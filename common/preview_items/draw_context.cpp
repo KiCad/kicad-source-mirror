@@ -32,9 +32,9 @@ using KIGFX::COLOR4D;
 
 static constexpr double ANGLE_EPSILON = 1e-9;
 
-static bool angleIsSpecial( double aRadians )
+static bool angleIsSpecial( EDA_ANGLE aAngle )
 {
-    return std::fabs( std::remainder( aRadians, M_PI_4 ) ) < ANGLE_EPSILON;
+    return std::fabs( std::remainder( aAngle.AsRadians(), M_PI_4 ) ) < ANGLE_EPSILON;
 }
 
 
@@ -82,7 +82,7 @@ void DRAW_CONTEXT::DrawLineWithAngleHighlight( const VECTOR2I& aStart, const VEC
     const VECTOR2I vec = aEnd - aStart;
     COLOR4D        strokeColor = m_render_settings.GetLayerColor( m_currLayer );
 
-    if( angleIsSpecial( vec.Angle() ) )
+    if( angleIsSpecial( EDA_ANGLE( vec ) ) )
         strokeColor = getSpecialAngleColour();
 
     m_gal.SetLineWidth( m_lineWidth );

@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -64,7 +64,7 @@ public:
 
     void AddCircle( const VECTOR2D& aOrigin, double aRadius, double aWidth, bool aFilled ) override;
 
-    void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle,
+    void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, const EDA_ANGLE& aAngle,
                  double aWidth ) override;
 
     void AddPolygon( const std::vector< VECTOR2D >& aVertices, double aWidth ) override;

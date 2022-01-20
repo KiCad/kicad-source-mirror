@@ -519,26 +519,26 @@ void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
     VECTOR2D center( mapX( centerCoords.x ), mapY( centerCoords.y ) );
 
     // aData.anglex is in degrees.
-    double  startangle = aData.angle1;
-    double  endangle = aData.angle2;
+    EDA_ANGLE  startangle( aData.angle1, DEGREES_T );
+    EDA_ANGLE  endangle( aData.angle2, DEGREES_T );
 
     // Init arc start point
     VECTOR2D startPoint( aData.radius, 0.0 );
-    startPoint = startPoint.Rotate( startangle * M_PI / 180.0 );
-    VECTOR2D arcStart(
-            mapX( startPoint.x + centerCoords.x ), mapY( startPoint.y + centerCoords.y ) );
+    RotatePoint( startPoint, -startangle );
+    VECTOR2D arcStart( mapX( startPoint.x + centerCoords.x ),
+                       mapY( startPoint.y + centerCoords.y ) );
 
     // calculate arc angle (arcs are CCW, and should be < 0 in Pcbnew)
-    double angle = -( endangle - startangle );
+    EDA_ANGLE angle = -( endangle - startangle );
 
-    if( angle > 0.0 )
-        angle -= 360.0;
+    if( angle > ANGLE_0 )
+        angle -= ANGLE_360;
 
     DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
     double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
 
-    GRAPHICS_IMPORTER_BUFFER* bufferToUse =
-            ( m_currentBlock != nullptr ) ? &m_currentBlock->m_buffer : &m_internalImporter;
+    GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
+                                                           : &m_internalImporter;
     bufferToUse->AddArc( center, arcStart, angle, lineWidth );
 
     VECTOR2D radiusDelta( mapDim( aData.radius ), mapDim( aData.radius ) );
@@ -1279,7 +1279,7 @@ void DXF_IMPORT_PLUGIN::insertArc( const VECTOR2D& aSegStart, const VECTOR2D& aS
     double cy = h * sin( offAng ) + ym;
     VECTOR2D center( SCALE_FACTOR( cx ), SCALE_FACTOR( -cy ) );
     VECTOR2D arc_start;
-    double angle = RAD2DEG( ang );
+    EDA_ANGLE angle( ang, RADIANS_T );
 
     if( ang < 0.0 )
     {
@@ -1291,8 +1291,8 @@ void DXF_IMPORT_PLUGIN::insertArc( const VECTOR2D& aSegStart, const VECTOR2D& aS
         angle = -angle;
     }
 
-    GRAPHICS_IMPORTER_BUFFER* bufferToUse =
-            ( m_currentBlock != nullptr ) ? &m_currentBlock->m_buffer : &m_internalImporter;
+    GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
+                                                           : &m_internalImporter;
     bufferToUse->AddArc( center, arc_start, angle, aWidth );
 
     VECTOR2D radiusDelta( SCALE_FACTOR( radius ), SCALE_FACTOR( radius ) );

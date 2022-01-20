@@ -229,8 +229,8 @@ using MATCH_PRED = std::function<bool( const EXP_OBJ&, const FOUND_OBJ& )>;
  *                  matches a given "expected" object.
  */
 template <typename EXP_CONT, typename FOUND_CONT, typename MATCH_PRED>
-void CheckUnorderedMatches(
-        const EXP_CONT& aExpected, const FOUND_CONT& aFound, MATCH_PRED aMatchPredicate )
+void CheckUnorderedMatches( const EXP_CONT& aExpected, const FOUND_CONT& aFound,
+                            MATCH_PRED aMatchPredicate )
 {
     using EXP_OBJ = typename EXP_CONT::value_type;
 
@@ -260,10 +260,11 @@ void CheckUnorderedMatches(
     // check every "found" object was expected
     for( const EXP_OBJ* found : matched )
     {
-        const bool was_expected =
-                std::find_if( aExpected.begin(), aExpected.end(),
-                        [found]( const EXP_OBJ& aObj ) { return &aObj == found; } )
-                != aExpected.end();
+        const bool was_expected = std::find_if( aExpected.begin(), aExpected.end(),
+                [found]( const EXP_OBJ& aObj )
+                {
+                    return &aObj == found;
+                } ) != aExpected.end();
 
         BOOST_CHECK_MESSAGE( was_expected, "Found item was not expected. Found: \n" << *found );
     }

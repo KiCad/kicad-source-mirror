@@ -174,21 +174,6 @@ public:
     VECTOR2<T> Resize( T aNewLength ) const;
 
     /**
-     * Compute the angle of the vector.
-     *
-     * @return the vector angle in radians.
-     */
-    double Angle() const;
-
-    /**
-     * Rotate the vector by a given angle.
-     *
-     * @param aAngle rotation angle in radians
-     * @return rotated vector
-     */
-    VECTOR2<T> Rotate( double aAngle ) const;
-
-    /**
      * Return the vector formatted as a string.
      *
      * @return the formatted string
@@ -317,13 +302,6 @@ typename VECTOR2<T>::extended_type VECTOR2<T>::SquaredEuclideanNorm() const
 
 
 template <class T>
-double VECTOR2<T>::Angle() const
-{
-    return atan2( (double) y, (double) x );
-}
-
-
-template <class T>
 VECTOR2<T> VECTOR2<T>::Perpendicular() const
 {
     VECTOR2<T> perpendicular( -y, x );
@@ -382,43 +360,6 @@ VECTOR2<T>& VECTOR2<T>::operator-=( const T& aScalar )
     x -= aScalar;
     y -= aScalar;
     return *this;
-}
-
-
-/**
- * Rotate a VECTOR2 by aAngle.
- * @param aAngle = rotation angle in radians
- */
-template <class T>
-VECTOR2<T> VECTOR2<T>::Rotate( double aAngle ) const
-{
-    // Avoid common radian rotations that may allow for angular error
-    if( aAngle == 0.0 || aAngle == 2 * M_PI )
-        return VECTOR2<T> ( T( x ), T( y ) );
-
-    if( aAngle == M_PI_2 )
-        return VECTOR2<T>( -T( y ), T( x ) );
-
-    if( aAngle == M_PI )
-        return VECTOR2<T>( -T(x), -T( y ) );
-
-    if( aAngle == 3 * M_PI_2 )
-        return VECTOR2<T>( T( y ), -T( x ) );
-
-    double  sa  = sin( aAngle );
-    double  ca  = cos( aAngle );
-
-    if( std::is_integral<T>::value )
-    {
-        return VECTOR2<T> ( KiROUND( (double) x * ca - (double) y * sa ),
-                            KiROUND( (double) x * sa + (double) y * ca ) );
-
-    }
-    else
-    {
-        return VECTOR2<T> ( T( (double) x * ca - (double) y * sa ),
-                            T( (double) x * sa + (double) y * ca ) );
-    }
 }
 
 

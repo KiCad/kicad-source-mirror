@@ -2,6 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Janito Vaqueiro Ferreira Filho <janito.vff@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -50,7 +51,7 @@ void GRAPHICS_IMPORTER_BUFFER::AddCircle( const VECTOR2D& aCenter, double aRadiu
 
 
 void GRAPHICS_IMPORTER_BUFFER::AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart,
-                                       double aAngle, double aWidth )
+                                       const EDA_ANGLE& aAngle, double aWidth )
 {
     m_shapes.push_back( make_shape<IMPORTED_ARC>( aCenter, aStart, aAngle, aWidth ) );
 }

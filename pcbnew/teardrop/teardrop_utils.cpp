@@ -375,12 +375,12 @@ void TEARDROP_MANAGER::computeCurvedForRectShape(  TEARDROP_PARAMETERS* aCurrPar
     side_length = side2.EuclideanNorm();
     delta_effective = std::min( delta, side_length/8 );
 
-    double angle2 = side2.Angle();
-    sign = std::abs( angle2 ) <= 90.0*M_PI/180 ? 1 : -1;
+    EDA_ANGLE angle2( side2 );
+    sign = std::abs( angle2 ) <= ANGLE_90 ? 1 : -1;
 
     bias = VECTOR2I( 0, sign * delta_effective );
 
-    bias.Rotate( angle2 );
+    RotatePoint( bias, -angle2 );
 
     ctrl1.x += bias.x;
     ctrl1.y += bias.y;

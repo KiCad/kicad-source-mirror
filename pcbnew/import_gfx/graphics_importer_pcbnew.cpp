@@ -95,7 +95,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadiu
 
 
 void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart,
-                                       double aAngle, double aWidth )
+                                       const EDA_ANGLE& aAngle, double aWidth )
 {
     std::unique_ptr<PCB_SHAPE> arc( createDrawing() );
     arc->SetShape( SHAPE_T::ARC );
@@ -105,11 +105,11 @@ void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
      * We need to perform the rotation/conversion here while still using floating point values
      * to avoid rounding errors when operating in integer space in pcbnew
      */
-    VECTOR2D end = aStart - aCenter;
-    VECTOR2D mid = aStart - aCenter;
+    VECTOR2D end = aStart;
+    VECTOR2D mid = aStart;
 
-    end = aCenter + end.Rotate( DEG2RAD( aAngle ) );
-    mid = aCenter + mid.Rotate( DEG2RAD( aAngle / 2.0 ) );
+    RotatePoint( end, aCenter, -aAngle );
+    RotatePoint( mid, aCenter, -aAngle / 2.0 );
 
     arc->SetArcGeometry( MapCoordinate( aStart ), MapCoordinate( mid ), MapCoordinate( end ) );
 

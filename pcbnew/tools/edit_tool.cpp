@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -377,8 +377,8 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
                 SEG trackSeg( retval->GetStart(), retval->GetEnd() );
 
                 // Allow deviations in colinearity as defined in ADVANCED_CFG
-                if( trackSeg.AngleDegrees( aCollinearSeg )
-                    > ADVANCED_CFG::GetCfg().m_MaxTangentAngleDeviation )
+                if( trackSeg.Angle( aCollinearSeg )
+                    > EDA_ANGLE( ADVANCED_CFG::GetCfg().m_MaxTangentAngleDeviation, DEGREES_T ) )
                 {
                     retval = nullptr;
                 }

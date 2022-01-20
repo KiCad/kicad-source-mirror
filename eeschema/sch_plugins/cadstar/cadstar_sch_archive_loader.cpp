@@ -2925,15 +2925,16 @@ void CADSTAR_SCH_ARCHIVE_LOADER::fixUpLibraryPins( LIB_SYMBOL* aSymbolToFix, int
     for( auto& pin : pins )
     {
         auto setPinOrientation =
-                [&]( double aAngleRad )
+                [&]( const EDA_ANGLE& aAngle )
                 {
-                    int oDeg = (int) NormalizeAngle180( RAD2DEG( aAngleRad ) );
+                    EDA_ANGLE angle( aAngle );
+                    angle.Normalize180();
 
-                    if( oDeg >= -45 && oDeg <= 45 )
+                    if( angle >= -ANGLE_45 && angle <= ANGLE_45 )
                         pin->SetOrientation( 'R' ); // 0 degrees
-                    else if( oDeg >= 45 && oDeg <= 135 )
+                    else if( angle >= ANGLE_45 && angle <= ANGLE_135 )
                         pin->SetOrientation( 'U' ); // 90 degrees
-                    else if( oDeg >= 135 || oDeg <= -135 )
+                    else if( angle >= ANGLE_135 || angle <= -ANGLE_135 )
                         pin->SetOrientation( 'L' ); // 180 degrees
                     else
                         pin->SetOrientation( 'D' ); // -90 degrees
@@ -2951,7 +2952,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::fixUpLibraryPins( LIB_SYMBOL* aSymbolToFix, int
             VECTOR2I vec( otherPt - pin->GetPosition() );
 
             pin->SetLength( vec.EuclideanNorm() );
-            setPinOrientation( vec.Angle() );
+            setPinOrientation( EDA_ANGLE( vec ) );
         }
     }
 }

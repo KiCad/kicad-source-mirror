@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Janito Vaqueiro Ferreira Filho <janito.vff@gmail.com>
  *
@@ -137,7 +137,8 @@ private:
 class IMPORTED_ARC : public IMPORTED_SHAPE
 {
 public:
-    IMPORTED_ARC( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle, double aWidth )  :
+    IMPORTED_ARC( const VECTOR2D& aCenter, const VECTOR2D& aStart, const EDA_ANGLE& aAngle,
+                  double aWidth )  :
             m_center( aCenter ),
             m_start( aStart ),
             m_angle( aAngle ),
@@ -171,10 +172,10 @@ public:
     }
 
 private:
-    VECTOR2D m_center;
-    VECTOR2D m_start;
-    double   m_angle;
-    double   m_width;
+    VECTOR2D  m_center;
+    VECTOR2D  m_start;
+    EDA_ANGLE m_angle;
+    double    m_width;
 };
 
 
@@ -334,7 +335,7 @@ public:
 
     void AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth, bool aFilled ) override;
 
-    void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle,
+    void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, const EDA_ANGLE& aAngle,
                  double aWidth ) override;
 
     void AddPolygon( const std::vector< VECTOR2D >& aVertices, double aWidth ) override;

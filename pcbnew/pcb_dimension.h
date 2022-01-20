@@ -309,8 +309,6 @@ protected:
 
     ///< Internal cache of drawn shapes
     std::vector<std::shared_ptr<SHAPE>> m_shapes;
-
-    static constexpr float s_arrowAngle = 27.5;
 };
 
 

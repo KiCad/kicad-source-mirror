@@ -721,7 +721,7 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
     }
     else
     {
-        auto lineAngle = startEndVector.Angle();
+        EDA_ANGLE lineAngle( startEndVector );
         // Outlined tracks
 
         SetLineWidth( 1.0 );
@@ -731,7 +731,7 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
         Save();
 
         m_currentManager->Translate( aStartPoint.x, aStartPoint.y, 0.0 );
-        m_currentManager->Rotate( lineAngle, 0.0f, 0.0f, 1.0f );
+        m_currentManager->Rotate( lineAngle.AsRadians(), 0.0f, 0.0f, 1.0f );
 
         drawLineQuad( VECTOR2D( 0.0, aWidth / 2.0 ), VECTOR2D( lineLength, aWidth / 2.0 ) );
 

@@ -169,17 +169,15 @@ bool ArePointsNearCircle(
  */
 
 template<typename T>
-bool ArePerpendicular( const VECTOR2<T>& a, const VECTOR2<T>& b, double aTolerance )
+bool ArePerpendicular( const VECTOR2<T>& a, const VECTOR2<T>& b, const EDA_ANGLE& aTolerance )
 {
-    auto angle = std::abs( a.Angle() - b.Angle() );
+    EDA_ANGLE angle = std::abs( EDA_ANGLE( a ) - EDA_ANGLE( b ) );
 
     // Normalise: angles of 3*pi/2 are also perpendicular
-    if (angle > M_PI)
-    {
-        angle -= M_PI;
-    }
+    if (angle > ANGLE_180)
+        angle -= ANGLE_180;
 
-    return KI_TEST::IsWithin( angle, M_PI / 2.0, aTolerance );
+    return KI_TEST::IsWithin( angle.AsRadians(), ANGLE_90.AsRadians(), aTolerance.AsRadians() );
 }
 
 /**

@@ -253,16 +253,16 @@ std::vector<VECTOR2I> CIRCLE::Intersect( const CIRCLE& aCircle ) const
     int64_t y = KiROUND( sqrt( r1sqMinusXsq ) );
 
     // Now correct back to original coordinates
-    double   rotAngle = vecCtoC.Angle();
-    VECTOR2I solution1( x, y );
-    solution1 = solution1.Rotate( rotAngle );
+    EDA_ANGLE rotAngle( vecCtoC );
+    VECTOR2I  solution1( x, y );
+    RotatePoint( solution1, -rotAngle );
     solution1 += Center;
     retval.push_back( solution1 );
 
     if( y != 0 )
     {
         VECTOR2I solution2( x, -y );
-        solution2 = solution2.Rotate( rotAngle );
+        RotatePoint( solution2, -rotAngle );
         solution2 += Center;
         retval.push_back( solution2 );
     }

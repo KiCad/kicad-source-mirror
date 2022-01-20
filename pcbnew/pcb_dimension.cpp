@@ -38,6 +38,9 @@
 #include <trigo.h>
 
 
+static const EDA_ANGLE s_arrowAngle( 27.5, DEGREES_T );
+
+
 PCB_DIMENSION_BASE::PCB_DIMENSION_BASE( BOARD_ITEM* aParent, KICAD_T aType ) :
         BOARD_ITEM( aParent, aType ),
         m_overrideTextEnabled( false ),
@@ -522,7 +525,7 @@ PCB_DIM_ALIGNED::PCB_DIM_ALIGNED( BOARD_ITEM* aParent, KICAD_T aType ) :
         m_height( 0 )
 {
     // To preserve look of old dimensions, initialize extension height based on default arrow length
-    m_extensionHeight = static_cast<int>( m_arrowLength * std::sin( DEG2RAD( s_arrowAngle ) ) );
+    m_extensionHeight = static_cast<int>( m_arrowLength * s_arrowAngle.Sin() );
 }
 
 
@@ -634,22 +637,15 @@ void PCB_DIM_ALIGNED::updateGeometry()
         m_shapes.emplace_back( new SHAPE_SEGMENT( crossbar ) );
 
     // Add arrows
-    VECTOR2I arrowEnd( m_arrowLength, 0 );
+    VECTOR2I arrowEndPos( m_arrowLength, 0 );
+    VECTOR2I arrowEndNeg( m_arrowLength, 0 );
+    RotatePoint( arrowEndPos, EDA_ANGLE( dimension ) + s_arrowAngle );
+    RotatePoint( arrowEndNeg, EDA_ANGLE( dimension ) - s_arrowAngle );
 
-    double arrowRotPos = dimension.Angle() + DEG2RAD( s_arrowAngle );
-    double arrowRotNeg = dimension.Angle() - DEG2RAD( s_arrowAngle );
-
-    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarStart,
-                           m_crossBarStart + arrowEnd.Rotate( arrowRotPos ) ) );
-
-    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarStart,
-                           m_crossBarStart + arrowEnd.Rotate( arrowRotNeg ) ) );
-
-    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarEnd,
-                           m_crossBarEnd - arrowEnd.Rotate( arrowRotPos ) ) );
-
-    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarEnd,
-                           m_crossBarEnd - arrowEnd.Rotate( arrowRotNeg ) ) );
+    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarStart, m_crossBarStart + arrowEndPos ) );
+    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarStart, m_crossBarStart + arrowEndNeg ) );
+    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarEnd, m_crossBarEnd - arrowEndPos ) );
+    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarEnd, m_crossBarEnd - arrowEndNeg ) );
 }
 
 
@@ -661,14 +657,18 @@ void PCB_DIM_ALIGNED::updateText()
     {
         int textOffsetDistance = m_text.GetEffectiveTextPenWidth() + m_text.GetTextHeight();
 
-        double rotation;
-        if( crossbarCenter.x == 0 )
-            rotation = sign( crossbarCenter.y ) * DEG2RAD( 90 );
-        else
-            rotation = -std::copysign( DEG2RAD( 90 ), crossbarCenter.x );
+        EDA_ANGLE rotation;
 
-        VECTOR2I textOffset = crossbarCenter.Rotate( rotation ).Resize( textOffsetDistance );
-        textOffset += crossbarCenter;
+        if( crossbarCenter.x == 0 )
+            rotation = ANGLE_90 * sign( -crossbarCenter.y );
+        else if( crossbarCenter.x < 0 )
+            rotation = -ANGLE_90;
+        else
+            rotation = ANGLE_90;
+
+        VECTOR2I textOffset = crossbarCenter;
+        RotatePoint( crossbarCenter, rotation );
+        textOffset += crossbarCenter.Resize( textOffsetDistance );
 
         m_text.SetTextPos( m_crossBarStart + textOffset );
     }
@@ -679,7 +679,7 @@ void PCB_DIM_ALIGNED::updateText()
 
     if( m_keepTextAligned )
     {
-        EDA_ANGLE textAngle = FULL_CIRCLE - EDA_ANGLE( crossbarCenter.Angle(), RADIANS_T );
+        EDA_ANGLE textAngle = FULL_CIRCLE - EDA_ANGLE( crossbarCenter );
         textAngle.Normalize();
 
         if( textAngle > ANGLE_90 && textAngle <= ANGLE_270 )
@@ -704,7 +704,7 @@ PCB_DIM_ORTHOGONAL::PCB_DIM_ORTHOGONAL( BOARD_ITEM* aParent, bool aInFP ) :
         PCB_DIM_ALIGNED( aParent, aInFP ? PCB_FP_DIM_ORTHOGONAL_T : PCB_DIM_ORTHOGONAL_T )
 {
     // To preserve look of old dimensions, initialize extension height based on default arrow length
-    m_extensionHeight = static_cast<int>( m_arrowLength * std::sin( DEG2RAD( s_arrowAngle ) ) );
+    m_extensionHeight = static_cast<int>( m_arrowLength * s_arrowAngle.Sin() );
     m_orientation = DIR::HORIZONTAL;
 }
 
@@ -816,19 +816,16 @@ void PCB_DIM_ORTHOGONAL::updateGeometry()
         m_shapes.emplace_back( new SHAPE_SEGMENT( crossbar ) );
 
     // Add arrows
-    VECTOR2I crossBarAngle( m_crossBarEnd - m_crossBarStart );
-    VECTOR2I arrowEnd( m_arrowLength, 0 );
+    EDA_ANGLE crossBarAngle( m_crossBarEnd - m_crossBarStart );
+    VECTOR2I  arrowEndPos( m_arrowLength, 0 );
+    VECTOR2I  arrowEndNeg( m_arrowLength, 0 );
+    RotatePoint( arrowEndPos, crossBarAngle + s_arrowAngle );
+    RotatePoint( arrowEndNeg, crossBarAngle - s_arrowAngle );
 
-    double arrowRotPos = crossBarAngle.Angle() + DEG2RAD( s_arrowAngle );
-    double arrowRotNeg = crossBarAngle.Angle() - DEG2RAD( s_arrowAngle );
-
-    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarStart, m_crossBarStart + arrowEnd.Rotate( arrowRotPos ) ) );
-
-    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarStart, m_crossBarStart + arrowEnd.Rotate( arrowRotNeg ) ) );
-
-    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarEnd, m_crossBarEnd - arrowEnd.Rotate( arrowRotPos ) ) );
-
-    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarEnd, m_crossBarEnd - arrowEnd.Rotate( arrowRotNeg ) ) );
+    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarStart, m_crossBarStart + arrowEndPos ) );
+    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarStart, m_crossBarStart + arrowEndNeg ) );
+    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarEnd, m_crossBarEnd - arrowEndPos ) );
+    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarEnd, m_crossBarEnd - arrowEndNeg ) );
 }
 
 
@@ -874,13 +871,9 @@ void PCB_DIM_ORTHOGONAL::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aA
 
     // restrict angle to -179.9 to 180.0 degrees
     if( angle > ANGLE_180 )
-    {
         angle -= ANGLE_360;
-    }
     else if( angle <= -ANGLE_180 )
-    {
         angle += ANGLE_360;
-    }
 
     // adjust orientation and height to new angle
     // we can only handle the cases of -90, 0, 90, 180 degrees exactly;
@@ -1010,13 +1003,13 @@ void PCB_DIM_LEADER::updateGeometry()
     m_shapes.emplace_back( new SHAPE_SEGMENT( start, *arrowSegEnd ) );
 
     // Add arrows
-    VECTOR2I arrowEnd( m_arrowLength, 0 );
+    VECTOR2I arrowEndPos( m_arrowLength, 0 );
+    VECTOR2I arrowEndNeg( m_arrowLength, 0 );
+    RotatePoint( arrowEndPos, EDA_ANGLE( firstLine ) + s_arrowAngle );
+    RotatePoint( arrowEndNeg, EDA_ANGLE( firstLine ) - s_arrowAngle );
 
-    double arrowRotPos = firstLine.Angle() + DEG2RAD( s_arrowAngle );
-    double arrowRotNeg = firstLine.Angle() - DEG2RAD( s_arrowAngle );
-
-    m_shapes.emplace_back( new SHAPE_SEGMENT( start, start + arrowEnd.Rotate( arrowRotPos ) ) );
-    m_shapes.emplace_back( new SHAPE_SEGMENT( start, start + arrowEnd.Rotate( arrowRotNeg ) ) );
+    m_shapes.emplace_back( new SHAPE_SEGMENT( start, start + arrowEndPos ) );
+    m_shapes.emplace_back( new SHAPE_SEGMENT( start, start + arrowEndNeg ) );
 
 
     if( !GetText().IsEmpty() )
@@ -1120,7 +1113,7 @@ void PCB_DIM_RADIAL::updateText()
     if( m_keepTextAligned )
     {
         VECTOR2I  textLine( Text().GetPosition() - GetKnee() );
-        EDA_ANGLE textAngle = FULL_CIRCLE - EDA_ANGLE( textLine.Angle(), RADIANS_T );
+        EDA_ANGLE textAngle = FULL_CIRCLE - EDA_ANGLE( textLine );
 
         textAngle.Normalize();
 
@@ -1146,7 +1139,7 @@ void PCB_DIM_RADIAL::updateGeometry()
 
     m_shapes.emplace_back( new SHAPE_SEGMENT( center - centerArm, center + centerArm ) );
 
-    centerArm = centerArm.Rotate( DEG2RAD( 90 ) );
+    RotatePoint( centerArm, -ANGLE_90 );
 
     m_shapes.emplace_back( new SHAPE_SEGMENT( center - centerArm, center + centerArm ) );
 
@@ -1190,13 +1183,13 @@ void PCB_DIM_RADIAL::updateGeometry()
     m_shapes.emplace_back( new SHAPE_SEGMENT( arrowSeg ) );
 
     // Add arrows
-    VECTOR2I arrowEnd( m_arrowLength, 0 );
+    VECTOR2I arrowEndPos( m_arrowLength, 0 );
+    VECTOR2I arrowEndNeg( m_arrowLength, 0 );
+    RotatePoint( arrowEndPos, EDA_ANGLE( radial ) + s_arrowAngle );
+    RotatePoint( arrowEndNeg, EDA_ANGLE( radial ) - s_arrowAngle );
 
-    double arrowRotPos = radial.Angle() + DEG2RAD( s_arrowAngle );
-    double arrowRotNeg = radial.Angle() - DEG2RAD( s_arrowAngle );
-
-    m_shapes.emplace_back( new SHAPE_SEGMENT( m_end, m_end + arrowEnd.Rotate( arrowRotPos ) ) );
-    m_shapes.emplace_back( new SHAPE_SEGMENT( m_end, m_end + arrowEnd.Rotate( arrowRotNeg ) ) );
+    m_shapes.emplace_back( new SHAPE_SEGMENT( m_end, m_end + arrowEndPos ) );
+    m_shapes.emplace_back( new SHAPE_SEGMENT( m_end, m_end + arrowEndNeg ) );
 
     m_shapes.emplace_back( new SHAPE_SEGMENT( textSeg ) );
 }
@@ -1263,7 +1256,7 @@ void PCB_DIM_CENTER::updateGeometry()
 
     m_shapes.emplace_back( new SHAPE_SEGMENT( center - arm, center + arm ) );
 
-    arm = arm.Rotate( DEG2RAD( 90 ) );
+    RotatePoint( arm, -ANGLE_90 );
 
     m_shapes.emplace_back( new SHAPE_SEGMENT( center - arm, center + arm ) );
 }

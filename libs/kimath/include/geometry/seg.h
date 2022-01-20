@@ -34,6 +34,7 @@
 
 #include <core/optional.h>
 #include <math/vector2d.h>
+#include <geometry/eda_angle.h>
 
 typedef OPT<VECTOR2I> OPT_VECTOR2I;
 
@@ -158,12 +159,12 @@ public:
     int LineDistance( const VECTOR2I& aP, bool aDetermineSide = false ) const;
 
     /**
-      * Determine the smallest angle between two segments (result in degrees)
+      * Determine the smallest angle between two segments
       *
       * @param aOther point to determine the orientation wrs to self
-      * @return smallest angle between this and aOther (degrees)
+      * @return smallest angle between this and aOther
       */
-    double AngleDegrees( const SEG& aOther ) const;
+    EDA_ANGLE Angle( const SEG& aOther ) const;
 
     /**
       * Compute a point on the segment (this) that is closest to point \a aP.

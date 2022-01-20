@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -219,10 +219,10 @@ public:
      * @param aCenter is the arc center point expressed in mm.
      * @param aStart is the arc arm end point expressed in mm.
      * Its length is the arc radius.
-     * @param aAngle is the arc angle expressed in degrees.
+     * @param aAngle is the arc angle.
      * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
      */
-    virtual void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle,
+    virtual void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, const EDA_ANGLE& aAngle,
                          double aWidth ) = 0;
 
     virtual void AddPolygon( const std::vector< VECTOR2D >& aVertices, double aWidth ) = 0;

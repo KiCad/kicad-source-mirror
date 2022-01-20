@@ -67,7 +67,7 @@ void TestFilletSegmentConstraints( const SEG& aSeg, VECTOR2I aRadCentre,
             KI_TEST::IsWithinAndBelow<int>, ( diffC.EuclideanNorm() )( aRadius )( aError + 1 ) );
 
     // Check 3: Mid-point -> radius centre perpendicular
-    const auto perpendularityMaxError = ( M_PI / 2 ) / 10;
+    const EDA_ANGLE perpendularityMaxError = ANGLE_90 / 10;
     BOOST_CHECK_PREDICATE( GEOM_TEST::ArePerpendicular<int>,
             ( diffC )( aSeg.A - aSeg.B )( perpendularityMaxError ) );
 }

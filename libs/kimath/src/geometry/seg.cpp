@@ -58,16 +58,14 @@ SEG::ecoord SEG::SquaredDistance( const SEG& aSeg ) const
 }
 
 
-double SEG::AngleDegrees( const SEG& aOther ) const
+EDA_ANGLE SEG::Angle( const SEG& aOther ) const
 {
-    VECTOR2I thisVec = A - B;
-    VECTOR2I otherVec = aOther.A - aOther.B;
+    EDA_ANGLE thisAngle = EDA_ANGLE( A - B ).Normalize180();
+    EDA_ANGLE otherAngle = EDA_ANGLE( aOther.A - aOther.B ).Normalize180();
 
-    double thisVecAngle = NormalizeAngle180( RAD2DECIDEG( thisVec.Angle() ) );
-    double otherVecAngle = NormalizeAngle180( RAD2DECIDEG( otherVec.Angle() ) );
-    double angleDegrees = std::abs( NormalizeAngle180( thisVecAngle - otherVecAngle ) ) / 10.0;
+    EDA_ANGLE angle = std::abs( ( thisAngle - otherAngle ).Normalize180() );
 
-    return std::min( 180.0 - angleDegrees, angleDegrees );
+    return std::min( ANGLE_180 - angle, angle );
 }
 
 

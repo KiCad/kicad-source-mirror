@@ -431,7 +431,9 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
                         int offset = segment->GetWidth() / 2;
                         SEG seg    = segment->GetSeg();
-                        VECTOR2I normal = ( seg.B - seg.A ).Resize( offset ).Rotate( -M_PI_2 );
+                        VECTOR2I normal = ( seg.B - seg.A );
+                        normal.Resize( offset );
+                        RotatePoint( normal, ANGLE_90 );
 
                         /*
                          * TODO: This creates more snap points than necessary for rounded rect pads
@@ -446,7 +448,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                         addAnchor( seg.Center() + normal, OUTLINE | SNAPPABLE, aPad );
                         addAnchor( seg.Center() - normal, OUTLINE | SNAPPABLE, aPad );
 
-                        normal = normal.Rotate( M_PI_2 );
+                        RotatePoint( normal, -ANGLE_90 );
 
                         addAnchor( seg.A - normal, OUTLINE | SNAPPABLE, aPad );
                         addAnchor( seg.B + normal, OUTLINE | SNAPPABLE, aPad );
@@ -726,7 +728,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
             for( int i = 0; i < 2; i++ )
             {
-                radial = radial.Rotate( DEG2RAD( 90 ) );
+                RotatePoint( radial, -ANGLE_90 );
                 addAnchor( start + radial, CORNER | SNAPPABLE, aItem );
             }
 
