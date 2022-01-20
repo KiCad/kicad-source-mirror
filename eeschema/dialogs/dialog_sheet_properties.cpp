@@ -544,8 +544,11 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
             }
         }
 
+        // If we are renaming files, the undo/redo list becomes invalid and must be cleared
         if( isUndoable )
             m_frame->SaveCopyInUndoList( m_frame->GetScreen(), m_sheet, UNDO_REDO::CHANGED, false );
+        else
+            m_frame->ClearUndoRedoList();
 
         if( renameFile )
         {
