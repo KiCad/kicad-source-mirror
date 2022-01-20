@@ -2,10 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
- *
+ * Copyright (C) 2013-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +35,7 @@
 #include <math/box2.h>       // for BOX2I
 #include <math/util.h>       // for rescale
 #include <math/vector2d.h>   // for VECTOR2, VECTOR2I
+#include <trigo.h>           // for RotatePoint
 
 class SHAPE;
 
@@ -419,14 +418,10 @@ bool SHAPE_LINE_CHAIN::Collide( const VECTOR2I& aP, int aClearance, int* aActual
 }
 
 
-void SHAPE_LINE_CHAIN::Rotate( double aAngle, const VECTOR2I& aCenter )
+void SHAPE_LINE_CHAIN::Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter )
 {
     for( VECTOR2I& pt : m_points )
-    {
-        pt -= aCenter;
-        pt = pt.Rotate( aAngle );
-        pt += aCenter;
-    }
+        RotatePoint( pt, aCenter, aAngle );
 
     for( SHAPE_ARC& arc : m_arcs )
         arc.Rotate( aAngle, aCenter );

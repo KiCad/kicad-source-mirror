@@ -67,7 +67,7 @@ public:
     {
     }
 
-    void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override
+    void Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override
     {
     }
 

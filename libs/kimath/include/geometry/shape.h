@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -29,6 +29,7 @@
 #include <sstream>
 #include <vector>
 #include <geometry/seg.h>
+#include <geometry/eda_angle.h>
 #include <math/vector2d.h>
 #include <math/box2.h>
 
@@ -220,9 +221,9 @@ public:
 
     /**
      * @param aCenter is the rotation center.
-     * @param aAngle rotation angle in radians.
+     * @param aAngle rotation angle.
      */
-    virtual void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) = 0;
+    virtual void Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter = { 0, 0 } ) = 0;
 
     virtual void Move( const VECTOR2I& aVector ) = 0;
 

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,7 @@
 #include <geometry/circle.h>
 #include <math/box2.h>
 #include <math/vector2d.h>
+#include <trigo.h>
 
 #include <algorithm>
 
@@ -124,11 +125,9 @@ public:
         m_circle.Center += aVector;
     }
 
-    void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override
+    void Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override
     {
-        m_circle.Center -= aCenter;
-        m_circle.Center = m_circle.Center.Rotate( aAngle );
-        m_circle.Center += aCenter;
+        RotatePoint( m_circle.Center, aCenter, aAngle );
     }
 
     bool IsSolid() const override

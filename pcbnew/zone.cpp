@@ -685,12 +685,12 @@ void ZONE::MoveEdge( const VECTOR2I& offset, int aEdge )
 
 void ZONE::Rotate( const VECTOR2I& aCentre, const EDA_ANGLE& aAngle )
 {
-    m_Poly->Rotate( -aAngle.AsRadians(), VECTOR2I( aCentre ) );
+    m_Poly->Rotate( aAngle, VECTOR2I( aCentre ) );
     HatchBorder();
 
     /* rotate filled areas: */
     for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
-        pair.second.Rotate( -aAngle.AsRadians(), aCentre );
+        pair.second.Rotate( aAngle, aCentre );
 
     for( std::pair<const PCB_LAYER_ID, std::vector<SEG> >& pair : m_FillSegmList )
     {

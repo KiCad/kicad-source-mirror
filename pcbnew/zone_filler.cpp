@@ -1404,7 +1404,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
             }
 
             // Rotate and move the spokes tho the right position
-            spoke.Rotate( - ( pad->GetOrientation() + spokesAngle ).AsRadians() );
+            spoke.Rotate( pad->GetOrientation() + spokesAngle );
             spoke.Move( shapePos );
 
             spoke.SetClosed( true );
@@ -1436,7 +1436,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
     // Use a area that contains the rotated bbox by orientation, and after rotate the result
     // by -orientation.
     if( !aZone->GetHatchOrientation().IsZero() )
-        filledPolys.Rotate( aZone->GetHatchOrientation().AsRadians(), VECTOR2I( 0, 0 ) );
+        filledPolys.Rotate( - aZone->GetHatchOrientation() );
 
     BOX2I bbox = filledPolys.BBox( 0 );
 
@@ -1542,7 +1542,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
     holes.Move( bbox.GetPosition() );
 
     if( !aZone->GetHatchOrientation().IsZero() )
-        holes.Rotate( -aZone->GetHatchOrientation().AsRadians(), VECTOR2I( 0, 0 ) );
+        holes.Rotate( aZone->GetHatchOrientation() );
 
     DUMP_POLYS_TO_COPPER_LAYER( holes, In10_Cu, "hatch-holes" );
 

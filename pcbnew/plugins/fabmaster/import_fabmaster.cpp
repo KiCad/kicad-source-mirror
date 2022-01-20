@@ -2344,11 +2344,11 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                     if( src->mirror )
                                     {
                                         poly_outline.Mirror( false, true, VECTOR2I( 0, ( pin->pin_y - src->y ) ) );
-                                        poly_outline.Rotate( ( -src->rotate + pin->rotation ) * M_PI / 180.0 );
+                                        poly_outline.Rotate( EDA_ANGLE( src->rotate - pin->rotation, DEGREES_T ) );
                                     }
                                     else
                                     {
-                                        poly_outline.Rotate( ( src->rotate - pin->rotation ) * M_PI / 180.0 );
+                                        poly_outline.Rotate( EDA_ANGLE( -src->rotate + pin->rotation, DEGREES_T ) );
                                     }
 
                                     newpad->AddPrimitivePoly( poly_outline, 0, true );

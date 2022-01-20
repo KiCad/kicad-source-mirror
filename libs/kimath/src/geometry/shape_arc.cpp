@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -522,19 +522,11 @@ void SHAPE_ARC::Move( const VECTOR2I& aVector )
 }
 
 
-void SHAPE_ARC::Rotate( double aAngle, const VECTOR2I& aCenter )
+void SHAPE_ARC::Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter )
 {
-    m_start -= aCenter;
-    m_end -= aCenter;
-    m_mid -= aCenter;
-
-    m_start = m_start.Rotate( aAngle );
-    m_end = m_end.Rotate( aAngle );
-    m_mid = m_mid.Rotate( aAngle );
-
-    m_start += aCenter;
-    m_end += aCenter;
-    m_mid += aCenter;
+    RotatePoint( m_start, aCenter, aAngle );
+    RotatePoint( m_end, aCenter, aAngle );
+    RotatePoint( m_mid, aCenter, aAngle );
 
     update_bbox();
 }

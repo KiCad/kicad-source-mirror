@@ -170,9 +170,9 @@ public:
      * Rotate the arc by a given angle about a point.
      *
      * @param aCenter is the rotation center.
-     * @param aAngle rotation angle in radians.
+     * @param aAngle rotation angle.
      */
-    void Rotate( double aAngle, const VECTOR2I& aCenter ) override;
+    void Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter ) override;
 
     void Mirror( bool aX = true, bool aY = false, const VECTOR2I& aVector = { 0, 0 } );
 

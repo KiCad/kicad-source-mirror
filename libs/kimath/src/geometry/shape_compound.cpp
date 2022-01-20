@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers
+ * Copyright (C) 2020-2022 KiCad Developers
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -102,7 +102,7 @@ int SHAPE_COMPOUND::Distance( const SEG& aSeg ) const
 }
 
 
-void SHAPE_COMPOUND::Rotate( double aAngle, const VECTOR2I& aCenter )
+void SHAPE_COMPOUND::Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter )
 {
     assert( false );
 }

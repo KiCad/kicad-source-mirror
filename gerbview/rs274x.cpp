@@ -820,7 +820,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
                 if( *aText == 'X' )
                 {
                     aText++;
-                    dcode->m_Rotation = ReadDouble( aText );
+                    dcode->m_Rotation = EDA_ANGLE( ReadDouble( aText ), DEGREES_T );
                 }
 
                 while( *aText == ' ' )

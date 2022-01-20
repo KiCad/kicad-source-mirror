@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -748,9 +748,9 @@ public:
      * Rotate all vertices by a given angle.
      *
      * @param aCenter is the rotation center.
-     * @param aAngle is the rotation angle in radians.
+     * @param aAngle is the rotation angle.
      */
-    void Rotate( double aAngle, const VECTOR2I& aCenter = VECTOR2I( 0, 0 ) ) override;
+    void Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override;
 
     bool IsSolid() const override
     {

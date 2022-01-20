@@ -218,7 +218,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
             poly.Append( bbox.GetRight(), y_sign*bbox.GetTop() );
             poly.SetClosed( true );
 
-            poly.Rotate( -footprint->GetOrientation().AsRadians(), VECTOR2I( 0, 0 ) );
+            poly.Rotate( footprint->GetOrientation() );
             poly.Move( footprint->GetPosition() );
             plotter.PLOTTER::PlotPoly( poly, FILL_T::NO_FILL, line_thickness, &gbr_metadata );
         }

@@ -258,7 +258,7 @@ void EDA_SHAPE::rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
         KI_FALLTHROUGH;
 
     case SHAPE_T::POLY:
-        m_poly.Rotate( -aAngle.AsRadians(), aRotCentre );
+        m_poly.Rotate( aAngle, aRotCentre );
         break;
 
     case SHAPE_T::BEZIER:
@@ -880,7 +880,7 @@ bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
             VECTOR2I offset = getParentPosition();
 
             SHAPE_LINE_CHAIN poly = m_poly.Outline( 0 );
-            poly.Rotate( -getParentOrientation().AsRadians() );
+            poly.Rotate( getParentOrientation() );
             poly.Move( offset );
 
             int count = poly.GetPointCount();
@@ -1112,7 +1112,7 @@ std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapes( bool aEdgeOnly ) const
     {
         SHAPE_LINE_CHAIN l = GetPolyShape().COutline( 0 );
 
-        l.Rotate( -getParentOrientation().AsRadians() );
+        l.Rotate( getParentOrientation() );
         l.Move( getParentPosition() );
 
         if( IsFilled() && !aEdgeOnly )

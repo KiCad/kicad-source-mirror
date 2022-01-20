@@ -191,7 +191,7 @@ public:
     wxSize                m_Drill;          ///< dimension of the hole (if any) (drill file)
     APERTURE_DEF_HOLETYPE m_DrillShape;     ///< shape of the hole (0 = no hole, round = 1,
                                             ///< rect = 2).
-    double                m_Rotation;       ///< shape rotation in degrees
+    EDA_ANGLE             m_Rotation;       ///< shape rotation
     int                   m_EdgesCount;     ///< in aperture definition Polygon only:
                                             ///< number of edges for the polygon
     bool                  m_InUse;          ///< false if the aperture (previously defined)

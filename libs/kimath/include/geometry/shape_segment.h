@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -29,6 +30,7 @@
 #include <geometry/shape.h>
 #include <math/box2.h>
 #include <math/vector2d.h>
+#include <trigo.h>
 
 #include <algorithm>
 
@@ -143,16 +145,10 @@ public:
         return true;
     }
 
-    void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override
+    void Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override
     {
-        m_seg.A -= aCenter;
-        m_seg.B -= aCenter;
-
-        m_seg.A = m_seg.A.Rotate( aAngle );
-        m_seg.B = m_seg.B.Rotate( aAngle );
-
-        m_seg.A += aCenter;
-        m_seg.B += aCenter;
+        RotatePoint( m_seg.A, aCenter, aAngle );
+        RotatePoint( m_seg.B, aCenter, aAngle );
     }
 
     void Move( const VECTOR2I& aVector ) override

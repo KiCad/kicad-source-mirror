@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2019 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
  *
@@ -1838,7 +1838,7 @@ void SHAPE_POLY_SET::Mirror( bool aX, bool aY, const VECTOR2I& aRef )
 }
 
 
-void SHAPE_POLY_SET::Rotate( double aAngle, const VECTOR2I& aCenter )
+void SHAPE_POLY_SET::Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter )
 {
     for( POLYGON& poly : m_polys )
     {

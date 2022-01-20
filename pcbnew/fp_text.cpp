@@ -488,7 +488,7 @@ void FP_TEXT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffe
     const FOOTPRINT* parentFootprint = static_cast<const FOOTPRINT*>( m_parent );
 
     if( parentFootprint )
-        buffer.Rotate( GetDrawRotation().AsRadians(), GetTextPos() );
+        buffer.Rotate( -GetDrawRotation(), GetTextPos() );
 
     aCornerBuffer.Append( buffer );
 }

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -32,6 +32,7 @@
 #include <geometry/shape_line_chain.h>
 #include <math/box2.h>
 #include <math/vector2d.h>
+#include <trigo.h>
 
 class SHAPE_RECT : public SHAPE
 {
@@ -152,13 +153,11 @@ public:
      * the rectangle.  If you might need to handle non-90° rotations then the SHAPE_RECT should
      * first be converted to a SHAPE_SIMPLE which can then be free-rotated.
      */
-    void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override
+    void Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override
     {
-        m_p0 -= aCenter;
-        m_p0 = m_p0.Rotate( aAngle );
-        m_p0 += aCenter;
+        RotatePoint( m_p0, aCenter, aAngle );
 
-        if( abs( sin( aAngle ) ) == 1 )
+        if( abs( aAngle.Sin() ) == 1 )
             std::swap( m_h, m_w );
     }
 

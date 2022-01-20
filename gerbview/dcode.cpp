@@ -78,7 +78,7 @@ void D_CODE::Clear_D_CODE_Data()
     m_InUse      = false;
     m_Defined    = false;
     m_Macro      = nullptr;
-    m_Rotation   = 0.0;
+    m_Rotation   = ANGLE_0;
     m_EdgesCount = 0;
     m_Polygon.RemoveAllContours();
 }
@@ -371,7 +371,7 @@ void D_CODE::ConvertShapeToPolygon()
         m_Polygon.Append( initialpos );      // close outline
 
         if( m_Size.y > m_Size.x )                   // vertical oval, rotate polygon.
-            m_Polygon.Rotate( -M_PI / 2 );
+            m_Polygon.Rotate( ANGLE_90 );
 
         addHoleToPolygon( &m_Polygon, m_DrillShape, m_Drill, initialpos );
     }
@@ -399,11 +399,8 @@ void D_CODE::ConvertShapeToPolygon()
 
         addHoleToPolygon( &m_Polygon, m_DrillShape, m_Drill, initialpos );
 
-        if( m_Rotation )    // rotate polygonal shape:
-        {
-            double angle = m_Rotation * M_PI / 180;
-            m_Polygon.Rotate( angle, VECTOR2I( 0, 0 ) );
-        }
+        if( !m_Rotation.IsZero() )    // rotate polygonal shape:
+            m_Polygon.Rotate( m_Rotation );
 
         break;
 

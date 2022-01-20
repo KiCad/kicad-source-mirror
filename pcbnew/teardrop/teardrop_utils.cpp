@@ -450,8 +450,7 @@ bool TEARDROP_MANAGER::ComputePointsOnPadVia( TEARDROP_PARAMETERS* aCurrParams,
         VECTOR2I ref_on_track = ( aPts[0] + aPts[1] ) / 2;
         VECTOR2I teardrop_axis( aPts[3] - ref_on_track );
 
-        double orient = teardrop_axis.Angle();
-        teardrop_axis.Rotate( -orient );
+        EDA_ANGLE orient( teardrop_axis );
         int len = teardrop_axis.EuclideanNorm();
 
         // Build the constraint polygon: a rectangle with
@@ -466,7 +465,7 @@ bool TEARDROP_MANAGER::ComputePointsOnPadVia( TEARDROP_PARAMETERS* aCurrParams,
         clipping_rect.Append( len, halfsize );
         clipping_rect.Append( len, - halfsize );
 
-        clipping_rect.Rotate( orient );
+        clipping_rect.Rotate( -orient );
         clipping_rect.Move( ref_on_track );
 
         // Clip the shape to the max allowed teadrop area

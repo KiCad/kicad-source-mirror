@@ -216,7 +216,7 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aSta
     // due to the shape of initial polygons
 
     // Rotate and move the polygon to its right location
-    polyshape.Rotate( delta_angle.AsRadians(), VECTOR2I( 0, 0 ) );
+    polyshape.Rotate( -delta_angle );
     polyshape.Move( startp );
 
     aCornerBuffer.Append( polyshape);
@@ -437,7 +437,7 @@ void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I&
     CornerListToPolygon( outline, corners, aInflate, aError, aErrorLoc );
 
     if( !aRotation.IsZero() )
-        outline.Rotate( -aRotation.AsRadians(), VECTOR2I( 0, 0 ) );
+        outline.Rotate( aRotation );
 
     outline.Move( VECTOR2I( aPosition ) );
     aCornerBuffer.Append( outline );
@@ -504,7 +504,7 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const 
     CornerListToPolygon( outline, corners, aInflate, aError, aErrorLoc );
 
     if( !aRotation.IsZero() )
-        outline.Rotate( -aRotation.AsRadians(), VECTOR2I( 0, 0 ) );
+        outline.Rotate( aRotation );
 
     outline.Move( aPosition );
     aCornerBuffer.Append( outline );
@@ -577,10 +577,10 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStar
     EDA_ANGLE arc_angle_end = arc_angle_start + arc_angle;
 
     if( arc_angle_start != ANGLE_0 && arc_angle_start != ANGLE_180 )
-        polyshape.Outline(0).Rotate( arc_angle_start.AsRadians(), aStart );
+        polyshape.Outline(0).Rotate( -arc_angle_start, aStart );
 
     if( arc_angle_end != ANGLE_0 && arc_angle_end != ANGLE_180 )
-        polyshape.Outline(1).Rotate( arc_angle_end.AsRadians(), aEnd );
+        polyshape.Outline(1).Rotate( -arc_angle_end, aEnd );
 
     VECTOR2I center = arc.GetCenter();
     int      radius = arc.GetRadius();

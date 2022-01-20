@@ -1737,7 +1737,7 @@ void FOOTPRINT::SetOrientation( const EDA_ANGLE& aNewAngle )
     m_visibleBBoxCacheTimeStamp = 0;
     m_textExcludedBBoxCacheTimeStamp = 0;
 
-    m_cachedHull.Rotate( - angleChange.AsRadians(), GetPosition() );
+    m_cachedHull.Rotate( angleChange, GetPosition() );
 }
 
 

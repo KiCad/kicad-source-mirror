@@ -417,7 +417,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
         corners.Append(  half_size.x - trap_delta.y, -half_size.y + trap_delta.x );
         corners.Append( -half_size.x + trap_delta.y, -half_size.y - trap_delta.x );
 
-        corners.Rotate( - m_orient.AsRadians() );
+        corners.Rotate( m_orient );
         corners.Move( shapePos );
 
         // GAL renders rectangles faster than 4-point polygons so it's worth checking if our
@@ -482,7 +482,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
         {
             for( SHAPE* shape : primitive->MakeEffectiveShapes() )
             {
-                shape->Rotate( - m_orient.AsRadians() );
+                shape->Rotate( m_orient );
                 shape->Move( shapePos );
                 add( shape );
             }
@@ -1563,7 +1563,7 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     {
         SHAPE_POLY_SET outline;
         MergePrimitivesAsPolygon( &outline, aErrorLoc );
-        outline.Rotate( - m_orient.AsRadians() );
+        outline.Rotate( m_orient );
         outline.Move( VECTOR2I( m_pos ) );
 
         if( aClearanceValue )

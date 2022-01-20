@@ -127,7 +127,7 @@ void ALTIUM_PCB::HelperShapeSetLocalCoord( PCB_SHAPE* aShape, uint16_t aComponen
                 FOOTPRINT* fp = m_components.at( aComponent );
 
                 polyShape.Move( -fp->GetPosition() );
-                polyShape.Rotate( -fp->GetOrientation().AsRadians() );
+                polyShape.Rotate( fp->GetOrientation() );
             }
         }
     }
@@ -147,7 +147,7 @@ void ALTIUM_PCB::HelperShapeSetLocalCoord( FP_SHAPE* aShape )
         if( fp )
         {
             polyShape.Move( -fp->GetPosition() );
-            polyShape.Rotate( -fp->GetOrientation().AsRadians() );
+            polyShape.Rotate( fp->GetOrientation() );
         }
     }
 }

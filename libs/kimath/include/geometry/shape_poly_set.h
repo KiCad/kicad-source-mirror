@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2019 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
@@ -83,7 +83,8 @@ public:
             {
             }
 
-            virtual void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override {};
+            virtual void Rotate( const EDA_ANGLE& aAngle,
+                                 const VECTOR2I& aCenter = { 0, 0 } ) override {};
 
             virtual void Move( const VECTOR2I& aVector ) override {};
 
@@ -1063,9 +1064,9 @@ public:
      * Rotate all vertices by a given angle.
      *
      * @param aCenter is the rotation center.
-     * @param aAngle is the rotation angle in radians.
+     * @param aAngle is the rotation angle.
      */
-    void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override;
+    void Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override;
 
     /// @copydoc SHAPE::IsSolid()
     bool IsSolid() const override
