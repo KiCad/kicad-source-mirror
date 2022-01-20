@@ -34,6 +34,8 @@
 #include <wx/menu.h>
 #include <wx/textctrl.h>
 #include <kiplatform/ui.h>
+#include <kiway_holder.h>
+#include <project.h>
 
 WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& pos,
                                             const wxSize& size, long style ) :
@@ -352,7 +354,14 @@ void WX_HTML_REPORT_PANEL::onBtnSaveToFile( wxCommandEvent& event )
     wxFileName fn;
 
     if( m_reportFileName.empty() )
-        fn = wxT( "./report.txt" );
+    {
+        fn = wxT( "report.txt" );
+
+        KIWAY_HOLDER* parent = dynamic_cast<KIWAY_HOLDER*>( m_parent );
+
+        if( parent )
+            fn.SetPath( parent->Prj().GetProjectPath() );
+    }
     else
         fn = m_reportFileName;
 
