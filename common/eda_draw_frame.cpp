@@ -72,7 +72,6 @@
 
 BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
     EVT_UPDATE_UI( ID_ON_GRID_SELECT, EDA_DRAW_FRAME::OnUpdateSelectGrid )
-    EVT_UPDATE_UI( ID_ON_ZOOM_SELECT, EDA_DRAW_FRAME::OnUpdateSelectZoom )
 
     EVT_ACTIVATE( EDA_DRAW_FRAME::onActivate )
 END_EVENT_TABLE()
@@ -449,30 +448,6 @@ void EDA_DRAW_FRAME::UpdateZoomSelectBox()
         if( zoom == current )
             m_zoomSelectBox->SetSelection( i + 1 );
     }
-}
-
-
-void EDA_DRAW_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
-{
-    if( m_zoomSelectBox == nullptr || m_zoomSelectBox->GetParent() == nullptr )
-        return;
-
-    int current = 0;    // display Auto if no match found
-
-    // check for a match within 1%
-    double zoom = GetCanvas()->GetGAL()->GetZoomFactor();
-
-    for( unsigned i = 0; i < config()->m_Window.zoom_factors.size(); i++ )
-    {
-        if( std::fabs( zoom - config()->m_Window.zoom_factors[i] ) < ( zoom / 100.0 ) )
-        {
-            current = i + 1;
-            break;
-        }
-    }
-
-    if( current != m_zoomSelectBox->GetSelection() )
-        m_zoomSelectBox->SetSelection( current );
 }
 
 
