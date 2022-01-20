@@ -751,9 +751,9 @@ void DIALOG_DRC::OnSeverity( wxCommandEvent& aEvent )
 
 void DIALOG_DRC::OnSaveReport( wxCommandEvent& aEvent )
 {
-    wxFileName fn( "./DRC." + ReportFileExtension );
+    wxFileName fn( "DRC." + ReportFileExtension );
 
-    wxFileDialog dlg( this, _( "Save Report to File" ), fn.GetPath(), fn.GetFullName(),
+    wxFileDialog dlg( this, _( "Save Report to File" ), Prj().GetProjectPath(), fn.GetFullName(),
                       ReportFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() != wxID_OK )
