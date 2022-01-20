@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 jean-pierre.charras
- * Copyright (C) 2011-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -253,12 +253,16 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const wxPoint& aPos )
     bool useTransform = aDC->CanUseTransformMatrix();
     wxAffineMatrix2D init_matrix = aDC->GetTransformMatrix();
 
+    wxPoint clipAreaPos;
+
     if( useTransform )
     {
         wxAffineMatrix2D matrix = aDC->GetTransformMatrix();
         matrix.Translate( pos.x, pos.y );
         matrix.Scale( GetScalingFactor(), GetScalingFactor() );
         aDC->SetTransformMatrix( matrix );
+        clipAreaPos.x = pos.x;
+        clipAreaPos.y = pos.y;
         pos.x = pos.y = 0;
     }
     else
@@ -271,10 +275,12 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const wxPoint& aPos )
         pos.y  = KiROUND( pos.y / GetScalingFactor() );
         size.x = KiROUND( size.x / GetScalingFactor() );
         size.y = KiROUND( size.y / GetScalingFactor() );
+        clipAreaPos.x = pos.x;
+        clipAreaPos.y = pos.y;
     }
 
     aDC->DestroyClippingRegion();
-    aDC->SetClippingRegion( pos, size );
+    aDC->SetClippingRegion( clipAreaPos, size );
 
     if( GetGRForceBlackPenState() )
     {
