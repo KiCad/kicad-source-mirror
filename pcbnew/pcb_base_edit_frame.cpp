@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -48,7 +48,6 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                           const wxPoint& aPos, const wxSize& aSize, long aStyle,
                                           const wxString& aFrameName ) :
         PCB_BASE_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
-        m_rotationAngle( ANGLE_90 ),
         m_undoRedoBlocked( false ),
         m_selectionFilterPanel( nullptr ),
         m_appearancePanel( nullptr )
@@ -159,13 +158,10 @@ bool PCB_BASE_EDIT_FRAME::TryBefore( wxEvent& aEvent )
 }
 
 
-void PCB_BASE_EDIT_FRAME::SetRotationAngle( EDA_ANGLE aRotationAngle )
+EDA_ANGLE PCB_BASE_EDIT_FRAME::GetRotationAngle() const
 {
-    wxCHECK2_MSG( aRotationAngle > ANGLE_0 && aRotationAngle <= ANGLE_90,
-                  aRotationAngle = ANGLE_90,
-                  wxT( "Invalid rotation angle, defaulting to 90." ) );
-
-    m_rotationAngle = aRotationAngle;
+    // Return a default angle (90 degrees) used for rotate operations.
+    return ANGLE_90;
 }
 
 

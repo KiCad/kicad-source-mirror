@@ -159,6 +159,11 @@ public:
     void UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool aEdit = true );
 
     /**
+     * Return the angle used for rotate operations.
+     */
+    EDA_ANGLE GetRotationAngle() const override;
+
+    /**
      * @return the color of the grid
      */
     COLOR4D GetGridColor() override;

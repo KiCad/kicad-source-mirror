@@ -588,6 +588,16 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
+
+EDA_ANGLE FOOTPRINT_EDIT_FRAME::GetRotationAngle() const
+{
+    FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
+
+    return cfg ? cfg->m_RotationAngle : ANGLE_90;
+}
+
+
+
 COLOR_SETTINGS* FOOTPRINT_EDIT_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
     wxString currentTheme = GetFootprintEditorSettings()->m_ColorTheme;

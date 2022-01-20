@@ -193,7 +193,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // assume dirty
     m_ZoneFillsDirty = true;
 
-    m_rotationAngle = ANGLE_90;
     m_aboutTitle = _( "KiCad PCB Editor" );
 
     // Must be created before the menus are created.
@@ -1054,7 +1053,6 @@ void PCB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     if( cfg )
     {
-        m_rotationAngle            = cfg->m_RotationAngle;
         m_show_layer_manager_tools = cfg->m_AuiPanels.show_layer_manager;
     }
 }
@@ -1069,11 +1067,18 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     if( cfg )
     {
-        cfg->m_RotationAngle                  = m_rotationAngle;
         cfg->m_AuiPanels.show_layer_manager   = m_show_layer_manager_tools;
         cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
         cfg->m_AuiPanels.appearance_panel_tab = m_appearancePanel->GetTabIndex();
     }
+}
+
+
+EDA_ANGLE PCB_EDIT_FRAME::GetRotationAngle() const
+{
+    PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( config() );
+
+    return cfg ? cfg->m_RotationAngle : ANGLE_90;
 }
 
 

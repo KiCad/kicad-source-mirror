@@ -63,6 +63,11 @@ public:
 
     FOOTPRINT_EDITOR_SETTINGS* GetSettings();
 
+    /**
+     * Return the angle used for rotate operations.
+     */
+    EDA_ANGLE GetRotationAngle() const override;
+
     APP_SETTINGS_BASE* config() const override;
 
     BOARD_DESIGN_SETTINGS& GetDesignSettings() const override;
