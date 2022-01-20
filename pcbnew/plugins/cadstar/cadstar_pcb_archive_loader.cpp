@@ -1415,8 +1415,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
                 }
                 else
                 {
-                    double angle = crossbarVector.Angle() + ( M_PI / 2 );
-                    height = heightVector.x * cos( angle ) + heightVector.y * sin( angle );
+                    EDA_ANGLE angle( crossbarVector );
+                    angle += ANGLE_90;
+                    height = heightVector.x * angle.Cos() + heightVector.y * angle.Sin();
                 }
 
                 dimension->SetHeight( height );

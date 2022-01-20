@@ -63,6 +63,7 @@
 
 
 #include <math/util.h>      // for KiROUND
+#include <trigo.h>          // for RotatePoint
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
@@ -109,38 +110,39 @@ static VECTOR2I computeCenter( VECTOR2I aStart, VECTOR2I aEnd, int& aRadius, boo
      * the Y center positions are on the vertical line starting at end.x/2, 0
      * and solve aRadius^2 = X^2 + Y^2  (2 values)
      */
-    double seg_angle = end.Angle(); //in radian
-    VECTOR2D h_segm = end.Rotate( - seg_angle );
-    double cX = h_segm.x/2;
-    double cY1 = sqrt( (double)aRadius*aRadius - cX*cX );
-    double cY2 = -cY1;
-    VECTOR2D center1( cX, cY1 );
-    center1 = center1.Rotate( seg_angle );
-    double arc_angle1 = (end - center1).Angle() - (VECTOR2D(0.0,0.0) - center1).Angle();
-    VECTOR2D center2( cX, cY2 );
-    center2 = center2.Rotate( seg_angle );
-    double arc_angle2 = (end - center2).Angle() - (VECTOR2D(0.0,0.0) - center2).Angle();
+    EDA_ANGLE seg_angle( end );
+    VECTOR2D  h_segm = end;
+    RotatePoint( h_segm, seg_angle );
+    double    cX = h_segm.x/2;
+    double    cY1 = sqrt( (double)aRadius*aRadius - cX*cX );
+    double    cY2 = -cY1;
+    VECTOR2D  center1( cX, cY1 );
+    RotatePoint( center1, -seg_angle );
+    EDA_ANGLE arc_angle1 = EDA_ANGLE( end - center1 ) - EDA_ANGLE( VECTOR2D( 0.0, 0.0 ) - center1 );
+    VECTOR2D  center2( cX, cY2 );
+    RotatePoint( center2, -seg_angle );
+    EDA_ANGLE arc_angle2 = EDA_ANGLE( end - center2 ) - EDA_ANGLE( VECTOR2D( 0.0, 0.0 ) - center2 );
 
     if( !aRotCCW )
     {
-        if( arc_angle1 < 0.0 )
-            arc_angle1 += 2*M_PI;
+        if( arc_angle1 < ANGLE_0 )
+            arc_angle1 += ANGLE_360;
 
-        if( arc_angle2 < 0.0 )
-            arc_angle2 += 2*M_PI;
+        if( arc_angle2 < ANGLE_0 )
+            arc_angle2 += ANGLE_360;
     }
     else
     {
-        if( arc_angle1 > 0.0 )
-            arc_angle1 -= 2*M_PI;
+        if( arc_angle1 > ANGLE_0 )
+            arc_angle1 -= ANGLE_360;
 
-        if( arc_angle2 > 0.0 )
-            arc_angle2 -= 2*M_PI;
+        if( arc_angle2 > ANGLE_0 )
+            arc_angle2 -= ANGLE_360;
     }
 
     // Arc angle must be <= 180.0 degrees.
     // So choose the center that create a arc angle <= 180.0
-    if( std::abs( arc_angle1 ) <= M_PI )
+    if( std::abs( arc_angle1 ) <= ANGLE_180 )
     {
         center.x = KiROUND( center1.x );
         center.y = KiROUND( center1.y );
@@ -161,7 +163,7 @@ extern double ReadDouble( char*& text, bool aSkipSeparator = true );
 extern void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                                  APERTURE_T        aAperture,
                                  int               Dcode_index,
-                                 const VECTOR2I& aPos,
+                                 const VECTOR2I&   aPos,
                                  wxSize            aSize,
                                  bool              aLayerNegative );
 

@@ -72,7 +72,7 @@ static void drawCursorStrings( KIGFX::VIEW* aView, const VECTOR2D& aCursor,
 
     cursorStrings.push_back( DimensionLabel( "r", aRulerVec.EuclideanNorm(), aUnits ) );
 
-    EDA_ANGLE angle( -aRulerVec.Angle(), RADIANS_T );
+    EDA_ANGLE angle = -EDA_ANGLE( aRulerVec );
     cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), angle.AsDegrees(),
                                              EDA_UNITS::DEGREES ) );
 
@@ -152,17 +152,19 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
 {
     KIGFX::GAL*   gal = aView->GetGAL();
     KIFONT::FONT* font = KIFONT::FONT::GetFont();
-    VECTOR2D      tickLine = aLine.Rotate( -M_PI_2 );
     double        tickSpace;
     TICK_FORMAT   tickFormat = getTickFormatForScale( gal->GetWorldScale(), tickSpace, aUnits );
     double        majorTickLen = aMinorTickLen * ( majorTickLengthFactor + 1 );
+    VECTOR2D      tickLine = aLine;
+
+    RotatePoint( tickLine, ANGLE_90 );
 
     // number of ticks in whole ruler
     int           numTicks = (int) std::ceil( aLine.EuclideanNorm() / tickSpace );
 
     // work out which way up the tick labels go
     TEXT_DIMS     labelDims = GetConstantGlyphHeight( gal, -1 );
-    double        labelAngle = -tickLine.Angle();
+    EDA_ANGLE     labelAngle = - EDA_ANGLE( tickLine );
     VECTOR2I      labelOffset = tickLine.Resize( majorTickLen );
 
     if( aDrawingDropShadows )
@@ -178,15 +180,15 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
     labelAttrs.m_Size = labelDims.GlyphSize;
     labelAttrs.m_StrokeWidth = labelDims.StrokeWidth;
 
-    if( aLine.Angle() > 0 )
+    if( EDA_ANGLE( aLine ) > ANGLE_0 )
     {
         labelAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
-        labelAttrs.m_Angle = EDA_ANGLE( labelAngle, RADIANS_T );
+        labelAttrs.m_Angle = labelAngle;
     }
     else
     {
         labelAttrs.m_Halign = GR_TEXT_H_ALIGN_RIGHT;
-        labelAttrs.m_Angle = EDA_ANGLE( labelAngle + M_PI, RADIANS_T );
+        labelAttrs.m_Angle = labelAngle + ANGLE_180;
     }
 
     BOX2D viewportD = aView->GetViewport();
@@ -241,10 +243,13 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
 void drawBacksideTicks( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECTOR2D& aLine,
                         double aTickLen, int aNumDivisions, bool aDrawingDropShadows )
 {
-    KIGFX::GAL*    gal = aView->GetGAL();
-    const double   backTickSpace = aLine.EuclideanNorm() / aNumDivisions;
-    const VECTOR2D backTickVec = aLine.Rotate( M_PI_2 ).Resize( aTickLen );
-    TEXT_DIMS      textDims = GetConstantGlyphHeight( gal, -1 );
+    KIGFX::GAL*  gal = aView->GetGAL();
+    TEXT_DIMS    textDims = GetConstantGlyphHeight( gal, -1 );
+    const double backTickSpace = aLine.EuclideanNorm() / aNumDivisions;
+    VECTOR2D     backTickVec = aLine;
+
+    RotatePoint( backTickVec, -ANGLE_90 );
+    backTickVec.Resize( aTickLen );
 
     BOX2D viewportD = aView->GetViewport();
     BOX2I viewport( VECTOR2I( viewportD.GetPosition() ), VECTOR2I( viewportD.GetSize() ) );

@@ -35,6 +35,7 @@
 #include <gal/definitions.h>
 #include <geometry/shape_poly_set.h>
 #include <math/util.h> // for KiROUND
+#include <trigo.h>
 #include <bitmap_base.h>
 
 #include <algorithm>
@@ -390,8 +391,10 @@ void CAIRO_GAL_BASE::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadiu
 
     VECTOR2D mid = roundp( xform( aCenterPoint ) );
     double   width = xform( aWidth / 2.0 );
-    VECTOR2D startPointS = VECTOR2D( r, 0.0 ).Rotate( startAngleS );
-    VECTOR2D endPointS = VECTOR2D( r, 0.0 ).Rotate( endAngleS );
+    VECTOR2D startPointS = VECTOR2D( r, 0.0 );
+    VECTOR2D endPointS = VECTOR2D( r, 0.0 );
+    RotatePoint( startPointS, -EDA_ANGLE( startAngleS, RADIANS_T ) );
+    RotatePoint( endPointS, -EDA_ANGLE( endAngleS, RADIANS_T ) );
 
     cairo_save( m_currentContext );
 
