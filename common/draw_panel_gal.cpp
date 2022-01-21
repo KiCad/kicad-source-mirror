@@ -251,9 +251,11 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
 
         if( m_view->IsDirty() )
         {
-            if( m_backend != GAL_TYPE_OPENGL && // Already called in opengl
-                m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
+            if( m_backend != GAL_TYPE_OPENGL  // Already called in opengl
+                    && m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
+            {
                 m_gal->ClearScreen();
+            }
 
             m_view->ClearTargets();
 
