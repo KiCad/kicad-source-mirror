@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2022-01-15 22:43+0000\n"
+"PO-Revision-Date: 2022-02-01 13:57+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.11-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -10509,15 +10509,14 @@ msgid "Filled shape"
 msgstr "Wypełniony kształt"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:110
-#, fuzzy
 msgid "Set line width to 0 to use Schematic Editor line widths."
 msgstr ""
-"Ustaw szerokość na 0, aby użyć szerokości linii pochodzącej z klasy sieci."
+"Ustaw szerokość na 0, aby użyć szerokości linii pochodzącej z edytora "
+"schematów."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:114
-#, fuzzy
 msgid "Set line color to transparent to use Schematic Editor colors."
-msgstr "Ustaw kolor przeźroczysty by użyć kolorów edytora schematów."
+msgstr "Ustaw kolor na przeźroczysty by użyć kolorów edytora schematów."
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:62
 #, c-format
@@ -11020,9 +11019,8 @@ msgid "Subcircuit"
 msgstr "Schemat podrzędny"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:85
-#, fuzzy
 msgid "Code Model"
-msgstr "Tryb modelowania"
+msgstr "Kod modelu"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:452
 msgid ""
@@ -11773,9 +11771,8 @@ msgid "Remap Symbols"
 msgstr "Remapowanie symboli"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:241
-#, fuzzy
 msgid "Text can not be empty."
-msgstr "Nazwa sieci nie może być pusta."
+msgstr "Pole tekstu nie może być puste."
 
 #: eeschema/dialogs/dialog_text_properties_base.h:82
 #: pcbnew/dialogs/dialog_text_properties.cpp:104
@@ -11897,28 +11894,24 @@ msgid "Show hidden fields"
 msgstr "Pokaż ukryte pola"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:52
-#, fuzzy
 msgid "Show ERC errors"
-msgstr "Błędy ERC"
+msgstr "Pokaż błędy ERC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:55
-#, fuzzy
 msgid "Show ERC warnings"
-msgstr "Ostrzeżenia ERC"
+msgstr "Pokaż ostrzeżenia ERC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:58
-#, fuzzy
 msgid "Show ERC exclusions"
-msgstr "Wyjątki DRC"
+msgstr "Pokaż wyjątki ERC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:61
 msgid "Show page limi&ts"
 msgstr "Pokaż granice strony"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:69
-#, fuzzy
 msgid "Selection && Highlighting"
-msgstr "Podświetlenie zaznaczenia"
+msgstr "Zaznaczenie oraz podświetlanie"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:71
 msgid "Draw selected text items as box"
@@ -11933,17 +11926,14 @@ msgid "Fill selected shapes"
 msgstr "Wypełnij zaznaczone kształty"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:86
-#, fuzzy
 msgid "Selection thickness:"
-msgstr "Domyślna szerokość linii:"
+msgstr "Grubość zaznaczenia wyboru:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:94
-#, fuzzy
 msgid "(selection color can be edited in the \"Colors\" page)"
 msgstr "(kolor podświetlenia można zmienić na stronie \"Kolory\")"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:98
-#, fuzzy
 msgid "Highlight thickness:"
 msgstr "Grubość podświetlenia:"
 
@@ -12271,21 +12261,18 @@ msgstr "]"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:213
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:21
-#, fuzzy
 msgid "Dashed Lines"
-msgstr "Dodaj linie"
+msgstr "Linie ukośne"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:220
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:28
-#, fuzzy
 msgid "Dash length:"
-msgstr "Długość przelotki:"
+msgstr "Długość ukosu:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:227
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:35
-#, fuzzy
 msgid "Gap length:"
-msgstr "Długość przelotki:"
+msgstr "Odstęp ukosu:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:237
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:45
@@ -13687,9 +13674,8 @@ msgstr "Wróć do poprzednio wybranego arkusza"
 
 #: eeschema/sch_field.cpp:865 eeschema/sch_text.cpp:648
 #: eeschema/sch_text.cpp:1510
-#, fuzzy
 msgid "Sheet References"
-msgstr "Odnośniki między arkuszami"
+msgstr "Odnośniki arkuszy"
 
 #: eeschema/sch_io_mgr.cpp:35 pcbnew/io_mgr.cpp:42
 #, c-format
@@ -16228,14 +16214,12 @@ msgid "Add a net label"
 msgstr "Dodaje etykietę"
 
 #: eeschema/tools/ee_actions.cpp:301
-#, fuzzy
 msgid "Add Net Class Flag"
-msgstr "Klasy sieci"
+msgstr "Dodaj flagę z klasą sieci"
 
 #: eeschema/tools/ee_actions.cpp:301
-#, fuzzy
 msgid "Add a net class flag"
-msgstr "Dodaje etykietę"
+msgstr "Dodaje flagę opisującą przynależność do danej sieci"
 
 #: eeschema/tools/ee_actions.cpp:307
 msgid "Add Hierarchical Label"
@@ -16243,7 +16227,7 @@ msgstr "Dodaj etykietę hierarchiczną"
 
 #: eeschema/tools/ee_actions.cpp:307
 msgid "Add a hierarchical label"
-msgstr "Dodaj etykietę hierarchiczną"
+msgstr "Dodaje etykietę hierarchiczną"
 
 #: eeschema/tools/ee_actions.cpp:313
 msgid "Add Sheet"
@@ -16463,14 +16447,12 @@ msgid "Change existing item to a label"
 msgstr "Zmienia istniejący element na etykietę"
 
 #: eeschema/tools/ee_actions.cpp:478
-#, fuzzy
 msgid "Change to Net Class Flag"
-msgstr "Zmień na tekst"
+msgstr "Zmień na flagę klasy sieci"
 
 #: eeschema/tools/ee_actions.cpp:478
-#, fuzzy
 msgid "Change existing item to a net class flag"
-msgstr "Zmienia istniejący element na etykietę"
+msgstr "Zmienia istniejący element na flagę z klasą sieci"
 
 #: eeschema/tools/ee_actions.cpp:483
 msgid "Change to Hierarchical Label"
@@ -16731,34 +16713,31 @@ msgid "Toggle display of hidden text fields"
 msgstr "Przełącza widoczność ukrytych pól tekstowych"
 
 #: eeschema/tools/ee_actions.cpp:660
-#, fuzzy
 msgid "Show ERC Warnings"
-msgstr "Ostrzeżenia DRC"
+msgstr "Pokaż ostrzeżenia ERC"
 
 #: eeschema/tools/ee_actions.cpp:660
-#, fuzzy
 msgid "Show markers for electrical rules checker warnings"
-msgstr "Przeprowadza kontrolę reguł projektowych pod względem elektrycznym"
+msgstr ""
+"Pokazuje znaczniki gdzie znajdują się ostrzeżenia kontroli reguł projektowych"
 
 #: eeschema/tools/ee_actions.cpp:664
-#, fuzzy
 msgid "Show ERC Errors"
-msgstr "Pokaż błędy wtyczki"
+msgstr "Pokaż błędy ERC"
 
 #: eeschema/tools/ee_actions.cpp:664
-#, fuzzy
 msgid "Show markers for electrical rules checker errors"
-msgstr "Przeprowadza kontrolę reguł projektowych pod względem elektrycznym"
+msgstr ""
+"Pokazuje znaczniki gdzie znajdują się błędy z kontroli reguł projektowych"
 
 #: eeschema/tools/ee_actions.cpp:668
-#, fuzzy
 msgid "Show ERC Exclusions"
-msgstr "Wyjątki DRC"
+msgstr "Pokaż wyjątki ERC"
 
 #: eeschema/tools/ee_actions.cpp:669
-#, fuzzy
 msgid "Show markers for excluded electrical rules checker violations"
-msgstr "Przeprowadza kontrolę reguł projektowych pod względem elektrycznym"
+msgstr ""
+"Pokazuje znaczniki gdzie znajdują się wyjątki kontroli reguł projektowych"
 
 #: eeschema/tools/ee_actions.cpp:673
 msgid "Force H/V Wires and Buses"
@@ -17275,24 +17254,20 @@ msgid "0B Lin"
 msgstr "0B Lin"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
-#, fuzzy
 msgid "4B S-Curve"
-msgstr "Krzywa"
+msgstr "4B S-Curve"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
-#, fuzzy
 msgid "5B S-Curve"
-msgstr "Krzywa"
+msgstr "5B S-Curve"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
-#, fuzzy
 msgid "Switch"
-msgstr "Przełącz jednostki miary"
+msgstr "Przełączana"
 
 #: eeschema/widgets/tuner_slider_base.cpp:70
-#, fuzzy
 msgid "Characteristic Curve"
-msgstr "Impedancja charakterystyczna"
+msgstr "Krzywa charakterystyki"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -18724,14 +18699,12 @@ msgid "Uninstall"
 msgstr "Odinstaluj"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:130
-#, fuzzy
 msgid "Apply Pending Changes"
-msgstr "Zatwierdź zmiany"
+msgstr "Zatwierdź oczekujące zmiany"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:131
-#, fuzzy
 msgid "Discard Pending Changes"
-msgstr "Porzuć zmiany"
+msgstr "Porzuć oczekujące zmiany"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:166
 msgid ""
@@ -18822,14 +18795,12 @@ msgid "Applying Package Changes"
 msgstr "Zatwierdzanie zmian w pakiecie"
 
 #: kicad/pcm/dialogs/panel_package.cpp:97
-#, fuzzy
 msgid "Install Pending"
-msgstr "Rozmiar instalacji"
+msgstr "Oczekujące instalacje"
 
 #: kicad/pcm/dialogs/panel_package.cpp:101
-#, fuzzy
 msgid "Uninstall Pending"
-msgstr "Odinstaluj"
+msgstr "Oczekujące deinstalacje"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:212
 msgid "Metadata"
@@ -21854,9 +21825,8 @@ msgid "PTFE natural"
 msgstr "Naturalny PTFE"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:80
-#, fuzzy
 msgid "Polyimide"
-msgstr "Linia łamana"
+msgstr "Poliamid"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:81
 msgid "Phenolic natural"
@@ -22495,7 +22465,6 @@ msgid "Defaults"
 msgstr "Domyślny"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:104
-#, fuzzy
 msgid "Fomatting"
 msgstr "Formatowanie"
 
@@ -23342,12 +23311,11 @@ msgid "Create Array"
 msgstr "Utwórz szyk"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:223
-#, fuzzy
 msgid ""
 "This item was on a non-existing layer.\n"
 "It has been moved to the first defined layer."
 msgstr ""
-"Ten element znajduje się na nieodpowiedniej lub nieistniejącej warstwie.\n"
+"Ten element znajduje się na nieistniejącej warstwie.\n"
 "Zostanie przeniesiony na najbliższą odpowiednią warstwę."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:309
@@ -23657,9 +23625,8 @@ msgid "Open the Board Setup... dialog"
 msgstr "Otwiera okno dialogowe Ustawienia płytki"
 
 #: pcbnew/dialogs/dialog_drc.cpp:705
-#, fuzzy
 msgid "Edit ignored violations..."
-msgstr "Edytuj poziomy naruszeń..."
+msgstr "Edycja zignorowanych poziomów naruszeń..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:775
 #, c-format
@@ -23724,9 +23691,9 @@ msgid "Schematic Parity (%d)"
 msgstr "Zgodność ze schematem (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored Tests (%d)"
-msgstr "Niepołączone elementy (%d)"
+msgstr "Zignorowanych testów (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:206
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
@@ -23811,19 +23778,17 @@ msgid "Updated footprint %s (%s)"
 msgstr "Uaktualniony footprint %s (%s)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Changed footprint %s from '%s' to '%s'"
-msgstr "Zmień footprint %s z '%s' na '%s'"
+msgstr "Zmieniono footprint %s z '%s' na '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:375
-#, fuzzy
 msgid "*** library footprint not found ***"
-msgstr "*** footprintu nie odnaleziono ***"
+msgstr "*** nie odnaleziono biblioteki footprintów ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:395
-#, fuzzy
 msgid ": (no changes)"
-msgstr "Anuluj zmiany"
+msgstr ": (bez zmian)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:400
 msgid ": OK"
@@ -24311,14 +24276,13 @@ msgid "3D Models"
 msgstr "Modele 3D"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:252
-#, fuzzy
 msgid ""
 "Locked footprints cannot be freely moved and oriented on the canvas and can "
 "only be selected when the 'Locked items' checkbox is enabled in the "
 "selection filter."
 msgstr ""
-"Footprint jest zablokowany: nie można go swobodnie przenosić ani umieszczać "
-"automatycznie na kanwie i można go wybrać tylko wtedy, gdy w filtrze wyboru "
+"Zablokowanych footprintów nie można swobodnie przenosić ani umieszczać "
+"automatycznie na kanwie i można je wybrać tylko wtedy, gdy w filtrze wyboru "
 "jest zaznaczone pole wyboru 'Zablokowane elementy'."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:338
@@ -24480,9 +24444,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:256
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:608
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:54
-#, fuzzy
 msgid "Solder mask expansion:"
-msgstr "Soldermaska na górze:"
+msgstr "Poszerzenie soldermaski:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:287
 msgid ""
@@ -24630,9 +24593,8 @@ msgid "Footprint name:"
 msgstr "Nazwa footprintu:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:135
-#, fuzzy
 msgid "Private Layers"
-msgstr "Drukuj warstwy"
+msgstr "Warstwy prywatne"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:188
 msgid "Component type:"
@@ -25154,14 +25116,12 @@ msgid "Delete Items"
 msgstr "Usuń elementy"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:139
-#, fuzzy
 msgid "Other text items"
-msgstr "Pozostałe elementy"
+msgstr "Pozostałe elementy tekstowe"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:140
-#, fuzzy
 msgid "Graphic items"
-msgstr "Elementy graficzne PCB"
+msgstr "Elementy graficzne"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:255
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
@@ -25423,31 +25383,26 @@ msgid "Deselect All"
 msgstr "Odznacz wszystkie"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:49
-#, fuzzy
 msgid "Board layers and physical stackup"
-msgstr "Uaktualnij fizyczny stos warstw"
+msgstr "Warstwy płytki oraz fizyczny stos warstw"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:52
 msgid "Solder mask/paste defaults"
 msgstr "Domyślne ustawienia soldermaski/pasty"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:55
-#, fuzzy
 msgid "Text && graphics default properties"
 msgstr "Domyślne właściwości tekstu oraz elementów graficznych"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
-#, fuzzy
 msgid "Text && graphics formatting"
-msgstr "Tekst i grafika"
+msgstr "Formatowanie tekstu i grafiki"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
-#, fuzzy
 msgid "Design rule constraints"
-msgstr "Reguły projektowe"
+msgstr "Ograniczenia zasad projektowania"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:64
-#, fuzzy
 msgid "Predefined track && via dimensions"
 msgstr "Predefiniowane wymiary ścieżek i przelotek"
 
@@ -26325,9 +26280,8 @@ msgid "Castellated pad (through hole only)"
 msgstr "Pole z kastelacją (tylko z otworem na wylot)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:582
-#, fuzzy
 msgid "Clearance Overrides"
-msgstr "Przekroczenie prześwitu"
+msgstr "Naruszenia prześwitu"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:585
 msgid "Set values to 0 to use parent footprint or netclass values."
@@ -26404,29 +26358,24 @@ msgid "Pad shape"
 msgstr "Kształt pola"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
-#, fuzzy
 msgid "Pad convex hull"
-msgstr "Użyj otoczenia obrysu pola lutowniczego"
+msgstr "Użyj uwypuklenia obrysu pola lutowniczego"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:733
-#, fuzzy
 msgid "Thermal Relief Overrides"
-msgstr "Szerokość połączenia termicznego"
+msgstr "Naruszenia łącza termicznego"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:741
-#, fuzzy
 msgid "Relief gap:"
-msgstr "Dystans połączenia termicznego:"
+msgstr "Dystans łącza termicznego:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:752
-#, fuzzy
 msgid "Spoke width:"
-msgstr "Grubość pisaka:"
+msgstr "Grubość łącza termicznego:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:763
-#, fuzzy
 msgid "Spoke angle:"
-msgstr "Kąt łuku:"
+msgstr "Kąt łącza termicznego:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:797
 msgid "Primitives list:"
@@ -28178,9 +28127,8 @@ msgid "Allow fillets outside zone outline"
 msgstr "Zezwalaj na zaokrąglenia poza obrysem strefy"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:146
-#, fuzzy
 msgid "Min thermal relief spoke count:"
-msgstr "Szerokość połączenia termicznego:"
+msgstr "Min. ilość łącz termicznych:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:165
 msgid "Length tuning"
@@ -28362,14 +28310,12 @@ msgstr ""
 "kształtów w jednym footprincie.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:459
-#, fuzzy
 msgid "Minimum text height:"
-msgstr "Wysokość tekstu:"
+msgstr "Min. wysokość tekstu:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:473
-#, fuzzy
 msgid "Minimum text thickness:"
-msgstr "Grubość tekstu:"
+msgstr "Min. grubość tekstu:"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:430
 msgid "Use the Physical Stackup page to change the number of copper layers."
@@ -28970,13 +28916,12 @@ msgid "User9"
 msgstr "User9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board manufacturer's recommendations for solder mask expansion and "
 "minimum web width."
 msgstr ""
-"Skorzystaj z zaleceń swojego producenta odnośnie prześwitu maski lutowniczej "
-"i minimalnej szerokości mostków."
+"Skorzystaj z zaleceń swojego producenta odnośnie poszerzenia maski "
+"lutowniczej i minimalnej szerokości mostków."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
 msgid "If none are provided, setting the values to zero is suggested."
@@ -29026,9 +28971,8 @@ msgstr ""
 "się bliżej niż określony odstęp będą traktowane jako jedno otwarcie."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:84
-#, fuzzy
 msgid "Solder mask to copper clearance:"
-msgstr "Prześwit soldermaski:"
+msgstr "Prześwit soldermaski względem miedzi:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
 msgid "Allow bridged solder mask apertures between pads within footprints"
@@ -29037,9 +28981,8 @@ msgstr ""
 "footprintów"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:98
-#, fuzzy
 msgid "Tent vias"
-msgstr "Nie maskuj przelotek"
+msgstr "Maskuj przelotki"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:103
 msgid ""
@@ -29113,7 +29056,6 @@ msgid "Check rule syntax"
 msgstr "Sprawdź składnię reguł"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -29397,7 +29339,7 @@ msgstr ""
 "    (rule <nazwa_reguły> <warunek_reguły> ...)\n"
 "\n"
 "\n"
-"<br><br>\n"
+"<br>\n"
 "\n"
 "### Klauzule warunkowe\n"
 "\n"
@@ -29407,8 +29349,10 @@ msgstr ""
 "\n"
 "    (layer \"<nazwa_warstwy>\")\n"
 "\n"
+"    (severity <nazwa_ważności>)\n"
 "\n"
-"<br><br>\n"
+"\n"
+"<br>\n"
 "\n"
 "### Typy ograniczeń\n"
 "\n"
@@ -29422,14 +29366,24 @@ msgstr ""
 " * length\n"
 " * hole\\_clearance\n"
 " * hole\\_size\n"
+" * mechanical\\_clearance\n"
+" * mechanical\\_hole\\_clearance\n"
+" * min\\_resolved\\_spokes\n"
 " * silk\\_clearance\n"
 " * skew\n"
+" * text\\_height\n"
+" * text\\_thickness\n"
+" * thermal\\_relief\\_gap\n"
+" * thermal\\_spoke\\_width\n"
 " * track\\_width\n"
 " * via\\_count\n"
 " * via\\_diameter\n"
+" * zone\\_connection\n"
 "\n"
-"\n"
-"<br><br>\n"
+"Uwaga: Reguły `clearance` oraz `hole_clearance` nie są sprawdzane dla "
+"elementów tej samej sieci; zaś `mechanical_clearance` oraz "
+"`mechanical_hole_clearance` są sprawdzane.\n"
+"<br>\n"
 "\n"
 "### Typy elementów\n"
 "\n"
@@ -29442,6 +29396,23 @@ msgstr ""
 "* track\n"
 "* via\n"
 "* zone\n"
+"\n"
+"<br>\n"
+"\n"
+"### Łącza ze strefami\n"
+"\n"
+" * solid\n"
+" * thermal\\_reliefs\n"
+" * none\n"
+"\n"
+"<br>\n"
+"\n"
+"### Ważność naruszeń\n"
+"\n"
+" * warning\n"
+" * error\n"
+" * exclusion\n"
+" * ignore\n"
 "\n"
 "<br>\n"
 "\n"
@@ -29469,6 +29440,11 @@ msgstr ""
 "    (rule HV_unshielded\n"
 "       (constraint clearance (min 2mm))\n"
 "       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+"\n"
+"\n"
+"    (rule heavy_thermals\n"
+"       (constraint thermal_spoke_width (min 0.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
 "<br><br>\n"
 "\n"
 "### Uwagi\n"
@@ -29540,8 +29516,8 @@ msgstr ""
 "\n"
 "UWAGA: Zwraca prawdę, jeśli `A` znajduje się na danej warstwie, \n"
 "niezależnie czy reguła jest oceniana dla tej warstwy.\n"
-"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy"
-"\")`.\n"
+"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy\")`."
+"\n"
 "<br><br><br>\n"
 "\n"
 "### Więcej przykładów\n"
@@ -29604,6 +29580,40 @@ msgstr ""
 "    (rule \"prześwit dp\"\n"
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+"\n"
+"\n"
+"    # Nie używaj łącz termicznych na polach radiatorowych\n"
+"    (rule heat_sink_pad\n"
+"        (constraint zone_connection solid)\n"
+"        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
+"\n"
+"    # Wymagaj wszystkich czterech łącz termicznych, aby połączyć się ze "
+"strefą nadrzędną\n"
+"    (rule fully_spoked_pads\n"
+"        (constraint min_resolved_spokes 4))\n"
+"\n"
+"    # Ustaw odstęp termiczny i szerokość łącza dla wszystkich stref\n"
+"    (rule defined_relief\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil)))\n"
+"\n"
+"    # Zastąp prześwit łącza termicznego oraz grubość łącz dla stref GND i "
+"PWR\n"
+"    (rule defined_relief_pwr\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil))\n"
+"        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
+"    \n"
+"\n"
+"    # Zapobiegaj tworzeniu nitek cyny dla pól SMD\n"
+"    (rule holes_in_pads\n"
+"        (constraint mechanical_hole_clearance (min 0.2mm))\n"
+"        (condition \"B.Pad_Type == 'SMD'\"))\n"
+"\n"
+"    # Nie zezwalaj na nadpisywanie marginesów maski lutowniczej\n"
+"    (rule \"nie zezwalaj na nadpisywanie marginesów maski lutowniczej\"\n"
+"        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
+"        (condition \"A.Type == 'Pad'\"))"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
@@ -29690,9 +29700,8 @@ msgid "board setup constraints"
 msgstr "ograniczenia w konfiguracji płytki"
 
 #: pcbnew/drc/drc_engine.cpp:180
-#, fuzzy
 msgid "default"
-msgstr "Domyślny"
+msgstr "domyślny"
 
 #: pcbnew/drc/drc_engine.cpp:186
 msgid "board setup constraints silk"
@@ -29740,14 +29749,14 @@ msgid "Tessellating copper zones..."
 msgstr "Teselacja stref miedzi..."
 
 #: pcbnew/drc/drc_engine.cpp:676
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved zone connection type: %s."
-msgstr "Typ połączenia ze strefą: %s."
+msgstr "Rozpoznany typ połączenia ze strefą: %s."
 
 #: pcbnew/drc/drc_engine.cpp:694
-#, fuzzy, c-format
+#, c-format
 msgid "Pad is not a through hole pad; connection will be: %s."
-msgstr "Pole nie jest polem PTH; połączone będzie: %s."
+msgstr "Pole nie jest polem przewlekanym; połączone będzie: %s."
 
 #: pcbnew/drc/drc_engine.cpp:754 pcbnew/drc/drc_engine.cpp:769
 #, c-format
@@ -29773,19 +29782,19 @@ msgid "Board minimum hole clearance: %s."
 msgstr "Minimalny prześwit otworu płytki: %s."
 
 #: pcbnew/drc/drc_engine.cpp:817
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; zone connection: %s."
-msgstr "Lokalne pokrycie na %s; prześwit: %s."
+msgstr "Lokalne zastąpienie na %s; połączenie ze strefą: %s."
 
 #: pcbnew/drc/drc_engine.cpp:833
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; thermal relief gap: %s."
-msgstr "Zastąpiony przez %s; łącze termiczne: %s."
+msgstr "Lokalne zastąpienie na %s; prześwit łącza termicznego: %s."
 
 #: pcbnew/drc/drc_engine.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; thermal spoke width: %s."
-msgstr "Lokalne pokrycie na %s; prześwit: %s."
+msgstr "Lokalne zastąpienie na %s; grubość łącza termicznego: %s."
 
 #: pcbnew/drc/drc_engine.cpp:858
 #, c-format
@@ -29793,9 +29802,9 @@ msgid "Zone %s min thickness: %s."
 msgstr "Strefa %s minimalna grubość: %s."
 
 #: pcbnew/drc/drc_engine.cpp:872
-#, fuzzy, c-format
+#, c-format
 msgid "Checking assertion \"%s\"."
-msgstr "Sprawdzam warunek reguły \"%s\"."
+msgstr "Sprawdzanie asercji \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:876 pcbnew/drc/drc_engine.cpp:1295
 msgid "Assertion passed."
@@ -29870,9 +29879,8 @@ msgid "Unconditional rule applied."
 msgstr "Zastosowano bezwarunkową regułę."
 
 #: pcbnew/drc/drc_engine.cpp:1083
-#, fuzzy
 msgid "Unconditional rule applied; overrides previous constraints."
-msgstr "Zastosowano regułę; pokrywa ona poprzednie ograniczenia."
+msgstr "Zastosowano regułę bezwarunkową; pokrywa ona poprzednie ograniczenia."
 
 #: pcbnew/drc/drc_engine.cpp:1098 pcbnew/drc/drc_engine.cpp:1323
 #, c-format
@@ -29884,9 +29892,8 @@ msgid "Constraint applied."
 msgstr "Zostało zastosowane ograniczenie."
 
 #: pcbnew/drc/drc_engine.cpp:1112 pcbnew/drc/drc_engine.cpp:1328
-#, fuzzy
 msgid "Rule applied."
-msgstr "Zastosowano bezwarunkową regułę."
+msgstr "Zastosowano regułę."
 
 #: pcbnew/drc/drc_engine.cpp:1117
 msgid "Rule applied; overrides previous constraints."
@@ -29931,18 +29938,17 @@ msgid "Zone %s thermal spoke width: %s."
 msgstr "Strefa %s szerokość poł. termicznego: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1290
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule assertion \"%s\"."
-msgstr "Sprawdzam warunek reguły \"%s\"."
+msgstr "Sprawdzam asercję reguły \"%s\"."
 
 #: pcbnew/drc/drc_item.cpp:44
 msgid "Electrical"
 msgstr "Elektryczne"
 
 #: pcbnew/drc/drc_item.cpp:45
-#, fuzzy
 msgid "Design for Manufacturing"
-msgstr "Produkcyjne"
+msgstr "Projekt dla produkcji"
 
 #: pcbnew/drc/drc_item.cpp:46
 msgid "Schematic Parity"
@@ -29953,9 +29959,8 @@ msgid "Signal Integrity"
 msgstr "Integracja sygnałów"
 
 #: pcbnew/drc/drc_item.cpp:48
-#, fuzzy
 msgid "Readability"
-msgstr "Tyko do odczytu"
+msgstr "Czytelność"
 
 #: pcbnew/drc/drc_item.cpp:52
 msgid "Missing connection between items"
@@ -30086,14 +30091,12 @@ msgid "Pad net doesn't match schematic"
 msgstr "Sieć na polu lutowniczym nie pasuje do schematu"
 
 #: pcbnew/drc/drc_item.cpp:180
-#, fuzzy
 msgid "Footprint not found in libraries"
-msgstr "Footprint nie został znaleziony na liście zmian"
+msgstr "Footprint nie został znaleziony w bibliotekach"
 
 #: pcbnew/drc/drc_item.cpp:184
-#, fuzzy
 msgid "Footprint doesn't match copy in library"
-msgstr "Typ footprintu nie odpowiada polom footprintu"
+msgstr "Footprint nie odpowiada jego kopii w bibliotece"
 
 #: pcbnew/drc/drc_item.cpp:192
 msgid "Assertion failure"
@@ -30116,14 +30119,12 @@ msgid "Silkscreen overlap"
 msgstr "Opisy nakładają się"
 
 #: pcbnew/drc/drc_item.cpp:212
-#, fuzzy
 msgid "Text height out of range"
-msgstr "Długość ścieżki poza zakresem"
+msgstr "Wysokość tekstu poza zakresem"
 
 #: pcbnew/drc/drc_item.cpp:216
-#, fuzzy
 msgid "Text thickness out of range"
-msgstr "Długość ścieżki poza zakresem"
+msgstr "Grubość tekstu poza zakresem"
 
 #: pcbnew/drc/drc_item.cpp:220
 msgid "Trace length out of range"
@@ -30256,9 +30257,8 @@ msgid "Expecting number."
 msgstr "Spodziewano się liczby."
 
 #: pcbnew/drc/drc_rule_parser.cpp:422
-#, fuzzy
 msgid "Missing assertion expression."
-msgstr "Brak wyrażenia warunkowego."
+msgstr "Brak wyrażenia dla asercji."
 
 #: pcbnew/drc/drc_rule_parser.cpp:459
 msgid "Missing min value."
@@ -30282,9 +30282,8 @@ msgid "Unrecognized layer '%s'."
 msgstr "Nierozpoznana warstwa '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:622
-#, fuzzy
 msgid "Missing severity name."
-msgstr "Brak informacji o numerze wersji."
+msgstr "Brak informacji o ważności."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:83
 msgid "Checking via annular rings..."
@@ -30454,14 +30453,12 @@ msgid "No project loaded, skipping library parity tests."
 msgstr "Nie załadowano projektu, pominięto testy zgodności bibliotek."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:410
-#, fuzzy
 msgid "Loading footprint library table..."
-msgstr "Błąd podczas wczytywania tabeli bibliotek footprintów."
+msgstr "Wczytywanie tabeli bibliotek footprintów..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:420
-#, fuzzy
 msgid "Checking board footprints against library..."
-msgstr "Sprawdzam footprinty..."
+msgstr "Porównywanie footprintów na płytce z ich źródłami w bibliotece..."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:113
 #, c-format
@@ -30494,14 +30491,12 @@ msgid "<unconstrained>"
 msgstr "<nieograniczona>"
 
 #: pcbnew/drc/drc_test_provider_mechanical_clearance.cpp:176
-#, fuzzy
 msgid "Gathering items..."
-msgstr "Zbieranie elementów na warstwach miedzi..."
+msgstr "Zbieranie elementów..."
 
 #: pcbnew/drc/drc_test_provider_mechanical_clearance.cpp:229
-#, fuzzy
 msgid "Checking mechanical clearances..."
-msgstr "Sprawdzam prześwit pomiędzy otworami..."
+msgstr "Sprawdzanie prześwitów mechanicznych..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:112
 msgid "(no edges found on Edge.Cuts layer)"
@@ -30525,9 +30520,8 @@ msgid "Checking text variables..."
 msgstr "Sprawdzenie zmiennych tekstowych..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:361
-#, fuzzy
 msgid "Checking assertions..."
-msgstr "Sprawdzanie pinów..."
+msgstr "Sprawdzanie asercji..."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:115
 #, c-format
@@ -30558,9 +30552,8 @@ msgid "Checking PCB to schematic parity..."
 msgstr "Sprawdzam identyczność PCB względem schematu..."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:221
-#, fuzzy
 msgid "No netlist provided, skipping schematic parity tests."
-msgstr "Nie dostarczono listy sieci, pomijam LVS."
+msgstr "Nie dostarczono listy sieci, pomijam sprawdzanie zgodności schematu."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:99
 msgid "Checking silkscreen for overlapping items..."
@@ -30576,9 +30569,8 @@ msgid "Running sliver detection on copper layers..."
 msgstr "Uruchamianie wykrywania odłamków na warstwach miedzi..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:55
-#, fuzzy
 msgid "board setup solder mask min width"
-msgstr "ograniczenia w konfiguracji płytki"
+msgstr "minimalna szerokość maski lutowniczej w konfiguracji płytki"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:426
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:506
@@ -30591,44 +30583,40 @@ msgid "Rear solder mask aperture bridges items with different nets"
 msgstr "Tylna soldermaska łączy elementy o różnych sieciach"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:614
-#, fuzzy
 msgid "Building solder mask..."
-msgstr "Tworzenie wypełnień strefy..."
+msgstr "Tworzenie soldermaski..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:619
-#, fuzzy
 msgid "Checking solder mask to silk clearance..."
-msgstr "Sprawdzam prześwit pomiędzy otworami..."
+msgstr "Sprawdzanie prześwitu pomiędzy soldermaską a warstwą opisową..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:624
-#, fuzzy
 msgid "Checking solder mask web integrity..."
-msgstr "Sprawdzenie szerokości ścieżek..."
+msgstr "Sprawdzenie integralności sieci soldermaski..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:85
-#, fuzzy
 msgid "Checking text dimensions..."
-msgstr "Sprawdzenie zmiennych tekstowych..."
+msgstr "Sprawdzenie tekstów wymiarów..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min height %s; actual %s)"
-msgstr "(%s min. szerokość %s; obecnie %s)"
+msgstr "(%s min. wysokość %s; obecnie %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max height %s; actual %s)"
-msgstr "(%s maks. szerokość %s; obecnie %s)"
+msgstr "(%s maks. wysokość %s; obecnie %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min thickness %s; actual %s)"
-msgstr "(%s min. szerokość %s; obecnie %s)"
+msgstr "(%s min. grubość %s; obecnie %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max thickness %s; actual %s)"
-msgstr "(%s maks. szerokość %s; obecnie %s)"
+msgstr "(%s maks. grubość %s; obecnie %s)"
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:78
 msgid "Checking track widths..."
@@ -30649,14 +30637,13 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s maks. rozmiar %s; obecnie %s)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:81
-#, fuzzy
 msgid "Checking thermal reliefs..."
-msgstr "Sprawdzenie zmiennych tekstowych..."
+msgstr "Sprawdzanie łącz termicznych..."
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min spoke count %d; actual %d)"
-msgstr "(%s maks. ilość %d; obecnie %d)"
+msgstr "(%s min. ilość łącz %d; obecnie %d)"
 
 #: pcbnew/edit_zone_helpers.cpp:86 pcbnew/edit_zone_helpers.cpp:151
 msgid "Modify zone properties"
@@ -31683,14 +31670,12 @@ msgid "Auto-Place Footprints"
 msgstr "Automatyczne rozmieszczanie footprintów"
 
 #: pcbnew/menubar_pcb_editor.cpp:410
-#, fuzzy
 msgid "Add Teardrops"
-msgstr "Dodaj wymiar odniesienia"
+msgstr "Dodaj łezki"
 
 #: pcbnew/menubar_pcb_editor.cpp:412
-#, fuzzy
 msgid "Remove Teardrops"
-msgstr "Usuń nieużywane pola lutownicze"
+msgstr "Usuń łezki"
 
 #: pcbnew/menubar_pcb_editor.cpp:434
 msgid "External Plugins"
@@ -32279,14 +32264,12 @@ msgid "Soldermask Margin Override"
 msgstr "Przekroczenie marginesu soldermaski"
 
 #: pcbnew/pad.cpp:1676 pcbnew/zone.cpp:1450
-#, fuzzy
 msgid "Thermal Relief Spoke Width"
-msgstr "Szerokość połączenia termicznego"
+msgstr "Szerokość łącza termicznego"
 
 #: pcbnew/pad.cpp:1679
-#, fuzzy
 msgid "Thermal Relief Spoke Angle"
-msgstr "Przerwa połączenia termicznego"
+msgstr "Kąt łącza termicznego"
 
 #: pcbnew/pad.cpp:1682 pcbnew/zone.cpp:1447
 msgid "Thermal Relief Gap"
@@ -32477,9 +32460,8 @@ msgid "Violation"
 msgstr "Naruszenie"
 
 #: pcbnew/pcb_marker.cpp:143
-#, fuzzy
 msgid "Severity"
-msgstr "Przywróć"
+msgstr "Poziom"
 
 #: pcbnew/pcb_marker.cpp:191
 #, c-format
@@ -34524,14 +34506,12 @@ msgid "%d Teardrops removed."
 msgstr "Usunięto %d łezek."
 
 #: pcbnew/teardrop/teardrop.cpp:189
-#, fuzzy
 msgid "Add teardrops"
-msgstr "Dodaj wymiar odniesienia"
+msgstr "Dodaj łezki"
 
 #: pcbnew/teardrop/teardrop.cpp:382
-#, fuzzy
 msgid "Remove teardrops"
-msgstr "Usuń elementy"
+msgstr "Usuń łezki"
 
 #: pcbnew/toolbars_footprint_editor.cpp:92
 msgid "Load footprint from current board"
@@ -34734,9 +34714,9 @@ msgid "Zone connection resolution for:"
 msgstr "Analiza połączeń ze strefami:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal relief gap: %s."
-msgstr "Połączenia termiczne ze strefą: %s."
+msgstr "Rozpoznany prześwit łącza termicznego: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:416
 #, c-format
@@ -34776,23 +34756,20 @@ msgid "Hole clearance resolution for:"
 msgstr "Analiza prześwitu dla otworów:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:602
-#, fuzzy
 msgid "Mechanical"
-msgstr "NPTH, Mechaniczne"
+msgstr "Mechaniczne"
 
 #: pcbnew/tools/board_inspection_tool.cpp:611
-#, fuzzy
 msgid "Mechanical clearance resolution for:"
-msgstr "Analiza prześwitu dla krawędzi:"
+msgstr "Analiza prześwitu mechanicznego dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:623
 msgid "No 'mechanical_clearance' constraints defined."
 msgstr "Nie zdefiniowano ograniczenia 'mechanical_clearance'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:650
-#, fuzzy
 msgid "Mechanical hole clearance resolution for:"
-msgstr "Analiza prześwitu dla otworów:"
+msgstr "Analiza prześwitu otworów mechanicznych dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:662
 msgid "No 'mechanical_hole_clearance' constraints defined."
@@ -34882,9 +34859,8 @@ msgid "Item allowed at current location."
 msgstr "Element dozwolony w bieżącej lokalizacji."
 
 #: pcbnew/tools/board_inspection_tool.cpp:843
-#, fuzzy
 msgid "Assertions"
-msgstr "Akcje"
+msgstr "Asercje"
 
 #: pcbnew/tools/board_inspection_tool.cpp:844
 msgid "Assertions for:"
@@ -35303,14 +35279,12 @@ msgid "Add a center dimension"
 msgstr "Dodaje wymiar centralny"
 
 #: pcbnew/tools/pcb_actions.cpp:139
-#, fuzzy
 msgid "Add Radial Dimension"
-msgstr "Dodaj wymiar"
+msgstr "Dodaj wymiar kątowy"
 
 #: pcbnew/tools/pcb_actions.cpp:139
-#, fuzzy
 msgid "Add a radial dimension"
-msgstr "Dodaje wymiar odniesienia"
+msgstr "Dodaje wymiar kątowy"
 
 #: pcbnew/tools/pcb_actions.cpp:144
 msgid "Add Orthogonal Dimension"
@@ -37356,39 +37330,32 @@ msgid "Select preset:"
 msgstr "Wybierz ustawienie:"
 
 #: pcbnew/widgets/appearance_controls.cpp:2557
-#, fuzzy
 msgid "Save viewport..."
-msgstr "Zapisz ustawienie..."
+msgstr "Zapisz obszar widoku..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2558
-#, fuzzy
 msgid "Delete viewport..."
-msgstr "Usuń ustawienie..."
+msgstr "Usuń obszar widoku..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2605
-#, fuzzy
 msgid "Viewport name:"
-msgstr "Nazwa sieci:"
+msgstr "Nazwa widoku:"
 
 #: pcbnew/widgets/appearance_controls.cpp:2605
-#, fuzzy
 msgid "Save Viewport"
-msgstr "Zapisz plik raportu"
+msgstr "Zapisz widok"
 
 #: pcbnew/widgets/appearance_controls.cpp:2643
-#, fuzzy
 msgid "Viewports"
-msgstr "Raport"
+msgstr "Widoki"
 
 #: pcbnew/widgets/appearance_controls.cpp:2652
-#, fuzzy
 msgid "Delete Viewport"
-msgstr "Usuń folder"
+msgstr "Usuń widok"
 
 #: pcbnew/widgets/appearance_controls.cpp:2653
-#, fuzzy
 msgid "Select viewport:"
-msgstr "Wybierz ustawienie:"
+msgstr "Wybierz widok:"
 
 #: pcbnew/widgets/appearance_controls.cpp:3089
 msgid "Open Preferences"
@@ -37429,9 +37396,8 @@ msgid "Layer presets"
 msgstr "Ustawienia wstępne warstw"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:182
-#, fuzzy
 msgid "Viewports (Alt+Tab):"
-msgstr "Ustawienia wstępne (Ctrl+Tab):"
+msgstr "Widoki (Alt+Tab):"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:146
 #, c-format
@@ -37548,9 +37514,8 @@ msgid "Inherited"
 msgstr "Dziedziczony"
 
 #: pcbnew/zone.cpp:1428
-#, fuzzy
 msgid "Thermal reliefs for PTH"
-msgstr "Połączenia termiczne"
+msgstr "Połączenia termiczne dla PTH"
 
 #: pcbnew/zone.cpp:1442
 msgid "Min Width"
@@ -37585,28 +37550,24 @@ msgid "Performing polygon fills..."
 msgstr "Wypełnianie stref polygonami..."
 
 #: pcbnew/zones.h:59
-#, fuzzy
 msgid "inherited"
-msgstr "Dziedziczony"
+msgstr "dziedziczony"
 
 #: pcbnew/zones.h:60
 msgid "none"
 msgstr "brak"
 
 #: pcbnew/zones.h:61
-#, fuzzy
 msgid "thermal reliefs"
-msgstr "Połączenia termiczne"
+msgstr "łącza termiczne"
 
 #: pcbnew/zones.h:62
-#, fuzzy
 msgid "solid"
-msgstr "Pełny"
+msgstr "pełny"
 
 #: pcbnew/zones.h:63
-#, fuzzy
 msgid "thermal reliefs for PTH"
-msgstr "Połączenia termiczne"
+msgstr "łącza termiczne dla PTH"
 
 #: plugins/3d/vrml/vrml.cpp:228
 msgid "[INFO] load failed: input line too long\n"
