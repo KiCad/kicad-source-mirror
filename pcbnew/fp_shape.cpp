@@ -307,6 +307,12 @@ void FP_SHAPE::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
             MIRROR( m_bezierC2_0.x, aCentre.x );
         }
 
+        if( GetShape() == SHAPE_T::ARC )
+        {
+            std::swap( m_start, m_end );
+            std::swap( m_start0, m_end0 );
+        }
+
         if( GetShape() == SHAPE_T::BEZIER )
             RebuildBezierToSegmentsPointsList( GetWidth() );
 
