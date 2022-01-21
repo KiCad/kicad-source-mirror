@@ -147,6 +147,10 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
     for( int i = 0; i < layers_count; i++ )
     {
         int  layer = layers[i];
+
+        if( IsZoneLayer( layer ) )
+            layer = layer - LAYER_ZONE_START;
+
         bool draw = aView->IsLayerVisible( layer );
 
         if( isSelection )
