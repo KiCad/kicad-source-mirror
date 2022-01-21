@@ -63,11 +63,11 @@ const SHAPE_LINE_CHAIN OctagonalHull( const VECTOR2I& aP0, const VECTOR2I& aSize
 }
 
 
-const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aSeg, int aClearance,
-            int aWalkaroundThickness )
+const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aSeg, int aClearance, int aWalkaroundThickness )
 {
-    int d = aSeg.GetWidth() / 2 + aClearance + aWalkaroundThickness / 2 + HULL_MARGIN;
-    int x = (int)( 2.0 / ( 1.0 + M_SQRT2 ) * d ) / 2;
+    int d = aSeg.GetWidth() / 2 + aClearance + aWalkaroundThickness / 2 + HULL_MARGIN
+            + SHAPE_ARC::DefaultAccuracyForPCB();
+    int x = (int) ( 2.0 / ( 1.0 + M_SQRT2 ) * d ) / 2;
 
     auto line = aSeg.ConvertToPolyline();
 
@@ -75,10 +75,10 @@ const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aSeg, int aClearance,
     s.SetClosed( true );
     std::vector<VECTOR2I> reverse_line;
 
-    auto seg = line.Segment( 0 );
+    auto     seg = line.Segment( 0 );
     VECTOR2I dir = seg.B - seg.A;
-    VECTOR2I p0 = dir.Perpendicular().Resize( d );
-    VECTOR2I ds = dir.Perpendicular().Resize( x );
+    VECTOR2I p0 = -dir.Perpendicular().Resize( d );
+    VECTOR2I ds = -dir.Perpendicular().Resize( x );
     VECTOR2I pd = dir.Resize( x );
     VECTOR2I dp = dir.Resize( d );
 
@@ -90,18 +90,38 @@ const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aSeg, int aClearance,
 
     for( int i = 1; i < line.SegmentCount(); i++ )
     {
-        auto old_seg = seg;
-        auto endpt = ( old_seg.A - old_seg.B ).Resize( seg.Length() );
-        old_seg.A = old_seg.B + endpt;
+        // calculate a vertex normal (average of segment normals)
+        auto pp =
+                ( line.CSegment( i - 1 ).B - line.CSegment( i - 1 ).A ).Perpendicular().Resize( d );
+        auto pp2 = ( line.CSegment( i ).B - line.CSegment( i ).A ).Perpendicular().Resize( d );
 
-        seg = line.Segment( i );
-        auto dir2 = old_seg.A - seg.B;
+        auto sa_out = line.CSegment( i - 1 ), sa_in = line.CSegment( i - 1 );
+        auto sb_out = line.CSegment( i ), sb_in = line.CSegment( i );
 
-        p0 = dir2.Perpendicular().Resize( d );
-        s.Append( seg.A - p0 );
-        reverse_line.push_back( seg.A + p0 );
+        sa_out.A += pp;
+        sa_out.B += pp;
+        sb_out.A += pp2;
+        sb_out.B += pp2;
+
+        sa_in.A -= pp;
+        sa_in.B -= pp;
+        sb_in.A -= pp2;
+        sb_in.B -= pp2;
+
+        auto ip_out = sa_out.IntersectLines( sb_out );
+        auto ip_in = sa_in.IntersectLines( sb_in );
+
+        seg = line.CSegment( i );
+        auto lead = ( pp + pp2 ) / 2;
+
+        s.Append( *ip_out );
+        reverse_line.push_back( *ip_in );
     }
 
+    seg = line.CSegment( -1 );
+    dir = seg.B - seg.A;
+    p0 = -dir.Perpendicular().Resize( d );
+    ds = -dir.Perpendicular().Resize( x );
     pd = dir.Resize( x );
     dp = dir.Resize( d );
     s.Append( seg.B - p0 + pd );
@@ -112,6 +132,7 @@ const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aSeg, int aClearance,
     for( int i = reverse_line.size() - 1; i >= 0; i-- )
         s.Append( reverse_line[i] );
 
+    // make sure the hull outline is always clockwise
     // make sure the hull outline is always clockwise
     if( s.CSegment( 0 ).Side( line.Segment( 0 ).A ) < 0 )
         return s.Reverse();
