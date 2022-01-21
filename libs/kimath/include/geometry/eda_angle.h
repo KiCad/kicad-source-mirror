@@ -103,7 +103,7 @@ public:
     explicit EDA_ANGLE( const VECTOR2I& aVector )
     {
         /* gcc is surprisingly smart in optimizing these conditions in a tree! */
-    
+
         if( aVector.x == 0 && aVector.y == 0 )
         {
             m_value = 0;
@@ -169,18 +169,13 @@ public:
      * @return true if angle is one of the four cardinal directions (0/90/180/270 degrees),
      *         otherwise false
      */
-    bool IsCardinal() const
-    {
-        double test = m_value;
+    bool IsCardinal() const;
 
-        while( test < 0.0 )
-            test += 90.0;
-
-        while( test > 90.0 )
-            test -= 90.0;
-
-        return test == 0.0;
-    }
+    /**
+     * @return true if angle is one of the two cardinal directions (90/270 degrees),
+     *         otherwise false
+     */
+    bool IsCardinal90() const;
 
     bool IsZero() const
     {

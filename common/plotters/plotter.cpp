@@ -460,6 +460,7 @@ void PLOTTER::segmentAsOval( const VECTOR2I& start, const VECTOR2I& end, int aWi
     VECTOR2I  center( ( start.x + end.x ) / 2, ( start.y + end.y ) / 2 );
     VECTOR2I  size( end.x - start.x, end.y - start.y );
     EDA_ANGLE orient( size );
+    orient = -orient;       // this is due to our Y axis orientation
 
     size.x = KiROUND( EuclideanNorm( size ) ) + aWidth;
     size.y = aWidth;

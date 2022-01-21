@@ -1263,12 +1263,13 @@ void GERBER_PLOTTER::FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize,
 
     VECTOR2I      size( aSize );
     EDA_ANGLE     orient( aOrient );
+    orient.Normalize();
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
 
     // Flash a vertical or horizontal shape (this is a basic aperture).
     if( orient.IsCardinal() && aTraceMode == FILLED )
     {
-        if( orient == ANGLE_90 || orient == ANGLE_270 ) /* orientation turned 90 deg. */
+        if( orient.IsCardinal90() )
             std::swap( size.x, size.y );
 
         VECTOR2I pos_device = userToDeviceCoordinates( aPos );
@@ -1344,13 +1345,18 @@ void GERBER_PLOTTER::FlashPadRect( const VECTOR2I& pos, const VECTOR2I& aSize,
 
     VECTOR2I      size( aSize );
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
+    EDA_ANGLE     orient( aOrient );
+    orient.Normalize();
 
-    // Plot as an aperture flash
-    if( aOrient == ANGLE_90 || aOrient == ANGLE_270 )
-        std::swap( size.x, size.y );
-
-    if( aOrient.IsCardinal() )
+    // Horizontal / vertical rect can use a basic aperture (not a macro)
+    // so use it for rotation n*90 deg
+    // if( aOrient.IsCardinal() )
+    if( orient == ANGLE_0 || orient == ANGLE_90 || orient == ANGLE_180 || orient == ANGLE_270 )
     {
+        if( orient == ANGLE_90 || orient == ANGLE_270 )
+            // Build the not rotated equivalent shape:
+            std::swap( size.x, size.y );
+
         if( aTraceMode == SKETCH )
         {
             if( gbr_metadata )

@@ -107,8 +107,8 @@ void PSLIKE_PLOTTER::FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSiz
     VECTOR2I a( 0, -delta / 2 );
     VECTOR2I b( 0, delta / 2 );
 
-    RotatePoint( a, aPadOrient );
-    RotatePoint( b, aPadOrient );
+    RotatePoint( a, orient );
+    RotatePoint( b, orient );
 
     if( aTraceMode == FILLED )
         ThickSegment( a + aPadPos, b + aPadPos, size.x, aTraceMode, nullptr );
