@@ -369,7 +369,8 @@ void SYMBOL_VIEWER_FRAME::updatePreviewSymbol()
         AppendMsgPanel( _( "Keywords" ), m_previewItem->GetKeyWords() );
     }
 
-    GetCanvas()->ForceRefresh();
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+    GetCanvas()->Refresh();
 }
 
 
@@ -675,7 +676,6 @@ void SYMBOL_VIEWER_FRAME::SetSelectedSymbol( const wxString& aSymbolName )
         }
 
         updatePreviewSymbol();
-        m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     }
 }
 
