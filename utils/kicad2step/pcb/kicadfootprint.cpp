@@ -37,6 +37,7 @@
 
 #include <iostream>
 #include <limits>
+#include <memory>
 #include <sstream>
 
 #include <Standard_Failure.hxx>
