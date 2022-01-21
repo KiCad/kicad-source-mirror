@@ -726,12 +726,11 @@ void PCB_EDIT_FRAME::setupUIConditions()
                         ENABLE( SELECTION_CONDITIONS::OnlyType( PCB_FOOTPRINT_T ) ) );
 
 
-    SELECTION_CONDITION singleZoneCond = SELECTION_CONDITIONS::Count( 1 ) &&
-                                         SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Zones );
+    SELECTION_CONDITION singleZoneCond = SELECTION_CONDITIONS::Count( 1 )
+                                    && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Zones );
 
-    SELECTION_CONDITION zoneMergeCond = SELECTION_CONDITIONS::MoreThan( 1 ) &&
-                                        PCB_SELECTION_CONDITIONS::SameNet( true ) &&
-                                        PCB_SELECTION_CONDITIONS::SameLayer();
+    SELECTION_CONDITION zoneMergeCond = SELECTION_CONDITIONS::MoreThan( 1 )
+                                    && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Zones );
 
     mgr->SetConditions( PCB_ACTIONS::zoneDuplicate, ENABLE( singleZoneCond ) );
     mgr->SetConditions( PCB_ACTIONS::drawZoneCutout, ENABLE( singleZoneCond ) );

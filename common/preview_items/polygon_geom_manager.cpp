@@ -83,7 +83,7 @@ void POLYGON_GEOM_MANAGER::SetLeaderMode( LEADER_MODE aMode )
 
 bool POLYGON_GEOM_MANAGER::IsSelfIntersecting( bool aIncludeLeaderPts ) const
 {
-    auto pts( m_lockedPoints );
+    SHAPE_LINE_CHAIN pts( m_lockedPoints );
 
     if( aIncludeLeaderPts )
     {
