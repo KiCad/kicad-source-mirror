@@ -52,6 +52,8 @@ class OUTLINE_FONT : public FONT
 public:
     OUTLINE_FONT();
 
+    static wxString FreeTypeVersion();
+
     bool IsOutline() const override { return true; }
 
     bool IsBold() const override

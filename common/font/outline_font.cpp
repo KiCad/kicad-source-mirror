@@ -51,6 +51,18 @@ OUTLINE_FONT::OUTLINE_FONT() :
 }
 
 
+wxString OUTLINE_FONT::FreeTypeVersion()
+{
+    if( !m_freeType )
+        FT_Init_FreeType( &m_freeType );
+
+    FT_Int major, minor, patch;
+    FT_Library_Version( m_freeType, &major, &minor, &patch );
+
+    return wxString::Format( "%d.%d.%d", major, minor, patch );
+ }
+
+
 OUTLINE_FONT* OUTLINE_FONT::LoadFont( const wxString& aFontName, bool aBold, bool aItalic )
 {
     OUTLINE_FONT* font = new OUTLINE_FONT();

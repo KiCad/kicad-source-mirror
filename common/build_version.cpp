@@ -27,6 +27,7 @@
 #include <config.h>
 #include <boost/version.hpp>
 #include <kiplatform/app.h>
+#include <font/outline_font.h>
 
 // kicad_curl.h must be included before wx headers, to avoid
 // conflicts for some defines, at least on Windows
@@ -133,6 +134,8 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     aMsg << "Libraries:" << eol;
 
     aMsg << indent4 << wxGetLibraryVersionInfo().GetVersionString() << eol;
+
+    aMsg << indent4 << "FreeType " << KIFONT::OUTLINE_FONT::FreeTypeVersion() << eol;
 
     if( !aBrief )
         aMsg << indent4 << GetKicadCurlVersion() << eol;
