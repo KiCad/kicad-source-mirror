@@ -32,6 +32,7 @@
 #include "pns_topology.h"
 #include "pns_walkaround.h"
 #include "pns_mouse_trail_tracer.h"
+#include "pns_utils.h"
 
 #include <wx/log.h>
 
@@ -940,9 +941,7 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
         if( !routeHead( aP, new_head ) )
             fail = true;
 
-        if( !new_head.Is45Degree() &&
-            !(Settings().GetFreeAngleMode() && Settings().Mode() == RM_MarkObstacles) )
-            fail = true;
+        PNS_DBG( Dbg(), AddLine, new_head.CLine(), LIGHTGREEN, 100000, "new_head" );
 
         if( fail )
             break;
@@ -1022,6 +1021,10 @@ const LINE LINE_PLACER::Trace() const
 
     tmp.SetShape( m_tail.CLine() );
     tmp.Line().Append( m_head.CLine() );
+
+    PNS_DBG( Dbg(), AddLine, m_tail.CLine(), GREEN, 100000, "tmp-tail" );
+    PNS_DBG( Dbg(), AddLine, m_head.CLine(), LIGHTGREEN, 100000, "tmp-head" );
+
     tmp.Line().Simplify();
     return tmp;
 }
