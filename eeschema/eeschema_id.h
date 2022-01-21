@@ -43,6 +43,12 @@
  */
 #define MAX_UNIT_COUNT_PER_PACKAGE 676
 
+/**
+ * While it would seem that an unfold-from-bus menu with over 100 items would be
+ * hard to deal with, we've already had one user who wants 256.
+ */
+#define MAX_BUS_UNFOLD_MENU_ITEMS 1024
+
 
 /**
  * Command IDs for the schematic editor.
@@ -80,7 +86,7 @@ enum id_eeschema_frm
     //
     // Dynamically bound in AddMenusForBus():
     ID_POPUP_SCH_UNFOLD_BUS = ID_POPUP_MENU_START,
-    ID_POPUP_SCH_UNFOLD_BUS_END = ID_POPUP_SCH_UNFOLD_BUS + 128,
+    ID_POPUP_SCH_UNFOLD_BUS_END = ID_POPUP_SCH_UNFOLD_BUS + MAX_BUS_UNFOLD_MENU_ITEMS,
 
     // Unit select context menus command IDs.
     ID_POPUP_SCH_SELECT_UNIT_CMP,
