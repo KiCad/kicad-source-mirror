@@ -639,8 +639,8 @@ void PCB_DIM_ALIGNED::updateGeometry()
     // Add arrows
     VECTOR2I arrowEndPos( m_arrowLength, 0 );
     VECTOR2I arrowEndNeg( m_arrowLength, 0 );
-    RotatePoint( arrowEndPos, EDA_ANGLE( dimension ) + s_arrowAngle );
-    RotatePoint( arrowEndNeg, EDA_ANGLE( dimension ) - s_arrowAngle );
+    RotatePoint( arrowEndPos, -EDA_ANGLE( dimension ) + s_arrowAngle );
+    RotatePoint( arrowEndNeg, -EDA_ANGLE( dimension ) - s_arrowAngle );
 
     m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarStart, m_crossBarStart + arrowEndPos ) );
     m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarStart, m_crossBarStart + arrowEndNeg ) );
@@ -819,8 +819,8 @@ void PCB_DIM_ORTHOGONAL::updateGeometry()
     EDA_ANGLE crossBarAngle( m_crossBarEnd - m_crossBarStart );
     VECTOR2I  arrowEndPos( m_arrowLength, 0 );
     VECTOR2I  arrowEndNeg( m_arrowLength, 0 );
-    RotatePoint( arrowEndPos, crossBarAngle + s_arrowAngle );
-    RotatePoint( arrowEndNeg, crossBarAngle - s_arrowAngle );
+    RotatePoint( arrowEndPos, -crossBarAngle + s_arrowAngle );
+    RotatePoint( arrowEndNeg, -crossBarAngle - s_arrowAngle );
 
     m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarStart, m_crossBarStart + arrowEndPos ) );
     m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarStart, m_crossBarStart + arrowEndNeg ) );
@@ -1005,8 +1005,8 @@ void PCB_DIM_LEADER::updateGeometry()
     // Add arrows
     VECTOR2I arrowEndPos( m_arrowLength, 0 );
     VECTOR2I arrowEndNeg( m_arrowLength, 0 );
-    RotatePoint( arrowEndPos, EDA_ANGLE( firstLine ) + s_arrowAngle );
-    RotatePoint( arrowEndNeg, EDA_ANGLE( firstLine ) - s_arrowAngle );
+    RotatePoint( arrowEndPos, -EDA_ANGLE( firstLine ) + s_arrowAngle );
+    RotatePoint( arrowEndNeg, -EDA_ANGLE( firstLine ) - s_arrowAngle );
 
     m_shapes.emplace_back( new SHAPE_SEGMENT( start, start + arrowEndPos ) );
     m_shapes.emplace_back( new SHAPE_SEGMENT( start, start + arrowEndNeg ) );
@@ -1185,8 +1185,8 @@ void PCB_DIM_RADIAL::updateGeometry()
     // Add arrows
     VECTOR2I arrowEndPos( m_arrowLength, 0 );
     VECTOR2I arrowEndNeg( m_arrowLength, 0 );
-    RotatePoint( arrowEndPos, EDA_ANGLE( radial ) + s_arrowAngle );
-    RotatePoint( arrowEndNeg, EDA_ANGLE( radial ) - s_arrowAngle );
+    RotatePoint( arrowEndPos, -EDA_ANGLE( radial ) + s_arrowAngle );
+    RotatePoint( arrowEndNeg, -EDA_ANGLE( radial ) - s_arrowAngle );
 
     m_shapes.emplace_back( new SHAPE_SEGMENT( m_end, m_end + arrowEndPos ) );
     m_shapes.emplace_back( new SHAPE_SEGMENT( m_end, m_end + arrowEndNeg ) );
