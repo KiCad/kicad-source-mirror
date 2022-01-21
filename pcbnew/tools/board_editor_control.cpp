@@ -1348,8 +1348,8 @@ int BOARD_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
 }
 
 
-static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE*>& aOriginZones,
-                        std::vector<ZONE*>& aMergedZones )
+static bool mergeZones( EDA_DRAW_FRAME* aFrame, BOARD_COMMIT& aCommit,
+                        std::vector<ZONE*>& aOriginZones, std::vector<ZONE*>& aMergedZones )
 {
     aCommit.Modify( aOriginZones[0] );
 
@@ -1361,13 +1361,14 @@ static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE*>& aOriginZones,
 
     aOriginZones[0]->Outline()->Simplify( SHAPE_POLY_SET::PM_FAST );
 
-    // We should have one polygon with hole
-    // We can have 2 polygons with hole, if the 2 initial polygons have only one common corner
-    // and therefore cannot be merged (they are detected as intersecting)
-    // but we should never have more than 2 polys
-    if( aOriginZones[0]->Outline()->OutlineCount() > 1 )
+    // We should have one polygon, possibly with holes.  If we end up with two polygons (either
+    // because the intersection was a single point or because the intersection was within one of
+    // the zone's holes) then we can't merge.
+    if( aOriginZones[0]->Outline()->IsSelfIntersecting()
+            || aOriginZones[0]->Outline()->OutlineCount() > 1 )
     {
-        wxLogMessage( "BOARD::mergeZones error: more than 2 polys after merging" );
+        DisplayErrorMessage( aFrame, _( "Zones have insufficient overlap for merging." ) );
+        aCommit.Revert();
         return false;
     }
 
@@ -1411,26 +1412,41 @@ int BOARD_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
         netcode = curr_area->GetNetCode();
 
         if( firstZone->GetNetCode() != netcode )
+        {
+            wxLogMessage( _( "Some zone netcodes did not match and were not merged." ) );
             continue;
+        }
 
         if( curr_area->GetPriority() != firstZone->GetPriority() )
+        {
+            wxLogMessage( _( "Some zone priorities did not match and were not merged." ) );
             continue;
+        }
 
         if( curr_area->GetIsRuleArea() != firstZone->GetIsRuleArea() )
+        {
+            wxLogMessage( _( "Some zones were rule areas and were not merged." ) );
             continue;
+        }
 
         if( curr_area->GetLayer() != firstZone->GetLayer() )
+        {
+            wxLogMessage( _( "Some zone layer sets did not match and were not merged." ) );
             continue;
+        }
 
         if( !board->TestZoneIntersection( curr_area, firstZone ) )
+        {
+            wxLogMessage( _( "Some zones did not intersect and were not merged." ) );
             continue;
+        }
 
         toMerge.push_back( curr_area );
     }
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    if( mergeZones( commit, toMerge, merged ) )
+    if( mergeZones( m_frame, commit, toMerge, merged ) )
     {
         commit.Push( "Merge zones" );
 
