@@ -816,7 +816,6 @@ private:
     wxTimer      m_redrawNetnamesTimer;
 
     wxTimer*     m_eventCounterTimer;
-
 };
 
 #endif  // __PCB_EDIT_FRAME_H__
