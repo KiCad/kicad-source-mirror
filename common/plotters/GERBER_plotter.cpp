@@ -1345,15 +1345,12 @@ void GERBER_PLOTTER::FlashPadRect( const VECTOR2I& pos, const VECTOR2I& aSize,
 
     VECTOR2I      size( aSize );
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
-    EDA_ANGLE     orient( aOrient );
-    orient.Normalize();
 
     // Horizontal / vertical rect can use a basic aperture (not a macro)
     // so use it for rotation n*90 deg
-    // if( aOrient.IsCardinal() )
-    if( orient == ANGLE_0 || orient == ANGLE_90 || orient == ANGLE_180 || orient == ANGLE_270 )
+    if( aOrient.IsCardinal() )
     {
-        if( orient == ANGLE_90 || orient == ANGLE_270 )
+        if( aOrient.IsCardinal90() )
             // Build the not rotated equivalent shape:
             std::swap( size.x, size.y );
 
