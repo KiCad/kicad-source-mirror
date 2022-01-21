@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -990,10 +990,10 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
          * store start-end with an implied winding internally though, so we need to swap the
          * ends if they don't match what we're expecting.
          */
-        EDA_ANGLE start, end;
-        arc->CalcArcAngles( start, end );
+        EDA_ANGLE arc_start, arc_end;
+        arc->CalcArcAngles( arc_start, arc_end );
 
-        if( start < end )
+        if( arc_start < arc_end )
         {
             VECTOR2I temp = arc->GetStart();
             arc->SetStart( arc->GetEnd() );
@@ -2895,10 +2895,10 @@ SCH_SHAPE* SCH_SEXPR_PARSER::parseSchArc()
      * don't match what we're expecting.  (Note that what we're expecting is backwards from the
      * LIB_SHAPE case because LibEdit has an upside-down coordinate system.)
      */
-    EDA_ANGLE start, end;
-    arc->CalcArcAngles( start, end );
+    EDA_ANGLE arc_start, arc_end;
+    arc->CalcArcAngles( arc_start, arc_end );
 
-    if( start > end )
+    if( arc_start > arc_end )
     {
         VECTOR2I temp = arc->GetStart();
         arc->SetStart( arc->GetEnd() );
