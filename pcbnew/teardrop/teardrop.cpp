@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -156,8 +156,8 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter,
 
             // Ensure a teardrop shape can be built:
             // The track width must be < teardrop height
-            if( track->GetWidth() >= currParams->m_tdMaxHeight
-                || track->GetWidth() >= viapad.m_Width * currParams->m_heightRatio )
+            if( track->GetWidth() >= currParams->m_TdMaxHeight
+                || track->GetWidth() >= viapad.m_Width * currParams->m_HeightRatio )
                 continue;
 
             // Skip case where pad/via and the track is within a copper zone with the same net

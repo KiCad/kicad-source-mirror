@@ -34,6 +34,7 @@
 #include <settings/nested_settings.h>
 #include <widgets/ui_common.h>
 #include <zone_settings.h>
+#include <teardrop/teardrop_parameters.h>
 
 
 #define DEFAULT_SILK_LINE_WIDTH       0.12
@@ -230,6 +231,11 @@ public:
 
     BOARD_STACKUP& GetStackupDescriptor() { return m_stackup; }
     const BOARD_STACKUP& GetStackupDescriptor() const { return m_stackup; }
+
+    TEARDROP_PARAMETERS_LIST* GetTeadropParamsList()
+    {
+        return &m_TeardropParamsList;
+    }
 
     SEVERITY GetSeverity( int aDRCErrorCode );
 
@@ -661,6 +667,11 @@ public:
     std::vector<int>                 m_TrackWidthList;
     std::vector<VIA_DIMENSION>       m_ViasDimensionsList;
     std::vector<DIFF_PAIR_DIMENSION> m_DiffPairDimensionsList;
+
+    /** The parameters of teardrops for the different teardrop targets (via/pad, track end)
+     *  3 set of parameters always exist: for round shapes, for rect shapes, for track ends
+     */
+    TEARDROP_PARAMETERS_LIST         m_TeardropParamsList;
 
     bool       m_MicroViasAllowed;          ///< true to allow micro vias
     bool       m_BlindBuriedViaAllowed;     ///< true to allow blind/buried vias

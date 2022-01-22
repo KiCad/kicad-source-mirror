@@ -25,9 +25,14 @@
 #ifndef TEARDROP_PARAMS_H
 #define TEARDROP_PARAMS_H
 
+#include <string>
+#include <vector>
+#include <convert_to_biu.h>
+
 // IDs for targets when creating teardrops
 enum TARGET_TD
 {
+    TARGET_UNKNOWN = -1,
     TARGET_ROUND = 0,
     TARGET_RECT =  1,
     TARGET_TRACK = 2,
@@ -41,16 +46,14 @@ enum TARGET_TD
  */
 class TEARDROP_PARAMETERS
 {
-    friend class TEARDROP_MANAGER;
-    friend class TEARDROP_PARAMETERS_LIST;
-
 public:
-    TEARDROP_PARAMETERS():
-        m_tdMaxLen( Millimeter2iu( 1.0 ) ),
-        m_tdMaxHeight( Millimeter2iu( 2.0 ) ),
-        m_lengthRatio( 0.5),
-        m_heightRatio( 1.0 ),
-        m_curveSegCount( 0 )
+    TEARDROP_PARAMETERS( TARGET_TD aTdType ):
+        m_TdType( aTdType ),
+        m_TdMaxLen( Millimeter2iu( 1.0 ) ),
+        m_TdMaxHeight( Millimeter2iu( 2.0 ) ),
+        m_LengthRatio( 0.5),
+        m_HeightRatio( 1.0 ),
+        m_CurveSegCount( 0 )
     {
     }
 
@@ -60,8 +63,8 @@ public:
      */
     void SetTeardropMaxSize( int aMaxLen, int aMaxHeight )
     {
-        m_tdMaxLen = aMaxLen;
-        m_tdMaxHeight = aMaxHeight;
+        m_TdMaxLen = aMaxLen;
+        m_TdMaxHeight = aMaxHeight;
     }
 
     /**
@@ -71,8 +74,8 @@ public:
      */
     void SetTeardropSizeRatio( double aLenghtRatio = 0.5, double aHeightRatio = 1.0 )
     {
-        m_lengthRatio = aLenghtRatio;
-        m_heightRatio = aHeightRatio;
+        m_LengthRatio = aLenghtRatio;
+        m_HeightRatio = aHeightRatio;
     }
 
     /**
@@ -81,23 +84,24 @@ public:
      */
     void SetTeardropCurvedPrm( int aCurveSegCount = 0 )
     {
-        m_curveSegCount = aCurveSegCount;
+        m_CurveSegCount = aCurveSegCount;
     }
 
-    bool IsCurved() const { return m_curveSegCount > 2; }
+    bool IsCurved() const { return m_CurveSegCount > 2; }
 
-protected:
+public:
+    TARGET_TD m_TdType;     /// the type of target for these parameters
     /// max allowed length for teardrops in IU. <= 0 to disable
-    int     m_tdMaxLen;
+    int     m_TdMaxLen;
     /// max allowed height for teardrops in IU. <= 0 to disable
-    int     m_tdMaxHeight;
+    int     m_TdMaxHeight;
     /// The length of a teardrop as ratio between length and size of pad/via
-    double  m_lengthRatio;
+    double  m_LengthRatio;
     /// The height of a teardrop as ratio between height and size of pad/via
-    double  m_heightRatio;
+    double  m_HeightRatio;
     /// number of segments to build the curved sides of a teardrop area
     /// must be > 2. for values <= 2 a straight line is used
-    int     m_curveSegCount;
+    int     m_CurveSegCount;
 };
 
 
@@ -111,11 +115,33 @@ class TEARDROP_PARAMETERS_LIST
     std::vector<TEARDROP_PARAMETERS> m_params_list;
 
 public:
-    TEARDROP_PARAMETERS_LIST()
+    /// True to create teardrops for vias and pads with holes
+    bool     m_TargetViasPads;
+    /// True to create teardrops for pads without holes (SMD and others
+    bool     m_TargetPadsWithNoHole;
+    /// True to create teardrops at the end of a track connected to the end of
+    /// another track having a different width
+    bool     m_TargetTrack2Track;
+    /// True to create teardrops for round shapes only
+    bool     m_UseRoundShapesOnly;
+    /// True to create teardrops using 2 track segments if the first in too small
+    bool     m_AllowUseTwoTracks;
+    /// the number of segments to apprximate a curve (Bezier curve) in a teardrop
+    /// Must be > 2, otherwise a line is used
+    int      m_CurveSegCount;
+
+public:
+    TEARDROP_PARAMETERS_LIST() :
+            m_TargetViasPads( true ),
+            m_TargetPadsWithNoHole( true ),
+            m_TargetTrack2Track( false ),
+            m_UseRoundShapesOnly( false ),
+            m_AllowUseTwoTracks( true ),
+            m_CurveSegCount( 5 )
     {
-        m_params_list.emplace_back( );       // parameters for TARGET_ROUND
-        m_params_list.emplace_back( );       // parameters for TARGET_RECT
-        m_params_list.emplace_back( );       // parameters for TARGET_TRACK
+        m_params_list.emplace_back( TARGET_ROUND );     // parameters for TARGET_ROUND
+        m_params_list.emplace_back( TARGET_RECT );      // parameters for TARGET_RECT
+        m_params_list.emplace_back( TARGET_TRACK );     // parameters for TARGET_TRACK
     }
 
     /**
@@ -135,5 +161,17 @@ public:
     }
 };
 
+
+/**
+ * @return the canonical name of a target type of a TEARDROP_PARAMETERS
+ * @param aTdType is the target type
+ */
+std::string GetTeardropTargetCanonicalName( TARGET_TD aTdType );
+
+/**
+ * @return the target type from a canonical name of a TEARDROP_PARAMETERS
+ * @param aTargetName is the canonical name
+ */
+TARGET_TD GetTeardropTargetTypeFromCanonicalName( const std::string& aTargetName );
 
 #endif  // ifndef TEARDROP_PARAMS_H

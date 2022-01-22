@@ -448,6 +448,110 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             },
             {} ) );
 
+    // Handle options for teardrops (targets and some others):
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "teardrop_options",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json js = nlohmann::json::array();
+                nlohmann::json entry = {};
+
+                entry["td_onviapad"]  = m_TeardropParamsList.m_TargetViasPads;
+                entry["td_onpadsmd"]  = m_TeardropParamsList.m_TargetPadsWithNoHole;
+                entry["td_ontrackend"]  = m_TeardropParamsList.m_TargetTrack2Track;
+                entry["td_onroundshapesonly"]  = m_TeardropParamsList.m_UseRoundShapesOnly;
+                entry["td_allow_use_two_tracks"] = m_TeardropParamsList.m_AllowUseTwoTracks;
+                entry["td_curve_segcount"]  = m_TeardropParamsList.m_CurveSegCount;
+
+                js.push_back( entry );
+
+                return js;
+            },
+            [&]( const nlohmann::json& aObj )
+            {
+                if( !aObj.is_array() )
+                    return;
+
+                for( const nlohmann::json& entry : aObj )
+                {
+                    if( entry.empty() || !entry.is_object() )
+                        continue;
+
+                    if( !entry.contains( "td_onviapad" )
+                            || !entry.contains( "td_onpadsmd" )
+                            || !entry.contains( "td_ontrackend" )
+                            || !entry.contains( "td_onroundshapesonly" )
+                            || !entry.contains( "td_allow_use_two_tracks" )
+                            || !entry.contains( "td_curve_segcount" )
+                            )
+                        continue;
+
+                    m_TeardropParamsList.m_TargetViasPads = entry["td_onviapad"].get<bool>();
+                    m_TeardropParamsList.m_TargetPadsWithNoHole = entry["td_onpadsmd"].get<bool>();
+                    m_TeardropParamsList.m_TargetTrack2Track = entry["td_ontrackend"].get<bool>();
+                    m_TeardropParamsList.m_UseRoundShapesOnly = entry["td_onroundshapesonly"].get<bool>();
+                    m_TeardropParamsList.m_AllowUseTwoTracks = entry["td_allow_use_two_tracks"].get<bool>();
+                    m_TeardropParamsList.m_CurveSegCount = entry["td_curve_segcount"].get<int>();
+                }
+            },
+            {} ) );
+
+    // Handle parameters (sizes, shape) for each type of teardrop:
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "teardrop_parameters",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json js = nlohmann::json::array();
+
+                for( int ii = 0; ii < m_TeardropParamsList.GetParametersCount(); ii++ )
+                {
+                    nlohmann::json entry = {};
+                    TEARDROP_PARAMETERS* td_prm = m_TeardropParamsList.GetParameters( (TARGET_TD)ii );
+
+                    entry["td_target_name"]  = GetTeardropTargetCanonicalName( (TARGET_TD)ii );
+                    entry["td_maxlen"]  = Iu2Millimeter( td_prm->m_TdMaxLen );
+                    entry["td_maxheight"]  = Iu2Millimeter( td_prm->m_TdMaxHeight );
+                    entry["td_length_ratio"]  = td_prm->m_LengthRatio;
+                    entry["td_height_ratio"]  = td_prm->m_HeightRatio;
+                    entry["td_curve_segcount"]  = td_prm->m_CurveSegCount;
+
+                    js.push_back( entry );
+                }
+
+                return js;
+            },
+            [&]( const nlohmann::json& aObj )
+            {
+                if( !aObj.is_array() )
+                    return;
+
+                for( const nlohmann::json& entry : aObj )
+                {
+                    if( entry.empty() || !entry.is_object() )
+                        continue;
+
+                    if( !entry.contains( "td_target_name" )
+                            || !entry.contains( "td_maxlen" )
+                            || !entry.contains( "td_maxheight" )
+                            || !entry.contains( "td_length_ratio" )
+                            || !entry.contains( "td_height_ratio" )
+                            || !entry.contains( "td_curve_segcount" )
+                            )
+                        continue;
+
+                    int idx = GetTeardropTargetTypeFromCanonicalName( entry["td_target_name"].get<std::string>() );
+
+                    if( idx >= 0 && idx < 3 )
+                    {
+                        TEARDROP_PARAMETERS* td_prm = m_TeardropParamsList.GetParameters( (TARGET_TD)idx );
+                        td_prm->m_TdMaxLen = Millimeter2iu( entry["td_maxlen"].get<double>() );
+                        td_prm->m_TdMaxHeight = Millimeter2iu( entry["td_maxheight"].get<double>() );
+                        td_prm->m_LengthRatio = entry["td_length_ratio"].get<double>();
+                        td_prm->m_HeightRatio = entry["td_height_ratio"].get<double>();
+                        td_prm->m_CurveSegCount = entry["td_curve_segcount"].get<int>();
+                    }
+                }
+            },
+            {} ) );
+
     m_params.emplace_back( new PARAM_SCALED<int>( "defaults.silk_line_width",
             &m_LineThickness[LAYER_CLASS_SILK], Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ),
             Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ), MM_PER_IU ) );
