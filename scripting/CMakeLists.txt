@@ -62,7 +62,7 @@ if( MAKE_LINK_MAPS )
         LINK_FLAGS "-Wl,-cref,-Map=_scripting.kiface.map" )
 endif()
 
-if( APPLE )
+if( KICAD_MACOSX_APP_BUNDLE )
     set_target_properties( scripting_kiface PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
         )

@@ -35,7 +35,7 @@ if( WIN32 )
     endif()
 endif()
 
-if( APPLE )
+if( KICAD_MACOSX_APP_BUNDLE )
     # setup bundle
     set( BITMAP2COMPONENT_RESOURCES bitmap2component.icns )
     set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/bitmap2component.icns" PROPERTIES
@@ -57,7 +57,11 @@ target_link_libraries( bitmap2component
     potrace
     )
 
-if( APPLE )
+set_target_properties( bitmap2component PROPERTIES
+    MACOSX_BUNDLE $<BOOL:KICAD_MACOSX_APP_BUNDLE>
+    )
+
+if( KICAD_MACOSX_APP_BUNDLE )
     set_target_properties( bitmap2component PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${PROJECT_BINARY_DIR}/bitmap2component/Info.plist
         )

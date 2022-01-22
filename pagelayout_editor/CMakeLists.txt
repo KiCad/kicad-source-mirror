@@ -62,7 +62,7 @@ if( WIN32 )
 endif()
 
 
-if( APPLE )
+if( KICAD_MACOSX_APP_BUNDLE )
     # setup bundle
     set( PL_EDITOR_RESOURCES pagelayout_editor.icns pagelayout_editor_doc.icns )
     set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pagelayout_editor.icns" PROPERTIES
@@ -91,6 +91,10 @@ target_link_libraries( pl_editor
     gal
     common
     ${wxWidgets_LIBRARIES}
+    )
+
+set_target_properties( pl_editor PROPERTIES
+    MACOSX_BUNDLE $<BOOL:KICAD_MACOSX_APP_BUNDLE>
     )
 
 if( MAKE_LINK_MAPS )
@@ -130,7 +134,7 @@ endif()
 add_dependencies( pl_editor pl_editor_kiface )
 
 # these 2 binaries are a matched set, keep them together:
-if( APPLE )
+if( KICAD_MACOSX_APP_BUNDLE )
     set_target_properties( pl_editor PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${PROJECT_BINARY_DIR}/pagelayout_editor/Info.plist
         )

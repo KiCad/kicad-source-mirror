@@ -29,7 +29,7 @@ target_link_libraries( s3d_plugin_idf
         ${OPENGL_LIBRARIES}
         ${wxWidgets_LIBRARIES} )
 
-if( APPLE )
+if( KICAD_MACOSX_APP_BUNDLE )
     # puts library into the main kicad.app bundle in build tree
     set_target_properties( s3d_plugin_idf PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY "${OSX_BUNDLE_BUILD_PLUGIN_DIR}/3d"

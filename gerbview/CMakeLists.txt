@@ -89,7 +89,7 @@ if( WIN32 )
     endif()
 endif()
 
-if( APPLE )
+if( KICAD_MACOSX_APP_BUNDLE )
     # setup bundle
     set( GERBVIEW_RESOURCES gerbview.icns gerbview_doc.icns )
     set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/gerbview.icns" PROPERTIES
@@ -118,6 +118,10 @@ target_link_libraries( gerbview
     common
     nlohmann_json
     ${wxWidgets_LIBRARIES}
+    )
+
+set_target_properties( gerbview PROPERTIES
+    MACOSX_BUNDLE $<BOOL:KICAD_MACOSX_APP_BUNDLE>
     )
 
 if( MAKE_LINK_MAPS )
@@ -168,7 +172,7 @@ endif()
 add_dependencies( gerbview gerbview_kiface )
 
 # these 2 binaries are a matched set, keep them together
-if( APPLE )
+if( KICAD_MACOSX_APP_BUNDLE )
     set_target_properties( gerbview PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${PROJECT_BINARY_DIR}/gerbview/Info.plist
         )

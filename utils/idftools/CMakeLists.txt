@@ -42,7 +42,7 @@ target_link_libraries( idf2vrml
     ${wxWidgets_LIBRARIES}
     )
 
-if( APPLE )
+if( KICAD_MACOSX_APP_BUNDLE )
     # puts binaries into the *.app bundle while linking
     set_target_properties( idfcyl idfrect dxf2idf idf2vrml PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}

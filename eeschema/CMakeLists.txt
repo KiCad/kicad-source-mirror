@@ -354,7 +354,7 @@ set_source_files_properties( sch_text.cpp
         OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/sch_text_help_md.h
     )
 
-if( APPLE )
+if( KICAD_MACOSX_APP_BUNDLE )
     # setup bundle
     set( EESCHEMA_RESOURCES eeschema.icns eeschema_doc.icns )
     set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/eeschema.icns" PROPERTIES
@@ -383,6 +383,10 @@ target_link_libraries( eeschema
     gal
     common
     ${wxWidgets_LIBRARIES}
+    )
+
+set_target_properties( eeschema PROPERTIES
+    MACOSX_BUNDLE $<BOOL:KICAD_MACOSX_APP_BUNDLE>
     )
 
 # the main Eeschema program, in DSO form.
@@ -453,7 +457,7 @@ if( MAKE_LINK_MAPS )
 endif()
 
 # these 2 binaries are a matched set, keep them together:
-if( APPLE )
+if( KICAD_MACOSX_APP_BUNDLE )
     set_target_properties( eeschema PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${PROJECT_BINARY_DIR}/eeschema/Info.plist
         )

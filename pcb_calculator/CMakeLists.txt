@@ -58,7 +58,7 @@ if( WIN32 )
     endif()
 endif()
 
-if( APPLE )
+if( KICAD_MACOSX_APP_BUNDLE )
     # setup bundle
     set( PCB_CALCULATOR_RESOURCES pcb_calculator.icns )
     set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator.icns" PROPERTIES
@@ -82,6 +82,10 @@ target_link_libraries( pcb_calculator
     # There's way too much crap coming in from common yet.
     common
     ${wxWidgets_LIBRARIES}
+    )
+
+set_target_properties( pcb_calculator PROPERTIES
+    MACOSX_BUNDLE $<BOOL:KICAD_MACOSX_APP_BUNDLE>
     )
 
 if( MAKE_LINK_MAPS )
@@ -119,7 +123,7 @@ endif()
 add_dependencies( pcb_calculator pcb_calculator_kiface )
 
 # these 2 binaries are a matched set, keep them together
-if( APPLE )
+if( KICAD_MACOSX_APP_BUNDLE )
     set_target_properties( pcb_calculator PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${PROJECT_BINARY_DIR}/pcb_calculator/Info.plist
         )

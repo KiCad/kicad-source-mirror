@@ -99,7 +99,7 @@ if( MAKE_LINK_MAPS )
 endif()
 
 # these 2 binaries are a matched set, keep them together:
-if( APPLE )
+if( KICAD_MACOSX_APP_BUNDLE )
     # puts binaries into the *.app bundle while linking
     set_target_properties( cvpcb_kiface PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}

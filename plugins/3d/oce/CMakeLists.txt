@@ -23,7 +23,7 @@ target_include_directories( s3d_plugin_oce PRIVATE
     $<TARGET_PROPERTY:gzip-hpp,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
-if( APPLE )
+if( KICAD_MACOSX_APP_BUNDLE )
     # puts library into the main kicad.app bundle in build tree
     set_target_properties( s3d_plugin_oce PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY "${OSX_BUNDLE_BUILD_PLUGIN_DIR}/3d"

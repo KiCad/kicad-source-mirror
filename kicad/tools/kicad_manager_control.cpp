@@ -799,7 +799,7 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
         wxString msg = wxString::Format( _( "%s %s opened [pid=%ld]\n" ), execFile, param, pid );
         m_frame->PrintMsg( msg );
 
-#ifdef __WXMAC__
+#ifdef __MACOSX_APP__
         // This non-parameterized use of wxExecute is fine because execFile is not derived
         // from user input.
         wxExecute( "osascript -e 'activate application \"" + execFile + "\"'" );

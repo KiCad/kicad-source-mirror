@@ -59,7 +59,7 @@ target_include_directories( kicad2step_lib PRIVATE
 set_target_properties( kicad2step_bin
         PROPERTIES OUTPUT_NAME kicad2step)
 
-if( APPLE )
+if( KICAD_MACOSX_APP_BUNDLE )
     # puts binaries into the *.app bundle while linking
     set_target_properties( kicad2step_bin PROPERTIES
             RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
