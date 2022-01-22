@@ -1825,6 +1825,26 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
                 getView()->Remove( text );
                 parent->Remove( text );
             }
+            else if( selectionCopy.GetSize() == 1 )
+            {
+                text->SetVisible( false );
+                getView()->Update( text );
+
+                switch( text->GetType() )
+                {
+                case FP_TEXT::TEXT_is_REFERENCE:
+                    frame()->ShowInfoBarMsg( _( "Reference designator hidden (it is required and "
+                                                "can not be deleted)." ) );
+                    break;
+                case FP_TEXT::TEXT_is_VALUE:
+                    frame()->ShowInfoBarMsg( _( "Value hidden (it is required and can not be "
+                                                "deleted)." ) );
+                    break;
+                default:
+                    wxFAIL;   // Shouldn't get here
+                    break;
+                }
+            }
 
             break;
         }
