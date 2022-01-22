@@ -286,7 +286,7 @@ std::vector<wxString> LIB_TABLE::GetLogicalLibs()
     std::sort( ret.begin(), ret.end(),
             []( const wxString& lhs, const wxString& rhs )
             {
-                return lhs.CmpNoCase( rhs ) < 0;
+                return StrNumCmp( lhs, rhs, true /* ignore case */ ) < 0;
             } );
 
     return ret;
