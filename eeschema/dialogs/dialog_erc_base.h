@@ -21,13 +21,16 @@ class WX_INFOBAR;
 #include <wx/settings.h>
 #include <wx/string.h>
 #include <wx/html/htmlwin.h>
+#include <wx/gauge.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/dataview.h>
 #include <wx/notebook.h>
+#include <wx/dataview.h>
+#include <wx/listctrl.h>
+#include <wx/simplebook.h>
 #include <wx/stattext.h>
 #include <wx/checkbox.h>
 #include <widgets/number_badge.h>
@@ -48,11 +51,18 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 
 	protected:
 		WX_INFOBAR* m_infoBar;
-		wxNotebook* m_notebook;
-		wxPanel* messagesPanel;
+		wxSimplebook* m_runningResultsBook;
+		wxPanel* running;
+		wxNotebook* m_runningNotebook;
+		wxPanel* m_panelMessages;
 		WX_HTML_REPORT_BOX* m_messages;
+		wxGauge* m_gauge;
+		wxPanel* results;
+		wxNotebook* m_notebook;
 		wxPanel* violationsPanel;
 		wxDataViewCtrl* m_markerDataView;
+		wxPanel* m_panelIgnored;
+		wxListCtrl* m_ignoredList;
 		wxStaticText* m_showLabel;
 		wxCheckBox* m_showAll;
 		wxCheckBox* m_showErrors;
@@ -64,7 +74,8 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 		wxButton* m_saveReport;
 		wxStaticLine* m_staticline1;
 		wxBoxSizer* m_buttonsSizer;
-		wxButton* m_buttondelmarkers;
+		wxButton* m_deleteOneMarker;
+		wxButton* m_deleteAllMarkers;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
@@ -75,9 +86,11 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 		virtual void OnERCItemDClick( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnERCItemRClick( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnERCItemSelected( wxDataViewEvent& event ) { event.Skip(); }
+		virtual void OnIgnoreItemRClick( wxListEvent& event ) { event.Skip(); }
 		virtual void OnSeverity( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveReport( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnEraseDrcMarkersClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDeleteOneClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDeleteAllClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRunERCClick( wxCommandEvent& event ) { event.Skip(); }
 

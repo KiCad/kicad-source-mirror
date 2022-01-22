@@ -20,6 +20,8 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
 
 	m_infoBar = new WX_INFOBAR( this );
+	m_infoBar->SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
+	m_infoBar->SetEffectDuration( 500 );
 	m_infoBar->Hide();
 
 	bSizer1->Add( m_infoBar, 0, wxEXPAND, 5 );
@@ -27,19 +29,47 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	messagesPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bMessagesSizer;
-	bMessagesSizer = new wxBoxSizer( wxVERTICAL );
+	m_runningResultsBook = new wxSimplebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	running = new wxPanel( m_runningResultsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer14;
+	bSizer14 = new wxBoxSizer( wxVERTICAL );
 
-	m_messages = new WX_HTML_REPORT_BOX( messagesPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
-	bMessagesSizer->Add( m_messages, 1, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	m_runningNotebook = new wxNotebook( running, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_panelMessages = new wxPanel( m_runningNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer10;
+	bSizer10 = new wxBoxSizer( wxVERTICAL );
+
+	m_messages = new WX_HTML_REPORT_BOX( m_panelMessages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
+	bSizer10->Add( m_messages, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bGaugeMargins;
+	bGaugeMargins = new wxBoxSizer( wxVERTICAL );
+
+	m_gauge = new wxGauge( m_panelMessages, wxID_ANY, 1000, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL );
+	m_gauge->SetValue( 0 );
+	bGaugeMargins->Add( m_gauge, 0, wxALL|wxEXPAND, 5 );
 
 
-	messagesPanel->SetSizer( bMessagesSizer );
-	messagesPanel->Layout();
-	bMessagesSizer->Fit( messagesPanel );
-	m_notebook->AddPage( messagesPanel, _("Messages"), true );
+	bSizer10->Add( bGaugeMargins, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+
+	m_panelMessages->SetSizer( bSizer10 );
+	m_panelMessages->Layout();
+	bSizer10->Fit( m_panelMessages );
+	m_runningNotebook->AddPage( m_panelMessages, _("Tests Running..."), true );
+
+	bSizer14->Add( m_runningNotebook, 1, wxEXPAND | wxALL, 5 );
+
+
+	running->SetSizer( bSizer14 );
+	running->Layout();
+	bSizer14->Fit( running );
+	m_runningResultsBook->AddPage( running, _("a page"), false );
+	results = new wxPanel( m_runningResultsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer13;
+	bSizer13 = new wxBoxSizer( wxVERTICAL );
+
+	m_notebook = new wxNotebook( results, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	violationsPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bViolationsSizer;
 	bViolationsSizer = new wxBoxSizer( wxVERTICAL );
@@ -54,16 +84,39 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	violationsPanel->SetSizer( bViolationsSizer );
 	violationsPanel->Layout();
 	bViolationsSizer->Fit( violationsPanel );
-	m_notebook->AddPage( violationsPanel, _("Violations"), false );
+	m_notebook->AddPage( violationsPanel, _("Violations (%d)"), false );
+	m_panelIgnored = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer15;
+	bSizer15 = new wxBoxSizer( wxVERTICAL );
 
-	bMainSizer->Add( m_notebook, 1, wxEXPAND, 5 );
+	m_ignoredList = new wxListCtrl( m_panelIgnored, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_NO_HEADER|wxLC_REPORT );
+	bSizer15->Add( m_ignoredList, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_panelIgnored->SetSizer( bSizer15 );
+	m_panelIgnored->Layout();
+	bSizer15->Fit( m_panelIgnored );
+	m_notebook->AddPage( m_panelIgnored, _("Ignored Tests (%d)"), false );
+
+	bSizer13->Add( m_notebook, 1, wxEXPAND, 5 );
+
+
+	results->SetSizer( bSizer13 );
+	results->Layout();
+	bSizer13->Fit( results );
+	m_runningResultsBook->AddPage( results, _("a page"), true );
+
+	bMainSizer->Add( m_runningResultsBook, 1, wxEXPAND|wxTOP|wxRIGHT, 5 );
+
+	wxBoxSizer* bSizer11;
+	bSizer11 = new wxBoxSizer( wxVERTICAL );
 
 	wxBoxSizer* bSeveritySizer;
 	bSeveritySizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_showLabel = new wxStaticText( this, wxID_ANY, _("Show:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_showLabel->Wrap( -1 );
-	bSeveritySizer->Add( m_showLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSeveritySizer->Add( m_showLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_showAll = new wxCheckBox( this, wxID_ANY, _("All"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSeveritySizer->Add( m_showAll, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
@@ -96,18 +149,24 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSeveritySizer->Add( m_saveReport, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	bMainSizer->Add( bSeveritySizer, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizer11->Add( bSeveritySizer, 0, wxEXPAND|wxALL, 5 );
 
 
-	bSizer1->Add( bMainSizer, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 8 );
+	bMainSizer->Add( bSizer11, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizer1->Add( bMainSizer, 1, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer1->Add( m_staticline1, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizer1->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_buttondelmarkers = new wxButton( this, ID_ERASE_DRC_MARKERS, _("Delete Markers"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonsSizer->Add( m_buttondelmarkers, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 8 );
+	m_deleteOneMarker = new wxButton( this, wxID_ANY, _("Delete Marker"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonsSizer->Add( m_deleteOneMarker, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_deleteAllMarkers = new wxButton( this, ID_ERASE_DRC_MARKERS, _("Delete All Markers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonsSizer->Add( m_deleteAllMarkers, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 8 );
 
 
 	m_buttonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -122,7 +181,7 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_buttonsSizer->Add( m_sdbSizer1, 0, wxEXPAND|wxALL, 5 );
 
 
-	bSizer1->Add( m_buttonsSizer, 0, wxEXPAND|wxLEFT, 5 );
+	bSizer1->Add( m_buttonsSizer, 0, wxEXPAND|wxLEFT, 10 );
 
 
 	this->SetSizer( bSizer1 );
@@ -135,12 +194,14 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_markerDataView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_ERC_BASE::OnERCItemDClick ), NULL, this );
 	m_markerDataView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEventHandler( DIALOG_ERC_BASE::OnERCItemRClick ), NULL, this );
 	m_markerDataView->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_ERC_BASE::OnERCItemSelected ), NULL, this );
+	m_ignoredList->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( DIALOG_ERC_BASE::OnIgnoreItemRClick ), NULL, this );
 	m_showAll->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
 	m_showErrors->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
 	m_showWarnings->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
 	m_showExclusions->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
 	m_saveReport->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSaveReport ), NULL, this );
-	m_buttondelmarkers->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnEraseDrcMarkersClick ), NULL, this );
+	m_deleteOneMarker->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnDeleteOneClick ), NULL, this );
+	m_deleteAllMarkers->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnDeleteAllClick ), NULL, this );
 	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnRunERCClick ), NULL, this );
 }
@@ -153,12 +214,14 @@ DIALOG_ERC_BASE::~DIALOG_ERC_BASE()
 	m_markerDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_ERC_BASE::OnERCItemDClick ), NULL, this );
 	m_markerDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEventHandler( DIALOG_ERC_BASE::OnERCItemRClick ), NULL, this );
 	m_markerDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_ERC_BASE::OnERCItemSelected ), NULL, this );
+	m_ignoredList->Disconnect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( DIALOG_ERC_BASE::OnIgnoreItemRClick ), NULL, this );
 	m_showAll->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
 	m_showErrors->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
 	m_showWarnings->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
 	m_showExclusions->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
 	m_saveReport->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSaveReport ), NULL, this );
-	m_buttondelmarkers->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnEraseDrcMarkersClick ), NULL, this );
+	m_deleteOneMarker->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnDeleteOneClick ), NULL, this );
+	m_deleteAllMarkers->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnDeleteAllClick ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnRunERCClick ), NULL, this );
 

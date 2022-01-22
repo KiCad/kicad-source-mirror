@@ -97,7 +97,28 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
     SetupStandardButtons( { { wxID_OK,     _( "Run DRC" ) },
                             { wxID_CANCEL, _( "Close" )   } } );
 
-    initValues();
+    m_markersTitleTemplate     = m_Notebook->GetPageText( 0 );
+    m_unconnectedTitleTemplate = m_Notebook->GetPageText( 1 );
+    m_footprintsTitleTemplate  = m_Notebook->GetPageText( 2 );
+    m_ignoredTitleTemplate     = m_Notebook->GetPageText( 3 );
+
+    auto cfg = m_frame->GetPcbNewSettings();
+
+    m_cbRefillZones->SetValue( cfg->m_DrcDialog.refill_zones );
+    m_cbReportAllTrackErrors->SetValue( cfg->m_DrcDialog.test_all_track_errors );
+
+    if( !Kiface().IsSingle() )
+        m_cbTestFootprints->SetValue( cfg->m_DrcDialog.test_footprints );
+
+    m_severities = cfg->m_DrcDialog.severities;
+    m_markersTreeModel->SetSeverities( m_severities );
+    m_unconnectedTreeModel->SetSeverities( m_severities );
+    m_footprintWarningsTreeModel->SetSeverities( m_severities );
+
+    Layout(); // adding the units above expanded Clearance text, now resize.
+
+    SetFocus();
+
     syncCheckboxes();
 
     finishDialogSettings();
@@ -136,31 +157,7 @@ void DIALOG_DRC::OnActivateDlg( wxActivateEvent& aEvent )
 }
 
 
-void DIALOG_DRC::initValues()
-{
-    m_markersTitleTemplate     = m_Notebook->GetPageText( 0 );
-    m_unconnectedTitleTemplate = m_Notebook->GetPageText( 1 );
-    m_footprintsTitleTemplate  = m_Notebook->GetPageText( 2 );
-    m_ignoredTitleTemplate     = m_Notebook->GetPageText( 3 );
-
-    auto cfg = m_frame->GetPcbNewSettings();
-
-    m_cbRefillZones->SetValue( cfg->m_DrcDialog.refill_zones );
-    m_cbReportAllTrackErrors->SetValue( cfg->m_DrcDialog.test_all_track_errors );
-
-    if( !Kiface().IsSingle() )
-        m_cbTestFootprints->SetValue( cfg->m_DrcDialog.test_footprints );
-
-    m_severities = cfg->m_DrcDialog.severities;
-    m_markersTreeModel->SetSeverities( m_severities );
-    m_unconnectedTreeModel->SetSeverities( m_severities );
-    m_footprintWarningsTreeModel->SetSeverities( m_severities );
-
-    Layout(); // adding the units above expanded Clearance text, now resize.
-
-    SetFocus();
-}
-
+// PROGRESS_REPORTER calls
 
 bool DIALOG_DRC::updateUI()
 {

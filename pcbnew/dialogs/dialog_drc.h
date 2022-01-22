@@ -71,7 +71,6 @@ private:
      */
     bool writeReport( const wxString& aFullFileName );
 
-    void initValues();
     void syncCheckboxes();
     void updateDisplayedCounts();
 

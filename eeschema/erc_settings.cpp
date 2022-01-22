@@ -343,7 +343,7 @@ int SHEETLIST_ERC_ITEMS_PROVIDER::GetCount( int aSeverity ) const
                 else
                     markerSeverity = settings.GetSeverity( aMarker->GetRCItem()->GetErrorCode() );
 
-                if( markerSeverity == aSeverity )
+                if( ( markerSeverity & aSeverity ) > 0 )
                     count++;
             } );
 

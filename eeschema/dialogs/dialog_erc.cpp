@@ -49,6 +49,12 @@
 #include <string_utils.h>
 #include <kiplatform/ui.h>
 
+// wxWidgets spends *far* too long calcuating column widths (most of it, believe it or
+// not, in repeatedly creating/destroying a wxDC to do the measurement in).
+// Use default column widths instead.
+static int DEFAULT_SINGLE_COL_WIDTH = 660;
+
+
 DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
         DIALOG_ERC_BASE( parent ),
         PROGRESS_REPORTER_BASE( 1 ),
@@ -70,17 +76,29 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
     m_markerTreeModel->SetSeverities( m_severities );
     m_markerTreeModel->SetProvider( m_markerProvider );
-    syncCheckboxes();
-    updateDisplayedCounts();
+
+    m_ignoredList->InsertColumn( 0, wxEmptyString, wxLIST_FORMAT_LEFT, DEFAULT_SINGLE_COL_WIDTH );
+
+    m_notebook->SetSelection( 0 );
 
     SetupStandardButtons( { { wxID_OK,     _( "Run ERC" ) },
                             { wxID_CANCEL, _( "Close" )   } } );
+
+    m_violationsTitleTemplate = m_notebook->GetPageText( 0 );
+    m_ignoredTitleTemplate    = m_notebook->GetPageText( 1 );
 
     m_errorsBadge->SetMaximumNumber( 999 );
     m_warningsBadge->SetMaximumNumber( 999 );
     m_exclusionsBadge->SetMaximumNumber( 999 );
 
     UpdateAnnotationWarning();
+
+    Layout();
+
+    SetFocus();
+
+    syncCheckboxes();
+    updateDisplayedCounts();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -178,11 +196,32 @@ void DIALOG_ERC::updateDisplayedCounts()
         numExcluded += m_markerProvider->GetCount( RPT_SEVERITY_EXCLUSION );
     }
 
-    if( !m_ercRun )
+    wxString msg;
+
+    if( m_ercRun )
     {
-        numErrors = -1;
-        numWarnings = -1;
+        msg.sprintf( m_violationsTitleTemplate, m_markerProvider->GetCount() );
+        m_notebook->SetPageText( 0, msg );
+
+        msg.sprintf( m_ignoredTitleTemplate, m_ignoredList->GetItemCount() );
+        m_notebook->SetPageText( 1, msg );
     }
+    else
+    {
+        msg = m_violationsTitleTemplate;
+        msg.Replace( wxT( "(%d)" ), wxEmptyString );
+        m_notebook->SetPageText( 0, msg );
+
+        msg = m_ignoredTitleTemplate;
+        msg.Replace( wxT( "(%d)" ), wxEmptyString );
+        m_notebook->SetPageText( 1, msg );
+    }
+
+    if( !m_ercRun && numErrors == 0 )
+        numErrors = -1;
+
+    if( !m_ercRun && numWarnings == 0 )
+        numWarnings = -1;
 
     m_errorsBadge->UpdateNumber( numErrors, RPT_SEVERITY_ERROR );
     m_warningsBadge->UpdateNumber( numWarnings, RPT_SEVERITY_WARNING );
@@ -190,9 +229,26 @@ void DIALOG_ERC::updateDisplayedCounts()
 }
 
 
+void DIALOG_ERC::OnDeleteOneClick( wxCommandEvent& aEvent )
+{
+    if( m_notebook->GetSelection() == 0 )
+    {
+        // Clear the selection.  It may be the selected ERC marker.
+        m_parent->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
+
+        m_markerTreeModel->DeleteCurrentItem( true );
+
+        // redraw the schematic
+        redrawDrawPanel();
+    }
+
+    updateDisplayedCounts();
+}
+
+
 /* Delete the old ERC markers, over the whole hierarchy
  */
-void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
+void DIALOG_ERC::OnDeleteAllClick( wxCommandEvent& event )
 {
     bool includeExclusions = false;
     int  numExcluded = 0;
@@ -216,9 +272,11 @@ void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
 
     deleteAllMarkers( includeExclusions );
 
+    // redraw the schematic
+    redrawDrawPanel();
+
     m_ercRun = false;
     updateDisplayedCounts();
-    m_parent->GetCanvas()->Refresh();
 }
 
 
@@ -275,14 +333,29 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
     m_parent->RecordERCExclusions();
     deleteAllMarkers( true );
 
-    m_notebook->ChangeSelection( 0 );   // Display the "Tests Running..." tab
+    std::vector<std::reference_wrapper<RC_ITEM>> violations = ERC_ITEM::GetItemsWithSeverities();
+    m_ignoredList->DeleteAllItems();
+
+    for( std::reference_wrapper<RC_ITEM>& item : violations )
+    {
+        if( sch->ErcSettings().GetSeverity( item.get().GetErrorCode() ) == RPT_SEVERITY_IGNORE )
+        {
+            m_ignoredList->InsertItem( m_ignoredList->GetItemCount(),
+                                       wxT( " • " ) + item.get().GetErrorText() );
+        }
+    }
+
+    Raise();
+
+    m_runningResultsBook->ChangeSelection( 0 );   // Display the "Tests Running..." tab
     m_messages->Clear();
-    wxYield();                          // Allow time slice to refresh Messages
+    wxYield();                                    // Allow time slice to refresh Messages
 
     m_running = true;
     m_sdbSizer1Cancel->SetLabel( _( "Cancel" ) );
     m_sdbSizer1OK->Enable( false );
-    m_buttondelmarkers->Enable( false );
+    m_deleteOneMarker->Enable( false );
+    m_deleteAllMarkers->Enable( false );
     m_saveReport->Enable( false );
 
     sch->GetSheets().AnnotatePowerSymbols();
@@ -311,7 +384,7 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
     if( m_cancelled )
         m_messages->Report( _( "-------- ERC cancelled by user.<br><br>" ), RPT_SEVERITY_INFO );
     else
-        m_messages->Report( _( "ERC completed.<br><br>" ), RPT_SEVERITY_INFO );
+        m_messages->Report( _( "Done.<br><br>" ), RPT_SEVERITY_INFO );
 
     Raise();
     wxYield();                                    // Allow time slice to refresh Messages
@@ -319,17 +392,19 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
     m_running = false;
     m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
     m_sdbSizer1OK->Enable( true );
-    m_buttondelmarkers->Enable( true );
+    m_deleteOneMarker->Enable( true );
+    m_deleteAllMarkers->Enable( true );
     m_saveReport->Enable( true );
 
     if( !m_cancelled )
     {
         wxMilliSleep( 500 );
-        m_notebook->ChangeSelection( 1 );
+        m_runningResultsBook->ChangeSelection( 1 );
         KIPLATFORM::UI::ForceFocus( m_markerDataView );
     }
 
     m_ercRun = true;
+    redrawDrawPanel();
     updateDisplayedCounts();
 }
 
@@ -654,19 +729,25 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
 
 void DIALOG_ERC::PrevMarker()
 {
-    if( m_notebook->GetSelection() != 1 )
-        m_notebook->SetSelection( 1 );
+    if( m_notebook->IsShown() )
+    {
+        if( m_notebook->GetSelection() != 0 )
+            m_notebook->SetSelection( 0 );
 
-    m_markerTreeModel->PrevMarker();
+        m_markerTreeModel->PrevMarker();
+    }
 }
 
 
 void DIALOG_ERC::NextMarker()
 {
-    if( m_notebook->GetSelection() != 1 )
-        m_notebook->SetSelection( 1 );
+    if( m_notebook->IsShown() )
+    {
+        if( m_notebook->GetSelection() != 0 )
+            m_notebook->SetSelection( 0 );
 
-    m_markerTreeModel->NextMarker();
+        m_markerTreeModel->NextMarker();
+    }
 }
 
 
@@ -677,7 +758,7 @@ void DIALOG_ERC::ExcludeMarker( SCH_MARKER* aMarker )
     if( marker != nullptr )
         m_markerTreeModel->SelectMarker( marker );
 
-    if( m_notebook->GetSelection() != 1 )
+    if( m_notebook->GetSelection() != 0 )
         return;
 
     RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( m_markerDataView->GetCurrentItem() );
@@ -699,6 +780,21 @@ void DIALOG_ERC::ExcludeMarker( SCH_MARKER* aMarker )
         updateDisplayedCounts();
         redrawDrawPanel();
         m_parent->OnModify();
+    }
+}
+
+
+void DIALOG_ERC::OnIgnoreItemRClick( wxListEvent& event )
+{
+    wxMenu menu;
+
+    menu.Append( 1, _( "Edit ignored violations..." ), _( "Open the Schematic Setup... dialog" ) );
+
+    switch( GetPopupMenuSelectionFromUser( menu ) )
+    {
+    case 1:
+        m_parent->ShowSchematicSetupDialog( _( "Violation Severity" ) );
+        break;
     }
 }
 

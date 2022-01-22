@@ -42,6 +42,7 @@ class PCB_MARKER : public BOARD_ITEM, public MARKER_BASE
 {
 public:
     PCB_MARKER( std::shared_ptr<RC_ITEM> aItem, const VECTOR2I& aPos, PCB_LAYER_ID aLayer = F_Cu );
+
     ~PCB_MARKER();
 
     static inline bool ClassOf( const EDA_ITEM* aItem )

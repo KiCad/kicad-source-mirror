@@ -51,6 +51,13 @@ SCH_MARKER::SCH_MARKER( std::shared_ptr<ERC_ITEM> aItem, const VECTOR2I& aPos ) 
 }
 
 
+SCH_MARKER::~SCH_MARKER()
+{
+    if( m_rcItem )
+        m_rcItem->SetParent( nullptr );
+}
+
+
 EDA_ITEM* SCH_MARKER::Clone() const
 {
     return new SCH_MARKER( *this );

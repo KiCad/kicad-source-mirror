@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,10 +68,13 @@ private:
     // from DIALOG_ERC_BASE:
     void OnCloseErcDialog( wxCloseEvent& event ) override;
     void OnRunERCClick( wxCommandEvent& event ) override;
-    void OnEraseDrcMarkersClick( wxCommandEvent& event ) override;
+    void OnDeleteOneClick( wxCommandEvent& event ) override;
+    void OnDeleteAllClick( wxCommandEvent& event ) override;
     void OnERCItemSelected( wxDataViewEvent& aEvent ) override;
     void OnERCItemDClick( wxDataViewEvent& aEvent ) override;
     void OnERCItemRClick( wxDataViewEvent& aEvent ) override;
+    void OnIgnoreItemRClick( wxListEvent& event ) override;
+
     void OnLinkClicked( wxHtmlLinkEvent& event ) override;
 
     void OnSeverity( wxCommandEvent& aEvent ) override;
@@ -91,6 +94,9 @@ private:
 
 private:
     SCH_EDIT_FRAME*    m_parent;
+
+    wxString           m_violationsTitleTemplate;
+    wxString           m_ignoredTitleTemplate;
 
     RC_ITEMS_PROVIDER* m_markerProvider;
     RC_TREE_MODEL*     m_markerTreeModel;

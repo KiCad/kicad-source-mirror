@@ -417,7 +417,7 @@ int DRC_ITEMS_PROVIDER::GetCount( int aSeverity ) const
         if( marker->GetMarkerType() != m_markerType )
             continue;
 
-        if( marker->GetSeverity() == aSeverity )
+        if( ( marker->GetSeverity() & aSeverity ) > 0 )
             count++;
     }
 
