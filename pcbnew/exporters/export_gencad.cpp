@@ -988,9 +988,9 @@ static bool CreateHeaderInfoData( FILE* aFile, PCB_EDIT_FRAME* aFrame )
     msg = wxT( "DRAWING \"" ) + board->GetFileName() + wxT( "\"\n" );
     fputs( TO_UTF8( msg ), aFile );
 
-    const TITLE_BLOCK&  tb = aFrame->GetTitleBlock();
-
-    msg = wxT( "REVISION \"" ) + tb.GetRevision() + wxT( " " ) + tb.GetDate() + wxT( "\"\n" );
+    wxString rev = ExpandTextVars( board->GetTitleBlock().GetRevision(), board->GetProject() );
+    wxString date = ExpandTextVars( board->GetTitleBlock().GetDate(), board->GetProject() );
+    msg = wxT( "REVISION \"" ) + rev + wxT( " " ) + date + wxT( "\"\n" );
 
     fputs( TO_UTF8( msg ), aFile );
     fputs( "UNITS INCH\n", aFile );
