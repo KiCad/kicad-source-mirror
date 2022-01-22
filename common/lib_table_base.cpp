@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@
 #include <lib_table_base.h>
 #include <lib_table_lexer.h>
 #include <macros.h>
-
+#include <string_utils.h>
 
 #define OPT_SEP     '|'         ///< options separator character
 
@@ -87,9 +87,7 @@ void LIB_TABLE_ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
     wxString extraOptions;
 
     if( !GetIsEnabled() )
-    {
         extraOptions += "(disabled)";
-    }
 
     out->Print( nestLevel, "(lib (name %s)(type %s)(uri %s)(options %s)(descr %s)%s)\n",
                 out->Quotew( GetNickName() ).c_str(),
@@ -97,8 +95,7 @@ void LIB_TABLE_ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
                 out->Quotew( uri ).c_str(),
                 out->Quotew( GetOptions() ).c_str(),
                 out->Quotew( GetDescr() ).c_str(),
-                extraOptions.ToStdString().c_str()
-                );
+                extraOptions.ToStdString().c_str() );
 }
 
 
@@ -196,7 +193,7 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName, bool aCheckIfEnabl
             {
                 row = &cur->rows[entry.second];
 
-                if( !aCheckIfEnabled || ( aCheckIfEnabled && row->GetIsEnabled() ) )
+                if( !aCheckIfEnabled || row->GetIsEnabled() )
                     return row;
             }
         }
@@ -212,7 +209,7 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName, bool aCheckIfEnabl
             {
                 row = &cur->rows[entry.second];
 
-                if( !aCheckIfEnabled || ( aCheckIfEnabled && row->GetIsEnabled() ) )
+                if( !aCheckIfEnabled || row->GetIsEnabled() )
                     return row;
             }
         }
@@ -262,22 +259,19 @@ const LIB_TABLE_ROW* LIB_TABLE::FindRowByURI( const wxString& aURI )
 
 std::vector<wxString> LIB_TABLE::GetLogicalLibs()
 {
-    // Only return unique logical library names.  Use std::set::insert() to
-    // quietly reject any duplicates, which can happen when encountering a duplicate
-    // nickname from one of the fall back table(s).
+    // Only return unique logical library names.  Use std::set::insert() to quietly reject any
+    // duplicates (usually due to encountering a duplicate nickname in a fallback table).
 
-    std::set< wxString >       unique;
-    std::vector< wxString >    ret;
-    const LIB_TABLE*           cur = this;
+    std::set<wxString>    unique;
+    std::vector<wxString> ret;
+    const LIB_TABLE*      cur = this;
 
     do
     {
         for( LIB_TABLE_ROWS_CITER it = cur->rows.begin();  it!=cur->rows.end();  ++it )
         {
             if( it->GetIsEnabled() )
-            {
                 unique.insert( it->GetNickName() );
-            }
         }
 
     } while( ( cur = cur->fallBack ) != nullptr );
@@ -286,9 +280,7 @@ std::vector<wxString> LIB_TABLE::GetLogicalLibs()
 
     // return a sorted, unique set of nicknames in a std::vector<wxString> to caller
     for( std::set< wxString >::const_iterator it = unique.begin();  it!=unique.end();  ++it )
-    {
         ret.push_back( *it );
-    }
 
     // We want to allow case-sensitive duplicates but sort by case-insensitive ordering
     std::sort( ret.begin(), ret.end(),
@@ -327,13 +319,12 @@ bool LIB_TABLE::InsertRow( LIB_TABLE_ROW* aRow, bool doReplace )
 
 
 void LIB_TABLE::Load( const wxString& aFileName )
-
 {
     // It's OK if footprint library tables are missing.
     if( wxFileName::IsFileReadable( aFileName ) )
     {
-        FILE_LINE_READER    reader( aFileName );
-        LIB_TABLE_LEXER     lexer( &reader );
+        FILE_LINE_READER reader( aFileName );
+        LIB_TABLE_LEXER  lexer( &reader );
 
         Parse( &lexer );
     }
@@ -380,7 +371,9 @@ PROPERTIES* LIB_TABLE::ParseOptions( const std::string& aOptionsList )
                     break;          // process the pair
                 }
                 else
+                {
                     pair += *cp++;
+                }
             }
 
             // stash the pair
@@ -396,7 +389,9 @@ PROPERTIES* LIB_TABLE::ParseOptions( const std::string& aOptionsList )
                     props[name] = value;
                 }
                 else
+                {
                     props[pair] = "";       // property is present, but with no value.
+                }
             }
         }
 

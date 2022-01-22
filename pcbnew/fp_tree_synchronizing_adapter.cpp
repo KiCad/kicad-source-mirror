@@ -76,7 +76,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::Sync()
         // Remove the library if it no longer exists or it exists in both the global and the
         // project library but the project library entry is disabled.
         if( !m_libs->HasLibrary( name, true )
-          || ( m_libs->FindRow( name, true ) != m_libs->FindRow( name, false ) ) )
+                || m_libs->FindRow( name, true ) != m_libs->FindRow( name, false ) )
         {
             it = deleteLibrary( it );
             continue;
@@ -89,7 +89,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::Sync()
     // Look for new libraries
     size_t count = m_libMap.size();
 
-    for( const auto& libName : m_libs->GetLogicalLibs() )
+    for( const wxString& libName : m_libs->GetLogicalLibs() )
     {
         if( m_libMap.count( libName ) == 0 )
         {
@@ -122,10 +122,10 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNode )
         // libraries with lots of footprints.
         FOOTPRINT_INFO_IMPL dummy( wxEmptyString, (*nodeIt)->m_Name );
         auto footprintIt = std::lower_bound( footprints.begin(), footprints.end(), &dummy,
-            []( LIB_TREE_ITEM* a, LIB_TREE_ITEM* b )
-            {
-                return StrNumCmp( a->GetName(), b->GetName(), false ) < 0;
-            } );
+                []( LIB_TREE_ITEM* a, LIB_TREE_ITEM* b )
+                {
+                    return StrNumCmp( a->GetName(), b->GetName(), false ) < 0;
+                } );
 
         if( footprintIt != footprints.end() && dummy.GetName() == (*footprintIt)->GetName() )
         {
@@ -143,7 +143,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNode )
     }
 
     // now the footprint list contains only new aliases that need to be added to the tree
-    for( auto footprint : footprints )
+    for( LIB_TREE_ITEM* footprint : footprints )
         aLibNode.AddItem( footprint );
 
     aLibNode.AssignIntrinsicRanks();
@@ -151,8 +151,8 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNode )
 }
 
 
-LIB_TREE_NODE::PTR_VECTOR::iterator FP_TREE_SYNCHRONIZING_ADAPTER::deleteLibrary(
-            LIB_TREE_NODE::PTR_VECTOR::iterator& aLibNodeIt )
+LIB_TREE_NODE::PTR_VECTOR::iterator
+FP_TREE_SYNCHRONIZING_ADAPTER::deleteLibrary( LIB_TREE_NODE::PTR_VECTOR::iterator& aLibNodeIt )
 {
     LIB_TREE_NODE* node = aLibNodeIt->get();
     m_libMap.erase( node->m_Name );
@@ -170,7 +170,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
         return;
     }
 
-    auto node = ToNode( aItem );
+    LIB_TREE_NODE* node = ToNode( aItem );
 
     switch( aCol )
     {
@@ -186,9 +186,14 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
                 aVariant = node->m_Name;
         }
         else if( node->m_Pinned )
+        {
             aVariant = GetPinningSymbol() + node->m_Name;
+        }
         else
+        {
             aVariant = node->m_Name;
+        }
+
         break;
 
     case 1:
@@ -235,7 +240,7 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsign
     if( m_frame->IsCurrentFPFromBoard() )
         return false;
 
-    auto node = ToNode( aItem );
+    LIB_TREE_NODE* node = ToNode( aItem );
     wxCHECK( node, false );
 
     switch( node->m_Type )
