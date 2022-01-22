@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2022-01-22 12:18+0000\n"
+"PO-Revision-Date: 2022-02-01 13:58+0000\n"
 "Last-Translator: Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
@@ -4590,7 +4590,7 @@ msgstr "%s'den : %s() satırı %d"
 #: common/exceptions.cpp:76
 #, c-format
 msgid "%s in '%s', line %d, offset %d."
-msgstr ""
+msgstr "%s içinde '%s', satır %d, sütun %d."
 
 #: common/exceptions.cpp:90
 #, c-format
@@ -4664,7 +4664,7 @@ msgstr "Yapılandırma dosyası yazma sorunları"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:101
 #: eeschema/dialogs/dialog_text_properties_base.cpp:67
 msgid "Default Font"
-msgstr ""
+msgstr "Varsayılan yazı tipi"
 
 #: common/font/fontconfig.cpp:109
 #, c-format
@@ -4692,18 +4692,20 @@ msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
 msgstr ""
+"Yinelenen kütüphane takma adı '%s' ayak izi kütüphanesi tablo dosyası "
+"satırında %d."
 
 #: common/fp_lib_table.cpp:300
 #, c-format
 msgid "fp-lib-table files contain no library named '%s'."
-msgstr ""
+msgstr "fp-lib-table dosyaları '%s' adlı kitaplık içermiyor."
 
 #: common/fp_lib_table.cpp:492
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
 #: eeschema/symbol_lib_table.cpp:501
 #, c-format
 msgid "Cannot create global library table path '%s'."
-msgstr ""
+msgstr "'%s' genel kütüphane tablo yolu oluşturulamıyor."
 
 #: common/gestfich.cpp:153
 #, c-format
@@ -4713,19 +4715,19 @@ msgstr "'%s' komutu bulunamadı."
 #: common/gestfich.cpp:170
 #, c-format
 msgid "Unable to find a PDF viewer for '%s'."
-msgstr ""
+msgstr "'%s' için bir PDF görüntüleyici bulunamadı."
 
 #: common/gestfich.cpp:185
 #, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr ""
+msgstr "'%s' PDF görüntüleyici çalıştırılırken sorun."
 
 #: common/gestfich.cpp:223 eeschema/eeschema.cpp:498 eeschema/eeschema.cpp:531
 #: gerbview/gerbview.cpp:241 kicad/project_template.cpp:257
 #: pcbnew/pcbnew.cpp:451
 #, c-format
 msgid "Cannot copy file '%s'."
-msgstr ""
+msgstr "'%s' dosyası kopyalanamıyor."
 
 #: common/grid_tricks.cpp:278 common/tool/actions.cpp:153
 #: eeschema/tools/ee_actions.cpp:148 pcbnew/tools/edit_tool.cpp:1949
@@ -4832,7 +4834,7 @@ msgstr "'%s' kiface kitaplığı yüklenemedi."
 #: common/kiway.cpp:266
 #, c-format
 msgid "Could not read instance name and version from kiface library '%s'."
-msgstr ""
+msgstr "'%s' kiface kitaplığından örnek adı ve sürümü okunamadı."
 
 #: common/kiway.cpp:299
 #, c-format
@@ -4841,6 +4843,9 @@ msgid ""
 "'%s'\n"
 "could not be loaded\n"
 msgstr ""
+"Önemli Yükleme Hatası. Dosya:\n"
+"'%s'\n"
+"yüklenemedi\n"
 
 #: common/kiway.cpp:303
 msgid "It is missing.\n"
@@ -5143,11 +5148,11 @@ msgstr "Hiyerarşik etiketler"
 
 #: common/layer_id.cpp:112
 msgid "Pin numbers"
-msgstr ""
+msgstr "Bacak numaraları"
 
 #: common/layer_id.cpp:113
 msgid "Pin names"
-msgstr ""
+msgstr "Bacak adları"
 
 #: common/layer_id.cpp:114
 msgid "Symbol references"
@@ -5155,7 +5160,7 @@ msgstr "Sembol referansları"
 
 #: common/layer_id.cpp:115
 msgid "Symbol values"
-msgstr ""
+msgstr "Sembol değerleri"
 
 #: common/layer_id.cpp:116
 msgid "Symbol fields"
@@ -5175,16 +5180,16 @@ msgstr "Sembol gövdesi ana hatları"
 
 #: common/layer_id.cpp:120
 msgid "Symbol body fills"
-msgstr ""
+msgstr "Sembol gövdesi dolguları"
 
 #: common/layer_id.cpp:121
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:69
 msgid "Schematic text && graphics"
-msgstr ""
+msgstr "Şematik metin && grafikler"
 
 #: common/layer_id.cpp:122
 msgid "Schematic text && graphics backgrounds"
-msgstr ""
+msgstr "Şematik metin && grafik arka planları"
 
 #: common/layer_id.cpp:123
 msgid "Pins"
@@ -5192,15 +5197,15 @@ msgstr "Bacaklar"
 
 #: common/layer_id.cpp:124
 msgid "Sheet borders"
-msgstr ""
+msgstr "Sayfa kenarlıkları"
 
 #: common/layer_id.cpp:125
 msgid "Sheet backgrounds"
-msgstr ""
+msgstr "Sayfa arka planları"
 
 #: common/layer_id.cpp:126
 msgid "Sheet names"
-msgstr ""
+msgstr "Sayfa adları"
 
 #: common/layer_id.cpp:127
 msgid "Sheet fields"
@@ -5208,7 +5213,7 @@ msgstr "Sayfa alanları"
 
 #: common/layer_id.cpp:128
 msgid "Sheet file names"
-msgstr ""
+msgstr "Sayfa dosyası adları"
 
 #: common/layer_id.cpp:129
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
@@ -5217,11 +5222,11 @@ msgstr "Sayfa Bacakları"
 
 #: common/layer_id.cpp:130
 msgid "No-connect symbols"
-msgstr ""
+msgstr "Bağlantısız semboller"
 
 #: common/layer_id.cpp:131
 msgid "ERC warnings"
-msgstr ""
+msgstr "ERC uyarıları"
 
 #: common/layer_id.cpp:132
 msgid "ERC errors"
@@ -5229,7 +5234,7 @@ msgstr "ERC hataları"
 
 #: common/layer_id.cpp:133
 msgid "ERC exclusions"
-msgstr ""
+msgstr "ERC istisnaları"
 
 #: common/layer_id.cpp:134 common/layer_id.cpp:171
 #: pcbnew/widgets/appearance_controls.cpp:354
@@ -5265,7 +5270,7 @@ msgstr "Vurgulanan öğeler"
 
 #: common/layer_id.cpp:141
 msgid "Hidden items"
-msgstr ""
+msgstr "Gizli öğeler"
 
 #: common/layer_id.cpp:142 common/layer_id.cpp:178
 msgid "Selection highlight"
@@ -5273,15 +5278,15 @@ msgstr "Seçim vurgulama"
 
 #: common/layer_id.cpp:143 common/layer_id.cpp:172
 msgid "Drawing sheet"
-msgstr ""
+msgstr "Çizim sayfası"
 
 #: common/layer_id.cpp:147
 msgid "Footprints front"
-msgstr ""
+msgstr "Ayak izleri ön"
 
 #: common/layer_id.cpp:148
 msgid "Footprints back"
-msgstr ""
+msgstr "Ayak izleri arka"
 
 #: common/layer_id.cpp:149
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
@@ -5305,19 +5310,19 @@ msgstr "Ayak çizimi metni"
 
 #: common/layer_id.cpp:152
 msgid "Hidden text"
-msgstr ""
+msgstr "Gizli metin"
 
 #: common/layer_id.cpp:153
 msgid "SMD pads front"
-msgstr ""
+msgstr "SMD ayak izleri ön"
 
 #: common/layer_id.cpp:154
 msgid "SMD pads back"
-msgstr ""
+msgstr "SMD ayak izleri arka"
 
 #: common/layer_id.cpp:155
 msgid "Through-hole pads"
-msgstr ""
+msgstr "Delikli ayak izleri"
 
 #: common/layer_id.cpp:156
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
@@ -5330,11 +5335,11 @@ msgstr "İzler"
 
 #: common/layer_id.cpp:157
 msgid "Through vias"
-msgstr ""
+msgstr "Tam Geçiş(via)"
 
 #: common/layer_id.cpp:158
 msgid "Bl/Buried vias"
-msgstr ""
+msgstr "BL/Gömülü Geçiş"
 
 #: common/layer_id.cpp:159
 msgid "Micro-vias"
@@ -5342,7 +5347,7 @@ msgstr "Mikro-geçişler"
 
 #: common/layer_id.cpp:160
 msgid "Via holes"
-msgstr ""
+msgstr "Geçiş Deliği"
 
 #: common/layer_id.cpp:161
 msgid "Via hole walls"
@@ -5354,11 +5359,11 @@ msgstr "Kaplamalı delikler"
 
 #: common/layer_id.cpp:163
 msgid "Plated hole walls"
-msgstr ""
+msgstr "Kaplamalı delik duvarlar"
 
 #: common/layer_id.cpp:164
 msgid "Non-plated holes"
-msgstr ""
+msgstr "Kaplamasız delikler"
 
 #: common/layer_id.cpp:165 pcbnew/dialogs/panel_edit_options_base.cpp:318
 #: pcbnew/widgets/appearance_controls.cpp:349
@@ -5372,7 +5377,7 @@ msgstr "Bağlantı yok"
 
 #: common/layer_id.cpp:167
 msgid "DRC warnings"
-msgstr ""
+msgstr "DRC uyarıları"
 
 #: common/layer_id.cpp:168
 msgid "DRC errors"
@@ -5380,15 +5385,15 @@ msgstr "DRC hataları"
 
 #: common/layer_id.cpp:169
 msgid "DRC exclusions"
-msgstr ""
+msgstr "DRC istisnaları"
 
 #: common/layer_id.cpp:170
 msgid "DRC marker shadows"
-msgstr ""
+msgstr "DRC işaretleyici gölgeleri"
 
 #: common/layer_id.cpp:176
 msgid "Grid axes"
-msgstr ""
+msgstr "Kılavuz eksenleri"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
@@ -5449,21 +5454,21 @@ msgstr "Tanınmayan işlev '%s'"
 #: common/libeval_compiler/libeval_compiler.cpp:1009
 #, c-format
 msgid "Missing units for '%s'| (%s)"
-msgstr ""
+msgstr "'%s' için eksik birimler| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1126
 #, c-format
 msgid "Type mismatch between '%s' and %lf"
-msgstr ""
+msgstr "'%s' ve %lf arasında tip uyuşmazlığı"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1132
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr ""
+msgstr "%lf ve '%s' arasında tip uyuşmazlığı"
 
 #: common/pgm_base.cpp:169
 msgid "No default editor found, you must choose one."
-msgstr ""
+msgstr "Varsayılan düzenleyici bulunamadı, birini seçmelisiniz."
 
 #: common/pgm_base.cpp:189 common/pgm_base.cpp:191
 msgid "Executable file"
@@ -5490,11 +5495,13 @@ msgid ""
 "Missing null byte at end of property list. Imported data might be malformed "
 "or missing."
 msgstr ""
+"Özellik listesinin sonunda boş bayt eksik. Alınan veriler hatalı "
+"biçimlendirilmiş veya eksik olabilir."
 
 #: common/plugins/altium/altium_parser.cpp:247
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
-msgstr ""
+msgstr "'%s' birimi 'mil' ile bitmiyor."
 
 #: common/plugins/altium/altium_parser.cpp:255
 #, c-format
@@ -5509,7 +5516,7 @@ msgstr "'%s' dosyası açılamıyor"
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2354
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2652
 msgid "File import cancelled by user."
-msgstr ""
+msgstr "Dosya alma işlemi kullanıcı tarafından iptal edildi."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2370
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2388
@@ -5624,15 +5631,15 @@ msgstr "'%s' dosyası arşivlenemedi."
 #: common/project/project_archiver.cpp:241
 #, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
-msgstr ""
+msgstr "Zip arşivi '%s' oluşturuldu (%s sıkıştırılmamış, %s sıkıştırılmış)."
 
 #: common/rc_item.cpp:360
 msgid "Excluded warning: "
-msgstr ""
+msgstr "İstisna uyarı: "
 
 #: common/rc_item.cpp:362
 msgid "Excluded error: "
-msgstr ""
+msgstr "İstisna hata: "
 
 #: common/rc_item.cpp:366
 msgid "Warning: "
@@ -5645,7 +5652,7 @@ msgstr "Hata: "
 #: common/richio.cpp:170
 #, c-format
 msgid "Unable to open %s for reading."
-msgstr ""
+msgstr "%s okunmak üzere açılamıyor."
 
 #: common/richio.cpp:221 common/richio.cpp:317
 msgid "Maximum line length exceeded"
@@ -5666,11 +5673,11 @@ msgstr "(Ayak izleri)"
 #: common/settings/color_settings.cpp:389
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings.cpp:78
 msgid "KiCad Default"
-msgstr ""
+msgstr "KiCad Varsayılanı"
 
 #: common/settings/color_settings.cpp:394
 msgid "KiCad Classic"
-msgstr ""
+msgstr "KiCad Classic"
 
 #: common/template_fieldnames.cpp:72
 #, c-format
@@ -5680,7 +5687,7 @@ msgstr "Alan%d"
 #: common/tool/action_menu.cpp:209 common/tool/action_menu.cpp:214
 #, c-format
 msgid "Close %s"
-msgstr ""
+msgstr "%s'i kapat"
 
 #: common/tool/action_menu.cpp:228
 #, c-format
@@ -5905,27 +5912,27 @@ msgstr "Tüm eşleşmeleri değiştir"
 
 #: common/tool/actions.cpp:249
 msgid "Previous Marker"
-msgstr ""
+msgstr "Önceki İşaretçi"
 
 #: common/tool/actions.cpp:249
 msgid "Go to previous marker in Checker window"
-msgstr ""
+msgstr "Denetleyici penceresinde önceki işaretçiye git"
 
 #: common/tool/actions.cpp:254
 msgid "Next Marker"
-msgstr ""
+msgstr "Sonraki İşaretçi"
 
 #: common/tool/actions.cpp:254
 msgid "Go to next marker in Checker window"
-msgstr ""
+msgstr "Denetleyici penceresinde sonraki işaretçiye git"
 
 #: common/tool/actions.cpp:259
 msgid "Exclude Marker"
-msgstr ""
+msgstr "İşaretçiyi Hariç Tut"
 
 #: common/tool/actions.cpp:259
 msgid "Mark current violation in Checker window as an exclusion"
-msgstr ""
+msgstr "Denetleyici penceresinde mevcut ihlali bir dışlama olarak işaretle"
 
 #: common/tool/actions.cpp:270 kicad/pcm/dialogs/dialog_pcm_base.cpp:131
 msgid "Refresh"
@@ -6015,7 +6022,7 @@ msgstr "Kütüphaneyi Sabitle"
 
 #: common/tool/actions.cpp:409
 msgid "Keep the library at the top of the list"
-msgstr ""
+msgstr "Kütüphaneyi listenin başında tut"
 
 #: common/tool/actions.cpp:413
 msgid "Unpin Library"
@@ -6023,7 +6030,7 @@ msgstr "Kitaplığı Sabitlemeyi Geri Alın"
 
 #: common/tool/actions.cpp:414
 msgid "No longer keep the library at the top of the list"
-msgstr ""
+msgstr "Kitaplığı artık listenin başında tutma"
 
 #: common/tool/actions.cpp:419
 msgid "Pan Up"
@@ -6154,7 +6161,7 @@ msgstr "Etkin olmayan katmanları normal ve soluk arasında geçiş yap"
 
 #: common/tool/actions.cpp:543
 msgid "Inactive Layer View Mode (3-state)"
-msgstr ""
+msgstr "Etkin Olmayan Katman Görünümü Modu (3 durumlu)"
 
 #: common/tool/actions.cpp:544
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
@@ -6208,7 +6215,7 @@ msgstr "PCB'i Şematik'ten Güncelleştir..."
 
 #: common/tool/actions.cpp:593
 msgid "Update PCB with changes made to schematic"
-msgstr ""
+msgstr "Devre şemasında yapılan değişikliklerle PCB'yi güncelleyin"
 
 #: common/tool/actions.cpp:598
 msgid "Update Schematic from PCB..."
@@ -6216,7 +6223,7 @@ msgstr "PCB'den Şematik Güncelleştir..."
 
 #: common/tool/actions.cpp:598
 msgid "Update schematic with changes made to PCB"
-msgstr ""
+msgstr "PCB'de yapılan değişikliklerle şemayı güncelleştir"
 
 #: common/tool/actions.cpp:608
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:71
@@ -6280,7 +6287,7 @@ msgstr "Web tarayıcısında \"KiCad'e Katkıda Bulun\" ı aç"
 
 #: common/tool/actions.cpp:651
 msgid "Open \"Donate to KiCad\" in a web browser"
-msgstr ""
+msgstr "Bir web tarayıcısında \"KiCad'e Bağış Yap\"ı açın"
 
 #: common/tool/actions.cpp:655
 msgid "Report Bug"
@@ -6293,10 +6300,13 @@ msgid ""
 "'%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
+"Yardım dosyası '%s' veya\n"
+"'%s' bulunamadı.\n"
+"KiCad çevrimiçi yardımına erişmek istiyor musunuz?"
 
 #: common/tool/common_control.cpp:222 common/tool/common_control.cpp:242
 msgid "File Not Found"
-msgstr ""
+msgstr "Dosya bulunamadı"
 
 #: common/tool/common_control.cpp:239
 #, c-format
@@ -6304,6 +6314,8 @@ msgid ""
 "Help file '%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
+"'%s' yardım dosyası bulunamadı.\n"
+"KiCad çevrimiçi yardımına erişmek istiyor musunuz?"
 
 #: common/tool/common_control.cpp:269
 #, c-format
@@ -6324,11 +6336,13 @@ msgid ""
 "Could not launch the default browser.\n"
 "To donate to the KiCad project, visit %s"
 msgstr ""
+"Varsayılan tarayıcı başlatılamadı.\n"
+"KiCad projesine bağış yapmak için %s adresini ziyaret edin"
 
 #: common/tool/grid_menu.cpp:93
 #, c-format
 msgid "Grid: %s (%s)"
-msgstr ""
+msgstr "Izgara: %s (%s)"
 
 #: common/tool/grid_menu.cpp:104
 #, c-format
@@ -6356,7 +6370,7 @@ msgstr "Girdi başta boşluk içeriyor."
 #: common/validators.cpp:302
 #, c-format
 msgid "'%s' is not a valid library identifier format."
-msgstr ""
+msgstr "%s geçerli bir kütüphane tanımlayıcı formatı değildir."
 
 #: common/validators.cpp:309
 msgid "Library Identifier Validation Error"
@@ -6384,7 +6398,7 @@ msgstr "< bulunamadı>"
 
 #: common/widgets/footprint_preview_widget.cpp:103
 msgid "Footprint not found."
-msgstr ""
+msgstr "Ayak izi bulunamadı."
 
 #: common/widgets/footprint_select_widget.cpp:141
 msgid "No default footprint"
@@ -6396,7 +6410,7 @@ msgstr "Hızlandırılmış grafikler"
 
 #: common/widgets/gal_options_panel.cpp:86
 msgid "Fallback graphics"
-msgstr ""
+msgstr "Hızlandırılmamış grafikleri"
 
 #: common/widgets/gal_options_panel.cpp:87
 msgid "Rendering Engine"
@@ -6803,7 +6817,7 @@ msgstr "Eski ayak izi dışa aktarma dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:467
 msgid "Electrical rule check file"
-msgstr ""
+msgstr "Elektrik kuralı kontrol dosyası"
 
 #: common/wildcards_and_files_ext.cpp:473
 msgid "Spice library file"
@@ -6844,7 +6858,7 @@ msgstr "Specctra DSN dosyası"
 
 #: common/wildcards_and_files_ext.cpp:528
 msgid "Specctra Session file"
-msgstr ""
+msgstr "Specctra Oturum Dosyası"
 
 #: common/wildcards_and_files_ext.cpp:535
 msgid "IPC-D-356 Test Files"
@@ -6864,12 +6878,12 @@ msgstr "jpeg dosyası"
 
 #: common/wildcards_and_files_ext.cpp:561
 msgid "Hotkey file"
-msgstr ""
+msgstr "Kısayol tuşu dosyası"
 
 #: cvpcb/auto_associate.cpp:105
 #, c-format
 msgid "Equivalence file '%s' could not be found in the default search paths."
-msgstr ""
+msgstr "'%s' eşdeğerlik dosyası varsayılan arama yollarında bulunamadı."
 
 #: cvpcb/auto_associate.cpp:126
 #, c-format
@@ -6883,7 +6897,7 @@ msgstr "Denklik Dosyası Yükleme Hatası"
 #: cvpcb/auto_associate.cpp:185
 #, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr ""
+msgstr "%lu ayak izi/sembol eşdeğerlikleri bulundu."
 
 #: cvpcb/auto_associate.cpp:261
 #, c-format
@@ -6908,6 +6922,14 @@ msgid ""
 "See the \"Footprint Library Table\" section of the CvPcb documentation for "
 "more information."
 msgstr ""
+"CvPcb'yi ilk kez ayak izi bulmak için yeni ayak izi kütüphane tablosu "
+"yöntemini kullanarak çalıştırmışsınızdır.\n"
+"CvPcb varsayılan tabloyu kopyalamış veya giriş klasörünüzde boş bir tablo "
+"oluşturmuştur.\n"
+"Önce kütüphane tablosunu KiCad'de bulunmayan tüm ayak izi kütüphanelerini "
+"içerecek şekilde yapılandırmanız gerekir.\n"
+"Daha fazla bilgi için CvPcb belgelerinin \"Ayak İzi Kütüphanesi Tablosu\" "
+"bölümüne bakın."
 
 #: cvpcb/cvpcb.cpp:187
 msgid ""
@@ -6939,16 +6961,17 @@ msgstr "Uygula, Şemayı Kaydet && Devam Et"
 
 #: cvpcb/cvpcb_mainframe.cpp:212
 msgid "Symbol to footprint changes are unsaved"
-msgstr ""
+msgstr "Ayak izi değişikliklerinin sembolü kaydedilmedi"
 
 #: cvpcb/cvpcb_mainframe.cpp:386
 msgid "Symbol to Footprint links have been modified. Save changes?"
 msgstr ""
+"Ayak İzi bağlantıları simgesi değiştirildi. Değişiklikler kaydedilsin mi?"
 
 #: cvpcb/cvpcb_mainframe.cpp:551 cvpcb/tools/cvpcb_association_tool.cpp:207
 #, c-format
 msgid "'%s' is not a valid footprint."
-msgstr ""
+msgstr "'%s' geçerli bir ayak izi değil."
 
 #: cvpcb/cvpcb_mainframe.cpp:705 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1423 eeschema/symbol_editor/symbol_editor.cpp:1251
@@ -6958,7 +6981,7 @@ msgstr "Anahtar kelimeler"
 
 #: cvpcb/cvpcb_mainframe.cpp:721
 msgid "Pin Count"
-msgstr ""
+msgstr "Bacak sayısı"
 
 #: cvpcb/cvpcb_mainframe.cpp:734 eeschema/sch_symbol.cpp:1406
 #: eeschema/sch_symbol.cpp:1410 eeschema/sch_symbol.cpp:1440
@@ -6969,35 +6992,36 @@ msgstr "Kütüphane"
 
 #: cvpcb/cvpcb_mainframe.cpp:747
 msgid "Search Text"
-msgstr ""
+msgstr "Metin Ara"
 
 #: cvpcb/cvpcb_mainframe.cpp:751
 msgid "No Filtering"
-msgstr ""
+msgstr "Filtreleme Yok"
 
 #: cvpcb/cvpcb_mainframe.cpp:753
 #, c-format
 msgid "Filtered by %s"
-msgstr ""
+msgstr "%s tarafından filtrelendi"
 
 #: cvpcb/cvpcb_mainframe.cpp:767
 #, c-format
 msgid "Description: %s;  Keywords: %s"
-msgstr ""
+msgstr "Açıklama: %s;  Anahtar Kelimeler: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:799
 #, c-format
 msgid "Library location: %s"
-msgstr ""
+msgstr "Kütüphane konumu: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:801
 msgid "Library location: unknown"
-msgstr ""
+msgstr "Kütüphane konumu: bilinmiyor"
 
 #: cvpcb/cvpcb_mainframe.cpp:814
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
 msgstr ""
+"Geçerli ayak izi kitaplığı tablosunda PCB ayak izi kitaplığı listelenmez."
 
 #: cvpcb/cvpcb_mainframe.cpp:815
 msgid "Configuration Error"
@@ -7014,18 +7038,20 @@ msgid ""
 "Error loading schematic.\n"
 "%s"
 msgstr ""
+"Şema yüklenirken hata oluştu.\n"
+"%s"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:51
 #, c-format
 msgid "Project file: '%s'"
-msgstr ""
+msgstr "Proje dosyası: '%s'"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:103
 #: eeschema/dialogs/dialog_bom.cpp:447
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
 #: kicad/project_tree_pane.cpp:790
 msgid "No text editor selected in KiCad.  Please choose one."
-msgstr ""
+msgstr "KiCad'de metin düzenleyicisi seçilmedi.  Lütfen birini seçin."
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:244
 msgid "Footprint Association File"
@@ -7034,11 +7060,11 @@ msgstr "Ayak İzi İlişkilendirme Dosyası"
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:288
 #, c-format
 msgid "File '%s' already exists in list."
-msgstr ""
+msgstr "'%s' dosyası listede zaten var."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
-msgstr ""
+msgstr "Sembol Ayak İzi İlişkilendirme Dosyaları (.equ)"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/dialogs/dialog_bus_manager.cpp:74
@@ -7072,7 +7098,7 @@ msgstr "Dosyayı Düzenle"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:63
 msgid "Available environment variables for relative paths:"
-msgstr ""
+msgstr "Göreli yollar için kullanılabilir ortam değişkenleri:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:81
 #: eeschema/dialogs/dialog_label_properties_base.cpp:84
@@ -7106,7 +7132,7 @@ msgstr "Bağıl"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
 msgid "Path Type"
-msgstr ""
+msgstr "Yol Türü"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
 msgid "Ref"
@@ -7118,7 +7144,7 @@ msgstr "Şematik atama"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:41
 msgid "Cmp file assignment"
-msgstr ""
+msgstr "Cmp dosyası atama"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.cpp:19
 msgid ""
@@ -7127,10 +7153,14 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
+"Şematik ağlistesi ve sembol ayak izi ilişkilendirme dosyasından (.cmp) ayak "
+"izi atamaları çakışıyor.\n"
+"\n"
+"Lütfen görevi seçin."
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.h:53
 msgid "Footprint Assignment Conflicts"
-msgstr ""
+msgstr "Ayak İzi Atama Çakışmaları"
 
 #: cvpcb/display_footprints_frame.cpp:69
 #: pcbnew/toolbars_footprint_viewer.cpp:164
@@ -7140,12 +7170,12 @@ msgstr "Ayak İzi Görüntüleyici"
 #: cvpcb/display_footprints_frame.cpp:388
 #, c-format
 msgid "Footprint ID '%s' is not valid."
-msgstr ""
+msgstr "'%s' ayak izi kimliği geçerli değil."
 
 #: cvpcb/display_footprints_frame.cpp:403
 #, c-format
 msgid "Library '%s' is not in the footprint library table."
-msgstr ""
+msgstr "'%s' kitaplığı, ayak izi kitaplığı tablosunda değil."
 
 #: cvpcb/display_footprints_frame.cpp:412
 #: cvpcb/display_footprints_frame.cpp:437
@@ -7170,6 +7200,10 @@ msgid ""
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
+"Atanan ayak izlerinden bazıları kitaplık adı olmayan eski girdilerdir. "
+"KiCad'in bunları yeni gerekli LIB_ID biçimine dönüştürmeyi denemesini ister "
+"misiniz? (Hayır yanıtını verirseniz, bu atamalar temizlenecek ve bunları el "
+"ile yeniden atamanız gerekir.)"
 
 #: cvpcb/readwrite_dlgs.cpp:148
 #, c-format
@@ -7180,15 +7214,15 @@ msgstr ""
 #: cvpcb/readwrite_dlgs.cpp:155
 #, c-format
 msgid "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n"
-msgstr ""
+msgstr "'%s' ayak izi '%s' bileşeni, <b>birden çok</b> kitaplıkta bulundu.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:168
 msgid "First check your footprint library table entries."
-msgstr ""
+msgstr "Öncelikle ayak izi kitaplığı tablo girişlerinizi kontrol edin."
 
 #: cvpcb/readwrite_dlgs.cpp:170
 msgid "Problematic Footprint Library Tables"
-msgstr ""
+msgstr "Sorunlu Ayak İzi Kitaplığı Tabloları"
 
 #: cvpcb/readwrite_dlgs.cpp:178
 msgid ""
@@ -7196,6 +7230,8 @@ msgid ""
 "assignments:\n"
 "\n"
 msgstr ""
+"Ayak izi atamaları dönüştürülmeye çalışılıyorken aşağıdaki hatalar oluştu:\n"
+"\n"
 
 #: cvpcb/readwrite_dlgs.cpp:181
 msgid ""
@@ -7203,6 +7239,9 @@ msgid ""
 "You will need to reassign them manually if you want them to be updated "
 "correctly the next time you import the netlist in Pcbnew."
 msgstr ""
+"\n"
+"Ağlistesi'ni Pcbnew'e bir sonraki içe aktarışınızda doğru şekilde "
+"güncelleştirilmelerini istiyorsanız, bunları el ile yeniden atamanız gerekir."
 
 #: cvpcb/readwrite_dlgs.cpp:299
 msgid "Schematic saved"
@@ -7214,61 +7253,64 @@ msgstr "Ayak İzi Filtreleri:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:52
 msgid "View selected footprint"
-msgstr ""
+msgstr "Seçilen ayak izini görüntüle"
 
 #: cvpcb/tools/cvpcb_actions.cpp:53
 msgid "View the selected footprint in the footprint viewer"
-msgstr ""
+msgstr "Ayak izi görüntüleyicide seçilen ayak izini görüntüleyin"
 
 #: cvpcb/tools/cvpcb_actions.cpp:60
 msgid "Manage Footprint Association Files"
-msgstr ""
+msgstr "Footprint İlişkilendirme Dosyalarını Yönetin"
 
 #: cvpcb/tools/cvpcb_actions.cpp:61
 msgid ""
 "Configure footprint association file (.equ) list.  These files are used to "
 "automatically assign footprint names from symbol values."
 msgstr ""
+"Ayak izi ilişkilendirma dosyası (.equ) listesini yapılandırın.  Bu dosyalar, "
+"sembol değerlerinden otomatik olarak ayak izi adları atamak için kullanılır."
 
 #: cvpcb/tools/cvpcb_actions.cpp:67
 msgid "Save to Schematic"
-msgstr ""
+msgstr "Şemaya Kaydet"
 
 #: cvpcb/tools/cvpcb_actions.cpp:68
 msgid "Save footprint associations in schematic symbol footprint fields"
 msgstr ""
+"Şematik sembol ayak izi alanlarındaki ayak izi ilişkilendirlerini kaydetme"
 
 #: cvpcb/tools/cvpcb_actions.cpp:91
 msgid "Select next unassigned symbol"
-msgstr ""
+msgstr "Sonraki atanmamış sembolü seç"
 
 #: cvpcb/tools/cvpcb_actions.cpp:92
 msgid "Select next symbol with no footprint assignment"
-msgstr ""
+msgstr "Ayak izi ataması olmayan bir sonraki sembolü seçin"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select previous unassigned symbol"
-msgstr ""
+msgstr "Önceki atanmamış sembolü seç"
 
 #: cvpcb/tools/cvpcb_actions.cpp:99
 msgid "Select previous symbol with no footprint assignment"
-msgstr ""
+msgstr "Ayak izi ataması olmayan önceki sembolü seçin"
 
 #: cvpcb/tools/cvpcb_actions.cpp:108
 msgid "Assign footprint"
-msgstr ""
+msgstr "Ayak izi ata"
 
 #: cvpcb/tools/cvpcb_actions.cpp:109
 msgid "Assign footprint to selected symbols"
-msgstr ""
+msgstr "Seçili sembollere ayak izi atama"
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
 msgid "Automatically assign footprints"
-msgstr ""
+msgstr "Ayak izlerini otomatik olarak atayın"
 
 #: cvpcb/tools/cvpcb_actions.cpp:115
 msgid "Perform automatic footprint assignment"
-msgstr ""
+msgstr "Otomatik ayak izi ataması gerçekleştirin"
 
 #: cvpcb/tools/cvpcb_actions.cpp:121
 msgid "Delete association"
@@ -7276,44 +7318,45 @@ msgstr "İlişkilendirmeyi sil"
 
 #: cvpcb/tools/cvpcb_actions.cpp:122
 msgid "Delete selected footprint associations"
-msgstr ""
+msgstr "Seçili ayak izi atamalarını sil"
 
 #: cvpcb/tools/cvpcb_actions.cpp:127 cvpcb/tools/cvpcb_actions.cpp:128
 msgid "Delete all footprint associations"
-msgstr ""
+msgstr "Tüm ayak izi atamalarını silin"
 
 #: cvpcb/tools/cvpcb_actions.cpp:135
 msgid "Use symbol footprint filters"
-msgstr ""
+msgstr "Sembol ayak izini filtre kullanın"
 
 #: cvpcb/tools/cvpcb_actions.cpp:136
 msgid "Filter footprint list by footprint filters defined in the symbol"
 msgstr ""
+"Sembolde tanımlanan ayak izi filtrelerine göre ayak izi listesini filtreleyin"
 
 #: cvpcb/tools/cvpcb_actions.cpp:142
 msgid "Filter by pin count"
-msgstr ""
+msgstr "Bacak sayısına göre filtrele"
 
 #: cvpcb/tools/cvpcb_actions.cpp:143
 msgid "Filter footprint list by pin count"
-msgstr ""
+msgstr "Ayak izi listesini bacak sayısına göre filtrele"
 
 #: cvpcb/tools/cvpcb_actions.cpp:149
 msgid "Filter by library"
-msgstr ""
+msgstr "Kütüphaneye göre filtrele"
 
 #: cvpcb/tools/cvpcb_actions.cpp:150
 msgid "Filter footprint list by library"
-msgstr ""
+msgstr "Ayak izi listesini kütüphaneye göre filtrele"
 
 #: cvpcb/tools/cvpcb_association_tool.cpp:257
 msgid "Delete all associations?"
-msgstr ""
+msgstr "Tüm atamaları silin?"
 
 #: eeschema/annotate.cpp:164
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
-msgstr ""
+msgstr "%d yinelenen zaman damgaları bulundu ve değiştirildi."
 
 #: eeschema/annotate.cpp:289
 #, c-format
@@ -7328,12 +7371,12 @@ msgstr "%s %s ile %s arasında güncelleştirildi."
 #: eeschema/annotate.cpp:307
 #, c-format
 msgid "Annotated %s (unit %s) as %s."
-msgstr ""
+msgstr "Açıklamalı %s (birim %s) olarak %s."
 
 #: eeschema/annotate.cpp:314
 #, c-format
 msgid "Annotated %s as %s."
-msgstr ""
+msgstr "%s as %s olarak numaralandırıldı."
 
 #: eeschema/annotate.cpp:331
 msgid "Annotation complete."
@@ -7346,85 +7389,89 @@ msgid ""
 "%s\n"
 "not found. Script not available."
 msgstr ""
+"Komut dosyası:\n"
+"%s\n"
+"bulunamadı. Komut dosyası kullanılamıyor."
 
 #: eeschema/component_references_lister.cpp:608
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)\n"
-msgstr ""
+msgstr "Öğe numaraladnırılamadı: %s%s (birim %d)\n"
 
 #: eeschema/component_references_lister.cpp:615
 #, c-format
 msgid "Item not annotated: %s%s\n"
-msgstr ""
+msgstr "Öğe numaralandırılamadı: %s%s\n"
 
 #: eeschema/component_references_lister.cpp:633
 #, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
-msgstr ""
+msgstr "Hata: simge %s%s%s (birim %d) tanımlanan birimleri aşıyor (%d)\n"
 
 #: eeschema/component_references_lister.cpp:670
 #: eeschema/component_references_lister.cpp:698
 #, c-format
 msgid "Duplicate items %s%s%s\n"
-msgstr ""
+msgstr "Yinelenen öğeler %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:677
 #: eeschema/component_references_lister.cpp:705
 #, c-format
 msgid "Duplicate items %s%s\n"
-msgstr ""
+msgstr "Yinelenen öğeler %s%s\n"
 
 #: eeschema/component_references_lister.cpp:717
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
-msgstr ""
+msgstr "%s%d%s (%s) ve %s%d%s (%s) için farklı değerler"
 
 #: eeschema/connection_graph.cpp:2274 eeschema/connection_graph.cpp:2305
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
-msgstr ""
+msgstr "%s ve %s aynı öğelere eklenir; %s ağlistesinde kullanılacak"
 
 #: eeschema/connection_graph.cpp:2529
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr ""
+"Ağ %s veri yoluna %s grafik olarak bağlı, ancak bu veri yoluna üye değil"
 
 #: eeschema/connection_graph.cpp:2970
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
-msgstr ""
+msgstr "Sayfa bacağı %s sayfanın içinde eşleşen hiyerarşik etiket yok"
 
 #: eeschema/connection_graph.cpp:2987
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
-msgstr ""
+msgstr "Hiyerarşik etiket %s üst sayfada eşleşen sayfa bacağı yok"
 
 #: eeschema/cross-probing.cpp:260 pcbnew/cross-probing.cpp:172
 #, c-format
 msgid "%s pin %s found"
-msgstr ""
+msgstr "%s bacağı %s bulundu"
 
 #: eeschema/cross-probing.cpp:262
 #, c-format
 msgid "%s found but pin %s not found"
-msgstr ""
+msgstr "%s bulundu ancak bacak %s bulunamadı"
 
 #: eeschema/cross-probing.cpp:266 pcbnew/cross-probing.cpp:185
 #, c-format
 msgid "%s found"
-msgstr ""
+msgstr "%s bulundu"
 
 #: eeschema/cross-probing.cpp:271 pcbnew/cross-probing.cpp:168
 #: pcbnew/cross-probing.cpp:187
 #, c-format
 msgid "%s not found"
-msgstr ""
+msgstr "%s bulunamadı"
 
 #: eeschema/cross-probing.cpp:324
 msgid "Selected net:"
-msgstr ""
+msgstr "Seçilen ağ:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:87
 msgid "Annotation Messages:"
@@ -7440,7 +7487,7 @@ msgstr "Şemanın tamamı"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:37
 msgid "Current sheet only"
-msgstr ""
+msgstr "Yalnızca geçerli sayfa"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:37
 msgid "Selection only"
@@ -7460,19 +7507,19 @@ msgstr "Emir"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:49
 msgid "Sort symbols by &X position"
-msgstr ""
+msgstr "Sembolleri &X konumuna göre sıralama"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:67
 msgid "Sort symbols by &Y position"
-msgstr ""
+msgstr "Sembolleri &Y konumuna göre sırala"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:82
 msgid "Keep existing annotations"
-msgstr ""
+msgstr "Varolan numaralandırmaları koru"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:82
 msgid "Reset existing annotations"
-msgstr ""
+msgstr "Varolan numaralandırmaları sıfırla"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:89
 msgid "Numbering"
@@ -7480,15 +7527,15 @@ msgstr "Numaralama"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:96
 msgid "Use first free number after:"
-msgstr ""
+msgstr "İlk kullanılmayan numarayı kullan:"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:102
 msgid "First free after sheet number X 100"
-msgstr ""
+msgstr "Sayfa numarası X 100'den sonra ilk kullanılmayan numarayı kullan"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:105
 msgid "First free after sheet number X 1000"
-msgstr ""
+msgstr "Sayfa numarası X 1000'den sonra ilk kullanılmayan numarayı kullan"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:128
 msgid "Clear Annotation"
@@ -7504,12 +7551,12 @@ msgstr "Oluştur"
 
 #: eeschema/dialogs/dialog_bom.cpp:216
 msgid "(file missing)"
-msgstr ""
+msgstr "(dosya eksik)"
 
 #: eeschema/dialogs/dialog_bom.cpp:293
 #, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr ""
+msgstr "Seçilen reçete(BOM) oluşturma komut dosyası %s bulunamadı."
 
 #: eeschema/dialogs/dialog_bom.cpp:298
 #, c-format
@@ -7520,10 +7567,15 @@ msgid ""
 "\t%s\n"
 "\t%s"
 msgstr ""
+"\n"
+"\n"
+"Aranan:\n"
+"%s\n"
+"%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:344
 msgid "Generating BOM requires a fully annotated schematic."
-msgstr ""
+msgstr "Ürün reçetesi oluşturmak için tam numaralandırılmış bir şema gerekir."
 
 #: eeschema/dialogs/dialog_bom.cpp:381 eeschema/dialogs/dialog_bom_base.cpp:43
 msgid "Generator nickname:"
@@ -7536,7 +7588,7 @@ msgstr "Jeneratör Ekle"
 #: eeschema/dialogs/dialog_bom.cpp:390
 #, c-format
 msgid "Nickname '%s' already in use."
-msgstr ""
+msgstr "'%s' takma adı zaten kullanılıyor."
 
 #: eeschema/dialogs/dialog_bom.cpp:419 eeschema/dialogs/dialog_netlist.cpp:682
 msgid "Generator File"
@@ -7544,35 +7596,35 @@ msgstr "Oluşturucu Dosyası"
 
 #: eeschema/dialogs/dialog_bom.cpp:438
 msgid "Generator file name not found."
-msgstr ""
+msgstr "Oluşturucu dosya adı bulunamadı."
 
 #: eeschema/dialogs/dialog_bom.cpp:459
 msgid "Bill of Material Generation Help"
-msgstr ""
+msgstr "Ürün Reçetesi Oluşturma Yardımı"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:25
 msgid "BOM generator scripts:"
-msgstr ""
+msgstr "Ürün reçetesi oluşturucu komut dosyaları:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:69
 msgid "Add a new BOM generator and its command line to the list"
-msgstr ""
+msgstr "Listeye yeni bir ürün reçetesi oluşturucusu ve komut satırı ekleme"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:74
 msgid "Edit the script file in the text editor"
-msgstr ""
+msgstr "Metin düzenleyicisinde komut dosyası düzenleme"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:82
 msgid "Remove the current generator script from list"
-msgstr ""
+msgstr "Geçerli oluşturucu komut dosyasını listeden kaldır"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:92
 msgid "Command line running the generator:"
-msgstr ""
+msgstr "Komut satırı oluşturucuyu çalıştırıyor:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:101
 msgid "Show console window"
-msgstr ""
+msgstr "Konsol penceresini göster"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:102
 msgid ""
@@ -7580,14 +7632,19 @@ msgid ""
 "redirected to the info display.\n"
 "Set this option to show the window of the running command."
 msgstr ""
+"Varsayılan olarak, komut satırı gizli konsol penceresiyle çalışır ve çıktı "
+"bilgi ekranına yeniden yönlendirilir.\n"
+"Çalışan komutun penceresini göstermek için bu seçeneği ayarlayın."
 
 #: eeschema/dialogs/dialog_bom_base.cpp:116
 msgid "Reset the list of BOM generator scripts to the default settings"
 msgstr ""
+"Ürün reçetesi oluşturucu komut dosyalarının listesini varsayılan ayarlara "
+"sıfırlama"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Material"
-msgstr ""
+msgstr "Ürün Reçetesi"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
 msgid ""
@@ -7775,6 +7832,162 @@ msgid ""
 "\"%O.csv\"\n"
 "```\n"
 msgstr ""
+"# 1 - Tüm belge\n"
+"\n"
+"Eeschema belgeleri (*eeschema.html*) bu ara ağ listesini açıklar ve örnekler "
+"verir (bölüm ***özelleştirilmiş ağ listeleri ve ürün reçetesi(BOM) dosyaları "
+"oluşturur***).\n"
+"\n"
+"# 2 - Ara(Geçici) Ağ Listesi Dosyası\n"
+"\n"
+"Ürün reçetesi(BOM) dosyaları (ve ağ listesi dosyaları), Eeschema tarafından "
+"oluşturulan bir *Ara(geçici) ağ listesi dosyasından* oluşturulabilir.\n"
+"\n"
+"Bu dosya XML sözdizimi kullanır ve ara(geçici) ağ listesi olarak "
+"adlandırılır. Ara(geçici) ağ listesi, panonuzla ilgili büyük miktarda veri "
+"içerir ve bu nedenle, bir ürün reçetesi veya diğer raporlar oluşturmak için "
+"işlem sonrası ile kullanılabilir.\n"
+"\n"
+"Çıktıya (ürün reçetesi veya ağ listesi) bağlı olarak, işlem sonrası dosyada "
+"tam Ara(geçici) Ağ listesi dosyasının farklı alt kümeleri kullanılır.\n"
+"\n"
+"# 3 - Yeni bir formata dönüştürme\n"
+"\n"
+"Ara(geçici)ağ listesi dosyasına işlem sonrası filtre uygulayarak, ürün "
+"reçetesi dosyalarının yanı sıra yabancı ağ listesi dosyaları da "
+"oluşturabilirsiniz. Bu dönüştürme metin dönüşümüne bir metin olduğundan, bu "
+"işlem sonrası filtre *Python*, *XSLT* veya XML'yi giriş olarak alabilen "
+"başka bir araç kullanılarak yazılabilir.\n"
+"\n"
+"XSLT'nin kendisi XML dönüşümleri için uygun bir XML dilidir. İndirip "
+"kurabileceğiniz 'xsltproc' adlı ücretsiz bir program vardır. 'xsltproc' "
+"programı, Ara(geçici) XML ağ listesi giriş dosyasını okumak, girişi "
+"dönüştürmek için bir stil sayfası uygulamak ve sonuçları bir çıktı dosyasına "
+"kaydetmek için kullanılabilir. 'xsltproc' kullanımı, XSLT kuralları kullanan "
+"bir stil sayfası dosyası gerektirir. Tam dönüştürme işlemi, 'xsltproc'ı "
+"belirli bir şekilde çalıştıracak şekilde bir kez yapılandırıldıktan sonra "
+"Eeschema tarafından işlenir.\n"
+"\n"
+"Python komut dosyası oluşturmak biraz daha kolaydır.\n"
+"\n"
+"# 4 - İletişim penceresinin başlatılması\n"
+"\n"
+"Eklenti Ekle düğmesine tıklayarak eklenti listesine yeni bir eklenti (komut "
+"dosyası) eklemelisiniz.\n"
+"\n"
+"## 4.1 - Eklenti Yapılandırma Parametreleri\n"
+"\n"
+"Eeschema eklenti yapılandırma iletişim kutusu aşağıdaki bilgileri gerektirir:"
+"\n"
+"\n"
+"* Başlık: örneğin, ağ listesi formatının adı.\n"
+" * Dönüştürücüyü başlatmak için komut satırı (genellikle bir komut dosyası)."
+"\n"
+"\n"
+"Not (yalnızca Windows):***\n"
+"*Varsayılan olarak, komut satırı gizli konsol penceresiyle çalışır ve çıktı "
+"\"Eklenti bilgisi\" alanına yönlendirilir. Çalışan komutun penceresini "
+"göstermek için \"Konsol penceresini göster\" onay kutusunu ayarlayın.*\n"
+"\n"
+"Oluştur düğmesine tıkladığınızda aşağıdakiler olacaktır:\n"
+"\n"
+"1. Eeschema, 'test.xml' gibi bir ara ağ listesi dosyası .xml oluşturur.\n"
+"2. Eeschema, son çıktı dosyasını oluşturmak için komut dosyasını komut "
+"satırından çalıştırır.\n"
+"\n"
+"## 4.2 - Komut satırıyla ağ listesi dosyaları oluşturmak\n"
+"\n"
+"Sayfa stilini ara dosyaya uygulamak için 'xsltproc.exe' programını "
+"kullandığımızı varsayarsak, 'xsltproc.exe' aşağıdaki komutla yürütülür.\n"
+"\n"
+"```\n"
+"xsltproc.exe -o <output dosyaadı> <style sayfa dosyaadı> <yeni xml dosyası "
+"dönüştürülecek>\n"
+"```\n"
+"\n"
+"Windows'da komut satırı aşağıdaki gibidir.\n"
+"\n"
+"```\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%"
+"I\"\n"
+"```\n"
+"\n"
+"Linux'ta komut aşağıdaki gibi olur.\n"
+"\n"
+"```\n"
+"xsltproc -o \"%O\" /usr/local/kicad/bin/plugins/myconverter .xsl \"%I\"\n"
+"```\n"
+"burada 'myconverter.xsl' uyguladığınız stil sayfasıdır.\n"
+"\n"
+"Dosya adlarının etrafındaki çift tırnakları unutmayın, bu, Eeschema "
+"tarafından ikame edildikten sonra boşluklara sahip olmalarını sağlar.\n"
+"\n"
+"Python komut dosyası kullanılıyorsa, komut satırı (Python komut dosyasına "
+"bağlı olarak):\n"
+"\n"
+"```\n"
+"python f:/kicad/bin/plugins/bom-in-python/myconverter.py \"%I\" \"%O\"\n"
+"```\n"
+"\n"
+"veya\n"
+"\n"
+"```\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" \"%"
+"O\"\n"
+"```\n"
+"\n"
+"Komut satırı biçimi dosya adları için parametreleri kabul eder. Desteklenen "
+"biçimlendirme parametreleri şunlardır:\n"
+"\n"
+"* '%B': seçili çıktı dosyasının temel dosya adı, eksi yol ve uzantı.\n"
+" * '%P': proje dizini, adsız ve '/' izi bırakmadan.\n"
+" * '%I': geçici giriş dosyasının tam dosya adı ve yolu\n"
+"(ara ağ dosyası).\n"
+" * '%O': kullanıcının tam dosya adı ve yolu (ancak uzantısız)\n"
+"seçilen çıktı dosyası.\n"
+"\n"
+"'%I' gerçek ara dosya adıyla değiştirilecek (genellikle \".xml\" uzantılı "
+"tam kök sayfa dosya adı).\n"
+"'%O' gerçek çıktı dosyası adıyla (tam kök sayfa dosya adı eksi uzantı) "
+"değiştirilecek.\n"
+"'%B' gerçek çıktı kısa dosya adıyla (kısa kök sayfa dosya adı eksi uzantı) "
+"değiştirilecek.\n"
+"'%P' gerçek geçerli proje yolu ile değiştirilecek.\n"
+"\n"
+"## 4.3 - Komut satırı biçimi:\n"
+"\n"
+"### 4.3.1 - Açıklama:\n"
+"\n"
+"Çoğu zaman, oluşturulan dosyanın türüne bağlı olarak bir uzantısı olmalıdır."
+"\n"
+"Bu nedenle, doğru dosya uzantısını ***%O*** seçeneğine eklemeniz gerekir.\n"
+"\n"
+"Örneğin:\n"
+"\n"
+"* **%O.csv** .csv dosyası (virgülle ayrılmış değer dosyası) oluşturmak için."
+"\n"
+" * **%O.htm** .html dosyası oluşturmak için.\n"
+" * **%O.bom** bir .bom dosyası oluşturmak için.\n"
+"\n"
+"### 4.3.2 xsltproc için örnek:\n"
+"\n"
+"xsltproc için komut satırı biçimi aşağıdaki gibidir:\n"
+"\n"
+"```\n"
+"xsltproc> xsltproc <xsltproc parametrelerinin <yolusu>\n"
+"```\n"
+"\n"
+"Windows'da:\n"
+"```\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O.bom\" f:/kicad/bin/plugins/"
+"netlist_form_pads-pcb.xsl \"%I\"\n"
+"```\n"
+"\n"
+"Linux'ta:\n"
+"```\n"
+"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+"pcb.xsl \"%I\"\n"
+"```\n"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:37
 msgid "Bus Definitions"
@@ -7803,47 +8016,47 @@ msgstr "Üye Adı"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:180
 msgid "Bus Alias Name"
-msgstr ""
+msgstr "Veri Yolu Takma Adı"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:181
 msgid "Net or Bus Name"
-msgstr ""
+msgstr "Ağ veya Veri Yolu Adı"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Change all symbols in schematic"
-msgstr ""
+msgstr "Şemadaki tüm simgeleri değiştirme"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:67
 msgid "Change Symbols"
-msgstr ""
+msgstr "Sembolleri Değiştir"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:76
 msgid "Change selected symbol(s)"
-msgstr ""
+msgstr "Seçili sembolleri değiştir"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:93
 msgid "Change symbols matching reference designator:"
-msgstr ""
+msgstr "Referans tasarımcısı ile eşleşen sembolleri değiştirin:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:94
 msgid "Change symbols matching value:"
-msgstr ""
+msgstr "Değerle eşleşen sembolleri değiştirin:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:95
 msgid "Change symbols matching library identifier:"
-msgstr ""
+msgstr "Kütüphane tanımlayıcısıyla eşleşen sembolleri değiştirin:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:132
 msgid "Update Fields"
-msgstr ""
+msgstr "Alanları Güncelleştir"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:133
 msgid "Remove fields if not in new symbol"
-msgstr ""
+msgstr "Yeni simgede değilse alanları kaldırma"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:134
 msgid "Reset fields if empty in new symbol"
-msgstr ""
+msgstr "Yeni sembolde boşsa alanları sıfırlayın"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:135
 msgid "Update field text"
@@ -7851,15 +8064,15 @@ msgstr "Alan metnini güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:136
 msgid "Update field visibilities"
-msgstr ""
+msgstr "Alan görünürlüklerini güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:137
 msgid "Update field sizes and styles"
-msgstr ""
+msgstr "Alan boyutlarını ve stillerini güncelleyin"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:138
 msgid "Update field positions"
-msgstr ""
+msgstr "Alan konumlarını güncelleyin"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:139
 msgid "Update symbol attributes"
@@ -7889,24 +8102,24 @@ msgstr "%s sembollerini '%s'den '%s'e güncelle"
 #: eeschema/dialogs/dialog_change_symbols.cpp:549
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr ""
+msgstr "%s sembolünü '%s' yerine '%s' olarak değiştirin"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:556
 #, c-format
 msgid "Change symbols %s from '%s' to '%s'"
-msgstr ""
+msgstr "%s sembollerini '%s' yerine '%s' olarak değiştirin"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:567
 msgid "*** symbol not found ***"
-msgstr ""
+msgstr "*** sembol bulunamadı ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:576
 msgid "*** new symbol has too few units ***"
-msgstr ""
+msgstr "*** yeni sembolün çok az birimi var ***"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:27
 msgid "Update all symbols in schematic"
-msgstr ""
+msgstr "Şematikteki tüm sembolleri güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:30
 msgid "Update selected symbol(s)"
@@ -7914,19 +8127,19 @@ msgstr "Seçili simge(leri) güncelleştir"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
 msgid "Update symbols matching reference designator:"
-msgstr ""
+msgstr "Referans tasarımcıyla eşleşen sembolleri güncelleyin:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:39
 msgid "Update symbols matching value:"
-msgstr ""
+msgstr "Değerle eşleşen sembolleri güncelleştir:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:45
 msgid "Update symbols matching library identifier:"
-msgstr ""
+msgstr "Kütüphane tanımlayıcısıyla eşleşen sembolleri güncelleyin:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:72
 msgid "New library identifier:"
-msgstr ""
+msgstr "Yeni kütüphane tanımlayıcısı:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:94
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:36
@@ -7942,21 +8155,21 @@ msgstr "Seçimi kaldır"
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:59
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:94
 msgid "Update Options"
-msgstr ""
+msgstr "Seçenekleri Güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:119
 msgid "Remove fields if not in library symbol"
-msgstr ""
+msgstr "Kütüphane simgesinde değilse alanları kaldırma"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:120
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:62
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:97
 msgid "Removes fields that do not occur in the original library symbols"
-msgstr ""
+msgstr "Orijinal kütüphane sembollerinde yer almayan alanları kaldırır"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:124
 msgid "Reset fields if empty in library symbol"
-msgstr ""
+msgstr "Kütüphane sembolünde boşsa alanları sıfırla"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
@@ -7966,17 +8179,17 @@ msgstr "Alan metnini güncelle/sıfırla"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
 msgid "Update/reset field visibilities"
-msgstr ""
+msgstr "Alan görünürlüklerini güncelle/sıfırla"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:136
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:78
 msgid "Update/reset field sizes and styles"
-msgstr ""
+msgstr "Alan boyutlarını ve stillerini güncelleştir/sıfırla"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:139
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:81
 msgid "Update/reset field positions"
-msgstr ""
+msgstr "Alan konumlarını güncelleştir/sıfırla"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:145
 msgid "Update/reset symbol attributes"
@@ -7989,23 +8202,23 @@ msgstr "Sembolleri Kütüphaneden Güncelle"
 #: eeschema/dialogs/dialog_choose_symbol.cpp:143
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:95
 msgid "Select with Browser"
-msgstr ""
+msgstr "Tarayıcı ile seçin"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:147
 msgid "Place repeated copies"
-msgstr ""
+msgstr "Yinelenen kopyaları yerleştirin"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:149
 msgid "Keep the symbol selected for subsequent clicks."
-msgstr ""
+msgstr "Sonraki tıklamalar için sembolü seçili tutun."
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:151
 msgid "Place all units"
-msgstr ""
+msgstr "Tüm birimleri yerleştir"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:153
 msgid "Sequentially place all units of the symbol."
-msgstr ""
+msgstr "Sembolün tüm birimlerini sırayla yerleştirin."
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:398
 #: eeschema/dialogs/dialog_choose_symbol.cpp:457
@@ -8018,44 +8231,44 @@ msgstr "'%s' kitaplığından %s sembolü yüklenirken hata oluştu."
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:421
 msgid "No footprint specified"
-msgstr ""
+msgstr "Ayak izi belirtilmedi"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:434
 msgid "Invalid footprint specified"
-msgstr ""
+msgstr "Geçersiz ayak izi belirtildi"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:516
 msgid "No symbol selected"
-msgstr ""
+msgstr "Sembol seçilmedi"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:545
 #, c-format
 msgid "Symbol library identifier %s is not valid."
-msgstr ""
+msgstr "Sembol kütüphane tanımlayıcısı %s geçerli değil."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:642
 #, c-format
 msgid "Available Candidates for %s "
-msgstr ""
+msgstr "%s için Mevcut Adaylar "
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:646
 #, c-format
 msgid "Candidates count %d "
-msgstr ""
+msgstr "Adaylar sayıldı %d "
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:657
 #, c-format
 msgid "%u link(s) mapped, %u not found"
-msgstr ""
+msgstr "%u bağlantı(lar) eşlendi, %u bulunamadı"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:663
 #, c-format
 msgid "All %u link(s) resolved"
-msgstr ""
+msgstr "Tüm %u bağlantı (lar) çözüldü"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:694
 msgid "Invalid symbol library identifier"
-msgstr ""
+msgstr "geçersiz sembol kütüphane tanımlayıcı"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:745
 #, c-format
@@ -8064,6 +8277,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"%s kitaplığından %s sembolü yüklenirken hata oluştu.\n"
+"\n"
+"%s"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:99
@@ -8072,11 +8288,11 @@ msgstr "Semboller"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:38
 msgid "Current Library Reference"
-msgstr ""
+msgstr "Güncel Kütüphane Başvurusu"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:39
 msgid "New Library Reference"
-msgstr ""
+msgstr "Yeni Kütüphane Başvurusu"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:58
 msgid "Map Orphans"
@@ -8088,6 +8304,9 @@ msgid ""
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
 msgstr ""
+"Bazı semboller yetimse (bağlantılı sembol her yerde bulunmaz)\n"
+"Yüklenen sembol kütüphanelerinden birinde aynı isime sahip bir aday bulmaya "
+"çalışın."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:63
 msgid "Update symbol fields from new library"
@@ -8098,89 +8317,92 @@ msgid ""
 "Replace current symbols fields by fields from the new library.\n"
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
+"Geçerli sembol alanlarını yeni kütüphane alanlara göre değiştirin.\n"
+"Uyarı: alanlar \"Değer\" ve \"Ayak izleri\" bu nedenle değiştirilecektir."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.h:57
 msgid "Symbol Library References"
-msgstr ""
+msgstr "Sembol Kütüphane Referansları"
 
 #: eeschema/dialogs/dialog_erc.cpp:76
 msgid "Run ERC"
-msgstr ""
+msgstr "ERC'yi çalıştırın"
 
 #: eeschema/dialogs/dialog_erc.cpp:110
 msgid "Show Annotation dialog"
-msgstr ""
+msgstr "Numaralandırma iletişim kutusunu göster"
 
 #: eeschema/dialogs/dialog_erc.cpp:123
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr ""
+"Şematik tam olarak numaralandırılmış değil. ERC sonuçları eksik olacaktır."
 
 #: eeschema/dialogs/dialog_erc.cpp:205
 msgid "Delete exclusions too?"
-msgstr ""
+msgstr "Dışlamalar da silinsin mi?"
 
 #: eeschema/dialogs/dialog_erc.cpp:205 pcbnew/dialogs/dialog_drc.cpp:1035
 #: pcbnew/dialogs/dialog_drc_base.cpp:209
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:82
 msgid "Delete All Markers"
-msgstr ""
+msgstr "Tüm İşaretçileri Sil"
 
 #: eeschema/dialogs/dialog_erc.cpp:207
 msgid "Errors and Warnings Only"
-msgstr ""
+msgstr "Yalnızca Hatalar ve Uyarılar"
 
 #: eeschema/dialogs/dialog_erc.cpp:207
 msgid "Errors, Warnings and Exclusions"
-msgstr ""
+msgstr "Hatalar, Uyarılar ve Dışlamalar"
 
 #: eeschema/dialogs/dialog_erc.cpp:308
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr ""
+msgstr "%d sembol(ler) numaralanmış olmalı. <br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:312
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr ""
+msgstr "-------- ERC kullanıcı tarafından iptal edildi. <br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:314
 msgid "ERC completed.<br><br>"
-msgstr ""
+msgstr "ERC tamamlandı. <br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:362
 msgid "Checking sheet names..."
-msgstr ""
+msgstr "Sayfa adları kontrol ediliyor..."
 
 #: eeschema/dialogs/dialog_erc.cpp:368
 msgid "Checking bus conflicts..."
-msgstr ""
+msgstr "Veri yolu çakışmaları kontrol ediliyor..."
 
 #: eeschema/dialogs/dialog_erc.cpp:373
 msgid "Checking conflicts..."
-msgstr ""
+msgstr "Çakışmalar kontrol ediliyor..."
 
 #: eeschema/dialogs/dialog_erc.cpp:380
 msgid "Checking footprints..."
-msgstr ""
+msgstr "Ayak izleri kontrol ediliyor..."
 
 #: eeschema/dialogs/dialog_erc.cpp:384
 msgid "Checking pins..."
-msgstr ""
+msgstr "Bacaklar kontrol ediliyor..."
 
 #: eeschema/dialogs/dialog_erc.cpp:401
 msgid "Checking labels..."
-msgstr ""
+msgstr "Etiketler kontrol ediliyor..."
 
 #: eeschema/dialogs/dialog_erc.cpp:407
 msgid "Checking for unresolved variables..."
-msgstr ""
+msgstr "Çözülmemiş değişkenler kontrol ediliyor..."
 
 #: eeschema/dialogs/dialog_erc.cpp:413
 msgid "Checking no connect pins for connections..."
-msgstr ""
+msgstr "Bağlantılar için eksik bağlantı bacakları kontrol ediliyor..."
 
 #: eeschema/dialogs/dialog_erc.cpp:419
 msgid "Checking for library symbol issues..."
-msgstr ""
+msgstr "Kütüphane simge sorunları kontrol ediliyor..."
 
 #: eeschema/dialogs/dialog_erc.cpp:497 pcbnew/dialogs/dialog_drc.cpp:469
 msgid "errors"
@@ -8196,7 +8418,7 @@ msgstr "uygun"
 
 #: eeschema/dialogs/dialog_erc.cpp:504 pcbnew/dialogs/dialog_drc.cpp:476
 msgid "Remove exclusion for this violation"
-msgstr ""
+msgstr "Bu ihlal için dışlamayı kaldır"
 
 #: eeschema/dialogs/dialog_erc.cpp:505 pcbnew/dialogs/dialog_drc.cpp:477
 #, c-format
@@ -8937,13 +9159,13 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:82
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
 msgid "Exclude from schematic bill of materials"
-msgstr ""
+msgstr "Şematik ürün reçetesin ekleme"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:85
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:181
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
 msgid "Exclude from board"
-msgstr ""
+msgstr "Karta ekleme"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:103
 msgid "Pin name position offset:"
@@ -9006,21 +9228,21 @@ msgstr "Çizim Özellikleri"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:231
 #: eeschema/dialogs/dialog_symbol_properties.cpp:565
 msgid "References must start with a letter."
-msgstr ""
+msgstr "Başvurular bir harfle başlamalıdır."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:251
 #: eeschema/dialogs/dialog_sheet_properties.cpp:195
 #: eeschema/dialogs/dialog_symbol_properties.cpp:582
 msgid "Fields must have a name."
-msgstr ""
+msgstr "Alanların bir adı olmalıdır."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:268
 msgid "Aliased symbol must have a parent selected"
-msgstr ""
+msgstr "Takma ad simgesinin seçili bir üst öğesi olmalıdır"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:280
 msgid "Delete extra units from symbol?"
-msgstr ""
+msgstr "Sembolden fazladan birimler silinsin mi?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:286
 msgid "Delete alternate body style (De Morgan) from symbol?"
@@ -9029,27 +9251,27 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:314
 #, c-format
 msgid "The name '%s' conflicts with an existing entry in the library '%s'."
-msgstr ""
+msgstr "'%s' adı, '%s' kütüphanesindeki mevcut bir girişle çakışıyor."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:430
 #, c-format
 msgid "The name '%s' is already in use."
-msgstr ""
+msgstr "'%s' adı zaten kullanılıyor."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:508
 #: eeschema/dialogs/dialog_sheet_properties.cpp:731
 #: eeschema/dialogs/dialog_symbol_properties.cpp:851
 #, c-format
 msgid "The first %d fields are mandatory."
-msgstr ""
+msgstr "İlk %d alanları zorunludur."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:643
 msgid "Add Footprint Filter"
-msgstr ""
+msgstr "Ayak İzi Filtresi Ekle"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:686
 msgid "Edit Footprint Filter"
-msgstr ""
+msgstr "Ayak İzi Filtresini Düzenle"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:131
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:114
@@ -9063,7 +9285,7 @@ msgstr "Anahtar Kelimeler:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:145
 msgid "Derive from symbol:"
-msgstr ""
+msgstr "Sembolden türet:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:149
 msgid "<None>"
@@ -9079,6 +9301,13 @@ msgid ""
 "derived from another symbols or they stand alone as\n"
 "root symbols."
 msgstr ""
+"Bu sembolü türetmek için sembolü seçin veya\n"
+"kök sembolü için <Yok>.\n"
+"\n"
+"Türetilmiş semboller daha önce takma ad olarak adlandırılırdı.\n"
+"Bu artık geçerli değil ve tüm semboller de\n"
+"başka sembollerden türetilmiş veya tek başlarına\n"
+"kök sembollerdir."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
 msgid "Has alternate body style (De Morgan)"
@@ -9087,10 +9316,11 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:169
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
 msgstr ""
+"Sembolün alternatif bir gövde stili varsa bu seçeneği işaretleyin (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:173
 msgid "Define as power symbol"
-msgstr ""
+msgstr "Güç simgesi olarak tanımla"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:174
 msgid ""
@@ -9099,14 +9329,18 @@ msgid ""
 "from editing in Eeschema.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
+"Bu seçenek seçilirse, söz konusu sembolün\n"
+"\"güç bağlantı noktası ekle\" iletişim kutusunda görünür.\n"
+"Eeschema'da düzenlenmekten korumak için değer metnini kilitler.\n"
+"Ürün reçetesi bu sembolü içermez ve sembole ayak izi atanamaz."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:187
 msgid "Number of Units:"
-msgstr ""
+msgstr "Birim Sayısı:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:189
 msgid "Enter the number of units for a symbol that contains more than one unit"
-msgstr ""
+msgstr "Birden fazla ünite içeren bir sembol için birimlerin sayısını girin"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:199
 msgid "All units are interchangeable"
@@ -9120,35 +9354,38 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:214
 msgid "Pin Text Options"
-msgstr ""
+msgstr "Bacak Metin Seçenekleri"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:216
 msgid "Show pin number"
-msgstr ""
+msgstr "Bacak numarasını göster"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:218
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:178
 msgid "Show or hide pin numbers"
-msgstr ""
+msgstr "Bacak numaralarını göster veya gizle"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:222
 msgid "Show pin name"
-msgstr ""
+msgstr "Bacak adını göster"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:224
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:184
 msgid "Show or hide pin names"
-msgstr ""
+msgstr "Bacak adlarını göster veya gizle"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:231
 msgid "Place pin names inside"
-msgstr ""
+msgstr "Pin adlarını içine yerleştir"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:233
 msgid ""
 "Check this option to have pin names inside the body and pin number outside.\n"
 "If not checked pins names and pins numbers are outside."
 msgstr ""
+"Gövdenin içinde bacak adları ve dışarıda bacak numarasının olması için bu "
+"seçeneği işaretleyin.\n"
+"İşaretli değilse bacak adları ve bacak numaraları dışarıdadır."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:240
 msgid "Position offset:"
@@ -9184,18 +9421,21 @@ msgid ""
 "Footprints names can used wildcards like sm* to allow all footprints names "
 "starting by sm."
 msgstr ""
+"Bu sembol için kullanılabilecek ayak izi adlarının listesi.\n"
+"Ayak izi adları, sm* gibi joker karakterler kullanarak sm ile başlayan tüm "
+"ayak izi adlarına izin verebilir."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:293
 msgid "Add footprint filter"
-msgstr ""
+msgstr "Ayak izi filtresi ekle"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:298
 msgid "Edit footprint filter"
-msgstr ""
+msgstr "Ayak izi filtresini düzenleme"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:306
 msgid "Delete footprint filter"
-msgstr ""
+msgstr "Ayak izi filtresini sil"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:320
 msgid "Footprint Filters"
@@ -9203,11 +9443,11 @@ msgstr "Ayak İzi Filtreleri"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:333
 msgid "Edit Spice Model..."
-msgstr ""
+msgstr "Spice Modelini Düzenle..."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:115
 msgid "Library Symbol Properties"
-msgstr ""
+msgstr "Kütüphane Sembol Özellikleri"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:31
 #: eeschema/dialogs/dialog_text_properties_base.cpp:26
@@ -14481,7 +14721,7 @@ msgstr "KiCad Sembol Düzenleyici"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:929
 #: eeschema/symbol_library.cpp:491 eeschema/symbol_tree_model_adapter.cpp:66
 msgid "Loading Symbol Libraries"
-msgstr ""
+msgstr "Sembol Kitaplıkları Yükleniyor"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:180
 #: pcbnew/footprint_edit_frame.cpp:219 pcbnew/footprint_edit_frame.cpp:788
@@ -27420,6 +27660,7 @@ msgid "Check rule syntax"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
+#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -27696,6 +27937,218 @@ msgid ""
 "        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
 "        (condition \"A.Type == 'Pad'\"))"
 msgstr ""
+"### Üst Düzey Yan tümceler\n"
+"\n"
+"(sürüm <numara>)\n"
+"\n"
+"(kural <kural_adı> <kural_yapısı>...)\n"
+"\n"
+"<br>\n"
+"\n"
+"### Kural Yan tümceleri\n"
+"\n"
+"(kısıtlama <kısıtlama_tipi>...)\n"
+"\n"
+"(koşul \"<koşul>\")\n"
+"\n"
+"(katman \"<katman_adı>\")\n"
+"\n"
+"(önem derecesi <önem_adı>)\n"
+"\n"
+"<br>\n"
+"\n"
+"### Kısıtlama Türleri\n"
+"\n"
+"* yıllık\\_genişlik\n"
+" * boşluk\n"
+" * avlu_boşluğu\n"
+" * diff\\_çift\\_boşluk\n"
+" * diff\\_çift\\_çiftsiz\n"
+" * izinsizlik\n"
+" * kenar\\_boşluk\n"
+" * uzunluk\n"
+" * delik\\_boşluk\n"
+" * delik\\_ebat\n"
+" * mekanik\\_boşluk\n"
+" * mekanik\\_delik\\_boşluk\n"
+" * dakika\\_çözülmüş\\_spokes\n"
+" * ipek\\_clearance\n"
+" * eğriltme\n"
+" * metin\\_height\n"
+" * metin\\_thickness\n"
+" * termal\\_relief\\_gap\n"
+" * termal\\_spoke\\_width\n"
+" * parça\\_width\n"
+" * via\\_count\n"
+" * via\\_diameter\n"
+" * bölge\\_connection\n"
+"\n"
+"Not: 'boşluk' ve 'hole_clearance' kuralları aynı ağın öğelerine karşı "
+"çalıştır değildir; 'mechanical_clearance' ve 'mechanical_hole_clearance' "
+"kuralları.\n"
+"<br>\n"
+"\n"
+"### Madde Türleri\n"
+"\n"
+"* gömülü\\_via\n"
+" * grafik\n"
+" * delik\n"
+" * mikro\\_via\n"
+" * ped\n"
+" * metin\n"
+" * parça\n"
+" * üzerinden\n"
+" * bölge\n"
+"\n"
+"<br>\n"
+"\n"
+"### Bölge Bağlantıları\n"
+"\n"
+"* katı\n"
+" * termal\\_reliefs\n"
+" * yok\n"
+"\n"
+"<br>\n"
+"\n"
+"### Önem Adları\n"
+"\n"
+"* uyarı\n"
+" * hata\n"
+" * hariç tutma\n"
+" * yoksay\n"
+"\n"
+"<br>\n"
+"\n"
+"### Örnekler\n"
+"\n"
+"(sürüm 1)\n"
+"\n"
+"(kural HV\n"
+"       (kısıtlama boşluğu (min 1,5 mm))\n"
+"       (koşul \"A.NetClass == 'HV'\"))\n"
+"\n"
+"(kural HV\n"
+"       (katman dış)\n"
+"       (kısıtlama boşluğu (min 1,5 mm))\n"
+"       (koşul \"A.NetClass == 'HV'\"))\n"
+"\n"
+"(kural HV_HV\n"
+"       # HV parçaları arasında daha geniş boşluk\n"
+"       (kısıtlama boşluğu (min \"1.5mm + 2.0mm\"))\n"
+"       (koşul \"A.NetClass == 'HV' & B.NetClass == 'HV'\"))\n"
+"\n"
+"(kural HV_unshielded\n"
+"       (kısıtlama boşluğu (min 2mm))\n"
+"       (koşul \"A.NetClass == 'HV' & ! A.insideArea('Kalkan*')\"))\n"
+"\n"
+"(kural heavy_thermals\n"
+"       (kısıtlama thermal_spoke_width (en az 0,5 mm))\n"
+"       (koşul \"A.NetClass == 'HV'\"))\n"
+"<br><br>\n"
+"\n"
+"### Notlar\n"
+"\n"
+"Sürüm yan tümcesi ilk yan tümce olmalıdır.  Dosyanın sözdizimi sürümünü "
+"gösterir, böylece \n"
+"gelecekteki kurallar ayrıştırıcıları otomatik güncelleştirmeler "
+"gerçekleştirebilir.  Öyle olmalı.\n"
+"\"1\" olarak ayarlayın.\n"
+"\n"
+"Kurallar özelliğe göre sıralanmalıdır.  Daha sonraki kurallar\n"
+"önceki kurallara göre öncelik; eşleşen bir kural bulunduktan sonra\n"
+"başka kural kontrol edilmeyecektir.\n"
+"\n"
+"Açıklama yapmak veya satırlarını çıkarmak için Ctrl+/ kullanın.\n"
+"<br><br><br>\n"
+"\n"
+"### İfade işlevleri\n"
+"\n"
+"Tüm işlev parametreleri basit joker karakterler ('*' ve '?') destekler.\n"
+"<br><br>\n"
+"\n"
+"A.insideCourtyard('<footprint_refdes>')\n"
+"'A'nın herhangi bir parçası verilen ayak izinin ana avlusunda yatıyorsa "
+"doğru.\n"
+"<br><br>\n"
+"\n"
+"A.insideFrontCourtyard('<footprint_refdes>')\n"
+"'A'nın herhangi bir parçası verilen ayak izinin ön avlusunda yatıyorsa doğru."
+"\n"
+"<br><br>\n"
+"\n"
+"A.insideBackCourtyard('<footprint_refdes>')\n"
+"'A'nın herhangi bir parçası verilen ayak izinin arka avlusunda yatıyorsa "
+"doğru.\n"
+"<br><br>\n"
+"\n"
+"A.insideArea('<zone_name>')\n"
+"'A'nın herhangi bir bölümü verilen bölgenin anahattı içindeyse doğru.\n"
+"<br><br>\n"
+"\n"
+"A.isPlated()\n"
+"'A'nın kaplanmış bir deliği varsa doğrudur.\n"
+"<br><br>\n"
+"\n"
+"A.inDiffPair('<net_name>')\n"
+"'A' belirtilen fark çiftinin bir parçası olan ağa sahipse true.\n"
+"'<net_name>' diferansiyel çiftinin temel adıdır.  Örneğin, "
+"'inDiffPair('CLK')'\n"
+"'CLK_P' ve 'CLK_N' ağlarındaki öğelerle eşleşir.\n"
+"<br><br>\n"
+"\n"
+"AB.isCoupledDiffPair()\n"
+"'A' ve 'B' aynı fark çiftinin üyeleriyse doğrudur.\n"
+"<br><br>\n"
+"\n"
+"A.memberOf('<group_name>')\n"
+"'A' verilen grubun bir üyesiyse doğrudur. İç içe üyelik içerir.\n"
+"<br><br>\n"
+"\n"
+"A.existsOnLayer('<layer_name>')\n"
+"Verilen katmanda 'A' varsa true.  Katman adı\n"
+"Pano Kurulumu > Pano Düzenleyici Katmanları'nda atanan ad veya\n"
+"kurallı adı (yani: 'F.Cu').\n"
+"\n"
+"Not: 'A' verilen katmandaysa, bağımsız olarak bu true döndürür\n"
+"kuralın bu katman için değerlendirilip değerlendirilmediğine ilişkin.\n"
+"İkincisi için kuralda bir '(katman \"layer_name\")' yan tümcesi kullanın.\n"
+"<br><br><br>\n"
+"\n"
+"### Daha Fazla Örnek\n"
+"\n"
+"(kural \"bakır tutma\"\n"
+"       (kısıtlama bölge üzerinden parçaya izin yok)\n"
+"       (koşul \"A.insideArea('zone3')\"))\n"
+"\n"
+"(kural \"BGA boyun eğme\"\n"
+"       (kısıtlama track_width (en az 0,2 mm) (opt 0,25 mm))\n"
+"       (kısıtlama boşluğu (en az 0,05 mm) (opt 0,08 mm))\n"
+"       (koşul \"A.insideCourtyard('U3')\"))\n"
+"\n"
+"# çadırlı vialar üzerinde ipek önlemek\n"
+"    (kural silk_over_via\n"
+"       (kısıtlama silk_clearance (en az 0,2 mm))\n"
+"       (koşul \"A.Type == '*Text' & B.Type == 'Via'\"))\n"
+"\n"
+"(kural \"Farklı Ağların Via'ları Arasındaki Mesafe\"  \n"
+"        (kısıtlama hole_to_hole (en az 0,254 mm))\n"
+"        (koşul \"A.Type == 'Via' & B.Type == 'Via' & A.Net != B.Net\"))\n"
+"\n"
+"(kural \"Farklı Ağların Pedleri Arasındaki Boşluk\"  \n"
+"        (kısıtlama boşluğu (min 3.0mm))\n"
+"        (koşul \"A.Type == 'Pad' & B.Type == 'Pad' & A.Net != B.Net\"))\n"
+"\n"
+"(kural \"İz Açıklığı İzlemek için Delik Üzerinden\"  \n"
+"        (kısıtlama hole_clearance (en az 0,254 mm))\n"
+"        (koşul \"A.Type == 'Via' & B.Type == 'Track'\"))\n"
+"    \n"
+"(kural \"Pad to Track Clearance\"  \n"
+"        (kısıtlama boşluğu (min 0.2mm))\n"
+"        (koşul \"A.Type == 'Pad' & B.Type == 'Track'\"))\n"
+"\n"
+"(kural \"1mm'ye boşluk\"\n"
+"        (kısıtlama boşluğu (min 0.8mm))\n"
+"        (koşul \"A.Layer == 'Edge.Cuts' &A.Thickne"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
