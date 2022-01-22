@@ -129,7 +129,7 @@ KICAD_CURL_EASY::KICAD_CURL_EASY() :
     curl_easy_setopt( m_CURL, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS );
 
     #ifdef _WIN32
-    // We need to this to allow using the Windows Certificate store
+    // We need this to use the Windows Certificate store
     curl_easy_setopt( m_CURL, CURLOPT_SSL_OPTIONS, CURLSSLOPT_NATIVE_CA );
     #endif
 
