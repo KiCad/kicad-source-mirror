@@ -97,10 +97,7 @@ public:
 
     void SetErrorMessage( const wxString& aMessage ) { m_errorMessage = aMessage; }
 
-    void SetItems( const KIIDS& aIds )
-    {
-        m_ids = aIds;
-    }
+    void SetItems( const KIIDS& aIds ) { m_ids = aIds; }
 
     void AddItem( EDA_ITEM* aItem );
 
@@ -170,7 +167,7 @@ protected:
     wxString      m_settingsKey;       ///< The key used to describe this type of error in settings
     MARKER_BASE*  m_parent;            ///< The marker this item belongs to, if any
 
-    KIIDS m_ids;
+    KIIDS         m_ids;
 
 };
 
@@ -246,16 +243,14 @@ public:
     /**
      * Called by the wxDataView to fetch an item's value.
      */
-    void GetValue( wxVariant&              aVariant,
-                   wxDataViewItem const&   aItem,
-                   unsigned int            aCol ) const override;
+    void GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
+                   unsigned int aCol ) const override;
 
     /**
      * Called by the wxDataView to edit an item's content.
      */
-    bool SetValue( wxVariant const& aVariant,
-                   wxDataViewItem const&   aItem,
-                   unsigned int            aCol ) override
+    bool SetValue( wxVariant const& aVariant, wxDataViewItem const& aItem,
+                   unsigned int aCol ) override
     {
         // Editing not supported
         return false;
@@ -265,9 +260,8 @@ public:
      * Called by the wxDataView to fetch an item's formatting.  Return true if the
      * item has non-default attributes.
      */
-    bool GetAttr( wxDataViewItem const&   aItem,
-                  unsigned int            aCol,
-                  wxDataViewItemAttr&     aAttr ) const override;
+    bool GetAttr( wxDataViewItem const& aItem, unsigned int aCol,
+                  wxDataViewItemAttr& aAttr ) const override;
 
     void ValueChanged( const RC_TREE_NODE* aNode );
 
