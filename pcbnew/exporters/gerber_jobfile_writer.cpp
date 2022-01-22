@@ -258,7 +258,7 @@ void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
     msg = fn.GetName();
 
     // build the <rec> string. All non ASCII chars and comma are replaced by '_'
-    wxString rev = m_pcb->GetTitleBlock().GetRevision();
+    wxString rev = ExpandTextVars( m_pcb->GetTitleBlock().GetRevision(), m_pcb->GetProject() );
 
     if( rev.IsEmpty() )
         rev = wxT( "rev?" );
