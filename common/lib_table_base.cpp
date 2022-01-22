@@ -31,7 +31,7 @@
 #include <lib_table_base.h>
 #include <lib_table_lexer.h>
 #include <macros.h>
-
+#include "string_utils.h"
 
 #define OPT_SEP     '|'         ///< options separator character
 
@@ -294,7 +294,7 @@ std::vector<wxString> LIB_TABLE::GetLogicalLibs()
     std::sort( ret.begin(), ret.end(),
             []( const wxString& lhs, const wxString& rhs )
             {
-                return lhs.CmpNoCase( rhs ) < 0;
+                return StrNumCmp( lhs, rhs, true /* ignore case */ ) < 0;
             } );
 
     return ret;
