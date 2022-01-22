@@ -441,7 +441,7 @@ void BITMAPCONV_INFO::createOutputData( BMP2CMP_MOD_LAYER aModLayer )
 
     if(!m_Paths)
     {
-        m_errors += "No path in black and white image: no outline created\n";
+        m_errors += "No shape in black and white image to convert: no outline created\n";
     }
 
     while( paths != nullptr )
