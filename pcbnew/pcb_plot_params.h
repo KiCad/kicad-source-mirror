@@ -79,15 +79,8 @@ public:
     void        SetDXFPlotPolygonMode( bool aFlag ) { m_DXFplotPolygonMode = aFlag; }
     bool        GetDXFPlotPolygonMode() const { return m_DXFplotPolygonMode; }
 
-    void SetDXFPlotUnits( DXF_UNITS aUnit )
-    {
-        m_DXFplotUnits = aUnit;
-    }
-
-    DXF_UNITS GetDXFPlotUnits() const
-    {
-        return m_DXFplotUnits;
-    }
+    void        SetDXFPlotUnits( DXF_UNITS aUnit ) { m_DXFplotUnits = aUnit; }
+    DXF_UNITS   GetDXFPlotUnits() const { return m_DXFplotUnits; }
 
     void        SetDrillMarksType( DrillMarksType aVal ) { m_drillMarks = aVal; }
     DrillMarksType GetDrillMarksType() const { return m_drillMarks; }

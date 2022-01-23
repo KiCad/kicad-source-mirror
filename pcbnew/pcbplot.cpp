@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,10 +21,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file pcbnew/pcbplot.cpp
  */
 
 #include <plotters/plotter.h>
@@ -52,9 +48,7 @@ const wxString GetGerberProtelExtension( int aLayer )
         else if( aLayer == B_Cu )
             return wxT( "gbl" );
         else
-        {
             return wxString::Format( wxT( "g%d" ), aLayer+1 );
-        }
     }
     else
     {
@@ -289,9 +283,8 @@ void AddGerberX2Header( PLOTTER* aPlotter, const BOARD* aBoard, bool aUseX1Compa
     aPlotter->AddLineToHeader( makeStringCompatX1( text, aUseX1CompatibilityMode ) );
 
     // creates the TF.CreationDate attribute:
-    text = GbrMakeCreationDateAttributeString( aUseX1CompatibilityMode ?
-                                                    GBR_NC_STRING_FORMAT_X1 :
-                                                    GBR_NC_STRING_FORMAT_X2 );
+    text = GbrMakeCreationDateAttributeString( aUseX1CompatibilityMode ? GBR_NC_STRING_FORMAT_X1
+                                                                       : GBR_NC_STRING_FORMAT_X2 );
     aPlotter->AddLineToHeader( text );
 
     // Creates the TF,.ProjectId. Format is (from Gerber file format doc):
@@ -324,20 +317,16 @@ void AddGerberX2Header( PLOTTER* aPlotter, const BOARD* aBoard, bool aUseX1Compa
     text.Printf( wxT( "%%TF.ProjectId,%s,%s,%s*%%" ), msg.ToAscii(), guid, rev.ToAscii() );
     aPlotter->AddLineToHeader( makeStringCompatX1( text, aUseX1CompatibilityMode ) );
 
-    // Add the TF.SameCoordinates, that specify all gerber files uses the same
-    // origin and orientation, and the registration between files is OK.
-    // The parameter of TF.SameCoordinates is a string that is common
-    // to all files using the same registration and has no special meaning:
-    // this is just a key
-    // Because there is no mirroring/rotation in Kicad, only the plot offset origin
-    // can create incorrect registration.
-    // So we create a key from plot offset options.
-    // and therefore for a given board, all Gerber files having the same key have the same
-    // plot origin and use the same registration
+    // Add the TF.SameCoordinates to specify that all gerber files uses the same origin and
+    // orientation, and the registration between files is OK.
+    // The parameter of TF.SameCoordinates is a string that is common to all files using the
+    // same registration.  The string value has no meaning; it is just a key.
+    // Because there is no mirroring/rotation in Kicad, only the plot offset origin can create
+    // incorrect registration, so we create a key from plot offset options.
     //
-    // Currently the key is "Original" when using absolute Pcbnew coordinates,
-    // and the PY and PY position of auxiliary axis, when using it.
-    // Please, if absolute Pcbnew coordinates, one day, are set by user, change the way
+    // Currently the key is "Original" when using absolute Pcbnew coordinates, and the PY and PY
+    // position of the auxiliary axis when using it.
+    // If we ever add user-settable absolute Pcbnew coordinates, we'll need to change the way
     // the key is built to ensure file only using the *same* axis have the same key.
     wxString registration_id = "Original";
     VECTOR2I auxOrigin = aBoard->GetDesignSettings().GetAuxOrigin();
@@ -415,9 +404,10 @@ PLOT_CONTROLLER::~PLOT_CONTROLLER()
 }
 
 
-/* IMPORTANT THING TO KNOW: the locale during plots *MUST* be kept as
- * C/POSIX using a LOCALE_IO object on the stack. This even when
- * opening/closing the plotfile, since some drivers do I/O even then */
+/*
+ * IMPORTANT: the locale during plots *MUST* be kept as C/POSIX using a LOCALE_IO object on the
+ * stack. This even when opening/closing the plotfile, as some drivers do I/O even then.
+ */
 void PLOT_CONTROLLER::ClosePlot()
 {
     LOCALE_IO toggle;
@@ -439,16 +429,15 @@ bool PLOT_CONTROLLER::OpenPlotfile( const wxString& aSuffix, PLOT_FORMAT aFormat
 {
     LOCALE_IO toggle;
 
-    /* Save the current format: sadly some plot routines depends on this
-       but the main reason is that the StartPlot method uses it to
-       dispatch the plotter creation */
+    // Save the current format: sadly some plot routines depends on this but the main reason
+    // is that the StartPlot method uses it to dispatch the plotter creation
     GetPlotOptions().SetFormat( aFormat );
 
     // Ensure that the previous plot is closed
     ClosePlot();
 
-    // Now compute the full filename for the output and start the plot
-    // (after ensuring the output directory is OK)
+    // Now compute the full filename for the output and start the plot (after ensuring the
+    // output directory is OK)
     wxString outputDirName = GetPlotOptions().GetOutputDirectory() ;
     wxFileName outputDir = wxFileName::DirName( outputDirName );
     wxString boardFilename = m_board->GetFileName();
@@ -460,11 +449,13 @@ bool PLOT_CONTROLLER::OpenPlotfile( const wxString& aSuffix, PLOT_FORMAT aFormat
         m_plotFile.SetPath( outputDir.GetPath() );
         wxString fileExt = GetDefaultPlotExtension( aFormat );
 
-        // Gerber format can use specific file ext, depending on layers
-        // (now not a good practice, because the official file ext is .gbr)
+        // Gerber format *can* use layer-specific file extensions (this is no longer best
+        // practice as the official file ext is now .gbr).
         if( GetPlotOptions().GetFormat() == PLOT_FORMAT::GERBER
                 && GetPlotOptions().GetUseGerberProtelExtensions() )
+        {
             fileExt = GetGerberProtelExtension( GetLayer() );
+        }
 
         // Build plot filenames from the board name and layer names:
         BuildPlotFileName( &m_plotFile, outputDir.GetPath(), aSuffix, fileExt );
