@@ -33,6 +33,7 @@
 #include <eda_base_frame.h>
 #include <filehistory.h>
 #include <kiplatform/app.h>
+#include <kicad_build_version.h>
 #include <kiway.h>
 #include <kiway_express.h>
 #include <launch_ext.h>
@@ -127,12 +128,21 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     wxIcon icon;
     wxIconBundle icon_bundle;
 
+#if KICAD_IS_NIGHTLY
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_nightly ) );
+    icon_bundle.AddIcon( icon );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_nightly_32 ) );
+    icon_bundle.AddIcon( icon );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_nightly_16 ) );
+    icon_bundle.AddIcon( icon );
+#else
     icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad ) );
     icon_bundle.AddIcon( icon );
     icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_32 ) );
     icon_bundle.AddIcon( icon );
     icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_16 ) );
     icon_bundle.AddIcon( icon );
+#endif
 
     SetIcons( icon_bundle );
 
