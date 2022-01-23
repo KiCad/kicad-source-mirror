@@ -43,13 +43,11 @@
 #define MAGIC_TEARDROP_ZONE_ID 30000
 
 
-void TEARDROP_MANAGER::SetTargets( bool aApplyToPadVias, bool aApplyToRoundShapesOnly,
-                                   bool aApplyToSurfacePads, bool aApplyToTracks )
+TEARDROP_MANAGER::TEARDROP_MANAGER( BOARD* aBoard, PCB_EDIT_FRAME* aFrame )
 {
-    m_applyToViaPads = aApplyToPadVias;
-    m_applyToRoundShapesOnly = aApplyToRoundShapesOnly;
-    m_applyToSurfacePads = aApplyToSurfacePads;
-    m_applyToTracks = aApplyToTracks;
+    m_board = aBoard;
+    m_prmsList = m_board->GetDesignSettings().GetTeadropParamsList();
+    m_tolerance = 0;
 }
 
 
@@ -101,10 +99,11 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter,
     // (custom pads are not collected)
     std::vector< VIAPAD > viapad_list;
 
-    if( m_applyToViaPads )
+    if( m_prmsList->m_TargetViasPads )
         collectVias( viapad_list );
 
-    collectPadsCandidate( viapad_list, m_applyToViaPads, m_applyToRoundShapesOnly, m_applyToSurfacePads );
+    collectPadsCandidate( viapad_list, m_prmsList->m_TargetViasPads,
+                          m_prmsList->m_UseRoundShapesOnly, m_prmsList->m_TargetPadsWithNoHole );
 
     TRACK_BUFFER trackLookupList;
 
@@ -150,9 +149,9 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter,
             TEARDROP_PARAMETERS* currParams;
 
             if( viapad.m_IsRound )
-                currParams = m_Parameters.GetParameters( TARGET_ROUND );
+                currParams = m_prmsList->GetParameters( TARGET_ROUND );
             else
-                currParams = m_Parameters.GetParameters( TARGET_RECT );
+                currParams = m_prmsList->GetParameters( TARGET_RECT );
 
             // Ensure a teardrop shape can be built:
             // The track width must be < teardrop height
@@ -185,7 +184,7 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter,
 
     int track2trackCount = 0;
 
-    if( m_applyToTracks )
+    if( m_prmsList->m_TargetTrack2Track )
         track2trackCount = addTeardropsOnTracks( aCommitter );
 
     // Now set priority of teardrops now all teardrops are added
@@ -263,7 +262,7 @@ int TEARDROP_MANAGER::addTeardropsOnTracks( BOARD_COMMIT* aCommitter )
     collectVias( viapad_list );
     collectPadsCandidate( viapad_list, true, true, true );
 
-    TEARDROP_PARAMETERS* currParams = m_Parameters.GetParameters( TARGET_TRACK );
+    TEARDROP_PARAMETERS* currParams = m_prmsList->GetParameters( TARGET_TRACK );
 
     // Explore groups (a group is a set of tracks on the same layer and the same net):
     for( auto grp : trackLookupList.GetBuffer() )

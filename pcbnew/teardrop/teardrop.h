@@ -87,14 +87,7 @@ public:
         TD_TYPE_TRACKEND    // specify a teardrop on a rond end of a wide track
     };
 
-    TEARDROP_MANAGER( BOARD* aBoard, PCB_EDIT_FRAME* aFrame ) :
-        m_tolerance( 0 ),
-        m_applyToViaPads( true ),
-        m_applyToRoundShapesOnly( false ),
-        m_applyToSurfacePads( true ),
-        m_board( aBoard )
-    {
-    }
+    TEARDROP_MANAGER( BOARD* aBoard, PCB_EDIT_FRAME* aFrame );
 
     /**
      * Set teardrops on a teardrop free board
@@ -119,52 +112,6 @@ public:
      */
     int  RemoveTeardrops( BOARD_COMMIT* aCommitter, bool aCommitAfterRemove );
 
-    /**
-     * Set max allowed length and height for teardrops in IU.
-     * a value <= 0 disable the constraint
-     */
-    void SetTeardropMaxSize( TARGET_TD aTdType, int aMaxLen, int aMaxHeight )
-    {
-        m_Parameters.GetParameters( aTdType )->SetTeardropMaxSize( aMaxLen, aMaxHeight );
-    }
-
-
-    /**
-     * Set prefered length and height ratio for teardrops
-     * the prefered length and height are VIAPAD width * aLenghtRatio and
-     * VIAPAD width * aHeightRatio
-     */
-    void SetTeardropSizeRatio( TARGET_TD aTdType, double aLenghtRatio = 0.5, double aHeightRatio = 1.0 )
-    {
-        m_Parameters.GetParameters( aTdType )->SetTeardropSizeRatio( aLenghtRatio, aHeightRatio );
-    }
-
-
-    /**
-     * Set the params for teardrop using curved shape
-     * note: if aSegCount is < 3, the shape uses a straight line
-     */
-    void SetTeardropCurvedPrm( TARGET_TD aTdType, int aCurveSegCount = 0 )
-    {
-        m_Parameters.GetParameters( aTdType )->SetTeardropCurvedPrm( aCurveSegCount );
-    }
-
-    /**
-     * Define the items used to add a teardrop
-     * @param aApplyToPadVias = true to add Td to vias and PTH
-     * @param aApplyToRoundShapesOnly = true to restrict Td on round PTH
-     * @param aApplyToSurfacePads = true to add Td to not drilled pads (like SMD)
-     * @param aApplyToTracks = true to add Td to tracks connected point when having
-     * different sizes
-     */
-    void SetTargets( bool aApplyToPadVias, bool aApplyToRoundShapesOnly,
-                     bool aApplyToSurfacePads, bool aApplyToTracks );
-
-    /**
-     * the list of available TEARDROP_PARAMETERS items
-     * at least for round, rect PADVIA shapes and tracks
-     */
-    TEARDROP_PARAMETERS_LIST m_Parameters;
 
 private:
     /**
@@ -301,12 +248,8 @@ private:
 private:
     int     m_tolerance;                // max distance between a track end point and a pad/via center to
                                         // see them connected to ut a teardrop
-    bool    m_applyToViaPads;           // true to add a teardrop to vias and PTH pads
-    bool    m_applyToRoundShapesOnly;   // true to add a teardrop to round pads only
-    bool    m_applyToSurfacePads;       // true to add a teardrop not drilled pads (like SMD)
-    bool    m_applyToTracks;            // true to add a teardrop to connected point of 2 tracks
-                                        // having different width
     BOARD*  m_board;
+    TEARDROP_PARAMETERS_LIST* m_prmsList; // the teardrop parameters list, from the board desing settings
     std::vector<ZONE*> m_createdTdList; // list of new created teardrops
 };
 

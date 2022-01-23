@@ -95,6 +95,14 @@ public:
 
     ~TEARDROP_DIALOG()
     {
+        TransferToParamList();
+    }
+
+    /**
+     * Copy the settings from dialog to the current board settings
+     */
+    void TransferToParamList()
+    {
         int shape_seg_count = GetCurvePointCount();
         TEARDROP_PARAMETERS_LIST* prmsList = m_brdSettings->GetTeadropParamsList();
 
@@ -195,34 +203,10 @@ void PCB_EDIT_FRAME::OnRunTeardropTool( wxCommandEvent& event )
 
     BOARD_COMMIT committer( this );
 
+    dlg.TransferToParamList();
     TEARDROP_MANAGER trdm( GetBoard(), this );
 
-    int shape_seg_count = dlg.GetCurvePointCount();
-
-    trdm.SetTeardropMaxSize( TARGET_ROUND, dlg.GetTeardropMaxLenRound(),
-                             dlg.GetTeardropMaxHeightRound() );
-    trdm.SetTeardropSizeRatio( TARGET_ROUND, dlg.GetTeardropLenPercentRound(),
-                               dlg.GetTeardropSizePercentRound() );
-    trdm.SetTeardropCurvedPrm( TARGET_ROUND, (dlg.CurvedShapeOption() & CURVED_OPTION_ROUND)
-                                             ? shape_seg_count : 0 );
-
-    trdm.SetTeardropMaxSize( TARGET_RECT, dlg.GetTeardropMaxLenRect(),
-                             dlg.GetTeardropMaxHeightRect() );
-    trdm.SetTeardropSizeRatio( TARGET_RECT, dlg.GetTeardropLenPercentRect(),
-                               dlg.GetTeardropSizePercentRect() );
-    trdm.SetTeardropCurvedPrm( TARGET_RECT, (dlg.CurvedShapeOption() & CURVED_OPTION_RECT)
-                                             ? shape_seg_count : 0 );
-
-    trdm.SetTeardropMaxSize( TARGET_TRACK, dlg.GetTeardropMaxLenTrack(),
-                             dlg.GetTeardropMaxHeightTrack() );
-    trdm.SetTeardropSizeRatio( TARGET_TRACK, dlg.GetTeardropLenPercentTrack(),
-                             dlg.GetTeardropSizePercentTrack() );
-    trdm.SetTeardropCurvedPrm( TARGET_TRACK, (dlg.CurvedShapeOption() & CURVED_OPTION_TRACK)
-                                              ? shape_seg_count : 0 );
-
     const bool discardTeardropInSameZone = true;
-    trdm.SetTargets( dlg.TeardropOnPadVia(), dlg.RoundShapesOnly(),
-                     dlg.IncludeNotPTH(), dlg.TeardropOnTracks() );
 
     int added_count = trdm.SetTeardrops( &committer,
                                    discardTeardropInSameZone,
