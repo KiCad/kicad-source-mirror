@@ -28,22 +28,28 @@ include( ${CMAKE_MODULE_PATH}/KiCadFullVersion.cmake )
 
 # Extract the major and minor build version as a string
 string( REGEX MATCH
-        "([0-9]+)\\.([0-9]+)\\..*"
-        KICAD_MAJOR_MINOR_VERSION
+        "([0-9]+)\\.([0-9]+)\\.([0-9]+).*"
+        KICAD_MAJOR_MINOR_PATCH_VERSION
         "${KICAD_SEMANTIC_VERSION}"
     )
 
-if( CMAKE_MATCH_COUNT EQUAL 2 )
+if( CMAKE_MATCH_COUNT EQUAL 3 )
     # Match slot 0 is the full string, so we want slots 1 & 2
     set( KICAD_MAJOR_MINOR_VERSION "${CMAKE_MATCH_1}.${CMAKE_MATCH_2}" )
     set( KICAD_MAJOR_MINOR_VERSION_TUPLE "{ ${CMAKE_MATCH_1}, ${CMAKE_MATCH_2} }" )
+
+    set( KICAD_MAJOR_MINOR_PATCH_VERSION "${CMAKE_MATCH_1}.${CMAKE_MATCH_2}.${CMAKE_MATCH_3}" )
+
     set( KICAD_MAJOR_VERSION "${CMAKE_MATCH_1}" )
-    set( KICAD_WIN32_RC_FILEVER_STR "${CMAKE_MATCH_1}.${CMAKE_MATCH_2}.0.${KICAD_GIT_REV}\\0" )
-    set( KICAD_WIN32_RC_FILEVER     "${CMAKE_MATCH_1}, ${CMAKE_MATCH_2}, 0, ${KICAD_GIT_REV}" )
+    set( KICAD_MINOR_VERSION "${CMAKE_MATCH_2}" )
+    set( KICAD_PATCH_VERSION "${CMAKE_MATCH_3}" )
+
+    set( KICAD_WIN32_RC_FILEVER_STR "${CMAKE_MATCH_1}.${CMAKE_MATCH_2}.${CMAKE_MATCH_3}.${KICAD_GIT_REV}\\0" )
+    set( KICAD_WIN32_RC_FILEVER     "${CMAKE_MATCH_1}, ${CMAKE_MATCH_2}, ${CMAKE_MATCH_3}, ${KICAD_GIT_REV}" )
     set( KICAD_WIN32_RC_PRODVER_STR "${CMAKE_MATCH_1}.${CMAKE_MATCH_2}\\0" )
-    set( KICAD_WIN32_RC_PRODVER     "${CMAKE_MATCH_1}, ${CMAKE_MATCH_2}, 0, ${KICAD_GIT_REV}" )
+    set( KICAD_WIN32_RC_PRODVER     "${CMAKE_MATCH_1}, ${CMAKE_MATCH_2}, ${CMAKE_MATCH_3}, ${KICAD_GIT_REV}" )
 else()
-    message( FATAL_ERROR "Unable to extract major and minor version string" )
+    message( FATAL_ERROR "Unable to extract major, minor and patch version string" )
 endif()
 
 set( _wvh_new_version_text
@@ -58,6 +64,8 @@ set( _wvh_new_version_text
 #define KICAD_VERSION_FULL              \"${KICAD_VERSION_FULL}\"
 #define KICAD_SEMANTIC_VERSION          \"${KICAD_SEMANTIC_VERSION}\"
 #define KICAD_MAJOR_VERSION             \"${KICAD_MAJOR_VERSION}\"
+#define KICAD_MINOR_VERSION             \"${KICAD_MINOR_VERSION}\"
+#define KICAD_PATCH_VERSION             \"${KICAD_PATCH_VERSION}\"
 #define KICAD_MAJOR_MINOR_VERSION       \"${KICAD_MAJOR_MINOR_VERSION}\"
 #define KICAD_MAJOR_MINOR_VERSION_TUPLE ${KICAD_MAJOR_MINOR_VERSION_TUPLE}
 #define KICAD_WIN32_RC_PRODVER          ${KICAD_WIN32_RC_PRODVER}
