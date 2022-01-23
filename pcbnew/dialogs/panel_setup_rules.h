@@ -48,6 +48,7 @@ private:
     void OnCompile( wxCommandEvent& event ) override;
     void OnErrorLinkClicked( wxHtmlLinkEvent& event ) override;
     void onCharHook( wxKeyEvent& aEvent );
+    void OnContextMenu( wxMouseEvent& event ) override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -61,6 +62,7 @@ private:
     wxRegEx           m_netNameRegex;
     wxRegEx           m_typeRegex;
     wxRegEx           m_padTypeRegex;
+    wxRegEx           m_pinTypeRegex;
     wxRegEx           m_fabPropRegex;
 
     HTML_MESSAGE_BOX* m_helpWindow;

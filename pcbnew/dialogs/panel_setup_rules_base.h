@@ -51,6 +51,7 @@ class PANEL_SETUP_RULES_BASE : public wxPanel
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnSyntaxHelp( wxHyperlinkEvent& event ) { event.Skip(); }
+		virtual void OnContextMenu( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnCompile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnErrorLinkClicked( wxHtmlLinkEvent& event ) { event.Skip(); }
 

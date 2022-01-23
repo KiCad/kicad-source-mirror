@@ -108,6 +108,9 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<double>( "appearance.hicontrast_dimming_factor",
             &m_Appearance.hicontrast_dimming_factor, 0.8f ) );
 
+    m_params.emplace_back( new PARAM<int>( "appearance.text_editor_zoom",
+            &m_Appearance.text_editor_zoom, 0 ) );
+
     m_params.emplace_back( new PARAM<bool>( "auto_backup.enabled", &m_Backup.enabled, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "auto_backup.backup_on_autosave",

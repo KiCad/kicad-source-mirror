@@ -38,6 +38,7 @@
 #include <scintilla_tricks.h>
 #include <drc/drc_rule_parser.h>
 #include <tools/drc_tool.h>
+#include <pgm_base.h>
 
 PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_RULES_BASE( aParent->GetTreebook() ),
@@ -58,10 +59,14 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFr
     m_netNameRegex.Compile( "NetName\\s*[!=]=\\s*$", wxRE_ADVANCED );
     m_typeRegex.Compile( "Type\\s*[!=]=\\s*$", wxRE_ADVANCED );
     m_padTypeRegex.Compile( "Pad_Type\\s*[!=]=\\s*$", wxRE_ADVANCED );
+    m_pinTypeRegex.Compile( "Pin_Type\\s*[!=]=\\s*$", wxRE_ADVANCED );
     m_fabPropRegex.Compile( "Fabrication_Property\\s*[!=]=\\s*$", wxRE_ADVANCED );
 
     m_compileButton->SetBitmap( KiBitmap( BITMAPS::drc ) );
 
+    m_textEditor->SetZoom( Pgm().GetCommonSettings()->m_Appearance.text_editor_zoom );
+
+    m_textEditor->UsePopUp( 0 );
     m_textEditor->Bind( wxEVT_STC_CHARADDED, &PANEL_SETUP_RULES::onScintillaCharAdded, this );
     m_textEditor->Bind( wxEVT_STC_AUTOCOMP_CHAR_DELETED, &PANEL_SETUP_RULES::onScintillaCharAdded, this );
     m_textEditor->Bind( wxEVT_CHAR_HOOK, &PANEL_SETUP_RULES::onCharHook, this );
@@ -70,6 +75,8 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFr
 
 PANEL_SETUP_RULES::~PANEL_SETUP_RULES( )
 {
+    Pgm().GetCommonSettings()->m_Appearance.text_editor_zoom = m_textEditor->GetZoom();
+
     delete m_scintillaTricks;
 
     if( m_helpWindow )
@@ -89,6 +96,74 @@ void PANEL_SETUP_RULES::onCharHook( wxKeyEvent& aEvent )
     }
 
     aEvent.Skip();
+}
+
+
+void PANEL_SETUP_RULES::OnContextMenu(wxMouseEvent &event)
+{
+    wxMenu   menu;
+    wxString msg;
+
+    menu.Append( wxID_UNDO, _( "Undo" ) );
+    menu.Append( wxID_REDO, _( "Redo" ) );
+
+    menu.AppendSeparator();
+
+    menu.Append( 1, _( "Cut" ) );       // Don't use wxID_CUT, wxID_COPY, etc.  On Mac (at least),
+    menu.Append( 2, _( "Copy" ) );      // wxWidgets never delivers them to us.
+    menu.Append( 3, _( "Paste" ) );
+    menu.Append( 4, _( "Delete" ) );
+
+    menu.AppendSeparator();
+
+    menu.Append( 5, _( "Select All" ) );
+
+    menu.AppendSeparator();
+
+    menu.Append( wxID_ZOOM_IN, _( "Zoom In" ) );
+    menu.Append( wxID_ZOOM_OUT, _( "Zoom Out" ) );
+
+
+    switch( GetPopupMenuSelectionFromUser( menu ) )
+    {
+    case wxID_UNDO:
+        m_textEditor->Undo();
+        break;
+    case wxID_REDO:
+        m_textEditor->Redo();
+        break;
+
+    case 1:
+        m_textEditor->Cut();
+        break;
+    case 2:
+        m_textEditor->Copy();
+        break;
+    case 3:
+        m_textEditor->Paste();
+        break;
+    case 4:
+    {
+        long from, to;
+        m_textEditor->GetSelection( &from, &to );
+
+        if( to > from )
+            m_textEditor->DeleteRange( from, to );
+
+        break;
+    }
+
+    case 5:
+        m_textEditor->SelectAll();
+        break;
+
+    case wxID_ZOOM_IN:
+        m_textEditor->ZoomIn();
+        break;
+    case wxID_ZOOM_OUT:
+        m_textEditor->ZoomOut();
+        break;
+    }
 }
 
 
@@ -416,6 +491,21 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                          "SMD|"
                          "Edge connector|"
                          "NPTH, mechanical";
+            }
+            else if( m_pinTypeRegex.Matches( last ) )
+            {
+                tokens = "Input|"
+                         "Output|"
+                         "Bidirectional|"
+                         "Tri-state|"
+                         "Passive|"
+                         "Free|"
+                         "Unspecified|"
+                         "Power input|"
+                         "Power output|"
+                         "Open collector|"
+                         "Open emitter|"
+                         "Unconnected";
             }
             else if( m_fabPropRegex.Matches( last ) )
             {
