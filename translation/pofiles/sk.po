@@ -1,21 +1,21 @@
 # Slavko <linux@slavino.sk>, 2010, 2011, 2012, 2014.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020, 2021.
-# Jakub Janek <shaman.janek@gmail.com>, 2020.
+# Jakub Janek <shaman.janek@gmail.com>, 2020, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2021-08-20 19:52+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
-"source/sk/>\n"
+"PO-Revision-Date: 2022-02-01 13:57+0000\n"
+"Last-Translator: Jakub Janek <shaman.janek@gmail.com>\n"
+"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/"
+"master-source/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.11-dev\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -296,11 +296,9 @@ msgstr "Názov súboru 3D obrázku"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:519
 #: common/eda_base_frame.cpp:1111 common/eda_base_frame.cpp:1116
 #: pcbnew/plugins/altium/altium_pcb.cpp:1449
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr ""
-"Na uloženie súboru nie sú potrebné dostatočné povolenia\n"
-"%s"
+msgstr "Nedostatočné oprávnenia na uloženie súboru '%s'."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:520 common/confirm.cpp:130
 #: common/confirm.cpp:296 common/dialogs/panel_setup_severities.cpp:43
@@ -1410,9 +1408,9 @@ msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr "Nemôžeme urobiť cestu „%s“ absolútnou vzhľadom na „%s“."
 
 #: common/common.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' created."
-msgstr "Bol vytvorený výstupný adresár „%s“.\n"
+msgstr "Výstupný adresár '%s' vytvorený."
 
 #: common/common.cpp:336
 #, fuzzy, c-format
@@ -5681,9 +5679,8 @@ msgstr "Nie je možné otvoriť súbor „%s“"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2354
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2652
-#, fuzzy
 msgid "File import cancelled by user."
-msgstr "-------- ERC zrušil používateľ. <br> <br>"
+msgstr "import súboru bol zrušený užívateľom."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2370
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2388
@@ -7016,7 +7013,7 @@ msgstr "Súbor netlistov CadStar"
 
 #: common/wildcards_and_files_ext.cpp:491
 msgid "Symbol footprint association files"
-msgstr "Súbory na priradenie stopy stopy"
+msgstr "Uložiť súbor priradenia púzdra"
 
 #: common/wildcards_and_files_ext.cpp:497
 msgid "Zip file"
@@ -9752,9 +9749,9 @@ msgid "Text:"
 msgstr "Text:"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:75
-#, fuzzy, c-format
+#, c-format
 msgid "(%s)"
-msgstr " (%s):"
+msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:116
 #, fuzzy
@@ -14604,10 +14601,10 @@ msgid "symbol document library file is empty"
 msgstr "súbor knižnice symbolov je prázdny"
 
 #: eeschema/sch_screen.cpp:644 eeschema/sch_screen.cpp:736
-#, fuzzy, c-format
+#, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
 msgstr ""
-"Nastavenie schematického symbolu „%s %s“ identifikátor knižnice na „%s“. "
+"Nastavenie schematického symbolu „%s %s“ identifikátor knižnice na „%s“."
 
 #: eeschema/sch_screen.cpp:660
 #, fuzzy, c-format
@@ -14638,9 +14635,9 @@ msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
 msgstr "Vrátenie sa do medzipamäte na nastavenie symbolu „%s: %s„ odkaz „%s“."
 
 #: eeschema/sch_screen.cpp:747
-#, fuzzy, c-format
+#, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
-msgstr "Pre schematický symbol „%s %s“ sa nenašiel žiadny symbol knižnice. "
+msgstr "Pre schematický symbol „%s %s“ sa nenašiel žiadny symbol knižnice."
 
 #: eeschema/sch_sheet.cpp:747
 msgid "Sheet Name"
@@ -15087,14 +15084,12 @@ msgid "space"
 msgstr "medzerník"
 
 #: eeschema/sch_validators.cpp:171
-#, fuzzy
 msgid " or "
-msgstr "%s alebo %s"
+msgstr " alebo "
 
 #: eeschema/sch_validators.cpp:176
-#, fuzzy
 msgid ", or "
-msgstr "%s alebo %s"
+msgstr ", alebo "
 
 #: eeschema/sch_validators.cpp:189
 msgid "The reference designator cannot contain text variable references"
@@ -18767,9 +18762,8 @@ msgid "Failed to output data"
 msgstr "Nepodarilo sa načítať „%s“"
 
 #: kicad/dialogs/dialog_template_selector.cpp:143
-#, fuzzy
 msgid "<h1>Template Selector</h1>"
-msgstr "<html><h1>Výber šablóny</h1></html>"
+msgstr "<h1>Výber šablóny</h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:245
 msgid "Select Templates Directory"
@@ -18900,11 +18894,13 @@ msgid "Import Eagle Project Files"
 msgstr "Importujte súbory projektu Eagle"
 
 #: kicad/kicad.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File '%s'\n"
 "does not appear to be a valid KiCad project file."
-msgstr " <%s> nevyzerá byť platným odkazom na knižnicu súčiastok Kicad."
+msgstr ""
+"Súbor '%s'\n"
+"sa nezdá byť platným súborom KiCad projektu."
 
 #: kicad/kicad_manager_frame.cpp:165
 #, fuzzy
@@ -19178,14 +19174,12 @@ msgid "Metadata"
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:214
-#, fuzzy
 msgid "Package identifier: "
-msgstr "Nový identifikátor knižnice:"
+msgstr "Identifikátor balíčku: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:215
-#, fuzzy
 msgid "License: "
-msgstr "Licencia"
+msgstr "Licencia: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:229
 msgid "Tags: "
@@ -21384,9 +21378,8 @@ msgid "Color Code"
 msgstr "Farebný kód"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:84
-#, fuzzy
 msgid "TransLine "
-msgstr "TransLine"
+msgstr "Prenosové vedenie: "
 
 #: pcb_calculator/pcb_calculator_frame.cpp:90
 msgid "Electrical Spacing"
@@ -22630,9 +22623,8 @@ msgstr ""
 "************************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:544
-#, fuzzy
 msgid " will be ignored"
-msgstr "bude ignorovaný"
+msgstr " bude ignorovaný"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:557
 msgid ""
@@ -23009,9 +23001,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:191 pcbnew/files.cpp:620
 #: pcbnew/tools/pcb_control.cpp:1102
-#, fuzzy
 msgid "Loading PCB"
-msgstr "Načítanie "
+msgstr "Načítanie DPS"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:213
 #, c-format
@@ -27157,11 +27148,10 @@ msgid "Check zone fills before plotting"
 msgstr "Pred vykreslením skontrolujte výplne zón"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
-#, fuzzy
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
 msgstr ""
-"Minimálna šírka a / alebo okraj globálnej masky spájky nie sú nastavené na "
-"0. Väčšina penziónov"
+"Minimálna šírka a/alebo okraj globálnej spájkovacej masky nie sú nastavené "
+"na 0. "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
 #, fuzzy
@@ -27772,9 +27762,9 @@ msgid "from %s"
 msgstr "(od %s)"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:29
-#, fuzzy, c-format
+#, c-format
 msgid "Details: %s"
-msgstr "Trieda siete: "
+msgstr "Detaily: %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:33
 #, fuzzy
@@ -32728,9 +32718,8 @@ msgid "Edit design rules"
 msgstr "Pravidlá návrhu"
 
 #: pcbnew/pcb_edit_frame.cpp:1780
-#, fuzzy
 msgid "Could not compile custom design rules."
-msgstr "KDR neúplné: nebolo možné zostaviť pravidlá návrhu.  "
+msgstr "Neporadilo sa zostaviť vlastné pravidlá návrhu."
 
 #: pcbnew/pcb_edit_frame.cpp:1826
 msgid "Export Hyperlynx Layout"
@@ -33688,9 +33677,8 @@ msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorovanie kruhu, pretože vrstva Eagle „%s“ (%d) nebola zmapovaná"
 
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:85
-#, fuzzy
 msgid "Could not read file "
-msgstr "Nebolo možné vytvoriť súbor \"%s\"."
+msgstr "Nebolo možné prečítať súbor "
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:251
 #, c-format
@@ -33908,9 +33896,9 @@ msgid "Undefined layers:"
 msgstr "Nedefinované vrstvy:"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1177
-#, fuzzy, c-format
+#, c-format
 msgid "Page type '%s' is not valid."
-msgstr "Typ stránky \"%s\" nie je platný "
+msgstr "Typ stránky \"%s\" nie je platný."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1734
 #, fuzzy, c-format
@@ -34711,9 +34699,9 @@ msgid "Routing Track: %s"
 msgstr "Trasa jednej trate"
 
 #: pcbnew/router/router_tool.cpp:2095
-#, fuzzy, c-format
+#, c-format
 msgid "Net Class: %s"
-msgstr "Trieda siete: "
+msgstr "Trieda siete: %s"
 
 #: pcbnew/router/router_tool.cpp:2099
 #, fuzzy
@@ -35290,14 +35278,12 @@ msgid "BOARD CHARACTERISTICS"
 msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:423
-#, fuzzy
 msgid "Copper Layer Count: "
-msgstr "Počet medených vrstiev:"
+msgstr "Počet medených vrstiev: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:432
-#, fuzzy
 msgid "Board overall dimensions: "
-msgstr "Nakreslite rozmer"
+msgstr "Celkové rozmery dosky: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:442
 #, fuzzy
@@ -35320,14 +35306,12 @@ msgid "Board Thickness: "
 msgstr "Hrúbka dosky:"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:484
-#, fuzzy
 msgid "Min hole diameter: "
-msgstr "Priemer voľného otvoru:"
+msgstr "Minimálny priemer diery: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:494
-#, fuzzy
 msgid "Impedance Control: "
-msgstr "Kontrola impedancie"
+msgstr "Kontrola impedancie: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:502
 #, fuzzy
@@ -35335,9 +35319,8 @@ msgid "Plated Board Edge: "
 msgstr "Okraj pokovovanej dosky"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:510
-#, fuzzy
 msgid "Edge card connectors: "
-msgstr "Konektory okrajových kariet:"
+msgstr "Konektory na hrane karty: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:518
 #, fuzzy
