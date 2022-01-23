@@ -72,6 +72,7 @@ set( BMAPS_SMALL
     icon_eeschema_16
     icon_gerbview_16
     icon_kicad_16
+    icon_kicad_nightly_16
     icon_libedit_16
     icon_modedit_16
     icon_pagelayout_editor_16
@@ -529,6 +530,7 @@ set( BMAPS_32
     icon_eeschema_32
     icon_gerbview_32
     icon_kicad_32
+    icon_kicad_nightly_32
     icon_libedit_32
     icon_modedit_32
     icon_pagelayout_editor_32
@@ -544,6 +546,7 @@ set( BMAPS_BIG
     icon_eeschema
     icon_gerbview
     icon_kicad
+    icon_kicad_nightly
     icon_libedit
     icon_modedit
     icon_pcbnew
@@ -569,6 +572,7 @@ set( BMAPS_64
     icon_eeschema
     icon_gerbview
     icon_kicad
+    icon_kicad_nightly
     icon_libedit
     icon_modedit
     icon_pcbnew
@@ -583,6 +587,7 @@ set( BMAPS_128
     icon_eeschema
     icon_gerbview
     icon_kicad
+    icon_kicad_nightly
     icon_libedit
     icon_modedit
     icon_pcbnew
