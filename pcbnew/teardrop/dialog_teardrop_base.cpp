@@ -213,17 +213,25 @@ TEARDROP_DIALOG_BASE::TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_cbPadVia = new wxCheckBox( sbSizerScope->GetStaticBox(), wxID_ANY, _("Vias and PTH pads"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbPadVia->SetValue(true);
+	m_cbPadVia->SetToolTip( _("Add teardrops to vias and pads with holes") );
+
 	sbSizerScope->Add( m_cbPadVia, 0, wxALL, 5 );
 
 	m_cbRoundShapesOnly = new wxCheckBox( sbSizerScope->GetStaticBox(), wxID_ANY, _("Round pads only"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbRoundShapesOnly->SetToolTip( _("Add teardrops to round shapes only ") );
+
 	sbSizerScope->Add( m_cbRoundShapesOnly, 0, wxALL, 5 );
 
-	m_cbSmdSimilarPads = new wxCheckBox( sbSizerScope->GetStaticBox(), wxID_ANY, _("Not Drilled Pads"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbSmdSimilarPads = new wxCheckBox( sbSizerScope->GetStaticBox(), wxID_ANY, _("Not drilled pads"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbSmdSimilarPads->SetValue(true);
+	m_cbSmdSimilarPads->SetToolTip( _("Add teardrops to not driiled pads, like SMD") );
+
 	sbSizerScope->Add( m_cbSmdSimilarPads, 0, wxALL, 5 );
 
 	m_cbTrack2Track = new wxCheckBox( sbSizerScope->GetStaticBox(), wxID_ANY, _("Track to track"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbTrack2Track->SetValue(true);
+	m_cbTrack2Track->SetToolTip( _("Add teardrops to two connected tracks of different widths") );
+
 	sbSizerScope->Add( m_cbTrack2Track, 0, wxALL, 5 );
 
 
@@ -270,6 +278,8 @@ TEARDROP_DIALOG_BASE::TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_stPointCount = new wxStaticText( sbSizerOptions->GetStaticBox(), wxID_ANY, _("Curve points"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stPointCount->Wrap( -1 );
+	m_stPointCount->SetToolTip( _("Number of segments to build a teardrop with curved shape") );
+
 	sbSizerOptions->Add( m_stPointCount, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_spPointCount = new wxSpinCtrl( sbSizerOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 3, 10, 5 );
