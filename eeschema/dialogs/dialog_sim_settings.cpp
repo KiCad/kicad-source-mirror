@@ -212,7 +212,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
             else
                 simCmd += " " + src2;
 
-            if( m_dcSource1->GetSelection() == m_dcSource2->GetSelection() )
+            if( m_dcSource1->GetStringSelection() == m_dcSource2->GetStringSelection() )
             {
                 DisplayError( this, _( "Source 1 and Source 2 must be different" ) );
                 return false;
