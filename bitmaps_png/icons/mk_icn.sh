@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # make icons using Inkscape
-# inkscape and icotool are necessary
+# inkscape (1.0.2 minimum) and icotool are necessary
 
 
 # create output directories
@@ -28,13 +28,13 @@ ICON_FILES="icon_3d.svg
 for fl in $ICON_FILES
 do
    NAME=${fl%.*} # strip the file extension
-	inkscape -f $fl -e ../../icons/tmp/22/$NAME.png -w 22 -h 22 --export-area-snap
-	inkscape -f $fl -e ../../icons/tmp/26/$NAME.png -w 26 -h 26 --export-area-snap
-	inkscape -f $fl -e ../../icons/tmp/32/$NAME.png -w 32 -h 32 --export-area-snap
-	inkscape -f $fl -e ../../icons/tmp/48/$NAME.png -w 48 -h 48 --export-area-snap
-	inkscape -f $fl -e ../../icons/tmp/64/$NAME.png -w 64 -h 64 --export-area-snap
-	inkscape -f $fl -e ../../icons/tmp/128/$NAME.png -w 128 -h 128 --export-area-snap
-	inkscape -f $fl -e ../../icons/tmp/256/$NAME.png -w 256 -h 256 --export-area-snap
+	inkscape -o ../../icons/tmp/22/$NAME.png -w 22 -h 22 --export-area-snap $fl
+	inkscape -o ../../icons/tmp/26/$NAME.png -w 26 -h 26 --export-area-snap $fl
+	inkscape -o ../../icons/tmp/32/$NAME.png -w 32 -h 32 --export-area-snap $fl
+	inkscape -o ../../icons/tmp/48/$NAME.png -w 48 -h 48 --export-area-snap $fl
+	inkscape -o ../../icons/tmp/64/$NAME.png -w 64 -h 64 --export-area-snap $fl
+	inkscape -o ../../icons/tmp/128/$NAME.png -w 128 -h 128 --export-area-snap $fl
+	inkscape -o ../../icons/tmp/256/$NAME.png -w 256 -h 256 --export-area-snap $fl
 	echo "file $fl converted."
 done
 
