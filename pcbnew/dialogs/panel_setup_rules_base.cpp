@@ -99,6 +99,7 @@ PANEL_SETUP_RULES_BASE::PANEL_SETUP_RULES_BASE( wxWindow* parent, wxWindowID id,
 
 	// Connect Events
 	m_syntaxHelp->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( PANEL_SETUP_RULES_BASE::OnSyntaxHelp ), NULL, this );
+	m_textEditor->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( PANEL_SETUP_RULES_BASE::OnContextMenu ), NULL, this );
 	m_compileButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_RULES_BASE::OnCompile ), NULL, this );
 	m_errorsReport->Connect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( PANEL_SETUP_RULES_BASE::OnErrorLinkClicked ), NULL, this );
 }
@@ -107,6 +108,7 @@ PANEL_SETUP_RULES_BASE::~PANEL_SETUP_RULES_BASE()
 {
 	// Disconnect Events
 	m_syntaxHelp->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( PANEL_SETUP_RULES_BASE::OnSyntaxHelp ), NULL, this );
+	m_textEditor->Disconnect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( PANEL_SETUP_RULES_BASE::OnContextMenu ), NULL, this );
 	m_compileButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_RULES_BASE::OnCompile ), NULL, this );
 	m_errorsReport->Disconnect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( PANEL_SETUP_RULES_BASE::OnErrorLinkClicked ), NULL, this );
 

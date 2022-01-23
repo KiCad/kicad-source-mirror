@@ -103,6 +103,9 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_Appearance.apply_icon_scale_to_fonts = false;
 #endif
 
+    m_params.emplace_back( new PARAM<int>( "appearance.text_editor_zoom",
+            &m_Appearance.text_editor_zoom, 0 ) );
+
     m_params.emplace_back( new PARAM<bool>( "auto_backup.enabled", &m_Backup.enabled, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "auto_backup.backup_on_autosave",
