@@ -271,9 +271,20 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     wxString   msg;
     int        fullcount = 0;
 
-    // Create output directory if it does not exist. Also transform it in absolute path.
-    // Bail if it fails
-    wxString    path = ExpandEnvVarSubstitutions( m_plotOpts.GetOutputDirectory(), &Prj() );
+    // Create output directory if it does not exist (also transform it in absolute form).
+    // Bail if it fails.
+
+    std::function<bool( wxString* )> textResolver =
+            [&]( wxString* token ) -> bool
+            {
+                // Handles board->GetTitleBlock() *and* board->GetProject()
+                return m_parent->GetBoard()->ResolveTextVar( token, 0 );
+            };
+
+    wxString path = m_plotOpts.GetOutputDirectory();
+    path = ExpandTextVars( path, &textResolver, nullptr, nullptr );
+    path = ExpandEnvVarSubstitutions( path, nullptr );
+
     wxFileName  outputDir = wxFileName::DirName( path );
     wxString    boardFilename = m_parent->GetBoard()->GetFileName();
 
@@ -368,10 +379,20 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
         }
     }
 
-    // Create output directory if it does not exist.
-    // Also transform it in absolute path.
-    // Bail if it fails
-    wxString    path = ExpandEnvVarSubstitutions( m_plotOpts.GetOutputDirectory(), &Prj() );
+    // Create output directory if it does not exist (also transform it in absolute form).
+    // Bail if it fails.
+
+    std::function<bool( wxString* )> textResolver =
+            [&]( wxString* token ) -> bool
+            {
+                // Handles board->GetTitleBlock() *and* board->GetProject()
+                return m_parent->GetBoard()->ResolveTextVar( token, 0 );
+            };
+
+    wxString path = m_plotOpts.GetOutputDirectory();
+    path = ExpandTextVars( path, &textResolver, nullptr, nullptr );
+    path = ExpandEnvVarSubstitutions( path, nullptr );
+
     wxFileName  outputDir = wxFileName::DirName( path );
     wxString    boardFilename = m_parent->GetBoard()->GetFileName();
 
