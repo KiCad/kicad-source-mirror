@@ -796,12 +796,23 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         return;
     }
 
-    // Create output directory if it does not exist (also transform it in
-    // absolute form). Bail if it fails
-    wxString    path = ExpandEnvVarSubstitutions( m_plotOpts.GetOutputDirectory(), &Prj() );
-    wxFileName  outputDir = wxFileName::DirName( path );
-    wxString    boardFilename = m_parent->GetBoard()->GetFileName();
-    REPORTER&   reporter = m_messagesPanel->Reporter();
+    // Create output directory if it does not exist (also transform it in absolute form).
+    // Bail if it fails.
+
+    std::function<bool( wxString* )> textResolver =
+            [&]( wxString* token ) -> bool
+            {
+                // Handles board->GetTitleBlock() *and* board->GetProject()
+                return m_parent->GetBoard()->ResolveTextVar( token, 0 );
+            };
+
+    wxString path = m_plotOpts.GetOutputDirectory();
+    path = ExpandTextVars( path, &textResolver, nullptr, nullptr );
+    path = ExpandEnvVarSubstitutions( path, nullptr );
+
+    wxFileName outputDir = wxFileName::DirName( path );
+    wxString   boardFilename = m_parent->GetBoard()->GetFileName();
+    REPORTER&  reporter = m_messagesPanel->Reporter();
 
     if( !EnsureFileDirectoryExists( &outputDir, boardFilename, &reporter ) )
     {

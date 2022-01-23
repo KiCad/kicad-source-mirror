@@ -380,9 +380,20 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
     if( choice >= arrayDim( filefmt ) )
         choice = 1;
 
-    // Create output directory if it does not exist (also transform it in
-    // absolute form). Bail if it fails
-    wxString    path = ExpandEnvVarSubstitutions( m_plotOpts.GetOutputDirectory(), &Prj() );
+    // Create output directory if it does not exist (also transform it in absolute form).
+    // Bail if it fails.
+
+    std::function<bool( wxString* )> textResolver =
+            [&]( wxString* token ) -> bool
+            {
+                // Handles m_board->GetTitleBlock() *and* m_board->GetProject()
+                return m_board->ResolveTextVar( token, 0 );
+            };
+
+    wxString path = m_plotOpts.GetOutputDirectory();
+    path = ExpandTextVars( path, &textResolver, nullptr, nullptr );
+    path = ExpandEnvVarSubstitutions( path, nullptr );
+
     wxFileName  outputDir = wxFileName::DirName( path );
     wxString    boardFilename = m_board->GetFileName();
 

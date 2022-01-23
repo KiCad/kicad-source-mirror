@@ -437,10 +437,21 @@ bool PLOT_CONTROLLER::OpenPlotfile( const wxString& aSuffix, PLOT_FORMAT aFormat
     ClosePlot();
 
     // Now compute the full filename for the output and start the plot (after ensuring the
-    // output directory is OK)
-    wxString outputDirName = GetPlotOptions().GetOutputDirectory() ;
+    // output directory is OK).
+
+    std::function<bool( wxString* )> textResolver =
+            [&]( wxString* token ) -> bool
+            {
+                // Handles m_board->GetTitleBlock() *and* m_board->GetProject()
+                return m_board->ResolveTextVar( token, 0 );
+            };
+
+    wxString outputDirName = GetPlotOptions().GetOutputDirectory();
+    outputDirName = ExpandTextVars( outputDirName, &textResolver, nullptr, nullptr );
+    outputDirName = ExpandEnvVarSubstitutions( outputDirName, nullptr );
+
     wxFileName outputDir = wxFileName::DirName( outputDirName );
-    wxString boardFilename = m_board->GetFileName();
+    wxString   boardFilename = m_board->GetFileName();
 
     if( EnsureFileDirectoryExists( &outputDir, boardFilename ) )
     {

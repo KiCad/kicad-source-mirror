@@ -248,9 +248,20 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
 {
     m_outputDirectory = m_outputDirectoryName->GetValue();
 
-    // Create output directory if it does not exist (also transform it in
-    // absolute form). Bail if it fails
-    wxString   path = ExpandEnvVarSubstitutions( m_outputDirectory, &Prj() );
+    // Create output directory if it does not exist (also transform it in absolute form).
+    // Bail if it fails.
+
+    std::function<bool( wxString* )> textResolver =
+            [&]( wxString* token ) -> bool
+            {
+                // Handles m_board->GetTitleBlock() *and* m_board->GetProject()
+                return m_board->ResolveTextVar( token, 0 );
+            };
+
+    wxString path = m_outputDirectory;
+    path = ExpandTextVars( path, &textResolver, nullptr, nullptr );
+    path = ExpandEnvVarSubstitutions( path, nullptr );
+
     wxFileName outputDir = wxFileName::DirName( path );
     wxString   boardFilename = m_board->GetFileName();
 
