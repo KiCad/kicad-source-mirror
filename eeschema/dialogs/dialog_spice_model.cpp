@@ -252,20 +252,24 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
     // Passive
     if( page == m_passive )
     {
-        if( !m_disabled->GetValue() && !m_passive->Validate() )
-            return false;
 
         switch( m_pasType->GetSelection() )
         {
         case 0: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_RESISTOR; break;
         case 1: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_CAPACITOR; break;
         case 2: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_INDUCTOR; break;
-
         default:
             wxASSERT_MSG( false, "Unhandled passive type" );
             return false;
             break;
         }
+
+        bool checkValue = m_fieldsTmp[SF_PRIMITIVE] == (char) SP_RESISTOR
+                          || m_fieldsTmp[SF_PRIMITIVE] == (char) SP_CAPACITOR
+                          || m_fieldsTmp[SF_PRIMITIVE] == (char) SP_INDUCTOR;
+
+        if( checkValue && !m_disabled->GetValue() && !m_passive->Validate() )
+            return false;
 
         m_fieldsTmp[SF_MODEL] = m_pasValue->GetValue();
     }
@@ -293,6 +297,34 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
 
         m_fieldsTmp[SF_PRIMITIVE] = (char)( m_pwrType->GetSelection() ? SP_ISOURCE : SP_VSOURCE );
         m_fieldsTmp[SF_MODEL] = model;
+    }
+    else if( page == m_tline )
+    {
+        wxWindow* subpage = m_tlineNotebook->GetCurrentPage();
+        wxString  model;
+
+        if( subpage == m_tlineLossless )
+        {
+            m_fieldsTmp[SF_PRIMITIVE] = (char) SP_TLINE;
+
+            if( !generateTlineLossless( model ) )
+                return false;
+
+            m_fieldsTmp[SF_MODEL] = model;
+        }
+        else if( subpage == m_tlineLossy )
+        {
+            m_fieldsTmp[SF_PRIMITIVE] = (char) SP_TLINE_LOSSY;
+
+            if( !generateTlineLossy( model ) )
+                return false;
+
+            m_fieldsTmp[SF_MODEL] = model;
+        }
+        else
+        {
+            wxASSERT_MSG( false, "Unhandled transmission line type" );
+        }
     }
     else
     {
@@ -388,13 +420,26 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
         case SP_CAPACITOR:
         case SP_INDUCTOR:
             m_notebook->SetSelection( m_notebook->FindPage( m_passive ) );
-            m_pasType->SetSelection( primitive == SP_RESISTOR ? 0
-                    : primitive == SP_CAPACITOR ? 1
-                    : primitive == SP_INDUCTOR ? 2
-                    : -1 );
+            m_pasType->SetSelection( primitive == SP_RESISTOR    ? 0
+                                     : primitive == SP_CAPACITOR ? 1
+                                     : primitive == SP_INDUCTOR  ? 2
+                                                                 : -1 );
             m_pasValue->SetValue( m_fieldsTmp[SF_MODEL] );
             break;
+        case SP_TLINE:
+            m_notebook->SetSelection( m_notebook->FindPage( m_tline ) );
+            m_tlineNotebook->SetSelection( m_tlineNotebook->FindPage( m_tlineLossless ) );
 
+            if( !parseLosslessTline( m_fieldsTmp[SF_MODEL] ) )
+                return false;
+            break;
+        case SP_TLINE_LOSSY:
+            m_notebook->SetSelection( m_notebook->FindPage( m_tline ) );
+            m_tlineNotebook->SetSelection( m_tlineNotebook->FindPage( m_tlineLossy ) );
+
+            if( !parseLossyTline( m_fieldsTmp[SF_MODEL] ) )
+                return false;
+            break;
         case SP_DIODE:
         case SP_BJT:
         case SP_MOSFET:
@@ -478,6 +523,88 @@ void DIALOG_SPICE_MODEL::showPinOrderNote( int aModelType )
     }
 
     m_stInfoNote->SetLabel( msg );
+}
+
+bool DIALOG_SPICE_MODEL::parseLosslessTline( const wxString& aModel )
+{
+    if( aModel.IsEmpty() )
+        return false;
+
+    wxStringTokenizer tokenizer( aModel, " " );
+
+    while( tokenizer.HasMoreTokens() )
+    {
+        // Get the next token now, so if any of the branches catches an exception, try to
+        // process it in another branch
+        wxString tkn = tokenizer.GetNextToken().Lower();
+
+        if( tkn.SubString( 0, 2 ) == "z0=" )
+        {
+            m_tlineLosslessImpedance->SetValue( tkn.AfterFirst( wxUniChar( '=' ) ) );
+        }
+        else if( tkn.SubString( 0, 2 ) == "td=" )
+        {
+            m_tlineLosslessDelay->SetValue( tkn.AfterFirst( wxUniChar( '=' ) ) );
+            m_tlineLosslessDelayMode->SetSelection( 0 );
+        }
+        else if( tkn.SubString( 0, 1 ) == "f=" )
+        {
+            m_tlineLosslessFrequency->SetValue( tkn.AfterFirst( wxUniChar( '=' ) ) );
+            m_tlineLosslessDelayMode->SetSelection( 1 );
+        }
+        else if( tkn.SubString( 0, 2 ) == "nl=" )
+        {
+            m_tlineLosslessWavelength->SetValue( tkn.AfterFirst( wxUniChar( '=' ) ) );
+            m_tlineLosslessDelayMode->SetSelection( 1 );
+        }
+    }
+    return true;
+}
+
+bool DIALOG_SPICE_MODEL::parseLossyTline( const wxString& aModel )
+{
+    if( aModel.IsEmpty() )
+        return false;
+
+    wxStringTokenizer tokenizer( aModel, " " );
+
+    wxString extraParam = "";
+
+    while( tokenizer.HasMoreTokens() )
+    {
+        // Get the next token now, so if any of the branches catches an exception, try to
+        // process it in another branch
+        wxString tkn = tokenizer.GetNextToken().Lower();
+
+        if( tkn.SubString( 0, 1 ) == "r=" )
+        {
+            m_tlineLossyR->SetValue( tkn.AfterFirst( wxUniChar( '=' ) ) );
+        }
+        else if( tkn.SubString( 0, 1 ) == "l=" )
+        {
+            m_tlineLossyL->SetValue( tkn.AfterFirst( wxUniChar( '=' ) ) );
+        }
+        else if( tkn.SubString( 0, 1 ) == "c=" )
+        {
+            m_tlineLossyC->SetValue( tkn.AfterFirst( wxUniChar( '=' ) ) );
+        }
+        else if( tkn.SubString( 0, 1 ) == "g=" )
+        {
+            m_tlineLossyG->SetValue( tkn.AfterFirst( wxUniChar( '=' ) ) );
+        }
+        else if( tkn.SubString( 0, 3 ) == "len=" )
+        {
+            m_tlineLossyLen->SetValue( tkn.AfterFirst( wxUniChar( '=' ) ) );
+        }
+
+        else
+        {
+            extraParam += tkn + " ";
+        }
+    }
+    m_tlineLossyParams->SetValue( extraParam );
+
+    return true;
 }
 
 
@@ -660,6 +787,139 @@ bool DIALOG_SPICE_MODEL::parsePowerSource( const wxString& aModel )
     return true;
 }
 
+
+bool DIALOG_SPICE_MODEL::generateTlineLossless( wxString& aTarget )
+{
+    wxString result = "";
+
+    try
+    {
+        if( !empty( m_tlineLosslessImpedance ) )
+            result += wxString::Format(
+                    "Z0=%s ", SPICE_VALUE( m_tlineLosslessImpedance->GetValue() ).ToSpiceString() );
+    }
+    catch( ... )
+    {
+        DisplayError( this, _( "Invalid Impedance value" ) );
+        return false;
+    }
+
+
+    if( m_tlineLosslessDelayMode->GetSelection() == 0 )
+    {
+        try
+        {
+            if( !empty( m_tlineLosslessDelay ) )
+                result += wxString::Format(
+                        "TD=%s ", SPICE_VALUE( m_tlineLosslessDelay->GetValue() ).ToSpiceString() );
+        }
+        catch( ... )
+        {
+            DisplayError( this, _( "Invalid delay value" ) );
+            return false;
+        }
+    }
+    else if( m_tlineLosslessDelayMode->GetSelection() == 1 )
+    {
+        try
+        {
+            if( !empty( m_tlineLosslessFrequency ) )
+                result += wxString::Format(
+                        "F=%s ",
+                        SPICE_VALUE( m_tlineLosslessFrequency->GetValue() ).ToSpiceString() );
+        }
+        catch( ... )
+        {
+            DisplayError( this, _( "Invalid frequency value" ) );
+            return false;
+        }
+        try
+        {
+            if( !empty( m_tlineLosslessWavelength ) )
+                result += wxString::Format(
+                        "NL=%s ",
+                        SPICE_VALUE( m_tlineLosslessWavelength->GetValue() ).ToSpiceString() );
+        }
+        catch( ... )
+        {
+            DisplayError( this, _( "Invalid length in wavelength value" ) );
+            return false;
+        }
+    }
+    else
+    {
+        return false;
+    }
+
+    aTarget += result;
+    return true;
+}
+
+bool DIALOG_SPICE_MODEL::generateTlineLossy( wxString& aTarget )
+{
+    wxString result;
+
+    try
+    {
+        if( !empty( m_tlineLossyR ) )
+            result += wxString::Format( "r=%s ",
+                                        SPICE_VALUE( m_tlineLossyR->GetValue() ).ToSpiceString() );
+    }
+    catch( ... )
+    {
+        DisplayError( this, _( "Invalid resistance value" ) );
+        return false;
+    }
+    try
+    {
+        if( !empty( m_tlineLossyC ) )
+            result += wxString::Format( "c=%s ",
+                                        SPICE_VALUE( m_tlineLossyC->GetValue() ).ToSpiceString() );
+    }
+    catch( ... )
+    {
+        DisplayError( this, _( "Invalid capacitance value" ) );
+        return false;
+    }
+    try
+    {
+        if( !empty( m_tlineLossyL ) )
+            result += wxString::Format( "l=%s ",
+                                        SPICE_VALUE( m_tlineLossyL->GetValue() ).ToSpiceString() );
+    }
+    catch( ... )
+    {
+        DisplayError( this, _( "Invalid inductance value" ) );
+        return false;
+    }
+    try
+    {
+        if( !empty( m_tlineLossyG ) )
+            result += wxString::Format( "g=%s ",
+                                        SPICE_VALUE( m_tlineLossyG->GetValue() ).ToSpiceString() );
+    }
+    catch( ... )
+    {
+        DisplayError( this, _( "Invalid conductance value" ) );
+        return false;
+    }
+    try
+    {
+        if( !empty( m_tlineLossyLen ) )
+            result += wxString::Format(
+                    "len=%s ", SPICE_VALUE( m_tlineLossyLen->GetValue() ).ToSpiceString() );
+    }
+    catch( ... )
+    {
+        DisplayError( this, _( "Invalid length value" ) );
+        return false;
+    }
+
+    result += m_tlineLossyParams->GetValue();
+
+    aTarget += result;
+    return true;
+}
 
 bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget )
 {

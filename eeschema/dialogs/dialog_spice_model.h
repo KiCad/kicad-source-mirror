@@ -56,6 +56,23 @@ private:
     bool parsePowerSource( const wxString& aModel );
 
     /**
+     * Parse a string describing a lossless transmission line, so appropriate settings are checked in the dialog.
+     *
+     * @param aModel contains the string to be parse (e.g. "Z0=50 td=10n")
+     * @return True if the input string was parsed without errors.
+     */
+    bool parseLosslessTline( const wxString& aModel );
+
+    /**
+     * Parse a string describing a lossy transmission line, so appropriate settings are checked in the dialog.
+     *
+     * @param aModel contains the string to be parse (e.g. "R=50 C=10 LEN=1")
+     * @return True if the input string was parsed without errors.
+     */
+    bool parseLossyTline( const wxString& aModel );
+
+
+    /**
      * Generate a string to describe power source parameters, basing on the current selection.
      *
      * If there are missing fields, it will not modify the target string.
@@ -64,6 +81,26 @@ private:
      * @return True if the string was saved successfully.
      */
     bool generatePowerSource( wxString& aTarget );
+
+    /**
+     * Generate a string to describe a transmission line model, basing on the current selection.
+     *
+     * If there are missing fields, it will not modify the target string.
+     *
+     * @param aTarget is the destination for the generated string.
+     * @return True if the string was saved successfully.
+     */
+    bool generateTlineLossless( wxString& aTarget );
+
+    /**
+     * Generate a string to describe a transmission line model, basing on the current selection.
+     *
+     * If there are missing fields, it will not modify the target string.
+     *
+     * @param aTarget is the destination for the generated string.
+     * @return True if the string was saved successfully.
+     */
+    bool generateTlineLossy( wxString& aTarget );
 
     /**
      * Load a list of components (.model and .subckt) from a spice library file and add them to

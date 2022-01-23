@@ -928,6 +928,187 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_power->Layout();
 	bSizer4->Fit( m_power );
 	m_notebook->AddPage( m_power, _("Source"), false );
+	m_tline = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_tline->SetMinSize( wxSize( 650,-1 ) );
+
+	wxBoxSizer* bSizer42;
+	bSizer42 = new wxBoxSizer( wxVERTICAL );
+
+	wxStaticBoxSizer* sbSizer31;
+	sbSizer31 = new wxStaticBoxSizer( new wxStaticBox( m_tline, wxID_ANY, _("Line model") ), wxVERTICAL );
+
+	m_tlineNotebook = new wxNotebook( sbSizer31->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_tlineLossless = new wxPanel( m_tlineNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxFlexGridSizer* fgSizer131;
+	fgSizer131 = new wxFlexGridSizer( 0, 1, 0, 0 );
+	fgSizer131->AddGrowableCol( 1 );
+	fgSizer131->SetFlexibleDirection( wxBOTH );
+	fgSizer131->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxFlexGridSizer* fgSizer1311;
+	fgSizer1311 = new wxFlexGridSizer( 4, 3, 0, 0 );
+	fgSizer1311->AddGrowableCol( 1 );
+	fgSizer1311->SetFlexibleDirection( wxBOTH );
+	fgSizer1311->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_staticText2671111 = new wxStaticText( m_tlineLossless, wxID_ANY, _("Characteristic impedance"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2671111->Wrap( -1 );
+	fgSizer1311->Add( m_staticText2671111, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_tlineLosslessImpedance = new wxTextCtrl( m_tlineLossless, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1311->Add( m_tlineLosslessImpedance, 0, wxALL|wxEXPAND, 5 );
+
+	m_staticText26211111 = new wxStaticText( m_tlineLossless, wxID_ANY, _("ohm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText26211111->Wrap( -1 );
+	fgSizer1311->Add( m_staticText26211111, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_staticText26711111 = new wxStaticText( m_tlineLossless, wxID_ANY, _("Propagation delay"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText26711111->Wrap( -1 );
+	fgSizer1311->Add( m_staticText26711111, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_tlineLosslessDelay = new wxTextCtrl( m_tlineLossless, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1311->Add( m_tlineLosslessDelay, 0, wxALL, 5 );
+
+	m_staticText262111111 = new wxStaticText( m_tlineLossless, wxID_ANY, _("s"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText262111111->Wrap( -1 );
+	fgSizer1311->Add( m_staticText262111111, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_staticText267111111 = new wxStaticText( m_tlineLossless, wxID_ANY, _("Frequency"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText267111111->Wrap( -1 );
+	fgSizer1311->Add( m_staticText267111111, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_tlineLosslessFrequency = new wxTextCtrl( m_tlineLossless, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1311->Add( m_tlineLosslessFrequency, 1, wxALL, 5 );
+
+	m_staticText2621111111 = new wxStaticText( m_tlineLossless, wxID_ANY, _("Hz"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2621111111->Wrap( -1 );
+	fgSizer1311->Add( m_staticText2621111111, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_staticText2671111111 = new wxStaticText( m_tlineLossless, wxID_ANY, _("Length in wavelength"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2671111111->Wrap( -1 );
+	fgSizer1311->Add( m_staticText2671111111, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_tlineLosslessWavelength = new wxTextCtrl( m_tlineLossless, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1311->Add( m_tlineLosslessWavelength, 1, wxALL, 5 );
+
+
+	fgSizer1311->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizer131->Add( fgSizer1311, 100, wxEXPAND, 5 );
+
+	wxString m_tlineLosslessDelayModeChoices[] = { _("Use time delay"), _("Use frequency and number of wavelength") };
+	int m_tlineLosslessDelayModeNChoices = sizeof( m_tlineLosslessDelayModeChoices ) / sizeof( wxString );
+	m_tlineLosslessDelayMode = new wxRadioBox( m_tlineLossless, wxID_ANY, _("Delay / Electrical length"), wxDefaultPosition, wxDefaultSize, m_tlineLosslessDelayModeNChoices, m_tlineLosslessDelayModeChoices, 1, wxRA_SPECIFY_COLS );
+	m_tlineLosslessDelayMode->SetSelection( 0 );
+	fgSizer131->Add( m_tlineLosslessDelayMode, 0, wxALL, 5 );
+
+
+	m_tlineLossless->SetSizer( fgSizer131 );
+	m_tlineLossless->Layout();
+	fgSizer131->Fit( m_tlineLossless );
+	m_tlineNotebook->AddPage( m_tlineLossless, _("Lossless"), true );
+	m_tlineLossy = new wxPanel( m_tlineNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxFlexGridSizer* fgSizer1312;
+	fgSizer1312 = new wxFlexGridSizer( 0, 1, 0, 0 );
+	fgSizer1312->AddGrowableCol( 1 );
+	fgSizer1312->SetFlexibleDirection( wxBOTH );
+	fgSizer1312->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxFlexGridSizer* fgSizer13111;
+	fgSizer13111 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer13111->AddGrowableCol( 1 );
+	fgSizer13111->SetFlexibleDirection( wxBOTH );
+	fgSizer13111->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_staticText26711112 = new wxStaticText( m_tlineLossy, wxID_ANY, _("Resistance per unit length"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText26711112->Wrap( -1 );
+	fgSizer13111->Add( m_staticText26711112, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_tlineLossyR = new wxTextCtrl( m_tlineLossy, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer13111->Add( m_tlineLossyR, 0, wxALL|wxEXPAND, 5 );
+
+	m_staticText262111112 = new wxStaticText( m_tlineLossy, wxID_ANY, _("ohm / unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText262111112->Wrap( -1 );
+	fgSizer13111->Add( m_staticText262111112, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_staticText267111112 = new wxStaticText( m_tlineLossy, wxID_ANY, _("Inductance per unit length"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText267111112->Wrap( -1 );
+	fgSizer13111->Add( m_staticText267111112, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_tlineLossyL = new wxTextCtrl( m_tlineLossy, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer13111->Add( m_tlineLossyL, 0, wxALL|wxEXPAND, 5 );
+
+	m_staticText2621111112 = new wxStaticText( m_tlineLossy, wxID_ANY, _("henry / unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2621111112->Wrap( -1 );
+	fgSizer13111->Add( m_staticText2621111112, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_staticText2671111112 = new wxStaticText( m_tlineLossy, wxID_ANY, _("Capacitance per unit length"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2671111112->Wrap( -1 );
+	fgSizer13111->Add( m_staticText2671111112, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_tlineLossyC = new wxTextCtrl( m_tlineLossy, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer13111->Add( m_tlineLossyC, 1, wxALL|wxEXPAND, 5 );
+
+	m_staticText26211111111 = new wxStaticText( m_tlineLossy, wxID_ANY, _("farad / unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText26211111111->Wrap( -1 );
+	fgSizer13111->Add( m_staticText26211111111, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_staticText26711111111 = new wxStaticText( m_tlineLossy, wxID_ANY, _("Conductance per unit length"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText26711111111->Wrap( -1 );
+	fgSizer13111->Add( m_staticText26711111111, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_tlineLossyG = new wxTextCtrl( m_tlineLossy, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer13111->Add( m_tlineLossyG, 1, wxALL|wxEXPAND, 5 );
+
+	m_staticText262111111111 = new wxStaticText( m_tlineLossy, wxID_ANY, _("siemens / unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText262111111111->Wrap( -1 );
+	fgSizer13111->Add( m_staticText262111111111, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_staticText267111111111 = new wxStaticText( m_tlineLossy, wxID_ANY, _("Length"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText267111111111->Wrap( -1 );
+	fgSizer13111->Add( m_staticText267111111111, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_tlineLossyLen = new wxTextCtrl( m_tlineLossy, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer13111->Add( m_tlineLossyLen, 0, wxALL|wxEXPAND, 5 );
+
+	m_staticText262111111112 = new wxStaticText( m_tlineLossy, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText262111111112->Wrap( -1 );
+	fgSizer13111->Add( m_staticText262111111112, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_staticText2671111111111 = new wxStaticText( m_tlineLossy, wxID_ANY, _("Extra parameters"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2671111111111->Wrap( -1 );
+	fgSizer13111->Add( m_staticText2671111111111, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_tlineLossyParams = new wxTextCtrl( m_tlineLossy, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer13111->Add( m_tlineLossyParams, 0, wxALL|wxEXPAND, 5 );
+
+
+	fgSizer1312->Add( fgSizer13111, 1, wxALL|wxEXPAND, 5 );
+
+	m_staticline21 = new wxStaticLine( m_tlineLossy, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgSizer1312->Add( m_staticline21, 0, wxEXPAND | wxALL, 5 );
+
+	m_staticText1812 = new wxStaticText( m_tlineLossy, wxID_ANY, _("The following types of lines have been implemented so far:\n\n- RLC\n- RC\n- LC\n- RG\n\nAny other combination will yield erroneous results and should not be tried."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1812->Wrap( -1 );
+	fgSizer1312->Add( m_staticText1812, 0, wxALL|wxEXPAND, 5 );
+
+
+	m_tlineLossy->SetSizer( fgSizer1312 );
+	m_tlineLossy->Layout();
+	fgSizer1312->Fit( m_tlineLossy );
+	m_tlineNotebook->AddPage( m_tlineLossy, _("Lossy"), false );
+
+	sbSizer31->Add( m_tlineNotebook, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+
+	bSizer42->Add( sbSizer31, 0, wxALL|wxEXPAND, 5 );
+
+
+	m_tline->SetSizer( bSizer42 );
+	m_tline->Layout();
+	bSizer42->Fit( m_tline );
+	m_notebook->AddPage( m_tline, _("Transmission Line"), true );
 
 	bSizer1->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
 
