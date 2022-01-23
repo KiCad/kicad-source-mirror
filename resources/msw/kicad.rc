@@ -1,4 +1,10 @@
+#include <kicad_build_version.h>
+
+#if KICAD_IS_NIGHTLY
+icon_kicad ICON "../bitmaps_png/icons/icon_kicad_nightly.ico"
+#else
 icon_kicad ICON "../bitmaps_png/icons/icon_kicad.ico"
+#endif
 
 #define RC_VER_FILE_DESCRIPTION "KiCad EDA " KICAD_WIN32_RC_PRODVER_STR
 #define RC_VER_INTERNALNAME "kicad"
