@@ -41,9 +41,9 @@ if( CMAKE_MATCH_COUNT EQUAL 2 )
     set( KICAD_MINOR_VERSION "${CMAKE_MATCH_2}" )
 
     if( KICAD_MINOR_VERSION STREQUAL "99" )
-    set( KICAD_IS_NIGHTLY "1" )
+        set( KICAD_IS_NIGHTLY "1" )
     else()
-    set( KICAD_IS_NIGHTLY "0" )
+        set( KICAD_IS_NIGHTLY "0" )
     endif()
 
     set( KICAD_WIN32_RC_FILEVER_STR "${CMAKE_MATCH_1}.${CMAKE_MATCH_2}.0.${KICAD_GIT_REV}\\0" )
