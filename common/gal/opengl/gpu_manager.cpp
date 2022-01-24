@@ -219,7 +219,7 @@ void GPU_CACHED_MANAGER::EndDrawing()
     cntDraw.Stop();
 
     KI_TRACE( traceGalProfile,
-              "Cached manager size: VBO size %u iranges %llu max elt size %u drawcalls %u\n",
+              "Cached manager size: VBO size %u iranges %zu max elt size %u drawcalls %u\n",
               cached->AllItemsSize(), m_vranges.size(), m_indexBufMaxSize, drawCalls );
     KI_TRACE( traceGalProfile, "Timing: %s\n", cntDraw.to_string() );
 
