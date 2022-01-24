@@ -4,6 +4,9 @@ if( KICAD_USE_3DCONNEXION )
 	    "nl_pcbnew_plugin_impl.cpp"
     )
 
+    # pcbnew_navlib depends on make_lexer outputs in common
+    add_dependencies( pcbnew_navlib pcbcommon )
+
     # Find the 3DxWare SDK component 3DxWare::NlClient
     # find_package(TDxWare_SDK 4.0 REQUIRED COMPONENTS 3DxWare::Navlib)
     target_compile_definitions(pcbnew_navlib PRIVATE
