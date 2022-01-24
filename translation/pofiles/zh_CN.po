@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
 "PO-Revision-Date: 2022-01-30 12:26+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v6/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -29672,7 +29672,7 @@ msgstr "KiCad 封装编辑器"
 
 #: pcbnew/footprint_edit_frame.cpp:200 pcbnew/zone_settings.cpp:219
 msgid "Inner layers"
-msgstr "Inner layers"
+msgstr "内部图层"
 
 #: pcbnew/footprint_edit_frame.cpp:239 pcbnew/pcb_edit_frame.cpp:279
 msgid "Selection Filter"
