@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2022-01-15 22:43+0000\n"
+"PO-Revision-Date: 2022-02-01 13:57+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.11-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -4955,11 +4955,11 @@ msgstr "F.Paste"
 
 #: common/layer_id.cpp:70
 msgid "B.Silkscreen"
-msgstr "底層絲印層"
+msgstr "B.Silkscreen"
 
 #: common/layer_id.cpp:71
 msgid "F.Silkscreen"
-msgstr "頂層絲印層"
+msgstr "F.Silkscreen"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
@@ -4991,15 +4991,15 @@ msgstr "Edge.Cuts"
 
 #: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:656
 msgid "Margin"
-msgstr "邊界"
+msgstr "Margin"
 
 #: common/layer_id.cpp:84
 msgid "F.Courtyard"
-msgstr "頂層外框層"
+msgstr "F.Courtyard"
 
 #: common/layer_id.cpp:85
 msgid "B.Courtyard"
-msgstr "底層外框層"
+msgstr "B.Courtyard"
 
 #: common/layer_id.cpp:86
 msgid "F.Fab"
@@ -10250,7 +10250,7 @@ msgstr "原理圖設定"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Import Settings from Another Project..."
-msgstr "從另一個專案匯入設定..."
+msgstr "從另一個工程匯入設定..."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:74
 msgid "Electrical Rules"
@@ -10286,7 +10286,7 @@ msgid ""
 "Project file %s could not be loaded."
 msgstr ""
 "從專案匯入設定時出錯：\n"
-"無法載入專案檔案 %s。"
+"無法載入工程檔案 %s。"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:81
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:158
@@ -12632,7 +12632,7 @@ msgstr "在專案檔案符號庫列表中找到非法條目。"
 
 #: eeschema/files-io.cpp:386
 msgid "Project Load Warning"
-msgstr "專案載入警告"
+msgstr "工程載入警告"
 
 #: eeschema/files-io.cpp:389
 msgid ""
@@ -13026,7 +13026,7 @@ msgstr "插入原理表內容..."
 #: eeschema/menubar.cpp:94
 msgid ""
 "Append schematic sheet content from another project to the current sheet"
-msgstr "將其它專案中的原理圖新增到當前圖頁中"
+msgstr "將其它工程中的原理圖新增到當前圖頁中"
 
 #: eeschema/menubar.cpp:102 pcbnew/menubar_footprint_editor.cpp:65
 #: pcbnew/menubar_pcb_editor.cpp:107
@@ -13511,7 +13511,7 @@ msgstr "未知的記錄編號： %d。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:654
 #, c-format
 msgid "Pin's owner (%d) not found."
-msgstr "找不到引腳的所有者（%d）。"
+msgstr "找不到引腳的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:699
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1876
@@ -13533,12 +13533,12 @@ msgstr "引腳的內邊緣型別出乎意料。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:909
 #, c-format
 msgid "Label's owner (%d) not found."
-msgstr "找不到標籤的所有者（%d）。"
+msgstr "找不到標籤的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1026
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
-msgstr "貝塞爾曲線有 %d 個控制點。預期至少2 個。"
+msgstr "貝塞爾曲線有 %d 個控制點。預期至少 2 個。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1082
 #, c-format
@@ -13548,17 +13548,17 @@ msgstr "找不到貝塞爾曲線的所有者 (%d)。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1183
 #, c-format
 msgid "Polyline's owner (%d) not found."
-msgstr "找不到多段線的所有者（%d）。"
+msgstr "找不到多段線的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1230
 #, c-format
 msgid "Polygon's owner (%d) not found."
-msgstr "找不到多邊形的所有者（%d）。"
+msgstr "找不到多邊形的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1280
 #, c-format
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "找不到圓角矩形的所有者（%d）。"
+msgstr "找不到圓角矩形的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1345
 #, c-format
@@ -13568,12 +13568,12 @@ msgstr "找不到圓弧所有者 (%d)。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1412
 #, c-format
 msgid "Line's owner (%d) not found."
-msgstr "找不到線的所有者（%d）。"
+msgstr "找不到線的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1460
 #, c-format
 msgid "Rectangle's owner (%d) not found."
-msgstr "找不到矩形的所有者（%d）。"
+msgstr "找不到矩形的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1521
 #, c-format
@@ -13613,12 +13613,12 @@ msgstr "找不到檔案“%s”。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2215
 #, c-format
 msgid "Sheetname's owner (%d) not found."
-msgstr "找不到大料名稱的所有者（%d）。"
+msgstr "找不到大料名稱的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2238
 #, c-format
 msgid "Filename's owner (%d) not found."
-msgstr "找不到檔名的所有者（%d）。"
+msgstr "找不到檔名的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2272
 #, c-format
@@ -13628,12 +13628,12 @@ msgstr "找不到指示符所有者 (%d)。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2407
 #, c-format
 msgid "Implementation's owner (%d) not found."
-msgstr "找不到實現的所有者（%d）。"
+msgstr "找不到實現的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2417
 #, c-format
 msgid "Footprint's owner (%d) not found."
-msgstr "找不到封裝的所有者（%d）。"
+msgstr "找不到封裝的所有者 (%d)。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:75
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:73
@@ -13733,9 +13733,7 @@ msgid ""
 "Symbol '%s' is scaled in the original CADSTAR schematic but this is not "
 "supported in KiCad. When the symbol is reloaded from the library, it will "
 "revert to the original 1:1 scale."
-msgstr ""
-"符號 '%s' 在原始 CADSTAR 原理圖中按比例縮放，但 KiCad 不支援。當符號從庫中重"
-"新載入時，它將恢復到原來的1:1比例。"
+msgstr "符號 '%s' 在原始 CADSTAR 原理圖中按比例縮放，但 KiCad 不支援。當符號從庫中重新載入時，它將恢復到原來的 1:1 比例。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1187
 #, c-format
@@ -13746,7 +13744,7 @@ msgstr "文件符號 '%s' 是指庫中不存在的符號定義 ID '%s'。未載�
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1296
 msgid "Text Variables could not be set as there is no project attached."
-msgstr "由於原理圖沒有附加在專案中，因此無法設定文字變數。"
+msgstr "由於原理圖沒有附加在工程中，因此無法設定文字變數。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1739
 #, c-format
@@ -13754,9 +13752,7 @@ msgid ""
 "Symbol '%s' is rotated by an angle of %.1f degrees in the original CADSTAR "
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
-msgstr ""
-"在原始CADSTAR設計中，符號'%s'旋轉了%.1f度角，但KiCad僅支援90度倍數的旋轉角。"
-"連線線將需要手動固定。"
+msgstr "在原始CADSTAR設計中，符號 '%s' 旋轉了 %.1f 度角，但 KiCad 僅支援 90 度倍數的旋轉角。連線線將需要手動固定。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1753
 #, c-format
@@ -13779,8 +13775,8 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
-"原理圖塊ID %s（塊名稱：“ %s”）繪製在圖紙“ %s”上，但未連結到專案中的另一張圖"
-"紙。 KiCad要求將所有圖紙符號都與圖紙相關聯，因此未載入該圖塊。"
+"原理圖塊 ID %s（塊名稱：“%s”）繪製在圖紙“%s”上，但未連結到專案中的另一張圖紙。 KiCad "
+"要求將所有圖紙符號都與圖紙相關聯，因此未載入該圖塊。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2214
 #, c-format
@@ -13986,7 +13982,7 @@ msgstr "需要“斜體”或 \"~\" 符號"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1764
 msgid "symbol field text attributes must be 3 characters wide"
-msgstr "符號欄位文字屬性必須是3個字元寬"
+msgstr "符號欄位文字屬性必須是 3 個字元寬"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2618
 msgid "Unexpected end of file."
@@ -14837,23 +14833,23 @@ msgstr "時間"
 
 #: eeschema/sim/sim_plot_panel.cpp:423
 msgid "Voltage (swept)"
-msgstr "電壓（掃描）"
+msgstr "電壓 (掃描)"
 
 #: eeschema/sim/sim_plot_panel.cpp:427
 msgid "Current (swept)"
-msgstr "電流 (swept)"
+msgstr "電流 (掃描)"
 
 #: eeschema/sim/sim_plot_panel.cpp:430
 msgid "Resistance (swept)"
-msgstr "電阻 (swept)"
+msgstr "電阻 (掃描)"
 
 #: eeschema/sim/sim_plot_panel.cpp:434
 msgid "Temperature (swept)"
-msgstr "溫度 (swept)"
+msgstr "溫度 (掃描)"
 
 #: eeschema/sim/sim_plot_panel.cpp:439
 msgid "Voltage (measured)"
-msgstr "電壓(測量)"
+msgstr "電壓 (測量)"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -16507,8 +16503,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>重複引腳%s</b>%s，位於 <b>(%.3f, %.3f)</b>，和引腳 %s%s衝突，後者位於轉換"
-"後的座標 <b>(%.3f, %.3f)</b>。"
+"<b>重複引腳 %s</b> %s，位於 <b>(%.3f, %.3f)</b>，和引腳 %s%s 衝突，後者位於轉換後的座標 <b>(%.3f, %."
+"3f)</b>。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:278
 #, c-format
@@ -16516,17 +16512,15 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted."
 msgstr ""
-"<b>重複引腳%s</b>%s，位置 <b>(%.3f, %.3f)</b>，與引腳 %s%s 衝突，後者位於 "
-"<b>(%.3f, %.3f)</b>, 衝突區域在轉換後的單元 %c 和 %c。"
+"<b>重複引腳 %s</b> %s，位置 <b>(%.3f, %.3f)</b>，與引腳 %s%s 衝突，後者位於 <b>(%.3f, %.3f)</"
+"b>, 衝突區域在轉換後的單元 %c 和 %c。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:297
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b>."
-msgstr ""
-"<b>重複引腳%s</b> %s，位置 <b>(%s, %s)</b>，和引腳 %s%s衝突，後者位於 <b>(%s,"
-"%s)</b>。"
+msgstr "<b>重複引腳 %s</b> %s，位置 <b>(%s, %s)</b>，和引腳 %s%s 衝突，後者位於 <b>(%s,%s)</b>。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:310
 #, c-format
@@ -16534,8 +16528,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b> in units %c and %c."
 msgstr ""
-"<b>重複引腳 %s</b> %s，位置 <b>(%s, %s)</b>，和引腳 %s%s衝突，後者位於 "
-"<b>(%s, %s)</b>，衝突區域在單元 %c 和 %c。"
+"<b>重複引腳 %s</b> %s，位置 <b>(%s, %s)</b>，和引腳 %s%s 衝突，後者位於 <b>(%s, %s)</b>，"
+"衝突區域在單元 %c 和 %c。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:348
 #, c-format
@@ -16548,9 +16542,7 @@ msgstr "資訊：<b>隱藏的電源引腳 %s</b>%s 位於轉換的位置 <b>(%s,
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of converted."
-msgstr ""
-"資訊：<b>隱藏的電源引腳%s</b>%s，位於 <b>(%s, %s)</b>，此座標在轉換後的單元 "
-"%c 中。"
+msgstr "資訊：<b>隱藏的電源引腳 %s</b>%s，位於 <b>(%s, %s)</b>，此座標在轉換後的單元 %c 中。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:370
 #, c-format
@@ -16561,8 +16553,7 @@ msgstr "資訊：<b>隱藏的電源引腳 %s</b> %s，位於<b>(%s, %s)</b>。"
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr ""
-"資訊：<b>隱藏的電源引腳%s</b>%s，位於 <b>(%s, %s)</b>，此座標在單元 %c 中。"
+msgstr "資訊：<b>隱藏的電源引腳 %s</b>%s，位於 <b>(%s, %s)</b>，此座標在單元 %c 中。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:389
 msgid ""
@@ -16579,8 +16570,7 @@ msgstr "<b>網格外引腳 %s</b>%s 位於轉換的位置 <b>(%s, %s)</b>。"
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
 "converted."
-msgstr ""
-"<b>網格外引腳%s</b>%s，位於 <b>(%.3s, %.3s)</b>，此座標在轉換後的單元 %c 中。"
+msgstr "<b>網格外引腳 %s</b>%s，位於 <b>(%.3s, %.3s)</b>，此座標在轉換後的單元 %c 中。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:424
 #, c-format
@@ -16590,7 +16580,7 @@ msgstr "<b>網格外引腳 %s</b> %s，位於 <b>(%s,%s)</b>。"
 #: eeschema/tools/ee_inspection_tool.cpp:432
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr "<b>網格外引腳%s</b>%s，位於 <b>(%s,%s )</b>，此座標在單元 %c 中。"
+msgstr "<b>網格外引腳 %s</b>%s，位於 <b>(%s,%s )</b>，此座標在單元 %c 中。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:449
 msgid "No symbol issues found."
@@ -16823,31 +16813,31 @@ msgstr " X "
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "10A Log"
-msgstr ""
+msgstr "10A Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15A Log"
-msgstr ""
+msgstr "15A Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15A Log S"
-msgstr ""
+msgstr "15A Log S"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "10C Rev Log"
-msgstr ""
+msgstr "10C Rev Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15C Rev Log"
-msgstr ""
+msgstr "15C Rev Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15C Rev Log S"
-msgstr ""
+msgstr "15C Rev Log S"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "0B Lin"
-msgstr ""
+msgstr "0B Lin"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "4B S-Curve"
@@ -17118,7 +17108,7 @@ msgstr "檔案單元"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No leading zeros (TZ format)"
-msgstr "無前導零 (TZ 符號)"
+msgstr "無前導零 (TZ 格式)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No trailing zeros (LZ format)"
@@ -18162,7 +18152,7 @@ msgstr "正在恢復 \"%s\""
 
 #: kicad/menubar.cpp:56
 msgid "Clear Recent Projects"
-msgstr "清除最近的專案"
+msgstr "清除最近的工程"
 
 #: kicad/menubar.cpp:99
 msgid "Import Non-KiCad Project..."
@@ -27593,7 +27583,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:402
 msgid "Minimum uVia hole:"
-msgstr "最小微孔內徑："
+msgstr "最小 U 形導通孔："
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:407
 msgid ""
@@ -29810,7 +29800,7 @@ msgstr "正在載入封裝庫表..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:420
 msgid "Checking board footprints against library..."
-msgstr "正在根據庫檢查電路板封裝..."
+msgstr "正在根據庫檢查電路板封裝…"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:113
 #, c-format
@@ -29842,11 +29832,11 @@ msgstr "< 無約束 >"
 
 #: pcbnew/drc/drc_test_provider_mechanical_clearance.cpp:176
 msgid "Gathering items..."
-msgstr "正在收集專案..."
+msgstr "正在收集專案…"
 
 #: pcbnew/drc/drc_test_provider_mechanical_clearance.cpp:229
 msgid "Checking mechanical clearances..."
-msgstr "正在檢查機械間隙..."
+msgstr "正在檢查機械間隙…"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:112
 msgid "(no edges found on Edge.Cuts layer)"
@@ -29871,7 +29861,7 @@ msgstr "正在檢查文字變數..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:361
 msgid "Checking assertions..."
-msgstr "正在檢查斷言..."
+msgstr "正在檢查斷言…"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:115
 #, c-format
@@ -29934,19 +29924,19 @@ msgstr "底層阻焊層孔徑橋接具有不同網路的專案"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:614
 msgid "Building solder mask..."
-msgstr "正在構造阻焊層..."
+msgstr "正在構造阻焊層…"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:619
 msgid "Checking solder mask to silk clearance..."
-msgstr "正在檢查阻焊層與絲印的間隙..."
+msgstr "正在檢查阻焊層與絲印的間隙…"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:624
 msgid "Checking solder mask web integrity..."
-msgstr "正在檢查阻焊層網路的完整性..."
+msgstr "正在檢查阻焊層網路的完整性…"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:85
 msgid "Checking text dimensions..."
-msgstr "正在檢查文字尺寸..."
+msgstr "正在檢查文字尺寸…"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:165
 #, c-format
@@ -30361,7 +30351,7 @@ msgstr "KiCad 封裝編輯器"
 
 #: pcbnew/footprint_edit_frame.cpp:192 pcbnew/zone_settings.cpp:219
 msgid "Inner layers"
-msgstr "內部圖層"
+msgstr "Inner layers"
 
 #: pcbnew/footprint_edit_frame.cpp:231 pcbnew/pcb_edit_frame.cpp:281
 msgid "Selection Filter"
@@ -31692,7 +31682,7 @@ msgstr "匯出 Hyperlynx 佈局"
 #: pcbnew/pcb_expr_evaluator.cpp:94
 #, c-format
 msgid "Missing layer name argument to %s."
-msgstr "缺少對 %s 的層名引數。"
+msgstr "缺少 %s 的層名引數。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:130
 #, c-format
@@ -31704,7 +31694,7 @@ msgstr "無法識別的圖層 '%s'"
 #, c-format
 msgid ""
 "Missing footprint identifier argument (A, B, or reference designator) to %s."
-msgstr "缺少封裝識別符號引數（A，B，或位號）到 %s。"
+msgstr "缺少 %s 的封裝識別符號引數（A，B，或位號）。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:500
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -31726,17 +31716,17 @@ msgstr "缺少規則區識別符號引數（A、B 或規則區名稱）到 %s。
 #: pcbnew/pcb_expr_evaluator.cpp:719
 #, c-format
 msgid "Missing group name argument to %s."
-msgstr "缺少對 %s 的組名引數。"
+msgstr "缺少 %s 的組名引數。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:829
 #, c-format
 msgid "Missing diff-pair name argument to %s."
-msgstr "缺少對 %s 的差分對名引數。"
+msgstr "缺少 %s 的差分對名引數。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:877
 #, c-format
 msgid "Missing field name argument to %s."
-msgstr "缺少對 %s 的欄位名引數。"
+msgstr "缺少 %s 的欄位名引數。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:1196
 msgid "must be mm, in, or mil"
@@ -33905,12 +33895,12 @@ msgstr "敷銅連線解像度，用於："
 #: pcbnew/tools/board_inspection_tool.cpp:406
 #, c-format
 msgid "Resolved thermal relief gap: %s."
-msgstr "已解決的散熱間隙：%s。"
+msgstr "已解決的防散熱間隙：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:416
 #, c-format
 msgid "Resolved thermal spoke width: %s."
-msgstr "已解決的散熱輻條寬度：%s。"
+msgstr "已解決的防散熱輻條寬度：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:422
 #, c-format
@@ -33950,7 +33940,7 @@ msgstr "機械"
 
 #: pcbnew/tools/board_inspection_tool.cpp:611
 msgid "Mechanical clearance resolution for:"
-msgstr "機械間隙解析為："
+msgstr "下列專案的機械間隙解析度："
 
 #: pcbnew/tools/board_inspection_tool.cpp:623
 msgid "No 'mechanical_clearance' constraints defined."
@@ -33958,7 +33948,7 @@ msgstr "未定義 'mechanical_clearance' (機械間隙) 約束。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:650
 msgid "Mechanical hole clearance resolution for:"
-msgstr "機械孔間隙解析為："
+msgstr "下列專案的機械孔間隙解析度："
 
 #: pcbnew/tools/board_inspection_tool.cpp:662
 msgid "No 'mechanical_hole_clearance' constraints defined."
@@ -36484,11 +36474,11 @@ msgstr "選擇預設："
 
 #: pcbnew/widgets/appearance_controls.cpp:2557
 msgid "Save viewport..."
-msgstr "儲存視口..."
+msgstr "儲存視口…"
 
 #: pcbnew/widgets/appearance_controls.cpp:2558
 msgid "Delete viewport..."
-msgstr "刪除視口..."
+msgstr "刪除視口…"
 
 #: pcbnew/widgets/appearance_controls.cpp:2605
 msgid "Viewport name:"
