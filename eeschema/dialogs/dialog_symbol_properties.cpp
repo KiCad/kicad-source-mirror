@@ -795,9 +795,12 @@ void DIALOG_SYMBOL_PROPERTIES::OnGridEditorShown( wxGridEvent& aEvent )
     if( aEvent.GetRow() == REFERENCE_FIELD && aEvent.GetCol() == FDC_VALUE )
         m_delayedSelection= true;
 
-    /// Yield here to allow events to propagate, updating editor size in GTK
-    /// before showing the editor FLT_MAX
-    wxSafeYield( this );
+    /// Queue up an event to ensure the widget gets resized if the editor needs it
+    wxSizeEvent *evt = new wxSizeEvent();
+    evt->SetSize( wxSize( m_width, -1 ) );
+
+    wxQueueEvent( m_fieldsGrid, evt );
+
 }
 
 
