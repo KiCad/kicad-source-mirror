@@ -175,12 +175,13 @@ int SCH_SHEET_PATH::ComparePageNum( const SCH_SHEET_PATH& aSheetPathToTest ) con
         int virtualPageA = GetVirtualPageNumber();
         int virtualPageB = aSheetPathToTest.GetVirtualPageNumber();
 
-        return virtualPageA > virtualPageB ? 1 : -1;
+        if( virtualPageA > virtualPageB )
+            pageNumComp = 1;
+        else if( virtualPageA < virtualPageB )
+            pageNumComp = -1;
     }
-    else
-    {
-        return pageNumComp;
-    }
+
+    return pageNumComp;
 }
 
 

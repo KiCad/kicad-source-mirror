@@ -22,6 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <cstdlib>
+#include <climits>
+
 #include <bitmaps.h>
 #include <core/mirror.h>
 #include <sch_draw_panel.h>
@@ -1224,10 +1227,9 @@ int SCH_SHEET::ComparePageNum( const wxString& aPageNumberA, const wxString& aPa
     // If not numeric, then sort as strings using natural sort
     int result = StrNumCmp( aPageNumberA, aPageNumberB );
 
-    if( result > 0 )
-        return 1; // A > B
+    result = result / std::abs( result );
 
-    return -1; //A < B
+    return result;
 }
 
 
