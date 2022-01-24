@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
 "PO-Revision-Date: 2022-01-30 12:26+0000\n"
-"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
+"Last-Translator: Tian Yunhao <t123yh@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -29221,7 +29221,7 @@ msgstr "未满足不允许约束。"
 
 #: pcbnew/drc/drc_engine.cpp:1033
 msgid "Keepout layer(s) not matched."
-msgstr "禁止层不匹配。"
+msgstr "禁布层不匹配。"
 
 #: pcbnew/drc/drc_engine.cpp:1037 pcbnew/drc/drc_engine.cpp:1057
 #: pcbnew/drc/drc_engine.cpp:1312
