@@ -44,6 +44,7 @@
 #include <symbol_library.h>
 #include <sch_symbol.h>
 #include <sch_field.h>
+#include <sch_label.h>
 #include <schematic.h>
 #include <settings/color_settings.h>
 #include <string_utils.h>

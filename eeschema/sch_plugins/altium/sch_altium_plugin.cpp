@@ -45,9 +45,9 @@
 #include <sch_line.h>
 #include <sch_no_connect.h>
 #include <sch_screen.h>
+#include <sch_label.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
-#include <sch_text.h>
 
 #include <bezier_curves.h>
 #include <compoundfilereader.h>
@@ -920,14 +920,14 @@ void SCH_ALTIUM_PLUGIN::ParseTextFrame( const std::map<wxString, wxString>& aPro
     {
     default:
     case ASCH_TEXT_FRAME_ALIGNMENT::LEFT:
-        text->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::RIGHT );
+        text->SetTextSpinStyle( TEXT_SPIN_STYLE::SPIN::RIGHT );
         break;
     case ASCH_TEXT_FRAME_ALIGNMENT::CENTER:
         // No support for centered text in Eeschema yet...
-        text->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::RIGHT );
+        text->SetTextSpinStyle( TEXT_SPIN_STYLE::SPIN::RIGHT );
         break;
     case ASCH_TEXT_FRAME_ALIGNMENT::RIGHT:
-        text->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::LEFT );
+        text->SetTextSpinStyle( TEXT_SPIN_STYLE::SPIN::LEFT );
         break;
     }
 
@@ -960,14 +960,14 @@ void SCH_ALTIUM_PLUGIN::ParseNote( const std::map<wxString, wxString>& aProperti
     {
     default:
     case ASCH_TEXT_FRAME_ALIGNMENT::LEFT:
-        text->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::RIGHT );
+        text->SetTextSpinStyle( TEXT_SPIN_STYLE::SPIN::RIGHT );
         break;
     case ASCH_TEXT_FRAME_ALIGNMENT::CENTER:
         // No support for centered text in Eeschema yet...
-        text->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::RIGHT );
+        text->SetTextSpinStyle( TEXT_SPIN_STYLE::SPIN::RIGHT );
         break;
     case ASCH_TEXT_FRAME_ALIGNMENT::RIGHT:
-        text->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::LEFT );
+        text->SetTextSpinStyle( TEXT_SPIN_STYLE::SPIN::LEFT );
         break;
     }
 
@@ -1502,7 +1502,7 @@ void SCH_ALTIUM_PLUGIN::ParseSheetEntry( const std::map<wxString, wxString>& aPr
 
     sheetPin->SetText( elem.name );
     sheetPin->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
-    //sheetPin->SetLabelSpinStyle( getSpinStyle( term.OrientAngle, false ) );
+    //sheetPin->SetTextSpinStyle( getSpinStyle( term.OrientAngle, false ) );
     //sheetPin->SetPosition( getKiCadPoint( term.Position ) );
 
     VECTOR2I pos = sheetIt->second->GetPosition();
@@ -1513,22 +1513,22 @@ void SCH_ALTIUM_PLUGIN::ParseSheetEntry( const std::map<wxString, wxString>& aPr
     default:
     case ASCH_SHEET_ENTRY_SIDE::LEFT:
         sheetPin->SetPosition( { pos.x, pos.y + elem.distanceFromTop } );
-        sheetPin->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
+        sheetPin->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
         sheetPin->SetSide( SHEET_SIDE::LEFT );
         break;
     case ASCH_SHEET_ENTRY_SIDE::RIGHT:
         sheetPin->SetPosition( { pos.x + size.x, pos.y + elem.distanceFromTop } );
-        sheetPin->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
+        sheetPin->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
         sheetPin->SetSide( SHEET_SIDE::RIGHT );
         break;
     case ASCH_SHEET_ENTRY_SIDE::TOP:
         sheetPin->SetPosition( { pos.x + elem.distanceFromTop, pos.y } );
-        sheetPin->SetLabelSpinStyle( LABEL_SPIN_STYLE::UP );
+        sheetPin->SetTextSpinStyle( TEXT_SPIN_STYLE::UP );
         sheetPin->SetSide( SHEET_SIDE::TOP );
         break;
     case ASCH_SHEET_ENTRY_SIDE::BOTTOM:
         sheetPin->SetPosition( { pos.x + elem.distanceFromTop, pos.y + size.y } );
-        sheetPin->SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM );
+        sheetPin->SetTextSpinStyle( TEXT_SPIN_STYLE::BOTTOM );
         sheetPin->SetSide( SHEET_SIDE::BOTTOM );
         break;
     }
@@ -1900,17 +1900,18 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
     }
 
     // Select label position. In case both match, we will add a line later.
-    VECTOR2I  position = ( startIsWireTerminal || startIsBusTerminal ) ? start : end;
-    SCH_TEXT* label;
+    VECTOR2I        position = ( startIsWireTerminal || startIsBusTerminal ) ? start : end;
+    SCH_LABEL_BASE* label;
 
     if( isHarness )
     {
-        wxString name = wxT( "HARNESS: " ) + aElem.name;
+        label = new SCH_DIRECTIVE_LABEL( position );
 
-        if( aElem.harnessType != aElem.name )
-            name += wxString::Format( wxT( " (%s)" ), aElem.harnessType );
+        std::vector<SCH_FIELD>& fields = label->GetFields();
 
-        label = new SCH_TEXT( position, name );
+        fields.emplace_back( SCH_FIELD( { 0, 0 }, 0, label, wxT( "Harness" ) ) );
+        fields[0].SetText( aElem.harnessType );
+        fields[0].SetVisible( true );
     }
     // TODO: detect correct label type depending on sheet settings, etc.
     //{
@@ -1947,18 +1948,18 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
     case ASCH_PORT_STYLE::RIGHT:
     case ASCH_PORT_STYLE::LEFT_RIGHT:
         if( ( startIsWireTerminal || startIsBusTerminal ) )
-            label->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
+            label->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
         else
-            label->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
+            label->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
         break;
     case ASCH_PORT_STYLE::NONE_VERTICAL:
     case ASCH_PORT_STYLE::TOP:
     case ASCH_PORT_STYLE::BOTTOM:
     case ASCH_PORT_STYLE::TOP_BOTTOM:
         if( ( startIsWireTerminal || startIsBusTerminal ) )
-            label->SetLabelSpinStyle( LABEL_SPIN_STYLE::UP );
+            label->SetTextSpinStyle( TEXT_SPIN_STYLE::UP );
         else
-            label->SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM );
+            label->SetTextSpinStyle( TEXT_SPIN_STYLE::BOTTOM );
         break;
     }
 
@@ -2008,16 +2009,16 @@ void SCH_ALTIUM_PLUGIN::ParseNetLabel( const std::map<wxString, wxString>& aProp
     switch( elem.orientation )
     {
     case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
-        label->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
+        label->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
         break;
     case ASCH_RECORD_ORIENTATION::UPWARDS:
-        label->SetLabelSpinStyle( LABEL_SPIN_STYLE::UP );
+        label->SetTextSpinStyle( TEXT_SPIN_STYLE::UP );
         break;
     case ASCH_RECORD_ORIENTATION::LEFTWARDS:
-        label->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
+        label->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
         break;
     case ASCH_RECORD_ORIENTATION::DOWNWARDS:
-        label->SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM );
+        label->SetTextSpinStyle( TEXT_SPIN_STYLE::BOTTOM );
         break;
     default:
         break;

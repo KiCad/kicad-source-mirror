@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2017-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -54,7 +54,7 @@
 #include <sch_screen.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
-#include <sch_text.h>
+#include <sch_label.h>
 #include <schematic.h>
 #include <symbol_lib_table.h>
 #include <wildcards_and_files_ext.h>
@@ -1135,9 +1135,9 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
                 label->SetTextSize( wxSize( Mils2iu( 40 ), Mils2iu( 40 ) ) );
 
                 if( firstWire->GetEndPoint().x > firstWire->GetStartPoint().x )
-                    label->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
+                    label->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
                 else
-                    label->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
+                    label->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
 
                 screen->Append( label.release() );
             }
@@ -1207,7 +1207,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aN
     label->SetPosition( elabelpos );
     label->SetText( escapeName( elabel.netname ) );
     label->SetTextSize( textSize );
-    label->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
+    label->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
 
     if( elabel.rot )
     {
@@ -2963,10 +2963,10 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* 
 
                     switch( pin->GetOrientation() )
                     {
-                    case PIN_LEFT:  netLabel->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );  break;
-                    case PIN_RIGHT: netLabel->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );   break;
-                    case PIN_UP:    netLabel->SetLabelSpinStyle( LABEL_SPIN_STYLE::UP );     break;
-                    case PIN_DOWN:  netLabel->SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM ); break;
+                    case PIN_LEFT:  netLabel->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );  break;
+                    case PIN_RIGHT: netLabel->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );   break;
+                    case PIN_UP:    netLabel->SetTextSpinStyle( TEXT_SPIN_STYLE::UP );     break;
+                    case PIN_DOWN:  netLabel->SetTextSpinStyle( TEXT_SPIN_STYLE::BOTTOM ); break;
                     }
 
                     aScreen->Append( netLabel );

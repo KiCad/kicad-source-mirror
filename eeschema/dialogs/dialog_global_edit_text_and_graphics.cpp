@@ -283,7 +283,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
     if( sch_text )
     {
         if( m_orientation->GetStringSelection() != INDETERMINATE_ACTION )
-            sch_text->SetLabelSpinStyle( (LABEL_SPIN_STYLE::SPIN) m_orientation->GetSelection() );
+            sch_text->SetTextSpinStyle( (TEXT_SPIN_STYLE::SPIN) m_orientation->GetSelection() );
     }
 
     if( aItem->HasLineStroke() )

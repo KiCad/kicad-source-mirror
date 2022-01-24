@@ -31,6 +31,7 @@
 #include <reporter.h>
 #include <sch_edit_frame.h>
 #include <sch_sheet_path.h>
+#include <sch_label.h>
 #include <schematic.h>
 #include <string_utils.h>
 #include <kiface_base.h>
@@ -417,17 +418,17 @@ void BACK_ANNOTATE::applyChangelist()
 }
 
 
-static LABEL_SPIN_STYLE orientLabel( SCH_PIN* aPin )
+static TEXT_SPIN_STYLE orientLabel( SCH_PIN* aPin )
 {
-    LABEL_SPIN_STYLE spin = LABEL_SPIN_STYLE::RIGHT;
+    TEXT_SPIN_STYLE spin = TEXT_SPIN_STYLE::RIGHT;
 
     // Initial orientation from the pin
     switch( aPin->GetLibPin()->GetOrientation() )
     {
-    case PIN_UP:    spin = LABEL_SPIN_STYLE::BOTTOM; break;
-    case PIN_DOWN:  spin = LABEL_SPIN_STYLE::UP;     break;
-    case PIN_LEFT:  spin = LABEL_SPIN_STYLE::RIGHT;  break;
-    case PIN_RIGHT: spin = LABEL_SPIN_STYLE::LEFT;   break;
+    case PIN_UP:    spin = TEXT_SPIN_STYLE::BOTTOM; break;
+    case PIN_DOWN:  spin = TEXT_SPIN_STYLE::UP;     break;
+    case PIN_LEFT:  spin = TEXT_SPIN_STYLE::RIGHT;  break;
+    case PIN_RIGHT: spin = TEXT_SPIN_STYLE::LEFT;   break;
     }
 
     // Reorient based on the actual symbol orientation now
@@ -551,8 +552,8 @@ void BACK_ANNOTATE::processNetNameChange( const wxString& aRef, SCH_PIN* aPin,
 
     case SCH_PIN_T:
     {
-        SCH_PIN*         schPin = static_cast<SCH_PIN*>( driver );
-        LABEL_SPIN_STYLE spin   = orientLabel( schPin );
+        SCH_PIN*        schPin = static_cast<SCH_PIN*>( driver );
+        TEXT_SPIN_STYLE spin   = orientLabel( schPin );
 
         if( schPin->IsPowerConnection() )
         {
@@ -576,7 +577,7 @@ void BACK_ANNOTATE::processNetNameChange( const wxString& aRef, SCH_PIN* aPin,
             SCH_LABEL* label = new SCH_LABEL( driver->GetPosition(), aNewName );
             label->SetParent( &m_frame->Schematic() );
             label->SetTextSize( wxSize( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
-            label->SetLabelSpinStyle( spin );
+            label->SetTextSpinStyle( spin );
             label->SetFlags( IS_NEW );
 
             SCH_SCREEN* screen = aConnection->Sheet().LastScreen();

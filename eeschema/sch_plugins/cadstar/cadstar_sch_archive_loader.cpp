@@ -42,7 +42,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_sheet_pin.h>
-#include <sch_text.h>
+#include <sch_label.h>
 #include <schematic.h>
 #include <trigo.h>
 #include <wildcards_and_files_ext.h>
@@ -347,7 +347,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadHierarchicalSheetPins()
 
                 sheetPin->SetText( name );
                 sheetPin->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
-                sheetPin->SetLabelSpinStyle( getSpinStyle( term.OrientAngle, false ) );
+                sheetPin->SetTextSpinStyle( getSpinStyle( term.OrientAngle, false ) );
                 sheetPin->SetPosition( getKiCadPoint( term.Position ) );
 
                 if( sheetPin->Type() == SCH_SHEET_PIN_T )
@@ -661,7 +661,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                                        linkOrigin.Justification );
                 }
 
-                netLabel->SetLabelSpinStyle( getSpinStyle( sym.OrientAngle, sym.Mirror ) );
+                netLabel->SetTextSpinStyle( getSpinStyle( sym.OrientAngle, sym.Mirror ) );
 
                 if( libSymDef.Alternate.Lower().Contains( "in" ) )
                     netLabel->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
@@ -1064,15 +1064,15 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             auto fixNetLabelsAndSheetPins =
                     [&]( const EDA_ANGLE& aWireAngle, NETELEMENT_ID& aNetEleID )
                     {
-                        LABEL_SPIN_STYLE spin = getSpinStyle( aWireAngle );
+                        TEXT_SPIN_STYLE spin = getSpinStyle( aWireAngle );
 
                         if( netlabels.find( aNetEleID ) != netlabels.end() )
-                            netlabels.at( aNetEleID )->SetLabelSpinStyle( spin.MirrorY() );
+                            netlabels.at( aNetEleID )->SetTextSpinStyle( spin.MirrorY() );
 
                         SCH_HIERLABEL* sheetPin = getHierarchicalLabel( aNetEleID );
 
                         if( sheetPin )
-                            sheetPin->SetLabelSpinStyle( spin.MirrorX() );
+                            sheetPin->SetTextSpinStyle( spin.MirrorX() );
                     };
 
             // Now we can load the wires and fix the label orientations
@@ -1135,8 +1135,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
                 label->SetVisible( true );
 
                 EDA_ANGLE        labelAngle = getAngle( junc.NetLabel.OrientAngle );
-                LABEL_SPIN_STYLE spin = getSpinStyle( labelAngle );
-                label->SetLabelSpinStyle( spin );
+                TEXT_SPIN_STYLE spin = getSpinStyle( labelAngle );
+                label->SetTextSpinStyle( spin );
 
                 m_sheetMap.at( junc.LayerID )->GetScreen()->Append( label );
             }
@@ -2514,11 +2514,11 @@ int CADSTAR_SCH_ARCHIVE_LOADER::getKiCadUnitNumberFromGate( const GATE_ID& aCads
 }
 
 
-LABEL_SPIN_STYLE CADSTAR_SCH_ARCHIVE_LOADER::getSpinStyle( const long long& aCadstarOrientation,
-                                                           bool aMirror )
+TEXT_SPIN_STYLE CADSTAR_SCH_ARCHIVE_LOADER::getSpinStyle( const long long& aCadstarOrientation,
+                                                          bool aMirror )
 {
-    EDA_ANGLE        orientation = getAngle( aCadstarOrientation );
-    LABEL_SPIN_STYLE spinStyle   = getSpinStyle( orientation );
+    EDA_ANGLE       orientation = getAngle( aCadstarOrientation );
+    TEXT_SPIN_STYLE spinStyle   = getSpinStyle( orientation );
 
     if( aMirror )
     {
@@ -2530,21 +2530,21 @@ LABEL_SPIN_STYLE CADSTAR_SCH_ARCHIVE_LOADER::getSpinStyle( const long long& aCad
 }
 
 
-LABEL_SPIN_STYLE CADSTAR_SCH_ARCHIVE_LOADER::getSpinStyle( const EDA_ANGLE& aOrientation )
+TEXT_SPIN_STYLE CADSTAR_SCH_ARCHIVE_LOADER::getSpinStyle( const EDA_ANGLE& aOrientation )
 {
-    LABEL_SPIN_STYLE spinStyle = LABEL_SPIN_STYLE::LEFT;
+    TEXT_SPIN_STYLE spinStyle = TEXT_SPIN_STYLE::LEFT;
 
     EDA_ANGLE oDeg = aOrientation;
     oDeg.Normalize180();
 
     if( oDeg >= -ANGLE_45 && oDeg <= ANGLE_45 )
-        spinStyle = LABEL_SPIN_STYLE::RIGHT;  // 0deg
+        spinStyle = TEXT_SPIN_STYLE::RIGHT;             // 0deg
     else if( oDeg >= ANGLE_45 && oDeg <= ANGLE_135 )
-        spinStyle = LABEL_SPIN_STYLE::UP;     // 90deg
+        spinStyle = TEXT_SPIN_STYLE::UP;                // 90deg
     else if( oDeg >= ANGLE_135 || oDeg <= -ANGLE_135 )
-        spinStyle = LABEL_SPIN_STYLE::LEFT;   // 180deg
+        spinStyle = TEXT_SPIN_STYLE::LEFT;              // 180deg
     else
-        spinStyle = LABEL_SPIN_STYLE::BOTTOM; // 270deg
+        spinStyle = TEXT_SPIN_STYLE::BOTTOM;            // 270deg
 
     return spinStyle;
 }
@@ -2694,8 +2694,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
                 }
             };
 
-    LABEL_SPIN_STYLE spin = getSpinStyle( aCadstarOrientAngle, aMirrored );
-    EDA_ITEM* textEdaItem = dynamic_cast<EDA_ITEM*>( aKiCadTextItem );
+    TEXT_SPIN_STYLE spin = getSpinStyle( aCadstarOrientAngle, aMirrored );
+    EDA_ITEM*       textEdaItem = dynamic_cast<EDA_ITEM*>( aKiCadTextItem );
     wxCHECK( textEdaItem, /* void */ ); // ensure this is a EDA_ITEM
 
     switch( textEdaItem->Type() )
@@ -2752,10 +2752,10 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
         // And correct the error introduced by the text offsetting in KiCad
         switch( spin )
         {
-        case LABEL_SPIN_STYLE::BOTTOM: pos = { bb.GetRight() - off, bb.GetTop()          }; break;
-        case LABEL_SPIN_STYLE::UP:     pos = { bb.GetRight() - off, bb.GetBottom()       }; break;
-        case LABEL_SPIN_STYLE::LEFT:   pos = { bb.GetRight()      , bb.GetBottom() + off }; break;
-        case LABEL_SPIN_STYLE::RIGHT:  pos = { bb.GetLeft()       , bb.GetBottom() + off }; break;
+        case TEXT_SPIN_STYLE::BOTTOM: pos = { bb.GetRight() - off, bb.GetTop()          }; break;
+        case TEXT_SPIN_STYLE::UP:     pos = { bb.GetRight() - off, bb.GetBottom()       }; break;
+        case TEXT_SPIN_STYLE::LEFT:   pos = { bb.GetRight()      , bb.GetBottom() + off }; break;
+        case TEXT_SPIN_STYLE::RIGHT:  pos = { bb.GetLeft()       , bb.GetBottom() + off }; break;
         }
 
         aKiCadTextItem->SetTextPos( pos );
@@ -2767,7 +2767,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIER_LABEL_T:
     case SCH_SHEET_PIN_T:
-        static_cast<SCH_TEXT*>( aKiCadTextItem )->SetLabelSpinStyle( spin );
+        static_cast<SCH_TEXT*>( aKiCadTextItem )->SetTextSpinStyle( spin );
         return;
 
     default:

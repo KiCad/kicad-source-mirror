@@ -668,7 +668,7 @@ bool SCH_LINE::CanConnect( const SCH_ITEM* aItem ) const
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
-        case SCH_NETCLASS_FLAG_T:
+        case SCH_DIRECTIVE_LABEL_T:
         case SCH_BUS_WIRE_ENTRY_T:
         case SCH_SYMBOL_T:
         case SCH_SHEET_T:
@@ -686,7 +686,7 @@ bool SCH_LINE::CanConnect( const SCH_ITEM* aItem ) const
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
-        case SCH_NETCLASS_FLAG_T:
+        case SCH_DIRECTIVE_LABEL_T:
         case SCH_BUS_WIRE_ENTRY_T:
         case SCH_SHEET_T:
         case SCH_SHEET_PIN_T:

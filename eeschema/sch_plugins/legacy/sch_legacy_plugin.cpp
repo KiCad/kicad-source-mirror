@@ -1465,7 +1465,7 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
             spinStyle = 0;
     }
 
-    text->SetLabelSpinStyle( (LABEL_SPIN_STYLE::SPIN) spinStyle );
+    text->SetTextSpinStyle( static_cast<TEXT_SPIN_STYLE::SPIN>( spinStyle ) );
 
     int size = Mils2Iu( parseInt( aReader, line, &line ) );
 
@@ -2409,7 +2409,7 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
         }
 
         // Local labels must have their spin style inverted for left and right
-        int spinStyle = static_cast<int>( aText->GetLabelSpinStyle() );
+        int spinStyle = static_cast<int>( aText->GetTextSpinStyle() );
 
         if( spinStyle == 0 )
             spinStyle = 2;
@@ -2431,7 +2431,7 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
 
         m_out->Print( 0, "Text %s %-4d %-4d %-4d %-4d %s %s %d\n%s\n", textType,
                       Iu2Mils( aText->GetPosition().x ), Iu2Mils( aText->GetPosition().y ),
-                      static_cast<int>( aText->GetLabelSpinStyle() ),
+                      static_cast<int>( aText->GetTextSpinStyle() ),
                       Iu2Mils( aText->GetTextWidth() ),
                       shapeLabelIt->second,
                       italics,

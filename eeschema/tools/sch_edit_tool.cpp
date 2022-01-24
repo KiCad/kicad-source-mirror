@@ -253,7 +253,7 @@ bool SCH_EDIT_TOOL::Init()
                 case SCH_LABEL_T:
                 case SCH_GLOBAL_LABEL_T:
                 case SCH_HIER_LABEL_T:
-                case SCH_NETCLASS_FLAG_T:
+                case SCH_DIRECTIVE_LABEL_T:
                 case SCH_FIELD_T:
                 case SCH_SHAPE_T:
                 case SCH_BITMAP_T:
@@ -284,13 +284,13 @@ bool SCH_EDIT_TOOL::Init()
             };
 
     static KICAD_T allLabelTypes[] = { SCH_LABEL_T,
-                                       SCH_NETCLASS_FLAG_T,
+                                       SCH_DIRECTIVE_LABEL_T,
                                        SCH_GLOBAL_LABEL_T,
                                        SCH_HIER_LABEL_T,
                                        SCH_TEXT_T,
                                        EOT };
 
-    static KICAD_T toLabelTypes[] = { SCH_NETCLASS_FLAG_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
+    static KICAD_T toLabelTypes[] = { SCH_DIRECTIVE_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
     auto toLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toLabelTypes ) )
                                 || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allLabelTypes ) );
 
@@ -298,15 +298,15 @@ bool SCH_EDIT_TOOL::Init()
     auto toCLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toCLabelTypes ) )
                                 || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allLabelTypes ) );
 
-    static KICAD_T toHLabelTypes[] = { SCH_LABEL_T, SCH_NETCLASS_FLAG_T, SCH_GLOBAL_LABEL_T, SCH_TEXT_T, EOT };
+    static KICAD_T toHLabelTypes[] = { SCH_LABEL_T, SCH_DIRECTIVE_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_TEXT_T, EOT };
     auto toHLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toHLabelTypes ) )
                                 || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allLabelTypes ) );
 
-    static KICAD_T toGLabelTypes[] = { SCH_LABEL_T, SCH_NETCLASS_FLAG_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
+    static KICAD_T toGLabelTypes[] = { SCH_LABEL_T, SCH_DIRECTIVE_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
     auto toGLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toGLabelTypes ) )
                                 || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allLabelTypes ) );
 
-    static KICAD_T toTextTypes[] = { SCH_LABEL_T, SCH_NETCLASS_FLAG_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, EOT };
+    static KICAD_T toTextTypes[] = { SCH_LABEL_T, SCH_DIRECTIVE_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, EOT };
     auto toTextCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toTextTypes ) )
                                 || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allLabelTypes ) );
 
@@ -433,7 +433,7 @@ const KICAD_T rotatableItems[] = {
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
     SCH_HIER_LABEL_T,
-    SCH_NETCLASS_FLAG_T,
+    SCH_DIRECTIVE_LABEL_T,
     SCH_FIELD_T,
     SCH_SYMBOL_T,
     SCH_SHEET_PIN_T,
@@ -507,7 +507,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
-        case SCH_NETCLASS_FLAG_T:
+        case SCH_DIRECTIVE_LABEL_T:
         {
             SCH_TEXT* textItem = static_cast<SCH_TEXT*>( head );
             textItem->Rotate90( clockwise );
@@ -724,7 +724,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
-        case SCH_NETCLASS_FLAG_T:
+        case SCH_DIRECTIVE_LABEL_T:
         {
             SCH_TEXT* textItem = static_cast<SCH_TEXT*>( item );
             textItem->MirrorSpinStyle( !vertical );
@@ -894,13 +894,11 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     {
         EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
-        if( dynamic_cast<SCH_TEXT*>( newItem ) )
+        if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( newItem ) )
         {
-            SCH_TEXT* text = static_cast<SCH_TEXT*>( newItem );
-
             // If incrementing tries to go below zero, tell user why the value is repeated
 
-            if( !text->IncrementLabel( cfg->m_Drawing.repeat_label_increment ) )
+            if( !label->IncrementLabel( cfg->m_Drawing.repeat_label_increment ) )
                 m_frame->ShowInfoBarWarning( _( "Label value cannot go below zero" ), true );
         }
 
@@ -952,7 +950,7 @@ static KICAD_T deletableItems[] =
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
     SCH_HIER_LABEL_T,
-    SCH_NETCLASS_FLAG_T,
+    SCH_DIRECTIVE_LABEL_T,
     SCH_NO_CONNECT_T,
     SCH_SHEET_T,
     SCH_SHEET_PIN_T,
@@ -1473,7 +1471,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIER_LABEL_T:
-    case SCH_NETCLASS_FLAG_T:
+    case SCH_DIRECTIVE_LABEL_T:
     {
         DIALOG_LABEL_PROPERTIES dlg( m_frame, static_cast<SCH_LABEL_BASE*>( item ) );
 
@@ -1602,7 +1600,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                                      SCH_GLOBAL_LABEL_T,
                                      SCH_HIER_LABEL_T,
                                      SCH_TEXT_T,
-                                     SCH_NETCLASS_FLAG_T,
+                                     SCH_DIRECTIVE_LABEL_T,
                                      EOT };
     EE_SELECTION  selection = m_selectionTool->RequestSelection( allTextTypes );
 
@@ -1612,11 +1610,11 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 
         if( text && text->Type() != convertTo )
         {
-            bool             selected    = text->IsSelected();
-            SCH_TEXT*        newtext     = nullptr;
-            const VECTOR2I&  position    = text->GetPosition();
-            LABEL_SPIN_STYLE orientation = text->GetLabelSpinStyle();
-            wxString         txt         = UnescapeString( text->GetText() );
+            bool            selected    = text->IsSelected();
+            SCH_TEXT*       newtext     = nullptr;
+            const VECTOR2I& position    = text->GetPosition();
+            TEXT_SPIN_STYLE orientation = text->GetTextSpinStyle();
+            wxString        txt         = UnescapeString( text->GetText() );
 
             // There can be characters in a SCH_TEXT object that can break labels so we have to
             // fix them here.
@@ -1639,12 +1637,12 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 
             switch( convertTo )
             {
-            case SCH_LABEL_T:         newtext = new SCH_LABEL( position, txt );       break;
-            case SCH_GLOBAL_LABEL_T:  newtext = new SCH_GLOBALLABEL( position, txt ); break;
-            case SCH_HIER_LABEL_T:    newtext = new SCH_HIERLABEL( position, txt );   break;
-            case SCH_TEXT_T:          newtext = new SCH_TEXT( position, txt );        break;
-            case SCH_NETCLASS_FLAG_T: newtext = new SCH_NETCLASS_FLAG( position );    break;
-            default:    UNIMPLEMENTED_FOR( wxString::Format( "%d.", convertTo ) );    break;
+            case SCH_LABEL_T:           newtext = new SCH_LABEL( position, txt );       break;
+            case SCH_GLOBAL_LABEL_T:    newtext = new SCH_GLOBALLABEL( position, txt ); break;
+            case SCH_HIER_LABEL_T:      newtext = new SCH_HIERLABEL( position, txt );   break;
+            case SCH_TEXT_T:            newtext = new SCH_TEXT( position, txt );        break;
+            case SCH_DIRECTIVE_LABEL_T: newtext = new SCH_DIRECTIVE_LABEL( position );  break;
+            default:    UNIMPLEMENTED_FOR( wxString::Format( "%d.", convertTo ) );      break;
             }
 
             // Copy the old text item settings to the new one.  Justifications are not copied
@@ -1653,7 +1651,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             //
             newtext->SetFlags( text->GetEditFlags() );
             newtext->SetShape( text->GetShape() );
-            newtext->SetLabelSpinStyle( orientation );
+            newtext->SetTextSpinStyle( orientation );
             newtext->SetTextSize( text->GetTextSize() );
             newtext->SetTextThickness( text->GetTextThickness() );
             newtext->SetItalic( text->IsItalic() );

@@ -72,4 +72,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20220101  // Circles, arcs, rects, polys & beziers
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20220102  // Dash-dot-dot
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20220103  // Label fields
-#define SEXPR_SCHEMATIC_FILE_VERSION 20220104  // Fonts
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20220104  // Fonts
+#define SEXPR_SCHEMATIC_FILE_VERSION 20220124  // netclass_flag -> directive_label

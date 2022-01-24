@@ -31,7 +31,7 @@
 #include <sch_edit_frame.h>
 #include <sch_junction.h>
 #include <sch_line.h>
-#include <sch_text.h>
+#include <sch_label.h>
 #include <project/net_settings.h>
 #include <project/project_file.h>
 #include <settings/color_settings.h>

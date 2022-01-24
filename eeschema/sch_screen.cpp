@@ -1015,7 +1015,7 @@ void SCH_SCREEN::GetHierarchicalItems( std::vector<SCH_ITEM*>* aItems ) const
                                            SCH_SHEET_T,
                                            SCH_LABEL_T,
                                            SCH_HIER_LABEL_T,
-                                           SCH_NETCLASS_FLAG_T,
+                                           SCH_DIRECTIVE_LABEL_T,
                                            SCH_GLOBAL_LABEL_T,
                                            EOT };
 
@@ -1119,7 +1119,7 @@ SCH_TEXT* SCH_SCREEN::GetLabel( const VECTOR2I& aPosition, int aAccuracy ) const
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
-        case SCH_NETCLASS_FLAG_T:
+        case SCH_DIRECTIVE_LABEL_T:
             if( item->HitTest( aPosition, aAccuracy ) )
                 return static_cast<SCH_TEXT*>( item );
 

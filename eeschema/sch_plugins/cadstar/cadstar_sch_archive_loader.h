@@ -36,7 +36,7 @@
 
 class BUS_ALIAS;
 class EDA_TEXT;
-class LABEL_SPIN_STYLE;
+class TEXT_SPIN_STYLE;
 class LIB_FIELD;
 class LIB_SYMBOL;
 class SCH_SYMBOL;
@@ -211,17 +211,17 @@ private:
     int            getTextHeightFromTextCode( const TEXTCODE_ID& aCadstarTextCodeID );
     wxString       getAttributeName( const ATTRIBUTE_ID& aCadstarAttributeID );
 
-    PART::DEFINITION::PIN getPartDefinitionPin(
-            const PART& aCadstarPart, const GATE_ID& aGateID, const TERMINAL_ID& aTerminalID );
+    PART::DEFINITION::PIN getPartDefinitionPin( const PART& aCadstarPart, const GATE_ID& aGateID,
+                                                const TERMINAL_ID& aTerminalID );
 
     //Helper Functions for obtaining individual elements as KiCad elements:
     ELECTRICAL_PINTYPE getKiCadPinType( const PART::PIN_TYPE& aPinType );
 
-    int              getKiCadUnitNumberFromGate( const GATE_ID& aCadstarGateID );
-    LABEL_SPIN_STYLE getSpinStyle( const long long& aCadstarOrientation, bool aMirror );
-    LABEL_SPIN_STYLE getSpinStyle( const EDA_ANGLE& aOrientation );
-    ALIGNMENT        mirrorX( const ALIGNMENT& aCadstarAlignment );
-    ALIGNMENT        rotate180( const ALIGNMENT& aCadstarAlignment );
+    int             getKiCadUnitNumberFromGate( const GATE_ID& aCadstarGateID );
+    TEXT_SPIN_STYLE getSpinStyle( const long long& aCadstarOrientation, bool aMirror );
+    TEXT_SPIN_STYLE getSpinStyle( const EDA_ANGLE& aOrientation );
+    ALIGNMENT       mirrorX( const ALIGNMENT& aCadstarAlignment );
+    ALIGNMENT       rotate180( const ALIGNMENT& aCadstarAlignment );
 
     //General Graphical manipulation functions
 

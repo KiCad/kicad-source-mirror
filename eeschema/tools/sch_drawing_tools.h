@@ -27,11 +27,11 @@
 
 #include <tools/ee_tool_base.h>
 #include <sch_base_frame.h>
+#include <sch_label.h>
 #include <status_popup.h>
 
 class SCH_SYMBOL;
 class SCH_BUS_WIRE_ENTRY;
-class SCH_LABEL;
 class SCHLIB_FILTER;
 class SCH_EDIT_FRAME;
 class EE_SELECTION_TOOL;
@@ -87,10 +87,10 @@ private:
     LABEL_FLAG_SHAPE           m_lastSheetPinType;
     LABEL_FLAG_SHAPE           m_lastGlobalLabelShape;
     LABEL_FLAG_SHAPE           m_lastNetClassFlagShape;
-    LABEL_SPIN_STYLE           m_lastTextOrientation;
+    TEXT_SPIN_STYLE            m_lastTextOrientation;
     bool                       m_lastTextBold;
     bool                       m_lastTextItalic;
-    bool                       m_lastNetClassFlagItalic;
+    bool                       m_lastNetClassDirectiveItalic;
     FILL_T                     m_lastFillStyle;
 
     ///< Re-entrancy guards

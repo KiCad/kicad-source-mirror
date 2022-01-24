@@ -27,7 +27,7 @@
 #include <fields_grid_table.h>
 #include <sch_base_frame.h>
 #include <sch_field.h>
-#include <sch_text.h>
+#include <sch_label.h>
 #include <sch_validators.h>
 #include <validators.h>
 #include <sch_edit_frame.h>

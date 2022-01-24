@@ -26,6 +26,7 @@ date
 default
 diameter
 diamond
+directive_label
 dot
 edge_clock_high
 effects

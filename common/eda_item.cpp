@@ -347,7 +347,7 @@ static struct EDA_ITEM_DESC
             .Map( SCH_BITMAP_T,            _HKI( "Bitmap" ) )
             .Map( SCH_TEXT_T,              _HKI( "Text" ) )
             .Map( SCH_LABEL_T,             _HKI( "Net Label" ) )
-            .Map( SCH_NETCLASS_FLAG_T,     _HKI( "Net Class Flag" ) )
+            .Map( SCH_DIRECTIVE_LABEL_T,   _HKI( "Directive Label" ) )
             .Map( SCH_GLOBAL_LABEL_T,      _HKI( "Global Label" ) )
             .Map( SCH_HIER_LABEL_T,        _HKI( "Hierarchical Label" ) )
             .Map( SCH_FIELD_T,             _HKI( "Field" ) )

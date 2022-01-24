@@ -298,7 +298,7 @@ TOOL_ACTION EE_ACTIONS::placeLabel( "eeschema.InteractiveDrawing.placeLabel",
 
 TOOL_ACTION EE_ACTIONS::placeClassLabel( "eeschema.InteractiveDrawing.placeClassLabel",
         AS_GLOBAL, 0, "",
-        _( "Add Net Class Flag" ), _( "Add a net class flag" ),
+        _( "Add Net Class Directive" ), _( "Add a net class directive label" ),
         BITMAPS::add_class_flag, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeHierLabel( "eeschema.InteractiveDrawing.placeHierarchicalLabel",
@@ -475,8 +475,8 @@ TOOL_ACTION EE_ACTIONS::toLabel( "eeschema.InteractiveEdit.toLabel",
 
 TOOL_ACTION EE_ACTIONS::toCLabel( "eeschema.InteractiveEdit.toCLabel",
         AS_GLOBAL, 0, "",
-        _( "Change to Net Class Flag" ), _( "Change existing item to a net class flag" ),
-        BITMAPS::add_class_flag, AF_NONE, (void*) SCH_NETCLASS_FLAG_T );
+        _( "Change to Directive Label" ), _( "Change existing item to a directive label" ),
+        BITMAPS::add_class_flag, AF_NONE, (void*) SCH_DIRECTIVE_LABEL_T );
 
 TOOL_ACTION EE_ACTIONS::toHLabel( "eeschema.InteractiveEdit.toHLabel",
         AS_GLOBAL, 0, "",

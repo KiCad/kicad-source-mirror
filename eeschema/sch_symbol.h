@@ -605,7 +605,7 @@ public:
                ( aItem->Type() == SCH_NO_CONNECT_T ) ||
                ( aItem->Type() == SCH_JUNCTION_T ) ||
                ( aItem->Type() == SCH_SYMBOL_T ) ||
-               ( aItem->Type() == SCH_NETCLASS_FLAG_T ) ||
+               ( aItem->Type() == SCH_DIRECTIVE_LABEL_T ) ||
                ( aItem->Type() == SCH_LABEL_T ) ||
                ( aItem->Type() == SCH_HIER_LABEL_T ) ||
                ( aItem->Type() == SCH_GLOBAL_LABEL_T );

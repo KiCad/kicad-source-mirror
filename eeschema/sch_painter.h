@@ -44,7 +44,7 @@ class SCH_JUNCTION;
 class SCH_LABEL;
 class SCH_TEXT;
 class SCH_HIERLABEL;
-class SCH_NETCLASS_FLAG;
+class SCH_DIRECTIVE_LABEL;
 class SCH_GLOBALLABEL;
 class SCH_SHEET;
 class SCH_SHEET_PIN;
@@ -161,7 +161,7 @@ private:
     void draw( const SCH_SHAPE* shape, int aLayer );
     void draw( const SCH_TEXT* aText, int aLayer );
     void draw( const SCH_LABEL* aText, int aLayer );
-    void draw( const SCH_NETCLASS_FLAG* aLabel, int aLayer );
+    void draw( const SCH_DIRECTIVE_LABEL* aLabel, int aLayer );
     void draw( const SCH_HIERLABEL* aLabel, int aLayer );
     void draw( const SCH_GLOBALLABEL* aLabel, int aLayer );
     void draw( const SCH_SHEET* aSheet, int aLayer );

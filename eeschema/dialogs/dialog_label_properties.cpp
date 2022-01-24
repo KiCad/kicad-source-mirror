@@ -40,6 +40,7 @@
 #include <project/net_settings.h>
 #include <project/project_file.h>
 #include <kiface_base.h>
+#include <sch_label.h>
 
 
 class SCH_EDIT_FRAME;
@@ -82,7 +83,7 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
 
         m_valueSingleLine->SetValidator( m_netNameValidator );
     }
-    else if( m_currentLabel->Type() == SCH_NETCLASS_FLAG_T )
+    else if( m_currentLabel->Type() == SCH_DIRECTIVE_LABEL_T )
     {
         SetInitialFocus( m_grid );
         m_delayedFocusRow = 0;
@@ -98,12 +99,12 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
 
     switch( m_currentLabel->Type() )
     {
-    case SCH_GLOBAL_LABEL_T:  SetTitle( _( "Global Label Properties" ) );           break;
-    case SCH_HIER_LABEL_T:    SetTitle( _( "Hierarchical Label Properties" ) );     break;
-    case SCH_LABEL_T:         SetTitle( _( "Label Properties" ) );                  break;
-    case SCH_NETCLASS_FLAG_T: SetTitle( _( "Net Class Flag Properties" ) );         break;
-    case SCH_SHEET_PIN_T:     SetTitle( _( "Hierarchical Sheet Pin Properties" ) ); break;
-    default:                  UNIMPLEMENTED_FOR( m_currentLabel->GetClass() );      break;
+    case SCH_GLOBAL_LABEL_T:    SetTitle( _( "Global Label Properties" ) );           break;
+    case SCH_HIER_LABEL_T:      SetTitle( _( "Hierarchical Label Properties" ) );     break;
+    case SCH_LABEL_T:           SetTitle( _( "Label Properties" ) );                  break;
+    case SCH_DIRECTIVE_LABEL_T: SetTitle( _( "Directive Label Properties" ) );        break;
+    case SCH_SHEET_PIN_T:       SetTitle( _( "Hierarchical Sheet Pin Properties" ) ); break;
+    default:            UNIMPLEMENTED_FOR( m_currentLabel->GetClass() );              break;
     }
 
     // Give a bit more room for combobox editors
@@ -158,7 +159,7 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
         m_spin2->SetBitmap( KiBitmap( BITMAPS::label_align_bottom ) );
         m_spin3->SetBitmap( KiBitmap( BITMAPS::label_align_top ) );
     }
-    else if( m_currentLabel->Type() == SCH_NETCLASS_FLAG_T )
+    else if( m_currentLabel->Type() == SCH_DIRECTIVE_LABEL_T )
     {
         m_input->Hide();
         m_output->Hide();
@@ -249,9 +250,10 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
 
         m_valueCombo->Append( existingLabelArray );
     }
-    else if( m_currentLabel->Type() == SCH_NETCLASS_FLAG_T )
+    else if( m_currentLabel->Type() == SCH_DIRECTIVE_LABEL_T )
     {
-        // Load the combobox with existing existingNetclassNames
+        // Load the combobox with existing existing netclass names.  While it's not the only
+        // think a directive is used for, it is the most common.
         NET_SETTINGS& netSettings = m_Parent->Schematic().Prj().GetProjectFile().NetSettings();
         wxArrayString existingNetclassNames;
 
@@ -297,20 +299,20 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
 
     m_fontCtrl->SetFontSelection( m_currentLabel->GetFont() );
 
-    if( m_currentLabel->Type() == SCH_NETCLASS_FLAG_T )
-        m_textSize.SetValue( static_cast<SCH_NETCLASS_FLAG*>( m_currentLabel )->GetPinLength() );
+    if( m_currentLabel->Type() == SCH_DIRECTIVE_LABEL_T )
+        m_textSize.SetValue( static_cast<SCH_DIRECTIVE_LABEL*>( m_currentLabel )->GetPinLength() );
     else
         m_textSize.SetValue( m_currentLabel->GetTextWidth() );
 
     m_bold->Check( m_currentLabel->IsBold() );
     m_italic->Check( m_currentLabel->IsItalic() );
 
-    switch( m_currentLabel->GetLabelSpinStyle() )
+    switch( m_currentLabel->GetTextSpinStyle() )
     {
-    case LABEL_SPIN_STYLE::RIGHT:  m_spin0->Check( true ); break;
-    case LABEL_SPIN_STYLE::LEFT:   m_spin1->Check( true ); break;
-    case LABEL_SPIN_STYLE::UP:     m_spin2->Check( true ); break;
-    case LABEL_SPIN_STYLE::BOTTOM: m_spin3->Check( true ); break;
+    case TEXT_SPIN_STYLE::RIGHT:  m_spin0->Check( true ); break;
+    case TEXT_SPIN_STYLE::LEFT:   m_spin1->Check( true ); break;
+    case TEXT_SPIN_STYLE::UP:     m_spin2->Check( true ); break;
+    case TEXT_SPIN_STYLE::BOTTOM: m_spin3->Check( true ); break;
     }
 
     return true;
@@ -448,8 +450,8 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
                                                                m_italic->IsChecked() ) );
     }
 
-    if( m_currentLabel->Type() == SCH_NETCLASS_FLAG_T )
-        static_cast<SCH_NETCLASS_FLAG*>( m_currentLabel )->SetPinLength( m_textSize.GetValue() );
+    if( m_currentLabel->Type() == SCH_DIRECTIVE_LABEL_T )
+        static_cast<SCH_DIRECTIVE_LABEL*>( m_currentLabel )->SetPinLength( m_textSize.GetValue() );
     else if( m_currentLabel->GetTextWidth() != m_textSize.GetValue() )
         m_currentLabel->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
 
@@ -469,19 +471,19 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
 
     m_currentLabel->SetItalic( m_italic->IsChecked() );
 
-    LABEL_SPIN_STYLE selectedSpinStyle= LABEL_SPIN_STYLE::LEFT;
+    TEXT_SPIN_STYLE selectedSpinStyle= TEXT_SPIN_STYLE::LEFT;
 
     if( m_spin0->IsChecked() )
-        selectedSpinStyle = LABEL_SPIN_STYLE::RIGHT;
+        selectedSpinStyle = TEXT_SPIN_STYLE::RIGHT;
     else if( m_spin1->IsChecked() )
-        selectedSpinStyle = LABEL_SPIN_STYLE::LEFT;
+        selectedSpinStyle = TEXT_SPIN_STYLE::LEFT;
     else if( m_spin2->IsChecked() )
-        selectedSpinStyle = LABEL_SPIN_STYLE::UP;
+        selectedSpinStyle = TEXT_SPIN_STYLE::UP;
     else if( m_spin3->IsChecked() )
-        selectedSpinStyle = LABEL_SPIN_STYLE::BOTTOM;
+        selectedSpinStyle = TEXT_SPIN_STYLE::BOTTOM;
 
-    if( m_currentLabel->GetLabelSpinStyle() != selectedSpinStyle )
-        m_currentLabel->SetLabelSpinStyle( selectedSpinStyle );
+    if( m_currentLabel->GetTextSpinStyle() != selectedSpinStyle )
+        m_currentLabel->SetTextSpinStyle( selectedSpinStyle );
 
     if( doAutoplace )
         m_currentLabel->AutoAutoplaceFields( m_Parent->GetScreen() );

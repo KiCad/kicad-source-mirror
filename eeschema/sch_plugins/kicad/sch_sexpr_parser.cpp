@@ -45,6 +45,7 @@
 #include <sch_edit_frame.h>          // SYM_ORIENT_XXX
 #include <sch_field.h>
 #include <sch_line.h>
+#include <sch_label.h>
 #include <sch_junction.h>
 #include <sch_no_connect.h>
 #include <sch_screen.h>
@@ -2169,11 +2170,14 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
             screen->Append( static_cast<SCH_ITEM*>( parseSchBezier() ) );
             break;
 
+        case T_netclass_flag:       // legacy
+            KI_FALLTHROUGH;
+
         case T_text:
         case T_label:
         case T_global_label:
         case T_hierarchical_label:
-        case T_netclass_flag:
+        case T_directive_label:
             screen->Append( static_cast<SCH_ITEM*>( parseSchText() ) );
             break;
 
@@ -3105,11 +3109,12 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
 
     switch( CurTok() )
     {
-    case T_text:                text = std::make_unique<SCH_TEXT>();          break;
-    case T_label:               text = std::make_unique<SCH_LABEL>();         break;
-    case T_global_label:        text = std::make_unique<SCH_GLOBALLABEL>();   break;
-    case T_hierarchical_label:  text = std::make_unique<SCH_HIERLABEL>();     break;
-    case T_netclass_flag:       text = std::make_unique<SCH_NETCLASS_FLAG>(); break;
+    case T_text:                text = std::make_unique<SCH_TEXT>();            break;
+    case T_label:               text = std::make_unique<SCH_LABEL>();           break;
+    case T_global_label:        text = std::make_unique<SCH_GLOBALLABEL>();     break;
+    case T_hierarchical_label:  text = std::make_unique<SCH_HIERLABEL>();       break;
+    case T_netclass_flag:       text = std::make_unique<SCH_DIRECTIVE_LABEL>(); break;
+    case T_directive_label:     text = std::make_unique<SCH_DIRECTIVE_LABEL>(); break;
     default:
         wxCHECK_MSG( false, nullptr, "Cannot parse " + GetTokenString( CurTok() ) + " as text." );
     }
@@ -3139,13 +3144,13 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
 
             switch( static_cast<int>( parseDouble( "text angle" ) ) )
             {
-            case 0:    text->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );    break;
-            case 90:   text->SetLabelSpinStyle( LABEL_SPIN_STYLE::UP );       break;
-            case 180:  text->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );     break;
-            case 270:  text->SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM );   break;
+            case 0:   text->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );    break;
+            case 90:  text->SetTextSpinStyle( TEXT_SPIN_STYLE::UP );       break;
+            case 180: text->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );     break;
+            case 270: text->SetTextSpinStyle( TEXT_SPIN_STYLE::BOTTOM );   break;
             default:
                 wxFAIL;
-                text->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
+                text->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
                 break;
             }
 
@@ -3153,22 +3158,25 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
             break;
 
         case T_shape:
+        {
             if( text->Type() == SCH_TEXT_T || text->Type() == SCH_LABEL_T )
                 Unexpected( T_shape );
+
+            SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( text.get() );
 
             token = NextTok();
 
             switch( token )
             {
-            case T_input:          text->SetShape( LABEL_FLAG_SHAPE::L_INPUT );        break;
-            case T_output:         text->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );       break;
-            case T_bidirectional:  text->SetShape( LABEL_FLAG_SHAPE::L_BIDI );         break;
-            case T_tri_state:      text->SetShape( LABEL_FLAG_SHAPE::L_TRISTATE );     break;
-            case T_passive:        text->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );  break;
-            case T_dot:            text->SetShape( LABEL_FLAG_SHAPE::F_DOT );          break;
-            case T_round:          text->SetShape( LABEL_FLAG_SHAPE::F_ROUND );        break;
-            case T_diamond:        text->SetShape( LABEL_FLAG_SHAPE::F_DIAMOND );      break;
-            case T_rectangle:      text->SetShape( LABEL_FLAG_SHAPE::F_RECTANGLE );    break;
+            case T_input:          label->SetShape( LABEL_FLAG_SHAPE::L_INPUT );        break;
+            case T_output:         label->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );       break;
+            case T_bidirectional:  label->SetShape( LABEL_FLAG_SHAPE::L_BIDI );         break;
+            case T_tri_state:      label->SetShape( LABEL_FLAG_SHAPE::L_TRISTATE );     break;
+            case T_passive:        label->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );  break;
+            case T_dot:            label->SetShape( LABEL_FLAG_SHAPE::F_DOT );          break;
+            case T_round:          label->SetShape( LABEL_FLAG_SHAPE::F_ROUND );        break;
+            case T_diamond:        label->SetShape( LABEL_FLAG_SHAPE::F_DIAMOND );      break;
+            case T_rectangle:      label->SetShape( LABEL_FLAG_SHAPE::F_RECTANGLE );    break;
             default:
                 Expecting( "input, output, bidirectional, tri_state, passive, dot, round, diamond"
                            "or rectangle" );
@@ -3176,13 +3184,14 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
 
             NeedRIGHT();
             break;
+        }
 
         case T_length:
         {
-            if( text->Type() != SCH_NETCLASS_FLAG_T )
+            if( text->Type() != SCH_DIRECTIVE_LABEL_T )
                 Unexpected( T_length );
 
-            SCH_NETCLASS_FLAG* label = static_cast<SCH_NETCLASS_FLAG*>( text.get() );
+            SCH_DIRECTIVE_LABEL* label = static_cast<SCH_DIRECTIVE_LABEL*>( text.get() );
 
             label->SetPinLength( parseInternalUnits( "pin length" ) );
             NeedRIGHT();
@@ -3205,14 +3214,14 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
                 {
                     // The vertically aligned text angle is always 90 (labels use 270 for the
                     // down direction) combined with the text justification flags.
-                    text->SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM );
+                    text->SetTextSpinStyle( TEXT_SPIN_STYLE::BOTTOM );
                 }
                 else if( text->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT
                        && text->GetTextAngle().IsHorizontal() )
                 {
                     // The horizontally aligned text angle is always 0 (labels use 180 for the
                     // left direction) combined with the text justification flags.
-                    text->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
+                    text->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
                 }
             }
 

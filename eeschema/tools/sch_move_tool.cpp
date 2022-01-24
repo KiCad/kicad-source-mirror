@@ -583,7 +583,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR
             // end.
             for( SCH_ITEM* item : itemsOverlapping )
             {
-                if( item->Type() == SCH_LABEL_T || item->Type() == SCH_NETCLASS_FLAG_T )
+                if( item->Type() == SCH_LABEL_T || item->Type() == SCH_DIRECTIVE_LABEL_T )
                 {
                     SCH_TEXT* label = static_cast<SCH_TEXT*>( item );
 
@@ -647,7 +647,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
-        case SCH_NETCLASS_FLAG_T:
+        case SCH_DIRECTIVE_LABEL_T:
             // Performance optimization:
             if( test->HasFlag( TEMP_SELECTED ) )
                 break;
@@ -774,7 +774,7 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
         break;
     }
     case SCH_LABEL_T:
-    case SCH_NETCLASS_FLAG_T:
+    case SCH_DIRECTIVE_LABEL_T:
     {
         SCH_TEXT* label = static_cast<SCH_TEXT*>( aItem );
 

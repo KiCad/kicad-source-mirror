@@ -166,7 +166,7 @@ bool EE_SELECTION_TOOL::Init()
                                         SCH_GLOBAL_LABEL_T,
                                         SCH_HIER_LABEL_T,
                                         SCH_LABEL_T,
-                                        SCH_NETCLASS_FLAG_T,
+                                        SCH_DIRECTIVE_LABEL_T,
                                         SCH_SHEET_PIN_T,
                                         SCH_PIN_T,
                                         EOT };
@@ -1341,19 +1341,19 @@ bool EE_SELECTION_TOOL::selectMultiple()
 
 static KICAD_T nodeTypes[] =
 {
-        SCH_SYMBOL_LOCATE_POWER_T,
-        SCH_PIN_T,
-        SCH_ITEM_LOCATE_WIRE_T,
-        SCH_ITEM_LOCATE_BUS_T,
-        SCH_BUS_WIRE_ENTRY_T,
-        SCH_BUS_BUS_ENTRY_T,
-        SCH_LABEL_T,
-        SCH_HIER_LABEL_T,
-        SCH_GLOBAL_LABEL_T,
-        SCH_SHEET_PIN_T,
-        SCH_NETCLASS_FLAG_T,
-        SCH_JUNCTION_T,
-        EOT
+    SCH_SYMBOL_LOCATE_POWER_T,
+    SCH_PIN_T,
+    SCH_ITEM_LOCATE_WIRE_T,
+    SCH_ITEM_LOCATE_BUS_T,
+    SCH_BUS_WIRE_ENTRY_T,
+    SCH_BUS_BUS_ENTRY_T,
+    SCH_LABEL_T,
+    SCH_HIER_LABEL_T,
+    SCH_GLOBAL_LABEL_T,
+    SCH_SHEET_PIN_T,
+    SCH_DIRECTIVE_LABEL_T,
+    SCH_JUNCTION_T,
+    EOT
 };
 
 

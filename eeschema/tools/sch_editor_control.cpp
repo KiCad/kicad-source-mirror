@@ -1591,7 +1591,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     {
         // If it wasn't content, then paste as content
         SCH_TEXT* text_item = new SCH_TEXT( wxPoint( 0, 0 ), content );
-        text_item->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT ); // Left alignment
+        text_item->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT ); // Left alignment
         tempScreen->Append( text_item );
     }
 

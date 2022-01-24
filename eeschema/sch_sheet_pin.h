@@ -22,10 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _SCH_SHEEET_PIN_H_
-#define _SCH_SHEEET_PIN_H_
+#ifndef SCH_SHEEET_PIN_H
+#define SCH_SHEEET_PIN_H
 
-#include <sch_text.h>
+#include <sch_label.h>
 
 class KIID;
 class LINE_READER;
@@ -206,4 +206,4 @@ private:
     SHEET_SIDE m_edge;
 };
 
-#endif // _SCH_SHEEET_PIN_H_
+#endif // SCH_SHEEET_PIN_H

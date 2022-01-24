@@ -225,7 +225,7 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
     HANDLE_ITEM( SCH_SHAPE_T, SCH_SHAPE );
     HANDLE_ITEM( SCH_TEXT_T, SCH_TEXT );
     HANDLE_ITEM( SCH_LABEL_T, SCH_LABEL );
-    HANDLE_ITEM( SCH_NETCLASS_FLAG_T, SCH_NETCLASS_FLAG );
+    HANDLE_ITEM( SCH_DIRECTIVE_LABEL_T, SCH_DIRECTIVE_LABEL );
     HANDLE_ITEM( SCH_FIELD_T, SCH_FIELD );
     HANDLE_ITEM( SCH_HIER_LABEL_T, SCH_HIERLABEL );
     HANDLE_ITEM( SCH_GLOBAL_LABEL_T, SCH_GLOBALLABEL );
@@ -1473,12 +1473,12 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
 
     switch( aText->Type() )
     {
-    case SCH_SHEET_PIN_T:     aLayer = LAYER_SHEETLABEL;    break;
-    case SCH_HIER_LABEL_T:    aLayer = LAYER_HIERLABEL;     break;
-    case SCH_GLOBAL_LABEL_T:  aLayer = LAYER_GLOBLABEL;     break;
-    case SCH_NETCLASS_FLAG_T: aLayer = LAYER_NETCLASS_REFS; break;
-    case SCH_LABEL_T:         aLayer = LAYER_LOCLABEL;      break;
-    default:                  aLayer = LAYER_NOTES;         break;
+    case SCH_SHEET_PIN_T:       aLayer = LAYER_SHEETLABEL;    break;
+    case SCH_HIER_LABEL_T:      aLayer = LAYER_HIERLABEL;     break;
+    case SCH_GLOBAL_LABEL_T:    aLayer = LAYER_GLOBLABEL;     break;
+    case SCH_DIRECTIVE_LABEL_T: aLayer = LAYER_NETCLASS_REFS; break;
+    case SCH_LABEL_T:           aLayer = LAYER_LOCLABEL;      break;
+    default:                    aLayer = LAYER_NOTES;         break;
     }
 
     COLOR4D color = getRenderColor( aText, aLayer, drawingShadows );
@@ -1892,7 +1892,7 @@ void SCH_PAINTER::draw( const SCH_HIERLABEL *aLabel, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( const SCH_NETCLASS_FLAG *aLabel, int aLayer )
+void SCH_PAINTER::draw( const SCH_DIRECTIVE_LABEL *aLabel, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 

@@ -121,12 +121,12 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     m_bold->Check( m_currentText->IsBold() );
     m_italic->Check( m_currentText->IsItalic() );
 
-    switch( m_currentText->GetLabelSpinStyle() )
+    switch( m_currentText->GetTextSpinStyle() )
     {
-    case LABEL_SPIN_STYLE::RIGHT:  m_spin0->Check( true ); break;
-    case LABEL_SPIN_STYLE::LEFT:   m_spin1->Check( true ); break;
-    case LABEL_SPIN_STYLE::UP:     m_spin2->Check( true ); break;
-    case LABEL_SPIN_STYLE::BOTTOM: m_spin3->Check( true ); break;
+    case TEXT_SPIN_STYLE::RIGHT:  m_spin0->Check( true ); break;
+    case TEXT_SPIN_STYLE::LEFT:   m_spin1->Check( true ); break;
+    case TEXT_SPIN_STYLE::UP:     m_spin2->Check( true ); break;
+    case TEXT_SPIN_STYLE::BOTTOM: m_spin3->Check( true ); break;
     }
 
     return true;
@@ -267,19 +267,19 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
     m_currentText->SetItalic( m_italic->IsChecked() );
 
-    LABEL_SPIN_STYLE selectedSpinStyle= LABEL_SPIN_STYLE::LEFT;
+    TEXT_SPIN_STYLE selectedSpinStyle= TEXT_SPIN_STYLE::LEFT;
 
     if( m_spin0->IsChecked() )
-        selectedSpinStyle = LABEL_SPIN_STYLE::RIGHT;
+        selectedSpinStyle = TEXT_SPIN_STYLE::RIGHT;
     else if( m_spin1->IsChecked() )
-        selectedSpinStyle = LABEL_SPIN_STYLE::LEFT;
+        selectedSpinStyle = TEXT_SPIN_STYLE::LEFT;
     else if( m_spin2->IsChecked() )
-        selectedSpinStyle = LABEL_SPIN_STYLE::UP;
+        selectedSpinStyle = TEXT_SPIN_STYLE::UP;
     else if( m_spin3->IsChecked() )
-        selectedSpinStyle = LABEL_SPIN_STYLE::BOTTOM;
+        selectedSpinStyle = TEXT_SPIN_STYLE::BOTTOM;
 
-    if( m_currentText->GetLabelSpinStyle() != selectedSpinStyle )
-        m_currentText->SetLabelSpinStyle( selectedSpinStyle );
+    if( m_currentText->GetTextSpinStyle() != selectedSpinStyle )
+        m_currentText->SetTextSpinStyle( selectedSpinStyle );
 
     m_frame->UpdateItem( m_currentText, false, true );
     m_frame->GetCanvas()->Refresh();

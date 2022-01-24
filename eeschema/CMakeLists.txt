@@ -198,12 +198,11 @@ set( EESCHEMA_SRCS
     sch_bus_entry.cpp
     ee_collectors.cpp
     sch_connection.cpp
-    sch_plugins/eagle/sch_eagle_plugin.cpp
     sch_field.cpp
     sch_io_mgr.cpp
     sch_item.cpp
     sch_junction.cpp
-    sch_plugins/legacy/sch_legacy_plugin.cpp
+    sch_label.cpp
     sch_line.cpp
     sch_marker.cpp
     sch_no_connect.cpp
@@ -211,8 +210,6 @@ set( EESCHEMA_SRCS
     sch_plugin.cpp
     sch_preview_panel.cpp
     sch_screen.cpp
-    sch_plugins/kicad/sch_sexpr_parser.cpp
-    sch_plugins/kicad/sch_sexpr_plugin.cpp
     sch_shape.cpp
     sch_sheet.cpp
     sch_sheet_path.cpp
@@ -242,6 +239,11 @@ set( EESCHEMA_SRCS
     netlist_exporters/netlist_exporter_orcadpcb2.cpp
     netlist_exporters/netlist_exporter_pspice.cpp
     netlist_exporters/netlist_generator.cpp
+
+    sch_plugins/eagle/sch_eagle_plugin.cpp
+    sch_plugins/kicad/sch_sexpr_parser.cpp
+    sch_plugins/kicad/sch_sexpr_plugin.cpp
+    sch_plugins/legacy/sch_legacy_plugin.cpp
 
     # Simulator settings must get built even when the simulator build option is disabled.
     sim/spice_settings.cpp
