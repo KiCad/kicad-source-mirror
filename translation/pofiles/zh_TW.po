@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-01-15 22:43+0000\n"
+"PO-Revision-Date: 2022-02-01 13:58+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/v6/zh_Hant/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.11-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -534,11 +534,11 @@ msgstr "切換膠粘層的顯示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:260
 msgid "Toggle silkscreen display"
-msgstr "切換網版印刷層顯示"
+msgstr "切換絲印層顯示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:260
 msgid "Toggle display of silkscreen layers"
-msgstr "切換網版印刷層的顯示"
+msgstr "切換絲印層的顯示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:265
 msgid "Toggle solder mask display"
@@ -620,11 +620,11 @@ msgstr "使用顏色："
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:77
 msgid "Silkscreen top:"
-msgstr "網版印刷層頂部："
+msgstr "絲印層頂部："
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:84
 msgid "Silkscreen bottom:"
-msgstr "網版印刷層底部："
+msgstr "絲印層底部："
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:97
 msgid "Solder mask top:"
@@ -648,15 +648,15 @@ msgstr "電路板層"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:31
 msgid "Show silkscreen layers"
-msgstr "顯示網版印刷層"
+msgstr "顯示絲印層"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
 msgid "Clip silkscreen at solder mask edges"
-msgstr "將網版印刷夾在阻焊層邊緣"
+msgstr "將絲印夾在阻焊層邊緣"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:37
 msgid "Clip silkscreen at via annuli"
-msgstr "剪去過孔環的網版印刷"
+msgstr "剪去過孔環的絲印"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:40
 msgid "Show solder mask layers"
@@ -1318,7 +1318,7 @@ msgstr "負片"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:527
 msgid "Front silk screen"
-msgstr "頂層網版印刷"
+msgstr "頂層絲印"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:533
@@ -1344,7 +1344,7 @@ msgid ""
 "layer (but will be marked invisible)."
 msgstr ""
 "選擇要放置輪廓的電路板圖層。\n"
-"位號和值始終放置在網版印刷層上（但會被標記為不可見）。"
+"位號和值始終放置在絲印層上（但會被標記為不可見）。"
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
@@ -4884,11 +4884,11 @@ msgstr "F.Paste"
 
 #: common/layer_id.cpp:70
 msgid "B.Silkscreen"
-msgstr "底層絲印層"
+msgstr "B.Silkscreen"
 
 #: common/layer_id.cpp:71
 msgid "F.Silkscreen"
-msgstr "頂層絲印層"
+msgstr "F.Silkscreen"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
@@ -4920,15 +4920,15 @@ msgstr "Edge.Cuts"
 
 #: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:656
 msgid "Margin"
-msgstr "邊界"
+msgstr "Margin"
 
 #: common/layer_id.cpp:84
 msgid "F.Courtyard"
-msgstr "頂層外框層"
+msgstr "F.Courtyard"
 
 #: common/layer_id.cpp:85
 msgid "B.Courtyard"
-msgstr "底層外框層"
+msgstr "B.Courtyard"
 
 #: common/layer_id.cpp:86
 msgid "F.Fab"
@@ -10013,7 +10013,7 @@ msgstr "原理圖設定"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Import Settings from Another Project..."
-msgstr "從另一個專案匯入設定..."
+msgstr "從另一個工程匯入設定..."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:67
 msgid "Formatting"
@@ -10058,7 +10058,7 @@ msgid ""
 "Project file %s could not be loaded."
 msgstr ""
 "從專案匯入設定時出錯：\n"
-"無法載入專案檔案 %s。"
+"無法載入工程檔案 %s。"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:36
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:133
@@ -12440,7 +12440,7 @@ msgstr "在專案檔案符號庫列表中找到非法條目。"
 
 #: eeschema/files-io.cpp:386
 msgid "Project Load Warning"
-msgstr "專案載入警告"
+msgstr "工程載入警告"
 
 #: eeschema/files-io.cpp:389
 msgid ""
@@ -12834,7 +12834,7 @@ msgstr "插入原理表內容..."
 #: eeschema/menubar.cpp:94
 msgid ""
 "Append schematic sheet content from another project to the current sheet"
-msgstr "將其它專案中的原理圖新增到當前圖頁中"
+msgstr "將其它工程中的原理圖新增到當前圖頁中"
 
 #: eeschema/menubar.cpp:102 pcbnew/menubar_footprint_editor.cpp:65
 #: pcbnew/menubar_pcb_editor.cpp:107
@@ -13316,7 +13316,7 @@ msgstr "未知的記錄編號： %d。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:606
 #, c-format
 msgid "Pin's owner (%d) not found."
-msgstr "找不到引腳的所有者（%d）。"
+msgstr "找不到引腳的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:651
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1895
@@ -13338,12 +13338,12 @@ msgstr "引腳的內邊緣型別出乎意料。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:861
 #, c-format
 msgid "Label's owner (%d) not found."
-msgstr "找不到標籤的所有者（%d）。"
+msgstr "找不到標籤的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:978
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
-msgstr "貝塞爾曲線有 %d 個控制點。預期至少2 個。"
+msgstr "貝塞爾曲線有 %d 個控制點。預期至少 2 個。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1035
 #, c-format
@@ -13353,17 +13353,17 @@ msgstr "找不到貝塞爾曲線的所有者 (%d)。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1148
 #, c-format
 msgid "Polyline's owner (%d) not found."
-msgstr "找不到多段線的所有者（%d）。"
+msgstr "找不到多段線的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1207
 #, c-format
 msgid "Polygon's owner (%d) not found."
-msgstr "找不到多邊形的所有者（%d）。"
+msgstr "找不到多邊形的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1288
 #, c-format
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "找不到圓角矩形的所有者（%d）。"
+msgstr "找不到圓角矩形的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1324
 msgid "Arcs on schematic not currently supported."
@@ -13377,12 +13377,12 @@ msgstr "找不到圓弧所有者 (%d)。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1402
 #, c-format
 msgid "Line's owner (%d) not found."
-msgstr "找不到線的所有者（%d）。"
+msgstr "找不到線的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1473
 #, c-format
 msgid "Rectangle's owner (%d) not found."
-msgstr "找不到矩形的所有者（%d）。"
+msgstr "找不到矩形的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1541
 #, c-format
@@ -13422,12 +13422,12 @@ msgstr "找不到檔案“%s”。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2234
 #, c-format
 msgid "Sheetname's owner (%d) not found."
-msgstr "找不到大料名稱的所有者（%d）。"
+msgstr "找不到大料名稱的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2257
 #, c-format
 msgid "Filename's owner (%d) not found."
-msgstr "找不到檔名的所有者（%d）。"
+msgstr "找不到檔名的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2291
 #, c-format
@@ -13437,12 +13437,12 @@ msgstr "找不到指示符所有者 (%d)。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2426
 #, c-format
 msgid "Implementation's owner (%d) not found."
-msgstr "找不到實現的所有者（%d）。"
+msgstr "找不到實現的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2436
 #, c-format
 msgid "Footprint's owner (%d) not found."
-msgstr "找不到封裝的所有者（%d）。"
+msgstr "找不到封裝的所有者 (%d)。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:74
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:73
@@ -13542,9 +13542,7 @@ msgid ""
 "Symbol '%s' is scaled in the original CADSTAR schematic but this is not "
 "supported in KiCad. When the symbol is reloaded from the library, it will "
 "revert to the original 1:1 scale."
-msgstr ""
-"符號 '%s' 在原始 CADSTAR 原理圖中按比例縮放，但 KiCad 不支援。當符號從庫中重"
-"新載入時，它將恢復到原來的1:1比例。"
+msgstr "符號 '%s' 在原始 CADSTAR 原理圖中按比例縮放，但 KiCad 不支援。當符號從庫中重新載入時，它將恢復到原來的 1:1 比例。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1190
 #, c-format
@@ -13555,7 +13553,7 @@ msgstr "文件符號 '%s' 是指庫中不存在的符號定義 ID '%s'。未載�
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1297
 msgid "Text Variables could not be set as there is no project attached."
-msgstr "由於原理圖沒有附加在專案中，因此無法設定文字變數。"
+msgstr "由於原理圖沒有附加在工程中，因此無法設定文字變數。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1740
 #, c-format
@@ -13563,9 +13561,7 @@ msgid ""
 "Symbol '%s' is rotated by an angle of %.1f degrees in the original CADSTAR "
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
-msgstr ""
-"在原始CADSTAR設計中，符號'%s'旋轉了%.1f度角，但KiCad僅支援90度倍數的旋轉角。"
-"連線線將需要手動固定。"
+msgstr "在原始CADSTAR設計中，符號 '%s' 旋轉了 %.1f 度角，但 KiCad 僅支援 90 度倍數的旋轉角。連線線將需要手動固定。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1754
 #, c-format
@@ -13588,8 +13584,8 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
-"原理圖塊ID %s（塊名稱：“ %s”）繪製在圖紙“ %s”上，但未連結到專案中的另一張圖"
-"紙。 KiCad要求將所有圖紙符號都與圖紙相關聯，因此未載入該圖塊。"
+"原理圖塊 ID %s（塊名稱：“%s”）繪製在圖紙“%s”上，但未連結到專案中的另一張圖紙。 KiCad "
+"要求將所有圖紙符號都與圖紙相關聯，因此未載入該圖塊。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2206
 #, c-format
@@ -13795,7 +13791,7 @@ msgstr "需要“斜體”或 \"~\" 符號"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1763
 msgid "symbol field text attributes must be 3 characters wide"
-msgstr "符號欄位文字屬性必須是3個字元寬"
+msgstr "符號欄位文字屬性必須是 3 個字元寬"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2617
 msgid "Unexpected end of file."
@@ -14642,23 +14638,23 @@ msgstr "時間"
 
 #: eeschema/sim/sim_plot_panel.cpp:423
 msgid "Voltage (swept)"
-msgstr "電壓（掃描）"
+msgstr "電壓 (掃描)"
 
 #: eeschema/sim/sim_plot_panel.cpp:427
 msgid "Current (swept)"
-msgstr "電流 (swept)"
+msgstr "電流 (掃描)"
 
 #: eeschema/sim/sim_plot_panel.cpp:430
 msgid "Resistance (swept)"
-msgstr "電阻 (swept)"
+msgstr "電阻 (掃描)"
 
 #: eeschema/sim/sim_plot_panel.cpp:434
 msgid "Temperature (swept)"
-msgstr "溫度 (swept)"
+msgstr "溫度 (掃描)"
 
 #: eeschema/sim/sim_plot_panel.cpp:439
 msgid "Voltage (measured)"
-msgstr "電壓(測量)"
+msgstr "電壓 (測量)"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -16276,8 +16272,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>重複引腳%s</b>%s，位於 <b>(%.3f, %.3f)</b>，和引腳 %s%s衝突，後者位於轉換"
-"後的座標 <b>(%.3f, %.3f)</b>。"
+"<b>重複引腳 %s</b> %s，位於 <b>(%.3f, %.3f)</b>，和引腳 %s%s 衝突，後者位於轉換後的座標 <b>(%.3f, %."
+"3f)</b>。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:280
 #, c-format
@@ -16285,17 +16281,15 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted."
 msgstr ""
-"<b>重複引腳%s</b>%s，位置 <b>(%.3f, %.3f)</b>，與引腳 %s%s 衝突，後者位於 "
-"<b>(%.3f, %.3f)</b>, 衝突區域在轉換後的單元 %c 和 %c。"
+"<b>重複引腳 %s</b> %s，位置 <b>(%.3f, %.3f)</b>，與引腳 %s%s 衝突，後者位於 <b>(%.3f, %.3f)</"
+"b>, 衝突區域在轉換後的單元 %c 和 %c。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:299
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b>."
-msgstr ""
-"<b>重複引腳%s</b> %s，位置 <b>(%s, %s)</b>，和引腳 %s%s衝突，後者位於 <b>(%s,"
-"%s)</b>。"
+msgstr "<b>重複引腳 %s</b> %s，位置 <b>(%s, %s)</b>，和引腳 %s%s 衝突，後者位於 <b>(%s,%s)</b>。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:312
 #, c-format
@@ -16303,8 +16297,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b> in units %c and %c."
 msgstr ""
-"<b>重複引腳 %s</b> %s，位置 <b>(%s, %s)</b>，和引腳 %s%s衝突，後者位於 "
-"<b>(%s, %s)</b>，衝突區域在單元 %c 和 %c。"
+"<b>重複引腳 %s</b> %s，位置 <b>(%s, %s)</b>，和引腳 %s%s 衝突，後者位於 <b>(%s, %s)</b>，"
+"衝突區域在單元 %c 和 %c。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:350
 #, c-format
@@ -16317,9 +16311,7 @@ msgstr "資訊：<b>隱藏的電源引腳 %s</b>%s 位於轉換的位置 <b>(%s,
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of converted."
-msgstr ""
-"資訊：<b>隱藏的電源引腳%s</b>%s，位於 <b>(%s, %s)</b>，此座標在轉換後的單元 "
-"%c 中。"
+msgstr "資訊：<b>隱藏的電源引腳 %s</b>%s，位於 <b>(%s, %s)</b>，此座標在轉換後的單元 %c 中。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:372
 #, c-format
@@ -16330,8 +16322,7 @@ msgstr "資訊：<b>隱藏的電源引腳 %s</b> %s，位於<b>(%s, %s)</b>。"
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr ""
-"資訊：<b>隱藏的電源引腳%s</b>%s，位於 <b>(%s, %s)</b>，此座標在單元 %c 中。"
+msgstr "資訊：<b>隱藏的電源引腳 %s</b>%s，位於 <b>(%s, %s)</b>，此座標在單元 %c 中。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:391
 msgid ""
@@ -16348,8 +16339,7 @@ msgstr "<b>網格外引腳 %s</b>%s 位於轉換的位置 <b>(%s, %s)</b>。"
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
 "converted."
-msgstr ""
-"<b>網格外引腳%s</b>%s，位於 <b>(%.3s, %.3s)</b>，此座標在轉換後的單元 %c 中。"
+msgstr "<b>網格外引腳 %s</b>%s，位於 <b>(%.3s, %.3s)</b>，此座標在轉換後的單元 %c 中。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:426
 #, c-format
@@ -16359,7 +16349,7 @@ msgstr "<b>網格外引腳 %s</b> %s，位於 <b>(%s,%s)</b>。"
 #: eeschema/tools/ee_inspection_tool.cpp:434
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr "<b>網格外引腳%s</b>%s，位於 <b>(%s,%s )</b>，此座標在單元 %c 中。"
+msgstr "<b>網格外引腳 %s</b>%s，位於 <b>(%s,%s )</b>，此座標在單元 %c 中。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:451
 msgid "No symbol issues found."
@@ -16812,7 +16802,7 @@ msgstr "檔案單元"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No leading zeros (TZ format)"
-msgstr "無前導零 (TZ 符號)"
+msgstr "無前導零 (TZ 格式)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No trailing zeros (LZ format)"
@@ -17051,11 +17041,11 @@ msgstr "頂部阻焊劑"
 
 #: gerbview/files.cpp:149
 msgid "Bottom overlay"
-msgstr "底層網版印刷字元"
+msgstr "底層絲印字元"
 
 #: gerbview/files.cpp:150
 msgid "Top overlay"
-msgstr "頂層網版印刷字元"
+msgstr "頂層絲印字元"
 
 #: gerbview/files.cpp:151
 msgid "Bottom paste"
@@ -17897,7 +17887,7 @@ msgstr "正在恢復 \"%s\""
 
 #: kicad/menubar.cpp:56
 msgid "Clear Recent Projects"
-msgstr "清除最近的專案"
+msgstr "清除最近的工程"
 
 #: kicad/menubar.cpp:99
 msgid "Import Non-KiCad Project..."
@@ -20732,7 +20722,7 @@ msgstr "電介質層 %d"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:529
 msgid "Top Silk Screen"
-msgstr "頂層網版印刷"
+msgstr "頂層絲印"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:537
 msgid "Top Solder Paste"
@@ -20752,7 +20742,7 @@ msgstr "底部焊膏"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:605
 msgid "Bottom Silk Screen"
-msgstr "底層網版印刷"
+msgstr "底層絲印"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:45
 msgid "Incorrect value for Epsilon R"
@@ -22972,7 +22962,7 @@ msgstr "將封裝%s從' %s'更新到 '%s'"
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:382
 #, c-format
 msgid "Change footprint %s from '%s' to '%s'"
-msgstr "將封裝 %s從 '%s' 更改為 '%s'"
+msgstr "將封裝 %s 從“%s”替換為“%s”"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:392
 msgid "*** footprint not found ***"
@@ -23452,7 +23442,7 @@ msgstr "3D 模型"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:294
 msgid "Footprint can be freely moved and oriented on the canvas."
-msgstr "封裝可以在畫布上被自由移動和更改方向。"
+msgstr "在畫布上可以自由移動和旋轉封裝。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:296
 msgid ""
@@ -24281,7 +24271,7 @@ msgstr "刪除專案"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:55
 msgid "Silk Layers"
-msgstr "網版印刷層"
+msgstr "絲印層"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:215
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:134
@@ -25338,7 +25328,7 @@ msgstr "底層錫膏"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:530
 msgid "Back silk screen"
-msgstr "底層網版印刷"
+msgstr "底層絲印"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:536
 msgid "Back solder mask"
@@ -25742,11 +25732,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:216
 msgid "Subtract soldermask from silkscreen"
-msgstr "減去開窗區域中的網版印刷"
+msgstr "剔除開窗區域中的絲印"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
 msgid "Remove silkscreen from areas without soldermask"
-msgstr "在沒有阻焊的區域移除網版印刷"
+msgstr "在沒有阻焊的區域移除絲印"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 msgid "Coordinate format:"
@@ -27290,7 +27280,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
 msgid "Minimum uVia hole:"
-msgstr "最小微孔內徑："
+msgstr "最小 U 形導通孔："
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:391
 msgid ""
@@ -27302,7 +27292,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:411
 msgid "Silkscreen"
-msgstr "網版印刷層"
+msgstr "絲印層"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:427
 msgid "Minimum item clearance:"
@@ -27313,9 +27303,7 @@ msgid ""
 "Minimum clearance between two items on the same silkscreen layer.  If set "
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
-msgstr ""
-"同一網版印刷層上兩個專案間的最小間隙。設定此值可提高辯認度。(注：不適用於單個"
-"封裝中的多個形狀。)"
+msgstr "同一絲印層上兩個專案間的最小間隙。設定此值可提高辯認度。(注：不適用於單個封裝中的多個形狀。)"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:431
 msgid "Use the Physical Stackup page to change the number of copper layers."
@@ -27441,11 +27429,11 @@ msgstr "頂層錫膏層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:94
 msgid "If you want a silk screen layer for the front side of the board"
-msgstr "開啟/關閉 頂層網版印刷層"
+msgstr "開啟/關閉 頂層絲印層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:98
 msgid "SilkS_Front"
-msgstr "頂層網版印刷層"
+msgstr "頂層絲印層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:106
 msgid "If you want a solder mask layer for the front of the board"
@@ -27784,11 +27772,11 @@ msgstr "底層阻焊層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:586
 msgid "If you want a silk screen layer for the back side of the board"
-msgstr "開啟/關閉 底層網版印刷層"
+msgstr "開啟/關閉 底層絲印層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:590
 msgid "SilkS_Back"
-msgstr "底層網版印刷層"
+msgstr "底層絲印層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:598
 msgid "If you want a solder paste layer for the back side of the board"
@@ -28279,7 +28267,7 @@ msgstr ""
 " * hole\\_clearance\n"
 "# （與通孔的間隙）\n"
 " * silk\\_clearance\n"
-"# （與網印的間隙）\n"
+"# （與絲印的間隙）\n"
 " * skew\n"
 "# （總偏差）\n"
 " * track\\_width\n"
@@ -28569,7 +28557,7 @@ msgstr "電路板設定約束"
 
 #: pcbnew/drc/drc_engine.cpp:175
 msgid "board setup constraints silk"
-msgstr "電路板設定約束網版印刷"
+msgstr "電路板設定約束絲印"
 
 #: pcbnew/drc/drc_engine.cpp:181
 msgid "board setup constraints hole"
@@ -28864,11 +28852,11 @@ msgstr "焊盤網路與原理圖不匹配"
 
 #: pcbnew/drc/drc_item.cpp:178
 msgid "Silkscreen clipped by solder mask"
-msgstr "與開窗區域相交的網版印刷"
+msgstr "與開窗區域相交的絲印"
 
 #: pcbnew/drc/drc_item.cpp:182
 msgid "Silkscreen overlap"
-msgstr "網版印刷重疊"
+msgstr "絲印重疊"
 
 #: pcbnew/drc/drc_item.cpp:186
 msgid "Trace length out of range"
@@ -29252,21 +29240,21 @@ msgstr "正在檢查文字變數..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:106
 msgid "Checking silkscreen for overlapping items..."
-msgstr "正在檢查重疊專案的網版印刷..."
+msgstr "正在檢查重疊專案的絲印..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:160
 #, c-format
 msgid "Testing %d silkscreen features against %d board items."
-msgstr "正在將 %d 個網版印刷與 %d 個電路板專案測試相交..."
+msgstr "正在將 %d 個絲印與 %d 個電路板專案測試相交..."
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:100
 msgid "Checking silkscreen for potential soldermask clipping..."
-msgstr "正在檢查網版印刷是否可能與開窗區相交..."
+msgstr "正在檢查絲印是否可能與開窗區相交..."
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:182
 #, c-format
 msgid "Testing %d mask apertures against %d silkscreen features."
-msgstr "正在將 %d 個阻焊區域與 %d 個網版印刷測試相交..."
+msgstr "正在將 %d 個阻焊區域與 %d 個絲印測試相交..."
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:83
 msgid "Checking track widths..."
@@ -29660,7 +29648,7 @@ msgstr "KiCad 封裝編輯器"
 
 #: pcbnew/footprint_edit_frame.cpp:200 pcbnew/zone_settings.cpp:219
 msgid "Inner layers"
-msgstr "內部圖層"
+msgstr "Inner layers"
 
 #: pcbnew/footprint_edit_frame.cpp:239 pcbnew/pcb_edit_frame.cpp:279
 msgid "Selection Filter"
@@ -33182,7 +33170,7 @@ msgstr "專案屬於同一網路。間隙為 0。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:498
 msgid "Silkscreen clearance resolution for:"
-msgstr "網版印刷層間隙解析適用於:"
+msgstr "絲印層間隙解析適用於:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:528
 msgid "Courtyard clearance resolution for:"
@@ -35505,11 +35493,11 @@ msgstr "底層錫膏"
 
 #: pcbnew/widgets/appearance_controls.cpp:1527
 msgid "Silkscreen on board's front"
-msgstr "頂層網版印刷"
+msgstr "頂層絲印"
 
 #: pcbnew/widgets/appearance_controls.cpp:1528
 msgid "Silkscreen on board's back"
-msgstr "底層網版印刷"
+msgstr "底層絲印"
 
 #: pcbnew/widgets/appearance_controls.cpp:1529
 msgid "Solder mask on board's front"
