@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2022-01-24 06:25+0000\n"
+"PO-Revision-Date: 2022-01-30 12:26+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -10260,7 +10260,7 @@ msgstr "原理图设置"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Import Settings from Another Project..."
-msgstr "从另一个项目导入设置..."
+msgstr "从另一个工程导入设置..."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:74
 msgid "Electrical Rules"
@@ -10296,7 +10296,7 @@ msgid ""
 "Project file %s could not be loaded."
 msgstr ""
 "从项目导入设置时出错：\n"
-"无法加载项目文件 %s。"
+"无法加载工程文件 %s。"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:81
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:158
@@ -12644,7 +12644,7 @@ msgstr "在项目文件符号库列表中找到非法条目。"
 
 #: eeschema/files-io.cpp:386
 msgid "Project Load Warning"
-msgstr "项目加载警告"
+msgstr "工程加载警告"
 
 #: eeschema/files-io.cpp:389
 msgid ""
@@ -13038,7 +13038,7 @@ msgstr "插入原理表内容..."
 #: eeschema/menubar.cpp:94
 msgid ""
 "Append schematic sheet content from another project to the current sheet"
-msgstr "将其它项目中的原理图添加到当前图页中"
+msgstr "将其它工程中的原理图添加到当前图页中"
 
 #: eeschema/menubar.cpp:102 pcbnew/menubar_footprint_editor.cpp:65
 #: pcbnew/menubar_pcb_editor.cpp:107
@@ -13524,7 +13524,7 @@ msgstr "未知的记录编号： %d。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:654
 #, c-format
 msgid "Pin's owner (%d) not found."
-msgstr "找不到引脚的所有者（%d）。"
+msgstr "找不到引脚的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:699
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1876
@@ -13546,12 +13546,12 @@ msgstr "引脚的内边缘类型出乎意料。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:909
 #, c-format
 msgid "Label's owner (%d) not found."
-msgstr "找不到标签的所有者（%d）。"
+msgstr "找不到标签的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1026
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
-msgstr "贝塞尔曲线有 %d 个控制点。预期至少2 个。"
+msgstr "贝塞尔曲线有 %d 个控制点。预期至少 2 个。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1082
 #, c-format
@@ -13561,17 +13561,17 @@ msgstr "找不到贝塞尔曲线的所有者 (%d)。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1183
 #, c-format
 msgid "Polyline's owner (%d) not found."
-msgstr "找不到多段线的所有者（%d）。"
+msgstr "找不到多段线的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1230
 #, c-format
 msgid "Polygon's owner (%d) not found."
-msgstr "找不到多边形的所有者（%d）。"
+msgstr "找不到多边形的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1280
 #, c-format
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "找不到圆角矩形的所有者（%d）。"
+msgstr "找不到圆角矩形的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1345
 #, c-format
@@ -13581,12 +13581,12 @@ msgstr "找不到圆弧所有者 (%d)。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1412
 #, c-format
 msgid "Line's owner (%d) not found."
-msgstr "找不到线的所有者（%d）。"
+msgstr "找不到线的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1460
 #, c-format
 msgid "Rectangle's owner (%d) not found."
-msgstr "找不到矩形的所有者（%d）。"
+msgstr "找不到矩形的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1521
 #, c-format
@@ -13626,12 +13626,12 @@ msgstr "找不到文件“%s”。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2215
 #, c-format
 msgid "Sheetname's owner (%d) not found."
-msgstr "找不到大料名称的所有者（%d）。"
+msgstr "找不到大料名称的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2238
 #, c-format
 msgid "Filename's owner (%d) not found."
-msgstr "找不到文件名的所有者（%d）。"
+msgstr "找不到文件名的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2272
 #, c-format
@@ -13641,12 +13641,12 @@ msgstr "找不到指示符所有者 (%d)。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2407
 #, c-format
 msgid "Implementation's owner (%d) not found."
-msgstr "找不到实现的所有者（%d）。"
+msgstr "找不到实现的所有者 (%d)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2417
 #, c-format
 msgid "Footprint's owner (%d) not found."
-msgstr "找不到封装的所有者（%d）。"
+msgstr "找不到封装的所有者 (%d)。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:75
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:73
@@ -13746,9 +13746,7 @@ msgid ""
 "Symbol '%s' is scaled in the original CADSTAR schematic but this is not "
 "supported in KiCad. When the symbol is reloaded from the library, it will "
 "revert to the original 1:1 scale."
-msgstr ""
-"符号 '%s' 在原始 CADSTAR 原理图中按比例缩放，但 KiCad 不支持。当符号从库中重"
-"新加载时，它将恢复到原来的1:1比例。"
+msgstr "符号 '%s' 在原始 CADSTAR 原理图中按比例缩放，但 KiCad 不支持。当符号从库中重新加载时，它将恢复到原来的 1:1 比例。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1187
 #, c-format
@@ -13759,7 +13757,7 @@ msgstr "文档符号 '%s' 是指库中不存在的符号定义 ID '%s'。未加�
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1296
 msgid "Text Variables could not be set as there is no project attached."
-msgstr "由于原理图没有附加在项目中，因此无法设置文本变量。"
+msgstr "由于原理图没有附加在工程中，因此无法设置文本变量。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1739
 #, c-format
@@ -13767,9 +13765,7 @@ msgid ""
 "Symbol '%s' is rotated by an angle of %.1f degrees in the original CADSTAR "
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
-msgstr ""
-"在原始CADSTAR设计中，符号'%s'旋转了%.1f度角，但KiCad仅支持90度倍数的旋转角。"
-"连接线将需要手动固定。"
+msgstr "在原始CADSTAR设计中，符号 '%s' 旋转了 %.1f 度角，但 KiCad 仅支持 90 度倍数的旋转角。连接线将需要手动固定。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1753
 #, c-format
@@ -13792,8 +13788,8 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
-"原理图块ID %s（块名称：“ %s”）绘制在图纸“ %s”上，但未链接到项目中的另一张图"
-"纸。 KiCad要求将所有图纸符号都与图纸相关联，因此未加载该图块。"
+"原理图块 ID %s（块名称：“%s”）绘制在图纸“%s”上，但未链接到项目中的另一张图纸。 KiCad "
+"要求将所有图纸符号都与图纸相关联，因此未加载该图块。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2214
 #, c-format
@@ -13999,7 +13995,7 @@ msgstr "需要“斜体”或 \"~\" 符号"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1764
 msgid "symbol field text attributes must be 3 characters wide"
-msgstr "符号字段文本属性必须是3个字符宽"
+msgstr "符号字段文本属性必须是 3 个字符宽"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2618
 msgid "Unexpected end of file."
@@ -14850,23 +14846,23 @@ msgstr "时间"
 
 #: eeschema/sim/sim_plot_panel.cpp:423
 msgid "Voltage (swept)"
-msgstr "电压（扫描）"
+msgstr "电压 (扫描)"
 
 #: eeschema/sim/sim_plot_panel.cpp:427
 msgid "Current (swept)"
-msgstr "电流 (swept)"
+msgstr "电流 (扫描)"
 
 #: eeschema/sim/sim_plot_panel.cpp:430
 msgid "Resistance (swept)"
-msgstr "电阻 (swept)"
+msgstr "电阻 (扫描)"
 
 #: eeschema/sim/sim_plot_panel.cpp:434
 msgid "Temperature (swept)"
-msgstr "温度 (swept)"
+msgstr "温度 (扫描)"
 
 #: eeschema/sim/sim_plot_panel.cpp:439
 msgid "Voltage (measured)"
-msgstr "电压(测量)"
+msgstr "电压 (测量)"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
@@ -16520,8 +16516,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>重复引脚%s</b>%s，位于 <b>(%.3f, %.3f)</b>，和引脚 %s%s冲突，后者位于转换"
-"后的坐标 <b>(%.3f, %.3f)</b>。"
+"<b>重复引脚 %s</b> %s，位于 <b>(%.3f, %.3f)</b>，和引脚 %s%s 冲突，后者位于转换后的坐标 <b>(%.3f, %."
+"3f)</b>。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:278
 #, c-format
@@ -16529,17 +16525,15 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted."
 msgstr ""
-"<b>重复引脚%s</b>%s，位置 <b>(%.3f, %.3f)</b>，与引脚 %s%s 冲突，后者位于 "
-"<b>(%.3f, %.3f)</b>, 冲突区域在转换后的单元 %c 和 %c。"
+"<b>重复引脚 %s</b> %s，位置 <b>(%.3f, %.3f)</b>，与引脚 %s%s 冲突，后者位于 <b>(%.3f, %.3f)</"
+"b>, 冲突区域在转换后的单元 %c 和 %c。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:297
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b>."
-msgstr ""
-"<b>重复引脚%s</b> %s，位置 <b>(%s, %s)</b>，和引脚 %s%s冲突，后者位于 <b>(%s,"
-"%s)</b>。"
+msgstr "<b>重复引脚 %s</b> %s，位置 <b>(%s, %s)</b>，和引脚 %s%s 冲突，后者位于 <b>(%s,%s)</b>。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:310
 #, c-format
@@ -16547,8 +16541,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b> in units %c and %c."
 msgstr ""
-"<b>重复引脚 %s</b> %s，位置 <b>(%s, %s)</b>，和引脚 %s%s冲突，后者位于 "
-"<b>(%s, %s)</b>，冲突区域在单元 %c 和 %c。"
+"<b>重复引脚 %s</b> %s，位置 <b>(%s, %s)</b>，和引脚 %s%s 冲突，后者位于 <b>(%s, %s)</b>，"
+"冲突区域在单元 %c 和 %c。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:348
 #, c-format
@@ -16561,9 +16555,7 @@ msgstr "信息：<b>隐藏的电源引脚 %s</b>%s 位于转换的位置 <b>(%s,
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of converted."
-msgstr ""
-"信息：<b>隐藏的电源引脚%s</b>%s，位于 <b>(%s, %s)</b>，此坐标在转换后的单元 "
-"%c 中。"
+msgstr "信息：<b>隐藏的电源引脚 %s</b>%s，位于 <b>(%s, %s)</b>，此坐标在转换后的单元 %c 中。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:370
 #, c-format
@@ -16574,8 +16566,7 @@ msgstr "信息：<b>隐藏的电源引脚 %s</b> %s，位于<b>(%s, %s)</b>。"
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr ""
-"信息：<b>隐藏的电源引脚%s</b>%s，位于 <b>(%s, %s)</b>，此坐标在单元 %c 中。"
+msgstr "信息：<b>隐藏的电源引脚 %s</b>%s，位于 <b>(%s, %s)</b>，此坐标在单元 %c 中。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:389
 msgid ""
@@ -16592,8 +16583,7 @@ msgstr "<b>网格外引脚 %s</b>%s 位于转换的位置 <b>(%s, %s)</b>。"
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
 "converted."
-msgstr ""
-"<b>网格外引脚%s</b>%s，位于 <b>(%.3s, %.3s)</b>，此坐标在转换后的单元 %c 中。"
+msgstr "<b>网格外引脚 %s</b>%s，位于 <b>(%.3s, %.3s)</b>，此坐标在转换后的单元 %c 中。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:424
 #, c-format
@@ -16603,7 +16593,7 @@ msgstr "<b>网格外引脚 %s</b> %s，位于 <b>(%s,%s)</b>。"
 #: eeschema/tools/ee_inspection_tool.cpp:432
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr "<b>网格外引脚%s</b>%s，位于 <b>(%s,%s )</b>，此坐标在单元 %c 中。"
+msgstr "<b>网格外引脚 %s</b>%s，位于 <b>(%s,%s )</b>，此坐标在单元 %c 中。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:449
 msgid "No symbol issues found."
@@ -16836,31 +16826,31 @@ msgstr " X "
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "10A Log"
-msgstr ""
+msgstr "10A Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15A Log"
-msgstr ""
+msgstr "15A Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15A Log S"
-msgstr ""
+msgstr "15A Log S"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "10C Rev Log"
-msgstr ""
+msgstr "10C Rev Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15C Rev Log"
-msgstr ""
+msgstr "15C Rev Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15C Rev Log S"
-msgstr ""
+msgstr "15C Rev Log S"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "0B Lin"
-msgstr ""
+msgstr "0B Lin"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "4B S-Curve"
@@ -17131,7 +17121,7 @@ msgstr "文件单元"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No leading zeros (TZ format)"
-msgstr "无前导零 (TZ 符号)"
+msgstr "无前导零 (TZ 格式)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No trailing zeros (LZ format)"
@@ -18175,7 +18165,7 @@ msgstr "正在恢复 \"%s\""
 
 #: kicad/menubar.cpp:56
 msgid "Clear Recent Projects"
-msgstr "清除最近的项目"
+msgstr "清除最近的工程"
 
 #: kicad/menubar.cpp:99
 msgid "Import Non-KiCad Project..."
