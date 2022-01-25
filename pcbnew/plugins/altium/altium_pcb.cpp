@@ -733,8 +733,8 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
         }
         case ALTIUM_RECORD::REGION:
         {
-            AREGION6 region( parser, false /* TODO */ );
-            // TODO: implement
+            AREGION6 region( parser, false );
+            ConvertShapeBasedRegions6ToFootprintItem( footprint.get(), region );
             break;
         }
         case ALTIUM_RECORD::MODEL:
@@ -1834,107 +1834,16 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const ALTIUM_COMPOUND_FILE&     aA
         checkpoint();
         AREGION6 elem( reader, true );
 
-        if( elem.kind == ALTIUM_REGION_KIND::BOARD_CUTOUT )
+        if( elem.component == ALTIUM_COMPONENT_NONE
+            || elem.kind == ALTIUM_REGION_KIND::BOARD_CUTOUT )
         {
-            HelperCreateBoardOutline( elem.outline );
-        }
-        else if( elem.kind == ALTIUM_REGION_KIND::POLYGON_CUTOUT || elem.is_keepout )
-        {
-            SHAPE_LINE_CHAIN linechain;
-            HelperShapeLineChainFromAltiumVertices( linechain, elem.outline );
-
-            if( linechain.PointCount() < 2 )
-            {
-                // We have found multiple Altium files with polygon records containing nothing but
-                // two coincident vertices.  These polygons do not appear when opening the file in
-                // Altium.  https://gitlab.com/kicad/code/kicad/-/issues/8183
-                //
-                // wxLogError( _( "ShapeBasedRegion has only %d point extracted from %ld vertices. "
-                //                "At least 2 points are required." ),
-                //              linechain.PointCount(),
-                //              elem.outline.size() );
-                continue;
-            }
-
-            ZONE* zone = new ZONE( m_board );
-            m_board->Add( zone, ADD_MODE::APPEND );
-
-            zone->SetFillVersion( 6 );
-            zone->SetIsRuleArea( true );
-            zone->SetDoNotAllowTracks( false );
-            zone->SetDoNotAllowVias( false );
-            zone->SetDoNotAllowPads( false );
-            zone->SetDoNotAllowFootprints( false );
-            zone->SetDoNotAllowCopperPour( true );
-
-            zone->SetPosition( elem.outline.at( 0 ).position );
-            zone->Outline()->AddOutline( linechain );
-
-            if( elem.layer == ALTIUM_LAYER::MULTI_LAYER )
-            {
-                zone->SetLayer( F_Cu );
-                zone->SetLayerSet( LSET::AllCuMask() );
-            }
-            else
-            {
-                PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
-
-                if( klayer == UNDEFINED_LAYER )
-                {
-                    wxLogWarning( _( "Zone found on an Altium layer (%d) with no KiCad equivalent. "
-                                     "It has been moved to KiCad layer Eco1_User." ),
-                                  elem.layer );
-                    klayer = Eco1_User;
-                }
-                zone->SetLayer( klayer );
-            }
-
-            zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
-                                         ZONE::GetDefaultHatchPitch(), true );
-        }
-        else if( elem.kind == ALTIUM_REGION_KIND::COPPER )
-        {
-            if( elem.subpolyindex == ALTIUM_POLYGON_NONE )
-            {
-                PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
-
-                if( klayer == UNDEFINED_LAYER )
-                {
-                    wxLogWarning( _( "Polygon found on an Altium layer (%d) with no KiCad equivalent. "
-                                     "It has been moved to KiCad layer Eco1_User." ),
-                                  elem.layer );
-                    klayer = Eco1_User;
-                }
-
-                SHAPE_LINE_CHAIN linechain;
-                HelperShapeLineChainFromAltiumVertices( linechain, elem.outline );
-
-                if( linechain.PointCount() < 2 )
-                {
-                    // We have found multiple Altium files with polygon records containing nothing
-                    // but two coincident vertices.  These polygons do not appear when opening the
-                    // file in Altium.  https://gitlab.com/kicad/code/kicad/-/issues/8183
-                    //
-                    // wxLogError( _( "Polygon has only %d point extracted from %ld vertices. At "
-                    //                "least 2 points are required." ),
-                    //             linechain.PointCount(),
-                    //             elem.outline.size() );
-
-                    continue;
-                }
-
-                PCB_SHAPE* shape = new PCB_SHAPE( m_board, SHAPE_T::POLY );
-                m_board->Add( shape, ADD_MODE::APPEND );
-                shape->SetFilled( true );
-                shape->SetLayer( klayer );
-                shape->SetStroke( STROKE_PARAMS( 0 ) );
-
-                shape->SetPolyShape( linechain );
-            }
+            // TODO: implement all different types for footprints
+            ConvertShapeBasedRegions6ToBoardItem( elem );
         }
         else
         {
-            wxLogError( _( "Ignored polygon shape of kind %d (not yet supported)." ), elem.kind );
+            FOOTPRINT* footprint = HelperGetFootprint( elem.component );
+            ConvertShapeBasedRegions6ToFootprintItem( footprint, elem );
         }
     }
 
@@ -1943,6 +1852,192 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const ALTIUM_COMPOUND_FILE&     aA
         THROW_IO_ERROR( "ShapeBasedRegions6 stream is not fully parsed" );
     }
 }
+
+
+void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem )
+{
+    if( aElem.kind == ALTIUM_REGION_KIND::BOARD_CUTOUT )
+    {
+        HelperCreateBoardOutline( aElem.outline );
+    }
+    else if( aElem.kind == ALTIUM_REGION_KIND::POLYGON_CUTOUT || aElem.is_keepout )
+    {
+        SHAPE_LINE_CHAIN linechain;
+        HelperShapeLineChainFromAltiumVertices( linechain, aElem.outline );
+
+        if( linechain.PointCount() < 2 )
+        {
+            // We have found multiple Altium files with polygon records containing nothing but
+            // two coincident vertices.  These polygons do not appear when opening the file in
+            // Altium.  https://gitlab.com/kicad/code/kicad/-/issues/8183
+            return;
+        }
+
+        ZONE* zone = new ZONE( m_board );
+        m_board->Add( zone, ADD_MODE::APPEND );
+
+        zone->SetFillVersion( 6 );
+        zone->SetIsRuleArea( true );
+        zone->SetDoNotAllowTracks( false );
+        zone->SetDoNotAllowVias( false );
+        zone->SetDoNotAllowPads( false );
+        zone->SetDoNotAllowFootprints( false );
+        zone->SetDoNotAllowCopperPour( true );
+
+        zone->SetPosition( aElem.outline.at( 0 ).position );
+        zone->Outline()->AddOutline( linechain );
+
+        if( aElem.layer == ALTIUM_LAYER::MULTI_LAYER )
+        {
+            zone->SetLayer( F_Cu );
+            zone->SetLayerSet( LSET::AllCuMask() );
+        }
+        else
+        {
+            PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
+
+            if( klayer == UNDEFINED_LAYER )
+            {
+                wxLogWarning( _( "Zone found on an Altium layer (%d) with no KiCad equivalent. "
+                                 "It has been moved to KiCad layer Eco1_User." ),
+                              aElem.layer );
+                klayer = Eco1_User;
+            }
+            zone->SetLayer( klayer );
+        }
+
+        zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
+                                     ZONE::GetDefaultHatchPitch(), true );
+    }
+    else if( aElem.kind == ALTIUM_REGION_KIND::COPPER )
+    {
+        if( aElem.subpolyindex == ALTIUM_POLYGON_NONE )
+        {
+            for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
+            {
+                ConvertShapeBasedRegions6ToBoardItemOnLayer( aElem, klayer );
+            }
+        }
+    }
+    else
+    {
+        wxLogError( _( "Ignored polygon shape of kind %d (not yet supported)." ), aElem.kind );
+    }
+}
+
+
+void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFootprint,
+                                                           const AREGION6& aElem )
+{
+    if( aElem.kind == ALTIUM_REGION_KIND::POLYGON_CUTOUT || aElem.is_keepout )
+    {
+        SHAPE_LINE_CHAIN linechain;
+        HelperShapeLineChainFromAltiumVertices( linechain, aElem.outline );
+
+        if( linechain.PointCount() < 2 )
+        {
+            // We have found multiple Altium files with polygon records containing nothing but
+            // two coincident vertices. These polygons do not appear when opening the file in
+            // Altium. https://gitlab.com/kicad/code/kicad/-/issues/8183
+            return;
+        }
+
+        FP_ZONE* zone = new FP_ZONE( aFootprint );
+        aFootprint->Add( zone, ADD_MODE::APPEND );
+
+        zone->SetFillVersion( 6 );
+        zone->SetIsRuleArea( true );
+        zone->SetDoNotAllowTracks( false );
+        zone->SetDoNotAllowVias( false );
+        zone->SetDoNotAllowPads( false );
+        zone->SetDoNotAllowFootprints( false );
+        zone->SetDoNotAllowCopperPour( true );
+
+        zone->SetPosition( aElem.outline.at( 0 ).position );
+        zone->Outline()->AddOutline( linechain );
+
+        if( aElem.layer == ALTIUM_LAYER::MULTI_LAYER )
+        {
+            zone->SetLayer( F_Cu );
+            zone->SetLayerSet( LSET::AllCuMask() );
+        }
+        else
+        {
+            std::vector<PCB_LAYER_ID> klayers = GetKicadLayersToIterate( aElem.layer );
+            zone->SetLayer( klayers.at( 0 ) );
+        }
+
+        zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
+                                     ZONE::GetDefaultHatchPitch(), true );
+    }
+    else if( aElem.kind == ALTIUM_REGION_KIND::COPPER )
+    {
+        if( aElem.subpolyindex == ALTIUM_POLYGON_NONE )
+        {
+            for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
+            {
+                ConvertShapeBasedRegions6ToFootprintItemOnLayer( aFootprint, aElem, klayer );
+            }
+        }
+    }
+    else
+    {
+        wxLogError( _( "Ignored polygon shape of kind %d (not yet supported)." ), aElem.kind );
+    }
+}
+
+
+void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItemOnLayer( const AREGION6& aElem,
+                                                              PCB_LAYER_ID    aLayer )
+{
+    SHAPE_LINE_CHAIN linechain;
+    HelperShapeLineChainFromAltiumVertices( linechain, aElem.outline );
+
+    if( linechain.PointCount() < 2 )
+    {
+        // We have found multiple Altium files with polygon records containing nothing
+        // but two coincident vertices. These polygons do not appear when opening the
+        // file in Altium. https://gitlab.com/kicad/code/kicad/-/issues/8183
+        return;
+    }
+
+    PCB_SHAPE* shape = new PCB_SHAPE( m_board, SHAPE_T::POLY );
+
+    shape->SetPolyShape( linechain );
+    shape->SetFilled( true );
+    shape->SetLayer( aLayer );
+    shape->SetStroke( STROKE_PARAMS( 0 ) );
+
+    m_board->Add( shape, ADD_MODE::APPEND );
+}
+
+
+void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*      aFootprint,
+                                                                  const AREGION6& aElem,
+                                                                  PCB_LAYER_ID    aLayer )
+{
+    SHAPE_LINE_CHAIN linechain;
+    HelperShapeLineChainFromAltiumVertices( linechain, aElem.outline );
+
+    if( linechain.PointCount() < 2 )
+    {
+        // We have found multiple Altium files with polygon records containing nothing
+        // but two coincident vertices. These polygons do not appear when opening the
+        // file in Altium. https://gitlab.com/kicad/code/kicad/-/issues/8183
+        return;
+    }
+
+    FP_SHAPE* shape = new FP_SHAPE( aFootprint, SHAPE_T::POLY );
+
+    shape->SetPolyShape( linechain );
+    shape->SetFilled( true );
+    shape->SetLayer( aLayer );
+    shape->SetStroke( STROKE_PARAMS( 0 ) );
+
+    HelperShapeSetLocalCoord( shape );
+    aFootprint->Add( shape, ADD_MODE::APPEND );
+}
+
 
 void ALTIUM_PCB::ParseRegions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                     const CFB::COMPOUND_FILE_ENTRY* aEntry )
