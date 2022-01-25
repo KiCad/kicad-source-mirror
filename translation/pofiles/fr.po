@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-23 13:18+0100\n"
-"PO-Revision-Date: 2022-01-23 13:20+0100\n"
+"POT-Creation-Date: 2022-01-24 16:07+0100\n"
+"PO-Revision-Date: 2022-01-24 16:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -1475,7 +1475,7 @@ msgstr "Restaurer"
 #: eeschema/dialogs/dialog_erc.cpp:355
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:168
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:66
-#: pcbnew/dialogs/dialog_drc.cpp:269 pcbnew/plugins/kicad/pcb_parser.cpp:925
+#: pcbnew/dialogs/dialog_drc.cpp:270 pcbnew/plugins/kicad/pcb_parser.cpp:925
 #: pcbnew/router/router_tool.cpp:523
 msgid "Cancel"
 msgstr "Annuler"
@@ -1594,60 +1594,60 @@ msgstr "Empreintes par"
 msgid "Icons by"
 msgstr "Icônes par"
 
-#: common/dialog_about/dialog_about.cpp:90
+#: common/dialog_about/dialog_about.cpp:96
 #, c-format
 msgid "About %s"
 msgstr "Au Sujet de %s"
 
-#: common/dialog_about/dialog_about.cpp:118
+#: common/dialog_about/dialog_about.cpp:124
 #: common/dialog_about/dialog_about_base.h:58
 msgid "About"
 msgstr "Au Sujet de"
 
-#: common/dialog_about/dialog_about.cpp:123
+#: common/dialog_about/dialog_about.cpp:129
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:88
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:82
 msgid "Version"
 msgstr "Version"
 
-#: common/dialog_about/dialog_about.cpp:125
+#: common/dialog_about/dialog_about.cpp:131
 msgid "Developers"
 msgstr "Développeurs"
 
-#: common/dialog_about/dialog_about.cpp:127
+#: common/dialog_about/dialog_about.cpp:133
 msgid "Doc Writers"
 msgstr "Rédaction de Doc"
 
-#: common/dialog_about/dialog_about.cpp:130
+#: common/dialog_about/dialog_about.cpp:136
 msgid "Librarians"
 msgstr "Libraires"
 
-#: common/dialog_about/dialog_about.cpp:133
+#: common/dialog_about/dialog_about.cpp:139
 msgid "Artists"
 msgstr "Artistes"
 
-#: common/dialog_about/dialog_about.cpp:135
+#: common/dialog_about/dialog_about.cpp:141
 msgid "Translators"
 msgstr "Traducteurs"
 
-#: common/dialog_about/dialog_about.cpp:137
+#: common/dialog_about/dialog_about.cpp:143
 msgid "Packagers"
 msgstr "Packagers"
 
-#: common/dialog_about/dialog_about.cpp:140
+#: common/dialog_about/dialog_about.cpp:146
 msgid "License"
 msgstr "Licence"
 
-#: common/dialog_about/dialog_about.cpp:454
+#: common/dialog_about/dialog_about.cpp:460
 msgid "Could not open clipboard to write version information."
 msgstr ""
 "Impossible d'ouvrir le presse-papier pour écrire les informations de version."
 
-#: common/dialog_about/dialog_about.cpp:455
+#: common/dialog_about/dialog_about.cpp:461
 msgid "Clipboard Error"
 msgstr "Erreur de presse-papier"
 
-#: common/dialog_about/dialog_about.cpp:464
+#: common/dialog_about/dialog_about.cpp:470
 msgid "Copied..."
 msgstr "Copié..."
 
@@ -2435,6 +2435,7 @@ msgstr "Hauteur de la page (utilisateur)."
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:370
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:38
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:34
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1075
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:281
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:297
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:310
@@ -2672,7 +2673,7 @@ msgstr "Prévisualisation"
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:72
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:115
 #: pcbnew/dialogs/dialog_board_statistics.cpp:135
-#: pcbnew/dialogs/dialog_drc.cpp:98 pcbnew/dialogs/dialog_drc.cpp:286
+#: pcbnew/dialogs/dialog_drc.cpp:99 pcbnew/dialogs/dialog_drc.cpp:287
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:161
 #: pcbnew/dialogs/dialog_export_step.cpp:121
 #: pcbnew/dialogs/dialog_export_svg.cpp:95
@@ -3684,7 +3685,7 @@ msgid "Info:"
 msgstr "Info:"
 
 #: common/dialogs/wx_html_report_panel.cpp:368
-#: eeschema/dialogs/dialog_erc.cpp:849 pcbnew/dialogs/dialog_drc.cpp:753
+#: eeschema/dialogs/dialog_erc.cpp:849 pcbnew/dialogs/dialog_drc.cpp:770
 msgid "Save Report to File"
 msgstr "Sauver Fichier Rapport sous"
 
@@ -4343,7 +4344,8 @@ msgstr "Courbe"
 #: common/eda_shape.cpp:571 common/eda_shape.cpp:596
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:76
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:52
-#: eeschema/lib_pin.cpp:1063 eeschema/sch_pin.cpp:219
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1068 eeschema/lib_pin.cpp:1063
+#: eeschema/sch_pin.cpp:219
 msgid "Length"
 msgstr "Longueur"
 
@@ -5684,17 +5686,17 @@ msgstr "Erreur en extrayant le fichier!"
 #: gerbview/export_to_pcbnew.cpp:68 pagelayout_editor/files.cpp:210
 #: pcbnew/build_BOM_from_board.cpp:103
 #: pcbnew/dialogs/dialog_board_statistics.cpp:662
-#: pcbnew/dialogs/dialog_drc.cpp:777 pcbnew/dialogs/dialog_export_idf.cpp:223
-#: pcbnew/dialogs/dialog_export_svg.cpp:293
+#: pcbnew/dialogs/dialog_drc.cpp:794 pcbnew/dialogs/dialog_export_idf.cpp:223
+#: pcbnew/dialogs/dialog_export_svg.cpp:304
 #: pcbnew/dialogs/dialog_export_vrml.cpp:265
-#: pcbnew/dialogs/dialog_gendrill.cpp:467 pcbnew/dialogs/dialog_plot.cpp:906
+#: pcbnew/dialogs/dialog_gendrill.cpp:478 pcbnew/dialogs/dialog_plot.cpp:917
 #: pcbnew/exporters/export_footprint_associations.cpp:83
 #: pcbnew/exporters/export_gencad.cpp:257
-#: pcbnew/exporters/gen_footprints_placefile.cpp:297
-#: pcbnew/exporters/gen_footprints_placefile.cpp:318
-#: pcbnew/exporters/gen_footprints_placefile.cpp:415
-#: pcbnew/exporters/gen_footprints_placefile.cpp:461
-#: pcbnew/exporters/gen_footprints_placefile.cpp:563
+#: pcbnew/exporters/gen_footprints_placefile.cpp:308
+#: pcbnew/exporters/gen_footprints_placefile.cpp:329
+#: pcbnew/exporters/gen_footprints_placefile.cpp:436
+#: pcbnew/exporters/gen_footprints_placefile.cpp:482
+#: pcbnew/exporters/gen_footprints_placefile.cpp:584
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:117
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:344
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:101
@@ -8514,7 +8516,7 @@ msgid "Delete exclusions too?"
 msgstr "Supprimer les exclusions aussi?"
 
 #: eeschema/dialogs/dialog_erc.cpp:261 eeschema/dialogs/dialog_erc_base.cpp:168
-#: pcbnew/dialogs/dialog_drc.cpp:1032 pcbnew/dialogs/dialog_drc_base.cpp:209
+#: pcbnew/dialogs/dialog_drc.cpp:1049 pcbnew/dialogs/dialog_drc_base.cpp:209
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:82
 msgid "Delete All Markers"
 msgstr "Effacer tous les Marqueurs"
@@ -8536,7 +8538,7 @@ msgstr "%d symbole (s) nécessitent une numérotation.<br><br>"
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC annulé par l’utilisateur.<br><br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:387 pcbnew/dialogs/dialog_drc.cpp:280
+#: eeschema/dialogs/dialog_erc.cpp:387 pcbnew/dialogs/dialog_drc.cpp:281
 msgid "Done.<br><br>"
 msgstr "Fait.<br><br>"
 
@@ -8576,59 +8578,59 @@ msgstr "Vérification des pins type non connecté pour connexions..."
 msgid "Checking for library symbol issues..."
 msgstr "Vérification des problèmes de symbole de librairies..."
 
-#: eeschema/dialogs/dialog_erc.cpp:572 pcbnew/dialogs/dialog_drc.cpp:466
+#: eeschema/dialogs/dialog_erc.cpp:572 pcbnew/dialogs/dialog_drc.cpp:483
 msgid "errors"
 msgstr "erreurs"
 
-#: eeschema/dialogs/dialog_erc.cpp:573 pcbnew/dialogs/dialog_drc.cpp:467
+#: eeschema/dialogs/dialog_erc.cpp:573 pcbnew/dialogs/dialog_drc.cpp:484
 msgid "warnings"
 msgstr "avertissements"
 
-#: eeschema/dialogs/dialog_erc.cpp:574 pcbnew/dialogs/dialog_drc.cpp:468
+#: eeschema/dialogs/dialog_erc.cpp:574 pcbnew/dialogs/dialog_drc.cpp:485
 msgid "appropriate"
 msgstr "approprié"
 
-#: eeschema/dialogs/dialog_erc.cpp:579 pcbnew/dialogs/dialog_drc.cpp:473
+#: eeschema/dialogs/dialog_erc.cpp:579 pcbnew/dialogs/dialog_drc.cpp:490
 msgid "Remove exclusion for this violation"
 msgstr "Supprimer l’exclusion pour cette violation"
 
-#: eeschema/dialogs/dialog_erc.cpp:580 pcbnew/dialogs/dialog_drc.cpp:474
+#: eeschema/dialogs/dialog_erc.cpp:580 pcbnew/dialogs/dialog_drc.cpp:491
 #, c-format
 msgid "It will be placed back in the %s list"
 msgstr "Il sera remis dans la liste des %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:584 pcbnew/dialogs/dialog_drc.cpp:485
+#: eeschema/dialogs/dialog_erc.cpp:584 pcbnew/dialogs/dialog_drc.cpp:502
 msgid "Exclude this violation"
 msgstr "Exclure cette violation"
 
-#: eeschema/dialogs/dialog_erc.cpp:585 pcbnew/dialogs/dialog_drc.cpp:486
+#: eeschema/dialogs/dialog_erc.cpp:585 pcbnew/dialogs/dialog_drc.cpp:503
 #, c-format
 msgid "It will be excluded from the %s list"
 msgstr "Il sera exclu de la liste %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:597 pcbnew/dialogs/dialog_drc.cpp:506
+#: eeschema/dialogs/dialog_erc.cpp:597 pcbnew/dialogs/dialog_drc.cpp:523
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
 msgstr "Changer la gravité en Erreur pour toutes les violations '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:599 eeschema/dialogs/dialog_erc.cpp:605
-#: pcbnew/dialogs/dialog_drc.cpp:508 pcbnew/dialogs/dialog_drc.cpp:515
+#: pcbnew/dialogs/dialog_drc.cpp:525 pcbnew/dialogs/dialog_drc.cpp:532
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr ""
 "Les sévérités de violation peuvent également être modifiées dans le dialogue "
 "\"Option de C.I.\""
 
-#: eeschema/dialogs/dialog_erc.cpp:603 pcbnew/dialogs/dialog_drc.cpp:513
+#: eeschema/dialogs/dialog_erc.cpp:603 pcbnew/dialogs/dialog_drc.cpp:530
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
 msgstr "Changer la gravité en Warning pour toutes les violations '%s'"
 
-#: eeschema/dialogs/dialog_erc.cpp:608 pcbnew/dialogs/dialog_drc.cpp:519
+#: eeschema/dialogs/dialog_erc.cpp:608 pcbnew/dialogs/dialog_drc.cpp:536
 #, c-format
 msgid "Ignore all '%s' violations"
 msgstr "Ignorer toutes les violations '%s'"
 
-#: eeschema/dialogs/dialog_erc.cpp:609 pcbnew/dialogs/dialog_drc.cpp:521
+#: eeschema/dialogs/dialog_erc.cpp:609 pcbnew/dialogs/dialog_drc.cpp:538
 msgid "Violations will not be checked or reported"
 msgstr "Les violations ne seront pas vérifiées ou signalées"
 
@@ -8636,7 +8638,7 @@ msgstr "Les violations ne seront pas vérifiées ou signalées"
 msgid "Edit pin-to-pin conflict map..."
 msgstr "Editer la carte des conflits de pins..."
 
-#: eeschema/dialogs/dialog_erc.cpp:620 pcbnew/dialogs/dialog_drc.cpp:526
+#: eeschema/dialogs/dialog_erc.cpp:620 pcbnew/dialogs/dialog_drc.cpp:543
 msgid "Edit violation severities..."
 msgstr "Modifier les sévérités de violation..."
 
@@ -8651,16 +8653,16 @@ msgstr "Carte des Conflits de Pins"
 
 #: eeschema/dialogs/dialog_erc.cpp:717 eeschema/dialogs/dialog_erc.cpp:796
 #: eeschema/dialogs/dialog_schematic_setup.cpp:75
-#: pcbnew/dialogs/dialog_board_setup.cpp:112 pcbnew/dialogs/dialog_drc.cpp:685
-#: pcbnew/dialogs/dialog_drc.cpp:707
+#: pcbnew/dialogs/dialog_board_setup.cpp:112 pcbnew/dialogs/dialog_drc.cpp:702
+#: pcbnew/dialogs/dialog_drc.cpp:724
 msgid "Violation Severity"
 msgstr "Gravité de la Violation"
 
-#: eeschema/dialogs/dialog_erc.cpp:791 pcbnew/dialogs/dialog_drc.cpp:702
+#: eeschema/dialogs/dialog_erc.cpp:791 pcbnew/dialogs/dialog_drc.cpp:719
 msgid "Edit ignored violations..."
 msgstr "Éditer les violations ignorées..."
 
-#: eeschema/dialogs/dialog_erc.cpp:868 pcbnew/dialogs/dialog_gendrill.cpp:472
+#: eeschema/dialogs/dialog_erc.cpp:868 pcbnew/dialogs/dialog_gendrill.cpp:483
 #, c-format
 msgid "Report file '%s' created."
 msgstr "Fichier rapport '%s' créé."
@@ -10072,7 +10074,7 @@ msgstr "Tracer Page Courante"
 #: pcbnew/dialogs/dialog_export_svg.cpp:204
 #: pcbnew/dialogs/dialog_gendrill.cpp:295 pcbnew/dialogs/dialog_plot.cpp:374
 #: pcbnew/exporters/gen_footprints_placefile.cpp:204
-#: pcbnew/exporters/gen_footprints_placefile.cpp:541
+#: pcbnew/exporters/gen_footprints_placefile.cpp:562
 msgid "Select Output Directory"
 msgstr "Sélection du Répertoire de Sortie"
 
@@ -10168,7 +10170,7 @@ msgstr "Impossible d'écrire les fichiers de tracés dans le répertoire '%s'."
 #: eeschema/dialogs/dialog_plot_schematic.cpp:679
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1028
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1160
-#: pcbnew/dialogs/dialog_plot.cpp:901
+#: pcbnew/dialogs/dialog_plot.cpp:912
 #, c-format
 msgid "Plotted to '%s'."
 msgstr "Tracé en '%s'."
@@ -10177,7 +10179,7 @@ msgstr "Tracé en '%s'."
 #: eeschema/dialogs/dialog_plot_schematic.cpp:695
 #: eeschema/dialogs/dialog_plot_schematic.cpp:870
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1046
-#: kicad/pcm/pcm_task_manager.cpp:447 pcbnew/dialogs/dialog_plot.cpp:922
+#: kicad/pcm/pcm_task_manager.cpp:447 pcbnew/dialogs/dialog_plot.cpp:933
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:153
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:124
 msgid "Done."
@@ -11151,7 +11153,7 @@ msgstr "Sous-circuit"
 msgid "Code Model"
 msgstr "Modèle de Code"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:452
+#: eeschema/dialogs/dialog_spice_model.cpp:497
 msgid ""
 "Symbol pin numbering don't always match the required SPICE pin order\n"
 "Check the symbol and use \"Alternate node sequence\" to reorder the pins, if "
@@ -11162,25 +11164,61 @@ msgstr ""
 "Vérifiez le symbole et utiliser la \"Séquence des nœuds alternative\" pour "
 "réorganiser les broches, si nécessaire"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:461
+#: eeschema/dialogs/dialog_spice_model.cpp:506
 msgid "For a Diode, pin order is anode, cathode"
 msgstr "Pour une diode, l’ordre des broches est anode, cathode"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:465
+#: eeschema/dialogs/dialog_spice_model.cpp:510
 msgid "For a BJT, pin order is collector, base, emitter, substrate (optional)"
 msgstr ""
 "Pour un BJT, l’ordre des broches est collecteur, base, émetteur, substrat "
 "(facultatif)"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:469
+#: eeschema/dialogs/dialog_spice_model.cpp:514
 msgid "For a MOSFET, pin order is drain, gate, source"
 msgstr "Pour un MOSFET, l’ordre des broches est drain, grille, source"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:473
+#: eeschema/dialogs/dialog_spice_model.cpp:518
 msgid "For a JFET, pin order is drain, gate, source"
 msgstr "Pour un JFET, l’ordre des broches est drain, grille, source"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:806
+#: eeschema/dialogs/dialog_spice_model.cpp:803
+msgid "Invalid Impedance value"
+msgstr "Valeur d’impédance non valide"
+
+#: eeschema/dialogs/dialog_spice_model.cpp:818
+msgid "Invalid delay value"
+msgstr "Valeur de délai non valide"
+
+#: eeschema/dialogs/dialog_spice_model.cpp:833
+msgid "Invalid frequency value"
+msgstr "Valeur de fréquence non valide"
+
+#: eeschema/dialogs/dialog_spice_model.cpp:845
+msgid "Invalid length in wavelength value"
+msgstr "Longueur non valide dans la valeur de longueur d’onde"
+
+#: eeschema/dialogs/dialog_spice_model.cpp:870
+msgid "Invalid resistance value"
+msgstr "Valeur de résistance non valide"
+
+#: eeschema/dialogs/dialog_spice_model.cpp:881
+msgid "Invalid capacitance value"
+msgstr "Valeur de capacité non valide"
+
+#: eeschema/dialogs/dialog_spice_model.cpp:892
+msgid "Invalid inductance value"
+msgstr "Valeur d’inductance non valide"
+
+#: eeschema/dialogs/dialog_spice_model.cpp:903
+msgid "Invalid conductance value"
+msgstr "Valeur de conductance non valide"
+
+#: eeschema/dialogs/dialog_spice_model.cpp:914
+msgid "Invalid length value"
+msgstr "Valeur de longueur non valide"
+
+#: eeschema/dialogs/dialog_spice_model.cpp:1066
 #, c-format
 msgid ""
 "You need to specify at least the first %d parameters for the transient source"
@@ -11188,45 +11226,45 @@ msgstr ""
 "Vous devez spécifier au moins les %d premiers paramètres pour la source "
 "transitoire"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:815
+#: eeschema/dialogs/dialog_spice_model.cpp:1075
 msgid ""
 "You cannot leave interleaved empty fields when defining a transient source"
 msgstr ""
 "Vous ne pouvez pas laisser de champs vides entrelacés lors de la définition "
 "d’une source transitoire"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:1032
+#: eeschema/dialogs/dialog_spice_model.cpp:1292
 msgid "Select library"
 msgstr "Sélection Librairie"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:1100
+#: eeschema/dialogs/dialog_spice_model.cpp:1360
 #: eeschema/dialogs/dialog_spice_model_base.cpp:885
 msgid "Range:"
 msgstr "Intervalle:"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:1101
-#: eeschema/dialogs/dialog_spice_model.cpp:1113
-#: eeschema/dialogs/dialog_spice_model.cpp:1119
+#: eeschema/dialogs/dialog_spice_model.cpp:1361
+#: eeschema/dialogs/dialog_spice_model.cpp:1373
+#: eeschema/dialogs/dialog_spice_model.cpp:1379
 #: eeschema/dialogs/dialog_spice_model_base.cpp:675
 #: eeschema/dialogs/dialog_spice_model_base.cpp:779
 #: eeschema/dialogs/dialog_spice_model_base.cpp:895
 msgid "Offset:"
 msgstr "Décalage:"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:1106
+#: eeschema/dialogs/dialog_spice_model.cpp:1366
 msgid "Standard deviation:"
 msgstr "Écart type:"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:1107
-#: eeschema/dialogs/dialog_spice_model.cpp:1112
+#: eeschema/dialogs/dialog_spice_model.cpp:1367
+#: eeschema/dialogs/dialog_spice_model.cpp:1372
 msgid "Mean:"
 msgstr "Moyenne:"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:1118
+#: eeschema/dialogs/dialog_spice_model.cpp:1378
 msgid "Lambda:"
 msgstr "Lambda:"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:1123
+#: eeschema/dialogs/dialog_spice_model.cpp:1383
 msgid "type of random generator for source is invalid"
 msgstr "type de générateur aléatoire pour la source invalide"
 
@@ -11385,6 +11423,7 @@ msgid "Frequency:"
 msgstr "Fréquence:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:498
+#: eeschema/dialogs/dialog_spice_model_base.cpp:983
 #: pcb_calculator/widgets/unit_selector.cpp:103
 msgid "Hz"
 msgstr "Hz"
@@ -11541,15 +11580,137 @@ msgstr "Type de source"
 msgid "Source"
 msgstr "Source"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:937
+#: eeschema/dialogs/dialog_spice_model_base.cpp:938
+msgid "Line model"
+msgstr "Modèle de ligne"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:954
+#: pcb_calculator/transline_ident.cpp:149
+#: pcb_calculator/transline_ident.cpp:183
+#: pcb_calculator/transline_ident.cpp:217
+#: pcb_calculator/transline_ident.cpp:254
+#: pcb_calculator/transline_ident.cpp:291
+#: pcb_calculator/transline_ident.cpp:373
+#: pcb_calculator/transline_ident.cpp:412
+msgid "Characteristic impedance"
+msgstr "Impédance caractéristique"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:961
+#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:158
+#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:256
+#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:232
+#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:342
+msgid "ohm"
+msgstr "Ohm"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:965
+msgid "Propagation delay"
+msgstr "Délai de propagation"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:972
+msgid "s"
+msgstr "s"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:976
+#: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
+#: pcb_calculator/transline_ident.cpp:108
+msgid "Frequency"
+msgstr "Fréquence"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:987
+msgid "Length in wavelength"
+msgstr "Longueur en longueur d’onde"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1000
+msgid "Use time delay"
+msgstr "Utiliser temps de retard"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1000
+msgid "Use frequency and number of wavelength"
+msgstr "Utiliser la fréquence et le nombre de longueurs d’onde"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1002
+msgid "Delay / Electrical length"
+msgstr "Retard / Longueur électrique"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1010
+msgid "Lossless"
+msgstr "Sans perte"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1024
+msgid "Resistance per unit length"
+msgstr "Résistance par unité de longueur"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1031
+msgid "ohm / unit"
+msgstr "ohm / unité"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1035
+msgid "Inductance per unit length"
+msgstr "Inductance par unité de longueur"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1042
+msgid "henry / unit"
+msgstr "henry / unité"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1046
+msgid "Capacitance per unit length"
+msgstr "Capacité par unité de longueur"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1053
+msgid "farad / unit"
+msgstr "farad / unité"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1057
+msgid "Conductance per unit length"
+msgstr "Conductance par unité de longueur"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1064
+msgid "siemens / unit"
+msgstr "siemens / unité"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1079
+msgid "Extra parameters"
+msgstr "Paramètres supplémentaires"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1092
+msgid ""
+"The following types of lines have been implemented so far:\n"
+"\n"
+"- RLC\n"
+"- RC\n"
+"- LC\n"
+"- RG\n"
+"\n"
+"Any other combination will yield erroneous results and should not be tried."
+msgstr ""
+"Les types suivants of lignes ont été implémentés:\n"
+"\n"
+"- RLC\n"
+"- RC\n"
+"- LC\n"
+"- RG\n"
+"\n"
+"Toute autre combinaison donnera des résultats erronés and ne doit pas être "
+"essayé."
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1100
+msgid "Lossy"
+msgstr "Avec Perte"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1111
+msgid "Transmission Line"
+msgstr "Ligne de Transmission"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1118
 msgid "Disable symbol for simulation"
 msgstr "Désactiver le composant pour la simulation"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:943
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1124
 msgid "Alternate node sequence:"
 msgstr "Séquence de noeud alternative:"
 
-#: eeschema/dialogs/dialog_spice_model_base.h:254
+#: eeschema/dialogs/dialog_spice_model_base.h:289
 msgid "Spice Model Editor"
 msgstr "Editeur de Modèle Spice"
 
@@ -13540,12 +13701,12 @@ msgstr "&Outils"
 msgid "P&references"
 msgstr "P&références"
 
-#: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:141
+#: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:142
 #, c-format
 msgid "Could not find library file %s."
 msgstr "Le fichier librairie '%s' n'a pas pu être trouvé."
 
-#: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:343
+#: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:359
 msgid ""
 "Multiple symbols have the same reference designator.\n"
 "Annotation must be corrected before simulating."
@@ -13791,7 +13952,7 @@ msgid "Could not open CvPcb"
 msgstr "Ne peut pas ouvrir CvPcb"
 
 #: eeschema/sch_edit_frame.cpp:1348 eeschema/sim/sim_plot_frame.cpp:353
-#: kicad/kicad_manager_frame.cpp:635 pcbnew/footprint_edit_frame.cpp:860
+#: kicad/kicad_manager_frame.cpp:645 pcbnew/footprint_edit_frame.cpp:860
 #: pcbnew/pcb_edit_frame.cpp:1351
 msgid "[Read Only]"
 msgstr "[Lecture Seule]"
@@ -14904,11 +15065,6 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
-"ols/sch_line_wire_bus_tool.cpp.obj\n"
-"[ 81%] Building CXX object pcbnew/CMakeFiles/pcbnew_kiface_objects.dir/"
-"dialogs/dialog_target_properties_base.cpp.obj\n"
-"[ 81%] Building CXX object eeschema/CMakeFiles/eeschema_kiface_objects.dir/"
-"t\n"
 "    </tr>\n"
 "</table>\n"
 "<p></p>\n"
@@ -15327,11 +15483,6 @@ msgstr "Signaux"
 #: eeschema/sim/sim_plot_frame_base.cpp:225
 msgid "Cursors"
 msgstr "Curseurs"
-
-#: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
-#: pcb_calculator/transline_ident.cpp:108
-msgid "Frequency"
-msgstr "Fréquence"
 
 #: eeschema/sim/sim_plot_panel.cpp:349
 msgid "Gain"
@@ -18733,32 +18884,32 @@ msgstr ""
 "Le fichier '%s'\n"
 "ne semble pas être un fichier de projet KiCad valide."
 
-#: kicad/kicad_manager_frame.cpp:165
+#: kicad/kicad_manager_frame.cpp:175
 msgid "Project Files"
 msgstr "Fichiers projet"
 
-#: kicad/kicad_manager_frame.cpp:169
+#: kicad/kicad_manager_frame.cpp:179
 msgid "Editors"
 msgstr "Éditeurs"
 
-#: kicad/kicad_manager_frame.cpp:570
+#: kicad/kicad_manager_frame.cpp:580
 msgid "Load File to Edit"
 msgstr "Chargement Fichier à Éditer"
 
-#: kicad/kicad_manager_frame.cpp:639
+#: kicad/kicad_manager_frame.cpp:649
 msgid "[no project loaded]"
 msgstr "[aucun projet chargé]"
 
-#: kicad/kicad_manager_frame.cpp:679
+#: kicad/kicad_manager_frame.cpp:689
 #, c-format
 msgid "Project: %s"
 msgstr "Projet: %s"
 
-#: kicad/kicad_manager_frame.cpp:723
+#: kicad/kicad_manager_frame.cpp:733
 msgid "Restoring session"
 msgstr "Restauration de la session"
 
-#: kicad/kicad_manager_frame.cpp:733
+#: kicad/kicad_manager_frame.cpp:743
 #, c-format
 msgid "Restoring '%s'"
 msgstr "Restauration '%s'"
@@ -20703,13 +20854,6 @@ msgstr "mm ^ 2"
 msgid "Resistance:"
 msgstr "Résistance:"
 
-#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:158
-#: pcb_calculator/calculator_panels/panel_track_width_base.cpp:256
-#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:232
-#: pcb_calculator/calculator_panels/panel_via_size_base.cpp:342
-msgid "ohm"
-msgstr "Ohm"
-
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:162
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:260
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:236
@@ -21344,16 +21488,6 @@ msgstr "Perméabilité relative (mu)  du conducteur"
 #: pcb_calculator/transline_ident.cpp:370
 msgid "Line length"
 msgstr "Longueur de ligne"
-
-#: pcb_calculator/transline_ident.cpp:149
-#: pcb_calculator/transline_ident.cpp:183
-#: pcb_calculator/transline_ident.cpp:217
-#: pcb_calculator/transline_ident.cpp:254
-#: pcb_calculator/transline_ident.cpp:291
-#: pcb_calculator/transline_ident.cpp:373
-#: pcb_calculator/transline_ident.cpp:412
-msgid "Characteristic impedance"
-msgstr "Impédance caractéristique"
 
 #: pcb_calculator/transline_ident.cpp:152
 #: pcb_calculator/transline_ident.cpp:186
@@ -22645,7 +22779,7 @@ msgstr "Couches Physiques"
 msgid "Board Finish"
 msgstr "Finition du Circuit"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:100 pcbnew/dialogs/dialog_plot.cpp:953
+#: pcbnew/dialogs/dialog_board_setup.cpp:100 pcbnew/dialogs/dialog_plot.cpp:964
 msgid "Solder Mask/Paste"
 msgstr "Couches Masque/Pâte à Souder"
 
@@ -22677,7 +22811,7 @@ msgstr "Tailles Prédéfinies"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:111
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:54
-#: pcbnew/dialogs/dialog_drc.cpp:198 pcbnew/pcb_edit_frame.cpp:1784
+#: pcbnew/dialogs/dialog_drc.cpp:199 pcbnew/pcb_edit_frame.cpp:1784
 msgid "Custom Rules"
 msgstr "Règles Utilisateur"
 
@@ -23780,55 +23914,55 @@ msgstr "Écart entre les points mesurés et le début des lignes d’extension"
 msgid "Dimension Properties"
 msgstr "Propriétés de la Cote"
 
-#: pcbnew/dialogs/dialog_drc.cpp:97
+#: pcbnew/dialogs/dialog_drc.cpp:98
 msgid "Run DRC"
 msgstr "Exécuter DRC"
 
-#: pcbnew/dialogs/dialog_drc.cpp:231
+#: pcbnew/dialogs/dialog_drc.cpp:232
 msgid "DRC incomplete: could not compile custom design rules.  "
 msgstr ""
 "DRC incomplet: impossible de compiler les règles de conception utilisateur.  "
 
-#: pcbnew/dialogs/dialog_drc.cpp:233 pcbnew/tools/board_inspection_tool.cpp:165
+#: pcbnew/dialogs/dialog_drc.cpp:234 pcbnew/tools/board_inspection_tool.cpp:165
 msgid "Show design rules."
 msgstr "Monter règles de conception."
 
-#: pcbnew/dialogs/dialog_drc.cpp:278
+#: pcbnew/dialogs/dialog_drc.cpp:279
 msgid "-------- DRC cancelled by user.<br><br>"
 msgstr "-------- DRC annulée par l’utilisateur.<br><br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:478
+#: pcbnew/dialogs/dialog_drc.cpp:495
 #, c-format
 msgid "Remove all exclusions for violations of rule '%s'"
 msgstr "Supprimer toutes les exclusions de violation de la règle '%s'"
 
-#: pcbnew/dialogs/dialog_drc.cpp:490
+#: pcbnew/dialogs/dialog_drc.cpp:507
 #, c-format
 msgid "Exclude all violations of rule '%s'"
 msgstr "Ignorer toutes les violations de la règle '%s'"
 
-#: pcbnew/dialogs/dialog_drc.cpp:499
+#: pcbnew/dialogs/dialog_drc.cpp:516
 msgid "Run clearance resolution tool..."
 msgstr "Exécuter l’outil de résolution d'isolation..."
 
-#: pcbnew/dialogs/dialog_drc.cpp:526 pcbnew/dialogs/dialog_drc.cpp:702
+#: pcbnew/dialogs/dialog_drc.cpp:543 pcbnew/dialogs/dialog_drc.cpp:719
 msgid "Open the Board Setup... dialog"
 msgstr "Ouvrir le dialogue de Propriétés du CI"
 
-#: pcbnew/dialogs/dialog_drc.cpp:772
+#: pcbnew/dialogs/dialog_drc.cpp:789
 #, c-format
 msgid "Report file '%s' created<br>"
 msgstr "Fichier rapport '%s' créé<br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:1031
+#: pcbnew/dialogs/dialog_drc.cpp:1048
 msgid "Do you wish to delete excluded markers as well?"
 msgstr "Souhaitez-vous supprimer les marqueurs exclus?"
 
-#: pcbnew/dialogs/dialog_drc.cpp:1034
+#: pcbnew/dialogs/dialog_drc.cpp:1051
 msgid "Delete exclusions"
 msgstr "Supprimer les exclusions"
 
-#: pcbnew/dialogs/dialog_drc.cpp:1107
+#: pcbnew/dialogs/dialog_drc.cpp:1124
 msgid "not run"
 msgstr "non exécuté"
 
@@ -24189,14 +24323,14 @@ msgid ""
 msgstr ""
 "Ne peut générer un chemin relatif (disque cible différent du disque du C.I.)"
 
-#: pcbnew/dialogs/dialog_export_svg.cpp:261 pcbnew/dialogs/dialog_plot.cpp:809
-#: pcbnew/exporters/gen_footprints_placefile.cpp:279
-#: pcbnew/exporters/gen_footprints_placefile.cpp:377
+#: pcbnew/dialogs/dialog_export_svg.cpp:272 pcbnew/dialogs/dialog_plot.cpp:820
+#: pcbnew/exporters/gen_footprints_placefile.cpp:290
+#: pcbnew/exporters/gen_footprints_placefile.cpp:398
 #, c-format
 msgid "Could not write plot files to folder '%s'."
 msgstr "Impossible d'écrire les fichiers de tracés dans le répertoire '%s'."
 
-#: pcbnew/dialogs/dialog_export_svg.cpp:288
+#: pcbnew/dialogs/dialog_export_svg.cpp:299
 #, c-format
 msgid "Exported '%s'."
 msgstr "Exporté '%s'."
@@ -24996,14 +25130,14 @@ msgstr ""
 "Ne peut générer un chemin relatif (disque cible différent du disque du "
 "chemin par défaut)"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:392
+#: pcbnew/dialogs/dialog_gendrill.cpp:403
 #, c-format
 msgid "Could not write drill and/or map files to folder '%s'."
 msgstr ""
 "Impossible d'écrire les fichiers de perçage et/ou plans de perçage  dans le "
 "répertoire '%s'."
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:441
+#: pcbnew/dialogs/dialog_gendrill.cpp:452
 msgid "Save Drill Report File"
 msgstr "Sauver Fichier Rapport de Perçage"
 
@@ -26653,11 +26787,11 @@ msgstr ""
 msgid "No layer selected, Nothing to plot"
 msgstr "Pas de couche sélectionnée, Rien à tracer"
 
-#: pcbnew/dialogs/dialog_plot.cpp:850
+#: pcbnew/dialogs/dialog_plot.cpp:861
 msgid "Warning: Scale option set to a very small value"
 msgstr "Attention: option d'échelle ajustée à une valeur très petite"
 
-#: pcbnew/dialogs/dialog_plot.cpp:853
+#: pcbnew/dialogs/dialog_plot.cpp:864
 msgid "Warning: Scale option set to a very large value"
 msgstr "Attention: option d'échelle ajustée à une valeur très grande"
 
@@ -30876,48 +31010,48 @@ msgstr "Echec en VRML Export: Impossible d'ajouter les trous aux contours."
 msgid "Generate Position File"
 msgstr "Générer Fichier Position des Empreintes"
 
-#: pcbnew/exporters/gen_footprints_placefile.cpp:303
-#: pcbnew/exporters/gen_footprints_placefile.cpp:424
+#: pcbnew/exporters/gen_footprints_placefile.cpp:314
+#: pcbnew/exporters/gen_footprints_placefile.cpp:445
 #, c-format
 msgid "Front (top side) placement file: '%s'."
 msgstr "Fichier placement côté composant (dessus): '%s'."
 
-#: pcbnew/exporters/gen_footprints_placefile.cpp:306
-#: pcbnew/exporters/gen_footprints_placefile.cpp:328
-#: pcbnew/exporters/gen_footprints_placefile.cpp:428
-#: pcbnew/exporters/gen_footprints_placefile.cpp:473
+#: pcbnew/exporters/gen_footprints_placefile.cpp:317
+#: pcbnew/exporters/gen_footprints_placefile.cpp:339
+#: pcbnew/exporters/gen_footprints_placefile.cpp:449
+#: pcbnew/exporters/gen_footprints_placefile.cpp:494
 #, c-format
 msgid "Component count: %d."
 msgstr "Nombre de composants: %d."
 
-#: pcbnew/exporters/gen_footprints_placefile.cpp:325
-#: pcbnew/exporters/gen_footprints_placefile.cpp:470
+#: pcbnew/exporters/gen_footprints_placefile.cpp:336
+#: pcbnew/exporters/gen_footprints_placefile.cpp:491
 #, c-format
 msgid "Back (bottom side) placement file: '%s'."
 msgstr "Fichier placement côté soudure (dessous): '%s'."
 
-#: pcbnew/exporters/gen_footprints_placefile.cpp:332
-#: pcbnew/exporters/gen_footprints_placefile.cpp:480
+#: pcbnew/exporters/gen_footprints_placefile.cpp:343
+#: pcbnew/exporters/gen_footprints_placefile.cpp:501
 #, c-format
 msgid "Full component count: %d."
 msgstr "Nombre total de composants: %d."
 
-#: pcbnew/exporters/gen_footprints_placefile.cpp:335
-#: pcbnew/exporters/gen_footprints_placefile.cpp:433
-#: pcbnew/exporters/gen_footprints_placefile.cpp:484
+#: pcbnew/exporters/gen_footprints_placefile.cpp:346
+#: pcbnew/exporters/gen_footprints_placefile.cpp:454
+#: pcbnew/exporters/gen_footprints_placefile.cpp:505
 msgid "File generation successful."
 msgstr "Le fichier a été créé correctement."
 
-#: pcbnew/exporters/gen_footprints_placefile.cpp:361
+#: pcbnew/exporters/gen_footprints_placefile.cpp:372
 msgid "No footprint for automated placement."
 msgstr "Pas d'empreinte pour placement automatisé."
 
-#: pcbnew/exporters/gen_footprints_placefile.cpp:422
+#: pcbnew/exporters/gen_footprints_placefile.cpp:443
 #, c-format
 msgid "Placement file: '%s'."
 msgstr "Fichier placement: '%s'."
 
-#: pcbnew/exporters/gen_footprints_placefile.cpp:557
+#: pcbnew/exporters/gen_footprints_placefile.cpp:578
 #, c-format
 msgid ""
 "Footprint report file created:\n"
@@ -30926,7 +31060,7 @@ msgstr ""
 "Fichier rapport sur empreintes créé:\n"
 "'%s'."
 
-#: pcbnew/exporters/gen_footprints_placefile.cpp:558
+#: pcbnew/exporters/gen_footprints_placefile.cpp:579
 msgid "Footprint Report"
 msgstr "Rapport sur Empreintes"
 
@@ -41844,9 +41978,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "User grid: %.4f mm (%.2f mils)"
 #~ msgstr "Grille utilisateur: %.4f mm (%.2f mils)"
-
-#~ msgid "&Measurement units:"
-#~ msgstr "&Unités de mesure:"
 
 #~ msgid "millimeters"
 #~ msgstr "millimètres"
