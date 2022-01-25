@@ -797,10 +797,13 @@ void DIALOG_SYMBOL_PROPERTIES::OnGridEditorShown( wxGridEvent& aEvent )
 
     /// Queue up an event to ensure the widget gets resized if the editor needs it
     wxSizeEvent *evt = new wxSizeEvent();
-    evt->SetSize( wxSize( m_width, -1 ) );
+    evt->SetSize( wxSize( m_width + 1, -1 ) );
 
     wxQueueEvent( m_fieldsGrid, evt );
 
+    wxSizeEvent *frmEvt = new wxSizeEvent();
+    evt->SetSize( wxSize( -1, -1 ) );
+    wxQueueEvent( this, frmEvt );
 }
 
 
