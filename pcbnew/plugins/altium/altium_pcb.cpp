@@ -2249,39 +2249,28 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItemOnLayer( const AARC6& aElem, PCB_LAYER_I
 {
     if( IsCopperLayer( aLayer ) && aElem.net != ALTIUM_NET_UNCONNECTED )
     {
-        EDA_ANGLE angle( aElem.startangle - aElem.endangle, DEGREES_T );
-        angle.Normalize();
+        // TODO: This is not the actual board item. We use it for now to calculate the arc points. This could be improved!
+        PCB_SHAPE shape( nullptr, SHAPE_T::ARC );
 
+        EDA_ANGLE includedAngle( aElem.endangle - aElem.startangle, DEGREES_T );
         EDA_ANGLE startAngle( aElem.endangle, DEGREES_T );
-        VECTOR2I  startOffset = VECTOR2I( KiROUND( startAngle.Cos() * aElem.radius ),
-                                          -KiROUND( startAngle.Sin() * aElem.radius ) );
 
-        startOffset += aElem.center;
+        VECTOR2I startOffset = VECTOR2I( KiROUND( startAngle.Cos() * aElem.radius ),
+                                         -KiROUND( startAngle.Sin() * aElem.radius ) );
 
-        // If it's a circle then add two 180-degree arcs
-        if( aElem.startangle == 0.0 && aElem.endangle == 360.0 )
-            angle = ANGLE_180;
+        shape.SetCenter( aElem.center );
+        shape.SetStart( aElem.center + startOffset );
+        shape.SetArcAngleAndEnd( includedAngle.Normalize(), true );
 
-        SHAPE_ARC shapeArc( aElem.center, startOffset, angle, aElem.width );
+        // Create actual arc
+        SHAPE_ARC shapeArc( shape.GetCenter(), shape.GetStart(), shape.GetArcAngle(), aElem.width );
         PCB_ARC*  arc = new PCB_ARC( m_board, &shapeArc );
-        m_board->Add( arc, ADD_MODE::APPEND );
 
         arc->SetWidth( aElem.width );
         arc->SetLayer( aLayer );
         arc->SetNetCode( GetNetCode( aElem.net ) );
 
-        // Add second 180-degree arc for a circle
-        // TODO: can we remove this workaround?
-        if( aElem.startangle == 0. && aElem.endangle == 360. )
-        {
-            shapeArc = SHAPE_ARC( aElem.center, startOffset, -angle, aElem.width );
-            arc = new PCB_ARC( m_board, &shapeArc );
-            m_board->Add( arc, ADD_MODE::APPEND );
-
-            arc->SetWidth( aElem.width );
-            arc->SetLayer( aLayer );
-            arc->SetNetCode( GetNetCode( aElem.net ) );
-        }
+        m_board->Add( arc, ADD_MODE::APPEND );
     }
     else
     {
