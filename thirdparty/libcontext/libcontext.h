@@ -55,6 +55,11 @@
             #define LIBCONTEXT_PLATFORM_linux_ppc32
             #define LIBCONTEXT_CALL_CONVENTION
         #endif
+    #elif defined(__riscv)
+        #if __riscv_xlen == 64
+            #define LIBCONTEXT_PLATFORM_linux_riscv64
+            #define LIBCONTEXT_CALL_CONVENTION
+        #endif
     #endif
 
     #elif defined(__MINGW32__) || defined(__MINGW64__)
