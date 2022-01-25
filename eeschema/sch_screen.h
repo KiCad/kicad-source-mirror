@@ -57,11 +57,10 @@ class LIB_SYMBOL;
 class LIB_PIN;
 class SCH_SYMBOL;
 class SCH_LINE;
-class SCH_TEXT;
+class SCH_LABEL_BASE;
 class PLOTTER;
 class REPORTER;
 class SCH_EDIT_FRAME;
-class SCH_SHEET;
 class SCH_SHEET_LIST;
 class SCH_SEXPR_PARSER;
 class SCH_SEXPR_PLUGIN;
@@ -437,10 +436,9 @@ public:
      *
      * @param[in] aPosition The VECTOR2I to test for label items.
      * @param aAccuracy Amount to inflate the item hit test bounding box.
-     * @return The SCH_TEXT* of the label item found at \a aPosition or NULL if item not
-     *         found.
+     * @return The SCH_LABEL_BASE* of the label item found or nullptr.
      */
-    SCH_TEXT* GetLabel( const VECTOR2I& aPosition, int aAccuracy = 0 ) const;
+    SCH_LABEL_BASE* GetLabel( const VECTOR2I& aPosition, int aAccuracy = 0 ) const;
 
     /**
      * Fetch a list of unique #LIB_SYMBOL object pointers required to properly render each

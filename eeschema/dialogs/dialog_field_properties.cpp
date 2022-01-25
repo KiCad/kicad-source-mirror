@@ -46,7 +46,7 @@
 
 DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const wxString& aTitle,
                                                   const EDA_TEXT* aTextItem ) :
-    DIALOG_LIB_TEXT_PROPERTIES_BASE( aParent ),
+    DIALOG_FIELD_PROPERTIES_BASE( aParent ),
     m_posX( aParent, m_xPosLabel, m_xPosCtrl, m_xPosUnits, true ),
     m_posY( aParent, m_yPosLabel, m_yPosCtrl, m_yPosUnits, true ),
     m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true ),

@@ -160,8 +160,12 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( EE_ACTIONS::importSheetPin,         ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->AddScaledSeparator( this );
-    m_drawToolBar->Add( EE_ACTIONS::drawLines,              ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeSchematicText,     ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::drawTextBox,            ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::drawRectangle,          ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::drawCircle,             ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::drawArc,                ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::drawLines,              ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeImage,             ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( ACTIONS::deleteTool,                ACTION_TOOLBAR::TOGGLE );
 

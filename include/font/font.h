@@ -31,8 +31,6 @@
 #include <map>
 #include <algorithm>
 #include <wx/string.h>
-
-#include <utf8.h>
 #include <font/glyph.h>
 #include <font/text_attributes.h>
 
@@ -123,10 +121,10 @@ public:
      *                object, such as a run of superscript characters)
      * @param aAttrs are the styling attributes of the text, including its rotation
      */
-    void Draw( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2I& aPosition,
+    void Draw( KIGFX::GAL* aGal, const wxString& aText, const VECTOR2I& aPosition,
                const VECTOR2I& aCursor, const TEXT_ATTRIBUTES& aAttrs ) const;
 
-    void Draw( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2I& aPosition,
+    void Draw( KIGFX::GAL* aGal, const wxString& aText, const VECTOR2I& aPosition,
                const TEXT_ATTRIBUTES& aAttributes ) const
     {
         Draw( aGal, aText, aPosition, VECTOR2I( 0, 0 ), aAttributes );
@@ -137,8 +135,14 @@ public:
      *
      * @return a VECTOR2I giving the width and height of text.
      */
-    VECTOR2I StringBoundaryLimits( const UTF8& aText, const VECTOR2I& aSize, int aThickness,
+    VECTOR2I StringBoundaryLimits( const wxString& aText, const VECTOR2I& aSize, int aThickness,
                                    bool aBold, bool aItalic ) const;
+
+    /**
+     * Insert \n characters into text to ensure that no lines are wider than \a aColumnWidth.
+     */
+    void LinebreakText( wxString& aText, int aColumnWidth, const VECTOR2I& aGlyphSize,
+                        int aThickness, bool aBold, bool aItalic ) const;
 
     /**
      * Compute the vertical position of an overbar.  This is the distance between the text
@@ -167,7 +171,7 @@ public:
      * @return text cursor position after this text
      */
     virtual VECTOR2I GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
-                                      const UTF8& aText, const VECTOR2I& aSize,
+                                      const wxString& aText, const VECTOR2I& aSize,
                                       const VECTOR2I& aPosition, const EDA_ANGLE& aAngle,
                                       bool aMirror, const VECTOR2I& aOrigin,
                                       TEXT_STYLE_FLAGS aTextStyle ) const = 0;
@@ -179,7 +183,7 @@ protected:
      * @param aText is the text to be checked.
      * @return unsigned - The number of lines in aText.
      */
-    inline unsigned linesCount( const UTF8& aText ) const
+    inline unsigned linesCount( const wxString& aText ) const
     {
         if( aText.empty() )
             return 0; // std::count does not work well with empty strings
@@ -202,7 +206,7 @@ protected:
      * @param aOrigin is the point around which the text should be rotated, mirrored, etc.
      * @return new cursor position in non-rotated, non-mirrored coordinates
      */
-    void drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const UTF8& aText,
+    void drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const wxString& aText,
                              const VECTOR2I& aPosition, const VECTOR2I& aSize,
                              const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
                              bool aItalic ) const;
@@ -217,17 +221,20 @@ protected:
      * @param aSize is the cap-height and em-width of the text.
      * @return new cursor position
      */
-    VECTOR2I boundingBoxSingleLine( BOX2I* aBBox, const UTF8& aText, const VECTOR2I& aPosition,
+    VECTOR2I boundingBoxSingleLine( BOX2I* aBBox, const wxString& aText, const VECTOR2I& aPosition,
                                     const VECTOR2I& aSize, bool aItalic ) const;
 
-    void getLinePositions( const UTF8& aText, const VECTOR2I& aPosition,
+    void getLinePositions( const wxString& aText, const VECTOR2I& aPosition,
                            wxArrayString& aTextLines, std::vector<VECTOR2I>& aPositions,
                            std::vector<VECTOR2I>& aExtents, const TEXT_ATTRIBUTES& aAttrs ) const;
 
     VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
-                         const UTF8& aText, const VECTOR2I& aPosition, const VECTOR2I& aSize,
+                         const wxString& aText, const VECTOR2I& aPosition, const VECTOR2I& aSize,
                          const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
                          TEXT_STYLE_FLAGS aTextStyle ) const;
+
+    void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords, const wxString& aText,
+                          const VECTOR2I& aSize, TEXT_STYLE_FLAGS aTextStyle ) const;
 
     ///< Factor that determines the pitch between 2 lines.
     static constexpr double INTERLINE_PITCH_RATIO = 1.62;   // The golden mean

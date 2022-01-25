@@ -192,6 +192,7 @@ const std::vector<BITMAP_INFO> g_BitmapInfo = {
     { BITMAPS::add_radial_dimension, wxT( "add_radial_dimension_24.png" ), 24, wxT( "light" ) },
     { BITMAPS::add_rectangle, wxT( "add_rectangle_24.png" ), 24, wxT( "light" ) },
     { BITMAPS::add_symbol_to_schematic, wxT( "add_symbol_to_schematic_24.png" ), 24, wxT( "light" ) },
+    { BITMAPS::add_textbox, wxT( "add_textbox_24.png" ), 24, wxT( "light" ) },
     { BITMAPS::add_tracks, wxT( "add_tracks_24.png" ), 24, wxT( "light" ) },
     { BITMAPS::add_via, wxT( "add_via_24.png" ), 24, wxT( "light" ) },
     { BITMAPS::add_zone_cutout, wxT( "add_zone_cutout_24.png" ), 24, wxT( "light" ) },

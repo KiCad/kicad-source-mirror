@@ -931,9 +931,9 @@ void SCH_ALTIUM_PLUGIN::ParseTextFrame( const std::map<wxString, wxString>& aPro
         break;
     }
 
-    // TODO: set size and word-wrap once KiCad supports wrapped text.
+    // JEY TODO: set size and word-wrap once KiCad supports wrapped text.
 
-    // TODO: set border and background color once KiCad supports them.
+    // JEY TODO: set border and background color once KiCad supports them.
 
     size_t fontId = static_cast<int>( elem.fontId );
 
@@ -1138,7 +1138,7 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
 
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        SCH_SHAPE* poly = new SCH_SHAPE( SHAPE_T::POLY, SCH_LAYER_ID::LAYER_NOTES );
+        SCH_SHAPE* poly = new SCH_SHAPE( SHAPE_T::POLY );
 
         for( VECTOR2I& point : elem.points )
             poly->AddPoint( point + m_sheetOffset );
@@ -1184,7 +1184,7 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
 
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        SCH_SHAPE* poly = new SCH_SHAPE( SHAPE_T::POLY, SCH_LAYER_ID::LAYER_NOTES );
+        SCH_SHAPE* poly = new SCH_SHAPE( SHAPE_T::POLY );
 
         for( VECTOR2I& point : elem.points )
             poly->AddPoint( point + m_sheetOffset );
@@ -1236,7 +1236,7 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         // TODO: misses rounded edges
-        SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECT, SCH_LAYER_ID::LAYER_NOTES );
+        SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECT );
 
         rect->SetPosition( sheetTopRight );
         rect->SetEnd( sheetBottomLeft );
@@ -1283,7 +1283,7 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
     {
         if( elem.startAngle == 0 && ( elem.endAngle == 0 || elem.endAngle == 360 ) )
         {
-            SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE, SCH_LAYER_ID::LAYER_NOTES );
+            SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE );
 
             circle->SetPosition( elem.center + m_sheetOffset );
             circle->SetEnd( circle->GetPosition() + VECTOR2I( elem.radius, 0 ) );
@@ -1293,7 +1293,7 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
         }
         else
         {
-            SCH_SHAPE* arc = new SCH_SHAPE( SHAPE_T::ARC, SCH_LAYER_ID::LAYER_NOTES );
+            SCH_SHAPE* arc = new SCH_SHAPE( SHAPE_T::ARC );
             EDA_ANGLE  includedAngle( elem.endAngle - elem.startAngle, DEGREES_T );
             EDA_ANGLE  startAngle( elem.endAngle, DEGREES_T );
             VECTOR2I   startOffset( KiROUND( elem.radius * startAngle.Cos() ),
@@ -1414,7 +1414,7 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
 
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECT, SCH_LAYER_ID::LAYER_NOTES );
+        SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECT );
 
         rect->SetPosition( sheetTopRight );
         rect->SetEnd( sheetBottomLeft );

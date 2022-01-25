@@ -291,7 +291,7 @@ wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName ) const
 }
 
 
-void SCH_SHEET_PATH::UpdateAllScreenReferences()
+void SCH_SHEET_PATH::UpdateAllScreenReferences() const
 {
     for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
     {

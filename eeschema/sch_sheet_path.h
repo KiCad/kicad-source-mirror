@@ -283,7 +283,7 @@ public:
      * Mandatory in complex hierarchies because sheets may use the same screen (basic schematic)
      * more than once but with different references and units according to the displayed sheet.
      */
-    void UpdateAllScreenReferences();
+    void UpdateAllScreenReferences() const;
 
     /**
      * Append a #SCH_REFERENCE object to \a aReferences based on \a aSymbol

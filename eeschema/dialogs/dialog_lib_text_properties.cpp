@@ -36,8 +36,6 @@
 DIALOG_LIB_TEXT_PROPERTIES::DIALOG_LIB_TEXT_PROPERTIES( SYMBOL_EDIT_FRAME* aParent,
                                                         LIB_TEXT* aText ) :
         DIALOG_LIB_TEXT_PROPERTIES_BASE( aParent ),
-        m_posX( aParent, m_xPosLabel, m_xPosCtrl, m_xPosUnits, true ),
-        m_posY( aParent, m_yPosLabel, m_yPosCtrl, m_yPosUnits, true ),
         m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true )
 {
     m_parent = aParent;
@@ -49,15 +47,7 @@ DIALOG_LIB_TEXT_PROPERTIES::DIALOG_LIB_TEXT_PROPERTIES( SYMBOL_EDIT_FRAME* aPare
                 wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
             } );
 
-    // Disable options for fieldedit, not existing in  graphic text
-    m_visible->Show( false );
-    m_TextValueSelectButton->Hide();
-
-    m_note->SetFont( KIUI::GetInfoFont( this ).Italic() );
-    m_note->Show( false );
-
-    SetInitialFocus( m_TextCtrl );
-    m_StyledTextCtrl->Show( false );
+    SetInitialFocus( m_StyledTextCtrl );
 
     m_separator1->SetIsSeparator();
 
@@ -128,15 +118,15 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
 {
     if( m_graphicText )
     {
-        m_posX.SetValue( m_graphicText->GetPosition().x );
-        m_posY.SetValue( m_graphicText->GetPosition().y );
         m_textSize.SetValue( m_graphicText->GetTextWidth() );
-        m_TextCtrl->SetValue( m_graphicText->GetText() );
+        m_StyledTextCtrl->SetValue( m_graphicText->GetText() );
 
         m_fontCtrl->SetFontSelection( m_graphicText->GetFont() );
 
         m_italic->Check( m_graphicText->IsItalic() );
         m_bold->Check( m_graphicText->IsBold() );
+
+        m_privateCheckbox->SetValue( m_graphicText->IsPrivate() );
         m_CommonUnit->SetValue( m_graphicText->GetUnit() == 0 );
         m_CommonConvert->SetValue( m_graphicText->GetConvert() == 0 );
 
@@ -213,18 +203,16 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataFromWindow()
 {
     if( m_graphicText )
     {
-        if( m_TextCtrl->GetValue().IsEmpty() )
+        if( m_StyledTextCtrl->GetValue().IsEmpty() )
             m_graphicText->SetText( wxT( "[null]" ) );
         else
-            m_graphicText->SetText( m_TextCtrl->GetValue() );
+            m_graphicText->SetText( m_StyledTextCtrl->GetValue() );
 
         if( m_fontCtrl->HaveFontSelection() )
         {
             m_graphicText->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(),
                                                                   m_italic->IsChecked() ) );
         }
-
-        m_graphicText->SetPosition( wxPoint( m_posX.GetValue(), m_posY.GetValue() ) );
 
         if( m_textSize.GetValue() != m_graphicText->GetTextWidth() )
             m_graphicText->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
@@ -233,6 +221,8 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataFromWindow()
             m_graphicText->SetTextAngle( ANGLE_HORIZONTAL );
         else
             m_graphicText->SetTextAngle( ANGLE_VERTICAL );
+
+        m_graphicText->SetPrivate( m_privateCheckbox->GetValue() );
 
         if( !m_CommonUnit->GetValue() )
             m_graphicText->SetUnit( m_parent->GetUnit() );

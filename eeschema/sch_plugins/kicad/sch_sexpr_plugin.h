@@ -42,6 +42,7 @@ class SCH_LINE;
 class SCH_SHAPE;
 class SCH_BUS_ENTRY_BASE;
 class SCH_TEXT;
+class SCH_TEXTBOX;
 class SCH_SYMBOL;
 class SCH_FIELD;
 struct SYMBOL_INSTANCE_REFERENCE;
@@ -151,6 +152,7 @@ private:
     void saveLine( SCH_LINE* aLine, int aNestLevel );
     void saveShape( SCH_SHAPE* aShape, int aNestLevel );
     void saveText( SCH_TEXT* aText, int aNestLevel );
+    void saveTextBox( SCH_TEXTBOX* aText, int aNestLevel );
     void saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias, int aNestLevel );
     void saveInstances( const std::vector<SCH_SHEET_INSTANCE>&        aSheets,
                         const std::vector<SYMBOL_INSTANCE_REFERENCE>& aSymbols, int aNestLevel );

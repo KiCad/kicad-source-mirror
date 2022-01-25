@@ -587,48 +587,40 @@ void PS_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int wid
 }
 
 
-void PS_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
-                      const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill, int aWidth )
+VECTOR2D mapCoords( const VECTOR2D& aSource )
 {
-    wxASSERT( m_outputFile );
-
-    if( aRadius <= 0 )
-        return;
-
-    EDA_ANGLE startAngle( aStartAngle );
-    EDA_ANGLE endAngle( aEndAngle );
-
-    if( startAngle > endAngle )
-        std::swap( startAngle, endAngle );
-
-    SetCurrentLineWidth( aWidth );
-
-    // Calculate start point.
-    VECTOR2D centre_dev = userToDeviceCoordinates( aCenter );
-    double   radius_dev = userToDeviceSize( aRadius );
-
-    if( m_plotMirror )
-    {
-        if( m_mirrorIsHorizontal )
-        {
-            startAngle = ANGLE_180 - startAngle;
-            endAngle = ANGLE_180 - endAngle;
-            std::swap( startAngle, endAngle );
-        }
-        else
-        {
-            startAngle = -startAngle;
-            endAngle = -endAngle;
-        }
-    }
-
-    fprintf( m_outputFile, "%g %g %g %g %g arc%d\n", centre_dev.x, centre_dev.y,
-             radius_dev, startAngle.AsDegrees(), endAngle.AsDegrees(), getFillId( aFill ) );
+    return VECTOR2D( aSource.x, aSource.y );
 }
 
 
-void PS_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill,
-                           int aWidth, void * aData )
+void PS_PLOTTER::Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR2I& aEnd,
+                      FILL_T aFill, int aWidth, int aMaxError )
+{
+    wxASSERT( m_outputFile );
+
+    VECTOR2D  center_device = userToDeviceCoordinates( aCenter );
+    VECTOR2D  start_device = userToDeviceCoordinates( aStart );
+    VECTOR2D  end_device = userToDeviceCoordinates( aEnd );
+    double    radius_device = ( start_device - center_device ).EuclideanNorm();
+    EDA_ANGLE startAngle( mapCoords( start_device - center_device ) );
+    EDA_ANGLE endAngle( mapCoords( end_device - center_device ) );
+
+    // userToDeviceCoordinates gets our start/ends out of order
+    std::swap( startAngle, endAngle );
+
+    SetCurrentLineWidth( aWidth );
+
+    fprintf( m_outputFile, "%g %g %g %g %g arc%d\n",
+             center_device.x,
+             center_device.y,
+             radius_device,
+             startAngle.AsDegrees(),
+             endAngle.AsDegrees(),
+             getFillId( aFill ) );
+}
+
+void PS_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill, int aWidth,
+                           void* aData )
 {
     if( aCornerList.size() <= 1 )
         return;

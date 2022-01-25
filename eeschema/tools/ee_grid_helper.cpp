@@ -69,7 +69,7 @@ VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I& aMousePos, int aLayer,
     // we can only consider anchors from text objects if they are the only thing
     // selected.
     bool includeText = ( aItems.Size() == 1
-                         || aItems.OnlyContains( { SCH_TEXT_T, SCH_FIELD_T } ) );
+                         || aItems.OnlyContains( { SCH_TEXT_T, SCH_TEXTBOX_T, SCH_FIELD_T } ) );
 
     for( EDA_ITEM* item : aItems )
         computeAnchors( static_cast<SCH_ITEM*>( item ), aMousePos, true, includeText );
@@ -274,6 +274,7 @@ void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, b
     switch( aItem->Type() )
     {
     case SCH_TEXT_T:
+    case SCH_TEXTBOX_T:
     case SCH_FIELD_T:
     {
         if( aIncludeText )

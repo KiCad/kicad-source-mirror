@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -139,6 +139,7 @@ void SYMBOL_EDIT_FRAME::ReCreateMenuBar()
 
     placeMenu->Add( EE_ACTIONS::placeSymbolPin );
     placeMenu->Add( EE_ACTIONS::placeSymbolText );
+    placeMenu->Add( EE_ACTIONS::drawSymbolTextBox );
     placeMenu->Add( EE_ACTIONS::drawRectangle );
     placeMenu->Add( EE_ACTIONS::drawCircle );
     placeMenu->Add( EE_ACTIONS::drawArc );

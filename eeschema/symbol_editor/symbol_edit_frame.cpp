@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -486,6 +486,7 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::deleteTool,             EDIT_TOOL( ACTIONS::deleteTool ) );
     mgr->SetConditions( EE_ACTIONS::placeSymbolPin,      EDIT_TOOL( EE_ACTIONS::placeSymbolPin ) );
     mgr->SetConditions( EE_ACTIONS::placeSymbolText,     EDIT_TOOL( EE_ACTIONS::placeSymbolText ) );
+    mgr->SetConditions( EE_ACTIONS::drawSymbolTextBox,   EDIT_TOOL( EE_ACTIONS::drawSymbolTextBox ) );
     mgr->SetConditions( EE_ACTIONS::drawRectangle,       EDIT_TOOL( EE_ACTIONS::drawRectangle ) );
     mgr->SetConditions( EE_ACTIONS::drawCircle,          EDIT_TOOL( EE_ACTIONS::drawCircle ) );
     mgr->SetConditions( EE_ACTIONS::drawArc,             EDIT_TOOL( EE_ACTIONS::drawArc ) );

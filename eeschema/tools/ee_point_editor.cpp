@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,15 +32,16 @@ using namespace std::placeholders;
 #include <geometry/seg.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
-#include <bitmaps.h>
 #include <sch_edit_frame.h>
 #include <sch_line.h>
 #include <sch_bitmap.h>
 #include <sch_sheet.h>
+#include <sch_textbox.h>
 #include <sch_shape.h>
 #include <sch_sheet_pin.h>
 #include <symbol_edit_frame.h>
 #include <lib_shape.h>
+#include <lib_textbox.h>
 
 
 // Few constants to avoid using bare numbers for point indices
@@ -110,8 +111,8 @@ public:
                 points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
                 points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
                 points->AddPoint( botRight );
-            }
                 break;
+            }
 
             case SHAPE_T::POLY:
                 for( const VECTOR2I& pt : shape->GetPolyShape().Outline( 0 ).CPoints() )
@@ -126,8 +127,30 @@ public:
             default:
                 UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
             }
-        }
+
             break;
+        }
+
+        case LIB_TEXTBOX_T:
+        {
+            LIB_TEXTBOX* textBox = static_cast<LIB_TEXTBOX*>( aItem );
+
+            // point editor works only with rectangles having width and height > 0
+            // Some symbols can have rectangles with width or height < 0
+            // So normalize the size:
+            BOX2I dummy;
+            dummy.SetOrigin( mapCoords( textBox->GetPosition() ) );
+            dummy.SetEnd( mapCoords( textBox->GetEnd() ) );
+            dummy.Normalize();
+            VECTOR2I topLeft = dummy.GetPosition();
+            VECTOR2I botRight = dummy.GetEnd();
+
+            points->AddPoint( topLeft );
+            points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
+            points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
+            points->AddPoint( botRight );
+            break;
+        }
 
         case SCH_SHAPE_T:
         {
@@ -162,8 +185,8 @@ public:
                 points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
                 points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
                 points->AddPoint( botRight );
-            }
                 break;
+            }
 
             case SHAPE_T::POLY:
                 for( const VECTOR2I& pt : shape->GetPolyShape().Outline( 0 ).CPoints() )
@@ -178,8 +201,30 @@ public:
             default:
                 UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
             }
-        }
+
             break;
+        }
+
+        case SCH_TEXTBOX_T:
+        {
+            SCH_TEXTBOX* textBox = static_cast<SCH_TEXTBOX*>( aItem );
+
+            // point editor works only with rectangles having width and height > 0
+            // Some symbols can have rectangles with width or height < 0
+            // So normalize the size:
+            BOX2I dummy;
+            dummy.SetOrigin( textBox->GetPosition() );
+            dummy.SetEnd( textBox->GetEnd() );
+            dummy.Normalize();
+            VECTOR2I topLeft = dummy.GetPosition();
+            VECTOR2I botRight = dummy.GetEnd();
+
+            points->AddPoint( topLeft );
+            points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
+            points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
+            points->AddPoint( botRight );
+            break;
+        }
 
         case SCH_SHEET_T:
         {
@@ -191,8 +236,8 @@ public:
             points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
             points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
             points->AddPoint( botRight );
-        }
             break;
+        }
 
         case SCH_BITMAP_T:
         {
@@ -204,8 +249,8 @@ public:
             points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
             points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
             points->AddPoint( botRight );
-        }
             break;
+        }
 
         case SCH_LINE_T:
         {
@@ -243,8 +288,8 @@ public:
 
             points->AddPoint( line->GetStartPoint(), connectedStart );
             points->AddPoint( line->GetEndPoint(), connectedEnd );
-        }
             break;
+        }
 
         default:
             points.reset();
@@ -327,7 +372,9 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 {
     static KICAD_T supportedTypes[] = {
         LIB_SHAPE_T,
+        LIB_TEXTBOX_T,
         SCH_SHAPE_T,
+        SCH_TEXTBOX_T,
         SCH_SHEET_T,
         SCH_ITEM_LOCATE_GRAPHIC_LINE_T,
         SCH_BITMAP_T,
@@ -589,8 +636,8 @@ void EE_POINT_EDITOR::updateParentItem() const
 
             shape->SetPosition( mapCoords( topLeft ) );
             shape->SetEnd( mapCoords( botRight ) );
-        }
             break;
+        }
 
         case SHAPE_T::BEZIER:
             // TODO
@@ -599,8 +646,27 @@ void EE_POINT_EDITOR::updateParentItem() const
         default:
             UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
         }
-    }
+
         break;
+    }
+
+    case LIB_TEXTBOX_T:
+    {
+        LIB_TEXTBOX*   textbox = static_cast<LIB_TEXTBOX*>( item );
+        EE_GRID_HELPER gridHelper( m_toolMgr );
+        VECTOR2I       topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
+        VECTOR2I       topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
+        VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
+        VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
+
+        pinEditedCorner( getEditedPointIndex(), Mils2iu( 1 ), Mils2iu( 1 ),
+                         topLeft, topRight, botLeft, botRight, &gridHelper );
+
+        textbox->SetPosition( mapCoords( topLeft ) );
+        textbox->SetEnd( mapCoords( botRight ) );
+        textbox->UpdateTextPosition();
+        break;
+    }
 
     case SCH_SHAPE_T:
     {
@@ -656,8 +722,8 @@ void EE_POINT_EDITOR::updateParentItem() const
 
             shape->SetPosition( topLeft );
             shape->SetEnd( botRight );
-        }
             break;
+        }
 
         case SHAPE_T::BEZIER:
             // TODO
@@ -666,8 +732,27 @@ void EE_POINT_EDITOR::updateParentItem() const
         default:
             UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
         }
-    }
+
         break;
+    }
+
+    case SCH_TEXTBOX_T:
+    {
+        SCH_TEXTBOX*   textBox = static_cast<SCH_TEXTBOX*>( item );
+        EE_GRID_HELPER gridHelper( m_toolMgr );
+        VECTOR2I       topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
+        VECTOR2I       topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
+        VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
+        VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
+
+        pinEditedCorner( getEditedPointIndex(), Mils2iu( 1 ), Mils2iu( 1 ),
+                         topLeft, topRight, botLeft, botRight, &gridHelper );
+
+        textBox->SetPosition( topLeft );
+        textBox->SetEnd( botRight );
+        textBox->UpdateTextPosition();
+        break;
+    }
 
     case SCH_BITMAP_T:
     {
@@ -690,8 +775,8 @@ void EE_POINT_EDITOR::updateParentItem() const
         double heightRatio = newHeight / oldHeight;
 
         bitmap->SetImageScale( bitmap->GetImageScale() * std::min( widthRatio, heightRatio ) );
-    }
         break;
+    }
 
     case SCH_SHEET_T:
     {
@@ -737,8 +822,9 @@ void EE_POINT_EDITOR::updateParentItem() const
 
             pin->SetPosition( pos );
         }
-    }
+
         break;
+    }
 
     case SCH_LINE_T:
     {
@@ -770,8 +856,9 @@ void EE_POINT_EDITOR::updateParentItem() const
 
             updateItem( connected.first, true );
         }
-    }
+
         break;
+    }
 
     default:
         break;
@@ -847,8 +934,8 @@ void EE_POINT_EDITOR::updatePoints()
             m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( VECTOR2I( botRight.x, topLeft.y ) );
             m_editPoints->Point( RECT_BOTLEFT ).SetPosition( VECTOR2I( topLeft.x, botRight.y ) );
             m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( botRight );
-        }
             break;
+        }
 
         case SHAPE_T::BEZIER:
             // TODO
@@ -857,8 +944,30 @@ void EE_POINT_EDITOR::updatePoints()
         default:
             UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
         }
-    }
+
         break;
+    }
+
+    case LIB_TEXTBOX_T:
+    {
+        LIB_TEXTBOX* textbox = static_cast<LIB_TEXTBOX*>( item );
+
+        // point editor works only with rectangles having width and height > 0
+        // Some symbols can have rectangles with width or height < 0
+        // So normalize the size:
+        BOX2I dummy;
+        dummy.SetOrigin( mapCoords( textbox->GetPosition() ) );
+        dummy.SetEnd( mapCoords( textbox->GetEnd() ) );
+        dummy.Normalize();
+        VECTOR2I topLeft = dummy.GetPosition();
+        VECTOR2I botRight = dummy.GetEnd();
+
+        m_editPoints->Point( RECT_TOPLEFT ).SetPosition( topLeft );
+        m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( VECTOR2I( botRight.x, topLeft.y ) );
+        m_editPoints->Point( RECT_BOTLEFT ).SetPosition( VECTOR2I( topLeft.x, botRight.y ) );
+        m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( botRight );
+        break;
+    }
 
     case SCH_SHAPE_T:
     {
@@ -913,8 +1022,8 @@ void EE_POINT_EDITOR::updatePoints()
             m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( VECTOR2I( botRight.x, topLeft.y ) );
             m_editPoints->Point( RECT_BOTLEFT ).SetPosition( VECTOR2I( topLeft.x, botRight.y ) );
             m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( botRight );
-        }
             break;
+        }
 
         case SHAPE_T::BEZIER:
             // TODO
@@ -923,8 +1032,30 @@ void EE_POINT_EDITOR::updatePoints()
         default:
             UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
         }
-    }
+
         break;
+    }
+
+    case SCH_TEXTBOX_T:
+    {
+        SCH_TEXTBOX* textBox = static_cast<SCH_TEXTBOX*>( item );
+
+        // point editor works only with rectangles having width and height > 0
+        // Some symbols can have rectangles with width or height < 0
+        // So normalize the size:
+        BOX2I dummy;
+        dummy.SetOrigin( textBox->GetPosition() );
+        dummy.SetEnd( textBox->GetEnd() );
+        dummy.Normalize();
+        VECTOR2I topLeft = dummy.GetPosition();
+        VECTOR2I botRight = dummy.GetEnd();
+
+        m_editPoints->Point( RECT_TOPLEFT ).SetPosition( topLeft );
+        m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( VECTOR2I( botRight.x, topLeft.y ) );
+        m_editPoints->Point( RECT_BOTLEFT ).SetPosition( VECTOR2I( topLeft.x, botRight.y ) );
+        m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( botRight );
+        break;
+    }
 
     case SCH_BITMAP_T:
     {
@@ -936,8 +1067,8 @@ void EE_POINT_EDITOR::updatePoints()
         m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( botRight.x, topLeft.y );
         m_editPoints->Point( RECT_BOTLEFT ).SetPosition( topLeft.x, botRight.y );
         m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( botRight );
-    }
         break;
+    }
 
     case SCH_SHEET_T:
     {
@@ -949,8 +1080,8 @@ void EE_POINT_EDITOR::updatePoints()
         m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( botRight.x, topLeft.y );
         m_editPoints->Point( RECT_BOTLEFT ).SetPosition( topLeft.x, botRight.y );
         m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( botRight );
-    }
         break;
+    }
 
     case SCH_LINE_T:
     {
@@ -958,8 +1089,8 @@ void EE_POINT_EDITOR::updatePoints()
 
         m_editPoints->Point( LINE_START ).SetPosition( line->GetStartPoint() );
         m_editPoints->Point( LINE_END ).SetPosition( line->GetEndPoint() );
-    }
         break;
+    }
 
     default:
         break;

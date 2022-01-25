@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
+ * Copyright (C) 2019-2022 KiCad Developers, see change_log.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -24,6 +25,7 @@
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
 #include <dialog_migrate_buses.h>
+#include <sch_label.h>
 
 /**
  * Migrates buses using legacy multi-label joining behavior.
@@ -75,18 +77,18 @@ void DIALOG_MIGRATE_BUSES::loadGraphData()
     m_items.clear();
     auto subgraphs = m_frame->Schematic().ConnectionGraph()->GetBusesNeedingMigration();
 
-    for( auto subgraph : subgraphs )
+    for( const CONNECTION_SUBGRAPH* subgraph : subgraphs )
     {
         BUS_MIGRATION_STATUS status;
 
         status.subgraph = subgraph;
         status.approved = false;
 
-        auto labels = subgraph->GetBusLabels();
+        std::vector<SCH_ITEM*> labels = subgraph->GetBusLabels();
         wxASSERT( labels.size() > 1 );
 
-        for( auto label : labels )
-            status.labels.push_back( static_cast<SCH_TEXT*>( label )->GetText() );
+        for( SCH_ITEM* label : labels )
+            status.labels.push_back( static_cast<SCH_LABEL_BASE*>( label )->GetText() );
 
         status.possible_labels = getProposedLabels( status.labels );
         m_items.push_back( status );
@@ -169,21 +171,18 @@ void DIALOG_MIGRATE_BUSES::onItemSelected( wxListEvent& aEvent )
 
     m_selected_index = sel;
 
-    auto subgraph = m_items[sel].subgraph;
+    const CONNECTION_SUBGRAPH* subgraph = m_items[sel].subgraph;
+    const SCH_SHEET_PATH&      sheet = subgraph->m_sheet;
+    SCH_ITEM*                  driver = subgraph->m_driver;
 
-    auto sheet = subgraph->m_sheet;
-    auto driver = subgraph->m_driver;
-
-    const SCH_SHEET_PATH& current = m_frame->GetCurrentSheet();
-
-    if( sheet != current )
+    if( sheet != m_frame->GetCurrentSheet() )
     {
         sheet.UpdateAllScreenReferences();
         m_frame->Schematic().SetCurrentSheet( sheet );
         m_frame->TestDanglingEnds();
     }
 
-    auto pos = driver->GetPosition();
+    VECTOR2I pos = driver->GetPosition();
 
     m_frame->GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( pos, false );
     m_frame->RedrawScreen( pos, false );
@@ -201,23 +200,21 @@ void DIALOG_MIGRATE_BUSES::onAcceptClicked( wxCommandEvent& aEvent )
 {
     wxASSERT( m_selected_index < m_items.size() );
 
-    auto sel = m_selected_index;
+    unsigned sel = m_selected_index;
 
     m_items[sel].approved_label = m_cb_new_name->GetStringSelection();
     m_items[sel].approved = true;
 
-    auto labels =  m_items[sel].subgraph->GetBusLabels();
+    std::vector<SCH_ITEM*> labels =  m_items[sel].subgraph->GetBusLabels();
 
-    for( auto label : labels )
-        static_cast<SCH_TEXT*>( label )->SetText( m_items[sel].approved_label );
+    for( SCH_ITEM* label : labels )
+        static_cast<SCH_LABEL_BASE*>( label )->SetText( m_items[sel].approved_label );
 
     m_migration_list->SetItem( sel, 2, m_items[sel].approved_label );
     m_migration_list->SetItem( sel, 3, _( "Updated" ) );
 
     if( sel < m_items.size() - 1 )
-    {
         m_migration_list->Select( sel + 1 );
-    }
 
     m_frame->GetCanvas()->Refresh();
 }

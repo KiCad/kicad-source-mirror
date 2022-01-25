@@ -38,12 +38,13 @@ class HTML_MESSAGE_BOX;
 class DIALOG_TEXT_PROPERTIES : public DIALOG_TEXT_PROPERTIES_BASE
 {
 public:
-    DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* parent, SCH_TEXT* aTextItem );
+    DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* parent, SCH_ITEM* aTextItem );
     ~DIALOG_TEXT_PROPERTIES();
 
 private:
     void onScintillaCharAdded( wxStyledTextEvent &aEvent );
     void onSpinButton( wxCommandEvent &aEvent );
+    void onFillSwatch( wxCommandEvent& aEvent );
 
     void OnFormattingHelp( wxHyperlinkEvent& aEvent ) override;
     void onMultiLineTCLostFocus( wxFocusEvent& event ) override;
@@ -52,8 +53,10 @@ private:
     bool TransferDataFromWindow() override;
 
     SCH_EDIT_FRAME*       m_frame;
-    SCH_TEXT*             m_currentText;
+    SCH_ITEM*             m_currentItem;
+    EDA_TEXT*             m_currentText;
     UNIT_BINDER           m_textSize;
+    UNIT_BINDER           m_borderWidth;
     SCINTILLA_TRICKS*     m_scintillaTricks;
 
     HTML_MESSAGE_BOX*     m_helpWindow;

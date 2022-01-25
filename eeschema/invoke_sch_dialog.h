@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2013-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,16 +44,8 @@
 #include <list>
 #include <class_draw_panel_gal.h>
 
-class wxFrame;
-class wxDialog;
-class SYMBOL_LIBS;
-class SCH_SYMBOL;
-class SCH_TEXT;
 class SCH_SHEET_PATH;
 class RESCUER;
-
-// Often this is not used in the prototypes, since wxFrame is good enough and would
-// represent maximum information hiding.
 class SCH_EDIT_FRAME;
 
 /**

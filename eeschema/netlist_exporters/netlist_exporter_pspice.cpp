@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,7 @@
 #include <env_paths.h>
 #include <pgm_base.h>
 #include <common.h>
+#include <sch_textbox.h>
 
 #include <wx/tokenzr.h>
 #include <wx/regex.h>
@@ -469,14 +470,21 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
                        wxRE_ADVANCED );
 
     m_directives.clear();
-    bool controlBlock = false;
-    bool circuitBlock = false;
+
+    bool     controlBlock = false;
+    bool     circuitBlock = false;
+    wxString text;
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
-        for( SCH_ITEM* item : sheetList[i].LastScreen()->Items().OfType( SCH_TEXT_T ) )
+        for( SCH_ITEM* item : sheetList[i].LastScreen()->Items() )
         {
-            wxString text = static_cast<SCH_TEXT*>( item )->GetShownText();
+            if( item->Type() == SCH_TEXT_T )
+                text = static_cast<SCH_TEXT*>( item )->GetShownText();
+            else if( item->Type() == SCH_TEXTBOX_T )
+                text = static_cast<SCH_TEXTBOX*>( item )->GetShownText();
+            else
+                continue;
 
             if( text.IsEmpty() )
                 continue;

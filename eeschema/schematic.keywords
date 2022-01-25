@@ -97,6 +97,7 @@ portrait
 power
 power_in
 power_out
+private
 property
 property_del
 pts
@@ -117,6 +118,7 @@ stroke
 symbol
 symbol_instances
 text
+text_box
 thickness
 title
 title_block

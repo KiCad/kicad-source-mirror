@@ -209,7 +209,7 @@ double STROKE_FONT::ComputeOverbarVerticalPosition( double aGlyphHeight ) const
 
 
 VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
-                                       const UTF8& aText, const VECTOR2I& aSize,
+                                       const wxString& aText, const VECTOR2I& aSize,
                                        const VECTOR2I& aPosition, const EDA_ANGLE& aAngle,
                                        bool aMirror, const VECTOR2I& aOrigin,
                                        TEXT_STYLE_FLAGS aTextStyle ) const
@@ -236,24 +236,18 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
         }
     }
 
-    for( UTF8::uni_iter i = aText.ubegin(), end = aText.uend(); i < end; ++i )
+    for( wxUniChar c : aText )
     {
-        // Index into bounding boxes table
-        int dd = (signed) *i - ' ';
-
-        if( dd >= (int) m_glyphBoundingBoxes->size() || dd < 0 )
+        if( c >= (int) m_glyphBoundingBoxes->size() || c < 0 )
         {
-            switch( *i )
-            {
-            case '\t':
-                // TAB->SPACE
-                dd = 0;
-                break;
-            default:
-                // everything else is turned into a '?'
-                dd = '?' - ' ';
-            }
+            if( c == '\t' )
+                c = ' ';
+            else
+                c = '?';
         }
+
+        // Index into bounding boxes table
+        int dd = (signed) c - ' ';
 
         if( dd == 0 )
         {
@@ -275,7 +269,7 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
 
             glyphExtents *= glyphSize;
 
-            if( tilt )
+            if( tilt > 0.0 )
                 glyphExtents.x -= glyphExtents.y * tilt;
 
             cursor.x += glyphExtents.x;

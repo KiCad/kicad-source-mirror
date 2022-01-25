@@ -204,9 +204,8 @@ public:
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
-                      const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill,
-                      int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
+    virtual void Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR2I& aEnd,
+                      FILL_T aFill, int aWidth, int aMaxError ) override;
 
     virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill,
                            int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
@@ -322,10 +321,13 @@ public:
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
 
     /**
-     * The PDF engine can't directly plot arcs, it uses the base emulation.
-     * So no filled arcs (not a great loss... )
+     * The PDF engine can't directly plot arcs so we use polygonization.
      */
-    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle, int aRadius,
+    virtual void Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR2I& aEnd,
+                      FILL_T aFill, int aWidth, int aMaxError ) override;
+
+    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aEndAngle, int aRadius,
                       FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
 
     /**

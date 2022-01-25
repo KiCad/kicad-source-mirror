@@ -83,7 +83,7 @@ public:
      * @param aAttributes contains text attributes (angle, line spacing, ...)
      * @return bounding box width/height
      */
-    VECTOR2D Draw( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosition,
+    VECTOR2D Draw( KIGFX::GAL* aGal, const wxString& aText, const VECTOR2D& aPosition,
                    const VECTOR2D& aOrigin, const TEXT_ATTRIBUTES& aAttributes ) const override;
 #endif
 
@@ -100,9 +100,9 @@ public:
     double GetInterline( double aGlyphHeight = 0.0, double aLineSpacing = 1.0 ) const override;
 
     VECTOR2I GetTextAsGlyphs( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
-                              const UTF8& aText, const VECTOR2I& aSize, const VECTOR2I& aPosition,
-                              const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
-                              TEXT_STYLE_FLAGS aTextStyle ) const override;
+                              const wxString& aText, const VECTOR2I& aSize,
+                              const VECTOR2I& aPosition, const EDA_ANGLE& aAngle, bool aMirror,
+                              const VECTOR2I& aOrigin, TEXT_STYLE_FLAGS aTextStyle ) const override;
 
     /**
      * Like GetTextAsGlyphs, but handles multiple lines.
@@ -115,13 +115,13 @@ public:
     void GetLinesAsGlyphs( std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                            const EDA_TEXT* aText ) const;
 
-    void GetLinesAsGlyphs( std::vector<std::unique_ptr<GLYPH>>* aGlyphs, const UTF8& aText,
+    void GetLinesAsGlyphs( std::vector<std::unique_ptr<GLYPH>>* aGlyphs, const wxString& aText,
                            const VECTOR2I& aPosition, const TEXT_ATTRIBUTES& aAttrs ) const;
 
     const FT_Face& GetFace() const { return m_face; }
 
 #if 0
-    void RenderToOpenGLCanvas( KIGFX::OPENGL_FREETYPE& aTarget, const UTF8& aString,
+    void RenderToOpenGLCanvas( KIGFX::OPENGL_FREETYPE& aTarget, const wxString& aString,
                                const VECTOR2D& aSize, const wxPoint& aPosition,
                                const EDA_ANGLE& aAngle, bool aMirror ) const;
 #endif

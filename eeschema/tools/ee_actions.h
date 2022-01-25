@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,6 +89,7 @@ public:
     static TOOL_ACTION drawSheet;
     static TOOL_ACTION importSheetPin;
     static TOOL_ACTION placeSchematicText;
+    static TOOL_ACTION drawTextBox;
     static TOOL_ACTION drawRectangle;
     static TOOL_ACTION drawCircle;
     static TOOL_ACTION drawArc;
@@ -103,6 +104,7 @@ public:
     // Symbol Tools
     static TOOL_ACTION placeSymbolPin;
     static TOOL_ACTION placeSymbolText;
+    static TOOL_ACTION drawSymbolTextBox;
     static TOOL_ACTION drawSymbolLines;
     static TOOL_ACTION placeSymbolAnchor;
     static TOOL_ACTION finishDrawing;

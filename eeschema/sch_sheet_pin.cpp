@@ -75,17 +75,14 @@ void SCH_SHEET_PIN::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOf
 void SCH_SHEET_PIN::SwapData( SCH_ITEM* aItem )
 {
     wxCHECK_RET( aItem->Type() == SCH_SHEET_PIN_T,
-                 wxString::Format( wxT( "SCH_SHEET_PIN object cannot swap data with %s object." ),
+                 wxString::Format( "SCH_SHEET_PIN object cannot swap data with %s object.",
                                    aItem->GetClass() ) );
 
-    SCH_SHEET_PIN* pin = ( SCH_SHEET_PIN* ) aItem;
-    SCH_TEXT::SwapData( (SCH_TEXT*) pin );
-    int tmp = pin->GetNumber();
-    pin->SetNumber( GetNumber() );
-    SetNumber( tmp );
-    SHEET_SIDE stmp = pin->GetSide();
-    pin->SetSide( GetSide() );
-    SetSide( stmp );
+    SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( aItem );
+
+    SCH_HIERLABEL::SwapData( pin );
+    std::swap( m_number, pin->m_number );
+    std::swap( m_edge, pin->m_edge );
 }
 
 

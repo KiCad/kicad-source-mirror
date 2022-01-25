@@ -92,7 +92,7 @@ private:
 
     // A map of labels to scaling factors.  Used to scale the movement vector for labels that
     // are attached to wires which have only one end moving.
-    std::map<SCH_TEXT*, SPECIAL_CASE_LABEL_INFO> m_specialCaseLabels;
+    std::map<SCH_LABEL_BASE*, SPECIAL_CASE_LABEL_INFO> m_specialCaseLabels;
 
 };
 

@@ -78,6 +78,12 @@ DIALOG_LIB_SHAPE_PROPERTIES_BASE::DIALOG_LIB_SHAPE_PROPERTIES_BASE( wxWindow* pa
 
 	dlgBorderSizer->Add( bSizerFill, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
+	m_privateCheckbox = new wxCheckBox( this, wxID_ANY, _("Private to Symbol Editor"), wxDefaultPosition, wxDefaultSize, 0 );
+	dlgBorderSizer->Add( m_privateCheckbox, 0, wxALL, 3 );
+
+
+	dlgBorderSizer->Add( 0, 8, 1, wxEXPAND, 5 );
+
 	m_checkApplyToAllUnits = new wxCheckBox( this, wxID_ANY, _("Common to all &units in symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	dlgBorderSizer->Add( m_checkApplyToAllUnits, 0, wxALL, 3 );
 

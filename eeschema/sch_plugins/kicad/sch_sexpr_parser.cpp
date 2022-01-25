@@ -36,6 +36,7 @@
 #include <lib_shape.h>
 #include <lib_pin.h>
 #include <lib_text.h>
+#include <lib_textbox.h>
 #include <math/util.h>                           // KiROUND, Clamp
 #include <font/font.h>
 #include <string_utils.h>
@@ -45,6 +46,7 @@
 #include <sch_edit_frame.h>          // SYM_ORIENT_XXX
 #include <sch_field.h>
 #include <sch_line.h>
+#include <sch_textbox.h>
 #include <sch_label.h>
 #include <sch_junction.h>
 #include <sch_no_connect.h>
@@ -326,6 +328,7 @@ LIB_SYMBOL* SCH_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMap, int aF
                 case T_polyline:
                 case T_rectangle:
                 case T_text:
+                case T_text_box:
                     item = ParseDrawItem();
 
                     wxCHECK_MSG( item, nullptr, "Invalid draw item pointer." );
@@ -351,6 +354,7 @@ LIB_SYMBOL* SCH_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMap, int aF
         case T_polyline:
         case T_rectangle:
         case T_text:
+        case T_text_box:
             item = ParseDrawItem();
 
             wxCHECK_MSG( item, nullptr, "Invalid draw item pointer." );
@@ -377,31 +381,35 @@ LIB_ITEM* SCH_SEXPR_PARSER::ParseDrawItem()
     switch( CurTok() )
     {
     case T_arc:
-        return static_cast<LIB_ITEM*>( parseArc() );
+        return parseArc();
         break;
 
     case T_bezier:
-        return static_cast<LIB_ITEM*>( parseBezier() );
+        return parseBezier();
         break;
 
     case T_circle:
-        return static_cast<LIB_ITEM*>( parseCircle() );
+        return parseCircle();
         break;
 
     case T_pin:
-        return static_cast<LIB_ITEM*>( parsePin() );
+        return parsePin();
         break;
 
     case T_polyline:
-        return static_cast<LIB_ITEM*>( parsePolyLine() );
+        return parsePolyLine();
         break;
 
     case T_rectangle:
-        return static_cast<LIB_ITEM*>( parseRectangle() );
+        return parseRectangle();
         break;
 
     case T_text:
-        return static_cast<LIB_TEXT*>( parseText() );
+        return parseText();
+        break;
+
+    case T_text_box:
+        return parseTextBox();
         break;
 
     default:
@@ -900,7 +908,15 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
     arc->SetUnit( m_unit );
     arc->SetConvert( m_convert );
 
-    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    token = NextTok();
+
+    if( token == T_private )
+    {
+        arc->SetPrivate( true );
+        token = NextTok();
+    }
+
+    for( ;  token != T_RIGHT;  token = NextTok() )
     {
         if( token != T_LEFT )
             Expecting( T_LEFT );
@@ -1047,7 +1063,15 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseBezier()
     bezier->SetUnit( m_unit );
     bezier->SetConvert( m_convert );
 
-    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    token = NextTok();
+
+    if( token == T_private )
+    {
+        bezier->SetPrivate( true );
+        token = NextTok();
+    }
+
+    for( ; token != T_RIGHT; token = NextTok() )
     {
         if( token != T_LEFT )
             Expecting( T_LEFT );
@@ -1122,7 +1146,15 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseCircle()
     circle->SetUnit( m_unit );
     circle->SetConvert( m_convert );
 
-    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    token = NextTok();
+
+    if( token == T_private )
+    {
+        circle->SetPrivate( true );
+        token = NextTok();
+    }
+
+    for( ; token != T_RIGHT; token = NextTok() )
     {
         if( token != T_LEFT )
             Expecting( T_LEFT );
@@ -1387,7 +1419,15 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parsePolyLine()
     poly->SetUnit( m_unit );
     poly->SetConvert( m_convert );
 
-    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    token = NextTok();
+
+    if( token == T_private )
+    {
+        poly->SetPrivate( true );
+        token = NextTok();
+    }
+
+    for( ;  token != T_RIGHT;  token = NextTok() )
     {
         if( token != T_LEFT )
             Expecting( T_LEFT );
@@ -1447,7 +1487,15 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseRectangle()
     rectangle->SetUnit( m_unit );
     rectangle->SetConvert( m_convert );
 
-    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    token = NextTok();
+
+    if( token == T_private )
+    {
+        rectangle->SetPrivate( true );
+        token = NextTok();
+    }
+
+    for( ; token != T_RIGHT; token = NextTok() )
     {
         if( token != T_LEFT )
             Expecting( T_LEFT );
@@ -1499,6 +1547,12 @@ LIB_TEXT* SCH_SEXPR_PARSER::parseText()
     text->SetConvert( m_convert );
     token = NextTok();
 
+    if( token == T_private )
+    {
+        text->SetPrivate( true );
+        token = NextTok();
+    }
+
     if( !IsSymbol( token ) )
     {
         THROW_PARSE_ERROR( _( "Invalid text string" ), CurSource(), CurLine(), CurLineNumber(),
@@ -1533,6 +1587,77 @@ LIB_TEXT* SCH_SEXPR_PARSER::parseText()
     }
 
     return text.release();
+}
+
+
+LIB_TEXTBOX* SCH_SEXPR_PARSER::parseTextBox()
+{
+    wxCHECK_MSG( CurTok() == T_text_box, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a text box." ) );
+
+    T             token;
+    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
+    FILL_PARAMS   fill;
+    std::unique_ptr<LIB_TEXTBOX> textBox = std::make_unique<LIB_TEXTBOX>( nullptr );
+
+    token = NextTok();
+
+    if( token == T_private )
+    {
+        textBox->SetPrivate( true );
+        token = NextTok();
+    }
+
+    if( !IsSymbol( token ) )
+    {
+        THROW_PARSE_ERROR( _( "Invalid text string" ), CurSource(), CurLine(), CurLineNumber(),
+                           CurOffset() );
+    }
+
+    textBox->SetText( FromUTF8() );
+
+    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_start:
+            textBox->SetPosition( parseXY() );
+            NeedRIGHT();
+            break;
+
+        case T_end:
+            textBox->SetEnd( parseXY() );
+            NeedRIGHT();
+            break;
+
+        case T_stroke:
+            parseStroke( stroke );
+            textBox->SetStroke( stroke );
+            break;
+
+        case T_fill:
+            parseFill( fill );
+            textBox->SetFillMode( fill.m_FillType );
+            textBox->SetFillColor( fill.m_Color );
+            break;
+
+        case T_effects:
+            parseEDA_TEXT( static_cast<EDA_TEXT*>( textBox.get() ), false );
+            break;
+
+        default:
+            Expecting( "start, end, stroke, fill or effects" );
+        }
+    }
+
+    textBox->UpdateTextPosition();
+
+    return textBox.release();
 }
 
 
@@ -2132,45 +2257,45 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
             // Complex hierarchies can have multiple copies of a sheet.  This only
             // provides a simple tree to find the root sheet.
             sheet->SetParent( aSheet );
-            screen->Append( static_cast<SCH_ITEM*>( sheet ) );
+            screen->Append( sheet );
             break;
         }
 
         case T_junction:
-            screen->Append( static_cast<SCH_ITEM*>( parseJunction() ) );
+            screen->Append( parseJunction() );
             break;
 
         case T_no_connect:
-            screen->Append( static_cast<SCH_ITEM*>( parseNoConnect() ) );
+            screen->Append( parseNoConnect() );
             break;
 
         case T_bus_entry:
-            screen->Append( static_cast<SCH_ITEM*>( parseBusEntry() ) );
+            screen->Append( parseBusEntry() );
             break;
 
         case T_polyline:
         case T_bus:
         case T_wire:
-            screen->Append( static_cast<SCH_ITEM*>( parseLine() ) );
+            screen->Append( parseLine() );
             break;
 
         case T_arc:
-            screen->Append( static_cast<SCH_ITEM*>( parseSchArc() ) );
+            screen->Append( parseSchArc() );
             break;
 
         case T_circle:
-            screen->Append( static_cast<SCH_ITEM*>( parseSchCircle() ) );
+            screen->Append( parseSchCircle() );
             break;
 
         case T_rectangle:
-            screen->Append( static_cast<SCH_ITEM*>( parseSchRectangle() ) );
+            screen->Append( parseSchRectangle() );
             break;
 
         case T_bezier:
-            screen->Append( static_cast<SCH_ITEM*>( parseSchBezier() ) );
+            screen->Append( parseSchBezier() );
             break;
 
-        case T_netclass_flag:       // legacy
+        case T_netclass_flag:       // present only during early development of 7.0
             KI_FALLTHROUGH;
 
         case T_text:
@@ -2178,7 +2303,11 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
         case T_global_label:
         case T_hierarchical_label:
         case T_directive_label:
-            screen->Append( static_cast<SCH_ITEM*>( parseSchText() ) );
+            screen->Append( parseSchText() );
+            break;
+
+        case T_text_box:
+            screen->Append( parseSchTextBox() );
             break;
 
         case T_sheet_instances:
@@ -3270,6 +3399,71 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
         label->SetFieldsAutoplaced();
 
     return text.release();
+}
+
+
+SCH_TEXTBOX* SCH_SEXPR_PARSER::parseSchTextBox()
+{
+    wxCHECK_MSG( CurTok() == T_text_box, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a text box." ) );
+
+    T             token;
+    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
+    FILL_PARAMS   fill;
+    std::unique_ptr<SCH_TEXTBOX> textBox = std::make_unique<SCH_TEXTBOX>();
+
+    NeedSYMBOL();
+
+    textBox->SetText( FromUTF8() );
+
+    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_start:
+            textBox->SetPosition( parseXY() );
+            NeedRIGHT();
+            break;
+
+        case T_end:
+            textBox->SetEnd( parseXY() );
+            NeedRIGHT();
+            break;
+
+        case T_stroke:
+            parseStroke( stroke );
+            textBox->SetStroke( stroke );
+            break;
+
+        case T_fill:
+            parseFill( fill );
+            textBox->SetFillMode( fill.m_FillType );
+            textBox->SetFillColor( fill.m_Color );
+            break;
+
+        case T_effects:
+            parseEDA_TEXT( static_cast<EDA_TEXT*>( textBox.get() ), false );
+            break;
+
+        case T_uuid:
+            NeedSYMBOL();
+            const_cast<KIID&>( textBox->m_Uuid ) = KIID( FromUTF8() );
+            NeedRIGHT();
+            break;
+
+        default:
+            Expecting( "start, end, stroke, fill or uuid" );
+        }
+    }
+
+    textBox->UpdateTextPosition();
+
+    return textBox.release();
 }
 
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019-2020 CERN
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -38,11 +38,13 @@ class LIB_ITEM;
 class LIB_SYMBOL;
 class LIB_FIELD;
 class LIB_TEXT;
+class LIB_TEXTBOX;
 class SCH_SYMBOL;
 class SCH_FIELD;
 class SCH_JUNCTION;
 class SCH_LABEL;
 class SCH_TEXT;
+class SCH_TEXTBOX;
 class SCH_HIERLABEL;
 class SCH_DIRECTIVE_LABEL;
 class SCH_GLOBALLABEL;
@@ -155,10 +157,12 @@ private:
                int aConvert = 0 );
     void draw( const LIB_FIELD* aField, int aLayer );
     void draw( const LIB_TEXT* aText, int aLayer );
+    void draw( const LIB_TEXTBOX* aTextBox, int aLayer );
     void draw( SCH_SYMBOL* aSymbol, int aLayer );
     void draw( const SCH_JUNCTION* aJct, int aLayer );
     void draw( const SCH_FIELD* aField, int aLayer );
-    void draw( const SCH_SHAPE* shape, int aLayer );
+    void draw( const SCH_SHAPE* aShape, int aLayer );
+    void draw( const SCH_TEXTBOX* aTextBox, int aLayer );
     void draw( const SCH_TEXT* aText, int aLayer );
     void draw( const SCH_LABEL* aText, int aLayer );
     void draw( const SCH_DIRECTIVE_LABEL* aLabel, int aLayer );
@@ -183,12 +187,8 @@ private:
 
     float getShadowWidth( bool aForHighlight ) const;
     COLOR4D getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows ) const;
-    float getLineWidth( const LIB_ITEM* aItem, bool aDrawingShadows ) const;
-    float getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows ) const;
-    float getTextThickness( const SCH_TEXT* aItem, bool aDrawingShadows ) const;
-    float getTextThickness( const SCH_FIELD* aItem, bool aDrawingShadows ) const;
-    float getTextThickness( const LIB_FIELD* aItem, bool aDrawingShadows ) const;
-    float getTextThickness( const LIB_TEXT* aItem, bool aDrawingShadows ) const;
+    float getLineWidth( const EDA_ITEM* aItem, bool aDrawingShadows ) const;
+    float getTextThickness( const EDA_ITEM* aItem, bool aDrawingShadows ) const;
 
     bool setDeviceColors( const LIB_ITEM* aItem, int aLayer );
 

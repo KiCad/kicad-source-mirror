@@ -6,6 +6,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/bitmap_button.h"
+#include "widgets/color_swatch.h"
 #include "widgets/font_choice.h"
 
 #include "dialog_text_properties_base.h"
@@ -137,13 +138,71 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_textEntrySizer->Add( m_textSizeLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_textSizeCtrl = new wxTextCtrl( this, wxID_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textEntrySizer->Add( m_textSizeCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	m_textEntrySizer->Add( m_textSizeCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_textSizeUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeUnits->Wrap( -1 );
 	m_textEntrySizer->Add( m_textSizeUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
+	m_borderWidthLabel = new wxStaticText( this, wxID_ANY, _("Border width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_borderWidthLabel->Wrap( -1 );
+	m_textEntrySizer->Add( m_borderWidthLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
+	m_borderWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_textEntrySizer->Add( m_borderWidthCtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_borderWidthUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_borderWidthUnits->Wrap( -1 );
+	m_textEntrySizer->Add( m_borderWidthUnits, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_borderColorLabel = new wxStaticText( this, wxID_ANY, _("Border color:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_borderColorLabel->Wrap( -1 );
+	m_textEntrySizer->Add( m_borderColorLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_panelBorderColor = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer2;
+	bSizer2 = new wxBoxSizer( wxVERTICAL );
+
+	m_borderColorSwatch = new COLOR_SWATCH( m_panelBorderColor, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer2->Add( m_borderColorSwatch, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+
+
+	m_panelBorderColor->SetSizer( bSizer2 );
+	m_panelBorderColor->Layout();
+	bSizer2->Fit( m_panelBorderColor );
+	m_textEntrySizer->Add( m_panelBorderColor, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_borderStyleLabel = new wxStaticText( this, wxID_ANY, _("Border style:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_borderStyleLabel->Wrap( -1 );
+	m_textEntrySizer->Add( m_borderStyleLabel, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_borderStyleCombo = new wxBitmapComboBox( this, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
+	m_borderStyleCombo->SetMinSize( wxSize( 240,-1 ) );
+
+	m_textEntrySizer->Add( m_borderStyleCombo, wxGBPosition( 6, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_filledCtrl = new wxCheckBox( this, wxID_ANY, _("Background fill"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textEntrySizer->Add( m_filledCtrl, wxGBPosition( 4, 3 ), wxGBSpan( 1, 2 ), wxLEFT, 100 );
+
+	m_fillColorLabel = new wxStaticText( this, wxID_ANY, _("Fill color:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_fillColorLabel->Wrap( -1 );
+	m_textEntrySizer->Add( m_fillColorLabel, wxGBPosition( 5, 3 ), wxGBSpan( 1, 1 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 100 );
+
+	m_panelFillColor = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer21;
+	bSizer21 = new wxBoxSizer( wxVERTICAL );
+
+	m_fillColorSwatch = new COLOR_SWATCH( m_panelFillColor, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer21->Add( m_fillColorSwatch, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+
+
+	m_panelFillColor->SetSizer( bSizer21 );
+	m_panelFillColor->Layout();
+	bSizer21->Fit( m_panelFillColor );
+	m_textEntrySizer->Add( m_panelFillColor, wxGBPosition( 5, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	m_textEntrySizer->AddGrowableCol( 1 );
 	m_textEntrySizer->AddGrowableCol( 4 );
 
 	bMainSizer->Add( m_textEntrySizer, 1, wxEXPAND|wxALL, 10 );

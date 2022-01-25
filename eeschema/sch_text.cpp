@@ -265,8 +265,6 @@ int SCH_TEXT::GetTextOffset( const RENDER_SETTINGS* aSettings ) const
         ratio = DEFAULT_TEXT_OFFSET_RATIO;   // For previews (such as in Preferences), etc.
 
     return KiROUND( ratio * GetTextSize().y );
-
-    return 0;
 }
 
 

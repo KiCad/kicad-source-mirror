@@ -29,10 +29,12 @@
 #include <lib_text.h>
 #include <dialogs/dialog_lib_text_properties.h>
 #include <lib_shape.h>
+#include <lib_textbox.h>
 #include <pgm_base.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <settings/settings_manager.h>
 #include <string_utils.h>
+#include "dialog_lib_textbox_properties.h"
 
 static void* g_lastPinWeakPtr;
 
@@ -162,7 +164,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 {
                 case LIB_PIN_T:
                 {
-                    item = pinTool->CreatePin( wxPoint( cursorPos.x, -cursorPos.y ), symbol );
+                    item = pinTool->CreatePin( VECTOR2I( cursorPos.x, -cursorPos.y ), symbol );
                     g_lastPinWeakPtr = item;
                     break;
                 }
@@ -170,7 +172,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 {
                     LIB_TEXT* text = new LIB_TEXT( symbol );
 
-                    text->SetPosition( wxPoint( cursorPos.x, -cursorPos.y ) );
+                    text->SetPosition( VECTOR2I( cursorPos.x, -cursorPos.y ) );
                     text->SetTextSize( wxSize( Mils2iu( settings->m_Defaults.text_size ),
                                                Mils2iu( settings->m_Defaults.text_size ) ) );
                     text->SetTextAngle( m_lastTextAngle );
@@ -239,7 +241,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         }
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
-            static_cast<LIB_ITEM*>( item )->SetPosition( wxPoint( cursorPos.x, -cursorPos.y ) );
+            static_cast<LIB_ITEM*>( item )->SetPosition( VECTOR2I( cursorPos.x, -cursorPos.y ) );
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
         }
@@ -267,6 +269,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     SHAPE_T                 type = aEvent.Parameter<SHAPE_T>();
     LIB_SYMBOL*             symbol = m_frame->GetCurSymbol();
     LIB_ITEM*               item = nullptr;
+    bool                    isTextBox = aEvent.IsAction( &EE_ACTIONS::drawSymbolTextBox );
 
     // We might be running as the same shape in another co-routine.  Make sure that one
     // gets whacked.
@@ -353,9 +356,13 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
             int lineWidth = Mils2iu( settings->m_Defaults.line_width );
 
-            item = new LIB_SHAPE( symbol, type, lineWidth, m_lastFillStyle );
+            if( isTextBox )
+                item = new LIB_TEXTBOX( symbol, lineWidth, m_lastFillStyle );
+            else
+                item = new LIB_SHAPE( symbol, type, lineWidth, m_lastFillStyle );
+
             item->SetFlags( IS_NEW );
-            item->BeginEdit( wxPoint( cursorPos.x, -cursorPos.y ) );
+            item->BeginEdit( VECTOR2I( cursorPos.x, -cursorPos.y ) );
 
             if( m_drawSpecificUnit )
                 item->SetUnit( m_frame->GetUnit() );
@@ -375,10 +382,22 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             }
 
             if( evt->IsDblClick( BUT_LEFT ) || evt->IsAction( &EE_ACTIONS::finishDrawing )
-                    || !item->ContinueEdit( wxPoint( cursorPos.x, -cursorPos.y ) ) )
+                    || !item->ContinueEdit( VECTOR2I( cursorPos.x, -cursorPos.y ) ) )
             {
                 item->EndEdit();
                 item->ClearEditFlags();
+
+                if( isTextBox )
+                {
+                    DIALOG_LIB_TEXTBOX_PROPERTIES dlg( m_frame, static_cast<LIB_TEXTBOX*>( item ) );
+
+                    if( dlg.ShowQuasiModal() != wxID_OK )
+                    {
+                        cleanup();
+                        continue;
+                    }
+                }
+
                 m_view->ClearPreview();
 
                 m_frame->SaveCopyInUndoList( symbol );
@@ -392,7 +411,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         }
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
-            item->CalcEdit( wxPoint( cursorPos.x, -cursorPos.y ) );
+            item->CalcEdit( VECTOR2I( cursorPos.x, -cursorPos.y ) );
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
         }
@@ -465,7 +484,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
                 continue;
 
             VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
-            wxPoint  offset( -cursorPos.x, cursorPos.y );
+            VECTOR2I offset( -cursorPos.x, cursorPos.y );
 
             symbol->SetOffset( offset );
 
@@ -531,6 +550,7 @@ void SYMBOL_EDITOR_DRAWING_TOOLS::setTransitions()
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,      EE_ACTIONS::drawCircle.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,      EE_ACTIONS::drawArc.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,      EE_ACTIONS::drawSymbolLines.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,      EE_ACTIONS::drawSymbolTextBox.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor,    EE_ACTIONS::placeSymbolAnchor.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem, EE_ACTIONS::repeatDrawItem.MakeEvent() );
 }

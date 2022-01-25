@@ -1025,15 +1025,14 @@ void wxStringSplit( const wxString& aText, wxArrayString& aStrings, wxChar aSpli
             aStrings.Add( tmp );
             tmp.Clear();
         }
-
         else
+        {
             tmp << aText[ii];
+        }
     }
 
     if( !tmp.IsEmpty() )
-    {
         aStrings.Add( tmp );
-    }
 }
 
 

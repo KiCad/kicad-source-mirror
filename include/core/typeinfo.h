@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see change_log.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -134,6 +134,7 @@ enum KICAD_T
     SCH_LINE_T,
     SCH_SHAPE_T,
     SCH_BITMAP_T,
+    SCH_TEXTBOX_T,
     SCH_TEXT_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
@@ -186,6 +187,7 @@ enum KICAD_T
     LIB_ALIAS_T,
     LIB_SHAPE_T,
     LIB_TEXT_T,
+    LIB_TEXTBOX_T,
     LIB_PIN_T,
 
     /*

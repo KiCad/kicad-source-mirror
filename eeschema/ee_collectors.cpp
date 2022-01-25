@@ -45,6 +45,7 @@ const KICAD_T EE_COLLECTOR::AllItems[] = {
 const KICAD_T EE_COLLECTOR::EditableItems[] = {
     SCH_SHAPE_T,
     SCH_TEXT_T,
+    SCH_TEXTBOX_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
     SCH_HIER_LABEL_T,
@@ -84,6 +85,7 @@ const KICAD_T EE_COLLECTOR::MovableItems[] =
     SCH_BITMAP_T,
     SCH_SHAPE_T,
     SCH_TEXT_T,
+    SCH_TEXTBOX_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
     SCH_HIER_LABEL_T,

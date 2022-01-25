@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-20212KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,8 +33,9 @@
 #include <lib_shape.h>
 
 
-LIB_SHAPE::LIB_SHAPE( LIB_SYMBOL* aParent, SHAPE_T aShape, int aLineWidth, FILL_T aFillType ) :
-    LIB_ITEM( LIB_SHAPE_T, aParent ),
+LIB_SHAPE::LIB_SHAPE( LIB_SYMBOL* aParent, SHAPE_T aShape, int aLineWidth, FILL_T aFillType,
+                      KICAD_T aType ) :
+    LIB_ITEM( aType, aParent ),
     EDA_SHAPE( aShape, aLineWidth, aFillType, true )
 {
     m_editState = 0;
@@ -113,11 +114,11 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
 {
     VECTOR2I  start = aTransform.TransformCoordinate( m_start ) + aOffset;
     VECTOR2I  end = aTransform.TransformCoordinate( m_end ) + aOffset;
-    VECTOR2I  center;
-    EDA_ANGLE startAngle;
-    EDA_ANGLE endAngle;
-    int       pen_size = GetEffectivePenWidth( aPlotter->RenderSettings() );
+    VECTOR2I  center = aTransform.TransformCoordinate( getCenter() ) + aOffset;
+    int       penWidth = GetEffectivePenWidth( aPlotter->RenderSettings() );
     FILL_T    fill = aFill ? m_fill : FILL_T::NO_FILL;
+    COLOR4D   color = aPlotter->RenderSettings()->GetLayerColor( IsPrivate() ? LAYER_NOTES
+                                                                             : LAYER_DEVICE );
 
     static std::vector<VECTOR2I> cornerList;
 
@@ -136,26 +137,29 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
         for( const VECTOR2I& pt : m_bezierPoints )
             cornerList.push_back( aTransform.TransformCoordinate( pt ) + aOffset );
     }
-    else if( GetShape() == SHAPE_T::ARC )
-    {
-        center = aTransform.TransformCoordinate( getCenter() ) + aOffset;
 
-        CalcArcAngles( startAngle, endAngle );
-        aTransform.MapAngles( &startAngle, &endAngle );
-    }
-
-    if( fill == FILL_T::FILLED_WITH_BG_BODYCOLOR )
+    if( fill != FILL_T::NO_FILL )
     {
-        aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
+        COLOR4D fillColor = color;
+
+        if( aPlotter->GetColorMode() )
+        {
+            if( fill == FILL_T::FILLED_WITH_BG_BODYCOLOR )
+                fillColor = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE_BACKGROUND );
+            else if( fill == FILL_T::FILLED_WITH_COLOR )
+                fillColor = GetFillColor();
+        }
+
+        aPlotter->SetColor( fillColor );
 
         switch( GetShape() )
         {
         case SHAPE_T::ARC:
-            aPlotter->Arc( center, -endAngle, -startAngle, GetRadius(), fill, 0 );
+            aPlotter->Arc( center, start, end, fill, 0, ARC_HIGH_DEF );
             break;
 
         case SHAPE_T::CIRCLE:
-            aPlotter->Circle( start, GetRadius() * 2, fill, 0 );
+            aPlotter->Circle( center, GetRadius() * 2, fill, 0 );
             break;
 
         case SHAPE_T::RECT:
@@ -171,31 +175,31 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
             UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         }
 
-        if( pen_size <= 0 )
+        if( penWidth <= 0 )
             return;
         else
             fill = FILL_T::NO_FILL;
     }
 
-    aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
+    aPlotter->SetColor( color );
 
     switch( GetShape() )
     {
     case SHAPE_T::ARC:
-        aPlotter->Arc( center, -endAngle, -startAngle, GetRadius(), fill, pen_size );
+        aPlotter->Arc( center, start, end, fill, penWidth, ARC_HIGH_DEF );
         break;
 
     case SHAPE_T::CIRCLE:
-        aPlotter->Circle( start, GetRadius() * 2, fill, pen_size );
+        aPlotter->Circle( center, GetRadius() * 2, fill, penWidth );
         break;
 
     case SHAPE_T::RECT:
-        aPlotter->Rect( start, end, fill, pen_size );
+        aPlotter->Rect( start, end, fill, penWidth );
         break;
 
     case SHAPE_T::POLY:
     case SHAPE_T::BEZIER:
-        aPlotter->PlotPoly( cornerList, fill, pen_size );
+        aPlotter->PlotPoly( cornerList, fill, penWidth );
         break;
 
     default:
@@ -223,8 +227,7 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
     VECTOR2I pt1 = aTransform.TransformCoordinate( m_start ) + aOffset;
     VECTOR2I pt2 = aTransform.TransformCoordinate( m_end ) + aOffset;
     VECTOR2I c;
-    COLOR4D  color = aSettings->GetLayerColor( LAYER_DEVICE );
-    COLOR4D  fillColor = color;
+    COLOR4D  color = aSettings->GetLayerColor( IsPrivate() ? LAYER_NOTES : LAYER_DEVICE );
 
     unsigned ptCount = 0;
     VECTOR2I* buffer = nullptr;
@@ -291,8 +294,12 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
     }
     else
     {
+        COLOR4D  fillColor = color;
+
         if( GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
             fillColor = aSettings->GetLayerColor( LAYER_DEVICE_BACKGROUND );
+        else if( GetFillMode() == FILL_T::FILLED_WITH_COLOR )
+            fillColor = GetFillColor();
 
         switch( GetShape() )
         {
@@ -421,3 +428,12 @@ void LIB_SHAPE::AddPoint( const VECTOR2I& aPosition )
 }
 
 
+
+
+void LIB_SHAPE::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount     = 3;
+    aLayers[0] = IsPrivate() ? LAYER_NOTES            : LAYER_DEVICE;
+    aLayers[1] = IsPrivate() ? LAYER_NOTES_BACKGROUND : LAYER_DEVICE_BACKGROUND;
+    aLayers[2] = LAYER_SELECTION_SHADOWS;
+}

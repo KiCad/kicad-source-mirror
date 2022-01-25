@@ -544,7 +544,7 @@ void BACK_ANNOTATE::processNetNameChange( const wxString& aRef, SCH_PIN* aPin,
 
             m_frame->SaveCopyInUndoList( screen, driver, UNDO_REDO::CHANGED, m_appendUndo );
             m_appendUndo = true;
-            static_cast<SCH_TEXT*>( driver )->SetText( aNewName );
+            static_cast<SCH_LABEL_BASE*>( driver )->SetText( aNewName );
         }
 
         m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );

@@ -11,6 +11,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class BITMAP_BUTTON;
+class COLOR_SWATCH;
 class FONT_CHOICE;
 
 #include "dialog_shim.h"
@@ -30,6 +31,9 @@ class FONT_CHOICE;
 #include <wx/sizer.h>
 #include <wx/hyperlink.h>
 #include <wx/textctrl.h>
+#include <wx/panel.h>
+#include <wx/bmpcbox.h>
+#include <wx/checkbox.h>
 #include <wx/gbsizer.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
@@ -67,6 +71,18 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_textSizeLabel;
 		wxTextCtrl* m_textSizeCtrl;
 		wxStaticText* m_textSizeUnits;
+		wxStaticText* m_borderWidthLabel;
+		wxTextCtrl* m_borderWidthCtrl;
+		wxStaticText* m_borderWidthUnits;
+		wxStaticText* m_borderColorLabel;
+		wxPanel* m_panelBorderColor;
+		COLOR_SWATCH* m_borderColorSwatch;
+		wxStaticText* m_borderStyleLabel;
+		wxBitmapComboBox* m_borderStyleCombo;
+		wxCheckBox* m_filledCtrl;
+		wxStaticText* m_fillColorLabel;
+		wxPanel* m_panelFillColor;
+		COLOR_SWATCH* m_fillColorSwatch;
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;

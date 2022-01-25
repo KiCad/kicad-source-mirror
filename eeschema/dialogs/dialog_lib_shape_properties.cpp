@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2006-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2006-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,6 +73,7 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataToWindow()
     if( shape )
         m_lineWidth.SetValue( shape->GetWidth() );
 
+    m_privateCheckbox->SetValue( m_item->IsPrivate() );
     m_checkApplyToAllUnits->SetValue( m_item->GetUnit() == 0 );
     m_checkApplyToAllUnits->Enable( symbol && symbol->GetUnitCount() > 1 );
     m_checkApplyToAllConversions->SetValue( m_item->GetConvert() == 0 );
@@ -182,6 +183,8 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataFromWindow()
         stroke.SetWidth( m_lineWidth.GetValue() );
         shape->SetStroke( stroke );
     }
+
+    m_item->SetPrivate( m_privateCheckbox->GetValue() );
 
     if( GetApplyToAllConversions() )
         m_item->SetConvert( 0 );

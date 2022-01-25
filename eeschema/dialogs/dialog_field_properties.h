@@ -1,13 +1,9 @@
-
-#ifndef DIALOG_EDIT_ONE_FIELD_H_
-#define DIALOG_EDIT_ONE_FIELD_H_
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2016 Wayne Stambaugh, stambaughw@gmail.com
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +23,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialog_lib_text_properties_base.h>
+#ifndef DIALOG_FIELD_PROPERTIES_H
+#define DIALOG_FIELD_PROPERTIES_H
+
+#include <dialog_field_properties_base.h>
 #include <widgets/unit_binder.h>
 #include <lib_field.h>
 #include <template_fieldnames.h>
@@ -44,7 +43,7 @@ class SCINTILLA_TRICKS;
  * This class is setup in expectation of its children possibly using Kiway player so
  * #DIALOG_SHIM::ShowQuasiModal is required when calling any subclasses.
  */
-class DIALOG_FIELD_PROPERTIES : public DIALOG_LIB_TEXT_PROPERTIES_BASE
+class DIALOG_FIELD_PROPERTIES : public DIALOG_FIELD_PROPERTIES_BASE
 {
 public:
     DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const wxString& aTitle,
@@ -147,4 +146,4 @@ private:
     bool m_isSheetFilename;
 };
 
-#endif    // DIALOG_EDIT_ONE_FIELD_H_
+#endif    // DIALOG_FIELD_PROPERTIES_H

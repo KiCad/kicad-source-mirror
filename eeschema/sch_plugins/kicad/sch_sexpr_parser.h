@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -57,6 +57,7 @@ class SCH_SCREEN;
 class SCH_SHEET;
 class SCH_SHEET_PIN;
 class SCH_TEXT;
+class SCH_TEXTBOX;
 class TITLE_BLOCK;
 
 
@@ -177,6 +178,7 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
     LIB_SHAPE* parsePolyLine();
     LIB_SHAPE* parseRectangle();
     LIB_TEXT* parseText();
+    LIB_TEXTBOX* parseTextBox();
 
     void parsePAGE_INFO( PAGE_INFO& aPageInfo );
     void parseTITLE_BLOCK( TITLE_BLOCK& aTitleBlock );
@@ -197,6 +199,7 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
     SCH_SHAPE* parseSchRectangle();
     SCH_SHAPE* parseSchBezier();
     SCH_TEXT* parseSchText();
+    SCH_TEXTBOX* parseSchTextBox();
     void parseBusAlias( SCH_SCREEN* aScreen );
 
 public:

@@ -43,10 +43,6 @@
 #include <sch_label.h>
 
 
-class SCH_EDIT_FRAME;
-class SCH_TEXT;
-
-
 DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_LABEL_BASE* aLabel ) :
         DIALOG_LABEL_PROPERTIES_BASE( aParent ),
         m_activeTextEntry( nullptr ),
@@ -238,8 +234,8 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
         {
             for( SCH_ITEM* item : screen->Items().OfType( m_currentLabel->Type() ) )
             {
-                const SCH_TEXT* textItem = static_cast<const SCH_TEXT*>( item );
-                existingLabels.insert( UnescapeString( textItem->GetText() ) );
+                const SCH_LABEL_BASE* label = static_cast<const SCH_LABEL_BASE*>( item );
+                existingLabels.insert( UnescapeString( label->GetText() ) );
             }
         }
 
@@ -508,7 +504,7 @@ void DIALOG_LABEL_PROPERTIES::onSpinButton( wxCommandEvent& aEvent )
 
 void DIALOG_LABEL_PROPERTIES::OnFormattingHelp( wxHyperlinkEvent& aEvent )
 {
-    m_helpWindow = SCH_TEXT::ShowSyntaxHelp( this );
+    m_helpWindow = SCH_LABEL_BASE::ShowSyntaxHelp( this );
 }
 
 

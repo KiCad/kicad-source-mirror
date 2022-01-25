@@ -61,6 +61,7 @@ class DIALOG_LIB_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxRadioButton* m_rbFillBackground;
 		wxRadioButton* m_rbFillCustom;
 		COLOR_SWATCH* m_colorSwatch;
+		wxCheckBox* m_privateCheckbox;
 		wxCheckBox* m_checkApplyToAllUnits;
 		wxCheckBox* m_checkApplyToAllConversions;
 		wxStaticLine* m_staticline;

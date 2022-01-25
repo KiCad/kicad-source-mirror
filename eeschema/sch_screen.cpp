@@ -547,34 +547,34 @@ bool SCH_SCREEN::IsTerminalPoint( const VECTOR2I& aPosition, int aLayer ) const
     wxCHECK_MSG( aLayer == LAYER_NOTES || aLayer == LAYER_BUS || aLayer == LAYER_WIRE, false,
                  wxT( "Invalid layer type passed to SCH_SCREEN::IsTerminalPoint()." ) );
 
+    SCH_SHEET_PIN* sheetPin;
+    SCH_LABEL_BASE* label;
+
     switch( aLayer )
     {
     case LAYER_BUS:
-    {
         if( GetBus( aPosition ) )
             return true;
 
-        SCH_SHEET_PIN* sheetPin = GetSheetPin( aPosition );
+        sheetPin = GetSheetPin( aPosition );
 
         if( sheetPin && sheetPin->IsConnected( aPosition ) )
             return true;
 
-        SCH_TEXT* label = GetLabel( aPosition );
+        label = GetLabel( aPosition );
 
         if( label && label->IsConnected( aPosition ) )
             return true;
-    }
+
         break;
 
     case LAYER_NOTES:
-    {
         if( GetLine( aPosition ) )
             return true;
-    }
+
         break;
 
     case LAYER_WIRE:
-    {
         if( GetItem( aPosition, 1, SCH_BUS_WIRE_ENTRY_T) )
             return true;
 
@@ -587,16 +587,16 @@ bool SCH_SCREEN::IsTerminalPoint( const VECTOR2I& aPosition, int aLayer ) const
         if( GetWire( aPosition ) )
             return true;
 
-        SCH_TEXT* label = GetLabel( aPosition, 1 );
+        label = GetLabel( aPosition, 1 );
 
         if( label && label->IsConnected( aPosition ) )
             return true;
 
-        SCH_SHEET_PIN* sheetPin = GetSheetPin( aPosition );
+        sheetPin = GetSheetPin( aPosition );
 
         if( sheetPin && sheetPin->IsConnected( aPosition ) )
             return true;
-    }
+
         break;
 
     default:
@@ -1110,7 +1110,7 @@ SCH_LINE* SCH_SCREEN::GetLine( const VECTOR2I& aPosition, int aAccuracy, int aLa
 }
 
 
-SCH_TEXT* SCH_SCREEN::GetLabel( const VECTOR2I& aPosition, int aAccuracy ) const
+SCH_LABEL_BASE* SCH_SCREEN::GetLabel( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     for( SCH_ITEM* item : Items().Overlapping( aPosition, aAccuracy ) )
     {
@@ -1121,7 +1121,7 @@ SCH_TEXT* SCH_SCREEN::GetLabel( const VECTOR2I& aPosition, int aAccuracy ) const
         case SCH_HIER_LABEL_T:
         case SCH_DIRECTIVE_LABEL_T:
             if( item->HitTest( aPosition, aAccuracy ) )
-                return static_cast<SCH_TEXT*>( item );
+                return static_cast<SCH_LABEL_BASE*>( item );
 
             break;
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -40,6 +40,7 @@
 #include <sch_shape.h>
 #include <sch_no_connect.h>
 #include <sch_text.h>
+#include <sch_textbox.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <schematic.h>
@@ -50,6 +51,7 @@
 #include <lib_field.h>
 #include <lib_pin.h>
 #include <lib_text.h>
+#include <lib_textbox.h>
 #include <eeschema_id.h>       // for MAX_UNIT_COUNT_PER_PACKAGE definition
 #include <sch_file_versions.h>
 #include <schematic_lexer.h>
@@ -251,10 +253,11 @@ static const char* getTextTypeToken( KICAD_T aType )
 
 
 static void formatArc( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aArc,
-                       const STROKE_PARAMS& aStroke, FILL_T aFillMode, const COLOR4D& aFillColor,
-                       KIID aUuid = niluuid )
+                       bool aIsPrivate, const STROKE_PARAMS& aStroke, FILL_T aFillMode,
+                       const COLOR4D& aFillColor, KIID aUuid = niluuid )
 {
-    aFormatter->Print( aNestLevel, "(arc (start %s) (mid %s) (end %s)\n",
+    aFormatter->Print( aNestLevel, "(arc%s (start %s) (mid %s) (end %s)\n",
+                       aIsPrivate ? " private" : "",
                        FormatInternalUnits( aArc->GetStart() ).c_str(),
                        FormatInternalUnits( aArc->GetArcMid() ).c_str(),
                        FormatInternalUnits( aArc->GetEnd() ).c_str() );
@@ -272,10 +275,11 @@ static void formatArc( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* a
 
 
 static void formatCircle( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aCircle,
-                          const STROKE_PARAMS& aStroke, FILL_T aFillMode, const COLOR4D& aFillColor,
-                          KIID aUuid = niluuid )
+                          bool aIsPrivate, const STROKE_PARAMS& aStroke, FILL_T aFillMode,
+                          const COLOR4D& aFillColor, KIID aUuid = niluuid )
 {
-    aFormatter->Print( aNestLevel, "(circle (center %s %s) (radius %s)\n",
+    aFormatter->Print( aNestLevel, "(circle%s (center %s %s) (radius %s)\n",
+                       aIsPrivate ? " private" : "",
                        FormatInternalUnits( aCircle->GetStart().x ).c_str(),
                        FormatInternalUnits( aCircle->GetStart().y ).c_str(),
                        FormatInternalUnits( aCircle->GetRadius() ).c_str() );
@@ -293,10 +297,11 @@ static void formatCircle( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE
 
 
 static void formatRect( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aRect,
-                        const STROKE_PARAMS& aStroke, FILL_T aFillMode, const COLOR4D& aFillColor,
-                        KIID aUuid = niluuid )
+                        bool aIsPrivate, const STROKE_PARAMS& aStroke, FILL_T aFillMode,
+                        const COLOR4D& aFillColor, KIID aUuid = niluuid )
 {
-    aFormatter->Print( aNestLevel, "(rectangle (start %s %s) (end %s %s)\n",
+    aFormatter->Print( aNestLevel, "(rectangle%s (start %s %s) (end %s %s)\n",
+                       aIsPrivate ? " private" : "",
                        FormatInternalUnits( aRect->GetStart().x ).c_str(),
                        FormatInternalUnits( aRect->GetStart().y ).c_str(),
                        FormatInternalUnits( aRect->GetEnd().x ).c_str(),
@@ -314,10 +319,11 @@ static void formatRect( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* 
 
 
 static void formatBezier( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aBezier,
-                          const STROKE_PARAMS& aStroke, FILL_T aFillMode, const COLOR4D& aFillColor,
-                          KIID aUuid = niluuid )
+                          bool aIsPrivate, const STROKE_PARAMS& aStroke, FILL_T aFillMode,
+                          const COLOR4D& aFillColor, KIID aUuid = niluuid )
 {
-    aFormatter->Print( aNestLevel, "(bezier (pts " );
+    aFormatter->Print( aNestLevel, "(bezier%s (pts ",
+                       aIsPrivate ? " private" : "" );
 
     for( const VECTOR2I& pt : { aBezier->GetStart(), aBezier->GetBezierC1(),
                                 aBezier->GetBezierC2(), aBezier->GetEnd() } )
@@ -342,12 +348,13 @@ static void formatBezier( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE
 
 
 static void formatPoly( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aPolyLine,
-                        const STROKE_PARAMS& aStroke, FILL_T aFillMode, const COLOR4D& aFillColor,
-                        KIID aUuid = niluuid )
+                        bool aIsPrivate, const STROKE_PARAMS& aStroke, FILL_T aFillMode,
+                        const COLOR4D& aFillColor, KIID aUuid = niluuid )
 {
     int newLine = 0;
     int lineCount = 1;
-    aFormatter->Print( aNestLevel, "(polyline\n" );
+    aFormatter->Print( aNestLevel, "(polyline%s\n",
+                       aIsPrivate ? " private" : "" );
     aFormatter->Print( aNestLevel + 1, "(pts" );
 
     for( const VECTOR2I& pt : aPolyLine->GetPolyShape().Outline( 0 ).CPoints() )
@@ -418,6 +425,8 @@ class SCH_SEXPR_PLUGIN_CACHE
     static void saveField( LIB_FIELD* aField, OUTPUTFORMATTER& aFormatter, int aNestLevel );
     static void savePin( LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter, int aNestLevel = 0 );
     static void saveText( LIB_TEXT* aText, OUTPUTFORMATTER& aFormatter, int aNestLevel = 0 );
+    static void saveTextBox( LIB_TEXTBOX* aTextBox, OUTPUTFORMATTER& aFormatter,
+                             int aNestLevel = 0 );
 
     static void saveDcmInfoAsFields( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter,
                                      int& aNextFreeFieldId, int aNestLevel );
@@ -828,6 +837,10 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
         case SCH_HIER_LABEL_T:
         case SCH_DIRECTIVE_LABEL_T:
             saveText( static_cast<SCH_TEXT*>( item ), 1 );
+            break;
+
+        case SCH_TEXTBOX_T:
+            saveTextBox( static_cast<SCH_TEXTBOX*>( item ), 1 );
             break;
 
         default:
@@ -1339,27 +1352,27 @@ void SCH_SEXPR_PLUGIN::saveShape( SCH_SHAPE* aShape, int aNestLevel )
     switch( aShape->GetShape() )
     {
     case SHAPE_T::ARC:
-        formatArc( m_out, aNestLevel, aShape, aShape->GetStroke(), aShape->GetFillMode(),
+        formatArc( m_out, aNestLevel, aShape, false, aShape->GetStroke(), aShape->GetFillMode(),
                    aShape->GetFillColor(), aShape->m_Uuid );
         break;
 
     case SHAPE_T::CIRCLE:
-        formatCircle( m_out, aNestLevel, aShape, aShape->GetStroke(), aShape->GetFillMode(),
+        formatCircle( m_out, aNestLevel, aShape, false, aShape->GetStroke(), aShape->GetFillMode(),
                       aShape->GetFillColor(), aShape->m_Uuid );
         break;
 
     case SHAPE_T::RECT:
-        formatRect( m_out, aNestLevel, aShape, aShape->GetStroke(), aShape->GetFillMode(),
+        formatRect( m_out, aNestLevel, aShape, false, aShape->GetStroke(), aShape->GetFillMode(),
                     aShape->GetFillColor(), aShape->m_Uuid );
         break;
 
     case SHAPE_T::BEZIER:
-        formatBezier( m_out, aNestLevel, aShape, aShape->GetStroke(), aShape->GetFillMode(),
+        formatBezier( m_out, aNestLevel, aShape, false, aShape->GetStroke(), aShape->GetFillMode(),
                       aShape->GetFillColor(), aShape->m_Uuid );
         break;
 
     case SHAPE_T::POLY:
-        formatPoly( m_out, aNestLevel, aShape, aShape->GetStroke(), aShape->GetFillMode(),
+        formatPoly( m_out, aNestLevel, aShape, false, aShape->GetStroke(), aShape->GetFillMode(),
                     aShape->GetFillColor(), aShape->m_Uuid );
         break;
 
@@ -1438,7 +1451,6 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
         case TEXT_SPIN_STYLE::RIGHT:                      break;
         case TEXT_SPIN_STYLE::BOTTOM: angle += ANGLE_180; break;
         }
-
     }
 
     if( aText->GetText().Length() < 50 )
@@ -1461,7 +1473,7 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
         m_out->Print( 0, " (fields_autoplaced)" );
 
     m_out->Print( 0, "\n" );
-    aText->Format( m_out, aNestLevel, 0 );
+    aText->EDA_TEXT::Format( m_out, aNestLevel, 0 );
 
     m_out->Print( aNestLevel + 1, "(uuid %s)\n", TO_UTF8( aText->m_Uuid.AsString() ) );
 
@@ -1472,6 +1484,33 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
     }
 
     m_out->Print( aNestLevel, ")\n" );   // Closes text token.
+}
+
+
+void SCH_SEXPR_PLUGIN::saveTextBox( SCH_TEXTBOX* aTextBox, int aNestLevel )
+{
+    wxCHECK_RET( aTextBox != nullptr && m_out != nullptr, "" );
+
+    m_out->Print( aNestLevel, "(text_box %s\n",
+                  m_out->Quotew( aTextBox->GetText() ).c_str() );
+
+    m_out->Print( aNestLevel + 1, "(start %s %s) (end %s %s)\n",
+                  FormatInternalUnits( aTextBox->GetStart().x ).c_str(),
+                  FormatInternalUnits( aTextBox->GetStart().y ).c_str(),
+                  FormatInternalUnits( aTextBox->GetEnd().x ).c_str(),
+                  FormatInternalUnits( aTextBox->GetEnd().y ).c_str() );
+
+    aTextBox->GetStroke().Format( m_out, aNestLevel + 1 );
+    m_out->Print( 0, "\n" );
+    formatFill( m_out, aNestLevel + 1, aTextBox->GetFillMode(), aTextBox->GetFillColor() );
+    m_out->Print( 0, "\n" );
+
+    aTextBox->EDA_TEXT::Format( m_out, aNestLevel, 0 );
+
+    if( aTextBox->m_Uuid != niluuid )
+        m_out->Print( aNestLevel + 1, "(uuid %s)\n", TO_UTF8( aTextBox->m_Uuid.AsString() ) );
+
+    m_out->Print( aNestLevel, ")\n" );
 }
 
 
@@ -1970,6 +2009,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveSymbolDrawItem( LIB_ITEM* aItem, OUTPUTFORMATTE
         LIB_SHAPE*    shape = static_cast<LIB_SHAPE*>( aItem );
         STROKE_PARAMS stroke;
         FILL_T        fillMode = shape->GetFillMode();
+        bool          isPrivate = shape->IsPrivate();
 
         stroke.SetWidth( shape->GetWidth() );
 
@@ -1978,23 +2018,23 @@ void SCH_SEXPR_PLUGIN_CACHE::saveSymbolDrawItem( LIB_ITEM* aItem, OUTPUTFORMATTE
         switch( shape->GetShape() )
         {
         case SHAPE_T::ARC:
-            formatArc( &aFormatter, aNestLevel, shape, stroke, fillMode, fillColor );
+            formatArc( &aFormatter, aNestLevel, shape, isPrivate, stroke, fillMode, fillColor );
             break;
 
         case SHAPE_T::CIRCLE:
-            formatCircle( &aFormatter, aNestLevel, shape, stroke, fillMode, fillColor );
+            formatCircle( &aFormatter, aNestLevel, shape, isPrivate, stroke, fillMode, fillColor );
             break;
 
         case SHAPE_T::RECT:
-            formatRect( &aFormatter, aNestLevel, shape, stroke, fillMode, fillColor );
+            formatRect( &aFormatter, aNestLevel, shape, isPrivate, stroke, fillMode, fillColor );
             break;
 
         case SHAPE_T::BEZIER:
-            formatBezier(&aFormatter, aNestLevel, shape, stroke, fillMode, fillColor );
+            formatBezier(&aFormatter, aNestLevel, shape, isPrivate, stroke, fillMode, fillColor );
             break;
 
         case SHAPE_T::POLY:
-            formatPoly( &aFormatter, aNestLevel, shape, stroke, fillMode, fillColor );
+            formatPoly( &aFormatter, aNestLevel, shape, isPrivate, stroke, fillMode, fillColor );
             break;
 
         default:
@@ -2005,11 +2045,15 @@ void SCH_SEXPR_PLUGIN_CACHE::saveSymbolDrawItem( LIB_ITEM* aItem, OUTPUTFORMATTE
     }
 
     case LIB_PIN_T:
-        savePin( (LIB_PIN* ) aItem, aFormatter, aNestLevel );
+        savePin( static_cast<LIB_PIN*>( aItem ), aFormatter, aNestLevel );
         break;
 
     case LIB_TEXT_T:
-        saveText( ( LIB_TEXT* ) aItem, aFormatter, aNestLevel );
+        saveText( static_cast<LIB_TEXT*>( aItem ), aFormatter, aNestLevel );
+        break;
+
+    case LIB_TEXTBOX_T:
+        saveTextBox( static_cast<LIB_TEXTBOX*>( aItem ), aFormatter, aNestLevel );
         break;
 
     default:
@@ -2089,12 +2133,40 @@ void SCH_SEXPR_PLUGIN_CACHE::saveText( LIB_TEXT* aText, OUTPUTFORMATTER& aFormat
 {
     wxCHECK_RET( aText && aText->Type() == LIB_TEXT_T, "Invalid LIB_TEXT object." );
 
-    aFormatter.Print( aNestLevel, "(text %s (at %s %s %g)\n",
+    aFormatter.Print( aNestLevel, "(text%s %s (at %s %s %g)\n",
+                      aText->IsPrivate() ? " private" : "",
                       aFormatter.Quotew( aText->GetText() ).c_str(),
                       FormatInternalUnits( aText->GetPosition().x ).c_str(),
                       FormatInternalUnits( aText->GetPosition().y ).c_str(),
                       (double) aText->GetTextAngle().AsTenthsOfADegree() );
-    aText->Format( &aFormatter, aNestLevel, 0 );
+
+    aText->EDA_TEXT::Format( &aFormatter, aNestLevel, 0 );
+    aFormatter.Print( aNestLevel, ")\n" );
+}
+
+
+void SCH_SEXPR_PLUGIN_CACHE::saveTextBox( LIB_TEXTBOX* aTextBox, OUTPUTFORMATTER& aFormatter,
+                                          int aNestLevel )
+{
+    wxCHECK_RET( aTextBox && aTextBox->Type() == LIB_TEXTBOX_T, "Invalid LIB_TEXTBOX object." );
+
+    aFormatter.Print( aNestLevel, "(text_box%s %s\n",
+                      aTextBox->IsPrivate() ? " private" : "",
+                      aFormatter.Quotew( aTextBox->GetText() ).c_str() );
+
+    aFormatter.Print( aNestLevel + 1, "(start %s %s) (end %s %s)\n",
+                      FormatInternalUnits( aTextBox->GetStart().x ).c_str(),
+                      FormatInternalUnits( aTextBox->GetStart().y ).c_str(),
+                      FormatInternalUnits( aTextBox->GetEnd().x ).c_str(),
+                      FormatInternalUnits( aTextBox->GetEnd().y ).c_str() );
+
+    aTextBox->GetStroke().Format( &aFormatter, aNestLevel + 1 );
+    aFormatter.Print( 0, "\n" );
+
+    formatFill( &aFormatter, aNestLevel + 1, aTextBox->GetFillMode(), aTextBox->GetFillColor() );
+    aFormatter.Print( 0, "\n" );
+
+    aTextBox->EDA_TEXT::Format( &aFormatter, aNestLevel, 0 );
     aFormatter.Print( aNestLevel, ")\n" );
 }
 

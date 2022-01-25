@@ -585,7 +585,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR
             {
                 if( item->Type() == SCH_LABEL_T || item->Type() == SCH_DIRECTIVE_LABEL_T )
                 {
-                    SCH_TEXT* label = static_cast<SCH_TEXT*>( item );
+                    SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
 
                     if( label->IsSelected() )
                         continue;   // These will be moved on their own because they're selected
@@ -655,9 +655,10 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR
             // Select labels that are connected to a wire (or bus) being moved.
             if( aOriginalItem->Type() == SCH_LINE_T && test->CanConnect( aOriginalItem ) )
             {
-                SCH_TEXT* label = static_cast<SCH_TEXT*>( test );
-                SCH_LINE* line = static_cast<SCH_LINE*>( aOriginalItem );
-                bool      oneEndFixed = !line->HasFlag( STARTPOINT ) || !line->HasFlag( ENDPOINT );
+                SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( test );
+                SCH_LINE*       line = static_cast<SCH_LINE*>( aOriginalItem );
+
+                bool oneEndFixed = !line->HasFlag( STARTPOINT ) || !line->HasFlag( ENDPOINT );
 
                 if( line->HitTest( label->GetTextPos(), 1 ) )
                 {
@@ -776,7 +777,7 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
     case SCH_LABEL_T:
     case SCH_DIRECTIVE_LABEL_T:
     {
-        SCH_TEXT* label = static_cast<SCH_TEXT*>( aItem );
+        SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( aItem );
 
         if( m_specialCaseLabels.count( label ) )
         {

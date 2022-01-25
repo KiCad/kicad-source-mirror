@@ -33,6 +33,7 @@
 #include <sch_reference_list.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
+#include <sch_textbox.h>
 #include <schematic.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
@@ -253,6 +254,18 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                     ercItem->SetItems( text );
 
                     SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
+                    screen->Append( marker );
+                }
+            }
+            else if( SCH_TEXTBOX* textBox = dynamic_cast<SCH_TEXTBOX*>( item ) )
+            {
+                if( textBox->GetShownText().Matches( wxT( "*${*}*" ) ) )
+                {
+                    std::shared_ptr<ERC_ITEM> ercItem =
+                            ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
+                    ercItem->SetItems( textBox );
+
+                    SCH_MARKER* marker = new SCH_MARKER( ercItem, textBox->GetPosition() );
                     screen->Append( marker );
                 }
             }
@@ -629,7 +642,7 @@ int ERC_TESTER::TestSimilarLabels()
 
     int errors = 0;
 
-    std::unordered_map<wxString, SCH_TEXT*> labelMap;
+    std::unordered_map<wxString, SCH_LABEL_BASE*> labelMap;
 
     for( const std::pair<NET_NAME_CODE, std::vector<CONNECTION_SUBGRAPH*>> net : nets )
     {
@@ -645,20 +658,20 @@ int ERC_TESTER::TestSimilarLabels()
                 case SCH_HIER_LABEL_T:
                 case SCH_GLOBAL_LABEL_T:
                 {
-                    SCH_TEXT* text = static_cast<SCH_TEXT*>( item );
+                    SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
 
-                    wxString normalized = text->GetShownText().Lower();
+                    wxString normalized = label->GetShownText().Lower();
 
                     if( !labelMap.count( normalized ) )
                     {
-                        labelMap[normalized] = text;
+                        labelMap[normalized] = label;
                     }
-                    else if( labelMap.at( normalized )->GetShownText() != text->GetShownText() )
+                    else if( labelMap.at( normalized )->GetShownText() != label->GetShownText() )
                     {
                         std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_SIMILAR_LABELS );
-                        ercItem->SetItems( text, labelMap.at( normalized ) );
+                        ercItem->SetItems( label, labelMap.at( normalized ) );
 
-                        SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
+                        SCH_MARKER* marker = new SCH_MARKER( ercItem, label->GetPosition() );
                         subgraph->m_sheet.LastScreen()->Append( marker );
                         errors += 1;
                     }

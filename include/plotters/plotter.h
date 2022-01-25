@@ -220,6 +220,12 @@ public:
     /**
      * Generic fallback: arc rendered as a polyline.
      */
+    virtual void Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR2I& aEnd,
+                      FILL_T aFill, int aWidth, int aMaxError );
+
+    /**
+     * Generic fallback: arc rendered as a polyline.
+     */
     virtual void Arc( const VECTOR2I& aCentre, const EDA_ANGLE& aStartAngle,
                       const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill,
                       int aWidth = USE_DEFAULT_LINE_WIDTH );

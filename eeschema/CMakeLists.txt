@@ -58,6 +58,7 @@ set( EESCHEMA_DLGS
     dialogs/dialog_edit_symbols_libid.cpp
     dialogs/dialog_edit_symbols_libid_base.cpp
     dialogs/dialog_field_properties.cpp
+    dialogs/dialog_field_properties_base.cpp
     dialogs/dialog_eeschema_page_settings.cpp
     dialogs/dialog_erc.cpp
     dialogs/dialog_erc_base.cpp
@@ -72,6 +73,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_lib_edit_pin_table_base.cpp
     dialogs/dialog_lib_text_properties.cpp
     dialogs/dialog_lib_text_properties_base.cpp
+    dialogs/dialog_lib_textbox_properties.cpp
+    dialogs/dialog_lib_textbox_properties_base.cpp
     dialogs/dialog_lib_new_symbol.cpp
     dialogs/dialog_lib_new_symbol_base.cpp
     dialogs/dialog_lib_shape_properties.cpp
@@ -187,6 +190,7 @@ set( EESCHEMA_SRCS
     lib_pin.cpp
     lib_symbol.cpp
     lib_text.cpp
+    lib_textbox.cpp
     libarch.cpp
     menubar.cpp
     pin_numbers.cpp
@@ -216,6 +220,7 @@ set( EESCHEMA_SRCS
     sch_sheet_pin.cpp
     sch_symbol.cpp
     sch_text.cpp
+    sch_textbox.cpp
     sch_validators.cpp
     schematic.cpp
     schematic_settings.cpp

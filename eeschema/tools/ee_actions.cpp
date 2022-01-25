@@ -225,6 +225,11 @@ TOOL_ACTION EE_ACTIONS::placeSymbolText( "eeschema.SymbolDrawing.placeSymbolText
         _( "Add Text" ), _( "Add a text item" ),
         BITMAPS::text, AF_ACTIVATE, (void*) LIB_TEXT_T );
 
+TOOL_ACTION EE_ACTIONS::drawSymbolTextBox( "eeschema.SymbolDrawing.drawSymbolTextBox",
+        AS_GLOBAL, 0, "",
+        _( "Add Text Box" ), _( "Add a text box item" ),
+        BITMAPS::add_textbox, AF_ACTIVATE, (void*) LIB_TEXTBOX_T );
+
 TOOL_ACTION EE_ACTIONS::drawSymbolLines( "eeschema.SymbolDrawing.drawSymbolLines",
         AS_GLOBAL, 0, "",
         _( "Add Lines" ), _( "Add connected graphic lines" ),
@@ -334,6 +339,11 @@ TOOL_ACTION EE_ACTIONS::placeSchematicText( "eeschema.InteractiveDrawing.placeSc
         'T', LEGACY_HK_NAME( "Add Graphic Text" ),
         _( "Add Text" ), _( "Add text" ),
         BITMAPS::text, AF_ACTIVATE );
+
+TOOL_ACTION EE_ACTIONS::drawTextBox( "eeschema.InteractiveDrawing.drawTextBox",
+        AS_GLOBAL, 0, "",
+        _( "Add Text Box" ), _( "Add a text box" ),
+        BITMAPS::add_textbox, AF_ACTIVATE, (void*) SHAPE_T::RECT );
 
 TOOL_ACTION EE_ACTIONS::drawRectangle( "eeschema.InteractiveDrawing.drawRectangle",
         AS_GLOBAL, 0, "",

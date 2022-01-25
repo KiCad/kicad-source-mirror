@@ -262,6 +262,9 @@ public:
     void SetConvert( int aConvert ) { m_convert = aConvert; }
     int GetConvert() const { return m_convert; }
 
+    void SetPrivate( bool aPrivate ) { m_private = aPrivate; }
+    bool IsPrivate() const { return m_private; }
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
@@ -316,6 +319,11 @@ protected:
      * body styles.  This is typially used for representing DeMorgan variants in KiCad.
      */
     int         m_convert;
+
+    /**
+     * Private items are shown only in the Symbol Editor.
+     */
+    bool        m_private;
 };
 
 

@@ -34,8 +34,8 @@
 #include <sch_shape.h>
 
 
-SCH_SHAPE::SCH_SHAPE( SHAPE_T aShape, int aLineWidth, FILL_T aFillType ) :
-    SCH_ITEM( nullptr, SCH_SHAPE_T ),
+SCH_SHAPE::SCH_SHAPE( SHAPE_T aShape, int aLineWidth, FILL_T aFillType, KICAD_T aType ) :
+    SCH_ITEM( nullptr, aType ),
     EDA_SHAPE( aShape, aLineWidth, aFillType, false )
 {
     SetLayer( LAYER_NOTES );
@@ -83,17 +83,13 @@ void SCH_SHAPE::MirrorVertically( int aCenter )
 
 void SCH_SHAPE::Rotate( const VECTOR2I& aCenter )
 {
-    rotate( aCenter, ANGLE_90 );
+    rotate( aCenter, -ANGLE_90 );
 }
 
 
 void SCH_SHAPE::Plot( PLOTTER* aPlotter ) const
 {
     int       pen_size = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
-    VECTOR2I  center;
-    int       radius = 0;
-    EDA_ANGLE startAngle;
-    EDA_ANGLE endAngle;
 
     static std::vector<VECTOR2I> cornerList;
 
@@ -103,12 +99,6 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter ) const
 
         for( const VECTOR2I& pt : m_poly.Outline( 0 ).CPoints() )
             cornerList.push_back( pt );
-    }
-    else if( GetShape() == SHAPE_T::ARC )
-    {
-        center = getCenter();
-        radius = GetRadius();
-        CalcArcAngles( startAngle, endAngle );
     }
 
     if( GetStroke().GetColor() == COLOR4D::UNSPECIFIED )
@@ -122,11 +112,11 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter ) const
     switch( GetShape() )
     {
     case SHAPE_T::ARC:
-        aPlotter->Arc( center, -endAngle, -startAngle, radius, FILL_T::NO_FILL, pen_size );
+        aPlotter->Arc( getCenter(), GetStart(), GetEnd(), FILL_T::NO_FILL, pen_size, ARC_HIGH_DEF );
         break;
 
     case SHAPE_T::CIRCLE:
-        aPlotter->Circle( GetStart(), GetRadius() * 2, FILL_T::NO_FILL, pen_size );
+        aPlotter->Circle( getCenter(), GetRadius() * 2, FILL_T::NO_FILL, pen_size );
         break;
 
     case SHAPE_T::RECT:
@@ -169,11 +159,11 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter ) const
         switch( GetShape() )
         {
         case SHAPE_T::ARC:
-            aPlotter->Arc( center, -endAngle, -startAngle, radius, m_fill, 0 );
+            aPlotter->Arc( getCenter(), GetStart(), GetEnd(), m_fill, 0, ARC_HIGH_DEF );
             break;
 
         case SHAPE_T::CIRCLE:
-            aPlotter->Circle( GetStart(), GetRadius() * 2, m_fill, 0 );
+            aPlotter->Circle( getCenter(), GetRadius() * 2, m_fill, 0 );
             break;
 
         case SHAPE_T::RECT:

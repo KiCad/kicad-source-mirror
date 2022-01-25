@@ -41,6 +41,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <sch_text.h>
+#include <sch_textbox.h>
 #include <sch_bitmap.h>
 #include <sch_view.h>
 #include <sch_line.h>
@@ -250,6 +251,7 @@ bool SCH_EDIT_TOOL::Init()
                 case SCH_SHEET_T:
                 case SCH_SHEET_PIN_T:
                 case SCH_TEXT_T:
+                case SCH_TEXTBOX_T:
                 case SCH_LABEL_T:
                 case SCH_GLOBAL_LABEL_T:
                 case SCH_HIER_LABEL_T:
@@ -430,6 +432,7 @@ bool SCH_EDIT_TOOL::Init()
 const KICAD_T rotatableItems[] = {
     SCH_SHAPE_T,
     SCH_TEXT_T,
+    SCH_TEXTBOX_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
     SCH_HIER_LABEL_T,
@@ -482,8 +485,10 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     {
         if( moving && selection.HasReferencePoint() )
             rotPoint = selection.GetReferencePoint();
-        else
+        else if( head->IsConnectable() )
             rotPoint = head->GetPosition();
+        else
+            rotPoint = m_frame->GetNearestHalfGridPosition( head->GetBoundingBox().GetCenter() );
 
         if( !moving )
             saveCopyInUndoList( head, UNDO_REDO::CHANGED );
@@ -550,11 +555,11 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         }
 
         case SCH_SHAPE_T:
+        case SCH_TEXTBOX_T:
             for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
                 head->Rotate( rotPoint );
 
             break;
-
 
         case SCH_BITMAP_T:
             for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
@@ -728,6 +733,18 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         {
             SCH_TEXT* textItem = static_cast<SCH_TEXT*>( item );
             textItem->MirrorSpinStyle( !vertical );
+            break;
+        }
+
+        case SCH_TEXTBOX_T:
+        {
+            SCH_TEXTBOX* textBox = static_cast<SCH_TEXTBOX*>( item );
+
+            if( vertical )
+                textBox->MirrorVertically( mirrorPoint.y );
+            else
+                textBox->MirrorHorizontally( mirrorPoint.x );
+
             break;
         }
 
@@ -947,6 +964,7 @@ static KICAD_T deletableItems[] =
     SCH_BUS_WIRE_ENTRY_T,
     SCH_SHAPE_T,
     SCH_TEXT_T,
+    SCH_TEXTBOX_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
     SCH_HIER_LABEL_T,
@@ -1456,8 +1474,9 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         break;
 
     case SCH_TEXT_T:
+    case SCH_TEXTBOX_T:
     {
-        DIALOG_TEXT_PROPERTIES dlg( m_frame, static_cast<SCH_TEXT*>( item ) );
+        DIALOG_TEXT_PROPERTIES dlg( m_frame, static_cast<SCH_ITEM*>( item ) );
 
         // Must be quasi modal for syntax help
         if( dlg.ShowQuasiModal() == wxID_OK )

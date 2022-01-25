@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,6 @@
 #include <eeschema_id.h>
 #include <symbol_edit_frame.h>
 #include <sch_painter.h>
-#include <bitmaps.h>
 #include <symbol_library_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_manager.h>
@@ -60,6 +59,7 @@ void SYMBOL_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->AddScaledSeparator( this );
     m_drawToolBar->Add( EE_ACTIONS::placeSymbolPin,       ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeSymbolText,      ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::drawSymbolTextBox,    ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::drawRectangle,        ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::drawCircle,           ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::drawArc,              ACTION_TOOLBAR::TOGGLE );

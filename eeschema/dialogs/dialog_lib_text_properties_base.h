@@ -20,16 +20,16 @@ class FONT_CHOICE;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/textctrl.h>
 #include <wx/stc/stc.h>
+#include <wx/choice.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
+#include <wx/textctrl.h>
 #include <wx/checkbox.h>
-#include <wx/choice.h>
 #include <wx/gbsizer.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
@@ -45,11 +45,7 @@ class DIALOG_LIB_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 
 	protected:
 		wxStaticText* m_textLabel;
-		wxTextCtrl* m_TextCtrl;
 		wxStyledTextCtrl* m_StyledTextCtrl;
-		wxBitmapButton* m_TextValueSelectButton;
-		wxStaticText* m_note;
-		wxCheckBox* m_visible;
 		wxStaticText* m_fontLabel;
 		FONT_CHOICE* m_fontCtrl;
 		BITMAP_BUTTON* m_separator1;
@@ -70,12 +66,7 @@ class DIALOG_LIB_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_textSizeLabel;
 		wxTextCtrl* m_textSizeCtrl;
 		wxStaticText* m_textSizeUnits;
-		wxStaticText* m_xPosLabel;
-		wxTextCtrl* m_xPosCtrl;
-		wxStaticText* m_xPosUnits;
-		wxStaticText* m_yPosLabel;
-		wxTextCtrl* m_yPosCtrl;
-		wxStaticText* m_yPosUnits;
+		wxCheckBox* m_privateCheckbox;
 		wxCheckBox* m_CommonUnit;
 		wxCheckBox* m_CommonConvert;
 		wxStaticLine* m_staticline2;
@@ -85,9 +76,8 @@ class DIALOG_LIB_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseDialog( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnSetFocusText( wxFocusEvent& event ) { event.Skip(); }
 		virtual void onMultiLineTCLostFocus( wxFocusEvent& event ) { event.Skip(); }
-		virtual void OnTextValueSelectButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSetFocusText( wxFocusEvent& event ) { event.Skip(); }
 
 
 	public:

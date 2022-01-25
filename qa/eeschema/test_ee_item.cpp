@@ -37,6 +37,7 @@
 #include <sch_shape.h>
 #include <sch_bitmap.h>
 #include <sch_text.h>
+#include <sch_textbox.h>
 #include <sch_field.h>
 #include <sch_symbol.h>
 #include <sch_sheet_pin.h>
@@ -44,6 +45,7 @@
 
 #include <lib_shape.h>
 #include <lib_text.h>
+#include <lib_textbox.h>
 #include <lib_pin.h>
 #include <lib_field.h>
 
@@ -86,6 +88,7 @@ public:
         case SCH_SHAPE_T:           return new SCH_SHAPE( SHAPE_T::ARC );
         case SCH_BITMAP_T:          return new SCH_BITMAP();
         case SCH_TEXT_T:            return new SCH_TEXT( wxPoint( 0, 0 ), "test text" );
+        case SCH_TEXTBOX_T:         return new SCH_TEXTBOX( 0, FILL_T::NO_FILL, "test textbox" );
         case SCH_LABEL_T:           return new SCH_LABEL( wxPoint( 0, 0 ), "test label" );
         case SCH_DIRECTIVE_LABEL_T: return new SCH_DIRECTIVE_LABEL( wxPoint( 0, 0 ) );
         case SCH_GLOBAL_LABEL_T:    return new SCH_GLOBALLABEL();
@@ -103,6 +106,7 @@ public:
         case SCH_SHEET_T:           return new SCH_SHEET();
         case LIB_SHAPE_T:           return new LIB_SHAPE( &m_symbol, SHAPE_T::ARC );
         case LIB_TEXT_T:            return new LIB_TEXT( &m_symbol );
+        case LIB_TEXTBOX_T:         return new LIB_TEXTBOX( &m_symbol, 0, FILL_T::NO_FILL, "test" );
         case LIB_PIN_T:             return new LIB_PIN( &m_symbol );
         case LIB_FIELD_T:           return new LIB_FIELD( &m_symbol );
 

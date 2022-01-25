@@ -22,18 +22,15 @@ DIALOG_LIB_TEXT_PROPERTIES_BASE::DIALOG_LIB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	wxBoxSizer* bPropertiesSizer;
 	bPropertiesSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxBoxSizer* bUpperBoxSizer;
-	bUpperBoxSizer = new wxBoxSizer( wxVERTICAL );
-
-	wxBoxSizer* bTextValueBoxSizer;
-	bTextValueBoxSizer = new wxBoxSizer( wxHORIZONTAL );
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 3, 0 );
+	gbSizer1->SetFlexibleDirection( wxBOTH );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	gbSizer1->SetEmptyCellSize( wxSize( -1,10 ) );
 
 	m_textLabel = new wxStaticText( this, wxID_ANY, _("Text:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textLabel->Wrap( -1 );
-	bTextValueBoxSizer->Add( m_textLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
-	m_TextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bTextValueBoxSizer->Add( m_TextCtrl, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizer1->Add( m_textLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxLEFT, 5 );
 
 	m_StyledTextCtrl = new wxStyledTextCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SUNKEN, wxEmptyString );
 	m_StyledTextCtrl->SetUseTabs( true );
@@ -64,45 +61,17 @@ DIALOG_LIB_TEXT_PROPERTIES_BASE::DIALOG_LIB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	m_StyledTextCtrl->MarkerDefine( wxSTC_MARKNUM_FOLDERTAIL, wxSTC_MARK_EMPTY );
 	m_StyledTextCtrl->SetSelBackground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 	m_StyledTextCtrl->SetSelForeground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
-	bTextValueBoxSizer->Add( m_StyledTextCtrl, 1, wxRIGHT|wxLEFT, 5 );
-
-	m_TextValueSelectButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bTextValueBoxSizer->Add( m_TextValueSelectButton, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	bUpperBoxSizer->Add( bTextValueBoxSizer, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
-
-	m_note = new wxStaticText( this, wxID_ANY, _("(%s)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_note->Wrap( -1 );
-	bUpperBoxSizer->Add( m_note, 0, wxBOTTOM|wxRIGHT|wxLEFT, 10 );
-
-
-	bPropertiesSizer->Add( bUpperBoxSizer, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-
-	wxBoxSizer* bSizer9;
-	bSizer9 = new wxBoxSizer( wxVERTICAL );
-
-	m_visible = new wxCheckBox( this, wxID_ANY, _("Visible"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer9->Add( m_visible, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
-
-
-	bPropertiesSizer->Add( bSizer9, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
-
-	wxGridBagSizer* gbSizer1;
-	gbSizer1 = new wxGridBagSizer( 3, 0 );
-	gbSizer1->SetFlexibleDirection( wxBOTH );
-	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	gbSizer1->SetEmptyCellSize( wxSize( -1,10 ) );
+	gbSizer1->Add( m_StyledTextCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 4 ), wxEXPAND, 5 );
 
 	m_fontLabel = new wxStaticText( this, wxID_ANY, _("Font:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fontLabel->Wrap( -1 );
-	gbSizer1->Add( m_fontLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	gbSizer1->Add( m_fontLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
 	wxString m_fontCtrlChoices[] = { _("Default Font"), _("KiCad Font") };
 	int m_fontCtrlNChoices = sizeof( m_fontCtrlChoices ) / sizeof( wxString );
 	m_fontCtrl = new FONT_CHOICE( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_fontCtrlNChoices, m_fontCtrlChoices, 0 );
 	m_fontCtrl->SetSelection( 0 );
-	gbSizer1->Add( m_fontCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
+	gbSizer1->Add( m_fontCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 
 	wxBoxSizer* formattingSizer;
 	formattingSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -183,49 +152,30 @@ DIALOG_LIB_TEXT_PROPERTIES_BASE::DIALOG_LIB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	formattingSizer->Add( m_separator5, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	gbSizer1->Add( formattingSizer, wxGBPosition( 0, 3 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
+	gbSizer1->Add( formattingSizer, wxGBPosition( 2, 3 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 
 	m_textSizeLabel = new wxStaticText( this, wxID_ANY, _("Text size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeLabel->Wrap( -1 );
-	gbSizer1->Add( m_textSizeLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	gbSizer1->Add( m_textSizeLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_textSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_textSizeCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_textSizeCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_textSizeUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeUnits->Wrap( -1 );
-	gbSizer1->Add( m_textSizeUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	gbSizer1->Add( m_textSizeUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_xPosLabel = new wxStaticText( this, wxID_ANY, _("Position X:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_xPosLabel->Wrap( -1 );
-	gbSizer1->Add( m_xPosLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_xPosCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_xPosCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_xPosUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_xPosUnits->Wrap( -1 );
-	gbSizer1->Add( m_xPosUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_yPosLabel = new wxStaticText( this, wxID_ANY, _("Position Y:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_yPosLabel->Wrap( -1 );
-	gbSizer1->Add( m_yPosLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
-	m_yPosCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_yPosCtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_yPosUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_yPosUnits->Wrap( -1 );
-	gbSizer1->Add( m_yPosUnits, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_privateCheckbox = new wxCheckBox( this, wxID_ANY, _("Private to Symbol Editor"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_privateCheckbox, wxGBPosition( 5, 0 ), wxGBSpan( 1, 2 ), wxLEFT, 5 );
 
 	m_CommonUnit = new wxCheckBox( this, wxID_ANY, _("Common to all units"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_CommonUnit, wxGBPosition( 3, 4 ), wxGBSpan( 1, 1 ), wxRIGHT, 5 );
+	gbSizer1->Add( m_CommonUnit, wxGBPosition( 5, 3 ), wxGBSpan( 1, 1 ), wxLEFT, 100 );
 
 	m_CommonConvert = new wxCheckBox( this, wxID_ANY, _("Common to all body styles"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_CommonConvert, wxGBPosition( 4, 4 ), wxGBSpan( 1, 1 ), wxRIGHT, 5 );
+	gbSizer1->Add( m_CommonConvert, wxGBPosition( 6, 3 ), wxGBSpan( 1, 1 ), wxLEFT, 100 );
 
 
-	bPropertiesSizer->Add( gbSizer1, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bPropertiesSizer->Add( gbSizer1, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxFlexGridSizer* fgSizer3;
 	fgSizer3 = new wxFlexGridSizer( 5, 4, 3, 3 );
@@ -278,19 +228,15 @@ DIALOG_LIB_TEXT_PROPERTIES_BASE::DIALOG_LIB_TEXT_PROPERTIES_BASE( wxWindow* pare
 
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_LIB_TEXT_PROPERTIES_BASE::OnCloseDialog ) );
-	m_TextCtrl->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_LIB_TEXT_PROPERTIES_BASE::OnSetFocusText ), NULL, this );
 	m_StyledTextCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_LIB_TEXT_PROPERTIES_BASE::onMultiLineTCLostFocus ), NULL, this );
 	m_StyledTextCtrl->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_LIB_TEXT_PROPERTIES_BASE::OnSetFocusText ), NULL, this );
-	m_TextValueSelectButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_TEXT_PROPERTIES_BASE::OnTextValueSelectButtonClick ), NULL, this );
 }
 
 DIALOG_LIB_TEXT_PROPERTIES_BASE::~DIALOG_LIB_TEXT_PROPERTIES_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_LIB_TEXT_PROPERTIES_BASE::OnCloseDialog ) );
-	m_TextCtrl->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_LIB_TEXT_PROPERTIES_BASE::OnSetFocusText ), NULL, this );
 	m_StyledTextCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_LIB_TEXT_PROPERTIES_BASE::onMultiLineTCLostFocus ), NULL, this );
 	m_StyledTextCtrl->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_LIB_TEXT_PROPERTIES_BASE::OnSetFocusText ), NULL, this );
-	m_TextValueSelectButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_TEXT_PROPERTIES_BASE::OnTextValueSelectButtonClick ), NULL, this );
 
 }

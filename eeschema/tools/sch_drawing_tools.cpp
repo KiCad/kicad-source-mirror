@@ -39,6 +39,7 @@
 #include <sch_junction.h>
 #include <sch_bus_entry.h>
 #include <sch_text.h>
+#include <sch_textbox.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <sch_bitmap.h>
@@ -1057,7 +1058,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 else if( isNetLabel )
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::LABEL_NET );
                 else if( isClassLabel )
-                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::LABEL_NET );    // JEY TODO: LABEL_CLASS cursor
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::LABEL_NET );    // JEY TODO: netclass directive cursor
                 else if( isHierLabel )
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::LABEL_HIER );
                 else
@@ -1299,6 +1300,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     else
         m_inDrawShape = true;
 
+    bool    isTextBox = aEvent.IsAction( &EE_ACTIONS::drawTextBox );
     SHAPE_T type = aEvent.Parameter<SHAPE_T>();
 
     // We might be running as the same shape in another co-routine.  Make sure that one
@@ -1390,7 +1392,11 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
             int lineWidth = Mils2iu( cfg->m_Drawing.default_line_thickness );
 
-            item = new SCH_SHAPE( type, lineWidth, m_lastFillStyle );
+            if( isTextBox )
+                item = new SCH_TEXTBOX( lineWidth, m_lastFillStyle );
+            else
+                item = new SCH_SHAPE( type, lineWidth, m_lastFillStyle );
+
             item->SetFlags( IS_NEW );
             item->BeginEdit( (wxPoint) cursorPos );
 
@@ -1406,6 +1412,17 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 item->EndEdit();
                 item->ClearEditFlags();
                 item->SetFlags( IS_NEW );
+
+                if( isTextBox )
+                {
+                    DIALOG_TEXT_PROPERTIES dlg( m_frame, item );
+
+                    if( dlg.ShowQuasiModal() != wxID_OK )
+                    {
+                        cleanup();
+                        continue;
+                    }
+                }
 
                 m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), item, false );
                 m_selectionTool->AddItemToSel( item );
@@ -1664,5 +1681,6 @@ void SCH_DRAWING_TOOLS::setTransitions()
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawRectangle.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawCircle.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawArc.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawTextBox.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::PlaceImage,          EE_ACTIONS::placeImage.MakeEvent() );
 }

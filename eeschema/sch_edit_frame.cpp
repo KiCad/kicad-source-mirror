@@ -519,8 +519,12 @@ void SCH_EDIT_FRAME::setupUIConditions()
     CURRENT_TOOL( EE_ACTIONS::placeHierLabel );
     CURRENT_TOOL( EE_ACTIONS::drawSheet );
     CURRENT_TOOL( EE_ACTIONS::importSheetPin );
+    CURRENT_TOOL( EE_ACTIONS::drawRectangle );
+    CURRENT_TOOL( EE_ACTIONS::drawCircle );
+    CURRENT_TOOL( EE_ACTIONS::drawArc );
     CURRENT_TOOL( EE_ACTIONS::drawLines );
     CURRENT_TOOL( EE_ACTIONS::placeSchematicText );
+    CURRENT_TOOL( EE_ACTIONS::drawTextBox );
     CURRENT_TOOL( EE_ACTIONS::placeImage );
 
 #undef CURRENT_TOOL
@@ -1177,7 +1181,7 @@ bool SCH_EDIT_FRAME::isAutoSaveRequired() const
 }
 
 
-static void inheritNetclass( const SCH_SHEET_PATH& aSheetPath, SCH_TEXT* aItem )
+static void inheritNetclass( const SCH_SHEET_PATH& aSheetPath, SCH_LABEL_BASE* aItem )
 {
     if( CONNECTION_SUBGRAPH::GetDriverPriority( aItem ) == CONNECTION_SUBGRAPH::PRIORITY::NONE )
         return;
@@ -1285,8 +1289,8 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
         {
             RecalculateConnections( LOCAL_CLEANUP );
 
-            if( SCH_TEXT* textItem = dynamic_cast<SCH_TEXT*>( aItem ) )
-                inheritNetclass( GetCurrentSheet(), textItem );
+            if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( aItem ) )
+                inheritNetclass( GetCurrentSheet(), label );
         }
     }
 

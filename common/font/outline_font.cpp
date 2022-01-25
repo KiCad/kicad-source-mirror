@@ -206,7 +206,7 @@ void OUTLINE_FONT::GetLinesAsGlyphs( std::vector<std::unique_ptr<GLYPH>>* aGlyph
 
 
 void OUTLINE_FONT::GetLinesAsGlyphs( std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
-                                     const UTF8& aText, const VECTOR2I& aPosition,
+                                     const wxString& aText, const VECTOR2I& aPosition,
                                      const TEXT_ATTRIBUTES& aAttrs ) const
 {
     wxArrayString         strings;
@@ -221,14 +221,14 @@ void OUTLINE_FONT::GetLinesAsGlyphs( std::vector<std::unique_ptr<GLYPH>>* aGlyph
 
     for( size_t i = 0; i < strings.GetCount(); i++ )
     {
-        (void) drawMarkup( nullptr, aGlyphs, UTF8( strings.Item( i ) ), positions[i],
-                           aAttrs.m_Size, aAttrs.m_Angle, aAttrs.m_Mirrored, aPosition, textStyle );
+        (void) drawMarkup( nullptr, aGlyphs, strings.Item( i ), positions[i], aAttrs.m_Size,
+                           aAttrs.m_Angle, aAttrs.m_Mirrored, aPosition, textStyle );
     }
 }
 
 
 VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
-                                        const UTF8& aText, const VECTOR2I& aSize,
+                                        const wxString& aText, const VECTOR2I& aSize,
                                         const VECTOR2I& aPosition, const EDA_ANGLE& aAngle,
                                         bool aMirror, const VECTOR2I& aOrigin,
                                         TEXT_STYLE_FLAGS aTextStyle ) const
@@ -396,7 +396,7 @@ VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
 /*
  * WIP: eeschema (and PDF output?) should use pixel rendering instead of linear segmentation
  */
-void OUTLINE_FONT::RenderToOpenGLCanvas( KIGFX::OPENGL_GAL& aGal, const UTF8& aString,
+void OUTLINE_FONT::RenderToOpenGLCanvas( KIGFX::OPENGL_GAL& aGal, const wxString& aString,
                                          const VECTOR2D& aGlyphSize, const VECTOR2I& aPosition,
                                          const EDA_ANGLE& aOrientation, bool aIsMirrored ) const
 {
