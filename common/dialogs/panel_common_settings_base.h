@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -88,7 +88,7 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnTextEditorClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onUpdateUIPdfPath( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void OnRadioButtonPdfViewer( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPDFViewerClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCanvasScaleAuto( wxCommandEvent& event ) { event.Skip(); }
 

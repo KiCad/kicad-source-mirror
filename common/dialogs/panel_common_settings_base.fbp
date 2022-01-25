@@ -662,6 +662,7 @@
                                                 <property name="window_extra_style"></property>
                                                 <property name="window_name"></property>
                                                 <property name="window_style"></property>
+                                                <event name="OnRadioButton">OnRadioButtonPdfViewer</event>
                                             </object>
                                         </object>
                                     </object>
@@ -737,6 +738,7 @@
                                                 <property name="window_extra_style"></property>
                                                 <property name="window_name"></property>
                                                 <property name="window_style"></property>
+                                                <event name="OnRadioButton">OnRadioButtonPdfViewer</event>
                                             </object>
                                         </object>
                                         <object class="sizeritem" expanded="1">
@@ -801,7 +803,6 @@
                                                 <property name="window_extra_style"></property>
                                                 <property name="window_name"></property>
                                                 <property name="window_style"></property>
-                                                <event name="OnUpdateUI">onUpdateUIPdfPath</event>
                                             </object>
                                         </object>
                                         <object class="sizeritem" expanded="1">
@@ -876,7 +877,6 @@
                                                 <property name="window_name"></property>
                                                 <property name="window_style"></property>
                                                 <event name="OnButtonClick">OnPDFViewerClick</event>
-                                                <event name="OnUpdateUI">onUpdateUIPdfPath</event>
                                             </object>
                                         </object>
                                     </object>

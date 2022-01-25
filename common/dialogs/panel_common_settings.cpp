@@ -144,32 +144,32 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aP
 
     if( m_iconScaleSlider )
     {
-        m_iconScaleSlider->Connect( wxEVT_SCROLL_TOP, 
-                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ), 
+        m_iconScaleSlider->Connect( wxEVT_SCROLL_TOP,
+                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
                                     nullptr, this );
-        m_iconScaleSlider->Connect( wxEVT_SCROLL_BOTTOM, 
-                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ), 
+        m_iconScaleSlider->Connect( wxEVT_SCROLL_BOTTOM,
+                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
                                     nullptr, this );
-        m_iconScaleSlider->Connect( wxEVT_SCROLL_LINEUP, 
-                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ), 
+        m_iconScaleSlider->Connect( wxEVT_SCROLL_LINEUP,
+                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
                                     nullptr, this );
         m_iconScaleSlider->Connect( wxEVT_SCROLL_LINEDOWN,
-                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ), 
+                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
                                     nullptr, this );
         m_iconScaleSlider->Connect( wxEVT_SCROLL_PAGEUP,
-                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ), 
+                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
                                     nullptr, this );
         m_iconScaleSlider->Connect( wxEVT_SCROLL_PAGEDOWN,
-                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ), 
+                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
                                     nullptr, this );
-        m_iconScaleSlider->Connect( wxEVT_SCROLL_THUMBTRACK, 
-                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ), 
+        m_iconScaleSlider->Connect( wxEVT_SCROLL_THUMBTRACK,
+                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
                                     nullptr, this );
-        m_iconScaleSlider->Connect( wxEVT_SCROLL_THUMBRELEASE, 
-                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ), 
+        m_iconScaleSlider->Connect( wxEVT_SCROLL_THUMBRELEASE,
+                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
                                     nullptr, this );
         m_iconScaleSlider->Connect( wxEVT_SCROLL_CHANGED,
-                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ), 
+                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
                                     nullptr, this );
         m_iconScaleAuto->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED,
                                   wxCommandEventHandler( PANEL_COMMON_SETTINGS::OnIconScaleAuto ),
@@ -241,6 +241,7 @@ bool PANEL_COMMON_SETTINGS::TransferDataToWindow()
     m_defaultPDFViewer->SetValue( Pgm().UseSystemPdfBrowser() );
     m_otherPDFViewer->SetValue( !Pgm().UseSystemPdfBrowser() );
     m_PDFViewerPath->SetValue( Pgm().GetPdfBrowserName() );
+    setPdfViewerPathState();
 
     return true;
 }
@@ -316,6 +317,7 @@ void PANEL_COMMON_SETTINGS::ResetPanel()
     m_defaultPDFViewer->SetValue( defaultSettings.m_System.use_system_pdf_viewer );
     m_otherPDFViewer->SetValue( !defaultSettings.m_System.use_system_pdf_viewer );
     m_PDFViewerPath->SetValue( defaultSettings.m_System.pdf_viewer_name );
+    setPdfViewerPathState();
 }
 
 
@@ -464,8 +466,14 @@ void PANEL_COMMON_SETTINGS::OnPDFViewerClick( wxCommandEvent& event )
 }
 
 
-void PANEL_COMMON_SETTINGS::onUpdateUIPdfPath( wxUpdateUIEvent& event )
+void PANEL_COMMON_SETTINGS::OnRadioButtonPdfViewer( wxCommandEvent& aEvent )
 {
-    // Used by both the m_pdfViewerBtn and m_PDFViewerPath
-    event.Enable( m_otherPDFViewer->GetValue() );
+    setPdfViewerPathState();
+}
+
+
+void PANEL_COMMON_SETTINGS::setPdfViewerPathState()
+{
+    m_PDFViewerPath->Enable( m_otherPDFViewer->GetValue() );
+    m_pdfViewerBtn->Enable( m_otherPDFViewer->GetValue() );
 }

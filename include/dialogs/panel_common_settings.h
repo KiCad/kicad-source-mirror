@@ -50,7 +50,7 @@ protected:
     void OnIconScaleAuto( wxCommandEvent& aEvent );
     void OnTextEditorClick( wxCommandEvent& event ) override;
     void OnPDFViewerClick( wxCommandEvent& event ) override;
-    void onUpdateUIPdfPath( wxUpdateUIEvent& event ) override;
+    void OnRadioButtonPdfViewer( wxCommandEvent& event ) override;
 
     /**
      * Event fired when the canvas scale field is modified
@@ -61,6 +61,9 @@ protected:
      * Event fired when the canvas auto-scale option is changed
      */
     void OnCanvasScaleAuto( wxCommandEvent& aEvent ) override;
+
+private:
+    void setPdfViewerPathState();
 
 protected:
     DIALOG_SHIM*    m_dialog;
