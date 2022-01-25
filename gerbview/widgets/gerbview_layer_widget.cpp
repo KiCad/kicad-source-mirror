@@ -225,7 +225,7 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
     case ID_LAYER_MOVE_DOWN:
         layer = m_frame->GetActiveLayer();
 
-        if( layer < ( GetImagesList()->GetLoadedImageCount() - 1 ) )
+        if( layer < ( (int)GetImagesList()->GetLoadedImageCount() - 1 ) )
         {
             m_frame->RemapLayers( GetImagesList()->SwapImages( layer, layer + 1 ) );
             m_frame->SetActiveLayer( layer + 1 );

@@ -193,7 +193,7 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter,
     if( count || removed_cnt || track2trackCount )
     {
         ZONE_FILLER filler( m_board, aCommitter );
-        filler.Fill( m_board->Zones() );
+        (void)filler.Fill( m_board->Zones() );
 
         if( aCommitter )
             aCommitter->Push( _( "Add teardrops" ) );
@@ -389,7 +389,7 @@ int TEARDROP_MANAGER::RemoveTeardrops( BOARD_COMMIT* aCommitter, bool aCommitAft
     if( count )
     {
         ZONE_FILLER filler( m_board, aCommitter );
-        filler.Fill( m_board->Zones() );
+        (void)filler.Fill( m_board->Zones() );
 
         if( aCommitter && aCommitAfterRemove )
             aCommitter->Push( _( "Remove teardrops" ) );

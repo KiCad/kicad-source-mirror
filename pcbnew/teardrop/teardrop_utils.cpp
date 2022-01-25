@@ -402,7 +402,8 @@ bool TEARDROP_MANAGER::ComputePointsOnPadVia( TEARDROP_PARAMETERS* aCurrParams,
 {
     // Compute the 2 anchor points on pad/via of the teardrop shape
 
-    PAD* pad = dynamic_cast<PAD*>( aViaPad.m_Parent );
+    PAD* pad = ( aViaPad.m_Parent->Type() == PCB_PAD_T ) ? static_cast<PAD*>(aViaPad.m_Parent)
+                                                         : nullptr;
     SHAPE_POLY_SET c_buffer;
 
     // aHeightRatio is the factor to calculate the aViaPad teardrop prefered height
@@ -428,7 +429,7 @@ bool TEARDROP_MANAGER::ComputePointsOnPadVia( TEARDROP_PARAMETERS* aCurrParams,
         TransformCircleToPolygon( c_buffer, aViaPad.m_Pos, aViaPad.m_Width/2 ,
                                   ARC_LOW_DEF, ERROR_INSIDE, 16 );
     }
-    else
+    else    // Only PADS can have a not round shape
     {
         wxASSERT( pad );
         force_clip_shape = true;

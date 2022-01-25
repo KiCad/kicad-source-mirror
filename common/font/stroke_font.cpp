@@ -61,7 +61,8 @@ std::vector<BOX2D>*                 g_defaultFontGlyphBoundingBoxes;
 
 STROKE_FONT::STROKE_FONT() :
         m_glyphs( nullptr ),
-        m_glyphBoundingBoxes( nullptr )
+        m_glyphBoundingBoxes( nullptr ),
+        m_maxGlyphWidth( 0.0 )
 {
 }
 
