@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -33,11 +33,13 @@ static bool normalizeAbsolutePaths( const wxFileName& aPathA, const wxFileName& 
     if( aPathA.GetPath() == aPathB.GetPath() )
         return true;
 
+    // Not sure all of volume checks are necessary since wxFileName::GetVolume() returns
+    // an empty string if the path has no volume.
     if( ( aPathA.GetDirCount() > aPathB.GetDirCount() )
       || ( aPathA.HasVolume() && !aPathB.HasVolume() )
       || ( !aPathA.HasVolume() && aPathB.HasVolume() )
       || ( ( aPathA.HasVolume() && aPathB.HasVolume() )
-         && ( aPathA.GetVolume() != aPathB.GetVolume() ) ) )
+         && ( aPathA.GetVolume().CmpNoCase( aPathB.GetVolume() ) != 0 ) ) )
         return false;
 
     wxArrayString aDirs = aPathA.GetDirs();
@@ -87,6 +89,7 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
             envPath.SetPath( entry.second.GetValue() );
 
             wxString tmp;
+
             if( normalizeAbsolutePaths( envPath, aFilePath, &tmp ) )
             {
                 int newDepth = envPath.GetDirs().GetCount();
@@ -98,6 +101,9 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
                     varName       = entry.first;
                     remainingPath = tmp;
                 }
+
+                // @fixme Shouldn't we break here if an environment variable path is found or try
+                //        at least try to pick the best match?
             }
         }
     }
