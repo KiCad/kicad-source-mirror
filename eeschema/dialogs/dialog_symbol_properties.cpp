@@ -295,6 +295,8 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
     m_delayedFocusRow = REFERENCE_FIELD;
     m_delayedFocusColumn = FDC_VALUE;
     m_delayedSelection = true;
+    m_editorShown = false;
+    m_lastRequestedSize = wxSize( 0, 0 );
 
 #ifndef KICAD_SPICE
     m_spiceFieldsButton->Hide();
@@ -795,14 +797,13 @@ void DIALOG_SYMBOL_PROPERTIES::OnGridEditorShown( wxGridEvent& aEvent )
     if( aEvent.GetRow() == REFERENCE_FIELD && aEvent.GetCol() == FDC_VALUE )
         m_delayedSelection= true;
 
-    /// Queue up an event to ensure the widget gets resized if the editor needs it
-    wxSizeEvent *evt = new wxSizeEvent();
-    evt->SetSize( m_fieldsSize +  wxSize( 1, 1 ) );
-    wxQueueEvent( m_fieldsGrid, evt );
+    m_editorShown = true;
+}
 
-    wxSizeEvent *frmEvt = new wxSizeEvent();
-    evt->SetSize( wxSize( -1, -1 ) );
-    wxQueueEvent( this, frmEvt );
+
+void DIALOG_SYMBOL_PROPERTIES::OnGridEditorHidden( wxGridEvent& aEvent )
+{
+    m_editorShown = false;
 }
 
 
@@ -1079,12 +1080,17 @@ void DIALOG_SYMBOL_PROPERTIES::OnSizeFieldsGrid( wxSizeEvent& event )
 {
     wxSize new_size = event.GetSize();
 
-    if( m_fieldsSize != new_size )
+    if( ( !m_editorShown || m_lastRequestedSize != new_size ) && m_fieldsSize != new_size )
     {
         m_fieldsSize = new_size;
 
         AdjustFieldsGridColumns();
     }
+
+    // We store this value to check whether the dialog is changing size.  This might indicate
+    // that the user is scaling the dialog with an editor shown.  Some editors do not close
+    // (at least on GTK) when the user drags a dialog corner
+    m_lastRequestedSize = new_size;
 
     // Always propagate for a grid repaint (needed if the height changes, as well as width)
     event.Skip();

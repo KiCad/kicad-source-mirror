@@ -278,6 +278,7 @@
                                                     <property name="window_extra_style"></property>
                                                     <property name="window_name"></property>
                                                     <property name="window_style"></property>
+                                                    <event name="OnGridEditorHidden">OnGridEditorHidden</event>
                                                     <event name="OnGridEditorShown">OnGridEditorShown</event>
                                                     <event name="OnSize">OnSizeFieldsGrid</event>
                                                 </object>

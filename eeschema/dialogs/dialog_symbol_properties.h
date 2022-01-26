@@ -81,6 +81,7 @@ private:
     void OnCancelButtonClick( wxCommandEvent& event ) override;
     void OnInitDlg( wxInitDialogEvent& event ) override;
     void OnGridEditorShown( wxGridEvent& event ) override;
+    void OnGridEditorHidden( wxGridEvent& event ) override;
     void OnChoice( wxCommandEvent& event ) override;
   	void OnCheckBox( wxCommandEvent& event ) override;
 
@@ -97,10 +98,12 @@ private:
     LIB_SYMBOL*    m_part;
 
     wxSize         m_fieldsSize;
+    wxSize         m_lastRequestedSize;
     wxSize         m_pinsSize;
     int            m_delayedFocusRow;
     int            m_delayedFocusColumn;
     bool           m_delayedSelection;
+    bool           m_editorShown;
     wxString       m_shownColumns;
 
     FIELDS_GRID_TABLE<SCH_FIELD>* m_fields;
