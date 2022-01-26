@@ -985,20 +985,31 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
     {
         arc->SetCenter( CalcArcCenter( arc->GetStart(), midPoint, arc->GetEnd() ) );
 
-        /**
+#if 1   // This code will be removed if the current code in Eeschema is modified to allow
+        // full support of arcs >= 180 deg without issue.
+        // For now the arcs are just modified to be < 180 degrees to do not break
+        // some other functions ( Draw, Plot, HitTest)
+
+        /*
          * Current file format stores start-mid-end and so doesn't care about winding.  We
          * store start-end with an implied winding internally though, so we need to swap the
          * ends if they don't match what we're expecting.
+         * This issue is only for 180 deg arcs, because 180 deg are a limit to handle arcs in
+         * previous versions of Kicad
          */
-        EDA_ANGLE arc_start, arc_end;
+        EDA_ANGLE arc_start, arc_end, arc_angle;
         arc->CalcArcAngles( arc_start, arc_end );
+        arc_angle = arc_end - arc_start;
 
-        if( arc_start < arc_end )
+        // So a workaround is to slightly change the arc angle to
+        // avoid it == 180 deg after correction
+        if( arc_angle == ANGLE_180 )
         {
-            VECTOR2I temp = arc->GetStart();
-            arc->SetStart( arc->GetEnd() );
-            arc->SetEnd( temp );
+            VECTOR2I new_center = CalcArcCenter( arc->GetStart(), arc->GetEnd(),
+                                  EDA_ANGLE( 179.5, DEGREES_T ) );
+            arc->SetCenter( new_center );
         }
+#endif
     }
     else if( hasAngles )
     {
