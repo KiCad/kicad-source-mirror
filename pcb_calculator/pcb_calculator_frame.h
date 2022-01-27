@@ -23,8 +23,8 @@
 #include <calculator_panels/calculator_panel.h>
 #include <kiway_player.h>
 
-class wxMenuBar;
-class wxNotebook;
+class wxTreebook;
+class wxTreebookEvent;
 class wxBoxSizer;
 
 class APP_SETTINGS_BASE;
@@ -76,16 +76,15 @@ private:
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
 private:
-    wxMenuBar*  m_menubar;
-    wxNotebook* m_notebook;
     wxBoxSizer* m_mainSizer;
+    wxTreebook* m_treebook;
 
     int         m_lastNotebookPage;
 
     std::vector<CALCULATOR_PANEL*>           m_panels;
     std::map<std::size_t, CALCULATOR_PANEL*> m_panelTypes;
 
-
+    void OnPageChanged ( wxTreebookEvent& aEvent );
 };
 
 
