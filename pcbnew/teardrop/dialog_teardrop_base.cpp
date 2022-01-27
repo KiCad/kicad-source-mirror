@@ -47,25 +47,25 @@ TEARDROP_DIALOG_BASE::TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_stMaxLenRound = new wxStaticText( this, wxID_ANY, _("Max length"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stMaxLenRound->Wrap( -1 );
-	fgSizerParmRound->Add( m_stMaxLenRound, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizerParmRound->Add( m_stMaxLenRound, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_tcTdMaxLenRound = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerParmRound->Add( m_tcTdMaxLenRound, 0, wxALL|wxEXPAND, 5 );
 
 	m_stTdMaxSizeRound = new wxStaticText( this, wxID_ANY, _("Max height"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stTdMaxSizeRound->Wrap( -1 );
-	fgSizerParmRound->Add( m_stTdMaxSizeRound, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizerParmRound->Add( m_stTdMaxSizeRound, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_tcMaxHeightRound = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerParmRound->Add( m_tcMaxHeightRound, 0, wxALL|wxEXPAND, 5 );
 
 	m_stLenUnitRound = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stLenUnitRound->Wrap( -1 );
-	fgSizerParmRound->Add( m_stLenUnitRound, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizerParmRound->Add( m_stLenUnitRound, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_stHsettingRound = new wxStaticText( this, wxID_ANY, _("Best length"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stHsettingRound->Wrap( -1 );
-	fgSizerParmRound->Add( m_stHsettingRound, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizerParmRound->Add( m_stHsettingRound, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spTeardropLenPercentRound = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 20, 100, 50.000000, 10 );
 	m_spTeardropLenPercentRound->SetDigits( 0 );
@@ -73,7 +73,7 @@ TEARDROP_DIALOG_BASE::TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_stVsettingRound = new wxStaticText( this, wxID_ANY, _("Best height"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stVsettingRound->Wrap( -1 );
-	fgSizerParmRound->Add( m_stVsettingRound, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizerParmRound->Add( m_stVsettingRound, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spTeardropSizePercentRound = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 60, 100, 100.000000, 10 );
 	m_spTeardropSizePercentRound->SetDigits( 0 );
@@ -81,7 +81,7 @@ TEARDROP_DIALOG_BASE::TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_stLenPercentRound = new wxStaticText( this, wxID_ANY, _("percent of d"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stLenPercentRound->Wrap( -1 );
-	fgSizerParmRound->Add( m_stLenPercentRound, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizerParmRound->Add( m_stLenPercentRound, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizerBitmaps->Add( fgSizerParmRound, 1, wxEXPAND, 5 );
@@ -102,25 +102,25 @@ TEARDROP_DIALOG_BASE::TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_stMaxLenRect = new wxStaticText( this, wxID_ANY, _("Max length"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stMaxLenRect->Wrap( -1 );
-	fgSizerParmRect->Add( m_stMaxLenRect, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizerParmRect->Add( m_stMaxLenRect, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_tcTdMaxLenRect = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerParmRect->Add( m_tcTdMaxLenRect, 0, wxALL|wxEXPAND, 5 );
 
 	m_stTdMaxSizeRect = new wxStaticText( this, wxID_ANY, _("Max height"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stTdMaxSizeRect->Wrap( -1 );
-	fgSizerParmRect->Add( m_stTdMaxSizeRect, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizerParmRect->Add( m_stTdMaxSizeRect, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_tcMaxHeightRect = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerParmRect->Add( m_tcMaxHeightRect, 0, wxALL|wxEXPAND, 5 );
 
 	m_stLenUnitRect = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stLenUnitRect->Wrap( -1 );
-	fgSizerParmRect->Add( m_stLenUnitRect, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizerParmRect->Add( m_stLenUnitRect, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_stHsettingRect = new wxStaticText( this, wxID_ANY, _("Best length"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stHsettingRect->Wrap( -1 );
-	fgSizerParmRect->Add( m_stHsettingRect, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizerParmRect->Add( m_stHsettingRect, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spTeardropLenPercentRect = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 20, 100, 50.000000, 10 );
 	m_spTeardropLenPercentRect->SetDigits( 0 );
@@ -128,7 +128,7 @@ TEARDROP_DIALOG_BASE::TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_stVsettingRect = new wxStaticText( this, wxID_ANY, _("Best height"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stVsettingRect->Wrap( -1 );
-	fgSizerParmRect->Add( m_stVsettingRect, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizerParmRect->Add( m_stVsettingRect, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spTeardropSizePercentRect = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 60, 100, 100.000000, 10 );
 	m_spTeardropSizePercentRect->SetDigits( 0 );
@@ -136,7 +136,7 @@ TEARDROP_DIALOG_BASE::TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_stLenPercentRect = new wxStaticText( this, wxID_ANY, _("percent of d"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stLenPercentRect->Wrap( -1 );
-	fgSizerParmRect->Add( m_stLenPercentRect, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizerParmRect->Add( m_stLenPercentRect, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizerBitmaps->Add( fgSizerParmRect, 1, wxEXPAND, 5 );
@@ -157,25 +157,25 @@ TEARDROP_DIALOG_BASE::TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_stMaxLenTrack = new wxStaticText( this, wxID_ANY, _("Max length"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stMaxLenTrack->Wrap( -1 );
-	fgSizerParmTrack->Add( m_stMaxLenTrack, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizerParmTrack->Add( m_stMaxLenTrack, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_tcTdMaxLenTrack = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerParmTrack->Add( m_tcTdMaxLenTrack, 0, wxALL|wxEXPAND, 5 );
 
 	m_stTdMaxSizeTrack = new wxStaticText( this, wxID_ANY, _("Max height"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stTdMaxSizeTrack->Wrap( -1 );
-	fgSizerParmTrack->Add( m_stTdMaxSizeTrack, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizerParmTrack->Add( m_stTdMaxSizeTrack, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_tcMaxHeightTrack = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerParmTrack->Add( m_tcMaxHeightTrack, 0, wxALL|wxEXPAND, 5 );
 
 	m_stLenUnitTrack = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stLenUnitTrack->Wrap( -1 );
-	fgSizerParmTrack->Add( m_stLenUnitTrack, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizerParmTrack->Add( m_stLenUnitTrack, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_stHsettingtrack = new wxStaticText( this, wxID_ANY, _("Best length"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stHsettingtrack->Wrap( -1 );
-	fgSizerParmTrack->Add( m_stHsettingtrack, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizerParmTrack->Add( m_stHsettingtrack, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spTeardropLenPercentTrack = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 20, 100, 100.000000, 10 );
 	m_spTeardropLenPercentTrack->SetDigits( 0 );
@@ -183,7 +183,7 @@ TEARDROP_DIALOG_BASE::TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_stVsettingtrack = new wxStaticText( this, wxID_ANY, _("Best height"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stVsettingtrack->Wrap( -1 );
-	fgSizerParmTrack->Add( m_stVsettingtrack, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizerParmTrack->Add( m_stVsettingtrack, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spTeardropSizePercentTrack = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 60, 100, 100.000000, 10 );
 	m_spTeardropSizePercentTrack->SetDigits( 0 );
@@ -191,7 +191,7 @@ TEARDROP_DIALOG_BASE::TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_stLenPercentTrack = new wxStaticText( this, wxID_ANY, _("percent of d"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stLenPercentTrack->Wrap( -1 );
-	fgSizerParmTrack->Add( m_stLenPercentTrack, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizerParmTrack->Add( m_stLenPercentTrack, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizerBitmaps->Add( fgSizerParmTrack, 1, wxEXPAND, 5 );
@@ -272,6 +272,11 @@ TEARDROP_DIALOG_BASE::TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 	m_cbOptUseNextTrack->SetToolTip( _("Allows a teardrop to spread over 2 tracks if the first track segment is too short") );
 
 	sbSizerOptions->Add( m_cbOptUseNextTrack, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_cbPadsInZones = new wxCheckBox( sbSizerOptions->GetStaticBox(), wxID_ANY, _("Teardrop on pads in zones"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbPadsInZones->SetToolTip( _("Pads inside a  copper zone outline of same net have no teardrop.\nCheck this option to allow teardrop for these pads.") );
+
+	sbSizerOptions->Add( m_cbPadsInZones, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	sbSizerOptions->Add( 30, 0, 0, 0, 5 );

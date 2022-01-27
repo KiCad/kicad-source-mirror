@@ -86,6 +86,7 @@ class TEARDROP_DIALOG_BASE : public DIALOG_SHIM
 		wxRadioBox* m_rbShapeRect;
 		wxRadioBox* m_rbShapeTrack;
 		wxCheckBox* m_cbOptUseNextTrack;
+		wxCheckBox* m_cbPadsInZones;
 		wxStaticText* m_stPointCount;
 		wxSpinCtrl* m_spPointCount;
 		wxStaticLine* m_staticline1;

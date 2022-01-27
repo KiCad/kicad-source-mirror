@@ -461,6 +461,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                 entry["td_onroundshapesonly"]  = m_TeardropParamsList.m_UseRoundShapesOnly;
                 entry["td_allow_use_two_tracks"] = m_TeardropParamsList.m_AllowUseTwoTracks;
                 entry["td_curve_segcount"]  = m_TeardropParamsList.m_CurveSegCount;
+                entry["td_on_pad_in_zone"]  = m_TeardropParamsList.m_TdOnPadsInZones;
 
                 js.push_back( entry );
 
@@ -476,21 +477,26 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                     if( entry.empty() || !entry.is_object() )
                         continue;
 
-                    if( !entry.contains( "td_onviapad" )
-                            || !entry.contains( "td_onpadsmd" )
-                            || !entry.contains( "td_ontrackend" )
-                            || !entry.contains( "td_onroundshapesonly" )
-                            || !entry.contains( "td_allow_use_two_tracks" )
-                            || !entry.contains( "td_curve_segcount" )
-                            )
-                        continue;
+                    if( entry.contains( "td_onviapad" ) )
+                        m_TeardropParamsList.m_TargetViasPads = entry["td_onviapad"].get<bool>();
 
-                    m_TeardropParamsList.m_TargetViasPads = entry["td_onviapad"].get<bool>();
-                    m_TeardropParamsList.m_TargetPadsWithNoHole = entry["td_onpadsmd"].get<bool>();
-                    m_TeardropParamsList.m_TargetTrack2Track = entry["td_ontrackend"].get<bool>();
-                    m_TeardropParamsList.m_UseRoundShapesOnly = entry["td_onroundshapesonly"].get<bool>();
-                    m_TeardropParamsList.m_AllowUseTwoTracks = entry["td_allow_use_two_tracks"].get<bool>();
-                    m_TeardropParamsList.m_CurveSegCount = entry["td_curve_segcount"].get<int>();
+                    if( entry.contains( "td_onpadsmd" ) )
+                        m_TeardropParamsList.m_TargetPadsWithNoHole = entry["td_onpadsmd"].get<bool>();
+
+                    if( entry.contains( "td_ontrackend" ) )
+                        m_TeardropParamsList.m_TargetTrack2Track = entry["td_ontrackend"].get<bool>();
+
+                    if( entry.contains( "td_onroundshapesonly" ) )
+                        m_TeardropParamsList.m_UseRoundShapesOnly = entry["td_onroundshapesonly"].get<bool>();
+
+                    if( entry.contains( "td_allow_use_two_tracks" ) )
+                        m_TeardropParamsList.m_AllowUseTwoTracks = entry["td_allow_use_two_tracks"].get<bool>();
+
+                    if( entry.contains( "td_curve_segcount" ) )
+                        m_TeardropParamsList.m_CurveSegCount = entry["td_curve_segcount"].get<int>();
+
+                    if( entry.contains( "td_on_pad_in_zone" ) )
+                        m_TeardropParamsList.m_TdOnPadsInZones = entry["td_on_pad_in_zone"].get<bool>();
                 }
             },
             {} ) );

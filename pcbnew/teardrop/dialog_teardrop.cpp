@@ -64,6 +64,7 @@ public:
         m_cbSmdSimilarPads->SetValue( prmsList->m_TargetPadsWithNoHole );
         m_cbRoundShapesOnly->SetValue( prmsList->m_UseRoundShapesOnly );
         m_cbTrack2Track->SetValue( prmsList->m_TargetTrack2Track );
+        m_cbPadsInZones->SetValue( prmsList->m_TdOnPadsInZones );
 
         m_cbOptUseNextTrack->SetValue( prmsList->m_AllowUseTwoTracks );
         m_spPointCount->SetValue( prmsList->m_CurveSegCount );
@@ -110,6 +111,7 @@ public:
         prmsList->m_TargetPadsWithNoHole = m_cbSmdSimilarPads->GetValue();
         prmsList->m_UseRoundShapesOnly = m_cbRoundShapesOnly->GetValue();
         prmsList->m_TargetTrack2Track = m_cbTrack2Track->GetValue();
+        prmsList->m_TdOnPadsInZones = m_cbPadsInZones->GetValue();
 
         prmsList->m_AllowUseTwoTracks = m_cbOptUseNextTrack->GetValue();
         prmsList->m_CurveSegCount = m_spPointCount->GetValue();
@@ -206,16 +208,11 @@ void PCB_EDIT_FRAME::OnRunTeardropTool( wxCommandEvent& event )
     dlg.TransferToParamList();
     TEARDROP_MANAGER trdm( GetBoard(), this );
 
-    const bool discardTeardropInSameZone = true;
-
-    int added_count = trdm.SetTeardrops( &committer,
-                                   discardTeardropInSameZone,
-                                   dlg.CanUseTwoTracks() );
+    int added_count = trdm.SetTeardrops( &committer, dlg.CanUseTwoTracks() );
 
     m_infoBar->RemoveAllButtons();
     m_infoBar->AddCloseButton();
-    m_infoBar->ShowMessageFor( wxString::Format( _( "%d Teardrops created" ),
-                                                 added_count ),
+    m_infoBar->ShowMessageFor( wxString::Format( _( "%d Teardrops created" ), added_count ),
                                1000, wxICON_EXCLAMATION );
 }
 

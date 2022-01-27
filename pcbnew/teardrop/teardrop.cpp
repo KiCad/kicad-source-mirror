@@ -84,8 +84,7 @@ ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
 }
 
 
-int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter,
-                                    bool aDiscardInSameZone, bool aFollowTracks )
+int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter, bool aFollowTracks )
 {
     // Init parameters:
     m_tolerance = Millimeter2iu( 0.01 );
@@ -161,7 +160,7 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter,
 
             // Skip case where pad/via and the track is within a copper zone with the same net
             // (and the pad can be connected by the zone thermal relief )
-            if( aDiscardInSameZone && isViaAndTrackInSameZone( viapad, track ) )
+            if( !m_prmsList->m_TdOnPadsInZones && isViaAndTrackInSameZone( viapad, track ) )
                 continue;
 
             std::vector<VECTOR2I> points;

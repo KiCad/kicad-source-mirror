@@ -93,12 +93,10 @@ public:
      * Set teardrops on a teardrop free board
      * @return the number of teardrop created
      * @param aCommitter is a BOARD_COMMIT reference (can be null)
-     * @param aDiscardInSameZone = to do not create teardrops for pads in a zone of the same net
      * @param aFollowTracks = true to use a track connected to the initial track connected
      * to a pad / via if this initial track is too short to build the teardrop
      */
     int SetTeardrops( BOARD_COMMIT* aCommitter,
-                      bool aDiscardInSameZone = true,
                       bool aFollowTracks = true );
 
 
