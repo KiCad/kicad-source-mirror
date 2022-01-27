@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -131,7 +131,7 @@ DIALOG_EXPORT_SVG::~DIALOG_EXPORT_SVG()
             continue;
 
         if( m_boxSelectLayer[layer].first->IsChecked( m_boxSelectLayer[layer].second ) )
-            cfg->m_ExportSvg.layers.push_back( m_boxSelectLayer[layer].second );
+            cfg->m_ExportSvg.layers.push_back( layer );
     }
 }
 
