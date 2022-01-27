@@ -92,6 +92,8 @@ private:
 
     void AdjustFieldsGridColumns();
     void AdjustPinsGridColumns();
+    void HandleDelayedFocus( wxCommandEvent& event );
+    void HandleDelayedSelection( wxCommandEvent& event );
 
 private:
     SCH_SYMBOL*    m_symbol;
@@ -100,9 +102,6 @@ private:
     wxSize         m_fieldsSize;
     wxSize         m_lastRequestedSize;
     wxSize         m_pinsSize;
-    int            m_delayedFocusRow;
-    int            m_delayedFocusColumn;
-    bool           m_delayedSelection;
     bool           m_editorShown;
     wxString       m_shownColumns;
 
