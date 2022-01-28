@@ -609,6 +609,8 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int aIndex,
 
     symbol->SetUnit( elem.currentpartid );
 
+
+
     m_currentSheet->GetScreen()->Append( symbol );
 
     m_symbols.insert( { aIndex, symbol } );
@@ -2250,13 +2252,20 @@ void SCH_ALTIUM_PLUGIN::ParseDesignator( const std::map<wxString, wxString>& aPr
     SCH_SHEET_PATH sheetpath;
     m_rootSheet->LocatePathOfScreen( m_currentSheet->GetScreen(), &sheetpath );
 
-    symbol->SetRef( &sheetpath, elem.text );
+    // Graphics symbols have no reference. '#GRAPHIC' allows them to not have footprint associated.
+    // Note: not all unnamed imported symbols are necessarilly graphics.
+    bool emptyRef = elem.text.IsEmpty();
+    symbol->SetRef( &sheetpath, emptyRef ? "#GRAPHIC" : elem.text );
 
-    SCH_FIELD* refField = symbol->GetField( REFERENCE_FIELD );
+    SCH_FIELD* field = symbol->GetField( VALUE_FIELD );
+    if ( emptyRef )
+        field->SetVisible( false );
 
-    refField->SetPosition( elem.location + m_sheetOffset );
-    refField->SetVisible( true );
-    SetTextPositioning( refField, elem.justification, elem.orientation );
+    field = symbol->GetField( REFERENCE_FIELD );
+    if ( emptyRef )
+        field->SetVisible( false );
+    field->SetPosition( elem.location + m_sheetOffset );
+    SetTextPositioning( field, elem.justification, elem.orientation );
 }
 
 
