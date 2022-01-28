@@ -275,12 +275,12 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_DrawArcAccuracy           = 10.0;
     m_DrawArcCenterMaxAngle     = 50.0;
     m_MaxTangentAngleDeviation  = 1.0;
-    m_MaxTrackLengthToKeep      = 0.0001;
+    m_MaxTrackLengthToKeep      = 0.0005;
     m_ExtraZoneDisplayModes     = false;
     m_DrawTriangulationOutlines = false;
 
-    m_ExtraClearance            = 0.0001;
-    m_DRCEpsilon                = 0.0001;   // 0.1um is small enough not to materially violate
+    m_ExtraClearance            = 0.0005;
+    m_DRCEpsilon                = 0.0005;   // 0.5um is small enough not to materially violate
                                             // any constraints.
     m_SliverWidthTolerance      = 0.08;
     m_SliverAngleTolerance      = 20.0;
@@ -302,9 +302,11 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_HideVersionFromTitle      = false;
     m_ShowEventCounters         = false;
     m_AllowManualCanvasScale    = false;
+    m_CompactSave               = false;
     m_UpdateUIEventInterval     = 0;
 
     m_AllowTeardrops            = false;
+    m_ShowRepairSchematic       = false;
 
     loadFromConfigFile();
 }
@@ -348,95 +350,95 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     std::vector<PARAM_CFG*> configParams;
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::RealtimeConnectivity,
-                                                &m_RealTimeConnectivity, true ) );
+                                                &m_RealTimeConnectivity, m_RealTimeConnectivity ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::ExtraFillMargin,
-                                                  &m_ExtraClearance, 0.0005, 0.0, 1.0 ) );
+                                                  &m_ExtraClearance, m_ExtraClearance, 0.0, 1.0 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCEpsilon,
-                                                  &m_DRCEpsilon, 0.0005, 0.0, 1.0 ) );
+                                                  &m_DRCEpsilon, m_DRCEpsilon, 0.0, 1.0 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCSliverWidthTolerance,
-                                                  &m_SliverWidthTolerance, 0.08, 0.01, 0.25 ) );
+                                                  &m_SliverWidthTolerance, m_SliverWidthTolerance, 0.01, 0.25 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCSliverAngleTolerance,
-                                                  &m_SliverAngleTolerance, 20.0, 1.0, 90.0 ) );
+                                                  &m_SliverAngleTolerance, m_SliverAngleTolerance, 1.0, 90.0 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::HoleWallThickness,
-                                                  &m_HoleWallThickness, 0.020, 0.0, 1.0 ) );
+                                                  &m_HoleWallThickness, m_HoleWallThickness, 0.0, 1.0 ) );
 
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::CoroutineStackSize,
                                                &m_CoroutineStackSize, AC_STACK::default_stack,
                                                AC_STACK::min_stack, AC_STACK::max_stack ) );
 
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::UpdateUIEventInterval,
-                                               &m_UpdateUIEventInterval, 0, -1, 100000 ) );
+                                               &m_UpdateUIEventInterval, m_UpdateUIEventInterval, -1, 100000 ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowRouterDebugGraphics,
-                                                &m_ShowRouterDebugGraphics, false ) );
+                                                &m_ShowRouterDebugGraphics, m_ShowRouterDebugGraphics ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::CompactFileSave,
-                                                &m_CompactSave, false ) );
+                                                &m_CompactSave, m_CompactSave ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DrawArcAccuracy,
-                                                  &m_DrawArcAccuracy, 10.0, 0.0, 100000.0 ) );
+                                                  &m_DrawArcAccuracy, m_DrawArcAccuracy, 0.0, 100000.0 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DrawArcCenterStartEndMaxAngle,
-                                                  &m_DrawArcCenterMaxAngle, 50.0, 0.0, 100000.0 ) );
+                                                  &m_DrawArcCenterMaxAngle, m_DrawArcCenterMaxAngle, 0.0, 100000.0 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::MaxTangentTrackAngleDeviation,
-                                                  &m_MaxTangentAngleDeviation, 1.0, 0.0, 90.0 ) );
+                                                  &m_MaxTangentAngleDeviation, m_MaxTangentAngleDeviation, 0.0, 90.0 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::MaxTrackLengthToKeep,
-                                                  &m_MaxTrackLengthToKeep, 0.0005, 0.0, 1.0 ) );
+                                                  &m_MaxTrackLengthToKeep, m_MaxTrackLengthToKeep, 0.0, 1.0 ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ExtraZoneDisplayModes,
-                                                &m_ExtraZoneDisplayModes, false ) );
+                                                &m_ExtraZoneDisplayModes, m_ExtraZoneDisplayModes ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::StrokeTriangulation,
-                                                &m_DrawTriangulationOutlines, false ) );
+                                                &m_DrawTriangulationOutlines, m_DrawTriangulationOutlines ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::MinPlotPenWidth,
-                                                  &m_MinPlotPenWidth, 0.0212, 0.0, 1.0 ) );
+                                                  &m_MinPlotPenWidth, m_MinPlotPenWidth, 0.0, 1.0 ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::DebugZoneFiller,
-                                                &m_DebugZoneFiller, false ) );
+                                                &m_DebugZoneFiller, m_DebugZoneFiller ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::DebugPDFWriter,
-                                                &m_DebugPDFWriter, false ) );
+                                                &m_DebugPDFWriter, m_DebugPDFWriter ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::SmallDrillMarkSize,
-                                                  &m_SmallDrillMarkSize, 0.35, 0.0, 3.0 ) );
+                                                  &m_SmallDrillMarkSize, m_SmallDrillMarkSize, 0.0, 3.0 ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::HotkeysDumper,
-                                                &m_HotkeysDumper, false ) );
+                                                &m_HotkeysDumper, m_HotkeysDumper ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::DrawBoundingBoxes,
-                                                &m_DrawBoundingBoxes, false ) );
+                                                &m_DrawBoundingBoxes, m_DrawBoundingBoxes ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowPcbnewExportNetlist,
-                                                &m_ShowPcbnewExportNetlist, false ) );
+                                                &m_ShowPcbnewExportNetlist, m_ShowPcbnewExportNetlist ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::Skip3DModelFileCache,
-                                                &m_Skip3DModelFileCache, false ) );
+                                                &m_Skip3DModelFileCache, m_Skip3DModelFileCache ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::Skip3DModelMemoryCache,
-                                                &m_Skip3DModelMemoryCache, false ) );
+                                                &m_Skip3DModelMemoryCache, m_Skip3DModelMemoryCache ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::HideVersionFromTitle,
-                                                &m_HideVersionFromTitle, false ) );
+                                                &m_HideVersionFromTitle, m_HideVersionFromTitle ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowRepairSchematic,
-                                                &m_ShowRepairSchematic, false ) );
+                                                &m_ShowRepairSchematic, m_ShowRepairSchematic ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowEventCounters,
-                                                &m_ShowEventCounters, false ) );
+                                                &m_ShowEventCounters, m_ShowEventCounters ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::AllowManualCanvasScale,
-                                                &m_AllowManualCanvasScale, false ) );
+                                                &m_AllowManualCanvasScale, m_AllowManualCanvasScale ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::AllowTeardrops,
-                                                &m_AllowTeardrops, false ) );
+                                                &m_AllowTeardrops, m_AllowTeardrops ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config
