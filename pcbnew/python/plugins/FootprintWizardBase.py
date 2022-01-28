@@ -639,8 +639,7 @@ class FootprintWizardDrawingAids:
         self.module.Reference().SetPosition(
             self.module.Reference().GetPos0())
         self.module.Reference().SetTextSize(text_size)
-        # internal angles are in 0.1 deg
-        self.module.Reference().SetTextAngle(orientation_degree * 10)
+        self.module.Reference().SetTextAngle( pcbnew.EDA_ANGLE( orientation_degree, pcbnew.DEGREES_T ) )
 
     def Value(self, x, y, size, orientation_degree=0):
         """!
@@ -657,8 +656,7 @@ class FootprintWizardDrawingAids:
         self.module.Value().SetPosition(self.module.Value().GetPos0())
         self.module.Value().SetTextSize(text_size)
         self.module.Value().SetLayer(self.DefaultTextValueLayer())
-        # internal angles are in 0.1 deg
-        self.module.Value().SetTextAngle(orientation_degree * 10)
+        self.module.Value().SetTextAngle( pcbnew.EDA_ANGLE( orientation_degree, pcbnew.DEGREES_T ) )
 
     def Box(self, x, y, w, h):
         """!

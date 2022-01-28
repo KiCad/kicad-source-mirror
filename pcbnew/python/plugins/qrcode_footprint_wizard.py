@@ -87,7 +87,7 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         # and a rectangle (a square) on silkscreen
         if self.UseCu:
             pad = pcbnew.PAD(self.module)
-            pad.SetSize(pcbnew.wxSize(self.X, self.X))
+            pad.SetSize(pcbnew.VECTOR2I(self.X, self.X))
             pad_pos = pcbnew.VECTOR2I(xposition,yposition)
             pad.SetPosition(pad_pos)
             pad.SetPos0(pad_pos)

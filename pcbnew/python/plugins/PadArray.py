@@ -52,7 +52,7 @@ class PadMaker(object):
         pad.SetAttribute(pcbnew.PAD_ATTRIB_PTH)
         pad.SetLayerSet(pad.PTHMask())
         pad.SetDrillSize(pcbnew.VECTOR2I(drill, drill))
-        pad.SetOrientation(rot_degree*10)   # rotation is in 0.1 degrees
+        pad.SetOrientation( pcbnew.EDA_ANGLE( rot_degree, pcbnew.DEGREES_T ) )
 
         return pad
 
@@ -93,7 +93,7 @@ class PadMaker(object):
         pad.SetShape(shape)
         pad.SetAttribute(pcbnew.PAD_ATTRIB_SMD)
         pad.SetLayerSet(pad.SMDMask())
-        pad.SetOrientation(rot_degree*10)   # rotation is in 0.1 degrees
+        pad.SetOrientation( pcbnew.EDA_ANGLE( rot_degree, pcbnew.DEGREES_T ) )
 
         return pad
 
@@ -423,7 +423,7 @@ class PadCircleArray(PadArray):
             padAngle = self.padRotationOffset
             if self.padRotationEnable:
                 padAngle -=angle
-            pad.SetOrientation(padAngle*10)
+            pad.SetOrientation( pcbnew.EDA_ANGLE( padAngle, pcbnew.DEGREES_T ) )
             pad.SetName(self.GetName(pin))
             self.AddPad(pad)
 

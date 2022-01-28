@@ -38,7 +38,7 @@ class DemoArc(FootprintWizardBase.FootprintWizard):
         centery = self.parameters["demo"]["centerY"]
         startptx = centerx
         startpty = centery+radius
-        self.draw.Arc(centerx, centery, startptx, startpty, arc_angle_deg * 10)
+        self.draw.Arc(centerx, centery, startptx, startpty, pcbnew.EDA_ANGLE( arc_angle_deg, pcbnew.DEGREES_T ) )
         t_size = self.GetTextSize()
         self.draw.Reference(0, -t_size, t_size)
         self.draw.Value(0, t_size, t_size)

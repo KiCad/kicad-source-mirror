@@ -88,7 +88,7 @@ class MutualcapButtonWizard(FootprintWizardBase.FootprintWizard):
 
         ###border h
         self.module.SetLayer(F_Cu)
-        size_pad = pcbnew.wxSize( w, oew )
+        size_pad = pcbnew.VECTOR2I( w, oew )
         self.module.Add(self.smdRectPad(self.module,size_pad,
                                         pcbnew.VECTOR2I(0, (int)((-h/2)+oew/2) ),
                                         str(1)))
@@ -96,7 +96,7 @@ class MutualcapButtonWizard(FootprintWizardBase.FootprintWizard):
                                         pcbnew.VECTOR2I(0, (int)(( h/2)-oew/2) ),
                                         str(1)))
         ###border v
-        size_pad = pcbnew.wxSize(oBorderWidth, h-2*oew)
+        size_pad = pcbnew.VECTOR2I( int(oBorderWidth), int(h-2*oew) )
         self.module.Add(self.smdRectPad(self.module,size_pad,
                                         pcbnew.VECTOR2I( (int)((-w/2)+oBorderWidth/2), 0),
                                         str(1)))
@@ -105,10 +105,10 @@ class MutualcapButtonWizard(FootprintWizardBase.FootprintWizard):
                                         str(1)))
 
         xPos = -w/2+oBorderWidth+clearance+iew
-        oFingerSize = pcbnew.wxSize(oew/2, h-oew-iew-2*clearance-oew)
-        iFingerSize = pcbnew.wxSize(iew,h-2*oew-2*clearance)
+        oFingerSize = pcbnew.VECTOR2I( int(oew/2), int(h-oew-iew-2*clearance-oew) )
+        iFingerSize = pcbnew.VECTOR2I( int(iew), int(h-2*oew-2*clearance) )
         #horizontal inner electrode trace
-        self.module.Add(self.smdRectPad(self.module,pcbnew.wxSize(w-2*oBorderWidth-2*clearance,iew),
+        self.module.Add(self.smdRectPad(self.module,pcbnew.VECTOR2I( int(w-2*oBorderWidth-2*clearance), int(iew) ),
                         pcbnew.VECTOR2I(0, (int)(h/2-oew-clearance-iew/2) ),str(2)))
         for i in range(0,oFingerCount):
             #inner electrode fingers
