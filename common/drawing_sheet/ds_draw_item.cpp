@@ -211,8 +211,7 @@ void DS_DRAW_ITEM_POLYPOLYGONS::PrintWsItem( const RENDER_SETTINGS* aSettings,
                                        outline.CPoint( ii ).y + aOffset.y );
         }
 
-        GRPoly( nullptr, DC, points_moved.size(), &points_moved[0], true, penWidth,
-                color, color );
+        GRPoly( DC, points_moved.size(), &points_moved[0], true, penWidth, color, color );
     }
 }
 
@@ -302,8 +301,7 @@ void DS_DRAW_ITEM_RECT::PrintWsItem( const RENDER_SETTINGS* aSettings, const VEC
     COLOR4D color = aSettings->GetLayerColor( LAYER_DRAWINGSHEET );
     int     penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
 
-    GRRect( nullptr, DC, GetStart().x + aOffset.x, GetStart().y + aOffset.y,
-            GetEnd().x + aOffset.x, GetEnd().y + aOffset.y, penWidth, color );
+    GRRect( DC, GetStart() + aOffset, GetEnd() + aOffset, penWidth, color );
 }
 
 
@@ -401,7 +399,7 @@ void DS_DRAW_ITEM_LINE::PrintWsItem( const RENDER_SETTINGS* aSettings, const VEC
     COLOR4D color = aSettings->GetLayerColor( LAYER_DRAWINGSHEET );
     int     penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
 
-    GRLine( nullptr, DC, GetStart() + aOffset, GetEnd() + aOffset, penWidth, color );
+    GRLine( DC, GetStart() + aOffset, GetEnd() + aOffset, penWidth, color );
 }
 
 

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -145,16 +145,15 @@ int D_CODE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 }
 
 
-void D_CODE::DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
-                               const COLOR4D& aColor, const VECTOR2I& aShapePos, bool aFilledShape )
+void D_CODE::DrawFlashedShape( GERBER_DRAW_ITEM* aParent, wxDC* aDC, const COLOR4D& aColor,
+                               const VECTOR2I& aShapePos, bool aFilledShape )
 {
     int radius;
 
     switch( m_Shape )
     {
     case APT_MACRO:
-        GetMacro()->DrawApertureMacroShape( aParent, aClipBox, aDC, aColor, aShapePos,
-                                            aFilledShape );
+        GetMacro()->DrawApertureMacroShape( aParent, aDC, aColor, aShapePos, aFilledShape );
         break;
 
     case APT_CIRCLE:
@@ -162,24 +161,23 @@ void D_CODE::DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wx
 
         if( !aFilledShape )
         {
-            GRCircle( aClipBox, aDC, aParent->GetABPosition(aShapePos), radius, 0, aColor );
+            GRCircle( aDC, aParent->GetABPosition(aShapePos), radius, 0, aColor );
         }
         else if( m_DrillShape == APT_DEF_NO_HOLE )
         {
-            GRFilledCircle( aClipBox, aDC, aParent->GetABPosition(aShapePos), radius, aColor );
+            GRFilledCircle( aDC, aParent->GetABPosition(aShapePos), radius, 0, aColor, aColor );
         }
         else if( m_DrillShape == APT_DEF_ROUND_HOLE )    // round hole in shape
         {
             int width = (m_Size.x - m_Drill.x ) / 2;
-            GRCircle( aClipBox, aDC,  aParent->GetABPosition(aShapePos),
-                      radius - (width / 2), width, aColor );
+            GRCircle( aDC,  aParent->GetABPosition(aShapePos), radius - (width / 2), width, aColor );
         }
         else                            // rectangular hole
         {
             if( m_Polygon.OutlineCount() == 0 )
                 ConvertShapeToPolygon();
 
-            DrawFlashedPolygon( aParent, aClipBox, aDC, aColor, aFilledShape, aShapePos );
+            DrawFlashedPolygon( aParent, aDC, aColor, aFilledShape, aShapePos );
         }
 
         break;
@@ -195,18 +193,18 @@ void D_CODE::DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wx
 
         if( !aFilledShape )
         {
-            GRRect( aClipBox, aDC, start.x, start.y, end.x, end.y, 0, aColor );
+            GRRect( aDC, start, end, 0, aColor );
         }
         else if( m_DrillShape == APT_DEF_NO_HOLE )
         {
-            GRFilledRect( aClipBox, aDC, start.x, start.y, end.x, end.y, 0, aColor, aColor );
+            GRFilledRect( aDC, start, end, 0, aColor, aColor );
         }
         else
         {
             if( m_Polygon.OutlineCount() == 0 )
                 ConvertShapeToPolygon();
 
-            DrawFlashedPolygon( aParent, aClipBox, aDC, aColor, aFilledShape, aShapePos );
+            DrawFlashedPolygon( aParent, aDC, aColor, aFilledShape, aShapePos );
         }
     }
     break;
@@ -236,18 +234,18 @@ void D_CODE::DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wx
 
         if( !aFilledShape )
         {
-            GRCSegm( aClipBox, aDC, start.x, start.y, end.x, end.y, radius, aColor );
+            GRCSegm( aDC, start, end, radius, aColor );
         }
         else if( m_DrillShape == APT_DEF_NO_HOLE )
         {
-            GRFillCSegm( aClipBox, aDC, start.x, start.y, end.x, end.y, radius, aColor );
+            GRFilledSegment( aDC, start, end, radius, aColor );
         }
         else
         {
             if( m_Polygon.OutlineCount() == 0 )
                 ConvertShapeToPolygon();
 
-            DrawFlashedPolygon( aParent, aClipBox, aDC, aColor, aFilledShape, aShapePos );
+            DrawFlashedPolygon( aParent, aDC, aColor, aFilledShape, aShapePos );
         }
     }
 
@@ -257,14 +255,14 @@ void D_CODE::DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wx
         if( m_Polygon.OutlineCount() == 0 )
             ConvertShapeToPolygon();
 
-        DrawFlashedPolygon( aParent, aClipBox, aDC, aColor, aFilledShape, aShapePos );
+        DrawFlashedPolygon( aParent, aDC, aColor, aFilledShape, aShapePos );
         break;
     }
 }
 
 
-void D_CODE::DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
-                                 const COLOR4D& aColor, bool aFilled, const VECTOR2I& aPosition )
+void D_CODE::DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent, wxDC* aDC, const COLOR4D& aColor,
+                                 bool aFilled, const VECTOR2I& aPosition )
 {
     if( m_Polygon.OutlineCount() == 0 )
         return;
@@ -280,7 +278,7 @@ void D_CODE::DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, 
         points[ii] = aParent->GetABPosition( points[ii] );
     }
 
-    GRClosedPoly( aClipBox, aDC, pointCount, &points[0], aFilled, aColor, aColor );
+    GRClosedPoly( aDC, pointCount, &points[0], aFilled, aColor );
 }
 
 

@@ -847,7 +847,7 @@ void SCH_LABEL_BASE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aO
     CreateGraphicShape( aSettings, s_poly, GetTextPos() + aOffset );
 
     if( !s_poly.empty() )
-        GRPoly( nullptr, DC, s_poly.size(), &s_poly[0], false, penWidth, color, color );
+        GRPoly( DC, s_poly.size(), &s_poly[0], false, penWidth, color, color );
 
     for( SCH_FIELD& field : m_fields )
         field.Print( aSettings, aOffset );

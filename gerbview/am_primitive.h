@@ -198,18 +198,18 @@ struct APERTURE_MACRO
      * When an item is flashed, this is the shape of the item.
      *
      * @param aParent is the parent GERBER_DRAW_ITEM which is actually drawn.
-     * @param aClipBox is DC clip box (NULL is no clip).
      * @param aDC is the device context.
      * @param aColor is the color of shape.
      * @param aShapePos is the actual shape position.
      * @param aFilledShape set to true to draw in filled mode, false to draw in sketch mode.
      */
-    void DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
-                                 const COLOR4D& aColor, const VECTOR2I& aShapePos,
-                                 bool aFilledShape );
+    void DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, wxDC* aDC, const COLOR4D& aColor,
+                                 const VECTOR2I& aShapePos, bool aFilledShape );
 
     /**
-     * Calculate a value that can be used to evaluate the size of text when displaying the
+     * C
+     *
+     * alculate a value that can be used to evaluate the size of text when displaying the
      * D-Code of an item.
      *
      * Due to the complexity of a shape using many primitives one cannot calculate the "size" of

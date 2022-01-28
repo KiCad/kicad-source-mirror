@@ -7,7 +7,7 @@
  *
  * Copyright (C) 1992-2017 Jean-Pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -864,9 +864,9 @@ SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* a
 }
 
 
-void APERTURE_MACRO::DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox,
-                                             wxDC* aDC, const COLOR4D& aColor,
-                                             const VECTOR2I& aShapePos, bool aFilledShape )
+void APERTURE_MACRO::DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, wxDC* aDC,
+                                             const COLOR4D& aColor, const VECTOR2I& aShapePos,
+                                             bool aFilledShape )
 {
     SHAPE_POLY_SET* shapeBuffer = GetApertureMacroShape( aParent, aShapePos );
 
@@ -876,9 +876,7 @@ void APERTURE_MACRO::DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, EDA_RECT
     for( int ii = 0; ii < shapeBuffer->OutlineCount(); ii++ )
     {
         SHAPE_LINE_CHAIN& poly = shapeBuffer->Outline( ii );
-
-        GRClosedPoly( aClipBox, aDC, poly.PointCount(), (VECTOR2I*) &poly.CPoint( 0 ), aFilledShape,
-                      aColor, aColor );
+        GRClosedPoly( aDC, poly.PointCount(), (VECTOR2I*) &poly.CPoint( 0 ), aFilledShape, aColor );
     }
 }
 

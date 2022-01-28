@@ -469,8 +469,8 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
 
     m_parent->SetDrawBgColor( bgColor );
 
-    GRSFilledRect( nullptr, dc, fitRect.GetX(), fitRect.GetY(), fitRect.GetRight(),
-                   fitRect.GetBottom(), 0, bgColor, bgColor );
+    GRSFilledRect( dc, fitRect.GetX(), fitRect.GetY(), fitRect.GetRight(), fitRect.GetBottom(), 0,
+                   bgColor, bgColor );
 
     if( cfg->m_Printing.monochrome )
         GRForceBlackPen( true );

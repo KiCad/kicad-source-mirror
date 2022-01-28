@@ -149,14 +149,14 @@ void GRPrintText( wxDC* aDC, const VECTOR2I& aPos, const COLOR4D& aColor, const 
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
             {
                 if( fill_mode )
-                    GRLine( nullptr, aDC, aPt1.x, aPt1.y, aPt2.x, aPt2.y, aWidth, aColor );
+                    GRLine( aDC, aPt1, aPt2, aWidth, aColor );
                 else
-                    GRCSegm( nullptr, aDC, aPt1.x, aPt1.y, aPt2.x, aPt2.y, aWidth, 0, aColor );
+                    GRCSegm( aDC, aPt1, aPt2, aWidth, aColor );
             },
             // Polygon callback
             [&]( const SHAPE_LINE_CHAIN& aPoly )
             {
-                GRClosedPoly( nullptr, aDC, aPoly.PointCount(), aPoly.CPoints().data(), true, aColor, aColor );
+                GRClosedPoly( aDC, aPoly.PointCount(), aPoly.CPoints().data(), true, aColor );
             } );
 
     TEXT_ATTRIBUTES attributes;

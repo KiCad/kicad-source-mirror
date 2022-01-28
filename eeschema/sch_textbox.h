@@ -107,10 +107,6 @@ public:
     }
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
-
-#if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const override;
-#endif
 };
 
 

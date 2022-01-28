@@ -253,23 +253,23 @@ void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
         switch( GetShape() )
         {
         case SHAPE_T::ARC:
-            GRFilledArc1( nullptr, DC, pt1, pt2, c, 0, color, color );
+            GRFilledArc( DC, pt1, pt2, c, 0, color, color );
             break;
 
         case SHAPE_T::CIRCLE:
-            GRFilledCircle( nullptr, DC, pt1.x, pt1.y, GetRadius(), 0, color, color );
+            GRFilledCircle( DC, pt1, GetRadius(), 0, color, color );
             break;
 
         case SHAPE_T::RECT:
-            GRFilledRect( nullptr, DC, pt1.x, pt1.y, pt2.x, pt2.y, 0, color, color );
+            GRFilledRect( DC, pt1, pt2, 0, color, color );
             break;
 
         case SHAPE_T::POLY:
-            GRPoly( nullptr, DC, ptCount, buffer, true, 0, color, color );
+            GRPoly( DC, ptCount, buffer, true, 0, color, color );
             break;
 
         case SHAPE_T::BEZIER:
-            GRPoly( nullptr, DC, ptCount, buffer, true, 0, color, color );
+            GRPoly( DC, ptCount, buffer, true, 0, color, color );
             break;
 
         default:
@@ -287,23 +287,23 @@ void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
         switch( GetShape() )
         {
         case SHAPE_T::ARC:
-            GRArc1( nullptr, DC, pt1, pt2, c, penWidth, color );
+            GRArc( DC, pt1, pt2, c, penWidth, color );
             break;
 
         case SHAPE_T::CIRCLE:
-            GRCircle( nullptr, DC, pt1.x, pt1.y, GetRadius(), penWidth, color );
+            GRCircle( DC, pt1, GetRadius(), penWidth, color );
             break;
 
         case SHAPE_T::RECT:
-            GRRect( nullptr, DC, pt1.x, pt1.y, pt2.x, pt2.y, penWidth, color );
+            GRRect( DC, pt1, pt2, penWidth, color );
             break;
 
         case SHAPE_T::POLY:
-            GRPoly( nullptr, DC, ptCount, buffer, false, penWidth, color, color );
+            GRPoly( DC, ptCount, buffer, false, penWidth, color, color );
             break;
 
         case SHAPE_T::BEZIER:
-            GRPoly( nullptr, DC, ptCount, buffer, false, penWidth, color, color );
+            GRPoly( DC, ptCount, buffer, false, penWidth, color, color );
             break;
 
         default:
@@ -319,7 +319,7 @@ void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
             STROKE_PARAMS::Stroke( shape, GetStroke().GetPlotStyle(), penWidth, aSettings,
                                    [&]( const VECTOR2I& a, const VECTOR2I& b )
                                    {
-                                       GRLine( nullptr, DC, a.x, a.y, b.x, b.y, penWidth, color );
+                                       GRLine( DC, a.x, a.y, b.x, b.y, penWidth, color );
                                    } );
         }
 

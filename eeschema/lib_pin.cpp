@@ -230,7 +230,7 @@ void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, 
         {
             wxDC* DC = aSettings->GetPrintDC();
             COLOR4D color = aSettings->GetLayerColor( IsVisible() ? LAYER_PIN : LAYER_HIDDEN );
-            GRCircle( nullptr, DC, pos1.x, pos1.y, TARGET_PIN_RADIUS, 0, color );
+            GRCircle( DC, pos1, TARGET_PIN_RADIUS, 0, color );
         }
     }
 }
@@ -259,15 +259,15 @@ void LIB_PIN::printPinSymbol( const RENDER_SETTINGS* aSettings, const VECTOR2I& 
     if( m_shape == GRAPHIC_PINSHAPE::INVERTED || m_shape == GRAPHIC_PINSHAPE::INVERTED_CLOCK )
     {
         const int radius = externalPinDecoSize( aSettings, *this );
-        GRCircle( nullptr, DC, MapX1 * radius + x1, MapY1 * radius + y1, radius, width, color );
+        GRCircle( DC, VECTOR2I( MapX1 * radius + x1, MapY1 * radius + y1 ), radius, width, color );
 
         GRMoveTo( MapX1 * radius * 2 + x1, MapY1 * radius * 2 + y1 );
-        GRLineTo( nullptr, DC, posX, posY, width, color );
+        GRLineTo( DC, posX, posY, width, color );
     }
     else
     {
         GRMoveTo( x1, y1 );
-        GRLineTo( nullptr, DC, posX, posY, width, color );
+        GRLineTo( DC, posX, posY, width, color );
     }
 
     // Draw the clock shape (>)inside the symbol
@@ -280,14 +280,14 @@ void LIB_PIN::printPinSymbol( const RENDER_SETTINGS* aSettings, const VECTOR2I& 
         if( MapY1 == 0 ) /* MapX1 = +- 1 */
         {
             GRMoveTo( x1, y1 + clock_size );
-            GRLineTo( nullptr, DC, x1 - MapX1 * clock_size * 2, y1, width, color );
-            GRLineTo( nullptr, DC, x1, y1 - clock_size, width, color );
+            GRLineTo( DC, x1 - MapX1 * clock_size * 2, y1, width, color );
+            GRLineTo( DC, x1, y1 - clock_size, width, color );
         }
         else    /* MapX1 = 0 */
         {
             GRMoveTo( x1 + clock_size, y1 );
-            GRLineTo( nullptr, DC, x1, y1 - MapY1 * clock_size * 2, width, color );
-            GRLineTo( nullptr, DC, x1 - clock_size, y1, width, color );
+            GRLineTo( DC, x1, y1 - MapY1 * clock_size * 2, width, color );
+            GRLineTo( DC, x1 - clock_size, y1, width, color );
         }
     }
 
@@ -300,14 +300,14 @@ void LIB_PIN::printPinSymbol( const RENDER_SETTINGS* aSettings, const VECTOR2I& 
         if( MapY1 == 0 )            /* MapX1 = +- 1 */
         {
             GRMoveTo( x1 + MapX1 * deco_size * 2, y1 );
-            GRLineTo( nullptr, DC, x1 + MapX1 * deco_size * 2, y1 - deco_size * 2, width, color );
-            GRLineTo( nullptr, DC, x1, y1, width, color );
+            GRLineTo( DC, x1 + MapX1 * deco_size * 2, y1 - deco_size * 2, width, color );
+            GRLineTo( DC, x1, y1, width, color );
         }
         else    /* MapX1 = 0 */
         {
             GRMoveTo( x1, y1 + MapY1 * deco_size * 2 );
-            GRLineTo( nullptr, DC, x1 - deco_size * 2, y1 + MapY1 * deco_size * 2, width, color );
-            GRLineTo( nullptr, DC, x1, y1, width, color );
+            GRLineTo( DC, x1 - deco_size * 2, y1 + MapY1 * deco_size * 2, width, color );
+            GRLineTo( DC, x1, y1, width, color );
         }
     }
 
@@ -317,32 +317,32 @@ void LIB_PIN::printPinSymbol( const RENDER_SETTINGS* aSettings, const VECTOR2I& 
         if( MapY1 == 0 )            /* MapX1 = +- 1 */
         {
             GRMoveTo( x1, y1 - deco_size * 2 );
-            GRLineTo( nullptr, DC, x1 + MapX1 * deco_size * 2, y1, width, color );
+            GRLineTo( DC, x1 + MapX1 * deco_size * 2, y1, width, color );
         }
         else    /* MapX1 = 0 */
         {
             GRMoveTo( x1 - deco_size * 2, y1 );
-            GRLineTo( nullptr, DC, x1, y1 + MapY1 * deco_size * 2, width, color );
+            GRLineTo( DC, x1, y1 + MapY1 * deco_size * 2, width, color );
         }
     }
     else if( m_shape == GRAPHIC_PINSHAPE::NONLOGIC ) /* NonLogic pin symbol */
     {
         const int deco_size = externalPinDecoSize( aSettings, *this );
         GRMoveTo( x1 - (MapX1 + MapY1) * deco_size, y1 - (MapY1 - MapX1) * deco_size );
-        GRLineTo( nullptr, DC, x1 + (MapX1 + MapY1) * deco_size,
-                  y1 + ( MapY1 - MapX1 ) * deco_size, width, color );
+        GRLineTo( DC, x1 + (MapX1 + MapY1) * deco_size, y1 + ( MapY1 - MapX1 ) * deco_size, width,
+                  color );
         GRMoveTo( x1 - (MapX1 - MapY1) * deco_size, y1 - (MapY1 + MapX1) * deco_size );
-        GRLineTo( nullptr, DC, x1 + (MapX1 - MapY1) * deco_size,
-                  y1 + ( MapY1 + MapX1 ) * deco_size, width, color );
+        GRLineTo( DC, x1 + (MapX1 - MapY1) * deco_size, y1 + ( MapY1 + MapX1 ) * deco_size, width,
+                  color );
     }
 
     if( m_type == ELECTRICAL_PINTYPE::PT_NC ) // Draw a N.C. symbol
     {
         const int deco_size = TARGET_PIN_RADIUS;
-        GRLine( nullptr, DC, posX - deco_size, posY - deco_size, posX + deco_size,
-                posY + deco_size, width, color );
-        GRLine( nullptr, DC, posX + deco_size, posY - deco_size, posX - deco_size,
-                posY + deco_size, width, color );
+        GRLine( DC, posX - deco_size, posY - deco_size, posX + deco_size, posY + deco_size, width,
+                color );
+        GRLine( DC, posX + deco_size, posY - deco_size, posX - deco_size, posY + deco_size, width,
+                color );
     }
 }
 

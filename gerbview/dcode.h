@@ -137,14 +137,13 @@ public:
      * When an item is flashed, the DCode shape is the shape of the item.
      *
      * @param aParent is the #GERBER_DRAW_ITEM being drawn.
-     * @param aClipBox is the device context clip box (NULL is no clip).
      * @param aDC is the device context.
      * @param aColor is the normal color to use.
      * @param aShapePos is the actual shape position
      * @param aFilledShape set to true to draw in filled mode, false to draw in sketch mode
      */
-    void DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
-                           const COLOR4D& aColor, const VECTOR2I& aShapePos, bool aFilledShape );
+    void DrawFlashedShape( GERBER_DRAW_ITEM* aParent, wxDC* aDC, const COLOR4D& aColor,
+                           const VECTOR2I& aShapePos, bool aFilledShape );
 
     /**
      * A helper function used to draw the polygon stored in m_PolyCorners.
@@ -154,14 +153,13 @@ public:
      * holes, some rotated shapes).
      *
      * @param aParent is the #GERBER_DRAW_ITEM being drawn.
-     * @param aClipBox is the device context clip box (NULL is no clip).
      * @param aDC is the device context.
      * @param aColor is the normal color to use.
      * @param aFilled set to true to draw in filled mode, false to draw in sketch mode.
      * @param aPosition is the actual shape position.
      */
-    void DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
-                             const COLOR4D& aColor, bool aFilled, const VECTOR2I& aPosition );
+    void DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent, wxDC* aDC, const COLOR4D& aColor,
+                             bool aFilled, const VECTOR2I& aPosition );
 
     /**
      * Convert a shape to an equivalent polygon.

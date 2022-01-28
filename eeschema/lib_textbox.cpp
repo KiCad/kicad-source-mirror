@@ -207,18 +207,16 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
     COLOR4D  color = aSettings->GetLayerColor( IsPrivate() ? LAYER_NOTES : LAYER_DEVICE );
 
     if( !forceNoFill && GetFillMode() == FILL_T::FILLED_WITH_COLOR )
-    {
-        GRFilledRect( nullptr, DC, pt1.x, pt1.y, pt2.x, pt2.y, penWidth, color, GetFillColor() );
-    }
+        GRFilledRect( DC, pt1, pt2, penWidth, color, GetFillColor() );
 
     if( GetStroke().GetColor() != COLOR4D::UNSPECIFIED )
         color = GetStroke().GetColor();
 
-    penWidth = std::max( penWidth, aSettings->GetDefaultPenWidth() );
+    penWidth = std::max( penWidth, aSettings->GetMinPenWidth() );
 
     if( GetStroke().GetPlotStyle() <= PLOT_DASH_TYPE::FIRST_TYPE )
     {
-        GRRect( nullptr, DC, pt1.x, pt1.y, pt2.x, pt2.y, penWidth, color );
+        GRRect( DC, pt1, pt2, penWidth, color );
     }
     else
     {
@@ -229,7 +227,7 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
             STROKE_PARAMS::Stroke( shape, GetStroke().GetPlotStyle(), penWidth, aSettings,
                                    [&]( const VECTOR2I& a, const VECTOR2I& b )
                                    {
-                                       GRLine( nullptr, DC, a.x, a.y, b.x, b.y, penWidth, color );
+                                       GRLine( DC, a.x, a.y, b.x, b.y, penWidth, color );
                                    } );
         }
 
@@ -237,39 +235,24 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
             delete shape;
     }
 
-    // Calculate the text orientation, according to the symbol orientation/mirror (needed when
-    // draw text in schematic)
-    EDA_ANGLE orient = GetTextAngle();
+    LIB_TEXTBOX text( *this );
 
-    if( aTransform.y1 )  // Rotate symbol 90 degrees.
+    penWidth = std::max( GetEffectiveTextPenWidth(), aSettings->GetMinPenWidth() );
+
+    if( aTransform.y1 )
     {
-        if( orient == ANGLE_HORIZONTAL )
-            orient = ANGLE_VERTICAL;
-        else
-            orient = ANGLE_HORIZONTAL;
+        text.SetTextAngle( text.GetTextAngle() == ANGLE_HORIZONTAL ? ANGLE_VERTICAL
+                                                                   : ANGLE_HORIZONTAL );
     }
 
-    /*
-     * Calculate the text justification, according to the symbol orientation/mirror.
-     * This is a bit complicated due to cumulative calculations:
-     * - numerous cases (mirrored or not, rotation)
-     * - the GRText function will also recalculate H and V justifications according to the text
-     *   orientation.
-     * - When a symbol is mirrored, the text is not mirrored and justifications are complicated
-     *   to calculate so the more easily way is to use no justifications (centered text) and
-     *   use GetBoundingBox to know the text coordinate considered as centered
-    */
-    EDA_RECT bBox = GetBoundingBox();
+    // NB: UpdateTextPosition() wants Symbol Editor (upside-down) coordinates
+    text.SetStart( VECTOR2I( pt1.x, -pt1.y ) );
+    text.SetEnd( VECTOR2I( pt2.x, -pt2.y ) );
+    text.UpdateTextPosition();
 
-    // convert coordinates from draw Y axis to symbol_editor Y axis:
-    bBox.RevertYAxis();
-    VECTOR2I txtpos = bBox.Centre();
-
-    // Calculate pos according to mirror/rotation.
-    txtpos = aTransform.TransformCoordinate( txtpos ) + aOffset;
-
-    GRPrintText( DC, txtpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_H_ALIGN_CENTER,
-                 GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(), GetDrawFont() );
+    GRPrintText( DC, text.GetTextPos(), color, text.GetShownText(), text.GetTextAngle(),
+                 text.GetTextSize(), text.GetHorizJustify(), text.GetVertJustify(), penWidth,
+                 text.IsItalic(), text.IsBold(), text.GetDrawFont() );
 }
 
 
@@ -358,12 +341,11 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
     aPlotter->SetColor( color );
     aPlotter->Rect( start, end, fill, penWidth );
 
-    KIFONT::FONT* font = GetDrawFont();
-    LIB_TEXTBOX   text( *this );
+    LIB_TEXTBOX text( *this );
 
     penWidth = std::max( GetEffectiveTextPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
 
-    if( aTransform.y1 != 0 && aTransform.x2 != 0 )
+    if( aTransform.y1 )
     {
         text.SetTextAngle( text.GetTextAngle() == ANGLE_HORIZONTAL ? ANGLE_VERTICAL
                                                                    : ANGLE_HORIZONTAL );
@@ -385,7 +367,7 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
     {
         aPlotter->Text( positions[ii], color, strings_list.Item( ii ), text.GetTextAngle(),
                         text.GetTextSize(), text.GetHorizJustify(), text.GetVertJustify(),
-                        penWidth, text.IsItalic(), text.IsBold(), false, font );
+                        penWidth, text.IsItalic(), text.IsBold(), false, GetDrawFont() );
     }
 }
 

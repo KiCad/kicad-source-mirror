@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -145,5 +145,5 @@ void MARKER_BASE::PrintMarker( const RENDER_SETTINGS* aSettings, const VECTOR2I&
     for( const VECTOR2I& corner : MarkerShapeCorners )
         shape.emplace_back( corner * MarkerScale() + m_Pos + aOffset );
 
-    GRClosedPoly( nullptr, DC, CORNERS_COUNT, &shape[0], true, 0, getColor(), getColor() );
+    GRClosedPoly( DC, CORNERS_COUNT, &shape[0], true, getColor() );
 }

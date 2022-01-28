@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -276,7 +276,7 @@ void SCH_BUS_ENTRY_BASE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I
 
     if( GetLineStyle() <= PLOT_DASH_TYPE::FIRST_TYPE )
     {
-        GRLine( nullptr, DC, start.x, start.y, end.x, end.y, penWidth, color );
+        GRLine( DC, start.x, start.y, end.x, end.y, penWidth, color );
     }
     else
     {
@@ -285,7 +285,7 @@ void SCH_BUS_ENTRY_BASE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I
         STROKE_PARAMS::Stroke( &segment, GetLineStyle(), penWidth, aSettings,
                                [&]( const VECTOR2I& a, const VECTOR2I& b )
                                {
-                                   GRLine( nullptr, DC, a.x, a.y, b.x, b.y, penWidth, color );
+                                   GRLine( DC, a.x, a.y, b.x, b.y, penWidth, color );
                                } );
     }
 }

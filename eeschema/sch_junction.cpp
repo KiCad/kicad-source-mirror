@@ -126,8 +126,7 @@ void SCH_JUNCTION::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOff
 
     SHAPE_CIRCLE circle = getEffectiveShape();
 
-    GRFilledCircle( nullptr, DC, circle.GetCenter() + aOffset, circle.GetRadius(),
-                    color );
+    GRFilledCircle( DC, circle.GetCenter() + aOffset, circle.GetRadius(), 0, color, color );
 }
 
 

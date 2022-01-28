@@ -673,8 +673,7 @@ void DIALOG_PAGES_SETTINGS::UpdateDrawingSheetExample()
                 renderSettings.SetLayerColor( LAYER_DRAWINGSHEET, color );
             }
 
-            GRFilledRect( nullptr, &memDC, 0, 0, m_layout_size.x, m_layout_size.y, bgColor,
-                          bgColor );
+            GRFilledRect( &memDC, VECTOR2I( 0, 0 ), m_layout_size, 0, bgColor, bgColor );
 
             PrintDrawingSheet( &renderSettings, pageDUMMY, emptyString, emptyString, m_tb,
                                m_screen->GetPageCount(), m_screen->GetPageNumber(), 1, &Prj(),

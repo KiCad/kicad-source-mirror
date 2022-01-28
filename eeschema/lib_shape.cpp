@@ -269,23 +269,23 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
         switch( GetShape() )
         {
         case SHAPE_T::ARC:
-            GRArc1( nullptr, DC, pt1, pt2, c, penWidth, color );
+            GRArc( DC, pt1, pt2, c, penWidth, color );
             break;
 
         case SHAPE_T::CIRCLE:
-            GRCircle( nullptr, DC, pt1.x, pt1.y, GetRadius(), penWidth, color );
+            GRCircle( DC, pt1, GetRadius(), penWidth, color );
             break;
 
         case SHAPE_T::RECT:
-            GRRect( nullptr, DC, pt1.x, pt1.y, pt2.x, pt2.y, penWidth, color );
+            GRRect( DC, pt1, pt2, penWidth, color );
             break;
 
         case SHAPE_T::POLY:
-            GRPoly( nullptr, DC, ptCount, buffer, false, penWidth, color, color );
+            GRPoly( DC, ptCount, buffer, false, penWidth, color, color );
             break;
 
         case SHAPE_T::BEZIER:
-            GRPoly( nullptr, DC, ptCount, buffer, false, penWidth, color, color );
+            GRPoly( DC, ptCount, buffer, false, penWidth, color, color );
             break;
 
         default:
@@ -307,33 +307,33 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
             // If we stroke in GRFilledArc it will stroke the two radials too, so we have to
             // fill and stroke separately
 
-            GRFilledArc1( nullptr, DC, pt1, pt2, c, 0, fillColor, fillColor );
+            GRFilledArc( DC, pt1, pt2, c, 0, fillColor, fillColor );
 
-            GRArc1( nullptr, DC, pt1, pt2, c, penWidth, color );
+            GRArc( DC, pt1, pt2, c, penWidth, color );
             break;
 
         case SHAPE_T::CIRCLE:
-            GRFilledCircle( nullptr, DC, pt1.x, pt1.y, GetRadius(), 0, color, fillColor );
+            GRFilledCircle( DC, pt1, GetRadius(), 0, color, fillColor );
             break;
 
         case SHAPE_T::RECT:
-            GRFilledRect( nullptr, DC, pt1.x, pt1.y, pt2.x, pt2.y, penWidth, color, fillColor );
+            GRFilledRect( DC, pt1, pt2, penWidth, color, fillColor );
             break;
 
         case SHAPE_T::POLY:
 
-            GRPoly( nullptr, DC, ptCount, buffer, true, 0, fillColor, fillColor );
+            GRPoly( DC, ptCount, buffer, true, 0, fillColor, fillColor );
 
             if( penWidth > 0 )
-                GRPoly( nullptr, DC, ptCount, buffer, false, penWidth, color, fillColor );
+                GRPoly( DC, ptCount, buffer, false, penWidth, color, fillColor );
 
             break;
 
         case SHAPE_T::BEZIER:
             if( penWidth > 0 )
-                GRPoly( nullptr, DC, ptCount, buffer, true, penWidth, color, fillColor );
+                GRPoly( DC, ptCount, buffer, true, penWidth, color, fillColor );
             else
-                GRPoly( nullptr, DC, ptCount, buffer, true, 0, fillColor, fillColor );
+                GRPoly( DC, ptCount, buffer, true, 0, fillColor, fillColor );
             break;
 
         default:

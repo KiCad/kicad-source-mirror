@@ -1079,12 +1079,9 @@ void SCH_SHEET::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
         background = COLOR4D::UNSPECIFIED;
 
     if( background != COLOR4D::UNSPECIFIED )
-    {
-        GRFilledRect( nullptr, DC, pos.x, pos.y, pos.x + m_size.x, pos.y + m_size.y, 0,
-                      background, background );
-    }
+        GRFilledRect( DC, pos, pos + m_size, 0, background, background );
 
-    GRRect( nullptr, DC, pos.x, pos.y, pos.x + m_size.x, pos.y + m_size.y, lineWidth, border );
+    GRRect( DC, pos, pos + m_size, lineWidth, border );
 
     for( SCH_FIELD& field : m_fields )
         field.Print( aSettings, aOffset );

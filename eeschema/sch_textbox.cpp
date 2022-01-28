@@ -183,7 +183,42 @@ KIFONT::FONT* SCH_TEXTBOX::GetDrawFont() const
 
 void SCH_TEXTBOX::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
-    COLOR4D color = aSettings->GetLayerColor( m_layer );
+    wxDC*    DC = aSettings->GetPrintDC();
+    int      penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+    VECTOR2I pt1 = GetStart();
+    VECTOR2I pt2 = GetEnd();
+    COLOR4D  color;
+
+    if( GetFillMode() == FILL_T::FILLED_WITH_COLOR )
+        GRFilledRect( DC, pt1, pt2, 0, GetFillColor(), GetFillColor() );
+
+    if( GetStroke().GetColor() == COLOR4D::UNSPECIFIED )
+        color = aSettings->GetLayerColor( m_layer );
+    else
+        color = GetStroke().GetColor();
+
+    if( GetStroke().GetPlotStyle() <= PLOT_DASH_TYPE::FIRST_TYPE )
+    {
+        GRRect( DC, pt1, pt2, penWidth, color );
+    }
+    else
+    {
+        std::vector<SHAPE*> shapes = MakeEffectiveShapes( true );
+
+        for( SHAPE* shape : shapes )
+        {
+            STROKE_PARAMS::Stroke( shape, GetStroke().GetPlotStyle(), penWidth, aSettings,
+                                   [&]( const VECTOR2I& a, const VECTOR2I& b )
+                                   {
+                                       GRLine( DC, a.x, a.y, b.x, b.y, penWidth, color );
+                                   } );
+        }
+
+        for( SHAPE* shape : shapes )
+            delete shape;
+    }
+
+    color = aSettings->GetLayerColor( m_layer );
     EDA_TEXT::Print( aSettings, aOffset, color );
 }
 
@@ -337,22 +372,3 @@ void SCH_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
     aList.emplace_back( _( "Text Size" ), MessageTextFromValue( aFrame->GetUserUnits(),
                                                                 GetTextWidth() ) );
 }
-
-
-#if defined(DEBUG)
-
-void SCH_TEXTBOX::Show( int nestLevel, std::ostream& os ) const
-{
-    // XML output:
-    wxString s = GetClass();
-
-    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str()
-                                 << " layer=\"" << m_layer << '"'
-                                 << '>'
-                                 << TO_UTF8( GetText() )
-                                 << "</" << s.Lower().mb_str() << ">\n";
-}
-
-#endif
-
-
