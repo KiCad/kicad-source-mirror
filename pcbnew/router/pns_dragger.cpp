@@ -511,12 +511,12 @@ bool DRAGGER::tryWalkaround( NODE* aNode, LINE& aOrig, LINE& aWalk )
                                                                              wr.lineCcw );
         ok    = true;
     }
-    else if( wr.statusCw == WALKAROUND::DONE )
+    else if( wr.statusCw == WALKAROUND::DONE && wr.lineCw.CLine().PointCount() > 1 )
     {
         aWalk = wr.lineCw;
         ok    = true;
     }
-    else if( wr.statusCcw == WALKAROUND::DONE )
+    else if( wr.statusCcw == WALKAROUND::DONE && wr.lineCcw.CLine().PointCount() > 1  )
     {
         aWalk = wr.lineCcw;
         ok    = true;
