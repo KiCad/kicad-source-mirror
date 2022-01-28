@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -15,6 +15,7 @@ class WX_HTML_REPORT_PANEL;
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
+#include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
@@ -118,8 +119,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxStaticText* DXF_exportUnitsLabel;
 		wxChoice* m_DXF_plotUnits;
 		wxStaticBoxSizer* m_svgOptionsSizer;
-		wxStaticText* svgUnitLabel;
-		wxChoice* m_svgUnits;
 		wxStaticText* svgPrecisionLabel;
 		wxSpinCtrl* m_svgPrecsision;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;

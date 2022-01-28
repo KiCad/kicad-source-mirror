@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -371,27 +371,12 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	m_svgOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("SVG Options") ), wxHORIZONTAL );
 
-	svgUnitLabel = new wxStaticText( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
-	svgUnitLabel->Wrap( -1 );
-	m_svgOptionsSizer->Add( svgUnitLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-	wxString m_svgUnitsChoices[] = { _("Millimeter"), _("Inch") };
-	int m_svgUnitsNChoices = sizeof( m_svgUnitsChoices ) / sizeof( wxString );
-	m_svgUnits = new wxChoice( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_svgUnitsNChoices, m_svgUnitsChoices, 0 );
-	m_svgUnits->SetSelection( 0 );
-	m_svgUnits->SetToolTip( _("The units that are used for a SVG user units.\nChoose Millimeter when you are not sure.") );
-
-	m_svgOptionsSizer->Add( m_svgUnits, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	m_svgOptionsSizer->Add( 30, 0, 0, 0, 5 );
-
 	svgPrecisionLabel = new wxStaticText( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, _("Precision:"), wxDefaultPosition, wxDefaultSize, 0 );
 	svgPrecisionLabel->Wrap( -1 );
 	m_svgOptionsSizer->Add( svgPrecisionLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_svgPrecsision = new wxSpinCtrl( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 3, 6, 6 );
-	m_svgPrecsision->SetToolTip( _("How big a SVG user unit is.\nThe number defines how many digits are exported that are below 1 mm or 1 inch.\nUser unit is 10^-<N> mm or 10^-<N> inch.\nChoose 6 if you are not sure.") );
+	m_svgPrecsision = new wxSpinCtrl( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 3, 6, 4 );
+	m_svgPrecsision->SetToolTip( _("This number defines how many digits are exported that are below 1 mm.\nUser unit is 10^-<N> mm\nChoose 4 if you are not sure.") );
 
 	m_svgOptionsSizer->Add( m_svgPrecsision, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 

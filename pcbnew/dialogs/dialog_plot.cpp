@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -163,7 +163,6 @@ void DIALOG_PLOT::init_Dialog()
 
     // SVG precision and units for coordinates
     m_svgPrecsision->SetValue( m_plotOpts.GetSvgPrecision() );
-    m_svgUnits->SetSelection( m_plotOpts.GetSvgUseInch() );
 
     // Option for excluding contents of "Edges Pcb" layer
     m_includeEdgeLayerOpt->SetValue( !m_plotOpts.GetExcludeEdgeLayer() );
@@ -734,7 +733,7 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetCreateGerberJobFile( m_generateGerberJobFile->GetValue() );
 
     tempOptions.SetGerberPrecision( m_coordFormatCtrl->GetSelection() == 0 ? 5 : 6 );
-    tempOptions.SetSvgPrecision( m_svgPrecsision->GetValue(), m_svgUnits->GetSelection() );
+    tempOptions.SetSvgPrecision( m_svgPrecsision->GetValue() );
 
     LSET selectedLayers;
 

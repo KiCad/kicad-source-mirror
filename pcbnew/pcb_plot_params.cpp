@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@
 
 #define SVG_PRECISION_MIN         3U
 #define SVG_PRECISION_MAX         6U
-#define SVG_PRECISION_DEFAULT     6
+#define SVG_PRECISION_DEFAULT     4
 
 
 // default trailing digits in Gerber coordinates, when units are mm
@@ -101,7 +101,6 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
 
     // we used 0.1mils for SVG step before, but nm precision is more accurate, so we use nm
     m_svgPrecision               = SVG_PRECISION_DEFAULT;
-    m_svgUseInch                 = false;
     m_excludeEdgeLayer           = true;
     m_plotFrameRef               = false;
     m_plotViaOnMaskLayer         = false;
@@ -158,9 +157,8 @@ void PCB_PLOT_PARAMS::SetGerberPrecision( int aPrecision )
 }
 
 
-void PCB_PLOT_PARAMS::SetSvgPrecision( unsigned aPrecision, bool aUseInch )
+void PCB_PLOT_PARAMS::SetSvgPrecision( unsigned aPrecision )
 {
-    m_svgUseInch   = aUseInch;
     m_svgPrecision = Clamp( SVG_PRECISION_MIN, aPrecision, SVG_PRECISION_MAX );
 }
 
@@ -179,7 +177,7 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     aFormatter->Print( aNestLevel+1, "(layerselection 0x%s)\n",
                        m_layerSelection.FmtHex().c_str() );
 
-    aFormatter->Print( aNestLevel+1, "(disableapertmacros %s)\n", 
+    aFormatter->Print( aNestLevel+1, "(disableapertmacros %s)\n",
                        printBool( m_gerberDisableApertMacros ) );
 
     aFormatter->Print( aNestLevel+1, "(usegerberextensions %s)\n",
@@ -203,7 +201,6 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     aFormatter->Print( aNestLevel+1, "(dashed_line_gap_ratio %f)\n", GetDashedLineGapRatio() );
 
     // SVG options
-    aFormatter->Print( aNestLevel+1, "(svguseinch %s)\n", printBool( m_svgUseInch ) );
     aFormatter->Print( aNestLevel+1, "(svgprecision %d)\n", m_svgPrecision );
 
     aFormatter->Print( aNestLevel+1, "(excludeedgelayer %s)\n", printBool( m_excludeEdgeLayer ) );
@@ -240,7 +237,7 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     aFormatter->Print( aNestLevel+1, "(mirror %s)\n", printBool( m_mirror ) );
     aFormatter->Print( aNestLevel+1, "(drillshape %d)\n", m_drillMarks );
     aFormatter->Print( aNestLevel+1, "(scaleselection %d)\n", m_scaleSelection );
-    aFormatter->Print( aNestLevel+1, "(outputdirectory \"%s\")", 
+    aFormatter->Print( aNestLevel+1, "(outputdirectory \"%s\")",
                        (const char*) m_outputDirectory.utf8_str() );
     aFormatter->Print( 0, "\n" );
     aFormatter->Print( aNestLevel, ")\n" );
@@ -301,9 +298,6 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
         return false;
 
     if( m_svgPrecision != aPcbPlotParams.m_svgPrecision )
-        return false;
-
-    if( m_svgUseInch != aPcbPlotParams.m_svgUseInch )
         return false;
 
     if( m_useAuxOrigin != aPcbPlotParams.m_useAuxOrigin )
@@ -484,7 +478,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             break;
 
         case T_svguseinch:
-            aPcbPlotParams->m_svgUseInch = parseBool();
+            parseBool();    // Unused. For compatibility
             break;
 
         case T_psa4output:

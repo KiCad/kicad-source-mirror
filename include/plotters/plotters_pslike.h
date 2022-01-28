@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -475,17 +475,16 @@ public:
     virtual void PenTo( const VECTOR2I& pos, char plume ) override;
 
     /**
-     * Select SVG step size (number of digits needed for 1 mm or 1 inch )
-     *
+     * Select SVG coordinate precision (number of digits needed for 1 mm  )
+     * (SVG plotter uses always metric unit)
      * Should be called only after SetViewport() is called
      *
-     * @param aResolution = number of digits in mantissa of coordinate
+     * @param aPrecision = number of digits in mantissa of coordinate
      *                      use a value from 3-6
      *                      do not use value > 6 to avoid overflow in PCBNEW
      *                      do not use value > 4 to avoid overflow for other parts
-     * @param aUseInches = true to use inches, false to use mm (default)
      */
-    virtual void SetSvgCoordinatesFormat( unsigned aResolution, bool aUseInches = false ) override;
+    virtual void SetSvgCoordinatesFormat( unsigned aPrecision ) override;
 
     /**
      * Calling this function allows one to define the beginning of a group

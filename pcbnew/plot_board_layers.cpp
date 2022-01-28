@@ -1080,7 +1080,7 @@ static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard,
     aPlotter->SetGerberCoordinatesFormat( aPlotOpts->GetGerberPrecision() );
 
     // Has meaning only for SVG plotter. Must be called only after SetViewport
-    aPlotter->SetSvgCoordinatesFormat( aPlotOpts->GetSvgPrecision(), aPlotOpts->GetSvgUseInch() );
+    aPlotter->SetSvgCoordinatesFormat( aPlotOpts->GetSvgPrecision() );
 
     aPlotter->SetCreator( wxT( "PCBNEW" ) );
     aPlotter->SetColorMode( false );        // default is plot in Black and White.

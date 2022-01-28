@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -461,7 +461,8 @@ public:
         // NOP for most plotters. Only for Gerber plotter
     }
 
-    virtual void SetSvgCoordinatesFormat( unsigned aResolution, bool aUseInches = false )
+    /// Set the number of digits for mantissa in coordinates in mm for SVG plotter
+    virtual void SetSvgCoordinatesFormat( unsigned aPrecision )
     {
         // NOP for most plotters. Only for SVG plotter
     }

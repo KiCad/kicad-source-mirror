@@ -99,6 +99,11 @@
 
 #include <plotters/plotters_pslike.h>
 
+// Note:
+// During tests, we (JPC) found issues when the coordinates used 6 digits in mantissa
+// especially for stroke-width using very small (but not null) values < 0.00001 mm
+// So to avoid this king of issue, we are using 4 digits in mantissa
+// The resolution (m_precision ) is 0.1 micron, that looks enougt for a SVG file
 
 /**
  * Translates '<' to "&lt;", '>' to "&gt;" and so on, according to the spec:
@@ -161,11 +166,11 @@ SVG_PLOTTER::SVG_PLOTTER()
     m_graphics_changed = true;
     SetTextMode( PLOT_TEXT_MODE::STROKE );
     m_fillMode        = FILL_T::NO_FILL; // or FILLED_SHAPE or FILLED_WITH_BG_BODYCOLOR
-    m_pen_rgb_color   = 0;       // current color value (black)
-    m_brush_rgb_color = 0;       // current color value (black)
+    m_pen_rgb_color   = 0;          // current color value (black)
+    m_brush_rgb_color = 0;          // current color value (black)
     m_dashed          = PLOT_DASH_TYPE::SOLID;
-    m_useInch         = true; // decimils is the default
-    m_precision       = 4;    // because there where used before it was changeable
+    m_useInch         = false;      // millimeters are always the svg unit
+    m_precision       = 4;          // default: 4 digits in mantissa.
 }
 
 
@@ -178,28 +183,24 @@ void SVG_PLOTTER::SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
     m_plotScale     = aScale;
     m_IUsPerDecimil = aIusPerDecimil;
 
-    /* Compute the paper size in IUs */
+    // Compute the paper size in IUs. for historical reasons the page size is in mils
     m_paperSize   = m_pageInfo.GetSizeMils();
     m_paperSize.x *= 10.0 * aIusPerDecimil;
     m_paperSize.y *= 10.0 * aIusPerDecimil;
 
-    // set iuPerDeviceUnit, in 0.1mils ( 2.54um )
-    // this was used before the format was changeable, so we set is as default
-    SetSvgCoordinatesFormat( 4, true );
+    // gives now a default value to iuPerDeviceUnit (because the units of the caller is now known)
+    double iusPerMM = m_IUsPerDecimil / 2.54 * 1000;
+    m_iuPerDeviceUnit = 1 / iusPerMM;
+
+    SetSvgCoordinatesFormat( 4 );
 }
 
 
-void SVG_PLOTTER::SetSvgCoordinatesFormat( unsigned aResolution, bool aUseInches )
+void SVG_PLOTTER::SetSvgCoordinatesFormat( unsigned aPrecision )
 {
-    m_useInch   = aUseInches;
-    m_precision = aResolution;
-
-    // gives now a default value to iuPerDeviceUnit (because the units of the caller is now known)
-    double iusPerMM = m_IUsPerDecimil / 2.54 * 1000;
-    m_iuPerDeviceUnit = pow( 10.0, m_precision ) / ( iusPerMM );
-
-    if( m_useInch )
-        m_iuPerDeviceUnit /= 25.4; // convert to inch
+    // Only number of digits in mantissa are adjustable.
+    // SVG units are always mm
+    m_precision = aPrecision;
 }
 
 
@@ -243,16 +244,21 @@ void SVG_PLOTTER::setSVGPlotStyle( bool aIsGroup, const std::string& aExtraStyle
     if( pen_w < 0.0 )   // Ensure pen width validity
         pen_w = 0.0;
 
-    fprintf( m_outputFile, "\nstroke:#%6.6lX; stroke-width:%f; stroke-opacity:1; \n",
-             m_pen_rgb_color, pen_w  );
+    // Fix a strange issue found in Inkscape: aWidth < 100 nm create issues on degrouping objects
+    // So we use only 4 digits in mantissa for stroke-width.
+    // TODO: perhaps used only 3 or 4 digits in mantissa for all values in mm, because some
+    // issues were previouly reported reported when using nm as integer units
+
+    fprintf( m_outputFile, "\nstroke:#%6.6lX; stroke-width:%.*f; stroke-opacity:1; \n",
+             m_pen_rgb_color, m_precision, pen_w  );
     fputs( "stroke-linecap:round; stroke-linejoin:round;", m_outputFile );
 
     //set any extra attributes for non-solid lines
     switch( m_dashed )
     {
     case PLOT_DASH_TYPE::DASH:
-        fprintf( m_outputFile, "stroke-dasharray:%f,%f;",
-                 GetDashMarkLenIU(), GetDashGapLenIU() );
+        fprintf( m_outputFile, "stroke-dasharray:%.*f,%.*f;",
+                 m_precision, GetDashMarkLenIU(), m_precision, GetDashGapLenIU() );
         break;
     case PLOT_DASH_TYPE::DOT:
         fprintf( m_outputFile, "stroke-dasharray:%f,%f;",
@@ -299,15 +305,15 @@ void SVG_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
         return;
     else if( aWidth == USE_DEFAULT_LINE_WIDTH )
         aWidth = m_renderSettings->GetDefaultPenWidth();
-    else if( aWidth == 0 )
-        aWidth = 1;
 
-    wxASSERT_MSG( aWidth > 0, "Plotter called to set negative pen width" );
+    // Note: aWidth == 0 is fine: used for filled shapes with no outline thickness
+
+    wxASSERT_MSG( aWidth >= 0, "Plotter called to set negative pen width" );
 
     if( aWidth != m_currentPenWidth )
     {
         m_graphics_changed  = true;
-        m_currentPenWidth     = aWidth;
+        m_currentPenWidth   = aWidth;
     }
 
     if( m_graphics_changed )
@@ -371,9 +377,9 @@ void SVG_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
 {
     EDA_RECT rect( p1, VECTOR2I( p2.x - p1.x, p2.y - p1.y ) );
     rect.Normalize();
-    VECTOR2D org_dev  = userToDeviceCoordinates( rect.GetOrigin() );
-    VECTOR2D end_dev  = userToDeviceCoordinates( rect.GetEnd() );
-    VECTOR2D size_dev = end_dev - org_dev;
+    VECTOR2D  org_dev  = userToDeviceCoordinates( rect.GetOrigin() );
+    VECTOR2D  end_dev = userToDeviceCoordinates( rect.GetEnd() );
+    VECTOR2D  size_dev = end_dev - org_dev;
 
     // Ensure size of rect in device coordinates is > 0
     // I don't know if this is a SVG issue or a Inkscape issue, but
@@ -389,9 +395,9 @@ void SVG_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
     if( rect_dev.GetSize().x == 0.0 || rect_dev.GetSize().y == 0.0 )    // Draw a line
     {
         fprintf( m_outputFile,
-                 "<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />\n",
-                 rect_dev.GetPosition().x, rect_dev.GetPosition().y,
-                 rect_dev.GetEnd().x, rect_dev.GetEnd().y );
+                 "<line x1=\"%.*f\" y1=\"%.*f\" x2=\"%.*f\" y2=\"%.*f\" />\n",
+                 m_precision, rect_dev.GetPosition().x, m_precision, rect_dev.GetPosition().y,
+                 m_precision, rect_dev.GetEnd().x, m_precision, rect_dev.GetEnd().y );
     }
     else
     {
@@ -406,8 +412,8 @@ void SVG_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
 
 void SVG_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int width )
 {
-    VECTOR2D pos_dev = userToDeviceCoordinates( pos );
-    double   radius  = userToDeviceSize( diametre / 2.0 );
+    VECTOR2D  pos_dev = userToDeviceCoordinates( pos );
+    double  radius  = userToDeviceSize( diametre / 2.0 );
 
     setFillMode( fill );
     SetCurrentLineWidth( width );
@@ -422,8 +428,8 @@ void SVG_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int wi
     }
 
     fprintf( m_outputFile,
-             "<circle cx=\"%f\" cy=\"%f\" r=\"%f\" /> \n",
-             pos_dev.x, pos_dev.y, radius );
+             "<circle cx=\"%.*f\" cy=\"%.*f\" r=\"%.*f\" /> \n",
+             m_precision, pos_dev.x, m_precision, pos_dev.y, m_precision, radius );
 }
 
 
@@ -450,8 +456,8 @@ void SVG_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
         std::swap( startAngle, endAngle );
 
     // Calculate start point.
-    VECTOR2D centre_device  = userToDeviceCoordinates( aCenter );
-    double   radius_device  = userToDeviceSize( aRadius );
+    VECTOR2D  centre_device  = userToDeviceCoordinates( aCenter );
+    double  radius_device  = userToDeviceSize( aRadius );
 
     if( !m_yaxisReversed )   // Should be never the case
     {
@@ -516,18 +522,21 @@ void SVG_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
         setFillMode( aFill );
         SetCurrentLineWidth( 0 );
 
-        fprintf( m_outputFile, "<path d=\"M%f %f A%f %f 0.0 %d %d %f %f L %f %f Z\" />\n",
-                 start.x, start.y, radius_device, radius_device,
+        fprintf( m_outputFile, "<path d=\"M%.*f %.*f A%.*f %.*f 0.0 %d %d %.*f %.*f L %.*f %.*f Z\" />\n",
+                 m_precision, start.x, m_precision, start.y,
+                 m_precision, radius_device, m_precision, radius_device,
                  flg_arc, flg_sweep,
-                 end.x, end.y, centre_device.x, centre_device.y  );
+                 m_precision, end.x, m_precision, end.y,
+                 m_precision, centre_device.x, m_precision, centre_device.y  );
     }
 
     setFillMode( FILL_T::NO_FILL );
     SetCurrentLineWidth( aWidth );
-    fprintf( m_outputFile, "<path d=\"M%f %f A%f %f 0.0 %d %d %f %f\" />\n",
-             start.x, start.y, radius_device, radius_device,
+    fprintf( m_outputFile, "<path d=\"M%.*f %.*f A%.*f %.*f 0.0 %d %d %.*f %.*f\" />\n",
+             m_precision, start.x, m_precision, start.y,
+             m_precision, radius_device, m_precision, radius_device,
              flg_arc, flg_sweep,
-             end.x, end.y  );
+             m_precision, end.x, m_precision, end.y  );
 }
 
 
@@ -539,15 +548,17 @@ void SVG_PLOTTER::BezierCurve( const VECTOR2I& aStart, const VECTOR2I& aControl1
     setFillMode( FILL_T::NO_FILL );
     SetCurrentLineWidth( aLineThickness );
 
-    VECTOR2D start = userToDeviceCoordinates( aStart );
-    VECTOR2D ctrl1 = userToDeviceCoordinates( aControl1 );
-    VECTOR2D ctrl2 = userToDeviceCoordinates( aControl2 );
-    VECTOR2D end   = userToDeviceCoordinates( aEnd );
+    VECTOR2D start  = userToDeviceCoordinates( aStart );
+    VECTOR2D ctrl1  = userToDeviceCoordinates( aControl1 );
+    VECTOR2D ctrl2  = userToDeviceCoordinates( aControl2 );
+    VECTOR2D end  = userToDeviceCoordinates( aEnd );
 
     // Generate a cubic curve: start point and 3 other control points.
-    fprintf( m_outputFile, "<path d=\"M%f,%f C%f,%f %f,%f %f,%f\" />\n",
-             start.x, start.y, ctrl1.x, ctrl1.y,
-             ctrl2.x, ctrl2.y, end.x, end.y  );
+    fprintf( m_outputFile, "<path d=\"M%.*f,%.*f C%.*f,%.*f %.*f,%.*f %.*f,%.*f\" />\n",
+             m_precision, start.x, m_precision, start.y,
+             m_precision, ctrl1.x, m_precision, ctrl1.y,
+             m_precision, ctrl2.x, m_precision, ctrl2.y,
+             m_precision, end.x, m_precision, end.y  );
 #else
     PLOTTER::BezierCurve( aStart, aControl1, aControl2, aEnd, aTolerance, aLineThickness );
 #endif
@@ -578,12 +589,12 @@ void SVG_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
     }
 
     VECTOR2D pos = userToDeviceCoordinates( aCornerList[0] );
-    fprintf( m_outputFile, "d=\"M %f,%f\n", pos.x, pos.y );
+    fprintf( m_outputFile, "d=\"M %.*f,%.*f\n", m_precision, pos.x, m_precision, pos.y );
 
     for( unsigned ii = 1; ii < aCornerList.size() - 1; ii++ )
     {
         pos = userToDeviceCoordinates( aCornerList[ii] );
-        fprintf( m_outputFile, "%f,%f\n", pos.x, pos.y );
+        fprintf( m_outputFile, "%.*f,%.*f\n", m_precision, pos.x, m_precision, pos.y );
     }
 
     // If the corner list ends where it begins, then close the poly
@@ -594,7 +605,7 @@ void SVG_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
     else
     {
         pos = userToDeviceCoordinates( aCornerList.back() );
-        fprintf( m_outputFile, "%f,%f\n\" /> \n", pos.x, pos.y );
+        fprintf( m_outputFile, "%.*f,%.*f\n\" /> \n", m_precision, pos.x, m_precision, pos.y );
     }
 }
 
@@ -639,8 +650,8 @@ void SVG_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
                 fprintf( m_outputFile, "\n" );
         }
 
-        fprintf( m_outputFile, "\"\npreserveAspectRatio=\"none\" width=\"%f\" height=\"%f\" />",
-                 userToDeviceSize( drawsize.x ), userToDeviceSize( drawsize.y ) );
+        fprintf( m_outputFile, "\"\npreserveAspectRatio=\"none\" width=\"%.*f\" height=\"%.*f\" />",
+                 m_precision, userToDeviceSize( drawsize.x ), m_precision, userToDeviceSize( drawsize.y ) );
     }
 }
 
@@ -672,12 +683,12 @@ void SVG_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
             setSVGPlotStyle();
         }
 
-        fprintf( m_outputFile, "<path d=\"M%d %d\n", (int) pos_dev.x, (int) pos_dev.y );
+        fprintf( m_outputFile, "<path d=\"M%.*f %.*f\n", m_precision, pos_dev.x, m_precision, pos_dev.y );
     }
     else if( m_penState != plume || pos != m_penLastpos )
     {
         VECTOR2D pos_dev = userToDeviceCoordinates( pos );
-        fprintf( m_outputFile, "L%d %d\n", (int) pos_dev.x, (int) pos_dev.y );
+        fprintf( m_outputFile, "L%.*f %.*f\n", m_precision, pos_dev.x, m_precision, pos_dev.y );
     }
 
     m_penState    = plume;
@@ -710,12 +721,13 @@ bool SVG_PLOTTER::StartPlot()
     }
 
     // Write viewport pos and size
-    VECTOR2I origin; // TODO set to actual value
-    fprintf( m_outputFile, "  width=\"%fcm\" height=\"%fcm\" viewBox=\"%d %d %d %d\">\n",
-             (double) m_paperSize.x / m_IUsPerDecimil * 2.54 / 10000,
-             (double) m_paperSize.y / m_IUsPerDecimil * 2.54 / 10000, origin.x, origin.y,
-             (int) ( m_paperSize.x * m_iuPerDeviceUnit ),
-             (int) ( m_paperSize.y * m_iuPerDeviceUnit) );
+    VECTOR2D origin;    // TODO set to actual value
+    fprintf( m_outputFile, "  width=\"%.*fmm\" height=\"%.*fmm\" viewBox=\"%.*f %.*f %.*f %.*f\">\n",
+             m_precision, (double) m_paperSize.x / m_IUsPerDecimil * 2.54 / 1000,
+             m_precision, (double) m_paperSize.y / m_IUsPerDecimil * 2.54 / 1000,
+             m_precision, origin.x, m_precision, origin.y,
+             m_precision, m_paperSize.x * m_iuPerDeviceUnit,
+             m_precision, m_paperSize.y * m_iuPerDeviceUnit);
 
     // Write title
     char    date_buf[250];
@@ -733,8 +745,8 @@ bool SVG_PLOTTER::StartPlot()
     // output the pen and brush color (RVB values in hex) and opacity
     double opacity = 1.0;      // 0.0 (transparent to 1.0 (solid)
     fprintf( m_outputFile,
-             "<g style=\"fill:#%6.6lX; fill-opacity:%f;stroke:#%6.6lX; stroke-opacity:%f;\n",
-             m_brush_rgb_color, opacity, m_pen_rgb_color, opacity );
+             "<g style=\"fill:#%6.6lX; fill-opacity:%.*f;stroke:#%6.6lX; stroke-opacity:%.*f;\n",
+             m_brush_rgb_color, m_precision, opacity, m_pen_rgb_color, m_precision, opacity );
 
     // output the pen cap and line joint
     fputs( "stroke-linecap:round; stroke-linejoin:round;\"\n", m_outputFile );
@@ -801,20 +813,21 @@ void SVG_PLOTTER::Text( const VECTOR2I&             aPos,
     if( !aOrient.IsZero() )
     {
         fprintf( m_outputFile,
-                 "<g transform=\"rotate(%f %f %f)\">\n",
-                 - aOrient.AsDegrees(), anchor_pos_dev.x, anchor_pos_dev.y );
+                 "<g transform=\"rotate(%f %.*f %.*f)\">\n",
+                 - aOrient.AsDegrees(), m_precision, anchor_pos_dev.x, m_precision, anchor_pos_dev.y );
     }
 
-    fprintf( m_outputFile, "<text x=\"%f\" y=\"%f\"\n", text_pos_dev.x, text_pos_dev.y );
+    fprintf( m_outputFile, "<text x=\"%.*f\" y=\"%.*f\"\n",
+                            m_precision, text_pos_dev.x, m_precision, text_pos_dev.y );
 
     /// If the text is mirrored, we should also mirror the hidden text to match
     if( aSize.x < 0 )
         fprintf( m_outputFile, "transform=\"scale(-1 1) translate(%f 0)\"\n", -2 * text_pos_dev.x );
 
     fprintf( m_outputFile,
-             "textLength=\"%f\" font-size=\"%f\" lengthAdjust=\"spacingAndGlyphs\"\n"
+             "textLength=\"%.*f\" font-size=\"%.*f\" lengthAdjust=\"spacingAndGlyphs\"\n"
              "text-anchor=\"%s\" opacity=\"0\">%s</text>\n",
-             sz_dev.x, sz_dev.y, hjust, TO_UTF8( XmlEsc( aText ) ) );
+             m_precision, sz_dev.x, m_precision, sz_dev.y, hjust, TO_UTF8( XmlEsc( aText ) ) );
 
     if( !aOrient.IsZero() )
         fputs( "</g>\n", m_outputFile );

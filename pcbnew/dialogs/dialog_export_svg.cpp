@@ -328,6 +328,8 @@ bool DIALOG_EXPORT_SVG::CreateSVGFile( const wxString& aFullFileName )
 
     plot_opts.SetMirror( m_printMirror );
     plot_opts.SetFormat( PLOT_FORMAT::SVG );
+    // coord format: 4 digits in mantissa (units always in mm). This is a good choice.
+    plot_opts.SetSvgPrecision( 4 );
 
     PAGE_INFO   savedPageInfo = m_board->GetPageSettings();
     VECTOR2I  savedAuxOrigin = m_board->GetDesignSettings().GetAuxOrigin();

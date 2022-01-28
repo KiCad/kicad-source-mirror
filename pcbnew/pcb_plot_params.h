@@ -3,7 +3,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -149,9 +149,8 @@ public:
     void        SetGerberPrecision( int aPrecision );
     int         GetGerberPrecision() const { return m_gerberPrecision; }
 
-    void        SetSvgPrecision( unsigned aPrecision, bool aUseInch );
+    void        SetSvgPrecision( unsigned aPrecision );
     unsigned    GetSvgPrecision() const { return m_svgPrecision; }
-    bool        GetSvgUseInch() const { return m_svgUseInch; }
 
     /**
      * Default precision of coordinates in Gerber files.
@@ -281,10 +280,6 @@ private:
     /// precision of coordinates in SVG files: accepted 3 - 6
     /// 6 is the internal resolution of Pcbnew
     unsigned    m_svgPrecision;
-
-    /// units for SVG plot
-    /// false for metric, true for inch/mils
-    bool        m_svgUseInch;
 
     /// Plot gerbers using auxiliary (drill) origin instead of absolute coordinates
     bool        m_useAuxOrigin;
