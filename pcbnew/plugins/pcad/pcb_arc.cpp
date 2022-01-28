@@ -176,7 +176,7 @@ void PCB_ARC::AddToFootprint( FOOTPRINT* aFootprint )
 
         arc->SetCenter0( wxPoint( m_positionX, m_positionY ) );
         arc->SetStart0( wxPoint( m_StartX, m_StartY ) );
-        arc->SetArcAngleAndEnd0( -m_Angle );
+        arc->SetArcAngleAndEnd0( -m_Angle, true );
 
         arc->SetWidth( m_Width );
         arc->SetLayer( m_KiCadLayer );
@@ -196,7 +196,7 @@ void PCB_ARC::AddToBoard()
     arc->SetLayer( m_KiCadLayer );
     arc->SetCenter( wxPoint( m_positionX, m_positionY ) );
     arc->SetStart( wxPoint( m_StartX, m_StartY ) );
-    arc->SetArcAngleAndEnd( -m_Angle );
+    arc->SetArcAngleAndEnd( -m_Angle, true );
     arc->SetWidth( m_Width );
 }
 
