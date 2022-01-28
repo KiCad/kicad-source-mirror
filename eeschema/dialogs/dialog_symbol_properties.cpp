@@ -518,6 +518,8 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_tcLibraryID->SetValue( UnescapeString( m_symbol->GetLibId().Format() ) );
 
     Layout();
+    m_fieldsGrid->Layout();
+    wxSafeYield();
 
     return true;
 }
