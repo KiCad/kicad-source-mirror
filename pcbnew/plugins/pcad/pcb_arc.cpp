@@ -182,7 +182,7 @@ void PCB_ARC::AddToFootprint( FOOTPRINT* aFootprint )
 
         arc->SetCenter0( VECTOR2I( m_positionX, m_positionY ) );
         arc->SetStart0( VECTOR2I( m_StartX, m_StartY ) );
-        arc->SetArcAngleAndEnd0( -m_Angle );
+        arc->SetArcAngleAndEnd0( -m_Angle, true );
 
         arc->SetStroke( STROKE_PARAMS( m_Width, PLOT_DASH_TYPE::SOLID ) );
         arc->SetLayer( m_KiCadLayer );
@@ -202,7 +202,7 @@ void PCB_ARC::AddToBoard()
     arc->SetLayer( m_KiCadLayer );
     arc->SetCenter( VECTOR2I( m_positionX, m_positionY ) );
     arc->SetStart( VECTOR2I( m_StartX, m_StartY ) );
-    arc->SetArcAngleAndEnd( -m_Angle );
+    arc->SetArcAngleAndEnd( -m_Angle, true );
     arc->SetStroke( STROKE_PARAMS( m_Width, PLOT_DASH_TYPE::SOLID ) );
 }
 
