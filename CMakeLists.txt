@@ -153,8 +153,8 @@ option( KICAD_STEP_EXPORT_LIB
     OFF )
 
 option( KICAD_USE_3DCONNEXION
-    "Build KiCad with support for 3Dconnexion devices"
-    ON )
+    "Build KiCad with support for 3Dconnexion devices (Currently only for Mac/MSW)"
+    OFF )
 
 if( KICAD_USE_3DCONNEXION )
     if( WIN32 )
