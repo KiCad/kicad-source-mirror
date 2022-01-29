@@ -210,6 +210,8 @@ void RC_TREE_MODEL::rebuildModel( RC_ITEMS_PROVIDER* aProvider, int aSeverities 
         m_view->UnselectAll();
     }
 
+    BeforeReset();
+
     if( aProvider != m_rcItemsProvider )
     {
         delete m_rcItemsProvider;
@@ -255,7 +257,7 @@ void RC_TREE_MODEL::rebuildModel( RC_ITEMS_PROVIDER* aProvider, int aSeverities 
 
     // Must be called after a significant change of items to force the
     // wxDataViewModel to reread all of them, repopulating itself entirely.
-    Cleared();
+    AfterReset();
 
 #ifdef __WXGTK__
     // The fastest method to update wxDataViewCtrl is to rebuild from
