@@ -1436,15 +1436,8 @@ void PCB_EDIT_FRAME::ToPlotter( int aID )
 
     SetPlotSettings( plotSettings );
 
-    // Force rebuild the dialog if currently open because the old dialog can be not up to date
-    // if the board (or units) has changed
-    wxWindow* dlg =  wxWindow::FindWindowByName( DLG_WINDOW_NAME );
-
-    if( dlg )
-        dlg->Destroy();
-
-    dlg = new DIALOG_PLOT( this );
-    dlg->Show( true );
+    DIALOG_PLOT dlg( this );
+    dlg.ShowQuasiModal(  );
 }
 
 
