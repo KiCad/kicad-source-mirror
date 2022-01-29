@@ -354,7 +354,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
             }
         }
 
-        if( aDeleteDuplicateSegments && track->Type() == PCB_TRACE_T )
+        if( aDeleteDuplicateSegments && track->Type() == PCB_TRACE_T && !track->IsNull() )
         {
             rtree.QueryColliding( track, track->GetLayer(), track->GetLayer(),
                     // Filter:
@@ -362,7 +362,8 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
                     {
                         return aItem->Type() == PCB_TRACE_T
                                   && !aItem->HasFlag( SKIP_STRUCT )
-                                  && !aItem->HasFlag( IS_DELETED );
+                                  && !aItem->HasFlag( IS_DELETED )
+                                  && !static_cast<PCB_TRACK*>( aItem )->IsNull();
                     },
                     // Visitor:
                     [&]( BOARD_ITEM* aItem ) -> bool
