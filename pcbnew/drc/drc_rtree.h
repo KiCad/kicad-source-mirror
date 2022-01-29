@@ -79,7 +79,12 @@ public:
     ~DRC_RTREE()
     {
         for( auto tree : m_tree )
+        {
+            for( auto el : *tree )
+                delete el;
+
             delete tree;
+        }
     }
 
     /**
