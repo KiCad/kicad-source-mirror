@@ -236,7 +236,7 @@ VECTOR2I FONT::drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYP
                            const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
                            TEXT_STYLE_FLAGS aTextStyle ) const
 {
-    MARKUP::MARKUP_PARSER         markupParser( aText );
+    MARKUP::MARKUP_PARSER         markupParser( aText.ToStdString() );
     std::unique_ptr<MARKUP::NODE> root = markupParser.Parse();
 
     return ::drawMarkup( aBoundingBox, aGlyphs, root, aPosition, this, aSize, aAngle, aMirror,
@@ -401,7 +401,7 @@ void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords,
 void FONT::wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords, const wxString& aText,
                             const VECTOR2I& aSize, TEXT_STYLE_FLAGS aTextStyle ) const
 {
-    MARKUP::MARKUP_PARSER         markupParser( aText );
+    MARKUP::MARKUP_PARSER         markupParser( aText.ToStdString() );
     std::unique_ptr<MARKUP::NODE> root = markupParser.Parse();
 
     ::wordbreakMarkup( aWords, root, this, aSize, aTextStyle );
