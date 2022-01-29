@@ -350,6 +350,7 @@ constexpr bool IsEeschemaType( const KICAD_T aType )
     case SCH_SHAPE_T:
     case SCH_BITMAP_T:
     case SCH_TEXT_T:
+    case SCH_TEXTBOX_T:
     case SCH_LABEL_T:
     case SCH_DIRECTIVE_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
@@ -383,6 +384,7 @@ constexpr bool IsEeschemaType( const KICAD_T aType )
     case LIB_ALIAS_T:
     case LIB_SHAPE_T:
     case LIB_TEXT_T:
+    case LIB_TEXTBOX_T:
     case LIB_PIN_T:
 
     case LIB_FIELD_T:
