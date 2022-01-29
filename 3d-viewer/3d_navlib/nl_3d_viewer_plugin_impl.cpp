@@ -25,15 +25,7 @@
 #include <3d-viewer/3d_canvas/eda_3d_canvas.h>
 
 // KiCAD includes
-#include <board.h>
-#include <pcb_base_frame.h>
-#include <bitmaps.h>
-#include <board_adapter.h>
-#include <class_draw_panel_gal.h>
-#include <pcb_base_frame.h>
-#include <view/wx_view_controls.h>
 #include <tool/action_manager.h>
-#include <tool/tool_action.h>
 #include <tool/tool_manager.h>
 
 // stdlib
