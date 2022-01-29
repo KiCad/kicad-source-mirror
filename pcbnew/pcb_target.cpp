@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@
 #include <i18n_utility.h>
 #include <geometry/shape_circle.h>
 #include <eda_draw_frame.h>
+#include <pcb_shape.h>
 
 PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent ) :
     BOARD_ITEM( aParent, PCB_TARGET_T )
@@ -156,6 +157,38 @@ void PCB_TARGET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     aList.emplace_back( _( "Size" ), MessageTextFromValue( units, GetSize() ) );
     aList.emplace_back( _( "Width" ), MessageTextFromValue( units, GetWidth() ) );
     aList.emplace_back( _( "Shape" ), GetShape() == 0 ? "+" : "X" );
+}
+
+
+void PCB_TARGET::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                               PCB_LAYER_ID aLayer, int aClearanceValue,
+                                               int aError, ERROR_LOC aErrorLoc,
+                                               bool ignoreLineWidth ) const
+{
+    int size = GetShape() ? GetSize() / 1.5 : GetSize() / 2.0;
+    int radius = GetShape() ? GetSize() / 2.0 : GetSize() / 3.0;
+
+    PCB_SHAPE line1, line2;
+    PCB_SHAPE circle( nullptr, SHAPE_T::CIRCLE );
+    line1.SetStart( wxPoint( -size, 0.0 ) );
+    line1.SetEnd( wxPoint( size, 0.0 ) );
+    line2.SetStart( wxPoint( 0.0, -size ) );
+    line2.SetEnd( wxPoint( 0.0,  size ) );
+    circle.SetEndX( radius );
+
+    if( GetShape() )    // shape x
+    {
+        line1.Rotate( wxPoint(0,0), 450 );
+        line2.Rotate( wxPoint(0,0), 450 );
+    }
+
+    for( PCB_SHAPE* item: { &line1, &line2, &circle } )
+    {
+        item->SetWidth( GetWidth() );
+        item->Move( GetPosition() );
+        item->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, aClearanceValue,
+                                                    aError, aErrorLoc, ignoreLineWidth );
+    }
 }
 
 
