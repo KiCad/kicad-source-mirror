@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
 #include <tool/selection.h>
 
 class wxListBox;
-class SCHLIB_FILTER;
+class SYMBOL_LIBRARY_FILTER;
 class LIB_SYMBOL;
 class SYMBOL_LIB_TABLE_ROW;
 
@@ -112,7 +112,7 @@ public:
      *                see SCH_BASE_FRAME::SelectSymbolFromLibrary() for details.
      *                if aFilter == NULL, remove all filtering.
      */
-    void SetFilter( const SCHLIB_FILTER* aFilter );
+    void SetFilter( const SYMBOL_LIBRARY_FILTER* aFilter );
 
     /**
      * Set the selected library in the library window.

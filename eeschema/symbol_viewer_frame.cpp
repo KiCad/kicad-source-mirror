@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
  */
 
 #include <bitmaps.h>
-#include <symbol_library.h>
+#include <symbol_library_common.h>
 #include <confirm.h>
 #include <dialog_choose_symbol.h>
 #include <eeschema_id.h>
@@ -774,7 +774,7 @@ void SYMBOL_VIEWER_FRAME::CloseLibraryViewer( wxCommandEvent& event )
 }
 
 
-void SYMBOL_VIEWER_FRAME::SetFilter( const SCHLIB_FILTER* aFilter )
+void SYMBOL_VIEWER_FRAME::SetFilter( const SYMBOL_LIBRARY_FILTER* aFilter )
 {
     m_listPowerOnly = false;
     m_allowedLibs.Clear();

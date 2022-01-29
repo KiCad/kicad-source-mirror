@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <core/kicad_algo.h>
-#include <symbol_library.h>
+#include <symbol_library_common.h>
 #include <confirm.h>
 #include <eeschema_id.h>
 #include <general.h>
@@ -35,6 +35,7 @@
 #include <symbol_tree_model_adapter.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <sch_symbol.h>
+#include <symbol_library_common.h>
 #include <sch_edit_frame.h>
 #include <symbol_lib_table.h>
 #include <tool/tool_manager.h>
@@ -43,7 +44,7 @@
 #include <dialog_choose_symbol.h>
 
 PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibBrowser( wxTopLevelWindow* aParent,
-                                                        const SCHLIB_FILTER* aFilter,
+                                                        const SYMBOL_LIBRARY_FILTER* aFilter,
                                                         const LIB_ID& aPreselectedLibId,
                                                         int aUnit, int aConvert )
 {
@@ -88,7 +89,7 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibBrowser( wxTopLevelWindow* aParen
 }
 
 
-PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilter,
+PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SYMBOL_LIBRARY_FILTER* aFilter,
                                                      std::vector<PICKED_SYMBOL>& aHistoryList,
                                                      bool aUseLibBrowser, int aUnit, int aConvert,
                                                      bool aShowFootprints, const LIB_ID* aHighlight,

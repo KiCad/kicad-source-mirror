@@ -63,13 +63,31 @@
 #include <lib_text.h>
 #include <eeschema_id.h>       // for MAX_UNIT_COUNT_PER_PACKAGE definition
 #include <tool/selection.h>
+#include <wildcards_and_files_ext.h>
 
 
 #define Mils2Iu( x ) Mils2iu( x )
 
+#define LIB_VERSION_MAJOR 2  ///< Legacy symbol library major version.
+#define LIB_VERSION_MINOR 4  ///< Legacy symbol library minor version.
 
-// Must be the first line of symbol library document (.dcm) files.
+#define LIB_VERSION( major, minor ) ( major * 100 + minor )
+
+/** Legacy symbol library (.lib) file header. */
+#define LIBFILE_IDENT     "EESchema-LIBRARY Version"
+
+/** Legacy symbol library document (.dcm) file header. */
 #define DOCFILE_IDENT     "EESchema-DOCLIB  Version 2.0"
+
+/**
+ * Library versions 2.4 and lower use the old separate library (.lib) and
+ * document (.dcm) files.  Symbol libraries after 2.4 merged the library
+ * and document files into a single library file.  This macro checks if the
+ * library version supports the old format.
+ */
+#define USE_OLD_DOC_FILE_FORMAT( major, minor )                      \
+    ( LIB_VERSION( major, minor ) <= LIB_VERSION( 2, 4 ) )
+
 
 #define SCH_PARSE_ERROR( text, reader, pos )                         \
     THROW_PARSE_ERROR( text, reader.GetSource(), reader.Line(),      \
@@ -2693,7 +2711,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDocs()
     wxFileName  fn = m_libFileName;
     LIB_SYMBOL* symbol = nullptr;;
 
-    fn.SetExt( DOC_EXT );
+    fn.SetExt( LegacySymbolDocumentFileExtension );
 
     // Not all libraries will have a document file.
     if( !fn.FileExists() )
@@ -4248,7 +4266,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveDocFile()
 
     wxFileName fileName = m_libFileName;
 
-    fileName.SetExt( DOC_EXT );
+    fileName.SetExt( LegacySymbolDocumentFileExtension );
     FILE_OUTPUTFORMATTER formatter( fileName.GetFullPath() );
 
     formatter.Print( 0, "%s\n", DOCFILE_IDENT );

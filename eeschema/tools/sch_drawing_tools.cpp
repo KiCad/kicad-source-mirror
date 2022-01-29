@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@
 #include <sch_sheet_pin.h>
 #include <sch_bitmap.h>
 #include <schematic.h>
-#include <symbol_library.h>
+#include <symbol_library_common.h>
 #include <eeschema_settings.h>
 #include <dialogs/dialog_label_properties.h>
 #include <dialogs/dialog_text_properties.h>
@@ -114,7 +114,7 @@ EDA_RECT SCH_DRAWING_TOOLS::GetCanvasFreeAreaPixels()
 int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 {
     SCH_SYMBOL*                 symbol = aEvent.Parameter<SCH_SYMBOL*>();
-    SCHLIB_FILTER               filter;
+    SYMBOL_LIBRARY_FILTER       filter;
     std::vector<PICKED_SYMBOL>* historyList = nullptr;
 
     if( m_inPlaceSymbol )

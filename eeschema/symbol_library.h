@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,158 +31,25 @@
 #ifndef SYMBOL_LIBRARY_H
 #define SYMBOL_LIBRARY_H
 
-#include <map>
 #include <mutex>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <wx/filename.h>
 
-#include <sch_io_mgr.h>
 #include <project.h>
+#include <sch_io_mgr.h>
+#include <symbol_library_common.h>
+
 
 class LIB_SYMBOL;
 class LIB_ID;
 class LINE_READER;
 class OUTPUTFORMATTER;
-class SCH_LEGACY_PLUGIN;
+class PROPERTIES;
 class SCH_PLUGIN;
-
-
-#define DOC_EXT           "dcm"
-
-/*
- * Symbol Library version and file header  macros.
- */
-#define LIB_VERSION_MAJOR 2
-#define LIB_VERSION_MINOR 4
-
-/* Must be the first line of symbol library (.lib) files. */
-#define LIBFILE_IDENT     "EESchema-LIBRARY Version"
-
-#define LIB_VERSION( major, minor ) ( major * 100 + minor )
-
-#define IS_LIB_CURRENT_VERSION( major, minor )              \
-    (                                                       \
-        LIB_VERSION( major1, minor1 ) ==                    \
-        LIB_VERSION( LIB_VERSION_MAJOR, LIB_VERSION_MINOR)  \
-    )
-
-/*
- * Library versions 2.4 and lower use the old separate library (.lib) and
- * document (.dcm) files.  Symbol libraries after 2.4 merged the library
- * and document files into a single library file.  This macro checks if the
- * library version supports the old format
- */
-#define USE_OLD_DOC_FILE_FORMAT( major, minor )                 \
-    ( LIB_VERSION( major, minor ) <= LIB_VERSION( 2, 4 ) )
-
-enum class SCH_LIB_TYPE
-{
-    LT_EESCHEMA,
-    LT_SYMBOL
-};
-
-// Helper class to filter a list of libraries, and/or a list of SYMBOL_LIB
-// in dialogs
-class SCHLIB_FILTER
-{
-public:
-    SCHLIB_FILTER()
-    {
-        m_filterPowerSymbols = false;
-        m_forceLoad = false;
-    }
-
-    /**
-     * add a lib name to the allowed libraries
-     */
-    void AddLib( const wxString& aLibName )
-    {
-        m_allowedLibs.Add( aLibName );
-        m_forceLoad = false;
-    }
-
-
-    /**
-     * add a lib name to the allowed libraries
-     */
-    void LoadFrom( const wxString& aLibName )
-    {
-        m_allowedLibs.Clear();
-        m_allowedLibs.Add( aLibName );
-        m_forceLoad = true;
-    }
-
-    /**
-     * Clear the allowed libraries list (allows all libs)
-     */
-    void ClearLibList()
-    {
-        m_allowedLibs.Clear();
-        m_forceLoad = false;
-    }
-
-    /**
-     * Set the filtering of power symbols
-     */
-    void FilterPowerSymbols( bool aFilterEnable )
-    {
-        m_filterPowerSymbols = aFilterEnable;
-    }
-
-    // Accessors
-
-    /**
-     * @return true if the filtering of power symbols is on
-     */
-    bool GetFilterPowerSymbols() const { return m_filterPowerSymbols; }
-
-
-    /**
-     * @return am wxArrayString of the names of allowed libs
-     */
-    const wxArrayString& GetAllowedLibList() const { return m_allowedLibs; }
-
-    /**
-     * @return the name of the lib to use to load a symbol, or an a empty string
-     * Useful to load (in lib editor or lib viewer) a symbol from a given library
-     */
-    const wxString& GetLibSource() const
-    {
-        static wxString dummy;
-
-        if( m_forceLoad && m_allowedLibs.GetCount() > 0 )
-            return m_allowedLibs[0];
-        else
-            return dummy;
-    }
-
-private:
-    wxArrayString m_allowedLibs;        ///< a list of lib names to list some libraries
-                                        ///< if empty: no filter
-    bool          m_filterPowerSymbols; ///< true to filter (show only) power symbols
-    bool          m_forceLoad;          // When true, load a symbol lib from the lib
-                                        // which is given in m_allowedLibs[0]
-};
+class SYMBOL_LIB;
 
 
 /* Helpers for creating a list of symbol libraries. */
-class SYMBOL_LIB;
-class wxRegEx;
-
-/**
- * LIB_SYMBOL map sorting.
- */
-struct LibSymbolMapSort
-{
-    bool operator() ( const wxString& aItem1, const wxString& aItem2 ) const
-    {
-        return aItem1 < aItem2;
-    }
-};
-
-/// Symbol map used by symbol library object.
-
-typedef std::map< wxString, LIB_SYMBOL*, LibSymbolMapSort > LIB_SYMBOL_MAP;
 typedef boost::ptr_vector< SYMBOL_LIB >                     SYMBOL_LIBS_BASE;
 
 
@@ -196,9 +63,6 @@ class SYMBOL_LIBS : public SYMBOL_LIBS_BASE, public PROJECT::_ELEM
 {
 public:
     KICAD_T Type() override { return SYMBOL_LIBS_T; }
-
-    static int        s_modify_generation;         ///< helper for GetModifyHash()
-    static std::mutex s_generationMutex;
 
     SYMBOL_LIBS()
     {
@@ -311,6 +175,9 @@ public:
                                  const wxString& aLibraryName = wxEmptyString );
 
     int GetLibraryCount() { return size(); }
+
+    static int        s_modify_generation;         ///< helper for GetModifyHash()
+    static std::mutex s_generationMutex;
 };
 
 
@@ -324,7 +191,7 @@ class SYMBOL_LIB
 {
 public:
     SYMBOL_LIB( SCH_LIB_TYPE aType, const wxString& aFileName,
-              SCH_IO_MGR::SCH_FILE_T aPluginType = SCH_IO_MGR::SCH_LEGACY );
+                SCH_IO_MGR::SCH_FILE_T aPluginType = SCH_IO_MGR::SCH_LEGACY );
     ~SYMBOL_LIB();
 
     /**
@@ -449,7 +316,6 @@ public:
         */
         return fileName.GetName();
     }
-
 
     /**
      * Allocate and load a symbol library file.

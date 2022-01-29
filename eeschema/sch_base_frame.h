@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,7 +52,7 @@ class SYMBOL_VIEWER_FRAME;
 class SYMBOL_EDIT_FRAME;
 class LIB_SYMBOL;
 class SYMBOL_LIB;
-class SCHLIB_FILTER;
+class SYMBOL_LIBRARY_FILTER;
 class LIB_ID;
 class SYMBOL_LIB_TABLE;
 class EESCHEMA_SETTINGS;
@@ -141,7 +141,7 @@ public:
      * (e.g. footprint selection) should be enabled. This should be false when they would
      * have no effect, for example loading a part into symbol_editor.
      *
-     * @param aFilter is an optional #SCHLIB_FILTER filter to pass the allowed library names
+     * @param aFilter is an optional #SYMBOL_LIBRARY_FILTER filter to pass the allowed library names
      *                and/or the library name to load the symbol from and/or some other filter
      * @param aHistoryList is the list of previously loaded symbols - will be edited
      * @param aUseLibBrowser is the flag to call the library viewer to select the symbol
@@ -154,7 +154,7 @@ public:
      *
      * @return the selected symbol
      */
-    PICKED_SYMBOL PickSymbolFromLibTree( const SCHLIB_FILTER* aFilter,
+    PICKED_SYMBOL PickSymbolFromLibTree( const SYMBOL_LIBRARY_FILTER* aFilter,
                                          std::vector<PICKED_SYMBOL>& aHistoryList,
                                          bool aUseLibBrowser,
                                          int aUnit,
@@ -188,7 +188,7 @@ public:
      * @return the selected symbol.
      */
     PICKED_SYMBOL PickSymbolFromLibBrowser( wxTopLevelWindow* aParent,
-                                            const SCHLIB_FILTER* aFilter,
+                                            const SYMBOL_LIBRARY_FILTER* aFilter,
                                             const LIB_ID& aPreselectedLibId,
                                             int aUnit, int aConvert );
 
