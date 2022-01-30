@@ -473,6 +473,10 @@ void FONT::LinebreakText( wxString& aText, int aColumnWidth, const VECTOR2I& aSi
 
             jj++;
         }
+
+        // Add the newlines back onto the string
+        if( ii != ( textLines.Count() - 1 ) )
+            aText += '\n';
     }
 }
 
