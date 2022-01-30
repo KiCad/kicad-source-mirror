@@ -743,7 +743,16 @@ void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer )
         {
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );
-            m_gal->SetFillColor( aShape->GetFillColor() );
+
+            if( aShape->GetFillColor() == COLOR4D::UNSPECIFIED )
+            {
+                if( aShape->GetFillMode() == FILL_T::FILLED_SHAPE )
+                    m_gal->SetFillColor( getRenderColor( aShape, LAYER_DEVICE, false ) );
+                else
+                    m_gal->SetFillColor( color );
+             }
+            else
+                m_gal->SetFillColor( aShape->GetFillColor() );
 
             drawShape( aShape );
         }
