@@ -75,13 +75,15 @@ public:
         m_spTeardropLenPercentRound->SetValue( prms->m_LengthRatio*100 );
         m_spTeardropSizePercentRound->SetValue( prms->m_HeightRatio*100 );
         m_rbShapeRound->SetSelection( prms->IsCurved() );
+        m_spTeardropHDPercentRound->SetValue( prms->m_WidthtoSizeFilterRatio*100 );
 
         prms = prmsList->GetParameters( TARGET_RECT );
         m_teardropMaxLenSettingRect.SetValue( prms->m_TdMaxLen );
         m_teardropMaxHeightSettingRect.SetValue( prms->m_TdMaxHeight );
         m_spTeardropLenPercentRect->SetValue( prms->m_LengthRatio*100 );
-        m_spTeardropSizePercentRect->SetValue(prms->m_HeightRatio*100 );
+        m_spTeardropSizePercentRect->SetValue( prms->m_HeightRatio*100 );
         m_rbShapeRect->SetSelection( prms->IsCurved() );
+        m_spTeardropHDPercentRect->SetValue( prms->m_WidthtoSizeFilterRatio*100 );
 
         prms = prmsList->GetParameters( TARGET_TRACK );
         m_teardropMaxLenSettingTrack.SetValue(prms->m_TdMaxLen );
@@ -89,6 +91,7 @@ public:
         m_spTeardropLenPercentTrack->SetValue( prms->m_LengthRatio*100 );
         m_spTeardropSizePercentTrack->SetValue( prms->m_HeightRatio*100 );
         m_rbShapeTrack->SetSelection( prms->IsCurved() );
+        m_spTeardropHDPercentTrack->SetValue( prms->m_WidthtoSizeFilterRatio*100 );
 
         // recalculate sizers, now the bitmap is initialized
         finishDialogSettings();
@@ -122,6 +125,7 @@ public:
         prms->m_TdMaxLen = m_teardropMaxLenSettingRound.GetValue();
         prms->m_TdMaxHeight = m_teardropMaxHeightSettingRound.GetValue();
         prms->m_CurveSegCount = (CurvedShapeOption() & CURVED_OPTION_ROUND) ? shape_seg_count : 0;
+        prms->m_WidthtoSizeFilterRatio = m_spTeardropHDPercentRound->GetValue() / 100.0;
 
         prms = prmsList->GetParameters( TARGET_RECT );
         prms->m_LengthRatio = GetTeardropLenPercentRect();
@@ -129,6 +133,7 @@ public:
         prms->m_TdMaxLen = m_teardropMaxLenSettingRect.GetValue();
         prms->m_TdMaxHeight = m_teardropMaxHeightSettingRect.GetValue();
         prms->m_CurveSegCount = (CurvedShapeOption() & CURVED_OPTION_RECT) ? shape_seg_count : 0;
+        prms->m_WidthtoSizeFilterRatio = m_spTeardropHDPercentRect->GetValue() / 100.0;
 
         prms = prmsList->GetParameters( TARGET_TRACK );
         prms->m_LengthRatio = GetTeardropLenPercentTrack();
@@ -136,6 +141,7 @@ public:
         prms->m_TdMaxLen = m_teardropMaxLenSettingTrack.GetValue();
         prms->m_TdMaxHeight = m_teardropMaxHeightSettingTrack.GetValue();
         prms->m_CurveSegCount = (CurvedShapeOption() & CURVED_OPTION_TRACK) ? shape_seg_count : 0;
+        prms->m_WidthtoSizeFilterRatio = m_spTeardropHDPercentTrack->GetValue() / 100.0;
     }
 
     int CurvedShapeOption()

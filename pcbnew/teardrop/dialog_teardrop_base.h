@@ -54,6 +54,9 @@ class TEARDROP_DIALOG_BASE : public DIALOG_SHIM
 		wxStaticText* m_stVsettingRound;
 		wxSpinCtrlDouble* m_spTeardropSizePercentRound;
 		wxStaticText* m_stLenPercentRound;
+		wxStaticText* m_stHDRatioRound;
+		wxSpinCtrlDouble* m_spTeardropHDPercentRound;
+		wxStaticText* m_stHDPercentRound;
 		wxStaticText* m_staticTextRectS;
 		wxStaticBitmap* m_bitmapTdRectangularInfo;
 		wxStaticText* m_stMaxLenRect;
@@ -66,6 +69,9 @@ class TEARDROP_DIALOG_BASE : public DIALOG_SHIM
 		wxStaticText* m_stVsettingRect;
 		wxSpinCtrlDouble* m_spTeardropSizePercentRect;
 		wxStaticText* m_stLenPercentRect;
+		wxStaticText* m_stHDRatioRect;
+		wxSpinCtrlDouble* m_spTeardropHDPercentRect;
+		wxStaticText* m_stHDPercentRect;
 		wxStaticText* m_staticTextTrck;
 		wxStaticBitmap* m_bitmapTdTrackInfo;
 		wxStaticText* m_stMaxLenTrack;
@@ -78,6 +84,9 @@ class TEARDROP_DIALOG_BASE : public DIALOG_SHIM
 		wxStaticText* m_stVsettingtrack;
 		wxSpinCtrlDouble* m_spTeardropSizePercentTrack;
 		wxStaticText* m_stLenPercentTrack;
+		wxStaticText* m_stHDRatioTrack;
+		wxSpinCtrlDouble* m_spTeardropHDPercentTrack;
+		wxStaticText* m_stHDPercentTrack;
 		wxCheckBox* m_cbPadVia;
 		wxCheckBox* m_cbRoundShapesOnly;
 		wxCheckBox* m_cbSmdSimilarPads;

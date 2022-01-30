@@ -518,6 +518,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                     entry["td_length_ratio"]  = td_prm->m_LengthRatio;
                     entry["td_height_ratio"]  = td_prm->m_HeightRatio;
                     entry["td_curve_segcount"]  = td_prm->m_CurveSegCount;
+                    entry["td_width_to_size_filter_ratio"] = td_prm->m_WidthtoSizeFilterRatio;
 
                     js.push_back( entry );
                 }
@@ -534,13 +535,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                     if( entry.empty() || !entry.is_object() )
                         continue;
 
-                    if( !entry.contains( "td_target_name" )
-                            || !entry.contains( "td_maxlen" )
-                            || !entry.contains( "td_maxheight" )
-                            || !entry.contains( "td_length_ratio" )
-                            || !entry.contains( "td_height_ratio" )
-                            || !entry.contains( "td_curve_segcount" )
-                            )
+                    if( !entry.contains( "td_target_name" ) )
                         continue;
 
                     int idx = GetTeardropTargetTypeFromCanonicalName( entry["td_target_name"].get<std::string>() );
@@ -548,11 +543,24 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                     if( idx >= 0 && idx < 3 )
                     {
                         TEARDROP_PARAMETERS* td_prm = m_TeardropParamsList.GetParameters( (TARGET_TD)idx );
-                        td_prm->m_TdMaxLen = Millimeter2iu( entry["td_maxlen"].get<double>() );
-                        td_prm->m_TdMaxHeight = Millimeter2iu( entry["td_maxheight"].get<double>() );
-                        td_prm->m_LengthRatio = entry["td_length_ratio"].get<double>();
-                        td_prm->m_HeightRatio = entry["td_height_ratio"].get<double>();
-                        td_prm->m_CurveSegCount = entry["td_curve_segcount"].get<int>();
+
+                        if( entry.contains( "td_maxlen" ) )
+                            td_prm->m_TdMaxLen = Millimeter2iu( entry["td_maxlen"].get<double>() );
+
+                        if( entry.contains( "td_maxheight" ) )
+                            td_prm->m_TdMaxHeight = Millimeter2iu( entry["td_maxheight"].get<double>() );
+
+                        if( entry.contains( "td_length_ratio" ) )
+                            td_prm->m_LengthRatio = entry["td_length_ratio"].get<double>();
+
+                        if( entry.contains( "td_height_ratio" ) )
+                            td_prm->m_HeightRatio = entry["td_height_ratio"].get<double>();
+
+                        if( entry.contains( "td_curve_segcount" ) )
+                            td_prm->m_CurveSegCount = entry["td_curve_segcount"].get<int>();
+
+                        if( entry.contains( "td_width_to_size_filter_ratio" ) )
+                            td_prm->m_WidthtoSizeFilterRatio = entry["td_width_to_size_filter_ratio"].get<double>();
                     }
                 }
             },

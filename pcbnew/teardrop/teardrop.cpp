@@ -158,6 +158,10 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter, bool aFollowTracks
                 || track->GetWidth() >= viapad.m_Width * currParams->m_HeightRatio )
                 continue;
 
+            // Ensure also it is not filtered by a too high track->GetWidth()/viapad.m_Width ratio
+            if( track->GetWidth() >= viapad.m_Width * currParams->m_WidthtoSizeFilterRatio )
+                continue;
+
             // Skip case where pad/via and the track is within a copper zone with the same net
             // (and the pad can be connected by the zone thermal relief )
             if( !m_prmsList->m_TdOnPadsInZones && isViaAndTrackInSameZone( viapad, track ) )
@@ -297,7 +301,9 @@ int TEARDROP_MANAGER::addTeardropsOnTracks( BOARD_COMMIT* aCommitter )
 
             // to avoid creating a teardrop between 2 tracks having similar widths
             // give a threshold
-            const double th = 1.2;
+            const double th = currParams->m_WidthtoSizeFilterRatio > 0.1 ?
+                                    1.0 / currParams->m_WidthtoSizeFilterRatio
+                                    : 10.0;
             min_width = min_width * th;
 
             for( unsigned jj = ii+1; jj < sublist->size(); jj++ )

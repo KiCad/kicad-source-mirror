@@ -53,7 +53,8 @@ public:
         m_TdMaxHeight( Millimeter2iu( 2.0 ) ),
         m_LengthRatio( 0.5),
         m_HeightRatio( 1.0 ),
-        m_CurveSegCount( 0 )
+        m_CurveSegCount( 0 ),
+        m_WidthtoSizeFilterRatio( 0.9 )
     {
     }
 
@@ -102,6 +103,9 @@ public:
     /// number of segments to build the curved sides of a teardrop area
     /// must be > 2. for values <= 2 a straight line is used
     int     m_CurveSegCount;
+    /// The ratio (H/D) between the via/pad size and the track width max value to create a teardrop
+    /// 1.0 (100 %) always creates a teardrop, 0.0 (0%) never create a teardrop
+    double  m_WidthtoSizeFilterRatio;
 };
 
 
