@@ -171,9 +171,9 @@ void PCB_TARGET::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBu
     PCB_SHAPE line1, line2;
     PCB_SHAPE circle( nullptr, SHAPE_T::CIRCLE );
     line1.SetStart( VECTOR2I( -size, 0.0 ) );
-    line1.SetEnd( VECTOR2D( size, 0.0 ) );
+    line1.SetEnd( VECTOR2I( size, 0.0 ) );
     line2.SetStart( VECTOR2I( 0.0, -size ) );
-    line2.SetEnd( VECTOR2D( 0.0,  size ) );
+    line2.SetEnd( VECTOR2I( 0.0, size ) );
     circle.SetEndX( radius );
 
     if( GetShape() )    // shape x
