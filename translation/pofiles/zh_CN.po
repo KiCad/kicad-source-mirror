@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
 "PO-Revision-Date: 2022-01-30 12:26+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -25690,7 +25690,7 @@ msgstr "测试点焊盘"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1629
 msgid "Heatsink pad"
-msgstr "防散热片焊盘"
+msgstr "散热焊盘"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560
 msgid "Castellated pad (through hole only)"
@@ -31473,7 +31473,7 @@ msgstr "测试点"
 
 #: pcbnew/pad.cpp:894
 msgid "Heat sink"
-msgstr "防散热片"
+msgstr "散热片"
 
 #: pcbnew/pad.cpp:895
 msgid "Castellated"
@@ -33327,7 +33327,7 @@ msgstr "无法从一个文本项开始布线。"
 
 #: pcbnew/router/pns_router.cpp:260
 msgid "Cannot start routing from a graphic."
-msgstr "无法从一张图开始布线。"
+msgstr "无法从图形元素开始布线。"
 
 #: pcbnew/router/pns_router.cpp:306 pcbnew/router/pns_router.cpp:362
 msgid "The routing start point violates DRC."
