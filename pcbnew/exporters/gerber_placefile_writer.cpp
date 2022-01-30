@@ -34,12 +34,14 @@
 
 #include <board.h>
 #include <board_design_settings.h>
+#include <pcb_shape.h>
 
 #include <pcbplot.h>
 #include <wildcards_and_files_ext.h>
 #include <gbr_metadata.h>
 #include <footprint.h>
 #include <pad.h>
+#include <fp_shape.h>
 
 
 PLACEFILE_GERBER_WRITER::PLACEFILE_GERBER_WRITER( BOARD* aPcb )
@@ -302,7 +304,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
             for( BOARD_ITEM* item : footprint->GraphicalItems() )
             {
                 if( item->Type() == PCB_FP_SHAPE_T && item->GetLayer() == Edge_Cuts )
-                    brd_plotter.PlotFootprintGraphicItem( (FP_SHAPE*) item );
+                    brd_plotter.PlotFootprintShape( static_cast<FP_SHAPE*>( item ) );
             }
         }
     }

@@ -995,7 +995,9 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                         case PCB_SHAPE_T:        mask = DRC_DISALLOW_GRAPHICS;   break;
                         case PCB_FP_SHAPE_T:     mask = DRC_DISALLOW_GRAPHICS;   break;
                         case PCB_TEXT_T:         mask = DRC_DISALLOW_TEXTS;      break;
+                        case PCB_TEXTBOX_T:      mask = DRC_DISALLOW_TEXTS;      break;
                         case PCB_FP_TEXT_T:      mask = DRC_DISALLOW_TEXTS;      break;
+                        case PCB_FP_TEXTBOX_T:   mask = DRC_DISALLOW_TEXTS;      break;
                         case PCB_ZONE_T:         mask = DRC_DISALLOW_ZONES;      break;
                         case PCB_FP_ZONE_T:      mask = DRC_DISALLOW_ZONES;      break;
                         case PCB_LOCATE_HOLE_T:  mask = DRC_DISALLOW_HOLES;      break;

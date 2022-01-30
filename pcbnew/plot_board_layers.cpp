@@ -873,7 +873,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 }
                 else if( item->Type() == PCB_FP_SHAPE_T && item->IsOnLayer( Edge_Cuts ) )
                 {
-                   itemplotter.PlotFootprintGraphicItem( static_cast<const FP_SHAPE*>( item ) );
+                   itemplotter.PlotFootprintShape( static_cast<const FP_SHAPE*>( item ) );
                 }
             }
         }

@@ -122,9 +122,6 @@ public:
      * Adjusters to allow EDA_TEXT to draw/print/etc. text in absolute coords.
      */
     EDA_ANGLE         GetDrawRotation() const override;
-    VECTOR2I          GetDrawPos() const override;
-    GR_TEXT_H_ALIGN_T GetDrawHorizJustify() const override;
-    GR_TEXT_V_ALIGN_T GetDrawVertJustify() const override;
 
     const EDA_RECT GetBoundingBox() const override;
 

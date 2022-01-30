@@ -49,6 +49,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     //  *** all items in a same list (shown here) must be contiguous ****
     PCB_MARKER_T,           // in m_markers
     PCB_TEXT_T,             // in m_drawings
+    PCB_TEXTBOX_T,          // in m_drawings
     PCB_SHAPE_T,            // in m_drawings
     PCB_DIM_ALIGNED_T,      // in m_drawings
     PCB_DIM_CENTER_T,       // in m_drawings
@@ -61,6 +62,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     PCB_ARC_T,              // in m_tracks
     PCB_PAD_T,              // in footprints
     PCB_FP_TEXT_T,          // in footprints
+    PCB_FP_TEXTBOX_T,       // in footprints
     PCB_FOOTPRINT_T,        // in m_footprints
     PCB_GROUP_T,            // in m_groups
     PCB_ZONE_T,             // in m_zones
@@ -71,6 +73,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
 const KICAD_T GENERAL_COLLECTOR::BoardLevelItems[] = {
     PCB_MARKER_T,
     PCB_TEXT_T,
+    PCB_TEXTBOX_T,
     PCB_SHAPE_T,
     PCB_DIM_ALIGNED_T,
     PCB_DIM_ORTHOGONAL_T,
@@ -105,6 +108,7 @@ const KICAD_T GENERAL_COLLECTOR::PadsOrTracks[] = {
 
 const KICAD_T GENERAL_COLLECTOR::FootprintItems[] = {
     PCB_FP_TEXT_T,
+    PCB_FP_TEXTBOX_T,
     PCB_FP_SHAPE_T,
     PCB_FP_DIM_ALIGNED_T,
     PCB_FP_DIM_ORTHOGONAL_T,
@@ -207,6 +211,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         breakhere++;
         break;
 
+    case PCB_TEXTBOX_T:
+        breakhere++;
+        break;
+
     case PCB_SHAPE_T:
         breakhere++;
         break;
@@ -222,6 +230,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
             if( fpText->GetText() == wxT( "10uH" ) )
                 breakhere++;
         }
+        break;
+
+    case PCB_FP_TEXTBOX_T:
+        breakhere++;
         break;
 
     case PCB_FOOTPRINT_T:
@@ -291,6 +303,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         break;
 
     case PCB_TEXT_T:
+    case PCB_TEXTBOX_T:
         break;
 
     case PCB_SHAPE_T:
@@ -319,25 +332,36 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         break;
 
     case PCB_FP_TEXT_T:
+    case PCB_FP_TEXTBOX_T:
     {
-        FP_TEXT *text = static_cast<FP_TEXT*>( item );
+        PCB_LAYER_ID layer = item->GetLayer();
 
-        if( m_Guide->IgnoreHiddenFPText() && !text->IsVisible() )
+        if( m_Guide->IgnoreHiddenFPText() && item->Type() == PCB_FP_TEXT_T )
+        {
+            FP_TEXT *text = static_cast<FP_TEXT*>( item );
+
+            if( !text->IsVisible() )
+                goto exit;
+        }
+
+        if( m_Guide->IgnoreFPTextOnBack() && IsBackLayer( layer ) )
             goto exit;
 
-        if( m_Guide->IgnoreFPTextOnBack() && IsBackLayer( text->GetLayer() ) )
+        if( m_Guide->IgnoreFPTextOnFront() && IsFrontLayer( layer ) )
             goto exit;
 
-        if( m_Guide->IgnoreFPTextOnFront() && IsFrontLayer( text->GetLayer() ) )
-            goto exit;
+        /*
+         * The three text types have different criteria: reference and value have their own
+         * ignore flags; user text instead follows their layer visibility. Checking this here
+         * is simpler than later (when layer visibility is checked for other entities)
+         */
 
-        /* The three text types have different criteria: reference
-         * and value have their own ignore flags; user text instead
-         * follows their layer visibility. Checking this here is
-         * simpler than later (when layer visibility is checked for
-         * other entities) */
+        FP_TEXT::TEXT_TYPE textType = FP_TEXT::TEXT_is_DIVERS;
 
-        switch( text->GetType() )
+        if( item->Type() == PCB_FP_TEXT_T )
+            textType = static_cast<FP_TEXT*>( item )->GetType();
+
+        switch( textType )
         {
         case FP_TEXT::TEXT_is_REFERENCE:
             if( m_Guide->IgnoreFPReferences() )
@@ -352,8 +376,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
             break;
 
         case FP_TEXT::TEXT_is_DIVERS:
-            if( !m_Guide->IsLayerVisible( text->GetLayer() )
-              && m_Guide->IgnoreNonVisibleLayers() )
+            if( !m_Guide->IsLayerVisible( layer ) && m_Guide->IgnoreNonVisibleLayers() )
                 goto exit;
 
             break;

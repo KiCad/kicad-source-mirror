@@ -504,6 +504,11 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
                 else if( m_otherFields->GetValue() )
                     visitItem( commit, boardItem );
             }
+            else if( itemType == PCB_FP_TEXTBOX_T )
+            {
+                if( m_otherFields->GetValue() )
+                    visitItem( commit, boardItem );
+            }
             else if( itemType == PCB_FP_SHAPE_T || BaseType( itemType ) == PCB_DIMENSION_T )
             {
                 if( m_footprintGraphics->GetValue() )
@@ -519,7 +524,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
         {
             KICAD_T itemType = boardItem->Type();
 
-            if( itemType == PCB_TEXT_T )
+            if( itemType == PCB_TEXT_T || itemType == PCB_TEXTBOX_T )
             {
                 if( m_boardText->GetValue() )
                     visitItem( commit, boardItem );

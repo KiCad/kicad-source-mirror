@@ -404,24 +404,6 @@ EDA_ANGLE SCH_FIELD::GetDrawRotation() const
 }
 
 
-VECTOR2I SCH_FIELD::GetDrawPos() const
-{
-    return GetBoundingBox().Centre();
-}
-
-
-GR_TEXT_H_ALIGN_T SCH_FIELD::GetDrawHorizJustify() const
-{
-    return GR_TEXT_H_ALIGN_CENTER;
-}
-
-
-GR_TEXT_V_ALIGN_T SCH_FIELD::GetDrawVertJustify() const
-{
-    return GR_TEXT_V_ALIGN_CENTER;
-}
-
-
 const EDA_RECT SCH_FIELD::GetBoundingBox() const
 {
     // Calculate the text bounding box:

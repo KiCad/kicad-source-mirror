@@ -222,7 +222,7 @@
                                     <property name="border">5</property>
                                     <property name="colspan">1</property>
                                     <property name="column">0</property>
-                                    <property name="flag">wxALL</property>
+                                    <property name="flag">wxRIGHT|wxLEFT</property>
                                     <property name="row">2</property>
                                     <property name="rowspan">1</property>
                                     <object class="wxStaticText" expanded="1">
@@ -356,7 +356,7 @@
                                     <property name="flag">wxEXPAND</property>
                                     <property name="row">2</property>
                                     <property name="rowspan">1</property>
-                                    <object class="wxBoxSizer" expanded="0">
+                                    <object class="wxBoxSizer" expanded="1">
                                         <property name="minimum_size"></property>
                                         <property name="name">formattingSizer</property>
                                         <property name="orient">wxHORIZONTAL</property>

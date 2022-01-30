@@ -27,6 +27,7 @@
 
 #include <footprint.h>
 #include <fp_text.h>
+#include <fp_textbox.h>
 #include <fp_shape.h>
 #include <pad.h>
 
@@ -115,7 +116,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
 
         ret = hash_board_item( text, aFlags );
         hash_combine( ret, text->GetText().ToStdString() );
-        hash_combine( ret,  text->IsItalic() );
+        hash_combine( ret, text->IsItalic() );
         hash_combine( ret, text->IsBold() );
         hash_combine( ret, text->IsMirrored() );
         hash_combine( ret, text->GetTextWidth() );
@@ -174,6 +175,46 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
                     hash_combine( ret, shape->GetCenter().x );
                     hash_combine( ret, shape->GetCenter().y );
                 }
+            }
+        }
+    }
+        break;
+
+    case PCB_FP_TEXTBOX_T:
+    {
+        const FP_TEXTBOX* textbox = static_cast<const FP_TEXTBOX*>( aItem );
+
+        ret = hash_board_item( textbox, aFlags );
+        hash_combine( ret, textbox->GetText().ToStdString() );
+        hash_combine( ret, textbox->IsItalic() );
+        hash_combine( ret, textbox->IsBold() );
+        hash_combine( ret, textbox->IsMirrored() );
+        hash_combine( ret, textbox->GetTextWidth() );
+        hash_combine( ret, textbox->GetTextHeight() );
+        hash_combine( ret, textbox->GetHorizJustify() );
+        hash_combine( ret, textbox->GetVertJustify() );
+
+        if( aFlags & HASH_ROT )
+            hash_combine( ret, textbox->GetTextAngle().AsDegrees() );
+
+        hash_combine( ret, textbox->GetShape() );
+        hash_combine( ret, textbox->GetWidth() );
+
+        if( aFlags & HASH_POS )
+        {
+            if( aFlags & REL_COORD )
+            {
+                hash_combine( ret, textbox->GetStart0().x );
+                hash_combine( ret, textbox->GetStart0().y );
+                hash_combine( ret, textbox->GetEnd0().x );
+                hash_combine( ret, textbox->GetEnd0().y );
+            }
+            else
+            {
+                hash_combine( ret, textbox->GetStart().x );
+                hash_combine( ret, textbox->GetStart().y );
+                hash_combine( ret, textbox->GetEnd().x );
+                hash_combine( ret, textbox->GetEnd().y );
             }
         }
     }

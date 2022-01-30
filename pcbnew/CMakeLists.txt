@@ -141,6 +141,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_target_properties_base.cpp
     dialogs/dialog_text_properties.cpp
     dialogs/dialog_text_properties_base.cpp
+    dialogs/dialog_textbox_properties.cpp
+    dialogs/dialog_textbox_properties_base.cpp
     dialogs/dialog_track_via_properties.cpp
     dialogs/dialog_track_via_properties_base.cpp
     dialogs/dialog_track_via_size.cpp

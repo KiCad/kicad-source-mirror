@@ -114,19 +114,19 @@ void SCH_TEXTBOX::UpdateTextPosition()
 
     bbox.Normalize();
 
-    if( GetTextAngle() == ANGLE_HORIZONTAL )
-    {
-        if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
-            SetTextPos( VECTOR2I( bbox.GetRight() - margin, bbox.GetTop() + margin )  );
-        else
-            SetTextPos( VECTOR2I( bbox.GetLeft() + margin, bbox.GetTop() + margin )  );
-    }
-    else
+    if( GetTextAngle() == ANGLE_VERTICAL )
     {
         if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
             SetTextPos( VECTOR2I( bbox.GetLeft() + margin, bbox.GetTop() + margin )  );
         else
             SetTextPos( VECTOR2I( bbox.GetLeft() + margin, bbox.GetBottom() - margin )  );
+    }
+    else
+    {
+        if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+            SetTextPos( VECTOR2I( bbox.GetRight() - margin, bbox.GetTop() + margin )  );
+        else
+            SetTextPos( VECTOR2I( bbox.GetLeft() + margin, bbox.GetTop() + margin )  );
     }
 }
 
@@ -360,8 +360,6 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter ) const
 
 void SCH_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString msg;
-
     // Don't use GetShownText() here; we want to show the user the variable references
     aList.emplace_back( _( "Text Box" ), UnescapeString( GetText() ) );
 

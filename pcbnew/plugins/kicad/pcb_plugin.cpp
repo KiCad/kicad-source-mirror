@@ -33,6 +33,7 @@
 #include <pcb_dimension.h>
 #include <footprint.h>
 #include <fp_shape.h>
+#include <fp_textbox.h>
 #include <string_utils.h>
 #include <kiface_base.h>
 #include <locale_io.h>
@@ -42,6 +43,7 @@
 #include <pcb_shape.h>
 #include <pcb_target.h>
 #include <pcb_text.h>
+#include <pcb_textbox.h>
 #include <pcbnew_settings.h>
 #include <plugins/kicad/pcb_plugin.h>
 #include <plugins/kicad/pcb_parser.h>
@@ -437,8 +439,16 @@ void PCB_PLUGIN::Format( const BOARD_ITEM* aItem, int aNestLevel ) const
         format( static_cast<const PCB_TEXT*>( aItem ), aNestLevel );
         break;
 
+    case PCB_TEXTBOX_T:
+        format( static_cast<const PCB_TEXTBOX*>( aItem ), aNestLevel );
+        break;
+
     case PCB_FP_TEXT_T:
         format( static_cast<const FP_TEXT*>( aItem ), aNestLevel );
+        break;
+
+    case PCB_FP_TEXTBOX_T:
+        format( static_cast<const FP_TEXTBOX*>( aItem ), aNestLevel );
         break;
 
     case PCB_GROUP_T:
@@ -906,7 +916,7 @@ void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
     {
     case SHAPE_T::SEGMENT:
         m_out->Print( aNestLevel, "(gr_line%s (start %s) (end %s)",
-                     locked.c_str(),
+                      locked.c_str(),
                       FormatInternalUnits( aShape->GetStart() ).c_str(),
                       FormatInternalUnits( aShape->GetEnd() ).c_str() );
         break;
@@ -1739,6 +1749,53 @@ void PCB_PLUGIN::format( const PCB_TEXT* aText, int aNestLevel ) const
 }
 
 
+void PCB_PLUGIN::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) const
+{
+    std::string locked = aTextBox->IsLocked() ? " locked" : "";
+
+    m_out->Print( aNestLevel, "(gr_text_box%s %s\n",
+                  locked.c_str(),
+                  m_out->Quotew( aTextBox->GetText() ).c_str() );
+
+    if( aTextBox->GetShape() == SHAPE_T::RECT )
+    {
+        m_out->Print( aNestLevel, "(start %s) (end %s)",
+                      FormatInternalUnits( aTextBox->GetStart() ).c_str(),
+                      FormatInternalUnits( aTextBox->GetEnd() ).c_str() );
+    }
+    else if( aTextBox->GetShape() == SHAPE_T::POLY )
+    {
+        const SHAPE_POLY_SET& poly = aTextBox->GetPolyShape();
+        const SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
+
+        formatPolyPts( outline, aNestLevel, true );
+    }
+    else
+    {
+        UNIMPLEMENTED_FOR( aTextBox->SHAPE_T_asString() );
+    }
+
+    if( !aTextBox->GetTextAngle().IsZero() )
+        m_out->Print( 0, " (angle %s)", FormatAngle( aTextBox->GetTextAngle() ).c_str() );
+
+    m_out->Print( 0, " (width %s)", FormatInternalUnits( aTextBox->GetWidth() ).c_str() );
+
+    formatLayer( aTextBox );
+
+    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aTextBox->m_Uuid.AsString() ) );
+
+    m_out->Print( 0, "\n" );
+
+    // PCB_TEXTBOXes are never hidden, so always omit "hide" attribute
+    aTextBox->EDA_TEXT::Format( m_out, aNestLevel, m_ctl | CTL_OMIT_HIDE );
+
+    if( aTextBox->GetFont() && aTextBox->GetFont()->IsOutline() )
+        formatRenderCache( aTextBox, aNestLevel + 1 );
+
+    m_out->Print( aNestLevel, ")\n" );
+}
+
+
 void PCB_PLUGIN::format( const PCB_GROUP* aGroup, int aNestLevel ) const
 {
     // Don't write empty groups
@@ -1830,6 +1887,54 @@ void PCB_PLUGIN::format( const FP_TEXT* aText, int aNestLevel ) const
 
     if( aText->GetFont() && aText->GetFont()->IsOutline() )
         formatRenderCache( aText, aNestLevel + 1 );
+
+    m_out->Print( aNestLevel, ")\n" );
+}
+
+
+void PCB_PLUGIN::format( const FP_TEXTBOX* aTextBox, int aNestLevel ) const
+{
+    std::string locked = aTextBox->IsLocked() ? " locked" : "";
+
+    m_out->Print( aNestLevel, "(fp_text_box%s %s\n",
+                  locked.c_str(),
+                  m_out->Quotew( aTextBox->GetText() ).c_str() );
+
+    if( aTextBox->GetShape() == SHAPE_T::RECT )
+    {
+        m_out->Print( aNestLevel, "(start %s) (end %s) (angle %s) (width %s)",
+                      FormatInternalUnits( aTextBox->GetStart0() ).c_str(),
+                      FormatInternalUnits( aTextBox->GetEnd0() ).c_str(),
+                      FormatAngle( aTextBox->GetTextAngle() ).c_str(),
+                      FormatInternalUnits( aTextBox->GetWidth() ).c_str() );
+    }
+    else if( aTextBox->GetShape() == SHAPE_T::POLY )
+    {
+        const SHAPE_POLY_SET& poly = aTextBox->GetPolyShape();
+        const SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
+
+        formatPolyPts( outline, aNestLevel, true );
+
+        m_out->Print( aNestLevel, " (angle %s) (width %s)",
+                      FormatAngle( aTextBox->GetTextAngle() ).c_str(),
+                      FormatInternalUnits( aTextBox->GetWidth() ).c_str() );
+    }
+    else
+    {
+        UNIMPLEMENTED_FOR( aTextBox->SHAPE_T_asString() );
+    }
+
+    formatLayer( aTextBox );
+
+    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aTextBox->m_Uuid.AsString() ) );
+
+    m_out->Print( 0, "\n" );
+
+    // FP_TEXTBOXes are never hidden, so always omit "hide" attribute
+    aTextBox->EDA_TEXT::Format( m_out, aNestLevel, m_ctl | CTL_OMIT_HIDE );
+
+    if( aTextBox->GetFont() && aTextBox->GetFont()->IsOutline() )
+        formatRenderCache( aTextBox, aNestLevel + 1 );
 
     m_out->Print( aNestLevel, ")\n" );
 }

@@ -1286,7 +1286,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
 
     for( BOARD_ITEM* gitem : m_board->Drawings() )
     {
-        if ( gitem->Type() == PCB_SHAPE_T )
+        if ( gitem->Type() == PCB_SHAPE_T || gitem->Type() == PCB_TEXTBOX_T )
         {
             syncGraphicalItem( aWorld, static_cast<PCB_SHAPE*>( gitem ) );
         }
@@ -1328,7 +1328,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
 
         for( BOARD_ITEM* mgitem : footprint->GraphicalItems() )
         {
-            if( mgitem->Type() == PCB_FP_SHAPE_T )
+            if( mgitem->Type() == PCB_FP_SHAPE_T || mgitem->Type() == PCB_FP_TEXTBOX_T )
             {
                 syncGraphicalItem( aWorld, static_cast<PCB_SHAPE*>( mgitem ) );
             }

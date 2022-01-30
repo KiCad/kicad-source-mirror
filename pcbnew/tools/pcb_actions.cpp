@@ -123,6 +123,11 @@ TOOL_ACTION PCB_ACTIONS::placeText( "pcbnew.InteractiveDrawing.text",
         _( "Add Text" ), _( "Add a text item" ),
         BITMAPS::text, AF_ACTIVATE );
 
+TOOL_ACTION PCB_ACTIONS::drawTextBox( "pcbnew.InteractiveDrawing.textbox",
+        AS_GLOBAL, 0, "",
+        _( "Add Text Box" ), _( "Add a wrapped text item" ),
+        BITMAPS::add_textbox, AF_ACTIVATE );
+
 TOOL_ACTION PCB_ACTIONS::drawAlignedDimension( "pcbnew.InteractiveDrawing.alignedDimension",
         AS_GLOBAL,
         MD_SHIFT + MD_CTRL + 'H', LEGACY_HK_NAME(  "Add Dimension" ),

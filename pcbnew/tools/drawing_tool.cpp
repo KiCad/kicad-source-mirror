@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017 CERN
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -40,7 +40,6 @@
 #include <router/router_tool.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <tools/pcb_editor_conditions.h>
 #include <tools/pcb_grid_helper.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/tool_event_utils.h>
@@ -56,11 +55,13 @@
 #include <confirm.h>
 #include <footprint.h>
 #include <fp_shape.h>
+#include <fp_textbox.h>
 #include <macros.h>
 #include <painter.h>
 #include <pcb_edit_frame.h>
 #include <pcb_group.h>
 #include <pcb_text.h>
+#include <pcb_textbox.h>
 #include <pcb_dimension.h>
 #include <pcbnew_id.h>
 #include <preview_items/arc_assistant.h>
@@ -333,12 +334,34 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
 
     REENTRANCY_GUARD guard( &m_inDrawingTool );
 
-    FOOTPRINT*       parentFootprint = dynamic_cast<FOOTPRINT*>( m_frame->GetModel() );
-    PCB_SHAPE*       rect = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
+    bool             isTextBox = aEvent.IsAction( &PCB_ACTIONS::drawTextBox );
+    PCB_SHAPE*       rect = nullptr;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::RECTANGLE );
     OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
 
+    auto makeNew =
+            [&]() -> PCB_SHAPE*
+            {
+                if( m_isFootprintEditor )
+                {
+                    FOOTPRINT* parentFootprint = dynamic_cast<FOOTPRINT*>( m_frame->GetModel() );
+
+                    if( isTextBox )
+                        return new FP_TEXTBOX( parentFootprint );
+                    else
+                        return new FP_SHAPE( parentFootprint );
+                }
+                else
+                {
+                    if( isTextBox )
+                        return new PCB_TEXTBOX( m_frame->GetModel() );
+                    else
+                        return new PCB_SHAPE();
+                }
+            };
+
+    rect = makeNew();
     rect->SetShape( SHAPE_T::RECT );
     rect->SetFilled( false );
     rect->SetFlags(IS_NEW );
@@ -357,13 +380,21 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
             if( m_isFootprintEditor )
                 static_cast<FP_SHAPE*>( rect )->SetLocalCoord();
 
-            commit.Add( rect );
-            commit.Push( _( "Draw a rectangle" ) );
+            if( isTextBox && m_frame->ShowTextBoxPropertiesDialog( rect ) != wxID_OK )
+            {
+                delete rect;
+                rect = nullptr;
+            }
+            else
+            {
+                commit.Add( rect );
+                commit.Push( isTextBox ? _( "Draw a text box" ) : _( "Draw a rectangle" ) );
 
-            m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, rect );
+                m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, rect );
+            }
         }
 
-        rect = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
+        rect = makeNew();
         rect->SetShape( SHAPE_T::RECT );
         rect->SetFilled( false );
         rect->SetFlags(IS_NEW );
@@ -589,7 +620,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                                      abs( thickness - GetPenSizeForNormal( textSize ) ) );
                     fpText->SetItalic( dsnSettings.GetTextItalic( layer ) );
                     fpText->SetKeepUpright( dsnSettings.GetTextUpright( layer ) );
-                    fpText->SetTextPos( (wxPoint) cursorPos );
+                    fpText->SetTextPos( cursorPos );
 
                     text = fpText;
 
@@ -606,7 +637,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                         delete text;
                         text = nullptr;
                     }
-                    else if( fpText->GetTextPos() != (wxPoint) cursorPos )
+                    else if( fpText->GetTextPos() != cursorPos )
                     {
                         // If the user modified the location then go ahead and place it there.
                         // Otherwise we'll drag.
@@ -629,7 +660,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     pcbText->SetBold( abs( thickness - GetPenSizeForBold( textSize ) ) <
                                       abs( thickness - GetPenSizeForNormal( textSize ) ) );
                     pcbText->SetItalic( dsnSettings.GetTextItalic( layer ) );
-                    pcbText->SetTextPos( (wxPoint) cursorPos );
+                    pcbText->SetTextPos( cursorPos );
 
                     RunMainStack( [&]()
                                   {
@@ -686,7 +717,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         }
         else if( text && evt->IsMotion() )
         {
-            text->SetPosition( (wxPoint) cursorPos );
+            text->SetPosition( cursorPos );
             selection().SetReferencePoint( cursorPos );
             m_view->Update( &selection() );
         }
@@ -722,7 +753,7 @@ void DRAWING_TOOL::constrainDimension( PCB_DIMENSION_BASE* aDim )
 {
     const VECTOR2I lineVector{ aDim->GetEnd() - aDim->GetStart() };
 
-    aDim->SetEnd( wxPoint( VECTOR2I( aDim->GetStart() ) + GetVectorSnapped45( lineVector ) ) );
+    aDim->SetEnd( aDim->GetStart() + GetVectorSnapped45( lineVector ) );
     aDim->Update();
 }
 
@@ -914,7 +945,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 else if( originalEvent.IsAction( &PCB_ACTIONS::drawLeader ) )
                 {
                     dimension = new PCB_DIM_LEADER( m_frame->GetModel(), m_isFootprintEditor );
-                    dimension->Text().SetPosition( wxPoint( cursorPos ) );
+                    dimension->Text().SetPosition( cursorPos );
                 }
                 else
                 {
@@ -930,8 +961,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 dimension->SetLineThickness( boardSettings.GetLineThickness( layer ) );
                 dimension->SetArrowLength( boardSettings.m_DimensionArrowLength );
                 dimension->SetExtensionOffset( boardSettings.m_DimensionExtensionOffset );
-                dimension->SetStart( (wxPoint) cursorPos );
-                dimension->SetEnd( (wxPoint) cursorPos );
+                dimension->SetStart( cursorPos );
+                dimension->SetEnd( cursorPos );
                 dimension->Update();
 
                 if( !m_view->IsLayerVisible( layer ) )
@@ -1000,7 +1031,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             switch( step )
             {
             case SET_END:
-                dimension->SetEnd( (wxPoint) cursorPos );
+                dimension->SetEnd( cursorPos );
 
                 if( Is45Limited() || t == PCB_DIM_CENTER_T || t == PCB_FP_DIM_CENTER_T )
                     constrainDimension( dimension );
@@ -1021,7 +1052,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 else if( t == PCB_DIM_RADIAL_T || t == PCB_FP_DIM_RADIAL_T )
                 {
                     PCB_DIM_RADIAL* radialDim = static_cast<PCB_DIM_RADIAL*>( dimension );
-                    wxPoint         textOffset( radialDim->GetArrowLength() * 10, 0 );
+                    VECTOR2I        textOffset( radialDim->GetArrowLength() * 10, 0 );
 
                     if( radialDim->GetEnd().x < radialDim->GetStart().x )
                         textOffset = -textOffset;
@@ -1030,7 +1061,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 }
                 else if( t == PCB_DIM_LEADER_T || t == PCB_FP_DIM_LEADER_T )
                 {
-                    wxPoint textOffset( dimension->GetArrowLength() * 10, 0 );
+                    VECTOR2I textOffset( dimension->GetArrowLength() * 10, 0 );
 
                     if( dimension->GetEnd().x < dimension->GetStart().x )
                         textOffset = -textOffset;
@@ -1266,7 +1297,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     VECTOR2I delta = cursorPos - static_cast<BOARD_ITEM*>( preview.Front() )->GetPosition();
 
     for( BOARD_ITEM* item : selectedItems )
-        item->Move( (wxPoint) delta );
+        item->Move( delta );
 
     m_view->Update( &preview );
 
@@ -1290,7 +1321,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
             delta = cursorPos - static_cast<BOARD_ITEM*>( preview.Front() )->GetPosition();
 
             for( BOARD_ITEM* item : selectedItems )
-                item->Move( (wxPoint) delta );
+                item->Move( delta );
 
             m_view->Update( &preview );
         }
@@ -1375,7 +1406,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
             commit.Modify( footprint );
 
             // set the new relative internal local coordinates of footprint items
-            VECTOR2I moveVector = footprint->GetPosition() - (wxPoint) cursorPos;
+            VECTOR2I moveVector = footprint->GetPosition() - cursorPos;
             footprint->MoveAnchorPosition( moveVector );
 
             commit.Push( _( "Move the footprint reference anchor" ) );
@@ -1433,8 +1464,8 @@ static void updateSegmentFromGeometryMgr( const KIGFX::PREVIEW::TWO_POINT_GEOMET
 {
     if( !aMgr.IsReset() )
     {
-        aGraphic->SetStart( (wxPoint) aMgr.GetOrigin() );
-        aGraphic->SetEnd( (wxPoint) aMgr.GetEnd() );
+        aGraphic->SetStart( aMgr.GetOrigin() );
+        aGraphic->SetEnd( aMgr.GetEnd() );
     }
 }
 
@@ -1618,8 +1649,8 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
                 graphic->SetLayer( m_layer );
                 grid.SetSkipPoint( cursorPos );
 
-                twoPointManager.SetOrigin( (wxPoint) cursorPos );
-                twoPointManager.SetEnd( (wxPoint) cursorPos );
+                twoPointManager.SetOrigin( cursorPos );
+                twoPointManager.SetEnd( cursorPos );
 
                 if( !isLocalOriginSet )
                     m_frame->GetScreen()->m_LocalOrigin = cursorPos;
@@ -1691,12 +1722,12 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
                 // get a restricted 45/H/V line from the last fixed point to the cursor
                 auto newEnd = GetVectorSnapped45( lineVector, ( shape == SHAPE_T::RECT ) );
                 m_controls->ForceCursorPosition( true, VECTOR2I( twoPointManager.GetEnd() ) );
-                twoPointManager.SetEnd( twoPointManager.GetOrigin() + (wxPoint) newEnd );
+                twoPointManager.SetEnd( twoPointManager.GetOrigin() + newEnd );
                 twoPointManager.SetAngleSnap( true );
             }
             else
             {
-                twoPointManager.SetEnd( (wxPoint) cursorPos );
+                twoPointManager.SetEnd( cursorPos );
                 twoPointManager.SetAngleSnap( false );
             }
 
@@ -1766,12 +1797,12 @@ static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER
 {
     VECTOR2I vec = aMgr.GetOrigin();
 
-    aArc.SetCenter( (wxPoint) vec );
+    aArc.SetCenter( vec );
 
     vec = aMgr.GetStartRadiusEnd();
-    aArc.SetStart( (wxPoint) vec );
+    aArc.SetStart( vec );
     vec = aMgr.GetEndRadiusEnd();
-    aArc.SetEnd( (wxPoint) vec );
+    aArc.SetEnd( vec );
 }
 
 
@@ -2275,7 +2306,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 
             if( polyGeomMgr.IsSelfIntersecting( true ) )
             {
-                wxPoint p = wxGetMousePosition() + wxPoint( 20, 20 );
+                VECTOR2I p = wxGetMousePosition() + wxPoint( 20, 20 );
                 status.Move( p );
                 status.PopupFor( 1500 );
             }
@@ -2376,15 +2407,15 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
         {
             const LSET lset = aVia->GetLayerSet();
             VECTOR2I   position = aVia->GetPosition();
-            BOX2I bbox = aVia->GetBoundingBox();
+            BOX2I      bbox = aVia->GetBoundingBox();
 
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
-            auto view = m_frame->GetCanvas()->GetView();
+            KIGFX::PCB_VIEW*        view = m_frame->GetCanvas()->GetView();
             std::vector<PCB_TRACK*> possible_tracks;
 
             view->Query( bbox, items );
 
-            for( auto it : items )
+            for( const KIGFX::VIEW::LAYER_ITEM_PAIR& it : items )
             {
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
 
@@ -2395,7 +2426,9 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 {
                     if( TestSegmentHit( position, track->GetStart(), track->GetEnd(),
                                         ( track->GetWidth() + aVia->GetWidth() ) / 2 ) )
+                    {
                         possible_tracks.push_back( track );
+                    }
                 }
             }
 
@@ -2525,15 +2558,17 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
         PAD* findPad( PCB_VIA* aVia )
         {
             const VECTOR2I position = aVia->GetPosition();
-            const LSET    lset = aVia->GetLayerSet();
+            const LSET     lset = aVia->GetLayerSet();
 
             for( FOOTPRINT* fp : m_board->Footprints() )
             {
-                for(PAD* pad : fp->Pads() )
+                for( PAD* pad : fp->Pads() )
                 {
                     if( pad->HitTest( position ) && ( pad->GetLayerSet() & lset ).any() )
+                    {
                         if( pad->GetNetCode() > 0 )
                             return pad;
+                    }
                 }
             }
 
@@ -2581,11 +2616,10 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
         void SnapItem( BOARD_ITEM *aItem ) override
         {
-            // If you place a Via on a track but not on its centerline, the current
-            // connectivity algorithm will require us to put a kink in the track when
-            // we break it (so that each of the two segments ends on the via center).
-            // That's not ideal, and is in fact probably worse than forcing snap in
-            // this situation.
+            // If you place a Via on a track but not on its centerline, the current connectivity
+            // algorithm will require us to put a kink in the track when we break it (so that each
+            // of the two segments ends on the via center).
+            // That's not ideal, and is probably worse than forcing snap in this situation.
 
             m_gridHelper.SetSnap( !( m_modifiers & MD_SHIFT ) );
             PCB_VIA*   via = static_cast<PCB_VIA*>( aItem );
@@ -2598,11 +2632,10 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 SEG      trackSeg( track->GetStart(), track->GetEnd() );
                 VECTOR2I snap = m_gridHelper.AlignToSegment( position, trackSeg );
 
-                aItem->SetPosition( (wxPoint) snap );
+                aItem->SetPosition( snap );
             }
             else if( pad && m_gridHelper.GetSnap()
-                     && m_frame->GetMagneticItemsSettings()->pads
-                                == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
+                 && m_frame->GetMagneticItemsSettings()->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
             {
                 aItem->SetPosition( pad->GetPosition() );
             }
@@ -2767,6 +2800,7 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawSimilarZone.MakeEvent() );
     Go( &DRAWING_TOOL::DrawVia,               PCB_ACTIONS::drawVia.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceText,             PCB_ACTIONS::placeText.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawRectangle,         PCB_ACTIONS::drawTextBox.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceImportedGraphics, PCB_ACTIONS::placeImportedGraphics.MakeEvent() );
     Go( &DRAWING_TOOL::SetAnchor,             PCB_ACTIONS::setAnchor.MakeEvent() );
     Go( &DRAWING_TOOL::ToggleLine45degMode,   PCB_ACTIONS::toggle45.MakeEvent() );

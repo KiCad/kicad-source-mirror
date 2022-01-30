@@ -167,6 +167,7 @@ public:
     //void SetRotationAngle( EDA_ANGLE aRotationAngle );
 
     void ShowTextPropertiesDialog( BOARD_ITEM* aText );
+    int ShowTextBoxPropertiesDialog( BOARD_ITEM* aText );
     void ShowGraphicItemPropertiesDialog( BOARD_ITEM* aItem );
 
     ///< @copydoc EDA_DRAW_FRAME::UseGalCanvas()

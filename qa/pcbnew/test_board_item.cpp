@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,9 @@
 #include <pad.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
+#include <pcb_textbox.h>
 #include <fp_text.h>
+#include <fp_textbox.h>
 #include <fp_shape.h>
 #include <zone.h>
 #include <pcb_track.h>
@@ -73,7 +75,9 @@ public:
         case PCB_PAD_T:               return new PAD( &m_footprint );
         case PCB_SHAPE_T:             return new PCB_SHAPE( &m_board );
         case PCB_TEXT_T:              return new PCB_TEXT( &m_board );
+        case PCB_TEXTBOX_T:           return new PCB_TEXTBOX( &m_board );
         case PCB_FP_TEXT_T:           return new FP_TEXT( &m_footprint );
+        case PCB_FP_TEXTBOX_T:        return new FP_TEXTBOX( &m_footprint );
         case PCB_FP_SHAPE_T:          return new FP_SHAPE( &m_footprint );
         case PCB_FP_DIM_ALIGNED_T:    return new PCB_DIM_ALIGNED( &m_footprint, PCB_FP_DIM_ALIGNED_T );
         case PCB_FP_DIM_LEADER_T:     return new PCB_DIM_LEADER( &m_footprint, true );

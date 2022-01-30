@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,11 +31,11 @@
 #include <base_units.h>
 #include <geometry/shape_compound.h>
 #include <pcb_shape.h>
+#include "macros.h"
 
-
-PCB_SHAPE::PCB_SHAPE( BOARD_ITEM* aParent, KICAD_T idtype, SHAPE_T shapetype ) :
-    BOARD_ITEM( aParent, idtype ),
-    EDA_SHAPE( shapetype, Millimeter2iu( DEFAULT_LINE_WIDTH ), FILL_T::NO_FILL, false )
+PCB_SHAPE::PCB_SHAPE( BOARD_ITEM* aParent, KICAD_T aItemType, SHAPE_T aShapeType ) :
+    BOARD_ITEM( aParent, aItemType ),
+    EDA_SHAPE( aShapeType, Millimeter2iu( DEFAULT_LINE_WIDTH ), FILL_T::NO_FILL, false )
 {
 }
 
@@ -91,6 +91,31 @@ const VECTOR2I PCB_SHAPE::GetFocusPosition() const
     default:
         return GetCenter();
     }
+}
+
+
+std::vector<VECTOR2I> PCB_SHAPE::GetCorners() const
+{
+    std::vector<VECTOR2I> pts;
+
+    if( GetShape() == SHAPE_T::RECT )
+    {
+        pts = GetRectCorners();
+    }
+    else if( GetShape() == SHAPE_T::POLY )
+    {
+        for( const VECTOR2I& pt : GetPolyShape().Outline( 0 ).CPoints() )
+            pts.emplace_back( pt );
+    }
+    else
+    {
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    }
+
+    while( pts.size() < 4 )
+        pts.emplace_back( pts.back() + VECTOR2I( 10, 10 ) );
+
+    return pts;
 }
 
 

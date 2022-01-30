@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,19 +22,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file object_2d.cpp
- */
-
 #include "object_2d.h"
-#include <wx/log.h>
 #include <map>
 
 OBJECT_2D_STATS *OBJECT_2D_STATS::s_instance = nullptr;
 
 
-OBJECT_2D::OBJECT_2D( OBJECT_2D_TYPE aObjType, const BOARD_ITEM& aBoardItem )
-    : m_boardItem(aBoardItem)
+OBJECT_2D::OBJECT_2D( OBJECT_2D_TYPE aObjType, const BOARD_ITEM& aBoardItem ) :
+        m_boardItem( aBoardItem )
 {
     m_obj_type = aObjType;
     OBJECT_2D_STATS::Instance().AddOne( aObjType );

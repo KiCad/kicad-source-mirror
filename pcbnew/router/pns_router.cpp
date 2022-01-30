@@ -252,6 +252,8 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
 
             case PCB_TEXT_T:
             case PCB_FP_TEXT_T:
+            case PCB_TEXTBOX_T:
+            case PCB_FP_TEXTBOX_T:
                 SetFailureReason( _( "Cannot start routing from a text item." ) );
                 break;
 

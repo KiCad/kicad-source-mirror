@@ -30,6 +30,7 @@
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <fp_shape.h>
+#include <fp_textbox.h>
 #include <collectors.h>
 #include <pcb_edit_frame.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
@@ -1584,6 +1585,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         {
         case PCB_FP_SHAPE_T:
         case PCB_FP_TEXT_T:
+        case PCB_FP_TEXTBOX_T:
         case PCB_FP_ZONE_T:
         case PCB_PAD_T:
             // Only create undo entry for items on the board
@@ -1616,6 +1618,13 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         {
             FP_TEXT* text = static_cast<FP_TEXT*>( item );
             text->Mirror( mirrorPoint, false );
+            break;
+        }
+
+        case PCB_FP_TEXTBOX_T:
+        {
+            FP_TEXTBOX* textbox = static_cast<FP_TEXTBOX*>( item );
+            textbox->Mirror( mirrorPoint, false );
             break;
         }
 
@@ -1846,6 +1855,17 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
                 }
             }
 
+            break;
+        }
+
+        case PCB_FP_TEXTBOX_T:
+        {
+            FP_TEXTBOX* textbox = static_cast<FP_TEXTBOX*>( item );
+            FOOTPRINT*  parent = static_cast<FOOTPRINT*>( item->GetParent() );
+
+            m_commit->Modify( parent );
+            getView()->Remove( textbox );
+            parent->Remove( textbox );
             break;
         }
 
@@ -2142,6 +2162,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             {
             case PCB_FOOTPRINT_T:
             case PCB_TEXT_T:
+            case PCB_TEXTBOX_T:
             case PCB_SHAPE_T:
             case PCB_TRACE_T:
             case PCB_ARC_T:

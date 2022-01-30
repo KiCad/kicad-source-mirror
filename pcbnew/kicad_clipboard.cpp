@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 KiCad Developers, see AUTHORS.TXT for contributors.
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Kristoffer Ödmark
  *
  * This program is free software; you can redistribute it and/or
@@ -32,7 +32,9 @@
 #include <pcb_group.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
+#include <pcb_textbox.h>
 #include <fp_text.h>
+#include <fp_textbox.h>
 #include <zone.h>
 #include <locale_io.h>
 #include <netinfo.h>
@@ -213,6 +215,18 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                 pcb_text->SetAttributes( *fp_text );
                 pcb_text->SetLayer( fp_text->GetLayer() );
                 copy = pcb_text;
+            }
+            else if( item->Type() == PCB_FP_TEXTBOX_T )
+            {
+                // Convert to PCB_TEXTBOX_T
+                FP_TEXTBOX*  fp_textbox = static_cast<FP_TEXTBOX*>( item );
+                PCB_TEXTBOX* pcb_textbox = new PCB_TEXTBOX( m_board );
+
+                pcb_textbox->CopyText( *fp_textbox );
+
+                pcb_textbox->SetAttributes( *fp_textbox );
+                pcb_textbox->SetLayer( fp_textbox->GetLayer() );
+                copy = pcb_textbox;
             }
             else if( item->Type() == PCB_PAD_T )
             {

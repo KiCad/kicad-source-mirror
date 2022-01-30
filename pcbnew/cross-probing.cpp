@@ -311,7 +311,8 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
         footprint = static_cast<FOOTPRINT*>( aItem->GetParent() );
         wxString pad = static_cast<PAD*>( aItem )->GetNumber();
 
-        return StrPrintf( "$PART: \"%s\" $PAD: \"%s\"", TO_UTF8( footprint->GetReference() ),
+        return StrPrintf( "$PART: \"%s\" $PAD: \"%s\"",
+                          TO_UTF8( footprint->GetReference() ),
                           TO_UTF8( pad ) );
     }
 
@@ -331,7 +332,9 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
         else
             break;
 
-        return StrPrintf( "$PART: \"%s\" %s \"%s\"", TO_UTF8( footprint->GetReference() ), text_key,
+        return StrPrintf( "$PART: \"%s\" %s \"%s\"",
+                          TO_UTF8( footprint->GetReference() ),
+                          text_key,
                           TO_UTF8( text->GetText() ) );
     }
 

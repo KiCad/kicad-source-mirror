@@ -39,6 +39,8 @@ using namespace std::placeholders;
 #include <pcb_group.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
+#include <pcb_textbox.h>
+#include <fp_textbox.h>
 #include <pcb_marker.h>
 #include <zone.h>
 #include <collectors.h>
@@ -1889,7 +1891,9 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard
             break;
 
         case PCB_FP_TEXT_T:
+        case PCB_FP_TEXTBOX_T:
         case PCB_TEXT_T:
+        case PCB_TEXTBOX_T:
             include = aFilterOptions.includePcbTexts;
             break;
 
@@ -2023,7 +2027,9 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
         break;
 
     case PCB_FP_TEXT_T:
+    case PCB_FP_TEXTBOX_T:
     case PCB_TEXT_T:
+    case PCB_TEXTBOX_T:
         if( !m_filter.text )
             return false;
 
@@ -2430,6 +2436,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         break;
 
     case PCB_FP_SHAPE_T:
+    case PCB_FP_TEXTBOX_T:
         if( m_isFootprintEditor )
         {
             if( !view()->IsLayerVisible( aItem->GetLayer() ) )
@@ -2652,10 +2659,24 @@ int PCB_SELECTION_TOOL::hitTestDistance( const wxPoint& aWhere, BOARD_ITEM* aIte
         break;
     }
 
+    case PCB_TEXTBOX_T:
+    {
+        PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( aItem );
+        textbox->GetEffectiveTextShape()->Collide( loc, aMaxDistance, &distance );
+        break;
+    }
+
     case PCB_FP_TEXT_T:
     {
         FP_TEXT* text = static_cast<FP_TEXT*>( aItem );
         text->GetEffectiveTextShape()->Collide( loc, aMaxDistance, &distance );
+        break;
+    }
+
+    case PCB_FP_TEXTBOX_T:
+    {
+        FP_TEXTBOX* textbox = static_cast<FP_TEXTBOX*>( aItem );
+        textbox->GetEffectiveTextShape()->Collide( loc, aMaxDistance, &distance );
         break;
     }
 
@@ -2757,7 +2778,7 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
             BOARD_ITEM* item = aCollector[i];
             KICAD_T type = item->Type();
 
-            if( ( type == PCB_FP_TEXT_T || type == PCB_TEXT_T || type == PCB_SHAPE_T )
+            if( ( type == PCB_TEXT_T || type == PCB_TEXTBOX_T || type == PCB_SHAPE_T )
                     && silkLayers[item->GetLayer()] )
             {
                 preferred.insert( item );

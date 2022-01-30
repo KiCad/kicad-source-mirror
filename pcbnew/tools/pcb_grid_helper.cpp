@@ -24,7 +24,6 @@
  */
 
 #include <functional>
-#include <board.h>
 #include <pcb_dimension.h>
 #include <fp_shape.h>
 #include <footprint.h>
@@ -555,6 +554,8 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
         case PCB_FP_SHAPE_T:
         case PCB_SHAPE_T:
+        case PCB_FP_TEXTBOX_T:
+        case PCB_TEXTBOX_T:
         {
             if( !m_magneticSettings->graphics )
                 break;

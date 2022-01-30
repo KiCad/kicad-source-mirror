@@ -2,7 +2,7 @@
 # This program source code file is part of KiCad, a free EDA CAD application.
 #
 # Copyright (C) 2012 CERN.
-# Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+# Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -120,6 +120,7 @@ fp_line
 fp_poly
 fp_rect
 fp_text
+fp_text_box
 free
 full
 general
@@ -133,6 +134,7 @@ gr_line
 gr_poly
 gr_rect
 gr_text
+gr_text_box
 hatch
 hatch_thickness
 hatch_gap

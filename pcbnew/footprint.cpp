@@ -47,6 +47,7 @@
 #include <i18n_utility.h>
 #include <convert_shape_list_to_polygon.h>
 #include <geometry/convex_hull.h>
+#include "fp_textbox.h"
 
 FOOTPRINT::FOOTPRINT( BOARD* parent ) :
         BOARD_ITEM_CONTAINER((BOARD_ITEM*) parent, PCB_FOOTPRINT_T ),
@@ -510,6 +511,7 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     case PCB_FP_DIM_RADIAL_T:
     case PCB_FP_DIM_ORTHOGONAL_T:
     case PCB_FP_SHAPE_T:
+    case PCB_FP_TEXTBOX_T:
         if( aMode == ADD_MODE::APPEND )
             m_drawings.push_back( aBoardItem );
         else
@@ -559,9 +561,8 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
     {
     case PCB_FP_TEXT_T:
         // Only user text can be removed this way.
-        wxCHECK_RET(
-                static_cast<FP_TEXT*>( aBoardItem )->GetType() == FP_TEXT::TEXT_is_DIVERS,
-                "Please report this bug: Invalid remove operation on required text" );
+        wxCHECK_RET( static_cast<FP_TEXT*>( aBoardItem )->GetType() == FP_TEXT::TEXT_is_DIVERS,
+                     "Please report this bug: Invalid remove operation on required text" );
         KI_FALLTHROUGH;
 
     case PCB_FP_DIM_ALIGNED_T:
@@ -570,6 +571,7 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
     case PCB_FP_DIM_RADIAL_T:
     case PCB_FP_DIM_LEADER_T:
     case PCB_FP_SHAPE_T:
+    case PCB_FP_TEXTBOX_T:
         for( auto it = m_drawings.begin(); it != m_drawings.end(); ++it )
         {
             if( *it == aBoardItem )
@@ -767,7 +769,7 @@ const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisi
         if( !isFPEdit && m_privateLayers.test( item->GetLayer() ) )
             continue;
 
-        if( item->Type() == PCB_FP_SHAPE_T || BaseType( item->Type() ) == PCB_DIMENSION_T )
+        if( item->Type() != PCB_FP_TEXT_T )
             area.Merge( item->GetBoundingBox() );
     }
 
@@ -787,6 +789,8 @@ const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisi
             if( !isFPEdit && m_privateLayers.test( item->GetLayer() ) )
                 continue;
 
+            // Only FP_TEXT items are independently selectable; FP_TEXTBOX items go in with
+            // other graphic items above.
             if( item->Type() == PCB_FP_TEXT_T )
                 area.Merge( item->GetBoundingBox() );
         }
@@ -869,7 +873,7 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
         if( !isFPEdit && m_privateLayers.test( item->GetLayer() ) )
             continue;
 
-        if( item->Type() == PCB_FP_SHAPE_T || BaseType( item->Type() ) == PCB_DIMENSION_T )
+        if( item->Type() != PCB_FP_TEXT_T )
         {
             item->TransformShapeWithClearanceToPolygon( rawPolys, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
                                                         ERROR_OUTSIDE );
@@ -1069,6 +1073,9 @@ bool FOOTPRINT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 
         for( BOARD_ITEM* item : m_drawings )
         {
+            // Text items are selectable on their own, and are therefore excluded from this
+            // test.  TextBox items are NOT selectable on their own, and so MUST be included
+            // here.
             if( item->Type() != PCB_FP_TEXT_T && item->HitTest( arect, false, 0 ) )
                 return true;
         }
@@ -1249,6 +1256,7 @@ SEARCH_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData, const KICAD
         case PCB_FP_DIM_RADIAL_T:
         case PCB_FP_DIM_ORTHOGONAL_T:
         case PCB_FP_SHAPE_T:
+        case PCB_FP_TEXTBOX_T:
             result = IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, p );
 
             // skip over any types handled in the above call.
@@ -1257,6 +1265,7 @@ SEARCH_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData, const KICAD
                 switch( stype = *++p )
                 {
                 case PCB_FP_TEXT_T:
+                case PCB_FP_TEXTBOX_T:
                 case PCB_FP_SHAPE_T:
                 case PCB_FP_DIM_ALIGNED_T:
                 case PCB_FP_DIM_LEADER_T:
@@ -1557,6 +1566,10 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
             static_cast<FP_TEXT*>( item )->Flip( m_pos, false );
             break;
 
+        case PCB_FP_TEXTBOX_T:
+            static_cast<FP_TEXTBOX*>( item )->Flip( m_pos, false );
+            break;
+
         default:
             wxMessageBox( wxT( "FOOTPRINT::Flip() error: Unknown Draw Type" ) );
             break;
@@ -1597,6 +1610,7 @@ void FOOTPRINT::SetPosition( const VECTOR2I& aPos )
         switch( item->Type() )
         {
         case PCB_FP_SHAPE_T:
+        case PCB_FP_TEXTBOX_T:
         {
             FP_SHAPE* shape = static_cast<FP_SHAPE*>( item );
             shape->SetDrawCoord();
@@ -1633,14 +1647,14 @@ void FOOTPRINT::SetPosition( const VECTOR2I& aPos )
 
 void FOOTPRINT::MoveAnchorPosition( const VECTOR2I& aMoveVector )
 {
-    /* Move the reference point of the footprint
+    /*
+     * Move the reference point of the footprint
      * the footprints elements (pads, outlines, edges .. ) are moved
      * but:
      * - the footprint position is not modified.
      * - the relative (local) coordinates of these items are modified
      * - Draw coordinates are updated
      */
-
 
     // Update (move) the relative coordinates relative to the new anchor point.
     VECTOR2I moveVector = aMoveVector;
@@ -1665,19 +1679,20 @@ void FOOTPRINT::MoveAnchorPosition( const VECTOR2I& aMoveVector )
         switch( item->Type() )
         {
         case PCB_FP_SHAPE_T:
+        case PCB_FP_TEXTBOX_T:
         {
             FP_SHAPE* shape = static_cast<FP_SHAPE*>( item );
             shape->Move( moveVector );
-        }
             break;
+        }
 
         case PCB_FP_TEXT_T:
         {
             FP_TEXT* text = static_cast<FP_TEXT*>( item );
             text->SetPos0( text->GetPos0() + moveVector );
             text->SetDrawCoord();
-        }
             break;
+        }
 
         default:
             break;
@@ -1727,10 +1742,20 @@ void FOOTPRINT::SetOrientation( const EDA_ANGLE& aNewAngle )
     // Displace contours and text of the footprint.
     for( BOARD_ITEM* item : m_drawings )
     {
-        if( item->Type() == PCB_FP_SHAPE_T )
+        switch( item->Type() )
+        {
+        case PCB_FP_SHAPE_T:
+        case PCB_FP_TEXTBOX_T:
             static_cast<FP_SHAPE*>( item )->SetDrawCoord();
-        else if( item->Type() == PCB_FP_TEXT_T )
+            break;
+
+        case PCB_FP_TEXT_T:
             static_cast<FP_TEXT*>( item )->SetDrawCoord();
+            break;
+
+        default:
+            break;
+        }
     }
 
     m_boundingBoxCacheTimeStamp = 0;
@@ -1819,6 +1844,18 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
             Add( new_shape );
 
         new_item = new_shape;
+        break;
+    }
+
+    case PCB_FP_TEXTBOX_T:
+    {
+        FP_TEXTBOX* new_textbox = new FP_TEXTBOX( *static_cast<const FP_TEXTBOX*>( aItem ) );
+        const_cast<KIID&>( new_textbox->m_Uuid ) = KIID();
+
+        if( aAddToFootprint )
+            Add( new_textbox );
+
+        new_item = new_textbox;
         break;
     }
 
@@ -1937,6 +1974,13 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
         text->TransformTextShapeWithClearanceToPolygon( poly, UNDEFINED_LAYER, textMargin,
                                                         ARC_LOW_DEF, ERROR_OUTSIDE );
     }
+    else if( aItem->Type() == PCB_FP_TEXTBOX_T )
+    {
+        const FP_TEXTBOX* textbox = static_cast<const FP_TEXTBOX*>( aItem );
+
+        textbox->TransformTextShapeWithClearanceToPolygon( poly, UNDEFINED_LAYER, textMargin,
+                                                           ARC_LOW_DEF, ERROR_OUTSIDE );
+    }
     else if( aItem->Type() == PCB_SHAPE_T )
     {
         // Approximate "linear" shapes with just their width squared, as we don't want to consider
@@ -2004,6 +2048,7 @@ double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
         switch( item->Type() )
         {
         case PCB_FP_TEXT_T:
+        case PCB_FP_TEXTBOX_T:
         case PCB_FP_SHAPE_T:
             if( item->GetParent() != this )
             {
@@ -2013,6 +2058,7 @@ double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
             break;
 
         case PCB_TEXT_T:
+        case PCB_TEXTBOX_T:
         case PCB_SHAPE_T:
         case PCB_TRACE_T:
         case PCB_ARC_T:
@@ -2395,6 +2441,17 @@ void FOOTPRINT::TransformFPShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCorner
 
             if( aLayer != UNDEFINED_LAYER && text->GetLayer() == aLayer && text->IsVisible() )
                 texts.push_back( text );
+        }
+
+        if( item->Type() == PCB_FP_TEXTBOX_T && aIncludeText )
+        {
+            FP_TEXTBOX* textbox = static_cast<FP_TEXTBOX*>( item );
+
+            if( aLayer != UNDEFINED_LAYER && textbox->GetLayer() == aLayer && textbox->IsVisible() )
+            {
+                textbox->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0,
+                                                               aError, aErrorLoc, false );
+            }
         }
 
         if( item->Type() == PCB_FP_SHAPE_T && aIncludeShapes )

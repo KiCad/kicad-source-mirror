@@ -304,8 +304,6 @@ public:
     virtual KIFONT::FONT* GetDrawFont() const;
     virtual EDA_ANGLE GetDrawRotation() const               { return GetTextAngle(); }
     virtual VECTOR2I GetDrawPos() const                     { return GetTextPos(); }
-    virtual GR_TEXT_H_ALIGN_T GetDrawHorizJustify() const   { return GetHorizJustify(); };
-    virtual GR_TEXT_V_ALIGN_T GetDrawVertJustify() const    { return GetVertJustify(); };
 
     virtual void ClearRenderCache();
     virtual void ClearBoundingBoxCache();
@@ -344,6 +342,7 @@ private:
     mutable std::vector<std::unique_ptr<KIFONT::GLYPH>> m_render_cache;
 
     mutable bool     m_bounding_box_cache_valid;
+    mutable VECTOR2I m_bounding_box_cache_pos;
     mutable EDA_RECT m_bounding_box_cache;
 
     TEXT_ATTRIBUTES  m_attributes;

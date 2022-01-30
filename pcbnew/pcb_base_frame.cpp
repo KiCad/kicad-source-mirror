@@ -360,7 +360,9 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
 
         case PCB_SHAPE_T:
         case PCB_TEXT_T:
+        case PCB_TEXTBOX_T:
         case PCB_FP_TEXT_T:
+        case PCB_FP_TEXTBOX_T:
         case PCB_FP_SHAPE_T:
         case PCB_FP_ZONE_T:
         case PCB_TRACE_T:

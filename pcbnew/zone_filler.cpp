@@ -560,6 +560,8 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
     {
     case PCB_SHAPE_T:
     case PCB_TEXT_T:
+    case PCB_TEXTBOX_T:
+    case PCB_FP_TEXTBOX_T:
     case PCB_FP_SHAPE_T:
     case PCB_TARGET_T:
         aItem->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
@@ -575,8 +577,9 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
             text->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
                                                         ERROR_OUTSIDE, aIgnoreLineWidth );
         }
-    }
+
         break;
+    }
 
     default:
         break;

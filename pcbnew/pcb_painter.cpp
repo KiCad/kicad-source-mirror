@@ -30,15 +30,16 @@
 #include <pcb_track.h>
 #include <pcb_group.h>
 #include <footprint.h>
+#include <fp_textbox.h>
 #include <pad.h>
 #include <pcb_shape.h>
 #include <string_utils.h>
 #include <zone.h>
 #include <pcb_text.h>
+#include <pcb_textbox.h>
 #include <pcb_marker.h>
 #include <pcb_dimension.h>
 #include <pcb_target.h>
-#include <advanced_config.h>
 
 #include <layer_ids.h>
 #include <pcb_painter.h>
@@ -460,8 +461,16 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         draw( static_cast<const PCB_TEXT*>( item ), aLayer );
         break;
 
+    case PCB_TEXTBOX_T:
+        draw( static_cast<const PCB_TEXTBOX*>( item ), aLayer );
+        break;
+
     case PCB_FP_TEXT_T:
         draw( static_cast<const FP_TEXT*>( item ), aLayer );
+        break;
+
+    case PCB_FP_TEXTBOX_T:
+        draw( static_cast<const FP_TEXTBOX*>( item ), aLayer );
         break;
 
     case PCB_FOOTPRINT_T:
@@ -1603,6 +1612,66 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
 }
 
 
+void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
+{
+    const COLOR4D& color = m_pcbSettings.GetColor( aTextBox, aTextBox->GetLayer() );
+    int            thickness = getLineThickness( aTextBox->GetWidth() );
+    PLOT_DASH_TYPE lineStyle = aTextBox->GetStroke().GetPlotStyle();
+
+    m_gal->SetFillColor( color );
+    m_gal->SetStrokeColor( color );
+    m_gal->SetIsFill( true );
+    m_gal->SetIsStroke( false );
+
+    if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
+    {
+        if( thickness > 0 )
+        {
+            std::vector<VECTOR2I> pts = aTextBox->GetCorners();
+
+            for( size_t ii = 0; ii < pts.size(); ++ii )
+                m_gal->DrawSegment( pts[ ii ], pts[ (ii + 1) % pts.size() ], thickness );
+        }
+    }
+    else
+    {
+        std::vector<SHAPE*> shapes = aTextBox->MakeEffectiveShapes( true );
+
+        for( SHAPE* shape : shapes )
+        {
+            STROKE_PARAMS::Stroke( shape, lineStyle, thickness, &m_pcbSettings,
+                                   [&]( const VECTOR2I& a, const VECTOR2I& b )
+                                   {
+                                       m_gal->DrawSegment( a, b, thickness );
+                                   } );
+        }
+
+        for( SHAPE* shape : shapes )
+            delete shape;
+    }
+
+    wxString resolvedText( aTextBox->GetShownText() );
+
+    if( resolvedText.Length() == 0 )
+        return;
+
+    TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
+    attrs.m_StrokeWidth = getLineThickness( aTextBox->GetEffectiveTextPenWidth() );
+
+    std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = aTextBox->GetRenderCache( resolvedText );
+
+    if( cache )
+    {
+        for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
+            m_gal->DrawGlyph( *glyph.get() );
+    }
+    else
+    {
+        strokeText( resolvedText, aTextBox->GetDrawPos(), attrs );
+    }
+}
+
+
 void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
 {
     wxString resolvedText( aText->GetShownText() );
@@ -1643,6 +1712,67 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
         m_gal->SetStrokeColor( m_pcbSettings.GetColor( nullptr, LAYER_ANCHOR ) );
         m_gal->DrawLine( aText->GetTextPos(), aText->GetParent()->GetPosition() );
+    }
+}
+
+
+void PCB_PAINTER::draw( const FP_TEXTBOX* aTextBox, int aLayer )
+{
+    const COLOR4D& color = m_pcbSettings.GetColor( aTextBox, aTextBox->GetLayer() );
+    int            thickness = getLineThickness( aTextBox->GetWidth() );
+    PLOT_DASH_TYPE lineStyle = aTextBox->GetStroke().GetPlotStyle();
+
+    m_gal->SetFillColor( color );
+    m_gal->SetStrokeColor( color );
+    m_gal->SetIsFill( true );
+    m_gal->SetIsStroke( false );
+
+    if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
+    {
+        if( thickness > 0 )
+        {
+            std::vector<VECTOR2I> pts = aTextBox->GetCorners();
+
+            for( size_t ii = 0; ii < pts.size(); ++ii )
+                m_gal->DrawSegment( pts[ ii ], pts[ (ii + 1) % pts.size() ], thickness );
+        }
+    }
+    else
+    {
+        std::vector<SHAPE*> shapes = aTextBox->MakeEffectiveShapes( true );
+
+        for( SHAPE* shape : shapes )
+        {
+            STROKE_PARAMS::Stroke( shape, lineStyle, thickness, &m_pcbSettings,
+                                   [&]( const VECTOR2I& a, const VECTOR2I& b )
+                                   {
+                                       m_gal->DrawSegment( a, b, thickness );
+                                   } );
+        }
+
+        for( SHAPE* shape : shapes )
+            delete shape;
+    }
+
+    wxString resolvedText( aTextBox->GetShownText() );
+
+    if( resolvedText.Length() == 0 )
+        return;
+
+    TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
+    attrs.m_Angle = aTextBox->GetDrawRotation();
+    attrs.m_StrokeWidth = getLineThickness( aTextBox->GetEffectiveTextPenWidth() );
+
+    std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = aTextBox->GetRenderCache( resolvedText );
+
+    if( cache )
+    {
+        for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
+            m_gal->DrawGlyph( *glyph.get() );
+    }
+    else
+    {
+        strokeText( resolvedText, aTextBox->GetDrawPos(), attrs );
     }
 }
 
@@ -1866,7 +1996,6 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
     // Draw text
     const PCB_TEXT& text = aDimension->Text();
     wxString        resolvedText = text.GetShownText();
-    VECTOR2D        position( text.GetTextPos().x, text.GetTextPos().y );
     TEXT_ATTRIBUTES attrs = text.GetAttributes();
 
     if( outline_mode )
@@ -1883,7 +2012,7 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
     }
     else
     {
-        strokeText( resolvedText, position, attrs );
+        strokeText( resolvedText, text.GetTextPos(), attrs );
     }
 }
 

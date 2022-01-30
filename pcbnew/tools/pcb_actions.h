@@ -148,6 +148,7 @@ public:
     static TOOL_ACTION drawCircle;
     static TOOL_ACTION drawArc;
     static TOOL_ACTION placeText;
+    static TOOL_ACTION drawTextBox;
     static TOOL_ACTION drawAlignedDimension;
     static TOOL_ACTION drawCenterDimension;
     static TOOL_ACTION drawRadialDimension;

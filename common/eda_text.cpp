@@ -457,8 +457,11 @@ EDA_TEXT::GetRenderCache( const wxString& forResolvedText ) const
             m_render_cache.clear();
 
             KIFONT::OUTLINE_FONT* font = static_cast<KIFONT::OUTLINE_FONT*>( GetFont() );
-            font->GetLinesAsGlyphs( &m_render_cache, this );
+            TEXT_ATTRIBUTES       attrs = GetAttributes();
 
+            attrs.m_Angle = resolvedAngle;
+
+            font->GetLinesAsGlyphs( &m_render_cache, GetShownText(), GetDrawPos(), attrs );
             m_render_cache_angle = resolvedAngle;
             m_render_cache_text = forResolvedText;
         }
@@ -507,8 +510,14 @@ int EDA_TEXT::GetInterline() const
 
 EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 {
+    VECTOR2I drawPos = GetDrawPos();
+
     if( m_bounding_box_cache_valid && aLine < 0 && !aInvertY )
+    {
+        m_bounding_box_cache.Offset( drawPos - m_bounding_box_cache_pos );
+        m_bounding_box_cache_pos = drawPos;
         return m_bounding_box_cache;
+    }
 
     EDA_RECT       rect;
     wxArrayString  strings;
@@ -540,7 +549,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     // Creates bounding box (rectangle) for horizontal, left and top justified text. The
     // bounding box will be moved later according to the actual text options
     wxSize   textsize = wxSize( dx, fontSize.y );
-    VECTOR2I pos = GetTextPos();
+    VECTOR2I pos = drawPos;
 
     if( IsMultilineAllowed() && aLine > 0 && ( aLine < static_cast<int>( strings.GetCount() ) ) )
         pos.y -= aLine * GetInterline();
@@ -599,6 +608,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     if( aLine < 0 && !aInvertY )
     {
         m_bounding_box_cache_valid = true;
+        m_bounding_box_cache_pos = drawPos;
         m_bounding_box_cache = rect;
     }
 
@@ -612,7 +622,7 @@ bool EDA_TEXT::TextHitTest( const VECTOR2I& aPoint, int aAccuracy ) const
     VECTOR2I location = aPoint;
 
     rect.Inflate( aAccuracy );
-    RotatePoint( location, GetTextPos(), -GetTextAngle() );
+    RotatePoint( location, GetDrawPos(), -GetDrawRotation() );
 
     return rect.Contains( location );
 }
@@ -627,7 +637,7 @@ bool EDA_TEXT::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy
     if( aContains )
         return rect.Contains( GetTextBox() );
 
-    return rect.Intersects( GetTextBox(), GetTextAngle() );
+    return rect.Intersects( GetTextBox(), GetDrawRotation() );
 }
 
 
@@ -649,14 +659,14 @@ void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
     }
     else
     {
-        printOneLineOfText( aSettings, aOffset, aColor, aFillMode, GetShownText(), GetTextPos() );
+        printOneLineOfText( aSettings, aOffset, aColor, aFillMode, GetShownText(), GetDrawPos() );
     }
 }
 
 
 void EDA_TEXT::GetLinePositions( std::vector<VECTOR2I>& aPositions, int aLineCount ) const
 {
-    VECTOR2I pos = GetTextPos();    // Position of first line of the multiline text according
+    VECTOR2I pos = GetDrawPos();    // Position of first line of the multiline text according
                                     // to the center of the multiline text block
 
     VECTOR2I offset;                // Offset to next line.
@@ -681,10 +691,10 @@ void EDA_TEXT::GetLinePositions( std::vector<VECTOR2I>& aPositions, int aLineCou
     }
 
     // Rotate the position of the first line around the center of the multiline text block
-    RotatePoint( pos, GetTextPos(), GetTextAngle() );
+    RotatePoint( pos, GetDrawPos(), GetDrawRotation() );
 
     // Rotate the offset lines to increase happened in the right direction
-    RotatePoint( offset, GetTextAngle() );
+    RotatePoint( offset, GetDrawRotation() );
 
     for( int ii = 0; ii < aLineCount; ii++ )
     {
@@ -709,7 +719,7 @@ void EDA_TEXT::printOneLineOfText( const RENDER_SETTINGS* aSettings, const VECTO
     if( IsMirrored() )
         size.x = -size.x;
 
-    GRPrintText( DC, aOffset + aPos, aColor, aText, GetTextAngle(), size, GetHorizJustify(),
+    GRPrintText( DC, aOffset + aPos, aColor, aText, GetDrawRotation(), size, GetHorizJustify(),
                  GetVertJustify(), penWidth, IsItalic(), IsBold(), GetDrawFont() );
 }
 
@@ -850,7 +860,7 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( ) const
     TEXT_ATTRIBUTES attrs = GetAttributes();
     attrs.m_Angle = GetDrawRotation();
 
-    font->Draw( &callback_gal, GetShownText(), GetTextPos(), attrs );
+    font->Draw( &callback_gal, GetShownText(), GetDrawPos(), attrs );
 
     return shape;
 }
@@ -930,7 +940,7 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCorn
     for( VECTOR2I& corner : corners )
     {
         // Rotate polygon
-        RotatePoint( corner, GetTextPos(), GetTextAngle() );
+        RotatePoint( corner, GetDrawPos(), GetDrawRotation() );
         aCornerBuffer->Append( corner.x, corner.y );
     }
 }

@@ -99,7 +99,9 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                 if( !m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_ON_EDGECUTS )
                         && item->GetLayer() == Edge_Cuts )
                 {
-                    if( item->Type() == PCB_TEXT_T || BaseType( item->Type() ) == PCB_DIMENSION_T )
+                    if( item->Type() == PCB_TEXT_T
+                            || item->Type() == PCB_TEXTBOX_T
+                            || BaseType( item->Type() ) == PCB_DIMENSION_T )
                     {
                         std::shared_ptr<DRC_ITEM> drc = DRC_ITEM::Create( DRCE_TEXT_ON_EDGECUTS );
                         drc->SetItems( item );

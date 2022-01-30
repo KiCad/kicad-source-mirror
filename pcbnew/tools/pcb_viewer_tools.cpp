@@ -169,7 +169,7 @@ int PCB_VIEWER_TOOLS::TextOutlines( const TOOL_EVENT& aEvent )
     {
         KICAD_T t = item->Type();
 
-        if( t == PCB_TEXT_T || BaseType( t ) == PCB_DIMENSION_T )
+        if( t == PCB_TEXT_T || t == PCB_TEXTBOX_T || BaseType( t ) == PCB_DIMENSION_T )
             view()->Update( item, KIGFX::REPAINT );
     }
 

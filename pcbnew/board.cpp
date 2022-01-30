@@ -5,7 +5,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,7 @@
 #include <pcb_target.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
+#include <pcb_textbox.h>
 #include <core/arraydim.h>
 #include <core/kicad_algo.h>
 #include <connectivity/connectivity_data.h>
@@ -299,6 +300,7 @@ void BOARD::Move( const VECTOR2I& aMoveVector ) // overload
     static const KICAD_T top_level_board_stuff[] = {
         PCB_MARKER_T,
         PCB_TEXT_T,
+        PCB_TEXTBOX_T,
         PCB_SHAPE_T,
         PCB_DIM_ALIGNED_T,
         PCB_DIM_ORTHOGONAL_T,
@@ -680,6 +682,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     case PCB_DIM_LEADER_T:
     case PCB_SHAPE_T:
     case PCB_TEXT_T:
+    case PCB_TEXTBOX_T:
     case PCB_TARGET_T:
         if( aMode == ADD_MODE::APPEND || aMode == ADD_MODE::BULK_APPEND )
             m_drawings.push_back( aBoardItem );
@@ -787,6 +790,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
     case PCB_DIM_LEADER_T:
     case PCB_SHAPE_T:
     case PCB_TEXT_T:
+    case PCB_TEXTBOX_T:
     case PCB_TARGET_T:
         alg::delete_matching( m_drawings, aBoardItem );
         break;
@@ -1225,6 +1229,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
         case PCB_FOOTPRINT_T:
         case PCB_PAD_T:
         case PCB_FP_TEXT_T:
+        case PCB_FP_TEXTBOX_T:
         case PCB_FP_SHAPE_T:
         case PCB_FP_DIM_ALIGNED_T:
         case PCB_FP_DIM_LEADER_T:
@@ -1244,6 +1249,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
                 case PCB_FOOTPRINT_T:
                 case PCB_PAD_T:
                 case PCB_FP_TEXT_T:
+                case PCB_FP_TEXTBOX_T:
                 case PCB_FP_SHAPE_T:
                 case PCB_FP_DIM_ALIGNED_T:
                 case PCB_FP_DIM_LEADER_T:
@@ -1264,6 +1270,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
 
         case PCB_SHAPE_T:
         case PCB_TEXT_T:
+        case PCB_TEXTBOX_T:
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_CENTER_T:
         case PCB_DIM_RADIAL_T:
@@ -1279,6 +1286,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
                 {
                 case PCB_SHAPE_T:
                 case PCB_TEXT_T:
+                case PCB_TEXTBOX_T:
                 case PCB_DIM_ALIGNED_T:
                 case PCB_DIM_CENTER_T:
                 case PCB_DIM_RADIAL_T:
@@ -2193,6 +2201,13 @@ bool BOARD::cmp_drawings::operator()( const BOARD_ITEM* aFirst,
         const PCB_TEXT* other = static_cast<const PCB_TEXT*>( aSecond );
         return text->Compare( other );
     }
+    else if( aFirst->Type() == PCB_TEXTBOX_T )
+    {
+        const PCB_TEXTBOX* textbox = static_cast<const PCB_TEXTBOX*>( aFirst );
+        const PCB_TEXTBOX* other = static_cast<const PCB_TEXTBOX*>( aSecond );
+
+        return textbox->PCB_SHAPE::Compare( other ) && textbox->EDA_TEXT::Compare( other );
+    }
 
     return aFirst->m_Uuid < aSecond->m_Uuid;
 }
@@ -2260,6 +2275,14 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
             const PCB_TEXT* text = static_cast<const PCB_TEXT*>( item );
             text->TransformTextShapeWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
                                                             ERROR_INSIDE );
+            break;
+        }
+
+        case PCB_TEXTBOX_T:
+        {
+            const PCB_TEXTBOX* textbox = static_cast<const PCB_TEXTBOX*>( item );
+            textbox->TransformTextShapeWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
+                                                               ERROR_INSIDE );
             break;
         }
 

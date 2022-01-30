@@ -246,7 +246,7 @@ void EDA_SHAPE::rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
             break;
         }
 
-        // Convert non-cartesian-rotated rect to a diamond
+        // Convert non-cardinally-rotated rect to a diamond
         m_shape = SHAPE_T::POLY;
         m_poly.RemoveAllContours();
         m_poly.NewOutline();

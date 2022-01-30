@@ -79,7 +79,7 @@ public:
     // Basic functions to plot a board item
     void SetLayerSet( LSET aLayerMask ) { m_layerMask = aLayerMask; }
     void PlotFootprintGraphicItems( const FOOTPRINT* aFootprint );
-    void PlotFootprintGraphicItem( const FP_SHAPE* aShape );
+    void PlotFootprintShape( const FP_SHAPE* aShape );
     void PlotFootprintTextItem( const FP_TEXT* aText, const COLOR4D& aColor );
 
     /*
@@ -91,7 +91,7 @@ public:
     void PlotDimension( const PCB_DIMENSION_BASE* aDim );
     void PlotPcbTarget( const PCB_TARGET* aMire );
     void PlotFilledAreas( const ZONE* aZone, const SHAPE_POLY_SET& aPolysList );
-    void PlotPcbText( const PCB_TEXT* aText );
+    void PlotPcbText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer );
     void PlotPcbShape( const PCB_SHAPE* aShape );
 
     /**

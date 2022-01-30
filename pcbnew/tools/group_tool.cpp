@@ -236,6 +236,7 @@ int GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
                         switch( item->Type() )
                         {
                         case PCB_FP_TEXT_T:
+                        case PCB_FP_TEXTBOX_T:
                         case PCB_FP_SHAPE_T:
                         case PCB_FP_ZONE_T:
                         case PCB_PAD_T:

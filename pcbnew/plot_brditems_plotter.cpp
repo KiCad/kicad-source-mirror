@@ -55,10 +55,12 @@
 #include <fp_shape.h>
 #include <footprint.h>
 #include <fp_text.h>
+#include <fp_textbox.h>
 #include <pcb_track.h>
 #include <pad.h>
 #include <pcb_target.h>
 #include <pcb_text.h>
+#include <pcb_textbox.h>
 #include <zone.h>
 
 #include <wx/debug.h>                         // for wxASSERT_MSG
@@ -350,7 +352,12 @@ void BRDITEMS_PLOTTER::PlotPcbGraphicItem( const BOARD_ITEM* item )
         break;
 
     case PCB_TEXT_T:
-        PlotPcbText( static_cast<const PCB_TEXT*>( item ) );
+        PlotPcbText( static_cast<const PCB_TEXT*>( item ), item->GetLayer() );
+        break;
+
+    case PCB_TEXTBOX_T:
+        PlotPcbText( static_cast<const PCB_TEXTBOX*>( item ), item->GetLayer() );
+        PlotPcbShape( static_cast<const PCB_TEXTBOX*>( item ) );
         break;
 
     case PCB_DIM_ALIGNED_T:
@@ -434,7 +441,7 @@ void BRDITEMS_PLOTTER::PlotDimension( const PCB_DIMENSION_BASE* aDim )
     // the white items are not seen on a white paper or screen
     m_plotter->SetColor( color != WHITE ? color : LIGHTGRAY);
 
-    PlotPcbText( &aDim->Text() );
+    PlotPcbText( &aDim->Text(), aDim->GetLayer() );
 
     for( const std::shared_ptr<SHAPE>& shape : aDim->GetShapes() )
     {
@@ -534,25 +541,57 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
         if( aFootprint->GetPrivateLayers().test( item->GetLayer() ) )
             continue;
 
-        if( item->Type() == PCB_FP_SHAPE_T )
+        switch( item->Type() )
+        {
+        case PCB_FP_SHAPE_T:
         {
             const FP_SHAPE* shape = static_cast<const FP_SHAPE*>( item );
 
             if( m_layerMask[ shape->GetLayer() ] )
-                PlotFootprintGraphicItem( shape );
+                PlotFootprintShape( shape );
+
+            break;
         }
-        else if( BaseType( item->Type() ) == PCB_DIMENSION_T )
+
+        case PCB_FP_TEXTBOX_T:
+        {
+            const FP_TEXTBOX* textbox = static_cast<const FP_TEXTBOX*>( item );
+
+            if( m_layerMask[ textbox->GetLayer() ] )
+            {
+                PlotPcbText( textbox, textbox->GetLayer() );
+                PlotFootprintShape( textbox );
+            }
+
+            break;
+        }
+
+        case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_CENTER_T:
+        case PCB_DIM_RADIAL_T:
+        case PCB_DIM_ORTHOGONAL_T:
+        case PCB_DIM_LEADER_T:
         {
             const PCB_DIMENSION_BASE* dimension = static_cast<const PCB_DIMENSION_BASE*>( item );
 
             if( m_layerMask[ dimension->GetLayer() ] )
                 PlotDimension( dimension );
+
+            break;
+        }
+
+        case PCB_FP_TEXT_T:
+            // Plotted in PlotFootprintTextItem()
+            break;
+
+        default:
+            UNIMPLEMENTED_FOR( item->GetClass() );
         }
     }
 }
 
 
-void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
+void BRDITEMS_PLOTTER::PlotFootprintShape( const FP_SHAPE* aShape )
 {
     if( aShape->Type() != PCB_FP_SHAPE_T )
         return;
@@ -735,7 +774,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
 }
 
 
-void BRDITEMS_PLOTTER::PlotPcbText( const PCB_TEXT* aText )
+void BRDITEMS_PLOTTER::PlotPcbText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer )
 {
     wxString      shownText( aText->GetShownText() );
     KIFONT::FONT* font = aText->GetDrawFont();
@@ -743,15 +782,15 @@ void BRDITEMS_PLOTTER::PlotPcbText( const PCB_TEXT* aText )
     if( shownText.IsEmpty() )
         return;
 
-    if( !m_layerMask[aText->GetLayer()] )
+    if( !m_layerMask[aLayer] )
         return;
 
     GBR_METADATA gbr_metadata;
 
-    if( IsCopperLayer( aText->GetLayer() ) )
+    if( IsCopperLayer( aLayer ) )
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_NONCONDUCTOR );
 
-    COLOR4D color = getColor( aText->GetLayer() );
+    COLOR4D color = getColor( aLayer );
     m_plotter->SetColor( color );
 
     VECTOR2I size = aText->GetTextSize();
@@ -781,14 +820,14 @@ void BRDITEMS_PLOTTER::PlotPcbText( const PCB_TEXT* aText )
         for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {
             wxString& txt =  strings_list.Item( ii );
-            m_plotter->Text( positions[ii], color, txt, aText->GetTextAngle(), size,
+            m_plotter->Text( positions[ii], color, txt, aText->GetDrawRotation(), size,
                              aText->GetHorizJustify(), aText->GetVertJustify(), thickness,
                              aText->IsItalic(), allow_bold, false, font, &gbr_metadata );
         }
     }
     else
     {
-        m_plotter->Text( pos, color, shownText, aText->GetTextAngle(), size,
+        m_plotter->Text( pos, color, shownText, aText->GetDrawRotation(), size,
                          aText->GetHorizJustify(), aText->GetVertJustify(), thickness,
                          aText->IsItalic(), allow_bold, false, font, &gbr_metadata );
     }

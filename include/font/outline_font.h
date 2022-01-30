@@ -112,9 +112,6 @@ public:
      * @param aGlyphs returns text glyphs
      * @param aText the text item
      */
-    void GetLinesAsGlyphs( std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
-                           const EDA_TEXT* aText ) const;
-
     void GetLinesAsGlyphs( std::vector<std::unique_ptr<GLYPH>>* aGlyphs, const wxString& aText,
                            const VECTOR2I& aPosition, const TEXT_ATTRIBUTES& aAttrs ) const;
 

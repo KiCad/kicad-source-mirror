@@ -89,7 +89,9 @@ enum KICAD_T
     PCB_PAD_T,               ///< class PAD, a pad in a footprint
     PCB_SHAPE_T,             ///< class PCB_SHAPE, a segment not on copper layers
     PCB_TEXT_T,              ///< class PCB_TEXT, text on a layer
+    PCB_TEXTBOX_T,           ///< class PCB_TEXTBOX, wrapped text on a layer
     PCB_FP_TEXT_T,           ///< class FP_TEXT, text in a footprint
+    PCB_FP_TEXTBOX_T,        ///< class FP_TEXTBOX, wrapped text in a footprint
     PCB_FP_SHAPE_T,          ///< class FP_SHAPE, a footprint edge
     PCB_FP_DIM_ALIGNED_T,    ///< class PCB_DIM_ALIGNED, a linear dimension (graphic item)
     PCB_FP_DIM_LEADER_T,     ///< class PCB_DIM_LEADER, a leader dimension (graphic item)
@@ -405,7 +407,9 @@ constexpr bool IsPcbnewType( const KICAD_T aType )
     case PCB_PAD_T:
     case PCB_SHAPE_T:
     case PCB_TEXT_T:
+    case PCB_TEXTBOX_T:
     case PCB_FP_TEXT_T:
+    case PCB_FP_TEXTBOX_T:
     case PCB_FP_SHAPE_T:
     case PCB_FP_DIM_ALIGNED_T:
     case PCB_FP_DIM_LEADER_T:

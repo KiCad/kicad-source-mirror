@@ -32,15 +32,16 @@ using namespace std::placeholders;
 #include <view/view_controls.h>
 #include <geometry/seg.h>
 #include <confirm.h>
-#include "pcb_actions.h"
-#include "pcb_selection_tool.h"
-#include "pcb_point_editor.h"
-#include "pcb_grid_helper.h"
+#include <tools/pcb_actions.h>
+#include <tools/pcb_selection_tool.h>
+#include <tools/pcb_point_editor.h>
+#include <tools/pcb_grid_helper.h>
 #include <board_commit.h>
-#include <bitmaps.h>
 #include <status_popup.h>
 #include <pcb_edit_frame.h>
+#include <pcb_textbox.h>
 #include <fp_shape.h>
+#include <fp_textbox.h>
 #include <pcb_dimension.h>
 #include <pad.h>
 #include <zone.h>
@@ -154,8 +155,7 @@ void PCB_POINT_EDITOR::buildForPolyOutline( std::shared_ptr<EDIT_POINTS> points,
             points->AddBreak();
     }
 
-    // Lines have to be added after creating edit points,
-    // as they use EDIT_POINT references
+    // Lines have to be added after creating edit points, as they use EDIT_POINT references
     for( int i = 0; i < cornersCount - 1; ++i )
     {
         if( points->IsContourEnd( i ) )
@@ -182,9 +182,21 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     if( !aItem )
         return points;
 
+    if( aItem->Type() == PCB_TEXTBOX_T || aItem->Type() == PCB_FP_TEXTBOX_T )
+    {
+        const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( aItem );
+
+        // We can't currently handle TEXTBOXes that have been turned into SHAPE_T::POLYs due
+        // to non-cardinal rotations
+        if( shape->GetShape() != SHAPE_T::RECT )
+            return points;
+    }
+
     // Generate list of edit points basing on the item type
     switch( aItem->Type() )
     {
+    case PCB_TEXTBOX_T:
+    case PCB_FP_TEXTBOX_T:
     case PCB_SHAPE_T:
     case PCB_FP_SHAPE_T:
     {
@@ -1053,6 +1065,8 @@ void PCB_POINT_EDITOR::updateItem() const
 
     switch( item->Type() )
     {
+    case PCB_TEXTBOX_T:
+    case PCB_FP_TEXTBOX_T:
     case PCB_SHAPE_T:
     case PCB_FP_SHAPE_T:
     {
@@ -1108,11 +1122,14 @@ void PCB_POINT_EDITOR::updateItem() const
             for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
             {
                 if( !isModified( m_editPoints->Line( i ) ) )
+                {
                     m_editPoints->Line( i ).SetConstraint(
                             new EC_PERPLINE( m_editPoints->Line( i ) ) );
+                }
             }
-        }
+
             break;
+        }
 
         case SHAPE_T::ARC:
         {
@@ -1145,8 +1162,9 @@ void PCB_POINT_EDITOR::updateItem() const
                 else
                     editArcEndpointKeepTangent( shape, center, start, mid, end, cursorPos );
             }
-        }
+
             break;
+        }
 
         case SHAPE_T::CIRCLE:
         {
@@ -1162,8 +1180,9 @@ void PCB_POINT_EDITOR::updateItem() const
             {
                 shape->SetEnd( VECTOR2I( end.x, end.y ) );
             }
-        }
+
             break;
+        }
 
         case SHAPE_T::POLY:
         {
@@ -1180,8 +1199,8 @@ void PCB_POINT_EDITOR::updateItem() const
             }
 
             validatePolygon( outline );
-        }
             break;
+        }
 
         case SHAPE_T::BEZIER:
             if( isModified( m_editPoints->Point( BEZIER_CURVE_START ) ) )
@@ -1222,8 +1241,8 @@ void PCB_POINT_EDITOR::updateItem() const
             int     diameter = (int) EuclideanNorm( end - pad->GetPosition() ) * 2;
 
             pad->SetSize( wxSize( diameter, diameter ) );
-        }
             break;
+        }
 
         case PAD_SHAPE::OVAL:
         case PAD_SHAPE::TRAPEZOID:
@@ -1307,8 +1326,8 @@ void PCB_POINT_EDITOR::updateItem() const
                 pad->SetPosition( VECTOR2I( ( left + right ) / 2, ( top + bottom ) / 2 ) );
                 pad->SetLocalCoord();
             }
-        }
             break;
+        }
 
         default:        // suppress warnings
             break;
@@ -1618,10 +1637,25 @@ void PCB_POINT_EDITOR::updatePoints()
     if( !item )
         return;
 
+    if( item->Type() == PCB_TEXTBOX_T || item->Type() == PCB_FP_TEXTBOX_T )
+    {
+        const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( item );
+
+        // We can't currently handle TEXTBOXes that have been turned into SHAPE_T::POLYs due
+        // to non-cardinal rotations
+        if( shape->GetShape() != SHAPE_T::RECT )
+        {
+            m_editPoints.reset();
+            return;
+        }
+    }
+
     switch( item->Type() )
     {
     case PCB_SHAPE_T:
     case PCB_FP_SHAPE_T:
+    case PCB_TEXTBOX_T:
+    case PCB_FP_TEXTBOX_T:
     {
         const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( item );
 

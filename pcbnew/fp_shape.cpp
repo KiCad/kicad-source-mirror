@@ -37,8 +37,8 @@
 #include <view/view.h>
 
 
-FP_SHAPE::FP_SHAPE( FOOTPRINT* parent, SHAPE_T aShape ) :
-        PCB_SHAPE( parent, PCB_FP_SHAPE_T, aShape )
+FP_SHAPE::FP_SHAPE( FOOTPRINT* parent, SHAPE_T aShape, KICAD_T aItemType ) :
+        PCB_SHAPE( parent, aItemType, aShape )
 {
     m_layer = F_SilkS;
 }

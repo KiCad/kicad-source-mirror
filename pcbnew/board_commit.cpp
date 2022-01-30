@@ -179,15 +179,16 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                     if( !( changeFlags & CHT_DONE ) )
                         board->Footprints().front()->Add( boardItem );
                 }
-                else if( boardItem->Type() == PCB_PAD_T ||
-                         boardItem->Type() == PCB_FP_TEXT_T ||
-                         boardItem->Type() == PCB_FP_SHAPE_T ||
-                         boardItem->Type() == PCB_FP_DIM_ALIGNED_T ||
-                         boardItem->Type() == PCB_FP_DIM_LEADER_T ||
-                         boardItem->Type() == PCB_FP_DIM_CENTER_T ||
-                         boardItem->Type() == PCB_FP_DIM_RADIAL_T ||
-                         boardItem->Type() == PCB_FP_DIM_ORTHOGONAL_T ||
-                         boardItem->Type() == PCB_FP_ZONE_T )
+                else if( boardItem->Type() == PCB_PAD_T
+                        || boardItem->Type() == PCB_FP_TEXT_T
+                        || boardItem->Type() == PCB_FP_TEXTBOX_T
+                        || boardItem->Type() == PCB_FP_SHAPE_T
+                        || boardItem->Type() == PCB_FP_DIM_ALIGNED_T
+                        || boardItem->Type() == PCB_FP_DIM_LEADER_T
+                        || boardItem->Type() == PCB_FP_DIM_CENTER_T
+                        || boardItem->Type() == PCB_FP_DIM_RADIAL_T
+                        || boardItem->Type() == PCB_FP_DIM_ORTHOGONAL_T
+                        || boardItem->Type() == PCB_FP_ZONE_T )
                 {
                     wxASSERT( boardItem->GetParent() &&
                               boardItem->GetParent()->Type() == PCB_FOOTPRINT_T );
@@ -229,6 +230,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 case PCB_PAD_T:
                 case PCB_FP_SHAPE_T:
                 case PCB_FP_TEXT_T:
+                case PCB_FP_TEXTBOX_T:
                 case PCB_FP_DIM_ALIGNED_T:
                 case PCB_FP_DIM_LEADER_T:
                 case PCB_FP_DIM_CENTER_T:
@@ -267,6 +269,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 // Board items
                 case PCB_SHAPE_T:            // a shape (normally not on copper layers)
                 case PCB_TEXT_T:             // a text on a layer
+                case PCB_TEXTBOX_T:          // a wrapped text on a layer
                 case PCB_TRACE_T:            // a track segment (segment on a copper layer)
                 case PCB_ARC_T:              // an arced track segment (segment on a copper layer)
                 case PCB_VIA_T:              // a via (like track segment on a copper layer)
@@ -461,23 +464,24 @@ EDA_ITEM* BOARD_COMMIT::parentObject( EDA_ITEM* aItem ) const
 {
     switch( aItem->Type() )
     {
-        case PCB_PAD_T:
-        case PCB_FP_SHAPE_T:
-        case PCB_FP_TEXT_T:
-        case PCB_FP_DIM_ALIGNED_T:
-        case PCB_FP_DIM_LEADER_T:
-        case PCB_FP_DIM_CENTER_T:
-        case PCB_FP_DIM_RADIAL_T:
-        case PCB_FP_DIM_ORTHOGONAL_T:
-        case PCB_FP_ZONE_T:
-            return aItem->GetParent();
+    case PCB_PAD_T:
+    case PCB_FP_SHAPE_T:
+    case PCB_FP_TEXT_T:
+    case PCB_FP_TEXTBOX_T:
+    case PCB_FP_DIM_ALIGNED_T:
+    case PCB_FP_DIM_LEADER_T:
+    case PCB_FP_DIM_CENTER_T:
+    case PCB_FP_DIM_RADIAL_T:
+    case PCB_FP_DIM_ORTHOGONAL_T:
+    case PCB_FP_ZONE_T:
+        return aItem->GetParent();
 
-        case PCB_ZONE_T:
-            wxASSERT( !dynamic_cast<FOOTPRINT*>( aItem->GetParent() ) );
-            return aItem;
+    case PCB_ZONE_T:
+        wxASSERT( !dynamic_cast<FOOTPRINT*>( aItem->GetParent() ) );
+        return aItem;
 
-        default:
-            break;
+    default:
+        break;
     }
 
     return aItem;

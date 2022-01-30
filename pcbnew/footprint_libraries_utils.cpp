@@ -1150,14 +1150,9 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName, b
 
         switch( footprintType )
         {
-        case 0:
-            footprintTranslated = FP_THROUGH_HOLE;
-            break;
-        case 1:
-            footprintTranslated = FP_SMD;
-            break;
-        default:
-            footprintTranslated = 0;
+        case 0:  footprintTranslated = FP_THROUGH_HOLE; break;
+        case 1:  footprintTranslated = FP_SMD;          break;
+        default: footprintTranslated = 0;               break;
         }
     }
 

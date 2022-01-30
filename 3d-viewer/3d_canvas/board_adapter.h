@@ -479,18 +479,21 @@ private:
     void addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2D_BASE* aDstContainer,
                              PCB_LAYER_ID aLayerId );
 
-    void addShape( const PCB_TEXT* aText, CONTAINER_2D_BASE* aDstContainer );
+    void addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aDstContainer,
+                  const BOARD_ITEM* aOwner );
 
-    void addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aDstContainer );
+    void addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aContainer,
+                   const BOARD_ITEM* aOwner );
 
-    void addShape( const PCB_DIMENSION_BASE* aDimension, CONTAINER_2D_BASE* aDstContainer );
+    void addShape( const PCB_DIMENSION_BASE* aDimension, CONTAINER_2D_BASE* aDstContainer,
+                   const BOARD_ITEM* aOwner );
 
-    void addSolidAreasShapes( const ZONE* aZoneContainer, CONTAINER_2D_BASE* aDstContainer,
+    void addSolidAreasShapes( const ZONE* aZone, CONTAINER_2D_BASE* aDstContainer,
                               PCB_LAYER_ID aLayerId );
 
     void transformArcToSegments( const VECTOR2I& aCentre, const VECTOR2I& aStart,
                                  const EDA_ANGLE& aArcAngle, int aCircleToSegmentsCount, int aWidth,
-                                 CONTAINER_2D_BASE* aDstContainer, const BOARD_ITEM& aBoardItem );
+                                 CONTAINER_2D_BASE* aDstContainer, const BOARD_ITEM& aOwner );
 
     void buildPadOutlineAsSegments( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer, int aWidth );
 

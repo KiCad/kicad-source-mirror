@@ -39,6 +39,9 @@
 #include <pcbplot.h>
 #include <gendrill_file_writer_base.h>
 #include <pcb_painter.h>
+#include <pcb_shape.h>
+#include <pcb_text.h>
+#include <pcb_textbox.h>
 
 
 /* Conversion utilities - these will be used often in there... */
@@ -197,11 +200,16 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         switch( item->Type() )
         {
         case PCB_SHAPE_T:
-            itemplotter.PlotPcbShape( (PCB_SHAPE*) item );
+            itemplotter.PlotPcbShape( static_cast<PCB_SHAPE*>( item ) );
             break;
 
         case PCB_TEXT_T:
-            itemplotter.PlotPcbText( (PCB_TEXT*) item );
+            itemplotter.PlotPcbText( static_cast<PCB_TEXT*>( item ), item->GetLayer() );
+            break;
+
+        case PCB_TEXTBOX_T:
+            itemplotter.PlotPcbText( static_cast<PCB_TEXTBOX*>( item ), item->GetLayer() );
+            itemplotter.PlotPcbShape( static_cast<PCB_TEXTBOX*>( item ) );
             break;
 
         case PCB_DIM_ALIGNED_T:

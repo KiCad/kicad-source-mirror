@@ -447,7 +447,8 @@ void FONT::LinebreakText( wxString& aText, int aColumnWidth, const VECTOR2I& aSi
 
         for( size_t jj = 0; jj < words.size(); /* advance in loop */ )
         {
-            if( lineWidth + spaceWidth + words[jj].second < aColumnWidth - aThickness )
+            if( lineWidth == 0
+                    || lineWidth + spaceWidth + words[jj].second < aColumnWidth - aThickness )
             {
                 if( lineWidth > 0 )
                 {

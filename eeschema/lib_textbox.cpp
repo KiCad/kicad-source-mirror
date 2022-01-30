@@ -120,19 +120,19 @@ void LIB_TEXTBOX::UpdateTextPosition()
     BOX2I bbox( VECTOR2I( std::min( m_start.x, m_end.x ), std::min( -m_start.y, -m_end.y ) ),
                 VECTOR2I( abs( m_end.x - m_start.x ), abs( m_end.y - m_start.y ) ) );
 
-    if( GetTextAngle() == ANGLE_HORIZONTAL )
-    {
-        if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
-            SetTextPos( VECTOR2I( bbox.GetRight() - margin, bbox.GetTop() + margin )  );
-        else
-            SetTextPos( VECTOR2I( bbox.GetLeft() + margin, bbox.GetTop() + margin )  );
-    }
-    else
+    if( GetTextAngle() == ANGLE_VERTICAL )
     {
         if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
             SetTextPos( VECTOR2I( bbox.GetLeft() + margin, bbox.GetTop() + margin )  );
         else
             SetTextPos( VECTOR2I( bbox.GetLeft() + margin, bbox.GetBottom() - margin )  );
+    }
+    else
+    {
+        if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+            SetTextPos( VECTOR2I( bbox.GetRight() - margin, bbox.GetTop() + margin )  );
+        else
+            SetTextPos( VECTOR2I( bbox.GetLeft() + margin, bbox.GetTop() + margin )  );
     }
 }
 
@@ -374,8 +374,6 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
 
 void LIB_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString msg;
-
     // Don't use GetShownText() here; we want to show the user the variable references
     aList.emplace_back( _( "Text Box" ), UnescapeString( GetText() ) );
 

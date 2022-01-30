@@ -1213,6 +1213,7 @@ static void FootprintWriteShape( FILE* aFile, FOOTPRINT* aFootprint, const wxStr
         switch( PtStruct->Type() )
         {
         case PCB_FP_TEXT_T:
+        case PCB_FP_TEXTBOX_T:
 
             // If we wanted to export text, this is not the correct section
             break;

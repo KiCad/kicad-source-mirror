@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +37,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_text.h>
+#include <pcb_textbox.h>
 #include <fp_shape.h>
 #include <zone.h>
 #include <convert_basic_shapes_to_polygon.h>
@@ -606,11 +607,16 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             switch( item->Type() )
             {
             case PCB_SHAPE_T:
-                addShape( static_cast<PCB_SHAPE*>( item ), layerContainer );
+                addShape( static_cast<PCB_SHAPE*>( item ), layerContainer, item );
                 break;
 
             case PCB_TEXT_T:
-                addShape( static_cast<PCB_TEXT*>( item ), layerContainer );
+                addText( static_cast<PCB_TEXT*>( item ), layerContainer, item );
+                break;
+
+            case PCB_TEXTBOX_T:
+                addText( static_cast<PCB_TEXTBOX*>( item ), layerContainer, item );
+                addShape( static_cast<PCB_TEXTBOX*>( item ), layerContainer, item );
                 break;
 
             case PCB_DIM_ALIGNED_T:
@@ -618,7 +624,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             case PCB_DIM_RADIAL_T:
             case PCB_DIM_ORTHOGONAL_T:
             case PCB_DIM_LEADER_T:
-                addShape( static_cast<PCB_DIMENSION_BASE*>( item ), layerContainer );
+                addShape( static_cast<PCB_DIMENSION_BASE*>( item ), layerContainer, item );
                 break;
 
             default:
@@ -657,8 +663,17 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
                     text->TransformTextShapeWithClearanceToPolygon( *layerPoly, cur_layer_id, 0,
                                                                     ARC_HIGH_DEF, ERROR_INSIDE );
-                }
                     break;
+                }
+
+                case PCB_TEXTBOX_T:
+                {
+                    PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
+
+                    textbox->TransformTextShapeWithClearanceToPolygon( *layerPoly, cur_layer_id, 0,
+                                                                       ARC_HIGH_DEF, ERROR_INSIDE );
+                    break;
+                }
 
                 default:
                     wxLogTrace( m_logTrace, wxT( "createLayers: item type: %d not implemented" ),
@@ -911,11 +926,16 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             switch( item->Type() )
             {
             case PCB_SHAPE_T:
-                addShape( static_cast<PCB_SHAPE*>( item ), layerContainer );
+                addShape( static_cast<PCB_SHAPE*>( item ), layerContainer, item );
                 break;
 
             case PCB_TEXT_T:
-                addShape( static_cast<PCB_TEXT*>( item ), layerContainer );
+                addText( static_cast<PCB_TEXT*>( item ), layerContainer, item );
+                break;
+
+            case PCB_TEXTBOX_T:
+                addText( static_cast<PCB_TEXTBOX*>( item ), layerContainer, item );
+                addShape( static_cast<PCB_TEXTBOX*>( item ), layerContainer, item );
                 break;
 
             case PCB_DIM_ALIGNED_T:
@@ -923,7 +943,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             case PCB_DIM_RADIAL_T:
             case PCB_DIM_ORTHOGONAL_T:
             case PCB_DIM_LEADER_T:
-                addShape( static_cast<PCB_DIMENSION_BASE*>( item ), layerContainer );
+                addShape( static_cast<PCB_DIMENSION_BASE*>( item ), layerContainer, item );
                 break;
 
             default:
@@ -950,8 +970,17 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
                 text->TransformTextShapeWithClearanceToPolygon( *layerPoly, curr_layer_id, 0,
                                                                 ARC_HIGH_DEF, ERROR_INSIDE );
-            }
                 break;
+            }
+
+            case PCB_TEXTBOX_T:
+            {
+                PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
+
+                textbox->TransformTextShapeWithClearanceToPolygon( *layerPoly, curr_layer_id, 0,
+                                                                   ARC_HIGH_DEF, ERROR_INSIDE );
+                break;
+            }
 
             default:
                 break;

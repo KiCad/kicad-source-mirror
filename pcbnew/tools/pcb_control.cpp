@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2016 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -40,9 +40,11 @@
 #include <pcb_dimension.h>
 #include <footprint.h>
 #include <pcb_group.h>
+#include <pcb_textbox.h>
 #include <pcb_track.h>
 #include <zone.h>
 #include <fp_shape.h>
+#include <fp_textbox.h>
 #include <confirm.h>
 #include <connectivity/connectivity_data.h>
 #include <core/kicad_algo.h>
@@ -661,7 +663,7 @@ static void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOA
     // So they will be skipped
     for( BOARD_ITEM* item : aClipFootprint->GraphicalItems() )
     {
-        if( item->Type() == PCB_FP_SHAPE_T )
+        if( item->Type() == PCB_FP_SHAPE_T || item->Type() == PCB_FP_TEXTBOX_T )
         {
             FP_SHAPE* shape = static_cast<FP_SHAPE*>( item );
 
@@ -789,6 +791,18 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
                         pastedTextItem->SetParent( editorFootprint );
                         pastedItems.push_back( pastedTextItem );
+                    }
+                    else if( clipDrawItem->Type() == PCB_TEXTBOX_T )
+                    {
+                        PCB_TEXTBOX* clipTextBox = static_cast<PCB_TEXTBOX*>( clipDrawItem );
+
+                        // Convert to PCB_FP_TEXTBOX_T
+                        FP_TEXTBOX* pastedTextBox = new FP_TEXTBOX( editorFootprint );
+                        static_cast<EDA_TEXT*>( pastedTextBox )->SwapText( *clipTextBox );
+                        static_cast<EDA_TEXT*>( pastedTextBox )->SwapAttributes( *clipTextBox );
+
+                        pastedTextBox->SetParent( editorFootprint );
+                        pastedItems.push_back( pastedTextBox );
                     }
                 }
 

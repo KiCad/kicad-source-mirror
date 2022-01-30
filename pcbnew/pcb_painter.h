@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -47,7 +47,9 @@ class PCB_GROUP;
 class FOOTPRINT;
 class ZONE;
 class PCB_TEXT;
+class PCB_TEXTBOX;
 class FP_TEXT;
+class FP_TEXTBOX;
 class PCB_DIMENSION_BASE;
 class PCB_TARGET;
 class PCB_MARKER;
@@ -170,7 +172,9 @@ protected:
     void draw( const PAD* aPad, int aLayer );
     void draw( const PCB_SHAPE* aSegment, int aLayer );
     void draw( const PCB_TEXT* aText, int aLayer );
+    void draw( const PCB_TEXTBOX* aText, int aLayer );
     void draw( const FP_TEXT* aText, int aLayer );
+    void draw( const FP_TEXTBOX* aText, int aLayer );
     void draw( const FOOTPRINT* aFootprint, int aLayer );
     void draw( const PCB_GROUP* aGroup, int aLayer );
     void draw( const ZONE* aZone, int aLayer );

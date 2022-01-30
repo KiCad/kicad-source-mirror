@@ -41,10 +41,12 @@ class PCB_SHAPE;
 class PCB_TARGET;
 class PAD;
 class FP_TEXT;
+class FP_TEXTBOX;
 class PCB_GROUP;
 class PCB_TRACK;
 class ZONE;
 class PCB_TEXT;
+class PCB_TEXTBOX;
 class EDA_TEXT;
 class SHAPE_LINE_CHAIN;
 
@@ -275,8 +277,10 @@ private:
     void format( const PAD* aPad, int aNestLevel = 0 ) const;
 
     void format( const PCB_TEXT* aText, int aNestLevel = 0 ) const;
+    void format( const PCB_TEXTBOX* aTextBox, int aNestLevel = 0 ) const;
 
     void format( const FP_TEXT* aText, int aNestLevel = 0 ) const;
+    void format( const FP_TEXTBOX* aTextBox, int aNestLevel = 0 ) const;
 
     void format( const PCB_TRACK* aTrack, int aNestLevel = 0 ) const;
 

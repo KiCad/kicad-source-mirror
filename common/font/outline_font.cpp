@@ -192,20 +192,6 @@ BOX2I OUTLINE_FONT::getBoundingBox( const std::vector<std::unique_ptr<GLYPH>>& a
 
 
 void OUTLINE_FONT::GetLinesAsGlyphs( std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
-                                     const EDA_TEXT* aText ) const
-{
-    wxArrayString         strings;
-    std::vector<VECTOR2I> positions;
-    std::vector<VECTOR2I> extents;
-    TEXT_ATTRIBUTES       attrs = aText->GetAttributes();
-
-    attrs.m_Angle = aText->GetDrawRotation();
-
-    return GetLinesAsGlyphs( aGlyphs, aText->GetShownText(), aText->GetTextPos(), attrs );
-}
-
-
-void OUTLINE_FONT::GetLinesAsGlyphs( std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                                      const wxString& aText, const VECTOR2I& aPosition,
                                      const TEXT_ATTRIBUTES& aAttrs ) const
 {
