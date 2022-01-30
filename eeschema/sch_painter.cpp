@@ -903,6 +903,11 @@ void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer )
         TEXT_ATTRIBUTES attrs = aText->GetAttributes();
         attrs.m_StrokeWidth = getTextThickness( aText, drawingShadows );
 
+        // Because the text position is the bounding box center, the text
+        // is drawn as centered.
+        attrs.m_Halign = GR_TEXT_H_ALIGN_CENTER;
+        attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
+
         strokeText( aText->GetText(), pos, attrs );
     }
 }
