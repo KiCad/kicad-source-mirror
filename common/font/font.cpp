@@ -454,17 +454,24 @@ void FONT::LinebreakText( wxString& aText, int aColumnWidth, const VECTOR2I& aSi
                     aText += " ";
                     lineWidth += spaceWidth;
                 }
-
-                aText += words[jj].first;
-                lineWidth += words[jj].second;
-
-                jj++;
             }
-            else
+            else if( lineWidth > 0 )
             {
                 aText += '\n';
                 lineWidth = 0;
+                continue;
             }
+            else
+            {
+                // TODO: Would we want to further split the words into characters when it doesn't fit
+                // in the column width? For now just return the full word even if it doesn't fit
+                // to avoid an infinite loop.
+            }
+
+            aText += words[jj].first;
+            lineWidth += words[jj].second;
+
+            jj++;
         }
     }
 }
