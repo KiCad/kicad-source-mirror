@@ -5,7 +5,7 @@
 # Rigo Ligo <rigoligo03@gmail.com>, 2020, 2021, 2022.
 # Eric <spice2wolf@gmail.com>, 2020, 2021.
 # Liu Guang <l.g110@163.com>, 2021.
-# CloverGit <w991593239@163.com>, 2021.
+# CloverGit <w991593239@163.com>, 2021, 2022.
 # Deleted User <noreply+33206@weblate.org>, 2021.
 # David Chen <d0123456789g@yahoo.com.tw>, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2021.
@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2022-01-30 12:26+0000\n"
-"Last-Translator: Tian Yunhao <t123yh@outlook.com>\n"
+"PO-Revision-Date: 2022-02-01 13:57+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -33327,7 +33327,7 @@ msgstr "无法从一个文本项开始布线。"
 
 #: pcbnew/router/pns_router.cpp:260
 msgid "Cannot start routing from a graphic."
-msgstr "无法从图形元素开始布线。"
+msgstr "不能在图形元素上进行布线。"
 
 #: pcbnew/router/pns_router.cpp:306 pcbnew/router/pns_router.cpp:362
 msgid "The routing start point violates DRC."
