@@ -853,6 +853,10 @@ void EE_SELECTION_TOOL::narrowSelection( EE_COLLECTOR& collector, const VECTOR2I
             else
                 line->SetFlags( STARTPOINT | ENDPOINT );
         }
+        else if( collector[i]->Type() == SCH_LINE_T )
+        {
+            static_cast<SCH_LINE*>( collector[i] )->SetFlags( STARTPOINT | ENDPOINT );
+        }
     }
 
     // Apply some ugly heuristics to avoid disambiguation menus whenever possible
