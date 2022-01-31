@@ -870,10 +870,7 @@ void PCB_DIM_ORTHOGONAL::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aA
     EDA_ANGLE angle( aAngle );
 
     // restrict angle to -179.9 to 180.0 degrees
-    if( angle > ANGLE_180 )
-        angle -= ANGLE_360;
-    else if( angle <= -ANGLE_180 )
-        angle += ANGLE_360;
+    angle.Normalize180();
 
     // adjust orientation and height to new angle
     // we can only handle the cases of -90, 0, 90, 180 degrees exactly;
