@@ -101,6 +101,21 @@ namespace KIPLATFORM
          * @return System scale factor in use, defaulting to the wxWidgets method
          */
         double GetSystemScaleFactor( const wxWindow* aWindow );
+
+        /**
+         * Tries to determine the size of the viewport of a scrollable widget
+         * (wxDataViewCtrl, wxGrid) that won't be obscured by scrollbars.
+         *
+         * @param aWindow pointer to the scrollable widget to check
+         * @return Viewport size that won't be obscured by scrollbars
+         */
+        wxSize GetUnobscuredSize( const wxWindow* aWindow );
+
+        /**
+         * Used to set overlay/non-overlay scrolling mode in a window.
+         * Implemented only on GTK.
+         */
+        void SetOverlayScrolling( const wxWindow* aWindow, bool overlay );
     }
 }
 

@@ -120,3 +120,17 @@ double KIPLATFORM::UI::GetSystemScaleFactor( const wxWindow* aWindow )
 
     return val;
 }
+
+
+wxSize KIPLATFORM::UI::GetUnobscuredSize( const wxWindow* aWindow )
+{
+    return wxSize( aWindow->GetSize().GetX() - wxSystemSettings::GetMetric( wxSYS_VSCROLL_X ),
+                   aWindow->GetSize().GetY() - wxSystemSettings::GetMetric( wxSYS_HSCROLL_Y ) );
+}
+
+
+void KIPLATFORM::UI::SetOverlayScrolling( const wxWindow* aWindow, bool overlay )
+{
+    gtk_scrolled_window_set_overlay_scrolling( GTK_SCROLLED_WINDOW( aWindow->GetHandle() ),
+                                               overlay );
+}
