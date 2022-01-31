@@ -35,7 +35,7 @@ endif( MINGW )
 
 add_library( kicad_3dsg SHARED ${SG_FILES} )
 
-if( KICAD_MACOSX_APP_BUNDLE )
+if( APPLE )
     # puts library into the main kicad.app bundle in build tree
     set_target_properties( kicad_3dsg PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY "${OSX_BUNDLE_BUILD_LIB_DIR}"

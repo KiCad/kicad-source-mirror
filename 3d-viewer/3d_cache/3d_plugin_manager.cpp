@@ -124,7 +124,7 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
     std::list< wxString > pluginlist;
     wxFileName fn;
 
-#ifndef __MACOSX_APP__
+#ifndef __WXMAC__
 
 #ifdef DEBUG
     // set up to work from the build directory

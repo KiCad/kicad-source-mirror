@@ -431,7 +431,7 @@ void NGSPICE::init_dll()
   #else
     const vector<string> dllPaths = { "", "/mingw64/bin", "/mingw32/bin" };
   #endif
-#elif defined(__MACOSX_APP__)
+#elif defined(__WXMAC__)
     const vector<string> dllPaths = {
         PATHS::GetOSXKicadUserDataDir().ToStdString() + "/PlugIns/ngspice",
         PATHS::GetOSXKicadMachineDataDir().ToStdString() + "/PlugIns/ngspice",

@@ -53,7 +53,7 @@ wxString FindKicadFile( const wxString& shortname )
 {
     // Test the presence of the file in the directory shortname of
     // the KiCad binary path.
-#ifndef __MACOSX_APP__
+#ifndef __WXMAC__
     wxString fullFileName = Pgm().GetExecutablePath() + shortname;
 #else
     wxString fullFileName = Pgm().GetExecutablePath() + wxT( "Contents/MacOS/" ) + shortname;
@@ -79,7 +79,7 @@ wxString FindKicadFile( const wxString& shortname )
 
     // Path list for KiCad binary files
     const static wxChar* possibilities[] = {
-#if defined( __MACOSX_APP__ )
+#if defined( __WXMAC__ )
         // all internal paths are relative to main bundle kicad.app
         wxT( "Contents/Applications/pcbnew.app/Contents/MacOS/" ),
         wxT( "Contents/Applications/eeschema.app/Contents/MacOS/" ),
@@ -97,7 +97,7 @@ wxString FindKicadFile( const wxString& shortname )
     // find binary file from possibilities list:
     for( unsigned i=0;  i<arrayDim(possibilities);  ++i )
     {
-#ifndef __MACOSX_APP__
+#ifndef __WXMAC__
         fullFileName = possibilities[i] + shortname;
 #else
         // make relative paths absolute

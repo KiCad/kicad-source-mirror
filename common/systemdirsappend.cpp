@@ -52,7 +52,7 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack )
     // Otherwise don't set it.
     maybe.AddPaths( wxGetenv( wxT( "KICAD" ) ) );
 
-#ifdef __MACOSX_APP__
+#ifdef __WXMAC__
     // Add the directory for the user-dependent, program specific data files.
     maybe.AddPaths( PATHS::GetOSXKicadUserDataDir() );
 
@@ -137,7 +137,7 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack )
     {
         wxFileName fn( maybe[i], wxEmptyString );
 
-#ifndef __MACOSX_APP__
+#ifndef __WXMAC__
         if( fn.GetPath().AfterLast( fn.GetPathSeparator() ) == wxT( "bin" ) )
         {
             fn.RemoveLastDir();
@@ -149,7 +149,7 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack )
 
         aSearchStack->AddPaths( fn.GetPath() );
 
-#ifndef __MACOSX_APP__
+#ifndef __WXMAC__
         fn.AppendDir( wxT( "kicad" ) );
         aSearchStack->AddPaths( fn.GetPath() );     // add maybe[i]/kicad
 

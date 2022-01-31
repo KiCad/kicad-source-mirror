@@ -588,7 +588,7 @@ set_source_files_properties( dialogs/panel_setup_rules.cpp
         OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help_md.h
     )
 
-if( KICAD_MACOSX_APP_BUNDLE )
+if( APPLE )
     # setup bundle
     set( PCBNEW_RESOURCES pcbnew.icns pcbnew_doc.icns )
     set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pcbnew.icns" PROPERTIES
@@ -626,10 +626,6 @@ target_link_libraries( pcbnew
     scripting
     nlohmann_json
     ${wxWidgets_LIBRARIES}
-    )
-
-set_target_properties( pcbnew PROPERTIES
-    MACOSX_BUNDLE $<BOOL:KICAD_MACOSX_APP_BUNDLE>
     )
 
 if( PCBNEW_LINK_MAPS )
@@ -745,7 +741,7 @@ if( WIN32 )
 endif()
 
 # these 2 binaries are a matched set, keep them together:
-if( KICAD_MACOSX_APP_BUNDLE )
+if( APPLE )
     set_target_properties( pcbnew PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${PROJECT_BINARY_DIR}/pcbnew/Info.plist
         )
@@ -793,7 +789,7 @@ if( KICAD_WIN32_INSTALL_PDBS )
     install(FILES $<TARGET_PDB_FILE:pcbnew_kiface> DESTINATION ${KICAD_BIN})
 endif()
 
-if( NOT KICAD_MACOSX_APP_BUNDLE )
+if( NOT APPLE )
     install( FILES ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py DESTINATION ${PYTHON_DEST} )
 else()
     # put into bundle at build time, it is relocated at install
@@ -818,7 +814,7 @@ install( DIRECTORY ${PROJECT_SOURCE_DIR}/pcbnew/python/plugins/
 if( MINGW OR VCPKG_TOOLCHAIN )
     install( FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.pyd DESTINATION ${PYTHON_DEST} )
     set( PYMOD_EXT "pyd" )
-elseif( KICAD_MACOSX_APP_BUNDLE )
+elseif( APPLE )
      # put everything into bundle at build time, it is relocated at install
     add_custom_target( ScriptingModulesPcbnewSoCopy ALL
         COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.so" "${PYTHON_DEST}/"
@@ -832,7 +828,7 @@ else()  # only linux remains among supported platforms
     set( PYMOD_EXT "so" )
 endif()
 
-if( KICAD_MACOSX_APP_BUNDLE )
+if( APPLE )
      add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
         DEPENDS pcbnew_kiface
         COMMAND ${CMAKE_COMMAND} -E copy  ${OSX_BUNDLE_BUILD_KIFACE_DIR}/_pcbnew.kiface _pcbnew.${PYMOD_EXT}
@@ -856,7 +852,7 @@ else()
 endif()
 
 
-if( KICAD_MACOSX_APP_BUNDLE )
+if( APPLE )
     # If we don't have wxPython, then we must create the site-packages directory
     add_custom_target( ScriptingPythonDirectoryCreation ALL
         COMMAND ${CMAKE_COMMAND} -E make_directory "${PYTHON_DEST}"

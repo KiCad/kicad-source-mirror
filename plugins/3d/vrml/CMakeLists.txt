@@ -71,7 +71,7 @@ target_include_directories( s3d_plugin_vrml PRIVATE
     $<TARGET_PROPERTY:gzip-hpp,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
-if( KICAD_MACOSX_APP_BUNDLE )
+if( APPLE )
     # puts library into the main kicad.app bundle in build tree
     set_target_properties( s3d_plugin_vrml PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY "${OSX_BUNDLE_BUILD_PLUGIN_DIR}/3d"

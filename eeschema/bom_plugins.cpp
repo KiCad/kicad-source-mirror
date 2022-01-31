@@ -75,7 +75,7 @@ BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
 #else
 // For macOS, we want to use the Python we bundle along, rather than just PYTHON_EXECUTABLE.
 // For non-Windows, non-macOS, we can call out to PYTHON_EXECUTABLE.
-#ifdef __MACOSX_APP__
+#ifdef __APPLE__
         // python is at Contents/Frameworks/Python.framework/Versions/Current/bin/python3
 
         // Of course, for macOS, it's not quite that simple, since the relative path

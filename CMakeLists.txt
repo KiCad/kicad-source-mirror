@@ -166,11 +166,6 @@ if( KICAD_USE_3DCONNEXION )
     endif()
 endif()
 
-cmake_dependent_option( KICAD_MACOSX_APP_BUNDLE
-    "Create macOS Application bundle"
-    ON "APPLE"
-    OFF )
-
 # Global setting: exports are explicit
 set( CMAKE_CXX_VISIBILITY_PRESET "hidden" )
 set( CMAKE_VISIBILITY_INLINES_HIDDEN ON )
@@ -190,10 +185,6 @@ endif()
 
 if( KICAD_GAL_PROFILE )
     add_definitions( -DKICAD_GAL_PROFILE )
-endif()
-
-if ( KICAD_MACOSX_APP_BUNDLE )
-    add_definitions ( -D__MACOSX_APP__ )
 endif()
 
 # Ensure DEBUG is defined for all platforms in Debug builds
@@ -527,7 +518,7 @@ set( KIFACE_PREFIX  "_" )
 #================================================
 # Locations for install targets.
 #================================================
-if( NOT KICAD_MACOSX_APP_BUNDLE )
+if( NOT APPLE )
     # Everything without leading / is relative to CMAKE_INSTALL_PREFIX.
     set( KICAD_BIN bin
         CACHE PATH "Location of KiCad binaries." )
@@ -823,7 +814,7 @@ if( NOT PYTHON_SITE_PACKAGE_PATH )
     endif()
 endif()
 
-if( KICAD_MACOSX_APP_BUNDLE )
+if( APPLE )
     set( OSX_BUNDLE_PYTHON_SITE_PACKAGES_DIR ${OSX_BUNDLE_LIB_DIR}/Python.framework/Versions/${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
     set( OSX_BUNDLE_INSTALL_PYTHON_SITE_PACKAGES_DIR "${OSX_BUNDLE_INSTALL_DIR}/${OSX_BUNDLE_PYTHON_SITE_PACKAGES_DIR}")
     set( PYTHON_DEST "${OSX_BUNDLE_BUILD_DIR}/${OSX_BUNDLE_PYTHON_SITE_PACKAGES_DIR}"
@@ -916,7 +907,7 @@ if( MINGW )
     endif()
 endif()
 
-if( KICAD_MACOSX_APP_BUNDLE )
+if( APPLE )
     # Remove app bundles in ${KICAD_BIN} before installing anything new.
     # Must be defined before all includes so that it is executed first.
     install( CODE "

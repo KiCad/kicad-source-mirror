@@ -29,7 +29,7 @@
 #include <config.h>
 
 // lowercase or pretty case depending on platform
-#if defined( __MACOSX_APP__ ) || defined( __WXMSW__ )
+#if defined( __WXMAC__ ) || defined( __WXMSW__ )
 #define KICAD_PATH_STR "KiCad"
 #else
 #define KICAD_PATH_STR "kicad"
@@ -154,7 +154,7 @@ wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )
     if( aRespectRunFromBuildDir && wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
     {
         // Allow debugging from build dir by placing relevant files/folders in the build root
-#if defined( __MACOSX_APP__ )
+#if defined( __WXMAC__ )
         wxFileName fn = wxStandardPaths::Get().GetExecutablePath();
 
         fn.RemoveLastDir();
@@ -170,7 +170,7 @@ wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )
     }
     else
     {
-#if defined( __MACOSX_APP__ )
+#if defined( __WXMAC__ )
         path = GetOSXKicadDataDir();
 #elif defined( __WXMSW__ )
         path = getWindowsKiCadRoot() + wxT( "share/kicad" );
@@ -187,7 +187,7 @@ wxString PATHS::GetStockEDALibraryPath()
 {
     wxString path;
 
-#if defined( __MACOSX_APP__ )
+#if defined( __WXMAC__ )
     path = GetOSXKicadMachineDataDir();
 #elif defined( __WXMSW__ )
     path = GetStockDataPath( false );
@@ -266,7 +266,7 @@ wxString PATHS::GetStockPlugins3DPath()
     fn.Assign( tfname, "" );
     fn.AppendDir( wxT( "kicad" ) );
     fn.AppendDir( wxT( "plugins" ) );
-#elif defined( __MACOSX_APP__ )
+#elif defined( __WXMAC__ )
     fn.Assign( wxStandardPaths::Get().GetPluginsDir(), wxEmptyString );
 #else
     fn.AssignDir( Pgm().GetExecutablePath() );
@@ -306,7 +306,7 @@ wxString PATHS::GetDocumentationPath()
 {
     wxString path;
 
-#if defined( __MACOSX_APP__ )
+#if defined( __WXMAC__ )
     path = GetOSXKicadDataDir();
 #elif defined( __WXMSW__ )
     path = getWindowsKiCadRoot() + "share/doc/kicad";

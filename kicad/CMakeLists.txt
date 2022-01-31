@@ -43,7 +43,7 @@ if( WIN32 )
     endif()
 endif()
 
-if( KICAD_MACOSX_APP_BUNDLE )
+if( APPLE )
     set( KICAD_RESOURCES kicad.icns kicad_doc.icns )
     set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/kicad.icns" PROPERTIES
         MACOSX_PACKAGE_LOCATION Resources
@@ -62,10 +62,6 @@ add_executable( kicad WIN32 MACOSX_BUNDLE
     ${KICAD_RESOURCES}
     )
 
-set_target_properties( kicad PROPERTIES
-    MACOSX_BUNDLE $<BOOL:KICAD_MACOSX_APP_BUNDLE>
-    )
-
 if( UNIX )
     # for build directory: create kiface symlinks so kicad (exe) can be run in-situ
     add_custom_target( kiface_sym_links
@@ -76,7 +72,7 @@ if( UNIX )
         )
 endif()
 
-if( KICAD_MACOSX_APP_BUNDLE )
+if( APPLE )
     set_target_properties( kicad PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${PROJECT_BINARY_DIR}/kicad/Info.plist
         )
@@ -108,7 +104,7 @@ if( KICAD_WIN32_INSTALL_PDBS )
     install(FILES $<TARGET_PDB_FILE:kicad> DESTINATION ${KICAD_BIN})
 endif()
 
-if( KICAD_MACOSX_APP_BUNDLE )
+if( APPLE )
     # "install( CODE ... )" will launch its own CMake, so no variables from
     # this CMake instance are accessible... use helper to transfer
     set( SCRIPTING_HELPER "1" )

@@ -122,7 +122,7 @@ const wxString KIWAY::dso_search_path( FACE_T aFaceId )
         return wxEmptyString;
     }
 
-#ifndef __MACOSX_APP__
+#ifndef __WXMAC__
     wxString path;
 
     if( m_ctl & (KFCTL_STANDALONE | KFCTL_CPP_PROJECT_SUITE) )
@@ -148,7 +148,7 @@ const wxString KIWAY::dso_search_path( FACE_T aFaceId )
 
     if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
     {
-#ifdef __MACOSX_APP__
+#ifdef __WXMAC__
         // On Mac, all of the kifaces are placed in the kicad.app bundle, even though the individual
         // standalone binaries are placed in separate bundles before the make install step runs.
         // So, we have to jump up to the kicad directory, then the PlugIns section of the kicad

@@ -1,7 +1,7 @@
 if( UNIX AND KICAD_I18N_UNIX_STRICT_PATH )
     set( KICAD_I18N_PATH ${CMAKE_INSTALL_PREFIX}/share/locale
         CACHE PATH "Location of KiCad i18n files." )
-elseif( KICAD_MACOSX_APP_BUNDLE )
+elseif( APPLE )
     set( KICAD_I18N_PATH ${KICAD_DATA}/internat
         CACHE PATH "Location of KiCad i18n files." )
 else()

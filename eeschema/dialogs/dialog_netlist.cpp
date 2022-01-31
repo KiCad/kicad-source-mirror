@@ -673,7 +673,7 @@ void NETLIST_DIALOG_ADD_GENERATOR::OnBrowseGenerators( wxCommandEvent& event )
 {
     wxString FullFileName, Path;
 
-#ifndef __MACOSX_APP__
+#ifndef __WXMAC__
     Path = Pgm().GetExecutablePath();
 #else
     Path = PATHS::GetOSXKicadDataDir() + wxT( "/plugins" );
