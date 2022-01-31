@@ -291,67 +291,63 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
 
     if( aItem->Type() == SCH_LINE_T )
     {
-        COLOR4D lineColor = static_cast<const SCH_LINE*>( aItem )->GetLineColor();
-
-        if( lineColor != COLOR4D::UNSPECIFIED )
-            color = lineColor;
+        color = static_cast<const SCH_LINE*>( aItem )->GetLineColor();
     }
     else if( aItem->Type() == SCH_BUS_WIRE_ENTRY_T )
     {
-        COLOR4D busEntryColor = static_cast<const SCH_BUS_WIRE_ENTRY*>( aItem )->GetBusEntryColor();
-
-        if( busEntryColor != COLOR4D::UNSPECIFIED )
-            color = busEntryColor;
+        color = static_cast<const SCH_BUS_WIRE_ENTRY*>( aItem )->GetBusEntryColor();
     }
     else if( aItem->Type() == SCH_JUNCTION_T )
     {
-        COLOR4D junctionColor = static_cast<const SCH_JUNCTION*>( aItem )->GetJunctionColor();
-
-        if( junctionColor != COLOR4D::UNSPECIFIED )
-            color = junctionColor;
+        color = static_cast<const SCH_JUNCTION*>( aItem )->GetJunctionColor();
     }
-    else if( aItem->Type() == SCH_SHEET_T )
+    else if( !m_schSettings.m_OverrideItemColors )
     {
-        const SCH_SHEET* sheet = static_cast<const SCH_SHEET*>( aItem );
+        if( aItem->Type() == SCH_SHEET_T )
+        {
+            const SCH_SHEET* sheet = static_cast<const SCH_SHEET*>( aItem );
 
-        if( m_schSettings.m_OverrideItemColors )
-            color = m_schSettings.GetLayerColor( aLayer );
-        else if( aLayer == LAYER_SHEET )
-            color = sheet->GetBorderColor();
-        else if( aLayer == LAYER_SHEET_BACKGROUND )
-            color = sheet->GetBackgroundColor();
+            if( aLayer == LAYER_SHEET )
+                color = sheet->GetBorderColor();
+            else if( aLayer == LAYER_SHEET_BACKGROUND )
+                color = sheet->GetBackgroundColor();
+        }
+        else if( aItem->Type() == SCH_SHAPE_T )
+        {
+            const SCH_SHAPE* shape = static_cast<const SCH_SHAPE*>( aItem );
 
-        if( color == COLOR4D::UNSPECIFIED )
-            color = m_schSettings.GetLayerColor( aLayer );
+            if( aLayer == LAYER_NOTES )
+                color = shape->GetStroke().GetColor();
+            else if( aLayer == LAYER_NOTES_BACKGROUND )
+                color = shape->GetFillColor();
+        }
+        else if( aItem->Type() == LIB_SHAPE_T )
+        {
+            const LIB_SHAPE* shape = static_cast<const LIB_SHAPE*>( aItem );
+
+            if( aLayer == LAYER_DEVICE || aLayer == LAYER_NOTES )
+                color = shape->GetStroke().GetColor();
+            else if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND )
+                color = shape->GetFillColor();
+        }
+        else if( aItem->Type() == SCH_TEXTBOX_T )
+        {
+            const SCH_TEXTBOX* textBox = static_cast<const SCH_TEXTBOX*>( aItem );
+
+            if( aLayer == LAYER_NOTES_BACKGROUND )
+                color = textBox->GetFillColor();
+        }
+        else if( aItem->Type() == LIB_TEXTBOX_T )
+        {
+            const LIB_TEXTBOX* textBox = static_cast<const LIB_TEXTBOX*>( aItem );
+
+            if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND )
+                color = textBox->GetFillColor();
+        }
     }
-    else if( aItem->Type() == SCH_SHAPE_T )
-    {
-        const SCH_SHAPE* shape = static_cast<const SCH_SHAPE*>( aItem );
 
-        if( m_schSettings.m_OverrideItemColors )
-            color = m_schSettings.GetLayerColor( aLayer );
-        else if( aLayer == LAYER_NOTES )
-            color = shape->GetStroke().GetColor();
-        else if( aLayer == LAYER_NOTES_BACKGROUND )
-            color = shape->GetFillColor();
-
-        if( color == COLOR4D::UNSPECIFIED )
-            color = m_schSettings.GetLayerColor( aLayer );
-    }
-    else if( aItem->Type() == SCH_TEXTBOX_T )
-    {
-        const SCH_TEXTBOX* textBox = static_cast<const SCH_TEXTBOX*>( aItem );
-
-        if( m_schSettings.m_OverrideItemColors )
-            color = m_schSettings.GetLayerColor( aLayer );
-        else if( aLayer == LAYER_NOTES )
-            color = textBox->GetStroke().GetColor();
-        else if( aLayer == LAYER_NOTES_BACKGROUND )
-            color = textBox->GetFillColor();
-
-        if( color == COLOR4D::UNSPECIFIED )
-            color = m_schSettings.GetLayerColor( aLayer );
-    }
+    if( color == COLOR4D::UNSPECIFIED )
+        color = m_schSettings.GetLayerColor( aLayer );
 
     if( aItem->IsBrightened() ) // Selection disambiguation, net highlighting, etc.
     {
@@ -995,8 +991,16 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer )
     }
     else if( aLayer == LAYER_DEVICE || aLayer == LAYER_NOTES )
     {
+        drawText();
+
         if( aTextBox->GetEffectivePenWidth( &m_schSettings ) > 0 )
         {
+            if( !m_schSettings.m_OverrideItemColors && !aTextBox->IsBrightened()
+                    && aTextBox->GetStroke().GetColor() != COLOR4D::UNSPECIFIED )
+            {
+                m_gal->SetStrokeColor( aTextBox->GetStroke().GetColor() );
+            }
+
             m_gal->SetIsFill( false );
             m_gal->SetIsStroke( true );
 
@@ -1026,8 +1030,6 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer )
                     delete shape;
             }
         }
-
-        drawText();
     }
 }
 
@@ -1872,8 +1874,16 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
     }
     else if( aLayer == LAYER_NOTES )
     {
+        drawText();
+
         if( aTextBox->GetPenWidth() > 0 )
         {
+            if( !m_schSettings.m_OverrideItemColors && !aTextBox->IsBrightened()
+                    && aTextBox->GetStroke().GetColor() != COLOR4D::UNSPECIFIED )
+            {
+                m_gal->SetStrokeColor( aTextBox->GetStroke().GetColor() );
+            }
+
             m_gal->SetIsFill( false );
             m_gal->SetIsStroke( true );
 
@@ -1902,8 +1912,6 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
                     delete shape;
             }
         }
-
-        drawText();
     }
 }
 
