@@ -32,13 +32,8 @@ bool KIPLATFORM::APP::Init()
 
 bool KIPLATFORM::APP::IsOperatingSystemUnsupported()
 {
-    // We only support bundled applications.  Purposefully unbundling may introduce
-    // issues that we cannot support
-#ifdef __MACOSX_APP__
+    // Not implemented on this platform
     return false;
-#else
-    return true;
-#endif
 }
 
 
