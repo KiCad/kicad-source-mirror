@@ -109,6 +109,12 @@ namespace KIPLATFORM
          * @return Viewport size that won't be obscured by scrollbars
          */
         wxSize GetUnobscuredSize( const wxWindow* aWindow );
+
+        /**
+         * Used to set overlay/non-overlay scrolling mode in a window.
+         * Implemented only on GTK.
+         */
+        void SetOverlayScrolling( const wxWindow* aWindow, bool overlay );
     }
 }
 

@@ -39,10 +39,6 @@ void KIPLATFORM::ENV::Init()
     // required until wxWidgets supports the Wayland compositors
     wxSetEnv( wxT( "GDK_BACKEND" ), wxT( "x11" ) );
 
-    // Disable overlay scrollbars as they mess up wxWidgets window sizing and cause
-    // excessive redraw requests.
-    wxSetEnv( wxT( "GTK_OVERLAY_SCROLLING" ), wxT( "0" ) );
-
     // Set GTK2-style input instead of xinput2.  This disables touchscreen and smooth
     // scrolling.  It's needed to ensure that we are not getting multiple mouse scroll
     // events.
