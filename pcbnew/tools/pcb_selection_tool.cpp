@@ -1575,12 +1575,15 @@ void PCB_SELECTION_TOOL::doSyncSelection( const std::vector<BOARD_ITEM*>& aItems
 
     EDA_RECT bbox = m_selection.GetBoundingBox();
 
-    if( m_frame->Settings().m_CrossProbing.center_on_items )
+    if( bbox.GetWidth() > 0 && bbox.GetHeight() > 0 )
     {
-        if( m_frame->Settings().m_CrossProbing.zoom_to_fit )
-            zoomFitCrossProbeBBox( bbox );
+        if( m_frame->Settings().m_CrossProbing.center_on_items )
+        {
+            if( m_frame->Settings().m_CrossProbing.zoom_to_fit )
+                zoomFitCrossProbeBBox( bbox );
 
-        m_frame->FocusOnLocation( bbox.Centre() );
+            m_frame->FocusOnLocation( bbox.Centre() );
+        }
     }
 
     view()->UpdateAllLayersColor();
