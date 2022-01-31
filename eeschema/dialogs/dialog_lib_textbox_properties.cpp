@@ -22,6 +22,7 @@
  */
 
 #include <symbol_edit_frame.h>
+#include <symbol_editor_settings.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
 #include <base_units.h>
@@ -77,11 +78,15 @@ DIALOG_LIB_TEXTBOX_PROPERTIES::DIALOG_LIB_TEXTBOX_PROPERTIES( SYMBOL_EDIT_FRAME*
     m_spin0->SetIsCheckButton();
     m_spin0->SetBitmap( KiBitmap( BITMAPS::text_align_left ) );
     m_spin1->SetIsCheckButton();
-    m_spin1->SetBitmap( KiBitmap( BITMAPS::text_align_right ) );
+    m_spin1->SetBitmap( KiBitmap( BITMAPS::text_align_center ) );
     m_spin2->SetIsCheckButton();
-    m_spin2->SetBitmap( KiBitmap( BITMAPS::text_align_bottom ) );
+    m_spin2->SetBitmap( KiBitmap( BITMAPS::text_align_right ) );
     m_spin3->SetIsCheckButton();
-    m_spin3->SetBitmap( KiBitmap( BITMAPS::text_align_top ) );
+    m_spin3->SetBitmap( KiBitmap( BITMAPS::text_align_bottom ) );
+    m_spin4->SetIsCheckButton();
+    m_spin4->SetBitmap( KiBitmap( BITMAPS::text_align_middle ) );
+    m_spin5->SetIsCheckButton();
+    m_spin5->SetBitmap( KiBitmap( BITMAPS::text_align_top ) );
 
     m_separator3->SetIsSeparator();
 
@@ -92,8 +97,8 @@ DIALOG_LIB_TEXTBOX_PROPERTIES::DIALOG_LIB_TEXTBOX_PROPERTIES( SYMBOL_EDIT_FRAME*
     m_spin1->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXTBOX_PROPERTIES::onSpinButton, this );
     m_spin2->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXTBOX_PROPERTIES::onSpinButton, this );
     m_spin3->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXTBOX_PROPERTIES::onSpinButton, this );
-
-    m_fillColorSwatch->Bind( COLOR_SWATCH_CHANGED, &DIALOG_LIB_TEXTBOX_PROPERTIES::onFillSwatch, this );
+    m_spin4->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXTBOX_PROPERTIES::onSpinButton, this );
+    m_spin5->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXTBOX_PROPERTIES::onSpinButton, this );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -122,6 +127,7 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataToWindow()
     m_bold->Check( m_currentText->IsBold() );
     m_italic->Check( m_currentText->IsItalic() );
 
+    m_borderCheckbox->SetValue( m_currentText->GetWidth() >= 0 );
     m_borderWidth.SetValue( m_currentText->GetWidth() );
     m_borderColorSwatch->SetSwatchColor( m_currentText->GetStroke().GetColor(), false );
 
@@ -134,22 +140,35 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataToWindow()
     else
         wxFAIL_MSG( "Line type not found in the type lookup map" );
 
+    m_borderWidth.Enable( m_currentText->GetWidth() >= 0 );
+    m_borderColorLabel->Enable( m_currentText->GetWidth() >= 0 );
+    m_borderColorSwatch->Enable( m_currentText->GetWidth() >= 0 );
+    m_borderStyleLabel->Enable( m_currentText->GetWidth() >= 0 );
+    m_borderStyleCombo->Enable( m_currentText->GetWidth() >= 0 );
+
     m_filledCtrl->SetValue( m_currentText->IsFilled() );
     m_fillColorSwatch->SetSwatchColor( m_currentText->GetFillColor(), false );
 
+    m_fillColorLabel->Enable( m_currentText->IsFilled() );
+    m_fillColorSwatch->Enable( m_currentText->IsFilled() );
+
     if( m_currentText->GetTextAngle() == ANGLE_VERTICAL )
     {
-        if( m_currentText->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
-            m_spin3->Check();
-        else
-            m_spin2->Check();
+        switch( m_currentText->GetHorizJustify() )
+        {
+        case GR_TEXT_H_ALIGN_LEFT:   m_spin3->Check(); break;
+        case GR_TEXT_H_ALIGN_CENTER: m_spin4->Check(); break;
+        case GR_TEXT_H_ALIGN_RIGHT:  m_spin5->Check(); break;
+        }
     }
     else
     {
-        if( m_currentText->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
-            m_spin1->Check();
-        else
-            m_spin0->Check();
+        switch( m_currentText->GetHorizJustify() )
+        {
+        case GR_TEXT_H_ALIGN_LEFT:   m_spin0->Check(); break;
+        case GR_TEXT_H_ALIGN_CENTER: m_spin1->Check(); break;
+        case GR_TEXT_H_ALIGN_RIGHT:  m_spin2->Check(); break;
+        }
     }
 
     m_privateCheckbox->SetValue( m_currentText->IsPrivate() );
@@ -229,25 +248,40 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataFromWindow()
     else if( m_spin1->IsChecked() )
     {
         m_currentText->SetTextAngle( ANGLE_HORIZONTAL );
-        m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
     }
     else if( m_spin2->IsChecked() )
     {
-        m_currentText->SetTextAngle( ANGLE_VERTICAL );
-        m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        m_currentText->SetTextAngle( ANGLE_HORIZONTAL );
+        m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
     }
     else if( m_spin3->IsChecked() )
     {
         m_currentText->SetTextAngle( ANGLE_VERTICAL );
+        m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+    }
+    else if( m_spin4->IsChecked() )
+    {
+        m_currentText->SetTextAngle( ANGLE_VERTICAL );
+        m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+    }
+    else if( m_spin5->IsChecked() )
+    {
+        m_currentText->SetTextAngle( ANGLE_VERTICAL );
         m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
     }
 
-    m_currentText->UpdateTextPosition();
-
     STROKE_PARAMS stroke = m_currentText->GetStroke();
 
-    if( !m_borderWidth.IsIndeterminate() )
-        stroke.SetWidth( m_borderWidth.GetValue() );
+    if( m_borderCheckbox->GetValue() )
+    {
+        if( !m_borderWidth.IsIndeterminate() )
+            stroke.SetWidth( m_borderWidth.GetValue() );
+    }
+    else
+    {
+        stroke.SetWidth( -1 );
+    }
 
     auto it = lineTypeNames.begin();
     std::advance( it, m_borderStyleCombo->GetSelection() );
@@ -304,7 +338,27 @@ void DIALOG_LIB_TEXTBOX_PROPERTIES::onMultiLineTCLostFocus( wxFocusEvent& event 
 }
 
 
-void DIALOG_LIB_TEXTBOX_PROPERTIES::onFillSwatch( wxCommandEvent& aEvent )
+void DIALOG_LIB_TEXTBOX_PROPERTIES::onBorderChecked( wxCommandEvent& event )
 {
-    m_filledCtrl->SetValue( true );
+    bool border = m_borderCheckbox->GetValue();
+
+    if( border && m_borderWidth.GetValue() < 0 )
+        m_borderWidth.SetValue( Mils2iu( m_frame->libeditconfig()->m_Defaults.line_width ) );
+
+    m_borderWidth.Enable( border );
+    m_borderColorLabel->Enable( border );
+    m_borderColorSwatch->Enable( border );
+    m_borderStyleLabel->Enable( border );
+    m_borderStyleCombo->Enable( border );
 }
+
+
+void DIALOG_LIB_TEXTBOX_PROPERTIES::onFillChecked( wxCommandEvent& event )
+{
+    bool fill = m_filledCtrl->GetValue();
+
+    m_fillColorLabel->Enable( fill );
+    m_fillColorSwatch->Enable( fill );
+}
+
+

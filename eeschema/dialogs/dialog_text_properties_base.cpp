@@ -59,17 +59,17 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_textCtrl->SetSelForeground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
 	m_textCtrl->SetMinSize( wxSize( 500,140 ) );
 
-	m_textEntrySizer->Add( m_textCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 4 ), wxEXPAND, 5 );
+	m_textEntrySizer->Add( m_textCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 5 ), wxEXPAND, 5 );
 
 	m_fontLabel = new wxStaticText( this, wxID_ANY, _("Font:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fontLabel->Wrap( -1 );
-	m_textEntrySizer->Add( m_fontLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_textEntrySizer->Add( m_fontLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
 
 	wxString m_fontCtrlChoices[] = { _("Default Font"), _("KiCad Font") };
 	int m_fontCtrlNChoices = sizeof( m_fontCtrlChoices ) / sizeof( wxString );
 	m_fontCtrl = new FONT_CHOICE( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_fontCtrlNChoices, m_fontCtrlChoices, 0 );
 	m_fontCtrl->SetSelection( 0 );
-	m_textEntrySizer->Add( m_fontCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	m_textEntrySizer->Add( m_fontCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP, 5 );
 
 	wxBoxSizer* bSizeCtrlSizer;
 	bSizeCtrlSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -77,50 +77,60 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_separator1 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_separator1->Enable( false );
 
-	bSizeCtrlSizer->Add( m_separator1, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizeCtrlSizer->Add( m_separator1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_bold = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_bold->SetToolTip( _("Bold") );
 
-	bSizeCtrlSizer->Add( m_bold, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizeCtrlSizer->Add( m_bold, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_italic = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_italic->SetToolTip( _("Italic") );
 
-	bSizeCtrlSizer->Add( m_italic, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizeCtrlSizer->Add( m_italic, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_separator2 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_separator2->Enable( false );
 
-	bSizeCtrlSizer->Add( m_separator2, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizeCtrlSizer->Add( m_separator2, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spin0 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_spin0->SetToolTip( _("Align right") );
 
-	bSizeCtrlSizer->Add( m_spin0, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizeCtrlSizer->Add( m_spin0, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spin1 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
-	m_spin1->SetToolTip( _("Align bottom") );
+	m_spin1->SetToolTip( _("Align right") );
 
-	bSizeCtrlSizer->Add( m_spin1, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizeCtrlSizer->Add( m_spin1, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spin2 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
-	m_spin2->SetToolTip( _("Align left") );
+	m_spin2->SetToolTip( _("Align bottom") );
 
-	bSizeCtrlSizer->Add( m_spin2, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizeCtrlSizer->Add( m_spin2, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spin3 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
-	m_spin3->SetToolTip( _("Align top") );
+	m_spin3->SetToolTip( _("Align left") );
 
-	bSizeCtrlSizer->Add( m_spin3, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizeCtrlSizer->Add( m_spin3, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_spin4 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_spin4->SetToolTip( _("Align left") );
+
+	bSizeCtrlSizer->Add( m_spin4, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_spin5 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_spin5->SetToolTip( _("Align top") );
+
+	bSizeCtrlSizer->Add( m_spin5, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_separator3 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_separator3->Enable( false );
 
-	bSizeCtrlSizer->Add( m_separator3, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
+	bSizeCtrlSizer->Add( m_separator3, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	m_textEntrySizer->Add( bSizeCtrlSizer, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	m_textEntrySizer->Add( bSizeCtrlSizer, wxGBPosition( 1, 3 ), wxGBSpan( 1, 2 ), wxEXPAND|wxTOP, 5 );
 
 	wxBoxSizer* bSizer41;
 	bSizer41 = new wxBoxSizer( wxVERTICAL );
@@ -128,10 +138,10 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_syntaxHelp = new wxHyperlinkCtrl( this, wxID_ANY, _("Syntax help"), wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
 	m_syntaxHelp->SetToolTip( _("Show syntax help window") );
 
-	bSizer41->Add( m_syntaxHelp, 0, wxRIGHT|wxLEFT, 5 );
+	bSizer41->Add( m_syntaxHelp, 0, wxBOTTOM|wxRIGHT|wxLEFT, 6 );
 
 
-	m_textEntrySizer->Add( bSizer41, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_RIGHT|wxLEFT, 80 );
+	m_textEntrySizer->Add( bSizer41, wxGBPosition( 1, 5 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_RIGHT|wxLEFT, 80 );
 
 	m_textSizeLabel = new wxStaticText( this, wxID_ANY, _("Text size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeLabel->Wrap( -1 );
@@ -144,20 +154,29 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_textSizeUnits->Wrap( -1 );
 	m_textEntrySizer->Add( m_textSizeUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_borderWidthLabel = new wxStaticText( this, wxID_ANY, _("Border width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_borderCheckbox = new wxCheckBox( this, wxID_ANY, _("Border"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textEntrySizer->Add( m_borderCheckbox, wxGBPosition( 4, 0 ), wxGBSpan( 1, 2 ), wxRIGHT, 5 );
+
+	m_borderWidthLabel = new wxStaticText( this, wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderWidthLabel->Wrap( -1 );
-	m_textEntrySizer->Add( m_borderWidthLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_textEntrySizer->Add( m_borderWidthLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxBoxSizer* bSizer7;
+	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_borderWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
-	m_textEntrySizer->Add( m_borderWidthCtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer7->Add( m_borderWidthCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_borderWidthUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderWidthUnits->Wrap( -1 );
-	m_textEntrySizer->Add( m_borderWidthUnits, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer7->Add( m_borderWidthUnits, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
 
-	m_borderColorLabel = new wxStaticText( this, wxID_ANY, _("Border color:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_borderColorLabel = new wxStaticText( this, wxID_ANY, _("Color:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderColorLabel->Wrap( -1 );
-	m_textEntrySizer->Add( m_borderColorLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer7->Add( m_borderColorLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
+
+
+	bSizer7->Add( 5, 0, 0, 0, 5 );
 
 	m_panelBorderColor = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer2;
@@ -170,23 +189,29 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_panelBorderColor->SetSizer( bSizer2 );
 	m_panelBorderColor->Layout();
 	bSizer2->Fit( m_panelBorderColor );
-	m_textEntrySizer->Add( m_panelBorderColor, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer7->Add( m_panelBorderColor, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_borderStyleLabel = new wxStaticText( this, wxID_ANY, _("Border style:"), wxDefaultPosition, wxDefaultSize, 0 );
+
+	m_textEntrySizer->Add( bSizer7, wxGBPosition( 5, 1 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
+
+	m_borderStyleLabel = new wxStaticText( this, wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderStyleLabel->Wrap( -1 );
 	m_textEntrySizer->Add( m_borderStyleLabel, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_borderStyleCombo = new wxBitmapComboBox( this, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
 	m_borderStyleCombo->SetMinSize( wxSize( 240,-1 ) );
 
-	m_textEntrySizer->Add( m_borderStyleCombo, wxGBPosition( 6, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL, 5 );
+	m_textEntrySizer->Add( m_borderStyleCombo, wxGBPosition( 6, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_filledCtrl = new wxCheckBox( this, wxID_ANY, _("Background fill"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textEntrySizer->Add( m_filledCtrl, wxGBPosition( 4, 3 ), wxGBSpan( 1, 2 ), wxLEFT, 100 );
+	m_textEntrySizer->Add( m_filledCtrl, wxGBPosition( 4, 4 ), wxGBSpan( 1, 2 ), wxRIGHT, 80 );
+
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_fillColorLabel = new wxStaticText( this, wxID_ANY, _("Fill color:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fillColorLabel->Wrap( -1 );
-	m_textEntrySizer->Add( m_fillColorLabel, wxGBPosition( 5, 3 ), wxGBSpan( 1, 1 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 100 );
+	bSizer8->Add( m_fillColorLabel, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_panelFillColor = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer21;
@@ -199,11 +224,13 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_panelFillColor->SetSizer( bSizer21 );
 	m_panelFillColor->Layout();
 	bSizer21->Fit( m_panelFillColor );
-	m_textEntrySizer->Add( m_panelFillColor, wxGBPosition( 5, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer8->Add( m_panelFillColor, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	m_textEntrySizer->AddGrowableCol( 1 );
-	m_textEntrySizer->AddGrowableCol( 4 );
+	m_textEntrySizer->Add( bSizer8, wxGBPosition( 5, 4 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
+
+
+	m_textEntrySizer->AddGrowableCol( 3 );
 
 	bMainSizer->Add( m_textEntrySizer, 1, wxEXPAND|wxALL, 10 );
 
@@ -233,6 +260,8 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	// Connect Events
 	m_textCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onMultiLineTCLostFocus ), NULL, this );
 	m_syntaxHelp->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnFormattingHelp ), NULL, this );
+	m_borderCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onBorderChecked ), NULL, this );
+	m_filledCtrl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onFillChecked ), NULL, this );
 }
 
 DIALOG_TEXT_PROPERTIES_BASE::~DIALOG_TEXT_PROPERTIES_BASE()
@@ -240,5 +269,7 @@ DIALOG_TEXT_PROPERTIES_BASE::~DIALOG_TEXT_PROPERTIES_BASE()
 	// Disconnect Events
 	m_textCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onMultiLineTCLostFocus ), NULL, this );
 	m_syntaxHelp->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnFormattingHelp ), NULL, this );
+	m_borderCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onBorderChecked ), NULL, this );
+	m_filledCtrl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onFillChecked ), NULL, this );
 
 }

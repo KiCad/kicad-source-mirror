@@ -113,7 +113,8 @@ class SHAPE_LINE_CHAIN;
 //#define SEXPR_BOARD_FILE_VERSION    20211229  // Stroke formatting
 //#define SEXPR_BOARD_FILE_VERSION    20211230  // Dimensions in footprints
 //#define SEXPR_BOARD_FILE_VERSION    20211231  // Private footprint layers
-#define SEXPR_BOARD_FILE_VERSION      20211232  // Fonts
+//#define SEXPR_BOARD_FILE_VERSION    20211232  // Fonts
+#define SEXPR_BOARD_FILE_VERSION      20220131  // Textboxes
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting

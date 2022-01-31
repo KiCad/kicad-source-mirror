@@ -89,7 +89,7 @@ void SCH_SHAPE::Rotate( const VECTOR2I& aCenter )
 
 void SCH_SHAPE::Plot( PLOTTER* aPlotter ) const
 {
-    int       pen_size = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
+    int pen_size = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
 
     static std::vector<VECTOR2I> cornerList;
 
@@ -191,7 +191,7 @@ int SCH_SHAPE::GetPenWidth() const
         return m_stroke.GetWidth();
 
     // Historically 0 meant "default width" and negative numbers meant "don't stroke".
-    if( GetWidth() < 0 && GetFillMode() != FILL_T::NO_FILL )
+    if( GetWidth() < 0 )
         return 0;
 
     SCHEMATIC* schematic = Schematic();
@@ -212,7 +212,7 @@ void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
     VECTOR2I c;
     COLOR4D  color;
 
-    penWidth = std::max( penWidth, aSettings->GetDefaultPenWidth() );
+    penWidth = std::max( penWidth, aSettings->GetMinPenWidth() );
 
     unsigned ptCount = 0;
     VECTOR2I* buffer = nullptr;

@@ -762,34 +762,37 @@ void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer )
     {
         int lineWidth = getLineWidth( aShape, drawingShadows );
 
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-        m_gal->SetLineWidth( lineWidth );
-        m_gal->SetStrokeColor( color );
-
-        if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE || drawingShadows )
+        if( lineWidth > 0 )
         {
-            drawShape( aShape );
-        }
-        else
-        {
-            std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapes( true );
+            m_gal->SetIsFill( false );
+            m_gal->SetIsStroke( true );
+            m_gal->SetLineWidth( lineWidth );
+            m_gal->SetStrokeColor( color );
 
-            for( SHAPE* shape : shapes )
+            if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE || drawingShadows )
             {
-                STROKE_PARAMS::Stroke( shape, lineStyle, lineWidth, &m_schSettings,
-                        [&]( const VECTOR2I& a, const VECTOR2I& b )
-                        {
-                            // DrawLine has problem with 0 length lines so enforce minimum
-                            if( a == b )
-                                m_gal->DrawLine( mapCoords( a+1 ), mapCoords( b ) );
-                            else
-                                m_gal->DrawLine( mapCoords( a ), mapCoords( b ) );
-                        } );
+                drawShape( aShape );
             }
+            else
+            {
+                std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapes( true );
 
-            for( SHAPE* shape : shapes )
-                delete shape;
+                for( SHAPE* shape : shapes )
+                {
+                    STROKE_PARAMS::Stroke( shape, lineStyle, lineWidth, &m_schSettings,
+                            [&]( const VECTOR2I& a, const VECTOR2I& b )
+                            {
+                                // DrawLine has problem with 0 length lines so enforce minimum
+                                if( a == b )
+                                    m_gal->DrawLine( mapCoords( a+1 ), mapCoords( b ) );
+                                else
+                                    m_gal->DrawLine( mapCoords( a ), mapCoords( b ) );
+                            } );
+                }
+
+                for( SHAPE* shape : shapes )
+                    delete shape;
+            }
         }
     }
 }
@@ -946,9 +949,10 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer )
                 if( !shownText.IsEmpty() )
                 {
                     TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
+                    attrs.m_Angle = aTextBox->GetDrawRotation();
                     attrs.m_StrokeWidth = getTextThickness( aTextBox, drawingShadows );
 
-                    strokeText( shownText, aTextBox->GetTextPos(), attrs );
+                    strokeText( shownText, aTextBox->GetDrawPos(), attrs );
                }
             };
 
@@ -991,33 +995,36 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer )
     }
     else if( aLayer == LAYER_DEVICE || aLayer == LAYER_NOTES )
     {
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-
-        if( borderStyle <= PLOT_DASH_TYPE::FIRST_TYPE || drawingShadows )
+        if( aTextBox->GetEffectivePenWidth( &m_schSettings ) > 0 )
         {
-            m_gal->DrawRectangle( mapCoords( aTextBox->GetPosition() ),
-                                  mapCoords( aTextBox->GetEnd() ) );
-        }
-        else
-        {
-            std::vector<SHAPE*> shapes = aTextBox->MakeEffectiveShapes( true );
+            m_gal->SetIsFill( false );
+            m_gal->SetIsStroke( true );
 
-            for( SHAPE* shape : shapes )
+            if( borderStyle <= PLOT_DASH_TYPE::FIRST_TYPE || drawingShadows )
             {
-                STROKE_PARAMS::Stroke( shape, borderStyle, borderWidth, &m_schSettings,
-                        [&]( const VECTOR2I& a, const VECTOR2I& b )
-                        {
-                            // DrawLine has problem with 0 length lines so enforce minimum
-                            if( a == b )
-                                m_gal->DrawLine( mapCoords( a+1 ), mapCoords( b ) );
-                            else
-                                m_gal->DrawLine( mapCoords( a ), mapCoords( b ) );
-                        } );
+                m_gal->DrawRectangle( mapCoords( aTextBox->GetPosition() ),
+                                      mapCoords( aTextBox->GetEnd() ) );
             }
+            else
+            {
+                std::vector<SHAPE*> shapes = aTextBox->MakeEffectiveShapes( true );
 
-            for( SHAPE* shape : shapes )
-                delete shape;
+                for( SHAPE* shape : shapes )
+                {
+                    STROKE_PARAMS::Stroke( shape, borderStyle, borderWidth, &m_schSettings,
+                            [&]( const VECTOR2I& a, const VECTOR2I& b )
+                            {
+                                // DrawLine has problem with 0 length lines so enforce minimum
+                                if( a == b )
+                                    m_gal->DrawLine( mapCoords( a+1 ), mapCoords( b ) );
+                                else
+                                    m_gal->DrawLine( mapCoords( a ), mapCoords( b ) );
+                            } );
+                }
+
+                for( SHAPE* shape : shapes )
+                    delete shape;
+            }
         }
 
         drawText();
@@ -1650,46 +1657,52 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer )
 
         drawShape( aShape );
     }
-    else if( aLayer == LAYER_NOTES_BACKGROUND && aShape->IsFilled() )
+    else if( aLayer == LAYER_NOTES_BACKGROUND )
     {
-        m_gal->SetIsFill( true );
-        m_gal->SetIsStroke( false );
-        m_gal->SetFillColor( aShape->GetFillColor() );
+        if( aShape->IsFilled() )
+        {
+            m_gal->SetIsFill( true );
+            m_gal->SetIsStroke( false );
+            m_gal->SetFillColor( aShape->GetFillColor() );
 
-        drawShape( aShape );
+            drawShape( aShape );
+        }
     }
     else if( aLayer == LAYER_NOTES )
     {
         int lineWidth = getLineWidth( aShape, drawingShadows );
 
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-        m_gal->SetLineWidth( lineWidth );
-        m_gal->SetStrokeColor( color );
-
-        if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE || drawingShadows )
+        if( lineWidth > 0 )
         {
-            drawShape( aShape );
-        }
-        else
-        {
-            std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapes( true );
+            m_gal->SetIsFill( false );
+            m_gal->SetIsStroke( true );
+            m_gal->SetLineWidth( lineWidth );
+            m_gal->SetStrokeColor( color );
 
-            for( SHAPE* shape : shapes )
+            if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE || drawingShadows )
             {
-                STROKE_PARAMS::Stroke( shape, lineStyle, lineWidth, &m_schSettings,
-                        [&]( const VECTOR2I& a, const VECTOR2I& b )
-                        {
-                            // DrawLine has problem with 0 length lines so enforce minimum
-                            if( a == b )
-                                m_gal->DrawLine( a+1, b );
-                            else
-                                m_gal->DrawLine( a, b );
-                        } );
+                drawShape( aShape );
             }
+            else
+            {
+                std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapes( true );
 
-            for( SHAPE* shape : shapes )
-                delete shape;
+                for( SHAPE* shape : shapes )
+                {
+                    STROKE_PARAMS::Stroke( shape, lineStyle, lineWidth, &m_schSettings,
+                            [&]( const VECTOR2I& a, const VECTOR2I& b )
+                            {
+                                // DrawLine has problem with 0 length lines so enforce minimum
+                                if( a == b )
+                                    m_gal->DrawLine( a+1, b );
+                                else
+                                    m_gal->DrawLine( a, b );
+                            } );
+                }
+
+                for( SHAPE* shape : shapes )
+                    delete shape;
+            }
         }
     }
 }
@@ -1766,6 +1779,7 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
     if( !shownText.IsEmpty() )
     {
         TEXT_ATTRIBUTES attrs = aText->GetAttributes();
+        attrs.m_Angle = aText->GetDrawRotation();
         attrs.m_StrokeWidth = getTextThickness( aText, drawingShadows );
 
         std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
@@ -1780,7 +1794,7 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
         }
         else
         {
-            strokeText( shownText, aText->GetTextPos() + text_offset, attrs );
+            strokeText( shownText, aText->GetDrawPos() + text_offset, attrs );
         }
     }
 }
@@ -1800,6 +1814,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
                 if( !shownText.IsEmpty() )
                 {
                     TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
+                    attrs.m_Angle = aTextBox->GetDrawRotation();
                     attrs.m_StrokeWidth = getTextThickness( aTextBox, drawingShadows );
 
                     std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
@@ -1813,7 +1828,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
                     }
                     else
                     {
-                        strokeText( shownText, aTextBox->GetTextPos(), attrs );
+                        strokeText( shownText, aTextBox->GetDrawPos(), attrs );
                     }
                }
             };
@@ -1857,32 +1872,35 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
     }
     else if( aLayer == LAYER_NOTES )
     {
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-
-        if( borderStyle <= PLOT_DASH_TYPE::FIRST_TYPE || drawingShadows )
+        if( aTextBox->GetPenWidth() > 0 )
         {
-            m_gal->DrawRectangle( aTextBox->GetPosition(), aTextBox->GetEnd() );
-        }
-        else
-        {
-            std::vector<SHAPE*> shapes = aTextBox->MakeEffectiveShapes( true );
+            m_gal->SetIsFill( false );
+            m_gal->SetIsStroke( true );
 
-            for( SHAPE* shape : shapes )
+            if( borderStyle <= PLOT_DASH_TYPE::FIRST_TYPE || drawingShadows )
             {
-                STROKE_PARAMS::Stroke( shape, borderStyle, borderWidth, &m_schSettings,
-                        [&]( const VECTOR2I& a, const VECTOR2I& b )
-                        {
-                            // DrawLine has problem with 0 length lines so enforce minimum
-                            if( a == b )
-                                m_gal->DrawLine( a+1, b );
-                            else
-                                m_gal->DrawLine( a, b );
-                        } );
+                m_gal->DrawRectangle( aTextBox->GetPosition(), aTextBox->GetEnd() );
             }
+            else
+            {
+                std::vector<SHAPE*> shapes = aTextBox->MakeEffectiveShapes( true );
 
-            for( SHAPE* shape : shapes )
-                delete shape;
+                for( SHAPE* shape : shapes )
+                {
+                    STROKE_PARAMS::Stroke( shape, borderStyle, borderWidth, &m_schSettings,
+                            [&]( const VECTOR2I& a, const VECTOR2I& b )
+                            {
+                                // DrawLine has problem with 0 length lines so enforce minimum
+                                if( a == b )
+                                    m_gal->DrawLine( a+1, b );
+                                else
+                                    m_gal->DrawLine( a, b );
+                            } );
+                }
+
+                for( SHAPE* shape : shapes )
+                    delete shape;
+            }
         }
 
         drawText();

@@ -44,6 +44,8 @@ public:
 private:
     void onScintillaCharAdded( wxStyledTextEvent &aEvent );
     void onSpinButton( wxCommandEvent &aEvent );
+    void onBorderChecked( wxCommandEvent& event ) override;
+    void onFillChecked( wxCommandEvent& event ) override;
     void onFillSwatch( wxCommandEvent& aEvent );
 
     void OnFormattingHelp( wxHyperlinkEvent& aEvent ) override;

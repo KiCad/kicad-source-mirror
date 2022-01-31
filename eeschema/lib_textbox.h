@@ -53,16 +53,11 @@ public:
 
     int GetTextMargin() const;
 
-    void UpdateTextPosition();
+    VECTOR2I GetDrawPos() const override;
 
     wxString GetShownText( int aDepth = 0 ) const override;
 
-    int GetPenWidth() const override;
-
     KIFONT::FONT* GetDrawFont() const override;
-
-    void Offset( const VECTOR2I& aOffset ) override;
-    void MoveTo( const VECTOR2I& newPosition ) override;
 
     void MirrorHorizontally( const VECTOR2I& center );
     void MirrorVertically( const VECTOR2I& center );

@@ -53,7 +53,7 @@ public:
 
     int GetTextMargin() const;
 
-    void UpdateTextPosition();
+    VECTOR2I GetDrawPos() const override;
 
     wxString GetShownText( int aDepth = 0 ) const override;
 
@@ -62,8 +62,6 @@ public:
     void SwapData( SCH_ITEM* aItem ) override;
 
     bool operator<( const SCH_ITEM& aItem ) const override;
-
-    int GetPenWidth() const override;
 
     KIFONT::FONT* GetDrawFont() const override;
 

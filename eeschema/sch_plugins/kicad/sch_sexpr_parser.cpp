@@ -1655,8 +1655,6 @@ LIB_TEXTBOX* SCH_SEXPR_PARSER::parseTextBox()
         }
     }
 
-    textBox->UpdateTextPosition();
-
     return textBox.release();
 }
 
@@ -3460,8 +3458,6 @@ SCH_TEXTBOX* SCH_SEXPR_PARSER::parseSchTextBox()
             Expecting( "start, end, stroke, fill or uuid" );
         }
     }
-
-    textBox->UpdateTextPosition();
 
     return textBox.release();
 }

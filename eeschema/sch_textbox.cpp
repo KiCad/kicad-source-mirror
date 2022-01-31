@@ -70,11 +70,13 @@ void SCH_TEXTBOX::MirrorHorizontally( int aCenter )
     // Text is NOT really mirrored; it just has its justification flipped
     if( GetTextAngle() == ANGLE_HORIZONTAL )
     {
-        SetHorizJustify( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT ? GR_TEXT_H_ALIGN_LEFT
-                                                                    : GR_TEXT_H_ALIGN_RIGHT );
+        switch( GetHorizJustify() )
+        {
+        case GR_TEXT_H_ALIGN_LEFT:   SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT ); break;
+        case GR_TEXT_H_ALIGN_CENTER:                                           break;
+        case GR_TEXT_H_ALIGN_RIGHT:  SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );  break;
+        }
     }
-
-    UpdateTextPosition();
 }
 
 
@@ -83,31 +85,30 @@ void SCH_TEXTBOX::MirrorVertically( int aCenter )
     // Text is NOT really mirrored; it just has its justification flipped
     if( GetTextAngle() == ANGLE_VERTICAL )
     {
-        SetHorizJustify( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT ? GR_TEXT_H_ALIGN_LEFT
-                                                                    : GR_TEXT_H_ALIGN_RIGHT );
+        switch( GetHorizJustify() )
+        {
+        case GR_TEXT_H_ALIGN_LEFT:   SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT ); break;
+        case GR_TEXT_H_ALIGN_CENTER:                                           break;
+        case GR_TEXT_H_ALIGN_RIGHT:  SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );  break;
+        }
     }
-
-    UpdateTextPosition();
 }
 
 
 void SCH_TEXTBOX::Rotate( const VECTOR2I& aCenter )
 {
     SCH_SHAPE::Rotate( aCenter );
-
     SetTextAngle( GetTextAngle() == ANGLE_VERTICAL ? ANGLE_HORIZONTAL : ANGLE_VERTICAL );
-    UpdateTextPosition();
 }
 
 
 void SCH_TEXTBOX::Rotate90( bool aClockwise )
 {
     SetTextAngle( GetTextAngle() == ANGLE_VERTICAL ? ANGLE_HORIZONTAL : ANGLE_VERTICAL );
-    UpdateTextPosition();
 }
 
 
-void SCH_TEXTBOX::UpdateTextPosition()
+VECTOR2I SCH_TEXTBOX::GetDrawPos() const
 {
     int   margin = GetTextMargin();
     BOX2I bbox( m_start, m_end - m_start );
@@ -116,17 +117,27 @@ void SCH_TEXTBOX::UpdateTextPosition()
 
     if( GetTextAngle() == ANGLE_VERTICAL )
     {
-        if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
-            SetTextPos( VECTOR2I( bbox.GetLeft() + margin, bbox.GetTop() + margin )  );
-        else
-            SetTextPos( VECTOR2I( bbox.GetLeft() + margin, bbox.GetBottom() - margin )  );
+        switch( GetHorizJustify() )
+        {
+        case GR_TEXT_H_ALIGN_LEFT:
+            return VECTOR2I( bbox.GetLeft() + margin, bbox.GetBottom() - margin );
+        case GR_TEXT_H_ALIGN_CENTER:
+            return VECTOR2I( bbox.GetLeft() + margin, ( bbox.GetTop() + bbox.GetBottom() ) / 2 );
+        case GR_TEXT_H_ALIGN_RIGHT:
+            return VECTOR2I( bbox.GetLeft() + margin, bbox.GetTop() + margin );
+        }
     }
     else
     {
-        if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
-            SetTextPos( VECTOR2I( bbox.GetRight() - margin, bbox.GetTop() + margin )  );
-        else
-            SetTextPos( VECTOR2I( bbox.GetLeft() + margin, bbox.GetTop() + margin )  );
+        switch( GetHorizJustify() )
+        {
+        case GR_TEXT_H_ALIGN_LEFT:
+            return VECTOR2I( bbox.GetLeft() + margin, bbox.GetTop() + margin );
+        case GR_TEXT_H_ALIGN_CENTER:
+            return VECTOR2I( ( bbox.GetLeft() + bbox.GetRight() ) / 2, bbox.GetTop() + margin );
+        case GR_TEXT_H_ALIGN_RIGHT:
+            return VECTOR2I( bbox.GetRight() - margin, bbox.GetTop() + margin );
+        }
     }
 }
 
@@ -164,12 +175,6 @@ bool SCH_TEXTBOX::operator<( const SCH_ITEM& aItem ) const
 }
 
 
-int SCH_TEXTBOX::GetPenWidth() const
-{
-    return GetEffectiveTextPenWidth();
-}
-
-
 KIFONT::FONT* SCH_TEXTBOX::GetDrawFont() const
 {
     KIFONT::FONT* font = EDA_TEXT::GetFont();
@@ -184,7 +189,7 @@ KIFONT::FONT* SCH_TEXTBOX::GetDrawFont() const
 void SCH_TEXTBOX::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     wxDC*    DC = aSettings->GetPrintDC();
-    int      penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+    int      penWidth = GetPenWidth();
     VECTOR2I pt1 = GetStart();
     VECTOR2I pt2 = GetEnd();
     COLOR4D  color;
@@ -192,30 +197,35 @@ void SCH_TEXTBOX::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
     if( GetFillMode() == FILL_T::FILLED_WITH_COLOR )
         GRFilledRect( DC, pt1, pt2, 0, GetFillColor(), GetFillColor() );
 
-    if( GetStroke().GetColor() == COLOR4D::UNSPECIFIED )
-        color = aSettings->GetLayerColor( m_layer );
-    else
-        color = GetStroke().GetColor();
-
-    if( GetStroke().GetPlotStyle() <= PLOT_DASH_TYPE::FIRST_TYPE )
+    if( penWidth > 0 )
     {
-        GRRect( DC, pt1, pt2, penWidth, color );
-    }
-    else
-    {
-        std::vector<SHAPE*> shapes = MakeEffectiveShapes( true );
+        penWidth = std::max( penWidth, aSettings->GetMinPenWidth() );
 
-        for( SHAPE* shape : shapes )
+        if( GetStroke().GetColor() == COLOR4D::UNSPECIFIED )
+            color = aSettings->GetLayerColor( m_layer );
+        else
+            color = GetStroke().GetColor();
+
+        if( GetStroke().GetPlotStyle() <= PLOT_DASH_TYPE::FIRST_TYPE )
         {
-            STROKE_PARAMS::Stroke( shape, GetStroke().GetPlotStyle(), penWidth, aSettings,
-                                   [&]( const VECTOR2I& a, const VECTOR2I& b )
-                                   {
-                                       GRLine( DC, a.x, a.y, b.x, b.y, penWidth, color );
-                                   } );
+            GRRect( DC, pt1, pt2, penWidth, color );
         }
+        else
+        {
+            std::vector<SHAPE*> shapes = MakeEffectiveShapes( true );
 
-        for( SHAPE* shape : shapes )
-            delete shape;
+            for( SHAPE* shape : shapes )
+            {
+                STROKE_PARAMS::Stroke( shape, GetStroke().GetPlotStyle(), penWidth, aSettings,
+                                       [&]( const VECTOR2I& a, const VECTOR2I& b )
+                                       {
+                                           GRLine( DC, a.x, a.y, b.x, b.y, penWidth, color );
+                                       } );
+            }
+
+            for( SHAPE* shape : shapes )
+                delete shape;
+        }
     }
 
     color = aSettings->GetLayerColor( m_layer );
@@ -314,7 +324,7 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter ) const
 {
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
     KIFONT::FONT*    font = GetDrawFont();
-    int              penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
+    int              penWidth = GetPenWidth();
     FILL_T           fill = m_fill;
     COLOR4D          color = settings->GetLayerColor( LAYER_NOTES );
 
@@ -332,13 +342,17 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter ) const
 
         aPlotter->SetColor( fillColor );
         aPlotter->Rect( m_start, m_end, fill, 0 );
-
-        fill = FILL_T::NO_FILL;
     }
 
-    aPlotter->SetColor( color );
-    aPlotter->Rect( m_start, m_end, fill, penWidth );
+    if( penWidth > 0 )
+    {
+        penWidth = std::max( penWidth, settings->GetMinPenWidth() );
 
+        aPlotter->SetColor( color );
+        aPlotter->Rect( m_start, m_end, FILL_T::NO_FILL, penWidth );
+    }
+
+    penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );
 

@@ -63,6 +63,10 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
     }
     else
     {
+        m_spin1->Show( false );
+        m_spin4->Show( false );
+
+        m_borderCheckbox->Show( false );
         m_borderWidth.Show( false );
         m_borderColorLabel->Show( false );
         m_panelBorderColor->Show( false );
@@ -96,11 +100,15 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
     m_spin0->SetIsCheckButton();
     m_spin0->SetBitmap( KiBitmap( BITMAPS::text_align_left ) );
     m_spin1->SetIsCheckButton();
-    m_spin1->SetBitmap( KiBitmap( BITMAPS::text_align_right ) );
+    m_spin1->SetBitmap( KiBitmap( BITMAPS::text_align_center ) );
     m_spin2->SetIsCheckButton();
-    m_spin2->SetBitmap( KiBitmap( BITMAPS::text_align_bottom ) );
+    m_spin2->SetBitmap( KiBitmap( BITMAPS::text_align_right ) );
     m_spin3->SetIsCheckButton();
-    m_spin3->SetBitmap( KiBitmap( BITMAPS::text_align_top ) );
+    m_spin3->SetBitmap( KiBitmap( BITMAPS::text_align_bottom ) );
+    m_spin4->SetIsCheckButton();
+    m_spin4->SetBitmap( KiBitmap( BITMAPS::text_align_middle ) );
+    m_spin5->SetIsCheckButton();
+    m_spin5->SetBitmap( KiBitmap( BITMAPS::text_align_top ) );
 
     m_separator3->SetIsSeparator();
 
@@ -112,8 +120,8 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
     m_spin1->Bind( wxEVT_BUTTON, &DIALOG_TEXT_PROPERTIES::onSpinButton, this );
     m_spin2->Bind( wxEVT_BUTTON, &DIALOG_TEXT_PROPERTIES::onSpinButton, this );
     m_spin3->Bind( wxEVT_BUTTON, &DIALOG_TEXT_PROPERTIES::onSpinButton, this );
-
-    m_fillColorSwatch->Bind( COLOR_SWATCH_CHANGED, &DIALOG_TEXT_PROPERTIES::onFillSwatch, this );
+    m_spin4->Bind( wxEVT_BUTTON, &DIALOG_TEXT_PROPERTIES::onSpinButton, this );
+    m_spin5->Bind( wxEVT_BUTTON, &DIALOG_TEXT_PROPERTIES::onSpinButton, this );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -149,6 +157,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     {
         SCH_TEXTBOX* textBox = static_cast<SCH_TEXTBOX*>( m_currentItem );
 
+        m_borderCheckbox->SetValue( textBox->GetWidth() >= 0 );
         m_borderWidth.SetValue( textBox->GetWidth() );
         m_borderColorSwatch->SetSwatchColor( textBox->GetStroke().GetColor(), false );
 
@@ -161,22 +170,35 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
         else
             wxFAIL_MSG( "Line type not found in the type lookup map" );
 
+        m_borderWidth.Enable( textBox->GetWidth() >= 0 );
+        m_borderColorLabel->Enable( textBox->GetWidth() >= 0 );
+        m_borderColorSwatch->Enable( textBox->GetWidth() >= 0 );
+        m_borderStyleLabel->Enable( textBox->GetWidth() >= 0 );
+        m_borderStyleCombo->Enable( textBox->GetWidth() >= 0 );
+
         m_filledCtrl->SetValue( textBox->IsFilled() );
         m_fillColorSwatch->SetSwatchColor( textBox->GetFillColor(), false );
 
-        if( textBox->GetTextAngle() == ANGLE_VERTICAL )
+        m_fillColorLabel->Enable( textBox->IsFilled() );
+        m_fillColorSwatch->Enable( textBox->IsFilled() );
+
+        if( m_currentText->GetTextAngle() == ANGLE_VERTICAL )
         {
-            if( textBox->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
-                m_spin3->Check();
-            else
-                m_spin2->Check();
+            switch( m_currentText->GetHorizJustify() )
+            {
+            case GR_TEXT_H_ALIGN_LEFT:   m_spin3->Check(); break;
+            case GR_TEXT_H_ALIGN_CENTER: m_spin4->Check(); break;
+            case GR_TEXT_H_ALIGN_RIGHT:  m_spin5->Check(); break;
+            }
         }
         else
         {
-            if( textBox->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
-                m_spin1->Check();
-            else
-                m_spin0->Check();
+            switch( m_currentText->GetHorizJustify() )
+            {
+            case GR_TEXT_H_ALIGN_LEFT:   m_spin0->Check(); break;
+            case GR_TEXT_H_ALIGN_CENTER: m_spin1->Check(); break;
+            case GR_TEXT_H_ALIGN_RIGHT:  m_spin2->Check(); break;
+            }
         }
     }
     else
@@ -186,13 +208,37 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
         switch( spin )
         {
         case TEXT_SPIN_STYLE::RIGHT:  m_spin0->Check( true ); break;
-        case TEXT_SPIN_STYLE::LEFT:   m_spin1->Check( true ); break;
-        case TEXT_SPIN_STYLE::UP:     m_spin2->Check( true ); break;
-        case TEXT_SPIN_STYLE::BOTTOM: m_spin3->Check( true ); break;
+        case TEXT_SPIN_STYLE::LEFT:   m_spin2->Check( true ); break;
+        case TEXT_SPIN_STYLE::UP:     m_spin3->Check( true ); break;
+        case TEXT_SPIN_STYLE::BOTTOM: m_spin5->Check( true ); break;
         }
     }
 
     return true;
+}
+
+
+void DIALOG_TEXT_PROPERTIES::onBorderChecked( wxCommandEvent& event )
+{
+    bool border = m_borderCheckbox->GetValue();
+
+    if( border && m_borderWidth.GetValue() < 0 )
+        m_borderWidth.SetValue( m_frame->eeconfig()->m_Drawing.default_line_thickness );
+
+    m_borderWidth.Enable( border );
+    m_borderColorLabel->Enable( border );
+    m_borderColorSwatch->Enable( border );
+    m_borderStyleLabel->Enable( border );
+    m_borderStyleCombo->Enable( border );
+}
+
+
+void DIALOG_TEXT_PROPERTIES::onFillChecked( wxCommandEvent& event )
+{
+    bool fill = m_filledCtrl->GetValue();
+
+    m_fillColorLabel->Enable( fill );
+    m_fillColorSwatch->Enable( fill );
 }
 
 
@@ -336,11 +382,11 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
         if( m_spin0->IsChecked() )
             selectedSpinStyle = TEXT_SPIN_STYLE::RIGHT;
-        else if( m_spin1->IsChecked() )
-            selectedSpinStyle = TEXT_SPIN_STYLE::LEFT;
         else if( m_spin2->IsChecked() )
-            selectedSpinStyle = TEXT_SPIN_STYLE::UP;
+            selectedSpinStyle = TEXT_SPIN_STYLE::LEFT;
         else if( m_spin3->IsChecked() )
+            selectedSpinStyle = TEXT_SPIN_STYLE::UP;
+        else if( m_spin5->IsChecked() )
             selectedSpinStyle = TEXT_SPIN_STYLE::BOTTOM;
 
         static_cast<SCH_TEXT*>( m_currentItem )->SetTextSpinStyle( selectedSpinStyle );
@@ -351,31 +397,46 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
         if( m_spin0->IsChecked() )
         {
-            textBox->SetTextAngle( ANGLE_HORIZONTAL );
-            textBox->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+            m_currentText->SetTextAngle( ANGLE_HORIZONTAL );
+            m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
         }
         else if( m_spin1->IsChecked() )
         {
-            textBox->SetTextAngle( ANGLE_HORIZONTAL );
-            textBox->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            m_currentText->SetTextAngle( ANGLE_HORIZONTAL );
+            m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
         }
         else if( m_spin2->IsChecked() )
         {
-            textBox->SetTextAngle( ANGLE_VERTICAL );
-            textBox->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+            m_currentText->SetTextAngle( ANGLE_HORIZONTAL );
+            m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
         }
         else if( m_spin3->IsChecked() )
         {
-            textBox->SetTextAngle( ANGLE_VERTICAL );
-            textBox->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            m_currentText->SetTextAngle( ANGLE_VERTICAL );
+            m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
         }
-
-        textBox->UpdateTextPosition();
+        else if( m_spin4->IsChecked() )
+        {
+            m_currentText->SetTextAngle( ANGLE_VERTICAL );
+            m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        }
+        else if( m_spin5->IsChecked() )
+        {
+            m_currentText->SetTextAngle( ANGLE_VERTICAL );
+            m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        }
 
         STROKE_PARAMS stroke = textBox->GetStroke();
 
-        if( !m_borderWidth.IsIndeterminate() )
-            stroke.SetWidth( m_borderWidth.GetValue() );
+        if( m_borderCheckbox->GetValue() )
+        {
+            if( !m_borderWidth.IsIndeterminate() )
+                stroke.SetWidth( m_borderWidth.GetValue() );
+        }
+        else
+        {
+            stroke.SetWidth( -1 );
+        }
 
         auto it = lineTypeNames.begin();
         std::advance( it, m_borderStyleCombo->GetSelection() );
@@ -413,10 +474,4 @@ void DIALOG_TEXT_PROPERTIES::onMultiLineTCLostFocus( wxFocusEvent& event )
         m_scintillaTricks->CancelAutocomplete();
 
     event.Skip();
-}
-
-
-void DIALOG_TEXT_PROPERTIES::onFillSwatch( wxCommandEvent& aEvent )
-{
-    m_filledCtrl->SetValue( true );
 }

@@ -664,7 +664,6 @@ void EE_POINT_EDITOR::updateParentItem() const
 
         textbox->SetPosition( mapCoords( topLeft ) );
         textbox->SetEnd( mapCoords( botRight ) );
-        textbox->UpdateTextPosition();
         break;
     }
 
@@ -750,7 +749,6 @@ void EE_POINT_EDITOR::updateParentItem() const
 
         textBox->SetPosition( topLeft );
         textBox->SetEnd( botRight );
-        textBox->UpdateTextPosition();
         break;
     }
 

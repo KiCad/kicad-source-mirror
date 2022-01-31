@@ -96,6 +96,7 @@ const std::vector<BITMAP_INFO> g_BitmapInfo = {
     { BITMAPS::text_align_center, wxT( "text_align_center_16.png" ), 16, wxT( "light" ) },
     { BITMAPS::text_align_right, wxT( "text_align_right_16.png" ), 16, wxT( "light" ) },
     { BITMAPS::text_align_bottom, wxT( "text_align_bottom_16.png" ), 16, wxT( "light" ) },
+    { BITMAPS::text_align_middle, wxT( "text_align_middle_16.png" ), 16, wxT( "light" ) },
     { BITMAPS::text_align_top, wxT( "text_align_top_16.png" ), 16, wxT( "light" ) },
     { BITMAPS::text_valign_top, wxT( "text_valign_top_16.png" ), 16, wxT( "light" ) },
     { BITMAPS::text_valign_center, wxT( "text_valign_center_16.png" ), 16, wxT( "light" ) },

@@ -65,6 +65,9 @@ void LIB_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
         msg = wxT( "?" );
 
     aList.emplace_back( _( "Converted" ), msg );
+
+    if( IsPrivate() )
+        aList.emplace_back( _( "Private" ), wxEmptyString );
 }
 
 
@@ -79,6 +82,9 @@ int LIB_ITEM::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompareF
 
     if( !( aCompareFlags & COMPARE_FLAGS::UNIT ) && m_convert != aOther.m_convert )
         return m_convert - aOther.m_convert;
+
+    if( IsPrivate() != aOther.IsPrivate() )
+        return IsPrivate() < aOther.IsPrivate();
 
     return 0;
 }

@@ -112,13 +112,15 @@ void LIB_SHAPE::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 void LIB_SHAPE::Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
                       const TRANSFORM& aTransform ) const
 {
+    if( IsPrivate() )
+        return;
+
     VECTOR2I  start = aTransform.TransformCoordinate( m_start ) + aOffset;
     VECTOR2I  end = aTransform.TransformCoordinate( m_end ) + aOffset;
     VECTOR2I  center = aTransform.TransformCoordinate( getCenter() ) + aOffset;
     int       penWidth = GetEffectivePenWidth( aPlotter->RenderSettings() );
     FILL_T    fill = aFill ? m_fill : FILL_T::NO_FILL;
-    COLOR4D   color = aPlotter->RenderSettings()->GetLayerColor( IsPrivate() ? LAYER_NOTES
-                                                                             : LAYER_DEVICE );
+    COLOR4D   color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
 
     static std::vector<VECTOR2I> cornerList;
 
@@ -217,6 +219,9 @@ int LIB_SHAPE::GetPenWidth() const
 void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
                        const TRANSFORM& aTransform )
 {
+    if( IsPrivate() )
+        return;
+
     bool forceNoFill = static_cast<bool>( aData );
     int  penWidth = GetEffectivePenWidth( aSettings );
 
@@ -227,7 +232,7 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
     VECTOR2I pt1 = aTransform.TransformCoordinate( m_start ) + aOffset;
     VECTOR2I pt2 = aTransform.TransformCoordinate( m_end ) + aOffset;
     VECTOR2I c;
-    COLOR4D  color = aSettings->GetLayerColor( IsPrivate() ? LAYER_NOTES : LAYER_DEVICE );
+    COLOR4D  color = aSettings->GetLayerColor( LAYER_DEVICE );
 
     unsigned ptCount = 0;
     VECTOR2I* buffer = nullptr;

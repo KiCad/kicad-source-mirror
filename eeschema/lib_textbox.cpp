@@ -65,30 +65,18 @@ int LIB_TEXTBOX::GetTextMargin() const
 }
 
 
-void LIB_TEXTBOX::Offset( const VECTOR2I& aOffset )
-{
-    LIB_SHAPE::Offset( aOffset );
-    UpdateTextPosition();
-}
-
-
-void LIB_TEXTBOX::MoveTo( const VECTOR2I& newPosition )
-{
-    LIB_SHAPE::MoveTo( newPosition );
-    UpdateTextPosition();
-}
-
-
 void LIB_TEXTBOX::MirrorHorizontally( const VECTOR2I& center )
 {
     // Text is NOT really mirrored; it just has its justification flipped
     if( GetTextAngle() == ANGLE_HORIZONTAL )
     {
-        SetHorizJustify( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT ? GR_TEXT_H_ALIGN_LEFT
-                                                                    : GR_TEXT_H_ALIGN_RIGHT );
+        switch( GetHorizJustify() )
+        {
+        case GR_TEXT_H_ALIGN_LEFT:   SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT ); break;
+        case GR_TEXT_H_ALIGN_CENTER:                                           break;
+        case GR_TEXT_H_ALIGN_RIGHT:  SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );  break;
+        }
     }
-
-    UpdateTextPosition();
 }
 
 
@@ -97,24 +85,24 @@ void LIB_TEXTBOX::MirrorVertically( const VECTOR2I& center )
     // Text is NOT really mirrored; it just has its justification flipped
     if( GetTextAngle() == ANGLE_VERTICAL )
     {
-        SetHorizJustify( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT ? GR_TEXT_H_ALIGN_LEFT
-                                                                    : GR_TEXT_H_ALIGN_RIGHT );
+        switch( GetHorizJustify() )
+        {
+        case GR_TEXT_H_ALIGN_LEFT:   SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT ); break;
+        case GR_TEXT_H_ALIGN_CENTER:                                           break;
+        case GR_TEXT_H_ALIGN_RIGHT:  SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );  break;
+        }
     }
-
-    UpdateTextPosition();
 }
 
 
 void LIB_TEXTBOX::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
     LIB_SHAPE::Rotate( aCenter, aRotateCCW );
-
     SetTextAngle( GetTextAngle() == ANGLE_VERTICAL ? ANGLE_HORIZONTAL : ANGLE_VERTICAL );
-    UpdateTextPosition();
 }
 
 
-void LIB_TEXTBOX::UpdateTextPosition()
+VECTOR2I LIB_TEXTBOX::GetDrawPos() const
 {
     int   margin = GetTextMargin();
     BOX2I bbox( VECTOR2I( std::min( m_start.x, m_end.x ), std::min( -m_start.y, -m_end.y ) ),
@@ -122,17 +110,27 @@ void LIB_TEXTBOX::UpdateTextPosition()
 
     if( GetTextAngle() == ANGLE_VERTICAL )
     {
-        if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
-            SetTextPos( VECTOR2I( bbox.GetLeft() + margin, bbox.GetTop() + margin )  );
-        else
-            SetTextPos( VECTOR2I( bbox.GetLeft() + margin, bbox.GetBottom() - margin )  );
+        switch( GetHorizJustify() )
+        {
+        case GR_TEXT_H_ALIGN_LEFT:
+            return VECTOR2I( bbox.GetLeft() + margin, bbox.GetBottom() - margin );
+        case GR_TEXT_H_ALIGN_CENTER:
+            return VECTOR2I( bbox.GetLeft() + margin, ( bbox.GetTop() + bbox.GetBottom() ) / 2 );
+        case GR_TEXT_H_ALIGN_RIGHT:
+            return VECTOR2I( bbox.GetLeft() + margin, bbox.GetTop() + margin );
+        }
     }
     else
     {
-        if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
-            SetTextPos( VECTOR2I( bbox.GetRight() - margin, bbox.GetTop() + margin )  );
-        else
-            SetTextPos( VECTOR2I( bbox.GetLeft() + margin, bbox.GetTop() + margin )  );
+        switch( GetHorizJustify() )
+        {
+        case GR_TEXT_H_ALIGN_LEFT:
+            return VECTOR2I( bbox.GetLeft() + margin, bbox.GetTop() + margin );
+        case GR_TEXT_H_ALIGN_CENTER:
+            return VECTOR2I( ( bbox.GetLeft() + bbox.GetRight() ) / 2, bbox.GetTop() + margin );
+        case GR_TEXT_H_ALIGN_RIGHT:
+            return VECTOR2I( bbox.GetRight() - margin, bbox.GetTop() + margin );
+        }
     }
 }
 
@@ -175,12 +173,6 @@ int LIB_TEXTBOX::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompa
 }
 
 
-int LIB_TEXTBOX::GetPenWidth() const
-{
-    return GetEffectiveTextPenWidth();
-}
-
-
 KIFONT::FONT* LIB_TEXTBOX::GetDrawFont() const
 {
     KIFONT::FONT* font = EDA_TEXT::GetFont();
@@ -195,16 +187,16 @@ KIFONT::FONT* LIB_TEXTBOX::GetDrawFont() const
 void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
                          const TRANSFORM& aTransform )
 {
+    if( IsPrivate() )
+        return;
+
     bool forceNoFill = static_cast<bool>( aData );
     int  penWidth = GetEffectivePenWidth( aSettings );
-
-    if( forceNoFill && IsFilled() && penWidth == 0 )
-        return;
 
     wxDC*    DC = aSettings->GetPrintDC();
     VECTOR2I pt1 = aTransform.TransformCoordinate( m_start ) + aOffset;
     VECTOR2I pt2 = aTransform.TransformCoordinate( m_end ) + aOffset;
-    COLOR4D  color = aSettings->GetLayerColor( IsPrivate() ? LAYER_NOTES : LAYER_DEVICE );
+    COLOR4D  color = aSettings->GetLayerColor( LAYER_DEVICE );
 
     if( !forceNoFill && GetFillMode() == FILL_T::FILLED_WITH_COLOR )
         GRFilledRect( DC, pt1, pt2, penWidth, color, GetFillColor() );
@@ -212,27 +204,30 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
     if( GetStroke().GetColor() != COLOR4D::UNSPECIFIED )
         color = GetStroke().GetColor();
 
-    penWidth = std::max( penWidth, aSettings->GetMinPenWidth() );
-
-    if( GetStroke().GetPlotStyle() <= PLOT_DASH_TYPE::FIRST_TYPE )
+    if( penWidth > 0 )
     {
-        GRRect( DC, pt1, pt2, penWidth, color );
-    }
-    else
-    {
-        std::vector<SHAPE*> shapes = MakeEffectiveShapes( true );
+        penWidth = std::max( penWidth, aSettings->GetMinPenWidth() );
 
-        for( SHAPE* shape : shapes )
+        if( GetStroke().GetPlotStyle() <= PLOT_DASH_TYPE::FIRST_TYPE )
         {
-            STROKE_PARAMS::Stroke( shape, GetStroke().GetPlotStyle(), penWidth, aSettings,
-                                   [&]( const VECTOR2I& a, const VECTOR2I& b )
-                                   {
-                                       GRLine( DC, a.x, a.y, b.x, b.y, penWidth, color );
-                                   } );
+            GRRect( DC, pt1, pt2, penWidth, color );
         }
+        else
+        {
+            std::vector<SHAPE*> shapes = MakeEffectiveShapes( true );
 
-        for( SHAPE* shape : shapes )
-            delete shape;
+            for( SHAPE* shape : shapes )
+            {
+                STROKE_PARAMS::Stroke( shape, GetStroke().GetPlotStyle(), penWidth, aSettings,
+                                       [&]( const VECTOR2I& a, const VECTOR2I& b )
+                                       {
+                                           GRLine( DC, a.x, a.y, b.x, b.y, penWidth, color );
+                                       } );
+            }
+
+            for( SHAPE* shape : shapes )
+                delete shape;
+        }
     }
 
     LIB_TEXTBOX text( *this );
@@ -245,12 +240,11 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
                                                                    : ANGLE_HORIZONTAL );
     }
 
-    // NB: UpdateTextPosition() wants Symbol Editor (upside-down) coordinates
+    // NB: GetDrawPos() will want Symbol Editor (upside-down) coordinates
     text.SetStart( VECTOR2I( pt1.x, -pt1.y ) );
     text.SetEnd( VECTOR2I( pt2.x, -pt2.y ) );
-    text.UpdateTextPosition();
 
-    GRPrintText( DC, text.GetTextPos(), color, text.GetShownText(), text.GetTextAngle(),
+    GRPrintText( DC, text.GetDrawPos(), color, text.GetShownText(), text.GetTextAngle(),
                  text.GetTextSize(), text.GetHorizJustify(), text.GetVertJustify(), penWidth,
                  text.IsItalic(), text.IsBold(), text.GetDrawFont() );
 }
@@ -314,12 +308,14 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
 {
     wxASSERT( aPlotter != nullptr );
 
+    if( IsPrivate() )
+        return;
+
     VECTOR2I  start = aTransform.TransformCoordinate( m_start ) + aOffset;
     VECTOR2I  end = aTransform.TransformCoordinate( m_end ) + aOffset;
     int       penWidth = GetEffectivePenWidth( aPlotter->RenderSettings() );
     FILL_T    fill = aFill ? m_fill : FILL_T::NO_FILL;
-    COLOR4D   color = aPlotter->RenderSettings()->GetLayerColor( IsPrivate() ? LAYER_NOTES
-                                                                             : LAYER_DEVICE );
+    COLOR4D   color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
     if( fill != FILL_T::NO_FILL )
     {
         COLOR4D fillColor = color;
@@ -334,12 +330,13 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
 
         aPlotter->SetColor( fillColor );
         aPlotter->Rect( start, end, fill, 0 );
-
-        fill = FILL_T::NO_FILL;
     }
 
-    aPlotter->SetColor( color );
-    aPlotter->Rect( start, end, fill, penWidth );
+    if( penWidth > 0 )
+    {
+        aPlotter->SetColor( color );
+        aPlotter->Rect( start, end, FILL_T::NO_FILL, penWidth );
+    }
 
     LIB_TEXTBOX text( *this );
 
@@ -351,10 +348,9 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
                                                                    : ANGLE_HORIZONTAL );
     }
 
-    // NB: UpdateTextPosition() wants Symbol Editor (upside-down) coordinates
+    // NB: GetDrawPos() will want Symbol Editor (upside-down) coordinates
     text.SetStart( VECTOR2I( start.x, -start.y ) );
     text.SetEnd( VECTOR2I( end.x, -end.y ) );
-    text.UpdateTextPosition();
 
     std::vector<VECTOR2I> positions;
     wxArrayString strings_list;

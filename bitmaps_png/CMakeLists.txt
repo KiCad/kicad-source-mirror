@@ -124,6 +124,7 @@ set( BMAPS_SMALL
     text_align_center
     text_align_right
     text_align_bottom
+    text_align_middle
     text_align_top
     text_valign_top
     text_valign_center
