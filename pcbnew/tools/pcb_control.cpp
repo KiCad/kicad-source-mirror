@@ -191,7 +191,7 @@ void PCB_CONTROL::unfilledZoneCheck()
 
     for( const ZONE* zone : board()->Zones() )
     {
-        if( !zone->IsFilled() )
+        if( !zone->GetIsRuleArea() && !zone->IsFilled() )
         {
             unfilledZones = true;
             break;
@@ -219,7 +219,7 @@ void PCB_CONTROL::unfilledZoneCheck()
                       "if you wish to see all fills." ),
                     KeyNameFromKeyCode( PCB_ACTIONS::zoneFillAll.GetHotKey() ) );
 
-        infobar->ShowMessageFor( msg, 10000, wxICON_WARNING  );
+        infobar->ShowMessageFor( msg, 5000, wxICON_WARNING  );
     }
 }
 
