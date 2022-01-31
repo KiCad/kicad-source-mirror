@@ -202,8 +202,7 @@ void NL_PCBNEW_PLUGIN_IMPL::exportCommandsAndImages()
     std::vector<TDx::CImage> vImages;
 
     // add the action set to the category_store
-    CATEGORY_STORE::iterator iter = categoryStore.insert(
-            categoryStore.end(), CATEGORY_STORE::value_type( ".", &commandSet ) );
+    categoryStore.insert( categoryStore.end(), CATEGORY_STORE::value_type( ".", &commandSet ) );
 
     std::list<TOOL_ACTION*>::const_iterator it;
 
@@ -248,14 +247,14 @@ void NL_PCBNEW_PLUGIN_IMPL::exportCommandsAndImages()
             if( imageStream.GetSize() )
             {
                 wxStreamBuffer* streamBuffer = imageStream.GetOutputStreamBuffer();
-                TDx::CImage     image = TDx::CImage::FromData( "", 0, name.c_str() );
-                image.AssignImage( std::string( reinterpret_cast<const char*>(
-                                                        streamBuffer->GetBufferStart() ),
-                                                streamBuffer->GetBufferSize() ),
-                                   0 );
+                TDx::CImage     tdxImage = TDx::CImage::FromData( "", 0, name.c_str() );
+                tdxImage.AssignImage( std::string( reinterpret_cast<const char*>(
+                                                           streamBuffer->GetBufferStart() ),
+                                                   streamBuffer->GetBufferSize() ),
+                                      0 );
 
                 wxLogTrace( m_logTrace, "Adding image for : %s", name );
-                vImages.push_back( std::move( image ) );
+                vImages.push_back( std::move( tdxImage ) );
             }
         }
 
