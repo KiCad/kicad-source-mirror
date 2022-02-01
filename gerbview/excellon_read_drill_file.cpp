@@ -772,7 +772,7 @@ bool EXCELLON_IMAGE::Select_Tool( char*& text )
     // in tool selection command, if the tool is not defined in list,
     // and the definition is embedded, it will be entered in list
     char * startline = text;    // the tool id starts here.
-    int tool_id = TCodeNumber( text );
+    int tool_id = CodeNumber( text );
 
     // T0 is legal, but is not a selection tool. it is a special command
     if( tool_id >= 0 )

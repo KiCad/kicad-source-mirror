@@ -185,11 +185,6 @@ private:
      */
     bool readToolInformation( char*& aText );
 
-    int TCodeNumber( char*& aText )
-    {
-        return DCodeNumber( aText );
-    }
-
     /**
      * End a route command started by M15 ot G01, G02 or G03 command.
      */

@@ -168,13 +168,13 @@ bool GERBER_FILE_IMAGE::LoadGerberFile( const wxString& aFullFileName )
                 break;
 
             case 'G':    /* Line type Gxx : command */
-                G_command = GCodeNumber( text );
+                G_command = CodeNumber( text );
                 Execute_G_Command( text, G_command );
                 break;
 
             case 'D':       /* Line type Dxx : Tool selection (xx > 0) or
                              * command if xx = 0..9 */
-                D_commande = DCodeNumber( text );
+                D_commande = CodeNumber( text );
                 Execute_DCODE_Command( text, D_commande );
                 break;
 
