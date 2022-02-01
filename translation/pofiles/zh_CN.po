@@ -13,13 +13,14 @@
 # Tian Yunhao <t123yh@outlook.com>, 2021, 2022.
 # obit <szpttboy@163.com>, 2021, 2022.
 # Eric <alchemillatruth@purelymail.com>, 2022.
+# Ian McInerney <ian.s.mcinerney@ieee.org>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2022-02-01 13:57+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2022-02-01 14:40+0000\n"
+"Last-Translator: Ian McInerney <ian.s.mcinerney@ieee.org>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -36806,7 +36807,7 @@ msgstr "用于各种电子相关计算的计算器"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
-msgstr "KiCad PCB 编辑器 (独立版）"
+msgstr "KiCad PCB 编辑器 (独立版)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "PCB layout editor"
