@@ -126,8 +126,6 @@ public:
 
     virtual wxString GetShownText( int aDepth = 0 ) const override;
 
-    virtual const BOX2I ViewBBox() const override;
-
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;

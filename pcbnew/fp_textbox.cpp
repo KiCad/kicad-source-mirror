@@ -237,18 +237,6 @@ EDA_ITEM* FP_TEXTBOX::Clone() const
 }
 
 
-const BOX2I FP_TEXTBOX::ViewBBox() const
-{
-    EDA_ANGLE angle = GetDrawRotation();
-    EDA_RECT  text_area = GetTextBox();
-
-    if( !angle.IsZero() )
-        text_area = text_area.GetBoundingBoxRotated( GetDrawPos(), angle );
-
-    return BOX2I( text_area.GetPosition(), text_area.GetSize() );
-}
-
-
 void FP_TEXTBOX::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     if( IsVisible() )
