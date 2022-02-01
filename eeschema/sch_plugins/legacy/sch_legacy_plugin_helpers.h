@@ -27,6 +27,8 @@
     THROW_PARSE_ERROR( text, reader.GetSource(), reader.Line(),      \
                        reader.LineNumber(), pos - reader.Line() )
 
+#define Mils2Iu( x ) Mils2iu( x )
+
 
 class LINE_READER;
 class wxString;

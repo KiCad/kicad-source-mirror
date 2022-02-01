@@ -245,9 +245,11 @@ set( EESCHEMA_SRCS
     netlist_exporters/netlist_exporter_xml.cpp
     netlist_exporters/netlist_generator.cpp
 
+    sch_plugins/sch_lib_plugin_cache.cpp
     sch_plugins/eagle/sch_eagle_plugin.cpp
     sch_plugins/kicad/sch_sexpr_parser.cpp
     sch_plugins/kicad/sch_sexpr_plugin.cpp
+    sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp
     sch_plugins/legacy/sch_legacy_plugin.cpp
     sch_plugins/legacy/sch_legacy_plugin_helpers.cpp
 
