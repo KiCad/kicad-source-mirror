@@ -373,13 +373,15 @@ void DIALOG_PAD_PROPERTIES::onCornerRadiusChange( wxCommandEvent& event )
     if( m_cornerRadius.GetValue() < 0 )
         m_cornerRadiusCtrl->ChangeValue( "0" );
 
-    transferDataToPad( m_dummyPad );
-    m_dummyPad->SetRoundRectCornerRadius( m_cornerRadius.GetValue() );
+    if( transferDataToPad( m_dummyPad ) )
+    {
+        m_dummyPad->SetRoundRectCornerRadius( m_cornerRadius.GetValue() );
 
-    m_cornerRatio.ChangeDoubleValue( m_dummyPad->GetRoundRectRadiusRatio() * 100.0 );
-    m_mixedCornerRatio.ChangeDoubleValue( m_dummyPad->GetRoundRectRadiusRatio() * 100.0 );
+        m_cornerRatio.ChangeDoubleValue( m_dummyPad->GetRoundRectRadiusRatio() * 100.0 );
+        m_mixedCornerRatio.ChangeDoubleValue( m_dummyPad->GetRoundRectRadiusRatio() * 100.0 );
 
-    redraw();
+        redraw();
+    }
 }
 
 
@@ -448,11 +450,8 @@ void DIALOG_PAD_PROPERTIES::onCornerSizePercentChange( wxCommandEvent& event )
         }
     }
 
-    if( changed )
-    {
-        transferDataToPad( m_dummyPad );
+    if( changed && transferDataToPad( m_dummyPad ) )
         m_cornerRadius.ChangeValue( m_dummyPad->GetRoundRectCornerRadius() );
-    }
 
     redraw();
 }
@@ -892,9 +891,8 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
 
     enablePrimitivePage( is_custom );
 
-    transferDataToPad( m_dummyPad );
-
-    updateRoundRectCornerValues();
+    if( transferDataToPad( m_dummyPad ) )
+        updateRoundRectCornerValues();
 
     for( size_t i = 0; i < m_notebook->GetPageCount(); ++i )
         m_notebook->GetPage( i )->Layout();
@@ -1228,7 +1226,7 @@ void DIALOG_PAD_PROPERTIES::OnSetLayers( wxCommandEvent& event )
 
 bool DIALOG_PAD_PROPERTIES::padValuesOK()
 {
-    bool error = transferDataToPad( m_dummyPad );
+    bool error = !transferDataToPad( m_dummyPad );
 
     wxArrayString error_msgs;
     wxArrayString warning_msgs;
@@ -1551,7 +1549,8 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     if( !padValuesOK() )
         return false;
 
-    transferDataToPad( m_padMaster );
+    if( !transferDataToPad( m_padMaster ) )
+        return false;
 
     PAD_TOOL* padTool = m_parent->GetToolManager()->GetTool<PAD_TOOL>();
     padTool->SetLastPadNumber( m_padMaster->GetNumber() );
@@ -1693,11 +1692,11 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     wxString    msg;
 
     if( !Validate() )
-        return true;
+        return false;
     if( !m_panelGeneral->Validate() )
-        return true;
+        return false;
     if( !m_localSettingsPanel->Validate() )
-        return true;
+        return false;
     if( !m_spokeWidth.Validate( 0, INT_MAX ) )
         return false;
 
@@ -1999,7 +1998,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
 
     aPad->SetLayerSet( padLayerMask );
 
-    return error;
+    return !error;
 }
 
 
@@ -2035,7 +2034,8 @@ void DIALOG_PAD_PROPERTIES::OnValuesChanged( wxCommandEvent& event )
 {
     if( m_canUpdate )
     {
-        transferDataToPad( m_dummyPad );
+        if( !transferDataToPad( m_dummyPad ) )
+            return;
 
         // If the pad size has changed, update the displayed values for rounded rect pads.
         updateRoundRectCornerValues();
@@ -2078,11 +2078,8 @@ void DIALOG_PAD_PROPERTIES::editPrimitive()
 
     displayPrimitivesList();
 
-    if( m_canUpdate )
-    {
-        transferDataToPad( m_dummyPad );
+    if( m_canUpdate && transferDataToPad( m_dummyPad ) )
         redraw();
-    }
 }
 
 
@@ -2126,11 +2123,8 @@ void DIALOG_PAD_PROPERTIES::onDeletePrimitive( wxCommandEvent& event )
 
     displayPrimitivesList();
 
-    if( m_canUpdate )
-    {
-        transferDataToPad( m_dummyPad );
+    if( m_canUpdate && transferDataToPad( m_dummyPad ) )
         redraw();
-    }
 }
 
 
@@ -2180,11 +2174,8 @@ void DIALOG_PAD_PROPERTIES::onAddPrimitive( wxCommandEvent& event )
 
     displayPrimitivesList();
 
-    if( m_canUpdate )
-    {
-        transferDataToPad( m_dummyPad );
+    if( m_canUpdate && transferDataToPad( m_dummyPad ) )
         redraw();
-    }
 }
 
 
@@ -2214,11 +2205,8 @@ void DIALOG_PAD_PROPERTIES::onGeometryTransform( wxCommandEvent& event )
 
     displayPrimitivesList();
 
-    if( m_canUpdate )
-    {
-        transferDataToPad( m_dummyPad );
+    if( m_canUpdate && transferDataToPad( m_dummyPad ) )
         redraw();
-    }
 }
 
 
@@ -2253,9 +2241,6 @@ void DIALOG_PAD_PROPERTIES::onDuplicatePrimitive( wxCommandEvent& event )
 
     displayPrimitivesList();
 
-    if( m_canUpdate )
-    {
-        transferDataToPad( m_dummyPad );
+    if( m_canUpdate && transferDataToPad( m_dummyPad ) )
         redraw();
-    }
 }
