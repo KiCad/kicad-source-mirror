@@ -67,7 +67,7 @@
                         <property name="flexible_direction">wxBOTH</property>
                         <property name="growablecols">3</property>
                         <property name="growablerows"></property>
-                        <property name="hgap">0</property>
+                        <property name="hgap">3</property>
                         <property name="minimum_size"></property>
                         <property name="name">m_textEntrySizer</property>
                         <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
@@ -77,7 +77,7 @@
                             <property name="border">5</property>
                             <property name="colspan">1</property>
                             <property name="column">0</property>
-                            <property name="flag">wxRIGHT</property>
+                            <property name="flag"></property>
                             <property name="row">0</property>
                             <property name="rowspan">1</property>
                             <object class="wxStaticText" expanded="1">
@@ -211,7 +211,7 @@
                             <property name="border">5</property>
                             <property name="colspan">1</property>
                             <property name="column">0</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
                             <property name="row">1</property>
                             <property name="rowspan">1</property>
                             <object class="wxStaticText" expanded="1">
@@ -1226,7 +1226,7 @@
                             <property name="border">5</property>
                             <property name="colspan">1</property>
                             <property name="column">0</property>
-                            <property name="flag">wxRIGHT|wxALIGN_CENTER_VERTICAL</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                             <property name="row">2</property>
                             <property name="rowspan">1</property>
                             <object class="wxStaticText" expanded="1">
@@ -1357,7 +1357,7 @@
                             <property name="border">5</property>
                             <property name="colspan">1</property>
                             <property name="column">2</property>
-                            <property name="flag">wxLEFT|wxALIGN_CENTER_VERTICAL</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                             <property name="row">2</property>
                             <property name="rowspan">1</property>
                             <object class="wxStaticText" expanded="1">
@@ -1502,7 +1502,7 @@
                             <property name="border">5</property>
                             <property name="colspan">1</property>
                             <property name="column">0</property>
-                            <property name="flag">wxRIGHT|wxALIGN_CENTER_VERTICAL</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                             <property name="row">5</property>
                             <property name="rowspan">1</property>
                             <object class="wxStaticText" expanded="1">
@@ -1901,7 +1901,7 @@
                             <property name="border">5</property>
                             <property name="colspan">1</property>
                             <property name="column">0</property>
-                            <property name="flag">wxRIGHT|wxALIGN_CENTER_VERTICAL</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                             <property name="row">6</property>
                             <property name="rowspan">1</property>
                             <object class="wxStaticText" expanded="1">

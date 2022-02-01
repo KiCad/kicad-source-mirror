@@ -76,7 +76,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	bMainSizer->Add( m_SingleLineSizer, 0, wxEXPAND|wxALL, 10 );
 
 	wxGridBagSizer* gbSizer1;
-	gbSizer1 = new wxGridBagSizer( 2, 5 );
+	gbSizer1 = new wxGridBagSizer( 2, 3 );
 	gbSizer1->SetFlexibleDirection( wxBOTH );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	gbSizer1->SetEmptyCellSize( wxSize( 20,-1 ) );

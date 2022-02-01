@@ -68,6 +68,7 @@ class DIALOG_TEXTBOX_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_SizeXLabel;
 		wxTextCtrl* m_SizeXCtrl;
 		wxStaticText* m_SizeXUnits;
+		wxCheckBox* m_borderCheckbox;
 		wxStaticText* m_SizeYLabel;
 		wxTextCtrl* m_SizeYCtrl;
 		wxStaticText* m_SizeYUnits;
@@ -93,6 +94,7 @@ class DIALOG_TEXTBOX_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onBoldToggle( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onAlignButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onBorderChecked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onThickness( wxCommandEvent& event ) { event.Skip(); }
 
 

@@ -65,7 +65,7 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent
 	bMainSizer->Add( m_MultiLineSizer, 20, wxEXPAND|wxALL, 10 );
 
 	wxGridBagSizer* gbSizer1;
-	gbSizer1 = new wxGridBagSizer( 3, 5 );
+	gbSizer1 = new wxGridBagSizer( 4, 3 );
 	gbSizer1->SetFlexibleDirection( wxBOTH );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	gbSizer1->SetEmptyCellSize( wxSize( 20,8 ) );
@@ -147,6 +147,9 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent
 	m_SizeXUnits->Wrap( -1 );
 	gbSizer1->Add( m_SizeXUnits, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
+	m_borderCheckbox = new wxCheckBox( this, wxID_ANY, _("Border"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_borderCheckbox, wxGBPosition( 4, 4 ), wxGBSpan( 1, 2 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
 	m_SizeYLabel = new wxStaticText( this, wxID_ANY, _("Text Height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeYLabel->Wrap( -1 );
 	m_SizeYLabel->SetToolTip( _("Text height") );
@@ -186,7 +189,7 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent
 	m_OrientCtrl->Append( _("180.0") );
 	gbSizer1->Add( m_OrientCtrl, wxGBPosition( 1, 5 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
-	m_borderWidthLabel = new wxStaticText( this, wxID_ANY, _("Border Width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_borderWidthLabel = new wxStaticText( this, wxID_ANY, _("Border width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderWidthLabel->Wrap( -1 );
 	gbSizer1->Add( m_borderWidthLabel, wxGBPosition( 5, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
@@ -197,18 +200,17 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent
 	m_borderWidthUnits->Wrap( -1 );
 	gbSizer1->Add( m_borderWidthUnits, wxGBPosition( 5, 6 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_borderStyleLabel = new wxStaticText( this, wxID_ANY, _("Border Style:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_borderStyleLabel = new wxStaticText( this, wxID_ANY, _("Border style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderStyleLabel->Wrap( -1 );
 	gbSizer1->Add( m_borderStyleLabel, wxGBPosition( 6, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_borderStyleCombo = new wxBitmapComboBox( this, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
 	m_borderStyleCombo->SetMinSize( wxSize( 240,-1 ) );
 
-	gbSizer1->Add( m_borderStyleCombo, wxGBPosition( 6, 5 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	gbSizer1->Add( m_borderStyleCombo, wxGBPosition( 6, 5 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxEXPAND, 5 );
 
 
-	gbSizer1->AddGrowableCol( 1 );
-	gbSizer1->AddGrowableCol( 5 );
+	gbSizer1->AddGrowableCol( 3 );
 
 	bMainSizer->Add( gbSizer1, 0, wxRIGHT|wxLEFT|wxEXPAND, 10 );
 
@@ -249,6 +251,7 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent
 	m_alignCenter->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onAlignButton ), NULL, this );
 	m_alignRight->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onAlignButton ), NULL, this );
 	m_SizeXCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::OnOkClick ), NULL, this );
+	m_borderCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onBorderChecked ), NULL, this );
 	m_SizeYCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_ThicknessCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onThickness ), NULL, this );
 	m_OrientCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::OnOkClick ), NULL, this );
@@ -266,6 +269,7 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::~DIALOG_TEXTBOX_PROPERTIES_BASE()
 	m_alignCenter->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onAlignButton ), NULL, this );
 	m_alignRight->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onAlignButton ), NULL, this );
 	m_SizeXCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::OnOkClick ), NULL, this );
+	m_borderCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onBorderChecked ), NULL, this );
 	m_SizeYCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_ThicknessCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::onThickness ), NULL, this );
 	m_OrientCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXTBOX_PROPERTIES_BASE::OnOkClick ), NULL, this );

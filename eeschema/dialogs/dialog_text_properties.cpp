@@ -158,7 +158,10 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
         SCH_TEXTBOX* textBox = static_cast<SCH_TEXTBOX*>( m_currentItem );
 
         m_borderCheckbox->SetValue( textBox->GetWidth() >= 0 );
-        m_borderWidth.SetValue( textBox->GetWidth() );
+
+        if( textBox->GetWidth() >= 0 )
+            m_borderWidth.SetValue( textBox->GetWidth() );
+
         m_borderColorSwatch->SetSwatchColor( textBox->GetStroke().GetColor(), false );
 
         int style = static_cast<int>( textBox->GetStroke().GetPlotStyle() );

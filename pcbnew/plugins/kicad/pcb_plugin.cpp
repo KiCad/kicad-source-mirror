@@ -1759,7 +1759,7 @@ void PCB_PLUGIN::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) const
 
     if( aTextBox->GetShape() == SHAPE_T::RECT )
     {
-        m_out->Print( aNestLevel, "(start %s) (end %s)",
+        m_out->Print( aNestLevel + 1, "(start %s) (end %s)",
                       FormatInternalUnits( aTextBox->GetStart() ).c_str(),
                       FormatInternalUnits( aTextBox->GetEnd() ).c_str() );
     }
@@ -1768,7 +1768,7 @@ void PCB_PLUGIN::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) const
         const SHAPE_POLY_SET& poly = aTextBox->GetPolyShape();
         const SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
 
-        formatPolyPts( outline, aNestLevel, true );
+        formatPolyPts( outline, aNestLevel + 1, true );
     }
     else
     {
@@ -1778,8 +1778,6 @@ void PCB_PLUGIN::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) const
     if( !aTextBox->GetTextAngle().IsZero() )
         m_out->Print( 0, " (angle %s)", FormatAngle( aTextBox->GetTextAngle() ).c_str() );
 
-    m_out->Print( 0, " (width %s)", FormatInternalUnits( aTextBox->GetWidth() ).c_str() );
-
     formatLayer( aTextBox );
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aTextBox->m_Uuid.AsString() ) );
@@ -1787,7 +1785,10 @@ void PCB_PLUGIN::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) const
     m_out->Print( 0, "\n" );
 
     // PCB_TEXTBOXes are never hidden, so always omit "hide" attribute
-    aTextBox->EDA_TEXT::Format( m_out, aNestLevel, m_ctl | CTL_OMIT_HIDE );
+    aTextBox->EDA_TEXT::Format( m_out, aNestLevel + 1, m_ctl | CTL_OMIT_HIDE );
+
+    if( aTextBox->GetStroke().GetWidth() > 0 )
+        aTextBox->GetStroke().Format( m_out, aNestLevel + 1 );
 
     if( aTextBox->GetFont() && aTextBox->GetFont()->IsOutline() )
         formatRenderCache( aTextBox, aNestLevel + 1 );
@@ -1881,7 +1882,7 @@ void PCB_PLUGIN::format( const FP_TEXT* aText, int aNestLevel ) const
 
     m_out->Print( 0, "\n" );
 
-    aText->EDA_TEXT::Format( m_out, aNestLevel, m_ctl | CTL_OMIT_HIDE );
+    aText->EDA_TEXT::Format( m_out, aNestLevel + 1, m_ctl | CTL_OMIT_HIDE );
 
     m_out->Print( aNestLevel + 1, "(tstamp %s)\n", TO_UTF8( aText->m_Uuid.AsString() ) );
 
@@ -1902,11 +1903,9 @@ void PCB_PLUGIN::format( const FP_TEXTBOX* aTextBox, int aNestLevel ) const
 
     if( aTextBox->GetShape() == SHAPE_T::RECT )
     {
-        m_out->Print( aNestLevel, "(start %s) (end %s) (angle %s) (width %s)",
+        m_out->Print( aNestLevel, "(start %s) (end %s)",
                       FormatInternalUnits( aTextBox->GetStart0() ).c_str(),
-                      FormatInternalUnits( aTextBox->GetEnd0() ).c_str(),
-                      FormatAngle( aTextBox->GetTextAngle() ).c_str(),
-                      FormatInternalUnits( aTextBox->GetWidth() ).c_str() );
+                      FormatInternalUnits( aTextBox->GetEnd0() ).c_str() );
     }
     else if( aTextBox->GetShape() == SHAPE_T::POLY )
     {
@@ -1914,15 +1913,14 @@ void PCB_PLUGIN::format( const FP_TEXTBOX* aTextBox, int aNestLevel ) const
         const SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
 
         formatPolyPts( outline, aNestLevel, true );
-
-        m_out->Print( aNestLevel, " (angle %s) (width %s)",
-                      FormatAngle( aTextBox->GetTextAngle() ).c_str(),
-                      FormatInternalUnits( aTextBox->GetWidth() ).c_str() );
     }
     else
     {
         UNIMPLEMENTED_FOR( aTextBox->SHAPE_T_asString() );
     }
+
+    if( !aTextBox->GetTextAngle().IsZero() )
+        m_out->Print( 0, " (angle %s)", FormatAngle( aTextBox->GetTextAngle() ).c_str() );
 
     formatLayer( aTextBox );
 
@@ -1931,7 +1929,10 @@ void PCB_PLUGIN::format( const FP_TEXTBOX* aTextBox, int aNestLevel ) const
     m_out->Print( 0, "\n" );
 
     // FP_TEXTBOXes are never hidden, so always omit "hide" attribute
-    aTextBox->EDA_TEXT::Format( m_out, aNestLevel, m_ctl | CTL_OMIT_HIDE );
+    aTextBox->EDA_TEXT::Format( m_out, aNestLevel + 1, m_ctl | CTL_OMIT_HIDE );
+
+    if( aTextBox->GetStroke().GetWidth() > 0 )
+        aTextBox->GetStroke().Format( m_out, aNestLevel + 1 );
 
     if( aTextBox->GetFont() && aTextBox->GetFont()->IsOutline() )
         formatRenderCache( aTextBox, aNestLevel + 1 );

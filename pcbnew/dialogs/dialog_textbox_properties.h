@@ -49,6 +49,7 @@ private:
     void onBoldToggle( wxCommandEvent &aEvent ) override;
     void onAlignButton( wxCommandEvent &aEvent ) override;
     void onThickness( wxCommandEvent &aEvent ) override;
+    void onBorderChecked( wxCommandEvent& event ) override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -65,6 +66,7 @@ private:
     UNIT_BINDER          m_textHeight;
     UNIT_BINDER          m_thickness;
     UNIT_BINDER          m_orientation;     // rotation in degrees
+    UNIT_BINDER          m_borderWidth;
 
     SCINTILLA_TRICKS*    m_scintillaTricks;
 };

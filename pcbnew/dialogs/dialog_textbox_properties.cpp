@@ -27,6 +27,7 @@
 #include <confirm.h>
 #include <widgets/unit_binder.h>
 #include <board_commit.h>
+#include <board_design_settings.h>
 #include <board.h>
 #include <footprint.h>
 #include <string_utils.h>
@@ -51,7 +52,8 @@ DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aPare
         m_textWidth( aParent, m_SizeXLabel, m_SizeXCtrl, m_SizeXUnits ),
         m_textHeight( aParent, m_SizeYLabel, m_SizeYCtrl, m_SizeYUnits ),
         m_thickness( aParent, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnits ),
-        m_orientation( aParent, m_OrientLabel, m_OrientCtrl, nullptr )
+        m_orientation( aParent, m_OrientLabel, m_OrientCtrl, nullptr ),
+        m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits )
 {
     m_MultiLineText->SetEOLMode( wxSTC_EOL_LF );
 
@@ -128,6 +130,9 @@ DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aPare
     for( size_t ii = 0; ii < m_OrientCtrl->GetCount() && ii < 4; ++ii )
         m_OrientCtrl->SetString( ii, wxString::Format( "%.1f", rot_list[ii] ) );
 
+    for( const std::pair<const PLOT_DASH_TYPE, lineTypeStruct>& typeEntry : lineTypeNames )
+        m_borderStyleCombo->Append( typeEntry.second.name, KiBitmap( typeEntry.second.bitmap ) );
+
     SetupStandardButtons();
 
     // wxTextCtrls fail to generate wxEVT_CHAR events when the wxTE_MULTILINE flag is set,
@@ -159,7 +164,7 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataToWindow()
 {
     BOARD*   board = m_frame->GetBoard();
     wxString converted = board->ConvertKIIDsToCrossReferences(
-            UnescapeString( m_edaText->GetText() ) );
+                                                        UnescapeString( m_edaText->GetText() ) );
 
     m_MultiLineText->SetValue( converted );
     m_MultiLineText->SetSelection( -1, -1 );
@@ -187,6 +192,31 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataToWindow()
     m_mirrored->Check( m_edaText->IsMirrored() );
 
     m_orientation.SetAngleValue( m_edaText->GetTextAngle() );
+
+    STROKE_PARAMS stroke;
+
+    if( m_fpTextBox )
+        stroke = m_fpTextBox->GetStroke();
+    else if( m_pcbTextBox )
+        stroke = m_pcbTextBox->GetStroke();
+
+    m_borderCheckbox->SetValue( stroke.GetWidth() >= 0 );
+
+    if( stroke.GetWidth() >= 0 )
+        m_borderWidth.SetValue( stroke.GetWidth() );
+
+    int style = static_cast<int>( stroke.GetPlotStyle() );
+
+    if( style == -1 )
+        m_borderStyleCombo->SetStringSelection( DEFAULT_STYLE );
+    else if( style < (int) lineTypeNames.size() )
+        m_borderStyleCombo->SetSelection( style );
+    else
+        wxFAIL_MSG( "Line type not found in the type lookup map" );
+
+    m_borderWidth.Enable( stroke.GetWidth() >= 0 );
+    m_borderStyleLabel->Enable( stroke.GetWidth() >= 0 );
+    m_borderStyleCombo->Enable( stroke.GetWidth() >= 0 );
 
     return DIALOG_TEXTBOX_PROPERTIES_BASE::TransferDataToWindow();
 }
@@ -241,6 +271,22 @@ void DIALOG_TEXTBOX_PROPERTIES::onThickness( wxCommandEvent& event )
 
     m_bold->Check( abs( thickness - GetPenSizeForBold( textSize ) )
                     < abs( thickness - GetPenSizeForNormal( textSize ) ) );
+}
+
+
+void DIALOG_TEXTBOX_PROPERTIES::onBorderChecked( wxCommandEvent& event )
+{
+    bool border = m_borderCheckbox->GetValue();
+
+    if( border && m_borderWidth.GetValue() <= 0 )
+    {
+        BOARD_DESIGN_SETTINGS& bds = m_item->GetBoard()->GetDesignSettings();
+        m_borderWidth.SetValue( bds.GetLineThickness( m_item->GetLayer() ) );
+    }
+
+    m_borderWidth.Enable( border );
+    m_borderStyleLabel->Enable( border );
+    m_borderStyleCombo->Enable( border );
 }
 
 
@@ -323,6 +369,36 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
         m_edaText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
 
     m_edaText->SetMirrored( m_mirrored->IsChecked() );
+
+    STROKE_PARAMS stroke;
+
+    if( m_fpTextBox )
+        stroke = m_fpTextBox->GetStroke();
+    else if( m_pcbTextBox )
+        stroke = m_pcbTextBox->GetStroke();
+
+    if( m_borderCheckbox->GetValue() )
+    {
+        if( !m_borderWidth.IsIndeterminate() )
+            stroke.SetWidth( m_borderWidth.GetValue() );
+    }
+    else
+    {
+        stroke.SetWidth( -1 );
+    }
+
+    auto it = lineTypeNames.begin();
+    std::advance( it, m_borderStyleCombo->GetSelection() );
+
+    if( it == lineTypeNames.end() )
+        stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+    else
+        stroke.SetPlotStyle( it->first );
+
+    if( m_fpTextBox )
+        m_fpTextBox->SetStroke( stroke );
+    else if( m_pcbTextBox )
+        m_pcbTextBox->SetStroke( stroke );
 
     if( pushCommit )
         commit.Push( _( "Change text box properties" ) );

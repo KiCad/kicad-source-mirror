@@ -20,7 +20,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_textEntrySizer = new wxGridBagSizer( 3, 0 );
+	m_textEntrySizer = new wxGridBagSizer( 3, 3 );
 	m_textEntrySizer->SetFlexibleDirection( wxBOTH );
 	m_textEntrySizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -63,7 +63,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	m_fontLabel = new wxStaticText( this, wxID_ANY, _("Font:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fontLabel->Wrap( -1 );
-	m_textEntrySizer->Add( m_fontLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+	m_textEntrySizer->Add( m_fontLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
 	wxString m_fontCtrlChoices[] = { _("Default Font"), _("KiCad Font") };
 	int m_fontCtrlNChoices = sizeof( m_fontCtrlChoices ) / sizeof( wxString );
@@ -145,21 +145,21 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	m_textSizeLabel = new wxStaticText( this, wxID_ANY, _("Text size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeLabel->Wrap( -1 );
-	m_textEntrySizer->Add( m_textSizeLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_textEntrySizer->Add( m_textSizeLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_textSizeCtrl = new wxTextCtrl( this, wxID_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textEntrySizer->Add( m_textSizeCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_textSizeUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeUnits->Wrap( -1 );
-	m_textEntrySizer->Add( m_textSizeUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_textEntrySizer->Add( m_textSizeUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_borderCheckbox = new wxCheckBox( this, wxID_ANY, _("Border"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textEntrySizer->Add( m_borderCheckbox, wxGBPosition( 4, 0 ), wxGBSpan( 1, 2 ), wxRIGHT, 5 );
 
 	m_borderWidthLabel = new wxStaticText( this, wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderWidthLabel->Wrap( -1 );
-	m_textEntrySizer->Add( m_borderWidthLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_textEntrySizer->Add( m_borderWidthLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
@@ -169,7 +169,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	m_borderWidthUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderWidthUnits->Wrap( -1 );
-	bSizer7->Add( m_borderWidthUnits, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
+	bSizer7->Add( m_borderWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
 
 	m_borderColorLabel = new wxStaticText( this, wxID_ANY, _("Color:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderColorLabel->Wrap( -1 );
@@ -196,7 +196,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	m_borderStyleLabel = new wxStaticText( this, wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderStyleLabel->Wrap( -1 );
-	m_textEntrySizer->Add( m_borderStyleLabel, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_textEntrySizer->Add( m_borderStyleLabel, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_borderStyleCombo = new wxBitmapComboBox( this, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
 	m_borderStyleCombo->SetMinSize( wxSize( 240,-1 ) );

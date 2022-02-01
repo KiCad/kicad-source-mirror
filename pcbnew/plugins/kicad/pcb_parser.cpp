@@ -2892,6 +2892,7 @@ PCB_TEXTBOX* PCB_PARSER::parsePCB_TEXTBOX()
 
     std::unique_ptr<PCB_TEXTBOX> textbox = std::make_unique<PCB_TEXTBOX>( m_board );
 
+    STROKE_PARAMS stroke( -1, PLOT_DASH_TYPE::SOLID );
     T token = NextTok();
 
     if( token == T_locked )
@@ -2954,10 +2955,15 @@ PCB_TEXTBOX* PCB_PARSER::parsePCB_TEXTBOX()
             NeedRIGHT();
             break;
 
-        case T_width:
-            textbox->SetWidth( parseBoardUnits( "text box border width" ) );
-            NeedRIGHT();
+        case T_stroke:
+        {
+            STROKE_PARAMS_PARSER strokeParser( reader, IU_PER_MM );
+            strokeParser.SyncLineReaderWith( *this );
+
+            strokeParser.ParseStroke( stroke );
+            SyncLineReaderWith( strokeParser );
             break;
+        }
 
         case T_layer:
             textbox->SetLayer( parseBoardItemLayer() );
@@ -2982,6 +2988,8 @@ PCB_TEXTBOX* PCB_PARSER::parsePCB_TEXTBOX()
             Expecting( "angle, width, layer, effects, render_cache or tstamp" );
         }
     }
+
+    textbox->SetStroke( stroke );
 
     return textbox.release();
 }
@@ -3917,6 +3925,7 @@ FP_TEXTBOX* PCB_PARSER::parseFP_TEXTBOX()
 
     std::unique_ptr<FP_TEXTBOX> textbox = std::make_unique<FP_TEXTBOX>( nullptr );
 
+    STROKE_PARAMS stroke( -1, PLOT_DASH_TYPE::SOLID );
     T token = NextTok();
 
     if( token == T_locked )
@@ -3977,10 +3986,15 @@ FP_TEXTBOX* PCB_PARSER::parseFP_TEXTBOX()
             NeedRIGHT();
             break;
 
-        case T_width:
-            textbox->SetWidth( parseBoardUnits( "text box border width" ) );
-            NeedRIGHT();
+        case T_stroke:
+        {
+            STROKE_PARAMS_PARSER strokeParser( reader, IU_PER_MM );
+            strokeParser.SyncLineReaderWith( *this );
+
+            strokeParser.ParseStroke( stroke );
+            SyncLineReaderWith( strokeParser );
             break;
+        }
 
         case T_layer:
             textbox->SetLayer( parseBoardItemLayer() );
@@ -4005,6 +4019,8 @@ FP_TEXTBOX* PCB_PARSER::parseFP_TEXTBOX()
             Expecting( "angle, width, layer, effects, render_cache or tstamp" );
         }
     }
+
+    textbox->SetStroke( stroke );
 
     return textbox.release();
 }

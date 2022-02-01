@@ -128,7 +128,10 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataToWindow()
     m_italic->Check( m_currentText->IsItalic() );
 
     m_borderCheckbox->SetValue( m_currentText->GetWidth() >= 0 );
-    m_borderWidth.SetValue( m_currentText->GetWidth() );
+
+    if( m_currentText->GetWidth() >= 0 )
+        m_borderWidth.SetValue( m_currentText->GetWidth() );
+
     m_borderColorSwatch->SetSwatchColor( m_currentText->GetStroke().GetColor(), false );
 
     int style = static_cast<int>( m_currentText->GetStroke().GetPlotStyle() );
