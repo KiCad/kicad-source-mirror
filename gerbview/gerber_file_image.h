@@ -232,9 +232,12 @@ public:
      */
     VECTOR2I ReadIJCoord( char*& Text );
 
-    // functions to read G commands or D commands:
-    int GCodeNumber( char*& Text );
-    int DCodeNumber( char*& Text );
+    /**
+     * Reads the next number and returns the value
+     * @param aText Pointer to the input string vector
+     * @return
+     */
+    int CodeNumber( char*& aText );
 
     /**
      * Return a pointer to the D_CODE within this GERBER for the given \a aDCODE.

@@ -395,47 +395,23 @@ static void fillArcPOLY( GERBER_DRAW_ITEM* aGbrItem, const VECTOR2I& aStart, con
 }
 
 
-int GERBER_FILE_IMAGE::GCodeNumber( char*& Text )
+int GERBER_FILE_IMAGE::CodeNumber( char*& aText )
 {
-    int   ii = 0;
-    char* text;
-    char  line[1024];
+    int retval;
+    char* endptr;
 
-    if( Text == nullptr )
+    errno = 0;
+
+    retval = strtol( aText + 1, &endptr, 10 );
+
+    if( endptr == aText || errno != 0 )
         return 0;
 
-    Text++;
-    text = line;
+    wxCHECK_MSG( retval < std::numeric_limits<int>::max(), 0, _( "Invalid Code Number" ) );
 
-    while( IsNumber( *Text ) )
-    {
-        *(text++) = *(Text++);
-    }
+    aText = endptr;
 
-    *text = 0;
-    ii    = atoi( line );
-    return ii;
-}
-
-
-int GERBER_FILE_IMAGE::DCodeNumber( char*& Text )
-{
-    int   ii = 0;
-    char* text;
-    char  line[1024];
-
-    if( Text == nullptr )
-        return 0;
-
-    Text++;
-    text = line;
-
-    while( IsNumber( *Text ) )
-        *(text++) = *(Text++);
-
-    *text = 0;
-    ii    = atoi( line );
-    return ii;
+    return static_cast<int>( retval );
 }
 
 
@@ -492,7 +468,7 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
 
     case GC_SELECT_TOOL:
     {
-        int D_commande = DCodeNumber( text );
+        int D_commande = CodeNumber( text );
 
         if( D_commande < FIRST_DCODE )
             return false;
