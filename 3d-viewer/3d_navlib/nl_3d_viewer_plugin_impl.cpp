@@ -397,7 +397,7 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetViewExtents( const navlib::box_t& extents )
 {
     const CAMERA_FRUSTUM& f = m_camera->GetFrustum();
 
-    float factor = 2 * f.nw / ( extents.max_x - extents.min_x );
+    float factor = f.nw / ( extents.max_x - extents.min_x );
     float zoom = m_camera->GetZoom() / factor;
 
     m_camera->Zoom( factor );
