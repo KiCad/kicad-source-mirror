@@ -816,13 +816,14 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
 
 int KICAD_MANAGER_CONTROL::ShowPluginManager( const TOOL_EVENT& aEvent )
 {
-    DIALOG_PCM pcm( m_frame );
-    pcm.ShowModal();
-
-    // For some reason, after a double click the bitmap button calling
+    // For some reason, after a click or a double click the bitmap button calling
     // PCM keeps the focus althougt the focus was not set to this button.
     // This hack force removing the focus from this button
     m_frame->SetFocus();
+    wxSafeYield();
+
+    DIALOG_PCM pcm( m_frame );
+    pcm.ShowModal();
 
     return 0;
 }
