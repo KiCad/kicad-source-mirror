@@ -30,6 +30,7 @@
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
+#include <font/font.h>
 
 
 /*
@@ -121,8 +122,25 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                 if( !text || !text->IsVisible() )
                     return true;
 
-                int actualH = text->GetTextHeight();
-                int actualT = text->GetTextThickness();
+                VECTOR2I      size = text->GetTextSize();
+                KIFONT::FONT* font = text->GetDrawFont();
+
+                int actualH = size.y;
+                int actualT = 0;
+
+                if( font->IsStroke() )
+                {
+                    actualT = text->GetTextThickness();
+                }
+                else if( font->IsOutline() )
+                {
+                    // The best we can do for outline fonts is estimate their thickness based
+                    // on their fontweight.
+                    if( font->IsBold() )
+                        actualT = GetPenSizeForBold( size.x );
+                    else
+                        actualT = GetPenSizeForNormal( size.x );
+                }
 
                 if( !m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_HEIGHT ) )
                 {

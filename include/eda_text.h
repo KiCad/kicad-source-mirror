@@ -112,7 +112,7 @@ public:
      * in bold text and thickness clamping.
      */
     void SetTextThickness( int aWidth );
-    int GetTextThickness() const        { return m_attributes.m_StrokeWidth; };
+    int GetTextThickness() const                { return m_attributes.m_StrokeWidth; };
 
     /**
      * The EffectiveTextPenWidth uses the text thickness if > 1 or aDefaultWidth.
