@@ -1685,11 +1685,12 @@ SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify( bool aRemoveColinear )
     std::vector<VECTOR2I> pts_unique;
     std::vector<std::pair<ssize_t, ssize_t>> shapes_unique;
 
-    if( PointCount() < 2 )
+    // Always try to keep at least 2 points otherwise, we're not really a line
+    if( PointCount() < 3 )
     {
         return *this;
     }
-    else if( PointCount() == 2 )
+    else if( PointCount() == 3 )
     {
         if( m_points[0] == m_points[1] )
             m_points.pop_back();
