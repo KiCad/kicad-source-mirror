@@ -160,7 +160,9 @@ void PCB_TEXT::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
     RotatePoint( pt, aRotCentre, aAngle );
     SetTextPos( pt );
 
-    SetTextAngle( GetTextAngle() + aAngle );
+    EDA_ANGLE new_angle = GetTextAngle() + aAngle;
+    new_angle.Normalize180();
+    SetTextAngle( new_angle );
 }
 
 
