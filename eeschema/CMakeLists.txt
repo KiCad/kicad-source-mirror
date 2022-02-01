@@ -249,6 +249,7 @@ set( EESCHEMA_SRCS
     sch_plugins/kicad/sch_sexpr_parser.cpp
     sch_plugins/kicad/sch_sexpr_plugin.cpp
     sch_plugins/legacy/sch_legacy_plugin.cpp
+    sch_plugins/legacy/sch_legacy_plugin_helpers.cpp
 
     # Simulator settings must get built even when the simulator build option is disabled.
     sim/spice_settings.cpp
