@@ -106,17 +106,8 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                 if( !reportProgress( ii++, count, delta ) )
                     return false;
 
-                wxASSERT( item->Type() == PCB_TEXT_T
-                       || item->Type() == PCB_TEXTBOX_T
-                       || item->Type() == PCB_FP_TEXT_T
-                       || item->Type() == PCB_FP_TEXTBOX_T );
-
                 DRC_CONSTRAINT constraint;
-                int            actualH = 0;
-                int            actualT = 0;
-                bool           visible = false;
-
-                EDA_TEXT* text = nullptr;
+                EDA_TEXT*      text = nullptr;
 
                 switch( item->Type() )
                 {
@@ -127,12 +118,11 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                 default:               UNIMPLEMENTED_FOR( item->GetClass() );    break;
                 }
 
-                visible = text->IsVisible();
-                actualH = text->GetTextHeight();
-                actualT = text->GetTextThickness();
-
-                if( !visible )
+                if( !text || !text->IsVisible() )
                     return true;
+
+                int actualH = text->GetTextHeight();
+                int actualT = text->GetTextThickness();
 
                 if( !m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_HEIGHT ) )
                 {
