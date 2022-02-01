@@ -425,6 +425,14 @@ float SCH_PAINTER::getTextThickness( const EDA_ITEM* aItem, bool aDrawingShadows
         pen = static_cast<const SCH_TEXT*>( aItem )->GetEffectiveTextPenWidth( pen );
         break;
 
+    case SCH_LABEL_T:
+    case SCH_DIRECTIVE_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
+    case SCH_SHEET_PIN_T:
+        pen = static_cast<const SCH_LABEL_BASE*>( aItem )->GetEffectiveTextPenWidth( pen );
+        break;
+
     case SCH_TEXTBOX_T:
         pen = static_cast<const SCH_TEXTBOX*>( aItem )->GetEffectiveTextPenWidth( pen );
         break;
