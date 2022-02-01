@@ -573,6 +573,9 @@ bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
             ok = true;
         }
 
+        if( draggedWalk.CLine().PointCount() < 2 )
+            ok = false;
+
         if( ok )
         {
             PNS_DBG( Dbg(), AddLine, origLine.CLine(), BLUE, 50000, "drag-orig-line" );
