@@ -139,6 +139,9 @@ VECTOR2I SCH_TEXTBOX::GetDrawPos() const
             return VECTOR2I( bbox.GetRight() - margin, bbox.GetTop() + margin );
         }
     }
+
+    // Dummy default.  Should never reach here
+    return VECTOR2I( bbox.GetLeft() + margin, bbox.GetBottom() - margin );
 }
 
 
