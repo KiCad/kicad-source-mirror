@@ -1568,6 +1568,10 @@ void EAGLE_PLUGIN::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, FP_TE
         // Even though size and ratio are both optional, I am not seeing
         // a case where ratio is present but size is not.
         double  ratio = 8;
+
+        if( a.ratio )
+            ratio = *a.ratio;
+
         wxSize  fontz = aFPText->GetTextSize();
         int     textThickness = KiROUND( fontz.y * ratio / 100 );
 
@@ -1576,11 +1580,7 @@ void EAGLE_PLUGIN::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, FP_TE
         {
             fontz = kicad_fontz( *a.size, textThickness );
             aFPText->SetTextSize( fontz );
-
-            if( a.ratio )
-                ratio = *a.ratio;
         }
-
 
 
         int align = ETEXT::BOTTOM_LEFT;     // bottom-left is eagle default
