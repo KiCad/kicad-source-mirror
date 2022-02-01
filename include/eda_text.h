@@ -343,6 +343,8 @@ private:
 
     mutable bool     m_bounding_box_cache_valid;
     mutable VECTOR2I m_bounding_box_cache_pos;
+    mutable int      m_bounding_box_cache_line;
+    mutable bool     m_bounding_box_cache_inverted;
     mutable EDA_RECT m_bounding_box_cache;
 
     TEXT_ATTRIBUTES  m_attributes;

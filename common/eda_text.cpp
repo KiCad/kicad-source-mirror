@@ -389,7 +389,7 @@ void EDA_TEXT::Offset( const VECTOR2I& aOffset )
     for( std::unique_ptr<KIFONT::GLYPH>& glyph : m_render_cache )
         static_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() )->Move( aOffset );
 
-    m_bounding_box_cache.Move( aOffset );
+    m_bounding_box_cache_valid = false;
 }
 
 
@@ -512,10 +512,11 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 {
     VECTOR2I drawPos = GetDrawPos();
 
-    if( m_bounding_box_cache_valid && aLine < 0 && !aInvertY )
+    if( m_bounding_box_cache_valid
+            && m_bounding_box_cache_pos == drawPos
+            && m_bounding_box_cache_line == aLine
+            && m_bounding_box_cache_inverted == aInvertY  )
     {
-        m_bounding_box_cache.Offset( drawPos - m_bounding_box_cache_pos );
-        m_bounding_box_cache_pos = drawPos;
         return m_bounding_box_cache;
     }
 
@@ -605,12 +606,11 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 
     rect.Normalize();       // Make h and v sizes always >= 0
 
-    if( aLine < 0 && !aInvertY )
-    {
-        m_bounding_box_cache_valid = true;
-        m_bounding_box_cache_pos = drawPos;
-        m_bounding_box_cache = rect;
-    }
+    m_bounding_box_cache_valid = true;
+    m_bounding_box_cache_pos = drawPos;
+    m_bounding_box_cache_line = aLine;
+    m_bounding_box_cache_inverted = aInvertY;
+    m_bounding_box_cache = rect;
 
     return rect;
 }
