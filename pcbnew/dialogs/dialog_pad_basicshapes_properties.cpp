@@ -246,7 +246,6 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS::DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aPar
     TransferDataToWindow();
 
     m_sdbSizerOK->SetDefault();
-    GetSizer()->SetSizeHints( this );
 
 	m_gridCornersList->Connect( wxEVT_GRID_CELL_CHANGING,
                                 wxGridEventHandler( DIALOG_PAD_PRIMITIVE_POLY_PROPS::onCellChanging ),

@@ -732,7 +732,7 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
         case SHAPE_T::POLY:
             bs_info[0] = "Polygon";
             bs_info[1] = wxString::Format( _( "corners count %d" ),
-                                           (int) primitive->GetPolyShape().Outline( 0 ).PointCount() );
+                                           primitive->GetPolyShape().Outline( 0 ).PointCount() );
             break;
 
         default:
@@ -1464,7 +1464,7 @@ void DIALOG_PAD_PROPERTIES::redraw()
 
     while( select >= 0 )
     {
-        PCB_SHAPE* dummyShape = (PCB_SHAPE*) m_primitives[select]->Clone();
+        PCB_SHAPE* dummyShape = static_cast<PCB_SHAPE*>( m_primitives[select]->Clone() );
         dummyShape->SetLayer( SELECTED_ITEMS_LAYER );
         dummyShape->Rotate( wxPoint( 0, 0), m_dummyPad->GetOrientation() );
         dummyShape->Move( m_dummyPad->GetPosition() );
