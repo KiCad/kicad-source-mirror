@@ -57,7 +57,7 @@
 #include <callback_gal.h>
 
 
-#define TO_3DU( x ) ( x * m_biuTo3Dunits )
+#define TO_3DU( x ) ( ( x ) * m_biuTo3Dunits )
 
 #define TO_SFVEC2F( vec ) SFVEC2F( TO_3DU( vec.x ), TO_3DU( -vec.y ) )
 
