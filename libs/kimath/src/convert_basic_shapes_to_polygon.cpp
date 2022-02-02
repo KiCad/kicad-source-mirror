@@ -520,20 +520,50 @@ int ConvertArcToPolyline( SHAPE_LINE_CHAIN& aPolyline, VECTOR2I aCenter, int aRa
     if( aRadius >= aAccuracy )
         n = GetArcToSegmentCount( aRadius, aAccuracy, aArcAngle ) + 1;
 
-    if( aErrorLoc == ERROR_OUTSIDE )
+    EDA_ANGLE delta = aArcAngle / n;
+
+    if( aErrorLoc == ERROR_INSIDE )
     {
+        // This is the easy case: with the error on the inside the endpoints of each segment
+        // are error-free.
+
+        EDA_ANGLE rot = aStartAngle;
+
+        for( int i = 0; i <= n; i++, rot += delta )
+        {
+            double x = aCenter.x + aRadius * rot.Cos();
+            double y = aCenter.y + aRadius * rot.Sin();
+
+            aPolyline.Append( KiROUND( x ), KiROUND( y ) );
+        }
+    }
+    else
+    {
+        // This is the hard case: with the error on the outside it's the segment midpoints
+        // that are error-free.  So we need to add a half-segment at each end of the arc to get
+        // them correct.
+
         int seg360 = std::abs( KiROUND( n * 360.0 / aArcAngle.AsDegrees() ) );
         int actual_delta_radius = CircleToEndSegmentDeltaRadius( aRadius, seg360 );
-        aRadius += actual_delta_radius;
-    }
+        int errorRadius = aRadius + actual_delta_radius;
 
-    for( int i = 0; i <= n ; i++ )
-    {
-        EDA_ANGLE rot = aStartAngle;
-        rot += ( aArcAngle * i ) / n;
+        double x = aCenter.x + aRadius * aStartAngle.Cos();
+        double y = aCenter.y + aRadius * aStartAngle.Sin();
 
-        double x = aCenter.x + aRadius * rot.Cos();
-        double y = aCenter.y + aRadius * rot.Sin();
+        aPolyline.Append( KiROUND( x ), KiROUND( y ) );
+
+        EDA_ANGLE rot = aStartAngle + delta / 2;
+
+        for( int i = 0; i < n; i++, rot += delta )
+        {
+            x = aCenter.x + errorRadius * rot.Cos();
+            y = aCenter.y + errorRadius * rot.Sin();
+
+            aPolyline.Append( KiROUND( x ), KiROUND( y ) );
+        }
+
+        x = aCenter.x + aRadius * ( aStartAngle + aArcAngle ).Cos();
+        y = aCenter.y + aRadius * ( aStartAngle + aArcAngle ).Sin();
 
         aPolyline.Append( KiROUND( x ), KiROUND( y ) );
     }
@@ -546,132 +576,48 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStar
                             const VECTOR2I& aMid, const VECTOR2I& aEnd, int aWidth,
                             int aError, ERROR_LOC aErrorLoc )
 {
-    SHAPE_ARC             arc( aStart, aMid, aEnd, aWidth );
-    // Currentlye have currently 2 algos:
-    // the first approximates the thick arc from its outlines
-    // the second approximates the thick arc from segments given by SHAPE_ARC
-    // using SHAPE_ARC::ConvertToPolyline
-    // The actual approximation errors are similar but not exactly the same.
-    //
-    // For now, both algorithms are kept, the second is the initial algo used in Kicad.
-
-#if 1
-    // This appproximation convert the 2 ends to polygons, arc outer to polyline
-    // and arc inner to polyline and merge shapes.
-    int                   radial_offset = ( aWidth + 1 ) / 2;
-
-    SHAPE_POLY_SET        polyshape;
-    std::vector<VECTOR2I> outside_pts;
-
-    /// We start by making rounded ends on the arc
-    TransformCircleToPolygon( polyshape, aStart, radial_offset, aError, aErrorLoc );
-    TransformCircleToPolygon( polyshape, aEnd, radial_offset, aError, aErrorLoc );
-
-    // The circle polygon is built with a even number of segments, so the
-    // horizontal diameter has 2 corners on the biggest diameter
-    // Rotate these 2 corners to match the start and ens points of inner and outer
-    // end points of the arc appoximation outlines, build below.
-    // The final shape is much better.
+    // This appproximation builds a single polygon by starting with a 180 degree arc at one
+    // end, then the outer edge of the arc, then a 180 degree arc at the other end, and finally
+    // the inner edge of the arc.
+    SHAPE_ARC arc( aStart, aMid, aEnd, aWidth );
     EDA_ANGLE arc_angle_start = arc.GetStartAngle();
     EDA_ANGLE arc_angle = arc.GetCentralAngle();
     EDA_ANGLE arc_angle_end = arc_angle_start + arc_angle;
 
-    if( arc_angle_start != ANGLE_0 && arc_angle_start != ANGLE_180 )
-        polyshape.Outline(0).Rotate( -arc_angle_start, aStart );
+    int       radial_offset = arc.GetWidth() / 2;
+    int       arc_outer_radius = arc.GetRadius() + radial_offset;
+    int       arc_inner_radius = arc.GetRadius() - radial_offset;
+    ERROR_LOC errorLocInner = ( aErrorLoc == ERROR_INSIDE ) ? ERROR_OUTSIDE : ERROR_INSIDE;
+    ERROR_LOC errorLocOuter = ( aErrorLoc == ERROR_INSIDE ) ? ERROR_INSIDE : ERROR_OUTSIDE;
 
-    if( arc_angle_end != ANGLE_0 && arc_angle_end != ANGLE_180 )
-        polyshape.Outline(1).Rotate( -arc_angle_end, aEnd );
-
-    VECTOR2I center = arc.GetCenter();
-    int      radius = arc.GetRadius();
-
-    int      arc_outer_radius = radius + radial_offset;
-    int      arc_inner_radius = radius - radial_offset;
-    ERROR_LOC errorLocInner = ERROR_OUTSIDE;
-    ERROR_LOC errorLocOuter = ERROR_INSIDE;
-
-    if( aErrorLoc == ERROR_OUTSIDE )
-    {
-        errorLocInner = ERROR_INSIDE;
-        errorLocOuter = ERROR_OUTSIDE;
-    }
-
+    SHAPE_POLY_SET polyshape;
     polyshape.NewOutline();
 
-    ConvertArcToPolyline( polyshape.Outline(2), center, arc_outer_radius, arc_angle_start,
-                          arc_angle, aError, errorLocOuter );
+    SHAPE_LINE_CHAIN& outline = polyshape.Outline( 0 );
 
+    // Starting end
+    ConvertArcToPolyline( outline, arc.GetP0(), radial_offset, -arc_angle_start, ANGLE_180, aError,
+                          aErrorLoc );
+
+    // Outside edge
+    ConvertArcToPolyline( outline, arc.GetCenter(), arc_outer_radius, arc_angle_start, arc_angle,
+                          aError, errorLocOuter );
+
+    // Other end
+    ConvertArcToPolyline( outline, arc.GetP1(), radial_offset, -arc_angle_end, ANGLE_180, aError,
+                          aErrorLoc );
+
+    // Inside edge
     if( arc_inner_radius > 0 )
-        ConvertArcToPolyline( polyshape.Outline(2), center, arc_inner_radius, arc_angle_end,
-                              -arc_angle, aError, errorLocInner );
-    else
-        polyshape.Append( center );
-#else
-    // This appproximation use SHAPE_ARC to convert the 2 ends to polygons,
-    // approximate arc to polyline, convert the polyline corners to outer and inner
-    // corners of outer and inner utliners and merge shapes.
-    double defaultErr;
-    SHAPE_LINE_CHAIN arcSpine = arc.ConvertToPolyline( SHAPE_ARC::DefaultAccuracyForPCB(),
-                                                       &defaultErr);
-    int              radius = arc.GetRadius();
-    int              radial_offset = ( aWidth + 1 ) / 2;
-    SHAPE_POLY_SET   polyshape;
-    std::vector<VECTOR2I> outside_pts;
-
-    // delta is the effective error approximation to build a polyline from an arc
-    int segCnt360 = arcSpine.GetSegmentCount()*360.0/arc.GetCentralAngle().AsDegrees();
-    int delta = CircleToEndSegmentDeltaRadius( radius+radial_offset, std::abs(segCnt360) );
-
-    /// We start by making rounded ends on the arc
-    TransformCircleToPolygon( polyshape, aStart, radial_offset, aError, aErrorLoc );
-    TransformCircleToPolygon( polyshape, aEnd, radial_offset, aError, aErrorLoc );
-
-    // The circle polygon is built with a even number of segments, so the
-    // horizontal diameter has 2 corners on the biggest diameter
-    // Rotate these 2 corners to match the start and ens points of inner and outer
-    // end points of the arc appoximation outlines, build below.
-    // The final shape is much better.
-    EDA_ANGLE arc_angle_end = arc.GetStartAngle();
-
-    if( arc_angle_end != ANGLE_0 && arc_angle_end != ANGLE_180 )
-        polyshape.Outline(0).Rotate( arc_angle_end.AsRadians(), arcSpine.GetPoint( 0 ) );
-
-    arc_angle_end = arc.GetEndAngle();
-
-    if( arc_angle_end != ANGLE_0 && arc_angle_end != ANGLE_180 )
-        polyshape.Outline(1).Rotate( arc_angle_end.AsRadians(), arcSpine.GetPoint( -1 ) );
-
-    if( aErrorLoc == ERROR_OUTSIDE )
-        radial_offset += delta + defaultErr/2;
-    else
-        radial_offset -= defaultErr/2;
-
-    if( radial_offset < 0 )
-        radial_offset = 0;
-
-    polyshape.NewOutline();
-
-    VECTOR2I center = arc.GetCenter();
-    int last_index = arcSpine.GetPointCount() -1;
-
-    for( std::size_t ii = 0; ii <= last_index; ++ii )
     {
-        VECTOR2I offset = arcSpine.GetPoint( ii ) - center;
-        int curr_rd = radius;
-
-        polyshape.Append( offset.Resize( curr_rd - radial_offset ) + center );
-        outside_pts.emplace_back( offset.Resize( curr_rd + radial_offset ) + center );
+        ConvertArcToPolyline( outline, arc.GetCenter(), arc_inner_radius, arc_angle_end, -arc_angle,
+                              aError, errorLocInner );
     }
 
-    for( auto it = outside_pts.rbegin(); it != outside_pts.rend(); ++it )
-        polyshape.Append( *it );
-#endif
-
-    // Can be removed, but usefull to display the outline:
+    // Required.  Otherwise Clipper has fits with duplicate points generating winding artefacts.
     polyshape.Simplify( SHAPE_POLY_SET::PM_FAST );
 
     aCornerBuffer.Append( polyshape );
-
 }
 
 
