@@ -352,7 +352,10 @@ void TEARDROP_MANAGER::computeCurvedForRectShape(  TEARDROP_PARAMETERS* aCurrPar
     int       sign = std::abs( angle1 ) >= ANGLE_90 ? 1 : -1;
     VECTOR2I  bias( 0, sign * delta_effective );
 
-    RotatePoint( bias, -angle1 );
+    // Does not works well with the current algo, due to an initial bug.
+    // but I (JPC) keep it here because probably it will gives a better shape
+    // if the algo is refined.
+    // RotatePoint( bias, angle1 );
 
     ctrl1.x += bias.x;
     ctrl1.y += bias.y;
@@ -380,7 +383,8 @@ void TEARDROP_MANAGER::computeCurvedForRectShape(  TEARDROP_PARAMETERS* aCurrPar
 
     bias = VECTOR2I( 0, sign * delta_effective );
 
-    RotatePoint( bias, -angle2 );
+    // Does not works well with the current algo
+    // RotatePoint( bias, angle2 );
 
     ctrl1.x += bias.x;
     ctrl1.y += bias.y;
