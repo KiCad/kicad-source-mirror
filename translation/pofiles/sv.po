@@ -3,13 +3,14 @@
 # Axel Henriksson <axe.henriksson@gmail.com>, 2021, 2022.
 # Allan Nordhøy <epost@anotheragency.no>, 2021.
 # Richard Jonsson <richard_jonsson@hotmail.com>, 2021.
+# Henrik Kauhanen <henrik@kauhanen.se>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
 "PO-Revision-Date: 2022-02-02 21:43+0000\n"
-"Last-Translator: Axel Henriksson <axe.henriksson@gmail.com>\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
 "Language: sv\n"
@@ -26500,22 +26501,20 @@ msgstr ""
 "Globalt minimi-bredd och/eller -marginal för lödmask är inte ställd till 0. "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
-#, fuzzy
 msgid ""
 "Most board manufacturers expect 0 and use their own constraints for solder "
 "mask minimum width."
 msgstr ""
-"förvänta dig 0 och använd deras begränsningar, särskilt för lödmask min "
-"bredd."
+"De flesta mönsterkortstillverkare förväntar sig 0 och använder sina egna "
+"begränsningar för lödmaskens minsta bredd."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
 msgstr "Board setup"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:184
-#, fuzzy
 msgid "File > Board Setup..."
-msgstr "Board Setup ..."
+msgstr "Arkiv > Board Setup ..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:197
 msgid "Gerber Options"
@@ -26829,9 +26828,8 @@ msgid "Max amplitude (Amax):"
 msgstr "Max amplitud (Amax):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:131
-#, fuzzy
 msgid "Min spacing (s):"
-msgstr "Avstånd (ar):"
+msgstr "Minsta avstånd:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:136
 msgid ""
@@ -27102,9 +27100,8 @@ msgid "Real drill"
 msgstr "Verklig borr"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:21
-#, fuzzy
 msgid "Select Manufacturer"
-msgstr "Välj nät"
+msgstr "Välj tillverkare"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:25
 #, fuzzy, c-format
@@ -27117,11 +27114,8 @@ msgid "Details: %s"
 msgstr "Detaljer: %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:33
-#, fuzzy
 msgid "Send project directly"
-msgstr ""
-"Aktuell projektkatalog:\n"
-"%s"
+msgstr "Skicka projekt direkt"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:37
 msgid "Sends production files to manufacturer from KiCad"
@@ -27201,9 +27195,8 @@ msgid "Raise a DRC error if a pad overlaps this area"
 msgstr "Visa ett DRC-fel om en pad överlappar detta område"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:63
-#, fuzzy
 msgid "Keep out copper fill"
-msgstr "Håll ut kopparhällen"
+msgstr "Förhindra kopparfyllning"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:64
 msgid "Zones will not fill copper into this area"
