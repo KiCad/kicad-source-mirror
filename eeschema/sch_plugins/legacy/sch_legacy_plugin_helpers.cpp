@@ -25,6 +25,7 @@
 #include <macros.h>
 #include <richio.h>
 
+#include <config.h> // contains strncasecmp for msvc
 #include "sch_legacy_plugin_helpers.h"
 
 
