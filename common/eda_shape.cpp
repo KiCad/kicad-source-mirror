@@ -1140,6 +1140,9 @@ std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapes() const
 
     case SHAPE_T::POLY:
     {
+        if( GetPolyShape().OutlineCount() == 0 )    // malformed/empty polygon
+            break;
+
         SHAPE_LINE_CHAIN l = GetPolyShape().COutline( 0 );
 
         l.Rotate( -DECIDEG2RAD( getParentOrientation() ) );
