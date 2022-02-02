@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-02-01 13:58+0000\n"
+"PO-Revision-Date: 2022-02-02 21:43+0000\n"
 "Last-Translator: Axel Henriksson <axe.henriksson@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -1828,7 +1828,7 @@ msgstr "Återställ till standard"
 #: common/dialogs/dialog_configure_paths.cpp:256
 #: common/dialogs/dialog_configure_paths.cpp:351
 msgid "Environment variable name cannot be empty."
-msgstr "Miljövariabelns namn kan inte vara tomt."
+msgstr "Miljövariabelns namn kan inte utelämnas."
 
 #: common/dialogs/dialog_configure_paths.cpp:264
 #: common/dialogs/dialog_configure_paths.cpp:353
@@ -1838,7 +1838,7 @@ msgstr "Sökvägen för miljövariabel kan inte vara tom."
 #: common/dialogs/dialog_configure_paths.cpp:316
 #: common/dialogs/dialog_configure_paths.cpp:358
 msgid "3D search path alias cannot be empty."
-msgstr "3D-sökvägsalias kan inte vara tomt."
+msgstr "3D-sökvägsalias kan inte utelämnas."
 
 #: common/dialogs/dialog_configure_paths.cpp:324
 #: common/dialogs/dialog_configure_paths.cpp:360
@@ -3646,7 +3646,7 @@ msgstr "Från stiftkonfliktsmap"
 #: common/dialogs/panel_text_variables.cpp:118
 #: common/dialogs/panel_text_variables.cpp:146
 msgid "Variable name cannot be empty."
-msgstr "Variabelnamn får inte vara tomt."
+msgstr "Variabelnamn kan inte utelämnas."
 
 #: common/dialogs/panel_text_variables_base.cpp:37
 msgid "Variable Name"
@@ -8519,7 +8519,7 @@ msgstr "Olagligt referensbeteckningsvärde!"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:254
 msgid "Value may not be empty."
-msgstr "Värde kanske inte är tomt."
+msgstr "Värdet kan inte utelämnas."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:336
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
@@ -8573,7 +8573,7 @@ msgstr "Filtrera objekt efter överordnad symboltyp:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
 msgid "Non-power symbols"
-msgstr "Icke-maktsymboler"
+msgstr "Icke-kraftsymboler"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
 msgid "Power symbols"
@@ -8674,7 +8674,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Fel uppstod vid skrivning av tomt symbolbibliotekstabell.\n"
+"Fel uppstod vid skrivning av tom symbolbibliotekstabell.\n"
 "\n"
 "%s"
 
@@ -8931,7 +8931,7 @@ msgstr "Skapa symbol med alternativ kroppsstil (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:79
 msgid "Create symbol as power symbol"
-msgstr "Skapa symbol som maktsymbol"
+msgstr "Skapa symbol som kraftsymbol"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:82
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
@@ -9166,7 +9166,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:173
 msgid "Define as power symbol"
-msgstr "Definiera som maktsymbol"
+msgstr "Definiera som kraftsymbol"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:174
 msgid ""
@@ -13928,7 +13928,7 @@ msgstr "Ogiltigt namn på egenskap"
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:786
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1722
 msgid "Empty property name"
-msgstr "Tomt namn på egenskap"
+msgstr "Tomt egenskapsnamn"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:795
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1730
@@ -14514,11 +14514,11 @@ msgstr "Fältet får inte innehålla %s tecken."
 
 #: eeschema/sch_validators.cpp:138
 msgid "The name of the field cannot be empty."
-msgstr "Fältets namn kan inte vara tomt."
+msgstr "Fältets namn kan inte utelämnas."
 
 #: eeschema/sch_validators.cpp:140
 msgid "The value of the field cannot be empty."
-msgstr "Fältets värde kan inte vara tomt."
+msgstr "Fältets värde kan inte utelämnas."
 
 #: eeschema/sch_validators.cpp:151
 msgid "carriage return"
@@ -14737,7 +14737,7 @@ msgstr "Det uppstod fel vid export av netlista, avbröts."
 #: eeschema/sim/sim_plot_frame.cpp:515
 #, c-format
 msgid "Plot%u - "
-msgstr "Tomt%u - "
+msgstr "Plotta%u - "
 
 #: eeschema/sim/sim_plot_frame.cpp:632
 msgid "Error: simulation type not defined!\n"
@@ -14765,7 +14765,7 @@ msgstr "Spara simuleringsarbetsbok som"
 
 #: eeschema/sim/sim_plot_frame.cpp:1197
 msgid "Save Plot as Image"
-msgstr "Spara tomt som bild"
+msgstr "Spara plot som bild"
 
 #: eeschema/sim/sim_plot_frame.cpp:1214
 msgid "Save Plot Data"
@@ -14805,7 +14805,7 @@ msgstr "Visa markören"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:19
 msgid "New Plot"
-msgstr "Ny tomt"
+msgstr "Ny plot"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:39
 msgid "Save as Image"
@@ -14936,7 +14936,7 @@ msgstr "OKÄND!"
 
 #: eeschema/sim/spice_value.cpp:42
 msgid "Spice value cannot be empty"
-msgstr "Kryddvärdet kan inte vara tomt"
+msgstr "Spice-värdet kan inte vara tomt"
 
 #: eeschema/sim/spice_value.cpp:47
 msgid "Invalid Spice value string"
@@ -21919,7 +21919,7 @@ msgid ""
 "Blank continues from front or enter a number greater than the highest "
 "reference designation on the front."
 msgstr ""
-"Tomt fortsätter framifrån eller ange ett nummer som är större än den högsta "
+"Blank fortsätter framifrån eller ange ett nummer som är större än den högsta "
 "referensbeteckningen på framsidan."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:227
@@ -21927,7 +21927,7 @@ msgid ""
 "Leave blank or zero, or enter a number greater than the highest reference "
 "designation on the front."
 msgstr ""
-"Lämna tomt eller noll, eller ange ett nummer som är större än den högsta "
+"Lämna tom eller noll, eller ange ett nummer som är större än den högsta "
 "referensbeteckningen på framsidan."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:232
@@ -25149,7 +25149,7 @@ msgstr "Byt namn på nätet"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1850
 msgid "Net name cannot be empty."
-msgstr "Nätnamnet kan inte vara tomt."
+msgstr "Nätnamnet kan inte utelämnas."
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1916
 #, c-format
@@ -26007,7 +26007,7 @@ msgstr "Varning: Skalalternativet är inställt på ett mycket stort värde"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:23
 msgid "Plot format:"
-msgstr "Tomtformat:"
+msgstr "Plot-format:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
 msgid "Include Layers"
@@ -26015,7 +26015,7 @@ msgstr "Inkludera lager"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
 msgid "Plot border and title block"
-msgstr "Tomtgräns och titelblock"
+msgstr "Ram och titelblock för plot"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:80
 msgid "Plot footprint values"
@@ -26106,11 +26106,11 @@ msgstr "Skissa"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:143
 msgid "Mirrored plot"
-msgstr "Speglad tomt"
+msgstr "Speglad plot"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:146
 msgid "Negative plot"
-msgstr "Negativ tomt"
+msgstr "Negativ plot"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:149
 msgid "Check zone fills before plotting"
