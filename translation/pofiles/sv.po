@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2022-02-02 21:43+0000\n"
+"PO-Revision-Date: 2022-02-02 23:56+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -27673,9 +27673,8 @@ msgstr "Markera nät (för dynor eller spår)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:243
 #: pcbnew/dialogs/panel_edit_options_base.cpp:363
-#, fuzzy
 msgid "Graphics Editing"
-msgstr "Spårredigering"
+msgstr "Grafikredigering"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
 #, fuzzy
@@ -27775,9 +27774,8 @@ msgid "Draw an outline to show the sheet size."
 msgstr "Rita en kontur för att visa bladstorlek."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:380
-#, fuzzy
 msgid "Refill zones after Zone Properties dialog"
-msgstr "Visar dialogrutan för objektegenskaper"
+msgstr "Återfyll zoner efter dialogrutan Egenskaper för kopparzon"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:382
 msgid ""
@@ -27853,9 +27851,8 @@ msgid "Path Substitutions"
 msgstr "Substitut för Sökvägar"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:386
-#, fuzzy
 msgid "No filename entered"
-msgstr "Ingen fil vald!"
+msgstr "Inget filnamn inmatat"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:391
 #, fuzzy
@@ -27868,14 +27865,12 @@ msgid "File not found"
 msgstr "Filen hittades inte"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:401
-#, fuzzy
 msgid "Unable to open file"
-msgstr "misslyckades att öppna fil"
+msgstr "Öppning av fil misslyckades"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:406
-#, fuzzy
 msgid "Unknown error"
-msgstr "Okänd metod"
+msgstr "Okänt fel"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:37
 msgid "3D Model(s)"
@@ -27899,14 +27894,12 @@ msgid "Open Plugin Directory"
 msgstr "Öppna Plugin Directory"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:80
-#, fuzzy
 msgid "Reload Plugins"
-msgstr "Uppdatera plugins"
+msgstr "Ladda om plugins"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:85
-#, fuzzy
 msgid "Show Plugin Errors"
-msgstr "Visa markören"
+msgstr "Visa plugin-fel"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Page origin"
@@ -27969,9 +27962,8 @@ msgid "Arc/circle approximated by segments"
 msgstr "Båge / cirkel approximerad av segment"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:68
-#, fuzzy
 msgid "Max allowed deviation:"
-msgstr "Maximal avvikelse:"
+msgstr "Maximalt tillåten avvikelse:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:70
 msgid ""
@@ -28036,9 +28028,8 @@ msgid "Min thermal relief spoke count:"
 msgstr "Termisk avlastning ekers bredd:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:165
-#, fuzzy
 msgid "Length tuning"
-msgstr "Trace Length Tuning"
+msgstr "Längdjustering"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:169
 msgid "Include stackup height in track length calculations"
@@ -28105,9 +28096,8 @@ msgstr ""
 "underskridas av nätklasser, anpassade regler, eller andra inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
-#, fuzzy
 msgid "Copper to hole clearance:"
-msgstr "Hålrum för koppar:"
+msgstr "Avstånd koppar till hål:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:277
 msgid ""
@@ -28120,9 +28110,8 @@ msgstr ""
 "eller andra inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:288
-#, fuzzy
 msgid "Copper to edge clearance:"
-msgstr "Kopparkantutrymme:"
+msgstr "Avstånd koppar till kant:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:293
 msgid ""
@@ -28183,9 +28172,8 @@ msgstr ""
 "inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:402
-#, fuzzy
 msgid "Minimum uVia hole:"
-msgstr "Minsta uVia-borr:"
+msgstr "Minsta uVia-hål:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:407
 msgid ""
@@ -28297,9 +28285,8 @@ msgid "Add User-defined Layer"
 msgstr "Lägg till användardefinierat lager"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:26
-#, fuzzy
 msgid "Add User Defined Layer..."
-msgstr "Lägg till användardefinierat lager"
+msgstr "Lägg till användardefinierat lager..."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:46
 msgid "CrtYd_Front"
@@ -28343,9 +28330,8 @@ msgid "On-board, non-copper"
 msgstr "Ombord, icke-koppar"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:82
-#, fuzzy
 msgid "If you want a solder paste layer for front side of the board"
-msgstr "Om du vill ha ett lödpasterskikt för brädans framsida"
+msgstr "Om du vill ha ett lödpasteskikt för mönsterkortets framsida"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:86
 msgid "SoldP_Front"
@@ -28851,9 +28837,8 @@ msgstr ""
 "maskavstånd)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
-#, fuzzy
 msgid "Solder mask minimum web width:"
-msgstr "Lödmask minsta bryggbredd:"
+msgstr "Lödmaskens minsta bryggbredd:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:71
 msgid ""
@@ -28932,9 +28917,8 @@ msgstr ""
 "bestämma den slutliga rensningen."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:86
-#, fuzzy
 msgid "Cancel Changes?"
-msgstr "Vill du spara ändringarna?"
+msgstr "Vill du förkasta ändringarna?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:446
 msgid "DRC rules"
@@ -29275,9 +29259,8 @@ msgstr ""
 "precision är inställd på att visa fler siffror"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:275
-#, fuzzy
 msgid "No via hole size defined."
-msgstr "Ingen via borr definierad."
+msgstr "Via-diameter ej definierad."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:290
 msgid "No differential pair gap defined."
@@ -29357,9 +29340,9 @@ msgstr "netklass '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:289 pcbnew/drc/drc_engine.cpp:306
 #: pcbnew/drc/drc_engine.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' (diff pair)"
-msgstr "netklass '%s'"
+msgstr "nätklass '%s' (differentialpar)"
 
 #: pcbnew/drc/drc_engine.cpp:445
 msgid "keepout area"
@@ -29486,9 +29469,9 @@ msgstr "Keepout-lag (er) matchade inte."
 
 #: pcbnew/drc/drc_engine.cpp:1037 pcbnew/drc/drc_engine.cpp:1057
 #: pcbnew/drc/drc_engine.cpp:1312
-#, fuzzy, c-format
+#, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
-msgstr "Regellager \"%s\" matchade inte."
+msgstr "Regel lager \"%s\" matchade inte, regel ingoreras."
 
 #: pcbnew/drc/drc_engine.cpp:1042 pcbnew/drc/drc_engine.cpp:1062
 #, fuzzy
@@ -29592,9 +29575,8 @@ msgid "Readability"
 msgstr "Enbart läsrättighet"
 
 #: pcbnew/drc/drc_item.cpp:52
-#, fuzzy
 msgid "Missing connection between items"
-msgstr "Ogiltig anslutning mellan buss- och nätartiklar"
+msgstr "Anslutning mellan element saknas"
 
 #: pcbnew/drc/drc_item.cpp:56
 msgid "Items shorting two nets"
@@ -29605,9 +29587,8 @@ msgid "Items not allowed"
 msgstr "Objekt är inte tillåtet"
 
 #: pcbnew/drc/drc_item.cpp:64
-#, fuzzy
 msgid "Text (or dimension) on Edge.Cuts layer"
-msgstr "(inga kanter hittades på Edge.Cuts lager)"
+msgstr "Text (eller måttsättning) på Edge.Cuts lager"
 
 #: pcbnew/drc/drc_item.cpp:68
 msgid "Clearance violation"
@@ -29634,9 +29615,8 @@ msgid "Thermal relief connection to zone incomplete"
 msgstr ""
 
 #: pcbnew/drc/drc_item.cpp:92
-#, fuzzy
 msgid "Via is not connected or connected on only one layer"
-msgstr "Ta bort vias anslutna på endast ett lager"
+msgstr "Via är inte anslutet eller bara anslutet på ett lager"
 
 #: pcbnew/drc/drc_item.cpp:96
 msgid "Track has unconnected end"
@@ -29838,9 +29818,9 @@ msgid "Missing version number."
 msgstr "Versionsnummer saknas."
 
 #: pcbnew/drc/drc_rule_parser.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized item '%s'.| Expected version number."
-msgstr "Okänt objekt '%s'. | Förväntat versionsnummer"
+msgstr "Okänt objekt '%s'. | Förväntat versionsnummer."
 
 #: pcbnew/drc/drc_rule_parser.cpp:140 pcbnew/drc/drc_rule_parser.cpp:219
 #: pcbnew/drc/drc_rule_parser.cpp:437 pcbnew/drc/drc_rule_parser.cpp:468
@@ -30054,9 +30034,8 @@ msgid "Checking keepouts & disallow constraints..."
 msgstr "Kontrollerar kvarhållningar och tillåter inte begränsningar ..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:122
-#, fuzzy
 msgid "Checking copper to board edge clearances..."
-msgstr "Kontrollera brädans kantavstånd ..."
+msgstr "Kontrollera koppar-till-kortkantsavstånd..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:127
 #, fuzzy
