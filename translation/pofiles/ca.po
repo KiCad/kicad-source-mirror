@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2022-02-01 13:56+0000\n"
+"PO-Revision-Date: 2022-02-02 16:32+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -9297,9 +9297,8 @@ msgid "Exclude from board"
 msgstr "Exclou de la placa"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:103
-#, fuzzy
 msgid "Pin name position offset:"
-msgstr "Desplaçament de la posició del text del pin:"
+msgstr "Desplaçament de la posició del nom del pin:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:120
 msgid "Show pin number text"
@@ -9318,11 +9317,10 @@ msgid "New Symbol"
 msgstr "Símbol nou"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:48
-#, fuzzy
 msgid "Set width to 0 to use Schematic default symbol line width."
 msgstr ""
-"Estableix l'ample a 0 per utilitzar les amplades de línia de la classe de "
-"xarxa."
+"Estableix l'ample a 0 per utilitzar les amplades de línia per defecte de "
+"l'esquemàtic."
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:53
 msgid "Fill Style"
@@ -9346,15 +9344,13 @@ msgstr "Omple amb:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:81
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:167
-#, fuzzy
 msgid "Common to all &units in symbol"
-msgstr "Comú a &totes les unitats al component"
+msgstr "Comú a totes les &unitats del símbol"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:84
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:170
-#, fuzzy
 msgid "Common to all body &styles (De Morgan)"
-msgstr "Comú a tots els e&stils de cos (DeMorgan)"
+msgstr "Comú a tots els e&stils de cos (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.h:77
 msgid "Drawing Properties"
@@ -9362,9 +9358,8 @@ msgstr "Propietats del dibuix"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:231
 #: eeschema/dialogs/dialog_symbol_properties.cpp:565
-#, fuzzy
 msgid "References must start with a letter."
-msgstr "Referència il·legal. Les referències han de començar amb una lletra."
+msgstr "Les referències han de començar amb una lletra."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:251
 #: eeschema/dialogs/dialog_sheet_properties.cpp:195
@@ -9377,16 +9372,12 @@ msgid "Aliased symbol must have a parent selected"
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:280
-#, fuzzy
 msgid "Delete extra units from symbol?"
-msgstr "Voleu eliminar les peces extres del component?"
+msgstr "Vols eliminar les unitats extra del símbol?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:286
-#, fuzzy
 msgid "Delete alternate body style (De Morgan) from symbol?"
-msgstr ""
-"Vols eliminar els elements dibuixats per l'estil alternatiu (DeMorgan) del "
-"símbol?"
+msgstr "Vols eliminar l'estil del cos alternatiu (De Morgan) del símbol?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:314
 #, c-format
@@ -9394,9 +9385,9 @@ msgid "The name '%s' conflicts with an existing entry in the library '%s'."
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:430
-#, fuzzy, c-format
+#, c-format
 msgid "The name '%s' is already in use."
-msgstr "Ja està en ús l'àlies o el nom de component <%s>."
+msgstr "El nom '%s' ja està en ús."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:508
 #: eeschema/dialogs/dialog_sheet_properties.cpp:731
@@ -9443,9 +9434,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
-#, fuzzy
 msgid "Has alternate body style (De Morgan)"
-msgstr "Crea un component amb l'estil de cos alternatiu (DeMorgan)"
+msgstr "Té un estil de cos alternatiu (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:169
 #, fuzzy
