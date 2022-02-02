@@ -106,15 +106,14 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
                     if( m_drcEngine->IsErrorLimitExceeded( DRCE_STARVED_THERMAL ) )
                         return true;
 
-                    if( !pad->FlashLayer( layer ) )
-                        continue;
-
+                    // Quick test for connected:
                     if( pad->GetNetCode() != zone->GetNetCode() || pad->GetNetCode() <= 0 )
                         continue;
 
-                    EDA_RECT item_boundingbox = pad->GetBoundingBox();
+                    // More thorough test for connected:
+                    const KICAD_T type_zone[] = { PCB_ZONE_T, EOT };
 
-                    if( !item_boundingbox.Intersects( zone->GetCachedBoundingBox() ) )
+                    if( !alg::contains( connectivity->GetConnectedItems( pad, type_zone ), zone ) )
                         continue;
 
                     constraint = bds.m_DRCEngine->EvalZoneConnection( pad, zone, layer );

@@ -409,12 +409,25 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             constraint = drcEngine.EvalRules( THERMAL_SPOKE_WIDTH_CONSTRAINT, pad, zone, layer, r );
             int width = constraint.m_Value.Opt();
 
+            r->Report( "" );
+            r->Report( wxString::Format( _( "Resolved thermal spoke width: %s." ),
+                                         StringFromValue( units, width, true ) ) );
+
+            constraint = drcEngine.EvalRules( MIN_RESOLVED_SPOKES_CONSTRAINT, pad, zone, layer, r );
+            int minSpokes = constraint.m_Value.Min();
+
             if( compileError )
                 reportCompileError( r );
 
             r->Report( "" );
-            r->Report( wxString::Format( _( "Resolved thermal spoke width: %s." ),
+            r->Report( wxString::Format( _( "Minimum thermal spoke count: %s." ),
                                          StringFromValue( units, width, true ) ) );
+
+            std::shared_ptr<CONNECTIVITY_DATA> connectivity = pad->GetBoard()->GetConnectivity();
+            const KICAD_T zones[] = { PCB_ZONE_T, EOT };
+
+            if( !alg::contains( connectivity->GetConnectedItems( pad, zones ), zone ) )
+                r->Report( _( "Items are not connected.  No thermal spokes will be generated." ) );
         }
         else if( constraint.m_ZoneConnection == ZONE_CONNECTION::NONE )
         {
