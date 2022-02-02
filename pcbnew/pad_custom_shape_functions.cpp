@@ -42,15 +42,24 @@ void PAD::AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness, bool aF
     // If aPoly has holes, convert it to a polygon with no holes.
     SHAPE_POLY_SET poly_no_hole;
     poly_no_hole.Append( aPoly );
-    poly_no_hole.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
-    PCB_SHAPE* item = new PCB_SHAPE();
-    item->SetShape( SHAPE_T::POLY );
-    item->SetFilled( aFilled );
-    item->SetPolyShape( poly_no_hole );
-    item->SetStroke( STROKE_PARAMS( aThickness, PLOT_DASH_TYPE::SOLID ) );
-    item->SetParent( this );
-    m_editPrimitives.emplace_back( item );
+    if( poly_no_hole.HasHoles() )
+        poly_no_hole.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+    // There should never be multiple shapes, but if there are, we split them into
+    // primitives so that we can edit them both.
+    for( int ii = 0; ii < poly_no_hole.OutlineCount(); ++ii )
+    {
+        SHAPE_POLY_SET poly_outline( poly_no_hole.COutline( ii ) );
+        PCB_SHAPE* item = new PCB_SHAPE();
+        item->SetShape( SHAPE_T::POLY );
+        item->SetFilled( aFilled );
+        item->SetPolyShape( poly_outline );
+        item->SetStroke( STROKE_PARAMS( aThickness, PLOT_DASH_TYPE::SOLID ) );
+        item->SetParent( this );
+        m_editPrimitives.emplace_back( item );
+    }
+
     SetDirty();
 }
 

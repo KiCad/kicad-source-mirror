@@ -250,8 +250,6 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS::DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aPar
 
     SetupStandardButtons();
 
-    GetSizer()->SetSizeHints( this );
-
 	m_gridCornersList->Connect( wxEVT_GRID_CELL_CHANGING,
                                 wxGridEventHandler( DIALOG_PAD_PRIMITIVE_POLY_PROPS::onCellChanging ),
                                 nullptr, this );
