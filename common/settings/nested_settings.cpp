@@ -54,13 +54,13 @@ bool NESTED_SETTINGS::LoadFromFile( const wxString& aDirectory )
             {
                 m_internals->update( m_parent->m_internals->at( ptr ) );
 
-                wxLogTrace( traceSettings, "Loaded NESTED_SETTINGS %s", GetFilename() );
+                wxLogTrace( traceSettings, wxT( "Loaded NESTED_SETTINGS %s" ), GetFilename() );
 
                 success = true;
             }
             catch( ... )
             {
-                wxLogTrace( traceSettings, "NESTED_SETTINGS %s: Could not load from %s at %s",
+                wxLogTrace( traceSettings, wxT( "NESTED_SETTINGS %s: Could not load from %s at %s" ),
                             m_filename, m_parent->GetFilename(), m_path );
             }
         }
@@ -76,31 +76,32 @@ bool NESTED_SETTINGS::LoadFromFile( const wxString& aDirectory )
         }
         catch( ... )
         {
-            wxLogTrace( traceSettings, "%s: nested settings version could not be read!",
+            wxLogTrace( traceSettings, wxT( "%s: nested settings version could not be read!" ),
                         m_filename );
             success = false;
         }
 
         if( filever >= 0 && filever < m_schemaVersion )
         {
-            wxLogTrace( traceSettings, "%s: attempting migration from version %d to %d",
+            wxLogTrace( traceSettings, wxT( "%s: attempting migration from version %d to %d" ),
                         m_filename, filever, m_schemaVersion );
 
             if( !Migrate() )
             {
-                wxLogTrace( traceSettings, "%s: migration failed!", GetFullFilename() );
+                wxLogTrace( traceSettings, wxT( "%s: migration failed!" ), GetFullFilename() );
                 success = false;
             }
         }
         else if( filever > m_schemaVersion )
         {
             wxLogTrace( traceSettings,
-                        "%s: warning: nested settings version %d is newer than latest (%d)",
+                        wxT( "%s: warning: nested settings version %d is newer than latest (%d)" ),
                         m_filename, filever, m_schemaVersion );
         }
         else if( filever >= 0 )
         {
-            wxLogTrace( traceSettings, "%s: schema version %d is current", m_filename, filever );
+            wxLogTrace( traceSettings, wxT( "%s: schema version %d is current" ),
+                        m_filename, filever );
         }
     }
 

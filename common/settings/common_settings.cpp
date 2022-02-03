@@ -346,7 +346,7 @@ bool COMMON_SETTINGS::migrateSchema0to1()
     }
     catch( ... )
     {
-        wxLogTrace( traceSettings, "COMMON_SETTINGS::Migrate 0->1: mousewheel_pan not found" );
+        wxLogTrace( traceSettings, wxT( "COMMON_SETTINGS::Migrate 0->1: mousewheel_pan not found" ) );
     }
 
     if( mwp )
@@ -383,7 +383,7 @@ bool COMMON_SETTINGS::migrateSchema1to2()
     }
     catch( ... )
     {
-        wxLogTrace( traceSettings, "COMMON_SETTINGS::Migrate 1->2: prefer_select_to_drag not found" );
+        wxLogTrace( traceSettings, wxT( "COMMON_SETTINGS::Migrate 1->2: prefer_select_to_drag not found" ) );
     }
 
     if( prefer_selection )
@@ -418,7 +418,7 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
                 {
                     if( envVarBlacklist.count( key ) )
                     {
-                        wxLogTrace( traceSettings, "Migrate Env: %s is blacklisted; skipping.", key );
+                        wxLogTrace( traceSettings, wxT( "Migrate Env: %s is blacklisted; skipping." ), key );
                         continue;
                     }
 
@@ -428,7 +428,7 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
                     {
                         ptr.push_back( key.ToStdString() );
 
-                        wxLogTrace( traceSettings, "Migrate Env: %s=%s", ptr.to_string(), value );
+                        wxLogTrace( traceSettings, wxT( "Migrate Env: %s=%s" ), ptr.to_string(), value );
                         ( *m_internals )[ptr] = value.ToUTF8();
 
                         ptr.pop_back();

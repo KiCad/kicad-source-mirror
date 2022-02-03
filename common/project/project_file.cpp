@@ -460,7 +460,7 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
                 wxString       entry;
                 nlohmann::json arr   = nlohmann::json::array();
 
-                wxLogTrace( traceSettings, "Migrating sheet names" );
+                wxLogTrace( traceSettings, wxT( "Migrating sheet names" ) );
 
                 aCfg->SetPath( wxT( "/sheetnames" ) );
 
@@ -470,7 +470,8 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
 
                     if( tokens.size() == 2 )
                     {
-                        wxLogTrace( traceSettings, "%d: %s = %s", sheet, tokens[0], tokens[1] );
+                        wxLogTrace( traceSettings, wxT( "%d: %s = %s" ), sheet, tokens[0],
+                                    tokens[1] );
                         arr.push_back( nlohmann::json::array( { tokens[0], tokens[1] } ) );
                     }
                 }
@@ -490,7 +491,7 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
     auto loadLegacyPairs =
             [&]( const std::string& aGroup ) -> bool
             {
-                wxLogTrace( traceSettings, "Migrating group %s", aGroup );
+                wxLogTrace( traceSettings, wxT( "Migrating group %s" ), aGroup );
                 bool     success = true;
                 wxString keyStr;
                 wxString val;
@@ -504,7 +505,7 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
 
                     std::string key( keyStr.ToUTF8() );
 
-                    wxLogTrace( traceSettings, "    %s = %s", key, val );
+                    wxLogTrace( traceSettings, wxT( "    %s = %s" ), key, val );
 
                     try
                     {
