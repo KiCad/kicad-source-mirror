@@ -43,6 +43,7 @@
 
 %{
 class PCB_TEXT;
+class PCB_TEXTBOX;
 class PCB_DIM_ALIGNED;
 class PCB_DIM_ORTHOGONAL;
 class PCB_DIM_LEADER;
@@ -50,6 +51,7 @@ class PCB_DIM_CENTER;
 class FOOTPRINT;
 class PCB_GROUP;
 class FP_TEXT;
+class FP_TEXTBOX;
 class PCB_SHAPE;
 class MARKER_PCB;
 class BOARD;
@@ -69,6 +71,7 @@ extern "C" {
 #endif
 
 static PCB_TEXT*             Cast_to_PCB_TEXT( BOARD_ITEM* );
+static PCB_TEXTBOX*          Cast_to_PCB_TEXTBOX( BOARD_ITEM* );
 static PCB_DIM_ALIGNED*      Cast_to_PCB_DIM_ALIGNED( BOARD_ITEM* );
 static PCB_DIM_ORTHOGONAL*   Cast_to_PCB_DIM_ORTHOGONAL( BOARD_ITEM* );
 static PCB_DIM_LEADER*       Cast_to_PCB_DIM_LEADER( BOARD_ITEM* );
@@ -76,6 +79,7 @@ static PCB_DIM_CENTER*       Cast_to_PCB_DIM_CENTER( BOARD_ITEM* );
 static FOOTPRINT*            Cast_to_FOOTPRINT( BOARD_ITEM* );
 static PCB_GROUP*            Cast_to_PCB_GROUP( BOARD_ITEM* );
 static FP_TEXT*              Cast_to_FP_TEXT( BOARD_ITEM* );
+static FP_TEXTBOX*           Cast_to_FP_TEXTBOX( BOARD_ITEM* );
 static PCB_SHAPE*            Cast_to_PCB_SHAPE( BOARD_ITEM* );
 static PCB_MARKER*           Cast_to_PCB_MARKER( BOARD_ITEM* );
 static BOARD*                Cast_to_BOARD( BOARD_ITEM* );
@@ -95,6 +99,7 @@ static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
 
 
 static PCB_TEXT*             Cast_to_PCB_TEXT( BOARD_ITEM* );
+static PCB_TEXTBOX*          Cast_to_PCB_TEXTBOX( BOARD_ITEM* );
 static PCB_DIM_ALIGNED*      Cast_to_PCB_DIM_ALIGNED( BOARD_ITEM* );
 static PCB_DIM_ORTHOGONAL*   Cast_to_PCB_DIM_ORTHOGONAL( BOARD_ITEM* );
 static PCB_DIM_LEADER*       Cast_to_PCB_DIM_LEADER( BOARD_ITEM* );
@@ -102,6 +107,7 @@ static PCB_DIM_CENTER*       Cast_to_PCB_DIM_CENTER( BOARD_ITEM* );
 static FOOTPRINT*            Cast_to_FOOTPRINT( BOARD_ITEM* );
 static PCB_GROUP*            Cast_to_PCB_GROUP( BOARD_ITEM* );
 static FP_TEXT*              Cast_to_FP_TEXT( BOARD_ITEM* );
+static FP_TEXTBOX*           Cast_to_FP_TEXTBOX( BOARD_ITEM* );
 static PCB_SHAPE*            Cast_to_PCB_SHAPE( BOARD_ITEM* );
 static PCB_MARKER*           Cast_to_PCB_MARKER( BOARD_ITEM* );
 static BOARD*                Cast_to_BOARD( BOARD_ITEM* );
@@ -123,8 +129,10 @@ static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
 
         ct = self.GetClass()
 
-        if ct=="PTEXT":
+        if ct=="PCB_TEXT":
             return Cast_to_PCB_TEXT(self)
+        if ct=="PCB_TEXTBOX":
+            return Cast_to_PCB_TEXTBOX(self)
         elif ct=="BOARD":
             return Cast_to_BOARD(self)
         elif ct=="PCB_DIM_ALIGNED":
@@ -145,8 +153,10 @@ static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
             return Cast_to_PCB_GROUP(self)
         elif ct=="PAD":
             return Cast_to_PAD(self)
-        elif ct=="MTEXT":
+        elif ct=="FP_TEXT":
             return Cast_to_FP_TEXT(self)
+        elif ct=="FP_TEXTBOX":
+            return Cast_to_FP_TEXTBOX(self)
         elif ct=="PCB_VIA":
             return Cast_to_PCB_VIA(self)
         elif ct=="PCB_TRACK":
@@ -186,6 +196,7 @@ static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
 // the %header section.  See section 5.6.2 of SWIG 3.0 documentation.
 %wrapper %{
 static PCB_TEXT*             Cast_to_PCB_TEXT( BOARD_ITEM* self )             { return dynamic_cast<PCB_TEXT*>(self);             }
+static PCB_TEXTBOX*          Cast_to_PCB_TEXTBOX( BOARD_ITEM* self )          { return dynamic_cast<PCB_TEXTBOX*>(self);          }
 static PCB_DIM_ALIGNED*      Cast_to_PCB_DIM_ALIGNED( BOARD_ITEM* self )      { return dynamic_cast<PCB_DIM_ALIGNED *>(self);     }
 static PCB_DIM_ORTHOGONAL*   Cast_to_PCB_DIM_ORTHOGONAL( BOARD_ITEM* self )   { return dynamic_cast<PCB_DIM_ORTHOGONAL *>(self);  }
 static PCB_DIM_LEADER*       Cast_to_PCB_DIM_LEADER( BOARD_ITEM* self )       { return dynamic_cast<PCB_DIM_LEADER *>(self);      }
@@ -193,6 +204,7 @@ static PCB_DIM_CENTER*       Cast_to_PCB_DIM_CENTER( BOARD_ITEM* self )       { 
 static FOOTPRINT*            Cast_to_FOOTPRINT( BOARD_ITEM* self )            { return dynamic_cast<FOOTPRINT*>(self);            }
 static PCB_GROUP*            Cast_to_PCB_GROUP( BOARD_ITEM* self )            { return dynamic_cast<PCB_GROUP*>(self);            }
 static FP_TEXT*              Cast_to_FP_TEXT( BOARD_ITEM* self )              { return dynamic_cast<FP_TEXT*>(self);              }
+static FP_TEXTBOX*           Cast_to_FP_TEXTBOX( BOARD_ITEM* self )           { return dynamic_cast<FP_TEXTBOX*>(self);           }
 static PCB_SHAPE*            Cast_to_PCB_SHAPE( BOARD_ITEM* self )            { return dynamic_cast<PCB_SHAPE*>(self);            }
 static PCB_MARKER*           Cast_to_PCB_MARKER( BOARD_ITEM* self )           { return dynamic_cast<PCB_MARKER*>(self);           }
 static BOARD*                Cast_to_BOARD( BOARD_ITEM* self )                { return dynamic_cast<BOARD*>(self);                }

@@ -115,7 +115,7 @@ public:
 
     wxString GetClass() const override
     {
-        return wxT( "MTEXT" );
+        return wxT( "FP_TEXTBOX" );
     }
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;

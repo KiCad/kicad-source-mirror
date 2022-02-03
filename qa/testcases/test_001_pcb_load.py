@@ -54,7 +54,7 @@ class TestPCBLoad(unittest.TestCase):
 
     def test_pcb_text(self):
         drawings = list(self.pcb.GetDrawings())
-        text = [d for d in drawings if d.GetClass() == "PTEXT"]
+        text = [d for d in drawings if d.GetClass() == "PCB_TEXT"]
         self.verify_text(text[0], 173355000, 68453000, pcbnew.F_Cu,
                          u'Actionneur\nPiezo New Amp\nV02')
         self.verify_text(text[1], 176149000, 64643000, pcbnew.B_Cu,
