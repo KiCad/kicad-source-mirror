@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <ee_actions.h>
 #include <sch_edit_frame.h>
 #include <tool/tool_manager.h>
 #include <schematic.h>
@@ -283,7 +284,13 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         }
         if( status == UNDO_REDO::NEWITEM )
         {
-            // new items are deleted on undo
+            // If we are removing the current sheet, get out first
+            if( SCH_SHEET* sheet = dyn_cast<SCH_SHEET*>( eda_item ) )
+            {
+                if( sheet->GetScreen() == GetScreen() )
+                    GetToolManager()->RunAction( EE_ACTIONS::leaveSheet );
+            }
+
             RemoveFromScreen( eda_item, screen );
             aList->SetPickedItemStatus( UNDO_REDO::DELETED, ii );
         }
