@@ -20,6 +20,7 @@ Pgm() returns a nullptr and Kicad crashes when Pgm is invoked.
 import wx
 import sys
 import os
+import pcbnew
 
 from wx.py import crust, version, dispatcher
 
@@ -136,7 +137,7 @@ class KiCadPyShell(KiCadEditorNotebookFrame):
         """Display an About window."""
         title = 'About : KiCad - Python Shell'
         text = "Enhanced Python Shell for KiCad\n\n" + \
-               "KiCad Revision: %s\n" % "??.??" + \
+               "KiCad Revision: %s\n" % pcbnew.FullVersion() + \
                "Platform: %s\n" % sys.platform + \
                "Python Version: %s\n" % sys.version.split()[0] + \
                "wxPython Version: %s\n" % wx.VERSION_STRING + \
