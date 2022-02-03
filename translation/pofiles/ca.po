@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2022-02-02 16:32+0000\n"
+"PO-Revision-Date: 2022-02-04 01:10+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -9365,11 +9365,11 @@ msgstr "Les referències han de començar amb una lletra."
 #: eeschema/dialogs/dialog_sheet_properties.cpp:195
 #: eeschema/dialogs/dialog_symbol_properties.cpp:582
 msgid "Fields must have a name."
-msgstr ""
+msgstr "Els camps han de tenir un nom."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:268
 msgid "Aliased symbol must have a parent selected"
-msgstr ""
+msgstr "El símbol amb àlies ha de tenir un pare seleccionat"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:280
 msgid "Delete extra units from symbol?"
@@ -9383,6 +9383,7 @@ msgstr "Vols eliminar l'estil del cos alternatiu (De Morgan) del símbol?"
 #, c-format
 msgid "The name '%s' conflicts with an existing entry in the library '%s'."
 msgstr ""
+"El nom '%s' entra en conflicte amb una entrada existent a la biblioteca '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:430
 #, c-format
@@ -9432,15 +9433,22 @@ msgid ""
 "derived from another symbols or they stand alone as\n"
 "root symbols."
 msgstr ""
+"Selecciona el símbol a partir del qual es deriva o selecciona\n"
+"<Cap> per a un símbol arrel.\n"
+"\n"
+"Els símbols derivats s'anomenaven anteriorment àlies.\n"
+"Actualment ja no s'anomenen així i tots els símbols són o\n"
+"derivats d'altres símbols o independents\n"
+"com a símbols arrel."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
 msgid "Has alternate body style (De Morgan)"
 msgstr "Té un estil de cos alternatiu (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:169
-#, fuzzy
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
-msgstr "Crea un component amb l'estil de cos alternatiu (DeMorgan)"
+msgstr ""
+"Marca aquesta opció si el símbol té un estil de cos alternatiu (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:173
 msgid "Define as power symbol"
@@ -9453,6 +9461,10 @@ msgid ""
 "from editing in Eeschema.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
+"Al configurar aquesta opció, el símbol en qüestió apareixerà al\n"
+"diàleg \"Afegeix port d'alimentació\". Es bloquejarà el text del valor\n"
+"per protegir-lo de l'edició a l'Eeschema. El símbol no s'inclourà a\n"
+"la llista de materials i no se li podrà assignar una empremta."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:187
 msgid "Number of Units:"
@@ -9461,6 +9473,7 @@ msgstr "Nombre d'unitats:"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:189
 msgid "Enter the number of units for a symbol that contains more than one unit"
 msgstr ""
+"Introdueix el número d'unitats per un símbol que contingui més d'una unitat"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:199
 msgid "All units are interchangeable"
@@ -9579,14 +9592,12 @@ msgid "(%s)"
 msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:116
-#, fuzzy
 msgid "Horizontal text"
-msgstr "Inversió horitzontal"
+msgstr "Text horitzontal"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:121
-#, fuzzy
 msgid "Vertical text"
-msgstr "Vertical"
+msgstr "Text vertical"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:146
 #: eeschema/dialogs/dialog_text_properties_base.cpp:107
@@ -9595,9 +9606,8 @@ msgid "Align left"
 msgstr "Alinea a l'esquerra"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:151
-#, fuzzy
 msgid "Align horizontal center"
-msgstr "Alinea al centre"
+msgstr "Alinea al centre horitzontal"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:156
 #: eeschema/dialogs/dialog_text_properties_base.cpp:97
@@ -9612,9 +9622,8 @@ msgid "Align top"
 msgstr "Alinea al capdavall"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:171
-#, fuzzy
 msgid "Align vertical center"
-msgstr "Alinea al centre"
+msgstr "Alinea al centre vertical"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:176
 #: eeschema/dialogs/dialog_text_properties_base.cpp:102
@@ -9646,9 +9655,8 @@ msgid "Common to all body styles"
 msgstr "Comú per a tots els estils de cossos"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.h:95
-#, fuzzy
 msgid "Text Item Properties"
-msgstr "Propietats de l'element"
+msgstr "Propietats de l'element del text"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:64
 msgid "Style:"
@@ -9661,9 +9669,8 @@ msgstr ""
 "xarxa."
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.h:67
-#, fuzzy
 msgid "Line, Wire & Bus Properties"
-msgstr "Propietats del segment de línia"
+msgstr "Propietats de línia, cable, i bus"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:102
 msgid "Conflicting Labels"
@@ -9683,9 +9690,8 @@ msgid "Status"
 msgstr "Estat"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:215
-#, fuzzy
 msgid "Updated"
-msgstr "Actualitza"
+msgstr "Actualitzat"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:19
 msgid ""
@@ -9700,9 +9706,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:32
-#, fuzzy
 msgid "Proposed new name:"
-msgstr "&Nom del component:"
+msgstr "Nou nom suggerit:"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:45
 msgid "Accept Name"
@@ -9714,9 +9719,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_netlist.cpp:267
 #: eeschema/dialogs/dialog_netlist_base.h:69
-#, fuzzy
 msgid "Export Netlist"
-msgstr "Importa fitxers"
+msgstr "Exporta llista de xarxes"
 
 #: eeschema/dialogs/dialog_netlist.cpp:296
 msgid "Simulator requires a fully annotated schematic."
@@ -18558,9 +18562,9 @@ msgid "Edit the project schematic"
 msgstr "Imprimeix l'esquemàtic"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:120
-#, fuzzy
 msgid "Edit global and/or project schematic symbol libraries"
-msgstr "Edita la taula de les biblioteques de símbols."
+msgstr ""
+"Edita les biblioteques de símbols globals i/o de l'esquemàtic del projecte"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:124
 msgid "Edit the project PCB design"
@@ -18710,14 +18714,12 @@ msgid "Clear Recent Projects"
 msgstr "Obre un projecte recent"
 
 #: kicad/menubar.cpp:99
-#, fuzzy
 msgid "Import Non-KiCad Project..."
-msgstr "Importació d'un fitxer de placa no de Kicad"
+msgstr "Importa un projecte No-KiCad..."
 
 #: kicad/menubar.cpp:102
-#, fuzzy
 msgid "CADSTAR Project..."
-msgstr "Obre un projecte"
+msgstr "Projecte CADSTAR..."
 
 #: kicad/menubar.cpp:103
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
@@ -18757,9 +18759,8 @@ msgid "Open project directory in file browser"
 msgstr "Obre una carpeta de projecte a l'explorador de fitxers"
 
 #: kicad/menubar.cpp:163
-#, fuzzy
 msgid "Edit Local File..."
-msgstr "Edita el fitxer local"
+msgstr "Edita un fitxer local..."
 
 #: kicad/menubar.cpp:164
 #, fuzzy
@@ -19031,9 +19032,9 @@ msgid "Download"
 msgstr "Avall"
 
 #: kicad/pcm/pcm.cpp:90
-#, fuzzy, c-format
+#, c-format
 msgid "schema file '%s' not found"
-msgstr "No s'ha trobat el fitxer de recuperació «%s»."
+msgstr "no s'ha trobat el fitxer d'esquemàtic '%s'"
 
 #: kicad/pcm/pcm.cpp:93
 #, c-format
@@ -19051,9 +19052,8 @@ msgid "Downloading %lld/%lld Kb"
 msgstr ""
 
 #: kicad/pcm/pcm.cpp:231
-#, fuzzy
 msgid "Download is too large."
-msgstr "S'estan baixant les biblioteques 3D"
+msgstr "La baixada es massa grossa."
 
 #: kicad/pcm/pcm.cpp:247
 #, fuzzy
@@ -19081,9 +19081,8 @@ msgid "Fetching repository packages"
 msgstr ""
 
 #: kicad/pcm/pcm.cpp:294
-#, fuzzy
 msgid "Unable to load repository packages url."
-msgstr "No s'ha pogut carregar el fitxer «%s» del projecte"
+msgstr "No s'ha pogut carregar la url del repositori de paquets."
 
 #: kicad/pcm/pcm.cpp:302
 msgid "Packages hash doesn't match. Repository may be corrupted."
@@ -19133,9 +19132,9 @@ msgid ""
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:97
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting package '%s'."
-msgstr "Extreu el fitxer «%s»"
+msgstr "S'està extraient el paquet '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:112
 #, c-format
@@ -19244,14 +19243,14 @@ msgid "Permission error?"
 msgstr "Error de permisos?"
 
 #: kicad/project_tree_item.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid "Can not move '%s' to recycle bin."
-msgstr "No es pot convertir «%s» a un enter"
+msgstr "No s'ha pogut moure '%s' a la paperera de reciclatge."
 
 #: kicad/project_tree_item.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "Can not move '%s' to trash."
-msgstr "No es pot convertir «%s» a un enter"
+msgstr "No s'ha pogut moure '%s' a la paperera."
 
 #: kicad/project_tree_pane.cpp:243
 #, fuzzy
@@ -19377,9 +19376,8 @@ msgid "Create new blank project"
 msgstr "Crea un projecte nou en blanc"
 
 #: kicad/tools/kicad_manager_actions.cpp:47
-#, fuzzy
 msgid "New Project from Template..."
-msgstr "Projecte nou a partir de la plantilla"
+msgstr "Projecte nou a partir d'una plantilla..."
 
 #: kicad/tools/kicad_manager_actions.cpp:47
 msgid "Create new project from template"
@@ -19519,9 +19517,9 @@ msgid "Similar files already exist in the destination folder."
 msgstr ""
 
 #: kicad/tools/kicad_manager_control.cpp:277
-#, fuzzy
 msgid "A problem occurred creating new project from template."
-msgstr "Crea un projecte nou a partir de la plantilla"
+msgstr ""
+"S'ha produït un problema al crear un projecte nou a partir de la plantilla."
 
 #: kicad/tools/kicad_manager_control.cpp:300
 msgid "Open Existing Project"
@@ -19554,9 +19552,8 @@ msgid "Error!"
 msgstr "Error!"
 
 #: kicad/tools/kicad_manager_control.cpp:643
-#, fuzzy
 msgid "Create (or open) a project to edit a schematic."
-msgstr "Crea un projecte nou a partir de la plantilla"
+msgstr "Crea (o obre) un projecte per editar un esquemàtic."
 
 #: kicad/tools/kicad_manager_control.cpp:649
 #, fuzzy
@@ -21718,9 +21715,8 @@ msgid "Plated board edge"
 msgstr "Imprimeix les vores de la placa"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:31
-#, fuzzy
 msgid "Copper finish:"
-msgstr "Zones de coure"
+msgstr "Acabat del coure:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:40
 #, fuzzy
@@ -21755,9 +21751,8 @@ msgid "Enter expected board thickness (min value %s):"
 msgstr "Introdueix el gruix de la placa esperat (valor min %s):"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:186
-#, fuzzy
 msgid "Adjust Unlocked Dielectric Layers"
-msgstr "Seleccioneu la capa:"
+msgstr "Ajusta les capes dielèctriques desbloquejades"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:197
 #, c-format
@@ -21774,9 +21769,8 @@ msgid "Layer '%s' (sublayer %d/%d)"
 msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:299
-#, fuzzy
 msgid "Add Dielectric Layer"
-msgstr "Seleccioneu la capa:"
+msgstr "Afegeix capa dielèctrica"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:300
 #: pcbnew/dialogs/panel_setup_layers.cpp:818
@@ -21795,15 +21789,13 @@ msgid "Remove Dielectric Layer"
 msgstr "Constants dielèctriques relatives"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:356
-#, fuzzy
 msgid "Select layer to remove:"
-msgstr "Selecciona la biblioteca a examinar"
+msgstr "Selecciona la capa a eliminar:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:740
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:191
-#, fuzzy
 msgid "Copper"
-msgstr "Coure:"
+msgstr "Coure"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1030
 msgid ""
@@ -21903,9 +21895,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:45
-#, fuzzy
 msgid "Add Dielectric Layer..."
-msgstr "Seleccioneu la capa:"
+msgstr "Afegeix capa dielèctrica..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:48
 #, fuzzy
@@ -21923,9 +21914,8 @@ msgid "Loss Tan"
 msgstr "Tangent de pèrdua magnètica"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:132
-#, fuzzy
 msgid "Board thickness from stackup:"
-msgstr "Gruix de la placa"
+msgstr "Gruix de la placa per l'apilat:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:139
 #, fuzzy
@@ -22467,9 +22457,8 @@ msgid "Reference Designator"
 msgstr "designador de la referència"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
-#, fuzzy
 msgid "Round locations to:"
-msgstr "Opcions de renderització"
+msgstr "Arrodonir ubicacions a:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:144
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:151
@@ -22502,14 +22491,12 @@ msgid "Back"
 msgstr "Posterior"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:208
-#, fuzzy
 msgid "Front reference start:"
-msgstr "Ploteja les referències de l'empremta"
+msgstr "Inici de les referències frontals:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:210
-#, fuzzy
 msgid "Starting reference designation for front."
-msgstr "Designador de referències predeterminat:"
+msgstr "Designador de referència inicial pel frontal."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
 #: pcbnew/dialogs/dialog_create_array_base.cpp:96
@@ -22532,9 +22519,8 @@ msgid "Default is 1"
 msgstr "Predeterminats"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:220
-#, fuzzy
 msgid "Back reference start:"
-msgstr "referència %s"
+msgstr "Inici de les referències posteriors:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:222
 msgid ""
@@ -22602,9 +22588,8 @@ msgid "Locked footprints will not be reannotated"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:269
-#, fuzzy
 msgid "Exclude references:"
-msgstr "&Preferències"
+msgstr "Excloure referències:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:271
 msgid ""
@@ -22656,9 +22641,8 @@ msgid "Solder Mask/Paste"
 msgstr "Color de la pasta de soldadura"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:102
-#, fuzzy
 msgid "Text & Graphics"
-msgstr "Gràfics:"
+msgstr "Text i gràfics"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:103
 msgid "Defaults"
@@ -22676,9 +22660,8 @@ msgstr "Regles de &disseny"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:108 pcbnew/router/router_tool.cpp:876
 #: pcbnew/router/router_tool.cpp:897
-#, fuzzy
 msgid "Constraints"
-msgstr "Restriccions:"
+msgstr "Restriccions"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:109 pcbnew/edit_track_width.cpp:189
 #: pcbnew/edit_track_width.cpp:210
@@ -22730,9 +22713,8 @@ msgstr "Vista posterior"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:99
 #: pcbnew/dialogs/dialog_board_statistics.cpp:707
-#, fuzzy
 msgid "Total"
-msgstr "Total:"
+msgstr "Total"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:106
 msgid "Area:"
@@ -22748,14 +22730,12 @@ msgid "SMD:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:149
-#, fuzzy
 msgid "Through hole:"
-msgstr "A través de forat"
+msgstr "Forat passant:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:151
-#, fuzzy
 msgid "Connector:"
-msgstr "Connector"
+msgstr "Connector:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:152
 msgid "NPTH:"
@@ -22768,9 +22748,8 @@ msgid "Through vias:"
 msgstr "A través de vies:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:156
-#, fuzzy
 msgid "Blind/buried:"
-msgstr "Via cega o enterrada"
+msgstr "Cega/enterrada:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:157
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:173
@@ -22897,14 +22876,12 @@ msgid "Via/Pad"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:238
-#, fuzzy
 msgid "Start Layer"
-msgstr "Intercanvia les capes:"
+msgstr "Capa inicial"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:239
-#, fuzzy
 msgid "Stop Layer"
-msgstr "Intercanvia les capes:"
+msgstr "Capa final"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:258
 #, fuzzy
@@ -22939,9 +22916,8 @@ msgid "Update PCB"
 msgstr "Actualitza el PCB"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:116
-#, fuzzy
 msgid "Graphics cleanup"
-msgstr "E&stil gràfic:"
+msgstr "Neteja de gràfics"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:22
 msgid "Merge lines into rectangles"
@@ -22959,9 +22935,8 @@ msgid "Changes To Be Applied:"
 msgstr "Els canvis que s'aplicaran:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.h:53
-#, fuzzy
 msgid "Cleanup Graphics"
-msgstr "Gràfics:"
+msgstr "Neteja gràfics"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:147
 msgid "Board cleanup"
@@ -23028,15 +23003,13 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:156
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:99
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:88
-#, fuzzy
 msgid "Chamfer distance:"
-msgstr "Distància del xamfrà"
+msgstr "Distància del xamfrà:"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:363
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:101
-#, fuzzy
 msgid "Fillet radius:"
-msgstr "Radi de l'arrodoniment"
+msgstr "Radi d'arrodoniment:"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:504
 #, fuzzy
