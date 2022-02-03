@@ -370,7 +370,10 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
         if( m_angle.GetValue() == 0 )
             error_msgs.Add( _( "The arc angle cannot be zero." ) );
 
-        KI_FALLTHROUGH;
+        if( m_startX.GetValue() == m_endX.GetValue() && m_startY.GetValue() == m_endY.GetValue() )
+            error_msgs.Add( _( "The radius cannot be zero." ) );
+
+        break;
 
     case SHAPE_T::CIRCLE:
         // Check radius.
