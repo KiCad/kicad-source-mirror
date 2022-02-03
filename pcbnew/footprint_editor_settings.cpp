@@ -423,7 +423,7 @@ bool FOOTPRINT_EDITOR_SETTINGS::migrateSchema0to1()
     if( !m_manager )
     {
         wxLogTrace( traceSettings,
-                    "Error: FOOTPRINT_EDITOR_SETTINGS migration cannot run unmanaged!" );
+                    wxT( "Error: FOOTPRINT_EDITOR_SETTINGS migration cannot run unmanaged!" ) );
         return false;
     }
 
@@ -439,7 +439,7 @@ bool FOOTPRINT_EDITOR_SETTINGS::migrateSchema0to1()
     {
         if( settings->GetFilename() == search )
         {
-            wxLogTrace( traceSettings, "Updating footprint editor theme from %s to %s",
+            wxLogTrace( traceSettings, wxT( "Updating footprint editor theme from %s to %s" ),
                         selected, search );
             Set( theme_ptr, search );
             return true;

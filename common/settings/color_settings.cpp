@@ -311,13 +311,13 @@ bool COLOR_SETTINGS::migrateSchema0to1()
 
     if( !m_manager )
     {
-        wxLogTrace( traceSettings, "Error: COLOR_SETTINGS migration cannot run unmanaged!" );
+        wxLogTrace( traceSettings, wxT( "Error: COLOR_SETTINGS migration cannot run unmanaged!" ) );
         return false;
     }
 
     if( !Contains( "fpedit" ) )
     {
-        wxLogTrace( traceSettings, "migrateSchema0to1: %s doesn't have fpedit settings; skipping.",
+        wxLogTrace( traceSettings, wxT( "migrateSchema0to1: %s doesn't have fpedit settings; skipping." ),
                     m_filename );
         return true;
     }
