@@ -886,7 +886,7 @@ BOOST_AUTO_TEST_CASE( CollideArcToShapeLineChain )
 BOOST_AUTO_TEST_CASE( CollideArcToPolygonApproximation )
 {
     SHAPE_ARC arc( VECTOR2I( 73843527, 74355869 ), VECTOR2I( 71713528, 72965869 ),
-                   EDA_ANGLE( -76.36664803, DEGREES_T ), 2000000 );
+                   EDA_ANGLE( -76.36664803, DEGREES_T ), 1000000 );
 
     // Create a polyset approximation from the arc - error outside (simulating the zone filler)
     SHAPE_POLY_SET arcBuffer;
@@ -917,14 +917,11 @@ BOOST_AUTO_TEST_CASE( CollideArcToPolygonApproximation )
 
     int      actual = 0;
     VECTOR2I location;
+    int      epsilon = polygonApproximationError / 10;
 
-    int clearanceReduced = clearance - polygonApproximationError;
+    BOOST_CHECK_EQUAL( zoneFill.Collide( &arc, clearance + epsilon, &actual, &location ), true );
 
-    BOOST_CHECK_EQUAL( zoneFill.Collide( &arc, clearanceReduced, &actual, &location ), false );
-
-    BOOST_CHECK_EQUAL( zoneFill.Collide( &arc, clearance * 2, &actual, &location ), true );
-
-    BOOST_CHECK( KI_TEST::IsWithin( actual, clearance, polygonApproximationError ) );
+    BOOST_CHECK_EQUAL( zoneFill.Collide( &arc, clearance - epsilon, &actual, &location ), false );
 }
 
 

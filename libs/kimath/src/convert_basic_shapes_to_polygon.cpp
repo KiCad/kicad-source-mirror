@@ -583,6 +583,14 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStar
     EDA_ANGLE arc_angle_start = arc.GetStartAngle();
     EDA_ANGLE arc_angle = arc.GetCentralAngle();
     EDA_ANGLE arc_angle_end = arc_angle_start + arc_angle;
+    EDA_ANGLE sweep = arc_angle < ANGLE_0 ? -ANGLE_180 : ANGLE_180;
+
+    if( arc_angle < ANGLE_0 )
+    {
+        std::swap( arc_angle_start, arc_angle_end );
+        arc = SHAPE_ARC( aEnd, aMid, aStart, aWidth );
+        arc_angle = -arc_angle;
+    }
 
     int       radial_offset = arc.GetWidth() / 2;
     int       arc_outer_radius = arc.GetRadius() + radial_offset;
@@ -596,26 +604,23 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStar
     SHAPE_LINE_CHAIN& outline = polyshape.Outline( 0 );
 
     // Starting end
-    ConvertArcToPolyline( outline, arc.GetP0(), radial_offset, -arc_angle_start, ANGLE_180, aError,
-                          aErrorLoc );
+    ConvertArcToPolyline( outline, arc.GetP0(), radial_offset, arc_angle_start - ANGLE_180,
+                          ANGLE_180, aError, aErrorLoc );
 
     // Outside edge
     ConvertArcToPolyline( outline, arc.GetCenter(), arc_outer_radius, arc_angle_start, arc_angle,
                           aError, errorLocOuter );
 
     // Other end
-    ConvertArcToPolyline( outline, arc.GetP1(), radial_offset, -arc_angle_end, ANGLE_180, aError,
+    ConvertArcToPolyline( outline, arc.GetP1(), radial_offset, arc_angle_end, ANGLE_180, aError,
                           aErrorLoc );
 
     // Inside edge
     if( arc_inner_radius > 0 )
     {
-        ConvertArcToPolyline( outline, arc.GetCenter(), arc_inner_radius, arc_angle_end, -arc_angle,
-                              aError, errorLocInner );
+        ConvertArcToPolyline( outline, arc.GetCenter(), arc_inner_radius, arc_angle_end,
+                              -arc_angle, aError, errorLocInner );
     }
-
-    // Required.  Otherwise Clipper has fits with duplicate points generating winding artefacts.
-    polyshape.Simplify( SHAPE_POLY_SET::PM_FAST );
 
     aCornerBuffer.Append( polyshape );
 }
