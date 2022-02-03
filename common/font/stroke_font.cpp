@@ -214,26 +214,24 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
                                        bool aMirror, const VECTOR2I& aOrigin,
                                        TEXT_STYLE_FLAGS aTextStyle ) const
 {
-    wxPoint  cursor( aPosition );
+    constexpr double SPACE_WIDTH = 0.6;
+    constexpr double INTER_CHAR = 0.2;
+    constexpr double SUPER_SUB_SIZE_MULTIPLIER = 0.7;
+    constexpr double SUPER_HEIGHT_OFFSET = 0.5;
+    constexpr double SUB_HEIGHT_OFFSET = 0.3;
+
+    VECTOR2I cursor( aPosition );
     VECTOR2D glyphSize( aSize );
     double   tilt = ( aTextStyle & TEXT_STYLE::ITALIC ) ? ITALIC_TILT : 0.0;
 
     if( aTextStyle & TEXT_STYLE::SUBSCRIPT || aTextStyle & TEXT_STYLE::SUPERSCRIPT )
     {
-        constexpr double subscriptSuperscriptMultiplier = 0.7;
-        glyphSize.x *= subscriptSuperscriptMultiplier;
-        glyphSize.y *= subscriptSuperscriptMultiplier;
+        glyphSize = glyphSize * SUPER_SUB_SIZE_MULTIPLIER;
 
         if( aTextStyle & TEXT_STYLE::SUBSCRIPT )
-        {
-            constexpr double subscriptVerticalMultiplier = 0.3;
-            cursor.y += glyphSize.y * subscriptVerticalMultiplier;
-        }
+            cursor.y += glyphSize.y * SUB_HEIGHT_OFFSET;
         else
-        {
-            constexpr double superscriptVerticalMultiplier = 0.5;
-            cursor.y -= glyphSize.y * superscriptVerticalMultiplier;
-        }
+            cursor.y -= glyphSize.y * SUPER_HEIGHT_OFFSET;
     }
 
     for( wxUniChar c : aText )
@@ -252,8 +250,7 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
         if( dd == 0 )
         {
             // 'space' character - draw nothing, advance cursor position
-            constexpr double spaceAdvance = 0.6;
-            cursor.x += glyphSize.x * spaceAdvance;
+            cursor.x += KiROUND( glyphSize.x * SPACE_WIDTH );
         }
         else
         {
@@ -272,7 +269,7 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
             if( tilt > 0.0 )
                 glyphExtents.x -= glyphExtents.y * tilt;
 
-            cursor.x += glyphExtents.x;
+            cursor.x += KiROUND( glyphExtents.x );
         }
     }
 
@@ -309,7 +306,8 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
     if( aBBox )
     {
         aBBox->SetOrigin( aPosition );
-        aBBox->SetEnd( cursor.x + barOffset.x, cursor.y + std::max( glyphSize.y, barOffset.y ) );
+        aBBox->SetEnd( cursor.x + barOffset.x - KiROUND( glyphSize.x * INTER_CHAR ),
+                       cursor.y + std::max( glyphSize.y, barOffset.y ) );
         aBBox->Normalize();
     }
 

@@ -541,19 +541,17 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     // calculate the H and V size
     KIFONT::FONT* font = GetDrawFont();
     VECTOR2D      fontSize( GetTextSize() );
-    double        penWidth( thickness );
     bool          bold = IsBold();
     bool          italic = IsItalic();
-    int           dx = font->StringBoundaryLimits( text, fontSize, penWidth, bold, italic ).x;
-    int           dy = GetInterline();
+    VECTOR2I      extents = font->StringBoundaryLimits( text, fontSize, thickness, bold, italic );
 
     // Creates bounding box (rectangle) for horizontal, left and top justified text. The
     // bounding box will be moved later according to the actual text options
-    wxSize   textsize = wxSize( dx, fontSize.y );
+    wxSize   textsize = wxSize( extents.x, extents.y );
     VECTOR2I pos = drawPos;
 
     if( IsMultilineAllowed() && aLine > 0 && ( aLine < static_cast<int>( strings.GetCount() ) ) )
-        pos.y -= aLine * GetInterline();
+        pos.y -= KiROUND( aLine * font->GetInterline( fontSize.y ) );
 
     if( aInvertY )
         pos.y = -pos.y;
@@ -566,10 +564,13 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
         for( unsigned ii = 1; ii < strings.GetCount(); ii++ )
         {
             text = strings.Item( ii );
-            dx = font->StringBoundaryLimits( text, fontSize, penWidth, bold, italic ).x;
-            textsize.x = std::max( textsize.x, dx );
-            textsize.y += dy;
+            extents = font->StringBoundaryLimits( text, fontSize, thickness, bold, italic );
+            textsize.x = std::max( textsize.x, extents.x );
         }
+
+        // interline spacing is only *between* lines, so total height is the height of the first
+        // line plus the interline distance (with interline spacing) for all subsequent lines
+        textsize.y += KiROUND( ( strings.GetCount() - 1 ) * font->GetInterline( fontSize.y ) );
     }
 
     rect.SetSize( textsize );
@@ -910,21 +911,7 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCorn
 
     EDA_RECT rect = GetTextBox();
 
-    // This ugly hack is because this code used to be defined in the board polygon code
-    // file rather than in the EDA_TEXT source file where it belonged.  Using the board
-    // default text width was dubious so this recreates the same code with the exception
-    // if for some reason a different default text width is require for some other object.
-#if !defined( DEFAULT_TEXT_WIDTH )
-#define LOCAL_DEFAULT_TEXT_WIDTH
-#define DEFAULT_TEXT_WIDTH            0.15
-#endif
-
-    rect.Inflate( aClearanceValue + Millimeter2iu( DEFAULT_TEXT_WIDTH ) );
-
-#if defined( LOCAL_DEFAULT_TEXT_WIDTH )
-#undef DEFAULT_TEXT_WIDTH
-#undef LOCAL_DEFAULT_TEXT_WIDTH
-#endif
+    rect.Inflate( aClearanceValue );
 
     corners[0].x = rect.GetOrigin().x;
     corners[0].y = rect.GetOrigin().y;
