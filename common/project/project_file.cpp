@@ -488,7 +488,7 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
 
     std::vector<wxString> groups;
 
-    groups.emplace_back( "" );
+    groups.emplace_back( wxEmptyString );
 
     auto loadLegacyPairs =
             [&]( const std::string& aGroup ) -> bool

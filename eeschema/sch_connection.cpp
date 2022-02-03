@@ -407,14 +407,6 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( std::vector<MSG_PANEL_ITEM>& aList ) 
 
     aList.emplace_back( _( "Connection Name" ), UnescapeString( Name() ) );
 
-    // NOTE(JE) Disabling this for now, because net codes are generated in the netlist exporter
-    // in order to avoid sort costs.  It may make sense to just tear out net codes from the
-    // CONNECTION_GRAPH entirely in the future, as they are mostly only useful for netlist exports.
-#if 0
-    if( !IsBus() )
-        aList.emplace_back( _( "Net Code" ), wxString::Format( "%d", m_net_code ) );
-#endif
-
     if( auto alias = m_graph->GetBusAlias( m_name ) )
     {
         msg.Printf( _( "Bus Alias %s Members" ), m_name );
@@ -447,14 +439,14 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( std::vector<MSG_PANEL_ITEM>& aList ) 
         return;
 
     if( IsBus() )
-        aList.emplace_back( "Bus Code", wxString::Format( "%d", m_bus_code ) );
+        aList.emplace_back( wxT( "Bus Code" ), wxString::Format( "%d", m_bus_code ) );
 
-    aList.emplace_back( "Subgraph Code", wxString::Format( "%d", m_subgraph_code ) );
+    aList.emplace_back( wxT( "Subgraph Code" ), wxString::Format( "%d", m_subgraph_code ) );
 
     if( SCH_ITEM* driver = Driver() )
     {
         msg.Printf( "%s at %p", driver->GetSelectMenuText( EDA_UNITS::MILLIMETRES ), driver );
-        aList.emplace_back( "Connection Source", msg );
+        aList.emplace_back( wxT( "Connection Source" ), msg );
     }
 #endif
 }

@@ -374,14 +374,14 @@ void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords,
         }
         else
         {
-            wxString      space( wxT( " " ) );
+            wxString      space( wxS( " " ) );
             wxString      textRun( aNode->string() );
             wxArrayString words;
 
             wxStringSplit( textRun, words, ' ' );
 
-            if( textRun.EndsWith( " " ) )
-                words.Add( " " );
+            if( textRun.EndsWith( wxS( " " ) ) )
+                words.Add( wxS( " " ) );
 
             for( size_t ii = 0; ii < words.size(); ++ii )
             {
@@ -430,8 +430,8 @@ void FONT::LinebreakText( wxString& aText, int aColumnWidth, const VECTOR2I& aSi
     if( aItalic )
         textStyle |= TEXT_STYLE::ITALIC;
 
-    int spaceWidth = GetTextAsGlyphs( nullptr, nullptr, " ", aSize, VECTOR2I(), ANGLE_0, false,
-                                      VECTOR2I(), textStyle ).x;
+    int spaceWidth = GetTextAsGlyphs( nullptr, nullptr, wxS( " " ), aSize, VECTOR2I(), ANGLE_0,
+                                      false, VECTOR2I(), textStyle ).x;
 
     wxArrayString  textLines;
     wxStringSplit( aText, textLines, '\n' );

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -449,8 +449,8 @@ int DIALOG_SHIM::ShowQuasiModal()
     // Get the optimal parent
     wxWindow* parent = GetParentForModalDialog( GetParent(), GetWindowStyle() );
 
-    wxASSERT_MSG( !m_qmodal_parent_disabler,
-            wxT( "Caller using ShowQuasiModal() twice on same window?" ) );
+    wxASSERT_MSG( !m_qmodal_parent_disabler, wxT( "Caller using ShowQuasiModal() twice on same "
+                                                  "window?" ) );
 
     // quasi-modal: disable only my "optimal" parent
     m_qmodal_parent_disabler = new WDO_ENABLE_DISABLE( parent );
@@ -488,8 +488,8 @@ void DIALOG_SHIM::EndQuasiModal( int retCode )
 
     if( !IsQuasiModal() )
     {
-        wxFAIL_MSG( "either DIALOG_SHIM::EndQuasiModal called twice or ShowQuasiModal"
-                    "wasn't called" );
+        wxFAIL_MSG( wxT( "Either DIALOG_SHIM::EndQuasiModal was called twice, or ShowQuasiModal"
+                         "wasn't called" ) );
         return;
     }
 
@@ -549,8 +549,7 @@ void DIALOG_SHIM::OnButton( wxCommandEvent& aEvent )
                 ignore_unused( TransferDataFromWindow() );
             }
         }
-        else if( id == GetEscapeId() ||
-                 (id == wxID_CANCEL && GetEscapeId() == wxID_ANY) )
+        else if( id == GetEscapeId() || (id == wxID_CANCEL && GetEscapeId() == wxID_ANY) )
         {
             EndQuasiModal( wxID_CANCEL );
         }

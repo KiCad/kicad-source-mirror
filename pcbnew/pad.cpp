@@ -952,7 +952,7 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     }
 #if 0
     // useful for debug only
-    aList.emplace_back( "UUID", m_Uuid.AsString() );
+    aList.emplace_back( wxT( "UUID" ), m_Uuid.AsString() );
 #endif
 }
 
