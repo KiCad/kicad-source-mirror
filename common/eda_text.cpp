@@ -685,21 +685,7 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCorn
 
     EDA_RECT rect = GetTextBox();
 
-    // This ugly hack is because this code used to be defined in the board polygon code
-    // file rather than in the EDA_TEXT source file where it belonged.  Using the board
-    // default text width was dubious so this recreates the same code with the exception
-    // if for some reason a different default text width is require for some other object.
-#if !defined( DEFAULT_TEXT_WIDTH )
-#define LOCAL_DEFAULT_TEXT_WIDTH
-#define DEFAULT_TEXT_WIDTH            0.15
-#endif
-
-    rect.Inflate( aClearanceValue + Millimeter2iu( DEFAULT_TEXT_WIDTH ) );
-
-#if defined( LOCAL_DEFAULT_TEXT_WIDTH )
-#undef DEFAULT_TEXT_WIDTH
-#undef LOCAL_DEFAULT_TEXT_WIDTH
-#endif
+    rect.Inflate( aClearanceValue );
 
     corners[0].x = rect.GetOrigin().x;
     corners[0].y = rect.GetOrigin().y;
