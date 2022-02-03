@@ -28,6 +28,7 @@
 #include <sstream>
 
 #include <math/vector2d.h>
+#include <kiid.h>
 
 class SHAPE_LINE_CHAIN;
 class SHAPE;
@@ -51,7 +52,7 @@ public:
     struct EVENT_ENTRY {
         VECTOR2I p;
         EVENT_TYPE type;
-        wxString uuid;
+        KIID uuid;
     };
 
     LOGGER();
