@@ -39,15 +39,15 @@
 #define SCALE_LIST_SIZE 9
 static double scale_list[SCALE_LIST_SIZE] =
 {
-    1000.0 * IU_PER_MILS,   // x.1 format (certainly useless)
-    100.0 * IU_PER_MILS,    // x.2 format (certainly useless)
-    10.0 * IU_PER_MILS,     // x.3 format
-    1.0 * IU_PER_MILS,      // x.4 format
-    0.1 * IU_PER_MILS,      // x.5 format
-    0.01 * IU_PER_MILS,     // x.6 format
-    0.001 * IU_PER_MILS,     // x.7 format  (currently the max allowed precision)
-    0.0001 * IU_PER_MILS,   // provided, but not used
-    0.00001 * IU_PER_MILS,  // provided, but not used
+    1000.0 * GERB_IU_PER_MM * 0.0254,   // x.1 format (certainly useless)
+    100.0 * GERB_IU_PER_MM * 0.0254,    // x.2 format (certainly useless)
+    10.0 * GERB_IU_PER_MM * 0.0254,     // x.3 format
+    1.0 * GERB_IU_PER_MM * 0.0254,      // x.4 format
+    0.1 * GERB_IU_PER_MM * 0.0254,      // x.5 format
+    0.01 * GERB_IU_PER_MM * 0.0254,     // x.6 format
+    0.001 * GERB_IU_PER_MM * 0.0254,     // x.7 format  (currently the max allowed precision)
+    0.0001 * GERB_IU_PER_MM * 0.0254,   // provided, but not used
+    0.00001 * GERB_IU_PER_MM * 0.0254,  // provided, but not used
 };
 
 
@@ -60,129 +60,99 @@ int scaletoIU( double aCoord, bool isMetric )
     int ret;
 
     if( isMetric )  // gerber are units in mm
-        ret = KiROUND( aCoord * IU_PER_MM );
+        ret = KiROUND( aCoord * GERB_IU_PER_MM );
     else            // gerber are units in inches
-        ret = KiROUND( aCoord * IU_PER_MILS * 1000.0 );
+        ret = KiROUND( aCoord * GERB_IU_PER_MM * 0.0254 );
 
     return ret;
 }
 
 
-wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& Text, bool aExcellonMode )
+wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& aText, bool aExcellonMode )
 {
-    wxPoint pos;
-    int     type_coord = 0, current_coord, nbdigits;
+    wxPoint pos( 0, 0 );
     bool    is_float   = false;
-    char*   text;
-    char    line[256];
 
+    std::string line;
+
+    // Reserve the anticipated length plus an optional sign and decimal
+    line.reserve( std::max( m_FmtLen.x, m_FmtLen.y ) + 3 );
 
     if( m_Relative )
-        pos.x = pos.y = 0;
-    else
         pos = m_CurrentPos;
 
-    if( Text == nullptr )
+    if( aText == nullptr )
         return pos;
 
-    text = line;
-
-    while( *Text )
+    while( *aText && ( ( *aText == 'X' ) || ( *aText == 'Y' ) || ( *aText == 'A' ) ) )
     {
-        if( ( *Text == 'X' ) || ( *Text == 'Y' ) || ( *Text == 'A' ) )
+        double decimal_scale = 1.0;
+        int    nbdigits = 0;
+        int    current_coord = 0;
+        char   type_coord = *aText++;
+
+        line.clear();
+
+        while( IsNumber( *aText ) )
         {
-            type_coord = *Text;
-            Text++;
-            text     = line;
-            nbdigits = 0;
+            if( *aText == '.' )  // Force decimal format if reading a floating point number
+                is_float = true;
 
-            while( IsNumber( *Text ) )
-            {
-                if( *Text == '.' )  // Force decimal format if reading a floating point number
-                    is_float = true;
+            // count digits only (sign and decimal point are not counted)
+            if( (*aText >= '0') && (*aText <='9') )
+                nbdigits++;
 
-                // count digits only (sign and decimal point are not counted)
-                if( (*Text >= '0') && (*Text <='9') )
-                    nbdigits++;
+            line.push_back( *( aText++ ) );
+        }
 
-                *(text++) = *(Text++);
-            }
+        double val = strtod( line.data(), nullptr );
 
-            *text = 0;
-
-            if( is_float )
-            {
-                // When X or Y (or A) values are float numbers, they are given in mm or inches
-                if( m_GerbMetric )  // units are mm
-                    current_coord = KiROUND( atof( line ) * IU_PER_MILS / 0.0254 );
-                else    // units are inches
-                    current_coord = KiROUND( atof( line ) * IU_PER_MILS * 1000 );
-            }
-            else
-            {
-                int fmt_scale = (type_coord == 'X') ? m_FmtScale.x : m_FmtScale.y;
-
-                if( m_NoTrailingZeros )
-                {
-                    // no trailing zero format, we need to add missing zeros.
-                    int digit_count = (type_coord == 'X') ? m_FmtLen.x : m_FmtLen.y;
-
-                    while( nbdigits < digit_count )
-                    {
-                        *(text++) = '0';
-                        nbdigits++;
-                    }
-
-                    if( aExcellonMode )
-                    {
-                        // Truncate the extra digits if the len is more than expected
-                        // because the conversion to internal units expect exactly
-                        // digit_count digits
-                        while( nbdigits > digit_count )
-                        {
-                            *(text--) = 0;
-                            nbdigits--;
-                        }
-                    }
-
-                    *text = 0;
-                }
-
-                current_coord = atoi( line );
-                double real_scale = scale_list[fmt_scale];
-
-                if( m_GerbMetric )
-                    real_scale = real_scale / 25.4;
-
-                current_coord = KiROUND( current_coord * real_scale );
-            }
-
-            if( type_coord == 'X' )
-            {
-                pos.x = current_coord;
-            }
-            else if( type_coord == 'Y' )
-            {
-                pos.y = current_coord;
-            }
-            else if( type_coord == 'A' )
-            {
-                m_ArcRadius = current_coord;
-                m_LastArcDataType = ARC_INFO_TYPE_RADIUS;
-            }
-
-            continue;
+        if( is_float )
+        {
+            // When X or Y (or A) values are float numbers, they are given in mm or inches
+            if( m_GerbMetric )  // units are mm
+                current_coord = KiROUND( val * GERB_IU_PER_MM );
+            else    // units are inches
+                current_coord = KiROUND( val * GERB_IU_PER_MM * 0.0254 );
         }
         else
         {
-            break;
-        }
-    }
+            int fmt_scale = (type_coord == 'X') ? m_FmtScale.x : m_FmtScale.y;
 
-    if( m_Relative )
-    {
-        pos.x += m_CurrentPos.x;
-        pos.y += m_CurrentPos.y;
+            if( m_NoTrailingZeros )
+            {
+                // no trailing zero format, we need to add missing zeros.
+                int digit_count = (type_coord == 'X') ? m_FmtLen.x : m_FmtLen.y;
+
+                // Truncate the extra digits if the len is more than expected
+                // because the conversion to internal units expect exactly
+                // digit_count digits.  Alternatively, add some additional digits
+                // to pad out to the missing zeros
+                if( nbdigits < digit_count || ( aExcellonMode && ( nbdigits > digit_count ) ) )
+                    decimal_scale = std::pow<double>( 10, digit_count - nbdigits );
+            }
+
+            double real_scale = scale_list[fmt_scale];
+
+            if( m_GerbMetric )
+                real_scale = real_scale / 25.4;
+
+            current_coord = KiROUND( val * real_scale * decimal_scale );
+        }
+
+        if( type_coord == 'X' )
+        {
+            pos.x += current_coord;
+        }
+        else if( type_coord == 'Y' )
+        {
+            pos.y += current_coord;
+        }
+        else if( type_coord == 'A' )
+        {
+            m_ArcRadius = current_coord;
+            m_LastArcDataType = ARC_INFO_TYPE_RADIUS;
+        }
     }
 
     m_CurrentPos = pos;
@@ -190,88 +160,82 @@ wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& Text, bool aExcellonMode )
 }
 
 
-wxPoint GERBER_FILE_IMAGE::ReadIJCoord( char*& Text )
+wxPoint GERBER_FILE_IMAGE::ReadIJCoord( char*& aText )
 {
     wxPoint pos( 0, 0 );
-
-    int     type_coord = 0, current_coord, nbdigits;
     bool    is_float   = false;
-    char*   text;
-    char    line[256];
 
-    if( Text == nullptr )
+    std::string line;
+
+    // Reserve the anticipated length plus an optional sign and decimal
+    line.reserve( std::max( m_FmtLen.x, m_FmtLen.y ) + 3 );
+
+    if( aText == nullptr )
         return pos;
 
-    text = line;
-
-    while( *Text )
+    while( *aText && ( ( *aText == 'I' ) || ( *aText == 'J' ) ) )
     {
-        if( ( *Text == 'I' ) || ( *Text == 'J' ) )
+        double decimal_scale = 1.0;
+        int    nbdigits = 0;
+        int    current_coord = 0;
+        char   type_coord = *aText++;
+
+        line.clear();
+
+        while( IsNumber( *aText ) )
         {
-            type_coord = *Text;
-            Text++;
-            text     = line;
-            nbdigits = 0;
+            if( *aText == '.' )  // Force decimal format if reading a floating point number
+                is_float = true;
 
-            while( IsNumber( *Text ) )
-            {
-                if( *Text == '.' )
-                    is_float = true;
+            // count digits only (sign and decimal point are not counted)
+            if( (*aText >= '0') && (*aText <='9') )
+                nbdigits++;
 
-                // count digits only (sign and decimal point are not counted)
-                if( ( *Text >= '0' ) && ( *Text <= '9' ) )
-                    nbdigits++;
+            line.push_back( *( aText++ ) );
+        }
 
-                *(text++) = *(Text++);
-            }
+        double val = strtod( line.data(), nullptr );
 
-            *text = 0;
-
-            if( is_float )
-            {
-                // When X or Y values are float numbers, they are given in mm or inches
-                if( m_GerbMetric )  // units are mm
-                    current_coord = KiROUND( atof( line ) * IU_PER_MILS / 0.0254 );
-                else    // units are inches
-                    current_coord = KiROUND( atof( line ) * IU_PER_MILS * 1000 );
-            }
-            else
-            {
-                int fmt_scale = ( type_coord == 'I' ) ? m_FmtScale.x : m_FmtScale.y;
-
-                if( m_NoTrailingZeros )
-                {
-                    int min_digit = ( type_coord == 'I' ) ? m_FmtLen.x : m_FmtLen.y;
-
-                    while( nbdigits < min_digit )
-                    {
-                        *(text++) = '0';
-                        nbdigits++;
-                    }
-
-                    *text = 0;
-                }
-
-                current_coord = atoi( line );
-
-                double real_scale = scale_list[fmt_scale];
-
-                if( m_GerbMetric )
-                    real_scale = real_scale / 25.4;
-
-                current_coord = KiROUND( current_coord * real_scale );
-            }
-
-            if( type_coord == 'I' )
-                pos.x = current_coord;
-            else if( type_coord == 'J' )
-                pos.y = current_coord;
-
-            continue;
+        if( is_float )
+        {
+            // When X or Y (or A) values are float numbers, they are given in mm or inches
+            if( m_GerbMetric )  // units are mm
+                current_coord = KiROUND( val * GERB_IU_PER_MM );
+            else    // units are inches
+                current_coord = KiROUND( val * GERB_IU_PER_MM * 0.0254 );
         }
         else
         {
-            break;
+            int fmt_scale = ( type_coord == 'I' ) ? m_FmtScale.x : m_FmtScale.y;
+
+            if( m_NoTrailingZeros )
+            {
+                // no trailing zero format, we need to add missing zeros.
+                int digit_count = ( type_coord == 'I' ) ? m_FmtLen.x : m_FmtLen.y;
+
+                // Truncate the extra digits if the len is more than expected
+                // because the conversion to internal units expect exactly
+                // digit_count digits.  Alternatively, add some additional digits
+                // to pad out to the missing zeros
+                if( nbdigits < digit_count )
+                    decimal_scale = std::pow<double>( 10, digit_count - nbdigits );
+            }
+
+            double real_scale = scale_list[fmt_scale];
+
+            if( m_GerbMetric )
+                real_scale = real_scale / 25.4;
+
+            current_coord = KiROUND( val * real_scale * decimal_scale );
+        }
+
+        if( type_coord == 'I' )
+        {
+            pos.x = current_coord;
+        }
+        else if( type_coord == 'J' )
+        {
+            pos.y = current_coord;
         }
     }
 
