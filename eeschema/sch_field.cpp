@@ -788,7 +788,7 @@ wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
 
     if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
-        if( m_id < MANDATORY_FIELDS )
+        if( m_id >= 0 && m_id < MANDATORY_FIELDS )
             return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
         else if( m_name.IsEmpty() && aUseDefaultName )
             return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
@@ -797,7 +797,7 @@ wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
     }
     else if( m_parent && m_parent->Type() == SCH_SHEET_T )
     {
-        if( m_id < SHEET_MANDATORY_FIELDS )
+        if( m_id >= 0 && m_id < SHEET_MANDATORY_FIELDS )
             return SCH_SHEET::GetDefaultFieldName( m_id );
         else if( m_name.IsEmpty() && aUseDefaultName )
             return SCH_SHEET::GetDefaultFieldName( m_id );
