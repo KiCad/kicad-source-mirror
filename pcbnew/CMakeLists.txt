@@ -407,6 +407,7 @@ set( SWIG_FLAGS
     -I${CMAKE_SOURCE_DIR}/pcbnew/python/scripting
     -I${CMAKE_SOURCE_DIR}/common/swig
     -I${CMAKE_SOURCE_DIR}/libs/kimath/include
+    -I${CMAKE_BINARY_DIR}
     )
 
 if( DEBUG )
@@ -468,6 +469,7 @@ add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
     DEPENDS python/swig/track.i
     DEPENDS python/swig/units.i
     DEPENDS python/swig/typeinfo.i
+    DEPENDS python/swig/version.i
     DEPENDS python/swig/zone.i
     DEPENDS python/swig/zone_settings.i
 

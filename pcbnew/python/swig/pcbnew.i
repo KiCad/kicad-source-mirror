@@ -135,5 +135,6 @@ HANDLE_EXCEPTIONS(WriteDRCReport)
 %include footprint.i
 %include plugins.i
 %include units.i
+%include version.i
 
 
