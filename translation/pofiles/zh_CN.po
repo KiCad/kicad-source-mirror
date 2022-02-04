@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-03 17:11-0800\n"
-"PO-Revision-Date: 2022-02-01 14:40+0000\n"
-"Last-Translator: Ian McInerney <ian.s.mcinerney@ieee.org>\n"
+"PO-Revision-Date: 2022-02-04 06:23+0000\n"
+"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -4079,9 +4079,8 @@ msgstr "图形"
 #: common/eda_item.cpp:373 eeschema/lib_textbox.cpp:377
 #: eeschema/sch_textbox.cpp:381 pcbnew/fp_textbox.cpp:206
 #: pcbnew/pcb_textbox.cpp:184
-#, fuzzy
 msgid "Text Box"
-msgstr "文本位置 X"
+msgstr "文本框"
 
 #: common/eda_item.cpp:323 common/eda_item.cpp:324 common/eda_item.cpp:325
 #: common/eda_item.cpp:326 common/eda_item.cpp:332 common/eda_item.cpp:333
@@ -4155,9 +4154,8 @@ msgstr "网络标签"
 
 #: common/eda_item.cpp:353 eeschema/sch_label.cpp:750
 #: eeschema/sch_label.cpp:1046
-#, fuzzy
 msgid "Directive Label"
-msgstr "网络标签"
+msgstr "指令标签"
 
 #: common/eda_item.cpp:354 eeschema/sch_label.cpp:751
 msgid "Global Label"
@@ -6167,9 +6165,8 @@ msgid "Cycle inactive layers between normal, dimmed, and hidden"
 msgstr "在正常、暗显和隐藏三种状态之间循环非活动图层"
 
 #: common/tool/actions.cpp:549
-#, fuzzy
 msgid "Draw Bounding Boxes"
-msgstr "边界框"
+msgstr "绘制边界框"
 
 #: common/tool/actions.cpp:554
 msgid "Select item(s)"
@@ -6751,9 +6748,8 @@ msgid "Legacy footprint library files"
 msgstr "旧的封装库文件"
 
 #: common/wildcards_and_files_ext.cpp:367
-#, fuzzy
 msgid "Altium PCB footprint library files"
-msgstr "Geda PCB 封装库文件"
+msgstr "Altium PCB 封装库文件"
 
 #: common/wildcards_and_files_ext.cpp:373
 msgid "Eagle ver. 6.x XML library files"
@@ -8929,9 +8925,8 @@ msgid "Label Properties"
 msgstr "标签属性"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:101
-#, fuzzy
 msgid "Directive Label Properties"
-msgstr "原理图层次标签属性"
+msgstr "指令标签属性"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:102
 msgid "Hierarchical Sheet Pin Properties"
@@ -9354,7 +9349,7 @@ msgstr "填充物:"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:168
 #, fuzzy
 msgid "Private to Symbol Editor"
-msgstr "用符号编辑器来编辑"
+msgstr "对符号编辑器私密"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:87
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:167
@@ -9601,9 +9596,8 @@ msgstr "文本不能为空。"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:160
 #: eeschema/dialogs/dialog_text_properties_base.cpp:157
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:150
-#, fuzzy
 msgid "Border"
-msgstr "顺序"
+msgstr "边界"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:200
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:64
@@ -9613,21 +9607,19 @@ msgstr "样式："
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:212
 #: eeschema/dialogs/dialog_text_properties_base.cpp:206
-#, fuzzy
 msgid "Background fill"
-msgstr "背景背景填充："
+msgstr "背景填充"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:238
 #, fuzzy
 msgid "Private to symbol editor"
-msgstr "用符号编辑器来编辑"
+msgstr "对符号编辑器私密"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.h:106
 #: eeschema/dialogs/dialog_text_properties.cpp:54
 #: pcbnew/dialogs/dialog_textbox_properties_base.h:103
-#, fuzzy
 msgid "Text Box Properties"
-msgstr "文本属性"
+msgstr "文本框属性"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:76
 msgid "Set width to 0 to use Netclass line widths."
@@ -11004,49 +10996,40 @@ msgid "For a JFET, pin order is drain, gate, source"
 msgstr "对于 JFET，引脚顺序为 drain、gate、source"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:803
-#, fuzzy
 msgid "Invalid Impedance value"
-msgstr "无效的属性值"
+msgstr "无效的阻抗值"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:818
-#, fuzzy
 msgid "Invalid delay value"
-msgstr "无效的属性值"
+msgstr "无效的延迟值"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:833
-#, fuzzy
 msgid "Invalid frequency value"
-msgstr "无效的属性值"
+msgstr "无效的频率值"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:845
-#, fuzzy
 msgid "Invalid length in wavelength value"
-msgstr "无效的备选引脚名"
+msgstr "无效的波长值长度"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:870
-#, fuzzy
 msgid "Invalid resistance value"
-msgstr "无效的属性值"
+msgstr "无效电阻值"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:881
-#, fuzzy
 msgid "Invalid capacitance value"
-msgstr "无效的 Spice 值字符串"
+msgstr "无效的电容值"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:892
-#, fuzzy
 msgid "Invalid inductance value"
-msgstr "无效的 Spice 值字符串"
+msgstr "无效的电感值"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:903
-#, fuzzy
 msgid "Invalid conductance value"
-msgstr "无效的属性值"
+msgstr "无效的电导值"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:914
-#, fuzzy
 msgid "Invalid length value"
-msgstr "无效的属性值"
+msgstr "无效的长度值"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1066
 #, c-format
@@ -11409,9 +11392,8 @@ msgid "Source"
 msgstr "源"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:938
-#, fuzzy
 msgid "Line model"
-msgstr "线条颜色："
+msgstr "线条模型"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:954
 #: pcb_calculator/transline_ident.cpp:149
@@ -11437,9 +11419,8 @@ msgid "Propagation delay"
 msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:972
-#, fuzzy
 msgid "s"
-msgstr "ns"
+msgstr "s"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:976
 #: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
@@ -11448,23 +11429,20 @@ msgid "Frequency"
 msgstr "频率"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:987
-#, fuzzy
 msgid "Length in wavelength"
-msgstr "封装长度"
+msgstr "波长长度"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1000
-#, fuzzy
 msgid "Use time delay"
-msgstr "时间延迟："
+msgstr "使用时间延迟"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1000
 msgid "Use frequency and number of wavelength"
 msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1002
-#, fuzzy
 msgid "Delay / Electrical length"
-msgstr "电长度"
+msgstr "延迟/电气长度"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1010
 msgid "Lossless"
@@ -11479,9 +11457,8 @@ msgid "ohm / unit"
 msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1035
-#, fuzzy
 msgid "Inductance per unit length"
-msgstr "导线长度："
+msgstr "单位长度电感值"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1042
 msgid "henry / unit"
@@ -11496,19 +11473,16 @@ msgid "farad / unit"
 msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1057
-#, fuzzy
 msgid "Conductance per unit length"
-msgstr "导线长度："
+msgstr "单位长度电导"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1064
-#, fuzzy
 msgid "siemens / unit"
-msgstr "测量单位 (&M)："
+msgstr "电阻/单位"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1079
-#, fuzzy
 msgid "Extra parameters"
-msgstr "参数不良或丢失"
+msgstr "附加参数"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1092
 msgid ""
@@ -11523,14 +11497,12 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1100
-#, fuzzy
 msgid "Lossy"
-msgstr "Loss Tg（损耗切线）"
+msgstr "有损耗的"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1111
-#, fuzzy
 msgid "Transmission Line"
-msgstr "传输线类型"
+msgstr "传输线"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1118
 msgid "Disable symbol for simulation"
@@ -12044,9 +12016,8 @@ msgstr "交叉探测"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:115
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
-#, fuzzy
 msgid "Cross-probe on selection"
-msgstr "缩放到选区"
+msgstr "选区交叉探测"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:119
 msgid "Center view on cross-probed items"
@@ -13302,9 +13273,8 @@ msgid "Converted"
 msgstr "转换"
 
 #: eeschema/lib_item.cpp:70
-#, fuzzy
 msgid "Private"
-msgstr "私密层"
+msgstr "私密"
 
 #: eeschema/lib_pin.cpp:1071 pcbnew/dialogs/dialog_pad_properties_base.cpp:1467
 msgid "Pos X"
@@ -13350,9 +13320,8 @@ msgid "Graphic Text '%s'"
 msgstr "图形文本 '%s'"
 
 #: eeschema/lib_textbox.cpp:299 eeschema/sch_textbox.cpp:316
-#, fuzzy
 msgid "Graphic Text Box"
-msgstr "图形文本"
+msgstr "图形文本框"
 
 #: eeschema/lib_textbox.cpp:379 eeschema/sch_label.cpp:764
 #: eeschema/sch_text.cpp:445 eeschema/sch_textbox.cpp:383
@@ -16089,14 +16058,12 @@ msgstr "添加文本项"
 
 #: eeschema/tools/ee_actions.cpp:230 eeschema/tools/ee_actions.cpp:345
 #: pcbnew/tools/pcb_actions.cpp:128
-#, fuzzy
 msgid "Add Text Box"
-msgstr "添加文本"
+msgstr "添加文本框"
 
 #: eeschema/tools/ee_actions.cpp:230
-#, fuzzy
 msgid "Add a text box item"
-msgstr "添加文本项"
+msgstr "添加文本框项目"
 
 #: eeschema/tools/ee_actions.cpp:235 eeschema/tools/ee_actions.cpp:754
 msgid "Add Lines"
@@ -16191,14 +16158,12 @@ msgid "Add a net label"
 msgstr "添加网络标签"
 
 #: eeschema/tools/ee_actions.cpp:306
-#, fuzzy
 msgid "Add Net Class Directive"
-msgstr "添加网络类标记"
+msgstr "添加网络类指令"
 
 #: eeschema/tools/ee_actions.cpp:306
-#, fuzzy
 msgid "Add a net class directive label"
-msgstr "添加网络类标签"
+msgstr "添加网络类指令标签"
 
 #: eeschema/tools/ee_actions.cpp:312
 msgid "Add Hierarchical Label"
@@ -16237,9 +16202,8 @@ msgid "Add text"
 msgstr "文本"
 
 #: eeschema/tools/ee_actions.cpp:345
-#, fuzzy
 msgid "Add a text box"
-msgstr "添加文本项"
+msgstr "添加文本框"
 
 #: eeschema/tools/ee_actions.cpp:350 pagelayout_editor/tools/pl_actions.cpp:49
 msgid "Add Rectangle"
@@ -16431,14 +16395,12 @@ msgid "Change existing item to a label"
 msgstr "将现有项目更改为标签"
 
 #: eeschema/tools/ee_actions.cpp:488
-#, fuzzy
 msgid "Change to Directive Label"
-msgstr "修改为层次标签"
+msgstr "修改为指令标签"
 
 #: eeschema/tools/ee_actions.cpp:488
-#, fuzzy
 msgid "Change existing item to a directive label"
-msgstr "将现有项目更改为标签"
+msgstr "将现有项目更改为指令标签"
 
 #: eeschema/tools/ee_actions.cpp:493
 msgid "Change to Hierarchical Label"
@@ -16667,14 +16629,12 @@ msgid "Generate a bill of materials for the current schematic"
 msgstr "生成当前原理图的 BOM"
 
 #: eeschema/tools/ee_actions.cpp:656
-#, fuzzy
 msgid "Select on PCB"
-msgstr "取消选择"
+msgstr "在 PCB 上选择"
 
 #: eeschema/tools/ee_actions.cpp:657
-#, fuzzy
 msgid "Select corresponding items in PCB editor"
-msgstr "在电路板编辑器中高亮显示相应项目"
+msgstr "在印刷电路板编辑器中选择相应项目"
 
 #: eeschema/tools/ee_actions.cpp:662
 msgid "Show Hidden Pins"
@@ -17643,18 +17603,14 @@ msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr "Gerbview 中 <b>没有更多可用的层</b> 来加载文件"
 
 #: gerbview/files.cpp:43
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Not loaded:</b> <i>%s</i>"
-msgstr ""
-"\n"
-"<b>未加载：</b> <i>%s</i>"
+msgstr "<b>未加载：</b> <i>%s</i>"
 
 #: gerbview/files.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Memory was exhausted reading:</b> <i>%s</i>"
-msgstr ""
-"\n"
-"<b>读取该文件时内存耗尽：</b> <i>%s</i>"
+msgstr "<b>读取该文件时内存耗尽：</b> <i>%s</i>"
 
 #: gerbview/files.cpp:87
 msgid "Zip files"
@@ -17665,9 +17621,8 @@ msgid "Job files"
 msgstr "工作文件"
 
 #: gerbview/files.cpp:181
-#, fuzzy
 msgid "Open Autodetected File(s)"
-msgstr "打开 Gerber 文件"
+msgstr "打开自动检测到的文件"
 
 #: gerbview/files.cpp:201
 msgid "Gerber files (.g* .lgr .pho)"
@@ -17739,9 +17694,8 @@ msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
 msgstr "<b>Gerber 作业文件无法作为绘制文件加载</b><i>%s</i>"
 
 #: gerbview/files.cpp:300
-#, fuzzy
 msgid "Loading files..."
-msgstr "载入规则中..."
+msgstr "加载文件中..."
 
 #: gerbview/files.cpp:303 gerbview/files.cpp:310
 #, c-format
@@ -17754,24 +17708,24 @@ msgid "Zip file '%s' cannot be opened."
 msgstr "无法打开 Zip 文件 \"%s\"。"
 
 #: gerbview/files.cpp:479
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (gerber job file)."
-msgstr "已跳过文件 \"%s\"（Gerber 作业文件）。\n"
+msgstr "已跳过文件 \"%s\"（Gerber 作业文件）。"
 
 #: gerbview/files.cpp:524
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>"
-msgstr "<b>无法创建临时文件 \"%s\"</b>\n"
+msgstr "<b>无法创建临时文件 \"%s\"</b>"
 
 #: gerbview/files.cpp:549
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (unknown type)."
-msgstr "已跳过文件 \"%s\"（未知类型）。\n"
+msgstr "已跳过文件 \"%s\"（未知类型）。"
 
 #: gerbview/files.cpp:586
-#, fuzzy, c-format
+#, c-format
 msgid "<b>unzipped file %s read error</b>"
-msgstr "<b>解压缩文件 %s 读取错误</b>\n"
+msgstr "<b>解压缩文件 %s 读取错误</b>"
 
 #: gerbview/files.cpp:634
 msgid "Open Zip File"
@@ -17808,14 +17762,12 @@ msgid "Position"
 msgstr "坐标"
 
 #: gerbview/gerber_draw_item.cpp:695
-#, fuzzy
 msgid "Start"
-msgstr "起点 X"
+msgstr "启动"
 
 #: gerbview/gerber_draw_item.cpp:698
-#, fuzzy
 msgid "End"
-msgstr "结束点 X"
+msgstr "结尾"
 
 #: gerbview/gerber_draw_item.cpp:709
 msgid "Clear"
@@ -18328,9 +18280,8 @@ msgid "Sort Layers by File Extension"
 msgstr ""
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:146
-#, fuzzy
 msgid "Move Current Layer Up"
-msgstr "清除当前层..."
+msgstr "将当前层上移"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:148
 #, fuzzy
@@ -26598,16 +26549,14 @@ msgid "SVG Options"
 msgstr "SVG 选项"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:379
-#, fuzzy
 msgid ""
 "This number defines how many digits are exported that are below 1 mm.\n"
 "User unit is 10^-<N> mm\n"
 "Choose 4 if you are not sure."
 msgstr ""
-"SVG 用户单元有多大。\n"
-"该数字定义导出的小于 1 毫米或 1 英寸的位数。\n"
-"用户单位为 10^-<N> 毫米或 10^-<N> 英寸。\n"
-"如果您不确定，请选择 6。"
+"该数字定义导出的小于 1 毫米的位数。\n"
+"用户单位为 10^-<N> 毫米\n"
+"如果您不确定，请选择 4。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:405
 msgid "Run DRC..."
@@ -27186,14 +27135,12 @@ msgid "Change text box properties"
 msgstr "修改文本属性"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:137
-#, fuzzy
 msgid "Text Width:"
-msgstr "文本宽度"
+msgstr "文本宽度："
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:153
-#, fuzzy
 msgid "Text Height:"
-msgstr "文本高度"
+msgstr "文本高度："
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:203
 #, fuzzy
@@ -31122,9 +31069,9 @@ msgid "Footprint Text '%s' of %s"
 msgstr "封装文本 '%s' (%s)"
 
 #: pcbnew/fp_textbox.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint Text Box of %s"
-msgstr "封装文本 '%s' (%s)"
+msgstr "%s 的封装文本框"
 
 #: pcbnew/generate_footprint_info.cpp:43
 msgid "Documentation"
@@ -32234,9 +32181,9 @@ msgid "PCB Text '%s' on %s"
 msgstr "电路板上的文本 \"%s\" (%s)"
 
 #: pcbnew/pcb_textbox.cpp:251
-#, fuzzy, c-format
+#, c-format
 msgid "PCB Text Box on %s"
-msgstr "电路板上的文本 \"%s\" (%s)"
+msgstr "%s 上的 PCB 文本"
 
 #: pcbnew/pcb_track.cpp:103
 #, c-format
@@ -32386,9 +32333,9 @@ msgid "'%s' was not fully parsed."
 msgstr "“%s”未完全解析。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:747
-#, fuzzy, c-format
+#, c-format
 msgid "Record of unknown type: '%d'."
-msgstr "未知焊盘类型：%d"
+msgstr "未知类型的记录：\"%d\""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1041
 #, c-format
@@ -34113,16 +34060,14 @@ msgstr "实体形状"
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:48
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:117
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:186
-#, fuzzy
 msgid "Max length"
-msgstr "Gap 长度："
+msgstr "最大长度"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:55
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:124
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:193
-#, fuzzy
 msgid "Max height"
-msgstr "最大高度："
+msgstr "最大高度"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:66
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:135
@@ -34147,9 +34092,8 @@ msgstr ""
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:86
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:155
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:224
-#, fuzzy
 msgid "Max height/d"
-msgstr "最大高度："
+msgstr "最大高度/d"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:88
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:157
@@ -34197,9 +34141,8 @@ msgid "Add teardrops to not driiled pads, like SMD"
 msgstr ""
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:273
-#, fuzzy
 msgid "Track to track"
-msgstr "吸附到布线："
+msgstr "要布线的导线"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:275
 msgid "Add teardrops to two connected tracks of different widths"
@@ -34509,9 +34452,9 @@ msgid "Resolved thermal spoke width: %s."
 msgstr "已解决的防散热辐条宽度：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid "Minimum thermal spoke count: %s."
-msgstr "花焊盘最小辐条 (散热) 数目："
+msgstr "最小辐条 (散热) 数目：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:430
 msgid "Items are not connected.  No thermal spokes will be generated."
@@ -36517,9 +36460,8 @@ msgid "Select"
 msgstr "选择"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:1114
-#, fuzzy
 msgid "Select/Expand Connection..."
-msgstr "选择/扩展连接"
+msgstr "选择/扩展连接…"
 
 #: pcbnew/tools/placement_tool.cpp:65
 msgid "Align/Distribute"
