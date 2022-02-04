@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-03 17:11-0800\n"
 "PO-Revision-Date: 2022-02-05 15:45+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Last-Translator: Axel Henriksson <axe.henriksson@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
 "Language: sv\n"
@@ -23966,7 +23966,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
-msgstr "Kontrollera paritet mellan mönsterkort och kretsschema"
+msgstr "Kontrollera att mönsterkort och kretsschema överensstämmer"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:119
 #, c-format
