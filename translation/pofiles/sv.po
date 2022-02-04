@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-03 17:11-0800\n"
-"PO-Revision-Date: 2022-02-04 01:10+0000\n"
+"PO-Revision-Date: 2022-02-05 15:45+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21057,7 +21057,7 @@ msgstr "Termisk resistans:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:262
 msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
-msgstr "Använda värmeledningsförmåga 401 W / (meter-Kelvin)"
+msgstr "Använd värmeledningsförmåga 401 W / (meter*Kelvin)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:270
 msgid "deg C/W"
@@ -22136,11 +22136,11 @@ msgstr "Polygonlinje"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:81
 msgid "Phenolic natural"
-msgstr ""
+msgstr "Fenolpapp naturlig"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:82
 msgid "Aluminum"
-msgstr ""
+msgstr "Aluminum"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:53
 msgid "Not specified"
@@ -23114,7 +23114,8 @@ msgstr "Filéradie:"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:504
 msgid "Thermal spoke width cannot be smaller than the minimum width."
-msgstr "Termisk ekers bredd kan inte vara mindre än minsta bredd."
+msgstr ""
+"Bredd på eker för termisk avlastning kan inte vara mindre än minsta bredd."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:533
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:252
@@ -23240,7 +23241,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:221 pcbnew/zone.cpp:1424
 msgid "Thermal reliefs"
-msgstr "Termiska reliefer"
+msgstr "Termiska avlastningar"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:221
 msgid "Reliefs for PTH"
@@ -23255,8 +23256,8 @@ msgid ""
 "The distance that will be kept clear between the filled area of the zone and "
 "a pad connected by thermal relief spokes."
 msgstr ""
-"Avståndet som hålls fritt mellan zonens fyllda yta och en lödyta som kopplas "
-"samman med thermal reliefs."
+"Avståndet som hålls fritt mellan zonens fyllda yta och en termiskt avlastad "
+"lödyta ansluten med ekrar."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:234
 msgid "Clearance between pads in the same net and filled areas."
@@ -23268,7 +23269,7 @@ msgstr "Termisk ekers bredd:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:247
 msgid "Width of copper in thermal reliefs."
-msgstr "Kopparbredd i termiska reliefer."
+msgstr "Kopparbredd i termiska avlastningar."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:264
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:108
@@ -24071,7 +24072,7 @@ msgstr "Ångra Ändringar"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:400
 msgid ": OK"
-msgstr ""
+msgstr ": OK"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
 msgid "Update all footprints on board"
@@ -24668,13 +24669,15 @@ msgstr "Uteslut från BOM"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:206
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:210
+#, fuzzy
 msgid "Exempt from courtyard requirement"
-msgstr ""
+msgstr "Undanta från krav på (courtyard)"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:207
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:211
+#, fuzzy
 msgid "Will not generate \"missing courtyard\" DRC violations"
-msgstr ""
+msgstr "Genererar inte DRC-överträdelse för saknad (courtyard)"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:223
 msgid "Update Footprint from Library..."
@@ -24738,7 +24741,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:298
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:269
 msgid "Allow bridged solder mask apertures between pads"
-msgstr ""
+msgstr "Tillåt överbryggade lödmasköppningar mellan lödytor"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:272
@@ -24824,7 +24827,7 @@ msgstr "Använd zoninställning"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:328
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:710
 msgid "Thermal relief"
-msgstr "Termisk lättnad"
+msgstr "Termisk avlastning"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:370
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:341
@@ -26607,8 +26610,9 @@ msgid "From parent footprint"
 msgstr "Från föräldrarnas fotavtryck"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:716
+#, fuzzy
 msgid "Zone knockout:"
-msgstr ""
+msgstr "Zonurtag"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
 msgid "Pad shape"
@@ -29220,7 +29224,7 @@ msgstr "Rensning av lödmask:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
 msgid "Allow bridged solder mask apertures between pads within footprints"
-msgstr ""
+msgstr "Tillåt överbryggade lödmasköppningar mellan lödytor i fotavtryck"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:98
 #, fuzzy
@@ -29962,8 +29966,9 @@ msgid "Copper zone net has no pads"
 msgstr "Kopparnas nät har inga dynor"
 
 #: pcbnew/drc/drc_item.cpp:88
+#, fuzzy
 msgid "Thermal relief connection to zone incomplete"
-msgstr ""
+msgstr "Ofullständig anslutning av termisk avlastning till zon"
 
 #: pcbnew/drc/drc_item.cpp:92
 msgid "Via is not connected or connected on only one layer"
@@ -30074,7 +30079,7 @@ msgstr "Kopparstrimla"
 
 #: pcbnew/drc/drc_item.cpp:200
 msgid "Solder mask aperture bridges items with different nets"
-msgstr ""
+msgstr "Lödmasköppning överbryggar objekt från olika nät"
 
 #: pcbnew/drc/drc_item.cpp:204
 msgid "Silkscreen clipped by solder mask"
@@ -30423,7 +30428,7 @@ msgstr "(%s min %s; faktisk %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:406
 msgid "No project loaded, skipping library parity tests."
-msgstr ""
+msgstr "Inget projekt öppnat, hoppar över biblioteksparitetskontroller."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:410
 #, fuzzy
@@ -30544,7 +30549,7 @@ msgstr "Testar %d silkscreen-funktioner mot %d brädobjekt."
 
 #: pcbnew/drc/drc_test_provider_sliver_checker.cpp:83
 msgid "Running sliver detection on copper layers..."
-msgstr ""
+msgstr "Detekterar strimlor på kopparlager..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:55
 #, fuzzy
@@ -30554,12 +30559,12 @@ msgstr "kortinställningsbegränsningar"
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:426
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:506
 msgid "Front solder mask aperture bridges items with different nets"
-msgstr ""
+msgstr "Öppning i främre lödmask överbryggar objekt från olika nät"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:431
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:511
 msgid "Rear solder mask aperture bridges items with different nets"
-msgstr ""
+msgstr "Öppning i bakre lödmask överbryggar objekt från olika nät"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:614
 #, fuzzy
@@ -32263,7 +32268,7 @@ msgstr "Mellanrum på thermal relief"
 
 #: pcbnew/pad.cpp:1676 pcbnew/zone.cpp:1445
 msgid "Thermal Relief Gap"
-msgstr "Mellanrum på thermal relief"
+msgstr "Gap i termisk avlastning"
 
 #: pcbnew/pad.cpp:1679
 msgid "Fabrication Property"
@@ -32401,6 +32406,8 @@ msgstr "Footprint har ingen bakgård."
 #, c-format
 msgid "Missing rule-area identifier argument (A, B, or rule-area name) to %s."
 msgstr ""
+"Saknat argument för regelytans beteckning (A, B eller regelytans namn) för "
+"%s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:719
 #, fuzzy, c-format
@@ -33077,9 +33084,9 @@ msgid ""
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
 msgstr ""
-"CADSTAR-mallen '%s' har olika inställningar för termisk avlastning i dynor "
-"och vias. KiCad stöder bara en enda inställning för båda. Inställningen för "
-"dynor har tillämpats."
+"CADSTAR-mallen '%s' har olika inställningar för termisk avlastning i lödytor "
+"och vior. KiCad stöder bara en enda inställning för båda. Inställningen för "
+"lödytor har tillämpats."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1933
 #, c-format
@@ -33090,11 +33097,10 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
-"CADSTAR-mallen '%s' har thermal reliefs i den ursprungliga designen men "
-"ekerbredden (%.2f mm) är tunnare än zonens minimitjocklek (%.2f mm). KiCad "
-"kräver att zonens minimitjocklek bevaras. Zonens minsta tjocklek har därför "
-"angetts som den nya ekerbredden och kommer tillämpas nästa gång zonerna "
-"fylls."
+"CADSTAR-mallen '%s' har termiska avlastningar i den ursprungliga designen "
+"men ekerbredden (%.2f mm) är tunnare än zonens minimibredd (%.2f mm). KiCad "
+"kräver att zonens minimibredd bevaras. Zonens minimibredd har därför angetts "
+"som den nya ekerbredden och kommer tillämpas nästa gång zonerna fylls."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1980
 #, c-format
@@ -34842,7 +34848,7 @@ msgstr "Zonavstånd: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:443
 #, c-format
 msgid "Overridden by larger thermal relief from %s;clearance: %s."
-msgstr "Överstyrd av större värmeavlastning från %s, spelrum: %s."
+msgstr "Åsidosatt av större termisk avlastning från %s, avstånd: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:453
 #: pcbnew/tools/board_inspection_tool.cpp:463
