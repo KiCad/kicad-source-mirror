@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-02-01 13:57+0000\n"
+"PO-Revision-Date: 2022-02-05 15:45+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -30958,7 +30958,7 @@ msgstr "Elemente gruppieren"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:164
 msgid "Add all imported items into a new group"
-msgstr "Fügen Sie alle importierten Elemente einer neuen Gruppe hinzu"
+msgstr "Alle importierten Elemente einer neuen Gruppe hinzufügen"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:175
 msgid "DXF Parameters"
