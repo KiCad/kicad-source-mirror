@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-13 10:05-0800\n"
+"POT-Creation-Date: 2022-02-03 17:11-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2531,6 +2531,9 @@ msgstr "Pad"
 msgid "Graphic"
 msgstr "Graphic"
 
+msgid "Text Box"
+msgstr "Text Box"
+
 msgid "Dimension"
 msgstr "Dimension"
 
@@ -2579,8 +2582,8 @@ msgstr "Bitmap"
 msgid "Net Label"
 msgstr "Net Label"
 
-msgid "Net Class Flag"
-msgstr "Net Class Flag"
+msgid "Directive Label"
+msgstr "Directive Label"
 
 msgid "Global Label"
 msgstr "Global Label"
@@ -3430,6 +3433,16 @@ msgstr "This language is not supported by the operating system."
 msgid "The KiCad language file for this language is not installed."
 msgstr "The KiCad language file for this language is not installed."
 
+#, c-format
+msgid "Cannot open file '%s'."
+msgstr "Cannot open file '%s'."
+
+msgid "Error reading file: cannot determine length."
+msgstr "Error reading file: cannot determine length."
+
+msgid "Error reading file."
+msgstr "Error reading file."
+
 msgid ""
 "Missing null byte at end of property list. Imported data might be malformed "
 "or missing."
@@ -3907,6 +3920,9 @@ msgstr "Inactive Layer View Mode (3-state)"
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
 msgstr "Cycle inactive layers between normal, dimmed, and hidden"
 
+msgid "Draw Bounding Boxes"
+msgstr "Draw Bounding Boxes"
+
 msgid "Select item(s)"
 msgstr "Select item(s)"
 
@@ -4336,6 +4352,9 @@ msgstr "KiCad footprint library paths"
 
 msgid "Legacy footprint library files"
 msgstr "Legacy footprint library files"
+
+msgid "Altium PCB footprint library files"
+msgstr "Altium PCB footprint library files"
 
 msgid "Eagle ver. 6.x XML library files"
 msgstr "Eagle ver. 6.x XML library files"
@@ -5642,8 +5661,8 @@ msgstr "%d symbol(s) require annotation.<br><br>"
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC cancelled by user.<br><br>"
 
-msgid "ERC completed.<br><br>"
-msgstr "ERC completed.<br><br>"
+msgid "Done.<br><br>"
+msgstr "Done.<br><br>"
 
 msgid "Checking sheet names..."
 msgstr "Checking sheet names..."
@@ -5728,6 +5747,9 @@ msgstr "Pin Conflicts Map"
 msgid "Violation Severity"
 msgstr "Violation Severity"
 
+msgid "Edit ignored violations..."
+msgstr "Edit ignored violations..."
+
 #, c-format
 msgid "Report file '%s' created."
 msgstr "Report file '%s' created."
@@ -5752,20 +5774,25 @@ msgstr ""
 "\n"
 " ** ERC messages: %d  Errors %d  Warnings %d\n"
 
-msgid "Messages"
-msgstr "Messages"
+msgid "Tests Running..."
+msgstr "Tests Running..."
 
 msgid "Click on items to highlight them on the board."
 msgstr "Click on items to highlight them on the board."
 
-msgid "Violations"
-msgstr "Violations"
+#, c-format
+msgid "Violations (%d)"
+msgstr "Violations (%d)"
+
+#, c-format
+msgid "Ignored Tests (%d)"
+msgstr "Ignored Tests (%d)"
 
 msgid "Exclusions"
 msgstr "Exclusions"
 
-msgid "Delete Markers"
-msgstr "Delete Markers"
+msgid "Delete Marker"
+msgstr "Delete Marker"
 
 msgid "Electrical Rules Checker"
 msgstr "Electrical Rules Checker"
@@ -5781,6 +5808,61 @@ msgstr "Value may not be empty."
 
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
 msgstr "Sheet filename can only be modified in Sheet Properties dialog."
+
+msgid "Text:"
+msgstr "Text:"
+
+#, c-format
+msgid "(%s)"
+msgstr "(%s)"
+
+msgid "Font:"
+msgstr "Font:"
+
+msgid "KiCad Font"
+msgstr "KiCad Font"
+
+msgid "Horizontal text"
+msgstr "Horizontal text"
+
+msgid "Vertical text"
+msgstr "Vertical text"
+
+msgid "Align left"
+msgstr "Align left"
+
+msgid "Align horizontal center"
+msgstr "Align horizontal center"
+
+msgid "Align right"
+msgstr "Align right"
+
+msgid "Align top"
+msgstr "Align top"
+
+msgid "Align vertical center"
+msgstr "Align vertical center"
+
+msgid "Align bottom"
+msgstr "Align bottom"
+
+msgid "Text size:"
+msgstr "Text size:"
+
+msgid "Position X:"
+msgstr "Position X:"
+
+msgid "Position Y:"
+msgstr "Position Y:"
+
+msgid "Common to all units"
+msgstr "Common to all units"
+
+msgid "Common to all body styles"
+msgstr "Common to all body styles"
+
+msgid "Text Item Properties"
+msgstr "Text Item Properties"
 
 msgid "Other symbol fields"
 msgstr "Other symbol fields"
@@ -5829,15 +5911,6 @@ msgstr "Only include selected items"
 
 msgid "Set To"
 msgstr "Set To"
-
-msgid "Font:"
-msgstr "Font:"
-
-msgid "KiCad Font"
-msgstr "KiCad Font"
-
-msgid "Text size:"
-msgstr "Text size:"
 
 msgid "Up"
 msgstr "Up"
@@ -5949,8 +6022,8 @@ msgstr "Hierarchical Label Properties"
 msgid "Label Properties"
 msgstr "Label Properties"
 
-msgid "Net Class Flag Properties"
-msgstr "Net Class Flag Properties"
+msgid "Directive Label Properties"
+msgstr "Directive Label Properties"
 
 msgid "Hierarchical Sheet Pin Properties"
 msgstr "Hierarchical Sheet Pin Properties"
@@ -6159,6 +6232,9 @@ msgstr "Fill with body background color"
 msgid "Fill with:"
 msgstr "Fill with:"
 
+msgid "Private to Symbol Editor"
+msgstr "Private to Symbol Editor"
+
 msgid "Common to all &units in symbol"
 msgstr "Common to all &units in symbol"
 
@@ -6332,54 +6408,23 @@ msgstr "Edit Spice Model…"
 msgid "Library Symbol Properties"
 msgstr "Library Symbol Properties"
 
-msgid "Text:"
-msgstr "Text:"
+msgid "Text can not be empty."
+msgstr "Text can not be empty."
 
-#, c-format
-msgid "(%s)"
-msgstr "(%s)"
-
-msgid "Horizontal text"
-msgstr "Horizontal text"
-
-msgid "Vertical text"
-msgstr "Vertical text"
-
-msgid "Align left"
-msgstr "Align left"
-
-msgid "Align horizontal center"
-msgstr "Align horizontal center"
-
-msgid "Align right"
-msgstr "Align right"
-
-msgid "Align top"
-msgstr "Align top"
-
-msgid "Align vertical center"
-msgstr "Align vertical center"
-
-msgid "Align bottom"
-msgstr "Align bottom"
-
-msgid "Position X:"
-msgstr "Position X:"
-
-msgid "Position Y:"
-msgstr "Position Y:"
-
-msgid "Common to all units"
-msgstr "Common to all units"
-
-msgid "Common to all body styles"
-msgstr "Common to all body styles"
-
-msgid "Text Item Properties"
-msgstr "Text Item Properties"
+msgid "Border"
+msgstr "Border"
 
 msgid "Style:"
 msgstr "Style:"
+
+msgid "Background fill"
+msgstr "Background fill"
+
+msgid "Private to symbol editor"
+msgstr "Private to symbol editor"
+
+msgid "Text Box Properties"
+msgstr "Text Box Properties"
 
 msgid "Set width to 0 to use Netclass line widths."
 msgstr "Set width to 0 to use Netclass line widths."
@@ -7338,6 +7383,33 @@ msgstr "For a MOSFET, pin order is drain, gate, source"
 msgid "For a JFET, pin order is drain, gate, source"
 msgstr "For a JFET, pin order is drain, gate, source"
 
+msgid "Invalid Impedance value"
+msgstr "Invalid Impedance value"
+
+msgid "Invalid delay value"
+msgstr "Invalid delay value"
+
+msgid "Invalid frequency value"
+msgstr "Invalid frequency value"
+
+msgid "Invalid length in wavelength value"
+msgstr "Invalid length in wavelength value"
+
+msgid "Invalid resistance value"
+msgstr "Invalid resistance value"
+
+msgid "Invalid capacitance value"
+msgstr "Invalid capacitance value"
+
+msgid "Invalid inductance value"
+msgstr "Invalid inductance value"
+
+msgid "Invalid conductance value"
+msgstr "Invalid conductance value"
+
+msgid "Invalid length value"
+msgstr "Invalid length value"
+
 #, c-format
 msgid ""
 "You need to specify at least the first %d parameters for the transient source"
@@ -7580,6 +7652,91 @@ msgstr "Source Type"
 
 msgid "Source"
 msgstr "Source"
+
+msgid "Line model"
+msgstr "Line model"
+
+msgid "Characteristic impedance"
+msgstr "Characteristic impedance"
+
+msgid "ohm"
+msgstr "ohm"
+
+msgid "Propagation delay"
+msgstr "Propagation delay"
+
+msgid "s"
+msgstr "s"
+
+msgid "Frequency"
+msgstr "Frequency"
+
+msgid "Length in wavelength"
+msgstr "Length in wavelength"
+
+msgid "Use time delay"
+msgstr "Use time delay"
+
+msgid "Use frequency and number of wavelength"
+msgstr "Use frequency and number of wavelength"
+
+msgid "Delay / Electrical length"
+msgstr "Delay / Electrical length"
+
+msgid "Lossless"
+msgstr "Lossless"
+
+msgid "Resistance per unit length"
+msgstr "Resistance per unit length"
+
+msgid "ohm / unit"
+msgstr "ohm / unit"
+
+msgid "Inductance per unit length"
+msgstr "Inductance per unit length"
+
+msgid "henry / unit"
+msgstr "henry / unit"
+
+msgid "Capacitance per unit length"
+msgstr "Capacitance per unit length"
+
+msgid "farad / unit"
+msgstr "farad / unit"
+
+msgid "Conductance per unit length"
+msgstr "Conductance per unit length"
+
+msgid "siemens / unit"
+msgstr "siemens / unit"
+
+msgid "Extra parameters"
+msgstr "Extra parameters"
+
+msgid ""
+"The following types of lines have been implemented so far:\n"
+"\n"
+"- RLC\n"
+"- RC\n"
+"- LC\n"
+"- RG\n"
+"\n"
+"Any other combination will yield erroneous results and should not be tried."
+msgstr ""
+"The following types of lines have been implemented so far:\n"
+"\n"
+"- RLC\n"
+"- RC\n"
+"- LC\n"
+"- RG\n"
+"\n"
+"Any other combination will yield erroneous results and should not be tried."
+
+msgid "Lossy"
+msgstr "Lossy"
+
+msgid "Transmission Line"
+msgstr "Transmission Line"
 
 msgid "Disable symbol for simulation"
 msgstr "Disable symbol for simulation"
@@ -7830,9 +7987,6 @@ msgstr "Some of the project files could not be backed up."
 msgid "Remap Symbols"
 msgstr "Remap Symbols"
 
-msgid "Text can not be empty."
-msgstr "Text can not be empty."
-
 msgid "Text Properties"
 msgstr "Text Properties"
 
@@ -7955,6 +8109,9 @@ msgstr "Highlight thickness:"
 
 msgid "Cross-probing"
 msgstr "Cross-probing"
+
+msgid "Cross-probe on selection"
+msgstr "Cross-probe on selection"
 
 msgid "Center view on cross-probed items"
 msgstr "Center view on cross-probed items"
@@ -8872,6 +9029,9 @@ msgstr "yes"
 msgid "Converted"
 msgstr "Converted"
 
+msgid "Private"
+msgstr "Private"
+
 msgid "Pos X"
 msgstr "Pos X"
 
@@ -8905,6 +9065,12 @@ msgstr "Bezier Curve, %d points"
 #, c-format
 msgid "Graphic Text '%s'"
 msgstr "Graphic Text '%s'"
+
+msgid "Graphic Text Box"
+msgstr "Graphic Text Box"
+
+msgid "Bold Italic"
+msgstr "Bold Italic"
 
 #, c-format
 msgid "Failed to add symbol %s to library file '%s'."
@@ -9108,9 +9274,6 @@ msgstr "Assigned Netclass"
 msgid "Connection Name"
 msgstr "Connection Name"
 
-msgid "Net Code"
-msgstr "Net Code"
-
 #, c-format
 msgid "Bus Alias %s Members"
 msgstr "Bus Alias %s Members"
@@ -9194,6 +9357,33 @@ msgstr "Plugin type “%s” is not found."
 msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Unknown SCH_FILE_T value: %d"
 
+msgid "Tri-State"
+msgstr "Tri-State"
+
+msgid "Label"
+msgstr "Label"
+
+msgid "Hierarchical Sheet Pin"
+msgstr "Hierarchical Sheet Pin"
+
+msgid "Justification"
+msgstr "Justification"
+
+#, c-format
+msgid "Label '%s'"
+msgstr "Label '%s'"
+
+#, c-format
+msgid "Global Label '%s'"
+msgstr "Global Label '%s'"
+
+#, c-format
+msgid "Hierarchical Label '%s'"
+msgstr "Hierarchical Label '%s'"
+
+msgid "Syntax Help"
+msgstr "Syntax Help"
+
 #, c-format
 msgid "Vertical Wire, length %s"
 msgstr "Vertical Wire, length %s"
@@ -9272,10 +9462,6 @@ msgid ""
 "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() functions."
 msgstr ""
 "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() functions."
-
-#, c-format
-msgid "Cannot open file '%s'."
-msgstr "Cannot open file '%s'."
 
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
@@ -9655,11 +9841,18 @@ msgstr "Symbol library '%s' already exists."
 msgid "Symbol library '%s' cannot be deleted."
 msgstr "Symbol library '%s' cannot be deleted."
 
+msgid "Unexpected end of file."
+msgstr "Unexpected end of file."
+
+#, c-format
+msgid "Insufficient permissions to read library '%s'."
+msgstr "Insufficient permissions to read library '%s'."
+
+msgid "symbol document library file is empty"
+msgstr "symbol document library file is empty"
+
 msgid "unexpected end of line"
 msgstr "unexpected end of line"
-
-msgid "expected unquoted string"
-msgstr "expected unquoted string"
 
 #, c-format
 msgid "'%s' does not appear to be an Eeschema file."
@@ -9680,15 +9873,8 @@ msgstr "expected ‘Italics’ or ‘~’"
 msgid "symbol field text attributes must be 3 characters wide"
 msgstr "symbol field text attributes must be 3 characters wide"
 
-msgid "Unexpected end of file."
-msgstr "Unexpected end of file."
-
-#, c-format
-msgid "Insufficient permissions to read library '%s'."
-msgstr "Insufficient permissions to read library '%s'."
-
-msgid "symbol document library file is empty"
-msgstr "symbol document library file is empty"
+msgid "expected unquoted string"
+msgstr "expected unquoted string"
 
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
@@ -9768,38 +9954,8 @@ msgstr "Symbol not found in %s!"
 msgid "Symbol %s [%s]"
 msgstr "Symbol %s [%s]"
 
-msgid "Tri-State"
-msgstr "Tri-State"
-
 msgid "Graphic Text"
 msgstr "Graphic Text"
-
-msgid "Bold Italic"
-msgstr "Bold Italic"
-
-msgid "Justification"
-msgstr "Justification"
-
-msgid "Label"
-msgstr "Label"
-
-msgid "Hierarchical Sheet Pin"
-msgstr "Hierarchical Sheet Pin"
-
-#, c-format
-msgid "Label '%s'"
-msgstr "Label '%s'"
-
-#, c-format
-msgid "Global Label '%s'"
-msgstr "Global Label '%s'"
-
-#, c-format
-msgid "Hierarchical Label '%s'"
-msgstr "Hierarchical Label '%s'"
-
-msgid "Syntax Help"
-msgstr "Syntax Help"
 
 msgid ""
 "<table>\n"
@@ -10398,9 +10554,6 @@ msgstr "Signals"
 
 msgid "Cursors"
 msgstr "Cursors"
-
-msgid "Frequency"
-msgstr "Frequency"
 
 msgid "Gain"
 msgstr "Gain"
@@ -11100,6 +11253,12 @@ msgstr "Add Text"
 msgid "Add a text item"
 msgstr "Add a text item"
 
+msgid "Add Text Box"
+msgstr "Add Text Box"
+
+msgid "Add a text box item"
+msgstr "Add a text box item"
+
 msgid "Add Lines"
 msgstr "Add Lines"
 
@@ -11169,11 +11328,11 @@ msgstr "Add Label"
 msgid "Add a net label"
 msgstr "Add a net label"
 
-msgid "Add Net Class Flag"
-msgstr "Add Net Class Flag"
+msgid "Add Net Class Directive"
+msgstr "Add Net Class Directive"
 
-msgid "Add a net class flag"
-msgstr "Add a net class flag"
+msgid "Add a net class directive label"
+msgstr "Add a net class directive label"
 
 msgid "Add Hierarchical Label"
 msgstr "Add Hierarchical Label"
@@ -11201,6 +11360,9 @@ msgstr "Add a global label"
 
 msgid "Add text"
 msgstr "Add text"
+
+msgid "Add a text box"
+msgstr "Add a text box"
 
 msgid "Add Rectangle"
 msgstr "Add Rectangle"
@@ -11343,11 +11505,11 @@ msgstr "Change to Label"
 msgid "Change existing item to a label"
 msgstr "Change existing item to a label"
 
-msgid "Change to Net Class Flag"
-msgstr "Change to Net Class Flag"
+msgid "Change to Directive Label"
+msgstr "Change to Directive Label"
 
-msgid "Change existing item to a net class flag"
-msgstr "Change existing item to a net class flag"
+msgid "Change existing item to a directive label"
+msgstr "Change existing item to a directive label"
 
 msgid "Change to Hierarchical Label"
 msgstr "Change to Hierarchical Label"
@@ -11521,11 +11683,11 @@ msgstr "Generate BOM..."
 msgid "Generate a bill of materials for the current schematic"
 msgstr "Generate a bill of materials for the current schematic"
 
-msgid "Highlight on PCB"
-msgstr "Highlight on PCB"
+msgid "Select on PCB"
+msgstr "Select on PCB"
 
-msgid "Highlight corresponding items in PCB editor"
-msgstr "Highlight corresponding items in PCB editor"
+msgid "Select corresponding items in PCB editor"
+msgstr "Select corresponding items in PCB editor"
 
 msgid "Show Hidden Pins"
 msgstr "Show Hidden Pins"
@@ -12203,26 +12365,21 @@ msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr "<b>No more available layers</b> in GerbView to load files"
 
 #, c-format
-msgid ""
-"\n"
-"<b>Not loaded:</b> <i>%s</i>"
-msgstr ""
-"\n"
-"<b>Not loaded:</b> <i>%s</i>"
+msgid "<b>Not loaded:</b> <i>%s</i>"
+msgstr "<b>Not loaded:</b> <i>%s</i>"
 
 #, c-format
-msgid ""
-"\n"
-"<b>Memory was exhausted reading:</b> <i>%s</i>"
-msgstr ""
-"\n"
-"<b>Memory was exhausted reading:</b> <i>%s</i>"
+msgid "<b>Memory was exhausted reading:</b> <i>%s</i>"
+msgstr "<b>Memory was exhausted reading:</b> <i>%s</i>"
 
 msgid "Zip files"
 msgstr "Zip files"
 
 msgid "Job files"
 msgstr "Job files"
+
+msgid "Open Autodetected File(s)"
+msgstr "Open Autodetected File(s)"
 
 msgid "Gerber files (.g* .lgr .pho)"
 msgstr "Gerber files (.g* .lgr .pho)"
@@ -12266,45 +12423,48 @@ msgstr "Bottom Pad Master"
 msgid "Open Gerber File(s)"
 msgstr "Open Gerber File(s)"
 
+msgid "Open NC (Excellon) Drill File(s)"
+msgstr "Open NC (Excellon) Drill File(s)"
+
 msgid "File not found:"
 msgstr "File not found:"
 
-msgid "Loading Gerber files..."
-msgstr "Loading Gerber files…"
+#, c-format
+msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
+msgstr "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
+
+msgid "Loading files..."
+msgstr "Loading files..."
 
 #, c-format
 msgid "Loading %u/%zu %s..."
 msgstr "Loading %u/%zu %s..."
 
 #, c-format
-msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
-msgstr "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
-
-msgid "Open NC (Excellon) Drill File(s)"
-msgstr "Open NC (Excellon) Drill File(s)"
-
-#, c-format
 msgid "Zip file '%s' cannot be opened."
 msgstr "Zip file '%s' cannot be opened."
 
 #, c-format
-msgid "Skipped file '%s' (unknown type).\n"
-msgstr "Skipped file '%s' (unknown type).\n"
+msgid "Skipped file '%s' (gerber job file)."
+msgstr "Skipped file '%s' (gerber job file)."
 
 #, c-format
-msgid "Skipped file '%s' (gerber job file).\n"
-msgstr "Skipped file '%s' (gerber job file).\n"
+msgid "<b>Unable to create temporary file '%s'.</b>"
+msgstr "<b>Unable to create temporary file '%s'.</b>"
 
 #, c-format
-msgid "<b>Unable to create temporary file '%s'.</b>\n"
-msgstr "<b>Unable to create temporary file '%s'.</b>\n"
+msgid "Skipped file '%s' (unknown type)."
+msgstr "Skipped file '%s' (unknown type)."
 
 #, c-format
-msgid "<b>unzipped file %s read error</b>\n"
-msgstr "<b>unzipped file %s read error</b>\n"
+msgid "<b>unzipped file %s read error</b>"
+msgstr "<b>unzipped file %s read error</b>"
 
 msgid "Open Zip File"
 msgstr "Open Zip File"
+
+msgid "Messages"
+msgstr "Messages"
 
 msgid "Attribute"
 msgstr "Attribute"
@@ -12318,6 +12478,15 @@ msgstr "D Code %d"
 
 msgid "Graphic Layer"
 msgstr "Graphic Layer"
+
+msgid "Position"
+msgstr "Position"
+
+msgid "Start"
+msgstr "Start"
+
+msgid "End"
+msgstr "End"
 
 msgid "Clear"
 msgstr "Clear"
@@ -12386,9 +12555,8 @@ msgstr "KiCad Gerber Viewer"
 msgid "Gerber Viewer"
 msgstr "Gerber Viewer"
 
-#, c-format
-msgid "Drawing layer %d not in use"
-msgstr "Drawing layer %d not in use"
+msgid "Drawing layer not in use"
+msgstr "Drawing layer not in use"
 
 msgid "(with X2 attributes)"
 msgstr "(with X2 attributes)"
@@ -12439,6 +12607,9 @@ msgstr ""
 "Warning: this file has some missing D-Code definitions\n"
 "Therefore the size of some items is undefined"
 
+msgid "Invalid Code Number"
+msgstr "Invalid Code Number"
+
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
 msgstr "Invalid Gerber file: missing G74 or G75 arc command"
 
@@ -12474,23 +12645,23 @@ msgstr "DCode:"
 msgid "<No selection>"
 msgstr "<No selection>"
 
+msgid "Open Autodetected File(s)..."
+msgstr "Open Autodetected File(s)..."
+
+msgid "Open Autodetected file(s) on a new layer."
+msgstr "Open Autodetected file(s) on a new layer."
+
 msgid "Open Gerber Plot File(s)..."
 msgstr "Open Gerber Plot File(s)..."
 
-msgid ""
-"Open Gerber plot file(s) on the current layer. Previous data will be deleted"
-msgstr ""
-"Open Gerber plot file(s) on the current layer. Previous data will be deleted"
+msgid "Open Gerber plot file(s) on a new layer."
+msgstr "Open Gerber plot file(s) on a new layer."
 
 msgid "Open Excellon Drill File(s)..."
 msgstr "Open Excellon Drill File(s)..."
 
-msgid ""
-"Open Excellon drill file(s) on the current layer. Previous data will be "
-"deleted"
-msgstr ""
-"Open Excellon drill file(s) on the current layer. Previous data will be "
-"deleted"
+msgid "Open Excellon drill file(s) on a new layer."
+msgstr "Open Excellon drill file(s) on a new layer."
 
 msgid "Open Gerber Job File..."
 msgstr "Open Gerber Job File..."
@@ -12683,6 +12854,15 @@ msgstr "Hide All Layers"
 
 msgid "Sort Layers if X2 Mode"
 msgstr "Sort Layers if X2 Mode"
+
+msgid "Sort Layers by File Extension"
+msgstr "Sort Layers by File Extension"
+
+msgid "Move Current Layer Up"
+msgstr "Move Current Layer Up"
+
+msgid "Move Current Layer Down"
+msgstr "Move Current Layer Down"
 
 msgid "Change Layer Color for"
 msgstr "Change Layer Color for"
@@ -13643,9 +13823,6 @@ msgstr "Set to 0 to use default values"
 msgid "Comment:"
 msgstr "Comment:"
 
-msgid "Position"
-msgstr "Position"
-
 msgid "From:"
 msgstr "From:"
 
@@ -14325,9 +14502,6 @@ msgstr "mm²"
 msgid "Resistance:"
 msgstr "Resistance:"
 
-msgid "ohm"
-msgstr "ohm"
-
 msgid "Voltage drop:"
 msgstr "Voltage drop:"
 
@@ -14624,23 +14798,35 @@ msgstr ""
 msgid "PCB Calculator"
 msgstr "PCB Calculator"
 
+msgid "General system design"
+msgstr "General system design"
+
 msgid "Regulators"
 msgstr "Regulators"
 
+msgid "Power, current and isolation"
+msgstr "Power, current and isolation"
+
+msgid "Electrical Spacing"
+msgstr "Electrical Spacing"
+
+msgid "High speed"
+msgstr "High speed"
+
 msgid "RF Attenuators"
 msgstr "RF Attenuators"
+
+msgid "TransLine "
+msgstr "TransLine "
+
+msgid "Memo"
+msgstr "Memo"
 
 msgid "E-Series"
 msgstr "E-Series"
 
 msgid "Color Code"
 msgstr "Color Code"
-
-msgid "TransLine "
-msgstr "TransLine "
-
-msgid "Electrical Spacing"
-msgstr "Electrical Spacing"
 
 msgid "Board Classes"
 msgstr "Board Classes"
@@ -14774,9 +14960,6 @@ msgstr "Relative permeability (mu) of conductor"
 
 msgid "Line length"
 msgstr "Line length"
-
-msgid "Characteristic impedance"
-msgstr "Characteristic impedance"
 
 msgid "Electrical length"
 msgstr "Electrical length"
@@ -16515,9 +16698,6 @@ msgstr "Show design rules."
 msgid "-------- DRC cancelled by user.<br><br>"
 msgstr "-------- DRC cancelled by user.<br><br>"
 
-msgid "Done.<br><br>"
-msgstr "Done.<br><br>"
-
 #, c-format
 msgid "Remove all exclusions for violations of rule '%s'"
 msgstr "Remove all exclusions for violations of rule '%s'"
@@ -16531,9 +16711,6 @@ msgstr "Run clearance resolution tool..."
 
 msgid "Open the Board Setup... dialog"
 msgstr "Open the Board Setup... dialog"
-
-msgid "Edit ignored violations..."
-msgstr "Edit ignored violations..."
 
 #, c-format
 msgid "Report file '%s' created<br>"
@@ -16570,13 +16747,6 @@ msgstr ""
 msgid "Test for parity between PCB and schematic"
 msgstr "Test for parity between PCB and schematic"
 
-msgid "Tests Running..."
-msgstr "Tests Running..."
-
-#, c-format
-msgid "Violations (%d)"
-msgstr "Violations (%d)"
-
 #, c-format
 msgid "Unconnected Items (%d)"
 msgstr "Unconnected Items (%d)"
@@ -16585,15 +16755,8 @@ msgstr "Unconnected Items (%d)"
 msgid "Schematic Parity (%d)"
 msgstr "Schematic Parity (%d)"
 
-#, c-format
-msgid "Ignored Tests (%d)"
-msgstr "Ignored Tests (%d)"
-
-msgid "Delete Marker"
-msgstr "Delete Marker"
-
-msgid "DRC Control"
-msgstr "DRC Control"
+msgid "Design Rules Checker"
+msgstr "Design Rules Checker"
 
 msgid "Pad names are restricted to 4 characters (including number)."
 msgstr "Pad names are restricted to 4 characters (including number)."
@@ -17910,6 +18073,9 @@ msgstr "Use polar coordinates"
 msgid "Move Item"
 msgstr "Move Item"
 
+msgid "Net Code"
+msgstr "Net Code"
+
 msgid "Net Name"
 msgstr "Net Name"
 
@@ -18842,28 +19008,14 @@ msgstr "The units to use for the exported DXF file"
 msgid "SVG Options"
 msgstr "SVG Options"
 
-msgid "Millimeter"
-msgstr "Millimeter"
-
 msgid ""
-"The units that are used for a SVG user units.\n"
-"Choose Millimeter when you are not sure."
+"This number defines how many digits are exported that are below 1 mm.\n"
+"User unit is 10^-<N> mm\n"
+"Choose 4 if you are not sure."
 msgstr ""
-"The units that are used for a SVG user units.\n"
-"Choose Millimeter when you are not sure."
-
-msgid ""
-"How big a SVG user unit is.\n"
-"The number defines how many digits are exported that are below 1 mm or 1 "
-"inch.\n"
-"User unit is 10^-<N> mm or 10^-<N> inch.\n"
-"Choose 6 if you are not sure."
-msgstr ""
-"How big a SVG user unit is.\n"
-"The number defines how many digits are exported that are below 1 mm or 1 "
-"inch.\n"
-"User unit is 10^-<N> mm or 10^-<N> inch.\n"
-"Choose 6 if you are not sure."
+"This number defines how many digits are exported that are below 1 mm.\n"
+"User unit is 10^-<N> mm\n"
+"Choose 4 if you are not sure."
 
 msgid "Run DRC..."
 msgstr "Run DRC…"
@@ -19314,6 +19466,18 @@ msgstr "Keep text upright"
 
 msgid "Parent footprint description"
 msgstr "Parent footprint description"
+
+msgid "Change text box properties"
+msgstr "Change text box properties"
+
+msgid "Text Width:"
+msgstr "Text Width:"
+
+msgid "Text Height:"
+msgstr "Text Height:"
+
+msgid "Border style:"
+msgstr "Border style:"
 
 #, c-format
 msgid "Changing the net will also update %s pad %s to %s."
@@ -22265,6 +22429,10 @@ msgstr "Value '%s' of %s"
 msgid "Footprint Text '%s' of %s"
 msgstr "Footprint Text '%s' of %s"
 
+#, c-format
+msgid "Footprint Text Box of %s"
+msgstr "Footprint Text Box of %s"
+
 msgid "Documentation"
 msgstr "Documentation"
 
@@ -23126,6 +23294,10 @@ msgid "PCB Text '%s' on %s"
 msgstr "PCB Text '%s' on %s"
 
 #, c-format
+msgid "PCB Text Box on %s"
+msgstr "PCB Text Box on %s"
+
+#, c-format
 msgid "Blind/Buried Via %s on %s"
 msgstr "Blind/Buried Via %s on %s"
 
@@ -23213,6 +23385,10 @@ msgstr ""
 "Enter the python module which implements the PLUGIN::Footprint*() functions."
 
 #, c-format
+msgid "File not found: '%s'."
+msgstr "File not found: '%s'."
+
+#, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
 msgstr "Unknown mapping of the Altium layer '%s'."
 
@@ -23220,11 +23396,13 @@ msgstr "Unknown mapping of the Altium layer '%s'."
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr "Pads6 stream has unexpected length for subrecord 6: %d."
 
-msgid "Error reading file: cannot determine length."
-msgstr "Error reading file: cannot determine length."
-
-msgid "Error reading file."
-msgstr "Error reading file."
+#, c-format
+msgid ""
+"Altium layer (%d) has no KiCad equivalent. It has been moved to KiCad layer "
+"Eco1_User."
+msgstr ""
+"Altium layer (%d) has no KiCad equivalent. It has been moved to KiCad layer "
+"Eco1_User."
 
 #, c-format
 msgid "'%s' was not parsed correctly."
@@ -23235,8 +23413,8 @@ msgid "'%s' was not fully parsed."
 msgstr "'%s' was not fully parsed."
 
 #, c-format
-msgid "File not found: '%s'."
-msgstr "File not found: '%s'."
+msgid "Record of unknown type: '%d'."
+msgstr "Record of unknown type: '%d'."
 
 #, c-format
 msgid "Duplicate netclass name '%s'."
@@ -23301,22 +23479,6 @@ msgstr "Loading zone fills..."
 
 msgid "Loading arcs..."
 msgstr "Loading arcs..."
-
-#, c-format
-msgid ""
-"Arc keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
-"been moved to KiCad layer Eco1_User."
-msgstr ""
-"Arc keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
-"been moved to KiCad layer Eco1_User."
-
-#, c-format
-msgid ""
-"Arc found on an Altium layer (%d) with no KiCad equivalent. It has been "
-"moved to KiCad layer Eco1_User."
-msgstr ""
-"Arc found on an Altium layer (%d) with no KiCad equivalent. It has been "
-"moved to KiCad layer Eco1_User."
 
 msgid "Loading pads..."
 msgstr "Loading pads..."
@@ -23385,22 +23547,6 @@ msgstr ""
 msgid "Loading tracks..."
 msgstr "Loading tracks..."
 
-#, c-format
-msgid ""
-"Track keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
-"been moved to KiCad layer Eco1_User."
-msgstr ""
-"Track keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
-"been moved to KiCad layer Eco1_User."
-
-#, c-format
-msgid ""
-"Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
-"moved to KiCad layer Eco1_User."
-msgstr ""
-"Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
-"moved to KiCad layer Eco1_User."
-
 msgid "Loading unicode strings..."
 msgstr "Loading unicode strings..."
 
@@ -23411,24 +23557,8 @@ msgstr "Loading text..."
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "Ignored barcode on Altium layer %d (not yet supported)."
 
-#, c-format
-msgid ""
-"Text found on an Altium layer (%d) with no KiCad equivalent. It has been "
-"moved to KiCad layer Eco1_User."
-msgstr ""
-"Text found on an Altium layer (%d) with no KiCad equivalent. It has been "
-"moved to KiCad layer Eco1_User."
-
 msgid "Loading rectangles..."
 msgstr "Loading rectangles..."
-
-#, c-format
-msgid ""
-"Fill found on an Altium layer (%d) with no KiCad equivalent. It has been "
-"moved to KiCad layer Eco1_User."
-msgstr ""
-"Fill found on an Altium layer (%d) with no KiCad equivalent. It has been "
-"moved to KiCad layer Eco1_User."
 
 msgid ""
 "The selected file indicates that nets might be out of synchronisation with "
@@ -24706,6 +24836,108 @@ msgstr "%d Teardrops created"
 msgid "%d Teardrops removed."
 msgstr "%d Teardrops removed."
 
+msgid "Round shapes"
+msgstr "Round shapes"
+
+msgid "Max length"
+msgstr "Max length"
+
+msgid "Max height"
+msgstr "Max height"
+
+msgid "Best length"
+msgstr "Best length"
+
+msgid "Best height"
+msgstr "Best height"
+
+msgid "percent of d"
+msgstr "percent of d"
+
+msgid "Max height/d"
+msgstr "Max height/d"
+
+msgid ""
+"Max pad/via size to track width ratio to create a teardrop.\n"
+"100 always creates a teardrop."
+msgstr ""
+"Max pad/via size to track width ratio to create a teardrop.\n"
+"100 always creates a teardrop."
+
+msgid "percent of H/d"
+msgstr "percent of H/d"
+
+msgid "Rect shapes"
+msgstr "Rect shapes"
+
+msgid "Vias and PTH pads"
+msgstr "Vias and PTH pads"
+
+msgid "Add teardrops to vias and pads with holes"
+msgstr "Add teardrops to vias and pads with holes"
+
+msgid "Round pads only"
+msgstr "Round pads only"
+
+msgid "Add teardrops to round shapes only "
+msgstr "Add teardrops to round shapes only "
+
+msgid "Not drilled pads"
+msgstr "Not drilled pads"
+
+msgid "Add teardrops to not driiled pads, like SMD"
+msgstr "Add teardrops to not driiled pads, like SMD"
+
+msgid "Track to track"
+msgstr "Track to track"
+
+msgid "Add teardrops to two connected tracks of different widths"
+msgstr "Add teardrops to two connected tracks of different widths"
+
+msgid "Straight lines"
+msgstr "Straight lines"
+
+msgid "Curved"
+msgstr "Curved"
+
+msgid "Style for round shapes"
+msgstr "Style for round shapes"
+
+msgid "Style for rect shapes"
+msgstr "Style for rect shapes"
+
+msgid "Style for tracks"
+msgstr "Style for tracks"
+
+msgid "Allows use two tracks"
+msgstr "Allows use two tracks"
+
+msgid ""
+"Allows a teardrop to spread over 2 tracks if the first track segment is too "
+"short"
+msgstr ""
+"Allows a teardrop to spread over 2 tracks if the first track segment is too "
+"short"
+
+msgid "Teardrop on pads in zones"
+msgstr "Teardrop on pads in zones"
+
+msgid ""
+"Pads inside a  copper zone outline of same net have no teardrop.\n"
+"Check this option to allow teardrop for these pads."
+msgstr ""
+"Pads inside a  copper zone outline of same net have no teardrop.\n"
+"Check this option to allow teardrop for these pads."
+
+msgid "Curve points"
+msgstr "Curve points"
+
+msgid "Number of segments to build a teardrop with curved shape"
+msgstr "Number of segments to build a teardrop with curved shape"
+
+msgid "Teardrop Settings"
+msgstr "Teardrop Settings"
+
 msgid "Add teardrops"
 msgstr "Add teardrops"
 
@@ -24822,6 +25054,24 @@ msgstr "Lock"
 msgid "Unlock"
 msgstr "Unlock"
 
+msgid "Zones have insufficient overlap for merging."
+msgstr "Zones have insufficient overlap for merging."
+
+msgid "Some zone netcodes did not match and were not merged."
+msgstr "Some zone netcodes did not match and were not merged."
+
+msgid "Some zone priorities did not match and were not merged."
+msgstr "Some zone priorities did not match and were not merged."
+
+msgid "Some zones were rule areas and were not merged."
+msgstr "Some zones were rule areas and were not merged."
+
+msgid "Some zone layer sets did not match and were not merged."
+msgstr "Some zone layer sets did not match and were not merged."
+
+msgid "Some zones did not intersect and were not merged."
+msgstr "Some zones did not intersect and were not merged."
+
 msgid "Duplicate zone"
 msgstr "Duplicate zone"
 
@@ -24864,6 +25114,13 @@ msgstr "Resolved thermal relief gap: %s."
 #, c-format
 msgid "Resolved thermal spoke width: %s."
 msgstr "Resolved thermal spoke width: %s."
+
+#, c-format
+msgid "Minimum thermal spoke count: %s."
+msgstr "Minimum thermal spoke count: %s."
+
+msgid "Items are not connected.  No thermal spokes will be generated."
+msgstr "Items are not connected.  No thermal spokes will be generated."
 
 #, c-format
 msgid "Zone clearance: %s."
@@ -25049,6 +25306,9 @@ msgstr "Select Via Size"
 msgid "Draw a line segment"
 msgstr "Draw a line segment"
 
+msgid "Draw a text box"
+msgstr "Draw a text box"
+
 msgid "Draw a rectangle"
 msgstr "Draw a rectangle"
 
@@ -25134,6 +25394,12 @@ msgstr "Rotate"
 
 msgid "Change Side / Flip"
 msgstr "Change Side / Flip"
+
+msgid "Reference designator hidden (it is required and can not be deleted)."
+msgstr "Reference designator hidden (it is required and can not be deleted)."
+
+msgid "Value hidden (it is required and can not be deleted)."
+msgstr "Value hidden (it is required and can not be deleted)."
 
 msgid "Move exact"
 msgstr "Move exact"
@@ -25269,6 +25535,9 @@ msgstr "Add Stackup Table"
 msgid "Add a board stackup table on a graphic layer"
 msgstr "Add a board stackup table on a graphic layer"
 
+msgid "Add a wrapped text item"
+msgstr "Add a wrapped text item"
+
 msgid "Add Aligned Dimension"
 msgstr "Add Aligned Dimension"
 
@@ -25370,9 +25639,6 @@ msgstr "Close Outline"
 
 msgid "Close the in progress outline"
 msgstr "Close the in progress outline"
-
-msgid "Design Rules Checker"
-msgstr "Design Rules Checker"
 
 msgid "Show the design rules checker window"
 msgstr "Show the design rules checker window"
@@ -26369,6 +26635,9 @@ msgstr "Remove a zone/polygon corner"
 msgid "Select"
 msgstr "Select"
 
+msgid "Select/Expand Connection..."
+msgstr "Select/Expand Connection..."
+
 msgid "Align/Distribute"
 msgstr "Align/Distribute"
 
@@ -27091,6 +27360,166 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Net Class Flag"
+#~ msgstr "Net Class Flag"
+
+#~ msgid "ERC completed.<br><br>"
+#~ msgstr "ERC completed.<br><br>"
+
+#~ msgid "Violations"
+#~ msgstr "Violations"
+
+#~ msgid "Delete Markers"
+#~ msgstr "Delete Markers"
+
+#~ msgid "Net Class Flag Properties"
+#~ msgstr "Net Class Flag Properties"
+
+#~ msgid "Add Net Class Flag"
+#~ msgstr "Add Net Class Flag"
+
+#~ msgid "Add a net class flag"
+#~ msgstr "Add a net class flag"
+
+#~ msgid "Change to Net Class Flag"
+#~ msgstr "Change to Net Class Flag"
+
+#~ msgid "Change existing item to a net class flag"
+#~ msgstr "Change existing item to a net class flag"
+
+#~ msgid "Highlight on PCB"
+#~ msgstr "Highlight on PCB"
+
+#~ msgid "Highlight corresponding items in PCB editor"
+#~ msgstr "Highlight corresponding items in PCB editor"
+
+#, c-format
+#~ msgid ""
+#~ "\n"
+#~ "<b>Not loaded:</b> <i>%s</i>"
+#~ msgstr ""
+#~ "\n"
+#~ "<b>Not loaded:</b> <i>%s</i>"
+
+#, c-format
+#~ msgid ""
+#~ "\n"
+#~ "<b>Memory was exhausted reading:</b> <i>%s</i>"
+#~ msgstr ""
+#~ "\n"
+#~ "<b>Memory was exhausted reading:</b> <i>%s</i>"
+
+#~ msgid "Loading Gerber files..."
+#~ msgstr "Loading Gerber files…"
+
+#, c-format
+#~ msgid "Skipped file '%s' (unknown type).\n"
+#~ msgstr "Skipped file '%s' (unknown type).\n"
+
+#, c-format
+#~ msgid "Skipped file '%s' (gerber job file).\n"
+#~ msgstr "Skipped file '%s' (gerber job file).\n"
+
+#, c-format
+#~ msgid "<b>Unable to create temporary file '%s'.</b>\n"
+#~ msgstr "<b>Unable to create temporary file '%s'.</b>\n"
+
+#, c-format
+#~ msgid "<b>unzipped file %s read error</b>\n"
+#~ msgstr "<b>unzipped file %s read error</b>\n"
+
+#, c-format
+#~ msgid "Drawing layer %d not in use"
+#~ msgstr "Drawing layer %d not in use"
+
+#~ msgid ""
+#~ "Open Gerber plot file(s) on the current layer. Previous data will be "
+#~ "deleted"
+#~ msgstr ""
+#~ "Open Gerber plot file(s) on the current layer. Previous data will be "
+#~ "deleted"
+
+#~ msgid ""
+#~ "Open Excellon drill file(s) on the current layer. Previous data will be "
+#~ "deleted"
+#~ msgstr ""
+#~ "Open Excellon drill file(s) on the current layer. Previous data will be "
+#~ "deleted"
+
+#~ msgid "DRC Control"
+#~ msgstr "DRC Control"
+
+#~ msgid "Millimeter"
+#~ msgstr "Millimeter"
+
+#~ msgid ""
+#~ "The units that are used for a SVG user units.\n"
+#~ "Choose Millimeter when you are not sure."
+#~ msgstr ""
+#~ "The units that are used for a SVG user units.\n"
+#~ "Choose Millimeter when you are not sure."
+
+#~ msgid ""
+#~ "How big a SVG user unit is.\n"
+#~ "The number defines how many digits are exported that are below 1 mm or 1 "
+#~ "inch.\n"
+#~ "User unit is 10^-<N> mm or 10^-<N> inch.\n"
+#~ "Choose 6 if you are not sure."
+#~ msgstr ""
+#~ "How big a SVG user unit is.\n"
+#~ "The number defines how many digits are exported that are below 1 mm or 1 "
+#~ "inch.\n"
+#~ "User unit is 10^-<N> mm or 10^-<N> inch.\n"
+#~ "Choose 6 if you are not sure."
+
+#, c-format
+#~ msgid ""
+#~ "Arc keepout found on an Altium layer (%d) with no KiCad equivalent. It "
+#~ "has been moved to KiCad layer Eco1_User."
+#~ msgstr ""
+#~ "Arc keepout found on an Altium layer (%d) with no KiCad equivalent. It "
+#~ "has been moved to KiCad layer Eco1_User."
+
+#, c-format
+#~ msgid ""
+#~ "Arc found on an Altium layer (%d) with no KiCad equivalent. It has been "
+#~ "moved to KiCad layer Eco1_User."
+#~ msgstr ""
+#~ "Arc found on an Altium layer (%d) with no KiCad equivalent. It has been "
+#~ "moved to KiCad layer Eco1_User."
+
+#, c-format
+#~ msgid ""
+#~ "Track keepout found on an Altium layer (%d) with no KiCad equivalent. It "
+#~ "has been moved to KiCad layer Eco1_User."
+#~ msgstr ""
+#~ "Track keepout found on an Altium layer (%d) with no KiCad equivalent. It "
+#~ "has been moved to KiCad layer Eco1_User."
+
+#, c-format
+#~ msgid ""
+#~ "Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
+#~ "moved to KiCad layer Eco1_User."
+#~ msgstr ""
+#~ "Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
+#~ "moved to KiCad layer Eco1_User."
+
+#, c-format
+#~ msgid ""
+#~ "Text found on an Altium layer (%d) with no KiCad equivalent. It has been "
+#~ "moved to KiCad layer Eco1_User."
+#~ msgstr ""
+#~ "Text found on an Altium layer (%d) with no KiCad equivalent. It has been "
+#~ "moved to KiCad layer Eco1_User."
+
+#, c-format
+#~ msgid ""
+#~ "Fill found on an Altium layer (%d) with no KiCad equivalent. It has been "
+#~ "moved to KiCad layer Eco1_User."
+#~ msgstr ""
+#~ "Fill found on an Altium layer (%d) with no KiCad equivalent. It has been "
+#~ "moved to KiCad layer Eco1_User."
 
 #~ msgid "Random direction factor of the cast rays"
 #~ msgstr "Random direction factor of the cast rays"
