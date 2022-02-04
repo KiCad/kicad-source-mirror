@@ -275,18 +275,16 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     const auto& font = basic_gal.GetStrokeFont();
     VECTOR2D    fontSize( GetTextSize() );
     double      penWidth( thickness );
-    int         dx = KiROUND( font.ComputeStringBoundaryLimits( text, fontSize, penWidth ).x );
-    int         dy = GetInterline();
+    VECTOR2D    extents =  font.ComputeStringBoundaryLimits( text, fontSize, penWidth );
+    double      interline = KIGFX::STROKE_FONT::GetInterline( fontSize.y );
 
     // Creates bounding box (rectangle) for horizontal, left and top justified text. The
     // bounding box will be moved later according to the actual text options
-    wxSize textsize = wxSize( dx, dy );
+    wxSize textsize = wxSize( KiROUND( extents.x ), KiROUND( extents.y ) );
     wxPoint pos = GetTextPos();
 
     if( IsMultilineAllowed() && aLine > 0 && ( aLine < static_cast<int>( strings.GetCount() ) ) )
-    {
-        pos.y -= aLine * GetInterline();
-    }
+        pos.y -= KiROUND( aLine * interline );
 
     if( aInvertY )
         pos.y = -pos.y;
@@ -312,10 +310,13 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
         for( unsigned ii = 1; ii < strings.GetCount(); ii++ )
         {
             text = strings.Item( ii );
-            dx = KiROUND( font.ComputeStringBoundaryLimits( text, fontSize, penWidth ).x );
-            textsize.x = std::max( textsize.x, dx );
-            textsize.y += dy;
+            extents = font.ComputeStringBoundaryLimits( text, fontSize, penWidth );
+            textsize.x = std::max( textsize.x, KiROUND( extents.x ) );
         }
+
+        // interline spacing is only *between* lines, so total height is the height of the first
+        // line plus the interline distance (with interline spacing) for all subsequent lines
+        textsize.y += KiROUND( ( strings.GetCount() - 1 ) * interline );
     }
 
     rect.SetSize( textsize );
@@ -334,7 +335,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
         break;
 
     case GR_TEXT_HJUSTIFY_CENTER:
-        rect.SetX( rect.GetX() - (rect.GetWidth() / 2) );
+        rect.SetX( rect.GetX() - ( rect.GetWidth() / 2 ) );
         break;
 
     case GR_TEXT_HJUSTIFY_RIGHT:
@@ -349,11 +350,11 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
         break;
 
     case GR_TEXT_VJUSTIFY_CENTER:
-        rect.SetY( rect.GetY() - ( dy / 2) );
+        rect.SetY( rect.GetY() - KiROUND( interline / 2.0 ) );
         break;
 
     case GR_TEXT_VJUSTIFY_BOTTOM:
-        rect.SetY( rect.GetY() - dy );
+        rect.SetY( rect.GetY() - KiROUND( interline ) );
         break;
     }
 
@@ -368,12 +369,12 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
             break;
 
         case GR_TEXT_VJUSTIFY_CENTER:
-            yoffset = linecount * GetInterline() / 2;
+            yoffset = KiROUND( linecount * interline / 2.0 );
             rect.SetY( rect.GetY() - yoffset );
             break;
 
         case GR_TEXT_VJUSTIFY_BOTTOM:
-            yoffset = linecount * GetInterline();
+            yoffset = KiROUND( linecount * interline );
             rect.SetY( rect.GetY() - yoffset );
             break;
         }
@@ -381,7 +382,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 
     // Many fonts draw diacriticals, descenders, etc. outside the X-height of the font.  This
     // will cacth most (but probably not all) of them.
-    rect.Inflate( 0, thickness * 1.5 );
+    rect.Inflate( 0, KiROUND( thickness * 0.75 ) );
 
     rect.Normalize();       // Make h and v sizes always >= 0
 
