@@ -1254,8 +1254,9 @@ PAD*& CADSTAR_PCB_ARCHIVE_LOADER::getPadReference( FOOTPRINT*   aFootprint,
 
     if( !( index < aFootprint->Pads().size() ) )
     {
-        THROW_IO_ERROR( _( "Unable to find pad index '%d' in footprint '%s'.", (long) aCadstarPadID,
-                           aFootprint->GetReference() ) );
+        THROW_IO_ERROR( wxString::Format( _( "Unable to find pad index '%d' in footprint '%s'." ),
+                                          (long) aCadstarPadID,
+                                          aFootprint->GetReference() ) );
     }
 
     return aFootprint->Pads().at( index );

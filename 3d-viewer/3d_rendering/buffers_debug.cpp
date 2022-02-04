@@ -41,7 +41,7 @@ static void dbg_save_rgb_buffer( const wxString& aFileName, unsigned char *aRGBp
     wxImage image( aXSize, aYSize );
     image.SetData( aRGBpixelBuffer );
     image = image.Mirror( false );
-    image.SaveFile( aFileName + ".png", wxBITMAP_TYPE_PNG );
+    image.SaveFile( aFileName + wxT( ".png" ), wxBITMAP_TYPE_PNG );
     image.Destroy();
 }
 

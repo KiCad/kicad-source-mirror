@@ -87,7 +87,7 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
         m_mainToolBar( nullptr ), m_canvas( nullptr ), m_currentCamera( m_trackBallCamera ),
         m_trackBallCamera( 2 * RANGE_SCALE_3D ), m_spaceMouse( nullptr )
 {
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME %s", aTitle );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME %s" ), aTitle );
 
     m_disable_ray_tracing = false;
     m_aboutTitle = _( "KiCad 3D Viewer" );
@@ -298,7 +298,7 @@ void EDA_3D_VIEWER_FRAME::refreshRender()
 
 void EDA_3D_VIEWER_FRAME::Exit3DFrame( wxCommandEvent &event )
 {
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::Exit3DFrame" );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::Exit3DFrame" ) );
 
     Close( true );
 }
@@ -306,7 +306,7 @@ void EDA_3D_VIEWER_FRAME::Exit3DFrame( wxCommandEvent &event )
 
 void EDA_3D_VIEWER_FRAME::OnCloseWindow( wxCloseEvent &event )
 {
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::OnCloseWindow" );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::OnCloseWindow" ) );
 
     if( m_canvas )
         m_canvas->Close();
@@ -325,7 +325,8 @@ void EDA_3D_VIEWER_FRAME::Process_Special_Functions( wxCommandEvent &event )
     int     id = event.GetId();
     bool    isChecked = event.IsChecked();
 
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::Process_Special_Functions id %d isChecked %d",
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::Process_Special_Functions id %d "
+                                 "isChecked %d" ),
                 id,
                 isChecked );
 
@@ -358,7 +359,7 @@ void EDA_3D_VIEWER_FRAME::Process_Special_Functions( wxCommandEvent &event )
         return;
 
     default:
-        wxFAIL_MSG( "Invalid event in EDA_3D_VIEWER_FRAME::Process_Special_Functions()" );
+        wxFAIL_MSG( wxT( "Invalid event in EDA_3D_VIEWER_FRAME::Process_Special_Functions()" ) );
         return;
     }
 }
@@ -373,9 +374,11 @@ void EDA_3D_VIEWER_FRAME::OnRenderEngineSelection( wxCommandEvent &event )
     else
         m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::OPENGL;
 
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::OnRenderEngineSelection type %s ",
-                m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::RAYTRACING ? "raytracing"
-                                                                                   : "realtime" );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::OnRenderEngineSelection type %s " ),
+                m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::RAYTRACING ?
+                                                                          wxT( "raytracing" )
+                                                                          :
+                                                                          wxT( "realtime" ) );
 
     if( old_engine != m_boardAdapter.m_Cfg->m_Render.engine )
         RenderEngineChanged();
@@ -384,7 +387,8 @@ void EDA_3D_VIEWER_FRAME::OnRenderEngineSelection( wxCommandEvent &event )
 
 void EDA_3D_VIEWER_FRAME::OnDisableRayTracing( wxCommandEvent& aEvent )
 {
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::%s disabling ray tracing.", __WXFUNCTION__ );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::%s disabling ray tracing." ),
+                __WXFUNCTION__ );
 
     m_disable_ray_tracing = true;
     m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::OPENGL;
@@ -393,7 +397,7 @@ void EDA_3D_VIEWER_FRAME::OnDisableRayTracing( wxCommandEvent& aEvent )
 
 void EDA_3D_VIEWER_FRAME::OnActivate( wxActivateEvent &aEvent )
 {
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::OnActivate" );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::OnActivate" ) );
 
     if( aEvent.GetActive() && m_canvas )
     {
@@ -434,7 +438,7 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
     EDA_3D_VIEWER_SETTINGS* cfg = dynamic_cast<EDA_3D_VIEWER_SETTINGS*>( aCfg );
     wxASSERT( cfg );
 
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::LoadSettings" );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::LoadSettings" ) );
 
     if( cfg )
     {
@@ -446,8 +450,9 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
 #if 0
         RENDER_ENGINE engine = static_cast<RENDER_ENGINE>( cfg->m_Render.engine );
         wxLogTrace( m_logTrace, engine == RENDER_ENGINE::RAYTRACING ?
-                                "EDA_3D_VIEWER_FRAME::LoadSettings render setting Ray Trace" :
-                                "EDA_3D_VIEWER_FRAME::LoadSettings render setting OpenGL" );
+                                wxT( "EDA_3D_VIEWER_FRAME::LoadSettings render setting Ray Trace" )
+                                :
+                                wxT( "EDA_3D_VIEWER_FRAME::LoadSettings render setting OpenGL" ) );
 #else
         m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::OPENGL;
 #endif
@@ -467,11 +472,12 @@ void EDA_3D_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE *aCfg )
 
     EDA_BASE_FRAME::SaveSettings( cfg );
 
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::SaveSettings" );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::SaveSettings" ) );
 
     wxLogTrace( m_logTrace, m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::RAYTRACING ?
-                            "EDA_3D_VIEWER_FRAME::SaveSettings render setting Ray Trace" :
-                            "EDA_3D_VIEWER_FRAME::SaveSettings render setting OpenGL" );
+                               wxT( "EDA_3D_VIEWER_FRAME::SaveSettings render setting Ray Trace" )
+                               :
+                               wxT( "EDA_3D_VIEWER_FRAME::SaveSettings render setting OpenGL" ) );
 
     if( cfg )
     {
@@ -487,7 +493,7 @@ void EDA_3D_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE *aCfg )
 
 void EDA_3D_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::CommonSettingsChanged" );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::CommonSettingsChanged" ) );
 
     // Regen menu bars, etc
     EDA_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
@@ -597,7 +603,7 @@ void EDA_3D_VIEWER_FRAME::takeScreenshot( wxCommandEvent& event )
 
 void EDA_3D_VIEWER_FRAME::RenderEngineChanged()
 {
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::RenderEngineChanged()" );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::RenderEngineChanged()" ) );
 
     if( m_canvas )
         m_canvas->RenderEngineChanged();
@@ -606,7 +612,7 @@ void EDA_3D_VIEWER_FRAME::RenderEngineChanged()
 
 void EDA_3D_VIEWER_FRAME::loadCommonSettings()
 {
-    wxCHECK_RET( m_canvas, "Cannot load settings to null canvas" );
+    wxCHECK_RET( m_canvas, wxT( "Cannot load settings to null canvas" ) );
 
     COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
 

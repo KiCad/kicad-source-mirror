@@ -633,7 +633,7 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
     break;
 
     default:
-        wxFAIL_MSG( "BOARD_ADAPTER::addShapeWithClearance no implementation for "
+        wxFAIL_MSG( wxT( "BOARD_ADAPTER::addShapeWithClearance no implementation for " )
                     + aShape->SHAPE_T_asString() );
         break;
     }

@@ -192,9 +192,9 @@ const float& POST_SHADER::GetShadowFactorAt( const SFVEC2I& aPos ) const
 
 void POST_SHADER::DebugBuffersOutputAsImages() const
 {
-    DBG_SaveBuffer( "m_shadow_att_factor", m_shadow_att_factor, m_size.x, m_size.y );
-    DBG_SaveBuffer( "m_color", m_color, m_size.x, m_size.y );
-    DBG_SaveNormalsBuffer( "m_normals", m_normals, m_size.x, m_size.y );
+    DBG_SaveBuffer( wxT( "m_shadow_att_factor" ), m_shadow_att_factor, m_size.x, m_size.y );
+    DBG_SaveBuffer( wxT( "m_color" ), m_color, m_size.x, m_size.y );
+    DBG_SaveNormalsBuffer( wxT( "m_normals" ), m_normals, m_size.x, m_size.y );
 
     // Normalize depth
     float *normalizedDepth = (float*) malloc( m_size.x * m_size.y * sizeof( float ) );
@@ -210,7 +210,7 @@ void POST_SHADER::DebugBuffersOutputAsImages() const
         }
     }
 
-    DBG_SaveBuffer( "m_depthNormalized", normalizedDepth, m_size.x, m_size.y );
+    DBG_SaveBuffer( wxT( "m_depthNormalized" ), normalizedDepth, m_size.x, m_size.y );
 
     free( normalizedDepth );
 }

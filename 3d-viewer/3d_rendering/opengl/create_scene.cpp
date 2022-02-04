@@ -276,7 +276,7 @@ OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateHoles( const LIST_OBJECT2D& aListH
                 break;
 
             default:
-                wxFAIL_MSG( "RENDER_3D_OPENGL::generateHoles: Object type is not implemented" );
+                wxFAIL_MSG( wxT( "RENDER_3D_OPENGL::generateHoles: Object type not implemented" ) );
                 break;
             }
         }
@@ -358,7 +358,7 @@ OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateLayerList( const BVH_CONTAINER_2D*
             break;
 
         default:
-            wxFAIL_MSG( "RENDER_3D_OPENGL: Object type is not implemented" );
+            wxFAIL_MSG( wxT( "RENDER_3D_OPENGL: Object type is not implemented" ) );
             break;
         }
     }

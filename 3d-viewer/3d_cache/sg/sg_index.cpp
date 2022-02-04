@@ -35,8 +35,10 @@ SGINDEX::SGINDEX( SGNODE* aParent ) : SGNODE( aParent )
     {
         m_Parent = nullptr;
 
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] inappropriate parent to SGINDEX (type '%d')",
-                    __FILE__, __FUNCTION__, __LINE__, aParent->GetNodeType() );
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [BUG] inappropriate parent to SGINDEX (type "
+                                     "'%d')" ),
+                    __FILE__, __FUNCTION__, __LINE__,
+                    aParent->GetNodeType() );
     }
 }
 
@@ -182,8 +184,8 @@ bool SGINDEX::writeCoordIndex( std::ostream& aFile )
 {
     size_t n = index.size();
 
-    wxCHECK_MSG( n % 3 == 0, false,
-                 "Coordinate index is not divisible by three (violates triangle constraint)" );
+    wxCHECK_MSG( n % 3 == 0, false, wxT( "Coordinate index is not divisible by three (violates "
+                                         "triangle constraint)" ) );
 
     aFile << " coordIndex [\n  ";
 
@@ -281,7 +283,7 @@ bool SGINDEX::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 
     if( !aFile.good() )
     {
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] bad stream",
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] bad stream" ),
                     __FILE__, __FUNCTION__, __LINE__ );
 
         return false;

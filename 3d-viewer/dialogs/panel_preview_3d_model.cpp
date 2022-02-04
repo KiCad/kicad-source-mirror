@@ -166,7 +166,7 @@ void PANEL_PREVIEW_3D_MODEL::OnMenuEvent( wxMenuEvent& aEvent )
 
 void PANEL_PREVIEW_3D_MODEL::loadSettings()
 {
-    wxCHECK_RET( m_previewPane, "Cannot load settings to null canvas" );
+    wxCHECK_RET( m_previewPane, wxT( "Cannot load settings to null canvas" ) );
 
     COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
 
