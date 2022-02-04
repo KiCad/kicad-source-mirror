@@ -876,6 +876,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
                                 Mils2iu( cfg->m_Drawing.default_repeat_offset_y ) ) );
     }
 
+    m_toolMgr->RunAction( EE_ACTIONS::addItemToSel, true, newItem );
     newItem->SetFlags( IS_NEW );
     m_frame->AddToScreen( newItem, m_frame->GetScreen() );
     m_frame->SaveCopyInUndoList( m_frame->GetScreen(), newItem, UNDO_REDO::NEWITEM, false );

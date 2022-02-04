@@ -183,7 +183,10 @@ public:
 
     VECTOR2I GetReferencePoint() const
     {
-        return *m_referencePoint;
+        if( m_referencePoint )
+            return *m_referencePoint;
+        else
+            return GetBoundingBox().Centre();
     }
 
     void SetReferencePoint( const VECTOR2I& aP )
