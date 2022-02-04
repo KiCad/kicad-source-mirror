@@ -60,7 +60,7 @@ wxString CLEANUP_ITEM::GetErrorText( int aCode, bool aTranslate ) const
     case CLEANUP_LINES_TO_RECT:         msg = _HKI( "Convert lines to rectangle" );         break;
 
     default:
-        wxFAIL_MSG( "Missing cleanup item description" );
+        wxFAIL_MSG( wxT( "Missing cleanup item description" ) );
         msg = _HKI( "Unknown cleanup action" );
         break;
     }

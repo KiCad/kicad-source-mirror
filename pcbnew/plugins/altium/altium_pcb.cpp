@@ -3061,17 +3061,18 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
     // TODO: improve parsing of variables
     wxString trimmedText = aElem.text;
     trimmedText.Trim();
-    if( !aElem.isDesignator && trimmedText.CmpNoCase( ".Designator" ) == 0 )
+
+    if( !aElem.isDesignator && trimmedText.CmpNoCase( wxT( ".Designator" ) ) == 0 )
     {
-        fpText->SetText( "${REFERENCE}" );
+        fpText->SetText( wxT( "${REFERENCE}" ) );
     }
-    else if( !aElem.isComment && trimmedText.CmpNoCase( ".Comment" ) == 0 )
+    else if( !aElem.isComment && trimmedText.CmpNoCase( wxT( ".Comment" ) ) == 0 )
     {
-        fpText->SetText( "${VALUE}" );
+        fpText->SetText( wxT( "${VALUE}" ) );
     }
-    else if( trimmedText.CmpNoCase( ".Layer_Name" ) == 0 )
+    else if( trimmedText.CmpNoCase( wxT( ".Layer_Name" ) ) == 0 )
     {
-        fpText->SetText( "${LAYER}" );
+        fpText->SetText( wxT( "${LAYER}" ) );
     }
     else
     {

@@ -56,21 +56,27 @@ wxString BuildStackupReport( BOARD_STACKUP& aStackup, EDA_UNITS aUnits )
             wxString sublayer_text;
 
             if( item->GetSublayersCount() )
-                sublayer_text.Printf( "\n  sublayer \"1/%d\"", item->GetSublayersCount() );
+            {
+                sublayer_text.Printf( wxT( "\n  sublayer \"1/%d\"" ),
+                                      item->GetSublayersCount() );
+            }
 
-            txt.Printf( "layer \"%s\" type \"%s\"%s",
-                            item->FormatDielectricLayerName(),
-                            item->GetTypeName(), sublayer_text );
+            txt.Printf( wxT( "layer \"%s\" type \"%s\"%s" ),
+                        item->FormatDielectricLayerName(),
+                        item->GetTypeName(), sublayer_text );
         }
         else
-            txt.Printf( "layer \"%s\" type \"%s\"", item->GetLayerName(),
+        {
+            txt.Printf( wxT( "layer \"%s\" type \"%s\"" ),
+                        item->GetLayerName(),
                         item->GetTypeName() );
+        }
 
         report << txt;
 
         if( item->IsColorEditable() )
         {
-            txt.Printf( " Color \"%s\"", item->GetColor() );
+            txt.Printf( wxT( " Color \"%s\"" ), item->GetColor() );
             report << txt;
         }
 
@@ -78,38 +84,38 @@ wxString BuildStackupReport( BOARD_STACKUP& aStackup, EDA_UNITS aUnits )
         {
             if( idx )    // not printed for the main (first) layer.
             {
-                txt.Printf( "\n  sublayer \"%d/%d\"", idx+1, item->GetSublayersCount() );
+                txt.Printf( wxT( "\n  sublayer \"%d/%d\"" ), idx+1, item->GetSublayersCount() );
                 report << txt;
             }
 
             if( item->IsThicknessEditable() )
             {
-                txt.Printf( " Thickness %s",
+                txt.Printf( wxT( " Thickness %s" ),
                             StringFromValue( aUnits, item->GetThickness( idx ), true ) );
                 report << txt;
 
                 if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC && item->IsThicknessLocked( idx ) )
                 {
-                    txt.Printf( " Locked" );
+                    txt.Printf( wxT( " Locked" ) );
                     report << txt;
                 }
             }
 
             if( item->IsMaterialEditable() )
             {
-                txt.Printf( " Material \"%s\"", item->GetMaterial( idx ) );
+                txt.Printf( wxT( " Material \"%s\"" ), item->GetMaterial( idx ) );
                 report << txt;
             }
 
             if( item->HasEpsilonRValue() )
             {
-                txt.Printf( " EpsilonR %s", item->FormatEpsilonR( idx ) );
+                txt.Printf( wxT( " EpsilonR %s" ), item->FormatEpsilonR( idx ) );
                 report << txt;
             }
 
             if( item->HasLossTangentValue() )
             {
-                txt.Printf( " LossTg %s", item->FormatLossTangent( idx ) );
+                txt.Printf( wxT( " LossTg %s" ), item->FormatLossTangent( idx ) );
                 report << txt;
             }
         }
@@ -118,26 +124,26 @@ wxString BuildStackupReport( BOARD_STACKUP& aStackup, EDA_UNITS aUnits )
     }
 
     // Finish and other options:
-    txt.Printf( "Finish \"%s\"", aStackup.m_FinishType );
+    txt.Printf( wxT( "Finish \"%s\"" ), aStackup.m_FinishType );
     report << txt;
 
     if( aStackup.m_HasDielectricConstrains )
-        report << " Option \"Impedance Controlled\"";
+        report << wxT( " Option \"Impedance Controlled\"" );
 
     if( aStackup.m_EdgePlating )
-        report << " Option \"Plated edges\"";
+        report << wxT( " Option \"Plated edges\"" );
 
     if( aStackup.m_CastellatedPads )
-        report << " Option \"Castellated Pads\"";
+        report << wxT( " Option \"Castellated Pads\"" );
 
     if( aStackup.m_EdgeConnectorConstraints != BS_EDGE_CONNECTOR_NONE )
     {
-        wxString conn_txt = "yes";
+        wxString conn_txt = wxT( "yes" );
 
         if( aStackup.m_EdgeConnectorConstraints == BS_EDGE_CONNECTOR_BEVELLED )
-            conn_txt << ",bevelled";
+            conn_txt << wxT( ",bevelled" );
 
-        txt.Printf( " EdgeConnector \"%s\"", conn_txt );
+        txt.Printf( wxT( " EdgeConnector \"%s\"" ), conn_txt );
         report << txt;
     }
 

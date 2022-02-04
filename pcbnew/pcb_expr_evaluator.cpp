@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,7 +59,8 @@ bool exprFromTo( LIBEVAL::CONTEXT* aCtx, void* self )
 
     if( !ftCache )
     {
-        wxLogWarning( "Attempting to call fromTo() with non-existent from-to cache, aborting...");
+        wxLogWarning( wxT( "Attempting to call fromTo() with non-existent from-to cache, "
+                           "aborting..." ));
         return true;
     }
 
@@ -286,14 +287,14 @@ static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
                 else
                     itemBBox = item->GetBoundingBox();
 
-                if( arg->AsString() == "A" )
+                if( arg->AsString() == wxT( "A" ) )
                 {
                     FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( context->GetItem( 0 ) );
 
                     if( isInsideCourtyard( item, itemBBox, itemShape, context, fp, In1_Cu ) )
                         return 1.0;
                 }
-                else if( arg->AsString() == "B" )
+                else if( arg->AsString() == wxT( "B" ) )
                 {
                     FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( context->GetItem( 1 ) );
 
@@ -353,14 +354,14 @@ static void insideFrontCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
                 else
                     itemBBox = item->GetBoundingBox();
 
-                if( arg->AsString() == "A" )
+                if( arg->AsString() == wxT( "A" ) )
                 {
                     FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( context->GetItem( 0 ) );
 
                     if( isInsideCourtyard( item, itemBBox, itemShape, context, fp, F_Cu ) )
                         return 1.0;
                 }
-                else if( arg->AsString() == "B" )
+                else if( arg->AsString() == wxT( "B" ) )
                 {
                     FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( context->GetItem( 1 ) );
 
@@ -419,14 +420,14 @@ static void insideBackCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
                 else
                     itemBBox = item->GetBoundingBox();
 
-                if( arg->AsString() == "A" )
+                if( arg->AsString() == wxT( "A" ) )
                 {
                     FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( context->GetItem( 0 ) );
 
                     if( isInsideCourtyard( item, itemBBox, itemShape, context, fp, B_Cu ) )
                         return 1.0;
                 }
-                else if( arg->AsString() == "B" )
+                else if( arg->AsString() == wxT( "B" ) )
                 {
                     FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( context->GetItem( 1 ) );
 
@@ -638,12 +639,12 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                 else
                     itemBBox = item->GetBoundingBox();
 
-                if( arg->AsString() == "A" )
+                if( arg->AsString() == wxT( "A" ) )
                 {
                     ZONE* zone = dynamic_cast<ZONE*>( context->GetItem( 0 ) );
                     return isInsideArea( item, itemBBox, context, zone ) ? 1.0 : 0.0;
                 }
-                else if( arg->AsString() == "B" )
+                else if( arg->AsString() == wxT( "B" ) )
                 {
                     ZONE* zone = dynamic_cast<ZONE*>( context->GetItem( 1 ) );
                     return isInsideArea( item, itemBBox, context, zone ) ? 1.0 : 0.0;
@@ -909,19 +910,19 @@ PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 void PCB_EXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
 {
     m_funcs.clear();
-    RegisterFunc( "existsOnLayer('x')", existsOnLayer );
-    RegisterFunc( "isPlated()", isPlated );
-    RegisterFunc( "insideCourtyard('x')", insideCourtyard );
-    RegisterFunc( "insideFrontCourtyard('x')", insideFrontCourtyard );
-    RegisterFunc( "insideBackCourtyard('x')", insideBackCourtyard );
-    RegisterFunc( "insideArea('x')", insideArea );
-    RegisterFunc( "isMicroVia()", isMicroVia );
-    RegisterFunc( "isBlindBuriedVia()", isBlindBuriedVia );
-    RegisterFunc( "memberOf('x')", memberOf );
-    RegisterFunc( "fromTo('x','y')", exprFromTo );
-    RegisterFunc( "isCoupledDiffPair()", isCoupledDiffPair );
-    RegisterFunc( "inDiffPair('x')", inDiffPair );
-    RegisterFunc( "getField('x')", getField );
+    RegisterFunc( wxT( "existsOnLayer('x')" ), existsOnLayer );
+    RegisterFunc( wxT( "isPlated()" ), isPlated );
+    RegisterFunc( wxT( "insideCourtyard('x')" ), insideCourtyard );
+    RegisterFunc( wxT( "insideFrontCourtyard('x')" ), insideFrontCourtyard );
+    RegisterFunc( wxT( "insideBackCourtyard('x')" ), insideBackCourtyard );
+    RegisterFunc( wxT( "insideArea('x')" ), insideArea );
+    RegisterFunc( wxT( "isMicroVia()" ), isMicroVia );
+    RegisterFunc( wxT( "isBlindBuriedVia()" ), isBlindBuriedVia );
+    RegisterFunc( wxT( "memberOf('x')" ), memberOf );
+    RegisterFunc( wxT( "fromTo('x','y')" ), exprFromTo );
+    RegisterFunc( wxT( "isCoupledDiffPair()" ), isCoupledDiffPair );
+    RegisterFunc( wxT( "inDiffPair('x')" ), inDiffPair );
+    RegisterFunc( wxT( "getField('x')" ), getField );
 }
 
 
@@ -1085,39 +1086,39 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCB_EXPR_UCODE::CreateVarRef( const wxString& 
 
     // Check for a couple of very common cases and compile them straight to "object code".
 
-    if( aField.CmpNoCase( "NetClass" ) == 0 )
+    if( aField.CmpNoCase( wxT( "NetClass" ) ) == 0 )
     {
-        if( aVar == "A" )
+        if( aVar == wxT( "A" ) )
             return std::make_unique<PCB_EXPR_NETCLASS_REF>( 0 );
-        else if( aVar == "B" )
+        else if( aVar == wxT( "B" ) )
             return std::make_unique<PCB_EXPR_NETCLASS_REF>( 1 );
         else
             return nullptr;
     }
-    else if( aField.CmpNoCase( "NetName" ) == 0 )
+    else if( aField.CmpNoCase( wxT( "NetName" ) ) == 0 )
     {
-        if( aVar == "A" )
+        if( aVar == wxT( "A" ) )
             return std::make_unique<PCB_EXPR_NETNAME_REF>( 0 );
-        else if( aVar == "B" )
+        else if( aVar == wxT( "B" ) )
             return std::make_unique<PCB_EXPR_NETNAME_REF>( 1 );
         else
             return nullptr;
     }
-    else if( aField.CmpNoCase( "Type" ) == 0 )
+    else if( aField.CmpNoCase( wxT( "Type" ) ) == 0 )
     {
-        if( aVar == "A" )
+        if( aVar == wxT( "A" ) )
             return std::make_unique<PCB_EXPR_TYPE_REF>( 0 );
-        else if( aVar == "B" )
+        else if( aVar == wxT( "B" ) )
             return std::make_unique<PCB_EXPR_TYPE_REF>( 1 );
         else
             return nullptr;
     }
 
-    if( aVar == "A" || aVar == "AB" )
+    if( aVar == wxT( "A" ) || aVar == wxT( "AB" ) )
         vref = std::make_unique<PCB_EXPR_VAR_REF>( 0 );
-    else if( aVar == "B" )
+    else if( aVar == wxT( "B" ) )
         vref = std::make_unique<PCB_EXPR_VAR_REF>( 1 );
-    else if( aVar == "L" )
+    else if( aVar == wxT( "L" ) )
         vref = std::make_unique<PCB_EXPR_VAR_REF>( 2 );
     else
         return nullptr;
@@ -1128,7 +1129,7 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCB_EXPR_UCODE::CreateVarRef( const wxString& 
     }
 
     wxString field( aField );
-    field.Replace( "_",  " " );
+    field.Replace( wxT( "_" ),  wxT( " " ) );
 
     for( const PROPERTY_MANAGER::CLASS_INFO& cls : propMgr.GetAllClasses() )
     {
@@ -1155,7 +1156,7 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCB_EXPR_UCODE::CreateVarRef( const wxString& 
                 }
                 else
                 {
-                    wxFAIL_MSG( "PCB_EXPR_UCODE::createVarRef: Unknown property type." );
+                    wxFAIL_MSG( wxT( "PCB_EXPR_UCODE::createVarRef: Unknown property type." ) );
                 }
             }
         }
@@ -1186,7 +1187,7 @@ public:
 
     virtual const std::vector<wxString>& GetSupportedUnits() const override
     {
-        static const std::vector<wxString> pcbUnits = { "mil", "mm", "in" };
+        static const std::vector<wxString> pcbUnits = { wxT( "mil" ), wxT( "mm" ), wxT( "in" ) };
 
         return pcbUnits;
     }

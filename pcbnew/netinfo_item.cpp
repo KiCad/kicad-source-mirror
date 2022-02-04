@@ -50,7 +50,7 @@ NETINFO_ITEM::NETINFO_ITEM( BOARD* aParent, const wxString& aNetName, int aNetCo
     if( aParent )
         m_netClass = aParent->GetDesignSettings().GetNetClasses().GetDefault();
     else
-        m_netClass = std::make_shared<NETCLASS>( "<invalid>" );
+        m_netClass = std::make_shared<NETCLASS>( wxT( "<invalid>" ) );
 }
 
 
@@ -73,7 +73,7 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
 
     aList.emplace_back( _( "Net Name" ), UnescapeString( GetNetname() ) );
 
-    aList.emplace_back( _( "Net Code" ), wxString::Format( "%d", GetNetCode() ) );
+    aList.emplace_back( _( "Net Code" ), wxString::Format( wxT( "%d" ), GetNetCode() ) );
 
     // Warning: for netcode == NETINFO_LIST::ORPHANED, the parent or the board can be NULL
     BOARD * board = m_parent ? m_parent->GetBoard() : nullptr;
@@ -92,7 +92,7 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
             }
         }
 
-        aList.emplace_back( _( "Pads" ), wxString::Format( "%d", count ) );
+        aList.emplace_back( _( "Pads" ), wxString::Format( wxT( "%d" ), count ) );
 
         count = 0;
 
@@ -107,7 +107,7 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
             }
         }
 
-        aList.emplace_back( _( "Vias" ), wxString::Format( "%d", count ) );
+        aList.emplace_back( _( "Vias" ), wxString::Format( wxT( "%d" ), count ) );
 
         if( startTrack )
         {

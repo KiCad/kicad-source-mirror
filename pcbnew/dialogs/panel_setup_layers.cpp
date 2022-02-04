@@ -459,7 +459,7 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
     if( !notremovableLayers.empty() )
     {
         for( unsigned int ii = 0; ii < notremovableLayers.size(); ii++ )
-            msg << m_pcb->GetLayerName( notremovableLayers[ii] ) << "\n";
+            msg << m_pcb->GetLayerName( notremovableLayers[ii] ) << wxT( "\n" );
 
         if( !IsOK( this, wxString::Format( _( "Footprints have some items on removed layers:\n"
                                               "%s\n"

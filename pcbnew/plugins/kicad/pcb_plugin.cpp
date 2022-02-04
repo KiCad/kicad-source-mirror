@@ -276,7 +276,7 @@ void FP_CACHE::Load()
             catch( const IO_ERROR& ioe )
             {
                 if( !cacheError.IsEmpty() )
-                    cacheError += "\n\n";
+                    cacheError += wxT( "\n\n" );
 
                 cacheError += ioe.What();
             }
@@ -1058,7 +1058,7 @@ void PCB_PLUGIN::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
         break;
 
     default:
-        wxFAIL_MSG( "PCB_PLUGIN::format not implemented for " + aFPShape->SHAPE_T_asString() );
+        wxFAIL_MSG( wxT( "PCB_PLUGIN::format not implemented for " ) + aFPShape->SHAPE_T_asString() );
         return;
     };
 
@@ -1422,7 +1422,8 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
     case PAD_ATTRIB::NPTH:   type = "np_thru_hole";   break;
 
     default:
-        THROW_IO_ERROR( wxString::Format( "unknown pad attribute: %d", aPad->GetAttribute() ) );
+        THROW_IO_ERROR( wxString::Format( wxT( "unknown pad attribute: %d" ),
+                                          aPad->GetAttribute() ) );
     }
 
     const char* property = nullptr;
@@ -1438,7 +1439,8 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
     case PAD_PROP::CASTELLATED:      property = "pad_prop_castellated";   break;
 
     default:
-        THROW_IO_ERROR( wxString::Format( "unknown pad property: %d", aPad->GetProperty() ) );
+        THROW_IO_ERROR( wxString::Format( wxT( "unknown pad property: %d" ),
+                                          aPad->GetProperty() ) );
     }
 
     m_out->Print( aNestLevel, "(pad %s %s %s",

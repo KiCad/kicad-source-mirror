@@ -93,17 +93,17 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB
 
     // Calculates a good size for color swatches (icons) in this dialog
     wxClientDC dc( this );
-    m_colorSwatchesSize = dc.GetTextExtent( "XX" );
-    m_colorIconsSize = dc.GetTextExtent( "XXXX" );
+    m_colorSwatchesSize = dc.GetTextExtent( wxT( "XX" ) );
+    m_colorIconsSize = dc.GetTextExtent( wxT( "XXXX" ) );
 
     // Calculates a good size for wxTextCtrl to enter Epsilon R and Loss tan
     // ("0.0000000" + margins)
-    m_numericFieldsSize = dc.GetTextExtent( "X.XXXXXXX" );
+    m_numericFieldsSize = dc.GetTextExtent( wxT( "X.XXXXXXX" ) );
     m_numericFieldsSize.y = -1;     // Use default for the vertical size
 
     // Calculates a minimal size for wxTextCtrl to enter a dim with units
     // ("000.0000000 mils" + margins)
-    m_numericTextCtrlSize = dc.GetTextExtent( "XXX.XXXXXXX mils" );
+    m_numericTextCtrlSize = dc.GetTextExtent( wxT( "XXX.XXXXXXX mils" ) );
     m_numericTextCtrlSize.y = -1;     // Use default for the vertical size
 
     // The grid column containing the lock checkbox is kept to a minimal
@@ -532,7 +532,7 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
             auto bm_combo = dynamic_cast<wxBitmapComboBox*>( ui_row_item.m_ColorCtrl );
             int  selected = 0;  // The "not specified" item
 
-            if( item->GetColor().StartsWith( "#" ) )  // User defined color
+            if( item->GetColor().StartsWith( wxT( "#" ) ) )  // User defined color
             {
                 COLOR4D custom_color( item->GetColor() );
 
@@ -703,7 +703,8 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
 
         if( item->GetSublayersCount() > 1 )
         {
-            lname <<  "  (" << aSublayerIdx+1 << "/" << item->GetSublayersCount() << ")";
+            lname <<  wxT( "  (" ) << aSublayerIdx+1 << wxT( "/" )
+                                   << item->GetSublayersCount() << wxT( ")" );
         }
 
         wxStaticText* st_text = new wxStaticText( m_scGridWin, wxID_ANY, lname );
@@ -789,7 +790,7 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
 
     if( item->IsColorEditable() )
     {
-        if( item->GetColor().StartsWith( "#" ) )  // User defined color
+        if( item->GetColor().StartsWith( wxT( "#" ) ) )  // User defined color
         {
             ui_row_item.m_UserColor = COLOR4D( item->GetColor() ).ToColour();
         }
@@ -801,7 +802,7 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
 
         m_fgGridSizer->Add( bm_combo, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 2 );
 
-        if( item->GetColor().StartsWith( "#" ) )
+        if( item->GetColor().StartsWith( wxT( "#" ) ) )
         {
             selected = GetColorUserDefinedListIdx( item->GetType() );
             bm_combo->SetString( selected, item->GetColor() );
@@ -1046,7 +1047,7 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
                 success = false;
 
                 if( !error_msg.IsEmpty() )
-                    error_msg << "\n";
+                    error_msg << wxT( "\n" );
 
                 error_msg << _( "Incorrect value for Loss tg (Loss tg must be positive or null "
                                 "if not used)" );
@@ -1093,7 +1094,7 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
                 success = false;
 
                 if( !error_msg.IsEmpty() )
-                    error_msg << "\n";
+                    error_msg << wxT( "\n" );
 
                 error_msg << _( "A layer thickness is < 0. Fix it" );
             }
@@ -1444,11 +1445,11 @@ wxColor PANEL_SETUP_BOARD_STACKUP::getColorIconItem( int aRow )
 
     default:
     case BS_ITEM_TYPE_UNDEFINED:
-        wxFAIL_MSG( "PANEL_SETUP_BOARD_STACKUP::getColorIconItem: unrecognized item type" );
+        wxFAIL_MSG( wxT( "PANEL_SETUP_BOARD_STACKUP::getColorIconItem: unrecognized item type" ) );
         break;
     }
 
-    wxASSERT_MSG( color.IsOk(), "Invalid color in PCB stackup" );
+    wxASSERT_MSG( color.IsOk(), wxT( "Invalid color in PCB stackup" ) );
 
     return color;
 }
@@ -1496,7 +1497,7 @@ wxBitmapComboBox* PANEL_SETUP_BOARD_STACKUP::createColorBox( BOARD_STACKUP_ITEM*
 
         // Defined colors have a name, the user color uses HTML notation ( i.e. #FF000080)
         if( IsCustomColorIdx( itemType, ii )
-                && aStackupItem && aStackupItem->GetColor().StartsWith( "#" ) )
+                && aStackupItem && aStackupItem->GetColor().StartsWith( wxT( "#" ) ) )
         {
             label = aStackupItem->GetColor();
             curr_color = COLOR4D( label );

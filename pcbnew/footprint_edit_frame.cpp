@@ -521,7 +521,7 @@ BOARD_DESIGN_SETTINGS& FOOTPRINT_EDIT_FRAME::GetDesignSettings() const
 
 const PCB_PLOT_PARAMS& FOOTPRINT_EDIT_FRAME::GetPlotSettings() const
 {
-    wxFAIL_MSG( "Plotting not supported in Footprint Editor" );
+    wxFAIL_MSG( wxT( "Plotting not supported in Footprint Editor" ) );
 
     return PCB_BASE_FRAME::GetPlotSettings();
 }
@@ -529,7 +529,7 @@ const PCB_PLOT_PARAMS& FOOTPRINT_EDIT_FRAME::GetPlotSettings() const
 
 void FOOTPRINT_EDIT_FRAME::SetPlotSettings( const PCB_PLOT_PARAMS& aSettings )
 {
-    wxFAIL_MSG( "Plotting not supported in Footprint Editor" );
+    wxFAIL_MSG( wxT( "Plotting not supported in Footprint Editor" ) );
 }
 
 
@@ -721,8 +721,8 @@ void FOOTPRINT_EDIT_FRAME::doCloseWindow()
     // Do not show the layer manager during closing to avoid flicker
     // on some platforms (Windows) that generate useless redraw of items in
     // the Layer Manager
-    m_auimgr.GetPane( "LayersManager" ).Show( false );
-    m_auimgr.GetPane( "SelectionFilter" ).Show( false );
+    m_auimgr.GetPane( wxT( "LayersManager" ) ).Show( false );
+    m_auimgr.GetPane( wxT( "SelectionFilter" ) ).Show( false );
 
     Clear_Pcb( false );
 
@@ -730,7 +730,7 @@ void FOOTPRINT_EDIT_FRAME::doCloseWindow()
 
     if( mgr->IsProjectOpen() && wxFileName::IsDirWritable( Prj().GetProjectPath() ) )
     {
-        GFootprintList.WriteCacheToFile( Prj().GetProjectPath() + "fp-info-cache" );
+        GFootprintList.WriteCacheToFile( Prj().GetProjectPath() + wxT( "fp-info-cache" ) );
     }
 
     mgr->FlushAndRelease( GetSettings() );
@@ -818,7 +818,7 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
     Update3DView( true, true );
     m_treePane->GetLibTree()->RefreshLibTree();
 
-    if( !GetTitle().StartsWith( "*" ) )
+    if( !GetTitle().StartsWith( wxT( "*" ) ) )
         UpdateTitle();
 }
 
@@ -836,8 +836,9 @@ void FOOTPRINT_EDIT_FRAME::UpdateTitle()
             title = wxT( "*" );
 
         title += footprint->GetReference();
-        title += wxS( " " ) + wxString::Format( _( "[from %s]" ),
-                                                Prj().GetProjectName() + "." + PcbFileExtension );
+        title += wxS( " " ) + wxString::Format( _( "[from %s]" ), Prj().GetProjectName()
+                                                                              + wxT( "." )
+                                                                              + PcbFileExtension );
     }
     else if( fpid.IsValid() )
     {
@@ -901,7 +902,7 @@ void FOOTPRINT_EDIT_FRAME::initLibraryTree()
     WX_PROGRESS_REPORTER progressReporter( this, _( "Loading Footprint Libraries" ), 2 );
 
     if( GFootprintList.GetCount() == 0 )
-        GFootprintList.ReadCacheFromFile( Prj().GetProjectPath() + "fp-info-cache" );
+        GFootprintList.ReadCacheFromFile( Prj().GetProjectPath() + wxT( "fp-info-cache" ) );
 
     GFootprintList.ReadFootprintFiles( fpTable, nullptr, &progressReporter );
     progressReporter.Show( false );
@@ -1225,7 +1226,7 @@ void FOOTPRINT_EDIT_FRAME::OnSaveFootprintAsPng( wxCommandEvent& event )
     }
 
     wxFileName fn( id.GetLibItemName() );
-    fn.SetExt( "png" );
+    fn.SetExt( wxT( "png" ) );
 
     wxString projectPath = wxPathOnly( Prj().GetProjectFullName() );
 

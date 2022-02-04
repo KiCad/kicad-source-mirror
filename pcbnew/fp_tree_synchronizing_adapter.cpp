@@ -181,7 +181,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
 
             // mark modified part with an asterisk
             if( m_frame->GetScreen()->IsContentModified() )
-                aVariant = node->m_Name + " *";
+                aVariant = node->m_Name + wxT( " *" );
             else
                 aVariant = node->m_Name;
         }

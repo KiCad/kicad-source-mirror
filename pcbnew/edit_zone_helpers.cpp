@@ -115,7 +115,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
 
         if( zone == nullptr )
         {
-            wxASSERT_MSG( false, "Expected a zone after zone properties edit" );
+            wxASSERT_MSG( false, wxT( "Expected a zone after zone properties edit" ) );
             continue;
         }
 

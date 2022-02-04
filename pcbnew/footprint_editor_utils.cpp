@@ -246,7 +246,7 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         break;
 
     default:
-        wxFAIL_MSG( "FOOTPRINT_EDIT_FRAME::OnEditItemRequest: unsupported item type "
+        wxFAIL_MSG( wxT( "FOOTPRINT_EDIT_FRAME::OnEditItemRequest: unsupported item type " )
                     + aItem->GetClass() );
         break;
     }

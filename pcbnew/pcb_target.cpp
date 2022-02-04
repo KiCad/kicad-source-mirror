@@ -156,7 +156,7 @@ void PCB_TARGET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 
     aList.emplace_back( _( "Size" ), MessageTextFromValue( units, GetSize() ) );
     aList.emplace_back( _( "Width" ), MessageTextFromValue( units, GetWidth() ) );
-    aList.emplace_back( _( "Shape" ), GetShape() == 0 ? "+" : "X" );
+    aList.emplace_back( _( "Shape" ), GetShape() == 0 ? wxT( "+" ) : wxT( "X" ) );
 }
 
 

@@ -220,7 +220,8 @@ void DIALOG_GENDRILL::onFileFormatSelection( wxCommandEvent& event )
     else
     {
         m_staticTextPrecision->Enable( true );
-        m_staticTextPrecision->SetLabel( m_plotOpts.GetGerberPrecision() == 6 ? "4.6" : "4.5" );
+        m_staticTextPrecision->SetLabel( m_plotOpts.GetGerberPrecision() == 6 ? wxT( "4.6" )
+                                                                              : wxT( "4.5" ) );
     }
 }
 

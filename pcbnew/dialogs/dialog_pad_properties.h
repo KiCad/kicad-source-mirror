@@ -45,7 +45,7 @@
  * created by wxFormBuilder
  */
 // The wxWidgets window name. Used to retrieve the dialog by window name
-#define PAD_PROPERTIES_DLG_NAME "pad_properties_dlg_name"
+#define PAD_PROPERTIES_DLG_NAME wxT( "pad_properties_dlg_name" )
 
 class DIALOG_PAD_PROPERTIES : public DIALOG_PAD_PROPERTIES_BASE
 {

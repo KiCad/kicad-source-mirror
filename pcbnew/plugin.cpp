@@ -27,7 +27,7 @@
 #include <wx/translation.h>
 
 
-#define FMT_UNIMPLEMENTED   "Plugin \"%s\" does not implement the \"%s\" function."
+#define FMT_UNIMPLEMENTED   wxT( "Plugin \"%s\" does not implement the \"%s\" function." )
 
 /**
  * Throw an #IO_ERROR and complains of an API function not being implemented.
@@ -148,34 +148,30 @@ void PLUGIN::FootprintLibOptions( PROPERTIES* aListToAppendTo ) const
 {
     // disable all these in another couple of months, after everyone has seen them:
 #if 1
-    (*aListToAppendTo)["debug_level"] = UTF8( _(
-        "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
-        ));
+    (*aListToAppendTo)["debug_level"] = UTF8( _( "Enable <b>debug</b> logging for Footprint*() "
+                                                 "functions in this PLUGIN." ) );
 
-    (*aListToAppendTo)["read_filter_regex"] = UTF8( _(
-        "Regular expression <b>footprint name</b> filter."
-        ));
+    (*aListToAppendTo)["read_filter_regex"] = UTF8( _( "Regular expression <b>footprint name</b> "
+                                                       "filter." ) );
 
-    (*aListToAppendTo)["enable_transaction_logging"] = UTF8( _(
-        "Enable transaction logging. The mere presence of this option turns on the "
-        "logging, no need to set a Value."
-        ));
+    (*aListToAppendTo)["enable_transaction_logging"] = UTF8( _( "Enable transaction logging. The "
+                                                                "mere presence of this option "
+                                                                "turns on the logging, no need to "
+                                                                "set a Value." ) );
 
-    (*aListToAppendTo)["username"] = UTF8( _(
-        "User name for <b>login</b> to some special library server."
-        ));
+    (*aListToAppendTo)["username"] = UTF8( _( "User name for <b>login</b> to some special library "
+                                              "server." ) );
 
-    (*aListToAppendTo)["password"] = UTF8( _(
-        "Password for <b>login</b> to some special library server."
-        ));
+    (*aListToAppendTo)["password"] = UTF8( _( "Password for <b>login</b> to some special library "
+                                              "server." ) );
 #endif
 
 #if 1
     // Suitable for a C++ to python PLUGIN::Footprint*() adapter, move it to the adapter
     // if and when implemented.
-    (*aListToAppendTo)["python_footprint_plugin"] = UTF8( _(
-        "Enter the python module which implements the PLUGIN::Footprint*() functions."
-        ));
+    (*aListToAppendTo)["python_footprint_plugin"] = UTF8( _( "Enter the python module which "
+                                                             "implements the PLUGIN::Footprint*() "
+                                                             "functions." ) );
 #endif
 }
 

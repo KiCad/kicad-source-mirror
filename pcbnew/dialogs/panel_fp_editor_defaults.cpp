@@ -242,7 +242,7 @@ void PANEL_FP_EDITOR_DEFAULTS::loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg )
             SET_MILS_CELL( i, COL_TEXT_WIDTH, aCfg->m_DesignSettings.m_TextSize[ i ].x );
             SET_MILS_CELL( i, COL_TEXT_HEIGHT, aCfg->m_DesignSettings.m_TextSize[ i ].y );
             SET_MILS_CELL( i, COL_TEXT_THICKNESS, aCfg->m_DesignSettings.m_TextThickness[ i ] );
-            m_graphicsGrid->SetCellValue( i, COL_TEXT_ITALIC, aCfg->m_DesignSettings.m_TextItalic[ i ] ? "1" : "" );
+            m_graphicsGrid->SetCellValue( i, COL_TEXT_ITALIC, aCfg->m_DesignSettings.m_TextItalic[ i ] ? wxT( "1" ) : wxT( "" ) );
 
             auto attr = new wxGridCellAttr;
             attr->SetRenderer( new wxGridCellBoolRenderer() );

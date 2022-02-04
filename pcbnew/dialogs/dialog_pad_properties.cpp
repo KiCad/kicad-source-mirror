@@ -671,7 +671,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 // A small helper function, to display coordinates:
 static wxString formatCoord( EDA_UNITS aUnits, VECTOR2I aCoord )
 {
-    return wxString::Format( "(X:%s Y:%s)",
+    return wxString::Format( wxT( "(X:%s Y:%s)" ),
                              MessageTextFromValue( aUnits, aCoord.x ),
                              MessageTextFromValue( aUnits, aCoord.y ) );
 }
@@ -731,13 +731,13 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
             break;
 
         case SHAPE_T::POLY:
-            bs_info[0] = "Polygon";
+            bs_info[0] = _( "Polygon" );
             bs_info[1] = wxString::Format( _( "corners count %d" ),
                                            primitive->GetPolyShape().Outline( 0 ).PointCount() );
             break;
 
         default:
-            bs_info[0] = "Unknown primitive";
+            bs_info[0] = _( "Unknown primitive" );
             break;
         }
 
@@ -1877,7 +1877,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
         break;
 
     default:
-        wxFAIL_MSG( "DIALOG_PAD_PROPERTIES::transferDataToPad: unknown pad type" );
+        wxFAIL_MSG( wxT( "DIALOG_PAD_PROPERTIES::transferDataToPad: unknown pad type" ) );
         break;
     }
 

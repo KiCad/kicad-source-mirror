@@ -35,15 +35,15 @@
 #include <pcb_edit_frame.h>
 
 // Allowable parameter types for PCB wizards
-const wxString WIZARD_PARAM_UNITS_MM        = "mm";          // Millimetres
-const wxString WIZARD_PARAM_UNITS_MILS      = "mils";        // Mils / thou
-const wxString WIZARD_PARAM_UNITS_FLOAT     = "float";       // Floating point (dimensionless)
-const wxString WIZARD_PARAM_UNITS_INTEGER   = "integer";     // Integer (dimensionless)
-const wxString WIZARD_PARAM_UNITS_BOOL      = "bool";        // Boolean option
-const wxString WIZARD_PARAM_UNITS_RADIANS   = "radians";     // Angle (radians)
-const wxString WIZARD_PARAM_UNITS_DEGREES   = "degrees";     // Angle (degrees)
-const wxString WIZARD_PARAM_UNITS_PERCENT   = "%";           // Percent (0% -> 100%)
-const wxString WIZARD_PARAM_UNITS_STRING    = "string";      // String
+const wxString WIZARD_PARAM_UNITS_MM        = wxT( "mm" );          // Millimetres
+const wxString WIZARD_PARAM_UNITS_MILS      = wxT( "mils" );        // Mils / thou
+const wxString WIZARD_PARAM_UNITS_FLOAT     = wxT( "float" );       // Floating point (dimensionless)
+const wxString WIZARD_PARAM_UNITS_INTEGER   = wxT( "integer" );     // Integer (dimensionless)
+const wxString WIZARD_PARAM_UNITS_BOOL      = wxT( "bool" );        // Boolean option
+const wxString WIZARD_PARAM_UNITS_RADIANS   = wxT( "radians" );     // Angle (radians)
+const wxString WIZARD_PARAM_UNITS_DEGREES   = wxT( "degrees" );     // Angle (degrees)
+const wxString WIZARD_PARAM_UNITS_PERCENT   = wxT( "%" );           // Percent (0% -> 100%)
+const wxString WIZARD_PARAM_UNITS_STRING    = wxT( "string" );      // String
 
 /**
  * The parent class from where any footprint wizard class must derive.

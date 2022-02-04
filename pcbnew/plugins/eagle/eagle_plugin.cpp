@@ -2470,7 +2470,7 @@ void EAGLE_PLUGIN::loadClasses( wxXmlNode* aClasses )
         ECLASS      eClass( classNode );
         NETCLASSPTR netclass;
 
-        if( eClass.name.CmpNoCase( "default" ) == 0 )
+        if( eClass.name.CmpNoCase( wxT( "default" ) ) == 0 )
         {
             netclass = bds.GetNetClasses().GetDefault();
         }

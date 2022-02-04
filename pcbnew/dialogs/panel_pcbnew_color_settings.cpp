@@ -482,7 +482,7 @@ void PANEL_PCBNEW_COLOR_SETTINGS::createPreviewItems()
     m_page->SetHeightMils( 5000 );
     m_page->SetWidthMils( 6000 );
 
-    STRING_LINE_READER reader( g_previewBoard, "preview" );
+    STRING_LINE_READER reader( g_previewBoard, wxT( "preview" ) );
     PCB_PLUGIN         pi;
 
     try

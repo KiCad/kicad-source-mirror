@@ -324,7 +324,7 @@ void S3D_PLUGIN_MANAGER::checkPluginPath( const wxString& aPath,
     if( aPath.StartsWith( wxT( "${" ) ) || aPath.StartsWith( wxT( "$(" ) ) )
         path.Assign( ExpandEnvVarSubstitutions( aPath, nullptr ), wxEmptyString );
     else
-        path.Assign( aPath, "" );
+        path.Assign( aPath, wxT( "" ) );
 
     path.Normalize();
 

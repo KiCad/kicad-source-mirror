@@ -783,7 +783,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
                 m_3d_render_opengl->SetCurrentRollOverItem( nullptr );
                 Request_refresh();
 
-                reporter.Report( "" );
+                reporter.Report( wxEmptyString );
             }
 
             m_currentRollOverItem = nullptr;

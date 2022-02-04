@@ -347,19 +347,19 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     wxString strK2S = Pgm().GetExecutablePath();
 
 #ifdef __WXMAC__
-    if( strK2S.Find( "pcbnew.app" ) != wxNOT_FOUND )
+    if( strK2S.Find( wxT( "pcbnew.app" ) ) != wxNOT_FOUND )
     {
         // On macOS, we have standalone applications inside the main bundle, so we handle that here:
-        strK2S += "../../";
+        strK2S += wxT( "../../" );
     }
 
-    strK2S += "Contents/MacOS/";
+    strK2S += wxT( "Contents/MacOS/" );
 #endif
 
-    wxFileName appK2S( strK2S, "kicad2step" );
+    wxFileName appK2S( strK2S, wxT( "kicad2step" ) );
 
     #ifdef _WIN32
-    appK2S.SetExt( "exe" );
+    appK2S.SetExt( wxT( "exe" ) );
     #endif
 
     // Ensure the window is on top
@@ -967,7 +967,7 @@ void PCB_EDIT_FRAME::doCloseWindow()
     if( !fn.IsOk() || !fn.IsDirWritable() )
         fn.SetPath( wxFileName::GetTempDir() );
 
-    wxLogTrace( traceAutoSave, "Deleting auto save file <" + fn.GetFullPath() + ">" );
+    wxLogTrace( traceAutoSave, wxT( "Deleting auto save file <" ) + fn.GetFullPath() + wxT( ">" ) );
 
     // Remove the auto save file on a normal close of Pcbnew.
     if( fn.FileExists() && !wxRemoveFile( fn.GetFullPath() ) )
@@ -1341,7 +1341,7 @@ void PCB_EDIT_FRAME::OnModify( )
 
     Update3DView( true, Settings().m_Display.m_Live3DRefresh );
 
-    if( !GetTitle().StartsWith( "*" ) )
+    if( !GetTitle().StartsWith( wxT( "*" ) ) )
         UpdateTitle();
 
     m_ZoneFillsDirty = true;
@@ -1489,9 +1489,11 @@ void PCB_EDIT_FRAME::ToPlotter( int aID )
     case ID_GEN_PLOT_PS:
         plotSettings.SetFormat( PLOT_FORMAT::POST );
         break;
-    case ID_GEN_PLOT:        /* keep the previous setup */                   break;
+    case ID_GEN_PLOT:
+        /* keep the previous setup */
+        break;
     default:
-        wxFAIL_MSG( "ToPlotter(): unexpected plot type" ); break;
+        wxFAIL_MSG( wxT( "ToPlotter(): unexpected plot type" ) ); break;
         break;
     }
 
@@ -1579,7 +1581,7 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist,
         Raise();
 
         // Do not translate extra_info strings.  These are for developers
-        wxString extra_info = e.Problem() + " : " + e.What() + " at " + e.Where();
+        wxString extra_info = e.Problem() + wxT( " : " ) + e.What() + wxT( " at " ) + e.Where();
 
         DisplayErrorMessage( this, _( "Received an error while reading netlist.  Please "
                                       "report this issue to the KiCad team using the menu "

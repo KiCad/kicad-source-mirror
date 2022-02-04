@@ -76,7 +76,7 @@ PANEL_SETUP_TEXT_AND_GRAPHICS::PANEL_SETUP_TEXT_AND_GRAPHICS( PAGED_DIALOG* aPar
     // Gives a suitable size to m_grid columns
     // The default wxWidget col size is not very good
     // Calculate a min best size to handle longest usual numeric values:
-    int min_best_width = m_grid->GetTextExtent( "555,555555 mils" ).x;
+    int min_best_width = m_grid->GetTextExtent( wxT( "555,555555 mils" ) ).x;
 
     for( int i = 0; i < m_grid->GetNumberCols(); ++i )
     {
@@ -148,8 +148,8 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataToWindow()
             SET_MILS_CELL( i, COL_TEXT_WIDTH, m_BrdSettings->m_TextSize[ i ].x );
             SET_MILS_CELL( i, COL_TEXT_HEIGHT, m_BrdSettings->m_TextSize[ i ].y );
             SET_MILS_CELL( i, COL_TEXT_THICKNESS, m_BrdSettings->m_TextThickness[ i ] );
-            m_grid->SetCellValue( i, COL_TEXT_ITALIC, m_BrdSettings->m_TextItalic[ i ] ? "1" : "" );
-            m_grid->SetCellValue( i, COL_TEXT_UPRIGHT, m_BrdSettings->m_TextUpright[ i ] ? "1" : "" );
+            m_grid->SetCellValue( i, COL_TEXT_ITALIC, m_BrdSettings->m_TextItalic[ i ] ? wxT( "1" ) : wxT( "" ) );
+            m_grid->SetCellValue( i, COL_TEXT_UPRIGHT, m_BrdSettings->m_TextUpright[ i ] ? wxT( "1" ) : wxT( "" ) );
 
             auto attr = new wxGridCellAttr;
             attr->SetRenderer( new wxGridCellBoolRenderer() );
@@ -173,7 +173,8 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataToWindow()
 
     Layout();
 
-    wxASSERT_MSG( m_BrdSettings->m_DimensionPrecision <= 4, "Unhandled dimension precision!" );
+    wxASSERT_MSG( m_BrdSettings->m_DimensionPrecision <= 4,
+                  wxT( "Unhandled dimension precision!" ) );
 
     int mode = static_cast<int>( m_BrdSettings->m_DimensionUnitsMode );
     m_dimensionUnits->SetSelection( mode );

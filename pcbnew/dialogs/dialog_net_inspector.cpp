@@ -1007,7 +1007,7 @@ bool DIALOG_NET_INSPECTOR::netFilterMatches( NETINFO_ITEM* aNet ) const
 
     // Show unconnected nets only if specifically asked for by filter
     if( m_netFilter.empty() )
-        return !aNet->GetNetname().StartsWith( "unconnected-(" );
+        return !aNet->GetNetname().StartsWith( wxT( "unconnected-(" ) );
 
     wxString net_str = UnescapeString( aNet->GetNetname() ).Upper();
 
@@ -1087,7 +1087,7 @@ void DIALOG_NET_INSPECTOR::updateDisplayedRowValues( const OPT<LIST_ITEM_ITER>& 
 
 wxString DIALOG_NET_INSPECTOR::formatNetCode( const NETINFO_ITEM* aNet ) const
 {
-    return wxString::Format( "%.3d", aNet->GetNetCode() );
+    return wxString::Format( wxT( "%.3d" ), aNet->GetNetCode() );
 }
 
 
@@ -1099,7 +1099,7 @@ wxString DIALOG_NET_INSPECTOR::formatNetName( const NETINFO_ITEM* aNet ) const
 
 wxString DIALOG_NET_INSPECTOR::formatCount( unsigned int aValue ) const
 {
-    return wxString::Format( "%u", aValue );
+    return wxString::Format( wxT( "%u" ), aValue );
 }
 
 
@@ -1584,7 +1584,7 @@ void DIALOG_NET_INSPECTOR::buildNetsList()
 
 void DIALOG_NET_INSPECTOR::onFilterChange( wxCommandEvent& aEvent )
 {
-    wxStringTokenizer filters( m_textCtrlFilter->GetValue().Upper(), "," );
+    wxStringTokenizer filters( m_textCtrlFilter->GetValue().Upper(), wxT( "," ) );
     m_netFilter.clear();
 
     while( filters.HasMoreTokens() )
@@ -1600,7 +1600,7 @@ void DIALOG_NET_INSPECTOR::onFilterChange( wxCommandEvent& aEvent )
         }
     }
 
-    wxStringTokenizer group_filters( m_groupByText->GetValue(), "," );
+    wxStringTokenizer group_filters( m_groupByText->GetValue(), wxT( "," ) );
     m_groupFilter.clear();
 
     while( group_filters.HasMoreTokens() )
@@ -1718,15 +1718,15 @@ void DIALOG_NET_INSPECTOR::adjustListColumns()
     int w0, w1, w2, w3, w4, w5, w6, w7;
 
     dc.GetTextExtent( COLUMN_NET.display_name, &w0, &h );
-    dc.GetTextExtent( "MMMMMMMMMMMMM", &minw_col1, &h );
+    dc.GetTextExtent( wxT( "MMMMMMMMMMMMM" ), &minw_col1, &h );
     dc.GetTextExtent( COLUMN_PAD_COUNT.display_name, &w2, &h );
     dc.GetTextExtent( COLUMN_VIA_COUNT.display_name, &w3, &h );
     dc.GetTextExtent( COLUMN_VIA_LENGTH.display_name, &w4, &h );
     dc.GetTextExtent( COLUMN_BOARD_LENGTH.display_name, &w5, &h );
     dc.GetTextExtent( COLUMN_CHIP_LENGTH.display_name, &w6, &h );
     dc.GetTextExtent( COLUMN_TOTAL_LENGTH.display_name, &w7, &h );
-    dc.GetTextExtent( "00000,000 mm", &minw, &h );
-    dc.GetTextExtent( "00000", &minw_col0, &h );
+    dc.GetTextExtent( wxT( "00000,000 mm" ), &minw, &h );
+    dc.GetTextExtent( wxT( "00000" ), &minw_col0, &h );
 
     // Considering left and right margins.
     // For wxRenderGeneric it is 5px.
@@ -1842,7 +1842,7 @@ void DIALOG_NET_INSPECTOR::onRenameNet( wxCommandEvent& aEvent )
         wxString      netPath;
         wxString      shortNetName;
 
-        if( fullNetName.Contains( "/" ) )
+        if( fullNetName.Contains( wxT( "/" ) ) )
         {
             netPath = fullNetName.BeforeLast( '/' ) + '/';
             shortNetName = fullNetName.AfterLast( '/' );
@@ -2001,7 +2001,7 @@ void DIALOG_NET_INSPECTOR::onReport( wxCommandEvent& aEvent )
 
     // Print Header:
     for( auto&& col : m_data_model->columnDesc() )
-        txt += '"' + col.csv_name + "\";";
+        txt += '"' + col.csv_name + wxT( "\";" );
 
     f.AddLine( txt );
 
@@ -2020,7 +2020,7 @@ void DIALOG_NET_INSPECTOR::onReport( wxCommandEvent& aEvent )
         for( auto&& col : m_data_model->columnDesc() )
         {
             if( col.csv_flags & COLUMN_DESC::CSV_QUOTE )
-                txt += '"' + m_data_model->valueAt( col.num, row ).GetString() + "\";";
+                txt += '"' + m_data_model->valueAt( col.num, row ).GetString() + wxT( "\";" );
             else
                 txt += m_data_model->valueAt( col.num, row ).GetString() + ';';
         }

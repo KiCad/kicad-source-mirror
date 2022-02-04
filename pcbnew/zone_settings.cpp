@@ -230,7 +230,7 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
         wxVector<wxVariant> row;
         row.push_back( wxVariant( m_Layers.test( layerID ) ) );
         row.push_back( wxVariant( wxDataViewIconText( layerName, icon ) ) );
-        row.push_back( wxVariant( wxString::Format( "%i", layerID ) ) );
+        row.push_back( wxVariant( wxString::Format( wxT( "%i" ), layerID ) ) );
         aList->AppendItem( row );
 
         if( m_Layers.test( layerID ) )

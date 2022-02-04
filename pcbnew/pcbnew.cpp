@@ -372,10 +372,10 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
             // if we are here, a incorrect global footprint library table was found.
             // Incorrect global symbol library table is not a fatal error:
             // the user just has to edit the (partially) loaded table.
-            wxString msg = _(
-                "An error occurred attempting to load the global footprint library table.\n"
-                "Please edit this global footprint library table in Preferences menu."
-                );
+            wxString msg = _( "An error occurred attempting to load the global footprint library "
+                              "table.\n"
+                              "Please edit this global footprint library table in Preferences "
+                              "menu." );
 
             DisplayErrorMessage( nullptr, msg, ioe.What() );
         }
@@ -403,8 +403,8 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
     if( destPath.StartsWith( aProjectBasePath + pathSep ) )
         destPath.Replace( aProjectBasePath, aNewProjectBasePath, false );
 
-    wxString srcProjectFootprintLib = pathSep + aSrcProjectName + ".pretty" + pathSep;
-    wxString newProjectFootprintLib = pathSep + aNewProjectName + ".pretty" + pathSep;
+    wxString srcProjectFootprintLib = pathSep + aSrcProjectName + wxT( ".pretty" ) + pathSep;
+    wxString newProjectFootprintLib = pathSep + aNewProjectName + wxT( ".pretty" ) + pathSep;
 
     destPath.Replace( srcProjectFootprintLib, newProjectFootprintLib, true );
 
@@ -433,7 +433,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
     {
         // TODO
     }
-    else if( ext == "rpt" )
+    else if( ext == wxT( "rpt" ) )
     {
         // DRC must be the "gold standard".  Since we can't guarantee that there aren't
         // any non-deterministic cases in the save-as algorithm, we don't want to certify
@@ -441,7 +441,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
         // name.
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
-    else if( destFile.GetName() == "fp-lib-table" )
+    else if( destFile.GetName() == wxT( "fp-lib-table" ) )
     {
         try
         {
@@ -453,7 +453,8 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
                 LIB_TABLE_ROW& row = fpLibTable.At( i );
                 wxString       uri = row.GetFullURI();
 
-                uri.Replace( "/" + aSrcProjectName + ".pretty", "/" + aNewProjectName + ".pretty" );
+                uri.Replace( wxT( "/" ) + aSrcProjectName + wxT( ".pretty" ),
+                             wxT( "/" ) + aNewProjectName + wxT( ".pretty" ) );
 
                 row.SetFullURI( uri );
             }
@@ -465,7 +466,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
             wxString msg;
 
             if( !aErrors.empty() )
-                aErrors += "\n";
+                aErrors += wxT( "\n" );
 
             msg.Printf( _( "Cannot copy file '%s'." ), destFile.GetFullPath() );
             aErrors += msg;
@@ -473,7 +474,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
     }
     else
     {
-        wxFAIL_MSG( "Unexpected filetype for Pcbnew::SaveFileAs()" );
+        wxFAIL_MSG( wxT( "Unexpected filetype for Pcbnew::SaveFileAs()" ) );
     }
 }
 

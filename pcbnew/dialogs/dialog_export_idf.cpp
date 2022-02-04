@@ -178,7 +178,7 @@ void PCB_EDIT_FRAME::OnExportIDF3( wxCommandEvent& event )
     if( path.IsEmpty() )
     {
         wxFileName brdFile = GetBoard()->GetFileName();
-        brdFile.SetExt( "emn" );
+        brdFile.SetExt( wxT( "emn" ) );
         path = brdFile.GetFullPath();
     }
 

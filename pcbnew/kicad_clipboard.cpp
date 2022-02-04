@@ -205,9 +205,9 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                 FP_TEXT*   fp_text = static_cast<FP_TEXT*>( item );
                 PCB_TEXT*  pcb_text = new PCB_TEXT( m_board );
 
-                if( fp_text->GetText() == "${VALUE}" )
+                if( fp_text->GetText() == wxT( "${VALUE}" ) )
                     pcb_text->SetText( footprint->GetValue() );
-                else if( fp_text->GetText() == "${REFERENCE}" )
+                else if( fp_text->GetText() == wxT( "${REFERENCE}" ) )
                     pcb_text->SetText( footprint->GetReference() );
                 else
                     pcb_text->CopyText( *fp_text );

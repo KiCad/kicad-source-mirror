@@ -140,7 +140,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->Add( _( "Footprint Association (.cmp) File..." ),
                         _( "Export footprint association file (*.cmp) for schematic back annotation" ),
                         ID_PCB_GEN_CMP_FILE, BITMAPS::export_cmp );
-    submenuExport->Add( _( "Hyperlynx..." ), "",
+    submenuExport->Add( _( "Hyperlynx..." ), wxEmptyString,
                         ID_GEN_EXPORT_FILE_HYPERLYNX, BITMAPS::export_step );
 
     if( ADVANCED_CFG::GetCfg().m_ShowPcbnewExportNetlist && m_exportNetlistAction )
@@ -455,7 +455,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     // We can't use ACTIONS::showPreferences yet because wxWidgets moves this on
     // Mac, and it needs the wxID_PREFERENCES id to find it.
-    prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
+    prefsMenu->Add( _( "Preferences..." ) + wxT( "\tCtrl+," ),
                     _( "Show preferences for all open tools" ),
                     wxID_PREFERENCES,
                     BITMAPS::preference );

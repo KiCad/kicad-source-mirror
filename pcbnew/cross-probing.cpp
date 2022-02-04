@@ -115,7 +115,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         if( !crossProbingSettings.auto_highlight )
             return;
 
-        wxStringTokenizer netsTok = wxStringTokenizer( FROM_UTF8( text ), "," );
+        wxStringTokenizer netsTok = wxStringTokenizer( FROM_UTF8( text ), wxT( "," ) );
         bool first = true;
 
         while( netsTok.HasMoreTokens() )

@@ -142,7 +142,7 @@ bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, int* aCtl, wxString* aFileNa
         }
 
         fileFilters = _( "All KiCad Board Files" ) + AddFileExtListToFilter( fileExtensions )
-                        + "|" + fileFilters;
+                        + wxT( "|" ) + fileFilters;
     }
     else
     {
@@ -157,11 +157,10 @@ bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, int* aCtl, wxString* aFileNa
 
             PLUGIN::RELEASER plugin( IO_MGR::PluginFind( loaders[ii].pluginType ) );
             wxCHECK( plugin, false );
-            allWildcards += "*." + formatWildcardExt( plugin->GetFileExtension() ) + ";";
+            allWildcards += wxT( "*." ) + formatWildcardExt( plugin->GetFileExtension() ) + wxT( ";" );
         }
 
-        fileFilters = _( "All supported formats|" ) + allWildcards
-                        + "|" + fileFilters;
+        fileFilters = _( "All supported formats|" ) + allWildcards + wxT( "|" ) + fileFilters;
     }
 
 
@@ -751,7 +750,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         SetBoard( loadedBoard, false, &progressReporter );
 
         if( GFootprintList.GetCount() == 0 )
-            GFootprintList.ReadCacheFromFile( Prj().GetProjectPath() + "fp-info-cache" );
+            GFootprintList.ReadCacheFromFile( Prj().GetProjectPath() + wxT( "fp-info-cache" ) );
 
         if( loadedBoard->m_LegacyDesignSettingsLoaded )
         {
@@ -798,7 +797,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         if( ( pluginType == IO_MGR::LEGACY )
          || ( pluginType == IO_MGR::KICAD_SEXP
                 && loadedBoard->GetFileFormatVersionAtLoad() < SEXPR_BOARD_FILE_VERSION
-                && loadedBoard->GetGenerator().Lower() != "gerbview" ) )
+                && loadedBoard->GetGenerator().Lower() != wxT( "gerbview" ) ) )
         {
             m_infoBar->RemoveAllButtons();
             m_infoBar->AddCloseButton();
@@ -853,11 +852,13 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 const wxString& project_env = PROJECT_VAR_NAME;
                 wxString        rel_path, env_path;
 
-                wxASSERT_MSG( wxGetEnv( project_env, &env_path ), "There is no project variable?" );
+                wxASSERT_MSG( wxGetEnv( project_env, &env_path ),
+                              wxT( "There is no project variable?" ) );
 
                 wxString result( newLibPath );
-                rel_path = result.Replace( env_path, wxString( "$(" + project_env + ")" ) ) ? result
-                                                                                            : "";
+                rel_path = result.Replace( env_path, wxT( "$(" ) + project_env + wxT( ")" ) )
+                                                                                  ? result
+                                                                                  : wxEmptyString;
 
                 FP_LIB_TABLE_ROW* row = new FP_LIB_TABLE_ROW( libNickName, rel_path,
                                                               wxT( "KiCad" ), wxEmptyString );
@@ -1198,7 +1199,8 @@ bool PCB_EDIT_FRAME::doAutoSave()
             return false;
     }
 
-    wxLogTrace( traceAutoSave, "Creating auto save file <" + autoSaveFileName.GetFullPath() + ">" );
+    wxLogTrace( traceAutoSave,
+                wxT( "Creating auto save file <" ) + autoSaveFileName.GetFullPath() + wxT( ">" ) );
 
     if( SavePcbFile( autoSaveFileName.GetFullPath(), false, false ) )
     {

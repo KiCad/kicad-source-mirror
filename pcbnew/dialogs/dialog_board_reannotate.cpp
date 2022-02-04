@@ -492,7 +492,7 @@ static bool ModuleCompare( const RefDesInfo& aA, const RefDesInfo& aB )
 
 wxString DIALOG_BOARD_REANNOTATE::CoordTowxString( int aX, int aY )
 {
-    return wxString::Format( "%s, %s",
+    return wxString::Format( wxT( "%s, %s" ),
                              MessageTextFromValue( m_units, aX ),
                              MessageTextFromValue( m_units, aY ) );
 }
@@ -522,14 +522,14 @@ void DIALOG_BOARD_REANNOTATE::LogChangePlan()
                     (int) m_refDesTypes.size() );
 
     for( RefDesTypeStr Type : m_refDesTypes ) // Show all the types of refdes
-        message += Type.RefDesType + ( 0 == ( i++ % 16 ) ? "\n" : " " );
+        message += Type.RefDesType + ( 0 == ( i++ % 16 ) ? wxT( "\n" ) : wxS( " " ) );
 
     if( !m_excludeArray.empty() )
     {
         wxString excludes;
 
         for( wxString& exclude : m_excludeArray ) // Show the refdes we are excluding
-            excludes += exclude + " ";
+            excludes += exclude + wxS( " " );
 
         message += wxString::Format( _( "\nExcluding: %s from reannotation\n\n" ), excludes );
     }
@@ -538,10 +538,12 @@ void DIALOG_BOARD_REANNOTATE::LogChangePlan()
 
     for( const RefDesChange& change : m_changeArray )
     {
-        message += wxString::Format(
-                "%s -> %s  %s %s\n", change.OldRefDesString, change.NewRefDes,
-                ActionMessage[change.Action],
-                UpdateRefDes != change.Action ? _( " will be ignored" ) : wxT( "" ) );
+        message += wxString::Format( wxT( "%s -> %s  %s %s\n" ),
+                                     change.OldRefDesString,
+                                     change.NewRefDes,
+                                     ActionMessage[change.Action],
+                                     UpdateRefDes != change.Action ? _( " will be ignored" )
+                                                                   : wxT( "" ) );
     }
 
     ShowReport( message, RPT_SEVERITY_INFO );
@@ -591,17 +593,17 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
 
     if( !BuildFootprintList( BadRefDes ) )
     {
-        ShowReport( "Selected options resulted in errors! Change them and try again.",
+        ShowReport( _( "Selected options resulted in errors! Change them and try again." ),
                     RPT_SEVERITY_ERROR );
         return false;
     }
 
     if( !BadRefDes.empty() )
     {
-        message.Printf(
-                _( "\nPCB has %d empty or invalid reference designations."
-                   "\nRecommend running DRC with 'Test for parity between PCB and schematic' checked.\n" ),
-                (int) BadRefDes.size() );
+        message.Printf( _( "\nPCB has %d empty or invalid reference designations."
+                           "\nRecommend running DRC with 'Test for parity between PCB and "
+                           "schematic' checked.\n" ),
+                        (int) BadRefDes.size() );
 
         for( const RefDesInfo& mod : BadRefDes )
         {
@@ -612,7 +614,7 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
                                            CoordTowxString( mod.x, mod.y ) );
         }
 
-        ShowReport( message + badrefdes + "\n", RPT_SEVERITY_WARNING );
+        ShowReport( message + badrefdes + wxT( "\n" ), RPT_SEVERITY_WARNING );
         message += _( "Reannotate anyway?" );
 
         if( !IsOK( m_frame, message ) )
@@ -633,7 +635,7 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
         m_frame->GetCanvas()->GetView()->Update( footprint ); // Touch the footprint
     }
 
-    commit.Push( "Geographic reannotation" );
+    commit.Push( wxT( "Geographic reannotation" ) );
     return true;
 }
 
@@ -707,7 +709,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<RefDesInfo>& aBadR
         }
         else
         {
-            firstnum = fpData.RefDesString.find_first_of( "0123456789" );
+            firstnum = fpData.RefDesString.find_first_of( wxT( "0123456789" ) );
 
             if( std::string::npos == firstnum )
                 fpData.Action = InvalidRefDes; // do not change ref des such as 12 or +1, or L
@@ -797,7 +799,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<RefDesInfo>& aBadR
             {
                 if( m_changeArray[i].NewRefDes == m_changeArray[j].NewRefDes )
                 {
-                    ShowReport( "Duplicate instances of " + m_changeArray[j].NewRefDes,
+                    ShowReport( _( "Duplicate instances of " ) + m_changeArray[j].NewRefDes,
                                 RPT_SEVERITY_ERROR );
 
                     if( errorcount++ > MAXERROR )
