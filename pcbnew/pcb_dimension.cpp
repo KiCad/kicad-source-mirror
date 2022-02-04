@@ -77,14 +77,14 @@ void PCB_DIMENSION_BASE::updateText()
         break;
 
     case DIM_UNITS_FORMAT::BARE_SUFFIX: // normal
-        text += " ";
+        text += wxS( " " );
         text += GetAbbreviatedUnitsLabel( m_units );
         break;
 
     case DIM_UNITS_FORMAT::PAREN_SUFFIX: // parenthetical
-        text += " (";
+        text += wxT( " (" );
         text += GetAbbreviatedUnitsLabel( m_units );
-        text += ")";
+        text += wxT( ")" );
         break;
     }
 
@@ -109,7 +109,7 @@ wxString PCB_DIMENSION_BASE::GetValueText() const
 
     int      val = GetMeasuredValue();
     wxString text;
-    wxString format = wxT( "%." ) + wxString::Format( "%i", m_precision ) + wxT( "f" );
+    wxString format = wxT( "%." ) + wxString::Format( wxT( "%i" ), m_precision ) + wxT( "f" );
 
     text.Printf( format, To_User_Unit( m_units, val ) );
 
@@ -310,7 +310,7 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     {
         aList.emplace_back( _( "Value" ), GetValueText() );
 
-        msg = "%" + wxString::Format( "1.%df", GetPrecision() );
+        msg = wxT( "%" ) + wxString::Format( wxT( "1.%df" ), GetPrecision() );
         aList.emplace_back( _( "Precision" ), wxString::Format( msg, 0.0 ) );
     }
 
@@ -327,7 +327,7 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     if( Type() == PCB_DIM_CENTER_T )
     {
         wxPoint startCoord = originTransforms.ToDisplayAbs( GetStart() );
-        wxString start = wxString::Format( "@(%s, %s)",
+        wxString start = wxString::Format( wxT( "@(%s, %s)" ),
                                            MessageTextFromValue( units, startCoord.x ),
                                            MessageTextFromValue( units, startCoord.y ) );
 
@@ -336,11 +336,11 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     else
     {
         wxPoint startCoord = originTransforms.ToDisplayAbs( GetStart() );
-        wxString start = wxString::Format( "@(%s, %s)",
+        wxString start = wxString::Format( wxT( "@(%s, %s)" ),
                                            MessageTextFromValue( units, startCoord.x ),
                                            MessageTextFromValue( units, startCoord.y ) );
         wxPoint endCoord = originTransforms.ToDisplayAbs( GetEnd() );
-        wxString end   = wxString::Format( "@(%s, %s)",
+        wxString end   = wxString::Format( wxT( "@(%s, %s)" ),
                                            MessageTextFromValue( units, endCoord.x ),
                                            MessageTextFromValue( units, endCoord.y ) );
 
@@ -508,7 +508,7 @@ void PCB_DIMENSION_BASE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& a
                                                                int aError, ERROR_LOC aErrorLoc,
                                                                bool aIgnoreLineWidth ) const
 {
-    wxASSERT_MSG( !aIgnoreLineWidth, "IgnoreLineWidth has no meaning for dimensions." );
+    wxASSERT_MSG( !aIgnoreLineWidth, wxT( "IgnoreLineWidth has no meaning for dimensions." ) );
 
     for( const std::shared_ptr<SHAPE>& shape : m_shapes )
     {
@@ -529,8 +529,8 @@ void PCB_DIMENSION_BASE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& a
         }
         else
         {
-            wxFAIL_MSG( "PCB_DIMENSION_BASE::TransformShapeWithClearanceToPolygon unexpected "
-                        "shape type." );
+            wxFAIL_MSG( wxT( "PCB_DIMENSION_BASE::TransformShapeWithClearanceToPolygon unexpected "
+                             "shape type." ) );
         }
     }
 }
@@ -1078,7 +1078,7 @@ void PCB_DIM_LEADER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     EDA_UNITS         units = aFrame->GetUserUnits();
 
     wxPoint startCoord = originTransforms.ToDisplayAbs( GetStart() );
-    wxString start = wxString::Format( "@(%s, %s)",
+    wxString start = wxString::Format( wxT( "@(%s, %s)" ),
                                        MessageTextFromValue( units, startCoord.x ),
                                        MessageTextFromValue( units, startCoord.y ) );
 

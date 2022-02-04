@@ -83,7 +83,7 @@ void PCB_BASE_EDIT_FRAME::doCloseWindow()
     if( mgr->IsProjectOpen() && wxFileName::IsDirWritable( projectName.GetPath() )
             && projectName.Exists() )
     {
-        GFootprintList.WriteCacheToFile( Prj().GetProjectPath() + "fp-info-cache" );
+        GFootprintList.WriteCacheToFile( Prj().GetProjectPath() + wxT( "fp-info-cache" ) );
     }
 
     // Close the project if we are standalone, so it gets cleaned up properly

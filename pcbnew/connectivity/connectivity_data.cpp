@@ -645,7 +645,7 @@ bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, wxPoint* a
     // Not in the connectivity system.  This is a bug!
     if( items.empty() )
     {
-        wxFAIL_MSG( "track not in connectivity system" );
+        wxFAIL_MSG( wxT( "track not in connectivity system" ) );
         return false;
     }
 
@@ -738,7 +738,7 @@ bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, wxPoint* a
     }
     else
     {
-        wxFAIL_MSG( "CONNECTIVITY_DATA::TestTrackEndpointDangling: unknown track type" );
+        wxFAIL_MSG( wxT( "CONNECTIVITY_DATA::TestTrackEndpointDangling: unknown track type" ) );
     }
 
     return false;

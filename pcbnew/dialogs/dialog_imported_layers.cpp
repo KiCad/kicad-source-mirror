@@ -27,13 +27,13 @@
 
 wxString DIALOG_IMPORTED_LAYERS::WrapRequired( const wxString& aLayerName )
 {
-    return aLayerName + " *";
+    return aLayerName + wxT( " *" );
 }
 
 
 wxString DIALOG_IMPORTED_LAYERS::UnwrapRequired( const wxString& aLayerName )
 {
-    if( !aLayerName.EndsWith( " *" ) )
+    if( !aLayerName.EndsWith( wxT( " *" ) ) )
         return aLayerName;
 
     return aLayerName.Left( aLayerName.Length() - 2 );
@@ -74,7 +74,7 @@ PCB_LAYER_ID DIALOG_IMPORTED_LAYERS::GetSelectedLayerID()
     // There should only be one selected (or none) as the list is set with wxLC_SINGLE_SEL style
     wxASSERT_MSG( ( m_kicad_layers_list->GetNextItem( itemIndex, wxLIST_NEXT_ALL,
                                                       wxLIST_STATE_SELECTED ) ) == wxNOT_FOUND,
-                  "There are more than one KiCad layer selected (unexpected)" );
+                  wxT( "There are more than one KiCad layer selected (unexpected)" ) );
 
     for( LAYER_NUM layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
@@ -313,7 +313,7 @@ std::vector<wxString> DIALOG_IMPORTED_LAYERS::GetUnmappedRequiredLayers() const
     for( const wxString& layerName : m_unmatched_layer_names )
     {
         const INPUT_LAYER_DESC* layerDesc = GetLayerDescription( layerName );
-        wxASSERT_MSG( layerDesc != nullptr, "Expected to find layer description" );
+        wxASSERT_MSG( layerDesc != nullptr, wxT( "Expected to find layer description" ) );
 
         if( layerDesc->Required )
             unmappedLayers.push_back( layerDesc->Name );

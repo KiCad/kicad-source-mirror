@@ -41,10 +41,10 @@
 #include <board_stackup_manager/board_stackup.h>
 
 // Keyword used in file to identify the dielectric layer type
-#define KEY_CORE "core"
-#define KEY_PREPREG "prepreg"
+#define KEY_CORE wxT(  "core" )
+#define KEY_PREPREG wxT( "prepreg" )
 
-#define KEY_COPPER "copper"
+#define KEY_COPPER wxT( "copper" )
 
 // key string used for not specified parameters
 // Can be translated in dialogs, and is also a keyword outside dialogs

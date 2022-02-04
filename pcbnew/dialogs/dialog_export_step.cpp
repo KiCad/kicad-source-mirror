@@ -128,7 +128,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     if( path.IsEmpty() )
     {
         wxFileName brdFile = m_parent->GetBoard()->GetFileName();
-        brdFile.SetExt( "step" );
+        brdFile.SetExt( wxT( "step" ) );
         path = brdFile.GetFullPath();
     }
 
@@ -178,7 +178,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     wxString tmpStr;
     tmpStr << m_XOrg;
     m_STEP_Xorg->SetValue( tmpStr );
-    tmpStr = "";
+    tmpStr = wxEmptyString;
     tmpStr << m_YOrg;
     m_STEP_Yorg->SetValue( tmpStr );
 
@@ -207,7 +207,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     if( !bad_scales.empty()
             && !Pgm().GetCommonSettings()->m_DoNotShowAgain.scaled_3d_models_warning )
     {
-        wxString extendedMsg = _( "Non-unity scaled models:" ) + "\n" + bad_scales;
+        wxString extendedMsg = _( "Non-unity scaled models:" ) + wxT( "\n" ) + bad_scales;
 
         KIDIALOG msgDlg( m_parent, _( "Scaled models detected.  "
                                       "Model scaling is not reliable for mechanical export." ),
@@ -356,7 +356,8 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     FILENAME_RESOLVER* fnResolver = m_parent->Prj().Get3DFilenameResolver();
 
-    fnResolver->WritePathList( wxStandardPaths::Get().GetTempDir(), "ExportPaths.cfg", true );
+    fnResolver->WritePathList( wxStandardPaths::Get().GetTempDir(), wxT( "ExportPaths.cfg" ),
+                               true );
 
     DIALOG_EXPORT_STEP::STEP_ORG_OPT orgOpt = GetOriginOption();
     double xOrg = 0.0;
@@ -369,25 +370,25 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     // On macOS, we have standalone applications inside the main bundle, so we handle that here:
         if( appK2S.GetPath().Find( "/Contents/Applications/pcbnew.app/Contents/MacOS" ) != wxNOT_FOUND )
         {
-            appK2S.AppendDir( ".." );
-            appK2S.AppendDir( ".." );
-            appK2S.AppendDir( ".." );
-            appK2S.AppendDir( ".." );
-            appK2S.AppendDir( "MacOS" );
+            appK2S.AppendDir( wxT( ".." ) );
+            appK2S.AppendDir( wxT( ".." ) );
+            appK2S.AppendDir( wxT( ".." ) );
+            appK2S.AppendDir( wxT( ".." ) );
+            appK2S.AppendDir( wxT( "MacOS" ) );
         }
 #endif
 
-    appK2S.SetName( "kicad2step" );
+    appK2S.SetName( wxT( "kicad2step" ) );
 
-    wxString cmdK2S = "\"";
+    wxString cmdK2S = wxT( "\"" );
     cmdK2S.Append( appK2S.GetFullPath() );
-    cmdK2S.Append( "\"" );
+    cmdK2S.Append( wxT( "\"" ) );
 
     if( GetNoVirtOption() )
-        cmdK2S.Append( " --no-virtual" );
+        cmdK2S.Append( wxT( " --no-virtual" ) );
 
     if( GetSubstOption() )
-        cmdK2S.Append( " --subst-models" );
+        cmdK2S.Append( wxT( " --subst-models" ) );
 
     // Note: for some reason, using \" to insert a quote in a format string, under MacOS
     // wxString::Format does not work. So use a %c format in string
@@ -399,11 +400,11 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
             break;
 
         case DIALOG_EXPORT_STEP::STEP_ORG_PLOT_AXIS:
-            cmdK2S.Append( " --drill-origin" );
+            cmdK2S.Append( wxT( " --drill-origin" ) );
             break;
 
         case DIALOG_EXPORT_STEP::STEP_ORG_GRID_AXIS:
-            cmdK2S.Append( " --grid-origin" );
+            cmdK2S.Append( wxT( " --grid-origin" ) );
             break;
 
         case DIALOG_EXPORT_STEP::STEP_ORG_USER:
@@ -419,7 +420,8 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
             }
 
             LOCALE_IO dummy;
-            cmdK2S.Append( wxString::Format( " --user-origin=%c%.6f x %.6f%c", quote, xOrg, yOrg, quote ) );
+            cmdK2S.Append( wxString::Format( wxT( " --user-origin=%c%.6f x %.6f%c" ),
+                                             quote, xOrg, yOrg, quote ) );
         }
             break;
 
@@ -429,20 +431,23 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
             xOrg = Iu2Millimeter( bbox.GetCenter().x );
             yOrg = Iu2Millimeter( bbox.GetCenter().y );
             LOCALE_IO dummy;
-            cmdK2S.Append( wxString::Format( " --user-origin=%c%.6f x %.6f%c", quote, xOrg, yOrg, quote ) );
+            cmdK2S.Append( wxString::Format( wxT( " --user-origin=%c%.6f x %.6f%c" ),
+                                             quote, xOrg, yOrg, quote ) );
         }
             break;
     }
 
     {
         LOCALE_IO dummy;
-        cmdK2S.Append( wxString::Format( " --min-distance=%c%.3f mm%c", quote, tolerance, quote ) );
+        cmdK2S.Append( wxString::Format( wxT( " --min-distance=%c%.3f mm%c" ),
+                                         quote, tolerance, quote ) );
     }
 
-    cmdK2S.Append( wxString::Format( " -f -o %c%s%c", quote,
-                                     m_filePickerSTEP->GetPath(), quote ) );  // input file path
+    cmdK2S.Append( wxString::Format( wxT( " -f -o %c%s%c" ),
+                                     quote, m_filePickerSTEP->GetPath(), quote ) );  // input file path
 
-    cmdK2S.Append( wxString::Format( " %c%s%c",quote,  m_boardPath, quote ) );                  // output file path
+    cmdK2S.Append( wxString::Format( wxT( " %c%s%c" ),
+                                     quote,  m_boardPath, quote ) );                 // output file path
 
     wxExecute( cmdK2S, wxEXEC_ASYNC  | wxEXEC_SHOW_CONSOLE );
 

@@ -215,7 +215,8 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
     }
     catch( const boost::uuids::entropy_error& )
     {
-        wxLogError( "A Boost UUID entropy exception was thrown in %s:%s.", __FILE__, __FUNCTION__ );
+        wxLogError( wxT( "A Boost UUID entropy exception was thrown in %s:%s." ),
+                    __FILE__, __FUNCTION__ );
     }
 #else
     lastItem = GetBoard()->GetItem( lastBrightenedItemID );
@@ -648,7 +649,7 @@ void PCB_BASE_FRAME::DisplayGridMsg()
     VECTOR2D gridSize = GetCanvas()->GetGAL()->GetGridSize();
     wxString line;
 
-    line.Printf( "grid X %s  Y %s",
+    line.Printf( wxT( "grid X %s  Y %s" ),
                  MessageTextFromValue( m_userUnits, gridSize.x, false ),
                  MessageTextFromValue( m_userUnits, gridSize.y, false ) );
 

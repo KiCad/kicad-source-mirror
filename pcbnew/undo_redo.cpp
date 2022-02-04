@@ -289,7 +289,7 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
             break;
 
         default:
-            wxFAIL_MSG( wxString::Format( "SaveCopyInUndoList() error (unknown code %X)",
+            wxFAIL_MSG( wxString::Format( wxT( "SaveCopyInUndoList() error (unknown code %X)" ),
                                           command ) );
             break;
         }
@@ -408,7 +408,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             if( !TestForExistingItem( GetBoard(), (BOARD_ITEM*) eda_item ) )
             {
                 // Checking if it ever happens
-                wxASSERT_MSG( false, "Item in the undo buffer does not exist" );
+                wxASSERT_MSG( false, wxT( "Item in the undo buffer does not exist" ) );
 
                 // Remove this non existent item
                 aList->RemovePicker( ii );
@@ -527,7 +527,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         }
 
         default:
-            wxFAIL_MSG( wxString::Format( "PutDataInPreviousState() error (unknown code %X)",
+            wxFAIL_MSG( wxString::Format( wxT( "PutDataInPreviousState() error (unknown code %X)" ),
                                           aList->GetPickedItemStatus( ii ) ) );
             break;
         }

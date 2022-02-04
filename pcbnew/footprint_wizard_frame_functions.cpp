@@ -66,9 +66,9 @@ void FOOTPRINT_WIZARD_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     default:
-        wxFAIL_MSG( wxString::Format(
-                "FOOTPRINT_WIZARD_FRAME::Process_Special_Functions error: id = %d",
-                event.GetId() ) );
+        wxFAIL_MSG( wxString::Format( wxT( "FOOTPRINT_WIZARD_FRAME::Process_Special_Functions "
+                                           "error: id = %d" ),
+                                      event.GetId() ) );
         break;
     }
 }

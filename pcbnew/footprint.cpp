@@ -571,7 +571,7 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
         // Only user text can be removed this way.
         wxCHECK_RET(
                 static_cast<FP_TEXT*>( aBoardItem )->GetType() == FP_TEXT::TEXT_is_DIVERS,
-                "Please report this bug: Invalid remove operation on required text" );
+                wxT( "Please report this bug: Invalid remove operation on required text" ) );
         KI_FALLTHROUGH;
 
     case PCB_FP_SHAPE_T:
@@ -976,7 +976,8 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     aList.emplace_back( _( "Status: " ) + status, _( "Attributes:" ) + wxS( " " ) + attrs );
 
-    aList.emplace_back( _( "Rotation" ), wxString::Format( "%.4g", GetOrientationDegrees() ) );
+    aList.emplace_back( _( "Rotation" ), wxString::Format( wxT( "%.4g" ),
+                                                           GetOrientationDegrees() ) );
 
     msg.Printf( _( "Footprint: %s" ), m_fpid.GetUniStringLibId() );
     msg2.Printf( _( "3D-Shape: %s" ), m_3D_Drawings.empty() ? _( "<none>" )
@@ -1316,7 +1317,7 @@ void FOOTPRINT::RunOnChildren( const std::function<void ( BOARD_ITEM*)>& aFuncti
     }
     catch( std::bad_function_call& )
     {
-        wxFAIL_MSG( "Error running FOOTPRINT::RunOnChildren" );
+        wxFAIL_MSG( wxT( "Error running FOOTPRINT::RunOnChildren" ) );
     }
 }
 
@@ -1356,8 +1357,8 @@ void FOOTPRINT::ViewGetLayers( int aLayers[], int& aCount ) const
     switch( m_layer )
     {
     default:
-        wxASSERT_MSG( false, "Illegal layer" );    // do you really have footprints placed on
-                                                   // other layers?
+        wxASSERT_MSG( false, wxT( "Illegal layer" ) );   // do you really have footprints placed
+                                                         // on other layers?
         KI_FALLTHROUGH;
 
     case F_Cu:
@@ -1811,7 +1812,7 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
 
     default:
         // Un-handled item for duplication
-        wxFAIL_MSG( "Duplication not supported for items of class " + aItem->GetClass() );
+        wxFAIL_MSG( wxT( "Duplication not supported for items of class " ) + aItem->GetClass() );
         break;
     }
 
@@ -1832,10 +1833,10 @@ wxString FOOTPRINT::GetNextPadNumber( const wxString& aLastPadNumber ) const
     wxString prefix = UTIL::GetRefDesPrefix( aLastPadNumber );
     int      num = GetTrailingInt( aLastPadNumber );
 
-    while( usedNumbers.count( wxString::Format( "%s%d", prefix, num ) ) )
+    while( usedNumbers.count( wxString::Format( wxT( "%s%d" ), prefix, num ) ) )
         num++;
 
-    return wxString::Format( "%s%d", prefix, num );
+    return wxString::Format( wxT( "%s%d" ), prefix, num );
 }
 
 
@@ -2116,7 +2117,7 @@ void FOOTPRINT::CheckFootprintAttributes( const std::function<void( const wxStri
             msg.Printf( _( "Expected \"Other\" type but set to \"%s\"" ), GetTypeName() );
         }
 
-        msg = "(" + msg + ")";
+        msg = wxT( "(" ) + msg + wxT( ")" );
 
         (*aErrorHandler)( msg );
     }

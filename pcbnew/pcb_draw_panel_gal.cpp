@@ -265,7 +265,7 @@ void PCB_DRAW_PANEL_GAL::UpdateColors()
             cs = Pgm().GetSettingsManager().GetColorSettings();
     }
 
-    wxCHECK_RET( cs, "null COLOR_SETTINGS" );
+    wxCHECK_RET( cs, wxT( "null COLOR_SETTINGS" ) );
 
     auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() );
     rs->LoadColors( cs );
@@ -474,11 +474,11 @@ void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
         }
     }
 
-    aList.emplace_back( _( "Pads" ), wxString::Format( "%d", padCount ) );
-    aList.emplace_back( _( "Vias" ), wxString::Format( "%d", viaCount ) );
-    aList.emplace_back( _( "Track Segments" ), wxString::Format( "%d", trackSegmentCount ) );
-    aList.emplace_back( _( "Nets" ), wxString::Format( "%d", (int) netCodes.size() ) );
-    aList.emplace_back( _( "Unrouted" ), wxString::Format( "%d", unconnected ) );
+    aList.emplace_back( _( "Pads" ), wxString::Format( wxT( "%d" ), padCount ) );
+    aList.emplace_back( _( "Vias" ), wxString::Format( wxT( "%d" ), viaCount ) );
+    aList.emplace_back( _( "Track Segments" ), wxString::Format( wxT( "%d" ), trackSegmentCount ) );
+    aList.emplace_back( _( "Nets" ), wxString::Format( wxT( "%d" ), (int) netCodes.size() ) );
+    aList.emplace_back( _( "Unrouted" ), wxString::Format( wxT( "%d" ), unconnected ) );
 }
 
 

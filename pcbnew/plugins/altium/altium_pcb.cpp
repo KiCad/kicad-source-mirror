@@ -2695,17 +2695,17 @@ void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
         }
 
         wxString trimmedText = elem.text.Trim();
-        if( !elem.isDesignator && trimmedText.CmpNoCase( ".Designator" ) == 0 )
+        if( !elem.isDesignator && trimmedText.CmpNoCase( wxT( ".Designator" ) ) == 0 )
         {
-            tx->SetText( "${REFERENCE}" );
+            tx->SetText( wxT( "${REFERENCE}" ) );
         }
-        else if( !elem.isComment && trimmedText.CmpNoCase( ".Comment" ) == 0 )
+        else if( !elem.isComment && trimmedText.CmpNoCase( wxT( ".Comment" ) ) == 0 )
         {
-            tx->SetText( "${VALUE}" );
+            tx->SetText( wxT( "${VALUE}" ) );
         }
-        else if( trimmedText.CmpNoCase( ".Layer_Name" ) == 0 )
+        else if( trimmedText.CmpNoCase( wxT( ".Layer_Name" ) ) == 0 )
         {
-            tx->SetText( "${LAYER}" );
+            tx->SetText( wxT( "${LAYER}" ) );
         }
         else
         {

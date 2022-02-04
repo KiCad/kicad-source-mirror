@@ -139,9 +139,9 @@ wxString BOARD_CONNECTED_ITEM::GetNetnameMsg() const
     if( !netname.length() )
         return wxT( "[<no net>]" );
     else if( GetNetCode() < 0 )
-        return wxT( "[" + UnescapeString( netname ) + "](" + _( "Not Found" ) + ")" );
+        return wxT( "[" ) + UnescapeString( netname ) + wxT( "](" ) + _( "Not Found" ) + wxT( ")" );
     else
-        return wxT( "[" + UnescapeString( netname ) + "]" );
+        return wxT( "[" ) + UnescapeString( netname ) + wxT( "]" );
 }
 
 

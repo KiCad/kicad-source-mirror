@@ -498,25 +498,30 @@ void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit, PROPAGAT
 {
     bool skipConflicts = ( aMode == PROPAGATE_MODE::SKIP_CONFLICTS );
 
-    wxLogTrace( "CN", "propagateConnections: propagate skip conflicts? %d", skipConflicts );
+    wxLogTrace( wxT( "CN" ), wxT( "propagateConnections: propagate skip conflicts? %d" ),
+                skipConflicts );
 
     for( const auto& cluster : m_connClusters )
     {
         if( skipConflicts && cluster->IsConflicting() )
         {
-            wxLogTrace( "CN", "Conflicting nets in cluster %p; skipping update", cluster.get() );
+            wxLogTrace( wxT( "CN" ), wxT( "Conflicting nets in cluster %p; skipping update" ),
+                        cluster.get() );
         }
         else if( cluster->IsOrphaned() )
         {
-            wxLogTrace( "CN", "Skipping orphaned cluster %p [net: %s]", cluster.get(),
-                    (const char*) cluster->OriginNetName().c_str() );
+            wxLogTrace( wxT( "CN" ), wxT( "Skipping orphaned cluster %p [net: %s]" ),
+                        cluster.get(),
+                        (const char*) cluster->OriginNetName().c_str() );
         }
         else if( cluster->HasValidNet() )
         {
             if( cluster->IsConflicting() )
             {
-                wxLogTrace( "CN", "Conflicting nets in cluster %p; chose %d (%s)", cluster.get(),
-                            cluster->OriginNet(), cluster->OriginNetName() );
+                wxLogTrace( wxT( "CN" ), wxT( "Conflicting nets in cluster %p; chose %d (%s)" ),
+                            cluster.get(),
+                            cluster->OriginNet(),
+                            cluster->OriginNetName() );
             }
 
             // normal cluster: just propagate from the pads
@@ -542,15 +547,19 @@ void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit, PROPAGAT
 
             if( n_changed )
             {
-                wxLogTrace( "CN", "Cluster %p : net : %d %s", cluster.get(),
-                        cluster->OriginNet(), (const char*) cluster->OriginNetName().c_str() );
+                wxLogTrace( wxT( "CN" ), wxT( "Cluster %p : net : %d %s" ),
+                            cluster.get(),
+                            cluster->OriginNet(),
+                            (const char*) cluster->OriginNetName().c_str() );
             }
             else
-                wxLogTrace( "CN", "Cluster %p : nothing to propagate", cluster.get() );
+                wxLogTrace( wxT( "CN" ), wxT( "Cluster %p : nothing to propagate" ),
+                            cluster.get() );
         }
         else
         {
-            wxLogTrace( "CN", "Cluster %p : connected to unused net", cluster.get() );
+            wxLogTrace( wxT( "CN" ), wxT( "Cluster %p : connected to unused net" ),
+                        cluster.get() );
         }
     }
 }
@@ -590,7 +599,7 @@ void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( ZONE* aZone, PCB_LAYER_ID 
         }
     }
 
-    wxLogTrace( "CN", "Found %u isolated islands\n", (unsigned)aIslands.size() );
+    wxLogTrace( wxT( "CN" ), wxT( "Found %u isolated islands\n" ), (unsigned) aIslands.size() );
 }
 
 void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones )

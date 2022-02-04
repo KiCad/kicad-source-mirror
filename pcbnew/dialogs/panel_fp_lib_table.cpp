@@ -107,24 +107,26 @@ static const std::map<int, SUPPORTED_FILE_TYPE>& fileTypes()
     {
         { ID_PANEL_FPLIB_ADD_KICADMOD,
             {
-                "KiCad (folder with .kicad_mod files)", "", KiCadFootprintFileExtension,
-                false, IO_MGR::KICAD_SEXP
+                wxT( "KiCad (folder with .kicad_mod files)" ), wxT( "" ),
+                KiCadFootprintFileExtension, false, IO_MGR::KICAD_SEXP
             }
         },
         { ID_PANEL_FPLIB_ADD_EAGLE6,
             {
-                "Eagle 6.x (*.lbr)", EagleFootprintLibPathWildcard(), "", true,  IO_MGR::EAGLE
+                wxT( "Eagle 6.x (*.lbr)" ), EagleFootprintLibPathWildcard(), wxT( "" ),
+                true, IO_MGR::EAGLE
             }
         },
         { ID_PANEL_FPLIB_ADD_KICADLEGACY,
             {
-                "KiCad legacy (*.mod)", LegacyFootprintLibPathWildcard(), "", true, IO_MGR::LEGACY
+                wxT( "KiCad legacy (*.mod)" ), LegacyFootprintLibPathWildcard(), wxT( "" ),
+                true, IO_MGR::LEGACY
             }
         },
         { ID_PANEL_FPLIB_ADD_GEDA,
             {
-                "Geda (folder with *.fp files)", "", GedaPcbFootprintLibFileExtension, false,
-                IO_MGR::GEDA_PCB
+                wxT( "Geda (folder with *.fp files)" ), wxT( "" ),
+                GedaPcbFootprintLibFileExtension, false, IO_MGR::GEDA_PCB
             }
         },
     };
@@ -312,7 +314,7 @@ protected:
             // paste the FP_LIB_TABLE_ROWs of s-expression (fp_lib_table), starting
             // at column 0 regardless of current cursor column.
 
-            STRING_LINE_READER  slr( TO_UTF8( cb_text ), "Clipboard" );
+            STRING_LINE_READER  slr( TO_UTF8( cb_text ), wxT( "Clipboard" ) );
             LIB_TABLE_LEXER     lexer( &slr );
             FP_LIB_TABLE        tmp_tbl;
             bool                parsed = true;
@@ -538,8 +540,8 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
                                             wxYES_NO | wxCENTER | wxICON_QUESTION | wxYES_DEFAULT );
                 badCellDlg.SetExtendedMessage( _( "Empty cells will result in all rows that are "
                                                   "invalid to be removed from the table." ) );
-                badCellDlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( "Remove Invalid Cells" ),
-                                           wxMessageDialog::ButtonLabel( "Cancel Table Update" ) );
+                badCellDlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Remove Invalid Cells" ) ),
+                                           wxMessageDialog::ButtonLabel( _( "Cancel Table Update" ) ) );
 
                 if( badCellDlg.ShowModal() == wxID_NO )
                     return false;
@@ -783,7 +785,8 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
     if( fileTypeIt == fileTypes().end() )
     {
-        wxLogWarning( "File type selection event received but could not find the file type in the table" );
+        wxLogWarning( wxT( "File type selection event received but could not find the file type "
+                           "in the table" ) );
         return;
     }
 
@@ -856,7 +859,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
                 wxString detailedMsg = _( "The following directories could not be opened: \n" );
 
                 for( const wxString& path : failedDirs )
-                    detailedMsg << path << "\n";
+                    detailedMsg << path << wxT( "\n" );
 
                 DisplayErrorMessage( this, _( "Failed to open directories to look for libraries" ),
                                      detailedMsg );
@@ -923,7 +926,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
             // Do not use the project path in the global library table.  This will almost
             // assuredly be wrong for a different project.
-            if( m_pageNdx == 0 && path.Contains( "${KIPRJMOD}" ) )
+            if( m_pageNdx == 0 && path.Contains( wxT( "${KIPRJMOD}" ) ) )
                 path = fn.GetFullPath();
 
             m_cur_grid->SetCellValue( last_row, COL_URI, path );

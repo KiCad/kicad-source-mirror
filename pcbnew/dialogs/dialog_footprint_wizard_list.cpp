@@ -103,7 +103,7 @@ void DIALOG_FOOTPRINT_WIZARD_LIST::initLists()
     // Put all wizards in the list
     for( int ii = 0; ii < n_wizards; ii++ )
     {
-        wxString num = wxString::Format( "%d", ii+1 );
+        wxString num = wxString::Format( wxT( "%d" ), ii+1 );
         FOOTPRINT_WIZARD *wizard = FOOTPRINT_WIZARD_LIST::GetWizard( ii );
         wxString name = wizard->GetName();
         wxString description = wizard->GetDescription();

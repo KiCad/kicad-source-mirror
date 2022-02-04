@@ -477,7 +477,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
 
             for( const std::unique_ptr<FOOTPRINT_INFO>& footprint : fp_info_list->GetList() )
             {
-                wxString search = footprint->GetFootprintName() + " " + footprint->GetSearchText();
+                wxString search = footprint->GetFootprintName() + wxS( " " ) + footprint->GetSearchText();
                 bool     matched = matcher.Find( search.Lower(), matches, position );
 
                 if( !matched && term.IsNumber() )
@@ -803,7 +803,7 @@ void FOOTPRINT_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 WINDOW_SETTINGS* FOOTPRINT_VIEWER_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 {
     PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
-    wxCHECK_MSG( cfg, nullptr, "config not existing" );
+    wxCHECK_MSG( cfg, nullptr, wxT( "config not existing" ) );
 
     return &cfg->m_FootprintViewer;
 }
@@ -968,8 +968,8 @@ void FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList( wxCommandEvent& event )
         break;
 
     default:
-        wxString id = wxString::Format( "%i", event.GetId() );
-        wxFAIL_MSG( "FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList error: id = " + id );
+        wxString id = wxString::Format( wxT( "%i" ), event.GetId() );
+        wxFAIL_MSG( wxT( "FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList error: id = " ) + id );
     }
 }
 

@@ -50,29 +50,29 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
             m_GridOffsetX( 0 ),
             m_GridOffsetY( 0 ),
             m_GridStagger( 1 ),
-            m_GridStaggerType( 0 ),           // rows
-            m_GridNumberingAxis( 0 ),         // h then v
+            m_GridStaggerType( 0 ),                  // rows
+            m_GridNumberingAxis( 0 ),                // h then v
             m_GridNumReverseAlt( false ),
-            m_GridNumStartSet( 1 ),           // use specified start
-            m_Grid2dArrayNumbering( 0 ),      // linear numbering
-            m_GridPrimaryAxisScheme( 0 ),     // numeric
-            m_GridSecondaryAxisScheme( 0 ),   // numeric
-            m_GridPrimaryNumOffset( "1" ),    // numeric
-            m_GridSecondaryNumOffset( "1" ),  // numeric
+            m_GridNumStartSet( 1 ),                  // use specified start
+            m_Grid2dArrayNumbering( 0 ),             // linear numbering
+            m_GridPrimaryAxisScheme( 0 ),            // numeric
+            m_GridSecondaryAxisScheme( 0 ),          // numeric
+            m_GridPrimaryNumOffset( wxT( "1" ) ),    // numeric
+            m_GridSecondaryNumOffset( wxT( "1" ) ),  // numeric
             m_GridPrimaryAxisStep( 1 ),
             m_GridSecondaryAxisStep( 1 ),
             m_CircCentreX( 0 ),
             m_CircCentreY( 0 ),
             m_CircAngle( 0.0 ),
             m_CircCount( 4 ),
-            m_CircNumStartSet( 1 ),           // use specified start
+            m_CircNumStartSet( 1 ),                  // use specified start
             m_GridCircNumScheme( 0 ),
-            m_CircNumberingOffset( "1" ),
+            m_CircNumberingOffset( wxT( "1" ) ),
             m_CircNumberingStep( 1 ),
             m_CircRotatationStep( false ),
-            m_ArrayTypeTab( 0 ),              // start on grid view
+            m_ArrayTypeTab( 0 ),                     // start on grid view
             m_FootprintKeepAnnotations( false ),
-            m_FootprintReannotate( true )     // Assign unique by default
+            m_FootprintReannotate( true )            // Assign unique by default
     {
     }
 
@@ -293,7 +293,7 @@ static bool validateAxisOptions( const wxTextCtrl& offsetEntry, const wxChoice& 
     void*                      clientData = typeEntry.GetClientData( typeEntry.GetSelection() );
     const NUMBERING_LIST_DATA* numberingData = static_cast<NUMBERING_LIST_DATA*>( clientData );
 
-    wxCHECK_MSG( numberingData, false, "Failed to get client data from list control." );
+    wxCHECK_MSG( numberingData, false, wxT( "Failed to get client data from list control." ) );
 
     aAxis.SetAxisType( numberingData->m_numbering_type );
 
@@ -445,7 +445,7 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         if( errors.IsEmpty() )
             errorStr = _("Bad parameters");
         else
-            errorStr = boost::algorithm::join( errors, "\n" );
+            errorStr = boost::algorithm::join( errors, wxT( "\n" ) );
 
         wxMessageBox( errorStr );
         return false;

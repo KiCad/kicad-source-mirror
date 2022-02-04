@@ -241,7 +241,7 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataToWindow()
             SET_MILS_CELL( i, COL_TEXT_WIDTH, m_brdSettings.m_TextSize[ i ].x );
             SET_MILS_CELL( i, COL_TEXT_HEIGHT, m_brdSettings.m_TextSize[ i ].y );
             SET_MILS_CELL( i, COL_TEXT_THICKNESS, m_brdSettings.m_TextThickness[ i ] );
-            m_graphicsGrid->SetCellValue( i, COL_TEXT_ITALIC, m_brdSettings.m_TextItalic[ i ] ? "1" : "" );
+            m_graphicsGrid->SetCellValue( i, COL_TEXT_ITALIC, m_brdSettings.m_TextItalic[ i ] ? wxT( "1" ) : wxT( "" ) );
 
             auto attr = new wxGridCellAttr;
             attr->SetRenderer( new wxGridCellBoolRenderer() );

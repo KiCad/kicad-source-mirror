@@ -598,7 +598,7 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
         }
 
         // Display priority level
-        aList.emplace_back( _( "Priority" ), wxString::Format( "%d", GetPriority() ) );
+        aList.emplace_back( _( "Priority" ), wxString::Format( wxT( "%d" ), GetPriority() ) );
     }
 
     if( aFrame->GetName() == PCB_EDIT_FRAME_NAME )
@@ -1411,7 +1411,7 @@ void ZONE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                  PCB_LAYER_ID aLayer, int aClearance, int aError,
                                                  ERROR_LOC aErrorLoc, bool aIgnoreLineWidth ) const
 {
-    wxASSERT_MSG( !aIgnoreLineWidth, "IgnoreLineWidth has no meaning for zones." );
+    wxASSERT_MSG( !aIgnoreLineWidth, wxT( "IgnoreLineWidth has no meaning for zones." ) );
 
     if( !m_FilledPolysList.count( aLayer ) )
         return;

@@ -656,7 +656,7 @@ void PCB_TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     BOARD*    board = GetBoard();
 
     aList.emplace_back( _( "Type" ),
-                        Type() == PCB_ARC_T ? ( "Track (arc)" ) : _( "Track" ) );
+                        Type() == PCB_ARC_T ? _( "Track (arc)" ) : _( "Track" ) );
 
 
     GetMsgPanelInfoBase_Common( aFrame, aList );
@@ -1018,7 +1018,7 @@ void PCB_TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
                                                       int aError, ERROR_LOC aErrorLoc,
                                                       bool ignoreLineWidth ) const
 {
-    wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for tracks." );
+    wxASSERT_MSG( !ignoreLineWidth, wxT( "IgnoreLineWidth has no meaning for tracks." ) );
 
 
     switch( Type() )

@@ -49,18 +49,18 @@ BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType )
         break;
 
     case BS_ITEM_TYPE_DIELECTRIC:
-        m_TypeName = KEY_CORE;      // or prepreg
-        SetMaterial( "FR4" );       // or other dielectric name
-        SetLossTangent( 0.02 );     // for FR4
-        SetEpsilonR( 4.5 );         // for FR4
+        m_TypeName = KEY_CORE;          // or prepreg
+        SetMaterial( wxT( "FR4" ) );    // or other dielectric name
+        SetLossTangent( 0.02 );         // for FR4
+        SetEpsilonR( 4.5 );             // for FR4
         break;
 
     case BS_ITEM_TYPE_SOLDERPASTE:
-        m_TypeName = "solderpaste";
+        m_TypeName = wxT( "solderpaste" );
         break;
 
     case BS_ITEM_TYPE_SOLDERMASK:
-        m_TypeName = "soldermask";
+        m_TypeName = wxT( "soldermask" );
         m_Color = NotSpecifiedPrm();
         SetMaterial( NotSpecifiedPrm() ); // or other solder mask material name
         SetThickness( GetMaskDefaultThickness() );
@@ -68,7 +68,7 @@ BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType )
         break;
 
     case BS_ITEM_TYPE_SILKSCREEN:
-        m_TypeName = "silkscreen";
+        m_TypeName = wxT( "silkscreen" );
         m_Color = NotSpecifiedPrm();
         SetMaterial( NotSpecifiedPrm() ); // or other silkscreen material name
         SetEpsilonR( DEFAULT_EPSILON_R_SILKSCREEN );
@@ -318,7 +318,7 @@ BOARD_STACKUP::BOARD_STACKUP()
     m_EdgeConnectorConstraints = BS_EDGE_CONNECTOR_NONE;
     m_CastellatedPads = false;          // True if some castellated pads exist
     m_EdgePlating = false;              // True if edge board is plated
-    m_FinishType = "None";              // undefined finish type
+    m_FinishType = wxT( "None" );       // undefined finish type
 }
 
 
@@ -569,12 +569,12 @@ void BOARD_STACKUP::BuildDefaultStackupList( const BOARD_DESIGN_SETTINGS* aSetti
         if( (dielectric_idx & 1) == 0 )
         {
             item->SetTypeName( KEY_CORE );
-            item->SetMaterial( "FR4" );
+            item->SetMaterial( wxT( "FR4" ) );
         }
         else
         {
             item->SetTypeName( KEY_PREPREG );
-            item->SetMaterial( "FR4" );
+            item->SetMaterial( wxT( "FR4" ) );
         }
 
         Add( item );
@@ -636,7 +636,7 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
         wxString layer_name;
 
         if( item->GetBrdLayerId() == UNDEFINED_LAYER )
-            layer_name.Printf( "dielectric %d", item->GetDielectricLayerId() );
+            layer_name.Printf( wxT( "dielectric %d" ), item->GetDielectricLayerId() );
         else
             layer_name = LSET::Name( item->GetBrdLayerId() );
 

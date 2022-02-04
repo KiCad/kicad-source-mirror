@@ -389,7 +389,7 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( FOOTPRINT* aFootprint, const 
 
     if( !newFootprint )
     {
-        msg << ": " << _( "*** footprint not found ***" );
+        msg << wxT( ": " ) << _( "*** footprint not found ***" );
         m_MessageWindow->Report( msg, RPT_SEVERITY_ERROR );
         return false;
     }
@@ -404,7 +404,7 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( FOOTPRINT* aFootprint, const 
     if( aFootprint == m_currentFootprint )
         m_currentFootprint = newFootprint;
 
-    msg += ": OK";
+    msg += wxT( ": OK" );
     m_MessageWindow->Report( msg, RPT_SEVERITY_ACTION );
 
     return true;

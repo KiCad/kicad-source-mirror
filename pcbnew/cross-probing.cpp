@@ -114,7 +114,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         if( !crossProbingSettings.auto_highlight )
             return;
 
-        wxStringTokenizer netsTok = wxStringTokenizer( FROM_UTF8( text ), "," );
+        wxStringTokenizer netsTok = wxStringTokenizer( FROM_UTF8( text ), wxT( "," ) );
         bool first = true;
 
         while( netsTok.HasMoreTokens() )
@@ -389,8 +389,8 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
                 // Use standard KiCad zoom algorithm for parts too wide to fit screen/
                 ratio = kicadRatio;
                 compRatioBent = 1.0; // Reset so we don't modify the "KiCad" ratio
-                wxLogTrace( "CROSS_PROBE_SCALE",
-                            "Part TOO WIDE for screen.  Using normal KiCad zoom ratio: %1.5f",
+                wxLogTrace( wxT( "CROSS_PROBE_SCALE" ),
+                            wxT( "Part TOO WIDE for screen.  Using normal KiCad zoom ratio: %1.5f" ),
                             ratio );
             }
 

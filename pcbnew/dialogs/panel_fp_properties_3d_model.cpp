@@ -83,7 +83,7 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL(
     // Filename
     attr = new wxGridCellAttr;
     attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parentDialog, m_modelsGrid, &cfg->m_lastFootprint3dDir,
-                                                "*.*", true, m_frame->Prj().GetProjectPath() ) );
+                                                wxT( "*.*" ), true, m_frame->Prj().GetProjectPath() ) );
     m_modelsGrid->SetColAttr( COL_FILENAME, attr );
 
     // Show checkbox
@@ -216,9 +216,9 @@ void PANEL_FP_PROPERTIES_3D_MODEL::On3DModelCellChanged( wxGridEvent& aEvent )
         // Perform cleanup and validation on the filename if it isn't empty
         if( !filename.empty() )
         {
-            filename.Replace( "\n", "" );
-            filename.Replace( "\r", "" );
-            filename.Replace( "\t", "" );
+            filename.Replace( wxT( "\n" ), wxT( "" ) );
+            filename.Replace( wxT( "\r" ), wxT( "" ) );
+            filename.Replace( wxT( "\t" ), wxT( "" ) );
 
             res->ValidateFileName( filename, hasAlias );
 
@@ -288,7 +288,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DModel( wxCommandEvent&  )
     // variable and fall back to the project path if necessary.
     if( initialpath.IsEmpty() )
     {
-        if( !wxGetEnv( "KICAD6_3DMODEL_DIR", &initialpath ) || initialpath.IsEmpty() )
+        if( !wxGetEnv( wxT( "KICAD6_3DMODEL_DIR" ), &initialpath ) || initialpath.IsEmpty() )
             initialpath = prj.GetProjectPath();
     }
 
@@ -322,7 +322,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DModel( wxCommandEvent&  )
 
 #ifdef __WINDOWS__
     // In KiCad files, filenames and paths are stored using Unix notation
-    model.m_Filename.Replace( "\\", "/" );
+    model.m_Filename.Replace( wxT( "\\" ), wxT( "/" ) );
 #endif
 
     model.m_Show = true;

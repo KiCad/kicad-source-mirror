@@ -252,7 +252,8 @@ FOOTPRINT* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
             historyInfos.push_back( fp_info );
     }
 
-    adapter->DoAddLibrary( "-- " + _( "Recently Used" ) + " --", wxEmptyString, historyInfos, true );
+    adapter->DoAddLibrary( wxT( "-- " ) + _( "Recently Used" ) + wxT( " --" ), wxEmptyString,
+                           historyInfos, true );
 
     if( aPreselect.IsValid() )
         adapter->SetPreselectNode( aPreselect, 0 );
@@ -461,8 +462,8 @@ FOOTPRINT* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
     wxArrayString   fplist;
 
     // Build list of available fp references, to display them in dialog
-    for( auto fp : GetBoard()->Footprints() )
-        fplist.Add( fp->GetReference() + wxT("    ( ") + fp->GetValue() + wxT(" )") );
+    for( FOOTPRINT* fp : GetBoard()->Footprints() )
+        fplist.Add( fp->GetReference() + wxT( "    ( " ) + fp->GetValue() + wxT( " )" ) );
 
     fplist.Sort();
 
@@ -477,10 +478,10 @@ FOOTPRINT* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
 
     if( !footprintName.IsEmpty() )
     {
-        for( auto mod : GetBoard()->Footprints() )
+        for( FOOTPRINT* fp : GetBoard()->Footprints() )
         {
-            if( mod->GetReference().CmpNoCase( footprintName ) == 0 )
-                return mod;
+            if( fp->GetReference().CmpNoCase( footprintName ) == 0 )
+                return fp;
         }
     }
 

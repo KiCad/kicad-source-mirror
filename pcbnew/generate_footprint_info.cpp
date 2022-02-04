@@ -25,24 +25,24 @@
 #include <wx/log.h>
 
 
-static const wxString DescriptionFormat =
+static const wxString DescriptionFormat = wxT(
     "<b>__NAME__</b>"
     "<br>__DESC__"
     "<hr><table border=0>"
     "__FIELDS__"
-    "</table>";
+    "</table>" );
 
-static const wxString KeywordsFormat =
+static const wxString KeywordsFormat = wxT(
         "<tr>"
         "   <td><b>" + _( "Keywords" ) + "</b></td>"
         "   <td>__KEYWORDS__</td>"
-        "</tr>";
+        "</tr>" );
 
-static const wxString DocFormat =
+static const wxString DocFormat = wxT(
         "<tr>"
         "   <td><b>" + _( "Documentation" ) + "</b></td>"
         "   <td><a href=\"__HREF__\">__TEXT__</a></td>"
-        "</tr>";
+        "</tr>" );
 
 
 class FOOTPRINT_INFO_GENERATOR
@@ -66,7 +66,7 @@ public:
      */
     void GenerateHtml()
     {
-        wxCHECK_RET( m_fp_lib_table, "Footprint library table pointer is not valid" );
+        wxCHECK_RET( m_fp_lib_table, wxT( "Footprint library table pointer is not valid" ) );
 
         if( !m_lib_id.IsValid() )
             return;

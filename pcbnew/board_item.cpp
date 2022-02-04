@@ -158,8 +158,8 @@ void BOARD_ITEM::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBu
                                                        int aError, ERROR_LOC aErrorLoc,
                                                        bool ignoreLineWidth ) const
 {
-    wxASSERT_MSG( false,
-                  "Called TransformShapeWithClearanceToPolygon() on unsupported BOARD_ITEM." );
+    wxASSERT_MSG( false, wxT( "Called TransformShapeWithClearanceToPolygon() on unsupported "
+                              "BOARD_ITEM." ) );
 };
 
 

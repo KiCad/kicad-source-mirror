@@ -291,7 +291,7 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::TransferDataToWindow()
     for( unsigned row = 0; row < m_currPoints.size(); ++row )
     {
         // Row label is "Corner x"
-        msg.Printf( "Corner %d", row+1 );
+        msg.Printf( _( "Corner %d" ), row+1 );
         m_gridCornersList->SetRowLabelValue( row, msg );
 
         msg = StringFromValue( GetUserUnits(), m_currPoints[row].x, true );

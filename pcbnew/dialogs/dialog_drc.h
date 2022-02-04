@@ -38,7 +38,7 @@
 class BOARD_DESIGN_SETTINGS;
 
 
-#define DIALOG_DRC_WINDOW_NAME "DialogDrcWindowName"
+#define DIALOG_DRC_WINDOW_NAME wxT( "DialogDrcWindowName" )
 
 class
 DIALOG_DRC: public DIALOG_DRC_BASE, PROGRESS_REPORTER_BASE

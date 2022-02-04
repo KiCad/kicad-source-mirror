@@ -138,7 +138,7 @@ public:
     {
         m_netname = aNewName;
 
-        if( aNewName.Contains( "/" ) )
+        if( aNewName.Contains( wxT( "/" ) ) )
             m_shortNetname = aNewName.AfterLast( '/' );
         else
             m_shortNetname = aNewName;

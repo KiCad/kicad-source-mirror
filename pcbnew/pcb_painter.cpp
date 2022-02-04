@@ -980,12 +980,12 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                 // shorten the displayed netname (actual name not useful)
                 // Can happen if the pad netname is edited inside the board editor, therefore
                 // having a netname not coming from schematic
-                if( netname.StartsWith( "unconnected-(" ) )
+                if( netname.StartsWith( wxT( "unconnected-(" ) ) )
                 {
                     if( pinType == wxT( "no_connect" ) || pinType.EndsWith( wxT( "+no_connect" ) ) )
-                        netname = "x";
+                        netname = wxT( "x" );
                     else if( pinType == wxT( "free" ) )
-                        netname = "*";
+                        netname = wxT( "*" );
                 }
 
                 // approximate the size of net name text:

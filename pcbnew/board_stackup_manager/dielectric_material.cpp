@@ -37,32 +37,32 @@
 // DO NOT translate them, as they are proper noun
 static DIELECTRIC_SUBSTRATE substrateMaterial[]  =
 {
-    { NotSpecifiedPrm(), 0.0,  0.0    },    // Not specified, not in .gbrjob
-    { "FR4",             4.5,  0.02   },    // used in .gbrjob file
-    { "FR408-HR",        3.69, 0.0091 },    // used in .gbrjob file
-    { "Polyimide",       3.2,  0.004  },    // used in .gbrjob file
-    { "Kapton",          3.2,  0.004  },    // used in .gbrjob file
-    { "Polyolefin",      1.0,  0.0    },    // used in .gbrjob file
-    { "Al",              8.7,  0.001  },    // used in .gbrjob file
-    { "PTFE",            2.1,  0.0002 },    // used in .gbrjob file
-    { "Teflon",          2.1,  0.0002 },    // used in .gbrjob file
-    { "Ceramic",         1.0,  0.0    }     // used in .gbrjob file
+    { NotSpecifiedPrm(),   0.0,  0.0    },    // Not specified, not in .gbrjob
+    { wxT( "FR4" ),        4.5,  0.02   },    // used in .gbrjob file
+    { wxT( "FR408-HR" ),   3.69, 0.0091 },    // used in .gbrjob file
+    { wxT( "Polyimide" ),  3.2,  0.004  },    // used in .gbrjob file
+    { wxT( "Kapton" ),     3.2,  0.004  },    // used in .gbrjob file
+    { wxT( "Polyolefin" ), 1.0,  0.0    },    // used in .gbrjob file
+    { wxT( "Al" ),         8.7,  0.001  },    // used in .gbrjob file
+    { wxT( "PTFE" ),       2.1,  0.0002 },    // used in .gbrjob file
+    { wxT( "Teflon" ),     2.1,  0.0002 },    // used in .gbrjob file
+    { wxT( "Ceramic" ),    1.0,  0.0    }     // used in .gbrjob file
                                             // Other names are free
 };
 
 static DIELECTRIC_SUBSTRATE solderMaskMaterial[]  =
 {
-    { NotSpecifiedPrm(), DEFAULT_EPSILON_R_SOLDERMASK, 0.0 },   // Not specified, not in .gbrjob
-    { "Epoxy",           DEFAULT_EPSILON_R_SOLDERMASK, 0.0 },   // Epoxy Liquid material (usual)
-    { "Liquid Ink",      DEFAULT_EPSILON_R_SOLDERMASK, 0.0 },   // Liquid Ink Photoimageable
-    { "Dry Film",        DEFAULT_EPSILON_R_SOLDERMASK, 0.0 }    // Dry Film Photoimageable
+    { NotSpecifiedPrm(),   DEFAULT_EPSILON_R_SOLDERMASK, 0.0 },   // Not specified, not in .gbrjob
+    { wxT( "Epoxy" ),      DEFAULT_EPSILON_R_SOLDERMASK, 0.0 },   // Epoxy Liquid material (usual)
+    { wxT( "Liquid Ink" ), DEFAULT_EPSILON_R_SOLDERMASK, 0.0 },   // Liquid Ink Photoimageable
+    { wxT( "Dry Film" ),   DEFAULT_EPSILON_R_SOLDERMASK, 0.0 }    // Dry Film Photoimageable
 };
 
 static DIELECTRIC_SUBSTRATE silkscreenMaterial[]  =
 {
-    { NotSpecifiedPrm(), DEFAULT_EPSILON_R_SILKSCREEN, 0.0 },   // Not specified, not in .gbrjob
-    { "Liquid Photo",    DEFAULT_EPSILON_R_SILKSCREEN, 0.0 },   // Liquid Ink Photoimageable
-    { "Direct Printing", DEFAULT_EPSILON_R_SILKSCREEN, 0.0 }    // Direct Legend Printing
+    { NotSpecifiedPrm(),        DEFAULT_EPSILON_R_SILKSCREEN, 0.0 },   // Not specified, not in .gbrjob
+    { wxT( "Liquid Photo" ),    DEFAULT_EPSILON_R_SILKSCREEN, 0.0 },   // Liquid Ink Photoimageable
+    { wxT( "Direct Printing" ), DEFAULT_EPSILON_R_SILKSCREEN, 0.0 }    // Direct Legend Printing
 };
 
 

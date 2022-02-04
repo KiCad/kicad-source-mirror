@@ -692,7 +692,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
         break;
 
     default:
-        wxASSERT_MSG( false, "Unhandled FP_SHAPE shape" );
+        wxASSERT_MSG( false, wxT( "Unhandled FP_SHAPE shape" ) );
         break;
     }
 }

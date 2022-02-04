@@ -1212,7 +1212,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
         if( aPlotOpts->GetPlotFrameRef() )
         {
             PlotDrawingSheet( plotter, aBoard->GetProject(), aBoard->GetTitleBlock(),
-                              aBoard->GetPageSettings(), "1", 1, aSheetDesc,
+                              aBoard->GetPageSettings(), wxT( "1" ), 1, aSheetDesc,
                               aBoard->GetFileName() );
 
             if( aPlotOpts->GetMirror() )

@@ -326,8 +326,10 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
     {
         delete np;
 
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] problems encountered reading cache file '%s'",
-                    __FILE__, __FUNCTION__, __LINE__, aFileName );
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] problems encountered reading cache file "
+                                     "'%s'" ),
+                    __FILE__, __FUNCTION__, __LINE__,
+                    aFileName );
 
         return nullptr;
     }

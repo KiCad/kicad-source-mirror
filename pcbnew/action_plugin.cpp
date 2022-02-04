@@ -177,7 +177,7 @@ void ACTION_PLUGINS::register_action( ACTION_PLUGIN* aAction )
 
             if ( !aAction->iconBitmap.IsOk() )
             {
-                wxLogVerbose( "Failed to load icon " + icon_file_name + " for action plugin " );
+                wxLogVerbose( wxT( "Failed to load icon " ) + icon_file_name + wxT( " for action plugin " ) );
             }
         }
     }

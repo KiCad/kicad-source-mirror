@@ -136,7 +136,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     double rot_list[] = { 0.0, 90.0, -90.0, 180.0 };
 
     for( size_t ii = 0; ii < m_OrientCtrl->GetCount() && ii < 4; ++ii )
-        m_OrientCtrl->SetString( ii, wxString::Format( "%.1f", rot_list[ii] ) );
+        m_OrientCtrl->SetString( ii, wxString::Format( wxT( "%.1f" ), rot_list[ii] ) );
 
     // Set font sizes
     m_statusLine->SetFont( KIUI::GetInfoFont( this ) );
@@ -316,11 +316,11 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 #ifdef __WXMAC__
             // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting.
             // Replace it now.
-            txt.Replace( "\r", "\n" );
+            txt.Replace( wxT( "\r" ), wxT( "\n" ) );
 #elif defined( __WINDOWS__ )
             // On Windows, a new line is coded as \r\n.  We use only \n in kicad files and in
             // drawing routines so strip the \r char.
-            txt.Replace( "\r", "" );
+            txt.Replace( wxT( "\r" ), wxT( "" ) );
 #endif
             m_edaText->SetText( EscapeString( txt, CTX_QUOTED_STR ) );
         }

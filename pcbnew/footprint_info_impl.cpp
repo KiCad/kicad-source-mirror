@@ -375,7 +375,7 @@ void FOOTPRINT_LIST_IMPL::WriteCacheToFile( const wxString& aFilePath )
         return;
     }
 
-    txtStream << wxString::Format( "%lld", m_list_timestamp ) << endl;
+    txtStream << wxString::Format( wxT( "%lld" ), m_list_timestamp ) << endl;
 
     for( std::unique_ptr<FOOTPRINT_INFO>& fpinfo : m_list )
     {
@@ -383,9 +383,9 @@ void FOOTPRINT_LIST_IMPL::WriteCacheToFile( const wxString& aFilePath )
         txtStream << fpinfo->GetName() << endl;
         txtStream << EscapeString( fpinfo->GetDescription(), CTX_LINE ) << endl;
         txtStream << EscapeString( fpinfo->GetKeywords(), CTX_LINE ) << endl;
-        txtStream << wxString::Format( "%d", fpinfo->GetOrderNum() ) << endl;
-        txtStream << wxString::Format( "%u", fpinfo->GetPadCount() ) << endl;
-        txtStream << wxString::Format( "%u", fpinfo->GetUniquePadCount() ) << endl;
+        txtStream << wxString::Format( wxT( "%d" ), fpinfo->GetOrderNum() ) << endl;
+        txtStream << wxString::Format( wxT( "%u" ), fpinfo->GetPadCount() ) << endl;
+        txtStream << wxString::Format( wxT( "%u" ), fpinfo->GetUniquePadCount() ) << endl;
     }
 
     txtStream.Flush();

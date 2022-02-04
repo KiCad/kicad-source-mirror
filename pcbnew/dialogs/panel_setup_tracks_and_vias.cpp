@@ -86,7 +86,7 @@ PANEL_SETUP_TRACKS_AND_VIAS::PANEL_SETUP_TRACKS_AND_VIAS( PAGED_DIALOG* aParent,
 
     // Ensure width of columns is enough to enter any reasonable value
     WX_GRID* grid_list[] = { m_trackWidthsGrid, m_viaSizesGrid, m_diffPairsGrid, nullptr };
-    int min_linesize = m_trackWidthsGrid->GetTextExtent( "000.000000 mm " ).x;
+    int min_linesize = m_trackWidthsGrid->GetTextExtent( wxT( "000.000000 mm " ) ).x;
 
     for( int ii = 0; grid_list[ii]; ii++ )
     {

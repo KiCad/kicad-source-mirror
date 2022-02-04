@@ -122,8 +122,8 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
     if( !s_savedDialogState.saveReportInitialized
             || s_savedDialogState.m_project != Prj().GetProjectFullName() )
     {
-        fn.SetName( fn.GetName() + "_report" );
-        fn.SetExt( "txt" );
+        fn.SetName( fn.GetName() + wxT( "_report" ) );
+        fn.SetExt( wxT( "txt" ) );
         s_savedDialogState.saveReportName = fn.GetFullName();
         s_savedDialogState.saveReportFolder = wxPathOnly( Prj().GetProjectFullName() );
         s_savedDialogState.m_project = Prj().GetProjectFullName();
@@ -372,7 +372,7 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     }
 
     m_gridPads->SetCellValue( currentRow, COL_LABEL, _( "Total:" ) );
-    m_gridPads->SetCellValue( currentRow, COL_AMOUNT, wxString::Format( "%i ", totalPads ) );
+    m_gridPads->SetCellValue( currentRow, COL_AMOUNT, wxString::Format( wxT( "%i " ), totalPads ) );
 
     int totalVias = 0;
     currentRow = 0;
@@ -380,13 +380,13 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     for( const auto& type : m_viasTypes )
     {
         m_gridVias->SetCellValue( currentRow, COL_LABEL, type.title );
-        m_gridVias->SetCellValue( currentRow, COL_AMOUNT, wxString::Format( "%i ", type.qty ) );
+        m_gridVias->SetCellValue( currentRow, COL_AMOUNT, wxString::Format( wxT( "%i " ), type.qty ) );
         totalVias += type.qty;
         currentRow++;
     }
 
     m_gridVias->SetCellValue( currentRow, COL_LABEL, _( "Total:" ) );
-    m_gridVias->SetCellValue( currentRow, COL_AMOUNT, wxString::Format( "%i ", totalVias ) );
+    m_gridVias->SetCellValue( currentRow, COL_AMOUNT, wxString::Format( wxT( "%i " ), totalVias ) );
 
 
     int totalFront = 0;
@@ -398,12 +398,13 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     for( const auto& type : m_componentsTypes )
     {
         m_gridComponents->SetCellValue( currentRow, COL_LABEL, type.title );
-        m_gridComponents->SetCellValue(
-                currentRow, COL_FRONT_SIDE, wxString::Format( "%i ", type.frontSideQty ) );
-        m_gridComponents->SetCellValue(
-                currentRow, COL_BOTTOM_SIDE, wxString::Format( "%i ", type.backSideQty ) );
+        m_gridComponents->SetCellValue( currentRow, COL_FRONT_SIDE,
+                                        wxString::Format( wxT( "%i " ), type.frontSideQty ) );
+        m_gridComponents->SetCellValue( currentRow, COL_BOTTOM_SIDE,
+                                        wxString::Format( wxT( "%i " ), type.backSideQty ) );
         m_gridComponents->SetCellValue( currentRow, 3,
-                wxString::Format( wxT( "%i " ), type.frontSideQty + type.backSideQty ) );
+                                        wxString::Format( wxT( "%i " ),
+                                                          type.frontSideQty + type.backSideQty ) );
         totalFront += type.frontSideQty;
         totalBack  += type.backSideQty;
         currentRow++;
@@ -411,18 +412,20 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
 
     m_gridComponents->SetCellValue( currentRow, COL_LABEL, _( "Total:" ) );
     m_gridComponents->SetCellValue( currentRow, COL_FRONT_SIDE,
-                                    wxString::Format( "%i ", totalFront ) );
+                                    wxString::Format( wxT( "%i " ), totalFront ) );
     m_gridComponents->SetCellValue( currentRow, COL_BOTTOM_SIDE,
-                                    wxString::Format( "%i ", totalBack ) );
+                                    wxString::Format( wxT( "%i " ), totalBack ) );
     m_gridComponents->SetCellValue( currentRow, COL_TOTAL,
-                                    wxString::Format( "%i ", totalFront + totalBack ) );
+                                    wxString::Format( wxT( "%i " ), totalFront + totalBack ) );
 
     if( m_hasOutline )
     {
         m_gridBoard->SetCellValue( ROW_BOARD_WIDTH, COL_AMOUNT,
-                                   MessageTextFromValue( GetUserUnits(), m_boardWidth ) + " " );
+                                   MessageTextFromValue( GetUserUnits(),
+                                                         m_boardWidth ) + wxS( " " ) );
         m_gridBoard->SetCellValue( ROW_BOARD_HEIGHT, COL_AMOUNT,
-                                   MessageTextFromValue( GetUserUnits(), m_boardHeight ) + " " );
+                                   MessageTextFromValue( GetUserUnits(),
+                                                         m_boardHeight ) + wxS( " " ) );
         m_gridBoard->SetCellValue( ROW_BOARD_AREA, COL_AMOUNT,
                                    MessageTextFromValue( GetUserUnits(), m_boardArea, true,
                                                          EDA_DATA_TYPE::AREA ) );
@@ -482,7 +485,7 @@ void DIALOG_BOARD_STATISTICS::updateDrillGrid()
             stopLayerStr = board->GetLayerName( type.stopLayer );
 
         m_gridDrills->SetCellValue(
-                currentRow, drillType_t::COL_COUNT, wxString::Format( "%i", type.qty ) );
+                currentRow, drillType_t::COL_COUNT, wxString::Format( wxT( "%i" ), type.qty ) );
         m_gridDrills->SetCellValue( currentRow, drillType_t::COL_SHAPE, shapeStr );
         m_gridDrills->SetCellValue( currentRow, drillType_t::COL_X_SIZE,
                 MessageTextFromValue( GetUserUnits(), type.xSize ) );
@@ -529,44 +532,44 @@ void DIALOG_BOARD_STATISTICS::printGridToStringAsTable( wxGrid* aGrid, wxString&
 
     // Print column labels.
 
-    aStr << "|";
+    aStr << wxT( "|" );
 
     if( aUseRowLabels )
     {
         aStr.Append( ' ', rowLabelsWidth );
-        aStr << " |";
+        aStr << wxT( " |" );
     }
 
     for( int col = 0; col < aGrid->GetNumberCols(); col++ )
     {
         if( aUseColLabels )
-            tmp.Printf( " %*s |", widths[col], aGrid->GetColLabelValue( col ) );
+            tmp.Printf( wxT( " %*s |" ), widths[col], aGrid->GetColLabelValue( col ) );
         else
-            tmp.Printf( " %*s |", widths[col], aGrid->GetCellValue( 0, col ) );
+            tmp.Printf( wxT( " %*s |" ), widths[col], aGrid->GetCellValue( 0, col ) );
 
         aStr << tmp;
     }
 
-    aStr << "\n";
+    aStr << wxT( "\n" );
 
     // Print column label horizontal separators.
 
-    aStr << "|";
+    aStr << wxT( "|" );
 
     if( aUseRowLabels )
     {
         aStr.Append( '-', rowLabelsWidth );
-        aStr << "-|";
+        aStr << wxT( "-|" );
     }
 
     for( int col = 0; col < aGrid->GetNumberCols(); col++ )
     {
-        aStr << "-";
+        aStr << wxT( "-" );
         aStr.Append( '-', widths[col] );
-        aStr << "-|";
+        aStr << wxT( "-|" );
     }
 
-    aStr << "\n";
+    aStr << wxT( "\n" );
 
     // Print regular cells.
 
@@ -581,21 +584,21 @@ void DIALOG_BOARD_STATISTICS::printGridToStringAsTable( wxGrid* aGrid, wxString&
     for( int row = firstRow; row < aGrid->GetNumberRows(); row++ )
     {
         if( aUseRowLabels )
-            tmp.Printf( "|%-*s |", rowLabelsWidth, aGrid->GetRowLabelValue( row ) );
+            tmp.Printf( wxT( "|%-*s |" ), rowLabelsWidth, aGrid->GetRowLabelValue( row ) );
         else if( aUseFirstColAsLabel )
-            tmp.Printf( "|%-*s  |", widths[0], aGrid->GetCellValue( row, 0 ) );
+            tmp.Printf( wxT( "|%-*s  |" ), widths[0], aGrid->GetCellValue( row, 0 ) );
         else
-            tmp.Printf( "|" );
+            tmp.Printf( wxT( "|" ) );
 
         aStr << tmp;
 
         for( int col = firstCol; col < aGrid->GetNumberCols(); col++ )
         {
-            tmp.Printf( " %*s |", widths[col], aGrid->GetCellValue( row, col ) );
+            tmp.Printf( wxT( " %*s |" ), widths[col], aGrid->GetCellValue( row, col ) );
             aStr << tmp;
         }
 
-        aStr << "\n";
+        aStr << wxT( "\n" );
     }
 }
 
@@ -655,7 +658,7 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
     s_savedDialogState.saveReportFolder = wxPathOnly( saveFileDialog.GetPath() );
     s_savedDialogState.saveReportName = saveFileDialog.GetFilename();
 
-    outFile = wxFopen( saveFileDialog.GetPath(), "wt" );
+    outFile = wxFopen( saveFileDialog.GetPath(), wxT( "wt" ) );
 
     if( outFile == nullptr )
     {
@@ -664,47 +667,47 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
         return;
     }
 
-    msg << _( "PCB statistics report\n=====================" ) << "\n";
-    msg << wxS( "- " ) << _( "Date" ) << wxS( ": " ) << wxDateTime::Now().Format() << "\n";
-    msg << wxS( "- " ) << _( "Project" ) << wxS( ": " )<< Prj().GetProjectName() << "\n";
-    msg << wxS( "- " ) << _( "Board name" ) << wxS( ": " )<< boardName << "\n";
+    msg << _( "PCB statistics report\n=====================" ) << wxT( "\n" );
+    msg << wxS( "- " ) << _( "Date" ) << wxS( ": " ) << wxDateTime::Now().Format() << wxT( "\n" );
+    msg << wxS( "- " ) << _( "Project" ) << wxS( ": " )<< Prj().GetProjectName() << wxT( "\n" );
+    msg << wxS( "- " ) << _( "Board name" ) << wxS( ": " )<< boardName << wxT( "\n" );
 
-    msg << "\n";
-    msg << _( "Board" ) << "\n-----\n";
+    msg << wxT( "\n" );
+    msg << _( "Board" ) << wxT( "\n-----\n" );
 
     if( m_hasOutline )
     {
         msg << wxS( "- " ) << _( "Width" ) << wxS( ": " ) <<
-               MessageTextFromValue( GetUserUnits(), m_boardWidth ) << "\n";
+               MessageTextFromValue( GetUserUnits(), m_boardWidth ) << wxT( "\n" );
         msg << wxS( "- " ) << _( "Height" ) << wxS( ": " ) <<
-               MessageTextFromValue( GetUserUnits(), m_boardHeight ) << "\n";
+               MessageTextFromValue( GetUserUnits(), m_boardHeight ) << wxT( "\n" );
         msg << wxS( "- " ) << _( "Area" ) + wxS( ": " ) <<
                MessageTextFromValue( GetUserUnits(), m_boardArea, true, EDA_DATA_TYPE::AREA );
-        msg << "\n";
+        msg << wxT( "\n" );
     }
     else
     {
-        msg << wxS( "- " ) << _( "Width" ) << wxS( ": " ) << _( "unknown" ) << "\n";
-        msg << wxS( "- " ) << _( "Height" ) << wxS( ": " ) << _( "unknown" ) << "\n";
-        msg << wxS( "- " ) << _( "Area" ) << wxS( ": " ) << _( "unknown" ) << "\n";
+        msg << wxS( "- " ) << _( "Width" ) << wxS( ": " ) << _( "unknown" ) << wxT( "\n" );
+        msg << wxS( "- " ) << _( "Height" ) << wxS( ": " ) << _( "unknown" ) << wxT( "\n" );
+        msg << wxS( "- " ) << _( "Area" ) << wxS( ": " ) << _( "unknown" ) << wxT( "\n" );
     }
 
-    msg << "\n";
-    msg << _( "Pads" ) << "\n----\n";
+    msg << wxT( "\n" );
+    msg << _( "Pads" ) << wxT( "\n----\n" );
 
     for( auto& type : m_padsTypes )
-        msg << "- " << type.title << " " << type.qty << "\n";
+        msg << wxT( "- " ) << type.title << wxS( " " ) << type.qty << wxT( "\n" );
 
-    msg << "\n";
-    msg << _( "Vias" ) << "\n----\n";
+    msg << wxT( "\n" );
+    msg << _( "Vias" ) << wxT( "\n----\n" );
 
     for( auto& type : m_viasTypes )
-        msg << "- " << type.title << " " << type.qty << "\n";
+        msg << wxT( "- " ) << type.title << wxS( " " ) << type.qty << wxT( "\n" );
 
     // We will save data about components in the table.
     // We have to calculate column widths
     std::vector<int>      widths;
-    std::vector<wxString> labels{ "", _( "Front Side" ), _( "Back Side" ), _( "Total" ) };
+    std::vector<wxString> labels{ wxT( "" ), _( "Front Side" ), _( "Back Side" ), _( "Total" ) };
     wxString tmp;
 
     widths.reserve( labels.size() );
@@ -724,23 +727,23 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
     }
 
     // Get maximum width for other columns
-    tmp.Printf( "%i", frontTotal );
+    tmp.Printf( wxT( "%i" ), frontTotal );
     widths[1] = std::max<int>( tmp.size(), widths[1] );
-    tmp.Printf( "%i", backTotal );
+    tmp.Printf( wxT( "%i" ), backTotal );
     widths[2] = std::max<int>( tmp.size(), widths[2] );
-    tmp.Printf( "%i", frontTotal + backTotal );
+    tmp.Printf( wxT( "%i" ), frontTotal + backTotal );
     widths[3] = std::max<int>( tmp.size(), widths[3] );
 
     //Write components amount to file
-    msg << "\n";
-    msg << _( "Components" ) << "\n----------\n";
-    msg << "\n";
+    msg << wxT( "\n" );
+    msg << _( "Components" ) << wxT( "\n----------\n" );
+    msg << wxT( "\n" );
 
     printGridToStringAsTable( m_gridComponents, msg, false, false, true );
 
-    msg << "\n";
-    msg << _( "Drill holes" ) << "\n-----------\n";
-    msg << "\n";
+    msg << wxT( "\n" );
+    msg << _( "Drill holes" ) << wxT( "\n-----------\n" );
+    msg << wxT( "\n" );
 
     printGridToStringAsTable( m_gridDrills, msg, false, true, false );
 

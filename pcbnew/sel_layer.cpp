@@ -215,7 +215,7 @@ void PCB_ONE_LAYER_SELECTOR::buildList()
             m_leftGridLayers->SetCellValue( left_row, LAYERNAME_COLNUM, layername );
 
             if( m_layerSelected == layerid )
-                m_leftGridLayers->SetCellValue( left_row, SELECT_COLNUM, "1" );
+                m_leftGridLayers->SetCellValue( left_row, SELECT_COLNUM, wxT( "1" ) );
 
             m_layersIdLeftColumn.push_back( layerid );
             left_row++;
@@ -229,7 +229,7 @@ void PCB_ONE_LAYER_SELECTOR::buildList()
             m_rightGridLayers->SetCellValue( right_row, LAYERNAME_COLNUM, layername );
 
             if( m_layerSelected == layerid )
-                m_rightGridLayers->SetCellValue( right_row, SELECT_COLNUM, "1" );
+                m_rightGridLayers->SetCellValue( right_row, SELECT_COLNUM, wxT( "1" ) );
 
             m_layersIdRightColumn.push_back( layerid );
             right_row++;
@@ -397,7 +397,7 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::buildList()
 
         if( m_frontLayer == layerid )
         {
-            m_leftGridLayers->SetCellValue( row, SELECT_COLNUM, "1" );
+            m_leftGridLayers->SetCellValue( row, SELECT_COLNUM, wxT( "1" ) );
             m_leftGridLayers->SetGridCursor( row, COLOR_COLNUM );
             m_leftRowSelected = row;
         }
@@ -410,7 +410,7 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::buildList()
 
         if( m_backLayer == layerid )
         {
-            m_rightGridLayers->SetCellValue( row, SELECT_COLNUM, "1" );
+            m_rightGridLayers->SetCellValue( row, SELECT_COLNUM, wxT( "1" ) );
             m_rightRowSelected = row;
         }
 
@@ -434,7 +434,7 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::OnLeftGridCellClick( wxGridEvent& event )
     m_leftGridLayers->SetCellValue( m_leftRowSelected, SELECT_COLNUM, wxEmptyString );
     m_frontLayer = layer;
     m_leftRowSelected = row;
-    m_leftGridLayers->SetCellValue( m_leftRowSelected, SELECT_COLNUM, "1" );
+    m_leftGridLayers->SetCellValue( m_leftRowSelected, SELECT_COLNUM, wxT( "1" ) );
 }
 
 
@@ -449,5 +449,5 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::OnRightGridCellClick( wxGridEvent& event 
     m_rightGridLayers->SetCellValue( m_rightRowSelected, SELECT_COLNUM, wxEmptyString );
     m_backLayer = layer;
     m_rightRowSelected = row;
-    m_rightGridLayers->SetCellValue( m_rightRowSelected, SELECT_COLNUM, "1" );
+    m_rightGridLayers->SetCellValue( m_rightRowSelected, SELECT_COLNUM, wxT( "1" ) );
 }

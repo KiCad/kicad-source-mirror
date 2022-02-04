@@ -124,7 +124,7 @@ bool GRAPHICS_CLEANER::areEquivalent( PCB_SHAPE* aShape1, PCB_SHAPE* aShape2 )
                 && aShape1->GetBezierPoints() == aShape2->GetBezierPoints();
 
     default:
-        wxFAIL_MSG( "GRAPHICS_CLEANER::areEquivalent unimplemented for "
+        wxFAIL_MSG( wxT( "GRAPHICS_CLEANER::areEquivalent unimplemented for " )
                     + aShape1->SHAPE_T_asString() );
         return false;
     }

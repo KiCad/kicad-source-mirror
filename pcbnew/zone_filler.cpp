@@ -71,7 +71,8 @@ ZONE_FILLER::~ZONE_FILLER()
 void ZONE_FILLER::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 {
     m_progressReporter = aReporter;
-    wxASSERT_MSG( m_commit, "ZONE_FILLER must have a valid commit to call SetProgressReporter" );
+    wxASSERT_MSG( m_commit, wxT( "ZONE_FILLER must have a valid commit to call "
+                                 "SetProgressReporter" ) );
 }
 
 
@@ -1085,19 +1086,19 @@ bool ZONE_FILLER::computeRawFilledArea( const ZONE* aZone,
     SHAPE_POLY_SET clearanceHoles;
 
     aRawPolys = aSmoothedOutline;
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In1_Cu, "smoothed-outline" );
+    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In1_Cu, wxT( "smoothed-outline" ) );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
 
     knockoutThermalReliefs( aZone, aLayer, aRawPolys );
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In2_Cu, "minus-thermal-reliefs" );
+    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In2_Cu, wxT( "minus-thermal-reliefs" ) );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
 
     buildCopperItemClearances( aZone, aLayer, clearanceHoles );
-    DUMP_POLYS_TO_COPPER_LAYER( clearanceHoles, In3_Cu, "clearance-holes" );
+    DUMP_POLYS_TO_COPPER_LAYER( clearanceHoles, In3_Cu, wxT( "clearance-holes" ) );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
@@ -1112,16 +1113,16 @@ bool ZONE_FILLER::computeRawFilledArea( const ZONE* aZone,
     static const bool USE_BBOX_CACHES = true;
     SHAPE_POLY_SET testAreas = aRawPolys;
     testAreas.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
-    DUMP_POLYS_TO_COPPER_LAYER( testAreas, In4_Cu, "minus-clearance-holes" );
+    DUMP_POLYS_TO_COPPER_LAYER( testAreas, In4_Cu, wxT( "minus-clearance-holes" ) );
 
     // Prune features that don't meet minimum-width criteria
     if( half_min_width - epsilon > epsilon )
     {
         testAreas.Deflate( half_min_width - epsilon, numSegs, fastCornerStrategy );
-        DUMP_POLYS_TO_COPPER_LAYER( testAreas, In5_Cu, "spoke-test-deflated" );
+        DUMP_POLYS_TO_COPPER_LAYER( testAreas, In5_Cu, wxT( "spoke-test-deflated" ) );
 
         testAreas.Inflate( half_min_width - epsilon, numSegs, fastCornerStrategy );
-        DUMP_POLYS_TO_COPPER_LAYER( testAreas, In6_Cu, "spoke-test-reinflated" );
+        DUMP_POLYS_TO_COPPER_LAYER( testAreas, In6_Cu, wxT( "spoke-test-reinflated" ) );
     }
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
@@ -1170,19 +1171,19 @@ bool ZONE_FILLER::computeRawFilledArea( const ZONE* aZone,
         }
     }
 
-    DUMP_POLYS_TO_COPPER_LAYER( debugSpokes, In7_Cu, "spokes" );
+    DUMP_POLYS_TO_COPPER_LAYER( debugSpokes, In7_Cu, wxT( "spokes" ) );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
 
     aRawPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In8_Cu, "after-spoke-trimming" );
+    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In8_Cu, wxT( "after-spoke-trimming" ) );
 
     // Prune features that don't meet minimum-width criteria
     if( half_min_width - epsilon > epsilon )
         aRawPolys.Deflate( half_min_width - epsilon, numSegs, cornerStrategy );
 
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In9_Cu, "deflated" );
+    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In9_Cu, wxT( "deflated" ) );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
@@ -1208,18 +1209,18 @@ bool ZONE_FILLER::computeRawFilledArea( const ZONE* aZone,
         aRawPolys.Inflate( half_min_width - epsilon, numSegs, cornerStrategy );
     }
 
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In15_Cu, "after-reinflating" );
+    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In15_Cu, wxT( "after-reinflating" ) );
 
     // Ensure additive changes (thermal stubs and particularly inflating acute corners) do not
     // add copper outside the zone boundary or inside the clearance holes
     aRawPolys.BooleanIntersection( aMaxExtents, SHAPE_POLY_SET::PM_FAST );
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In16_Cu, "after-trim-to-outline" );
+    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In16_Cu, wxT( "after-trim-to-outline" ) );
     aRawPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In17_Cu, "after-trim-to-clearance-holes" );
+    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In17_Cu, wxT( "after-trim-to-clearance-holes" ) );
 
     // Lastly give any same-net but higher-priority zones control over their own area.
     subtractHigherPriorityZones( aZone, aLayer, aRawPolys );
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In18_Cu, "minus-higher-priority-zones" );
+    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In18_Cu, wxT( "minus-higher-priority-zones" ) );
 
     aRawPolys.Fracture( SHAPE_POLY_SET::PM_FAST );
     return true;
@@ -1546,7 +1547,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
     if( orientation != 0.0 )
         holes.Rotate( -M_PI/180.0 * orientation, VECTOR2I( 0,0 ) );
 
-    DUMP_POLYS_TO_COPPER_LAYER( holes, In10_Cu, "hatch-holes" );
+    DUMP_POLYS_TO_COPPER_LAYER( holes, In10_Cu, wxT( "hatch-holes" ) );
 
     int outline_margin = aZone->GetMinThickness() * 1.1;
 
@@ -1559,12 +1560,12 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
     SHAPE_POLY_SET deflatedFilledPolys = aRawPolys;
     deflatedFilledPolys.Deflate( outline_margin - aZone->GetMinThickness(), 16 );
     holes.BooleanIntersection( deflatedFilledPolys, SHAPE_POLY_SET::PM_FAST );
-    DUMP_POLYS_TO_COPPER_LAYER( holes, In11_Cu, "fill-clipped-hatch-holes" );
+    DUMP_POLYS_TO_COPPER_LAYER( holes, In11_Cu, wxT( "fill-clipped-hatch-holes" ) );
 
     SHAPE_POLY_SET deflatedOutline = *aZone->Outline();
     deflatedOutline.Deflate( outline_margin, 16 );
     holes.BooleanIntersection( deflatedOutline, SHAPE_POLY_SET::PM_FAST );
-    DUMP_POLYS_TO_COPPER_LAYER( holes, In12_Cu, "outline-clipped-hatch-holes" );
+    DUMP_POLYS_TO_COPPER_LAYER( holes, In12_Cu, wxT( "outline-clipped-hatch-holes" ) );
 
     if( aZone->GetNetCode() != 0 )
     {
@@ -1623,7 +1624,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
 
         holes.BooleanSubtract( aprons, SHAPE_POLY_SET::PM_FAST );
     }
-    DUMP_POLYS_TO_COPPER_LAYER( holes, In13_Cu, "pad-via-clipped-hatch-holes" );
+    DUMP_POLYS_TO_COPPER_LAYER( holes, In13_Cu, wxT( "pad-via-clipped-hatch-holes" ) );
 
     // Now filter truncated holes to avoid small holes in pattern
     // It happens for holes near the zone outline
@@ -1640,7 +1641,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
     // create grid. Use SHAPE_POLY_SET::PM_STRICTLY_SIMPLE to
     // generate strictly simple polygons needed by Gerber files and Fracture()
     aRawPolys.BooleanSubtract( aRawPolys, holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In14_Cu, "after-hatching" );
+    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In14_Cu, wxT( "after-hatching" ) );
 
     return true;
 }

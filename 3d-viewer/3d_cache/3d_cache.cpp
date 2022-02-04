@@ -536,7 +536,7 @@ bool S3D_CACHE::Set3DConfigDir( const wxString& aConfigDir )
     {
         wxLogTrace( MASK_3D_CACHE,
                     wxT( "%s:%s:%d\n * could not set 3D Config Directory on filename resolver\n"
-                    " * config directory: '%s'" ),
+                         " * config directory: '%s'" ),
                     __FILE__, __FUNCTION__, __LINE__, m_ConfigDir );
     }
 

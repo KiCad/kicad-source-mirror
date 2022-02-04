@@ -470,7 +470,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
         break;
 
     default:
-        wxFAIL_MSG( "PAD::buildEffectiveShapes: Unsupported pad shape: "
+        wxFAIL_MSG( wxT( "PAD::buildEffectiveShapes: Unsupported pad shape: " )
                     + PAD_SHAPE_T_asString( effectiveShape ) );
         break;
     }
@@ -963,13 +963,13 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
         if( GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
         {
             aList.emplace_back( _( "Hole" ),
-                                wxString::Format( "%s",
+                                wxString::Format( wxT( "%s" ),
                                                   MessageTextFromValue( units, m_drill.x ) ) );
         }
         else
         {
             aList.emplace_back( _( "Hole X / Y" ),
-                                wxString::Format( "%s / %s",
+                                wxString::Format( wxT( "%s / %s" ),
                                                   MessageTextFromValue( units, m_drill.x ),
                                                   MessageTextFromValue( units, m_drill.y ) ) );
         }
@@ -987,7 +987,7 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     }
 #if 0
     // useful for debug only
-    aList.emplace_back( "UUID", m_Uuid.AsString() );
+    aList.emplace_back( wxT( "UUID" ), m_Uuid.AsString() );
 #endif
 }
 
@@ -1295,8 +1295,8 @@ void PAD::ViewGetLayers( int aLayers[], int& aCount ) const
     {
         wxString msg;
         msg.Printf( wxT( "footprint %s, pad %s: could not find valid layer for pad" ),
-                GetParent() ? GetParent()->GetReference() : "<null>",
-                GetNumber().IsEmpty() ? "(unnumbered)" : GetNumber() );
+                    GetParent() ? GetParent()->GetReference() : wxT( "<null>" ),
+                    GetNumber().IsEmpty() ? wxT( "(unnumbered)" ) : GetNumber() );
         wxLogDebug( msg );
     }
 #endif
@@ -1532,7 +1532,7 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                 int aError, ERROR_LOC aErrorLoc,
                                                 bool ignoreLineWidth ) const
 {
-    wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for pads." );
+    wxASSERT_MSG( !ignoreLineWidth, wxT( "IgnoreLineWidth has no meaning for pads." ) );
 
     // minimal segment count to approximate a circle to create the polygonal pad shape
     // This minimal value is mainly for very small pads, like SM0402.
@@ -1626,7 +1626,7 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     }
 
     default:
-        wxFAIL_MSG( "PAD::TransformShapeWithClearanceToPolygon no implementation for "
+        wxFAIL_MSG( wxT( "PAD::TransformShapeWithClearanceToPolygon no implementation for " )
                     + PAD_SHAPE_T_asString( GetShape() ) );
         break;
     }

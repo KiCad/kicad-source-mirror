@@ -357,8 +357,8 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
                                             wxYES_NO | wxCENTER | wxICON_QUESTION | wxYES_DEFAULT );
                 badCellDlg.SetExtendedMessage( _( "Empty cells will result in all rows that are "
                                                   "invalid to be removed from the table." ) );
-                badCellDlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( "Remove Invalid Cells" ),
-                                           wxMessageDialog::ButtonLabel( "Cancel Table Update" ) );
+                badCellDlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Remove Invalid Cells" ) ),
+                                           wxMessageDialog::ButtonLabel( _( "Cancel Table Update" ) ) );
 
                 if( badCellDlg.ShowModal() == wxID_NO )
                     return false;

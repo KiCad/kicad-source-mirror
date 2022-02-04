@@ -160,7 +160,7 @@ void CN_ITEM::Dump()
     for( CN_ITEM* i : m_connected )
     {
         PCB_TRACK* t = static_cast<PCB_TRACK*>( i->Parent() );
-        wxLogDebug( "    - %p %d\n", t, t->Type() );
+        wxLogDebug( wxT( "    - %p %d\n" ), t, t->Type() );
     }
 }
 
@@ -458,12 +458,12 @@ void CN_CLUSTER::Dump()
 {
     for( auto item : m_items )
     {
-        wxLogTrace( "CN", " - item : %p bitem : %p type : %d inet %s\n",
+        wxLogTrace( wxT( "CN" ), wxT( " - item : %p bitem : %p type : %d inet %s\n" ),
                     item,
                     item->Parent(),
                     item->Parent()->Type(),
                     (const char*) item->Parent()->GetNetname().c_str() );
-        wxLogTrace( "CN", "- item : %p bitem : %p type : %d inet %s\n",
+        wxLogTrace( wxT( "CN" ), wxT( "- item : %p bitem : %p type : %d inet %s\n" ),
                     item,
                     item->Parent(),
                     item->Parent()->Type(),

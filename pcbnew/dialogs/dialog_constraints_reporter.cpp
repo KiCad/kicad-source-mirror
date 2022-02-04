@@ -50,9 +50,9 @@ void DIALOG_CONSTRAINTS_REPORTER::DeleteAllPages()
 
 void DIALOG_CONSTRAINTS_REPORTER::OnErrorLinkClicked( wxHtmlLinkEvent& event )
 {
-    if( event.GetLinkInfo().GetHref() == "boardsetup" )
+    if( event.GetLinkInfo().GetHref() == wxT( "boardsetup" ) )
         m_frame->ShowBoardSetupDialog( _( "Custom Rules" ) );
-    else if( event.GetLinkInfo().GetHref() == "drc" )
+    else if( event.GetLinkInfo().GetHref() == wxT( "drc" ) )
         m_frame->GetToolManager()->RunAction( PCB_ACTIONS::runDRC, true );
 }
 

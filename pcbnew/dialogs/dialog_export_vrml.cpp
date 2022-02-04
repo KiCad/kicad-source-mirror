@@ -196,7 +196,7 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     if( path.IsEmpty() )
     {
         wxFileName brdFile = GetBoard()->GetFileName();
-        brdFile.SetExt( "wrl" );
+        brdFile.SetExt( wxT( "wrl" ) );
         path = brdFile.GetFullPath();
     }
 

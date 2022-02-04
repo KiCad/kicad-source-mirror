@@ -611,18 +611,20 @@ static wxString ComboBoxUnits( EDA_UNITS aUnits, double aValue, bool aIncludeLab
 
     switch( aUnits )
     {
-    default:                     wxASSERT_MSG( false, "Invalid unit" ); KI_FALLTHROUGH;
-    case EDA_UNITS::UNSCALED:    format = wxT( "%.0f" );                break;
-    case EDA_UNITS::MILLIMETRES: format = wxT( "%.3f" );                break;
-    case EDA_UNITS::MILS:        format = wxT( "%.2f" );                break;
-    case EDA_UNITS::INCHES:      format = wxT( "%.5f" );                break;
+    default:
+        wxASSERT_MSG( false, wxT( "Invalid unit" ) );
+        KI_FALLTHROUGH;
+    case EDA_UNITS::UNSCALED:    format = wxT( "%.0f" ); break;
+    case EDA_UNITS::MILLIMETRES: format = wxT( "%.3f" ); break;
+    case EDA_UNITS::MILS:        format = wxT( "%.2f" ); break;
+    case EDA_UNITS::INCHES:      format = wxT( "%.5f" ); break;
     }
 
     text.Printf( format, To_User_Unit( aUnits, aValue ) );
 
     if( aIncludeLabel )
     {
-        text += " ";
+        text += wxS( " " );
         text += GetAbbreviatedUnitsLabel( aUnits, EDA_DATA_TYPE::DISTANCE );
     }
 
@@ -708,9 +710,9 @@ void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool a
 
         if( hole > 0 )
         {
-            priStr = ComboBoxUnits( primaryUnit, diam, false ) + " / "
+            priStr = ComboBoxUnits( primaryUnit, diam, false ) + wxT( " / " )
                         + ComboBoxUnits( primaryUnit, hole, true );
-            secStr = ComboBoxUnits( secondaryUnit, diam, false ) + " / "
+            secStr = ComboBoxUnits( secondaryUnit, diam, false ) + wxT( " / " )
                         + ComboBoxUnits( secondaryUnit, hole, true );
         }
         else

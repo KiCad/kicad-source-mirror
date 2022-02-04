@@ -181,7 +181,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         int      lineStart = m_textEditor->PositionFromLine( line );
         wxString beginning = m_textEditor->GetTextRange( lineStart, lineStart + 10 );
 
-        if( beginning.StartsWith( "(rule " ) )
+        if( beginning.StartsWith( wxT( "(rule " ) ) )
         {
             startPos = lineStart;
             break;
@@ -201,15 +201,15 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
     auto isDisallowToken =
             []( const wxString& token ) -> bool
             {
-                return token == "buried_via"
-                    || token == "graphic"
-                    || token == "hole"
-                    || token == "micro_via"
-                    || token == "pad"
-                    || token == "text"
-                    || token == "track"
-                    || token == "via"
-                    || token == "zone";
+                return token == wxT( "buried_via" )
+                    || token == wxT( "graphic" )
+                    || token == wxT( "hole" )
+                    || token == wxT( "micro_via" )
+                    || token == wxT( "pad" )
+                    || token == wxT( "text" )
+                    || token == wxT( "track" )
+                    || token == wxT( "via" )
+                    || token == wxT( "zone" );
             };
 
     std::stack<wxString> sexprs;
@@ -277,11 +277,11 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         }
         else if( c == ')' )
         {
-            while( !sexprs.empty() && ( sexprs.top() == "assertion"
-                                     || sexprs.top() == "disallow"
+            while( !sexprs.empty() && ( sexprs.top() == wxT( "assertion" )
+                                     || sexprs.top() == wxT( "disallow" )
                                      || isDisallowToken( sexprs.top() )
-                                     || sexprs.top() == "min_resolved_spokes"
-                                     || sexprs.top() == "zone_connection" ) )
+                                     || sexprs.top() == wxT( "min_resolved_spokes" )
+                                     || sexprs.top() == wxT( "zone_connection" ) ) )
             {
                 sexprs.pop();
             }
@@ -293,10 +293,10 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         }
         else if( c == ' ' )
         {
-            if( context == SEXPR_OPEN && ( partial == "constraint"
-                                        || partial == "disallow"
-                                        || partial == "layer"
-                                        || partial == "severity" ) )
+            if( context == SEXPR_OPEN && ( partial == wxT( "constraint" )
+                                        || partial == wxT( "disallow" )
+                                        || partial == wxT( "layer" )
+                                        || partial == wxT( "severity" ) ) )
             {
                 m_textEditor->AutoCompCancel();
                 sexprs.push( partial );
@@ -305,10 +305,10 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                 context = SEXPR_TOKEN;
                 continue;
             }
-            else if( partial == "disallow"
+            else if( partial == wxT( "disallow" )
                   || isDisallowToken( partial )
-                  || partial == "min_resolved_spokes"
-                  || partial == "zone_connection" )
+                  || partial == wxT( "min_resolved_spokes" )
+                  || partial == wxT( "zone_connection" ) )
             {
                 m_textEditor->AutoCompCancel();
                 sexprs.push( partial );
@@ -317,9 +317,9 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                 context = SEXPR_TOKEN;
                 continue;
             }
-            else if( partial == "rule"
-                  || partial == "assertion"
-                  || partial == "condition" )
+            else if( partial == wxT( "rule" )
+                  || partial == wxT( "assertion" )
+                  || partial == wxT( "condition" ) )
             {
                 m_textEditor->AutoCompCancel();
                 sexprs.push( partial );
@@ -343,18 +343,18 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
     {
         if( sexprs.empty() )
         {
-            tokens = "rule|"
-                     "version";
+            tokens = wxT( "rule|"
+                          "version" );
         }
-        else if( sexprs.top() == "rule" )
+        else if( sexprs.top() == wxT( "rule" ) )
         {
-            tokens = "condition|"
-                     "constraint|"
-                     "layer";
+            tokens = wxT( "condition|"
+                          "constraint|"
+                          "layer" );
         }
-        else if( sexprs.top() == "constraint" )
+        else if( sexprs.top() == wxT( "constraint" ) )
         {
-            tokens = "max|min|opt";
+            tokens = wxT( "max|min|opt" );
         }
     }
     else if( context == SEXPR_TOKEN )
@@ -363,47 +363,47 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         {
             /* badly formed grammar */
         }
-        else if( sexprs.top() == "constraint" )
+        else if( sexprs.top() == wxT( "constraint" ) )
         {
-            tokens = "annular_width|"
-                     "clearance|"
-                     "courtyard_clearance|"
-                     "diff_pair_gap|"
-                     "diff_pair_uncoupled|"
-                     "disallow|"
-                     "edge_clearance|"
-                     "length|"
-                     "hole_clearance|"
-                     "hole_size|"
-                     "hole_to_hole|"
-                     "silk_clearance|"
-                     "skew|"
-                     "track_width|"
-                     "via_count|"
-                     "via_diameter";
+            tokens = wxT( "annular_width|"
+                          "clearance|"
+                          "courtyard_clearance|"
+                          "diff_pair_gap|"
+                          "diff_pair_uncoupled|"
+                          "disallow|"
+                          "edge_clearance|"
+                          "length|"
+                          "hole_clearance|"
+                          "hole_size|"
+                          "hole_to_hole|"
+                          "silk_clearance|"
+                          "skew|"
+                          "track_width|"
+                          "via_count|"
+                          "via_diameter" );
         }
-        else if( sexprs.top() == "disallow" || isDisallowToken( sexprs.top() ) )
+        else if( sexprs.top() == wxT( "disallow" ) || isDisallowToken( sexprs.top() ) )
         {
-            tokens = "buried_via|"
-                     "graphic|"
-                     "hole|"
-                     "micro_via|"
-                     "pad|"
-                     "text|"
-                     "track|"
-                     "via|"
-                     "zone";
+            tokens = wxT( "buried_via|"
+                          "graphic|"
+                          "hole|"
+                          "micro_via|"
+                          "pad|"
+                          "text|"
+                          "track|"
+                          "via|"
+                          "zone" );
         }
-        else if( sexprs.top() == "layer" )
+        else if( sexprs.top() == wxT( "layer" ) )
         {
-            tokens = "inner|outer|\"x\"";
+            tokens = wxT( "inner|outer|\"x\"" );
         }
-        else if( sexprs.top() == "severity" )
+        else if( sexprs.top() == wxT( "severity" ) )
         {
-            tokens = "warning|error|ignore|exclusion";
+            tokens = wxT( "warning|error|ignore|exclusion" );
         }
     }
-    else if( context == STRING && !sexprs.empty() && sexprs.top() == "condition" )
+    else if( context == STRING && !sexprs.empty() && sexprs.top() == wxT( "condition" ) )
     {
         if( expr_context == STRUCT_REF )
         {
@@ -417,18 +417,18 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                 for( PROPERTY_BASE* prop : props )
                 {
                     wxString ref( prop->Name() );
-                    ref.Replace( " ", "_" );
+                    ref.Replace( wxT( " " ), wxT( "_" ) );
                     propNames.insert( ref );
                 }
             }
 
             for( const wxString& propName : propNames )
-                tokens += "|" + propName;
+                tokens += wxT( "|" ) + propName;
 
             PCB_EXPR_BUILTIN_FUNCTIONS& functions = PCB_EXPR_BUILTIN_FUNCTIONS::Instance();
 
             for( const wxString& funcSig : functions.GetSignatures() )
-                tokens += "|" + funcSig;
+                tokens += wxT( "|" ) + funcSig;
         }
         else if( expr_context == STRING )
         {
@@ -438,60 +438,60 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                 BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
 
                 for( const std::pair<const wxString, NETCLASSPTR>& entry : bds.GetNetClasses() )
-                    tokens += "|" + entry.first;
+                    tokens += wxT( "|" ) + entry.first;
             }
             else if( m_netNameRegex.Matches( last ) )
             {
                 BOARD* board = m_frame->GetBoard();
 
                 for( const wxString& netnameCandidate : board->GetNetClassAssignmentCandidates() )
-                    tokens += "|" + netnameCandidate;
+                    tokens += wxT( "|" ) + netnameCandidate;
             }
             else if( m_typeRegex.Matches( last ) )
             {
-                tokens = "Dimension|"
-                         "Footprint|"
-                         "Graphic|"
-                         "Group|"
-                         "Leader|"
-                         "Pad|"
-                         "Target|"
-                         "Text|"
-                         "Track|"
-                         "Via|"
-                         "Zone";
+                tokens = wxT( "Dimension|"
+                              "Footprint|"
+                              "Graphic|"
+                              "Group|"
+                              "Leader|"
+                              "Pad|"
+                              "Target|"
+                              "Text|"
+                              "Track|"
+                              "Via|"
+                              "Zone" );
             }
             else if( m_padTypeRegex.Matches( last ) )
             {
-                tokens = "Through-hole|"
-                         "SMD|"
-                         "Edge connector|"
-                         "NPTH, mechanical";
+                tokens = wxT( "Through-hole|"
+                              "SMD|"
+                              "Edge connector|"
+                              "NPTH, mechanical" );
             }
             else if( m_pinTypeRegex.Matches( last ) )
             {
-                tokens = "Input|"
-                         "Output|"
-                         "Bidirectional|"
-                         "Tri-state|"
-                         "Passive|"
-                         "Free|"
-                         "Unspecified|"
-                         "Power input|"
-                         "Power output|"
-                         "Open collector|"
-                         "Open emitter|"
-                         "Unconnected";
+                tokens = wxT( "Input|"
+                              "Output|"
+                              "Bidirectional|"
+                              "Tri-state|"
+                              "Passive|"
+                              "Free|"
+                              "Unspecified|"
+                              "Power input|"
+                              "Power output|"
+                              "Open collector|"
+                              "Open emitter|"
+                              "Unconnected" );
             }
             else if( m_fabPropRegex.Matches( last ) )
             {
-                tokens = "None|"
-                         "BGA pad|"
-                         "Fiducial, global to board|"
-                         "Fiducial, local to footprint|"
-                         "Test point pad|"
-                         "Heatsink pad|"
-                         "Castellated pad";
+                tokens = wxT( "None|"
+                              "BGA pad|"
+                              "Fiducial, global to board|"
+                              "Fiducial, local to footprint|"
+                              "Test point pad|"
+                              "Heatsink pad|"
+                              "Castellated pad" );
             }
         }
     }
@@ -515,7 +515,7 @@ void PANEL_SETUP_RULES::OnCompile( wxCommandEvent& event )
     }
     catch( PARSE_ERROR& pe )
     {
-        wxString msg = wxString::Format( "%s <a href='%d:%d'>%s</a>%s",
+        wxString msg = wxString::Format( wxT( "%s <a href='%d:%d'>%s</a>%s" ),
                                          _( "ERROR:" ),
                                          pe.lineNumber,
                                          pe.byteIndex,
@@ -627,7 +627,7 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
     ;
 
 #ifdef __WXMAC__
-    msg.Replace( "Ctrl+", "Cmd+" );
+    msg.Replace( wxT( "Ctrl+" ), wxT( "Cmd+" ) );
 #endif
 
     m_helpWindow = new HTML_MESSAGE_BOX( nullptr, _( "Syntax Help" ) );

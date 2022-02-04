@@ -91,68 +91,68 @@ const wxString GetGerberFileFunctionAttribute( const BOARD* aBoard, LAYER_NUM aL
     switch( aLayer )
     {
     case F_Adhes:
-        attrib = "Glue,Top";
+        attrib = wxT( "Glue,Top" );
         break;
 
     case B_Adhes:
-        attrib = "Glue,Bot";
+        attrib = wxT( "Glue,Bot" );
         break;
 
     case F_SilkS:
-        attrib = "Legend,Top";
+        attrib = wxT( "Legend,Top" );
         break;
 
     case B_SilkS:
-        attrib = "Legend,Bot";
+        attrib = wxT( "Legend,Bot" );
         break;
 
     case F_Mask:
-        attrib = "Soldermask,Top";
+        attrib = wxT( "Soldermask,Top" );
         break;
 
     case B_Mask:
-        attrib = "Soldermask,Bot";
+        attrib = wxT( "Soldermask,Bot" );
         break;
 
     case F_Paste:
-        attrib = "Paste,Top";
+        attrib = wxT( "Paste,Top" );
         break;
 
     case B_Paste:
-        attrib = "Paste,Bot";
+        attrib = wxT( "Paste,Bot" );
         break;
 
     case Edge_Cuts:
         // Board outline.
         // Can be "Profile,NP" (Not Plated: usual) or "Profile,P"
         // This last is the exception (Plated)
-        attrib = "Profile,NP";
+        attrib = wxT( "Profile,NP" );
         break;
 
     case Dwgs_User:
-        attrib = "OtherDrawing,Comment";
+        attrib = wxT( "OtherDrawing,Comment" );
         break;
 
     case Cmts_User:
-        attrib = "Other,Comment";
+        attrib = wxT( "Other,Comment" );
         break;
 
     case Eco1_User:
-        attrib = "Other,ECO1";
+        attrib = wxT( "Other,ECO1" );
         break;
 
     case Eco2_User:
-        attrib = "Other,ECO2";
+        attrib = wxT( "Other,ECO2" );
         break;
 
     case B_Fab:
         // This is actually a assembly layer
-        attrib = "AssemblyDrawing,Bot";
+        attrib = wxT( "AssemblyDrawing,Bot" );
         break;
 
     case F_Fab:
         // This is actually a assembly layer
-        attrib = "AssemblyDrawing,Top";
+        attrib = wxT( "AssemblyDrawing,Top" );
         break;
 
     case B_Cu:
@@ -160,7 +160,7 @@ const wxString GetGerberFileFunctionAttribute( const BOARD* aBoard, LAYER_NUM aL
         break;
 
     case F_Cu:
-        attrib = "Copper,L1,Top";
+        attrib = wxT( "Copper,L1,Top" );
         break;
 
     default:
@@ -185,13 +185,13 @@ const wxString GetGerberFileFunctionAttribute( const BOARD* aBoard, LAYER_NUM aL
         switch( type )
         {
         case LT_SIGNAL:
-            attrib += ",Signal";
+            attrib += wxT( ",Signal" );
             break;
         case LT_POWER:
-            attrib += ",Plane";
+            attrib += wxT( ",Plane" );
             break;
         case LT_MIXED:
-            attrib += ",Mixed";
+            attrib += wxT( ",Mixed" );
             break;
         default:
             break;   // do nothing (but avoid a warning for unhandled LAYER_T values from GCC)
@@ -200,7 +200,7 @@ const wxString GetGerberFileFunctionAttribute( const BOARD* aBoard, LAYER_NUM aL
 #endif
 
     wxString fileFct;
-    fileFct.Printf( "%%TF.FileFunction,%s*%%", attrib );
+    fileFct.Printf( wxT( "%%TF.FileFunction,%s*%%" ), attrib );
 
     return fileFct;
 }
@@ -253,9 +253,9 @@ static const wxString GetGerberFilePolarityAttribute( LAYER_NUM aLayer )
     wxString filePolarity;
 
     if( polarity == 1 )
-        filePolarity = "%TF.FilePolarity,Positive*%";
+        filePolarity = wxT( "%TF.FilePolarity,Positive*%" );
     if( polarity == -1 )
-        filePolarity = "%TF.FilePolarity,Negative*%";
+        filePolarity = wxT( "%TF.FilePolarity,Negative*%" );
 
     return filePolarity;
 }
@@ -271,8 +271,8 @@ static wxString& makeStringCompatX1( wxString& aText, bool aUseX1CompatibilityMo
 {
     if( aUseX1CompatibilityMode )
     {
-        aText.Replace( "%", "" );
-        aText.Prepend( "G04 #@! " );
+        aText.Replace( wxT( "%" ), wxEmptyString );
+        aText.Prepend( wxT( "G04 #@! " ) );
     }
 
     return aText;
@@ -339,13 +339,13 @@ void AddGerberX2Header( PLOTTER* aPlotter, const BOARD* aBoard, bool aUseX1Compa
     // and the PY and PY position of auxiliary axis, when using it.
     // Please, if absolute Pcbnew coordinates, one day, are set by user, change the way
     // the key is built to ensure file only using the *same* axis have the same key.
-    wxString registration_id = "Original";
+    wxString registration_id = wxT( "Original" );
     wxPoint auxOrigin = aBoard->GetDesignSettings().GetAuxOrigin();
 
     if( aBoard->GetPlotOptions().GetUseAuxOrigin() && auxOrigin.x && auxOrigin.y )
-        registration_id.Printf( "PX%xPY%x", auxOrigin.x, auxOrigin.y );
+        registration_id.Printf( wxT( "PX%xPY%x" ), auxOrigin.x, auxOrigin.y );
 
-    text.Printf( "%%TF.SameCoordinates,%s*%%", registration_id.GetData() );
+    text.Printf( wxT( "%%TF.SameCoordinates,%s*%%" ), registration_id.GetData() );
     aPlotter->AddLineToHeader( makeStringCompatX1( text, aUseX1CompatibilityMode ) );
 }
 

@@ -1483,7 +1483,7 @@ void PCB_PARSER::parseBoardStackup()
                         name = FromUTF8();
 
                         // Older versions didn't store opacity with custom colors
-                        if( name.StartsWith( "#" ) && m_requiredVersion < 20210824 )
+                        if( name.StartsWith( wxT( "#" ) ) && m_requiredVersion < 20210824 )
                         {
                             KIGFX::COLOR4D color( name );
 
@@ -3581,8 +3581,8 @@ FP_TEXT* PCB_PARSER::parseFP_TEXT()
         Expecting( "text value" );
 
     wxString value = FromUTF8();
-    value.Replace( "%V", "${VALUE}" );
-    value.Replace( "%R", "${REFERENCE}" );
+    value.Replace( wxT( "%V" ), wxT( "${VALUE}" ) );
+    value.Replace( wxT( "%R" ), wxT( "${REFERENCE}" ) );
     text->SetText( value );
     NeedLEFT();
     token = NextTok();

@@ -31,7 +31,7 @@
 #include <widgets/unit_binder.h>
 
 // the plot dialog window name, used by wxWidgets
-#define DLG_WINDOW_NAME "plot_dialog-window"
+#define DLG_WINDOW_NAME wxT( "plot_dialog-window" )
 
 /**
  * A dialog to set the plot options and create plot files in various formats.
