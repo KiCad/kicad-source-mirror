@@ -49,8 +49,10 @@ SCENEGRAPH::SCENEGRAPH( SGNODE* aParent ) : SGNODE( aParent )
     {
         m_Parent = nullptr;
 
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] inappropriate parent to SCENEGRAPH (type %d)" ,
-                    __FILE__, __FUNCTION__, __LINE__, aParent->GetNodeType() );
+        wxLogTrace( MASK_3D_SG,
+                    wxT( "%s:%s:%d * [BUG] inappropriate parent to SCENEGRAPH (type %d)" ),
+                    __FILE__, __FUNCTION__, __LINE__,
+                    aParent->GetNodeType() );
     }
     else if( nullptr != aParent && S3D::SGTYPE_TRANSFORM == aParent->GetNodeType() )
     {
@@ -140,7 +142,7 @@ void SCENEGRAPH::unlinkNode( const SGNODE* aNode, bool isChild )
         break;
     }
 
-    wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] unlinkNode() did not find its target",
+    wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [BUG] unlinkNode() did not find its target" ),
                 __FILE__, __FUNCTION__, __LINE__ );
 }
 
@@ -166,8 +168,11 @@ bool SCENEGRAPH::addNode( SGNODE* aNode, bool isChild )
     ADD_NODE( S3D::SGTYPE_TRANSFORM, SCENEGRAPH, aNode, m_Transforms, m_RTransforms, isChild );
     ADD_NODE( S3D::SGTYPE_SHAPE, SGSHAPE, aNode, m_Shape, m_RShape, isChild );
 
-    wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] object '%s' is not a valid type for this object (%d)",
-                __FILE__, __FUNCTION__, __LINE__, aNode->GetName(), aNode->GetNodeType() );
+    wxLogTrace( MASK_3D_SG,
+                wxT( "%s:%s:%d * [BUG] object '%s' is not a valid type for this object (%d)" ),
+                __FILE__, __FUNCTION__, __LINE__,
+                aNode->GetName(),
+                aNode->GetNodeType() );
 
     return false;
 }
@@ -358,7 +363,8 @@ bool SCENEGRAPH::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 
     if( aFile.fail() )
     {
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] bad stream", __FILE__, __FUNCTION__, __LINE__ );
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] bad stream" ),
+                    __FILE__, __FUNCTION__, __LINE__ );
 
         return false;
     }
@@ -414,7 +420,8 @@ bool SCENEGRAPH::WriteCache( std::ostream& aFile, SGNODE* parentNode )
     {
         if( !m_Transforms[i]->WriteCache( aFile, this ) )
         {
-            wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] bad stream while writing child transforms",
+            wxLogTrace( MASK_3D_SG,
+                        wxT( "%s:%s:%d * [INFO] bad stream while writing child transforms" ),
                         __FILE__, __FUNCTION__, __LINE__ );
 
             return false;
@@ -434,7 +441,8 @@ bool SCENEGRAPH::WriteCache( std::ostream& aFile, SGNODE* parentNode )
     {
         if( !m_Shape[i]->WriteCache( aFile, this ) )
         {
-            wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] bad stream while writing child shapes",
+            wxLogTrace( MASK_3D_SG,
+                        wxT( "%s:%s:%d * [INFO] bad stream while writing child shapes" ),
                         __FILE__, __FUNCTION__, __LINE__ );
 
             return false;
@@ -467,8 +475,8 @@ bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
         // we need to read the tag and verify its type
         if( S3D::SGTYPE_TRANSFORM != S3D::ReadTag( aFile, name ) )
         {
-            wxLogTrace( MASK_3D_SG,
-                        "%s:%s:%d * [INFO] corrupt data; tag mismatch at position %ul",
+            wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] corrupt data; tag mismatch at position "
+                                         "%ul" ),
                         __FILE__, __FUNCTION__, __LINE__,
                         static_cast<unsigned long>( aFile.tellg() ) );
 
@@ -504,8 +512,8 @@ bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_TRANSFORM != S3D::ReadTag( aFile, name ) )
         {
-            wxLogTrace( MASK_3D_SG,
-                        "%s:%s:%d * [INFO] corrupt data; bad child transform tag at position %ul",
+            wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] corrupt data; bad child transform tag "
+                                         "at position %ul" ),
                         __FILE__, __FUNCTION__, __LINE__,
                         static_cast<unsigned long>( aFile.tellg() ) );
 
@@ -517,8 +525,8 @@ bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( !sp->ReadCache( aFile, this ) )
         {
-            wxLogTrace( MASK_3D_SG,
-                        "%s:%s:%d * [INFO] corrupt data while reading transform %ul",
+            wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] corrupt data while reading transform "
+                                         "%ul" ),
                         __FILE__, __FUNCTION__, __LINE__,
                         static_cast<unsigned long>( aFile.tellg() ) );
 
@@ -531,8 +539,8 @@ bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_TRANSFORM != S3D::ReadTag( aFile, name ) )
         {
-            wxLogTrace( MASK_3D_SG,
-                        "%s:%s:%d * [INFO] corrupt data; bad ref transform tag at position %ul",
+            wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] corrupt data; bad ref transform tag at "
+                                         "position %ul" ),
                         __FILE__, __FUNCTION__, __LINE__,
                         static_cast<unsigned long>( aFile.tellg() ) );
 
@@ -543,8 +551,8 @@ bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( !sp )
         {
-            wxLogTrace( MASK_3D_SG,
-                        "%s:%s:%d * [INFO] corrupt data: cannot find ref transform at position %ul",
+            wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] corrupt data: cannot find ref "
+                                         "transform at position %ul" ),
                         __FILE__, __FUNCTION__, __LINE__,
                         static_cast<unsigned long>( aFile.tellg() ) );
 
@@ -553,8 +561,8 @@ bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( S3D::SGTYPE_TRANSFORM != sp->GetNodeType() )
         {
-            wxLogTrace( MASK_3D_SG,
-                        "%s:%s:%d * [INFO] corrupt data: type is not TRANSFORM at position %ul",
+            wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] corrupt data: type is not TRANSFORM "
+                                         "at position %ul" ),
                         __FILE__, __FUNCTION__, __LINE__,
                         static_cast<unsigned long>( aFile.tellg() ) );
 
@@ -569,8 +577,8 @@ bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_SHAPE != S3D::ReadTag( aFile, name ) )
         {
-            wxLogTrace( MASK_3D_SG,
-                        "%s:%s:%d * [INFO] corrupt data; bad child shape tag at position %ul",
+            wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] corrupt data; bad child shape tag at "
+                                         "position %ul" ),
                         __FILE__, __FUNCTION__, __LINE__,
                         static_cast<unsigned long>( aFile.tellg() ) );
 
@@ -582,9 +590,9 @@ bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( !sp->ReadCache( aFile, this ) )
         {
-            wxLogTrace( MASK_3D_SG,
-                        "%s:%s:%d * [INFO] corrupt data; corrupt data while reading shape at "
-                        "position %ul", __FILE__, __FUNCTION__, __LINE__,
+            wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] corrupt data; corrupt data while "
+                                        "reading shape at position %ul" ),
+                        __FILE__, __FUNCTION__, __LINE__,
                         static_cast<unsigned long>( aFile.tellg() ) );
 
             return false;
@@ -596,8 +604,8 @@ bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_SHAPE != S3D::ReadTag( aFile, name ) )
         {
-            wxLogTrace( MASK_3D_SG,
-                        "%s:%s:%d * [INFO] corrupt data; bad ref shape tag at position %ul",
+            wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] corrupt data; bad ref shape tag at "
+                                         "position %ul" ),
                         __FILE__, __FUNCTION__, __LINE__,
                         static_cast<unsigned long>( aFile.tellg() ) );
 
@@ -608,8 +616,8 @@ bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( !sp )
         {
-            wxLogTrace( MASK_3D_SG,
-                        "%s:%s:%d * [INFO] corrupt data: cannot find ref shape at position %ul",
+            wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] corrupt data: cannot find ref shape "
+                                         "at position %ul" ),
                         __FILE__, __FUNCTION__, __LINE__,
                         static_cast<unsigned long>( aFile.tellg() ) );
 
@@ -618,8 +626,8 @@ bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( S3D::SGTYPE_SHAPE != sp->GetNodeType() )
         {
-            wxLogTrace( MASK_3D_SG,
-                        "%s:%s:%d * [INFO] corrupt data: type is not SGSHAPE at position %ul",
+            wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] corrupt data: type is not SGSHAPE at "
+                                         "position %ul" ),
                         __FILE__, __FUNCTION__, __LINE__,
                         static_cast<unsigned long>( aFile.tellg() ) );
 

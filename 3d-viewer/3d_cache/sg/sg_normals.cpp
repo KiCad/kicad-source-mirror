@@ -38,8 +38,10 @@ SGNORMALS::SGNORMALS( SGNODE* aParent ) : SGNODE( aParent )
     {
         m_Parent = nullptr;
 
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] inappropriate parent to SGNORMALS (type %d)",
-                    __FILE__, __FUNCTION__, __LINE__, aParent->GetNodeType() );
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [BUG] inappropriate parent to SGNORMALS "
+                                     "(type %d)" ),
+                    __FILE__, __FUNCTION__, __LINE__,
+                    aParent->GetNodeType() );
     }
     else if( nullptr != aParent && S3D::SGTYPE_FACESET == aParent->GetNodeType() )
     {
@@ -253,7 +255,7 @@ bool SGNORMALS::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 
     if( !aFile.good() )
     {
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] bad stream",
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] bad stream" ),
                     __FILE__, __FUNCTION__, __LINE__ );
 
         return false;

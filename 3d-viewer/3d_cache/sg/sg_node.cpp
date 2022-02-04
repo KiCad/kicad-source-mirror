@@ -196,9 +196,11 @@ void SGNODE::delNodeRef( const SGNODE* aNode )
         return;
     }
 
-    wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] delNodeRef() did not find its target, "
-                "this node type %d, referenced node type %d", __FILE__, __FUNCTION__, __LINE__,
-                m_SGtype, aNode->GetNodeType() );
+    wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [BUG] delNodeRef() did not find its target, this "
+                                 "node type %d, referenced node type %d" ),
+                __FILE__, __FUNCTION__, __LINE__,
+                m_SGtype,
+                aNode->GetNodeType() );
 }
 
 
@@ -212,8 +214,8 @@ void SGNODE::AssociateWrapper( SGNODE** aWrapperRef ) noexcept
     {
         *m_Association = nullptr;
 
-        wxLogTrace( MASK_3D_SG,
-                    "%s:%s:%d * [WARNING] association being broken with previous wrapper",
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [WARNING] association being broken with "
+                                     "previous wrapper" ),
                     __FILE__, __FUNCTION__, __LINE__ );
     }
 

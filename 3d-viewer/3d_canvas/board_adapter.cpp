@@ -164,49 +164,49 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     list.push_back( CUSTOM_COLOR_ITEM( r/255.0, g/255.0, b/255.0, a, name ) )
 
         ADD_COLOR( g_SilkscreenColors, 245, 245, 245, 1.0, NotSpecifiedPrm() ); // White
-        ADD_COLOR( g_SilkscreenColors,  20,  51,  36, 1.0, "Green" );
-        ADD_COLOR( g_SilkscreenColors, 181,  19,  21, 1.0, "Red" );
-        ADD_COLOR( g_SilkscreenColors,   2,  59, 162, 1.0, "Blue" );
-        ADD_COLOR( g_SilkscreenColors,  11,  11,  11, 1.0, "Black" );
-        ADD_COLOR( g_SilkscreenColors, 245, 245, 245, 1.0, "White" );
-        ADD_COLOR( g_SilkscreenColors,  32,   2,  53, 1.0, "Purple" );
-        ADD_COLOR( g_SilkscreenColors, 194,  195,  0, 1.0, "Yellow" );
+        ADD_COLOR( g_SilkscreenColors,  20,  51,  36, 1.0, wxT( "Green" ) );
+        ADD_COLOR( g_SilkscreenColors, 181,  19,  21, 1.0, wxT( "Red" ) );
+        ADD_COLOR( g_SilkscreenColors,   2,  59, 162, 1.0, wxT( "Blue" ) );
+        ADD_COLOR( g_SilkscreenColors,  11,  11,  11, 1.0, wxT( "Black" ) );
+        ADD_COLOR( g_SilkscreenColors, 245, 245, 245, 1.0, wxT( "White" ) );
+        ADD_COLOR( g_SilkscreenColors,  32,   2,  53, 1.0, wxT( "Purple" ) );
+        ADD_COLOR( g_SilkscreenColors, 194,  195,  0, 1.0, wxT( "Yellow" ) );
 
         ADD_COLOR( g_MaskColors,  20,  51,  36, 0.83, NotSpecifiedPrm() ); // Green
-        ADD_COLOR( g_MaskColors,  20,  51,  36, 0.83, "Green" );
-        ADD_COLOR( g_MaskColors,  91, 168,  12, 0.83, "Light Green" );
-        ADD_COLOR( g_MaskColors,  13, 104,  11, 0.83, "Saturated Green" );
-        ADD_COLOR( g_MaskColors, 181,  19,  21, 0.83, "Red" );
-        ADD_COLOR( g_MaskColors, 210,  40,  14, 0.83, "Light Red" );
-        ADD_COLOR( g_MaskColors, 239,  53,  41, 0.83, "Red/Orange" );
-        ADD_COLOR( g_MaskColors,   2,  59, 162, 0.83, "Blue" );
-        ADD_COLOR( g_MaskColors,  54,  79, 116, 0.83, "Light Blue 1" );
-        ADD_COLOR( g_MaskColors,  61,  85, 130, 0.83, "Light Blue 2" );
-        ADD_COLOR( g_MaskColors,  21,  70,  80, 0.83, "Green/Blue" );
-        ADD_COLOR( g_MaskColors,  11,  11,  11, 0.83, "Black" );
-        ADD_COLOR( g_MaskColors, 245, 245, 245, 0.83, "White" );
-        ADD_COLOR( g_MaskColors,  32,   2,  53, 0.83, "Purple" );
-        ADD_COLOR( g_MaskColors, 119,  31,  91, 0.83, "Light Purple" );
-        ADD_COLOR( g_MaskColors, 194,  195,  0, 0.83, "Yellow" );
+        ADD_COLOR( g_MaskColors,  20,  51,  36, 0.83, wxT( "Green" ) );
+        ADD_COLOR( g_MaskColors,  91, 168,  12, 0.83, wxT( "Light Green" ) );
+        ADD_COLOR( g_MaskColors,  13, 104,  11, 0.83, wxT( "Saturated Green" ) );
+        ADD_COLOR( g_MaskColors, 181,  19,  21, 0.83, wxT( "Red" ) );
+        ADD_COLOR( g_MaskColors, 210,  40,  14, 0.83, wxT( "Light Red" ) );
+        ADD_COLOR( g_MaskColors, 239,  53,  41, 0.83, wxT( "Red/Orange" ) );
+        ADD_COLOR( g_MaskColors,   2,  59, 162, 0.83, wxT( "Blue" ) );
+        ADD_COLOR( g_MaskColors,  54,  79, 116, 0.83, wxT( "Light Blue 1" ) );
+        ADD_COLOR( g_MaskColors,  61,  85, 130, 0.83, wxT( "Light Blue 2" ) );
+        ADD_COLOR( g_MaskColors,  21,  70,  80, 0.83, wxT( "Green/Blue" ) );
+        ADD_COLOR( g_MaskColors,  11,  11,  11, 0.83, wxT( "Black" ) );
+        ADD_COLOR( g_MaskColors, 245, 245, 245, 0.83, wxT( "White" ) );
+        ADD_COLOR( g_MaskColors,  32,   2,  53, 0.83, wxT( "Purple" ) );
+        ADD_COLOR( g_MaskColors, 119,  31,  91, 0.83, wxT( "Light Purple" ) );
+        ADD_COLOR( g_MaskColors, 194,  195,  0, 0.83, wxT( "Yellow" ) );
 
-        ADD_COLOR( g_PasteColors, 128, 128, 128, 1.0, "Grey" );
-        ADD_COLOR( g_PasteColors,  90,  90,  90, 1.0, "Dark Grey" );
-        ADD_COLOR( g_PasteColors, 213, 213, 213, 1.0, "Silver" );
+        ADD_COLOR( g_PasteColors, 128, 128, 128, 1.0, wxT( "Grey" ) );
+        ADD_COLOR( g_PasteColors,  90,  90,  90, 1.0, wxT( "Dark Grey" ) );
+        ADD_COLOR( g_PasteColors, 213, 213, 213, 1.0, wxT( "Silver" ) );
 
-        ADD_COLOR( g_FinishColors, 184, 115,  50, 1.0, "Copper" );
-        ADD_COLOR( g_FinishColors, 178, 156,   0, 1.0, "Gold" );
-        ADD_COLOR( g_FinishColors, 213, 213, 213, 1.0, "Silver" );
-        ADD_COLOR( g_FinishColors, 160, 160, 160, 1.0, "Tin" );
+        ADD_COLOR( g_FinishColors, 184, 115,  50, 1.0, wxT( "Copper" ) );
+        ADD_COLOR( g_FinishColors, 178, 156,   0, 1.0, wxT( "Gold" ) );
+        ADD_COLOR( g_FinishColors, 213, 213, 213, 1.0, wxT( "Silver" ) );
+        ADD_COLOR( g_FinishColors, 160, 160, 160, 1.0, wxT( "Tin" ) );
 
-        ADD_COLOR( g_BoardColors,  51,  43,  22, 0.83, "FR4 natural, dark" );
-        ADD_COLOR( g_BoardColors, 109, 116,  75, 0.83, "FR4 natural" );
-        ADD_COLOR( g_BoardColors, 252, 252, 250, 0.90, "PTFE natural" );
-        ADD_COLOR( g_BoardColors, 205, 130,   0, 0.68, "Polyimide" );
-        ADD_COLOR( g_BoardColors,  92,  17,   6, 0.90, "Phenolic natural" );
-        ADD_COLOR( g_BoardColors, 146,  99,  47, 0.83, "Brown 1" );
-        ADD_COLOR( g_BoardColors, 160, 123,  54, 0.83, "Brown 2" );
-        ADD_COLOR( g_BoardColors, 146,  99,  47, 0.83, "Brown 3" );
-        ADD_COLOR( g_BoardColors, 213, 213, 213,  1.0, "Aluminum" );
+        ADD_COLOR( g_BoardColors,  51,  43,  22, 0.83, wxT( "FR4 natural, dark" ) );
+        ADD_COLOR( g_BoardColors, 109, 116,  75, 0.83, wxT( "FR4 natural" ) );
+        ADD_COLOR( g_BoardColors, 252, 252, 250, 0.90, wxT( "PTFE natural" ) );
+        ADD_COLOR( g_BoardColors, 205, 130,   0, 0.68, wxT( "Polyimide" ) );
+        ADD_COLOR( g_BoardColors,  92,  17,   6, 0.90, wxT( "Phenolic natural" ) );
+        ADD_COLOR( g_BoardColors, 146,  99,  47, 0.83, wxT( "Brown 1" ) );
+        ADD_COLOR( g_BoardColors, 160, 123,  54, 0.83, wxT( "Brown 2" ) );
+        ADD_COLOR( g_BoardColors, 146,  99,  47, 0.83, wxT( "Brown 3" ) );
+        ADD_COLOR( g_BoardColors, 213, 213, 213,  1.0, wxT( "Aluminum" ) );
 
         g_DefaultBackgroundTop = COLOR4D(  0.80, 0.80, 0.90, 1.0 );
         g_DefaultBackgroundBot = COLOR4D(  0.40, 0.40, 0.50, 1.0 );
@@ -559,7 +559,7 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
         auto findColor =
                 []( const wxString& aColorName, const CUSTOM_COLORS_LIST& aColorSet )
                 {
-                    if( aColorName.StartsWith( "#" ) )
+                    if( aColorName.StartsWith( wxT( "#" ) ) )
                     {
                         return KIGFX::COLOR4D( aColorName );
                     }
@@ -608,28 +608,28 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
                 KIGFX::COLOR4D  layerColor = COLOR4D::UNSPECIFIED;
                 const wxString& materialName = stackupItem->GetMaterial();
 
-                if( materialName.StartsWith( "FR4" ) )
+                if( materialName.StartsWith( wxT( "FR4" ) ) )
                 {
-                    layerColor = findColor( "FR4 natural", g_BoardColors );
+                    layerColor = findColor( wxT( "FR4 natural" ), g_BoardColors );
                 }
-                else if( materialName.IsSameAs( "PTFE" )
-                      || materialName.IsSameAs( "Teflon" ) )
+                else if( materialName.IsSameAs( wxT( "PTFE" ) )
+                      || materialName.IsSameAs( wxT( "Teflon" ) ) )
                 {
-                    layerColor = findColor( "PTFE natural", g_BoardColors );
+                    layerColor = findColor( wxT( "PTFE natural" ), g_BoardColors );
                 }
-                else if( materialName.IsSameAs( "Polyimide" )
-                      || materialName.IsSameAs( "Kapton" ) )
+                else if( materialName.IsSameAs( wxT( "Polyimide" ) )
+                      || materialName.IsSameAs( wxT( "Kapton" ) ) )
                 {
-                    layerColor = findColor( "Polyimide", g_BoardColors );
+                    layerColor = findColor( wxT( "Polyimide" ), g_BoardColors );
                 }
-                else if( materialName.IsSameAs( "Al" ) )
+                else if( materialName.IsSameAs( wxT( "Al" ) ) )
                 {
-                    layerColor = findColor( "Aluminum", g_BoardColors );
+                    layerColor = findColor( wxT( "Aluminum" ), g_BoardColors );
                 }
                 else    // A default color value for unknown dielectric material
                         // (i.e. an exotic name entered by hand)
                 {
-                    layerColor = findColor( "FR4 natural", g_BoardColors );
+                    layerColor = findColor( wxT( "FR4 natural" ), g_BoardColors );
                 }
 
                 if( bodyColor == COLOR4D( 0, 0, 0, 0 ) )
@@ -653,25 +653,25 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 
         const wxString& finishName = stackup.m_FinishType;
 
-        if( finishName.EndsWith( "OSP" ) )
+        if( finishName.EndsWith( wxT( "OSP" ) ) )
         {
-            m_CopperColor = to_SFVEC4F( findColor( "Copper", g_FinishColors ) );
+            m_CopperColor = to_SFVEC4F( findColor( wxT( "Copper" ), g_FinishColors ) );
         }
-        else if( finishName.EndsWith( "IG" )
-              || finishName.EndsWith( "gold" ) )
+        else if( finishName.EndsWith( wxT( "IG" ) )
+              || finishName.EndsWith( wxT( "gold" ) ) )
         {
-            m_CopperColor = to_SFVEC4F( findColor( "Gold", g_FinishColors ) );
+            m_CopperColor = to_SFVEC4F( findColor( wxT( "Gold" ), g_FinishColors ) );
         }
-        else if( finishName.StartsWith( "HAL" )
-              || finishName.StartsWith( "HASL" )
-              || finishName.EndsWith( "tin" )
-              || finishName.EndsWith( "nickel" ) )
+        else if( finishName.StartsWith( wxT( "HAL" ) )
+              || finishName.StartsWith( wxT( "HASL" ) )
+              || finishName.EndsWith( wxT( "tin" ) )
+              || finishName.EndsWith( wxT( "nickel" ) ) )
         {
-            m_CopperColor = to_SFVEC4F( findColor( "Tin", g_FinishColors ) );
+            m_CopperColor = to_SFVEC4F( findColor( wxT( "Tin" ), g_FinishColors ) );
         }
-        else if( finishName.EndsWith( "silver" ) )
+        else if( finishName.EndsWith( wxT( "silver" ) ) )
         {
-            m_CopperColor = to_SFVEC4F( findColor( "Silver", g_FinishColors ) );
+            m_CopperColor = to_SFVEC4F( findColor( wxT( "Silver" ), g_FinishColors ) );
         }
         else
         {

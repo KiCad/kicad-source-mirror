@@ -75,7 +75,6 @@ public:
     static TOOL_ACTION materialDiffuse;
     static TOOL_ACTION materialCAD;
 
-    static TOOL_ACTION rotate45axisZ;
     static TOOL_ACTION showTHT;
     static TOOL_ACTION showSMD;
     static TOOL_ACTION showVirtual;

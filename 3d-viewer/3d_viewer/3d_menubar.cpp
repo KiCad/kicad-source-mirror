@@ -37,7 +37,7 @@
 
 void EDA_3D_VIEWER_FRAME::CreateMenuBar()
 {
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::CreateMenuBar" );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::CreateMenuBar" ) );
 
     COMMON_CONTROL* tool    = m_toolManager->GetTool<COMMON_CONTROL>();
     WX_MENUBAR*     menuBar = new WX_MENUBAR();
@@ -48,12 +48,12 @@ void EDA_3D_VIEWER_FRAME::CreateMenuBar()
     ACTION_MENU* fileMenu = new ACTION_MENU( false, tool );
 
     fileMenu->Add( _( "Export Current View as PNG..." ),
-                   "",
+                   wxEmptyString,
                    ID_MENU_SCREENCOPY_PNG,
                    BITMAPS::export_png );
 
     fileMenu->Add( _( "Export Current View as JPEG..." ),
-                   "",
+                   wxEmptyString,
                    ID_MENU_SCREENCOPY_JPEG,
                    BITMAPS::export_file );
 
@@ -67,7 +67,7 @@ void EDA_3D_VIEWER_FRAME::CreateMenuBar()
     ACTION_MENU* editMenu = new ACTION_MENU( false, tool );
 
     editMenu->Add( _( "Copy 3D Image" ),
-                   "",
+                   wxEmptyString,
                    ID_TOOL_SCREENCOPY_TOCLIBBOARD,
                    BITMAPS::copy );
 
@@ -109,7 +109,7 @@ void EDA_3D_VIEWER_FRAME::CreateMenuBar()
                     BITMAPS::tools,
                     ACTION_MENU::CHECK );
 
-    prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
+    prefsMenu->Add( _( "Preferences..." ) + wxT( "\tCtrl+," ),
                     _( "Show preferences for all open tools" ),
                     wxID_PREFERENCES,
                     BITMAPS::preference );

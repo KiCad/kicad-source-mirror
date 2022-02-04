@@ -97,7 +97,7 @@ bool S3D::WriteVRML( const char* filename, bool overwrite, SGNODE* aTopNode,
 
     if( op.fail() )
     {
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d  * [INFO] failed to open file '%s'",
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d  * [INFO] failed to open file '%s'" ),
                     __FILE__, __FUNCTION__, __LINE__, filename );
 
         return false;
@@ -122,7 +122,7 @@ bool S3D::WriteVRML( const char* filename, bool overwrite, SGNODE* aTopNode,
 
     CLOSE_STREAM( op );
 
-    wxLogTrace( MASK_3D_SG, "%s:%s:%d  * [INFO] problems encountered writing file '%s'",
+    wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d  * [INFO] problems encountered writing file '%s'" ),
                 __FILE__, __FUNCTION__, __LINE__, filename );
 
     return false;
@@ -167,7 +167,7 @@ bool S3D::WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode,
     {
         if( !overwrite )
         {
-            wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] file exists not overwriting '%s'",
+            wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] file exists not overwriting '%s'" ),
                         __FILE__, __FUNCTION__, __LINE__, aFileName );
 
             return false;
@@ -176,7 +176,7 @@ bool S3D::WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode,
         // make sure we make no attempt to write a directory
         if( !wxFileName::FileExists( aFileName ) )
         {
-            wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] specified path is a directory '%s'",
+            wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] specified path is a directory '%s'" ),
                         __FILE__, __FUNCTION__, __LINE__, aFileName );
 
             return false;
@@ -187,7 +187,7 @@ bool S3D::WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode,
 
     if( output.fail() )
     {
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] failed to open file '%s'",
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] failed to open file '%s'" ),
                     __FILE__, __FUNCTION__, __LINE__, aFileName );
 
         return false;
@@ -205,7 +205,8 @@ bool S3D::WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode,
 
     if( !rval )
     {
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] problems encountered writing cache file '%s'",
+        wxLogTrace( MASK_3D_SG,
+                    wxT( "%s:%s:%d * [INFO] problems encountered writing cache file '%s'" ),
                     __FILE__, __FUNCTION__, __LINE__, aFileName );
 
         // delete the defective file
@@ -226,7 +227,7 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
 
     if( !wxFileName::FileExists( aFileName ) )
     {
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] no such file '%s'",
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] no such file '%s'" ),
                     __FILE__, __FUNCTION__, __LINE__, aFileName );
 
         return nullptr;
@@ -240,7 +241,7 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
     {
         delete np;
 
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] failed to open file '%s'",
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] failed to open file '%s'" ),
                     __FILE__, __FUNCTION__, __LINE__, aFileName );
 
         return nullptr;
@@ -256,9 +257,10 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
 
         if( '(' != schar )
         {
-            wxLogTrace( MASK_3D_SG,
-                        "%s:%s:%d * [INFO] corrupt data; missing left parenthesis at position '%d'",
-                        __FILE__, __FUNCTION__, __LINE__, static_cast<int>( file.tellg() ) );
+            wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] corrupt data; missing left parenthesis"
+                                         " at position '%d'" ),
+                        __FILE__, __FUNCTION__, __LINE__,
+                        static_cast<int>( file.tellg() ) );
 
             CLOSE_STREAM( file );
             return nullptr;
@@ -290,9 +292,10 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
 
         if( '(' != schar )
         {
-            wxLogTrace( MASK_3D_SG,
-                        "%s:%s:%d * [INFO] corrupt data; missing left parenthesis at position '%d'",
-                        __FILE__, __FUNCTION__, __LINE__, static_cast<int>( file.tellg() ) );
+            wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [INFO] corrupt data; missing left parenthesis"
+                                         " at position '%d'" ),
+                        __FILE__, __FUNCTION__, __LINE__,
+                        static_cast<int>( file.tellg() ) );
 
             CLOSE_STREAM( file );
             return nullptr;

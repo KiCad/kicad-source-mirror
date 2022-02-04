@@ -429,7 +429,7 @@ void BOARD_ADAPTER::createPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* 
                 break;
 
             default:
-                wxFAIL_MSG( "BOARD_ADAPTER::createPadWithClearance no implementation for "
+                wxFAIL_MSG( wxT( "BOARD_ADAPTER::createPadWithClearance no implementation for " )
                             + SHAPE_TYPE_asString( shape->Type() ) );
                 break;
             }
@@ -738,7 +738,7 @@ void BOARD_ADAPTER::addShapeWithClearance( const PCB_SHAPE* aShape,
     break;
 
     default:
-        wxFAIL_MSG( "BOARD_ADAPTER::addShapeWithClearance no implementation for "
+        wxFAIL_MSG( wxT( "BOARD_ADAPTER::addShapeWithClearance no implementation for " )
                     + aShape->SHAPE_T_asString() );
         break;
     }

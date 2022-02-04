@@ -56,7 +56,8 @@ IFSG_COORDS::IFSG_COORDS( SGNODE* aParent )
         delete m_node;
         m_node = nullptr;
 
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__, WrongParent );
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d %s" ), __FILE__, __FUNCTION__, __LINE__,
+                    WrongParent );
 
         return;
     }
@@ -72,7 +73,8 @@ IFSG_COORDS::IFSG_COORDS( IFSG_NODE& aParent )
 #ifdef DEBUG
     if( !pp )
     {
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__, BadParent );
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d %s" ), __FILE__, __FUNCTION__, __LINE__,
+                    BadParent );
     }
 #endif
 
@@ -83,7 +85,8 @@ IFSG_COORDS::IFSG_COORDS( IFSG_NODE& aParent )
         delete m_node;
         m_node = nullptr;
 
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__, WrongParent );
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d %s" ), __FILE__, __FUNCTION__, __LINE__,
+                    WrongParent );
 
         return;
     }
@@ -123,7 +126,7 @@ bool IFSG_COORDS::NewNode( SGNODE* aParent )
 
     if( aParent != m_node->GetParent() )
     {
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] invalid SGNODE parent (%s) to SGCOORDS",
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [BUG] invalid SGNODE parent (%s) to SGCOORDS" ),
                     __FILE__, __FUNCTION__, __LINE__,
                     aParent->GetNodeTypeName( aParent->GetNodeType() ) );
 

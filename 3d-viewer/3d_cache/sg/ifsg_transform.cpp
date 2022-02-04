@@ -56,7 +56,8 @@ IFSG_TRANSFORM::IFSG_TRANSFORM( SGNODE* aParent )
         delete m_node;
         m_node = nullptr;
 
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__, WrongParent );
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d %s" ), __FILE__, __FUNCTION__, __LINE__,
+                    WrongParent );
 
         return;
     }
@@ -96,7 +97,7 @@ bool IFSG_TRANSFORM::NewNode( SGNODE* aParent )
 
     if( aParent != m_node->GetParent() )
     {
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] invalid SGNODE parent (%s) to SCENEGRAPH",
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [BUG] invalid SGNODE parent (%s) to SCENEGRAPH" ),
                     __FILE__, __FUNCTION__, __LINE__,
                     aParent->GetNodeTypeName( aParent->GetNodeType() ) );
 
@@ -148,7 +149,7 @@ bool IFSG_TRANSFORM::SetScale( double aScale )
 
     if( aScale < 1e-8 && aScale > -1e-8 )
     {
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] |scale| is < 1e-8 - this seems strange",
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [BUG] |scale| is < 1e-8 - this seems strange" ),
                     __FILE__, __FUNCTION__, __LINE__ );
 
         return false;

@@ -56,7 +56,8 @@ IFSG_APPEARANCE::IFSG_APPEARANCE( SGNODE* aParent )
         delete m_node;
         m_node = nullptr;
 
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__, WrongParent );
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d %s" ), __FILE__, __FUNCTION__, __LINE__,
+                    WrongParent );
 
         return;
     }
@@ -72,7 +73,8 @@ IFSG_APPEARANCE::IFSG_APPEARANCE( IFSG_NODE& aParent )
 #ifdef DEBUG
     if( ! pp )
     {
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__, BadParent );
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d %s" ), __FILE__, __FUNCTION__, __LINE__,
+                    BadParent );
     }
 #endif
 
@@ -83,7 +85,8 @@ IFSG_APPEARANCE::IFSG_APPEARANCE( IFSG_NODE& aParent )
         delete m_node;
         m_node = nullptr;
 
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__, WrongParent );
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d %s" ), __FILE__, __FUNCTION__, __LINE__,
+                    WrongParent );
 
         return;
     }
@@ -123,7 +126,8 @@ bool IFSG_APPEARANCE::NewNode( SGNODE* aParent )
 
     if( aParent != m_node->GetParent() )
     {
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d  * [BUG] invalid SGNODE parent (%s) to SGAPPEARANCE",
+        wxLogTrace( MASK_3D_SG,
+                    wxT( "%s:%s:%d  * [BUG] invalid SGNODE parent (%s) to SGAPPEARANCE" ),
                     __FILE__, __FUNCTION__, __LINE__,
                     aParent->GetNodeTypeName( aParent->GetNodeType() ) );
 
@@ -250,7 +254,7 @@ bool IFSG_APPEARANCE::SetShininess( float aShininess ) noexcept
 
     if( aShininess < 0 || aShininess > 1.0 )
     {
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d  * [BUG] shininess out of range [0..1]",
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d  * [BUG] shininess out of range [0..1]" ),
                     __FILE__, __FUNCTION__, __LINE__ );
 
         return false;
@@ -268,7 +272,7 @@ bool IFSG_APPEARANCE::SetTransparency( float aTransparency ) noexcept
 
     if( aTransparency < 0 || aTransparency > 1.0 )
     {
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] transparency out of range [0..1]",
+        wxLogTrace( MASK_3D_SG, wxT( "%s:%s:%d * [BUG] transparency out of range [0..1]" ),
                     __FILE__, __FUNCTION__, __LINE__ );
 
         return false;

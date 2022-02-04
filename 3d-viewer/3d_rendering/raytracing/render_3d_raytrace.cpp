@@ -327,7 +327,7 @@ void RENDER_3D_RAYTRACE::render( GLubyte* ptrPBO, REPORTER* aStatusReporter )
         break;
 
     default:
-        wxASSERT_MSG( false, "Invalid state on m_renderState");
+        wxASSERT_MSG( false, wxT( "Invalid state on m_renderState" ) );
         restartRenderState();
         break;
     }

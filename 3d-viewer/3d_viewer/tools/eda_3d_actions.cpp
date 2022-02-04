@@ -202,21 +202,18 @@ TOOL_ACTION EDA_3D_ACTIONS::materialCAD( "3DViewer.Control.materialCAD",
         _( "Use a CAD color style based on the diffuse color of the material" ),
         BITMAPS::INVALID_BITMAP, AF_NONE, (void*) MATERIAL_MODE::CAD_MODE );
 
-TOOL_ACTION EDA_3D_ACTIONS::rotate45axisZ( "3DViewer.Control.rotate45axisZ",
-        AS_ACTIVE,
-        WXK_TAB, "",
-        "Rotate 45 degrees over Z axis" );
-
 TOOL_ACTION EDA_3D_ACTIONS::showTHT( "3DViewer.Control.attributesTHT",
         AS_ACTIVE,
         'T', "",
-        _( "Toggle Through Hole 3D models" ), _( "Toggle 3D models for 'Through hole' type components" ),
+        _( "Toggle Through Hole 3D models" ),
+        _( "Toggle 3D models for 'Through hole' type components" ),
         BITMAPS::show_tht, AF_NONE, (void*) FL_FP_ATTRIBUTES_NORMAL );
 
 TOOL_ACTION EDA_3D_ACTIONS::showSMD( "3DViewer.Control.attributesSMD",
         AS_ACTIVE,
         'S', "",
-        _( "Toggle SMD 3D models" ), _( "Toggle 3D models for 'Surface mount' type components" ),
+        _( "Toggle SMD 3D models" ),
+        _( "Toggle 3D models for 'Surface mount' type components" ),
         BITMAPS::show_smt, AF_NONE, (void*) FL_FP_ATTRIBUTES_NORMAL_INSERT );
 
 TOOL_ACTION EDA_3D_ACTIONS::showVirtual( "3DViewer.Control.attributesOther",

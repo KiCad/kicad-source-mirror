@@ -35,7 +35,7 @@
 
 void EDA_3D_VIEWER_FRAME::ReCreateMainToolbar()
 {
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::ReCreateMainToolbar" );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::ReCreateMainToolbar" ) );
 
     wxWindowUpdateLocker dummy( this );
 
