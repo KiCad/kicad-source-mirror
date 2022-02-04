@@ -117,6 +117,7 @@ protected:
     void DrawColLabel( wxDC& dc, int col ) override;
 
     void onGridColMove( wxGridEvent& aEvent );
+    void onGridCellSelect( wxGridEvent& aEvent );
 
     bool m_weOwnTable;
 };
