@@ -1014,6 +1014,10 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
     // Make sure everything's up-to-date
     GetBoard()->BuildListOfNets();
 
+    PCBNEW_SETTINGS::DISPLAY_OPTIONS* displayOpts = &GetPcbNewSettings()->m_Display;
+    PCBNEW_SETTINGS::DISPLAY_OPTIONS  prevDisplayOpts = *displayOpts;
+#define CHANGED( x ) ( displayOpts->x != prevDisplayOpts.x )
+
     DIALOG_BOARD_SETUP dlg( this );
 
     if( !aInitialPage.IsEmpty() )
@@ -1028,6 +1032,31 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
 
         Kiway().CommonSettingsChanged( false, true );
 
+        GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
+                {
+                    if( dynamic_cast<RATSNEST_VIEW_ITEM*>( aItem ) )
+                    {
+                        return CHANGED( m_RatsnestMode )
+                                   || CHANGED( m_ShowGlobalRatsnest )
+                                   || CHANGED( m_DisplayRatsnestLinesCurved );
+                    }
+                    else if( dynamic_cast<PCB_TRACK*>( aItem ) )
+                    {
+                        return CHANGED( m_DisplayPadClearance );
+                    }
+                    else if( dynamic_cast<PAD*>( aItem ) )
+                    {
+                        return CHANGED( m_ShowTrackClearanceMode );
+                    }
+                    else if( dynamic_cast<EDA_TEXT*>( aItem ) )
+                    {
+                        return true;  // text variables
+                    }
+
+                    return false;
+                } );
+
         GetCanvas()->Refresh();
 
         UpdateUserInterface();
@@ -1040,6 +1069,7 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
         m_toolManager->ProcessEvent( toolEvent );
     }
 
+#undef CHANGED
     GetCanvas()->SetFocus();
 }
 
@@ -1784,14 +1814,6 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
         infobar->ShowMessage( _( "Could not compile custom design rules." ), wxICON_ERROR,
                               WX_INFOBAR::MESSAGE_TYPE::DRC_RULES_ERROR );
     }
-
-    GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
-            []( KIGFX::VIEW_ITEM* aItem ) -> bool
-            {
-                return dynamic_cast<RATSNEST_VIEW_ITEM*>( aItem )
-                        || dynamic_cast<PCB_TRACK*>( aItem )
-                        || dynamic_cast<PAD*>( aItem );
-            } );
 
     GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     GetCanvas()->ForceRefresh();
