@@ -1768,15 +1768,14 @@ void FOOTPRINT::SetOrientation( const EDA_ANGLE& aNewAngle )
 
 BOARD_ITEM* FOOTPRINT::Duplicate() const
 {
-    FOOTPRINT* dupe = (FOOTPRINT*) Clone();
-    const_cast<KIID&>( dupe->m_Uuid ) = KIID();
+    FOOTPRINT* dupe = static_cast<FOOTPRINT*>( BOARD_ITEM::Duplicate() );
 
     dupe->RunOnChildren( [&]( BOARD_ITEM* child )
                          {
                              const_cast<KIID&>( child->m_Uuid ) = KIID();
                          });
 
-    return static_cast<BOARD_ITEM*>( dupe );
+    return dupe;
 }
 
 
