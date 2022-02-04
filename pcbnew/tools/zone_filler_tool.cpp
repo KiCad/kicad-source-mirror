@@ -85,7 +85,7 @@ void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRep
     if( filler.Fill( toFill, true, aCaller ) )
     {
         board()->GetConnectivity()->Build( board() );
-        commit.Push( _( "Fill Zone(s)" ), false );
+        commit.Push( _( "Fill Zone(s)" ) );
         getEditFrame<PCB_EDIT_FRAME>()->m_ZoneFillsDirty = false;
     }
     else
