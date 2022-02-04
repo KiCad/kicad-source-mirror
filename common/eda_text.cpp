@@ -529,7 +529,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     {
         wxStringSplit( text, strings, '\n' );
 
-        if( strings.GetCount() )     // GetCount() == 0 for void strings
+        if( strings.GetCount() )     // GetCount() == 0 for void strings with multilines allowed
         {
             if( aLine >= 0 && ( aLine < static_cast<int>( strings.GetCount() ) ) )
                 text = strings.Item( aLine );
@@ -559,7 +559,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     rect.SetOrigin( pos );
 
     // for multiline texts and aLine < 0, merge all rectangles (aLine == -1 signals all lines)
-    if( IsMultilineAllowed() && aLine < 0 )
+    if( IsMultilineAllowed() && aLine < 0 && strings.GetCount() )
     {
         for( unsigned ii = 1; ii < strings.GetCount(); ii++ )
         {
