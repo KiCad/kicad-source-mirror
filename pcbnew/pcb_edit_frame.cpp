@@ -974,6 +974,8 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
     // Make sure everything's up-to-date
     GetBoard()->BuildListOfNets();
 
+    const PCB_DISPLAY_OPTIONS prevOpts = GetDisplayOptions();
+
     DIALOG_BOARD_SETUP dlg( this );
 
     if( !aInitialPage.IsEmpty() )
@@ -988,24 +990,37 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
 
         Kiway().CommonSettingsChanged( false, true );
 
-        const PCB_DISPLAY_OPTIONS& opts = GetDisplayOptions();
+        bool trackClearanceModeChanged = GetDisplayOptions().m_ShowTrackClearanceMode
+                                                 != prevOpts.m_ShowTrackClearanceMode;
+        bool padClearanceModeChanged = GetDisplayOptions().m_DisplayPadClearance
+                                               != prevOpts.m_DisplayPadClearance;
 
-        if( opts.m_ShowTrackClearanceMode || opts.m_DisplayPadClearance )
-        {
-            // Update clearance outlines
-            GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
-                    [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
+        GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
+                {
+                    BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem );
+
+                    if( !item )
+                        return false;
+
+                    switch( item->Type() )
                     {
-                        PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( aItem );
-                        PAD*       pad = dynamic_cast<PAD*>( aItem );
+                    case PCB_TRACE_T:
+                    case PCB_ARC_T:
+                    case PCB_VIA_T:
+                        return trackClearanceModeChanged;
 
-                        // PCB_TRACK is the base class of PCB_VIA and PCB_ARC so we don't need
-                        // to check them independently
+                    case PCB_PAD_T:
+                        return padClearanceModeChanged;
 
-                        return ( track && opts.m_ShowTrackClearanceMode )
-                                || ( pad && opts.m_DisplayPadClearance );
-                    } );
-        }
+                    case PCB_TEXT_T:
+                    case PCB_FP_TEXT_T:
+                        return true;        // text variables
+
+                    default:
+                        return false;
+                    }
+                } );
 
         GetCanvas()->Refresh();
 

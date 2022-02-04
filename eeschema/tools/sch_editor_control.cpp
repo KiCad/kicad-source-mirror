@@ -133,9 +133,18 @@ int SCH_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
     dlg.SetWksFileName( BASE_SCREEN::m_DrawingSheetFileName );
 
     if( dlg.ShowModal() )
+    {
+        // Update text variables
+        m_frame->GetCanvas()->GetView()->MarkDirty();
+        m_frame->GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );
+        m_frame->GetCanvas()->Refresh();
+
         m_frame->OnModify();
+    }
     else
+    {
         m_frame->RollbackSchematicFromUndo();
+    }
 
     return 0;
 }

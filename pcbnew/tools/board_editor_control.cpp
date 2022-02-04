@@ -339,9 +339,32 @@ int BOARD_EDITOR_CONTROL::PageSettings( const TOOL_EVENT& aEvent )
     dlg.SetWksFileName( BASE_SCREEN::m_DrawingSheetFileName );
 
     if( dlg.ShowModal() == wxID_OK )
+    {
+        m_frame->GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
+                {
+                    BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem );
+
+                    if( !item )
+                        return false;
+
+                    switch( item->Type() )
+                    {
+                    case PCB_TEXT_T:
+                    case PCB_FP_TEXT_T:
+                        return true;        // text variables
+
+                    default:
+                        return false;
+                    }
+                } );
+
         m_frame->OnModify();
+    }
     else
+    {
         m_frame->RollbackFromUndo();
+    }
 
     return 0;
 }
