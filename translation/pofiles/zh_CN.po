@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-03 17:11-0800\n"
-"PO-Revision-Date: 2022-02-04 06:23+0000\n"
+"PO-Revision-Date: 2022-02-05 15:45+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -9347,7 +9347,6 @@ msgstr "填充物:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:81
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:168
-#, fuzzy
 msgid "Private to Symbol Editor"
 msgstr "对符号编辑器私密"
 
@@ -9611,7 +9610,6 @@ msgid "Background fill"
 msgstr "背景填充"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:238
-#, fuzzy
 msgid "Private to symbol editor"
 msgstr "对符号编辑器私密"
 
@@ -11416,7 +11414,7 @@ msgstr "欧姆"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:965
 msgid "Propagation delay"
-msgstr ""
+msgstr "传播延迟"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:972
 msgid "s"
@@ -11438,7 +11436,7 @@ msgstr "使用时间延迟"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1000
 msgid "Use frequency and number of wavelength"
-msgstr ""
+msgstr "使用频率和波长的编号"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1002
 msgid "Delay / Electrical length"
@@ -11446,15 +11444,15 @@ msgstr "延迟/电气长度"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1010
 msgid "Lossless"
-msgstr ""
+msgstr "无损"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1024
 msgid "Resistance per unit length"
-msgstr ""
+msgstr "单位长度电阻"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1031
 msgid "ohm / unit"
-msgstr ""
+msgstr "欧姆/单位"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1035
 msgid "Inductance per unit length"
@@ -11462,15 +11460,15 @@ msgstr "单位长度电感值"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1042
 msgid "henry / unit"
-msgstr ""
+msgstr "亨利/单位"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1046
 msgid "Capacitance per unit length"
-msgstr ""
+msgstr "单位长度电容"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1053
 msgid "farad / unit"
-msgstr ""
+msgstr "法拉/单位"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1057
 msgid "Conductance per unit length"
@@ -11495,6 +11493,14 @@ msgid ""
 "\n"
 "Any other combination will yield erroneous results and should not be tried."
 msgstr ""
+"目前为止，已经实现了以下类型的线：\n"
+"\n"
+"- RLC\n"
+"- RC\n"
+"- LC\n"
+"- RG\n"
+"\n"
+"任何其他的组合都会产生错误的结果，不应该尝试。"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1100
 msgid "Lossy"
@@ -17763,7 +17769,7 @@ msgstr "坐标"
 
 #: gerbview/gerber_draw_item.cpp:695
 msgid "Start"
-msgstr "启动"
+msgstr "开头"
 
 #: gerbview/gerber_draw_item.cpp:698
 msgid "End"
@@ -17865,9 +17871,8 @@ msgid "Gerber Viewer"
 msgstr "Gerber 文件查看器"
 
 #: gerbview/gerbview_frame.cpp:589
-#, fuzzy
 msgid "Drawing layer not in use"
-msgstr "绘图层 %d 没有使用"
+msgstr "绘图层未在使用"
 
 #: gerbview/gerbview_frame.cpp:606
 msgid "(with X2 attributes)"
@@ -17932,9 +17937,8 @@ msgstr ""
 "因此，某些项目的大小未定义"
 
 #: gerbview/rs274d.cpp:410
-#, fuzzy
 msgid "Invalid Code Number"
-msgstr "无效的引脚编号"
+msgstr "无效的代码编号"
 
 #: gerbview/rs274d.cpp:618
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
@@ -17983,31 +17987,28 @@ msgid "<No selection>"
 msgstr "<没有选择>"
 
 #: gerbview/tools/gerbview_actions.cpp:39
-#, fuzzy
 msgid "Open Autodetected File(s)..."
-msgstr "打开 Gerber 绘制文件..."
+msgstr "打开自动检测到的文件..."
 
 #: gerbview/tools/gerbview_actions.cpp:40
 msgid "Open Autodetected file(s) on a new layer."
-msgstr ""
+msgstr "在新层上打开自动检测到的文件。"
 
 #: gerbview/tools/gerbview_actions.cpp:45
 msgid "Open Gerber Plot File(s)..."
 msgstr "打开 Gerber 绘制文件..."
 
 #: gerbview/tools/gerbview_actions.cpp:46
-#, fuzzy
 msgid "Open Gerber plot file(s) on a new layer."
-msgstr "打开 Gerber 绘制文件..."
+msgstr "在新层上打开 Gerber 绘制文件。"
 
 #: gerbview/tools/gerbview_actions.cpp:51
 msgid "Open Excellon Drill File(s)..."
 msgstr "打开 Excellon 钻孔文件..."
 
 #: gerbview/tools/gerbview_actions.cpp:52
-#, fuzzy
 msgid "Open Excellon drill file(s) on a new layer."
-msgstr "打开 Excellon 钻孔文件..."
+msgstr "在新层上打开 Excellon 钻孔文件。"
 
 #: gerbview/tools/gerbview_actions.cpp:57
 msgid "Open Gerber Job File..."
@@ -18277,16 +18278,15 @@ msgstr "X2 模式整理层"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:141
 msgid "Sort Layers by File Extension"
-msgstr ""
+msgstr "按文件扩展名对层进行排序"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:146
 msgid "Move Current Layer Up"
 msgstr "将当前层上移"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:148
-#, fuzzy
 msgid "Move Current Layer Down"
-msgstr "仅当前层"
+msgstr "将当前层下移"
 
 #: gerbview/widgets/layer_widget.cpp:130
 msgid "Change Layer Color for"
@@ -20825,18 +20825,16 @@ msgid "PCB Calculator"
 msgstr "PCB 计算器"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:76
-#, fuzzy
 msgid "General system design"
-msgstr "常规选项"
+msgstr "常规系统设计"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:79
 msgid "Regulators"
 msgstr "稳压器"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:81
-#, fuzzy
 msgid "Power, current and isolation"
-msgstr "通孔间隙违规"
+msgstr "电源、电流和隔离"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:84
 msgid "Electrical Spacing"
@@ -20844,7 +20842,7 @@ msgstr "电气间距"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:90
 msgid "High speed"
-msgstr ""
+msgstr "高速"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:94
 msgid "RF Attenuators"
@@ -20856,7 +20854,7 @@ msgstr "传输线 "
 
 #: pcb_calculator/pcb_calculator_frame.cpp:98
 msgid "Memo"
-msgstr ""
+msgstr "备忘录"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:101
 msgid "E-Series"
@@ -27130,9 +27128,8 @@ msgid "Parent footprint description"
 msgstr "父级封装描述"
 
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:404
-#, fuzzy
 msgid "Change text box properties"
-msgstr "修改文本属性"
+msgstr "修改文本框属性"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:137
 msgid "Text Width:"
@@ -27143,9 +27140,8 @@ msgid "Text Height:"
 msgstr "文本高度："
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:203
-#, fuzzy
 msgid "Border style:"
-msgstr "斜切样式："
+msgstr "边界样式："
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:445
 #, c-format
@@ -32314,13 +32310,11 @@ msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr "Pads6 流中的 subrecord6 数据的长度 %d 非法。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium layer (%d) has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
-msgstr ""
-"Altium 层 (%d) 上找到的圆弧没有 KiCad 等效项。它已被移动至 KiCad 层 "
-"Eco1_User。"
+msgstr "Altium 层 (%d) 没有 KiCad 等效项。它已被移动至 KiCad 层 Eco1_User。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:509
 #, c-format
@@ -32335,7 +32329,7 @@ msgstr "“%s”未完全解析。"
 #: pcbnew/plugins/altium/altium_pcb.cpp:747
 #, c-format
 msgid "Record of unknown type: '%d'."
-msgstr "未知类型的记录：\"%d\""
+msgstr "未知类型的记录：\"%d\"。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1041
 #, c-format
@@ -34053,9 +34047,8 @@ msgid "%d Teardrops removed."
 msgstr "%d 已移除泪滴。"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:34
-#, fuzzy
 msgid "Round shapes"
-msgstr "实体形状"
+msgstr "圆形"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:48
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:117
@@ -34072,22 +34065,20 @@ msgstr "最大高度"
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:66
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:135
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:204
-#, fuzzy
 msgid "Best length"
-msgstr "网络长度"
+msgstr "最佳长度"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:74
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:143
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:212
-#, fuzzy
 msgid "Best height"
-msgstr "文本高度"
+msgstr "最佳高度"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:82
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:151
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:220
 msgid "percent of d"
-msgstr ""
+msgstr "d 的百分比"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:86
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:155
@@ -34102,43 +34093,42 @@ msgid ""
 "Max pad/via size to track width ratio to create a teardrop.\n"
 "100 always creates a teardrop."
 msgstr ""
+"创建泪滴的最大焊盘/过孔与导线宽度比。\n"
+"100 始终创建一个泪滴。"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:96
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:165
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:234
 msgid "percent of H/d"
-msgstr ""
+msgstr "H/d 百分比"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:103
-#, fuzzy
 msgid "Rect shapes"
-msgstr "填充所选形状"
+msgstr "最佳形状"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:256
 msgid "Vias and PTH pads"
-msgstr ""
+msgstr "过孔和金属化焊盘"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:258
 msgid "Add teardrops to vias and pads with holes"
-msgstr ""
+msgstr "添加泪滴到过孔和有孔焊盘"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:262
-#, fuzzy
 msgid "Round pads only"
-msgstr "圆半径比"
+msgstr "仅圆焊盘"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:263
 msgid "Add teardrops to round shapes only "
-msgstr ""
+msgstr "只添加泪滴到圆形 "
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:267
-#, fuzzy
 msgid "Not drilled pads"
-msgstr "无钻孔标记"
+msgstr "非钻孔焊盘"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:269
 msgid "Add teardrops to not driiled pads, like SMD"
-msgstr ""
+msgstr "添加泪滴到非钻孔焊盘，比如表面黏装零件(SMD)"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:273
 msgid "Track to track"
@@ -34146,69 +34136,65 @@ msgstr "要布线的导线"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:275
 msgid "Add teardrops to two connected tracks of different widths"
-msgstr ""
+msgstr "将泪滴添加到不同宽度的两根连接导线上"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:285
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:291
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:297
-#, fuzzy
 msgid "Straight lines"
-msgstr "带状线"
+msgstr "直线"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:285
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:291
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:297
-#, fuzzy
 msgid "Curved"
-msgstr "曲线"
+msgstr "弯曲的"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:287
 msgid "Style for round shapes"
-msgstr ""
+msgstr "圆形的样式"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:293
 msgid "Style for rect shapes"
-msgstr ""
+msgstr "矩形的样式"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:299
-#, fuzzy
 msgid "Style for tracks"
-msgstr "显示在布线上"
+msgstr "导线样式"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:312
-#, fuzzy
 msgid "Allows use two tracks"
-msgstr "孔太靠近布线了"
+msgstr "允许使用两根导线"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:314
 msgid ""
 "Allows a teardrop to spread over 2 tracks if the first track segment is too "
 "short"
-msgstr ""
+msgstr "允许泪滴散布在2 根导线上，如果第一个导线段太短"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:318
 msgid "Teardrop on pads in zones"
-msgstr ""
+msgstr "区域内焊盘泪滴"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:319
 msgid ""
 "Pads inside a  copper zone outline of same net have no teardrop.\n"
 "Check this option to allow teardrop for these pads."
 msgstr ""
+"同一网络覆铜区域轮廓内的焊盘没有泪滴。\n"
+"选中此选项允许这些焊盘使用泪滴。"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:326
-#, fuzzy
 msgid "Curve points"
-msgstr "贝塞尔曲线，%d 点"
+msgstr "曲线点"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:328
 msgid "Number of segments to build a teardrop with curved shape"
-msgstr ""
+msgstr "构建弯曲形状泪滴的片段数"
 
 #: pcbnew/teardrop/dialog_teardrop_base.h:108
-#, fuzzy
 msgid "Teardrop Settings"
-msgstr "网格设置"
+msgstr "泪滴设置"
 
 #: pcbnew/teardrop/teardrop.cpp:202
 msgid "Add teardrops"
@@ -34356,32 +34342,27 @@ msgstr "解锁"
 
 #: pcbnew/tools/board_editor_control.cpp:1370
 msgid "Zones have insufficient overlap for merging."
-msgstr ""
+msgstr "区域重叠不足，无法进行合并。"
 
 #: pcbnew/tools/board_editor_control.cpp:1416
-#, fuzzy
 msgid "Some zone netcodes did not match and were not merged."
-msgstr "有些项目 DRC 失败，未被修改。"
+msgstr "一些区域网码不匹配，没有合并。"
 
 #: pcbnew/tools/board_editor_control.cpp:1422
-#, fuzzy
 msgid "Some zone priorities did not match and were not merged."
-msgstr "有些项目 DRC 失败，未被修改。"
+msgstr "一些区域优先级不匹配，没有合并。"
 
 #: pcbnew/tools/board_editor_control.cpp:1428
-#, fuzzy
 msgid "Some zones were rule areas and were not merged."
-msgstr "有些项目 DRC 失败，未被修改。"
+msgstr "有些区域是规则区域，没有合并。"
 
 #: pcbnew/tools/board_editor_control.cpp:1434
-#, fuzzy
 msgid "Some zone layer sets did not match and were not merged."
-msgstr "规则层 \"%s\" 不匹配；已忽略规则。"
+msgstr "一些区域层集不匹配，没有合并。"
 
 #: pcbnew/tools/board_editor_control.cpp:1440
-#, fuzzy
 msgid "Some zones did not intersect and were not merged."
-msgstr "有些项目 DRC 失败，未被修改。"
+msgstr "有些区域没有交叉，没有合并。"
 
 #: pcbnew/tools/board_editor_control.cpp:1506
 msgid "Duplicate zone"
@@ -34458,7 +34439,7 @@ msgstr "最小辐条 (散热) 数目：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:430
 msgid "Items are not connected.  No thermal spokes will be generated."
-msgstr ""
+msgstr "项目没有连接。  不会产生热辐条。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:435
 #, c-format
@@ -34707,9 +34688,8 @@ msgid "Draw a line segment"
 msgstr "绘制线段"
 
 #: pcbnew/tools/drawing_tool.cpp:391
-#, fuzzy
 msgid "Draw a text box"
-msgstr "绘制线"
+msgstr "绘制文本框"
 
 #: pcbnew/tools/drawing_tool.cpp:391 pcbnew/tools/pcb_actions.cpp:93
 msgid "Draw a rectangle"
@@ -34827,12 +34807,11 @@ msgstr "更改所在面 / 翻转"
 
 #: pcbnew/tools/edit_tool.cpp:1845
 msgid "Reference designator hidden (it is required and can not be deleted)."
-msgstr ""
+msgstr "位号隐藏（这是必需的，无法删除）。"
 
 #: pcbnew/tools/edit_tool.cpp:1849
-#, fuzzy
 msgid "Value hidden (it is required and can not be deleted)."
-msgstr "名称 %s 是保留的，不能使用。"
+msgstr "值被隐藏（它是必需的，不能被删除）。"
 
 #: pcbnew/tools/edit_tool.cpp:2085
 msgid "Move exact"
@@ -35011,9 +34990,8 @@ msgid "Add a board stackup table on a graphic layer"
 msgstr "在图形层上添加板压层表"
 
 #: pcbnew/tools/pcb_actions.cpp:128
-#, fuzzy
 msgid "Add a wrapped text item"
-msgstr "添加文本项"
+msgstr "添加换行的文本项"
 
 #: pcbnew/tools/pcb_actions.cpp:134
 msgid "Add Aligned Dimension"
