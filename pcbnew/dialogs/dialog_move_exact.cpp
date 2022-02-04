@@ -77,6 +77,11 @@ DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME *aParent, VECTOR2I& aTransl
     m_xEntry->ChangeValue( m_options.entry1 );
     m_yEntry->ChangeValue( m_options.entry2 );
 
+    // Force the evaluation when setting previous values
+    m_moveX.RequireEval();
+    m_moveY.RequireEval();
+    m_rotate.RequireEval();
+
     m_rotate.SetUnits( EDA_UNITS::DEGREES );
     m_rotate.SetValue( m_options.entryRotation );
     m_anchorOptions->SetSelection( std::min( m_options.entryAnchorSelection, m_menuIDs.size() ) );

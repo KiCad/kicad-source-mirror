@@ -186,6 +186,14 @@ public:
         m_coordType = aCoordType;
     }
 
+    /**
+     * Force the binder to evaluate the text
+     */
+    void RequireEval()
+    {
+        m_needsEval = true;
+    }
+
 protected:
 
     void onSetFocus( wxFocusEvent& aEvent );
