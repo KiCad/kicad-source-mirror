@@ -141,6 +141,18 @@ void BOARD_ITEM::SwapData( BOARD_ITEM* aImage )
 }
 
 
+BOARD_ITEM* BOARD_ITEM::Duplicate() const
+{
+    BOARD_ITEM* dupe = static_cast<BOARD_ITEM*>( Clone() );
+    const_cast<KIID&>( dupe->m_Uuid ) = KIID();
+
+    if( dupe->GetParentGroup() )
+        dupe->GetParentGroup()->AddItem( dupe );
+
+    return static_cast<BOARD_ITEM*>( dupe );
+}
+
+
 void BOARD_ITEM::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                        PCB_LAYER_ID aLayer, int aClearanceValue,
                                                        int aError, ERROR_LOC aErrorLoc,
