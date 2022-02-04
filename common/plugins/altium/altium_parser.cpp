@@ -176,7 +176,7 @@ std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties()
 
 int32_t ALTIUM_PARSER::ConvertToKicadUnit( const double aValue )
 {
-    const double int_limit = ( std::numeric_limits<int>::max() - 1 ) / 2.54;
+    constexpr double int_limit = ( std::numeric_limits<int>::max() - 1 ) / 2.54;
 
     int32_t iu = KiROUND( Clamp<double>( -int_limit, aValue, int_limit ) * 2.54 );
 
