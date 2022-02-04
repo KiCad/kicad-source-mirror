@@ -96,10 +96,24 @@ void WX_GRID::SetTable( wxGridTableBase* aTable, bool aTakeOwnership )
     delete[] formBuilderColWidths;
 
     Connect( wxEVT_GRID_COL_MOVE, wxGridEventHandler( WX_GRID::onGridColMove ), nullptr, this );
+    Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( WX_GRID::onGridCellSelect ), nullptr, this );
 
     m_weOwnTable = aTakeOwnership;
 }
 
+
+void WX_GRID::onGridCellSelect( wxGridEvent& aEvent )
+{
+    // Highlight the selected cell.
+    // Calling SelectBlock() allows a visual effect when cells are selected
+    // by tab or arrow keys.
+    // Otherwise, one cannot really know what actual cell is selected
+    int row = aEvent.GetRow();
+    int col = aEvent.GetCol();
+
+    if( row >= 0 && col >= 0 )
+        SelectBlock(row,col,row,col,false);
+}
 
 void WX_GRID::DestroyTable( wxGridTableBase* aTable )
 {
@@ -108,6 +122,7 @@ void WX_GRID::DestroyTable( wxGridTableBase* aTable )
     CommitPendingChanges( true /* quiet mode */ );
 
     Disconnect( wxEVT_GRID_COL_MOVE, wxGridEventHandler( WX_GRID::onGridColMove ), nullptr, this );
+    Disconnect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( WX_GRID::onGridCellSelect ), nullptr, this );
 
     wxGrid::SetTable( nullptr );
     delete aTable;
