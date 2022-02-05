@@ -1250,7 +1250,15 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
 PAD*& CADSTAR_PCB_ARCHIVE_LOADER::getPadReference( FOOTPRINT*   aFootprint,
                                                    const PAD_ID aCadstarPadID )
 {
-    return aFootprint->Pads().at( aCadstarPadID - (long long) 1 );
+    size_t index = aCadstarPadID - (long) 1;
+
+    if( !( index < aFootprint->Pads().size() ) )
+    {
+        THROW_IO_ERROR( _( "Unable to find pad index '%d' in footprint '%s'.", (long) aCadstarPadID,
+                           aFootprint->GetReference() ) );
+    }
+
+    return aFootprint->Pads().at( index );
 }
 
 
@@ -1703,12 +1711,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
                     csPad.Side = padEx.Side;
 
                 // Find the pad in the footprint definition
-                PAD*     kiPad = getPadReference( footprint, padEx.ID );
+                PAD* kiPad = getPadReference( footprint, padEx.ID );
+
                 wxString padNumber = kiPad->GetNumber();
 
-                if( kiPad )
-                    delete kiPad;
-
+                delete kiPad;
                 kiPad = getKiCadPad( csPad, footprint );
                 kiPad->SetNumber( padNumber );
 
