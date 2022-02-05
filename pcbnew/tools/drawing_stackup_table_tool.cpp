@@ -217,7 +217,8 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup( const wxPoint& 
     std::vector<std::vector<PCB_TEXT*>> texts;
 
     // Style : Header
-    PCB_TEXT* headStyle = new PCB_TEXT( static_cast<FOOTPRINT*>( m_frame->GetModel() ) );
+    std::unique_ptr<PCB_TEXT> headStyle =
+            std::make_unique<PCB_TEXT>( static_cast<FOOTPRINT*>( m_frame->GetModel() ) );
     headStyle->SetLayer( Eco1_User );
     headStyle->SetTextSize( wxSize( Millimeter2iu( 1.5 ), Millimeter2iu( 1.5 ) ) );
     headStyle->SetTextThickness( Millimeter2iu( 0.3 ) );
@@ -228,7 +229,8 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup( const wxPoint& 
     headStyle->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
 
     // Style : data
-    PCB_TEXT* dataStyle = new PCB_TEXT( static_cast<FOOTPRINT*>( m_frame->GetModel() ) );
+    std::unique_ptr<PCB_TEXT> dataStyle =
+            std::make_unique<PCB_TEXT>( static_cast<FOOTPRINT*>( m_frame->GetModel() ) );
     dataStyle->SetLayer( Eco1_User );
     dataStyle->SetTextSize( wxSize( Millimeter2iu( 1.5 ), Millimeter2iu( 1.5 ) ) );
     dataStyle->SetTextThickness( Millimeter2iu( 0.1 ) );
@@ -382,7 +384,8 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics( const wxPoint& 
     wxPoint cursorPos = aOrigin;
 
     // Style : Section header
-    PCB_TEXT* headStyle = new PCB_TEXT( static_cast<FOOTPRINT*>( m_frame->GetModel() ) );
+    std::unique_ptr<PCB_TEXT> headStyle =
+            std::make_unique<PCB_TEXT>( static_cast<FOOTPRINT*>( m_frame->GetModel() ) );
     headStyle->SetLayer( Eco1_User );
     headStyle->SetTextSize( wxSize( Millimeter2iu( 2.0 ), Millimeter2iu( 2.0 ) ) );
     headStyle->SetTextThickness( Millimeter2iu( 0.4 ) );
@@ -392,7 +395,8 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics( const wxPoint& 
     headStyle->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
 
     // Style : Data
-    PCB_TEXT* dataStyle = new PCB_TEXT( static_cast<FOOTPRINT*>( m_frame->GetModel() ) );
+    std::unique_ptr<PCB_TEXT> dataStyle =
+            std::make_unique<PCB_TEXT>( static_cast<FOOTPRINT*>( m_frame->GetModel() ) );
     dataStyle->SetLayer( Eco1_User );
     dataStyle->SetTextSize( wxSize( Millimeter2iu( 1.5 ), Millimeter2iu( 1.5 ) ) );
     dataStyle->SetTextThickness( Millimeter2iu( 0.2 ) );
