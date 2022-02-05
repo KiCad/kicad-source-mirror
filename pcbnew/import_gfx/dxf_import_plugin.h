@@ -216,7 +216,7 @@ struct DXF_ARBITRARY_AXIS
  */
 #if 0 //defined(DEBUG)
 // For dxf import debug:
-#define ON_UNSUPPORTED( error_msg ) wxLogMessage( error_msg )
+#define ON_UNSUPPORTED( error_msg ) wxLogMessage( wxT( error_msg ) )
 #else
 #define ON_UNSUPPORTED( error_msg )
 #endif

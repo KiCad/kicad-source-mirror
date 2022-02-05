@@ -54,20 +54,20 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
     {
     case MICROWAVE_FOOTPRINT_SHAPE::GAP:
         msg       = _( "Gap Size:" );
-        cmp_name  = "muwave_gap";
+        cmp_name  = wxT( "muwave_gap" );
         text_size = gap_size;
         break;
 
     case MICROWAVE_FOOTPRINT_SHAPE::STUB:
         msg       = _( "Stub Size:" );
-        cmp_name  = "muwave_stub";
+        cmp_name  = wxT( "muwave_stub" );
         text_size = gap_size;
         pad_count = 2;
         break;
 
     case MICROWAVE_FOOTPRINT_SHAPE::STUB_ARC:
         msg       = _( "Arc Stub Radius Value:" );
-        cmp_name  = "muwave_arcstub";
+        cmp_name  = wxT( "muwave_arcstub" );
         pad_count = 1;
         break;
 

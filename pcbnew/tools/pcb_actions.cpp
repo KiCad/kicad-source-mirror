@@ -188,7 +188,8 @@ TOOL_ACTION PCB_ACTIONS::placeImportedGraphics( "pcbnew.InteractiveDrawing.place
 TOOL_ACTION PCB_ACTIONS::setAnchor( "pcbnew.InteractiveDrawing.setAnchor",
         AS_GLOBAL,
         MD_SHIFT + MD_CTRL + 'N', LEGACY_HK_NAME( "Place the Footprint Anchor" ),
-        _( "Place the Footprint Anchor" ), _( "Set the coordinate origin point (anchor) of the footprint" ),
+        _( "Place the Footprint Anchor" ),
+        _( "Set the coordinate origin point (anchor) of the footprint" ),
         BITMAPS::anchor, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::incWidth( "pcbnew.InteractiveDrawing.incWidth",
@@ -269,7 +270,8 @@ TOOL_ACTION PCB_ACTIONS::copyWithReference( "pcbnew.InteractiveMove.copyWithRefe
 TOOL_ACTION PCB_ACTIONS::duplicateIncrement( "pcbnew.InteractiveEdit.duplicateIncrementPads",
         AS_GLOBAL,
         MD_SHIFT + MD_CTRL + 'D', LEGACY_HK_NAME( "Duplicate Item and Increment" ),
-        _( "Duplicate and Increment" ), _( "Duplicates the selected item(s), incrementing pad numbers" ),
+        _( "Duplicate and Increment" ),
+        _( "Duplicates the selected item(s), incrementing pad numbers" ),
         BITMAPS::duplicate );
 
 TOOL_ACTION PCB_ACTIONS::moveExact( "pcbnew.InteractiveEdit.moveExact",
@@ -333,12 +335,12 @@ TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
 //
 TOOL_ACTION PCB_ACTIONS::showFootprintTree( "pcbnew.ModuleEditor.showFootprintTree",
         AS_GLOBAL, 0, "",
-        _( "Show Footprint Tree" ), "",
+        _( "Show Footprint Tree" ), _( "Show Footprint Tree" ),
         BITMAPS::search_tree );
 
 TOOL_ACTION PCB_ACTIONS::hideFootprintTree( "pcbnew.ModuleEditor.hideFootprintTree",
         AS_GLOBAL, 0, "",
-        _( "Hide Footprint Tree" ), "",
+        _( "Hide Footprint Tree" ), _( "Hide Footprint Tree" ),
         BITMAPS::search_tree );
 
 TOOL_ACTION PCB_ACTIONS::newFootprint( "pcbnew.ModuleEditor.newFootprint",
@@ -359,22 +361,22 @@ TOOL_ACTION PCB_ACTIONS::editFootprint( "pcbnew.ModuleEditor.editFootprint",
 
 TOOL_ACTION PCB_ACTIONS::deleteFootprint( "pcbnew.ModuleEditor.deleteFootprint",
         AS_GLOBAL, 0, "",
-        _( "Delete Footprint from Library" ), "",
+        _( "Delete Footprint from Library" ), _( "Delete Footprint from Library" ),
         BITMAPS::trash );
 
 TOOL_ACTION PCB_ACTIONS::cutFootprint( "pcbnew.ModuleEditor.cutFootprint",
         AS_GLOBAL, 0, "",
-        _( "Cut Footprint" ), "",
+        _( "Cut Footprint" ), _( "Cut Footprint" ),
         BITMAPS::cut );
 
 TOOL_ACTION PCB_ACTIONS::copyFootprint( "pcbnew.ModuleEditor.copyFootprint",
         AS_GLOBAL, 0, "",
-        _( "Copy Footprint" ), "",
+        _( "Copy Footprint" ), _( "Copy Footprint" ),
         BITMAPS::copy );
 
 TOOL_ACTION PCB_ACTIONS::pasteFootprint( "pcbnew.ModuleEditor.pasteFootprint",
         AS_GLOBAL, 0, "",
-        _( "Paste Footprint" ), "",
+        _( "Paste Footprint" ), _( "Paste Footprint" ),
         BITMAPS::paste );
 
 TOOL_ACTION PCB_ACTIONS::importFootprint( "pcbnew.ModuleEditor.importFootprint",
@@ -471,22 +473,26 @@ TOOL_ACTION PCB_ACTIONS::microwaveCreateGap( "pcbnew.MicrowaveTool.createGap",
 
 TOOL_ACTION PCB_ACTIONS::microwaveCreateStub( "pcbnew.MicrowaveTool.createStub",
         AS_GLOBAL, 0, "",
-        _( "Add Microwave Stub" ), _( "Create stub of specified length for microwave applications" ),
+        _( "Add Microwave Stub" ),
+        _( "Create stub of specified length for microwave applications" ),
         BITMAPS::mw_add_stub, AF_ACTIVATE, (void*) MICROWAVE_FOOTPRINT_SHAPE::STUB );
 
 TOOL_ACTION PCB_ACTIONS::microwaveCreateStubArc( "pcbnew.MicrowaveTool.createStubArc",
         AS_GLOBAL, 0, "",
-        _( "Add Microwave Arc Stub" ), _( "Create stub (arc) of specified size for microwave applications" ),
+        _( "Add Microwave Arc Stub" ),
+        _( "Create stub (arc) of specified size for microwave applications" ),
         BITMAPS::mw_add_stub_arc, AF_ACTIVATE, (void*) MICROWAVE_FOOTPRINT_SHAPE::STUB_ARC );
 
 TOOL_ACTION PCB_ACTIONS::microwaveCreateFunctionShape( "pcbnew.MicrowaveTool.createFunctionShape",
         AS_GLOBAL, 0, "",
-        _( "Add Microwave Polygonal Shape" ), _( "Create a microwave polygonal shape from a list of vertices" ),
+        _( "Add Microwave Polygonal Shape" ),
+        _( "Create a microwave polygonal shape from a list of vertices" ),
         BITMAPS::mw_add_shape, AF_ACTIVATE, (void*) MICROWAVE_FOOTPRINT_SHAPE::FUNCTION_SHAPE );
 
 TOOL_ACTION PCB_ACTIONS::microwaveCreateLine( "pcbnew.MicrowaveTool.createLine",
         AS_GLOBAL, 0, "",
-        _( "Add Microwave Line" ), _( "Create line of specified length for microwave applications" ),
+        _( "Add Microwave Line" ),
+        _( "Create line of specified length for microwave applications" ),
         BITMAPS::mw_add_line, AF_ACTIVATE );
 
 
@@ -536,7 +542,8 @@ TOOL_ACTION PCB_ACTIONS::recombinePad( "pcbnew.PadTool.recombinePad",
 
 TOOL_ACTION PCB_ACTIONS::defaultPadProperties( "pcbnew.PadTool.defaultPadProperties",
         AS_GLOBAL, 0, "",
-        _( "Default Pad Properties..." ), _( "Edit the pad properties used when creating new pads" ),
+        _( "Default Pad Properties..." ),
+        _( "Edit the pad properties used when creating new pads" ),
         BITMAPS::options_pad );
 
 
@@ -620,7 +627,8 @@ TOOL_ACTION PCB_ACTIONS::trackWidthInc( "pcbnew.EditorControl.trackWidthInc",
 TOOL_ACTION PCB_ACTIONS::trackWidthDec( "pcbnew.EditorControl.trackWidthDec",
         AS_GLOBAL,
         MD_SHIFT + 'W', LEGACY_HK_NAME( "Switch Track Width To Previous" ),
-        _( "Switch Track Width to Previous" ), _( "Change track width to previous pre-defined size" ) );
+        _( "Switch Track Width to Previous" ),
+        _( "Change track width to previous pre-defined size" ) );
 
 TOOL_ACTION PCB_ACTIONS::viaSizeInc( "pcbnew.EditorControl.viaSizeInc",
         AS_GLOBAL,
@@ -860,12 +868,12 @@ TOOL_ACTION PCB_ACTIONS::zoneDisplayOutline( "pcbnew.Control.zoneDisplayDisable"
 
 TOOL_ACTION PCB_ACTIONS::zoneDisplayFractured( "pcbnew.Control.zoneDisplayOutlines",
         AS_GLOBAL, 0, "",
-        _( "Draw Zone Fill Fracture Borders" ), "",
+        _( "Draw Zone Fill Fracture Borders" ), _( "Draw Zone Fill Fracture Borders" ),
         BITMAPS::show_zone_outline_only );
 
 TOOL_ACTION PCB_ACTIONS::zoneDisplayTriangulated( "pcbnew.Control.zoneDisplayTesselation",
         AS_GLOBAL, 0, "",
-        _( "Draw Zone Fill Triangulation" ), "",
+        _( "Draw Zone Fill Triangulation" ), _( "Draw Zone Fill Triangulation" ),
         BITMAPS::show_zone_triangulation );
 
 TOOL_ACTION PCB_ACTIONS::zoneDisplayToggle( "pcbnew.Control.zoneDisplayToggle",
@@ -880,181 +888,181 @@ TOOL_ACTION PCB_ACTIONS::zoneDisplayToggle( "pcbnew.Control.zoneDisplayToggle",
 TOOL_ACTION PCB_ACTIONS::layerTop( "pcbnew.Control.layerTop",
         AS_GLOBAL,
         WXK_PAGEUP, LEGACY_HK_NAME( "Switch to Component (F.Cu) layer" ),
-        _( "Switch to Component (F.Cu) layer" ), "",
+        _( "Switch to Component (F.Cu) layer" ), _( "Switch to Component (F.Cu) layer" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) F_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner1( "pcbnew.Control.layerInner1",
         AS_GLOBAL,
         0, LEGACY_HK_NAME( "Switch to Inner layer 1" ),
-        _( "Switch to Inner layer 1" ), "",
+        _( "Switch to Inner layer 1" ), _( "Switch to Inner layer 1" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In1_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner2( "pcbnew.Control.layerInner2",
         AS_GLOBAL,
         0, LEGACY_HK_NAME( "Switch to Inner layer 2" ),
-        _( "Switch to Inner layer 2" ), "",
+        _( "Switch to Inner layer 2" ), _( "Switch to Inner layer 2" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In2_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner3( "pcbnew.Control.layerInner3",
         AS_GLOBAL,
         0, LEGACY_HK_NAME( "Switch to Inner layer 3" ),
-        _( "Switch to Inner layer 3" ), "",
+        _( "Switch to Inner layer 3" ), _( "Switch to Inner layer 3" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In3_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner4( "pcbnew.Control.layerInner4",
         AS_GLOBAL,
         0, LEGACY_HK_NAME( "Switch to Inner layer 4" ),
-        _( "Switch to Inner layer 4" ), "",
+        _( "Switch to Inner layer 4" ), _( "Switch to Inner layer 4" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In4_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner5( "pcbnew.Control.layerInner5",
         AS_GLOBAL,
         0, LEGACY_HK_NAME( "Switch to Inner layer 5" ),
-        _( "Switch to Inner layer 5" ), "",
+        _( "Switch to Inner layer 5" ), _( "Switch to Inner layer 5" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In5_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner6( "pcbnew.Control.layerInner6",
         AS_GLOBAL,
         0, LEGACY_HK_NAME( "Switch to Inner layer 6" ),
-        _( "Switch to Inner layer 6" ), "",
+        _( "Switch to Inner layer 6" ), _( "Switch to Inner layer 6" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In6_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner7( "pcbnew.Control.layerInner7",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 7" ), "",
+        _( "Switch to Inner layer 7" ), _( "Switch to Inner layer 7" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In7_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner8( "pcbnew.Control.layerInner8",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 8" ), "",
+        _( "Switch to Inner layer 8" ), _( "Switch to Inner layer 8" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In8_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner9( "pcbnew.Control.layerInner9",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 9" ), "",
+        _( "Switch to Inner layer 9" ), _( "Switch to Inner layer 9" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In9_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner10( "pcbnew.Control.layerInner10",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 10" ), "",
+        _( "Switch to Inner layer 10" ), _( "Switch to Inner layer 10" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In10_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner11( "pcbnew.Control.layerInner11",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 11" ), "",
+        _( "Switch to Inner layer 11" ), _( "Switch to Inner layer 11" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In11_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner12( "pcbnew.Control.layerInner12",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 12" ), "",
+        _( "Switch to Inner layer 12" ), _( "Switch to Inner layer 12" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In12_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner13( "pcbnew.Control.layerInner13",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 13" ), "",
+        _( "Switch to Inner layer 13" ), _( "Switch to Inner layer 13" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In13_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner14( "pcbnew.Control.layerInner14",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 14" ), "",
+        _( "Switch to Inner layer 14" ), _( "Switch to Inner layer 14" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In14_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner15( "pcbnew.Control.layerInner15",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 15" ), "",
+        _( "Switch to Inner layer 15" ), _( "Switch to Inner layer 15" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In15_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner16( "pcbnew.Control.layerInner16",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 16" ), "",
+        _( "Switch to Inner layer 16" ), _( "Switch to Inner layer 16" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In16_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner17( "pcbnew.Control.layerInner17",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 17" ), "",
+        _( "Switch to Inner layer 17" ), _( "Switch to Inner layer 17" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In17_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner18( "pcbnew.Control.layerInner18",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 18" ), "",
+        _( "Switch to Inner layer 18" ), _( "Switch to Inner layer 18" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In18_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner19( "pcbnew.Control.layerInner19",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 19" ), "",
+        _( "Switch to Inner layer 19" ), _( "Switch to Inner layer 19" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In19_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner20( "pcbnew.Control.layerInner20",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 20" ), "",
+        _( "Switch to Inner layer 20" ), _( "Switch to Inner layer 20" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In20_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner21( "pcbnew.Control.layerInner21",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 21" ), "",
+        _( "Switch to Inner layer 21" ), _( "Switch to Inner layer 21" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In21_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner22( "pcbnew.Control.layerInner22",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 22" ), "",
+        _( "Switch to Inner layer 22" ), _( "Switch to Inner layer 22" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In22_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner23( "pcbnew.Control.layerInner23",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 23" ), "",
+        _( "Switch to Inner layer 23" ), _( "Switch to Inner layer 23" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In23_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner24( "pcbnew.Control.layerInner24",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 24" ), "",
+        _( "Switch to Inner layer 24" ), _( "Switch to Inner layer 24" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In24_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner25( "pcbnew.Control.layerInner25",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 25" ), "",
+        _( "Switch to Inner layer 25" ), _( "Switch to Inner layer 25" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In25_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner26( "pcbnew.Control.layerInner26",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 26" ), "",
+        _( "Switch to Inner layer 26" ), _( "Switch to Inner layer 26" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In26_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner27( "pcbnew.Control.layerInner27",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 27" ), "",
+        _( "Switch to Inner layer 27" ), _( "Switch to Inner layer 27" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In27_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner28( "pcbnew.Control.layerInner28",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 28" ), "",
+        _( "Switch to Inner layer 28" ), _( "Switch to Inner layer 28" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In28_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner29( "pcbnew.Control.layerInner29",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 29" ), "",
+        _( "Switch to Inner layer 29" ), _( "Switch to Inner layer 29" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In29_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner30( "pcbnew.Control.layerInner30",
         AS_GLOBAL, 0, "",
-        _( "Switch to Inner layer 30" ), "",
+        _( "Switch to Inner layer 30" ), _( "Switch to Inner layer 30" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) In30_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerBottom( "pcbnew.Control.layerBottom",
         AS_GLOBAL,
         WXK_PAGEDOWN, LEGACY_HK_NAME( "Switch to Copper (B.Cu) layer" ),
-        _( "Switch to Copper (B.Cu) layer" ), "",
+        _( "Switch to Copper (B.Cu) layer" ), _( "Switch to Copper (B.Cu) layer" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY, (void*) B_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerNext( "pcbnew.Control.layerNext",
         AS_GLOBAL,
         '+', LEGACY_HK_NAME( "Switch to Next Layer" ),
-        _( "Switch to Next Layer" ), "",
+        _( "Switch to Next Layer" ), _( "Switch to Next Layer" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY );
 
 TOOL_ACTION PCB_ACTIONS::layerPrev( "pcbnew.Control.layerPrev",
         AS_GLOBAL,
         '-', LEGACY_HK_NAME( "Switch to Previous Layer" ),
-        _( "Switch to Previous Layer" ), "",
+        _( "Switch to Previous Layer" ), _( "Switch to Previous Layer" ),
         BITMAPS::INVALID_BITMAP, AF_NOTIFY );
 
 TOOL_ACTION PCB_ACTIONS::layerToggle( "pcbnew.Control.layerToggle",

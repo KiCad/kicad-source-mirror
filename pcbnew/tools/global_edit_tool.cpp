@@ -93,7 +93,7 @@ int GLOBAL_EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
     }
     else
     {
-        wxFAIL_MSG( "ExchangeFootprints: unexpected action" );
+        wxFAIL_MSG( wxT( "ExchangeFootprints: unexpected action" ) );
     }
 
     // invoke the exchange dialog process
@@ -168,7 +168,7 @@ int GLOBAL_EDIT_TOOL::SwapLayers( const TOOL_EVENT& aEvent )
     if( hasChanges )
     {
         frame()->OnModify();
-        m_commit->Push( "Layers moved" );
+        m_commit->Push( wxT( "Layers moved" ) );
         frame()->GetCanvas()->Refresh();
     }
 

@@ -901,7 +901,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 }
                 else
                 {
-                    wxFAIL_MSG( "Unhandled action in DRAWING_TOOL::DrawDimension" );
+                    wxFAIL_MSG( wxT( "Unhandled action in DRAWING_TOOL::DrawDimension" ) );
                 }
 
                 dimension->SetLayer( layer );

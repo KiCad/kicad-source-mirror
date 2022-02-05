@@ -260,7 +260,7 @@ void GPCB_FPL_CACHE::Load()
         catch( const IO_ERROR& ioe )
         {
             if( !cacheErrorMsg.IsEmpty() )
-                cacheErrorMsg += "\n\n";
+                cacheErrorMsg += wxT( "\n\n" );
 
             cacheErrorMsg += ioe.What();
         }
@@ -326,7 +326,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 
     if( aLineReader->ReadLine() == nullptr )
     {
-        msg = aLineReader->GetSource() + ": empty file";
+        msg = aLineReader->GetSource() + wxT( ": empty file" );
         THROW_IO_ERROR( msg );
     }
 

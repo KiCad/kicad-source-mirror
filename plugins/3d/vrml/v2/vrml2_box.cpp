@@ -56,7 +56,7 @@ WRL2BOX::WRL2BOX( WRL2NODE* aParent ) : WRL2NODE()
 
 WRL2BOX::~WRL2BOX()
 {
-    wxLogTrace( traceVrmlPlugin, " * [INFO] Destroying Box node." );
+    wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Destroying Box node." ) );
 }
 
 

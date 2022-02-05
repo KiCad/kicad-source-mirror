@@ -129,7 +129,7 @@ bool PCB_POINT_EDITOR::Init()
     // Find the selection tool, so they can cooperate
     m_selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
-    wxASSERT_MSG( m_selectionTool, "pcbnew.InteractiveSelection tool is not available" );
+    wxASSERT_MSG( m_selectionTool, wxT( "pcbnew.InteractiveSelection tool is not available" ) );
 
     auto& menu = m_selectionTool->GetToolMenu().GetMenu();
     menu.AddItem( PCB_ACTIONS::pointEditorAddCorner, PCB_POINT_EDITOR::addCornerCondition );

@@ -50,7 +50,7 @@ WRL1COORDS::WRL1COORDS( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
 
 WRL1COORDS::~WRL1COORDS()
 {
-    wxLogTrace( traceVrmlPlugin, " * [INFO] Destroying Coordinate3 node." );
+    wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Destroying Coordinate3 node." ) );
 }
 
 

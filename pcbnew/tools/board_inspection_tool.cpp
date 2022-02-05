@@ -130,7 +130,7 @@ void reportCompileError( REPORTER* r )
 {
     r->Report( "" );
     r->Report( _( "Report incomplete: could not compile custom design rules.  " )
-               + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
+               + wxT( "<a href='boardsetup'>" ) + _( "Show design rules." ) + wxT( "</a>" ) );
 }
 
 
@@ -195,9 +195,9 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
     switch( aDRCItem->GetErrorCode() )
     {
     case DRCE_EDGE_CLEARANCE:
-        r->Report( "<h7>" + _( "Edge clearance resolution for:" ) + "</h7>" );
+        r->Report( wxT( "<h7>" ) + _( "Edge clearance resolution for:" ) + wxT( "</h7>" ) );
 
-        r->Report( wxString::Format( "<ul><li>%s</li><li>%s</li></ul>",
+        r->Report( wxString::Format( wxT( "<ul><li>%s</li><li>%s</li></ul>" ),
                                      EscapeHTML( getItemDescription( a ) ),
                                      EscapeHTML( getItemDescription( b ) ) ) );
 
@@ -232,9 +232,9 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
                 layer = B_Cu;
         }
 
-        r->Report( "<h7>" + _( "Clearance resolution for:" ) + "</h7>" );
+        r->Report( wxT( "<h7>" ) + _( "Clearance resolution for:" ) + wxT( "</h7>" ) );
 
-        r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
+        r->Report( wxString::Format( wxT( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>" ),
                                      _( "Layer" ),
                                      EscapeHTML( m_frame->GetBoard()->GetLayerName( layer ) ),
                                      EscapeHTML( getItemDescription( a ) ),
@@ -380,8 +380,8 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
         r = m_inspectClearanceDialog->AddPage( _( "Zone" ) );
 
-        r->Report( "<h7>" + _( "Zone connection resolution for:" ) + "</h7>" );
-        r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
+        r->Report( wxT( "<h7>" ) + _( "Zone connection resolution for:" ) + wxT( "</h7>" ) );
+        r->Report( wxString::Format( wxT( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>" ),
                                      _( "Layer" ),
                                      EscapeHTML( m_frame->GetBoard()->GetLayerName( layer ) ),
                                      EscapeHTML( getItemDescription( a ) ),
@@ -456,8 +456,8 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
         r = m_inspectClearanceDialog->AddPage( m_frame->GetBoard()->GetLayerName( layer ) );
 
-        r->Report( "<h7>" + _( "Clearance resolution for:" ) + "</h7>" );
-        r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
+        r->Report( wxT( "<h7>" ) + _( "Clearance resolution for:" ) + wxT( "</h7>" ) );
+        r->Report( wxString::Format( wxT( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>" ),
                                      _( "Layer" ),
                                      EscapeHTML( m_frame->GetBoard()->GetLayerName( layer ) ),
                                      EscapeHTML( getItemDescription( a ) ),
@@ -495,8 +495,8 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         {
             r = m_inspectClearanceDialog->AddPage( m_frame->GetBoard()->GetLayerName( layer ) );
 
-            r->Report( "<h7>" + _( "Silkscreen clearance resolution for:" ) + "</h7>" );
-            r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
+            r->Report( wxT( "<h7>" ) + _( "Silkscreen clearance resolution for:" ) + wxT( "</h7>" ) );
+            r->Report( wxString::Format( wxT( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>" ),
                                          _( "Layer" ),
                                          EscapeHTML( m_frame->GetBoard()->GetLayerName( layer ) ),
                                          EscapeHTML( getItemDescription( a ) ),
@@ -525,8 +525,8 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         {
             r = m_inspectClearanceDialog->AddPage( m_frame->GetBoard()->GetLayerName( layer ) );
 
-            r->Report( "<h7>" + _( "Courtyard clearance resolution for:" ) + "</h7>" );
-            r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
+            r->Report( wxT( "<h7>" ) + _( "Courtyard clearance resolution for:" ) + wxT( "</h7>" ) );
+            r->Report( wxString::Format( wxT( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>" ),
                                          _( "Layer" ),
                                          EscapeHTML( m_frame->GetBoard()->GetLayerName( layer ) ),
                                          EscapeHTML( getItemDescription( a ) ),
@@ -563,8 +563,8 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         {
             r = m_inspectClearanceDialog->AddPage( _( "Hole" ) );
 
-            r->Report( "<h7>" + _( "Hole clearance resolution for:" ) + "</h7>" );
-            r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
+            r->Report( wxT( "<h7>" ) + _( "Hole clearance resolution for:" ) + wxT( "</h7>" ) );
+            r->Report( wxString::Format( wxT( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>" ),
                                          _( "Layer" ),
                                          EscapeHTML( m_frame->GetBoard()->GetLayerName( layer ) ),
                                          EscapeHTML( getItemDescription( a ) ),
@@ -602,8 +602,8 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             wxString layerName = m_frame->GetBoard()->GetLayerName( edgeLayer );
             r = m_inspectClearanceDialog->AddPage( layerName + wxS( " " ) + _( "Clearance" ) );
 
-            r->Report( "<h7>" + _( "Edge clearance resolution for:" ) + "</h7>" );
-            r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
+            r->Report( wxT( "<h7>" ) + _( "Edge clearance resolution for:" ) + wxT( "</h7>" ) );
+            r->Report( wxString::Format( wxT( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>" ),
                                          _( "Layer" ),
                                          EscapeHTML( m_frame->GetBoard()->GetLayerName( layer ) ),
                                          EscapeHTML( getItemDescription( a ) ),
@@ -626,8 +626,8 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     if( m_inspectClearanceDialog->GetPageCount() == 0 )
     {
         r = m_inspectClearanceDialog->AddPage( _( "Clearance" ) );
-        r->Report( "<h7>" + _( "Items share no relevant layers:" ) + "</h7>" );
-        r->Report( wxString::Format( "<ul><li>%s</li><li>%s</li></ul>",
+        r->Report( wxT( "<h7>" ) + _( "Items share no relevant layers:" ) + wxT( "</h7>" ) );
+        r->Report( wxString::Format( wxT( "<ul><li>%s</li><li>%s</li></ul>" ),
                                      EscapeHTML( getItemDescription( a ) ),
                                      EscapeHTML( getItemDescription( b ) ) ) );
         r->Flush();
@@ -726,8 +726,8 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     {
         r = m_inspectConstraintsDialog->AddPage( _( "Track Width" ) );
 
-        r->Report( "<h7>" + _( "Track width resolution for:" ) + "</h7>" );
-        r->Report( "<ul><li>" + EscapeHTML( getItemDescription( item ) ) + "</li></ul>" );
+        r->Report( wxT( "<h7>" ) + _( "Track width resolution for:" ) + wxT( "</h7>" ) );
+        r->Report( wxT( "<ul><li>" ) + EscapeHTML( getItemDescription( item ) ) + wxT( "</li></ul>" ) );
         r->Report( "" );
 
         constraint = EVAL_RULES( TRACK_WIDTH_CONSTRAINT, item, nullptr, item->GetLayer(), r );
@@ -748,8 +748,8 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     {
         r = m_inspectConstraintsDialog->AddPage( _( "Via Diameter" ) );
 
-        r->Report( "<h7>" + _( "Via diameter resolution for:" ) + "</h7>" );
-        r->Report( "<ul><li>" + EscapeHTML( getItemDescription( item ) ) + "</li></ul>" );
+        r->Report( wxT( "<h7>" ) + _( "Via diameter resolution for:" ) + wxT( "</h7>" ) );
+        r->Report( wxT( "<ul><li>" ) + EscapeHTML( getItemDescription( item ) ) + wxT( "</li></ul>" ) );
         r->Report( "" );
 
         // PADSTACKS TODO: once we have padstacks we'll need to run this per-layer....
@@ -768,8 +768,8 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
         r = m_inspectConstraintsDialog->AddPage( _( "Via Annular Width" ) );
 
-        r->Report( "<h7>" + _( "Via annular width resolution for:" ) + "</h7>" );
-        r->Report( "<ul><li>" + EscapeHTML( getItemDescription( item ) ) + "</li></ul>" );
+        r->Report( wxT( "<h7>" ) + _( "Via annular width resolution for:" ) + wxT( "</h7>" ) );
+        r->Report( wxT( "<ul><li>" ) + EscapeHTML( getItemDescription( item ) ) + wxT( "</li></ul>" ) );
         r->Report( "" );
 
         // PADSTACKS TODO: once we have padstacks we'll need to run this per-layer....
@@ -792,8 +792,8 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     {
         r = m_inspectConstraintsDialog->AddPage( _( "Hole Size" ) );
 
-        r->Report( "<h7>" + _( "Hole diameter resolution for:" ) + "</h7>" );
-        r->Report( "<ul><li>" + EscapeHTML( getItemDescription( item ) ) + "</li></ul>" );
+        r->Report( wxT( "<h7>" ) + _( "Hole diameter resolution for:" ) + wxT( "</h7>" ) );
+        r->Report( wxT( "<ul><li>" ) + EscapeHTML( getItemDescription( item ) ) + wxT( "</li></ul>" ) );
         r->Report( "" );
 
         // PADSTACKS TODO: once we have padstacks we'll need to run this per-layer....
@@ -815,8 +815,8 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
     r = m_inspectConstraintsDialog->AddPage( _( "Keepouts" ) );
 
-    r->Report( "<h7>" + _( "Keepout resolution for:" ) + "</h7>" );
-    r->Report( "<ul><li>" + EscapeHTML( getItemDescription( item ) ) + "</li></ul>" );
+    r->Report( wxT( "<h7>" ) + _( "Keepout resolution for:" ) + wxT( "</h7>" ) );
+    r->Report( wxT( "<ul><li>" ) + EscapeHTML( getItemDescription( item ) ) + wxT( "</li></ul>" ) );
     r->Report( "" );
 
     constraint = EVAL_RULES( DISALLOW_CONSTRAINT, item, nullptr, item->GetLayer(), r );
@@ -828,7 +828,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     {
         r->Report( "" );
         r->Report( _( "Report may be incomplete: some footprint courtyards are malformed." )
-                   + "  <a href='drc'>" + _( "Run DRC for a full analysis." ) + "</a>" );
+                   + wxT( "  <a href='drc'>" ) + _( "Run DRC for a full analysis." ) + wxT( "</a>" ) );
     }
 
     r->Report( "" );

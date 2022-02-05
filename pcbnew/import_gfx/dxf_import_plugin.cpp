@@ -175,7 +175,7 @@ bool DXF_IMPORT_PLUGIN::ImportDxfFile( const wxString& aFile )
     DL_Dxf dxf_reader;
 
     // wxFopen takes care of unicode filenames across platforms
-    FILE* fp = wxFopen( aFile, "rt" );
+    FILE* fp = wxFopen( aFile, wxT( "rt" ) );
 
     if( fp == nullptr )
         return false;

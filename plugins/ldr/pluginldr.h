@@ -38,7 +38,7 @@
 // Mask for plugin loader tracing.
 extern const wxChar* const tracePluginLoader;
 
-#define MASK_PLUGINLDR "PLUGIN_LOADER"
+#define MASK_PLUGINLDR wxT( "PLUGIN_LOADER" )
 
 
 // helper function to link functions in the plugin

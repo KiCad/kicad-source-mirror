@@ -57,7 +57,7 @@ bool SVG_IMPORT_PLUGIN::Load( const wxString& aFileName )
     wxCHECK( m_importer, false );
 
     // wxFopen takes care of unicode filenames across platforms
-    FILE* fp = wxFopen( aFileName, "rt" );
+    FILE* fp = wxFopen( aFileName, wxT( "rt" ) );
 
     if( fp == nullptr )
         return false;
@@ -89,7 +89,7 @@ double SVG_IMPORT_PLUGIN::GetImageHeight() const
 {
     if( !m_parsedImage )
     {
-        wxASSERT_MSG(false, "Image must have been loaded before checking height");
+        wxASSERT_MSG( false, wxT( "Image must have been loaded before checking height" ) );
         return 0.0;
     }
 
@@ -101,7 +101,7 @@ double SVG_IMPORT_PLUGIN::GetImageWidth() const
 {
     if( !m_parsedImage )
     {
-        wxASSERT_MSG(false, "Image must have been loaded before checking width");
+        wxASSERT_MSG( false, wxT( "Image must have been loaded before checking width" ) );
         return 0.0;
     }
 

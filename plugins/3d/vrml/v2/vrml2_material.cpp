@@ -52,7 +52,7 @@ WRL2MATERIAL::WRL2MATERIAL( WRL2NODE* aParent ) : WRL2NODE()
 
 WRL2MATERIAL::~WRL2MATERIAL()
 {
-    wxLogTrace( traceVrmlPlugin, " * [INFO] Destroying Material node." );
+    wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Destroying Material node." ) );
 }
 
 

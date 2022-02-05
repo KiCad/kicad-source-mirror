@@ -110,30 +110,30 @@ void X3DTRANSFORM::readFields( wxXmlNode* aNode )
     {
         const wxString& pname = prop->GetName();
 
-        if( pname == "DEF" )
+        if( pname == wxT( "DEF" ) )
         {
             m_Name = prop->GetValue();
             m_Dict->AddName( m_Name, this );
         }
-        else if( pname == "center" )
+        else if( pname == wxT( "center" ) )
         {
             X3D::ParseSFVec3( prop->GetValue(), center );
             center *= 2.54;
         }
-        else if( pname == "scale" )
+        else if( pname == wxT( "scale" ) )
         {
             X3D::ParseSFVec3( prop->GetValue(), scale );
         }
-        else if( pname == "translation" )
+        else if( pname == wxT( "translation" ) )
         {
             X3D::ParseSFVec3( prop->GetValue(), translation );
             translation *= 2.54;
         }
-        else if( pname == "rotation" )
+        else if( pname == wxT( "rotation" ) )
         {
             X3D::ParseSFRotation( prop->GetValue(), rotation );
         }
-        else if( pname == "scaleOrientation" )
+        else if( pname == wxT( "scaleOrientation" ) )
         {
             X3D::ParseSFRotation( prop->GetValue(), scaleOrientation );
         }
@@ -154,11 +154,11 @@ bool X3DTRANSFORM::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
     {
         wxString name = child->GetName();
 
-        if( name == "Transform" || name == "Group" )
+        if( name == wxT( "Transform" ) || name == wxT( "Group" ) )
             ok |= X3D::ReadTransform( child, this, aDict );
-        else if( name == "Switch" )
+        else if( name == wxT( "Switch" ) )
             ok |= X3D::ReadSwitch( child, this, aDict );
-        else if( name == "Shape" )
+        else if( name == wxT( "Shape" ) )
             ok |= X3D::ReadShape( child, this, aDict );
 
     }

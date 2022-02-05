@@ -56,7 +56,7 @@ WRL1SHAPEHINTS::WRL1SHAPEHINTS( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
 
 WRL1SHAPEHINTS::~WRL1SHAPEHINTS()
 {
-    wxLogTrace( traceVrmlPlugin, " * [INFO] Destroying ShapeHints node." );
+    wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Destroying ShapeHints node." ) );
 }
 
 

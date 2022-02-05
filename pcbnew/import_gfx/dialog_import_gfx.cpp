@@ -112,7 +112,7 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
     m_rbAbsolutePlacement->SetValue( not m_placementInteractive );
     m_groupItems->SetValue( m_shouldGroupItems );
 
-    m_textCtrlImportScale->SetValue( wxString::Format( "%f", m_scaleImport ) );
+    m_textCtrlImportScale->SetValue( wxString::Format( wxT( "%f" ), m_scaleImport ) );
 
     // Configure the layers list selector
     m_SelLayerBox->SetLayersHotkeys( false );                    // Do not display hotkeys
@@ -200,8 +200,8 @@ void DIALOG_IMPORT_GFX::showPcbImportOffsets()
     if( m_originUnits )   // Units are inches
         offset = m_origin / 25.4;
 
-    m_DxfPcbXCoord->SetValue( wxString::Format( "%f", offset.x ) );
-    m_DxfPcbYCoord->SetValue( wxString::Format( "%f", offset.y ) );
+    m_DxfPcbXCoord->SetValue( wxString::Format( wxT( "%f" ), offset.x ) );
+    m_DxfPcbYCoord->SetValue( wxString::Format( wxT( "%f" ), offset.y ) );
 
 }
 
@@ -218,7 +218,7 @@ void DIALOG_IMPORT_GFX::showPCBdefaultLineWidth()
     case 2: value = m_lineWidth / 25.4;        break;  // display units = inch
     }
 
-    m_textCtrlLineWidth->SetValue( wxString::Format( "%f", value ) );
+    m_textCtrlLineWidth->SetValue( wxString::Format( wxT( "%f" ), value ) );
 }
 
 
@@ -243,8 +243,8 @@ void DIALOG_IMPORT_GFX::onBrowseFiles( wxCommandEvent& event )
         auto       plugin = m_gfxImportMgr->GetPlugin( pluginType );
         const auto extensions = plugin->GetFileExtensions();
 
-        wildcardsDesc += "|" + plugin->GetName() + AddFileExtListToFilter( extensions );
-        allWildcards += plugin->GetWildcards() + ";";
+        wildcardsDesc += wxT( "|" ) + plugin->GetName() + AddFileExtListToFilter( extensions );
+        allWildcards += plugin->GetWildcards() + wxT( ";" );
     }
 
     wildcardsDesc = _( "All supported formats|" ) + allWildcards + wildcardsDesc;
@@ -335,7 +335,7 @@ bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
         {
             HTML_MESSAGE_BOX dlg( this, _( "Warning" ) );
             dlg.MessageSet( _( "Items in the imported file could not be handled properly." ) );
-            warnings.Replace( "\n", "<br/>" );
+            warnings.Replace( wxT( "\n" ), wxT( "<br/>" ) );
             dlg.AddHTML_Text( warnings );
             dlg.ShowModal();
         }

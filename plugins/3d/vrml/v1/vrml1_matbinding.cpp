@@ -53,7 +53,7 @@ WRL1MATBINDING::WRL1MATBINDING( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
 
 WRL1MATBINDING::~WRL1MATBINDING()
 {
-    wxLogTrace( traceVrmlPlugin, " * [INFO] Destroying MaterialBinding node\n" );
+    wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Destroying MaterialBinding node\n" ) );
 }
 
 

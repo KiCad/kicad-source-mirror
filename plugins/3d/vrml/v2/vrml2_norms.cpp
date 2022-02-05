@@ -49,7 +49,7 @@ WRL2NORMS::WRL2NORMS( WRL2NODE* aParent ) : WRL2NODE()
 
 WRL2NORMS::~WRL2NORMS()
 {
-    wxLogTrace( traceVrmlPlugin, " * [INFO] Destroying Normal node." );
+    wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Destroying Normal node." ) );
 }
 
 

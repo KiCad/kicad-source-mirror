@@ -65,7 +65,7 @@ X3DIFACESET::X3DIFACESET( X3DNODE* aParent ) : X3DNODE()
 
 X3DIFACESET::~X3DIFACESET()
 {
-    wxLogTrace( traceVrmlPlugin, " * [INFO] Destroying IndexedFaceSet." );
+    wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Destroying IndexedFaceSet." ) );
 }
 
 
@@ -92,16 +92,16 @@ void X3DIFACESET::readFields( wxXmlNode* aNode )
     {
         const wxString& pname = prop->GetName();
 
-        if( pname == "DEF" )
+        if( pname == wxT( "DEF" ) )
         {
             m_Name = prop->GetValue();
             m_Dict->AddName( m_Name, this );
         }
-        else if( pname == "ccw" )
+        else if( pname == wxT( "ccw" ) )
         {
             X3D::ParseSFBool( prop->GetValue(), ccw );
         }
-        else if( pname == "creaseAngle" )
+        else if( pname == wxT( "creaseAngle" ) )
         {
             X3D::ParseSFFloat( prop->GetValue(), creaseAngle );
 
@@ -112,7 +112,7 @@ void X3DIFACESET::readFields( wxXmlNode* aNode )
 
             creaseLimit = cosf( creaseAngle );
         }
-        else if( pname == "coordIndex" )
+        else if( pname == wxT( "coordIndex" ) )
         {
             wxStringTokenizer indices( prop->GetValue() );
 
@@ -138,7 +138,7 @@ bool X3DIFACESET::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
 
     for( wxXmlNode* child = aNode->GetChildren(); child != nullptr; child = child->GetNext() )
     {
-        if( child->GetName() == "Coordinate" )
+        if( child->GetName() == wxT( "Coordinate" ) )
             ok = X3D::ReadCoordinates( child, this, aDict );
 
     }
