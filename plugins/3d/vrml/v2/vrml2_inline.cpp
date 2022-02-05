@@ -53,7 +53,7 @@ WRL2INLINE::WRL2INLINE( WRL2NODE* aParent ) : WRL2NODE()
 
 WRL2INLINE::~WRL2INLINE()
 {
-    wxLogTrace( traceVrmlPlugin, " * [INFO] Destroying Inline node." );
+    wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Destroying Inline node." ) );
 }
 
 

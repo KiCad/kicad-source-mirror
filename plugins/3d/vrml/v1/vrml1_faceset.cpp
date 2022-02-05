@@ -206,7 +206,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
     // decompose into Rotate,Scale,Transform via an analytic expression.
     if( !m_Parent )
     {
-        wxLogTrace( traceVrmlPlugin, " * [INFO] bad model: no parent node." );
+        wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] bad model: no parent node." ) );
 
         return nullptr;
     }
@@ -214,7 +214,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
     {
         if( nullptr == sp )
         {
-            wxLogTrace( traceVrmlPlugin, " * [INFO] bad model: no base data given." );
+            wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] bad model: no base data given." ) );
 
             return nullptr;
         }
@@ -224,13 +224,13 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 
     if( nullptr == m_current.coord )
     {
-        wxLogTrace( traceVrmlPlugin, " * [INFO] bad model: no vertex set." );
+        wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] bad model: no vertex set." ) );
         return nullptr;
     }
 
     if( nullptr == m_current.mat )
     {
-        wxLogTrace( traceVrmlPlugin, " * [INFO] bad model: no material set." );
+        wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] bad model: no material set." ) );
         return nullptr;
     }
 

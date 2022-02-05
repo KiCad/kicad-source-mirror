@@ -248,7 +248,7 @@ SGNODE* WRL2SWITCH::TranslateToSG( SGNODE* aParent )
 
     if( choices.empty() )
     {
-        wxLogTrace( traceVrmlPlugin, " * [INFO] Switch translation: no choices." );
+        wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Switch translation: no choices." ) );
 
         return nullptr;
     }

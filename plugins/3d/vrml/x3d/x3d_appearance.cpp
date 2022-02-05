@@ -59,7 +59,7 @@ X3DAPP::X3DAPP( X3DNODE* aParent ) : X3DNODE()
 
 X3DAPP::~X3DAPP()
 {
-    wxLogTrace( traceVrmlPlugin, " * [INFO] Destroying Appearance" );
+    wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Destroying Appearance" ) );
 
     if( !m_MatName.empty() && m_Dict )
         m_Dict->DelName( m_MatName, this );
@@ -103,12 +103,12 @@ void X3DAPP::readFields( wxXmlNode* aNode )
     {
         const wxString& pname = prop->GetName();
 
-        if( pname == "DEF" )
+        if( pname == wxT( "DEF" ) )
         {
             m_MatName = prop->GetValue();
             m_Dict->AddName( m_MatName, this );
         }
-        else if( pname == "USE" )
+        else if( pname == wxT( "USE" ) )
         {
             X3DNODE* np = m_Dict->FindName( prop->GetValue() );
 
@@ -123,27 +123,27 @@ void X3DAPP::readFields( wxXmlNode* aNode )
                 transparency = ap->transparency;
             }
         }
-        else if( pname == "diffuseColor" )
+        else if( pname == wxT( "diffuseColor" ) )
         {
             X3D::ParseSFVec3( prop->GetValue(), diffuseColor );
         }
-        else if( pname == "emissiveColor" )
+        else if( pname == wxT( "emissiveColor" ) )
         {
             X3D::ParseSFVec3( prop->GetValue(), emissiveColor );
         }
-        else if( pname == "specularColor" )
+        else if( pname == wxT( "specularColor" ) )
         {
             X3D::ParseSFVec3( prop->GetValue(), specularColor );
         }
-        else if( pname == "ambientIntensity" )
+        else if( pname == wxT( "ambientIntensity" ) )
         {
             X3D::ParseSFFloat( prop->GetValue(), ambientIntensity );
         }
-        else if( pname == "shininess" )
+        else if( pname == wxT( "shininess" ) )
         {
             X3D::ParseSFFloat( prop->GetValue(), shininess );
         }
-        else if( pname == "transparency" )
+        else if( pname == wxT( "transparency" ) )
         {
             X3D::ParseSFFloat( prop->GetValue(), transparency );
         }
@@ -163,7 +163,7 @@ bool X3DAPP::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
     {
         const wxString& pname = prop->GetName();
 
-        if( pname == "DEF" )
+        if( pname == wxT( "DEF" ) )
         {
             m_Name = prop->GetValue();
             m_Dict->AddName( m_Name, this );
@@ -174,7 +174,7 @@ bool X3DAPP::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
 
     for( wxXmlNode* child = aNode->GetChildren(); child != nullptr; child = child->GetNext() )
     {
-        if( child->GetName() == "Material" )
+        if( child->GetName() == wxT( "Material" ) )
             pmat = child;
 
     }

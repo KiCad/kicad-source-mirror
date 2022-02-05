@@ -43,7 +43,7 @@ bool X3D::ReadTransform( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict )
     {
         const wxString& pname = prop->GetName();
 
-        if( pname == "USE" )
+        if( pname == wxT( "USE" ) )
         {
             X3DNODE* np = aDict.FindName( prop->GetValue() );
 
@@ -88,7 +88,7 @@ bool X3D::ReadShape( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict )
     {
         const wxString& pname = prop->GetName();
 
-        if( pname == "USE" )
+        if( pname == wxT( "USE" ) )
         {
             X3DNODE* np = aDict.FindName( prop->GetValue() );
 
@@ -126,7 +126,7 @@ bool X3D::ReadAppearance( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict )
     {
         const wxString& pname = prop->GetName();
 
-        if( pname == "USE" )
+        if( pname == wxT( "USE" ) )
         {
             X3DNODE* np = aDict.FindName( prop->GetValue() );
 
@@ -164,7 +164,7 @@ bool X3D::ReadIndexedFaceSet( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDic
     {
         const wxString& pname = prop->GetName();
 
-        if( pname == "USE" )
+        if( pname == wxT( "USE" ) )
         {
             X3DNODE* np = aDict.FindName( prop->GetValue() );
 
@@ -202,7 +202,7 @@ bool X3D::ReadCoordinates( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict )
     {
         const wxString& pname = prop->GetName();
 
-        if( pname == "USE" )
+        if( pname == wxT( "USE" ) )
         {
             X3DNODE* np = aDict.FindName( prop->GetValue() );
 
@@ -233,13 +233,13 @@ bool X3D::ParseSFBool( const wxString& aSource, bool& aResult )
     wxStringTokenizer tokens( aSource );
     wxString val = tokens.GetNextToken();
 
-    if( val == "TRUE" || val == "1" )
+    if( val == wxT( "TRUE" ) || val == wxT( "1" ) )
     {
         aResult = true;
         return true;
     }
 
-    if( val == "FALSE" || val == "0" )
+    if( val == wxT( "FALSE" ) || val == wxT( "0" ) )
     {
         aResult = false;
         return true;

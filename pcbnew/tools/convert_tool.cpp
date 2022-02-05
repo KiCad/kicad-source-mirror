@@ -187,7 +187,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
     else if( FP_ZONE* zone = dynamic_cast<FP_ZONE*>( selection.Front() ) )
         parentFootprint = static_cast<FOOTPRINT*>( zone->GetParent() );
     else
-        wxFAIL_MSG( "Unimplemented footprint parent in CONVERT_TOOL::CreatePolys" );
+        wxFAIL_MSG( wxT( "Unimplemented footprint parent in CONVERT_TOOL::CreatePolys" ) );
 
     BOARD_COMMIT commit( m_frame );
 
@@ -608,13 +608,13 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                     }
                     else
                     {
-                        wxFAIL_MSG( "Unhandled graphic shape type in PolyToLines - getPolySet" );
+                        wxFAIL_MSG( wxT( "Unhandled graphic shape type in PolyToLines - getPolySet" ) );
                     }
                     break;
                 }
 
                 default:
-                    wxFAIL_MSG( "Unhandled type in PolyToLines - getPolySet" );
+                    wxFAIL_MSG( wxT( "Unhandled type in PolyToLines - getPolySet" ) );
                     break;
                 }
 

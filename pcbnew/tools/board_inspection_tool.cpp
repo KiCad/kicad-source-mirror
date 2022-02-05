@@ -162,23 +162,23 @@ void BOARD_INSPECTION_TOOL::reportCompileError( REPORTER* r )
 {
     r->Report( "" );
     r->Report( _( "Report incomplete: could not compile custom design rules.  " )
-               + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
+               + wxT( "<a href='boardsetup'>" ) + _( "Show design rules." ) + wxT( "</a>" ) );
 }
 
 
 void BOARD_INSPECTION_TOOL::reportHeader( const wxString& aTitle, BOARD_ITEM* a, REPORTER* r )
 {
-    r->Report( "<h7>" + EscapeHTML( aTitle ) + "</h7>" );
-    r->Report( "<ul><li>" + EscapeHTML( getItemDescription( a ) ) + "</li></ul>" );
+    r->Report( wxT( "<h7>" ) + EscapeHTML( aTitle ) + wxT( "</h7>" ) );
+    r->Report( wxT( "<ul><li>" ) + EscapeHTML( getItemDescription( a ) ) + wxT( "</li></ul>" ) );
 }
 
 
 void BOARD_INSPECTION_TOOL::reportHeader( const wxString& aTitle, BOARD_ITEM* a, BOARD_ITEM* b,
                                           REPORTER* r )
 {
-    r->Report( "<h7>" + EscapeHTML( aTitle ) + "</h7>" );
-    r->Report( "<ul><li>" + EscapeHTML( getItemDescription( a ) ) + "</li>"
-                 + "<li>" + EscapeHTML( getItemDescription( b ) ) + "</li></ul>" );
+    r->Report( wxT( "<h7>" ) + EscapeHTML( aTitle ) + wxT( "</h7>" ) );
+    r->Report( wxT( "<ul><li>" ) + EscapeHTML( getItemDescription( a ) ) + wxT( "</li>" )
+                 + wxT( "<li>" ) + EscapeHTML( getItemDescription( b ) ) + wxT( "</li></ul>" ) );
 }
 
 
@@ -187,10 +187,10 @@ void BOARD_INSPECTION_TOOL::reportHeader( const wxString& aTitle, BOARD_ITEM* a,
 {
     wxString layerStr = _( "Layer" ) + wxS( " " ) + m_frame->GetBoard()->GetLayerName( aLayer );
 
-    r->Report( "<h7>" + EscapeHTML( aTitle ) + "</h7>" );
-    r->Report( "<ul><li>" + EscapeHTML( layerStr ) + "</li>"
-                 + "<li>" + EscapeHTML( getItemDescription( a ) ) + "</li>"
-                 + "<li>" + EscapeHTML( getItemDescription( b ) ) + "</li></ul>" );
+    r->Report( wxT( "<h7>" ) + EscapeHTML( aTitle ) + wxT( "</h7>" ) );
+    r->Report( wxT( "<ul><li>" ) + EscapeHTML( layerStr ) + wxT( "</li>" )
+                 + wxT( "<li>" ) + EscapeHTML( getItemDescription( a ) ) + wxT( "</li>" )
+                 + wxT( "<li>" ) + EscapeHTML( getItemDescription( b ) ) + wxT( "</li></ul>" ) );
 }
 
 
@@ -841,7 +841,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     {
         r->Report( "" );
         r->Report( _( "Report may be incomplete: some footprint courtyards are malformed." )
-                   + "  <a href='drc'>" + _( "Run DRC for a full analysis." ) + "</a>" );
+                   + wxT( "  <a href='drc'>" ) + _( "Run DRC for a full analysis." ) + wxT( "</a>" ) );
     }
 
     r->Report( "" );
@@ -863,7 +863,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     {
         r->Report( "" );
         r->Report( _( "Report may be incomplete: some footprint courtyards are malformed." )
-                   + "  <a href='drc'>" + _( "Run DRC for a full analysis." ) + "</a>" );
+                   + wxT( "  <a href='drc'>" ) + _( "Run DRC for a full analysis." ) + wxT( "</a>" ) );
     }
 
     drcEngine.ProcessAssertions( item, []( const DRC_CONSTRAINT* c ){}, r );

@@ -68,12 +68,12 @@ SCENEGRAPH* X3DPARSER::Load( const wxString& aFileName )
         wxXmlNode* node = *node_it;
         wxString name = node->GetName();
 
-        if( name == "Transform" || name == "Group" )
+        if( name == wxT( "Transform" ) || name == wxT( "Group" ) )
         {
             // Read a Transform / Group
             ok |= X3D::ReadTransform( node, topNode, dictionary );
         }
-        else if( name == "Switch" )
+        else if( name == wxT( "Switch" ) )
         {
             ok |= X3D::ReadSwitch( node, topNode, dictionary );
         }
@@ -96,7 +96,7 @@ bool X3DPARSER::getGroupingNodes( wxXmlNode* aNode, std::vector<wxXmlNode*>& aRe
 
     for( wxXmlNode* child = aNode->GetChildren(); child != nullptr; child = child->GetNext() )
     {
-        if( child->GetName() == "Scene" )
+        if( child->GetName() == wxT( "Scene" ) )
         {
             scene = child;
             break;
@@ -110,7 +110,7 @@ bool X3DPARSER::getGroupingNodes( wxXmlNode* aNode, std::vector<wxXmlNode*>& aRe
     {
         const wxString& name = child->GetName();
 
-        if( name == "Transform" || name == "Switch" || name == "Group" )
+        if( name == wxT( "Transform" ) || name == wxT( "Switch" ) || name == wxT( "Group" ) )
             aResult.push_back( child );
     }
 

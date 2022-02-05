@@ -76,9 +76,9 @@ public:
             if( first )
                 first = false;
             else
-                ret += ";";
+                ret += wxT( ";" );
 
-            ret += "*." + formatWildcardExt( extension );
+            ret += wxT( "*." ) + formatWildcardExt( extension );
         }
 
         return ret;

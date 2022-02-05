@@ -174,13 +174,13 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
     wxString filename = aFileName;
     wxFileName tmpfilename;
 
-    if( aFileName.Upper().EndsWith( "WRZ" ) )
+    if( aFileName.Upper().EndsWith( wxT( "WRZ" ) ) )
     {
         wxFFileInputStream ifile( aFileName );
         tmpfilename = wxFileName( aFileName );
 
         tmpfilename.SetPath( wxStandardPaths::Get().GetTempDir() );
-        tmpfilename.SetExt( "WRL" );
+        tmpfilename.SetExt( wxT( "WRL" ) );
 
         wxFileOffset size = ifile.GetLength();
 
@@ -239,17 +239,17 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
 
     if( proc.GetVRMLType() == WRLVERSION::VRML_V1 )
     {
-        wxLogTrace( traceVrmlPlugin, " * [INFO] Processing VRML 1.0 file" );
+        wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Processing VRML 1.0 file" ) );
 
         WRL1BASE* bp = new WRL1BASE;
 
         if( !bp->Read( proc ) )
         {
-            wxLogTrace( traceVrmlPlugin, " * [INFO] load failed" );
+            wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] load failed" ) );
         }
         else
         {
-            wxLogTrace( traceVrmlPlugin, " * [INFO] load completed" );
+            wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] load completed" ) );
 
             scene = (SCENEGRAPH*)bp->TranslateToSG( nullptr, nullptr );
         }
@@ -258,7 +258,7 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
     }
     else
     {
-        wxLogTrace( traceVrmlPlugin, " * [INFO] Processing VRML 2.0 file" );
+        wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Processing VRML 2.0 file" ) );
 
         WRL2BASE* bp = new WRL2BASE;
 
@@ -267,11 +267,11 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
 
         if( !bp->Read( proc ) )
         {
-            wxLogTrace( traceVrmlPlugin, " * [INFO] load failed" );
+            wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] load failed" ) );
         }
         else
         {
-            wxLogTrace( traceVrmlPlugin, " * [INFO] load completed" );
+            wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] load completed" ) );
 
             // for now we recalculate all normals per-vertex per-face
             scene = (SCENEGRAPH*)bp->TranslateToSG( nullptr );
@@ -331,7 +331,7 @@ SCENEGRAPH* Load( char const* aFileName )
     SCENEGRAPH* scene = nullptr;
     wxString ext = wxFileName( fname ).GetExt();
 
-    if( ext == "x3d" || ext == "X3D" )
+    if( ext == wxT( "x3d" ) || ext == wxT( "X3D" ) )
         scene = LoadX3D( fname );
     else
         scene = LoadVRML( fname, true );

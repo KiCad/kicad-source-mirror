@@ -49,7 +49,7 @@ WRL2COORDS::WRL2COORDS( WRL2NODE* aParent ) : WRL2NODE()
 
 WRL2COORDS::~WRL2COORDS()
 {
-    wxLogTrace( traceVrmlPlugin, " * [INFO] Destroying Coordinate node." );
+    wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Destroying Coordinate node." ) );
 }
 
 

@@ -56,7 +56,7 @@ X3DCOORDS::X3DCOORDS( X3DNODE* aParent ) : X3DNODE()
 
 X3DCOORDS::~X3DCOORDS()
 {
-    wxLogTrace( traceVrmlPlugin, " * [INFO] Destroying Coordinate" );
+    wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Destroying Coordinate" ) );
 }
 
 
@@ -72,12 +72,12 @@ bool X3DCOORDS::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
     {
         const wxString& pname = prop->GetName();
 
-        if( pname == "DEF" )
+        if( pname == wxT( "DEF" ) )
         {
             m_Name = prop->GetValue();
             m_Dict->AddName( m_Name, this );
         }
-        else if( pname == "point" )
+        else if( pname == wxT( "point" ) )
         {
             // Save points to vector as doubles
             wxStringTokenizer plist( prop->GetValue() );

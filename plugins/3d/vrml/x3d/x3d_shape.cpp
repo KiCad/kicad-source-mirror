@@ -83,7 +83,7 @@ bool X3DSHAPE::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
     {
         const wxString& pname = prop->GetName();
 
-        if( pname == "DEF" )
+        if( pname == wxT( "DEF" ) )
         {
             m_Name = prop->GetValue();
             m_Dict->AddName( m_Name, this );
@@ -94,9 +94,9 @@ bool X3DSHAPE::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
     {
         wxString name = child->GetName();
 
-        if( name == "Appearance" && nullptr == appearance )
+        if( name == wxT( "Appearance" ) && nullptr == appearance )
             X3D::ReadAppearance( child, this, aDict );
-        else if( name == "IndexedFaceSet" && nullptr == geometry )
+        else if( name == wxT( "IndexedFaceSet" ) && nullptr == geometry )
             X3D::ReadIndexedFaceSet( child, this, aDict );
     }
 

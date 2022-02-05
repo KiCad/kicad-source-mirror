@@ -403,7 +403,7 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
     }
 
     // Generate footprint. the value is also used as footprint name.
-    msg = "L";
+    msg = wxT( "L" );
     WX_TEXT_ENTRY_DIALOG cmpdlg( &editFrame, _( "Component Value:" ), wxEmptyString, msg );
     cmpdlg.SetTextValidator( FOOTPRINT_NAME_VALIDATOR( &msg ) );
 
@@ -435,7 +435,7 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
 
     footprint->Add( pad );
 
-    pad->SetNumber( "1" );
+    pad->SetNumber( wxT( "1" ) );
     pad->SetPosition( aInductorPattern.m_End );
     pad->SetPos0( pad->GetPosition() - footprint->GetPosition() );
 
@@ -451,7 +451,7 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
     footprint->Add( newpad );
 
     pad = newpad;
-    pad->SetNumber( "2" );
+    pad->SetNumber( wxT( "2" ) );
     pad->SetPosition( aInductorPattern.m_Start );
     pad->SetPos0( pad->GetPosition() - footprint->GetPosition() );
 

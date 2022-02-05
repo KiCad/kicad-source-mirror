@@ -49,7 +49,7 @@ WRL2COLOR::WRL2COLOR( WRL2NODE* aParent ) : WRL2NODE()
 
 WRL2COLOR::~WRL2COLOR()
 {
-    wxLogTrace( traceVrmlPlugin, " * [INFO] Destroying Color node" );
+    wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Destroying Color node" ) );
 }
 
 

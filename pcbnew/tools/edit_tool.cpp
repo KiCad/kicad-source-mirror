@@ -2182,7 +2182,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                 break;
 
             default:
-                wxASSERT_MSG( false, wxString::Format( "Unhandled item type %d",
+                wxASSERT_MSG( false, wxString::Format( wxT( "Unhandled item type %d" ),
                                                        orig_item->Type() ) );
                 break;
             }

@@ -399,7 +399,7 @@ int GROUP_TOOL::RemoveFromGroup( const TOOL_EVENT& aEvent )
             pair.first->RemoveItem( item );
     }
 
-    commit.Push( "Remove Group Items" );
+    commit.Push( wxT( "Remove Group Items" ) );
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
     m_frame->OnModify();

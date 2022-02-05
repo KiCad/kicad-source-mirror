@@ -468,7 +468,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 void PCB_SELECTION_TOOL::EnterGroup()
 {
     wxCHECK_RET( m_selection.GetSize() == 1 && m_selection[0]->Type() == PCB_GROUP_T,
-                 "EnterGroup called when selection is not a single group" );
+                 wxT( "EnterGroup called when selection is not a single group" ) );
     PCB_GROUP* aGroup = static_cast<PCB_GROUP*>( m_selection[0] );
 
     if( m_enteredGroup != nullptr )
@@ -2162,7 +2162,7 @@ bool PCB_SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector )
             BOARD_ITEM* item = ( *aCollector )[i];
             text             = item->GetSelectMenuText( m_frame->GetUserUnits() );
 
-            wxString menuText = wxString::Format( "&%d. %s\t%d", i + 1, text, i + 1 );
+            wxString menuText = wxString::Format( wxT( "&%d. %s\t%d" ), i + 1, text, i + 1 );
             menu.Add( menuText, i + 1, item->GetMenuImage() );
         }
 
@@ -2856,7 +2856,7 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
             }
             catch( const ClipperLib::clipperException& e )
             {
-                wxLogError( "A clipper exception %s was detected.", e.what() );
+                wxLogError( wxT( "A clipper exception %s was detected." ), e.what() );
             }
         }
 

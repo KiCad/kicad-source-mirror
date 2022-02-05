@@ -140,7 +140,7 @@ SGNODE* WRL1GROUP::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
         {
             /// @todo Determine if this is a bug or can actually happen parsing a VRML file.
             ///       If it's a bug, this should be an assertion not a trace.
-            wxLogTrace( traceVrmlPlugin, " * [INFO] bad model: no base data given." );
+            wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] bad model: no base data given." ) );
 
             return nullptr;
         }

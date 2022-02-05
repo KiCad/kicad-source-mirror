@@ -55,7 +55,7 @@ WRL1MATERIAL::WRL1MATERIAL( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
 
 WRL1MATERIAL::~WRL1MATERIAL()
 {
-    wxLogTrace( traceVrmlPlugin, " * [INFO] Destroying Material node." );
+    wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] Destroying Material node." ) );
 
     // destroy any orphaned color nodes
     for( int i = 0; i < 2; ++i )

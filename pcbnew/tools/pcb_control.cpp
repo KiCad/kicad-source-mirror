@@ -218,7 +218,7 @@ void PCB_CONTROL::unfilledZoneCheck()
 
         wxString msg;
         msg.Printf( _( "Not all zones are filled. Use Edit > Fill All Zones (%s) "
-                      "if you wish to see all fills." ),
+                       "if you wish to see all fills." ),
                     KeyNameFromKeyCode( PCB_ACTIONS::zoneFillAll.GetHotKey() ) );
 
         infobar->ShowMessageFor( msg, 5000, wxICON_WARNING  );
