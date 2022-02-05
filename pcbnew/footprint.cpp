@@ -2137,7 +2137,7 @@ void FOOTPRINT::CheckFootprintTHPadNoHoles(
             && pad->GetAttribute() != PAD_ATTRIB::NPTH )
             continue;
 
-        if( pad->GetDrillSizeX() < 1 || pad->GetDrillSizeX() < 1 )
+        if( pad->GetDrillSizeX() < 1 || pad->GetDrillSizeY() < 1 )
         {
             wxString msg;
             msg.Printf( _( "(pad \"%s\")" ), pad->GetNumber() );
