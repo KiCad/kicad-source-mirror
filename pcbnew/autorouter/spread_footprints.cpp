@@ -299,12 +299,12 @@ void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aSpreadAre
         {
             int Xsize_allowed = (int) ( sqrt( placementsurface ) * 4.0 / 3.0 );
 
-            if( Xsize_allowed < 0 || Xsize_allowed > INT_MAX/2 )
+            if( Xsize_allowed <= 0 || Xsize_allowed > INT_MAX/2 )
                 Xsize_allowed = INT_MAX/2;
 
             int Ysize_allowed = (int) ( placementsurface / Xsize_allowed );
 
-            if( Ysize_allowed < 0 || Ysize_allowed > INT_MAX/2 )
+            if( Ysize_allowed <= 0 || Ysize_allowed > INT_MAX/2 )
                 Ysize_allowed = INT_MAX/2;
 
             CRectPlacement placementArea;
