@@ -856,9 +856,10 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                               wxT( "There is no project variable?" ) );
 
                 wxString result( newLibPath );
-                rel_path = result.Replace( env_path, wxT( "$(" ) + project_env + wxT( ")" ) )
-                                                                                  ? result
-                                                                                  : wxEmptyString;
+                rel_path = result.Replace( env_path,
+                                           wxT( "$(" ) + project_env + wxT( ")" ) )
+                                                    ? result
+                                                    : wxString( wxEmptyString );
 
                 FP_LIB_TABLE_ROW* row = new FP_LIB_TABLE_ROW( libNickName, rel_path,
                                                               wxT( "KiCad" ), wxEmptyString );
