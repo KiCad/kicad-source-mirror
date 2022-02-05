@@ -146,7 +146,7 @@ const wxString GERBER_FILE_IMAGE_LIST::GetDisplayName( int aIdx, bool aNameOnly,
 
         if( !aFullName && filename.Length() > maxlen )
         {
-            wxString shortenedfn = filename.Left(2) + "..." + filename.Right(maxlen-5);
+            wxString shortenedfn = filename.Left(2) + wxT( "..." ) + filename.Right(maxlen-5);
             filename = shortenedfn;
         }
 
@@ -154,7 +154,7 @@ const wxString GERBER_FILE_IMAGE_LIST::GetDisplayName( int aIdx, bool aNameOnly,
         {
             if( gerber->m_FileFunction->IsCopper() )
             {
-                name.Printf( "%s (%s, %s, %s)",
+                name.Printf( wxT( "%s (%s, %s, %s)" ),
                              filename.GetData(),
                              gerber->m_FileFunction->GetFileType(),
                              gerber->m_FileFunction->GetBrdLayerId(),
@@ -162,7 +162,7 @@ const wxString GERBER_FILE_IMAGE_LIST::GetDisplayName( int aIdx, bool aNameOnly,
             }
             if( gerber->m_FileFunction->IsDrillFile() )
             {
-                name.Printf( "%s (%s,%s,%s,%s)",
+                name.Printf( wxT( "%s (%s,%s,%s,%s)" ),
                              filename.GetData(),
                              gerber->m_FileFunction->GetFileType(),
                              gerber->m_FileFunction->GetDrillLayerPair(),
@@ -171,7 +171,7 @@ const wxString GERBER_FILE_IMAGE_LIST::GetDisplayName( int aIdx, bool aNameOnly,
             }
             else
             {
-                name.Printf( "%s (%s, %s)",
+                name.Printf( wxT( "%s (%s, %s)" ),
                              filename.GetData(),
                              gerber->m_FileFunction->GetFileType(),
                              gerber->m_FileFunction->GetBrdLayerId() );
@@ -187,7 +187,7 @@ const wxString GERBER_FILE_IMAGE_LIST::GetDisplayName( int aIdx, bool aNameOnly,
 
         wxString fullname;
 
-        fullname.Printf( "%d ", aIdx + 1 );
+        fullname.Printf( wxT( "%d " ), aIdx + 1 );
         fullname << name;
         return fullname;
     }

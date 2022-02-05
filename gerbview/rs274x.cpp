@@ -413,13 +413,13 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
         X2_ATTRIBUTE dummy;
         dummy.ParseAttribCmd( m_Current_File, aBuff, aBuffSize, aText, m_LineNum );
 
-        if( dummy.GetAttribute() == ".AperFunction" )
+        if( dummy.GetAttribute() == wxT( ".AperFunction" ) )
         {
             m_AperFunction = dummy.GetPrm( 1 );
 
             // A few function values can have other parameters. Add them
             for( int ii = 2; ii < dummy.GetPrmCount(); ii++ )
-                m_AperFunction << "," << dummy.GetPrm( ii );
+                m_AperFunction << wxT( "," ) << dummy.GetPrm( ii );
         }
     }
         break;
@@ -430,17 +430,17 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
 
         dummy.ParseAttribCmd( m_Current_File, aBuff, aBuffSize, aText, m_LineNum );
 
-        if( dummy.GetAttribute() == ".N" )
+        if( dummy.GetAttribute() == wxT( ".N" ) )
         {
             m_NetAttributeDict.m_NetAttribType |= GBR_NETLIST_METADATA::GBR_NETINFO_NET;
             m_NetAttributeDict.m_Netname = FormatStringFromGerber( dummy.GetPrm( 1 ) );
         }
-        else if( dummy.GetAttribute() == ".C" )
+        else if( dummy.GetAttribute() == wxT( ".C" ) )
         {
             m_NetAttributeDict.m_NetAttribType |= GBR_NETLIST_METADATA::GBR_NETINFO_CMP;
             m_NetAttributeDict.m_Cmpref = FormatStringFromGerber( dummy.GetPrm( 1 ) );
         }
-        else if( dummy.GetAttribute() == ".P" )
+        else if( dummy.GetAttribute() == wxT( ".P" ) )
         {
             m_NetAttributeDict.m_NetAttribType |= GBR_NETLIST_METADATA::GBR_NETINFO_PAD;
             m_NetAttributeDict.m_Cmpref = FormatStringFromGerber( dummy.GetPrm( 1 ) );
@@ -1107,7 +1107,8 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
         if( ii < paramCount )
         {
             // maybe some day we can throw an exception and track a line number
-            msg.Printf( "RS274X: read macro descr type %d: read %d parameters, insufficient parameters\n",
+            msg.Printf( wxT( "RS274X: read macro descr type %d: read %d parameters, insufficient "
+                             "parameters\n" ),
                         prim.primitive_id, ii );
             AddMessageToList( msg );
         }

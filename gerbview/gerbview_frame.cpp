@@ -258,9 +258,9 @@ bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         {
             wxString ext = wxFileName( aFileSet[i] ).GetExt().Lower();
 
-            if( ext == "zip" )
+            if( ext == wxT( "zip" ) )
                 LoadZipArchiveFile( aFileSet[i] );
-            else if( ext == "gbrprj" )
+            else if( ext == wxT( "gbrprj" ) )
                 LoadGerberJobFile( aFileSet[i] );
             else
             {
@@ -303,28 +303,28 @@ void GERBVIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     if( aCfg->m_Window.grid.sizes.empty() )
     {
-        aCfg->m_Window.grid.sizes = { "100 mil",
-                                      "50 mil",
-                                      "25 mil",
-                                      "20 mil",
-                                      "10 mil",
-                                      "5 mil",
-                                      "2.5 mil",
-                                      "2 mil",
-                                      "1 mil",
-                                      "0.5 mil",
-                                      "0.2 mil",
-                                      "0.1 mil",
-                                      "5.0 mm",
-                                      "2.5 mm",
-                                      "1.0 mm",
-                                      "0.5 mm",
-                                      "0.25 mm",
-                                      "0.2 mm",
-                                      "0.1 mm",
-                                      "0.05 mm",
-                                      "0.025 mm",
-                                      "0.01 mm" };
+        aCfg->m_Window.grid.sizes = { wxT( "100 mil" ),
+                                      wxT( "50 mil" ),
+                                      wxT( "25 mil" ),
+                                      wxT( "20 mil" ),
+                                      wxT( "10 mil" ),
+                                      wxT( "5 mil" ),
+                                      wxT( "2.5 mil" ),
+                                      wxT( "2 mil" ),
+                                      wxT( "1 mil" ),
+                                      wxT( "0.5 mil" ),
+                                      wxT( "0.2 mil" ),
+                                      wxT( "0.1 mil" ),
+                                      wxT( "5.0 mm" ),
+                                      wxT( "2.5 mm" ),
+                                      wxT( "1.0 mm" ),
+                                      wxT( "0.5 mm" ),
+                                      wxT( "0.25 mm" ),
+                                      wxT( "0.2 mm" ),
+                                      wxT( "0.1 mm" ),
+                                      wxT( "0.05 mm" ),
+                                      wxT( "0.025 mm" ),
+                                      wxT( "0.01 mm" ) };
     }
 
     if( aCfg->m_Window.zoom_factors.empty() )
@@ -442,7 +442,7 @@ void GERBVIEW_FRAME::SetElementVisibility( int aLayerID, bool aNewState )
         break;
 
     default:
-        wxFAIL_MSG( wxString::Format( "GERBVIEW_FRAME::SetElementVisibility(): bad arg %d",
+        wxFAIL_MSG( wxString::Format( wxT( "GERBVIEW_FRAME::SetElementVisibility(): bad arg %d" ),
                                       aLayerID ) );
     }
 
@@ -649,7 +649,8 @@ bool GERBVIEW_FRAME::IsElementVisible( int aLayerID ) const
     case LAYER_GERBVIEW_BACKGROUND:   return true;
 
     default:
-        wxFAIL_MSG( wxString::Format( "GERBVIEW_FRAME::IsElementVisible bad arg %d", aLayerID ) );
+        wxFAIL_MSG( wxString::Format( wxT( "GERBVIEW_FRAME::IsElementVisible(): bad arg %d" ),
+                                      aLayerID ) );
     }
 
     return true;
@@ -711,7 +712,7 @@ COLOR4D GERBVIEW_FRAME::GetVisibleElementColor( int aLayerID )
         break;
 
     default:
-        wxFAIL_MSG( wxString::Format( "GERBVIEW_FRAME::GetVisibleElementColor(): bad arg %d",
+        wxFAIL_MSG( wxString::Format( wxT( "GERBVIEW_FRAME::GetVisibleElementColor(): bad arg %d" ),
                                       aLayerID ) );
     }
 
@@ -757,7 +758,7 @@ void GERBVIEW_FRAME::SetVisibleElementColor( int aLayerID, const COLOR4D& aColor
         break;
 
     default:
-        wxFAIL_MSG( wxString::Format( "GERBVIEW_FRAME::SetVisibleElementColor(): bad arg %d",
+        wxFAIL_MSG( wxString::Format( wxT( "GERBVIEW_FRAME::SetVisibleElementColor(): bad arg %d" ),
                                        aLayerID ) );
     }
 }
@@ -879,7 +880,7 @@ void GERBVIEW_FRAME::DisplayGridMsg()
     VECTOR2D gridSize = GetCanvas()->GetGAL()->GetGridSize();
     wxString line;
 
-    line.Printf( "grid X %s  Y %s",
+    line.Printf( wxT( "grid X %s  Y %s" ),
                  MessageTextFromValue( m_userUnits, gridSize.x, false ),
                  MessageTextFromValue( m_userUnits, gridSize.y, false ) );
 

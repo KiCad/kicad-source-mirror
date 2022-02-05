@@ -213,7 +213,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
             return;
 
         color = m_gerbviewSettings.GetColor( aItem, aLayer );
-        codeText.Printf( "D%d", aItem->m_DCode );
+        codeText.Printf( wxT( "D%d" ), aItem->m_DCode );
 
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( false );
@@ -399,7 +399,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
     }
 
     default:
-        wxASSERT_MSG( false, "GERBER_DRAW_ITEM shape is unknown!" );
+        wxASSERT_MSG( false, wxT( "GERBER_DRAW_ITEM shape is unknown!" ) );
         break;
     }
     m_gal->SetNegativeDrawMode( false );
@@ -447,7 +447,7 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
 {
     D_CODE* code = aItem->GetDcodeDescr();
 
-    wxASSERT_MSG( code, "drawFlashedShape: Item has no D_CODE!" );
+    wxASSERT_MSG( code, wxT( "drawFlashedShape: Item has no D_CODE!" ) );
 
     if( !code )
         return;

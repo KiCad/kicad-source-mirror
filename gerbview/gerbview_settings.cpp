@@ -109,14 +109,14 @@ bool GERBVIEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
         for( int i = 0; i < max_history_size; i++ )
         {
-            key.Printf( "file%d", i );
+            key.Printf( wxT( "file%d" ), i );
             file = aCfg->Read( key, wxEmptyString );
 
             if( !file.IsEmpty() )
                 js.emplace_back( file.ToStdString() );
         }
 
-        aCfg->SetPath( ".." );
+        aCfg->SetPath( wxT( ".." ) );
 
         Set( aDest, js );
     };
@@ -133,7 +133,7 @@ bool GERBVIEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
         for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; i++ )
         {
-            key.Printf( "GbrLyr%dToPcb", i );
+            key.Printf( wxT( "GbrLyr%dToPcb" ), i );
             aCfg->Read( key, &value, UNSELECTED_LAYER );
             At( "gerber_to_pcb_layers" ).emplace_back( value );
         }
@@ -159,7 +159,7 @@ bool GERBVIEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     for( int i = 0, id = GERBVIEW_LAYER_ID_START;
          id < GERBER_DRAWLAYERS_COUNT + GERBVIEW_LAYER_ID_START; ++i, ++id )
     {
-        key.Printf( "ColorLayer%dEx", i );
+        key.Printf( wxT( "ColorLayer%dEx" ), i );
         migrateLegacyColor( key.ToStdString(), id );
     }
 

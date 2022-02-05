@@ -273,8 +273,8 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString&      aPath,
         if( !filename.FileExists() )
         {
             wxString warning;
-            warning << "<b>" << _( "File not found:" ) << "</b><br>"
-                    << filename.GetFullPath() << "<br>";
+            warning << wxT( "<b>" ) << _( "File not found:" ) << wxT( "</b><br>" )
+                    << filename.GetFullPath() << wxT( "<br>" );
             reporter.Report( warning, RPT_SEVERITY_WARNING );
             success = false;
             continue;

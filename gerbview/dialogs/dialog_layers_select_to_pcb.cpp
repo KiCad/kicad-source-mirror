@@ -361,7 +361,7 @@ void LAYERS_MAP_DIALOG::OnSelectLayer( wxCommandEvent& event )
     wxFileName fn( m_Parent->GetGerberLayout()->GetImagesList()->GetGbrImage( ii )->m_FileName );
 
     // Surround it with quotes to make it stand out on the dialog title bar
-    wxString layerName = "\"" + fn.GetFullName() + "\"";
+    wxString layerName = wxT( "\"" ) + fn.GetFullName() + wxT( "\"" );
 
     // Display dialog to let user select a layer for the Gerber
     jj = m_Parent->SelectPCBLayer( jj, m_exportBoardCopperLayersCount, layerName );
@@ -424,8 +424,8 @@ bool LAYERS_MAP_DIALOG::TransferDataFromWindow()
     // internal copper layers = m_exportBoardCopperLayersCount-2
     if( inner_layer_max > m_exportBoardCopperLayersCount-2 )
     {
-        wxMessageBox( _("Exported board does not have enough copper layers to handle selected "
-                        "inner layers") );
+        wxMessageBox( _( "Exported board does not have enough copper layers to handle selected "
+                         "inner layers" ) );
         return false;
     }
 
@@ -462,47 +462,47 @@ int LAYERS_MAP_DIALOG::findNumAltiumGerbersLoaded( std::vector<int>& aGerber2Kic
     // This map contains the known Altium file extensions for Gerbers that we care about,
     // along with their corresponding KiCad layer
     std::map<wxString, PCB_LAYER_ID> altiumExt{
-        { "GTL", F_Cu },      // Top copper
-        { "G1", In1_Cu },     // Inner layers 1 - 30
-        { "G2", In2_Cu },
-        { "G3", In3_Cu },
-        { "G4", In4_Cu },
-        { "G5", In5_Cu },
-        { "G6", In6_Cu },
-        { "G7", In7_Cu },
-        { "G8", In8_Cu },
-        { "G9", In9_Cu },
-        { "G10", In10_Cu },
-        { "G11", In11_Cu },
-        { "G12", In12_Cu },
-        { "G13", In13_Cu },
-        { "G14", In14_Cu },
-        { "G15", In15_Cu },
-        { "G16", In16_Cu },
-        { "G17", In17_Cu },
-        { "G18", In18_Cu },
-        { "G19", In19_Cu },
-        { "G20", In20_Cu },
-        { "G21", In21_Cu },
-        { "G22", In22_Cu },
-        { "G23", In23_Cu },
-        { "G24", In24_Cu },
-        { "G25", In25_Cu },
-        { "G26", In26_Cu },
-        { "G27", In27_Cu },
-        { "G28", In28_Cu },
-        { "G29", In29_Cu },
-        { "G30", In30_Cu },
-        { "GBL", B_Cu },      // Bottom copper
-        { "GTP", F_Paste },   // Paste top
-        { "GBP", B_Paste },   // Paste bottom
-        { "GTO", F_SilkS },   // Silkscreen top
-        { "GBO", B_SilkS },   // Silkscreen bottom
-        { "GTS", F_Mask },    // Soldermask top
-        { "GBS", B_Mask },    // Soldermask bottom
-        { "GM1", Eco1_User }, // Altium mechanical layer 1
-        { "GM2", Eco2_User }, // Altium mechanical layer 2
-        { "GKO", Edge_Cuts }  // PCB Outline
+        { wxT( "GTL" ), F_Cu },      // Top copper
+        { wxT( "G1" ), In1_Cu },     // Inner layers 1 - 30
+        { wxT( "G2" ), In2_Cu },
+        { wxT( "G3" ), In3_Cu },
+        { wxT( "G4" ), In4_Cu },
+        { wxT( "G5" ), In5_Cu },
+        { wxT( "G6" ), In6_Cu },
+        { wxT( "G7" ), In7_Cu },
+        { wxT( "G8" ), In8_Cu },
+        { wxT( "G9" ), In9_Cu },
+        { wxT( "G10" ), In10_Cu },
+        { wxT( "G11" ), In11_Cu },
+        { wxT( "G12" ), In12_Cu },
+        { wxT( "G13" ), In13_Cu },
+        { wxT( "G14" ), In14_Cu },
+        { wxT( "G15" ), In15_Cu },
+        { wxT( "G16" ), In16_Cu },
+        { wxT( "G17" ), In17_Cu },
+        { wxT( "G18" ), In18_Cu },
+        { wxT( "G19" ), In19_Cu },
+        { wxT( "G20" ), In20_Cu },
+        { wxT( "G21" ), In21_Cu },
+        { wxT( "G22" ), In22_Cu },
+        { wxT( "G23" ), In23_Cu },
+        { wxT( "G24" ), In24_Cu },
+        { wxT( "G25" ), In25_Cu },
+        { wxT( "G26" ), In26_Cu },
+        { wxT( "G27" ), In27_Cu },
+        { wxT( "G28" ), In28_Cu },
+        { wxT( "G29" ), In29_Cu },
+        { wxT( "G30" ), In30_Cu },
+        { wxT( "GBL" ), B_Cu },      // Bottom copper
+        { wxT( "GTP" ), F_Paste },   // Paste top
+        { wxT( "GBP" ), B_Paste },   // Paste bottom
+        { wxT( "GTO" ), F_SilkS },   // Silkscreen top
+        { wxT( "GBO" ), B_SilkS },   // Silkscreen bottom
+        { wxT( "GTS" ), F_Mask },    // Soldermask top
+        { wxT( "GBS" ), B_Mask },    // Soldermask bottom
+        { wxT( "GM1" ), Eco1_User }, // Altium mechanical layer 1
+        { wxT( "GM2" ), Eco2_User }, // Altium mechanical layer 2
+        { wxT( "GKO" ), Edge_Cuts }  // PCB Outline
     };
     // clang-format on
 
@@ -692,51 +692,51 @@ int LAYERS_MAP_DIALOG::findNumX2GerbersLoaded( std::vector<int>& aGerber2KicadMa
     // care about, along with their corresponding KiCad layer
     std::map<wxString, PCB_LAYER_ID> kicadLayers
     {
-        { "Top",   F_Cu },
-        { "L2",    In1_Cu },
-        { "L3",    In2_Cu },
-        { "L4",    In3_Cu },
-        { "L5",    In4_Cu },
-        { "L6",    In5_Cu },
-        { "L7",    In6_Cu },
-        { "L8",    In7_Cu },
-        { "L9",    In8_Cu },
-        { "L10",   In9_Cu },
-        { "L11",   In10_Cu },
-        { "L12",   In11_Cu },
-        { "L13",   In12_Cu },
-        { "L14",   In13_Cu },
-        { "L15",   In14_Cu },
-        { "L16",   In15_Cu },
-        { "L17",   In16_Cu },
-        { "L18",   In17_Cu },
-        { "L19",   In18_Cu },
-        { "L20",   In19_Cu },
-        { "L21",   In20_Cu },
-        { "L22",   In21_Cu },
-        { "L23",   In22_Cu },
-        { "L24",   In23_Cu },
-        { "L25",   In24_Cu },
-        { "L26",   In25_Cu },
-        { "L27",   In26_Cu },
-        { "L28",   In27_Cu },
-        { "L29",   In28_Cu },
-        { "L30",   In29_Cu },
-        { "Bot",         B_Cu },
-        { "BotGlue",     B_Adhes },
-        { "TopGlue",     F_Adhes },
-        { "BotPaste",    B_Paste },
-        { "TopPaste",    F_Paste },
-        { "BotLegend",   B_SilkS },
-        { "TopLegend",   F_SilkS },
-        { "BotSoldermask",      B_Mask },
-        { "TopSoldermask",      F_Mask },
-        { "FabricationDrawing", Dwgs_User },
-        { "OtherDrawing",       Cmts_User },
-        { "TopAssemblyDrawing", Eco1_User },
-        { "BotAssemblyDrawing", Eco2_User },
-        { "PProfile",           Edge_Cuts }, // Plated PCB outline
-        { "NPProfile",          Edge_Cuts }  // Non-plated PCB outline
+        { wxT( "Top" ),   F_Cu },
+        { wxT( "L2" ),    In1_Cu },
+        { wxT( "L3" ),    In2_Cu },
+        { wxT( "L4" ),    In3_Cu },
+        { wxT( "L5" ),    In4_Cu },
+        { wxT( "L6" ),    In5_Cu },
+        { wxT( "L7" ),    In6_Cu },
+        { wxT( "L8" ),    In7_Cu },
+        { wxT( "L9" ),    In8_Cu },
+        { wxT( "L10" ),   In9_Cu },
+        { wxT( "L11" ),   In10_Cu },
+        { wxT( "L12" ),   In11_Cu },
+        { wxT( "L13" ),   In12_Cu },
+        { wxT( "L14" ),   In13_Cu },
+        { wxT( "L15" ),   In14_Cu },
+        { wxT( "L16" ),   In15_Cu },
+        { wxT( "L17" ),   In16_Cu },
+        { wxT( "L18" ),   In17_Cu },
+        { wxT( "L19" ),   In18_Cu },
+        { wxT( "L20" ),   In19_Cu },
+        { wxT( "L21" ),   In20_Cu },
+        { wxT( "L22" ),   In21_Cu },
+        { wxT( "L23" ),   In22_Cu },
+        { wxT( "L24" ),   In23_Cu },
+        { wxT( "L25" ),   In24_Cu },
+        { wxT( "L26" ),   In25_Cu },
+        { wxT( "L27" ),   In26_Cu },
+        { wxT( "L28" ),   In27_Cu },
+        { wxT( "L29" ),   In28_Cu },
+        { wxT( "L30" ),   In29_Cu },
+        { wxT( "Bot" ),   B_Cu },
+        { wxT( "BotGlue" ),            B_Adhes },
+        { wxT( "TopGlue" ),            F_Adhes },
+        { wxT( "BotPaste" ),           B_Paste },
+        { wxT( "TopPaste" ),           F_Paste },
+        { wxT( "BotLegend" ),          B_SilkS },
+        { wxT( "TopLegend" ),          F_SilkS },
+        { wxT( "BotSoldermask" ),      B_Mask },
+        { wxT( "TopSoldermask" ),      F_Mask },
+        { wxT( "FabricationDrawing" ), Dwgs_User },
+        { wxT( "OtherDrawing" ),       Cmts_User },
+        { wxT( "TopAssemblyDrawing" ), Eco1_User },
+        { wxT( "BotAssemblyDrawing" ), Eco2_User },
+        { wxT( "PProfile" ),           Edge_Cuts }, // Plated PCB outline
+        { wxT( "NPProfile" ),          Edge_Cuts }  // Non-plated PCB outline
     };
     // clang-format on
 

@@ -128,7 +128,7 @@ bool GERBER_JOBFILE_READER::ReadGerberJobFile()
 
     data = line;
 
-    if( data.Contains( "{" ) )
+    if( data.Contains( wxT( "{" ) ) )
         json_format = true;
 
     if( json_format )
