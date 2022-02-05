@@ -25,6 +25,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <memory>
 #include <wx/filename.h>
 #include <wx/log.h>
 #include "plugins/3dapi/ifsg_api.h"
@@ -232,14 +233,12 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
         return nullptr;
     }
 
-    SGNODE* np = new SCENEGRAPH( nullptr );
+    std::unique_ptr<SGNODE> np = std::make_unique<SCENEGRAPH>( nullptr );
 
     OPEN_ISTREAM( file, aFileName );
 
     if( file.fail() )
     {
-        delete np;
-
         wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] failed to open file '%s'",
                     __FILE__, __FUNCTION__, __LINE__, aFileName );
 
@@ -321,15 +320,13 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
 
     if( !rval )
     {
-        delete np;
-
         wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] problems encountered reading cache file '%s'",
                     __FILE__, __FUNCTION__, __LINE__, aFileName );
 
         return nullptr;
     }
 
-    return np;
+    return np.release();
 }
 
 
