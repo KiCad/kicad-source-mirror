@@ -221,7 +221,7 @@ bool COMPONENT_DRAGGER::Drag( const VECTOR2I& aP )
         }
 
         default:
-            wxFAIL_MSG( "Unexpected item type in COMPONENT_DRAGGER::m_fixedItems" );
+            wxFAIL_MSG( wxT( "Unexpected item type in COMPONENT_DRAGGER::m_fixedItems" ) );
         }
     }
 

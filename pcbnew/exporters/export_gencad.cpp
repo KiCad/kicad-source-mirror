@@ -169,7 +169,7 @@ static std::string GenCADLayerNameFlipped( int aCuCount, PCB_LAYER_ID aId )
 static wxString escapeString( const wxString& aString )
 {
     wxString copy( aString );
-    copy.Replace( "\"", "\\\"" );
+    copy.Replace( wxT( "\"" ), wxT( "\\\"" ) );
     return copy;
 }
 
@@ -239,7 +239,7 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
     if( path.IsEmpty() )
     {
         wxFileName brdFile = GetBoard()->GetFileName();
-        brdFile.SetExt( "cad" );
+        brdFile.SetExt( wxT( "cad" ) );
         path = brdFile.GetFullPath();
     }
 
@@ -250,7 +250,7 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
 
     path = optionsDialog.GetFileName();
     SetLastPath( LAST_PATH_GENCAD, path );
-    FILE* file = wxFopen( path, "wt" );
+    FILE* file = wxFopen( path, wxT( "wt" ) );
 
     if( !file )
     {
@@ -769,7 +769,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
                     // find an unused name or matching entry
                     do
                     {
-                        newShapeName = wxString::Format( "%s_%d", shapeName, suffix );
+                        newShapeName = wxString::Format( wxT( "%s_%d" ), shapeName, suffix );
                         shapeIt = shapes.find( newShapeName );
                         ++suffix;
                     }
@@ -820,7 +820,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
 
                 while( it != pins.end() )
                 {
-                    pinname = wxString::Format( "%s_%d", origPinname, suffix );
+                    pinname = wxString::Format( wxT( "%s_%d" ), origPinname, suffix );
                     ++suffix;
                     it = pins.find( pinname );
                 }
@@ -937,13 +937,13 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
 
         if( net->GetNetname() == wxEmptyString ) // dummy netlist (no connection)
         {
-            msg.Printf( "NoConnection%d", NbNoConn++ );
+            msg.Printf( wxT( "NoConnection%d" ), NbNoConn++ );
         }
 
         if( net->GetNetCode() <= 0 )  // dummy netlist (no connection)
             continue;
 
-        msg = wxT( "SIGNAL \"" ) + escapeString( net->GetNetname() ) + "\"";
+        msg = wxT( "SIGNAL \"" ) + escapeString( net->GetNetname() ) + wxT( "\"" );
 
         fputs( TO_UTF8( msg ), aFile );
         fputs( "\n", aFile );
@@ -1292,7 +1292,7 @@ static void FootprintWriteShape( FILE* aFile, FOOTPRINT* aFootprint, const wxStr
                     break;
 
                 default:
-                    wxFAIL_MSG( wxString::Format( "Type Edge Module %d invalid.",
+                    wxFAIL_MSG( wxString::Format( wxT( "Type Edge Module %d invalid." ),
                                                   PtStruct->Type() ) );
                     break;
                 }

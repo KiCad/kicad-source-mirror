@@ -613,22 +613,22 @@ int PNS_PCBNEW_RULE_RESOLVER::matchDpSuffix( const wxString& aNetName, wxString&
         }
         else if( ch == '+' )
         {
-            aComplementNet = "-";
+            aComplementNet = wxT( "-" );
             rv = 1;
         }
         else if( ch == '-' )
         {
-            aComplementNet = "+";
+            aComplementNet = wxT( "+" );
             rv = -1;
         }
         else if( ch == 'N' )
         {
-            aComplementNet = "P";
+            aComplementNet = wxT( "P" );
             rv = -1;
         }
         else if ( ch == 'P' )
         {
-            aComplementNet = "N";
+            aComplementNet = wxT( "N" );
             rv = 1;
         }
         else
@@ -917,7 +917,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
     }
 
     default:
-        wxLogTrace( "PNS", "unsupported pad type 0x%x", aPad->GetAttribute() );
+        wxLogTrace( wxT( "PNS" ), wxT( "unsupported pad type 0x%x" ), aPad->GetAttribute() );
         return nullptr;
     }
 
@@ -1192,7 +1192,7 @@ bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aIte
 void PNS_KICAD_IFACE_BASE::SetBoard( BOARD* aBoard )
 {
     m_board = aBoard;
-    wxLogTrace( "PNS", "m_board = %p", m_board );
+    wxLogTrace( wxT( "PNS" ), wxT( "m_board = %p" ), m_board );
 }
 
 
@@ -1276,7 +1276,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
 {
     if( !m_board )
     {
-        wxLogTrace( "PNS", "No board attached, aborting sync." );
+        wxLogTrace( wxT( "PNS" ), wxT( "No board attached, aborting sync." ) );
         return;
     }
 
@@ -1667,7 +1667,7 @@ EDA_UNITS PNS_KICAD_IFACE::GetUnits() const
 
 void PNS_KICAD_IFACE::SetView( KIGFX::VIEW* aView )
 {
-    wxLogTrace( "PNS", "SetView %p", aView );
+    wxLogTrace( wxT( "PNS" ), wxT( "SetView %p" ), aView );
 
     if( m_previewItems )
     {
@@ -1696,7 +1696,7 @@ void PNS_KICAD_IFACE::SetView( KIGFX::VIEW* aView )
 
 void PNS_KICAD_IFACE::UpdateNet( int aNetCode )
 {
-    wxLogTrace( "PNS", "Update-net %d", aNetCode );
+    wxLogTrace( wxT( "PNS" ), wxT( "Update-net %d" ), aNetCode );
 }
 
 

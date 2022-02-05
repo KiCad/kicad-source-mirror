@@ -167,43 +167,43 @@ const ALTIUM_RULE_TOKEN& ALTIUM_RULE_TOKENIZER::Next()
             nextCh = nextChar();
         }
 
-        if( identString.IsSameAs( "True", false ) )
+        if( identString.IsSameAs( wxT( "True" ), false ) )
         {
             m_nextToken = { ALTIUM_RULE_TOKEN_KIND::CONST_TRUE, startPos };
         }
-        else if( identString.IsSameAs( "False", false ) )
+        else if( identString.IsSameAs( wxT( "False" ), false ) )
         {
             m_nextToken = { ALTIUM_RULE_TOKEN_KIND::CONST_FALSE, startPos };
         }
-        else if( identString.IsSameAs( "Div", false ) )
+        else if( identString.IsSameAs( wxT( "Div" ), false ) )
         {
             m_nextToken = { ALTIUM_RULE_TOKEN_KIND::INTEGRAL_DIV, startPos };
         }
-        else if( identString.IsSameAs( "Mod", false ) )
+        else if( identString.IsSameAs( wxT( "Mod" ), false ) )
         {
             m_nextToken = { ALTIUM_RULE_TOKEN_KIND::MOD, startPos };
         }
-        else if( identString.IsSameAs( "And", false ) )
+        else if( identString.IsSameAs( wxT( "And" ), false ) )
         {
             m_nextToken = { ALTIUM_RULE_TOKEN_KIND::AND, startPos };
         }
-        else if( identString.IsSameAs( "Or", false ) )
+        else if( identString.IsSameAs( wxT( "Or" ), false ) )
         {
             m_nextToken = { ALTIUM_RULE_TOKEN_KIND::OR, startPos };
         }
-        else if( identString.IsSameAs( "Xor", false ) )
+        else if( identString.IsSameAs( wxT( "Xor" ), false ) )
         {
             m_nextToken = { ALTIUM_RULE_TOKEN_KIND::XOR, startPos };
         }
-        else if( identString.IsSameAs( "Not", false ) )
+        else if( identString.IsSameAs( wxT( "Not" ), false ) )
         {
             m_nextToken = { ALTIUM_RULE_TOKEN_KIND::NOT, startPos };
         }
-        else if( identString.IsSameAs( "Between", false ) )
+        else if( identString.IsSameAs( wxT( "Between" ), false ) )
         {
             m_nextToken = { ALTIUM_RULE_TOKEN_KIND::BETWEEN, startPos };
         }
-        else if( identString.IsSameAs( "Like", false ) )
+        else if( identString.IsSameAs( wxT( "Like" ), false ) )
         {
             m_nextToken = { ALTIUM_RULE_TOKEN_KIND::LIKE, startPos };
         }

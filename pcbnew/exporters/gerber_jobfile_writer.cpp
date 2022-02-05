@@ -352,21 +352,21 @@ void GERBER_JOBFILE_WRITER::addJSONFilesAttributes()
 
         if( layer <= B_Cu )
         {
-            gbr_layer_id = "Copper,L";
+            gbr_layer_id = wxT( "Copper,L" );
 
             if( layer == B_Cu )
                 gbr_layer_id << m_pcb->GetCopperLayerCount();
             else
                 gbr_layer_id << layer + 1;
 
-            gbr_layer_id << ",";
+            gbr_layer_id << wxT( "," );
 
             if( layer == B_Cu )
-                gbr_layer_id << "Bot";
+                gbr_layer_id << wxT( "Bot" );
             else if( layer == F_Cu )
-                gbr_layer_id << "Top";
+                gbr_layer_id << wxT( "Top" );
             else
-                gbr_layer_id << "Inr";
+                gbr_layer_id << wxT( "Inr" );
         }
 
         else
@@ -374,44 +374,44 @@ void GERBER_JOBFILE_WRITER::addJSONFilesAttributes()
             switch( layer )
             {
             case B_Adhes:
-                gbr_layer_id = "Glue,Bot";
+                gbr_layer_id = wxT( "Glue,Bot" );
                 break;
             case F_Adhes:
-                gbr_layer_id = "Glue,Top";
+                gbr_layer_id = wxT( "Glue,Top" );
                 break;
 
             case B_Paste:
-                gbr_layer_id = "SolderPaste,Bot";
+                gbr_layer_id = wxT( "SolderPaste,Bot" );
                 break;
             case F_Paste:
-                gbr_layer_id = "SolderPaste,Top";
+                gbr_layer_id = wxT( "SolderPaste,Top" );
                 break;
 
             case B_SilkS:
-                gbr_layer_id = "Legend,Bot";
+                gbr_layer_id = wxT( "Legend,Bot" );
                 break;
             case F_SilkS:
-                gbr_layer_id = "Legend,Top";
+                gbr_layer_id = wxT( "Legend,Top" );
                 break;
 
             case B_Mask:
-                gbr_layer_id = "SolderMask,Bot";
+                gbr_layer_id = wxT( "SolderMask,Bot" );
                 polarity = "Negative";
                 break;
             case F_Mask:
-                gbr_layer_id = "SolderMask,Top";
+                gbr_layer_id = wxT( "SolderMask,Top" );
                 polarity = "Negative";
                 break;
 
             case Edge_Cuts:
-                gbr_layer_id = "Profile";
+                gbr_layer_id = wxT( "Profile" );
                 break;
 
             case B_Fab:
-                gbr_layer_id = "AssemblyDrawing,Bot";
+                gbr_layer_id = wxT( "AssemblyDrawing,Bot" );
                 break;
             case F_Fab:
-                gbr_layer_id = "AssemblyDrawing,Top";
+                gbr_layer_id = wxT( "AssemblyDrawing,Top" );
                 break;
 
             case Dwgs_User:
@@ -426,7 +426,7 @@ void GERBER_JOBFILE_WRITER::addJSONFilesAttributes()
 
             default:
                 skip_file = true;
-                m_reporter->Report( "Unexpected layer id in job file", RPT_SEVERITY_ERROR );
+                m_reporter->Report( wxT( "Unexpected layer id in job file" ), RPT_SEVERITY_ERROR );
                 break;
             }
         }
@@ -600,39 +600,39 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
             switch( item->GetType() )
             {
             case BS_ITEM_TYPE_COPPER:
-                layer_type = "Copper";
+                layer_type = wxT( "Copper" );
                 layer_name = formatStringFromUTF32( m_pcb->GetLayerName( item->GetBrdLayerId() ) );
                 last_copper_layer = item->GetBrdLayerId();
                 break;
 
             case BS_ITEM_TYPE_SILKSCREEN:
-                layer_type = "Legend";
+                layer_type = wxT( "Legend" );
                 layer_name = formatStringFromUTF32( item->GetTypeName() );
                 break;
 
             case BS_ITEM_TYPE_SOLDERMASK:
-                layer_type = "SolderMask";
+                layer_type = wxT( "SolderMask" );
                 layer_name = formatStringFromUTF32( item->GetTypeName() );
                 break;
 
             case BS_ITEM_TYPE_SOLDERPASTE:
-                layer_type = "SolderPaste";
+                layer_type = wxT( "SolderPaste" );
                 layer_name = formatStringFromUTF32( item->GetTypeName() );
                 break;
 
             case BS_ITEM_TYPE_DIELECTRIC:
-                layer_type = "Dielectric";
+                layer_type = wxT( "Dielectric" );
                 // The option core or prepreg is not added here, as it creates constraints
                 // in build process, not necessary wanted.
                 if( sub_layer_count > 1 )
                 {
                     layer_name =
-                            formatStringFromUTF32( wxString::Format( "dielectric layer %d - %d/%d",
+                            formatStringFromUTF32( wxString::Format( wxT( "dielectric layer %d - %d/%d" ),
                                     item->GetDielectricLayerId(), sub_idx + 1, sub_layer_count ) );
                 }
                 else
                     layer_name = formatStringFromUTF32( wxString::Format(
-                            "dielectric layer %d", item->GetDielectricLayerId() ) );
+                            wxT( "dielectric layer %d" ), item->GetDielectricLayerId() ) );
                 break;
 
             default:
@@ -647,11 +647,14 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
                 {
                     wxString colorName = item->GetColor();
 
-                    if( colorName.StartsWith( "#" ) ) // This is a user defined color.
+                    if( colorName.StartsWith( wxT( "#" ) ) ) // This is a user defined color.
                     {
                         // In job file a color can be given by its RGB values (0...255)
                         wxColor color( COLOR4D( colorName ).ToColour() );
-                        colorName.Printf( "R%dG%dB%d", color.Red(), color.Green(), color.Blue() );
+                        colorName.Printf( wxT( "R%dG%dB%d" ),
+                                          color.Red(),
+                                          color.Green(),
+                                          color.Blue() );
                     }
 
                     layer_json["Color"] = colorName;
@@ -694,9 +697,9 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
                 wxString subLayerName;
 
                 if( sub_layer_count > 1 )
-                    subLayerName.Printf( " (%d/%d)", sub_idx + 1, sub_layer_count );
+                    subLayerName.Printf( wxT( " (%d/%d)" ), sub_idx + 1, sub_layer_count );
 
-                wxString name = wxString::Format( "%s/%s%s",
+                wxString name = wxString::Format( wxT( "%s/%s%s" ),
                         formatStringFromUTF32( m_pcb->GetLayerName( last_copper_layer ) ),
                         formatStringFromUTF32( m_pcb->GetLayerName( next_copper_layer ) ),
                         subLayerName );
@@ -706,9 +709,9 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
                 // Add a comment ("Notes"):
                 wxString note;
 
-                note << wxString::Format( "Type: %s", layer_name.c_str() );
+                note << wxString::Format( wxT( "Type: %s" ), layer_name.c_str() );
 
-                note << wxString::Format( " (from %s to %s)",
+                note << wxString::Format( wxT( " (from %s to %s)" ),
                         formatStringFromUTF32( m_pcb->GetLayerName( last_copper_layer ) ),
                         formatStringFromUTF32( m_pcb->GetLayerName( next_copper_layer ) ) );
 

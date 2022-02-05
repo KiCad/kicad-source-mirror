@@ -296,7 +296,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE&
 
             if( !l.Walkaround( hull, path, clockwise ) )
             {
-                PNS_DBG( Dbg(), Message, wxString::Format( "Fail-Walk %s %s %d\n",
+                PNS_DBG( Dbg(), Message, wxString::Format( wxT( "Fail-Walk %s %s %d\n" ),
                                                            hull.Format().c_str(),
                                                            l.CLine().Format().c_str(),
                                                            clockwise? 1 : 0) );
@@ -329,19 +329,21 @@ SHOVE::SHOVE_STATUS SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE&
 
         if( ( vFirst < 0 || vLast < 0 ) && !path.CompareGeometry( aObstacleLine.CLine() ) )
         {
-            PNS_DBG( Dbg(), Message, wxString::Format( "attempt %d fail vfirst-last", attempt ) );
+            PNS_DBG( Dbg(), Message, wxString::Format( wxT( "attempt %d fail vfirst-last" ),
+                                                       attempt ) );
             continue;
         }
 
         if( path.CPoint( -1 ) != obs.CPoint( -1 ) || path.CPoint( 0 ) != obs.CPoint( 0 ) )
         {
-            PNS_DBG( Dbg(), Message, wxString::Format( "attempt %d fail vend-start\n", attempt ) );
+            PNS_DBG( Dbg(), Message, wxString::Format( wxT( "attempt %d fail vend-start\n" ),
+                                                       attempt ) );
             continue;
         }
 
         if( !checkShoveDirection( aCurLine, aObstacleLine, l ) )
         {
-            PNS_DBG( Dbg(), Message, wxString::Format( "attempt %d fail direction-check",
+            PNS_DBG( Dbg(), Message, wxString::Format( wxT( "attempt %d fail direction-check" ),
                                                        attempt ) );
             aResultLine.SetShape( l.CLine() );
             continue;
@@ -349,7 +351,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE&
 
         if( path.SelfIntersecting() )
         {
-            PNS_DBG( Dbg(), Message, wxString::Format( "attempt %d fail self-intersect",
+            PNS_DBG( Dbg(), Message, wxString::Format( wxT( "attempt %d fail self-intersect" ),
                                                        attempt ) );
             continue;
         }
@@ -375,7 +377,8 @@ SHOVE::SHOVE_STATUS SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE&
 
         if( colliding )
         {
-            PNS_DBG( Dbg(), Message, wxString::Format( "attempt %d fail coll-check", attempt ) );
+            PNS_DBG( Dbg(), Message, wxString::Format( wxT( "attempt %d fail coll-check" ),
+                                                       attempt ) );
             continue;
         }
 
@@ -431,7 +434,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& 
         hulls.reserve( currentLineSegmentCount + 1 );
 
 #ifdef DEBUG
-        Dbg()->Message( wxString::Format( "shove process-single: cur net %d obs %d cl %d",
+        Dbg()->Message( wxString::Format( wxT( "shove process-single: cur net %d obs %d cl %d" ),
                                           aCurLine.Net(), aObstacleLine.Net(), clearance ) );
 #endif
 
@@ -509,7 +512,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSegment( LINE& aCurrent, SEGMENT* aObstacl
 
     if( Dbg() )
     {
-        Dbg()->BeginGroup( wxString::Format( "on-colliding-segment-iter-%d",
+        Dbg()->BeginGroup( wxString::Format( wxT( "on-colliding-segment-iter-%d" ),
                                              m_iter ).ToStdString() );
         Dbg()->AddSegment( tmp.Seg(), WHITE, "obstacle-segment" );
         Dbg()->AddLine( aCurrent.CLine(), RED, 10000, "current-line" );
@@ -579,7 +582,8 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingArc( LINE& aCurrent, ARC* aObstacleArc )
 
     if ( Dbg() )
     {
-        Dbg()->BeginGroup( wxString::Format( "on-colliding-arc-iter-%d", m_iter ).ToStdString() );
+        Dbg()->BeginGroup( wxString::Format( wxT( "on-colliding-arc-iter-%d" ),
+                                             m_iter ).ToStdString() );
         Dbg()->AddLine( tmp.CLine(), WHITE, 10000, "obstacle-segment" );
         Dbg()->AddLine( aCurrent.CLine(), RED, 10000, "current-line" );
         Dbg()->AddLine( obstacleLine.CLine(), GREEN, 10000, "obstacle-line" );
@@ -865,7 +869,7 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
     JOINT* jt = m_currentNode->FindJoint( p0, aVia );
     VECTOR2I p0_pushed( p0 + aForce );
 
-    PNS_DBG( Dbg(), Message, wxString::Format( "via force [%d %d]\n", aForce.x, aForce.y ) );
+    PNS_DBG( Dbg(), Message, wxString::Format( wxT( "via force [%d %d]\n" ), aForce.x, aForce.y ) );
 
     // nothing to do...
     if ( aForce.x == 0 && aForce.y == 0 )
@@ -874,7 +878,7 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
     if( !jt )
     {
         PNS_DBG( Dbg(), Message,
-                 wxString::Format( "weird, can't find the center-of-via joint\n" ) );
+                 wxString::Format( wxT( "weird, can't find the center-of-via joint\n" ) ) );
         return SH_INCOMPLETE;
     }
 
@@ -1222,7 +1226,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
          if( nearest )
              PNS_DBG( Dbg(), Message,
-                      wxString::Format( "nearest %p %s", nearest->m_item,
+                      wxString::Format( wxT( "nearest %p %s" ), nearest->m_item,
                                         nearest->m_item->KindStr() ) );
 
          if( nearest )

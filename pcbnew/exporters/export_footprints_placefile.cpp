@@ -183,14 +183,14 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
             if( layer == B_Cu )
                 footprint_pos.x = - footprint_pos.x;
 
-            wxString tmp = "\"" + list[ii].m_Reference;
-            tmp << "\"" << csv_sep;
-            tmp << "\"" << list[ii].m_Value;
-            tmp << "\"" << csv_sep;
-            tmp << "\"" << list[ii].m_Footprint->GetFPID().GetLibItemName().wx_str();
-            tmp << "\"" << csv_sep;
+            wxString tmp = wxT( "\"" ) + list[ii].m_Reference;
+            tmp << wxT( "\"" ) << csv_sep;
+            tmp << wxT( "\"" ) << list[ii].m_Value;
+            tmp << wxT( "\"" ) << csv_sep;
+            tmp << wxT( "\"" ) << list[ii].m_Footprint->GetFPID().GetLibItemName().wx_str();
+            tmp << wxT( "\"" ) << csv_sep;
 
-            tmp << wxString::Format( "%f%c%f%c%f",
+            tmp << wxString::Format( wxT( "%f%c%f%c%f" ),
                                      footprint_pos.x * conv_unit,
                                      csv_sep,
                                      // Keep the Y axis oriented from bottom to top,

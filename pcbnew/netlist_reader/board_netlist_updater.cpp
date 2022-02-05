@@ -355,12 +355,12 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
     }
 
-    if( ( aNetlistComponent->GetProperties().count( "exclude_from_bom" ) > 0 )
+    if( ( aNetlistComponent->GetProperties().count( wxT( "exclude_from_bom" ) ) > 0 )
             != ( ( aPcbFootprint->GetAttributes() & FP_EXCLUDE_FROM_BOM ) > 0 ) )
     {
         if( m_isDryRun )
         {
-            if( aNetlistComponent->GetProperties().count( "exclude_from_bom" ) )
+            if( aNetlistComponent->GetProperties().count( wxT( "exclude_from_bom" ) ) )
             {
                 msg.Printf( _( "Add %s 'exclude from BOM' fabrication attribute." ),
                             aPcbFootprint->GetReference() );
@@ -375,7 +375,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         {
             int attributes = aPcbFootprint->GetAttributes();
 
-            if( aNetlistComponent->GetProperties().count( "exclude_from_bom" ) )
+            if( aNetlistComponent->GetProperties().count( wxT( "exclude_from_bom" ) ) )
             {
                 attributes |= FP_EXCLUDE_FROM_BOM;
                 msg.Printf( _( "Added %s 'exclude from BOM' fabrication attribute." ),
@@ -853,7 +853,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     {
         component = aNetlist.GetComponent( i );
 
-        if( component->GetProperties().count( "exclude_from_board" ) )
+        if( component->GetProperties().count( wxT( "exclude_from_board" ) ) )
             continue;
 
         msg.Printf( _( "Processing symbol '%s:%s'." ),
@@ -948,7 +948,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         else
             component = aNetlist.GetComponentByReference( footprint->GetReference() );
 
-        if( component && component->GetProperties().count( "exclude_from_board" ) == 0 )
+        if( component && component->GetProperties().count( wxT( "exclude_from_board" ) ) == 0 )
             matched = true;
 
         if( doDelete && !matched && footprint->IsLocked() )

@@ -70,14 +70,14 @@ NODE::~NODE()
 {
     if( !m_children.empty() )
     {
-        wxLogTrace( "PNS", "attempting to free a node that has kids." );
+        wxLogTrace( wxT( "PNS" ), wxT( "attempting to free a node that has kids." ) );
         assert( false );
     }
 
 #ifdef DEBUG
     if( allocNodes.find( this ) == allocNodes.end() )
     {
-        wxLogTrace( "PNS", "attempting to free an already-free'd node." );
+        wxLogTrace( wxT( "PNS" ), wxT( "attempting to free an already-free'd node." ) );
         assert( false );
     }
 
@@ -161,7 +161,7 @@ NODE* NODE::Branch()
     }
 
 #if 0
-    wxLogTrace( "PNS", "%d items, %d joints, %d overrides",
+    wxLogTrace( wxT( "PNS" ), wxT( "%d items, %d joints, %d overrides" ),
                 child->m_index->Size(),
                 (int) child->m_joints.size(),
                 (int) child->m_override.size() );
@@ -640,7 +640,8 @@ bool NODE::Add( std::unique_ptr< SEGMENT > aSegment, bool aAllowRedundant )
 {
     if( aSegment->Seg().A == aSegment->Seg().B )
     {
-        wxLogTrace( "PNS", "attempting to add a segment with same end coordinates, ignoring." );
+        wxLogTrace( wxT( "PNS" ),
+                    wxT( "attempting to add a segment with same end coordinates, ignoring." ) );
         return false;
     }
 
@@ -1228,7 +1229,7 @@ JOINT& NODE::touchJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int a
 
 void JOINT::Dump() const
 {
-    wxLogTrace( "PNS", "joint layers %d-%d, net %d, pos %s, links: %d",
+    wxLogTrace( wxT( "PNS" ), wxT( "joint layers %d-%d, net %d, pos %s, links: %d" ),
                 m_layers.Start(),
                 m_layers.End(),
                 m_tag.net,
@@ -1281,7 +1282,7 @@ void NODE::Dump( bool aLong )
     {
         for( j = m_joints.begin(); j != m_joints.end(); ++j )
         {
-            wxLogTrace( "PNS", "joint : %s, links : %d\n",
+            wxLogTrace( wxT( "PNS" ), wxT( "joint : %s, links : %d\n" ),
                         j->second.GetPos().Format().c_str(), j->second.LinkCount() );
             JOINT::LINKED_ITEMS::const_iterator k;
 
@@ -1294,8 +1295,9 @@ void NODE::Dump( bool aLong )
                 case ITEM::SEGMENT_T:
                     {
                         const SEGMENT* seg = static_cast<const SEGMENT*>( m_item );
-                        wxLogTrace( "PNS", " -> seg %s %s\n", seg->GetSeg().A.Format().c_str(),
-                                seg->GetSeg().B.Format().c_str() );
+                        wxLogTrace( wxT( "PNS" ), wxT( " -> seg %s %s\n" ),
+                                    seg->GetSeg().A.Format().c_str(),
+                                    seg->GetSeg().B.Format().c_str() );
                         break;
                     }
 
@@ -1316,14 +1318,17 @@ void NODE::Dump( bool aLong )
         LINE::LinkedSegments* seg_refs = l->GetLinkedSegments();
 
         if( aLong )
-            wxLogTrace( "PNS", "Line: %s, net %d ", l->GetLine().Format().c_str(), l->GetNet() );
+        {
+            wxLogTrace( wxT( "PNS" ), wxT( "Line: %s, net %d " ),
+                        l->GetLine().Format().c_str(), l->GetNet() );
+        }
 
         for( std::vector<SEGMENT*>::iterator j = seg_refs->begin(); j != seg_refs->end(); ++j )
         {
-            wxLogTrace( "PNS", "%s ", (*j)->GetSeg().A.Format().c_str() );
+            wxLogTrace( wxT( "PNS" ), wxT( "%s " ), (*j)->GetSeg().A.Format().c_str() );
 
             if( j + 1 == seg_refs->end() )
-                wxLogTrace( "PNS", "%s\n", (*j)->GetSeg().B.Format().c_str() );
+                wxLogTrace( wxT( "PNS" ), wxT( "%s\n" ), (*j)->GetSeg().B.Format().c_str() );
 
             all_segs.erase( *j );
         }
@@ -1331,7 +1336,8 @@ void NODE::Dump( bool aLong )
         lines_count++;
     }
 
-    wxLogTrace( "PNS", "Local joints: %d, lines : %d \n", m_joints.size(), lines_count );
+    wxLogTrace( wxT( "PNS" ), wxT( "Local joints: %d, lines : %d \n" ),
+                m_joints.size(), lines_count );
 #endif
 }
 

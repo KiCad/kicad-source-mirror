@@ -629,7 +629,7 @@ static VIATYPE getViaTypeFromFlags( int aFlags )
     case VIA_ACTION_FLAGS::MICROVIA:
         return VIATYPE::MICROVIA;
     default:
-        wxASSERT_MSG( false, "Unhandled via type" );
+        wxASSERT_MSG( false, wxT( "Unhandled via type" ) );
         return VIATYPE::THROUGH;
     }
 }
@@ -993,7 +993,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             break;
 
         default:
-            wxFAIL_MSG( "unexpected via type" );
+            wxFAIL_MSG( wxT( "unexpected via type" ) );
             return 0;
             break;
         }

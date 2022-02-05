@@ -49,7 +49,7 @@ GERBER_WRITER::GERBER_WRITER( BOARD* aPcb )
     m_zeroFormat      = SUPPRESS_LEADING;
     m_conversionUnits = 1.0;
     m_unitsMetric    = true;
-    m_drillFileExtension = "gbr";
+    m_drillFileExtension = wxT( "gbr" );
     m_merge_PTH_NPTH = false;
 }
 
@@ -162,7 +162,7 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
     plotter.AddLineToHeader( text );
 
     // Add file polarity (positive)
-    text = "%TF.FilePolarity,Positive*%";
+    text = wxT( "%TF.FilePolarity,Positive*%" );
     plotter.AddLineToHeader( text );
 
     if( !plotter.OpenFile( aFullFilename ) )
@@ -303,7 +303,7 @@ const wxString GERBER_WRITER::getDrillFileName( DRILL_LAYER_PAIR aPair, bool aNP
     // Gerber files extension is always .gbr.
     // Therefore, to mark drill files, add "-drl" to the filename.
     wxFileName fname( GENDRILL_WRITER_BASE::getDrillFileName( aPair, aNPTH, aMerge_PTH_NPTH ) );
-    fname.SetName( fname.GetName() + "-drl" );
+    fname.SetName( fname.GetName() + wxT( "-drl" ) );
 
     return fname.GetFullPath();
 }

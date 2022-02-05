@@ -237,7 +237,7 @@ bool LINE_PLACER::handlePullback()
             m_p_start            = arc.GetP0();
         }
 
-        wxLogTrace( "PNS", "Placer: pullback triggered [%d] [%s %s]",
+        wxLogTrace( wxT( "PNS" ), wxT( "Placer: pullback triggered [%d] [%s %s]" ),
                     n, last_tail.Format().c_str(), first_head.Format().c_str() );
 
         // erase the last point in the tail, hoping that the next iteration will
@@ -306,7 +306,7 @@ bool LINE_PLACER::reduceTail( const VECTOR2I& aEnd )
 
     if( reduce_index >= 0 )
     {
-        wxLogTrace( "PNS", "Placer: reducing tail: %d", reduce_index );
+        wxLogTrace( wxT( "PNS" ), wxT( "Placer: reducing tail: %d" ), reduce_index );
         SHAPE_LINE_CHAIN reducedLine = new_direction.BuildInitialTrace( new_start, aEnd );
 
         m_p_start = new_start;
@@ -340,13 +340,13 @@ bool LINE_PLACER::mergeHead()
 
     if( n_head < 3 )
     {
-        wxLogTrace( "PNS", "Merge failed: not enough head segs." );
+        wxLogTrace( wxT( "PNS" ), wxT( "Merge failed: not enough head segs." ) );
         return false;
     }
 
     if( n_tail && head.CPoint( 0 ) != tail.CPoint( -1 ) )
     {
-        wxLogTrace( "PNS", "Merge failed: head and tail discontinuous." );
+        wxLogTrace( wxT( "PNS" ), wxT( "Merge failed: head and tail discontinuous." ) );
         return false;
     }
 
@@ -390,7 +390,7 @@ bool LINE_PLACER::mergeHead()
 
     head.Remove( 0, -1 );
 
-    wxLogTrace( "PNS", "Placer: merge %d, new direction: %s", n_head,
+    wxLogTrace( wxT( "PNS" ), wxT( "Placer: merge %d, new direction: %s" ), n_head,
                 m_direction.Format().c_str() );
 
     head.Simplify();
@@ -918,7 +918,7 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
 
     LINE new_head;
 
-    wxLogTrace( "PNS", "routeStep: direction: %s head: %d, tail: %d shapes",
+    wxLogTrace( wxT( "PNS" ), wxT( "routeStep: direction: %s head: %d, tail: %d shapes" ),
                 m_direction.Format().c_str(),
                 m_head.ShapeCount(),
                 m_tail.ShapeCount() );
@@ -1154,7 +1154,8 @@ bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
         initialDir   = DIRECTION_45( static_cast<DIRECTION_45::Directions>( int( angle ) ) );
     }
 
-    wxLogTrace( "PNS", "Posture: init %s, last seg %s", initialDir.Format(), lastSegDir.Format() );
+    wxLogTrace( wxT( "PNS" ), wxT( "Posture: init %s, last seg %s" ),
+                initialDir.Format(), lastSegDir.Format() );
 
     m_mouseTrailTracer.Clear();
     m_mouseTrailTracer.AddTrailPoint( aP );
@@ -1202,7 +1203,7 @@ void LINE_PLACER::initPlacement()
 
     setWorld( rootNode );
 
-    wxLogTrace( "PNS", "world %p, intitial-direction %s layer %d",
+    wxLogTrace( wxT( "PNS" ), wxT( "world %p, intitial-direction %s layer %d" ),
                 m_world,
                 m_direction.Format().c_str(),
                 m_currentLayer );
@@ -1552,7 +1553,7 @@ void LINE_PLACER::removeLoops( NODE* aNode, LINE& aLatest )
             }
         }
 
-        wxLogTrace( "PNS", "total segs removed: %d/%d", removedCount, total );
+        wxLogTrace( wxT( "PNS" ), wxT( "total segs removed: %d/%d" ), removedCount, total );
     }
 
     for( LINKED_ITEM* s : toErase )
@@ -1697,7 +1698,8 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aForce
     SHAPE_LINE_CHAIN l;
     DIRECTION_45 guessedDir = m_mouseTrailTracer.GetPosture( aP );
 
-    wxLogTrace( "PNS", "buildInitialLine: m_direction %s, guessedDir %s, tail points %d",
+    wxLogTrace( wxT( "PNS" ),
+                wxT( "buildInitialLine: m_direction %s, guessedDir %s, tail points %d" ),
                 m_direction.Format(), guessedDir.Format(), m_tail.PointCount() );
 
     DIRECTION_45::CORNER_MODE cornerMode = Settings().GetCornerMode();

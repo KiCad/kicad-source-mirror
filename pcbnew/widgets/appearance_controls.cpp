@@ -106,7 +106,7 @@ wxString NET_GRID_TABLE::GetValue( int aRow, int aCol )
         return m_nets[aRow].color.ToWxString( wxC2S_CSS_SYNTAX );
 
     case COL_VISIBILITY:
-        return m_nets[aRow].visible ? "1" : "0";
+        return m_nets[aRow].visible ? wxT( "1" ) : wxT( "0" );
 
     case COL_LABEL:
         return m_nets[aRow].name;
@@ -131,7 +131,7 @@ void NET_GRID_TABLE::SetValue( int aRow, int aCol, const wxString& aValue )
         break;
 
     case COL_VISIBILITY:
-        net.visible = ( aValue != "0" );
+        net.visible = ( aValue != wxT( "0" ) );
         updateNetVisibility( net );
         break;
 
@@ -249,7 +249,7 @@ void NET_GRID_TABLE::Rebuild()
     {
         int netCode = pair.second->GetNetCode();
 
-        if( netCode > 0 && !pair.first.StartsWith( "unconnected-(" ) )
+        if( netCode > 0 && !pair.first.StartsWith( wxT( "unconnected-(" ) ) )
         {
             COLOR4D color = netColors.count( netCode ) ? netColors.at( netCode ) :
                             COLOR4D::UNSPECIFIED;
