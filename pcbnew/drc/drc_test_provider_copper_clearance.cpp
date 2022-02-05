@@ -432,7 +432,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
             }
         }
 
-        if( zoneTree->QueryColliding( itemBBox, itemShape.get(), aLayer,
+        if( zoneTree && zoneTree->QueryColliding( itemBBox, itemShape.get(), aLayer,
                                       std::max( 0, clearance - m_drcEpsilon ), &actual, &pos ) )
         {
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
