@@ -80,21 +80,21 @@ int GERBVIEW_INSPECTION_TOOL::ShowDCodes( const TOOL_EVENT& aEvent )
     {
     case EDA_UNITS::MILLIMETRES:
         scale = IU_PER_MM;
-        units = "mm";
+        units = wxT( "mm" );
         break;
 
     case EDA_UNITS::INCHES:
         scale = IU_PER_MILS * 1000;
-        units = "in";
+        units = wxT( "in" );
         break;
 
     case EDA_UNITS::MILS:
         scale = IU_PER_MILS;
-        units = "mil";
+        units = wxT( "mil" );
         break;
 
     default:
-        wxASSERT_MSG( false, "Invalid units" );
+        wxASSERT_MSG( false, wxT( "Invalid units" ) );
     }
 
     for( unsigned int layer = 0; layer < m_frame->ImagesMaxCount(); ++layer )

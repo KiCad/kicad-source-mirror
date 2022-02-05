@@ -377,7 +377,7 @@ void GERBER_FILE_IMAGE::DisplayImageInfo(  GERBVIEW_FRAME* aMainFrame  )
         break;
 
     default:
-        wxASSERT_MSG( false, "Invalid unit" );
+        wxASSERT_MSG( false, wxT( "Invalid unit" ) );
     }
 
 
@@ -397,7 +397,7 @@ void GERBER_FILE_IMAGE::RemoveAttribute( X2_ATTRIBUTE& aAttribute )
     wxString cmd = aAttribute.GetPrm( 0 );
     m_NetAttributeDict.ClearAttribute( &cmd );
 
-    if( cmd.IsEmpty() || cmd == ".AperFunction" )
+    if( cmd.IsEmpty() || cmd == wxT( ".AperFunction" ) )
         m_AperFunction.Clear();
 }
 

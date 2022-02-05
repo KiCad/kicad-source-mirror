@@ -238,8 +238,8 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString& aPath,
         if( !filename.FileExists() )
         {
             wxString warning;
-            warning << "<b>" << _( "File not found:" ) << "</b><br>"
-                    << filename.GetFullPath() << "<br>";
+            warning << wxT( "<b>" ) << _( "File not found:" ) << wxT( "</b><br>" )
+                    << filename.GetFullPath() << wxT( "<br>" );
             reporter.Report( warning, RPT_SEVERITY_WARNING );
             success = false;
             continue;
@@ -518,7 +518,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
         // drill files do not have a well defined ext
         // It is .drl in kicad, but .txt in Altium for instance
         // Allows only .drl for drill files.
-        if( curr_ext[0] != 'g' && curr_ext != "pho" && curr_ext != "drl" )
+        if( curr_ext[0] != 'g' && curr_ext != wxT( "pho" ) && curr_ext != wxT( "drl" ) )
         {
             if( aReporter )
             {
@@ -584,7 +584,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
 
         bool read_ok = true;
 
-        if( curr_ext[0] == 'g' || curr_ext == "pho" )
+        if( curr_ext[0] == 'g' || curr_ext == wxT( "pho" ) )
         {
             // Read gerber files: each file is loaded on a new GerbView layer
             read_ok = Read_GERBER_File( unzipped_tempfile );

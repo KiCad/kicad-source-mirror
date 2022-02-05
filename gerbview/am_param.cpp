@@ -119,7 +119,7 @@ double AM_PARAM::GetValue( const D_CODE* aDcode ) const
                 }
                 else
                 {
-                    wxFAIL_MSG( "AM_PARAM::GetValue(): NULL param aDcode" );
+                    wxFAIL_MSG( wxT( "AM_PARAM::GetValue(): NULL param aDcode" ) );
                 }
 
                 ops.push_back( AM_PARAM_EVAL( curr_value ) );
@@ -131,8 +131,8 @@ double AM_PARAM::GetValue( const D_CODE* aDcode ) const
                 break;
 
             default:
-                wxFAIL_MSG( wxString::Format( "AM_PARAM::GetValue(): dcode %d prm %d/%d: "
-                                              "unexpected type %d",
+                wxFAIL_MSG( wxString::Format( wxT( "AM_PARAM::GetValue(): dcode %d prm %d/%d: "
+                                                   "unexpected type %d" ),
                                                aDcode ? aDcode->m_Num_Dcode : -1, ii,
                                                m_paramStack.size(), item.GetType() ) );
                 break;

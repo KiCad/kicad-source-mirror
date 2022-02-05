@@ -749,10 +749,10 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
     if( ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_NET ) )
     {
         net_msg = _( "Net:" );
-        net_msg << " ";
+        net_msg << wxS( " " );
 
         if( m_netAttributes.m_Netname.IsEmpty() )
-            net_msg << "<no net>";
+            net_msg << wxT( "<no net>" );
         else
             net_msg << UnescapeString( m_netAttributes.m_Netname );
     }
@@ -773,7 +773,7 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
     else if( ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_CMP ) )
     {
         cmp_pad_msg = _( "Cmp:" );
-        cmp_pad_msg << " " << m_netAttributes.m_Cmpref;
+        cmp_pad_msg << wxS( " " ) << m_netAttributes.m_Cmpref;
     }
 
     aList.emplace_back( net_msg, cmp_pad_msg );

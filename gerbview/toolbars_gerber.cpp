@@ -312,21 +312,21 @@ void GERBVIEW_FRAME::updateDCodeSelectBox()
     {
     case EDA_UNITS::MILLIMETRES:
         scale = IU_PER_MM;
-        units = "mm";
+        units = wxT( "mm" );
         break;
 
     case EDA_UNITS::INCHES:
         scale = IU_PER_MILS * 1000;
-        units = "in";
+        units = wxT( "in" );
         break;
 
     case EDA_UNITS::MILS:
         scale = IU_PER_MILS;
-        units = "mil";
+        units = wxT( "mil" );
         break;
 
     default:
-        wxASSERT_MSG( false, "Invalid units" );
+        wxASSERT_MSG( false, wxT( "Invalid units" ) );
     }
 
     for( int ii = 0; ii < TOOLS_MAX_COUNT; ii++ )
@@ -339,14 +339,14 @@ void GERBVIEW_FRAME::updateDCodeSelectBox()
         if( !dcode->m_InUse && !dcode->m_Defined )
             continue;
 
-        msg.Printf( "tool %d [%.3fx%.3f %s] %s",
+        msg.Printf( wxT( "tool %d [%.3fx%.3f %s] %s" ),
                     dcode->m_Num_Dcode,
                     dcode->m_Size.x / scale, dcode->m_Size.y / scale,
                     units,
                     D_CODE::ShowApertureType( dcode->m_Shape )
                     );
         if( !dcode->m_AperFunction.IsEmpty() )
-            msg << ", " << dcode->m_AperFunction;
+            msg << wxT( ", " ) << dcode->m_AperFunction;
 
         dcode_list.Add( msg );
     }

@@ -340,8 +340,8 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
                                  getBackgroundLayerColor(), aSpec.defaultColor, SWATCH_SMALL );
     bmb->Bind( wxEVT_LEFT_DOWN, &LAYER_WIDGET::OnLeftDownLayers, this );
     bmb->Bind( COLOR_SWATCH_CHANGED, &LAYER_WIDGET::OnLayerSwatchChanged, this );
-    bmb->SetToolTip( _("Left double click or middle click for color change, right click for "
-                       "menu" ) );
+    bmb->SetToolTip( _( "Left double click or middle click for color change, right click for "
+                        "menu" ) );
     m_LayersFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags );
 
     // column 2 (COLUMN_COLOR_LYR_CB)
@@ -490,7 +490,7 @@ void LAYER_WIDGET::passOnFocus()
 LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, wxWindowID id,
                             const wxPoint& pos, const wxSize& size, long style ) :
     wxPanel( aParent, id, pos, size, style ),
-    m_smallestLayerString( "M...M" )
+    m_smallestLayerString( wxT( "M...M" ) )
 {
     int indicatorSize = ConvertDialogToPixels( wxSize( 6, 6 ) ).x;
     m_IconProvider = new ROW_ICON_PROVIDER( indicatorSize );

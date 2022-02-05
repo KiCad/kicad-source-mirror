@@ -165,7 +165,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
         destFile.SetPath( destPath );
     }
 
-    if( ext == "gbr" || IsProtelExtension( ext ) )
+    if( ext == wxT( "gbr" ) || IsProtelExtension( ext ) )
     {
         wxString destFileName = destFile.GetName();
 
@@ -177,10 +177,10 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
 
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
-    else if( ext == "gbrjob" )
+    else if( ext == wxT( "gbrjob" ) )
     {
-        if( destFile.GetName() == aProjectName + "-job" )
-            destFile.SetName( aNewProjectName + "-job"  );
+        if( destFile.GetName() == aProjectName + wxT( "-job" ) )
+            destFile.SetName( aNewProjectName + wxT( "-job" )  );
 
          FILE_LINE_READER jobfileReader( aSrcFilePath );
 
@@ -191,7 +191,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             data << line << '\n';
 
         // detect the file format: old (deprecated) gerber format or official JSON format
-        if( !data.Contains( "{" ) )
+        if( !data.Contains( wxT( "{" ) ) )
         {
             KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
             return;
@@ -208,14 +208,14 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             {
                 wxString path = wxString( entry["Path"].get<std::string>() );
 
-                if( path.StartsWith( aProjectName + "-" ) )
+                if( path.StartsWith( aProjectName + wxT( "-" ) ) )
                 {
                     path.Replace( aProjectName, aNewProjectName, false );
                     entry["Path"] = path.ToStdString();
                 }
             }
 
-            wxFFile destJobFile( destFile.GetFullPath(), "wb" );
+            wxFFile destJobFile( destFile.GetFullPath(), wxT( "wb" ) );
 
             if( destJobFile.IsOpened() )
                 success = destJobFile.Write( js.dump( 0 ) );
@@ -232,19 +232,19 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             wxString msg;
 
             if( !aErrors.empty() )
-                aErrors += "\n";
+                aErrors += wxT( "\n" );
 
             msg.Printf( _( "Cannot copy file '%s'." ), destFile.GetFullPath() );
             aErrors += msg;
         }
     }
-    else if( ext == "drl" )
+    else if( ext == wxT( "drl" ) )
     {
         wxString destFileName = destFile.GetName();
 
         if( destFileName == aProjectName )
             destFileName = aNewProjectName;
-        else if( destFileName.StartsWith( aProjectName + "-" ) )
+        else if( destFileName.StartsWith( aProjectName + wxT( "-" ) ) )
             destFileName.Replace( aProjectName, aNewProjectName, false );
 
         destFile.SetName( destFileName );
@@ -253,7 +253,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
     }
     else
     {
-        wxFAIL_MSG( "Unexpected filetype for GerbView::SaveFileAs()" );
+        wxFAIL_MSG( wxT( "Unexpected filetype for GerbView::SaveFileAs()" ) );
     }
 }
 

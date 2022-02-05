@@ -105,38 +105,38 @@ TOOL_ACTION GERBVIEW_ACTIONS::layerChanged( "gerbview.Control.layerChanged",
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightClear( "gerbview.Control.highlightClear",
         AS_GLOBAL, 0, "",
-        _( "Clear Highlight" ), "",
+        _( "Clear Highlight" ), _( "Clear Highlight" ),
         BITMAPS::cancel );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightNet( "gerbview.Control.highlightNet",
         AS_GLOBAL, 0, "",
-        _( "Highlight Net" ), "",
+        _( "Highlight Net" ), _( "Highlight Net" ),
         BITMAPS::general_ratsnest );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightComponent( "gerbview.Control.highlightComponent",
         AS_GLOBAL, 0, "",
-        _( "Highlight Component" ), "",
+        _( "Highlight Component" ), _( "Highlight Component" ),
         BITMAPS::module );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightAttribute( "gerbview.Control.highlightAttribute",
         AS_GLOBAL, 0, "",
-        _( "Highlight Attribute" ), "",
+        _( "Highlight Attribute" ), _( "Highlight Attribute" ),
         BITMAPS::flag );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightDCode( "gerbview.Control.highlightDCode",
         AS_GLOBAL, 0, "",
-        _( "Highlight DCode" ), "",
+        _( "Highlight DCode" ), _( "Highlight DCode" ),
         BITMAPS::show_dcodenumber );
 
 TOOL_ACTION GERBVIEW_ACTIONS::layerNext( "gerbview.Control.layerNext",
         AS_GLOBAL,
         '+', LEGACY_HK_NAME( "Switch to Next Layer" ),
-        _( "Next Layer" ), "" );
+        _( "Next Layer" ), _( "Next Layer" ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::layerPrev( "gerbview.Control.layerPrev",
         AS_GLOBAL,
         '-', LEGACY_HK_NAME( "Switch to Previous Layer" ),
-        _( "Previous Layer" ), "" );
+        _( "Previous Layer" ), _( "Previous Layer" ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::linesDisplayOutlines( "gerbview.Control.linesDisplayOutlines",
         AS_GLOBAL,

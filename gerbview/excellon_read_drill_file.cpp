@@ -327,7 +327,7 @@ bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName, EXCELLON_DEFAULTS
     ResetDefaultValues();
     ClearMessageList();
 
-    m_Current_File = wxFopen( aFullFileName, "rt" );
+    m_Current_File = wxFopen( aFullFileName, wxT( "rt" ) );
 
     if( m_Current_File == nullptr )
         return false;
@@ -398,7 +398,7 @@ bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName, EXCELLON_DEFAULTS
                 break;
 
             default:
-                msg.Printf( "Unexpected symbol 0x%2.2X &lt;%c&gt;", *text, *text );
+                msg.Printf( wxT( "Unexpected symbol 0x%2.2X &lt;%c&gt;" ), *text, *text );
                 AddMessageToList( msg );
                 break;
             }   // End switch
@@ -532,7 +532,7 @@ bool EXCELLON_IMAGE::Execute_HEADER_And_M_Command( char*& text )
     case DRILL_INCREMENTALHEADER:
         if( *text != ',' )
         {
-            AddMessageToList( "ICI command has no parameter" );
+            AddMessageToList( wxT( "ICI command has no parameter" ) );
             break;
         }
         text++;     // skip separator
@@ -542,7 +542,7 @@ bool EXCELLON_IMAGE::Execute_HEADER_And_M_Command( char*& text )
         else if( strncasecmp( text, "ON", 2 ) == 0 )
             m_Relative = true;
         else
-            AddMessageToList( "ICI command has incorrect parameter" );
+            AddMessageToList( wxT( "ICI command has incorrect parameter" ) );
         break;
 
     case DRILL_TOOL_CHANGE_STOP:
@@ -993,7 +993,7 @@ void EXCELLON_IMAGE::FinishRouteCommand()
 
     if( !tool )
     {
-        AddMessageToList( wxString::Format( "Unknown tool code %d", m_Current_Tool ) );
+        AddMessageToList( wxString::Format( wxT( "Unknown tool code %d" ), m_Current_Tool ) );
         return;
     }
 
