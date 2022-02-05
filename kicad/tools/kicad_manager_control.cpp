@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -363,8 +363,8 @@ public:
         bool       atRoot = destFile.GetPath() == m_projectDirPath;
 
         if( ext == LegacyProjectFileExtension
-                || ext == ProjectFileExtension
-                || ext == ProjectLocalSettingsFileExtension )
+          || ext == ProjectFileExtension
+          || ext == ProjectLocalSettingsFileExtension )
         {
             wxString destPath = destFile.GetPath();
 
@@ -481,7 +481,7 @@ public:
         wxUniChar  pathSep = wxFileName::GetPathSeparator();
 
         if( destDirPath.StartsWith( m_projectDirPath + pathSep )
-                || destDirPath.StartsWith( m_projectDirPath + PROJECT_BACKUPS_DIR_SUFFIX ) )
+          || destDirPath.StartsWith( m_projectDirPath + PROJECT_BACKUPS_DIR_SUFFIX ) )
         {
             destDirPath.Replace( m_projectDirPath, m_newProjectDirPath, false );
             destDir.SetPath( destDirPath );
@@ -600,11 +600,10 @@ int KICAD_MANAGER_CONTROL::SaveProjectAs( const TOOL_EVENT& aEvent )
     if( !traverser.GetErrors().empty() )
         DisplayErrorMessage( m_frame, traverser.GetErrors() );
 
-    if( traverser.GetNewProjectFile().FileExists() )
-    {
+    if( !traverser.GetNewProjectFile().FileExists() )
         m_frame->CreateNewProject( traverser.GetNewProjectFile() );
-        m_frame->LoadProject( traverser.GetNewProjectFile() );
-    }
+
+    m_frame->LoadProject( traverser.GetNewProjectFile() );
 
     return 0;
 }
