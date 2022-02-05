@@ -384,18 +384,16 @@ bool KICADPCB::parseRect( SEXPR::SEXPR* data )
 
 bool KICADPCB::parsePolygon( SEXPR::SEXPR* data )
 {
-    KICADCURVE* poly = new KICADCURVE();
+    std::unique_ptr<KICADCURVE> poly = std::make_unique<KICADCURVE>();
 
     if( !poly->Read( data, CURVE_POLYGON ) )
     {
-        delete poly;
         return false;
     }
 
     // reject any curves not on the Edge.Cuts layer
     if( poly->GetLayer() != LAYER_EDGE )
     {
-        delete poly;
         return true;
     }
 
@@ -417,7 +415,6 @@ bool KICADPCB::parsePolygon( SEXPR::SEXPR* data )
     seg->m_start = pts.back();
     seg->m_end = pts.front();
     m_curves.push_back( seg );
-
 
     return true;
 }
