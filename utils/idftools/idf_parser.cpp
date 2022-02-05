@@ -616,9 +616,13 @@ bool IDF3_COMP_OUTLINE_DATA::readPlaceData( std::istream &aBoardFile,
 
     if( parent == nullptr )
     {
-        IDF3_COMPONENT* cp = new IDF3_COMPONENT( aBoard );
+        IDF3_COMPONENT* cp;
 
-        if( cp == nullptr )
+        try
+        {
+            cp = new IDF3_COMPONENT( aBoard );
+        }
+        catch( std::bad_alloc& )
         {
             outline = nullptr;
 
@@ -981,11 +985,16 @@ IDF_DRILL_DATA* IDF3_COMPONENT::AddDrill( double aDia, double aXpos, double aYpo
                                           const std::string& aHoleType,
                                           IDF3::KEY_OWNER aOwner )
 {
-    IDF_DRILL_DATA* dp = new IDF_DRILL_DATA( aDia, aXpos, aYpos, aPlating,
-                                             refdes, aHoleType, aOwner );
+    IDF_DRILL_DATA* dp = nullptr;
 
-    if( dp == nullptr )
+    try
+    {
+        dp = new IDF_DRILL_DATA( aDia, aXpos, aYpos, aPlating, refdes, aHoleType, aOwner );
+    }
+    catch( std::bad_alloc& )
+    {
         return nullptr;
+    }
 
     drills.push_back( dp );
 
@@ -1988,11 +1997,19 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
                                   "* Violation of specification: expecting .BOARD_OUTLINE, have "
                                   ".OTHER_OUTLINE" ) );
 
-            OTHER_OUTLINE* op = new OTHER_OUTLINE( this );
+            OTHER_OUTLINE* op = nullptr;
 
-            if( op == nullptr )
+            try
+            {
+                op = new OTHER_OUTLINE( this );
+            }
+            catch( std::bad_alloc& )
+            {
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                                   "could not create OTHER_OUTLINE object" ) );
+            }
+
+            if( op == nullptr )
 
             op->SetUnit( unit );
             op->readData( aBoardFile, iline, idfVer );
@@ -2034,11 +2051,17 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
                                   "* Violation of specification: expecting .BOARD_OUTLINE, have "
                                   ".ROUTE_OUTLINE" ) );
 
-            ROUTE_OUTLINE* op = new ROUTE_OUTLINE( this );
+            ROUTE_OUTLINE* op = nullptr;
 
-            if( op == nullptr )
+            try
+            {
+                op = new ROUTE_OUTLINE( this );
+            }
+            catch( std::bad_alloc& )
+            {
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                                   "could not create ROUTE_OUTLINE object" ) );
+            }
 
             op->SetUnit( unit );
             op->readData( aBoardFile, iline, idfVer );
@@ -2068,11 +2091,17 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
                                   "* Violation of specification: expecting .BOARD_OUTLINE, have "
                                   ".PLACE_OUTLINE" ) );
 
-            PLACE_OUTLINE* op = new PLACE_OUTLINE( this );
+            PLACE_OUTLINE* op = nullptr;
 
-            if( op == nullptr )
+            try
+            {
+                op = new PLACE_OUTLINE( this );
+            }
+            catch( std::bad_alloc& )
+            {
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                                   "could not create PLACE_OUTLINE object" ) );
+            }
 
             op->SetUnit( unit );
             op->readData( aBoardFile, iline, idfVer );
@@ -2102,11 +2131,17 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
                                   "* Violation of specification: expecting .BOARD_OUTLINE, have "
                                   ".ROUTE_KEEPOUT" ) );
 
-            ROUTE_KO_OUTLINE* op = new ROUTE_KO_OUTLINE( this );
+            ROUTE_KO_OUTLINE* op = nullptr;
 
-            if( op == nullptr )
+            try
+            {
+                op = new ROUTE_KO_OUTLINE( this );
+            }
+            catch( std::bad_alloc& )
+            {
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                                   "could not create ROUTE_KEEPOUT object" ) );
+            }
 
             op->SetUnit( unit );
             op->readData( aBoardFile, iline, idfVer );
@@ -2136,11 +2171,17 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
                                   "* Violation of specification: expecting .BOARD_OUTLINE, have "
                                   ".VIA_KEEPOUT" ) );
 
-            VIA_KO_OUTLINE* op = new VIA_KO_OUTLINE( this );
+            VIA_KO_OUTLINE* op = nullptr;
 
-            if( op == nullptr )
+            try
+            {
+                op = new VIA_KO_OUTLINE( this );
+            }
+            catch( std::bad_alloc& )
+            {
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                                   "could not create VIA_KEEPOUT object" ) );
+            }
 
             op->SetUnit( unit );
             op->readData( aBoardFile, iline, idfVer );
@@ -2170,11 +2211,16 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
                                   "* Violation of specification: expecting .BOARD_OUTLINE, have "
                                   ".PLACE_KEEPOUT" ) );
 
-            PLACE_KO_OUTLINE* op = new PLACE_KO_OUTLINE( this );
-
-            if( op == nullptr )
+            PLACE_KO_OUTLINE* op = nullptr;
+            try
+            {
+                op = new PLACE_KO_OUTLINE( this );
+            }
+            catch( std::bad_alloc& )
+            {
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                                   "could not create PLACE_KEEPOUT object" ) );
+            }
 
             op->SetUnit( unit );
             op->readData( aBoardFile, iline, idfVer );
@@ -2204,11 +2250,17 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
                                   "* Violation of specification: expecting .BOARD_OUTLINE, have "
                                   ".PLACE_REGION" ) );
 
-            GROUP_OUTLINE* op = new GROUP_OUTLINE( this );
+            GROUP_OUTLINE* op = nullptr;
 
-            if( op == nullptr )
+            try
+            {
+                op = new GROUP_OUTLINE( this );
+            }
+            catch( std::bad_alloc& )
+            {
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                                   "could not create PLACE_REGION object" ) );
+            }
 
             op->SetUnit( unit );
             op->readData( aBoardFile, iline, idfVer );
@@ -2428,11 +2480,16 @@ void IDF3_BOARD::readLibSection( std::istream& aLibFile, IDF3::FILE_STATE& aLibS
     int idx = 0;
     bool quoted = false;
     std::string token;
-    IDF3_COMP_OUTLINE *pout = new IDF3_COMP_OUTLINE( this );
+    IDF3_COMP_OUTLINE* pout = nullptr;
 
-    if( !pout )
-        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
-                          "\n* memory allocation failure" ) );
+    try
+    {
+        pout = new IDF3_COMP_OUTLINE( this );
+    }
+    catch( std::bad_alloc& )
+    {
+        throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, "\n* memory allocation failure" ) );
+    }
 
     while( aLibFile.good() )
     {
@@ -3436,11 +3493,18 @@ IDF_DRILL_DATA* IDF3_BOARD::AddBoardDrill( double aDia, double aXpos, double aYp
                                            const std::string& aHoleType,
                                            IDF3::KEY_OWNER aOwner )
 {
-    IDF_DRILL_DATA* drill = new IDF_DRILL_DATA( aDia, aXpos, aYpos, aPlating,
-                                                "BOARD", aHoleType, aOwner );
+    IDF_DRILL_DATA* drill = nullptr;
 
-    if( drill != nullptr )
-        board_drills.push_back( drill );
+    try
+    {
+        drill = new IDF_DRILL_DATA( aDia, aXpos, aYpos, aPlating, "BOARD", aHoleType, aOwner );
+    }
+    catch( std::bad_alloc& )
+    {
+        return nullptr;
+    }
+
+    board_drills.push_back( drill );
 
     return drill;
 }
@@ -3587,9 +3651,13 @@ bool IDF3_BOARD::AddSlot( double aWidth, double aLength, double aOrientation, do
     pt[3].x = c[0].x + dca2;
     pt[3].y = c[0].y + dsa2;
 
-    IDF_OUTLINE* outline = new IDF_OUTLINE;
+    IDF_OUTLINE* outline = nullptr;
 
-    if( outline == nullptr )
+    try
+    {
+        outline = new IDF_OUTLINE;
+    }
+    catch( std::bad_alloc& )
     {
         ostringstream ostr;
         ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
@@ -3666,9 +3734,12 @@ IDF_DRILL_DATA* IDF3_BOARD::addCompDrill( double aDia, double aXpos, double aYpo
     if( ref == components.end() )
     {
         // create the item
-        IDF3_COMPONENT* comp = new IDF3_COMPONENT( this );
-
-        if( comp == nullptr )
+        IDF3_COMPONENT* comp = nullptr;
+        try
+        {
+            comp = new IDF3_COMPONENT( this );
+        }
+        catch( std::bad_alloc& )
         {
             ostringstream ostr;
             ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
@@ -3724,9 +3795,12 @@ IDF_DRILL_DATA* IDF3_BOARD::addCompDrill( IDF_DRILL_DATA* aDrilledHole )
     if( ref == components.end() )
     {
         // create the item
-        IDF3_COMPONENT* comp = new IDF3_COMPONENT( this );
-
-        if( comp == nullptr )
+        IDF3_COMPONENT* comp;
+        try
+        {
+            comp = new IDF3_COMPONENT( this );
+        }
+        catch( std::bad_alloc& )
         {
             ostringstream ostr;
             ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
@@ -3913,9 +3987,13 @@ IDF3_COMP_OUTLINE* IDF3_BOARD::GetComponentOutline( const wxString& aFullFileNam
     if( itm != uidFileList.end() )
         return GetComponentOutline( itm->second );
 
-    IDF3_COMP_OUTLINE* cp = new IDF3_COMP_OUTLINE( this );
+    IDF3_COMP_OUTLINE* cp = nullptr;
 
-    if( cp == nullptr )
+    try
+    {
+        cp = new IDF3_COMP_OUTLINE( this );
+    }
+    catch( std::bad_alloc& )
     {
         ostringstream ostr;
         ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): \n";
@@ -4115,9 +4193,11 @@ IDF3_COMP_OUTLINE* IDF3_BOARD::GetInvalidOutline( const std::string& aGeomName,
     if( cp != nullptr )
         return cp;
 
-    cp = new IDF3_COMP_OUTLINE( this );
-
-    if( cp == nullptr )
+    try
+    {
+        cp = new IDF3_COMP_OUTLINE( this );
+    }
+    catch( std::bad_alloc& )
     {
         ostringstream ostr;
         ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): ";

@@ -303,9 +303,11 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
                     // outline may have a Loop Index of 0 or 1
                     if( tmp == 0 || tmp == 1 )
                     {
-                        op = new IDF_OUTLINE;
-
-                        if( op == nullptr )
+                        try
+                        {
+                            op = new IDF_OUTLINE;
+                        }
+                        catch( std::bad_alloc& )
                         {
                             clearOutlines();
                             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
@@ -344,9 +346,11 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
                         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
                     }
 
-                    op = new IDF_OUTLINE;
-
-                    if( op == nullptr )
+                    try
+                    {
+                        op = new IDF_OUTLINE;
+                    }
+                    catch( std::bad_alloc& )
                     {
                         clearOutlines();
                         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
@@ -399,9 +403,11 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
                     throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
                 }
 
-                op = new IDF_OUTLINE;
-
-                if( op == nullptr )
+                try
+                {
+                    op = new IDF_OUTLINE;
+                }
+                catch( std::bad_alloc& )
                 {
                     clearOutlines();
                     throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
@@ -610,16 +616,18 @@ void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aI
             curPt.x = x;
             curPt.y = y;
 
-            if( ang > -MIN_ANG && ang < MIN_ANG )
+            try
             {
-                sp = new IDF_SEGMENT( prePt, curPt );
+                if( ang > -MIN_ANG && ang < MIN_ANG )
+                {
+                    sp = new IDF_SEGMENT( prePt, curPt );
+                }
+                else
+                {
+                    sp = new IDF_SEGMENT( prePt, curPt, ang, false );
+                }
             }
-            else
-            {
-                sp = new IDF_SEGMENT( prePt, curPt, ang, false );
-            }
-
-            if( sp == nullptr )
+            catch( std::bad_alloc& )
             {
                 clearOutlines();
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
@@ -3578,14 +3586,20 @@ bool IDF3_COMP_OUTLINE::CreateDefaultOutline( const std::string& aGeom, const st
     a = da / 2.0;
 
     IDF_POINT p1, p2;
-    IDF_OUTLINE* ol = new IDF_OUTLINE;
     IDF_SEGMENT* sp;
+    IDF_OUTLINE* ol;
 
     p1.x = 1.5 * cos( a );
     p1.y = 1.5 * sin( a );
 
-    if( ol == nullptr )
+    try
+    {
+        ol = new IDF_OUTLINE;
+    }
+    catch( std::bad_alloc& )
+    {
         return false;
+    }
 
     for( int i = 0; i < 10; ++i )
     {
@@ -3600,9 +3614,11 @@ bool IDF3_COMP_OUTLINE::CreateDefaultOutline( const std::string& aGeom, const st
             p2.y = 1.5 * sin( a );
         }
 
-        sp = new IDF_SEGMENT( p1, p2 );
-
-        if( sp == nullptr )
+        try
+        {
+            sp = new IDF_SEGMENT( p1, p2 );
+        }
+        catch( std::bad_alloc& )
         {
             Clear();
             return false;
@@ -3617,9 +3633,11 @@ bool IDF3_COMP_OUTLINE::CreateDefaultOutline( const std::string& aGeom, const st
     p2.x = 1.5 * cos( a );
     p2.y = 1.5 * sin( a );
 
-    sp = new IDF_SEGMENT( p1, p2 );
-
-    if( sp == nullptr )
+    try
+    {
+        sp = new IDF_SEGMENT( p1, p2 );
+    }
+    catch( std::bad_alloc& )
     {
         Clear();
         return false;
