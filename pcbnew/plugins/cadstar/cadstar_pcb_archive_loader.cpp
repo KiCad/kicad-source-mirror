@@ -362,7 +362,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
                     break;
 
                 default:
-                    wxFAIL_MSG( "Unexpected Layer type. Was expecting an electrical type" );
+                    wxFAIL_MSG( wxT( "Unexpected Layer type. Was expecting an electrical type" ) );
                     break;
                 }
 
@@ -445,11 +445,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
         }
         else if( item->GetType() == BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_SILKSCREEN )
         {
-            item->SetColor( "White" );
+            item->SetColor( wxT( "White" ) );
         }
         else if( item->GetType() == BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_SOLDERMASK )
         {
-            item->SetColor( "Green" );
+            item->SetColor( wxT( "Green" ) );
         }
     }
 
@@ -544,23 +544,23 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
             case LAYER_SUBTYPE::LAYERSUBTYPE_NONE:
                 // Generic Non-electrical layer (older CADSTAR versions).
                 // Attempt to detect technical layers by string matching.
-                if( layerName.Contains( "glue" ) || layerName.Contains( "adhesive" ) )
+                if( layerName.Contains( wxT( "glue" ) ) || layerName.Contains( wxT( "adhesive" ) ) )
                 {
                     selectLayerID( PCB_LAYER_ID::F_Adhes, PCB_LAYER_ID::B_Adhes, LOG_LEVEL::MSG );
                 }
-                else if( layerName.Contains( "silk" ) || layerName.Contains( "legend" ) )
+                else if( layerName.Contains( wxT( "silk" ) ) || layerName.Contains( wxT( "legend" ) ) )
                 {
                     selectLayerID( PCB_LAYER_ID::F_SilkS, PCB_LAYER_ID::B_SilkS, LOG_LEVEL::MSG );
                 }
-                else if( layerName.Contains( "assembly" ) || layerName.Contains( "fabrication" ) )
+                else if( layerName.Contains( wxT( "assembly" ) ) || layerName.Contains( wxT( "fabrication" ) ) )
                 {
                     selectLayerID( PCB_LAYER_ID::F_Fab, PCB_LAYER_ID::B_Fab, LOG_LEVEL::MSG );
                 }
-                else if( layerName.Contains( "resist" ) || layerName.Contains( "mask" ) )
+                else if( layerName.Contains( wxT( "resist" ) ) || layerName.Contains( wxT( "mask" ) ) )
                 {
                     selectLayerID( PCB_LAYER_ID::F_Mask, PCB_LAYER_ID::B_Mask, LOG_LEVEL::MSG );
                 }
-                else if( layerName.Contains( "paste" ) )
+                else if( layerName.Contains( wxT( "paste" ) ) )
                 {
                     selectLayerID( PCB_LAYER_ID::F_Paste, PCB_LAYER_ID::B_Paste, LOG_LEVEL::MSG );
                 }
@@ -591,13 +591,13 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
                 break;
 
             default:
-                wxFAIL_MSG( "Unknown CADSTAR Layer Sub-type" );
+                wxFAIL_MSG( wxT( "Unknown CADSTAR Layer Sub-type" ) );
                 break;
             }
             break;
 
         default:
-            wxFAIL_MSG( "Unknown CADSTAR Layer Type" );
+            wxFAIL_MSG( wxT( "Unknown CADSTAR Layer Type" ) );
             break;
         }
 
@@ -648,7 +648,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::remapUnsureLayers()
     {
         if( layerPair.second == PCB_LAYER_ID::UNDEFINED_LAYER )
         {
-            wxFAIL_MSG( "Unexpected Layer ID" );
+            wxFAIL_MSG( wxT( "Unexpected Layer ID" ) );
             continue;
         }
 
@@ -762,7 +762,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryFigures( const SYMDEF_PCB& aComponen
 
         drawCadstarShape( fig.Shape, getKiCadLayer( fig.LayerID ),
                           getLineThickness( fig.LineCodeID ),
-                          wxString::Format( "Component %s:%s -> Figure %s",
+                          wxString::Format( wxT( "Component %s:%s -> Figure %s" ),
                                             aComponent.ReferenceName,
                                             aComponent.Alternate,
                                             fig.ID ),
@@ -852,7 +852,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
         else
         {
             drawCadstarShape( compCopper.Shape, copperLayer, lineThickness,
-                              wxString::Format( "Component %s:%s -> Copper element",
+                              wxString::Format( wxT( "Component %s:%s -> Copper element" ),
                                                 aComponent.ReferenceName, aComponent.Alternate ),
                               aFootprint );
         }
@@ -941,7 +941,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
         break;
 
     default:
-        wxFAIL_MSG( "Unknown Pad type" );
+        wxFAIL_MSG( wxT( "Unknown Pad type" ) );
     }
 
     pad->SetAttribute( PAD_ATTRIB::SMD ); // assume SMD pad for now
@@ -1121,7 +1121,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
         break;
 
     default:
-        wxFAIL_MSG( "Unknown Pad Shape" );
+        wxFAIL_MSG( wxT( "Unknown Pad Shape" ) );
     }
 
     if( csPadcode.ReliefClearance != UNDEFINED_VALUE )
@@ -1211,7 +1211,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
         }
         else
         {
-            wxFAIL_MSG( "No copper layers defined in the pad?" );
+            wxFAIL_MSG( wxT( "No copper layers defined in the pad?" ) );
             csPadcode.SlotOrientation = 0;
             pad->SetOffset( drillOffset );
         }
@@ -1309,8 +1309,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoards()
         CADSTAR_BOARD&   board      = boardPair.second;
         GROUP_ID boardGroup = createUniqueGroupID( wxT( "Board" ) );
         drawCadstarShape( board.Shape, PCB_LAYER_ID::Edge_Cuts,
-                getLineThickness( board.LineCodeID ), wxString::Format( "BOARD %s", board.ID ),
-                m_board, boardGroup );
+                          getLineThickness( board.LineCodeID ),
+                          wxString::Format( wxT( "BOARD %s" ), board.ID ),
+                          m_board, boardGroup );
 
         if( !board.GroupID.IsEmpty() )
         {
@@ -1328,7 +1329,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadFigures()
     {
         FIGURE& fig = figPair.second;
         drawCadstarShape( fig.Shape, getKiCadLayer( fig.LayerID ),
-                getLineThickness( fig.LineCodeID ), wxString::Format( "FIGURE %s", fig.ID ),
+                          getLineThickness( fig.LineCodeID ),
+                          wxString::Format( wxT( "FIGURE %s" ), fig.ID ),
                           m_board, fig.GroupID );
 
         //TODO process "swaprule" (doesn't seem to apply to Layout Figures?)
@@ -1786,10 +1788,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDocumentationSymbols()
             {
                 FIGURE fig = figPair.second;
                 drawCadstarShape( fig.Shape, layer, getLineThickness( fig.LineCodeID ),
-                        wxString::Format( "DOCUMENTATION SYMBOL %s, FIGURE %s",
-                                docSymDefinition.ReferenceName, fig.ID ),
-                        m_board, groupID, moveVector, rotationAngle, scalingFactor,
-                        centreOfTransform, mirrorInvert );
+                                  wxString::Format( wxT( "DOCUMENTATION SYMBOL %s, FIGURE %s" ),
+                                                    docSymDefinition.ReferenceName, fig.ID ),
+                                  m_board, groupID, moveVector, rotationAngle, scalingFactor,
+                                  centreOfTransform, mirrorInvert );
             }
         }
 
@@ -2168,7 +2170,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
         std::map<NETELEMENT_ID, long> netelementSizes;
 
         if( netnameForErrorReporting.IsEmpty() )
-            netnameForErrorReporting = wxString::Format( "$%ld", net.SignalNum );
+            netnameForErrorReporting = wxString::Format( wxT( "$%ld" ), net.SignalNum );
 
         for( std::pair<NETELEMENT_ID, NET_PCB::VIA> viaPair : net.Vias )
         {
@@ -2592,7 +2594,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
         break;
 
     default:
-        wxFAIL_MSG( "Unknown Alignment - needs review!" );
+        wxFAIL_MSG( wxT( "Unknown Alignment - needs review!" ) );
     }
 
     if( aMirrorInvert )
@@ -3024,7 +3026,7 @@ SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromShapes( const std::
             break;
 
         default:
-            wxFAIL_MSG( "Drawsegment type is unexpected. Ignored." );
+            wxFAIL_MSG( wxT( "Drawsegment type is unexpected. Ignored." ) );
         }
     }
 
@@ -3114,7 +3116,7 @@ std::vector<PCB_TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromShapes(
             break;
 
         default:
-            wxFAIL_MSG( "Drawsegment type is unexpected. Ignored." );
+            wxFAIL_MSG( wxT( "Drawsegment type is unexpected. Ignored." ) );
             continue;
         }
 
@@ -3314,7 +3316,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadsta
         break;
 
     default:
-        wxFAIL_MSG( "Unknown Alignment - needs review!" );
+        wxFAIL_MSG( wxT( "Unknown Alignment - needs review!" ) );
     }
 
     //TODO Handle different font types when KiCad can support it.
@@ -3611,7 +3613,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::applyDimensionSettings( const DIMENSION&  aCads
         suffix = ParseTextFields( remainingStr.Mid( endpos + 2 ), &m_context );
     }
 
-    if( suffix.StartsWith( "mm" ) )
+    if( suffix.StartsWith( wxT( "mm" ) ) )
     {
         aKiCadDim->SetUnitsFormat( DIM_UNITS_FORMAT::BARE_SUFFIX );
         suffix = suffix.Mid( 2 );
@@ -3655,7 +3657,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::applyDimensionSettings( const DIMENSION&  aCads
         break;
 
     case UNITS::DESIGN:
-        wxFAIL_MSG( "We should have handled design units before coming here!" );
+        wxFAIL_MSG( wxT( "We should have handled design units before coming here!" ) );
         break;
     }
 }
@@ -3667,7 +3669,7 @@ bool CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities( PCB_LAYER_ID& aLayer )
     auto inflateValue =
         [&]( ZONE* aZoneA, ZONE* aZoneB )
         {
-            int extra = getKiCadLength( Assignments.Codedefs.SpacingCodes.at( "C_C" ).Spacing )
+            int extra = getKiCadLength( Assignments.Codedefs.SpacingCodes.at( wxT( "C_C" ) ).Spacing )
                         - m_board->GetDesignSettings().m_MinClearance;
 
             int retval = std::max( aZoneA->GetLocalClearance(), aZoneB->GetLocalClearance() );
@@ -3914,24 +3916,24 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
                 FOOTPRINT* m = getFootprintFromCadstarID( firstPin.ComponentID );
                 newName   = wxT( "Net-(" );
                 newName << m->Reference().GetText();
-                newName << "-Pad" << wxString::Format( "%ld", firstPin.PadID ) << ")";
+                newName << wxT( "-Pad" ) << wxString::Format( wxT( "%ld" ), firstPin.PadID );
+                newName << wxT( ")" );
             }
             else
             {
-                wxFAIL_MSG( "A net with no pins associated?" );
+                wxFAIL_MSG( wxT( "A net with no pins associated?" ) );
                 newName = wxT( "csNet-" );
-                newName << wxString::Format( "%i", csNet.SignalNum );
+                newName << wxString::Format( wxT( "%i" ), csNet.SignalNum );
             }
         }
 
         if( !m_doneNetClassWarning && !csNet.NetClassID.IsEmpty()
                 && csNet.NetClassID != wxT( "NONE" ) )
         {
-            wxLogMessage(
-                    _( "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad does "
-                       "not have an equivalent to CADSTAR's Net Class so these elements were not "
-                       "imported. Note: KiCad's version of 'Net Class' is closer to CADSTAR's "
-                       "'Net Route Code' (which has been imported for all nets)." ) );
+            wxLogMessage( _( "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad "
+                             "does not have an equivalent to CADSTAR's Net Class so these elements "
+                             "were not imported. Note: KiCad's version of 'Net Class' is closer to "
+                             "CADSTAR's 'Net Route Code' (which has been imported for all nets)." ) );
             m_doneNetClassWarning = true;
         }
 
@@ -4121,7 +4123,7 @@ CADSTAR_PCB_ARCHIVE_LOADER::GROUP_ID CADSTAR_PCB_ARCHIVE_LOADER::createUniqueGro
 
     while( m_groupMap.find( groupName ) != m_groupMap.end() )
     {
-        groupName = aName + wxT( "_" ) + wxString::Format( "%i", ++num );
+        groupName = aName + wxT( "_" ) + wxString::Format( wxT( "%i" ), ++num );
     }
 
     PCB_GROUP* docSymGroup = new PCB_GROUP( m_board );

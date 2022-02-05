@@ -738,7 +738,7 @@ void LINE::dragCornerFree( const VECTOR2I& aP, int aIndex )
         }
         else
         {
-            wxASSERT_MSG( false, "Attempt to dragCornerFree in the middle of an arc!" );
+            wxASSERT_MSG( false, wxT( "Attempt to dragCornerFree in the middle of an arc!" ) );
         }
     }
 
@@ -748,7 +748,7 @@ void LINE::dragCornerFree( const VECTOR2I& aP, int aIndex )
 
 void LINE::DragCorner( const VECTOR2I& aP, int aIndex, bool aFreeAngle )
 {
-    wxCHECK_RET( aIndex >= 0, "Negative index passed to LINE::DragCorner" );
+    wxCHECK_RET( aIndex >= 0, wxT( "Negative index passed to LINE::DragCorner" ) );
 
     if( aFreeAngle )
     {

@@ -70,7 +70,7 @@ void FABMASTER::checkpoint()
                                                             / std::max( 1U, m_totalCount ) );
 
             if( !m_progressReporter->KeepRefreshing() )
-                THROW_IO_ERROR( ( "Open cancelled by user." ) );
+                THROW_IO_ERROR( _( "Open cancelled by user." ) );
 
             m_lastProgressCount = m_doneCount;
         }
@@ -273,7 +273,7 @@ double FABMASTER::processScaleFactor( size_t aRow )
 
     for( int i = 7; i < 10 && retval < 1.0; ++i )
     {
-        auto units = rows[aRow][i];
+        std::string units = rows[aRow][i];
         std::transform(units.begin(), units.end(),units.begin(), ::toupper);
 
         if( units == "MILS" )
@@ -1266,7 +1266,7 @@ size_t FABMASTER::processGeometry( size_t aRow )
 
         if( !gr_item )
         {
-            wxLogDebug( "Unhandled graphic item '%s' in row %zu.",
+            wxLogDebug( wxT( "Unhandled graphic item '%s' in row %zu." ),
                         gr_data.graphic_dataname.c_str(),
                         geo_tag.c_str(),
                         rownum );
@@ -1988,12 +1988,12 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
             wxString lib_ref = m_filename.GetName();
 
             if( has_multiple )
-                mod_ref.Append( wxString::Format( "_%d", i ) );
+                mod_ref.Append( wxString::Format( wxT( "_%d" ), i ) );
 
             ReplaceIllegalFileNameChars( lib_ref, '_' );
             ReplaceIllegalFileNameChars( mod_ref, '_' );
 
-            wxString key = !lib_ref.empty() ? lib_ref + ":" + mod_ref : mod_ref;
+            wxString key = !lib_ref.empty() ? lib_ref + wxT( ":" ) + mod_ref : mod_ref;
 
             LIB_ID fpID;
             fpID.Parse( key, true );

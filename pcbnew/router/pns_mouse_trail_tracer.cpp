@@ -182,14 +182,14 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
     if( !m_manuallyForced && !m_disableMouse && m_lastSegDirection != DIRECTION_45::UNDEFINED )
     {
         PNS_DBG( dbg, Message,
-                 wxString::Format( "Posture: checking direction %s against last seg %s",
+                 wxString::Format( wxT( "Posture: checking direction %s against last seg %s" ),
                                    m_direction.Format(), m_lastSegDirection.Format() ) );
 
         if( straightDirection == m_lastSegDirection )
         {
             if( m_direction != straightDirection )
             {
-                PNS_DBG( dbg, Message, wxString::Format( "Posture: forcing straight => %s",
+                PNS_DBG( dbg, Message, wxString::Format( wxT( "Posture: forcing straight => %s" ),
                                                          straightDirection.Format() ) );
             }
 
@@ -199,7 +199,7 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
         {
             if( m_direction != straightDirection )
             {
-                PNS_DBG( dbg, Message, wxString::Format( "Posture: forcing diagonal => %s",
+                PNS_DBG( dbg, Message, wxString::Format( wxT( "Posture: forcing diagonal => %s" ),
                                                          diagDirection.Format() ) );
             }
 
@@ -212,7 +212,7 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
             case DIRECTION_45::ANG_HALF_FULL:
                 // Force a better (acute) connection
                 m_direction = m_direction.IsDiagonal() ? straightDirection : diagDirection;
-                PNS_DBG( dbg, Message, wxString::Format( "Posture: correcting half full => %s",
+                PNS_DBG( dbg, Message, wxString::Format( wxT( "Posture: correcting half full => %s" ),
                                                          m_direction.Format() ) );
                 break;
 
@@ -224,7 +224,7 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
 
                 if( candidate.Angle( m_lastSegDirection ) == DIRECTION_45::ANG_RIGHT )
                 {
-                    PNS_DBG( dbg, Message, wxString::Format( "Posture: correcting right => %s",
+                    PNS_DBG( dbg, Message, wxString::Format( wxT( "Posture: correcting right => %s" ),
                                                              candidate.Format() ) );
                     m_direction = candidate;
                 }
@@ -240,7 +240,7 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
 
                 if( candidate.Angle( m_lastSegDirection ) == DIRECTION_45::ANG_OBTUSE )
                 {
-                    PNS_DBG( dbg, Message, wxString::Format( "Posture: correcting obtuse => %s",
+                    PNS_DBG( dbg, Message, wxString::Format( wxT( "Posture: correcting obtuse => %s" ),
                                                              candidate.Format() ) );
                     m_direction = candidate;
                 }

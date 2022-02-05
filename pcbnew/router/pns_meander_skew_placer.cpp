@@ -175,7 +175,7 @@ const wxString MEANDER_SKEW_PLACER::TuningInfo( EDA_UNITS aUnits ) const
     }
 
     status += ::MessageTextFromValue( aUnits, m_lastLength - m_coupledLength );
-    status += "/";
+    status += wxT( "/" );
     status += ::MessageTextFromValue( aUnits, m_settings.m_targetSkew );
 
     return status;

@@ -448,11 +448,11 @@ const wxString DP_MEANDER_PLACER::TuningInfo( EDA_UNITS aUnits ) const
     }
 
     status += ::MessageTextFromValue( aUnits, m_lastLength );
-    status += "/";
+    status += wxT( "/" );
     status += ::MessageTextFromValue( aUnits, m_settings.m_targetLength );
-    status += " (gap: ";
+    status += wxT( " (gap: " );
     status += ::MessageTextFromValue( aUnits, m_originPair.Gap() );
-    status += ")";
+    status += wxT( ")" );
 
     return status;
 }

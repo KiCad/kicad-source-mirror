@@ -76,14 +76,14 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
             {
                 if( Header.Format.Type == wxT( "LIBRARY" ) )
                 {
-                    THROW_IO_ERROR( "The selected file is a CADSTAR library file (as opposed to a "
-                                    "layout file). CADSTAR libraries cannot yet be imported into "
-                                    "KiCad." );
+                    THROW_IO_ERROR( wxT( "The selected file is a CADSTAR library file (as opposed "
+                                         "to a layout file). CADSTAR libraries cannot yet be "
+                                         "imported into KiCad." ) );
                 }
                 else
                 {
-                    THROW_IO_ERROR( "The selected file is an unknown CADSTAR format so cannot be "
-                                    "imported into KiCad." );
+                    THROW_IO_ERROR( wxT( "The selected file is an unknown CADSTAR format so "
+                                         "cannot be imported into KiCad." ) );
                 }
             }
         }
@@ -333,15 +333,15 @@ void CADSTAR_PCB_ARCHIVE_PARSER::MATERIAL::Parse( XNODE* aNode, PARSER_CONTEXT* 
     }
     else
     {
-        THROW_UNKNOWN_PARAMETER_IO_ERROR( sType, wxString::Format( "MATERIAL %s", Name ) );
+        THROW_UNKNOWN_PARAMETER_IO_ERROR( sType, wxString::Format( wxT( "MATERIAL %s" ), Name ) );
     }
 
     XNODE* iNode = aNode->GetChildren();
 
     if( !iNode )
     {
-        THROW_MISSING_PARAMETER_IO_ERROR(
-                wxT( "RESISTIVITY" ), wxString::Format( "MATERIAL %s", Name ) );
+        THROW_MISSING_PARAMETER_IO_ERROR( wxT( "RESISTIVITY" ),
+                                          wxString::Format( wxT( "MATERIAL %s" ), Name ) );
     }
 
     for( ; iNode; iNode = iNode->GetNext() )
@@ -362,7 +362,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::MATERIAL::Parse( XNODE* aNode, PARSER_CONTEXT* 
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( nodeName, wxString::Format( "MATERIAL %s", Name ) );
+            THROW_UNKNOWN_NODE_IO_ERROR( nodeName, wxString::Format( wxT( "MATERIAL %s" ), Name ) );
         }
     }
 }
@@ -412,14 +412,16 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYER::Parse( XNODE* aNode, PARSER_CONTEXT* aCo
                         }
                         else
                         {
-                            THROW_UNKNOWN_PARAMETER_IO_ERROR(
-                                    embedsValue, wxString::Format( "LAYER %s -> EMBEDS", Name ) );
+                            THROW_UNKNOWN_PARAMETER_IO_ERROR( embedsValue,
+                                                              wxString::Format( wxT( "LAYER %s -> EMBEDS" ),
+                                                                                Name ) );
                         }
                     }
                     else
                     {
                         THROW_UNKNOWN_NODE_IO_ERROR( childOfTempNode->GetName(),
-                                wxString::Format( "LAYER %s->MAKE", Name ) );
+                                                     wxString::Format( wxT( "LAYER %s->MAKE" ),
+                                                                       Name ) );
                     }
                 }
             }
@@ -449,13 +451,15 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYER::Parse( XNODE* aNode, PARSER_CONTEXT* aCo
                 }
                 else
                 {
-                    THROW_UNKNOWN_PARAMETER_IO_ERROR(
-                            bias, wxString::Format( "LAYER %s -> BIAS", Name ) );
+                    THROW_UNKNOWN_PARAMETER_IO_ERROR( bias,
+                                                      wxString::Format( wxT( "LAYER %s -> BIAS" ),
+                                                                        Name ) );
                 }
             }
             else
             {
-                THROW_UNKNOWN_NODE_IO_ERROR( tempNodeName, wxString::Format( "LAYER %s", Name ) );
+                THROW_UNKNOWN_NODE_IO_ERROR( tempNodeName, wxString::Format( wxT( "LAYER %s" ),
+                                                                             Name ) );
             }
         }
     };
@@ -562,13 +566,13 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYER::Parse( XNODE* aNode, PARSER_CONTEXT* aCo
             }
             else
             {
-                THROW_UNKNOWN_PARAMETER_IO_ERROR(
-                        sSubType, wxString::Format( "LAYER %s %s", Name, cNodeName ) );
+                THROW_UNKNOWN_PARAMETER_IO_ERROR( sSubType, wxString::Format( wxT( "LAYER %s %s" ),
+                                                                              Name, cNodeName ) );
             }
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxString::Format( "LAYER %s", Name ) );
+            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxString::Format( wxT( "LAYER %s" ), Name ) );
         }
     }
 }
@@ -762,7 +766,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PADCODE::Parse( XNODE* aNode, PARSER_CONTEXT* a
     Name = GetXmlAttributeIDString( aNode, 1 );
 
     XNODE*   cNode    = aNode->GetChildren();
-    wxString location = wxString::Format( "PADCODE -> %s", Name );
+    wxString location = wxString::Format( wxT( "PADCODE -> %s" ), Name );
 
     for( ; cNode; cNode = cNode->GetNext() )
     {
@@ -850,7 +854,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::VIACODE::Parse( XNODE* aNode, PARSER_CONTEXT* a
     Name = GetXmlAttributeIDString( aNode, 1 );
 
     XNODE*   cNode    = aNode->GetChildren();
-    wxString location = wxString::Format( "VIACODE -> %s", Name );
+    wxString location = wxString::Format( wxT( "VIACODE -> %s" ), Name );
 
     for( ; cNode; cNode = cNode->GetNext() )
     {
@@ -907,7 +911,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYERPAIR::Parse( XNODE* aNode, PARSER_CONTEXT*
     PhysicalLayerStart = GetXmlAttributeIDLong( aNode, 2 );
     PhysicalLayerEnd   = GetXmlAttributeIDLong( aNode, 3 );
 
-    wxString location = wxString::Format( "LAYERPAIR -> %s", Name );
+    wxString location = wxString::Format( wxT( "LAYERPAIR -> %s" ), Name );
 
     if( aNode->GetChildren() )
     {
@@ -1075,7 +1079,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT_AREA::Parse( XNODE* aNode, PARSER_CON
 
     XNODE*   cNode              = aNode->GetChildren();
     bool     shapeIsInitialised = false; // Stop more than one Shape Object
-    wxString location           = wxString::Format( "COMPAREA %s", ID );
+    wxString location           = wxString::Format( wxT( "COMPAREA %s" ), ID );
 
     if( !cNode )
         THROW_MISSING_NODE_IO_ERROR( wxT( "Shape" ), location );
@@ -1166,7 +1170,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT_PAD::Parse( XNODE* aNode, PARSER_CONT
     Side      = GetPadSide( GetXmlAttributeIDString( aNode, 3 ) );
 
     XNODE*   cNode    = aNode->GetChildren();
-    wxString location = wxString::Format( "PAD %ld", ID );
+    wxString location = wxString::Format( wxT( "PAD %ld" ), ID );
 
     if( !cNode )
         THROW_MISSING_NODE_IO_ERROR( wxT( "PT" ), location );
@@ -1343,7 +1347,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::LINE::Parse( XNODE* aNode, PARSER_CO
     else if( aNode->GetName() == wxT( "ANGULARLINE" ) )
         Type = TYPE::ANGULARLINE;
     else
-        wxASSERT_MSG( true, "Not a valid type. What happened to the node Name?" );
+        wxASSERT_MSG( true, wxT( "Not a valid type. What happened to the node Name?" ) );
 
     LineCodeID = GetXmlAttributeIDString( aNode, 0 );
 
@@ -1424,7 +1428,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::Parse( XNODE* aNode, PARSER_CONTEXT*
 
     //make sure aNode is valid TYPE
     wxASSERT_MSG( typeMap.find( aNode->GetName() ) != typeMap.end(),
-            "Not a valid type. What happened to the node Name?" );
+                  wxT( "Not a valid type. What happened to the node Name?" ) );
 
     Type                = typeMap[aNode->GetName()];
     LayerID             = GetXmlAttributeIDString( aNode, 1 );
@@ -1632,7 +1636,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::CADSTAR_BOARD::Parse( XNODE* aNode, PARSER_CONT
 
     XNODE*   cNode              = aNode->GetChildren();
     bool     shapeIsInitialised = false; // Stop more than one Shape Object
-    wxString location           = wxString::Format( "BOARD %s", ID );
+    wxString location           = wxString::Format( wxT( "BOARD %s" ), ID );
 
     if( !cNode )
         THROW_MISSING_NODE_IO_ERROR( wxT( "Shape" ), location );
@@ -1683,7 +1687,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::AREA::Parse( XNODE* aNode, PARSER_CONTEXT* aCon
 
     XNODE*   cNode              = aNode->GetChildren();
     bool     shapeIsInitialised = false; // Stop more than one Shape Object
-    wxString location           = wxString::Format( "AREA %s", ID );
+    wxString location           = wxString::Format( wxT( "AREA %s" ), ID );
 
     if( !cNode )
         THROW_MISSING_NODE_IO_ERROR( wxT( "Shape" ), location );

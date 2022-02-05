@@ -152,7 +152,7 @@ static wxString interpret_text( const wxString& aText )
                 continue;
             }
 
-            static wxString escapeChars( " )]}'\"" );
+            static wxString escapeChars( wxT( " )]}'\"" ) );
 
             if( i + 1 != aText.size() && escapeChars.Find( aText[i + 1] ) == wxNOT_FOUND )
             {
@@ -217,52 +217,52 @@ void ERULES::parse( wxXmlNode* aRules, std::function<void()> aCheckpoint )
     {
         aCheckpoint();
 
-        if( child->GetName() == "param" )
+        if( child->GetName() == wxT( "param" ) )
         {
-            const wxString& name = child->GetAttribute( "name" );
-            const wxString& value = child->GetAttribute( "value" );
+            const wxString& name = child->GetAttribute( wxT( "name" ) );
+            const wxString& value = child->GetAttribute( wxT( "value" ) );
 
-            if( name == "psElongationLong" )
+            if( name == wxT( "psElongationLong" ) )
                 psElongationLong = wxAtoi( value );
-            else if( name == "psElongationOffset" )
+            else if( name == wxT( "psElongationOffset" ) )
                 psElongationOffset = wxAtoi( value );
-            else if( name == "mvStopFrame" )
+            else if( name == wxT( "mvStopFrame" ) )
                 value.ToCDouble( &mvStopFrame );
-            else if( name == "mvCreamFrame" )
+            else if( name == wxT( "mvCreamFrame" ) )
                 value.ToCDouble( &mvCreamFrame );
-            else if( name == "mlMinStopFrame" )
+            else if( name == wxT( "mlMinStopFrame" ) )
                 mlMinStopFrame = parseEagle( value );
-            else if( name == "mlMaxStopFrame" )
+            else if( name == wxT( "mlMaxStopFrame" ) )
                 mlMaxStopFrame = parseEagle( value );
-            else if( name == "mlMinCreamFrame" )
+            else if( name == wxT( "mlMinCreamFrame" ) )
                 mlMinCreamFrame = parseEagle( value );
-            else if( name == "mlMaxCreamFrame" )
+            else if( name == wxT( "mlMaxCreamFrame" ) )
                 mlMaxCreamFrame = parseEagle( value );
-            else if( name == "srRoundness" )
+            else if( name == wxT( "srRoundness" ) )
                 value.ToCDouble( &srRoundness );
-            else if( name == "srMinRoundness" )
+            else if( name == wxT( "srMinRoundness" ) )
                 srMinRoundness = parseEagle( value );
-            else if( name == "srMaxRoundness" )
+            else if( name == wxT( "srMaxRoundness" ) )
                 srMaxRoundness = parseEagle( value );
-            else if( name == "psTop" )
+            else if( name == wxT( "psTop" ) )
                 psTop = wxAtoi( value );
-            else if( name == "psBottom" )
+            else if( name == wxT( "psBottom" ) )
                 psBottom = wxAtoi( value );
-            else if( name == "psFirst" )
+            else if( name == wxT( "psFirst" ) )
                 psFirst = wxAtoi( value );
-            else if( name == "rvPadTop" )
+            else if( name == wxT( "rvPadTop" ) )
                 value.ToCDouble( &rvPadTop );
-            else if( name == "rlMinPadTop" )
+            else if( name == wxT( "rlMinPadTop" ) )
                 rlMinPadTop = parseEagle( value );
-            else if( name == "rlMaxPadTop" )
+            else if( name == wxT( "rlMaxPadTop" ) )
                 rlMaxPadTop = parseEagle( value );
-            else if( name == "rvViaOuter" )
+            else if( name == wxT( "rvViaOuter" ) )
                 value.ToCDouble( &rvViaOuter );
-            else if( name == "rlMinViaOuter" )
+            else if( name == wxT( "rlMinViaOuter" ) )
                 rlMinViaOuter = parseEagle( value );
-            else if( name == "rlMaxViaOuter" )
+            else if( name == wxT( "rlMaxViaOuter" ) )
                 rlMaxViaOuter = parseEagle( value );
-            else if( name == "mdWireWire" )
+            else if( name == wxT( "mdWireWire" ) )
                 mdWireWire = parseEagle( value );
         }
 
@@ -321,7 +321,7 @@ void EAGLE_PLUGIN::checkpoint()
                                                     / std::max( 1U, m_totalCount ) );
 
             if( !m_progressReporter->KeepRefreshing() )
-                THROW_IO_ERROR( ( "Open cancelled by user." ) );
+                THROW_IO_ERROR( _( "Open cancelled by user." ) );
 
             m_lastProgressCount = m_doneCount;
         }
@@ -363,7 +363,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
             m_progressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
 
             if( !m_progressReporter->KeepRefreshing() )
-                THROW_IO_ERROR( ( "Open cancelled by user." ) );
+                THROW_IO_ERROR( _( "Open cancelled by user." ) );
         }
 
         wxFileName fn = aFileName;
@@ -404,7 +404,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
         if( m_rules->mdWireWire )
             designSettings.m_MinClearance = KiROUND( m_rules->mdWireWire );
 
-        NETCLASS defaults( "dummy" );
+        NETCLASS defaults( wxT( "dummy" ) );
 
         auto finishNetclass =
                 [&]( NETCLASSPTR netclass )
@@ -431,7 +431,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
         m_board->m_LegacyNetclassesLoaded = true;
         m_board->m_LegacyDesignSettingsLoaded = true;
 
-        fn.SetExt( "kicad_dru" );
+        fn.SetExt( wxT( "kicad_dru" ) );
         wxFile rulesFile( fn.GetFullPath(), wxFile::write );
         rulesFile.Write( m_customRules );
 
@@ -442,7 +442,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
     {
         wxString errmsg = exc.what();
 
-        errmsg += "\n@ ";
+        errmsg += wxT( "\n@ " );
         errmsg += m_xpath->Contents();
 
         THROW_IO_ERROR( errmsg );
@@ -692,7 +692,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
         wxString grName = gr->GetName();
 
-        if( grName == "wire" )
+        if( grName == wxT( "wire" ) )
         {
             m_xpath->push( "wire" );
 
@@ -735,7 +735,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
             m_xpath->pop();
         }
-        else if( grName == "text" )
+        else if( grName == wxT( "text" ) )
         {
             m_xpath->push( "text" );
 
@@ -856,7 +856,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
             m_xpath->pop();
         }
-        else if( grName == "circle" )
+        else if( grName == wxT( "circle" ) )
         {
             m_xpath->push( "circle" );
 
@@ -918,7 +918,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
             m_xpath->pop();
         }
-        else if( grName == "rectangle" )
+        else if( grName == wxT( "rectangle" ) )
         {
             // This seems to be a simplified rectangular [copper] zone, cannot find any
             // net related info on it from the DTD.
@@ -954,7 +954,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
             m_xpath->pop();
         }
-        else if( grName == "hole" )
+        else if( grName == wxT( "hole" ) )
         {
             m_xpath->push( "hole" );
 
@@ -963,24 +963,24 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
             FOOTPRINT* footprint = new FOOTPRINT( m_board );
             m_board->Add( footprint, ADD_MODE::APPEND );
-            footprint->SetReference( wxString::Format( "@HOLE%d", m_hole_count++ ) );
+            footprint->SetReference( wxString::Format( wxT( "@HOLE%d" ), m_hole_count++ ) );
             footprint->Reference().SetVisible( false );
 
             packageHole( footprint, gr, true );
 
             m_xpath->pop();
         }
-        else if( grName == "frame" )
+        else if( grName == wxT( "frame" ) )
         {
             // picture this
         }
-        else if( grName == "polygon" )
+        else if( grName == wxT( "polygon" ) )
         {
             m_xpath->push( "polygon" );
             loadPolygon( gr );
             m_xpath->pop();     // "polygon"
         }
-        else if( grName == "dimension" )
+        else if( grName == wxT( "dimension" ) )
         {
             EDIMENSION d( gr );
             PCB_LAYER_ID layer = kicad_layer( d.layer );
@@ -996,13 +996,13 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                     // Eagle dimension graphic arms may have different lengths, but they look
                     // incorrect in KiCad (the graphic is tilted). Make them even length in
                     // such case.
-                    if( *d.dimensionType == "horizontal" )
+                    if( *d.dimensionType == wxT( "horizontal" ) )
                     {
                         int newY = ( d.y1.ToPcbUnits() + d.y2.ToPcbUnits() ) / 2;
                         d.y1 = ECOORD( newY, ECOORD::EAGLE_UNIT::EU_NM );
                         d.y2 = ECOORD( newY, ECOORD::EAGLE_UNIT::EU_NM );
                     }
-                    else if( *d.dimensionType == "vertical" )
+                    else if( *d.dimensionType == wxT( "vertical" ) )
                     {
                         int newX = ( d.x1.ToPcbUnits() + d.x2.ToPcbUnits() ) / 2;
                         d.x1 = ECOORD( newX, ECOORD::EAGLE_UNIT::EU_NM );
@@ -1140,7 +1140,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
     {
         checkpoint();
 
-        if( element->GetName() != "element" )
+        if( element->GetName() != wxT( "element" ) )
         {
             // Get next item
             element = element->GetNext();
@@ -1235,7 +1235,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 
             while( attribute )
             {
-                if( attribute->GetName() != "attribute" )
+                if( attribute->GetName() != wxT( "attribute" ) )
                 {
                     attribute = attribute->GetNext();
                     continue;
@@ -1243,7 +1243,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 
                 EATTR   a( attribute );
 
-                if( a.name == "NAME" )
+                if( a.name == wxT( "NAME" ) )
                 {
                     name = a;
                     nameAttr = &name;
@@ -1263,7 +1263,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
                             // annotation.  If the reference begins with a number, we prepend
                             // 'UNK' (unknown) for the symbol designator.
                             if( reference.find_first_not_of( "0123456789" ) == wxString::npos )
-                                reference.Prepend( "UNK" );
+                                reference.Prepend( wxT( "UNK" ) );
 
                             nameAttr->name = reference;
                             footprint->SetReference( reference );
@@ -1287,8 +1287,8 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
                             if( refanceNamePresetInPackageLayout )
                                 footprint->Reference().SetVisible( true );
 
-                            nameAttr->name =  nameAttr->name + " = " + e.name;
-                            footprint->SetReference( "NAME = " + e.name );
+                            nameAttr->name =  nameAttr->name + wxT( " = " ) + e.name;
+                            footprint->SetReference( wxT( "NAME = " ) + e.name );
                             break;
 
                         case EATTR::Off :
@@ -1308,7 +1308,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
                         footprint->Reference().SetVisible( true );
                     }
                 }
-                else if( a.name == "VALUE" )
+                else if( a.name == wxT( "VALUE" ) )
                 {
                     value = a;
                     valueAttr = &value;
@@ -1331,15 +1331,15 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
                             if( valueNamePresetInPackageLayout )
                                 footprint->Value().SetVisible( true );
 
-                            footprint->SetValue( "VALUE" );
+                            footprint->SetValue( wxT( "VALUE" ) );
                             break;
 
                         case EATTR::BOTH :
                             if( valueNamePresetInPackageLayout )
                                 footprint->Value().SetVisible( true );
 
-                            valueAttr->value = opt_wxString( "VALUE = " + e.value );
-                            footprint->SetValue( "VALUE = " + e.value );
+                            valueAttr->value = opt_wxString( wxT( "VALUE = " ) + e.value );
+                            footprint->SetValue( wxT( "VALUE = " ) + e.value );
                             break;
 
                         case EATTR::Off :
@@ -1420,7 +1420,7 @@ ZONE* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
     // to allow the curve to link back
     while( vertex )
     {
-        if( vertex->GetName() == "vertex" )
+        if( vertex->GetName() == wxT( "vertex" ) )
             vertices.emplace_back( vertex );
 
         vertex = vertex->GetNext();
@@ -1717,23 +1717,23 @@ FOOTPRINT* EAGLE_PLUGIN::makeFootprint( wxXmlNode* aPackage, const wxString& aPk
     {
         const wxString& itemName = packageItem->GetName();
 
-        if( itemName == "description" )
+        if( itemName == wxT( "description" ) )
             m->SetDescription( FROM_UTF8( packageItem->GetNodeContent().c_str() ) );
-        else if( itemName == "wire" )
+        else if( itemName == wxT( "wire" ) )
             packageWire( m.get(), packageItem );
-        else if( itemName == "pad" )
+        else if( itemName == wxT( "pad" ) )
             packagePad( m.get(), packageItem );
-        else if( itemName == "text" )
+        else if( itemName == wxT( "text" ) )
             packageText( m.get(), packageItem );
-        else if( itemName == "rectangle" )
+        else if( itemName == wxT( "rectangle" ) )
             packageRectangle( m.get(), packageItem );
-        else if( itemName == "polygon" )
+        else if( itemName == wxT( "polygon" ) )
             packagePolygon( m.get(), packageItem );
-        else if( itemName == "circle" )
+        else if( itemName == wxT( "circle" ) )
             packageCircle( m.get(), packageItem );
-        else if( itemName == "hole" )
+        else if( itemName == wxT( "hole" ) )
             packageHole( m.get(), packageItem, false );
-        else if( itemName == "smd" )
+        else if( itemName == wxT( "smd" ) )
             packageSMD( m.get(), packageItem );
 
         packageItem = packageItem->GetNext();
@@ -1933,9 +1933,9 @@ void EAGLE_PLUGIN::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 
     FP_TEXT* txt;
 
-    if( t.text.MakeUpper() == ">NAME" )
+    if( t.text.MakeUpper() == wxT( ">NAME" ) )
         txt = &aFootprint->Reference();
-    else if( t.text.MakeUpper() == ">VALUE" )
+    else if( t.text.MakeUpper() == wxT( ">VALUE" ) )
         txt = &aFootprint->Value();
     else
     {
@@ -2121,7 +2121,7 @@ void EAGLE_PLUGIN::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
     // to allow the curve to link back
     while( vertex )
     {
-        if( vertex->GetName() == "vertex" )
+        if( vertex->GetName() == wxT( "vertex" ) )
             vertices.emplace_back( vertex );
 
         vertex = vertex->GetNext();
@@ -2482,7 +2482,7 @@ void EAGLE_PLUGIN::loadClasses( wxXmlNode* aClasses )
         classNode = classNode->GetNext();
     }
 
-    m_customRules = "(version 1)";
+    m_customRules = wxT( "(version 1)" );
 
     for( ECLASS& eClass : eClasses )
     {
@@ -2491,16 +2491,16 @@ void EAGLE_PLUGIN::loadClasses( wxXmlNode* aClasses )
             if( m_classMap[ entry.first ] != nullptr )
             {
                 wxString rule;
-                rule.Printf( "(rule \"class %s:%s\"\n"
-                             "  (condition \"A.NetClass == '%s' && B.NetClass == '%s'\")\n"
-                             "  (constraint clearance (min %smm)))\n",
+                rule.Printf( wxT( "(rule \"class %s:%s\"\n"
+                                  "  (condition \"A.NetClass == '%s' && B.NetClass == '%s'\")\n"
+                                  "  (constraint clearance (min %smm)))\n" ),
                              eClass.number,
                              entry.first,
                              eClass.name,
                              m_classMap[ entry.first ]->GetName(),
                              StringFromValue( EDA_UNITS::MILLIMETRES, entry.second.ToPcbUnits() ) );
 
-                m_customRules += "\n" + rule;
+                m_customRules += wxT( "\n" ) + rule;
             }
         }
     }
@@ -2551,7 +2551,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
         {
             const wxString& itemName = netItem->GetName();
 
-            if( itemName == "wire" )
+            if( itemName == wxT( "wire" ) )
             {
                 m_xpath->push( "wire" );
 
@@ -2631,7 +2631,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                 m_xpath->pop();
             }
-            else if( itemName == "via" )
+            else if( itemName == wxT( "via" ) )
             {
                 m_xpath->push( "via" );
                 EVIA    v( netItem );
@@ -2720,7 +2720,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                 m_xpath->pop();
             }
 
-            else if( itemName == "contactref" )
+            else if( itemName == wxT( "contactref" ) )
             {
                 m_xpath->push( "contactref" );
                 // <contactref element="RN1" pad="7"/>
@@ -2736,7 +2736,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                 sawPad = true;
             }
 
-            else if( itemName == "polygon" )
+            else if( itemName == wxT( "polygon" ) )
             {
                 m_xpath->push( "polygon" );
                 auto* zone = loadPolygon( netItem );

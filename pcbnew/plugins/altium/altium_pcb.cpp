@@ -59,7 +59,7 @@ void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName, PROGRESS_REPORTER
                      const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping )
 {
     // Open file
-    FILE* fp = wxFopen( aFileName, "rb" );
+    FILE* fp = wxFopen( aFileName, wxT( "rb" ) );
 
     if( fp == nullptr )
     {
@@ -126,8 +126,8 @@ PCB_SHAPE* ALTIUM_PCB::HelperCreateAndAddShape( uint16_t aComponent )
     {
         if( m_components.size() <= aComponent )
         {
-            THROW_IO_ERROR( wxString::Format( "Component creator tries to access component id %d "
-                                              "of %d existing components",
+            THROW_IO_ERROR( wxString::Format( wxT( "Component creator tries to access component "
+                                                   "id %d of %d existing components" ),
                                               aComponent,
                                               m_components.size() ) );
         }
@@ -338,7 +338,7 @@ void ALTIUM_PCB::checkpoint()
                                                     / std::max( 1U, m_totalCount ) );
 
             if( !m_progressReporter->KeepRefreshing() )
-                THROW_IO_ERROR( ( "Open cancelled by user." ) );
+                THROW_IO_ERROR( _( "Open cancelled by user." ) );
 
             m_lastProgressCount = m_doneCount;
         }
@@ -513,8 +513,9 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
 
         if( mappedDirectory == aFileMapping.end() )
         {
-            wxASSERT_MSG( !isRequired, wxString::Format( "Altium Directory of kind %d was expected, "
-                                                         "but no mapping is present in the code",
+            wxASSERT_MSG( !isRequired, wxString::Format( wxT( "Altium Directory of kind %d was "
+                                                              "expected, but no mapping is "
+                                                              "present in the code" ),
                                                          directory ) );
             continue;
         }
@@ -639,8 +640,9 @@ int ALTIUM_PCB::GetNetCode( uint16_t aId ) const
     }
     else if( m_num_nets < aId )
     {
-        THROW_IO_ERROR( wxString::Format(
-                "Netcode with id %d does not exist. Only %d nets are known", aId, m_num_nets ) );
+        THROW_IO_ERROR( wxString::Format( wxT( "Netcode with id %d does not exist. Only %d nets "
+                                               "are known" ),
+                                          aId, m_num_nets ) );
     }
     else
     {
@@ -674,7 +676,7 @@ const ARULE6* ALTIUM_PCB::GetRuleDefault( ALTIUM_RULE_KIND aKind ) const
     }
     for( const ARULE6& rule : rules->second )
     {
-        if( rule.scope1expr == "All" && rule.scope2expr == "All" )
+        if( rule.scope1expr == wxT( "All" ) && rule.scope2expr == wxT( "All" ) )
         {
             return &rule;
         }
@@ -705,7 +707,7 @@ void ALTIUM_PCB::ParseBoard6Data( const CFB::CompoundFileReader& aReader,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Loading board data..." );
+        m_progressReporter->Report( _( "Loading board data..." ) );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -714,7 +716,7 @@ void ALTIUM_PCB::ParseBoard6Data( const CFB::CompoundFileReader& aReader,
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( "Board6 stream is not fully parsed" );
+        THROW_IO_ERROR( wxT( "Board6 stream is not fully parsed" ) );
     }
 
     m_board->GetDesignSettings().SetAuxOrigin( elem.sheetpos );
@@ -751,18 +753,18 @@ void ALTIUM_PCB::ParseBoard6Data( const CFB::CompoundFileReader& aReader,
         // handle unused layer in case of odd layercount
         if( layer.nextId == 0 && layercount != kicadLayercount )
         {
-            m_board->SetLayerName( ( *it )->GetBrdLayerId(), "[unused]" );
+            m_board->SetLayerName( ( *it )->GetBrdLayerId(), wxT( "[unused]" ) );
 
             if( ( *it )->GetType() != BS_ITEM_TYPE_COPPER )
             {
-                THROW_IO_ERROR( "Board6 stream, unexpected item while parsing stackup" );
+                THROW_IO_ERROR( wxT( "Board6 stream, unexpected item while parsing stackup" ) );
             }
             ( *it )->SetThickness( 0 );
 
             ++it;
             if( ( *it )->GetType() != BS_ITEM_TYPE_DIELECTRIC )
             {
-                THROW_IO_ERROR( "Board6 stream, unexpected item while parsing stackup" );
+                THROW_IO_ERROR( wxT( "Board6 stream, unexpected item while parsing stackup" ) );
             }
             ( *it )->SetThickness( 0, 0 );
             ( *it )->SetThicknessLocked( true, 0 );
@@ -773,7 +775,7 @@ void ALTIUM_PCB::ParseBoard6Data( const CFB::CompoundFileReader& aReader,
                 static_cast<PCB_LAYER_ID>( curLayer++ ) } );
 
         if( ( *it )->GetType() != BS_ITEM_TYPE_COPPER )
-            THROW_IO_ERROR( "Board6 stream, unexpected item while parsing stackup" );
+            THROW_IO_ERROR( wxT( "Board6 stream, unexpected item while parsing stackup" ) );
 
         ( *it )->SetThickness( layer.copperthick );
 
@@ -794,7 +796,7 @@ void ALTIUM_PCB::ParseBoard6Data( const CFB::CompoundFileReader& aReader,
         if( klayer == B_Cu )
         {
             if( layer.nextId != 0 )
-                THROW_IO_ERROR( "Board6 stream, unexpected id while parsing last stackup layer" );
+                THROW_IO_ERROR( wxT( "Board6 stream, unexpected id while parsing last stackup layer" ) );
 
             // overwrite entry from internal -> bottom
             m_layermap[alayer] = B_Cu;
@@ -804,7 +806,7 @@ void ALTIUM_PCB::ParseBoard6Data( const CFB::CompoundFileReader& aReader,
         ++it;
 
         if( ( *it )->GetType() != BS_ITEM_TYPE_DIELECTRIC )
-            THROW_IO_ERROR( "Board6 stream, unexpected item while parsing stackup" );
+            THROW_IO_ERROR( wxT( "Board6 stream, unexpected item while parsing stackup" ) );
 
         ( *it )->SetThickness( layer.dielectricthick, 0 );
         ( *it )->SetMaterial( layer.dielectricmaterial.empty() ?
@@ -883,7 +885,7 @@ void ALTIUM_PCB::ParseClasses6Data( const CFB::CompoundFileReader& aReader,
                                     const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Loading netclasses..." );
+        m_progressReporter->Report( _( "Loading netclasses..." ) );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -912,7 +914,7 @@ void ALTIUM_PCB::ParseClasses6Data( const CFB::CompoundFileReader& aReader,
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( "Classes6 stream is not fully parsed" );
+        THROW_IO_ERROR( wxT( "Classes6 stream is not fully parsed" ) );
     }
 
     m_board->m_LegacyNetclassesLoaded = true;
@@ -922,7 +924,7 @@ void ALTIUM_PCB::ParseComponents6Data( const CFB::CompoundFileReader& aReader,
                                        const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Loading components..." );
+        m_progressReporter->Report( _( "Loading components..." ) );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -947,7 +949,7 @@ void ALTIUM_PCB::ParseComponents6Data( const CFB::CompoundFileReader& aReader,
         // If the reference begins with a number, we prepend 'UNK' (unknown) for the source designator
         wxString reference = elem.sourcedesignator;
         if( reference.find_first_not_of( "0123456789" ) == wxString::npos )
-            reference.Prepend( "UNK" );
+            reference.Prepend( wxT( "UNK" ) );
         footprint->SetReference( reference );
 
         footprint->SetLocked( elem.locked );
@@ -960,7 +962,7 @@ void ALTIUM_PCB::ParseComponents6Data( const CFB::CompoundFileReader& aReader,
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( "Components6 stream is not fully parsed" );
+        THROW_IO_ERROR( wxT( "Components6 stream is not fully parsed" ) );
     }
 }
 
@@ -969,7 +971,7 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const CFB::CompoundFileReader& aRea
                                              const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Loading component 3D models..." );
+        m_progressReporter->Report( _( "Loading component 3D models..." ) );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -983,9 +985,10 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const CFB::CompoundFileReader& aRea
 
         if( m_components.size() <= elem.component )
         {
-            THROW_IO_ERROR( wxString::Format(
-                    "ComponentsBodies6 stream tries to access component id %d of %d existing components",
-                    elem.component, m_components.size() ) );
+            THROW_IO_ERROR( wxString::Format( wxT( "ComponentsBodies6 stream tries to access "
+                                                   "component id %d of %d existing components" ),
+                                              elem.component,
+                                              m_components.size() ) );
         }
 
         if( !elem.modelIsEmbedded )
@@ -995,9 +998,9 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const CFB::CompoundFileReader& aRea
 
         if( modelTuple == m_models.end() )
         {
-            THROW_IO_ERROR( wxString::Format(
-                    "ComponentsBodies6 stream tries to access model id %s which does not exist",
-                    elem.modelId ) );
+            THROW_IO_ERROR( wxString::Format( wxT( "ComponentsBodies6 stream tries to access "
+                                                   "model id %s which does not exist" ),
+                                              elem.modelId ) );
         }
 
         FOOTPRINT*     footprint  = m_components.at( elem.component );
@@ -1032,14 +1035,14 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const CFB::CompoundFileReader& aRea
     }
 
     if( reader.GetRemainingBytes() != 0 )
-        THROW_IO_ERROR( "ComponentsBodies6 stream is not fully parsed" );
+        THROW_IO_ERROR( wxT( "ComponentsBodies6 stream is not fully parsed" ) );
 }
 
 
 void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
 {
     if( aElem.referencePoint.size() != 2 )
-        THROW_IO_ERROR( "Incorrect number of reference points for linear dimension object" );
+        THROW_IO_ERROR( wxT( "Incorrect number of reference points for linear dimension object" ) );
 
     PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
 
@@ -1125,7 +1128,7 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
 void ALTIUM_PCB::HelperParseDimensions6Radial(const ADIMENSION6 &aElem)
 {
     if( aElem.referencePoint.size() < 2 )
-        THROW_IO_ERROR( "Not enough reference points for radial dimension object" );
+        THROW_IO_ERROR( wxT( "Not enough reference points for radial dimension object" ) );
 
     PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
 
@@ -1177,7 +1180,7 @@ void ALTIUM_PCB::HelperParseDimensions6Radial(const ADIMENSION6 &aElem)
 
     if( aElem.textPoint.empty() )
     {
-        wxLogError( "No text position present for leader dimension object" );
+        wxLogError( wxT( "No text position present for leader dimension object" ) );
         return;
     }
 
@@ -1256,7 +1259,7 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
 
     if( aElem.textPoint.empty() )
     {
-        wxLogError( "No text position present for leader dimension object" );
+        wxLogError( wxT( "No text position present for leader dimension object" ) );
         return;
     }
 
@@ -1324,7 +1327,7 @@ void ALTIUM_PCB::ParseDimensions6Data( const CFB::CompoundFileReader& aReader,
                                        const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Loading dimension drawings..." );
+        m_progressReporter->Report( _( "Loading dimension drawings..." ) );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1358,7 +1361,7 @@ void ALTIUM_PCB::ParseDimensions6Data( const CFB::CompoundFileReader& aReader,
     }
 
     if( reader.GetRemainingBytes() != 0 )
-        THROW_IO_ERROR( "Dimensions6 stream is not fully parsed" );
+        THROW_IO_ERROR( wxT( "Dimensions6 stream is not fully parsed" ) );
 }
 
 
@@ -1366,7 +1369,7 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry, const wxString& aRootDir )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( "Loading 3D models..." );
+        m_progressReporter->Report( _( "Loading 3D models..." ) );
 
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1378,14 +1381,14 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
     wxSetEnv( PROJECT_VAR_NAME, projectPath );
 
     // TODO: make this path configurable?
-    const wxString altiumModelDir = "ALTIUM_EMBEDDED_MODELS";
+    const wxString altiumModelDir = wxT( "ALTIUM_EMBEDDED_MODELS" );
 
     wxFileName altiumModelsPath = wxFileName::DirName( projectPath );
-    wxString   kicadModelPrefix = "${KIPRJMOD}/" + altiumModelDir + "/";
+    wxString   kicadModelPrefix = wxT( "${KIPRJMOD}/" ) + altiumModelDir + wxT( "/" );
 
     if( !altiumModelsPath.AppendDir( altiumModelDir ) )
     {
-        THROW_IO_ERROR( "Cannot construct directory path for step models" );
+        THROW_IO_ERROR( wxT( "Cannot construct directory path for step models" ) );
     }
 
     // Create dir if it does not exist
@@ -1408,10 +1411,11 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
         checkpoint();
         AMODEL elem( reader );
 
-        wxString       stepPath = wxString::Format( aRootDir + "%d", idx );
+        wxString       stepPath = wxString::Format( aRootDir + wxT( "%d" ), idx );
         bool           validName = !elem.name.IsEmpty() && elem.name.IsAscii() &&
                                    wxString::npos == elem.name.find_first_of( invalidChars );
-        wxString       storageName = !validName ? wxString::Format( "model_%d", idx ) : elem.name;
+        wxString       storageName = !validName ? wxString::Format( wxT( "model_%d" ), idx )
+                                                : elem.name;
         wxFileName     storagePath( altiumModelsPath.GetPath(), storageName );
 
         idx++;
@@ -1448,7 +1452,7 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
     }
 
     if( reader.GetRemainingBytes() != 0 )
-        THROW_IO_ERROR( "Models stream is not fully parsed" );
+        THROW_IO_ERROR( wxT( "Models stream is not fully parsed" ) );
 }
 
 
@@ -1470,7 +1474,7 @@ void ALTIUM_PCB::ParseNets6Data( const CFB::CompoundFileReader& aReader,
     }
 
     if( reader.GetRemainingBytes() != 0 )
-        THROW_IO_ERROR( "Nets6 stream is not fully parsed" );
+        THROW_IO_ERROR( wxT( "Nets6 stream is not fully parsed" ) );
 }
 
 void ALTIUM_PCB::ParsePolygons6Data( const CFB::CompoundFileReader& aReader,
@@ -1604,7 +1608,7 @@ void ALTIUM_PCB::ParsePolygons6Data( const CFB::CompoundFileReader& aReader,
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( "Polygons6 stream is not fully parsed" );
+        THROW_IO_ERROR( wxT( "Polygons6 stream is not fully parsed" ) );
     }
 }
 
@@ -1636,7 +1640,7 @@ void ALTIUM_PCB::ParseRules6Data( const CFB::CompoundFileReader& aReader,
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( "Rules6 stream is not fully parsed" );
+        THROW_IO_ERROR( wxT( "Rules6 stream is not fully parsed" ) );
     }
 }
 
@@ -1658,7 +1662,7 @@ void ALTIUM_PCB::ParseBoardRegionsData( const CFB::CompoundFileReader& aReader,
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( "BoardRegions stream is not fully parsed" );
+        THROW_IO_ERROR( wxT( "BoardRegions stream is not fully parsed" ) );
     }
 }
 
@@ -1781,7 +1785,7 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const CFB::CompoundFileReader& aRe
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( "ShapeBasedRegions6 stream is not fully parsed" );
+        THROW_IO_ERROR( wxT( "ShapeBasedRegions6 stream is not fully parsed" ) );
     }
 }
 
@@ -1869,7 +1873,7 @@ void ALTIUM_PCB::ParseRegions6Data( const CFB::CompoundFileReader& aReader,
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( "Regions6 stream is not fully parsed" );
+        THROW_IO_ERROR( wxT( "Regions6 stream is not fully parsed" ) );
     }
 }
 
@@ -2033,7 +2037,7 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( "Arcs6 stream is not fully parsed" );
+        THROW_IO_ERROR( wxT( "Arcs6 stream is not fully parsed" ) );
     }
 }
 
@@ -2072,8 +2076,8 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
         {
             if( m_components.size() <= elem.component )
             {
-                THROW_IO_ERROR( wxString::Format( "Pads6 stream tries to access component id %d "
-                                                  "of %d existing components",
+                THROW_IO_ERROR( wxString::Format( wxT( "Pads6 stream tries to access component id "
+                                                       "%d of %d existing components" ),
                                                   elem.component,
                                                   m_components.size() ) );
             }
@@ -2118,7 +2122,7 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
                 switch( elem.sizeAndShape->holeshape )
                 {
                 case ALTIUM_PAD_HOLE_SHAPE::ROUND:
-                    wxFAIL_MSG( "Round holes are handled before the switch" );
+                    wxFAIL_MSG( wxT( "Round holes are handled before the switch" ) );
                     break;
 
                 case ALTIUM_PAD_HOLE_SHAPE::SQUARE:
@@ -2258,7 +2262,7 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( "Pads6 stream is not fully parsed" );
+        THROW_IO_ERROR( wxT( "Pads6 stream is not fully parsed" ) );
     }
 }
 
@@ -2506,7 +2510,7 @@ void ALTIUM_PCB::ParseVias6Data( const CFB::CompoundFileReader& aReader,
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( "Vias6 stream is not fully parsed" );
+        THROW_IO_ERROR( wxT( "Vias6 stream is not fully parsed" ) );
     }
 }
 
@@ -2612,7 +2616,7 @@ void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader,
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( "Tracks6 stream is not fully parsed" );
+        THROW_IO_ERROR( wxT( "Tracks6 stream is not fully parsed" ) );
     }
 }
 
@@ -2627,7 +2631,7 @@ void ALTIUM_PCB::ParseWideStrings6Data( const CFB::CompoundFileReader&  aReader,
     m_unicodeStrings = reader.ReadWideStringTable();
 
     if( reader.GetRemainingBytes() != 0 )
-        THROW_IO_ERROR( "WideStrings6 stream is not fully parsed" );
+        THROW_IO_ERROR( wxT( "WideStrings6 stream is not fully parsed" ) );
 }
 
 void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
@@ -2665,8 +2669,8 @@ void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
         {
             if( m_components.size() <= elem.component )
             {
-                THROW_IO_ERROR( wxString::Format( "Texts6 stream tries to access component id %d "
-                                                  "of %d existing components",
+                THROW_IO_ERROR( wxString::Format( wxT( "Texts6 stream tries to access component "
+                                                       "id %d of %d existing components" ),
                                                   elem.component,
                                                   m_components.size() ) );
             }
@@ -2781,7 +2785,7 @@ void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
                 tx->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_RIGHT );
                 break;
             default:
-                wxLogError( "Unexpected horizontal Text Position. This should never happen." );
+                wxLogError( wxT( "Unexpected horizontal Text Position. This should never happen." ) );
                 break;
             }
 
@@ -2803,7 +2807,7 @@ void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
                 tx->SetVertJustify( EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_BOTTOM );
                 break;
             default:
-                wxLogError( "Unexpected vertical text position. This should never happen." );
+                wxLogError( wxT( "Unexpected vertical text position. This should never happen." ) );
                 break;
             }
         }
@@ -2811,7 +2815,7 @@ void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( "Texts6 stream is not fully parsed" );
+        THROW_IO_ERROR( wxT( "Texts6 stream is not fully parsed" ) );
     }
 }
 
@@ -2899,6 +2903,6 @@ void ALTIUM_PCB::ParseFills6Data( const CFB::CompoundFileReader& aReader,
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( "Fills6 stream is not fully parsed" );
+        THROW_IO_ERROR( wxT( "Fills6 stream is not fully parsed" ) );
     }
 }

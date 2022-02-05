@@ -143,16 +143,16 @@ void pcbnewGetWizardsBackTrace( wxString& aTrace )
 
     for( unsigned ii = 0; ii < traces.Count(); ++ii )
     {
-        if( traces[ii].Contains( "Traceback" ) )
+        if( traces[ii].Contains( wxT( "Traceback" ) ) )
         {
             ii += 2; // Skip this line and next lines which are related to pcbnew.py module
 
             if( !aTrace.IsEmpty() ) // Add separator for the next trace block
-                aTrace << "\n**********************************\n";
+                aTrace << wxT( "\n**********************************\n" );
         }
         else
         {
-            aTrace += traces[ii] + "\n";
+            aTrace += traces[ii] + wxT( "\n" );
         }
     }
 }

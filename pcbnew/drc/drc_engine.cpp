@@ -46,14 +46,12 @@ void drcPrintDebugMessage( int level, const wxString& msg, const char *function,
 {
     wxString valueStr;
 
-    if( wxGetEnv( "DRC_DEBUG", &valueStr ) )
+    if( wxGetEnv( wxT( "DRC_DEBUG" ), &valueStr ) )
     {
         int setLevel = wxAtoi( valueStr );
 
         if( level <= setLevel )
-        {
-            printf("%-30s:%d | %s\n", function, line, (const char *) msg.c_str() );
-        }
+            printf( "%-30s:%d | %s\n", function, line, (const char *) msg.c_str() );
     }
 }
 
@@ -136,7 +134,7 @@ DRC_RULE* DRC_ENGINE::createImplicitRule( const wxString& name )
 
 void DRC_ENGINE::loadImplicitRules()
 {
-    ReportAux( wxString::Format( "Building implicit rules (per-item/class overrides, etc...)" ) );
+    ReportAux( wxString::Format( wxT( "Building implicit rules (per-item/class overrides, etc...)" ) ) );
 
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
@@ -197,7 +195,7 @@ void DRC_ENGINE::loadImplicitRules()
 
     DRC_RULE* uViaRule = createImplicitRule( _( "board setup micro-via constraints" ) );
 
-    uViaRule->m_Condition = new DRC_RULE_CONDITION( "A.Via_Type == 'Micro'" );
+    uViaRule->m_Condition = new DRC_RULE_CONDITION( wxT( "A.Via_Type == 'Micro'" ) );
 
     DRC_CONSTRAINT uViaDrillConstraint( HOLE_SIZE_CONSTRAINT );
     uViaDrillConstraint.Value().SetMin( bds.m_MicroViasMinDrill );
@@ -218,7 +216,7 @@ void DRC_ENGINE::loadImplicitRules()
     {
         DRC_RULE* bbViaRule = createImplicitRule( _( "board setup constraints" ) );
 
-        bbViaRule->m_Condition = new DRC_RULE_CONDITION( "A.Via_Type == 'Blind/buried'" );
+        bbViaRule->m_Condition = new DRC_RULE_CONDITION( wxT( "A.Via_Type == 'Blind/buried'" ) );
 
         DRC_CONSTRAINT disallowConstraint( DISALLOW_CONSTRAINT );
         disallowConstraint.m_DisallowFlags = DRC_DISALLOW_BB_VIAS;
@@ -244,7 +242,7 @@ void DRC_ENGINE::loadImplicitRules()
                     netclassRule->m_Name = wxString::Format( _( "netclass '%s'" ), ncName );
                     netclassRule->m_Implicit = true;
 
-                    expr = wxString::Format( "A.NetClass == '%s'", ncName );
+                    expr = wxString::Format( wxT( "A.NetClass == '%s'" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassClearanceRules.push_back( netclassRule );
 
@@ -272,7 +270,8 @@ void DRC_ENGINE::loadImplicitRules()
                                                              ncName );
                     netclassRule->m_Implicit = true;
 
-                    expr = wxString::Format( "A.NetClass == '%s' && A.inDiffPair('*')", ncName );
+                    expr = wxString::Format( wxT( "A.NetClass == '%s' && A.inDiffPair('*')" ),
+                                             ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( netclassRule );
 
@@ -289,7 +288,7 @@ void DRC_ENGINE::loadImplicitRules()
                                                              ncName );
                     netclassRule->m_Implicit = true;
 
-                    expr = wxString::Format( "A.NetClass == '%s'", ncName );
+                    expr = wxString::Format( wxT( "A.NetClass == '%s'" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( netclassRule );
 
@@ -307,7 +306,7 @@ void DRC_ENGINE::loadImplicitRules()
                                                                  ncName );
                         netclassRule->m_Implicit = true;
 
-                        expr = wxString::Format( "A.NetClass == '%s' && AB.isCoupledDiffPair()",
+                        expr = wxString::Format( wxT( "A.NetClass == '%s' && AB.isCoupledDiffPair()" ),
                                                  ncName );
                         netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                         netclassItemSpecificRules.push_back( netclassRule );
@@ -325,7 +324,7 @@ void DRC_ENGINE::loadImplicitRules()
                     netclassRule->m_Name = wxString::Format( _( "netclass '%s'" ), ncName );
                     netclassRule->m_Implicit = true;
 
-                    expr = wxString::Format( "A.NetClass == '%s' && A.Via_Type != 'Micro'",
+                    expr = wxString::Format( wxT( "A.NetClass == '%s' && A.Via_Type != 'Micro'" ),
                                              ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( netclassRule );
@@ -353,7 +352,7 @@ void DRC_ENGINE::loadImplicitRules()
                     netclassRule->m_Name = wxString::Format( _( "netclass '%s'" ), ncName );
                     netclassRule->m_Implicit = true;
 
-                    expr = wxString::Format( "A.NetClass == '%s' && A.Via_Type == 'Micro'",
+                    expr = wxString::Format( wxT( "A.NetClass == '%s' && A.Via_Type == 'Micro'" ),
                                              ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( netclassRule );
@@ -428,7 +427,7 @@ void DRC_ENGINE::loadImplicitRules()
         else
             rule = createImplicitRule( wxString::Format( _( "keepout area '%s'" ), name ) );
 
-        rule->m_Condition = new DRC_RULE_CONDITION( wxString::Format( "A.insideArea('%s')",
+        rule->m_Condition = new DRC_RULE_CONDITION( wxString::Format( wxT( "A.insideArea('%s')" ),
                                                                       zone->m_Uuid.AsString() ) );
 
         rule->m_LayerCondition = zone->GetLayerSet();
@@ -455,7 +454,7 @@ void DRC_ENGINE::loadImplicitRules()
         rule->AddConstraint( disallowConstraint );
     }
 
-    ReportAux( wxString::Format( "Building %d implicit netclass rules",
+    ReportAux( wxString::Format( wxT( "Building %d implicit netclass rules" ),
                                  (int) netclassClearanceRules.size() ) );
 }
 
@@ -476,40 +475,40 @@ static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
                 const auto value = c.GetValue();
 
                 if ( value.HasMin() )
-                    str += wxString::Format( " min: %d", value.Min() );
+                    str += wxString::Format( wxT( " min: %d" ), value.Min() );
 
                 if ( value.HasOpt() )
-                    str += wxString::Format( " opt: %d", value.Opt() );
+                    str += wxString::Format( wxT( " opt: %d" ), value.Opt() );
 
                 if ( value.HasMax() )
-                    str += wxString::Format( " max: %d", value.Max() );
+                    str += wxString::Format( wxT( " max: %d" ), value.Max() );
 
                 return str;
             };
 
     std::vector<FORMATTER> formats =
     {
-        { CLEARANCE_CONSTRAINT,           "clearance",           formatMinMax },
-        { HOLE_CLEARANCE_CONSTRAINT,      "hole_clearance",      formatMinMax },
-        { HOLE_TO_HOLE_CONSTRAINT,        "hole_to_hole",        formatMinMax },
-        { EDGE_CLEARANCE_CONSTRAINT,      "edge_clearance",      formatMinMax },
-        { HOLE_SIZE_CONSTRAINT,           "hole_size",           formatMinMax },
-        { COURTYARD_CLEARANCE_CONSTRAINT, "courtyard_clearance", formatMinMax },
-        { SILK_CLEARANCE_CONSTRAINT,      "silk_clearance",      formatMinMax },
-        { TRACK_WIDTH_CONSTRAINT,         "track_width",         formatMinMax },
-        { ANNULAR_WIDTH_CONSTRAINT,       "annular_width",       formatMinMax },
-        { DISALLOW_CONSTRAINT,            "disallow",            nullptr },
-        { VIA_DIAMETER_CONSTRAINT,        "via_diameter",        formatMinMax },
-        { LENGTH_CONSTRAINT,              "length",              formatMinMax },
-        { SKEW_CONSTRAINT,                "skew",                formatMinMax },
-        { VIA_COUNT_CONSTRAINT,           "via_count",           formatMinMax }
+        { CLEARANCE_CONSTRAINT,           wxT( "clearance" ),           formatMinMax },
+        { HOLE_CLEARANCE_CONSTRAINT,      wxT( "hole_clearance" ),      formatMinMax },
+        { HOLE_TO_HOLE_CONSTRAINT,        wxT( "hole_to_hole" ),        formatMinMax },
+        { EDGE_CLEARANCE_CONSTRAINT,      wxT( "edge_clearance" ),      formatMinMax },
+        { HOLE_SIZE_CONSTRAINT,           wxT( "hole_size" ),           formatMinMax },
+        { COURTYARD_CLEARANCE_CONSTRAINT, wxT( "courtyard_clearance" ), formatMinMax },
+        { SILK_CLEARANCE_CONSTRAINT,      wxT( "silk_clearance" ),      formatMinMax },
+        { TRACK_WIDTH_CONSTRAINT,         wxT( "track_width" ),         formatMinMax },
+        { ANNULAR_WIDTH_CONSTRAINT,       wxT( "annular_width" ),       formatMinMax },
+        { DISALLOW_CONSTRAINT,            wxT( "disallow" ),            nullptr },
+        { VIA_DIAMETER_CONSTRAINT,        wxT( "via_diameter" ),        formatMinMax },
+        { LENGTH_CONSTRAINT,              wxT( "length" ),              formatMinMax },
+        { SKEW_CONSTRAINT,                wxT( "skew" ),                formatMinMax },
+        { VIA_COUNT_CONSTRAINT,           wxT( "via_count" ),           formatMinMax }
     };
 
     for( FORMATTER& fmt : formats )
     {
         if( fmt.type == constraint.m_Type )
         {
-            wxString rv = fmt.name + " ";
+            wxString rv = fmt.name + wxS( " " );
 
             if( fmt.formatter )
                 rv += fmt.formatter( constraint );
@@ -547,17 +546,17 @@ void DRC_ENGINE::loadRules( const wxFileName& aPath )
 
 void DRC_ENGINE::compileRules()
 {
-    ReportAux( wxString::Format( "Compiling Rules (%d rules): ",
+    ReportAux( wxString::Format( wxT( "Compiling Rules (%d rules): " ),
                                  (int) m_rules.size() ) );
 
     for( DRC_TEST_PROVIDER* provider : m_testProviders )
     {
-        ReportAux( wxString::Format( "- Provider: '%s': ", provider->GetName() ) );
-        drc_dbg( 7, "do prov %s", provider->GetName() );
+        ReportAux( wxString::Format( wxT( "- Provider: '%s': " ), provider->GetName() ) );
+        drc_dbg( 7, wxT( "do prov %s" ), provider->GetName() );
 
         for( DRC_CONSTRAINT_T id : provider->GetConstraintTypes() )
         {
-            drc_dbg( 7, "do id %d", id );
+            drc_dbg( 7, wxT( "do id %d" ), id );
 
             if( m_constraintMap.find( id ) == m_constraintMap.end() )
                 m_constraintMap[ id ] = new std::vector<DRC_ENGINE_CONSTRAINT*>();
@@ -567,7 +566,7 @@ void DRC_ENGINE::compileRules()
                 DRC_RULE_CONDITION* condition = nullptr;
                 bool compileOk = false;
                 std::vector<DRC_CONSTRAINT> matchingConstraints;
-                drc_dbg( 7, "Scan provider %s, rule %s",  provider->GetName(), rule->m_Name );
+                drc_dbg( 7, wxT( "Scan provider %s, rule %s" ), provider->GetName(), rule->m_Name );
 
                 if( rule->m_Condition && !rule->m_Condition->GetExpression().IsEmpty() )
                 {
@@ -577,7 +576,7 @@ void DRC_ENGINE::compileRules()
 
                 for( const DRC_CONSTRAINT& constraint : rule->m_Constraints )
                 {
-                    drc_dbg(7, "scan constraint id %d\n", constraint.m_Type );
+                    drc_dbg(7, wxT( "scan constraint id %d\n" ), constraint.m_Type );
 
                     if( constraint.m_Type != id )
                         continue;
@@ -596,19 +595,19 @@ void DRC_ENGINE::compileRules()
 
                 if( !matchingConstraints.empty() )
                 {
-                    ReportAux( wxString::Format( "   |- Rule: '%s' ",
+                    ReportAux( wxString::Format( wxT( "   |- Rule: '%s' " ),
                                                  rule->m_Name ) );
 
                     if( condition )
                     {
-                        ReportAux( wxString::Format( "       |- condition: '%s' compile: %s",
+                        ReportAux( wxString::Format( wxT( "       |- condition: '%s' compile: %s" ),
                                                      condition->GetExpression(),
-                                                     compileOk ? "OK" : "ERROR" ) );
+                                                     compileOk ? wxT( "OK" ) : wxT( "ERROR" ) ) );
                     }
 
                     for (const DRC_CONSTRAINT& constraint : matchingConstraints )
                     {
-                        ReportAux( wxString::Format( "       |- constraint: %s",
+                        ReportAux( wxString::Format( wxT( "       |- constraint: %s" ),
                                                      formatConstraint( constraint ) ) );
                     }
                 }
@@ -624,7 +623,7 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
 
     for( DRC_TEST_PROVIDER* provider : m_testProviders )
     {
-        ReportAux( wxString::Format( "Create DRC provider: '%s'", provider->GetName() ) );
+        ReportAux( wxString::Format( wxT( "Create DRC provider: '%s'" ), provider->GetName() ) );
         provider->SetDRCEngine( this );
     }
 
@@ -661,7 +660,7 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
         }
         catch( PARSE_ERROR& )
         {
-            wxFAIL_MSG( "Compiling implicit rules failed." );
+            wxFAIL_MSG( wxT( "Compiling implicit rules failed." ) );
         }
 
         throw original_parse_error;
@@ -747,9 +746,9 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
         if( !provider->IsEnabled() )
             continue;
 
-        drc_dbg( 0, "Running test provider: '%s'\n", provider->GetName() );
+        drc_dbg( 0, wxT( "Running test provider: '%s'\n" ), provider->GetName() );
 
-        ReportAux( wxString::Format( "Run DRC provider: '%s'", provider->GetName() ) );
+        ReportAux( wxString::Format( wxT( "Run DRC provider: '%s'" ), provider->GetName() ) );
 
         if( !provider->Run() )
             break;
@@ -888,10 +887,10 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
                             switch( c->constraint.m_Type )
                             {
-                            case TRACK_WIDTH_CONSTRAINT:   msg = "track width";   break;
-                            case ANNULAR_WIDTH_CONSTRAINT: msg = "annular width"; break;
-                            case VIA_DIAMETER_CONSTRAINT:  msg = "via diameter";  break;
-                            default:                       msg = "constraint";    break;
+                            case TRACK_WIDTH_CONSTRAINT:   msg = _( "track width" );   break;
+                            case ANNULAR_WIDTH_CONSTRAINT: msg = _( "annular width" ); break;
+                            case VIA_DIAMETER_CONSTRAINT:  msg = _( "via diameter" );  break;
+                            default:                       msg = _( "constraint" );    break;
                             }
 
                             REPORT( wxString::Format( _( "Checking %s %s: %s." ),
@@ -1170,7 +1169,7 @@ void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const 
 
     if( m_reporter )
     {
-        wxString msg = wxString::Format( "Test '%s': %s (code %d)",
+        wxString msg = wxString::Format( wxT( "Test '%s': %s (code %d)" ),
                                          aItem->GetViolatingTest()->GetName(),
                                          aItem->GetErrorMessage(),
                                          aItem->GetErrorCode() );
@@ -1178,13 +1177,13 @@ void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const 
         DRC_RULE* rule = aItem->GetViolatingRule();
 
         if( rule )
-            msg += wxString::Format( ", violating rule: '%s'", rule->m_Name );
+            msg += wxString::Format( wxT( ", violating rule: '%s'" ), rule->m_Name );
 
         m_reporter->Report( msg );
 
-        wxString violatingItemsStr = "Violating items: ";
+        wxString violatingItemsStr = wxT( "Violating items: " );
 
-        m_reporter->Report( wxString::Format( "  |- violating position (%d, %d)",
+        m_reporter->Report( wxString::Format( wxT( "  |- violating position (%d, %d)" ),
                                               aPos.x,
                                               aPos.y ) );
     }
@@ -1269,22 +1268,22 @@ int DRC_ENGINE::MatchDpSuffix( const wxString& aNetName, wxString& aComplementNe
         }
         else if( ch == '+' )
         {
-            aComplementNet = "-";
+            aComplementNet = wxT( "-" );
             rv = 1;
         }
         else if( ch == '-' )
         {
-            aComplementNet = "+";
+            aComplementNet = wxT( "+" );
             rv = -1;
         }
         else if( ch == 'N' )
         {
-            aComplementNet = "P";
+            aComplementNet = wxT( "P" );
             rv = -1;
         }
         else if ( ch == 'P' )
         {
-            aComplementNet = "N";
+            aComplementNet = wxT( "N" );
             rv = 1;
         }
         else

@@ -377,11 +377,11 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
     }
 
     case SH_COMPOUND:
-        wxFAIL_MSG( "Router preview item: nested compound shapes not supported" );
+        wxFAIL_MSG( wxT( "Router preview item: nested compound shapes not supported" ) );
         break;
 
     case SH_POLY_SET:
-        wxFAIL_MSG( "Router preview item: SHAPE_POLY_SET not supported" );
+        wxFAIL_MSG( wxT( "Router preview item: SHAPE_POLY_SET not supported" ) );
         break;
 
     case SH_NULL:

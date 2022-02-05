@@ -54,7 +54,7 @@ static const char ACCEL_ASCII_KEYWORD[] = "ACCEL_ASCII";
     if( !fgets( line, sizeof( line ), fp )
         // first line starts with "ACCEL_ASCII" with optional stuff on same line after that.
         || memcmp( line, ACCEL_ASCII_KEYWORD, sizeof(ACCEL_ASCII_KEYWORD)-1 ) )
-        THROW_IO_ERROR( "Unknown file type" );
+        THROW_IO_ERROR( wxT( "Unknown file type" ) );
 
     // rewind the file
     fseek( fp, 0, SEEK_SET );

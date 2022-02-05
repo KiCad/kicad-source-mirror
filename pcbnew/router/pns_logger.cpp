@@ -47,7 +47,7 @@ void LOGGER::Save( const std::string& aFilename )
 {
     FILE* f = fopen( aFilename.c_str(), "wb" );
 
-    wxLogTrace( "PNS", "Saving to '%s' [%p]", aFilename.c_str(), f );
+    wxLogTrace( wxT( "PNS" ), wxT( "Saving to '%s' [%p]" ), aFilename.c_str(), f );
 
     for( const EVENT_ENTRY& evt : m_events )
     {

@@ -278,11 +278,11 @@ const wxString GENDRILL_WRITER_BASE::getDrillFileName( DRILL_LAYER_PAIR aPair, b
     wxString    extend;
 
     if( aNPTH )
-        extend = "-NPTH";
+        extend = wxT( "-NPTH" );
     else if( aPair == DRILL_LAYER_PAIR( F_Cu, B_Cu ) )
     {
         if( !aMerge_PTH_NPTH )
-            extend = "-PTH";
+            extend = wxT( "-PTH" );
         // if merged, extend with nothing
     }
     else
@@ -369,18 +369,18 @@ const wxString GENDRILL_WRITER_BASE::BuildFileFunctionAttributeString(
     wxString text;
 
     if( aCompatNCdrill )
-        text = "; #@! ";
+        text = wxT( "; #@! " );
     else
-        text = "%";
+        text = wxT( "%" );
 
-    text << "TF.FileFunction,";
+    text << wxT( "TF.FileFunction," );
 
     if( aHoleType == NPTH_FILE )
-        text << "NonPlated,";
+        text << wxT( "NonPlated," );
     else if( aHoleType == MIXED_FILE )  // only for Excellon format
-        text << "MixedPlating,";
+        text << wxT( "MixedPlating," );
     else
-        text << "Plated,";
+        text << wxT( "Plated," );
 
     int layer1 = aLayerPair.first;
     int layer2 = aLayerPair.second;
@@ -394,24 +394,24 @@ const wxString GENDRILL_WRITER_BASE::BuildFileFunctionAttributeString(
     else
         layer2 += 1;
 
-    text << layer1 << "," << layer2;
+    text << layer1 << wxT( "," ) << layer2;
 
     // Now add PTH or NPTH or Blind or Buried attribute
     int toplayer = 1;
     int bottomlayer = m_pcb->GetCopperLayerCount();
 
     if( aHoleType == NPTH_FILE )
-        text << ",NPTH";
+        text << wxT( ",NPTH" );
     else if( aHoleType == MIXED_FILE )      // only for Excellon format
     {
         // write nothing
     }
     else if( layer1 == toplayer && layer2 == bottomlayer )
-        text << ",PTH";
+        text << wxT( ",PTH" );
     else if( layer1 == toplayer || layer2 == bottomlayer )
-        text << ",Blind";
+        text << wxT( ",Blind" );
     else
-        text << ",Buried";
+        text << wxT( ",Buried" );
 
     // In NC drill file, these previous parameters should be enough:
     if( aCompatNCdrill )
@@ -436,16 +436,16 @@ const wxString GENDRILL_WRITER_BASE::BuildFileFunctionAttributeString(
     }
 
     if( hasOblong && hasDrill )
-        text << ",Mixed";
+        text << wxT( ",Mixed" );
     else if( hasDrill )
-        text << ",Drill";
+        text << wxT( ",Drill" );
     else if( hasOblong )
-        text << ",Route";
+        text << wxT( ",Route" );
 
     // else: empty file.
 
     // End of .FileFunction attribute:
-    text << "*%";
+    text << wxT( "*%" );
 
     return text;
 }

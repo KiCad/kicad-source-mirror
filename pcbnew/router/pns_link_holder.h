@@ -82,14 +82,14 @@ public:
 #if 0 /// @todo move outside header.
         if( !IsLinked() )
         {
-            wxLogTrace( "PNS", "item %p: no links", this );
+            wxLogTrace( wxT( "PNS" ), wxT( "item %p: no links" ), this );
             return;
         }
 
-        wxLogTrace( "PNS", "item %p: %d links", this, (int) m_links.size() );
+        wxLogTrace( wxT( "PNS" ), wxT( "item %p: %d links" ), this, (int) m_links.size() );
 
         for( int i = 0; i < (int) m_links.size(); i++ )
-            wxLogTrace( "PNS", "item %d: %p\n", i, m_links[i] );
+            wxLogTrace( wxT( "PNS" ), wxT( "item %d: %p\n" ), i, m_links[i] );
 #endif
     }
 

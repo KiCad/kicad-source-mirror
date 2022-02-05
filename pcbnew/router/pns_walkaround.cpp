@@ -75,7 +75,7 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath, bool aWinding
     PNS_DBG( Dbg(), AddLine, aPath.CLine(), GREEN, 1, name );
     snprintf( name, sizeof( name ), "result-%s-%d", aWindingDirection ? "cw" : "ccw", m_iteration );
     PNS_DBG( Dbg(), AddLine, path_walk, BLUE, 10000, name );
-    PNS_DBG( Dbg(), Message, wxString::Format( "Stat cw %d", !!s_cw ) );
+    PNS_DBG( Dbg(), Message, wxString::Format( wxT( "Stat cw %d" ), !!s_cw ) );
     PNS_DBGN( Dbg(), EndGroup );
 
     path_walk.Simplify();

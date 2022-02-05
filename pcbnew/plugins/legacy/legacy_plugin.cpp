@@ -211,7 +211,7 @@ void LEGACY_PLUGIN::checkpoint()
                                                             / std::max( 1U, m_lineCount ) );
 
             if( !m_progressReporter->KeepRefreshing() )
-                THROW_IO_ERROR( ( "Open cancelled by user." ) );
+                THROW_IO_ERROR( _( "Open cancelled by user." ) );
 
             m_lastProgressLine = curLine;
         }
@@ -450,7 +450,7 @@ BOARD* LEGACY_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
         m_progressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
 
         if( !m_progressReporter->KeepRefreshing() )
-            THROW_IO_ERROR( ( "Open cancelled by user." ) );
+            THROW_IO_ERROR( _( "Open cancelled by user." ) );
 
         while( reader.ReadLine() )
             m_lineCount++;
@@ -569,7 +569,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
         }
     }
 
-    THROW_IO_ERROR( "Missing '$EndBOARD'" );
+    THROW_IO_ERROR( wxT( "Missing '$EndBOARD'" ) );
 }
 
 
@@ -584,7 +584,7 @@ void LEGACY_PLUGIN::checkVersion()
 
     if( !TESTLINE( "PCBNEW-BOARD" ) )
     {
-        THROW_IO_ERROR( "Unknown file type" );
+        THROW_IO_ERROR( wxT( "Unknown file type" ) );
     }
 
     int ver = 1;    // if sccanf fails
@@ -640,7 +640,7 @@ void LEGACY_PLUGIN::loadGENERAL()
         else if( TESTLINE( "EnabledLayers" ) )
         {
             if( !saw_LayerCount )
-                THROW_IO_ERROR( "Missing '$GENERAL's LayerCount" );
+                THROW_IO_ERROR( wxT( "Missing '$GENERAL's LayerCount" ) );
 
             LEG_MASK enabledLayers = hexParse( line + SZ( "EnabledLayers" ) );
             LSET new_mask = leg_mask2new( m_cu_count, enabledLayers );
@@ -661,7 +661,7 @@ void LEGACY_PLUGIN::loadGENERAL()
         // However, this code works.
         #if 0
             if( !saw_LayerCount )
-                THROW_IO_ERROR( "Missing '$GENERAL's LayerCount" );
+                THROW_IO_ERROR( wxT( "Missing '$GENERAL's LayerCount" ) );
 
             LEG_MASK visibleLayers = hexParse( line + SZ( "VisibleLayers" ) );
 
@@ -713,7 +713,7 @@ void LEGACY_PLUGIN::loadGENERAL()
         }
     }
 
-    THROW_IO_ERROR( "Missing '$EndGENERAL'" );
+    THROW_IO_ERROR( wxT( "Missing '$EndGENERAL'" ) );
 }
 
 
@@ -844,7 +844,7 @@ void LEGACY_PLUGIN::loadSHEET()
         }
     }
 
-    THROW_IO_ERROR( "Missing '$EndSHEETDESCR'" );
+    THROW_IO_ERROR( wxT( "Missing '$EndSHEETDESCR'" ) );
 }
 
 
@@ -1548,7 +1548,7 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
         }
     }
 
-    THROW_IO_ERROR( "Missing '$EndPAD'" );
+    THROW_IO_ERROR( wxT( "Missing '$EndPAD'" ) );
 }
 
 
@@ -1636,14 +1636,14 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
         {
             if( ( line = READLINE( m_reader ) ) == nullptr )
             {
-                THROW_IO_ERROR( "S_POLGON point count mismatch." );
+                THROW_IO_ERROR( wxT( "S_POLGON point count mismatch." ) );
             }
 
             // e.g. "Dl 23 44\n"
 
             if( !TESTLINE( "Dl" ) )
             {
-                THROW_IO_ERROR( "Missing Dl point def" );
+                THROW_IO_ERROR( wxT( "Missing Dl point def" ) );
             }
 
             BIU x = biuParse( line + SZ( "Dl" ), &data );
@@ -1710,8 +1710,8 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( FP_TEXT* aText )
     // convert the "quoted, escaped, UTF8, text" to a wxString, find it by skipping
     // as far forward as needed until the first double quote.
     txt_end = data + ReadDelimitedText( &m_field, data );
-    m_field.Replace( "%V", "${VALUE}" );
-    m_field.Replace( "%R", "${REFERENCE}" );
+    m_field.Replace( wxT( "%V" ), wxT( "${VALUE}" ) );
+    m_field.Replace( wxT( "%R" ), wxT( "${REFERENCE}" ) );
     m_field = ConvertToNewOverbarNotation( m_field );
     aText->SetText( m_field );
 
@@ -1810,7 +1810,7 @@ void LEGACY_PLUGIN::load3D( FOOTPRINT* aFootprint )
         }
     }
 
-    THROW_IO_ERROR( "Missing '$EndSHAPE3D'" );
+    THROW_IO_ERROR( wxT( "Missing '$EndSHAPE3D'" ) );
 }
 
 
@@ -1931,7 +1931,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
         }
     }
 
-    THROW_IO_ERROR( "Missing '$EndDRAWSEGMENT'" );
+    THROW_IO_ERROR( wxT( "Missing '$EndDRAWSEGMENT'" ) );
 }
 
 void LEGACY_PLUGIN::loadNETINFO_ITEM()
@@ -1968,7 +1968,7 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
             }
             else
             {
-                THROW_IO_ERROR( "Two net definitions in  '$EQUIPOT' block" );
+                THROW_IO_ERROR( wxT( "Two net definitions in  '$EQUIPOT' block" ) );
             }
         }
         else if( TESTLINE( "$EndEQUIPOT" ) )
@@ -1998,7 +1998,7 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
 
     // If we are here, there is an error.
     delete net;
-    THROW_IO_ERROR( "Missing '$EndEQUIPOT'" );
+    THROW_IO_ERROR( wxT( "Missing '$EndEQUIPOT'" ) );
 }
 
 
@@ -2107,7 +2107,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
         }
     }
 
-    THROW_IO_ERROR( "Missing '$EndTEXTPCB'" );
+    THROW_IO_ERROR( wxT( "Missing '$EndTEXTPCB'" ) );
 }
 
 
@@ -2160,7 +2160,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
         if( !TESTLINE( "De" ) )
         {
             // mandatory 2nd line is missing
-            THROW_IO_ERROR( "Missing 2nd line of a TRACK def" );
+            THROW_IO_ERROR( wxT( "Missing 2nd line of a TRACK def" ) );
         }
 #endif
 
@@ -2186,7 +2186,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
         }
         else
         {
-            wxFAIL_MSG( "Segment type unknown" );
+            wxFAIL_MSG( wxT( "Segment type unknown" ) );
             continue;
         }
 
@@ -2261,7 +2261,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
         }
     }
 
-    THROW_IO_ERROR( "Missing '$EndTRACK'" );
+    THROW_IO_ERROR( wxT( "Missing '$EndTRACK'" ) );
 }
 
 
@@ -2343,7 +2343,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
         }
     }
 
-    THROW_IO_ERROR( "Missing '$EndNCLASS'" );
+    THROW_IO_ERROR( wxT( "Missing '$EndNCLASS'" ) );
 }
 
 
@@ -2390,7 +2390,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             int   netcode = intParse( data, &data );
 
             if( ReadDelimitedText( buf, data, sizeof(buf) ) > (int) sizeof(buf) )
-                THROW_IO_ERROR( "ZInfo netname too long" );
+                THROW_IO_ERROR( wxT( "ZInfo netname too long" ) );
 
             const_cast<KIID&>( zc->m_Uuid ) = KIID( uuid );
 
@@ -2627,7 +2627,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
         }
     }
 
-    THROW_IO_ERROR( "Missing '$endCZONE_OUTLINE'" );
+    THROW_IO_ERROR( wxT( "Missing '$endCZONE_OUTLINE'" ) );
 }
 
 
@@ -2765,7 +2765,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
         }
     }
 
-    THROW_IO_ERROR( "Missing '$endCOTATION'" );
+    THROW_IO_ERROR( wxT( "Missing '$endCOTATION'" ) );
 }
 
 
@@ -2804,7 +2804,7 @@ void LEGACY_PLUGIN::loadPCB_TARGET()
         }
     }
 
-    THROW_IO_ERROR( "Missing '$EndDIMENSION'" );
+    THROW_IO_ERROR( wxT( "Missing '$EndDIMENSION'" ) );
 }
 
 
@@ -3111,7 +3111,7 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
             {
                 if( !m_footprints.insert( footprintName, fp ).second )
                 {
-                    wxFAIL_MSG( "error doing cache insert using guaranteed unique name" );
+                    wxFAIL_MSG( wxT( "error doing cache insert using guaranteed unique name" ) );
                 }
             }
             else
@@ -3140,7 +3140,8 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
 
                         if( !m_footprints.insert( newName, fp ).second )
                         {
-                            wxFAIL_MSG( "error doing cache insert using guaranteed unique name" );
+                            wxFAIL_MSG( wxT( "error doing cache insert using guaranteed unique "
+                                             "name" ) );
                         }
                     }
                 }

@@ -181,8 +181,6 @@ public:
 
         APPEARANCE_SETTING() :
                 id( -1 ),
-                label( "" ),
-                tooltip( "" ),
                 visible( false ),
                 can_control_opacity( false ),
                 spacer( true ),

@@ -75,7 +75,7 @@ BOARD* FABMASTER_PLUGIN::Load( const wxString &aFileName, BOARD *aAppendToMe,
         aProgressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
 
         if( !aProgressReporter->KeepRefreshing() )
-            THROW_IO_ERROR( ( "Open cancelled by user." ) );
+            THROW_IO_ERROR( _( "Open cancelled by user." ) );
     }
 
     if( !m_fabmaster.Read( aFileName.ToStdString() ) )

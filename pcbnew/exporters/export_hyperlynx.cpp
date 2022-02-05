@@ -395,7 +395,7 @@ bool HYPERLYNX_EXPORTER::writeDevices()
         wxString layerName = m_board->GetLayerName( footprint->GetLayer() );
 
         if( ref.IsEmpty() )
-            ref = "EMPTY";
+            ref = wxT( "EMPTY" );
 
         m_out->Print( 1, "(? REF=\"%s\" L=\"%s\")\n", (const char*) ref.c_str(),
                 (const char*) layerName.c_str() );
@@ -446,12 +446,12 @@ bool HYPERLYNX_EXPORTER::writeNetObjects( const std::vector<BOARD_ITEM*>& aObjec
                 wxString ref = pad->GetParent()->GetReference();
 
                 if( ref.IsEmpty() )
-                    ref = "EMPTY";
+                    ref = wxT( "EMPTY" );
 
                 wxString padName = pad->GetNumber();
 
                 if( padName.IsEmpty() )
-                    padName = "1";
+                    padName = wxT( "1" );
 
 
                 m_out->Print( 1, "(PIN X=%.10f Y=%.10f R=\"%s.%s\" P=%d)\n",

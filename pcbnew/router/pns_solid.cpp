@@ -83,7 +83,7 @@ static const SHAPE_LINE_CHAIN buildHullForPrimitiveShape( const SHAPE* aShape, i
     }
     default:
     {
-        wxFAIL_MSG( wxString::Format( "Unsupported hull shape: %d (%s).",
+        wxFAIL_MSG( wxString::Format( wxT( "Unsupported hull shape: %d (%s)." ),
                                       aShape->Type(),
                                       SHAPE_TYPE_asString( aShape->Type() ) ) );
         break;
