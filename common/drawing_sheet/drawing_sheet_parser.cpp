@@ -899,7 +899,7 @@ bool DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
         }
     }
 
-    wxFFile wksFile( fullFileName, "rb" );
+    wxFFile wksFile( fullFileName, wxT( "rb" ) );
 
     if( ! wksFile.IsOpened() )
     {
@@ -939,7 +939,7 @@ bool DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
         }
         catch( const std::bad_alloc& )
         {
-            wxLogMessage( "Memory exhaustion reading drawing sheet" );
+            wxLogMessage( wxT( "Memory exhaustion reading drawing sheet" ) );
             return false;
         }
     }

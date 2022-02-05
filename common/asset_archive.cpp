@@ -87,7 +87,7 @@ bool ASSET_ARCHIVE::Load()
 long ASSET_ARCHIVE::GetFileContents( const wxString& aFilePath, const unsigned char* aDest,
                                      size_t aMaxLen )
 {
-    wxFAIL_MSG( "Unimplemented" );
+    wxFAIL_MSG( wxT( "Unimplemented" ) );
     return 0;
 }
 

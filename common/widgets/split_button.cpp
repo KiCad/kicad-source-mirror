@@ -33,7 +33,7 @@
 
 SPLIT_BUTTON::SPLIT_BUTTON( wxWindow* aParent, wxWindowID aId, const wxString& aLabel,
                             const wxPoint& aPos, const wxSize& aSize ) :
-        wxPanel( aParent, aId, aPos, aSize, wxBORDER_NONE | wxTAB_TRAVERSAL, "DropDownButton" ),
+        wxPanel( aParent, aId, aPos, aSize, wxBORDER_NONE | wxTAB_TRAVERSAL, wxT( "DropDownButton" ) ),
         m_label( aLabel )
 {
     m_colorNormal   = GetForegroundColour();

@@ -30,9 +30,9 @@
 
 // lowercase or pretty case depending on platform
 #if defined( __WXMAC__ ) || defined( __WXMSW__ )
-#define KICAD_PATH_STR "KiCad"
+#define KICAD_PATH_STR wxT( "KiCad" )
 #else
-#define KICAD_PATH_STR "kicad"
+#define KICAD_PATH_STR wxT( "kicad" )
 #endif
 
 
@@ -55,7 +55,7 @@ wxString PATHS::GetUserPluginsPath()
     wxFileName tmp;
     getUserDocumentPath( tmp );
 
-    tmp.AppendDir( "plugins" );
+    tmp.AppendDir( wxT( "plugins" ) );
 
     return tmp.GetPath();
 }
@@ -66,7 +66,7 @@ wxString PATHS::GetUserPlugins3DPath()
     wxFileName tmp;
 
     tmp.AssignDir( PATHS::GetUserPluginsPath() );
-    tmp.AppendDir( "3d" );
+    tmp.AppendDir( wxT( "3d" ) );
 
     return tmp.GetPath();
 }
@@ -77,7 +77,7 @@ wxString PATHS::GetUserScriptingPath()
     wxFileName tmp;
     getUserDocumentPath( tmp );
 
-    tmp.AppendDir( "scripting" );
+    tmp.AppendDir( wxT( "scripting" ) );
 
     return tmp.GetPath();
 }
@@ -88,7 +88,7 @@ wxString PATHS::GetUserTemplatesPath()
     wxFileName tmp;
     getUserDocumentPath( tmp );
 
-    tmp.AppendDir( "template" );
+    tmp.AppendDir( wxT( "template" ) );
 
     return tmp.GetPathWithSep();
 }
@@ -99,7 +99,7 @@ wxString PATHS::GetDefaultUserSymbolsPath()
     wxFileName tmp;
     getUserDocumentPath( tmp );
 
-    tmp.AppendDir( "symbols" );
+    tmp.AppendDir( wxT( "symbols" ) );
 
     return tmp.GetPath();
 }
@@ -110,7 +110,7 @@ wxString PATHS::GetDefaultUserFootprintsPath()
     wxFileName tmp;
     getUserDocumentPath( tmp );
 
-    tmp.AppendDir( "footprints" );
+    tmp.AppendDir( wxT( "footprints" ) );
 
     return tmp.GetPath();
 }
@@ -121,7 +121,7 @@ wxString PATHS::GetDefaultUser3DModelsPath()
     wxFileName tmp;
     getUserDocumentPath( tmp );
 
-    tmp.AppendDir( "3dmodels" );
+    tmp.AppendDir( wxT( "3dmodels" ) );
 
     return tmp.GetPath();
 }
@@ -131,7 +131,7 @@ wxString PATHS::GetDefault3rdPartyPath()
     wxFileName tmp;
     getUserDocumentPath( tmp );
 
-    tmp.AppendDir( "3rdparty" );
+    tmp.AppendDir( wxT( "3rdparty" ) );
 
     return tmp.GetPath();
 }
@@ -141,7 +141,7 @@ wxString PATHS::GetDefaultUserProjectsPath()
     wxFileName tmp;
     getUserDocumentPath( tmp );
 
-    tmp.AppendDir( "projects" );
+    tmp.AppendDir( wxT( "projects" ) );
 
     return tmp.GetPath();
 }
@@ -263,7 +263,7 @@ wxString PATHS::GetStockPlugins3DPath()
     // KICAD_PLUGINDIR = CMAKE_INSTALL_FULL_LIBDIR path is the absolute path
     // corresponding to the install path used for constructing KICAD_USER_PLUGIN
     wxString tfname = wxString::FromUTF8Unchecked( KICAD_PLUGINDIR );
-    fn.Assign( tfname, "" );
+    fn.Assign( tfname, wxT( "" ) );
     fn.AppendDir( wxT( "kicad" ) );
     fn.AppendDir( wxT( "plugins" ) );
 #elif defined( __WXMAC__ )
@@ -273,7 +273,7 @@ wxString PATHS::GetStockPlugins3DPath()
     fn.AppendDir( wxT( "plugins" ) );
 #endif
 
-    fn.AppendDir( "3d" );
+    fn.AppendDir( wxT( "3d" ) );
 
     return fn.GetPathWithSep();
 }
@@ -309,7 +309,7 @@ wxString PATHS::GetDocumentationPath()
 #if defined( __WXMAC__ )
     path = GetOSXKicadDataDir();
 #elif defined( __WXMSW__ )
-    path = getWindowsKiCadRoot() + "share/doc/kicad";
+    path = getWindowsKiCadRoot() + wxT( "share/doc/kicad" );
 #else
     path = wxString::FromUTF8Unchecked( KICAD_DOCS );
 #endif
@@ -360,9 +360,9 @@ wxString PATHS::GetOSXKicadUserDataDir()
     wxFileName udir( wxStandardPaths::Get().GetUserDataDir(), wxEmptyString );
 
     // Since appname is different if started via launcher or standalone binary
-    // map all to "kicad" here
+    // map all to wxT( "kicad" ) here
     udir.RemoveLastDir();
-    udir.AppendDir( "kicad" );
+    udir.AppendDir( wxT( "kicad" ) );
 
     return udir.GetPath();
 }
@@ -407,7 +407,7 @@ wxString PATHS::GetOSXKicadDataDir()
 #ifdef __WXWINDOWS__
 wxString PATHS::getWindowsKiCadRoot()
 {
-    wxFileName root( Pgm().GetExecutablePath() + "/../" );
+    wxFileName root( Pgm().GetExecutablePath() + wxT( "/../" ) );
     root.Normalize();
 
     return root.GetPathWithSep();

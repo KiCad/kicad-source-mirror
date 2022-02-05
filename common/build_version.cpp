@@ -95,42 +95,42 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     wxString aMsg;
     // DO NOT translate information in the msg_version string
 
-    wxString eol = aHtml ? "<br>" : "\n";
+    wxString eol = aHtml ? wxT( "<br>" ) : wxT( "\n" );
 
     // Tabs instead of spaces for the plaintext version for shorter string length
-    wxString indent4 = aHtml ? "&nbsp;&nbsp;&nbsp;&nbsp;" : "\t";
+    wxString indent4 = aHtml ? wxT( "&nbsp;&nbsp;&nbsp;&nbsp;" ) : wxT( "\t" );
 
-#define ON "ON" << eol
-#define OFF "OFF" << eol
+#define ON wxT( "ON" ) << eol
+#define OFF wxT( "OFF" ) << eol
 
     wxString version;
-    version << ( KIPLATFORM::APP::IsOperatingSystemUnsupported() ? "(UNSUPPORTED)"
+    version << ( KIPLATFORM::APP::IsOperatingSystemUnsupported() ? wxT( "(UNSUPPORTED)" )
                                                                  : GetBuildVersion() )
 #ifdef DEBUG
-            << ", debug"
+            << wxT( ", debug" )
 #else
-            << ", release"
+            << wxT( ", release" )
 #endif
-            << " build";
+            << wxT( " build" );
 
     wxPlatformInfo platform;
-    aMsg << "Application: " << aTitle;
+    aMsg << wxT( "Application: " ) << aTitle;
 
     #if defined( KICAD_BUILD_ARCH_X64 )
-    aMsg << " (64-bit)";
+    aMsg << wxT( " (64-bit)" );
     #elif defined( KICAD_BUILD_ARCH_X86 )
-    aMsg << " (32-bit)";
+    aMsg << wxT( " (32-bit)" );
     #elif defined( KICAD_BUILD_ARCH_ARM )
-    aMsg << " (ARM 32-bit)";
+    aMsg << wxT( " (ARM 32-bit)" );
     #elif defined( KICAD_BUILD_ARCH_ARM64 )
-    aMsg << " (ARM 64-bit)";
+    aMsg << wxT( " (ARM 64-bit)" );
     #endif
 
     aMsg << eol << eol;
 
 
-    aMsg << "Version: " << version << eol << eol;
-    aMsg << "Libraries:" << eol;
+    aMsg << wxT( "Version: " ) << version << eol << eol;
+    aMsg << wxT( "Libraries:" ) << eol;
 
     aMsg << indent4 << wxGetLibraryVersionInfo().GetVersionString() << eol;
 
@@ -139,26 +139,26 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 
     aMsg << eol;
 
-    aMsg << "Platform: " << wxGetOsDescription() << ", "
-         << GetPlatformGetBitnessName() << ", "
-         << platform.GetEndiannessName() << ", "
+    aMsg << wxT( "Platform: " ) << wxGetOsDescription() << wxT( ", " )
+         << GetPlatformGetBitnessName() << wxT( ", " )
+         << platform.GetEndiannessName() << wxT( ", " )
          << platform.GetPortIdName();
 
 #ifdef __WXGTK__
-    aMsg << ", " << wxGetenv( "XDG_SESSION_DESKTOP" )
-         << ", " << wxGetenv( "XDG_SESSION_TYPE" );
+    aMsg << wxT( ", " ) << wxGetenv( wxT( "XDG_SESSION_DESKTOP" ) )
+         << wxT( ", " ) << wxGetenv( wxT( "XDG_SESSION_TYPE" ) );
 #endif
 
     aMsg << eol << eol;
 
     if( !aBrief )
     {
-        aMsg << "Build Info:" << eol;
-        aMsg << indent4 << "Date: " << GetBuildDate() << eol;
+        aMsg << wxT( "Build Info:" ) << eol;
+        aMsg << indent4 << wxT( "Date: " ) << GetBuildDate() << eol;
     }
 
-    aMsg << indent4 << "wxWidgets: " << wxVERSION_NUM_DOT_STRING << " (";
-    aMsg << __WX_BO_UNICODE __WX_BO_STL __WX_BO_WXWIN_COMPAT_2_8 ")";
+    aMsg << indent4 << wxT( "wxWidgets: " ) << wxVERSION_NUM_DOT_STRING << wxT( " (" );
+    aMsg << __WX_BO_UNICODE __WX_BO_STL __WX_BO_WXWIN_COMPAT_2_8 wxT( ")" );
 
     // Get the GTK+ version where possible.
 #ifdef __WXGTK__
@@ -166,68 +166,68 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 
     major = wxPlatformInfo().Get().GetToolkitMajorVersion();
     minor = wxPlatformInfo().Get().GetToolkitMinorVersion();
-    aMsg << " GTK+ " <<  major << "." << minor;
+    aMsg << wxT( " GTK+ " ) <<  major << wxT( "." ) << minor;
 #endif
 
     aMsg << eol;
 
-    aMsg << indent4 << "Boost: " << ( BOOST_VERSION / 100000 ) << wxT( "." )
+    aMsg << indent4 << wxT( "Boost: " ) << ( BOOST_VERSION / 100000 ) << wxT( "." )
          << ( BOOST_VERSION / 100 % 1000 ) << wxT( "." )
          << ( BOOST_VERSION % 100 ) << eol;
 
 #ifdef KICAD_USE_OCC
-    aMsg << indent4 << "OCC: " << OCC_VERSION_COMPLETE << eol;
+    aMsg << indent4 << wxT( "OCC: " ) << OCC_VERSION_COMPLETE << eol;
 #endif
 
-    aMsg << indent4 << "Curl: " << GetCurlLibVersion() << eol;
+    aMsg << indent4 << wxT( "Curl: " ) << GetCurlLibVersion() << eol;
 
 #if defined( KICAD_SPICE )
 #if defined( NGSPICE_BUILD_VERSION )
-    aMsg << indent4 << "ngspice: " << NGSPICE_BUILD_VERSION << eol;
+    aMsg << indent4 << wxT( "ngspice: " ) << NGSPICE_BUILD_VERSION << eol;
 #elif defined( NGSPICE_HAVE_CONFIG_H )
     #undef HAVE_STRNCASECMP     /* is redefined in ngspice/config.h */
     #include <ngspice/config.h>
-    aMsg << indent4 << "ngspice: " << PACKAGE_VERSION << eol;
+    aMsg << indent4 << wxT( "ngspice: " ) << PACKAGE_VERSION << eol;
 #elif defined( NGSPICE_PACKAGE_VERSION )
-    aMsg << indent4 << "ngspice: " << NGSPICE_PACKAGE_VERSION << eol;
+    aMsg << indent4 << wxT( "ngspice: " ) << NGSPICE_PACKAGE_VERSION << eol;
 #else
-    aMsg << indent4 << "ngspice: " << "unknown" << eol;
+    aMsg << indent4 << wxT( "ngspice: " ) << wxT( "unknown" ) << eol;
 #endif
 #endif
 
-    aMsg << indent4 << "Compiler: ";
+    aMsg << indent4 << wxT( "Compiler: " );
 #if defined(__clang__)
-    aMsg << "Clang " << __clang_major__ << "." << __clang_minor__ << "." << __clang_patchlevel__;
+    aMsg << wxT( "Clang " ) << __clang_major__ << wxT( "." ) << __clang_minor__ << wxT( "." ) << __clang_patchlevel__;
 #elif defined(__GNUG__)
-    aMsg << "GCC " << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__;
+    aMsg << wxT( "GCC " ) << __GNUC__ << wxT( "." ) << __GNUC_MINOR__ << wxT( "." ) << __GNUC_PATCHLEVEL__;
 #elif defined(_MSC_VER)
-    aMsg << "Visual C++ " << _MSC_VER;
+    aMsg << wxT( "Visual C++ " ) << _MSC_VER;
 #elif defined(__INTEL_COMPILER)
-    aMsg << "Intel C++ " << __INTEL_COMPILER;
+    aMsg << wxT( "Intel C++ " ) << __INTEL_COMPILER;
 #else
-    aMsg << "Other Compiler ";
+    aMsg << wxT( "Other Compiler " );
 #endif
 
 #if defined(__GXX_ABI_VERSION)
-    aMsg << " with C++ ABI " << __GXX_ABI_VERSION << eol;
+    aMsg << wxT( " with C++ ABI " ) << __GXX_ABI_VERSION << eol;
 #else
-    aMsg << " without C++ ABI" << eol;
+    aMsg << wxT( " without C++ ABI" ) << eol;
 #endif
 
     aMsg << eol;
 
     // Add build settings config (build options):
-    aMsg << "Build settings:" << eol;
+    aMsg << wxT( "Build settings:" ) << eol;
 
 #ifdef KICAD_USE_OCC
-    aMsg << indent4 << "KICAD_USE_OCC=" << ON;
+    aMsg << indent4 << wxT( "KICAD_USE_OCC=" ) << ON;
 #endif
 
 #ifdef KICAD_USE_EGL
-    aMsg << indent4 << "KICAD_USE_EGL=" << ON;
+    aMsg << indent4 << wxT( "KICAD_USE_EGL=" ) << ON;
 #endif
 
-    aMsg << indent4 << "KICAD_SPICE=";
+    aMsg << indent4 << wxT( "KICAD_SPICE=" );
 #ifdef KICAD_SPICE
     aMsg << ON;
 #else
@@ -235,12 +235,12 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 #endif
 
 #ifndef NDEBUG
-    aMsg << indent4 << "KICAD_STDLIB_DEBUG=";
+    aMsg << indent4 << wxT( "KICAD_STDLIB_DEBUG=" );
 #ifdef KICAD_STDLIB_DEBUG
     aMsg << ON;
 #else
     aMsg << OFF;
-    aMsg << indent4 << "KICAD_STDLIB_LIGHT_DEBUG=";
+    aMsg << indent4 << wxT( "KICAD_STDLIB_LIGHT_DEBUG=" );
 #ifdef KICAD_STDLIB_LIGHT_DEBUG
     aMsg << ON;
 #else
@@ -248,14 +248,14 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 #endif
 #endif
 
-    aMsg << indent4 << "KICAD_SANITIZE_ADDRESS=";
+    aMsg << indent4 << wxT( "KICAD_SANITIZE_ADDRESS=" );
 #ifdef KICAD_SANITIZE_ADDRESS
     aMsg << ON;
 #else
     aMsg << OFF;
 #endif
 
-    aMsg << indent4 << "KICAD_SANITIZE_THREADS=";
+    aMsg << indent4 << wxT( "KICAD_SANITIZE_THREADS=" );
 #ifdef KICAD_SANITIZE_THREADS
     aMsg << ON;
 #else

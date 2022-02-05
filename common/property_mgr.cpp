@@ -123,14 +123,14 @@ void PROPERTY_MANAGER::AddTypeCast( TYPE_CAST_BASE* aCast )
     TYPE_ID derivedHash = aCast->DerivedHash();
     CLASS_DESC& classDesc = getClass( aCast->BaseHash() );
     auto& typeCasts = classDesc.m_typeCasts;
-    wxASSERT_MSG( typeCasts.count( derivedHash ) == 0, "Such converter already exists" );
+    wxASSERT_MSG( typeCasts.count( derivedHash ) == 0, wxT( "Such converter already exists" ) );
     typeCasts.emplace( derivedHash, aCast );
 }
 
 
 void PROPERTY_MANAGER::InheritsAfter( TYPE_ID aDerived, TYPE_ID aBase )
 {
-    wxASSERT_MSG( aDerived != aBase, "Class cannot inherit from itself" );
+    wxASSERT_MSG( aDerived != aBase, wxT( "Class cannot inherit from itself" ) );
 
     CLASS_DESC& derived = getClass( aDerived );
     CLASS_DESC& base = getClass( aBase );
@@ -138,7 +138,7 @@ void PROPERTY_MANAGER::InheritsAfter( TYPE_ID aDerived, TYPE_ID aBase )
     m_dirty = true;
 
     wxASSERT_MSG( derived.m_bases.size() == 1 || derived.m_typeCasts.count( aBase ) == 1,
-                  "You need to add a TYPE_CAST for classes inheriting from multiple bases" );
+                  wxT( "You need to add a TYPE_CAST for classes inheriting from multiple bases" ) );
 }
 
 

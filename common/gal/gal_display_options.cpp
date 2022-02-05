@@ -74,7 +74,7 @@ GAL_DISPLAY_OPTIONS::GAL_DISPLAY_OPTIONS()
 
 void GAL_DISPLAY_OPTIONS::ReadWindowSettings( WINDOW_SETTINGS& aCfg )
 {
-    wxLogTrace( traceGalDispOpts, "Reading app-specific options" );
+    wxLogTrace( traceGalDispOpts, wxT( "Reading app-specific options" ) );
 
     m_gridStyle = UTIL::GetValFromConfig( gridStyleConfigVals, aCfg.grid.style );
     m_gridSnapping = UTIL::GetValFromConfig( gridSnapConfigVals, aCfg.grid.snap );
@@ -91,7 +91,7 @@ void GAL_DISPLAY_OPTIONS::ReadWindowSettings( WINDOW_SETTINGS& aCfg )
 
 void GAL_DISPLAY_OPTIONS::ReadCommonConfig( COMMON_SETTINGS& aSettings, wxWindow* aWindow )
 {
-    wxLogTrace( traceGalDispOpts, "Reading common config" );
+    wxLogTrace( traceGalDispOpts, wxT( "Reading common config" ) );
 
     gl_antialiasing_mode = static_cast<KIGFX::OPENGL_ANTIALIASING_MODE>(
             aSettings.m_Graphics.opengl_aa_mode );
@@ -109,7 +109,7 @@ void GAL_DISPLAY_OPTIONS::ReadCommonConfig( COMMON_SETTINGS& aSettings, wxWindow
 void GAL_DISPLAY_OPTIONS::ReadConfig( COMMON_SETTINGS& aCommonConfig,
                                       WINDOW_SETTINGS& aWindowConfig, wxWindow* aWindow )
 {
-    wxLogTrace( traceGalDispOpts, "Reading common and app config" );
+    wxLogTrace( traceGalDispOpts, wxT( "Reading common and app config" ) );
 
     ReadWindowSettings( aWindowConfig );
 
@@ -119,7 +119,7 @@ void GAL_DISPLAY_OPTIONS::ReadConfig( COMMON_SETTINGS& aCommonConfig,
 
 void GAL_DISPLAY_OPTIONS::WriteConfig( WINDOW_SETTINGS& aCfg )
 {
-    wxLogTrace( traceGalDispOpts, "Writing window settings" );
+    wxLogTrace( traceGalDispOpts, wxT( "Writing window settings" ) );
 
     aCfg.grid.style = UTIL::GetConfigForVal( gridStyleConfigVals, m_gridStyle );
     aCfg.grid.snap = UTIL::GetConfigForVal( gridSnapConfigVals, m_gridSnapping );
@@ -143,7 +143,7 @@ void GAL_DISPLAY_OPTIONS::UpdateScaleFactor()
 
 void GAL_DISPLAY_OPTIONS::NotifyChanged()
 {
-    wxLogTrace( traceGalDispOpts, "Change notification" );
+    wxLogTrace( traceGalDispOpts, wxT( "Change notification" ) );
 
     Notify( &GAL_DISPLAY_OPTIONS_OBSERVER::OnGalDisplayOptionsChanged, *this );
 }

@@ -43,36 +43,36 @@
 #include <eda_doc.h>
 #include <wx/msgdlg.h>
 
-#define URL_GET_INVOLVED "https://kicad.org/contribute/"
-#define URL_DONATE "https://go.kicad.org/app-donate"
-#define URL_DOCUMENTATION "https://docs.kicad.org/"
+#define URL_GET_INVOLVED wxT( "https://kicad.org/contribute/" )
+#define URL_DONATE wxT( "https://go.kicad.org/app-donate" )
+#define URL_DOCUMENTATION wxT( "https://docs.kicad.org/" )
 
 
 /// URL to launch a new issue with pre-populated description
 wxString COMMON_CONTROL::m_bugReportUrl =
-        "https://gitlab.com/kicad/code/kicad/issues/new?issue[description]=%s";
+        wxT( "https://gitlab.com/kicad/code/kicad/issues/new?issue[description]=%s" );
 
 
 /// Issue template to use for reporting bugs (this should not be translated)
 wxString COMMON_CONTROL::m_bugReportTemplate =
-        "<!-- Before Creating a New Issue:\n"
-        "* Search the issue tracker to verify the issue has not already been reported.\n"
-        "* Only report one problem per issue. -->\n"
-        "\n"
-        "# Description\n"
-        "<!-- What is the current behavior and what is the expected behavior? -->\n"
-        "<!-- Please attach screenshots if they will help explain the problem. -->\n"
-        "\n"
-        "# Steps to reproduce\n"
-        "<!-- Please include a screen recording if it will help explain how to reproduce. -->\n"
-        "<!-- If this issue is specific to a project, please attach it. -->\n"
-        "1.\n"
-        "2.\n"
-        "# KiCad Version\n"
-        "\n"
-        "```\n"
-        "%s\n"
-        "```";
+        wxT( "<!-- Before Creating a New Issue:\n" )
+        wxT( "* Search the issue tracker to verify the issue has not already been reported.\n" )
+        wxT( "* Only report one problem per issue. -->\n" )
+        wxT( "\n" )
+        wxT( "# Description\n" )
+        wxT( "<!-- What is the current behavior and what is the expected behavior? -->\n" )
+        wxT( "<!-- Please attach screenshots if they will help explain the problem. -->\n" )
+        wxT( "\n" )
+        wxT( "# Steps to reproduce\n" )
+        wxT( "<!-- Please include a screen recording if it will help explain how to reproduce. -->\n" )
+        wxT( "<!-- If this issue is specific to a project, please attach it. -->\n" )
+        wxT( "1.\n" )
+        wxT( "2.\n" )
+        wxT( "# KiCad Version\n" )
+        wxT( "\n" )
+        wxT( "```\n" )
+        wxT( "%s\n" )
+        wxT( "```" );
 
 
 void COMMON_CONTROL::Reset( RESET_REASON aReason )
@@ -164,7 +164,7 @@ int COMMON_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
     KIWAY_PLAYER* editor = m_frame->Kiway().Player( playerType, true );
 
     // editor can be null if Player() fails:
-    wxCHECK_MSG( editor != nullptr, 0, "Cannot open/create the editor frame" );
+    wxCHECK_MSG( editor != nullptr, 0, wxT( "Cannot open/create the editor frame" ) );
 
     // Needed on Windows, other platforms do not use it, but it creates no issue
     if( editor->IsIconized() )
@@ -186,9 +186,9 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
     wxString helpFile;
     wxString msg;
 
-    // the URL of help files is "https://docs.kicad.org/<version>/<language>/<name>/"
-    const wxString baseUrl = URL_DOCUMENTATION + GetMajorMinorVersion() + "/"
-                             + Pgm().GetLocale()->GetName().BeforeLast( '_' ) + "/";
+    // the URL of help files is wxT( "https://docs.kicad.org/<version>/<language>/<name>/" )
+    const wxString baseUrl = URL_DOCUMENTATION + GetMajorMinorVersion() + wxT( "/" )
+                             + Pgm().GetLocale()->GetName().BeforeLast( '_' ) + wxT( "/" );
 
     /* We have to get document for beginners,
      * or the full specific doc
@@ -225,7 +225,7 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
             if( dlg.ShowModal() != wxID_YES )
                 return -1;
 
-            helpFile = baseUrl + names[0] + "/";
+            helpFile = baseUrl + names[0] + wxT( "/" );
         }
     }
     else
@@ -245,7 +245,7 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
             if( dlg.ShowModal() != wxID_YES )
                 return -1;
 
-            helpFile = baseUrl + base_name + "/";
+            helpFile = baseUrl + base_name + wxT( "/" );
         }
     }
 

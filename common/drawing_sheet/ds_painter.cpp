@@ -142,12 +142,12 @@ wxString DS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                 }
                 else if( token->IsSameAs( wxT( "PAPER" ) ) )
                 {
-                    *token = m_paperFormat ? *m_paperFormat : wxString( "" );
+                    *token = m_paperFormat ? *m_paperFormat : wxString( wxT( "" ) );
                     tokenUpdated = true;
                 }
                 else if( token->IsSameAs( wxT( "LAYER" ) ) )
                 {
-                    *token = m_sheetLayer ? *m_sheetLayer : wxString( "" );
+                    *token = m_sheetLayer ? *m_sheetLayer : wxString( wxT( "" ) );
                     tokenUpdated = true;
                 }
                 else if( m_titleBlock )

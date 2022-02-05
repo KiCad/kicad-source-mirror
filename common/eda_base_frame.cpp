@@ -183,7 +183,7 @@ wxWindow* EDA_BASE_FRAME::findQuasiModalDialog()
     // so we have to look for it separately.
     if( m_ident == FRAME_SCH )
     {
-        wxWindow* cvpcb = wxWindow::FindWindowByName( "CvpcbFrame" );
+        wxWindow* cvpcb = wxWindow::FindWindowByName( wxT( "CvpcbFrame" ) );
 
         if( cvpcb )
             return cvpcb;
@@ -332,7 +332,7 @@ bool EDA_BASE_FRAME::doAutoSave()
 
 void EDA_BASE_FRAME::OnCharHook( wxKeyEvent& aKeyEvent )
 {
-    wxLogTrace( kicadTraceKeyEvent, "EDA_BASE_FRAME::OnCharHook %s", dump( aKeyEvent ) );
+    wxLogTrace( kicadTraceKeyEvent, wxT( "EDA_BASE_FRAME::OnCharHook %s" ), dump( aKeyEvent ) );
 
     // Key events can be filtered here.
     // Currently no filtering is made.
@@ -535,7 +535,7 @@ void EDA_BASE_FRAME::OnSize( wxSizeEvent& aEvent )
 
     if( m_displayIndex >= 0 && currentDisplay >= 0 && currentDisplay != m_displayIndex )
     {
-        wxLogTrace( traceDisplayLocation, "OnSize: current display changed %d to %d",
+        wxLogTrace( traceDisplayLocation, wxT( "OnSize: current display changed %d to %d" ),
                     m_displayIndex, currentDisplay );
         m_displayIndex = currentDisplay;
         ensureWindowIsOnScreen();
@@ -569,7 +569,7 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
     m_frameSize.x = aState.size_x;
     m_frameSize.y = aState.size_y;
 
-    wxLogTrace( traceDisplayLocation, "Config position (%d, %d) with size (%d, %d)",
+    wxLogTrace( traceDisplayLocation, wxT( "Config position (%d, %d) with size (%d, %d)" ),
                 m_framePos.x, m_framePos.y, m_frameSize.x, m_frameSize.y );
 
     // Ensure minimum size is set if the stored config was zero-initialized
@@ -578,15 +578,15 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
         m_frameSize = defaultSize( m_ident );
         wasDefault  = true;
 
-        wxLogTrace( traceDisplayLocation, "Using minimum size (%d, %d)",
+        wxLogTrace( traceDisplayLocation, wxT( "Using minimum size (%d, %d)" ),
                     m_frameSize.x, m_frameSize.y );
     }
 
-    wxLogTrace( traceDisplayLocation, "Number of displays: %d", wxDisplay::GetCount() );
+    wxLogTrace( traceDisplayLocation, wxT( "Number of displays: %d" ), wxDisplay::GetCount() );
 
     if( aState.display >= wxDisplay::GetCount() )
     {
-        wxLogTrace( traceDisplayLocation, "Previous display not found" );
+        wxLogTrace( traceDisplayLocation, wxT( "Previous display not found" ) );
 
         // If it isn't attached, use the first display
         // Warning wxDisplay has 2 ctor variants. the parameter needs a type:
@@ -622,11 +622,11 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
             upperLeft.y > yLimBottom )
         {
             m_framePos = wxDefaultPosition;
-            wxLogTrace( traceDisplayLocation, "Resetting to default position" );
+            wxLogTrace( traceDisplayLocation, wxT( "Resetting to default position" ) );
         }
     }
 
-    wxLogTrace( traceDisplayLocation, "Final window position (%d, %d) with size (%d, %d)",
+    wxLogTrace( traceDisplayLocation, wxT( "Final window position (%d, %d) with size (%d, %d)" ),
                 m_framePos.x, m_framePos.y, m_frameSize.x, m_frameSize.y );
 
     SetSize( m_framePos.x, m_framePos.y, m_frameSize.x, m_frameSize.y );
@@ -634,7 +634,7 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
     // Center the window if we reset to default
     if( m_framePos.x == -1 )
     {
-        wxLogTrace( traceDisplayLocation, "Centering window" );
+        wxLogTrace( traceDisplayLocation, wxT( "Centering window" ) );
         Center();
         m_framePos = GetPosition();
     }
@@ -646,7 +646,7 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
     // Maximize if we were maximized before
     if( aState.maximized || ( wasDefault && m_maximizeByDefault ) )
     {
-        wxLogTrace( traceDisplayLocation, "Maximizing window" );
+        wxLogTrace( traceDisplayLocation, wxT( "Maximizing window" ) );
         Maximize();
     }
 
@@ -662,13 +662,13 @@ void EDA_BASE_FRAME::ensureWindowIsOnScreen()
     wxSize    size       = GetWindowSize();
 
     wxLogTrace( traceDisplayLocation,
-                "ensureWindowIsOnScreen: clientArea (%d, %d) w %d h %d", clientSize.x, clientSize.y,
+                wxT( "ensureWindowIsOnScreen: clientArea (%d, %d) w %d h %d" ), clientSize.x, clientSize.y,
                 clientSize.width, clientSize.height );
 
     if( pos.y < clientSize.y )
     {
         wxLogTrace( traceDisplayLocation,
-                    "ensureWindowIsOnScreen: y pos %d below minimum, setting to %d", pos.y,
+                    wxT( "ensureWindowIsOnScreen: y pos %d below minimum, setting to %d" ), pos.y,
                     clientSize.y );
         pos.y = clientSize.y;
     }
@@ -676,7 +676,7 @@ void EDA_BASE_FRAME::ensureWindowIsOnScreen()
     if( pos.x < clientSize.x )
     {
         wxLogTrace( traceDisplayLocation,
-                    "ensureWindowIsOnScreen: x pos %d is off the client rect, setting to %d", pos.x,
+                    wxT( "ensureWindowIsOnScreen: x pos %d is off the client rect, setting to %d" ), pos.x,
                     clientSize.x );
         pos.x = clientSize.x;
     }
@@ -685,7 +685,7 @@ void EDA_BASE_FRAME::ensureWindowIsOnScreen()
     {
         int newWidth = clientSize.width - ( pos.x - clientSize.x );
         wxLogTrace( traceDisplayLocation,
-                    "ensureWindowIsOnScreen: effective width %d above available %d, setting to %d",
+                    wxT( "ensureWindowIsOnScreen: effective width %d above available %d, setting to %d" ),
                     pos.x + size.x, clientSize.width, newWidth );
         size.x = newWidth;
     }
@@ -694,12 +694,12 @@ void EDA_BASE_FRAME::ensureWindowIsOnScreen()
     {
         int newHeight = clientSize.height - ( pos.y - clientSize.y );
         wxLogTrace( traceDisplayLocation,
-                    "ensureWindowIsOnScreen: effective height %d above available %d, setting to %d",
+                    wxT( "ensureWindowIsOnScreen: effective height %d above available %d, setting to %d" ),
                     pos.y + size.y, clientSize.height, newHeight );
         size.y = newHeight;
     }
 
-    wxLogTrace( traceDisplayLocation, "Updating window position (%d, %d) with size (%d, %d)",
+    wxLogTrace( traceDisplayLocation, wxT( "Updating window position (%d, %d) with size (%d, %d)" ),
                 pos.x, pos.y, size.x, size.y );
 
     SetSize( pos.x, pos.y, size.x, size.y );
@@ -748,9 +748,9 @@ void EDA_BASE_FRAME::SaveWindowSettings( WINDOW_SETTINGS* aCfg )
     aCfg->state.maximized = IsMaximized();
     aCfg->state.display   = wxDisplay::GetFromWindow( this );
 
-    wxLogTrace( traceDisplayLocation, "Saving window maximized: %s",
-                IsMaximized() ? "true" : "false" );
-    wxLogTrace( traceDisplayLocation, "Saving config position (%d, %d) with size (%d, %d)",
+    wxLogTrace( traceDisplayLocation, wxT( "Saving window maximized: %s" ),
+                IsMaximized() ? wxT( "true" ) : wxT( "false" ) );
+    wxLogTrace( traceDisplayLocation, wxT( "Saving config position (%d, %d) with size (%d, %d)" ),
                 m_framePos.x, m_framePos.y, m_frameSize.x, m_frameSize.y );
 
     // TODO(JE) should auto-save in common settings be overwritten by every app?
@@ -845,7 +845,7 @@ void EDA_BASE_FRAME::CreateInfoBar()
 #else
     m_infoBar = new WX_INFOBAR( this, &m_auimgr );
 
-    m_auimgr.AddPane( m_infoBar, EDA_PANE().InfoBar().Name( "InfoBar" ).Top().Layer(1) );
+    m_auimgr.AddPane( m_infoBar, EDA_PANE().InfoBar().Name( wxT( "InfoBar" ) ).Top().Layer(1) );
 #endif
 }
 
@@ -860,7 +860,7 @@ void EDA_BASE_FRAME::FinishAUIInitialization()
     m_auimgr.Update();
 
     // We don't want the infobar displayed right away
-    m_auimgr.GetPane( "InfoBar" ).Hide();
+    m_auimgr.GetPane( wxT( "InfoBar" ) ).Hide();
     m_auimgr.Update();
 #endif
 }
@@ -1224,7 +1224,7 @@ void EDA_BASE_FRAME::OnMaximize( wxMaximizeEvent& aEvent )
         m_normalFrameSize = GetWindowSize();
         m_normalFramePos  = GetPosition();
         wxLogTrace( traceDisplayLocation,
-                    "Maximizing window - Saving position (%d, %d) with size (%d, %d)",
+                    wxT( "Maximizing window - Saving position (%d, %d) with size (%d, %d)" ),
                     m_normalFramePos.x, m_normalFramePos.y,
                     m_normalFrameSize.x, m_normalFrameSize.y );
     }

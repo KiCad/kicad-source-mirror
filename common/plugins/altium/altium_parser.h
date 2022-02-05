@@ -80,7 +80,7 @@ public:
         else
         {
             m_error = true;
-            return wxString( "" );
+            return wxString( wxT( "" ) );
         }
     }
 

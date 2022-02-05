@@ -85,30 +85,30 @@ wxString AddFileExtListToFilter( const std::vector<std::string>& aExts )
     {
         // The "all files" wildcard is different on different systems
         wxString filter;
-        filter << " (" << wxFileSelectorDefaultWildcardStr << ")|"
+        filter << wxT( " (" ) << wxFileSelectorDefaultWildcardStr << wxT( ")|" )
                << wxFileSelectorDefaultWildcardStr;
         return filter;
     }
 
-    wxString files_filter = " (";
+    wxString files_filter = wxT( " (" );
 
     // Add extensions to the info message:
     for( const std::string& ext : aExts )
     {
         if( files_filter.length() > 2 )
-            files_filter << "; ";
+            files_filter << wxT( "; " );
 
-        files_filter << "*." << ext;
+        files_filter << wxT( "*." ) << ext;
     }
 
-    files_filter << ")|*.";
+    files_filter << wxT( ")|*." );
 
     // Add extensions to the filter list, using a formatted string (GTK specific):
     bool first = true;
     for( const auto& ext : aExts )
     {
         if( !first )
-            files_filter << ";*.";
+            files_filter << wxT( ";*." );
 
         first = false;
 

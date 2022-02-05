@@ -62,12 +62,12 @@ CACHED_CONTAINER_GPU::CACHED_CONTAINER_GPU( unsigned int aSize ) :
     // disable glCopyBuffer, causes crashes/freezes on certain driver versions
     // Note, Intel's GL_VENDOR string varies depending on GPU/driver generation
     // But generally always starts with Intel at least
-    if( vendor.StartsWith( "Intel" ) || vendor.Contains( "etnaviv" ) )
+    if( vendor.StartsWith( wxT( "Intel" ) ) || vendor.Contains( "etnaviv" ) )
     {
         m_useCopyBuffer = false;
     }
 
-    KI_TRACE( traceGalProfile, "VBO initial size: %d\n", m_currentSize );
+    KI_TRACE( traceGalProfile, wxT( "VBO initial size: %d\n" ), m_currentSize );
 
     glGenBuffers( 1, &m_glBufferHandle );
     glBindBuffer( GL_ARRAY_BUFFER, m_glBufferHandle );
@@ -213,14 +213,14 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
 #ifdef KICAD_GAL_PROFILE
     totalTime.Stop();
 
-    wxLogTrace( traceGalCachedContainerGpu, "Defragmented container storing %d vertices / %.1f ms",
+    wxLogTrace( traceGalCachedContainerGpu, wxT( "Defragmented container storing %d vertices / %.1f ms" ),
                 m_currentSize - m_freeSpace, totalTime.msecs() );
 #endif /* KICAD_GAL_PROFILE */
 
     m_freeSpace += ( aNewSize - m_currentSize );
     m_currentSize = aNewSize;
 
-    KI_TRACE( traceGalProfile, "VBO size %d used %d\n", m_currentSize, AllItemsSize() );
+    KI_TRACE( traceGalProfile, wxT( "VBO size %d used %d\n" ), m_currentSize, AllItemsSize() );
 
     // Now there is only one big chunk of free memory
     m_freeChunks.clear();
@@ -280,14 +280,14 @@ bool CACHED_CONTAINER_GPU::defragmentResizeMemcpy( unsigned int aNewSize )
 #ifdef KICAD_GAL_PROFILE
     totalTime.Stop();
 
-    wxLogTrace( traceGalCachedContainerGpu, "Defragmented container storing %d vertices / %.1f ms",
+    wxLogTrace( traceGalCachedContainerGpu, wxT( "Defragmented container storing %d vertices / %.1f ms" ),
                 m_currentSize - m_freeSpace, totalTime.msecs() );
 #endif /* KICAD_GAL_PROFILE */
 
     m_freeSpace += ( aNewSize - m_currentSize );
     m_currentSize = aNewSize;
 
-    KI_TRACE( traceGalProfile, "VBO size %d used: %d \n", m_currentSize, AllItemsSize() );
+    KI_TRACE( traceGalProfile, wxT( "VBO size %d used: %d \n" ), m_currentSize, AllItemsSize() );
 
     // Now there is only one big chunk of free memory
     m_freeChunks.clear();

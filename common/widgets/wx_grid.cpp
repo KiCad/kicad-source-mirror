@@ -271,7 +271,7 @@ int WX_GRID::GetVisibleWidth( int aCol, bool aHeader, bool aContents, bool aKeep
         // the normal font.
         // TODO: use a better way to evaluate the text size, for bold font
         for( int row = 0; aContents && row < GetNumberRows(); row++ )
-            size = std::max( size, int( GetTextExtent( GetRowLabelValue( row ) + "M" ).x * 1.1 ) );
+            size = std::max( size, int( GetTextExtent( GetRowLabelValue( row ) + wxT( "M" ) ).x * 1.1 ) );
     }
     else
     {
@@ -286,14 +286,14 @@ int WX_GRID::GetVisibleWidth( int aCol, bool aHeader, bool aContents, bool aKeep
 
             // The 1.1 scale factor is due to the fact headers use a bold font, bigger than
             // the normal font.
-            size = std::max( size, int( GetTextExtent( GetColLabelValue( aCol ) + "M" ).x * 1.1 ) );
+            size = std::max( size, int( GetTextExtent( GetColLabelValue( aCol ) + wxT( "M" ) ).x * 1.1 ) );
         }
 
         for( int row = 0; aContents && row < GetNumberRows(); row++ )
         {
             // If we have text, get the size.  Otherwise, use a placeholder for the checkbox
             if( GetTable()->CanGetValueAs( row, aCol, wxGRID_VALUE_STRING ) )
-                size = std::max( size, GetTextExtent( GetCellValue( row, aCol ) + "M" ).x );
+                size = std::max( size, GetTextExtent( GetCellValue( row, aCol ) + wxT( "M" ) ).x );
             else
                 size = std::max( size, GetTextExtent( "MM" ).x );
         }

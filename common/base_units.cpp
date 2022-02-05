@@ -181,7 +181,7 @@ wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitLab
 
     if( aAddUnitLabel )
     {
-        text += " ";
+        text += wxT( " " );
         text += GetAbbreviatedUnitsLabel( aUnits, aType );
     }
 
@@ -352,7 +352,7 @@ double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, EDA_
         {
             aUnits = EDA_UNITS::INCHES;
         }
-        else if( unit == "oz" ) // 1 oz = 1.37 mils
+        else if( unit == wxT( "oz" ) ) // 1 oz = 1.37 mils
         {
             aUnits = EDA_UNITS::MILS;
             dtmp *= 1.37;

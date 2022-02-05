@@ -74,41 +74,41 @@ int checkGlError( const std::string& aInfo, const char* aFile, int aLine, bool a
             switch( status )
             {
             case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
-                errorMsg = "The framebuffer attachment points are incomplete.";
+                errorMsg = wxT( "The framebuffer attachment points are incomplete." );
                 break;
 
             case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
-                errorMsg = "No images attached to the framebuffer.";
+                errorMsg = wxT( "No images attached to the framebuffer." );
                 break;
 
             case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
-                errorMsg = "The framebuffer does not have at least one image attached to it.";
+                errorMsg = wxT( "The framebuffer does not have at least one image attached to it." );
                 break;
 
             case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
-                errorMsg = "The framebuffer read buffer is incomplete.";
+                errorMsg = wxT( "The framebuffer read buffer is incomplete." );
                 break;
 
             case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
-                errorMsg = "The combination of internal formats of the attached images violates "
-                           "an implementation dependent set of restrictions.";
+                errorMsg = wxT( "The combination of internal formats of the attached images violates " )
+                           wxT( "an implementation dependent set of restrictions." );
                 break;
 
             case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_EXT:
-                errorMsg = "GL_RENDERBUFFER_SAMPLES is not the same for all attached render "
-                           "buffers.";
+                errorMsg = wxT( "GL_RENDERBUFFER_SAMPLES is not the same for all attached render " )
+                           wxT( "buffers." );
                 break;
 
             case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT:
-                errorMsg = "Framebuffer incomplete layer targets errors.";
+                errorMsg = wxT( "Framebuffer incomplete layer targets errors." );
                 break;
 
             case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
-                errorMsg = "Framebuffer attachments have different dimensions";
+                errorMsg = wxT( "Framebuffer attachments have different dimensions" );
                 break;
 
             default:
-                errorMsg.Printf( "Unknown incomplete framebuffer error id %X", status );
+                errorMsg.Printf( wxT( "Unknown incomplete framebuffer error id %X" ), status );
             }
         }
         else
@@ -140,7 +140,7 @@ int checkGlError( const std::string& aInfo, const char* aFile, int aLine, bool a
         if( aThrow )
         {
             wxLogTrace( traceGalOpenGlError, wxT( "Throwing exception for glGetError() '%s' "
-                                                  "in file '%s' on line %d." ),
+                                                  wxT( "in file '%s' on line %d." ) ),
                         errorMsg,
                         aFile,
                         aLine );
@@ -154,7 +154,7 @@ int checkGlError( const std::string& aInfo, const char* aFile, int aLine, bool a
                                              aFile,
                                              aLine );
 
-            DisplayErrorMessage( nullptr, "OpenGL Error", errorMsg );
+            DisplayErrorMessage( nullptr, wxT( "OpenGL Error" ), errorMsg );
         }
     }
 
@@ -170,13 +170,13 @@ static void GLAPIENTRY debugMsgCallback( GLenum aSource, GLenum aType, GLuint aI
 {
     switch( aSeverity )
     {
-    case GL_DEBUG_SEVERITY_HIGH:   wxLogDebug( "OpenGL ERROR: " );   break;
-    case GL_DEBUG_SEVERITY_MEDIUM: wxLogDebug( "OpenGL WARNING: " ); break;
-    case GL_DEBUG_SEVERITY_LOW:    wxLogDebug( "OpenGL INFO: " );    break;
+    case GL_DEBUG_SEVERITY_HIGH:   wxLogDebug( wxT( "OpenGL ERROR: " ) );   break;
+    case GL_DEBUG_SEVERITY_MEDIUM: wxLogDebug( wxT( "OpenGL WARNING: " ) ); break;
+    case GL_DEBUG_SEVERITY_LOW:    wxLogDebug( wxT( "OpenGL INFO: " ) );    break;
     case GL_DEBUG_SEVERITY_NOTIFICATION: return;
     }
 
-    wxLogDebug( "%s\n", aMessage );
+    wxLogDebug( wxT( "%s\n" ), aMessage );
 }
 
 

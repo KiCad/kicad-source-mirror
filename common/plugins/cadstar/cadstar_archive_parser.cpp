@@ -836,7 +836,7 @@ wxString CADSTAR_ARCHIVE_PARSER::ParseTextFields( const wxString& aTextString,
             {
                 // Assume the last two characters are "@>"
                 wxASSERT_MSG( remainingStr.EndsWith( wxT( "@>" ) ),
-                              "Expected '@>' at the end of a hyperlink" );
+                              wxT( "Expected '@>' at the end of a hyperlink" ) );
 
                 fieldValue = remainingStr.SubString( valueStart + splitPos + 1,
                                                      remainingStr.Length() - 3 );
@@ -2429,7 +2429,7 @@ wxString CADSTAR_ARCHIVE_PARSER::GetXmlAttributeIDString( XNODE* aNode, unsigned
                                                           bool aIsRequired )
 {
     wxString attrName, retVal;
-    attrName = "attr";
+    attrName = wxT( "attr" );
     attrName << aID;
 
     if( !aNode->GetAttribute( attrName, &retVal ) )
@@ -2633,7 +2633,7 @@ void CADSTAR_ARCHIVE_PARSER::FixTextPositionNoAlignment( EDA_TEXT* aKiCadTextIte
 
         //Count num of additional lines
         wxString text = aKiCadTextItem->GetText();
-        int      numExtraLines = text.Replace( "\n", "\n" );
+        int      numExtraLines = text.Replace( wxT( "\n" ), wxT( "\n" ) );
         numExtraLines -= text.at( text.size() - 1 ) == '\n'; // Ignore new line character at end
         positionOffset.x *= numExtraLines;
         positionOffset.y *= numExtraLines;

@@ -32,7 +32,7 @@ LIB_ID AltiumToKiCadLibID( const wxString& aLibName, const wxString& aLibReferen
 {
     wxString libReference = EscapeString( aLibReference, CTX_LIBID );
 
-    wxString key = !aLibName.empty() ? ( aLibName + ":" + libReference ) : libReference;
+    wxString key = !aLibName.empty() ? ( aLibName + wxT( ":" ) + libReference ) : libReference;
 
     LIB_ID libId;
     libId.Parse( key, true );
@@ -54,7 +54,7 @@ wxString AltiumPropertyToKiCadString( const wxString& aString )
         {
             if( !inOverbar )
             {
-                converted += "~{";
+                converted += wxT( "~{" );
                 inOverbar = true;
             }
 
@@ -65,7 +65,7 @@ wxString AltiumPropertyToKiCadString( const wxString& aString )
         {
             if( inOverbar )
             {
-                converted += "}";
+                converted += wxT( "}" );
                 inOverbar = false;
             }
 
@@ -93,13 +93,13 @@ wxString AltiumSpecialStringsToKiCadVariables( const wxString&                  
     size_t escaping_start = 0;
     do
     {
-        delimiter = aString.find( "+", start );
-        escaping_start = aString.find( "'", start );
+        delimiter = aString.find( wxT( "+" ), start );
+        escaping_start = aString.find( wxT( "'" ), start );
 
         if( escaping_start < delimiter )
         {
             size_t text_start = escaping_start + 1;
-            size_t escaping_end = aString.find( "'", text_start );
+            size_t escaping_end = aString.find( wxT( "'" ), text_start );
 
             if( escaping_end == wxString::npos )
             {
@@ -114,7 +114,7 @@ wxString AltiumSpecialStringsToKiCadVariables( const wxString&                  
         {
             wxString specialString = aString.substr( start, delimiter - start ).Trim().Trim( false );
 
-            if( specialString.StartsWith( "\"" ) && specialString.EndsWith( "\"" ) )
+            if( specialString.StartsWith( wxT( "\"" ) ) && specialString.EndsWith( wxT( "\"" ) ) )
                 specialString = specialString.Mid( 1, specialString.Length() - 2 );
 
             if( !specialString.IsEmpty() )

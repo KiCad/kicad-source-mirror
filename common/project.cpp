@@ -93,7 +93,7 @@ void PROJECT::setProjectFullName( const wxString& aFullPathAndName )
     {
         Clear();            // clear the data when the project changes.
 
-        wxLogTrace( tracePathsAndFiles, "%s: old:'%s' new:'%s'", __func__,
+        wxLogTrace( tracePathsAndFiles, wxT( "%s: old:'%s' new:'%s'" ), __func__,
                     TO_UTF8( GetProjectFullName() ), TO_UTF8( aFullPathAndName ) );
 
         m_project_name = aFullPathAndName;
@@ -139,13 +139,13 @@ bool PROJECT::IsNullProject() const
 
 const wxString PROJECT::SymbolLibTableName() const
 {
-    return libTableName( "sym-lib-table" );
+    return libTableName( wxT( "sym-lib-table" ) );
 }
 
 
 const wxString PROJECT::FootprintLibTblName() const
 {
-    return libTableName( "fp-lib-table" );
+    return libTableName( wxT( "fp-lib-table" ) );
 }
 
 
@@ -181,7 +181,7 @@ const wxString PROJECT::libTableName( const wxString& aLibTableName ) const
          * until the project file being edited is saved.  It is then moved to the correct
          * file in the folder where the project file is saved.
          */
-        fn.SetName( "prj-" + aLibTableName );
+        fn.SetName( wxT( "prj-" ) + aLibTableName );
     }
     else    // normal path.
     {

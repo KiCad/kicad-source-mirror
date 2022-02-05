@@ -143,7 +143,7 @@ bool EDA_PATTERN_MATCH_WILDCARD::SetPattern( const wxString& aPattern )
         }
         else if( to_replace.Find( c ) != wxNOT_FOUND )
         {
-            regex += "\\";
+            regex += wxT( "\\" );
             regex += c;
         }
         else
@@ -192,7 +192,7 @@ bool EDA_PATTERN_MATCH_WILDCARD_EXPLICIT::SetPattern( const wxString& aPattern )
         }
         else if( to_replace.Find( c ) != wxNOT_FOUND )
         {
-            regex += "\\";
+            regex += wxT( "\\" );
             regex += c;
         }
         else
@@ -221,20 +221,20 @@ bool EDA_PATTERN_MATCH_RELATIONAL::SetPattern( const wxString& aPattern )
 
     m_key = key.Lower();
 
-    if( rel == "<" )
+    if( rel == wxT( "<" ) )
         m_relation = LT;
-    else if( rel == "<=" )
+    else if( rel == wxT( "<=" ) )
         m_relation = LE;
-    else if( rel == "=" )
+    else if( rel == wxT( "=" ) )
         m_relation = EQ;
-    else if( rel == ">=" )
+    else if( rel == wxT( ">=" ) )
         m_relation = GE;
-    else if( rel == ">" )
+    else if( rel == wxT( ">" ) )
         m_relation = GT;
     else
         return false;
 
-    if( val == "" )
+    if( val == wxT( "" ) )
     {
         // Matching on empty values keeps the match list from going empty when
         // the user types the relational operator character, which helps prevent
@@ -333,19 +333,19 @@ wxRegEx EDA_PATTERN_MATCH_RELATIONAL::m_regex_description(
 wxRegEx EDA_PATTERN_MATCH_RELATIONAL::m_regex_search(
         R"(^(\w+)(<|<=|=|>=|>)([-+]?[\d.]*)(\w*)$)", wxRE_ADVANCED );
 const std::map<wxString, double> EDA_PATTERN_MATCH_RELATIONAL::m_units = {
-    { "p",  1e-12 },
-    { "n",  1e-9 },
-    { "u",  1e-6 },
-    { "m",  1e-3 },
-    { "",   1. },
-    { "k",  1e3 },
-    { "meg",1e6 },
-    { "g",  1e9 },
-    { "t",  1e12 },
-    { "ki", 1024. },
-    { "mi", 1048576. },
-    { "gi", 1073741824. },
-    { "ti", 1099511627776. } };
+    { wxT( "p" ),  1e-12 },
+    { wxT( "n" ),  1e-9 },
+    { wxT( "u" ),  1e-6 },
+    { wxT( "m" ),  1e-3 },
+    { wxT( "" ),   1. },
+    { wxT( "k" ),  1e3 },
+    { wxT( "meg" ),1e6 },
+    { wxT( "g" ),  1e9 },
+    { wxT( "t" ),  1e12 },
+    { wxT( "ki" ), 1024. },
+    { wxT( "mi" ), 1048576. },
+    { wxT( "gi" ), 1073741824. },
+    { wxT( "ti" ), 1099511627776. } };
 
 
 EDA_COMBINED_MATCHER::EDA_COMBINED_MATCHER( const wxString& aPattern )

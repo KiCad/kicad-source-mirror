@@ -84,7 +84,7 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
     m_titleName = aParent->GetAboutTitle();
     m_staticTextAppTitle->SetLabel( m_titleName );
     m_staticTextCopyright->SetLabel( m_info.GetCopyright() );
-    m_staticTextBuildVersion->SetLabel( "Version: " + m_info.GetBuildVersion() );
+    m_staticTextBuildVersion->SetLabel( wxT( "Version: " ) + m_info.GetBuildVersion() );
     m_staticTextLibVersion->SetLabel( m_info.GetLibVersion() );
 
     SetTitle( wxString::Format( _( "About %s" ), m_titleName ) );
@@ -222,7 +222,7 @@ void DIALOG_ABOUT::createNotebookPageByCategory( wxNotebook* aParent, const wxSt
     // Of course the padding is different depending on the platform so we adjust the
     // padding accordingly.
 #if defined( __WXGTK__ )
-    padding += "      ";
+    padding += wxT( "      " );
 #endif
     wxPanel* outerPanel = new wxPanel( aParent );
     wxBoxSizer* outerSizer = new wxBoxSizer( wxVERTICAL );
@@ -419,7 +419,7 @@ void DIALOG_ABOUT::createNotebookHtmlPage( wxNotebook* aParent, const wxString& 
 wxStaticText* DIALOG_ABOUT::wxStaticTextRef( wxScrolledWindow* aParent, const wxString& aReference )
 {
     wxStaticText* text = new wxStaticText( aParent, wxID_ANY,
-                                           wxT( "(" ) + aReference + wxT( ")" ) );
+                                           wxT( "(wxT( " ) + aReference + wxT( " ))" ) );
 
     return text;
 }

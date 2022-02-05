@@ -250,7 +250,7 @@ bool GERBER_PLOTTER::StartPlot()
 
     // Create a temp file in system temp to avoid potential network share buffer issues for
     // the final read and save.
-    m_workFilename = wxFileName::CreateTempFileName( "" );
+    m_workFilename = wxFileName::CreateTempFileName( wxT( "" ) );
     workFile   = wxFopen( m_workFilename, wxT( "wt" ));
     m_outputFile = workFile;
     wxASSERT( m_outputFile );
@@ -402,7 +402,7 @@ void GERBER_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
     else if( aWidth == USE_DEFAULT_LINE_WIDTH )
         aWidth =  m_renderSettings->GetDefaultPenWidth();
 
-    wxASSERT_MSG( aWidth >= 0, "Plotter called to set negative pen width" );
+    wxASSERT_MSG( aWidth >= 0, wxT( "Plotter called to set negative pen width" ) );
 
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
     int aperture_attribute = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
@@ -1601,7 +1601,7 @@ void GERBER_PLOTTER::plotRoundRectAsRegion( const wxPoint& aRectCenter, const wx
 
 #if 0    // For test only:
     if( last_pt != first_pt )
-        wxLogMessage( "first pt %d %d last pt %d %d",
+        wxLogMessage( wxT( "first pt %d %d last pt %d %d" ),
                       first_pt.x, first_pt.y, last_pt.x, last_pt.y );
 #endif
 
@@ -1811,7 +1811,7 @@ void GERBER_PLOTTER::FlashPadChamferRoundRect( const wxPoint& aShapePos, const w
         break;
 
     default:
-        wxLogMessage( "FlashPadChamferRoundRect(): Unexpected number of corners (%d)",
+        wxLogMessage( wxT( "FlashPadChamferRoundRect(): Unexpected number of corners (%d)" ),
                       (int)cornerList.size() );
         break;
     }

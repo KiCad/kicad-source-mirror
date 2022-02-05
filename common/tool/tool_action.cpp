@@ -89,7 +89,7 @@ wxString TOOL_ACTION::GetLabel() const
 wxString TOOL_ACTION::GetMenuItem() const
 {
     wxString label = wxGetTranslation( m_label );
-    label.Replace( "&", "&&" );
+    label.Replace( wxT( "&" ), wxT( "&&" ) );
     return AddHotkeyName( label, m_hotKey, IS_HOTKEY );
 }
 

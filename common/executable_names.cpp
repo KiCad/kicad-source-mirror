@@ -28,19 +28,19 @@
 
 // TODO Executable names TODO
 #ifdef __WINDOWS__
-const wxString CVPCB_EXE           ( "cvpcb.exe" );
-const wxString PCBNEW_EXE          ( "pcbnew.exe" );
-const wxString EESCHEMA_EXE        ( "eeschema.exe" );
-const wxString GERBVIEW_EXE        ( "gerbview.exe" );
-const wxString BITMAPCONVERTER_EXE ( "bitmap2component.exe" );
-const wxString PCB_CALCULATOR_EXE  ( "pcb_calculator.exe" );
-const wxString PL_EDITOR_EXE       ( "pl_editor.exe" );
+const wxString CVPCB_EXE           ( wxT( "cvpcb.exe" ) );
+const wxString PCBNEW_EXE          ( wxT( "pcbnew.exe" ) );
+const wxString EESCHEMA_EXE        ( wxT( "eeschema.exe" ) );
+const wxString GERBVIEW_EXE        ( wxT( "gerbview.exe" ) );
+const wxString BITMAPCONVERTER_EXE ( wxT( "bitmap2component.exe" ) );
+const wxString PCB_CALCULATOR_EXE  ( wxT( "pcb_calculator.exe" ) );
+const wxString PL_EDITOR_EXE       ( wxT( "pl_editor.exe" ) );
 #else
-const wxString CVPCB_EXE           ( "cvpcb" );
-const wxString PCBNEW_EXE          ( "pcbnew" );
-const wxString EESCHEMA_EXE        ( "eeschema" );
-const wxString GERBVIEW_EXE        ( "gerbview" );
-const wxString BITMAPCONVERTER_EXE ( "bitmap2component" );
-const wxString PCB_CALCULATOR_EXE  ( "pcb_calculator" );
-const wxString PL_EDITOR_EXE       ( "pl_editor" );
+const wxString CVPCB_EXE           ( wxT( "cvpcb" ) );
+const wxString PCBNEW_EXE          ( wxT( "pcbnew" ) );
+const wxString EESCHEMA_EXE        ( wxT( "eeschema" ) );
+const wxString GERBVIEW_EXE        ( wxT( "gerbview" ) );
+const wxString BITMAPCONVERTER_EXE ( wxT( "bitmap2component" ) );
+const wxString PCB_CALCULATOR_EXE  ( wxT( "pcb_calculator" ) );
+const wxString PL_EDITOR_EXE       ( wxT( "pl_editor" ) );
 #endif

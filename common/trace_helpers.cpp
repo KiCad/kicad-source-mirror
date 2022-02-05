@@ -224,37 +224,37 @@ wxString GetKeyName( const wxKeyEvent &aEvent )
         return wxString::Format( "'%c'", uc );
 #endif
 
-    return "unknown";
+    return wxT( "unknown" );
 }
 
 
 wxString dump( const wxKeyEvent& aEvent )
 {
     wxString msg;
-    wxString eventType = "unknown";
+    wxString eventType = wxT( "unknown" );
 
     if( aEvent.GetEventType() == wxEVT_KEY_DOWN )
-        eventType = "KeyDown";
+        eventType = wxT( "KeyDown" );
     else if( aEvent.GetEventType() == wxEVT_KEY_UP )
-        eventType = "KeyUp";
+        eventType = wxT( "KeyUp" );
     else if( aEvent.GetEventType() == wxEVT_CHAR )
-        eventType = "Char";
+        eventType = wxT( "Char" );
     else if( aEvent.GetEventType() == wxEVT_CHAR_HOOK )
-        eventType = "Hook";
+        eventType = wxT( "Hook" );
 
     // event  key_name  KeyCode  modifiers  Unicode  raw_code raw_flags pos
-    msg.Printf( "%7s %15s %5d   %c%c%c%c"
+    msg.Printf( wxT( "%7s %15s %5d   %c%c%c%c" )
 #if wxUSE_UNICODE
-                "%5d (U+%04x)"
+                wxT( "%5d (U+%04x)" )
 #else
-                "    none   "
+                wxT( "    none   " )
 #endif
 #ifdef wxHAS_RAW_KEY_CODES
-                "  %7lu    0x%08lx"
+                wxT( "  %7lu    0x%08lx" )
 #else
-                "  not-set    not-set"
+                wxT( "  not-set    not-set" )
 #endif
-                "  (%5d,%5d)",
+                wxT( "  (%5d,%5d)" ),
                 eventType,
                 GetKeyName( aEvent ),
                 aEvent.GetKeyCode(),

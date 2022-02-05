@@ -102,7 +102,7 @@ wxString ExpandTextVars( const wxString& aSource,
             else
             {
                 // Token not resolved: leave the reference unchanged
-                newbuf.append( "${" + token + "}" );
+                newbuf.append( wxT( "${" ) + token + wxT( "}" ) );
             }
         }
         else

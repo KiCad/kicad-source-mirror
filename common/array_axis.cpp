@@ -42,10 +42,10 @@ ARRAY_AXIS::ARRAY_AXIS() : m_type( NUMBERING_TYPE::NUMBERING_NUMERIC ), m_offset
 
 const wxString& ARRAY_AXIS::GetAlphabet() const
 {
-    static const wxString alphaNumeric = "0123456789";
-    static const wxString alphaHex = "0123456789ABCDEF";
-    static const wxString alphaFull = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    static const wxString alphaNoIOSQXZ = "ABCDEFGHJKLMNPRTUVWY";
+    static const wxString alphaNumeric = wxT( "0123456789" );
+    static const wxString alphaHex = wxT( "0123456789ABCDEF" );
+    static const wxString alphaFull = wxT( "ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
+    static const wxString alphaNoIOSQXZ = wxT( "ABCDEFGHJKLMNPRTUVWY" );
 
     switch( m_type )
     {

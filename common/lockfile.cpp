@@ -39,12 +39,12 @@ std::unique_ptr<wxSingleInstanceChecker> LockFile( const wxString& aFileName )
 
     fn.MakeAbsolute();
 
-    wxString lockFileName = fn.GetFullPath() + ".lock";
+    wxString lockFileName = fn.GetFullPath() + wxT( ".lock" );
 
-    lockFileName.Replace( "/", "_" );
+    lockFileName.Replace( wxT( "/" ), wxT( "_" ) );
 
     // We can have filenames coming from Windows, so also convert Windows separator
-    lockFileName.Replace( "\\", "_" );
+    lockFileName.Replace( wxT( "\\" ), wxT( "_" ) );
 
     auto p = std::make_unique<wxSingleInstanceChecker>( lockFileName,
                                                         GetKicadLockFilePath() );
@@ -65,24 +65,24 @@ wxString GetKicadLockFilePath()
 
 #if defined( __WXMAC__ )
     // In OSX use the standard per user cache directory
-    lockpath.AppendDir( "Library" );
-    lockpath.AppendDir( "Caches" );
-    lockpath.AppendDir( "kicad" );
+    lockpath.AppendDir( wxT( "Library" ) );
+    lockpath.AppendDir( wxT( "Caches" ) );
+    lockpath.AppendDir( wxT( "kicad" ) );
 #elif defined( __UNIX__ )
     wxString envstr;
     // Try first the standard XDG_RUNTIME_DIR, falling back to XDG_CACHE_HOME
-    if( wxGetEnv( "XDG_RUNTIME_DIR", &envstr ) && !envstr.IsEmpty() )
+    if( wxGetEnv( wxT( "XDG_RUNTIME_DIR" ), &envstr ) && !envstr.IsEmpty() )
     {
         lockpath.AssignDir( envstr );
     }
-    else if( wxGetEnv( "XDG_CACHE_HOME", &envstr ) && !envstr.IsEmpty() )
+    else if( wxGetEnv( wxT( "XDG_CACHE_HOME" ), &envstr ) && !envstr.IsEmpty() )
     {
         lockpath.AssignDir( envstr );
     }
     else
     {
         // If all fails, just use ~/.cache
-        lockpath.AppendDir( ".cache" );
+        lockpath.AppendDir( wxT( ".cache" ) );
     }
 
     lockpath.AppendDir( wxString::Format( "kicad_v%s", GetMajorMinorVersion() ) );

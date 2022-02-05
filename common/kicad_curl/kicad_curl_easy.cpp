@@ -116,7 +116,7 @@ KICAD_CURL_EASY::KICAD_CURL_EASY() : m_headers( nullptr )
 
     if( !m_CURL )
     {
-        THROW_IO_ERROR( "Unable to initialize CURL session" );
+        THROW_IO_ERROR( wxT( "Unable to initialize CURL session" ) );
     }
 
     curl_easy_setopt( m_CURL, CURLOPT_WRITEFUNCTION, write_callback );
@@ -133,23 +133,23 @@ KICAD_CURL_EASY::KICAD_CURL_EASY() : m_headers( nullptr )
     wxPlatformInfo platformInfo;
     wxString application( Pgm().App().GetAppName() );
     wxString version( GetBuildVersion() );
-    wxString platform = "(" + wxGetOsDescription() + ";" + GetPlatformGetBitnessName();
+    wxString platform = wxT( "(" ) + wxGetOsDescription() + wxT( ";" ) + GetPlatformGetBitnessName();
 
 #if defined( KICAD_BUILD_ARCH_X64 )
-    platform << ";64-bit";
+    platform << wxT( ";64-bit" );
 #elif defined( KICAD_BUILD_ARCH_X86 )
-    platform << ";32-bit";
+    platform << wxT( ";32-bit" );
 #elif defined( KICAD_BUILD_ARCH_ARM )
-    platform << ";ARM 32-bit";
+    platform << wxT( ";ARM 32-bit" );
 #elif defined( KICAD_BUILD_ARCH_ARM64 )
-    platform << ";ARM 64-bit";
+    platform << wxT( ";ARM 64-bit" );
 #endif
 
-    platform << ")";
+    platform << wxT( ")" );
 
-    wxString user_agent = "KiCad/" + version + " " + platform + " " + application;
+    wxString user_agent = wxT( "KiCad/" ) + version + wxT( " " ) + platform + wxT( " " ) + application;
 
-    user_agent << "/" << GetBuildDate();
+    user_agent << wxT( "/" ) << GetBuildDate();
     setOption<const char*>( CURLOPT_USERAGENT, user_agent.ToStdString().c_str() );
     setOption( CURLOPT_ACCEPT_ENCODING, "gzip,deflate" );
 }

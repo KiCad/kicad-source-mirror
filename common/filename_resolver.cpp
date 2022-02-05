@@ -44,7 +44,7 @@
 #define ERRFLG_RELPATH  (2)
 #define ERRFLG_ENVPATH  (4)
 
-#define MASK_3D_RESOLVER "3D_RESOLVER"
+#define MASK_3D_RESOLVER wxT( "3D_RESOLVER" )
 
 static std::mutex mutex_resolver;
 
@@ -64,7 +64,7 @@ bool FILENAME_RESOLVER::Set3DConfigDir( const wxString& aConfigDir )
     if( aConfigDir.empty() )
         return false;
 
-    wxFileName cfgdir( ExpandEnvVarSubstitutions( aConfigDir, m_project ), "" );
+    wxFileName cfgdir( ExpandEnvVarSubstitutions( aConfigDir, m_project ), wxT( "" ) );
 
     cfgdir.Normalize();
 
@@ -85,7 +85,7 @@ bool FILENAME_RESOLVER::SetProject( PROJECT* aProject, bool* flgChanged )
     if( !aProject )
         return false;
 
-    wxFileName projdir( ExpandEnvVarSubstitutions( aProject->GetProjectPath(), aProject ), "" );
+    wxFileName projdir( ExpandEnvVarSubstitutions( aProject->GetProjectPath(), aProject ), wxT( "" ) );
 
     projdir.Normalize();
 
@@ -100,8 +100,8 @@ bool FILENAME_RESOLVER::SetProject( PROJECT* aProject, bool* flgChanged )
     if( m_paths.empty() )
     {
         SEARCH_PATH al;
-        al.m_Alias = "${KIPRJMOD}";
-        al.m_Pathvar = "${KIPRJMOD}";
+        al.m_Alias = wxT( "${KIPRJMOD}" );
+        al.m_Pathvar = wxT( "${KIPRJMOD}" );
         al.m_Pathexp = m_curProjDir;
         m_paths.push_back( al );
 
@@ -129,7 +129,7 @@ bool FILENAME_RESOLVER::SetProject( PROJECT* aProject, bool* flgChanged )
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * [INFO] changed project dir to ";
         ostr << m_paths.front().m_Pathexp.ToUTF8();
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
+        wxLogTrace( MASK_3D_RESOLVER, wxT( "%s\n" ), ostr.str().c_str() );
     }
 #endif
 
@@ -168,8 +168,8 @@ bool FILENAME_RESOLVER::createPathList()
     // the user may change this later with a call to SetProjectDir()
 
     SEARCH_PATH lpath;
-    lpath.m_Alias = "${KIPRJMOD}";
-    lpath.m_Pathvar = "${KIPRJMOD}";
+    lpath.m_Alias = wxT( "${KIPRJMOD}" );
+    lpath.m_Pathvar = wxT( "${KIPRJMOD}" );
     lpath.m_Pathexp = m_curProjDir;
     m_paths.push_back( lpath );
     wxFileName fndummy;
@@ -188,7 +188,7 @@ bool FILENAME_RESOLVER::createPathList()
             }
             else
             {
-                fndummy.Assign( pathVal, "" );
+                fndummy.Assign( pathVal, wxT( "" ) );
                 fndummy.Normalize();
                 lpath.m_Pathexp = fndummy.GetFullPath();
             }
@@ -210,12 +210,12 @@ bool FILENAME_RESOLVER::createPathList()
         return false;
 
 #ifdef DEBUG
-    wxLogTrace( MASK_3D_RESOLVER, " * [3D model] search paths:\n" );
+    wxLogTrace( MASK_3D_RESOLVER, wxT( " * [3D model] search paths:\n" ) );
     std::list< SEARCH_PATH >::const_iterator sPL = m_paths.begin();
 
     while( sPL != m_paths.end() )
     {
-        wxLogTrace( MASK_3D_RESOLVER, "   + %s : '%s'\n", (*sPL).m_Alias.GetData(),
+        wxLogTrace( MASK_3D_RESOLVER, wxT( "   + %s : '%s'\n" ), (*sPL).m_Alias.GetData(),
             (*sPL).m_Pathexp.GetData() );
         ++sPL;
     }
@@ -274,7 +274,7 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
 
         // special case: if a path begins with ${ENV_VAR} but is not in the resolver's path list
         // then add it.
-        if( aFileName.StartsWith( "${" ) || aFileName.StartsWith( "$(" ) )
+        if( aFileName.StartsWith( wxT( "${" ) ) || aFileName.StartsWith( wxT( "$(" ) ) )
             checkEnvVarPath( aFileName );
 
         return tname;
@@ -282,15 +282,15 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
 
     // if a path begins with ${ENV_VAR}/$(ENV_VAR) and is not resolved then the file either does
     // not exist or the ENV_VAR is not defined
-    if( aFileName.StartsWith( "${" ) || aFileName.StartsWith( "$(" ) )
+    if( aFileName.StartsWith( wxT( "${" ) ) || aFileName.StartsWith( wxT( "$(" ) ) )
     {
         if( !( m_errflags & ERRFLG_ENVPATH ) )
         {
             m_errflags |= ERRFLG_ENVPATH;
-            wxString errmsg = "[3D File Resolver] No such path; ensure the environment var is defined";
-            errmsg.append( "\n" );
+            wxString errmsg = wxT( "[3D File Resolver] No such path; ensure the environment var is defined" );
+            errmsg.append( wxT( "\n" ) );
             errmsg.append( tname );
-            errmsg.append( "\n" );
+            errmsg.append( wxT( "\n" ) );
             wxLogTrace( tracePathsAndFiles, errmsg );
         }
 
@@ -306,9 +306,9 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     // been checked. This case accounts for partial paths which do not contain ${KIPRJMOD}.
     // This check is performed before checking the path relative to ${KICAD6_3DMODEL_DIR} so that
     // users can potentially override a model within ${KICAD6_3DMODEL_DIR}.
-    if( !m_paths.begin()->m_Pathexp.empty() && !tname.StartsWith( ":" ) )
+    if( !m_paths.begin()->m_Pathexp.empty() && !tname.StartsWith( wxT( ":" ) ) )
     {
-        tmpFN.Assign( m_paths.begin()->m_Pathexp, "" );
+        tmpFN.Assign( m_paths.begin()->m_Pathexp, wxT( "" ) );
         wxString fullPath = tmpFN.GetPathWithSep() + tname;
 
         fullPath = ExpandEnvVarSubstitutions( fullPath, m_project );
@@ -324,10 +324,10 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     }
 
     // check the partial path relative to ${KICAD6_3DMODEL_DIR} (legacy behavior)
-    if( !tname.StartsWith( ":" ) )
+    if( !tname.StartsWith( wxT( ":" ) ) )
     {
         wxFileName fpath;
-        wxString fullPath( "${KICAD6_3DMODEL_DIR}" );
+        wxString fullPath( wxT( "${KICAD6_3DMODEL_DIR}" ) );
         fullPath.Append( fpath.GetPathSeparator() );
         fullPath.Append( tname );
         fullPath = ExpandEnvVarSubstitutions( fullPath, m_project );
@@ -352,10 +352,10 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
             // this can happen if the file was intended to be relative to ${KICAD6_3DMODEL_DIR}
             // but ${KICAD6_3DMODEL_DIR} is not set or is incorrect.
             m_errflags |= ERRFLG_RELPATH;
-            wxString errmsg = "[3D File Resolver] No such path";
-            errmsg.append( "\n" );
+            wxString errmsg = wxT( "[3D File Resolver] No such path" );
+            errmsg.append( wxT( "\n" ) );
             errmsg.append( tname );
-            errmsg.append( "\n" );
+            errmsg.append( wxT( "\n" ) );
             wxLogTrace( tracePathsAndFiles, errmsg );
         }
 
@@ -365,7 +365,7 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     for( const SEARCH_PATH& path : m_paths )
     {
         // ${ENV_VAR} paths have already been checked; skip them
-        if( path.m_Alias.StartsWith( "${" ) || path.m_Alias.StartsWith( "$(" ) )
+        if( path.m_Alias.StartsWith( wxT( "${" ) ) || path.m_Alias.StartsWith( wxT( "$(" ) ) )
             continue;
 
         if( path.m_Alias == alias && !path.m_Pathexp.empty() )
@@ -392,10 +392,10 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     if( !( m_errflags & ERRFLG_ALIAS ) )
     {
         m_errflags |= ERRFLG_ALIAS;
-        wxString errmsg = "[3D File Resolver] No such path; ensure the path alias is defined";
-        errmsg.append( "\n" );
+        wxString errmsg = wxT( "[3D File Resolver] No such path; ensure the path alias is defined" );
+        errmsg.append( wxT( "\n" ) );
         errmsg.append( tname.substr( 1 ) );
-        errmsg.append( "\n" );
+        errmsg.append( wxT( "\n" ) );
         wxLogTrace( tracePathsAndFiles, errmsg );
     }
 
@@ -420,15 +420,15 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
         tpath.m_Pathvar.erase( tpath.m_Pathvar.length() - 1 );
     #endif
 
-    wxFileName path( ExpandEnvVarSubstitutions( tpath.m_Pathvar, m_project ), "" );
+    wxFileName path( ExpandEnvVarSubstitutions( tpath.m_Pathvar, m_project ), wxT( "" ) );
 
     path.Normalize();
 
     if( !path.DirExists() )
     {
-        if( aPath.m_Pathvar == "${KICAD6_3DMODEL_DIR}"
-                || aPath.m_Pathvar == "${KIPRJMOD}" || aPath.m_Pathvar == "$(KIPRJMOD)"
-                || aPath.m_Pathvar == "${KISYS3DMOD}" || aPath.m_Pathvar == "$(KISYS3DMOD)" )
+        if( aPath.m_Pathvar == wxT( "${KICAD6_3DMODEL_DIR}" )
+                || aPath.m_Pathvar == wxT( "${KIPRJMOD}" ) || aPath.m_Pathvar == wxT( "$(KIPRJMOD)" )
+                || aPath.m_Pathvar == wxT( "${KISYS3DMOD}" ) || aPath.m_Pathvar == wxT( "$(KISYS3DMOD)" ) )
         {
             // suppress the message if the missing pathvar is a system variable
         }
@@ -465,10 +465,10 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
             wxString msg = _( "Alias: " );
             msg.append( tpath.m_Alias );
             msg.append( wxT( "\n" ) );
-            msg.append( _( "This path:" ) + wxS( " " ) );
+            msg.append( _( "This path:wxT( " ) + wxS( " ) " ) );
             msg.append( tpath.m_Pathvar );
             msg.append( wxT( "\n" ) );
-            msg.append( _( "Existing path:" ) + wxS( " " ) );
+            msg.append( _( "Existing path:wxT( " ) + wxS( " ) " ) );
             msg.append( sPL->m_Pathvar );
             wxMessageBox( msg, _( "Bad alias (duplicate name)" ) );
 
@@ -489,9 +489,9 @@ bool FILENAME_RESOLVER::readPathList()
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "3D configuration directory is unknown";
-        ostr << " * " << errmsg.ToUTF8();
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
+        wxString errmsg = wxT( "3D configuration directory is unknown" );
+        ostr << wxT( " * " ) << errmsg.ToUTF8();
+        wxLogTrace( MASK_3D_RESOLVER, wxT( "%s\n" ), ostr.str().c_str() );
         return false;
     }
 
@@ -508,10 +508,10 @@ bool FILENAME_RESOLVER::readPathList()
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "no 3D configuration file";
+        wxString errmsg = wxT( "no 3D configuration file" );
         ostr << " * " << errmsg.ToUTF8() << " '";
         ostr << cfgname.ToUTF8() << "'";
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
+        wxLogTrace( MASK_3D_RESOLVER, wxT( "%s\n" ), ostr.str().c_str() );
         return false;
     }
 
@@ -521,9 +521,9 @@ bool FILENAME_RESOLVER::readPathList()
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "Could not open configuration file";
+        wxString errmsg = wxT( "Could not open configuration file" );
         ostr << " * " << errmsg.ToUTF8() << " '" << cfgname.ToUTF8() << "'";
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
+        wxLogTrace( MASK_3D_RESOLVER, wxT( "%s\n" ), ostr.str().c_str() );
         return false;
     }
 
@@ -566,9 +566,9 @@ bool FILENAME_RESOLVER::readPathList()
 
         // Don't add KICAD6_3DMODEL_DIR, one of its legacy equivalents, or KIPRJMOD from a
         // config file.  They're system variables are are defined at runtime.
-        if( al.m_Alias == "${KICAD6_3DMODEL_DIR}"
-                || al.m_Alias == "${KIPRJMOD}" || al.m_Alias == "$(KIPRJMOD)"
-                || al.m_Alias == "${KISYS3DMOD}" || al.m_Alias == "$(KISYS3DMOD)" )
+        if( al.m_Alias == wxT( "${KICAD6_3DMODEL_DIR}" )
+                || al.m_Alias == wxT( "${KIPRJMOD}" ) || al.m_Alias == wxT( "$(KIPRJMOD)" )
+                || al.m_Alias == wxT( "${KISYS3DMOD}" ) || al.m_Alias == wxT( "$(KISYS3DMOD)" ) )
         {
             continue;
         }
@@ -600,7 +600,7 @@ bool FILENAME_RESOLVER::WritePathList( const wxString& aDir, const wxString& aFi
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         wxString errmsg = _( "3D configuration directory is unknown" );
         ostr << " * " << errmsg.ToUTF8();
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
+        wxLogTrace( MASK_3D_RESOLVER, wxT( "%s\n" ), ostr.str().c_str() );
         wxMessageBox( errmsg, _( "Write 3D search path list" ) );
 
         return false;
@@ -613,7 +613,7 @@ bool FILENAME_RESOLVER::WritePathList( const wxString& aDir, const wxString& aFi
         // skip all ${ENV_VAR} alias names
 
         while( sPL != m_paths.end()
-                && ( sPL->m_Alias.StartsWith( "${" ) || sPL->m_Alias.StartsWith( "$(" ) ) )
+                && ( sPL->m_Alias.StartsWith( wxT( "${" ) ) || sPL->m_Alias.StartsWith( wxT( "$(" ) ) ) )
         {
             ++sPL;
         }
@@ -631,7 +631,7 @@ bool FILENAME_RESOLVER::WritePathList( const wxString& aDir, const wxString& aFi
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         wxString errmsg = _( "Could not open configuration file" );
         ostr << " * " << errmsg.ToUTF8() << " '" << cfgname.ToUTF8() << "'";
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
+        wxLogTrace( MASK_3D_RESOLVER, wxT( "%s\n" ), ostr.str().c_str() );
         wxMessageBox( errmsg, _( "Write 3D search path list" ) );
 
         return false;
@@ -677,17 +677,17 @@ void FILENAME_RESOLVER::checkEnvVarPath( const wxString& aPath )
 {
     bool useParen = false;
 
-    if( aPath.StartsWith( "$(" ) )
+    if( aPath.StartsWith( wxT( "$(" ) ) )
         useParen = true;
-    else if( !aPath.StartsWith( "${" ) )
+    else if( !aPath.StartsWith( wxT( "${" ) ) )
         return;
 
     size_t pEnd;
 
     if( useParen )
-        pEnd = aPath.find( ")" );
+        pEnd = aPath.find( wxT( ")" ) );
     else
-        pEnd = aPath.find( "}" );
+        pEnd = aPath.find( wxT( "}" ) );
 
     if( pEnd == wxString::npos )
         return;
@@ -704,7 +704,7 @@ void FILENAME_RESOLVER::checkEnvVarPath( const wxString& aPath )
         if( sPL->m_Alias == envar )
             return;
 
-        if( !sPL->m_Alias.StartsWith( "${" ) )
+        if( !sPL->m_Alias.StartsWith( wxT( "${" ) ) )
             break;
 
         ++sPL;
@@ -713,7 +713,7 @@ void FILENAME_RESOLVER::checkEnvVarPath( const wxString& aPath )
     SEARCH_PATH lpath;
     lpath.m_Alias = envar;
     lpath.m_Pathvar = lpath.m_Alias;
-    wxFileName tmpFN( ExpandEnvVarSubstitutions( lpath.m_Alias, m_project ), "" );
+    wxFileName tmpFN( ExpandEnvVarSubstitutions( lpath.m_Alias, m_project ), wxT( "" ) );
 
     wxUniChar psep = tmpFN.GetPathSeparator();
     tmpFN.Normalize();
@@ -758,7 +758,7 @@ wxString FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
         wxFileName fpath;
 
         // in the case of aliases, ensure that we use the most recent definition
-        if( sL->m_Alias.StartsWith( "${" ) || sL->m_Alias.StartsWith( "$(" ) )
+        if( sL->m_Alias.StartsWith( wxT( "${" ) ) || sL->m_Alias.StartsWith( wxT( "$(" ) ) )
         {
             wxString tpath = ExpandEnvVarSubstitutions( sL->m_Alias, m_project );
 
@@ -789,19 +789,19 @@ wxString FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
             fname.Replace( wxT( "\\" ), wxT( "/" ) );
             #endif
 
-            if( sL->m_Alias.StartsWith( "${" ) || sL->m_Alias.StartsWith( "$(" ) )
+            if( sL->m_Alias.StartsWith( wxT( "${" ) ) || sL->m_Alias.StartsWith( wxT( "$(" ) ) )
             {
                 // old style ENV_VAR
                 tname = sL->m_Alias;
-                tname.Append( "/" );
+                tname.Append( wxT( "/" ) );
                 tname.append( fname );
             }
             else
             {
                 // new style alias
-                tname = ":";
+                tname = wxT( ":" );
                 tname.append( sL->m_Alias );
-                tname.append( ":" );
+                tname.append( wxT( ":" ) );
                 tname.append( fname );
             }
 
@@ -864,9 +864,9 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "bad Hollerith string on line";
+        wxString errmsg = wxT( "bad Hollerith string on line" );
         ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
+        wxLogTrace( MASK_3D_RESOLVER, wxT( "%s\n" ), ostr.str().c_str() );
 
         return false;
     }
@@ -877,9 +877,9 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "missing opening quote mark in config file";
+        wxString errmsg = wxT( "missing opening quote mark in config file" );
         ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
+        wxLogTrace( MASK_3D_RESOLVER, wxT( "%s\n" ), ostr.str().c_str() );
 
         return false;
     }
@@ -890,9 +890,9 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "invalid entry (unexpected end of line)";
+        wxString errmsg = wxT( "invalid entry (unexpected end of line)" );
         ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
+        wxLogTrace( MASK_3D_RESOLVER, wxT( "%s\n" ), ostr.str().c_str() );
 
         return false;
     }
@@ -906,9 +906,9 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "bad Hollerith string on line";
+        wxString errmsg = wxT( "bad Hollerith string on line" );
         ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
+        wxLogTrace( MASK_3D_RESOLVER, wxT( "%s\n" ), ostr.str().c_str() );
 
         return false;
     }
@@ -922,9 +922,9 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "invalid entry (unexpected end of line)";
+        wxString errmsg = wxT( "invalid entry (unexpected end of line)" );
         ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
+        wxLogTrace( MASK_3D_RESOLVER, wxT( "%s\n" ), ostr.str().c_str() );
 
         return false;
     }
@@ -939,9 +939,9 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "missing closing quote mark in config file";
+        wxString errmsg = wxT( "missing closing quote mark in config file" );
         ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
+        wxLogTrace( MASK_3D_RESOLVER, wxT( "%s\n" ), ostr.str().c_str() );
 
         return false;
     }
@@ -1015,9 +1015,9 @@ bool FILENAME_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAl
         // environment string before testing
         aliasEnd = wxString::npos;
 
-        if( aFileName.StartsWith( "${" ) )
+        if( aFileName.StartsWith( wxT( "${" ) ) )
             aliasEnd = aFileName.find( '}' );
-        else if( aFileName.StartsWith( "$(" ) )
+        else if( aFileName.StartsWith( wxT( "$(" ) ) )
             aliasEnd = aFileName.find( ')' );
 
         if( aliasEnd != wxString::npos )
@@ -1031,8 +1031,8 @@ bool FILENAME_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAl
     // So remove separators
     wxString lpath_no_sep = lpath;
 #ifdef __WINDOWS__
-    lpath_no_sep.Replace( "/", " " );
-    lpath_no_sep.Replace( "\\", " " );
+    lpath_no_sep.Replace( wxT( "/" ), wxT( " " ) );
+    lpath_no_sep.Replace( wxT( "\\" ), wxT( " " ) );
 
     // A disk identifier is allowed, and therefore remove its separator
     if( lpath_no_sep.Length() > 1 && lpath_no_sep[1] == ':' )
@@ -1064,32 +1064,32 @@ bool FILENAME_RESOLVER::GetKicadPaths( std::list< wxString >& paths ) const
     while( mS != mE )
     {
         // filter out URLs, template directories, and known system paths
-        if( mS->first == wxString( "KICAD_PTEMPLATES" )
-            || mS->first == wxString( "KICAD6_FOOTPRINT_DIR" ) )
+        if( mS->first == wxString( wxT( "KICAD_PTEMPLATES" ) )
+            || mS->first == wxString( wxT( "KICAD6_FOOTPRINT_DIR" ) ) )
         {
             ++mS;
             continue;
         }
 
-        if( wxString::npos != mS->second.GetValue().find( wxString( "://" ) ) )
+        if( wxString::npos != mS->second.GetValue().find( wxString( wxT( "://" ) ) ) )
         {
             ++mS;
             continue;
         }
 
-        wxString tmp( "${" );
+        wxString tmp( wxT( "${" ) );
         tmp.Append( mS->first );
-        tmp.Append( "}" );
+        tmp.Append( wxT( "}" ) );
         paths.push_back( tmp );
 
-        if( tmp == "${KICAD6_3DMODEL_DIR}" )
+        if( tmp == wxT( "${KICAD6_3DMODEL_DIR}" ) )
             hasKisys3D = true;
 
         ++mS;
     }
 
     if( !hasKisys3D )
-        paths.emplace_back("${KICAD6_3DMODEL_DIR}" );
+        paths.emplace_back(wxT( "${KICAD6_3DMODEL_DIR}" ) );
 
     return true;
 }

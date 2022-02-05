@@ -329,7 +329,7 @@ void ReadHotKeyConfig( const wxString& aFileName, std::map<std::string, int>& aH
 
     if( fileName.IsEmpty() )
     {
-        wxFileName fn( "user" );
+        wxFileName fn( wxT( "user" ) );
         fn.SetExt( HotkeyFileExtension );
         fn.SetPath( SETTINGS_MANAGER::GetUserSettingsPath() );
         fileName = fn.GetFullPath();
@@ -338,19 +338,19 @@ void ReadHotKeyConfig( const wxString& aFileName, std::map<std::string, int>& aH
     if( !wxFile::Exists( fileName ) )
         return;
 
-    wxFFile file( fileName, "rb" );
+    wxFFile file( fileName, wxT( "rb" ) );
 
     if( !file.IsOpened() )       // There is a problem to open file
         return;
 
     wxString input;
     file.ReadAll( &input );
-    input.Replace( "\r\n", "\n" );  // Convert Windows files to Unix line-ends
-    wxStringTokenizer fileTokenizer( input, "\n", wxTOKEN_STRTOK );
+    input.Replace( wxT( "\r\n" ), wxT( "\n" ) );  // Convert Windows files to Unix line-ends
+    wxStringTokenizer fileTokenizer( input, wxT( "\n" ), wxTOKEN_STRTOK );
 
     while( fileTokenizer.HasMoreTokens() )
     {
-        wxStringTokenizer lineTokenizer( fileTokenizer.GetNextToken(), "\t" );
+        wxStringTokenizer lineTokenizer( fileTokenizer.GetNextToken(), wxT( "\t" ) );
 
         wxString cmdName = lineTokenizer.GetNextToken();
         wxString keyName = lineTokenizer.GetNextToken();
@@ -364,7 +364,7 @@ void ReadHotKeyConfig( const wxString& aFileName, std::map<std::string, int>& aH
 int WriteHotKeyConfig( const std::map<std::string, TOOL_ACTION*>& aActionMap )
 {
     std::map<std::string, int> hotkeys;
-    wxFileName fn( "user" );
+    wxFileName fn( wxT( "user" ) );
 
     fn.SetExt( HotkeyFileExtension );
     fn.SetPath( SETTINGS_MANAGER::GetUserSettingsPath() );
@@ -418,7 +418,7 @@ int ReadLegacyHotkeyConfigFile( const wxString& aFilename, std::map<std::string,
     if( !wxFile::Exists( fn.GetFullPath() ) )
         return 0;
 
-    wxFFile cfgfile( fn.GetFullPath(), "rb" );
+    wxFFile cfgfile( fn.GetFullPath(), wxT( "rb" ) );
 
     if( !cfgfile.IsOpened() )       // There is a problem to open file
         return 0;
@@ -433,7 +433,7 @@ int ReadLegacyHotkeyConfigFile( const wxString& aFilename, std::map<std::string,
 
     // Is this the wxConfig format? If so, remove "Keys=" and parse the newlines.
     if( data.StartsWith( wxT("Keys="), &data ) )
-        data.Replace( "\\n", "\n", true );
+        data.Replace( wxT( "\\n" ), wxT( "\n" ), true );
 
     // parse
     wxStringTokenizer tokenizer( data, L"\r\n", wxTOKEN_STRTOK );

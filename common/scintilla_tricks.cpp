@@ -268,7 +268,7 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
         for( int ii = startLine; ii <= endLine; ++ii )
         {
             if( comment )
-                m_te->InsertText( m_te->PositionFromLine( ii ), "#" );
+                m_te->InsertText( m_te->PositionFromLine( ii ), wxT( "#" ) );
             else if( firstNonWhitespace( ii, &whitespaceCount ) == '#' )
                 m_te->DeleteRange( m_te->PositionFromLine( ii ) + whitespaceCount, 1 );
         }

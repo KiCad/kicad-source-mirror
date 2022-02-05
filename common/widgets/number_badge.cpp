@@ -138,9 +138,9 @@ void NUMBER_BADGE::computeSize()
 
     // Determine the size using the string "-999+" where the - on the front is for spacing from
     // the start of the rectangle so the number isn't close to the curved edge.
-    test = "-";
+    test = wxT( "-" );
     test.Pad( len, '9' );
-    test += "+";
+    test += wxT( "+" );
 
     dc.SetFont( wxFont( m_textSize, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, BADGE_FONTWEIGHT ) );
     wxSize size = dc.GetTextExtent( test );

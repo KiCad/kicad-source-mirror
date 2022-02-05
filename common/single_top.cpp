@@ -233,7 +233,7 @@ struct APP_SINGLE_TOP : public wxApp
         }
         catch( const std::exception& e )
         {
-            wxLogError( "Unhandled exception class: %s  what: %s",
+            wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
                         FROM_UTF8( typeid(e).name() ),
                         FROM_UTF8( e.what() ) );
         }
@@ -243,7 +243,7 @@ struct APP_SINGLE_TOP : public wxApp
         }
         catch(...)
         {
-            wxLogError( "Unhandled exception of unknown type" );
+            wxLogError( wxT( "Unhandled exception of unknown type" ) );
         }
 
         return false;   // continue on. Return false to abort program
@@ -340,7 +340,7 @@ bool PGM_SINGLE_TOP::OnPgmInit()
 
     wxString frameName;
 
-    if( parser.Found( "frame", &frameName ) )
+    if( parser.Found( wxT( "frame" ), &frameName ) )
     {
         appType = FRAME_T_COUNT;
 

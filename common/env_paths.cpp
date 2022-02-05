@@ -27,8 +27,8 @@
 static bool normalizeAbsolutePaths( const wxFileName& aPathA, const wxFileName& aPathB,
                                     wxString* aResultPath )
 {
-    wxCHECK_MSG( aPathA.IsAbsolute(), false, aPathA.GetPath() + " is not an absolute path." );
-    wxCHECK_MSG( aPathB.IsAbsolute(), false, aPathB.GetPath() + " is not an absolute path." );
+    wxCHECK_MSG( aPathA.IsAbsolute(), false, aPathA.GetPath() + wxT( " is not an absolute path." ) );
+    wxCHECK_MSG( aPathB.IsAbsolute(), false, aPathB.GetPath() + wxT( " is not an absolute path." ) );
 
     if( aPathA.GetPath() == aPathB.GetPath() )
         return true;
@@ -141,7 +141,7 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
     if( aProject )
         return NormalizePath( aFilePath, aEnvVars, aProject->GetProjectPath() );
     else
-        return NormalizePath( aFilePath, aEnvVars, "" );
+        return NormalizePath( aFilePath, aEnvVars, wxT( "" ) );
 }
 
 

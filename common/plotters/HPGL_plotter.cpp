@@ -473,7 +473,7 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList, FILL_T aFi
         // Draw the filled area
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
 
-        m_current_item->content << wxString( "PM 0;\n" ); // Start polygon
+        m_current_item->content << wxString( wxT( "PM 0;\n" ) ); // Start polygon
 
         for( unsigned ii = 1; ii < aCornerList.size(); ++ii )
             LineTo( aCornerList[ii] );

@@ -76,7 +76,7 @@ void TOOL_EVENT::init()
 VECTOR2D TOOL_EVENT::returnCheckedPosition( const VECTOR2D& aPos ) const
 {
 #ifdef WX_COMPATIBILITY
-    wxCHECK_MSG( HasPosition(), VECTOR2D(), "Attempted to get position from non-position event" );
+    wxCHECK_MSG( HasPosition(), VECTOR2D(), wxT( "Attempted to get position from non-position event" ) );
 #else
     assert( HasPosition() );
 #endif

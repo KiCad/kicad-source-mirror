@@ -90,7 +90,7 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
     // Read the pinned entries from the project config
     PROJECT_FILE& project = m_parent->Kiway().Prj().GetProjectFile();
 
-    std::vector<wxString>& entries = ( m_pinnedKey == "pinned_symbol_libs" ) ?
+    std::vector<wxString>& entries = ( m_pinnedKey == wxT( "pinned_symbol_libs" ) ) ?
                                              project.m_PinnedSymbolLibs :
                                              project.m_PinnedFootprintLibs;
 
@@ -117,7 +117,7 @@ void LIB_TREE_MODEL_ADAPTER::SavePinnedItems()
 {
     PROJECT_FILE& project = m_parent->Kiway().Prj().GetProjectFile();
 
-    std::vector<wxString>& entries = ( m_pinnedKey == "pinned_symbol_libs" ) ?
+    std::vector<wxString>& entries = ( m_pinnedKey == wxT( "pinned_symbol_libs" ) ) ?
                                      project.m_PinnedSymbolLibs :
                                      project.m_PinnedFootprintLibs;
 
@@ -283,7 +283,7 @@ void LIB_TREE_MODEL_ADAPTER::AttachTo( wxDataViewCtrl* aDataViewCtrl )
 
     // The extent of the text doesn't take into account the space on either side
     // in the header, so artificially pad it
-    wxSize partHeadMinWidth = KIUI::GetTextSize( partHead + "MMM", aDataViewCtrl );
+    wxSize partHeadMinWidth = KIUI::GetTextSize( partHead + wxT( "MMM" ), aDataViewCtrl );
 
     // Ensure the part column is wider than the smallest allowable width
     if( m_colWidths[PART_COL] < partHeadMinWidth.x )

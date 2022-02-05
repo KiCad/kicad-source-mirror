@@ -194,7 +194,7 @@ static const wxChar AllowManualCanvasScale[] = wxT( "AllowManualCanvasScale" );
  */
 wxString dumpParamCfg( const PARAM_CFG& aParam )
 {
-    wxString s = aParam.m_Ident + ": ";
+    wxString s = aParam.m_Ident + wxT( ": " );
 
     /*
      * This implementation is rather simplistic, but it is
@@ -217,9 +217,9 @@ wxString dumpParamCfg( const PARAM_CFG& aParam )
         s << *static_cast<const PARAM_CFG_FILENAME&>( aParam ).m_Pt_param;
         break;
     case paramcfg_id::PARAM_BOOL:
-        s << ( *static_cast<const PARAM_CFG_BOOL&>( aParam ).m_Pt_param ? "true" : "false" );
+        s << ( *static_cast<const PARAM_CFG_BOOL&>( aParam ).m_Pt_param ? wxT( "true" ) : wxT( "false" ) );
         break;
-    default: s << "Unsupported PARAM_CFG variant: " << aParam.m_Type;
+    default: s << wxT( "Unsupported PARAM_CFG variant: " ) << aParam.m_Type;
     }
 
     return s;
@@ -249,14 +249,14 @@ static void dumpCfg( const std::vector<PARAM_CFG*>& aArray )
  */
 static wxFileName getAdvancedCfgFilename()
 {
-    const static wxString cfg_filename{ "kicad_advanced" };
+    const static wxString cfg_filename{ wxT( "kicad_advanced" ) };
     return wxFileName( SETTINGS_MANAGER::GetUserSettingsPath(), cfg_filename );
 }
 
 
 ADVANCED_CFG::ADVANCED_CFG()
 {
-    wxLogTrace( AdvancedConfigMask, "Init advanced config" );
+    wxLogTrace( AdvancedConfigMask, wxT( "Init advanced config" ) );
 
     // Init defaults - this is done in case the config doesn't exist,
     // then the values will remain as set here.
@@ -313,7 +313,7 @@ void ADVANCED_CFG::loadFromConfigFile()
 
     if( !k_advanced.FileExists() )
     {
-        wxLogTrace( AdvancedConfigMask, "File does not exist %s", k_advanced.GetFullPath() );
+        wxLogTrace( AdvancedConfigMask, wxT( "File does not exist %s" ), k_advanced.GetFullPath() );
 
         // load the defaults
         wxConfig emptyConfig;
@@ -322,9 +322,9 @@ void ADVANCED_CFG::loadFromConfigFile()
         return;
     }
 
-    wxLogTrace( AdvancedConfigMask, "Loading advanced config from: %s", k_advanced.GetFullPath() );
+    wxLogTrace( AdvancedConfigMask, wxT( "Loading advanced config from: %s" ), k_advanced.GetFullPath() );
 
-    wxFileConfig file_cfg( "", "", k_advanced.GetFullPath() );
+    wxFileConfig file_cfg( wxT( "" ), wxT( "" ), k_advanced.GetFullPath() );
     loadSettings( file_cfg );
 }
 
@@ -414,14 +414,14 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config
-    wxString traceMasks = "";
-    configParams.push_back( new PARAM_CFG_WXSTRING( true, AC_KEYS::TraceMasks, &traceMasks, "" ) );
+    wxString traceMasks = wxT( "" );
+    configParams.push_back( new PARAM_CFG_WXSTRING( true, AC_KEYS::TraceMasks, &traceMasks, wxT( "" ) ) );
 
     // Load the config from file
     wxConfigLoadSetups( &aCfg, configParams );
 
     // Now actually set the trace masks
-    wxStringTokenizer traceMaskTokenizer( traceMasks, "," );
+    wxStringTokenizer traceMaskTokenizer( traceMasks, wxT( "," ) );
 
     while( traceMaskTokenizer.HasMoreTokens() )
     {

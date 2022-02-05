@@ -111,7 +111,7 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
         double degs = getNormDeciDegFromRad( initAngle );
 
-        cursorStrings.push_back( DimensionLabel( "r", m_constructMan.GetRadius(), m_units ) );
+        cursorStrings.push_back( DimensionLabel( wxT( "r" ), m_constructMan.GetRadius(), m_units ) );
         cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), degs,
                                                  EDA_UNITS::DEGREES ) );
     }

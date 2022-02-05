@@ -399,8 +399,8 @@ void DIALOG_SHIM::OnPaint( wxPaintEvent &event )
 
 void DIALOG_SHIM::OnModify()
 {
-    if( !GetTitle().StartsWith( "*" ) )
-        SetTitle( "*" + GetTitle() );
+    if( !GetTitle().StartsWith( wxT( "*" ) ) )
+        SetTitle( wxT( "*" ) + GetTitle() );
 }
 
 
@@ -488,8 +488,8 @@ void DIALOG_SHIM::EndQuasiModal( int retCode )
 
     if( !IsQuasiModal() )
     {
-        wxFAIL_MSG( "either DIALOG_SHIM::EndQuasiModal called twice or ShowQuasiModal"
-                    "wasn't called" );
+        wxFAIL_MSG( wxT( "either DIALOG_SHIM::EndQuasiModal called twice or ShowQuasiModal" )
+                    wxT( "wasn't called" ) );
         return;
     }
 

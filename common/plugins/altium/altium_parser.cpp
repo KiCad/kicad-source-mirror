@@ -151,7 +151,7 @@ std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties()
         // If the key starts with '%UTF8%' we have to parse the value using UTF8
         wxString value;
 
-        if( canonicalKey.StartsWith( "%UTF8%" ) )
+        if( canonicalKey.StartsWith( wxT( "%UTF8%" ) ) )
             value = wxString( valueS.c_str(), wxConvUTF8 );
         else
             value = wxString( valueS.c_str(), wxConvISO8859_1 );
@@ -231,7 +231,7 @@ bool ALTIUM_PARSER::ReadBool( const std::map<wxString, wxString>& aProps, const 
     if( value == aProps.end() )
         return aDefault;
     else
-        return value->second == "T" || value->second == "TRUE";
+        return value->second == wxT( "T" ) || value->second == wxT( "TRUE" );
 }
 
 
@@ -242,7 +242,7 @@ int32_t ALTIUM_PARSER::ReadKicadUnit( const std::map<wxString, wxString>& aProps
 
     wxString prefix;
 
-    if( !value.EndsWith( "mil", &prefix ) )
+    if( !value.EndsWith( wxT( "mil" ), &prefix ) )
     {
         wxLogError( _( "Unit '%s' does not end with 'mil'." ), value );
         return 0;
@@ -263,7 +263,7 @@ int32_t ALTIUM_PARSER::ReadKicadUnit( const std::map<wxString, wxString>& aProps
 wxString ALTIUM_PARSER::ReadString( const std::map<wxString, wxString>& aProps,
                                     const wxString& aKey, const wxString& aDefault )
 {
-    const auto& utf8Value = aProps.find( wxString( "%UTF8%" ) + aKey );
+    const auto& utf8Value = aProps.find( wxString( wxT( "%UTF8%" ) ) + aKey );
 
     if( utf8Value != aProps.end() )
         return utf8Value->second;

@@ -452,7 +452,7 @@ void OPENGL_GAL::BeginDrawing()
         }
         catch( const std::runtime_error& )
         {
-            wxLogVerbose( "Could not create a framebuffer for overlays.\n" );
+            wxLogVerbose( wxT( "Could not create a framebuffer for overlays.\n" ) );
             m_overlayBuffer = 0;
         }
 
@@ -579,7 +579,7 @@ void OPENGL_GAL::BeginDrawing()
 
 void OPENGL_GAL::EndDrawing()
 {
-    wxASSERT_MSG( m_isContextLocked, "What happened to the context lock?" );
+    wxASSERT_MSG( m_isContextLocked, wxT( "What happened to the context lock?" ) );
 
     PROF_TIMER cntTotal("gl-end-total");
     PROF_TIMER cntEndCached("gl-end-cached");
@@ -629,7 +629,7 @@ void OPENGL_GAL::EndDrawing()
 
     cntTotal.Stop();
 
-    KI_TRACE( traceGalProfile, "Timing: %s %s %s %s %s %s\n", cntTotal.to_string(),
+    KI_TRACE( traceGalProfile, wxT( "Timing: %s %s %s %s %s %s\n" ), cntTotal.to_string(),
               cntEndCached.to_string(), cntEndNoncached.to_string(), cntEndOverlay.to_string(),
               cntComposite.to_string(), cntSwap.to_string() );
 }
@@ -637,7 +637,7 @@ void OPENGL_GAL::EndDrawing()
 
 void OPENGL_GAL::LockContext( int aClientCookie )
 {
-    wxASSERT_MSG( !m_isContextLocked, "Context already locked." );
+    wxASSERT_MSG( !m_isContextLocked, wxT( "Context already locked." ) );
     m_isContextLocked = true;
     m_lockClientCookie = aClientCookie;
 
@@ -2232,7 +2232,7 @@ void OPENGL_GAL::init()
 {
     wxASSERT( IsShownOnScreen() );
 
-    wxASSERT_MSG( m_isContextLocked, "This should only be called from within a locked context." );
+    wxASSERT_MSG( m_isContextLocked, wxT( "This should only be called from within a locked context." ) );
 
 // IsDisplayAttr() handles WX_GL_{MAJOR,MINOR}_VERSION correctly only in 3.0.4
 // starting with 3.1.0 one should use wxGLContext::IsOk() (done by GL_CONTEXT_MANAGER)

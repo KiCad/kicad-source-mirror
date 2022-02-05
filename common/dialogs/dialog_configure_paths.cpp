@@ -153,7 +153,7 @@ bool DIALOG_CONFIGURE_PATHS::TransferDataToWindow()
 
        for( auto it = paths->begin(); it != paths->end(); ++it )
        {
-           if ( !( *it ).m_Alias.StartsWith( "${" ) && !( *it ).m_Alias.StartsWith( "$(" ) )
+           if ( !( *it ).m_Alias.StartsWith( wxT( "${" ) ) && !( *it ).m_Alias.StartsWith( wxT( "$(" ) ) )
            {
                AppendSearchPath( it->m_Alias, it->m_Pathvar, it->m_Description );
 
@@ -172,7 +172,7 @@ bool DIALOG_CONFIGURE_PATHS::TransferDataToWindow()
         const wxString& path = it->second.GetValue();
         AppendEnvVar( it->first, path, it->second.GetDefinedExternally() );
 
-        if( m_curdir.IsEmpty() && !path.StartsWith( "${" ) && !path.StartsWith( "$(" ) )
+        if( m_curdir.IsEmpty() && !path.StartsWith( wxT( "${" ) ) && !path.StartsWith( wxT( "$(" ) ) )
             m_curdir = path;
     }
 
@@ -639,19 +639,19 @@ void DIALOG_CONFIGURE_PATHS::OnHelp( wxCommandEvent& event )
                       "level.  Environment variables defined at the system or user level "
                       "take precedence over the ones defined in this table.  This means the "
                       "values in this table are ignored." );
-    msg << "<br><br><b>";
+    msg << wxT( "<br><br><b>" );
     msg << _( "To ensure environment variable names are valid on all platforms, the name field "
               "will only accept upper case letters, digits, and the underscore characters." );
-    msg << "</b>";
+    msg << wxT( "</b>" );
 
     for( const auto& var : ENV_VAR::GetPredefinedEnvVars() )
     {
-        msg << "<br><br><b>" << var << "</b>";
+        msg << wxT( "<br><br><b>" ) << var << wxT( "</b>" );
 
         const auto desc = ENV_VAR::LookUpEnvVarHelp( var );
 
         if( desc.size() > 0 )
-            msg << ": " << desc;
+            msg << wxT( ": " ) << desc;
 
     }
 

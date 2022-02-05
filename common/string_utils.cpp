@@ -47,7 +47,7 @@ wxString ConvertToNewOverbarNotation( const wxString& aOldStr )
     bool inOverbar = false;
 
     // Don't get tripped up by the legacy empty-string token.
-    if( aOldStr == "~" )
+    if( aOldStr == wxT( "~" ) )
         return aOldStr;
 
     for( wxString::const_iterator chIt = aOldStr.begin(); chIt != aOldStr.end(); ++chIt )
@@ -62,12 +62,12 @@ wxString ConvertToNewOverbarNotation( const wxString& aOldStr )
                 {
                     // This way the subsequent opening curly brace will not start an
                     // overbar.
-                    newStr << "~~{}";
+                    newStr << wxT( "~~{}" );
                     continue;
                 }
 
                 // Two subsequent tildes mean a tilde.
-                newStr << "~";
+                newStr << wxT( "~" );
                 ++chIt;
                 continue;
             }
@@ -81,12 +81,12 @@ wxString ConvertToNewOverbarNotation( const wxString& aOldStr )
             {
                 if( inOverbar )
                 {
-                    newStr << "}";
+                    newStr << wxT( "}" );
                     inOverbar = false;
                 }
                 else
                 {
-                    newStr << "~{";
+                    newStr << wxT( "~{" );
                     inOverbar = true;
                 }
 
@@ -96,7 +96,7 @@ wxString ConvertToNewOverbarNotation( const wxString& aOldStr )
         else if( ( *chIt == ' ' || *chIt == '}' || *chIt == ')' ) && inOverbar )
         {
             // Spaces were used to terminate overbar as well
-            newStr << "}";
+            newStr << wxT( "}" );
             inOverbar = false;
         }
 
@@ -105,7 +105,7 @@ wxString ConvertToNewOverbarNotation( const wxString& aOldStr )
 
     // Explicitly end the overbar even if there was no terminating '~' in the aOldStr.
     if( inOverbar )
-        newStr << "}";
+        newStr << wxT( "}" );
 
     return newStr;
 }
@@ -147,78 +147,78 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
         if( aContext == CTX_NETNAME )
         {
             if( c == '/' )
-                converted += "{slash}";
+                converted += wxT( "{slash}" );
             else if( c == '\n' || c == '\r' )
-                converted += "";    // drop
+                converted += wxT( "" );    // drop
             else
                 converted += c;
         }
         else if( aContext == CTX_LIBID )
         {
             if( c == '{' )
-                converted += "{brace}";
+                converted += wxT( "{brace}" );
             else if( c == '/' )
-                converted += "{slash}";
+                converted += wxT( "{slash}" );
             else if( c == '\\' )
-                converted += "{backslash}";
+                converted += wxT( "{backslash}" );
             else if( c == '<' )
-                converted += "{lt}";
+                converted += wxT( "{lt}" );
             else if( c == '>' )
-                converted += "{gt}";
+                converted += wxT( "{gt}" );
             else if( c == ':' )
-                converted += "{colon}";
+                converted += wxT( "{colon}" );
             else if( c == '\"' )
-                converted += "{dblquote}";
+                converted += wxT( "{dblquote}" );
             else if( c == '\n' || c == '\r' )
-                converted += "";    // drop
+                converted += wxT( "" );    // drop
             else
                 converted += c;
         }
         else if( aContext == CTX_QUOTED_STR )
         {
             if( c == '\"' )
-                converted += "{dblquote}";
+                converted += wxT( "{dblquote}" );
             else
                 converted += c;
         }
         else if( aContext == CTX_LINE )
         {
             if( c == '\n' || c == '\r' )
-                converted += "{return}";
+                converted += wxT( "{return}" );
             else
                 converted += c;
         }
         else if( aContext == CTX_FILENAME )
         {
             if( c == '{' )
-                converted += "{brace}";
+                converted += wxT( "{brace}" );
             else if( c == '/' )
-                converted += "{slash}";
+                converted += wxT( "{slash}" );
             else if( c == '\\' )
-                converted += "{backslash}";
+                converted += wxT( "{backslash}" );
             else if( c == '\"' )
-                converted += "{dblquote}";
+                converted += wxT( "{dblquote}" );
             else if( c == '<' )
-                converted += "{lt}";
+                converted += wxT( "{lt}" );
             else if( c == '>' )
-                converted += "{gt}";
+                converted += wxT( "{gt}" );
             else if( c == '|' )
-                converted += "{bar}";
+                converted += wxT( "{bar}" );
             else if( c == ':' )
-                converted += "{colon}";
+                converted += wxT( "{colon}" );
             else if( c == '\t' )
-                converted += "{tab}";
+                converted += wxT( "{tab}" );
             else if( c == '\n' || c == '\r' )
-                converted += "{return}";
+                converted += wxT( "{return}" );
             else
                 converted += c;
         }
         else if( aContext == CTX_NO_SPACE )
         {
             if( c == ' ' )
-                converted += "{space}";
+                converted += wxT( "{space}" );
             else if( c == '{' )
-                converted += "{brace}";
+                converted += wxT( "{brace}" );
             else
                 converted += c;
         }
@@ -285,7 +285,7 @@ wxString UnescapeString( const wxString& aSource )
             else if( token.IsEmpty() )             newbuf.append( wxS( "{" ) );
             else
             {
-                newbuf.append( "{" + UnescapeString( token ) + "}" );
+                newbuf.append( wxT( "{" ) + UnescapeString( token ) + wxT( "}" ) );
             }
         }
         else
@@ -416,8 +416,8 @@ std::string EscapedUTF8( const wxString& aString )
     wxString str = aString;
 
     // No new-lines allowed in quoted strings
-    str.Replace( "\r\n", "\r" );
-    str.Replace( "\n", "\r" );
+    str.Replace( wxT( "\r\n" ), wxT( "\r" ) );
+    str.Replace( wxT( "\n" ), wxT( "\r" ) );
 
     std::string utf8 = TO_UTF8( aString );
 
@@ -457,15 +457,15 @@ wxString EscapeHTML( const wxString& aString )
     for( wxUniChar c : aString )
     {
         if( c == '\"' )
-            converted += "&quot;";
+            converted += wxT( "&quot;" );
         else if( c == '\'' )
-            converted += "&apos;";
+            converted += wxT( "&apos;" );
         else if( c == '&' )
-            converted += "&amp;";
+            converted += wxT( "&amp;" );
         else if( c == '<' )
-            converted += "&lt;";
+            converted += wxT( "&lt;" );
         else if( c == '>' )
-            converted += "&gt;";
+            converted += wxT( "&gt;" );
         else
             converted += c;
     }

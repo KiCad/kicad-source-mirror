@@ -101,7 +101,7 @@ BITMAP_STORE::BITMAP_STORE()
 {
     wxFileName path( PATHS::GetStockDataPath() + wxT( "/resources" ), IMAGE_ARCHIVE );
 
-    wxLogTrace( traceBitmaps, "Loading bitmaps from " + path.GetFullPath() );
+    wxLogTrace( traceBitmaps, wxT( "Loading bitmaps from " ) + path.GetFullPath() );
 
     m_archive = std::make_unique<ASSET_ARCHIVE>( path.GetFullPath() );
 
@@ -148,8 +148,8 @@ wxImage BITMAP_STORE::getImage( BITMAPS aBitmapId, int aHeight )
 
         if( count < 0 )
         {
-            wxLogTrace( traceBitmaps, "Bitmap for %d, %d, %s has an info tag with file %s,"
-                        "but that file could not be found in the archive!",
+            wxLogTrace( traceBitmaps, wxT( "Bitmap for %d, %d, %s has an info tag with file %s," )
+                        wxT( "but that file could not be found in the archive!" ),
                         aBitmapId, aHeight, m_theme );
             data  = s_imageNotFound;
             count = sizeof( s_imageNotFound );
@@ -205,7 +205,7 @@ wxString BITMAP_STORE::computeBitmapName( BITMAPS aBitmapId, int aHeight )
 {
     if( !m_bitmapInfoCache.count( aBitmapId ) )
     {
-        wxLogTrace( traceBitmaps, "No bitmap info available for %d", aBitmapId );
+        wxLogTrace( traceBitmaps, wxT( "No bitmap info available for %d" ), aBitmapId );
         return wxEmptyString;
     }
 
@@ -225,7 +225,7 @@ wxString BITMAP_STORE::computeBitmapName( BITMAPS aBitmapId, int aHeight )
 
     if( fn.IsEmpty() )
     {
-        wxLogTrace( traceBitmaps, "No bitmap found matching ID %d, height %d, theme %s",
+        wxLogTrace( traceBitmaps, wxT( "No bitmap found matching ID %d, height %d, theme %s" ),
                     aBitmapId, aHeight, m_theme );
         return m_bitmapInfoCache.at( aBitmapId ).begin()->filename;
     }

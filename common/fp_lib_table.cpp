@@ -474,7 +474,7 @@ FOOTPRINT* FP_LIB_TABLE::FootprintLoadWithOptionalNickname( const LIB_ID& aFootp
 
 const wxString FP_LIB_TABLE::GlobalPathEnvVariableName()
 {
-    return  "KICAD6_FOOTPRINT_DIR";
+    return  wxT( "KICAD6_FOOTPRINT_DIR" );
 }
 
 

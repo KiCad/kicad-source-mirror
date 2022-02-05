@@ -34,14 +34,14 @@ using STRING_MAP = std::map<wxString, wxString>;
  * (where they are originally defined)
  */
 static const ENV_VAR::ENV_VAR_LIST predefinedEnvVars = {
-    "KIPRJMOD",
-    "KICAD6_SYMBOL_DIR",
-    "KICAD6_3DMODEL_DIR",
-    "KICAD6_FOOTPRINT_DIR",
-    "KICAD6_TEMPLATE_DIR",
-    "KICAD_USER_TEMPLATE_DIR",
-    "KICAD_PTEMPLATES",
-    "KICAD6_3RD_PARTY",
+    wxT( "KIPRJMOD" ),
+    wxT( "KICAD6_SYMBOL_DIR" ),
+    wxT( "KICAD6_3DMODEL_DIR" ),
+    wxT( "KICAD6_FOOTPRINT_DIR" ),
+    wxT( "KICAD6_TEMPLATE_DIR" ),
+    wxT( "KICAD_USER_TEMPLATE_DIR" ),
+    wxT( "KICAD_PTEMPLATES" ),
+    wxT( "KICAD6_3RD_PARTY" ),
 };
 
 
@@ -67,40 +67,40 @@ static void initialiseEnvVarHelp( STRING_MAP& aMap )
 {
     // Set up dynamically, as we want to be able to use _() translations,
     // which can't be done statically
-    aMap["KICAD6_FOOTPRINT_DIR"] =
+    aMap[wxT( "KICAD6_FOOTPRINT_DIR" )] =
         _( "The base path of locally installed system "
             "footprint libraries (.pretty folders).");
-    aMap["KICAD6_3DMODEL_DIR"] =
+    aMap[wxT( "KICAD6_3DMODEL_DIR" )] =
         _( "The base path of system footprint 3D shapes (.3Dshapes folders).");
-    aMap["KICAD6_SYMBOL_DIR"] =
+    aMap[wxT( "KICAD6_SYMBOL_DIR" )] =
         _( "The base path of the locally installed symbol libraries.");
-    aMap["KICAD6_TEMPLATE_DIR"] =
+    aMap[wxT( "KICAD6_TEMPLATE_DIR" )] =
         _( "A directory containing project templates installed with KiCad.");
-    aMap["KICAD_USER_TEMPLATE_DIR"] =
+    aMap[wxT( "KICAD_USER_TEMPLATE_DIR" )] =
         _( "Optional. Can be defined if you want to create your own project "
            "templates folder.");
-    aMap["KICAD6_3RD_PARTY"] =
+    aMap[wxT( "KICAD6_3RD_PARTY" )] =
         _( "A directory containing 3rd party plugins, libraries and other "
            "downloadable content.");
-    aMap["KIPRJMOD"] =
+    aMap[wxT( "KIPRJMOD" )] =
         _("Internally defined by KiCad (cannot be edited) and is set "
           "to the absolute path of the currently loaded project file.  This environment "
           "variable can be used to define files and paths relative to the currently loaded "
           "project.  For instance, ${KIPRJMOD}/libs/footprints.pretty can be defined as a "
           "folder containing a project specific footprint library named footprints.pretty." );
-    aMap["KICAD6_SCRIPTING_DIR"] =
+    aMap[wxT( "KICAD6_SCRIPTING_DIR" )] =
         _( "A directory containing system-wide scripts installed with KiCad" );
-    aMap["KICAD6_USER_SCRIPTING_DIR"] =
+    aMap[wxT( "KICAD6_USER_SCRIPTING_DIR" )] =
         _( "A directory containing user-specific scripts installed with KiCad" );
 
     // Deprecated vars
-    aMap["KICAD_PTEMPLATES"] =
+    aMap[wxT( "KICAD_PTEMPLATES" )] =
         _( "Deprecated version of KICAD_TEMPLATE_DIR.");
-    aMap["KISYS3DMOD"] =
+    aMap[wxT( "KISYS3DMOD" )] =
         _( "Deprecated version of KICAD6_3DMODEL_DIR." );
-    aMap["KISYSMOD"] =
+    aMap[wxT( "KISYSMOD" )] =
         _( "Deprecated version of KICAD6_FOOTPRINT_DIR." );
-    aMap["KICAD_SYMBOL_DIR"] =
+    aMap[wxT( "KICAD_SYMBOL_DIR" )] =
         _( "Deprecated version of KICAD_SYMBOL_DIR.");
 }
 

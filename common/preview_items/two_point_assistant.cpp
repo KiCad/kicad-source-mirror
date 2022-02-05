@@ -77,19 +77,19 @@ void TWO_POINT_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     if( m_shape == GEOM_SHAPE::SEGMENT )
     {
-        cursorStrings.push_back( DimensionLabel( "l", radVec.EuclideanNorm(), m_units ) );
+        cursorStrings.push_back( DimensionLabel( wxT( "l" ), radVec.EuclideanNorm(), m_units ) );
     }
     else if( m_shape == GEOM_SHAPE::RECT )
     {
-        cursorStrings.push_back( DimensionLabel( "x", std::abs( radVec.x ), m_units ) );
-        cursorStrings.push_back( DimensionLabel( "y", std::abs( radVec.y ), m_units ) );
+        cursorStrings.push_back( DimensionLabel( wxT( "x" ), std::abs( radVec.x ), m_units ) );
+        cursorStrings.push_back( DimensionLabel( wxT( "y" ), std::abs( radVec.y ), m_units ) );
     }
     else if( m_shape == GEOM_SHAPE::CIRCLE )
     {
         KIGFX::PREVIEW::DRAW_CONTEXT preview_ctx( *aView );
         preview_ctx.DrawLine( origin, end, false );
 
-        cursorStrings.push_back( DimensionLabel( "r", radVec.EuclideanNorm(), m_units ) );
+        cursorStrings.push_back( DimensionLabel( wxT( "r" ), radVec.EuclideanNorm(), m_units ) );
     }
 
     // place the text next to cursor, on opposite side from drawing

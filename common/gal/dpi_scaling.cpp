@@ -59,7 +59,7 @@ static OPT<double> getKiCadConfiguredScale( const COMMON_SETTINGS& aConfig )
 
     if( scale )
     {
-        wxLogTrace( traceHiDpi, "Scale factor (configured): %f", *scale );
+        wxLogTrace( traceHiDpi, wxT( "Scale factor (configured): %f" ), *scale );
     }
 
     return scale;
@@ -85,7 +85,7 @@ static OPT<double> getEnvironmentScale()
 
     if( scale )
     {
-        wxLogTrace( traceHiDpi, "Scale factor (environment): %f", *scale );
+        wxLogTrace( traceHiDpi, wxT( "Scale factor (environment): %f" ), *scale );
     }
 
     return scale;
@@ -118,14 +118,14 @@ double DPI_SCALING::GetScaleFactor() const
         // On Linux, this will not work until WX 3.2 and GTK >= 3.10
         // Otherwise it returns 1.0
         val = KIPLATFORM::UI::GetSystemScaleFactor( m_window );
-        wxLogTrace( traceHiDpi, "Scale factor (WX): %f", *val );
+        wxLogTrace( traceHiDpi, wxT( "Scale factor (WX): %f" ), *val );
     }
 
     if( !val )
     {
         // Nothing else we can do, give it a default value
         val = GetDefaultScaleFactor();
-        wxLogTrace( traceHiDpi, "Scale factor (default): %f", *val );
+        wxLogTrace( traceHiDpi, wxT( "Scale factor (default): %f" ), *val );
     }
 
     return *val;
@@ -141,14 +141,14 @@ bool DPI_SCALING::GetCanvasIsAutoScaled() const
     }
 
     const bool automatic = getKiCadConfiguredScale( *m_config ) == boost::none;
-    wxLogTrace( traceHiDpi, "Scale is automatic: %d", automatic );
+    wxLogTrace( traceHiDpi, wxT( "Scale is automatic: %d" ), automatic );
     return automatic;
 }
 
 
 void DPI_SCALING::SetDpiConfig( bool aAuto, double aValue )
 {
-    wxCHECK_RET( m_config != nullptr, "Setting DPI config without a config store." );
+    wxCHECK_RET( m_config != nullptr, wxT( "Setting DPI config without a config store." ) );
 
     const double value = aAuto ? 0.0 : aValue;
 

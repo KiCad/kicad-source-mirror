@@ -274,7 +274,7 @@ WIDGET_HOTKEY_CLIENT_DATA* WIDGET_HOTKEY_LIST::getExpectedHkClientData( wxTreeLi
 
     // This probably means a hotkey-only action is being attempted on
     // a row that is not a hotkey (like a section heading)
-    wxASSERT_MSG( hkdata != nullptr, "No hotkey data found for list item" );
+    wxASSERT_MSG( hkdata != nullptr, wxT( "No hotkey data found for list item" ) );
 
     return hkdata;
 }
@@ -298,7 +298,7 @@ void WIDGET_HOTKEY_LIST::updateFromClientData()
 
             // mark unsaved changes
             if( changed_hk.m_EditKeycode != changed_hk.m_Actions[ 0 ]->GetHotKey() )
-                label += " *";
+                label += wxT( " *" );
 
             SetItemText( i, 0, label );
             SetItemText( i, 1, key_text);
@@ -461,7 +461,7 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
     wxString command_header = _( "Command" );
 
     if( !m_readOnly )
-        command_header << " " << _( "(double-click to edit)" );
+        command_header << wxT( " " ) << _( "(double-click to edit)" );
 
     AppendColumn( command_header, 450, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
     AppendColumn( _( "Hotkey" ), 120, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
@@ -488,8 +488,8 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
 
     std::vector<wxString> reserved_keys =
     {
-            "Ctrl+Tab",
-            "Ctrl+Shift+Tab"
+            wxT( "Ctrl+Tab" ),
+            wxT( "Ctrl+Shift+Tab" )
     };
 
     for( auto& key : reserved_keys )
@@ -500,7 +500,7 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
             m_reservedHotkeys[code] = key;
         else
         {
-            wxLogWarning( "Unknown reserved keycode %s\n", key );
+            wxLogWarning( wxT( "Unknown reserved keycode %s\n" ), key );
         }
     }
 

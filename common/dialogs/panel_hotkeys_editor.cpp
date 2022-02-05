@@ -231,7 +231,7 @@ void PANEL_HOTKEYS_EDITOR::dumpHotkeys()
 
     wxFileName fn( filename );
 
-    wxFFileOutputStream fileStream( fn.GetFullPath(), "w" );
+    wxFFileOutputStream fileStream( fn.GetFullPath(), wxT( "w" ) );
     wxTextOutputStream stream( fileStream );
 
     if( !fn.IsDirWritable() || ( fn.Exists() && !fn.IsFileWritable() ) )

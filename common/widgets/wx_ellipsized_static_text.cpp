@@ -28,7 +28,7 @@ WX_ELLIPSIZED_STATIC_TEXT::WX_ELLIPSIZED_STATIC_TEXT( wxWindow* aParent, wxWindo
                                                       const wxString& aLabel, const wxPoint& aPos,
                                                       const wxSize& aSize, long aStyle )
     : wxStaticText( aParent, aID, aLabel, aPos, aSize, aStyle ),
-      m_minimumString( "M...M" )
+      m_minimumString( wxT( "M...M" ) )
 {
 }
 

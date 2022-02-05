@@ -91,7 +91,7 @@ wxFont KIUI::GetMonospacedUIFont()
 #ifdef __WXMAC__
     // https://trac.wxwidgets.org/ticket/19210
     if( font.GetFaceName().IsEmpty() )
-        font.SetFaceName( "Menlo" );
+        font.SetFaceName( wxT( "Menlo" ) );
 #endif
 
     return font;
@@ -119,7 +119,7 @@ wxFont getGUIFont( wxWindow* aWindow, int aRelativeSize )
 #ifdef __WXMAC__
     // https://trac.wxwidgets.org/ticket/19210
     if( font.GetFaceName().IsEmpty() )
-        font.SetFaceName( "San Francisco" );
+        font.SetFaceName( wxT( "San Francisco" ) );
     // OSX 10.1 .. 10.9: Lucida Grande
     // OSX 10.10:        Helvetica Neue
     // OSX 10.11 .. :    San Francisco

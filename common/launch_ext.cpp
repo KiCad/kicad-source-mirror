@@ -37,7 +37,7 @@ bool LaunchExternal( const wxString& aPath )
 
     wxString PATH, xdg_open;
 
-    if( wxGetEnv( "PATH", &PATH ) && wxFindFileInPath( &xdg_open, PATH, "xdg-open" ) )
+    if( wxGetEnv( wxT( "PATH" ), &PATH ) && wxFindFileInPath( &xdg_open, PATH, wxT( "xdg-open" ) ) )
     {
         const char* argv[3];
         argv[0] = xdg_open.fn_str();

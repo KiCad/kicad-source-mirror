@@ -146,7 +146,7 @@ LIB_TREE_NODE_UNIT::LIB_TREE_NODE_UNIT( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* a
     m_Unit = aUnit;
     m_LibId = aParent->m_LibId;
 
-    m_Name = namePrefix + " " + aItem->GetUnitReference( aUnit );
+    m_Name = namePrefix + wxT( " " ) + aItem->GetUnitReference( aUnit );
     m_Desc = wxEmptyString;
     m_MatchName = wxEmptyString;
 

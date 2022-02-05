@@ -67,10 +67,10 @@ static void drawCursorStrings( KIGFX::VIEW* aView, const VECTOR2D& aCursor,
     if( aFlipY )
         temp.y = -temp.y;
 
-    cursorStrings.push_back( DimensionLabel( "x", temp.x, aUnits ) );
-    cursorStrings.push_back( DimensionLabel( "y", temp.y, aUnits ) );
+    cursorStrings.push_back( DimensionLabel( wxT( "x" ), temp.x, aUnits ) );
+    cursorStrings.push_back( DimensionLabel( wxT( "y" ), temp.y, aUnits ) );
 
-    cursorStrings.push_back( DimensionLabel( "r", aRulerVec.EuclideanNorm(), aUnits ) );
+    cursorStrings.push_back( DimensionLabel( wxT( "r" ), aRulerVec.EuclideanNorm(), aUnits ) );
 
     double degs = RAD2DECIDEG( -aRulerVec.Angle() );
     cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), degs,
@@ -221,7 +221,7 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
 
         if( drawLabel )
         {
-            wxString label = DimensionLabel( "", tickSpace * i, aUnits, false );
+            wxString label = DimensionLabel( wxT( "" ), tickSpace * i, aUnits, false );
             gal->SetLineWidth( textThickness );
             gal->StrokeText( label, tickPos + labelOffset, labelAngle );
         }

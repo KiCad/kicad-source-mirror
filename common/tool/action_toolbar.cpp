@@ -57,7 +57,7 @@ wxBitmap MakeDisabledBitmap( const wxBitmap& aSource )
 ACTION_GROUP::ACTION_GROUP( const std::string& aName,
                             const std::vector<const TOOL_ACTION*>& aActions )
 {
-    wxASSERT_MSG( aActions.size() > 0, "Action groups must have at least one action" );
+    wxASSERT_MSG( aActions.size() > 0, wxT( "Action groups must have at least one action" ) );
 
     // The default action is just the first action in the vector
     m_actions       = aActions;
@@ -83,7 +83,7 @@ void ACTION_GROUP::SetDefaultAction( const TOOL_ACTION& aDefault )
                                   return aAction->GetId() == aDefault.GetId();
                               } );
 
-    wxASSERT_MSG( valid, "Action must be present in a group to be the default" );
+    wxASSERT_MSG( valid, wxT( "Action must be present in a group to be the default" ) );
 
     m_defaultAction = &aDefault;
 }
@@ -230,7 +230,7 @@ ACTION_TOOLBAR::~ACTION_TOOLBAR()
 void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction, bool aIsToggleEntry, bool aIsCancellable )
 {
     wxASSERT( GetParent() );
-    wxASSERT_MSG( !( aIsCancellable && !aIsToggleEntry ), "aIsCancellable requires aIsToggleEntry" );
+    wxASSERT_MSG( !( aIsCancellable && !aIsToggleEntry ), wxT( "aIsCancellable requires aIsToggleEntry" ) );
 
     int      toolId = aAction.GetUIId();
     wxBitmap bmp    = KiScaledBitmap( aAction.GetIcon(), GetParent() );

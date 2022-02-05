@@ -120,7 +120,7 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, const COLOR4D& aColor, int aID,
         m_readOnly( false ),
         m_supportsOpacity( true )
 {
-    wxASSERT_MSG( aSwatchSize != SWATCH_EXPAND, "SWATCH_EXPAND not supported in COLOR_SWATCH" );
+    wxASSERT_MSG( aSwatchSize != SWATCH_EXPAND, wxT( "SWATCH_EXPAND not supported in COLOR_SWATCH" ) );
 
     switch( aSwatchSize )
     {

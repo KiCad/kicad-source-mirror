@@ -54,7 +54,7 @@ wxString GetRefDesUnannotated( const wxString& aSource )
 int GetRefDesNumber( const wxString& aRefDes )
 {
     int    retval = -1; // negative to indicate not found
-    size_t firstnum = aRefDes.find_first_of( "0123456789" );
+    size_t firstnum = aRefDes.find_first_of( wxT( "0123456789" ) );
 
     if( firstnum != wxString::npos )
     {

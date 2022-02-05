@@ -150,7 +150,7 @@ void PDF_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
     if( aWidth == 0 )
         aWidth = 1;
 
-    wxASSERT_MSG( aWidth > 0, "Plotter called to set negative pen width" );
+    wxASSERT_MSG( aWidth > 0, wxT( "Plotter called to set negative pen width" ) );
 
     if( aWidth != m_currentPenWidth )
         fprintf( workFile, "%g w\n", userToDeviceSize( aWidth ) );

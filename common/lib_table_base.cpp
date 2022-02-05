@@ -88,7 +88,7 @@ void LIB_TABLE_ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
 
     if( !GetIsEnabled() )
     {
-        extraOptions += "(disabled)";
+        extraOptions += wxT( "(disabled)" );
     }
 
     out->Print( nestLevel, "(lib (name %s)(type %s)(uri %s)(options %s)(descr %s)%s)\n",
@@ -206,7 +206,7 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName, bool aCheckIfEnabl
         for( const std::pair<const wxString, int>& entry : cur->nickIndex )
         {
             wxString legacyLibName = entry.first;
-            legacyLibName.Replace( " ", "_" );
+            legacyLibName.Replace( wxT( " " ), wxT( "_" ) );
 
             if( legacyLibName == aNickName )
             {
@@ -236,7 +236,7 @@ const LIB_TABLE_ROW* LIB_TABLE::FindRowByURI( const wxString& aURI )
         {
             wxString tmp = cur->rows[i].GetFullURI( true );
 
-            if( tmp.Find( "://" ) != wxNOT_FOUND )
+            if( tmp.Find( wxT( "://" ) ) != wxNOT_FOUND )
             {
                 if( tmp == aURI )
                     return &cur->rows[i];  // found as URI

@@ -107,7 +107,7 @@ void FOOTPRINT_LIST::DisplayErrors( wxTopLevelWindow* aWindow )
         wxString tmp = error->Problem();
 
         // Preserve new lines in error messages so queued errors don't run together.
-        tmp.Replace( "\n", "<BR>" );
+        tmp.Replace( wxT( "\n" ), wxT( "<BR>" ) );
         msg += wxT( "<p>" ) + tmp + wxT( "</p>" );
     }
 
@@ -148,7 +148,7 @@ FOOTPRINT_LIST* FOOTPRINT_LIST::GetInstance( KIWAY& aKiway )
         return nullptr;
 
     if( !footprintInfo->GetCount() )
-        footprintInfo->ReadCacheFromFile( aKiway.Prj().GetProjectPath() + "fp-info-cache" );
+        footprintInfo->ReadCacheFromFile( aKiway.Prj().GetProjectPath() + wxT( "fp-info-cache" ) );
 
     return footprintInfo;
 }

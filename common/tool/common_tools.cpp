@@ -78,7 +78,7 @@ void COMMON_TOOLS::SetLastUnits( EDA_UNITS aUnit )
     else if( EDA_UNIT_UTILS::IsMetricUnit( aUnit ) )
         m_metricUnit = aUnit;
     else
-        wxASSERT_MSG( false, "Invalid unit" );
+        wxASSERT_MSG( false, wxT( "Invalid unit" ) );
 }
 
 
@@ -150,7 +150,7 @@ int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
         return 0;
     }
     default:
-        wxFAIL_MSG( "CursorControl(): unexpected request" );
+        wxFAIL_MSG( wxT( "CursorControl(): unexpected request" ) );
     }
 
     getViewControls()->SetCursorPosition( cursor, true, true, type );
@@ -515,7 +515,7 @@ int COMMON_TOOLS::SwitchUnits( const TOOL_EVENT& aEvent )
     else if( EDA_UNIT_UTILS::IsImperialUnit( newUnit ) )
         m_imperialUnit = newUnit;
     else
-        wxASSERT_MSG( false, "Invalid unit for the frame" );
+        wxASSERT_MSG( false, wxT( "Invalid unit for the frame" ) );
 
     m_frame->ChangeUserUnits( newUnit );
     return 0;

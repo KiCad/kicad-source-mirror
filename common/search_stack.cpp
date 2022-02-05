@@ -202,11 +202,11 @@ const wxString SEARCH_STACK::LastVisitedPath( const wxString& aSubPathToSearch )
 #if defined(DEBUG)
 void SEARCH_STACK::Show( const wxString& aPrefix ) const
 {
-    wxLogTrace( tracePathsAndFiles, "%s SEARCH_STACK:", aPrefix );
+    wxLogTrace( tracePathsAndFiles, wxT( "%s SEARCH_STACK:" ), aPrefix );
 
     for( unsigned i=0;  i<GetCount();  ++i )
     {
-        wxLogTrace( tracePathsAndFiles, "  [%2u]:%s", i, TO_UTF8( (*this)[i] ) );
+        wxLogTrace( tracePathsAndFiles, wxT( "  [%2u]:%s" ), i, TO_UTF8( (*this)[i] ) );
     }
 }
 #endif

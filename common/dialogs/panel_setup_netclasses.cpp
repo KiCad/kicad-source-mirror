@@ -384,7 +384,7 @@ static void gridRowToNetclass( EDA_UNITS aUnits, wxGrid* grid, int row, const NE
     nc->SetSchematicColor( wxColour( grid->GetCellValue( row, GRID_SCHEMATIC_COLOR ) ) );
 
     nc->SetLineStyle( g_lineStyleNames.Index( grid->GetCellValue( row, GRID_LINESTYLE ) ) );
-    wxASSERT_MSG( nc->GetLineStyle() >= 0, "Line style name not found." );
+    wxASSERT_MSG( nc->GetLineStyle() >= 0, wxT( "Line style name not found." ) );
 }
 
 

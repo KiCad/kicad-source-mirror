@@ -189,20 +189,20 @@ wxString WX_HTML_REPORT_PANEL::generateHtml( const REPORT_LINE& aLine )
         switch( aLine.severity )
         {
         case RPT_SEVERITY_ERROR:
-            retv = "<font color=#F04040 size=3>" + _( "Error:" ) + " </font>"
-                   "<font size=3>" + aLine.message + "</font><br>";
+            retv = wxT( "<font color=#F04040 size=3>" ) + _( "Error:" ) + " </font>"
+                   wxT( "<font size=3>" ) + aLine.message + wxT( "</font><br>" );
             break;
         case RPT_SEVERITY_WARNING:
-            retv = "<font size=3>" + _( "Warning:" ) + wxS( " " ) + aLine.message + "</font><br>";
+            retv = wxT( "<font size=3>" ) + _( "Warning:" ) + wxS( " " ) + aLine.message + "</font><br>";
             break;
         case RPT_SEVERITY_INFO:
-            retv = "<font color=#909090 size=3>" + aLine.message + "</font><br>";
+            retv = wxT( "<font color=#909090 size=3>" ) + aLine.message + wxT( "</font><br>" );
             break;
         case RPT_SEVERITY_ACTION:
-            retv = "<font color=#60D060 size=3>" + aLine.message + "</font><br>";
+            retv = wxT( "<font color=#60D060 size=3>" ) + aLine.message + wxT( "</font><br>" );
             break;
         default:
-            retv = "<font size=3>" + aLine.message + "</font><br>";
+            retv = wxT( "<font size=3>" ) + aLine.message + wxT( "</font><br>" );
         }
     }
     else
@@ -210,26 +210,26 @@ wxString WX_HTML_REPORT_PANEL::generateHtml( const REPORT_LINE& aLine )
         switch( aLine.severity )
         {
         case RPT_SEVERITY_ERROR:
-            retv = "<font color=#D00000 size=3>" + _( "Error:" ) + " </font>"
-                   "<font size=3>" + aLine.message + "</font><br>";
+            retv = wxT( "<font color=#D00000 size=3>" ) + _( "Error:" ) + " </font>"
+                   wxT( "<font size=3>" ) + aLine.message + wxT( "</font><br>" );
             break;
         case RPT_SEVERITY_WARNING:
-            retv = "<font size=3>" + _( "Warning:" ) + wxS( " " ) + aLine.message + "</font><br>";
+            retv = wxT( "<font size=3>" ) + _( "Warning:" ) + wxS( " " ) + aLine.message + "</font><br>";
             break;
         case RPT_SEVERITY_INFO:
-            retv = "<font color=#808080 size=3>" + aLine.message + "</font><br>";
+            retv = wxT( "<font color=#808080 size=3>" ) + aLine.message + wxT( "</font><br>" );
             break;
         case RPT_SEVERITY_ACTION:
-            retv = "<font color=#008000 size=3>" + aLine.message + "</font><br>";
+            retv = wxT( "<font color=#008000 size=3>" ) + aLine.message + wxT( "</font><br>" );
             break;
         default:
-            retv = "<font size=3>" + aLine.message + "</font><br>";
+            retv = wxT( "<font size=3>" ) + aLine.message + wxT( "</font><br>" );
         }
     }
 
     // wxHtmlWindow fails to do correct baseline alignment between Japanese/Chinese cells and
     // Roman cells.  This keeps the line in a single cell.
-    retv.Replace( " ", "&nbsp;" );
+    retv.Replace( wxT( " " ), wxT( "&nbsp;" ) );
 
     return retv;
 }
@@ -250,7 +250,7 @@ wxString WX_HTML_REPORT_PANEL::generatePlainText( const REPORT_LINE& aLine )
 void WX_HTML_REPORT_PANEL::onRightClick( wxMouseEvent& event )
 {
     wxMenu popup;
-    popup.Append( wxID_COPY, "Copy" );
+    popup.Append( wxID_COPY, wxT( "Copy" ) );
     PopupMenu( &popup );
 }
 
@@ -376,7 +376,7 @@ void WX_HTML_REPORT_PANEL::onBtnSaveToFile( wxCommandEvent& event )
     if( fn.GetExt().IsEmpty() )
         fn.SetExt( "txt" );
 
-    wxFFile f( fn.GetFullPath(), "wb" );
+    wxFFile f( fn.GetFullPath(), wxT( "wb" ) );
 
     if( !f.IsOpened() )
     {

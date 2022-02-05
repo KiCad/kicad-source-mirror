@@ -47,7 +47,7 @@ void GRID_BITMAP_TOGGLE_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wx
     // erase background
     wxGridCellRenderer::Draw( aGrid, aAttr, aDc, aRect, aRow, aCol, aIsSelected );
 
-    bool checked = aGrid.GetCellValue( aRow, aCol ) == "1";
+    bool checked = aGrid.GetCellValue( aRow, aCol ) == wxT( "1" );
     const wxBitmap& bitmap = checked ? m_bitmapChecked : m_bitmapUnchecked;
 
     int x = std::max( 0, ( aRect.GetWidth() - m_bitmapChecked.GetWidth() ) / 2 );

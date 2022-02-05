@@ -360,7 +360,7 @@ OPT<TOOL_EVENT> TOOL_DISPATCHER::GetToolEvent( wxKeyEvent* aKeyEvent, bool* keyI
         return evt;
     }
 
-    wxLogTrace( kicadTraceKeyEvent, "TOOL_DISPATCHER::GetToolEvent %s", dump( *aKeyEvent ) );
+    wxLogTrace( kicadTraceKeyEvent, wxT( "TOOL_DISPATCHER::GetToolEvent %s" ), dump( *aKeyEvent ) );
 
     // if the key event must be skipped, skip it here if the event is a wxEVT_CHAR_HOOK
     // and do nothing.
@@ -512,7 +512,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     {
         wxKeyEvent* ke = static_cast<wxKeyEvent*>( &aEvent );
 
-        wxLogTrace( kicadTraceKeyEvent, "TOOL_DISPATCHER::DispatchWxEvent %s", dump( *ke ) );
+        wxLogTrace( kicadTraceKeyEvent, wxT( "TOOL_DISPATCHER::DispatchWxEvent %s" ), dump( *ke ) );
 
         // Do not process wxEVT_CHAR_HOOK for a shift-modified key, as ACTION_MANAGER::RunHotKey
         // will run the un-shifted key and that's not what we want.  Wait to get the translated
@@ -593,12 +593,12 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
     if( evt )
     {
-        wxLogTrace( kicadTraceToolStack, "TOOL_DISPATCHER::DispatchWxEvent %s", evt->Format() );
+        wxLogTrace( kicadTraceToolStack, wxT( "TOOL_DISPATCHER::DispatchWxEvent %s" ), evt->Format() );
 
         handled = m_toolMgr->ProcessEvent( *evt );
 
-        wxLogTrace( kicadTraceToolStack, "TOOL_DISPATCHER::DispatchWxEvent - Handled: %s  %s",
-                    ( handled ? "true" : "false" ), evt->Format() );
+        wxLogTrace( kicadTraceToolStack, wxT( "TOOL_DISPATCHER::DispatchWxEvent - Handled: %s  %s" ),
+                    ( handled ? wxT( "true" ) : wxT( "false" ) ), evt->Format() );
     }
 
     // pass the event to the GUI, it might still be interested in it
@@ -629,6 +629,6 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
          && !keyIsEscape )
         aEvent.Skip();
 
-    wxLogTrace( kicadTraceToolStack, "TOOL_DISPATCHER::DispatchWxEvent - Wx event skipped: %s",
-                ( aEvent.GetSkipped() ? "true" : "false" ) );
+    wxLogTrace( kicadTraceToolStack, wxT( "TOOL_DISPATCHER::DispatchWxEvent - Wx event skipped: %s" ),
+                ( aEvent.GetSkipped() ? wxT( "true" ) : wxT( "false" ) ) );
 }

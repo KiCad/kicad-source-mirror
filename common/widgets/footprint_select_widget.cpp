@@ -139,14 +139,14 @@ bool FOOTPRINT_SELECT_WIDGET::UpdateList()
 
     m_fp_sel_ctrl->Append( m_default_footprint.IsEmpty() ?
                                    _( "No default footprint" ) :
-                                   "[" + _( "Default" ) + "] " + m_default_footprint,
+                                   wxT( "[" ) + _( "Default" ) + "] " + m_default_footprint,
                            new wxStringClientData( m_default_footprint ) );
 
     if( !m_zero_filter )
     {
         for( FOOTPRINT_INFO& fpinfo : m_fp_filter )
         {
-            wxString display_name( fpinfo.GetLibNickname() + ":" + fpinfo.GetFootprintName() );
+            wxString display_name( fpinfo.GetLibNickname() + wxT( ":" ) + fpinfo.GetFootprintName() );
 
             m_fp_sel_ctrl->Append( display_name, new wxStringClientData( display_name ) );
             ++n_items;
