@@ -69,7 +69,7 @@ DIALOG_LIB_NEW_SYMBOL_BASE::DIALOG_LIB_NEW_SYMBOL_BASE( wxWindow* parent, wxWind
 	bSizer17 = new wxBoxSizer( wxVERTICAL );
 
 	m_checkUnitsInterchangeable = new wxCheckBox( this, wxID_ANY, _("All units are interchangeable"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkUnitsInterchangeable->SetToolTip( _("Check this option to allow symbols with multiple units to have different\nelements.  Uncheck this option when all symbol units are identical except\nfor pin numbers.") );
+	m_checkUnitsInterchangeable->SetToolTip( _("Check this option when all symbol units are identical except\nfor pin numbers.") );
 
 	bSizer17->Add( m_checkUnitsInterchangeable, 0, wxRIGHT|wxLEFT, 5 );
 
