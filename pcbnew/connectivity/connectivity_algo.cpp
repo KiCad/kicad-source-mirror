@@ -315,9 +315,9 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
 }
 
 
-const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode,
-                                                                           const KICAD_T aTypes[],
-                                                                           int aSingleNet )
+const CN_CONNECTIVITY_ALGO::CLUSTERS
+CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, const KICAD_T aTypes[],
+                                      int aSingleNet, CN_ITEM* rootItem )
 {
     bool withinAnyNet = ( aMode != CSM_PROPAGATE );
 
@@ -330,7 +330,7 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
         searchConnections();
 
     auto addToSearchList =
-            [&item_set, withinAnyNet, aSingleNet, aTypes]( CN_ITEM *aItem )
+            [&item_set, withinAnyNet, aSingleNet, aTypes, rootItem ]( CN_ITEM *aItem )
             {
                 if( withinAnyNet && aItem->Net() <= 0 )
                     return;
@@ -352,7 +352,7 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
                     }
                 }
 
-                if( !found )
+                if( !found && aItem != rootItem )
                     return;
 
                 aItem->SetVisited( false );

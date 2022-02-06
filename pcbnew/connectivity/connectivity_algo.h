@@ -214,7 +214,7 @@ public:
     bool Add( BOARD_ITEM* aItem );
 
     const CLUSTERS SearchClusters( CLUSTER_SEARCH_MODE aMode, const KICAD_T aTypes[],
-                                   int aSingleNet );
+                                   int aSingleNet, CN_ITEM* rootItem = nullptr );
     const CLUSTERS SearchClusters( CLUSTER_SEARCH_MODE aMode );
 
     /**

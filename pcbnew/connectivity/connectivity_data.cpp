@@ -438,23 +438,29 @@ void CONNECTIVITY_DATA::Clear()
 }
 
 
-const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItems(
-        const BOARD_CONNECTED_ITEM* aItem,
-        const KICAD_T aTypes[],
-        bool aIgnoreNetcodes ) const
+const std::vector<BOARD_CONNECTED_ITEM*>
+CONNECTIVITY_DATA::GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem, const KICAD_T aTypes[],
+                                      bool aIgnoreNetcodes ) const
 {
-    std::vector<BOARD_CONNECTED_ITEM*> rv;
-    const auto clusters = m_connAlgo->SearchClusters(
-            aIgnoreNetcodes ?
-                    CN_CONNECTIVITY_ALGO::CSM_PROPAGATE :
-                    CN_CONNECTIVITY_ALGO::CSM_CONNECTIVITY_CHECK, aTypes,
-            aIgnoreNetcodes ? -1 : aItem->GetNetCode() );
+    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_ZONE_T,
+                                  PCB_FOOTPRINT_T, EOT };
 
-    for( auto cl : clusters )
+    std::vector<BOARD_CONNECTED_ITEM*> rv;
+    CN_CONNECTIVITY_ALGO::CLUSTER_SEARCH_MODE searchMode;
+
+    if( aIgnoreNetcodes )
+        searchMode = CN_CONNECTIVITY_ALGO::CSM_PROPAGATE;
+    else
+        searchMode = CN_CONNECTIVITY_ALGO::CSM_CONNECTIVITY_CHECK;
+
+    const auto clusters = m_connAlgo->SearchClusters( searchMode, types,
+                                                      aIgnoreNetcodes ? -1 : aItem->GetNetCode() );
+
+    for( const std::shared_ptr<CN_CLUSTER>& cl : clusters )
     {
         if( cl->Contains( aItem ) )
         {
-            for( const auto item : *cl )
+            for( const CN_ITEM* item : *cl )
             {
                 if( item->Valid() )
                     rv.push_back( item->Parent() );

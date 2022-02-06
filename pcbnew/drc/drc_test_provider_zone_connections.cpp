@@ -106,11 +106,11 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
                     if( m_drcEngine->IsErrorLimitExceeded( DRCE_STARVED_THERMAL ) )
                         return true;
 
-                    // Quick test for connected:
+                    // Quick test for "connected":
                     if( pad->GetNetCode() != zone->GetNetCode() || pad->GetNetCode() <= 0 )
                         continue;
 
-                    // More thorough test for connected:
+                    // More thorough test for "connected", but still not layer-specific:
                     const KICAD_T type_zone[] = { PCB_ZONE_T, EOT };
 
                     if( !alg::contains( connectivity->GetConnectedItems( pad, type_zone ), zone ) )
@@ -156,7 +156,8 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
                         }
                     }
 
-                    if( spokes < minCount )
+                    // Note that spokes > 0 is our final "connected" test.
+                    if( spokes > 0 && spokes < minCount )
                     {
                         std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_STARVED_THERMAL );
 
