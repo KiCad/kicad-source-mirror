@@ -149,8 +149,10 @@ public:
         // For historical reasons, a stored value of 0 means "default width" and negative
         // numbers meant "don't stroke".
 
-        if( GetPenWidth() <= 0 )
-            return aSettings->GetDefaultPenWidth();
+        if( GetPenWidth() < 0 )
+            return 0;
+        else if( GetPenWidth() == 0 )
+            return std::max( aSettings->GetDefaultPenWidth(), aSettings->GetMinPenWidth() );
         else
             return std::max( GetPenWidth(), aSettings->GetMinPenWidth() );
     }

@@ -57,19 +57,6 @@ public:
 
     int GetPenWidth() const override;
 
-    int GetEffectivePenWidth( const RENDER_SETTINGS* aSettings ) const override
-    {
-        // For historical reasons, a stored value of 0 means "default width" and negative
-        // numbers meant "don't stroke".
-
-        if( GetPenWidth() < 0 )
-            return 0;
-        else if( GetPenWidth() == 0 )
-            return aSettings->GetDefaultPenWidth();
-        else
-            return std::max( GetPenWidth(), aSettings->GetMinPenWidth() );
-    }
-
     const EDA_RECT GetBoundingBox() const override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;

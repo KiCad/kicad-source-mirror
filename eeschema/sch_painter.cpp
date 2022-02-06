@@ -378,36 +378,21 @@ float SCH_PAINTER::getLineWidth( const EDA_ITEM* aItem, bool aDrawingShadows ) c
 {
     wxCHECK( aItem, static_cast<float>( Mils2iu( DEFAULT_LINE_WIDTH_MILS ) ) );
 
-    int pen;
+    int pen = 0;
 
-    if( aItem->Type() == LIB_TEXTBOX_T )
-    {
-        pen = static_cast<const LIB_TEXTBOX*>( aItem )->GetStroke().GetWidth();
-    }
-    else if( aItem->Type() == SCH_TEXTBOX_T )
-    {
-        pen = static_cast<const SCH_TEXTBOX*>( aItem )->GetStroke().GetWidth();
-    }
-    else if( dynamic_cast<const LIB_ITEM*>( aItem ) )
-    {
+    if( dynamic_cast<const LIB_ITEM*>( aItem ) )
         pen = static_cast<const LIB_ITEM*>( aItem )->GetEffectivePenWidth( &m_schSettings );
-    }
     else if( dynamic_cast<const SCH_ITEM*>( aItem ) )
-    {
         pen = static_cast<const SCH_ITEM*>( aItem )->GetPenWidth();
-    }
     else
-    {
-        pen = 0;
         UNIMPLEMENTED_FOR( aItem->GetClass() );
-    }
 
     float width = pen;
 
     if( ( aItem->IsBrightened() || aItem->IsSelected() ) && aDrawingShadows )
         width += getShadowWidth( aItem->IsBrightened() );
 
-    return std::max( width, 1.0f );
+    return width;
 }
 
 
