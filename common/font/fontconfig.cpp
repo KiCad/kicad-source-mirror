@@ -18,6 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <fontconfig/fontconfig.h>
+
 #include <font/fontconfig.h>
 #include <pgm_base.h>
 #include <wx/log.h>

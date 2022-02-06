@@ -21,7 +21,6 @@
 #ifndef KICAD_FONTCONFIG_H
 #define KICAD_FONTCONFIG_H
 
-#include <fontconfig/fontconfig.h>
 #include <wx/string.h>
 #include <vector>
 #include <map>
