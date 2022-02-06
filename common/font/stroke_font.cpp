@@ -236,13 +236,11 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
 
     for( wxUniChar c : aText )
     {
-        if( c >= (int) m_glyphBoundingBoxes->size() || c < 0 )
+        if( c >= (int) m_glyphBoundingBoxes->size() || c < ' ' )
         {
             // Filtering non existing glyphes and non printable chars
             if( c == '\t' )
                 c = ' ';
-            else if( c < ' ' )      // Non printable char
-                c = '?';
             else
                 c = '?';
         }
