@@ -1061,6 +1061,17 @@ void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 }
 
 
+void LIB_PIN::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount     = 3;
+    aLayers[0] = LAYER_DANGLING;    // We don't really show dangling vs non-dangling (since there
+                                    // are no connections in the symbol editor), but it's still
+                                    // a good visual indication of which end of the pin is which.
+    aLayers[1] = LAYER_DEVICE;
+    aLayers[2] = LAYER_SELECTION_SHADOWS;
+}
+
+
 const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly ) const
 {
     EDA_RECT       bbox;
