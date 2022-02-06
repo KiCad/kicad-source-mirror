@@ -986,7 +986,11 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
         case SCH_DIRECTIVE_LABEL_T:
-            saveText( static_cast< SCH_TEXT* >( item ), 0 );
+            saveText( static_cast<SCH_TEXT*>( item ), 0 );
+            break;
+
+        case SCH_TEXTBOX_T:
+            saveTextBox( static_cast<SCH_TEXTBOX*>( item ), 0 );
             break;
 
         default:
