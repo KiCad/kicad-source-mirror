@@ -481,7 +481,7 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol()
         ( dlg.GetPowerSymbol() ) ? new_symbol.SetPower() : new_symbol.SetNormal();
         new_symbol.SetShowPinNumbers( dlg.GetShowPinNumber() );
         new_symbol.SetShowPinNames( dlg.GetShowPinName() );
-        new_symbol.LockUnits( dlg.GetLockItems() );
+        new_symbol.LockUnits( !dlg.GetUnitsInterchangeable() );
         new_symbol.SetIncludeInBom( dlg.GetIncludeInBom() );
         new_symbol.SetIncludeOnBoard( dlg.GetIncludeOnBoard() );
 

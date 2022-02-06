@@ -65,8 +65,8 @@ public:
     void SetPowerSymbol( bool enable ) { m_checkIsPowerSymbol->SetValue( enable ); }
     bool GetPowerSymbol( void ) { return m_checkIsPowerSymbol->GetValue(); }
 
-    void SetLockItems( bool enable ) { m_checkLockItems->SetValue( enable ); }
-    bool GetLockItems( void ) { return m_checkLockItems->GetValue(); }
+    void SetUnitsInterchangeable( bool enable ) { m_checkUnitsInterchangeable->SetValue( enable ); }
+    bool GetUnitsInterchangeable( void ) { return m_checkUnitsInterchangeable->GetValue(); }
 
     void SetIncludeInBom( bool aInclude ) { m_excludeFromBomCheckBox->SetValue( !aInclude ); }
     bool GetIncludeInBom() const { return !m_excludeFromBomCheckBox->GetValue(); }

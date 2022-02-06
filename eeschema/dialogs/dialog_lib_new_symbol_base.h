@@ -49,7 +49,7 @@ class DIALOG_LIB_NEW_SYMBOL_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_textReference;
 		wxStaticText* m_staticTextUnits;
 		wxSpinCtrl* m_spinPartCount;
-		wxCheckBox* m_checkLockItems;
+		wxCheckBox* m_checkUnitsInterchangeable;
 		wxCheckBox* m_checkHasConversion;
 		wxCheckBox* m_checkIsPowerSymbol;
 		wxCheckBox* m_excludeFromBomCheckBox;
