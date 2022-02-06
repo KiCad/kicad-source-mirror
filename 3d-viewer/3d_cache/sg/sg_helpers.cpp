@@ -420,8 +420,7 @@ bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords, std::vector< int >
         }
         else
         {
-            vmap.insert( std::pair < int, std::list < glm::dvec3 > >
-                ( p1, std::list < glm::dvec3 >( 1, tri ) ) );
+            vmap.emplace( p1, std::list < glm::dvec3 >( 1, tri ) );
         }
 
         ip = vmap.find( p2 );
@@ -432,8 +431,7 @@ bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords, std::vector< int >
         }
         else
         {
-            vmap.insert( std::pair < int, std::list < glm::dvec3 > >
-                ( p2, std::list < glm::dvec3 >( 1, tri ) ) );
+            vmap.emplace( p2, std::list < glm::dvec3 >( 1, tri ) );
         }
 
         ip = vmap.find( p3 );
@@ -444,8 +442,7 @@ bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords, std::vector< int >
         }
         else
         {
-            vmap.insert( std::pair < int, std::list < glm::dvec3 > >
-                ( p3, std::list < glm::dvec3 >( 1, tri ) ) );
+            vmap.emplace( p3, std::list < glm::dvec3 >( 1, tri ) );
         }
     }
 

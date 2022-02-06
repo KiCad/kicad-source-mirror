@@ -304,8 +304,7 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
         // or we do not have a configured cache file directory, we create an
         // entry to prevent further attempts at loading the file
 
-        if( m_CacheMap.insert( std::pair< wxString, S3D_CACHE_ENTRY* >
-            ( aFileName, ep ) ).second == false )
+        if( m_CacheMap.emplace( aFileName, ep ).second == false )
         {
             wxLogTrace( MASK_3D_CACHE,
                         wxT( "%s:%s:%d\n * [BUG] duplicate entry in map file; key = '%s'" ),
@@ -323,8 +322,7 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
         return nullptr;
     }
 
-    if( m_CacheMap.insert( std::pair< wxString, S3D_CACHE_ENTRY* >
-                               ( aFileName, ep ) ).second == false )
+    if( m_CacheMap.emplace( aFileName, ep ).second == false )
     {
         wxLogTrace( MASK_3D_CACHE,
                     wxT( "%s:%s:%d\n * [BUG] duplicate entry in map file; key = '%s'" ),

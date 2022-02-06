@@ -260,7 +260,7 @@ bool S3D::GetMatIndex( MATLIST& aList, SGNODE* aNode, int& aIndex )
 
     int idx = (int)aList.matorder.size();
     aList.matorder.push_back( node );
-    aList.matmap.insert( std::pair< SGAPPEARANCE const*, int >( node, idx ) );
+    aList.matmap.emplace( node, idx );
     aIndex = idx;
 
     return true;

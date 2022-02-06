@@ -103,7 +103,7 @@ public:
     void AddNet( const wxString& aPinName, const wxString& aNetName, const wxString& aPinFunction,
                  const wxString& aPinType )
     {
-        m_nets.push_back( COMPONENT_NET( aPinName, aNetName, aPinFunction, aPinType ) );
+        m_nets.emplace_back( aPinName, aNetName, aPinFunction, aPinType );
     }
 
     unsigned GetNetCount() const { return m_nets.size(); }

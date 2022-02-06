@@ -46,7 +46,7 @@ bool NAMEREGISTER::AddName( const std::string& aName, WRL1NODE* aNode )
     if( ir != reg.end() )
         reg.erase( ir );
 
-    reg.insert( std::pair< std::string, WRL1NODE* >( aName, aNode ) );
+    reg.emplace( aName, aNode );
 
     return true;
 }

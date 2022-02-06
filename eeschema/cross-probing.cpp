@@ -488,7 +488,7 @@ std::string FormatProbeItems( bool aSelectConnections, const std::deque<EDA_ITEM
 
             wxString ref = symbol->GetField( REFERENCE_FIELD )->GetText();
 
-            parts.insert( wxT( "F" ) + EscapeString( ref, CTX_IPC ) );
+            parts.emplace( wxT( "F" ) + EscapeString( ref, CTX_IPC ) );
 
             break;
         }
@@ -515,7 +515,7 @@ std::string FormatProbeItems( bool aSelectConnections, const std::deque<EDA_ITEM
 
             full_path += "/" + sheet->m_Uuid.AsString();
 
-            parts.insert( wxT( "S" ) + full_path );
+            parts.emplace( wxT( "S" ) + full_path );
 
             break;
         }

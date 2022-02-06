@@ -116,7 +116,7 @@ ClipperLib::Path SHAPE_LINE_CHAIN::convertToClipper( bool aRequiredOrientation,
         size_t          z_value_ptr = aZValueBuffer.size();
         aZValueBuffer.push_back( z_value );
 
-        c_path.push_back( ClipperLib::IntPoint( vertex.x, vertex.y, z_value_ptr ) );
+        c_path.emplace_back( vertex.x, vertex.y, z_value_ptr );
     }
 
     aArcBuffer.insert( aArcBuffer.end(), input.m_arcs.begin(), input.m_arcs.end() );

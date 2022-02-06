@@ -699,7 +699,7 @@ bool SGSHAPE::Prepare( const glm::dmat4* aTransform, S3D::MATLIST& materials,
 
         if( mit == indexmap.end() )
         {
-            indexmap.insert( std::pair< int, unsigned int >( lv[i], vertices.size() ) );
+            indexmap.emplace( lv[i], vertices.size() );
             vertices.push_back( lv[i] );
         }
     }

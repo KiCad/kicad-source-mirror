@@ -259,7 +259,7 @@ struct DATA
         app.SetSpecular( 0.12f, 0.12f, 0.12f );
         app.SetAmbient( 0.1f, 0.1f, 0.1f );
         app.SetDiffuse( colorObj->Red(), colorObj->Green(), colorObj->Blue() );
-        colors.insert( std::pair< Standard_Real, SGNODE* >( id, app.GetRawPtr() ) );
+        colors.emplace( id, app.GetRawPtr() );
 
         return app.GetRawPtr();
     }
@@ -1167,7 +1167,7 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent,
     vshape.SetParent( parent );
 
     if( !partID.empty() )
-        data.faces.insert( std::pair< std::string, SGNODE* >( partID, vshape.GetRawPtr() ) );
+        data.faces.emplace( partID, vshape.GetRawPtr() );
 
     // The outer surface of an IGES model is indeterminate so
     // we must render both sides of a surface.
@@ -1187,7 +1187,7 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent,
         vshape2.SetParent( parent );
 
         if( !partID.empty() )
-            data.faces.insert( std::pair< std::string, SGNODE* >( id2, vshape2.GetRawPtr() ) );
+            data.faces.emplace( id2, vshape2.GetRawPtr() );
     }
 
     return true;

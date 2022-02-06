@@ -130,7 +130,7 @@ SGNODE* WRL2BASE::GetInlineData( const std::string& aName )
 
     if( !fn.Normalize() )
     {
-        m_inlineModels.insert( std::pair< std::string, SGNODE* >( aName, nullptr ) );
+        m_inlineModels.emplace( aName, nullptr );
         return nullptr;
     }
 
@@ -138,11 +138,11 @@ SGNODE* WRL2BASE::GetInlineData( const std::string& aName )
 
     if( nullptr == sp )
     {
-        m_inlineModels.insert( std::pair< std::string, SGNODE* >( aName, nullptr ) );
+        m_inlineModels.emplace( aName, nullptr );
         return nullptr;
     }
 
-    m_inlineModels.insert( std::pair< std::string, SGNODE* >( aName, (SGNODE*)sp ) );
+    m_inlineModels.emplace( aName, (SGNODE*) sp );
 
     return (SGNODE*)sp;
 }

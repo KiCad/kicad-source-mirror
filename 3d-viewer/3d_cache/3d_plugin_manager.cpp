@@ -55,7 +55,7 @@
 S3D_PLUGIN_MANAGER::S3D_PLUGIN_MANAGER()
 {
     // create the initial file filter list entry
-    m_FileFilters.push_back( _( "All Files" ) + wxT( " (*.*)|*.*" ) );
+    m_FileFilters.emplace_back( _( "All Files" ) + wxT( " (*.*)|*.*" ) );
 
     // discover and load plugins
     loadPlugins();
@@ -391,7 +391,7 @@ void S3D_PLUGIN_MANAGER::addExtensionMap( KICAD_PLUGIN_LDR_3D* aPlugin )
 
         if( !ws.empty() )
         {
-            m_ExtMap.insert( std::pair< const wxString, KICAD_PLUGIN_LDR_3D* >( ws, aPlugin ) );
+            m_ExtMap.emplace( ws, aPlugin );
         }
 
     }

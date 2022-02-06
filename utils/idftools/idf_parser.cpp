@@ -2026,8 +2026,7 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
                 }
             }
 
-            if( olnOther.insert( pair<string,
-                                 OTHER_OUTLINE*>(op->GetOutlineIdentifier(), op ) ).second == false )
+            if( olnOther.emplace( op->GetOutlineIdentifier(), op ).second == false )
             {
                 ostringstream ostr;
                 ostr << "invalid IDF file\n";
@@ -2277,7 +2276,7 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
                 }
             }
 
-            olnGroup.insert( pair<string, GROUP_OUTLINE*>(op->GetGroupName(), op) );
+            olnGroup.emplace( op->GetGroupName(), op );
 
             return;
         }
@@ -2551,8 +2550,7 @@ void IDF3_BOARD::readLibSection( std::istream& aLibFile, IDF3::FILE_STATE& aLibS
 
             if( cop == nullptr )
             {
-                compOutlines.insert( pair<const std::string,
-                                     IDF3_COMP_OUTLINE*>( pout->GetUID(), pout ) );
+                compOutlines.emplace( pout->GetUID(), pout );
             }
             else
             {
@@ -3751,8 +3749,7 @@ IDF_DRILL_DATA* IDF3_BOARD::addCompDrill( double aDia, double aXpos, double aYpo
 
         comp->SetParent( this );
         comp->SetRefDes( refdes );
-        ref = components.insert( std::pair< std::string,
-                                 IDF3_COMPONENT*> ( comp->GetRefDes(), comp ) ).first;
+        ref = components.emplace( comp->GetRefDes(), comp ).first;
     }
 
     // add the drill
@@ -3812,8 +3809,7 @@ IDF_DRILL_DATA* IDF3_BOARD::addCompDrill( IDF_DRILL_DATA* aDrilledHole )
 
         comp->SetParent( this );
         comp->SetRefDes( aDrilledHole->GetDrillRefDes() );
-        ref = components.insert( std::pair< std::string,
-                                 IDF3_COMPONENT*> ( comp->GetRefDes(), comp ) ).first;
+        ref = components.emplace( comp->GetRefDes(), comp ).first;
     }
 
     IDF_DRILL_DATA* dp = ref->second->AddDrill( aDrilledHole );
@@ -3859,8 +3855,7 @@ bool IDF3_BOARD::AddComponent( IDF3_COMPONENT* aComponent )
         return false;
     }
 
-    if( components.insert( std::pair<std::string, IDF3_COMPONENT*>
-        ( aComponent->GetRefDes(), aComponent ) ).second == false )
+    if( components.emplace( aComponent->GetRefDes(), aComponent ).second == false )
     {
         ostringstream ostr;
         ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): \n";
@@ -4086,7 +4081,7 @@ IDF3_COMP_OUTLINE* IDF3_BOARD::GetComponentOutline( const wxString& aFullFileNam
                 delete cp;
 
                 // make sure we can find the item via its filename
-                uidFileList.insert( std::pair< std::string, std::string>( fname, uid ) );
+                uidFileList.emplace( fname, uid );
 
                 // return the pointer to the original
                 return oldp;
@@ -4114,8 +4109,8 @@ IDF3_COMP_OUTLINE* IDF3_BOARD::GetComponentOutline( const wxString& aFullFileNam
     if( oldp == nullptr )
     {
         // everything is fine, there are no existing entries
-        uidFileList.insert( std::pair< std::string, std::string>( fname, uid ) );
-        compOutlines.insert( pair<const std::string, IDF3_COMP_OUTLINE*>( uid, cp ) );
+        uidFileList.emplace( fname, uid );
+        compOutlines.emplace( uid, cp );
 
         return cp;
     }
@@ -4126,7 +4121,7 @@ IDF3_COMP_OUTLINE* IDF3_BOARD::GetComponentOutline( const wxString& aFullFileNam
         delete cp;
 
         // make sure we can find the item via its other filename
-        uidFileList.insert( std::pair< std::string, std::string>( fname, uid ) );
+        uidFileList.emplace( fname, uid );
 
         // return the pointer to the original
         return oldp;
@@ -4212,7 +4207,7 @@ IDF3_COMP_OUTLINE* IDF3_BOARD::GetInvalidOutline( const std::string& aGeomName,
     else
         cp->CreateDefaultOutline( aGeomName, aPartName );
 
-    compOutlines.insert( pair<const std::string, IDF3_COMP_OUTLINE*>(cp->GetUID(), cp) );
+    compOutlines.emplace( cp->GetUID(), cp );
 
     return cp;
 }

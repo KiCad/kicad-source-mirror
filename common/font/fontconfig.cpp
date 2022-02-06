@@ -200,7 +200,7 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts )
                 std::map<std::string, FONTINFO>::iterator it = m_fonts.find( theFamily );
 
                 if( it == m_fonts.end() )
-                    m_fonts.insert( std::pair<std::string, FONTINFO>( theFamily, fontInfo ) );
+                    m_fonts.emplace( theFamily, fontInfo );
                 else
                     it->second.Children().push_back( fontInfo );
             }

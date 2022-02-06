@@ -397,9 +397,9 @@ void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I&
             if( aDeltaX > size.y ) // shrinking turned the trapezoid into a triangle
             {
                 corners.reserve( 3 );
-                corners.push_back( ROUNDED_CORNER( -size.x, -size.y - aDeltaX ) );
-                corners.push_back( ROUNDED_CORNER( KiROUND( size.y / slope ), 0 ) );
-                corners.push_back( ROUNDED_CORNER( -size.x, size.y + aDeltaX ) );
+                corners.emplace_back( -size.x, -size.y - aDeltaX );
+                corners.emplace_back( KiROUND( size.y / slope ), 0 );
+                corners.emplace_back( -size.x, size.y + aDeltaX );
             }
         }
         else // vertical trapezoid
@@ -413,9 +413,9 @@ void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I&
             if( aDeltaY > size.x )
             {
                 corners.reserve( 3 );
-                corners.push_back( ROUNDED_CORNER( 0, -KiROUND( size.x / slope ) ) );
-                corners.push_back( ROUNDED_CORNER( size.x + aDeltaY, size.y ) );
-                corners.push_back( ROUNDED_CORNER( -size.x - aDeltaY, size.y ) );
+                corners.emplace_back( 0, -KiROUND( size.x / slope ) );
+                corners.emplace_back( size.x + aDeltaY, size.y );
+                corners.emplace_back( -size.x - aDeltaY, size.y );
             }
         }
 
@@ -425,10 +425,10 @@ void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I&
     if( corners.empty() )
     {
         corners.reserve( 4 );
-        corners.push_back( ROUNDED_CORNER( -size.x + aDeltaY, -size.y - aDeltaX ) );
-        corners.push_back( ROUNDED_CORNER( size.x - aDeltaY, -size.y + aDeltaX ) );
-        corners.push_back( ROUNDED_CORNER( size.x + aDeltaY, size.y - aDeltaX ) );
-        corners.push_back( ROUNDED_CORNER( -size.x - aDeltaY, size.y + aDeltaX ) );
+        corners.emplace_back( -size.x + aDeltaY, -size.y - aDeltaX );
+        corners.emplace_back( size.x - aDeltaY, -size.y + aDeltaX );
+        corners.emplace_back( size.x + aDeltaY, size.y - aDeltaX );
+        corners.emplace_back( -size.x - aDeltaY, size.y + aDeltaX );
 
         if( aDeltaY == size.x || aDeltaX == size.y )
             CornerListRemoveDuplicates( corners );
@@ -466,10 +466,10 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const 
 
     std::vector<ROUNDED_CORNER> corners;
     corners.reserve( 4 + chamferCnt );
-    corners.push_back( ROUNDED_CORNER( -size.x, -size.y, aCornerRadius ) );
-    corners.push_back( ROUNDED_CORNER( size.x, -size.y, aCornerRadius ) );
-    corners.push_back( ROUNDED_CORNER( size.x, size.y, aCornerRadius ) );
-    corners.push_back( ROUNDED_CORNER( -size.x, size.y, aCornerRadius ) );
+    corners.emplace_back( -size.x, -size.y, aCornerRadius );
+    corners.emplace_back( size.x, -size.y, aCornerRadius );
+    corners.emplace_back( size.x, size.y, aCornerRadius );
+    corners.emplace_back( -size.x, size.y, aCornerRadius );
 
     if( aChamferCorners )
     {

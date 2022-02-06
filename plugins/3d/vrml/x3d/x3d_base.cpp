@@ -42,7 +42,7 @@ bool X3D_DICT::AddName( const wxString& aName, X3DNODE* aNode )
     if( ir != reg.end() )
         reg.erase( ir );
 
-    reg.insert( std::pair< wxString, X3DNODE* >( aName, aNode ) );
+    reg.emplace( aName, aNode );
 
     return true;
 }

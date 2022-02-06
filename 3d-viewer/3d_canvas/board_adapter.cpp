@@ -136,7 +136,7 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     if( !g_ColorsLoaded )
     {
 #define ADD_COLOR( list, r, g, b, a, name ) \
-    list.push_back( CUSTOM_COLOR_ITEM( r/255.0, g/255.0, b/255.0, a, name ) )
+    list.emplace_back( r/255.0, g/255.0, b/255.0, a, name )
 
         ADD_COLOR( g_SilkscreenColors, 245, 245, 245, 1.0, NotSpecifiedPrm() ); // White
         ADD_COLOR( g_SilkscreenColors,  20,  51,  36, 1.0, wxT( "Green" ) );

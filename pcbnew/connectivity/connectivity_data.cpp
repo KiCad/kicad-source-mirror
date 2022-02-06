@@ -815,8 +815,8 @@ void CONNECTIVITY_DATA::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 
 void CONNECTIVITY_DATA::AddExclusion( const KIID& aBoardItemId1, const KIID& aBoardItemId2 )
 {
-    m_exclusions.insert( std::pair<KIID, KIID>( aBoardItemId1, aBoardItemId2 ) );
-    m_exclusions.insert( std::pair<KIID, KIID>( aBoardItemId2, aBoardItemId1 ) );
+    m_exclusions.emplace( aBoardItemId1, aBoardItemId2 );
+    m_exclusions.emplace( aBoardItemId2, aBoardItemId1 );
 
     for( RN_NET* rnNet : m_nets )
     {

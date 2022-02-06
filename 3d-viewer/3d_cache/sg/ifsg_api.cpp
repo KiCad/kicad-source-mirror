@@ -359,7 +359,7 @@ S3DMODEL* S3D::GetModel( SCENEGRAPH* aNode )
     app.transparency = 0.0f;
 
     materials.matorder.push_back( &app );
-    materials.matmap.insert( std::pair< SGAPPEARANCE const*, int >( &app, 0 ) );
+    materials.matmap.emplace( &app, 0 );
 
     if( aNode->Prepare( nullptr, materials, meshes ) )
     {
