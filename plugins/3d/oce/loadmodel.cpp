@@ -763,7 +763,6 @@ SCENEGRAPH* LoadModel( char const* filename )
     data.scene = nullptr;
 
     m_app->Close( data.m_doc );
-
     return scene;
 }
 
