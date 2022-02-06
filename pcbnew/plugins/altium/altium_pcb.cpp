@@ -685,8 +685,24 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
     LIB_ID fpID = AltiumToKiCadLibID( "", footprintName ); // TODO: library name
     footprint->SetFPID( fpID );
 
-    footprint->SetDescription( wxT( "Test Description for " ) + aFootprintName + wxT( " - " ) + footprintName );
-    footprint->SetReference( wxT( "UNK" ) ); // TODO: extract
+    std::string parametersStreamName = aFootprintName.ToStdString() + "\\Parameters";
+    const CFB::COMPOUND_FILE_ENTRY* parametersData =
+            altiumLibFile.FindStream( parametersStreamName );
+    if( parametersData != nullptr )
+    {
+        ALTIUM_PARSER                parametersReader( altiumLibFile, parametersData );
+        std::map<wxString, wxString> parameterProperties = parametersReader.ReadProperties();
+        wxString                     description =
+                ALTIUM_PARSER::ReadString( parameterProperties, wxT( "DESCRIPTION" ), wxT( "" ) );
+        footprint->SetDescription( description );
+    }
+    else
+    {
+        wxLogError( _( "File not found: '%s'." ), parametersStreamName );
+        footprint->SetDescription( wxT( "" ) );
+    }
+
+    footprint->SetReference( wxT( "REF**" ) );
     footprint->SetValue( footprintName );
     footprint->Reference().SetVisible( true ); // TODO: extract visibility information
     footprint->Value().SetVisible( true );
