@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
 "PO-Revision-Date: 2022-02-07 19:42+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Last-Translator: Axel Henriksson <axe.henriksson@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -701,7 +701,7 @@ msgstr "Visa mönsterkortskropp"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:82
 msgid "Show filled areas in zones"
-msgstr "Visa fyllda områden i zoner"
+msgstr "Visa zoner som fyllda områden"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:85
 msgid "Use bare copper color for unplated copper"
@@ -5777,7 +5777,7 @@ msgstr "Interaktivt Raderingsverktyg"
 
 #: common/tool/actions.cpp:196
 msgid "Delete clicked items"
-msgstr "Radera klickade objekt"
+msgstr "Radera objekt med klickning"
 
 #: common/tool/actions.cpp:203
 msgid "Change Edit Method"
@@ -5867,7 +5867,7 @@ msgstr "Zooma för att Passa"
 
 #: common/tool/actions.cpp:286
 msgid "Zoom to Objects"
-msgstr "Zooma till Objekt"
+msgstr "Zooma till objekt"
 
 #: common/tool/actions.cpp:297
 msgid "Zoom In at Cursor"
@@ -6052,7 +6052,7 @@ msgstr "Polära Koordinater"
 
 #: common/tool/actions.cpp:513
 msgid "Switch between polar and cartesian coordinate systems"
-msgstr "Växla mellan polära och kartesiska koordinatsystem"
+msgstr "Växla mellan polärt och kartesiskt koordinatsystem"
 
 #: common/tool/actions.cpp:519
 msgid "Reset Local Coordinates"
@@ -8456,7 +8456,7 @@ msgstr "Stiftkonfliktskarta"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
 #: pcbnew/dialogs/dialog_board_setup.cpp:107 pcbnew/dialogs/dialog_drc.cpp:594
 msgid "Violation Severity"
-msgstr "Överträdelsens svårighetsgrad"
+msgstr "Överträdelsens allvarlighetsgrad"
 
 #: eeschema/dialogs/dialog_erc.cpp:770 pcbnew/dialogs/dialog_gendrill.cpp:474
 #, c-format
@@ -18250,7 +18250,7 @@ msgstr "& Ta bort arkivprojekt ..."
 
 #: kicad/menubar.cpp:121 kicad/menubar.cpp:229
 msgid "Unarchive project files from zip archive"
-msgstr "Ta bort arkivering av projektfiler från zip-arkiv"
+msgstr "Packa upp arkiverat projekt från zip-arkiv"
 
 #: kicad/menubar.cpp:136
 msgid "Browse Project Files"
@@ -18875,7 +18875,7 @@ msgstr "Öppna ett demoprojekt"
 
 #: kicad/tools/kicad_manager_actions.cpp:57
 msgid "Open Project..."
-msgstr "Öppet projekt..."
+msgstr "Öppna projekt..."
 
 #: kicad/tools/kicad_manager_actions.cpp:57
 msgid "Open an existing project"
@@ -20899,7 +20899,7 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:358
 msgid "Distance between strip and top metal"
-msgstr "Avstånd mellan spår och toppmetall"
+msgstr "Avstånd mellan ledare och toppmetall"
 
 #: pcb_calculator/transline_ident.cpp:390
 msgid "Twists"
@@ -21142,7 +21142,7 @@ msgstr "Materialegenskaper för dielektrikum"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
-msgstr "Har kastrerade dynor"
+msgstr "Har krenelerade lödytor"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:23
 msgid "Plated board edge"
@@ -21150,7 +21150,7 @@ msgstr "Pläterad brädkant"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:31
 msgid "Copper finish:"
-msgstr "Koppar finish:"
+msgstr "Kopparns ytfinish:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:40
 msgid "Edge card connectors:"
@@ -22037,7 +22037,7 @@ msgstr "Board Editor Lager"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:91
 msgid "Physical Stackup"
-msgstr "Fysisk stapling"
+msgstr "Fysisk lageruppbyggnad"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:95
 msgid "Board Finish"
@@ -22331,7 +22331,7 @@ msgstr "Städning ombord"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:22
 msgid "Delete &tracks connecting different nets"
-msgstr "Ta bort och spår som ansluter olika nät"
+msgstr "Ta bort &ledare som ansluter olika nät"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:23
 msgid ""
@@ -22362,19 +22362,19 @@ msgstr "slå ihop inriktade spårsegment och ta bort nollsegment"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:40
 msgid "Delete tracks unconnected at one end"
-msgstr "Ta bort spår som inte är anslutna i ena änden"
+msgstr "Ta bort ledare som inte är anslutna i ena änden"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:41
 msgid "delete tracks having at least one dangling end"
-msgstr "ta bort spår som har minst en dinglande ände"
+msgstr "ta bort ledare som har minst en dinglande ände"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:45
 msgid "Delete tracks fully inside pads"
-msgstr "Ta bort spår helt inuti dynorna"
+msgstr "Ta bort ledare inneslutna i lödytor"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:46
 msgid "Delete tracks that have both start and end positions inside of a pad"
-msgstr "Radera spår som har både start- och slutposition inne i en pad"
+msgstr "Ta bort ledare som har både start- och slutposition inuti en lödyta"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.h:57
 msgid "Cleanup Tracks and Vias"
@@ -24814,7 +24814,7 @@ msgstr "Ställ in nettoklassvärden:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:77
 msgid "Set Track and Via Properties"
-msgstr "Ställ in spår och via egenskaper"
+msgstr "Ställ in egenskaper för ledare och vias"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:30
 msgid "footprint"
@@ -25286,7 +25286,7 @@ msgstr "Ta bort fotavtryck utan komponenter i netlist"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:60
 msgid "Delete tracks shorting multiple nets"
-msgstr "Ta bort spår som kortsluter flera nät"
+msgstr "Ta bort ledare som kortsluter flera nät"
 
 #: pcbnew/dialogs/dialog_netlist_base.h:67
 msgid "Import Netlist"
@@ -26977,7 +26977,7 @@ msgstr "Via startlager och slutlager kan inte vara desamma"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:606
 msgid "Edit track/via properties"
-msgstr "Redigera spår / via egenskaper"
+msgstr "Ändra ledare-/via-egenskaper"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:671 pcbnew/files.cpp:914
 msgid "Updating nets"
@@ -27370,7 +27370,7 @@ msgstr "Dra (45 graders läge)"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:347
 #: pcbnew/tools/pcb_actions.cpp:1394
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
-msgstr "Drar spårsegmentet samtidigt som anslutna spår hålls i 45 grader."
+msgstr "Drar ledarsegmentet medan anslutna spår behålls i 45 grader."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:351
 #: pcbnew/tools/pcb_actions.cpp:1400
@@ -28787,7 +28787,7 @@ msgstr "Inget differentiellt paravstånd definierat."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:19
 msgid "Pre-defined track and via dimensions:"
-msgstr "Fördefinierat spår och via mått:"
+msgstr "Fördefinierade ledar- och via-dimensioner:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:54
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:111
@@ -29132,7 +29132,7 @@ msgstr "Spårlängd utanför området"
 
 #: pcbnew/drc/drc_item.cpp:190
 msgid "Skew between traces out of range"
-msgstr "Sned mellan spår utanför räckvidden"
+msgstr "Skjuvning mellan ledare utanför intervall"
 
 #: pcbnew/drc/drc_item.cpp:194
 msgid "Too many vias on a connection"
@@ -29298,7 +29298,7 @@ msgstr "Samla kopparföremål ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:210
 msgid "Checking track & via clearances..."
-msgstr "Kontrollerar spår och via avstånd ..."
+msgstr "Kontrollerar isolationsavstånd mellan ledare och vias..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:217
 msgid "Checking hole clearances..."
@@ -29913,7 +29913,7 @@ msgstr "Lokal marginal för lödpasta"
 #: pcbnew/footprint.cpp:2397 pcbnew/pad.cpp:1706
 #, fuzzy
 msgid "Solderpaste Margin Ratio Override"
-msgstr "Lokalt marginalförhållande för lödpasta"
+msgstr "Lokal proportion för lödpastemarginal"
 
 #: pcbnew/footprint.cpp:2400 pcbnew/pad.cpp:1708 pcbnew/zone.cpp:1490
 msgid "Thermal Relief Width"
@@ -32819,7 +32819,7 @@ msgstr "Det går inte att hitta en lämplig startpunkt för kopplat nät \"%s\".
 #: pcbnew/router/pns_dp_meander_placer.cpp:76
 #: pcbnew/router/pns_meander_placer.cpp:64
 msgid "Please select a track whose length you want to tune."
-msgstr "Välj ett spår vars längd du vill ställa in."
+msgstr "Vänligen välj ett spår vars längd du vill ställa in."
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:90
 msgid ""
@@ -32954,7 +32954,7 @@ msgstr "Slutar lägga det aktuella spåret."
 
 #: pcbnew/router/router_tool.cpp:97
 msgid "Auto-finish Track"
-msgstr "Auto-finish Spår"
+msgstr "Auto-avsluta spår"
 
 #: pcbnew/router/router_tool.cpp:97
 msgid "Automatically finishes laying the current track."
@@ -33025,7 +33025,7 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:149
 msgid "Custom Track/Via Size..."
-msgstr "Anpassat spår / via storlek ..."
+msgstr "Anpassad ledar-/via-storlek..."
 
 #: pcbnew/router/router_tool.cpp:150
 msgid "Shows a dialog for changing the track width and via size."
@@ -33049,7 +33049,7 @@ msgstr "Byter mellan skarpa/avrundade och 45°/90° hörn under spårdragning."
 
 #: pcbnew/router/router_tool.cpp:186
 msgid "Select Track/Via Width"
-msgstr "Välj spår / via bredd"
+msgstr "Välj ledar-/via-bredd"
 
 #: pcbnew/router/router_tool.cpp:205
 msgid "Use Starting Track Width"
@@ -33065,7 +33065,7 @@ msgstr "Använd nettoklassvärden"
 
 #: pcbnew/router/router_tool.cpp:211
 msgid "Use track and via sizes from the net class"
-msgstr "Använd spår och via storlekar från nätklassen"
+msgstr "Använd ledar- och via-storlekar från nätklassen"
 
 #: pcbnew/router/router_tool.cpp:215 pcbnew/router/router_tool.cpp:336
 #: pcbnew/tools/drawing_tool.cpp:101
@@ -33074,7 +33074,7 @@ msgstr "Använd anpassade värden ..."
 
 #: pcbnew/router/router_tool.cpp:216 pcbnew/tools/drawing_tool.cpp:102
 msgid "Specify custom track and via sizes"
-msgstr "Ange anpassat spår och via storlekar"
+msgstr "Ange anpassade ledar- och via-storlekar"
 
 #: pcbnew/router/router_tool.cpp:227
 msgid "Track netclass width"
@@ -33829,7 +33829,7 @@ msgstr "Specialverktyg"
 #: pcbnew/tools/edit_tool.cpp:326
 #, c-format
 msgid "Unable to resize arc tracks %.1f degrees or greater."
-msgstr "Kunde inte skala om bågformade spår %.1f grader eller mer."
+msgstr "Kunde inte skala om bågformade ledare %.1f grader eller mer."
 
 #: pcbnew/tools/edit_tool.cpp:658
 msgid "Drag Arc Track"
@@ -33845,7 +33845,7 @@ msgstr "Redigera spårbredd / via storlek"
 
 #: pcbnew/tools/edit_tool.cpp:1167
 msgid "At least two straight track segments must be selected."
-msgstr "Minst två segment med rak spår måste väljas."
+msgstr "Minst två raka ledarsegment måste väljas."
 
 #: pcbnew/tools/edit_tool.cpp:1171
 msgid "Enter fillet radius:"
@@ -34266,7 +34266,7 @@ msgstr "Ändra spårbredd"
 
 #: pcbnew/tools/pcb_actions.cpp:313
 msgid "Updates selected track & via sizes"
-msgstr "Uppdaterar valt spår och via storlekar"
+msgstr "Uppdaterar valda ledar- och via-storlekar"
 
 #: pcbnew/tools/pcb_actions.cpp:317
 msgid "Adds arcs tangent to the selected straight track segments"
@@ -34401,11 +34401,11 @@ msgstr "Byt lager ..."
 
 #: pcbnew/tools/pcb_actions.cpp:432
 msgid "Move tracks or drawings from one layer to another"
-msgstr "Flytta spår eller ritningar från ett lager till ett annat"
+msgstr "Flytta ledare eller ritningar från ett lager till ett annat"
 
 #: pcbnew/tools/pcb_actions.cpp:437
 msgid "Edit Track & Via Properties..."
-msgstr "Redigera egenskaper för spår och via ..."
+msgstr "Ändra egenskaper för ledare och vior..."
 
 #: pcbnew/tools/pcb_actions.cpp:438
 msgid "Edit track and via properties globally across board"
@@ -34901,7 +34901,7 @@ msgstr "Skissspår"
 
 #: pcbnew/tools/pcb_actions.cpp:823
 msgid "Show tracks in outline mode"
-msgstr "Visa spår i konturläge"
+msgstr "Visa ledare i konturläge"
 
 #: pcbnew/tools/pcb_actions.cpp:828
 msgid "Sketch Pads"
@@ -34941,7 +34941,7 @@ msgstr "Rita zonfyllningar"
 
 #: pcbnew/tools/pcb_actions.cpp:853
 msgid "Show filled areas of zones"
-msgstr "Visa fyllda områden i zoner"
+msgstr "Visa zoner som fyllda områden"
 
 #: pcbnew/tools/pcb_actions.cpp:858
 msgid "Draw Zone Outlines"
@@ -34949,7 +34949,7 @@ msgstr "Rita zonkonturer"
 
 #: pcbnew/tools/pcb_actions.cpp:858
 msgid "Show only zone boundaries"
-msgstr "Visa endast zongränser"
+msgstr "Visa zoner som gränser"
 
 #: pcbnew/tools/pcb_actions.cpp:863
 msgid "Draw Zone Fill Fracture Borders"
@@ -35263,7 +35263,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1240
 msgid "Select All Tracks in Net"
-msgstr "Välj Alla spår i nätet"
+msgstr "Välj alla ledare i nätet"
 
 #: pcbnew/tools/pcb_actions.cpp:1241
 msgid "Selects all tracks & vias belonging to the same net."
@@ -35271,7 +35271,7 @@ msgstr "Väljer alla ledare och vior som tillhör samma nät."
 
 #: pcbnew/tools/pcb_actions.cpp:1245
 msgid "Deselect All Tracks in Net"
-msgstr "Avmarkera alla spår i nätet"
+msgstr "Avmarkera alla ledare i nätet"
 
 #: pcbnew/tools/pcb_actions.cpp:1246
 #, fuzzy
