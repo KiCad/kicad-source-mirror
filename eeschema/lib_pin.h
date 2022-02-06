@@ -170,6 +170,8 @@ public:
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
     /* Cannot use a default parameter here as it will not be compatible with the virtual. */
     const EDA_RECT GetBoundingBox() const override { return GetBoundingBox( false ); }
 
