@@ -160,6 +160,8 @@ bool OUTLINE_DECOMPOSER::approximateQuadraticBezierCurve( GLYPH_POINTS&       aR
     // cp0 = qp0, cp1 = qp0 + 2/3 * (qp1 - qp0), cp2 = qp2 + 2/3 * (qp1 - qp2), cp3 = qp2
 
     GLYPH_POINTS cubic;
+    cubic.resize( 4 );
+
     cubic.push_back( aBezier[0] );                                           // cp0
     cubic.push_back( aBezier[0] + ( ( aBezier[1] - aBezier[0] ) * 2 / 3 ) ); // cp1
     cubic.push_back( aBezier[2] + ( ( aBezier[1] - aBezier[2] ) * 2 / 3 ) ); // cp2

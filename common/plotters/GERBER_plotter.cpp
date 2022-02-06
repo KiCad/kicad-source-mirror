@@ -804,6 +804,8 @@ void GERBER_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, 
 {
     std::vector<VECTOR2I> cornerList;
 
+    cornerList.reserve( 5 );
+
     // Build corners list
     cornerList.push_back( p1 );
 
@@ -1525,6 +1527,8 @@ void GERBER_PLOTTER::plotRoundRectAsRegion( const VECTOR2I& aRectCenter, const V
 
     RR_EDGE curr_edge;
     std::vector<RR_EDGE> rr_outline;
+
+    rr_outline.reserve( 4 );
 
     // Build outline coordinates, relative to rectangle center, rotation 0:
 

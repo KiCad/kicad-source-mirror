@@ -820,7 +820,9 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::rectBreakouts( int aWidth, const SHAPE* aSha
     const SHAPE_RECT* rect = static_cast<const SHAPE_RECT*>(aShape);
     VECTOR2I s = rect->GetSize();
     VECTOR2I c = rect->GetPosition() + VECTOR2I( s.x / 2, s.y / 2 );
+
     BREAKOUT_LIST breakouts;
+    breakouts.reserve( 12 );
 
     VECTOR2I d_offset;
 

@@ -253,6 +253,8 @@ void PLOTTER::BezierCurve( const VECTOR2I& aStart, const VECTOR2I& aControl1,
     int minSegLen = aLineThickness;  // The segment min length to approximate a bezier curve
 
     std::vector<VECTOR2I> ctrlPoints;
+    ctrlPoints.reserve( 4 );
+
     ctrlPoints.push_back( aStart );
     ctrlPoints.push_back( aControl1 );
     ctrlPoints.push_back( aControl2 );
@@ -295,6 +297,8 @@ void PLOTTER::markerSquare( const VECTOR2I& position, int radius )
     std::vector<VECTOR2I> corner_list;
     VECTOR2I              corner;
 
+    corner_list.reserve( 4 );
+
     corner.x = position.x + r;
     corner.y = position.y + r;
     corner_list.push_back( corner );
@@ -325,6 +329,8 @@ void PLOTTER::markerLozenge( const VECTOR2I& position, int radius )
 {
     std::vector<VECTOR2I> corner_list;
     VECTOR2I              corner;
+
+    corner_list.reserve( 4 );
 
     corner.x = position.x;
     corner.y = position.y + radius;

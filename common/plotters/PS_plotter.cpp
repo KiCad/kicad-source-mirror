@@ -144,9 +144,9 @@ void PSLIKE_PLOTTER::FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSiz
                                    const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
                                    void* aData )
 {
-    static std::vector<VECTOR2I> cornerList;
+    std::vector<VECTOR2I> cornerList;
     VECTOR2I size( aSize );
-    cornerList.clear();
+    cornerList.reserve( 4 );
 
     if( aTraceMode == FILLED )
         SetCurrentLineWidth( 0 );
