@@ -1538,7 +1538,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
                 aEagleLibrary->package[symbolName] = edevice.package.Get();
 
             // Create KiCad symbol.
-            unique_ptr<LIB_SYMBOL> libSymbol( new LIB_SYMBOL( symbolName ) );
+            std::unique_ptr<LIB_SYMBOL> libSymbol = std::make_unique<LIB_SYMBOL>( symbolName );
 
             // Process each gate in the deviceset for this device.
             wxXmlNode* gateNode    = getChildrenNodes( deviceSetChildren, "gates" );

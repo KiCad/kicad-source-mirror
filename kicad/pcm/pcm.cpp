@@ -362,8 +362,8 @@ const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryI
     nlohmann::json js;
     PCM_REPOSITORY current_repo;
 
-    std::unique_ptr<WX_PROGRESS_REPORTER> reporter(
-            new WX_PROGRESS_REPORTER( m_dialog, wxT( "" ), 1 ) );
+    std::unique_ptr<WX_PROGRESS_REPORTER> reporter =
+            std::make_unique<WX_PROGRESS_REPORTER>( m_dialog, wxT( "" ), 1 );
 
     if( !FetchRepository( url, current_repo, reporter.get() ) )
         return false;

@@ -85,8 +85,8 @@ int AUTOPLACE_TOOL::autoplace( std::vector<FOOTPRINT*>& aFootprints, bool aPlace
     std::function<int( FOOTPRINT* aFootprint )> callback = refreshCallback;
     autoplacer.SetRefreshCallback( callback );
 
-    std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter(
-            new WX_PROGRESS_REPORTER( frame(), _( "Autoplace Components" ), 1 ) );
+    std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter =
+            std::make_unique<WX_PROGRESS_REPORTER>( frame(), _( "Autoplace Components" ), 1 );
 
     autoplacer.SetProgressReporter( progressReporter.get() );
     auto result = autoplacer.AutoplaceFootprints( aFootprints, &commit, aPlaceOffboard );

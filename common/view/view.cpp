@@ -1590,7 +1590,7 @@ void VIEW::Update( const VIEW_ITEM* aItem, int aUpdateFlags ) const
 
 std::shared_ptr<VIEW_OVERLAY> VIEW::MakeOverlay()
 {
-    std::shared_ptr<VIEW_OVERLAY> overlay( new VIEW_OVERLAY );
+    std::shared_ptr<VIEW_OVERLAY> overlay = std::make_shared<VIEW_OVERLAY>();
 
     Add( overlay.get() );
     return overlay;

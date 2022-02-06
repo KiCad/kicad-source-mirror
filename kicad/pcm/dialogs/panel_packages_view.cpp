@@ -494,8 +494,8 @@ void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
 
     std::ofstream output( path.ToUTF8(), std::ios_base::binary );
 
-    std::unique_ptr<WX_PROGRESS_REPORTER> reporter(
-            new WX_PROGRESS_REPORTER( this, _( "Downloading package" ), 1 ) );
+    std::unique_ptr<WX_PROGRESS_REPORTER> reporter =
+            std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Downloading package" ), 1 );
 
     bool success = m_pcm->DownloadToStream( url, &output, reporter.get(), 0 );
 
