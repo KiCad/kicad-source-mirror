@@ -1,7 +1,7 @@
 ##########################################################################
 # Build KiCad on Ubuntu 20.04 and save the results
 ##########################################################################
-ubuntu20.04_build:
+.ubuntu20.04_build:
   stage: build
   tags:
     - kicad-ubuntu20.04
@@ -52,7 +52,7 @@ ubuntu20.04_build:
       - build/linux/compilation_log.txt
 
 # Upload the compilation log in an easily downloadable form
-ubuntu20.04_report_build_warn:
+.ubuntu20.04_report_build_warn:
   stage: report
   when: always
   only:
@@ -74,7 +74,7 @@ ubuntu20.04_report_build_warn:
       - compilation_log.txt
 
 # Report on the metrics of the code
-ubuntu20.04_report_metrics:
+.ubuntu20.04_report_metrics:
   stage: report
   when: always
   only:
@@ -95,7 +95,7 @@ ubuntu20.04_report_metrics:
 ##########################################################################
 # Run the code unit tests.
 ##########################################################################
-ubuntu20.04_qa:
+.ubuntu20.04_qa:
   extends:
     - .unit_test
   needs:
