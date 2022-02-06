@@ -244,6 +244,7 @@ static KICAD_T nonFields[] =
         LIB_SYMBOL_T,
         LIB_SHAPE_T,
         LIB_TEXT_T,
+        LIB_TEXTBOX_T,
         LIB_PIN_T,
         EOT
 };
