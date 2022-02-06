@@ -14,17 +14,17 @@ class COLOR_SWATCH;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
-#include <wx/stattext.h>
+#include <wx/checkbox.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/radiobut.h>
 #include <wx/gbsizer.h>
 #include <wx/statbox.h>
-#include <wx/checkbox.h>
 #include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -40,6 +40,7 @@ class DIALOG_LIB_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 	private:
 
 		// Private event handlers
+		void _wxFB_onBorderChecked( wxCommandEvent& event ){ onBorderChecked( event ); }
 		void _wxFB_onFill( wxCommandEvent& event ){ onFill( event ); }
 
 
@@ -52,6 +53,7 @@ class DIALOG_LIB_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 			FILLED_WITH_COLOR
 		};
 
+		wxCheckBox* m_checkBorder;
 		wxStaticText* m_widthLabel;
 		wxTextCtrl* m_widthCtrl;
 		wxStaticText* m_widthUnits;
@@ -70,6 +72,7 @@ class DIALOG_LIB_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, overide them in your derived class
+		virtual void onBorderChecked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFill( wxCommandEvent& event ) { event.Skip(); }
 
 

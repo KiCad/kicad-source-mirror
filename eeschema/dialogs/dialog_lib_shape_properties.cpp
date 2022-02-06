@@ -24,6 +24,7 @@
 #include <lib_item.h>
 #include <dialog_lib_shape_properties.h>
 #include <symbol_edit_frame.h>
+#include <symbol_editor_settings.h>
 #include <confirm.h>
 #include <lib_shape.h>
 #include <widgets/color_swatch.h>
@@ -71,7 +72,14 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataToWindow()
     EDA_SHAPE*  shape = dynamic_cast<EDA_SHAPE*>( m_item );
 
     if( shape )
+        m_checkBorder->SetValue( shape->GetWidth() >= 0 );
+
+    if( shape && shape->GetWidth() >= 0 )
         m_lineWidth.SetValue( shape->GetWidth() );
+
+    m_checkBorder->Enable( shape );
+    m_lineWidth.Enable( shape && shape->GetWidth() >= 0 );
+    m_helpLabel->Enable( shape && shape->GetWidth() >= 0 );
 
     m_privateCheckbox->SetValue( m_item->IsPrivate() );
     m_checkApplyToAllUnits->SetValue( m_item->GetUnit() == 0 );
@@ -168,6 +176,20 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataFromWindow()
 
     if( shape )
     {
+        STROKE_PARAMS stroke = shape->GetStroke();
+
+        if( m_checkBorder->GetValue() )
+        {
+            if( !m_lineWidth.IsIndeterminate() )
+                stroke.SetWidth( m_lineWidth.GetValue() );
+        }
+        else
+        {
+            stroke.SetWidth( -1 );
+        }
+
+        shape->SetStroke( stroke );
+
         if( m_rbFillOutline->GetValue() )
             shape->SetFillMode( FILL_T::FILLED_SHAPE );
         else if( m_rbFillBackground->GetValue() )
@@ -178,10 +200,6 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataFromWindow()
             shape->SetFillMode( FILL_T::NO_FILL );
 
         shape->SetFillColor( m_colorSwatch->GetSwatchColor() );
-
-        STROKE_PARAMS stroke = shape->GetStroke();
-        stroke.SetWidth( m_lineWidth.GetValue() );
-        shape->SetStroke( stroke );
     }
 
     m_item->SetPrivate( m_privateCheckbox->GetValue() );
@@ -197,6 +215,18 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataFromWindow()
         m_item->SetUnit( m_frame->GetUnit() );
 
     return true;
+}
+
+
+void DIALOG_LIB_SHAPE_PROPERTIES::onBorderChecked( wxCommandEvent& event )
+{
+    bool border = m_checkBorder->GetValue();
+
+    if( border && m_lineWidth.GetValue() < 0 )
+        m_lineWidth.SetValue( Mils2iu( m_frame->libeditconfig()->m_Defaults.line_width ) );
+
+    m_lineWidth.Enable( border );
+    m_helpLabel->Enable( border );
 }
 
 

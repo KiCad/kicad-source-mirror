@@ -50,6 +50,7 @@ public:
 
 private:
     void onFill(wxCommandEvent &event) override;
+    void onBorderChecked( wxCommandEvent& event ) override;
     void onSwatch( wxCommandEvent& aEvent );
 
 private:

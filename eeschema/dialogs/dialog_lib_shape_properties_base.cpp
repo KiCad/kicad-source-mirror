@@ -12,6 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE( DIALOG_LIB_SHAPE_PROPERTIES_BASE, DIALOG_SHIM )
+	EVT_CHECKBOX( wxID_ANY, DIALOG_LIB_SHAPE_PROPERTIES_BASE::_wxFB_onBorderChecked )
 	EVT_RADIOBUTTON( NO_FILL, DIALOG_LIB_SHAPE_PROPERTIES_BASE::_wxFB_onFill )
 	EVT_RADIOBUTTON( FILLED_SHAPE, DIALOG_LIB_SHAPE_PROPERTIES_BASE::_wxFB_onFill )
 	EVT_RADIOBUTTON( FILLED_WITH_BG_BODYCOLOR, DIALOG_LIB_SHAPE_PROPERTIES_BASE::_wxFB_onFill )
@@ -28,15 +29,18 @@ DIALOG_LIB_SHAPE_PROPERTIES_BASE::DIALOG_LIB_SHAPE_PROPERTIES_BASE( wxWindow* pa
 	wxBoxSizer* dlgBorderSizer;
 	dlgBorderSizer = new wxBoxSizer( wxVERTICAL );
 
+	m_checkBorder = new wxCheckBox( this, wxID_ANY, _("Border"), wxDefaultPosition, wxDefaultSize, 0 );
+	dlgBorderSizer->Add( m_checkBorder, 0, wxTOP|wxRIGHT|wxLEFT, 3 );
+
 	wxBoxSizer* bSizerLineWidth;
 	bSizerLineWidth = new wxBoxSizer( wxHORIZONTAL );
 
-	m_widthLabel = new wxStaticText( this, wxID_ANY, _("Line width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_widthLabel = new wxStaticText( this, wxID_ANY, _("Border width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_widthLabel->Wrap( -1 );
 	bSizerLineWidth->Add( m_widthLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 
 	m_widthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerLineWidth->Add( m_widthCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	bSizerLineWidth->Add( m_widthCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 
 	m_widthUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_widthUnits->Wrap( -1 );
@@ -45,9 +49,12 @@ DIALOG_LIB_SHAPE_PROPERTIES_BASE::DIALOG_LIB_SHAPE_PROPERTIES_BASE( wxWindow* pa
 
 	dlgBorderSizer->Add( bSizerLineWidth, 0, wxEXPAND, 5 );
 
-	m_helpLabel = new wxStaticText( this, wxID_ANY, _("Set width to 0 to use Schematic default symbol line width."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_helpLabel->Wrap( 333 );
-	dlgBorderSizer->Add( m_helpLabel, 0, wxALL, 5 );
+	m_helpLabel = new wxStaticText( this, wxID_ANY, _("Set border width to 0 to use Schematic default symbol line width."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_helpLabel->Wrap( 320 );
+	dlgBorderSizer->Add( m_helpLabel, 0, wxALL, 3 );
+
+
+	dlgBorderSizer->Add( 0, 3, 0, 0, 5 );
 
 	wxStaticBoxSizer* bSizerFill;
 	bSizerFill = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Fill Style") ), wxVERTICAL );
@@ -77,6 +84,9 @@ DIALOG_LIB_SHAPE_PROPERTIES_BASE::DIALOG_LIB_SHAPE_PROPERTIES_BASE( wxWindow* pa
 
 
 	dlgBorderSizer->Add( bSizerFill, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
+
+	dlgBorderSizer->Add( 0, 3, 0, 0, 5 );
 
 	m_privateCheckbox = new wxCheckBox( this, wxID_ANY, _("Private to Symbol Editor"), wxDefaultPosition, wxDefaultSize, 0 );
 	dlgBorderSizer->Add( m_privateCheckbox, 0, wxALL, 3 );
