@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-03 17:11-0800\n"
 "PO-Revision-Date: 2022-02-07 19:42+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Last-Translator: Axel Henriksson <axe.henriksson@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
 "Language: sv\n"
@@ -674,7 +674,7 @@ msgstr "Visa mönsterkortskropp"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:82
 msgid "Show filled areas in zones"
-msgstr "Visa fyllda områden i zoner"
+msgstr "Visa zoner som fyllda områden"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:85
 msgid "Use bare copper color for unplated copper"
@@ -5929,7 +5929,7 @@ msgstr "Interaktivt Raderingsverktyg"
 
 #: common/tool/actions.cpp:196
 msgid "Delete clicked items"
-msgstr "Radera klickade objekt"
+msgstr "Radera objekt med klickning"
 
 #: common/tool/actions.cpp:203
 msgid "Change Edit Method"
@@ -6019,7 +6019,7 @@ msgstr "Zooma för att Passa"
 
 #: common/tool/actions.cpp:286
 msgid "Zoom to Objects"
-msgstr "Zooma till Objekt"
+msgstr "Zooma till objekt"
 
 #: common/tool/actions.cpp:297
 msgid "Zoom In at Cursor"
@@ -6206,7 +6206,7 @@ msgstr "Polära Koordinater"
 
 #: common/tool/actions.cpp:513
 msgid "Switch between polar and cartesian coordinate systems"
-msgstr "Växla mellan polära och kartesiska koordinatsystem"
+msgstr "Växla mellan polärt och kartesiskt koordinatsystem"
 
 #: common/tool/actions.cpp:519
 msgid "Reset Local Coordinates"
@@ -8608,7 +8608,7 @@ msgstr "Stiftkonfliktskarta"
 #: pcbnew/dialogs/dialog_board_setup.cpp:112 pcbnew/dialogs/dialog_drc.cpp:702
 #: pcbnew/dialogs/dialog_drc.cpp:724
 msgid "Violation Severity"
-msgstr "Överträdelsens svårighetsgrad"
+msgstr "Överträdelsens allvarlighetsgrad"
 
 #: eeschema/dialogs/dialog_erc.cpp:791 pcbnew/dialogs/dialog_drc.cpp:719
 #, fuzzy
@@ -18074,24 +18074,24 @@ msgid "Zip file '%s' cannot be opened."
 msgstr "Zip-filen '%s' kan inte öppnas."
 
 #: gerbview/files.cpp:479
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (gerber job file)."
-msgstr "hoppade över fil '%s' (Gerber-jobbfil)\n"
+msgstr "Hoppade över fil '%s' (Gerber-jobbfil)."
 
 #: gerbview/files.cpp:524
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>"
-msgstr "<b> Det gick inte att skapa temporär fil '%s'.</b>\n"
+msgstr "<b>Kunde inte skapa temporär fil '%s'.</b>"
 
 #: gerbview/files.cpp:549
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (unknown type)."
-msgstr "Hoppade över fil '%s' (okänd typ).\n"
+msgstr "Hoppade över fil '%s' (okänd typ)."
 
 #: gerbview/files.cpp:586
-#, fuzzy, c-format
+#, c-format
 msgid "<b>unzipped file %s read error</b>"
-msgstr "<b> uppladdad fil %s läsfel </b>\n"
+msgstr "<b>uppdackad fil %s läsfel </b>"
 
 #: gerbview/files.cpp:634
 msgid "Open Zip File"
@@ -18128,14 +18128,12 @@ msgid "Position"
 msgstr "Position"
 
 #: gerbview/gerber_draw_item.cpp:695
-#, fuzzy
 msgid "Start"
-msgstr "Start X"
+msgstr "Start"
 
 #: gerbview/gerber_draw_item.cpp:698
-#, fuzzy
 msgid "End"
-msgstr "Avsluta X"
+msgstr "Slut"
 
 #: gerbview/gerber_draw_item.cpp:709
 msgid "Clear"
@@ -18233,9 +18231,8 @@ msgid "Gerber Viewer"
 msgstr "Gerber-visare"
 
 #: gerbview/gerbview_frame.cpp:589
-#, fuzzy
 msgid "Drawing layer not in use"
-msgstr "Ritlager %d används inte"
+msgstr "Ritlager används inte"
 
 #: gerbview/gerbview_frame.cpp:606
 msgid "(with X2 attributes)"
@@ -18300,9 +18297,8 @@ msgstr ""
 "Därför är storleken på vissa artiklar odefinierad"
 
 #: gerbview/rs274d.cpp:410
-#, fuzzy
 msgid "Invalid Code Number"
-msgstr "Ogiltigt stiftnummer"
+msgstr "Ogiltigt kodnummer"
 
 #: gerbview/rs274d.cpp:618
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
@@ -18351,31 +18347,28 @@ msgid "<No selection>"
 msgstr "<Inget val>"
 
 #: gerbview/tools/gerbview_actions.cpp:39
-#, fuzzy
 msgid "Open Autodetected File(s)..."
-msgstr "Öppna Gerber-plotfil(er)..."
+msgstr "Öppna automatiskt upptäckt(a) fil(er)..."
 
 #: gerbview/tools/gerbview_actions.cpp:40
 msgid "Open Autodetected file(s) on a new layer."
-msgstr ""
+msgstr "Öppna automatiskt upptäckt(a) fil(er) på ett nytt lager..."
 
 #: gerbview/tools/gerbview_actions.cpp:45
 msgid "Open Gerber Plot File(s)..."
 msgstr "Öppna Gerber-plotfil(er)..."
 
 #: gerbview/tools/gerbview_actions.cpp:46
-#, fuzzy
 msgid "Open Gerber plot file(s) on a new layer."
-msgstr "Öppna Gerber-plotfil(er)..."
+msgstr "Öppna Gerberplot-fil(er) på ett nytt lager..."
 
 #: gerbview/tools/gerbview_actions.cpp:51
 msgid "Open Excellon Drill File(s)..."
 msgstr "Öppna Excellon Drill File (s) ..."
 
 #: gerbview/tools/gerbview_actions.cpp:52
-#, fuzzy
 msgid "Open Excellon drill file(s) on a new layer."
-msgstr "Öppna Excellon Drill File (s) ..."
+msgstr "Öppna Excellon-borrfil(er) på ett nytt lager."
 
 #: gerbview/tools/gerbview_actions.cpp:57
 msgid "Open Gerber Job File..."
@@ -18645,17 +18638,15 @@ msgstr "Sortera lager om X2-läge"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:141
 msgid "Sort Layers by File Extension"
-msgstr ""
+msgstr "Sortera lager efter filnamnstillägg"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:146
-#, fuzzy
 msgid "Move Current Layer Up"
-msgstr "Rensa nuvarande lager ..."
+msgstr "Flytta aktuellt lager uppåt"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:148
-#, fuzzy
 msgid "Move Current Layer Down"
-msgstr "Endast nuvarande lager"
+msgstr "Flytta aktuellt lager nedåt"
 
 #: gerbview/widgets/layer_widget.cpp:130
 msgid "Change Layer Color for"
@@ -18949,7 +18940,7 @@ msgstr "& Ta bort arkivprojekt ..."
 
 #: kicad/menubar.cpp:121 kicad/menubar.cpp:227
 msgid "Unarchive project files from zip archive"
-msgstr "Ta bort arkivering av projektfiler från zip-arkiv"
+msgstr "Packa upp arkiverat projekt från zip-arkiv"
 
 #: kicad/menubar.cpp:136
 msgid "Browse Project Files"
@@ -19024,12 +19015,10 @@ msgid "Uninstall"
 msgstr "Avinstallera"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:130
-#, fuzzy
 msgid "Apply Pending Changes"
 msgstr "Tillämpa ändringar"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:131
-#, fuzzy
 msgid "Discard Pending Changes"
 msgstr "Ignorera Ändringar"
 
@@ -19123,14 +19112,12 @@ msgid "Applying Package Changes"
 msgstr "Tillämpar paketändringar"
 
 #: kicad/pcm/dialogs/panel_package.cpp:97
-#, fuzzy
 msgid "Install Pending"
-msgstr "Installationsstorlek"
+msgstr "Installera väntande"
 
 #: kicad/pcm/dialogs/panel_package.cpp:101
-#, fuzzy
 msgid "Uninstall Pending"
-msgstr "Avinstallera"
+msgstr "Avinstallera väntande"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:212
 msgid "Metadata"
@@ -19582,7 +19569,7 @@ msgstr "Öppna ett demoprojekt"
 
 #: kicad/tools/kicad_manager_actions.cpp:57
 msgid "Open Project..."
-msgstr "Öppet projekt..."
+msgstr "Öppna projekt..."
 
 #: kicad/tools/kicad_manager_actions.cpp:57
 msgid "Open an existing project"
@@ -21227,26 +21214,25 @@ msgid "PCB Calculator"
 msgstr "PCB-kalkylator"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:76
-#, fuzzy
 msgid "General system design"
-msgstr "Allmäna inställningar"
+msgstr "Allmän systemdesign"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:79
 msgid "Regulators"
 msgstr "Tillsynsmyndigheter"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:81
-#, fuzzy
 msgid "Power, current and isolation"
-msgstr "Brott mot hålröjning"
+msgstr "Effekt, ström och isolering"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:84
 msgid "Electrical Spacing"
 msgstr "Elektriskt avstånd"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:90
+#, fuzzy
 msgid "High speed"
-msgstr ""
+msgstr "Höghastighet"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:94
 msgid "RF Attenuators"
@@ -21257,8 +21243,9 @@ msgid "TransLine "
 msgstr "TransLedn "
 
 #: pcb_calculator/pcb_calculator_frame.cpp:98
+#, fuzzy
 msgid "Memo"
-msgstr ""
+msgstr "Memo"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:101
 msgid "E-Series"
@@ -21602,7 +21589,7 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:358
 msgid "Distance between strip and top metal"
-msgstr "Avstånd mellan spår och toppmetall"
+msgstr "Avstånd mellan ledare och toppmetall"
 
 #: pcb_calculator/transline_ident.cpp:390
 msgid "Twists"
@@ -21847,7 +21834,7 @@ msgstr "Materialegenskaper för dielektrikum"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
-msgstr "Har kastrerade dynor"
+msgstr "Har krenelerade lödytor"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:23
 msgid "Plated board edge"
@@ -21855,7 +21842,7 @@ msgstr "Pläterad brädkant"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:31
 msgid "Copper finish:"
-msgstr "Koppar finish:"
+msgstr "Kopparns ytfinish:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:40
 msgid "Edge card connectors:"
@@ -22148,7 +22135,7 @@ msgstr ""
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:80
 #, fuzzy
 msgid "Polyimide"
-msgstr "Polygonlinje"
+msgstr "Polyimid"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:81
 msgid "Phenolic natural"
@@ -22764,7 +22751,7 @@ msgstr "Board Editor Lager"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:94
 msgid "Physical Stackup"
-msgstr "Fysisk stapling"
+msgstr "Fysisk lageruppbyggnad"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:99
 msgid "Board Finish"
@@ -22783,7 +22770,6 @@ msgid "Defaults"
 msgstr "Standardvärden"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:104
-#, fuzzy
 msgid "Fomatting"
 msgstr "Formatering"
 
@@ -23063,7 +23049,7 @@ msgstr "Städning ombord"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:22
 msgid "Delete &tracks connecting different nets"
-msgstr "Ta bort och spår som ansluter olika nät"
+msgstr "Ta bort &ledare som ansluter olika nät"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:23
 msgid ""
@@ -23094,19 +23080,19 @@ msgstr "slå ihop inriktade spårsegment och ta bort nollsegment"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:40
 msgid "Delete tracks unconnected at one end"
-msgstr "Ta bort spår som inte är anslutna i ena änden"
+msgstr "Ta bort ledare som inte är anslutna i ena änden"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:41
 msgid "delete tracks having at least one dangling end"
-msgstr "ta bort spår som har minst en dinglande ände"
+msgstr "ta bort ledare som har minst en dinglande ände"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:45
 msgid "Delete tracks fully inside pads"
-msgstr "Ta bort spår helt inuti dynorna"
+msgstr "Ta bort ledare inneslutna i lödytor"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:46
 msgid "Delete tracks that have both start and end positions inside of a pad"
-msgstr "Radera spår som har både start- och slutposition inne i en pad"
+msgstr "Ta bort ledare som har både start- och slutposition inuti en lödyta"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.h:57
 msgid "Cleanup Tracks and Vias"
@@ -23624,13 +23610,12 @@ msgid "Create Array"
 msgstr "Skapa matris"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:223
-#, fuzzy
 msgid ""
 "This item was on a non-existing layer.\n"
 "It has been moved to the first defined layer."
 msgstr ""
-"Den här artikeln fanns i ett icke-existerande eller förbjudet lager.\n"
-"Den har flyttats till det första tillåtna lagret."
+"Den här artikeln fanns på ett icke-existerande lager.\n"
+"Den har flyttats till det första definierade lagret."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:309
 msgid "Change dimension properties"
@@ -24073,19 +24058,17 @@ msgid "Updated footprint %s (%s)"
 msgstr "Uppdaterade fotavtryck %s (%s)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Changed footprint %s from '%s' to '%s'"
-msgstr "Ändra fotavtryck %s från '%s' till '%s'"
+msgstr "Ändrade fotavtryck %s från '%s' till '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:375
-#, fuzzy
 msgid "*** library footprint not found ***"
 msgstr "*** fotavtryck hittades inte ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:395
-#, fuzzy
 msgid ": (no changes)"
-msgstr "Ångra Ändringar"
+msgstr ": (inga ändringar)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:400
 msgid ": OK"
@@ -24571,14 +24554,13 @@ msgid "3D Models"
 msgstr "3D-modeller"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:252
-#, fuzzy
 msgid ""
 "Locked footprints cannot be freely moved and oriented on the canvas and can "
 "only be selected when the 'Locked items' checkbox is enabled in the "
 "selection filter."
 msgstr ""
-"Fotavtrycket är låst: det kan inte flyttas eller roteras fritt, och kan "
-"endast väljas när kryssrutan 'Låsta objekt' är aktiverad i urvalsfiltret."
+"Låsta fotavtryck kan inte flyttas eller roteras fritt, och kan endast väljas "
+"när kryssrutan 'Låsta objekt' är aktiverad i urvalsfiltret."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:338
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:387
@@ -24741,7 +24723,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:54
 #, fuzzy
 msgid "Solder mask expansion:"
-msgstr "Lödmask topp:"
+msgstr "Lödmask expansion:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:287
 msgid ""
@@ -24884,9 +24866,8 @@ msgid "Footprint name:"
 msgstr "Fotavtryck namn:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:135
-#, fuzzy
 msgid "Private Layers"
-msgstr "Skapa lager"
+msgstr "Privata lager"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:188
 msgid "Component type:"
@@ -25398,14 +25379,12 @@ msgid "Delete Items"
 msgstr "Ta bort objekt"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:139
-#, fuzzy
 msgid "Other text items"
-msgstr "Andra saker"
+msgstr "Andra textelement"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:140
-#, fuzzy
 msgid "Graphic items"
-msgstr "PCB-grafiska objekt"
+msgstr "Grafiska element"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:255
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
@@ -25532,7 +25511,7 @@ msgstr "Ställ in nettoklassvärden:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:77
 msgid "Set Track and Via Properties"
-msgstr "Ställ in spår och via egenskaper"
+msgstr "Ställ in egenskaper för ledare och vias"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:30
 #: pcbnew/drc/drc_engine.cpp:1218
@@ -25668,9 +25647,8 @@ msgid "Deselect All"
 msgstr "Ångra &markering"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:49
-#, fuzzy
 msgid "Board layers and physical stackup"
-msgstr "Uppdatera fysisk stapling"
+msgstr "Kortlager och fysisk lageruppbyggnad"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:52
 msgid "Solder mask/paste defaults"
@@ -25679,22 +25657,21 @@ msgstr "Lödmask / klistra in standardvärden"
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:55
 #, fuzzy
 msgid "Text && graphics default properties"
-msgstr "Egenskaper för text och grafik"
+msgstr "Text && grafik standardegenskaper"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
 #, fuzzy
 msgid "Text && graphics formatting"
-msgstr "Text & Grafik"
+msgstr "Text && grafik formattering"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
 #, fuzzy
 msgid "Design rule constraints"
-msgstr "Designregler"
+msgstr "Designregeltvång"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:64
-#, fuzzy
 msgid "Predefined track && via dimensions"
-msgstr "Fördefinierat spår och via mått"
+msgstr "Fördefinierade ledar- och via-dimensioner"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:243
 #: pcbnew/dialogs/dialog_imported_layers.cpp:251
@@ -26013,7 +25990,7 @@ msgstr "Ta bort fotavtryck utan komponenter i netlist"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:60
 msgid "Delete tracks shorting multiple nets"
-msgstr "Ta bort spår som kortsluter flera nät"
+msgstr "Ta bort ledare som kortsluter flera nät"
 
 #: pcbnew/dialogs/dialog_netlist_base.h:67
 msgid "Import Netlist"
@@ -26565,7 +26542,7 @@ msgstr "Castellated pad (endast genomgående hål)"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:582
 #, fuzzy
 msgid "Clearance Overrides"
-msgstr "Clearance konturer"
+msgstr "Åsidosättningar för isolationsavstånd"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:585
 msgid "Set values to 0 to use parent footprint or netclass values."
@@ -26629,7 +26606,7 @@ msgstr "Från föräldrarnas fotavtryck"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:716
 #, fuzzy
 msgid "Zone knockout:"
-msgstr "Zonurtag"
+msgstr "Zonurtag:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
 msgid "Pad shape"
@@ -26643,22 +26620,20 @@ msgstr "Använd pad konvex skrov"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:733
 #, fuzzy
 msgid "Thermal Relief Overrides"
-msgstr "Bredd på thermal relief"
+msgstr "Åsidosättningar för termisk avlastning"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:741
 #, fuzzy
 msgid "Relief gap:"
-msgstr "Termiskt avlastningsgap:"
+msgstr "Termiskt avlastningsmellanrum:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:752
-#, fuzzy
 msgid "Spoke width:"
-msgstr "Pennans bredd:"
+msgstr "Ekerbredd:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:763
-#, fuzzy
 msgid "Spoke angle:"
-msgstr "Bågvinkel:"
+msgstr "Ekervinkel:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:797
 msgid "Primitives list:"
@@ -27077,17 +27052,14 @@ msgid "SVG Options"
 msgstr "SVG-alternativ"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:379
-#, fuzzy
 msgid ""
 "This number defines how many digits are exported that are below 1 mm.\n"
 "User unit is 10^-<N> mm\n"
 "Choose 4 if you are not sure."
 msgstr ""
-"Hur stor en SVG-användarenhet är.\n"
-"Siffran definierar hur många siffror som exporteras som är under 1 mm eller "
-"1 tum.\n"
-"Användarenheten är 10 ^ - <N> mm eller 10 ^ - <N> tum.\n"
-"Välj 6 om du inte är säker."
+"Detta nummer bestämmer hur många värdesiffror under 1 mm som exporteras.\n"
+"Användarenheten är 10^-<N> mm\n"
+"Välj 4 om du är osäker."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:405
 msgid "Run DRC..."
@@ -27682,22 +27654,19 @@ msgstr "Beskrivning av moderns fotavtryck"
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:404
 #, fuzzy
 msgid "Change text box properties"
-msgstr "Ändra textegenskaper"
+msgstr "Ändra textrute-egenskaper"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:137
-#, fuzzy
 msgid "Text Width:"
-msgstr "Textbredd"
+msgstr "Textbredd:"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:153
-#, fuzzy
 msgid "Text Height:"
-msgstr "Texthöjd"
+msgstr "Texthöjd:"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:203
-#, fuzzy
 msgid "Border style:"
-msgstr "Geringsstil:"
+msgstr "Kantstil:"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:445
 #, c-format
@@ -27732,7 +27701,7 @@ msgstr "Via startlager och slutlager kan inte vara desamma"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:657
 msgid "Edit track/via properties"
-msgstr "Redigera spår / via egenskaper"
+msgstr "Ändra ledare-/via-egenskaper"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:722 pcbnew/files.cpp:914
 msgid "Updating nets"
@@ -28125,7 +28094,7 @@ msgstr "Dra (45 graders läge)"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:347
 #: pcbnew/tools/pcb_actions.cpp:1410
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
-msgstr "Drar spårsegmentet samtidigt som anslutna spår hålls i 45 grader."
+msgstr "Drar ledarsegmentet medan anslutna spår behålls i 45 grader."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:351
 #: pcbnew/tools/pcb_actions.cpp:1416
@@ -28396,9 +28365,8 @@ msgid "Allow fillets outside zone outline"
 msgstr "Tillåt filéer utanför zonerna"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:146
-#, fuzzy
 msgid "Min thermal relief spoke count:"
-msgstr "Termisk avlastning ekers bredd:"
+msgstr "Minsta antal ekrar för termisk avlastning:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:165
 msgid "Length tuning"
@@ -28576,14 +28544,12 @@ msgstr ""
 "fotavtryck.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:459
-#, fuzzy
 msgid "Minimum text height:"
-msgstr "Text höjd:"
+msgstr "Minsta texthöjd:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:473
-#, fuzzy
 msgid "Minimum text thickness:"
-msgstr "Texttjocklek:"
+msgstr "Minsta texttjocklek:"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:430
 msgid "Use the Physical Stackup page to change the number of copper layers."
@@ -29179,13 +29145,12 @@ msgid "User9"
 msgstr "Användare9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board manufacturer's recommendations for solder mask expansion and "
 "minimum web width."
 msgstr ""
-"Använd din mönsterkorttillverkares rekommendationer för lödmasksmarginal och "
-"minsta bryggbredd."
+"Använd din mönsterkorttillverkares rekommendationer för lödmasksexpansion "
+"och minsta bryggbredd."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
 msgid "If none are provided, setting the values to zero is suggested."
@@ -29232,18 +29197,16 @@ msgstr ""
 "detta avstånd kommer att plottas som en enda öppning."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:84
-#, fuzzy
 msgid "Solder mask to copper clearance:"
-msgstr "Rensning av lödmask:"
+msgstr "Avstånd mellan lödmask och koppar:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
 msgid "Allow bridged solder mask apertures between pads within footprints"
 msgstr "Tillåt överbryggade lödmasköppningar mellan lödytor i fotavtryck"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:98
-#, fuzzy
 msgid "Tent vias"
-msgstr "Tält inte vias"
+msgstr "Täck vior"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:103
 msgid ""
@@ -29639,7 +29602,7 @@ msgstr "Inget differentiellt paravstånd definierat."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:19
 msgid "Pre-defined track and via dimensions:"
-msgstr "Fördefinierat spår och via mått:"
+msgstr "Fördefinierade ledar- och via-dimensioner:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:54
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:111
@@ -29727,12 +29690,12 @@ msgstr "Tessellating kopparzoner ..."
 #: pcbnew/drc/drc_engine.cpp:676
 #, fuzzy, c-format
 msgid "Resolved zone connection type: %s."
-msgstr "Zonanslutningstyp: %s."
+msgstr "Löst zonanslutningstyp: %s."
 
 #: pcbnew/drc/drc_engine.cpp:694
 #, fuzzy, c-format
 msgid "Pad is not a through hole pad; connection will be: %s."
-msgstr "Pad är inte en PTH-pad; anslutningen blir: %s."
+msgstr "Lödytan är inte ett genomgående hål; anslutningen blir: %s."
 
 #: pcbnew/drc/drc_engine.cpp:754 pcbnew/drc/drc_engine.cpp:769
 #, c-format
@@ -29760,17 +29723,17 @@ msgstr "Kortets minsta hålavstånd: %s."
 #: pcbnew/drc/drc_engine.cpp:817
 #, fuzzy, c-format
 msgid "Local override on %s; zone connection: %s."
-msgstr "Lokal åsidosättning på %s; godkännande: %s."
+msgstr "Lokal åsidosättning på %s; zonanslutning: %s."
 
 #: pcbnew/drc/drc_engine.cpp:833
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; thermal relief gap: %s."
-msgstr "Överstyrd av %s; värmeavlastning: %s."
+msgstr "Lokal åsidosättning på %s; värmeavlastningsavstånd: %s."
 
 #: pcbnew/drc/drc_engine.cpp:849
 #, fuzzy, c-format
 msgid "Local override on %s; thermal spoke width: %s."
-msgstr "Lokal åsidosättning på %s; godkännande: %s."
+msgstr "Lokal åsidosättning på %s; värmeavlastningens ekerbredd: %s."
 
 #: pcbnew/drc/drc_engine.cpp:858
 #, c-format
@@ -29778,17 +29741,17 @@ msgid "Zone %s min thickness: %s."
 msgstr "Zon %s minimibredd: %s."
 
 #: pcbnew/drc/drc_engine.cpp:872
-#, fuzzy, c-format
+#, c-format
 msgid "Checking assertion \"%s\"."
-msgstr "Kontrollerar regelvillkor \"%s\"."
+msgstr "Kontrollerar villkor \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:876 pcbnew/drc/drc_engine.cpp:1298
 msgid "Assertion passed."
-msgstr ""
+msgstr "Villkoret uppfylldes."
 
 #: pcbnew/drc/drc_engine.cpp:878 pcbnew/drc/drc_engine.cpp:1302
 msgid "--> Assertion failed. <--"
-msgstr ""
+msgstr "--> Villkoret misslyckades. <--"
 
 #: pcbnew/drc/drc_engine.cpp:897
 #, c-format
@@ -29867,9 +29830,8 @@ msgid "Constraint applied."
 msgstr "Begränsning tillämpas."
 
 #: pcbnew/drc/drc_engine.cpp:1115 pcbnew/drc/drc_engine.cpp:1331
-#, fuzzy
 msgid "Rule applied."
-msgstr "Ovillkorlig regel tillämpad."
+msgstr "Regel tillämpad."
 
 #: pcbnew/drc/drc_engine.cpp:1120
 msgid "Rule applied; overrides previous constraints."
@@ -29914,7 +29876,7 @@ msgid "Zone %s thermal spoke width: %s."
 msgstr "Zon %s termisk avlastning, ekerbredd: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1293
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule assertion \"%s\"."
 msgstr "Kontrollerar regelvillkor \"%s\"."
 
@@ -29923,7 +29885,6 @@ msgid "Electrical"
 msgstr "Elektrisk"
 
 #: pcbnew/drc/drc_item.cpp:45
-#, fuzzy
 msgid "Design for Manufacturing"
 msgstr "Design för tillverkning"
 
@@ -29936,9 +29897,8 @@ msgid "Signal Integrity"
 msgstr "Signalintegritet"
 
 #: pcbnew/drc/drc_item.cpp:48
-#, fuzzy
 msgid "Readability"
-msgstr "Enbart läsrättighet"
+msgstr "Läslighet"
 
 #: pcbnew/drc/drc_item.cpp:52
 msgid "Missing connection between items"
@@ -30070,18 +30030,17 @@ msgid "Pad net doesn't match schematic"
 msgstr "Lödytans nät matchar inte kretsschemat"
 
 #: pcbnew/drc/drc_item.cpp:180
-#, fuzzy
 msgid "Footprint not found in libraries"
-msgstr "Fotavtryck hittades inte i ändringslistan"
+msgstr "Fotavtryck hittades inte i biblioteken"
 
 #: pcbnew/drc/drc_item.cpp:184
-#, fuzzy
 msgid "Footprint doesn't match copy in library"
-msgstr "Fotavtryckets typ stämmer inte överens med dess lödytor"
+msgstr "Fotavtryck stämmer inte överens med kopia i bibliotek"
 
 #: pcbnew/drc/drc_item.cpp:192
+#, fuzzy
 msgid "Assertion failure"
-msgstr ""
+msgstr "Assertion failure"
 
 #: pcbnew/drc/drc_item.cpp:196
 msgid "Copper sliver"
@@ -30100,14 +30059,12 @@ msgid "Silkscreen overlap"
 msgstr "Silkscreen-överlappning"
 
 #: pcbnew/drc/drc_item.cpp:212
-#, fuzzy
 msgid "Text height out of range"
-msgstr "Spårlängd utanför området"
+msgstr "Texthöjd utanför intervall"
 
 #: pcbnew/drc/drc_item.cpp:216
-#, fuzzy
 msgid "Text thickness out of range"
-msgstr "Spårlängd utanför området"
+msgstr "Texttjocklek utanför intervall"
 
 #: pcbnew/drc/drc_item.cpp:220
 msgid "Trace length out of range"
@@ -30115,7 +30072,7 @@ msgstr "Spårlängd utanför området"
 
 #: pcbnew/drc/drc_item.cpp:224
 msgid "Skew between traces out of range"
-msgstr "Sned mellan spår utanför räckvidden"
+msgstr "Skjuvning mellan ledare utanför intervall"
 
 #: pcbnew/drc/drc_item.cpp:228
 msgid "Too many vias on a connection"
@@ -30237,14 +30194,12 @@ msgid "Rule already has a '%s' constraint."
 msgstr "Regel har redan ett '%s' krav."
 
 #: pcbnew/drc/drc_rule_parser.cpp:407
-#, fuzzy
 msgid "Expecting number."
-msgstr "Förväntar %s"
+msgstr "Förväntar nummer."
 
 #: pcbnew/drc/drc_rule_parser.cpp:422
-#, fuzzy
 msgid "Missing assertion expression."
-msgstr "Saknade tillståndsuttryck."
+msgstr "Saknar villkorsuttryck."
 
 #: pcbnew/drc/drc_rule_parser.cpp:459
 msgid "Missing min value."
@@ -30268,9 +30223,8 @@ msgid "Unrecognized layer '%s'."
 msgstr "Okänt lager '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:622
-#, fuzzy
 msgid "Missing severity name."
-msgstr "Versionsnummer saknas."
+msgstr "Saknar namn för allvarlighetsgrad."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:83
 msgid "Checking via annular rings..."
@@ -30300,7 +30254,7 @@ msgstr "Samla kopparföremål ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:205
 msgid "Checking track & via clearances..."
-msgstr "Kontrollerar spår och via avstånd ..."
+msgstr "Kontrollerar isolationsavstånd mellan ledare och vias..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:212
 msgid "Checking hole clearances..."
@@ -30441,14 +30395,12 @@ msgid "No project loaded, skipping library parity tests."
 msgstr "Inget projekt öppnat, hoppar över biblioteksparitetskontroller."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:410
-#, fuzzy
 msgid "Loading footprint library table..."
-msgstr "Fel vid inläsning av fotavtrycksbibliotekstabell."
+msgstr "Laddar tabell för fotavtrycksbibliotek..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:420
-#, fuzzy
 msgid "Checking board footprints against library..."
-msgstr "Kontrollerar fotavtryck..."
+msgstr "Kontrollerar kortets fotavtryck mot bibliotek..."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:113
 #, c-format
@@ -30480,14 +30432,13 @@ msgid "<unconstrained>"
 msgstr "<obegränsat>"
 
 #: pcbnew/drc/drc_test_provider_mechanical_clearance.cpp:176
-#, fuzzy
 msgid "Gathering items..."
-msgstr "Samla kopparföremål ..."
+msgstr "Samlar element..."
 
 #: pcbnew/drc/drc_test_provider_mechanical_clearance.cpp:229
 #, fuzzy
 msgid "Checking mechanical clearances..."
-msgstr "Kontrollera hål till dynavstånd ..."
+msgstr "Kontrollerar mekaniska avstånd..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:112
 msgid "(no edges found on Edge.Cuts layer)"
@@ -30511,9 +30462,8 @@ msgid "Checking text variables..."
 msgstr "Kontrollerar textvariabler ..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:361
-#, fuzzy
 msgid "Checking assertions..."
-msgstr "Kontrollerar stift ..."
+msgstr "Kontrollerar villkor..."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:115
 #, c-format
@@ -30546,7 +30496,8 @@ msgstr "Kontrollerar paritet mellan mönsterkort och kretsschema..."
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:221
 #, fuzzy
 msgid "No netlist provided, skipping schematic parity tests."
-msgstr "Ingen netlista tillhandahålls, hoppar över LVS."
+msgstr ""
+"Ingen nätlista har tillhandahållts, hoppar över paritetstest för schema."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:99
 msgid "Checking silkscreen for overlapping items..."
@@ -30564,7 +30515,7 @@ msgstr "Detekterar strimlor på kopparlager..."
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:55
 #, fuzzy
 msgid "board setup solder mask min width"
-msgstr "kortinställningsbegränsningar"
+msgstr "Kortinställning lödmaskens minsta bredd."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:426
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:506
@@ -30577,44 +30528,41 @@ msgid "Rear solder mask aperture bridges items with different nets"
 msgstr "Öppning i bakre lödmask överbryggar objekt från olika nät"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:614
-#, fuzzy
 msgid "Building solder mask..."
-msgstr "Byggzon fyller ..."
+msgstr "Bygger lödmask..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:619
-#, fuzzy
 msgid "Checking solder mask to silk clearance..."
-msgstr "Kontrollera hål till hålavstånd ..."
+msgstr "Kontrollerar avstånd mellan lödmask och screentryck..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:624
 #, fuzzy
 msgid "Checking solder mask web integrity..."
-msgstr "Kontrollera spårbredder ..."
+msgstr "Kontrollerar integritet av lödmasksnät..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:88
-#, fuzzy
 msgid "Checking text dimensions..."
-msgstr "Kontrollerar textvariabler ..."
+msgstr "Kontrollerar textdimensioner..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:174
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min height %s; actual %s)"
-msgstr "(%s min bredd %s; faktisk %s)"
+msgstr "(%s minsta höjd %s; faktisk %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max height %s; actual %s)"
-msgstr "(%s max bredd %s; faktisk %s)"
+msgstr "(%s maximal höjd %s; faktisk %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:224
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min thickness %s; actual %s)"
-msgstr "(%s min bredd %s; faktisk %s)"
+msgstr "(%s minsta tjocklek %s; faktisk %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:231
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max thickness %s; actual %s)"
-msgstr "(%s max bredd %s; faktisk %s)"
+msgstr "(%s maximal tjocklek %s; faktisk %s)"
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:78
 msgid "Checking track widths..."
@@ -30635,14 +30583,13 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s max diameter %s; faktisk %s)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:81
-#, fuzzy
 msgid "Checking thermal reliefs..."
-msgstr "Kontrollerar textvariabler ..."
+msgstr "Kontrollerar termisk avlastning..."
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min spoke count %d; actual %d)"
-msgstr "(%s maxantal: %d; faktisk: %d)"
+msgstr "(%s minsta antal ekrar %d; faktisk %d)"
 
 #: pcbnew/edit_zone_helpers.cpp:86 pcbnew/edit_zone_helpers.cpp:151
 msgid "Modify zone properties"
@@ -31010,7 +30957,7 @@ msgstr "Lokal marginal för lödpasta"
 #: pcbnew/footprint.cpp:2530 pcbnew/pad.cpp:1668
 #, fuzzy
 msgid "Solderpaste Margin Ratio Override"
-msgstr "Lokalt marginalförhållande för lödpasta"
+msgstr "Lokal proportion för lödpastemarginal"
 
 #: pcbnew/footprint.h:228
 #, c-format
@@ -31358,7 +31305,7 @@ msgstr "Footprint Text '%s' av %s"
 #: pcbnew/fp_textbox.cpp:223
 #, fuzzy, c-format
 msgid "Footprint Text Box of %s"
-msgstr "Footprint Text '%s' av %s"
+msgstr "Fotavtrycks textruta av %s"
 
 #: pcbnew/generate_footprint_info.cpp:43
 msgid "Documentation"
@@ -32270,12 +32217,12 @@ msgstr "Lokal marginal för lödmask"
 #: pcbnew/pad.cpp:1670 pcbnew/zone.cpp:1448
 #, fuzzy
 msgid "Thermal Relief Spoke Width"
-msgstr "Bredd på thermal relief"
+msgstr "Ekerbredd för termisk avlastning"
 
 #: pcbnew/pad.cpp:1673
 #, fuzzy
 msgid "Thermal Relief Spoke Angle"
-msgstr "Mellanrum på thermal relief"
+msgstr "Ekervinkel för termisk avlastning"
 
 #: pcbnew/pad.cpp:1676 pcbnew/zone.cpp:1445
 msgid "Thermal Relief Gap"
@@ -32385,7 +32332,7 @@ msgstr "Exportera Hyperlynx Layout"
 #: pcbnew/pcb_expr_evaluator.cpp:94
 #, fuzzy, c-format
 msgid "Missing layer name argument to %s."
-msgstr "Argumentet saknas till '%s'"
+msgstr "Argumentet lagernamn saknas för %s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:130
 #, c-format
@@ -32423,17 +32370,17 @@ msgstr ""
 #: pcbnew/pcb_expr_evaluator.cpp:719
 #, fuzzy, c-format
 msgid "Missing group name argument to %s."
-msgstr "Argumentet saknas till '%s'"
+msgstr "Argumentet gruppnamn saknas för %s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:829
 #, fuzzy, c-format
 msgid "Missing diff-pair name argument to %s."
-msgstr "Argumentet saknas till '%s'"
+msgstr "Argumentet diff-par-namn saknas för %s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:877
 #, fuzzy, c-format
 msgid "Missing field name argument to %s."
-msgstr "Argumentet saknas till '%s'"
+msgstr "Argumentet fältnamn saknas till %s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:1196
 msgid "must be mm, in, or mil"
@@ -32466,9 +32413,8 @@ msgid "Violation"
 msgstr "Överträdelse"
 
 #: pcbnew/pcb_marker.cpp:143
-#, fuzzy
 msgid "Severity"
-msgstr "Återställ"
+msgstr "Allvarlighet"
 
 #: pcbnew/pcb_marker.cpp:191
 #, c-format
@@ -32495,7 +32441,7 @@ msgstr "PCB-text '%s' på %s"
 #: pcbnew/pcb_textbox.cpp:251
 #, fuzzy, c-format
 msgid "PCB Text Box on %s"
-msgstr "PCB-text '%s' på %s"
+msgstr "PCB-textruta på %s"
 
 #: pcbnew/pcb_track.cpp:103
 #, c-format
@@ -33917,7 +33863,7 @@ msgstr "Det går inte att hitta en lämplig startpunkt för kopplat nät \"%s\".
 #: pcbnew/router/pns_dp_meander_placer.cpp:76
 #: pcbnew/router/pns_meander_placer.cpp:64
 msgid "Please select a track whose length you want to tune."
-msgstr "Välj ett spår vars längd du vill ställa in."
+msgstr "Vänligen välj ett spår vars längd du vill ställa in."
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:90
 msgid ""
@@ -34052,7 +33998,7 @@ msgstr "Slutar lägga det aktuella spåret."
 
 #: pcbnew/router/router_tool.cpp:97
 msgid "Auto-finish Track"
-msgstr "Auto-finish Spår"
+msgstr "Auto-avsluta spår"
 
 #: pcbnew/router/router_tool.cpp:97
 msgid "Automatically finishes laying the current track."
@@ -34123,7 +34069,7 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:149
 msgid "Custom Track/Via Size..."
-msgstr "Anpassat spår / via storlek ..."
+msgstr "Anpassad ledar-/via-storlek..."
 
 #: pcbnew/router/router_tool.cpp:150
 msgid "Shows a dialog for changing the track width and via size."
@@ -34147,7 +34093,7 @@ msgstr "Byter mellan skarpa/avrundade och 45°/90° hörn under spårdragning."
 
 #: pcbnew/router/router_tool.cpp:186
 msgid "Select Track/Via Width"
-msgstr "Välj spår / via bredd"
+msgstr "Välj ledar-/via-bredd"
 
 #: pcbnew/router/router_tool.cpp:205
 msgid "Use Starting Track Width"
@@ -34163,7 +34109,7 @@ msgstr "Använd nettoklassvärden"
 
 #: pcbnew/router/router_tool.cpp:211
 msgid "Use track and via sizes from the net class"
-msgstr "Använd spår och via storlekar från nätklassen"
+msgstr "Använd ledar- och via-storlekar från nätklassen"
 
 #: pcbnew/router/router_tool.cpp:215 pcbnew/router/router_tool.cpp:336
 #: pcbnew/tools/drawing_tool.cpp:104
@@ -34172,7 +34118,7 @@ msgstr "Använd anpassade värden ..."
 
 #: pcbnew/router/router_tool.cpp:216 pcbnew/tools/drawing_tool.cpp:105
 msgid "Specify custom track and via sizes"
-msgstr "Ange anpassat spår och via storlekar"
+msgstr "Ange anpassade ledar- och via-storlekar"
 
 #: pcbnew/router/router_tool.cpp:227
 msgid "Track netclass width"
@@ -35169,7 +35115,7 @@ msgstr "Specialverktyg"
 #: pcbnew/tools/edit_tool.cpp:327
 #, c-format
 msgid "Unable to resize arc tracks %.1f degrees or greater."
-msgstr "Kunde inte skala om bågformade spår %.1f grader eller mer."
+msgstr "Kunde inte skala om bågformade ledare %.1f grader eller mer."
 
 #: pcbnew/tools/edit_tool.cpp:659
 msgid "Drag Arc Track"
@@ -35185,7 +35131,7 @@ msgstr "Redigera spårbredd / via storlek"
 
 #: pcbnew/tools/edit_tool.cpp:1173
 msgid "At least two straight track segments must be selected."
-msgstr "Minst två segment med rak spår måste väljas."
+msgstr "Minst två raka ledarsegment måste väljas."
 
 #: pcbnew/tools/edit_tool.cpp:1177
 msgid "Enter fillet radius:"
@@ -35626,7 +35572,7 @@ msgstr "Ändra spårbredd"
 
 #: pcbnew/tools/pcb_actions.cpp:323
 msgid "Updates selected track & via sizes"
-msgstr "Uppdaterar valt spår och via storlekar"
+msgstr "Uppdaterar valda ledar- och via-storlekar"
 
 #: pcbnew/tools/pcb_actions.cpp:327
 msgid "Adds arcs tangent to the selected straight track segments"
@@ -35761,11 +35707,11 @@ msgstr "Byt lager ..."
 
 #: pcbnew/tools/pcb_actions.cpp:442
 msgid "Move tracks or drawings from one layer to another"
-msgstr "Flytta spår eller ritningar från ett lager till ett annat"
+msgstr "Flytta ledare eller ritningar från ett lager till ett annat"
 
 #: pcbnew/tools/pcb_actions.cpp:447
 msgid "Edit Track & Via Properties..."
-msgstr "Redigera egenskaper för spår och via ..."
+msgstr "Ändra egenskaper för ledare och vior..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
 msgid "Edit track and via properties globally across board"
@@ -36261,7 +36207,7 @@ msgstr "Skissspår"
 
 #: pcbnew/tools/pcb_actions.cpp:833
 msgid "Show tracks in outline mode"
-msgstr "Visa spår i konturläge"
+msgstr "Visa ledare i konturläge"
 
 #: pcbnew/tools/pcb_actions.cpp:838
 msgid "Sketch Pads"
@@ -36301,7 +36247,7 @@ msgstr "Rita zonfyllningar"
 
 #: pcbnew/tools/pcb_actions.cpp:863
 msgid "Show filled areas of zones"
-msgstr "Visa fyllda områden i zoner"
+msgstr "Visa zoner som fyllda områden"
 
 #: pcbnew/tools/pcb_actions.cpp:868
 msgid "Draw Zone Outlines"
@@ -36309,7 +36255,7 @@ msgstr "Rita zonkonturer"
 
 #: pcbnew/tools/pcb_actions.cpp:868
 msgid "Show only zone boundaries"
-msgstr "Visa endast zongränser"
+msgstr "Visa zoner som gränser"
 
 #: pcbnew/tools/pcb_actions.cpp:873
 msgid "Draw Zone Fill Fracture Borders"
@@ -36623,7 +36569,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1256
 msgid "Select All Tracks in Net"
-msgstr "Välj Alla spår i nätet"
+msgstr "Välj alla ledare i nätet"
 
 #: pcbnew/tools/pcb_actions.cpp:1257
 msgid "Selects all tracks & vias belonging to the same net."
@@ -36631,7 +36577,7 @@ msgstr "Väljer alla ledare och vior som tillhör samma nät."
 
 #: pcbnew/tools/pcb_actions.cpp:1261
 msgid "Deselect All Tracks in Net"
-msgstr "Avmarkera alla spår i nätet"
+msgstr "Avmarkera alla ledare i nätet"
 
 #: pcbnew/tools/pcb_actions.cpp:1262
 #, fuzzy
