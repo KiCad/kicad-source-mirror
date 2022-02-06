@@ -260,8 +260,12 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             &m_SilkClearance, Millimeter2iu( DEFAULT_SILKCLEARANCE ),
             Millimeter2iu( 0.00 ), Millimeter2iu( 100.0 ), MM_PER_IU ) );
 
+    // While the maximum *effective* value is 4, we've had users interpret this as the count on
+    // all layers, and enter something like 10.  They'll figure it out soon enough *unless* we
+    // enforce a max of 4 (and therefore reset it back to the default of 2), at which point it
+    // just looks buggy.
     m_params.emplace_back( new PARAM<int>( "rules.min_resolved_spokes",
-            &m_MinResolvedSpokes, DEFAULT_MINRESOLVEDSPOKES, 0, 4 ) );
+            &m_MinResolvedSpokes, DEFAULT_MINRESOLVEDSPOKES, 0, 99 ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_text_height",
             &m_MinSilkTextHeight, Millimeter2iu( DEFAULT_SILK_TEXT_SIZE * 0.8 ),
