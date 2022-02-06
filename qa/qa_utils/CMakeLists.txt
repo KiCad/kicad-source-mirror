@@ -43,6 +43,7 @@ include_directories( BEFORE ${INC_BEFORE} )
 
 target_link_libraries( qa_utils
     common
+    turtle
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}

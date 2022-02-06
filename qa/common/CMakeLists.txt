@@ -23,7 +23,7 @@ find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc R
 
 set( common_srcs
     # This is needed for the global mock objects
-    common_mocks.cpp
+    ${CMAKE_SOURCE_DIR}/qa/mocks/kicad/common_mocks.cpp
 
     # The main test entry points
     test_module.cpp
@@ -71,6 +71,8 @@ include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/pcbnew
     ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/qa/mocks/pcbnew
+    ${CMAKE_SOURCE_DIR}/qa/mocks/include
     ${INC_AFTER}
 )
 
