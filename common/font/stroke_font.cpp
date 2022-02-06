@@ -238,8 +238,11 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
     {
         if( c >= (int) m_glyphBoundingBoxes->size() || c < 0 )
         {
+            // Filtering non existing glyphes and non printable chars
             if( c == '\t' )
                 c = ' ';
+            else if( c < ' ' )      // Non printable char
+                c = '?';
             else
                 c = '?';
         }
@@ -247,7 +250,7 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
         // Index into bounding boxes table
         int dd = (signed) c - ' ';
 
-        if( dd == 0 )
+        if( dd <= 0 )
         {
             // 'space' character - draw nothing, advance cursor position
             cursor.x += KiROUND( glyphSize.x * SPACE_WIDTH );
