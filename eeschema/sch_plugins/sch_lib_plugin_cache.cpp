@@ -25,11 +25,8 @@
 #include <wx_filename.h>
 
 
-int SCH_LIB_PLUGIN_CACHE::m_modHash = 1;          // starts at 1 and goes up
-std::mutex SCH_LIB_PLUGIN_CACHE::m_modHashMutex;
-
-
 SCH_LIB_PLUGIN_CACHE::SCH_LIB_PLUGIN_CACHE( const wxString& aFullPathAndFileName ) :
+    m_modHash( 1 ),
     m_fileName( aFullPathAndFileName ),
     m_libFileName( aFullPathAndFileName ),
     m_isWritable( true ),
@@ -154,7 +151,7 @@ LIB_SYMBOL* SCH_LIB_PLUGIN_CACHE::removeSymbol( LIB_SYMBOL* aSymbol )
     m_symbols.erase( it );
     delete aSymbol;
     m_isModified = true;
-    SCH_LIB_PLUGIN_CACHE::IncrementModifyHash();
+    IncrementModifyHash();
     return firstChild;
 }
 
@@ -172,5 +169,5 @@ void SCH_LIB_PLUGIN_CACHE::AddSymbol( const LIB_SYMBOL* aSymbol )
 
     m_symbols[ name ] = const_cast< LIB_SYMBOL* >( aSymbol );
     m_isModified = true;
-    SCH_LIB_PLUGIN_CACHE::IncrementModifyHash();
+    IncrementModifyHash();
 }

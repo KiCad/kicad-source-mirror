@@ -64,26 +64,7 @@ class SYMBOL_LIBS : public SYMBOL_LIBS_BASE, public PROJECT::_ELEM
 public:
     KICAD_T Type() override { return SYMBOL_LIBS_T; }
 
-    SYMBOL_LIBS()
-    {
-        IncrementModifyGeneration();
-    }
-
-    static void IncrementModifyGeneration()
-    {
-        std::lock_guard<std::mutex> mut( SYMBOL_LIBS::s_generationMutex );
-        ++SYMBOL_LIBS::s_modify_generation;
-    }
-
-    static int GetModifyGeneration()
-    {
-        std::lock_guard<std::mutex> mut( SYMBOL_LIBS::s_generationMutex );
-        return SYMBOL_LIBS::s_modify_generation;
-    }
-
-    /// Return the modification hash for all libraries.  The value returned
-    /// changes on every library modification.
-    int GetModifyHash();
+    SYMBOL_LIBS() {}
 
     /**
      * Allocate and adds a symbol library to the library list.
@@ -175,9 +156,6 @@ public:
                                  const wxString& aLibraryName = wxEmptyString );
 
     int GetLibraryCount() { return size(); }
-
-    static int        s_modify_generation;         ///< helper for GetModifyHash()
-    static std::mutex s_generationMutex;
 };
 
 

@@ -1963,11 +1963,6 @@ void SCH_LEGACY_PLUGIN::cacheLib( const wxString& aLibraryFileName, const PROPER
         delete m_cache;
         m_cache = new SCH_LEGACY_PLUGIN_CACHE( aLibraryFileName );
 
-        // Because m_cache is rebuilt, increment SYMBOL_LIBS::s_modify_generation
-        // to modify the hash value that indicate symbol to symbol links
-        // must be updated.
-        SYMBOL_LIBS::IncrementModifyGeneration();
-
         if( !isBuffering( aProperties ) )
             m_cache->Load();
     }
@@ -1994,7 +1989,7 @@ bool SCH_LEGACY_PLUGIN::isBuffering( const PROPERTIES* aProperties )
 int SCH_LEGACY_PLUGIN::GetModifyHash() const
 {
     if( m_cache )
-        return SCH_LEGACY_PLUGIN_CACHE::GetModifyHash();
+        return m_cache->GetModifyHash();
 
     // If the cache hasn't been loaded, it hasn't been modified.
     return 0;

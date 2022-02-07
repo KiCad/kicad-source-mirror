@@ -43,16 +43,16 @@ public:
     SCH_LIB_PLUGIN_CACHE( const wxString& aLibraryPath );
     virtual ~SCH_LIB_PLUGIN_CACHE();
 
-    static void IncrementModifyHash()
+    void IncrementModifyHash()
     {
-        std::lock_guard<std::mutex> mut( SCH_LIB_PLUGIN_CACHE::m_modHashMutex );
-        SCH_LIB_PLUGIN_CACHE::m_modHash++;
+        std::lock_guard<std::mutex> mut( m_modHashMutex );
+        m_modHash++;
     }
 
-    static int GetModifyHash()
+    int GetModifyHash()
     {
-        std::lock_guard<std::mutex> mut( SCH_LIB_PLUGIN_CACHE::m_modHashMutex );
-        return SCH_LIB_PLUGIN_CACHE::m_modHash;
+        std::lock_guard<std::mutex> mut( m_modHashMutex );
+        return m_modHash;
     }
 
     // Most all functions in this class throw IO_ERROR exceptions.  There are no
@@ -88,8 +88,8 @@ public:
 protected:
     LIB_SYMBOL* removeSymbol( LIB_SYMBOL* aAlias );
 
-    static int        m_modHash;      // Keep track of the modification status of the library.
-    static std::mutex m_modHashMutex;
+    int               m_modHash;      // Keep track of the modification status of the library.
+    std::mutex        m_modHashMutex;
 
     wxString          m_fileName;     // Absolute path and file name.
     wxFileName        m_libFileName;  // Absolute path and file name is required here.

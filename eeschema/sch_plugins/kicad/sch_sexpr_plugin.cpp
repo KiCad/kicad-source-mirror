@@ -2230,11 +2230,6 @@ void SCH_SEXPR_PLUGIN::cacheLib( const wxString& aLibraryFileName, const PROPERT
         delete m_cache;
         m_cache = new SCH_SEXPR_PLUGIN_CACHE( aLibraryFileName );
 
-        // Because m_cache is rebuilt, increment SYMBOL_LIBS::s_modify_generation
-        // to modify the hash value that indicate symbol to symbol links
-        // must be updated.
-        SYMBOL_LIBS::IncrementModifyGeneration();
-
         if( !isBuffering( aProperties ) )
             m_cache->Load();
     }
