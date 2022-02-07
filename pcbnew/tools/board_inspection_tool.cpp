@@ -420,8 +420,8 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 reportCompileError( r );
 
             r->Report( "" );
-            r->Report( wxString::Format( _( "Minimum thermal spoke count: %s." ),
-                                         StringFromValue( units, width, true ) ) );
+            r->Report( wxString::Format( _( "Minimum thermal spoke count: %d." ),
+                                         minSpokes ) );
 
             std::shared_ptr<CONNECTIVITY_DATA> connectivity = pad->GetBoard()->GetConnectivity();
             const KICAD_T zones[] = { PCB_ZONE_T, EOT };

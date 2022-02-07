@@ -145,10 +145,6 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts )
                 if( !outline )
                     continue;
 
-                FcStrSet*  langStrSet = FcLangSetGetLangs( langSet );
-                FcStrList* langStrList = FcStrListCreate( langStrSet );
-                FcChar8*   langStr = FcStrListNext( langStrList );
-
                 std::string theFamily( reinterpret_cast<char *>( family ) );
 
 #ifdef __WXMAC__
@@ -159,6 +155,9 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts )
                 // GTK, on the other hand, doesn't appear to support wxLocale::IsAvailable(),
                 // so we can't run these checks.
 
+                FcStrSet*  langStrSet = FcLangSetGetLangs( langSet );
+                FcStrList* langStrList = FcStrListCreate( langStrSet );
+                FcChar8*   langStr = FcStrListNext( langStrList );
                 bool langSupported = false;
 
                 if( !langStr )
