@@ -273,7 +273,10 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     m_DeleteAllMarkersButton->Enable( false );
     m_saveReport->Enable( false );
 
+    {
+    wxBusyCursor dummy;
     drcTool->RunTests( this, refillZones, reportAllTrackErrors, testFootprints );
+    }
 
     if( m_cancelled )
         m_messages->Report( _( "-------- DRC cancelled by user.<br><br>" ) );
