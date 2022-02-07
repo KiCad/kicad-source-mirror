@@ -72,21 +72,6 @@ public:
      */
     static OUTLINE_FONT* LoadFont( const wxString& aFontFileName, bool aBold, bool aItalic );
 
-#if 0
-    /**
-     * Draw a string.
-     *
-     * @param aGal
-     * @param aText is the text to be drawn.
-     * @param aPosition is the text position in world coordinates.
-     * @param aOrigin is the item origin
-     * @param aAttributes contains text attributes (angle, line spacing, ...)
-     * @return bounding box width/height
-     */
-    VECTOR2D Draw( KIGFX::GAL* aGal, const wxString& aText, const VECTOR2D& aPosition,
-                   const VECTOR2D& aOrigin, const TEXT_ATTRIBUTES& aAttributes ) const override;
-#endif
-
     /**
      * Compute the vertical position of an overbar.  This is the distance between the text
      * baseline and the overbar.
@@ -104,14 +89,6 @@ public:
                               const VECTOR2I& aPosition, const EDA_ANGLE& aAngle, bool aMirror,
                               const VECTOR2I& aOrigin, TEXT_STYLE_FLAGS aTextStyle ) const override;
 
-    /**
-     * Like GetTextAsGlyphs, but handles multiple lines.
-     * TODO: Combine with GetTextAsGlyphs, maybe with a boolean parameter,
-     * but it's possible a non-line-breaking version isn't even needed
-     *
-     * @param aGlyphs returns text glyphs
-     * @param aText the text item
-     */
     void GetLinesAsGlyphs( std::vector<std::unique_ptr<GLYPH>>* aGlyphs, const wxString& aText,
                            const VECTOR2I& aPosition, const TEXT_ATTRIBUTES& aAttrs ) const;
 
@@ -145,8 +122,7 @@ private:
     // need to compensate to keep them from being much smaller than their stroked counterparts.
     static constexpr double m_outlineFontSizeCompensation = 1.4;
 
-    // FT_Set_Char_Size() gets character width and height specified in
-    // 1/64ths of a point
+    // FT_Set_Char_Size() gets character width and height specified in 1/64ths of a point
     static constexpr int m_charSizeScaler = 64;
 
     // The KiCad stroke font uses a subscript/superscript size ratio of 0.7.  This ratio is also
@@ -171,8 +147,8 @@ private:
 
     static constexpr double m_subscriptVerticalOffset   = -0.25;
     static constexpr double m_superscriptVerticalOffset = 0.45;
-    static constexpr double m_overbarOffset             = 0.16;
-    static constexpr double m_overbarHeightMultiplier   = 0.07;
+    static constexpr double m_overbarOffsetRatio        = 0.02;
+    static constexpr double m_overbarThicknessRatio     = 0.08;
 };
 
 } //namespace KIFONT

@@ -544,6 +544,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     bool          bold = IsBold();
     bool          italic = IsItalic();
     VECTOR2I      extents = font->StringBoundaryLimits( text, fontSize, thickness, bold, italic );
+    int           overbarOffset = 0;
 
     // Creates bounding box (rectangle) for horizontal, left and top justified text. The
     // bounding box will be moved later according to the actual text options
@@ -552,6 +553,9 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 
     if( IsMultilineAllowed() && aLine > 0 && ( aLine < static_cast<int>( strings.GetCount() ) ) )
         pos.y -= KiROUND( aLine * font->GetInterline( fontSize.y ) );
+
+    if( text.Contains( wxT( "~{" ) ) )
+        overbarOffset = extents.y / 14;
 
     if( aInvertY )
         pos.y = -pos.y;
@@ -575,34 +579,41 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 
     rect.SetSize( textsize );
 
-    /* Now, calculate the rect origin, according to text justification
-     * At this point the rectangle origin is the text origin (m_Pos).
-     * This is true only for left and top text justified texts (using top to bottom Y axis
-     * orientation). and must be recalculated for others justifications
-     * also, note the V justification is relative to the first line
+    /*
+     * At this point the rectangle origin is the text origin (m_Pos).  This is correct only for
+     * left and top justified, non-mirrored, non-overbarred texts. Recalculate for all others.
      */
+    int italicOffset = IsItalic() ? fontSize.y * ITALIC_TILT : 0;
+
     switch( GetHorizJustify() )
     {
     case GR_TEXT_H_ALIGN_LEFT:
         if( IsMirrored() )
-            rect.SetX( rect.GetX() - rect.GetWidth() );
+            rect.SetX( rect.GetX() - ( rect.GetWidth() - italicOffset ) );
         break;
 
     case GR_TEXT_H_ALIGN_CENTER:
-        rect.SetX( rect.GetX() - rect.GetWidth() / 2 );
+        rect.SetX( rect.GetX() - ( rect.GetWidth() - italicOffset ) / 2 );
         break;
 
     case GR_TEXT_H_ALIGN_RIGHT:
         if( !IsMirrored() )
-            rect.SetX( rect.GetX() - rect.GetWidth() );
+            rect.SetX( rect.GetX() - ( rect.GetWidth() - italicOffset ) );
         break;
     }
 
     switch( GetVertJustify() )
     {
-    case GR_TEXT_V_ALIGN_TOP:                                                     break;
-    case GR_TEXT_V_ALIGN_CENTER: rect.SetY( rect.GetY() - rect.GetHeight() / 2 ); break;
-    case GR_TEXT_V_ALIGN_BOTTOM: rect.SetY( rect.GetY() - rect.GetHeight() );     break;
+    case GR_TEXT_V_ALIGN_TOP:
+        break;
+
+    case GR_TEXT_V_ALIGN_CENTER:
+        rect.SetY( rect.GetY() - ( rect.GetHeight() + overbarOffset ) / 2 );
+        break;
+
+    case GR_TEXT_V_ALIGN_BOTTOM:
+        rect.SetY( rect.GetY() - ( rect.GetHeight() + overbarOffset ) );
+        break;
     }
 
     rect.Normalize();       // Make h and v sizes always >= 0
@@ -910,6 +921,11 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCorn
     VECTOR2I  corners[4];    // Buffer of polygon corners
 
     EDA_RECT rect = GetTextBox();
+
+    // TrueType bounding boxes aren't guaranteed to include all descenders, diacriticals, etc.
+    // Since we use this for zone knockouts and DRC, we need something more accurate.
+    if( GetDrawFont()->IsOutline() )
+        rect = GetEffectiveTextShape()->BBox();
 
     rect.Inflate( aClearanceValue );
 

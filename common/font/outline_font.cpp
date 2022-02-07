@@ -248,8 +248,6 @@ VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
     scaleFactor = scaleFactor * m_outlineFontSizeCompensation;
 
     VECTOR2I cursor( 0, 0 );
-    VECTOR2D topLeft( INT_MAX * 1.0, -INT_MAX * 1.0 );
-    VECTOR2D topRight( -INT_MAX * 1.0, -INT_MAX * 1.0 );
 
     for( unsigned int i = 0; i < glyphCount; i++ )
     {
@@ -257,9 +255,8 @@ VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
         {
             FT_Load_Glyph( face, glyphInfo[i].codepoint, FT_LOAD_NO_BITMAP );
 
-            // contours is a collection of all outlines in the glyph;
-            // example: glyph for 'o' generally contains 2 contours,
-            // one for the glyph outline and one for the hole
+            // contours is a collection of all outlines in the glyph; for example the 'o' glyph
+            // generally contains 2 contours, one for the glyph outline and one for the hole
             CONTOURS contours;
 
             OUTLINE_DECOMPOSER decomposer( face->glyph->outline );
@@ -276,11 +273,6 @@ VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
                 for( const VECTOR2D& v : points )
                 {
                     VECTOR2D pt( v + cursor );
-
-                    topLeft.x = std::min( topLeft.x, pt.x );
-                    topLeft.y = std::max( topLeft.y, pt.y );
-                    topRight.x = std::max( topRight.x, pt.x );
-                    topRight.y = std::max( topRight.y, pt.y );
 
                     if( IsSubscript( aTextStyle ) )
                         pt.y += m_subscriptVerticalOffset * scaler;
@@ -337,16 +329,36 @@ VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
         cursor.y += ( pos.y_advance * GLYPH_SIZE_SCALER );
     }
 
-    if( IsOverbar( aTextStyle ) && aGlyphs )
+    int      ascender = abs( face->size->metrics.ascender * GLYPH_SIZE_SCALER );
+    int      descender = abs( face->size->metrics.descender * GLYPH_SIZE_SCALER );
+    VECTOR2I extents( cursor.x * scaleFactor.x, ( ascender + descender ) * abs( scaleFactor.y ) );
+
+    // Font metrics don't include all descenders and diacriticals, so beef them up just a little.
+    extents.y *= 1.05;
+
+    // Shorten the bar a little so its rounded ends don't make it over-long
+    double barTrim = glyphSize.x * 0.125;
+
+    if( IsOverbar( aTextStyle ) )
     {
-        topLeft *= scaleFactor;
-        topRight *= scaleFactor;
+        VECTOR2I topLeft( aPosition );
+        VECTOR2I topRight( aPosition );
 
-        topLeft.y -= aSize.y * m_overbarOffset;
-        topRight.y -= aSize.y * m_overbarOffset;
+        topLeft.y += ascender * scaleFactor.y * ( 1.0 + m_overbarOffsetRatio );
+        topRight.y += ascender * scaleFactor.y * ( 1.0 + m_overbarOffsetRatio );
 
-        topLeft += aPosition;
-        topRight += aPosition;
+        topLeft.x += barTrim;
+        topRight.x += extents.x - barTrim;
+
+        extents.y *= ( 1.0 + m_overbarOffsetRatio + m_overbarOffsetRatio );
+        extents.x += barTrim;
+
+        if( IsItalic() )
+        {
+            topLeft.x += aSize.y * ITALIC_TILT;
+            topRight.x += aSize.y * ITALIC_TILT;
+            extents.x += aSize.y * ITALIC_TILT;
+        }
 
         if( !aAngle.IsZero() )
         {
@@ -354,14 +366,21 @@ VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
             RotatePoint( topRight, aOrigin, aAngle );
         }
 
-        double         overbarHeight = aSize.y * m_overbarHeightMultiplier;
-        SHAPE_POLY_SET overbar;
+        if( aGlyphs )
+        {
+            int thickness = abs( ascender * scaleFactor.y * m_overbarThicknessRatio );
+            int maxError = KiROUND( thickness / 48 );
 
-        TransformOvalToPolygon( overbar, topLeft, topRight, overbarHeight, overbarHeight / 8,
-                                ERROR_INSIDE );
+            if( IsBold() )
+                thickness = KiROUND( thickness * 1.5 );
 
-        std::unique_ptr<OUTLINE_GLYPH> overbarGlyph = std::make_unique<OUTLINE_GLYPH>( overbar );
-        aGlyphs->push_back( std::move( overbarGlyph ) );
+            SHAPE_POLY_SET poly;
+
+            TransformOvalToPolygon( poly, topLeft, topRight, thickness, maxError, ERROR_INSIDE );
+
+            std::unique_ptr<OUTLINE_GLYPH> overbarGlyph = std::make_unique<OUTLINE_GLYPH>( poly );
+            aGlyphs->push_back( std::move( overbarGlyph ) );
+        }
     }
 
     hb_buffer_destroy( buf );
@@ -371,7 +390,7 @@ VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
     if( aBBox )
     {
         aBBox->SetOrigin( aPosition.x, aPosition.y );
-        aBBox->SetEnd( cursorDisplacement );
+        aBBox->SetEnd( aPosition + extents );
     }
 
     return VECTOR2I( aPosition.x + cursorDisplacement.x, aPosition.y + cursorDisplacement.y );

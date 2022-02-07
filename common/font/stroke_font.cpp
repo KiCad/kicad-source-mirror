@@ -47,10 +47,6 @@ static constexpr double OVERBAR_POSITION_FACTOR = 1.33;
 ///< Scale factor for a glyph
 static constexpr double STROKE_FONT_SCALE = 1.0 / 21.0;
 
-///< Tilt factor for italic style (this is the scaling factor on dY relative coordinates to
-///< give a tilted shape)
-static constexpr double ITALIC_TILT = 1.0 / 8;
-
 static constexpr int FONT_OFFSET = -10;
 
 
@@ -279,6 +275,9 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
 
     VECTOR2D barOffset( 0.0, 0.0 );
 
+    // Shorten the bar a little so its rounded ends don't make it over-long
+    double   barTrim = glyphSize.x * 0.1;
+
     if( aTextStyle & TEXT_STYLE::OVERBAR )
     {
         barOffset.y = ComputeOverbarVerticalPosition( glyphSize.y );
@@ -286,8 +285,8 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
         if( aTextStyle & TEXT_STYLE::ITALIC )
             barOffset.x = barOffset.y * ITALIC_TILT;
 
-        VECTOR2D barStart( aPosition.x + barOffset.x, cursor.y - barOffset.y );
-        VECTOR2D barEnd( cursor.x + barOffset.x, cursor.y - barOffset.y );
+        VECTOR2D barStart( aPosition.x + barOffset.x + barTrim, cursor.y - barOffset.y );
+        VECTOR2D barEnd( cursor.x + barOffset.x - barTrim, cursor.y - barOffset.y );
 
         if( !aAngle.IsZero() )
         {
@@ -311,7 +310,7 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
     {
         aBBox->SetOrigin( aPosition );
         aBBox->SetEnd( cursor.x + barOffset.x - KiROUND( glyphSize.x * INTER_CHAR ),
-                       cursor.y + std::max( glyphSize.y, barOffset.y ) );
+                       cursor.y + std::max( glyphSize.y, barOffset.y * OVERBAR_POSITION_FACTOR ) );
         aBBox->Normalize();
     }
 

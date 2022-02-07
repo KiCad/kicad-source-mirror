@@ -50,6 +50,15 @@ enum TEXT_STYLE
 };
 
 
+/**
+ * Tilt factor for italic style (this is the scaling factor on dY relative coordinates to give
+ * a tilted shape).
+ * This is applied directly to stroke fonts, and is used as an estimate for outline fonts (which
+ * have the actual tilt built in to their polygonal glyph outlines).
+ */
+static constexpr double ITALIC_TILT = 1.0 / 8;
+
+
 using TEXT_STYLE_FLAGS = unsigned int;
 
 

@@ -2007,7 +2007,7 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
         }
 
         default:
-            aItem->TransformShapeWithClearanceToPolygon( poly, UNDEFINED_LAYER, 0,
+            shape->TransformShapeWithClearanceToPolygon( poly, UNDEFINED_LAYER, 0,
                                                          ARC_LOW_DEF, ERROR_OUTSIDE );
         }
     }

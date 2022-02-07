@@ -150,8 +150,8 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* item )
                 PCB_VIA* via = static_cast<PCB_VIA*>( item );
                 int      clearance = ( m_webWidth / 2 ) + via->GetSolderMaskExpansion();
 
-                item->TransformShapeWithClearanceToPolygon( *solderMask->GetFill( layer ), layer,
-                                                            clearance, m_maxError, ERROR_OUTSIDE );
+                via->TransformShapeWithClearanceToPolygon( *solderMask->GetFill( layer ), layer,
+                                                           clearance, m_maxError, ERROR_OUTSIDE );
 
                 m_itemTree->Insert( item, layer, m_largestClearance );
             }
