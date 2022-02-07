@@ -1276,8 +1276,11 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
 
                     for( PCB_TRACK* track : trackMap[pt] )
                     {
-                        if( layerSetCu.Contains( track->GetLayer() ) )
+                        if( track->GetStart() != track->GetEnd()
+                                && layerSetCu.Contains( track->GetLayer() ) )
+                        {
                             pt_count++;
+                        }
                     }
 
                     if( pt_count > 2 || gotVia || gotNonStartPad )
