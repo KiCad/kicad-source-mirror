@@ -142,6 +142,10 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
 
                     spokes += intersections.size() / 2;
 
+                    // This is our final "connected" test.
+                    if( spokes <= 0 )
+                        continue;
+
                     for( PCB_TRACK* track : connectivity->GetConnectedTracks( pad ) )
                     {
                         if( padOutline.PointInside( track->GetStart() ) )
@@ -156,8 +160,7 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
                         }
                     }
 
-                    // Note that spokes > 0 is our final "connected" test.
-                    if( spokes > 0 && spokes < minCount )
+                    if( spokes < minCount )
                     {
                         std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_STARVED_THERMAL );
 
