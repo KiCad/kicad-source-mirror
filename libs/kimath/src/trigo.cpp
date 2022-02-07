@@ -359,10 +359,10 @@ void RotatePoint( double* pX, double* pY, double angle )
 }
 
 
-const wxPoint CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd, double aAngle )
+const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aEnd, double aAngle )
 {
-    VECTOR2I start = aStart;
-    VECTOR2I end = aEnd;
+    VECTOR2D start = aStart;
+    VECTOR2D end = aEnd;
 
     if( aAngle < 0 )
     {
@@ -376,14 +376,14 @@ const wxPoint CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd, doubl
         aAngle = 360 - aAngle;
     }
 
-    int chord = ( start - end ).EuclideanNorm();
-    int r = ( chord / 2 ) / sin( aAngle * M_PI / 360.0 );
+    double chord = ( start - end ).EuclideanNorm();
+    double r = chord / ( 2.0 * sin( ( aAngle / 2.0 ) * M_PI / 180.0 ) );
 
-    VECTOR2I vec = end - start;
+    VECTOR2D vec = end - start;
     vec = vec.Resize( r );
-    vec = vec.Rotate( ( 180.0 - aAngle ) * M_PI / 360.0 );
+    vec = vec.Rotate( ( 90.0 - aAngle / 2.0 ) * M_PI / 180.0 );
 
-    return (wxPoint) ( start + vec );
+    return start + vec;
 }
 
 

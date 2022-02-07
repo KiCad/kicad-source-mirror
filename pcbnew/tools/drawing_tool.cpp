@@ -1929,7 +1929,9 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
                 frame()->SetMsgPanel( graphic );
                 break;
             }
-            else if( arcManager.GetStep() == KIGFX::PREVIEW::ARC_GEOM_MANAGER::SET_ANGLE )
+            // Don't show the edit panel if we can't represent the arc with it
+            else if( ( arcManager.GetStep() == KIGFX::PREVIEW::ARC_GEOM_MANAGER::SET_ANGLE )
+                    && ( arcManager.GetStartRadiusEnd() != arcManager.GetEndRadiusEnd() ) )
             {
                 frame()->OnEditItemRequest( graphic );
                 m_view->Update( &preview );
