@@ -724,7 +724,12 @@ include_directories( SYSTEM ${Boost_INCLUDE_DIR} )
 
 #
 # Libraries required for outline font support.
-find_package( Freetype REQUIRED )
+if( MSVC )
+# Earlier than 2.11.1 contain a crash bug specific to MSVC built freetype
+set( FREETYPE_MIN_VERSION 2.11.1 )
+endif()
+
+find_package( Freetype ${FREETYPE_MIN_VERSION} REQUIRED )
 include_directories( SYSTEM ${FREETYPE_INCLUDE_DIRS} )
 
 find_package( HarfBuzz REQUIRED )
