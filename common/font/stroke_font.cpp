@@ -236,19 +236,22 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
 
     for( wxUniChar c : aText )
     {
-        if( c >= (int) m_glyphBoundingBoxes->size() || c < ' ' )
+        // dd is the index into bounding boxes table
+        int dd = (signed) c - ' ';
+
+        if( dd >= (int) m_glyphBoundingBoxes->size() || dd < 0 )
         {
             // Filtering non existing glyphes and non printable chars
             if( c == '\t' )
                 c = ' ';
             else
                 c = '?';
+
+            // Fix the index:
+            dd = (signed) c - ' ';
         }
 
-        // Index into bounding boxes table
-        int dd = (signed) c - ' ';
-
-        if( dd <= 0 )
+        if( dd <= 0 )   // dd < 0 should not happen
         {
             // 'space' character - draw nothing, advance cursor position
             cursor.x += KiROUND( glyphSize.x * SPACE_WIDTH );
