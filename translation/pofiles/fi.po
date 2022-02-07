@@ -10,13 +10,14 @@
 # Simo Mattila <simo.mattila@kapsi.fi>, 2021.
 # Vesa Solonen <vesa.solonen@vli.fi>, 2021.
 # Petri Niemelä <petrinm@gmail.com>, 2022.
+# Henrik Kauhanen <henrik@kauhanen.se>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-03 17:11-0800\n"
-"PO-Revision-Date: 2022-02-05 15:45+0000\n"
-"Last-Translator: Petri Niemelä <petrinm@gmail.com>\n"
+"PO-Revision-Date: 2022-02-07 22:32+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -44,8 +45,9 @@ msgid "All Files"
 msgstr "Kaikki tiedostot"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:301
+#, fuzzy
 msgid "Build board outline"
-msgstr "Rakenna laudan ääriviivat"
+msgstr "Rakenna piirilevyn ääriviivat"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:506
 msgid "Create layers"
@@ -179,7 +181,7 @@ msgstr "Lataa…"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:385
 msgid "Load Raytracing: board"
-msgstr "Lataa säteentunnistus: lauta"
+msgstr "Lataa säteentunnistus: Piirilevy"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:556
 msgid "Load Raytracing: layers"
@@ -360,19 +362,19 @@ msgstr "Käännä vastapäivään"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Move board Left"
-msgstr "Siirrä levyä vasemmalle"
+msgstr "Siirrä piirilevyä vasemmalle"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:85
 msgid "Move board Right"
-msgstr "Siirrä levyä oikealle"
+msgstr "Siirrä piirilevyä oikealle"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:91
 msgid "Move board Up"
-msgstr "Siirrä lauta ylös"
+msgstr "Siirrä piirilevyä ylöspäin"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:97
 msgid "Move board Down"
-msgstr "Siirrä lauta alas"
+msgstr "Siirrä piirilevyä alaspäin"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:103
 msgid "Home view"
@@ -384,7 +386,7 @@ msgstr "Palauta näkymä"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:115
 msgid "Flip Board"
-msgstr "Käännä levy"
+msgstr "Käännä piirilevy"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:115
 msgid "Flip the board view"
@@ -405,19 +407,19 @@ msgstr "Näkymä edestä"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:132
 msgid "View Back"
-msgstr "Näkymä täkaa"
+msgstr "Näkymä takaa"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:138
 msgid "View Left"
-msgstr "Näkymä vasemmalle"
+msgstr "Näkymä vasemmalta"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:144
 msgid "View Right"
-msgstr "Näkymä oikealle"
+msgstr "Näkymä oikealta"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
 msgid "View Top"
-msgstr "Näkymä päältä"
+msgstr "Näkymä yläpuolelta"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:156
 msgid "View Bottom"
@@ -501,7 +503,7 @@ msgstr "Vaihda todenmukainen tila"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:239
 msgid "Toggle board body display"
-msgstr "Vaihda levyn rungon näyttö"
+msgstr "Vaihda piirilevyn rungon näyttö"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:243
 msgid "Show 3D Axis"
@@ -599,7 +601,7 @@ msgstr "Levyn rungon värit"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:66
 msgid "Use board stackup colors"
-msgstr "Käytä kortin kerrospinon värejä"
+msgstr "Käytä piirilevyn kerrospinon värejä"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:69
 msgid "Use colors:"
@@ -623,15 +625,15 @@ msgstr "Juotosmaski alapuoli:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:117
 msgid "Copper/surface finish:"
-msgstr "Kuparin/pinnan viimeistely:"
+msgstr "Kupari/pinnan viimeistely:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:130
 msgid "Board body:"
-msgstr "Levyn runko:"
+msgstr "Piirilevyn runko:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:24
 msgid "Board Layers"
-msgstr "Levyn kerrokset"
+msgstr "Piirilevyn kerrokset"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:31
 msgid "Show silkscreen layers"
@@ -679,7 +681,7 @@ msgstr "Todenmukainen tila"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:79
 msgid "Show board body"
-msgstr "Näytä levyn runko"
+msgstr "Näytä piirilevyn runko"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:82
 msgid "Show filled areas in zones"
@@ -687,11 +689,11 @@ msgstr "Näytä täytöt"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:85
 msgid "Use bare copper color for unplated copper"
-msgstr "Käytä kuparin väriä kasvattamattomalla kuparilla"
+msgstr "Käytä kuparin väriä pinnoittamattomalla kuparilla"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:86
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr "Käytä kasvatettuun ja peruskupariin eri värejä. (Hidas)"
+msgstr "Käytä pinnoitettuun ja peruskupariin eri värejä. (Hidas)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:93
 msgid "Material properties:"
@@ -4788,7 +4790,7 @@ msgstr ""
 #: common/fp_lib_table.cpp:300
 #, c-format
 msgid "fp-lib-table files contain no library named '%s'."
-msgstr "fp-lib-taulukotiedostot eivät sisällä kirjastoa lempinimellä '%s'."
+msgstr "fp-lib-taulukkotiedostot eivät sisällä kirjastoa nimellä '%s'."
 
 #: common/fp_lib_table.cpp:492
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
@@ -7005,7 +7007,7 @@ msgstr "ZIP-tiedosto"
 
 #: common/wildcards_and_files_ext.cpp:510
 msgid "GenCAD 1.4 board files"
-msgstr "GenCAD 1.4 -taulutiedostot"
+msgstr "GenCAD 1.4 piirilevytiedostot"
 
 #: common/wildcards_and_files_ext.cpp:516
 msgid "DXF Files"
@@ -19494,9 +19496,8 @@ msgid "Download Size"
 msgstr "Alas"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
-#, fuzzy
 msgid "Install Size"
-msgstr "Palauta koko"
+msgstr "Asennuskoko"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:85
 msgid "Compatible"
@@ -22225,7 +22226,7 @@ msgstr "On valettu tyynyjä"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:23
 msgid "Plated board edge"
-msgstr "Pinnoitettu laudan reuna"
+msgstr "Pinnoitettu piirilevyn reuna"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:31
 msgid "Copper finish:"
@@ -23128,7 +23129,7 @@ msgstr "Hallituksen asetukset"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:53
 msgid "Import Settings from Another Board..."
-msgstr "Tuo asetukset toisesta taulusta ..."
+msgstr "Tuo asetukset toisesta piirilevystä..."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:81
 msgid "Board Stackup"
@@ -23195,7 +23196,7 @@ msgid ""
 "Error importing settings from board:\n"
 "Associated project file %s could not be loaded"
 msgstr ""
-"Virhe asetusten tuomisessa taululta:\n"
+"Virhe asetusten tuomisessa piirilevyltä:\n"
 "Liitettyä projektitiedostoa %s ei voitu ladata"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:191 pcbnew/files.cpp:620
@@ -23328,7 +23329,7 @@ msgstr "Hallituksen nimi"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:673
 msgid "Board"
-msgstr "Lauta"
+msgstr "Piirilevy"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:681
 #: pcbnew/dialogs/dialog_board_statistics.cpp:689
@@ -23351,7 +23352,7 @@ msgstr "Virhe kirjoitettaessa tiedostoon '%s'."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:119
 msgid "Board Size"
-msgstr "Laudan koko"
+msgstr "Piirilevyn koko"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:200
 msgid "Subtract holes from board area"
@@ -24872,7 +24873,7 @@ msgstr "Sisällytä ja kappaleita"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:45
 msgid "Include &board outline layer"
-msgstr "Sisällytä ja laudan ääriviivat"
+msgstr "Sisällytä piirilevyn ääriviivat"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:48
 msgid "Include &vias"
@@ -25561,8 +25562,8 @@ msgid ""
 "Only use it for board houses which do not accept fully featured headers."
 msgstr ""
 "Ei suositeltu.\n"
-"Käytä sitä vain lautataloissa, jotka eivät hyväksy täysin varustettuja "
-"otsikoita."
+"Käytä sitä vain piirilevyvalmistajille, jotka eivät hyväksy täysin "
+"varustettuja otsikoita."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:60
 msgid "PTH and NPTH in single file"
@@ -25575,8 +25576,8 @@ msgid ""
 "file."
 msgstr ""
 "Ei suositeltu.\n"
-"Käytä vain lautataloille, jotka pyytävät yhdistetyn PTH: n ja NPTH: n "
-"yhdeksi tiedostoksi."
+"Käytä vain piirilevyvalmistajille, jotka pyytävät yhdistetyn PTH: n ja NPTH: "
+"n yhdeksi tiedostoksi."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Use route command (recommended)"
@@ -25597,7 +25598,7 @@ msgid ""
 " \"Use alternate mode\" uses another drill/ route command (G85)\n"
 "(Use it only if the recommended command does not work)"
 msgstr ""
-"Soikeat reiät aiheuttavat usein ongelmia lautarakenteille.\n"
+"Soikeat reiät aiheuttavat usein ongelmia piirilevyvalmistajille.\n"
 "\"Käytä reittikomentoa\" käyttää tavallista G00-reittikomentoa (suositus)\n"
 " \"Käytä vaihtoehtoista tilaa\" käyttää toista pora / reitti-komentoa (G85)\n"
 "(Käytä sitä vain, jos suositeltu komento ei toimi)"
@@ -25750,7 +25751,7 @@ msgstr "Markkerit"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:46
 msgid "Clear board"
-msgstr "Selkeä lauta"
+msgstr "Pyyhi piirilevy"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:55
 msgid "Filter Settings"
@@ -26226,7 +26227,8 @@ msgid ""
 "Invalid movement values.  Movement would place selection outside of the "
 "maximum board area."
 msgstr ""
-"Virheelliset liikearvot. Liike asettaisi valinnan maksimilaudan ulkopuolelle."
+"Virheelliset liikearvot. Liike asettaisi valinnan suurimman sallitun "
+"piirilevyn ulkopuolelle."
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around center of selection"
@@ -27683,7 +27685,7 @@ msgstr "Työntää"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Walk around"
-msgstr "Kävellä ympäriinsä"
+msgstr "Kierrä esteet"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:21
 msgid "Mode"
@@ -28951,13 +28953,14 @@ msgid "Copper to edge clearance:"
 msgstr "Kuparin reunan välys:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:293
+#, fuzzy
 msgid ""
 "The minimum clearance between the board edge and any copper item.  If set, "
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
 msgstr ""
-"Pienin välys kortin reunan ja minkä tahansa kuparin välillä. Jos asetettu, "
-"tämä on absoluuttinen minimi jota ei voi alittaa netclass:eilla, "
+"Pienin välys piirilevyn reunan ja minkä tahansa kuparin välillä. Jos "
+"asetettu, tämä on absoluuttinen minimi jota ei voi alittaa netclass:eilla, "
 "kustomisäännöillä tai muilla asetuksilla."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:313
@@ -29105,7 +29108,7 @@ msgstr ""
 "piirilevyssä (%i %i sijaan).\n"
 "\n"
 "Jatketaanko ja poistetaanko ylimääräiset sisäiset kuparikerrokset nykyisestä "
-"levystä?"
+"piirilevystä?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:778
 msgid "Inner Layers To Be Deleted"
@@ -31194,7 +31197,7 @@ msgstr "(kerros %s)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:337
 msgid "Checking board outline..."
-msgstr "Tarkistetaan laudan ääriviivoja ..."
+msgstr "Tarkistetaan piirilevyn ääriviivoja ..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:345
 msgid "Checking disabled layers..."
@@ -31460,7 +31463,7 @@ msgstr "Luo Gerber-työtiedosto \"%s\""
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:579
 msgid "Board stackup settings not up to date."
-msgstr "Kortin kerrospinon asetukset eivät ole ajantasalla."
+msgstr "Piirilevyn kerrospinon asetukset eivät ole ajantasalla."
 
 #: pcbnew/files.cpp:144
 msgid "All KiCad Board Files"
@@ -31887,8 +31890,9 @@ msgstr "Päivitä kortin footprint:it osoittamaan uuteen kirjastoon?"
 
 #: pcbnew/footprint_libraries_utils.cpp:878
 #: pcbnew/footprint_viewer_frame.cpp:716
+#, fuzzy
 msgid "No board currently open."
-msgstr "Ei lautaa ole tällä hetkellä auki."
+msgstr "Tällä hetkellä ei ole avattua piirilevyä."
 
 #: pcbnew/footprint_libraries_utils.cpp:905
 msgid ""
@@ -36915,7 +36919,7 @@ msgstr "Poistu nykyisestä ryhmästä"
 
 #: pcbnew/tools/pcb_actions.cpp:726
 msgid "Append Board..."
-msgstr "Liitä lauta ..."
+msgstr "Liitä piirilevy..."
 
 #: pcbnew/tools/pcb_actions.cpp:726
 msgid "Open another board and append its contents to this board"
@@ -37000,7 +37004,7 @@ msgstr "Kääntötaulunäkymä"
 
 #: pcbnew/tools/pcb_actions.cpp:806
 msgid "View board from the opposite side"
-msgstr "Katso lauta vastakkaiselta puolelta"
+msgstr "Katso piirilevyä vastakkaiselta puolelta"
 
 #: pcbnew/tools/pcb_actions.cpp:812
 msgid "Show Ratsnest"
@@ -37552,7 +37556,7 @@ msgstr "Vaihda reititin shove-tilaan"
 
 #: pcbnew/tools/pcb_actions.cpp:1358
 msgid "Router Walkaround Mode"
-msgstr "Reitittimen Walkaround-tila"
+msgstr "Reitittimen kiertotila"
 
 #: pcbnew/tools/pcb_actions.cpp:1358
 msgid "Switch router to walkaround mode"
