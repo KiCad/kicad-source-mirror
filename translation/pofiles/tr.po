@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-02-01 13:58+0000\n"
+"PO-Revision-Date: 2022-02-07 22:32+0000\n"
 "Last-Translator: Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v6/tr/>\n"
 "Language: tr\n"
@@ -13256,7 +13256,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:66
 #, c-format
 msgid "Cannot open file '%s'."
-msgstr ""
+msgstr "'%s' dosyası açılamıyor."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:314
 #, c-format
@@ -30195,7 +30195,7 @@ msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:76
 msgid "Error reading file: cannot determine length."
-msgstr ""
+msgstr "Dosya okunurken hata oluştu: uzunluk belirlenemiyor."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:87
 msgid "Error reading file."
