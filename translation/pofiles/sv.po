@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-03 17:11-0800\n"
-"PO-Revision-Date: 2022-02-07 19:42+0000\n"
-"Last-Translator: Axel Henriksson <axe.henriksson@gmail.com>\n"
+"PO-Revision-Date: 2022-02-07 22:32+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
 "Language: sv\n"
@@ -674,7 +674,7 @@ msgstr "Visa mönsterkortskropp"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:82
 msgid "Show filled areas in zones"
-msgstr "Visa zoner som fyllda områden"
+msgstr "Visa fyllda kopparytor i zoner"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:85
 msgid "Use bare copper color for unplated copper"
