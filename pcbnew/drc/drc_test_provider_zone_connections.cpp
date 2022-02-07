@@ -106,16 +106,21 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
                     if( m_drcEngine->IsErrorLimitExceeded( DRCE_STARVED_THERMAL ) )
                         return true;
 
-                    // Quick test for "connected":
+                    // Quick tests for "connected":
+                    //
+                    if( !pad->FlashLayer( layer ) )
+                        continue;
+
                     if( pad->GetNetCode() != zone->GetNetCode() || pad->GetNetCode() <= 0 )
                         continue;
 
-                    // More thorough test for "connected", but still not layer-specific:
-                    const KICAD_T type_zone[] = { PCB_ZONE_T, EOT };
+                    EDA_RECT item_boundingbox = pad->GetBoundingBox();
 
-                    if( !alg::contains( connectivity->GetConnectedItems( pad, type_zone ), zone ) )
+                    if( !item_boundingbox.Intersects( zone->GetCachedBoundingBox() ) )
                         continue;
 
+                    // If those passed, do a thorough test:
+                    //
                     constraint = bds.m_DRCEngine->EvalZoneConnection( pad, zone, layer );
                     ZONE_CONNECTION conn = constraint.m_ZoneConnection;
 
@@ -142,10 +147,12 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
 
                     spokes += intersections.size() / 2;
 
-                    // This is our final "connected" test.
                     if( spokes <= 0 )
                         continue;
 
+                    // Now we know we're connected, so see if there are any other manual spokes
+                    // added:
+                    //
                     for( PCB_TRACK* track : connectivity->GetConnectedTracks( pad ) )
                     {
                         if( padOutline.PointInside( track->GetStart() ) )
@@ -160,6 +167,8 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
                         }
                     }
 
+                    // And finally report it if there aren't enough:
+                    //
                     if( spokes < minCount )
                     {
                         std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_STARVED_THERMAL );
