@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-03 17:11-0800\n"
-"PO-Revision-Date: 2022-02-01 13:58+0000\n"
+"PO-Revision-Date: 2022-02-07 22:32+0000\n"
 "Last-Translator: Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4123,9 +4123,8 @@ msgstr "Grafik"
 #: common/eda_item.cpp:373 eeschema/lib_textbox.cpp:377
 #: eeschema/sch_textbox.cpp:381 pcbnew/fp_textbox.cpp:206
 #: pcbnew/pcb_textbox.cpp:184
-#, fuzzy
 msgid "Text Box"
-msgstr "Metin"
+msgstr "Metin kutusu"
 
 #: common/eda_item.cpp:323 common/eda_item.cpp:324 common/eda_item.cpp:325
 #: common/eda_item.cpp:326 common/eda_item.cpp:332 common/eda_item.cpp:333
@@ -4199,9 +4198,8 @@ msgstr "Ağ Etiketi"
 
 #: common/eda_item.cpp:353 eeschema/sch_label.cpp:750
 #: eeschema/sch_label.cpp:1046
-#, fuzzy
 msgid "Directive Label"
-msgstr "Ağ Etiketi"
+msgstr "Yönerge Etiketi"
 
 #: common/eda_item.cpp:354 eeschema/sch_label.cpp:751
 msgid "Global Label"
@@ -5535,11 +5533,11 @@ msgstr "Bu dil için KiCad dil dosyası kurulu değil."
 #: common/plugins/altium/altium_parser.cpp:43
 #, c-format
 msgid "Cannot open file '%s'."
-msgstr ""
+msgstr "'%s' dosyası açılamıyor."
 
 #: common/plugins/altium/altium_parser.cpp:52
 msgid "Error reading file: cannot determine length."
-msgstr ""
+msgstr "Dosya okunurken hata oluştu: uzunluk belirlenemiyor."
 
 #: common/plugins/altium/altium_parser.cpp:65
 msgid "Error reading file."
@@ -6227,9 +6225,8 @@ msgstr ""
 "Normal, soluk ve gizli arasında etkin olmayan katmanları döngüye ekleme"
 
 #: common/tool/actions.cpp:549
-#, fuzzy
 msgid "Draw Bounding Boxes"
-msgstr "Model Sınırlama Kutusunu Göster"
+msgstr "Sınırlayıcı Kutular Çiz"
 
 #: common/tool/actions.cpp:554
 msgid "Select item(s)"
@@ -6817,9 +6814,8 @@ msgid "Legacy footprint library files"
 msgstr "Eski ayak izi kitaplığı dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:367
-#, fuzzy
 msgid "Altium PCB footprint library files"
-msgstr "Geda PCB ayak izi kütüphanesi dosyaları"
+msgstr "Altium PCB ayak izi kitaplığı dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:373
 msgid "Eagle ver. 6.x XML library files"
