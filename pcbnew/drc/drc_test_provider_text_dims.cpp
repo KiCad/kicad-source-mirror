@@ -126,21 +126,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                 KIFONT::FONT* font = text->GetDrawFont();
 
                 int actualH = size.y;
-                int actualT = 0;
-
-                if( font->IsStroke() )
-                {
-                    actualT = text->GetTextThickness();
-                }
-                else if( font->IsOutline() )
-                {
-                    // The best we can do for outline fonts is estimate their thickness based
-                    // on their fontweight.
-                    if( font->IsBold() )
-                        actualT = GetPenSizeForBold( size.x );
-                    else
-                        actualT = GetPenSizeForNormal( size.x );
-                }
+                int actualT = text->GetTextThickness();
 
                 if( !m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_HEIGHT ) )
                 {
@@ -194,6 +180,20 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
 
                 if( !m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_THICKNESS ) )
                 {
+                    if( font->IsOutline() )
+                    {
+                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TEXT_THICKNESS );
+
+                        m_msg = _( "(TrueType font characters can have variable thickness)" );
+
+                        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+                        drcItem->SetItems( item );
+                        drcItem->SetViolatingRule( constraint.GetParentRule() );
+
+                        reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
+                        return true;
+                    }
+
                     constraint = m_drcEngine->EvalRules( TEXT_THICKNESS_CONSTRAINT, item, nullptr,
                                                           item->GetLayer() );
                     bool fail_min = false;
