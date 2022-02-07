@@ -358,10 +358,10 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
 
     if( m_item->GetShape() == SHAPE_T::ARC )
     {
-        m_item->SetCenter( CalcArcCenter( m_item->GetStart(), m_item->GetEnd(),
-                                          m_angle.GetAngleValue() ) );
-    }
+        VECTOR2D center = CalcArcCenter( m_item->GetStart(), m_item->GetEnd(), m_angle.GetAngleValue() );
 
+        m_item->SetCenter( center );
+    }
     if( m_fp_item )
     {
         // We are editing a footprint; init the item coordinates relative to the footprint anchor.
@@ -429,10 +429,28 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
             error_msgs.Add( _( "The arc angle cannot be zero." ) );
 
         if( m_startX.GetValue() == m_endX.GetValue() && m_startY.GetValue() == m_endY.GetValue() )
-            error_msgs.Add( _( "The radius cannot be zero." ) );
+        {
+            error_msgs.Add( wxString::Format( _( "Invalid Arc with radius %f and angle %f" ),
+                                      0.0, m_angle.GetDoubleValue() ) );
+        }
+        else
+        {
+            VECTOR2D start( m_startX.GetValue(), m_startY.GetValue() );
+            VECTOR2D end( m_endX.GetValue(), m_endY.GetValue() );
+            VECTOR2D center = CalcArcCenter( start, end, m_angle.GetAngleValue() );
 
+            double radius = ( center - start ).EuclideanNorm();
+            double max_offset = std::max( std::abs( center.x ) + radius,
+                                          std::abs( center.y ) + radius );
+
+            if( max_offset >= ( std::numeric_limits<VECTOR2I::coord_type>::max() / 2 )
+                    || center == start || center == end )
+            {
+                error_msgs.Add( wxString::Format( _( "Invalid Arc with radius %f and angle %f" ),
+                                          radius, m_angle.GetDoubleValue() ) );
+            }
+        }
         break;
-
     case SHAPE_T::CIRCLE:
         // Check radius.
         if( m_endX.GetValue() == 0 )

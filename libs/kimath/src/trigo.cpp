@@ -298,7 +298,7 @@ void RotatePoint( double* pX, double* pY, const EDA_ANGLE& aAngle )
 }
 
 
-const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd,
+const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aEnd,
                               const EDA_ANGLE& aAngle )
 {
     EDA_ANGLE angle( aAngle );
@@ -317,14 +317,14 @@ const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd,
         angle = ANGLE_360 - angle;
     }
 
-    int chord = ( start - end ).EuclideanNorm();
-    int r = ( chord / 2 ) / ( angle / 2 ).Sin();
+    double chord = ( start - end ).EuclideanNorm();
+    double r = ( chord / 2.0 ) / ( angle / 2.0 ).Sin();
 
-    VECTOR2I vec = end - start;
+    VECTOR2D vec = end - start;
     vec = vec.Resize( r );
     RotatePoint( vec, -( ANGLE_180 - angle ) / 2 );
 
-    return VECTOR2I( start + vec );
+    return VECTOR2D( start + vec );
 }
 
 
