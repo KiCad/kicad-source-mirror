@@ -373,7 +373,7 @@ public:
     /**
      * Returns the distance (in RGB space) between two colors.
      */
-    int Distance( const COLOR4D& other ) const;
+    double Distance( const COLOR4D& other ) const;
 
     /**
      * Returns a legacy color ID that is closest to the given 8-bit RGB values.

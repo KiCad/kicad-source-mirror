@@ -510,7 +510,7 @@ const COLOR4D COLOR4D::BLACK( 0, 0, 0, 1 );
 const COLOR4D COLOR4D::CLEAR( 1, 0, 1, 0 );
 
 
-int COLOR4D::Distance( const COLOR4D& other ) const
+double COLOR4D::Distance( const COLOR4D& other ) const
 {
     return ( r - other.r ) * ( r - other.r )
             + ( g - other.g ) * ( g - other.g )
