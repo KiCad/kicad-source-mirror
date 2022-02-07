@@ -1,10 +1,10 @@
-# boonchai k. <kicadthai@gmail.com>, 2021.
+# boonchai k. <kicadthai@gmail.com>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-03 17:11-0800\n"
-"PO-Revision-Date: 2021-12-17 00:56+0000\n"
+"PO-Revision-Date: 2022-02-07 22:32+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.10\n"
+"X-Generator: Weblate 4.11-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -1655,28 +1655,24 @@ msgid "&OK"
 msgstr "&OK"
 
 #: common/dialog_shim.cpp:659
-#, fuzzy
 msgid "&Cancel"
-msgstr "ยกเลิก"
+msgstr "(&C)ยกเลิก"
 
 #: common/dialog_shim.cpp:660
 msgid "&Yes"
-msgstr ""
+msgstr "(&Y)ใช่"
 
 #: common/dialog_shim.cpp:661
-#, fuzzy
 msgid "&No"
-msgstr "ไม่ใช่"
+msgstr "(&N)ไม่ใช่"
 
 #: common/dialog_shim.cpp:662
-#, fuzzy
 msgid "&Apply"
-msgstr "นำมาใช้"
+msgstr "(&A)นำไปใช้"
 
 #: common/dialog_shim.cpp:663
-#, fuzzy
 msgid "&Save"
-msgstr "บันทึก"
+msgstr "(&S)บันทึก"
 
 #: common/dialog_shim.cpp:664 common/dialog_shim.cpp:665
 #: common/eda_base_frame.cpp:463
@@ -2956,7 +2952,7 @@ msgstr "(การแก้ปัญหานี้จะปรับปรุ�
 
 #: common/dialogs/panel_common_settings_base.cpp:171
 msgid "High-contrast mode dimming factor:"
-msgstr ""
+msgstr "ปัจจัยการลดแสงของโหมดความแตกต่างสูง:"
 
 #: common/dialogs/panel_common_settings_base.cpp:178
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:75
@@ -3359,9 +3355,8 @@ msgstr "เส้นประ-จุด"
 
 #: common/dialogs/panel_setup_netclasses.cpp:97 common/eda_shape.cpp:1605
 #: include/stroke_params.h:74
-#, fuzzy
 msgid "Dash-Dot-Dot"
-msgstr "เส้นประ-จุด"
+msgstr "เส้นประ-จุด-จุด"
 
 #: common/dialogs/panel_setup_netclasses.cpp:442
 msgid "Netclass must have a name."
@@ -4063,9 +4058,8 @@ msgstr "กราฟิก"
 #: common/eda_item.cpp:373 eeschema/lib_textbox.cpp:377
 #: eeschema/sch_textbox.cpp:381 pcbnew/fp_textbox.cpp:206
 #: pcbnew/pcb_textbox.cpp:184
-#, fuzzy
 msgid "Text Box"
-msgstr "ตำแหน่งข้อความ X"
+msgstr "กล่องข้อความ"
 
 #: common/eda_item.cpp:323 common/eda_item.cpp:324 common/eda_item.cpp:325
 #: common/eda_item.cpp:326 common/eda_item.cpp:332 common/eda_item.cpp:333
@@ -4139,9 +4133,8 @@ msgstr "ป้ายชื่อเน็ต"
 
 #: common/eda_item.cpp:353 eeschema/sch_label.cpp:750
 #: eeschema/sch_label.cpp:1046
-#, fuzzy
 msgid "Directive Label"
-msgstr "ป้ายชื่อเน็ต"
+msgstr "ป้ายชื่อคำสั่ง"
 
 #: common/eda_item.cpp:354 eeschema/sch_label.cpp:751
 msgid "Global Label"
@@ -4633,14 +4626,13 @@ msgstr "เกิดปัญหาเขียนไฟล์การปรั
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:70
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:68
 #: eeschema/dialogs/dialog_text_properties_base.cpp:68
-#, fuzzy
 msgid "Default Font"
-msgstr "หน่วยปริยาย:"
+msgstr "รูปแบบอักษรปริยาย"
 
 #: common/font/fontconfig.cpp:110
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading font '%s'."
-msgstr "เกิดข้อผิดพลาดในการโหลดพีซีบี '%s'"
+msgstr "เกิดผิดพลาดอ่านแบบอักษร '%s'"
 
 #: common/font/fontconfig.cpp:112
 #, fuzzy, c-format
