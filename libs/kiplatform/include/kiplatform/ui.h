@@ -115,6 +115,11 @@ namespace KIPLATFORM
          * Implemented only on GTK.
          */
         void SetOverlayScrolling( const wxWindow* aWindow, bool overlay );
+
+        /**
+         * If the user has disabled icons system-wide, we check that here
+         */
+        bool AllowIconsInMenus();
     }
 }
 

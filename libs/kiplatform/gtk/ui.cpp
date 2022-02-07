@@ -134,3 +134,13 @@ void KIPLATFORM::UI::SetOverlayScrolling( const wxWindow* aWindow, bool overlay 
     gtk_scrolled_window_set_overlay_scrolling( GTK_SCROLLED_WINDOW( aWindow->GetHandle() ),
                                                overlay );
 }
+
+
+bool KIPLATFORM::UI::AllowIconsInMenus()
+{
+    gboolean allowed = 1;
+
+    g_object_get( gtk_settings_get_default(), "gtk-menu-images", &allowed, NULL );
+
+    return !!allowed;
+}

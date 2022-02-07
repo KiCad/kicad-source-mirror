@@ -28,6 +28,7 @@
 #include <dialog_shim.h>
 #include <gal/dpi_scaling.h>
 #include <kiface_base.h>
+#include <kiplatform/ui.h>
 #include <pgm_base.h>
 #include <id.h>
 #include <settings/common_settings.h>
@@ -131,6 +132,9 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aP
         m_canvasScaleCtrl = nullptr;
         m_canvasScaleAuto->Show( false );
     }
+
+    // Hide the option of icons in menus for platforms that do not support them
+    m_checkBoxIconsInMenus->Show( KIPLATFORM::UI::AllowIconsInMenus() );
 
     /*
      * Font scaling hacks are only needed on GTK under wxWidgets 3.0.
