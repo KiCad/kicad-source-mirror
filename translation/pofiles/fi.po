@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-02-07 22:32+0000\n"
+"PO-Revision-Date: 2022-02-08 01:49+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v6/fi/>\n"
 "Language: fi\n"
@@ -735,23 +735,20 @@ msgid "Realistic"
 msgstr "Todenmukainen"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:97
-#, fuzzy
 msgid "Solid colors"
-msgstr "Valinnan värit"
+msgstr "Tasaiset värit"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:97
-#, fuzzy
 msgid "CAD colors"
-msgstr "Värit"
+msgstr "CAD-värit"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:110
 msgid "Camera Options"
 msgstr "Kameran asetukset"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:115
-#, fuzzy
 msgid "Rotation increment:"
-msgstr "Kierron lisäys:"
+msgstr "Kierron askel:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:123
 #: common/base_units.cpp:477 pcb_calculator/widgets/unit_selector.cpp:130
@@ -775,26 +772,24 @@ msgstr "Animaation nopeus:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:23
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:21
-#, fuzzy
 msgid "Rendering Options"
-msgstr "Render-asetukset"
+msgstr "Piirron asetukset"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:25
 msgid "Show model bounding boxes"
-msgstr "Näytä mallin rajoituslaatikot"
+msgstr "Näytä mallin rajausalueet"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:28
 msgid "Show copper thickness"
 msgstr "Näytä kuparin paksuus"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:31
-#, fuzzy
 msgid "Highlight items on rollover"
-msgstr "Korostetut kohteet"
+msgstr "Korosta kohteet osoittimen alla"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:37
 msgid "Anti-aliasing:"
-msgstr "Antialiasointi:"
+msgstr "Reunojen pehmennys:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:41
 msgid "Disabled"
@@ -827,7 +822,7 @@ msgstr "Liikkumisen aikana"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:65
 msgid "Disable anti-aliasing"
-msgstr "Poista anti-aliasing käytöstä"
+msgstr "Poista reunojen pehmennys käytöstä"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:68
 msgid "Disable thickness"
@@ -835,26 +830,24 @@ msgstr "Poista paksuus käytöstä"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:71
 msgid "Disable vias"
-msgstr "Poista viias käytöstä"
+msgstr "Poista läpiviennit käytöstä"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:74
 msgid "Disable holes"
 msgstr "Poista reiät käytöstä"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
-#, fuzzy
 msgid "Procedural textures (slow)"
-msgstr "Menettelytavat"
+msgstr "Menetelmäpohjaiset pintakuviot (hidas)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
 #, fuzzy
 msgid "Add floor (slow)"
-msgstr "Lisää kerros"
+msgstr "Lisää alusta/lattia (hidas)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:35
-#, fuzzy
 msgid "Anti-aliasing (slow)"
-msgstr "Anti-aliasing"
+msgstr "Reunojen pehmennys (hidas)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
 #, fuzzy
@@ -1285,8 +1278,9 @@ msgid "Output Parameters"
 msgstr "Lähtöparametrit"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
+#, fuzzy
 msgid "Lock height/width ratio"
-msgstr "Lukon korkeuden / leveyden suhde"
+msgstr "Lukitse korkeus/leveys-suhde"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:122
 #: common/dialogs/dialog_page_settings_base.cpp:32
@@ -1323,7 +1317,7 @@ msgstr "Jalanjälki (.kicad_mod-tiedosto)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Postscript (.ps file)"
-msgstr "Jälkikirjoitus (.ps-tiedosto)"
+msgstr "Postscript (.ps-tiedosto)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 #, fuzzy
@@ -1796,8 +1790,9 @@ msgid "Report"
 msgstr "Raportoi"
 
 #: common/dialogs/dialog_color_picker.cpp:94
+#, fuzzy
 msgid "Clear Color"
-msgstr "Kirkas väri"
+msgstr "Palauta väri"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
@@ -1938,6 +1933,7 @@ msgstr ""
 "nimikenttä hyväksyy vain isot kirjaimet, numerot ja alaviivat."
 
 #: common/dialogs/dialog_configure_paths.cpp:645
+#, fuzzy
 msgid "Environment Variable Help"
 msgstr "Ympäristömuuttuja"
 
