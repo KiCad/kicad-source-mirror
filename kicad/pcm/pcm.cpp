@@ -64,7 +64,7 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER( wxWindow* aParent ) : m_dialog( 
 {
     // Get 3rd party path
     const ENV_VAR_MAP& env = Pgm().GetLocalEnvVariables();
-    auto               it = env.find( "KICAD6_3RD_PARTY" );
+    auto               it = env.find( wxT( "KICAD6_3RD_PARTY" ) );
 
     if( it != env.end() && !it->second.GetValue().IsEmpty() )
         m_3rdparty_path = it->second.GetValue();
@@ -72,9 +72,9 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER( wxWindow* aParent ) : m_dialog( 
         m_3rdparty_path = PATHS::GetDefault3rdPartyPath();
 
     // Read and store pcm schema
-    wxFileName schema_file( PATHS::GetStockDataPath( true ), "pcm.v1.schema.json" );
+    wxFileName schema_file( PATHS::GetStockDataPath( true ), wxT( "pcm.v1.schema.json" ) );
     schema_file.Normalize();
-    schema_file.AppendDir( "schemas" );
+    schema_file.AppendDir( wxT( "schemas" ) );
 
     std::ifstream  schema_stream( schema_file.GetFullPath().ToUTF8() );
     nlohmann::json schema;
@@ -94,7 +94,7 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER( wxWindow* aParent ) : m_dialog( 
     }
 
     // Load currently installed packages
-    wxFileName f( SETTINGS_MANAGER::GetUserSettingsPath(), "installed_packages.json" );
+    wxFileName f( SETTINGS_MANAGER::GetUserSettingsPath(), wxT( "installed_packages.json" ) );
 
     if( f.FileExists() )
     {
@@ -154,14 +154,14 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER( wxWindow* aParent ) : m_dialog( 
 
                     entry.package.name = subdir;
                     entry.package.identifier = actual_package_id;
-                    entry.current_version = "0.0";
+                    entry.current_version = wxT( "0.0" );
                     entry.repository_name = wxT( "<unknown>" );
 
                     if( stat_code == 0 )
                         entry.install_timestamp = stat.st_mtime;
 
                     PACKAGE_VERSION version;
-                    version.version = "0.0";
+                    version.version = wxT( "0.0" );
                     version.status = PVS_STABLE;
                     version.kicad_version = KICAD_MAJOR_MINOR_VERSION;
 
@@ -336,7 +336,7 @@ const PCM_REPOSITORY&
 PLUGIN_CONTENT_MANAGER::getCachedRepository( const wxString& aRepositoryId ) const
 {
     wxASSERT_MSG( m_repository_cache.find( aRepositoryId ) != m_repository_cache.end(),
-                  "Repository is not cached." );
+                  wxT( "Repository is not cached." ) );
 
     return m_repository_cache.at( aRepositoryId );
 }
@@ -371,10 +371,10 @@ const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryI
     bool packages_cache_exists = false;
 
     // First load repository data from local filesystem if available.
-    wxFileName repo_cache = wxFileName( m_3rdparty_path, "repository.json" );
-    repo_cache.AppendDir( "cache" );
+    wxFileName repo_cache = wxFileName( m_3rdparty_path, wxT( "repository.json" ) );
+    repo_cache.AppendDir( wxT( "cache" ) );
     repo_cache.AppendDir( aRepositoryId );
-    wxFileName packages_cache( repo_cache.GetPath(), "packages.json" );
+    wxFileName packages_cache( repo_cache.GetPath(), wxT( "packages.json" ) );
 
     if( repo_cache.FileExists() && packages_cache.FileExists() )
     {
@@ -438,7 +438,7 @@ const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryI
         // Check resources file date, redownload if needed
         PCM_RESOURCE_REFERENCE& resources = current_repo.resources.get();
 
-        wxFileName resource_file( repo_cache.GetPath(), "resources.zip" );
+        wxFileName resource_file( repo_cache.GetPath(), wxT( "resources.zip" ) );
 
         time_t mtime = 0;
 
@@ -495,7 +495,7 @@ void PLUGIN_CONTENT_MANAGER::preparePackage( PCM_PACKAGE& aPackage )
         if( ver.version_epoch )
             epoch = ver.version_epoch.get();
 
-        wxStringTokenizer version_tokenizer( ver.version, "." );
+        wxStringTokenizer version_tokenizer( ver.version, wxT( "." ) );
 
         major = wxAtoi( version_tokenizer.GetNextToken() );
 
@@ -512,7 +512,7 @@ void PLUGIN_CONTENT_MANAGER::preparePackage( PCM_PACKAGE& aPackage )
 
         auto parse_major_minor = []( const wxString& version )
         {
-            wxStringTokenizer tokenizer( version, "." );
+            wxStringTokenizer tokenizer( version, wxT( "." ) );
             int               ver_major = wxAtoi( tokenizer.GetNextToken() );
             int               ver_minor = wxAtoi( tokenizer.GetNextToken() );
             return std::tuple<int, int>( ver_major, ver_minor );
@@ -594,7 +594,7 @@ void PLUGIN_CONTENT_MANAGER::DiscardRepositoryCache( const wxString& aRepository
         m_repository_cache.erase( aRepositoryId );
 
     wxFileName repo_cache( m_3rdparty_path, "" );
-    repo_cache.AppendDir( "cache" );
+    repo_cache.AppendDir( wxT( "cache" ) );
     repo_cache.AppendDir( aRepositoryId );
 
     if( repo_cache.DirExists() )
@@ -684,7 +684,7 @@ PLUGIN_CONTENT_MANAGER::~PLUGIN_CONTENT_MANAGER()
             js["packages"].emplace_back( entry.second );
         }
 
-        wxFileName    f( SETTINGS_MANAGER::GetUserSettingsPath(), "installed_packages.json" );
+        wxFileName    f( SETTINGS_MANAGER::GetUserSettingsPath(), wxT( "installed_packages.json" ) );
         std::ofstream stream( f.GetFullPath().ToUTF8() );
 
         stream << std::setw( 4 ) << js << std::endl;
@@ -714,7 +714,7 @@ const wxString&
 PLUGIN_CONTENT_MANAGER::GetInstalledPackageVersion( const wxString& aPackageId ) const
 {
     wxASSERT_MSG( m_installed.find( aPackageId ) != m_installed.end(),
-                  "Installed package not found." );
+                  wxT( "Installed package not found." ) );
 
     return m_installed.at( aPackageId ).current_version;
 }
@@ -723,7 +723,7 @@ PLUGIN_CONTENT_MANAGER::GetInstalledPackageVersion( const wxString& aPackageId )
 int PLUGIN_CONTENT_MANAGER::GetPackageSearchRank( const PCM_PACKAGE& aPackage,
                                                   const wxString&    aSearchTerm )
 {
-    wxArrayString terms = wxStringTokenize( aSearchTerm.Lower(), " ", wxTOKEN_STRTOK );
+    wxArrayString terms = wxStringTokenize( aSearchTerm.Lower(), wxT( " " ), wxTOKEN_STRTOK );
     int           rank = 0;
 
     const auto find_term_matches = [&]( const wxString& str )
@@ -782,8 +782,8 @@ PLUGIN_CONTENT_MANAGER::GetRepositoryPackageBitmaps( const wxString& aRepository
 {
     std::unordered_map<wxString, wxBitmap> bitmaps;
 
-    wxFileName resources_file = wxFileName( m_3rdparty_path, "resources.zip" );
-    resources_file.AppendDir( "cache" );
+    wxFileName resources_file = wxFileName( m_3rdparty_path, wxT( "resources.zip" ) );
+    resources_file.AppendDir( wxT( "cache" ) );
     resources_file.AppendDir( aRepositoryId );
 
     if( !resources_file.FileExists() )
@@ -800,7 +800,7 @@ PLUGIN_CONTENT_MANAGER::GetRepositoryPackageBitmaps( const wxString& aRepository
         wxArrayString path_parts =
                 wxSplit( entry->GetName(), wxFileName::GetPathSeparator(), (wxChar) 0 );
 
-        if( path_parts.size() != 2 || path_parts[1] != "icon.png" )
+        if( path_parts.size() != 2 || path_parts[1] != wxT( "icon.png" ) )
             continue;
 
         try
@@ -812,7 +812,7 @@ PLUGIN_CONTENT_MANAGER::GetRepositoryPackageBitmaps( const wxString& aRepository
         catch( ... )
         {
             // Log and ignore
-            wxLogTrace( "Error loading png bitmap for entry %s from %s", entry->GetName(),
+            wxLogTrace( wxT( "Error loading png bitmap for entry %s from %s" ), entry->GetName(),
                         resources_file.GetFullPath() );
         }
     }
@@ -825,19 +825,19 @@ std::unordered_map<wxString, wxBitmap> PLUGIN_CONTENT_MANAGER::GetInstalledPacka
 {
     std::unordered_map<wxString, wxBitmap> bitmaps;
 
-    wxFileName resources_dir_fn( m_3rdparty_path, "" );
-    resources_dir_fn.AppendDir( "resources" );
+    wxFileName resources_dir_fn( m_3rdparty_path, wxT( "" ) );
+    resources_dir_fn.AppendDir( wxT( "resources" ) );
     wxDir resources_dir( resources_dir_fn.GetPath() );
 
     if( !resources_dir.IsOpened() )
         return bitmaps;
 
     wxString subdir;
-    bool     more = resources_dir.GetFirst( &subdir, "", wxDIR_DIRS | wxDIR_HIDDEN );
+    bool     more = resources_dir.GetFirst( &subdir, wxT( "" ), wxDIR_DIRS | wxDIR_HIDDEN );
 
     while( more )
     {
-        wxFileName icon( resources_dir_fn.GetPath(), "icon.png" );
+        wxFileName icon( resources_dir_fn.GetPath(), wxT( "icon.png" ) );
         icon.AppendDir( subdir );
 
         if( icon.FileExists() )
@@ -853,7 +853,7 @@ std::unordered_map<wxString, wxBitmap> PLUGIN_CONTENT_MANAGER::GetInstalledPacka
             catch( ... )
             {
                 // Log and ignore
-                wxLogTrace( "Error loading png bitmap from %s", icon.GetFullPath() );
+                wxLogTrace( wxT( "Error loading png bitmap from %s" ), icon.GetFullPath() );
             }
         }
 

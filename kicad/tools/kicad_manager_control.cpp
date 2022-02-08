@@ -156,7 +156,7 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     wxString    envStr;
 
     // KiCad system template path.
-    ENV_VAR_MAP_CITER it =  Pgm().GetLocalEnvVariables().find( "KICAD6_TEMPLATE_DIR" );
+    ENV_VAR_MAP_CITER it =  Pgm().GetLocalEnvVariables().find( wxT( "KICAD6_TEMPLATE_DIR" ) );
 
     if( it != Pgm().GetLocalEnvVariables().end() && it->second.GetValue() != wxEmptyString )
     {
@@ -165,7 +165,7 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     }
 
     // User template path.
-    it = Pgm().GetLocalEnvVariables().find( "KICAD_USER_TEMPLATE_DIR" );
+    it = Pgm().GetLocalEnvVariables().find( wxT( "KICAD_USER_TEMPLATE_DIR" ) );
 
     if( it != Pgm().GetLocalEnvVariables().end() && it->second.GetValue() != wxEmptyString )
     {
@@ -257,7 +257,7 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
             wxString extendedMsg = _( "Overwriting files:" ) + "\n";
 
             for( const auto& file : overwrittenFiles )
-                extendedMsg += "\n" + file.GetFullName();
+                extendedMsg += wxT( "\n" ) + file.GetFullName();
 
             KIDIALOG msgDlg( m_frame, _( "Similar files already exist in the destination folder." ),
                              _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
@@ -297,8 +297,8 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
 int KICAD_MANAGER_CONTROL::openProject( const wxString& aDefaultDir )
 {
     wxString wildcard = AllProjectFilesWildcard()
-                        + "|" + ProjectFileWildcard()
-                        + "|" + LegacyProjectFileWildcard();
+                        + wxT( "|" ) + ProjectFileWildcard()
+                        + wxT( "|" ) + LegacyProjectFileWildcard();
 
     wxFileDialog dlg( m_frame, _( "Open Existing Project" ), aDefaultDir, wxEmptyString, wildcard,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
@@ -412,7 +412,7 @@ public:
                || ext == LegacySymbolDocumentFileExtension
                || ext == KiCadSymbolLibFileExtension
                || ext == NetlistFileExtension
-               || destFile.GetName() == "sym-lib-table" )
+               || destFile.GetName() == wxT( "sym-lib-table" ) )
         {
             KIFACE* eeschema = m_frame->Kiway().KiFACE( KIWAY::FACE_SCH );
             eeschema->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
@@ -424,7 +424,7 @@ public:
                || ext == KiCadFootprintFileExtension
                || ext == LegacyFootprintLibPathExtension
                || ext == FootprintAssignmentFileExtension
-               || destFile.GetName() == "fp-lib-table" )
+               || destFile.GetName() == wxT( "fp-lib-table" ) )
         {
             KIFACE* pcbnew = m_frame->Kiway().KiFACE( KIWAY::FACE_PCB );
             pcbnew->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
@@ -452,8 +452,8 @@ public:
             wxString  destName = destFile.GetName();
             wxUniChar pathSep = wxFileName::GetPathSeparator();
 
-            wxString srcProjectFootprintLib = pathSep + m_projectName + ".pretty" + pathSep;
-            wxString newProjectFootprintLib = pathSep + m_newProjectName + ".pretty" + pathSep;
+            wxString srcProjectFootprintLib = pathSep + m_projectName + wxT( ".pretty" ) + pathSep;
+            wxString newProjectFootprintLib = pathSep + m_newProjectName + wxT( ".pretty" ) + pathSep;
 
             if( destPath.StartsWith( m_projectDirPath ) )
             {
@@ -492,12 +492,12 @@ public:
 
         if( destDir.GetName() == m_projectName )
         {
-            if( destDir.GetExt() == "pretty" )
+            if( destDir.GetExt() == wxT( "pretty" ) )
                 destDir.SetName( m_newProjectName );
 #if 0
             // WAYNE STAMBAUGH TODO:
             // If we end up with a symbol equivalent to ".pretty" we'll want to handle it here....
-            else if( destDir.GetExt() == "sym_lib_dir_extension" )
+            else if( destDir.GetExt() == wxT( "sym_lib_dir_extension" ) )
                 destDir.SetName( m_newProjectName );
 #endif
         }
@@ -507,7 +507,7 @@ public:
             wxString msg;
 
             if( !m_errors.empty() )
-                m_errors += "\n";
+                m_errors += wxT( "\n" );
 
             msg.Printf( _( "Cannot copy folder '%s'." ), destDir.GetFullPath() );
             m_errors += msg;
@@ -782,7 +782,7 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
     else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::editOtherPCB ) )
         execFile = PCBNEW_EXE;
     else
-        wxFAIL_MSG( "Execute(): unexpected request" );
+        wxFAIL_MSG( wxT( "Execute(): unexpected request" ) );
 
     if( execFile.IsEmpty() )
         return 0;

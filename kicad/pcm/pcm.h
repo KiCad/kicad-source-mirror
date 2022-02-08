@@ -36,12 +36,12 @@
 
 ///< Contains list of all valid directories that get extracted from a package archive
 const std::unordered_set<wxString> PCM_PACKAGE_DIRECTORIES( {
-        "plugins",
-        "footprints",
-        "3dmodels",
-        "symbols",
-        "resources",
-        "colors",
+        wxT( "plugins" ),
+        wxT( "footprints" ),
+        wxT( "3dmodels" ),
+        wxT( "symbols" ),
+        wxT( "resources" ),
+        wxT( "colors" ),
 } );
 
 

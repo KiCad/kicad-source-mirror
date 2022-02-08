@@ -210,7 +210,7 @@ void DIALOG_TEMPLATE_SELECTOR::buildPageContent( const wxString& aPath, int aPag
 
     if( dir.Open( aPath ) )
     {
-        if( dir.HasSubDirs( "meta" ) )
+        if( dir.HasSubDirs( wxT( "meta" ) ) )
         {
             AddTemplate( aPage, new PROJECT_TEMPLATE( aPath ) );
         }

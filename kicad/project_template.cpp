@@ -202,11 +202,11 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
         {
             // Skip these; they're often shared
         }
-        if( destFile.GetName().EndsWith( "-cache" ) || destFile.GetName().EndsWith( "-rescue" ) )
+        if( destFile.GetName().EndsWith( wxT( "-cache" ) ) || destFile.GetName().EndsWith( wxT( "-rescue" ) ) )
         {
             currname.Replace( basename, aNewProjectPath.GetName() );
         }
-        else if( destFile.GetExt() == "dcm" || destFile.GetExt() == "lib" )
+        else if( destFile.GetExt() == wxT( "dcm" ) || destFile.GetExt() == wxT( "lib" ) )
         {
             // Don't rename project-specific symbol libraries.  This will break the symbol library
             // table which will cause broken symbol library links in the schematic.
@@ -231,7 +231,7 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
                 if( aErrorMsg )
                 {
                     if( !aErrorMsg->empty() )
-                        *aErrorMsg += "\n";
+                        *aErrorMsg += wxT( "\n" );
 
                     wxString msg;
 
@@ -250,7 +250,7 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
             if( aErrorMsg )
             {
                 if( !aErrorMsg->empty() )
-                    *aErrorMsg += "\n";
+                    *aErrorMsg += wxT( "\n" );
 
                 wxString msg;
 

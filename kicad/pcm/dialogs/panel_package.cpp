@@ -60,8 +60,8 @@ void PANEL_PACKAGE::OnSize( wxSizeEvent& event )
 {
     Layout();
 
-    int    nameLineHeight = m_name->GetTextExtent( "X" ).GetHeight();
-    double descLineHeight = m_desc->GetTextExtent( "X" ).GetHeight() * 1.2 /* leading */;
+    int    nameLineHeight = m_name->GetTextExtent( wxT( "X" ) ).GetHeight();
+    double descLineHeight = m_desc->GetTextExtent( wxT( "X" ) ).GetHeight() * 1.2 /* leading */;
 
     m_desc->SetLabel( m_data.package.description );
     m_desc->Wrap( m_desc->GetClientSize().GetWidth() - 10 );

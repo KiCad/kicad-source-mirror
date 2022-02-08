@@ -115,7 +115,7 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
             while( pro.DirExists() )
             {
                 pro.RemoveLastDir();
-                wxString suffix = wxString::Format( "_%d", ++attempt );
+                wxString suffix = wxString::Format( wxT( "_%d" ), ++attempt );
                 pro.AppendDir( newDir + suffix );
             }
 

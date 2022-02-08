@@ -40,11 +40,11 @@
 
 
 std::unordered_map<PCM_PACKAGE_VERSION_STATUS, wxString> PANEL_PACKAGES_VIEW::STATUS_ENUM_TO_STR = {
-    { PVS_INVALID, "invalid" },
-    { PVS_STABLE, "stable" },
-    { PVS_TESTING, "testing" },
-    { PVS_DEVELOPMENT, "development" },
-    { PVS_DEPRECATED, "deprecated" }
+    { PVS_INVALID, wxT( "invalid" ) },
+    { PVS_STABLE, wxT( "stable" ) },
+    { PVS_TESTING, wxT( "testing" ) },
+    { PVS_DEVELOPMENT, wxT( "development" ) },
+    { PVS_DEPRECATED, wxT( "deprecated" ) }
 };
 
 
@@ -161,7 +161,7 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
     // Details
     wxString details;
 
-    details << "<h5>" + package.name + "</h5>";
+    details << wxT( "<h5>" ) + package.name + wxT( "</h5>" );
 
     auto format_desc =
             []( const wxString& text ) -> wxString
@@ -178,7 +178,7 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
                     {
                         if( c == ' ' )
                         {
-                            result += wxString::Format( "<a href='%s'>%s</a>", url, url );
+                            result += wxString::Format( wxT( "<a href='%s'>%s</a>" ), url, url );
                             inURL = false;
 
                             result += c;
@@ -188,14 +188,14 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
                             url += c;
                         }
                     }
-                    else if( text.Mid( i, 5 ) == "http:" || text.Mid( i, 6 ) == "https:" )
+                    else if( text.Mid( i, 5 ) == wxT( "http:" ) || text.Mid( i, 6 ) == wxT( "https:" ) )
                     {
                         url = c;
                         inURL = true;
                     }
                     else if( c == '\n' )
                     {
-                        result += "</p><p>";
+                        result += wxT( "</p><p>" );
                     }
                     else
                     {
@@ -207,12 +207,12 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
             };
 
     wxString desc = package.description_full;
-    details << "<p>" + format_desc( desc ) + "</p>";
+    details << wxT( "<p>" ) + format_desc( desc ) + wxT( "</p>" );
 
-    details << "<p><b>" + _( "Metadata" ) + "</b></p>";
-    details << "<ul>";
-    details << "<li>" + _( "Package identifier: " ) + package.identifier + "</li>";
-    details << "<li>" + _( "License: " ) + package.license + "</li>";
+    details << wxT( "<p><b>" ) + _( "MetadatawxT( " ) + " )</b></p>";
+    details << wxT( "<ul>" );
+    details << wxT( "<li>" ) + _( "Package identifier: wxT( " ) + package.identifier + " )</li>";
+    details << wxT( "<li>" ) + _( "License: wxT( " ) + package.license + " )</li>";
 
     if( package.tags.size() > 0 )
     {
@@ -221,12 +221,12 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
         for( const std::string& tag : package.tags )
         {
             if( !tags_str.IsEmpty() )
-                tags_str += ", ";
+                tags_str += wxT( ", " );
 
             tags_str += tag;
         }
 
-        details << "<li>" + _( "Tags: " ) + tags_str + "</li>";
+        details << wxT( "<li>" ) + _( "Tags: wxT( " ) + tags_str + " )</li>";
     }
 
     auto format_entry =
@@ -235,10 +235,10 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
                 wxString name = entry.first;
                 wxString url = EscapeHTML( entry.second );
 
-                if( name == "email" )
-                    return wxString::Format( "<a href='mailto:%s'>%s</a>", url, url );
-                else if( url.StartsWith( "http:" ) || url.StartsWith( "https:" ) )
-                    return wxString::Format( "<a href='%s'>%s</a>", url, url );
+                if( name == wxT( "email" ) )
+                    return wxString::Format( wxT( "<a href='mailto:%s'>%s</a>" ), url, url );
+                else if( url.StartsWith( wxT( "http:" ) ) || url.StartsWith( wxT( "https:" ) ) )
+                    return wxString::Format( wxT( "<a href='%s'>%s</a>" ), url, url );
                 else
                     return entry.second;
             };
@@ -246,12 +246,12 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
     auto write_contact =
             [&]( const wxString& type, const PCM_CONTACT& contact )
             {
-                details << "<li>" + type + ": " + contact.name + "<ul>";
+                details << wxT( "<li>" ) + type + wxT( ": " ) + contact.name + wxT( "<ul>" );
 
                 for( const std::pair<const std::string, wxString>& entry : contact.contact )
-                    details << "<li>" + entry.first + ": " + format_entry( entry ) + "</li>";
+                    details << wxT( "<li>" ) + entry.first + wxT( ": " ) + format_entry( entry ) + wxT( "</li>" );
 
-                details << "</ul>";
+                details << wxT( "</ul>" );
             };
 
     write_contact( _( "Author" ), package.author );
@@ -261,15 +261,15 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
 
     if( package.resources.size() > 0 )
     {
-        details << "<li>" + _( "Resources" ) + "<ul>";
+        details << wxT( "<li>" ) + _( "Resources" ) + "<ul>";
 
         for( const std::pair<const std::string, wxString>& entry : package.resources )
-            details << "<li>" + entry.first + wxS( ": " ) + format_entry( entry ) + "</li>";
+            details << wxT( "<li>" ) + entry.first + wxS( ": " ) + format_entry( entry ) + "</li>";
 
-        details << "</ul>";
+        details << wxT( "</ul>" );
     }
 
-    details << "</ul>";
+    details << wxT( "</ul>" );
 
     m_infoText->SetPage( details );
 
@@ -382,17 +382,17 @@ void PANEL_PACKAGES_VIEW::unsetPackageDetails()
 wxString PANEL_PACKAGES_VIEW::toHumanReadableSize( const boost::optional<uint64_t> size ) const
 {
     if( !size )
-        return "-";
+        return wxT( "-" );
 
     uint64_t b = size.get();
 
     if( b >= 1024 * 1024 )
-        return wxString::Format( "%.1f Mb", b / 1024.0 / 1024.0 );
+        return wxString::Format( wxT( "%.1f Mb" ), b / 1024.0 / 1024.0 );
 
     if( b >= 1024 )
-        return wxString::Format( "%lld Kb", b / 1024 );
+        return wxString::Format( wxT( "%lld Kb" ), b / 1024 );
 
-    return wxString::Format( "%lld b", b );
+    return wxString::Format( wxT( "%lld b" ), b );
 }
 
 
@@ -468,7 +468,7 @@ void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
                                     return ver.version == version;
                                 } );
 
-    wxASSERT_MSG( ver_it != package.versions.end(), "Could not find package version" );
+    wxASSERT_MSG( ver_it != package.versions.end(), wxT( "Could not find package version" ) );
 
     if( !ver_it->download_url )
     {
@@ -483,8 +483,8 @@ void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
     KICAD_SETTINGS*   app_settings = mgr.GetAppSettings<KICAD_SETTINGS>();
 
     wxFileDialog dialog( this, _( "Save package" ), app_settings->m_PcmLastDownloadDir,
-                         wxString::Format( "%s_v%s.zip", package.identifier, version ),
-                         "ZIP files (*.zip)|*.zip", wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                         wxString::Format( wxT( "%s_v%s.zip" ), package.identifier, version ),
+                         wxT( "ZIP files (*.zip)|*.zip" ), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dialog.ShowModal() == wxID_CANCEL )
         return;
@@ -552,7 +552,7 @@ void PANEL_PACKAGES_VIEW::OnInstallVersionClicked( wxCommandEvent& event )
                                     return ver.version == version;
                                 } );
 
-    wxASSERT_MSG( ver_it != package.versions.end(), "Could not find package version" );
+    wxASSERT_MSG( ver_it != package.versions.end(), wxT( "Could not find package version" ) );
 
     if( !ver_it->compatible
         && wxMessageBox( _( "This package version is incompatible with your kicad version or "

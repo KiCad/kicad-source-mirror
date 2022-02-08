@@ -113,7 +113,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 {
     m_active_project = false;
     m_leftWinWidth = 250;       // Default value
-    m_aboutTitle = "KiCad";
+    m_aboutTitle = wxT( "KiCad" );
 
 #ifdef PCM
     // JPC: A very ugly hack to fix an issue on Linux: if the wxbase315u_xml_gcc_custom.so is
@@ -158,7 +158,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     m_auimgr.SetManagedWindow( this );
     m_auimgr.SetFlags( wxAUI_MGR_LIVE_RESIZE );
 
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Left()
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( wxT( "MainToolbar" ) ).Left()
                       .Layer( 2 ) );
 
     // BestSize() does not always set the actual pane size of m_leftWin to the required value.
@@ -166,11 +166,11 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     // (Well, BestSize() sets the best size... not the window size)
     // A trick is to use MinSize() to set the required pane width,
     // and after give a reasonable MinSize value
-    m_auimgr.AddPane( m_leftWin, EDA_PANE().Palette().Name( "ProjectTree" ).Left().Layer( 1 )
+    m_auimgr.AddPane( m_leftWin, EDA_PANE().Palette().Name( wxT( "ProjectTree" ) ).Left().Layer( 1 )
                       .Caption( _( "Project Files" ) ).PaneBorder( false )
                       .MinSize( m_leftWinWidth, -1 ).BestSize( m_leftWinWidth, -1 ) );
 
-    m_auimgr.AddPane( m_launcher, EDA_PANE().Canvas().Name( "Launcher" ).Center()
+    m_auimgr.AddPane( m_launcher, EDA_PANE().Canvas().Name( wxT( "Launcher" ) ).Center()
                       .Caption( _( "Editors" ) ).PaneBorder( false )
                       .MinSize( m_launcher->GetBestSize() ) );
 
@@ -188,7 +188,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     if( ADVANCED_CFG::GetCfg().m_HideVersionFromTitle )
         SetTitle( wxT( "KiCad" ) );
     else
-        SetTitle( wxString( "KiCad " ) + GetMajorMinorVersion() );
+        SetTitle( wxString( wxT( "KiCad " ) ) + GetMajorMinorVersion() );
 
     // Do not let the messages window have initial focus
     m_leftWin->SetFocus();
@@ -429,7 +429,7 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
         mgr.UnloadProject( &Prj() );
     }
 
-    SetStatusText( "" );
+    SetStatusText( wxT( "" ) );
 
     m_leftWin->EmptyTreePrj();
 
@@ -480,7 +480,7 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName,
                                             bool aCreateStubFiles )
 {
     wxCHECK_RET( aProjectFileName.DirExists() && aProjectFileName.IsDirWritable(),
-                 "Project folder must exist and be writable to create a new project." );
+                 wxT( "Project folder must exist and be writable to create a new project." ) );
 
     // If the project is legacy, convert it
     if( !aProjectFileName.FileExists() )
@@ -498,7 +498,7 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName,
         else
         {
             // Copy template project file from template folder.
-            wxString srcFileName = sys_search().FindValidPath( "kicad.kicad_pro" );
+            wxString srcFileName = sys_search().FindValidPath( wxT( "kicad.kicad_pro" ) );
 
             wxFileName destFileName( aProjectFileName );
             destFileName.SetExt( ProjectFileExtension );
@@ -507,7 +507,7 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName,
             if( !wxFileName::FileExists( srcFileName )
                 || !wxCopyFile( srcFileName, destFileName.GetFullPath() ) )
             {
-                wxFFile file( destFileName.GetFullPath(), "wb" );
+                wxFFile file( destFileName.GetFullPath(), wxT( "wb" ) );
 
                 if( file.IsOpened() )
                     file.Write( wxT( "{\n}\n") );
@@ -529,12 +529,12 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName,
         // file ).
         if( !fn.FileExists() )
         {
-            wxFFile file( fn.GetFullPath(), "wb" );
+            wxFFile file( fn.GetFullPath(), wxT( "wb" ) );
 
             if( file.IsOpened() )
-                file.Write( wxString::Format( "(kicad_sch (version %d) (generator eeschema)\n"
+                file.Write( wxString::Format( wxT( "(kicad_sch (version %d) (generator eeschema)\n"
                                               "  (paper \"A4\")\n  (lib_symbols)\n"
-                                              "  (symbol_instances)\n)\n",
+                                              "  (symbol_instances)\n)\n" ),
                                               SEXPR_SCHEMATIC_FILE_VERSION ) );
 
             // wxFFile dtor will close the file
@@ -548,11 +548,11 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName,
 
         if( !fn.FileExists() && !leg_fn.FileExists() )
         {
-            wxFFile file( fn.GetFullPath(), "wb" );
+            wxFFile file( fn.GetFullPath(), wxT( "wb" ) );
 
             if( file.IsOpened() )
                 // Create a small dummy file as a stub for pcbnew:
-                file.Write( wxString::Format( "(kicad_pcb (version %d) (generator pcbnew)\n)",
+                file.Write( wxString::Format( wxT( "(kicad_pcb (version %d) (generator pcbnew)\n)" ),
                                               SEXPR_BOARD_FILE_VERSION ) );
 
             // wxFFile dtor will close the file

@@ -123,7 +123,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                    BITMAPS::unzip );
 
     fileMenu->AppendSeparator();
-    fileMenu->AddQuitOrClose( nullptr, "KiCad" );
+    fileMenu->AddQuitOrClose( nullptr, wxT( "KiCad" ) );
 
     //-- View menu -----------------------------------------------------------
     //

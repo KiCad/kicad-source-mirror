@@ -111,7 +111,7 @@ static const wxChar* s_allowedExtensionsToList[] = {
  */
 
 // Gerber file extension wildcard.
-const wxString GerberFileExtensionWildCard( ".((gbr|gbrjob|(gb|gt)[alops])|pho)" );
+const wxString GerberFileExtensionWildCard( wxT( ".((gbr|gbrjob|(gb|gt)[alops])|pho)" ) );
 
 
 /**
@@ -273,8 +273,8 @@ wxString PROJECT_TREE_PANE::GetFileExt( TREE_FILE_TYPE type )
     case TREE_FILE_TYPE::REPORT:                return ReportFileExtension;
     case TREE_FILE_TYPE::FP_PLACE:              return FootprintPlaceFileExtension;
     case TREE_FILE_TYPE::DRILL:                 return DrillFileExtension;
-    case TREE_FILE_TYPE::DRILL_NC:              return "nc";
-    case TREE_FILE_TYPE::DRILL_XNC:             return "xnc";
+    case TREE_FILE_TYPE::DRILL_NC:              return wxT( "nc" );
+    case TREE_FILE_TYPE::DRILL_XNC:             return wxT( "xnc" );
     case TREE_FILE_TYPE::SVG:                   return SVGFileExtension;
     case TREE_FILE_TYPE::DRAWING_SHEET:         return DrawingSheetFileExtension;
     case TREE_FILE_TYPE::FOOTPRINT_FILE:        return KiCadFootprintFileExtension;
@@ -332,7 +332,7 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
         for( const wxString& m_filter : m_filters )
         {
             wxCHECK2_MSG( reg.Compile( m_filter, wxRE_ICASE ), continue,
-                          wxString::Format( "Regex %s failed to compile.", m_filter ) );
+                          wxString::Format( wxT( "Regex %s failed to compile." ), m_filter ) );
 
             if( reg.Matches( aName ) )
             {
@@ -354,7 +354,7 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
 
             // For gerber files, the official ext is gbr
             if( i == static_cast<int>( TREE_FILE_TYPE::GERBER ) )
-                ext = "gbr";
+                ext = wxT( "gbr" );
 
             reg.Compile( wxString::FromAscii( "^.*\\." ) + ext + wxString::FromAscii( "$" ),
                          wxRE_ICASE );
@@ -473,7 +473,7 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
     // Mark root files (files which have the same aName as the project)
     wxString fileName = currfile.GetName().Lower();
     wxString projName = project.GetName().Lower();
-    data->SetRootFile( fileName == projName || fileName.StartsWith( projName + "-" ) );
+    data->SetRootFile( fileName == projName || fileName.StartsWith( projName + wxT( "-" ) ) );
 
 #ifndef __WINDOWS__
     bool subdir_populated = false;
@@ -799,7 +799,7 @@ void PROJECT_TREE_PANE::onOpenSelectedFileWithTextEditor( wxCommandEvent& event 
         wxString fullFileName = item_data->GetFileName();
 
         if( !files.IsEmpty() )
-            files += " ";
+            files += wxT( " " );
 
         files += fullFileName;
     }
@@ -1222,7 +1222,7 @@ void PROJECT_TREE_PANE::FileWatcherReset()
             // we can see wxString under a debugger, not a wxFileName
             const wxString& path = itemData->GetFileName();
 
-            wxLogTrace( tracePathsAndFiles, "%s: add '%s'\n", __func__, TO_UTF8( path ) );
+            wxLogTrace( tracePathsAndFiles, wxT( "%s: add '%s'\n" ), __func__, TO_UTF8( path ) );
 
             if( wxFileName::IsDirReadable( path ) )   // linux whines about watching protected dir
             {
@@ -1242,10 +1242,10 @@ void PROJECT_TREE_PANE::FileWatcherReset()
 #if defined(DEBUG) && 1
     wxArrayString paths;
     m_watcher->GetWatchedPaths( &paths );
-    wxLogTrace( tracePathsAndFiles, "%s: watched paths:", __func__ );
+    wxLogTrace( tracePathsAndFiles, wxT( "%s: watched paths:" ), __func__ );
 
     for( unsigned ii = 0; ii < paths.GetCount(); ii++ )
-        wxLogTrace( tracePathsAndFiles, " %s\n", TO_UTF8( paths[ii] ) );
+        wxLogTrace( tracePathsAndFiles, wxT( " %s\n" ), TO_UTF8( paths[ii] ) );
 #endif
 }
 

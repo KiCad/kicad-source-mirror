@@ -43,8 +43,8 @@ void PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wx
     PCM_TASK download_task = [aPackage, aVersion, aRepositoryId, this]()
     {
         wxFileName file_path( m_pcm->Get3rdPartyPath(), "" );
-        file_path.AppendDir( "cache" );
-        file_path.SetFullName( wxString::Format( "%s_v%s.zip", aPackage.identifier, aVersion ) );
+        file_path.AppendDir( wxT( "cache" ) );
+        file_path.SetFullName( wxString::Format( wxT( "%s_v%s.zip" ), aPackage.identifier, aVersion ) );
 
         auto find_pkgver = std::find_if( aPackage.versions.begin(), aPackage.versions.end(),
                                     [&aVersion]( const PACKAGE_VERSION& pv )
@@ -52,7 +52,7 @@ void PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wx
                                         return pv.version == aVersion;
                                     } );
 
-        wxASSERT_MSG( find_pkgver != aPackage.versions.end(), "Package version not found" );
+        wxASSERT_MSG( find_pkgver != aPackage.versions.end(), wxT( "Package version not found" ) );
 
         if( !wxDirExists( file_path.GetPath() )
             && !wxFileName::Mkdir( file_path.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
@@ -281,7 +281,7 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
     for( wxArchiveEntry* entry = zip.GetNextEntry(); entry != nullptr; entry = zip.GetNextEntry() )
     {
         // Find and load metadata.json
-        if( entry->GetName() != "metadata.json" )
+        if( entry->GetName() != wxT( "metadata.json" ) )
             continue;
 
         wxStringOutputStream strStream;

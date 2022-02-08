@@ -250,7 +250,7 @@ void DIALOG_PCM::OnRefreshClicked( wxCommandEvent& event )
 void DIALOG_PCM::OnInstallFromFileClicked( wxCommandEvent& event )
 {
     wxFileDialog open_file_dialog( this, _( "Choose package file" ), wxEmptyString, wxEmptyString,
-                                   "Zip files (*.zip)|*.zip", wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+                                   wxT( "Zip files (*.zip)|*.zip" ), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( open_file_dialog.ShowModal() == wxID_CANCEL )
         return;

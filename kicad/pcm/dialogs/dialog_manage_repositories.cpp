@@ -109,7 +109,7 @@ void DIALOG_MANAGE_REPOSITORIES::OnAddButtonClicked( wxCommandEvent& event )
                 int      increment = 1;
 
                 while( find_row( 0, name ) >= 0 )
-                    name = wxString::Format( "%s (%d)", repository.name, increment++ );
+                    name = wxString::Format( wxT( "%s (%d)" ), repository.name, increment++ );
 
                 m_grid->Freeze();
 
