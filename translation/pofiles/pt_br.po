@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-07 17:47-0800\n"
-"PO-Revision-Date: 2022-02-05 15:45+0000\n"
+"PO-Revision-Date: 2022-02-14 17:24+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -9389,7 +9389,7 @@ msgstr "Tamanho do nome do texto"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:593
 msgid "ALL"
-msgstr ""
+msgstr "TODOS"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:633
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:55
@@ -9448,14 +9448,12 @@ msgid "0"
 msgstr "0"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:119
-#, fuzzy
 msgid "Pin count:"
-msgstr "contagem de pinos"
+msgstr "Contagem dos pinos:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:133
-#, fuzzy
 msgid "Duplicate pins:"
-msgstr "Duplicados:"
+msgstr "Pinos duplicados:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:74
 msgid "Pin Table"
@@ -9580,11 +9578,10 @@ msgid "Border width:"
 msgstr "Largura da borda:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:52
-#, fuzzy
 msgid "Set border width to 0 to use Schematic default symbol line width."
 msgstr ""
-"Defina a largura como 0 para usar a largura da linha do símbolo padrão do "
-"esquema."
+"Defina a largura da borda para 0 para usar a largura da linha do símbolo "
+"padrão do esquema."
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:60
 msgid "Fill Style"
@@ -12760,15 +12757,13 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:550
-#, fuzzy
 msgid "Remove Invalid Cells"
-msgstr "Remove itens"
+msgstr "Remova as células inválidas"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:551
-#, fuzzy
 msgid "Cancel Table Update"
-msgstr "Diâmetro do isolamento do furo :"
+msgstr "Cancela a atualização da tabela"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
@@ -22649,6 +22644,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:596
 msgid "Selected options resulted in errors! Change them and try again."
 msgstr ""
+"As opções selecionadas resultaram em erros! Altere-os e tente novamente."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:603
 #, c-format
@@ -22677,9 +22673,8 @@ msgid "Reannotate anyway?"
 msgstr "Anote novamente?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:802
-#, fuzzy
 msgid "Duplicate instances of "
-msgstr "Itens duplicados %s%s\n"
+msgstr "Instâncias duplicadas de "
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
 msgid "Aborted: too many errors"
@@ -26217,9 +26212,9 @@ msgid "Center:"
 msgstr "Centro:"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid "Corner %d"
-msgstr "Cantos"
+msgstr "Canto %d"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:341
 msgid "Polygon must have at least 3 corners"
@@ -26313,9 +26308,8 @@ msgid "corners count %d"
 msgstr "quantidade de cantos %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:740
-#, fuzzy
 msgid "Unknown primitive"
-msgstr "Transforma primitiva"
+msgstr "Primitivo desconhecido"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:929
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
@@ -27622,9 +27616,9 @@ msgid "<none selected>"
 msgstr "<nada selecionado>"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:255
-#, fuzzy, c-format
+#, c-format
 msgid "Reference item: %s"
-msgstr "Item de referência: "
+msgstr "Item de referência: %s"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -30308,24 +30302,20 @@ msgid "undefined"
 msgstr "indefinido"
 
 #: pcbnew/drc/drc_engine.cpp:921
-#, fuzzy
 msgid "track width"
-msgstr "Largura da trilha"
+msgstr "largura da trilha"
 
 #: pcbnew/drc/drc_engine.cpp:922
-#, fuzzy
 msgid "annular width"
-msgstr "Largura anular"
+msgstr "largura anular"
 
 #: pcbnew/drc/drc_engine.cpp:923
-#, fuzzy
 msgid "via diameter"
-msgstr "Diâmetro da via"
+msgstr "diâmetro da via"
 
 #: pcbnew/drc/drc_engine.cpp:924
-#, fuzzy
 msgid "constraint"
-msgstr "Restrições"
+msgstr "restrição"
 
 #: pcbnew/drc/drc_engine.cpp:927
 #, c-format
@@ -33036,9 +33026,8 @@ msgid "removed annular ring"
 msgstr "anel anular removido"
 
 #: pcbnew/pcb_track.cpp:694
-#, fuzzy
 msgid "Track (arc)"
-msgstr "Trilha "
+msgstr "Trilha (arco)"
 
 #: pcbnew/pcb_track.cpp:709
 msgid "Segment Length"
@@ -33189,14 +33178,12 @@ msgid "Record of unknown type: '%d'."
 msgstr "Registro de tipo desconhecido: '%d'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:854
-#, fuzzy
 msgid "Loading board data..."
-msgstr "Carregando as regiões da placa..."
+msgstr "Carregando os dados da placa..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1037
-#, fuzzy
 msgid "Loading netclasses..."
-msgstr "Carregando redes..."
+msgstr "Carregando as netclasses..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1059
 #, c-format
@@ -33204,14 +33191,12 @@ msgid "Duplicate netclass name '%s'."
 msgstr "Nome duplicada da classe da rede '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1074
-#, fuzzy
 msgid "Loading components..."
-msgstr "Carregando redes..."
+msgstr "Carregando os componentes..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1132
-#, fuzzy
 msgid "Loading component 3D models..."
-msgstr "Carregando os modelos 3D..."
+msgstr "Carregando o componente dos modelos 3D..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1210
 #: pcbnew/plugins/altium/altium_pcb.cpp:1302
@@ -33227,9 +33212,8 @@ msgstr ""
 "Ele foi movido para a camada Eco1_User do KiCad."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1502
-#, fuzzy
 msgid "Loading dimension drawings..."
-msgstr "Carregando os textos unicode..."
+msgstr "Carregando os desenhos dimensionais..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1523
 #: pcbnew/plugins/altium/altium_pcb.cpp:1530
@@ -33520,9 +33504,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "A importação da definição da ilha CADSTAR '%s' possui erros: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1257
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
-msgstr "Não foi possível encontrar um visualizador de PDF para '%s'."
+msgstr "Não foi possível encontrar o índice do bloco '%d' no footprint '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1290
 #, c-format
@@ -35435,9 +35419,9 @@ msgid "Resolved thermal spoke width: %s."
 msgstr "Largura do raio térmico que foi resolvido: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid "Minimum thermal spoke count: %d."
-msgstr "Contagem mínima do raio térmico: %s."
+msgstr "Contagem mínima do raio térmico: %d."
 
 #: pcbnew/tools/board_inspection_tool.cpp:430
 msgid "Items are not connected.  No thermal spokes will be generated."
