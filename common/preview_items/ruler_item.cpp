@@ -168,10 +168,7 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
     VECTOR2I      labelOffset = tickLine.Resize( majorTickLen );
 
     if( aDrawingDropShadows )
-    {
-        labelOffset = { labelDims.ShadowWidth, labelDims.ShadowWidth };
         labelDims.StrokeWidth += 2 * labelDims.ShadowWidth;
-    }
 
     if( aView->IsMirroredX() )
         labelOffset = -labelOffset;
@@ -249,7 +246,7 @@ void drawBacksideTicks( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECTO
     VECTOR2D     backTickVec = aLine;
 
     RotatePoint( backTickVec, -ANGLE_90 );
-    backTickVec.Resize( aTickLen );
+    backTickVec = backTickVec.Resize( aTickLen );
 
     BOX2D viewportD = aView->GetViewport();
     BOX2I viewport( VECTOR2I( viewportD.GetPosition() ), VECTOR2I( viewportD.GetSize() ) );
