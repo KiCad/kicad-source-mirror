@@ -20,22 +20,23 @@
 
 // kicad_curl_easy.h **must be** included before any wxWidgets header to avoid conflicts
 // at least on Windows/msys2
-#include "kicad_curl/kicad_curl_easy.h"
+#include <kicad_curl/kicad_curl_easy.h>
 
-#include "dialog_pcm.h"
-#include "bitmaps.h"
-#include "dialog_manage_repositories.h"
-#include "grid_tricks.h"
-#include "ki_exception.h"
-#include "kicad_settings.h"
-#include "pcm_task_manager.h"
-#include "pgm_base.h"
-#include "settings/settings_manager.h"
-#include "thread"
-#include "widgets/wx_grid.h"
+#include <dialog_pcm.h>
+#include <bitmaps.h>
+#include <dialog_manage_repositories.h>
+#include <grid_tricks.h>
+#include <ki_exception.h>
+#include <kicad_settings.h>
+#include <pcm_task_manager.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
+#include <widgets/wx_grid.h>
+#include <wildcards_and_files_ext.h>
 
 #include <fstream>
 #include <sstream>
+#include <thread>
 #include <vector>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
@@ -250,7 +251,7 @@ void DIALOG_PCM::OnRefreshClicked( wxCommandEvent& event )
 void DIALOG_PCM::OnInstallFromFileClicked( wxCommandEvent& event )
 {
     wxFileDialog open_file_dialog( this, _( "Choose package file" ), wxEmptyString, wxEmptyString,
-                                   wxT( "Zip files (*.zip)|*.zip" ), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+                                   ZipFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( open_file_dialog.ShowModal() == wxID_CANCEL )
         return;

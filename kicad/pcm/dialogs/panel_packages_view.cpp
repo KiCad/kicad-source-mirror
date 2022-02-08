@@ -28,6 +28,7 @@
 #include <widgets/wx_panel.h>
 #include <string_utils.h>
 #include <html_window.h>
+#include <wildcards_and_files_ext.h>
 
 #include <cmath>
 #include <fstream>
@@ -484,7 +485,7 @@ void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
 
     wxFileDialog dialog( this, _( "Save package" ), app_settings->m_PcmLastDownloadDir,
                          wxString::Format( wxT( "%s_v%s.zip" ), package.identifier, version ),
-                         wxT( "ZIP files (*.zip)|*.zip" ), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                         ZipFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dialog.ShowModal() == wxID_CANCEL )
         return;
