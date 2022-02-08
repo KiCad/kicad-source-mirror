@@ -2802,11 +2802,11 @@ bool IDF3_BOARD::ReadFile( const wxString& aFullFileName, bool aNoSubstituteOutl
     wxFileName libname( aFullFileName );
     wxString ext = brdname.GetExt();
 
-    if( !ext.Cmp( "EMN" ) )
+    if( !ext.Cmp( wxT( "EMN" ) ) )
     {
         libname.SetExt( wxT( "EMP" ) );
     }
-    else if( !ext.Cmp( "emn" ) )
+    else if( !ext.Cmp( wxT( "emn" ) ) )
     {
         libname.SetExt( wxT( "emp" ) );
     }

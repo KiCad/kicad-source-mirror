@@ -2918,8 +2918,10 @@ void GROUP_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHead
     }
 
     if( !GetIDFString( iline, token, quoted, idx ) || !CompareToken( ".END_PLACE_REGION", token ) )
+    {
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "\n* invalid .PLACE_REGION section: no .END_PLACE_REGION found" ) );
+    }
 }
 
 
