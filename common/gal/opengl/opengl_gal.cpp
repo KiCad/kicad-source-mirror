@@ -1232,8 +1232,10 @@ void OPENGL_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aContro
 }
 
 
-void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
+void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap, double alphaBlend )
 {
+    GLfloat alpha = std::clamp( alphaBlend, 0.0, 1.0 );
+
     // We have to calculate the pixel size in users units to draw the image.
     // m_worldUnitLength is a factor used for converting IU to inches
     double scale = 1.0 / ( aBitmap.GetPPI() * m_worldUnitLength );
@@ -1259,16 +1261,16 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
     glBindTexture( GL_TEXTURE_2D, texture_id );
 
     glBegin( GL_QUADS );
-    glColor4f( 1.0, 1.0, 1.0, 1.0 );
+    glColor4f( 1.0, 1.0, 1.0, alpha );
     glTexCoord2f( 0.0, 0.0 );
     glVertex3f( v0.x, v0.y, m_layerDepth );
-    glColor4f( 1.0, 1.0, 1.0, 1.0 );
+    glColor4f( 1.0, 1.0, 1.0, alpha );
     glTexCoord2f( 1.0, 0.0 );
     glVertex3f( v1.x, v0.y, m_layerDepth );
-    glColor4f( 1.0, 1.0, 1.0, 1.0 );
+    glColor4f( 1.0, 1.0, 1.0, alpha );
     glTexCoord2f( 1.0, 1.0 );
     glVertex3f( v1.x, v1.y, m_layerDepth );
-    glColor4f( 1.0, 1.0, 1.0, 1.0 );
+    glColor4f( 1.0, 1.0, 1.0, alpha );
     glTexCoord2f( 0.0, 1.0 );
     glVertex3f( v0.x, v1.y, m_layerDepth );
     glEnd();

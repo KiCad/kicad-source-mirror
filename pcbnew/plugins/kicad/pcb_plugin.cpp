@@ -41,6 +41,7 @@
 #include <pad.h>
 #include <pcb_group.h>
 #include <pcb_shape.h>
+#include <pcb_bitmap.h>
 #include <pcb_target.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
@@ -56,6 +57,13 @@
 #include <wx_filename.h>
 #include <zone.h>
 #include <zones.h>
+
+// For some reason wxWidgets is built with wxUSE_BASE64 unset so expose the wxWidgets
+// base64 code. Needed for PCB_BITMAP
+#define wxUSE_BASE64 1
+#include <wx/base64.h>
+#include <wx/mstream.h>
+
 
 using namespace PCB_KEYS_T;
 
@@ -416,6 +424,10 @@ void PCB_PLUGIN::Format( const BOARD_ITEM* aItem, int aNestLevel ) const
 
     case PCB_SHAPE_T:
         format( static_cast<const PCB_SHAPE*>( aItem ), aNestLevel );
+        break;
+
+    case PCB_BITMAP_T:
+        format( static_cast<const PCB_BITMAP*>( aItem ), aNestLevel );
         break;
 
     case PCB_FP_SHAPE_T:
@@ -993,6 +1005,52 @@ void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aShape->m_Uuid.AsString() ) );
 
     m_out->Print( 0, ")\n" );
+}
+
+
+void PCB_PLUGIN::format( const PCB_BITMAP* aBitmap, int aNestLevel ) const
+{
+    wxCHECK_RET( aBitmap != nullptr && m_out != nullptr, "" );
+
+    const wxImage* image = aBitmap->GetImage()->GetImageData();
+
+    wxCHECK_RET( image != nullptr, "wxImage* is NULL" );
+
+    m_out->Print( aNestLevel, "(image (at %s %s)",
+                  FormatInternalUnits( aBitmap->GetPosition().x ).c_str(),
+                  FormatInternalUnits( aBitmap->GetPosition().y ).c_str() );
+
+    if( aBitmap->GetImage()->GetScale() != 1.0 )
+        m_out->Print( 0, " (scale %g)", aBitmap->GetImage()->GetScale() );
+
+    m_out->Print( 0, "\n" );
+
+    m_out->Print( aNestLevel + 1, "(data" );
+
+    wxMemoryOutputStream stream;
+
+    image->SaveFile( stream, wxBITMAP_TYPE_PNG );
+
+    // Write binary data in hexadecimal form (ASCII)
+    wxStreamBuffer* buffer = stream.GetOutputStreamBuffer();
+    wxString out = wxBase64Encode( buffer->GetBufferStart(), buffer->GetBufferSize() );
+
+    // Apparently the MIME standard character width for base64 encoding is 76 (unconfirmed)
+    // so use it in a vein attempt to be standard like.
+#define MIME_BASE64_LENGTH 76
+
+    size_t first = 0;
+
+    while( first < out.Length() )
+    {
+        m_out->Print( 0, "\n" );
+        m_out->Print( aNestLevel + 2, "%s", TO_UTF8( out( first, MIME_BASE64_LENGTH ) ) );
+        first += MIME_BASE64_LENGTH;
+    }
+
+    m_out->Print( 0, "\n" );
+    m_out->Print( aNestLevel + 1, ")\n" );  // Closes data token.
+    m_out->Print( aNestLevel, ")\n" );      // Closes image token.
 }
 
 

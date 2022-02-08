@@ -88,6 +88,7 @@ enum KICAD_T
     PCB_FOOTPRINT_T,         ///< class FOOTPRINT, a footprint
     PCB_PAD_T,               ///< class PAD, a pad in a footprint
     PCB_SHAPE_T,             ///< class PCB_SHAPE, a segment not on copper layers
+    PCB_BITMAP_T,            ///< class PCB_BITMAP, bitmap on a layer
     PCB_TEXT_T,              ///< class PCB_TEXT, text on a layer
     PCB_TEXTBOX_T,           ///< class PCB_TEXTBOX, wrapped text on a layer
     PCB_FP_TEXT_T,           ///< class FP_TEXT, text in a footprint
@@ -111,7 +112,7 @@ enum KICAD_T
     PCB_DIM_ORTHOGONAL_T,    ///< class PCB_DIM_ORTHOGONAL, a linear dimension constrained to x/y
     PCB_TARGET_T,            ///< class PCB_TARGET, a target (graphic item)
     PCB_ZONE_T,              ///< class ZONE, a copper pour area
-    PCB_ITEM_LIST_T ,        ///< class BOARD_ITEM_LIST, a list of board items
+    PCB_ITEM_LIST_T,         ///< class BOARD_ITEM_LIST, a list of board items
     PCB_NETINFO_T,           ///< class NETINFO_ITEM, a description of a net
     PCB_GROUP_T,             ///< class PCB_GROUP, a set of BOARD_ITEMs
 
@@ -406,6 +407,7 @@ constexpr bool IsPcbnewType( const KICAD_T aType )
     case PCB_FOOTPRINT_T:
     case PCB_PAD_T:
     case PCB_SHAPE_T:
+    case PCB_BITMAP_T:
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
     case PCB_FP_TEXT_T:

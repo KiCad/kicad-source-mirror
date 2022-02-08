@@ -74,6 +74,7 @@ convexhull
 copper_line_width
 copper_text_dims
 courtyard_line_width
+data
 date
 defaults
 descr
@@ -148,6 +149,7 @@ hide
 hole_to_hole_min
 host
 id
+image
 island
 island_removal_mode
 island_area_min

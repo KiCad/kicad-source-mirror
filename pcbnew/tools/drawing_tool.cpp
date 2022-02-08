@@ -48,6 +48,7 @@
 #include <view/view.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/infobar.h>
+#include <wx/filedlg.h>
 
 #include <bitmaps.h>
 #include <board.h>
@@ -61,6 +62,7 @@
 #include <painter.h>
 #include <pcb_edit_frame.h>
 #include <pcb_group.h>
+#include <pcb_bitmap.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <pcb_dimension.h>
@@ -519,6 +521,237 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 
         startingPoint = NULLOPT;
     }
+
+    return 0;
+}
+
+
+int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
+{
+    if( m_inDrawingTool )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
+
+    PCB_BITMAP*      image = aEvent.Parameter<PCB_BITMAP*>();
+    bool             immediateMode = image != nullptr;
+    PCB_GRID_HELPER  grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    bool             ignorePrimePosition = false;
+    COMMON_SETTINGS* common_settings = Pgm().GetCommonSettings();
+
+    VECTOR2I     cursorPos = getViewControls()->GetCursorPosition();
+    auto         selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    BOARD_COMMIT commit( m_frame );
+
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
+    // Add all the drawable symbols to preview
+    if( image )
+    {
+        image->SetPosition( cursorPos );
+        m_view->ClearPreview();
+        m_view->AddToPreview( image->Clone() );
+    }
+
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
+    auto setCursor =
+            [&]()
+            {
+                if( image )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+                else
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+            };
+
+    auto cleanup =
+            [&] ()
+            {
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+                m_view->ClearPreview();
+                delete image;
+                image = nullptr;
+            };
+
+    Activate();
+
+    // Must be done after Activate() so that it gets set into the correct context
+    getViewControls()->ShowCursor( true );
+
+    // Set initial cursor
+    setCursor();
+
+    // Prime the pump
+    if( image )
+    {
+        m_toolMgr->RunAction( ACTIONS::refreshPreview );
+    }
+    else if( aEvent.HasPosition() )
+    {
+        m_toolMgr->PrimeTool( aEvent.Position() );
+    }
+    else if( common_settings->m_Input.immediate_actions && !aEvent.IsReactivate() )
+    {
+        m_toolMgr->PrimeTool( { 0, 0 } );
+        ignorePrimePosition = true;
+    }
+
+    // Main loop: keep receiving events
+    while( TOOL_EVENT* evt = Wait() )
+    {
+        setCursor();
+        cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
+
+        if( evt->IsCancelInteractive() )
+        {
+            if( image )
+            {
+                cleanup();
+            }
+            else
+            {
+                m_frame->PopTool( tool );
+                break;
+            }
+
+            if( immediateMode )
+            {
+                m_frame->PopTool( tool );
+                break;
+            }
+        }
+        else if( evt->IsActivate() )
+        {
+            if( image && evt->IsMoveTool() )
+            {
+                // We're already moving our own item; ignore the move tool
+                evt->SetPassEvent( false );
+                continue;
+            }
+
+            if( image )
+            {
+                m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel image creation." ) );
+                evt->SetPassEvent( false );
+                continue;
+            }
+
+            if( evt->IsMoveTool() )
+            {
+                // Leave ourselves on the stack so we come back after the move
+                break;
+            }
+            else
+            {
+                m_frame->PopTool( tool );
+                break;
+            }
+        }
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
+        {
+            if( !image )
+            {
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
+                wxFileDialog dlg( m_frame, _( "Choose Image" ), wxEmptyString, wxEmptyString,
+                                  _( "Image Files" ) + wxS( " " ) + wxImage::GetImageExtWildcard(),
+                                  wxFD_OPEN );
+
+                if( dlg.ShowModal() != wxID_OK )
+                    continue;
+
+                // If we started with a hotkey which has a position then warp back to that.
+                // Otherwise update to the current mouse position pinned inside the autoscroll
+                // boundaries.
+                if( evt->IsPrime() && !ignorePrimePosition )
+                {
+                    cursorPos = grid.Align( evt->Position() );
+                    getViewControls()->WarpMouseCursor( cursorPos, true );
+                }
+                else
+                {
+                    getViewControls()->PinCursorInsideNonAutoscrollArea( true );
+                    cursorPos = getViewControls()->GetMousePosition();
+                }
+
+                cursorPos = getViewControls()->GetMousePosition( true );
+
+                wxString fullFilename = dlg.GetPath();
+
+                if( wxFileExists( fullFilename ) )
+                    image = new PCB_BITMAP( m_frame->GetModel(), cursorPos );
+
+                if( !image || !image->ReadImageFile( fullFilename ) )
+                {
+                    wxMessageBox( _( "Could not load image from '%s'." ), fullFilename );
+                    delete image;
+                    image = nullptr;
+                    continue;
+                }
+
+                image->SetFlags( IS_NEW | IS_MOVING );
+                image->SetLayer( m_frame->GetActiveLayer() );
+
+                m_view->ClearPreview();
+                m_view->AddToPreview( image->Clone() );
+                m_view->RecacheAllItems(); // Bitmaps are cached in Opengl
+                selectionTool->AddItemToSel( image, false );
+
+                getViewControls()->SetCursorPosition( cursorPos, false );
+                setCursor();
+                m_view->ShowPreview( true );
+            }
+            else
+            {
+                commit.Add( image );
+                commit.Push( _( "Place an image" ) );
+
+                m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, image );
+
+                image = nullptr;
+                m_toolMgr->RunAction( ACTIONS::activatePointEditor );
+
+                m_view->ClearPreview();
+
+                if( immediateMode )
+                {
+                    m_frame->PopTool( tool );
+                    break;
+                }
+            }
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            // Warp after context menu only if dragging...
+            if( !image )
+                m_toolMgr->VetoContextMenuMouseWarp();
+
+            m_menu.ShowContextMenu( selectionTool->GetSelection() );
+        }
+        else if( image && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
+        {
+            image->SetPosition( cursorPos );
+            m_view->ClearPreview();
+            m_view->AddToPreview( image->Clone() );
+            m_view->RecacheAllItems(); // Bitmaps are cached in Opengl
+        }
+        else if( image && evt->IsAction( &ACTIONS::doDelete ) )
+        {
+            cleanup();
+        }
+        else
+        {
+            evt->SetPassEvent();
+        }
+
+        // Enable autopanning and cursor capture only when there is an image to be placed
+        getViewControls()->SetAutoPan( image != nullptr );
+        getViewControls()->CaptureCursor( image != nullptr );
+    }
+
+    getViewControls()->SetAutoPan( false );
+    getViewControls()->CaptureCursor( false );
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
     return 0;
 }
@@ -3004,6 +3237,7 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawZoneCutout.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawSimilarZone.MakeEvent() );
     Go( &DRAWING_TOOL::DrawVia,               PCB_ACTIONS::drawVia.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceImage,            PCB_ACTIONS::placeImage.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceText,             PCB_ACTIONS::placeText.MakeEvent() );
     Go( &DRAWING_TOOL::DrawRectangle,         PCB_ACTIONS::drawTextBox.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceImportedGraphics, PCB_ACTIONS::placeImportedGraphics.MakeEvent() );

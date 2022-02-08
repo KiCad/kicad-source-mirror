@@ -40,6 +40,7 @@ public:
         m_ViaOpacity          = 1.0;
         m_PadOpacity          = 1.0;
         m_ZoneOpacity         = 1.0;
+        m_BgImageOpacity      = 1.0;
     }
 
     /// @see ZONE_DISPLAY_MODE - stored in the project
@@ -57,6 +58,7 @@ public:
     double             m_ViaOpacity;       ///< Opacity override for all types of via
     double             m_PadOpacity;       ///< Opacity override for SMD pads and PTHs
     double             m_ZoneOpacity;      ///< Opacity override for filled zone areas
+    double             m_BgImageOpacity;   ///< Opacity override for background images
 };
 
 #endif // PCBSTRUCT_H_

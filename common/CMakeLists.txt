@@ -512,6 +512,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/netinfo_list.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pad.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_target.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_bitmap.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_text.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_textbox.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board_stackup_manager/board_stackup.cpp

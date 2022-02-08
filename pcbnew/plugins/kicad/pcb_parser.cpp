@@ -39,6 +39,7 @@
 #include <fp_textbox.h>
 #include <pcb_dimension.h>
 #include <pcb_shape.h>
+#include <pcb_bitmap.h>
 #include <pcb_group.h>
 #include <pcb_target.h>
 #include <pcb_track.h>
@@ -62,6 +63,12 @@
 #include <wx/log.h>
 #include <progress_reporter.h>
 #include <board_stackup_manager/stackup_predefined_prms.h>
+
+// For some reason wxWidgets is built with wxUSE_BASE64 unset so expose the wxWidgets
+// base64 code. Needed for PCB_BITMAP
+#define wxUSE_BASE64 1
+#include <wx/base64.h>
+#include <wx/mstream.h>
 
 using namespace PCB_KEYS_T;
 
@@ -847,6 +854,12 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
         case T_gr_circle:
         case T_gr_rect:
             item = parsePCB_SHAPE();
+            m_board->Add( item, ADD_MODE::BULK_APPEND, true );
+            bulkAddedItems.push_back( item );
+            break;
+
+        case T_image:
+            item = parsePCB_BITMAP( m_board );
             m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
@@ -2836,6 +2849,80 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
 }
 
 
+PCB_BITMAP* PCB_PARSER::parsePCB_BITMAP( BOARD_ITEM* aParent )
+{
+    wxCHECK_MSG( CurTok() == T_image, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as an image." ) );
+
+    T                           token;
+    std::unique_ptr<PCB_BITMAP> bitmap = std::make_unique<PCB_BITMAP>( aParent );
+
+    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_at:
+        {
+            VECTOR2I pos;
+            pos.x = parseBoardUnits( "X coordinate" );
+            pos.y = parseBoardUnits( "Y coordinate" );
+            bitmap->SetPosition( pos );
+            NeedRIGHT();
+            break;
+        }
+
+        case T_scale:
+            bitmap->GetImage()->SetScale( parseDouble( "image scale factor" ) );
+
+            if( !std::isnormal( bitmap->GetImage()->GetScale() ) )
+                bitmap->GetImage()->SetScale( 1.0 );
+
+            NeedRIGHT();
+            break;
+
+        case T_data:
+        {
+            token = NextTok();
+
+            wxString data;
+
+            // Reserve 128K because most image files are going to be larger than the default
+            // 1K that wxString reserves.
+            data.reserve( 1 << 17 );
+
+            while( token != T_RIGHT )
+            {
+                if( !IsSymbol( token ) )
+                    Expecting( "base64 image data" );
+
+                data += FromUTF8();
+                token = NextTok();
+            }
+
+            wxMemoryBuffer       buffer = wxBase64Decode( data );
+            wxMemoryOutputStream stream( buffer.GetData(), buffer.GetBufSize() );
+            wxImage*             image = new wxImage();
+            wxMemoryInputStream  istream( stream );
+            image->LoadFile( istream, wxBITMAP_TYPE_PNG );
+            bitmap->GetImage()->SetImage( image );
+            bitmap->GetImage()->SetBitmap( new wxBitmap( *image ) );
+            break;
+        }
+
+        default:
+            Expecting( "at, scale, data" );
+        }
+    }
+
+    return bitmap.release();
+}
+
+
 PCB_TEXT* PCB_PARSER::parsePCB_TEXT()
 {
     wxCHECK_MSG( CurTok() == T_gr_text, nullptr,
@@ -3781,6 +3868,13 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             shape->SetParent( footprint.get() );
             shape->SetDrawCoord();
             footprint->Add( shape, ADD_MODE::APPEND, true );
+            break;
+        }
+
+        case T_image:
+        {
+            PCB_BITMAP* image = parsePCB_BITMAP( footprint.get() );
+            footprint->Add( image, ADD_MODE::APPEND, true );
             break;
         }
 

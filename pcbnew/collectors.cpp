@@ -49,6 +49,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     //  *** all items in a same list (shown here) must be contiguous ****
     PCB_MARKER_T,           // in m_markers
     PCB_TEXT_T,             // in m_drawings
+    PCB_BITMAP_T,           // in m_drawings
     PCB_TEXTBOX_T,          // in m_drawings
     PCB_SHAPE_T,            // in m_drawings
     PCB_DIM_ALIGNED_T,      // in m_drawings
@@ -72,6 +73,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
 
 const KICAD_T GENERAL_COLLECTOR::BoardLevelItems[] = {
     PCB_MARKER_T,
+    PCB_BITMAP_T,
     PCB_TEXT_T,
     PCB_TEXTBOX_T,
     PCB_SHAPE_T,
@@ -118,6 +120,7 @@ const KICAD_T GENERAL_COLLECTOR::FootprintItems[] = {
     PCB_PAD_T,
     PCB_FP_ZONE_T,
     PCB_GROUP_T,
+    PCB_BITMAP_T,
     EOT
     };
 

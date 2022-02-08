@@ -112,6 +112,7 @@ void ARRAY_CREATOR::Invoke()
                     {
                     case PCB_FOOTPRINT_T:
                     case PCB_SHAPE_T:
+                    case PCB_BITMAP_T:
                     case PCB_TEXT_T:
                     case PCB_TEXTBOX_T:
                     case PCB_TRACE_T:

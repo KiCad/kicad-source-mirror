@@ -172,6 +172,7 @@ public:
      */
     //void SetRotationAngle( EDA_ANGLE aRotationAngle );
 
+    void ShowBitmapPropertiesDialog( BOARD_ITEM* aBitmap );
     void ShowTextPropertiesDialog( BOARD_ITEM* aText );
     int ShowTextBoxPropertiesDialog( BOARD_ITEM* aText );
     void ShowGraphicItemPropertiesDialog( BOARD_ITEM* aItem );

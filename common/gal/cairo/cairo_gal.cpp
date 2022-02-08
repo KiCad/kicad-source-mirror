@@ -480,9 +480,11 @@ void CAIRO_GAL_BASE::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aCo
 }
 
 
-void CAIRO_GAL_BASE::DrawBitmap( const BITMAP_BASE& aBitmap )
+void CAIRO_GAL_BASE::DrawBitmap( const BITMAP_BASE& aBitmap, double alphaBlend )
 {
     cairo_save( m_currentContext );
+
+    alphaBlend = std::clamp( alphaBlend, 0.0, 1.0 );
 
     // We have to calculate the pixel size in users units to draw the image.
     // m_worldUnitLength is a factor used for converting IU to inches
@@ -537,7 +539,7 @@ void CAIRO_GAL_BASE::DrawBitmap( const BITMAP_BASE& aBitmap )
 
     cairo_surface_mark_dirty( image );
     cairo_set_source_surface( m_currentContext, image, 0, 0 );
-    cairo_paint( m_currentContext );
+    cairo_paint_with_alpha( m_currentContext, alphaBlend );
 
     // store the image handle so it can be destroyed later
     m_imageSurfaces.push_back( image );

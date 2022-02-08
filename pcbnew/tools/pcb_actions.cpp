@@ -117,6 +117,11 @@ TOOL_ACTION PCB_ACTIONS::placeStackup( "pcbnew.InteractiveDrawing.placeStackup",
         _( "Add a board stackup table on a graphic layer" ),
         BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
 
+TOOL_ACTION PCB_ACTIONS::placeImage( "pcbnew.InteractiveDrawing.placeImage",
+        AS_GLOBAL, 0, "",
+        _( "Add Image" ), _( "Add bitmap image" ),
+        BITMAPS::image, AF_ACTIVATE );
+
 TOOL_ACTION PCB_ACTIONS::placeText( "pcbnew.InteractiveDrawing.text",
         AS_GLOBAL,
         MD_SHIFT + MD_CTRL + 'T', LEGACY_HK_NAME( "Add Text" ),

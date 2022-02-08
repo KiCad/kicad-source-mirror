@@ -41,6 +41,7 @@ using namespace std::placeholders;
 #include <pcb_edit_frame.h>
 #include <fp_shape.h>
 #include <fp_textbox.h>
+#include <pcb_bitmap.h>
 #include <pcb_dimension.h>
 #include <pcb_textbox.h>
 #include <pad.h>
@@ -191,6 +192,20 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     // Generate list of edit points basing on the item type
     switch( aItem->Type() )
     {
+    case PCB_BITMAP_T:
+    {
+        PCB_BITMAP* bitmap = (PCB_BITMAP*) aItem;
+        VECTOR2I    topLeft = bitmap->GetPosition() - bitmap->GetSize() / 2;
+        VECTOR2I    botRight = bitmap->GetPosition() + bitmap->GetSize() / 2;
+
+        points->AddPoint( topLeft );
+        points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
+        points->AddPoint( botRight );
+        points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
+
+        break;
+    }
+
     case PCB_TEXTBOX_T:
     case PCB_FP_TEXTBOX_T:
     case PCB_SHAPE_T:
@@ -1076,6 +1091,29 @@ void PCB_POINT_EDITOR::updateItem() const
 
     switch( item->Type() )
     {
+    case PCB_BITMAP_T:
+    {
+        PCB_BITMAP* bitmap = (PCB_BITMAP*) item;
+        VECTOR2I    topLeft = m_editPoints->Point( RECT_TOP_LEFT ).GetPosition();
+        VECTOR2I    topRight = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition();
+        VECTOR2I    botLeft = m_editPoints->Point( RECT_BOT_LEFT ).GetPosition();
+        VECTOR2I    botRight = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition();
+
+        pinEditedCorner( topLeft, topRight, botLeft, botRight );
+
+        double oldWidth = bitmap->GetSize().x;
+        double newWidth = std::max( topRight.x - topLeft.x, Mils2iu( 50 ) );
+        double widthRatio = newWidth / oldWidth;
+
+        double oldHeight = bitmap->GetSize().y;
+        double newHeight = std::max( botLeft.y - topLeft.y, Mils2iu( 50 ) );
+        double heightRatio = newHeight / oldHeight;
+
+        bitmap->SetImageScale( bitmap->GetImageScale() * std::min( widthRatio, heightRatio ) );
+
+        break;
+    }
+
     case PCB_TEXTBOX_T:
     case PCB_FP_TEXTBOX_T:
     case PCB_SHAPE_T:
@@ -1646,6 +1684,20 @@ void PCB_POINT_EDITOR::updatePoints()
 
     switch( item->Type() )
     {
+    case PCB_BITMAP_T:
+    {
+        PCB_BITMAP* bitmap = (PCB_BITMAP*) item;
+        VECTOR2I    topLeft = bitmap->GetPosition() - bitmap->GetSize() / 2;
+        VECTOR2I    botRight = bitmap->GetPosition() + bitmap->GetSize() / 2;
+
+        m_editPoints->Point( RECT_TOP_LEFT ).SetPosition( topLeft );
+        m_editPoints->Point( RECT_TOP_RIGHT ).SetPosition( botRight.x, topLeft.y );
+        m_editPoints->Point( RECT_BOT_LEFT ).SetPosition( topLeft.x, botRight.y );
+        m_editPoints->Point( RECT_BOT_RIGHT ).SetPosition( botRight );
+
+        break;
+    }
+
     case PCB_TEXTBOX_T:
     case PCB_FP_TEXTBOX_T:
     {

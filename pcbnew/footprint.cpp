@@ -532,6 +532,7 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
     case PCB_FP_DIM_ORTHOGONAL_T:
     case PCB_FP_SHAPE_T:
     case PCB_FP_TEXTBOX_T:
+    case PCB_BITMAP_T:
         if( aMode == ADD_MODE::APPEND )
             m_drawings.push_back( aBoardItem );
         else
@@ -786,7 +787,10 @@ const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisi
 
     for( BOARD_ITEM* item : m_drawings )
     {
-        if( !isFPEdit && m_privateLayers.test( item->GetLayer() ) )
+        // We want the bitmap bounding box just in the footprint editor
+        // so it will start with the correct initial zoom
+        if( !isFPEdit
+            && ( m_privateLayers.test( item->GetLayer() ) || item->Type() != PCB_BITMAP_T ) )
             continue;
 
         if( item->Type() != PCB_FP_TEXT_T )
@@ -893,7 +897,7 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
         if( !isFPEdit && m_privateLayers.test( item->GetLayer() ) )
             continue;
 
-        if( item->Type() != PCB_FP_TEXT_T )
+        if( item->Type() != PCB_FP_TEXT_T && item->Type() != PCB_BITMAP_T )
         {
             item->TransformShapeWithClearanceToPolygon( rawPolys, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
                                                         ERROR_OUTSIDE );
@@ -1096,9 +1100,12 @@ bool FOOTPRINT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
         {
             // Text items are selectable on their own, and are therefore excluded from this
             // test.  TextBox items are NOT selectable on their own, and so MUST be included
-            // here.
-            if( item->Type() != PCB_FP_TEXT_T && item->HitTest( arect, false, 0 ) )
+            // here. Bitmaps aren't selectable since they aren't displayed.
+            if( item->Type() != PCB_FP_TEXT_T && item->Type() != PCB_FP_TEXT_T
+                && item->HitTest( arect, false, 0 ) )
+            {
                 return true;
+            }
         }
 
         // Groups are not hit-tested; only their members
@@ -1689,6 +1696,7 @@ void FOOTPRINT::SetPosition( const VECTOR2I& aPos )
         case PCB_FP_DIM_ORTHOGONAL_T:
         case PCB_FP_DIM_RADIAL_T:
         case PCB_FP_DIM_LEADER_T:
+        case PCB_BITMAP_T:
             item->Move( delta );
             break;
 

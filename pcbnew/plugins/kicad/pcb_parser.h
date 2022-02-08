@@ -49,6 +49,7 @@ class PAD;
 class BOARD_DESIGN_SETTINGS;
 class PCB_DIMENSION_BASE;
 class PCB_SHAPE;
+class PCB_BITMAP;
 class EDA_TEXT;
 class FP_SHAPE;
 class FP_TEXT;
@@ -176,6 +177,7 @@ private:
 
     PCB_SHAPE*          parsePCB_SHAPE();
     PCB_TEXT*           parsePCB_TEXT();
+    PCB_BITMAP*         parsePCB_BITMAP( BOARD_ITEM* aParent );
     PCB_TEXTBOX*        parsePCB_TEXTBOX();
     PCB_DIMENSION_BASE* parseDIMENSION( BOARD_ITEM* aParent, bool aInFP );
 

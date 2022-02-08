@@ -25,6 +25,10 @@
 #include <wx/dcclient.h>
 #include <confirm.h>
 #include <bitmap_base.h>
+#include <pcb_base_edit_frame.h>
+#include <pcb_bitmap.h>
+#include <tool/tool_manager.h>
+#include <tool/actions.h>
 
 #include <dialogs/dialog_image_editor.h>
 
@@ -128,4 +132,25 @@ void DIALOG_IMAGE_EDITOR::TransferToImage( BITMAP_BASE* aItem )
     msg.ToDouble( &scale );
     m_workingImage->SetScale( scale );
     aItem->ImportData( m_workingImage );
+}
+
+
+void PCB_BASE_EDIT_FRAME::ShowBitmapPropertiesDialog( BOARD_ITEM* aBitmap )
+{
+    PCB_BITMAP*         bitmap = static_cast<PCB_BITMAP*>( aBitmap );
+    DIALOG_IMAGE_EDITOR dlg( this, bitmap->GetImage() );
+
+    if( dlg.ShowModal() == wxID_OK )
+    {
+        // save old image in undo list if not already in edit
+        if( bitmap->GetEditFlags() == 0 )
+            SaveCopyInUndoList( bitmap, UNDO_REDO::CHANGED );
+
+        dlg.TransferToImage( bitmap->GetImage() );
+
+        // The bitmap is cached in Opengl: clear the cache in case it has become invalid
+        GetCanvas()->GetView()->RecacheAllItems();
+        m_toolManager->PostEvent( EVENTS::SelectedItemsModified );
+        this->OnModify();
+    }
 }

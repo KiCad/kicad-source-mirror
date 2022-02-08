@@ -336,6 +336,7 @@ const APPEARANCE_CONTROLS::APPEARANCE_SETTING APPEARANCE_CONTROLS::s_objectSetti
     RR( _HKI( "Vias" ),             LAYER_VIAS,               _HKI( "Show all vias" ),     true ),
     RR( _HKI( "Pads" ),             LAYER_PADS,               _HKI( "Show all pads" ),     true ),
     RR( _HKI( "Zones" ),            LAYER_ZONES,              _HKI( "Show copper zones" ), true ),
+    RR( _HKI( "Background Images" ), LAYER_DRAW_BITMAPS,      _HKI( "Show user background images" ), true ),
     RR(),
     RR( _HKI( "Footprints Front" ), LAYER_MOD_FR,             _HKI( "Show footprints that are on board's front" ) ),
     RR( _HKI( "Footprints Back" ),  LAYER_MOD_BK,             _HKI( "Show footprints that are on board's back" ) ),
@@ -371,6 +372,7 @@ static std::set<int> s_allowedInFpEditor =
             LAYER_MOD_REFERENCES,
             LAYER_MOD_TEXT,
             LAYER_MOD_TEXT_INVISIBLE,
+            LAYER_DRAW_BITMAPS,
             LAYER_GRID
         };
 
@@ -2204,12 +2206,14 @@ void APPEARANCE_CONTROLS::syncObjectSettings()
     wxASSERT( m_objectSettingsMap.count( LAYER_TRACKS )
               && m_objectSettingsMap.count( LAYER_VIAS )
               && m_objectSettingsMap.count( LAYER_PADS )
-              && m_objectSettingsMap.count( LAYER_ZONES ) );
+              && m_objectSettingsMap.count( LAYER_ZONES )
+              && m_objectSettingsMap.count( LAYER_DRAW_BITMAPS ) );
 
     m_objectSettingsMap[LAYER_TRACKS]->ctl_opacity->SetValue( opts.m_TrackOpacity * 100 );
     m_objectSettingsMap[LAYER_VIAS]->ctl_opacity->SetValue( opts.m_ViaOpacity * 100 );
     m_objectSettingsMap[LAYER_PADS]->ctl_opacity->SetValue( opts.m_PadOpacity * 100 );
     m_objectSettingsMap[LAYER_ZONES]->ctl_opacity->SetValue( opts.m_ZoneOpacity * 100 );
+    m_objectSettingsMap[LAYER_DRAW_BITMAPS]->ctl_opacity->SetValue( opts.m_BgImageOpacity * 100 );
 }
 
 
@@ -2838,10 +2842,11 @@ void APPEARANCE_CONTROLS::onObjectOpacitySlider( int aLayer, float aOpacity )
 
     switch( aLayer )
     {
-    case static_cast<int>( LAYER_TRACKS ): options.m_TrackOpacity = aOpacity; break;
-    case static_cast<int>( LAYER_VIAS ):   options.m_ViaOpacity = aOpacity;   break;
-    case static_cast<int>( LAYER_PADS ):   options.m_PadOpacity = aOpacity;   break;
-    case static_cast<int>( LAYER_ZONES ):  options.m_ZoneOpacity = aOpacity;  break;
+    case static_cast<int>( LAYER_TRACKS ):       options.m_TrackOpacity   = aOpacity; break;
+    case static_cast<int>( LAYER_VIAS ):         options.m_ViaOpacity     = aOpacity; break;
+    case static_cast<int>( LAYER_PADS ):         options.m_PadOpacity     = aOpacity; break;
+    case static_cast<int>( LAYER_ZONES ):        options.m_ZoneOpacity    = aOpacity; break;
+    case static_cast<int>( LAYER_DRAW_BITMAPS ): options.m_BgImageOpacity = aOpacity; break;
     default: return;
     }
 

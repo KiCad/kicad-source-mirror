@@ -560,6 +560,8 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
         }
     }
 
+    m_view->SetLayerTarget( LAYER_DRAW_BITMAPS, KIGFX::TARGET_NONCACHED );
+
     m_view->SetLayerTarget( LAYER_ANCHOR, KIGFX::TARGET_NONCACHED );
     m_view->SetLayerDisplayOnly( LAYER_ANCHOR );
 

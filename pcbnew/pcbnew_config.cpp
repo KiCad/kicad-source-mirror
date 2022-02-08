@@ -106,6 +106,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     opts.m_PadOpacity          = localSettings.m_PadOpacity;
     opts.m_ZoneOpacity         = localSettings.m_ZoneOpacity;
     opts.m_ZoneDisplayMode     = localSettings.m_ZoneDisplayMode;
+    opts.m_BgImageOpacity      = localSettings.m_BgImageOpacity;
 
     // No refresh here: callers of LoadProjectSettings refresh later
     SetDisplayOptions( opts, false );
@@ -159,6 +160,7 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
     localSettings.m_PadOpacity          = displayOpts.m_PadOpacity;
     localSettings.m_ZoneOpacity         = displayOpts.m_ZoneOpacity;
     localSettings.m_ZoneDisplayMode     = displayOpts.m_ZoneDisplayMode;
+    localSettings.m_BgImageOpacity      = displayOpts.m_BgImageOpacity;
 
     // Save Design settings
     const BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();

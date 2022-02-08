@@ -39,6 +39,7 @@ class BOARD_DESIGN_SETTINGS;
 class PCB_DIMENSION_BASE;
 class FP_SHAPE;
 class PCB_SHAPE;
+class PCB_BITMAP;
 class PCB_TARGET;
 class PAD;
 class FP_TEXT;
@@ -122,7 +123,8 @@ class SHAPE_LINE_CHAIN;
 //#define SEXPR_BOARD_FILE_VERSION    20220331  // Plot on all layers selection setting
 //#define SEXPR_BOARD_FILE_VERSION    20220417  // Automatic dimension precisions
 //#define SEXPR_BOARD_FILE_VERSION    20220427  // Exclude Edge.Cuts & Margin from fp private layers
-#define SEXPR_BOARD_FILE_VERSION      20220609  // Add teardrop keywords to identify teardrop zones
+//#define SEXPR_BOARD_FILE_VERSION    20220609  // Add teardrop keywords to identify teardrop zones
+#define SEXPR_BOARD_FILE_VERSION      20220621  // Add Image support
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting
@@ -280,6 +282,8 @@ private:
     void format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel = 0 ) const;
 
     void format( const FP_SHAPE* aFPShape, int aNestLevel = 0 ) const;
+
+    void format( const PCB_BITMAP* aBitmap, int aNestLevel = 0 ) const;
 
     void format( const PCB_GROUP* aGroup, int aNestLevel = 0 ) const;
 

@@ -46,6 +46,7 @@ class PCB_SHAPE;
 class PCB_GROUP;
 class FOOTPRINT;
 class ZONE;
+class PCB_BITMAP;
 class PCB_TEXT;
 class PCB_TEXTBOX;
 class FP_TEXT;
@@ -142,6 +143,7 @@ protected:
     double m_viaOpacity;       ///< Opacity override for all types of via
     double m_padOpacity;       ///< Opacity override for SMD pads and PTHs
     double m_zoneOpacity;      ///< Opacity override for filled zones
+    double m_bgImageOpacity;   ///< Opacity override for background images
 };
 
 
@@ -169,6 +171,7 @@ protected:
     void draw( const PCB_VIA* aVia, int aLayer );
     void draw( const PAD* aPad, int aLayer );
     void draw( const PCB_SHAPE* aSegment, int aLayer );
+    void draw( const PCB_BITMAP* aBitmap, int aLayer );
     void draw( const PCB_TEXT* aText, int aLayer );
     void draw( const PCB_TEXTBOX* aText, int aLayer );
     void draw( const FP_TEXT* aText, int aLayer );

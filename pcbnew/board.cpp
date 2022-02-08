@@ -44,6 +44,7 @@
 #include <pcb_group.h>
 #include <pcb_target.h>
 #include <pcb_shape.h>
+#include <pcb_bitmap.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <pgm_base.h>
@@ -307,6 +308,7 @@ void BOARD::Move( const VECTOR2I& aMoveVector ) // overload
     // @todo : anything like this elsewhere?  maybe put into GENERAL_COLLECTOR class.
     static const KICAD_T top_level_board_stuff[] = {
         PCB_MARKER_T,
+        PCB_BITMAP_T,
         PCB_TEXT_T,
         PCB_TEXTBOX_T,
         PCB_SHAPE_T,
@@ -739,6 +741,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
     case PCB_SHAPE_T:
+    case PCB_BITMAP_T:
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
     case PCB_TARGET_T:
@@ -851,6 +854,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
     case PCB_SHAPE_T:
+    case PCB_BITMAP_T:
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
     case PCB_TARGET_T:
@@ -1334,6 +1338,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
             break;
 
         case PCB_SHAPE_T:
+        case PCB_BITMAP_T:
         case PCB_TEXT_T:
         case PCB_TEXTBOX_T:
         case PCB_DIM_ALIGNED_T:
@@ -1350,6 +1355,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
                 switch( stype = *++p )
                 {
                 case PCB_SHAPE_T:
+                case PCB_BITMAP_T:
                 case PCB_TEXT_T:
                 case PCB_TEXTBOX_T:
                 case PCB_DIM_ALIGNED_T:

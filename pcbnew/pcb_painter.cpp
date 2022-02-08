@@ -35,6 +35,7 @@
 #include <pcb_shape.h>
 #include <string_utils.h>
 #include <zone.h>
+#include <pcb_bitmap.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <pcb_marker.h>
@@ -72,10 +73,11 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_netColorMode = NET_COLOR_MODE::RATSNEST;
     m_ContrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
 
-    m_trackOpacity = 1.0;
-    m_viaOpacity   = 1.0;
-    m_padOpacity   = 1.0;
-    m_zoneOpacity  = 1.0;
+    m_trackOpacity    = 1.0;
+    m_viaOpacity      = 1.0;
+    m_padOpacity      = 1.0;
+    m_zoneOpacity     = 1.0;
+    m_bgImageOpacity  = 1.0;
 
     m_ForcePadSketchModeOff    = false;
     m_ForcePadSketchModeOn     = false;
@@ -143,10 +145,11 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOption
     m_ContrastModeDisplay = aOptions.m_ContrastModeDisplay;
     m_netColorMode        = aOptions.m_NetColorMode;
 
-    m_trackOpacity = aOptions.m_TrackOpacity;
-    m_viaOpacity   = aOptions.m_ViaOpacity;
-    m_padOpacity   = aOptions.m_PadOpacity;
-    m_zoneOpacity  = aOptions.m_ZoneOpacity;
+    m_trackOpacity    = aOptions.m_TrackOpacity;
+    m_viaOpacity      = aOptions.m_ViaOpacity;
+    m_padOpacity      = aOptions.m_PadOpacity;
+    m_zoneOpacity     = aOptions.m_ZoneOpacity;
+    m_bgImageOpacity  = aOptions.m_BgImageOpacity;
 }
 
 
@@ -341,6 +344,8 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         color.a *= m_padOpacity;
     else if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
         color.a *= m_zoneOpacity;
+    else if( item->Type() == PCB_BITMAP_T )
+        color.a *= m_bgImageOpacity;
 
     // No special modifiers enabled
     return color;
@@ -414,7 +419,10 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         {
             FOOTPRINT* parentFP = static_cast<FOOTPRINT*>( item->GetParentFootprint() );
 
-            if( item->GetLayerSet().count() > 1 )
+            // Never draw footprint bitmaps on board
+            if( item->Type() == PCB_BITMAP_T )
+                return false;
+            else if( item->GetLayerSet().count() > 1 )
             {
                 // For multi-layer objects, exclude only those layers that are private
                 if( IsPcbLayer( aLayer ) && parentFP->GetPrivateLayers().test( aLayer ) )
@@ -459,6 +467,10 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
     case PCB_SHAPE_T:
     case PCB_FP_SHAPE_T:
         draw( static_cast<const PCB_SHAPE*>( item ), aLayer );
+        break;
+
+    case PCB_BITMAP_T:
+        draw( static_cast<const PCB_BITMAP*>( item ), aLayer );
         break;
 
     case PCB_TEXT_T:
@@ -1630,6 +1642,45 @@ void PCB_PAINTER::strokeText( const wxString& aText, const VECTOR2I& aPosition,
     m_gal->SetIsStroke( font->IsStroke() );
 
     font->Draw( m_gal, aText, aPosition, aAttrs );
+}
+
+
+void PCB_PAINTER::draw( const PCB_BITMAP* aBitmap, int aLayer )
+{
+    m_gal->Save();
+    m_gal->Translate( aBitmap->GetPosition() );
+
+    // When the image scale factor is not 1.0, we need to modify the actual as the image scale
+    // factor is similar to a local zoom
+    double img_scale = aBitmap->GetImageScale();
+
+    if( img_scale != 1.0 )
+        m_gal->Scale( VECTOR2D( img_scale, img_scale ) );
+
+    m_gal->DrawBitmap( *aBitmap->GetImage(), m_pcbSettings.m_bgImageOpacity );
+
+    if( aBitmap->IsSelected() || aBitmap->IsBrightened() )
+    {
+        COLOR4D color = m_pcbSettings.GetColor( aBitmap, LAYER_ANCHOR );
+        m_gal->SetIsStroke( true );
+        m_gal->SetStrokeColor( color );
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth * 2.0f );
+        m_gal->SetIsFill( false );
+
+        // Draws a bounding box.
+        VECTOR2D bm_size( aBitmap->GetSize() );
+        // bm_size is the actual image size in UI.
+        // but m_gal scale was previously set to img_scale
+        // so recalculate size relative to this image size.
+        bm_size.x /= img_scale;
+        bm_size.y /= img_scale;
+        VECTOR2D origin( -bm_size.x / 2.0, -bm_size.y / 2.0 );
+        VECTOR2D end = origin + bm_size;
+
+        m_gal->DrawRectangle( origin, end );
+    }
+
+    m_gal->Restore();
 }
 
 

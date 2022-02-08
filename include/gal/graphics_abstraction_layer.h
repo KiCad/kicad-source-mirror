@@ -206,7 +206,7 @@ public:
     /**
      * Draw a bitmap image.
      */
-    virtual void DrawBitmap( const BITMAP_BASE& aBitmap ) {};
+    virtual void DrawBitmap( const BITMAP_BASE& aBitmap, double alphaBlend = 1.0 ) {};
 
     // --------------
     // Screen methods

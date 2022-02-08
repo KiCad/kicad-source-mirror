@@ -67,6 +67,7 @@ public:
         RECTANGLE,
         CIRCLE,
         ARC,
+        IMAGE,
         TEXT,
         ANCHOR,
         DXF,
@@ -134,6 +135,12 @@ public:
      * the third one - the angle.
      */
     int DrawArc( const TOOL_EVENT& aEvent );
+
+    /**
+     * Display a dialog that allows one to select and image then decide where to place the
+     * image in the editor.
+     */
+    int PlaceImage( const TOOL_EVENT& aEvent );
 
     /**
      * Display a dialog that allows one to input text and its settings and then lets the user

@@ -157,7 +157,7 @@ public:
                             double aFilterValue = 0.0 ) override;
 
     /// @copydoc GAL::DrawBitmap()
-    void DrawBitmap( const BITMAP_BASE& aBitmap ) override;
+    void DrawBitmap( const BITMAP_BASE& aBitmap, double alphaBlend = 1.0 ) override;
 
     /// @copydoc GAL::BitmapText()
     void BitmapText( const wxString& aText, const VECTOR2I& aPosition,
