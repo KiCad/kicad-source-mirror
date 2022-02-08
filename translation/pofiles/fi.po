@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-02-08 01:49+0000\n"
+"PO-Revision-Date: 2022-02-14 17:18+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v6/fi/>\n"
 "Language: fi\n"
@@ -1986,7 +1986,7 @@ msgid "Configure Global %s Library Table"
 msgstr "Määritä yleinen %s kirjastotaulukko"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:42
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "KiCad has been run for the first time using the new %s library table for\n"
 "accessing libraries.  In order for KiCad to access %s libraries,\n"
@@ -2117,8 +2117,9 @@ msgstr "Valitse yleinen %s kirjastotaulukotiedosto:"
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:308
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:322
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:338
+#, fuzzy
 msgid "dummy"
-msgstr "nuken"
+msgstr "dummy"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:51
 msgid "Select a file"
