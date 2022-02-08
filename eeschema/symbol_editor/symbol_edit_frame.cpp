@@ -168,28 +168,28 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.SetManagedWindow( this );
 
     CreateInfoBar();
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" )
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( wxT( "MainToolbar" ) )
                       .Top().Layer( 6 ) );
-    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" )
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( wxT( "MsgPanel" ) )
                       .Bottom().Layer( 6 ) );
 
-    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
+    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( wxT( "OptToolbar" ) )
                       .Left().Layer( 3 ) );
-    m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "SymbolTree" )
+    m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( wxT( "SymbolTree" ) )
                       .Left().Layer( 2 )
                       .Caption( _( "Libraries" ) )
                       .MinSize( 250, -1 ).BestSize( 250, -1 ) );
-    m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" )
+    m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( wxT( "ToolsToolbar" ) )
                       .Right().Layer( 2 ) );
 
-    m_auimgr.AddPane( GetCanvas(), wxAuiPaneInfo().Name( "DrawFrame" )
+    m_auimgr.AddPane( GetCanvas(), wxAuiPaneInfo().Name( wxT( "DrawFrame" ) )
                       .CentrePane() );
 
     FinishAUIInitialization();
 
     if( m_settings->m_LibWidth > 0 )
     {
-        wxAuiPaneInfo& treePane = m_auimgr.GetPane( "SymbolTree" );
+        wxAuiPaneInfo& treePane = m_auimgr.GetPane( wxT( "SymbolTree" ) );
 
         // wxAUI hack: force width by setting MinSize() and then Fixed()
         // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
@@ -265,7 +265,7 @@ SYMBOL_EDIT_FRAME::~SYMBOL_EDIT_FRAME()
 
 void SYMBOL_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    wxCHECK_RET( m_settings, "Call to SYMBOL_EDIT_FRAME::LoadSettings with null m_boardAdapter" );
+    wxCHECK_RET( m_settings, wxT( "Call to SYMBOL_EDIT_FRAME::LoadSettings with null m_boardAdapter" ) );
 
     SCH_BASE_FRAME::LoadSettings( GetSettings() );
 
@@ -280,7 +280,7 @@ void SYMBOL_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
 void SYMBOL_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
-    wxCHECK_RET( m_settings, "Call to SYMBOL_EDIT_FRAME::LoadSettings with null m_boardAdapter" );
+    wxCHECK_RET( m_settings, wxT( "Call to SYMBOL_EDIT_FRAME::LoadSettings with null m_boardAdapter" ) );
 
     GetGalDisplayOptions().m_axesEnabled = true;
 
@@ -807,7 +807,7 @@ void SYMBOL_EDIT_FRAME::OnModify()
 
     m_treePane->GetLibTree()->RefreshLibTree();
 
-    if( !GetTitle().StartsWith( "*" ) )
+    if( !GetTitle().StartsWith( wxT( "*" ) ) )
         updateTitle();
 }
 
@@ -968,7 +968,7 @@ void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress, const wxString& aForc
         // Try to select the parent library, in case the symbol is not found
         if( !found && selected.IsValid() )
         {
-            selected.SetLibItemName( "" );
+            selected.SetLibItemName( wxT( "" ) );
             found = m_libMgr->GetAdapter()->FindItem( selected );
 
             if( found )
@@ -1375,7 +1375,7 @@ bool SYMBOL_EDIT_FRAME::addLibTableEntry( const wxString& aLibFile, TABLE_SCOPE 
 
         while( libTable->HasLibrary( libNickname ) )
         {
-            tmp.Printf( "%s%d", fn.GetName(), suffix );
+            tmp.Printf( wxT( "%s%d" ), fn.GetName(), suffix );
             libNickname = tmp;
             suffix += 1;
         }
@@ -1449,7 +1449,7 @@ bool SYMBOL_EDIT_FRAME::replaceLibTableEntry( const wxString& aLibNickname,
     wxString normalizedPath = NormalizePath( aLibFile, &envVars, projectPath );
 
     row->SetFullURI( normalizedPath );
-    row->SetType( "KiCad" );
+    row->SetType( wxT( "KiCad" ) );
 
     try
     {

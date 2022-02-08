@@ -342,7 +342,7 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbolAux( LIB_SYMBOL* aEntry, const wxStr
 
     if( aEntry->GetName().IsEmpty() )
     {
-        wxLogWarning( "Symbol in library '%s' has empty name field.", aLibrary );
+        wxLogWarning( wxT( "Symbol in library '%s' has empty name field." ), aLibrary );
         return false;
     }
 
@@ -437,7 +437,7 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol()
     wxString name = dlg.GetName();
 
     // Currently, symbol names cannot include a space, that breaks libraries:
-    name.Replace( " ", "_" );
+    name.Replace( wxT( " " ), wxT( "_" ) );
 
     // Test if there is a symbol with this name already.
     if( !lib.empty() && m_libMgr->SymbolExists( name, lib ) )
@@ -686,7 +686,7 @@ void SYMBOL_EDIT_FRAME::saveSymbolAs()
         wxString new_name = nameTextCtrl->GetValue();
         new_name.Trim( true );
         new_name.Trim( false );
-        new_name.Replace( " ", "_" );
+        new_name.Replace( wxT( " " ), wxT( "_" ) );
 
         if( new_name.IsEmpty() )
         {
@@ -864,7 +864,7 @@ void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
         }
         catch( IO_ERROR& e )
         {
-            wxLogMessage( "Can not paste: %s", e.Problem() );
+            wxLogMessage( wxT( "Can not paste: %s" ), e.Problem() );
             return;
         }
     }
@@ -911,7 +911,7 @@ void SYMBOL_EDIT_FRAME::ensureUniqueName( LIB_SYMBOL* aSymbol, const wxString& a
 
     // Append a number to the name until the name is unique in the library.
     while( m_libMgr->SymbolExists( newName, aLibrary ) )
-        newName.Printf( "%s_%d", aSymbol->GetName(), i++ );
+        newName.Printf( wxT( "%s_%d" ), aSymbol->GetName(), i++ );
 
     aSymbol->SetName( newName );
 }
@@ -978,7 +978,7 @@ void SYMBOL_EDIT_FRAME::Revert( bool aConfirm )
 
 void SYMBOL_EDIT_FRAME::RevertAll()
 {
-    wxCHECK_RET( m_libMgr, "Library manager object not created." );
+    wxCHECK_RET( m_libMgr, wxT( "Library manager object not created." ) );
 
     Revert( false );
     m_libMgr->RevertAll();
@@ -1075,7 +1075,7 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     ClearMsgPanel();
 
     // Copy .kicad_symb file to .bak.
-    if( !backupFile( fn, "bak" ) )
+    if( !backupFile( fn, wxT( "bak" ) ) )
         return false;
 
     if( !m_libMgr->SaveLibrary( aLibrary, fn.GetFullPath(), fileType ) )

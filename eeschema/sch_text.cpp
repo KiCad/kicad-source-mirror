@@ -92,7 +92,7 @@ bool IncrementLabelMember( wxString& name, int aIncrement )
         {
             name.Remove( ii + 1 );
             //write out a format string with correct number of leading zeroes
-            outputFormat.Printf( "%%0%dd", dCount );
+            outputFormat.Printf( wxT( "%%0%dd" ), dCount );
             //write out the number using the format string
             outputNumber.Printf( outputFormat, number );
             name << outputNumber << suffix;
@@ -154,7 +154,7 @@ LABEL_SPIN_STYLE LABEL_SPIN_STYLE::RotateCW()
     case LABEL_SPIN_STYLE::UP:     newSpin = LABEL_SPIN_STYLE::RIGHT;  break;
     case LABEL_SPIN_STYLE::RIGHT:  newSpin = LABEL_SPIN_STYLE::BOTTOM; break;
     case LABEL_SPIN_STYLE::BOTTOM: newSpin = LABEL_SPIN_STYLE::LEFT;   break;
-    default: wxLogWarning( "RotateCW encountered unknown current spin style" ); break;
+    default: wxLogWarning( wxT( "RotateCW encountered unknown current spin style" ) ); break;
     }
 
     return LABEL_SPIN_STYLE( newSpin );
@@ -171,7 +171,7 @@ LABEL_SPIN_STYLE LABEL_SPIN_STYLE::RotateCCW()
     case LABEL_SPIN_STYLE::BOTTOM: newSpin = LABEL_SPIN_STYLE::RIGHT;  break;
     case LABEL_SPIN_STYLE::RIGHT:  newSpin = LABEL_SPIN_STYLE::UP;     break;
     case LABEL_SPIN_STYLE::UP:     newSpin = LABEL_SPIN_STYLE::LEFT;   break;
-    default: wxLogWarning( "RotateCCW encountered unknown current spin style" ); break;
+    default: wxLogWarning( wxT( "RotateCCW encountered unknown current spin style" ) ); break;
     }
 
     return LABEL_SPIN_STYLE( newSpin );
@@ -188,7 +188,7 @@ LABEL_SPIN_STYLE LABEL_SPIN_STYLE::MirrorX()
     case LABEL_SPIN_STYLE::BOTTOM: newSpin = LABEL_SPIN_STYLE::UP;     break;
     case LABEL_SPIN_STYLE::LEFT:                                       break;
     case LABEL_SPIN_STYLE::RIGHT:                                      break;
-    default: wxLogWarning( "MirrorX encountered unknown current spin style" ); break;
+    default: wxLogWarning( wxT( "MirrorX encountered unknown current spin style" ) ); break;
     }
 
     return LABEL_SPIN_STYLE( newSpin );
@@ -205,7 +205,7 @@ LABEL_SPIN_STYLE LABEL_SPIN_STYLE::MirrorY()
     case LABEL_SPIN_STYLE::RIGHT: newSpin = LABEL_SPIN_STYLE::LEFT;  break;
     case LABEL_SPIN_STYLE::UP:                                       break;
     case LABEL_SPIN_STYLE::BOTTOM:                                   break;
-    default: wxLogWarning( "MirrorY encountered unknown current spin style" ); break;
+    default: wxLogWarning( wxT( "MirrorY encountered unknown current spin style" ) ); break;
     }
 
     return LABEL_SPIN_STYLE( newSpin );
@@ -336,7 +336,7 @@ void SCH_TEXT::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
     switch( aSpinStyle )
     {
     default:
-        wxASSERT_MSG( 1, "Bad spin style" );
+        wxASSERT_MSG( 1, wxT( "Bad spin style" ) );
         break;
 
     case LABEL_SPIN_STYLE::RIGHT: // Horiz Normal Orientation
@@ -647,13 +647,13 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
 
     wxString text = EDA_TEXT::GetShownText();
 
-    if( text == "~" )   // Legacy placeholder for empty string
+    if( text == wxT( "~" ) )   // Legacy placeholder for empty string
     {
         text = "";
     }
     else if( HasTextVars() )
     {
-        wxCHECK_MSG( Schematic(), wxEmptyString, "No parent SCHEMATIC set for SCH_TEXT!" );
+        wxCHECK_MSG( Schematic(), wxEmptyString, wxT( "No parent SCHEMATIC set for SCH_TEXT!" ) );
 
         PROJECT* project = nullptr;
 
@@ -859,7 +859,7 @@ bool SCH_LABEL::IsType( const KICAD_T aScanTypes[] ) const
     if( SCH_ITEM::IsType( aScanTypes ) )
         return true;
 
-    wxCHECK_MSG( Schematic(), false, "No parent SCHEMATIC set for SCH_LABEL!" );
+    wxCHECK_MSG( Schematic(), false, wxT( "No parent SCHEMATIC set for SCH_LABEL!" ) );
 
     SCH_SHEET_PATH current = Schematic()->CurrentSheet();
 
@@ -1065,7 +1065,7 @@ void SCH_GLOBALLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
     switch( aSpinStyle )
     {
     default:
-        wxASSERT_MSG( 1, "Bad spin style" );
+        wxASSERT_MSG( 1, wxT( "Bad spin style" ) );
         m_spin_style = LABEL_SPIN_STYLE::RIGHT;
         KI_FALLTHROUGH;
 
@@ -1268,7 +1268,7 @@ bool SCH_GLOBALLABEL::ResolveTextVar( wxString* token, int aDepth ) const
 
         if( it == Schematic()->GetPageRefsMap().end() )
         {
-            ref = "?";
+            ref = wxT( "?" );
         }
         else
         {
@@ -1572,7 +1572,7 @@ void SCH_HIERLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
     switch( aSpinStyle )
     {
     default:
-        wxLogWarning( "SetLabelSpinStyle bad spin style" );
+        wxLogWarning( wxT( "SetLabelSpinStyle bad spin style" ) );
         break;
 
     case LABEL_SPIN_STYLE::LEFT:
@@ -1606,7 +1606,7 @@ void SCH_HIERLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
 
 void SCH_HIERLABEL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& offset )
 {
-    wxCHECK_RET( Schematic(), "No parent SCHEMATIC set for SCH_LABEL!" );
+    wxCHECK_RET( Schematic(), wxT( "No parent SCHEMATIC set for SCH_LABEL!" ) );
 
     static std::vector <wxPoint> Poly;
 

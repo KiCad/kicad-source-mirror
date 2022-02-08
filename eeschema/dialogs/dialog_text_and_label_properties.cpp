@@ -338,7 +338,7 @@ bool DIALOG_TEXT_AND_LABEL_PROPERTIES::TransferDataFromWindow()
     {
 #ifdef __WXMAC__
         // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting
-        text.Replace( "\r", "\n" );
+        text.Replace( wxT( "\r" ), wxT( "\n" ) );
 #endif
         m_CurrentText->SetText( text );
     }

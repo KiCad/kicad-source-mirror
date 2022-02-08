@@ -37,7 +37,7 @@
 using namespace LIB_TABLE_T;
 
 
-static const wxString global_tbl_name( "sym-lib-table" );
+static const wxString global_tbl_name( wxT( "sym-lib-table" ) );
 
 
 const char* SYMBOL_LIB_TABLE::PropPowerSymsOnly = "pwr_sym_only";
@@ -289,7 +289,7 @@ void SYMBOL_LIB_TABLE::EnumerateSymbolLib( const wxString& aNickname, wxArrayStr
     wxString options = row->GetOptions();
 
     if( aPowerSymbolsOnly )
-        row->SetOptions( row->GetOptions() + " " + PropPowerSymsOnly );
+        row->SetOptions( row->GetOptions() + wxT( " " ) + PropPowerSymsOnly );
 
     row->SetLoaded( false );
     row->plugin->EnumerateSymbolLib( aAliasNames, row->GetFullURI( true ), row->GetProperties() );
@@ -327,7 +327,7 @@ void SYMBOL_LIB_TABLE::LoadSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
     wxString options = row->GetOptions();
 
     if( aPowerSymbolsOnly )
-        row->SetOptions( row->GetOptions() + " " + PropPowerSymsOnly );
+        row->SetOptions( row->GetOptions() + wxT( " " ) + PropPowerSymsOnly );
 
     row->SetLoaded( false );
     row->plugin->EnumerateSymbolLib( aSymbolList, row->GetFullURI( true ), row->GetProperties() );
@@ -483,7 +483,7 @@ LIB_SYMBOL* SYMBOL_LIB_TABLE::LoadSymbolWithOptionalNickname( const LIB_ID& aLib
 
 const wxString SYMBOL_LIB_TABLE::GlobalPathEnvVariableName()
 {
-    return  "KICAD6_SYMBOL_DIR";
+    return  wxT( "KICAD6_SYMBOL_DIR" );
 }
 
 

@@ -171,7 +171,7 @@ int LIB_PIN::GetPenWidth() const
 
 wxString LIB_PIN::GetShownName() const
 {
-    if( m_name == "~" )
+    if( m_name == wxT( "~" ) )
         return wxEmptyString;
     else
         return m_name;

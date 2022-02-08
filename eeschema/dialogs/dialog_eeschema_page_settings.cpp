@@ -108,7 +108,7 @@ void DIALOG_EESCHEMA_PAGE_SETTINGS::onTransferDataToWindow()
 bool DIALOG_EESCHEMA_PAGE_SETTINGS::onSavePageSettings()
 {
     wxCHECK_MSG( dynamic_cast<SCH_EDIT_FRAME*>( m_parent ), true,
-                 "DIALOG_PAGES_SETTINGS::OnDateApplyClick frame is not a schematic frame!" );
+                 wxT( "DIALOG_PAGES_SETTINGS::OnDateApplyClick frame is not a schematic frame!" ) );
 
     // Exports settings to other sheets if requested:
     SCH_SCREENS ScreenList( dynamic_cast<SCH_EDIT_FRAME*>( m_parent )->Schematic().Root() );

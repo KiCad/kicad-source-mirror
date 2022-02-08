@@ -49,7 +49,7 @@ wxString NETLIST_EXPORTER_PSPICE_SIM::ComponentToVector(
         // Replace these forbidden chars to find the actual spice net name
         NETLIST_EXPORTER_PSPICE::ReplaceForbiddenChars( spicenet );
 
-        return wxString::Format( "V(%s)", spicenet );
+        return wxString::Format( wxT( "V(%s)" ), spicenet );
     }
 
     else if( aType & SPT_CURRENT )
@@ -59,13 +59,13 @@ wxString NETLIST_EXPORTER_PSPICE_SIM::ComponentToVector(
 
         if( device.length() > 0 && device[0] == 'x' )
         {
-            return "current probe of .subckt not yet implemented";
+            return wxT( "current probe of .subckt not yet implemented" );
         }
         else
         {
-            return wxString::Format( "@%s[%s]",
+            return wxString::Format( wxT( "@%s[%s]" ),
                                      device,
-                                     param.IsEmpty() ? "i" : param );
+                                     param.IsEmpty() ? wxT( "i" ) : param );
         }
     }
 
@@ -85,7 +85,7 @@ SIM_PLOT_TYPE NETLIST_EXPORTER_PSPICE_SIM::VectorToSignal(
     if( !internalDevParameter.Matches( vector ) )
     {
         // any text is a node name, which returns voltage
-        aSignal = "V(" + aVector + ")";
+        aSignal = wxT( "V(" ) + aVector + wxT( ")" );
         return SPT_VOLTAGE;
     }
     else
@@ -96,8 +96,8 @@ SIM_PLOT_TYPE NETLIST_EXPORTER_PSPICE_SIM::VectorToSignal(
         {
             // this is a branch current
             paramType[0] = 'I';
-            aSignal      = paramType + "(";
-            aSignal += internalDevParameter.GetMatch( vector, 1 ).Upper() + ")";
+            aSignal      = paramType + wxT( "(" );
+            aSignal += internalDevParameter.GetMatch( vector, 1 ).Upper() + wxT( ")" );
             return SPT_CURRENT;
         }
         else
@@ -110,10 +110,10 @@ SIM_PLOT_TYPE NETLIST_EXPORTER_PSPICE_SIM::VectorToSignal(
 
 const std::vector<wxString>& NETLIST_EXPORTER_PSPICE_SIM::GetCurrents( SPICE_PRIMITIVE aPrimitive )
 {
-    static const std::vector<wxString> passive = { "I" };
-    static const std::vector<wxString> diode = { "Id" };
-    static const std::vector<wxString> bjt = { "Ib", "Ic", "Ie" };
-    static const std::vector<wxString> mos = { "Ig", "Id", "Is" };
+    static const std::vector<wxString> passive = { wxT( "I" ) };
+    static const std::vector<wxString> diode = { wxT( "Id" ) };
+    static const std::vector<wxString> bjt = { wxT( "Ib" ), wxT( "Ic" ), wxT( "Ie" ) };
+    static const std::vector<wxString> mos = { wxT( "Ig" ), wxT( "Id" ), wxT( "Is" ) };
     static const std::vector<wxString> empty;
 
     switch( aPrimitive )
@@ -148,7 +148,7 @@ wxString NETLIST_EXPORTER_PSPICE_SIM::GetSheetSimCommand()
     for( const auto& dir : GetDirectives() )
     {
         if( IsSimCommand( dir ) )
-            simCmd += wxString::Format( "%s\r\n", dir );
+            simCmd += wxString::Format( wxT( "%s\r\n" ), dir );
     }
 
     return simCmd;
@@ -170,15 +170,15 @@ SIM_TYPE NETLIST_EXPORTER_PSPICE_SIM::GetSimType()
 SIM_TYPE NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( const wxString& aCmd )
 {
     const std::vector<std::pair<wxString, SIM_TYPE>> simCmds = {
-        { "^.ac\\M.*", ST_AC },
-        { "^.dc\\M.*", ST_DC },
-        { "^.tran\\M.*", ST_TRANSIENT },
-        { "^.op\\M.*", ST_OP },
-        { "^.disto\\M.*", ST_DISTORTION },
-        { "^.noise\\M.*", ST_NOISE },
-        { "^.pz\\M.*", ST_POLE_ZERO },
-        { "^.sens\\M.*", ST_SENSITIVITY },
-        { "^.tf\\M.*", ST_TRANS_FUNC } };
+        { wxT( "^.ac\\M.*" ), ST_AC },
+        { wxT( "^.dc\\M.*" ), ST_DC },
+        { wxT( "^.tran\\M.*" ), ST_TRANSIENT },
+        { wxT( "^.op\\M.*" ), ST_OP },
+        { wxT( "^.disto\\M.*" ), ST_DISTORTION },
+        { wxT( "^.noise\\M.*" ), ST_NOISE },
+        { wxT( "^.pz\\M.*" ), ST_POLE_ZERO },
+        { wxT( "^.sens\\M.*" ), ST_SENSITIVITY },
+        { wxT( "^.tf\\M.*" ), ST_TRANS_FUNC } };
     wxRegEx simCmd;
 
     for( const auto& c : simCmds )
@@ -196,7 +196,7 @@ SIM_TYPE NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( const wxString& aCmd )
 bool NETLIST_EXPORTER_PSPICE_SIM::ParseDCCommand( const wxString& aCmd, SPICE_DC_PARAMS* aSource1,
                                                   SPICE_DC_PARAMS* aSource2 )
 {
-    if( !aCmd.Lower().StartsWith( ".dc" ) )
+    if( !aCmd.Lower().StartsWith( wxT( ".dc" ) ) )
         return false;
 
     wxString cmd = aCmd.Mid( 3 ).Trim().Trim( false );
@@ -251,7 +251,7 @@ void NETLIST_EXPORTER_PSPICE_SIM::writeDirectives( OUTPUTFORMATTER* aFormatter, 
         // Skip them
         wxString netname = ComponentToVector( netMap.first, SPT_VOLTAGE );
 
-        if( netname == "V(0)" || netname == "V(GND)" )
+        if( netname == wxT( "V(0)" ) || netname == wxT( "V(GND)" ) )
             continue;
 
         aFormatter->Print( 0, ".save %s\n", TO_UTF8( netname ) );

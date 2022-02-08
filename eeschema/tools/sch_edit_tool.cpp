@@ -1533,7 +1533,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         break;
 
     default:                // Unexpected item
-        wxFAIL_MSG( wxString( "Cannot edit schematic item type " ) + item->GetClass() );
+        wxFAIL_MSG( wxString( wxT( "Cannot edit schematic item type " ) ) + item->GetClass() );
     }
 
     updateItem( item, true );
@@ -1567,10 +1567,10 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             // fix them here.
             if( text->Type() == SCH_TEXT_T )
             {
-                txt.Replace( "\n", "_" );
-                txt.Replace( "\r", "_" );
-                txt.Replace( "\t", "_" );
-                txt.Replace( " ", "_" );
+                txt.Replace( wxT( "\n" ), wxT( "_" ) );
+                txt.Replace( wxT( "\r" ), wxT( "_" ) );
+                txt.Replace( wxT( "\t" ), wxT( "_" ) );
+                txt.Replace( wxT( " " ), wxT( "_" ) );
             }
 
             // label strings are "escaped" i.e. a '/' is replaced by "{slash}"
@@ -1585,7 +1585,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             case SCH_TEXT_T:         newtext = new SCH_TEXT( position, txt );         break;
 
             default:
-                wxFAIL_MSG( wxString::Format( "Invalid text type: %d.", convertTo ) );
+                wxFAIL_MSG( wxString::Format( wxT( "Invalid text type: %d." ), convertTo ) );
                 return 0;
             }
 
@@ -1756,7 +1756,7 @@ int SCH_EDIT_TOOL::EditPageNumber( const TOOL_EVENT& aEvent )
     wxString pageNumber = instance.GetPageNumber();
 
     msg.Printf( _( "Enter page number for sheet path%s" ),
-                ( sheetPath.Length() > 20 ) ? "\n" + sheetPath : " " + sheetPath );
+                ( sheetPath.Length() > 20 ) ? wxT( "\n" ) + sheetPath : wxT( " " ) + sheetPath );
 
     wxTextEntryDialog dlg( m_frame, msg, _( "Edit Sheet Page Number" ), pageNumber );
 

@@ -750,7 +750,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
             if( evt->GetCommandId().get() >= ID_POPUP_SCH_UNFOLD_BUS
                 && evt->GetCommandId().get() <= ID_POPUP_SCH_UNFOLD_BUS_END )
             {
-                wxASSERT_MSG( !segment, "Bus unfold event received when already drawing!" );
+                wxASSERT_MSG( !segment, wxT( "Bus unfold event received when already drawing!" ) );
 
                 aType = LAYER_WIRE;
                 wxString net = *evt->Parameter<wxString*>();

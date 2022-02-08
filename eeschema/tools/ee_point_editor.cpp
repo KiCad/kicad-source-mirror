@@ -123,7 +123,7 @@ public:
                 break;
 
             default:
-                wxFAIL_MSG( "EDIT_POINTS_FACTORY::Make not implemented for "
+                wxFAIL_MSG( wxT( "EDIT_POINTS_FACTORY::Make not implemented for " )
                             + shape->SHAPE_T_asString() );
             }
         }
@@ -544,7 +544,7 @@ void EE_POINT_EDITOR::updateParentItem() const
             break;
 
         default:
-            wxFAIL_MSG( "EE_POINT_EDITOR::updateParentItem not implemented for "
+            wxFAIL_MSG( wxT( "EE_POINT_EDITOR::updateParentItem not implemented for " )
                         + shape->SHAPE_T_asString() );
         }
     }
@@ -736,7 +736,7 @@ void EE_POINT_EDITOR::updatePoints()
             break;
 
         default:
-            wxFAIL_MSG( "EE_POINT_EDITOR::updatePoints not implemented for "
+            wxFAIL_MSG( wxT( "EE_POINT_EDITOR::updatePoints not implemented for " )
                         + shape->SHAPE_T_asString() );
         }
     }

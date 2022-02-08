@@ -224,7 +224,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wx
                     ratio = kicadRatio;
                     compRatioBent = 1.0; // Reset so we don't modify the "KiCad" ratio
                     wxLogTrace( "CROSS_PROBE_SCALE",
-                                "Part TOO WIDE for screen.  Using normal KiCad zoom ratio: %1.5f",
+                                wxT( "Part TOO WIDE for screen.  Using normal KiCad zoom ratio: %1.5f" ),
                                 ratio );
                 }
 

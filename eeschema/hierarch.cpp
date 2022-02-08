@@ -171,7 +171,7 @@ int HIERARCHY_TREE::OnCompareItems( const wxTreeItemId& item1, const wxTreeItemI
 
 void HIERARCHY_NAVIG_DLG::buildHierarchyTree( SCH_SHEET_PATH* aList, wxTreeItemId* aPreviousmenu )
 {
-    wxCHECK_RET( m_nbsheets < NB_MAX_SHEET, "Maximum number of sheets exceeded." );
+    wxCHECK_RET( m_nbsheets < NB_MAX_SHEET, wxT( "Maximum number of sheets exceeded." ) );
 
     std::vector<SCH_ITEM*> sheetChildren;
     aList->LastScreen()->GetSheets( &sheetChildren );

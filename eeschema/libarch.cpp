@@ -48,7 +48,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibraryCacheFile( bool aUseCurrentSheetFilenam
     else
         fn = Schematic().RootScreen()->GetFileName();
 
-    fn.SetName( fn.GetName() + "-cache" );
+    fn.SetName( fn.GetName() + wxT( "-cache" ) );
     fn.SetExt( LegacySymbolLibFileExtension );
 
     bool success = CreateArchiveLibrary( fn.GetFullPath() );
@@ -131,7 +131,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
                 if( errorMsg.empty() )
                     errorMsg += tmp;
                 else
-                    errorMsg += "\n" + tmp;
+                    errorMsg += wxT( "\n" ) + tmp;
             }
         }
     }

@@ -390,7 +390,7 @@ int SYMBOL_EDITOR_CONTROL::ExportView( const TOOL_EVENT& aEvent )
     wxString   file_ext = wxT( "png" );
     wxString   mask = wxT( "*." ) + file_ext;
     wxFileName fn( symbol->GetName() );
-    fn.SetExt( "png" );
+    fn.SetExt( wxT( "png" ) );
 
     wxString projectPath = wxPathOnly( m_frame->Prj().GetProjectFullName() );
 

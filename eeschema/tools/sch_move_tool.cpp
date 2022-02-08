@@ -283,7 +283,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 if( evt->IsAction( &EE_ACTIONS::restartMove ) )
                 {
-                    wxASSERT_MSG( m_anchorPos, "Should be already set from previous cmd" );
+                    wxASSERT_MSG( m_anchorPos, wxT( "Should be already set from previous cmd" ) );
                 }
                 else if( placingNewItems )
                 {

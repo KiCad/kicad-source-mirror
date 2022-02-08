@@ -57,14 +57,14 @@ BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
     // python <script_path>/script.py
     // and *not* python <script_path>\script.py
     // Otherwise the script does not find some auxiliary pythons scripts needed by this script
-    if( extension == "xsl" )
+    if( extension == wxT( "xsl" ) )
     {
-        m_info = readHeader( "-->" );
+        m_info = readHeader( wxT( "-->" ) );
         m_cmd = wxString::Format( "xsltproc -o \"%%O%s\" \"%s\" \"%%I\"",
                                   getOutputExtension( m_info ),
                                   m_file.GetFullPath() );
     }
-    else if( extension == "py" )
+    else if( extension == wxT( "py" ) )
     {
         m_info = readHeader( "\"\"\"" );
 #ifdef __WINDOWS__
@@ -107,7 +107,7 @@ BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
 #endif
     }
 #ifdef __WINDOWS__
-    else if( extension == "pyw" )
+    else if( extension == wxT( "pyw" ) )
     {
         m_info = readHeader( "\"\"\"" );
         m_cmd = wxString::Format( "pythonw \"%s/%s\" \"%%I\" \"%%O%s\"",
@@ -121,7 +121,7 @@ BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
         m_cmd = m_file.GetFullPath();
     }
 
-    wxLogTrace( BOM_TRACE, "%s: extracted command line %s", m_name, m_cmd );
+    wxLogTrace( BOM_TRACE, wxT( "%s: extracted command line %s" ), m_name, m_cmd );
 }
 
 
@@ -130,7 +130,7 @@ bool BOM_GENERATOR_HANDLER::IsValidGenerator( const wxString& aFile )
     wxFileName fn( aFile );
     wxString ext = fn.GetExt().Lower();
 
-    for( const auto& pluginExt : { "xsl", "py", "pyw" } )
+    for( const auto& pluginExt : { wxT( "xsl" ), wxT( "py" ), wxT( "pyw" ) } )
     {
         if( pluginExt == ext )
             return true;
@@ -145,13 +145,13 @@ wxString BOM_GENERATOR_HANDLER::readHeader( const wxString& aEndSection )
     if( aEndSection.IsEmpty() )
         return wxEmptyString;
 
-    wxFFile fdata( m_file.GetFullPath(), "rb" );        // dtor will close the file
+    wxFFile fdata( m_file.GetFullPath(), wxT( "rb" ) );        // dtor will close the file
     wxString data;
 
     if( !fdata.ReadAll( &data ) )
         return wxEmptyString;
 
-    const wxString header( "@package" );
+    const wxString header( wxT( "@package" ) );
 
     // Extract substring between @package and endsection
     int strstart = data.Find( header );
@@ -198,7 +198,7 @@ wxFileName BOM_GENERATOR_HANDLER::FindFilePath() const
 {
     if( m_file.IsAbsolute() && m_file.Exists( wxFILE_EXISTS_REGULAR ) )
     {
-        wxLogTrace( BOM_TRACE, "%s found directly", m_file.GetFullPath() );
+        wxLogTrace( BOM_TRACE, wxT( "%s found directly" ), m_file.GetFullPath() );
         return m_file;
     }
 
@@ -206,7 +206,7 @@ wxFileName BOM_GENERATOR_HANDLER::FindFilePath() const
 
     if( test.Exists( wxFILE_EXISTS_REGULAR ) )
     {
-        wxLogTrace( BOM_TRACE, "%s found in user plugins path %s", m_file.GetFullName(),
+        wxLogTrace( BOM_TRACE, wxT( "%s found in user plugins path %s" ), m_file.GetFullName(),
                     PATHS::GetUserPluginsPath() );
         return test;
     }
@@ -215,12 +215,12 @@ wxFileName BOM_GENERATOR_HANDLER::FindFilePath() const
 
     if( test.Exists( wxFILE_EXISTS_REGULAR ) )
     {
-        wxLogTrace( BOM_TRACE, "%s found in stock plugins path %s", m_file.GetFullName(),
+        wxLogTrace( BOM_TRACE, wxT( "%s found in stock plugins path %s" ), m_file.GetFullName(),
                     PATHS::GetStockPluginsPath() );
         return test;
     }
 
-    wxLogTrace( BOM_TRACE, "Could not find %s (checked %s, %s)", m_file.GetFullName(),
+    wxLogTrace( BOM_TRACE, wxT( "Could not find %s (checked %s, %s)" ), m_file.GetFullName(),
                 PATHS::GetUserPluginsPath(), PATHS::GetStockPluginsPath() );
 
     return m_file;

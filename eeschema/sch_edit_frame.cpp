@@ -259,15 +259,15 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.SetManagedWindow( this );
 
     CreateInfoBar();
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" )
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( wxT( "MainToolbar" ) )
                       .Top().Layer( 6 ) );
-    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
+    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( wxT( "OptToolbar" ) )
                       .Left().Layer( 3 ) );
-    m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" )
+    m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( wxT( "ToolsToolbar" ) )
                       .Right().Layer( 2 ) );
-    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" )
+    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( wxT( "DrawFrame" ) )
                       .Center() );
-    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" )
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( wxT( "MsgPanel" ) )
                       .Bottom().Layer( 6 ) );
 
     FinishAUIInitialization();
@@ -846,7 +846,7 @@ void SCH_EDIT_FRAME::OnModify()
     GetCanvas()->Refresh();
     UpdateHierarchyNavigator();
 
-    if( !GetTitle().StartsWith( "*" ) )
+    if( !GetTitle().StartsWith( wxT( "*" ) ) )
         UpdateTitle();
 }
 
@@ -992,7 +992,7 @@ void SCH_EDIT_FRAME::NewProject()
         }
 
         // OpenProjectFiles() requires absolute
-        wxASSERT_MSG( create_me.IsAbsolute(), "wxFileDialog returned non-absolute path" );
+        wxASSERT_MSG( create_me.IsAbsolute(), wxT( "wxFileDialog returned non-absolute path" ) );
 
         OpenProjectFiles( std::vector<wxString>( 1, create_me.GetFullPath() ), KICTL_CREATE );
         m_mruPath = create_me.GetPath();
@@ -1004,8 +1004,8 @@ void SCH_EDIT_FRAME::LoadProject()
 {
     wxString pro_dir = m_mruPath;
     wxString wildcards = AllSchematicFilesWildcard()
-                            + "|" + KiCadSchematicFileWildcard()
-                            + "|" + LegacySchematicFileWildcard();
+                            + wxT( "|" ) + KiCadSchematicFileWildcard()
+                            + wxT( "|" ) + LegacySchematicFileWildcard();
 
     wxFileDialog dlg( this, _( "Open Schematic" ), pro_dir, wxEmptyString,
                       wildcards, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
@@ -1349,7 +1349,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 
 #ifdef PROFILE
     timer.Stop();
-    wxLogTrace( "CONN_PROFILE", "SchematicCleanUp() %0.4f ms", timer.msecs() );
+    wxLogTrace( "CONN_PROFILE", wxT( "SchematicCleanUp() %0.4f ms" ), timer.msecs() );
 #endif
 
     if( settings.m_IntersheetRefsShow )

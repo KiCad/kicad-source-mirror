@@ -316,7 +316,7 @@ bool RESCUE_CACHE_CANDIDATE::PerformAction( RESCUER* aRescuer )
 {
     LIB_SYMBOL* tmp = ( m_cache_candidate ) ? m_cache_candidate : m_lib_candidate;
 
-    wxCHECK_MSG( tmp, false, "Both cache and library symbols undefined." );
+    wxCHECK_MSG( tmp, false, wxT( "Both cache and library symbols undefined." ) );
 
     std::unique_ptr<LIB_SYMBOL> new_symbol = tmp->Flatten();
     new_symbol->SetName( m_new_name );
@@ -434,8 +434,8 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
 
             // Spaces in the file name will break the symbol name because they are not
             // quoted in the symbol library file format.
-            libNickname.Replace( " ", "-" );
-            LIB_ID new_id( libNickname, new_name + "-" + symbol_id.GetLibNickname().wx_str() );
+            libNickname.Replace( wxT( " " ), wxT( "-" ) );
+            LIB_ID new_id( libNickname, new_name + wxT( "-" ) + symbol_id.GetLibNickname().wx_str() );
 
             RESCUE_SYMBOL_LIB_TABLE_CANDIDATE candidate( symbol_id, new_id, cache_match, lib_match,
                                                          eachSymbol->GetUnit(),
@@ -484,7 +484,7 @@ bool RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::PerformAction( RESCUER* aRescuer )
 {
     LIB_SYMBOL* tmp = ( m_cache_candidate ) ? m_cache_candidate : m_lib_candidate;
 
-    wxCHECK_MSG( tmp, false, "Both cache and library symbols undefined." );
+    wxCHECK_MSG( tmp, false, wxT( "Both cache and library symbols undefined." ) );
 
     std::unique_ptr<LIB_SYMBOL> new_symbol = tmp->Flatten();
     new_symbol->SetLibId( m_new_id );
@@ -761,7 +761,7 @@ bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 
 void LEGACY_RESCUER::AddSymbol( LIB_SYMBOL* aNewSymbol )
 {
-    wxCHECK_RET( aNewSymbol, "Invalid LIB_SYMBOL pointer." );
+    wxCHECK_RET( aNewSymbol, wxT( "Invalid LIB_SYMBOL pointer." ) );
 
     aNewSymbol->SetLib( m_rescue_lib.get() );
     m_rescue_lib->AddSymbol( aNewSymbol );
@@ -817,15 +817,15 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
             return false;
         }
 
-        wxString uri = "${KIPRJMOD}/" + fn.GetFullName();
+        wxString uri = wxT( "${KIPRJMOD}/" ) + fn.GetFullName();
         wxString libNickname = fn.GetName();
 
         // Spaces in the file name will break the symbol name because they are not
         // quoted in the symbol library file format.
-        libNickname.Replace( " ", "-" );
+        libNickname.Replace( wxT( " " ), wxT( "-" ) );
 
         SYMBOL_LIB_TABLE_ROW* row = new SYMBOL_LIB_TABLE_ROW( libNickname, uri,
-                                                              wxString( "Legacy" ) );
+                                                              wxString( wxT( "Legacy" ) ) );
         m_prj->SchSymbolLibTable()->InsertRow( row );
 
         fn = wxFileName( m_prj->GetProjectPath(), SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
@@ -858,7 +858,7 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 
 void SYMBOL_LIB_TABLE_RESCUER::AddSymbol( LIB_SYMBOL* aNewSymbol )
 {
-    wxCHECK_RET( aNewSymbol, "Invalid LIB_SYMBOL pointer." );
+    wxCHECK_RET( aNewSymbol, wxT( "Invalid LIB_SYMBOL pointer." ) );
 
     wxFileName fn = GetRescueLibraryFileName( m_schematic );
 

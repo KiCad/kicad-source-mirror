@@ -77,7 +77,7 @@ EDA_RECT EE_SELECTION::GetBoundingBox() const
             }
             catch( const boost::bad_pointer& )
             {
-                wxFAIL_MSG( "Invalid pointer." );
+                wxFAIL_MSG( wxT( "Invalid pointer." ) );
             }
         }
         else if( item->Type() == SCH_SHEET_T )

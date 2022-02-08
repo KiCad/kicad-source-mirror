@@ -68,7 +68,7 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATI
 
     if( aAppendToMe )
     {
-        wxCHECK_MSG( aSchematic->IsValid(), nullptr, "Can't append to a schematic with no root!" );
+        wxCHECK_MSG( aSchematic->IsValid(), nullptr, wxT( "Can't append to a schematic with no root!" ) );
         rootSheet = &aSchematic->Root();
     }
     else
@@ -88,7 +88,7 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATI
 
     SYMBOL_LIB_TABLE* libTable = aSchematic->Prj().SchSymbolLibTable();
 
-    wxCHECK_MSG( libTable, NULL, "Could not load symbol lib table." );
+    wxCHECK_MSG( libTable, NULL, wxT( "Could not load symbol lib table." ) );
 
     // Lets come up with a nice library name
     wxString libName = aSchematic->Prj().GetProjectName();
@@ -100,7 +100,7 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATI
     }
 
     if( libName.IsEmpty() )
-        libName = "noname";
+        libName = wxT( "noname" );
 
     libName = LIB_ID::FixIllegalChars( libName, true );
 
@@ -114,11 +114,11 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATI
     {
         // Create a new empty symbol library.
         sch_plugin->CreateSymbolLib( libFileName.GetFullPath() );
-        wxString libTableUri = "${KIPRJMOD}/" + libFileName.GetFullName();
+        wxString libTableUri = wxT( "${KIPRJMOD}/" ) + libFileName.GetFullName();
 
         // Add the new library to the project symbol library table.
         libTable->InsertRow(
-                new SYMBOL_LIB_TABLE_ROW( libName, libTableUri, wxString( "KiCad" ) ) );
+                new SYMBOL_LIB_TABLE_ROW( libName, libTableUri, wxString( wxT( "KiCad" ) ) ) );
 
         // Save project symbol library table.
         wxFileName fn(

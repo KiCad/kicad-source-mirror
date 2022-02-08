@@ -183,7 +183,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     break;
                 }
                 default:
-                    wxFAIL_MSG( "TwoClickPlace(): unknown type" );
+                    wxFAIL_MSG( wxT( "TwoClickPlace(): unknown type" ) );
                 }
 
                 // Restore cursor after dialog
@@ -216,7 +216,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     symbol->AddDrawItem( (LIB_TEXT*) item );
                     break;
                 default:
-                    wxFAIL_MSG( "TwoClickPlace(): unknown type" );
+                    wxFAIL_MSG( wxT( "TwoClickPlace(): unknown type" ) );
                 }
 
                 item->ClearEditFlags();

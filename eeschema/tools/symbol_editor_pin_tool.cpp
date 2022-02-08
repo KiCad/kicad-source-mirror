@@ -351,7 +351,7 @@ void SYMBOL_EDITOR_PIN_TOOL::CreateImagePins( LIB_PIN* aPin )
         // it does no have the save pin number as the master pin
         // Because we do not know the actual number, give it a temporary number
         wxString unknownNum;
-        unknownNum.Printf( "%s-U%c", aPin->GetNumber(), wxChar( 'A' + ii - 1 ) );
+        unknownNum.Printf( wxT( "%s-U%c" ), aPin->GetNumber(), wxChar( 'A' + ii - 1 ) );
         newPin->SetNumber( unknownNum );
 
         newPin->SetUnit( ii );
@@ -362,7 +362,7 @@ void SYMBOL_EDITOR_PIN_TOOL::CreateImagePins( LIB_PIN* aPin )
         }
         catch( const boost::bad_pointer& e )
         {
-            wxLogError( "Cannot add new pin to symbol.  Boost pointer error %s occurred.",
+            wxLogError( wxT( "Cannot add new pin to symbol.  Boost pointer error %s occurred." ),
                         e.what() );
             delete newPin;
             return;

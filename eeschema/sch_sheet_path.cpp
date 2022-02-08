@@ -240,7 +240,7 @@ wxString SCH_SHEET_PATH::PathAsString() const
     // Start at 1 to avoid the root sheet, which does not need to be added to the path.
     // Its timestamp changes anyway.
     for( unsigned i = 1; i < size(); i++ )
-        s += at( i )->m_Uuid.AsString() + "/";
+        s += at( i )->m_Uuid.AsString() + wxT( "/" );
 
     return s;
 }
@@ -389,7 +389,7 @@ bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName, const wxStr
 
     SCHEMATIC* sch = LastScreen()->Schematic();
 
-    wxCHECK_MSG( sch, false, "No SCHEMATIC found in SCH_SHEET_PATH::TestForRecursion!" );
+    wxCHECK_MSG( sch, false, wxT( "No SCHEMATIC found in SCH_SHEET_PATH::TestForRecursion!" ) );
 
     wxFileName rootFn = sch->GetFileName();
     wxFileName srcFn = aSrcFileName;
@@ -769,7 +769,7 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
     {
         if( references[ii].GetRef()[0] != '#' )
         {
-            wxString new_ref = "#" + references[ii].GetRef();
+            wxString new_ref = wxT( "#" ) + references[ii].GetRef();
             references[ii].SetRef( new_ref );
         }
     }
@@ -840,7 +840,7 @@ bool SCH_SHEET_LIST::TestForRecursion( const SCH_SHEET_LIST& aSrcSheetHierarchy,
 
     SCHEMATIC* sch = at( 0 ).LastScreen()->Schematic();
 
-    wxCHECK_MSG( sch, false, "No SCHEMATIC found in SCH_SHEET_LIST::TestForRecursion!" );
+    wxCHECK_MSG( sch, false, wxT( "No SCHEMATIC found in SCH_SHEET_LIST::TestForRecursion!" ) );
 
     wxFileName rootFn = sch->GetFileName();
     wxFileName destFn = aDestFileName;
@@ -932,7 +932,7 @@ void SCH_SHEET_LIST::UpdateSymbolInstances(
 
         if( it == aSymbolInstances.end() )
         {
-            wxLogTrace( traceSchSheetPaths, "No symbol instance found for path '%s'", path );
+            wxLogTrace( traceSchSheetPaths, wxT( "No symbol instance found for path '%s'" ), path );
             continue;
         }
 
@@ -967,12 +967,12 @@ void SCH_SHEET_LIST::UpdateSheetInstances( const std::vector<SCH_SHEET_INSTANCE>
 
         if( it == aSheetInstances.end() )
         {
-            wxLogTrace( traceSchSheetPaths, "No sheet instance found for path '%s'",
+            wxLogTrace( traceSchSheetPaths, wxT( "No sheet instance found for path '%s'" ),
                         path.PathWithoutRootUuid().AsString() );
             continue;
         }
 
-        wxLogTrace( traceSchSheetPaths, "Setting sheet '%s' instance '%s' page number '%s'",
+        wxLogTrace( traceSchSheetPaths, wxT( "Setting sheet '%s' instance '%s' page number '%s'" ),
                     ( sheet->GetName().IsEmpty() ) ? wxT( "root" ) : sheet->GetName(),
                     path.PathWithoutRootUuid().AsString(), it->m_PageNumber );
         sheet->AddInstance( path );
@@ -1044,7 +1044,7 @@ void SCH_SHEET_LIST::SetInitialPageNumbers()
         wxCHECK2( sheet, continue );
 
         sheet->AddInstance( instance );
-        tmp.Printf( "%d", pageNumber );
+        tmp.Printf( wxT( "%d" ), pageNumber );
         sheet->SetPageNumber( instance, tmp );
         pageNumber += 1;
     }

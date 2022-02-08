@@ -174,11 +174,11 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
     if( aDrawingSheet )
     {
         wsItems.SetMilsToIUfactor( IU_PER_MILS );
-        wsItems.SetPageNumber( "1" );
+        wsItems.SetPageNumber( wxT( "1" ) );
         wsItems.SetSheetCount( 1 );
-        wsItems.SetFileName( "dummyFilename" );
-        wsItems.SetSheetName( "dummySheet" );
-        wsItems.SetSheetLayer( "dummyLayer" );
+        wsItems.SetFileName( wxT( "dummyFilename" ) );
+        wsItems.SetSheetName( wxT( "dummySheet" ) );
+        wsItems.SetSheetLayer( wxT( "dummyLayer" ) );
         wsItems.SetProject( &m_schematic->Prj() );
         wsItems.BuildDrawItemsList( aDrawingSheet->GetPageInfo(), aDrawingSheet->GetTitleBlock());
     }
@@ -589,7 +589,7 @@ int ERC_TESTER::TestMultUnitPinConflicts()
                         continue;
 
                     wxString name = pin->GetParentSymbol()->GetRef( &subgraph->m_sheet ) +
-                                      + ":" + pin->GetShownNumber();
+                                      + wxT( ":" ) + pin->GetShownNumber();
 
                     if( !pinToNetMap.count( name ) )
                     {
@@ -734,7 +734,7 @@ int ERC_TESTER::TestLibSymbolIssues()
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
                 ercItem->SetItems( symbol );
-                msg.Printf( "Symbol '%s' not found in symbol library '%s'.",
+                msg.Printf( wxT( "Symbol '%s' not found in symbol library '%s'." ),
                             UnescapeString( symbolName ),
                             UnescapeString( libName ) );
                 ercItem->SetErrorMessage( msg );
@@ -749,7 +749,7 @@ int ERC_TESTER::TestLibSymbolIssues()
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
                 ercItem->SetItems( symbol );
-                msg.Printf( "Symbol '%s' has been modified in library '%s'.",
+                msg.Printf( wxT( "Symbol '%s' has been modified in library '%s'." ),
                             UnescapeString( symbolName ),
                             UnescapeString( libName ) );
                 ercItem->SetErrorMessage( msg );

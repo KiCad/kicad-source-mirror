@@ -56,7 +56,7 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
     SYMBOL_EDITOR_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
     SYMBOL_EDITOR_MOVE_TOOL*     moveTool = m_toolMgr->GetTool<SYMBOL_EDITOR_MOVE_TOOL>();
 
-    wxASSERT_MSG( drawingTools, "eeschema.SymbolDrawing tool is not available" );
+    wxASSERT_MSG( drawingTools, wxT( "eeschema.SymbolDrawing tool is not available" ) );
 
     auto haveSymbolCondition =
             [&]( const SELECTION& sel )
@@ -445,7 +445,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             break;
 
         default:
-            wxFAIL_MSG( wxT( "Unhandled item <" ) + item->GetClass() + wxT( ">" ) );
+            wxFAIL_MSG( wxT( "Unhandled item <wxT( " ) + item->GetClass() + wxT( " )>" ) );
             break;
         }
     }
@@ -706,7 +706,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
         return 0;
 
     std::string         text_utf8 = m_toolMgr->GetClipboardUTF8();
-    STRING_LINE_READER  reader( text_utf8, "Clipboard" );
+    STRING_LINE_READER  reader( text_utf8, wxT( "Clipboard" ) );
     LIB_SYMBOL*         newPart;
 
     try
@@ -716,7 +716,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     catch( IO_ERROR& )
     {
         // If it's not a symbol then paste as text
-        newPart = new LIB_SYMBOL( "dummy_part" );
+        newPart = new LIB_SYMBOL( wxT( "dummy_part" ) );
         LIB_TEXT* newText = new LIB_TEXT( newPart );
         newText->SetText( wxString::FromUTF8( text_utf8.c_str() ) );
         newPart->AddDrawItem( newText );

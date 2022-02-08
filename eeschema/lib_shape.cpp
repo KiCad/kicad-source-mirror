@@ -417,7 +417,7 @@ void LIB_SHAPE::AddPoint( const wxPoint& aPosition )
     }
     else
     {
-        wxFAIL_MSG( "LIB_SHAPE::AddPoint not implemented for " + SHAPE_T_asString() );
+        wxFAIL_MSG( wxT( "LIB_SHAPE::AddPoint not implemented for " ) + SHAPE_T_asString() );
     }
 }
 

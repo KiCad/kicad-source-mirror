@@ -92,7 +92,7 @@ SCH_SCREEN::~SCH_SCREEN()
 SCHEMATIC* SCH_SCREEN::Schematic() const
 {
     wxCHECK_MSG( GetParent() && GetParent()->Type() == SCHEMATIC_T, nullptr,
-            "SCH_SCREEN must have a SCHEMATIC parent!" );
+            wxT( "SCH_SCREEN must have a SCHEMATIC parent!" ) );
 
     return static_cast<SCHEMATIC*>( GetParent() );
 }
@@ -180,13 +180,13 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem )
                         int cnt = 1;
                         wxString newName;
 
-                        newName.Printf( "%s_%d", symbol->GetLibId().GetUniStringLibItemName(),
+                        newName.Printf( wxT( "%s_%d" ), symbol->GetLibId().GetUniStringLibItemName(),
                                         cnt );
 
                         while( m_libSymbols.find( newName ) != m_libSymbols.end() )
                         {
                             cnt += 1;
-                            newName.Printf( "%s_%d", symbol->GetLibId().GetUniStringLibItemName(),
+                            newName.Printf( wxT( "%s_%d" ), symbol->GetLibId().GetUniStringLibItemName(),
                                             cnt );
                         }
 
@@ -214,7 +214,7 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem )
 
 void SCH_SCREEN::Append( SCH_SCREEN* aScreen )
 {
-    wxCHECK_RET( aScreen, "Invalid screen object." );
+    wxCHECK_RET( aScreen, wxT( "Invalid screen object." ) );
 
     // No need to descend the hierarchy.  Once the top level screen is copied, all of its
     // children are copied as well.
@@ -609,7 +609,7 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer ) const
 
 void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
 {
-    wxCHECK_RET( Schematic(), "Cannot call SCH_SCREEN::UpdateSymbolLinks with no SCHEMATIC" );
+    wxCHECK_RET( Schematic(), wxT( "Cannot call SCH_SCREEN::UpdateSymbolLinks with no SCHEMATIC" ) );
 
     wxString msg;
     std::unique_ptr< LIB_SYMBOL > libSymbol;
@@ -1237,7 +1237,7 @@ void SCH_SCREENS::buildScreenList( SCH_SHEET* aSheet )
     {
         SCH_SCREEN* screen = aSheet->GetScreen();
 
-        wxCHECK_RET( screen, "No screen for aSheet" );
+        wxCHECK_RET( screen, wxT( "No screen for aSheet" ) );
 
         addScreenToList( screen, aSheet );
 
@@ -1256,7 +1256,7 @@ void SCH_SCREENS::ClearAnnotationOfNewSheetPaths( SCH_SHEET_LIST& aInitialSheetP
 
     SCHEMATIC* sch = first->Schematic();
 
-    wxCHECK_RET( sch, "Null schematic in SCH_SCREENS::ClearAnnotationOfNewSheetPaths" );
+    wxCHECK_RET( sch, wxT( "Null schematic in SCH_SCREENS::ClearAnnotationOfNewSheetPaths" ) );
 
     // Clear the annotation for symbols inside new sheetpaths not already in aInitialSheetList
     SCH_SCREENS screensList( sch->Root() );     // The list of screens, shared by sheet paths
@@ -1398,7 +1398,7 @@ void SCH_SCREENS::UpdateSymbolLinks( REPORTER* aReporter )
 
     SCHEMATIC* sch = first->Schematic();
 
-    wxCHECK_RET( sch, "Null schematic in SCH_SCREENS::UpdateSymbolLinks" );
+    wxCHECK_RET( sch, wxT( "Null schematic in SCH_SCREENS::UpdateSymbolLinks" ) );
 
     SCH_SHEET_LIST sheets = sch->GetSheets();
 
@@ -1521,7 +1521,7 @@ void SCH_SCREENS::BuildClientSheetPathList()
 
     SCHEMATIC* sch = first->Schematic();
 
-    wxCHECK_RET( sch, "Null schematic in SCH_SCREENS::BuildClientSheetPathList" );
+    wxCHECK_RET( sch, wxT( "Null schematic in SCH_SCREENS::BuildClientSheetPathList" ) );
 
     for( SCH_SCREEN* curr_screen = GetFirst(); curr_screen; curr_screen = GetNext() )
         curr_screen->GetClientSheetPaths().clear();

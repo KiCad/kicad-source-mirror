@@ -753,7 +753,7 @@ void DIALOG_ERC::deleteAllMarkers( bool aIncludeExclusions )
 
 void DIALOG_ERC::OnSaveReport( wxCommandEvent& aEvent )
 {
-    wxFileName fn( "ERC." + ReportFileExtension );
+    wxFileName fn( wxT( "ERC." ) + ReportFileExtension );
 
     wxFileDialog dlg( this, _( "Save Report to File" ), Prj().GetProjectPath(), fn.GetFullName(),
                       ReportFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );

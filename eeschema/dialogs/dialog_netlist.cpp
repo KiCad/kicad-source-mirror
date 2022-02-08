@@ -295,7 +295,7 @@ void NETLIST_DIALOG::OnRunExternSpiceCommand( wxCommandEvent& event )
 
     // Build the command line
     wxString commandLine = simulatorCommand;
-    commandLine.Replace( "%I", fn.GetFullPath(), true );
+    commandLine.Replace( wxT( "%I" ), fn.GetFullPath(), true );
 
     if( m_Parent->ReadyToNetlist( _( "Simulator requires a fully annotated schematic." ) ) )
     {

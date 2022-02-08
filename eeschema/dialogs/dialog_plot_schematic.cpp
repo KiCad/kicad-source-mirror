@@ -450,7 +450,7 @@ wxFileName DIALOG_PLOT_SCHEMATIC::createPlotFileName( const wxString& aPlotFileN
         retv.SetPath( tmp.GetPath() );
     }
 
-    wxLogTrace( tracePathsAndFiles, "Writing plot file '%s'.", retv.GetFullPath() );
+    wxLogTrace( tracePathsAndFiles, wxT( "Writing plot file '%s'." ), retv.GetFullPath() );
 
     return retv;
 }
@@ -498,8 +498,8 @@ void DIALOG_PLOT_SCHEMATIC::createDXFFiles( bool aPlotAll, bool aPlotDrawingShee
             // The sub sheet can be in a sub_hierarchy, but we plot the file in the
             // main project folder (or the folder specified by the caller),
             // so replace separators to create a unique filename:
-            fname.Replace( "/", "_" );
-            fname.Replace( "\\", "_" );
+            fname.Replace( wxT( "/" ), wxT( "_" ) );
+            fname.Replace( wxT( "\\" ), wxT( "_" ) );
             wxString ext = DXF_PLOTTER::GetDefaultFileExtension();
             wxFileName plotFileName = createPlotFileName( fname, ext, &reporter );
 
@@ -667,8 +667,8 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFiles( bool aPlotAll, bool aPlotFrameRef,
             // The sub sheet can be in a sub_hierarchy, but we plot the file in the
             // main project folder (or the folder specified by the caller),
             // so replace separators to create a unique filename:
-            fname.Replace( "/", "_" );
-            fname.Replace( "\\", "_" );
+            fname.Replace( wxT( "/" ), wxT( "_" ) );
+            fname.Replace( wxT( "\\" ), wxT( "_" ) );
             wxString ext = HPGL_PLOTTER::GetDefaultFileExtension();
             wxFileName plotFileName = createPlotFileName( fname, ext, &reporter );
 
@@ -825,8 +825,8 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotDrawingSheet
                 // The sub sheet can be in a sub_hierarchy, but we plot the file in the main
                 // project folder (or the folder specified by the caller), so replace separators
                 // to create a unique filename:
-                fname.Replace( "/", "_" );
-                fname.Replace( "\\", "_" );
+                fname.Replace( wxT( "/" ), wxT( "_" ) );
+                fname.Replace( wxT( "\\" ), wxT( "_" ) );
                 wxString ext = PDF_PLOTTER::GetDefaultFileExtension();
                 plotFileName = createPlotFileName( fname, ext, &reporter );
 
@@ -1018,8 +1018,8 @@ void DIALOG_PLOT_SCHEMATIC::createPSFiles( bool aPlotAll, bool aPlotFrameRef,
             // The sub sheet can be in a sub_hierarchy, but we plot the file in the
             // main project folder (or the folder specified by the caller),
             // so replace separators to create a unique filename:
-            fname.Replace( "/", "_" );
-            fname.Replace ("\\", "_" );
+            fname.Replace( wxT( "/" ), wxT( "_" ) );
+            fname.Replace (wxT( "\\" ), wxT( "_" ) );
             wxString ext = PS_PLOTTER::GetDefaultFileExtension();
             wxFileName plotFileName = createPlotFileName( fname, ext, &reporter );
 
@@ -1143,8 +1143,8 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFiles( bool aPrintAll, bool aPrintFrameRef,
             // The sub sheet can be in a sub_hierarchy, but we plot the file in the
             // main project folder (or the folder specified by the caller),
             // so replace separators to create a unique filename:
-            fname.Replace( "/", "_" );
-            fname.Replace( "\\", "_" );
+            fname.Replace( wxT( "/" ), wxT( "_" ) );
+            fname.Replace( wxT( "\\" ), wxT( "_" ) );
             wxString ext = SVG_PLOTTER::GetDefaultFileExtension();
             wxFileName plotFileName = createPlotFileName( fname, ext, &reporter );
 

@@ -147,7 +147,7 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( wxWindow* aParent,
     // fudge factors here but it does seem to work pretty reliably.
     auto info_size = m_htmlPrompt->GetTextExtent( info );
     auto prompt_size = m_htmlPrompt->GetSize();
-    auto font_size = m_htmlPrompt->GetTextExtent( "X" );
+    auto font_size = m_htmlPrompt->GetTextExtent( wxT( "X" ) );
     auto approx_info_height = ( 2 * info_size.x / prompt_size.x ) * font_size.y;
     m_htmlPrompt->SetSizeHints( 2 * prompt_size.x / 3, approx_info_height );
     Layout();

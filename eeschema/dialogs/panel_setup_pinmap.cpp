@@ -74,7 +74,7 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
     wxSize          bmapSize = dummy->GetSize();
     delete dummy;
 
-    wxSize        charSize = KIUI::GetTextSize( "X", m_matrixPanel );
+    wxSize        charSize = KIUI::GetTextSize( wxT( "X" ), m_matrixPanel );
     wxPoint       pos( 0, charSize.y * 2 );
     wxStaticText* text;
 
@@ -133,7 +133,7 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 
                 wxPoint calloutPos( x + KiROUND( bmapSize.x / 2 ) - KiROUND( charSize.x / 2 ),
                                     y - charSize.y );
-                new wxStaticText( m_matrixPanel, wxID_ANY, "|", calloutPos );
+                new wxStaticText( m_matrixPanel, wxID_ANY, wxT( "|" ), calloutPos );
             }
 
             int event_id = ID_MATRIX_0 + ii + ( jj * ELECTRICAL_PINTYPES_TOTAL );

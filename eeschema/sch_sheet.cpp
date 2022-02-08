@@ -206,7 +206,7 @@ int SCH_SHEET::GetScreenCount() const
 
 bool SCH_SHEET::IsRootSheet() const
 {
-    wxCHECK_MSG( Schematic(), false, "Can't call IsRootSheet without setting a schematic" );
+    wxCHECK_MSG( Schematic(), false, wxT( "Can't call IsRootSheet without setting a schematic" ) );
 
     return &Schematic()->Root() == this;
 }
@@ -259,7 +259,7 @@ bool SCH_SHEET::ResolveTextVar( wxString* token, int aDepth ) const
         {
             if( sheet.Last() == this )   // Current sheet path found
             {
-                *token = wxString::Format( "%s", sheet.GetPageNumber() );
+                *token = wxString::Format( wxT( "%s" ), sheet.GetPageNumber() );
                 return true;
             }
         }

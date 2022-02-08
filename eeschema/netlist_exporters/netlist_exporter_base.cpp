@@ -50,9 +50,9 @@ wxString NETLIST_EXPORTER_BASE::MakeCommandLine( const wxString& aFormatString,
     wxFileName out  = aFinalFile;
     wxString str_out  = out.GetFullPath();
 
-    ret.Replace( "%P", aProjectPath, true );
-    ret.Replace( "%B", out.GetName(), true );
-    ret.Replace( "%I", in.GetFullPath(), true );
+    ret.Replace( wxT( "%P" ), aProjectPath, true );
+    ret.Replace( wxT( "%B" ), out.GetName(), true );
+    ret.Replace( wxT( "%I" ), in.GetFullPath(), true );
 
 #ifdef __WINDOWS__
     // A ugly hack to run xsltproc that has a serious bug on Window since a long time:
@@ -60,11 +60,11 @@ wxString NETLIST_EXPORTER_BASE::MakeCommandLine( const wxString& aFormatString,
     // so replace if by '/' if possible (I mean if the filename does not start by "\\"
     // that is a filename on a Windows server)
 
-    if( !str_out.StartsWith( "\\\\" ) )
-        str_out.Replace( "\\", "/" );
+    if( !str_out.StartsWith( wxT( "\\\\" ) ) )
+        str_out.Replace( wxT( "\\" ), wxT( "/" ) );
 #endif
 
-    ret.Replace( "%O", str_out, true );
+    ret.Replace( wxT( "%O" ), str_out, true );
 
     return ret;
 }

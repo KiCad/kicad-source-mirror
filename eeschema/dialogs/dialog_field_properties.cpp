@@ -192,7 +192,7 @@ void DIALOG_FIELD_PROPERTIES::OnSetFocusText( wxFocusEvent& event )
         // This is needed because GTK seems to ignore the selection on first update
         //
         // Note that we can't do this on OSX as it tends to provoke Apple's
-        // "[NSAlert runModal] may not be invoked inside of transaction begin/commit pair"
+        // wxT( "[NSAlert runModal] may not be invoked inside of transaction begin/commit pair" )
         // bug.  See: https://bugs.launchpad.net/kicad/+bug/1837225
         if( m_fieldId == REFERENCE_FIELD || m_fieldId == VALUE_FIELD || m_fieldId == SHEETNAME_V )
             m_TextCtrl->Update();
@@ -348,7 +348,7 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
     m_isPower = false;
 
-    m_textLabel->SetLabel( m_field->GetName() + ":" );
+    m_textLabel->SetLabel( m_field->GetName() + wxT( ":" ) );
 
     m_position = m_field->GetPosition();
 
@@ -399,7 +399,7 @@ void DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEven
     {
         wxString text = m_StyledTextCtrl->GetText();
         int currpos = m_StyledTextCtrl->GetCurrentPos();
-        text.Replace( "\n", "" );
+        text.Replace( wxT( "\n" ), wxT( "" ) );
         m_StyledTextCtrl->SetText( text );
         m_StyledTextCtrl->GotoPos( currpos-1 );
         return;

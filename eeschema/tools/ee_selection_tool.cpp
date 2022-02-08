@@ -1620,7 +1620,7 @@ bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
             EDA_ITEM* item = ( *aCollector )[i];
             text           = item->GetSelectMenuText( m_frame->GetUserUnits() );
 
-            wxString menuText = wxString::Format( "&%d. %s\t%d", i + 1, text, i + 1 );
+            wxString menuText = wxString::Format( wxT( "&%d. %s\t%d" ), i + 1, text, i + 1 );
             menu.Add( menuText, i + 1, item->GetMenuImage() );
         }
 

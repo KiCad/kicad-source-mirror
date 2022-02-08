@@ -137,12 +137,12 @@ int PIN_NUMBERS::Compare( const wxString& lhs, const wxString& rhs )
             if( wxIsdigit( c2 ) || c2 == '-' || c2 == '+' )
             {
                 // numeric comparison
-                wxString::size_type v1 = symbol1.find_first_of( "vV" );
+                wxString::size_type v1 = symbol1.find_first_of( wxT( "vV" ) );
 
                 if( v1 != wxString::npos )
                     symbol1[v1] = '.';
 
-                wxString::size_type v2 = symbol2.find_first_of( "vV" );
+                wxString::size_type v2 = symbol2.find_first_of( wxT( "vV" ) );
 
                 if( v2 != wxString::npos )
                     symbol2[v2] = '.';

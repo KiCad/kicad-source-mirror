@@ -94,7 +94,7 @@ wxString SCH_PIN::GetShownName() const
     if( !m_alt.IsEmpty() )
         name = m_alt;
 
-    if( name == "~" )
+    if( name == wxT( "~" ) )
         return wxEmptyString;
     else
         return name;
@@ -103,7 +103,7 @@ wxString SCH_PIN::GetShownName() const
 
 wxString SCH_PIN::GetShownNumber() const
 {
-    if( m_number == "~" )
+    if( m_number == wxT( "~" ) )
         return wxEmptyString;
     else
         return m_number;
@@ -180,7 +180,7 @@ SCH_SYMBOL* SCH_PIN::GetParentSymbol() const
 
 wxString SCH_PIN::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( "%s %s",
+    return wxString::Format( wxT( "%s %s" ),
                              GetParentSymbol()->GetSelectMenuText( aUnits ),
                              m_libPin->GetSelectMenuText( aUnits ) );
 }
@@ -266,10 +266,10 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
             return it->second.first;
     }
 
-    wxString name = "Net-(";
+    wxString name = wxT( "Net-(" );
 
     if( aForceNoConnect || GetType() == ELECTRICAL_PINTYPE::PT_NC )
-        name = ( "unconnected-(" );
+        name = ( wxT( "unconnected-(" ) );
 
     name << GetParentSymbol()->GetRef( &aPath );
 
@@ -282,7 +282,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
         annotated = false;
     }
 
-    name << "-Pad" << m_libPin->GetNumber() << ")";
+    name << wxT( "-Pad" ) << m_libPin->GetNumber() << wxT( ")" );
 
     if( annotated )
         m_net_name_map[ aPath ] = std::make_pair( name, aForceNoConnect );

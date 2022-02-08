@@ -83,7 +83,7 @@ void NGSPICE::Init( const SPICE_SIMULATOR_SETTINGS* aSettings )
 
     for( const std::string& command : GetSettingCommands() )
     {
-        wxLogTrace( traceNgspice, "Sending Ngspice configuration command '%s'.", command );
+        wxLogTrace( traceNgspice, wxT( "Sending Ngspice configuration command '%s'." ), command );
         Command( command );
     }
 }
@@ -396,7 +396,7 @@ std::vector<std::string> NGSPICE::GetSettingCommands() const
         break;
 
     default:
-        wxFAIL_MSG( wxString::Format( "Undefined NGSPICE_MODEL_MODE %d.",
+        wxFAIL_MSG( wxString::Format( wxT( "Undefined NGSPICE_MODEL_MODE %d." ),
                                       settings->GetModelMode() ) );
         break;
     }
@@ -441,7 +441,7 @@ void NGSPICE::init_dll()
 
         // when running eeschema.app
         wxFileName( stdPaths.GetExecutablePath() ).GetPath().ToStdString() +
-                "/../../../../../Contents/PlugIns/sim"
+                wxT( "/../../../../../Contents/PlugIns/sim" )
     };
 #else   // Unix systems
     const vector<string> dllPaths = { "/usr/local/lib" };
@@ -451,18 +451,18 @@ void NGSPICE::init_dll()
     for( const auto& path : dllPaths )
     {
         dllFile.SetPath( path );
-        wxLogTrace( traceNgspice, "libngspice search path: %s", dllFile.GetFullPath() );
+        wxLogTrace( traceNgspice, wxT( "libngspice search path: %s" ), dllFile.GetFullPath() );
         m_dll.Load( dllFile.GetFullPath(), wxDL_VERBATIM | wxDL_QUIET | wxDL_NOW );
 
         if( m_dll.IsLoaded() )
         {
-            wxLogTrace( traceNgspice, "libngspice path found in: %s", dllFile.GetFullPath() );
+            wxLogTrace( traceNgspice, wxT( "libngspice path found in: %s" ), dllFile.GetFullPath() );
             break;
         }
     }
 
     if( !m_dll.IsLoaded() ) // try also the system libraries
-        m_dll.Load( wxDynamicLibrary::CanonicalizeName( "ngspice" ) );
+        m_dll.Load( wxDynamicLibrary::CanonicalizeName( wxT( "ngspice" ) ) );
 #else
     // First, try the system libraries
     m_dll.Load( NGSPICE_DLL_FILE, wxDL_VERBATIM | wxDL_QUIET | wxDL_NOW );
@@ -473,12 +473,12 @@ void NGSPICE::init_dll()
         for( const auto& path : dllPaths )
         {
             dllFile.SetPath( path );
-            wxLogTrace( traceNgspice, "libngspice search path: %s", dllFile.GetFullPath() );
+            wxLogTrace( traceNgspice, wxT( "libngspice search path: %s" ), dllFile.GetFullPath() );
             m_dll.Load( dllFile.GetFullPath(), wxDL_VERBATIM | wxDL_QUIET | wxDL_NOW );
 
             if( m_dll.IsLoaded() )
             {
-                wxLogTrace( traceNgspice, "libngspice path found in: %s", dllFile.GetFullPath() );
+                wxLogTrace( traceNgspice, wxT( "libngspice path found in: %s" ), dllFile.GetFullPath() );
                 break;
             }
         }
@@ -535,11 +535,11 @@ void NGSPICE::init_dll()
 
     for( const auto& path : spiceinitPaths )
     {
-        wxLogTrace( traceNgspice, "ngspice init script search path: %s", path );
+        wxLogTrace( traceNgspice, wxT( "ngspice init script search path: %s" ), path );
 
         if( loadSpinit( path + "/spiceinit" ) )
         {
-            wxLogTrace( traceNgspice, "ngspice path found in: %s", path );
+            wxLogTrace( traceNgspice, wxT( "ngspice path found in: %s" ), path );
             foundSpiceinit = true;
             break;
         }
@@ -600,11 +600,11 @@ string NGSPICE::findCmPath() const
 
     for( const auto& path : cmPaths )
     {
-        wxLogTrace( traceNgspice, "ngspice code models search path: %s", path );
+        wxLogTrace( traceNgspice, wxT( "ngspice code models search path: %s" ), path );
 
-        if( wxFileName::FileExists( path + "/spice2poly.cm" ) )
+        if( wxFileName::FileExists( path + wxT( "/spice2poly.cm" ) ) )
         {
-            wxLogTrace( traceNgspice, "ngspice code models found in: %s", path );
+            wxLogTrace( traceNgspice, wxT( "ngspice code models found in: %s" ), path );
             return path;
         }
     }

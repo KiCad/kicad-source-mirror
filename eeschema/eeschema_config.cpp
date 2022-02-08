@@ -192,7 +192,7 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    wxCHECK_RET( aCfg, "Call to SCH_BASE_FRAME::SaveSettings with null settings" );
+    wxCHECK_RET( aCfg, wxT( "Call to SCH_BASE_FRAME::SaveSettings with null settings" ) );
 
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
@@ -210,13 +210,13 @@ void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
          * The 100 mil grid is added to help conform to the KiCad Library Convention which
          * states: "Using a 100mil grid, pin ends and origin must lie on grid nodes IEC-60617"
          */
-        aCfg->m_Window.grid.sizes = { "100 mil",
-                                      "50 mil",
-                                      "25 mil",
-                                      "10 mil",
-                                      "5 mil",
-                                      "2 mil",
-                                      "1 mil" };
+        aCfg->m_Window.grid.sizes = { wxT( "100 mil" ),
+                                      wxT( "50 mil" ),
+                                      wxT( "25 mil" ),
+                                      wxT( "10 mil" ),
+                                      wxT( "5 mil" ),
+                                      wxT( "2 mil" ),
+                                      wxT( "1 mil" ) };
     }
 
     // Currently values read from config file are not used because the user cannot
@@ -230,7 +230,7 @@ void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
 void SCH_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
-    wxCHECK_RET( aCfg, "Call to SCH_BASE_FRAME::SaveSettings with null settings" );
+    wxCHECK_RET( aCfg, wxT( "Call to SCH_BASE_FRAME::SaveSettings with null settings" ) );
 
     EDA_DRAW_FRAME::SaveSettings( aCfg );
 }

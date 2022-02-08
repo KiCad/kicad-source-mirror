@@ -106,7 +106,7 @@ void SCH_MARKER::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 2;
 
-    wxCHECK_RET( Schematic(), "No SCHEMATIC set for SCH_MARKER!" );
+    wxCHECK_RET( Schematic(), wxT( "No SCHEMATIC set for SCH_MARKER!" ) );
 
     switch( Schematic()->ErcSettings().GetSeverity( m_rcItem->GetErrorCode() ) )
     {
@@ -124,7 +124,7 @@ SCH_LAYER_ID SCH_MARKER::GetColorLayer() const
     if( IsExcluded() )
         return LAYER_HIDDEN;
 
-    wxCHECK_MSG( Schematic(), LAYER_ERC_ERR, "No SCHEMATIC set for SCH_MARKER!" );
+    wxCHECK_MSG( Schematic(), LAYER_ERC_ERR, wxT( "No SCHEMATIC set for SCH_MARKER!" ) );
 
     switch( Schematic()->ErcSettings().GetSeverity( m_rcItem->GetErrorCode() ) )
     {

@@ -162,16 +162,16 @@ private:
         switch( aOption )
         {
         case DECADE:
-            return wxString( "dec" );
+            return wxString( wxT( "dec" ) );
 
         case OCTAVE:
-            return wxString( "oct" );
+            return wxString( wxT( "oct" ) );
 
         case LINEAR:
-            return wxString( "lin" );
+            return wxString( wxT( "lin" ) );
         }
 
-        wxASSERT_MSG( false, "Unhandled scale type" );
+        wxASSERT_MSG( false, wxT( "Unhandled scale type" ) );
 
         return wxEmptyString;
     }

@@ -597,7 +597,7 @@ void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer )
             break;
 
         default:
-            wxFAIL_MSG( "SCH_PAINTER::draw not implemented for " + aShape->SHAPE_T_asString() );
+            wxFAIL_MSG( wxT( "SCH_PAINTER::draw not implemented for " ) + aShape->SHAPE_T_asString() );
         }
     }
 }
@@ -1191,7 +1191,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         break;
 
     default:
-        wxFAIL_MSG( "Unknown pin orientation" );
+        wxFAIL_MSG( wxT( "Unknown pin orientation" ) );
     }
 }
 

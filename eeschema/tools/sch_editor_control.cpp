@@ -789,9 +789,9 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                     primitive = NETLIST_EXPORTER_PSPICE::GetSpiceField( SF_PRIMITIVE, symbol, 0 );
                     primitive.LowerCase();
 
-                    if( primitive == "c" || primitive == "l" || primitive == "r" )
+                    if( primitive == wxT( "c" ) || primitive == wxT( "l" ) || primitive == wxT( "r" ) )
                         param = wxT( "I" );
-                    else if( primitive == "d" )
+                    else if( primitive == wxT( "d" ) )
                         param = wxT( "Id" );
                     else
                         param = wxString::Format( wxT( "I%s" ), pin->GetShownName().Lower() );
@@ -1559,7 +1559,7 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPas
     if( m_clipboardSheetInstances.count( aClipPath ) > 0 )
         pageNum = m_clipboardSheetInstances.at( aClipPath ).m_PageNumber;
     else
-        pageNum = wxString::Format( "%d", static_cast<int>( aPastedSheetsSoFar->size() ) );
+        pageNum = wxString::Format( wxT( "%d" ), static_cast<int>( aPastedSheetsSoFar->size() ) );
 
     aSheet->SetPageNumber( sheetPath, pageNum );
     aPastedSheetsSoFar->push_back( sheetPath );
@@ -1929,10 +1929,10 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             for( SCH_SHEET_PATH& pastedSheet : pastedSheets[instance] )
             {
                 int      page = 1;
-                wxString pageNum = wxString::Format( "%d", page );
+                wxString pageNum = wxString::Format( wxT( "%d" ), page );
 
                 while( hierarchy.PageNumberExists( pageNum ) )
-                    pageNum = wxString::Format( "%d", ++page );
+                    pageNum = wxString::Format( wxT( "%d" ), ++page );
 
                 pastedSheet.SetPageNumber( pageNum );
                 hierarchy.push_back( pastedSheet );

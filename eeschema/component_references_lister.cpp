@@ -303,9 +303,9 @@ wxString buildFullReference( const SCH_REFERENCE& aItem, int aUnitNumber = -1 )
     fullref = aItem.GetRef() + aItem.GetRefNumber();
 
     if( aUnitNumber < 0 )
-        fullref << ".." << aItem.GetUnit();
+        fullref << wxT( ".." ) << aItem.GetUnit();
     else
-        fullref << ".." << aUnitNumber;
+        fullref << wxT( ".." ) << aUnitNumber;
 
     return fullref;
 }

@@ -106,7 +106,7 @@ void SYMBOL_LIBRARY_MANAGER::Preload( PROGRESS_REPORTER& aReporter )
         dlg.MessageSet( _( "Errors loading symbols:" ) );
 
         wxString msg = loader.GetErrors();
-        msg.Replace( "\n", "<BR>" );
+        msg.Replace( wxT( "\n" ), wxT( "<BR>" ) );
 
         dlg.AddHTML_Text( msg );
         dlg.ShowModal();
@@ -191,7 +191,7 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
     bool res = true;    // assume all libraries are successfully saved
 
     PROPERTIES properties;
-    properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, "" );
+    properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, wxT( "" ) );
 
     auto it = m_libs.find( aLibrary );
 
@@ -238,7 +238,7 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
                 std::shared_ptr< LIB_SYMBOL > oldParent = symbol->GetParent().lock();
 
                 wxCHECK_MSG( oldParent, false,
-                             wxString::Format( "Derived symbol '%s' found with undefined parent.",
+                             wxString::Format( wxT( "Derived symbol '%s' found with undefined parent." ),
                                                symbol->GetName() ) );
 
                 LIB_SYMBOL* libParent = pi->LoadSymbol( aLibrary, oldParent->GetName(),
@@ -408,7 +408,7 @@ LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER::GetBufferedSymbol( const wxString& aAlias,
             {
                 std::shared_ptr< LIB_SYMBOL > parent = symbol->GetParent().lock();
                 wxCHECK_MSG( parent, nullptr,
-                             wxString::Format( "Derived symbol '%s' found with undefined parent.",
+                             wxString::Format( wxT( "Derived symbol '%s' found with undefined parent." ),
                                                symbol->GetName() ) );
 
                 // Check if the parent symbol buffer has already be created.
@@ -660,17 +660,17 @@ bool SYMBOL_LIBRARY_MANAGER::LibraryExists( const wxString& aLibrary, bool aChec
 
 wxString SYMBOL_LIBRARY_MANAGER::GetUniqueLibraryName() const
 {
-    wxString name = "New_Library";
+    wxString name = wxT( "New_Library" );
 
     if( !LibraryExists( name ) )
         return name;
 
-    name += "_";
+    name += wxT( "_" );
 
     for( unsigned int i = 0; i < std::numeric_limits<unsigned int>::max(); ++i )
     {
-        if( !LibraryExists( name + wxString::Format( "%u", i ) ) )
-            return name + wxString::Format( "%u", i );
+        if( !LibraryExists( name + wxString::Format( wxT( "%u" ), i ) ) )
+            return name + wxString::Format( wxT( "%u" ), i );
     }
 
     wxFAIL;
@@ -797,7 +797,7 @@ SYMBOL_LIBRARY_MANAGER::LIB_BUFFER& SYMBOL_LIBRARY_MANAGER::getLibraryBuffer(
             std::shared_ptr< LIB_SYMBOL > oldParent = symbol->GetParent().lock();
 
             wxCHECK_MSG( oldParent, buf,
-                         wxString::Format( "Derived symbol '%s' found with undefined parent.",
+                         wxString::Format( wxT( "Derived symbol '%s' found with undefined parent." ),
                                            symbol->GetName() ) );
 
             LIB_SYMBOL* libParent = buf.GetSymbol( oldParent->GetName() );
@@ -957,7 +957,7 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( std::shared_ptr<SYMBOL_BUFF
     wxCHECK( libSymbol && originalSymbol, false );
     SYMBOL_LIB_TABLE::SAVE_T result;
     PROPERTIES properties;
-    properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, "" );
+    properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, wxT( "" ) );
 
     // Delete the original symbol if the symbol name has been changed.
     if( libSymbol->GetName() != originalSymbol->GetName() )
@@ -1049,7 +1049,7 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( std::shared_ptr<SYMBOL_BUFF
 
     // set properties to prevent save file on every symbol save
     PROPERTIES properties;
-    properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, "" );
+    properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, wxT( "" ) );
 
     // Delete the original symbol if the symbol name has been changed.
     if( libSymbol->GetName() != originalSymbol->GetName() )

@@ -93,19 +93,19 @@ SCH_ALTIUM_PLUGIN::~SCH_ALTIUM_PLUGIN()
 
 const wxString SCH_ALTIUM_PLUGIN::GetName() const
 {
-    return "Altium";
+    return wxT( "Altium" );
 }
 
 
 const wxString SCH_ALTIUM_PLUGIN::GetFileExtension() const
 {
-    return "SchDoc";
+    return wxT( "SchDoc" );
 }
 
 
 const wxString SCH_ALTIUM_PLUGIN::GetLibraryFileExtension() const
 {
-    return "SchLib";
+    return wxT( "SchLib" );
 }
 
 
@@ -137,9 +137,9 @@ wxString SCH_ALTIUM_PLUGIN::getLibName()
         }
 
         if( m_libName.IsEmpty() )
-            m_libName = "noname";
+            m_libName = wxT( "noname" );
 
-        m_libName += "-altium-import";
+        m_libName += wxT( "-altium-import" );
         m_libName = LIB_ID::FixIllegalChars( m_libName, true );
     }
 
@@ -169,7 +169,7 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
 
     if( aAppendToMe )
     {
-        wxCHECK_MSG( aSchematic->IsValid(), nullptr, "Can't append to a schematic with no root!" );
+        wxCHECK_MSG( aSchematic->IsValid(), nullptr, wxT( "Can't append to a schematic with no root!" ) );
         m_rootSheet = &aSchematic->Root();
     }
     else
@@ -183,7 +183,7 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
         sheetpath.push_back( m_rootSheet );
 
         m_rootSheet->AddInstance( sheetpath );
-        m_rootSheet->SetPageNumber( sheetpath, "#" );   // We'll update later if we find a
+        m_rootSheet->SetPageNumber( sheetpath, wxT( "#" ) );   // We'll update later if we find a
                                                         // pageNumber record for it
     }
 
@@ -196,7 +196,7 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
 
     SYMBOL_LIB_TABLE* libTable = m_schematic->Prj().SchSymbolLibTable();
 
-    wxCHECK_MSG( libTable, nullptr, "Could not load symbol lib table." );
+    wxCHECK_MSG( libTable, nullptr, wxT( "Could not load symbol lib table." ) );
 
     m_pi.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
 
@@ -206,11 +206,11 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
     {
         // Create a new empty symbol library.
         m_pi->CreateSymbolLib( getLibFileName().GetFullPath() );
-        wxString libTableUri = "${KIPRJMOD}/" + getLibFileName().GetFullName();
+        wxString libTableUri = wxT( "${KIPRJMOD}/" ) + getLibFileName().GetFullName();
 
         // Add the new library to the project symbol library table.
         libTable->InsertRow( new SYMBOL_LIB_TABLE_ROW( getLibName(), libTableUri,
-                                                       wxString( "KiCad" ) ) );
+                                                       wxString( wxT( "KiCad" ) ) ) );
 
         // Save project symbol library table.
         wxFileName fn( m_schematic->Prj().GetProjectPath(),
@@ -243,7 +243,7 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
 void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
 {
     // Open file
-    FILE* fp = wxFopen( aFileName, "rb" );
+    FILE* fp = wxFopen( aFileName, wxT( "rb" ) );
 
     if( fp == nullptr )
     {
@@ -258,7 +258,7 @@ void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
     if( len < 0 )
     {
         fclose( fp );
-        THROW_IO_ERROR( "Read error, cannot determine length of file." );
+        THROW_IO_ERROR( wxT( "Read error, cannot determine length of file." ) );
     }
 
     std::unique_ptr<unsigned char[]> buffer( new unsigned char[len] );
@@ -268,7 +268,7 @@ void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
     fclose( fp );
 
     if( static_cast<size_t>( len ) != bytesRead )
-        THROW_IO_ERROR( "Read error." );
+        THROW_IO_ERROR( wxT( "Read error." ) );
 
     try
     {
@@ -293,11 +293,11 @@ void SCH_ALTIUM_PLUGIN::ParseStorage( const CFB::CompoundFileReader& aReader )
     ALTIUM_PARSER reader( aReader, file );
 
     std::map<wxString, wxString> properties = reader.ReadProperties();
-    wxString header = ALTIUM_PARSER::ReadString( properties, "HEADER", "" );
-    int      weight = ALTIUM_PARSER::ReadInt( properties, "WEIGHT", 0 );
+    wxString header = ALTIUM_PARSER::ReadString( properties, wxT( "HEADER" ), wxT( "" ) );
+    int      weight = ALTIUM_PARSER::ReadInt( properties, wxT( "WEIGHT" ), 0 );
 
     if( weight < 0 )
-        THROW_IO_ERROR( "Storage weight is negative!" );
+        THROW_IO_ERROR( wxT( "Storage weight is negative!" ) );
 
     for( int i = 0; i < weight; i++ )
     {
@@ -305,14 +305,14 @@ void SCH_ALTIUM_PLUGIN::ParseStorage( const CFB::CompoundFileReader& aReader )
     }
 
     if( reader.HasParsingError() )
-        THROW_IO_ERROR( "stream was not parsed correctly!" );
+        THROW_IO_ERROR( wxT( "stream was not parsed correctly!" ) );
 
     // TODO pointhi: is it possible to have multiple headers in one Storage file? Otherwise
     // throw IO Error.
     if( reader.GetRemainingBytes() != 0 )
     {
         m_reporter->Report( wxString::Format( _( "Storage file not fully parsed "
-                                                 "(%d bytes remaining)." ),
+                                                 wxT( "(%d bytes remaining)." ) ),
                                               reader.GetRemainingBytes() ),
                             RPT_SEVERITY_ERROR );
     }
@@ -324,23 +324,23 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const CFB::CompoundFileReader& aReader 
     const CFB::COMPOUND_FILE_ENTRY* file = FindStream( aReader, "FileHeader" );
 
     if( file == nullptr )
-        THROW_IO_ERROR( "FileHeader not found" );
+        THROW_IO_ERROR( wxT( "FileHeader not found" ) );
 
     ALTIUM_PARSER reader( aReader, file );
 
     if( reader.GetRemainingBytes() <= 0 )
     {
-        THROW_IO_ERROR( "FileHeader does not contain any data" );
+        THROW_IO_ERROR( wxT( "FileHeader does not contain any data" ) );
     }
     else
     {
         std::map<wxString, wxString> properties = reader.ReadProperties();
 
-        int               recordId = ALTIUM_PARSER::ReadInt( properties, "RECORD", 0 );
+        int               recordId = ALTIUM_PARSER::ReadInt( properties, wxT( "RECORD" ), 0 );
         ALTIUM_SCH_RECORD record   = static_cast<ALTIUM_SCH_RECORD>( recordId );
 
         if( record != ALTIUM_SCH_RECORD::HEADER )
-            THROW_IO_ERROR( "Header expected" );
+            THROW_IO_ERROR( wxT( "Header expected" ) );
     }
 
     // Prepare some local variables
@@ -354,14 +354,14 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const CFB::CompoundFileReader& aReader 
     {
         std::map<wxString, wxString> properties = reader.ReadProperties();
 
-        int               recordId = ALTIUM_PARSER::ReadInt( properties, "RECORD", 0 );
+        int               recordId = ALTIUM_PARSER::ReadInt( properties, wxT( "RECORD" ), 0 );
         ALTIUM_SCH_RECORD record   = static_cast<ALTIUM_SCH_RECORD>( recordId );
 
         // see: https://github.com/vadmium/python-altium/blob/master/format.md
         switch( record )
         {
         case ALTIUM_SCH_RECORD::HEADER:
-            THROW_IO_ERROR( "Header already parsed" );
+            THROW_IO_ERROR( wxT( "Header already parsed" ) );
         case ALTIUM_SCH_RECORD::COMPONENT:
             ParseComponent( index, properties );
             break;
@@ -493,10 +493,10 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const CFB::CompoundFileReader& aReader 
     }
 
     if( reader.HasParsingError() )
-        THROW_IO_ERROR( "stream was not parsed correctly!" );
+        THROW_IO_ERROR( wxT( "stream was not parsed correctly!" ) );
 
     if( reader.GetRemainingBytes() != 0 )
-        THROW_IO_ERROR( "stream is not fully parsed" );
+        THROW_IO_ERROR( wxT( "stream is not fully parsed" ) );
 
     // assign LIB_SYMBOL -> COMPONENT
     for( std::pair<const int, SCH_SYMBOL*>& symbol : m_symbols )
@@ -504,7 +504,7 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const CFB::CompoundFileReader& aReader 
         auto libSymbolIt = m_libSymbols.find( symbol.first );
 
         if( libSymbolIt == m_libSymbols.end() )
-            THROW_IO_ERROR( "every symbol should have a symbol attached" );
+            THROW_IO_ERROR( wxT( "every symbol should have a symbol attached" ) );
 
         m_pi->SaveSymbol( getLibFileName().GetFullPath(),
                           new LIB_SYMBOL( *( libSymbolIt->second ) ), m_properties.get() );
@@ -565,9 +565,9 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int aIndex,
     const ASCH_SYMBOL& elem = pair.first->second;
 
     // TODO: this is a hack until we correctly apply all transformations to every element
-    wxString name = wxString::Format( "%d%s_%s",
+    wxString name = wxString::Format( wxT( "%d%s_%s" ),
                                       elem.orientation,
-                                      elem.isMirrored ? "_mirrored" : "",
+                                      elem.isMirrored ? wxT( "_mirrored" ) : wxT( "" ),
                                       elem.libreference );
     LIB_ID libId = AltiumToKiCadLibID( getLibName(), name );
 
@@ -821,16 +821,16 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         std::map<wxString, wxString> variableMap = {
-            { "APPLICATION_BUILDNUMBER", "KICAD_VERSION" },
-            { "SHEETNUMBER",  "#"            },
-            { "SHEETTOTAL",   "##"           },
-            { "TITLE",        "TITLE"        }, // 1:1 maps are sort of useless, but it makes it
-            { "REVISION",     "REVISION"     }, // easier to see that the list is complete
-            { "DATE",         "ISSUE_DATE"   },
-            { "CURRENTDATE",  "CURRENT_DATE" },
-            { "COMPANYNAME",  "COMPANY"      },
-            { "DOCUMENTNAME", "FILENAME"     },
-            { "PROJECTNAME",  "PROJECTNAME"  },
+            { wxT( "APPLICATION_BUILDNUMBER" ), wxT( "KICAD_VERSION" ) },
+            { wxT( "SHEETNUMBER" ),  wxT( "#" )            },
+            { wxT( "SHEETTOTAL" ),   wxT( "##" )           },
+            { wxT( "TITLE" ),        wxT( "TITLE" )        }, // 1:1 maps are sort of useless, but it makes it
+            { wxT( "REVISION" ),     wxT( "REVISION" )     }, // easier to see that the list is complete
+            { wxT( "DATE" ),         wxT( "ISSUE_DATE" )   },
+            { wxT( "CURRENTDATE" ),  wxT( "CURRENT_DATE" ) },
+            { wxT( "COMPANYNAME" ),  wxT( "COMPANY" )      },
+            { wxT( "DOCUMENTNAME" ), wxT( "FILENAME" )     },
+            { wxT( "PROJECTNAME" ),  wxT( "PROJECTNAME" )  },
         };
 
         wxString  kicadText = AltiumSpecialStringsToKiCadVariables( elem.text, variableMap );
@@ -1523,7 +1523,7 @@ void SCH_ALTIUM_PLUGIN::ParseSheetSymbol( int aIndex,
     sheetpath.push_back( sheet );
 
     sheet->AddInstance( sheetpath );
-    sheet->SetPageNumber( sheetpath, "#" );   // We'll update later if we find a pageNumber
+    sheet->SetPageNumber( sheetpath, wxT( "#" ) );   // We'll update later if we find a pageNumber
                                               // record for it
 
     m_sheets.insert( { aIndex, sheet } );
@@ -1822,12 +1822,12 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
         libSymbol = new LIB_SYMBOL( wxEmptyString );
         libSymbol->SetPower();
         libSymbol->SetName( elem.text );
-        libSymbol->GetReferenceField().SetText( "#PWR" );
+        libSymbol->GetReferenceField().SetText( wxT( "#PWR" ) );
         libSymbol->GetValueField().SetText( elem.text );
         libSymbol->GetValueField().SetVisible( true );
         libSymbol->SetDescription( wxString::Format( _( "Power symbol creates a global "
                                                         "label with name '%s'" ), elem.text ) );
-        libSymbol->SetKeyWords( "power-flag" );
+        libSymbol->SetKeyWords( wxT( "power-flag" ) );
         libSymbol->SetLibId( libId );
 
         // generate graphic
@@ -1856,7 +1856,7 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
 
     // each symbol has its own powerSymbolIt for now
     SCH_SYMBOL* symbol = new SCH_SYMBOL();
-    symbol->SetRef( &sheetpath, "#PWR?" );
+    symbol->SetRef( &sheetpath, wxT( "#PWR?" ) );
     symbol->SetValue( elem.text );
     symbol->SetLibId( libId );
     symbol->SetLibSymbol( new LIB_SYMBOL( *libSymbol ) );
@@ -2138,7 +2138,7 @@ void SCH_ALTIUM_PLUGIN::ParseImage( const std::map<wxString, wxString>& aPropert
             return;
         }
 
-        wxString storagePath = wxFileName::CreateTempFileName( "kicad_import_" );
+        wxString storagePath = wxFileName::CreateTempFileName( wxT( "kicad_import_" ) );
 
         // As wxZlibInputStream is not seekable, we need to write a temporary file
         wxMemoryInputStream fileStream( storageFile->data.data(), storageFile->data.size() );
@@ -2197,24 +2197,24 @@ void SCH_ALTIUM_PLUGIN::ParseSheet( const std::map<wxString, wxString>& aPropert
     switch( m_altiumSheet->sheetSize )
     {
     default:
-    case ASCH_SHEET_SIZE::A4:      pageInfo.SetType( "A4", isPortrait );       break;
-    case ASCH_SHEET_SIZE::A3:      pageInfo.SetType( "A3", isPortrait );       break;
-    case ASCH_SHEET_SIZE::A2:      pageInfo.SetType( "A2", isPortrait );       break;
-    case ASCH_SHEET_SIZE::A1:      pageInfo.SetType( "A1", isPortrait );       break;
-    case ASCH_SHEET_SIZE::A0:      pageInfo.SetType( "A0", isPortrait );       break;
-    case ASCH_SHEET_SIZE::A:       pageInfo.SetType( "A", isPortrait );        break;
-    case ASCH_SHEET_SIZE::B:       pageInfo.SetType( "B", isPortrait );        break;
-    case ASCH_SHEET_SIZE::C:       pageInfo.SetType( "C", isPortrait );        break;
-    case ASCH_SHEET_SIZE::D:       pageInfo.SetType( "D", isPortrait );        break;
-    case ASCH_SHEET_SIZE::E:       pageInfo.SetType( "E", isPortrait );        break;
-    case ASCH_SHEET_SIZE::LETTER:  pageInfo.SetType( "USLetter", isPortrait ); break;
-    case ASCH_SHEET_SIZE::LEGAL:   pageInfo.SetType( "USLegal", isPortrait );  break;
-    case ASCH_SHEET_SIZE::TABLOID: pageInfo.SetType( "A3", isPortrait );       break;
-    case ASCH_SHEET_SIZE::ORCAD_A: pageInfo.SetType( "A", isPortrait );        break;
-    case ASCH_SHEET_SIZE::ORCAD_B: pageInfo.SetType( "B", isPortrait );        break;
-    case ASCH_SHEET_SIZE::ORCAD_C: pageInfo.SetType( "C", isPortrait );        break;
-    case ASCH_SHEET_SIZE::ORCAD_D: pageInfo.SetType( "D", isPortrait );        break;
-    case ASCH_SHEET_SIZE::ORCAD_E: pageInfo.SetType( "E", isPortrait );        break;
+    case ASCH_SHEET_SIZE::A4:      pageInfo.SetType( wxT( "A4" ), isPortrait );       break;
+    case ASCH_SHEET_SIZE::A3:      pageInfo.SetType( wxT( "A3" ), isPortrait );       break;
+    case ASCH_SHEET_SIZE::A2:      pageInfo.SetType( wxT( "A2" ), isPortrait );       break;
+    case ASCH_SHEET_SIZE::A1:      pageInfo.SetType( wxT( "A1" ), isPortrait );       break;
+    case ASCH_SHEET_SIZE::A0:      pageInfo.SetType( wxT( "A0" ), isPortrait );       break;
+    case ASCH_SHEET_SIZE::A:       pageInfo.SetType( wxT( "A" ), isPortrait );        break;
+    case ASCH_SHEET_SIZE::B:       pageInfo.SetType( wxT( "B" ), isPortrait );        break;
+    case ASCH_SHEET_SIZE::C:       pageInfo.SetType( wxT( "C" ), isPortrait );        break;
+    case ASCH_SHEET_SIZE::D:       pageInfo.SetType( wxT( "D" ), isPortrait );        break;
+    case ASCH_SHEET_SIZE::E:       pageInfo.SetType( wxT( "E" ), isPortrait );        break;
+    case ASCH_SHEET_SIZE::LETTER:  pageInfo.SetType( wxT( "USLetter" ), isPortrait ); break;
+    case ASCH_SHEET_SIZE::LEGAL:   pageInfo.SetType( wxT( "USLegal" ), isPortrait );  break;
+    case ASCH_SHEET_SIZE::TABLOID: pageInfo.SetType( wxT( "A3" ), isPortrait );       break;
+    case ASCH_SHEET_SIZE::ORCAD_A: pageInfo.SetType( wxT( "A" ), isPortrait );        break;
+    case ASCH_SHEET_SIZE::ORCAD_B: pageInfo.SetType( wxT( "B" ), isPortrait );        break;
+    case ASCH_SHEET_SIZE::ORCAD_C: pageInfo.SetType( wxT( "C" ), isPortrait );        break;
+    case ASCH_SHEET_SIZE::ORCAD_D: pageInfo.SetType( wxT( "D" ), isPortrait );        break;
+    case ASCH_SHEET_SIZE::ORCAD_E: pageInfo.SetType( wxT( "E" ), isPortrait );        break;
     }
 
     m_currentSheet->GetScreen()->SetPageSettings( pageInfo );
@@ -2266,7 +2266,7 @@ void SCH_ALTIUM_PLUGIN::ParseFileName( const std::map<wxString, wxString>& aProp
 
     // If last symbols are ".sChDoC", change them to ".kicad_sch"
     if( ( elem.text.Right( GetFileExtension().length() + 1 ).Lower() )
-            == ( "." + GetFileExtension().Lower() ) )
+            == ( wxT( "." ) + GetFileExtension().Lower() ) )
     {
         elem.text.RemoveLast( GetFileExtension().length() );
         elem.text += KiCadSchematicFileExtension;
@@ -2328,38 +2328,38 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
 
     // TODO: fill in replacements from variant, sheet and project
     std::map<wxString, wxString> variableMap = {
-        { "COMMENT", "VALUE"        },
-        { "VALUE",   "ALTIUM_VALUE" },
+        { wxT( "COMMENT" ), wxT( "VALUE" )        },
+        { wxT( "VALUE" ),   wxT( "ALTIUM_VALUE" ) },
     };
 
     if( elem.ownerindex <= 0 && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         // This is some sheet parameter
-        if( elem.text == "*" )
+        if( elem.text == wxT( "*" ) )
             return; // indicates parameter not set?
 
         wxString paramName = elem.name.Upper();
 
-        if( paramName == "SHEETNUMBER" )
+        if( paramName == wxT( "SHEETNUMBER" ) )
         {
             SCH_SHEET_PATH sheetpath;
             m_rootSheet->LocatePathOfScreen( m_currentSheet->GetScreen(), &sheetpath );
 
             m_rootSheet->SetPageNumber( sheetpath, elem.text );
         }
-        else if( paramName == "TITLE" )
+        else if( paramName == wxT( "TITLE" ) )
         {
             m_currentTitleBlock->SetTitle( elem.text );
         }
-        else if( paramName == "REVISION" )
+        else if( paramName == wxT( "REVISION" ) )
         {
             m_currentTitleBlock->SetRevision( elem.text );
         }
-        else if( paramName == "DATE" )
+        else if( paramName == wxT( "DATE" ) )
         {
             m_currentTitleBlock->SetDate( elem.text );
         }
-        else if( paramName == "COMPANYNAME" )
+        else if( paramName == wxT( "COMPANYNAME" ) )
         {
             m_currentTitleBlock->SetCompany( elem.text );
         }
@@ -2381,15 +2381,15 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
         SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
         SCH_FIELD*  field = nullptr;
 
-        if( elem.name.Upper() == "COMMENT" )
+        if( elem.name.Upper() == wxT( "COMMENT" ) )
             field = symbol->GetField( VALUE_FIELD );
         else
         {
             int      fieldIdx = symbol->GetFieldCount();
             wxString fieldName = elem.name.Upper();
 
-            if( fieldName == "VALUE" )
-                fieldName = "ALTIUM_VALUE";
+            if( fieldName == wxT( "VALUE" ) )
+                fieldName = wxT( "ALTIUM_VALUE" );
 
             field = symbol->AddField( SCH_FIELD( wxPoint(), fieldIdx, symbol, fieldName ) );
         }
@@ -2417,7 +2417,7 @@ void SCH_ALTIUM_PLUGIN::ParseImplementation( const std::map<wxString, wxString>&
     ASCH_IMPLEMENTATION elem( aProperties );
 
     // Only get footprint, currently assigned only
-    if( ( elem.type == "PCBLIB" ) && ( elem.isCurrent ) )
+    if( ( elem.type == wxT( "PCBLIB" ) ) && ( elem.isCurrent ) )
     {
         const auto& implementationOwnerIt = m_altiumImplementationList.find( elem.ownerindex );
 

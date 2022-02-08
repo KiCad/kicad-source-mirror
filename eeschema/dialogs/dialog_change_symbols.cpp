@@ -528,7 +528,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
         if( references.IsEmpty() )
             references = instance.m_Reference;
         else
-            references += " " + instance.m_Reference;
+            references += wxT( " " ) + instance.m_Reference;
     }
 
     if( m_mode == MODE::UPDATE )
@@ -570,7 +570,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
 
     if( !libSymbol )
     {
-        msg << ": " << _( "*** symbol not found ***" );
+        msg << wxT( ": " ) << _( "*** symbol not found ***" );
         m_messagePanel->Report( msg, RPT_SEVERITY_ERROR );
         return false;
     }
@@ -579,7 +579,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
 
     if( flattenedSymbol->GetUnitCount() < aSymbol->GetUnit() )
     {
-        msg << ": " << _( "*** new symbol has too few units ***" );
+        msg << wxT( ": " ) << _( "*** new symbol has too few units ***" );
         m_messagePanel->Report( msg, RPT_SEVERITY_ERROR );
         return false;
     }
@@ -688,7 +688,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
     screen->Append( aSymbol );
     frame->GetCanvas()->GetView()->Update( aSymbol );
 
-    msg += ": OK";
+    msg += wxT( ": OK" );
     m_messagePanel->Report( msg, RPT_SEVERITY_ACTION );
 
     return true;

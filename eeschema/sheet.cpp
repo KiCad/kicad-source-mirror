@@ -124,7 +124,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
 
     if( !fileName.IsAbsolute() && !fileName.MakeAbsolute() )
     {
-        wxFAIL_MSG( wxString::Format( "Cannot make file name '%s' path absolute.", aFileName ) );
+        wxFAIL_MSG( wxString::Format( wxT( "Cannot make file name '%s' path absolute." ), aFileName ) );
         return false;
     }
 
@@ -181,7 +181,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
             topLevelSheetPath = fileName.GetPathWithSep();
 
         if( wxFileName::GetPathSeparator() == '\\' )
-            topLevelSheetPath.Replace( "\\", "/" );
+            topLevelSheetPath.Replace( wxT( "\\" ), wxT( "/" ) );
     }
 
     // Make sure any new sheet changes do not cause any recursion issues.
@@ -353,7 +353,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
                 wxString thisURI = thisRow->GetFullURI( true );
                 wxString otherURI = otherRow->GetFullURI( false);
 
-                if( otherURI.Contains( "${KIPRJMOD}" ) || otherURI.Contains( "$(KIPRJMOD)" ) )
+                if( otherURI.Contains( wxT( "${KIPRJMOD}" ) ) || otherURI.Contains( wxT( "$(KIPRJMOD)" ) ) )
                 {
                     // Cannot use relative paths here, "${KIPRJMOD}../path-to-cache-lib" does
                     // not expand to a valid symbol library path.
@@ -403,7 +403,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
                 wxString uri = table.GetFullURI( libName, false );
                 wxFileName newLib;
 
-                if( uri.Contains( "${KIPRJMOD}" ) || uri.Contains( "$(KIPRJMOD)" ) )
+                if( uri.Contains( wxT( "${KIPRJMOD}" ) ) || uri.Contains( wxT( "$(KIPRJMOD)" ) ) )
                 {
                     // Cannot use relative paths here, "${KIPRJMOD}../path-to-cache-lib" does
                     // not expand to a valid symbol library path.
@@ -434,7 +434,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     }
 
     SCH_SCREEN* newScreen = newSheet->GetScreen();
-    wxCHECK_MSG( newScreen, false, "No screen defined for sheet." );
+    wxCHECK_MSG( newScreen, false, wxT( "No screen defined for sheet." ) );
 
     if( libTableChanged )
     {

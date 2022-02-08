@@ -177,17 +177,17 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
     m_auimgr.SetManagedWindow( this );
 
     // Manage main toolbar
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer( 6 ) );
-    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" )
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( wxT( "MainToolbar" ) ).Top().Layer( 6 ) );
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( wxT( "MsgPanel" ) )
                       .Bottom().Layer( 6 ) );
 
-    m_auimgr.AddPane( m_libList, EDA_PANE().Palette().Name( "Libraries" ).Left().Layer(3)
+    m_auimgr.AddPane( m_libList, EDA_PANE().Palette().Name( wxT( "Libraries" ) ).Left().Layer(3)
                       .CaptionVisible( false ).MinSize( 80, -1 ).BestSize( m_libListWidth, -1 ) );
-    m_auimgr.AddPane( m_symbolList, EDA_PANE().Palette().Name( "Symbols" ).Left().Layer(1)
+    m_auimgr.AddPane( m_symbolList, EDA_PANE().Palette().Name( wxT( "Symbols" ) ).Left().Layer(1)
                       .CaptionVisible( false ).MinSize( 80, -1 )
                       .BestSize( m_symbolListWidth, -1 ) );
 
-    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( wxT( "DrawFrame" ) ).Center() );
 
     m_auimgr.GetPane( m_libList ).Show( aLibraryName.empty() );
 

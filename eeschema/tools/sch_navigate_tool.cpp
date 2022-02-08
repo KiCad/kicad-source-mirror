@@ -59,7 +59,7 @@ int SCH_NAVIGATE_TOOL::HypertextCommand( const TOOL_EVENT& aEvent )
                 }
             };
 
-    if( *page == "HYPERTEXT_BACK" )
+    if( *page == wxT( "HYPERTEXT_BACK" ) )
     {
         if( m_hypertextStack.size() > 0 )
         {

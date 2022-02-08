@@ -131,10 +131,10 @@ wxString DIALOG_SIM_SETTINGS::evaluateDCControls( wxChoice* aDcSource, wxTextCtr
     try
     {
         // pick device name from exporter when something different than temperature is selected
-        if( dcSource.Cmp( "TEMP" ) )
+        if( dcSource.Cmp( wxT( "TEMP" ) ) )
             dcSource = m_exporter->GetSpiceDevice( dcSource );
 
-        return wxString::Format( "%s %s %s %s", dcSource,
+        return wxString::Format( wxT( "%s %s %s %s" ), dcSource,
                                  SPICE_VALUE( aDcStart->GetValue() ).ToSpiceString(),
                                  SPICE_VALUE( aDcStop->GetValue() ).ToSpiceString(),
                                  SPICE_VALUE( aDcIncr->GetValue() ).ToSpiceString() );
@@ -186,7 +186,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         if( !m_pgAC->Validate() )
             return false;
 
-        m_simCommand.Printf( ".ac %s %s %s %s",
+        m_simCommand.Printf( wxT( ".ac %s %s %s %s" ),
                              scaleToString( m_acScale->GetSelection() ),
                              m_acPointsNumber->GetValue(),
                              SPICE_VALUE( m_acFreqStart->GetValue() ).ToSpiceString(),
@@ -194,7 +194,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
     }
     else if( page == m_pgDC )           // DC transfer analysis
     {
-        wxString simCmd = wxString( ".dc " );
+        wxString simCmd = wxString( wxT( ".dc " ) );
 
         wxString src1 = evaluateDCControls( m_dcSource1, m_dcStart1, m_dcStop1, m_dcIncr1 );
 
@@ -210,7 +210,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
             if( src2.IsEmpty() )
                 return false;
             else
-                simCmd += " " + src2;
+                simCmd += wxT( " " ) + src2;
 
             if( m_dcSource1->GetStringSelection() == m_dcSource2->GetStringSelection() )
             {
@@ -234,7 +234,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         wxString ref;
 
         if( !empty( m_noiseRef ) )
-            ref = wxString::Format( ", %d", netMap.at( m_noiseRef->GetValue() ) );
+            ref = wxString::Format( wxT( ", %d" ), netMap.at( m_noiseRef->GetValue() ) );
 
         wxString noiseSource = m_exporter->GetSpiceDevice( m_noiseSrc->GetValue() );
 
@@ -242,7 +242,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         if( noiseSource[0] != 'v' && noiseSource[0] != 'V' )
             noiseSource += 'v' + noiseSource;
 
-        m_simCommand.Printf( ".noise v(%d%s) %s %s %s %s %s",
+        m_simCommand.Printf( wxT( ".noise v(%d%s) %s %s %s %s %s" ),
                              netMap.at( m_noiseMeas->GetValue() ), ref,
                              noiseSource, scaleToString( m_noiseScale->GetSelection() ),
                              m_noisePointsNumber->GetValue(),
@@ -251,7 +251,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
     }
     else if( page == m_pgOP )           // DC operating point analysis
     {
-        m_simCommand = wxString( ".op" );
+        m_simCommand = wxString( wxT( ".op" ) );
     }
     else if( page == m_pgTransient )    // Transient analysis
     {
@@ -263,7 +263,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         if( !empty( m_transInitial ) )
             initial = SPICE_VALUE( m_transInitial->GetValue() ).ToSpiceString();
 
-        m_simCommand.Printf( ".tran %s %s %s",
+        m_simCommand.Printf( wxT( ".tran %s %s %s" ),
                              SPICE_VALUE( m_transStep->GetValue() ).ToSpiceString(),
                              SPICE_VALUE( m_transFinal->GetValue() ).ToSpiceString(),
                              initial );
@@ -332,7 +332,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataToWindow()
         case NGSPICE_MODEL_MODE::LT_PSPICE:   m_compatibilityModeChoice->SetSelection( 4 ); break;
         case NGSPICE_MODEL_MODE::HSPICE:      m_compatibilityModeChoice->SetSelection( 5 ); break;
         default:
-            wxFAIL_MSG( wxString::Format( "Unknown NGSPICE_MODEL_MODE %d.",
+            wxFAIL_MSG( wxString::Format( wxT( "Unknown NGSPICE_MODEL_MODE %d." ),
                                           ngspiceSettings->GetModelMode() ) );
             break;
         }
@@ -433,22 +433,22 @@ bool DIALOG_SIM_SETTINGS::parseCommand( const wxString& aCommand )
     if( aCommand.IsEmpty() )
         return false;
 
-    wxStringTokenizer tokenizer( aCommand, " " );
+    wxStringTokenizer tokenizer( aCommand, wxT( " " ) );
     wxString tkn = tokenizer.GetNextToken().Lower();
 
     try
     {
-        if( tkn == ".ac" )
+        if( tkn == wxT( ".ac" ) )
         {
             m_simPages->SetSelection( m_simPages->FindPage( m_pgAC ) );
 
             tkn = tokenizer.GetNextToken().Lower();
 
-            if( tkn == "dec" )
+            if( tkn == wxT( "dec" ) )
                 m_acScale->SetSelection( 0 );
-            if( tkn == "oct" )
+            if( tkn == wxT( "oct" ) )
                 m_acScale->SetSelection( 1 );
-            if( tkn == "lin" )
+            if( tkn == wxT( "lin" ) )
                 m_acScale->SetSelection( 2 );
             else
                 return false;
@@ -458,7 +458,7 @@ bool DIALOG_SIM_SETTINGS::parseCommand( const wxString& aCommand )
             m_acFreqStart->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
             m_acFreqStop->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
         }
-        else if( tkn == ".dc" )
+        else if( tkn == wxT( ".dc" ) )
         {
             SPICE_DC_PARAMS src1, src2;
             src2.m_vincrement = SPICE_VALUE( -1 );
@@ -497,7 +497,7 @@ bool DIALOG_SIM_SETTINGS::parseCommand( const wxString& aCommand )
 
             refreshUIControls();
         }
-        else if( tkn == ".tran" )
+        else if( tkn == wxT( ".tran" ) )
         {
             m_simPages->SetSelection( m_simPages->FindPage( m_pgTransient ) );
 
@@ -511,7 +511,7 @@ bool DIALOG_SIM_SETTINGS::parseCommand( const wxString& aCommand )
             if( !tkn.IsEmpty() )
                 m_transInitial->SetValue( SPICE_VALUE( tkn ).ToSpiceString() );
         }
-        else if( tkn == ".op" )
+        else if( tkn == wxT( ".op" ) )
         {
             m_simPages->SetSelection( m_simPages->FindPage( m_pgOP ) );
         }

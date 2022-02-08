@@ -32,7 +32,7 @@
 
 void SYMBOL_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO aUndoType, bool aAppend )
 {
-    wxASSERT_MSG( !aAppend, "Append not needed/supported for symbol editor" );
+    wxASSERT_MSG( !aAppend, wxT( "Append not needed/supported for symbol editor" ) );
 
     if( !aItem )
         return;

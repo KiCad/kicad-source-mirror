@@ -64,7 +64,7 @@ bool DIALOG_SIGNAL_LIST::TransferDataToWindow()
             // netnames are escaped (can contain "{slash}" for '/') Unscape them:
             wxString netname = UnescapeString( net.first );
 
-            if( netname != "GND" && netname != "0" )
+            if( netname != wxT( "GND" ) && netname != wxT( "0" ) )
                 m_signals->Append( wxString::Format( "V(%s)", netname ) );
         }
 

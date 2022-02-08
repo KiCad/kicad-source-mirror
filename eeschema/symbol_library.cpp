@@ -61,7 +61,7 @@ SYMBOL_LIB::SYMBOL_LIB( SCH_LIB_TYPE aType, const wxString& aFileName,
     fileName = aFileName;
 
     if( !fileName.IsOk() )
-        fileName = "unnamed.lib";
+        fileName = wxT( "unnamed.lib" );
 
     m_plugin.reset( SCH_IO_MGR::FindPlugin( m_pluginType ) );
     m_properties = std::make_unique<PROPERTIES>();
@@ -75,7 +75,7 @@ SYMBOL_LIB::~SYMBOL_LIB()
 
 void SYMBOL_LIB::Save( bool aSaveDocFile )
 {
-    wxCHECK_RET( m_plugin != nullptr, wxString::Format( "no plugin defined for library `%s`.",
+    wxCHECK_RET( m_plugin != nullptr, wxString::Format( wxT( "no plugin defined for library `%s`." ),
                                                         fileName.GetFullPath() ) );
 
     PROPERTIES props;
@@ -192,7 +192,7 @@ void SYMBOL_LIB::AddSymbol( LIB_SYMBOL* aSymbol )
 
 LIB_SYMBOL* SYMBOL_LIB::RemoveSymbol( LIB_SYMBOL* aEntry )
 {
-    wxCHECK_MSG( aEntry != nullptr, nullptr, "NULL pointer cannot be removed from library." );
+    wxCHECK_MSG( aEntry != nullptr, nullptr, wxT( "NULL pointer cannot be removed from library." ) );
 
     m_plugin->DeleteSymbol( fileName.GetFullPath(), aEntry->GetName(), m_properties.get() );
 
@@ -432,7 +432,7 @@ int SYMBOL_LIBS::GetModifyHash()
 void SYMBOL_LIBS::LibNamesAndPaths( PROJECT* aProject, bool doSave,
                                     wxString* aPaths, wxArrayString* aNames )
 {
-    wxCHECK_RET( aProject, "Null PROJECT in LibNamesAndPaths" );
+    wxCHECK_RET( aProject, wxT( "Null PROJECT in LibNamesAndPaths" ) );
 
     PROJECT_FILE& project = aProject->GetProjectFile();
 
@@ -459,7 +459,7 @@ const wxString SYMBOL_LIBS::CacheName( const wxString& aFullProjectFilename )
 {
     wxFileName  name = aFullProjectFilename;
 
-    name.SetName( name.GetName() + "-cache" );
+    name.SetName( name.GetName() + wxT( "-cache" ) );
     name.SetExt( LegacySymbolLibFileExtension );
 
     if( name.FileExists() )
@@ -510,7 +510,7 @@ void SYMBOL_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
             // lib_names[] does not store the file extension. Set it.
             // Remember lib_names[i] can contain a '.' in name, so using a wxFileName
             // before adding the extension can create incorrect full filename
-            wxString fullname = lib_names[i] + "." + LegacySymbolLibFileExtension;
+            wxString fullname = lib_names[i] + wxT( "." ) + LegacySymbolLibFileExtension;
             // Now the full name is set, we can use a wxFileName.
             wxFileName fn( fullname );
 

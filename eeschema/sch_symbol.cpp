@@ -408,9 +408,9 @@ void SCH_SYMBOL::AddHierarchicalReference( const KIID_PATH& aPath, const wxStrin
     {
         if( m_instanceReferences[ii].m_Path == aPath )
         {
-            wxLogTrace( traceSchSheetPaths, "Removing symbol instance:\n"
-                                            "  sheet path %s\n"
-                                            "  reference %s, unit %d from symbol %s.",
+            wxLogTrace( traceSchSheetPaths, wxT( "Removing symbol instance:\n" )
+                                            wxT( "  sheet path %s\n" )
+                                            wxT( "  reference %s, unit %d from symbol %s." ),
                                             aPath.AsString(),
                                             m_instanceReferences[ii].m_Reference,
                                             m_instanceReferences[ii].m_Unit,
@@ -428,9 +428,9 @@ void SCH_SYMBOL::AddHierarchicalReference( const KIID_PATH& aPath, const wxStrin
     instance.m_Value = aValue;
     instance.m_Footprint = aFootprint;
 
-    wxLogTrace( traceSchSheetPaths, "Adding symbol instance:\n"
-                                    "  sheet path %s\n"
-                                    "  reference %s, unit %d to symbol %s.",
+    wxLogTrace( traceSchSheetPaths, wxT( "Adding symbol instance:\n" )
+                                    wxT( "  sheet path %s\n" )
+                                    wxT( "  reference %s, unit %d to symbol %s." ),
                                     aPath.AsString(),
                                     aRef,
                                     aUnit,
@@ -871,7 +871,7 @@ std::vector<SCH_PIN*> SCH_SYMBOL::GetPins( const SCH_SHEET_PATH* aSheet ) const
 
     if( aSheet == nullptr )
     {
-        wxCHECK_MSG( Schematic(), pins, "Can't call GetPins on a symbol with no schematic" );
+        wxCHECK_MSG( Schematic(), pins, wxT( "Can't call GetPins on a symbol with no schematic" ) );
 
         aSheet = &Schematic()->CurrentSheet();
     }
@@ -1089,7 +1089,7 @@ bool SCH_SYMBOL::ReplaceInstanceSheetPath( const KIID_PATH& aOldSheetPath,
     if( it != m_instanceReferences.end() )
     {
         wxLogTrace( traceSchSheetPaths,
-                    "Replacing sheet path %s\n  with sheet path %s\n  for symbol %s.",
+                    wxT( "Replacing sheet path %s\n  with sheet path %s\n  for symbol %s." ),
                     aOldSheetPath.AsString(), aNewSheetPath.AsString(), m_Uuid.AsString() );
 
         it->m_Path = aNewSheetPath;
@@ -1097,7 +1097,7 @@ bool SCH_SYMBOL::ReplaceInstanceSheetPath( const KIID_PATH& aOldSheetPath,
     }
 
     wxLogTrace( traceSchSheetPaths,
-            "Could not find sheet path %s\n  to replace with sheet path %s\n  for symbol %s.",
+            wxT( "Could not find sheet path %s\n  to replace with sheet path %s\n  for symbol %s." ),
             aOldSheetPath.AsString(), aNewSheetPath.AsString(), m_Uuid.AsString() );
 
     return false;
@@ -1204,7 +1204,7 @@ void SCH_SYMBOL::SetOrientation( int aOrientation )
 
     default:
         transform = false;
-        wxFAIL_MSG( "Invalid schematic symbol orientation type." );
+        wxFAIL_MSG( wxT( "Invalid schematic symbol orientation type." ) );
         break;
     }
 
@@ -1261,7 +1261,7 @@ int SCH_SYMBOL::GetOrientation()
     }
 
     // Error: orientation not found in list (should not happen)
-    wxFAIL_MSG( "Schematic symbol orientation matrix internal error." );
+    wxFAIL_MSG( wxT( "Schematic symbol orientation matrix internal error." ) );
     m_transform = transform;
 
     return SYM_NORMAL;

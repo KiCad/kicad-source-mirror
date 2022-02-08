@@ -146,7 +146,7 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
     PROJECT*  project = nullptr;
     wxString  text = EDA_TEXT::GetShownText();
 
-    if( text == "~" )    // Legacy placeholder for empty string
+    if( text == wxT( "~" ) )    // Legacy placeholder for empty string
     {
         text = "";
     }
@@ -569,7 +569,7 @@ void SCH_FIELD::Rotate( const wxPoint& aCenter )
 
 wxString SCH_FIELD::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( "%s '%s'", GetName(), ShortenedShownText() );
+    return wxString::Format( wxT( "%s '%s'" ), GetName(), ShortenedShownText() );
 }
 
 
@@ -613,7 +613,7 @@ void SCH_FIELD::DoHypertextMenu( EDA_DRAW_FRAME* aFrame )
 {
     constexpr int START_ID = 1;
 
-    static wxString back = "HYPERTEXT_BACK";
+    static wxString back = wxT( "HYPERTEXT_BACK" );
     wxMenu          menu;
     SCH_TEXT*       label = dynamic_cast<SCH_TEXT*>( m_parent );
 

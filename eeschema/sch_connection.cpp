@@ -350,7 +350,7 @@ wxString SCH_CONNECTION::Name( bool aIgnoreSheet ) const
 
 void SCH_CONNECTION::recacheName()
 {
-    m_cached_name = m_name.IsEmpty() ? "<NO NET>" : m_prefix + m_name + m_suffix;
+    m_cached_name = m_name.IsEmpty() ? wxT( "<NO NET>" ) : m_prefix + m_name + m_suffix;
 
     bool prepend_path = true;
 
@@ -412,7 +412,7 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( std::vector<MSG_PANEL_ITEM>& aList ) 
     // CONNECTION_GRAPH entirely in the future, as they are mostly only useful for netlist exports.
 #if 0
     if( !IsBus() )
-        aList.emplace_back( _( "Net Code" ), wxString::Format( "%d", m_net_code ) );
+        aList.emplace_back( _( "Net CodewxT( " ), wxString::Format( " )%d", m_net_code ) );
 #endif
 
     if( auto alias = m_graph->GetBusAlias( m_name ) )
@@ -420,7 +420,7 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( std::vector<MSG_PANEL_ITEM>& aList ) 
         msg.Printf( _( "Bus Alias %s Members" ), m_name );
 
         for( const wxString& member : alias->Members() )
-            members << member << " ";
+            members << member << wxT( " " );
 
         aList.emplace_back( msg, members );
     }
@@ -433,7 +433,7 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( std::vector<MSG_PANEL_ITEM>& aList ) 
                 msg.Printf( _( "Bus Alias %s Members" ), group_alias->GetName() );
 
                 for( const wxString& member : group_alias->Members() )
-                    members << member << " ";
+                    members << member << wxT( " " );
 
                 aList.emplace_back( msg, members );
             }
@@ -447,14 +447,14 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( std::vector<MSG_PANEL_ITEM>& aList ) 
         return;
 
     if( IsBus() )
-        aList.emplace_back( "Bus Code", wxString::Format( "%d", m_bus_code ) );
+        aList.emplace_back( wxT( "Bus Code" ), wxString::Format( wxT( "%d" ), m_bus_code ) );
 
-    aList.emplace_back( "Subgraph Code", wxString::Format( "%d", m_subgraph_code ) );
+    aList.emplace_back( wxT( "Subgraph Code" ), wxString::Format( wxT( "%d" ), m_subgraph_code ) );
 
     if( SCH_ITEM* driver = Driver() )
     {
-        msg.Printf( "%s at %p", driver->GetSelectMenuText( EDA_UNITS::MILLIMETRES ), driver );
-        aList.emplace_back( "Connection Source", msg );
+        msg.Printf( wxT( "%s at %p" ), driver->GetSelectMenuText( EDA_UNITS::MILLIMETRES ), driver );
+        aList.emplace_back( wxT( "Connection Source" ), msg );
     }
 #endif
 }
@@ -474,7 +474,7 @@ bool SCH_CONNECTION::MightBeBusLabel( const wxString& aLabel )
     // Weak heuristic for performance reasons.  Stronger test will be used for connectivity
     wxString label = UnescapeString( aLabel );
 
-    return label.Contains( wxT( "[" ) ) || label.Contains( wxT( "{" ) );
+    return label.Contains( wxT( "[wxT( " ) ) || label.Contains( wxT( " ){" ) );
 }
 
 

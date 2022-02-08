@@ -892,7 +892,7 @@ void BOM_CFG_PARSER::parseGenerator()
 
             wxString option = FromUTF8();
 
-            if( option.StartsWith( "nickname=", &str ) )
+            if( option.StartsWith( wxT( "nickname=" ), &str ) )
                 settings.name = str;
 
             NeedRIGHT();

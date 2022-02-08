@@ -107,7 +107,7 @@ void DIALOG_MIGRATE_BUSES::updateUi()
     {
         wxString old = item.labels[0];
         for( unsigned j = 1; j < item.labels.size(); j++ )
-            old << ", " << item.labels[j];
+            old << wxT( ", " ) << item.labels[j];
 
         auto i = m_migration_list->InsertItem( m_migration_list->GetItemCount(), wxEmptyString );
 
@@ -154,7 +154,7 @@ std::vector<wxString> DIALOG_MIGRATE_BUSES::getProposedLabels(
     {
         conn.ConfigureFromLabel( label );
         wxString proposal = conn.VectorPrefix();
-        proposal << "[" << highest_end << ".." << lowest_start << "]";
+        proposal << wxT( "[" ) << highest_end << wxT( ".." ) << lowest_start << wxT( "]" );
         proposals.push_back( proposal );
     }
 

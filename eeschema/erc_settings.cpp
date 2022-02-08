@@ -249,7 +249,7 @@ SEVERITY ERC_SETTINGS::GetSeverity( int aErrorCode ) const
     }
 
     wxCHECK_MSG( m_Severities.count( aErrorCode ), RPT_SEVERITY_IGNORE,
-            "Missing severity from map in ERC_SETTINGS!" );
+            wxT( "Missing severity from map in ERC_SETTINGS!" ) );
 
     return m_Severities.at( aErrorCode );
 }

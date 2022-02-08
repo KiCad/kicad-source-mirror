@@ -85,7 +85,7 @@ SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const wxPoint& pos, int aQuadrant ) :
     case 2: m_size.x *=  1; m_size.y *=  1; break;
     case 3: m_size.x *= -1; m_size.y *=  1; break;
     case 4: m_size.x *= -1; m_size.y *= -1; break;
-    default: wxFAIL_MSG( "SCH_BUS_WIRE_ENTRY ctor: unexpected quadrant" );
+    default: wxFAIL_MSG( wxT( "SCH_BUS_WIRE_ENTRY ctor: unexpected quadrant" ) );
     }
 
     m_layer  = LAYER_WIRE;

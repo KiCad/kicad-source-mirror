@@ -128,7 +128,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     }
     else
     {
-        wxFAIL_MSG( "PlaceSymbol(): unexpected request" );
+        wxFAIL_MSG( wxT( "PlaceSymbol(): unexpected request" ) );
     }
 
     std::string tool = aEvent.GetCommandStr().get();
@@ -654,7 +654,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         break;
 
     default:
-        wxASSERT_MSG( false, "Unknown item type in SCH_DRAWING_TOOLS::SingleClickPlace" );
+        wxASSERT_MSG( false, wxT( "Unknown item type in SCH_DRAWING_TOOLS::SingleClickPlace" ) );
         return 0;
     }
 
@@ -889,7 +889,7 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
         break;
 
     default:
-        wxFAIL_MSG( "SCH_EDIT_FRAME::CreateNewText() unknown layer type" );
+        wxFAIL_MSG( wxT( "SCH_EDIT_FRAME::CreateNewText() unknown layer type" ) );
         return nullptr;
     }
 
@@ -1340,8 +1340,8 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             sheet->SetBorderWidth( Mils2iu( cfg->m_Drawing.default_line_thickness ) );
             sheet->SetBorderColor( cfg->m_Drawing.default_sheet_border_color );
             sheet->SetBackgroundColor( cfg->m_Drawing.default_sheet_background_color );
-            sheet->GetFields()[ SHEETNAME ].SetText( "Untitled Sheet" );
-            sheet->GetFields()[ SHEETFILENAME ].SetText( "untitled." + KiCadSchematicFileExtension );
+            sheet->GetFields()[ SHEETNAME ].SetText( wxT( "Untitled Sheet" ) );
+            sheet->GetFields()[ SHEETFILENAME ].SetText( wxT( "untitled." ) + KiCadSchematicFileExtension );
             sizeSheet( sheet, cursorPos );
 
             m_view->ClearPreview();
@@ -1370,7 +1370,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                 SCH_SHEET_PATH sheetPath = instance;
                 sheetPath.push_back( sheet );
                 sheet->AddInstance( sheetPath );
-                sheet->SetPageNumber( sheetPath, wxString::Format( "%d", pageNum++ ) );
+                sheet->SetPageNumber( sheetPath, wxString::Format( wxT( "%d" ), pageNum++ ) );
             }
 
             if( m_frame->EditSheetProperties( static_cast<SCH_SHEET*>( sheet ),

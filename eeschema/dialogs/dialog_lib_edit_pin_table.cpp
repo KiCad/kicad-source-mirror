@@ -406,18 +406,18 @@ private:
 
     static bool BoolFromString( wxString aValue )
     {
-        if( aValue == "1" )
+        if( aValue == wxT( "1" ) )
         {
             return true;
         }
-        else if( aValue == "0" )
+        else if( aValue == wxT( "0" ) )
         {
             return false;
         }
         else
         {
-            wxFAIL_MSG( wxString::Format( "string '%s' can't be converted to boolean "
-                                          "correctly, it will have been perceived as FALSE",
+            wxFAIL_MSG( wxString::Format( wxT( "string '%s' can't be converted to boolean " )
+                                          wxT( "correctly, it will have been perceived as FALSE" ),
                                           aValue ) );
             return false;
         }

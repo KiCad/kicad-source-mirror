@@ -147,7 +147,7 @@ LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary ) :
         }
         catch( ... )
         {
-            wxFAIL_MSG( "Failed to clone LIB_ITEM." );
+            wxFAIL_MSG( wxT( "Failed to clone LIB_ITEM." ) );
         }
     }
 
@@ -371,7 +371,7 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
         LIB_SYMBOL_SPTR parent = m_parent.lock();
 
         wxCHECK_MSG( parent, retv,
-                     wxString::Format( "Parent of derived symbol '%s' undefined", m_name ) );
+                     wxString::Format( wxT( "Parent of derived symbol '%s' undefined" ), m_name ) );
 
         // Copy the parent.
         retv.reset( new LIB_SYMBOL( *parent.get() ) );
@@ -1420,7 +1420,7 @@ std::vector<struct LIB_SYMBOL_UNIT> LIB_SYMBOL::GetUniqueUnits()
         compareDrawItems = GetUnitDrawItems( unitNum, 1 );
 
         wxCHECK2_MSG( compareDrawItems.size() != 0, continue,
-                      "Multiple unit symbol defined with empty units." );
+                      wxT( "Multiple unit symbol defined with empty units." ) );
 
         if( currentDrawItems.size() != compareDrawItems.size() )
         {
@@ -1464,7 +1464,7 @@ std::vector<struct LIB_SYMBOL_UNIT> LIB_SYMBOL::GetUniqueUnits()
             compareDrawItems = GetUnitDrawItems( unitNum, 2 );
 
             wxCHECK2_MSG( compareDrawItems.size() != 0, continue,
-                          "Multiple unit symbol defined with empty units." );
+                          wxT( "Multiple unit symbol defined with empty units." ) );
 
             if( currentDrawItems.size() != compareDrawItems.size() )
             {

@@ -94,10 +94,10 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
     m_suffixCtrl->ChangeValue( settings.m_IntersheetRefsSuffix );
     m_listOwnPage->SetValue( settings.m_IntersheetRefsListOwnPage );
 
-    wxString offsetRatio = wxString::Format( "%f", settings.m_TextOffsetRatio * 100.0 );
+    wxString offsetRatio = wxString::Format( wxT( "%f" ), settings.m_TextOffsetRatio * 100.0 );
     m_textOffsetRatioCtrl->SetValue( offsetRatio );
 
-    wxString labelSizeRatio = wxString::Format( "%f", settings.m_LabelSizeRatio * 100.0 );
+    wxString labelSizeRatio = wxString::Format( wxT( "%f" ), settings.m_LabelSizeRatio * 100.0 );
     m_labelSizeRatioCtrl->SetValue( labelSizeRatio );
 
     return true;
@@ -167,9 +167,9 @@ void PANEL_SETUP_FORMATTING::ImportSettingsFrom( SCHEMATIC_SETTINGS& aSettings )
     m_suffixCtrl->ChangeValue( aSettings.m_IntersheetRefsSuffix );
     m_listOwnPage->SetValue( aSettings.m_IntersheetRefsListOwnPage );
 
-    wxString offsetRatio = wxString::Format( "%f", aSettings.m_TextOffsetRatio * 100.0 );
+    wxString offsetRatio = wxString::Format( wxT( "%f" ), aSettings.m_TextOffsetRatio * 100.0 );
     m_textOffsetRatioCtrl->SetValue( offsetRatio );
 
-    wxString labelSizeRatio = wxString::Format( "%f", aSettings.m_LabelSizeRatio * 100.0 );
+    wxString labelSizeRatio = wxString::Format( wxT( "%f" ), aSettings.m_LabelSizeRatio * 100.0 );
     m_labelSizeRatioCtrl->SetValue( labelSizeRatio );
 }

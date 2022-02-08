@@ -158,7 +158,7 @@ protected:
             // paste the SYMBOL_LIB_TABLE_ROWs of s-expression (sym_lib_table), starting
             // at column 0 regardless of current cursor column.
 
-            STRING_LINE_READER  slr( TO_UTF8( cb_text ), "Clipboard" );
+            STRING_LINE_READER  slr( TO_UTF8( cb_text ), wxT( "Clipboard" ) );
             LIB_TABLE_LEXER     lexer( &slr );
             SYMBOL_LIB_TABLE    tmp_tbl;
             bool                parsed = true;
@@ -241,8 +241,8 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
                 attr = new wxGridCellAttr;
 
                 wxString wildcards = AllSymbolLibFilesWildcard()
-                                     + "|" + KiCadSymbolLibFileWildcard()
-                                     + "|" + LegacySymbolLibFileWildcard();
+                                     + wxT( "|" ) + KiCadSymbolLibFileWildcard()
+                                     + wxT( "|" ) + LegacySymbolLibFileWildcard();
                 attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, aGrid,
                                                             &cfg->m_lastSymbolLibDir, wildcards,
                                                             true, m_project->GetProjectPath() ) );
@@ -481,8 +481,8 @@ void PANEL_SYM_LIB_TABLE::OnUpdateUI( wxUpdateUIEvent& event )
 void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 {
     wxString wildcards = AllSymbolLibFilesWildcard()
-                            + "|" + KiCadSymbolLibFileWildcard()
-                            + "|" + LegacySymbolLibFileWildcard();
+                            + wxT( "|" ) + KiCadSymbolLibFileWildcard()
+                            + wxT( "|" ) + LegacySymbolLibFileWildcard();
 
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
@@ -554,7 +554,7 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
             // Do not use the project path in the global library table.  This will almost
             // assuredly be wrong for a different project.
-            if( m_pageNdx == 0 && path.Contains( "${KIPRJMOD}" ) )
+            if( m_pageNdx == 0 && path.Contains( wxT( "${KIPRJMOD}" ) ) )
                 path = fn.GetFullPath();
 
             m_cur_grid->SetCellValue( last_row, COL_URI, path );
@@ -768,7 +768,7 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
         }
 
         wxFileName newLib( resolvedPath );
-        newLib.SetExt( "kicad_sym" );
+        newLib.SetExt( wxT( "kicad_sym" ) );
 
         if( newLib.Exists() )
         {
@@ -791,7 +791,7 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
 
             // Do not use the project path in the global library table.  This will almost
             // assuredly be wrong for a different project.
-            if( m_cur_grid == m_global_grid && relPath.Contains( "${KIPRJMOD}" ) )
+            if( m_cur_grid == m_global_grid && relPath.Contains( wxT( "${KIPRJMOD}" ) ) )
                 relPath = newLib.GetFullPath();
 
             m_cur_grid->SetCellValue( row, COL_URI, relPath );

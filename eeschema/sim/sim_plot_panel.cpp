@@ -39,7 +39,7 @@ static wxString formatFloat( double x, int nDigits )
 
     if( nDigits )
     {
-        fmt.Printf( "%%.0%df", nDigits );
+        fmt.Printf( wxT( "%%.0%df" ), nDigits );
     }
     else
     {

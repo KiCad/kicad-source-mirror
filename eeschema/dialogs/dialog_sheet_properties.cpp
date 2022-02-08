@@ -456,9 +456,9 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
     {
         loadFromFile = wxFileExists( newAbsoluteFilename );
 
-        wxLogTrace( tracePathsAndFiles, "\n    Sheet requested file '%s', %s",
+        wxLogTrace( tracePathsAndFiles, wxT( "\n    Sheet requested file '%s', %s" ),
                                         newAbsoluteFilename,
-                                        loadFromFile ? "found" : "not found" );
+                                        loadFromFile ? wxT( "found" ) : wxT( "not found" ) );
     }
 
     if( m_sheet->GetScreen() == nullptr )      // New just created sheet.

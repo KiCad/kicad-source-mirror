@@ -47,7 +47,7 @@ SYMBOL_TREE_MODEL_ADAPTER::Create( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs )
 
 
 SYMBOL_TREE_MODEL_ADAPTER::SYMBOL_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs ) :
-        LIB_TREE_MODEL_ADAPTER( aParent, "pinned_symbol_libs" ),
+        LIB_TREE_MODEL_ADAPTER( aParent, wxT( "pinned_symbol_libs" ) ),
         m_libs( (SYMBOL_LIB_TABLE*) aLibs )
 {}
 
@@ -104,7 +104,7 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
         dlg.MessageSet( _( "Errors loading symbols:" ) );
 
         wxString msg = loader.GetErrors();
-        msg.Replace( "\n", "<BR>" );
+        msg.Replace( wxT( "\n" ), wxT( "<BR>" ) );
 
         dlg.AddHTML_Text( msg );
         dlg.ShowModal();

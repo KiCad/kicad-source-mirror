@@ -251,11 +251,11 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
         wxString pinName;
         wxString nextName;
 
-        if( pin->GetName() != "~"  && !pin->GetName().IsEmpty() )
-            pinName = " '" + pin->GetName() + "'";
+        if( pin->GetName() != wxT( "~" )  && !pin->GetName().IsEmpty() )
+            pinName = wxT( " '" ) + pin->GetName() + wxT( "'" );
 
-        if( next->GetName() != "~"  && !next->GetName().IsEmpty() )
-            nextName = " '" + next->GetName() + "'";
+        if( next->GetName() != wxT( "~" )  && !next->GetName().IsEmpty() )
+            nextName = wxT( " '" ) + next->GetName() + wxT( "'" );
 
         if( symbol->HasConversion() && next->GetConvert() )
         {
@@ -331,10 +331,10 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
     {
         wxString pinName = pin->GetName();
 
-        if( pinName.IsEmpty() || pinName == "~" )
-            pinName = "";
+        if( pinName.IsEmpty() || pinName == wxT( "~" ) )
+            pinName = wxT( "" );
         else
-            pinName = "'" + pinName + "'";
+            pinName = wxT( "'" ) + pinName + wxT( "'" );
 
         if( !symbol->IsPower()
                 && pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN

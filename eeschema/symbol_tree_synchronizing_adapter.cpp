@@ -41,7 +41,7 @@ SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( SYMBOL_EDIT_FRAME* aParent,
 
 SYMBOL_TREE_SYNCHRONIZING_ADAPTER::SYMBOL_TREE_SYNCHRONIZING_ADAPTER( SYMBOL_EDIT_FRAME* aParent,
                                                                       SYMBOL_LIBRARY_MANAGER* aLibMgr ) :
-        LIB_TREE_MODEL_ADAPTER( aParent, "pinned_symbol_libs" ),
+        LIB_TREE_MODEL_ADAPTER( aParent, wxT( "pinned_symbol_libs" ) ),
         m_frame( aParent ),
         m_libMgr( aLibMgr ),
         m_lastSyncHash( -1 )
@@ -226,12 +226,12 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
         if( node->m_Type == LIB_TREE_NODE::LIB )
         {
             if( m_libMgr->IsLibraryModified( node->m_Name ) )
-                aVariant = aVariant.GetString() + " *";
+                aVariant = aVariant.GetString() + wxT( " *" );
         }
         else if( node->m_Type == LIB_TREE_NODE::LIBID )
         {
             if( m_libMgr->IsSymbolModified( node->m_Name, node->m_Parent->m_Name ) )
-                aVariant = aVariant.GetString() + " *";
+                aVariant = aVariant.GetString() + wxT( " *" );
         }
 
         break;

@@ -138,7 +138,7 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilte
             history_list.push_back( symbol );
     }
 
-    adapter->DoAddLibrary( "-- " + _( "Recently Used" ) + " --", wxEmptyString, history_list,
+    adapter->DoAddLibrary( wxT( "-- " ) + _( "Recently Used" ) + " --", wxEmptyString, history_list,
                            true );
 
     if( !aHistoryList.empty() )

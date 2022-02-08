@@ -342,8 +342,8 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
     else if( ext == LegacySymbolLibFileExtension || ext == LegacySymbolDocumentFileExtension ||
              ext == KiCadSymbolLibFileExtension )
     {
-        if( destFile.GetName() == aProjectName + "-cache" )
-            destFile.SetName( aNewProjectName + "-cache"  );
+        if( destFile.GetName() == aProjectName + wxT( "-cache" ) )
+            destFile.SetName( aNewProjectName + wxT( "-cache" )  );
 
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
@@ -363,7 +363,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
                 {
                     if( node->IsList() && node->GetNumberOfChildren() > 1
                             && node->GetChild( 0 )->IsSymbol()
-                            && node->GetChild( 0 )->GetSymbol() == "source" )
+                            && node->GetChild( 0 )->GetSymbol() == wxT( "source" ) )
                     {
                         auto pathNode = dynamic_cast<SEXPR::SEXPR_STRING*>( node->GetChild( 1 ) );
                         auto symNode = dynamic_cast<SEXPR::SEXPR_SYMBOL*>( node->GetChild( 1 ) );
@@ -374,10 +374,10 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
                         else if( symNode )
                             path = symNode->m_value;
 
-                        if( path == aProjectName + ".sch" )
-                            path = aNewProjectName + ".sch";
-                        else if( path == aProjectBasePath + "/" + aProjectName + ".sch" )
-                            path = aNewProjectBasePath + "/" + aNewProjectName + ".sch";
+                        if( path == aProjectName + wxT( ".sch" ) )
+                            path = aNewProjectName + wxT( ".sch" );
+                        else if( path == aProjectBasePath + wxT( "/" ) + aProjectName + wxT( ".sch" ) )
+                            path = aNewProjectBasePath + wxT( "/" ) + aNewProjectName + wxT( ".sch" );
                         else if( path.StartsWith( aProjectBasePath ) )
                             path.Replace( aProjectBasePath, aNewProjectBasePath, false );
 
@@ -388,7 +388,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
                     }
                 } );
 
-            wxFFile destNetList( destFile.GetFullPath(), "wb" );
+            wxFFile destNetList( destFile.GetFullPath(), wxT( "wb" ) );
 
             if( destNetList.IsOpened() )
                 success = destNetList.Write( sexpr->AsString( 0 ) );
@@ -405,13 +405,13 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             wxString msg;
 
             if( !aErrors.empty() )
-                aErrors += "\n";
+                aErrors += wxT( "\n" );
 
             msg.Printf( _( "Cannot copy file '%s'." ), destFile.GetFullPath() );
             aErrors += msg;
         }
     }
-    else if( destFile.GetName() == "sym-lib-table" )
+    else if( destFile.GetName() == wxT( "sym-lib-table" ) )
     {
         SYMBOL_LIB_TABLE symbolLibTable;
         symbolLibTable.Load( aSrcFilePath );
@@ -421,10 +421,10 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             LIB_TABLE_ROW& row = symbolLibTable.At( i );
             wxString       uri = row.GetFullURI();
 
-            uri.Replace( "/" + aProjectName + "-cache.lib", "/" + aNewProjectName + "-cache.lib" );
-            uri.Replace( "/" + aProjectName + "-rescue.lib", "/" + aNewProjectName +
-                         "-rescue.lib" );
-            uri.Replace( "/" + aProjectName + ".lib", "/" + aNewProjectName + ".lib" );
+            uri.Replace( wxT( "/" ) + aProjectName + wxT( "-cache.lib" ), wxT( "/" ) + aNewProjectName + wxT( "-cache.lib" ) );
+            uri.Replace( wxT( "/" ) + aProjectName + wxT( "-rescue.lib" ), wxT( "/" ) + aNewProjectName +
+                         wxT( "-rescue.lib" ) );
+            uri.Replace( wxT( "/" ) + aProjectName + wxT( ".lib" ), wxT( "/" ) + aNewProjectName + wxT( ".lib" ) );
 
             row.SetFullURI( uri );
         }
@@ -438,7 +438,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             wxString msg;
 
             if( !aErrors.empty() )
-                aErrors += "\n";
+                aErrors += wxT( "\n" );
 
             msg.Printf( _( "Cannot copy file '%s'." ), destFile.GetFullPath() );
             aErrors += msg;
@@ -446,7 +446,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
     }
     else
     {
-        wxFAIL_MSG( "Unexpected filetype for Eeschema::SaveFileAs()" );
+        wxFAIL_MSG( wxT( "Unexpected filetype for Eeschema::SaveFileAs()" ) );
     }
 }
 
