@@ -739,9 +739,11 @@ void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer )
                     m_gal->SetFillColor( getRenderColor( aShape, LAYER_DEVICE, false ) );
                 else
                     m_gal->SetFillColor( color );
-             }
+            }
             else
+            {
                 m_gal->SetFillColor( aShape->GetFillColor() );
+            }
 
             drawShape( aShape );
         }
