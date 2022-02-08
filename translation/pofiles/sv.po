@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-03 17:11-0800\n"
-"PO-Revision-Date: 2022-02-07 22:32+0000\n"
+"PO-Revision-Date: 2022-02-08 01:46+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -744,7 +744,7 @@ msgstr "Visa koppartjocklek"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:31
 msgid "Highlight items on rollover"
-msgstr "Markera objekt vid överrullning"
+msgstr "Markera objekt under markör"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:37
 msgid "Anti-aliasing:"
@@ -752,7 +752,7 @@ msgstr "Kantutjämning:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:41
 msgid "Disabled"
-msgstr "Inaktiverad"
+msgstr "Deaktiverad"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:41
 msgid "2x"
@@ -820,7 +820,7 @@ msgstr "Antal prover"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:58
 msgid "Spread Factor %"
-msgstr "Spridningsfaktor%"
+msgstr "Spridningsfaktor %"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:62
 msgid "Recursion Level"
@@ -1010,7 +1010,7 @@ msgstr "Förhandsgranskning"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:221
 msgid "Reload board and 3D models"
-msgstr "Ladda om kretskort och 3D-modeller"
+msgstr "Ladda om mönsterkort och 3D-modeller"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:159
 #: common/dialogs/dialog_grid_settings_base.cpp:41
@@ -1151,7 +1151,7 @@ msgstr "Det gick inte att exportera till Urklipp"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:742
 msgid "Create Logo File"
-msgstr "Skapa Logo-Fil"
+msgstr "Skapa logotypfil"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:759
 #: bitmap2component/bitmap2cmp_gui.cpp:799
@@ -1310,7 +1310,7 @@ msgstr "Negativ"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:527
 msgid "Front silk screen"
-msgstr "Stenciltryck framsida"
+msgstr "Anvisningstryck framsida"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:533
@@ -1336,8 +1336,8 @@ msgid ""
 "layer (but will be marked invisible)."
 msgstr ""
 "Välj mönsterkortslagret för att placera konturen.\n"
-"Referensbeteckningen och värdet placeras alltid på stenciltryckslagret (men "
-"kommer att markeras som osynligt)."
+"Referensbeteckningen och värdet placeras alltid på anvisningstryckslagret ("
+"men kommer att markeras som osynligt)."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
@@ -1364,7 +1364,7 @@ msgstr "Utmatningskatalogen '%s' skapades."
 #: common/common.cpp:336
 #, c-format
 msgid "Cannot create output directory '%s'."
-msgstr "Det går inte att skapa utdatakatalogen '%s'."
+msgstr "Det går inte att skapa utmatningskatalogen '%s'."
 
 #: common/common.cpp:608
 msgid "This operating system is not supported by KiCad and its dependencies."
@@ -1511,7 +1511,7 @@ msgid ""
 "electronic schematics and printed circuit boards."
 msgstr ""
 "KiCad EDA Suite är en uppsättning applikationer med öppen källkod för "
-"skapande av elektroniska scheman och kretskort."
+"skapande av elektroniska scheman och mönsterkort."
 
 #: common/dialog_about/AboutDialog_main.cpp:134
 msgid "KiCad on the web"
@@ -1554,12 +1554,13 @@ msgid "GNU General Public License (GPL) version 3 or any later version"
 msgstr "GNU General Public License (GPL) version 3 eller någon senare version"
 
 #: common/dialog_about/AboutDialog_main.cpp:208
+#, fuzzy
 msgid "Lead Development Team"
 msgstr "Led utvecklingsteam"
 
 #: common/dialog_about/AboutDialog_main.cpp:209
 msgid "Lead Development Alumni"
-msgstr "Ledande utvecklingsalumner"
+msgstr "Tidigare ledande utvecklare"
 
 #: common/dialog_about/AboutDialog_main.cpp:210
 msgid "Additional Contributions By"
@@ -1615,7 +1616,7 @@ msgstr "Bibliotekarier"
 
 #: common/dialog_about/dialog_about.cpp:139
 msgid "Artists"
-msgstr "Artister"
+msgstr "Konstnärer"
 
 #: common/dialog_about/dialog_about.cpp:141
 msgid "Translators"
@@ -1647,19 +1648,19 @@ msgstr "Appens titel"
 
 #: common/dialog_about/dialog_about_base.cpp:37
 msgid "Copyright Info"
-msgstr "Copyright information"
+msgstr "Copyright-information"
 
 #: common/dialog_about/dialog_about_base.cpp:41
 msgid "Build Version Info"
-msgstr "Bygg version Info"
+msgstr "Byggversions-info"
 
 #: common/dialog_about/dialog_about_base.cpp:45
 msgid "Lib Version Info"
-msgstr "Lib Version Info"
+msgstr "Biblioteksversions-info"
 
 #: common/dialog_about/dialog_about_base.cpp:58
 msgid "&Copy Version Info"
-msgstr "Kopiera Versionsinformation"
+msgstr "&Kopiera Versionsinformation"
 
 #: common/dialog_about/dialog_about_base.cpp:59
 msgid "Copy KiCad version info to the clipboard"
@@ -1667,11 +1668,11 @@ msgstr "Kopiera KiCad versionsinformation till Urklipp"
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
-msgstr "Rapportera Fel"
+msgstr "&Rapportera Fel"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:661
 msgid "Report a problem with KiCad"
-msgstr "Rapportera problem med KiCad"
+msgstr "Rapportera ett problem med KiCad"
 
 #: common/dialog_about/dialog_about_base.cpp:68 common/tool/actions.cpp:655
 msgid "Donate"
@@ -1771,7 +1772,7 @@ msgstr "Opacitet:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:185
 msgid "Preview (old/new):"
-msgstr "Förhandsgranska (gammalt / nytt):"
+msgstr "Förhandsgranska (gammal/ny):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:210
 msgid "Reset to Default"
@@ -1785,7 +1786,7 @@ msgstr "Miljövariabelns namn kan inte utelämnas."
 #: common/dialogs/dialog_configure_paths.cpp:264
 #: common/dialogs/dialog_configure_paths.cpp:353
 msgid "Environment variable path cannot be empty."
-msgstr "Sökvägen för miljövariabel kan inte vara tom."
+msgstr "Miljövariabelns sökväg kan inte vara tom."
 
 #: common/dialogs/dialog_configure_paths.cpp:316
 #: common/dialogs/dialog_configure_paths.cpp:358
@@ -1802,7 +1803,7 @@ msgid ""
 "This path was defined  externally to the running process and\n"
 "will only be temporarily overwritten."
 msgstr ""
-"Denna väg definierades externt för den pågående processen och\n"
+"Denna sökväg definierades externt för den pågående processen och\n"
 "kommer bara att skrivas över tillfälligt."
 
 #: common/dialogs/dialog_configure_paths.cpp:377
@@ -1831,7 +1832,7 @@ msgstr "Filhanterare..."
 #: common/dialogs/dialog_configure_paths.cpp:555
 #: common/widgets/grid_text_button_helpers.cpp:416
 msgid "Select Path"
-msgstr "Välj Sökväg"
+msgstr "Välj sökväg"
 
 #: common/dialogs/dialog_configure_paths.cpp:637
 msgid ""
@@ -1858,7 +1859,7 @@ msgstr ""
 
 #: common/dialogs/dialog_configure_paths.cpp:658
 msgid "Environment Variable Help"
-msgstr "Miljövariabel hjälp"
+msgstr "Hjälp om miljövariabler"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:22
 msgid "Environment Variables"
@@ -1907,7 +1908,7 @@ msgstr "Alias"
 #: common/dialogs/dialog_global_lib_table_config.cpp:39
 #, c-format
 msgid "Configure Global %s Library Table"
-msgstr "Konfigurera Global %s Bibliotekstabell"
+msgstr "Konfigurera global %s bibliotekstabell"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:42
 #, c-format
