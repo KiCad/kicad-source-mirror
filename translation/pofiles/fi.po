@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-03 17:11-0800\n"
-"PO-Revision-Date: 2022-02-07 22:32+0000\n"
+"PO-Revision-Date: 2022-02-08 01:46+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -813,12 +813,11 @@ msgstr "Menetelmäpohjaiset pintakuviot (hidas)"
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
 #, fuzzy
 msgid "Add floor (slow)"
-msgstr "Lisää kerros"
+msgstr "Lisää alusta/lattia (hidas)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:35
-#, fuzzy
 msgid "Anti-aliasing (slow)"
-msgstr "Anti-aliasing"
+msgstr "Reunojen pehmennys (hidas)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
 #, fuzzy
@@ -1255,8 +1254,9 @@ msgid "Output Parameters"
 msgstr "Lähtöparametrit"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
+#, fuzzy
 msgid "Lock height/width ratio"
-msgstr "Lukon korkeuden / leveyden suhde"
+msgstr "Lukitse korkeus/leveys-suhde"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:122
 #: common/dialogs/dialog_page_settings_base.cpp:32
@@ -1293,7 +1293,7 @@ msgstr "Jalanjälki (.kicad_mod-tiedosto)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Postscript (.ps file)"
-msgstr "Jälkikirjoitus (.ps-tiedosto)"
+msgstr "Postscript (.ps-tiedosto)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 #, fuzzy
@@ -1735,8 +1735,9 @@ msgid "Report"
 msgstr "Raportoi"
 
 #: common/dialogs/dialog_color_picker.cpp:94
+#, fuzzy
 msgid "Clear Color"
-msgstr "Kirkas väri"
+msgstr "Palauta väri"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
@@ -1877,6 +1878,7 @@ msgstr ""
 "nimikenttä hyväksyy vain isot kirjaimet, numerot ja alaviivat."
 
 #: common/dialogs/dialog_configure_paths.cpp:658
+#, fuzzy
 msgid "Environment Variable Help"
 msgstr "Ympäristömuuttuja"
 
