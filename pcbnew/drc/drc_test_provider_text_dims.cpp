@@ -95,20 +95,181 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                 return true;
             };
 
+    auto checkTextHeight =
+            [&]( BOARD_ITEM* item, EDA_TEXT* text ) -> bool
+            {
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_HEIGHT ) )
+                    return false;
+
+                DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( TEXT_HEIGHT_CONSTRAINT, item,
+                                                                    nullptr, item->GetLayer() );
+
+                if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
+                    return true;
+
+                int  actualHeight = text->GetTextSize().y;
+
+                if( constraint.Value().HasMin() && actualHeight < constraint.Value().Min() )
+                {
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TEXT_HEIGHT );
+
+                    m_msg.Printf( _( "(%s min height %s; actual %s)" ),
+                                  constraint.GetName(),
+                                  MessageTextFromValue( userUnits(), constraint.Value().Min() ),
+                                  MessageTextFromValue( userUnits(), actualHeight ) );
+
+                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+                    drcItem->SetItems( item );
+                    drcItem->SetViolatingRule( constraint.GetParentRule() );
+
+                    reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
+                }
+
+                if( constraint.Value().HasMax() && actualHeight > constraint.Value().Max() )
+                {
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TEXT_HEIGHT );
+
+                    m_msg.Printf( _( "(%s max height %s; actual %s)" ),
+                                  constraint.GetName(),
+                                  MessageTextFromValue( userUnits(), constraint.Value().Max() ),
+                                  MessageTextFromValue( userUnits(), actualHeight ) );
+
+                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+                    drcItem->SetItems( item );
+                    drcItem->SetViolatingRule( constraint.GetParentRule() );
+
+                    reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
+                }
+
+                return true;
+            };
+
+    auto checkTextThickness =
+            [&]( BOARD_ITEM* item, EDA_TEXT* text ) -> bool
+            {
+                DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( TEXT_THICKNESS_CONSTRAINT, item,
+                                                                    nullptr, item->GetLayer() );
+
+                if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
+                    return true;
+
+                KIFONT::FONT* font = text->GetDrawFont();
+
+                if( font->IsOutline() )
+                {
+                    if( !constraint.Value().HasMin() )
+                        return true;
+
+                    auto* glyphs = text->GetRenderCache( text->GetShownText() );
+                    bool  collapsedStroke = false;
+                    bool  collapsedArea = false;
+
+                    for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *glyphs )
+                    {
+                        auto outlineGlyph = static_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() );
+                        int  outlineCount = outlineGlyph->OutlineCount();
+                        int  holeCount = 0;
+
+                        if( outlineCount == 0 )
+                            continue;           // ignore spaces
+
+                        for( int ii = 0; ii < outlineCount; ++ii )
+                            holeCount += outlineGlyph->HoleCount( ii );
+
+                        SHAPE_POLY_SET poly = *outlineGlyph;
+                        poly.Deflate( constraint.Value().Min() / 2, 16 );
+                        poly.Simplify( SHAPE_POLY_SET::PM_FAST );
+
+                        int resultingOutlineCount = poly.OutlineCount();
+                        int resultingHoleCount = 0;
+
+                        for( int ii = 0; ii < resultingOutlineCount; ++ii )
+                            resultingHoleCount += poly.HoleCount( ii );
+
+                        if( ( resultingOutlineCount != outlineCount )
+                                || ( resultingHoleCount != holeCount ) )
+                        {
+                            collapsedStroke = true;
+                            break;
+                        }
+
+                        double glyphArea = outlineGlyph->Area();
+
+                        if( glyphArea == 0 )
+                            continue;
+
+                        poly.Inflate( constraint.Value().Min() / 2, 16 );
+                        poly.Simplify( SHAPE_POLY_SET::PM_FAST );
+                        double resultingGlyphArea = poly.Area();
+
+                        if( ( std::abs( resultingGlyphArea - glyphArea ) / glyphArea ) > 0.1 )
+                        {
+                            collapsedArea = true;
+                            break;
+                        }
+                    }
+
+                    if( collapsedStroke || collapsedArea )
+                    {
+                        auto drcItem = DRC_ITEM::Create( DRCE_TEXT_THICKNESS );
+
+                        m_msg = _( "(TrueType font characters with insufficient stroke weight)" );
+
+                        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+                        drcItem->SetItems( item );
+                        drcItem->SetViolatingRule( constraint.GetParentRule() );
+
+                        reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
+                    }
+                }
+                else
+                {
+                    int actualThickness = text->GetTextThickness();
+
+                    if( constraint.Value().HasMin() && actualThickness < constraint.Value().Min() )
+                    {
+                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TEXT_THICKNESS );
+
+                        m_msg.Printf( _( "(%s min thickness %s; actual %s)" ),
+                                      constraint.GetName(),
+                                      MessageTextFromValue( userUnits(), constraint.Value().Min() ),
+                                      MessageTextFromValue( userUnits(), actualThickness ) );
+
+                        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+                        drcItem->SetItems( item );
+                        drcItem->SetViolatingRule( constraint.GetParentRule() );
+
+                        reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
+                    }
+
+                    if( constraint.Value().HasMax() && actualThickness > constraint.Value().Max() )
+                    {
+                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TEXT_THICKNESS );
+
+                        m_msg.Printf( _( "(%s max thickness %s; actual %s)" ),
+                                      constraint.GetName(),
+                                      MessageTextFromValue( userUnits(), constraint.Value().Max() ),
+                                      MessageTextFromValue( userUnits(), actualThickness ) );
+
+                        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+                        drcItem->SetItems( item );
+                        drcItem->SetViolatingRule( constraint.GetParentRule() );
+
+                        reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
+                    }
+                }
+
+                return true;
+            };
+
     auto checkTextDims =
             [&]( BOARD_ITEM* item ) -> bool
             {
-                if( m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_HEIGHT )
-                        && m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_THICKNESS ) )
-                {
-                    return false;
-                }
-
                 if( !reportProgress( ii++, count, delta ) )
                     return false;
 
-                DRC_CONSTRAINT constraint;
-                EDA_TEXT*      text = nullptr;
+                EDA_TEXT* text = nullptr;
+                int       strikes = 0;
 
                 switch( item->Type() )
                 {
@@ -122,125 +283,18 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                 if( !text || !text->IsVisible() )
                     return true;
 
-                VECTOR2I      size = text->GetTextSize();
-                KIFONT::FONT* font = text->GetDrawFont();
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_THICKNESS ) )
+                    strikes++;
+                else
+                    checkTextThickness( item, text );
 
-                int actualH = size.y;
-                int actualT = text->GetTextThickness();
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_HEIGHT ) )
+                    strikes++;
+                else
+                    checkTextHeight( item, text );
 
-                if( !m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_HEIGHT ) )
-                {
-                    constraint = m_drcEngine->EvalRules( TEXT_HEIGHT_CONSTRAINT, item, nullptr,
-                                                         item->GetLayer() );
-                    bool fail_min = false;
-                    bool fail_max = false;
-                    int  constraintHeight;
-
-                    if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
-                    {
-                        if( constraint.Value().HasMin() && actualH < constraint.Value().Min() )
-                        {
-                            fail_min         = true;
-                            constraintHeight = constraint.Value().Min();
-                        }
-
-                        if( constraint.Value().HasMax() && actualH > constraint.Value().Max() )
-                        {
-                            fail_max         = true;
-                            constraintHeight = constraint.Value().Max();
-                        }
-                    }
-
-                    if( fail_min || fail_max )
-                    {
-                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TEXT_HEIGHT );
-
-                        if( fail_min )
-                        {
-                            m_msg.Printf( _( "(%s min height %s; actual %s)" ),
-                                          constraint.GetName(),
-                                          MessageTextFromValue( userUnits(), constraintHeight ),
-                                          MessageTextFromValue( userUnits(), actualH ) );
-                        }
-                        else
-                        {
-                            m_msg.Printf( _( "(%s max height %s; actual %s)" ),
-                                          constraint.GetName(),
-                                          MessageTextFromValue( userUnits(), constraintHeight ),
-                                          MessageTextFromValue( userUnits(), actualH ) );
-                        }
-
-                        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
-                        drcItem->SetItems( item );
-                        drcItem->SetViolatingRule( constraint.GetParentRule() );
-
-                        reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
-                    }
-                }
-
-                if( !m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_THICKNESS ) )
-                {
-                    if( font->IsOutline() )
-                    {
-                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TEXT_THICKNESS );
-
-                        m_msg = _( "(TrueType font characters can have variable thickness)" );
-
-                        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
-                        drcItem->SetItems( item );
-                        drcItem->SetViolatingRule( constraint.GetParentRule() );
-
-                        reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
-                        return true;
-                    }
-
-                    constraint = m_drcEngine->EvalRules( TEXT_THICKNESS_CONSTRAINT, item, nullptr,
-                                                          item->GetLayer() );
-                    bool fail_min = false;
-                    bool fail_max = false;
-                    int  constraintThickness;
-
-                    if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
-                    {
-                        if( constraint.Value().HasMin() && actualT < constraint.Value().Min() )
-                        {
-                            fail_min            = true;
-                            constraintThickness = constraint.Value().Min();
-                        }
-
-                        if( constraint.Value().HasMax() && actualT > constraint.Value().Max() )
-                        {
-                            fail_max            = true;
-                            constraintThickness = constraint.Value().Max();
-                        }
-                    }
-
-                    if( fail_min || fail_max )
-                    {
-                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TEXT_THICKNESS );
-
-                        if( fail_min )
-                        {
-                            m_msg.Printf( _( "(%s min thickness %s; actual %s)" ),
-                                          constraint.GetName(),
-                                          MessageTextFromValue( userUnits(), constraintThickness ),
-                                          MessageTextFromValue( userUnits(), actualT ) );
-                        }
-                        else
-                        {
-                            m_msg.Printf( _( "(%s max thickness %s; actual %s)" ),
-                                          constraint.GetName(),
-                                          MessageTextFromValue( userUnits(), constraintThickness ),
-                                          MessageTextFromValue( userUnits(), actualT ) );
-                        }
-
-                        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
-                        drcItem->SetItems( item );
-                        drcItem->SetViolatingRule( constraint.GetParentRule() );
-
-                        reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
-                    }
-                }
+                if( strikes >= 2 )
+                    return false;
 
                 return true;
             };

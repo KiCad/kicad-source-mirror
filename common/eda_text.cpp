@@ -446,7 +446,7 @@ void EDA_TEXT::ClearBoundingBoxCache()
 std::vector<std::unique_ptr<KIFONT::GLYPH>>*
 EDA_TEXT::GetRenderCache( const wxString& forResolvedText ) const
 {
-    if( GetFont() && GetFont()->IsOutline() )
+    if( GetDrawFont()->IsOutline() )
     {
         EDA_ANGLE resolvedAngle = GetDrawRotation();
 
@@ -456,7 +456,7 @@ EDA_TEXT::GetRenderCache( const wxString& forResolvedText ) const
         {
             m_render_cache.clear();
 
-            KIFONT::OUTLINE_FONT* font = static_cast<KIFONT::OUTLINE_FONT*>( GetFont() );
+            KIFONT::OUTLINE_FONT* font = static_cast<KIFONT::OUTLINE_FONT*>( GetDrawFont() );
             TEXT_ATTRIBUTES       attrs = GetAttributes();
 
             attrs.m_Angle = resolvedAngle;
