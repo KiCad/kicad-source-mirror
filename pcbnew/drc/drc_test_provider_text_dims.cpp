@@ -173,7 +173,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                         if( outlineCount == 0 )
                             continue;           // ignore spaces
 
-                        for( int ii = 0; ii < outlineCount; ++ii )
+                        for( ii = 0; ii < outlineCount; ++ii )
                             holeCount += outlineGlyph->HoleCount( ii );
 
                         SHAPE_POLY_SET poly = *outlineGlyph;
@@ -183,7 +183,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                         int resultingOutlineCount = poly.OutlineCount();
                         int resultingHoleCount = 0;
 
-                        for( int ii = 0; ii < resultingOutlineCount; ++ii )
+                        for( ii = 0; ii < resultingOutlineCount; ++ii )
                             resultingHoleCount += poly.HoleCount( ii );
 
                         if( ( resultingOutlineCount != outlineCount )
