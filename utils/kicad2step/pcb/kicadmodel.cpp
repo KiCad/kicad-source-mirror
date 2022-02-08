@@ -54,7 +54,7 @@ bool KICADMODEL::Read( SEXPR::SEXPR* aEntry )
     {
         std::ostringstream ostr;
         ostr << "* invalid model entry";
-        wxLogMessage( "%s\n", ostr.str().c_str() );
+        wxLogMessage( wxT( "%s\n" ), ostr.str().c_str() );
         return false;
     }
 
@@ -72,7 +72,7 @@ bool KICADMODEL::Read( SEXPR::SEXPR* aEntry )
     {
         std::ostringstream ostr;
         ostr << "* invalid model entry; invalid path";
-        wxLogMessage( "%s\n", ostr.str().c_str() );
+        wxLogMessage( wxT( "%s\n" ), ostr.str().c_str() );
         return false;
     }
 

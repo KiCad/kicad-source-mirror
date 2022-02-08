@@ -87,10 +87,10 @@ bool S3D_RESOLVER::createPathList( void )
         return false;
 
 #ifdef DEBUG
-    wxLogTrace( trace3dResolver, " * [3D model] search paths:\n" );
+    wxLogTrace( trace3dResolver, wxT( " * [3D model] search paths:\n" ) );
 
     for( const SEARCH_PATH& searchPath : m_Paths )
-        wxLogTrace( trace3dResolver, "   + '%s'\n", searchPath.m_Pathexp );
+        wxLogTrace( trace3dResolver, wxT( "   + '%s'\n" ), searchPath.m_Pathexp );
 #endif
 
     return true;
@@ -120,20 +120,21 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName,
 
 #ifdef _WIN32
     // translate from KiCad's internal UNIX-like path to MSWin paths
-    tname.Replace( "/", "\\" );
+    tname.Replace( wxT( "/" ), wxT( "\\" ) );
 #endif
 
     // Note: variable expansion must preferably be performed via a threadsafe wrapper for the
     // getenv() system call. If we allow the wxFileName::Normalize() routine to perform expansion
     // then we will have a race condition since wxWidgets does not assure a threadsafe wrapper
     // for getenv().
-    if( tname.StartsWith( "${" ) || tname.StartsWith( "$(" ) )
+    if( tname.StartsWith( wxT( "${" ) ) || tname.StartsWith( wxT( "$(" ) ) )
         tname = expandVars( tname );
 
     wxFileName tmpFN( tname );
 
     // in the case of absolute filenames we don't store a map item
-    if( !aFileName.StartsWith( "${" ) && !aFileName.StartsWith( "$(" ) && tmpFN.IsAbsolute() )
+    if( !aFileName.StartsWith( wxT( "${" ) ) && !aFileName.StartsWith( wxT( "$(" ) )
+            && tmpFN.IsAbsolute() )
     {
         if( tmpFN.FileExists() )
         {
@@ -157,7 +158,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName,
 
         // special case: if a path begins with ${ENV_VAR} but is not in the resolver's path list
         // then add it
-        if( aFileName.StartsWith( "${" ) || aFileName.StartsWith( "$(" ) )
+        if( aFileName.StartsWith( wxT( "${" ) ) || aFileName.StartsWith( wxT( "$(" ) ) )
             checkEnvVarPath( aFileName );
 
         return tname;
@@ -169,7 +170,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName,
 
     // if a path begins with ${ENV_VAR}/$(ENV_VAR) and is not resolved then the file either does
     // not exist or the ENV_VAR is not defined
-    if( aFileName.StartsWith( "${" ) || aFileName.StartsWith( "$(" ) )
+    if( aFileName.StartsWith( wxT( "${" ) ) || aFileName.StartsWith( wxT( "$(" ) ) )
     {
         m_errflags |= ERRFLG_ENVPATH;
         return aFileName;
@@ -184,12 +185,12 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName,
     // been checked. This case accounts for partial paths which do not contain ${KIPRJMOD}.
     // This check is performed before checking the path relative to ${KICAD6_3DMODEL_DIR} so that
     // users can potentially override a model within ${KICAD6_3DMODEL_DIR}.
-    if( !m_Paths.empty() && !m_Paths.begin()->m_Pathexp.empty() && !tname.StartsWith( ":" ) )
+    if( !m_Paths.empty() && !m_Paths.begin()->m_Pathexp.empty() && !tname.StartsWith( wxT( ":" ) ) )
     {
-        tmpFN.Assign( m_Paths.begin()->m_Pathexp, "" );
+        tmpFN.Assign( m_Paths.begin()->m_Pathexp, wxT( "" ) );
         wxString fullPath = tmpFN.GetPathWithSep() + tname;
 
-        if( fullPath.StartsWith( "${" ) || fullPath.StartsWith( "$(" ) )
+        if( fullPath.StartsWith( wxT( "${" ) ) || fullPath.StartsWith( wxT( "$(" ) ) )
             fullPath = expandVars( fullPath );
 
         tmpFN.Assign( fullPath );
@@ -208,10 +209,10 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName,
     }
 
     // check the partial path relative to ${KICAD6_3DMODEL_DIR} (legacy behavior)
-    if( !tname.Contains( ":" ) )
+    if( !tname.Contains( wxT( ":" ) ) )
     {
         wxFileName fpath;
-        wxString fullPath( "${KICAD6_3DMODEL_DIR}" );
+        wxString fullPath( wxT( "${KICAD6_3DMODEL_DIR}" ) );
         fullPath.Append( fpath.GetPathSeparator() );
         fullPath.Append( tname );
         fullPath = expandVars( fullPath );
@@ -245,7 +246,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName,
     for( const SEARCH_PATH& path : m_Paths )
     {
         // ${ENV_VAR} paths have already been checked; skip them
-        if( path.m_Alias.StartsWith( "${" ) || path.m_Alias.StartsWith( "$(" ) )
+        if( path.m_Alias.StartsWith( wxT( "${" ) ) || path.m_Alias.StartsWith( wxT( "$(" ) ) )
             continue;
 
         if( path.m_Alias == alias && !path.m_Pathexp.empty() )
@@ -253,7 +254,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName,
             wxFileName fpath( wxFileName::DirName( path.m_Pathexp ) );
             wxString fullPath = fpath.GetPathWithSep() + relpath;
 
-            if( fullPath.StartsWith( "${") || fullPath.StartsWith( "$(" ) )
+            if( fullPath.StartsWith( wxT( "${" ) ) || fullPath.StartsWith( wxT( "$(" ) ) )
                 fullPath = expandVars( fullPath );
 
             wxFileName tmp( fullPath );
@@ -287,32 +288,32 @@ bool S3D_RESOLVER::addPath( const SEARCH_PATH& aPath )
     SEARCH_PATH tpath = aPath;
 
 #ifdef _WIN32
-    while( tpath.m_Pathvar.EndsWith( "\\" ) )
+    while( tpath.m_Pathvar.EndsWith( wxT( "\\" ) ) )
         tpath.m_Pathvar.erase( tpath.m_Pathvar.length() - 1 );
 #else
-    while( tpath.m_Pathvar.EndsWith( "/" ) && tpath.m_Pathvar.length() > 1 )
+    while( tpath.m_Pathvar.EndsWith( wxT( "/" ) ) && tpath.m_Pathvar.length() > 1 )
         tpath.m_Pathvar.erase( tpath.m_Pathvar.length() - 1 );
 #endif
 
-    wxFileName path( tpath.m_Pathvar, "" );
+    wxFileName path( tpath.m_Pathvar, wxT( "" ) );
     path.Normalize();
 
     if( !path.DirExists() )
     {
         // Show a message only in debug mode
 #ifdef DEBUG
-        if( aPath.m_Pathvar == "${KICAD6_3DMODEL_DIR}"
-                || aPath.m_Pathvar == "${KIPRJMOD}"
-                || aPath.m_Pathvar == "${KISYS3DMOD}" )
+        if( aPath.m_Pathvar == wxT( "${KICAD6_3DMODEL_DIR}" )
+                || aPath.m_Pathvar == wxT( "${KIPRJMOD}" )
+                || aPath.m_Pathvar == wxT( "${KISYS3DMOD}" ) )
         {
             // suppress the message if the missing pathvar is a system variable
         }
         else
         {
             wxString msg = _( "The given path does not exist" );
-            msg.append( "\n" );
+            msg.append( wxT( "\n" ) );
             msg.append( tpath.m_Pathvar );
-            wxLogMessage( "%s\n", msg.ToUTF8() );
+            wxLogMessage( wxT( "%s\n" ), msg.ToUTF8() );
         }
 #endif
 
@@ -323,10 +324,10 @@ bool S3D_RESOLVER::addPath( const SEARCH_PATH& aPath )
         tpath.m_Pathexp = path.GetFullPath();
 
 #ifdef _WIN32
-        while( tpath.m_Pathexp.EndsWith( "\\" ) )
+        while( tpath.m_Pathexp.EndsWith( wxT( "\\" ) ) )
         tpath.m_Pathexp.erase( tpath.m_Pathexp.length() - 1 );
 #else
-        while( tpath.m_Pathexp.EndsWith( "/" ) && tpath.m_Pathexp.length() > 1 )
+        while( tpath.m_Pathexp.EndsWith( wxT( "/" ) ) && tpath.m_Pathexp.length() > 1 )
             tpath.m_Pathexp.erase( tpath.m_Pathexp.length() - 1 );
 #endif
     }
@@ -341,10 +342,10 @@ bool S3D_RESOLVER::addPath( const SEARCH_PATH& aPath )
         {
             wxString msg = _( "Alias:" ) + wxS( " " );
             msg.append( tpath.m_Alias );
-            msg.append( "\n" );
+            msg.append( wxS( "\n" ) );
             msg.append( _( "This path:" ) + wxS( " " ) );
             msg.append( tpath.m_Pathvar );
-            msg.append( "\n" );
+            msg.append( wxS( "\n" ) );
             msg.append( _( "Existing path:" ) + wxS( " " ) );
             msg.append( sPL->m_Pathvar );
             wxMessageBox( msg, _( "Bad alias (duplicate name)" ) );
@@ -448,17 +449,17 @@ void S3D_RESOLVER::checkEnvVarPath( const wxString& aPath )
 {
     bool useParen = false;
 
-    if( aPath.StartsWith( "$(" ) )
+    if( aPath.StartsWith( wxT( "$(" ) ) )
         useParen = true;
-    else if( !aPath.StartsWith( "${" ) )
+    else if( !aPath.StartsWith( wxT( "${" ) ) )
         return;
 
     size_t pEnd;
 
     if( useParen )
-        pEnd = aPath.find( ")" );
+        pEnd = aPath.find( wxT( ")" ) );
     else
-        pEnd = aPath.find( "}" );
+        pEnd = aPath.find( wxT( "}" ) );
 
     if( pEnd == wxString::npos )
         return;
@@ -475,7 +476,7 @@ void S3D_RESOLVER::checkEnvVarPath( const wxString& aPath )
         if( sPL->m_Alias == envar )
             return;
 
-        if( !sPL->m_Alias.StartsWith( "${" ) )
+        if( !sPL->m_Alias.StartsWith( wxT( "${" ) ) )
             break;
 
         ++sPL;
@@ -484,7 +485,7 @@ void S3D_RESOLVER::checkEnvVarPath( const wxString& aPath )
     SEARCH_PATH lpath;
     lpath.m_Alias = envar;
     lpath.m_Pathvar = lpath.m_Alias;
-    wxFileName tmpFN( lpath.m_Alias, "" );
+    wxFileName tmpFN( lpath.m_Alias, wxT( "" ) );
     wxUniChar psep = tmpFN.GetPathSeparator();
     tmpFN.Normalize();
 
@@ -518,7 +519,7 @@ wxString S3D_RESOLVER::expandVars( const wxString& aPath )
             result = i.second;
             result.append( aPath.substr( 3 + i.first.length() ) );
 
-            if( result.StartsWith( "${" ) || result.StartsWith( "$(" ) )
+            if( result.StartsWith( wxT( "${" ) ) || result.StartsWith( wxT( "$(" ) ) )
                 result = expandVars( result );
 
             return result;
@@ -530,7 +531,7 @@ wxString S3D_RESOLVER::expandVars( const wxString& aPath )
     if( result == aPath )
         return wxEmptyString;
 
-    if( result.StartsWith( "${" ) || result.StartsWith( "$(" ) )
+    if( result.StartsWith( wxT( "${" ) ) || result.StartsWith( wxT( "$(" ) ) )
         result = expandVars( result );
 
     return result;
@@ -559,7 +560,7 @@ wxString S3D_RESOLVER::ShortenPath( const wxString& aFullPathName )
             continue;
         }
 
-        wxFileName fpath( sL->m_Pathexp, "" );
+        wxFileName fpath( sL->m_Pathexp, wxT( "" ) );
         wxString fps = fpath.GetPathWithSep();
         wxString tname;
 
@@ -571,22 +572,22 @@ wxString S3D_RESOLVER::ShortenPath( const wxString& aFullPathName )
 
 #ifdef _WIN32
             // ensure only the '/' separator is used in the internal name
-            fname.Replace( "\\", "/" );
+            fname.Replace( wxT( "\\" ), wxT( "/" ) );
 #endif
 
-            if( sL->m_Alias.StartsWith( "${" ) || sL->m_Alias.StartsWith( "$(" ) )
+            if( sL->m_Alias.StartsWith( wxT( "${" ) ) || sL->m_Alias.StartsWith( wxT( "$(" ) ) )
             {
                 // old style ENV_VAR
                 tname = sL->m_Alias;
-                tname.Append( "/" );
+                tname.Append( wxT( "/" ) );
                 tname.append( fname );
             }
             else
             {
                 // new style alias
-                tname = ":";
+                tname = wxT( ":" );
                 tname.append( sL->m_Alias );
-                tname.append( ":" );
+                tname.append( wxT( ":" ) );
                 tname.append( fname );
             }
 
@@ -601,7 +602,7 @@ wxString S3D_RESOLVER::ShortenPath( const wxString& aFullPathName )
     // UNIX separator but this is done for consistency and can
     // be helpful even when transferring project files from
     // MSWin to *NIX.
-    fname.Replace( "\\", "/" );
+    fname.Replace( wxT( "\\" ), wxT( "/" ) );
 #endif
 
     return fname;
@@ -736,12 +737,12 @@ bool S3D_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAlias )
 
     // ensure that the file separators suit the current platform
 #ifdef __WINDOWS__
-    filename.Replace( "/", "\\" );
+    filename.Replace( wxT( "/" ), wxT( "\\" ) );
 
     // if we see the :\ pattern then it must be a drive designator
     if( aliasEnd != wxString::npos )
     {
-        size_t pos1 = aFileName.find( ":\\" );
+        size_t pos1 = aFileName.find( wxT( ":\\" ) );
 
         if( pos1 != wxString::npos && ( pos1 != aliasEnd || pos1 != 1 ) )
             return false;
@@ -751,7 +752,7 @@ bool S3D_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAlias )
             aliasEnd = wxString::npos;
     }
 #else
-    filename.Replace( "\\", "/" );
+    filename.Replace( wxT( "\\" ), wxT( "/" ) );
 #endif
 
     // names may not end with ':'
@@ -781,9 +782,9 @@ bool S3D_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAlias )
         // environment string before testing
         aliasEnd = wxString::npos;
 
-        if( aFileName.StartsWith( "${" ) )
+        if( aFileName.StartsWith( wxT( "${" ) ) )
             aliasEnd = aFileName.find( '}' );
-        else if( aFileName.StartsWith( "$(" ) )
+        else if( aFileName.StartsWith( wxT( "$(" ) ) )
             aliasEnd = aFileName.find( ')' );
 
         if( aliasEnd != wxString::npos )

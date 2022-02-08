@@ -121,33 +121,33 @@ bool IDF2VRML::OnInit()
 void IDF2VRML::OnInitCmdLine( wxCmdLineParser& parser )
 {
     parser.SetDesc( cmdLineDesc );
-    parser.SetSwitchChars( "-" );
+    parser.SetSwitchChars( wxT( "-" ) );
     return;
 }
 
 
 bool IDF2VRML::OnCmdLineParsed( wxCmdLineParser& parser )
 {
-    if( parser.Found( "k" ) )
+    if( parser.Found( wxT( "k" ) ) )
         m_Compact = false;
 
     double scale;
 
-    if( parser.Found( "s", &scale ) )
+    if( parser.Found( wxT( "s" ), &scale ) )
         m_ScaleFactor = scale;
 
     wxString fname;
 
-    if( parser.Found( "f", &fname ) )
+    if( parser.Found( wxT( "f" ), &fname ) )
         m_filename = fname;
 
-    if( parser.Found( "d" ) )
+    if( parser.Found( wxT( "d" ) ) )
         m_NoOutlineSubs = true;
 
-    if( parser.Found( "z" ) )
+    if( parser.Found( wxT( "z" ) ) )
         nozeroheights = true;
 
-    if( parser.Found( "m" ) )
+    if( parser.Found( wxT( "m" ) ) )
         showObjectMapping = true;
 
     return true;
@@ -227,17 +227,18 @@ int IDF2VRML::OnRun()
 
     if( m_ScaleFactor < 0.001 || m_ScaleFactor > 10.0 )
     {
-        wxLogMessage("scale factor out of range (%d); range is 0.001 to 10.0", m_ScaleFactor);
+        wxLogMessage( wxT( "scale factor out of range (%d); range is 0.001 to 10.0" ),
+                      m_ScaleFactor);
         return -1;
     }
 
     IDF3_BOARD pcb( IDF3::CAD_ELEC );
 
-    wxLogMessage( "Reading file: '%s'", m_filename );
+    wxLogMessage( wxT( "Reading file: '%s'" ), m_filename );
 
     if( !pcb.ReadFile( m_filename, m_NoOutlineSubs ) )
     {
-        wxLogMessage( "Failed to read IDF data: %s", pcb.GetError() );
+        wxLogMessage( wxT( "Failed to read IDF data: %s" ), pcb.GetError() );
         return -1;
     }
 
@@ -257,16 +258,14 @@ int IDF2VRML::OnRun()
 
     // Create the VRML file and write the header
     wxFileName fname( m_filename );
-    fname.SetExt( "wrl" );
+    fname.SetExt( wxT( "wrl" ) );
     fname.Normalize();
-    wxLogMessage( "Writing file: '%s'", fname.GetFullName() );
+    wxLogMessage( wxT( "Writing file: '%s'" ), fname.GetFullName() );
 
     OPEN_OSTREAM( ofile, fname.GetFullPath().ToUTF8() );
 
     if( ofile.fail() )
-    {
-        wxLogMessage( "Could not open file: '%s'", fname.GetFullName() );
-    }
+        wxLogMessage( wxT( "Could not open file: '%s'" ), fname.GetFullName() );
 
     ofile.imbue( std::locale( "C" ) );
     ofile << std::fixed; // do not use exponents in VRML output
@@ -326,7 +325,7 @@ bool MakeBoard( IDF3_BOARD& board, std::ostream& file )
 
     if( board.GetBoardOutlinesSize() < 1 )
     {
-        wxLogMessage( "Cannot proceed; no board outline in IDF object" );
+        wxLogMessage( wxT( "Cannot proceed; no board outline in IDF object" ) );
         return false;
     }
 
@@ -420,13 +419,13 @@ bool PopulateVRML( VRML_LAYER& model, const std::list< IDF_OUTLINE* >* items, bo
 
         if( nvcont < 0 )
         {
-            wxLogMessage( "Cannot create an outline" );
+            wxLogMessage( wxT( "Cannot create an outline" ) );
             return false;
         }
 
         if( (*scont)->size() < 1 )
         {
-            wxLogMessage( "Invalid contour: no vertices" );
+            wxLogMessage( wxT( "Invalid contour: no vertices" ) );
             return false;
         }
 
@@ -464,7 +463,7 @@ bool AddSegment( VRML_LAYER& model, IDF_SEGMENT* seg, int icont, int iseg )
         {
             if( iseg != 0 )
             {
-                wxLogMessage( "Adding a circle to an existing vertex list" );
+                wxLogMessage( wxT( "Adding a circle to an existing vertex list" ) );
                 return false;
             }
 
@@ -574,16 +573,16 @@ bool WriteTriangles( std::ostream& file, VRML_IDS* vID, VRML_LAYER* layer, bool 
     {
         if( !layer->WriteVertices( top_z, file, precision ) )
         {
-            wxLogMessage( "Errors writing planar vertices to %s\n%s",
-                vID->objectName, layer->GetError() );
+            wxLogMessage( wxT( "Errors writing planar vertices to %s\n%s" ),
+                          vID->objectName, layer->GetError() );
         }
     }
     else
     {
         if( !layer->Write3DVertices( top_z, bottom_z, file, precision ) )
         {
-            wxLogMessage( "Errors writing 3D vertices to %s\n%s",
-                vID->objectName, layer->GetError() );
+            wxLogMessage( wxT( "Errors writing 3D vertices to %s\n%s" ),
+                          vID->objectName, layer->GetError() );
         }
     }
 
@@ -869,7 +868,7 @@ VRML_IDS* GetColor( boost::ptr_map<const std::string, VRML_IDS>& cmap, int& inde
         id->objectName = ostr.str();
 
         if( showObjectMapping )
-            wxLogMessage( "* %s = '%s'", ostr.str(), uid );
+            wxLogMessage( wxT( "* %s = '%s'" ), ostr.str(), uid );
 
         cmap.insert( uid, id );
 

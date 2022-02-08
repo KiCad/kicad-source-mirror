@@ -42,7 +42,7 @@
 
 KICADPCB::KICADPCB( const wxString& aPcbName )
 {
-    m_resolver.Set3DConfigDir( "" );
+    m_resolver.Set3DConfigDir( wxT( "" ) );
     m_thickness = 1.6;
     m_pcb_model = nullptr;
     m_minDistance = MIN_DISTANCE;
@@ -74,14 +74,14 @@ bool KICADPCB::ReadFile( const wxString& aFileName )
 
     if( fname.GetExt() != "kicad_pcb" )
     {
-        ReportMessage( wxString::Format( "expecting extension kicad_pcb, got %s\n",
+        ReportMessage( wxString::Format( wxT( "expecting extension kicad_pcb, got %s\n" ),
                                          fname.GetExt() ) );
         return false;
     }
 
     if( !fname.FileExists() )
     {
-        ReportMessage( wxString::Format( "No such file: %s\n", aFileName ) );
+        ReportMessage( wxString::Format( wxT( "No such file: %s\n" ), aFileName ) );
         return false;
     }
 
@@ -96,7 +96,7 @@ bool KICADPCB::ReadFile( const wxString& aFileName )
 
         if( !data )
         {
-            ReportMessage( wxString::Format( "No data in file: %s\n", aFileName ) );
+            ReportMessage( wxString::Format( wxT( "No data in file: %s\n" ), aFileName ) );
             return false;
         }
 
@@ -105,12 +105,14 @@ bool KICADPCB::ReadFile( const wxString& aFileName )
     }
     catch( std::exception& e )
     {
-        ReportMessage( wxString::Format( "error reading file: %s\n%s\n", aFileName, e.what() ) );
+        ReportMessage( wxString::Format( wxT( "error reading file: %s\n%s\n" ),
+                                         aFileName,
+                                         e.what() ) );
         return false;
     }
     catch( ... )
     {
-        ReportMessage( wxString::Format( "unexpected exception while reading file: %s\n",
+        ReportMessage( wxString::Format( wxT( "unexpected exception while reading file: %s\n" ),
                                          aFileName ) );
         return false;
     }
@@ -162,7 +164,7 @@ bool KICADPCB::parsePCB( SEXPR::SEXPR* data )
 
             if( !child->IsList() )
             {
-                ReportMessage( wxString::Format( "corrupt PCB file (line %d)\n",
+                ReportMessage( wxString::Format( wxT( "corrupt PCB file (line %d)\n" ),
                                                  child->GetLineNumber() ) );
                 return false;
             }
@@ -196,7 +198,7 @@ bool KICADPCB::parsePCB( SEXPR::SEXPR* data )
         return result;
     }
 
-    ReportMessage( wxString::Format( "data is not a valid PCB file: %s\n", m_filename ) );
+    ReportMessage( wxString::Format( wxT( "data is not a valid PCB file: %s\n" ), m_filename ) );
     return false;
 }
 
@@ -212,7 +214,7 @@ bool KICADPCB::parseGeneral( SEXPR::SEXPR* data )
 
         if( !child->IsList() )
         {
-            ReportMessage( wxString::Format( "corrupt PCB file (line %d)\n",
+            ReportMessage( wxString::Format( wxT( "corrupt PCB file (line %d)\n" ),
                                              child->GetLineNumber() ) );
             return false;
         }
@@ -225,8 +227,8 @@ bool KICADPCB::parseGeneral( SEXPR::SEXPR* data )
         return true;
     }
 
-    ReportMessage( wxString::Format( "corrupt PCB file (line %d)\n"
-                                     "no PCB thickness specified in general section\n",
+    ReportMessage( wxString::Format( wxT( "corrupt PCB file (line %d)\n"
+                                          "no PCB thickness specified in general section\n" ),
                                      child->GetLineNumber() ) );
     return false;
 }
@@ -244,7 +246,7 @@ bool KICADPCB::parseLayers( SEXPR::SEXPR* data )
 
         if( !child->IsList() )
         {
-            ReportMessage( wxString::Format( "corrupt PCB file (line %d)\n",
+            ReportMessage( wxString::Format( wxT( "corrupt PCB file (line %d)\n" ),
                                              child->GetLineNumber() ) );
             return false;
         }
@@ -285,7 +287,7 @@ bool KICADPCB::parseSetup( SEXPR::SEXPR* data )
 
         if( !child->IsList() )
         {
-            ReportMessage( wxString::Format( "corrupt PCB file (line %d)\n",
+            ReportMessage( wxString::Format( wxT( "corrupt PCB file (line %d)\n" ),
                                              child->GetLineNumber() ) );
             return false;
         }
@@ -295,8 +297,8 @@ bool KICADPCB::parseSetup( SEXPR::SEXPR* data )
         {
             if( child->GetNumberOfChildren() != 3 )
             {
-                ReportMessage( wxString::Format( "corrupt PCB file (line %d): grid_origin has "
-                                                 "%d children (expected: 3)\n",
+                ReportMessage( wxString::Format( wxT( "corrupt PCB file (line %d): grid_origin has "
+                                                      "%d children (expected: 3)\n" ),
                                                  child->GetLineNumber(),
                                                  child->GetNumberOfChildren() ) );
                 return false;
@@ -310,8 +312,8 @@ bool KICADPCB::parseSetup( SEXPR::SEXPR* data )
         {
             if( child->GetNumberOfChildren() != 3 )
             {
-                ReportMessage( wxString::Format( "corrupt PCB file (line %d): aux_axis_origin has"
-                                                 " %d children (expected: 3)\n",
+                ReportMessage( wxString::Format( wxT( "corrupt PCB file (line %d): aux_axis_origin "
+                                                      "has %d children (expected: 3)\n" ),
                                                  child->GetLineNumber(),
                                                  child->GetNumberOfChildren() ) );
                 return false;
@@ -449,7 +451,7 @@ bool KICADPCB::ComposePCB( bool aComposeVirtual, bool aSubstituteModels )
 
     if( m_footprints.empty() && m_curves.empty() )
     {
-        ReportMessage( "Error: no PCB data (no footprint, no outline) to render\n" );
+        ReportMessage( wxT( "Error: no PCB data (no footprint, no outline) to render\n" ) );
         return false;
     }
 
@@ -502,11 +504,11 @@ bool KICADPCB::ComposePCB( bool aComposeVirtual, bool aSubstituteModels )
     for( auto i : m_footprints )
         i->ComposePCB( m_pcb_model, &m_resolver, origin, aComposeVirtual, aSubstituteModels );
 
-    ReportMessage( "Create PCB solid model\n" );
+    ReportMessage( wxT( "Create PCB solid model\n" ) );
 
     if( !m_pcb_model->CreatePCB() )
     {
-        ReportMessage( "could not create PCB solid model\n" );
+        ReportMessage( wxT( "could not create PCB solid model\n" ) );
         delete m_pcb_model;
         m_pcb_model = NULL;
         return false;

@@ -59,7 +59,7 @@ bool KICADPAD::Read( const SEXPR::SEXPR* aEntry )
     {
         std::ostringstream ostr;
         ostr << bad_pad << " (line " << aEntry->GetLineNumber() << ")";
-        wxLogMessage( "%s\n", ostr.str().c_str() );
+        wxLogMessage( wxT( "%s\n" ), ostr.str().c_str() );
         return false;
     }
 
@@ -111,7 +111,7 @@ bool KICADPAD::parseDrill( const SEXPR::SEXPR* aDrill )
     {
         std::ostringstream ostr;
         ostr << bad_drill << " (line " << aDrill->GetLineNumber() << ")";
-        wxLogMessage( "%s\n", ostr.str().c_str() );
+        wxLogMessage( wxT( "%s\n" ), ostr.str().c_str() );
         return false;
     }
 
@@ -132,7 +132,7 @@ bool KICADPAD::parseDrill( const SEXPR::SEXPR* aDrill )
             ostr << bad_drill << " (line " << child->GetLineNumber();
             ostr << ") (unexpected symbol: ";
             ostr << child->GetSymbol() << "), nchild = " << nchild;
-            wxLogMessage( "%s\n", ostr.str().c_str() );
+            wxLogMessage( wxT( "%s\n" ), ostr.str().c_str() );
             return false;
         }
     }
@@ -148,7 +148,7 @@ bool KICADPAD::parseDrill( const SEXPR::SEXPR* aDrill )
         std::ostringstream ostr;
         ostr << bad_drill << " (line " << child->GetLineNumber();
         ostr << ") (did not find X size)";
-        wxLogMessage( "%s\n", ostr.str().c_str() );
+        wxLogMessage( wxT( "%s\n" ), ostr.str().c_str() );
         return false;
     }
 
@@ -177,7 +177,7 @@ bool KICADPAD::parseDrill( const SEXPR::SEXPR* aDrill )
                 std::ostringstream ostr;
                 ostr << bad_drill << " (line " << child->GetLineNumber();
                 ostr << ") (did not find Y size)";
-                wxLogMessage( "%s\n", ostr.str().c_str() );
+                wxLogMessage( wxT( "%s\n" ), ostr.str().c_str() );
                 return false;
             }
 

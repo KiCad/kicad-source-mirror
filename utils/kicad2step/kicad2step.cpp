@@ -91,9 +91,9 @@ protected:
             ReportMessage( theString.ToCString() );
 #if OCC_VERSION_HEX < OCC_VERSION_MIN
           if( theToPutEol )
-            ReportMessage( "\n" );
+            ReportMessage( wxT( "\n" ) );
 #else
-          ReportMessage( "\n" );
+          ReportMessage( wxT( "\n" ) );
 #endif
       }
       if( theGravity >= Message_Alarm )
@@ -284,10 +284,10 @@ wxString KICAD2MCAD_PRMS::getOutputExt() const
 {
 #ifdef SUPPORTS_IGES
     if( m_fmtIGES )
-        return wxString( "igs" );
+        return wxT( "igs" );
     else
 #endif
-        return wxString( "step" );
+        return wxT( "step" );
 }
 
 
@@ -299,7 +299,7 @@ KICAD2STEP::KICAD2STEP( KICAD2MCAD_PRMS aParams ) : m_params( aParams ), m_panel
 int KICAD2STEP::Run()
 {
     // create the main application window
-    KICAD2STEP_FRAME* frame = new KICAD2STEP_FRAME( "Kicad2step" );
+    KICAD2STEP_FRAME* frame = new KICAD2STEP_FRAME( wxT( "Kicad2step" ) );
 
     m_panel = frame->m_panelKicad2Step;
     m_panel->m_params = m_params;

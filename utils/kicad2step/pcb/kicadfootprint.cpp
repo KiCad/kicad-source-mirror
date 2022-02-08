@@ -86,7 +86,7 @@ bool KICADFOOTPRINT::Read( SEXPR::SEXPR* aEntry )
         {
             std::ostringstream ostr;
             ostr << "* BUG: module parser invoked for type '" << name << "'\n";
-            wxLogMessage( "%s\n", ostr.str().c_str() );
+            wxLogMessage( wxT( "%s\n" ), ostr.str().c_str() );
             return false;
         }
 
@@ -109,14 +109,16 @@ bool KICADFOOTPRINT::Read( SEXPR::SEXPR* aEntry )
                 if( symname == "locked" || symname == "placed" )
                     continue;
 
-                wxLogMessage( "* module descr in PCB file at line %d: unexpected keyword '%s'\n",
-                              child->GetLineNumber(), symname.c_str() );
+                wxLogMessage( wxT( "* module descr in PCB file at line %d: unexpected keyword "
+                                   "'%s'\n" ),
+                              child->GetLineNumber(),
+                              symname.c_str() );
                 return false;
             }
 
             if( !child->IsList() )
             {
-                wxLogMessage( "* corrupt module in PCB file at line %d\n",
+                wxLogMessage( wxT( "* corrupt module in PCB file at line %d\n" ),
                               child->GetLineNumber() );
                 return false;
             }
@@ -155,7 +157,7 @@ bool KICADFOOTPRINT::Read( SEXPR::SEXPR* aEntry )
 
     std::ostringstream ostr;
     ostr << "* data is not a valid PCB module\n";
-    wxLogMessage( "%s\n", ostr.str().c_str() );
+    wxLogMessage( wxT( "%s\n" ), ostr.str().c_str() );
 
     return false;
 }
@@ -248,7 +250,7 @@ bool KICADFOOTPRINT::parseLayer( SEXPR::SEXPR* data )
         std::ostringstream ostr;
         ostr << "* corrupt module in PCB file (line ";
         ostr << val->GetLineNumber() << "); layer cannot be parsed\n";
-        wxLogMessage( "%s\n", ostr.str().c_str() );
+        wxLogMessage( wxT( "%s\n" ), ostr.str().c_str() );
         return false;
     }
 
@@ -276,7 +278,7 @@ bool KICADFOOTPRINT::parseAttribute( SEXPR::SEXPR* data )
         std::ostringstream ostr;
         ostr << "* corrupt module in PCB file (line ";
         ostr << data->GetLineNumber() << "); attribute cannot be parsed\n";
-        wxLogMessage( "%s\n", ostr.str().c_str() );
+        wxLogMessage( wxT( "%s\n" ), ostr.str().c_str() );
         return false;
     }
 
@@ -443,10 +445,10 @@ bool KICADFOOTPRINT::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
             for( const wxString& path : searchedPaths )
                 paths += "    " + path + "\n";
 
-            ReportMessage( wxString::Format( "Could not add 3D model to %s.\n"
-                                             "File not found: %s\n"
-                                             "Searched paths:\n"
-                                             "%s",
+            ReportMessage( wxString::Format( wxT( "Could not add 3D model to %s.\n"
+                                                  "File not found: %s\n"
+                                                  "Searched paths:\n"
+                                                  "%s" ),
                                              m_refdes,
                                              mname,
                                              paths) );
@@ -466,8 +468,8 @@ bool KICADFOOTPRINT::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
         }
         catch( const Standard_Failure& e)
         {
-            ReportMessage( wxString::Format( "Could not add 3D model to %s.\n"
-                                             "OpenCASCADE error: %s\n",
+            ReportMessage( wxString::Format( wxT( "Could not add 3D model to %s.\n"
+                                                  "OpenCASCADE error: %s\n" ),
                                              m_refdes, 
                                              e.GetMessageString() ) );
         }

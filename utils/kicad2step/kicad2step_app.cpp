@@ -33,7 +33,6 @@
 #include <sstream>
 
 #include "kicad2step.h"
-#include "pcb/kicadpcb.h"
 #include "kicad2step_frame_base.h"
 #include <Standard_Failure.hxx> // In open cascade
 
@@ -49,8 +48,8 @@ public:
     virtual bool OnCmdLineParsed( wxCmdLineParser& parser ) override;
 
 private:
-    KICAD2STEP*     m_converter;
-    KICAD2MCAD_PRMS   m_params;
+    KICAD2STEP*      m_converter;
+    KICAD2MCAD_PRMS  m_params;
 };
 
 
@@ -96,7 +95,7 @@ static const wxCmdLineEntryDesc cmdLineDesc[] = {
 void KICAD2MCAD_APP::OnInitCmdLine( wxCmdLineParser& parser )
 {
     parser.SetDesc( cmdLineDesc );
-    parser.SetSwitchChars( "-" );
+    parser.SetSwitchChars( wxT( "-" ) );
 }
 
 
@@ -124,28 +123,28 @@ int KICAD2MCAD_APP::OnRun()
 bool KICAD2MCAD_APP::OnCmdLineParsed( wxCmdLineParser& parser )
 {
 #ifdef SUPPORTS_IGES
-    if( parser.Found( "fmt-iges" ) )
+    if( parser.Found( wxT( "fmt-iges" ) ) )
         m_fmtIGES = true;
 #endif
 
-    if( parser.Found( "f" ) )
+    if( parser.Found( wxT( "f" ) ) )
         m_params.m_overwrite = true;
 
-    if( parser.Found( "grid-origin" ) )
+    if( parser.Found( wxT( "grid-origin" ) ) )
         m_params.m_useGridOrigin = true;
 
-    if( parser.Found( "drill-origin" ) )
+    if( parser.Found( wxT( "drill-origin" ) ) )
         m_params.m_useDrillOrigin = true;
 
-    if( parser.Found( "no-virtual" ) )
+    if( parser.Found( wxT( "no-virtual" ) ) )
         m_params.m_includeVirtual = false;
 
-    if( parser.Found( "subst-models" ) )
+    if( parser.Found( wxT( "subst-models" ) ) )
         m_params.m_substModels = true;
 
     wxString tstr;
 
-    if( parser.Found( "user-origin", &tstr ) )
+    if( parser.Found( wxT( "user-origin" ), &tstr ) )
     {
         std::istringstream istr;
         istr.str( std::string( tstr.ToUTF8() ) );
@@ -192,7 +191,7 @@ bool KICAD2MCAD_APP::OnCmdLineParsed( wxCmdLineParser& parser )
         }
     }
 
-    if( parser.Found( "min-distance", &tstr ) )
+    if( parser.Found( wxT( "min-distance" ), &tstr ) )
     {
         std::istringstream istr;
         istr.str( std::string( tstr.ToUTF8() ) );
@@ -221,7 +220,7 @@ bool KICAD2MCAD_APP::OnCmdLineParsed( wxCmdLineParser& parser )
         }
     }
 
-    if( parser.Found( "o", &tstr ) )
+    if( parser.Found( wxT( "o" ), &tstr ) )
         m_params.m_outputFile = tstr;
 
 
