@@ -47,66 +47,64 @@ struct NODE : parse_tree::basic_node<NODE>
     bool isSuperscript() const { return is_type<MARKUP::superscript>(); }
 };
 
-struct varPrefix : string<'$', '{'> {};
-
-struct subPrefix : string<'_', '{'> {};
-
-struct supPrefix : string<'^', '{'> {};
-
-struct tildePrefix : string<'~', '{'> {};
-
-struct closeBrace : string<'}'> {};
-
 struct varName : plus<sor<identifier_other, string<' '>>> {};
 
 struct varNamespaceName : plus<identifier> {};
 
 struct varNamespace : seq<varNamespaceName, string<':'>> {};
 
-struct variable : seq<varPrefix, opt<varNamespace>, varName, closeBrace> {};
+struct variable : seq< string< '$', '{' >, opt<varNamespace>, varName, string< '}' > > {};
 
+template< typename ControlChar >
+struct plain : seq< not_at< seq< ControlChar, string< '{' > > >, ControlChar > {};
+
+struct plainControlChar : sor< plain< string<'$'> >,
+                               plain< string<'_'> >,
+                               plain< string<'^'> >,
+                               plain< string<'~'> > > {};
 /**
  * anyString =
  * a run of characters that do not start a command sequence, or if they do, they do not start
  * a complete command prefix (command char + open brace)
  */
-struct anyString : plus<sor<utf8::not_one<'~', '$', '_', '^'>,
-                            seq<not_at<subPrefix>, string<'_'>>,
-                            seq<not_at<supPrefix>, string<'^'>>,
-                            seq<not_at<tildePrefix>, string<'~'>>>> {};
+struct anyString : plus< sor< utf8::not_one< '~', '$', '_', '^' >,
+                              plainControlChar > > {};
 
-struct prefixedSuperscript : seq<supPrefix, superscript> {};
+struct anyStringWithinBraces : plus< sor< utf8::not_one< '~', '$', '_', '^', '}' >,
+                                          plainControlChar > > {};
 
-struct prefixedSubscript : seq<subPrefix, subscript> {};
+template< typename ControlChar >
+struct braces : seq< seq< ControlChar, string< '{' > >,
+                     until< string< '}' >, sor< anyStringWithinBraces,
+                                                variable,
+                                                subscript,
+                                                superscript,
+                                                overbar > > > {};
 
-struct prefixedOverbar : seq<tildePrefix, overbar> {};
-
-struct anyStringWithinBraces : plus<sor<utf8::not_one<'~', '$', '_', '^', '}'>>> {};
-
-struct superscript : until<closeBrace, sor<variable, anyStringWithinBraces>> {};
-
-struct subscript : until<closeBrace, sor<variable, anyStringWithinBraces>> {};
-
-struct overbar : until<closeBrace, sor<variable, anyStringWithinBraces>> {};
+struct superscript : braces< string< '^' > > {};
+struct subscript   : braces< string< '_' > > {};
+struct overbar     : braces< string< '~' > > {};
 
 /**
  * Finally, the full grammar
  */
-struct grammar : star<sor<variable,
-                          prefixedSubscript,
-                          prefixedSuperscript,
-                          prefixedOverbar,
-                          anyString>> {};
+struct anything : sor< anyString,
+                       variable,
+                       subscript,
+                       superscript,
+                       overbar > {};
+
+struct grammar : until< tao::pegtl::eof, anything > {};
 
 template <typename Rule>
 using selector = parse_tree::selector< Rule,
-                                       parse_tree::store_content::on<varNamespaceName,
-                                                                     varName,
-                                                                     anyString,
-                                                                     anyStringWithinBraces>,
-                                       parse_tree::discard_empty::on<superscript,
-                                                                     subscript,
-                                                                     overbar>>;
+                                       parse_tree::store_content::on< varNamespaceName,
+                                                                      varName,
+                                                                      anyStringWithinBraces,
+                                                                      anyString >,
+                                       parse_tree::discard_empty::on< superscript,
+                                                                      subscript,
+                                                                      overbar > >;
 
 class MARKUP_PARSER
 {

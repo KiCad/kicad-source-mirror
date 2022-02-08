@@ -196,35 +196,37 @@ VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* a
 {
     VECTOR2I nextPosition = aPosition;
 
-    TEXT_STYLE_FLAGS textStyle = aTextStyle;
+    if( aNode ) {
+        TEXT_STYLE_FLAGS textStyle = aTextStyle;
 
-    if( !aNode->is_root() )
-    {
-        if( aNode->isSubscript() )
-            textStyle = TEXT_STYLE::SUBSCRIPT;
-        else if( aNode->isSuperscript() )
-            textStyle = TEXT_STYLE::SUPERSCRIPT;
-
-        if( aNode->isOverbar() )
-            textStyle |= TEXT_STYLE::OVERBAR;
-
-        if( aNode->has_content() )
+        if( !aNode->is_root() )
         {
-            std::string txt = aNode->string();
-            BOX2I       bbox;
+            if( aNode->isSubscript() )
+                textStyle = TEXT_STYLE::SUBSCRIPT;
+            else if( aNode->isSuperscript() )
+                textStyle = TEXT_STYLE::SUPERSCRIPT;
 
-            nextPosition = aFont->GetTextAsGlyphs( &bbox, aGlyphs, txt, aSize, aPosition, aAngle,
-                                                   aMirror, aOrigin, textStyle );
+            if( aNode->isOverbar() )
+                textStyle |= TEXT_STYLE::OVERBAR;
 
-            if( aBoundingBox )
-                aBoundingBox->Merge( bbox );
+            if( aNode->has_content() )
+            {
+                std::string txt = aNode->string();
+                BOX2I       bbox;
+
+                nextPosition = aFont->GetTextAsGlyphs( &bbox, aGlyphs, txt, aSize, aPosition, aAngle,
+                                                       aMirror, aOrigin, textStyle );
+
+                if( aBoundingBox )
+                    aBoundingBox->Merge( bbox );
+            }
         }
-    }
 
-    for( const std::unique_ptr<MARKUP::NODE>& child : aNode->children )
-    {
-        nextPosition = drawMarkup( aBoundingBox, aGlyphs, child, nextPosition, aFont, aSize,
-                                   aAngle, aMirror, aOrigin, textStyle );
+        for( const std::unique_ptr<MARKUP::NODE>& child : aNode->children )
+        {
+            nextPosition = drawMarkup( aBoundingBox, aGlyphs, child, nextPosition, aFont, aSize,
+                                       aAngle, aMirror, aOrigin, textStyle );
+        }
     }
 
     return nextPosition;

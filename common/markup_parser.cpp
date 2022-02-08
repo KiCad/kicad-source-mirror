@@ -27,9 +27,17 @@ using namespace MARKUP;
 
 std::unique_ptr<NODE> MARKUP_PARSER::Parse()
 {
-    //string_input<> in( source, "from_input" );
-    auto root = parse_tree::parse<MARKUP::grammar, MARKUP::NODE, MARKUP::selector>( in );
-    return root;
+    try
+    {
+        auto root = parse_tree::parse<MARKUP::grammar, MARKUP::NODE, MARKUP::selector>( in );
+        return root;
+    }
+    catch ( tao::pegtl::parse_error& parseError )
+    {
+        // couldn't parse text item
+        // TODO message to user?
+        return nullptr;
+    }
 }
 
 
@@ -39,6 +47,7 @@ std::string NODE::typeString() const
 
     if( is_type<MARKUP::subscript>() )                  os << "SUBSCRIPT";
     else if( is_type<MARKUP::superscript>() )           os << "SUPERSCRIPT";
+    else if( is_type<MARKUP::overbar>() )               os << "OVERBAR";
     else if( is_type<MARKUP::anyString>() )             os << "ANYSTRING";
     else if( is_type<MARKUP::anyStringWithinBraces>() ) os << "ANYSTRINGWITHINBRACES";
     else if( is_type<MARKUP::varNamespaceName>() )      os << "VARNAMESPACENAME";
