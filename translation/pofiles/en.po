@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-03 17:11-0800\n"
+"POT-Creation-Date: 2022-02-07 17:47-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -6106,6 +6106,9 @@ msgstr "Diamond"
 msgid "Formatting"
 msgstr "Formatting"
 
+msgid "Count"
+msgstr "Count"
+
 msgid "Number"
 msgstr "Number"
 
@@ -6121,6 +6124,9 @@ msgstr "Number Text Size"
 msgid "Name Text Size"
 msgstr "Name Text Size"
 
+msgid "ALL"
+msgstr "ALL"
+
 msgid "Read Only"
 msgstr "Read Only"
 
@@ -6135,6 +6141,12 @@ msgstr "Pin numbers:"
 
 msgid "0"
 msgstr "0"
+
+msgid "Pin count:"
+msgstr "Pin count:"
+
+msgid "Duplicate pins:"
+msgstr "Duplicate pins:"
 
 msgid "Pin Table"
 msgstr "Pin Table"
@@ -6175,16 +6187,14 @@ msgstr "U"
 msgid "Number of units per package:"
 msgstr "Number of units per package:"
 
-msgid "Units are not interchangeable"
-msgstr "Units are not interchangeable"
+msgid "All units are interchangeable"
+msgstr "All units are interchangeable"
 
 msgid ""
-"Check this option to allow symbols with multiple units to have different\n"
-"elements.  Uncheck this option when all symbol units are identical except\n"
+"Check this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
-"Check this option to allow symbols with multiple units to have different\n"
-"elements.  Uncheck this option when all symbol units are identical except\n"
+"Check this option when all symbol units are identical except\n"
 "for pin numbers."
 
 msgid "Create symbol with alternate body style (De Morgan)"
@@ -6214,8 +6224,14 @@ msgstr "Pin name inside"
 msgid "New Symbol"
 msgstr "New Symbol"
 
-msgid "Set width to 0 to use Schematic default symbol line width."
-msgstr "Set width to 0 to use Schematic default symbol line width."
+msgid "Border"
+msgstr "Border"
+
+msgid "Border width:"
+msgstr "Border width:"
+
+msgid "Set border width to 0 to use Schematic default symbol line width."
+msgstr "Set border width to 0 to use Schematic default symbol line width."
 
 msgid "Fill Style"
 msgstr "Fill Style"
@@ -6334,16 +6350,6 @@ msgid "Enter the number of units for a symbol that contains more than one unit"
 msgstr ""
 "Enter the number of units for a symbol that contains more than one unit"
 
-msgid "All units are interchangeable"
-msgstr "All units are interchangeable"
-
-msgid ""
-"Check this option when all symbol units are identical except\n"
-"for pin numbers."
-msgstr ""
-"Check this option when all symbol units are identical except\n"
-"for pin numbers."
-
 msgid "Pin Text Options"
 msgstr "Pin Text Options"
 
@@ -6410,9 +6416,6 @@ msgstr "Library Symbol Properties"
 
 msgid "Text can not be empty."
 msgstr "Text can not be empty."
-
-msgid "Border"
-msgstr "Border"
 
 msgid "Style:"
 msgstr "Style:"
@@ -7126,9 +7129,6 @@ msgstr "Hierarchical path: "
 
 msgid "Style"
 msgstr "Style"
-
-msgid "Border width:"
-msgstr "Border width:"
 
 msgid "Border color:"
 msgstr "Border color:"
@@ -8405,6 +8405,12 @@ msgid ""
 msgstr ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
+
+msgid "Remove Invalid Cells"
+msgstr "Remove Invalid Cells"
+
+msgid "Cancel Table Update"
+msgstr "Cancel Table Update"
 
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'"
@@ -13721,9 +13727,6 @@ msgstr "Layout"
 msgid "Size: %.1fx%.1fmm"
 msgstr "Size: %.1fx%.1fmm"
 
-msgid "Count"
-msgstr "Count"
-
 msgid "Y start:"
 msgstr "Y start:"
 
@@ -15694,6 +15697,9 @@ msgstr ""
 "\n"
 "%d %s UUID: [%s], X, Y: %s, Rounded X, Y, %s"
 
+msgid "Selected options resulted in errors! Change them and try again."
+msgstr "Selected options resulted in errors! Change them and try again."
+
 #, c-format
 msgid ""
 "\n"
@@ -15716,6 +15722,9 @@ msgstr ""
 
 msgid "Reannotate anyway?"
 msgstr "Reannotate anyway?"
+
+msgid "Duplicate instances of "
+msgstr "Duplicate instances of "
 
 msgid "Aborted: too many errors"
 msgstr "Aborted: too many errors"
@@ -18221,6 +18230,10 @@ msgstr "Ring"
 msgid "Center:"
 msgstr "Center:"
 
+#, c-format
+msgid "Corner %d"
+msgstr "Corner %d"
+
 msgid "Polygon must have at least 3 corners"
 msgstr "Polygon must have at least 3 corners"
 
@@ -18285,6 +18298,9 @@ msgstr "radius"
 #, c-format
 msgid "corners count %d"
 msgstr "corners count %d"
+
+msgid "Unknown primitive"
+msgstr "Unknown primitive"
 
 msgid "All copper layers"
 msgstr "All copper layers"
@@ -19275,6 +19291,10 @@ msgstr "Reference location: local coordinates origin"
 
 msgid "<none selected>"
 msgstr "<none selected>"
+
+#, c-format
+msgid "Reference item: %s"
+msgstr "Reference item: %s"
 
 msgid "Reference item: <none selected>"
 msgstr "Reference item: <none selected>"
@@ -21289,6 +21309,18 @@ msgstr "Checking %s clearance: %s."
 
 msgid "undefined"
 msgstr "undefined"
+
+msgid "track width"
+msgstr "track width"
+
+msgid "annular width"
+msgstr "annular width"
+
+msgid "via diameter"
+msgstr "via diameter"
+
+msgid "constraint"
+msgstr "constraint"
 
 #, c-format
 msgid "Checking %s %s: %s."
@@ -23312,6 +23344,9 @@ msgstr "Via %s on %s"
 msgid "removed annular ring"
 msgstr "removed annular ring"
 
+msgid "Track (arc)"
+msgstr "Track (arc)"
+
 msgid "Segment Length"
 msgstr "Segment Length"
 
@@ -23404,6 +23439,9 @@ msgstr ""
 "Altium layer (%d) has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
 
+msgid "Open cancelled by user."
+msgstr "Open cancelled by user."
+
 #, c-format
 msgid "'%s' was not parsed correctly."
 msgstr "'%s' was not parsed correctly."
@@ -23416,9 +23454,21 @@ msgstr "'%s' was not fully parsed."
 msgid "Record of unknown type: '%d'."
 msgstr "Record of unknown type: '%d'."
 
+msgid "Loading board data..."
+msgstr "Loading board data..."
+
+msgid "Loading netclasses..."
+msgstr "Loading netclasses..."
+
 #, c-format
 msgid "Duplicate netclass name '%s'."
 msgstr "Duplicate netclass name '%s'."
+
+msgid "Loading components..."
+msgstr "Loading components..."
+
+msgid "Loading component 3D models..."
+msgstr "Loading component 3D models..."
 
 #, c-format
 msgid ""
@@ -23427,6 +23477,9 @@ msgid ""
 msgstr ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
+
+msgid "Loading dimension drawings..."
+msgstr "Loading dimension drawings..."
 
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
@@ -23660,6 +23713,10 @@ msgstr ""
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "The CADSTAR pad definition '%s' has import errors: %s"
+
+#, c-format
+msgid "Unable to find pad index '%d' in footprint '%s'."
+msgstr "Unable to find pad index '%d' in footprint '%s'."
 
 #, c-format
 msgid "Unable to find group ID %s in the group definitions."
@@ -24256,9 +24313,6 @@ msgstr "unknown via type %d"
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "unknown zone corner smoothing type %d"
-
-msgid "Open cancelled by user."
-msgstr "Open cancelled by user."
 
 msgid "This file does not contain a PCB."
 msgstr "This file does not contain a PCB."
@@ -25116,8 +25170,8 @@ msgid "Resolved thermal spoke width: %s."
 msgstr "Resolved thermal spoke width: %s."
 
 #, c-format
-msgid "Minimum thermal spoke count: %s."
-msgstr "Minimum thermal spoke count: %s."
+msgid "Minimum thermal spoke count: %d."
+msgstr "Minimum thermal spoke count: %d."
 
 msgid "Items are not connected.  No thermal spokes will be generated."
 msgstr "Items are not connected.  No thermal spokes will be generated."
@@ -27360,6 +27414,27 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Units are not interchangeable"
+#~ msgstr "Units are not interchangeable"
+
+#~ msgid ""
+#~ "Check this option to allow symbols with multiple units to have different\n"
+#~ "elements.  Uncheck this option when all symbol units are identical "
+#~ "except\n"
+#~ "for pin numbers."
+#~ msgstr ""
+#~ "Check this option to allow symbols with multiple units to have different\n"
+#~ "elements.  Uncheck this option when all symbol units are identical "
+#~ "except\n"
+#~ "for pin numbers."
+
+#~ msgid "Set width to 0 to use Schematic default symbol line width."
+#~ msgstr "Set width to 0 to use Schematic default symbol line width."
+
+#, c-format
+#~ msgid "Minimum thermal spoke count: %s."
+#~ msgstr "Minimum thermal spoke count: %s."
 
 #~ msgid "Net Class Flag"
 #~ msgstr "Net Class Flag"
