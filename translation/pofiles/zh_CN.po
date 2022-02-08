@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-07 17:47-0800\n"
-"PO-Revision-Date: 2022-02-05 15:45+0000\n"
+"PO-Revision-Date: 2022-02-14 17:24+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -4747,7 +4747,7 @@ msgstr "删除"
 
 #: common/grid_tricks.cpp:284
 msgid "Delete selected cells"
-msgstr "删除所选槽"
+msgstr "删除所选单元格"
 
 #: common/grid_tricks.cpp:285 common/tool/actions.cpp:171
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -9174,7 +9174,7 @@ msgstr "名称文本尺寸"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:593
 msgid "ALL"
-msgstr ""
+msgstr "全部"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:633
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:55
@@ -9233,14 +9233,12 @@ msgid "0"
 msgstr "0"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:119
-#, fuzzy
 msgid "Pin count:"
-msgstr "引脚数"
+msgstr "引脚数："
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:133
-#, fuzzy
 msgid "Duplicate pins:"
-msgstr "重复的封装"
+msgstr "重复的引脚："
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:74
 msgid "Pin Table"
@@ -9364,9 +9362,8 @@ msgid "Border width:"
 msgstr "边框宽度："
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:52
-#, fuzzy
 msgid "Set border width to 0 to use Schematic default symbol line width."
-msgstr "将宽度设为 0 以使用原理图默认符号行宽度。"
+msgstr "将边框宽度设为 0 以使用原理图默认符号行宽。"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:60
 msgid "Fill Style"
@@ -12470,15 +12467,13 @@ msgstr "空单元格将导致从表格中删除无效的所有行。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:550
-#, fuzzy
 msgid "Remove Invalid Cells"
-msgstr "删除项目"
+msgstr "删除无效槽"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:551
-#, fuzzy
 msgid "Cancel Table Update"
-msgstr "间隙孔直径："
+msgstr "取消表更新"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
@@ -22107,7 +22102,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:596
 msgid "Selected options resulted in errors! Change them and try again."
-msgstr ""
+msgstr "所选的选项导致错误！请更改它们，并再试一次。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:603
 #, c-format
@@ -22135,9 +22130,8 @@ msgid "Reannotate anyway?"
 msgstr "无论如何都要重新批注吗？"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:802
-#, fuzzy
 msgid "Duplicate instances of "
-msgstr "重复项目 %s%s\n"
+msgstr "重复实例 "
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
 msgid "Aborted: too many errors"
@@ -25583,9 +25577,9 @@ msgid "Center:"
 msgstr "圆心："
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid "Corner %d"
-msgstr "圆角半径："
+msgstr "角 %d"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:341
 msgid "Polygon must have at least 3 corners"
@@ -25679,9 +25673,8 @@ msgid "corners count %d"
 msgstr "拐角计数 %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:740
-#, fuzzy
 msgid "Unknown primitive"
-msgstr "转换图元"
+msgstr "未知的基本元素"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:929
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
@@ -26921,9 +26914,9 @@ msgid "<none selected>"
 msgstr "<选择>"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:255
-#, fuzzy, c-format
+#, c-format
 msgid "Reference item: %s"
-msgstr "位号 '%s'"
+msgstr "参照项：%s"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -29607,24 +29600,20 @@ msgid "undefined"
 msgstr "未定义"
 
 #: pcbnew/drc/drc_engine.cpp:921
-#, fuzzy
 msgid "track width"
-msgstr "布线宽度"
+msgstr "导线宽度"
 
 #: pcbnew/drc/drc_engine.cpp:922
-#, fuzzy
 msgid "annular width"
 msgstr "环形宽度"
 
 #: pcbnew/drc/drc_engine.cpp:923
-#, fuzzy
 msgid "via diameter"
-msgstr "过孔外径"
+msgstr "过孔直径"
 
 #: pcbnew/drc/drc_engine.cpp:924
-#, fuzzy
 msgid "constraint"
-msgstr "无约束"
+msgstr "约束"
 
 #: pcbnew/drc/drc_engine.cpp:927
 #, c-format
@@ -32273,9 +32262,8 @@ msgid "removed annular ring"
 msgstr "移除通孔环"
 
 #: pcbnew/pcb_track.cpp:694
-#, fuzzy
 msgid "Track (arc)"
-msgstr "布线间距"
+msgstr "导线 （圆弧）"
 
 #: pcbnew/pcb_track.cpp:709
 msgid "Segment Length"
@@ -32421,14 +32409,12 @@ msgid "Record of unknown type: '%d'."
 msgstr "未知类型的记录：\"%d\"。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:854
-#, fuzzy
 msgid "Loading board data..."
-msgstr "正载入板区域..."
+msgstr "正加载板数据..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1037
-#, fuzzy
 msgid "Loading netclasses..."
-msgstr "载入网中..."
+msgstr "正在加载网络类..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1059
 #, c-format
@@ -32436,14 +32422,12 @@ msgid "Duplicate netclass name '%s'."
 msgstr "重复的网络类名 \"%s\"。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1074
-#, fuzzy
 msgid "Loading components..."
-msgstr "载入网中..."
+msgstr "正在加载元件..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1132
-#, fuzzy
 msgid "Loading component 3D models..."
-msgstr "正载入 3D 模型…"
+msgstr "正在加载元件 3D 模型…"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1210
 #: pcbnew/plugins/altium/altium_pcb.cpp:1302
@@ -32459,9 +32443,8 @@ msgstr ""
 "Eco1_User。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1502
-#, fuzzy
 msgid "Loading dimension drawings..."
-msgstr "正在加载 unicode 字符串……"
+msgstr "正在加载尺寸绘图…"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1523
 #: pcbnew/plugins/altium/altium_pcb.cpp:1530
@@ -32733,9 +32716,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "CADSTAR 焊盘定义 '%s' 有导入错误：%s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1257
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
-msgstr "无法为 '%s' 找到一款 PDF 查看器。"
+msgstr "无法找到焊盘索引 \"%d\"，查找范围为封装 \"%s\"。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1290
 #, c-format
@@ -34548,9 +34531,9 @@ msgid "Resolved thermal spoke width: %s."
 msgstr "已解决的防散热辐条宽度：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid "Minimum thermal spoke count: %d."
-msgstr "最小辐条 (散热) 数目：%s。"
+msgstr "最小辐条 (散热) 数：%d。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:430
 msgid "Items are not connected.  No thermal spokes will be generated."
