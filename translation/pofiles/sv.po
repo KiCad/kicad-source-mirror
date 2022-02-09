@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-07 17:47-0800\n"
-"PO-Revision-Date: 2022-02-08 01:46+0000\n"
+"PO-Revision-Date: 2022-02-14 17:24+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -329,14 +329,12 @@ msgid "Can't save file"
 msgstr "Kan inte spara fil"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:43
-#, fuzzy
 msgid "Center pivot rotation"
-msgstr "Mittpunkt vridrotation"
+msgstr "Mittpunkt för rotation"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:43
-#, fuzzy
 msgid "Center pivot rotation (middle mouse click)"
-msgstr "Mittpunkt vridrotation (mitten musklick)"
+msgstr "Mittpunkt för rotation (mittre musklick)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
 msgid "Rotate X Clockwise"
@@ -1596,9 +1594,8 @@ msgid "GNU General Public License (GPL) version 3 or any later version"
 msgstr "GNU General Public License (GPL) version 3 eller någon senare version"
 
 #: common/dialog_about/AboutDialog_main.cpp:208
-#, fuzzy
 msgid "Lead Development Team"
-msgstr "Led utvecklingsteam"
+msgstr "Ledande utvecklingsteam"
 
 #: common/dialog_about/AboutDialog_main.cpp:209
 msgid "Lead Development Alumni"
@@ -2289,11 +2286,11 @@ msgstr "Hur vill du konfigurera KiCad?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
 msgid "Import settings from a previous version at:"
-msgstr "Importera inställningar från en tidigare version på:"
+msgstr "Importera inställningar från en tidigare version i:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 msgid "Choose a different path"
-msgstr "Välj en annan väg"
+msgstr "Välj en annan sökväg"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
@@ -2345,39 +2342,39 @@ msgstr "A0 841x1189mm"
 
 #: common/dialogs/dialog_page_settings.cpp:63
 msgid "A 8.5x11in"
-msgstr "En 8,5x11in"
+msgstr "A 8,5x11 tum"
 
 #: common/dialogs/dialog_page_settings.cpp:64
 msgid "B 11x17in"
-msgstr "B 11x17in"
+msgstr "B 11x17 tum"
 
 #: common/dialogs/dialog_page_settings.cpp:65
 msgid "C 17x22in"
-msgstr "C 17x22in"
+msgstr "C 17x22 tum"
 
 #: common/dialogs/dialog_page_settings.cpp:66
 msgid "D 22x34in"
-msgstr "D 22x34in"
+msgstr "D 22x34 tum"
 
 #: common/dialogs/dialog_page_settings.cpp:67
 msgid "E 34x44in"
-msgstr "E 34x44in"
+msgstr "E 34x44 tum"
 
 #: common/dialogs/dialog_page_settings.cpp:68
 msgid "USLetter 8.5x11in"
-msgstr "USLetter 8,5x11in"
+msgstr "USLetter 8,5x11 tum"
 
 #: common/dialogs/dialog_page_settings.cpp:69
 msgid "USLegal 8.5x14in"
-msgstr "USLegal 8,5x14in"
+msgstr "USLegal 8,5x14 tum"
 
 #: common/dialogs/dialog_page_settings.cpp:70
 msgid "USLedger 11x17in"
-msgstr "USLedger 11x17in"
+msgstr "USLedger 11x17 tum"
 
 #: common/dialogs/dialog_page_settings.cpp:71
 msgid "User (Custom)"
-msgstr "Användare (anpassad)"
+msgstr "Användaranpassad"
 
 #: common/dialogs/dialog_page_settings.cpp:103
 msgid "Preview Settings"
@@ -2426,7 +2423,7 @@ msgstr "Välj Ritningsbladsfil"
 
 #: common/dialogs/dialog_page_settings_base.cpp:36
 msgid "dummy text"
-msgstr "dummy text"
+msgstr "exempeltext"
 
 #: common/dialogs/dialog_page_settings_base.cpp:45
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:213
@@ -2670,7 +2667,7 @@ msgstr "Rensa referensbeteckningarna på alla inklistrade symboler"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
-msgstr "Klistra in alternativ"
+msgstr "Alternativ för Klistra in"
 
 #: common/dialogs/dialog_paste_special_base.h:48
 msgid "Paste Special"
@@ -2719,7 +2716,7 @@ msgstr "Stäng"
 
 #: common/dialogs/dialog_print_generic.cpp:105
 msgid "Warning: Bad scale number"
-msgstr "Varning: Dåligt skalningsnummer"
+msgstr "Varning: Ogiltigt värde för skala"
 
 #: common/dialogs/dialog_print_generic.cpp:114
 #, c-format
@@ -2728,7 +2725,7 @@ msgid ""
 " Clamped to %f"
 msgstr ""
 "Varning: Skalalternativet är inställt på ett mycket stort värde.\n"
-" Fästs till %f"
+" Begränsat till %f"
 
 #: common/dialogs/dialog_print_generic.cpp:122
 #, c-format
@@ -2737,12 +2734,12 @@ msgid ""
 " Clamped to %f"
 msgstr ""
 "Varning: Skalalternativet är inställt på ett mycket litet värde.\n"
-" Fästs till %f"
+" Begränsat till %f"
 
 #: common/dialogs/dialog_print_generic.cpp:192
 #: common/dialogs/dialog_print_generic.cpp:239
 msgid "Nothing to print"
-msgstr "Ingenting att skriva ut"
+msgstr "Inget att skriva ut"
 
 #: common/dialogs/dialog_print_generic.cpp:230
 #: eeschema/dialogs/dialog_print_using_printer.cpp:306
@@ -2775,7 +2772,7 @@ msgstr "Inställningar"
 #: common/dialogs/dialog_print_generic_base.cpp:31
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:72
 msgid "Output mode:"
-msgstr "Utmatningsläge:"
+msgstr "Utskriftsläge:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:35
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
@@ -2864,7 +2861,7 @@ msgstr "Temat finns redan!"
 #: common/dialogs/panel_color_settings.cpp:211
 #: common/dialogs/panel_color_settings.cpp:233
 msgid "New Theme..."
-msgstr "Nytt Tema ..."
+msgstr "Nytt Tema..."
 
 #: common/dialogs/panel_color_settings.cpp:221
 msgid "(read-only)"
@@ -13789,12 +13786,11 @@ msgid "Insert Schematic Sheet Content..."
 msgstr "Lägg till innehåll från kretsschema-ark..."
 
 #: eeschema/menubar.cpp:94
-#, fuzzy
 msgid ""
 "Append schematic sheet content from another project to the current sheet"
 msgstr ""
-"Lägg till kretsschema-arkinnehåll från ett annat projekt till det aktuella "
-"arket"
+"Lägg till innehåll från ett kretsschema-ark i ett annat projekt, till det "
+"aktuella arket"
 
 #: eeschema/menubar.cpp:102 pcbnew/menubar_footprint_editor.cpp:65
 #: pcbnew/menubar_pcb_editor.cpp:107
@@ -17345,9 +17341,8 @@ msgid "Moves the selected item(s)"
 msgstr "Flyttar markerade objekt"
 
 #: eeschema/tools/ee_actions.cpp:789 pcbnew/tools/edit_tool.cpp:1063
-#, fuzzy
 msgid "Drag"
-msgstr "Drag"
+msgstr "Dra"
 
 #: eeschema/tools/ee_actions.cpp:789
 msgid "Drags the selected item(s)"
@@ -22956,9 +22951,8 @@ msgstr "Främre prefix:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:244
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:249
-#, fuzzy
 msgid "Optional prefix for component side reference designations (e.g. F_)"
-msgstr "Valfritt prefix för komponentsidans referensbeteckningar (tex. F_)"
+msgstr "Valfritt prefix för komponentsidans referensbeteckningar (t.ex. F_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
 msgid "Back prefix:"
@@ -22966,9 +22960,8 @@ msgstr "Tillbaka prefix:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:255
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:260
-#, fuzzy
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
-msgstr "Valfritt prefix för lödsidans referensbeteckningar (tex. B_)"
+msgstr "Valfritt prefix för lödsidans referensbeteckningar (t.ex. B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
 msgid "Exclude locked footprints"
@@ -28256,7 +28249,7 @@ msgstr "Visa när du drar ledare"
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 #, fuzzy
 msgid "Show when routing w/ via clearance at end"
-msgstr "Visa under ledardragning med via-avstånd i slutet"
+msgstr "Visa under ledardragning med utrymme för via i slutet"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show when routing and editing"
@@ -35305,9 +35298,8 @@ msgstr "Rensningsrapport"
 
 #: pcbnew/tools/board_inspection_tool.cpp:227
 #: pcbnew/tools/board_inspection_tool.cpp:599
-#, fuzzy
 msgid "Edge clearance resolution for:"
-msgstr "Tar reda på avstånd till kortkant för:"
+msgstr "Tar reda på avstånd till mönsterkortets kant för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:237
 #: pcbnew/tools/board_inspection_tool.cpp:279
@@ -36722,7 +36714,6 @@ msgid "Open schematic in Eeschema"
 msgstr "Öppet schema i Eeschema"
 
 #: pcbnew/tools/pcb_actions.cpp:788 pcbnew/tools/pcb_actions.cpp:780
-#, fuzzy
 msgid "Local Ratsnest"
 msgstr "Lokala nätlinjer"
 
