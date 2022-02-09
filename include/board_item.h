@@ -147,7 +147,7 @@ public:
     virtual LSET GetLayerSet() const { return LSET( m_layer ); }
     virtual void SetLayerSet( LSET aLayers )
     {
-        wxFAIL_MSG( "Attempted to SetLayerSet() on a single-layer object." );
+        wxFAIL_MSG( wxT( "Attempted to SetLayerSet() on a single-layer object." ) );
 
         // Derived classes which support multiple layers must implement this
     }
@@ -231,7 +231,7 @@ public:
      */
     virtual void Move( const wxPoint& aMoveVector )
     {
-        wxFAIL_MSG( "virtual BOARD_ITEM::Move called for " + GetClass() );
+        wxFAIL_MSG( wxT( "virtual BOARD_ITEM::Move called for " ) + GetClass() );
     }
 
     void Move( const VECTOR2I& aMoveVector )

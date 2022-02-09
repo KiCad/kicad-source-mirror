@@ -266,7 +266,7 @@ public:
     {
         if( ( aType < FIRST_TYPE ) || ( aType > LAST_TYPE ) )
         {
-            wxFAIL_MSG( "Attempted access to type not within MULTIVECTOR" );
+            wxFAIL_MSG( wxT( "Attempted access to type not within MULTIVECTOR" ) );
 
             // return type is a reference so we have to return something...
             aType = FIRST_TYPE;
@@ -279,7 +279,7 @@ public:
     {
         if( ( aType < FIRST_TYPE ) || ( aType > LAST_TYPE ) )
         {
-            wxFAIL_MSG( "Attempted access to type not within MULTIVECTOR" );
+            wxFAIL_MSG( wxT( "Attempted access to type not within MULTIVECTOR" ) );
 
             // return type is a reference so we have to return something...
             aType = FIRST_TYPE;

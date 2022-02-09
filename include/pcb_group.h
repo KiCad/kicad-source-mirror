@@ -121,7 +121,7 @@ public:
     ///< @copydoc BOARD_ITEM::SetLayer
     void SetLayer( PCB_LAYER_ID aLayer ) override
     {
-        wxFAIL_MSG( "groups don't support layer SetLayer" );
+        wxFAIL_MSG( wxT( "groups don't support layer SetLayer" ) );
     }
 
     /** Set layer for all items within the group.

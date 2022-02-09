@@ -118,6 +118,6 @@ static inline wxString FROM_UTF8( const char* cstring )
 }
 
 #define UNIMPLEMENTED_FOR( type ) \
-        wxFAIL_MSG( wxString::Format( "%s: unimplemented for %s", __FUNCTION__, type ) )
+        wxFAIL_MSG( wxString::Format( wxT( "%s: unimplemented for %s" ), __FUNCTION__, type ) )
 
 #endif // MACROS_H

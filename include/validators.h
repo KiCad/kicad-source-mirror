@@ -179,7 +179,7 @@ public:
     LIB_ID_VALIDATOR( wxString* aValue = nullptr ) :
         wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, aValue )
     {
-        SetCharExcludes( "\r\n\t" );
+        SetCharExcludes( wxT( "\r\n\t" ) );
     }
 
     virtual wxObject* Clone() const override
