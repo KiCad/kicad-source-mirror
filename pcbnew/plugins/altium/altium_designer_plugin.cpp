@@ -84,6 +84,7 @@ BOARD* ALTIUM_DESIGNER_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendTo
             { ALTIUM_PCB_DIR::COMPONENTS6, "Components6\\" },
             { ALTIUM_PCB_DIR::COMPONENTBODIES6, "ComponentBodies6\\" },
             { ALTIUM_PCB_DIR::DIMENSIONS6, "Dimensions6\\" },
+            { ALTIUM_PCB_DIR::EXTENDPRIMITIVEINFORMATION, "ExtendedPrimitiveInformation\\" },
             { ALTIUM_PCB_DIR::FILLS6, "Fills6\\" },
             { ALTIUM_PCB_DIR::MODELS, "Models\\" },
             { ALTIUM_PCB_DIR::NETS6, "Nets6\\" },

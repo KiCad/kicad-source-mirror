@@ -49,6 +49,7 @@ set( QA_PCBNEW_SRCS
     drc/test_solder_mask_bridging.cpp
 
     plugins/altium/test_altium_rule_transformer.cpp
+    plugins/altium/test_altium_pcblib_import.cpp
 
     group_saveload.cpp
 )
