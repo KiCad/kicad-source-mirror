@@ -291,7 +291,7 @@ public:
     {
         INVOCATION_ARGS args{ INVOCATION_ARGS::FROM_ROUTINE, this, aCor.m_callContext };
 
-        wxLogTrace( kicadTraceCoroutineStack, "COROUTINE::Call (from routine)" );
+        wxLogTrace( kicadTraceCoroutineStack, wxT( "COROUTINE::Call (from routine)" ) );
 
         doCall( &args, aArg );
         // we will not be asked to continue
@@ -318,7 +318,7 @@ public:
         m_caller.own_tsan_fiber = false;
 #endif
 
-        wxLogTrace( kicadTraceCoroutineStack, "COROUTINE::Resume (from root)" );
+        wxLogTrace( kicadTraceCoroutineStack, wxT( "COROUTINE::Resume (from root)" ) );
 
         ctx.Continue( doResume( &args ) );
 
@@ -337,7 +337,7 @@ public:
     {
         INVOCATION_ARGS args{ INVOCATION_ARGS::FROM_ROUTINE, this, aCor.m_callContext };
 
-        wxLogTrace( kicadTraceCoroutineStack, "COROUTINE::Resume (from routine)" );
+        wxLogTrace( kicadTraceCoroutineStack, wxT( "COROUTINE::Resume (from routine)" ) );
 
         doResume( &args );
         // we will not be asked to continue
@@ -398,7 +398,7 @@ private:
         __tsan_set_fiber_name( m_callee.tsan_fiber, "Coroutine fiber" );
 #endif
 
-        wxLogTrace( kicadTraceCoroutineStack, "COROUTINE::doCall" );
+        wxLogTrace( kicadTraceCoroutineStack, wxT( "COROUTINE::doCall" ) );
 
         m_callee.ctx = libcontext::make_fcontext( sp, stackSize, callerStub );
         m_running = true;
@@ -439,7 +439,7 @@ private:
         __tsan_switch_to_fiber( m_callee.tsan_fiber, 0 );
 #endif
 
-        wxLogTrace( kicadTraceCoroutineStack, "COROUTINE::jumpIn" );
+        wxLogTrace( kicadTraceCoroutineStack, wxT( "COROUTINE::jumpIn" ) );
 
         args = reinterpret_cast<INVOCATION_ARGS*>(
             libcontext::jump_fcontext( &( m_caller.ctx ), m_callee.ctx,
@@ -459,7 +459,7 @@ private:
         __tsan_switch_to_fiber( m_caller.tsan_fiber, 0 );
 #endif
 
-        wxLogTrace( kicadTraceCoroutineStack, "COROUTINE::jumpOut" );
+        wxLogTrace( kicadTraceCoroutineStack, wxT( "COROUTINE::jumpOut" ) );
 
         ret = reinterpret_cast<INVOCATION_ARGS*>(
             libcontext::jump_fcontext( &( m_callee.ctx ), m_caller.ctx,

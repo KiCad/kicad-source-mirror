@@ -198,7 +198,7 @@ public:
             return;
         }
 
-        if( !aName || aName->IsEmpty() || *aName == ".CN" )
+        if( !aName || aName->IsEmpty() || *aName == wxT( ".CN" ) )
         {
             m_NetAttribType = GBR_NETINFO_UNSPECIFIED;
             m_Padname.clear();
@@ -208,21 +208,21 @@ public:
             return;
         }
 
-        if( *aName == ".C" )
+        if( *aName == wxT( ".C" ) )
         {
             m_NetAttribType &= ~GBR_NETINFO_CMP;
             m_Cmpref.clear();
             return;
         }
 
-        if( *aName == ".N" )
+        if( *aName == wxT( ".N" ) )
         {
             m_NetAttribType &= ~GBR_NETINFO_NET;
             m_Netname.clear();
             return;
         }
 
-        if( *aName == ".P" )
+        if( *aName == wxT( ".P" ) )
         {
             m_NetAttribType &= ~GBR_NETINFO_PAD;
             m_Padname.clear();

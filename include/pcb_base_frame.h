@@ -161,7 +161,7 @@ public:
      */
     virtual COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const override
     {
-        wxFAIL_MSG( "Color settings requested for a PCB_BASE_FRAME that does not override!" );
+        wxFAIL_MSG( wxT( "Color settings requested for a PCB_BASE_FRAME that does not override!" ) );
         return nullptr;
     }
 

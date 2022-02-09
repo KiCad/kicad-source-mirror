@@ -394,7 +394,7 @@ public:
         if ( std::is_enum<T>::value )
         {
             m_choices = ENUM_MAP<T>::Instance().Choices();
-            wxASSERT_MSG( m_choices.GetCount() > 0, "No enum choices defined" );
+            wxASSERT_MSG( m_choices.GetCount() > 0, wxT( "No enum choices defined" ) );
         }
     }
 
@@ -408,7 +408,7 @@ public:
         if ( std::is_enum<T>::value )
         {
             m_choices = ENUM_MAP<T>::Instance().Choices();
-            wxASSERT_MSG( m_choices.GetCount() > 0, "No enum choices defined" );
+            wxASSERT_MSG( m_choices.GetCount() > 0, wxT( "No enum choices defined" ) );
         }
     }
 
