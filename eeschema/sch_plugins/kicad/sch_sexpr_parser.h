@@ -49,6 +49,7 @@ class SCH_BITMAP;
 class SCH_BUS_WIRE_ENTRY;
 class SCH_SYMBOL;
 class SCH_FIELD;
+class SCH_ITEM;
 class SCH_SHAPE;
 class SCH_JUNCTION;
 class SCH_LINE;

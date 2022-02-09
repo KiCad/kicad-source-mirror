@@ -247,6 +247,7 @@ set( EESCHEMA_SRCS
 
     sch_plugins/sch_lib_plugin_cache.cpp
     sch_plugins/eagle/sch_eagle_plugin.cpp
+    sch_plugins/kicad/sch_sexpr_lib_plugin_cache.cpp
     sch_plugins/kicad/sch_sexpr_plugin_common.cpp
     sch_plugins/kicad/sch_sexpr_parser.cpp
     sch_plugins/kicad/sch_sexpr_plugin.cpp
