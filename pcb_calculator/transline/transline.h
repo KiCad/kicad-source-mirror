@@ -88,8 +88,8 @@ public:
 
     void getProperties();
     void checkProperties();
-    void setResult( int, double, const char* );
-    void setResult( int, const char* );
+    void setResult( int, const wxString& );
+    void setResult( int, double, const wxString& );
     bool isSelected( enum PRMS_ID aPrmId );
 
     void         Init();

@@ -129,23 +129,23 @@ void PANEL_VIA_SIZE::OnViaResetButtonClick( wxCommandEvent& event )
     #define DEFAULT_UNIT_SEL_MM 0
     #define DEFAULT_UNIT_SEL_OHM 0
 
-    m_textCtrlHoleDia->SetValue( wxString::Format( "%g", 0.4 ) );
+    m_textCtrlHoleDia->SetValue( wxString::Format( wxT( "%g" ), 0.4 ) );
     m_choiceHoleDia->SetSelection( DEFAULT_UNIT_SEL_MM );
-    m_textCtrlPlatingThickness->SetValue( wxString::Format( "%g", 0.035 ) );
+    m_textCtrlPlatingThickness->SetValue( wxString::Format( wxT( "%g" ), 0.035 ) );
     m_choicePlatingThickness->SetSelection( DEFAULT_UNIT_SEL_MM );
-    m_textCtrlViaLength->SetValue( wxString::Format( "%g", 1.6 ) );
+    m_textCtrlViaLength->SetValue( wxString::Format( wxT( "%g" ), 1.6 ) );
     m_choiceViaLength->SetSelection( DEFAULT_UNIT_SEL_MM );
-    m_textCtrlViaPadDia->SetValue( wxString::Format( "%g", 0.6 ) );
+    m_textCtrlViaPadDia->SetValue( wxString::Format( wxT( "%g" ), 0.6 ) );
     m_choiceViaPadDia->SetSelection( DEFAULT_UNIT_SEL_MM );
-    m_textCtrlClearanceDia->SetValue( wxString::Format( "%g", 1.0 ) );
+    m_textCtrlClearanceDia->SetValue( wxString::Format( wxT( "%g" ), 1.0 ) );
     m_choiceClearanceDia->SetSelection( DEFAULT_UNIT_SEL_MM );
-    m_textCtrlImpedance->SetValue( wxString::Format( "%g", 50.0 ) );
+    m_textCtrlImpedance->SetValue( wxString::Format( wxT( "%g" ), 50.0 ) );
     m_choiceImpedance->SetSelection( DEFAULT_UNIT_SEL_OHM );
-    m_textCtrlAppliedCurrent->SetValue( wxString::Format( "%g", 1.0 ) );
-    m_textCtrlPlatingResistivity->SetValue( wxString::Format( "%g", 1.72e-8 ) );
-    m_textCtrlPlatingPermittivity->SetValue( wxString::Format( "%g", 4.5 ) );
-    m_textCtrlTemperatureDiff->SetValue( wxString::Format( "%g", 10.0 ) );
-    m_textCtrlRiseTime->SetValue( wxString::Format( "%g", 1.0 ) );
+    m_textCtrlAppliedCurrent->SetValue( wxString::Format( wxT( "%g" ), 1.0 ) );
+    m_textCtrlPlatingResistivity->SetValue( wxString::Format( wxT( "%g" ), 1.72e-8 ) );
+    m_textCtrlPlatingPermittivity->SetValue( wxString::Format( wxT( "%g" ), 4.5 ) );
+    m_textCtrlTemperatureDiff->SetValue( wxString::Format( wxT( "%g" ), 10.0 ) );
+    m_textCtrlRiseTime->SetValue( wxString::Format( wxT( "%g" ), 1.0 ) );
 }
 
 
@@ -272,30 +272,30 @@ void PANEL_VIA_SIZE::VSDisplayValues( double aViaResistance, double aVoltageDrop
 {
     wxString msg;
 
-    msg.Printf( "%g", aViaResistance );
+    msg.Printf( wxT( "%g" ), aViaResistance );
     m_ViaResistance->SetLabel( msg );
 
-    msg.Printf( "%g", aVoltageDrop );
+    msg.Printf( wxT( "%g" ), aVoltageDrop );
     m_ViaVoltageDrop->SetLabel( msg );
 
-    msg.Printf( "%g", aPowerLoss );
+    msg.Printf( wxT( "%g" ), aPowerLoss );
     m_ViaPowerLoss->SetLabel( msg );
 
-    msg.Printf( "%g", aEstimatedAmpacity );
+    msg.Printf( wxT( "%g" ), aEstimatedAmpacity );
     m_ViaAmpacity->SetLabel( msg );
 
-    msg.Printf( "%g", aThermalResistance );
+    msg.Printf( wxT( "%g" ), aThermalResistance );
     m_ViaThermalResistance->SetLabel( msg );
 
-    msg.Printf( "%g", aCapacitance );
+    msg.Printf( wxT( "%g" ), aCapacitance );
     m_ViaCapacitance->SetLabel( msg );
 
-    msg.Printf( "%g", aTimeDegradation );
+    msg.Printf( wxT( "%g" ), aTimeDegradation );
     m_RiseTimeOutput->SetLabel( msg );
 
-    msg.Printf( "%g", aInductance );
+    msg.Printf( wxT( "%g" ), aInductance );
     m_Inductance->SetLabel( msg );
 
-    msg.Printf( "%g", aReactance );
+    msg.Printf( wxT( "%g" ), aReactance );
     m_Reactance->SetLabel( msg );
 }

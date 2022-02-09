@@ -100,22 +100,21 @@ void SetPropertyBgColorInDialog( enum PRMS_ID aPrmId, const KIGFX::COLOR4D* aCol
     getTranslinePanel()->SetPrmBgColor( aPrmId, aCol );
 }
 
+
 /* Puts the text into the given result line.
 */
-void SetResultInDialog( int line, const char* aText )
+void SetResultInDialog( int line, const wxString& aText )
 {
-    wxString msg   = wxString::FromUTF8( aText );
-    getTranslinePanel()->SetResult( line, msg );
+    getTranslinePanel()->SetResult( line, aText );
 }
 
 /* print aValue into the given result line.
 */
-void SetResultInDialog( int aLineNumber, double aValue, const char* aText )
+void SetResultInDialog( int aLineNumber, double aValue, const wxString& aText )
 {
-    wxString              msg   = wxString::FromUTF8( aText );
     wxString              fullmsg;
     fullmsg.Printf( wxT( "%g " ), aValue );
-    fullmsg += msg;
+    fullmsg += aText;
     getTranslinePanel()->SetResult( aLineNumber, fullmsg );
 }
 

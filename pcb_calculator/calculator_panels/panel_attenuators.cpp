@@ -186,7 +186,7 @@ void PANEL_ATTENUATORS::TransfAttenuatorDataToPanel()
 
     if( m_CurrAttenuator->m_FormulaName )
     {
-        if( m_CurrAttenuator->m_FormulaName->StartsWith( "<!" ) )
+        if( m_CurrAttenuator->m_FormulaName->StartsWith( wxT( "<!" ) ) )
         {
             m_panelAttFormula->SetPage( *m_CurrAttenuator->m_FormulaName );
         }

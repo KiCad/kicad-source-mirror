@@ -197,9 +197,9 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_Messages.Add( _( "Skin depth:" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_PRM,
-                                   "H", "H", _( "Height of substrate" ), 0.2, true ) );
+                                   "H", wxT( "H" ), _( "Height of substrate" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
-                                   "T", "T", _( "Strip thickness" ), 0.035, true ) );
+                                   "T", wxT( "T" ), _( "Strip thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
                                    "mu Rel C", wxString::Format( wxT( "μ(%s)" ),
                                                                  _( "conductor" ) ),
@@ -207,17 +207,17 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
                                    false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM,
-                                   "W", "W", _( "Line width" ), 0.2, true ) );
+                                   "W", wxT( "W" ), _( "Line width" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_S_PRM,
-                                   "S", "S", _( "Gap width" ), 0.2, true ) );
+                                   "S", wxT( "S" ), _( "Gap width" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_LEN_PRM,
-                                   "L", "L", _( "Line length" ), 50.0, true ) );
+                                   "L", wxT( "L" ), _( "Line length" ), 50.0, true ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_PRM,
-                                   "Z0", "Z0", _( "Characteristic impedance" ), 50.0, true ) );
+                                   "Z0", wxT( "Z0" ), _( "Characteristic impedance" ), 50.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, DUMMY_PRM ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, ANG_L_PRM,
-                                   "Ang_l", "Ang_l", _( "Electrical length" ), 0, true ) );
+                                   "Ang_l", wxT( "Ang_l" ), _( "Electrical length" ), 0, true ) );
         break;
 
 
@@ -244,17 +244,17 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
                                    false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM,
-                                   "a", "a", _( "Width of waveguide" ), 10.0, true ) );
+                                   "a", wxT( "a" ), _( "Width of waveguide" ), 10.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_S_PRM,
-                                   "b", "b", _( "Height of waveguide" ), 5.0, true ) );
+                                   "b", wxT( "b" ), _( "Height of waveguide" ), 5.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_LEN_PRM,
-                                   "L", "L", _( "Waveguide length" ), 50.0, true ) );
+                                   "L", wxT( "L" ), _( "Waveguide length" ), 50.0, true ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_PRM,
-                                   "Z0", "Z0", _( "Characteristic impedance" ), 50.0, true ) );
+                                   "Z0", wxT( "Z0" ), _( "Characteristic impedance" ), 50.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, DUMMY_PRM ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, ANG_L_PRM,
-                                   "Ang_l", "Ang_l", _( "Electrical length" ), 0, true ) );
+                                   "Ang_l", wxT( "Ang_l" ), _( "Electrical length" ), 0, true ) );
         break;
 
     case COAX_TYPE:      // coaxial cable
@@ -285,13 +285,13 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
                                    "Dout", _( "Dout" ),
                                    _( "Outer diameter (insulator)" ), 8.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_LEN_PRM,
-                                   "L", "L", _( "Line length" ), 50.0, true ) );
+                                   "L", wxT( "L" ), _( "Line length" ), 50.0, true ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_PRM,
-                                   "Z0", "Z0", _( "Characteristic impedance" ), 50.0, true ) );
+                                   "Z0", wxT( "Z0" ), _( "Characteristic impedance" ), 50.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, DUMMY_PRM ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, ANG_L_PRM,
-                                   "Ang_l", "Ang_l", _( "Electrical length" ), 0.0, true ) );
+                                   "Ang_l", wxT( "Ang_l" ), _( "Electrical length" ), 0.0, true ) );
         break;
 
     case C_MICROSTRIP_TYPE:      // coupled microstrip
@@ -309,11 +309,11 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_Messages.Add( _( "Differential Impedance (Zd):" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_PRM,
-                                   "H", "H", _( "Height of substrate" ), 0.2, true ) );
+                                   "H", wxT( "H" ), _( "Height of substrate" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_T_PRM,
-                                   "H_t", "H_t", _( "Height of box top" ), 1e20, true ) );
+                                   "H_t", wxT( "H_t" ), _( "Height of box top" ), 1e20, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
-                                   "T", "T", _( "Strip thickness" ), 0.035, true ) );
+                                   "T", wxT( "T" ), _( "Strip thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, ROUGH_PRM,
                                    "Rough", _( "Roughness" ),
                                    _( "Conductor roughness" ), 0.0, true ) );
@@ -324,11 +324,11 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
                                    false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM,
-                                   "W", "W", _( "Line width" ), 0.2, true ) );
+                                   "W", wxT( "W" ), _( "Line width" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_S_PRM,
-                                   "S", "S", _( "Gap width" ), 0.2, true ) );
+                                   "S", wxT( "S" ), _( "Gap width" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_LEN_PRM,
-                                   "L", "L", _( "Line length" ), 50.0, true ) );
+                                   "L", wxT( "L" ), _( "Line length" ), 50.0, true ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_E_PRM,
                                    "Zeven", _( "Zeven" ),
@@ -339,7 +339,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
                                    _( "Odd mode impedance (lines driven by opposite "
                                       "(differential) voltages)" ), 50.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, ANG_L_PRM,
-                                   "Ang_l", "Ang_l",
+                                   "Ang_l", wxT( "Ang_l" ),
                                    _( "Electrical length" ), 0.0, true ) );
         break;
 
@@ -353,27 +353,27 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_Messages.Add( _( "Skin depth:" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_PRM,
-                                   "H", "H", _( "Height of substrate" ), 0.2, true ) );
+                                   "H", wxT( "H" ), _( "Height of substrate" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, STRIPLINE_A_PRM,
-                                   "a", "a", _( "Distance between strip and top metal" ), 0.2,
+                                   "a", wxT( "a" ), _( "Distance between strip and top metal" ), 0.2,
                                    true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
-                                   "T", "T", _( "Strip thickness" ), 0.035, true ) );
+                                   "T", wxT( "T" ), _( "Strip thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
                                    "mu Rel C", wxString::Format( wxT( "μ(%s)" ),
                                                                  _( "conductor" ) ),
                                    _( "Relative permeability (mu) of conductor" ), 1, false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM,
-                                   "W", "W", _( "Line width" ), 0.2, true ) );
+                                   "W", wxT( "W" ), _( "Line width" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_LEN_PRM,
-                                   "L", "L", _( "Line length" ), 50.0, true ) );
+                                   "L", wxT( "L" ), _( "Line length" ), 50.0, true ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_PRM,
-                                   "Z0", "Z0", _( "Characteristic impedance" ), 50, true ) );
+                                   "Z0", wxT( "Z0" ), _( "Characteristic impedance" ), 50, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, DUMMY_PRM ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, ANG_L_PRM,
-                                   "Ang_l", "Ang_l", _( "Electrical length" ), 0, true ) );
+                                   "Ang_l", wxT( "Ang_l" ), _( "Electrical length" ), 0, true ) );
         break;
 
     case TWISTEDPAIR_TYPE:      // twisted pair
@@ -406,13 +406,13 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
                                    "Dout", _( "Dout" ),
                                    _( "Outer diameter (insulator)" ), 8.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_LEN_PRM,
-                                   "L", "L", _( "Cable length" ), 50.0, true ) );
+                                   "L", wxT( "L" ), _( "Cable length" ), 50.0, true ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_PRM,
-                                   "Z0", "Z0", _( "Characteristic impedance" ), 50.0, true ) );
+                                   "Z0", wxT( "Z0" ), _( "Characteristic impedance" ), 50.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, DUMMY_PRM ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, ANG_L_PRM,
-                                   "Ang_l", "Ang_l", _( "Electrical length" ), 0.0, true ) );
+                                   "Ang_l", wxT( "Ang_l" ), _( "Electrical length" ), 0.0, true ) );
         break;
 
     case END_OF_LIST_TYPE:      // Not really used

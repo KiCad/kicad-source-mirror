@@ -239,20 +239,20 @@ void PANEL_TRACK_WIDTH::OnTWResetButtonClick( wxCommandEvent& event )
     // Note: a wxString:Format( "%g", xx) is used to use local separator in floats
 
     // Init main parameters:
-    m_TrackCurrentValue->SetValue( wxString::Format( "%g", 1.0 ) );
-    m_TrackDeltaTValue->SetValue( wxString::Format( "%g", 10.0 ) );
-    m_TrackLengthValue->SetValue( wxString::Format( "%g", 20.0 ) );
+    m_TrackCurrentValue->SetValue( wxString::Format( wxT( "%g" ), 1.0 ) );
+    m_TrackDeltaTValue->SetValue( wxString::Format( wxT( "%g" ), 10.0 ) );
+    m_TrackLengthValue->SetValue( wxString::Format( wxT( "%g" ), 20.0 ) );
     m_TW_CuLength_choiceUnit->SetSelection( 0 );
-    m_TWResistivity->SetValue( wxString::Format( "%g", copper_resistivity ) );
+    m_TWResistivity->SetValue( wxString::Format( wxT( "%g" ), copper_resistivity ) );
 
     // m_ExtTrackWidthValue is not reinitialized: it will be calculated from previous parameters
     m_TW_ExtTrackWidth_choiceUnit->SetSelection( 0 );
-    m_ExtTrackThicknessValue->SetValue( wxString::Format( "%g", 0.035 ) );
+    m_ExtTrackThicknessValue->SetValue( wxString::Format( wxT( "%g" ), 0.035 ) );
     m_ExtTrackThicknessUnit->SetSelection( 0 );
 
     // m_IntTrackWidthValue is not reinitialized: it will be calculated from previous parameters
     m_TW_IntTrackWidth_choiceUnit->SetSelection( 0 );
-    m_IntTrackThicknessValue->SetValue( wxString::Format( "%g", 0.035 ) );
+    m_IntTrackThicknessValue->SetValue( wxString::Format( wxT( "%g" ), 0.035 ) );
     m_IntTrackThicknessUnit->SetSelection( 0 );
 }
 
@@ -458,7 +458,7 @@ void PANEL_TRACK_WIDTH::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 #if 0   // the IPC formula is valid for copper traces, so we do not currently adjust the resistivity
     m_TWResistivity->SetValue( aCfg->m_TrackWidth.resistivity );
 #else
-    m_TWResistivity->SetValue( wxString::Format( "%g", copper_resistivity ) );
+    m_TWResistivity->SetValue( wxString::Format( wxT( "%g" ), copper_resistivity ) );
 #endif
     m_ExtTrackWidthValue->SetValue( aCfg->m_TrackWidth.ext_track_width );
     m_TW_ExtTrackWidth_choiceUnit->SetSelection( aCfg->m_TrackWidth.ext_track_width_units );
@@ -469,7 +469,7 @@ void PANEL_TRACK_WIDTH::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
     m_IntTrackThicknessValue->SetValue( aCfg->m_TrackWidth.int_track_thickness );
     m_IntTrackThicknessUnit->SetSelection( aCfg->m_TrackWidth.int_track_thickness_units );
 
-    if( tracks_width_versus_current_formula.StartsWith( "<!" ) )
+    if( tracks_width_versus_current_formula.StartsWith( wxT( "<!" ) ) )
         m_htmlWinFormulas->SetPage( tracks_width_versus_current_formula );
     else
     {

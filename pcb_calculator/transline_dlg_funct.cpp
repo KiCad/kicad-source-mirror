@@ -310,7 +310,7 @@ void PANEL_TRANSLINE::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType )
 
         if( prm->m_Id != DUMMY_PRM )
         {
-            data->value->SetValue( wxString::Format( "%g", prm->m_Value ) );
+            data->value->SetValue( wxString::Format( wxT( "%g" ), prm->m_Value ) );
             data->value->Enable( true );
         }
         else

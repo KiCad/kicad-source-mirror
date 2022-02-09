@@ -369,28 +369,26 @@ void RECTWAVEGUIDE::showAnalyze()
 }
 
 
-#define MAXSTRLEN 128
 void RECTWAVEGUIDE::show_results()
 {
     int  m, n, max = 6;
-    char text[MAXSTRLEN], txt[32];
+    wxString text;
 
     // Z0EH = Ey / Hx (definition with field quantities)
     Z0EH = ZF0 * sqrt( kval_square() / ( kval_square() - kc_square( 1, 0 ) ) );
-    setResult( 0, Z0EH, "Ohm" );
+    setResult( 0, Z0EH, wxT( "Ohm" ) );
 
     setResult( 1, m_parameters[EPSILON_EFF_PRM], "" );
-    setResult( 2, m_parameters[LOSS_CONDUCTOR_PRM], "dB" );
-    setResult( 3, m_parameters[LOSS_DIELECTRIC_PRM], "dB" );
+    setResult( 2, m_parameters[LOSS_CONDUCTOR_PRM], wxT( "dB" ) );
+    setResult( 3, m_parameters[LOSS_DIELECTRIC_PRM], wxT( "dB" ) );
 
     // show possible TE modes (H modes)
     if( m_parameters[FREQUENCY_PRM] < fc( 1, 0 ) )
     {
-        strcpy( text, "none" );
+        text = wxT( "none" );
     }
     else
     {
-        strcpy( text, "" );
         for( m = 0; m <= max; m++ )
         {
             for( n = 0; n <= max; n++ )
@@ -399,18 +397,7 @@ void RECTWAVEGUIDE::show_results()
                     continue;
 
                 if( m_parameters[FREQUENCY_PRM] >= ( fc( m, n ) ) )
-                {
-                    sprintf( txt, "H(%d,%d) ", m, n );
-                    if( ( strlen( text ) + strlen( txt ) + 5 ) < MAXSTRLEN )
-                    {
-                        strcat( text, txt );
-                    }
-                    else
-                    {
-                        strcat( text, "..." );
-                        m = n = max + 1; // print no more modes
-                    }
-                }
+                    text << wxString::Format( wxT( "H(%d,%d) " ), m, n );
             }
         }
     }
@@ -419,30 +406,21 @@ void RECTWAVEGUIDE::show_results()
     // show possible TM modes (E modes)
     if( m_parameters[FREQUENCY_PRM] < fc( 1, 1 ) )
     {
-        strcpy( text, "none" );
+        text = wxT( "none" );
     }
     else
     {
-        strcpy( text, "" );
+        text.Clear();
+
         for( m = 1; m <= max; m++ )
         {
             for( n = 1; n <= max; n++ )
             {
                 if( m_parameters[FREQUENCY_PRM] >= fc( m, n ) )
-                {
-                    sprintf( txt, "E(%d,%d) ", m, n );
-                    if( ( strlen( text ) + strlen( txt ) + 5 ) < MAXSTRLEN )
-                    {
-                        strcat( text, txt );
-                    }
-                    else
-                    {
-                        strcat( text, "..." );
-                        m = n = max + 1; // print no more modes
-                    }
-                }
+                    text << wxString::Format( wxT( "E(%d,%d) " ), m, n );
             }
         }
     }
+
     setResult( 5, text );
 }

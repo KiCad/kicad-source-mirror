@@ -874,13 +874,13 @@ void C_MICROSTRIP::show_results()
 
     setResult( 0, er_eff_e, "" );
     setResult( 1, er_eff_o, "" );
-    setResult( 2, atten_cond_e, "dB" );
-    setResult( 3, atten_cond_o, "dB" );
-    setResult( 4, atten_dielectric_e, "dB" );
-    setResult( 5, atten_dielectric_o, "dB" );
+    setResult( 2, atten_cond_e, wxT( "dB" ) );
+    setResult( 3, atten_cond_o, wxT( "dB" ) );
+    setResult( 4, atten_dielectric_e, wxT( "dB" ) );
+    setResult( 5, atten_dielectric_o, wxT( "dB" ) );
 
-    setResult( 6, m_parameters[SKIN_DEPTH_PRM] / UNIT_MICRON, "µm" );
-    setResult( 7, Zdiff, "Ω" );
+    setResult( 6, m_parameters[SKIN_DEPTH_PRM] / UNIT_MICRON, wxT( "µm" ) );
+    setResult( 7, Zdiff, wxT( "Ω" ) );
 }
 
 

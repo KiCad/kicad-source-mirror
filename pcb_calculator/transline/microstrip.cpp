@@ -464,10 +464,10 @@ void MICROSTRIP::show_results()
     setProperty( ANG_L_PRM, m_parameters[ANG_L_PRM] );
 
     setResult( 0, er_eff, "" );
-    setResult( 1, atten_cond, "dB" );
-    setResult( 2, atten_dielectric, "dB" );
+    setResult( 1, atten_cond, wxT( "dB" ) );
+    setResult( 2, atten_dielectric, wxT( "dB" ) );
 
-    setResult( 3, m_parameters[SKIN_DEPTH_PRM] / UNIT_MICRON, "µm" );
+    setResult( 3, m_parameters[SKIN_DEPTH_PRM] / UNIT_MICRON, wxT( "µm" ) );
 }
 
 

@@ -54,6 +54,14 @@ void SetResultInDialog( int line, const char* text );
 */
 void SetResultInDialog( int aLineNumber, double aValue, const char* aText );
 
+/* Puts the text into the given result line.
+*/
+void SetResultInDialog( int line, const wxString& aText );
+
+/* print aValue into the given result line.
+*/
+void SetResultInDialog( int aLineNumber, double aValue, const wxString& aText );
+
 /* Returns a named property value. */
 double GetPropertyInDialog( enum PRMS_ID aPrmId );
 
@@ -124,13 +132,13 @@ bool TRANSLINE::isSelected( enum PRMS_ID aPrmId )
 
 /* Puts the text into the given result line.
 */
-void TRANSLINE::setResult( int line, const char* text )
+void TRANSLINE::setResult( int line, const wxString& text )
 {
     SetResultInDialog( line, text );
 }
 
 
-void TRANSLINE::setResult( int line, double value, const char* text )
+void TRANSLINE::setResult( int line, double value, const wxString& text )
 {
     SetResultInDialog( line, value, text );
 }

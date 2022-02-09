@@ -28,9 +28,8 @@
  * performs the associated calculations
  */
 #include <cmath>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
+
+#include <wx/string.h>
 
 #include "coax.h"
 #include "units.h"
@@ -209,14 +208,14 @@ void COAX::showSynthesize()
 void COAX::show_results()
 {
     int  m, n;
-    char text[256], txt[256];
+    wxString text;
 
     m_parameters[LOSS_DIELECTRIC_PRM] = alphad_coax() * m_parameters[PHYS_LEN_PRM];
     m_parameters[LOSS_CONDUCTOR_PRM]  = alphac_coax() * m_parameters[PHYS_LEN_PRM];
 
     setResult( 0, m_parameters[EPSILONR_PRM], "" );
-    setResult( 1, m_parameters[LOSS_CONDUCTOR_PRM], "dB" );
-    setResult( 2, m_parameters[LOSS_DIELECTRIC_PRM], "dB" );
+    setResult( 1, m_parameters[LOSS_CONDUCTOR_PRM], wxT( "dB" ) );
+    setResult( 2, m_parameters[LOSS_DIELECTRIC_PRM], wxT( "dB" ) );
 
     n = 1;
     m_parameters[CUTOFF_FREQUENCY_PRM] =
@@ -225,21 +224,20 @@ void COAX::show_results()
 
     if( m_parameters[CUTOFF_FREQUENCY_PRM] > m_parameters[FREQUENCY_PRM] )
     {
-        strcpy( text, "none" );
+        text = wxT( "none" );
     }
     else
     {
-        strcpy( text, "H(1,1) " );
+        text = wxT( " H(1,1) " );
         m = 2;
         m_parameters[CUTOFF_FREQUENCY_PRM] =
                 C0
                 / ( 2 * ( m_parameters[PHYS_DIAM_OUT_PRM] - m_parameters[MUR_PRM] )
-                        / (double) ( m - 1 ) );
+                        / ( m - 1 ) );
 
         while( ( m_parameters[CUTOFF_FREQUENCY_PRM] <= m_parameters[FREQUENCY_PRM] ) && ( m < 10 ) )
         {
-            sprintf( txt, "H(n,%d) ", m );
-            strcat( text, txt );
+            text << wxString::Format( wxT( "H(n,%d) " ), m );
             m++;
             m_parameters[CUTOFF_FREQUENCY_PRM] =
                     C0
@@ -254,16 +252,15 @@ void COAX::show_results()
             C0 / ( 2 * ( m_parameters[PHYS_DIAM_OUT_PRM] - m_parameters[MUR_PRM] ) / (double) m );
     if( m_parameters[CUTOFF_FREQUENCY_PRM] > m_parameters[FREQUENCY_PRM] )
     {
-        strcpy( text, "none" );
+        text = wxT( "none" );
     }
     else
     {
-        strcpy( text, "" );
+        text.Clear();
 
         while( ( m_parameters[CUTOFF_FREQUENCY_PRM] <= m_parameters[FREQUENCY_PRM] ) && ( m < 10 ) )
         {
-            sprintf( txt, "E(n,%d) ", m );
-            strcat( text, txt );
+            text << wxString::Format( wxT( "E(n,%d) " ), m );
             m++;
             m_parameters[CUTOFF_FREQUENCY_PRM] =
                     C0

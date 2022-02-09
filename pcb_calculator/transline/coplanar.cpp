@@ -180,10 +180,10 @@ void COPLANAR::show_results()
 {
 
     setResult( 0, m_parameters[EPSILON_EFF_PRM], "" );
-    setResult( 1, m_parameters[LOSS_CONDUCTOR_PRM], "dB" );
-    setResult( 2, m_parameters[LOSS_DIELECTRIC_PRM], "dB" );
+    setResult( 1, m_parameters[LOSS_CONDUCTOR_PRM], wxT( "dB" ) );
+    setResult( 2, m_parameters[LOSS_DIELECTRIC_PRM], wxT( "dB" ) );
 
-    setResult( 3, m_parameters[SKIN_DEPTH_PRM] / UNIT_MICRON, "µm" );
+    setResult( 3, m_parameters[SKIN_DEPTH_PRM] / UNIT_MICRON, wxT( "µm" ) );
 }
 
 
