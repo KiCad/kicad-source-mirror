@@ -2,10 +2,9 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -205,7 +204,7 @@ void SHAPE_LINE_CHAIN::amendArc( size_t aArcIndex, const VECTOR2I& aNewStart,
                                  const VECTOR2I& aNewEnd )
 {
     wxCHECK_MSG( aArcIndex <  m_arcs.size(), /* void */,
-                 "Invalid arc index requested." );
+                 wxT( "Invalid arc index requested." ) );
 
     SHAPE_ARC& theArc = m_arcs[aArcIndex];
 
@@ -230,7 +229,7 @@ void SHAPE_LINE_CHAIN::splitArc( ssize_t aPtIndex, bool aCoincident )
         return; // Nothing to do
 
     wxCHECK_MSG( aPtIndex < static_cast<ssize_t>( m_shapes.size() ), /* void */,
-                 "Invalid point index requested." );
+                 wxT( "Invalid point index requested." ) );
 
     if( IsSharedPt( aPtIndex ) || IsArcEnd( aPtIndex ) )
     {
@@ -411,7 +410,7 @@ bool SHAPE_LINE_CHAIN::Collide( const VECTOR2I& aP, int aClearance, int* aActual
         const SHAPE_ARC& arc = Arc( i );
 
         // The arcs in the chain should have zero width
-        wxASSERT_MSG( arc.GetWidth() == 0, "Invalid arc width - should be zero" );
+        wxASSERT_MSG( arc.GetWidth() == 0, wxT( "Invalid arc width - should be zero" ) );
 
         if( arc.Collide( aP, aClearance, aActual, aLocation ) )
             return true;
@@ -549,7 +548,7 @@ bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance, int* aActual,
         const SHAPE_ARC& arc = Arc( i );
 
         // The arcs in the chain should have zero width
-        wxASSERT_MSG( arc.GetWidth() == 0, "Invalid arc width - should be zero" );
+        wxASSERT_MSG( arc.GetWidth() == 0, wxT( "Invalid arc width - should be zero" ) );
 
         if( arc.Collide( aSeg, aClearance, aActual, aLocation ) )
             return true;
@@ -1167,7 +1166,8 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
         }
         else
         {
-            wxASSERT_MSG( !IsArcSegment( i ), "Still on an arc segment, we missed something..." );
+            wxASSERT_MSG( !IsArcSegment( i ),
+                          wxT( "Still on an arc segment, we missed something..." ) );
 
             rv.Append( m_points[i] );
         }

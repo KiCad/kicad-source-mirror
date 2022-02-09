@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -56,16 +56,16 @@ static inline wxString SHAPE_TYPE_asString( SHAPE_TYPE a )
 {
     switch( a )
     {
-    case SH_RECT:       return "SH_RECT";
-    case SH_SEGMENT:    return "SH_SEGMENT";
-    case SH_LINE_CHAIN: return "SH_LINE_CHAIN";
-    case SH_CIRCLE:     return "SH_CIRCLE";
-    case SH_SIMPLE:     return "SH_SIMPLE";
-    case SH_POLY_SET:   return "SH_POLY_SET";
-    case SH_COMPOUND:   return "SH_COMPOUND";
-    case SH_ARC:        return "SH_ARC";
-    case SH_NULL:       return "SH_NULL";
-    case SH_POLY_SET_TRIANGLE:       return "SH_POLY_SET_TRIANGLE";
+    case SH_RECT:              return wxT( "SH_RECT" );
+    case SH_SEGMENT:           return wxT( "SH_SEGMENT" );
+    case SH_LINE_CHAIN:        return wxT( "SH_LINE_CHAIN" );
+    case SH_CIRCLE:            return wxT( "SH_CIRCLE" );
+    case SH_SIMPLE:            return wxT( "SH_SIMPLE" );
+    case SH_POLY_SET:          return wxT( "SH_POLY_SET" );
+    case SH_COMPOUND:          return wxT( "SH_COMPOUND" );
+    case SH_ARC:               return wxT( "SH_ARC" );
+    case SH_NULL:              return wxT( "SH_NULL" );
+    case SH_POLY_SET_TRIANGLE: return wxT( "SH_POLY_SET_TRIANGLE" );
     }
 
     return wxEmptyString;  // Just to quiet GCC.
