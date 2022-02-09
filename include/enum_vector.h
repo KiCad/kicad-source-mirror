@@ -18,29 +18,74 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DEFINE_ENUM_VECTOR
+#ifndef ENUM_VECTOR_H
+#define ENUM_VECTOR_H
+
+#include <type_traits>
 
 /**
- * Macro to create const vectors containing enum values to enable easy iteration.
+ * Macro to create const vectors containing enum values to enable easy iteration. Do not use in new
+ * code. Use the DEFINE_ENUM_CLASS_WITH_ITERATOR and DECLARE_ENUM_CLASS_ITERATOR macros instead
+ * (unless they don't work ;) ).
  *
  * Usage:
  * [header]
  * A {
- *     DEFINE_ENUM_VECTOR( COLORS, { RED, GREEN, BLUE } );
+ *     DEFINE_ENUM_VECTOR( COLOR, { RED, GREEN, BLUE } )
  * };
  *
  * [source]
- * for( auto color : A::COLORS_vector ) {
+ * for( COLOR color : COLOR_vector ) {
  *     // do sth with color
  * }
  *
  * DECLARE_ENUM_VECTOR( COLORS );
  */
-#define DEFINE_ENUM_VECTOR(enum_name, ...) \
-    enum enum_name __VA_ARGS__; \
-    static constexpr enum_name enum_name##_vector[] = __VA_ARGS__;
+#define DEFINE_ENUM_VECTOR( enumName, ... ) \
+    enum enumName __VA_ARGS__; \
+    static constexpr enumName enumName##_vector[] = __VA_ARGS__;
 
-#define DECLARE_ENUM_VECTOR(class_name, enum_name) \
-    constexpr class_name::enum_name class_name::enum_name##_vector[];
+#define DECLARE_ENUM_VECTOR( className, enumName ) \
+    constexpr className::enumName className::enumName##_vector[];
 
-#endif
+
+/**
+ * Macro to create const vectors containing enum class values to enable easy iteration.
+ *
+ * Usage:
+ * [header]
+ * A {
+ *     DEFINE_ENUM_CLASS_WITH_ITERATOR( COLOR, RED, GREEN, BLUE )
+ * };
+ *
+ * [source]
+ * for( COLOR color : COLOR_ITERATOR() ) {
+ *     // do sth with color
+ * }
+ */
+#define DEFINE_ENUM_CLASS_WITH_ITERATOR( enumName, beginVal, ... ) \
+    enum class enumName : int { beginVal, __VA_ARGS__, _ENUM_END }; \
+    typedef ENUM_ITERATOR<enumName, enumName::beginVal, enumName::_ENUM_END> enumName##_ITERATOR;
+
+template <typename T, T beginVal, T endVal>
+class ENUM_ITERATOR
+{
+    typedef typename std::underlying_type<T>::type val_t;
+    int val;
+
+public:
+    ENUM_ITERATOR( const T& f ) : val( static_cast<val_t>( f ) ) {}
+    ENUM_ITERATOR() : val( static_cast<val_t>( beginVal ) ) {}
+    ENUM_ITERATOR operator++()
+    {
+        val++;
+        return *this;
+    }
+
+    T operator*() { return static_cast<T>( val ); }
+    ENUM_ITERATOR begin() { return *this; }
+    ENUM_ITERATOR end() { return ENUM_ITERATOR( endVal ); }
+    bool operator!=( const ENUM_ITERATOR& aIt ) { return val != aIt.val; }
+};
+
+#endif /* ENUM_VECTOR_H */

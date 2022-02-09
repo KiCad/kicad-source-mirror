@@ -1,10 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2017 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
- *
- * @author Maciej Suminski <maciej.suminski@cern.ch>
+ * Copyright (C) 2022 Mikolaj Wielgus
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,180 +29,35 @@
 #include <netlist_exporter_pspice.h>
 #include <scintilla_tricks.h>
 
-#include <sim/spice_value.h>
+#include <sim/spice_model.h>
 #include <sch_symbol.h>
-#include <sch_field.h>
-#include <lib_field.h>
 
-#include <wx/valnum.h>
-
+template <typename T>
 class DIALOG_SPICE_MODEL : public DIALOG_SPICE_MODEL_BASE
 {
 public:
+    enum COLUMN { DESCRIPTION, NAME, VALUE, UNIT };
+
     DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
-                        std::vector<SCH_FIELD>* aSchFields );
-    DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
-                        std::vector<LIB_FIELD>* aLibFields );
+                        std::vector<T>* aSchFields );
 
 private:
-    /**
-     * Parse a string describing a power source, so appropriate settings are checked in the dialog.
-     *
-     * @param aModel contains the string to be parse (e.g. sin(0 1 10k))
-     * @return True if the input string was parsed without errors.
-     */
-    bool parsePowerSource( const wxString& aModel );
+    bool TransferDataFromWindow() override;
+    bool TransferDataToWindow() override;
 
-    /**
-     * Parse a string describing a lossless transmission line, so appropriate settings are checked in the dialog.
-     *
-     * @param aModel contains the string to be parse (e.g. "Z0=50 td=10n")
-     * @return True if the input string was parsed without errors.
-     */
-    bool parseLosslessTline( const wxString& aModel );
+    void updateModel();
+    void updateWidgets();
 
-    /**
-     * Parse a string describing a lossy transmission line, so appropriate settings are checked in the dialog.
-     *
-     * @param aModel contains the string to be parse (e.g. "R=50 C=10 LEN=1")
-     * @return True if the input string was parsed without errors.
-     */
-    bool parseLossyTline( const wxString& aModel );
+    void onDeviceTypeChoice( wxCommandEvent& aEvent ) override;
+    void onTypeChoice( wxCommandEvent& aEvent ) override;
+    void onGridCellChange( wxGridEvent& aEvent ) override;
 
-
-    /**
-     * Generate a string to describe power source parameters, basing on the current selection.
-     *
-     * If there are missing fields, it will not modify the target string.
-     *
-     * @param aTarget is the destination for the generated string.
-     * @return True if the string was saved successfully.
-     */
-    bool generatePowerSource( wxString& aTarget );
-
-    /**
-     * Generate a string to describe a transmission line model, basing on the current selection.
-     *
-     * If there are missing fields, it will not modify the target string.
-     *
-     * @param aTarget is the destination for the generated string.
-     * @return True if the string was saved successfully.
-     */
-    bool generateTlineLossless( wxString& aTarget );
-
-    /**
-     * Generate a string to describe a transmission line model, basing on the current selection.
-     *
-     * If there are missing fields, it will not modify the target string.
-     *
-     * @param aTarget is the destination for the generated string.
-     * @return True if the string was saved successfully.
-     */
-    bool generateTlineLossy( wxString& aTarget );
-
-    /**
-     * Load a list of components (.model and .subckt) from a spice library file and add them to
-     * a combo box.
-     *
-     * @param aComboBox is the target combo box
-     * @param aFilePath is path to the library file
-     */
-    void loadLibrary( const wxString& aFilePath );
-
-    /**
-     * Return or create a field in the edited schematic fields vector.
-     *
-     * @param aFieldType is an SPICE_FIELD enum value.
-     * @return Requested field.
-     */
-    SCH_FIELD& getSchField( int aFieldType );
-    LIB_FIELD& getLibField( int aFieldType );
-
-    /**
-     * Add a value to the PWL values list.
-     *
-     * @param aTime is the time value.
-     * @param aValue is the source value at the given time.
-     * @return True if request has completed successfully, false if the data is invalid.
-     */
-    bool addPwlValue( const wxString& aTime, const wxString& aValue );
-
-    virtual bool TransferDataFromWindow() override;
-    virtual bool TransferDataToWindow() override;
-
-    // The default dialog Validate() calls the validators of all widgets.
-    // This is not what we want; We want only validators of the selected page
-    // of the notebooks. So disable the wxDialog::Validate(), and let our
-    // TransferDataFromWindow doing the job.
-    virtual bool Validate() override
-    {
-        return true;
-    }
-
-    virtual void onInitDlg( wxInitDialogEvent& event ) override
-    {
-        // Call the default wxDialog handler of a wxInitDialogEvent
-        TransferDataToWindow();
-
-        // Now all widgets have the size fixed, call FinishDialogSettings
-        finishDialogSettings();
-    }
-
-    /**
-     * Initialize the internal settings.
-     */
-    void Init();
-
-    /**
-     * Display a note info about pin order
-     */
-    void showPinOrderNote( int aModelType );
-
-    // Event handlers
-    void onSelectLibrary( wxCommandEvent& event ) override;
-    void onModelSelected( wxCommandEvent& event ) override;
-    void onPwlAdd( wxCommandEvent& event ) override;
-    void onPwlRemove( wxCommandEvent& event ) override;
-    void onRandomSourceType( wxCommandEvent& event ) override;
-    void onTypeSelected( wxCommandEvent& event ) override;
-
-    ///< Edited symbol
     SCH_SYMBOL& m_symbol;
+    std::vector<T>* m_fields;
 
-    ///< Fields from the symbol properties dialog.
-    std::vector<SCH_FIELD>* m_schfields;
-    std::vector<LIB_FIELD>* m_libfields;
-    bool m_useSchFields;
-
-    ///< Temporary field values
-    std::map<int, wxString> m_fieldsTmp;
-
-    struct MODEL
-    {
-        ///< Line number in the library file
-        int line;
-
-        ///< Type of the device
-        SPICE_PRIMITIVE model;
-
-        ///< Convert string to model
-        static SPICE_PRIMITIVE parseModelType( const wxString& aValue );
-
-        MODEL( int aLine, enum SPICE_PRIMITIVE aModel )
-            : line( aLine ), model( aModel )
-        {
-        }
-    };
-
-    ///< Models available in the selected library file
-    std::map<wxString, MODEL> m_models;
-
-    ///< Column identifiers for PWL power source value list
-    long m_pwlTimeCol, m_pwlValueCol;
-
-    SPICE_VALIDATOR m_spiceValidator;
-    SPICE_VALIDATOR m_spiceEmptyValidator;
-    wxTextValidator m_notEmptyValidator;
+    std::vector<SPICE_MODEL> m_models;
+    std::map<SPICE_MODEL::DEVICE_TYPE, SPICE_MODEL::TYPE> m_curModelTypeOfDeviceType;
+    SPICE_MODEL::TYPE m_curModelType = SPICE_MODEL::TYPE::NONE;
 
     std::unique_ptr<SCINTILLA_TRICKS> m_scintillaTricks;
 };

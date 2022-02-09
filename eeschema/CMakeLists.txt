@@ -312,6 +312,7 @@ if( KICAD_SPICE )
         dialogs/dialog_spice_model_base.cpp
         sim/ngspice_helpers.cpp
         sim/ngspice.cpp
+        sim/ngspice_models.cpp
         sim/sim_panel_base.cpp
         sim/sim_plot_colors.cpp
         sim/sim_plot_frame.cpp
@@ -319,6 +320,7 @@ if( KICAD_SPICE )
         sim/sim_plot_panel.cpp
         sim/sim_workbook.cpp
         sim/spice_simulator.cpp
+        sim/spice_model.cpp
         sim/spice_value.cpp
         widgets/tuner_slider.cpp
         widgets/tuner_slider_base.cpp

@@ -47,6 +47,56 @@ class wxDynamicLibrary;
 class NGSPICE : public SPICE_SIMULATOR
 {
 public:
+    enum class PARAM_DIR
+    {
+        IN,
+        OUT,
+        INOUT
+    };
+
+    enum class PARAM_TYPE
+    {
+        FLAG,
+        INTEGER,
+        REAL,
+        COMPLEX,
+        NODE,
+        INSTANCE,
+        STRING,
+        PARSETREE,
+        VECTOR,
+        FLAGVEC,
+        INTVEC,
+        REALVEC,
+        CPLXVEC,
+        NODEVEC,
+        INSTVEC,
+        STRINGVEC
+    };
+
+    struct PARAM_INFO
+    {
+        unsigned int id;
+        PARAM_DIR dir;
+        PARAM_TYPE type;
+        wxString unit;
+        wxString defaultValueOfVariant1;
+        wxString defaultValueOfVariant2;
+        wxString description;
+    };
+
+    enum class MODEL_TYPE; // Defined in ngspice_devices.cpp.
+
+    struct MODEL_INFO
+    {
+        wxString name;
+        wxString variant1;
+        wxString variant2;
+        wxString description;
+        std::map<wxString, PARAM_INFO> modelParams;
+        std::map<wxString, PARAM_INFO> instanceParams;
+    };
+
     NGSPICE();
     virtual ~NGSPICE();
 
@@ -91,6 +141,8 @@ public:
 
     ///< @copydoc SPICE_SIMULATOR::GetPhasePlot()
     std::vector<double> GetPhasePlot( const std::string& aName, int aMaxLen = -1 ) override final;
+
+    MODEL_INFO GetModelInfo( MODEL_TYPE aDeviceType );
 
     std::vector<std::string> GetSettingCommands() const override final;
 
