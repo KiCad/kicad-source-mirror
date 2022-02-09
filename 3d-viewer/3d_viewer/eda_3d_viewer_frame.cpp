@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -444,18 +444,10 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
     {
         m_boardAdapter.m_Cfg = cfg;
 
-        // When opening the 3D viewer, we use the opengl mode, not the ray tracing engine
+        // When opening the 3D viewer, we use the opengl mode, never the ray tracing engine
         // because the ray tracing is very time consumming, and can be seen as not working
         // (freeze window) with large boards.
-#if 0
-        RENDER_ENGINE engine = static_cast<RENDER_ENGINE>( cfg->m_Render.engine );
-        wxLogTrace( m_logTrace, engine == RENDER_ENGINE::RAYTRACING ?
-                                wxT( "EDA_3D_VIEWER_FRAME::LoadSettings render setting Ray Trace" )
-                                :
-                                wxT( "EDA_3D_VIEWER_FRAME::LoadSettings render setting OpenGL" ) );
-#else
         m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::OPENGL;
-#endif
 
         m_canvas->SetAnimationEnabled( cfg->m_Camera.animation_enabled );
         m_canvas->SetMovingSpeedMultiplier( cfg->m_Camera.moving_speed_multiplier );

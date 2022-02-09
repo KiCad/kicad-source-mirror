@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -137,7 +137,9 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList,
     m_3d_render_raytracing->SetBusyIndicatorFactory( busy_indicator_factory );
     m_3d_render_opengl->SetBusyIndicatorFactory( busy_indicator_factory );
 
-    RenderEngineChanged();
+    // We always start with the opengl engine (raytracing is avoided due to very
+    // long calculation time)
+    m_3d_render = m_3d_render_opengl;
 
     m_boardAdapter.SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
 
