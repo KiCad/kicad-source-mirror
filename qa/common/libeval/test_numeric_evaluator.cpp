@@ -110,46 +110,46 @@ BOOST_AUTO_TEST_CASE( SetVar )
  */
 static const std::vector<EVAL_CASE> eval_cases_valid = {
     // Empty case
-    { "", "0" },
+    { wxT( "" ), wxT( "0" ) },
     // Trivial eval
-    { "1", "1" },
+    { wxT( "1" ), wxT( "1" ) },
     // Decimal separators
-    { "1.5", "1.5" },
-    { "1,5", "1.5" },
+    { wxT( "1.5" ), wxT( "1.5" ) },
+    { wxT( "1,5" ), wxT( "1.5" ) },
     // Semicolon is valid, but the result is NaN
-    { "1;", "NaN" },
+    { wxT( "1;" ), wxT( "NaN" ) },
     // With own unit
-    { "1mm", "1" },
+    { wxT( "1mm" ), wxT( "1" ) },
     // Unit that's not the evaluator's unit
-    { "1in", "25.4" },
+    { wxT( "1in" ), wxT( "25.4" ) },
     // Unit with white-space
-    { "1 in", "25.4" },
+    { wxT( "1 in" ), wxT( "25.4" ) },
     // Unit-less arithmetic
-    { "1+2", "3" },
+    { wxT( "1+2" ), wxT( "3" ) },
     // Multiple units
-    { "1 + 10mm + 1\" + 1.5in + 500mil", "87.2" },
+    { wxT( "1 + 10mm + 1\" + 1.5in + 500mil" ), wxT( "87.2" ) },
     // Any White-space is OK
-    { "   1 +     2    ", "3" },
+    { wxT( "   1 +     2    " ), wxT( "3" ) },
     // Decimals are OK in expressions
-    { "1.5 + 0.2 + .1", "1.8" },
+    { wxT( "1.5 + 0.2 + .1" ), wxT( "1.8" ) },
     // Negatives are OK
-    { "3 - 10", "-7" },
+    { wxT( "3 - 10" ), wxT( "-7" ) },
     // Lots of operands
-    { "1 + 2 + 10 + 1000.05", "1013.05" },
+    { wxT( "1 + 2 + 10 + 1000.05" ), wxT( "1013.05" ) },
     // Operator precedence
-    { "1 + 2 - 4 * 20 / 2", "-37" },
+    { wxT( "1 + 2 - 4 * 20 / 2" ), wxT( "-37" ) },
     // Parens
-    { "(1)", "1" },
+    { wxT( "(1)" ), wxT( "1" ) },
     // Parens affect precedence
-    { "-(1 + (2 - 4)) * 20.8 / 2", "10.4" },
+    { wxT( "-(1 + (2 - 4)) * 20.8 / 2" ), wxT( "10.4" ) },
     // Unary addition is a sign, not a leading operator
-    { "+2 - 1", "1" },
+    { wxT( "+2 - 1" ), wxT( "1" ) },
     // Unknown vars are 0.0
-    { "1 + unknown", "1" },
+    { wxT( "1 + unknown" ), wxT( "1" ) },
     // Set var in-string
-    { "x = 1; 1 + x", "2" },
+    { wxT( "x = 1; 1 + x" ), wxT( "2" ) },
     // Multiple set vars
-    { "x = 1; y = 2; 10 + x - y", "9" },
+    { wxT( "x = 1; y = 2; 10 + x - y" ), wxT( "9" ) },
 };
 
 
