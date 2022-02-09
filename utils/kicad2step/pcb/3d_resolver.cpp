@@ -187,7 +187,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName,
     // users can potentially override a model within ${KICAD6_3DMODEL_DIR}.
     if( !m_Paths.empty() && !m_Paths.begin()->m_Pathexp.empty() && !tname.StartsWith( wxT( ":" ) ) )
     {
-        tmpFN.Assign( m_Paths.begin()->m_Pathexp, wxT( "" ) );
+        tmpFN.Assign( m_Paths.begin()->m_Pathexp, wxEmptyString );
         wxString fullPath = tmpFN.GetPathWithSep() + tname;
 
         if( fullPath.StartsWith( wxT( "${" ) ) || fullPath.StartsWith( wxT( "$(" ) ) )
@@ -295,7 +295,7 @@ bool S3D_RESOLVER::addPath( const SEARCH_PATH& aPath )
         tpath.m_Pathvar.erase( tpath.m_Pathvar.length() - 1 );
 #endif
 
-    wxFileName path( tpath.m_Pathvar, wxT( "" ) );
+    wxFileName path( tpath.m_Pathvar, wxEmptyString );
     path.Normalize();
 
     if( !path.DirExists() )
@@ -485,7 +485,7 @@ void S3D_RESOLVER::checkEnvVarPath( const wxString& aPath )
     SEARCH_PATH lpath;
     lpath.m_Alias = envar;
     lpath.m_Pathvar = lpath.m_Alias;
-    wxFileName tmpFN( lpath.m_Alias, wxT( "" ) );
+    wxFileName tmpFN( lpath.m_Alias, wxEmptyString );
     wxUniChar psep = tmpFN.GetPathSeparator();
     tmpFN.Normalize();
 
@@ -560,7 +560,7 @@ wxString S3D_RESOLVER::ShortenPath( const wxString& aFullPathName )
             continue;
         }
 
-        wxFileName fpath( sL->m_Pathexp, wxT( "" ) );
+        wxFileName fpath( sL->m_Pathexp, wxEmptyString );
         wxString fps = fpath.GetPathWithSep();
         wxString tname;
 

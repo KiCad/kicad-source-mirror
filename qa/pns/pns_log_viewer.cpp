@@ -293,11 +293,11 @@ PNS_LOG_VIEWER_FRAME::PNS_LOG_VIEWER_FRAME( wxFrame* frame ) : PNS_LOG_VIEWER_FR
 
     settings->SetZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_FILLED );
 
-    m_listPopupMenu = new wxMenu( wxT( "" ) );
-    m_listPopupMenu->Append( ID_LIST_COPY, wxT( "Copy selected geometry" ), wxT( "" ),
+    m_listPopupMenu = new wxMenu( wxEmptyString );
+    m_listPopupMenu->Append( ID_LIST_COPY, wxT( "Copy selected geometry" ), wxEmptyString,
                              wxITEM_NORMAL );
-    m_listPopupMenu->Append( ID_LIST_SHOW_ALL, wxT( "Show all" ), wxT( "" ), wxITEM_NORMAL );
-    m_listPopupMenu->Append( ID_LIST_SHOW_NONE, wxT( "Show none" ), wxT( "" ), wxITEM_NORMAL );
+    m_listPopupMenu->Append( ID_LIST_SHOW_ALL, wxT( "Show all" ), wxEmptyString, wxITEM_NORMAL );
+    m_listPopupMenu->Append( ID_LIST_SHOW_NONE, wxT( "Show none" ), wxEmptyString, wxITEM_NORMAL );
 
     m_itemList->Connect( m_itemList->GetId(), wxEVT_TREELIST_ITEM_CONTEXT_MENU,
                          wxMouseEventHandler( PNS_LOG_VIEWER_FRAME::onListRightClick ), nullptr,

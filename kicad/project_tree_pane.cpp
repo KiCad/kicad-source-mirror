@@ -349,7 +349,7 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
         {
             wxString ext = GetFileExt( (TREE_FILE_TYPE) i );
 
-            if( ext == wxT( "" ) )
+            if( ext == wxEmptyString )
                 continue;
 
             // For gerber files, the official ext is gbr

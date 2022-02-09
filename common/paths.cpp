@@ -263,7 +263,7 @@ wxString PATHS::GetStockPlugins3DPath()
     // KICAD_PLUGINDIR = CMAKE_INSTALL_FULL_LIBDIR path is the absolute path
     // corresponding to the install path used for constructing KICAD_USER_PLUGIN
     wxString tfname = wxString::FromUTF8Unchecked( KICAD_PLUGINDIR );
-    fn.Assign( tfname, wxT( "" ) );
+    fn.Assign( tfname, wxEmptyString );
     fn.AppendDir( wxT( "kicad" ) );
     fn.AppendDir( wxT( "plugins" ) );
 #elif defined( __WXMAC__ )

@@ -1296,7 +1296,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     wxString libraryname = epart->library;
     wxString gatename    = epart->deviceset + epart->device + einstance.gate;
     wxString symbolname  = wxString( epart->deviceset + epart->device );
-    symbolname.Replace( wxT( "*" ), wxT( "" ) );
+    symbolname.Replace( wxT( "*" ), wxEmptyString );
     wxString kisymbolname = EscapeString( symbolname, CTX_LIBID );
 
     int unit = m_eagleLibs[libraryname].GateUnit[gatename];
@@ -1518,7 +1518,10 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
         // Get Device set information
         EDEVICE_SET edeviceset = EDEVICE_SET( devicesetNode );
 
-        wxString prefix = edeviceset.prefix ? edeviceset.prefix.Get() : wxT( "" );
+        wxString prefix;
+
+        if( edeviceset.prefix )
+            prefix =  edeviceset.prefix.Get();
 
         NODE_MAP   deviceSetChildren = MapChildren( devicesetNode );
         wxXmlNode* deviceNode        = getChildrenNodes( deviceSetChildren, wxT( "devices" ) );
@@ -1531,7 +1534,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
 
             // Create symbol name from deviceset and device names.
             wxString symbolName = edeviceset.name + edevice.name;
-            symbolName.Replace( wxT( "*" ), wxT( "" ) );
+            symbolName.Replace( wxT( "*" ), wxEmptyString );
             wxASSERT( !symbolName.IsEmpty() );
             symbolName = EscapeString( symbolName, CTX_LIBID );
 

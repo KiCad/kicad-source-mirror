@@ -128,7 +128,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
                     if( entry.empty() || !entry.is_array() )
                         continue;
 
-                    TEXT_ITEM_INFO textInfo( wxT( "" ), true, F_SilkS );
+                    TEXT_ITEM_INFO textInfo( wxEmptyString, true, F_SilkS );
 
                     textInfo.m_Text = entry.at(0).get<wxString>();
                     textInfo.m_Visible = entry.at(1).get<bool>();

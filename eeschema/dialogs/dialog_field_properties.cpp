@@ -399,7 +399,7 @@ void DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEven
     {
         wxString text = m_StyledTextCtrl->GetText();
         int currpos = m_StyledTextCtrl->GetCurrentPos();
-        text.Replace( wxT( "\n" ), wxT( "" ) );
+        text.Replace( wxT( "\n" ), wxEmptyString );
         m_StyledTextCtrl->SetText( text );
         m_StyledTextCtrl->GotoPos( currpos-1 );
         return;

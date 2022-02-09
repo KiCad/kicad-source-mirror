@@ -968,7 +968,7 @@ void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress, const wxString& aForc
         // Try to select the parent library, in case the symbol is not found
         if( !found && selected.IsValid() )
         {
-            selected.SetLibItemName( wxT( "" ) );
+            selected.SetLibItemName( wxEmptyString );
             found = m_libMgr->GetAdapter()->FindItem( selected );
 
             if( found )

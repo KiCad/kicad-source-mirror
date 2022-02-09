@@ -221,7 +221,7 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
 
         if( drawLabel )
         {
-            wxString label = DimensionLabel( wxT( "" ), tickSpace * i, aUnits, false );
+            wxString label = DimensionLabel( wxEmptyString, tickSpace * i, aUnits, false );
             gal->SetLineWidth( textThickness );
             gal->StrokeText( label, tickPos + labelOffset, labelAngle );
         }

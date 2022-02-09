@@ -536,7 +536,7 @@ std::string FormatStringToGerber( const wxString& aString )
 // Netname and Pan num fields cannot be empty in Gerber files
 // Normalized names must be used, if any
 #define NO_NET_NAME wxT( "N/C" )    // net name of not connected pads (one pad net) (normalized)
-#define NO_PAD_NAME wxT( "" )       // pad name of pads without pad name/number (not normalized)
+#define NO_PAD_NAME wxEmptyString       // pad name of pads without pad name/number (not normalized)
 
 
 bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttributes,

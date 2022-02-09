@@ -1007,7 +1007,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
     if( !conn )
     {
-        editFrame->SetStatusText( wxT( "" ) );
+        editFrame->SetStatusText( wxEmptyString );
         editFrame->SendCrossProbeClearHighlight();
     }
     else

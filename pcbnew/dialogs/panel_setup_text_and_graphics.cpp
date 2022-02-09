@@ -148,8 +148,8 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataToWindow()
             SET_MILS_CELL( i, COL_TEXT_WIDTH, m_BrdSettings->m_TextSize[ i ].x );
             SET_MILS_CELL( i, COL_TEXT_HEIGHT, m_BrdSettings->m_TextSize[ i ].y );
             SET_MILS_CELL( i, COL_TEXT_THICKNESS, m_BrdSettings->m_TextThickness[ i ] );
-            m_grid->SetCellValue( i, COL_TEXT_ITALIC, m_BrdSettings->m_TextItalic[ i ] ? wxT( "1" ) : wxT( "" ) );
-            m_grid->SetCellValue( i, COL_TEXT_UPRIGHT, m_BrdSettings->m_TextUpright[ i ] ? wxT( "1" ) : wxT( "" ) );
+            m_grid->SetCellValue( i, COL_TEXT_ITALIC, m_BrdSettings->m_TextItalic[ i ] ? wxT( "1" ) : wxEmptyString );
+            m_grid->SetCellValue( i, COL_TEXT_UPRIGHT, m_BrdSettings->m_TextUpright[ i ] ? wxT( "1" ) : wxEmptyString );
 
             auto attr = new wxGridCellAttr;
             attr->SetRenderer( new wxGridCellBoolRenderer() );

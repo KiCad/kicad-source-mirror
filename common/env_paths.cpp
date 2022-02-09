@@ -141,7 +141,7 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
     if( aProject )
         return NormalizePath( aFilePath, aEnvVars, aProject->GetProjectPath() );
     else
-        return NormalizePath( aFilePath, aEnvVars, wxT( "" ) );
+        return NormalizePath( aFilePath, aEnvVars, wxEmptyString );
 }
 
 

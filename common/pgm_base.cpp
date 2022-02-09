@@ -98,7 +98,7 @@ LANGUAGE_DESCR LanguagesList[] =
             wxT( "简体中文" ), true },
     { wxLANGUAGE_CHINESE_TRADITIONAL, ID_LANGUAGE_CHINESE_TRADITIONAL,
             wxT( "繁體中文" ), false },
-    { 0, 0, wxT( "" ), false }         // Sentinel
+    { 0, 0, wxEmptyString, false }         // Sentinel
 };
 #undef _
 #define _(s) wxGetTranslation((s))

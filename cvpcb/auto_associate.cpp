@@ -55,13 +55,13 @@ wxString GetQuotedText( wxString& text )
     int i = text.Find( QUOTE );
 
     if( wxNOT_FOUND == i )
-        return wxT( "" );
+        return wxEmptyString;
 
     wxString shrt = text.Mid( i + 1 );
     i = shrt.Find( QUOTE );
 
     if( wxNOT_FOUND == i )
-        return wxT( "" );
+        return wxEmptyString;
 
     text = shrt.Mid( i + 1 );
     return shrt.Mid( 0, i );

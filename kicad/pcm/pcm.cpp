@@ -363,7 +363,7 @@ const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryI
     PCM_REPOSITORY current_repo;
 
     std::unique_ptr<WX_PROGRESS_REPORTER> reporter(
-            new WX_PROGRESS_REPORTER( m_dialog, wxT( "" ), 1 ) );
+            new WX_PROGRESS_REPORTER( m_dialog, wxEmptyString, 1 ) );
 
     if( !FetchRepository( url, current_repo, reporter.get() ) )
         return false;
@@ -825,7 +825,7 @@ std::unordered_map<wxString, wxBitmap> PLUGIN_CONTENT_MANAGER::GetInstalledPacka
 {
     std::unordered_map<wxString, wxBitmap> bitmaps;
 
-    wxFileName resources_dir_fn( m_3rdparty_path, wxT( "" ) );
+    wxFileName resources_dir_fn( m_3rdparty_path, wxEmptyString );
     resources_dir_fn.AppendDir( wxT( "resources" ) );
     wxDir resources_dir( resources_dir_fn.GetPath() );
 
@@ -833,7 +833,7 @@ std::unordered_map<wxString, wxBitmap> PLUGIN_CONTENT_MANAGER::GetInstalledPacka
         return bitmaps;
 
     wxString subdir;
-    bool     more = resources_dir.GetFirst( &subdir, wxT( "" ), wxDIR_DIRS | wxDIR_HIDDEN );
+    bool     more = resources_dir.GetFirst( &subdir, wxEmptyString, wxDIR_DIRS | wxDIR_HIDDEN );
 
     while( more )
     {

@@ -75,7 +75,7 @@ void PCB_TEXT::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
     }
 
     aNode->GetAttribute( wxT( "Name" ), &m_name.text );
-    m_name.text.Replace( wxT( "\r" ), wxT( "" ) );
+    m_name.text.Replace( wxT( "\r" ), wxEmptyString );
 
     str = FindNodeGetContent( aNode, wxT( "justify" ) );
     m_name.justify = GetJustifyIdentificator( str );

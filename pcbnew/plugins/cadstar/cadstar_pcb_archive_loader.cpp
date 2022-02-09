@@ -714,7 +714,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentLibrary()
         SYMDEF_PCB component = symPair.second;
         wxString   fpName = component.ReferenceName + ( ( component.Alternate.size() > 0 ) ?
                                               ( wxT( " (" ) + component.Alternate + wxT( ")" ) ) :
-                                              wxT( "" ) );
+                                              wxString() );
 
         // Check that we are not loading a documentation symbol.
         // Documentation symbols in CADSTAR are graphical "footprints" that can be assigned
@@ -999,7 +999,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
         // PCB Only pads in CADSTAR do not have a representation in the schematic - they are
         // purely mechanical pads that have no net associated with them. Make the pad name
         // empty to avoid warnings when importing from the schematic
-        pad->SetNumber( wxT( "" ) );
+        pad->SetNumber( wxEmptyString );
     }
     else
     {

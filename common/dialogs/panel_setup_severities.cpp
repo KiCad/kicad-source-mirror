@@ -111,7 +111,7 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
 
     if( m_pinMapSpecialCase )
     {
-        wxString pinMapSeverities[] = { _( "From Pin Conflicts Map" ), wxT( "" ), _( "Ignore" ) };
+        wxString pinMapSeverities[] = { _( "From Pin Conflicts Map" ), wxEmptyString, _( "Ignore" ) };
         int      errorCode          = m_pinMapSpecialCase->GetErrorCode();
         wxString msg                = m_pinMapSpecialCase->GetErrorText();
 
@@ -123,9 +123,9 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
 
         for( size_t i = 0; i < 3; ++i )
         {
-            if( pinMapSeverities[i] == wxT( "" ) )
+            if( pinMapSeverities[i] == wxEmptyString )
             {
-                wxStaticText* spacer = new wxStaticText( radioPanel, wxID_ANY, wxT( "" ) );
+                wxStaticText* spacer = new wxStaticText( radioPanel, wxID_ANY, wxEmptyString );
                 radioSizer->Add( spacer, 0, wxRIGHT | wxEXPAND, 17 );
             }
             else

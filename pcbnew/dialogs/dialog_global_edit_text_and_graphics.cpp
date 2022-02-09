@@ -206,7 +206,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
         attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER ); \
         attr->SetReadOnly(); \
         m_grid->SetAttr( aRow, aCol, attr ); \
-        m_grid->SetCellValue( aRow, aCol, ( aValue ) ? wxT( "1" ) : wxT( "" ) )
+        m_grid->SetCellValue( aRow, aCol, ( aValue ) ? wxT( "1" ) : wxEmptyString )
 
     const BOARD_DESIGN_SETTINGS& bds = m_parent->GetBoard()->GetDesignSettings();
     wxGridCellAttr* attr;

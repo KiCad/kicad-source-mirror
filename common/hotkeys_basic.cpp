@@ -112,14 +112,14 @@ static struct hotkey_name_descr hotkeyNameList[] =
     { wxT( "Num Pad /" ),    WXK_NUMPAD_DIVIDE                                        },
     { wxT( "Num Pad ." ),    WXK_NUMPAD_SEPARATOR                                     },
 
-    { wxT( "" ),             0                                                        },
+    { wxEmptyString,             0                                                        },
 
     { wxT( "Click" ),        PSEUDO_WXK_CLICK                                         },
     { wxT( "DblClick" ),     PSEUDO_WXK_DBLCLICK                                      },
     { wxT( "Wheel" ),        PSEUDO_WXK_WHEEL                                         },
 
     // Do not change this line: end of list
-    { wxT( "" ),             KEY_NON_FOUND                                            }
+    { wxEmptyString,             KEY_NON_FOUND                                            }
 };
 
 

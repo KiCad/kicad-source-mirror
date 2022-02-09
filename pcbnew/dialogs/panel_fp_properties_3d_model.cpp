@@ -216,9 +216,9 @@ void PANEL_FP_PROPERTIES_3D_MODEL::On3DModelCellChanged( wxGridEvent& aEvent )
         // Perform cleanup and validation on the filename if it isn't empty
         if( !filename.empty() )
         {
-            filename.Replace( wxT( "\n" ), wxT( "" ) );
-            filename.Replace( wxT( "\r" ), wxT( "" ) );
-            filename.Replace( wxT( "\t" ), wxT( "" ) );
+            filename.Replace( wxT( "\n" ), wxEmptyString );
+            filename.Replace( wxT( "\r" ), wxEmptyString );
+            filename.Replace( wxT( "\t" ), wxEmptyString );
 
             res->ValidateFileName( filename, hasAlias );
 

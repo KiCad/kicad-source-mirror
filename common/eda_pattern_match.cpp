@@ -234,7 +234,7 @@ bool EDA_PATTERN_MATCH_RELATIONAL::SetPattern( const wxString& aPattern )
     else
         return false;
 
-    if( val == wxT( "" ) )
+    if( val == wxEmptyString )
     {
         // Matching on empty values keeps the match list from going empty when
         // the user types the relational operator character, which helps prevent
@@ -337,7 +337,7 @@ const std::map<wxString, double> EDA_PATTERN_MATCH_RELATIONAL::m_units = {
     { wxT( "n" ),  1e-9 },
     { wxT( "u" ),  1e-6 },
     { wxT( "m" ),  1e-3 },
-    { wxT( "" ),   1. },
+    { wxEmptyString,   1. },
     { wxT( "k" ),  1e3 },
     { wxT( "meg" ),1e6 },
     { wxT( "g" ),  1e9 },

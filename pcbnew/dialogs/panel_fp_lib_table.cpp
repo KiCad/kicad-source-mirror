@@ -107,25 +107,25 @@ static const std::map<int, SUPPORTED_FILE_TYPE>& fileTypes()
     {
         { ID_PANEL_FPLIB_ADD_KICADMOD,
             {
-                wxT( "KiCad (folder with .kicad_mod files)" ), wxT( "" ),
+                wxT( "KiCad (folder with .kicad_mod files)" ), wxEmptyString,
                 KiCadFootprintFileExtension, false, IO_MGR::KICAD_SEXP
             }
         },
         { ID_PANEL_FPLIB_ADD_EAGLE6,
             {
-                wxT( "Eagle 6.x (*.lbr)" ), EagleFootprintLibPathWildcard(), wxT( "" ),
+                wxT( "Eagle 6.x (*.lbr)" ), EagleFootprintLibPathWildcard(), wxEmptyString,
                 true, IO_MGR::EAGLE
             }
         },
         { ID_PANEL_FPLIB_ADD_KICADLEGACY,
             {
-                wxT( "KiCad legacy (*.mod)" ), LegacyFootprintLibPathWildcard(), wxT( "" ),
+                wxT( "KiCad legacy (*.mod)" ), LegacyFootprintLibPathWildcard(), wxEmptyString,
                 true, IO_MGR::LEGACY
             }
         },
         { ID_PANEL_FPLIB_ADD_GEDA,
             {
-                wxT( "Geda (folder with *.fp files)" ), wxT( "" ),
+                wxT( "Geda (folder with *.fp files)" ), wxEmptyString,
                 GedaPcbFootprintLibFileExtension, false, IO_MGR::GEDA_PCB
             }
         },

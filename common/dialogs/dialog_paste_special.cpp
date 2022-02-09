@@ -38,7 +38,7 @@ DIALOG_PASTE_SPECIAL::DIALOG_PASTE_SPECIAL( wxWindow* aParent,
                                        "any designators that already exist in the design." ) );
 
     m_pasteOptions->SetItemToolTip( static_cast<int>( PASTE_MODE::KEEP_ANNOTATIONS ),
-                                    wxT( "" ) ); // Self explanatory
+                                    wxEmptyString ); // Self explanatory
 
     m_pasteOptions->SetItemToolTip( static_cast<int>( PASTE_MODE::REMOVE_ANNOTATIONS ),
                                     wxString::Format( _( "Replaces reference designators "

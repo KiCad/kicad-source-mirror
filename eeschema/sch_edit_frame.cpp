@@ -1521,7 +1521,7 @@ void SCH_EDIT_FRAME::UpdateNetHighlightStatus()
     }
     else
     {
-        SetStatusText( wxT( "" ) );
+        SetStatusText( wxEmptyString );
     }
 }
 

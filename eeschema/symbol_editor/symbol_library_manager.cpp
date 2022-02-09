@@ -191,7 +191,7 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
     bool res = true;    // assume all libraries are successfully saved
 
     PROPERTIES properties;
-    properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, wxT( "" ) );
+    properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, wxEmptyString );
 
     auto it = m_libs.find( aLibrary );
 
@@ -957,7 +957,7 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( std::shared_ptr<SYMBOL_BUFF
     wxCHECK( libSymbol && originalSymbol, false );
     SYMBOL_LIB_TABLE::SAVE_T result;
     PROPERTIES properties;
-    properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, wxT( "" ) );
+    properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, wxEmptyString );
 
     // Delete the original symbol if the symbol name has been changed.
     if( libSymbol->GetName() != originalSymbol->GetName() )
@@ -1049,7 +1049,7 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( std::shared_ptr<SYMBOL_BUFF
 
     // set properties to prevent save file on every symbol save
     PROPERTIES properties;
-    properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, wxT( "" ) );
+    properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, wxEmptyString );
 
     // Delete the original symbol if the symbol name has been changed.
     if( libSymbol->GetName() != originalSymbol->GetName() )

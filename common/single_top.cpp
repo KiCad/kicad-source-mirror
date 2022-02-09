@@ -335,7 +335,7 @@ bool PGM_SINGLE_TOP::OnPgmInit()
     } frameTypes[] = {
         { wxT( "pcb" ),    FRAME_PCB_EDITOR },
         { wxT( "fpedit" ), FRAME_FOOTPRINT_EDITOR },
-        { wxT( "" ),       FRAME_T_COUNT }
+        { wxEmptyString,       FRAME_T_COUNT }
     };
 
     wxString frameName;

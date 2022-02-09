@@ -1403,7 +1403,7 @@ public:
     {
         return aRefName
                + ( ( aAlternateName.size() > 0 ) ? ( wxT( " (" ) + aAlternateName + wxT( ")" ) )
-                                                 : wxT( "" ) );
+                                                 : wxString() );
     }
 
 

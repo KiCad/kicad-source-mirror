@@ -101,7 +101,7 @@ void DIALOG_MANAGE_REPOSITORIES::OnAddButtonClicked( wxCommandEvent& event )
         }
         else
         {
-            WX_PROGRESS_REPORTER reporter( GetParent(), wxT( "" ), 1 );
+            WX_PROGRESS_REPORTER reporter( GetParent(), wxEmptyString, 1 );
 
             if( m_pcm->FetchRepository( url, repository, &reporter ) )
             {

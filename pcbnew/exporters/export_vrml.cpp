@@ -792,7 +792,7 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
     auto sM = aFootprint->Models().begin();
     auto eM = aFootprint->Models().end();
 
-    wxFileName subdir( m_Subdir3DFpModels, wxT( "" ) );
+    wxFileName subdir( m_Subdir3DFpModels, wxEmptyString );
 
     while( sM != eM )
     {
@@ -926,8 +926,8 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
             if( m_UseRelPathIn3DModelFilename )
             {
                 wxFileName tmp = dstFile;
-                tmp.SetExt( wxT( "" ) );
-                tmp.SetName( wxT( "" ) );
+                tmp.SetExt( wxEmptyString );
+                tmp.SetName( wxEmptyString );
                 tmp.RemoveLastDir();
                 dstFile.MakeRelativeTo( tmp.GetPath() );
             }
@@ -1049,7 +1049,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
 void EXPORTER_PCB_VRML::ExportFp3DModelsAsLinkedFile( const wxString& aFullFileName )
 {
     // check if the 3D Subdir exists - create if not
-    wxFileName subdir( m_Subdir3DFpModels, wxT( "" ) );
+    wxFileName subdir( m_Subdir3DFpModels, wxEmptyString );
 
     if( ! subdir.DirExists() )
     {

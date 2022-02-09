@@ -183,7 +183,7 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
         wxLogNull doNotLog;
 
         wxConfigBase::DontCreateOnDemand();
-        auto cfg = std::make_unique<wxFileConfig>( wxT( "" ), wxT( "" ), aPath.GetFullPath() );
+        auto cfg = std::make_unique<wxFileConfig>( wxEmptyString, wxEmptyString, aPath.GetFullPath() );
 
         // If migrate fails or is not implemented, fall back to built-in defaults that were
         // already loaded above

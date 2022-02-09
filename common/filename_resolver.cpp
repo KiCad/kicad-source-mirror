@@ -64,7 +64,7 @@ bool FILENAME_RESOLVER::Set3DConfigDir( const wxString& aConfigDir )
     if( aConfigDir.empty() )
         return false;
 
-    wxFileName cfgdir( ExpandEnvVarSubstitutions( aConfigDir, m_project ), wxT( "" ) );
+    wxFileName cfgdir( ExpandEnvVarSubstitutions( aConfigDir, m_project ), wxEmptyString );
 
     cfgdir.Normalize();
 
@@ -85,7 +85,7 @@ bool FILENAME_RESOLVER::SetProject( PROJECT* aProject, bool* flgChanged )
     if( !aProject )
         return false;
 
-    wxFileName projdir( ExpandEnvVarSubstitutions( aProject->GetProjectPath(), aProject ), wxT( "" ) );
+    wxFileName projdir( ExpandEnvVarSubstitutions( aProject->GetProjectPath(), aProject ), wxEmptyString );
 
     projdir.Normalize();
 
@@ -188,7 +188,7 @@ bool FILENAME_RESOLVER::createPathList()
             }
             else
             {
-                fndummy.Assign( pathVal, wxT( "" ) );
+                fndummy.Assign( pathVal, wxEmptyString );
                 fndummy.Normalize();
                 lpath.m_Pathexp = fndummy.GetFullPath();
             }
@@ -308,7 +308,7 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     // users can potentially override a model within ${KICAD6_3DMODEL_DIR}.
     if( !m_paths.begin()->m_Pathexp.empty() && !tname.StartsWith( wxT( ":" ) ) )
     {
-        tmpFN.Assign( m_paths.begin()->m_Pathexp, wxT( "" ) );
+        tmpFN.Assign( m_paths.begin()->m_Pathexp, wxEmptyString );
         wxString fullPath = tmpFN.GetPathWithSep() + tname;
 
         fullPath = ExpandEnvVarSubstitutions( fullPath, m_project );
@@ -420,7 +420,7 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
         tpath.m_Pathvar.erase( tpath.m_Pathvar.length() - 1 );
     #endif
 
-    wxFileName path( ExpandEnvVarSubstitutions( tpath.m_Pathvar, m_project ), wxT( "" ) );
+    wxFileName path( ExpandEnvVarSubstitutions( tpath.m_Pathvar, m_project ), wxEmptyString );
 
     path.Normalize();
 
@@ -713,7 +713,7 @@ void FILENAME_RESOLVER::checkEnvVarPath( const wxString& aPath )
     SEARCH_PATH lpath;
     lpath.m_Alias = envar;
     lpath.m_Pathvar = lpath.m_Alias;
-    wxFileName tmpFN( ExpandEnvVarSubstitutions( lpath.m_Alias, m_project ), wxT( "" ) );
+    wxFileName tmpFN( ExpandEnvVarSubstitutions( lpath.m_Alias, m_project ), wxEmptyString );
 
     wxUniChar psep = tmpFN.GetPathSeparator();
     tmpFN.Normalize();
@@ -768,11 +768,11 @@ wxString FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
                 continue;
             }
 
-            fpath.Assign( tpath, wxT( "" ) );
+            fpath.Assign( tpath, wxEmptyString );
         }
         else
         {
-            fpath.Assign( sL->m_Pathexp, wxT( "" ) );
+            fpath.Assign( sL->m_Pathexp, wxEmptyString );
         }
 
         wxString fps = fpath.GetPathWithSep();

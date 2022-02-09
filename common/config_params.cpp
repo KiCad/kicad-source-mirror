@@ -404,7 +404,7 @@ void PARAM_CFG_WXSTRING_SET::ReadParam( wxConfigBase* aConfig ) const
 
         key = m_Ident;
         key << i;
-        data = aConfig->Read( key, wxT( "" ) );
+        data = aConfig->Read( key, wxEmptyString );
 
         if( data.IsEmpty() )
             break;
@@ -494,7 +494,7 @@ void PARAM_CFG_LIBNAME_LIST::ReadParam( wxConfigBase* aConfig ) const
         id_lib = m_Ident;
         id_lib << indexlib;
         indexlib++;
-        libname = aConfig->Read( id_lib, wxT( "" ) );
+        libname = aConfig->Read( id_lib, wxEmptyString );
 
         if( libname.IsEmpty() )
             break;

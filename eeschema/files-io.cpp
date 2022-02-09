@@ -1402,7 +1402,7 @@ void SCH_EDIT_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
             wxString tmp = recoveredFn.GetName();
 
             // Strip "_autosave-" prefix from the auto save file name.
-            tmp.Replace( GetAutoSaveFilePrefix(), wxT( "" ), false );
+            tmp.Replace( GetAutoSaveFilePrefix(), wxEmptyString, false );
             recoveredFn.SetName( tmp );
 
             wxFileName backupFn = recoveredFn;

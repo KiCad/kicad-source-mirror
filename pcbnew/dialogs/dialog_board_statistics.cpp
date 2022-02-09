@@ -707,7 +707,7 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
     // We will save data about components in the table.
     // We have to calculate column widths
     std::vector<int>      widths;
-    std::vector<wxString> labels{ wxT( "" ), _( "Front Side" ), _( "Back Side" ), _( "Total" ) };
+    std::vector<wxString> labels{ wxEmptyString, _( "Front Side" ), _( "Back Side" ), _( "Total" ) };
     wxString tmp;
 
     widths.reserve( labels.size() );

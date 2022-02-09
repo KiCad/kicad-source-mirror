@@ -86,7 +86,7 @@ PCB::PCB( BOARD* aBoard ) :
         TLAYER layer;
         layer.KiCadLayer = F_Mask; // default
         layer.layerType  = LAYER_TYPE_NONSIGNAL; // default
-        layer.netNameRef = wxT( "" ); // default
+        layer.netNameRef = wxEmptyString; // default
 
         m_LayersMap.insert( std::make_pair( i, layer ) );
     }

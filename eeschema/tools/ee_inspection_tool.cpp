@@ -332,7 +332,7 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
         wxString pinName = pin->GetName();
 
         if( pinName.IsEmpty() || pinName == wxT( "~" ) )
-            pinName = wxT( "" );
+            pinName = wxEmptyString;
         else
             pinName = wxT( "'" ) + pinName + wxT( "'" );
 

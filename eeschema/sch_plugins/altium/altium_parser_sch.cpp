@@ -108,9 +108,9 @@ ASCH_SYMBOL::ASCH_SYMBOL( const std::map<wxString, wxString>& aProps )
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::COMPONENT );
 
     currentpartid = ALTIUM_PARSER::ReadInt( aProps, wxT( "CURRENTPARTID" ), ALTIUM_COMPONENT_NONE );
-    libreference = ALTIUM_PARSER::ReadString( aProps, wxT( "LIBREFERENCE" ), wxT( "" ) );
-    sourcelibraryname = ALTIUM_PARSER::ReadString( aProps, wxT( "SOURCELIBRARYNAME" ), wxT( "" ) );
-    componentdescription = ALTIUM_PARSER::ReadString( aProps, wxT( "COMPONENTDESCRIPTION" ), wxT( "" ) );
+    libreference = ALTIUM_PARSER::ReadString( aProps, wxT( "LIBREFERENCE" ), wxEmptyString );
+    sourcelibraryname = ALTIUM_PARSER::ReadString( aProps, wxT( "SOURCELIBRARYNAME" ), wxEmptyString );
+    componentdescription = ALTIUM_PARSER::ReadString( aProps, wxT( "COMPONENTDESCRIPTION" ), wxEmptyString );
 
     orientation = ALTIUM_PARSER::ReadInt( aProps, wxT( "ORIENTATION" ), 0 );
     isMirrored  = ALTIUM_PARSER::ReadBool( aProps, wxT( "ISMIRRORED" ), false );
@@ -131,9 +131,9 @@ ASCH_PIN::ASCH_PIN( const std::map<wxString, wxString>& aProps )
     ownerpartid = ReadOwnerPartId( aProps );
     ownerpartdisplaymode = ALTIUM_PARSER::ReadInt( aProps, wxT( "OWNERPARTDISPLAYMODE" ), 0 );
 
-    name       = ALTIUM_PARSER::ReadString( aProps, wxT( "NAME" ), wxT( "" ) );
-    text       = ALTIUM_PARSER::ReadString( aProps, wxT( "TEXT" ), wxT( "" ) );
-    designator = ALTIUM_PARSER::ReadString( aProps, wxT( "DESIGNATOR" ), wxT( "" ) );
+    name       = ALTIUM_PARSER::ReadString( aProps, wxT( "NAME" ), wxEmptyString );
+    text       = ALTIUM_PARSER::ReadString( aProps, wxT( "TEXT" ), wxEmptyString );
+    designator = ALTIUM_PARSER::ReadString( aProps, wxT( "DESIGNATOR" ), wxEmptyString );
 
     int symbolOuterInt = ALTIUM_PARSER::ReadInt( aProps, wxT( "SYMBOL_OUTER" ), 0 );
     symbolOuter        = static_cast<ASCH_PIN_SYMBOL_OUTER>( symbolOuterInt );
@@ -214,7 +214,7 @@ ASCH_LABEL::ASCH_LABEL( const std::map<wxString, wxString>& aProps )
     location = wxPoint( ReadKiCadUnitFrac( aProps, wxT( "LOCATION.X" ) ),
                         -ReadKiCadUnitFrac( aProps, wxT( "LOCATION.Y" ) ) );
 
-    text = ALTIUM_PARSER::ReadString( aProps, wxT( "TEXT" ), wxT( "" ) );
+    text = ALTIUM_PARSER::ReadString( aProps, wxT( "TEXT" ), wxEmptyString );
 
     fontId     = ALTIUM_PARSER::ReadInt( aProps, wxT( "FONTID" ), 0 );
     isMirrored = ALTIUM_PARSER::ReadBool( aProps, wxT( "ISMIRRORED" ), false );
@@ -237,7 +237,7 @@ ASCH_TEXT_FRAME::ASCH_TEXT_FRAME( const std::map<wxString, wxString>& aProps )
     size = wxSize( ReadKiCadUnitFrac( aProps, wxT( "CORNER.X" ) ) - location.x,
                    -ReadKiCadUnitFrac( aProps, wxT( "CORNER.Y" ) ) - location.y );
 
-    text = ALTIUM_PARSER::ReadString( aProps, wxT( "TEXT" ), wxT( "" ) );
+    text = ALTIUM_PARSER::ReadString( aProps, wxT( "TEXT" ), wxEmptyString );
     text.Replace( wxT( "~1" ), wxT( "\n" ), true );
 
     fontId = ALTIUM_PARSER::ReadInt( aProps, wxT( "FONTID" ), 0 );
@@ -256,7 +256,7 @@ ASCH_NOTE::ASCH_NOTE( const std::map<wxString, wxString>& aProperties ) :
 {
     wxASSERT( ReadRecord( aProperties ) == ALTIUM_SCH_RECORD::NOTE );
 
-    author = ALTIUM_PARSER::ReadString( aProperties, wxT( "AUTHOR" ), wxT( "" ) );
+    author = ALTIUM_PARSER::ReadString( aProperties, wxT( "AUTHOR" ), wxEmptyString );
 }
 
 
@@ -444,7 +444,7 @@ ASCH_SHEET_ENTRY::ASCH_SHEET_ENTRY( const std::map<wxString, wxString>& aProps )
 
     side = ReadEnum<ASCH_SHEET_ENTRY_SIDE>( aProps, wxT( "SIDE" ), 0, 3, ASCH_SHEET_ENTRY_SIDE::LEFT );
 
-    name = ALTIUM_PARSER::ReadString( aProps, wxT( "NAME" ), wxT( "" ) );
+    name = ALTIUM_PARSER::ReadString( aProps, wxT( "NAME" ), wxEmptyString );
 
     iotype = ReadEnum<ASCH_PORT_IOTYPE>( aProps, wxT( "IOTYPE" ), 0, 3, ASCH_PORT_IOTYPE::UNSPECIFIED );
     style = ReadEnum<ASCH_PORT_STYLE>( aProps, wxT( "STYLE" ), 0, 7, ASCH_PORT_STYLE::NONE_HORIZONTAL );
@@ -463,7 +463,7 @@ ASCH_POWER_PORT::ASCH_POWER_PORT( const std::map<wxString, wxString>& aProps )
     orientation = ReadEnum<ASCH_RECORD_ORIENTATION>( aProps, wxT( "ORIENTATION" ), 0, 3,
                                                      ASCH_RECORD_ORIENTATION::RIGHTWARDS );
 
-    text        = ALTIUM_PARSER::ReadString( aProps, wxT( "TEXT" ), wxT( "" ) );
+    text        = ALTIUM_PARSER::ReadString( aProps, wxT( "TEXT" ), wxEmptyString );
     showNetName = ALTIUM_PARSER::ReadBool( aProps, wxT( "SHOWNETNAME" ), true );
 
     style = ReadEnum<ASCH_POWER_PORT_STYLE>( aProps, wxT( "STYLE" ), 0, 10,
@@ -479,8 +479,8 @@ ASCH_PORT::ASCH_PORT( const std::map<wxString, wxString>& aProps )
     location = wxPoint( ReadKiCadUnitFrac( aProps, wxT( "LOCATION.X" ) ),
                         -ReadKiCadUnitFrac( aProps, wxT( "LOCATION.Y" ) ) );
 
-    name = ALTIUM_PARSER::ReadString( aProps, wxT( "NAME" ), wxT( "" ) );
-    harnessType = ALTIUM_PARSER::ReadString( aProps, wxT( "HARNESSTYPE" ), wxT( "" ) );
+    name = ALTIUM_PARSER::ReadString( aProps, wxT( "NAME" ), wxEmptyString );
+    harnessType = ALTIUM_PARSER::ReadString( aProps, wxT( "HARNESSTYPE" ), wxEmptyString );
 
     width  = ReadKiCadUnitFrac( aProps, wxT( "WIDTH" ) );
     height = ReadKiCadUnitFrac( aProps, wxT( "HEIGHT" ) );
@@ -506,7 +506,7 @@ ASCH_NET_LABEL::ASCH_NET_LABEL( const std::map<wxString, wxString>& aProps )
 {
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::NET_LABEL );
 
-    text = ALTIUM_PARSER::ReadString( aProps, wxT( "TEXT" ), wxT( "" ) );
+    text = ALTIUM_PARSER::ReadString( aProps, wxT( "TEXT" ), wxEmptyString );
 
     location = wxPoint( ReadKiCadUnitFrac( aProps, wxT( "LOCATION.X" ) ),
                         -ReadKiCadUnitFrac( aProps, wxT( "LOCATION.Y" ) ) );
@@ -572,7 +572,7 @@ ASCH_IMAGE::ASCH_IMAGE( const std::map<wxString, wxString>& aProps )
     indexinsheet = ALTIUM_PARSER::ReadInt( aProps, wxT( "INDEXINSHEET" ), 0 );
     ownerpartid = ReadOwnerPartId( aProps );
 
-    filename = ALTIUM_PARSER::ReadString( aProps, wxT( "FILENAME" ), wxT( "" ) );
+    filename = ALTIUM_PARSER::ReadString( aProps, wxT( "FILENAME" ), wxEmptyString );
 
     location = wxPoint( ReadKiCadUnitFrac( aProps, wxT( "LOCATION.X" ) ),
                         -ReadKiCadUnitFrac( aProps, wxT( "LOCATION.Y" ) ) );
@@ -590,7 +590,7 @@ ASCH_SHEET_FONT::ASCH_SHEET_FONT( const std::map<wxString, wxString>& aProps, in
 
     const wxString sid = std::to_string( aId );
 
-    fontname = ALTIUM_PARSER::ReadString( aProps, wxT( "FONTNAME" ) + sid, wxT( "" ) );
+    fontname = ALTIUM_PARSER::ReadString( aProps, wxT( "FONTNAME" ) + sid, wxEmptyString );
 
     size     = ReadKiCadUnitFrac( aProps, wxT( "SIZE" ) + sid );
     rotation = ALTIUM_PARSER::ReadInt( aProps, wxT( "ROTATION" ) + sid, 0 );
@@ -650,7 +650,7 @@ ASCH_SHEET_NAME::ASCH_SHEET_NAME( const std::map<wxString, wxString>& aProps )
     ownerindex = ReadOwnerIndex( aProps );
     ownerpartid = ReadOwnerPartId( aProps );
 
-    text = ALTIUM_PARSER::ReadString( aProps, wxT( "TEXT" ), wxT( "" ) );
+    text = ALTIUM_PARSER::ReadString( aProps, wxT( "TEXT" ), wxEmptyString );
 
     orientation = ReadEnum<ASCH_RECORD_ORIENTATION>( aProps, wxT( "ORIENTATION" ), 0, 3,
                                                      ASCH_RECORD_ORIENTATION::RIGHTWARDS );
@@ -669,7 +669,7 @@ ASCH_FILE_NAME::ASCH_FILE_NAME( const std::map<wxString, wxString>& aProps )
     ownerindex = ReadOwnerIndex( aProps );
     ownerpartid = ReadOwnerPartId( aProps );
 
-    text = ALTIUM_PARSER::ReadString( aProps, wxT( "TEXT" ), wxT( "" ) );
+    text = ALTIUM_PARSER::ReadString( aProps, wxT( "TEXT" ), wxEmptyString );
 
     orientation = ReadEnum<ASCH_RECORD_ORIENTATION>( aProps, wxT( "ORIENTATION" ), 0, 3,
                                                      ASCH_RECORD_ORIENTATION::RIGHTWARDS );
@@ -688,8 +688,8 @@ ASCH_DESIGNATOR::ASCH_DESIGNATOR( const std::map<wxString, wxString>& aProps )
     ownerindex = ReadOwnerIndex( aProps );
     ownerpartid = ReadOwnerPartId( aProps );
 
-    name = ALTIUM_PARSER::ReadString( aProps, wxT( "NAME" ), wxT( "" ) );
-    text = ALTIUM_PARSER::ReadString( aProps, wxT( "TEXT" ), wxT( "" ) );
+    name = ALTIUM_PARSER::ReadString( aProps, wxT( "NAME" ), wxEmptyString );
+    text = ALTIUM_PARSER::ReadString( aProps, wxT( "TEXT" ), wxEmptyString );
 
     justification = ReadEnum<ASCH_LABEL_JUSTIFICATION>( aProps, wxT( "JUSTIFICATION" ), 0, 8,
                                                         ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT );
@@ -707,9 +707,9 @@ ASCH_IMPLEMENTATION::ASCH_IMPLEMENTATION( const std::map<wxString, wxString>& aP
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::IMPLEMENTATION );
 
     ownerindex = ALTIUM_PARSER::ReadInt( aProps, wxT( "OWNERINDEX" ), ALTIUM_COMPONENT_NONE );
-    name = ALTIUM_PARSER::ReadString( aProps, wxT( "MODELNAME" ), wxT( "" ) );
-    type = ALTIUM_PARSER::ReadString( aProps, wxT( "MODELTYPE" ), wxT( "" ) );
-    libname = ALTIUM_PARSER::ReadString( aProps, wxT( "MODELDATAFILE0" ), wxT( "" ) );
+    name = ALTIUM_PARSER::ReadString( aProps, wxT( "MODELNAME" ), wxEmptyString );
+    type = ALTIUM_PARSER::ReadString( aProps, wxT( "MODELTYPE" ), wxEmptyString );
+    libname = ALTIUM_PARSER::ReadString( aProps, wxT( "MODELDATAFILE0" ), wxEmptyString );
     isCurrent = ALTIUM_PARSER::ReadBool( aProps, wxT( "ISCURRENT" ), false );
 }
 
@@ -748,8 +748,8 @@ ASCH_PARAMETER::ASCH_PARAMETER( const std::map<wxString, wxString>& aProps )
     orientation = ReadEnum<ASCH_RECORD_ORIENTATION>( aProps, wxT( "ORIENTATION" ), 0, 3,
                                                      ASCH_RECORD_ORIENTATION::RIGHTWARDS );
 
-    name = ALTIUM_PARSER::ReadString( aProps, wxT( "NAME" ), wxT( "" ) );
-    text = ALTIUM_PARSER::ReadString( aProps, wxT( "TEXT" ), wxT( "" ) );
+    name = ALTIUM_PARSER::ReadString( aProps, wxT( "NAME" ), wxEmptyString );
+    text = ALTIUM_PARSER::ReadString( aProps, wxT( "TEXT" ), wxEmptyString );
 
     isHidden   = ALTIUM_PARSER::ReadBool( aProps, wxT( "ISHIDDEN" ), false );
     isMirrored = ALTIUM_PARSER::ReadBool( aProps, wxT( "ISMIRRORED" ), false );

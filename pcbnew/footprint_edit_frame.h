@@ -220,7 +220,7 @@ public:
      * The import function can also read gpcb footprint file, in Newlib format.
      * (One footprint per file, Newlib files have no special ext.)
      */
-    FOOTPRINT* ImportFootprint( const wxString& aName = wxT( "" ) );
+    FOOTPRINT* ImportFootprint( const wxString& aName = wxEmptyString );
 
     /**
      * Load a footprint from the main board into the Footprint Editor.

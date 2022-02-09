@@ -807,7 +807,7 @@ protected:
         return m_tickLabels.size();
     }
 
-    virtual const wxString formatLabel( double value, int nDigits ) { return wxT( "" ); }
+    virtual const wxString formatLabel( double value, int nDigits ) { return wxEmptyString; }
     virtual void formatLabels() {};
 
     virtual double getTickPos( int n ) const

@@ -336,7 +336,7 @@ wxString OPENGL_GAL::CheckFeatures( GAL_DISPLAY_OPTIONS& aOptions )
 {
     wxString retVal = wxEmptyString;
 
-    wxFrame* testFrame = new wxFrame( nullptr, wxID_ANY, wxT( "" ), wxDefaultPosition,
+    wxFrame* testFrame = new wxFrame( nullptr, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                       wxSize( 1, 1 ), wxFRAME_TOOL_WINDOW | wxNO_BORDER );
 
     KIGFX::OPENGL_GAL* opengl_gal = nullptr;

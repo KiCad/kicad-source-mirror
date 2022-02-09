@@ -293,7 +293,7 @@ void SCH_ALTIUM_PLUGIN::ParseStorage( const CFB::CompoundFileReader& aReader )
     ALTIUM_PARSER reader( aReader, file );
 
     std::map<wxString, wxString> properties = reader.ReadProperties();
-    wxString header = ALTIUM_PARSER::ReadString( properties, wxT( "HEADER" ), wxT( "" ) );
+    wxString header = ALTIUM_PARSER::ReadString( properties, wxT( "HEADER" ), wxEmptyString );
     int      weight = ALTIUM_PARSER::ReadInt( properties, wxT( "WEIGHT" ), 0 );
 
     if( weight < 0 )
@@ -567,7 +567,7 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int aIndex,
     // TODO: this is a hack until we correctly apply all transformations to every element
     wxString name = wxString::Format( wxT( "%d%s_%s" ),
                                       elem.orientation,
-                                      elem.isMirrored ? wxT( "_mirrored" ) : wxT( "" ),
+                                      elem.isMirrored ? wxT( "_mirrored" ) : wxEmptyString,
                                       elem.libreference );
     LIB_ID libId = AltiumToKiCadLibID( getLibName(), name );
 

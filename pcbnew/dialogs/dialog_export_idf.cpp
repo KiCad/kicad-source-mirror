@@ -64,7 +64,7 @@ public:
         wxString tmpStr;
         tmpStr << m_XRef;
         m_IDF_Xref->SetValue( tmpStr );
-        tmpStr = wxT( "" );
+        tmpStr = wxEmptyString;
         tmpStr << m_YRef;
         m_IDF_Yref->SetValue( tmpStr );
 

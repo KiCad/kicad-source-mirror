@@ -80,7 +80,7 @@ public:
         wxString tmpStr;
         tmpStr << m_XRef;
         m_VRML_Xref->SetValue( tmpStr );
-        tmpStr = wxT( "" );
+        tmpStr = wxEmptyString;
         tmpStr << m_YRef;
         m_VRML_Yref->SetValue( tmpStr );
         m_sdbSizerOK->SetDefault();

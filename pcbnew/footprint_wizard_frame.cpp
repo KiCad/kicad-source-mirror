@@ -440,7 +440,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
             m_parameterGrid->SetCellEditor( i, WIZ_COL_VALUE,
                                             new wxGridCellChoiceEditor( options ) );
 
-            units = wxT( "" );
+            units = wxEmptyString;
         }
         else if( units == WIZARD_PARAM_UNITS_INTEGER )    // Integer parameters
         {

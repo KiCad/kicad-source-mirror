@@ -149,7 +149,7 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
             if( c == '/' )
                 converted += wxT( "{slash}" );
             else if( c == '\n' || c == '\r' )
-                converted += wxT( "" );    // drop
+                converted += wxEmptyString;    // drop
             else
                 converted += c;
         }
@@ -170,7 +170,7 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
             else if( c == '\"' )
                 converted += wxT( "{dblquote}" );
             else if( c == '\n' || c == '\r' )
-                converted += wxT( "" );    // drop
+                converted += wxEmptyString;    // drop
             else
                 converted += c;
         }

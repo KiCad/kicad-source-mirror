@@ -320,7 +320,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 #elif defined( __WINDOWS__ )
             // On Windows, a new line is coded as \r\n.  We use only \n in kicad files and in
             // drawing routines so strip the \r char.
-            txt.Replace( wxT( "\r" ), wxT( "" ) );
+            txt.Replace( wxT( "\r" ), wxEmptyString );
 #endif
             m_edaText->SetText( EscapeString( txt, CTX_QUOTED_STR ) );
         }

@@ -42,7 +42,7 @@
 
 KICADPCB::KICADPCB( const wxString& aPcbName )
 {
-    m_resolver.Set3DConfigDir( wxT( "" ) );
+    m_resolver.Set3DConfigDir( wxEmptyString );
     m_thickness = 1.6;
     m_pcb_model = nullptr;
     m_minDistance = MIN_DISTANCE;

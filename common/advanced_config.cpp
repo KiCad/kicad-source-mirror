@@ -324,7 +324,7 @@ void ADVANCED_CFG::loadFromConfigFile()
 
     wxLogTrace( AdvancedConfigMask, wxT( "Loading advanced config from: %s" ), k_advanced.GetFullPath() );
 
-    wxFileConfig file_cfg( wxT( "" ), wxT( "" ), k_advanced.GetFullPath() );
+    wxFileConfig file_cfg( wxEmptyString, wxEmptyString, k_advanced.GetFullPath() );
     loadSettings( file_cfg );
 }
 
@@ -414,8 +414,8 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config
-    wxString traceMasks = wxT( "" );
-    configParams.push_back( new PARAM_CFG_WXSTRING( true, AC_KEYS::TraceMasks, &traceMasks, wxT( "" ) ) );
+    wxString traceMasks = wxEmptyString;
+    configParams.push_back( new PARAM_CFG_WXSTRING( true, AC_KEYS::TraceMasks, &traceMasks, wxEmptyString ) );
 
     // Load the config from file
     wxConfigLoadSetups( &aCfg, configParams );

@@ -223,7 +223,7 @@ void DIALOG_RESCUE_EACH::PopulateInstanceList()
 
         data.clear();
         data.push_back( eachSymbol->GetRef( m_currentSheet ) );
-        data.push_back( valueField ? valueField->GetText() : wxT( "" ) );
+        data.push_back( valueField ? valueField->GetText() : wxString() );
         m_ListOfInstances->AppendItem( data );
         count++;
     }

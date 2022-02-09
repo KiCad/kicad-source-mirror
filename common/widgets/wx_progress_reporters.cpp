@@ -33,7 +33,7 @@ WX_PROGRESS_REPORTER::WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& a
                                             int aNumPhases, bool aCanAbort,
                                             bool aReserveSpaceForMessage ) :
         PROGRESS_REPORTER_BASE( aNumPhases ),
-        wxProgressDialog( aTitle, ( aReserveSpaceForMessage ? wxT( " " ) : wxT( "" ) ), 1, aParent,
+        wxProgressDialog( aTitle, ( aReserveSpaceForMessage ? wxT( " " ) : wxEmptyString ), 1, aParent,
                       // wxPD_APP_MODAL |   // Don't use; messes up OSX when called from
                                             // quasi-modal dialog
                       wxPD_AUTO_HIDE |      // *MUST* use; otherwise wxWidgets will spin

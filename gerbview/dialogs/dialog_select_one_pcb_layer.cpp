@@ -259,7 +259,7 @@ const wxString GetPCBDefaultLayerName( int aLayerId )
     // Pcbnew knows some other layers, but any other layer is not suitable for export.
 
     default:    // Sentinel
-        txt = wxT( "" ); break;
+        txt = wxEmptyString; break;
     }
 
     return wxString( txt );

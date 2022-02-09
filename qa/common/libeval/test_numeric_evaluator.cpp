@@ -110,7 +110,7 @@ BOOST_AUTO_TEST_CASE( SetVar )
  */
 static const std::vector<EVAL_CASE> eval_cases_valid = {
     // Empty case
-    { wxT( "" ), wxT( "0" ) },
+    { wxEmptyString, wxT( "0" ) },
     // Trivial eval
     { wxT( "1" ), wxT( "1" ) },
     // Decimal separators

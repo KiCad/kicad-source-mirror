@@ -429,7 +429,7 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
         mgr.UnloadProject( &Prj() );
     }
 
-    SetStatusText( wxT( "" ) );
+    SetStatusText( wxEmptyString );
 
     m_leftWin->EmptyTreePrj();
 

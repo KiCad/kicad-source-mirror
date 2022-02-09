@@ -115,7 +115,7 @@ public:
     bool AppendRows( size_t aNumRows = 1 ) override
     {
         for( size_t i = 0; i < aNumRows; ++i )
-            m_items.emplace_back( wxT( "" ), true, F_SilkS );
+            m_items.emplace_back( wxEmptyString, true, F_SilkS );
 
         if( GetView() )
         {
@@ -241,7 +241,7 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataToWindow()
             SET_MILS_CELL( i, COL_TEXT_WIDTH, m_brdSettings.m_TextSize[ i ].x );
             SET_MILS_CELL( i, COL_TEXT_HEIGHT, m_brdSettings.m_TextSize[ i ].y );
             SET_MILS_CELL( i, COL_TEXT_THICKNESS, m_brdSettings.m_TextThickness[ i ] );
-            m_graphicsGrid->SetCellValue( i, COL_TEXT_ITALIC, m_brdSettings.m_TextItalic[ i ] ? wxT( "1" ) : wxT( "" ) );
+            m_graphicsGrid->SetCellValue( i, COL_TEXT_ITALIC, m_brdSettings.m_TextItalic[ i ] ? wxT( "1" ) : wxEmptyString );
 
             auto attr = new wxGridCellAttr;
             attr->SetRenderer( new wxGridCellBoolRenderer() );
