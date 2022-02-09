@@ -45,7 +45,8 @@
 
 // wxListBox's performance degrades horrifically with very large datasets.  It's not clear
 // they're useful to the user anyway.
-#define ERROR_LIMIT_MAX 199
+#define ERROR_LIMIT 199
+#define EXTENDED_ERROR_LIMIT 499
 
 
 void drcPrintDebugMessage( int level, const wxString& msg, const char *function, int line )
@@ -77,7 +78,7 @@ DRC_ENGINE::DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS *aSettings ) :
     m_errorLimits.resize( DRCE_LAST + 1 );
 
     for( int ii = DRCE_FIRST; ii <= DRCE_LAST; ++ii )
-        m_errorLimits[ ii ] = ERROR_LIMIT_MAX;
+        m_errorLimits[ ii ] = ERROR_LIMIT;
 }
 
 
@@ -578,7 +579,7 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
     }
 
     for( int ii = DRCE_FIRST; ii < DRCE_LAST; ++ii )
-        m_errorLimits[ ii ] = ERROR_LIMIT_MAX;
+        m_errorLimits[ ii ] = ERROR_LIMIT;
 
     m_rulesValid = true;
 }
@@ -595,8 +596,10 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
     {
         if( m_designSettings->Ignore( ii ) )
             m_errorLimits[ ii ] = 0;
+        else if( ii == DRCE_CLEARANCE || ii == DRCE_UNCONNECTED_ITEMS )
+            m_errorLimits[ ii ] = EXTENDED_ERROR_LIMIT;
         else
-            m_errorLimits[ ii ] = ERROR_LIMIT_MAX;
+            m_errorLimits[ ii ] = ERROR_LIMIT;
     }
 
     m_board->IncrementTimeStamp();      // Invalidate all caches

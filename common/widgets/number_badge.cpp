@@ -90,6 +90,8 @@ void NUMBER_BADGE::UpdateNumber( int aNumber, SEVERITY aSeverity )
         }
     }
 
+    computeSize();
+
     // Force the badge UI to refresh so the new number and color is displayed
     Refresh();
 }
@@ -98,7 +100,6 @@ void NUMBER_BADGE::UpdateNumber( int aNumber, SEVERITY aSeverity )
 void NUMBER_BADGE::SetMaximumNumber( int aMax )
 {
     m_maxNumber = aMax;
-    computeSize();
 }
 
 
@@ -113,7 +114,7 @@ void NUMBER_BADGE::SetTextSize( int aSize )
 // match those.  Other platforms may also need tweaks to spacing, fontweight, etc.
 #ifdef __WXMAC__
 #define BADGE_FONTWEIGHT wxFONTWEIGHT_NORMAL
-#define PLATFORM_FUDGE_X 0.8
+#define PLATFORM_FUDGE_X 0.92
 #define PLATFORM_FUDGE_Y 1.6
 #endif
 
@@ -133,14 +134,16 @@ void NUMBER_BADGE::computeSize()
 {
     wxClientDC dc( this );
 
-    wxString test = wxString::Format( wxT( "%d" ), m_maxNumber );
+    wxString test = wxString::Format( wxT( "%d" ), m_currentNumber );
     int      len  = test.length();
 
-    // Determine the size using the string "-999+" where the - on the front is for spacing from
-    // the start of the rectangle so the number isn't close to the curved edge.
-    test = "-";
+    // Determine the size using the string "m999{+}" where the 'm' on the front serves as a margin
+    // so the number isn't too close to the curved edge.
+    test = "m";
     test.Pad( len, '9' );
-    test += "+";
+
+    if( m_currentNumber > m_maxNumber )
+        test += "+";
 
     dc.SetFont( wxFont( m_textSize, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, BADGE_FONTWEIGHT ) );
     wxSize size = dc.GetTextExtent( test );

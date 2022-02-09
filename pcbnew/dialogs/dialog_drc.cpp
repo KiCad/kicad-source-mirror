@@ -1071,6 +1071,10 @@ void DIALOG_DRC::OnDeleteAllClick( wxCommandEvent& aEvent )
 
 void DIALOG_DRC::updateDisplayedCounts()
 {
+    BOARD_DESIGN_SETTINGS& bds = m_frame->GetDesignSettings();
+    DRC_TOOL*              drcTool = m_frame->GetToolManager()->GetTool<DRC_TOOL>();
+    DRC_ENGINE*            drcEngine = drcTool->GetDRCEngine().get();
+
     // Collect counts:
 
     int numMarkers = 0;
@@ -1105,49 +1109,91 @@ void DIALOG_DRC::updateDisplayedCounts()
         numExcluded += m_footprintWarningsProvider->GetCount( RPT_SEVERITY_EXCLUSION );
     }
 
+    bool errorsOverflowed = false;
+    bool warningsOverflowed = false;
+    bool markersOverflowed = false;
+    bool unconnectedOverflowed = false;
+    bool footprintsOverflowed = false;
+
+    for( int ii = DRCE_FIRST; ii < DRCE_LAST; ++ii )
+    {
+        if( drcEngine->IsErrorLimitExceeded( ii ) && bds.GetSeverity( ii ) != RPT_SEVERITY_IGNORE )
+        {
+            if( bds.GetSeverity( ii ) == RPT_SEVERITY_ERROR )
+            {
+                errorsOverflowed = true;
+            }
+            else if( bds.GetSeverity( ii ) == RPT_SEVERITY_WARNING )
+            {
+                warningsOverflowed = true;
+            }
+
+            if( ii == DRCE_UNCONNECTED_ITEMS )
+            {
+                unconnectedOverflowed = true;
+            }
+            else if(    ii == DRCE_MISSING_FOOTPRINT
+                     || ii == DRCE_DUPLICATE_FOOTPRINT
+                     || ii == DRCE_EXTRA_FOOTPRINT
+                     || ii == DRCE_NET_CONFLICT )
+            {
+                footprintsOverflowed = true;
+            }
+            else
+            {
+                markersOverflowed = true;
+            }
+        }
+    }
+
     wxString msg;
+    wxString num;
 
     // Update tab headers:
 
     if( m_drcRun )
     {
-        msg.sprintf( m_markersTitleTemplate, numMarkers );
+        num.Printf( markersOverflowed ? wxT( "%d+" ) : wxT( "%d" ), numMarkers );
+        msg.Printf( m_markersTitleTemplate, num );
         m_Notebook->SetPageText( 0, msg );
 
-        msg.sprintf( m_unconnectedTitleTemplate, numUnconnected );
+        num.Printf( unconnectedOverflowed ? wxT( "%d+" ) : wxT( "%d" ), numUnconnected );
+        msg.sprintf( m_unconnectedTitleTemplate, num );
         m_Notebook->SetPageText( 1, msg );
 
         if( m_footprintTestsRun )
         {
-            msg.sprintf( m_footprintsTitleTemplate, numFootprints );
+            num.Printf( footprintsOverflowed ? wxT( "%d+" ) : wxT( "%d" ), numFootprints );
+            msg.sprintf( m_footprintsTitleTemplate, num );
         }
         else
         {
             msg = m_footprintsTitleTemplate;
-            msg.Replace( wxT( "%d" ), _( "not run" ) );
+            msg.Replace( wxT( "%s" ), _( "not run" ) );
         }
 
         m_Notebook->SetPageText( 2, msg );
 
-        msg.sprintf( m_ignoredTitleTemplate, m_ignoredList->GetItemCount() );
+        num.Printf( wxT( "%d" ), m_ignoredList->GetItemCount() );
+        msg.sprintf( m_ignoredTitleTemplate, num );
         m_Notebook->SetPageText( 3, msg );
     }
     else
     {
         msg = m_markersTitleTemplate;
-        msg.Replace( wxT( "(%d)" ), wxEmptyString );
+        msg.Replace( wxT( "(%s)" ), wxEmptyString );
         m_Notebook->SetPageText( 0, msg );
 
         msg = m_unconnectedTitleTemplate;
-        msg.Replace( wxT( "(%d)" ), wxEmptyString );
+        msg.Replace( wxT( "(%s)" ), wxEmptyString );
         m_Notebook->SetPageText( 1, msg );
 
         msg = m_footprintsTitleTemplate;
-        msg.Replace( wxT( "(%d)" ), wxEmptyString );
+        msg.Replace( wxT( "(%s)" ), wxEmptyString );
         m_Notebook->SetPageText( 2, msg );
 
         msg = m_ignoredTitleTemplate;
-        msg.Replace( wxT( "(%d)" ), wxEmptyString );
+        msg.Replace( wxT( "(%s)" ), wxEmptyString );
         m_Notebook->SetPageText( 3, msg );
     }
 
@@ -1160,10 +1206,12 @@ void DIALOG_DRC::updateDisplayedCounts()
         numWarnings = -1;
 
     m_errorsBadge->SetMaximumNumber( numErrors );
-    m_errorsBadge->UpdateNumber( numErrors, RPT_SEVERITY_ERROR );
+    m_errorsBadge->UpdateNumber( errorsOverflowed ? numErrors + 1 : numErrors,
+                                 RPT_SEVERITY_ERROR );
 
     m_warningsBadge->SetMaximumNumber( numWarnings );
-    m_warningsBadge->UpdateNumber( numWarnings, RPT_SEVERITY_WARNING );
+    m_warningsBadge->UpdateNumber( warningsOverflowed ? numWarnings + 1 : numWarnings,
+                                   RPT_SEVERITY_WARNING );
 
     m_exclusionsBadge->SetMaximumNumber( numExcluded );
     m_exclusionsBadge->UpdateNumber( numExcluded, RPT_SEVERITY_EXCLUSION );

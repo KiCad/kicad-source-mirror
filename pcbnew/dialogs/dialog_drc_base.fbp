@@ -777,7 +777,7 @@
                                             <event name="OnNotebookPageChanged">OnChangingNotebookPage</event>
                                             <object class="notebookpage" expanded="1">
                                                 <property name="bitmap"></property>
-                                                <property name="label">Violations (%d)</property>
+                                                <property name="label">Violations (%s)</property>
                                                 <property name="select">0</property>
                                                 <object class="wxPanel" expanded="1">
                                                     <property name="BottomDockable">1</property>
@@ -870,7 +870,7 @@
                                             </object>
                                             <object class="notebookpage" expanded="1">
                                                 <property name="bitmap"></property>
-                                                <property name="label">Unconnected Items (%d)</property>
+                                                <property name="label">Unconnected Items (%s)</property>
                                                 <property name="select">0</property>
                                                 <object class="wxPanel" expanded="1">
                                                     <property name="BottomDockable">1</property>
@@ -963,7 +963,7 @@
                                             </object>
                                             <object class="notebookpage" expanded="1">
                                                 <property name="bitmap"></property>
-                                                <property name="label">Schematic Parity (%d)</property>
+                                                <property name="label">Schematic Parity (%s)</property>
                                                 <property name="select">0</property>
                                                 <object class="wxPanel" expanded="1">
                                                     <property name="BottomDockable">1</property>
@@ -1056,7 +1056,7 @@
                                             </object>
                                             <object class="notebookpage" expanded="1">
                                                 <property name="bitmap"></property>
-                                                <property name="label">Ignored Tests (%d)</property>
+                                                <property name="label">Ignored Tests (%s)</property>
                                                 <property name="select">0</property>
                                                 <object class="wxPanel" expanded="1">
                                                     <property name="BottomDockable">1</property>
