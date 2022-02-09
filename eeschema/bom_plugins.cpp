@@ -100,7 +100,7 @@ BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
         if( interpreter.IsEmpty() )
             interpreter = wxT( "python" ); // For macOS, should we log here? Error here?
 
-        m_cmd = wxString::Format( "%s \"%s\" \"%%I\" \"%%O%s\"",
+        m_cmd = wxString::Format( wxT( "\"%s\" \"%s\" \"%%I\" \"%%O%s\"" ),
                                   interpreter,
                                   m_file.GetFullPath(),
                                   getOutputExtension( m_info ) );
