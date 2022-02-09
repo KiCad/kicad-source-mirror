@@ -62,7 +62,7 @@ int scaletoIU( double aCoord, bool isMetric )
     if( isMetric )  // gerber are units in mm
         ret = KiROUND( aCoord * GERB_IU_PER_MM );
     else            // gerber are units in inches
-        ret = KiROUND( aCoord * GERB_IU_PER_MM * 0.0254 );
+        ret = KiROUND( aCoord * GERB_IU_PER_MM * 25.4 );
 
     return ret;
 }
@@ -78,7 +78,8 @@ wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& aText, bool aExcellonMode )
     // Reserve the anticipated length plus an optional sign and decimal
     line.reserve( std::max( m_FmtLen.x, m_FmtLen.y ) + 3 );
 
-    if( m_Relative )
+    // Set up return value for case where aText == nullptr
+    if( !m_Relative )
         pos = m_CurrentPos;
 
     if( aText == nullptr )
@@ -142,11 +143,11 @@ wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& aText, bool aExcellonMode )
 
         if( type_coord == 'X' )
         {
-            pos.x += current_coord;
+            pos.x = current_coord;
         }
         else if( type_coord == 'Y' )
         {
-            pos.y += current_coord;
+            pos.y = current_coord;
         }
         else if( type_coord == 'A' )
         {
@@ -154,6 +155,9 @@ wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& aText, bool aExcellonMode )
             m_LastArcDataType = ARC_INFO_TYPE_RADIUS;
         }
     }
+
+    if( m_Relative )
+        pos += m_CurrentPos;
 
     m_CurrentPos = pos;
     return pos;
