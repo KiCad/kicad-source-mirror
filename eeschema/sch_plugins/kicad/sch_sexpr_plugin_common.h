@@ -27,7 +27,7 @@
 #include <sch_text.h>
 
 
-class COLOR4D;
+//class COLOR4D;
 class KIID;
 class OUTPUTFORMATTER;
 class STROKE_PARAMS;
