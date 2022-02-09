@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2015-2019 CERN
  * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
  *
@@ -575,8 +576,8 @@ void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET
     if( ( aShape.OutlineCount() > 1 || aOtherShape.OutlineCount() > 0 )
         && ( aShape.ArcCount() > 0 || aOtherShape.ArcCount() > 0 ) )
     {
-        wxFAIL_MSG( "Boolean ops on curved polygons are not supported. You should call "
-                    "ClearArcs() before carrying out the boolean operation." );
+        wxFAIL_MSG( wxT( "Boolean ops on curved polygons are not supported. You should call "
+                         "ClearArcs() before carrying out the boolean operation." ) );
     }
 
     ClipperLib::Clipper c;
@@ -1029,7 +1030,7 @@ void SHAPE_POLY_SET::fractureSingle( POLYGON& paths )
         // If we can't handle the edge, the zone is broken (maybe)
         if( !num_processed )
         {
-            wxLogWarning( "Broken polygon, dropping path" );
+            wxLogWarning( wxT( "Broken polygon, dropping path" ) );
 
             for( FractureEdge* edge : edges )
                 delete edge;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Ian McInerney <Ian.S.McInerney at ieee.org>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -68,7 +68,7 @@ void KIPLATFORM::UI::ReparentQuasiModal( wxNonOwnedWindow* aWindow )
     wxTopLevelWindow* parent =
             static_cast<wxTopLevelWindow*>( wxGetTopLevelParent( aWindow->GetParent() ) );
 
-    wxASSERT_MSG(parent, "QuasiModal windows require a parent.");
+    wxASSERT_MSG(parent, wxT( "QuasiModal windows require a parent.") );
 
     NSWindow* parentWindow = parent->GetWXWindow();
     NSWindow* theWindow    = aWindow->GetWXWindow();

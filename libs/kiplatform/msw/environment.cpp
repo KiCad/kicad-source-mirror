@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Ian McInerney <Ian.S.McInerney at ieee.org>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -200,7 +200,7 @@ bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& 
             // autoProxyInfo will return a list of proxies that are semicolon delimited
             // todo...maybe figure out better selection logic
             wxString          proxyList = autoProxyInfo.lpszProxy;
-            wxStringTokenizer tokenizer( proxyList, ";" );
+            wxStringTokenizer tokenizer( proxyList, wxT( ";" ) );
 
             if( tokenizer.HasMoreTokens() )
             {
