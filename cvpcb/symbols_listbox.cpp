@@ -110,7 +110,7 @@ void SYMBOLS_LISTBOX::SetSelection( int index, bool State )
 
 void SYMBOLS_LISTBOX::OnChar( wxKeyEvent& event )
 {
-    wxLogTrace( kicadTraceKeyEvent, "SYMBOLS_LISTBOX::OnChar %s", dump( event ) );
+    wxLogTrace( kicadTraceKeyEvent, wxT( "SYMBOLS_LISTBOX::OnChar %s" ), dump( event ) );
 
     int key = event.GetKeyCode();
 

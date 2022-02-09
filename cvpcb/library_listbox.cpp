@@ -142,7 +142,7 @@ END_EVENT_TABLE()
 
 void LIBRARY_LISTBOX::OnChar( wxKeyEvent& event )
 {
-    wxLogTrace( kicadTraceKeyEvent, "LIBRARY_LISTBOX::OnChar %s", dump( event ) );
+    wxLogTrace( kicadTraceKeyEvent, wxT( "LIBRARY_LISTBOX::OnChar %s" ), dump( event ) );
 
     int key = event.GetKeyCode();
 

@@ -76,7 +76,7 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
     wxStaticText* text = new wxStaticText( m_mainToolBar, wxID_ANY, msg_bold );
 	text->SetFont( m_mainToolBar->GetFont().Bold() );
 #ifdef __WXGTK3__
-    text->SetLabelMarkup( "<b>" + msg_bold + "</b>" );
+    text->SetLabelMarkup( wxT( "<b>" ) + msg_bold + wxT( "</b>" ) );
 #endif
     m_mainToolBar->AddControl( text );
 

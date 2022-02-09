@@ -261,7 +261,7 @@ int CVPCB_CONTROL::ToNA( const TOOL_EVENT& aEvent )
         break;
 
     default:
-        wxASSERT_MSG( false, "Invalid direction" );
+        wxASSERT_MSG( false, wxT( "Invalid direction" ) );
     }
 
     // Find the next index in the component list

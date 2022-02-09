@@ -74,7 +74,7 @@ void ITEMS_LISTBOX_BASE::UpdateLineWidth( unsigned aLine )
     int newWidth = 10;  // Value of AUTOSIZE_COL_MARGIN from wxWidgets source.
 
     dc.SetFont( GetFont() );
-    dc.GetTextExtent( GetItemText( aLine, 0 ) + " ", &w, nullptr );
+    dc.GetTextExtent( GetItemText( aLine, 0 ) + wxT( " " ), &w, nullptr );
     newWidth += w;
 
     if( newWidth > columnWidth )

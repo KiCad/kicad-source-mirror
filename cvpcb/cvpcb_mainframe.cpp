@@ -74,7 +74,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_tcFilterString      = nullptr;
     m_FootprintsList      = FOOTPRINT_LIST::GetInstance( Kiway() );
     m_initialized         = false;
-    m_aboutTitle          = "CvPcb";
+    m_aboutTitle          = wxT( "CvPcb" );
 
     // Give an icon
     wxIcon icon;
@@ -97,16 +97,16 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.SetManagedWindow( this );
 
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( wxT( "MainToolbar" ) ).Top().Layer(6) );
 
-    m_auimgr.AddPane( m_librariesListBox, EDA_PANE().Palette().Name( "Libraries" ).Left().Layer(1)
+    m_auimgr.AddPane( m_librariesListBox, EDA_PANE().Palette().Name( wxT( "Libraries" ) ).Left().Layer(1)
                       .Caption( _( "Footprint Libraries" ) )
                       .BestSize((int) ( m_frameSize.x * 0.20 ), m_frameSize.y ) );
 
-    m_auimgr.AddPane( m_symbolsListBox, EDA_PANE().Palette().Name( "Symbols" ).Center().Layer(0)
+    m_auimgr.AddPane( m_symbolsListBox, EDA_PANE().Palette().Name( wxT( "Symbols" ) ).Center().Layer(0)
                       .Caption( _( "Symbol : Footprint Assignments" ) ) );
 
-    m_auimgr.AddPane( m_footprintListBox, EDA_PANE().Palette().Name( "Footprints" ).Right().Layer(1)
+    m_auimgr.AddPane( m_footprintListBox, EDA_PANE().Palette().Name( wxT( "Footprints" ) ).Right().Layer(1)
                       .Caption( _( "Filtered Footprints" ) )
                       .BestSize((int) ( m_frameSize.x * 0.30 ), m_frameSize.y ) );
 
@@ -159,7 +159,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     sdbSizerOK->SetDefault();
     KIPLATFORM::UI::FixupCancelButtonCmdKeyCollision( this );
 
-    m_auimgr.AddPane( bottomPanel, EDA_PANE().HToolbar().Name( "Buttons" ).Bottom().Layer(6) );
+    m_auimgr.AddPane( bottomPanel, EDA_PANE().HToolbar().Name( wxT( "Buttons" ) ).Bottom().Layer(6) );
 
     m_auimgr.Update();
     m_initialized = true;
@@ -168,7 +168,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     {
         if( cfg->m_LibrariesWidth > 0 )
         {
-            wxAuiPaneInfo& librariesPane = m_auimgr.GetPane( "Libraries" );
+            wxAuiPaneInfo& librariesPane = m_auimgr.GetPane( wxT( "Libraries" ) );
 
             // wxAUI hack: force width by setting MinSize() and then Fixed()
             // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
@@ -186,7 +186,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
         if( cfg->m_FootprintsWidth > 0 )
         {
-            wxAuiPaneInfo& footprintsPane = m_auimgr.GetPane( "Footprints" );
+            wxAuiPaneInfo& footprintsPane = m_auimgr.GetPane( wxT( "Footprints" ) );
 
             // wxAUI hack: force width by setting MinSize() and then Fixed()
             // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
@@ -1058,7 +1058,7 @@ std::vector<unsigned int> CVPCB_MAINFRAME::GetComponentIndices(
         break;
 
     default:
-        wxASSERT_MSG( false, "Invalid symbol selection criteria" );
+        wxASSERT_MSG( false, wxT( "Invalid symbol selection criteria" ) );
     }
 
     return idx;
@@ -1132,7 +1132,7 @@ void CVPCB_MAINFRAME::SetStatusText( const wxString& aText, int aNumber )
     case 0:  m_statusLine1->SetLabel( aText );          break;
     case 1:  m_statusLine2->SetLabel( aText );          break;
     case 2:  m_statusLine3->SetLabel( aText );          break;
-    default: wxFAIL_MSG( "Invalid status row number" ); break;
+    default: wxFAIL_MSG( wxT( "Invalid status row number" ) ); break;
     }
 }
 
