@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-07 08:38+0100\n"
-"PO-Revision-Date: 2022-02-07 11:27+0100\n"
+"PO-Revision-Date: 2022-02-10 21:56+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -24448,7 +24448,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:74
 msgid "Include only SMD footprints"
-msgstr "Includi sono impronte SMD"
+msgstr "Includi solo impronte SMD"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:77
 msgid "Exclude all footprints with through hole pads"
