@@ -87,7 +87,7 @@ void SCH_SHAPE::Rotate( const VECTOR2I& aCenter )
 }
 
 
-void SCH_SHAPE::Plot( PLOTTER* aPlotter ) const
+void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground ) const
 {
     int pen_size = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
 
@@ -106,81 +106,87 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter ) const
     else
         aPlotter->SetColor( GetStroke().GetColor() );
 
-    aPlotter->SetCurrentLineWidth( pen_size );
-    aPlotter->SetDash( GetEffectiveLineStyle() );
-
-    switch( GetShape() )
+    if( aBackground )
     {
-    case SHAPE_T::ARC:
-        aPlotter->Arc( getCenter(), GetStart(), GetEnd(), FILL_T::NO_FILL, pen_size, ARC_HIGH_DEF );
-        break;
+        if( m_fill == FILL_T::FILLED_WITH_COLOR && GetFillColor() != COLOR4D::UNSPECIFIED )
+        {
+            aPlotter->SetColor( GetFillColor() );
 
-    case SHAPE_T::CIRCLE:
-        aPlotter->Circle( getCenter(), GetRadius() * 2, FILL_T::NO_FILL, pen_size );
-        break;
+            switch( GetShape() )
+            {
+            case SHAPE_T::ARC:
+                aPlotter->Arc( getCenter(), GetStart(), GetEnd(), m_fill, 0, ARC_HIGH_DEF );
+                break;
 
-    case SHAPE_T::RECT:
-    {
-        std::vector<VECTOR2I> pts = GetRectCorners();
+            case SHAPE_T::CIRCLE:
+                aPlotter->Circle( getCenter(), GetRadius() * 2, m_fill, 0 );
+                break;
 
-        aPlotter->MoveTo( pts[0] );
-        aPlotter->LineTo( pts[1] );
-        aPlotter->LineTo( pts[2] );
-        aPlotter->LineTo( pts[3] );
-        aPlotter->FinishTo( pts[0] );
+            case SHAPE_T::RECT:
+                aPlotter->Rect( GetStart(), GetEnd(), m_fill, 0 );
+                break;
+
+            case SHAPE_T::POLY:
+                aPlotter->PlotPoly( cornerList, m_fill, 0 );
+                break;
+
+            case SHAPE_T::BEZIER:
+                aPlotter->PlotPoly( m_bezierPoints, m_fill, 0 );
+                break;
+
+            default:
+                UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+            }
+        }
     }
-        break;
-
-    case SHAPE_T::POLY:
+    else /* if( aForeground ) */
     {
-        aPlotter->MoveTo( cornerList[0] );
-
-        for( size_t ii = 1; ii < cornerList.size(); ++ii )
-            aPlotter->LineTo( cornerList[ii] );
-
-        aPlotter->FinishTo( cornerList[0] );
-    }
-        break;
-
-    case SHAPE_T::BEZIER:
-        aPlotter->PlotPoly( m_bezierPoints, FILL_T::NO_FILL, pen_size );
-        break;
-
-    default:
-        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
-    }
-
-    aPlotter->SetDash( PLOT_DASH_TYPE::SOLID );
-
-    if( m_fill == FILL_T::FILLED_WITH_COLOR && GetFillColor() != COLOR4D::UNSPECIFIED )
-    {
-        aPlotter->SetColor( GetFillColor() );
+        aPlotter->SetCurrentLineWidth( pen_size );
+        aPlotter->SetDash( GetEffectiveLineStyle() );
 
         switch( GetShape() )
         {
         case SHAPE_T::ARC:
-            aPlotter->Arc( getCenter(), GetStart(), GetEnd(), m_fill, 0, ARC_HIGH_DEF );
+            aPlotter->Arc( getCenter(), GetStart(), GetEnd(), FILL_T::NO_FILL, pen_size,
+                           ARC_HIGH_DEF );
             break;
 
         case SHAPE_T::CIRCLE:
-            aPlotter->Circle( getCenter(), GetRadius() * 2, m_fill, 0 );
+            aPlotter->Circle( getCenter(), GetRadius() * 2, FILL_T::NO_FILL, pen_size );
             break;
 
         case SHAPE_T::RECT:
-            aPlotter->Rect( GetStart(), GetEnd(), m_fill, 0 );
+        {
+            std::vector<VECTOR2I> pts = GetRectCorners();
+
+            aPlotter->MoveTo( pts[0] );
+            aPlotter->LineTo( pts[1] );
+            aPlotter->LineTo( pts[2] );
+            aPlotter->LineTo( pts[3] );
+            aPlotter->FinishTo( pts[0] );
+        }
             break;
 
         case SHAPE_T::POLY:
-            aPlotter->PlotPoly( cornerList, m_fill, 0 );
+        {
+            aPlotter->MoveTo( cornerList[0] );
+
+            for( size_t ii = 1; ii < cornerList.size(); ++ii )
+                aPlotter->LineTo( cornerList[ii] );
+
+            aPlotter->FinishTo( cornerList[0] );
+        }
             break;
 
         case SHAPE_T::BEZIER:
-            aPlotter->PlotPoly( m_bezierPoints, m_fill, 0 );
+            aPlotter->PlotPoly( m_bezierPoints, FILL_T::NO_FILL, pen_size );
             break;
 
         default:
             UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         }
+
+        aPlotter->SetDash( PLOT_DASH_TYPE::SOLID );
     }
 }
 

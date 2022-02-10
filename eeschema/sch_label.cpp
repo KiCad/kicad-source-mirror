@@ -803,7 +803,7 @@ void SCH_LABEL_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 }
 
 
-void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter ) const
+void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
 {
     static std::vector<VECTOR2I> s_poly;
 
@@ -817,17 +817,23 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter ) const
     aPlotter->SetCurrentLineWidth( penWidth );
 
     VECTOR2I textpos = GetTextPos() + GetSchematicTextOffset( aPlotter->RenderSettings() );
-
-    aPlotter->Text( textpos, color, GetShownText(), GetTextAngle(), GetTextSize(),
-                    GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), IsBold() );
-
     CreateGraphicShape( aPlotter->RenderSettings(), s_poly, GetTextPos() );
 
-    if( s_poly.size() )
-        aPlotter->PlotPoly( s_poly, FILL_T::NO_FILL, penWidth );
+    if( aBackground )
+    {
+        // No filled shapes (yet)
+    }
+    else
+    {
+        aPlotter->Text( textpos, color, GetShownText(), GetTextAngle(), GetTextSize(),
+                        GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), IsBold() );
+
+        if( s_poly.size() )
+            aPlotter->PlotPoly( s_poly, FILL_T::NO_FILL, penWidth );
+    }
 
     for( const SCH_FIELD& field : m_fields )
-        field.Plot( aPlotter );
+        field.Plot( aPlotter, aBackground );
 }
 
 

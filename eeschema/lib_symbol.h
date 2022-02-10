@@ -326,11 +326,12 @@ public:
      * @param aPlotter - Plotter object to plot to.
      * @param aUnit - Symbol symbol to plot.
      * @param aConvert - Symbol alternate body style to plot.
+     * @param aBackground - A poor-man's Z-order.
      * @param aOffset - Distance to shift the plot coordinates.
      * @param aTransform - Symbol plot transform matrix.
      */
-    void Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const VECTOR2I& aOffset,
-               const TRANSFORM& aTransform ) const;
+    void Plot( PLOTTER* aPlotter, int aUnit, int aConvert, bool aBackground,
+               const VECTOR2I& aOffset, const TRANSFORM& aTransform ) const;
 
     /**
      * Plot Lib Fields only of the symbol to plotter.
@@ -339,11 +340,12 @@ public:
      * @param aPlotter - Plotter object to plot to.
      * @param aUnit - Symbol to plot.
      * @param aConvert - Symbol alternate body style to plot.
+     * @param aBackground - A poor-man's Z-order.
      * @param aOffset - Distance to shift the plot coordinates.
      * @param aTransform - Symbol plot transform matrix.
      */
-    void PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, const VECTOR2I& aOffset,
-                        const TRANSFORM& aTransform );
+    void PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, bool aBackground,
+                        const VECTOR2I& aOffset, const TRANSFORM& aTransform );
 
     /**
      * Add a new draw \a aItem to the draw object list and sort according to \a aSort.

@@ -273,7 +273,7 @@ const wxString& SCH_ITEM::GetDefaultFont() const
 }
 
 
-void SCH_ITEM::Plot( PLOTTER* aPlotter ) const
+void SCH_ITEM::Plot( PLOTTER* aPlotter, bool aBackground ) const
 {
     wxFAIL_MSG( wxT( "Plot() method not implemented for class " ) + GetClass() );
 }

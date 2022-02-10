@@ -468,13 +468,18 @@ bool SCH_BUS_ENTRY_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aA
 }
 
 
-void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter ) const
+void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
 {
+    if( aBackground )
+        return;
+
     auto* settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
 
-    COLOR4D color = ( GetBusEntryColor() == COLOR4D::UNSPECIFIED ) ?
-                    settings->GetLayerColor( m_layer ) : GetBusEntryColor();
-    int     penWidth = ( GetPenWidth() == 0 ) ? settings->GetDefaultPenWidth() : GetPenWidth();
+    COLOR4D color = ( GetBusEntryColor() == COLOR4D::UNSPECIFIED )
+                                    ? settings->GetLayerColor( m_layer )
+                                    : GetBusEntryColor();
+
+    int penWidth = ( GetPenWidth() == 0 ) ? settings->GetDefaultPenWidth() : GetPenWidth();
 
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );
 
@@ -483,6 +488,8 @@ void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter ) const
     aPlotter->SetDash( GetLineStyle() );
     aPlotter->MoveTo( m_pos );
     aPlotter->FinishTo( GetEnd() );
+
+    aPlotter->SetDash( PLOT_DASH_TYPE::SOLID );
 }
 
 

@@ -911,8 +911,11 @@ bool SCH_FIELD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 }
 
 
-void SCH_FIELD::Plot( PLOTTER* aPlotter ) const
+void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground ) const
 {
+    if( IsVoid() || aBackground )
+        return;
+
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
     COLOR4D          color = settings->GetLayerColor( GetLayer() );
     int              penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
@@ -920,9 +923,6 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter ) const
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );
 
     if( !IsVisible() )
-        return;
-
-    if( IsVoid() )
         return;
 
     // Calculate the text orientation, according to the symbol orientation/mirror

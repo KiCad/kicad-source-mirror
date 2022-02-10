@@ -448,8 +448,10 @@ public:
      * Plot the schematic item to \a aPlotter.
      *
      * @param aPlotter is the #PLOTTER object to plot to.
+     * @param aBackground a poor-man's Z-order.  The routine will get called twice, first with
+     *                    aBackground true and then with aBackground false.
      */
-    virtual void Plot( PLOTTER* aPlotter ) const;
+    virtual void Plot( PLOTTER* aPlotter, bool aBackground ) const;
 
     virtual bool operator <( const SCH_ITEM& aItem ) const;
 

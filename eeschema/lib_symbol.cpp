@@ -593,35 +593,13 @@ void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
 }
 
 
-void LIB_SYMBOL::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const VECTOR2I& aOffset,
-                       const TRANSFORM& aTransform ) const
+void LIB_SYMBOL::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, bool aBackground,
+                       const VECTOR2I& aOffset, const TRANSFORM& aTransform ) const
 {
     wxASSERT( aPlotter != nullptr );
 
     aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
 
-    // draw background for filled items using background option
-    // Solid lines will be drawn after the background
-    for( const LIB_ITEM& item : m_drawings )
-    {
-        if( item.Type() != LIB_SHAPE_T )
-            continue;
-
-        const LIB_SHAPE& shape = static_cast<const LIB_SHAPE&>( item );
-
-        // Do not draw items not attached to the current part
-        if( aUnit && shape.m_unit && ( shape.m_unit != aUnit ) )
-            continue;
-
-        if( aConvert && shape.m_convert && ( shape.m_convert != aConvert ) )
-            continue;
-
-        if( shape.GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR && aPlotter->GetColorMode() )
-            shape.Plot( aPlotter, aOffset, true, aTransform );
-    }
-
-    // Not filled items and filled shapes are now plotted
-    // Items that have BG fills only get re-stroked to ensure the edges are in the foreground
     for( const LIB_ITEM& item : m_drawings )
     {
         // Lib Fields are not plotted here, because this plot function
@@ -635,21 +613,13 @@ void LIB_SYMBOL::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const VECTOR2
         if( aConvert && item.m_convert && ( item.m_convert != aConvert ) )
             continue;
 
-        bool forceNoFill = false;
-
-        if( item.Type() == LIB_SHAPE_T )
-        {
-            const LIB_SHAPE& shape = static_cast<const LIB_SHAPE&>( item );
-            forceNoFill = shape.GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR;
-        }
-
-        item.Plot( aPlotter, aOffset, !forceNoFill, aTransform );
+        item.Plot( aPlotter, aBackground, aOffset, aTransform );
     }
 }
 
 
-void LIB_SYMBOL::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, const VECTOR2I& aOffset,
-                                const TRANSFORM& aTransform )
+void LIB_SYMBOL::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, bool aBackground,
+                                const VECTOR2I& aOffset, const TRANSFORM& aTransform )
 {
     wxASSERT( aPlotter != nullptr );
 
@@ -679,7 +649,7 @@ void LIB_SYMBOL::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, cons
             field.SetText( text );
         }
 
-        item.Plot( aPlotter, aOffset, fill, aTransform );
+        item.Plot( aPlotter, aBackground, aOffset, aTransform );
         field.SetText( tmp );
     }
 }

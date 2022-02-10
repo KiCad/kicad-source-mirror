@@ -1031,10 +1031,10 @@ void LIB_PIN::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 }
 
 
-void LIB_PIN::Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
+void LIB_PIN::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
                     const TRANSFORM& aTransform ) const
 {
-    if( !IsVisible() )
+    if( !IsVisible() || aBackground )
         return;
 
     int     orient = PinDrawOrient( aTransform );

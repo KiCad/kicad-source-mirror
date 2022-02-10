@@ -109,7 +109,7 @@ void LIB_SHAPE::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 }
 
 
-void LIB_SHAPE::Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
+void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
                       const TRANSFORM& aTransform ) const
 {
     if( IsPrivate() )
@@ -118,9 +118,6 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
     VECTOR2I  start = aTransform.TransformCoordinate( m_start ) + aOffset;
     VECTOR2I  end = aTransform.TransformCoordinate( m_end ) + aOffset;
     VECTOR2I  center = aTransform.TransformCoordinate( getCenter() ) + aOffset;
-    int       penWidth = GetEffectivePenWidth( aPlotter->RenderSettings() );
-    FILL_T    fill = aFill ? m_fill : FILL_T::NO_FILL;
-    COLOR4D   color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
 
     static std::vector<VECTOR2I> cornerList;
 
@@ -149,47 +146,43 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
             std::swap( start, end );
     }
 
-    if( fill != FILL_T::NO_FILL )
+    int     penWidth;
+    COLOR4D color;
+    FILL_T  fill;
+
+    if( aBackground )
     {
-        COLOR4D fillColor = color;
-
         if( aPlotter->GetColorMode() )
+            return;
+
+        switch( m_fill )
         {
-            if( fill == FILL_T::FILLED_WITH_BG_BODYCOLOR )
-                fillColor = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE_BACKGROUND );
-            else if( fill == FILL_T::FILLED_WITH_COLOR )
-                fillColor = GetFillColor();
-        }
+        case FILL_T::FILLED_SHAPE:
+            return;
 
-        aPlotter->SetColor( fillColor );
-
-        switch( GetShape() )
-        {
-        case SHAPE_T::ARC:
-            aPlotter->Arc( center, start, end, fill, 0, ARC_HIGH_DEF );
+        case FILL_T::FILLED_WITH_COLOR:
+            color = GetFillColor();
             break;
 
-        case SHAPE_T::CIRCLE:
-            aPlotter->Circle( center, GetRadius() * 2, fill, 0 );
-            break;
-
-        case SHAPE_T::RECT:
-            aPlotter->Rect( start, end, fill, 0 );
-            break;
-
-        case SHAPE_T::POLY:
-        case SHAPE_T::BEZIER:
-            aPlotter->PlotPoly( cornerList, fill, 0 );
+        case FILL_T::FILLED_WITH_BG_BODYCOLOR:
+            color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE_BACKGROUND );
             break;
 
         default:
-            UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+            return;
         }
 
-        if( penWidth <= 0 )
-            return;
+        penWidth = 0;
+    }
+    else
+    {
+        if( m_fill == FILL_T::FILLED_SHAPE )
+            fill = m_fill;
         else
             fill = FILL_T::NO_FILL;
+
+        penWidth = GetEffectivePenWidth( aPlotter->RenderSettings() );
+        color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
     }
 
     aPlotter->SetColor( color );

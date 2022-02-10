@@ -62,11 +62,10 @@ public:
 
     void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
-    void Plot( PLOTTER* /* aPlotter */ ) const override
+    void Plot( PLOTTER* /* aPlotter */, bool /* aBackground */ ) const override
     {
-        // SCH_MARKERs should not be plotted. However, SCH_ITEM will fail an
-        // assertion if we do not confirm this by locally implementing a no-op
-        // Plot().
+        // SCH_MARKERs should not be plotted. However, SCH_ITEM will fail an assertion if we
+        // do not confirm this by locally implementing a no-op Plot().
     }
 
     EDA_RECT const GetBoundingBox() const override;

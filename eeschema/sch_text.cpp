@@ -404,8 +404,11 @@ void SCH_TEXT::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-void SCH_TEXT::Plot( PLOTTER* aPlotter ) const
+void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground ) const
 {
+    if( aBackground )
+        return;
+
     static std::vector<VECTOR2I> s_poly;
 
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();

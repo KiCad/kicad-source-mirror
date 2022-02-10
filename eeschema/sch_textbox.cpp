@@ -323,29 +323,19 @@ BITMAPS SCH_TEXTBOX::GetMenuImage() const
 }
 
 
-void SCH_TEXTBOX::Plot( PLOTTER* aPlotter ) const
+void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground ) const
 {
+    if( aBackground )
+    {
+        SCH_SHAPE::Plot( aPlotter, aBackground );
+        return;
+    }
+
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
     KIFONT::FONT*    font = GetDrawFont();
     int              penWidth = GetPenWidth();
     FILL_T           fill = m_fill;
     COLOR4D          color = settings->GetLayerColor( LAYER_NOTES );
-
-    if( fill != FILL_T::NO_FILL )
-    {
-        COLOR4D fillColor = color;
-
-        if( aPlotter->GetColorMode() )
-        {
-            if( fill == FILL_T::FILLED_WITH_BG_BODYCOLOR )
-                fillColor = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE_BACKGROUND );
-            else if( fill == FILL_T::FILLED_WITH_COLOR )
-                fillColor = GetFillColor();
-        }
-
-        aPlotter->SetColor( fillColor );
-        aPlotter->Rect( m_start, m_end, fill, 0 );
-    }
 
     if( penWidth > 0 )
     {

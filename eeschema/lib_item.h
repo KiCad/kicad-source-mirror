@@ -251,11 +251,13 @@ public:
      * Plot the draw item using the plot object.
      *
      * @param aPlotter The plot object to plot to.
+     * @param aBackground a poor-man's Z-order.  The routine will get called twice, first with
+     *                    aBackground true and then with aBackground false.
      * @param aOffset Plot offset position.
      * @param aFill Flag to indicate whether or not the object is filled.
      * @param aTransform The plot transform.
      */
-    virtual void Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
+    virtual void Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
                        const TRANSFORM& aTransform ) const = 0;
 
     void SetUnit( int aUnit ) { m_unit = aUnit; }

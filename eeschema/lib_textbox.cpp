@@ -306,7 +306,7 @@ BITMAPS LIB_TEXTBOX::GetMenuImage() const
 }
 
 
-void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
+void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
                         const TRANSFORM& aTransform ) const
 {
     wxASSERT( aPlotter != nullptr );
@@ -314,26 +314,16 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
     if( IsPrivate() )
         return;
 
+    if( aBackground )
+    {
+        LIB_SHAPE::Plot( aPlotter, aBackground, aOffset, aTransform );
+        return;
+    }
+
     VECTOR2I  start = aTransform.TransformCoordinate( m_start ) + aOffset;
     VECTOR2I  end = aTransform.TransformCoordinate( m_end ) + aOffset;
     int       penWidth = GetEffectivePenWidth( aPlotter->RenderSettings() );
-    FILL_T    fill = aFill ? m_fill : FILL_T::NO_FILL;
     COLOR4D   color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
-    if( fill != FILL_T::NO_FILL )
-    {
-        COLOR4D fillColor = color;
-
-        if( aPlotter->GetColorMode() )
-        {
-            if( fill == FILL_T::FILLED_WITH_BG_BODYCOLOR )
-                fillColor = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE_BACKGROUND );
-            else if( fill == FILL_T::FILLED_WITH_COLOR )
-                fillColor = GetFillColor();
-        }
-
-        aPlotter->SetColor( fillColor );
-        aPlotter->Rect( start, end, fill, 0 );
-    }
 
     if( penWidth > 0 )
     {

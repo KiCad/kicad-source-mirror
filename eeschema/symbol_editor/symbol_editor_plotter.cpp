@@ -61,16 +61,22 @@ void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName )
 
     if( m_symbol )
     {
-        TRANSFORM   temp;     // Uses default transform
-        wxPoint     plotPos;
+        constexpr bool background = true;
+        TRANSFORM      temp;                 // Uses default transform
+        wxPoint        plotPos;
 
         plotPos.x = pageInfo.GetWidthIU() / 2;
         plotPos.y = pageInfo.GetHeightIU() / 2;
 
-        m_symbol->Plot( plotter, GetUnit(), GetConvert(), plotPos, temp );
+        m_symbol->Plot( plotter, GetUnit(), GetConvert(), background, plotPos, temp );
 
         // Plot lib fields, not plotted by m_symbol->Plot():
-        m_symbol->PlotLibFields( plotter, GetUnit(), GetConvert(), plotPos, temp );
+        m_symbol->PlotLibFields( plotter, GetUnit(), GetConvert(), background, plotPos, temp );
+
+        m_symbol->Plot( plotter, GetUnit(), GetConvert(), !background, plotPos, temp );
+
+        // Plot lib fields, not plotted by m_symbol->Plot():
+        m_symbol->PlotLibFields( plotter, GetUnit(), GetConvert(), !background, plotPos, temp );
     }
 
     plotter->EndPlot();

@@ -866,6 +866,7 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter ) const
                 } );
 
     int defaultPenWidth = aPlotter->RenderSettings()->GetDefaultPenWidth();
+    constexpr bool background = true;
 
     // Bitmaps are drawn first to ensure they are in the background
     // This is particularly important for the wxPostscriptDC (used in *nix printers) as
@@ -873,19 +874,25 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter ) const
     for( const SCH_ITEM* item : bitmaps )
     {
         aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
-        item->Plot( aPlotter );
+        item->Plot( aPlotter, background );
     }
 
     for( const SCH_ITEM* item : other )
     {
         aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
-        item->Plot( aPlotter );
+        item->Plot( aPlotter, background );
+    }
+
+    for( const SCH_ITEM* item : other )
+    {
+        aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
+        item->Plot( aPlotter, !background );
     }
 
     for( const SCH_ITEM* item : junctions )
     {
         aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
-        item->Plot( aPlotter );
+        item->Plot( aPlotter, !background );
     }
 }
 

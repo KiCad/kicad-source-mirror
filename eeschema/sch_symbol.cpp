@@ -1848,17 +1848,29 @@ bool SCH_SYMBOL::IsInNetlist() const
 }
 
 
-void SCH_SYMBOL::Plot( PLOTTER* aPlotter ) const
+void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground ) const
 {
+    if( aBackground )
+        return;
+
     if( m_part )
     {
         TRANSFORM temp = GetTransform();
         aPlotter->StartBlock( nullptr );
 
-        m_part->Plot( aPlotter, GetUnit(), GetConvert(), m_pos, temp );
+        bool local_background = true;
+
+        m_part->Plot( aPlotter, GetUnit(), GetConvert(), local_background, m_pos, temp );
 
         for( SCH_FIELD field : m_fields )
-            field.Plot( aPlotter );
+            field.Plot( aPlotter, local_background );
+
+        local_background = false;
+
+        m_part->Plot( aPlotter, GetUnit(), GetConvert(), local_background, m_pos, temp );
+
+        for( SCH_FIELD field : m_fields )
+            field.Plot( aPlotter, local_background );
 
         aPlotter->EndBlock( nullptr );
     }

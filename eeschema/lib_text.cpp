@@ -257,10 +257,13 @@ void LIB_TEXT::Rotate( const VECTOR2I& center, bool aRotateCCW )
 }
 
 
-void LIB_TEXT::Plot( PLOTTER* plotter, const VECTOR2I& offset, bool fill,
+void LIB_TEXT::Plot( PLOTTER* plotter, bool aBackground, const VECTOR2I& offset,
                      const TRANSFORM& aTransform ) const
 {
     wxASSERT( plotter != nullptr );
+
+    if( aBackground )
+        return;
 
     EDA_RECT bBox = GetBoundingBox();
     // convert coordinates from draw Y axis to symbol_editor Y axis

@@ -97,7 +97,7 @@ public:
 
     BITMAPS GetMenuImage() const override;
 
-    void Plot( PLOTTER* aPlotter ) const override;
+    void Plot( PLOTTER* aPlotter, bool aBackground ) const override;
 
     EDA_ITEM* Clone() const override
     {

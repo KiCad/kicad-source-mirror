@@ -220,7 +220,7 @@ public:
     void MirrorVertical( const VECTOR2I& aCenter ) override;
     void Rotate( const VECTOR2I& aCenter, bool aRotateCCW = true ) override;
 
-    void Plot( PLOTTER* aPlotter, const VECTOR2I& aPffset, bool aFill,
+    void Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
                const TRANSFORM& aTransform ) const override;
 
     BITMAPS GetMenuImage() const override;

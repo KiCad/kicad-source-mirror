@@ -83,8 +83,8 @@ public:
 
     BITMAPS GetMenuImage() const override;
 
-    void Plot( PLOTTER* aPlotter, const VECTOR2I& offset, bool fill,
-                             const TRANSFORM& aTransform ) const override;
+    void Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& offset,
+               const TRANSFORM& aTransform ) const override;
 
     EDA_ITEM* Clone() const override
     {
