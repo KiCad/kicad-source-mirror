@@ -74,7 +74,7 @@ class PadMaker(object):
         pad = pcbnew.PAD(self.module)
         pad.SetSize(pcbnew.wxSize(drill, drill))
         pad.SetShape(pcbnew.PAD_SHAPE_CIRCLE)
-        pad.SetAttribute(pcbnew.PAD_ATTRIB_HOLE_NOT_PLATED)
+        pad.SetAttribute(pcbnew.PAD_ATTRIB_NPTH)
         pad.SetLayerSet(pad.UnplatedHoleMask())
         pad.SetDrillSize(pcbnew.wxSize(drill, drill))
         return pad
