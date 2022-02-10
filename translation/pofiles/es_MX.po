@@ -7,13 +7,13 @@
 # Iñigo <ifs@elektroquark.com>, 2021.
 # VicSanRoPe <vicsanrope@protonmail.com>, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2021.
-# Ulices <ulicesah@gmail.com>, 2021.
+# Ulices <ulicesah@gmail.com>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-07 17:47-0800\n"
-"PO-Revision-Date: 2021-12-23 20:49+0000\n"
+"PO-Revision-Date: 2022-02-14 17:24+0000\n"
 "Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.11-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4750,9 +4750,9 @@ msgid "Error loading font '%s'."
 msgstr "Error al cargar la placa '%s'."
 
 #: common/font/fontconfig.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Font '%s' not found; substituting '%s'."
-msgstr "No se ha encontrado la huella '%s'."
+msgstr "Fuente '%s' no encontrada, sustituyendo '%s'."
 
 #: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:884
 #: eeschema/symbol_editor/symbol_library_manager.cpp:104
@@ -5745,9 +5745,8 @@ msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "Se ha creado archivo Zip '%s' (%s sin comprimir, %s comprimido)."
 
 #: common/rc_item.cpp:362
-#, fuzzy
 msgid "Excluded warning: "
-msgstr "Escala:"
+msgstr "Escala: "
 
 #: common/rc_item.cpp:364
 #, fuzzy
@@ -6516,9 +6515,8 @@ msgid "Mirroring for Y axis is not supported yet"
 msgstr "Aún no está implementado el reflejo sobre el eje Y"
 
 #: common/widgets/font_choice.cpp:58
-#, fuzzy
 msgid "<not found>"
-msgstr " no encontrado"
+msgstr "<no encontrado>"
 
 #: common/widgets/footprint_preview_widget.cpp:103
 msgid "Footprint not found."
@@ -8797,9 +8795,8 @@ msgstr "Tamaño de fuente:"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:174
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:112
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:87
-#, fuzzy
 msgid "KiCad Font"
-msgstr "KiCad "
+msgstr "Fuente de KiCad"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:116
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:85
@@ -10751,9 +10748,9 @@ msgstr ""
 "de Esquemas."
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Properties"
-msgstr "Propiedades"
+msgstr "%s Propiedades"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:66
 msgid "Connection type:"
@@ -18155,18 +18152,14 @@ msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr "<b>No hay más capas disponibles</b> en GerbView para cargar archivos"
 
 #: gerbview/files.cpp:43
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Not loaded:</b> <i>%s</i>"
-msgstr ""
-"\n"
-"<b>No se ha cargado:</b> <i>%s</i>"
+msgstr "<b>No se ha cargado:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Memory was exhausted reading:</b> <i>%s</i>"
-msgstr ""
-"\n"
-"<b>Se ha acabado la memoria al leer:</b> <i>%s</i>"
+msgstr "<b>Se ha acabado la memoria al leer:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:87
 msgid "Zip files"
@@ -18232,7 +18225,7 @@ msgstr "Maestro de pads superiores"
 
 #: gerbview/files.cpp:221
 msgid "Bottom Pad Master"
-msgstr "Maestro de pads inferiores"
+msgstr "Maestro de pads superiores"
 
 #: gerbview/files.cpp:227
 msgid "Open Gerber File(s)"
@@ -18269,24 +18262,24 @@ msgid "Zip file '%s' cannot be opened."
 msgstr "No puede abrirse el archivo Zip '%s'."
 
 #: gerbview/files.cpp:479
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (gerber job file)."
-msgstr "Archivo '%s' salteado (archivo de trabajo gerber).\n"
+msgstr "Archivo '%s' salteado (archivo de trabajo gerber)."
 
 #: gerbview/files.cpp:524
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>"
-msgstr "<b>No puede crearse al archivo temporal '%s'.</b>\n"
+msgstr "<b>No puede crearse al archivo temporal '%s'.</b>"
 
 #: gerbview/files.cpp:549
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (unknown type)."
-msgstr "Archivo '%s' salteado (tipo desconocido).\n"
+msgstr "Archivo '%s' salteado (tipo desconocido)."
 
 #: gerbview/files.cpp:586
-#, fuzzy, c-format
+#, c-format
 msgid "<b>unzipped file %s read error</b>"
-msgstr "<b>error de lectura en el archivo descomprimido %s</b>\n"
+msgstr "<b>error de lectura en el archivo descomprimido %s</b>"
 
 #: gerbview/files.cpp:634
 msgid "Open Zip File"
@@ -21511,7 +21504,6 @@ msgstr ""
 "¿Desea descartar los cambios y salir?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -21536,8 +21528,8 @@ msgid ""
 "___H___ is thickness (height) in mils<br>\n"
 "___K___ is 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
-"Si especifica la corriente máxima, se calculará el grosor de pista "
-"adecuado.\n"
+"Si especifica la corriente máxima, se calculará el grosor de pista adecuado."
+"\n"
 "\n"
 "Si especifica uno de los grosores de pista, se calculará la corriente máxima "
 "que puede soportar. También se calculará el grosor de la otra pista para que "
@@ -21549,16 +21541,16 @@ msgstr ""
 "17,5 A (pistas internas), aumentos de temperatura de hasta 100 ºC y grosores "
 "de hasta 400 mil (10 mm).\n"
 "\n"
-"La fórmula, de IPC 2221, es  \n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>  \n"
-"dónde:  \n"
-"___I___ es la corriente máxima en A  \n"
+"La fórmula, de IPC 2221, es\n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>\n"
+"dónde:<br>\n"
+"___I___ es la corriente máxima en A <br>\n"
 "___&Delta;T___ es el aumento de temperatura por encima de la temperatura "
-"ambiente en &deg;C  \n"
-"___W___ es el ancho en mils  \n"
-"___H___ es el espesor (altura ) en mils  \n"
-"___K___ es 0.024 para pistas internas ó 0,048 para pistas externas  \n"
+"ambiente en &deg;C<br>\n"
+"___W___ es el ancho en mils<br>\n"
+"___H___ es el espesor (altura ) en mils<br>\n"
+"___K___ es 0.024 para pistas internas ó 0,048 para pistas externas<br>\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -22746,9 +22738,8 @@ msgid "Reannotate anyway?"
 msgstr "¿Reanotar de todas formas?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:802
-#, fuzzy
 msgid "Duplicate instances of "
-msgstr "Duplicar elementos %s%s\n"
+msgstr "Duplicar instancias de "
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
 msgid "Aborted: too many errors"
@@ -24163,14 +24154,14 @@ msgid "-------- DRC cancelled by user.<br><br>"
 msgstr "-------- DRC cancelado por el usuario.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:495
-#, fuzzy, c-format
+#, c-format
 msgid "Remove all exclusions for violations of rule '%s'"
-msgstr "Eliminar exclusión de esta violación"
+msgstr "Eliminar todas las exclusiones para las violaciones de la regla '%s'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:507
-#, fuzzy, c-format
+#, c-format
 msgid "Exclude all violations of rule '%s'"
-msgstr "Excluir esta violación"
+msgstr "Excluir todas las violaciones de la regla '%s'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:516
 msgid "Run clearance resolution tool..."
@@ -24308,9 +24299,9 @@ msgstr ""
 "librería y quiere propagarlos a la placa."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Updated footprint %s (%s)"
-msgstr "Actualizar la(s) huella(s) seleccionada(s)"
+msgstr "Actualizar la(s) huella(s) %s (%s)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:365
 #, fuzzy, c-format
@@ -26297,9 +26288,9 @@ msgid "Center:"
 msgstr "Centro:"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid "Corner %d"
-msgstr "Esquinas"
+msgstr "Esquina %d"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:341
 msgid "Polygon must have at least 3 corners"
@@ -27363,17 +27354,15 @@ msgid "SVG Options"
 msgstr "Opciones SVG"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:379
-#, fuzzy
 msgid ""
 "This number defines how many digits are exported that are below 1 mm.\n"
 "User unit is 10^-<N> mm\n"
 "Choose 4 if you are not sure."
 msgstr ""
-"Que tan grande es una unidad SVG de usuario.\n"
-"El número define cuantos dígitos son exportados que están por debajo 1 mm o "
-"1 inch,\n"
-"La unidad de usuario es 10^-<N> mm o 10^-<N> inch.\n"
-"Elija 6 si no está seguro."
+"Este número define cuantos dígitos son exportados que están por debajo de 1 "
+"mm o.\n"
+"La unidad de usuario es 10^-<N> mm\n"
+"Elija 4 si no está seguro."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:405
 msgid "Run DRC..."
@@ -29636,7 +29625,6 @@ msgid "Check rule syntax"
 msgstr "Verificar reglas de sintaxis"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -29920,7 +29908,7 @@ msgstr ""
 "    (rule <rule_name> <rule_clause> ...)\n"
 "\n"
 "\n"
-"<br><br>\n"
+"<br>\n"
 "\n"
 "### Cláusulas de reglas\n"
 "\n"
@@ -29930,14 +29918,16 @@ msgstr ""
 "\n"
 "    (layer \"<layer_name>\")\n"
 "\n"
+"    (severity <severity_name>)\n"
 "\n"
-"<br><br>\n"
 "\n"
-"### Tipos de requerimientos\n"
+"<br>\n"
+"\n"
+"### Tipos de restricciones\n"
 "\n"
 " * annular\\_width\n"
 " * clearance\n"
-" * courtyard\\_clearance\n"
+" * courtyard_clearance\n"
 " * diff\\_pair\\_gap\n"
 " * diff\\_pair\\_uncoupled\n"
 " * disallow\n"
@@ -29945,14 +29935,24 @@ msgstr ""
 " * length\n"
 " * hole\\_clearance\n"
 " * hole\\_size\n"
-" * silk_clearance\n"
+" * mechanical\\_clearance\n"
+" * mechanical\\_hole\\_clearance\n"
+" * min\\_resolved\\_spokes\n"
+" * silk\\_clearance\n"
 " * skew\n"
+" * text\\_height\n"
+" * text\\_thickness\n"
+" * thermal\\_relief\\_gap\n"
+" * thermal\\_spoke\\_width\n"
 " * track\\_width\n"
 " * via\\_count\n"
 " * via\\_diameter\n"
+" * zone\\_connection\n"
 "\n"
-"\n"
-"<br><br>\n"
+"Nota: las reglas `clearance` y `hole_clearance` no se ejecutan contra "
+"elementos de la misma red; las reglas `mechanical_clearance` y "
+"`mechanical_hole_clearance` sí lo hacen.\n"
+"<br>\n"
 "\n"
 "### Tipos de elementos\n"
 "\n"
@@ -29965,6 +29965,23 @@ msgstr ""
 " * track\n"
 " * via\n"
 " * zone\n"
+"\n"
+"<br>\n"
+"\n"
+"### Conexiones de zona\n"
+"\n"
+" * solid\n"
+" * thermal\\_reliefs\n"
+" * none\n"
+"\n"
+"<br>\n"
+"\n"
+"### Nombre de gravedad\n"
+"\n"
+" * warning\n"
+" * error\n"
+" * exclusion\n"
+" * ignore\n"
 "\n"
 "<br>\n"
 "\n"
@@ -29992,19 +30009,25 @@ msgstr ""
 "    (rule HV_unshielded\n"
 "       (constraint clearance (min 2mm))\n"
 "       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+"\n"
+"\n"
+"    (rule heavy_thermals\n"
+"       (constraint thermal_spoke_width (min 0.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
 "<br><br>\n"
 "\n"
 "### Notas\n"
 "\n"
-"La cláusula de versión tiene que ser la primera cláusula.\n"
-"Indica la versión de sintaxis del archivo para que analizadores de\n"
-"reglas futuros puedan realizar actualizaciones automáticas.\n"
+"La cláusula de versión tiene que ser la primera cláusula. Indica la versión "
+"de sintaxis \n"
+"del archivo para que analizadores de reglas futuros puedan realizar "
+"actualizaciones automáticas.\n"
 "Debería ser fijado a \"1\".\n"
 "\n"
 "Las reglas deberían ser ordenadas por especificidad.\n"
 "Las reglas posteriores tienen precedencia sobre las reglas anteriores;\n"
-"una vez que se encuentra una regla coincidente, no se comprobarán más "
-"reglas.\n"
+"una vez que se encuentra una regla coincidente, no se comprobarán más reglas."
+"\n"
 "\n"
 "Use Ctrl+/ para comentar o descomentar la(s) línea(s).\n"
 "<br><br><br>\n"
@@ -30039,8 +30062,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<net_name>')\n"
-"Verdadero si `A` tiene una red que es parte del par diferencial "
-"especificado.\n"
+"Verdadero si `A` tiene una red que es parte del par diferencial especificado."
+"\n"
 "`<net_name>` es el nombre base del par diferencial. Por ejemplo, "
 "`inDiffPair('CLK')`\n"
 "coincide con los elementos en las redes `CLK_P` y `CLK_N`.\n"
@@ -30055,10 +30078,10 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.existsOnLayer('<layer_name>')\n"
-"Verdadero si`A` existe en la capa dada. El nombre de la capa puede ser el "
-"asignado\n"
-"en Configuración de placa > Capas del editor de placas, o el nombre canónico "
-"(ej: `F.Cu`).\n"
+"Verdadero si `A` existe en la capa dada. El nombre de la capa \n"
+"puede ser el asignado en Configuración de placa > Capas del editor de "
+"placas, \n"
+"o el nombre canónico (ej: `F.Cu`).\n"
 "\n"
 "Note: esto devuelve verdadero si `A`está en la capa dada, independientemente "
 "de\n"
@@ -30126,6 +30149,41 @@ msgstr ""
 "    (rule \"dp clearance\"\n"
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+"\n"
+"\n"
+"    # No usar alivios térmicos en los pads del disipador de calor\n"
+"    (rule heat_sink_pad\n"
+"        (constraint zone_connection solid)\n"
+"        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
+"\n"
+"    # Requerir que los cuatro radios de alivio térmico se conecten a la zona "
+"principal\n"
+"    (rule fully_spoked_pads\n"
+"        (constraint min_resolved_spokes 4))\n"
+"\n"
+"    # Establecer el espacio de alivio térmico y el ancho de los radios para "
+"todas las zonas\n"
+"    (rule defined_relief\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil)))\n"
+"\n"
+"    # Anular el espacio de alivio térmico y el ancho de los radios para las "
+"zonas GND y PWR\n"
+"    (rule defined_relief_pwr\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil))\n"
+"        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
+"    \n"
+"\n"
+"    # Evitar la absorción de soldadura de los pads SMD\n"
+"    (rule holes_in_pads\n"
+"        (constraint mechanical_hole_clearance (min 0.2mm))\n"
+"        (condition \"B.Pad_Type == 'SMD'\"))\n"
+"\n"
+"    # Deshabilitar anulaciones de margen de máscara anti-soldante\n"
+"    (rule \"disallow solder mask margin overrides\"\n"
+"        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
+"        (condition \"A.Type == 'Pad'\"))"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
@@ -30312,9 +30370,9 @@ msgid "Local override on %s; thermal spoke width: %s."
 msgstr "Sustitución local en %s; margen: %s."
 
 #: pcbnew/drc/drc_engine.cpp:857
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s min thickness: %s."
-msgstr "Valor mínimo anchura de zonas"
+msgstr "Ancho mínimo de la zona %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:871
 #, fuzzy, c-format
@@ -30449,9 +30507,9 @@ msgid "Local clearance on %s; clearance: %s."
 msgstr "Margen local en %s; margen: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1213
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s zone connection: %s."
-msgstr "Selección de huellas:"
+msgstr "Huella %s conecxión de zona: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1228
 #, fuzzy, c-format
@@ -33100,9 +33158,8 @@ msgid "removed annular ring"
 msgstr "anillo anular eliminado"
 
 #: pcbnew/pcb_track.cpp:694
-#, fuzzy
 msgid "Track (arc)"
-msgstr "Pista "
+msgstr "Pista (arco)"
 
 #: pcbnew/pcb_track.cpp:709
 msgid "Segment Length"
