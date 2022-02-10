@@ -110,11 +110,7 @@ VECTOR2I GERBER_FILE_IMAGE::ReadXYCoord( char*& aText, bool aExcellonMode )
 
         if( is_float )
         {
-            // When X or Y (or A) values are float numbers, they are given in mm or inches
-            if( m_GerbMetric )  // units are mm
-                current_coord = KiROUND( val * GERB_IU_PER_MM );
-            else    // units are inches
-                current_coord = KiROUND( val * GERB_IU_PER_MM * 0.0254 );
+            current_coord = scaletoIU( val, m_GerbMetric );
         }
         else
         {
@@ -202,11 +198,7 @@ VECTOR2I GERBER_FILE_IMAGE::ReadIJCoord( char*& aText )
 
         if( is_float )
         {
-            // When X or Y (or A) values are float numbers, they are given in mm or inches
-            if( m_GerbMetric )  // units are mm
-                current_coord = KiROUND( val * GERB_IU_PER_MM );
-            else    // units are inches
-                current_coord = KiROUND( val * GERB_IU_PER_MM * 0.0254 );
+            current_coord = scaletoIU( val, m_GerbMetric );
         }
         else
         {
