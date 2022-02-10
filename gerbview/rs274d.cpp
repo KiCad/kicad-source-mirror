@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -360,7 +360,10 @@ static void fillArcPOLY( GERBER_DRAW_ITEM* aGbrItem, const VECTOR2I& aStart, con
     // start_angle < end_angle. So ensure this is the case here:
     // Due to the fact atan2 returns angles between -180 to + 180 degrees,
     // this is not always the case ( a modulo 360.0 degrees can be lost )
-    if( start_angle > end_angle )
+    //
+    // Note also an arc with same start and end angle is a circle (360 deg arc)
+    // in gerber files
+    if( start_angle >= end_angle )
         end_angle += ANGLE_360;
 
     EDA_ANGLE arc_angle = start_angle - end_angle;
