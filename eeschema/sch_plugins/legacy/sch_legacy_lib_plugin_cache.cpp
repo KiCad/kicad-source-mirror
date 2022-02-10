@@ -742,10 +742,8 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbo
 
     LIB_SHAPE* arc = new LIB_SHAPE( aSymbol.get(), SHAPE_T::ARC );
 
-    VECTOR2I center;
-
-    center.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    center.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    VECTOR2I center( Mils2Iu( parseInt( aReader, line, &line ) ),
+                     Mils2Iu( parseInt( aReader, line, &line ) ) );
 
     arc->SetPosition( center );
 
@@ -758,11 +756,13 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbo
 
     arc->SetUnit( parseInt( aReader, line, &line ) );
     arc->SetConvert( parseInt( aReader, line, &line ) );
-    arc->SetStroke( STROKE_PARAMS( Mils2Iu( parseInt( aReader, line, &line ) ),
-                                   PLOT_DASH_TYPE::SOLID ) );
 
-    // Old libraries (version <= 2.2) do not have always this FILL MODE param
-    // when fill mode is no fill (default mode).
+    STROKE_PARAMS stroke( Mils2Iu( parseInt( aReader, line, &line ) ), PLOT_DASH_TYPE::SOLID );
+
+    arc->SetStroke( stroke );
+
+    // Old libraries (version <= 2.2) do not have always this FILL MODE param when fill mode
+    // is no fill (default mode).
     if( *line != 0 )
         arc->SetFillMode( parseFillMode( aReader, line, &line ) );
 
@@ -839,10 +839,8 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr<LIB_SYMBOL>& aSy
 
     LIB_SHAPE* circle = new LIB_SHAPE( aSymbol.get(), SHAPE_T::CIRCLE );
 
-    VECTOR2I center;
-
-    center.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    center.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    VECTOR2I center( Mils2Iu( parseInt( aReader, line, &line ) ),
+                     Mils2Iu( parseInt( aReader, line, &line ) ) );
 
     int radius = Mils2Iu( parseInt( aReader, line, &line ) );
 
@@ -850,8 +848,10 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr<LIB_SYMBOL>& aSy
     circle->SetEnd( VECTOR2I( center.x + radius, center.y ) );
     circle->SetUnit( parseInt( aReader, line, &line ) );
     circle->SetConvert( parseInt( aReader, line, &line ) );
-    circle->SetStroke( STROKE_PARAMS( Mils2Iu( parseInt( aReader, line, &line ) ),
-                                      PLOT_DASH_TYPE::SOLID ) );
+
+    STROKE_PARAMS stroke( Mils2Iu( parseInt( aReader, line, &line ) ), PLOT_DASH_TYPE::SOLID );
+
+    circle->SetStroke( stroke );
 
     if( *line != 0 )
         circle->SetFillMode( parseFillMode( aReader, line, &line ) );
@@ -874,10 +874,9 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr<LIB_SYMBOL>& aSymbo
 
     text->SetTextAngle( EDA_ANGLE( angleInTenths, TENTHS_OF_A_DEGREE_T ) );
 
-    VECTOR2I center;
+    VECTOR2I center( Mils2Iu( parseInt( aReader, line, &line ) ),
+                     Mils2Iu( parseInt( aReader, line, &line ) ) );
 
-    center.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    center.y = Mils2Iu( parseInt( aReader, line, &line ) );
     text->SetPosition( center );
 
     wxSize size;
@@ -921,7 +920,8 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr<LIB_SYMBOL>& aSymbo
     // Update: apparently even in the latest version this can be different so added a test
     //         for end of line before checking for the text properties.
     if( LIB_VERSION( aMajorVersion, aMinorVersion ) > 0
-     && LIB_VERSION( aMajorVersion, aMinorVersion ) > LIB_VERSION( 2, 0 ) && !is_eol( *line ) )
+             && LIB_VERSION( aMajorVersion, aMinorVersion ) > LIB_VERSION( 2, 0 )
+             && !is_eol( *line ) )
     {
         if( strCompare( "Italic", line, &line ) )
             text->SetItalic( true );
@@ -967,22 +967,23 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadRect( std::unique_ptr<LIB_SYMBOL>& aSymb
 
     LIB_SHAPE* rectangle = new LIB_SHAPE( aSymbol.get(), SHAPE_T::RECT );
 
-    VECTOR2I pos;
+    VECTOR2I pos( Mils2Iu( parseInt( aReader, line, &line ) ),
+                  Mils2Iu( parseInt( aReader, line, &line ) ) );
 
-    pos.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    pos.y = Mils2Iu( parseInt( aReader, line, &line ) );
     rectangle->SetPosition( pos );
 
-    VECTOR2I end;
+    VECTOR2I end( Mils2Iu( parseInt( aReader, line, &line ) ),
+                  Mils2Iu( parseInt( aReader, line, &line ) ) );
 
-    end.x = Mils2Iu( parseInt( aReader, line, &line ) );
-    end.y = Mils2Iu( parseInt( aReader, line, &line ) );
     rectangle->SetEnd( end );
 
     rectangle->SetUnit( parseInt( aReader, line, &line ) );
     rectangle->SetConvert( parseInt( aReader, line, &line ) );
-    rectangle->SetStroke( STROKE_PARAMS( Mils2Iu( parseInt( aReader, line, &line ) ),
-                                         PLOT_DASH_TYPE::SOLID ) );
+
+    STROKE_PARAMS stroke( Mils2Iu( parseInt( aReader, line, &line ) ), PLOT_DASH_TYPE::SOLID );
+
+    rectangle->SetStroke( stroke );
+
 
     if( *line != 0 )
         rectangle->SetFillMode( parseFillMode( aReader, line, &line ) );
@@ -1023,8 +1024,10 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     tmp = tokens.GetNextToken();
 
     if( !tmp.ToLong( &num ) )
+    {
         THROW_PARSE_ERROR( "invalid pin X coordinate", aReader.GetSource(), aReader.Line(),
                            aReader.LineNumber(), pos );
+    }
 
     pos += tmp.size() + 1;
     position.x = Mils2Iu( (int) num );
@@ -1032,8 +1035,10 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     tmp = tokens.GetNextToken();
 
     if( !tmp.ToLong( &num ) )
+    {
         THROW_PARSE_ERROR( "invalid pin Y coordinate", aReader.GetSource(), aReader.Line(),
                            aReader.LineNumber(), pos );
+    }
 
     pos += tmp.size() + 1;
     position.y = Mils2Iu( (int) num );
@@ -1041,8 +1046,10 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     tmp = tokens.GetNextToken();
 
     if( !tmp.ToLong( &num ) )
+    {
         THROW_PARSE_ERROR( "invalid pin length", aReader.GetSource(), aReader.Line(),
                            aReader.LineNumber(), pos );
+    }
 
     pos += tmp.size() + 1;
     int length = Mils2Iu( (int) num );
@@ -1051,8 +1058,10 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     tmp = tokens.GetNextToken();
 
     if( tmp.size() > 1 )
+    {
         THROW_PARSE_ERROR( "invalid pin orientation", aReader.GetSource(), aReader.Line(),
                            aReader.LineNumber(), pos );
+    }
 
     pos += tmp.size() + 1;
     int orientation = tmp[0];
@@ -1060,8 +1069,10 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     tmp = tokens.GetNextToken();
 
     if( !tmp.ToLong( &num ) )
+    {
         THROW_PARSE_ERROR( "invalid pin number text size", aReader.GetSource(), aReader.Line(),
                            aReader.LineNumber(), pos );
+    }
 
     pos += tmp.size() + 1;
     int numberTextSize = Mils2Iu( (int) num );
@@ -1069,8 +1080,10 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     tmp = tokens.GetNextToken();
 
     if( !tmp.ToLong( &num ) )
+    {
         THROW_PARSE_ERROR( "invalid pin name text size", aReader.GetSource(), aReader.Line(),
                            aReader.LineNumber(), pos );
+    }
 
     pos += tmp.size() + 1;
     int nameTextSize = Mils2Iu( (int) num );
@@ -1078,8 +1091,10 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     tmp = tokens.GetNextToken();
 
     if( !tmp.ToLong( &num ) )
+    {
         THROW_PARSE_ERROR( "invalid pin unit", aReader.GetSource(), aReader.Line(),
                            aReader.LineNumber(), pos );
+    }
 
     pos += tmp.size() + 1;
     int unit = (int) num;
@@ -1087,8 +1102,10 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     tmp = tokens.GetNextToken();
 
     if( !tmp.ToLong( &num ) )
+    {
         THROW_PARSE_ERROR( "invalid pin alternate body type", aReader.GetSource(), aReader.Line(),
                            aReader.LineNumber(), pos );
+    }
 
     pos += tmp.size() + 1;
     int convert = (int) num;
@@ -1096,8 +1113,10 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     tmp = tokens.GetNextToken();
 
     if( tmp.size() != 1 )
+    {
         THROW_PARSE_ERROR( "invalid pin type", aReader.GetSource(), aReader.Line(),
                            aReader.LineNumber(), pos );
+    }
 
     pos += tmp.size() + 1;
     char type = tmp[0];
@@ -1118,7 +1137,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     case 'N': pinType = ELECTRICAL_PINTYPE::PT_NC;            break;
     default:
         THROW_PARSE_ERROR( "unknown pin type", aReader.GetSource(), aReader.Line(),
-                aReader.LineNumber(), pos );
+                           aReader.LineNumber(), pos );
     }
 
 
@@ -1202,8 +1221,10 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr<LIB_SYMBOL>& a
     int points = parseInt( aReader, line, &line );
     polyLine->SetUnit( parseInt( aReader, line, &line ) );
     polyLine->SetConvert( parseInt( aReader, line, &line ) );
-    polyLine->SetStroke( STROKE_PARAMS( Mils2Iu( parseInt( aReader, line, &line ) ),
-                                        PLOT_DASH_TYPE::SOLID ) );
+
+    STROKE_PARAMS stroke( Mils2Iu( parseInt( aReader, line, &line ) ), PLOT_DASH_TYPE::SOLID );
+
+    polyLine->SetStroke( stroke );
 
     VECTOR2I pt;
 
@@ -1236,8 +1257,10 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr<LIB_SYMBOL>& aSy
 
     bezier->SetUnit( parseInt( aReader, line, &line ) );
     bezier->SetConvert( parseInt( aReader, line, &line ) );
-    bezier->SetStroke( STROKE_PARAMS( Mils2Iu( parseInt( aReader, line, &line ) ),
-                                      PLOT_DASH_TYPE::SOLID ) );
+
+    STROKE_PARAMS stroke ( Mils2Iu( parseInt( aReader, line, &line ) ), PLOT_DASH_TYPE::SOLID );
+
+    bezier->SetStroke( stroke );
 
     bezier->SetStart( VECTOR2I( Mils2Iu( parseInt( aReader, line, &line ) ),
                                 Mils2Iu( parseInt( aReader, line, &line ) ) ) );
