@@ -139,6 +139,15 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
         for( const VECTOR2I& pt : m_bezierPoints )
             cornerList.push_back( aTransform.TransformCoordinate( pt ) + aOffset );
     }
+    else if( GetShape() == SHAPE_T::ARC )
+    {
+        EDA_ANGLE t1, t2;
+
+        CalcArcAngles( t1, t2 );
+
+        if( aTransform.MapAngles( &t1, &t2 ) != ( ( t1 - t2 ).Normalize180() > ANGLE_0 ) )
+            std::swap( start, end );
+    }
 
     if( fill != FILL_T::NO_FILL )
     {
