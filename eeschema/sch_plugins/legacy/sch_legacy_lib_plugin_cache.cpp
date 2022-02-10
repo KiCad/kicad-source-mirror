@@ -179,8 +179,10 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDocs()
         THROW_IO_ERROR( _( "symbol document library file is empty" ) );
 
     if( !strCompare( DOCFILE_IDENT, line, &line ) )
+    {
         SCH_PARSE_ERROR( "invalid document library file version formatting in header",
                          reader, line );
+    }
 
     while( reader.ReadLine() )
     {
@@ -312,8 +314,10 @@ LIB_SYMBOL* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorV
     tmp = tokens.GetNextToken();                  // Pin name offset.
 
     if( !tmp.ToLong( &num ) )
+    {
         THROW_PARSE_ERROR( "invalid pin offset", aReader.GetSource(), aReader.Line(),
                            aReader.LineNumber(), pos );
+    }
 
     pos += tmp.size() + 1;
     symbol->SetPinNameOffset( Mils2Iu( (int)num ) );
@@ -330,8 +334,10 @@ LIB_SYMBOL* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorV
     tmp = tokens.GetNextToken();                  // Show pin names.
 
     if( !( tmp == "Y" || tmp == "N") )
+    {
         THROW_PARSE_ERROR( "expected Y or N", aReader.GetSource(), aReader.Line(),
                            aReader.LineNumber(), pos );
+    }
 
     pos += tmp.size() + 1;
     symbol->SetShowPinNames( ( tmp == "N" ) ? false : true );
@@ -339,8 +345,10 @@ LIB_SYMBOL* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorV
     tmp = tokens.GetNextToken();                  // Number of units.
 
     if( !tmp.ToLong( &num ) )
+    {
         THROW_PARSE_ERROR( "invalid unit count", aReader.GetSource(), aReader.Line(),
                            aReader.LineNumber(), pos );
+    }
 
     pos += tmp.size() + 1;
     symbol->SetUnitCount( (int)num );
@@ -680,8 +688,8 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDrawEntries( std::unique_ptr<LIB_SYMBOL>& aSym
             break;
 
         case 'T':    // Text
-            aSymbol->AddDrawItem( loadText( aSymbol, aReader, aMajorVersion,
-                                            aMinorVersion ), false );
+            aSymbol->AddDrawItem( loadText( aSymbol, aReader, aMajorVersion, aMinorVersion ),
+                                  false );
             break;
 
         case 'S':    // Square
@@ -742,8 +750,10 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbo
 
     LIB_SHAPE* arc = new LIB_SHAPE( aSymbol.get(), SHAPE_T::ARC );
 
-    VECTOR2I center( Mils2Iu( parseInt( aReader, line, &line ) ),
-                     Mils2Iu( parseInt( aReader, line, &line ) ) );
+    VECTOR2I center;
+
+    center.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    center.y = Mils2Iu( parseInt( aReader, line, &line ) );
 
     arc->SetPosition( center );
 
@@ -821,8 +831,10 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr<LIB_SYMBOL>& aSy
 
     LIB_SHAPE* circle = new LIB_SHAPE( aSymbol.get(), SHAPE_T::CIRCLE );
 
-    VECTOR2I center( Mils2Iu( parseInt( aReader, line, &line ) ),
-                     Mils2Iu( parseInt( aReader, line, &line ) ) );
+    VECTOR2I center;
+
+    center.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    center.y = Mils2Iu( parseInt( aReader, line, &line ) );
 
     int radius = Mils2Iu( parseInt( aReader, line, &line ) );
 
@@ -856,9 +868,10 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr<LIB_SYMBOL>& aSymbo
 
     text->SetTextAngle( EDA_ANGLE( angleInTenths, TENTHS_OF_A_DEGREE_T ) );
 
-    VECTOR2I center( Mils2Iu( parseInt( aReader, line, &line ) ),
-                     Mils2Iu( parseInt( aReader, line, &line ) ) );
+    VECTOR2I center;
 
+    center.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    center.y = Mils2Iu( parseInt( aReader, line, &line ) );
     text->SetPosition( center );
 
     wxSize size;
@@ -949,14 +962,16 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadRect( std::unique_ptr<LIB_SYMBOL>& aSymb
 
     LIB_SHAPE* rectangle = new LIB_SHAPE( aSymbol.get(), SHAPE_T::RECT );
 
-    VECTOR2I pos( Mils2Iu( parseInt( aReader, line, &line ) ),
-                  Mils2Iu( parseInt( aReader, line, &line ) ) );
+    VECTOR2I pos;
 
+    pos.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    pos.y = Mils2Iu( parseInt( aReader, line, &line ) );
     rectangle->SetPosition( pos );
 
-    VECTOR2I end( Mils2Iu( parseInt( aReader, line, &line ) ),
-                  Mils2Iu( parseInt( aReader, line, &line ) ) );
+    VECTOR2I end;
 
+    end.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    end.y = Mils2Iu( parseInt( aReader, line, &line ) );
     rectangle->SetEnd( end );
 
     rectangle->SetUnit( parseInt( aReader, line, &line ) );
@@ -1244,17 +1259,23 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr<LIB_SYMBOL>& aSy
 
     bezier->SetStroke( stroke );
 
-    bezier->SetStart( VECTOR2I( Mils2Iu( parseInt( aReader, line, &line ) ),
-                                Mils2Iu( parseInt( aReader, line, &line ) ) ) );
+    VECTOR2I pt;
 
-    bezier->SetBezierC1( VECTOR2I( Mils2Iu( parseInt( aReader, line, &line ) ),
-                                   Mils2Iu( parseInt( aReader, line, &line ) ) ) );
+    pt.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    pt.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    bezier->SetStart( pt );
 
-    bezier->SetBezierC2( VECTOR2I( Mils2Iu( parseInt( aReader, line, &line ) ),
-                                   Mils2Iu( parseInt( aReader, line, &line ) ) ) );
+    pt.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    pt.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    bezier->SetBezierC1( pt );
 
-    bezier->SetEnd( VECTOR2I( Mils2Iu( parseInt( aReader, line, &line ) ),
-                              Mils2Iu( parseInt( aReader, line, &line ) ) ) );
+    pt.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    pt.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    bezier->SetBezierC2( pt );
+
+    pt.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    pt.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    bezier->SetEnd( pt );
 
     bezier->RebuildBezierToSegmentsPointsList( bezier->GetWidth() );
 
