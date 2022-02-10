@@ -157,15 +157,14 @@ public:
     EDA_ITEM_FLAGS GetEditFlags() const
     {
         constexpr int mask = ( IS_NEW | IS_PASTED | IS_MOVING | IS_RESIZING | IS_DRAGGING
-                               | IS_WIRE_IMAGE | STRUCT_DELETED );
+                               | IS_CHANGED | IS_WIRE_IMAGE | STRUCT_DELETED );
 
         return m_flags & mask;
     }
 
     void ClearTempFlags()
     {
-        ClearFlags( STARTPOINT | ENDPOINT | CANDIDATE | TEMP_SELECTED | IS_LINKED | SKIP_STRUCT |
-                    DO_NOT_DRAW );
+        ClearFlags( CANDIDATE | TEMP_SELECTED | IS_LINKED | SKIP_STRUCT | DO_NOT_DRAW );
     }
 
     void ClearEditFlags()

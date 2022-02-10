@@ -31,6 +31,7 @@
 #include <core/typeinfo.h>
 #include <deque>
 #include <eda_rect.h>
+#include <eda_item.h>
 #include <view/view_group.h>
 
 class EDA_ITEM;
@@ -109,6 +110,37 @@ public:
     const std::deque<EDA_ITEM*> GetItems() const
     {
         return m_items;
+    }
+
+    /**
+     * Returns a copy of this selection of items sorted by their X then Y position.
+     *
+     * @return Vector of sorted items
+     */
+    const std::vector<EDA_ITEM*> GetItemsSortedByTypeAndXY() const
+    {
+        std::vector<EDA_ITEM*> sorted_items =
+                std::vector<EDA_ITEM*>( m_items.begin(), m_items.end() );
+
+        std::sort( sorted_items.begin(), sorted_items.end(), [&]( EDA_ITEM* a, EDA_ITEM* b ) {
+            if( a->Type() == b->Type() )
+            {
+                if( a->GetPosition().x == b->GetPosition().x )
+                {
+                    // Ensure deterministic sort
+                    if( a->GetPosition().y == b->GetPosition().y )
+                        return a->m_Uuid < b->m_Uuid;
+
+                    return a->GetPosition().y < b->GetPosition().y;
+                }
+                else
+                    return a->GetPosition().x < b->GetPosition().x;
+            }
+            else
+                return a->Type() < b->Type();
+        } );
+
+        return sorted_items;
     }
 
     /// Returns the center point of the selection area bounding box.

@@ -36,6 +36,9 @@ project( kicad )
 include( GNUInstallDirs )
 include( CMakeDependentOption )
 
+# Output compile_commands.json for various LSP and other users
+set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
+
 # Path to local CMake modules.
 set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules )
 

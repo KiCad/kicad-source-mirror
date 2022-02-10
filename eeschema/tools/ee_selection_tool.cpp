@@ -1291,7 +1291,25 @@ bool EE_SELECTION_TOOL::selectMultiple()
                         else
                         {
                             select( aItem );
-                            aItem->SetFlags( STARTPOINT | ENDPOINT );
+
+                            // Lines can have just one end selected
+                            if( aItem->Type() == SCH_LINE_T )
+                            {
+                                SCH_LINE* line = static_cast<SCH_LINE*>( aItem );
+
+                                line->ClearFlags( STARTPOINT | ENDPOINT );
+
+                                if( selectionRect.Contains( line->GetStartPoint() ) )
+                                    line->SetFlags( STARTPOINT );
+
+                                if( selectionRect.Contains( line->GetEndPoint() ) )
+                                    line->SetFlags( ENDPOINT );
+
+                                // If no ends were selected, select whole line (both ends)
+                                if( !line->HasFlag( STARTPOINT ) && !line->HasFlag( ENDPOINT ) )
+                                    line->SetFlags( STARTPOINT | ENDPOINT );
+                            }
+
                             anyAdded = true;
                         }
                     };

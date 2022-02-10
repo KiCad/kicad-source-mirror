@@ -87,6 +87,36 @@ public:
     int GetAngleFrom( const VECTOR2I& aPoint ) const;
     int GetReverseAngleFrom( const VECTOR2I& aPoint ) const;
 
+    /**
+     * Gets the angle between the start and end lines.
+     *
+     * @return Line angle in radians.
+     */
+    inline EDA_ANGLE Angle() const
+    {
+        return ( EDA_ANGLE( (VECTOR2I) m_end - (VECTOR2I) m_start ) );
+    }
+
+    /**
+     * Saves the current line angle. Useful when dragging a line and its important to
+     * be able to restart the line from length 0 in the correct direction.
+     */
+    inline void StoreAngle() { m_storedAngle = Angle(); }
+
+    /**
+     * Returns the angle stored by StoreAngle()
+     *
+     * @return Stored angle in radians.
+     */
+    inline EDA_ANGLE GetStoredAngle() const { return m_storedAngle; }
+
+    /**
+     * Checks if line is orthogonal (to the grid).
+     *
+     * @return True if orthogonal, false if not or the line is zero length.
+     */
+    inline bool IsOrthogonal() const { return Angle().IsCardinal(); }
+
     bool IsNull() const { return m_start == m_end; }
 
     VECTOR2I GetStartPoint() const { return m_start; }
@@ -282,6 +312,7 @@ private:
     bool          m_endIsDangling;    ///< True if end point is not connected.
     VECTOR2I      m_start;            ///< Line start point
     VECTOR2I      m_end;              ///< Line end point
+    EDA_ANGLE     m_storedAngle;      ///< Stored angle
     STROKE_PARAMS m_stroke;           ///< Line stroke properties.
 
     // If real-time connectivity gets disabled (due to being too slow on a particular

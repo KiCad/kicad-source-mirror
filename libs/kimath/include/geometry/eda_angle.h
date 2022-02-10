@@ -192,6 +192,23 @@ public:
         return m_value == 90.0 || m_value == 270.0;
     }
 
+    bool IsParallelTo( EDA_ANGLE aAngle ) const
+    {
+        EDA_ANGLE thisNormalized = *this;
+
+        // Normalize90 is inclusive on both ends [-90, +90]
+        // but we need it to be (-90, +90] for this test to work
+        thisNormalized.Normalize90();
+        if( thisNormalized.AsDegrees() == -90.0 )
+            thisNormalized = EDA_ANGLE( 90.0, DEGREES_T );
+
+        aAngle.Normalize90();
+        if( aAngle.AsDegrees() == -90.0 )
+            aAngle = EDA_ANGLE( 90.0, DEGREES_T );
+
+        return ( thisNormalized.AsDegrees() == aAngle.AsDegrees() );
+    }
+
     EDA_ANGLE Invert() const
     {
         return EDA_ANGLE( -AsDegrees(), DEGREES_T );

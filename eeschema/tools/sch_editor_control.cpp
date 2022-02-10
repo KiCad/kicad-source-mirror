@@ -1842,6 +1842,11 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             }
         }
 
+        // Lines need both ends selected for a move after paste so the whole
+        // line moves
+        if( item->Type() == SCH_LINE_T )
+            item->SetFlags( STARTPOINT | ENDPOINT );
+
         item->SetFlags( IS_NEW | IS_PASTED | IS_MOVING );
         m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), (SCH_ITEM*) item, i > 0 );
 
