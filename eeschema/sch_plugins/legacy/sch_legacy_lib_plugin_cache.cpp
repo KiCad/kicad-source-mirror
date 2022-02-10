@@ -747,12 +747,10 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbo
 
     arc->SetPosition( center );
 
-    int       radius = Mils2Iu( parseInt( aReader, line, &line ) );
+    (void) Mils2Iu( parseInt( aReader, line, &line ) );
+
     EDA_ANGLE angle1( parseInt( aReader, line, &line ), TENTHS_OF_A_DEGREE_T );
     EDA_ANGLE angle2( parseInt( aReader, line, &line ), TENTHS_OF_A_DEGREE_T );
-
-    angle1.Normalize();
-    angle2.Normalize();
 
     arc->SetUnit( parseInt( aReader, line, &line ) );
     arc->SetConvert( parseInt( aReader, line, &line ) );
@@ -776,36 +774,20 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbo
         arcEnd.x = Mils2Iu( parseInt( aReader, line, &line ) );
         arcEnd.y = Mils2Iu( parseInt( aReader, line, &line ) );
 
+        // The previous wxDC-based drawing routines used start point and end point and always
+        // drew counter-clockwise.  The new GAL draw takes center, radius and start/end angles.
+        // All of these values were stored in the file with little indication of which takes
+        // precedence, so we need to jump through some hoops to ensure the correct winding.
+        if( TRANSFORM().MapAngles( &angle1, &angle2 ) != ( ( angle1 - angle2 ).Normalize180() > ANGLE_0 ) )
+            std::swap( arcStart, arcEnd );
+
         arc->SetStart( arcStart );
         arc->SetEnd( arcEnd );
     }
+    // Actual Coordinates of arc ends are not read from file (old library), calculate them
     else
     {
-        // Actual Coordinates of arc ends are not read from file
-        // (old library), calculate them
-        VECTOR2I arcStart( radius, 0 );
-        VECTOR2I arcEnd( radius, 0 );
-
-        RotatePoint( &arcStart.x, &arcStart.y, -angle1 );
-        arcStart += arc->GetCenter();
-        arc->SetStart( arcStart );
-        RotatePoint( &arcEnd.x, &arcEnd.y, -angle2 );
-        arcEnd += arc->GetCenter();
-        arc->SetEnd( arcEnd );
-    }
-
-    /**
-     * This accounts for an oddity in the old library format, where the symbol is overdefined.
-     * The previous draw (based on wxwidgets) used start point and end point and always drew
-     * counter-clockwise.  The new GAL draw takes center, radius and start/end angles.  All of
-     * these points were stored in the file, so we need to mimic the swapping of start/end
-     * points rather than using the stored angles in order to properly map edge cases.
-     */
-    if( !TRANSFORM().MapAngles( &angle1, &angle2 ) )
-    {
-        VECTOR2I temp = arc->GetStart();
-        arc->SetStart( arc->GetEnd() );
-        arc->SetEnd( temp );
+        arc->SetArcAngleAndEnd( angle2 - angle1, true );
     }
 
     /*
