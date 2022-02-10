@@ -441,7 +441,7 @@ void NGSPICE::init_dll()
 
         // when running eeschema.app
         wxFileName( stdPaths.GetExecutablePath() ).GetPath().ToStdString() +
-                wxT( "/../../../../../Contents/PlugIns/sim" )
+                "/../../../../../Contents/PlugIns/sim"
     };
 #else   // Unix systems
     const vector<string> dllPaths = { "/usr/local/lib" };
