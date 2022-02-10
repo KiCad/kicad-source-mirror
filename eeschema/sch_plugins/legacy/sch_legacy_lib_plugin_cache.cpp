@@ -808,6 +808,24 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbo
         arc->SetEnd( temp );
     }
 
+    /*
+     * Current file format stores start-mid-end and so doesn't care about winding. We
+     * store start-end with an implied winding internally though.
+     * This issue is only for 180 deg arcs, because 180 deg are a limit to handle arcs in
+     * legacy libs.
+     *
+     * So a workaround is to slightly change the arc angle to
+     * avoid 180 deg arc after correction
+     */
+    EDA_ANGLE arc_angle = arc->GetArcAngle();
+
+    if( arc_angle == ANGLE_180 )
+    {
+        VECTOR2I new_center = CalcArcCenter( arc->GetStart(), arc->GetEnd(),
+                              EDA_ANGLE( 179.5, DEGREES_T ) );
+        arc->SetCenter( new_center );
+    }
+
     return arc;
 }
 
