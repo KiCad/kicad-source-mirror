@@ -257,7 +257,8 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     wxString Text = wxT( "Drill Map:" );
     plotter->Text( VECTOR2I( plotX, plotY ), COLOR4D::UNSPECIFIED, Text, ANGLE_HORIZONTAL,
                    wxSize( KiROUND( charSize * charScale ), KiROUND( charSize * charScale ) ),
-                   GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, TextWidth, false, false );
+                   GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, TextWidth, false, false,
+                   false, nullptr /* stroke font */ );
 
     // For some formats (PS, PDF SVG) we plot the drill size list on more than one column
     // because the list must be contained inside the printed page
@@ -318,7 +319,8 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
 
         plotter->Text( VECTOR2I( plotX, y ), COLOR4D::UNSPECIFIED, msg, ANGLE_HORIZONTAL,
                        VECTOR2I( KiROUND( charSize * charScale ), KiROUND( charSize * charScale ) ),
-                       GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, TextWidth, false, false );
+                       GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, TextWidth, false, false,
+                       false, nullptr /* stroke font */ );
 
         intervalle = KiROUND( ( ( charSize * charScale ) + TextWidth ) * 1.2 );
 

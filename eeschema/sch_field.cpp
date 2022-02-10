@@ -956,7 +956,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground ) const
     VECTOR2I          textpos = GetBoundingBox().Centre();
 
     aPlotter->Text( textpos, color, GetShownText(), orient, GetTextSize(),  hjustify, vjustify,
-                    penWidth, IsItalic(), IsBold() );
+                    penWidth, IsItalic(), IsBold(), false, GetDrawFont() );
 }
 
 

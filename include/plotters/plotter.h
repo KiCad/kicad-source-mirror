@@ -421,8 +421,8 @@ public:
                        int                         aPenWidth,
                        bool                        aItalic,
                        bool                        aBold,
-                       bool                        aMultilineAllowed = false,
-                       KIFONT::FONT*               aFont = nullptr,
+                       bool                        aMultilineAllowed,
+                       KIFONT::FONT*               aFont,
                        void*                       aData = nullptr );
 
     /**

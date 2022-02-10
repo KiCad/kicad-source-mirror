@@ -329,7 +329,7 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
     int penWidth = GetEffectivePenWidth( aPlotter->RenderSettings() );
 
     aPlotter->Text( textpos, color, GetShownText(), orient, GetTextSize(), hjustify, vjustify,
-                    penWidth, IsItalic(), IsBold() );
+                    penWidth, IsItalic(), IsBold(), false, GetDrawFont() );
 }
 
 

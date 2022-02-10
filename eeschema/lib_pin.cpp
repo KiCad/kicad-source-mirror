@@ -707,14 +707,10 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const VECTOR2I& aPinPos, int aPin
         return;
 
     int     x, y;
-    wxSize  pinNameSize = wxSize( m_nameTextSize, m_nameTextSize );
-    wxSize  pinNumSize  = wxSize( m_numTextSize, m_numTextSize );
-
     int     namePenWidth = std::max( Clamp_Text_PenSize( GetPenWidth(), m_nameTextSize, false ),
                                      aPlotter->RenderSettings()->GetDefaultPenWidth() );
     int     numPenWidth  = std::max( Clamp_Text_PenSize( GetPenWidth(), m_numTextSize, false ),
                                      aPlotter->RenderSettings()->GetDefaultPenWidth() );
-
     int     name_offset = Mils2iu( PIN_TEXT_MARGIN ) + namePenWidth;
     int     num_offset  = Mils2iu( PIN_TEXT_MARGIN ) + numPenWidth;
 
@@ -732,6 +728,15 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const VECTOR2I& aPinPos, int aPin
     case PIN_LEFT:   x1 -= m_length;  break;
     case PIN_RIGHT:  x1 += m_length;  break;
     }
+
+    auto plotText =
+            [&]( int x, int y, const COLOR4D& color, const wxString& text, const EDA_ANGLE& angle,
+                 int size, GR_TEXT_H_ALIGN_T hJustify, GR_TEXT_V_ALIGN_T vJustify, int penWidth )
+
+            {
+                aPlotter->Text( VECTOR2I( x, y ), color, text, angle, VECTOR2I( size, size ),
+                                hJustify, vJustify, penWidth, false, false, false, GetDrawFont() );
+            };
 
     /* Draw the text inside, but the pin numbers outside. */
     if( aTextInside )
@@ -752,14 +757,15 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const VECTOR2I& aPinPos, int aPin
                     hjustify = GR_TEXT_H_ALIGN_RIGHT;
                 }
 
-                aPlotter->Text( VECTOR2I( x, y1 ), nameColor, name, ANGLE_HORIZONTAL, pinNameSize,
-                                hjustify, GR_TEXT_V_ALIGN_CENTER, namePenWidth, false, false );
+                plotText( x, y1, nameColor, name, ANGLE_HORIZONTAL, m_nameTextSize, hjustify,
+                          GR_TEXT_V_ALIGN_CENTER, namePenWidth );
             }
+
             if( aDrawPinNum )
             {
-                aPlotter->Text( VECTOR2I( ( x1 + aPinPos.x) / 2, y1 - num_offset ), numColor,
-                                number, ANGLE_HORIZONTAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
-                                GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false );
+                plotText( ( x1 + aPinPos.x) / 2, y1 - num_offset, numColor, number,
+                          ANGLE_HORIZONTAL, m_numTextSize, GR_TEXT_H_ALIGN_CENTER,
+                          GR_TEXT_V_ALIGN_BOTTOM, numPenWidth );
             }
         }
         else         /* Its a vertical line. */
@@ -769,15 +775,16 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const VECTOR2I& aPinPos, int aPin
                 y = y1 + aTextInside;
 
                 if( aDrawPinName )
-                    aPlotter->Text( VECTOR2I( x1, y ), nameColor, name, ANGLE_VERTICAL,
-                                    pinNameSize, GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER,
-                                    namePenWidth, false, false );
+                {
+                    plotText( x1, y, nameColor, name, ANGLE_VERTICAL, m_nameTextSize,
+                              GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER, namePenWidth );
+                }
 
                 if( aDrawPinNum )
                 {
-                    aPlotter->Text( VECTOR2I( x1 - num_offset, ( y1 + aPinPos.y) / 2 ), numColor,
-                                    number, ANGLE_VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
-                                    GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false );
+                    plotText( x1 - num_offset, ( y1 + aPinPos.y) / 2, numColor, number,
+                              ANGLE_VERTICAL, m_nameTextSize, GR_TEXT_H_ALIGN_CENTER,
+                              GR_TEXT_V_ALIGN_BOTTOM, numPenWidth );
                 }
             }
             else        /* PIN_UP */
@@ -786,16 +793,15 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const VECTOR2I& aPinPos, int aPin
 
                 if( aDrawPinName )
                 {
-                    aPlotter->Text( VECTOR2I( x1, y ), nameColor, name, ANGLE_VERTICAL,
-                                    pinNameSize, GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER,
-                                    namePenWidth, false, false );
+                    plotText( x1, y, nameColor, name, ANGLE_VERTICAL, m_nameTextSize,
+                              GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, namePenWidth );
                 }
 
                 if( aDrawPinNum )
                 {
-                    aPlotter->Text( VECTOR2I( x1 - num_offset,  ( y1 + aPinPos.y) / 2 ), numColor,
-                                    number, ANGLE_VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
-                                    GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false );
+                    plotText( x1 - num_offset, ( y1 + aPinPos.y) / 2, numColor, number,
+                              ANGLE_VERTICAL, m_numTextSize, GR_TEXT_H_ALIGN_CENTER,
+                              GR_TEXT_V_ALIGN_BOTTOM, numPenWidth );
                 }
             }
         }
@@ -808,17 +814,15 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const VECTOR2I& aPinPos, int aPin
             if( aDrawPinName )
             {
                 x = ( x1 + aPinPos.x) / 2;
-                aPlotter->Text( VECTOR2I( x, y1 - name_offset ), nameColor, name, ANGLE_HORIZONTAL,
-                                pinNameSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM,
-                                namePenWidth, false, false );
+                plotText( x, y1 - name_offset, nameColor, name, ANGLE_HORIZONTAL, m_nameTextSize,
+                          GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, namePenWidth );
             }
 
             if( aDrawPinNum )
             {
                 x = ( x1 + aPinPos.x ) / 2;
-                aPlotter->Text( VECTOR2I( x, y1 + num_offset ), numColor, number, ANGLE_HORIZONTAL,
-                                pinNumSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP,
-                                numPenWidth, false, false );
+                plotText( x, y1 + num_offset, numColor, number, ANGLE_HORIZONTAL, m_numTextSize,
+                          GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP, numPenWidth );
             }
         }
         else     /* Its a vertical line. */
@@ -826,16 +830,14 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const VECTOR2I& aPinPos, int aPin
             if( aDrawPinName )
             {
                 y = ( y1 + aPinPos.y ) / 2;
-                aPlotter->Text( VECTOR2I( x1 - name_offset, y ), nameColor, name, ANGLE_VERTICAL,
-                                pinNameSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM,
-                                namePenWidth, false, false );
+                plotText( x1 - name_offset, y, nameColor, name, ANGLE_VERTICAL, m_nameTextSize,
+                          GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, namePenWidth );
             }
 
             if( aDrawPinNum )
             {
-                aPlotter->Text( VECTOR2I( x1 + num_offset, ( y1 + aPinPos.y ) / 2 ), numColor,
-                                number, ANGLE_VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
-                                GR_TEXT_V_ALIGN_TOP, numPenWidth, false, false );
+                plotText( x1 + num_offset, ( y1 + aPinPos.y ) / 2, numColor, number, ANGLE_VERTICAL,
+                          m_numTextSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP, numPenWidth );
             }
         }
     }

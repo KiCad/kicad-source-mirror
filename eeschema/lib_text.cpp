@@ -288,7 +288,8 @@ void LIB_TEXT::Plot( PLOTTER* plotter, bool aBackground, const VECTOR2I& offset,
     int penWidth = std::max( GetEffectiveTextPenWidth(), settings->GetMinPenWidth() );
 
     plotter->Text( pos, color, GetText(), t1 ? ANGLE_HORIZONTAL : ANGLE_VERTICAL, GetTextSize(),
-                   GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold() );
+                   GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(),
+                   true, GetDrawFont() );
 }
 
 
