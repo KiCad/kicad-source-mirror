@@ -2114,10 +2114,8 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
     m_out->Print( aNestLevel+1, "(min_thickness %s)",
                   FormatInternalUnits( aZone->GetMinThickness() ).c_str() );
 
-    // write it only if V 6.O version option is used (i.e. do not write if the "legacy"
-    // algorithm is used)
-    if( !aZone->GetFilledPolysUseThickness() )
-        m_out->Print( 0, " (filled_areas_thickness no)" );
+    // We continue to write this for 3rd-party parsers, but we no longer read it (as of V7).
+    m_out->Print( 0, " (filled_areas_thickness no)" );
 
     m_out->Print( 0, "\n" );
 

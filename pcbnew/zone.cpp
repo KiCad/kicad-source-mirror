@@ -343,15 +343,6 @@ void ZONE::SetCornerRadius( unsigned int aRadius )
 }
 
 
-bool ZONE::GetFilledPolysUseThickness( PCB_LAYER_ID aLayer ) const
-{
-    if( ADVANCED_CFG::GetCfg().m_DebugZoneFiller && LSET::InternalCuMask().Contains( aLayer ) )
-        return false;
-
-    return GetFilledPolysUseThickness();
-}
-
-
 static SHAPE_POLY_SET g_nullPoly;
 
 
@@ -1385,32 +1376,8 @@ void ZONE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 void ZONE::TransformSolidAreasShapesToPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aCornerBuffer,
                                                int aError ) const
 {
-    if( !m_FilledPolysList.count( aLayer ) || m_FilledPolysList.at( aLayer ).IsEmpty() )
-        return;
-
-    // Just add filled areas if filled polygons outlines have no thickness
-    if( !GetFilledPolysUseThickness() || GetMinThickness() == 0 )
-    {
-        const SHAPE_POLY_SET& polys = m_FilledPolysList.at( aLayer );
-        aCornerBuffer.Append( polys );
-        return;
-    }
-
-    // Filled areas have polygons with outline thickness.
-    // we must create the polygons and add inflated polys
-    SHAPE_POLY_SET polys = m_FilledPolysList.at( aLayer );
-
-    auto board = GetBoard();
-    int maxError = ARC_HIGH_DEF;
-
-    if( board )
-        maxError = board->GetDesignSettings().m_MaxError;
-
-    int numSegs = GetArcToSegmentCount( GetMinThickness(), maxError, FULL_CIRCLE );
-
-    polys.InflateWithLinkedHoles( GetMinThickness()/2, numSegs, SHAPE_POLY_SET::PM_FAST );
-
-    aCornerBuffer.Append( polys );
+    if( m_FilledPolysList.count( aLayer ) && !m_FilledPolysList.at( aLayer ).IsEmpty() )
+        aCornerBuffer.Append( m_FilledPolysList.at( aLayer ) );
 }
 
 

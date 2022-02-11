@@ -1927,20 +1927,14 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
         if( polySet.OutlineCount() == 0 )  // Nothing to draw
             return;
 
-        // Set up drawing options
-        int outline_thickness = 0;
-
-        if( aZone->GetFilledPolysUseThickness( layer ) )
-            outline_thickness = aZone->GetMinThickness();
-
         m_gal->SetStrokeColor( color );
         m_gal->SetFillColor( color );
-        m_gal->SetLineWidth( outline_thickness );
+        m_gal->SetLineWidth( 0 );
 
         if( displayMode == ZONE_DISPLAY_MODE::SHOW_FILLED )
         {
             m_gal->SetIsFill( true );
-            m_gal->SetIsStroke( outline_thickness > 0 );
+            m_gal->SetIsStroke( false );
         }
         else
         {

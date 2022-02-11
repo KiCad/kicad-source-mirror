@@ -61,7 +61,7 @@ public:
 void LoadBoard( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
                 std::unique_ptr<BOARD>& aBoard );
 
-void FillZones( BOARD* m_board, int aFillVersion );
+void FillZones( BOARD* m_board );
 
 
 } // namespace KI_TEST

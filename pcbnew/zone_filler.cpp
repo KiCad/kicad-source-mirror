@@ -165,8 +165,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         // Remove existing fill first to prevent drawing invalid polygons
         // on some platforms
         zone->UnFill();
-
-        zone->SetFillVersion( bds.m_ZoneFillVersion );
     }
 
     size_t cores = std::thread::hardware_concurrency();
@@ -915,17 +913,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                         // Keepouts use outline with no clearance
                         aKnockout->TransformSmoothedOutlineToPolygon( aHoles, 0, nullptr );
                     }
-                    else if( bds.m_ZoneFillVersion == 5 )
-                    {
-                        // 5.x used outline with clearance
-                        int gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aKnockout,
-                                                     aLayer );
-
-                        aKnockout->TransformSmoothedOutlineToPolygon( aHoles, gap, nullptr );
-                    }
                     else
                     {
-                        // 6.0 uses filled areas with clearance
                         int gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aKnockout,
                                                      aLayer );
 
@@ -1203,15 +1192,8 @@ bool ZONE_FILLER::computeRawFilledArea( const ZONE* aZone,
         return false;
 
     // Re-inflate after pruning of areas that don't meet minimum-width criteria
-    if( aZone->GetFilledPolysUseThickness() )
-    {
-        // If we're stroking the zone with a min_width stroke then this will naturally inflate
-        // the zone by half_min_width
-    }
-    else if( half_min_width - epsilon > epsilon )
-    {
+    if( half_min_width - epsilon > epsilon )
         aRawPolys.Inflate( half_min_width - epsilon, numSegs, cornerStrategy );
-    }
 
     DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In15_Cu, wxT( "after-reinflating" ) );
 
@@ -1279,15 +1261,8 @@ bool ZONE_FILLER::fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_S
             addHatchFillTypeOnZone( aZone, aLayer, debugLayer, smoothedPoly );
 
         // Re-inflate after pruning of areas that don't meet minimum-width criteria
-        if( aZone->GetFilledPolysUseThickness() )
-        {
-            // If we're stroking the zone with a min_width stroke then this will naturally
-            // inflate the zone by half_min_width
-        }
-        else if( half_min_width - epsilon > epsilon )
-        {
+        if( half_min_width - epsilon > epsilon )
             smoothedPoly.Inflate( half_min_width - epsilon, numSegs );
-        }
 
         aRawPolys = smoothedPoly;
         aFinalPolys = smoothedPoly;

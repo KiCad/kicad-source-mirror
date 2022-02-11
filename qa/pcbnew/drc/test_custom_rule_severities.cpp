@@ -48,7 +48,7 @@ BOOST_FIXTURE_TEST_CASE( DRCCustomRuleSeverityTest, DRC_REGRESSION_TEST_FIXTURE 
     // therefore only generate edge-clearance violations for the other edge connector.
 
     KI_TEST::LoadBoard( m_settingsManager, "severities", m_board );
-    KI_TEST::FillZones( m_board.get(), 6 );
+    KI_TEST::FillZones( m_board.get() );
 
     std::vector<DRC_ITEM>  violations;
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();

@@ -44,7 +44,7 @@ struct DRC_REGRESSION_TEST_FIXTURE
 BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_REGRESSION_TEST_FIXTURE )
 {
     KI_TEST::LoadBoard( m_settingsManager, "solder_mask_bridge_test", m_board );
-    KI_TEST::FillZones( m_board.get(), 6 );
+    KI_TEST::FillZones( m_board.get() );
 
     std::vector<DRC_ITEM>  violations;
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();

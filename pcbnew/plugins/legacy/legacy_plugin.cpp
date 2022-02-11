@@ -2460,11 +2460,11 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             {
                 // SEGMENT fill mode no longer supported.  Make sure user is OK with converting
                 // them.
-                if( m_showLegacyZoneWarning )
+                if( m_showLegacySegmentZoneWarning )
                 {
                     KIDIALOG dlg( nullptr,
                                   _( "The legacy segment fill mode is no longer supported.\n"
-                                     "Convert zones to polygon fills?"),
+                                     "Convert zones to smoothed polygon fills?" ),
                                   _( "Legacy Zone Warning" ),
                                   wxYES_NO | wxICON_WARNING );
 
@@ -2473,7 +2473,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                     if( dlg.ShowModal() == wxID_NO )
                         THROW_IO_ERROR( wxT( "CANCEL" ) );
 
-                    m_showLegacyZoneWarning = false;
+                    m_showLegacySegmentZoneWarning = false;
                 }
 
                 // User OK'd; switch to polygon mode
@@ -2858,7 +2858,7 @@ void LEGACY_PLUGIN::init( const PROPERTIES* aProperties )
     m_loading_format_version = 0;
     m_cu_count = 16;
     m_board = nullptr;
-    m_showLegacyZoneWarning = true;
+    m_showLegacySegmentZoneWarning = true;
     m_props = aProperties;
 
     // conversion factor for saving RAM BIUs to KICAD legacy file format.

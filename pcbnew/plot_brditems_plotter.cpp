@@ -867,73 +867,29 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( const ZONE* aZone, const SHAPE_POLY_SET&
 
     m_plotter->StartBlock( nullptr );    // Clean current object attributes
 
-    /* Plot all filled areas: filled areas have a filled area and a thick
-     * outline (depending on the fill area option we must plot the filled area itself
-     * and plot the thick outline itself, if the thickness has meaning (at least is > 1)
-     *
-     * in non filled mode the outline is plotted, but not the filling items
+    /*
+     * In non filled mode the outline is plotted, but not the filling items
      */
-    int outline_thickness = aZone->GetFilledPolysUseThickness() ? aZone->GetMinThickness() : 0;
 
     for( int idx = 0; idx < polysList.OutlineCount(); ++idx )
     {
         const SHAPE_LINE_CHAIN& outline = polysList.Outline( idx );
 
-        // Plot the current filled area (as region for Gerber plotter
-        // to manage attributes) and its outline for thick outline
+        // Plot the current filled area (as region for Gerber plotter to manage attributes)
         if( GetPlotMode() == FILLED )
         {
             if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
             {
-                if( outline_thickness > 0 )
-                {
-                    m_plotter->PlotPoly( outline, FILL_T::NO_FILL, outline_thickness,
-                                         &gbr_metadata );
-
-                    // Ensure the outline is closed:
-                    int last_idx = outline.PointCount() - 1;
-
-                    if( outline.CPoint( 0 ) != outline.CPoint( last_idx ) )
-                    {
-                        m_plotter->ThickSegment( VECTOR2I( outline.CPoint( 0 ) ),
-                                                 VECTOR2I( outline.CPoint( last_idx ) ),
-                                                 outline_thickness, GetPlotMode(), &gbr_metadata );
-                    }
-                }
-
                 static_cast<GERBER_PLOTTER*>( m_plotter )->PlotGerberRegion( outline,
                                                                              &gbr_metadata );
             }
             else
             {
-                m_plotter->PlotPoly( outline, FILL_T::FILLED_SHAPE, outline_thickness,
-                                     &gbr_metadata );
+                m_plotter->PlotPoly( outline, FILL_T::FILLED_SHAPE, 0, &gbr_metadata );
             }
         }
         else
         {
-            if( outline_thickness )
-            {
-                int last_idx = outline.PointCount() - 1;
-
-                for( int jj = 1; jj <= last_idx; jj++ )
-                {
-                    m_plotter->ThickSegment( VECTOR2I( outline.CPoint( jj - 1 ) ),
-                                             VECTOR2I( outline.CPoint( jj ) ),
-                                             outline_thickness,
-                                             GetPlotMode(), &gbr_metadata );
-                }
-
-                // Ensure the outline is closed:
-                if( outline.CPoint( 0 ) != outline.CPoint( last_idx ) )
-                {
-                    m_plotter->ThickSegment( VECTOR2I( outline.CPoint( 0 ) ),
-                                             VECTOR2I( outline.CPoint( last_idx ) ),
-                                             outline_thickness,
-                                             GetPlotMode(), &gbr_metadata );
-                }
-            }
-
             m_plotter->SetCurrentLineWidth( -1 );
         }
     }

@@ -74,8 +74,6 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataToWindow()
 
     m_maxError.SetValue( m_BrdSettings->m_MaxError );
 
-    m_rbOutlinePolygonFastest->SetValue( m_BrdSettings->m_ZoneFillVersion == 6 );
-    m_rbOutlinePolygonBestQ->SetValue( m_BrdSettings->m_ZoneFillVersion == 5 );
     m_allowExternalFilletsOpt->SetValue( m_BrdSettings->m_ZoneKeepExternalFillets );
     m_minResolvedSpokeCountCtrl->SetValue( m_BrdSettings->m_MinResolvedSpokes );
 
@@ -136,7 +134,6 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
                                             m_maxError.GetValue(),
                                             IU_PER_MM * MAXIMUM_ERROR_SIZE_MM );
 
-    m_BrdSettings->m_ZoneFillVersion = m_rbOutlinePolygonFastest->GetValue() ? 6 : 5;
     m_BrdSettings->m_ZoneKeepExternalFillets = m_allowExternalFilletsOpt->GetValue();
     m_BrdSettings->m_MinResolvedSpokes = m_minResolvedSpokeCountCtrl->GetValue();
 
@@ -170,7 +167,6 @@ bool PANEL_SETUP_CONSTRAINTS::Show( bool aShow )
         // These *should* work in the constructor, and indeed they do if this panel is the
         // first displayed.  However, on OSX 3.0.5 (at least), if another panel is displayed
         // first then the icons will be blank unless they're set here.
-        m_bitmapZoneFillOpt->SetBitmap( KiBitmap( BITMAPS::show_zone ) );
         m_filletBitmap->SetBitmap( KiBitmap( BITMAPS::zone_fillet ) );
         m_spokeBitmap->SetBitmap( KiBitmap( BITMAPS::thermal_spokes ) );
         m_bitmapClearance->SetBitmap( KiBitmap( BITMAPS::ps_diff_pair_gap ) );
@@ -201,15 +197,4 @@ void PANEL_SETUP_CONSTRAINTS::ImportSettingsFrom( BOARD* aBoard )
     TransferDataToWindow();
 
     m_BrdSettings = savedSettings;
-}
-
-
-void PANEL_SETUP_CONSTRAINTS::onChangeOutlineOpt( wxCommandEvent& event )
-{
-    wxObject* item =event.GetEventObject();
-
-    if( item == m_rbOutlinePolygonBestQ )
-        m_rbOutlinePolygonFastest->SetValue( not m_rbOutlinePolygonBestQ->GetValue() );
-    else
-        m_rbOutlinePolygonBestQ->SetValue( not m_rbOutlinePolygonFastest->GetValue() );
 }

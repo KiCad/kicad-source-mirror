@@ -180,9 +180,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_DRCSeverities[ DRCE_TEXT_THICKNESS ] = RPT_SEVERITY_WARNING;
 
     m_MaxError = ARC_HIGH_DEF;
-    m_ZoneFillVersion = 6;                      // Use new algo by default to fill zones
-    m_ZoneKeepExternalFillets = false;          // Use new algo by default.  Legacy boards might
-                                                // want to set it to true for old algo....
+    m_ZoneKeepExternalFillets = false;
     m_UseHeightForLengthCalcs = true;
 
     // Global mask margins:
@@ -739,18 +737,6 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             &m_SolderMaskToCopperClearance, Millimeter2iu( DEFAULT_SOLDERMASK_TO_COPPER_CLEARANCE ),
             Millimeter2iu( 0.0 ), Millimeter2iu( 25.0 ), MM_PER_IU ) );
 
-    // TODO: replace with zones_fill_version parameter and migrate zones_use_no_outline?
-    m_params.emplace_back( new PARAM_LAMBDA<bool>( "zones_use_no_outline",
-            [this]() -> bool
-            {
-                return m_ZoneFillVersion >= 6;
-            },
-            [this]( bool aVal )
-            {
-                m_ZoneFillVersion = aVal ? 6 : 5;
-            },
-            true ) );
-
     m_params.emplace_back( new PARAM<bool>( "zones_allow_external_fillets",
             &m_ZoneKeepExternalFillets, false ) );
 
@@ -840,7 +826,6 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_MinSilkTextThickness   = aOther.m_MinSilkTextThickness;
     m_DRCSeverities          = aOther.m_DRCSeverities;
     m_DrcExclusions          = aOther.m_DrcExclusions;
-    m_ZoneFillVersion        = aOther.m_ZoneFillVersion;
     m_ZoneKeepExternalFillets     = aOther.m_ZoneKeepExternalFillets;
     m_MaxError                    = aOther.m_MaxError;
     m_SolderMaskExpansion         = aOther.m_SolderMaskExpansion;

@@ -2078,7 +2078,6 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
             SHAPE_POLY_SET finalPolys = rawPolys;
             finalPolys.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
-            pouredZone->SetFillVersion( 6 );
             pouredZone->SetRawPolysList( getKiCadLayer( csCopper.LayerID ), rawPolys );
             pouredZone->SetFilledPolysList( getKiCadLayer( csCopper.LayerID ), finalPolys );
             pouredZone->SetIsFilled( true );
@@ -2161,7 +2160,6 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
             SHAPE_POLY_SET fillePolys( *zone->Outline() );
             fillePolys.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_STRICTLY_SIMPLE );
 
-            zone->SetFillVersion( 6 );
             zone->SetFilledPolysList( getKiCadLayer( csCopper.LayerID ), fillePolys );
         }
     }

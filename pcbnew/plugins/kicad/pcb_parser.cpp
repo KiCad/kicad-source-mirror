@@ -68,7 +68,8 @@ using namespace PCB_KEYS_T;
 
 void PCB_PARSER::init()
 {
-    m_showLegacyZoneWarning = true;
+    m_showLegacySegmentZoneWarning = true;
+    m_showLegacy5ZoneWarning = true;
     m_tooRecent = false;
     m_requiredVersion = 0;
     m_layerIndices.clear();
@@ -2166,9 +2167,27 @@ void PCB_PARSER::parseSetup()
             NeedRIGHT();
             break;
 
-        case T_filled_areas_thickness:  // Note: legacy (early 5.99) token
-            designSettings.m_ZoneFillVersion = parseBool() ? 5 : 6;
-            m_board->m_LegacyDesignSettingsLoaded = true;
+        case T_filled_areas_thickness:
+            if( parseBool() )
+            {
+                if( m_showLegacy5ZoneWarning )
+                {
+                    // Thick outline fill mode no longer supported.  Make sure user is OK with
+                    // converting fills.
+                    KIDIALOG dlg( nullptr, _( "The legacy zone fill strategy is no longer "
+                                              "supported.\nConvert zones to smoothed polygon "
+                                              "fills?" ),
+                                  _( "Legacy Zone Warning" ), wxYES_NO | wxICON_WARNING );
+
+                    dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+
+                    if( dlg.ShowModal() == wxID_NO )
+                        THROW_IO_ERROR( wxT( "CANCEL" ) );
+
+                    m_showLegacy5ZoneWarning = false;
+                }
+            }
+
             NeedRIGHT();
             break;
 
@@ -5284,8 +5303,7 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
 ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 {
     wxCHECK_MSG( CurTok() == T_zone, nullptr,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
-                 wxT( " as ZONE." ) );
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as ZONE." ) );
 
     ZONE_BORDER_DISPLAY_STYLE hatchStyle = ZONE_BORDER_DISPLAY_STYLE::NO_HATCH;
 
@@ -5427,7 +5445,26 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
             break;
 
         case T_filled_areas_thickness:
-            zone->SetFillVersion( parseBool() ? 5 : 6 );
+            if( parseBool() )
+            {
+                if( m_showLegacy5ZoneWarning )
+                {
+                    // Thick outline fill mode no longer supported.  Make sure user is OK with
+                    // converting fills.
+                    KIDIALOG dlg( nullptr, _( "The legacy zone fill strategy is no longer "
+                                              "supported.\nConvert zones to smoothed polygon "
+                                              "fills?" ),
+                                  _( "Legacy Zone Warning" ), wxYES_NO | wxICON_WARNING );
+
+                    dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+
+                    if( dlg.ShowModal() == wxID_NO )
+                        THROW_IO_ERROR( wxT( "CANCEL" ) );
+
+                    m_showLegacy5ZoneWarning = false;
+                }
+            }
+
             NeedRIGHT();
             break;
 
@@ -5453,20 +5490,19 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                     {
                         // SEGMENT fill mode no longer supported.  Make sure user is OK with
                         // converting them.
-                        if( m_showLegacyZoneWarning )
+                        if( m_showLegacySegmentZoneWarning )
                         {
-                            KIDIALOG dlg( nullptr,
-                                          _( "The legacy segment fill mode is no longer supported."
-                                             "\nConvert zones to polygon fills?"),
-                                          _( "Legacy Zone Warning" ),
-                                          wxYES_NO | wxICON_WARNING );
+                            KIDIALOG dlg( nullptr, _( "The legacy segment fill mode is no longer "
+                                                      "supported.\nConvert zones to smoothed "
+                                                      "polygon fills?" ),
+                                          _( "Legacy Zone Warning" ), wxYES_NO | wxICON_WARNING );
 
                             dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
                             if( dlg.ShowModal() == wxID_NO )
                                 THROW_IO_ERROR( wxT( "CANCEL" ) );
 
-                            m_showLegacyZoneWarning = false;
+                            m_showLegacySegmentZoneWarning = false;
                         }
 
                         zone->SetFillMode( ZONE_FILL_MODE::POLYGONS );

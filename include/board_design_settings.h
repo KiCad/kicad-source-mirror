@@ -700,21 +700,6 @@ public:
     std::map<int, SEVERITY>     m_DRCSeverities;   // Map from DRCErrorCode to SEVERITY
     std::set<wxString>          m_DrcExclusions;
 
-    /**
-     * Option to select different fill algorithms.
-     *
-     * There are currently two supported values:
-     * 5:
-     * - Use thick outlines around filled polygons (gives smoothest shape but at the expense
-     *   of processing time and slight infidelity when exporting)
-     * - Use zone outline when knocking out higher-priority zones (just wrong, but mimics
-     *   legacy behavior.
-     * 6:
-     * - No thick outline.
-     * - Use filled areas when knocking out higher-priority zones.
-     */
-    int        m_ZoneFillVersion;
-
     // When smoothing the zone's outline there's the question of external fillets (that is, those
     // applied to concave corners).  While it seems safer to never have copper extend outside the
     // zone outline, 5.1.x and prior did indeed fill them so we leave the mode available.

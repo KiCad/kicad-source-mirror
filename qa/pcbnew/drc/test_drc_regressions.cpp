@@ -63,7 +63,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
     for( const wxString& relPath : tests )
     {
         KI_TEST::LoadBoard( m_settingsManager, relPath, m_board );
-        KI_TEST::FillZones( m_board.get(), 6 );
+        KI_TEST::FillZones( m_board.get() );
 
         std::vector<DRC_ITEM>  violations;
         BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
@@ -130,7 +130,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
     for( const std::pair<wxString, int>& entry : tests )
     {
         KI_TEST::LoadBoard( m_settingsManager, entry.first, m_board );
-        KI_TEST::FillZones( m_board.get(), 6 );
+        KI_TEST::FillZones( m_board.get() );
 
         std::vector<DRC_ITEM>  violations;
         BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();

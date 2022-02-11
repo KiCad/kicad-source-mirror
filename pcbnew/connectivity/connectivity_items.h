@@ -316,13 +316,7 @@ public:
 
     bool ContainsPoint( const VECTOR2I& p, int aAccuracy = 0 ) const
     {
-        ZONE* zone = static_cast<ZONE*>( Parent() );
-        int clearance = aAccuracy;
-
-        if( zone->GetFilledPolysUseThickness() )
-            clearance += ( zone->GetMinThickness() + 1 ) / 2;
-
-        return m_cachedPoly->ContainsPoint( p, clearance );
+        return m_cachedPoly->ContainsPoint( p, aAccuracy );
     }
 
     const BOX2I& BBox()

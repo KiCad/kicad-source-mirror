@@ -648,61 +648,6 @@ void BOARD_ADAPTER::addSolidAreasShapes( const ZONE* aZone, CONTAINER_2D_BASE* a
 
     // This convert the poly in outline and holes
     ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aZone );
-
-    // add filled areas outlines, which are drawn with thick lines segments
-    // but only if filled polygons outlines have thickness
-    if( !aZone->GetFilledPolysUseThickness() )
-        return;
-
-    float width3DU = TO_3DU( aZone->GetMinThickness() );
-
-    for( int i = 0; i < polyList.OutlineCount(); ++i )
-    {
-        // Add outline
-        const SHAPE_LINE_CHAIN& pathOutline = polyList.COutline( i );
-
-        for( int j = 0; j < pathOutline.PointCount(); ++j )
-        {
-            SFVEC2F start3DU = TO_SFVEC2F( pathOutline.CPoint( j ) );
-            SFVEC2F end3DU = TO_SFVEC2F( pathOutline.CPoint( j + 1 ) );
-
-            if( Is_segment_a_circle( start3DU, end3DU ) )
-            {
-                float radius3DU = width3DU / 2;
-
-                if( radius3DU > 0.0 )  // degenerated circles crash 3D viewer
-                    aContainer->Add( new FILLED_CIRCLE_2D( start3DU, radius3DU, *aZone ) );
-            }
-            else
-            {
-                aContainer->Add( new ROUND_SEGMENT_2D( start3DU, end3DU, width3DU, *aZone ) );
-            }
-        }
-
-        // Add holes (of the poly, ie: the open parts) for this outline
-        for( int h = 0; h < polyList.HoleCount( i ); ++h )
-        {
-            const SHAPE_LINE_CHAIN& pathHole = polyList.CHole( i, h );
-
-            for( int j = 0; j < pathHole.PointCount(); j++ )
-            {
-                SFVEC2F start3DU = TO_SFVEC2F( pathHole.CPoint( j ) );
-                SFVEC2F end3DU = TO_SFVEC2F( pathHole.CPoint( j + 1 ) );
-
-                if( Is_segment_a_circle( start3DU, end3DU ) )
-                {
-                    float radius3DU = width3DU / 2;
-
-                    if( radius3DU > 0.0 )  // degenerated circles crash 3D viewer
-                        aContainer->Add( new FILLED_CIRCLE_2D( start3DU, radius3DU, *aZone ) );
-                }
-                else
-                {
-                    aContainer->Add( new ROUND_SEGMENT_2D( start3DU, end3DU, width3DU, *aZone ) );
-                }
-            }
-        }
-    }
 }
 
 

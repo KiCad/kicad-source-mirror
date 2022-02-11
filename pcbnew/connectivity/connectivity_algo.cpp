@@ -709,15 +709,6 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LA
     const BOX2I& boxA = aZoneLayerA->BBox();
     const BOX2I& boxB = aZoneLayerB->BBox();
 
-    int radiusA = 0;
-    int radiusB = 0;
-
-    if( zoneA->GetFilledPolysUseThickness() )
-        radiusA = ( zoneA->GetMinThickness() + 1 ) / 2;
-
-    if( zoneB->GetFilledPolysUseThickness() )
-        radiusB = ( zoneB->GetMinThickness() + 1 ) / 2;
-
     PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( aZoneLayerA->Layer() );
 
     const SHAPE_LINE_CHAIN& outline =
@@ -728,7 +719,7 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LA
         if( !boxB.Contains( outline.CPoint( i ) ) )
             continue;
 
-        if( aZoneLayerB->ContainsPoint( outline.CPoint( i ), radiusA ) )
+        if( aZoneLayerB->ContainsPoint( outline.CPoint( i ) ) )
         {
             aZoneLayerA->Connect( aZoneLayerB );
             aZoneLayerB->Connect( aZoneLayerA );
@@ -744,7 +735,7 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LA
         if( !boxA.Contains( outline2.CPoint( i ) ) )
             continue;
 
-        if( aZoneLayerA->ContainsPoint( outline2.CPoint( i ), radiusB ) )
+        if( aZoneLayerA->ContainsPoint( outline2.CPoint( i ) ) )
         {
             aZoneLayerA->Connect( aZoneLayerB );
             aZoneLayerB->Connect( aZoneLayerA );

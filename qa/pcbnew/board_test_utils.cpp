@@ -96,7 +96,7 @@ void LoadBoard( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
 }
 
 
-void FillZones( BOARD* m_board, int aFillVersion )
+void FillZones( BOARD* m_board )
 {
     TOOL_MANAGER toolMgr;
     toolMgr.SetEnvironment( m_board, nullptr, nullptr, nullptr, nullptr );
@@ -104,8 +104,6 @@ void FillZones( BOARD* m_board, int aFillVersion )
     BOARD_COMMIT       commit( &toolMgr );
     ZONE_FILLER        filler( m_board, &commit );
     std::vector<ZONE*> toFill;
-
-    m_board->GetDesignSettings().m_ZoneFillVersion = aFillVersion;
 
     for( ZONE* zone : m_board->Zones() )
         toFill.push_back( zone );

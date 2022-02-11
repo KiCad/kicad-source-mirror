@@ -97,33 +97,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 
 	m_stZoneFilledPolysOpt = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Zone fill strategy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stZoneFilledPolysOpt->Wrap( -1 );
-	m_bSizerPolygonFillOption->Add( m_stZoneFilledPolysOpt, 0, wxALL, 5 );
-
-	wxBoxSizer* bSizer5;
-	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_bitmapZoneFillOpt = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer5->Add( m_bitmapZoneFillOpt, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
-	wxBoxSizer* bSizerOutlinesOpts;
-	bSizerOutlinesOpts = new wxBoxSizer( wxVERTICAL );
-
-	m_rbOutlinePolygonBestQ = new wxRadioButton( m_scrolledWindow, wxID_ANY, _("Mimic legacy behavior"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_rbOutlinePolygonBestQ->SetToolTip( _("Produces a slightly smoother outline at the expense of performance, some export fidelity issues, and overly aggressive higher-priority zone knockouts.") );
-
-	bSizerOutlinesOpts->Add( m_rbOutlinePolygonBestQ, 0, wxALL, 4 );
-
-	m_rbOutlinePolygonFastest = new wxRadioButton( m_scrolledWindow, wxID_ANY, _("Smoothed polygons (best performance)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_rbOutlinePolygonFastest->SetValue( true );
-	m_rbOutlinePolygonFastest->SetToolTip( _("Better performance, exact export fidelity, and more complete filling near higher-priority zones.") );
-
-	bSizerOutlinesOpts->Add( m_rbOutlinePolygonFastest, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
-
-
-	bSizer5->Add( bSizerOutlinesOpts, 1, wxEXPAND, 5 );
-
-
-	m_bSizerPolygonFillOption->Add( bSizer5, 0, wxEXPAND, 15 );
+	m_bSizerPolygonFillOption->Add( m_stZoneFilledPolysOpt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
@@ -500,16 +474,8 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	this->SetSizer( bMainSizer );
 	this->Layout();
 	bMainSizer->Fit( this );
-
-	// Connect Events
-	m_rbOutlinePolygonBestQ->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_SETUP_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
-	m_rbOutlinePolygonFastest->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_SETUP_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
 }
 
 PANEL_SETUP_CONSTRAINTS_BASE::~PANEL_SETUP_CONSTRAINTS_BASE()
 {
-	// Disconnect Events
-	m_rbOutlinePolygonBestQ->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_SETUP_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
-	m_rbOutlinePolygonFastest->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_SETUP_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
-
 }

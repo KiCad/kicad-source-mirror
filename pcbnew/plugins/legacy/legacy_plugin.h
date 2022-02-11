@@ -193,7 +193,7 @@ protected:
     wxString           m_field;                  ///< reused to stuff FOOTPRINT fields.
     int                m_loading_format_version; ///< which BOARD_FORMAT_VERSION am I Load()ing?
     LP_CACHE*          m_cache;
-    bool               m_showLegacyZoneWarning;
+    bool               m_showLegacySegmentZoneWarning;
 
     std::vector<int>   m_netCodes;               ///< net codes mapping for boards being loaded
 

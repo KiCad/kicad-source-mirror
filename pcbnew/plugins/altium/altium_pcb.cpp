@@ -1696,7 +1696,6 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
         m_board->Add( zone, ADD_MODE::APPEND );
         m_polygons.emplace_back( zone );
 
-        zone->SetFillVersion( 6 );
         zone->SetNetCode( GetNetCode( elem.net ) );
         zone->SetLayer( klayer );
         zone->SetPosition( elem.vertices.at( 0 ).position );
@@ -1896,7 +1895,6 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem )
         ZONE* zone = new ZONE( m_board );
         m_board->Add( zone, ADD_MODE::APPEND );
 
-        zone->SetFillVersion( 6 );
         zone->SetIsRuleArea( true );
         zone->SetDoNotAllowTracks( false );
         zone->SetDoNotAllowVias( false );
@@ -1965,7 +1963,6 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
         FP_ZONE* zone = new FP_ZONE( aFootprint );
         aFootprint->Add( zone, ADD_MODE::APPEND );
 
-        zone->SetFillVersion( 6 );
         zone->SetIsRuleArea( true );
         zone->SetDoNotAllowTracks( false );
         zone->SetDoNotAllowVias( false );
@@ -2096,16 +2093,15 @@ void ALTIUM_PCB::ParseRegions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFi
             }
 
             PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
+
             if( klayer == UNDEFINED_LAYER )
-            {
                 continue; // Just skip it for now. Users can fill it themselves.
-            }
 
             SHAPE_LINE_CHAIN linechain;
+
             for( const ALTIUM_VERTICE& vertice : elem.outline )
-            {
                 linechain.Append( vertice.position );
-            }
+
             linechain.Append( elem.outline.at( 0 ).position );
             linechain.SetClosed( true );
 
@@ -2115,21 +2111,20 @@ void ALTIUM_PCB::ParseRegions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFi
             for( const std::vector<ALTIUM_VERTICE>& hole : elem.holes )
             {
                 SHAPE_LINE_CHAIN hole_linechain;
+
                 for( const ALTIUM_VERTICE& vertice : hole )
-                {
                     hole_linechain.Append( vertice.position );
-                }
+
                 hole_linechain.Append( hole.at( 0 ).position );
                 hole_linechain.SetClosed( true );
                 rawPolys.AddHole( hole_linechain );
             }
 
-            if( zone->GetFilledPolysUseThickness() )
-                rawPolys.Deflate( zone->GetMinThickness() / 2, 32 );
-
             if( zone->HasFilledPolysForLayer( klayer ) )
+            {
                 rawPolys.BooleanAdd( zone->RawPolysList( klayer ),
                                      SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            }
 
             SHAPE_POLY_SET finalPolys = rawPolys;
             finalPolys.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
@@ -3267,7 +3262,6 @@ void ALTIUM_PCB::ConvertFills6ToBoardItemWithNet( const AFILL6& aElem )
     ZONE* zone = new ZONE( m_board );
     m_board->Add( zone, ADD_MODE::APPEND );
 
-    zone->SetFillVersion( 6 );
     zone->SetNetCode( GetNetCode( aElem.net ) );
 
     zone->SetPosition( aElem.pos1 );
@@ -3369,7 +3363,6 @@ void ALTIUM_PCB::HelperPcpShapeAsBoardKeepoutRegion( const PCB_SHAPE& aShape,
 {
     ZONE* zone = new ZONE( m_board );
 
-    zone->SetFillVersion( 6 );
     zone->SetIsRuleArea( true );
     zone->SetDoNotAllowTracks( false );
     zone->SetDoNotAllowVias( false );
@@ -3403,7 +3396,6 @@ void ALTIUM_PCB::HelperPcpShapeAsFootprintKeepoutRegion( FOOTPRINT*       aFootp
 {
     FP_ZONE* zone = new FP_ZONE( aFootprint );
 
-    zone->SetFillVersion( 6 );
     zone->SetIsRuleArea( true );
     zone->SetDoNotAllowTracks( false );
     zone->SetDoNotAllowVias( false );

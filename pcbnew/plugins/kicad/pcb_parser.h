@@ -355,7 +355,8 @@ private:
     ///< if resetting UUIDs, record new ones to update groups with.
     KIID_MAP            m_resetKIIDMap;
 
-    bool                m_showLegacyZoneWarning;
+    bool                m_showLegacySegmentZoneWarning;
+    bool                m_showLegacy5ZoneWarning;
 
     PROGRESS_REPORTER*  m_progressReporter;  ///< optional; may be nullptr
     TIME_PT             m_lastProgressTime;  ///< for progress reporting

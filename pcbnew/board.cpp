@@ -96,7 +96,6 @@ BOARD::BOARD() :
     m_SolderMask->Outline()->Append( VECTOR2I( +infinity, +infinity ) );
     m_SolderMask->Outline()->Append( VECTOR2I( +infinity, -infinity ) );
     m_SolderMask->SetMinThickness( 0 );
-    m_SolderMask->SetFillVersion( 6 );
 
     BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
 

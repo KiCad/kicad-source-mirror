@@ -25,7 +25,6 @@
 #include <wx/statline.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
-#include <wx/radiobut.h>
 #include <wx/spinctrl.h>
 #include <wx/scrolwin.h>
 #include <wx/panel.h>
@@ -54,9 +53,6 @@ class PANEL_SETUP_CONSTRAINTS_BASE : public wxPanel
 		wxBoxSizer* m_bSizerPolygonFillOption;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_stZoneFilledPolysOpt;
-		wxStaticBitmap* m_bitmapZoneFillOpt;
-		wxRadioButton* m_rbOutlinePolygonBestQ;
-		wxRadioButton* m_rbOutlinePolygonFastest;
 		wxStaticBitmap* m_filletBitmap;
 		wxCheckBox* m_allowExternalFilletsOpt;
 		wxStaticBitmap* m_spokeBitmap;
@@ -130,10 +126,6 @@ class PANEL_SETUP_CONSTRAINTS_BASE : public wxPanel
 		wxStaticText* m_textThicknessLabel;
 		wxTextCtrl* m_textThicknessCtrl;
 		wxStaticText* m_textThicknessUnits;
-
-		// Virtual event handlers, overide them in your derived class
-		virtual void onChangeOutlineOpt( wxCommandEvent& event ) { event.Skip(); }
-
 
 	public:
 		wxScrolledWindow* m_scrolledWindow;

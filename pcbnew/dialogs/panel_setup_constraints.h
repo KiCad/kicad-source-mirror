@@ -48,8 +48,6 @@ private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    void onChangeOutlineOpt( wxCommandEvent& event ) override;
-
 public:
     UNIT_BINDER             m_minClearance;
     UNIT_BINDER             m_trackMinWidth;

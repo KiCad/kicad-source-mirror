@@ -278,7 +278,6 @@ bool zonesNeedUpdate( const FP_ZONE* a, const FP_ZONE* b )
 
     TEST( a->GetMinThickness(), b->GetMinThickness() );
 
-    TEST( a->GetFillVersion(), b->GetFillVersion() );
     TEST( a->GetIslandRemovalMode(), b->GetIslandRemovalMode() );
     TEST( a->GetMinIslandArea(), b->GetMinIslandArea() );
 

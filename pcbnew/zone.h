@@ -711,12 +711,6 @@ public:
 
     unsigned int GetCornerRadius() const { return m_cornerRadius; }
 
-    bool GetFilledPolysUseThickness() const { return m_fillVersion == 5; }
-    bool GetFilledPolysUseThickness( PCB_LAYER_ID aLayer ) const;
-
-    int GetFillVersion() const { return m_fillVersion; }
-    void SetFillVersion( int aVersion ) { m_fillVersion = aVersion; }
-
     /**
      * Remove a cutout from the zone.
      *

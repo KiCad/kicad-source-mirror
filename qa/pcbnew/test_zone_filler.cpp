@@ -53,7 +53,7 @@ BOOST_FIXTURE_TEST_CASE( BasicZoneFills, ZONE_FILL_TEST_FIXTURE )
 
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
-    KI_TEST::FillZones( m_board.get(), 6 );
+    KI_TEST::FillZones( m_board.get() );
 
     // Now that the zones are filled we're going to increase the size of -some- pads and
     // tracks so that they generate DRC errors.  The test then makes sure that those errors
@@ -159,7 +159,7 @@ BOOST_FIXTURE_TEST_CASE( NotchedZones, ZONE_FILL_TEST_FIXTURE )
     BOOST_CHECK_GT( frontCopper.OutlineCount(), 2 );
 
     // Now re-fill and make sure the holes are gone.
-    KI_TEST::FillZones( m_board.get(), 6 );
+    KI_TEST::FillZones( m_board.get() );
 
     frontCopper = SHAPE_POLY_SET();
 
@@ -197,44 +197,37 @@ BOOST_FIXTURE_TEST_CASE( RegressionZoneFillTests, ZONE_FILL_TEST_FIXTURE )
 
         BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
-        for( int fillVersion : { 5, 6 } )
-        {
-            KI_TEST::FillZones( m_board.get(), fillVersion );
+        KI_TEST::FillZones( m_board.get() );
 
-            std::vector<DRC_ITEM> violations;
+        std::vector<DRC_ITEM> violations;
 
-            bds.m_DRCEngine->SetViolationHandler(
-                    [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos,
-                         PCB_LAYER_ID aLayer )
-                    {
-                        if( aItem->GetErrorCode() == DRCE_CLEARANCE )
-                            violations.push_back( *aItem );
-                    } );
-
-            bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
-
-            if( violations.empty() )
-            {
-                BOOST_CHECK_EQUAL( 1, 1 );  // quiet "did not check any assertions" warning
-                BOOST_TEST_MESSAGE( wxString::Format( "Zone fill regression: %s, V%d algo passed",
-                                                      relPath,
-                                                      fillVersion ) );
-            }
-            else
-            {
-                std::map<KIID, EDA_ITEM*> itemMap;
-                m_board->FillItemMap( itemMap );
-
-                for( const DRC_ITEM& item : violations )
+        bds.m_DRCEngine->SetViolationHandler(
+                [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos,
+                     PCB_LAYER_ID aLayer )
                 {
-                    BOOST_TEST_MESSAGE( item.ShowReport( EDA_UNITS::INCHES, RPT_SEVERITY_ERROR,
-                                                         itemMap ) );
-                }
+                    if( aItem->GetErrorCode() == DRCE_CLEARANCE )
+                        violations.push_back( *aItem );
+                } );
 
-                BOOST_ERROR( wxString::Format( "Zone fill regression: %s, V%d algo failed",
-                                               relPath,
-                                               fillVersion ) );
+        bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+
+        if( violations.empty() )
+        {
+            BOOST_CHECK_EQUAL( 1, 1 );  // quiet "did not check any assertions" warning
+            BOOST_TEST_MESSAGE( wxString::Format( "Zone fill regression: %s passed", relPath ) );
+        }
+        else
+        {
+            std::map<KIID, EDA_ITEM*> itemMap;
+            m_board->FillItemMap( itemMap );
+
+            for( const DRC_ITEM& item : violations )
+            {
+                BOOST_TEST_MESSAGE( item.ShowReport( EDA_UNITS::INCHES, RPT_SEVERITY_ERROR,
+                                                     itemMap ) );
             }
+
+            BOOST_ERROR( wxString::Format( "Zone fill regression: %s failed", relPath ) );
         }
     }
 }

@@ -75,7 +75,7 @@ BOOST_FIXTURE_TEST_CASE( FailedToCleanRegressionTests, TRACK_CLEANER_TEST_FIXTUR
     for( const TEST_DESCRIPTION& entry : tests )
     {
         KI_TEST::LoadBoard( m_settingsManager, entry.m_File, m_board );
-        KI_TEST::FillZones( m_board.get(), 6 );
+        KI_TEST::FillZones( m_board.get() );
         m_board->GetConnectivity()->RecalculateRatsnest();
 
         TOOL_MANAGER toolMgr;
@@ -141,7 +141,7 @@ BOOST_FIXTURE_TEST_CASE( TrackCleanerRegressionTests, TRACK_CLEANER_TEST_FIXTURE
     for( const wxString& relPath : tests )
     {
         KI_TEST::LoadBoard( m_settingsManager, relPath, m_board );
-        KI_TEST::FillZones( m_board.get(), 6 );
+        KI_TEST::FillZones( m_board.get() );
         m_board->GetConnectivity()->RecalculateRatsnest();
 
         TOOL_MANAGER toolMgr;
