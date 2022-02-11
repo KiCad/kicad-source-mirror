@@ -784,13 +784,6 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbo
         arcEnd.x = Mils2Iu( parseInt( aReader, line, &line ) );
         arcEnd.y = Mils2Iu( parseInt( aReader, line, &line ) );
 
-        // The previous wxDC-based drawing routines used start point and end point and always
-        // drew counter-clockwise.  The new GAL draw takes center, radius and start/end angles.
-        // All of these values were stored in the file with little indication of which takes
-        // precedence, so we need to jump through some hoops to ensure the correct winding.
-        if( TRANSFORM().MapAngles( &angle1, &angle2 ) != ( ( angle1 - angle2 ).Normalize180() > ANGLE_0 ) )
-            std::swap( arcStart, arcEnd );
-
         arc->SetStart( arcStart );
         arc->SetEnd( arcEnd );
     }
