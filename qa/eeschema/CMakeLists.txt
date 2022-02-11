@@ -28,13 +28,15 @@ include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/pcbnew
+    ${CMAKE_SOURCE_DIR}/qa/mocks/include
     ${CMAKE_SOURCE_DIR}/qa/qa_utils
     ${INC_AFTER}
     )
 
 set( QA_EESCHEMA_SRCS
     # need the mock Pgm for many functions
-    mocks_eeschema.cpp
+    ${CMAKE_SOURCE_DIR}/qa/mocks/kicad/common_mocks.cpp
+    ${CMAKE_SOURCE_DIR}/qa/mocks/eeschema/mock_eeschema.cpp
 
     eeschema_test_utils.cpp
     uuid_test_utils.cpp

@@ -31,15 +31,12 @@ MOCK_BASE_CLASS( MOCK_PGM_BASE, PGM_BASE )
     virtual ~MOCK_PGM_BASE() {};
 
     MOCK_METHOD( MacOpenFile, 1, void( const wxString& ) );
-    MOCK_METHOD( GetSettingsManager, 0, SETTINGS_MANAGER&() );
     MOCK_METHOD( GetCommonSettings, 0, COMMON_SETTINGS*() );
     MOCK_METHOD( SetTextEditor, 1, void( const wxString& ) );
     MOCK_METHOD( GetTextEditor, 1, wxString&( bool ) );
     MOCK_METHOD( AskUserForPreferredEditor, 1, wxString&( wxString& ) );
     MOCK_CONST_METHOD( IsKicadEnvVariableDefined, 0, bool() );
     MOCK_CONST_METHOD( GetKicadEnvVariable, 0, const wxString&() );
-    MOCK_CONST_METHOD( GetExecutablePath, 0, const wxString&() );
-    MOCK_METHOD( GetLocale, 0, wxLocale*() );
     MOCK_CONST_METHOD( GetPdfBrowserName, 0, const wxString&() );
     MOCK_METHOD( SetPdfBrowserName, 1, void( const wxString& ) );
     MOCK_CONST_METHOD( UseSystemPdfBrowser, 0, bool() );
@@ -47,11 +44,17 @@ MOCK_BASE_CLASS( MOCK_PGM_BASE, PGM_BASE )
     MOCK_METHOD( SetLanguage, 2, bool( wxString&, bool ) );
     MOCK_METHOD( SetLanguageIdentifier, 1, void( int ) );
     MOCK_CONST_METHOD( GetSelectedLanguageIdentifier, 0, int() );
-    MOCK_METHOD( SetLanguagePath, 0, void() );
     MOCK_METHOD( ReadPdfBrowserInfos, 0, void() );
     MOCK_METHOD( WritePdfBrowserInfos, 0, void() );
     MOCK_METHOD( SetLocalEnvVariable, 2, bool( const wxString&, const wxString& ) );
     MOCK_METHOD( SetLocalEnvVariables, 0, void() );
     MOCK_CONST_METHOD( GetLocalEnvVariables, 0, ENV_VAR_MAP&() );
-    MOCK_METHOD( App, 0, wxApp&() );
+
+    // following functions will not be mocked in order to mimic old qa behavior
+//    MOCK_METHOD( App, 0, wxApp&() );
+//    MOCK_METHOD( GetLocale, 0, wxLocale*() );
+//    MOCK_METHOD( GetSettingsManager, 0, SETTINGS_MANAGER&() );
+//    MOCK_METHOD( SetLanguagePath, 0, void() );
+//    MOCK_CONST_METHOD( GetExecutablePath, 0, const wxString&() );
+//    MOCK_METHOD( GetSettingsManager, 0, SETTINGS_MANAGER&() );
 };

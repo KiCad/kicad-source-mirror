@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,28 +26,9 @@
  * @brief Mock objects for unit tests
  */
 
-#include <mock_kiface_base.h>
-#include <mock_pgm_base.h>
+#include <transform.h>
 
 
-PGM_BASE& Pgm()
-{
-    static MOCK_PGM_BASE program;
-    return program;
-}
+// a transform matrix, to display components in lib editor
+TRANSFORM DefaultTransform = TRANSFORM( 1, 0, 0, -1 );
 
-
-// Similar to PGM_BASE& Pgm(), but return nullptr when a *.ki_face is run from
-// a python script or something else.
-// Therefore here return always nullptr
-PGM_BASE* PgmOrNull()
-{
-    return nullptr;
-}
-
-
-KIFACE_BASE& Kiface()
-{
-    static MOCK_KIFACE_BASE kiface;
-    return kiface;
-}

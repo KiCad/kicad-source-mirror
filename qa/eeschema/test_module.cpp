@@ -30,6 +30,7 @@
 #include <kiplatform/app.h>
 
 #include <pgm_base.h>
+#include <wx/app.h>
 #include <wx/init.h>
 
 #include <qa_utils/wx_utils/wx_assert.h>
@@ -51,12 +52,14 @@ bool init_unit_test()
     KIPLATFORM::APP::Init();
     boost::unit_test::framework::master_test_suite().p_name.value = "Common Eeschema module tests";
 
+    wxApp::SetInstance( new wxAppConsole );
+
     bool ok = wxInitialize( boost::unit_test::framework::master_test_suite().argc,
                             boost::unit_test::framework::master_test_suite().argv );
 
-    Pgm().InitPgm( true ); // Initialize in headless mode
-
     wxSetAssertHandler( &wxAssertThrower );
+
+    Pgm().InitPgm( true, true );
 
     return ok;
 }
