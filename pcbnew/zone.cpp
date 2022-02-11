@@ -152,7 +152,6 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
         m_FilledPolysList[layer]  = aZone.m_FilledPolysList.at( layer );
         m_RawPolysList[layer]     = aZone.m_RawPolysList.at( layer );
         m_filledPolysHash[layer]  = aZone.m_filledPolysHash.at( layer );
-        m_FillSegmList[layer]     = aZone.m_FillSegmList.at( layer ); // vector <> copy
         m_insulatedIslands[layer] = aZone.m_insulatedIslands.at( layer );
     }
 
@@ -184,12 +183,6 @@ bool ZONE::UnFill()
         change |= !pair.second.IsEmpty();
         m_insulatedIslands[pair.first].clear();
         pair.second.RemoveAllContours();
-    }
-
-    for( std::pair<const PCB_LAYER_ID, std::vector<SEG> >& pair : m_FillSegmList )
-    {
-        change |= !pair.second.empty();
-        pair.second.clear();
     }
 
     m_isFilled = false;
@@ -250,7 +243,6 @@ void ZONE::SetLayerSet( LSET aLayerSet )
 
         UnFill();
 
-        m_FillSegmList.clear();
         m_FilledPolysList.clear();
         m_RawPolysList.clear();
         m_filledPolysHash.clear();
@@ -258,7 +250,6 @@ void ZONE::SetLayerSet( LSET aLayerSet )
 
         for( PCB_LAYER_ID layer : aLayerSet.Seq() )
         {
-            m_FillSegmList[layer]     = {};
             m_FilledPolysList[layer]  = {};
             m_RawPolysList[layer]     = {};
             m_filledPolysHash[layer]  = {};
@@ -647,15 +638,6 @@ void ZONE::Move( const VECTOR2I& offset )
 
     for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
         pair.second.Move( offset );
-
-    for( std::pair<const PCB_LAYER_ID, std::vector<SEG> >& pair : m_FillSegmList )
-    {
-        for( SEG& seg : pair.second )
-        {
-            seg.A += offset;
-            seg.B += offset;
-        }
-    }
 }
 
 
@@ -682,20 +664,6 @@ void ZONE::Rotate( const VECTOR2I& aCentre, const EDA_ANGLE& aAngle )
     /* rotate filled areas: */
     for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
         pair.second.Rotate( aAngle, aCentre );
-
-    for( std::pair<const PCB_LAYER_ID, std::vector<SEG> >& pair : m_FillSegmList )
-    {
-        for( SEG& seg : pair.second )
-        {
-            VECTOR2I a( seg.A );
-            RotatePoint( a, aCentre, -aAngle );
-            seg.A = a;
-
-            VECTOR2I b( seg.B );
-            RotatePoint( b, aCentre, -aAngle );
-            seg.B = a;
-        }
-    }
 }
 
 
@@ -720,23 +688,6 @@ void ZONE::Mirror( const VECTOR2I& aMirrorRef, bool aMirrorLeftRight )
 
     for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
         pair.second.Mirror( aMirrorLeftRight, !aMirrorLeftRight, aMirrorRef );
-
-    for( std::pair<const PCB_LAYER_ID, std::vector<SEG> >& pair : m_FillSegmList )
-    {
-        for( SEG& seg : pair.second )
-        {
-            if( aMirrorLeftRight )
-            {
-                MIRROR( seg.A.x, aMirrorRef.x );
-                MIRROR( seg.B.x, aMirrorRef.x );
-            }
-            else
-            {
-                MIRROR( seg.A.y, aMirrorRef.y );
-                MIRROR( seg.B.y, aMirrorRef.y );
-            }
-        }
-    }
 }
 
 

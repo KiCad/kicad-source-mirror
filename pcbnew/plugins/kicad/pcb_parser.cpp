@@ -1228,8 +1228,7 @@ void PCB_PARSER::parsePAGE_INFO()
 void PCB_PARSER::parseTITLE_BLOCK()
 {
     wxCHECK_RET( CurTok() == T_title_block,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
-                 wxT( " as TITLE_BLOCK." ) );
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as TITLE_BLOCK." ) );
 
     T token;
     TITLE_BLOCK titleBlock;
@@ -1831,8 +1830,7 @@ PCB_LAYER_ID PCB_PARSER::parseBoardItemLayer()
 LSET PCB_PARSER::parseBoardItemLayersAsMask()
 {
     wxCHECK_MSG( CurTok() == T_layers, LSET(),
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
-                 wxT( " as item layer mask." ) );
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as item layers." ) );
 
     LSET layerMask;
 
@@ -3494,10 +3492,9 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
 
     if( !name.IsEmpty() && fpid.Parse( name, true ) >= 0 )
     {
-        wxString error;
-        error.Printf( _( "Invalid footprint ID in\nfile: '%s'\nline: %d\noffset: %d." ),
-                      CurSource(), CurLineNumber(), CurOffset() );
-        THROW_IO_ERROR( error );
+        THROW_IO_ERROR( wxString::Format( _( "Invalid footprint ID in\nfile: %s\nline: %d\n"
+                                             "offset: %d." ),
+                                          CurSource(), CurLineNumber(), CurOffset() ) );
     }
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
@@ -4617,8 +4614,8 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
         case T_net:
             if( ! pad->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
             {
-                wxLogError( _( "Invalid net ID in\nfile: %s\nline: %d offset: %d" ), CurSource(),
-                            CurLineNumber(), CurOffset() );
+                wxLogError( _( "Invalid net ID in\nfile: %s\nline: %d offset: %d" ),
+                            CurSource(), CurLineNumber(), CurOffset() );
             }
 
             NeedSYMBOLorNUMBER();
@@ -5073,9 +5070,10 @@ PCB_ARC* PCB_PARSER::parseARC()
 
         case T_net:
             if( !arc->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
-                THROW_IO_ERROR( wxString::Format(
-                        _( "Invalid net ID in\nfile: '%s'\nline: %d\noffset: %d." ), CurSource(),
-                        CurLineNumber(), CurOffset() ) );
+            {
+                wxLogError( _( "Invalid net ID in\nfile: %s\nline: %d\noffset: %d." ),
+                            CurSource(), CurLineNumber(), CurOffset() );
+            }
             break;
 
         case T_tstamp:
@@ -5151,9 +5149,10 @@ PCB_TRACK* PCB_PARSER::parsePCB_TRACK()
 
         case T_net:
             if( !track->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
-                THROW_IO_ERROR( wxString::Format(
-                        _( "Invalid net ID in\nfile: '%s'\nline: %d\noffset: %d." ), CurSource(),
-                        CurLineNumber(), CurOffset() ) );
+            {
+                wxLogError( _( "Invalid net ID in\nfile: '%s'\nline: %d\noffset: %d." ),
+                            CurSource(), CurLineNumber(), CurOffset() );
+            }
             break;
 
         case T_tstamp:
@@ -5246,13 +5245,8 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
         case T_net:
             if( !via->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
             {
-                THROW_IO_ERROR( wxString::Format( _( "Invalid net ID in\n"
-                                                     "file: '%s'\n"
-                                                     "line: %d\n"
-                                                     "offset: %d" ),
-                                      CurSource(),
-                                      CurLineNumber(),
-                                      CurOffset() ) );
+                wxLogError( _( "Invalid net ID in\nfile: %s\nline: %d\noffset: %d" ),
+                            CurSource(), CurLineNumber(), CurOffset() );
             }
 
             NeedRIGHT();
@@ -5318,6 +5312,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
     bool         inFootprint = false;
     PCB_LAYER_ID filledLayer;
     bool         addedFilledPolygons = false;
+    bool         dropFilledPolygons = false;
 
     if( dynamic_cast<FOOTPRINT*>( aParent ) )      // The zone belongs a footprint
         inFootprint = true;
@@ -5354,11 +5349,10 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                 tmp = 0;
 
             if( !zone->SetNetCode( tmp, /* aNoAssert */ true ) )
-                THROW_IO_ERROR( wxString::Format(
-                        _( "Invalid net ID in\n file: '%s;\nline: %d\noffset: %d." ),
-                        CurSource(),
-                        CurLineNumber(),
-                        CurOffset() ) );
+            {
+                wxLogError( _( "Invalid net ID in\nfile: %s;\nline: %d\noffset: %d." ),
+                            CurSource(), CurLineNumber(), CurOffset() );
+            }
 
             NeedRIGHT();
             break;
@@ -5463,6 +5457,8 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
                     m_showLegacy5ZoneWarning = false;
                 }
+
+                dropFilledPolygons = true;
             }
 
             NeedRIGHT();
@@ -5784,8 +5780,6 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
         case T_fill_segments:
         {
-            std::vector<SEG> segs;
-
             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
             {
                 if( token != T_LEFT )
@@ -5812,12 +5806,11 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                 if( token != T_pts )
                     Expecting( T_pts );
 
-                SEG segment( parseXY(), parseXY() );
+                ignore_unused( parseXY() );
+                ignore_unused( parseXY() );
                 NeedRIGHT();
-                segs.push_back( segment );
             }
 
-            zone->SetFillSegments( filledLayer, segs );
             break;
         }
 
@@ -5853,7 +5846,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
         zone->SetBorderDisplayStyle( hatchStyle, hatchPitch, true );
     }
 
-    if( addedFilledPolygons )
+    if( addedFilledPolygons && !dropFilledPolygons )
     {
         for( auto& pair : pts )
             zone->SetFilledPolysList( pair.first, pair.second );

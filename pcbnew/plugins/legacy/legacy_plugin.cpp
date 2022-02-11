@@ -2559,13 +2559,10 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                     break;
 
                 // e.g. ""%d %d %d %d\n"
-                BIU sx = biuParse( line, &data );
-                BIU sy = biuParse( data, &data );
-                BIU ex = biuParse( data, &data );
-                BIU ey = biuParse( data );
-
-                zc->FillSegments( zc->GetLayer() )
-                        .push_back( SEG( VECTOR2I( sx, sy ), VECTOR2I( ex, ey ) ) );
+                ignore_unused( biuParse( line, &data ) );
+                ignore_unused( biuParse( data, &data ) );
+                ignore_unused( biuParse( data, &data ) );
+                ignore_unused( biuParse( data ) );
             }
         }
         else if( TESTLINE( "$endCZONE_OUTLINE" ) )

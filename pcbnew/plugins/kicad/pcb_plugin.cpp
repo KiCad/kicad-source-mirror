@@ -2232,25 +2232,6 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
             formatPolyPts( chain, aNestLevel + 1, ADVANCED_CFG::GetCfg().m_CompactSave );
             m_out->Print( aNestLevel + 1, ")\n" );
         }
-
-        // Save the filling segments list
-        const std::vector<SEG>& segs = aZone->FillSegments( layer );
-
-        if( segs.size() )
-        {
-            m_out->Print( aNestLevel + 1, "(fill_segments\n" );
-            m_out->Print( aNestLevel + 2, "(layer %s)\n",
-                          TO_UTF8( BOARD::GetStandardLayerName( layer ) ) );
-
-            for( const SEG& seg : segs )
-            {
-                m_out->Print( aNestLevel + 2, "(pts (xy %s) (xy %s))\n",
-                              FormatInternalUnits( seg.A ).c_str(),
-                              FormatInternalUnits( seg.B ).c_str() );
-            }
-
-            m_out->Print( aNestLevel + 1, ")\n" );
-        }
     }
 
     m_out->Print( aNestLevel, ")\n" );
