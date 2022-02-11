@@ -132,6 +132,7 @@ const std::string LegacyProjectFileExtension( "pro" );
 const std::string ProjectLocalSettingsFileExtension( "kicad_prl" );
 const std::string LegacySchematicFileExtension( "sch" );
 const std::string KiCadSchematicFileExtension( "kicad_sch" );
+const std::string OrCadPcb2NetlistFileExtension( "net" );
 const std::string NetlistFileExtension( "net" );
 const std::string FootprintAssignmentFileExtension( "cmp" );
 const std::string GerberFileExtension( "gbr" );
@@ -279,6 +280,13 @@ wxString EagleSchematicFileWildcard()
 wxString EagleFilesWildcard()
 {
     return _( "Eagle XML files" ) + AddFileExtListToFilter( { "sch", "brd" } );
+}
+
+
+wxString OrCadPcb2NetlistFileWildcard()
+{
+    return _( "OrcadPCB2 netlist files" )
+            + AddFileExtListToFilter( { OrCadPcb2NetlistFileExtension } );
 }
 
 

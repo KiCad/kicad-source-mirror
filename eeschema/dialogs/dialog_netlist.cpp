@@ -526,8 +526,12 @@ bool NETLIST_DIALOG::FilenamePrms( NETLIST_TYPE_ID aType, wxString * aExt, wxStr
         fileWildcard = CadstarNetlistFileWildcard();
         break;
 
-    case NET_TYPE_PCBNEW:
     case NET_TYPE_ORCADPCB2:
+        fileExt = OrCadPcb2NetlistFileExtension;
+        fileWildcard = OrCadPcb2NetlistFileWildcard();
+        break;
+
+    case NET_TYPE_PCBNEW:
         fileExt = NetlistFileExtension;
         fileWildcard = NetlistFileWildcard();
         break;
