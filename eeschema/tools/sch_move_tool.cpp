@@ -1014,7 +1014,9 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR
                 case SCH_HIER_LABEL_T:
                 case SCH_GLOBAL_LABEL_T:
                 case SCH_DIRECTIVE_LABEL_T:
-                    if( line->HitTest( aPoint, 1 ) )
+                    // Only add a line if this line is unselected,
+                    // if the label and line are both selected they'll move together
+                    if( line->HitTest( aPoint, 1 ) && !line->HasFlag( SELECTED ) )
                     {
                         // Add a new line so we have something to drag
                         newWire = new SCH_LINE( aPoint, line->GetLayer() );
