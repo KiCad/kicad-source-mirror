@@ -261,10 +261,12 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
     // see https://gitlab.com/kicad/code/kicad/-/issues/7125
     double snapScale = snapSize / m_toolMgr->GetView()->GetGAL()->GetWorldScale();
     int    snapRange = std::min( KiROUND( snapScale ), GetGrid().x );
-    int    snapDist  = snapRange;
+    int    snapDist = snapRange;
 
-    BOX2I bb( VECTOR2I( aOrigin.x - snapRange / 2, aOrigin.y - snapRange / 2 ),
-              VECTOR2I( snapRange, snapRange ) );
+    //Respect limits of coordinates representation
+    BOX2I bb;
+    bb.SetOrigin( GetClampedCoords<double, int>( VECTOR2D( aOrigin ) - snapRange / 2 ) );
+    bb.SetEnd( GetClampedCoords<double, int>( VECTOR2D( aOrigin ) + snapRange / 2 ) );
 
     clearAnchors();
 

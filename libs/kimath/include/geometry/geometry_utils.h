@@ -134,6 +134,47 @@ VECTOR2<T> GetVectorSnapped45( const VECTOR2<T>& aVec, bool only45 = false )
 
 
 /**
+ * Clamps a vector to values that can be negated, respecting numeric limits
+ * of coordinates data type with specified padding.
+ * 
+ * Numeric limits are (-2^31 + 1) to (2^31 - 1).
+ * 
+ * Takes care of rounding in case of floating point to integer conversion.
+ *
+ * @param aCoord - vector to clamp.
+ * @param aPadding - padding from the limits. Must not be negative.
+ * @return clamped vector.
+ */
+template <typename in_type, typename ret_type = in_type, typename pad_type = unsigned int,
+          typename = typename std::enable_if<std::is_unsigned<pad_type>::value>::type>
+VECTOR2<ret_type> GetClampedCoords( const VECTOR2<in_type>& aCoords, pad_type aPadding = 0u )
+{
+    typedef std::numeric_limits<int> coord_limits;
+
+    long max = coord_limits::max() - aPadding;
+    long min = -max;
+
+    in_type x = aCoords.x;
+    in_type y = aCoords.y;
+
+    if( x < min )
+        x = min;
+    else if( x > max )
+        x = max;
+
+    if( y < min )
+        y = min;
+    else if( y > max )
+        y = max;
+
+    if( !std::is_integral<in_type>() && std::is_integral<ret_type>() )
+        return VECTOR2<ret_type>( KiROUND( x ), KiROUND( y ) );
+
+    return VECTOR2<ret_type>( x, y );
+}
+
+
+/**
  * Test if any part of a line falls within the bounds of a rectangle.
  *
  * Please note that this is only accurate for lines that are one pixel wide.

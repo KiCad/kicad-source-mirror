@@ -204,6 +204,8 @@ public:
      * @note The position may be different from the cursor position if snapping is
      *       enabled (@see GetCursorPosition()).
      *
+     * @note The position is clamped if outside of coordinates representation limits.
+     *
      * @param aWorldCoordinates if true, the result is given in world coordinates, otherwise
      *                          it is given in screen coordinates.
      * @return The current mouse pointer position in either world or screen coordinates.
@@ -215,6 +217,8 @@ public:
      *
      * @note The position  may be different from the mouse pointer position if snapping is
      *       enabled or cursor position is forced to a specific point.
+     *
+     * @note The position is clamped if outside of coordinates representation limits.
      *
      * @return The current cursor position in world coordinates.
      */
@@ -237,6 +241,8 @@ public:
      * @note The position may be different from the mouse pointer position if snapping is
      *       enabled or cursor position is forced to a specific point.
      *
+     * @note The position is clamped if outside of coordinates representation limits.
+     *
      * @param aEnableSnapping selects whether cursor position should be snapped to the grid.
      * @return The current cursor position in world coordinates.
      */
@@ -244,6 +250,8 @@ public:
 
     /**
      * Place the cursor immediately at a given point. Mouse movement is ignored.
+     *
+     * @note The position is clamped if outside of coordinates representation limits.
      *
      * @param aEnabled enable forced cursor position
      * @param aPosition the position (world coordinates).
@@ -260,6 +268,8 @@ public:
      * The position is not forced and will be overridden with the next mouse motion event.
      * Mouse cursor follows the world cursor.
      *
+     * @note The position is clamped if outside of coordinates representation limits.
+     *
      * @param aPosition is the requested cursor position in the world coordinates.
      * @param aWarpView enables/disables view warp if the cursor is outside the current viewport.
      */
@@ -269,6 +279,8 @@ public:
 
     /**
      * Move the graphic crosshair cursor to the requested position expressed in world coordinates.
+     *
+     * @note The position is clamped if outside of coordinates representation limits.
      *
      * @param aPosition is the requested cursor position in the world coordinates.
      * @param aWarpView enables/disables view warp if the cursor is outside the current viewport.
@@ -302,6 +314,8 @@ public:
     /**
      * If enabled (@see SetEnableCursorWarping(), warps the cursor to the specified position,
      * expressed either in the screen coordinates or the world coordinates.
+     *
+     * @note The position is clamped if outside of coordinates representation limits.
      *
      * @param aPosition is the position where the cursor should be warped.
      * @param aWorldCoordinates if true treats aPosition as the world coordinates, otherwise it
