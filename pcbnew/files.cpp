@@ -58,6 +58,8 @@
 #include <dialogs/dialog_imported_layers.h>
 #include <tools/pcb_actions.h>
 #include "footprint_info_impl.h"
+#include "board_commit.h"
+#include "zone_filler.h"
 #include <wx_filename.h>  // For ::ResolvePossibleSymlinks()
 
 #include <wx/wupdlock.h>
@@ -693,6 +695,19 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             props["page_width"]  = xbuf;
             props["page_height"] = ybuf;
 
+            pi->SetQueryUserCallback(
+                    [&]( wxString aTitle, int aIcon, wxString aMessage, wxString aAction ) -> bool
+                    {
+                        KIDIALOG dlg( nullptr, aMessage, aTitle, wxOK | wxCANCEL | aIcon );
+
+                        if( !aAction.IsEmpty() )
+                            dlg.SetOKLabel( aAction );
+
+                        dlg.DoNotShowCheckbox( aMessage, 0 );
+
+                        return dlg.ShowModal() == wxID_OK;
+                    } );
+
 #if USE_INSTRUMENTATION
             // measure the time to load a BOARD.
             unsigned startTime = GetRunningMicroSecs();
@@ -856,10 +871,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                               wxT( "There is no project variable?" ) );
 
                 wxString result( newLibPath );
-                rel_path = result.Replace( env_path,
-                                           wxT( "$(" ) + project_env + wxT( ")" ) )
-                                                    ? result
-                                                    : wxString( wxEmptyString );
+
+                if( result.Replace( env_path, wxT( "$(" ) + project_env + wxT( ")" ) ) )
+                    rel_path = result;
 
                 FP_LIB_TABLE_ROW* row = new FP_LIB_TABLE_ROW( libNickName, rel_path,
                                                               wxT( "KiCad" ), wxEmptyString );
@@ -912,6 +926,8 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( !converted )
         UpdateFileHistory( GetBoard()->GetFileName() );
 
+    std::vector<ZONE*> toFill;
+
     // Rebuild list of nets (full ratsnest rebuild)
     progressReporter.Report( _( "Updating nets" ) );
     GetBoard()->BuildConnectivity( &progressReporter );
@@ -927,11 +943,37 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     if( draw3DFrame )
         draw3DFrame->NewDisplay();
-
 #if 0 && defined(DEBUG)
     // Output the board object tree to stdout, but please run from command prompt:
     GetBoard()->Show( 0, std::cout );
 #endif
+
+    // Re-fill any zones which had their legacy fills deleted on open
+
+    for( ZONE* zone : GetBoard()->Zones() )
+    {
+        if( zone->GetFlags() & CANDIDATE )
+        {
+            toFill.push_back( zone );
+            zone->ClearTempFlags();
+        }
+    }
+
+    if( toFill.size() )
+    {
+        BOARD_COMMIT commit( this );
+        ZONE_FILLER  filler( GetBoard(), &commit );
+
+        progressReporter.Report( _( "Converting zone fills" ) );
+        filler.SetProgressReporter( &progressReporter );
+
+        if( filler.Fill( toFill ) )
+        {
+            commit.Push( _( "Convert Zone(s)" ) );
+            progressReporter.Report( _( "Updating nets" ) );
+            GetBoard()->BuildConnectivity( &progressReporter );
+        }
+    }
 
     // from EDA_APPL which was first loaded BOARD only:
     {

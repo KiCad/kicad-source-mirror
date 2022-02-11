@@ -75,7 +75,7 @@ std::unique_ptr<BOARD_ITEM> ReadBoardItemFromStream( std::istream& aStream )
     STDISTREAM_LINE_READER reader;
     reader.SetStream( aStream );
 
-    PCB_PARSER                  parser( &reader );
+    PCB_PARSER                  parser( &reader, nullptr, nullptr );
     std::unique_ptr<BOARD_ITEM> board;
 
     try

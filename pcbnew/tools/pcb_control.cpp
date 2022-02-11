@@ -1112,6 +1112,19 @@ int PCB_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
         props["page_width"]  = xbuf;
         props["page_height"] = ybuf;
 
+        pi.SetQueryUserCallback(
+                [&]( wxString aTitle, int aIcon, wxString aMessage, wxString aAction ) -> bool
+                {
+                    KIDIALOG dlg( editFrame, aMessage, aTitle, wxOK | wxCANCEL | aIcon );
+
+                    if( !aAction.IsEmpty() )
+                        dlg.SetOKLabel( aAction );
+
+                    dlg.DoNotShowCheckbox( aMessage, 0 );
+
+                    return dlg.ShowModal() == wxID_OK;
+                } );
+
         WX_PROGRESS_REPORTER progressReporter( editFrame, _( "Loading PCB" ), 1 );
 
         editFrame->GetDesignSettings().GetNetClasses().Clear();

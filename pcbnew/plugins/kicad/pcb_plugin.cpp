@@ -265,7 +265,7 @@ void FP_CACHE::Load()
             try
             {
                 FILE_LINE_READER reader( fn.GetFullPath() );
-                PCB_PARSER       parser( &reader );
+                PCB_PARSER       parser( &reader, nullptr, nullptr );
 
                 FOOTPRINT* footprint = (FOOTPRINT*) parser.Parse();
                 wxString   fpName = fn.GetName();
@@ -337,17 +337,16 @@ void PCB_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIE
 
     wxString sanityResult = aBoard->GroupsSanityCheck();
 
-    if( sanityResult != wxEmptyString )
+    if( sanityResult != wxEmptyString && m_queryUserCallback )
     {
-        KIDIALOG dlg( nullptr, wxString::Format(
-             _( "Please report this bug.  Error validating group structure: %s"
-                "\n\nSave anyway?" ), sanityResult ),
-                      _( "Internal group data structure corrupt" ),
-                      wxOK | wxCANCEL | wxICON_ERROR );
-        dlg.SetOKLabel( _( "Save Anyway" ) );
-
-        if( dlg.ShowModal() == wxID_CANCEL )
+        if( !(*m_queryUserCallback)(
+                    _( "Internal Group Data Error" ), wxICON_ERROR,
+                    wxString::Format( _( "Please report this bug.  Error validating group "
+                                         "structure: %s\n\nSave anyway?" ), sanityResult ),
+                    _( "Save Anyway" ) ) )
+        {
             return;
+        }
     }
 
     init( aProperties );
@@ -376,7 +375,7 @@ BOARD_ITEM* PCB_PLUGIN::Parse( const wxString& aClipboardSourceInput )
     std::string input = TO_UTF8( aClipboardSourceInput );
 
     STRING_LINE_READER reader( input, wxT( "clipboard" ) );
-    PCB_PARSER         parser( &reader );
+    PCB_PARSER         parser( &reader, nullptr, m_queryUserCallback );
 
     try
     {
@@ -2241,7 +2240,8 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
 PCB_PLUGIN::PCB_PLUGIN( int aControlFlags ) :
     m_cache( nullptr ),
     m_ctl( aControlFlags ),
-    m_mapping( new NETINFO_MAPPING() )
+    m_mapping( new NETINFO_MAPPING() ),
+    m_queryUserCallback( nullptr )
 {
     init( nullptr );
     m_out = &m_sf;
@@ -2255,8 +2255,9 @@ PCB_PLUGIN::~PCB_PLUGIN()
 }
 
 
-BOARD* PCB_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties,
-                         PROJECT* aProject, PROGRESS_REPORTER* aProgressReporter )
+BOARD* PCB_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
+                         const PROPERTIES* aProperties, PROJECT* aProject,
+                         PROGRESS_REPORTER* aProgressReporter )
 {
     FILE_LINE_READER reader( aFileName );
 
@@ -2290,7 +2291,7 @@ BOARD* PCB_PLUGIN::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const PROPE
 {
     init( aProperties );
 
-    PCB_PARSER parser( &aReader, aAppendToMe, aProgressReporter, aLineCount );
+    PCB_PARSER parser( &aReader, aAppendToMe, m_queryUserCallback, aProgressReporter, aLineCount );
     BOARD*     board;
 
     try

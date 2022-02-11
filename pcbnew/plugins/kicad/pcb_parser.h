@@ -72,14 +72,16 @@ class PROGRESS_REPORTER;
 class PCB_PARSER : public PCB_LEXER
 {
 public:
-    PCB_PARSER( LINE_READER* aReader, BOARD* aBoard = nullptr,
+    PCB_PARSER( LINE_READER* aReader, BOARD* aBoard,
+                std::function<bool( wxString, int, wxString, wxString )>* aQueryUserCallback,
                 PROGRESS_REPORTER* aProgressReporter = nullptr, unsigned aLineCount = 0 ) :
         PCB_LEXER( aReader ),
         m_board( aBoard ),
         m_resetKIIDs( aBoard != nullptr ),
         m_progressReporter( aProgressReporter ),
         m_lastProgressTime( std::chrono::steady_clock::now() ),
-        m_lineCount( aLineCount )
+        m_lineCount( aLineCount ),
+        m_queryUserCallback( aQueryUserCallback )
     {
         init();
     }
@@ -376,6 +378,8 @@ private:
     };
 
     std::vector<GROUP_INFO> m_groupInfos;
+
+    std::function<bool( wxString aTitle, int aIcon, wxString aMsg, wxString aAction )>* m_queryUserCallback;
 };
 
 

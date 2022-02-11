@@ -52,7 +52,7 @@ bool parse( std::istream& aStream, bool aVerbose )
     STDISTREAM_LINE_READER reader;
     reader.SetStream( aStream );
 
-    PCB_PARSER  parser( &reader );
+    PCB_PARSER  parser( &reader, nullptr, nullptr );
     BOARD_ITEM* board = nullptr;
 
     PARSE_DURATION duration{};

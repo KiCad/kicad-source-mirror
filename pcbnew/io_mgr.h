@@ -280,6 +280,14 @@ public:
     virtual const wxString GetFileExtension() const = 0;
 
     /**
+     * Registers a KIDIALOG callback for collecting info from the user.
+     */
+    virtual void SetQueryUserCallback( std::function<bool( wxString aTitle, int aIcon,
+                                                           wxString aMessage,
+                                                           wxString aAction )> aCallback )
+    { }
+
+    /**
      * Load information from some input file format that this PLUGIN implementation
      * knows about into either a new #BOARD or an existing one.
      *

@@ -42,6 +42,7 @@
 
 #include <plugins/kicad/pcb_plugin.h>
 #include <kicad_clipboard.h>
+#include "confirm.h"
 
 CLIPBOARD_IO::CLIPBOARD_IO():
         PCB_PLUGIN(CTL_FOR_CLIPBOARD ),
@@ -415,8 +416,21 @@ BOARD* CLIPBOARD_IO::Load( const wxString& aFileName, BOARD* aAppendToMe,
         result = data.GetText().mb_str();
     }
 
+    std::function<bool( wxString, int, wxString, wxString )> queryUser =
+            [&]( wxString aTitle, int aIcon, wxString aMessage, wxString aAction ) -> bool
+            {
+                KIDIALOG dlg( nullptr, aMessage, aTitle, wxOK | wxCANCEL | aIcon );
+
+                if( !aAction.IsEmpty() )
+                    dlg.SetOKLabel( aAction );
+
+                dlg.DoNotShowCheckbox( aMessage, 0 );
+
+                return dlg.ShowModal() == wxID_OK;
+            };
+
     STRING_LINE_READER reader( result, wxT( "clipboard" ) );
-    PCB_PARSER         parser( &reader, aAppendToMe );
+    PCB_PARSER         parser( &reader, aAppendToMe, &queryUser );
 
     init( aProperties );
 
