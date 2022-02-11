@@ -36,6 +36,7 @@
 #include <trace_helpers.h>
 #include <settings/common_settings.h>
 #include <math/util.h>      // for KiROUND
+#include <geometry/geometry_utils.h>
 #include <widgets/ui_common.h>
 #include <class_draw_panel_gal.h>
 #include <kiplatform/ui.h>
@@ -302,7 +303,7 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
     }
 
     if( m_updateCursor )        // do not update the cursor position if it was explicitly set
-        m_cursorPos = m_view->ToWorld( mousePos );
+        m_cursorPos = GetClampedCoords( m_view->ToWorld( mousePos ) );
     else
         m_updateCursor = true;
 
@@ -648,7 +649,7 @@ VECTOR2D WX_VIEW_CONTROLS::GetMousePosition( bool aWorldCoordinates ) const
     wxPoint msp = getMouseScreenPosition();
     VECTOR2D screenPos( msp.x, msp.y );
 
-    return aWorldCoordinates ? m_view->ToWorld( screenPos ) : screenPos;
+    return aWorldCoordinates ? GetClampedCoords( m_view->ToWorld( screenPos ) ) : screenPos;
 }
 
 
@@ -675,7 +676,7 @@ VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition( bool aEnableSnapping ) const
     }
     else
     {
-        return GetRawCursorPosition( aEnableSnapping );
+        return GetClampedCoords( GetRawCursorPosition( aEnableSnapping ) );
     }
 }
 
@@ -685,10 +686,12 @@ void WX_VIEW_CONTROLS::SetCursorPosition( const VECTOR2D& aPosition, bool aWarpV
 {
     m_updateCursor = false;
 
+    VECTOR2D clampedPosition = GetClampedCoords( aPosition );
+
     if( aTriggeredByArrows )
     {
         m_settings.m_lastKeyboardCursorPositionValid = true;
-        m_settings.m_lastKeyboardCursorPosition = aPosition;
+        m_settings.m_lastKeyboardCursorPosition = clampedPosition;
         m_settings.m_lastKeyboardCursorCommand = aArrowCommand;
         m_cursorWarped = false;
     }
@@ -700,8 +703,8 @@ void WX_VIEW_CONTROLS::SetCursorPosition( const VECTOR2D& aPosition, bool aWarpV
         m_cursorWarped = true;
     }
 
-    WarpCursor( aPosition, true, aWarpView );
-    m_cursorPos = aPosition;
+    WarpCursor( clampedPosition, true, aWarpView );
+    m_cursorPos = clampedPosition;
 }
 
 
@@ -710,14 +713,16 @@ void WX_VIEW_CONTROLS::SetCrossHairCursorPosition( const VECTOR2D& aPosition,
 {
     m_updateCursor = false;
 
+    VECTOR2D clampedPosition = GetClampedCoords( aPosition );
+
     const VECTOR2I& screenSize = m_view->GetGAL()->GetScreenPixelSize();
-    BOX2I screen( VECTOR2I( 0, 0 ), screenSize );
-    VECTOR2D screenPos = m_view->ToScreen( aPosition );
+    BOX2I           screen( VECTOR2I( 0, 0 ), screenSize );
+    VECTOR2D        screenPos = m_view->ToScreen( clampedPosition );
 
     if( aWarpView && !screen.Contains( screenPos ) )
-        m_view->SetCenter( aPosition );
+        m_view->SetCenter( clampedPosition );
 
-    m_cursorPos = aPosition;
+    m_cursorPos = clampedPosition;
 }
 
 
@@ -727,14 +732,15 @@ void WX_VIEW_CONTROLS::WarpCursor( const VECTOR2D& aPosition, bool aWorldCoordin
     if( aWorldCoordinates )
     {
         const VECTOR2I& screenSize = m_view->GetGAL()->GetScreenPixelSize();
-        BOX2I screen( VECTOR2I( 0, 0 ), screenSize );
-        VECTOR2D screenPos = m_view->ToScreen( aPosition );
+        BOX2I           screen( VECTOR2I( 0, 0 ), screenSize );
+        VECTOR2D        clampedPosition = GetClampedCoords( aPosition );
+        VECTOR2D        screenPos = m_view->ToScreen( clampedPosition );
 
         if( !screen.Contains( screenPos ) )
         {
             if( aWarpView )
             {
-                m_view->SetCenter( aPosition );
+                m_view->SetCenter( clampedPosition );
                 m_parentPanel->WarpPointer( screenSize.x / 2, screenSize.y / 2 );
             }
         }
@@ -889,7 +895,7 @@ void WX_VIEW_CONTROLS::refreshMouse()
     moveEvent.SetShiftDown( wxGetKeyState( WXK_SHIFT ) );
     moveEvent.SetAltDown( wxGetKeyState( WXK_ALT ) );
 
-    m_cursorPos = m_view->ToWorld( VECTOR2D( msp.x, msp.y ) );
+    m_cursorPos = GetClampedCoords( m_view->ToWorld( VECTOR2D( msp.x, msp.y ) ) );
     wxPostEvent( m_parentPanel, moveEvent );
 }
 
@@ -943,6 +949,8 @@ void WX_VIEW_CONTROLS::UpdateScrollbars()
 
 void WX_VIEW_CONTROLS::ForceCursorPosition( bool aEnabled, const VECTOR2D& aPosition )
 {
+    VECTOR2D clampedPosition = GetClampedCoords( aPosition );
+
     m_settings.m_forceCursorPosition = aEnabled;
-    m_settings.m_forcedPosition = aPosition;
+    m_settings.m_forcedPosition = clampedPosition;
 }
