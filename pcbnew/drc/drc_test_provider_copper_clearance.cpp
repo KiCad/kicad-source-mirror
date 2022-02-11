@@ -297,7 +297,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
             }
         }
 
-        std::shared_ptr<SHAPE> otherShape = DRC_ENGINE::GetShape( other, layer );
+        std::shared_ptr<SHAPE> otherShape = other->GetEffectiveShape( layer );
 
         if( trackShape->Collide( otherShape.get(), clearance - m_drcEpsilon, &actual, &pos ) )
         {
@@ -630,7 +630,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
     if( !testClearance && !testShorting && !testHoles )
         return false;
 
-    std::shared_ptr<SHAPE> otherShape = DRC_ENGINE::GetShape( other, aLayer );
+    std::shared_ptr<SHAPE> otherShape = other->GetEffectiveShape( aLayer );
     DRC_CONSTRAINT         constraint;
     int                    clearance;
     int                    actual;
@@ -791,7 +791,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 
             for( PCB_LAYER_ID layer : pad->GetLayerSet().Seq() )
             {
-                std::shared_ptr<SHAPE> padShape = DRC_ENGINE::GetShape( pad, layer );
+                std::shared_ptr<SHAPE> padShape = pad->GetEffectiveShape( layer );
 
                 m_copperTree.QueryColliding( pad, layer, layer,
                         // Filter:

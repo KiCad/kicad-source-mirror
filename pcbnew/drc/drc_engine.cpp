@@ -1535,30 +1535,6 @@ bool DRC_ENGINE::IsNetADiffPair( BOARD* aBoard, NETINFO_ITEM* aNet, int& aNetP, 
 }
 
 
-std::shared_ptr<SHAPE> DRC_ENGINE::GetShape( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
-{
-    if( aItem->Type() == PCB_PAD_T && !static_cast<PAD*>( aItem )->FlashLayer( aLayer ) )
-    {
-        PAD* aPad = static_cast<PAD*>( aItem );
-
-        if( aPad->GetAttribute() == PAD_ATTRIB::PTH )
-        {
-            BOARD_DESIGN_SETTINGS& bds = aPad->GetBoard()->GetDesignSettings();
-
-            // Note: drill size represents finish size, which means the actual holes size is the
-            // plating thickness larger.
-            auto hole = static_cast<SHAPE_SEGMENT*>( aPad->GetEffectiveHoleShape()->Clone() );
-            hole->SetWidth( hole->GetWidth() + bds.GetHolePlatingThickness() );
-            return std::make_shared<SHAPE_SEGMENT>( *hole );
-        }
-
-        return std::make_shared<SHAPE_NULL>();
-    }
-
-    return aItem->GetEffectiveShape( aLayer );
-}
-
-
 bool DRC_ENGINE::IsNetTie( BOARD_ITEM* aItem )
 {
     if( aItem->GetParent() && aItem->GetParent()->Type() == PCB_FOOTPRINT_T )

@@ -191,8 +191,6 @@ public:
 
     static bool IsNetTie( BOARD_ITEM* aItem );
 
-    static std::shared_ptr<SHAPE> GetShape( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer );
-
 private:
     void addRule( std::shared_ptr<DRC_RULE>& rule )
     {

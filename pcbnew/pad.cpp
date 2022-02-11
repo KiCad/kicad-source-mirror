@@ -33,6 +33,7 @@
 #include <geometry/shape_simple.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_compound.h>
+#include <geometry/shape_null.h>
 #include <string_utils.h>
 #include <i18n_utility.h>
 #include <view/view.h>
@@ -310,6 +311,22 @@ const std::shared_ptr<SHAPE_POLY_SET>& PAD::GetEffectivePolygon() const
 
 std::shared_ptr<SHAPE> PAD::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
+    if( !FlashLayer( aLayer ) )
+    {
+        if( GetAttribute() == PAD_ATTRIB::PTH )
+        {
+            BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
+
+            // Note: drill size represents finish size, which means the actual holes size is the
+            // plating thickness larger.
+            auto hole = static_cast<SHAPE_SEGMENT*>( GetEffectiveHoleShape()->Clone() );
+            hole->SetWidth( hole->GetWidth() + bds.GetHolePlatingThickness() );
+            return std::make_shared<SHAPE_SEGMENT>( *hole );
+        }
+
+        return std::make_shared<SHAPE_NULL>();
+    }
+
     if( m_shapesDirty )
         BuildEffectiveShapes( aLayer );
 

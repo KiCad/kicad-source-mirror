@@ -583,7 +583,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* it
     int            actual;
     VECTOR2I       pos;
 
-    std::shared_ptr<SHAPE> otherShape = DRC_ENGINE::GetShape( other, layer );
+    std::shared_ptr<SHAPE> otherShape = other->GetEffectiveShape( layer );
 
     if( testClearance )
     {

@@ -2477,8 +2477,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
                 if( clearance >= 0 )
                 {
-                    std::shared_ptr<SHAPE> viaShape = DRC_ENGINE::GetShape( aVia, layer );
-                    std::shared_ptr<SHAPE> otherShape = DRC_ENGINE::GetShape( aOther, layer );
+                    std::shared_ptr<SHAPE> viaShape = aVia->GetEffectiveShape( layer );
+                    std::shared_ptr<SHAPE> otherShape = aOther->GetEffectiveShape( layer );
 
                     if( viaShape->Collide( otherShape.get(), clearance - m_drcEpsilon ) )
                         return true;
@@ -2510,7 +2510,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
                 if( clearance >= 0 )
                 {
-                    std::shared_ptr<SHAPE> viaShape = DRC_ENGINE::GetShape( aVia, UNDEFINED_LAYER );
+                    std::shared_ptr<SHAPE> viaShape = aVia->GetEffectiveShape( UNDEFINED_LAYER );
 
                     if( viaShape->Collide( holeShape.get(), clearance - m_drcEpsilon ) )
                         return true;
