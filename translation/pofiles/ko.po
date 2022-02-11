@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-02-01 13:58+0000\n"
+"PO-Revision-Date: 2022-02-14 17:18+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v6/ko/>\n"
 "Language: ko\n"
@@ -33226,7 +33226,7 @@ msgstr "두께 (마일)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:290
 msgid "Loss Tangent"
-msgstr "손실 탄젠트"
+msgstr "손실 접선"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:313
 msgid "Dielectric"
