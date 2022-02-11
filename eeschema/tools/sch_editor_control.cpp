@@ -559,6 +559,10 @@ int SCH_EDITOR_CONTROL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
 
     if( item && item->Matches( data, sheet ) )
     {
+        SCH_ITEM* sch_item = static_cast<SCH_ITEM*>( item );
+
+        m_frame->SaveCopyInUndoList( sheet->LastScreen(), sch_item, UNDO_REDO::CHANGED, false );
+
         if( item->Replace( data, sheet ) )
         {
             m_frame->UpdateItem( item, false, true );
@@ -585,6 +589,9 @@ int SCH_EDITOR_CONTROL::ReplaceAll( const TOOL_EVENT& aEvent )
     auto doReplace =
             [&]( SCH_ITEM* aItem, SCH_SHEET_PATH* aSheet, wxFindReplaceData& aData )
             {
+                m_frame->SaveCopyInUndoList( aSheet->LastScreen(), aItem, UNDO_REDO::CHANGED,
+                                             modified );
+
                 if( aItem->Replace( aData, aSheet ) )
                 {
                     m_frame->UpdateItem( aItem, false, true );
