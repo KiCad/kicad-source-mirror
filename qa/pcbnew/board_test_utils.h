@@ -31,6 +31,9 @@
 
 class BOARD;
 class BOARD_ITEM;
+class FOOTPRINT;
+class FP_SHAPE;
+class PAD;
 class SETTINGS_MANAGER;
 
 
@@ -62,6 +65,16 @@ void LoadBoard( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
                 std::unique_ptr<BOARD>& aBoard );
 
 void FillZones( BOARD* m_board );
+
+
+/**
+ * Helper method to check if two footprints are semantically the same.
+ */
+void CheckFootprint( const FOOTPRINT* expected, const FOOTPRINT* fp );
+
+void CheckFpPad( const PAD* expected, const PAD* pad );
+
+void CheckFpShape( const FP_SHAPE* expected, const FP_SHAPE* shape );
 
 
 } // namespace KI_TEST

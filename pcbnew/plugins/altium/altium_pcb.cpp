@@ -2385,6 +2385,8 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
 {
     PAD* pad = new PAD( aFootprint );
 
+    pad->SetKeepTopBottom( false ); // TODO: correct? This seems to be KiCad default on import
+
     pad->SetNumber( aElem.name );
     pad->SetNetCode( GetNetCode( aElem.net ) );
     pad->SetLocked( aElem.is_locked );

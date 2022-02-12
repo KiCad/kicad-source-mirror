@@ -50,108 +50,8 @@ struct ALTIUM_PCBLIB_IMPORT_FIXTURE
 
     ALTIUM_DESIGNER_PLUGIN altiumPlugin;
     PCB_PLUGIN             kicadPlugin;
-
-    void CompareFootprints( const FOOTPRINT* fp1, const FOOTPRINT* fp2 )
-    {
-        BOOST_CHECK_EQUAL( fp1->GetPosition(), fp2->GetPosition() );
-        BOOST_CHECK_EQUAL( fp1->GetOrientation(), fp2->GetOrientation() );
-
-        BOOST_CHECK_EQUAL( fp1->GetReference(), fp2->GetReference() );
-        BOOST_CHECK_EQUAL( fp1->GetValue(), fp2->GetValue() );
-        BOOST_CHECK_EQUAL( fp1->GetDescription(), fp2->GetDescription() );
-        BOOST_CHECK_EQUAL( fp1->GetKeywords(), fp2->GetKeywords() );
-        BOOST_CHECK_EQUAL( fp1->GetAttributes(), fp2->GetAttributes() );
-        BOOST_CHECK_EQUAL( fp1->GetFlag(), fp2->GetFlag() );
-        //BOOST_CHECK_EQUAL( fp1->GetProperties(), fp2->GetProperties() );
-        BOOST_CHECK_EQUAL( fp1->GetTypeName(), fp2->GetTypeName() );
-
-        BOOST_CHECK_EQUAL( fp1->Pads().size(), fp2->Pads().size() );
-        BOOST_CHECK_EQUAL( fp1->GraphicalItems().size(), fp2->GraphicalItems().size() );
-        BOOST_CHECK_EQUAL( fp1->Zones().size(), fp2->Zones().size() );
-        BOOST_CHECK_EQUAL( fp1->Groups().size(), fp2->Groups().size() );
-        BOOST_CHECK_EQUAL( fp1->Models().size(), fp2->Models().size() );
-
-        std::set<PAD*, FOOTPRINT::cmp_pads> fp1Pads( fp1->Pads().begin(), fp1->Pads().end() );
-        std::set<PAD*, FOOTPRINT::cmp_pads> fp2Pads( fp2->Pads().begin(), fp2->Pads().end() );
-        for( auto it1 = fp1Pads.begin(), it2 = fp2Pads.begin();
-             it1 != fp1Pads.end() && it2 != fp2Pads.end(); it1++, it2++ )
-        {
-            BOOST_CHECK( PAD::Compare( *it1, *it2 ) == 0 );
-        }
-
-        std::set<BOARD_ITEM*, FOOTPRINT::cmp_drawings> fp1GraphicalItems(
-                fp1->GraphicalItems().begin(), fp1->GraphicalItems().end() );
-        std::set<BOARD_ITEM*, FOOTPRINT::cmp_drawings> fp2GraphicalItems(
-                fp2->GraphicalItems().begin(), fp2->GraphicalItems().end() );
-        for( auto it1 = fp1GraphicalItems.begin(), it2 = fp2GraphicalItems.begin();
-             it1 != fp1GraphicalItems.end() && it2 != fp2GraphicalItems.end(); it1++, it2++ )
-        {
-            BOOST_CHECK_EQUAL( ( *it1 )->GetLayer(), ( *it2 )->GetLayer() );
-            BOOST_CHECK_EQUAL( ( *it1 )->GetLayerSet(), ( *it2 )->GetLayerSet() );
-            BOOST_CHECK_EQUAL( ( *it2 )->GetCenter(), ( *it2 )->GetCenter() );
-
-            BOOST_CHECK_EQUAL( ( *it1 )->Type(), ( *it2 )->Type() );
-            switch( ( *it1 )->Type() )
-            {
-            case PCB_FP_TEXT_T:
-            {
-                const FP_TEXT* text1 = static_cast<const FP_TEXT*>( *it1 );
-                const FP_TEXT* text2 = static_cast<const FP_TEXT*>( *it2 );
-
-                // TODO: text is not sorted the same way!
-                /*CHECK_ENUM_CLASS_EQUAL( text1->GetType(), text2->GetType() );
-
-                BOOST_CHECK_EQUAL( text1->GetText(), text2->GetText() );
-                BOOST_CHECK_EQUAL( text1->GetPosition(), text2->GetPosition() );
-                BOOST_CHECK_EQUAL( text1->GetTextAngle(), text2->GetTextAngle() );
-                BOOST_CHECK_EQUAL( text1->GetTextThickness(), text2->GetTextThickness() );
-
-                BOOST_CHECK( text1->Compare( text2 ) == 0 );*/
-            }
-            break;
-            case PCB_FP_SHAPE_T:
-            {
-                const FP_SHAPE* shape1 = static_cast<const FP_SHAPE*>( *it1 );
-                const FP_SHAPE* shape2 = static_cast<const FP_SHAPE*>( *it2 );
-
-                CHECK_ENUM_CLASS_EQUAL( shape1->GetShape(), shape2->GetShape() );
-
-                BOOST_CHECK_EQUAL( shape1->GetStroke().GetWidth(), shape2->GetStroke().GetWidth() );
-                CHECK_ENUM_CLASS_EQUAL( shape1->GetStroke().GetPlotStyle(),
-                                        shape2->GetStroke().GetPlotStyle() );
-
-                BOOST_CHECK_EQUAL( shape1->GetPosition(), shape2->GetPosition() );
-                BOOST_CHECK_EQUAL( shape1->GetStart(), shape2->GetStart() );
-                BOOST_CHECK_EQUAL( shape1->GetEnd(), shape2->GetEnd() );
-
-                CHECK_ENUM_CLASS_EQUAL( shape1->GetFillMode(), shape2->GetFillMode() );
-            }
-            break;
-            /*case PCB_FP_DIM_ALIGNED_T: break;
-            case PCB_FP_DIM_LEADER_T: break;
-            case PCB_FP_DIM_CENTER_T: break;
-            case PCB_FP_DIM_RADIAL_T: break;
-            case PCB_FP_DIM_ORTHOGONAL_T: break;*/
-            default: BOOST_ERROR( "KICAD_T not known" ); break;
-            }
-        }
-
-        std::set<FP_ZONE*, FOOTPRINT::cmp_zones> fp1Zones( fp1->Zones().begin(),
-                                                           fp1->Zones().end() );
-        std::set<FP_ZONE*, FOOTPRINT::cmp_zones> fp2Zones( fp2->Zones().begin(),
-                                                           fp2->Zones().end() );
-        for( auto it1 = fp1Zones.begin(), it2 = fp2Zones.begin();
-             it1 != fp1Zones.end() && it2 != fp2Zones.end(); it1++, it2++ )
-        {
-            // TODO: BOOST_CHECK( (*it1)->IsSame( **it2 ) );
-        }
-
-        // TODO: Groups
-    }
 };
 
-
-// TODO: see https://gitlab.com/kicad/code/kicad/-/blob/master/qa/pcbnew/test_save_load.cpp
 
 /**
  * Declares the struct as the Boost test fixture.
@@ -164,8 +64,10 @@ BOOST_FIXTURE_TEST_SUITE( AltiumPcbLibImport, ALTIUM_PCBLIB_IMPORT_FIXTURE )
  */
 BOOST_AUTO_TEST_CASE( AltiumPcbLibImport )
 {
-    std::vector<std::pair<wxString, wxString>> tests = { { "TracksTest.PcbLib",
-                                                           "TracksTest.pretty" } };
+    std::vector<std::pair<wxString, wxString>> tests = {
+        { "TracksTest.PcbLib", "TracksTest.pretty" },
+        { "Espressif ESP32-WROOM-32.PcbLib", "Espressif ESP32-WROOM-32.pretty" }
+    };
 
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/altium/pcblib/";
 
@@ -198,7 +100,7 @@ BOOST_AUTO_TEST_CASE( AltiumPcbLibImport )
                                                                 false, nullptr );
                 BOOST_CHECK( kicadFp );
 
-                CompareFootprints( altiumFp, kicadFp );
+                KI_TEST::CheckFootprint( kicadFp, altiumFp );
             }
         }
     }
