@@ -334,7 +334,6 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground ) const
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
     KIFONT::FONT*    font = GetDrawFont();
     int              penWidth = GetPenWidth();
-    FILL_T           fill = m_fill;
     COLOR4D          color = settings->GetLayerColor( LAYER_NOTES );
 
     if( penWidth > 0 )

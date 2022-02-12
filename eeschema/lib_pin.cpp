@@ -730,11 +730,11 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const VECTOR2I& aPinPos, int aPin
     }
 
     auto plotText =
-            [&]( int x, int y, const COLOR4D& color, const wxString& text, const EDA_ANGLE& angle,
+            [&]( int px, int py, const COLOR4D& color, const wxString& text, const EDA_ANGLE& angle,
                  int size, GR_TEXT_H_ALIGN_T hJustify, GR_TEXT_V_ALIGN_T vJustify, int penWidth )
 
             {
-                aPlotter->Text( VECTOR2I( x, y ), color, text, angle, VECTOR2I( size, size ),
+                aPlotter->Text( VECTOR2I( px, py ), color, text, angle, VECTOR2I( size, size ),
                                 hJustify, vJustify, penWidth, false, false, false, GetDrawFont() );
             };
 

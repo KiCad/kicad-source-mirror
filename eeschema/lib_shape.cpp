@@ -148,7 +148,7 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
 
     int     penWidth;
     COLOR4D color;
-    FILL_T  fill;
+    FILL_T  fill = m_fill;
 
     if( aBackground )
     {
