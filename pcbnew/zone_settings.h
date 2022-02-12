@@ -99,6 +99,7 @@ public:
 
     /// Option to show the zone area (outlines only, short hatches or full hatches
     ZONE_BORDER_DISPLAY_STYLE m_ZoneBorderDisplayStyle;
+    int             m_BorderHatchPitch;     // for hatched outlines: dist between 2 hatches
 
     long            m_ThermalReliefGap;        // thickness of the gap in thermal reliefs
     long            m_ThermalReliefSpokeWidth; // thickness of the copper bridge in thermal reliefs

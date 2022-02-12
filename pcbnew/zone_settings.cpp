@@ -59,6 +59,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE; // Option to show the zone
                                                                          // outlines only, short
                                                                          // hatches or full hatches
+    m_BorderHatchPitch = Mils2iu( ZONE_BORDER_HATCH_DIST_MIL );
 
     m_Layers.reset().set( F_Cu );
     m_Name = wxEmptyString;
@@ -104,6 +105,7 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE& aSource )
     m_NetcodeSelection            = aSource.GetNetCode();
     m_Name                        = aSource.GetZoneName();
     m_ZoneBorderDisplayStyle      = aSource.GetHatchStyle();
+    m_BorderHatchPitch            = aSource.GetBorderHatchPitch();
     m_ThermalReliefGap            = aSource.GetThermalReliefGap();
     m_ThermalReliefSpokeWidth     = aSource.GetThermalReliefSpokeWidth();
     m_padConnection               = aSource.GetPadConnection();
@@ -166,8 +168,8 @@ void ZONE_SETTINGS::ExportSetting( ZONE& aTarget, bool aFullExport ) const
 
     // call SetBorderDisplayStyle last, because hatch lines will be rebuilt,
     // using new parameters values
-    aTarget.SetBorderDisplayStyle( m_ZoneBorderDisplayStyle, aTarget.GetDefaultHatchPitch(),
-                                   true );
+    aTarget.SetBorderDisplayStyle( m_ZoneBorderDisplayStyle,
+                                   m_BorderHatchPitch, true );
 }
 
 

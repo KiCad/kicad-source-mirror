@@ -787,21 +787,21 @@ public:
     /**
      * Set all hatch parameters for the zone.
      *
-     * @param  aHatchStyle   is the style of the hatch, specified as one of HATCH_STYLE possible
-     *                       values.
-     * @param  aHatchPitch   is the hatch pitch in iu.
-     * @param  aRebuildHatch is a flag to indicate whether to re-hatch after having set the
+     * @param  aBorderHatchStyle   is the style of the hatch, specified as one of HATCH_STYLE
+                                   possible values.
+     * @param  aBorderHatchPitch   is the hatch pitch in iu.
+     * @param  aRebuildBorderHatch is a flag to indicate whether to re-hatch after having set the
      *                       previous parameters.
      */
-    void SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE aHatchStyle, int aHatchPitch,
-                                bool aRebuildHatch );
+    void SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE aBorderHatchStyle, int aBorderHatchPitch,
+                                bool aRebuilBorderdHatch );
 
     /**
      * Set the hatch pitch parameter for the zone.
      *
      * @param aPitch is the hatch pitch in iu.
      */
-    void SetHatchPitch( int aPitch );
+    void SetBorderHatchPitch( int aPitch );
 
     /**
      * Clear the zone's hatch.

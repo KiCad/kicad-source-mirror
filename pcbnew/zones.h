@@ -34,6 +34,9 @@
 #define ZONE_THICKNESS_MIN_VALUE_MIL 1      // minimum acceptable value for ZONE_SETTINGS::m_ZoneMinThickness
 #define ZONE_CLEARANCE_MIL 20               // default value for ZONE_SETTINGS::m_ZoneClearance
 #define ZONE_CLEARANCE_MAX_VALUE_MIL 500    // maximum acceptable value for ZONE_SETTINGS::m_ZoneClearance
+#define ZONE_BORDER_HATCH_DIST_MIL 20       // default distance between hatches to draw hatched outlines
+#define ZONE_BORDER_HATCH_MINDIST_MM 0.1    // min distance between hatches to draw hatched outlines
+#define ZONE_BORDER_HATCH_MAXDIST_MM 2.0    // min distance between hatches to draw hatched outlines
 
 
 #define ZONE_EXPORT_VALUES  1004        // Copper zone dialog reports wxID_OK, wxID_CANCEL or

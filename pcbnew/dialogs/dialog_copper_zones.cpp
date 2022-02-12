@@ -68,6 +68,7 @@ private:
     int              m_cornerSmoothingType;
     int              m_maxNetCode;
     int              m_currentlySelectedNetcode;
+    UNIT_BINDER      m_outlineHatchPitch;
 
     UNIT_BINDER      m_cornerRadius;
     UNIT_BINDER      m_clearance;
@@ -165,6 +166,8 @@ static bool sortNetsByNames( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
 DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings ) :
         DIALOG_COPPER_ZONE_BASE( aParent ),
         m_cornerSmoothingType( ZONE_SETTINGS::SMOOTHING_UNDEFINED ),
+        m_outlineHatchPitch( aParent, m_stBorderHatchPitchText,
+                             m_outlineHatchPitchCtrl, m_outlineHatchUnits ),
         m_cornerRadius( aParent, m_cornerRadiusLabel, m_cornerRadiusCtrl, m_cornerRadiusUnits ),
         m_clearance( aParent, m_clearanceLabel, m_clearanceCtrl, m_clearanceUnits ),
         m_minWidth( aParent, m_minWidthLabel, m_minWidthCtrl, m_minWidthUnits ),
@@ -224,6 +227,8 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE: m_OutlineDisplayCtrl->SetSelection( 1 ); break;
     case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL: m_OutlineDisplayCtrl->SetSelection( 2 ); break;
     }
+
+    m_outlineHatchPitch.SetValue( m_settings.m_BorderHatchPitch );
 
     m_clearance.SetValue( m_settings.m_ZoneClearance );
     m_minWidth.SetValue( m_settings.m_ZoneMinThickness );
@@ -478,6 +483,12 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
     case 1: m_settings.m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE; break;
     case 2: m_settings.m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL; break;
     }
+
+    if( !m_outlineHatchPitch.Validate( Millimeter2iu( ZONE_BORDER_HATCH_MINDIST_MM ),
+                                       Millimeter2iu( ZONE_BORDER_HATCH_MAXDIST_MM ) ) )
+        return false;
+
+    m_settings.m_BorderHatchPitch = m_outlineHatchPitch.GetValue();
 
     PCBNEW_SETTINGS* cfg = m_Parent->GetPcbNewSettings();
 

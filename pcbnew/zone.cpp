@@ -797,18 +797,23 @@ int ZONE::GetBorderHatchPitch() const
 }
 
 
-void ZONE::SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE aHatchStyle, int aHatchPitch,
-                                  bool aRebuildHatch )
+void ZONE::SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE aBorderHatchStyle,
+                                  int aBorderHatchPitch,
+                                  bool aRebuildBorderHatch )
 {
-    SetHatchPitch( aHatchPitch );
-    m_borderStyle = aHatchStyle;
+    aBorderHatchPitch = std::max( aBorderHatchPitch,
+                                  Millimeter2iu( ZONE_BORDER_HATCH_MINDIST_MM ) );
+    aBorderHatchPitch = std::min( aBorderHatchPitch,
+                                  Millimeter2iu( ZONE_BORDER_HATCH_MAXDIST_MM ) );
+    SetBorderHatchPitch( aBorderHatchPitch );
+    m_borderStyle = aBorderHatchStyle;
 
-    if( aRebuildHatch )
+    if( aRebuildBorderHatch )
         HatchBorder();
 }
 
 
-void ZONE::SetHatchPitch( int aPitch )
+void ZONE::SetBorderHatchPitch( int aPitch )
 {
     m_borderHatchPitch = aPitch;
 }
@@ -991,7 +996,7 @@ void ZONE::HatchBorder()
 
 int ZONE::GetDefaultHatchPitch()
 {
-    return Mils2iu( 20 );
+    return Mils2iu( ZONE_BORDER_HATCH_DIST_MIL );
 }
 
 

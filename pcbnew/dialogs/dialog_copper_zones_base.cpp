@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -139,6 +139,17 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_OutlineDisplayCtrl = new wxChoice( m_ExportableSetupSizer->GetStaticBox(), ID_M_OUTLINEAPPEARANCECTRL, wxDefaultPosition, wxDefaultSize, m_OutlineDisplayCtrlNChoices, m_OutlineDisplayCtrlChoices, 0 );
 	m_OutlineDisplayCtrl->SetSelection( 0 );
 	gbSizer1->Add( m_OutlineDisplayCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_stBorderHatchPitchText = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Outline hatch dist:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stBorderHatchPitchText->Wrap( -1 );
+	gbSizer1->Add( m_stBorderHatchPitchText, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_outlineHatchPitchCtrl = new wxTextCtrl( m_ExportableSetupSizer->GetStaticBox(), ID_M_CORNERSMOOTHINGCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_outlineHatchPitchCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+
+	m_outlineHatchUnits = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_outlineHatchUnits->Wrap( -1 );
+	gbSizer1->Add( m_outlineHatchUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticline1 = new wxStaticLine( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	gbSizer1->Add( m_staticline1, wxGBPosition( 3, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
