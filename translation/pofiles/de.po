@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-02-05 15:45+0000\n"
+"PO-Revision-Date: 2022-02-12 23:30+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -118,7 +118,8 @@ msgstr "Erstelle BVH für Löcher und Vias"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:410
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
 msgstr ""
-"Ihre OpenGL-Version wird nicht unterstützt. Minimal erforderlich ist 1.5."
+"Ihre OpenGL-Version wird nicht unterstützt. Es ist mindestens 1.5 "
+"erforderlich."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:538
 #, c-format
@@ -3511,11 +3512,11 @@ msgstr "Name der Netzklasse wird bereits benutzt."
 
 #: common/dialogs/panel_setup_netclasses.cpp:487
 msgid "Minimum copper clearance"
-msgstr "Minimum Kupferabstand"
+msgstr "Mindestkupferabstand"
 
 #: common/dialogs/panel_setup_netclasses.cpp:488
 msgid "Minimum track width"
-msgstr "Minimum Leiterbahnbreite"
+msgstr "Mindestleiterbahnbreite"
 
 #: common/dialogs/panel_setup_netclasses.cpp:489
 msgid "Via pad diameter"
@@ -5993,7 +5994,7 @@ msgstr "Führt Klick der linken Maustaste aus"
 
 #: common/tool/actions.cpp:400
 msgid "Double-click"
-msgstr "Doppelklicken"
+msgstr "Doppelklick"
 
 #: common/tool/actions.cpp:400
 msgid "Performs left mouse button double-click"
@@ -19949,7 +19950,7 @@ msgstr "Formel"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:33
 msgid "Note: Values are minimal values"
-msgstr "Hinweis: Werte sind Minimalwerte"
+msgstr "Hinweis: Werte sind Mindestwerte"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:57
 msgid "Class 1"
@@ -19981,7 +19982,7 @@ msgstr "Leiterbahnbreite"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
 msgid "Min clearance"
-msgstr "Minimaler Abstand"
+msgstr "Mindestabstand"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
 msgid "Via: (diam - drill)"
@@ -20038,7 +20039,7 @@ msgstr "Werte aktualisieren"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:47
 msgid "Note: Values are minimal values (from IPC 2221)"
-msgstr "Hinweis: Werte sind Minimalwerte (von IPC 2221)"
+msgstr "Hinweis: Werte sind Mindestwerte (aus IPC 2221)"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:72
 msgid "B1"
@@ -21442,7 +21443,7 @@ msgstr "Ungesperrte dielektrische Lagen anpassen"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:208
 #, c-format
 msgid "Value too small (min value %s)."
-msgstr "Wert zu klein (Minimalwert ist %s)."
+msgstr "Wert zu klein (Mindestwert %s)."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:228
 msgid "All dielectric  thickness layers are locked"
@@ -22762,7 +22763,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:199
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
 msgid "Minimum width:"
-msgstr "Minimalbreite:"
+msgstr "Mindestbreite:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:201
 msgid "Minimum thickness of filled areas."
@@ -22894,7 +22895,7 @@ msgstr "Unterhalb der Flächengrenze"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:349
 msgid "Minimum island size:"
-msgstr "Minimale Inselgröße:"
+msgstr "Mindestgröße von Inseln:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:352
 msgid "Isolated islands smaller than this will be removed"
@@ -28042,7 +28043,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:240
 msgid "Minimum via diameter:"
-msgstr "Via-Minimaldurchmesser:"
+msgstr "Via-Mindestdurchmesser:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:245
 msgid ""
@@ -28077,7 +28078,7 @@ msgid ""
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
 msgstr ""
-"Der minimale Freiraum zwischen der Platinenkante und einem beliebigen "
+"Der Mindestfreiraum zwischen der Platinenkante und einem beliebigen "
 "Kupferelement.  Falls gesetzt, ist dies ein absolutes Minimum und kann nicht "
 "durch benutzerdefinierte Regeln oder andere Einstellungen reduziert werden."
 
@@ -28108,7 +28109,7 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
-"Der minimale Freiraum zwischen zwei gebohrten Löchern.   Falls gesetzt, ist "
+"Der Mindestfreiraum zwischen zwei gebohrten Löchern.   Falls gesetzt, ist "
 "dies ein absolutes Minimum und kann nicht durch benutzerdefinierte Regeln "
 "oder andere Einstellungen reduziert werden. (Hinweis: gilt nicht für "
 "gefräste Löcher.)"
@@ -28157,7 +28158,7 @@ msgid ""
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
-"Minimaler Freiraum zwischen zwei Elementen auf derselben "
+"Mindestfreiraum zwischen zwei Elementen auf derselben "
 "Bestückungsdruckebene.  Dies kann die Lesbarkeit verbessern.  (Hinweis: gilt "
 "nicht für mehrere Elemente eines Footprints.)"
 
@@ -28794,7 +28795,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
 msgid "Solder mask minimum web width:"
-msgstr "Mindestbreite Lötstoppmasken-Brücken:"
+msgstr "Mindestbreite von Lötstoppmasken-Brücken:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:71
 msgid ""
@@ -29458,7 +29459,7 @@ msgstr "Platinen-Minimum"
 #: pcbnew/drc/drc_engine.cpp:829
 #, c-format
 msgid "Board minimum clearance: %s."
-msgstr "Freiraum-Platinenminimum: %s."
+msgstr "Platinen-Minimum für Freiraum: %s."
 
 #: pcbnew/drc/drc_engine.cpp:838
 msgid "board minimum hole"
@@ -29467,7 +29468,7 @@ msgstr "Platinen-Minimum-Loch"
 #: pcbnew/drc/drc_engine.cpp:841
 #, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr "Mindestabstand zwischen Bohrungen: %s."
+msgstr "Platinen-Mindestabstand zwischen Bohrungen: %s."
 
 #: pcbnew/drc/drc_engine.cpp:868
 #, c-format
@@ -31222,7 +31223,7 @@ msgstr "Länge der Leiterbahn:"
 
 #: pcbnew/microwave/microwave_inductor.cpp:383
 msgid "Requested length < minimum length"
-msgstr "Gewünschte Länge < Minimale Länge"
+msgstr "Gewünschte Länge < Mindestlänge"
 
 #: pcbnew/microwave/microwave_inductor.cpp:397
 msgid "Requested length too large"
@@ -33504,7 +33505,7 @@ msgstr "vorhandene Leiterbahn"
 
 #: pcbnew/router/pns_kicad_iface.cpp:488 pcbnew/router/pns_kicad_iface.cpp:501
 msgid "board minimum width"
-msgstr "Platinen-Mindestbreite"
+msgstr "platinenspezifische Mindestbreite"
 
 #: pcbnew/router/pns_kicad_iface.cpp:497
 msgid "netclass 'Default'"
@@ -34009,9 +34010,9 @@ msgid ""
 "if the 'Use Existing Track Width' feature is enabled."
 msgstr ""
 "Wählen Sie die Standardbreite für neue Leiterbahnen aus. Beachten Sie, dass "
-"diese Breite durch die minimale Breite der Platine oder durch die Breite "
-"einer vorhandenen Leiterbahn überschrieben werden kann, wenn die Funktion "
-"„Bisherige Leiterbahnbreite verwenden“ aktiviert ist."
+"diese Breite durch die platinenspezifische Mindestbreite oder durch die "
+"Breite einer vorhandenen Leiterbahn überschrieben werden kann, wenn die "
+"Funktion „Bisherige Leiterbahnbreite verwenden“ aktiviert ist."
 
 #: pcbnew/toolbars_pcb_editor.cpp:540
 msgid ""
