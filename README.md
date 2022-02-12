@@ -16,9 +16,6 @@ KiCad uses a host of CI resources.
 
 GitLab CI pipeline status can be viewed for Linux and Windows builds of the latest commits.
 
-Additional status is available for builds:
-[<img alt="Jenkins" src="https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.simonrichter.eu%2Fjob%2Fwindows-kicad-ps-pipeline%2F&label=Windows%2C%20MSVC%Nightly&style=plastic">](https://jenkins.simonrichter.eu/job/windows-kicad-ps-pipeline/)
-
 ## Release status
 [![latest released version(s)](https://repology.org/badge/latest-versions/kicad.svg)](https://repology.org/project/kicad/versions)
 [![Release status](https://repology.org/badge/tiny-repos/kicad.svg)](https://repology.org/metapackage/kicad/versions)
