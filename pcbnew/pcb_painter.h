@@ -115,7 +115,6 @@ public:
     const std::set<int>& GetHiddenNets() const { return m_hiddenNets; }
 
 public:
-    bool               m_ForceClearanceDisplayOff;
     bool               m_ForcePadSketchModeOff;
     bool               m_ForcePadSketchModeOn;
 

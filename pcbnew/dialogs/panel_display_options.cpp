@@ -28,11 +28,11 @@
 
 static const UTIL::CFG_MAP<TRACK_CLEARANCE_MODE> clearanceModeMap =
 {
-    { SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING, 2 },     // Default
-    { DO_NOT_SHOW_CLEARANCE,                       0 },
-    { SHOW_TRACK_CLEARANCE_WHILE_ROUTING,          1 },
-    { SHOW_WHILE_ROUTING_OR_DRAGGING,              3 },
-    { SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS,        4 },
+    { SHOW_WITH_VIA_WHILE_ROUTING,             2 },     // Default
+    { DO_NOT_SHOW_CLEARANCE,                   0 },
+    { SHOW_WHILE_ROUTING,                      1 },
+    { SHOW_WITH_VIA_WHILE_ROUTING_OR_DRAGGING, 3 },
+    { SHOW_WITH_VIA_ALWAYS,                    4 },
 };
 
 
@@ -49,13 +49,13 @@ PANEL_DISPLAY_OPTIONS::PANEL_DISPLAY_OPTIONS( wxWindow* aParent, APP_SETTINGS_BA
 
 void PANEL_DISPLAY_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
 {
-    int i = UTIL::GetConfigForVal( clearanceModeMap, aCfg->m_Display.m_ShowTrackClearanceMode );
+    int i = UTIL::GetConfigForVal( clearanceModeMap, aCfg->m_Display.m_TrackClearance );
     m_OptDisplayTracksClearance->SetSelection( i );
 
-    m_OptDisplayPadClearence->SetValue( aCfg->m_Display.m_DisplayPadClearance );
-    m_OptDisplayPadNumber->SetValue( aCfg->m_Display.m_DisplayPadNum );
-    m_OptDisplayPadNoConn->SetValue( aCfg->m_Display.m_DisplayPadNoConnects );
-    m_ShowNetNamesOption->SetSelection( aCfg->m_Display.m_DisplayNetNamesMode );
+    m_OptDisplayPadClearence->SetValue( aCfg->m_Display.m_PadClearance );
+    m_OptDisplayPadNumber->SetValue( aCfg->m_Display.m_PadNumbers );
+    m_OptDisplayPadNoConn->SetValue( aCfg->m_Display.m_PadNoConnects );
+    m_ShowNetNamesOption->SetSelection( aCfg->m_Display.m_NetNames );
     m_live3Drefresh->SetValue( aCfg->m_Display.m_Live3DRefresh );
     m_checkCrossProbeOnSelection->SetValue( aCfg->m_CrossProbing.on_selection );
     m_checkCrossProbeCenter->SetValue( aCfg->m_CrossProbing.center_on_items );
@@ -93,12 +93,12 @@ bool PANEL_DISPLAY_OPTIONS::TransferDataFromWindow()
         PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
 
         int i = m_OptDisplayTracksClearance->GetSelection();
-        cfg->m_Display.m_ShowTrackClearanceMode = UTIL::GetValFromConfig( clearanceModeMap, i );
+        cfg->m_Display.m_TrackClearance = UTIL::GetValFromConfig( clearanceModeMap, i );
 
-        cfg->m_Display.m_DisplayPadClearance = m_OptDisplayPadClearence->GetValue();
-        cfg->m_Display.m_DisplayPadNum = m_OptDisplayPadNumber->GetValue();
-        cfg->m_Display.m_DisplayPadNoConnects = m_OptDisplayPadNoConn->GetValue();
-        cfg->m_Display.m_DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
+        cfg->m_Display.m_PadClearance = m_OptDisplayPadClearence->GetValue();
+        cfg->m_Display.m_PadNumbers = m_OptDisplayPadNumber->GetValue();
+        cfg->m_Display.m_PadNoConnects = m_OptDisplayPadNoConn->GetValue();
+        cfg->m_Display.m_NetNames = m_ShowNetNamesOption->GetSelection();
         cfg->m_Display.m_Live3DRefresh = m_live3Drefresh->GetValue();
         cfg->m_CrossProbing.on_selection = m_checkCrossProbeOnSelection->GetValue();
         cfg->m_CrossProbing.zoom_to_fit = m_checkCrossProbeZoom->GetValue();

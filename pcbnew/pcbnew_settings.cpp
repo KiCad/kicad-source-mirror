@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -157,19 +157,19 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_Display.m_DisplayTextFill, true ) );
 
     m_params.emplace_back( new PARAM<int>( "pcb_display.net_names_mode",
-            &m_Display.m_DisplayNetNamesMode, 3, 0, 3 ) );
+            &m_Display.m_NetNames, 3, 0, 3 ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_clearance",
-            &m_Display.m_DisplayPadClearance, true ) );
+            &m_Display.m_PadClearance, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_no_connects",
-            &m_Display.m_DisplayPadNoConnects, true ) );
+            &m_Display.m_PadNoConnects, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_fill",
             &m_Display.m_DisplayPadFill, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_numbers",
-            &m_Display.m_DisplayPadNum, true ) );
+            &m_Display.m_PadNumbers, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.ratsnest_global",
             &m_Display.m_ShowGlobalRatsnest, true ) );
@@ -181,8 +181,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_Display.m_DisplayRatsnestLinesCurved, false ) );
 
     m_params.emplace_back( new PARAM<int>( "pcb_display.track_clearance_mode",
-            reinterpret_cast<int*>( &m_Display.m_ShowTrackClearanceMode ),
-            SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING ) );
+            reinterpret_cast<int*>( &m_Display.m_TrackClearance ), SHOW_WITH_VIA_WHILE_ROUTING ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.track_fill",
             &m_Display.m_DisplayPcbTrackFill, true ) );

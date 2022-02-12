@@ -1043,11 +1043,11 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
                     }
                     else if( dynamic_cast<PCB_TRACK*>( aItem ) )
                     {
-                        return CHANGED( m_DisplayPadClearance );
+                        return CHANGED( m_PadClearance );
                     }
                     else if( dynamic_cast<PAD*>( aItem ) )
                     {
-                        return CHANGED( m_ShowTrackClearanceMode );
+                        return CHANGED( m_TrackClearance );
                     }
                     else if( dynamic_cast<EDA_TEXT*>( aItem ) )
                     {
@@ -1155,7 +1155,7 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
                 {
                     // Clearances could be layer-dependent so redraw them when the active layer
                     // is changed
-                    if( Settings().m_Display.m_DisplayPadClearance )
+                    if( Settings().m_Display.m_PadClearance )
                     {
                         // Round-corner rects are expensive to draw, but are mostly found on
                         // SMD pads which only need redrawing on an active-to-not-active
@@ -1176,7 +1176,7 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
                 {
                     // Clearances could be layer-dependent so redraw them when the active layer
                     // is changed
-                    if( Settings().m_Display.m_ShowTrackClearanceMode )
+                    if( Settings().m_Display.m_TrackClearance )
                     {
                         // Tracks aren't particularly expensive to draw, but it's an easy check.
                         return track->IsOnLayer( oldLayer ) || track->IsOnLayer( aLayer );
@@ -1781,7 +1781,7 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     auto* painter = static_cast<KIGFX::PCB_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
     auto* renderSettings = painter->GetSettings();
     renderSettings->LoadDisplayOptions( GetDisplayOptions() );
-    SetElementVisibility( LAYER_NO_CONNECTS, Settings().m_Display.m_DisplayPadNoConnects );
+    SetElementVisibility( LAYER_NO_CONNECTS, Settings().m_Display.m_PadNoConnects );
     SetElementVisibility( LAYER_RATSNEST, Settings().m_Display.m_ShowGlobalRatsnest );
 
     auto cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();

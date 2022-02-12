@@ -64,10 +64,10 @@ enum class TRACK_DRAG_ACTION
 enum TRACK_CLEARANCE_MODE
 {
     DO_NOT_SHOW_CLEARANCE = 0,
-    SHOW_TRACK_CLEARANCE_WHILE_ROUTING,
-    SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING,
-    SHOW_WHILE_ROUTING_OR_DRAGGING,
-    SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS
+    SHOW_WHILE_ROUTING,
+    SHOW_WITH_VIA_WHILE_ROUTING,
+    SHOW_WITH_VIA_WHILE_ROUTING_OR_DRAGGING,
+    SHOW_WITH_VIA_ALWAYS
 };
 
 
@@ -257,12 +257,12 @@ public:
         bool                 m_DisplayTextFill;
         bool                 m_DisplayPcbTrackFill;
 
-        TRACK_CLEARANCE_MODE m_ShowTrackClearanceMode;
-        bool                 m_DisplayPadClearance;
+        TRACK_CLEARANCE_MODE m_TrackClearance;
+        bool                 m_PadClearance;
 
-        int                  m_DisplayNetNamesMode;
-        bool                 m_DisplayPadNum;
-        bool                 m_DisplayPadNoConnects;
+        int                  m_NetNames;
+        bool                 m_PadNumbers;
+        bool                 m_PadNoConnects;
 
         RATSNEST_MODE        m_RatsnestMode;
 

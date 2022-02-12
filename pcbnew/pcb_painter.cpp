@@ -77,7 +77,6 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_padOpacity   = 1.0;
     m_zoneOpacity  = 1.0;
 
-    m_ForceClearanceDisplayOff = false;
     m_ForcePadSketchModeOff    = false;
     m_ForcePadSketchModeOn     = false;
 
@@ -563,7 +562,7 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
 
     if( IsNetnameLayer( aLayer ) )
     {
-        if( !pcbconfig() || pcbconfig()->m_Display.m_DisplayNetNamesMode < 2 )
+        if( !pcbconfig() || pcbconfig()->m_Display.m_NetNames < 2 )
             return;
 
         if( aTrack->GetNetCode() <= NETINFO_LIST::UNCONNECTED )
@@ -640,9 +639,7 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
     }
 
     // Clearance lines
-    if( pcbconfig()
-            && pcbconfig()->m_Display.m_ShowTrackClearanceMode == SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS
-            && !m_pcbSettings.m_ForceClearanceDisplayOff )
+    if( pcbconfig() && pcbconfig()->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS )
     {
         int clearance = aTrack->GetOwnClearance( m_pcbSettings.GetActiveLayer() );
 
@@ -684,9 +681,7 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
     }
 
     // Clearance lines
-    if( pcbconfig()
-            && pcbconfig()->m_Display.m_ShowTrackClearanceMode == SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS
-            && !m_pcbSettings.m_ForceClearanceDisplayOff )
+    if( pcbconfig() && pcbconfig()->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS )
     {
         int clearance = aArc->GetOwnClearance( m_pcbSettings.GetActiveLayer() );
 
@@ -747,8 +742,8 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         if( !pcbconfig() )
             return;
 
-        if( pcbconfig()->m_Display.m_DisplayNetNamesMode == 0
-                || pcbconfig()->m_Display.m_DisplayNetNamesMode == 2
+        if( pcbconfig()->m_Display.m_NetNames == 0
+                || pcbconfig()->m_Display.m_NetNames == 2
                 || aVia->GetNetname().empty() )
         {
             return;
@@ -856,10 +851,8 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     }
 
     // Clearance lines
-    if( pcbconfig()
-            && pcbconfig()->m_Display.m_ShowTrackClearanceMode == SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS
-            && aLayer != LAYER_VIA_HOLES
-            && !m_pcbSettings.m_ForceClearanceDisplayOff )
+    if( pcbconfig() && pcbconfig()->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS
+            && aLayer != LAYER_VIA_HOLES )
     {
         PCB_LAYER_ID activeLayer = m_pcbSettings.GetActiveLayer();
         double       radius;
@@ -885,11 +878,11 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
     if( IsNetnameLayer( aLayer ) )
     {
         // Is anything that we can display enabled?
-        bool displayNetname = ( (pcbconfig() && pcbconfig()->m_Display.m_DisplayNetNamesMode == 1)
-                                || (pcbconfig() && pcbconfig()->m_Display.m_DisplayNetNamesMode == 3 ) )
+        bool displayNetname = ( (pcbconfig() && pcbconfig()->m_Display.m_NetNames == 1)
+                                || (pcbconfig() && pcbconfig()->m_Display.m_NetNames == 3 ) )
                                 && !aPad->GetNetname().empty();
 
-        bool displayPadNumber = !pcbconfig() || pcbconfig()->m_Display.m_DisplayPadNum;
+        bool displayPadNumber = !pcbconfig() || pcbconfig()->m_Display.m_PadNumbers;
 
         if( displayNetname || displayPadNumber )
         {
@@ -1266,10 +1259,8 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         }
     }
 
-    if( pcbconfig()
-            && pcbconfig()->m_Display.m_DisplayPadClearance
-            && ( aLayer == LAYER_PAD_FR || aLayer == LAYER_PAD_BK || aLayer == LAYER_PADS_TH )
-            && !m_pcbSettings.m_ForceClearanceDisplayOff )
+    if( pcbconfig() && pcbconfig()->m_Display.m_PadClearance
+            && ( aLayer == LAYER_PAD_FR || aLayer == LAYER_PAD_BK || aLayer == LAYER_PADS_TH ) )
     {
         /* Showing the clearance area is not obvious.
          * - A pad can be removed from some copper layers.

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,12 +41,12 @@ bool PCB_VIEWER_TOOLS::Init()
 {
     // Populate the context menu displayed during the tool (primarily the measure tool)
     auto activeToolCondition =
-        [ this ] ( const SELECTION& aSel )
-        {
-            return !frame()->ToolStackIsEmpty();
-        };
+            [ this ] ( const SELECTION& aSel )
+            {
+                return !frame()->ToolStackIsEmpty();
+            };
 
-    auto& ctxMenu = m_menu.GetMenu();
+    CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
 
     // "Cancel" goes at the top of the context menu when a tool is active
     ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
@@ -90,7 +90,7 @@ template<class T> void Flip( T& aValue )
 
 int PCB_VIEWER_TOOLS::ShowPadNumbers( const TOOL_EVENT& aEvent )
 {
-    Flip( displayOptions().m_DisplayPadNum );
+    Flip( displayOptions().m_PadNumbers );
 
     for( FOOTPRINT* fp : board()->Footprints() )
     {

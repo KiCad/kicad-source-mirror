@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -39,7 +39,8 @@ class PCB_GRID_HELPER;
 class PNS_KICAD_IFACE;
 class PNS_TUNE_STATUS_POPUP;
 
-namespace PNS {
+namespace PNS
+{
 
 class APIEXPORT TOOL_BASE : public PCB_TOOL_BASE
 {
@@ -73,7 +74,7 @@ protected:
     ITEM*            m_endItem;
     VECTOR2I         m_endSnapPoint;
 
-    PCB_GRID_HELPER*     m_gridHelper;
+    PCB_GRID_HELPER* m_gridHelper;
     PNS_KICAD_IFACE* m_iface;
     ROUTER*          m_router;
 
