@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-07 17:47-0800\n"
-"PO-Revision-Date: 2022-02-07 22:32+0000\n"
+"PO-Revision-Date: 2022-02-14 17:24+0000\n"
 "Last-Translator: Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8501,17 +8501,17 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:584 pcbnew/dialogs/dialog_drc.cpp:502
 msgid "Exclude this violation"
-msgstr ""
+msgstr "Bu ihlali hariç tut"
 
 #: eeschema/dialogs/dialog_erc.cpp:585 pcbnew/dialogs/dialog_drc.cpp:503
 #, c-format
 msgid "It will be excluded from the %s list"
-msgstr ""
+msgstr "%s listesinden çıkarılır"
 
 #: eeschema/dialogs/dialog_erc.cpp:597 pcbnew/dialogs/dialog_drc.cpp:523
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
-msgstr ""
+msgstr "Tüm '%s' ihlalleri için önem derecesini Hataya değiştirme"
 
 #: eeschema/dialogs/dialog_erc.cpp:599 eeschema/dialogs/dialog_erc.cpp:605
 #: pcbnew/dialogs/dialog_drc.cpp:525 pcbnew/dialogs/dialog_drc.cpp:532
@@ -33753,7 +33753,7 @@ msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:292
 msgid "Loss Tangent"
-msgstr ""
+msgstr "kayıp tanjantı"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:315
 msgid "Dielectric"
