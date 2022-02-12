@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2018 CERN
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -70,6 +70,7 @@ BOARD_PRINTOUT::BOARD_PRINTOUT( const BOARD_PRINTOUT_SETTINGS& aParams,
     m_settings( aParams )
 {
     m_view = aView;
+    m_gerbviewPrint = false;
 }
 
 
@@ -85,12 +86,12 @@ void BOARD_PRINTOUT::GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, 
 
 void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPageCount )
 {
-    auto dc = GetDC();
+    wxDC* dc = GetDC();
     KIGFX::GAL_DISPLAY_OPTIONS options;
-    auto galPrint = KIGFX::GAL_PRINT::Create( options, dc );
-    auto gal = galPrint->GetGAL();
-    auto printCtx = galPrint->GetPrintCtx();
-    auto painter = getPainter( gal );
+    std::unique_ptr<KIGFX::GAL_PRINT> galPrint = KIGFX::GAL_PRINT::Create( options, dc );
+    KIGFX::GAL* gal = galPrint->GetGAL();
+    KIGFX::PRINT_CONTEXT* printCtx = galPrint->GetPrintCtx();
+    std::unique_ptr<KIGFX::PAINTER> painter = getPainter( gal );
     std::unique_ptr<KIGFX::VIEW> view( m_view->DataReference() );
 
     // Target paper size
@@ -174,6 +175,11 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
 
     gal->SetClearColor( dstSettings->GetBackgroundColor() );
     gal->ClearScreen();
+
+    if( m_gerbviewPrint )
+        // Mandatory in Gerbview to use the same order for printing as for screen redraw
+        // due to negative objects that need a specific order
+        view->UseDrawPriority( true );
 
     {
         KIGFX::GAL_DRAWING_CONTEXT ctx( gal );
