@@ -30,7 +30,7 @@ add_executable( qa_common_tools
     ${CMAKE_SOURCE_DIR}/common/observable.cpp
 
     # Mock Pgm needed for advanced_config in coroutines
-    ${CMAKE_SOURCE_DIR}/qa/qa_utils/mock_pgm.cpp
+    ${CMAKE_SOURCE_DIR}/qa/mocks/kicad/common_mocks.cpp
 
     # The main entry point
     main.cpp
@@ -45,6 +45,7 @@ add_executable( qa_common_tools
 include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/qa/mocks/include
     ${INC_AFTER}
 )
 
