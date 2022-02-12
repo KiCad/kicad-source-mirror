@@ -140,7 +140,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_OutlineDisplayCtrl->SetSelection( 0 );
 	gbSizer1->Add( m_OutlineDisplayCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_stBorderHatchPitchText = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Outline hatch dist:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stBorderHatchPitchText = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Outline hatch pitch:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stBorderHatchPitchText->Wrap( -1 );
 	gbSizer1->Add( m_stBorderHatchPitchText, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 

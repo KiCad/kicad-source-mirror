@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -101,21 +101,39 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	m_cbLocked = new wxCheckBox( this, wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerRight->Add( m_cbLocked, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	wxBoxSizer* bSizerLowerRight;
-	bSizerLowerRight = new wxBoxSizer( wxHORIZONTAL );
+	wxFlexGridSizer* fgSizerLowerRigth;
+	fgSizerLowerRigth = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizerLowerRigth->SetFlexibleDirection( wxBOTH );
+	fgSizerLowerRigth->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_staticTextStyle = new wxStaticText( this, wxID_ANY, _("Outline display:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextStyle->Wrap( -1 );
-	bSizerLowerRight->Add( m_staticTextStyle, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerLowerRigth->Add( m_staticTextStyle, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_OutlineDisplayCtrlChoices[] = { _("Line"), _("Hatched"), _("Fully hatched") };
 	int m_OutlineDisplayCtrlNChoices = sizeof( m_OutlineDisplayCtrlChoices ) / sizeof( wxString );
 	m_OutlineDisplayCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_OutlineDisplayCtrlNChoices, m_OutlineDisplayCtrlChoices, 0 );
 	m_OutlineDisplayCtrl->SetSelection( 0 );
-	bSizerLowerRight->Add( m_OutlineDisplayCtrl, 0, wxALL, 5 );
+	fgSizerLowerRigth->Add( m_OutlineDisplayCtrl, 0, wxALL, 5 );
 
 
-	bSizerRight->Add( bSizerLowerRight, 0, wxEXPAND, 5 );
+	fgSizerLowerRigth->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_stBorderHatchPitchText = new wxStaticText( this, wxID_ANY, _("Outline hatch pitch:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stBorderHatchPitchText->Wrap( -1 );
+	fgSizerLowerRigth->Add( m_stBorderHatchPitchText, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_outlineHatchPitchCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_outlineHatchPitchCtrl->SetToolTip( _("A unique name for this rule area for use in DRC rules") );
+
+	fgSizerLowerRigth->Add( m_outlineHatchPitchCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_outlineHatchUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_outlineHatchUnits->Wrap( -1 );
+	fgSizerLowerRigth->Add( m_outlineHatchUnits, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bSizerRight->Add( fgSizerLowerRigth, 1, wxEXPAND, 5 );
 
 
 	bUpperSizer->Add( bSizerRight, 0, wxEXPAND|wxALL, 5 );

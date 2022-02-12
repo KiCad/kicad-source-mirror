@@ -39,6 +39,7 @@ private:
     PCB_BASE_FRAME* m_parent;
     ZONE_SETTINGS*  m_ptr;
     ZONE_SETTINGS   m_settings;     // working copy of zone settings
+    UNIT_BINDER     m_outlineHatchPitch;
     UNIT_BINDER     m_minWidth;
     UNIT_BINDER     m_hatchRotation;
     UNIT_BINDER     m_hatchWidth;
@@ -70,6 +71,8 @@ int InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSetting
 DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* aParent,
                                                                 ZONE_SETTINGS* aSettings ) :
     DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( aParent ),
+    m_outlineHatchPitch( aParent, m_stBorderHatchPitchText,
+                         m_outlineHatchPitchCtrl, m_outlineHatchUnits ),
     m_minWidth( aParent, m_MinWidthLabel, m_MinWidthCtrl, m_MinWidthUnits ),
     m_hatchRotation( aParent, m_hatchOrientLabel, m_hatchOrientCtrl, m_hatchOrientUnits ),
     m_hatchWidth( aParent, m_hatchWidthLabel, m_hatchWidthCtrl, m_hatchWidthUnits),
@@ -120,6 +123,8 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataToWindow()
     case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE: m_OutlineDisplayCtrl->SetSelection( 1 ); break;
     case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL: m_OutlineDisplayCtrl->SetSelection( 2 ); break;
     }
+
+    m_outlineHatchPitch.SetValue( m_settings.m_BorderHatchPitch );
 
     SetInitialFocus( m_OutlineDisplayCtrl );
 
@@ -205,6 +210,12 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
     case 1: m_settings.m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE; break;
     case 2: m_settings.m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL; break;
     }
+
+    if( !m_outlineHatchPitch.Validate( Millimeter2iu( ZONE_BORDER_HATCH_MINDIST_MM ),
+                                       Millimeter2iu( ZONE_BORDER_HATCH_MAXDIST_MM ) ) )
+        return false;
+
+    m_settings.m_BorderHatchPitch = m_outlineHatchPitch.GetValue();
 
     if( m_GridStyleCtrl->GetSelection() > 0 )
         m_settings.m_FillMode = ZONE_FILL_MODE::HATCH_PATTERN;
