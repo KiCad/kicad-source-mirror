@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,18 +46,18 @@ void PCB_EDIT_FRAME::InstallNetlistFrame()
 {
     wxString netlistName = GetLastPath( LAST_PATH_NETLIST );
 
-    DIALOG_NETLIST dlg( this, netlistName );
+    DIALOG_NETLIST_IMPORT dlg( this, netlistName );
 
     dlg.ShowModal();
 
     SetLastPath( LAST_PATH_NETLIST, netlistName );
 }
 
-bool DIALOG_NETLIST::m_matchByUUID = false;
+bool DIALOG_NETLIST_IMPORT::m_matchByUUID = false;
 
 
-DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullFilename )
-    : DIALOG_NETLIST_BASE( aParent ),
+DIALOG_NETLIST_IMPORT::DIALOG_NETLIST_IMPORT( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullFilename )
+    : DIALOG_NETLIST_IMPORT_BASE( aParent ),
       m_parent( aParent ),
       m_netlistPath( aNetlistFullFilename ),
       m_initialized( false ),
@@ -78,20 +78,18 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullF
     m_MessageWindow->SetVisibleSeverities( cfg->m_NetlistDialog.report_filter );
     m_MessageWindow->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
 
-    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
-    // that requires us to correct the button labels here.
-    m_sdbSizer1OK->SetLabel( _( "Update PCB" ) );
-    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
+    m_sdbSizerApply->SetLabel( _( "Update PCB" ) );
+    m_sdbSizerCancel->SetLabel( _( "Close" ) );
+    m_sdbSizerOK->SetLabel( _( "Load and Test Netlist" ) );
     m_buttonsSizer->Layout();
 
-    m_sdbSizer1OK->SetDefault();
+    m_sdbSizerOK->SetDefault();
     finishDialogSettings();
 
     m_initialized = true;
-    loadNetlist( true );
 }
 
-DIALOG_NETLIST::~DIALOG_NETLIST()
+DIALOG_NETLIST_IMPORT::~DIALOG_NETLIST_IMPORT()
 {
     m_matchByUUID = m_matchByTimestamp->GetSelection() == 0;
 
@@ -111,7 +109,7 @@ DIALOG_NETLIST::~DIALOG_NETLIST()
 }
 
 
-void DIALOG_NETLIST::OnOpenNetlistClick( wxCommandEvent& event )
+void DIALOG_NETLIST_IMPORT::onBrowseNetlistFiles( wxCommandEvent& event )
 {
     wxString dirPath = wxFileName( Prj().GetProjectFullName() ).GetPath();
 
@@ -131,10 +129,17 @@ void DIALOG_NETLIST::OnOpenNetlistClick( wxCommandEvent& event )
         return;
 
     m_NetlistFilenameCtrl->SetValue( FilesDialog.GetPath() );
-    onFilenameChanged();
+    onFilenameChanged( false );
 }
 
-void DIALOG_NETLIST::OnUpdatePCB( wxCommandEvent& event )
+
+void DIALOG_NETLIST_IMPORT::onImportNetlist( wxCommandEvent& event )
+{
+    onFilenameChanged( true );
+}
+
+
+void DIALOG_NETLIST_IMPORT::onUpdatePCB( wxCommandEvent& event )
 {
     wxFileName fn = m_NetlistFilenameCtrl->GetValue();
 
@@ -153,18 +158,18 @@ void DIALOG_NETLIST::OnUpdatePCB( wxCommandEvent& event )
     m_MessageWindow->SetLabel( _( "Changes Applied to PCB" ) );
     loadNetlist( false );
 
-    m_sdbSizer1Cancel->SetDefault();
+    m_sdbSizerCancel->SetDefault();
+    m_sdbSizerCancel->SetFocus();
 }
 
 
-void DIALOG_NETLIST::OnFilenameKillFocus( wxFocusEvent& event )
+void DIALOG_NETLIST_IMPORT::OnFilenameKillFocus( wxFocusEvent& event )
 {
-    onFilenameChanged();
     event.Skip();
 }
 
 
-void DIALOG_NETLIST::onFilenameChanged()
+void DIALOG_NETLIST_IMPORT::onFilenameChanged( bool aLoadNetlist )
 {
     if( m_initialized )
     {
@@ -175,7 +180,9 @@ void DIALOG_NETLIST::onFilenameChanged()
             if( fn.FileExists() )
             {
                 m_netlistPath = m_NetlistFilenameCtrl->GetValue();
-                loadNetlist( true );
+
+                if( aLoadNetlist )
+                    loadNetlist( true );
             }
             else
             {
@@ -188,21 +195,21 @@ void DIALOG_NETLIST::onFilenameChanged()
 }
 
 
-void DIALOG_NETLIST::OnMatchChanged( wxCommandEvent& event )
+void DIALOG_NETLIST_IMPORT::OnMatchChanged( wxCommandEvent& event )
 {
     if( m_initialized )
         loadNetlist( true );
 }
 
 
-void DIALOG_NETLIST::OnOptionChanged( wxCommandEvent& event )
+void DIALOG_NETLIST_IMPORT::OnOptionChanged( wxCommandEvent& event )
 {
     if( m_initialized )
         loadNetlist( true );
 }
 
 
-void DIALOG_NETLIST::loadNetlist( bool aDryRun )
+void DIALOG_NETLIST_IMPORT::loadNetlist( bool aDryRun )
 {
     wxString netlistFileName = m_NetlistFilenameCtrl->GetValue();
     wxFileName fn = netlistFileName;

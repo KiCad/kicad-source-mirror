@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,8 +25,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _DIALOG_NETLIST_H_
-#define _DIALOG_NETLIST_H_
+#ifndef _DIALOG_NETLIST_IMPORT_H_
+#define _DIALOG_NETLIST_IMPORT_H_
 
 #include <dialog_netlist_base.h>
 
@@ -35,20 +35,21 @@ class FOOTPRINT;
 class NETLIST;
 
 
-class DIALOG_NETLIST : public DIALOG_NETLIST_BASE
+class DIALOG_NETLIST_IMPORT : public DIALOG_NETLIST_IMPORT_BASE
 {
 public:
-    DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullFilename );
-    ~DIALOG_NETLIST();
+    DIALOG_NETLIST_IMPORT( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullFilename );
+    ~DIALOG_NETLIST_IMPORT();
 
 private:
-    void onFilenameChanged();
+    void onFilenameChanged( bool aLoadNetlist );
 
     void loadNetlist( bool aDryRun );
 
     // Virtual event handlers:
-    void OnOpenNetlistClick( wxCommandEvent& event ) override;
-    void OnUpdatePCB( wxCommandEvent& event ) override;
+    void onBrowseNetlistFiles( wxCommandEvent& event ) override;
+    void onImportNetlist( wxCommandEvent& event ) override;
+    void onUpdatePCB( wxCommandEvent& event ) override;
     void OnFilenameKillFocus( wxFocusEvent& event ) override;
     void OnMatchChanged( wxCommandEvent& event ) override;
     void OnOptionChanged( wxCommandEvent& event ) override;
@@ -64,4 +65,4 @@ private:
 };
 
 
-#endif      // _DIALOG_NETLIST_H_
+#endif      // _DIALOG_NETLIST_IMPORT_H_

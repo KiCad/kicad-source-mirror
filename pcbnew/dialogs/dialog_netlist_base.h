@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -35,9 +35,9 @@ class WX_HTML_REPORT_PANEL;
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_NETLIST_BASE
+/// Class DIALOG_NETLIST_IMPORT_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_NETLIST_BASE : public DIALOG_SHIM
+class DIALOG_NETLIST_IMPORT_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -50,22 +50,25 @@ class DIALOG_NETLIST_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbDeleteShortingTracks;
 		WX_HTML_REPORT_PANEL* m_MessageWindow;
 		wxBoxSizer* m_buttonsSizer;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerApply;
+		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnFilenameKillFocus( wxFocusEvent& event ) { event.Skip(); }
-		virtual void OnOpenNetlistClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onBrowseNetlistFiles( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMatchChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOptionChanged( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnUpdatePCB( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onUpdatePCB( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onImportNetlist( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		DIALOG_NETLIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Netlist"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-		~DIALOG_NETLIST_BASE();
+		DIALOG_NETLIST_IMPORT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Netlist"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
+		~DIALOG_NETLIST_IMPORT_BASE();
 
 };
 
