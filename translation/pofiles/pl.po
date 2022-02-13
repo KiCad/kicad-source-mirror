@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-07 17:47-0800\n"
-"PO-Revision-Date: 2022-02-13 20:12+0000\n"
+"PO-Revision-Date: 2022-02-14 17:24+0000\n"
 "Last-Translator: Krzysztof Kawa <christophorus72@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -12269,7 +12269,7 @@ msgstr "Ustawienia zaznaczania"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:115
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
 msgid "Cross-probe on selection"
-msgstr "Sondowanie krzyżowe z zaznaczenia"
+msgstr "Wycentruj zaznaczony element"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:119
 msgid "Center view on cross-probed items"
