@@ -97,7 +97,7 @@ void CN_CONNECTIVITY_ALGO::markItemNetAsDirty( const BOARD_ITEM* aItem )
 {
     if( aItem->IsConnected() )
     {
-        auto citem = static_cast<const BOARD_CONNECTED_ITEM*>( aItem );
+        const BOARD_CONNECTED_ITEM* citem = static_cast<const BOARD_CONNECTED_ITEM*>( aItem );
         MarkNetAsDirty( citem->GetNetCode() );
     }
     else
@@ -213,7 +213,7 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 
     m_itemList.RemoveInvalidItems( garbage );
 
-    for( auto item : garbage )
+    for( CN_ITEM* item : garbage )
         delete item;
 
 #ifdef PROFILE
@@ -266,7 +266,9 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
                 };
 
         if( parallelThreadCount <= 1 )
+        {
             conn_lambda( &m_itemList, m_progressReporter );
+        }
         else
         {
             for( size_t ii = 0; ii < parallelThreadCount; ++ii )
@@ -367,9 +369,9 @@ CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, const KICAD_T a
 
     while( !item_set.empty() )
     {
-        CN_CLUSTER_PTR cluster = std::make_shared<CN_CLUSTER>();
-        CN_ITEM*       root;
-        auto           it = item_set.begin();
+        std::shared_ptr<CN_CLUSTER> cluster = std::make_shared<CN_CLUSTER>();
+        CN_ITEM*                    root;
+        auto                        it = item_set.begin();
 
         while( it != item_set.end() && (*it)->Visited() )
             it = item_set.erase( item_set.begin() );
@@ -390,7 +392,7 @@ CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, const KICAD_T a
             Q.pop_front();
             cluster->Add( current );
 
-            for( auto n : current->ConnectedItems() )
+            for( CN_ITEM* n : current->ConnectedItems() )
             {
                 if( withinAnyNet && n->Net() != root->Net() )
                     continue;
@@ -410,7 +412,7 @@ CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, const KICAD_T a
         return CLUSTERS();
 
     std::sort( clusters.begin(), clusters.end(),
-               []( CN_CLUSTER_PTR a, CN_CLUSTER_PTR b )
+               []( const std::shared_ptr<CN_CLUSTER>& a, const std::shared_ptr<CN_CLUSTER>& b )
                {
                    return a->OriginNet() < b->OriginNet();
                } );
@@ -585,16 +587,14 @@ void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( ZONE* aZone, PCB_LAYER_ID 
 
     m_connClusters = SearchClusters( CSM_CONNECTIVITY_CHECK );
 
-    for( const auto& cluster : m_connClusters )
+    for( const std::shared_ptr<CN_CLUSTER>& cluster : m_connClusters )
     {
         if( cluster->Contains( aZone ) && cluster->IsOrphaned() )
         {
-            for( auto z : *cluster )
+            for( CN_ITEM* z : *cluster )
             {
                 if( z->Parent() == aZone && z->Layer() == aLayer )
-                {
                     aIslands.push_back( static_cast<CN_ZONE_LAYER*>(z)->SubpolyIndex() );
-                }
             }
         }
     }
@@ -619,7 +619,7 @@ void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLAT
             if( zone.m_zone->GetFilledPolysList( layer ).IsEmpty() )
                 continue;
 
-            for( const CN_CLUSTER_PTR& cluster : m_connClusters )
+            for( const std::shared_ptr<CN_CLUSTER>& cluster : m_connClusters )
             {
                 if( cluster->Contains( zone.m_zone ) && cluster->IsOrphaned() )
                 {

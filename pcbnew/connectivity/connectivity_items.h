@@ -155,9 +155,6 @@ private:
 };
 
 
-typedef std::shared_ptr<CN_ANCHOR>  CN_ANCHOR_PTR;
-typedef std::vector<CN_ANCHOR_PTR>  CN_ANCHORS;
-
 
 /**
  * CN_ITEM represents a BOARD_CONNETED_ITEM in the connectivity system (ie: a pad, track/arc/via,
@@ -166,8 +163,6 @@ typedef std::vector<CN_ANCHOR_PTR>  CN_ANCHORS;
 class CN_ITEM
 {
 public:
-    using CONNECTED_ITEMS = std::vector<CN_ITEM*>;
-
     void Dump();
 
     CN_ITEM( BOARD_CONNECTED_ITEM* aParent, bool aCanChangeNet, int aAnchorCount = 2 )
@@ -189,7 +184,7 @@ public:
         m_anchors.emplace_back( std::make_shared<CN_ANCHOR>( aPos, this ) );
     }
 
-    CN_ANCHORS& Anchors() { return m_anchors; }
+    std::vector<std::shared_ptr<CN_ANCHOR>>& Anchors() { return m_anchors; }
 
     void SetValid( bool aValid ) { m_valid = aValid; }
     bool Valid() const { return m_valid; }
@@ -233,7 +228,7 @@ public:
 
     BOARD_CONNECTED_ITEM* Parent() const { return m_parent; }
 
-    const CONNECTED_ITEMS& ConnectedItems() const { return m_connected; }
+    const std::vector<CN_ITEM*>& ConnectedItems() const { return m_connected; }
     void ClearConnections() { m_connected.clear(); }
 
     void SetVisited( bool aVisited ) { m_visited = aVisited; }
@@ -270,10 +265,10 @@ protected:
     BOX2I           m_bbox;          ///< bounding box for the item
 
 private:
-    BOARD_CONNECTED_ITEM* m_parent;
+    BOARD_CONNECTED_ITEM*                    m_parent;
 
-    CONNECTED_ITEMS m_connected;     ///< list of items physically connected (touching)
-    CN_ANCHORS      m_anchors;
+    std::vector<CN_ITEM*>                    m_connected;   ///< list of physically touching items
+    std::vector<std::shared_ptr<CN_ANCHOR>>  m_anchors;
 
     bool            m_canChangeNet;  ///< can the net propagator modify the netcode?
 
@@ -474,7 +469,6 @@ public:
     ITER end() { return m_items.end(); };
 };
 
-typedef std::shared_ptr<CN_CLUSTER> CN_CLUSTER_PTR;
 
 
 #endif /* PCBNEW_CONNECTIVITY_ITEMS_H */

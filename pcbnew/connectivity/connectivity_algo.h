@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
@@ -48,7 +48,6 @@
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_items.h>
 
-class CN_CONNECTIVITY_ALGO_IMPL;
 class CN_RATSNEST_NODES;
 class BOARD;
 class BOARD_CONNECTED_ITEM;
@@ -64,12 +63,17 @@ class PROGRESS_REPORTER;
 class CN_EDGE
 {
 public:
-    CN_EDGE()
-            : m_weight( 0 ), m_visible( true )
+    CN_EDGE() :
+            m_weight( 0 ),
+            m_visible( true )
     {}
 
-    CN_EDGE( CN_ANCHOR_PTR aSource, CN_ANCHOR_PTR aTarget, unsigned aWeight = 0 )
-            : m_source( aSource ), m_target( aTarget ), m_weight( aWeight ), m_visible( true )
+    CN_EDGE( const std::shared_ptr<CN_ANCHOR>& aSource, const std::shared_ptr<CN_ANCHOR>& aTarget,
+             unsigned aWeight = 0 ) :
+            m_source( aSource ),
+            m_target( aTarget ),
+            m_weight( aWeight ),
+            m_visible( true )
     {}
 
     /**
@@ -83,39 +87,26 @@ public:
         return m_weight < aOther.m_weight;
     }
 
-    CN_ANCHOR_PTR GetSourceNode() const { return m_source; }
-    CN_ANCHOR_PTR GetTargetNode() const { return m_target; }
+    std::shared_ptr<CN_ANCHOR> GetSourceNode() const { return m_source; }
+    std::shared_ptr<CN_ANCHOR> GetTargetNode() const { return m_target; }
+
+    void SetSourceNode( const std::shared_ptr<CN_ANCHOR>& aNode ) { m_source = aNode; }
+    void SetTargetNode( const std::shared_ptr<CN_ANCHOR>& aNode ) { m_target = aNode; }
+
+    void SetWeight( unsigned weight ) { m_weight = weight; }
     unsigned GetWeight() const { return m_weight; }
 
-    void SetSourceNode( const CN_ANCHOR_PTR& aNode ) { m_source = aNode; }
-    void SetTargetNode( const CN_ANCHOR_PTR& aNode ) { m_target = aNode; }
-    void SetWeight( unsigned weight ) { m_weight = weight; }
+    void SetVisible( bool aVisible ) { m_visible = aVisible; }
+    bool IsVisible() const { return m_visible; }
 
-    void SetVisible( bool aVisible )
-    {
-        m_visible = aVisible;
-    }
-
-    bool IsVisible() const
-    {
-        return m_visible;
-    }
-
-    const VECTOR2I GetSourcePos() const
-    {
-        return m_source->Pos();
-    }
-
-    const VECTOR2I GetTargetPos() const
-    {
-        return m_target->Pos();
-    }
+    const VECTOR2I GetSourcePos() const { return m_source->Pos(); }
+    const VECTOR2I GetTargetPos() const { return m_target->Pos(); }
 
 private:
-    CN_ANCHOR_PTR m_source;
-    CN_ANCHOR_PTR m_target;
-    unsigned      m_weight;
-    bool          m_visible;
+    std::shared_ptr<CN_ANCHOR> m_source;
+    std::shared_ptr<CN_ANCHOR> m_target;
+    unsigned                   m_weight;
+    bool                       m_visible;
 };
 
 
@@ -129,7 +120,7 @@ public:
         CSM_RATSNEST
     };
 
-    using CLUSTERS = std::vector<CN_CLUSTER_PTR>;
+    using CLUSTERS = std::vector<std::shared_ptr<CN_CLUSTER>>;
 
     class ITEM_MAP_ENTRY
     {
@@ -142,10 +133,8 @@ public:
 
         void MarkItemsAsInvalid()
         {
-            for( auto item : m_items )
-            {
+            for( CN_ITEM* item : m_items )
                 item->SetValid( false );
-            }
         }
 
         void Link( CN_ITEM* aItem )
@@ -184,13 +173,13 @@ public:
 
     void ClearDirtyFlags()
     {
-        for( auto i = m_dirtyNets.begin(); i != m_dirtyNets.end(); ++i )
-            *i = false;
+        for( bool dirty : m_dirtyNets )
+            dirty = false;
     }
 
     void GetDirtyClusters( CLUSTERS& aClusters ) const
     {
-        for( const auto& cl : m_ratsnestClusters )
+        for( const std::shared_ptr<CN_CLUSTER>& cl : m_ratsnestClusters )
         {
             int net = cl->OriginNet();
 
@@ -246,9 +235,9 @@ public:
     template <typename Func>
     void ForEachAnchor( Func&& aFunc ) const
     {
-        for( auto&& item : m_itemList )
+        for( CN_ITEM* item : m_itemList )
         {
-            for( auto&& anchor : item->Anchors() )
+            for( std::shared_ptr<CN_ANCHOR>& anchor : item->Anchors() )
                 aFunc( *anchor );
         }
     }
@@ -256,7 +245,7 @@ public:
     template <typename Func>
     void ForEachItem( Func&& aFunc ) const
     {
-        for( auto&& item : m_itemList )
+        for( CN_ITEM* item : m_itemList )
             aFunc( *item );
     }
 
@@ -272,7 +261,7 @@ private:
     template <class Container, class BItem>
     void add( Container& c, BItem brditem )
     {
-        auto item = c.Add( brditem );
+        CN_ITEM* item = c.Add( brditem );
 
         m_itemMap[ brditem ] = ITEM_MAP_ENTRY( item );
     }

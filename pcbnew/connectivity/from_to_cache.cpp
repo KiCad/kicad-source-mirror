@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers.
+ * Copyright (C) 2004-2022 KiCad Developers.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -88,8 +88,10 @@ static PATH_STATUS uniquePathBetweenNodes( CN_ITEM* u, CN_ITEM* v, std::vector<C
         if( last == v )
         {
             outPath = path;
+
             if( pathFound )
                 return PS_MULTIPLE_PATHS;
+
             pathFound = true;
         }
 
@@ -119,11 +121,11 @@ static PATH_STATUS uniquePathBetweenNodes( CN_ITEM* u, CN_ITEM* v, std::vector<C
 
 int FROM_TO_CACHE::cacheFromToPaths( const wxString& aFrom, const wxString& aTo )
 {
-    std::vector<FT_PATH> paths;
-    auto connectivity = m_board->GetConnectivity();
-    auto cnAlgo = connectivity->GetConnectivityAlgo();
+    std::vector<FT_PATH>                  paths;
+    std::shared_ptr<CONNECTIVITY_DATA>    connectivity = m_board->GetConnectivity();
+    std::shared_ptr<CN_CONNECTIVITY_ALGO> cnAlgo = connectivity->GetConnectivityAlgo();
 
-    for( auto& endpoint : m_ftEndpoints )
+    for( FT_ENDPOINT& endpoint : m_ftEndpoints )
     {
         if( WildCompareString( aFrom, endpoint.name, false ) )
         {
@@ -135,7 +137,7 @@ int FROM_TO_CACHE::cacheFromToPaths( const wxString& aFrom, const wxString& aTo 
         }
     }
 
-    for( auto &path : paths )
+    for( FT_PATH& path : paths )
     {
         int count = 0;
         auto netName = path.from->GetNetname();
@@ -148,7 +150,7 @@ int FROM_TO_CACHE::cacheFromToPaths( const wxString& aFrom, const wxString& aTo 
         auto padCandidates = connectivity->GetConnectedItems( path.from, onlyRouting );
         PAD* toPad = nullptr;
 
-        for( auto pitem : padCandidates )
+        for( BOARD_CONNECTED_ITEM* pitem : padCandidates )
         {
             if( pitem == path.from )
                 continue;
@@ -161,44 +163,43 @@ int FROM_TO_CACHE::cacheFromToPaths( const wxString& aFrom, const wxString& aTo 
             wxString toName = pad->GetParent()->GetReference() + wxT( "-" ) + pad->GetNumber();
 
 
-            for ( const auto& endpoint : m_ftEndpoints )
+            for( const FT_ENDPOINT& endpoint : m_ftEndpoints )
             {
                 if( pad == endpoint.parent )
                 {
-                        if( WildCompareString( aTo, endpoint.name, false ) )
+                    if( WildCompareString( aTo, endpoint.name, false ) )
+                    {
+                        count++;
+                        toPad = endpoint.parent;
+
+                        path.to = toPad;
+                        path.fromName = fromName;
+                        path.toName = toName;
+                        path.fromWildcard = aFrom;
+                        path.toWildcard = aTo;
+
+                        if( count >= 2 )
                         {
-                            count++;
-                            toPad = endpoint.parent;
-
-                            path.to = toPad;
-                            path.fromName = fromName;
-                            path.toName = toName;
-                            path.fromWildcard = aFrom;
-                            path.toWildcard = aTo;
-
-                            if( count >= 2 )
-                            {
-                                // fixme: report this somewhere?
-                                //printf("Multiple targets found, aborting...\n");
-                                path.to = nullptr;
-                            }
+                            // fixme: report this somewhere?
+                            //printf("Multiple targets found, aborting...\n");
+                            path.to = nullptr;
                         }
                     }
                 }
+            }
         }
     }
 
     int newPaths = 0;
 
-    for( auto &path : paths )
+    for( FT_PATH& path : paths )
     {
         if( !path.from || !path.to )
             continue;
 
-
-        CN_ITEM *cnFrom = cnAlgo->ItemEntry( path.from ).GetItems().front();
-        CN_ITEM *cnTo = cnAlgo->ItemEntry( path.to ).GetItems().front();
-        CN_ITEM::CONNECTED_ITEMS upath;
+        CN_ITEM*              cnFrom = cnAlgo->ItemEntry( path.from ).GetItems().front();
+        CN_ITEM*              cnTo = cnAlgo->ItemEntry( path.to ).GetItems().front();
+        std::vector<CN_ITEM*> upath;
 
         auto result = uniquePathBetweenNodes( cnFrom, cnTo, upath );
 
@@ -238,19 +239,18 @@ bool  FROM_TO_CACHE::IsOnFromToPath( BOARD_CONNECTED_ITEM* aItem, const wxString
     for( int attempt = 0; attempt < 2; attempt++ )
     {
         // item already belongs to path
-        for( auto& ftPath : m_ftPaths )
+        for( FT_PATH& ftPath : m_ftPaths )
         {
-            if( aFrom == ftPath.fromWildcard &&
-                    aTo == ftPath.toWildcard )
-                {
-                    nFromTosFound++;
+            if( aFrom == ftPath.fromWildcard && aTo == ftPath.toWildcard )
+            {
+                nFromTosFound++;
 
-                    if( ftPath.pathItems.count( aItem ) )
-                    {
-            //            printf("Found cached path for %p [%s->%s]\n", aItem, (const char *)ftPath.fromName, (const char *) ftPath.toName );
-                        return true;
-                    }
+                if( ftPath.pathItems.count( aItem ) )
+                {
+        //            printf("Found cached path for %p [%s->%s]\n", aItem, (const char *)ftPath.fromName, (const char *) ftPath.toName );
+                    return true;
                 }
+            }
         }
 
         if( !nFromTosFound )
@@ -273,7 +273,7 @@ void FROM_TO_CACHE::Rebuild( BOARD* aBoard )
 
 FROM_TO_CACHE::FT_PATH* FROM_TO_CACHE::QueryFromToPath( const std::set<BOARD_CONNECTED_ITEM*>& aItems )
 {
-    for( auto& ftPath : m_ftPaths )
+    for( FT_PATH& ftPath : m_ftPaths )
     {
         if ( ftPath.pathItems == aItems )
             return &ftPath;

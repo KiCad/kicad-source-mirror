@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers.
+ * Copyright (C) 2004-2022 KiCad Developers.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,8 +17,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __FROM_TO_CACHE_H
-#define __FROM_TO_CACHE_H
+#ifndef FROM_TO_CACHE_H
+#define FROM_TO_CACHE_H
 
 #include <set>
 
@@ -32,12 +32,12 @@ public:
     struct FT_ENDPOINT
     {
         wxString name;
-        PAD* parent;
+        PAD*     parent;
     };
 
     struct FT_PATH
     {
-        int net;
+        int      net;
         PAD*     from;
         PAD*     to;
         wxString fromName, toName;
@@ -61,14 +61,14 @@ public:
     FT_PATH* QueryFromToPath( const std::set<BOARD_CONNECTED_ITEM*>& aItems );
 
 private:
-
     int cacheFromToPaths( const wxString& aFrom, const wxString& aTo );
     void buildEndpointList();
 
+private:
     std::vector<FT_ENDPOINT> m_ftEndpoints;
-    std::vector<FT_PATH> m_ftPaths;
+    std::vector<FT_PATH>     m_ftPaths;
 
-    BOARD* m_board;
+    BOARD*                   m_board;
 };
 
 #endif

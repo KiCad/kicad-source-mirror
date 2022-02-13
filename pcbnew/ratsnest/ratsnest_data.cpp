@@ -116,13 +116,13 @@ void RN_NET::kruskalMST( std::vector<CN_EDGE>& aEdges,
 
     int i = 0;
 
-    for( const CN_ANCHOR_PTR& node : m_nodes )
+    for( const std::shared_ptr<CN_ANCHOR>& node : m_nodes )
         node->SetTag( i++ );
 
     for( CN_EDGE& tmp : aEdges )
     {
-        const CN_ANCHOR_PTR&  source = tmp.GetSourceNode();
-        const CN_ANCHOR_PTR&  target = tmp.GetTargetNode();
+        const std::shared_ptr<CN_ANCHOR>&  source = tmp.GetSourceNode();
+        const std::shared_ptr<CN_ANCHOR>&  target = tmp.GetTargetNode();
 
         if( dset.unite( source->GetTag(), target->GetTag() ) )
         {
@@ -141,12 +141,12 @@ void RN_NET::kruskalMST( std::vector<CN_EDGE>& aEdges,
 class RN_NET::TRIANGULATOR_STATE
 {
 private:
-    std::multiset<CN_ANCHOR_PTR, CN_PTR_CMP> m_allNodes;
+    std::multiset<std::shared_ptr<CN_ANCHOR>, CN_PTR_CMP> m_allNodes;
 
 
     // Checks if all nodes in aNodes lie on a single line. Requires the nodes to
     // have unique coordinates!
-    bool areNodesColinear( const std::vector<CN_ANCHOR_PTR>& aNodes ) const
+    bool areNodesColinear( const std::vector<std::shared_ptr<CN_ANCHOR>>& aNodes ) const
     {
         if ( aNodes.size() <= 2 )
             return true;
@@ -172,23 +172,29 @@ public:
         m_allNodes.clear();
     }
 
-    void AddNode( CN_ANCHOR_PTR aNode )
+    void AddNode( std::shared_ptr<CN_ANCHOR> aNode )
     {
         m_allNodes.insert( aNode );
     }
 
     void Triangulate( std::vector<CN_EDGE>& mstEdges )
     {
-        std::vector<double>                       node_pts;
-        std::vector<CN_ANCHOR_PTR>                anchors;
-        std::vector< std::vector<CN_ANCHOR_PTR> > anchorChains( m_allNodes.size() );
+        std::vector<double>                                    node_pts;
+        std::vector<std::shared_ptr<CN_ANCHOR>>                anchors;
+        std::vector< std::vector<std::shared_ptr<CN_ANCHOR>> > anchorChains( m_allNodes.size() );
 
         node_pts.reserve( 2 * m_allNodes.size() );
         anchors.reserve( m_allNodes.size() );
 
-        CN_ANCHOR_PTR prev = nullptr;
+        auto addEdge =
+                [&]( const std::shared_ptr<CN_ANCHOR>& src, const std::shared_ptr<CN_ANCHOR>& dst )
+                {
+                    mstEdges.emplace_back( src, dst, src->Dist( *dst ) );
+                };
 
-        for( const CN_ANCHOR_PTR& n : m_allNodes )
+        std::shared_ptr<CN_ANCHOR> prev = nullptr;
+
+        for( const std::shared_ptr<CN_ANCHOR>& n : m_allNodes )
         {
             if( !prev || prev->Pos() != n->Pos() )
             {
@@ -211,11 +217,7 @@ public:
             // triangulation for such set. In this case, we sort along any coordinate
             // and chain the nodes together.
             for( size_t i = 0; i < anchors.size() - 1; i++ )
-            {
-                const CN_ANCHOR_PTR& src = anchors[i];
-                const CN_ANCHOR_PTR& dst = anchors[i + 1];
-                mstEdges.emplace_back( src, dst, src->Dist( *dst ) );
-            }
+                addEdge( anchors[i], anchors[i + 1] );
         }
         else
         {
@@ -224,17 +226,9 @@ public:
 
             for( size_t i = 0; i < triangles.size(); i += 3 )
             {
-                CN_ANCHOR_PTR src = anchors[triangles[i]];
-                CN_ANCHOR_PTR dst = anchors[triangles[i + 1]];
-                mstEdges.emplace_back( src, dst, src->Dist( *dst ) );
-
-                src = anchors[triangles[i + 1]];
-                dst = anchors[triangles[i + 2]];
-                mstEdges.emplace_back( src, dst, src->Dist( *dst ) );
-
-                src = anchors[triangles[i + 2]];
-                dst = anchors[triangles[i]];
-                mstEdges.emplace_back( src, dst, src->Dist( *dst ) );
+                addEdge( anchors[triangles[i]],     anchors[triangles[i + 1]] );
+                addEdge( anchors[triangles[i + 1]], anchors[triangles[i + 2]] );
+                addEdge( anchors[triangles[i + 2]], anchors[triangles[i]]     );
             }
 
             for( size_t i = 0; i < delaunator.halfedges.size(); i++ )
@@ -242,29 +236,27 @@ public:
                 if( delaunator.halfedges[i] == delaunator::INVALID_INDEX )
                     continue;
 
-                const CN_ANCHOR_PTR& src = anchors[triangles[i]];
-                const CN_ANCHOR_PTR& dst = anchors[triangles[delaunator.halfedges[i]]];
-                mstEdges.emplace_back( src, dst, src->Dist( *dst ) );
+                addEdge( anchors[triangles[i]], anchors[triangles[delaunator.halfedges[i]]] );
             }
         }
 
         for( size_t i = 0; i < anchorChains.size(); i++ )
         {
-            std::vector<CN_ANCHOR_PTR>& chain = anchorChains[i];
+            std::vector<std::shared_ptr<CN_ANCHOR>>& chain = anchorChains[i];
 
             if( chain.size() < 2 )
                 continue;
 
             std::sort( chain.begin(), chain.end(),
-                    [] ( const CN_ANCHOR_PTR& a, const CN_ANCHOR_PTR& b )
+                    [] ( const std::shared_ptr<CN_ANCHOR>& a, const std::shared_ptr<CN_ANCHOR>& b )
                     {
                         return a->GetCluster().get() < b->GetCluster().get();
                     } );
 
             for( unsigned int j = 1; j < chain.size(); j++ )
             {
-                const CN_ANCHOR_PTR& prevNode = chain[j - 1];
-                const CN_ANCHOR_PTR& curNode  = chain[j];
+                const std::shared_ptr<CN_ANCHOR>& prevNode = chain[j - 1];
+                const std::shared_ptr<CN_ANCHOR>& curNode  = chain[j];
                 int weight = prevNode->GetCluster() != curNode->GetCluster() ? 1 : 0;
                 mstEdges.emplace_back( prevNode, curNode, weight );
             }
@@ -293,9 +285,10 @@ void RN_NET::compute( const std::set< std::pair<KIID, KIID> >& aExclusions )
             auto last = ++m_nodes.begin();
 
             // There can be only one possible connection, but it is missing
-            CN_EDGE               edge( *m_nodes.begin(), *last );
-            const CN_ANCHOR_PTR&  source = edge.GetSourceNode();
-            const CN_ANCHOR_PTR&  target = edge.GetTargetNode();
+            CN_EDGE                            edge( *m_nodes.begin(), *last );
+            const std::shared_ptr<CN_ANCHOR>&  source = edge.GetSourceNode();
+            const std::shared_ptr<CN_ANCHOR>&  target = edge.GetTargetNode();
+
             std::pair<KIID, KIID> ids = { source->Parent()->m_Uuid, target->Parent()->m_Uuid };
 
             source->SetTag( 0 );
@@ -307,7 +300,7 @@ void RN_NET::compute( const std::set< std::pair<KIID, KIID> >& aExclusions )
         else
         {
             // Set tags to m_nodes as connected
-            for( const CN_ANCHOR_PTR& node : m_nodes )
+            for( const std::shared_ptr<CN_ANCHOR>& node : m_nodes )
                 node->SetTag( 0 );
         }
 
@@ -317,7 +310,7 @@ void RN_NET::compute( const std::set< std::pair<KIID, KIID> >& aExclusions )
 
     m_triangulator->Clear();
 
-    for( const CN_ANCHOR_PTR& n : m_nodes )
+    for( const std::shared_ptr<CN_ANCHOR>& n : m_nodes )
         m_triangulator->AddNode( n );
 
     std::vector<CN_EDGE> triangEdges;
@@ -366,15 +359,14 @@ void RN_NET::Clear()
 }
 
 
-void RN_NET::AddCluster( CN_CLUSTER_PTR aCluster )
+void RN_NET::AddCluster( std::shared_ptr<CN_CLUSTER> aCluster )
 {
-    CN_ANCHOR_PTR firstAnchor;
+    std::shared_ptr<CN_ANCHOR> firstAnchor;
 
     for( CN_ITEM* item : *aCluster )
     {
-        bool                        isZone = dynamic_cast<CN_ZONE_LAYER*>( item );
-        std::vector<CN_ANCHOR_PTR>& anchors = item->Anchors();
-        unsigned int                nAnchors = isZone ? 1 : anchors.size();
+        std::vector<std::shared_ptr<CN_ANCHOR>>& anchors = item->Anchors();
+        unsigned int nAnchors = dynamic_cast<CN_ZONE_LAYER*>( item ) ? 1 : anchors.size();
 
         if( nAnchors > anchors.size() )
             nAnchors = anchors.size();
@@ -398,8 +390,7 @@ void RN_NET::AddCluster( CN_CLUSTER_PTR aCluster )
 }
 
 
-bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode1,
-                                   CN_ANCHOR_PTR& aNode2 ) const
+bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, VECTOR2I* aPos1, VECTOR2I* aPos2 ) const
 {
     bool rv = false;
 
@@ -414,10 +405,10 @@ bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode
 
                 if( dist_sq < distMax_sq )
                 {
-                    rv      = true;
+                    rv         = true;
                     distMax_sq = dist_sq;
-                    aNode1  = aTestNode1;
-                    aNode2  = aTestNode2;
+                    *aPos1     = aTestNode1->Pos();
+                    *aPos2     = aTestNode2->Pos();
                 }
             };
 

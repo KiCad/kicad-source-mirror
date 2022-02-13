@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -214,7 +214,7 @@ void CONNECTIVITY_DATA::RecalculateRatsnest( BOARD_COMMIT* aCommit  )
             m_nets[i] = new RN_NET;
     }
 
-    const std::vector<CN_CLUSTER_PTR>& clusters = m_connAlgo->GetClusters();
+    const std::vector<std::shared_ptr<CN_CLUSTER>>& clusters = m_connAlgo->GetClusters();
 
     int dirtyNets = 0;
 
@@ -227,7 +227,7 @@ void CONNECTIVITY_DATA::RecalculateRatsnest( BOARD_COMMIT* aCommit  )
         }
     }
 
-    for( const CN_CLUSTER_PTR& c : clusters )
+    for( const std::shared_ptr<CN_CLUSTER>& c : clusters )
     {
         int net = c->OriginNet();
 
@@ -322,14 +322,14 @@ void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& 
 
         if( dynNet->GetNodeCount() != 0 )
         {
-            RN_NET*       ourNet = m_nets[nc];
-            CN_ANCHOR_PTR nodeA, nodeB;
+            RN_NET*  ourNet = m_nets[nc];
+            VECTOR2I pos1, pos2;
 
-            if( ourNet->NearestBicoloredPair( *dynNet, nodeA, nodeB ) )
+            if( ourNet->NearestBicoloredPair( *dynNet, &pos1, &pos2 ) )
             {
                 RN_DYNAMIC_LINE l;
-                l.a = nodeA->Pos();
-                l.b = nodeB->Pos();
+                l.a = pos1;
+                l.b = pos2;
                 l.netCode = nc;
 
                 m_dynamicRatsnest.push_back( l );
@@ -342,9 +342,9 @@ void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& 
 
     for( const CN_EDGE& edge : edges )
     {
-        const CN_ANCHOR_PTR& nodeA = edge.GetSourceNode();
-        const CN_ANCHOR_PTR& nodeB = edge.GetTargetNode();
-        RN_DYNAMIC_LINE      l;
+        const std::shared_ptr<CN_ANCHOR>& nodeA = edge.GetSourceNode();
+        const std::shared_ptr<CN_ANCHOR>& nodeB = edge.GetTargetNode();
+        RN_DYNAMIC_LINE                   l;
 
         // Use the parents' positions
         l.a = nodeA->Parent()->GetPosition() + aInternalOffset;

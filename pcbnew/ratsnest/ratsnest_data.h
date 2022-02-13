@@ -46,7 +46,8 @@ class CN_CLUSTER;
 
 struct CN_PTR_CMP
 {
-    bool operator()( const CN_ANCHOR_PTR& aItem, const CN_ANCHOR_PTR& bItem ) const
+    bool operator()( const std::shared_ptr<CN_ANCHOR>& aItem,
+                     const std::shared_ptr<CN_ANCHOR>& bItem ) const
     {
         if( aItem->Pos().x == bItem->Pos().x )
             return aItem->Pos().y < bItem->Pos().y;
@@ -89,8 +90,7 @@ public:
     const std::vector<CN_EDGE>& GetEdges() const { return m_rnEdges; }
     std::vector<CN_EDGE>& GetEdges() { return m_rnEdges; }
 
-    bool NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode1,
-                               CN_ANCHOR_PTR& aNode2 ) const;
+    bool NearestBicoloredPair( const RN_NET& aOtherNet, VECTOR2I* aPos1, VECTOR2I* aPos2 ) const;
 
 protected:
     ///< Recompute ratsnest from scratch.
@@ -101,7 +101,7 @@ protected:
                      const std::set< std::pair<KIID, KIID> >& aExclusions );
 
     ///< Vector of nodes
-    std::multiset<CN_ANCHOR_PTR, CN_PTR_CMP> m_nodes;
+    std::multiset<std::shared_ptr<CN_ANCHOR>, CN_PTR_CMP> m_nodes;
 
     ///< Vector of edges that make pre-defined connections
     std::vector<CN_EDGE> m_boardEdges;
