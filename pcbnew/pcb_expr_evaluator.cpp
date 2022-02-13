@@ -795,17 +795,15 @@ static void isCoupledDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
     result->SetDeferredEval(
             [a, b]() -> double
             {
-                if( a && b )
-                {
-                    NETINFO_ITEM* netinfo = a->GetNet();
-                    wxString      coupledNet, dummy;
+                NETINFO_ITEM* netinfo = a->GetNet();
+                wxString      coupledNet;
+                wxString      dummy;
 
-                    if( netinfo
-                            && DRC_ENGINE::MatchDpSuffix( netinfo->GetNetname(), coupledNet, dummy )
-                            && b->GetNetname() == coupledNet )
-                    {
-                        return 1.0;
-                    }
+                if( netinfo
+                        && DRC_ENGINE::MatchDpSuffix( netinfo->GetNetname(), coupledNet, dummy )
+                        && ( !b || b->GetNetname() == coupledNet ) )
+                {
+                    return 1.0;
                 }
 
                 return 0.0;
@@ -815,7 +813,7 @@ static void isCoupledDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
 
 static void inDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
 {
-    LIBEVAL::VALUE*   arg    = aCtx->Pop();
+    LIBEVAL::VALUE*   argv   = aCtx->Pop();
     PCB_EXPR_VAR_REF* vref   = static_cast<PCB_EXPR_VAR_REF*>( self );
     BOARD_ITEM*       item   = vref ? vref->GetObject( aCtx ) : nullptr;
     LIBEVAL::VALUE*   result = aCtx->AllocValue();
@@ -823,7 +821,7 @@ static void inDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
     result->Set( 0.0 );
     aCtx->Push( result );
 
-    if( !arg )
+    if( !argv )
     {
         if( aCtx->HasErrorCallback() )
         {
@@ -838,21 +836,24 @@ static void inDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
 
     result->SetDeferredEval(
-            [item, arg]() -> double
+            [item, argv]() -> double
             {
                 if( item && item->IsConnected() )
                 {
                     NETINFO_ITEM* netinfo = static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNet();
 
                     wxString refName = netinfo->GetNetname();
+                    wxString arg = argv->AsString();
                     wxString baseName, coupledNet;
                     int      polarity = DRC_ENGINE::MatchDpSuffix( refName, coupledNet, baseName );
 
-                    if( polarity != 0
-                            && item->GetBoard()->FindNet( coupledNet )
-                            && baseName.Matches( arg->AsString() ) )
+                    if( polarity != 0 && item->GetBoard()->FindNet( coupledNet ) )
                     {
-                        return 1.0;
+                        if( baseName.Matches( arg ) )
+                            return 1.0;
+
+                        if( baseName.EndsWith( "_" ) && baseName.BeforeLast( '_' ).Matches( arg ) )
+                            return 1.0;
                     }
                 }
 
