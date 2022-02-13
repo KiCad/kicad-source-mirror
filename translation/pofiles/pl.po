@@ -1,13 +1,14 @@
 # Mark Roszko <mark.roszko@gmail.com>, 2020.
 # ZbeeGin <zbeegin@op.pl>, 2020, 2021, 2022.
 # Pomian <kontakt@rapiddev.pl>, 2021.
+# Krzysztof Kawa <christophorus72@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-07 17:47-0800\n"
 "PO-Revision-Date: 2022-02-13 20:12+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Last-Translator: Krzysztof Kawa <christophorus72@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
 "Language: pl\n"
@@ -12263,7 +12264,7 @@ msgstr "Grubość podświetlenia:"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:113
 #: pcbnew/dialogs/panel_display_options_base.cpp:74
 msgid "Cross-probing"
-msgstr "Sondowanie krzyżowe"
+msgstr "Ustawienia zaznaczania"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:115
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
@@ -12272,17 +12273,17 @@ msgstr "Sondowanie krzyżowe z zaznaczenia"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:119
 msgid "Center view on cross-probed items"
-msgstr "Skoncentruj widok na elementach poddawanych próbie"
+msgstr "Skoncentruj widok na zaznaczonych elementach"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:123
 #: pcbnew/dialogs/panel_display_options_base.cpp:84
 msgid "Zoom to fit cross-probed items"
-msgstr "Powiększa sondowane elementy"
+msgstr "Powiększa zaznaczone elementy"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:127
 #: pcbnew/dialogs/panel_display_options_base.cpp:88
 msgid "Highlight cross-probed nets"
-msgstr "Podświetl sondowane sieci"
+msgstr "Podświetl zaznaczone sieci"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:129
 msgid "Highlight nets when they are highlighted in the PCB editor"
