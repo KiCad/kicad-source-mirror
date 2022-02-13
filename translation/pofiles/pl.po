@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
 "PO-Revision-Date: 2022-02-14 17:18+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Last-Translator: Krzysztof Kawa <christophorus72@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v6/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -11778,21 +11778,21 @@ msgstr "(kolor podświetlenia można zmienić na stronie \"Kolory\")"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:78
 #: pcbnew/dialogs/panel_display_options_base.cpp:74
 msgid "Cross-probing"
-msgstr "Sondowanie krzyżowe"
+msgstr "Ustawienia zaznaczania"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:80
 msgid "Center view on cross-probed items"
-msgstr "Skoncentruj widok na elementach poddawanych próbie"
+msgstr "Skoncentruj widok na zaznaczonych elementach"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:84
 #: pcbnew/dialogs/panel_display_options_base.cpp:80
 msgid "Zoom to fit cross-probed items"
-msgstr "Powiększa sondowane elementy"
+msgstr "Powiększa zaznaczone elementy"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:88
 #: pcbnew/dialogs/panel_display_options_base.cpp:84
 msgid "Highlight cross-probed nets"
-msgstr "Podświetl sondowane sieci"
+msgstr "Podświetl zaznaczone sieci"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
 msgid "Highlight nets when they are highlighted in the PCB editor"
