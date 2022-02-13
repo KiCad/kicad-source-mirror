@@ -213,6 +213,7 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
     try
     {
         cntUpd.Start();
+
         try
         {
             m_view->UpdateItems();
@@ -229,9 +230,7 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
         cntUpd.Stop();
 
         cntCtx.Start();
-        int cookie = rand();
-        m_gal->LockContext( cookie );
-        m_gal->BeginDrawing();
+        KIGFX::GAL_DRAWING_CONTEXT ctx( m_gal );
         cntCtx.Stop();
 
         if( m_view->IsTargetDirty( KIGFX::TARGET_OVERLAY )
@@ -273,9 +272,6 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
         m_gal->DrawCursor( m_viewControls->GetCursorPosition() );
 
         cntCtxDestroy.Start();
-        m_gal->EndDrawing();
-        m_gal->UnlockContext( cookie );
-        cntCtxDestroy.Stop();
     }
     catch( std::exception& err )
     {
@@ -293,6 +289,9 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
             DisplayInfoMessage( m_parent, _( "Could not use OpenGL" ), wxString( err.what() ) );
         }
     }
+
+    // ctx goes out of scope here so destructor would be called
+    cntCtxDestroy.Stop();
 
 
     if( isDirty )
