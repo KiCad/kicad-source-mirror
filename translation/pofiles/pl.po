@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-02-01 13:58+0000\n"
+"PO-Revision-Date: 2022-02-14 17:18+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v6/pl/>\n"
 "Language: pl\n"
@@ -11757,7 +11757,7 @@ msgstr "Wybór"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:44
 msgid "Draw selected text items as box"
-msgstr "Rysuj wybrane elementy tekstowe jako prostokąt"
+msgstr "Rysuj wybrane elementy tekstowe jako blok"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:47
 msgid "Draw selected child items"
