@@ -157,6 +157,7 @@ void DIALOG_NETLIST_IMPORT::onUpdatePCB( wxCommandEvent& event )
     loadNetlist( false );
 
     m_sdbSizerCancel->SetDefault();
+    m_sdbSizerCancel->SetFocus();
 }
 
 
