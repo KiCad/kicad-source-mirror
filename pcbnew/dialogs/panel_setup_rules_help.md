@@ -151,8 +151,8 @@ True if `A` has a hole which is plated.
 
     A.inDiffPair('<net_name>')
 True if `A` has net that is part of the specified differential pair.
-`<net_name>` is the base name of the differential pair.  For example, `inDiffPair('CLK')`
-matches items in the `CLK_P` and `CLK_N` nets.
+`<net_name>` is the base name of the differential pair.  For example, `inDiffPair('/CLK')`
+matches items in the `/CLK_P` and `/CLK_N` nets.
 <br><br>
 
     AB.isCoupledDiffPair()
@@ -192,20 +192,20 @@ For the latter use a `(layer "layer_name")` clause in the rule.
        (condition "A.Type == '*Text' && B.Type == 'Via'"))
 
 
-    (rule "Distance between Vias of Different Nets"  
+    (rule "Distance between Vias of Different Nets"
         (constraint hole_to_hole (min 0.254mm))
         (condition "A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"))
 
-    (rule "Clearance between Pads of Different Nets"  
+    (rule "Clearance between Pads of Different Nets"
         (constraint clearance (min 3.0mm))
         (condition "A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"))
 
 
-    (rule "Via Hole to Track Clearance"  
+    (rule "Via Hole to Track Clearance"
         (constraint hole_clearance (min 0.254mm))
         (condition "A.Type == 'Via' && B.Type == 'Track'"))
-    
-    (rule "Pad to Track Clearance"  
+
+    (rule "Pad to Track Clearance"
         (constraint clearance (min 0.2mm))
         (condition "A.Type == 'Pad' && B.Type == 'Track'"))
 
@@ -215,11 +215,11 @@ For the latter use a `(layer "layer_name")` clause in the rule.
         (condition "A.Layer == 'Edge.Cuts' && A.Thickness == 1.0mm"))
 
 
-    (rule "Max Drill Hole Size Mechanical"  
+    (rule "Max Drill Hole Size Mechanical"
         (constraint hole_size (max 6.3mm))
         (condition "A.Pad_Type == 'NPTH, mechanical'"))
-    
-    (rule "Max Drill Hole Size PTH"  
+
+    (rule "Max Drill Hole Size PTH"
         (constraint hole_size (max 6.35mm))
         (condition "A.Pad_Type == 'Through-hole'"))
 
@@ -227,7 +227,7 @@ For the latter use a `(layer "layer_name")` clause in the rule.
     # Specify an optimal gap for a particular diff-pair
     (rule "dp clock gap"
         (constraint diff_pair_gap (opt "0.8mm"))
-        (condition "A.inDiffPair('CLK') && AB.isCoupledDiffPair()"))
+        (condition "A.inDiffPair('/CLK')"))
 
     # Specify a larger clearance around any diff-pair
     (rule "dp clearance"
@@ -254,7 +254,7 @@ For the latter use a `(layer "layer_name")` clause in the rule.
         (constraint thermal_relief_gap (min 10mil))
         (constraint thermal_spoke_width (min 12mil))
         (condition "A.Name == 'zone_GND' || A.Name == 'zone_PWR'"))
-    
+
 
     # Prevent solder wicking from SMD pads
     (rule holes_in_pads
