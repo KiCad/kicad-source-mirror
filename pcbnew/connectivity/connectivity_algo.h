@@ -173,8 +173,8 @@ public:
 
     void ClearDirtyFlags()
     {
-        for( bool dirty : m_dirtyNets )
-            dirty = false;
+        for( size_t ii = 0; ii < m_dirtyNets.size(); ii++ )
+            m_dirtyNets[ii] = false;
     }
 
     void GetDirtyClusters( CLUSTERS& aClusters ) const
