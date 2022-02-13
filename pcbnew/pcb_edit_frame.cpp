@@ -973,8 +973,6 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
     // Make sure everything's up-to-date
     GetBoard()->BuildListOfNets();
 
-    const PCB_DISPLAY_OPTIONS prevOpts = GetDisplayOptions();
-
     DIALOG_BOARD_SETUP dlg( this );
 
     if( !aInitialPage.IsEmpty() )
@@ -989,36 +987,13 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
 
         Kiway().CommonSettingsChanged( false, true );
 
-        bool trackClearanceModeChanged = GetDisplayOptions().m_ShowTrackClearanceMode
-                                                 != prevOpts.m_ShowTrackClearanceMode;
-        bool padClearanceModeChanged = GetDisplayOptions().m_DisplayPadClearance
-                                               != prevOpts.m_DisplayPadClearance;
-
         GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
                 [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
                 {
-                    BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem );
+                    if( dynamic_cast<EDA_TEXT*>( aItem ) )
+                        return true;  // text variables
 
-                    if( !item )
-                        return false;
-
-                    switch( item->Type() )
-                    {
-                    case PCB_TRACE_T:
-                    case PCB_ARC_T:
-                    case PCB_VIA_T:
-                        return trackClearanceModeChanged;
-
-                    case PCB_PAD_T:
-                        return padClearanceModeChanged;
-
-                    case PCB_TEXT_T:
-                    case PCB_FP_TEXT_T:
-                        return true;        // text variables
-
-                    default:
-                        return false;
-                    }
+                    return false;
                 } );
 
         GetCanvas()->Refresh();

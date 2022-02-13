@@ -58,6 +58,7 @@
 #include <tool/grid_menu.h>
 #include "cleanup_item.h"
 #include <zoom_defines.h>
+#include <ratsnest/ratsnest_view_item.h>
 
 
 wxDEFINE_EVENT( BOARD_CHANGED, wxCommandEvent );
@@ -810,7 +811,25 @@ void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
     GetCanvas()->GetView()->GetPainter()->GetSettings()->LoadColors( GetColorSettings() );
-    GetCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
+
+    GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
+            [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
+            {
+                if( dynamic_cast<RATSNEST_VIEW_ITEM*>( aItem ) )
+                {
+                    return true;    // ratsnest display
+                }
+                else if( dynamic_cast<PCB_TRACK*>( aItem ) )
+                {
+                    return true;    // track, arc & via clearance display
+                }
+                else if( dynamic_cast<PAD*>( aItem ) )
+                {
+                    return true;    // pad clearance display
+                }
+
+                return false;
+            } );
 
     RecreateToolbars();
 
