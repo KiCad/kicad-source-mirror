@@ -43,6 +43,9 @@ fedora_build_linux:
       - build/linux/pcbnew/_pcbnew.so
       - build/linux/qa/
       - build/linux/compilation_log.txt
+    exclude:
+      - build/linux/**/*.o
+      - build/linux/**/*.a
 
 # Upload the compilation log in an easily downloadable form
 fedora_report_build_warn:
