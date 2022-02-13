@@ -172,7 +172,7 @@ static void convertPolygon( std::list<std::unique_ptr<IMPORTED_SHAPE>>& aShapes,
 
 void GRAPHICS_IMPORTER_BUFFER::PostprocessNestedPolygons()
 {
-    int curShapeIdx = 0;
+    int curShapeIdx = -1;
     int lastWidth = 1;
 
     std::list<std::unique_ptr<IMPORTED_SHAPE>> newShapes;
@@ -191,11 +191,14 @@ void GRAPHICS_IMPORTER_BUFFER::PostprocessNestedPolygons()
         lastWidth = poly->GetWidth();
         int index = poly->GetParentShapeIndex();
 
+        if( curShapeIdx < 0 )
+            index = curShapeIdx;
+
         if( index == curShapeIdx )
         {
             polypaths.push_back( poly );
         }
-        else if( index == curShapeIdx + 1 )
+        else if( index >= curShapeIdx + 1 )
         {
             convertPolygon( newShapes, polypaths, m_shapeFillRules[curShapeIdx], lastWidth );
             curShapeIdx++;
