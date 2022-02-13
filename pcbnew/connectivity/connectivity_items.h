@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
@@ -36,7 +36,6 @@
 #include <zone.h>
 
 #include <geometry/shape_poly_set.h>
-#include <geometry/poly_grid_partition.h>
 
 #include <memory>
 #include <algorithm>
@@ -296,12 +295,22 @@ public:
             m_subpolyIndex( aSubpolyIndex ),
             m_layer( aLayer )
     {
-        SHAPE_LINE_CHAIN outline = aParent->GetFilledPolysList( aLayer ).COutline( aSubpolyIndex );
+        const SHAPE_POLY_SET& fill = aParent->GetFilledPolysList( aLayer );
 
-        outline.SetClosed( true );
-        outline.Simplify();
+        m_triangulatedSubpoly = SHAPE_POLY_SET( fill.COutline( aSubpolyIndex ) );
+        m_triangulatedSubpoly.CacheTriangulation();
 
-        m_cachedPoly = std::make_unique<POLY_GRID_PARTITION>( outline, 16 );
+        for( size_t ii = 0; ii < m_triangulatedSubpoly.TriangulatedPolyCount(); ++ii )
+        {
+            for( auto& tri : m_triangulatedSubpoly.TriangulatedPolygon( ii )->Triangles() )
+            {
+                BOX2I     bbox = tri.BBox();
+                const int mmin[2] = { bbox.GetX(), bbox.GetY() };
+                const int mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
+
+                m_rTree.Insert( mmin, mmax, &tri );
+            }
+        }
     }
 
     int SubpolyIndex() const
@@ -309,33 +318,44 @@ public:
         return m_subpolyIndex;
     }
 
-    bool ContainsAnchor( const CN_ANCHOR_PTR anchor ) const
-    {
-        return ContainsPoint( anchor->Pos(), 0 );
-    }
-
-    bool ContainsPoint( const VECTOR2I& p, int aAccuracy = 0 ) const
-    {
-        return m_cachedPoly->ContainsPoint( p, aAccuracy );
-    }
-
-    const BOX2I& BBox()
-    {
-        if( m_dirty )
-            m_bbox = m_cachedPoly->BBox();
-
-        return m_bbox;
-    }
+    PCB_LAYER_ID GetLayer() { return m_layer; }
 
     virtual int AnchorCount() const override;
     virtual const VECTOR2I GetAnchor( int n ) const override;
 
+    bool Collide( SHAPE* aRefShape ) const
+    {
+        BOX2I bbox = aRefShape->BBox();
+        int  min[2] = { bbox.GetX(), bbox.GetY() };
+        int  max[2] = { bbox.GetRight(), bbox.GetBottom() };
+        bool collision = false;
+
+        auto visitor =
+                [&]( const SHAPE* aShape ) -> bool
+                {
+                    if( aRefShape->Collide( aShape ) )
+                    {
+                        collision = true;
+                        return false;
+                    }
+
+                    return true;
+                };
+
+        m_rTree.Search( min, max, visitor );
+
+        return collision;
+    }
+
 private:
-    std::vector<VECTOR2I>                m_testOutlinePoints;
-    std::unique_ptr<POLY_GRID_PARTITION> m_cachedPoly;
-    int                                  m_subpolyIndex;
-    PCB_LAYER_ID                         m_layer;
+    std::vector<VECTOR2I>               m_testOutlinePoints;
+    int                                 m_subpolyIndex;
+    PCB_LAYER_ID                        m_layer;
+    SHAPE_POLY_SET                      m_triangulatedSubpoly;
+    RTree<const SHAPE*, int, 2, double> m_rTree;
 };
+
+
 
 
 class CN_LIST
@@ -370,15 +390,8 @@ public:
     ITER begin() { return m_items.begin(); };
     ITER end() { return m_items.end(); };
 
-    CONST_ITER begin() const
-    {
-        return m_items.begin();
-    }
-
-    CONST_ITER end() const
-    {
-        return m_items.end();
-    }
+    CONST_ITER begin() const { return m_items.begin(); }
+    CONST_ITER end() const { return m_items.end(); }
 
     CN_ITEM* operator[] ( int aIndex ) { return m_items[aIndex]; }
 
@@ -403,14 +416,6 @@ public:
         SetDirty( false );
     }
 
-    void MarkAllAsDirty()
-    {
-        for( auto item : m_items )
-            item->SetDirty( true );
-
-        SetDirty( true );
-    }
-
     int Size() const
     {
         return m_items.size();
@@ -427,10 +432,9 @@ public:
     const std::vector<CN_ITEM*> Add( ZONE* zone, PCB_LAYER_ID aLayer );
 
 private:
-    bool                  m_dirty;
-    bool                  m_hasInvalid;
-
-    CN_RTREE<CN_ITEM*>    m_index;
+    bool               m_dirty;
+    bool               m_hasInvalid;
+    CN_RTREE<CN_ITEM*> m_index;
 };
 
 

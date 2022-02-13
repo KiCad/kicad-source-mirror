@@ -36,7 +36,6 @@ set( KIMATH_SRCS
     geometry/test_shape_poly_set_collision.cpp
     geometry/test_shape_poly_set_distance.cpp
     geometry/test_shape_poly_set_iterator.cpp
-    geometry/test_poly_grid_partition.cpp
     geometry/test_shape_line_chain.cpp
 
     math/test_vector2.cpp

@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016-2018 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -604,7 +604,7 @@ void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( ZONE* aZone, PCB_LAYER_ID 
 
 void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones )
 {
-    for( auto& z : aZones )
+    for( CN_ZONE_ISOLATED_ISLAND_LIST& z : aZones )
     {
         Remove( z.m_zone );
         Add( z.m_zone );
@@ -672,34 +672,15 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aI
     if( aZoneLayer->Net() != aItem->Net() && !aItem->CanChangeNet() )
         return;
 
-    if( !aZoneLayer->BBox().Intersects( aItem->BBox() ) )
-        return;
-
-    int accuracy = 0;
-
-    if( aItem->Parent()->Type() == PCB_VIA_T
-            || aItem->Parent()->Type() == PCB_TRACE_T
-            || aItem->Parent()->Type() == PCB_ARC_T )
+    if( aZoneLayer->Collide( aItem->Parent()->GetEffectiveShape( aZoneLayer->GetLayer() ).get() ) )
     {
-        accuracy = ( static_cast<PCB_TRACK*>( aItem->Parent() )->GetWidth() + 1 ) / 2;
-    }
-
-    for( int i = 0; i < aItem->AnchorCount(); ++i )
-    {
-        if( aZoneLayer->ContainsPoint( aItem->GetAnchor( i ), accuracy ) )
-        {
-            aZoneLayer->Connect( aItem );
-            aItem->Connect( aZoneLayer );
-            return;
-        }
+        aZoneLayer->Connect( aItem );
+        aItem->Connect( aZoneLayer );
     }
 }
 
 void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LAYER* aZoneLayerB )
 {
-    const ZONE* zoneA = static_cast<const ZONE*>( aZoneLayerA->Parent() );
-    const ZONE* zoneB = static_cast<const ZONE*>( aZoneLayerB->Parent() );
-
     if( aZoneLayerA->Layer() != aZoneLayerB->Layer() )
         return;
 
@@ -709,38 +690,15 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LA
     const BOX2I& boxA = aZoneLayerA->BBox();
     const BOX2I& boxB = aZoneLayerB->BBox();
 
+    if( !boxA.Intersects( boxB ) )
+        return;
+
     PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( aZoneLayerA->Layer() );
 
-    const SHAPE_LINE_CHAIN& outline =
-            zoneA->GetFilledPolysList( layer ).COutline( aZoneLayerA->SubpolyIndex() );
-
-    for( int i = 0; i < outline.PointCount(); i++ )
+    if( aZoneLayerA->Collide( aZoneLayerB->Parent()->GetEffectiveShape( layer ).get() ) )
     {
-        if( !boxB.Contains( outline.CPoint( i ) ) )
-            continue;
-
-        if( aZoneLayerB->ContainsPoint( outline.CPoint( i ) ) )
-        {
-            aZoneLayerA->Connect( aZoneLayerB );
-            aZoneLayerB->Connect( aZoneLayerA );
-            return;
-        }
-    }
-
-    const SHAPE_LINE_CHAIN& outline2 =
-            zoneB->GetFilledPolysList( layer ).COutline( aZoneLayerB->SubpolyIndex() );
-
-    for( int i = 0; i < outline2.PointCount(); i++ )
-    {
-        if( !boxA.Contains( outline2.CPoint( i ) ) )
-            continue;
-
-        if( aZoneLayerA->ContainsPoint( outline2.CPoint( i ) ) )
-        {
-            aZoneLayerA->Connect( aZoneLayerB );
-            aZoneLayerB->Connect( aZoneLayerA );
-            return;
-        }
+        aZoneLayerA->Connect( aZoneLayerB );
+        aZoneLayerB->Connect( aZoneLayerA );
     }
 }
 

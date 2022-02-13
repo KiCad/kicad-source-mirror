@@ -39,8 +39,6 @@ int CN_ITEM::AnchorCount() const
 
     switch( m_parent->Type() )
     {
-    case PCB_PAD_T:
-        return 5;  // center, north, south, east and west
     case PCB_TRACE_T:
     case PCB_ARC_T:
         return 2;  // start and end
@@ -52,89 +50,14 @@ int CN_ITEM::AnchorCount() const
 
 const VECTOR2I CN_ITEM::GetAnchor( int n ) const
 {
-    VECTOR2I pt0;
-
     if( !m_valid )
-        return pt0;
+        return VECTOR2I();
 
     switch( m_parent->Type() )
     {
     case PCB_PAD_T:
-    {
-        PAD* pad = static_cast<PAD*>( m_parent );
+        return static_cast<PAD*>( m_parent )->GetPosition();
 
-        if( n == 0 )
-            return VECTOR2I( pad->GetPosition() );
-
-        // ShapePos() is the geometric center (not anchor) for the pad
-        pt0 = pad->ShapePos();
-        VECTOR2I pt1 = pt0;
-
-        switch( pad->GetShape() )
-        {
-        case PAD_SHAPE::TRAPEZOID:
-            // Because the trap delta is applied as +1/2 at one end and -1/2 at the other,
-            // the midpoint is actually unchanged.  Therefore all the cardinal points are
-            // the same as for a rectangle.
-            KI_FALLTHROUGH;
-
-        case PAD_SHAPE::RECT:
-        case PAD_SHAPE::CIRCLE:
-        case PAD_SHAPE::OVAL:
-        case PAD_SHAPE::ROUNDRECT:
-        case PAD_SHAPE::CHAMFERED_RECT:
-            switch( n )
-            {
-            case 1: pt1.y -= pad->GetSize().y / 2; break;    // North
-            case 2: pt1.y += pad->GetSize().y / 2; break;    // South
-            case 3: pt1.x -= pad->GetSize().x / 2; break;    // East
-            case 4: pt1.x += pad->GetSize().x / 2; break;    // West
-            default:                               break;    // Wicked witch
-            }
-
-            if( !pad->GetOrientation().IsZero() )
-                RotatePoint( pt1, pad->ShapePos(), pad->GetOrientation() );
-
-            // Thermal spokes on circular pads form an 'X' instead of a '+'
-            if( pad->GetShape() == PAD_SHAPE::CIRCLE )
-                RotatePoint( pt1, pad->ShapePos(), ANGLE_45 );
-
-            return pt1;
-
-        case PAD_SHAPE::CUSTOM:
-        {
-            switch( n )
-            {
-            case 1: pt1.y = INT_MIN / 2; break;    // North
-            case 2: pt1.y = INT_MAX / 2; break;    // South
-            case 3: pt1.x = INT_MIN / 2; break;    // East
-            case 4: pt1.x = INT_MAX / 2; break;    // West
-            default:                     break;    // Wicked witch
-            }
-
-            if( !pad->GetOrientation().IsZero() )
-                RotatePoint( pt1, pad->ShapePos(), pad->GetOrientation() );
-
-            const std::shared_ptr<SHAPE_POLY_SET>& padPolySet = pad->GetEffectivePolygon();
-            const SHAPE_LINE_CHAIN&                padOutline = padPolySet->COutline( 0 );
-            SHAPE_LINE_CHAIN::INTERSECTIONS        intersections;
-
-            padOutline.Intersect( SEG( pt0, pt1 ), intersections );
-
-            if( intersections.empty() )
-            {
-                // There should always be at least some copper outside the hole and/or
-                // shapePos center
-                assert( false );
-                return pt0;
-            }
-
-            return intersections[ intersections.size() - 1 ].p;
-        }
-        }
-
-        break;
-    }
     case PCB_TRACE_T:
     case PCB_ARC_T:
         if( n == 0 )
@@ -146,10 +69,9 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
         return static_cast<const PCB_VIA*>( m_parent )->GetStart();
 
     default:
-        assert( false );
+        UNIMPLEMENTED_FOR( m_parent->GetClass() );
+        return VECTOR2I();
     }
-
-    return pt0;
 }
 
 

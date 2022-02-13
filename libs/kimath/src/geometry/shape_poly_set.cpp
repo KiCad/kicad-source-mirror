@@ -2464,7 +2464,7 @@ size_t SHAPE_POLY_SET::GetIndexableSubshapeCount() const
 }
 
 
-void SHAPE_POLY_SET:: GetIndexableSubshapes( std::vector<SHAPE*>& aSubshapes )
+void SHAPE_POLY_SET::GetIndexableSubshapes( std::vector<SHAPE*>& aSubshapes )
 {
     aSubshapes.reserve( GetIndexableSubshapeCount() );
 

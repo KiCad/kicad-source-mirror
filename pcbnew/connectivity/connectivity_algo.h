@@ -36,7 +36,6 @@
 #include <zone.h>
 
 #include <geometry/shape_poly_set.h>
-#include <geometry/poly_grid_partition.h>
 
 #include <memory>
 #include <algorithm>

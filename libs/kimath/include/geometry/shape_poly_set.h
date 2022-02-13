@@ -101,9 +101,8 @@ public:
                     case 0: return parent->m_vertices[a];
                     case 1: return parent->m_vertices[b];
                     case 2: return parent->m_vertices[c];
-                    default: assert(false);
+                    default: wxCHECK( false, VECTOR2I() );
                 }
-                return VECTOR2I(0, 0);
             }
 
             virtual const SEG GetSegment( int aIndex ) const override
@@ -113,16 +112,16 @@ public:
                     case 0: return SEG( parent->m_vertices[a], parent->m_vertices[b] );
                     case 1: return SEG( parent->m_vertices[b], parent->m_vertices[c] );
                     case 2: return SEG( parent->m_vertices[c], parent->m_vertices[a] );
-                    default: assert(false);
+                    default: wxCHECK( false, SEG() );
                 }
-                return SEG();
             }
 
             virtual size_t GetPointCount() const override { return 3; }
             virtual size_t GetSegmentCount() const override { return 3; }
 
-
-            int a, b, c;
+            int                   a;
+            int                   b;
+            int                   c;
             TRIANGULATED_POLYGON* parent;
         };
 
@@ -153,15 +152,10 @@ public:
             m_vertices.push_back( aP );
         }
 
-        size_t GetTriangleCount() const
-        {
-            return m_triangles.size();
-        }
+        size_t GetTriangleCount() const { return m_triangles.size(); }
 
-        std::deque<TRI>& Triangles()
-        {
-            return m_triangles;
-        }
+        std::deque<TRI>& Triangles() { return m_triangles; }
+        const std::deque<TRI>& Triangles() const { return m_triangles; }
 
         size_t GetVertexCount() const
         {
@@ -170,7 +164,7 @@ public:
 
         void Move( const VECTOR2I& aVec )
         {
-            for( auto& vertex : m_vertices )
+            for( VECTOR2I& vertex : m_vertices )
                 vertex += aVec;
         }
 
