@@ -127,7 +127,10 @@ void PCB_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
             m_layerColors[GetNetnameLayer( layer )] = lightLabel;
     }
 
-    m_hiContrastFactor = 1.0f - Pgm().GetCommonSettings()->m_Appearance.hicontrast_dimming_factor;
+    if( PgmOrNull() )   // can be null if used without project (i.e. from python script)
+        m_hiContrastFactor = 1.0f - Pgm().GetCommonSettings()->m_Appearance.hicontrast_dimming_factor;
+    else
+        m_hiContrastFactor = 1.0f - 0.8f;   // default value
 
     update();
 }
