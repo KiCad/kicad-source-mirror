@@ -331,6 +331,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
+        bool selCancelled = false;
         bool displayWireCursor = false;
         bool displayBusCursor = false;
         bool displayLineCursor = false;
@@ -348,9 +349,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         if( evt->IsMouseDown( BUT_LEFT ) )
         {
             // Avoid triggering when running under other tools
-            EE_POINT_EDITOR *pt_tool = m_toolMgr->GetTool<EE_POINT_EDITOR>();
-
-            if( m_frame->ToolStackIsEmpty() && pt_tool && !pt_tool->HasPoint() )
+            if( m_frame->ToolStackIsEmpty() && !m_toolMgr->GetTool<EE_POINT_EDITOR>()->HasPoint() )
             {
                 m_originalCursor = m_toolMgr->GetMousePosition();
                 m_disambiguateTimer.StartOnce( 500 );
@@ -372,89 +371,38 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
                 schframe->FocusOnItem( nullptr );
 
-            EE_COLLECTOR collector;
-            bool continueSelect = true;
-
             // Collect items at the clicked location (doesn't select them yet)
-            if( CollectHits( collector, evt->Position() ) )
+            EE_COLLECTOR collector;
+            CollectHits( collector, evt->Position() );
+            narrowSelection( collector, evt->Position(), false, false );
+
+            if( collector.GetCount() == 1 && !m_isSymbolEditor && !modifier_enabled )
             {
-                narrowSelection( collector, evt->Position(), false, false );
+                OPT_TOOL_EVENT autostart = autostartEvent( evt, grid, collector[0] );
 
-                if( collector.GetCount() == 1 && !m_isSymbolEditor && !modifier_enabled )
+                if( autostart )
                 {
-                    // Check if we want to auto start wires
-                    VECTOR2I snappedCursorPos = grid.BestSnapAnchor( evt->Position(),
-                                                                     LAYER_CONNECTABLE, nullptr );
+                    DRAW_SEGMENT_EVENT_PARAMS* params = new DRAW_SEGMENT_EVENT_PARAMS();
 
-                    EE_POINT_EDITOR *pt_tool = m_toolMgr->GetTool<EE_POINT_EDITOR>();
+                    params->layer = autostart->Parameter<DRAW_SEGMENT_EVENT_PARAMS*>()->layer;
+                    params->quitOnDraw = true;
+                    params->sourceSegment = dynamic_cast<SCH_LINE*>( collector[0] );
 
-                    if( m_frame->eeconfig()->m_Drawing.auto_start_wires
-                            && pt_tool && !pt_tool->HasPoint()
-                            && collector[0]->IsPointClickableAnchor( (wxPoint) snappedCursorPos ) )
-                    {
-                        OPT_TOOL_EVENT newEvt;
-                        SCH_CONNECTION* connection = collector[0]->Connection();
+                    autostart->SetParameter( params );
+                    m_toolMgr->ProcessEvent( *autostart );
 
-                        if( ( connection && ( connection->IsNet() || connection->IsUnconnected() ) )
-                            || collector[0]->Type() == SCH_SYMBOL_T )
-                        {
-                            // For bus wire entries, we want to autostart a wire or a bus
-                            // depending on what is connected to the other side.
-                            auto entry = dynamic_cast<SCH_BUS_WIRE_ENTRY*>( collector[0] );
-
-                            if( ( entry != nullptr ) && ( entry->m_connected_bus_item == nullptr ) )
-                                newEvt = EE_ACTIONS::drawBus.MakeEvent();
-                            else
-                                newEvt = EE_ACTIONS::drawWire.MakeEvent();
-                        }
-                        else if( connection && connection->IsBus() )
-                        {
-                            newEvt = EE_ACTIONS::drawBus.MakeEvent();
-                        }
-                        else if( collector[0]->Type() == SCH_LINE_T
-                                 && static_cast<SCH_LINE*>( collector[0] )->IsGraphicLine() )
-                        {
-                            newEvt = EE_ACTIONS::drawLines.MakeEvent();
-                        }
-                        else
-                        {
-                            newEvt = EE_ACTIONS::drawLines.MakeEvent();
-                        }
-
-                        auto* params = newEvt->Parameter<DRAW_SEGMENT_EVENT_PARAMS*>();
-                        auto* newParams = new DRAW_SEGMENT_EVENT_PARAMS();
-
-                        *newParams= *params;
-                        newParams->quitOnDraw = true;
-                        newEvt->SetParameter( newParams );
-
-                        // Make it so we can copy the parameters of the line we are extending
-                        if( collector[0]->Type() == SCH_LINE_T )
-                            newParams->sourceSegment = static_cast<SCH_LINE*>( collector[0] );
-
-                        getViewControls()->ForceCursorPosition( true, snappedCursorPos );
-                        newEvt->SetMousePosition( snappedCursorPos );
-                        newEvt->SetHasPosition( true );
-                        newEvt->SetForceImmediate( true );
-                        m_toolMgr->ProcessEvent( *newEvt );
-
-                        continueSelect = false;
-                    }
-                    else if( collector[0]->IsHypertext() )
-                    {
-                        collector[0]->DoHypertextMenu( m_frame );
-                        continueSelect = false;
-                    }
+                    selCancelled = true;
+                }
+                else if( collector[0]->IsHypertext() )
+                {
+                    collector[0]->DoHypertextMenu( m_frame );
+                    selCancelled = true;
                 }
             }
 
-            if( continueSelect )
+            if( !selCancelled )
             {
-                // If we didn't click on an anchor, we perform a normal select, pass in the
-                // items we previously collected
-                selectPoint( collector, nullptr, nullptr, m_additive, m_subtractive,
-                             m_exclusive_or );
-
+                selectPoint( collector, nullptr, nullptr, m_additive, m_subtractive, m_exclusive_or );
                 m_selection.SetIsHover( false );
             }
         }
@@ -463,13 +411,10 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_disambiguateTimer.Stop();
 
             // right click? if there is any object - show the context menu
-            bool selectionCancelled = false;
-
             if( m_selection.Empty() )
             {
                 ClearSelection();
-                SelectPoint( evt->Position(), EE_COLLECTOR::AllItems, nullptr,
-                             &selectionCancelled );
+                SelectPoint( evt->Position(), EE_COLLECTOR::AllItems, nullptr, &selCancelled );
                 m_selection.SetIsHover( true );
             }
             // If the cursor has moved off the bounding box of the selection by more than
@@ -477,23 +422,21 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             // under the cursor.  If there is, the user likely meant to get the context menu
             // for that item.  If there is no new item, then keep the original selection and
             // show the context menu for it.
-            else if( !m_selection.GetBoundingBox().Inflate(
-                        grid.GetGrid().x, grid.GetGrid().y ).Contains(
-                                (wxPoint) evt->Position() ) )
+            else if( !m_selection.GetBoundingBox().Inflate( grid.GetGrid().x, grid.GetGrid().y )
+                        .Contains( evt->Position() ) )
             {
                 EE_SELECTION saved_selection = m_selection;
 
-                for( const auto& item : saved_selection )
+                for( EDA_ITEM* item : saved_selection )
                     RemoveItemFromSel( item, true );
 
-                SelectPoint( evt->Position(), EE_COLLECTOR::AllItems, nullptr,
-                             &selectionCancelled );
+                SelectPoint( evt->Position(), EE_COLLECTOR::AllItems, nullptr, &selCancelled );
 
                 if( m_selection.Empty() )
                 {
                     m_selection.SetIsHover( false );
 
-                    for( const auto& item : saved_selection )
+                    for( EDA_ITEM* item : saved_selection )
                         AddItemToSel( item,  true);
                 }
                 else
@@ -502,7 +445,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
             }
 
-            if( !selectionCancelled )
+            if( !selCancelled )
                 m_menu.ShowContextMenu( m_selection );
         }
         else if( evt->IsDblClick( BUT_LEFT ) )
@@ -607,7 +550,6 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 wxString* net = new wxString( *evt->Parameter<wxString*>() );
                 m_toolMgr->RunAction( EE_ACTIONS::unfoldBus, true, net );
             }
-
         }
         else if( evt->IsCancelInteractive() )
         {
@@ -627,11 +569,10 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsMotion() && !m_isSymbolEditor && m_frame->ToolStackIsEmpty() )
         {
+            // Update cursor and rollover item
             rolloverItem = niluuid;
             EE_COLLECTOR collector;
 
-            // We are checking if we should display a pencil when hovering over anchors
-            // for "auto starting" wires when clicked
             getViewControls()->ForceCursorPosition( false );
 
             if( CollectHits( collector, evt->Position() ) )
@@ -640,38 +581,18 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 if( collector.GetCount() == 1 && !modifier_enabled )
                 {
-                    VECTOR2I snappedCursorPos = grid.BestSnapAnchor( evt->Position(),
-                                                                     LAYER_CONNECTABLE, nullptr );
+                    OPT_TOOL_EVENT autostartEvt = autostartEvent( evt, grid, collector[0] );
 
-                    EE_POINT_EDITOR *pt_tool = m_toolMgr->GetTool<EE_POINT_EDITOR>();
-
-                    if( m_frame->eeconfig()->m_Drawing.auto_start_wires
-                            && pt_tool && !pt_tool->HasPoint()
-                            && !collector[0]->IsConnectivityDirty()
-                            && collector[0]->IsPointClickableAnchor( (wxPoint) snappedCursorPos ) )
+                    if( autostartEvt )
                     {
-                        SCH_CONNECTION* connection = collector[0]->Connection();
-
-                        if( ( connection && ( connection->IsNet() || connection->IsUnconnected() ) )
-                            || collector[0]->Type() == SCH_SYMBOL_T )
-                        {
-                            displayWireCursor = true;
-                        }
-                        else if( connection && connection->IsBus() )
-                        {
+                        if( autostartEvt->Matches( EE_ACTIONS::drawBus.MakeEvent() ) )
                             displayBusCursor = true;
-                        }
-                        else if( collector[0]->Type() == SCH_LINE_T
-                                 && static_cast<SCH_LINE*>( collector[0] )->IsGraphicLine() )
-                        {
+                        else if( autostartEvt->Matches( EE_ACTIONS::drawWire.MakeEvent() ) )
+                            displayWireCursor = true;
+                        else if( autostartEvt->Matches( EE_ACTIONS::drawLines.MakeEvent() ) )
                             displayLineCursor = true;
-                        }
-
-                        getViewControls()->ForceCursorPosition( true, snappedCursorPos );
                     }
-                    else if( collector[0]->IsHypertext()
-                                && !collector[0]->IsSelected()
-                                && !m_additive && !m_subtractive && !m_exclusive_or )
+                    else if( collector[0]->IsHypertext() && !collector[0]->IsSelected() )
                     {
                         rolloverItem = collector[0]->m_Uuid;
                     }
@@ -753,6 +674,51 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
+OPT_TOOL_EVENT EE_SELECTION_TOOL::autostartEvent( TOOL_EVENT* aEvent, EE_GRID_HELPER& aGrid,
+                                                  SCH_ITEM* aItem )
+{
+    VECTOR2I pos = aGrid.BestSnapAnchor( aEvent->Position(), LAYER_CONNECTABLE );
+
+    if( m_frame->eeconfig()->m_Drawing.auto_start_wires
+            && !m_toolMgr->GetTool<EE_POINT_EDITOR>()->HasPoint()
+            && aItem->IsPointClickableAnchor( pos ) )
+    {
+        OPT_TOOL_EVENT newEvt = EE_ACTIONS::drawWire.MakeEvent();
+
+        if( aItem->Type() == SCH_BUS_BUS_ENTRY_T )
+        {
+            newEvt = EE_ACTIONS::drawBus.MakeEvent();
+        }
+        else if( aItem->Type() == SCH_BUS_WIRE_ENTRY_T )
+        {
+            SCH_BUS_WIRE_ENTRY* busEntry = static_cast<SCH_BUS_WIRE_ENTRY*>( aItem );
+
+            if( !busEntry->m_connected_bus_item )
+                newEvt = EE_ACTIONS::drawBus.MakeEvent();
+        }
+        else if( aItem->Type() == SCH_LINE_T )
+        {
+            SCH_LINE* line = static_cast<SCH_LINE*>( aItem );
+
+            if( line->IsBus() )
+                newEvt = EE_ACTIONS::drawBus.MakeEvent();
+            else if( line->IsGraphicLine() )
+                newEvt = EE_ACTIONS::drawLines.MakeEvent();
+        }
+
+        newEvt->SetMousePosition( pos );
+        newEvt->SetHasPosition( true );
+        newEvt->SetForceImmediate( true );
+
+        getViewControls()->ForceCursorPosition( true, pos );
+
+        return newEvt;
+    }
+
+    return OPT_TOOL_EVENT();
+}
+
+
 int EE_SELECTION_TOOL::disambiguateCursor( const TOOL_EVENT& aEvent )
 {
     m_skip_heuristics = true;
@@ -811,13 +777,11 @@ bool EE_SELECTION_TOOL::CollectHits( EE_COLLECTOR& aCollector, const VECTOR2I& a
         if( !symbol )
             return false;
 
-        aCollector.Collect( symbol->GetDrawItems(), aFilterList, (wxPoint) aWhere, m_unit,
-                            m_convert );
+        aCollector.Collect( symbol->GetDrawItems(), aFilterList, aWhere, m_unit, m_convert );
     }
     else
     {
-        aCollector.Collect( m_frame->GetScreen(), aFilterList, (wxPoint) aWhere, m_unit,
-                            m_convert );
+        aCollector.Collect( m_frame->GetScreen(), aFilterList, aWhere, m_unit, m_convert );
     }
 
     return aCollector.GetCount() > 0;
@@ -847,9 +811,9 @@ void EE_SELECTION_TOOL::narrowSelection( EE_COLLECTOR& collector, const VECTOR2I
             SCH_LINE* line = (SCH_LINE*) collector[i];
             line->ClearFlags( STARTPOINT | ENDPOINT );
 
-            if( HitTestPoints( line->GetStartPoint(), (wxPoint) aWhere, collector.m_Threshold ) )
+            if( HitTestPoints( line->GetStartPoint(), aWhere, collector.m_Threshold ) )
                 line->SetFlags( STARTPOINT );
-            else if( HitTestPoints( line->GetEndPoint(), (wxPoint) aWhere, collector.m_Threshold ) )
+            else if( HitTestPoints( line->GetEndPoint(), aWhere, collector.m_Threshold ) )
                 line->SetFlags( ENDPOINT );
             else
                 line->SetFlags( STARTPOINT | ENDPOINT );
@@ -1014,12 +978,12 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
 
         if( line || ( shape && shape->GetShape() == SHAPE_T::POLY ) )
         {
-            if( item->HitTest( (wxPoint) aPos, Mils2iu( DANGLING_SYMBOL_SIZE ) ) )
+            if( item->HitTest( aPos, Mils2iu( DANGLING_SYMBOL_SIZE ) ) )
                 exactHits.insert( item );
         }
         else
         {
-            if( item->HitTest( (wxPoint) aPos, 0 ) )
+            if( item->HitTest( aPos, 0 ) )
                 exactHits.insert( item );
         }
     }
@@ -1036,7 +1000,7 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
     }
 
     // Find the closest item.  (Note that at this point all hits are either exact or non-exact.)
-    wxPoint   pos( aPos );
+    VECTOR2I  pos( aPos );
     SEG       poss( m_isSymbolEditor ? mapCoords( pos ) : pos,
                     m_isSymbolEditor ? mapCoords( pos ) : pos );
     EDA_ITEM* closest = nullptr;
@@ -1275,7 +1239,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
                 }
             }
 
-            EDA_RECT selectionRect( (wxPoint) area.GetOrigin(), wxSize( width, height ) );
+            EDA_RECT selectionRect( area.GetOrigin(), wxSize( width, height ) );
             selectionRect.Normalize();
 
             bool anyAdded = false;
@@ -1399,7 +1363,7 @@ EDA_ITEM* EE_SELECTION_TOOL::GetNode( VECTOR2I aPosition )
     for( int threshold : { 0, thresholdMax/4, thresholdMax/2, thresholdMax } )
     {
         collector.m_Threshold = threshold;
-        collector.Collect( m_frame->GetScreen(), nodeTypes, (wxPoint) aPosition );
+        collector.Collect( m_frame->GetScreen(), nodeTypes, aPosition );
 
         if( collector.GetCount() > 0 )
             break;
@@ -1695,6 +1659,7 @@ bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
                 {
                     for( int i = 0; i < aCollector->GetCount(); ++i )
                         highlight( ( *aCollector )[i], BRIGHTENED );
+
                     selectAll = true;
                 }
                 else
@@ -1710,7 +1675,9 @@ bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
                         unhighlight( ( *aCollector )[i], BRIGHTENED );
                 }
                 else if( current )
+                {
                     unhighlight( current, BRIGHTENED );
+                }
 
                 OPT<int> id = evt->GetCommandId();
 
@@ -1794,16 +1761,16 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos,
             if( aPos )
             {
                 EE_GRID_HELPER grid( m_toolMgr );
-                VECTOR2I       cursorPos = grid.BestSnapAnchor( *aPos, LAYER_CONNECTABLE, nullptr );
 
-                if( pin->IsPointClickableAnchor( (wxPoint) cursorPos ) )
+                if( pin->IsPointClickableAnchor( grid.BestSnapAnchor( *aPos, LAYER_CONNECTABLE ) ) )
                     return true;
             }
 
             return false;
         }
-    }
+
         break;
+    }
 
     case LIB_SYMBOL_T:    // In symbol_editor we do not want to select the symbol itself.
         return false;

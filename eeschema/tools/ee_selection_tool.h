@@ -35,6 +35,7 @@
 
 class SCH_BASE_FRAME;
 class SCH_ITEM;
+class EE_GRID_HELPER;
 
 namespace KIGFX
 {
@@ -187,6 +188,8 @@ public:
                       const KICAD_T* aFilterList = EE_COLLECTOR::AllItems );
 
 private:
+    OPT_TOOL_EVENT autostartEvent( TOOL_EVENT* aEvent, EE_GRID_HELPER& aGrid, SCH_ITEM* aItem );
+
     /**
      * Apply rules to narrow the collection down to selectable objects, and then heuristics
      * to try and narrow it to a single object.
@@ -196,7 +199,8 @@ private:
      * @param aCheckLocked If false, remove locked elements from #collector
      * @param aSelectPoints If true, set STARTPOINT/ENDPOINT flags on individual wires
      */
-    void narrowSelection( EE_COLLECTOR& collector, const VECTOR2I& aWhere, bool aCheckLocked, bool aSelectPoints );
+    void narrowSelection( EE_COLLECTOR& collector, const VECTOR2I& aWhere, bool aCheckLocked,
+                          bool aSelectPoints );
 
     /**
      * This is the primary SelectPoint method that will prompt the user with a menu to disambiguate
