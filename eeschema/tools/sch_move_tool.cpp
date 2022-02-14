@@ -1455,7 +1455,10 @@ void SCH_MOVE_TOOL::setTransitions()
 void SCH_MOVE_TOOL::commitNewDragLines()
 {
     for( auto newLine : m_newDragLines )
+    {
         saveCopyInUndoList( newLine, UNDO_REDO::NEWITEM, true );
+        newLine->ClearEditFlags();
+    }
 
     m_newDragLines.clear();
 }
