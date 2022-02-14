@@ -313,6 +313,29 @@ public:
         return m_subpolyIndex;
     }
 
+    bool ContainsPoint( const VECTOR2I& p ) const
+    {
+        int  min[2] = { p.x, p.y };
+        int  max[2] = { p.x, p.y };
+        bool collision = false;
+
+        auto visitor =
+                [&]( const SHAPE* aShape ) -> bool
+                {
+                    if( aShape->Collide( p ) )
+                    {
+                        collision = true;
+                        return false;
+                    }
+
+                    return true;
+                };
+
+        m_rTree.Search( min, max, visitor );
+
+        return collision;
+    }
+
     PCB_LAYER_ID GetLayer() { return m_layer; }
 
     virtual int AnchorCount() const override;

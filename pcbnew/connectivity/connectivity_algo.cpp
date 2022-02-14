@@ -681,6 +681,9 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aI
 
 void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LAYER* aZoneLayerB )
 {
+    const ZONE* zoneA = static_cast<const ZONE*>( aZoneLayerA->Parent() );
+    const ZONE* zoneB = static_cast<const ZONE*>( aZoneLayerB->Parent() );
+
     if( aZoneLayerA->Layer() != aZoneLayerB->Layer() )
         return;
 
@@ -695,10 +698,36 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LA
 
     PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( aZoneLayerA->Layer() );
 
-    if( aZoneLayerA->Collide( aZoneLayerB->Parent()->GetEffectiveShape( layer ).get() ) )
+    const SHAPE_LINE_CHAIN& outline =
+            zoneA->GetFilledPolysList( layer ).COutline( aZoneLayerA->SubpolyIndex() );
+
+    for( int i = 0; i < outline.PointCount(); i++ )
     {
-        aZoneLayerA->Connect( aZoneLayerB );
-        aZoneLayerB->Connect( aZoneLayerA );
+        if( !boxB.Contains( outline.CPoint( i ) ) )
+            continue;
+
+        if( aZoneLayerB->ContainsPoint( outline.CPoint( i ) ) )
+        {
+            aZoneLayerA->Connect( aZoneLayerB );
+            aZoneLayerB->Connect( aZoneLayerA );
+            return;
+        }
+    }
+
+    const SHAPE_LINE_CHAIN& outline2 =
+            zoneB->GetFilledPolysList( layer ).COutline( aZoneLayerB->SubpolyIndex() );
+
+    for( int i = 0; i < outline2.PointCount(); i++ )
+    {
+        if( !boxA.Contains( outline2.CPoint( i ) ) )
+            continue;
+
+        if( aZoneLayerA->ContainsPoint( outline2.CPoint( i ) ) )
+        {
+            aZoneLayerA->Connect( aZoneLayerB );
+            aZoneLayerB->Connect( aZoneLayerA );
+            return;
+        }
     }
 }
 
