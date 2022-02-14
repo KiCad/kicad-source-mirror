@@ -210,10 +210,10 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
     wxString desc = package.description_full;
     details << wxT( "<p>" ) + format_desc( desc ) + wxT( "</p>" );
 
-    details << wxT( "<p><b>" ) + _( "MetadatawxT( " ) + " )</b></p>";
+    details << wxT( "<p><b>" ) + _( "Metadata" ) + wxT( "</b></p>" );
     details << wxT( "<ul>" );
-    details << wxT( "<li>" ) + _( "Package identifier: wxT( " ) + package.identifier + " )</li>";
-    details << wxT( "<li>" ) + _( "License: wxT( " ) + package.license + " )</li>";
+    details << wxT( "<li>" ) + _( "Package identifier: " ) + package.identifier + wxT( "</li>" );
+    details << wxT( "<li>" ) + _( "License: " ) + package.license + wxT( "</li>" );
 
     if( package.tags.size() > 0 )
     {
@@ -227,7 +227,7 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
             tags_str += tag;
         }
 
-        details << wxT( "<li>" ) + _( "Tags: wxT( " ) + tags_str + " )</li>";
+        details << wxT( "<li>" ) + _( "Tags: " ) + tags_str + wxT( "</li>" );
     }
 
     auto format_entry =
@@ -262,10 +262,10 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
 
     if( package.resources.size() > 0 )
     {
-        details << wxT( "<li>" ) + _( "Resources" ) + "<ul>";
+        details << wxT( "<li>" ) + _( "Resources" ) + wxT( "<ul>" );
 
         for( const std::pair<const std::string, wxString>& entry : package.resources )
-            details << wxT( "<li>" ) + entry.first + wxS( ": " ) + format_entry( entry ) + "</li>";
+            details << wxT( "<li>" ) + entry.first + wxS( ": " ) + format_entry( entry ) + wxT( "</li>" );
 
         details << wxT( "</ul>" );
     }
