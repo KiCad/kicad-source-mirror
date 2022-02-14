@@ -117,7 +117,8 @@ public:
      *
      * @return Vector of sorted items
      */
-    const std::vector<EDA_ITEM*> GetItemsSortedByTypeAndXY() const
+    const std::vector<EDA_ITEM*> GetItemsSortedByTypeAndXY( bool leftBeforeRight = true,
+                                                            bool topBeforeBottom = true ) const
     {
         std::vector<EDA_ITEM*> sorted_items =
                 std::vector<EDA_ITEM*>( m_items.begin(), m_items.end() );
@@ -131,10 +132,15 @@ public:
                     if( a->GetPosition().y == b->GetPosition().y )
                         return a->m_Uuid < b->m_Uuid;
 
-                    return a->GetPosition().y < b->GetPosition().y;
+                    if( topBeforeBottom )
+                        return a->GetPosition().y < b->GetPosition().y;
+                    else
+                        return a->GetPosition().y > b->GetPosition().y;
                 }
-                else
+                else if( leftBeforeRight )
                     return a->GetPosition().x < b->GetPosition().x;
+                else
+                    return a->GetPosition().x > b->GetPosition().x;
             }
             else
                 return a->Type() < b->Type();

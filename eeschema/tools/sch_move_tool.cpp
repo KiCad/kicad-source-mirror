@@ -373,6 +373,30 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             VECTOR2I delta( m_cursor - prevPos );
             m_anchorPos = m_cursor;
 
+            // We need to check if the movement will change the net offset direction on the
+            // X an Y axes. This is because we remerge added bend lines in realtime, and we
+            // also account for the direction of the move when adding bend lines. So, if the
+            // move direction changes, we need to split it into a move that gets us back to
+            // zero, then the rest of the move.
+            std::vector<VECTOR2I> splitMoves;
+
+            if( std::signbit( m_moveOffset.x ) != std::signbit( ( m_moveOffset + delta ).x ) )
+            {
+                splitMoves.emplace_back( VECTOR2I( -1 * m_moveOffset.x, 0 ) );
+                splitMoves.emplace_back( VECTOR2I( delta.x + m_moveOffset.x, 0 ) );
+            }
+            else
+                splitMoves.emplace_back( VECTOR2I( delta.x, 0 ) );
+
+            if( std::signbit( m_moveOffset.y ) != std::signbit( ( m_moveOffset + delta ).y ) )
+            {
+                splitMoves.emplace_back( VECTOR2I( 0, -1 * m_moveOffset.y ) );
+                splitMoves.emplace_back( VECTOR2I( 0, delta.y + m_moveOffset.y ) );
+            }
+            else
+                splitMoves.emplace_back( VECTOR2I( 0, delta.y ) );
+
+
             m_moveOffset += delta;
             prevPos = m_cursor;
 
@@ -381,13 +405,14 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             int yBendCount = 1;
 
             // Split the move into X and Y moves so we can correctly drag orthogonal lines
-            for( VECTOR2I splitDelta : { VECTOR2I( delta.x, 0 ), VECTOR2I( 0, delta.y ) } )
+            for( VECTOR2I splitDelta : splitMoves )
             {
                 // Skip non-moves
                 if( splitDelta == VECTOR2I( 0, 0 ) )
                     continue;
 
-                for( EDA_ITEM* item : selection.GetItemsSortedByTypeAndXY() )
+                for( EDA_ITEM* item :
+                     selection.GetItemsSortedByTypeAndXY( ( delta.x >= 0 ), ( delta.y >= 0 ) ) )
                 {
                     // Don't double move pins, fields, etc.
                     if( item->GetParent() && item->GetParent()->IsSelected() )
@@ -596,7 +621,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                                 int          yLength = abs( unselectedEnd.y - selectedEnd.y );
                                 int          xMove = ( xLength - ( xBendCount * grid.GetGrid().x ) )
                                             * sign( selectedEnd.x - unselectedEnd.x );
-                                int yMove = ( yLength - ( yBendCount * grid.GetGrid().y ) )
+                                int          yMove = ( yLength - ( yBendCount * grid.GetGrid().y ) )
                                             * sign( selectedEnd.y - unselectedEnd.y );
 
                                 // Create a new wire ending at the unselected end, we'll
