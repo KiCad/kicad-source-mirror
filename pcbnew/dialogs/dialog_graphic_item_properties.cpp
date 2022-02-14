@@ -375,15 +375,16 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
 
         if( m_startX.GetValue() == m_endX.GetValue() && m_startY.GetValue() == m_endY.GetValue() )
         {
+            double arcAngleDeg = m_angle.GetDoubleValue()/10.0;
             error_msgs.Add( wxString::Format( _( "Invalid Arc with radius %f and angle %f" ),
-                                      0.0, m_angle.GetDoubleValue() ) );
+                                      0.0, arcAngleDeg ) );
         }
         else
         {
             VECTOR2D start( m_startX.GetValue(), m_startY.GetValue() );
             VECTOR2D end( m_endX.GetValue(), m_endY.GetValue() );
-            VECTOR2D center = CalcArcCenter( start, end, m_angle.GetDoubleValue() );
-
+            double arcAngleDeg = m_angle.GetDoubleValue()/10.0;
+            VECTOR2D center = CalcArcCenter( start, end, arcAngleDeg );
             double radius = ( center - start ).EuclideanNorm();
             double max_offset = std::max( std::abs( center.x ) + radius,
                                           std::abs( center.y ) + radius );
@@ -392,10 +393,11 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
                     || center == start || center == end )
             {
                 error_msgs.Add( wxString::Format( _( "Invalid Arc with radius %f and angle %f" ),
-                                          radius, m_angle.GetDoubleValue() ) );
+                                          radius, arcAngleDeg ) );
             }
         }
         break;
+
     case SHAPE_T::CIRCLE:
         // Check radius.
         if( m_endX.GetValue() == 0 )
