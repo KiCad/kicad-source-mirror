@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-12 08:52+0100\n"
+"POT-Creation-Date: 2022-02-14 09:25-0800\n"
 "PO-Revision-Date: 2022-02-12 09:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -202,7 +202,7 @@ msgstr "Exporter la Vue en Cours en JPEG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61 common/eda_base_frame.cpp:1045
 #: common/hotkey_store.cpp:76 common/tool/actions.cpp:572
-#: pcbnew/footprint_viewer_frame.cpp:951 pcbnew/pcb_base_frame.cpp:636
+#: pcbnew/footprint_viewer_frame.cpp:951 pcbnew/pcb_base_frame.cpp:637
 msgid "3D Viewer"
 msgstr "Visu 3D"
 
@@ -717,7 +717,7 @@ msgstr "Incrément de rotation :"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:123
 #: pcb_calculator/widgets/unit_selector.cpp:130
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:289
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:300
 #: pcbnew/dialogs/dialog_create_array_base.cpp:259
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:151
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:59
@@ -1066,14 +1066,15 @@ msgstr "Rechargement circuit et modèles 3D"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:557
 #: pagelayout_editor/pl_editor_frame.cpp:723
 #: pcb_calculator/widgets/unit_selector.cpp:34
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:163
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:195
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:208
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:238
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:251
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:300
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:174
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:206
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:219
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:249
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:262
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:311
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:361
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:322
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:372
 #: pcbnew/dialogs/dialog_create_array_base.cpp:55
 #: pcbnew/dialogs/dialog_create_array_base.cpp:66
 #: pcbnew/dialogs/dialog_create_array_base.cpp:77
@@ -1107,6 +1108,7 @@ msgstr "Rechargement circuit et modèles 3D"
 #: pcbnew/dialogs/dialog_plot_base.cpp:316
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:74
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:91
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:140
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:190
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:207
@@ -1905,7 +1907,7 @@ msgstr "Variables d'Environnement"
 #: pcbnew/dialogs/dialog_net_inspector.cpp:79
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:455
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:38 pcbnew/zone.cpp:581
-#: pcbnew/zone.cpp:1353
+#: pcbnew/zone.cpp:1358
 msgid "Name"
 msgstr "Nom"
 
@@ -2408,10 +2410,10 @@ msgstr "dummy text"
 #: common/dialogs/dialog_page_settings_base.cpp:45
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:213
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:126
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:282
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:293
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:340
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:136
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:140
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:227
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:179
 msgid "Orientation:"
@@ -2576,7 +2578,6 @@ msgid "Revision:"
 msgstr "Révision:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:238
-#: eeschema/dialogs/dialog_netlist - new.cpp:385
 #: eeschema/dialogs/dialog_netlist.cpp:384
 msgid "Title:"
 msgstr "Titre:"
@@ -2673,7 +2674,6 @@ msgstr "Prévisualisation"
 #: eeschema/dialogs/dialog_annotate.cpp:91 eeschema/dialogs/dialog_bom.cpp:135
 #: eeschema/dialogs/dialog_change_symbols.cpp:157
 #: eeschema/dialogs/dialog_erc.cpp:85 eeschema/dialogs/dialog_erc.cpp:393
-#: eeschema/dialogs/dialog_netlist - new.cpp:269
 #: eeschema/dialogs/dialog_netlist.cpp:268
 #: eeschema/dialogs/dialog_plot_schematic.cpp:111
 #: eeschema/dialogs/dialog_print_using_printer.cpp:146
@@ -2811,7 +2811,7 @@ msgstr "MyLabel"
 
 #: common/dialogs/eda_list_dialog.cpp:48 common/widgets/lib_tree.cpp:123
 #: kicad/pcm/dialogs/panel_packages_view.cpp:72
-#: pcbnew/dialogs/dialog_copper_zones.cpp:194
+#: pcbnew/dialogs/dialog_copper_zones.cpp:197
 #: pcbnew/footprint_viewer_frame.cpp:144 pcbnew/footprint_viewer_frame.cpp:159
 msgid "Filter"
 msgstr "Filtre"
@@ -3351,12 +3351,12 @@ msgstr "Zoom"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:145
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:49
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:221
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:161
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:357
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:328
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:82
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:93
 #: pcbnew/dialogs/dialog_pad_properties.cpp:934
 #: pcbnew/dialogs/dialog_pad_properties.cpp:943
 #: pcbnew/dialogs/dialog_pad_properties.cpp:953
@@ -3364,7 +3364,7 @@ msgstr "Zoom"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:710
 #: pcbnew/dialogs/dialog_plot_base.cpp:117 pcbnew/pad.cpp:1635
 #: pcbnew/widgets/appearance_controls.cpp:701
-#: pcbnew/widgets/appearance_controls.cpp:743 pcbnew/zone.cpp:1341
+#: pcbnew/widgets/appearance_controls.cpp:743 pcbnew/zone.cpp:1346
 msgid "None"
 msgstr "Aucun"
 
@@ -3438,11 +3438,11 @@ msgstr "Réinitialiser aux Défauts de Trackpad"
 
 #: common/dialogs/panel_setup_netclasses.cpp:89 common/eda_shape.cpp:1601
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:342
-#: include/stroke_params.h:70 pcbnew/dialogs/dialog_copper_zones_base.cpp:221
+#: include/stroke_params.h:70 pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:357
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:328
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:710 pcbnew/zone.cpp:585
-#: pcbnew/zone.cpp:1343
+#: pcbnew/zone.cpp:1348
 msgid "Solid"
 msgstr "Solide"
 
@@ -3751,11 +3751,11 @@ msgstr "Infos"
 msgid "Save..."
 msgstr "Sauver..."
 
-#: common/draw_panel_gal.cpp:287 common/draw_panel_gal.cpp:455
+#: common/draw_panel_gal.cpp:283 common/draw_panel_gal.cpp:454
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "Impossible d'utiliser OpenGL, utilise le moteur logiciel"
 
-#: common/draw_panel_gal.cpp:293 common/draw_panel_gal.cpp:462
+#: common/draw_panel_gal.cpp:289 common/draw_panel_gal.cpp:461
 msgid "Could not use OpenGL"
 msgstr "Impossible d’utiliser OpenGL"
 
@@ -3793,7 +3793,7 @@ msgstr "Texte"
 #: gerbview/gerber_draw_item.cpp:211
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:137
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:111
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:125
 msgid "Line"
 msgstr "Ligne"
 
@@ -3994,7 +3994,7 @@ msgstr "Valeurs par Défaut"
 
 #: common/eda_base_frame.cpp:1035 common/hotkey_store.cpp:74
 #: kicad/tools/kicad_manager_actions.cpp:81 pcbnew/menubar_pcb_editor.cpp:184
-#: pcbnew/pcb_edit_frame.cpp:178 pcbnew/pcb_edit_frame.cpp:1387
+#: pcbnew/pcb_edit_frame.cpp:178 pcbnew/pcb_edit_frame.cpp:1366
 msgid "PCB Editor"
 msgstr "Éditeur de PCB KiCad"
 
@@ -4174,7 +4174,7 @@ msgstr "Graphique"
 
 #: common/eda_item.cpp:319 common/eda_item.cpp:321 common/eda_item.cpp:351
 #: common/eda_item.cpp:373 eeschema/lib_textbox.cpp:367
-#: eeschema/sch_textbox.cpp:371 pcbnew/fp_textbox.cpp:206
+#: eeschema/sch_textbox.cpp:370 pcbnew/fp_textbox.cpp:206
 #: pcbnew/pcb_textbox.cpp:184
 msgid "Text Box"
 msgstr "Boîte de Texte"
@@ -4448,7 +4448,7 @@ msgstr "Épaisseur Ligne"
 
 #: common/eda_text.cpp:750 eeschema/lib_textbox.cpp:369
 #: eeschema/sch_label.cpp:764 eeschema/sch_text.cpp:448
-#: eeschema/sch_textbox.cpp:373 eeschema/symbol_editor/symbol_editor.cpp:1240
+#: eeschema/sch_textbox.cpp:372 eeschema/symbol_editor/symbol_editor.cpp:1240
 #: gerbview/gerber_file_image.cpp:350 gerbview/gerber_file_image.cpp:354
 #: gerbview/gerber_file_image.cpp:357
 #: pcbnew/microwave/microwave_polygon.cpp:128
@@ -4469,7 +4469,7 @@ msgstr "Normal"
 #: eeschema/dialogs/dialog_text_properties_base.cpp:88
 #: eeschema/fields_grid_table.cpp:260 eeschema/lib_textbox.cpp:369
 #: eeschema/sch_label.cpp:764 eeschema/sch_text.cpp:448
-#: eeschema/sch_textbox.cpp:373
+#: eeschema/sch_textbox.cpp:372
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:114
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:58
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:58
@@ -4494,7 +4494,7 @@ msgstr "Italique"
 #: eeschema/dialogs/dialog_text_properties_base.cpp:83
 #: eeschema/fields_grid_table.cpp:261 eeschema/lib_textbox.cpp:369
 #: eeschema/sch_label.cpp:764 eeschema/sch_text.cpp:448
-#: eeschema/sch_textbox.cpp:373
+#: eeschema/sch_textbox.cpp:372
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:98
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:186
 msgid "Bold"
@@ -5690,7 +5690,7 @@ msgstr "Taille %lld non valide: trop grande"
 msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Arc non valide avec le rayon %f et l’angle %f"
 
-#: common/project.cpp:310 common/project.cpp:315 pcbnew/pcb_base_frame.cpp:178
+#: common/project.cpp:310 common/project.cpp:315 pcbnew/pcb_base_frame.cpp:179
 msgid "Error loading project footprint library table."
 msgstr ""
 "Erreur lors du chargement de la table des librairies d’empreintes du projet."
@@ -6605,7 +6605,7 @@ msgid "Snap to Grid:"
 msgstr "Accrochage à la Grille:"
 
 #: common/widgets/gal_options_panel.cpp:163
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:343
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:354
 #: pcbnew/dialogs/panel_edit_options_base.cpp:275
 #: pcbnew/dialogs/panel_edit_options_base.cpp:289
 #: pcbnew/dialogs/panel_edit_options_base.cpp:303
@@ -6617,7 +6617,7 @@ msgid "When grid shown"
 msgstr "Quand la grille est affichée"
 
 #: common/widgets/gal_options_panel.cpp:163
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:343
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:354
 #: pcbnew/dialogs/panel_edit_options_base.cpp:275
 #: pcbnew/dialogs/panel_edit_options_base.cpp:289
 #: pcbnew/dialogs/panel_edit_options_base.cpp:303
@@ -7757,8 +7757,7 @@ msgstr "Ajouter Générateur"
 msgid "Nickname '%s' already in use."
 msgstr "Un nom logique '%s' existe déjà."
 
-#: eeschema/dialogs/dialog_bom.cpp:419 eeschema/dialogs/dialog_netlist -
-#: new.cpp:709 eeschema/dialogs/dialog_netlist.cpp:686
+#: eeschema/dialogs/dialog_bom.cpp:419 eeschema/dialogs/dialog_netlist.cpp:686
 msgid "Generator File"
 msgstr "Fichier Générateur"
 
@@ -9252,7 +9251,7 @@ msgstr "Alignement V"
 #: eeschema/fields_grid_table.cpp:262 eeschema/lib_field.cpp:477
 #: eeschema/lib_text.cpp:367 eeschema/lib_textbox.cpp:373
 #: eeschema/sch_field.cpp:696 eeschema/sch_label.cpp:768
-#: eeschema/sch_text.cpp:452 eeschema/sch_textbox.cpp:377
+#: eeschema/sch_text.cpp:452 eeschema/sch_textbox.cpp:376
 msgid "Text Size"
 msgstr "Taille du Texte"
 
@@ -9818,9 +9817,10 @@ msgstr "Marge entre la position du nom de la pin et le corps du symbole."
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:149
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:124
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:74
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:95
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:147
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:85
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:106
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:158
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:169
 #: pcbnew/microwave/microwave_polygon.cpp:147
 #: pcbnew/microwave/microwave_polygon.cpp:156
 msgid "units"
@@ -9949,33 +9949,27 @@ msgstr "Accepter Nom"
 msgid "Migrate Buses"
 msgstr "Migration des Bus"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:268
 #: eeschema/dialogs/dialog_netlist.cpp:267
 #: eeschema/dialogs/dialog_netlist_base.h:69
 msgid "Export Netlist"
 msgstr "Exporter Netliste"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:300
 #: eeschema/dialogs/dialog_netlist.cpp:296
 msgid "Simulator requires a fully annotated schematic."
 msgstr "La simulation nécessite un schéma complètement numéroté."
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:323
 #: eeschema/dialogs/dialog_netlist.cpp:322
 msgid "Reformat passive symbol values"
 msgstr "Reformater les valeurs des composants passifs"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:324
 #: eeschema/dialogs/dialog_netlist.cpp:323
 msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
 msgstr "Reformater les valeurs des composants passifs, par exemple 1M-> 1Meg"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:329
 #: eeschema/dialogs/dialog_netlist.cpp:328
 msgid "External simulator command:"
 msgstr "Commande simulateur externe :"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:330
 #: eeschema/dialogs/dialog_netlist.cpp:329
 msgid ""
 "Enter the command line to run spice\n"
@@ -9986,46 +9980,38 @@ msgstr ""
 "Habituellement <path to spice binary> %I\n"
 "%I sera remplacé par le nom réel de la netliste spice</path>"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:344
 #: eeschema/dialogs/dialog_netlist.cpp:343
 msgid "Create Netlist and Run Simulator Command"
 msgstr "Créer la Netlist et Exécuter la commande de simulation"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:395
 #: eeschema/dialogs/dialog_netlist.cpp:394
 msgid "Netlist command:"
 msgstr "Commande netliste:"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:441
 #: eeschema/dialogs/dialog_netlist.cpp:440
 msgid "Save Netlist File"
 msgstr "Sauver Fichier Netliste"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:499
 #: eeschema/dialogs/dialog_netlist.cpp:473
 #, c-format
 msgid "%s Export"
 msgstr "Export %s"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:528
 #: eeschema/dialogs/dialog_netlist.cpp:502
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
 msgid "Exporting netlist requires a fully annotated schematic."
 msgstr ""
 "L'exportation de la net liste nécessite un schéma complètement numéroté."
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:652
 #: eeschema/dialogs/dialog_netlist.cpp:629
 msgid "This plugin already exists."
 msgstr "Ce plugin existe déjà."
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:685
 #: eeschema/dialogs/dialog_netlist.cpp:662
 msgid "You must provide a netlist generator command string"
 msgstr ""
 "Vous devez fournir une ligne de commande pour le générateur de netliste"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:691
 #: eeschema/dialogs/dialog_netlist.cpp:668
 msgid "You must provide a netlist generator title"
 msgstr "Vous devez fournir un titre pour le générateur de netliste"
@@ -10916,7 +10902,7 @@ msgstr "Chemin hiérarchique: "
 #: eeschema/lib_pin.cpp:1062 eeschema/lib_text.cpp:365
 #: eeschema/lib_textbox.cpp:371 eeschema/sch_field.cpp:694
 #: eeschema/sch_label.cpp:766 eeschema/sch_pin.cpp:215
-#: eeschema/sch_text.cpp:450 eeschema/sch_textbox.cpp:375
+#: eeschema/sch_text.cpp:450 eeschema/sch_textbox.cpp:374
 msgid "Style"
 msgstr "Style"
 
@@ -12298,7 +12284,7 @@ msgstr "/chemin/de/feuille"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:28
 #: pcbnew/footprint_edit_frame.cpp:227 pcbnew/footprint_edit_frame.cpp:802
-#: pcbnew/pcb_edit_frame.cpp:276 pcbnew/pcb_edit_frame.cpp:1299
+#: pcbnew/pcb_edit_frame.cpp:276 pcbnew/pcb_edit_frame.cpp:1278
 msgid "Appearance"
 msgstr "Apparence"
 
@@ -13741,7 +13727,7 @@ msgid "Graphic Text Box"
 msgstr "Boite de Texte Graphique"
 
 #: eeschema/lib_textbox.cpp:369 eeschema/sch_label.cpp:764
-#: eeschema/sch_text.cpp:448 eeschema/sch_textbox.cpp:373
+#: eeschema/sch_text.cpp:448 eeschema/sch_textbox.cpp:372
 msgid "Bold Italic"
 msgstr "Gras Italique"
 
@@ -14096,12 +14082,12 @@ msgstr "Ne peut pas ouvrir CvPcb"
 
 #: eeschema/sch_edit_frame.cpp:1352 eeschema/sim/sim_plot_frame.cpp:353
 #: kicad/kicad_manager_frame.cpp:645 pcbnew/footprint_edit_frame.cpp:861
-#: pcbnew/pcb_edit_frame.cpp:1382
+#: pcbnew/pcb_edit_frame.cpp:1361
 msgid "[Read Only]"
 msgstr "[Lecture Seule]"
 
 #: eeschema/sch_edit_frame.cpp:1355 eeschema/sim/sim_plot_frame.cpp:356
-#: pcbnew/footprint_edit_frame.cpp:870 pcbnew/pcb_edit_frame.cpp:1385
+#: pcbnew/footprint_edit_frame.cpp:870 pcbnew/pcb_edit_frame.cpp:1364
 msgid "[Unsaved]"
 msgstr "[Non sauvé]"
 
@@ -17476,13 +17462,13 @@ msgstr "Avertissements de Symboles"
 msgid "No datasheet defined."
 msgstr "Aucune fiche de données n’a été définie."
 
-#: eeschema/tools/ee_selection_tool.cpp:1648
+#: eeschema/tools/ee_selection_tool.cpp:1612
 #: pagelayout_editor/tools/pl_selection_tool.cpp:618
 #: pcbnew/tools/pcb_selection_tool.cpp:2173
 msgid "Select &All\tA"
 msgstr "Tout Sélectionner\tT"
 
-#: eeschema/tools/ee_selection_tool.cpp:1651
+#: eeschema/tools/ee_selection_tool.cpp:1615
 #: pcbnew/tools/pcb_selection_tool.cpp:2176
 msgid "&Expand Selection\tE"
 msgstr "&Expandre Sélection\tE"
@@ -19930,8 +19916,8 @@ msgid "Application failed to load:\n"
 msgstr "Échec du chargement de l’application:\n"
 
 #: kicad/tools/kicad_manager_control.cpp:667
-#: kicad/tools/kicad_manager_control.cpp:674 pcbnew/pcb_edit_frame.cpp:1614
-#: pcbnew/pcb_edit_frame.cpp:1644
+#: kicad/tools/kicad_manager_control.cpp:674 pcbnew/pcb_edit_frame.cpp:1593
+#: pcbnew/pcb_edit_frame.cpp:1623
 msgid "KiCad Error"
 msgstr "KiCad erreur"
 
@@ -21966,7 +21952,7 @@ msgstr "Position Y"
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:38
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:54
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:82
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:101
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:58
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:84
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:73
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:46
@@ -22726,7 +22712,8 @@ msgid "Reannotate anyway?"
 msgstr "Renuméroter de toute façon?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:802
-msgid "Duplicate instances of "
+#, fuzzy, c-format
+msgid "Duplicate instances of %s"
 msgstr "Exemplaires dupliqués de "
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
@@ -23012,7 +22999,7 @@ msgstr "Tailles Prédéfinies"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:111
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:54
-#: pcbnew/dialogs/dialog_drc.cpp:199 pcbnew/pcb_edit_frame.cpp:1810
+#: pcbnew/dialogs/dialog_drc.cpp:199 pcbnew/pcb_edit_frame.cpp:1789
 msgid "Custom Rules"
 msgstr "Règles Utilisateur"
 
@@ -23241,7 +23228,7 @@ msgstr "Mise à Jour de l'Empreinte"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:47
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:53
-#: pcbnew/dialogs/dialog_netlist.cpp:81 pcbnew/dialogs/dialog_update_pcb.cpp:59
+#: pcbnew/dialogs/dialog_netlist.cpp:83 pcbnew/dialogs/dialog_update_pcb.cpp:59
 msgid "Update PCB"
 msgstr "Mise à jour PCB"
 
@@ -23328,30 +23315,30 @@ msgstr "Nettoyer Pistes et Vias"
 msgid "Constraints Resolution Report"
 msgstr "Rapport de Résolution des Contraintes"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:361
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:156
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:99
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:88
+#: pcbnew/dialogs/dialog_copper_zones.cpp:366
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:167
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:102
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:99
 msgid "Chamfer distance:"
 msgstr "Distance de chanfreinage:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:363
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:101
+#: pcbnew/dialogs/dialog_copper_zones.cpp:368
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:104
 msgid "Fillet radius:"
 msgstr "Rayon de l'arrondi:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:504
+#: pcbnew/dialogs/dialog_copper_zones.cpp:515
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr ""
 "La largeur des freins thermique ne peut pas être plus petite que la largeur "
 "minimum."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:533
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:252
+#: pcbnew/dialogs/dialog_copper_zones.cpp:544
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:263
 msgid "No layer selected."
 msgstr "Pas de couche sélectionnée."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:869
+#: pcbnew/dialogs/dialog_copper_zones.cpp:880
 msgid "Selecting <no net> will create an isolated copper island."
 msgstr "La sélection <pas de net> créera un îlot de cuivre isolée."
 
@@ -23403,65 +23390,72 @@ msgid "Constrain outline to H, V and 45 degrees"
 msgstr "Limiter les lignes graphiques à 0, 90 et 45 degrés"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:133
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:107
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:121
 msgid "Outline display:"
 msgstr "Aspect des contours:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:137
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:111 pcbnew/zone.cpp:586
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:125 pcbnew/zone.cpp:586
 msgid "Hatched"
 msgstr "Hachuré"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:137
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:111
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:125
 msgid "Fully hatched"
 msgstr "Pleinement hachuré"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:146
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:78
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:143
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:131
+#, fuzzy
+msgid "Outline hatch pitch:"
+msgstr "Épaisseur contour:"
+
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:157
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:89
 msgid "Corner smoothing:"
 msgstr "Traitement des angles:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:82
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:161
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:93
 msgid "Chamfer"
 msgstr "Chanfrein"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:82
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:161
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:93
 msgid "Fillet"
 msgstr "Arrondi"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:179
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:190
 msgid "Electrical Properties"
 msgstr "Propriétés électriques"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:186
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:197
 msgid "Clearance:"
 msgstr "Isolation:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:188
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:199
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
 msgstr ""
 "Isolation du cuivre pour cette zone (définir à 0 pour utiliser l'isolation "
 "de netclasse)"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:199
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:210
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:78
 msgid "Minimum width:"
 msgstr "Épaisseur minimum:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:201
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:212
 msgid "Minimum thickness of filled areas."
 msgstr "Valeur de l'épaisseur minimum des zones remplies."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:215
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:226
 msgid "Pad connections:"
 msgstr "Connexions des pads:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:217
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:228
 msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local  pad settings"
@@ -23469,19 +23463,19 @@ msgstr ""
 "Type de connexion par défaut des pads à la zone.\n"
 "Ce paramètre peut être outrepassé  par les paramètres locaux du pad"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:221 pcbnew/zone.cpp:1342
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/zone.cpp:1347
 msgid "Thermal reliefs"
 msgstr "Freins thermiques"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:221
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 msgid "Reliefs for PTH"
 msgstr "Freins thermiques pour PTH"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:227
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:238
 msgid "Thermal relief gap:"
 msgstr "Longueur frein thermique:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:229
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:240
 msgid ""
 "The distance that will be kept clear between the filled area of the zone and "
 "a pad connected by thermal relief spokes."
@@ -23489,55 +23483,55 @@ msgstr ""
 "La distance qui sera maintenue libre entre la surface remplie de la zone et "
 "un pad connecté par des freins thermique."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:234
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:245
 msgid "Clearance between pads in the same net and filled areas."
 msgstr "Isolation entre pads et la surface remplie du même net."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:242
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:253
 msgid "Thermal spoke width:"
 msgstr "Largeur frein thermique:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:247
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:258
 msgid "Width of copper in thermal reliefs."
 msgstr "Définit l'épaisseur du cuivre dans les freins thermiques."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:264
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:108
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:275
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:119
 msgid "Fill"
 msgstr "Remplir"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:272
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:116
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:283
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:127
 msgid "Fill type:"
 msgstr "Style de Remplissage:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:276
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:120
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:287
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:131
 msgid "Solid fill"
 msgstr "Remplissage solide"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:276
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:120
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:287
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:131
 msgid "Hatch pattern"
 msgstr "Forme hachurée"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:293
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:140
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:304
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:151
 msgid "Hatch width:"
 msgstr "Largeur de la hachure:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:304
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:151
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:315
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:162
 msgid "Hatch gap:"
 msgstr "Espacement des hachures:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:315
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:162
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:326
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:173
 msgid "Smoothing effort:"
 msgstr "Effort de lissage:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:317
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:164
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:328
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:175
 msgid ""
 "Value of smoothing effort\n"
 "0 = no smoothing\n"
@@ -23551,13 +23545,13 @@ msgstr ""
 "2 = angles arrondis\n"
 "3 = angles arrondis (forme plus fine)"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:324
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:174
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:335
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:185
 msgid "Smoothing amount:"
 msgstr "Importance de lissage:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:326
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:176
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:337
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:187
 msgid ""
 "Ratio between smoothed corners size and the gap between lines\n"
 "0 = no smoothing\n"
@@ -23567,31 +23561,31 @@ msgstr ""
 "0 = pas de lissage\n"
 "1,0 = rayon maximum/taille du chanfrein (valeur de demi-distance)"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:337
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:348
 msgid "Remove islands:"
 msgstr "Supprimer les îlots :"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:339
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:350
 msgid "Choose what to do with unconnected copper islands"
 msgstr "Choisissez ce qu’il faut faire avec les îlots de cuivre non connectés"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:343
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:354
 msgid "Below area limit"
 msgstr "Inférieur à la limite de zone"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:349
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:360
 msgid "Minimum island size:"
 msgstr "Taille minimale de l’îlot :"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:352
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:363
 msgid "Isolated islands smaller than this will be removed"
 msgstr "Les îlots isolés plus petites que cela seront supprimés"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:381
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:392
 msgid "Export Settings to Other Zones"
 msgstr "Exporter Options vers Autres Zones"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:382
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:393
 msgid ""
 "Export this zone setup (excluding layer and net selection) to all other "
 "copper zones."
@@ -23599,7 +23593,7 @@ msgstr ""
 "Exporter ces options vers les autres zones de cuivre (en excluant la couche "
 "et la sélection de net)."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.h:139
+#: pcbnew/dialogs/dialog_copper_zones_base.h:142
 msgid "Copper Zone Properties"
 msgstr "Propriétés de la Zone sur Cuivre"
 
@@ -26183,35 +26177,40 @@ msgstr "Créer Fichier Rapport..."
 msgid "Net Inspector"
 msgstr "Inspecteur d'équipotentielles (nets)"
 
+#: pcbnew/dialogs/dialog_netlist.cpp:81
+#, fuzzy
+msgid "Load and Test Netlist"
+msgstr "Charger la netliste"
+
 #: pcbnew/dialogs/dialog_netlist.cpp:123
 msgid "Select Netlist"
 msgstr "Sélection Netliste"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:139
+#: pcbnew/dialogs/dialog_netlist.cpp:146
 msgid "Please choose a valid netlist file."
 msgstr "Veuillez choisir un fichier netliste valide."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:145 pcbnew/dialogs/dialog_netlist.cpp:180
+#: pcbnew/dialogs/dialog_netlist.cpp:152 pcbnew/dialogs/dialog_netlist.cpp:189
 msgid "The netlist file does not exist."
 msgstr "Le fichier netliste n'existe pas."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:149
+#: pcbnew/dialogs/dialog_netlist.cpp:156
 #: pcbnew/dialogs/dialog_update_pcb.cpp:134
 msgid "Changes Applied to PCB"
 msgstr "Modifications Appliquées au CI"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:215
+#: pcbnew/dialogs/dialog_netlist.cpp:224
 #, c-format
 msgid "Reading netlist file '%s'.\n"
 msgstr "Lecture fichier netliste '%s'\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:219
+#: pcbnew/dialogs/dialog_netlist.cpp:228
 msgid "Using reference designators to match symbols and footprints.\n"
 msgstr ""
 "Utilisation des références schématiques pour associer composants et "
 "empreintes.\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:221
+#: pcbnew/dialogs/dialog_netlist.cpp:230
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
 msgstr ""
 "Utilisation des signatures temporelles (uniques IDs) pour associer "
@@ -26257,7 +26256,7 @@ msgstr "Supprimer les empreintes sans symbole associé en netliste"
 msgid "Delete tracks shorting multiple nets"
 msgstr "Supprimer pistes connectant plusieurs nets"
 
-#: pcbnew/dialogs/dialog_netlist_base.h:67
+#: pcbnew/dialogs/dialog_netlist_base.h:69
 msgid "Import Netlist"
 msgstr "Importer Netliste"
 
@@ -26265,11 +26264,11 @@ msgstr "Importer Netliste"
 msgid "Outline style:"
 msgstr "Style des contours:"
 
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:136
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:147
 msgid "degree"
 msgstr "degré"
 
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:84
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:87
 msgid "Non Copper Zones Properties"
 msgstr "Propriétés des Zones sur Couches non Cuivre"
 
@@ -27797,7 +27796,7 @@ msgstr "Ne pas modifier les pads ayant un type différent"
 msgid "Push Pad Properties"
 msgstr "Exporter Propriétés du Pad"
 
-#: pcbnew/dialogs/dialog_rule_area_properties.cpp:154
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:161
 msgid "No layers selected."
 msgstr "Pas de couche sélectionnée."
 
@@ -27805,74 +27804,75 @@ msgstr "Pas de couche sélectionnée."
 msgid "Layers:"
 msgstr "Couches:"
 
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:41
-msgid "Basic rules:"
-msgstr "Règles de Base:"
-
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
-msgid "Keep out tracks"
-msgstr "Sans pistes"
-
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:49
-msgid "Prevent tracks from routing into this area"
-msgstr "Empêcher les pistes d'être tracées dans cette zone"
-
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:53
-msgid "Keep out vias"
-msgstr "Sans vias"
-
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:54
-msgid "Prevent vias from being placed in this area"
-msgstr "Empêcher les vias d’être placées dans cette zone"
-
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:58
-msgid "Keep out pads"
-msgstr "Sans pads"
-
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:59
-msgid "Raise a DRC error if a pad overlaps this area"
-msgstr "Afficher une erreur DRC si un pad chevauche cette zone"
-
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:63
-msgid "Keep out copper fill"
-msgstr "Sans zones cuivre"
-
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:64
-msgid "Zones will not fill copper into this area"
-msgstr "Les zones ne rempliront pas le cuivre dans cette surface"
-
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:68
-msgid "Keep out footprints"
-msgstr "Sans empreintes"
-
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:69
-msgid "Raise a DRC error if a footprint courtyard overlaps this area"
-msgstr ""
-"Afficher une erreur DRC si une zone d'occupation d'empreinte chevauche cette "
-"zone"
-
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:79
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:44
 msgid "Area name:"
 msgstr "Nom de zone:"
 
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:81
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:89
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:46
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:54
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:136
 msgid "A unique name for this rule area for use in DRC rules"
 msgstr ""
 "Un nom unique pour cette zone de règles pour l'utiliser dans les règles de "
 "DRC"
 
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:96
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:69
+msgid "Basic rules:"
+msgstr "Règles de Base:"
+
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:73
+msgid "Keep out tracks"
+msgstr "Sans pistes"
+
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:74
+msgid "Prevent tracks from routing into this area"
+msgstr "Empêcher les pistes d'être tracées dans cette zone"
+
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:78
+msgid "Keep out vias"
+msgstr "Sans vias"
+
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:79
+msgid "Prevent vias from being placed in this area"
+msgstr "Empêcher les vias d’être placées dans cette zone"
+
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:83
+msgid "Keep out pads"
+msgstr "Sans pads"
+
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:84
+msgid "Raise a DRC error if a pad overlaps this area"
+msgstr "Afficher une erreur DRC si un pad chevauche cette zone"
+
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:88
+msgid "Keep out copper fill"
+msgstr "Sans zones cuivre"
+
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:89
+msgid "Zones will not fill copper into this area"
+msgstr "Les zones ne rempliront pas le cuivre dans cette surface"
+
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:93
+msgid "Keep out footprints"
+msgstr "Sans empreintes"
+
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:94
+msgid "Raise a DRC error if a footprint courtyard overlaps this area"
+msgstr ""
+"Afficher une erreur DRC si une zone d'occupation d'empreinte chevauche cette "
+"zone"
+
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:116
 msgid "Constrain outline to H, V and 45 deg"
 msgstr "Contraindre contour à H, V et 45 deg"
 
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:97
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:117
 msgid "Draw the area using horizontal, vertical and 45 degree lines only"
 msgstr ""
 "Dessinez la zone en utilisant uniquement des lignes horizontales, verticales "
 "et à 45 degrés"
 
-#: pcbnew/dialogs/dialog_rule_area_properties_base.h:67
+#: pcbnew/dialogs/dialog_rule_area_properties_base.h:71
 msgid "Rule Area Properties"
 msgstr "Propriétés de la Zone à Règles"
 
@@ -29587,6 +29587,7 @@ msgid "Check rule syntax"
 msgstr "Vérification de la syntaxe de la règle"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
+#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -29746,8 +29747,8 @@ msgid ""
 "    A.inDiffPair('<net_name>')\n"
 "True if `A` has net that is part of the specified differential pair.\n"
 "`<net_name>` is the base name of the differential pair.  For example, "
-"`inDiffPair('CLK')`\n"
-"matches items in the `CLK_P` and `CLK_N` nets.\n"
+"`inDiffPair('/CLK')`\n"
+"matches items in the `/CLK_P` and `/CLK_N` nets.\n"
 "<br><br>\n"
 "\n"
 "    AB.isCoupledDiffPair()\n"
@@ -29787,22 +29788,22 @@ msgid ""
 "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
 "\n"
 "\n"
-"    (rule \"Distance between Vias of Different Nets\"  \n"
+"    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
 "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
 "\"))\n"
 "\n"
-"    (rule \"Clearance between Pads of Different Nets\"  \n"
+"    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
 "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
 "\"))\n"
 "\n"
 "\n"
-"    (rule \"Via Hole to Track Clearance\"  \n"
+"    (rule \"Via Hole to Track Clearance\"\n"
 "        (constraint hole_clearance (min 0.254mm))\n"
 "        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
-"    \n"
-"    (rule \"Pad to Track Clearance\"  \n"
+"\n"
+"    (rule \"Pad to Track Clearance\"\n"
 "        (constraint clearance (min 0.2mm))\n"
 "        (condition \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
 "\n"
@@ -29812,11 +29813,11 @@ msgid ""
 "        (condition \"A.Layer == 'Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
 "\n"
 "\n"
-"    (rule \"Max Drill Hole Size Mechanical\"  \n"
+"    (rule \"Max Drill Hole Size Mechanical\"\n"
 "        (constraint hole_size (max 6.3mm))\n"
 "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
-"    \n"
-"    (rule \"Max Drill Hole Size PTH\"  \n"
+"\n"
+"    (rule \"Max Drill Hole Size PTH\"\n"
 "        (constraint hole_size (max 6.35mm))\n"
 "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
@@ -29824,7 +29825,7 @@ msgid ""
 "    # Specify an optimal gap for a particular diff-pair\n"
 "    (rule \"dp clock gap\"\n"
 "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
-"        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
+"        (condition \"A.inDiffPair('/CLK')\"))\n"
 "\n"
 "    # Specify a larger clearance around any diff-pair\n"
 "    (rule \"dp clearance\"\n"
@@ -29851,7 +29852,7 @@ msgid ""
 "        (constraint thermal_relief_gap (min 10mil))\n"
 "        (constraint thermal_spoke_width (min 12mil))\n"
 "        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
-"    \n"
+"\n"
 "\n"
 "    # Prevent solder wicking from SMD pads\n"
 "    (rule holes_in_pads\n"
@@ -29861,7 +29862,7 @@ msgid ""
 "    # Disallow solder mask margin overrides\n"
 "    (rule \"disallow solder mask margin overrides\"\n"
 "        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
-"        (condition \"A.Type == 'Pad'\"))"
+"        (condition \"A.Type == 'Pad'\"))\n"
 msgstr ""
 "### Top-level Clauses\n"
 "\n"
@@ -31563,7 +31564,7 @@ msgstr "Type \"Autre\" attendu mais défini comme \"%s\""
 msgid "(pad \"%s\")"
 msgstr "(pad \"%s\")"
 
-#: pcbnew/footprint.cpp:2523 pcbnew/pad.cpp:1708 pcbnew/zone.cpp:1355
+#: pcbnew/footprint.cpp:2523 pcbnew/pad.cpp:1708 pcbnew/zone.cpp:1360
 msgid "Clearance Override"
 msgstr "Forçage d'Isolation"
 
@@ -31584,7 +31585,7 @@ msgstr "empreinte %s"
 msgid "KiCad Footprint Editor"
 msgstr "Éditeur d'Empreintes KiCad"
 
-#: pcbnew/footprint_edit_frame.cpp:192 pcbnew/zone_settings.cpp:219
+#: pcbnew/footprint_edit_frame.cpp:192 pcbnew/zone_settings.cpp:221
 msgid "Inner layers"
 msgstr "Couches internes"
 
@@ -32845,7 +32846,7 @@ msgstr "Dist. Pad à Chip"
 msgid "Soldermask Margin Override"
 msgstr "Forçage Marge Vernis Epargne"
 
-#: pcbnew/pad.cpp:1687 pcbnew/zone.cpp:1366
+#: pcbnew/pad.cpp:1687 pcbnew/zone.cpp:1371
 msgid "Thermal Relief Spoke Width"
 msgstr "Largeur Rayon Frein Thermique"
 
@@ -32853,7 +32854,7 @@ msgstr "Largeur Rayon Frein Thermique"
 msgid "Thermal Relief Spoke Angle"
 msgstr "Angle Rayon Frein Thermique"
 
-#: pcbnew/pad.cpp:1693 pcbnew/zone.cpp:1363
+#: pcbnew/pad.cpp:1693 pcbnew/zone.cpp:1368
 msgid "Thermal Relief Gap"
 msgstr "Longueur Frein Thermique"
 
@@ -32865,7 +32866,7 @@ msgstr "Propriétés de Fabrication"
 msgid "Round Radius Ratio"
 msgstr "Rapport Rayon d'Arrondi"
 
-#: pcbnew/pcb_base_frame.cpp:173
+#: pcbnew/pcb_base_frame.cpp:174
 msgid "Error loading project footprint libraries."
 msgstr "Erreur lors du chargement des librairies d'empreintes du projet."
 
@@ -32903,19 +32904,19 @@ msgstr "Le nouveau fichier PCB n'est pas sauvé"
 msgid "The auto save file '%s' could not be removed!"
 msgstr "Le fichier d'auto sauvegarde '%s' n'a pas pu être supprimé!"
 
-#: pcbnew/pcb_edit_frame.cpp:1231
+#: pcbnew/pcb_edit_frame.cpp:1210
 msgid "Board file is read only."
 msgstr "Le fichier du circuit imprimé est en lecture seule."
 
-#: pcbnew/pcb_edit_frame.cpp:1265
+#: pcbnew/pcb_edit_frame.cpp:1244
 msgid "PCB file changes are unsaved"
 msgstr "Les modifications du C.I. ne sont pas sauvées."
 
-#: pcbnew/pcb_edit_frame.cpp:1529
+#: pcbnew/pcb_edit_frame.cpp:1508
 msgid "The schematic for this board cannot be found."
 msgstr "La schématique pour ce circiut imprimé ne peut pas être trouvée."
 
-#: pcbnew/pcb_edit_frame.cpp:1553
+#: pcbnew/pcb_edit_frame.cpp:1532
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
@@ -32926,11 +32927,11 @@ msgstr ""
 "Afin de créer/mettre à jour le PCB à partir du schéma, vous devrez lancer "
 "Kicad manager et créer un projet."
 
-#: pcbnew/pcb_edit_frame.cpp:1575
+#: pcbnew/pcb_edit_frame.cpp:1554
 msgid "Eeschema netlist"
 msgstr "Netliste EEschema"
 
-#: pcbnew/pcb_edit_frame.cpp:1586
+#: pcbnew/pcb_edit_frame.cpp:1565
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
@@ -32938,24 +32939,24 @@ msgstr ""
 "Vous avez reçu une erreur lors de la lecture de netliste.  Veuillez signaler "
 "ce problème à l’équipe KiCad à l’aide du menu Aide-> Signaler un bogue."
 
-#: pcbnew/pcb_edit_frame.cpp:1613
+#: pcbnew/pcb_edit_frame.cpp:1592
 #, c-format
 msgid "Schematic file '%s' not found."
 msgstr "Fichier schématique '%s' non trouvé."
 
-#: pcbnew/pcb_edit_frame.cpp:1643
+#: pcbnew/pcb_edit_frame.cpp:1622
 msgid "Eeschema failed to load."
 msgstr "Eeschema a échoué chargement."
 
-#: pcbnew/pcb_edit_frame.cpp:1804
+#: pcbnew/pcb_edit_frame.cpp:1783
 msgid "Edit design rules"
 msgstr "Editer règles de conception"
 
-#: pcbnew/pcb_edit_frame.cpp:1816
+#: pcbnew/pcb_edit_frame.cpp:1795
 msgid "Could not compile custom design rules."
 msgstr "Impossible de compiler les règles de conception utilisateur."
 
-#: pcbnew/pcb_edit_frame.cpp:1854
+#: pcbnew/pcb_edit_frame.cpp:1833
 msgid "Export Hyperlynx Layout"
 msgstr "Exporter au Format Hyperlynx"
 
@@ -33001,17 +33002,17 @@ msgstr ""
 msgid "Missing group name argument to %s."
 msgstr "Nom de groupe manquant à '%s'."
 
-#: pcbnew/pcb_expr_evaluator.cpp:830
+#: pcbnew/pcb_expr_evaluator.cpp:828
 #, c-format
 msgid "Missing diff-pair name argument to %s."
 msgstr "Nom de paire différentielle manquant à '%s'."
 
-#: pcbnew/pcb_expr_evaluator.cpp:878
+#: pcbnew/pcb_expr_evaluator.cpp:879
 #, c-format
 msgid "Missing field name argument to %s."
 msgstr "Nom de champ manquant à '%s'."
 
-#: pcbnew/pcb_expr_evaluator.cpp:1197
+#: pcbnew/pcb_expr_evaluator.cpp:1198
 msgid "must be mm, in, or mil"
 msgstr "doit être mm, in, ou mil"
 
@@ -33355,19 +33356,19 @@ msgstr "Chargement arcs..."
 msgid "Loading pads..."
 msgstr "Chargement des pads..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2407
+#: pcbnew/plugins/altium/altium_pcb.cpp:2409
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 "L’empreinte %s pad %s n’est pas marquée comme multicouche, mais est un pad "
 "traversant."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2425
+#: pcbnew/plugins/altium/altium_pcb.cpp:2427
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "P’empreinte %s, pad '%s’a un trou carré. (non supporté)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2447
+#: pcbnew/plugins/altium/altium_pcb.cpp:2449
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
@@ -33376,25 +33377,25 @@ msgstr ""
 "Le pad '%s’de l’empreinte %s a un trou avec rotation de %f degrés. KiCad ne "
 "supporte que des rotations de 90 degrés."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2460
+#: pcbnew/plugins/altium/altium_pcb.cpp:2462
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "L’empreinte %s, pad %s, utilise un trou de type %d inconnu."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2476
+#: pcbnew/plugins/altium/altium_pcb.cpp:2478
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
 "Le pad '%s’de l'empreinte %s utilise une pile de pads complexe, qui n’est "
 "pas encore pris en charge."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2507
+#: pcbnew/plugins/altium/altium_pcb.cpp:2509
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "L’empreinte %s pad %s utilise une forme de pad inconnue."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2561
-#: pcbnew/plugins/altium/altium_pcb.cpp:2582
+#: pcbnew/plugins/altium/altium_pcb.cpp:2563
+#: pcbnew/plugins/altium/altium_pcb.cpp:2584
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -33403,34 +33404,34 @@ msgstr ""
 "Le pad non cuivre %s sur la couche Altium %d n’a pas d’équivalent KiCad. Mis "
 "sur Eco1_User à la place."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2602
+#: pcbnew/plugins/altium/altium_pcb.cpp:2604
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr ""
 "Le pad non-cuivre %s est connecté à un net, ce qui n’est pas pris en charge."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2608
+#: pcbnew/plugins/altium/altium_pcb.cpp:2610
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "Le pad non en cuivre %s a un trou, qui n’est pas pris en charge."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2613
+#: pcbnew/plugins/altium/altium_pcb.cpp:2615
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 "Le pad non-cuivre %s utilise une pile de pad complexe (non encore prise en "
 "charge)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2755
+#: pcbnew/plugins/altium/altium_pcb.cpp:2757
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "Le pad %s non cuivre utilise une forme de pad inconnue."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2765
+#: pcbnew/plugins/altium/altium_pcb.cpp:2767
 msgid "Loading vias..."
 msgstr "Chargement des vias..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2806
+#: pcbnew/plugins/altium/altium_pcb.cpp:2808
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
@@ -33438,27 +33439,27 @@ msgstr ""
 "La via de la couche %d à %d utilise une couche non-cuivre, qui n’est pas "
 "prise en charge."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2827
+#: pcbnew/plugins/altium/altium_pcb.cpp:2829
 msgid "Loading tracks..."
 msgstr "Chargement des pistes..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2960
+#: pcbnew/plugins/altium/altium_pcb.cpp:2962
 msgid "Loading unicode strings..."
 msgstr "Chargement de chaînes unicode..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2974
+#: pcbnew/plugins/altium/altium_pcb.cpp:2976
 msgid "Loading text..."
 msgstr "Chargement des textes..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3003
-#: pcbnew/plugins/altium/altium_pcb.cpp:3018
+#: pcbnew/plugins/altium/altium_pcb.cpp:3005
+#: pcbnew/plugins/altium/altium_pcb.cpp:3020
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr ""
 "Ignore le code-barre sur la couche Altium %d (pas pris en charge "
 "actuellement)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3181
+#: pcbnew/plugins/altium/altium_pcb.cpp:3183
 msgid "Loading rectangles..."
 msgstr "Chargement rectangles..."
 
@@ -34638,12 +34639,12 @@ msgstr "netclasse 'Défaut'"
 msgid "user choice"
 msgstr "choix de l’utilisateur"
 
-#: pcbnew/router/pns_kicad_iface.cpp:1057
+#: pcbnew/router/pns_kicad_iface.cpp:1054
 #, c-format
 msgid "%s is malformed."
 msgstr "%s est mal formé."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1060
+#: pcbnew/router/pns_kicad_iface.cpp:1057
 msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
@@ -34651,7 +34652,7 @@ msgstr ""
 "Cette zone ne peut pas être gérée par le routeur.\n"
 "SVP vérifier qu’il ne s’agit pas d’un polygone auto-intersectant."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1657 pcbnew/router/router_tool.cpp:435
+#: pcbnew/router/pns_kicad_iface.cpp:1654 pcbnew/router/router_tool.cpp:435
 msgid "Interactive Router"
 msgstr "Routeur Interactif"
 
@@ -38304,7 +38305,7 @@ msgstr "Pas d'empreinte"
 msgid "Restrictions"
 msgstr "Restrictions"
 
-#: pcbnew/zone.cpp:555 pcbnew/zone.cpp:1349
+#: pcbnew/zone.cpp:555 pcbnew/zone.cpp:1354
 msgid "Priority"
 msgstr "Priorité"
 
@@ -38349,19 +38350,19 @@ msgstr "Surface à Règles sur %s"
 msgid "Zone %s on %s"
 msgstr "Zone '%s' sur '%s'"
 
-#: pcbnew/zone.cpp:1340
+#: pcbnew/zone.cpp:1345
 msgid "Inherited"
 msgstr "Hérité"
 
-#: pcbnew/zone.cpp:1344
+#: pcbnew/zone.cpp:1349
 msgid "Thermal reliefs for PTH"
 msgstr "Freins thermiques pour pads traversants"
 
-#: pcbnew/zone.cpp:1358
+#: pcbnew/zone.cpp:1363
 msgid "Min Width"
 msgstr "Largeur Min"
 
-#: pcbnew/zone.cpp:1361
+#: pcbnew/zone.cpp:1366
 msgid "Pad Connections"
 msgstr "Connexions des Pads"
 
@@ -38389,34 +38390,29 @@ msgstr "Continuer sans re-remplir"
 msgid "Performing polygon fills..."
 msgstr "Exécution de remplissage des polygones..."
 
-#: pcbnew/zones.h:59
+#: pcbnew/zones.h:62
 msgid "inherited"
 msgstr "hérité"
 
-#: pcbnew/zones.h:60
+#: pcbnew/zones.h:63
 msgid "none"
 msgstr "aucun"
 
-#: pcbnew/zones.h:61
+#: pcbnew/zones.h:64
 msgid "thermal reliefs"
 msgstr "freins thermiques"
 
-#: pcbnew/zones.h:62
+#: pcbnew/zones.h:65
 msgid "solid"
 msgstr "solide"
 
-#: pcbnew/zones.h:63
+#: pcbnew/zones.h:66
 msgid "thermal reliefs for PTH"
 msgstr "freins thermiques pour pads traversants"
 
 #: plugins/3d/vrml/vrml.cpp:228
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
-
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
-msgid "bitmap2component"
-msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
@@ -38428,10 +38424,9 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+msgid "bitmap2component"
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
@@ -38445,10 +38440,9 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -38458,9 +38452,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
-msgid "kicad"
-msgstr "kicad"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -38475,10 +38469,6 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
-msgid "pcbcalculator"
-msgstr "pcbcalculator"
-
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -38486,11 +38476,6 @@ msgstr "Calculateur pour PCB KiCad"
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
@@ -38503,6 +38488,10 @@ msgstr "Éditeur de circuit imprimé"
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
+
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+msgid "pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -38556,6 +38545,12 @@ msgstr "Schématique KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Fichier Circuit Imprimé KiCad"
+
+#~ msgid "kicad"
+#~ msgstr "kicad"
+
+#~ msgid "pcbcalculator"
+#~ msgstr "pcbcalculator"
 
 #~ msgid "Mimic legacy behavior"
 #~ msgstr "Utiliser ancien comportement"
@@ -41788,9 +41783,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "Set thickness to 0 for a filled circle."
 #~ msgstr "Définissez l'épaisseur à 0 pour un cercle rempli."
-
-#~ msgid "Outline thickness:"
-#~ msgstr "Épaisseur contour:"
 
 #~ msgid "Set thickness to 0 for a filled polygon."
 #~ msgstr "Définissez l'épaisseur à 0 pour un polygone rempli."
@@ -48031,9 +48023,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "Save changes to board"
 #~ msgstr "Sauver changements dans le PCB"
-
-#~ msgid "Load netlist"
-#~ msgstr "Charger la netliste"
 
 #~ msgid ""
 #~ "Corner radius.\n"
