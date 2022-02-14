@@ -624,7 +624,6 @@ void LIB_SYMBOL::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, bool
     wxASSERT( aPlotter != nullptr );
 
     aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_FIELDS ) );
-    bool fill = aPlotter->GetColorMode();
 
     for( LIB_ITEM& item : m_drawings )
     {

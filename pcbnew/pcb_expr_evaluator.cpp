@@ -795,7 +795,7 @@ static void isCoupledDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
     result->SetDeferredEval(
             [a, b]() -> double
             {
-                NETINFO_ITEM* netinfo = a->GetNet();
+                NETINFO_ITEM* netinfo = a ? a->GetNet() : nullptr;
                 wxString      coupledNet;
                 wxString      dummy;
 
