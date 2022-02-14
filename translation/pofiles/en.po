@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-09 08:58-0800\n"
+"POT-Creation-Date: 2022-02-14 09:20-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1071,6 +1071,12 @@ msgstr "&Report Bug"
 
 msgid "Report a problem with KiCad"
 msgstr "Report a problem with KiCad"
+
+msgid "Donate"
+msgstr "Donate"
+
+msgid "Donate to KiCad"
+msgstr "Donate to KiCad"
 
 msgid "&OK"
 msgstr "&OK"
@@ -2781,11 +2787,11 @@ msgstr "3D model search path"
 msgid "Alias: "
 msgstr "Alias: "
 
-msgid "This path:"
-msgstr "This path:"
+msgid "This path:wxT( "
+msgstr "This path:wxT( "
 
-msgid "Existing path:"
-msgstr "Existing path:"
+msgid "Existing path:wxT( "
+msgstr "Existing path:wxT( "
 
 msgid "Bad alias (duplicate name)"
 msgstr "Bad alias (duplicate name)"
@@ -3938,9 +3944,6 @@ msgstr "Get Involved"
 msgid "Open \"Contribute to KiCad\" in a web browser"
 msgstr "Open \"Contribute to KiCad\" in a web browser"
 
-msgid "Donate"
-msgstr "Donate"
-
 msgid "Open \"Donate to KiCad\" in a web browser"
 msgstr "Open \"Donate to KiCad\" in a web browser"
 
@@ -3986,9 +3989,6 @@ msgid ""
 msgstr ""
 "Could not launch the default browser.\n"
 "To donate to the KiCad project, visit %s"
-
-msgid "Donate to KiCad"
-msgstr "Donate to KiCad"
 
 #, c-format
 msgid "Grid: %s (%s)"
@@ -8156,6 +8156,12 @@ msgstr ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
 
+msgid "Remove Invalid Cells"
+msgstr "Remove Invalid Cells"
+
+msgid "Cancel Table Update"
+msgstr "Cancel Table Update"
+
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'"
 msgstr "Illegal character '%c' in nickname '%s'"
@@ -9000,8 +9006,8 @@ msgstr "Assigned Netclass"
 msgid "Connection Name"
 msgstr "Connection Name"
 
-msgid "Net Code"
-msgstr "Net Code"
+msgid "Net CodewxT( "
+msgstr "Net CodewxT( "
 
 #, c-format
 msgid "Bus Alias %s Members"
@@ -9169,9 +9175,8 @@ msgstr ""
 msgid "Cannot open file '%s'."
 msgstr "Cannot open file '%s'."
 
-#, c-format
-msgid "Storage file not fully parsed (%d bytes remaining)."
-msgstr "Storage file not fully parsed (%d bytes remaining)."
+msgid "Storage file not fully parsed "
+msgstr "Storage file not fully parsed "
 
 msgid "Compile mask not currently supported."
 msgstr "Compile mask not currently supported."
@@ -10393,9 +10398,6 @@ msgstr "Libraries"
 
 msgid "Library changes are unsaved"
 msgstr "Library changes are unsaved"
-
-msgid "Save changes to schematic before closing?"
-msgstr "Save changes to schematic before closing?"
 
 #, c-format
 msgid "Unit %s"
@@ -12276,6 +12278,9 @@ msgid ""
 msgstr ""
 "Warning: this file has some missing D-Code definitions\n"
 "Therefore the size of some items is undefined"
+
+msgid "Invalid Code Number"
+msgstr "Invalid Code Number"
 
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
 msgstr "Invalid Gerber file: missing G74 or G75 arc command"
@@ -14509,15 +14514,15 @@ msgid ""
 "(internal), temperature rises up to 100 °C, and widths of up to 400 mils (10 "
 "mm).\n"
 "\n"
-"The formula, from IPC 2221, is  \n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>  \n"
-"where:  \n"
-"___I___ is maximum current in A  \n"
-"___&Delta;T___ is temperature rise above ambient in &deg;C  \n"
-"___W___ is width in mils  \n"
-"___H___ is thickness (height) in mils  \n"
-"___K___ is 0.024 for internal traces or 0.048 for external traces  \n"
+"The formula, from IPC 2221, is\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
+"H)<sup>0.725</sup>___</center>\n"
+"where:<br>\n"
+"___I___ is maximum current in A<br>\n"
+"___&Delta;T___ is temperature rise above ambient in &deg;C<br>\n"
+"___W___ is width in mils<br>\n"
+"___H___ is thickness (height) in mils<br>\n"
+"___K___ is 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -14532,15 +14537,15 @@ msgstr ""
 "(internal), temperature rises up to 100 °C, and widths of up to 400 mils (10 "
 "mm).\n"
 "\n"
-"The formula, from IPC 2221, is  \n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>  \n"
-"where:  \n"
-"___I___ is maximum current in A  \n"
-"___&Delta;T___ is temperature rise above ambient in &deg;C  \n"
-"___W___ is width in mils  \n"
-"___H___ is thickness (height) in mils  \n"
-"___K___ is 0.024 for internal traces or 0.048 for external traces  \n"
+"The formula, from IPC 2221, is\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
+"H)<sup>0.725</sup>___</center>\n"
+"where:<br>\n"
+"___I___ is maximum current in A<br>\n"
+"___&Delta;T___ is temperature rise above ambient in &deg;C<br>\n"
+"___W___ is width in mils<br>\n"
+"___H___ is thickness (height) in mils<br>\n"
+"___K___ is 0.024 for internal traces or 0.048 for external traces\n"
 
 msgid "Dielectric Loss Factor"
 msgstr "Dielectric Loss Factor"
@@ -15328,6 +15333,9 @@ msgstr ""
 "\n"
 "%d %s UUID: [%s], X, Y: %s, Rounded X, Y, %s"
 
+msgid "Selected options resulted in errors! Change them and try again."
+msgstr "Selected options resulted in errors! Change them and try again."
+
 #, c-format
 msgid ""
 "\n"
@@ -15350,6 +15358,10 @@ msgstr ""
 
 msgid "Reannotate anyway?"
 msgstr "Reannotate anyway?"
+
+#, c-format
+msgid "Duplicate instances of %s"
+msgstr "Duplicate instances of %s"
 
 msgid "Aborted: too many errors"
 msgstr "Aborted: too many errors"
@@ -17721,6 +17733,9 @@ msgstr "Use polar coordinates"
 msgid "Move Item"
 msgstr "Move Item"
 
+msgid "Net Code"
+msgstr "Net Code"
+
 msgid "Net Name"
 msgstr "Net Name"
 
@@ -17796,6 +17811,9 @@ msgstr "Create Report…"
 msgid "Net Inspector"
 msgstr "Net Inspector"
 
+msgid "Load and Test Netlist"
+msgstr "Load and Test Netlist"
+
 msgid "Select Netlist"
 msgstr "Select Netlist"
 
@@ -17866,6 +17884,10 @@ msgstr "Ring"
 msgid "Center:"
 msgstr "Center:"
 
+#, c-format
+msgid "Corner %d"
+msgstr "Corner %d"
+
 msgid "Polygon must have at least 3 corners"
 msgstr "Polygon must have at least 3 corners"
 
@@ -17930,6 +17952,9 @@ msgstr "radius"
 #, c-format
 msgid "corners count %d"
 msgstr "corners count %d"
+
+msgid "Unknown primitive"
+msgstr "Unknown primitive"
 
 msgid "All copper layers"
 msgstr "All copper layers"
@@ -18925,6 +18950,10 @@ msgstr "Reference location: local coordinates origin"
 
 msgid "<none selected>"
 msgstr "<none selected>"
+
+#, c-format
+msgid "Reference item: %s"
+msgstr "Reference item: %s"
 
 msgid "Reference item: <none selected>"
 msgstr "Reference item: <none selected>"
@@ -20736,6 +20765,18 @@ msgstr "Checking %s clearance: %s."
 
 msgid "undefined"
 msgstr "undefined"
+
+msgid "track width"
+msgstr "track width"
+
+msgid "annular width"
+msgstr "annular width"
+
+msgid "via diameter"
+msgstr "via diameter"
+
+msgid "constraint"
+msgstr "constraint"
 
 #, c-format
 msgid "Checking %s %s: %s."
@@ -22597,6 +22638,9 @@ msgstr "Via %s on %s"
 msgid "removed annular ring"
 msgstr "removed annular ring"
 
+msgid "Track (arc)"
+msgstr "Track (arc)"
+
 msgid "Segment Length"
 msgstr "Segment Length"
 
@@ -22689,6 +22733,9 @@ msgstr "Error reading file: cannot determine length."
 msgid "Error reading file."
 msgstr "Error reading file."
 
+msgid "Open cancelled by user."
+msgstr "Open cancelled by user."
+
 #, c-format
 msgid "'%s' was not parsed correctly."
 msgstr "'%s' was not parsed correctly."
@@ -22701,9 +22748,21 @@ msgstr "'%s' was not fully parsed."
 msgid "File not found: '%s'."
 msgstr "File not found: '%s'."
 
+msgid "Loading board data..."
+msgstr "Loading board data..."
+
+msgid "Loading netclasses..."
+msgstr "Loading netclasses..."
+
 #, c-format
 msgid "Duplicate netclass name '%s'."
 msgstr "Duplicate netclass name '%s'."
+
+msgid "Loading components..."
+msgstr "Loading components..."
+
+msgid "Loading component 3D models..."
+msgstr "Loading component 3D models..."
 
 #, c-format
 msgid ""
@@ -22712,6 +22771,9 @@ msgid ""
 msgstr ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
+
+msgid "Loading dimension drawings..."
+msgstr "Loading dimension drawings..."
 
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
@@ -22993,6 +23055,10 @@ msgstr ""
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "The CADSTAR pad definition '%s' has import errors: %s"
+
+#, c-format
+msgid "Unable to find pad index '%d' in footprint '%s'."
+msgstr "Unable to find pad index '%d' in footprint '%s'."
 
 #, c-format
 msgid "Unable to find group ID %s in the group definitions."
@@ -23589,9 +23655,6 @@ msgstr "unknown via type %d"
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "unknown zone corner smoothing type %d"
-
-msgid "Open cancelled by user."
-msgstr "Open cancelled by user."
 
 msgid "This file does not contain a PCB."
 msgstr "This file does not contain a PCB."
@@ -24270,6 +24333,24 @@ msgstr "Lock"
 
 msgid "Unlock"
 msgstr "Unlock"
+
+msgid "Zones have insufficient overlap for merging."
+msgstr "Zones have insufficient overlap for merging."
+
+msgid "Some zone netcodes did not match and were not merged."
+msgstr "Some zone netcodes did not match and were not merged."
+
+msgid "Some zone priorities did not match and were not merged."
+msgstr "Some zone priorities did not match and were not merged."
+
+msgid "Some zones were rule areas and were not merged."
+msgstr "Some zones were rule areas and were not merged."
+
+msgid "Some zone layer sets did not match and were not merged."
+msgstr "Some zone layer sets did not match and were not merged."
+
+msgid "Some zones did not intersect and were not merged."
+msgstr "Some zones did not intersect and were not merged."
 
 msgid "Duplicate zone"
 msgstr "Duplicate zone"
@@ -26480,6 +26561,66 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "This path:"
+#~ msgstr "This path:"
+
+#~ msgid "Existing path:"
+#~ msgstr "Existing path:"
+
+#, c-format
+#~ msgid "Storage file not fully parsed (%d bytes remaining)."
+#~ msgstr "Storage file not fully parsed (%d bytes remaining)."
+
+#~ msgid "Save changes to schematic before closing?"
+#~ msgstr "Save changes to schematic before closing?"
+
+#~ msgid ""
+#~ "If you specify the maximum current, then the trace widths will be "
+#~ "calculated to suit.\n"
+#~ "\n"
+#~ "If you specify one of the trace widths, the maximum current it can handle "
+#~ "will be calculated. The width for the other trace to also handle this "
+#~ "current will then be calculated.\n"
+#~ "\n"
+#~ "The controlling value is shown in bold.\n"
+#~ "\n"
+#~ "The calculations are valid for currents up to 35 A (external) or 17.5 A "
+#~ "(internal), temperature rises up to 100 °C, and widths of up to 400 mils "
+#~ "(10 mm).\n"
+#~ "\n"
+#~ "The formula, from IPC 2221, is  \n"
+#~ "<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
+#~ "H)<sup>0.725</sup>___</center>  \n"
+#~ "where:  \n"
+#~ "___I___ is maximum current in A  \n"
+#~ "___&Delta;T___ is temperature rise above ambient in &deg;C  \n"
+#~ "___W___ is width in mils  \n"
+#~ "___H___ is thickness (height) in mils  \n"
+#~ "___K___ is 0.024 for internal traces or 0.048 for external traces  \n"
+#~ msgstr ""
+#~ "If you specify the maximum current, then the trace widths will be "
+#~ "calculated to suit.\n"
+#~ "\n"
+#~ "If you specify one of the trace widths, the maximum current it can handle "
+#~ "will be calculated. The width for the other trace to also handle this "
+#~ "current will then be calculated.\n"
+#~ "\n"
+#~ "The controlling value is shown in bold.\n"
+#~ "\n"
+#~ "The calculations are valid for currents up to 35 A (external) or 17.5 A "
+#~ "(internal), temperature rises up to 100 °C, and widths of up to 400 mils "
+#~ "(10 mm).\n"
+#~ "\n"
+#~ "The formula, from IPC 2221, is  \n"
+#~ "<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
+#~ "H)<sup>0.725</sup>___</center>  \n"
+#~ "where:  \n"
+#~ "___I___ is maximum current in A  \n"
+#~ "___&Delta;T___ is temperature rise above ambient in &deg;C  \n"
+#~ "___W___ is width in mils  \n"
+#~ "___H___ is thickness (height) in mils  \n"
+#~ "___K___ is 0.024 for internal traces or 0.048 for external traces  \n"
 
 #~ msgid "Others"
 #~ msgstr "Others"
