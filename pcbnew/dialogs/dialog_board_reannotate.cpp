@@ -799,7 +799,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<RefDesInfo>& aBadR
             {
                 if( m_changeArray[i].NewRefDes == m_changeArray[j].NewRefDes )
                 {
-                    ShowReport( _( "Duplicate instances of " ) + m_changeArray[j].NewRefDes,
+                    ShowReport( wxString::Format( _( "Duplicate instances of %s" ), m_changeArray[j].NewRefDes ),
                                 RPT_SEVERITY_ERROR );
 
                     if( errorcount++ > MAXERROR )
