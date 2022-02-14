@@ -421,44 +421,48 @@ CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, const KICAD_T a
 }
 
 
-void reportProgress( PROGRESS_REPORTER* aReporter, int aCount, int aSize, int aDelta )
-{
-    if( aReporter && ( ( aCount % aDelta ) == 0 || aCount == aSize -  1 ) )
-    {
-        aReporter->SetCurrentProgress( (double) aCount / (double) aSize );
-        aReporter->KeepRefreshing( false );
-    }
-}
-
-
 void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 {
-    int delta = 200;  // Number of additions between 2 calls to the progress bar
+    int delta = 100;         // Number of additions between 2 calls to the progress bar
+    int zoneScaler = 50;     // Zones are more expensive
     int ii = 0;
     int size = 0;
 
-    size += aBoard->Zones().size();
+    size += aBoard->Zones().size() * zoneScaler;
     size += aBoard->Tracks().size();
 
     for( FOOTPRINT* footprint : aBoard->Footprints() )
         size += footprint->Pads().size();
 
-    size *= 2;      // Our caller gets the other half of the progress bar
+    size *= 1.5;      // Our caller gets the other third of the progress bar
 
     delta = std::max( delta, size / 10 );
 
-    reportProgress( aReporter, 0, size, delta );
+    if( aReporter )
+        aReporter->KeepRefreshing( false );
 
     for( ZONE* zone : aBoard->Zones() )
     {
         Add( zone );
-        reportProgress( aReporter, ii++, size, delta );
+        ii += zoneScaler;
+
+        if( aReporter )
+        {
+            aReporter->SetCurrentProgress( (double) ii / (double) size );
+            aReporter->KeepRefreshing( false );
+        }
     }
 
     for( PCB_TRACK* tv : aBoard->Tracks() )
     {
         Add( tv );
-        reportProgress( aReporter, ii++, size, delta );
+        ii++;
+
+        if( aReporter && ( ii % delta ) == 0 )
+        {
+            aReporter->SetCurrentProgress( (double) ii / (double) size );
+            aReporter->KeepRefreshing( false );
+        }
     }
 
     for( FOOTPRINT* footprint : aBoard->Footprints() )
@@ -466,15 +470,27 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
         for( PAD* pad : footprint->Pads() )
         {
             Add( pad );
-            reportProgress( aReporter, ii++, size, delta );
+            ii++;
+
+            if( aReporter && ( ii % delta ) == 0 )
+            {
+                aReporter->SetCurrentProgress( (double) ii / (double) size );
+                aReporter->KeepRefreshing( false );
+            }
         }
+    }
+
+    if( aReporter )
+    {
+        aReporter->SetCurrentProgress( (double) ii / (double) size );
+        aReporter->KeepRefreshing( false );
     }
 }
 
 
 void CN_CONNECTIVITY_ALGO::Build( const std::vector<BOARD_ITEM*>& aItems )
 {
-    for( auto item : aItems )
+    for( BOARD_ITEM* item : aItems )
     {
         switch( item->Type() )
         {
@@ -505,7 +521,7 @@ void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit, PROPAGAT
     wxLogTrace( wxT( "CN" ), wxT( "propagateConnections: propagate skip conflicts? %d" ),
                 skipConflicts );
 
-    for( const auto& cluster : m_connClusters )
+    for( const std::shared_ptr<CN_CLUSTER>& cluster : m_connClusters )
     {
         if( skipConflicts && cluster->IsConflicting() )
         {

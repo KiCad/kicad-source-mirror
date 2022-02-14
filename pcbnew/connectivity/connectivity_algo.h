@@ -272,9 +272,9 @@ private:
     CN_LIST                                               m_itemList;
     std::unordered_map<const BOARD_ITEM*, ITEM_MAP_ENTRY> m_itemMap;
 
-    CLUSTERS           m_connClusters;
-    CLUSTERS           m_ratsnestClusters;
-    std::vector<bool>  m_dirtyNets;
+    std::vector<std::shared_ptr<CN_CLUSTER>>              m_connClusters;
+    std::vector<std::shared_ptr<CN_CLUSTER>>              m_ratsnestClusters;
+    std::vector<bool>                                     m_dirtyNets;
 
     PROGRESS_REPORTER* m_progressReporter = nullptr;
 };

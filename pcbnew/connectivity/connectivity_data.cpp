@@ -97,8 +97,10 @@ void CONNECTIVITY_DATA::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
     m_netclassMap.clear();
 
     for( NETINFO_ITEM* net : aBoard->GetNetInfo() )
+    {
         if( net->GetNetClass()->GetName() != NETCLASS::Default )
             m_netclassMap[ net->GetNetCode() ] = net->GetNetClass()->GetName();
+    }
 
     if( aReporter )
     {

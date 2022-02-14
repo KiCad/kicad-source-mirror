@@ -1430,10 +1430,7 @@ private:
     MD5_HASH checksum() const;
 
 private:
-    typedef std::vector<POLYGON> POLYSET;
-
-    POLYSET  m_polys;
-
+    std::vector<POLYGON>                               m_polys;
     std::vector<std::unique_ptr<TRIANGULATED_POLYGON>> m_triangulatedPolys;
 
     bool     m_triangulationValid = false;

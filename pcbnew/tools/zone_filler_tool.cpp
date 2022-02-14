@@ -127,7 +127,7 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
     if( !board()->GetDesignSettings().m_DRCEngine->RulesValid() )
     {
         WX_INFOBAR* infobar = frame->GetInfoBar();
-        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _("Show DRC rules"),
+        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Show DRC rules" ),
                                                        wxEmptyString );
 
         button->Bind( wxEVT_COMMAND_HYPERLINK,
@@ -150,25 +150,26 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
     }
     else
     {
-        reporter = std::make_unique<WX_PROGRESS_REPORTER>( aCaller, _( "Fill All Zones" ), 3 );
+        reporter = std::make_unique<WX_PROGRESS_REPORTER>( aCaller, _( "Fill All Zones" ), 5 );
         filler.SetProgressReporter( reporter.get() );
     }
 
+    if( filler.Fill( toFill ) )
     {
-        if( filler.Fill( toFill ) )
-        {
-            board()->GetConnectivity()->Build( board(), reporter.get() );
-            commit.Push( _( "Fill Zone(s)" ), true ); // Allow undoing zone fill
-            frame->m_ZoneFillsDirty = false;
-        }
-        else
-        {
-            commit.Revert();
-        }
+        reporter->AdvancePhase();
+        reporter->Report( _( "Updating nets..." ) );
+        board()->GetConnectivity()->Build( board(), reporter.get() );
 
-        if( filler.IsDebug() )
-            frame->UpdateUserInterface();
+        commit.Push( _( "Fill Zone(s)" ), true, true, false );
+        frame->m_ZoneFillsDirty = false;
     }
+    else
+    {
+        commit.Revert();
+    }
+
+    if( filler.IsDebug() )
+        frame->UpdateUserInterface();
 
     canvas()->Refresh();
     m_fillInProgress = false;
@@ -208,13 +209,16 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
     std::unique_ptr<WX_PROGRESS_REPORTER> reporter;
     ZONE_FILLER                           filler( board(), &commit );
 
-    reporter = std::make_unique<WX_PROGRESS_REPORTER>( frame(), _( "Fill Zone" ), 4 );
+    reporter = std::make_unique<WX_PROGRESS_REPORTER>( frame(), _( "Fill Zone" ), 5 );
     filler.SetProgressReporter( reporter.get() );
 
     if( filler.Fill( toFill ) )
     {
-        board()->GetConnectivity()->Build( board() );
-        commit.Push( _( "Fill Zone(s)" ), true );  // Allow undoing zone fill
+        reporter->AdvancePhase();
+        reporter->Report( _( "Updating nets..." ) );
+        board()->GetConnectivity()->Build( board(), reporter.get() );
+
+        commit.Push( _( "Fill Zone(s)" ), true, true, false );
     }
     else
         commit.Revert();

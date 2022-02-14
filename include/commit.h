@@ -132,7 +132,8 @@ public:
 
     ///< Execute the changes.
     virtual void Push( const wxString& aMessage = wxT( "A commit" ),
-                       bool aCreateUndoEntry = true, bool aSetDirtyBit = true ) = 0;
+                       bool aCreateUndoEntry = true, bool aSetDirtyBit = true,
+                       bool aUpdateConnectivity = true ) = 0;
 
     ///< Revert the commit by restoring the modified items state.
     virtual void Revert() = 0;

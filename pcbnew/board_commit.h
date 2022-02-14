@@ -44,7 +44,8 @@ public:
     virtual ~BOARD_COMMIT();
 
     virtual void Push( const wxString& aMessage = wxT( "A commit" ),
-                       bool aCreateUndoEntry = true, bool aSetDirtyBit = true ) override;
+                       bool aCreateUndoEntry = true, bool aSetDirtyBit = true,
+                       bool aUpdateConnectivity = true ) override;
 
     virtual void Revert() override;
     COMMIT&      Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType ) override;

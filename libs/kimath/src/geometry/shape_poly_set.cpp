@@ -2360,7 +2360,6 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition )
 
     while( tmpSet.OutlineCount() > 0 )
     {
-
         if( !m_triangulatedPolys.empty() && m_triangulatedPolys.back()->GetTriangleCount() == 0 )
             m_triangulatedPolys.erase( m_triangulatedPolys.end() - 1 );
 

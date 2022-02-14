@@ -96,14 +96,14 @@ COMMIT& BOARD_COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag
 }
 
 
-void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool aSetDirtyBit )
+void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool aSetDirtyBit,
+                         bool aUpdateConnectivity )
 {
     // Objects potentially interested in changes:
     PICKED_ITEMS_LIST   undoList;
     KIGFX::VIEW*        view = m_toolMgr->GetView();
     BOARD*              board = (BOARD*) m_toolMgr->GetModel();
     PCB_BASE_FRAME*     frame = dynamic_cast<PCB_BASE_FRAME*>( m_toolMgr->GetToolHolder() );
-    auto                connectivity = board->GetConnectivity();
     std::set<EDA_ITEM*> savedModules;
     PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     bool                itemsDeselected = false;
@@ -352,10 +352,15 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                     undoList.PushItem( itemWrapper );
                 }
 
-                if( ent.m_copy )
-                    connectivity->MarkItemNetAsDirty( static_cast<BOARD_ITEM*>( ent.m_copy ) );
+                if( aUpdateConnectivity )
+                {
+                    std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
 
-                connectivity->Update( boardItem );
+                    if( ent.m_copy )
+                        connectivity->MarkItemNetAsDirty( static_cast<BOARD_ITEM*>( ent.m_copy ) );
+
+                    connectivity->Update( boardItem );
+                }
 
                 if( view )
                 {
@@ -399,11 +404,16 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
     {
         size_t num_changes = m_changes.size();
 
-        if( m_resolveNetConflicts )
-            connectivity->PropagateNets( this, PROPAGATE_MODE::RESOLVE_CONFLICTS );
+        if( aUpdateConnectivity )
+        {
+            std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
 
-        connectivity->RecalculateRatsnest( this );
-        connectivity->ClearDynamicRatsnest();
+            if( m_resolveNetConflicts )
+                connectivity->PropagateNets( this, PROPAGATE_MODE::RESOLVE_CONFLICTS );
+
+            connectivity->RecalculateRatsnest( this );
+            connectivity->ClearDynamicRatsnest();
+        }
 
         if( frame && solderMaskDirty )
             frame->HideSolderMask();
