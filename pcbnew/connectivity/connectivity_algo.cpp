@@ -443,9 +443,11 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
     for( FOOTPRINT* footprint : aBoard->Footprints() )
         size += footprint->Pads().size();
 
-    size *= 2;      // Our caller us gets the other half of the progress bar
+    size *= 2;      // Our caller gets the other half of the progress bar
 
     delta = std::max( delta, size / 10 );
+
+    reportProgress( aReporter, 0, size, delta );
 
     for( ZONE* zone : aBoard->Zones() )
     {
@@ -672,7 +674,12 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aI
     if( aZoneLayer->Net() != aItem->Net() && !aItem->CanChangeNet() )
         return;
 
-    if( aZoneLayer->Collide( aItem->Parent()->GetEffectiveShape( aZoneLayer->GetLayer() ).get() ) )
+    PCB_LAYER_ID layer = aZoneLayer->GetLayer();
+
+    if( !aItem->Parent()->IsOnLayer( layer ) )
+        return;
+
+    if( aZoneLayer->Collide( aItem->Parent()->GetEffectiveShape( layer ).get() ) )
     {
         aZoneLayer->Connect( aItem );
         aItem->Connect( aZoneLayer );
@@ -684,19 +691,19 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LA
     const ZONE* zoneA = static_cast<const ZONE*>( aZoneLayerA->Parent() );
     const ZONE* zoneB = static_cast<const ZONE*>( aZoneLayerB->Parent() );
 
-    if( aZoneLayerA->Layer() != aZoneLayerB->Layer() )
-        return;
-
     if( aZoneLayerB->Net() != aZoneLayerA->Net() )
         return; // we only test zones belonging to the same net
 
     const BOX2I& boxA = aZoneLayerA->BBox();
     const BOX2I& boxB = aZoneLayerB->BBox();
 
-    if( !boxA.Intersects( boxB ) )
+    PCB_LAYER_ID layer = aZoneLayerA->GetLayer();
+
+    if( aZoneLayerB->GetLayer() != layer )
         return;
 
-    PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( aZoneLayerA->Layer() );
+    if( !boxA.Intersects( boxB ) )
+        return;
 
     const SHAPE_LINE_CHAIN& outline =
             zoneA->GetFilledPolysList( layer ).COutline( aZoneLayerA->SubpolyIndex() );
@@ -743,11 +750,6 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
     if( parentA == parentB )
         return true;
 
-    LSET commonLayers = parentA->GetLayerSet() & parentB->GetLayerSet();
-
-    if( !commonLayers.any() )
-        return true;
-
     // If both m_item and aCandidate are marked dirty, they will both be searched
     // Since we are reciprocal in our connection, we arbitrarily pick one of the connections
     // to conduct the expensive search
@@ -773,6 +775,8 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
         checkZoneItemConnection( static_cast<CN_ZONE_LAYER*>( m_item ), aCandidate );
         return true;
     }
+
+    LSET commonLayers = parentA->GetLayerSet() & parentB->GetLayerSet();
 
     for( PCB_LAYER_ID layer : commonLayers.Seq() )
     {

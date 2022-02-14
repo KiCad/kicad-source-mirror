@@ -157,7 +157,7 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
     {
         if( filler.Fill( toFill ) )
         {
-            board()->GetConnectivity()->Build( board() );
+            board()->GetConnectivity()->Build( board(), reporter.get() );
             commit.Push( _( "Fill Zone(s)" ), true ); // Allow undoing zone fill
             frame->m_ZoneFillsDirty = false;
         }

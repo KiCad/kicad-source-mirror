@@ -205,8 +205,8 @@ CN_ITEM* CN_LIST::Add( PCB_ARC* aArc )
 
      for( int j = 0; j < polys.OutlineCount(); j++ )
      {
-         CN_ZONE_LAYER* zitem = new CN_ZONE_LAYER( zone, aLayer, false, j );
-         const auto& outline = zone->GetFilledPolysList( aLayer ).COutline( j );
+         CN_ZONE_LAYER*          zitem = new CN_ZONE_LAYER( zone, aLayer, false, j );
+         const SHAPE_LINE_CHAIN& outline = zone->GetFilledPolysList( aLayer ).COutline( j );
 
          for( int k = 0; k < outline.PointCount(); k++ )
              zitem->AddAnchor( outline.CPoint( k ) );

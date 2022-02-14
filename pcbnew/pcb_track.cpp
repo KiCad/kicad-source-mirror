@@ -381,7 +381,23 @@ int PCB_VIA::GetSolderMaskExpansion() const
 
 bool PCB_VIA::IsOnLayer( PCB_LAYER_ID aLayer ) const
 {
+#if 0
+    // Nice and simple, but raises its ugly head in performance profiles....
     return GetLayerSet().test( aLayer );
+#endif
+
+    if( aLayer >= m_layer && aLayer <= m_bottomLayer )
+        return true;
+
+    if( !IsTented() )
+    {
+        if( m_layer == F_Mask )
+            return IsOnLayer( F_Cu );
+        else if( m_layer == B_Mask )
+            return IsOnLayer( B_Cu );
+    }
+
+    return false;
 }
 
 
@@ -510,9 +526,6 @@ bool PCB_VIA::FlashLayer( LSET aLayers ) const
 
 bool PCB_VIA::FlashLayer( int aLayer ) const
 {
-    std::vector<KICAD_T> types
-    { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_ZONE_T, PCB_FP_ZONE_T };
-
     // Return the "normal" shape if the caller doesn't specify a particular layer
     if( aLayer == UNDEFINED_LAYER )
         return true;
@@ -531,7 +544,11 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
     if( m_keepTopBottomLayer && ( aLayer == m_layer || aLayer == m_bottomLayer ) )
         return true;
 
-    return board->GetConnectivity()->IsConnectedOnLayer( this, static_cast<int>( aLayer ), types );
+    // Must be static to keep from raising its ugly head in performance profiles
+    static std::vector<KICAD_T> connectedTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T,
+                                                   PCB_ZONE_T, PCB_FP_ZONE_T };
+
+    return board->GetConnectivity()->IsConnectedOnLayer( this, aLayer, connectedTypes );
 }
 
 
