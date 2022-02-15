@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:25-0800\n"
-"PO-Revision-Date: 2022-02-14 17:24+0000\n"
+"PO-Revision-Date: 2022-02-16 02:33+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -126,7 +126,7 @@ msgstr "Último tempo de renderização %.0f ms"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:731
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
-msgstr "Net %s\tNetClass %s\tPadName %s"
+msgstr "Rede %s\tNetClass %s\tPadName %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:756
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:769
@@ -1491,7 +1491,7 @@ msgstr "Reverta"
 #: pcbnew/dialogs/dialog_drc.cpp:270 pcbnew/plugins/kicad/pcb_parser.cpp:935
 #: pcbnew/router/router_tool.cpp:523
 msgid "Cancel"
-msgstr "Cancele"
+msgstr "Cancela"
 
 #: common/confirm.cpp:312
 msgid "Information"
@@ -6835,9 +6835,8 @@ msgid "Eagle XML files"
 msgstr "Arquivos XML do Eagle"
 
 #: common/wildcards_and_files_ext.cpp:288
-#, fuzzy
 msgid "OrcadPCB2 netlist files"
-msgstr "Arquivos netlist do KiCad"
+msgstr "Arquivos netlist do OrcadPCB2"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "KiCad netlist files"
@@ -22681,9 +22680,9 @@ msgid "Reannotate anyway?"
 msgstr "Anote novamente?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "Instâncias duplicadas de "
+msgstr "Instâncias duplicadas de %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
 msgid "Aborted: too many errors"
@@ -23376,9 +23375,8 @@ msgstr "Totalmente traçado"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:143
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:131
-#, fuzzy
 msgid "Outline hatch pitch:"
-msgstr "Espessura do contorno:"
+msgstr "Contorno do campo hachurado:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:157
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:89
@@ -24165,24 +24163,24 @@ msgid "Test for parity between PCB and schematic"
 msgstr "Teste de paridade entre a PCI e o esquemático"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "Violations (%s)"
-msgstr "Violações (%d)"
+msgstr "Violações (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid "Unconnected Items (%s)"
-msgstr "Itens desconectados (%d)"
+msgstr "Itens desconectados (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic Parity (%s)"
-msgstr "Paridade Esquemática (%d)"
+msgstr "Paridade Esquemática (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored Tests (%s)"
-msgstr "Testes que foram ignorados (%d)"
+msgstr "Testes que foram ignorados (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.h:106 pcbnew/tools/pcb_actions.cpp:235
 msgid "Design Rules Checker"
@@ -26143,9 +26141,8 @@ msgid "Net Inspector"
 msgstr "Inspetor da rede"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:81
-#, fuzzy
 msgid "Load and Test Netlist"
-msgstr "Carregar Netlist"
+msgstr "Carrega e testa a netlist"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:123
 msgid "Select Netlist"
@@ -29532,7 +29529,6 @@ msgid "Check rule syntax"
 msgstr "Verifique a sintaxe da regra"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -29993,10 +29989,10 @@ msgstr ""
 "Editor de camadas da placa ou seu nome canônico (ex.: `F.Cu`).\n"
 "\n"
 "Importante: isso vai retornar verdadeiro caso `A` esteja numa determinada\n"
-"camada, independentemente se a regra foi ou não avaliada para aquela "
-"camada.\n"
-"Para este último, use uma cláusula `(layer \"layer_name\")` dentro da "
-"regra.\n"
+"camada, independentemente se a regra foi ou não avaliada para aquela camada."
+"\n"
+"Para este último, use uma cláusula `(layer \"layer_name\")` dentro da regra."
+"\n"
 "<br><br><br>\n"
 "\n"
 "### Mais exemplos\n"
@@ -30020,13 +30016,13 @@ msgstr ""
 "\n"
 "    (rule \"A distância entre as diferentes redes das vias\"  \n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
-"\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"A lacuna entre as  vias nas diferentes redes\"  \n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
-"\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Furo da via para monitorar a folga\"  \n"
@@ -30084,7 +30080,7 @@ msgstr ""
 "        (constraint thermal_relief_gap (min 10mil))\n"
 "        (constraint thermal_spoke_width (min 12mil))\n"
 "        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
-"    \n"
+"\n"
 "\n"
 "    # Evita a malha de solda a partir das ilhas SMD\n"
 "    (rule holes_in_pads\n"
@@ -30094,7 +30090,7 @@ msgstr ""
 "    # Nega a permissão da substituição da margem da máscara de solda\n"
 "    (rule \"nega a substituição da margem da máscara de solda\"\n"
 "        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
-"        (condition \"A.Type == 'Pad'\"))"
+"        (condition \"A.Type == 'Pad'\"))\n"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
@@ -31116,6 +31112,8 @@ msgstr "(%s altura máx %s; atual %s)"
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:216
 msgid "(TrueType font characters with insufficient stroke weight)"
 msgstr ""
+"(Os caracteres da fonte TrueType está com uma espessura insuficiente do "
+"traço)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:233
 #, c-format
@@ -31391,14 +31389,12 @@ msgstr ""
 "projeto."
 
 #: pcbnew/files.cpp:967
-#, fuzzy
 msgid "Converting zone fills"
-msgstr "Verificando o preenchimentos da zona..."
+msgstr "Convertendo os preenchimentos da região"
 
 #: pcbnew/files.cpp:972
-#, fuzzy
 msgid "Convert Zone(s)"
-msgstr "Convertido"
+msgstr "Região(ões) convertida(s)"
 
 #: pcbnew/files.cpp:1010 pcbnew/files.cpp:1150
 #: pcbnew/footprint_libraries_utils.cpp:365
@@ -34132,13 +34128,12 @@ msgstr "%d não é uma contagem de camada válida"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2175
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5448
-#, fuzzy
 msgid ""
 "The legacy zone fill strategy is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
 msgstr ""
-"O modo de preenchimento de segmento legado não é mais compatível.\n"
-"Converta as zonas como preenchimento preenchimentos de polígonos?"
+"A estratégia de preenchimento legado da região não é mais suportada.\n"
+"Deseja converter as regiões em enchimentos com polígonos suavizados?"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2178
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5447
@@ -34153,7 +34148,7 @@ msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "Nome NETCLASS duplicado '%s' no arquivo '%s' na linha %d, posição %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3495
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: %s\n"
@@ -34161,7 +34156,7 @@ msgid ""
 "offset: %d."
 msgstr ""
 "ID inválido do footprint em\n"
-"arquivo: '%s'\n"
+"arquivo: %s\n"
 "linha: %d\n"
 "posição: %d."
 
@@ -34193,7 +34188,7 @@ msgstr ""
 "linha: %d posição: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5074
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: %s\n"
@@ -34201,7 +34196,7 @@ msgid ""
 "offset: %d."
 msgstr ""
 "ID inválido da rede em\n"
-"arquivo: '%s'\n"
+"arquivo: %s\n"
 "linha: %d\n"
 "posição: %d."
 
@@ -34219,7 +34214,7 @@ msgstr ""
 "posição: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5248
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: %s\n"
@@ -34227,12 +34222,12 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID inválido da rede em\n"
-"arquivo: '%s'\n"
+"arquivo: %s\n"
 "linha: %d\n"
 "posição: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5353
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: %s;\n"
@@ -34240,18 +34235,17 @@ msgid ""
 "offset: %d."
 msgstr ""
 "ID inválido da rede em\n"
-" arquivo: '%s'\n"
+" arquivo: %s;\n"
 "linha: %d\n"
 "posição: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5488
-#, fuzzy
 msgid ""
 "The segment zone fill mode is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
 msgstr ""
-"O modo de preenchimento de segmento legado não é mais compatível.\n"
-"Converta as zonas como preenchimento preenchimentos de polígonos?"
+"A estratégia de preenchimento legado da região não é mais suportada.\n"
+"Deseja converter as regiões em enchimentos com polígonos suavizados?"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:174
 #, c-format
@@ -34269,9 +34263,8 @@ msgid "Cannot rename temporary file '%s' to '%s'"
 msgstr "Não é possível renomear o arquivo temporário '%s' para '%s'"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:343
-#, fuzzy
 msgid "Internal Group Data Error"
-msgstr "A estrutura dos dados do grupo interno está corrompida"
+msgstr "Erro dos dados do grupo interno"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:344
 #, c-format
@@ -34385,13 +34378,12 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "ZSmoothing ruim para o CZONE_CONTAINER \"%s\""
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2466
-#, fuzzy
 msgid ""
 "The legacy segment fill mode is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
 msgstr ""
-"O modo de preenchimento de segmento legado não é mais compatível.\n"
-"Converta as zonas como preenchimento preenchimentos de polígonos?"
+"A estratégia de preenchimento legado da região não é mais suportada.\n"
+"Deseja converter as regiões em enchimentos com polígonos suavizados?"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2506
 #, c-format
