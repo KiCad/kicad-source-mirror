@@ -228,6 +228,12 @@ private:
 
     ///< Hold all drill hole types to be shown in the dialog.
     drillTypeList_t m_drillTypes;
+
+    ///< Width of the start layer column as calculated by the wxWidgets autosizing algorithm.
+    int m_startLayerColInitialSize;
+
+    ///< Width of the stop layer column as calculated by the wxWidgets autosizing algorithm.
+    int m_stopLayerColInitialSize;
 };
 
 #endif // __DIALOG_BOARD_STATISTICS_H
