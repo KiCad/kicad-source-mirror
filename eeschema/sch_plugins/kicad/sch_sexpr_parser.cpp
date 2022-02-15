@@ -552,6 +552,11 @@ void SCH_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSynta
     T        token;
     wxString faceName;
 
+    // Various text objects (text boxes, schematic text, etc.) all have their own defaults,
+    // but the file format default is {center,center} so we have to set that before parsing.
+    aText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+    aText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
         if( token == T_LEFT )
