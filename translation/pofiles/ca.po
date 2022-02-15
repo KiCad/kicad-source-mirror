@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:25-0800\n"
-"PO-Revision-Date: 2022-02-14 17:24+0000\n"
+"PO-Revision-Date: 2022-02-16 02:33+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22729,9 +22729,9 @@ msgid "Reannotate anyway?"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "Duplica les instàncies de "
+msgstr "Duplica les instàncies de %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
 #, fuzzy
@@ -24214,24 +24214,24 @@ msgid "Test for parity between PCB and schematic"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "Violations (%s)"
-msgstr "Infraccions (%d)"
+msgstr "Infraccions (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid "Unconnected Items (%s)"
-msgstr "Elements no connectats (%d)"
+msgstr "Elements no connectats (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic Parity (%s)"
-msgstr "Paritat de l'esquemàtic (%d)"
+msgstr "Paritat de l'esquemàtic (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored Tests (%s)"
-msgstr "Tests ignorats (%d)"
+msgstr "Tests ignorats (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.h:106 pcbnew/tools/pcb_actions.cpp:235
 msgid "Design Rules Checker"
@@ -27729,14 +27729,12 @@ msgid "Offset Y:"
 msgstr "Desplaçament Y:"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:171
-#, fuzzy
 msgid "Reset to the current X offset from the reference position."
-msgstr "Mou la selecció actual una posició cap amunt"
+msgstr "Reinicia al òfset en X actual des de la posició de referència."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:172
-#, fuzzy
 msgid "Reset to the current Y offset from the reference position."
-msgstr "Mou la selecció actual una posició cap amunt"
+msgstr "Reinicia al òfset en Y actual des de la posició de referència."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:231
 msgid "Reference location: grid origin"
@@ -27779,9 +27777,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:73
-#, fuzzy
 msgid "Position Relative To Reference Item"
-msgstr "Posició relativa a..."
+msgstr "Posició relativa a l'element de referència"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:207
 msgid "Print according to objects tab of appearance manager"
