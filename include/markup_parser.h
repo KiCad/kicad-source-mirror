@@ -47,19 +47,10 @@ struct NODE : parse_tree::basic_node<NODE>
     bool isSuperscript() const { return is_type<MARKUP::superscript>(); }
 };
 
-struct varName : plus<sor<identifier_other, string<' '>>> {};
-
-struct varNamespaceName : plus<identifier> {};
-
-struct varNamespace : seq<varNamespaceName, string<':'>> {};
-
-struct variable : seq< string< '$', '{' >, opt<varNamespace>, varName, string< '}' > > {};
-
 template< typename ControlChar >
 struct plain : seq< not_at< seq< ControlChar, string< '{' > > >, ControlChar > {};
 
-struct plainControlChar : sor< plain< string<'$'> >,
-                               plain< string<'_'> >,
+struct plainControlChar : sor< plain< string<'_'> >,
                                plain< string<'^'> >,
                                plain< string<'~'> > > {};
 /**
@@ -67,16 +58,15 @@ struct plainControlChar : sor< plain< string<'$'> >,
  * a run of characters that do not start a command sequence, or if they do, they do not start
  * a complete command prefix (command char + open brace)
  */
-struct anyString : plus< sor< utf8::not_one< '~', '$', '_', '^' >,
+struct anyString : plus< sor< utf8::not_one< '~', '_', '^' >,
                               plainControlChar > > {};
 
-struct anyStringWithinBraces : plus< sor< utf8::not_one< '~', '$', '_', '^', '}' >,
+struct anyStringWithinBraces : plus< sor< utf8::not_one< '~', '_', '^', '}' >,
                                           plainControlChar > > {};
 
 template< typename ControlChar >
 struct braces : seq< seq< ControlChar, string< '{' > >,
                      until< string< '}' >, sor< anyStringWithinBraces,
-                                                variable,
                                                 subscript,
                                                 superscript,
                                                 overbar > > > {};
@@ -89,7 +79,6 @@ struct overbar     : braces< string< '~' > > {};
  * Finally, the full grammar
  */
 struct anything : sor< anyString,
-                       variable,
                        subscript,
                        superscript,
                        overbar > {};
@@ -98,9 +87,7 @@ struct grammar : until< tao::pegtl::eof, anything > {};
 
 template <typename Rule>
 using selector = parse_tree::selector< Rule,
-                                       parse_tree::store_content::on< varNamespaceName,
-                                                                      varName,
-                                                                      anyStringWithinBraces,
+                                       parse_tree::store_content::on< anyStringWithinBraces,
                                                                       anyString >,
                                        parse_tree::discard_empty::on< superscript,
                                                                       subscript,

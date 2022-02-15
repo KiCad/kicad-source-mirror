@@ -50,8 +50,6 @@ std::string NODE::typeString() const
     else if( is_type<MARKUP::overbar>() )               os << "OVERBAR";
     else if( is_type<MARKUP::anyString>() )             os << "ANYSTRING";
     else if( is_type<MARKUP::anyStringWithinBraces>() ) os << "ANYSTRINGWITHINBRACES";
-    else if( is_type<MARKUP::varNamespaceName>() )      os << "VARNAMESPACENAME";
-    else if( is_type<MARKUP::varName>() )               os << "VARNAME";
     else                                                os << "other";
 
     return os.str();
