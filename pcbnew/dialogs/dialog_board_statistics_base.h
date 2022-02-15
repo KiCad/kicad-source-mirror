@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -56,7 +56,7 @@ class DIALOG_BOARD_STATISTICS_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbControlSizer;
 		wxButton* m_sdbControlSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void windowSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void checkboxClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void drillGridSize( wxSizeEvent& event ) { event.Skip(); }
@@ -66,6 +66,7 @@ class DIALOG_BOARD_STATISTICS_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Board Statistics"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_BOARD_STATISTICS_BASE();
 
 };
