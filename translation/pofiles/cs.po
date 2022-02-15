@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:20-0800\n"
-"PO-Revision-Date: 2022-02-14 17:18+0000\n"
+"PO-Revision-Date: 2022-02-16 13:03+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
 "Language: cs\n"
@@ -4569,14 +4569,12 @@ msgid "Alias: "
 msgstr "Alias: "
 
 #: common/filename_resolver.cpp:468
-#, fuzzy
 msgid "This path:wxT( "
-msgstr "Tato cesta:"
+msgstr "Tato cesta:wxT( "
 
 #: common/filename_resolver.cpp:471
-#, fuzzy
 msgid "Existing path:wxT( "
-msgstr "Existující cesta:"
+msgstr "Existující cesta:wxT( "
 
 #: common/filename_resolver.cpp:473
 msgid "Bad alias (duplicate name)"
@@ -12140,9 +12138,8 @@ msgstr "Odebrat položky"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
-#, fuzzy
 msgid "Cancel Table Update"
-msgstr "Průměr izolační mezery díry:"
+msgstr "Zrušit aktualizaci tabulky"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
@@ -13295,9 +13292,8 @@ msgid "Connection Name"
 msgstr "Název připojení"
 
 #: eeschema/sch_connection.cpp:415
-#, fuzzy
 msgid "Net CodewxT( "
-msgstr "Kód sítě"
+msgstr "Kód sítěwxT( "
 
 #: eeschema/sch_connection.cpp:420 eeschema/sch_connection.cpp:433
 #, c-format
@@ -13522,9 +13518,8 @@ msgid "Cannot open file '%s'."
 msgstr "Nelze otevřít soubor '%s'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:314
-#, fuzzy
 msgid "Storage file not fully parsed "
-msgstr "Soubor úložiště nebyl plně analyzován (zbývající %d bajty)."
+msgstr "Soubor úložiště nebyl plně analyzován "
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:476
 msgid "Compile mask not currently supported."
@@ -13954,8 +13949,9 @@ msgid "Invalid page type"
 msgstr "Neplatný typ stránky"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1687
+#, fuzzy
 msgid "Invalid title block comment number"
-msgstr ""
+msgstr "Neplatný počet komentářů"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1784
 msgid "Invalid sheet pin name"
@@ -15866,18 +15862,16 @@ msgid "Copy pin length to other pins in symbol"
 msgstr "Zkopírovat délku vývodu na další vývody v symbolu"
 
 #: eeschema/tools/ee_actions.cpp:267
-#, fuzzy
 msgid "Push Pin Name Size"
-msgstr "Velikost názvu vývodu -> ostatní"
+msgstr "Vnutit velikost názvu vývodu"
 
 #: eeschema/tools/ee_actions.cpp:267
 msgid "Copy pin name size to other pins in symbol"
 msgstr "Zkopíruje velikost názvu vývodu do jiných vývodů v symbolu"
 
 #: eeschema/tools/ee_actions.cpp:272
-#, fuzzy
 msgid "Push Pin Number Size"
-msgstr "Velikost čísla vývodu -> ostatní"
+msgstr "Vnutit velikost čísla vývodu"
 
 #: eeschema/tools/ee_actions.cpp:272
 msgid "Copy pin number size to other pins in symbol"
@@ -17598,9 +17592,8 @@ msgstr ""
 "Proto není velikost některých položek definována"
 
 #: gerbview/rs274d.cpp:414
-#, fuzzy
 msgid "Invalid Code Number"
-msgstr "Neplatné číslo vývodu"
+msgstr "Neplatné kódové číslo"
 
 #: gerbview/rs274d.cpp:622
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
@@ -18447,9 +18440,8 @@ msgid ""
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:519
-#, fuzzy
 msgid "Keep downloaded file"
-msgstr "stažený soubor"
+msgstr "Zachovat stažený soubor"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:559
 msgid ""
@@ -19195,9 +19187,8 @@ msgid "From:"
 msgstr "Z:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:247
-#, fuzzy
 msgid "End Position"
-msgstr "Pozice X"
+msgstr "Koncová pozice"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:319
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1333
@@ -21453,9 +21444,8 @@ msgstr "Neznámá metoda čištění"
 #: pcbnew/convert_shape_list_to_polygon.cpp:774
 #: pcbnew/convert_shape_list_to_polygon.cpp:813
 #: pcbnew/convert_shape_list_to_polygon.cpp:827
-#, fuzzy
 msgid "(self-intersecting)"
-msgstr "Polygon nesmí být sám se protínající"
+msgstr "(samo-protínající)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:540
 #: pcbnew/convert_shape_list_to_polygon.cpp:782
@@ -21705,9 +21695,9 @@ msgid "Reannotate anyway?"
 msgstr "Přesto znova očíslovat?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "Duplikovat položky %s%s\n"
+msgstr "Duplicitní instance %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
 msgid "Aborted: too many errors"
@@ -24271,9 +24261,8 @@ msgid "Use drill/place file origin"
 msgstr "Počátek vrtání"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:75
-#, fuzzy
 msgid "Generate Placement Files"
-msgstr "Vygenerovat soubor mapy"
+msgstr "Generování souborů umístění"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:41
 msgid "Export to GenCAD settings"
@@ -25142,9 +25131,8 @@ msgid "Net Inspector"
 msgstr "Kontrola sítě"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:83
-#, fuzzy
 msgid "Load and Test Netlist"
-msgstr "Načíst netlist"
+msgstr "Načíst a test netlistu"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:125
 msgid "Select Netlist"
@@ -25248,9 +25236,9 @@ msgid "Center:"
 msgstr "Střed:"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Corner %d"
-msgstr "Rohy"
+msgstr "Roh %d"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:334
 msgid "Polygon must have at least 3 corners"
@@ -28824,19 +28812,16 @@ msgid "undefined"
 msgstr "nedefinováno"
 
 #: pcbnew/drc/drc_engine.cpp:890
-#, fuzzy
 msgid "track width"
-msgstr "Šířka spoje"
+msgstr "šířka spoje"
 
 #: pcbnew/drc/drc_engine.cpp:891
-#, fuzzy
 msgid "annular width"
-msgstr "Šířka prstence"
+msgstr "šířka prstence"
 
 #: pcbnew/drc/drc_engine.cpp:892
-#, fuzzy
 msgid "via diameter"
-msgstr "Průměr prokovu"
+msgstr "průměr prokovu"
 
 #: pcbnew/drc/drc_engine.cpp:893
 #, fuzzy
@@ -28922,9 +28907,8 @@ msgid "Local clearance on %s; clearance: %s."
 msgstr "Místní izolační mezera na %s; izolační mezera: %s."
 
 #: pcbnew/drc/drc_item.cpp:43
-#, fuzzy
 msgid "Electrical"
-msgstr "Elektrický typ"
+msgstr "Elektrický"
 
 #: pcbnew/drc/drc_item.cpp:44
 msgid "Design For Manufacturing"
@@ -31316,9 +31300,8 @@ msgid "removed annular ring"
 msgstr "odstranit prstenec"
 
 #: pcbnew/pcb_track.cpp:659
-#, fuzzy
 msgid "Track (arc)"
-msgstr "Spoj "
+msgstr "Spoj (oblouk)"
 
 #: pcbnew/pcb_track.cpp:674
 msgid "Segment Length"
@@ -31466,14 +31449,12 @@ msgid "File not found: '%s'."
 msgstr "Soubor nenalezen: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:710
-#, fuzzy
 msgid "Loading board data..."
-msgstr "Načítání oblastí desky..."
+msgstr "Načítání dat desky..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:888
-#, fuzzy
 msgid "Loading netclasses..."
-msgstr "Načítání sítí..."
+msgstr "Načítání tříd sítí..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:910
 #, c-format
@@ -31481,9 +31462,8 @@ msgid "Duplicate netclass name '%s'."
 msgstr "Duplicitní název třídy spojů '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:927
-#, fuzzy
 msgid "Loading components..."
-msgstr "Načítání sítí..."
+msgstr "Načítání komponent..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:974
 #, fuzzy
@@ -33857,9 +33837,8 @@ msgid "Rotate"
 msgstr "Otočit"
 
 #: pcbnew/tools/edit_tool.cpp:1714 pcbnew/tools/pcb_actions.cpp:305
-#, fuzzy
 msgid "Change Side / Flip"
-msgstr "Změnit velikost"
+msgstr "Změnit stranu / Obrátit"
 
 #: pcbnew/tools/edit_tool.cpp:2043
 msgid "Move exact"
@@ -33888,9 +33867,8 @@ msgid "_copy"
 msgstr "_kopírovat"
 
 #: pcbnew/tools/footprint_editor_control.cpp:594
-#, fuzzy
 msgid "No footprint problems found."
-msgstr "Pouzdro nalezeno."
+msgstr "Nenalezeny problémy s pouzdry."
 
 #: pcbnew/tools/group_tool.cpp:43
 msgid "Grouping"
@@ -34040,9 +34018,8 @@ msgid "Draw Arc"
 msgstr "Kreslit oblouk"
 
 #: pcbnew/tools/pcb_actions.cpp:110
-#, fuzzy
 msgid "Add Board Characteristics"
-msgstr "Nastavit výchozí charakteristiky plošky"
+msgstr "Přidat charakteristiky desky"
 
 #: pcbnew/tools/pcb_actions.cpp:111
 msgid "Add a board characteristics table on a graphic layer"
@@ -34057,14 +34034,12 @@ msgid "Add a board stackup table on a graphic layer"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:129
-#, fuzzy
 msgid "Add Aligned Dimension"
-msgstr "Přidat kótu"
+msgstr "Přidat zarovnaný rozměr"
 
 #: pcbnew/tools/pcb_actions.cpp:129
-#, fuzzy
 msgid "Add an aligned linear dimension"
-msgstr "Nastavit rozměry mřížky"
+msgstr "Přidat zarovnaný lineární rozměr"
 
 #: pcbnew/tools/pcb_actions.cpp:134
 #, fuzzy
@@ -34305,9 +34280,8 @@ msgid "Show Footprint Tree"
 msgstr "Zobrazit strom pouzder"
 
 #: pcbnew/tools/pcb_actions.cpp:343
-#, fuzzy
 msgid "Hide Footprint Tree"
-msgstr "Zobrazit strom pouzder"
+msgstr "Skrýt strom pouzder"
 
 #: pcbnew/tools/pcb_actions.cpp:349
 msgid "New Footprint..."
@@ -34363,16 +34337,14 @@ msgid "Export Footprint..."
 msgstr "Export pouzdra..."
 
 #: pcbnew/tools/pcb_actions.cpp:389
-#, fuzzy
 msgid "Export footprint to file"
-msgstr "Export pouzdra do editoru"
+msgstr "Export pouzdra do souboru"
 
 #: pcbnew/tools/pcb_actions.cpp:394
 msgid "Footprint Properties..."
 msgstr "Vlastnosti pouzdra..."
 
 #: pcbnew/tools/pcb_actions.cpp:394
-#, fuzzy
 msgid "Edit footprint properties"
 msgstr "Upravit vlastnosti pouzdra"
 
