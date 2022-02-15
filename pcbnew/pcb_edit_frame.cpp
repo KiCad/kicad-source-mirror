@@ -990,8 +990,24 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
         GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
                 [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
                 {
-                    if( dynamic_cast<EDA_TEXT*>( aItem ) )
-                        return true;  // text variables
+                    if( dynamic_cast<PCB_TRACK*>( aItem ) )
+                    {
+                        if( GetDisplayOptions().m_DisplayPadClearance )
+                            return true;        // clearance values
+                    }
+                    else if( dynamic_cast<PAD*>( aItem ) )
+                    {
+                        if( GetDisplayOptions().m_ShowTrackClearanceMode
+                                == PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS )
+                        {
+                            return true;        // clearance values
+                        }
+                    }
+                    else if( dynamic_cast<EDA_TEXT*>( aItem ) )
+                    {
+                        if( dynamic_cast<EDA_TEXT*>( aItem )->HasTextVars() )
+                            return true;        // text variables
+                    }
 
                     return false;
                 } );
