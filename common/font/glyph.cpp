@@ -120,7 +120,7 @@ void OUTLINE_GLYPH::Triangulate( std::function<void( const VECTOR2I& aPt1,
                                                      const VECTOR2I& aPt2,
                                                      const VECTOR2I& aPt3 )> aCallback ) const
 {
-    const_cast<OUTLINE_GLYPH*>( this )->CacheTriangulation();
+    const_cast<OUTLINE_GLYPH*>( this )->CacheTriangulation( false );
 
     for( unsigned int i = 0; i < TriangulatedPolyCount(); i++ )
     {
