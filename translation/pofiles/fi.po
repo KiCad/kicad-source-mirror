@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:20-0800\n"
-"PO-Revision-Date: 2022-02-14 17:18+0000\n"
+"PO-Revision-Date: 2022-02-16 13:03+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v6/fi/>\n"
 "Language: fi\n"
@@ -657,7 +657,7 @@ msgstr "Juotosmaski alapuoli:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:117
 msgid "Copper/surface finish:"
-msgstr "Kupari/pinnan viimeistely:"
+msgstr "Kuparin/piirilevyn pinnoitteet:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:130
 msgid "Board body:"
@@ -1368,8 +1368,9 @@ msgid "User layer Eco2"
 msgstr "Käyttäjäkerros Eco2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:184
+#, fuzzy
 msgid "Board Layer for Outline"
-msgstr "Hallituksen taso ääriviivaa varten"
+msgstr "Piirilevyn taso ääriviivaa varten"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:186
 msgid ""
@@ -4770,7 +4771,7 @@ msgstr "Panorointi ylös / alas"
 
 #: common/hotkey_store.cpp:45 eeschema/tools/ee_actions.cpp:255
 msgid "Finish Drawing"
-msgstr "Viimeistele piirtäminen"
+msgstr "Lopeta piirtäminen"
 
 #: common/hotkey_store.cpp:46
 msgid "Add to Selection"
@@ -5313,12 +5314,12 @@ msgstr "Piilotettu teksti"
 #: common/layer_id.cpp:149
 #, fuzzy
 msgid "SMD pads front"
-msgstr "Anturat, etu"
+msgstr "SMD-anturat, etu"
 
 #: common/layer_id.cpp:150
 #, fuzzy
 msgid "SMD pads back"
-msgstr "Anturat, taka"
+msgstr "SMD-anturat, taka"
 
 #: common/layer_id.cpp:151
 #, fuzzy
@@ -8531,10 +8532,11 @@ msgstr "Vaihda vakavuudeksi Virhe kaikkien ”%s” rikkomusten osalta"
 
 #: eeschema/dialogs/dialog_erc.cpp:529 eeschema/dialogs/dialog_erc.cpp:535
 #: pcbnew/dialogs/dialog_drc.cpp:471 pcbnew/dialogs/dialog_drc.cpp:478
+#, fuzzy
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr ""
-"Rikkomusten vakavuutta voidaan muokata myös Hallituksen asetukset ... -"
-"valintaikkunassa"
+"Rikkomusten vakavuutta voidaan muokata myös Piirilevyasetukset ... "
+"-valintaikkunassa"
 
 #: eeschema/dialogs/dialog_erc.cpp:533 pcbnew/dialogs/dialog_drc.cpp:476
 #, c-format
@@ -16108,7 +16110,7 @@ msgstr "Määritä uusi sijainti symboliankkurille"
 
 #: eeschema/tools/ee_actions.cpp:255
 msgid "Finish drawing shape"
-msgstr "Viimeistele piirustuksen muoto"
+msgstr "Lopeta muodon piirtäminen"
 
 #: eeschema/tools/ee_actions.cpp:262
 msgid "Push Pin Length"
@@ -16735,7 +16737,7 @@ msgstr "Katkaise johto bussista"
 
 #: eeschema/tools/ee_actions.cpp:726
 msgid "Finish Wire or Bus"
-msgstr "Viimeistele lanka tai bussi"
+msgstr "Päätä lanka tai bussi"
 
 #: eeschema/tools/ee_actions.cpp:726
 msgid "Complete drawing at current segment"
@@ -16743,7 +16745,7 @@ msgstr "Täydellinen piirustus nykyisellä segmentillä"
 
 #: eeschema/tools/ee_actions.cpp:731
 msgid "Finish Wire"
-msgstr "Viimeistele lanka"
+msgstr "Päätä lanka"
 
 #: eeschema/tools/ee_actions.cpp:731
 msgid "Complete wire with current segment"
@@ -16751,7 +16753,7 @@ msgstr "Täydellinen johto nykyisellä segmentillä"
 
 #: eeschema/tools/ee_actions.cpp:736
 msgid "Finish Bus"
-msgstr "Lopeta bussi"
+msgstr "Päätä bussi"
 
 #: eeschema/tools/ee_actions.cpp:736
 msgid "Complete bus with current segment"
@@ -16759,7 +16761,7 @@ msgstr "Täydellinen väylä nykyisellä segmentillä"
 
 #: eeschema/tools/ee_actions.cpp:741
 msgid "Finish Lines"
-msgstr "Viimeistele viivat"
+msgstr "Päätä viivat"
 
 #: eeschema/tools/ee_actions.cpp:741
 msgid "Complete connected lines with current segment"
@@ -18138,7 +18140,7 @@ msgstr "Yksikään Gerber-kerroksista ei sisällä dataa"
 
 #: gerbview/tools/gerbview_control.cpp:119
 msgid "Board File Name"
-msgstr "Hallituksen tiedostonimi"
+msgstr "Piirilevyn tiedostonimi"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:147
 msgid "D Codes"
@@ -20663,11 +20665,11 @@ msgstr "Läpivienti on levyn paksuus läpivientireikien kohdalla"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:71
 msgid "Via pad diameter:"
-msgstr "Tyynyn halkaisijan kautta:"
+msgstr "Läpiviennin johdinalueen halkaisija:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:73
 msgid "Diameter of pad surrounding via (annular ring)"
-msgstr "Läpivientiholkin läpimitta (rengasmainen rengas)"
+msgstr "Läpivientiä ympäröivän johdinalueen halkaisija"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
 msgid "Clearance hole diameter:"
@@ -20921,8 +20923,9 @@ msgid "Electrical Spacing"
 msgstr "Sähköväli"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:93
+#, fuzzy
 msgid "Board Classes"
-msgstr "Hallituksen luokat"
+msgstr "Piirilevyluokat"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:242
 msgid "Write Data Failed"
@@ -21538,6 +21541,7 @@ msgid "Dielectric Material Characteristics"
 msgstr "Materiaalin dielektriset ominaisuudet"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
+#, fuzzy
 msgid "Has castellated pads"
 msgstr "On valettu tyynyjä"
 
@@ -21547,7 +21551,7 @@ msgstr "Pinnoitettu piirilevyn reuna"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:31
 msgid "Copper finish:"
-msgstr "Kuparin viimeistely:"
+msgstr "Kuparin pinnoite:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:40
 msgid "Edge card connectors:"
@@ -21897,6 +21901,7 @@ msgid "Remove zero-length track"
 msgstr "Poista nollapituinen raita"
 
 #: pcbnew/cleanup_item.cpp:55
+#, fuzzy
 msgid "Remove track inside pad"
 msgstr "Poista raita sisätyynystä"
 
@@ -22428,8 +22433,9 @@ msgid "Geographical Reannotation"
 msgstr "Maantieteellinen uudelleenhuomautus"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:52
+#, fuzzy
 msgid "Board Setup"
-msgstr "Hallituksen asetukset"
+msgstr "Piirilevyasetukset"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:53
 msgid "Import Settings from Another Board..."
@@ -22449,7 +22455,7 @@ msgstr "Fyysinen kerrospino"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:97
 msgid "Board Finish"
-msgstr "Hallituksen loppu"
+msgstr "Piirilevyn pinnoite"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:98 pcbnew/dialogs/dialog_plot.cpp:971
 msgid "Solder Mask/Paste"
@@ -22624,7 +22630,7 @@ msgstr "Päivämäärä"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:673
 msgid "Board name"
-msgstr "Hallituksen nimi"
+msgstr "Piirilevyn nimi"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:676
 msgid "Board"
@@ -22696,7 +22702,7 @@ msgstr "Luo raporttitiedosto ..."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.h:68
 msgid "Board Statistics"
-msgstr "Hallituksen tilastot"
+msgstr "Piirilevyn tilastot"
 
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:229
 msgid "No footprint selected"
@@ -22734,8 +22740,9 @@ msgid "Cleanup Graphics"
 msgstr "Siivousgrafiikka"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:150
+#, fuzzy
 msgid "Board cleanup"
-msgstr "Hallituksen puhdistus"
+msgstr "Piirilevyn puhdistus"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:22
 msgid "Delete &tracks connecting different nets"
@@ -24054,7 +24061,7 @@ msgstr "Nykyinen sivukoko"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Board area only"
-msgstr "Vain hallituksen alue"
+msgstr "Vain piirilevyn alue"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:90
 msgid "SVG Page Size"
@@ -25059,7 +25066,7 @@ msgstr "Täytöt"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:31
 msgid "Board outlines"
-msgstr "Hallituksen piirteet"
+msgstr "Piirilevyn ääriviivat"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:34
 #: pcbnew/widgets/panel_selection_filter_base.cpp:49
@@ -26275,6 +26282,7 @@ msgid "Fabrication Property:"
 msgstr "Valmistusominaisuus:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:553
+#, fuzzy
 msgid ""
 "Optional property to specify a special purpose or constraint in fabrication "
 "files:\n"
@@ -26638,7 +26646,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
-msgstr "Hallituksen asetukset"
+msgstr "Piirilevyasetukset"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:184
 msgid "File > Board Setup..."
@@ -29790,8 +29798,9 @@ msgid "Tracks crossing"
 msgstr "Liuskat risteävät"
 
 #: pcbnew/drc/drc_item.cpp:74
+#, fuzzy
 msgid "Board edge clearance violation"
-msgstr "Hallituksen reunan raivaaminen"
+msgstr "Piirilevyn reunan"
 
 #: pcbnew/drc/drc_item.cpp:78
 msgid "Copper areas intersect"
@@ -30595,8 +30604,9 @@ msgid "Last Change"
 msgstr "Viimeinen muutos"
 
 #: pcbnew/footprint.cpp:948
+#, fuzzy
 msgid "Board Side"
-msgstr "Hallituksen puoli"
+msgstr "Piirilevyn puoli"
 
 #: pcbnew/footprint.cpp:948
 msgid "Back (Flipped)"
@@ -32164,9 +32174,8 @@ msgid "Segment Length"
 msgstr "Segmentin pituus"
 
 #: pcbnew/pcb_track.cpp:685
-#, fuzzy
 msgid "Routed Length"
-msgstr "Hallituksen pituus"
+msgstr "Piirilevyn pituus"
 
 #: pcbnew/pcb_track.cpp:693
 msgid "Full Length"
@@ -33812,7 +33821,7 @@ msgstr "Differentiaaliparia ei voi käynnistää keskellä ei mitään."
 
 #: pcbnew/router/router_tool.cpp:91
 msgid "Finish Track"
-msgstr "Viimeistele raita"
+msgstr "Päätä liuska"
 
 #: pcbnew/router/router_tool.cpp:91
 msgid "Stops laying the current track."
@@ -33820,12 +33829,11 @@ msgstr "Lopettaa nykyisen radan asettamisen."
 
 #: pcbnew/router/router_tool.cpp:97
 msgid "Auto-finish Track"
-msgstr "Automaattinen viimeistely raita"
+msgstr "Päätä liuska automaattisesti"
 
 #: pcbnew/router/router_tool.cpp:97
-#, fuzzy
 msgid "Automatically finishes laying the current track."
-msgstr "Viimeistelee nykyisen radan asettamisen automaattisesti."
+msgstr "Päättää työn alla olevan liuskan automaattisesti."
 
 #: pcbnew/router/router_tool.cpp:102
 msgid "Place Through Via"
@@ -33998,7 +34006,7 @@ msgid "Width %s, gap %s, via gap %s"
 msgstr "Leveys %s, aukko %s, aukon kautta %s"
 
 #: pcbnew/router/router_tool.cpp:521
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Event file: %s\n"
 "Board dump: %s"
@@ -35494,7 +35502,7 @@ msgstr "Paljastaa laajennuskansion Finder-ikkunassa"
 
 #: pcbnew/tools/pcb_actions.cpp:570
 msgid "Board Setup..."
-msgstr "Hallituksen asetukset ..."
+msgstr "Piirilevyasetukset ..."
 
 #: pcbnew/tools/pcb_actions.cpp:571
 msgid "Edit board setup including layers, design rules and various defaults"
@@ -36074,11 +36082,11 @@ msgstr "Tee nykyisestä kerroksesta läpinäkyvämpi"
 
 #: pcbnew/tools/pcb_actions.cpp:1096
 msgid "Show Board Statistics"
-msgstr "Näytä hallituksen tilastot"
+msgstr "Näytä piirilevyn tilastot"
 
 #: pcbnew/tools/pcb_actions.cpp:1096
 msgid "Shows board statistics"
-msgstr "Näyttää hallituksen tilastot"
+msgstr "Näyttää piirilevyn tilastot"
 
 #: pcbnew/tools/pcb_actions.cpp:1100
 msgid "Clearance Resolution..."
@@ -36909,8 +36917,9 @@ msgid "Board's perimeter definition"
 msgstr "Levyn ulkoreunan määrittely"
 
 #: pcbnew/widgets/appearance_controls.cpp:1536
+#, fuzzy
 msgid "Board's edge setback outline"
-msgstr "Hallituksen reunan takaisinkytkentä"
+msgstr "Piirilevyn reunavälyksen ääriviivat"
 
 #: pcbnew/widgets/appearance_controls.cpp:1537
 msgid "Footprint courtyards on board's front"
