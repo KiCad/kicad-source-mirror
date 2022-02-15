@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:20-0800\n"
 "PO-Revision-Date: 2022-02-16 13:03+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -36783,11 +36783,11 @@ msgstr "Umriss des Randabstands der Platine"
 
 #: pcbnew/widgets/appearance_controls.cpp:1537
 msgid "Footprint courtyards on board's front"
-msgstr "Footprint-Abstandsflächen auf Platinenoberseite"
+msgstr "Footprint-Abstandsflächen auf Platinenvorderseite"
 
 #: pcbnew/widgets/appearance_controls.cpp:1538
 msgid "Footprint courtyards on board's back"
-msgstr "Footprint-Abstandsflächen auf Platinenunterseite"
+msgstr "Footprint-Abstandsflächen auf Platinenrückseite"
 
 #: pcbnew/widgets/appearance_controls.cpp:1539
 msgid "Footprint assembly on board's front"
