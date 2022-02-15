@@ -152,7 +152,7 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
 
     if( aBackground )
     {
-        if( aPlotter->GetColorMode() )
+        if( !aPlotter->GetColorMode() )
             return;
 
         switch( m_fill )
