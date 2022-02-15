@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:20-0800\n"
-"PO-Revision-Date: 2022-02-01 13:57+0000\n"
+"PO-Revision-Date: 2022-02-16 13:03+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v6/ja/>\n"
 "Language: ja\n"
@@ -12142,15 +12142,13 @@ msgstr "空白のセルを使用すると、無効なすべての行がテーブ
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:543
-#, fuzzy
 msgid "Remove Invalid Cells"
-msgstr "アイテムを削除"
+msgstr "不正なセルを削除"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
-#, fuzzy
 msgid "Cancel Table Update"
-msgstr "クリアランス穴の直径:"
+msgstr "テーブルの更新をキャンセル"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
@@ -13533,9 +13531,8 @@ msgid "Cannot open file '%s'."
 msgstr "ファイル '%s' を開くことができません。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:314
-#, fuzzy
 msgid "Storage file not fully parsed "
-msgstr "ストレージファイルは完全に読み込まれていません(%d バイト残っています)."
+msgstr "ストレージファイルは完全に読み込まれていません "
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:476
 msgid "Compile mask not currently supported."
@@ -17642,7 +17639,7 @@ msgstr ""
 #: gerbview/rs274d.cpp:414
 #, fuzzy
 msgid "Invalid Code Number"
-msgstr "不正なピン番号"
+msgstr "不正なコードナンバー"
 
 #: gerbview/rs274d.cpp:622
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
@@ -20600,7 +20597,6 @@ msgstr ""
 "変更を破棄して終了しますか？"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -20627,23 +20623,22 @@ msgid ""
 msgstr ""
 "最大電流を指定した場合、トレース幅は適合するように計算されます。\n"
 "\n"
-"トレース幅の一つを指定した場合、まず扱える最大電流が計算されます。それから、"
-"この電流を扱えるように別のトレース幅が計算されます。\n"
+"トレース幅の一つを指定した場合、まず扱える最大電流が計算されます。それから、この電流を扱えるように別のトレース幅が計算されます。\n"
 "\n"
 "制御する値はボールド体で表示されます。\n"
 "\n"
-"計算は、電流 35 A (外部) または 17.5 A (内部) まで、温度上昇は 100℃ まで、幅"
-"は 400mil (10mm) までの範囲で有効です。\n"
+"計算は、電流 35 A (外部) または 17.5 A (内部) まで、温度上昇は 100℃ まで、幅は 400mil (10mm) "
+"までの範囲で有効です。\n"
 "\n"
-"計算式 (IPC 2221 より) \n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>  \n"
-"ここでは:  \n"
-"__I__ = 最大電流 (A)  \n"
-"__dt__ = 周囲環境からの温度上昇 (℃)  \n"
-"___W___ = 幅 (mils)  \n"
-"___H___ = 厚さ(高さ) (mils)  \n"
-"__K__ = 0.024 (内部トレース) または 0.048 (外部トレース)  \n"
+"計算式 (IPC 2221 より)\n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>\n"
+"ここでは:<br>\n"
+"__I__ = 最大電流 (A)<br>\n"
+"__dt__ = 周囲環境からの温度上昇 (℃)<br>\n"
+"___W___ = 幅 (mils)<br>\n"
+"___H___ = 厚さ(高さ) (mils)<br>\n"
+"__K__ = 0.024 (内部トレース) または 0.048 (外部トレース)<br>\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -21780,7 +21775,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:596
 msgid "Selected options resulted in errors! Change them and try again."
-msgstr ""
+msgstr "選択したオプションでエラーが発生しました！変更してやり直してください。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:603
 #, c-format
@@ -21809,9 +21804,9 @@ msgid "Reannotate anyway?"
 msgstr "とにかく再アノテーションしますか？"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "重複したアイテム %s%s\n"
+msgstr "%sの重複インスタンス"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
 msgid "Aborted: too many errors"
@@ -25336,9 +25331,9 @@ msgid "Center:"
 msgstr "中心:"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Corner %d"
-msgstr "角"
+msgstr "角 %d"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:334
 msgid "Polygon must have at least 3 corners"
@@ -26720,9 +26715,9 @@ msgid "<none selected>"
 msgstr "<選択なし>"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Reference item: %s"
-msgstr "リファレンス アイテム:: "
+msgstr "リファレンス アイテム: %s"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -29148,24 +29143,20 @@ msgid "undefined"
 msgstr "未定義"
 
 #: pcbnew/drc/drc_engine.cpp:890
-#, fuzzy
 msgid "track width"
 msgstr "配線幅"
 
 #: pcbnew/drc/drc_engine.cpp:891
-#, fuzzy
 msgid "annular width"
 msgstr "アニュラー幅"
 
 #: pcbnew/drc/drc_engine.cpp:892
-#, fuzzy
 msgid "via diameter"
 msgstr "ビア直径"
 
 #: pcbnew/drc/drc_engine.cpp:893
-#, fuzzy
 msgid "constraint"
-msgstr "制約なし"
+msgstr "制約"
 
 #: pcbnew/drc/drc_engine.cpp:896
 #, c-format
@@ -31625,9 +31616,8 @@ msgid "removed annular ring"
 msgstr "削除されたアニュラーリング"
 
 #: pcbnew/pcb_track.cpp:659
-#, fuzzy
 msgid "Track (arc)"
-msgstr "配線 "
+msgstr "配線(円弧)"
 
 #: pcbnew/pcb_track.cpp:674
 msgid "Segment Length"
@@ -31778,14 +31768,12 @@ msgid "File not found: '%s'."
 msgstr "ファイルが見つかりません: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:710
-#, fuzzy
 msgid "Loading board data..."
-msgstr "基板の領域をロード中..."
+msgstr "基板データをロードしています..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:888
-#, fuzzy
 msgid "Loading netclasses..."
-msgstr "ネットをロードしています..."
+msgstr "ネットクラスをロードしています..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:910
 #, c-format
@@ -31793,14 +31781,12 @@ msgid "Duplicate netclass name '%s'."
 msgstr "重複したネットクラス名: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:927
-#, fuzzy
 msgid "Loading components..."
-msgstr "ネットをロードしています..."
+msgstr "コンポーネントをロードしています..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:974
-#, fuzzy
 msgid "Loading component 3D models..."
-msgstr "3D モデルをロードしています..."
+msgstr "コンポーネントの3Dモデルをロードしています..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1051
 #: pcbnew/plugins/altium/altium_pcb.cpp:1137
@@ -32162,9 +32148,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "CADSTAR のパッド定義 '%s' にインポート エラーがあります: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
-msgstr "'%s' を開くための PDF ビューアーが見つかりませんでした。"
+msgstr "パッド番号 '%d' がフットプリント '%s' 中に見つかりませんでした。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1291
 #, c-format
@@ -33777,7 +33763,7 @@ msgstr "ロック解除"
 
 #: pcbnew/tools/board_editor_control.cpp:1393
 msgid "Zones have insufficient overlap for merging."
-msgstr ""
+msgstr "ゾーンの重なりが不十分なため、マージできません。"
 
 #: pcbnew/tools/board_editor_control.cpp:1439
 #, fuzzy
