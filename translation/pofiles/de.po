@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:25-0800\n"
-"PO-Revision-Date: 2022-02-14 17:24+0000\n"
+"PO-Revision-Date: 2022-02-16 02:33+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12824,15 +12824,13 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:550
-#, fuzzy
 msgid "Remove Invalid Cells"
-msgstr "Elemente entfernen"
+msgstr "Ungültige Zellen entfernen"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:551
-#, fuzzy
 msgid "Cancel Table Update"
-msgstr "Antipad-Durchmesser:"
+msgstr "Tabelle nicht aktualisieren"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
@@ -18555,9 +18553,8 @@ msgstr ""
 "Die Größe mancher Elemente bleibt somit undefiniert"
 
 #: gerbview/rs274d.cpp:413
-#, fuzzy
 msgid "Invalid Code Number"
-msgstr "Ungültige Pin-Nummer"
+msgstr "Ungültige Codenummer"
 
 #: gerbview/rs274d.cpp:621
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
@@ -22771,6 +22768,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:596
 msgid "Selected options resulted in errors! Change them and try again."
 msgstr ""
+"Gewählte Optionen führen zu Fehlern! Ändern Sie die Optionen und versuchen "
+"Sie es erneut."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:603
 #, c-format
@@ -22799,9 +22798,9 @@ msgid "Reannotate anyway?"
 msgstr "Trotzdem neu notieren?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "Mehrfach vorkommende Elemente %s%s\n"
+msgstr "Mehrfache Instanzen von %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
 msgid "Aborted: too many errors"
@@ -26270,7 +26269,7 @@ msgstr "Netzinspektor"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:81
 msgid "Load and Test Netlist"
-msgstr ""
+msgstr "Netzliste laden und testen"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:123
 msgid "Select Netlist"
@@ -26373,9 +26372,9 @@ msgid "Center:"
 msgstr "Zentrum:"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid "Corner %d"
-msgstr "Eckenradius:"
+msgstr "Ecke %d"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:341
 msgid "Polygon must have at least 3 corners"
@@ -26469,9 +26468,8 @@ msgid "corners count %d"
 msgstr "Anzahl Ecken %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:740
-#, fuzzy
 msgid "Unknown primitive"
-msgstr "Form umwandeln"
+msgstr "Unbekannte Zeichenprimitive"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:929
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
@@ -27778,9 +27776,9 @@ msgid "<none selected>"
 msgstr "<keine gewählt>"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:255
-#, fuzzy, c-format
+#, c-format
 msgid "Reference item: %s"
-msgstr "Referenz \"%s\""
+msgstr "Referenzelement: %s"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -30397,24 +30395,20 @@ msgid "undefined"
 msgstr "nicht definiert"
 
 #: pcbnew/drc/drc_engine.cpp:924
-#, fuzzy
 msgid "track width"
 msgstr "Leiterbahnbreite"
 
 #: pcbnew/drc/drc_engine.cpp:925
-#, fuzzy
 msgid "annular width"
 msgstr "Ringbreite"
 
 #: pcbnew/drc/drc_engine.cpp:926
-#, fuzzy
 msgid "via diameter"
 msgstr "Via-Durchmesser"
 
 #: pcbnew/drc/drc_engine.cpp:927
-#, fuzzy
 msgid "constraint"
-msgstr "Keine Beschränkung"
+msgstr "Beschränkung"
 
 #: pcbnew/drc/drc_engine.cpp:930
 #, c-format
@@ -33152,9 +33146,8 @@ msgid "removed annular ring"
 msgstr "Restring entfernt"
 
 #: pcbnew/pcb_track.cpp:694
-#, fuzzy
 msgid "Track (arc)"
-msgstr "Leiterbahnabstandsflächen"
+msgstr "Leiterbahn (Bogen)"
 
 #: pcbnew/pcb_track.cpp:709
 msgid "Segment Length"
@@ -33306,14 +33299,12 @@ msgid "Record of unknown type: '%d'."
 msgstr "unbekannter Pad-Typ: %d"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:854
-#, fuzzy
 msgid "Loading board data..."
-msgstr "Lade Platinenbereiche..."
+msgstr "Lade Platinendaten ..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1037
-#, fuzzy
 msgid "Loading netclasses..."
-msgstr "Lade Netze..."
+msgstr "Lade Netzklassen ..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1059
 #, c-format
@@ -33321,14 +33312,12 @@ msgid "Duplicate netclass name '%s'."
 msgstr "Doppelter Netzklassenname \"%s\"."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1074
-#, fuzzy
 msgid "Loading components..."
-msgstr "Lade Netze..."
+msgstr "Lade Bauteile ..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1132
-#, fuzzy
 msgid "Loading component 3D models..."
-msgstr "Lade 3D-Modelle ..."
+msgstr "Lade Bauteil-3D-Modelle ..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1210
 #: pcbnew/plugins/altium/altium_pcb.cpp:1302
@@ -33344,9 +33333,8 @@ msgstr ""
 "KiCad-Lage Eco1_User verschoben."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1502
-#, fuzzy
 msgid "Loading dimension drawings..."
-msgstr "Lade Unicode-Strings..."
+msgstr "Lade Maßzeichnungen ..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1523
 #: pcbnew/plugins/altium/altium_pcb.cpp:1530
@@ -33640,9 +33628,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "Die CADSTAR-Paddefinition '%s' hat Importfehler: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1257
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
-msgstr "Konnte keinen PDF-Betrachter für \"%s\" finden."
+msgstr "Padindex \"%d\" kann in Footprint \"%s\" nicht gefunden werden."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1290
 #, c-format
