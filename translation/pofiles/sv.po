@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:25-0800\n"
-"PO-Revision-Date: 2022-02-14 17:24+0000\n"
+"PO-Revision-Date: 2022-02-16 02:33+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -10515,8 +10515,8 @@ msgid ""
 "Target directory for plot files. Can be absolute or relative to the board "
 "file location."
 msgstr ""
-"Målkatalog för plotfiler. Kan vara absolut eller relativt till brädans "
-"filplats."
+"Målkatalog för plotfiler. Kan vara absolut eller relativt till "
+"mönsterkortsfilens sökväg."
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:44
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:45
@@ -11922,8 +11922,9 @@ msgid ""
 "not required to layout the board such as mechanical fasteners and enclosures"
 msgstr ""
 "Detta är användbart för att lägga till symboler som bara exporteras till "
-"fakturaboken men\n"
-"krävs inte för att utforma brädet såsom mekaniska fästelement och kapslingar"
+"materiallistan men\n"
+"inte behöver placeras på mönsterkortet, såsom mekaniska fästelement och "
+"kapslingar"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
 msgid "Update Symbol from Library..."
@@ -21694,7 +21695,7 @@ msgstr "Autoplacement %s"
 #: pcbnew/autorouter/autoplace_tool.cpp:68
 #, c-format
 msgid "Board edges must be defined on the %s layer."
-msgstr "Brädekanter måste definieras på %s -lagret."
+msgstr "Mönsterkortskanter måste definieras på %s -lagret."
 
 #: pcbnew/autorouter/autoplace_tool.cpp:89
 msgid "Autoplace Components"
@@ -21718,7 +21719,7 @@ msgstr "PCB"
 #: pcbnew/tools/pcb_control.cpp:1242 pcbnew/widgets/appearance_controls.cpp:337
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
-msgstr "Dynor"
+msgstr "Lödytor"
 
 #: pcbnew/board.cpp:1195 pcbnew/dialogs/dialog_board_statistics.cpp:702
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:158
@@ -21869,7 +21870,7 @@ msgstr "Har krenelerade lödytor"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:23
 msgid "Plated board edge"
-msgstr "Pläterad brädkant"
+msgstr "Pläterad mönsterkortskant"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:31
 msgid "Copper finish:"
@@ -21877,7 +21878,7 @@ msgstr "Kopparns ytfinish:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:40
 msgid "Edge card connectors:"
-msgstr "Edge-kortkontakter:"
+msgstr "Kortkantskontakter:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 msgid "Yes, bevelled"
@@ -22099,7 +22100,7 @@ msgstr "Hårt guld"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:43
 msgid "Immersion tin"
-msgstr "Nedsänkningsburk"
+msgstr "Kemiskt tenn"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:44
 msgid "Immersion nickel"
@@ -22107,11 +22108,11 @@ msgstr "Kemiskt nickel"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:45
 msgid "Immersion silver"
-msgstr "Nedsänkning silver"
+msgstr "Kemiskt silver"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
 msgid "Immersion gold"
-msgstr "Nedsänkningsguld"
+msgstr "Kemiskt guld"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:47
 msgid "HT_OSP"
@@ -22890,7 +22891,7 @@ msgstr "SMD:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:149
 msgid "Through hole:"
-msgstr "Genom hål:"
+msgstr "Hålmonteringshål:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:151
 msgid "Connector:"
@@ -22907,7 +22908,7 @@ msgstr "Genomgående vior:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:156
 msgid "Blind/buried:"
-msgstr "Blind / begravd:"
+msgstr "Blinda / begravda:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:157
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:173
@@ -22918,7 +22919,7 @@ msgstr "Mikrovior:"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:388
 #: pcbnew/dialogs/dialog_board_statistics.cpp:413
 msgid "Total:"
-msgstr "Total:"
+msgstr "Totalt:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:435
 #: pcbnew/dialogs/dialog_board_statistics.cpp:436
@@ -22999,11 +23000,11 @@ msgstr "Fel under skrivning av fil '%s'."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:119
 msgid "Board Size"
-msgstr "Brädesstorlek"
+msgstr "Mönsterkortets storlek"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:200
 msgid "Subtract holes from board area"
-msgstr "Subtrahera hål från brädområdet"
+msgstr "Subtrahera hål från mönsterkortsarea"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:203
 msgid "Exclude components with no pins"
@@ -23083,7 +23084,7 @@ msgstr "Städa upp grafik"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:147
 msgid "Board cleanup"
-msgstr "Städning ombord"
+msgstr "Städa mönsterkortet"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:22
 msgid "Delete &tracks connecting different nets"
@@ -23308,7 +23309,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:245
 msgid "Clearance between pads in the same net and filled areas."
-msgstr "Avstånd mellan dynor i samma nät och fyllda områden."
+msgstr "Avstånd mellan lödytor i samma nät och fyllda områden."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:253
 msgid "Thermal spoke width:"
@@ -24061,7 +24062,7 @@ msgstr "Byt fotavtryck"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
 msgid "Change all footprints on board"
-msgstr "Byt alla fotavtryck ombord"
+msgstr "Byt alla fotavtryck på mönsterkortet"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
 msgid "Change selected footprint(s)"
@@ -24131,7 +24132,7 @@ msgstr ": OK"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
 msgid "Update all footprints on board"
-msgstr "Uppdatera alla fotavtryck ombord"
+msgstr "Uppdatera alla fotavtryck på mönsterkortet"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:27
 msgid "Update selected footprint(s)"
@@ -24255,7 +24256,7 @@ msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
 msgstr ""
-"Brädeskiss saknas eller är inte stängd med %.3f mm tolerans.\n"
+"Mönsterkortskant saknas eller är inte stängd med %.3f mm tolerans.\n"
 "Kör DRC för en fullständig analys."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:353
@@ -24416,7 +24417,7 @@ msgstr "Skriv ut en sida per lager"
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:105
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:260
 msgid "Print board edges on all pages"
-msgstr "Skriv ut brädans kanter på alla sidor"
+msgstr "Skriv ut mönsterkortets kanter på alla sidor"
 
 #: pcbnew/dialogs/dialog_export_svg_base.h:71
 msgid "Export SVG File"
@@ -24690,7 +24691,7 @@ msgstr "Fotavtryckstyp:"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
 #: pcbnew/footprint.cpp:704 pcbnew/footprint_libraries_utils.cpp:1142
 msgid "Through hole"
-msgstr "Genom hål"
+msgstr "Hålmonteringshål"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:185
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
@@ -24787,9 +24788,9 @@ msgid ""
 "This value can be superseded by a pad local value.\n"
 "If 0, the global value is used."
 msgstr ""
-"Detta är det lokala avståndet mellan dynorna och lödmasken för detta "
+"Detta är det lokala avståndet mellan lödytorna och lödmasken för detta "
 "fotavtryck.\n"
-"Det här värdet kan ersättas med ett pad-lokalt värde.\n"
+"Det här värdet kan ersättas med ett lokalt värde per lödyta.\n"
 "Om 0 används det globala värdet."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:298
@@ -24813,11 +24814,11 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"Detta är det lokala avståndet mellan dynor och lödpasta för detta "
+"Detta är det lokala avståndet mellan lödytor och lodpasta för detta "
 "fotavtryck.\n"
-"Detta värde kan ersättas med en lokal lokalvärde.\n"
-"Det slutliga rensningsvärdet är summan av detta värde och rensningsvärdet.\n"
-"Ett negativt värde betyder en mindre maskstorlek än vadstorleken."
+"Detta värde kan ersättas med ett lokalt värde per lödyta.\n"
+"Det slutliga avståndet är summan av detta värde och storleksförhållandet.\n"
+"Ett negativt värde betyder en masköppning mindre än lödytan."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:314
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:285
@@ -24849,7 +24850,8 @@ msgstr ""
 msgid ""
 "Note: solder mask and paste values are used only for pads on copper layers."
 msgstr ""
-"Obs! Värden för lödmask och klistra används endast för dynor på kopparlager."
+"Obs! Värden för lödmask och lodpasta används endast för lödytor på "
+"kopparlager."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:343
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:314
@@ -24939,10 +24941,10 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Detta är det lokala nätavståndet för alla dynor med detta fotavtryck.\n"
-"Om 0 används Netclass-värdena.\n"
-"Detta värde kan åsidosättas pad för pad i Local\n"
-"Fliken Clearance and Settings i Pad Properties."
+"Detta är det lokala nätavståndet för alla lödytor med detta fotavtryck.\n"
+"Om 0 används nätklass-värdena.\n"
+"Detta värde kan åsidosättas individuellt per lödyta i fliken\n"
+"\"Lokala avstånd och inställningar\" i Lödyte-egenskaper."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:258
 msgid ""
@@ -25096,11 +25098,11 @@ msgstr "Inkludera bara ytmonterade fotavtryck"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:77
 msgid "Exclude all footprints with through hole pads"
-msgstr "Uteslut alla fotavtryck med genomgående hålkuddar"
+msgstr "Uteslut alla fotavtryck med hålmonterings-lödytor"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:80
 msgid "Include board edge layer"
-msgstr "Inkludera brädkantlager"
+msgstr "Inkludera lager för mönsterkortets kantlinjer"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:83
 #: pcbnew/dialogs/dialog_plot_base.cpp:108
@@ -25184,7 +25186,7 @@ msgid ""
 "Used mostly by users who make the boards themselves."
 msgstr ""
 "Rekommenderas inte.\n"
-"Används mest av användare som själva tillverkar brädorna."
+"Används mest av användare som tillverkar mönsterkort själva."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:55
 msgid "Minimal header"
@@ -25308,11 +25310,11 @@ msgstr "Hålräkning"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:149
 msgid "Plated pads:"
-msgstr "Pläterade dynor:"
+msgstr "Pläterade lödytor:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:157
 msgid "Non-plated pads:"
-msgstr "Icke-pläterade dynor:"
+msgstr "Icke-pläterade lödytor:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:181
 msgid "Buried vias:"
@@ -25383,7 +25385,7 @@ msgstr "Markörer"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:46
 msgid "Clear board"
-msgstr "Rensa ombord"
+msgstr "Töm mönsterkortet"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:55
 msgid "Filter Settings"
@@ -25853,7 +25855,7 @@ msgid ""
 "maximum board area."
 msgstr ""
 "Ogiltiga rörelsevärden. Rörelse skulle placera val utanför det maximala "
-"brädområdet."
+"området för mönsterkort."
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around center of selection"
@@ -26247,7 +26249,7 @@ msgid ""
 "Warning: Plated through holes should normally have a copper pad on at least "
 "one layer."
 msgstr ""
-"Varning: Pläterade genomgående hål ska normalt ha en kopparplatta på minst "
+"Varning: Pläterade genomgående hål ska normalt ha en kopparkrage på minst "
 "ett lager."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1344
@@ -26256,7 +26258,7 @@ msgstr "För stort värde för paddeltastorlek."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1353
 msgid "Warning: Through hole pad has no hole."
-msgstr "Varning: Genomgående hål-element har inget hål."
+msgstr "Varning: Hålmonterings-lödyta har inget hål."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1360
 msgid ""
@@ -26339,7 +26341,7 @@ msgstr "Pad typ:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1620
 msgid "Through-hole"
-msgstr "Genom hål"
+msgstr "Hålmonteringshål"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40
 msgid "Edge Connector"
@@ -26471,7 +26473,7 @@ msgstr "Fasningshörn:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:262
 msgid ""
 "Chamfered corners. The position is relative to a pad orientation 0 degree."
-msgstr "Fasade hörn. Positionen är relativt en dynorientering 0 grader."
+msgstr "Fasade hörn. Positionen är relativt en lödyteorientering 0 grader."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:219
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:269
@@ -26518,8 +26520,8 @@ msgid ""
 "Parent footprint on board is flipped.\n"
 "Layers will be reversed."
 msgstr ""
-"Föräldrarnas fotavtryck ombord vänds.\n"
-"Lager kommer att omvändas."
+"Det överordnade fotavtrycket på mönsterkortet är spegelvänt.\n"
+"Lagren kommer att vändas."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:515
 msgid "Front adhesive"
@@ -26606,7 +26608,7 @@ msgstr "Kylfläns"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560
 msgid "Castellated pad (through hole only)"
-msgstr "Castellated pad (endast genomgående hål)"
+msgstr "Krenelerad lödyta (endast genomgående hål)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:582
 #, fuzzy
@@ -27322,9 +27324,8 @@ msgid ""
 "When enabled, the router tries to move colliding traces behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
 msgstr ""
-"När den är aktiverad försöker routern att flytta kolliderande spår bakom "
-"solida hinder (t.ex. dynor) istället för att \"reflektera\" tillbaka "
-"kollisionen"
+"När aktiverad, försöker routern att flytta kolliderande spår bakom fasta "
+"hinder (t.ex. lödytor) istället för att \"reflektera\" tillbaka kollisionen"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:42
 msgid "Remove redundant tracks"
@@ -27545,7 +27546,7 @@ msgstr "Skicka mönsterkort för tillverkning"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:49
 msgid "Change Pads on Current Footprint"
-msgstr "Ändra dynor på aktuellt fotavtryck"
+msgstr "Ändra lödytor i aktuellt fotavtryck"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:50
 msgid "Change Pads on Identical Footprints"
@@ -27553,19 +27554,19 @@ msgstr "Byt kuddar på identiska fotavtryck"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:25
 msgid "Do not modify pads having a different shape"
-msgstr "Ändra inte dynor med annan form"
+msgstr "Ändra inte lödytor med annan form"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:28
 msgid "Do not modify pads having different layers"
-msgstr "Ändra inte dynor med olika lager"
+msgstr "Ändra inte lödytor med andra lager"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:31
 msgid "Do not modify pads having a different orientation"
-msgstr "Ändra inte dynor med en annan riktning"
+msgstr "Ändra inte lödytor med en annan riktning"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:34
 msgid "Do not modify pads having a different type"
-msgstr "Ändra inte dynor med en annan typ"
+msgstr "Ändra inte lödytor av en annan typ"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.h:51
 msgid "Push Pad Properties"
@@ -27610,8 +27611,9 @@ msgid "Prevent vias from being placed in this area"
 msgstr "Förhindra att vior placeras i detta område"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:83
+#, fuzzy
 msgid "Keep out pads"
-msgstr "Håll ut dynorna"
+msgstr "Håll lödytor borta"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:84
 msgid "Raise a DRC error if a pad overlaps this area"
@@ -27756,7 +27758,7 @@ msgstr "Om du byter nät uppdateras %s pad %s och %s pad %s till %s."
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:465
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
-msgstr "Om du byter nät uppdateras %lu anslutna dynor till %s."
+msgstr "Om du byter nät uppdateras %lu anslutna lödytor till %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:471
 msgid "Change Nets"
@@ -27792,8 +27794,8 @@ msgid ""
 "Automatically change the net of this via when the pads or zones it touches "
 "are changed"
 msgstr ""
-"Ändra automatiskt nätet för detta via när dynorna eller zonerna det rör vid "
-"byts ut"
+"Ändra automatiskt nätet för detta via när lödytorna eller zonerna det rör "
+"vid byts ut"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:60
 msgid "Start point X:"
@@ -27902,7 +27904,7 @@ msgstr "&Vior"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Pads"
-msgstr "&Dynor"
+msgstr "&Lödytor"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
 msgid "&Remove unused layers"
@@ -27961,7 +27963,7 @@ msgstr "Visa inte"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Show on pads"
-msgstr "Visa på dynor"
+msgstr "Visa på lödytor"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Show on tracks"
@@ -27977,7 +27979,7 @@ msgstr "Nätnamn"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:41
 msgid "Show or hide net names on pads and/or tracks."
-msgstr "Visa eller dölj nätnamn på dynor och / eller spår."
+msgstr "Visa eller dölj nätnamn på lödytor och / eller ledare."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:45
 #: pcbnew/tools/pcb_actions.cpp:866
@@ -28048,7 +28050,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:29
 msgid "Magnetic pads"
-msgstr "Magnetiska dynor"
+msgstr "Magnetiska lödytor"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:32
 msgid "Magnetic graphics"
@@ -28089,7 +28091,7 @@ msgstr "Välj objekt."
 #: pcbnew/dialogs/panel_edit_options_base.cpp:142
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
 msgid "Highlight net (for pads or tracks)."
-msgstr "Markera nät (för dynor eller spår)."
+msgstr "Markera nät (för lödytor eller spår)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:243
 #: pcbnew/dialogs/panel_edit_options_base.cpp:363
@@ -28106,7 +28108,7 @@ msgstr "Magnetiska punkter"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:269
 msgid "Snap to pads:"
-msgstr "Fäst på dynorna:"
+msgstr "Fäst till lödytor:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:271
 #: pcbnew/dialogs/panel_edit_options_base.cpp:279
@@ -28521,14 +28523,14 @@ msgstr "Hål"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:303
 msgid "Minimum through hole:"
-msgstr "Minimalt genomgående hål:"
+msgstr "Minsta genomgående hål:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:308
 msgid ""
 "The minimum through-hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules or other settings."
 msgstr ""
-"Minsta storlek för genomgående hål. Om angiven är detta ett absolut minimum "
+"Minsta diameter för genomgående hål. Om angiven är detta ett absolut minimum "
 "som inte kan underskridas av nätklasser, anpassade regler eller andra "
 "inställningar."
 
@@ -28683,11 +28685,11 @@ msgstr "CrtYd_Front"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:51
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:639
 msgid "Off-board, testing"
-msgstr "Ombord, testning"
+msgstr "Ej på mönsterkortet, testning"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:58
 msgid "If you want a fabrication layer for the front side of the board"
-msgstr "Om du vill ha ett fabrikationslager på framsidan av brädet"
+msgstr "Om du vill ha ett fabrikationslager på framsidan av mönsterkortet"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:62
 msgid "Fab_Front"
@@ -28696,11 +28698,11 @@ msgstr "Fab_Front"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:65
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:629
 msgid "Off-board, manufacturing"
-msgstr "Ombord, tillverkning"
+msgstr "Ej på mönsterkortet, tillverkning"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:70
 msgid "If you want an adhesive template for the front side of the board"
-msgstr "Om du vill ha en självhäftande mall för brädans framsida"
+msgstr "Om du vill ha en mall för lim på mönsterkortets framsida"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:74
 msgid "Adhes_Front"
@@ -28715,7 +28717,7 @@ msgstr "Adhes_Front"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:605
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:617
 msgid "On-board, non-copper"
-msgstr "Ombord, icke-koppar"
+msgstr "På mönsterkortet, icke-koppar"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:82
 msgid "If you want a solder paste layer for front side of the board"
@@ -28727,7 +28729,8 @@ msgstr "SåldP_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:94
 msgid "If you want a silk screen layer for the front side of the board"
-msgstr "Om du vill ha ett silkskiktlager på framsidan av brädet"
+msgstr ""
+"Om du vill ha ett lager för anvisningstryck på framsidan av mönsterkortet"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:98
 msgid "SilkS_Front"
@@ -28735,7 +28738,7 @@ msgstr "SilkS_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:106
 msgid "If you want a solder mask layer for the front of the board"
-msgstr "Om du vill ha ett lödmaskeringsskikt på framsidan av brädet"
+msgstr "Om du vill ha ett lödmaskeringsskikt på framsidan av mönsterkortet"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:110
 msgid "Mask_Front"
@@ -29062,7 +29065,7 @@ msgstr "Skiktnamn på bakre (nedre) kopparskiktet"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:574
 msgid "If you want a solder mask layer for the back side of the board"
-msgstr "Om du vill ha ett lödmaskskikt på baksidan av brädet"
+msgstr "Om du vill ha ett lödmaskskikt på baksidan av mönsterkortet"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:578
 msgid "SoldM_Back"
@@ -29070,7 +29073,8 @@ msgstr "SåldM_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:586
 msgid "If you want a silk screen layer for the back side of the board"
-msgstr "Om du vill ha ett silkskiktlager på baksidan av brädet"
+msgstr ""
+"Om du vill ha ett lager för anvisningstryck på baksidan av mönsterkortet"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:590
 msgid "SilkS_Back"
@@ -29078,7 +29082,7 @@ msgstr "SilkS_Bak"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:598
 msgid "If you want a solder paste layer for the back side of the board"
-msgstr "Om du vill ha ett lödpasta lager för baksidan av brädet"
+msgstr "Om du vill ha ett lager för lodpasta på baksidan av mönsterkortet"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:602
 msgid "SoldP_Back"
@@ -29086,7 +29090,7 @@ msgstr "SåldP_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:610
 msgid "If you want an adhesive layer for the back side of the board"
-msgstr "Om du vill ha ett limskikt på baksidan av brädet"
+msgstr "Om du vill ha ett lager för lim på baksidan av mönsterkortet"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:614
 msgid "Adhes_Back"
@@ -29094,7 +29098,7 @@ msgstr "Adhes_Bak"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:622
 msgid "If you want a fabrication layer for the back side of the board"
-msgstr "Om du vill ha ett fabrikationsskikt för baksidan av brädet"
+msgstr "Om du vill ha ett lager för tillverkning på baksidan av mönsterkortet"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:626
 msgid "Fab_Back"
@@ -29110,7 +29114,7 @@ msgstr "Pcb_Edges"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:649
 msgid "Board contour"
-msgstr "Brädans kontur"
+msgstr "Mönsterkortets kantkontur"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:659
 msgid "Edge_Cuts setback"
@@ -29212,8 +29216,8 @@ msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
-"Globalt utrymme mellan dynor och lödmasken.\n"
-"Detta värde kan ersättas av lokala värden för ett fotavtryck eller en pad."
+"Globalt utrymme mellan lödytor och lödmasken.\n"
+"Detta värde kan ersättas av lokala värden för ett fotavtryck eller en lödyta."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:61
 msgid ""
@@ -29234,8 +29238,8 @@ msgid ""
 "This parameter is only used to plot solder mask layers.\n"
 "Leave at 0 unless you know what you are doing."
 msgstr ""
-"Min. distans mellan två dynor.\n"
-"Två padområden närmare detta värde slås samman under planeringen.\n"
+"Min. distans mellan två lödytor.\n"
+"Två lödytor närmare än detta värde slås samman under plottning.\n"
 "Den här parametern används bara för att plotta lödmasklager.\n"
 "Lämna 0 om du inte vet vad du gör."
 
@@ -29265,9 +29269,10 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value ratio."
 msgstr ""
-"Globalt spelrum mellan dynor och lödpasta.\n"
-"Detta värde kan ersättas av lokala värden för ett fotavtryck eller en pad.\n"
-"Slutligt rensningsvärde är summan av detta värde och rensningsvärdet."
+"Globalt spelrum mellan lödytor och lödpasta.\n"
+"Detta värde kan ersättas av lokala värden för ett fotavtryck eller en lödyta."
+"\n"
+"Slutligt värde är summan av detta värde och avståndsförhållandet."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:108
 msgid ""
@@ -29278,16 +29283,18 @@ msgstr ""
 "pastaavstånd)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:118
+#, fuzzy
 msgid ""
 "Global clearance ratio in percent between pads and the solder paste.\n"
 "A value of 10 means the clearance value is 10 percent of the pad size.\n"
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value."
 msgstr ""
-"Globalt spelförhållande i procent mellan dynor och lödpasta.\n"
-"Ett värde på 10 betyder att avståndet är 10 procent av dynans storlek.\n"
-"Detta värde kan ersättas av lokala värden för ett fotavtryck eller en pad.\n"
-"Slutligt rensningsvärde är summan av detta värde och rensningsvärdet."
+"Globalt marginalförhållande i procent mellan lödyta och lödpasta.\n"
+"Ett värde på 10 betyder att marginalen är 10 procent av lödytans storlek.\n"
+"Detta värde kan ersättas av lokala värden för ett fotavtryck eller en lödyta."
+"\n"
+"Slutlig marginal är summan av detta värde och marginalvärdet."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:123
 msgid "Additional clearance as a percentage of the pad size."
@@ -29910,7 +29917,7 @@ msgstr "Regel tillämpas; åsidosätter tidigare begränsningar."
 
 #: pcbnew/drc/drc_engine.cpp:1148
 msgid "Membership not satisfied; constraint ignored."
-msgstr "Medlemskap inte nöjt; begränsning ignoreras."
+msgstr "Medlemskap inte uppfyllt; begränsning ignoreras."
 
 #: pcbnew/drc/drc_engine.cpp:1149 pcbnew/drc/drc_engine.cpp:1338
 msgid "Condition not satisfied; rule ignored."
@@ -29919,7 +29926,7 @@ msgstr "Villkor inte uppfyllt; regel ignoreras."
 #: pcbnew/drc/drc_engine.cpp:1180 pcbnew/drc/drc_engine.cpp:1191
 #, c-format
 msgid "Local clearance on %s; clearance: %s."
-msgstr "Lokalt godkännande den %s; godkännande: %s."
+msgstr "Lokalt avstånd på %s; avstånd: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1216
 #, c-format
@@ -29981,7 +29988,7 @@ msgstr "Objekt som kortsluter två nät"
 
 #: pcbnew/drc/drc_item.cpp:60
 msgid "Items not allowed"
-msgstr "Objekt är inte tillåtet"
+msgstr "Objekt är inte tillåtna"
 
 #: pcbnew/drc/drc_item.cpp:64
 msgid "Text (or dimension) on Edge.Cuts layer"
@@ -29993,19 +30000,19 @@ msgstr "Brott mot godkännande"
 
 #: pcbnew/drc/drc_item.cpp:72
 msgid "Tracks crossing"
-msgstr "Spår som passerar"
+msgstr "Ledare som korsar"
 
 #: pcbnew/drc/drc_item.cpp:76
 msgid "Board edge clearance violation"
-msgstr "Brott mot brädans godkännande"
+msgstr "Regelöverträdelse för mönsterkortets kantmarginal"
 
 #: pcbnew/drc/drc_item.cpp:80
 msgid "Copper areas intersect"
-msgstr "Kopparområden skär varandra"
+msgstr "Kopparzoner överlappar"
 
 #: pcbnew/drc/drc_item.cpp:84
 msgid "Copper zone net has no pads"
-msgstr "Kopparnas nät har inga dynor"
+msgstr "Kopparzons nät har inga lödytor"
 
 #: pcbnew/drc/drc_item.cpp:88
 #, fuzzy
@@ -30018,7 +30025,7 @@ msgstr "Via är inte anslutet eller bara anslutet på ett lager"
 
 #: pcbnew/drc/drc_item.cpp:96
 msgid "Track has unconnected end"
-msgstr "Spåret har slutat sluta"
+msgstr "Ledarens ända saknar anslutning"
 
 #: pcbnew/drc/drc_item.cpp:100
 msgid "Hole clearance violation"
@@ -30577,7 +30584,7 @@ msgstr "Kontrollerar silkscreen för överlappande föremål ..."
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:153
 #, c-format
 msgid "Testing %d silkscreen features against %d board items."
-msgstr "Testar %d silkscreen-funktioner mot %d brädobjekt."
+msgstr "Testar %d anvisningstrycks egenskaper mot %d mönsterkortsobjekt."
 
 #: pcbnew/drc/drc_test_provider_sliver_checker.cpp:83
 msgid "Running sliver detection on copper layers..."
@@ -31012,7 +31019,7 @@ msgstr "Fotavtryck: %s"
 #: pcbnew/footprint.cpp:2190
 #, c-format
 msgid "Expected \"Through hole\" type but set to \"%s\""
-msgstr "Väntade \"genomgående hål\"-typ men var \"%s\""
+msgstr "Förväntad typ är \"hålmonteringshål\" men är satt till \"%s\""
 
 #: pcbnew/footprint.cpp:2194
 #, c-format
@@ -31615,7 +31622,7 @@ msgstr "GenCAD ..."
 
 #: pcbnew/menubar_pcb_editor.cpp:130
 msgid "Export GenCAD board representation"
-msgstr "Exportera GenCAD-brädet"
+msgstr "Exportera GenCAD-mönsterkort"
 
 #: pcbnew/menubar_pcb_editor.cpp:132
 msgid "VRML..."
@@ -31673,8 +31680,8 @@ msgid ""
 "Add footprints used on board to an existing footprint library\n"
 "(does not remove other footprints from this library)"
 msgstr ""
-"Lägg till fotavtryck som används ombord i ett befintligt bibliotek med "
-"fotavtryck\n"
+"Lägg till fotavtryck som används på mönsterkoret till ett befintligt "
+"fotavtrycksbibliotek\n"
 "(tar inte bort andra fotavtryck från detta bibliotek)"
 
 #: pcbnew/menubar_pcb_editor.cpp:155
@@ -31686,8 +31693,8 @@ msgid ""
 "Create a new footprint library containing the footprints used on board\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
-"Skapa ett nytt fotavtrycksbibliotek som innehåller fotavtryck som används "
-"ombord\n"
+"Skapa ett nytt fotavtrycksbibliotek som innehåller de fotavtryck som används "
+"på mönsterkortet\n"
 "(om biblioteket redan finns kommer det att ersättas)"
 
 #: pcbnew/menubar_pcb_editor.cpp:164
@@ -31801,7 +31808,7 @@ msgstr "Placera mikrovågsfunktionen"
 
 #: pcbnew/netinfo_item.cpp:125
 msgid "On Board"
-msgstr "Ombord"
+msgstr "På mönsterkortet"
 
 #: pcbnew/netinfo_item.cpp:129
 msgid "In Package"
@@ -32039,7 +32046,7 @@ msgstr "Uppdatera netlista"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1033
 #, c-format
 msgid "Total warnings: %d, errors: %d."
-msgstr "Totala varningar: %d, fel: %d."
+msgstr "Totalt antal varningar: %d, fel: %d."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:270
 #, c-format
@@ -32238,7 +32245,7 @@ msgstr "Kudde %s av %s på %s"
 #: pcbnew/pad.cpp:1162 pcbnew/pad.cpp:1168 pcbnew/pad.cpp:1185
 #, c-format
 msgid "Through hole pad %s of %s"
-msgstr "Genomgående hålkudde %s av %s"
+msgstr "Hålmonterings-lödyta %s för %s"
 
 #: pcbnew/pad.cpp:1177
 #, c-format
@@ -32248,7 +32255,7 @@ msgstr "Lödyta %s %s av %s på %s"
 #: pcbnew/pad.cpp:1191
 #, c-format
 msgid "Through hole pad %s %s of %s"
-msgstr "Lödyta med genomgående hål %s %s av %s"
+msgstr "Hålmonterings-lödyta %s %s för %s"
 
 #: pcbnew/pad.cpp:1622
 msgid "Edge connector"
@@ -32531,7 +32538,7 @@ msgstr "PCB-textruta på %s"
 #: pcbnew/pcb_track.cpp:103
 #, c-format
 msgid "Blind/Buried Via %s on %s"
-msgstr "Blind / begravd via %s den %s"
+msgstr "Blind / begravd via %s på %s"
 
 #: pcbnew/pcb_track.cpp:104
 #, c-format
@@ -32820,7 +32827,7 @@ msgstr "Läser in lödytor..."
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 "Fotavtryck %s lödyta %s är inte angiven som flerlager-element, men är ett "
-"genomgående hål."
+"hålmonteringshål."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2427
 #, c-format
@@ -34173,8 +34180,7 @@ msgstr "Placera genom Via"
 #: pcbnew/router/router_tool.cpp:103
 msgid "Adds a through-hole via at the end of currently routed track."
 msgstr ""
-"Lägger till ett genomgående hål via i slutet av det nuvarande dirigerade "
-"spåret."
+"Lägger till ett via med genomgående hål i slutet av den ledare som dras."
 
 #: pcbnew/router/router_tool.cpp:109
 msgid "Place Blind/Buried Via"
@@ -34183,8 +34189,8 @@ msgstr "Placera blind / begravd via"
 #: pcbnew/router/router_tool.cpp:110
 msgid "Adds a blind or buried via at the end of currently routed track."
 msgstr ""
-"Lägger till en blind eller begravd via i slutet av det nuvarande dirigerade "
-"spåret."
+"Lägger till en blind eller begravd via i slutet av ledaren som dras för "
+"närvarande."
 
 #: pcbnew/router/router_tool.cpp:116
 msgid "Place Microvia"
@@ -34203,12 +34209,12 @@ msgid ""
 "Select a layer, then add a through-hole via at the end of currently routed "
 "track."
 msgstr ""
-"Välj ett lager och lägg sedan till ett genomgående hål via i slutet av det "
-"för närvarande dirigerade spåret."
+"Välj ett lager och lägg sedan till ett via med genomgående hål i slutet av "
+"ledaren som för närvarande dras."
 
 #: pcbnew/router/router_tool.cpp:132
 msgid "Select Layer and Place Blind/Buried Via..."
-msgstr "Välj Layer and Place Blind / Buried Via ..."
+msgstr "Välj lager och placera blind / begravd via..."
 
 #: pcbnew/router/router_tool.cpp:133
 msgid ""
@@ -34216,7 +34222,7 @@ msgid ""
 "routed track."
 msgstr ""
 "Välj ett lager och lägg sedan till en blind eller begravd via i slutet av "
-"det nuvarande dirigerade spåret."
+"ledaren som dras för närvarande."
 
 #: pcbnew/router/router_tool.cpp:141
 msgid "Select Layer and Place Micro Via..."
@@ -34736,7 +34742,7 @@ msgstr "Visa nästa fotavtryck"
 
 #: pcbnew/toolbars_footprint_viewer.cpp:78
 msgid "Insert footprint in board"
-msgstr "Sätt in fotavtryck i brädet"
+msgstr "Lägg till fotavtryck på mönsterkortet"
 
 #: pcbnew/toolbars_pcb_editor.cpp:538
 msgid ""
@@ -34826,7 +34832,7 @@ msgstr "Orphaned net %s omföräldrades.\n"
 
 #: pcbnew/tools/board_editor_control.cpp:652
 msgid "No board problems found."
-msgstr "Inga brädproblem hittades."
+msgstr "Inga mönsterkortsproblem hittades."
 
 #: pcbnew/tools/board_editor_control.cpp:663
 msgid "Updating PCB requires a fully annotated schematic."
@@ -35417,8 +35423,9 @@ msgid "Edit pad shapes"
 msgstr "Redigera padformer"
 
 #: pcbnew/tools/pad_tool.cpp:812
+#, fuzzy
 msgid "Recombine pads"
-msgstr "Rekombinerar dynor"
+msgstr "Rekombinerar lödytor"
 
 #: pcbnew/tools/pcb_actions.cpp:48
 msgid "Create Polygon from Selection"
@@ -35721,7 +35728,7 @@ msgstr "Rotera valda objekt moturs"
 
 #: pcbnew/tools/pcb_actions.cpp:315
 msgid "Flips selected item(s) to opposite side of board"
-msgstr "Vänd markerade objekt till motsatt sida av brädet"
+msgstr "Vänd markerade objekt till motsatt sida av mönsterkortet"
 
 #: pcbnew/tools/pcb_actions.cpp:320
 msgid "Mirrors selected item"
@@ -35841,7 +35848,7 @@ msgstr "Uppdatera fotavtryck så att alla ändringar från biblioteket inkludera
 
 #: pcbnew/tools/pcb_actions.cpp:428
 msgid "Remove Unused Pads..."
-msgstr "Ta bort oanvända dynor ..."
+msgstr "Ta bort oanvända lödytor..."
 
 #: pcbnew/tools/pcb_actions.cpp:429
 msgid ""
@@ -35888,7 +35895,7 @@ msgstr "Globala raderingar ..."
 
 #: pcbnew/tools/pcb_actions.cpp:462
 msgid "Delete tracks, footprints and graphic items from board"
-msgstr "Ta bort spår, fotavtryck och grafiska objekt från brädet"
+msgstr "Ta bort ledare, fotavtryck och grafiska objekt från mönsterkortet"
 
 #: pcbnew/tools/pcb_actions.cpp:467
 msgid "Cleanup Tracks & Vias..."
@@ -35965,7 +35972,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:524
 msgid "Push Pad Properties to Other Pads..."
-msgstr "Push Pad egenskaper till andra dynor ..."
+msgstr "Överför lödyte-egenskaper till andra lödytor..."
 
 #: pcbnew/tools/pcb_actions.cpp:525
 msgid "Copy the current pad's properties to other pads"
@@ -35973,7 +35980,7 @@ msgstr "Kopiera den aktuella padens egenskaper till andra pad"
 
 #: pcbnew/tools/pcb_actions.cpp:530
 msgid "Renumber Pads..."
-msgstr "Omnumrerar dynor ..."
+msgstr "Omnumrera lödytor..."
 
 #: pcbnew/tools/pcb_actions.cpp:531
 msgid "Renumber pads by clicking on them in the desired order"
@@ -36009,7 +36016,7 @@ msgstr "Standardkuddegenskaper ..."
 
 #: pcbnew/tools/pcb_actions.cpp:556
 msgid "Edit the pad properties used when creating new pads"
-msgstr "Redigera dynegenskaperna som används när du skapar nya dynor"
+msgstr "Redigera lödyte-egenskaperna som används när du skapar nya lödytor"
 
 #: pcbnew/tools/pcb_actions.cpp:564
 msgid "Refresh Plugins"
@@ -36375,7 +36382,7 @@ msgstr "Skisskuddar"
 
 #: pcbnew/tools/pcb_actions.cpp:846
 msgid "Show pads in outline mode"
-msgstr "Visa dynor i konturläge"
+msgstr "Visa lödytor i konturläge"
 
 #: pcbnew/tools/pcb_actions.cpp:851
 msgid "Sketch Vias"
@@ -36806,7 +36813,7 @@ msgstr "Utför automatisk placering av valda komponenter"
 
 #: pcbnew/tools/pcb_actions.cpp:1324
 msgid "Place Off-Board Footprints"
-msgstr "Placera fotspår ombord"
+msgstr "Placera fotspår utanför mönsterkortet"
 
 #: pcbnew/tools/pcb_actions.cpp:1325
 msgid "Performs automatic placement of components outside board area"
@@ -37076,7 +37083,7 @@ msgstr "Visa alla vior"
 
 #: pcbnew/widgets/appearance_controls.cpp:337
 msgid "Show all pads"
-msgstr "Visa alla dynor"
+msgstr "Visa alla lödytor"
 
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Show copper zones"
@@ -37088,7 +37095,7 @@ msgstr "Fotspår fram"
 
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Show footprints that are on board's front"
-msgstr "Visa fotavtryck som finns ombord på framsidan"
+msgstr "Visa fotavtryck som finns på mönsterkorets framsida"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Footprints Back"
@@ -37096,15 +37103,15 @@ msgstr "Fotavtryck tillbaka"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Show footprints that are on board's back"
-msgstr "Visa fotavtryck som finns ombord"
+msgstr "Visa fotavtryck på mönsterkortets baksida"
 
 #: pcbnew/widgets/appearance_controls.cpp:342
 msgid "Through-hole Pads"
-msgstr "Genomgående hålkuddar"
+msgstr "Hålmonterings-lödytor"
 
 #: pcbnew/widgets/appearance_controls.cpp:342
 msgid "Show through-hole pads"
-msgstr "Visa genomgående hålkuddar"
+msgstr "Visa hålmonterings-lödytor"
 
 #: pcbnew/widgets/appearance_controls.cpp:343
 msgid "Show footprint values"
@@ -37144,7 +37151,7 @@ msgstr "Inga anslutningar"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "Show a marker on pads which have no net connected"
-msgstr "Visa en markör på dynor som inte har något nätanslutet"
+msgstr "Visa en markör på lödytor som inte har något nät anslutet"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "DRC Warnings"
@@ -37250,7 +37257,7 @@ msgstr "Inaktiva lager kommer gömmas"
 
 #: pcbnew/widgets/appearance_controls.cpp:638
 msgid "Flip board view"
-msgstr "Vänd ombord"
+msgstr "Vänd visningen av mönsterkortet"
 
 #: pcbnew/widgets/appearance_controls.cpp:660
 msgid "Net Display Options"
@@ -37362,35 +37369,35 @@ msgstr "Visa eller dölj detta lager"
 
 #: pcbnew/widgets/appearance_controls.cpp:1527
 msgid "Adhesive on board's front"
-msgstr "Lim ombord på framsidan"
+msgstr "Lim på mönsterkortets framsida"
 
 #: pcbnew/widgets/appearance_controls.cpp:1528
 msgid "Adhesive on board's back"
-msgstr "Lim ombord"
+msgstr "Lim på mönsterkortets baksida"
 
 #: pcbnew/widgets/appearance_controls.cpp:1529
 msgid "Solder paste on board's front"
-msgstr "Lödpasta på brädans front"
+msgstr "Lödpasta på mönsterkortets framsida"
 
 #: pcbnew/widgets/appearance_controls.cpp:1530
 msgid "Solder paste on board's back"
-msgstr "Lödpasta på brädans rygg"
+msgstr "Lödpasta på mönsterkortets baksida"
 
 #: pcbnew/widgets/appearance_controls.cpp:1531
 msgid "Silkscreen on board's front"
-msgstr "Silkscreen ombord på framsidan"
+msgstr "Anvisningstryck på mönsterkortets framsida"
 
 #: pcbnew/widgets/appearance_controls.cpp:1532
 msgid "Silkscreen on board's back"
-msgstr "Silkscreen på brädans rygg"
+msgstr "Anvisningstryck på mönsterkortets baksida"
 
 #: pcbnew/widgets/appearance_controls.cpp:1533
 msgid "Solder mask on board's front"
-msgstr "Lödmask ombord fram"
+msgstr "Lödmask på mönsterkortets framsida"
 
 #: pcbnew/widgets/appearance_controls.cpp:1534
 msgid "Solder mask on board's back"
-msgstr "Lödmask ombord"
+msgstr "Lödmask på mönsterkortets baksida"
 
 #: pcbnew/widgets/appearance_controls.cpp:1535
 msgid "Explanatory drawings"
@@ -37411,23 +37418,23 @@ msgstr "Kortets omkretsdefinition"
 
 #: pcbnew/widgets/appearance_controls.cpp:1540
 msgid "Board's edge setback outline"
-msgstr "Kortets kantindragsskontur"
+msgstr "Mönsterkortets kantmarginals kontur"
 
 #: pcbnew/widgets/appearance_controls.cpp:1541
 msgid "Footprint courtyards on board's front"
-msgstr "Innergårdar för fotavtryck ombord"
+msgstr "Fotavtrycks gårdsplaner på mönsterkortets framsida"
 
 #: pcbnew/widgets/appearance_controls.cpp:1542
 msgid "Footprint courtyards on board's back"
-msgstr "Gårdsavtryck på ombordets rygg"
+msgstr "Fotavtrycks gårdsplaner på mönsterkortets baksida"
 
 #: pcbnew/widgets/appearance_controls.cpp:1543
 msgid "Footprint assembly on board's front"
-msgstr "Montering av fotavtryck på brädans front"
+msgstr "Montering av fotavtryck på mönsterkortets framsida"
 
 #: pcbnew/widgets/appearance_controls.cpp:1544
 msgid "Footprint assembly on board's back"
-msgstr "Montering av fotavtryck på brädans rygg"
+msgstr "Montering av fotavtryck på mönsterkortets baksida"
 
 #: pcbnew/widgets/appearance_controls.cpp:1545
 msgid "User defined layer 1"
@@ -37702,7 +37709,7 @@ msgstr "Inga spår"
 
 #: pcbnew/zone.cpp:534
 msgid "No pads"
-msgstr "Inga dynor"
+msgstr "Inga lödytor"
 
 #: pcbnew/zone.cpp:537
 msgid "No copper zones"
