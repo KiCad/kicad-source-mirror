@@ -309,7 +309,7 @@ void DIALOG_TEXT_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 
 void DIALOG_TEXT_PROPERTIES::onSpinButton( wxCommandEvent& aEvent )
 {
-    for( BITMAP_BUTTON* btn : { m_spin0, m_spin1, m_spin2, m_spin3 } )
+    for( BITMAP_BUTTON* btn : { m_spin0, m_spin1, m_spin2, m_spin3, m_spin4, m_spin5 } )
     {
         if( btn->IsChecked() && btn != aEvent.GetEventObject() )
             btn->Check( false );

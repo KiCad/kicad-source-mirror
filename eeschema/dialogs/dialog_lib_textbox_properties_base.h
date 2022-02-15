@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -94,7 +94,7 @@ class DIALOG_LIB_TEXTBOX_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void onMultiLineTCLostFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnFormattingHelp( wxHyperlinkEvent& event ) { event.Skip(); }
 		virtual void onBorderChecked( wxCommandEvent& event ) { event.Skip(); }
@@ -104,6 +104,7 @@ class DIALOG_LIB_TEXTBOX_PROPERTIES_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_LIB_TEXTBOX_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Box Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_LIB_TEXTBOX_PROPERTIES_BASE();
 
 };

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,6 +38,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_textCtrl->SetViewWhiteSpace( false );
 	m_textCtrl->SetMarginWidth( 2, 0 );
 	m_textCtrl->SetIndentationGuides( false );
+	m_textCtrl->SetReadOnly( false );
 	m_textCtrl->SetMarginWidth( 1, 0 );
 	m_textCtrl->SetMarginWidth( 0, 0 );
 	m_textCtrl->MarkerDefine( wxSTC_MARKNUM_FOLDER, wxSTC_MARK_BOXPLUS );
@@ -95,27 +96,27 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	bSizeCtrlSizer->Add( m_separator2, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spin0 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
-	m_spin0->SetToolTip( _("Align right") );
+	m_spin0->SetToolTip( _("Align left") );
 
 	bSizeCtrlSizer->Add( m_spin0, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spin1 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
-	m_spin1->SetToolTip( _("Align right") );
+	m_spin1->SetToolTip( _("Align horizontal center") );
 
 	bSizeCtrlSizer->Add( m_spin1, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spin2 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
-	m_spin2->SetToolTip( _("Align bottom") );
+	m_spin2->SetToolTip( _("Align right") );
 
 	bSizeCtrlSizer->Add( m_spin2, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spin3 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
-	m_spin3->SetToolTip( _("Align left") );
+	m_spin3->SetToolTip( _("Align bottom") );
 
 	bSizeCtrlSizer->Add( m_spin3, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spin4 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
-	m_spin4->SetToolTip( _("Align left") );
+	m_spin4->SetToolTip( _("Align vertical center") );
 
 	bSizeCtrlSizer->Add( m_spin4, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
