@@ -157,7 +157,6 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
     if( filler.Fill( toFill ) )
     {
         reporter->AdvancePhase();
-        reporter->Report( _( "Updating nets..." ) );
         board()->GetConnectivity()->Build( board(), reporter.get() );
 
         commit.Push( _( "Fill Zone(s)" ), true, true, false );
@@ -215,7 +214,6 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
     if( filler.Fill( toFill ) )
     {
         reporter->AdvancePhase();
-        reporter->Report( _( "Updating nets..." ) );
         board()->GetConnectivity()->Build( board(), reporter.get() );
 
         commit.Push( _( "Fill Zone(s)" ), true, true, false );

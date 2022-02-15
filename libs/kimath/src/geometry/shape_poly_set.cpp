@@ -2246,8 +2246,7 @@ bool SHAPE_POLY_SET::IsTriangulationUpToDate() const
 }
 
 
-static void partitionPolyIntoRegularCellGrid( const SHAPE_POLY_SET& aPoly, int aSize,
-                                              SHAPE_POLY_SET& aOut )
+static SHAPE_POLY_SET partitionPolyIntoRegularCellGrid( const SHAPE_POLY_SET& aPoly, int aSize )
 {
     BOX2I bb = aPoly.BBox();
 
@@ -2255,7 +2254,7 @@ static void partitionPolyIntoRegularCellGrid( const SHAPE_POLY_SET& aPoly, int a
     double h = bb.GetHeight();
 
     if( w == 0.0 || h == 0.0 )
-        return;
+        return aPoly;
 
     int n_cells_x, n_cells_y;
 
@@ -2306,13 +2305,13 @@ static void partitionPolyIntoRegularCellGrid( const SHAPE_POLY_SET& aPoly, int a
     ps1.Fracture( SHAPE_POLY_SET::PM_FAST );
     ps2.Fracture( SHAPE_POLY_SET::PM_FAST );
 
-    aOut = ps1;
-
     for( int i = 0; i < ps2.OutlineCount(); i++ )
-        aOut.AddOutline( ps2.COutline( i ) );
+        ps1.AddOutline( ps2.COutline( i ) );
 
-    if( !aOut.OutlineCount() )
-        aOut = aPoly;
+    if( ps1.OutlineCount() )
+        return ps1;
+    else
+        return aPoly;
 }
 
 
@@ -2338,46 +2337,60 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition )
     if( !recalculate )
         return;
 
-    SHAPE_POLY_SET tmpSet;
+    auto triangulate =
+            []( SHAPE_POLY_SET& polySet, int forOutline,
+                std::vector<std::unique_ptr<TRIANGULATED_POLYGON>>& dest )
+            {
+                bool triangulationValid = false;
+
+                while( polySet.OutlineCount() > 0 )
+                {
+                    if( !dest.empty() && dest.back()->GetTriangleCount() == 0 )
+                        dest.erase( dest.end() - 1 );
+
+                    dest.push_back( std::make_unique<TRIANGULATED_POLYGON>( forOutline ) );
+                    PolygonTriangulation tess( *dest.back() );
+
+                    // If the tessellation fails, we re-fracture the polygon, which will
+                    // first simplify the system before fracturing and removing the holes
+                    // This may result in multiple, disjoint polygons.
+                    if( !tess.TesselatePolygon( polySet.Polygon( 0 ).front() ) )
+                    {
+                        polySet.Fracture( PM_FAST );
+                        triangulationValid = false;
+                        continue;
+                    }
+
+                    polySet.DeletePolygon( 0 );
+                    triangulationValid = true;
+                }
+
+                return triangulationValid;
+            };
+
+    m_triangulatedPolys.clear();
+    m_triangulationValid = true;
 
     if( aPartition )
     {
-        // This partitions into regularly-sized grids (1cm in Pcbnew)
-        SHAPE_POLY_SET flattened( *this );
-        flattened.ClearArcs();
-        partitionPolyIntoRegularCellGrid( flattened, 1e7, tmpSet );
+        for( int ii = 0; ii < OutlineCount(); ++ii )
+        {
+            // This partitions into regularly-sized grids (1cm in Pcbnew)
+            SHAPE_POLY_SET flattened( Outline( ii ) );
+            flattened.ClearArcs();
+            SHAPE_POLY_SET partitions = partitionPolyIntoRegularCellGrid( flattened, 1e7 );
+
+            m_triangulationValid &= triangulate( partitions, ii, m_triangulatedPolys );
+        }
     }
     else
     {
-        tmpSet = *this;
+        SHAPE_POLY_SET tmpSet( *this );
 
         if( tmpSet.HasHoles() )
             tmpSet.Fracture( PM_FAST );
-    }
 
-    m_triangulatedPolys.clear();
-    m_triangulationValid = false;
-
-    while( tmpSet.OutlineCount() > 0 )
-    {
-        if( !m_triangulatedPolys.empty() && m_triangulatedPolys.back()->GetTriangleCount() == 0 )
-            m_triangulatedPolys.erase( m_triangulatedPolys.end() - 1 );
-
-        m_triangulatedPolys.push_back( std::make_unique<TRIANGULATED_POLYGON>() );
-        PolygonTriangulation tess( *m_triangulatedPolys.back() );
-
-        // If the tessellation fails, we re-fracture the polygon, which will
-        // first simplify the system before fracturing and removing the holes
-        // This may result in multiple, disjoint polygons.
-        if( !tess.TesselatePolygon( tmpSet.Polygon( 0 ).front() ) )
-        {
-            tmpSet.Fracture( PM_FAST );
-            m_triangulationValid = false;
-            continue;
-        }
-
-        tmpSet.DeletePolygon( 0 );
-        m_triangulationValid = true;
+        m_triangulationValid = triangulate( tmpSet, -1, m_triangulatedPolys );
     }
 
     if( m_triangulationValid )
@@ -2496,6 +2509,7 @@ void SHAPE_POLY_SET::TRIANGULATED_POLYGON::AddTriangle( int a, int b, int c )
 
 SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRIANGULATED_POLYGON( const TRIANGULATED_POLYGON& aOther )
 {
+    m_sourceOutline = aOther.m_sourceOutline;
     m_vertices = aOther.m_vertices;
     m_triangles = aOther.m_triangles;
 
@@ -2506,6 +2520,7 @@ SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRIANGULATED_POLYGON( const TRIANGULATED_P
 
 SHAPE_POLY_SET::TRIANGULATED_POLYGON& SHAPE_POLY_SET::TRIANGULATED_POLYGON::operator=( const TRIANGULATED_POLYGON& aOther )
 {
+    m_sourceOutline = aOther.m_sourceOutline;
     m_vertices = aOther.m_vertices;
     m_triangles = aOther.m_triangles;
 
@@ -2516,7 +2531,8 @@ SHAPE_POLY_SET::TRIANGULATED_POLYGON& SHAPE_POLY_SET::TRIANGULATED_POLYGON::oper
 }
 
 
-SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRIANGULATED_POLYGON()
+SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRIANGULATED_POLYGON( int aSourceOutline ) :
+        m_sourceOutline( aSourceOutline )
 {
 }
 

@@ -438,9 +438,6 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 
     delta = std::max( delta, size / 10 );
 
-    if( aReporter )
-        aReporter->KeepRefreshing( false );
-
     for( ZONE* zone : aBoard->Zones() )
     {
         Add( zone );

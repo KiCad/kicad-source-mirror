@@ -125,7 +125,7 @@ public:
             TRIANGULATED_POLYGON* parent;
         };
 
-        TRIANGULATED_POLYGON();
+        TRIANGULATED_POLYGON( int aSourceOutline );
         TRIANGULATED_POLYGON( const TRIANGULATED_POLYGON& aOther );
         ~TRIANGULATED_POLYGON();
 
@@ -154,6 +154,8 @@ public:
 
         size_t GetTriangleCount() const { return m_triangles.size(); }
 
+        int GetSourceOutlineIndex() const { return m_sourceOutline; }
+
         std::deque<TRI>& Triangles() { return m_triangles; }
         const std::deque<TRI>& Triangles() const { return m_triangles; }
 
@@ -169,6 +171,7 @@ public:
         }
 
     private:
+        int                  m_sourceOutline;
         std::deque<TRI>      m_triangles;
         std::deque<VECTOR2I> m_vertices;
     };

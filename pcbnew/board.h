@@ -308,6 +308,8 @@ public:
      */
     void FinalizeBulkRemove( std::vector<BOARD_ITEM*>& aRemovedItems );
 
+    void CacheTriangulation( PROGRESS_REPORTER* aReporter = nullptr );
+
     /**
      * Get the first footprint on the board or nullptr.
      *

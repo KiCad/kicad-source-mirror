@@ -182,23 +182,7 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard, PROGRESS_REPORTER* aReport
 {
     m_view->Clear();
 
-    auto zones = aBoard->Zones();
-    std::atomic<size_t> next( 0 );
-    std::atomic<size_t> count_done( 0 );
-    size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
-
-    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-    {
-        std::thread t = std::thread( [ &count_done, &next, &zones ]( )
-        {
-            for( size_t i = next.fetch_add( 1 ); i < zones.size(); i = next.fetch_add( 1 ) )
-                zones[i]->CacheTriangulation();
-
-            count_done++;
-        } );
-
-        t.detach();
-    }
+    aBoard->CacheTriangulation();
 
     if( m_drawingSheet )
         m_drawingSheet->SetFileName( TO_UTF8( aBoard->GetFileName() ) );
@@ -218,15 +202,6 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard, PROGRESS_REPORTER* aReport
     // DRC markers
     for( PCB_MARKER* marker : aBoard->Markers() )
         m_view->Add( marker );
-
-    // Finalize the triangulation threads
-    while( count_done < parallelThreadCount )
-    {
-        if( aReporter )
-            aReporter->KeepRefreshing();
-
-        std::this_thread::sleep_for( std::chrono::milliseconds( 30 ) );
-    }
 
     // Load zones
     for( ZONE* zone : aBoard->Zones() )

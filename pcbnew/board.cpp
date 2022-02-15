@@ -26,6 +26,7 @@
  */
 
 #include <iterator>
+#include <thread>
 #include <drc/drc_rtree.h>
 #include <pcb_base_frame.h>
 #include <board_design_settings.h>
@@ -55,6 +56,7 @@
 #include <tool/selection_conditions.h>
 #include <convert_shape_list_to_polygon.h>
 #include <wx/log.h>
+#include <progress_reporter.h>
 
 // This is an odd place for this, but CvPcb won't link if it's in board_item.cpp like I first
 // tried it.
@@ -619,6 +621,44 @@ void BOARD::SetZoneSettings( const ZONE_SETTINGS& aSettings )
 }
 
 
+void BOARD::CacheTriangulation( PROGRESS_REPORTER* aReporter )
+{
+    if( aReporter )
+        aReporter->Report( _( "Tessellating copper zones..." ) );
+
+    std::atomic<size_t> next( 0 );
+    std::atomic<size_t> count_done( 0 );
+    size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
+
+    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+    {
+        std::thread t = std::thread(
+                [ this, &count_done, &next ]( )
+                {
+                    for( size_t i = next.fetch_add( 1 ); i < m_zones.size(); i = next.fetch_add( 1 ) )
+                        m_zones[i]->CacheTriangulation();
+
+                    count_done++;
+                } );
+
+        t.detach();
+    }
+
+    // Finalize the triangulation threads
+    while( count_done < parallelThreadCount )
+    {
+        if( aReporter && m_zones.size() )
+        {
+            aReporter->SetCurrentProgress( (double) count_done / (double) m_zones.size() );
+            aReporter->KeepRefreshing();
+        }
+
+        std::this_thread::sleep_for( std::chrono::milliseconds( 30 ) );
+    }
+
+}
+
+
 void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 {
     if( aBoardItem == nullptr )
@@ -704,10 +744,12 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 
     aBoardItem->SetParent( this );
     aBoardItem->ClearEditFlags();
-    m_connectivity->Add( aBoardItem );
 
     if( aMode != ADD_MODE::BULK_INSERT && aMode != ADD_MODE::BULK_APPEND )
+    {
+        m_connectivity->Add( aBoardItem );
         InvokeListeners( &BOARD_LISTENER::OnBoardItemAdded, *this, aBoardItem );
+    }
 }
 
 

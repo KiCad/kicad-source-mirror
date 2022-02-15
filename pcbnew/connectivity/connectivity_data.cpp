@@ -86,10 +86,15 @@ bool CONNECTIVITY_DATA::Update( BOARD_ITEM* aItem )
 
 void CONNECTIVITY_DATA::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 {
+    aBoard->CacheTriangulation( aReporter );
+
     std::unique_lock<KISPINLOCK> lock( m_lock, std::try_to_lock );
 
     if( !lock )
         return;
+
+    if( aReporter )
+        aReporter->Report( _( "Updating nets..." ) );
 
     m_connAlgo.reset( new CN_CONNECTIVITY_ALGO );
     m_connAlgo->Build( aBoard, aReporter );

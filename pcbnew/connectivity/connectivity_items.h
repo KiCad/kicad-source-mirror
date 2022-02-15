@@ -292,12 +292,19 @@ public:
     {
         const SHAPE_POLY_SET& fill = aParent->GetFilledPolysList( aLayer );
 
-        m_triangulatedSubpoly = SHAPE_POLY_SET( fill.COutline( aSubpolyIndex ) );
-        m_triangulatedSubpoly.CacheTriangulation();
+        if( !fill.IsTriangulationUpToDate() )
+            const_cast<SHAPE_POLY_SET&>( fill ).CacheTriangulation();
 
-        for( size_t ii = 0; ii < m_triangulatedSubpoly.TriangulatedPolyCount(); ++ii )
+        m_triangulatedPoly = fill;
+
+        for( unsigned int ii = 0; ii < m_triangulatedPoly.TriangulatedPolyCount(); ++ii )
         {
-            for( auto& tri : m_triangulatedSubpoly.TriangulatedPolygon( ii )->Triangles() )
+            const auto* triangleSet = m_triangulatedPoly.TriangulatedPolygon( ii );
+
+            if( triangleSet->GetSourceOutlineIndex() != aSubpolyIndex )
+                continue;
+
+            for( const SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRI& tri : triangleSet->Triangles() )
             {
                 BOX2I     bbox = tri.BBox();
                 const int mmin[2] = { bbox.GetX(), bbox.GetY() };
@@ -369,7 +376,7 @@ private:
     std::vector<VECTOR2I>               m_testOutlinePoints;
     int                                 m_subpolyIndex;
     PCB_LAYER_ID                        m_layer;
-    SHAPE_POLY_SET                      m_triangulatedSubpoly;
+    SHAPE_POLY_SET                      m_triangulatedPoly;
     RTree<const SHAPE*, int, 2, double> m_rTree;
 };
 
