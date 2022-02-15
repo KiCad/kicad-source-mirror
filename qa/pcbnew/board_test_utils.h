@@ -34,7 +34,9 @@ class BOARD_ITEM;
 class FOOTPRINT;
 class FP_TEXT;
 class FP_SHAPE;
+class FP_ZONE;
 class PAD;
+class SHAPE_POLY_SET;
 class SETTINGS_MANAGER;
 
 
@@ -79,6 +81,9 @@ void CheckFpText( const FP_TEXT* expected, const FP_TEXT* text );
 
 void CheckFpShape( const FP_SHAPE* expected, const FP_SHAPE* shape );
 
+void CheckFpZone( const FP_ZONE* expected, const FP_ZONE* zone );
+
+void CheckShapePolySet( const SHAPE_POLY_SET* expected, const SHAPE_POLY_SET* polyset );
 
 } // namespace KI_TEST
 

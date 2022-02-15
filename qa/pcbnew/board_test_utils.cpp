@@ -229,15 +229,14 @@ void CheckFootprint( const FOOTPRINT* expected, const FOOTPRINT* fp )
         }
     }
 
-    /*std::set<FP_ZONE*, FOOTPRINT::cmp_zones> expectedZones( expected->Zones().begin(),
+    std::set<FP_ZONE*, FOOTPRINT::cmp_zones> expectedZones( expected->Zones().begin(),
                                                             expected->Zones().end() );
-    std::set<FP_ZONE*, FOOTPRINT::cmp_zones> fp2Zones( fp->Zones().begin(),
-                                                       fp->Zones().end() );
-    for( auto it1 = expectedZones.begin(), it2 = fp2Zones.begin();
-         it1 != expectedZones.end() && it2 != fp2Zones.end(); it1++, it2++ )
+    std::set<FP_ZONE*, FOOTPRINT::cmp_zones> fpZones( fp->Zones().begin(), fp->Zones().end() );
+    for( auto itExpected = expectedZones.begin(), itFp = fpZones.begin();
+         itExpected != expectedZones.end() && itFp != fpZones.end(); itExpected++, itFp++ )
     {
-        // TODO: BOOST_CHECK( (*it1)->IsSame( **it2 ) );
-    }*/
+        CheckFpZone( *itExpected, *itFp );
+    }
 
     // TODO: Groups
 }
@@ -336,7 +335,7 @@ void CheckFpShape( const FP_SHAPE* expected, const FP_SHAPE* shape )
     BOOST_CHECK_EQUAL( expected->GetBezierC1(), shape->GetBezierC1() );
     BOOST_CHECK_EQUAL( expected->GetBezierC2(), shape->GetBezierC2() );
 
-    // TODO: polyshape
+    CheckShapePolySet( &expected->GetPolyShape(), &shape->GetPolyShape() );
 
     BOOST_CHECK_EQUAL( expected->GetLayer(), shape->GetLayer() );
     BOOST_CHECK_EQUAL( expected->GetLayerSet(), shape->GetLayerSet() );
@@ -347,5 +346,60 @@ void CheckFpShape( const FP_SHAPE* expected, const FP_SHAPE* shape )
     CHECK_ENUM_CLASS_EQUAL( expected->GetFillMode(), shape->GetFillMode() );
 }
 
+
+void CheckFpZone( const FP_ZONE* expected, const FP_ZONE* zone )
+{
+    CHECK_ENUM_CLASS_EQUAL( expected->Type(), zone->Type() );
+
+    BOOST_CHECK_EQUAL( expected->IsLocked(), zone->IsLocked() );
+
+    BOOST_CHECK_EQUAL( expected->GetNetCode(), zone->GetNetCode() );
+    BOOST_CHECK_EQUAL( expected->GetPriority(), zone->GetPriority() );
+    CHECK_ENUM_CLASS_EQUAL( expected->GetPadConnection(), zone->GetPadConnection() );
+    BOOST_CHECK_EQUAL( expected->GetLocalClearance(), zone->GetLocalClearance() );
+    BOOST_CHECK_EQUAL( expected->GetMinThickness(), zone->GetMinThickness() );
+
+    BOOST_CHECK_EQUAL( expected->GetLayer(), zone->GetLayer() ); // this is not used for zones
+    BOOST_CHECK_EQUAL( expected->GetLayerSet(), zone->GetLayerSet() );
+
+    BOOST_CHECK_EQUAL( expected->IsFilled(), zone->IsFilled() );
+    CHECK_ENUM_CLASS_EQUAL( expected->GetFillMode(), zone->GetFillMode() );
+    BOOST_CHECK_EQUAL( expected->GetHatchThickness(), zone->GetHatchThickness() );
+    BOOST_CHECK_EQUAL( expected->GetHatchGap(), zone->GetHatchGap() );
+    BOOST_CHECK_EQUAL( expected->GetHatchOrientation(), zone->GetHatchOrientation() );
+    BOOST_CHECK_EQUAL( expected->GetHatchSmoothingLevel(), zone->GetHatchSmoothingLevel() );
+    BOOST_CHECK_EQUAL( expected->GetHatchSmoothingValue(), zone->GetHatchSmoothingValue() );
+    BOOST_CHECK_EQUAL( expected->GetHatchBorderAlgorithm(), zone->GetHatchBorderAlgorithm() );
+    BOOST_CHECK_EQUAL( expected->GetHatchHoleMinArea(), zone->GetHatchHoleMinArea() );
+    BOOST_CHECK_EQUAL( expected->GetThermalReliefGap(), zone->GetThermalReliefGap() );
+    BOOST_CHECK_EQUAL( expected->GetThermalReliefSpokeWidth(), zone->GetThermalReliefSpokeWidth() );
+    BOOST_CHECK_EQUAL( expected->GetCornerSmoothingType(), zone->GetCornerSmoothingType() );
+    BOOST_CHECK_EQUAL( expected->GetCornerRadius(), zone->GetCornerRadius() );
+    CHECK_ENUM_CLASS_EQUAL( expected->GetIslandRemovalMode(), zone->GetIslandRemovalMode() );
+    BOOST_CHECK_EQUAL( expected->GetMinIslandArea(), zone->GetMinIslandArea() );
+
+    BOOST_CHECK_EQUAL( expected->GetIsRuleArea(), zone->GetIsRuleArea() );
+    BOOST_CHECK_EQUAL( expected->GetDoNotAllowCopperPour(), zone->GetDoNotAllowCopperPour() );
+    BOOST_CHECK_EQUAL( expected->GetDoNotAllowVias(), zone->GetDoNotAllowVias() );
+    BOOST_CHECK_EQUAL( expected->GetDoNotAllowTracks(), zone->GetDoNotAllowTracks() );
+    BOOST_CHECK_EQUAL( expected->GetDoNotAllowPads(), zone->GetDoNotAllowPads() );
+    BOOST_CHECK_EQUAL( expected->GetDoNotAllowFootprints(), zone->GetDoNotAllowFootprints() );
+
+    BOOST_CHECK_EQUAL( expected->GetZoneName(), zone->GetZoneName() );
+    CHECK_ENUM_CLASS_EQUAL( expected->GetTeardropAreaType(), zone->GetTeardropAreaType() );
+    BOOST_CHECK_EQUAL( expected->GetZoneName(), zone->GetZoneName() );
+
+    CheckShapePolySet( expected->Outline(), zone->Outline() );
+    // TODO: filled zones
+}
+
+
+void CheckShapePolySet( const SHAPE_POLY_SET* expected, const SHAPE_POLY_SET* polyset )
+{
+    BOOST_CHECK_EQUAL( expected->OutlineCount(), polyset->OutlineCount() );
+    BOOST_CHECK_EQUAL( expected->TotalVertices(), polyset->TotalVertices() );
+
+    // TODO: check all outlines and holes
+}
 
 } // namespace KI_TEST
