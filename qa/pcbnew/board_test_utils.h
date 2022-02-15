@@ -32,6 +32,7 @@
 class BOARD;
 class BOARD_ITEM;
 class FOOTPRINT;
+class FP_TEXT;
 class FP_SHAPE;
 class PAD;
 class SETTINGS_MANAGER;
@@ -73,6 +74,8 @@ void FillZones( BOARD* m_board );
 void CheckFootprint( const FOOTPRINT* expected, const FOOTPRINT* fp );
 
 void CheckFpPad( const PAD* expected, const PAD* pad );
+
+void CheckFpText( const FP_TEXT* expected, const FP_TEXT* text );
 
 void CheckFpShape( const FP_SHAPE* expected, const FP_SHAPE* shape );
 

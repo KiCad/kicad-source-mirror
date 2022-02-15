@@ -122,8 +122,48 @@ void FillZones( BOARD* m_board )
 }
 
 
+#define TEST( a, b )                                                                               \
+    {                                                                                              \
+        if( a != b )                                                                               \
+            return a < b;                                                                          \
+    }
+#define TEST_PT( a, b )                                                                            \
+    {                                                                                              \
+        if( a.x != b.x )                                                                           \
+            return a.x < b.x;                                                                      \
+        if( a.y != b.y )                                                                           \
+            return a.y < b.y;                                                                      \
+    }
+
+
+struct kitest_cmp_drawings
+{
+    FOOTPRINT::cmp_drawings fp_comp;
+
+    bool operator()( const BOARD_ITEM* itemA, const BOARD_ITEM* itemB ) const
+    {
+        TEST( itemA->Type(), itemB->Type() );
+        TEST( itemA->GetLayer(), itemB->GetLayer() );
+
+        if( itemA->Type() == PCB_FP_TEXT_T )
+        {
+            const FP_TEXT* textA = static_cast<const FP_TEXT*>( itemA );
+            const FP_TEXT* textB = static_cast<const FP_TEXT*>( itemB );
+
+            TEST( textA->GetType(), textB->GetType() );
+            TEST_PT( textA->GetPosition(), textB->GetPosition() );
+            TEST( textA->GetTextAngle(), textB->GetTextAngle() );
+        }
+
+        return fp_comp( itemA, itemB );
+    }
+};
+
+
 void CheckFootprint( const FOOTPRINT* expected, const FOOTPRINT* fp )
 {
+    CHECK_ENUM_CLASS_EQUAL( expected->Type(), fp->Type() );
+
     // TODO: validate those informations match the importer
     BOOST_CHECK_EQUAL( expected->GetPosition(), fp->GetPosition() );
     BOOST_CHECK_EQUAL( expected->GetOrientation(), fp->GetOrientation() );
@@ -153,10 +193,10 @@ void CheckFootprint( const FOOTPRINT* expected, const FOOTPRINT* fp )
         CheckFpPad( *itExpected, *itFp );
     }
 
-    std::set<BOARD_ITEM*, FOOTPRINT::cmp_drawings> expectedGraphicalItems(
+    std::set<BOARD_ITEM*, kitest_cmp_drawings> expectedGraphicalItems(
             expected->GraphicalItems().begin(), expected->GraphicalItems().end() );
-    std::set<BOARD_ITEM*, FOOTPRINT::cmp_drawings> fpGraphicalItems( fp->GraphicalItems().begin(),
-                                                                     fp->GraphicalItems().end() );
+    std::set<BOARD_ITEM*, kitest_cmp_drawings> fpGraphicalItems( fp->GraphicalItems().begin(),
+                                                                 fp->GraphicalItems().end() );
     for( auto itExpected = expectedGraphicalItems.begin(), itFp = fpGraphicalItems.begin();
          itExpected != expectedGraphicalItems.end() && itFp != fpGraphicalItems.end();
          itExpected++, itFp++ )
@@ -169,15 +209,7 @@ void CheckFootprint( const FOOTPRINT* expected, const FOOTPRINT* fp )
             const FP_TEXT* expectedText = static_cast<const FP_TEXT*>( *itExpected );
             const FP_TEXT* text = static_cast<const FP_TEXT*>( *itFp );
 
-            // TODO: text is not sorted the same way!
-            /*CHECK_ENUM_CLASS_EQUAL( text1->GetType(), text2->GetType() );
-
-                BOOST_CHECK_EQUAL( text1->GetText(), text2->GetText() );
-                BOOST_CHECK_EQUAL( text1->GetPosition(), text2->GetPosition() );
-                BOOST_CHECK_EQUAL( text1->GetTextAngle(), text2->GetTextAngle() );
-                BOOST_CHECK_EQUAL( text1->GetTextThickness(), text2->GetTextThickness() );
-
-                BOOST_CHECK( text1->Compare( text2 ) == 0 );*/
+            CheckFpText( expectedText, text );
         }
         break;
         case PCB_FP_SHAPE_T:
@@ -185,7 +217,7 @@ void CheckFootprint( const FOOTPRINT* expected, const FOOTPRINT* fp )
             const FP_SHAPE* expectedShape = static_cast<const FP_SHAPE*>( *itExpected );
             const FP_SHAPE* shape = static_cast<const FP_SHAPE*>( *itFp );
 
-            KI_TEST::CheckFpShape( expectedShape, shape );
+            CheckFpShape( expectedShape, shape );
         }
         break;
         /*case PCB_FP_DIM_ALIGNED_T: break;
@@ -213,6 +245,8 @@ void CheckFootprint( const FOOTPRINT* expected, const FOOTPRINT* fp )
 
 void CheckFpPad( const PAD* expected, const PAD* pad )
 {
+    CHECK_ENUM_CLASS_EQUAL( expected->Type(), pad->Type() );
+
     BOOST_CHECK_EQUAL( expected->GetNumber(), pad->GetNumber() );
     CHECK_ENUM_CLASS_EQUAL( expected->GetAttribute(), pad->GetAttribute() );
     CHECK_ENUM_CLASS_EQUAL( expected->GetProperty(), pad->GetProperty() );
@@ -256,8 +290,41 @@ void CheckFpPad( const PAD* expected, const PAD* pad )
 }
 
 
+void CheckFpText( const FP_TEXT* expected, const FP_TEXT* text )
+{
+    CHECK_ENUM_CLASS_EQUAL( expected->Type(), text->Type() );
+
+    CHECK_ENUM_CLASS_EQUAL( expected->GetType(), text->GetType() );
+
+    BOOST_CHECK_EQUAL( expected->IsLocked(), text->IsLocked() );
+
+    BOOST_CHECK_EQUAL( expected->GetText(), text->GetText() );
+    BOOST_CHECK_EQUAL( expected->GetPosition(), text->GetPosition() );
+    BOOST_CHECK_EQUAL( expected->GetTextAngle(), text->GetTextAngle() );
+    BOOST_CHECK_EQUAL( expected->IsKeepUpright(), text->IsKeepUpright() );
+
+    BOOST_CHECK_EQUAL( expected->GetLayer(), text->GetLayer() );
+    BOOST_CHECK_EQUAL( expected->GetLayerSet(), text->GetLayerSet() );
+    BOOST_CHECK_EQUAL( expected->IsVisible(), text->IsVisible() );
+
+    BOOST_CHECK_EQUAL( expected->GetTextSize(), text->GetTextSize() );
+    BOOST_CHECK_EQUAL( expected->GetLineSpacing(), text->GetLineSpacing() );
+    BOOST_CHECK_EQUAL( expected->GetTextThickness(), text->GetTextThickness() );
+    BOOST_CHECK_EQUAL( expected->IsBold(), text->IsBold() );
+    BOOST_CHECK_EQUAL( expected->IsItalic(), text->IsItalic() );
+    BOOST_CHECK_EQUAL( expected->GetHorizJustify(), text->GetHorizJustify() );
+    BOOST_CHECK_EQUAL( expected->GetVertJustify(), text->GetVertJustify() );
+    BOOST_CHECK_EQUAL( expected->IsMirrored(), text->IsMirrored() );
+    BOOST_CHECK_EQUAL( expected->GetFontName(), text->GetFontName() ); // TODO: bold/italic setting?
+
+    // TODO: render cache?
+}
+
+
 void CheckFpShape( const FP_SHAPE* expected, const FP_SHAPE* shape )
 {
+    CHECK_ENUM_CLASS_EQUAL( expected->Type(), shape->Type() );
+
     CHECK_ENUM_CLASS_EQUAL( expected->GetShape(), shape->GetShape() );
 
     BOOST_CHECK_EQUAL( expected->IsLocked(), shape->IsLocked() );
