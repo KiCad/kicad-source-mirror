@@ -10,13 +10,14 @@
 # Flo082002 <flos6323@gmail.com>, 2021.
 # Benedikt Freisen <b.freisen@gmx.net>, 2021.
 # Mark Hämmerling <dev@markh.de>, 2021, 2022.
+# Henrik Kauhanen <henrik@kauhanen.se>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:25-0800\n"
 "PO-Revision-Date: 2022-02-16 02:33+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -38093,11 +38094,11 @@ msgstr "Umriss des Randabstands der Platine"
 
 #: pcbnew/widgets/appearance_controls.cpp:1541
 msgid "Footprint courtyards on board's front"
-msgstr "Footprint-Abstandsflächen auf Platinenoberseite"
+msgstr "Footprint-Abstandsflächen auf Platinenvorderseite"
 
 #: pcbnew/widgets/appearance_controls.cpp:1542
 msgid "Footprint courtyards on board's back"
-msgstr "Footprint-Abstandsflächen auf Platinenunterseite"
+msgstr "Footprint-Abstandsflächen auf Platinenrückseite"
 
 #: pcbnew/widgets/appearance_controls.cpp:1543
 msgid "Footprint assembly on board's front"
