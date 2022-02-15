@@ -705,11 +705,25 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aI
     if( !aItem->Parent()->IsOnLayer( layer ) )
         return;
 
-    if( aZoneLayer->Collide( aItem->Parent()->GetEffectiveShape( layer ).get() ) )
+    auto connect =
+            [&]()
+            {
+                aZoneLayer->Connect( aItem );
+                aItem->Connect( aZoneLayer );
+            };
+
+    // Try quick checks first...
+    for( int i = 0; i < aItem->AnchorCount(); ++i )
     {
-        aZoneLayer->Connect( aItem );
-        aItem->Connect( aZoneLayer );
+        if( aZoneLayer->ContainsPoint( aItem->GetAnchor( i ) ) )
+        {
+            connect();
+            return;
+        }
     }
+
+    if( aZoneLayer->Collide( aItem->Parent()->GetEffectiveShape( layer ).get() ) )
+        connect();
 }
 
 void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LAYER* aZoneLayerB )
