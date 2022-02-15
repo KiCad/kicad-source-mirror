@@ -914,6 +914,7 @@ BOOST_AUTO_TEST_CASE( CollideArcToPolygonApproximation )
     SHAPE_POLY_SET zoneFill;
     zoneFill.AddOutline( zoneOutline );
     zoneFill.AddHole( arcBuffer.Outline( 0 ) );
+    zoneFill.CacheTriangulation( false );
 
     int      actual = 0;
     VECTOR2I location;
