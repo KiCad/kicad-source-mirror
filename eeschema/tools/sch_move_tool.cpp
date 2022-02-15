@@ -381,8 +381,12 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             // zero, then the rest of the move.
             std::vector<VECTOR2I> splitMoves;
 
-            // Note, MSVC does not support std::signbit for ints (due to spec dispute) so we have this awkward cast to double
-            if( std::signbit( static_cast<double>( m_moveOffset.x ) ) != std::signbit( static_cast<double>( ( m_moveOffset + delta ).x ) ) )
+            // Note, this was originally implemented as std::signbit( m_moveOffset.x ) !=
+            // std::signbit( ( m_moveOffset + delta ).x ).  The binary logic XORs both
+            // values and if the signbit is set in the result, that means that one value
+            // had the sign bit set and one did not, hence the result is negative.
+            // We need to avoid std::signbit<int> as it is not supported by MSVC because reasons
+            if( ( m_moveOffset.x ^ ( m_moveOffset + delta ).x ) < 0 )
             {
                 splitMoves.emplace_back( VECTOR2I( -1 * m_moveOffset.x, 0 ) );
                 splitMoves.emplace_back( VECTOR2I( delta.x + m_moveOffset.x, 0 ) );
@@ -390,8 +394,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             else
                 splitMoves.emplace_back( VECTOR2I( delta.x, 0 ) );
 
-            if( std::signbit( static_cast<double>( m_moveOffset.y ) )
-                != std::signbit( static_cast<double>( ( m_moveOffset + delta ).y ) ) )
+            if( ( m_moveOffset.y ^ ( m_moveOffset + delta ).y ) < 0 )
             {
                 splitMoves.emplace_back( VECTOR2I( 0, -1 * m_moveOffset.y ) );
                 splitMoves.emplace_back( VECTOR2I( 0, delta.y + m_moveOffset.y ) );
