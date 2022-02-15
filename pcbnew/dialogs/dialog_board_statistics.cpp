@@ -77,13 +77,14 @@ static DIALOG_BOARD_STATISTICS_SAVED_STATE s_savedDialogState;
 
 DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame ) :
         DIALOG_BOARD_STATISTICS_BASE( aParentFrame ),
+        m_parentFrame(aParentFrame),
         m_boardWidth( 0 ),
         m_boardHeight( 0 ),
         m_boardArea( 0.0 ),
-        m_hasOutline( false )
+        m_hasOutline( false ),
+        m_startLayerColInitialSize( 1 ),
+        m_stopLayerColInitialSize( 1 )
 {
-    m_parentFrame = aParentFrame;
-
     m_gridDrills->Connect( wxEVT_GRID_COL_SORT,
                            wxGridEventHandler( DIALOG_BOARD_STATISTICS::drillGridSort ),
                            nullptr, this );
@@ -183,7 +184,16 @@ bool DIALOG_BOARD_STATISTICS::TransferDataToWindow()
 
     Layout();
     m_drillsPanel->Layout();
+
     m_gridDrills->AutoSizeColumns();
+    m_startLayerColInitialSize = m_gridDrills->GetColSize( drillType_t::COL_START_LAYER );
+    m_stopLayerColInitialSize = m_gridDrills->GetColSize( drillType_t::COL_STOP_LAYER );
+
+    // Add space for the vertical scrollbar, so that it won't overlap with the cells.
+    m_gridDrills->SetMinSize( m_gridDrills->GetEffectiveMinSize()
+                              + wxSize( wxSystemSettings::GetMetric( wxSYS_VSCROLL_X ), 0 ) );
+
+    adjustDrillGridColumns();
 
     finishDialogSettings();
     return true;
@@ -447,8 +457,6 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     m_gridPads->AutoSize();
     m_gridBoard->AutoSize();
     m_gridVias->AutoSize();
-    m_gridDrills->AutoSize();
-    m_gridDrills->EnsureColLabelsVisible();
 
     adjustDrillGridColumns();
 }
@@ -611,24 +619,24 @@ void DIALOG_BOARD_STATISTICS::adjustDrillGridColumns()
 {
     wxGridUpdateLocker deferRepaintsTillLeavingScope( m_gridDrills );
 
-    int newTotalWidth = KIPLATFORM::UI::GetUnobscuredSize( m_gridDrills ).x;
-    int curTotalWidth = 0;
+    m_gridDrills->EnsureColLabelsVisible();
+
+    double remainingWidth = KIPLATFORM::UI::GetUnobscuredSize( m_gridDrills ).x;
 
     // Find the total current width
     for( int i = 0; i < m_gridDrills->GetNumberCols(); i++ )
     {
         if( i != drillType_t::COL_START_LAYER && i != drillType_t::COL_STOP_LAYER )
-            curTotalWidth += m_gridDrills->GetColSize( i );
+            remainingWidth -= m_gridDrills->GetColSize( i );
     }
 
-    // Resize the last two columns to fill all available space
+    double scalingFactor = std::max(
+            1.0, remainingWidth / ( m_startLayerColInitialSize + m_stopLayerColInitialSize ) );
+    int startLayerColWidth = static_cast<int>( m_startLayerColInitialSize * scalingFactor );
+    int stopLayerColWidth = static_cast<int>( m_stopLayerColInitialSize * scalingFactor );
 
-    int remainingWidth = newTotalWidth - curTotalWidth;
-
-    m_gridDrills->SetColSize( drillType_t::COL_START_LAYER, remainingWidth / 2 );
-    m_gridDrills->SetColSize( drillType_t::COL_STOP_LAYER, remainingWidth - remainingWidth / 2 );
-
-    m_gridDrills->Refresh();
+    m_gridDrills->SetColSize( drillType_t::COL_START_LAYER, startLayerColWidth );
+    m_gridDrills->SetColSize( drillType_t::COL_STOP_LAYER, stopLayerColWidth );
 }
 
 
