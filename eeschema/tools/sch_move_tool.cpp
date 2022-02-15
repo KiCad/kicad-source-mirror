@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <cmath>
 #include <trigo.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_grid_helper.h>
@@ -380,7 +381,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             // zero, then the rest of the move.
             std::vector<VECTOR2I> splitMoves;
 
-            if( std::signbit( m_moveOffset.x ) != std::signbit( ( m_moveOffset + delta ).x ) )
+            // Note, MSVC does not support std::signbit for ints (due to spec dispute) so we have this awkward cast to double
+            if( std::signbit( static_cast<double>( m_moveOffset.x ) ) != std::signbit( static_cast<double>( ( m_moveOffset + delta ).x ) ) )
             {
                 splitMoves.emplace_back( VECTOR2I( -1 * m_moveOffset.x, 0 ) );
                 splitMoves.emplace_back( VECTOR2I( delta.x + m_moveOffset.x, 0 ) );
@@ -388,7 +390,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             else
                 splitMoves.emplace_back( VECTOR2I( delta.x, 0 ) );
 
-            if( std::signbit( m_moveOffset.y ) != std::signbit( ( m_moveOffset + delta ).y ) )
+            if( std::signbit( static_cast<double>( m_moveOffset.y ) )
+                != std::signbit( static_cast<double>( ( m_moveOffset + delta ).y ) ) )
             {
                 splitMoves.emplace_back( VECTOR2I( 0, -1 * m_moveOffset.y ) );
                 splitMoves.emplace_back( VECTOR2I( 0, delta.y + m_moveOffset.y ) );
