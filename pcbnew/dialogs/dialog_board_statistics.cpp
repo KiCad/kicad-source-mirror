@@ -25,6 +25,7 @@
 
 #include "dialog_board_statistics.h"
 #include "base_units.h"
+#include <kiplatform/ui.h>
 #include <confirm.h>
 #include <pad.h>
 #include <macros.h>
@@ -179,8 +180,11 @@ bool DIALOG_BOARD_STATISTICS::TransferDataToWindow()
     refreshItemsTypes();
     getDataFromPCB();
     updateWidets();
+
     Layout();
     m_drillsPanel->Layout();
+    m_gridDrills->AutoSizeColumns();
+
     finishDialogSettings();
     return true;
 }
@@ -605,7 +609,9 @@ void DIALOG_BOARD_STATISTICS::printGridToStringAsTable( wxGrid* aGrid, wxString&
 
 void DIALOG_BOARD_STATISTICS::adjustDrillGridColumns()
 {
-    int newTotalWidth = m_gridDrills->GetClientSize().GetWidth();
+    wxGridUpdateLocker deferRepaintsTillLeavingScope( m_gridDrills );
+
+    int newTotalWidth = KIPLATFORM::UI::GetUnobscuredSize( m_gridDrills ).x;
     int curTotalWidth = 0;
 
     // Find the total current width

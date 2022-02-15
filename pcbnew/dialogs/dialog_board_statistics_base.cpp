@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -215,7 +215,7 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	wxBoxSizer* bDrillsSizer;
 	bDrillsSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_gridDrills = new WX_GRID( m_drillsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
+	m_gridDrills = new WX_GRID( m_drillsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 
 	// Grid
 	m_gridDrills->CreateGrid( 0, 8 );
@@ -228,7 +228,6 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	m_gridDrills->AutoSizeColumns();
 	m_gridDrills->EnableDragColMove( true );
 	m_gridDrills->EnableDragColSize( true );
-	m_gridDrills->SetColLabelSize( 22 );
 	m_gridDrills->SetColLabelValue( 0, _("Count") );
 	m_gridDrills->SetColLabelValue( 1, _("Shape") );
 	m_gridDrills->SetColLabelValue( 2, _("X Size") );
@@ -237,6 +236,7 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	m_gridDrills->SetColLabelValue( 5, _("Via/Pad") );
 	m_gridDrills->SetColLabelValue( 6, _("Start Layer") );
 	m_gridDrills->SetColLabelValue( 7, _("Stop Layer") );
+	m_gridDrills->SetColLabelSize( 22 );
 	m_gridDrills->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -245,7 +245,7 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	m_gridDrills->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Label Appearance
-	m_gridDrills->SetLabelFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_gridDrills->SetLabelFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
 	// Cell Defaults
 	m_gridDrills->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_TOP );
