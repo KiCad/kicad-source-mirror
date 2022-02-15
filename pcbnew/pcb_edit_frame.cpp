@@ -1028,11 +1028,26 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
 
         Kiway().CommonSettingsChanged( false, true );
 
+        PCBNEW_SETTINGS* settings = GetPcbNewSettings();
+
         GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
                 [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
                 {
-                    if( dynamic_cast<EDA_TEXT*>( aItem ) )
-                        return true;  // text variables
+                    if( dynamic_cast<PCB_TRACK*>( aItem ) )
+                    {
+                        if( settings->m_Display.m_PadClearance )
+                            return true;        // clearance values
+                    }
+                    else if( dynamic_cast<PAD*>( aItem ) )
+                    {
+                        if( settings->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS )
+                            return true;        // clearance values
+                    }
+                    else if( dynamic_cast<EDA_TEXT*>( aItem ) )
+                    {
+                        if( dynamic_cast<EDA_TEXT*>( aItem )->HasTextVars() )
+                            return true;        // text variables
+                    }
 
                     return false;
                 } );
