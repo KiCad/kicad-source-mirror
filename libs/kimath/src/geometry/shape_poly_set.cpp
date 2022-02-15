@@ -2204,20 +2204,17 @@ SHAPE_POLY_SET &SHAPE_POLY_SET::operator=( const SHAPE_POLY_SET& aOther )
 {
     static_cast<SHAPE&>(*this) = aOther;
     m_polys = aOther.m_polys;
+
     m_triangulatedPolys.clear();
-    m_triangulationValid = false;
 
-    if( aOther.IsTriangulationUpToDate() )
+    for( unsigned i = 0; i < aOther.TriangulatedPolyCount(); i++ )
     {
-        for( unsigned i = 0; i < aOther.TriangulatedPolyCount(); i++ )
-        {
-            const TRIANGULATED_POLYGON* poly = aOther.TriangulatedPolygon( i );
-            m_triangulatedPolys.push_back( std::make_unique<TRIANGULATED_POLYGON>( *poly ) );
-        }
-
-        m_hash = aOther.GetHash();
-        m_triangulationValid = true;
+        const TRIANGULATED_POLYGON* poly = aOther.TriangulatedPolygon( i );
+        m_triangulatedPolys.push_back( std::make_unique<TRIANGULATED_POLYGON>( *poly ) );
     }
+
+    m_hash = aOther.m_hash;
+    m_triangulationValid = aOther.m_triangulationValid;
 
     return *this;
 }

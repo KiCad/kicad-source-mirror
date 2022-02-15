@@ -292,9 +292,6 @@ public:
     {
         const SHAPE_POLY_SET& fill = aParent->GetFilledPolysList( aLayer );
 
-        if( !fill.IsTriangulationUpToDate() )
-            const_cast<SHAPE_POLY_SET&>( fill ).CacheTriangulation();
-
         m_triangulatedPoly = fill;
 
         for( unsigned int ii = 0; ii < m_triangulatedPoly.TriangulatedPolyCount(); ++ii )

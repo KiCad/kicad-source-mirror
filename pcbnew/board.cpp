@@ -621,39 +621,51 @@ void BOARD::SetZoneSettings( const ZONE_SETTINGS& aSettings )
 }
 
 
-void BOARD::CacheTriangulation( PROGRESS_REPORTER* aReporter )
+void BOARD::CacheTriangulation( PROGRESS_REPORTER* aReporter, const std::vector<ZONE*>& aZones )
 {
+    std::vector<ZONE*> zones = aZones;
+
+    if( zones.empty() )
+        zones = m_zones;
+
+    if( zones.empty() )
+        return;
+
     if( aReporter )
         aReporter->Report( _( "Tessellating copper zones..." ) );
 
     std::atomic<size_t> next( 0 );
-    std::atomic<size_t> count_done( 0 );
+    std::atomic<size_t> zones_done( 0 );
+    std::atomic<size_t> threads_done( 0 );
     size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
 
     for( size_t ii = 0; ii < parallelThreadCount; ++ii )
     {
         std::thread t = std::thread(
-                [ this, &count_done, &next ]( )
+                [ &zones, &zones_done, &threads_done, &next ]( )
                 {
-                    for( size_t i = next.fetch_add( 1 ); i < m_zones.size(); i = next.fetch_add( 1 ) )
-                        m_zones[i]->CacheTriangulation();
+                    for( size_t i = next.fetch_add( 1 ); i < zones.size(); i = next.fetch_add( 1 ) )
+                    {
+                        zones[i]->CacheTriangulation();
+                        zones_done.fetch_add( 1 );
+                    }
 
-                    count_done++;
+                    threads_done.fetch_add( 1 );
                 } );
 
         t.detach();
     }
 
     // Finalize the triangulation threads
-    while( count_done < parallelThreadCount )
+    while( threads_done < parallelThreadCount )
     {
-        if( aReporter && m_zones.size() )
+        if( aReporter )
         {
-            aReporter->SetCurrentProgress( (double) count_done / (double) m_zones.size() );
+            aReporter->SetCurrentProgress( (double) zones_done / (double) zones.size() );
             aReporter->KeepRefreshing();
         }
 
-        std::this_thread::sleep_for( std::chrono::milliseconds( 30 ) );
+        std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
     }
 
 }

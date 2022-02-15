@@ -619,10 +619,23 @@ void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( ZONE* aZone, PCB_LAYER_ID 
 
 void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones )
 {
+    int delta = 10;    // Number of additions between 2 calls to the progress bar
+    int ii = 0;
+
     for( CN_ZONE_ISOLATED_ISLAND_LIST& z : aZones )
     {
         Remove( z.m_zone );
         Add( z.m_zone );
+        ii++;
+
+        if( m_progressReporter && ( ii % delta ) == 0 )
+        {
+            m_progressReporter->SetCurrentProgress( (double) ii / (double) aZones.size() );
+            m_progressReporter->KeepRefreshing( false );
+        }
+
+        if( m_progressReporter && m_progressReporter->IsCancelled() )
+            return;
     }
 
     m_connClusters = SearchClusters( CSM_CONNECTIVITY_CHECK );

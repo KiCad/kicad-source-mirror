@@ -78,8 +78,9 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 {
     std::lock_guard<KISPINLOCK> lock( m_board->GetConnectivity()->GetLock() );
 
-    std::vector<std::pair<ZONE*, PCB_LAYER_ID>> toFill;
-    std::vector<CN_ZONE_ISOLATED_ISLAND_LIST> islandsList;
+    std::vector<std::pair<ZONE*, PCB_LAYER_ID>>        toFill;
+    std::map<std::pair<ZONE*, PCB_LAYER_ID>, MD5_HASH> oldFillHashes;
+    std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>          islandsList;
 
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
 
@@ -155,6 +156,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
             zone->BuildHashValue( layer );
+            oldFillHashes[ { zone, layer } ] = zone->GetHashValue( layer );
 
             // Add the zone to the list of zones to test or refill
             toFill.emplace_back( std::make_pair( zone, layer ) );
@@ -291,6 +293,8 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
             break;
     }
 
+    m_board->CacheTriangulation( m_progressReporter, aZones );
+
     // Now update the connectivity to check for copper islands
     if( m_progressReporter )
     {
@@ -387,6 +391,9 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         }
     }
 
+    // Re-cache triangulation after removing islands
+    m_board->CacheTriangulation( m_progressReporter, aZones );
+
     if( aCheck )
     {
         bool outOfDate = false;
@@ -399,12 +406,9 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
             for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
             {
-                MD5_HASH was = zone->GetHashValue( layer );
-                zone->CacheTriangulation( layer );
                 zone->BuildHashValue( layer );
-                MD5_HASH is = zone->GetHashValue( layer );
 
-                if( is != was )
+                if( oldFillHashes[ { zone, layer } ] != zone->GetHashValue( layer ) )
                     outOfDate = true;
             }
         }
@@ -424,66 +428,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
             // No need to commit something that hasn't changed (and committing will set
             // the modified flag).
             return false;
-        }
-    }
-
-    if( m_progressReporter )
-    {
-        m_progressReporter->AdvancePhase();
-        m_progressReporter->Report( _( "Performing polygon fills..." ) );
-        m_progressReporter->SetMaxProgress( islandsList.size() );
-    }
-
-    nextItem = 0;
-
-    auto tri_lambda =
-            [&]( PROGRESS_REPORTER* aReporter ) -> size_t
-            {
-                size_t num = 0;
-
-                for( size_t i = nextItem++; i < islandsList.size(); i = nextItem++ )
-                {
-                    islandsList[i].m_zone->CacheTriangulation();
-                    num++;
-
-                    if( m_progressReporter )
-                    {
-                        m_progressReporter->AdvanceProgress();
-
-                        if( m_progressReporter->IsCancelled() )
-                            break;
-                    }
-                }
-
-                return num;
-            };
-
-    size_t parallelThreadCount = std::min( cores, islandsList.size() );
-    std::vector<std::future<size_t>> returns( parallelThreadCount );
-
-    if( parallelThreadCount <= 1 )
-        tri_lambda( m_progressReporter );
-    else
-    {
-        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-            returns[ii] = std::async( std::launch::async, tri_lambda, m_progressReporter );
-
-        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-        {
-            // Here we balance returns with a 100ms timeout to allow UI updating
-            std::future_status status;
-            do
-            {
-                if( m_progressReporter )
-                {
-                    m_progressReporter->KeepRefreshing();
-
-                    if( m_progressReporter->IsCancelled() )
-                        break;
-                }
-
-                status = returns[ii].wait_for( std::chrono::milliseconds( 100 ) );
-            } while( status != std::future_status::ready );
         }
     }
 
