@@ -239,7 +239,7 @@ int polygon_triangulation_main( int argc, char *argv[] )
                 // to do that right now.
                 for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
                 {
-                    SHAPE_POLY_SET poly = zone->GetFilledPolysList( layer );
+                    SHAPE_POLY_SET poly = *zone->GetFilledPolysList( layer );
 
                     poly.CacheTriangulation();
 

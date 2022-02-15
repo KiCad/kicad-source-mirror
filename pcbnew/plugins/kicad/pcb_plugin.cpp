@@ -2215,9 +2215,9 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
     // Save the PolysList (filled areas)
     for( PCB_LAYER_ID layer : aZone->GetLayerSet().Seq() )
     {
-        const SHAPE_POLY_SET& fv = aZone->GetFilledPolysList( layer );
+        const std::shared_ptr<SHAPE_POLY_SET>& fv = aZone->GetFilledPolysList( layer );
 
-        for( int ii = 0; ii < fv.OutlineCount(); ++ii )
+        for( int ii = 0; ii < fv->OutlineCount(); ++ii )
         {
             m_out->Print( aNestLevel + 1, "(filled_polygon\n" );
             m_out->Print( aNestLevel + 2, "(layer %s)\n",
@@ -2226,7 +2226,7 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
             if( aZone->IsIsland( layer, ii ) )
                 m_out->Print( aNestLevel + 2, "(island)\n" );
 
-            const SHAPE_LINE_CHAIN& chain = fv.COutline( ii );
+            const SHAPE_LINE_CHAIN& chain = fv->COutline( ii );
 
             formatPolyPts( chain, aNestLevel + 1, ADVANCED_CFG::GetCfg().m_CompactSave );
             m_out->Print( aNestLevel + 1, ")\n" );

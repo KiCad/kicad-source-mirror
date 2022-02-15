@@ -290,13 +290,11 @@ public:
             m_subpolyIndex( aSubpolyIndex ),
             m_layer( aLayer )
     {
-        const SHAPE_POLY_SET& fill = aParent->GetFilledPolysList( aLayer );
+        m_triangulatedPoly = aParent->GetFilledPolysList( aLayer );
 
-        m_triangulatedPoly = fill;
-
-        for( unsigned int ii = 0; ii < m_triangulatedPoly.TriangulatedPolyCount(); ++ii )
+        for( unsigned int ii = 0; ii < m_triangulatedPoly->TriangulatedPolyCount(); ++ii )
         {
-            const auto* triangleSet = m_triangulatedPoly.TriangulatedPolygon( ii );
+            const auto* triangleSet = m_triangulatedPoly->TriangulatedPolygon( ii );
 
             if( triangleSet->GetSourceOutlineIndex() != aSubpolyIndex )
                 continue;
@@ -373,7 +371,7 @@ private:
     std::vector<VECTOR2I>               m_testOutlinePoints;
     int                                 m_subpolyIndex;
     PCB_LAYER_ID                        m_layer;
-    SHAPE_POLY_SET                      m_triangulatedPoly;
+    std::shared_ptr<SHAPE_POLY_SET>     m_triangulatedPoly;
     RTree<const SHAPE*, int, 2, double> m_rTree;
 };
 

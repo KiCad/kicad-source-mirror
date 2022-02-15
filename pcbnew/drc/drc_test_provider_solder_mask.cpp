@@ -117,7 +117,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* item )
         {
             if( zone->IsOnLayer( layer ) )
             {
-                solderMask->GetFill( layer )->BooleanAdd( zone->GetFilledPolysList( layer ),
+                solderMask->GetFill( layer )->BooleanAdd( *zone->GetFilledPolysList( layer ),
                                                           SHAPE_POLY_SET::PM_FAST );
             }
         }

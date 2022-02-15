@@ -3692,15 +3692,12 @@ bool CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities( PCB_LAYER_ID& aLayer )
             SHAPE_POLY_SET intersectShape( *aHigherZone->Outline() );
             intersectShape.Inflate( inflateValue( aLowerZone, aHigherZone ) , 32 );
 
-            SHAPE_POLY_SET lowerZoneFill( aLowerZone->GetFilledPolysList( aLayer ) );
-
+            SHAPE_POLY_SET lowerZoneFill( *aLowerZone->GetFilledPolysList( aLayer ) );
             SHAPE_POLY_SET lowerZoneOutline( *aLowerZone->Outline() );
 
-            lowerZoneOutline.BooleanSubtract( intersectShape,
-                                                SHAPE_POLY_SET::PM_FAST );
+            lowerZoneOutline.BooleanSubtract( intersectShape, SHAPE_POLY_SET::PM_FAST );
 
-            lowerZoneFill.BooleanSubtract( lowerZoneOutline,
-                                            SHAPE_POLY_SET::PM_FAST );
+            lowerZoneFill.BooleanSubtract( lowerZoneOutline, SHAPE_POLY_SET::PM_FAST );
 
             double leftOverArea = lowerZoneFill.Area();
 
@@ -3758,8 +3755,8 @@ bool CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities( PCB_LAYER_ID& aLayer )
                 continue; // The zones do not interact in any way
             }
 
-            SHAPE_POLY_SET thisZonePolyFill = thisZone->GetFilledPolysList( aLayer );
-            SHAPE_POLY_SET otherZonePolyFill = otherZone->GetFilledPolysList( aLayer );
+            SHAPE_POLY_SET thisZonePolyFill = *thisZone->GetFilledPolysList( aLayer );
+            SHAPE_POLY_SET otherZonePolyFill = *otherZone->GetFilledPolysList( aLayer );
 
             if( thisZonePolyFill.Area() > 0.0 && otherZonePolyFill.Area() > 0.0 )
             {

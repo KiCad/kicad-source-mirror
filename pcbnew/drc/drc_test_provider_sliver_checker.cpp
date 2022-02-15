@@ -115,7 +115,7 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
                     {
                         ZONE* zone = static_cast<ZONE*>( item );
 
-                        poly.BooleanAdd( zone->GetFilledPolysList( layer ),
+                        poly.BooleanAdd( *zone->GetFilledPolysList( layer ),
                                          SHAPE_POLY_SET::PM_FAST );
                     }
                     else

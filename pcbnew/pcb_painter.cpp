@@ -1916,9 +1916,9 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
             || displayMode == ZONE_DISPLAY_MODE::SHOW_FRACTURE_BORDERS
             || displayMode == ZONE_DISPLAY_MODE::SHOW_TRIANGULATION )
     {
-        const SHAPE_POLY_SET& polySet = aZone->GetFilledPolysList( layer );
+        const std::shared_ptr<SHAPE_POLY_SET>& polySet = aZone->GetFilledPolysList( layer );
 
-        if( polySet.OutlineCount() == 0 )  // Nothing to draw
+        if( polySet->OutlineCount() == 0 )  // Nothing to draw
             return;
 
         m_gal->SetStrokeColor( color );
@@ -1936,7 +1936,7 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
             m_gal->SetIsStroke( true );
         }
 
-        m_gal->DrawPolygon( polySet, displayMode == ZONE_DISPLAY_MODE::SHOW_TRIANGULATION );
+        m_gal->DrawPolygon( *polySet, displayMode == ZONE_DISPLAY_MODE::SHOW_TRIANGULATION );
     }
 }
 

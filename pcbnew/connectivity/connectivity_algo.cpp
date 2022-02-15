@@ -592,7 +592,7 @@ void CN_CONNECTIVITY_ALGO::PropagateNets( BOARD_COMMIT* aCommit, PROPAGATE_MODE 
 void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( ZONE* aZone, PCB_LAYER_ID aLayer,
                                                       std::vector<int>& aIslands )
 {
-    if( aZone->GetFilledPolysList( aLayer ).IsEmpty() )
+    if( aZone->GetFilledPolysList( aLayer )->IsEmpty() )
         return;
 
     aIslands.clear();
@@ -644,7 +644,7 @@ void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLAT
     {
         for( PCB_LAYER_ID layer : zone.m_zone->GetLayerSet().Seq() )
         {
-            if( zone.m_zone->GetFilledPolysList( layer ).IsEmpty() )
+            if( zone.m_zone->GetFilledPolysList( layer )->IsEmpty() )
                 continue;
 
             for( const std::shared_ptr<CN_CLUSTER>& cluster : m_connClusters )
@@ -732,7 +732,7 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LA
         return;
 
     const SHAPE_LINE_CHAIN& outline =
-            zoneA->GetFilledPolysList( layer ).COutline( aZoneLayerA->SubpolyIndex() );
+            zoneA->GetFilledPolysList( layer )->COutline( aZoneLayerA->SubpolyIndex() );
 
     for( int i = 0; i < outline.PointCount(); i++ )
     {
@@ -748,7 +748,7 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LA
     }
 
     const SHAPE_LINE_CHAIN& outline2 =
-            zoneB->GetFilledPolysList( layer ).COutline( aZoneLayerB->SubpolyIndex() );
+            zoneB->GetFilledPolysList( layer )->COutline( aZoneLayerB->SubpolyIndex() );
 
     for( int i = 0; i < outline2.PointCount(); i++ )
     {

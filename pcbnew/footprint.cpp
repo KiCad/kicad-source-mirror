@@ -894,7 +894,7 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
     {
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
-            SHAPE_POLY_SET layerPoly = zone->GetFilledPolysList( layer );
+            SHAPE_POLY_SET layerPoly = *zone->GetFilledPolysList( layer );
 
             for( int ii = 0; ii < layerPoly.OutlineCount(); ii++ )
             {

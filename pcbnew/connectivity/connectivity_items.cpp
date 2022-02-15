@@ -93,7 +93,7 @@ int CN_ZONE_LAYER::AnchorCount() const
         return 0;
 
     const ZONE*             zone    = static_cast<const ZONE*>( Parent() );
-    const SHAPE_LINE_CHAIN& outline = zone->GetFilledPolysList( m_layer ).COutline( m_subpolyIndex );
+    const SHAPE_LINE_CHAIN& outline = zone->GetFilledPolysList( m_layer )->COutline( m_subpolyIndex );
 
     return outline.PointCount() ? 1 : 0;
 }
@@ -105,7 +105,7 @@ const VECTOR2I CN_ZONE_LAYER::GetAnchor( int n ) const
         return VECTOR2I();
 
     const ZONE*             zone    = static_cast<const ZONE*>( Parent() );
-    const SHAPE_LINE_CHAIN& outline = zone->GetFilledPolysList( m_layer ).COutline( m_subpolyIndex );
+    const SHAPE_LINE_CHAIN& outline = zone->GetFilledPolysList( m_layer )->COutline( m_subpolyIndex );
 
     return outline.CPoint( 0 );
 }
@@ -199,14 +199,14 @@ CN_ITEM* CN_LIST::Add( PCB_ARC* aArc )
 
  const std::vector<CN_ITEM*> CN_LIST::Add( ZONE* zone, PCB_LAYER_ID aLayer )
  {
-     const auto& polys = zone->GetFilledPolysList( aLayer );
+     const std::shared_ptr<SHAPE_POLY_SET>& polys = zone->GetFilledPolysList( aLayer );
 
      std::vector<CN_ITEM*> rv;
 
-     for( int j = 0; j < polys.OutlineCount(); j++ )
+     for( int j = 0; j < polys->OutlineCount(); j++ )
      {
          CN_ZONE_LAYER*          zitem = new CN_ZONE_LAYER( zone, aLayer, false, j );
-         const SHAPE_LINE_CHAIN& outline = zone->GetFilledPolysList( aLayer ).COutline( j );
+         const SHAPE_LINE_CHAIN& outline = zone->GetFilledPolysList( aLayer )->COutline( j );
 
          for( int k = 0; k < outline.PointCount(); k++ )
              zitem->AddAnchor( outline.CPoint( k ) );

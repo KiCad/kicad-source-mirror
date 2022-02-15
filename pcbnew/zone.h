@@ -639,7 +639,7 @@ public:
     /**
      * @return a reference to the list of filled polygons.
      */
-    const SHAPE_POLY_SET& GetFilledPolysList( PCB_LAYER_ID aLayer ) const
+    const std::shared_ptr<SHAPE_POLY_SET>& GetFilledPolysList( PCB_LAYER_ID aLayer ) const
     {
         wxASSERT( m_FilledPolysList.count( aLayer ) );
         return m_FilledPolysList.at( aLayer );
@@ -648,7 +648,7 @@ public:
     SHAPE_POLY_SET* GetFill( PCB_LAYER_ID aLayer )
     {
         wxASSERT( m_FilledPolysList.count( aLayer ) );
-        return &m_FilledPolysList.at( aLayer );
+        return m_FilledPolysList.at( aLayer ).get();
     }
 
     /**
@@ -662,7 +662,7 @@ public:
      */
     void SetFilledPolysList( PCB_LAYER_ID aLayer, const SHAPE_POLY_SET& aPolysList )
     {
-        m_FilledPolysList[aLayer] = aPolysList;
+        m_FilledPolysList[aLayer] = std::make_shared<SHAPE_POLY_SET>( aPolysList );
     }
 
     /**
@@ -931,7 +931,7 @@ protected:
      * connecting "holes" with external main outline.  In complex cases an outline
      * described by m_Poly can have many filled areas
      */
-    std::map<PCB_LAYER_ID, SHAPE_POLY_SET> m_FilledPolysList;
+    std::map<PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>> m_FilledPolysList;
     std::map<PCB_LAYER_ID, SHAPE_POLY_SET> m_RawPolysList;
 
     /// Temp variables used while filling

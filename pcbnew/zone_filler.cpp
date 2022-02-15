@@ -339,23 +339,22 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
             // to allow deleting a polygon from list without breaking the remaining of the list
             std::sort( islands.begin(), islands.end(), std::greater<int>() );
 
-            SHAPE_POLY_SET      poly = zone.m_zone->GetFilledPolysList( layer );
-            long long int       minArea = zone.m_zone->GetMinIslandArea();
-            ISLAND_REMOVAL_MODE mode    = zone.m_zone->GetIslandRemovalMode();
+            std::shared_ptr<SHAPE_POLY_SET> poly = zone.m_zone->GetFilledPolysList( layer );
+            long long int                   minArea = zone.m_zone->GetMinIslandArea();
+            ISLAND_REMOVAL_MODE             mode = zone.m_zone->GetIslandRemovalMode();
 
             for( int idx : islands )
             {
-                SHAPE_LINE_CHAIN& outline = poly.Outline( idx );
+                SHAPE_LINE_CHAIN& outline = poly->Outline( idx );
 
                 if( mode == ISLAND_REMOVAL_MODE::ALWAYS )
-                    poly.DeletePolygon( idx );
+                    poly->DeletePolygon( idx );
                 else if ( mode == ISLAND_REMOVAL_MODE::AREA && outline.Area() < minArea )
-                    poly.DeletePolygon( idx );
+                    poly->DeletePolygon( idx );
                 else
                     zone.m_zone->SetIsIsland( layer, idx );
             }
 
-            zone.m_zone->SetFilledPolysList( layer, poly );
             zone.m_zone->CalculateFilledArea();
 
             if( m_progressReporter && m_progressReporter->IsCancelled() )
@@ -373,17 +372,16 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
             if( m_debugZoneFiller && LSET::InternalCuMask().Contains( layer ) )
                 continue;
 
-            SHAPE_POLY_SET poly = zone->GetFilledPolysList( layer );
+            std::shared_ptr<SHAPE_POLY_SET> poly = zone->GetFilledPolysList( layer );
 
-            for( int ii = poly.OutlineCount() - 1; ii >= 0; ii-- )
+            for( int ii = poly->OutlineCount() - 1; ii >= 0; ii-- )
             {
-                std::vector<SHAPE_LINE_CHAIN>& island = poly.Polygon( ii );
+                std::vector<SHAPE_LINE_CHAIN>& island = poly->Polygon( ii );
 
                 if( island.empty() || !m_boardOutline.Contains( island.front().CPoint( 0 ) ) )
-                    poly.DeletePolygon( ii );
+                    poly->DeletePolygon( ii );
             }
 
-            zone->SetFilledPolysList( layer, poly );
             zone->CalculateFilledArea();
 
             if( m_progressReporter && m_progressReporter->IsCancelled() )

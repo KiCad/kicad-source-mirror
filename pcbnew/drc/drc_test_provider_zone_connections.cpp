@@ -97,7 +97,7 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
 
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
-            const SHAPE_POLY_SET& zoneFill = zone->GetFilledPolysList( layer );
+            const std::shared_ptr<SHAPE_POLY_SET>& zoneFill = zone->GetFilledPolysList( layer );
 
             for( FOOTPRINT* footprint : board->Footprints() )
             {
@@ -142,8 +142,8 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
                     std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersections;
                     int spokes = 0;
 
-                    for( int jj = 0; jj < zoneFill.OutlineCount(); ++jj )
-                        padOutline.Intersect( zoneFill.Outline( jj ), intersections, true );
+                    for( int jj = 0; jj < zoneFill->OutlineCount(); ++jj )
+                        padOutline.Intersect( zoneFill->Outline( jj ), intersections, true );
 
                     spokes += intersections.size() / 2;
 
@@ -157,12 +157,12 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
                     {
                         if( padOutline.PointInside( track->GetStart() ) )
                         {
-                            if( zone->GetFilledPolysList( layer ).Collide( track->GetEnd() ) )
+                            if( zone->GetFilledPolysList( layer )->Collide( track->GetEnd() ) )
                                 spokes++;
                         }
                         else if( padOutline.PointInside( track->GetEnd() ) )
                         {
-                            if( zone->GetFilledPolysList( layer ).Collide( track->GetStart() ) )
+                            if( zone->GetFilledPolysList( layer )->Collide( track->GetStart() ) )
                                 spokes++;
                         }
                     }

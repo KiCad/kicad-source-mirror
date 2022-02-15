@@ -485,7 +485,7 @@ bool HYPERLYNX_EXPORTER::writeNetObjects( const std::vector<BOARD_ITEM*>& aObjec
             for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
             {
                 const wxString layerName   = m_board->GetLayerName( layer );
-                SHAPE_POLY_SET filledShape = zone->GetFilledPolysList( layer );
+                SHAPE_POLY_SET filledShape = *zone->GetFilledPolysList( layer );
 
                 filledShape.Simplify( SHAPE_POLY_SET::PM_FAST );
 
