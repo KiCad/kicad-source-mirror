@@ -182,7 +182,7 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard, PROGRESS_REPORTER* aReport
 {
     m_view->Clear();
 
-    aBoard->CacheTriangulation();
+    aBoard->CacheTriangulation( aReporter );
 
     if( m_drawingSheet )
         m_drawingSheet->SetFileName( TO_UTF8( aBoard->GetFileName() ) );

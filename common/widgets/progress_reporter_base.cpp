@@ -30,7 +30,6 @@
 
 PROGRESS_REPORTER_BASE::PROGRESS_REPORTER_BASE( int aNumPhases ) :
     PROGRESS_REPORTER(),
-    m_msgChanged( false ),
     m_phase( 0 ),
     m_numPhases( aNumPhases ),
     m_progress( 0 ),
@@ -65,7 +64,6 @@ void PROGRESS_REPORTER_BASE::Report( const wxString& aMessage )
 {
     std::lock_guard<std::mutex> guard( m_mutex );
     m_rptMessage = aMessage;
-    m_msgChanged = true;
 }
 
 

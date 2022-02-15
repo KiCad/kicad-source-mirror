@@ -94,7 +94,10 @@ void CONNECTIVITY_DATA::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
         return;
 
     if( aReporter )
+    {
         aReporter->Report( _( "Updating nets..." ) );
+        aReporter->KeepRefreshing( false );
+    }
 
     m_connAlgo.reset( new CN_CONNECTIVITY_ALGO );
     m_connAlgo->Build( aBoard, aReporter );

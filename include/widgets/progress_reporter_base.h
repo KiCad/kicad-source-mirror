@@ -113,7 +113,6 @@ protected:
     virtual bool updateUI() = 0;
 
     wxString           m_rptMessage;
-    bool               m_msgChanged;    // true after change in m_rptMessage
 
     mutable std::mutex m_mutex;
     std::atomic_int    m_phase;

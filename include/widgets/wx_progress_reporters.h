@@ -72,11 +72,14 @@ public:
     }
 
 private:
+    bool updateUI() override;
+
+private:
 #if wxCHECK_VERSION( 3, 1, 0 )
     wxAppProgressIndicator m_appProgressIndicator;
 #endif
 
-    bool updateUI() override;
+    int                    m_messageWidth;
 };
 
 

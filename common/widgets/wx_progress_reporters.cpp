@@ -34,17 +34,16 @@ WX_PROGRESS_REPORTER::WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& a
                                             bool aReserveSpaceForMessage ) :
         PROGRESS_REPORTER_BASE( aNumPhases ),
         wxProgressDialog( aTitle, ( aReserveSpaceForMessage ? wxT( " " ) : wxT( "" ) ), 1, aParent,
-                      // wxPD_APP_MODAL |   // Don't use; messes up OSX when called from
-                                            // quasi-modal dialog
-                      wxPD_AUTO_HIDE |      // *MUST* use; otherwise wxWidgets will spin
-                                            // up another event loop on completion which
-                                            // causes all sorts of grief
-                      ( aCanAbort ? wxPD_CAN_ABORT : 0 ) |
-                      wxPD_ELAPSED_TIME )
+                          // wxPD_APP_MODAL |   // Don't use; messes up OSX when called from
+                                                // quasi-modal dialog
+                          wxPD_AUTO_HIDE |      // *MUST* use; otherwise wxWidgets will spin
+                                                // up another event loop on completion which
+                                                // causes all sorts of grief
+                          ( aCanAbort ? wxPD_CAN_ABORT : 0 ) | wxPD_ELAPSED_TIME ),
 #if wxCHECK_VERSION( 3, 1, 0 )
-    ,
-        m_appProgressIndicator( aParent )
+        m_appProgressIndicator( aParent ),
 #endif
+        m_messageWidth( 0 )
 {
 #if wxCHECK_VERSION( 3, 1, 0 )
     // wxAppProgressIndicator doesn't like value > max, ever. However there are some risks
@@ -67,21 +66,27 @@ bool WX_PROGRESS_REPORTER::updateUI()
     if( cur < 0 || cur > 1000 )
         cur = 0;
 
-    bool msgChanged = false;
+    SetRange( 1000 );
+
     wxString message;
 
     {
         std::lock_guard<std::mutex> guard( m_mutex );
         message = m_rptMessage;
-        msgChanged = m_msgChanged;
-        m_msgChanged = false;
     }
 
-    SetRange( 1000 );
-    bool diag = wxProgressDialog::Update( cur, message );
+    int  newWidth = GetTextExtent( m_rptMessage ).x;
 
-    if( msgChanged )
+    if( newWidth > m_messageWidth )
+    {
+        m_messageWidth = newWidth;
         Fit();
+    }
+
+    Raise();
+    SetFocus();
+
+    bool diag = wxProgressDialog::Update( cur, message );
 
     return diag;
 }
