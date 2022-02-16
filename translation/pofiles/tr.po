@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:25-0800\n"
-"PO-Revision-Date: 2022-02-14 17:24+0000\n"
+"PO-Revision-Date: 2022-02-16 22:56+0000\n"
 "Last-Translator: Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6770,9 +6770,8 @@ msgid "Eagle XML files"
 msgstr "Eagle XML dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:288
-#, fuzzy
 msgid "OrcadPCB2 netlist files"
-msgstr "KiCad netlist dosyaları"
+msgstr "OrcadPCB2 netlist dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "KiCad netlist files"
@@ -8504,7 +8503,7 @@ msgstr "Bu ihlal için dışlamayı kaldır"
 #: eeschema/dialogs/dialog_erc.cpp:580 pcbnew/dialogs/dialog_drc.cpp:494
 #, c-format
 msgid "It will be placed back in the %s list"
-msgstr ""
+msgstr "%s listesine geri yerleştirilecektir"
 
 #: eeschema/dialogs/dialog_erc.cpp:584 pcbnew/dialogs/dialog_drc.cpp:505
 msgid "Exclude this violation"
@@ -8523,38 +8522,39 @@ msgstr "Tüm '%s' ihlalleri için önem derecesini Hataya değiştirme"
 #: eeschema/dialogs/dialog_erc.cpp:599 eeschema/dialogs/dialog_erc.cpp:605
 #: pcbnew/dialogs/dialog_drc.cpp:528 pcbnew/dialogs/dialog_drc.cpp:535
 msgid "Violation severities can also be edited in the Board Setup... dialog"
-msgstr ""
+msgstr "İhlal önemleri Pano Kurulumu'nda da düzenlenebilir... Iletişim"
 
 #: eeschema/dialogs/dialog_erc.cpp:603 pcbnew/dialogs/dialog_drc.cpp:533
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr ""
+msgstr "Tüm '%s' ihlalleri için önem derecesini Uyarı olarak değiştirme"
 
 #: eeschema/dialogs/dialog_erc.cpp:608 pcbnew/dialogs/dialog_drc.cpp:539
 #, c-format
 msgid "Ignore all '%s' violations"
-msgstr ""
+msgstr "Tüm '%s' ihlallerini yoksay"
 
 #: eeschema/dialogs/dialog_erc.cpp:609 pcbnew/dialogs/dialog_drc.cpp:541
 msgid "Violations will not be checked or reported"
-msgstr ""
+msgstr "İhlaller kontrol edilmeyecek veya bildirilmeyecek"
 
 #: eeschema/dialogs/dialog_erc.cpp:616
+#, fuzzy
 msgid "Edit pin-to-pin conflict map..."
-msgstr ""
+msgstr "Pin-to-pin çakışma haritasını düzenle..."
 
 #: eeschema/dialogs/dialog_erc.cpp:620 pcbnew/dialogs/dialog_drc.cpp:546
 msgid "Edit violation severities..."
-msgstr ""
+msgstr "İhlal önem derecelerini düzenle..."
 
 #: eeschema/dialogs/dialog_erc.cpp:621 eeschema/dialogs/dialog_erc.cpp:791
 msgid "Open the Schematic Setup... dialog"
-msgstr ""
+msgstr "Şematik Kurulum... iletişim kutusunu açın"
 
 #: eeschema/dialogs/dialog_erc.cpp:713
 #: eeschema/dialogs/dialog_schematic_setup.cpp:76
 msgid "Pin Conflicts Map"
-msgstr ""
+msgstr "Bacak Çakışmaları Haritası"
 
 #: eeschema/dialogs/dialog_erc.cpp:717 eeschema/dialogs/dialog_erc.cpp:796
 #: eeschema/dialogs/dialog_schematic_setup.cpp:75
@@ -8565,7 +8565,7 @@ msgstr "İhlal Önem Derecesi"
 
 #: eeschema/dialogs/dialog_erc.cpp:791 pcbnew/dialogs/dialog_drc.cpp:722
 msgid "Edit ignored violations..."
-msgstr ""
+msgstr "Yoksayılan ihlalleri düzenle..."
 
 #: eeschema/dialogs/dialog_erc.cpp:868 pcbnew/dialogs/dialog_gendrill.cpp:484
 #, c-format
@@ -8575,14 +8575,16 @@ msgstr "'%s' rapor dosyası oluşturuldu."
 #: eeschema/dialogs/dialog_erc.cpp:886
 #, c-format
 msgid "ERC report (%s, Encoding UTF8)\n"
-msgstr ""
+msgstr "ERC raporu (%s, UTF8 Kodlaması)\n"
 
 #: eeschema/dialogs/dialog_erc.cpp:901
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "\n"
 "***** Sheet %s\n"
 msgstr ""
+"\n"
+"Sayfa %s\n"
 
 #: eeschema/dialogs/dialog_erc.cpp:925
 #, c-format
@@ -8590,26 +8592,28 @@ msgid ""
 "\n"
 " ** ERC messages: %d  Errors %d  Warnings %d\n"
 msgstr ""
+"\n"
+" ** ERC mesajları: %d Hatalar %d Uyarılar %d\n"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:59
 #: pcbnew/dialogs/dialog_drc_base.cpp:77
 msgid "Tests Running..."
-msgstr ""
+msgstr "Testler Çalışıyor..."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:78
 #: pcbnew/dialogs/dialog_drc_base.cpp:99
 msgid "Click on items to highlight them on the board."
-msgstr ""
+msgstr "Panoda vurgulamak için öğelere tıklayın."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:87
 #, c-format
 msgid "Violations (%d)"
-msgstr ""
+msgstr "İhlaller (%d)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:99
 #, c-format
 msgid "Ignored Tests (%d)"
-msgstr ""
+msgstr "Yoksayılan Testler (%d)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:139
 #: pcbnew/dialogs/dialog_drc_base.cpp:183
@@ -8621,27 +8625,29 @@ msgstr "İstisnalar"
 #: pcbnew/dialogs/dialog_drc_base.cpp:206
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
 msgid "Delete Marker"
-msgstr ""
+msgstr "İşaretçiyi Sil"
 
 #: eeschema/dialogs/dialog_erc_base.h:100 eeschema/tools/ee_actions.cpp:45
 msgid "Electrical Rules Checker"
-msgstr ""
+msgstr "Elektrik Kuralları Denetleyicisi"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:179
 msgid "Power symbol value field text cannot be changed."
-msgstr ""
+msgstr "Güç simgesi değeri alan metni değiştirilemez."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:342
 msgid "Illegal reference designator value!"
-msgstr ""
+msgstr "Geçersiz referans belirtici değeri!"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:350
 msgid "Value may not be empty."
-msgstr ""
+msgstr "Değer boş olmayabilir."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:471
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
 msgstr ""
+"Sayfa dosya adı yalnızca Sayfa Özellikleri iletişim kutusunda "
+"değiştirilebilir."
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:31
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:31
@@ -8702,12 +8708,12 @@ msgstr "Dikey metin"
 #: eeschema/dialogs/dialog_text_properties_base.cpp:118
 #: eeschema/sch_label.cpp:775 eeschema/sch_text.cpp:459
 msgid "Align left"
-msgstr ""
+msgstr "Sola hizala"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:151
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:120
 msgid "Align horizontal center"
-msgstr ""
+msgstr "Yatay ortaya hizala"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:156
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:125
@@ -8716,7 +8722,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_text_properties_base.cpp:103
 #: eeschema/sch_label.cpp:773 eeschema/sch_text.cpp:457
 msgid "Align right"
-msgstr ""
+msgstr "Sağa hizala"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:166
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:135
@@ -8726,12 +8732,12 @@ msgstr ""
 #: eeschema/dialogs/dialog_text_properties_base.cpp:123
 #: eeschema/sch_label.cpp:776 eeschema/sch_text.cpp:460
 msgid "Align top"
-msgstr ""
+msgstr "Üste hizala"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:171
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:140
 msgid "Align vertical center"
-msgstr ""
+msgstr "Dikey ortaya hizala"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:176
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:145
@@ -8770,7 +8776,7 @@ msgstr "Konum Y:"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:171
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:241
 msgid "Common to all units"
-msgstr ""
+msgstr "Tüm birimler için ortak"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:224
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:174
@@ -8781,19 +8787,19 @@ msgstr ""
 #: eeschema/dialogs/dialog_field_properties_base.h:95
 #: eeschema/dialogs/dialog_lib_text_properties_base.h:85
 msgid "Text Item Properties"
-msgstr ""
+msgstr "Metin Öğesi Özellikleri"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:33
 msgid "Other symbol fields"
-msgstr ""
+msgstr "Diğer sembol alanları"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:39
 msgid "Wires && wire labels"
-msgstr ""
+msgstr "Teller && tel etiketleri"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:42
 msgid "Buses && bus labels"
-msgstr ""
+msgstr "Veri yolu ve veri yolu etiketleri"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:54
 msgid "Sheet titles"
@@ -8801,11 +8807,11 @@ msgstr "Sayfa başlıkları"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Other sheet fields"
-msgstr ""
+msgstr "Diğer sayfa alanları"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:63
 msgid "Sheet borders && backgrounds"
-msgstr ""
+msgstr "Sayfa kenarlıkları && arka planları"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:76
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:53
