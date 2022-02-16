@@ -59,15 +59,17 @@ wxString GRID_CELL_TEXT_BUTTON::GetValue() const
 void GRID_CELL_TEXT_BUTTON::SetSize( const wxRect& aRect )
 {
     wxRect rect( aRect );
-    rect.Inflate( -3 );     // The -3 is a very sad hack here.  Some GTK themes
-                            // Overrun the default -1, preventing display
-                            // Unfortunately, we don't appear to have a good method
-                            // of finding the current margin needed.  Some GTK
-                            // resize events seem to update the cell size but not
-                            // all and not consistently
 
 #if defined( __WXMAC__ )
-    rect.Inflate( 3 );      // no FOCUS_RING, even on Mac
+    rect.Inflate( 2 );      // ignore FOCUS_RING
+#elif defined( __WXGTK__ )
+    rect.Inflate( -3 );     // The -3 is a very sad hack here.  Some GTK themes overrun the
+                            // default -1, preventing display.  Unfortunately, we don't appear to
+                            // have a good method of finding the current margin needed.
+                            // Some GTK resize events seem to update the cell size but not all and
+                            // not consistently.
+#else
+    rect.Inflate( -1 );
 #endif
 
     Combo()->SetSize( rect, wxSIZE_ALLOW_MINUS_ONE );
