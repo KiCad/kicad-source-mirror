@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:25-0800\n"
-"PO-Revision-Date: 2022-02-16 17:20+0000\n"
+"PO-Revision-Date: 2022-02-16 22:56+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -35915,7 +35915,7 @@ msgstr "Upprensning av överflödiga föremål etc."
 
 #: pcbnew/tools/pcb_actions.cpp:481
 msgid "Add Microwave Gap"
-msgstr "Tillsätt mikrovågsgap"
+msgstr "Lägg till mikrovågsgap"
 
 #: pcbnew/tools/pcb_actions.cpp:481
 msgid "Create gap of specified length for microwave applications"
@@ -35923,7 +35923,7 @@ msgstr "Skapa mellanrum med specificerad längd för mikrovågsapplikationer"
 
 #: pcbnew/tools/pcb_actions.cpp:486
 msgid "Add Microwave Stub"
-msgstr "Tillsätt mikrovågsstubb"
+msgstr "Lägg till mikrovågsstubb"
 
 #: pcbnew/tools/pcb_actions.cpp:487
 msgid "Create stub of specified length for microwave applications"
@@ -35947,7 +35947,7 @@ msgstr "Skapa en polygonal form av mikrovågsugn från en lista med hörn"
 
 #: pcbnew/tools/pcb_actions.cpp:504
 msgid "Add Microwave Line"
-msgstr "Tillsätt mikrovågsrör"
+msgstr "Lägg till mikrovågsledare"
 
 #: pcbnew/tools/pcb_actions.cpp:505
 msgid "Create line of specified length for microwave applications"
