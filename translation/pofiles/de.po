@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:20-0800\n"
-"PO-Revision-Date: 2022-02-16 13:03+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2022-02-16 22:56+0000\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -20856,7 +20856,6 @@ msgstr ""
 "Möchten Sie beenden und Ihre Änderungen verwerfen?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -20881,30 +20880,29 @@ msgid ""
 "___H___ is thickness (height) in mils<br>\n"
 "___K___ is 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
-"Wenn Sie den maximalen Strom angeben, wird die Breite für die Leiterbahn "
+"Wenn Sie den maximal zulässigen Strom angeben, wird die Leiterbahnbreite "
 "entsprechend berechnet.\n"
 "\n"
-"Wenn Sie die Werte der Leiterbahnparameter angeben, wird der maximale Strom "
-"berechnet der fließen darf. Der Wert für den andere Leiterbahnparameter, der "
-"ebenfalls zum Erreichen dieses Stromwertes notwendig ist, wird ebenfalls "
-"berechnet.\n"
+"Wenn Sie eine der Leiterbahnbreiten angeben, wird der maximal zulässige "
+"Strom berechnet. Die Breite für die andere Leiterbahn wird entsprechend dem "
+"maximal zulässigen Strom ebenfalls berechnet.\n"
 "\n"
-"Der erste vorgegebene Wert ist fett dargestellt.\n"
+"Der bestimmende Wert ist fett dargestellt.\n"
 "\n"
-"Die Berechnungen gelten für Ströme bis zu 35 A (extern) oder 17,5 A "
-"(intern), Temperaturanstiege bis zu 100 °C und Breiten von bis zu 400 mil "
-"(10 mm).\n"
+"Die Berechnungen gelten für Ströme bis zu 35 A (extern) bzw. 17,5 A (intern)"
+", Temperaturanstiege bis zu 100 °C und Breiten von bis zu 400 mil (10 mm).\n"
 "\n"
-"Die zugehörige Formel aus IPC 2221 ist\n"
-"<center>___I = K &sdot; &Delta;T<sup>0,44</sup> &sdot; (W &sdot; "
-"H)<sup>0,725</sup>___</center>  \n"
-"Wobei:  \n"
-"___I___ = Maximaler Strom in Ampere  \n"
-"___&Delta;T___ = Temperaturanstieg über die Umgebungstemperatur in &deg;C  \n"
-"___W___ = Breite in mils  \n"
-"___H___ = Dicke in mils  \n"
-"___K___ = 0,024 für interne Leiterzüge oder 0,048 für externe "
-"Leiterbahnen  \n"
+"Die zugehörige Formel aus IPC 2221 lautet\n"
+"<center>___I = K &middot; &Delta;T<sup>0,44</sup> &middot; (W &middot; "
+"H)<sup>0,725</sup>___</center>\n"
+"wobei:<br>\n"
+"___I___ = Maximaler Strom in A<br>\n"
+"___&Delta;T___ = Temperaturanstieg über die Umgebungstemperatur in &deg;C<br>"
+"\n"
+"___W___ = Breite in mil<br>\n"
+"___H___ = Dicke (Höhe) in mil<br>\n"
+"___K___ = 0,024 für interne Leiterbahnen oder 0,048 für externe "
+"Leiterbahnen\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -22947,7 +22945,7 @@ msgid ""
 "Export this zone setup (excluding layer and net selection) to all other "
 "copper zones."
 msgstr ""
-"Exportiere Flächeneinstellungen (außer Lagen und Netzauswahl) an alle "
+"Exportiere Flächeneinstellungen (außer Lagen- und Netzauswahl) an alle "
 "anderen Kupferflächen."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:139
@@ -34237,32 +34235,31 @@ msgstr "Entsperren"
 
 #: pcbnew/tools/board_editor_control.cpp:1393
 msgid "Zones have insufficient overlap for merging."
-msgstr ""
+msgstr "Flächen haben unzureichende Überlappung für Vereinigung."
 
 #: pcbnew/tools/board_editor_control.cpp:1439
-#, fuzzy
 msgid "Some zone netcodes did not match and were not merged."
-msgstr "Einige Elemente sind im DRC fehlgeschlagen und wurden nicht geändert."
+msgstr ""
+"Einige Flächen-Netzcodes stimmten nicht überein und wurden nicht vereint."
 
 #: pcbnew/tools/board_editor_control.cpp:1445
-#, fuzzy
 msgid "Some zone priorities did not match and were not merged."
-msgstr "Einige Elemente sind im DRC fehlgeschlagen und wurden nicht geändert."
+msgstr ""
+"Einige Flächen-Prioritäten stimmten nicht überein und wurden nicht vereint."
 
 #: pcbnew/tools/board_editor_control.cpp:1451
-#, fuzzy
 msgid "Some zones were rule areas and were not merged."
-msgstr "Einige Elemente sind im DRC fehlgeschlagen und wurden nicht geändert."
+msgstr "Einige Flächen waren Regelbereiche und wurden nicht vereint."
 
 #: pcbnew/tools/board_editor_control.cpp:1457
-#, fuzzy
 msgid "Some zone layer sets did not match and were not merged."
-msgstr "Regellage \"%s\" stimmt nicht überein, Regel ignoriert."
+msgstr ""
+"Einige Flächen-Lagenkombinationen stimmten nicht überein und wurden nicht "
+"vereint."
 
 #: pcbnew/tools/board_editor_control.cpp:1463
-#, fuzzy
 msgid "Some zones did not intersect and were not merged."
-msgstr "Einige Elemente sind im DRC fehlgeschlagen und wurden nicht geändert."
+msgstr "Einige Flächen hatten keine Schnittfläche und wurden nicht vereint."
 
 #: pcbnew/tools/board_editor_control.cpp:1529
 msgid "Duplicate zone"
