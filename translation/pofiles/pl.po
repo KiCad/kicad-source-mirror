@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:20-0800\n"
-"PO-Revision-Date: 2022-02-14 17:18+0000\n"
-"Last-Translator: Krzysztof Kawa <christophorus72@gmail.com>\n"
+"PO-Revision-Date: 2022-02-16 12:55+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v6/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -12218,15 +12218,13 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:543
-#, fuzzy
 msgid "Remove Invalid Cells"
-msgstr "Usuń elementy"
+msgstr "Usuń nieprawidłowe komórki"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
-#, fuzzy
 msgid "Cancel Table Update"
-msgstr "Średnica prześwitu otworu:"
+msgstr "Anuluj aktualizację tabeli"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
@@ -13630,9 +13628,8 @@ msgid "Cannot open file '%s'."
 msgstr "Nie można otworzyć pliku '%s'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:314
-#, fuzzy
 msgid "Storage file not fully parsed "
-msgstr "Zapisany plik nie został przetworzony w pełni (pozostało %d bajtów)."
+msgstr "Zapisany plik nie został w pełni przetworzony "
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:476
 msgid "Compile mask not currently supported."
@@ -17752,9 +17749,8 @@ msgstr ""
 "Dlatego rozmiar niektórych elementów jest nieokreślony"
 
 #: gerbview/rs274d.cpp:414
-#, fuzzy
 msgid "Invalid Code Number"
-msgstr "Nieprawidłowy numer pinu"
+msgstr "Nieprawidłowy numer kodu"
 
 #: gerbview/rs274d.cpp:622
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
@@ -20721,7 +20717,6 @@ msgstr ""
 "Czy chcesz opuścić program i porzucić zmiany?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -20756,20 +20751,19 @@ msgstr ""
 "Wartość kontrolna jest pokazywana jako pogrubiona.\n"
 "\n"
 "Obliczenia dotyczą prądów do 35A (zewnętrzne ścieżki) lub 17,5A (wewnętrzne "
-"ścieżki), przy wzroście temperatury do 100 st. C i szerokości do 400milsów "
-"(10 mm).\n"
+"ścieżki), przy wzroście temperatury do 100 st. C i szerokości do 400milsów ("
+"10 mm).\n"
 "\n"
-"Wzór z normy IPC 2221 to  \n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>  \n"
-"gdzie:  \n"
-"___I___ = maksymalny prąd w amperach  \n"
-"___&Delta;T___ = wzrost temperatury powyżej temperatury otoczenia w &deg;"
-"C  \n"
-"___W___ = szerokość milsach  \n"
-"___H___ = grubość (wysokość miedzi) w milsach  \n"
-"___K___ = 0.024 dla ścieżek wewnętrznych lub 0.048 dla ścieżek "
-"zewnętrznych  \n"
+"Wzór z normy IPC 2221 to\n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>\n"
+"gdzie:<br>\n"
+"___I___ = maksymalny prąd w amperach<br>\n"
+"___&Delta;T___ = wzrost temperatury powyżej temperatury otoczenia w "
+"&deg;C<br>\n"
+"___W___ = szerokość milsach<br>\n"
+"___H___ = grubość (wysokość miedzi) w milsach<br>\n"
+"___K___ = 0.024 dla ścieżek wewnętrznych lub 0.048 dla ścieżek zewnętrznych\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -21911,7 +21905,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:596
 msgid "Selected options resulted in errors! Change them and try again."
-msgstr ""
+msgstr "Wybrane opcje powodują błędy! Zmień je i spróbuj ponownie."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:603
 #, c-format
@@ -21940,9 +21934,9 @@ msgid "Reannotate anyway?"
 msgstr "Ponumerować ponownie mimo to?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "Elementy zduplikowane %s%s\n"
+msgstr "Zduplikowane wystąpienie %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
 msgid "Aborted: too many errors"
@@ -25408,7 +25402,7 @@ msgstr "Inspekcja sieci"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:83
 msgid "Load and Test Netlist"
-msgstr ""
+msgstr "Wczytuje i przeprowadza test listy sieci"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:125
 msgid "Select Netlist"
@@ -25505,9 +25499,9 @@ msgid "Center:"
 msgstr "Wyśrodkuj:"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Corner %d"
-msgstr "Promień narożnika:"
+msgstr "Narożnik %d"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:334
 msgid "Polygon must have at least 3 corners"
@@ -25603,9 +25597,8 @@ msgid "corners count %d"
 msgstr "ilość wierzchołków %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:739
-#, fuzzy
 msgid "Unknown primitive"
-msgstr "Przekształć prymitywy"
+msgstr "Nieznany prymityw"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:919
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
@@ -26919,9 +26912,9 @@ msgid "<none selected>"
 msgstr "<nie wybrano>"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Reference item: %s"
-msgstr "Oznaczenie '%s'"
+msgstr "Element referencyjny: %s"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -29378,24 +29371,20 @@ msgid "undefined"
 msgstr "niezdefiniowany"
 
 #: pcbnew/drc/drc_engine.cpp:890
-#, fuzzy
 msgid "track width"
-msgstr "Szerokość ścieżki"
+msgstr "szerokość ścieżki"
 
 #: pcbnew/drc/drc_engine.cpp:891
-#, fuzzy
 msgid "annular width"
-msgstr "Szerokość pierścienia"
+msgstr "szerokość pierścienia"
 
 #: pcbnew/drc/drc_engine.cpp:892
-#, fuzzy
 msgid "via diameter"
-msgstr "Średnica przelotki"
+msgstr "średnica przelotki"
 
 #: pcbnew/drc/drc_engine.cpp:893
-#, fuzzy
 msgid "constraint"
-msgstr "Brak restrykcji"
+msgstr "ograniczenie"
 
 #: pcbnew/drc/drc_engine.cpp:896
 #, c-format
@@ -31860,9 +31849,8 @@ msgid "removed annular ring"
 msgstr "usunięty pierścień pola"
 
 #: pcbnew/pcb_track.cpp:659
-#, fuzzy
 msgid "Track (arc)"
-msgstr "Prześwity ścieżek"
+msgstr "Ścieżka (łukowa)"
 
 #: pcbnew/pcb_track.cpp:674
 msgid "Segment Length"
@@ -32011,14 +31999,12 @@ msgid "File not found: '%s'."
 msgstr "Nie znaleziono pliku: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:710
-#, fuzzy
 msgid "Loading board data..."
-msgstr "Wczytywanie regionów płytki..."
+msgstr "Wczytywanie danych płytki..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:888
-#, fuzzy
 msgid "Loading netclasses..."
-msgstr "Wczytywanie sieci..."
+msgstr "Wczytywanie klas sieci..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:910
 #, c-format
@@ -32026,14 +32012,12 @@ msgid "Duplicate netclass name '%s'."
 msgstr "Zduplikowana nazwa klasy sieci '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:927
-#, fuzzy
 msgid "Loading components..."
-msgstr "Wczytywanie sieci..."
+msgstr "Wczytywanie komponentów..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:974
-#, fuzzy
 msgid "Loading component 3D models..."
-msgstr "Ładowanie modeli 3D..."
+msgstr "Wczytywanie modeli 3D komponentów..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1051
 #: pcbnew/plugins/altium/altium_pcb.cpp:1137
@@ -32049,9 +32033,8 @@ msgstr ""
 "Zamiast tego umieszczono go na Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1330
-#, fuzzy
 msgid "Loading dimension drawings..."
-msgstr "Wczytywanie treści Unicode..."
+msgstr "Wczytywanie wymiarowania..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1351
 #: pcbnew/plugins/altium/altium_pcb.cpp:1358
@@ -32400,9 +32383,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "Definicja pola CADSTAR '%s' zwróciła błędy podczas importu: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
-msgstr "Nie można odnaleźć przeglądarki PDF dla '%s'."
+msgstr "Nie można odnaleźć indeksu pola '%d' w footprincie '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1291
 #, c-format
@@ -34045,39 +34028,30 @@ msgstr "Odblokowany"
 #: pcbnew/tools/board_editor_control.cpp:1393
 msgid "Zones have insufficient overlap for merging."
 msgstr ""
+"Strefy zachodzą na siebie w niewystarczającym stopniu, aby można je było "
+"scalić."
 
 #: pcbnew/tools/board_editor_control.cpp:1439
-#, fuzzy
 msgid "Some zone netcodes did not match and were not merged."
 msgstr ""
-"Test DRC wykazał błędy dla niektórych elementów i nie zostały one "
-"zmodyfikowane."
+"Niektóre z kodów sieci strefy nie pasują do siebie i nie zostały połączone."
 
 #: pcbnew/tools/board_editor_control.cpp:1445
-#, fuzzy
 msgid "Some zone priorities did not match and were not merged."
-msgstr ""
-"Test DRC wykazał błędy dla niektórych elementów i nie zostały one "
-"zmodyfikowane."
+msgstr "Niektóre priorytety stref nie pasowały do siebie i nie zostały scalone."
 
 #: pcbnew/tools/board_editor_control.cpp:1451
-#, fuzzy
 msgid "Some zones were rule areas and were not merged."
-msgstr ""
-"Test DRC wykazał błędy dla niektórych elementów i nie zostały one "
-"zmodyfikowane."
+msgstr "Niektóre ze stref są strefami z ograniczeniami i nie zostały połączone."
 
 #: pcbnew/tools/board_editor_control.cpp:1457
-#, fuzzy
 msgid "Some zone layer sets did not match and were not merged."
-msgstr "Warstwa reguł '%s' nie pasuje; zasada zignorowana."
+msgstr ""
+"Niektóre zestawy warstw stref nie pasoują do siebie i nie zostały scalone."
 
 #: pcbnew/tools/board_editor_control.cpp:1463
-#, fuzzy
 msgid "Some zones did not intersect and were not merged."
-msgstr ""
-"Test DRC wykazał błędy dla niektórych elementów i nie zostały one "
-"zmodyfikowane."
+msgstr "Niektóre strefy nie zachodzą na siebie i nie zostały scalone."
 
 #: pcbnew/tools/board_editor_control.cpp:1529
 msgid "Duplicate zone"
