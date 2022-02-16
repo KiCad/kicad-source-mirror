@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:25-0800\n"
-"PO-Revision-Date: 2022-02-16 02:33+0000\n"
+"PO-Revision-Date: 2022-02-16 17:20+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -6809,9 +6809,8 @@ msgid "Eagle XML files"
 msgstr "Fitxers XML d'Eagle"
 
 #: common/wildcards_and_files_ext.cpp:288
-#, fuzzy
 msgid "OrcadPCB2 netlist files"
-msgstr "Fitxers de llistes de xarxes de KiCad"
+msgstr "Fitxers de llistes de xarxes d'OrcadPCB2"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "KiCad netlist files"
@@ -12374,13 +12373,16 @@ msgid ""
 "If enabled, clicking on a pin select the parent symbol.\n"
 "If disabled, clicking on a pin select only the pin."
 msgstr ""
+"A l'editor d'esquemàtics:\n"
+"Si està habilitat, al fer clic en un pin es selecciona el símbol principal.\n"
+"Si està deshabilitat, al fer clic en un pin es selecciona només el pin."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:84
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:132
 #: pcbnew/dialogs/panel_edit_options_base.cpp:81
 #: pcbnew/dialogs/panel_edit_options_base.cpp:152
 msgid "Left Click Mouse Commands"
-msgstr ""
+msgstr "Ordres del clic esquerre del ratolí"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:86
 #: pcbnew/dialogs/panel_edit_options_base.cpp:83
@@ -12394,7 +12396,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:107
 #: pcbnew/dialogs/panel_edit_options_base.cpp:178
 msgid "Long Click"
-msgstr ""
+msgstr "Clic llarg"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:102
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:150
@@ -12415,7 +12417,7 @@ msgstr "Afegeix element(s) a la selecció."
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:114
 #: pcbnew/dialogs/panel_edit_options_base.cpp:127
 msgid "Ctrl+Shift"
-msgstr ""
+msgstr "Ctrl+Shift"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:118
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:166
@@ -12434,7 +12436,7 @@ msgstr ""
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:198
 msgid "Shift+Cmd"
-msgstr ""
+msgstr "Shift+Cmd"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:196
 msgid "Symbol Field Automatic Placement"
@@ -12457,14 +12459,12 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:211
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:98
-#, fuzzy
 msgid "Repeated Items"
-msgstr "Elimina els elements"
+msgstr "Elements repetits"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:221
-#, fuzzy
 msgid "&Horizontal pitch:"
-msgstr "Espaiament horitzontal:"
+msgstr "Espaiat horitzontal:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:232
 msgid "&Vertical pitch:"
@@ -28070,9 +28070,8 @@ msgstr ""
 "La mida de perforació de la via és més petita que el diàmetre de la via"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:501
-#, fuzzy
 msgid "Via start layer and end layer cannot be the same"
-msgstr "Els punts de començament i d'acabament no poden ser els mateixos."
+msgstr "La capa d'inici i de final no pot ser la mateixa"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:659
 msgid "Edit track/via properties"
@@ -28175,9 +28174,8 @@ msgid "Annular rings:"
 msgstr "Anells anulars:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
-#, fuzzy
 msgid "Start, end, and connected layers"
-msgstr "Introduïu el text posicionat en la capa seleccionada."
+msgstr "Inici, final, i capes connectades"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:114
 msgid "Track & Via Properties"
@@ -28401,15 +28399,13 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:102
 #: pcbnew/dialogs/panel_edit_options_base.cpp:173
-#, fuzzy
 msgid "Select item(s)."
-msgstr "Selecciona els elements"
+msgstr "Selecciona element(s)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:142
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
-#, fuzzy
 msgid "Highlight net (for pads or tracks)."
-msgstr "Llista els pads o les pistes sense connectar"
+msgstr "Realça la xarxa (per a pads o pistes)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:243
 #: pcbnew/dialogs/panel_edit_options_base.cpp:363
@@ -28433,10 +28429,8 @@ msgstr "Ajusta als pads:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:271
 #: pcbnew/dialogs/panel_edit_options_base.cpp:279
-#, fuzzy
 msgid "Capture cursor when the mouse enters a pad area"
-msgstr ""
-"Controla la captura del cursor quan el ratolí entri en l'àrea d'un pad."
+msgstr "Captura el cursor quan el ratolí entri en l'àrea d'un pad"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:275
 #: pcbnew/dialogs/panel_edit_options_base.cpp:289
@@ -28449,10 +28443,8 @@ msgstr "Ajusta a les pistes:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:285
 #: pcbnew/dialogs/panel_edit_options_base.cpp:293
-#, fuzzy
 msgid "Capture cursor when the mouse approaches a track"
-msgstr ""
-"Controla la captura del cursor quan el ratolí entri en l'àrea d'una pista."
+msgstr "Captura el cursor quan el ratolí entri en l'àrea d'una pista"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:297
 msgid "Snap to graphics:"
@@ -28460,10 +28452,8 @@ msgstr "Ajusta als gràfics:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:299
 #: pcbnew/dialogs/panel_edit_options_base.cpp:307
-#, fuzzy
 msgid "Capture cursor when the mouse approaches graphical control points"
-msgstr ""
-"Controla la captura del cursor quan el ratolí entri en l'àrea d'una pista."
+msgstr "Captura el cursor quan el ratolí s'apropi als punts de control gràfics"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:320
 #, fuzzy
@@ -28561,9 +28551,8 @@ msgid "Default properties for new graphic items:"
 msgstr "Propietats per defecte pels nous elements gràfics:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:296
-#, fuzzy
 msgid "Options Editor..."
-msgstr "Editor d'opcions"
+msgstr "Editor d'opcions..."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:296
 #, fuzzy
@@ -28671,9 +28660,8 @@ msgid "Display Origin"
 msgstr "Mostra origen"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:27
-#, fuzzy
 msgid "Select which origin is used for X,Y coordinate display."
-msgstr "Seleccioneu la biblioteca a mostrar"
+msgstr "Selecciona quin origen s'utilitza per mostrar les coordenades X, Y."
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
 #, fuzzy
@@ -28983,9 +28971,8 @@ msgid "Add User-defined Layer"
 msgstr "Quadrícula definida de l'usuari"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:26
-#, fuzzy
 msgid "Add User Defined Layer..."
-msgstr "Quadrícula definida de l'usuari"
+msgstr "Afegeix capa definida per l'usuari..."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:46
 #, fuzzy
