@@ -700,8 +700,19 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     m_symbol->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
     m_symbol->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );
 
-    // The value, footprint and datasheet fields and exclude from bill of materials setting
-    // should be kept in sync in multi-unit parts.
+    // Update any assignments
+    if( m_dataModel )
+    {
+        for( const SCH_PIN& model_pin : *m_dataModel )
+        {
+            // map from the edited copy back to the "real" pin in the symbol.
+            SCH_PIN* src_pin = m_symbol->GetPin( model_pin.GetLibPin() );
+            src_pin->SetAlt( model_pin.GetAlt() );
+        }
+    }
+
+    // The value, footprint and datasheet fields, alternate pin assignements, and include/exclude
+    // flags should be kept in sync in multi-unit parts.
     if( m_symbol->GetUnitCount() > 1 && m_symbol->IsAnnotated( &GetParent()->GetCurrentSheet() ) )
     {
         wxString ref = m_symbol->GetRef( &GetParent()->GetCurrentSheet() );
@@ -725,19 +736,20 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
                 otherUnit->GetField( DATASHEET_FIELD )->SetText( m_fields->at( DATASHEET_FIELD ).GetText() );
                 otherUnit->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
                 otherUnit->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );
+
+                if( m_dataModel )
+                {
+                    for( const SCH_PIN& model_pin : *m_dataModel )
+                    {
+                        SCH_PIN* src_pin = otherUnit->GetPin( model_pin.GetNumber() );
+
+                        if( src_pin )
+                            src_pin->SetAlt( model_pin.GetAlt() );
+                    }
+                }
+
                 GetParent()->UpdateItem( otherUnit, false, true );
             }
-        }
-    }
-
-    // Update any assignments
-    if( m_dataModel )
-    {
-        for( const SCH_PIN& model_pin : *m_dataModel )
-        {
-            // map from the edited copy back to the "real" pin in the symbol.
-            SCH_PIN* src_pin = m_symbol->GetPin( model_pin.GetLibPin() );
-            src_pin->SetAlt( model_pin.GetAlt() );
         }
     }
 
