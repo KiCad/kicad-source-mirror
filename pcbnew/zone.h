@@ -666,14 +666,6 @@ public:
     }
 
     /**
-     * Set the list of filled polygons.
-     */
-    void SetRawPolysList( PCB_LAYER_ID aLayer, const SHAPE_POLY_SET& aPolysList )
-    {
-        m_RawPolysList[aLayer] = aPolysList;
-    }
-
-    /**
      * Check if a given filled polygon is an insulated island.
      *
      * @param aLayer is the layer to test
@@ -716,12 +708,6 @@ public:
     void AddPolygon( std::vector<VECTOR2I>& aPolygon );
 
     void AddPolygon( const SHAPE_LINE_CHAIN& aPolygon );
-
-    SHAPE_POLY_SET& RawPolysList( PCB_LAYER_ID aLayer )
-    {
-        wxASSERT( m_RawPolysList.count( aLayer ) );
-        return m_RawPolysList.at( aLayer );
-    }
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
@@ -932,7 +918,6 @@ protected:
      * described by m_Poly can have many filled areas
      */
     std::map<PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>> m_FilledPolysList;
-    std::map<PCB_LAYER_ID, SHAPE_POLY_SET> m_RawPolysList;
 
     /// Temp variables used while filling
     EDA_RECT                               m_bboxCache;

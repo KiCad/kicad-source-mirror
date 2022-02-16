@@ -156,7 +156,6 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
         else
             m_FilledPolysList[layer] = std::make_shared<SHAPE_POLY_SET>();
 
-        m_RawPolysList[layer]     = aZone.m_RawPolysList.at( layer );
         m_filledPolysHash[layer]  = aZone.m_filledPolysHash.at( layer );
         m_insulatedIslands[layer] = aZone.m_insulatedIslands.at( layer );
     }
@@ -250,14 +249,12 @@ void ZONE::SetLayerSet( LSET aLayerSet )
         UnFill();
 
         m_FilledPolysList.clear();
-        m_RawPolysList.clear();
         m_filledPolysHash.clear();
         m_insulatedIslands.clear();
 
         for( PCB_LAYER_ID layer : aLayerSet.Seq() )
         {
             m_FilledPolysList[layer]  = std::make_shared<SHAPE_POLY_SET>();
-            m_RawPolysList[layer]     = {};
             m_filledPolysHash[layer]  = {};
             m_insulatedIslands[layer] = {};
         }

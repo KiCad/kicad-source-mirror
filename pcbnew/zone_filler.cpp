@@ -238,13 +238,12 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                         continue;
 
                     // Now we're ready to fill.
-                    SHAPE_POLY_SET rawPolys, finalPolys;
-                    fillSingleZone( zone, layer, rawPolys, finalPolys );
+                    SHAPE_POLY_SET fillPolys;
+                    fillSingleZone( zone, layer, fillPolys );
 
                     std::unique_lock<std::mutex> zoneLock( zone->GetLock() );
 
-                    zone->SetRawPolysList( layer, rawPolys );
-                    zone->SetFilledPolysList( layer, finalPolys );
+                    zone->SetFilledPolysList( layer, fillPolys );
                     zone->SetFillFlag( layer, true );
 
                     if( m_progressReporter )
@@ -987,11 +986,11 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID a
  * 5 - Removes unconnected copper islands, deleting any affected spokes
  * 6 - Adds in the remaining spokes
  */
-bool ZONE_FILLER::computeRawFilledArea( const ZONE* aZone,
-                                        PCB_LAYER_ID aLayer, PCB_LAYER_ID aDebugLayer,
-                                        const SHAPE_POLY_SET& aSmoothedOutline,
-                                        const SHAPE_POLY_SET& aMaxExtents,
-                                        SHAPE_POLY_SET& aRawPolys )
+bool ZONE_FILLER::fillCopperZone( const ZONE* aZone,
+                                  PCB_LAYER_ID aLayer, PCB_LAYER_ID aDebugLayer,
+                                  const SHAPE_POLY_SET& aSmoothedOutline,
+                                  const SHAPE_POLY_SET& aMaxExtents,
+                                  SHAPE_POLY_SET& aRawPolys )
 {
     m_maxError = m_board->GetDesignSettings().m_MaxError;
 
@@ -1160,8 +1159,7 @@ bool ZONE_FILLER::computeRawFilledArea( const ZONE* aZone,
  * The solid areas can be more than one on copper layers, and do not have holes
  * ( holes are linked by overlapping segments to the main outline)
  */
-bool ZONE_FILLER::fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aRawPolys,
-                                  SHAPE_POLY_SET& aFinalPolys )
+bool ZONE_FILLER::fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aFillPolys )
 {
     SHAPE_POLY_SET* boardOutline = m_brdOutlinesValid ? &m_boardOutline : nullptr;
     SHAPE_POLY_SET  maxExtents;
@@ -1182,10 +1180,8 @@ bool ZONE_FILLER::fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_S
 
     if( aZone->IsOnCopperLayer() )
     {
-        if( computeRawFilledArea( aZone, aLayer, debugLayer, smoothedPoly, maxExtents, aRawPolys ) )
+        if( fillCopperZone( aZone, aLayer, debugLayer, smoothedPoly, maxExtents, aFillPolys ) )
             aZone->SetNeedRefill( false );
-
-        aFinalPolys = aRawPolys;
     }
     else
     {
@@ -1206,10 +1202,9 @@ bool ZONE_FILLER::fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_S
         if( half_min_width - epsilon > epsilon )
             smoothedPoly.Inflate( half_min_width - epsilon, numSegs );
 
-        aRawPolys = smoothedPoly;
-        aFinalPolys = smoothedPoly;
+        aFillPolys = smoothedPoly;
 
-        aFinalPolys.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        aFillPolys.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
         aZone->SetNeedRefill( false );
     }
 

@@ -75,7 +75,7 @@ private:
                                       SHAPE_POLY_SET& aRawFill );
 
     /**
-     * Function computeRawFilledArea
+     * Function fillCopperZone
      * Add non copper areas polygons (pads and tracks with clearance)
      * to a filled copper area
      * used in BuildFilledSolidAreasPolygons when calculating filled areas in a zone
@@ -85,9 +85,9 @@ private:
      *  filled copper area polygon (without clearance areas
      * @param aPcb: the current board
      */
-    bool computeRawFilledArea( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LAYER_ID aDebugLayer,
-                               const SHAPE_POLY_SET& aSmoothedOutline,
-                               const SHAPE_POLY_SET& aMaxExtents, SHAPE_POLY_SET& aRawPolys );
+    bool fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LAYER_ID aDebugLayer,
+                         const SHAPE_POLY_SET& aSmoothedOutline,
+                         const SHAPE_POLY_SET& aMaxExtents, SHAPE_POLY_SET& aRawPolys );
 
     /**
      * Function buildThermalSpokes
@@ -104,15 +104,12 @@ private:
      * in order to have drawable (and plottable) filled polygons.
      * @return true if OK, false if the solid polygons cannot be built
      * @param aZone is the zone to fill
-     * @param aRawPolys: A reference to a SHAPE_POLY_SET buffer to store
-     * filled solid areas polygons (with holes)
-     * @param aFinalPolys: A reference to a SHAPE_POLY_SET buffer to store polygons with no holes
+     * @param aFillPolys: A reference to a SHAPE_POLY_SET buffer to store polygons with no holes
      * (holes are linked to main outline by overlapping segments, and these polygons are shrunk
      * by aZone->GetMinThickness() / 2 to be drawn with a outline thickness = aZone->GetMinThickness()
      * aFinalPolys are polygons that will be drawn on screen and plotted
      */
-    bool fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aRawPolys,
-                         SHAPE_POLY_SET& aFinalPolys );
+    bool fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aFillPolys );
 
     /**
      * for zones having the ZONE_FILL_MODE::ZONE_FILL_MODE::HATCH_PATTERN, create a grid pattern

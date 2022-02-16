@@ -2103,8 +2103,8 @@ void ALTIUM_PCB::ParseRegions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFi
             linechain.Append( elem.outline.at( 0 ).position );
             linechain.SetClosed( true );
 
-            SHAPE_POLY_SET rawPolys;
-            rawPolys.AddOutline( linechain );
+            SHAPE_POLY_SET fill;
+            fill.AddOutline( linechain );
 
             for( const std::vector<ALTIUM_VERTICE>& hole : elem.holes )
             {
@@ -2115,20 +2115,15 @@ void ALTIUM_PCB::ParseRegions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFi
 
                 hole_linechain.Append( hole.at( 0 ).position );
                 hole_linechain.SetClosed( true );
-                rawPolys.AddHole( hole_linechain );
+                fill.AddHole( hole_linechain );
             }
 
             if( zone->HasFilledPolysForLayer( klayer ) )
-            {
-                rawPolys.BooleanAdd( zone->RawPolysList( klayer ),
-                                     SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-            }
+                fill.BooleanAdd( *zone->GetFill( klayer ), SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
-            SHAPE_POLY_SET finalPolys = rawPolys;
-            finalPolys.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            fill.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
-            zone->SetRawPolysList( klayer, rawPolys );
-            zone->SetFilledPolysList( klayer, finalPolys );
+            zone->SetFilledPolysList( klayer, fill );
             zone->SetIsFilled( true );
             zone->SetNeedRefill( false );
         }

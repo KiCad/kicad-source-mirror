@@ -2028,7 +2028,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
         if( !csCopper.PouredTemplateID.IsEmpty() )
         {
             ZONE* pouredZone = m_zonesMap.at( csCopper.PouredTemplateID );
-            SHAPE_POLY_SET rawPolys;
+            SHAPE_POLY_SET fill;
 
             int copperWidth = getKiCadLength( getCopperCode( csCopper.CopperCodeID ).CopperWidth );
 
@@ -2058,28 +2058,26 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
                     }
 
                     poly.ClearArcs();
-                    rawPolys.BooleanAdd( poly, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                    fill.BooleanAdd( poly, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
                 }
 
             }
             else
             {
-                rawPolys = getPolySetFromCadstarShape( csCopper.Shape, -1 );
-                rawPolys.ClearArcs();
-                rawPolys.Inflate( copperWidth / 2, 32 );
+                fill = getPolySetFromCadstarShape( csCopper.Shape, -1 );
+                fill.ClearArcs();
+                fill.Inflate( copperWidth / 2, 32 );
             }
 
             if( pouredZone->HasFilledPolysForLayer( getKiCadLayer( csCopper.LayerID ) ) )
             {
-                rawPolys.BooleanAdd( pouredZone->RawPolysList( getKiCadLayer( csCopper.LayerID )),
-                                     SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                fill.BooleanAdd( *pouredZone->GetFill( getKiCadLayer( csCopper.LayerID ) ),
+                                 SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
             }
 
-            SHAPE_POLY_SET finalPolys = rawPolys;
-            finalPolys.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            fill.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
-            pouredZone->SetRawPolysList( getKiCadLayer( csCopper.LayerID ), rawPolys );
-            pouredZone->SetFilledPolysList( getKiCadLayer( csCopper.LayerID ), finalPolys );
+            pouredZone->SetFilledPolysList( getKiCadLayer( csCopper.LayerID ), fill );
             pouredZone->SetIsFilled( true );
             pouredZone->SetNeedRefill( false );
             continue;
@@ -2155,12 +2153,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
             zone->SetPadConnection( ZONE_CONNECTION::FULL );
             zone->SetNet( getKiCadNet( csCopper.NetRef.NetID ) );
             zone->SetPriority( m_zonesMap.size() + 1 ); // Highest priority (always fill first)
-            zone->SetRawPolysList( getKiCadLayer( csCopper.LayerID ), *zone->Outline() );
 
-            SHAPE_POLY_SET fillePolys( *zone->Outline() );
-            fillePolys.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_STRICTLY_SIMPLE );
+            SHAPE_POLY_SET fill( *zone->Outline() );
+            fill.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_STRICTLY_SIMPLE );
 
-            zone->SetFilledPolysList( getKiCadLayer( csCopper.LayerID ), fillePolys );
+            zone->SetFilledPolysList( getKiCadLayer( csCopper.LayerID ), fill );
         }
     }
 }
