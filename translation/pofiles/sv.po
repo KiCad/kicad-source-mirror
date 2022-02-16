@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:20-0800\n"
-"PO-Revision-Date: 2022-02-16 13:03+0000\n"
+"PO-Revision-Date: 2022-02-16 17:20+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -25162,11 +25162,11 @@ msgstr "Nätnamn"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:78
 msgid "Pad Count"
-msgstr "Padantal"
+msgstr "Lödytor"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:79
 msgid "Via Count"
-msgstr "Via räkning"
+msgstr "Vior"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:80
 msgid "Via Length"
@@ -25229,7 +25229,7 @@ msgstr "Rapportera filen"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:44
 msgid "Show zero pad nets"
-msgstr "Visa nollkuddar"
+msgstr "Visa nät utan lödytor"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:48
 msgid "Group by:"
@@ -27717,7 +27717,7 @@ msgid ""
 "is ignored."
 msgstr ""
 "Aktiverad: avståndet mellan kopparlagren kommer räknas in i "
-"spårlängdsuträkningar för spår med vior.  Deaktiverad: lageruppbyggnadens "
+"ledarlängdsuträkningar för ledare med vior.  Deaktiverad: lageruppbyggnadens "
 "höjd ignoreras."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:191
@@ -30250,9 +30250,9 @@ msgid ""
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pad count."
 msgstr ""
-"Filtrera på fotavtrycksnamn, nyckelord, beskrivning och padantal.\n"
+"Filtrera på fotavtrycksnamn, nyckelord, beskrivning och antal lödytor.\n"
 "Söktermer är åtskilda av mellanslag. Alla söktermer måste matcha.\n"
-"En term som är ett nummer kommer också att matcha mot padantalet."
+"En term som är ett nummer kommer också att matcha mot antalet lödytor."
 
 #: pcbnew/footprint_viewer_frame.cpp:674
 #, c-format
