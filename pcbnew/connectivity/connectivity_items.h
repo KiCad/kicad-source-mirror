@@ -285,18 +285,22 @@ typedef std::shared_ptr<CN_ITEM> CN_ITEM_PTR;
 class CN_ZONE_LAYER : public CN_ITEM
 {
 public:
-    CN_ZONE_LAYER( ZONE* aParent, PCB_LAYER_ID aLayer, bool aCanChangeNet, int aSubpolyIndex ) :
-            CN_ITEM( aParent, aCanChangeNet ),
+    CN_ZONE_LAYER( ZONE* aParent, PCB_LAYER_ID aLayer, int aSubpolyIndex ) :
+            CN_ITEM( aParent, false ),
             m_subpolyIndex( aSubpolyIndex ),
             m_layer( aLayer )
     {
         m_triangulatedPoly = aParent->GetFilledPolysList( aLayer );
+        SetLayers( aLayer );
+    }
 
+    void BuildRTree()
+    {
         for( unsigned int ii = 0; ii < m_triangulatedPoly->TriangulatedPolyCount(); ++ii )
         {
             const auto* triangleSet = m_triangulatedPoly->TriangulatedPolygon( ii );
 
-            if( triangleSet->GetSourceOutlineIndex() != aSubpolyIndex )
+            if( triangleSet->GetSourceOutlineIndex() != m_subpolyIndex )
                 continue;
 
             for( const SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRI& tri : triangleSet->Triangles() )
@@ -448,6 +452,8 @@ public:
     CN_ITEM* Add( PCB_ARC* track );
 
     CN_ITEM* Add( PCB_VIA* via );
+
+    CN_ITEM* Add( CN_ZONE_LAYER* zitem );
 
     const std::vector<CN_ITEM*> Add( ZONE* zone, PCB_LAYER_ID aLayer );
 

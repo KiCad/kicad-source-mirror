@@ -423,43 +423,104 @@ CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, const KICAD_T a
 
 void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 {
-    int delta = 100;         // Number of additions between 2 calls to the progress bar
-    int zoneScaler = 50;     // Zones are more expensive
-    int ii = 0;
-    int size = 0;
+    // Generate CN_ZONE_LAYERs for each island on each layer of each zone
+    //
+    std::vector<CN_ZONE_LAYER*> zitems;
 
-    size += aBoard->Zones().size() * zoneScaler;
+    for( ZONE* zone : aBoard->Zones() )
+    {
+        if( zone->IsOnCopperLayer() )
+        {
+            m_itemMap[zone] = ITEM_MAP_ENTRY();
+            markItemNetAsDirty( zone );
+
+            for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+            {
+                if( IsCopperLayer( layer ) )
+                {
+                    for( int j = 0; j < zone->GetFilledPolysList( layer )->OutlineCount(); j++ )
+                        zitems.push_back( new CN_ZONE_LAYER( zone, layer, j ) );
+                }
+            }
+        }
+    }
+
+    // Setup progress metrics
+    //
+    int    delta = 50;            // Number of additions between 2 calls to the progress bar
+    double size = 0.0;
+
+    size += zitems.size();        // Once for building RTrees
+    size += zitems.size();        // Once for adding to connectivity
     size += aBoard->Tracks().size();
 
     for( FOOTPRINT* footprint : aBoard->Footprints() )
         size += footprint->Pads().size();
 
-    size *= 1.5;      // Our caller gets the other third of the progress bar
+    size *= 1.5;                  // Our caller gets the other third of the progress bar
 
-    delta = std::max( delta, size / 10 );
+    delta = std::max( delta, KiROUND( size / 10 ) );
 
-    for( ZONE* zone : aBoard->Zones() )
+    auto report =
+            [&]( int progress )
+            {
+                if( aReporter && ( progress % delta ) == 0 )
+                {
+                    aReporter->SetCurrentProgress( progress / size );
+                    aReporter->KeepRefreshing( false );
+                }
+            };
+
+    // Generate RTrees for CN_ZONE_LAYER items (in parallel)
+    //
+    std::atomic<size_t> next( 0 );
+    std::atomic<size_t> zitems_done( 0 );
+    std::atomic<size_t> threads_done( 0 );
+    size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
+
+    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
     {
-        Add( zone );
-        ii += zoneScaler;
+        std::thread t = std::thread(
+                [ &zitems, &zitems_done, &threads_done, &next ]( )
+                {
+                    for( size_t i = next.fetch_add( 1 ); i < zitems.size(); i = next.fetch_add( 1 ) )
+                    {
+                        zitems[i]->BuildRTree();
+                        zitems_done.fetch_add( 1 );
+                    }
 
+                    threads_done.fetch_add( 1 );
+                } );
+
+        t.detach();
+    }
+
+    while( threads_done < parallelThreadCount )
+    {
         if( aReporter )
         {
-            aReporter->SetCurrentProgress( (double) ii / (double) size );
-            aReporter->KeepRefreshing( false );
+            aReporter->SetCurrentProgress( zitems_done / size );
+            aReporter->KeepRefreshing();
         }
+
+        std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
+    }
+
+    // Add CN_ZONE_LAYERS, tracks, and pads to connectivity
+    //
+    int ii = zitems.size();
+
+    for( CN_ZONE_LAYER* zitem : zitems )
+    {
+        m_itemList.Add( zitem );
+        m_itemMap[ zitem->Parent() ].Link( zitem );
+        report( ++ii );
     }
 
     for( PCB_TRACK* tv : aBoard->Tracks() )
     {
         Add( tv );
-        ii++;
-
-        if( aReporter && ( ii % delta ) == 0 )
-        {
-            aReporter->SetCurrentProgress( (double) ii / (double) size );
-            aReporter->KeepRefreshing( false );
-        }
+        report( ++ii );
     }
 
     for( FOOTPRINT* footprint : aBoard->Footprints() )
@@ -467,13 +528,7 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
         for( PAD* pad : footprint->Pads() )
         {
             Add( pad );
-            ii++;
-
-            if( aReporter && ( ii % delta ) == 0 )
-            {
-                aReporter->SetCurrentProgress( (double) ii / (double) size );
-                aReporter->KeepRefreshing( false );
-            }
+            report( ++ii );
         }
     }
 

@@ -205,21 +205,27 @@ CN_ITEM* CN_LIST::Add( PCB_ARC* aArc )
 
      for( int j = 0; j < polys->OutlineCount(); j++ )
      {
-         CN_ZONE_LAYER*          zitem = new CN_ZONE_LAYER( zone, aLayer, false, j );
-         const SHAPE_LINE_CHAIN& outline = zone->GetFilledPolysList( aLayer )->COutline( j );
+         CN_ZONE_LAYER* zitem = new CN_ZONE_LAYER( zone, aLayer, j );
 
-         for( int k = 0; k < outline.PointCount(); k++ )
-             zitem->AddAnchor( outline.CPoint( k ) );
+         zitem->BuildRTree();
 
-         m_items.push_back( zitem );
-         zitem->SetLayer( aLayer );
-         addItemtoTree( zitem );
-         rv.push_back( zitem );
-         SetDirty();
+         for( VECTOR2I pt : zone->GetFilledPolysList( aLayer )->COutline( j ).CPoints() )
+             zitem->AddAnchor( pt );
+
+         rv.push_back( Add( zitem ) );
      }
 
      return rv;
  }
+
+
+CN_ITEM* CN_LIST::Add( CN_ZONE_LAYER* zitem )
+{
+    m_items.push_back( zitem );
+    addItemtoTree( zitem );
+    SetDirty();
+    return zitem;
+}
 
 
 void CN_LIST::RemoveInvalidItems( std::vector<CN_ITEM*>& aGarbage )
