@@ -134,7 +134,7 @@ void CONNECTIVITY_DATA::Build( const std::vector<BOARD_ITEM*>& aItems )
         return;
 
     m_connAlgo.reset( new CN_CONNECTIVITY_ALGO );
-    m_connAlgo->Build( aItems );
+    m_connAlgo->LocalBuild( aItems );
 
     RecalculateRatsnest();
 }

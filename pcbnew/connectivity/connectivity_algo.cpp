@@ -485,27 +485,22 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 }
 
 
-void CN_CONNECTIVITY_ALGO::Build( const std::vector<BOARD_ITEM*>& aItems )
+void CN_CONNECTIVITY_ALGO::LocalBuild( const std::vector<BOARD_ITEM*>& aItems )
 {
     for( BOARD_ITEM* item : aItems )
     {
         switch( item->Type() )
         {
-            case PCB_TRACE_T:
-            case PCB_ARC_T:
-            case PCB_VIA_T:
-            case PCB_PAD_T:
-                Add( item );
-                break;
+        case PCB_TRACE_T:
+        case PCB_ARC_T:
+        case PCB_VIA_T:
+        case PCB_PAD_T:
+        case PCB_FOOTPRINT_T:
+            Add( item );
+            break;
 
-            case PCB_FOOTPRINT_T:
-                for( PAD* pad : static_cast<FOOTPRINT*>( item )->Pads() )
-                    Add( pad );
-
-                break;
-
-            default:
-                break;
+        default:
+            break;
         }
     }
 }

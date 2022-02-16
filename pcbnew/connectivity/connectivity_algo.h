@@ -194,7 +194,7 @@ public:
     }
 
     void Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter = nullptr );
-    void Build( const std::vector<BOARD_ITEM*>& aItems );
+    void LocalBuild( const std::vector<BOARD_ITEM*>& aItems );
 
     void Clear();
 
