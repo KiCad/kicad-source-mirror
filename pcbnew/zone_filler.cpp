@@ -347,13 +347,14 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 SHAPE_LINE_CHAIN& outline = poly->Outline( idx );
 
                 if( mode == ISLAND_REMOVAL_MODE::ALWAYS )
-                    poly->DeletePolygon( idx );
+                    poly->DeletePolygonAndTriangulationData( idx, false );
                 else if ( mode == ISLAND_REMOVAL_MODE::AREA && outline.Area() < minArea )
-                    poly->DeletePolygon( idx );
+                    poly->DeletePolygonAndTriangulationData( idx, false );
                 else
                     zone.m_zone->SetIsIsland( layer, idx );
             }
 
+            poly->UpdateTriangulationDataHash();
             zone.m_zone->CalculateFilledArea();
 
             if( m_progressReporter && m_progressReporter->IsCancelled() )
@@ -378,18 +379,16 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 std::vector<SHAPE_LINE_CHAIN>& island = poly->Polygon( ii );
 
                 if( island.empty() || !m_boardOutline.Contains( island.front().CPoint( 0 ) ) )
-                    poly->DeletePolygon( ii );
+                    poly->DeletePolygonAndTriangulationData( ii, false );
             }
 
+            poly->UpdateTriangulationDataHash();
             zone->CalculateFilledArea();
 
             if( m_progressReporter && m_progressReporter->IsCancelled() )
                 return false;
         }
     }
-
-    // Re-cache triangulation after removing islands
-    m_board->CacheTriangulation( m_progressReporter, aZones );
 
     if( aCheck )
     {

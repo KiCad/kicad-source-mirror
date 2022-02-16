@@ -139,17 +139,12 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
             reporter = std::make_unique<WX_PROGRESS_REPORTER>( this, title, 4 );
             filler.SetProgressReporter( reporter.get() );
 
-            if( !filler.Fill( zones_to_refill ) )
-            {
-                GetBoard()->GetConnectivity()->Build( GetBoard() );
-                // User has already OK'ed dialog so we're going to go ahead and commit even if the
-                // fill was cancelled.
-            }
+            (void) filler.Fill( zones_to_refill );
         }
     }
 
-    commit.Push( _( "Modify zone properties" ) );
-    GetBoard()->GetConnectivity()->RecalculateRatsnest();
+    commit.Push( _( "Modify zone properties" ), true, true, false );
+    GetBoard()->GetConnectivity()->Build( GetBoard() );
 
     pickedList.ClearItemsList();  // s_ItemsListPicker is no longer owner of picked items
 }

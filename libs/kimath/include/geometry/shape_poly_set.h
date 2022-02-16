@@ -155,6 +155,7 @@ public:
         size_t GetTriangleCount() const { return m_triangles.size(); }
 
         int GetSourceOutlineIndex() const { return m_sourceOutline; }
+        void SetSourceOutlineIndex( int aIndex ) { m_sourceOutline = aIndex; }
 
         std::deque<TRI>& Triangles() { return m_triangles; }
         const std::deque<TRI>& Triangles() const { return m_triangles; }
@@ -1250,6 +1251,12 @@ public:
 
     ///< Delete \a aIdx-th polygon from the set.
     void DeletePolygon( int aIdx );
+
+    ///< Delete \a aIdx-th polygon and its triangulation data from the set.
+    ///< If called with \a aUpdateHash false, caller must call UpdateTriangulationDataHash().
+    void DeletePolygonAndTriangulationData( int aIdx, bool aUpdateHash = true );
+
+    void UpdateTriangulationDataHash();
 
     /**
      * Return a chamfered version of the \a aIndex-th polygon.

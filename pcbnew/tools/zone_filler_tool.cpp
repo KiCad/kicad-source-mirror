@@ -84,14 +84,15 @@ void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRep
 
     if( filler.Fill( toFill, true, aCaller ) )
     {
-        board()->GetConnectivity()->Build( board() );
-        commit.Push( _( "Fill Zone(s)" ) );
+        commit.Push( _( "Fill Zone(s)" ), true, true, false );
         getEditFrame<PCB_EDIT_FRAME>()->m_ZoneFillsDirty = false;
     }
     else
     {
         commit.Revert();
     }
+
+    board()->GetConnectivity()->Build( board() );
 
     canvas()->Refresh();
     m_fillInProgress = false;
@@ -157,8 +158,6 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
     if( filler.Fill( toFill ) )
     {
         reporter->AdvancePhase();
-        board()->GetConnectivity()->Build( board(), reporter.get() );
-
         commit.Push( _( "Fill Zone(s)" ), true, true, false );
         frame->m_ZoneFillsDirty = false;
     }
@@ -166,6 +165,8 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
     {
         commit.Revert();
     }
+
+    board()->GetConnectivity()->Build( board(), reporter.get() );
 
     if( filler.IsDebug() )
         frame->UpdateUserInterface();
@@ -214,12 +215,14 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
     if( filler.Fill( toFill ) )
     {
         reporter->AdvancePhase();
-        board()->GetConnectivity()->Build( board(), reporter.get() );
-
         commit.Push( _( "Fill Zone(s)" ), true, true, false );
     }
     else
+    {
         commit.Revert();
+    }
+
+    board()->GetConnectivity()->Build( board(), reporter.get() );
 
     canvas()->Refresh();
     m_fillInProgress = false;

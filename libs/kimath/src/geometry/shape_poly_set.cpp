@@ -1639,6 +1639,34 @@ void SHAPE_POLY_SET::DeletePolygon( int aIdx )
 }
 
 
+void SHAPE_POLY_SET::DeletePolygonAndTriangulationData( int aIdx, bool aUpdateHash )
+{
+    m_polys.erase( m_polys.begin() + aIdx );
+
+    if( m_triangulationValid )
+    {
+        for( int ii = m_triangulatedPolys.size() - 1; ii >= 0; --ii )
+        {
+            std::unique_ptr<TRIANGULATED_POLYGON>& triangleSet = m_triangulatedPolys[ii];
+
+            if( triangleSet->GetSourceOutlineIndex() == aIdx )
+                m_triangulatedPolys.erase( m_triangulatedPolys.begin() + ii );
+            else if( triangleSet->GetSourceOutlineIndex() > aIdx )
+                triangleSet->SetSourceOutlineIndex( triangleSet->GetSourceOutlineIndex() - 1 );
+        }
+
+        if( aUpdateHash )
+            m_hash = checksum();
+    }
+}
+
+
+void SHAPE_POLY_SET::UpdateTriangulationDataHash()
+{
+    m_hash = checksum();
+}
+
+
 void SHAPE_POLY_SET::Append( const SHAPE_POLY_SET& aSet )
 {
     m_polys.insert( m_polys.end(), aSet.m_polys.begin(), aSet.m_polys.end() );
