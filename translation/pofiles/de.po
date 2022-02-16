@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:25-0800\n"
-"PO-Revision-Date: 2022-02-16 02:33+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2022-02-16 22:56+0000\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -23675,7 +23675,7 @@ msgid ""
 "Export this zone setup (excluding layer and net selection) to all other "
 "copper zones."
 msgstr ""
-"Exportiere Flächeneinstellungen (außer Lagen und Netzauswahl) an alle "
+"Exportiere Flächeneinstellungen (außer Lagen- und Netzauswahl) an alle "
 "anderen Kupferflächen."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:142
@@ -35492,32 +35492,31 @@ msgstr "Entsperren"
 
 #: pcbnew/tools/board_editor_control.cpp:1393
 msgid "Zones have insufficient overlap for merging."
-msgstr ""
+msgstr "Flächen haben unzureichende Überlappung für Vereinigung."
 
 #: pcbnew/tools/board_editor_control.cpp:1439
-#, fuzzy
 msgid "Some zone netcodes did not match and were not merged."
-msgstr "Einige Elemente sind im DRC fehlgeschlagen und wurden nicht geändert."
+msgstr ""
+"Einige Flächen-Netzcodes stimmten nicht überein und wurden nicht vereint."
 
 #: pcbnew/tools/board_editor_control.cpp:1445
-#, fuzzy
 msgid "Some zone priorities did not match and were not merged."
-msgstr "Einige Elemente sind im DRC fehlgeschlagen und wurden nicht geändert."
+msgstr ""
+"Einige Flächen-Prioritäten stimmten nicht überein und wurden nicht vereint."
 
 #: pcbnew/tools/board_editor_control.cpp:1451
-#, fuzzy
 msgid "Some zones were rule areas and were not merged."
-msgstr "Einige Elemente sind im DRC fehlgeschlagen und wurden nicht geändert."
+msgstr "Einige Flächen waren Regelbereiche und wurden nicht vereint."
 
 #: pcbnew/tools/board_editor_control.cpp:1457
-#, fuzzy
 msgid "Some zone layer sets did not match and were not merged."
-msgstr "Regellage \"%s\" stimmt nicht überein, Regel ignoriert."
+msgstr ""
+"Einige Flächen-Lagenkombinationen stimmten nicht überein und wurden nicht "
+"vereint."
 
 #: pcbnew/tools/board_editor_control.cpp:1463
-#, fuzzy
 msgid "Some zones did not intersect and were not merged."
-msgstr "Einige Elemente sind im DRC fehlgeschlagen und wurden nicht geändert."
+msgstr "Einige Flächen hatten keine Schnittfläche und wurden nicht vereint."
 
 #: pcbnew/tools/board_editor_control.cpp:1529
 msgid "Duplicate zone"
