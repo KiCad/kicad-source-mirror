@@ -1270,8 +1270,12 @@ bool EE_SELECTION_TOOL::selectMultiple()
                                     line->SetFlags( ENDPOINT );
 
                                 // If no ends were selected, select whole line (both ends)
-                                if( !line->HasFlag( STARTPOINT ) && !line->HasFlag( ENDPOINT ) )
+                                // Also select both ends if the selection overlaps the midpoint
+                                if( ( !line->HasFlag( STARTPOINT ) && !line->HasFlag( ENDPOINT ) )
+                                    || selectionRect.Contains( line->GetMidPoint() ) )
+                                {
                                     line->SetFlags( STARTPOINT | ENDPOINT );
+                                }
                             }
 
                             anyAdded = true;

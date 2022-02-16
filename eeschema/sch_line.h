@@ -122,6 +122,8 @@ public:
     VECTOR2I GetStartPoint() const { return m_start; }
     void     SetStartPoint( const VECTOR2I& aPosition ) { m_start = aPosition; }
 
+    VECTOR2I GetMidPoint() const { return ( m_start + m_end ) / 2; }
+
     VECTOR2I GetEndPoint() const { return m_end; }
     void     SetEndPoint( const VECTOR2I& aPosition ) { m_end = aPosition; }
 
