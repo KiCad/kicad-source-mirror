@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:20-0800\n"
-"PO-Revision-Date: 2022-02-14 17:18+0000\n"
+"PO-Revision-Date: 2022-02-16 13:03+0000\n"
 "Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "v6/es_MX/>\n"
@@ -22002,9 +22002,9 @@ msgid "Reannotate anyway?"
 msgstr "¿Reanotar de todas formas?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "Duplicar elementos %s%s\n"
+msgstr "Duplicar instancias de %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
 msgid "Aborted: too many errors"
