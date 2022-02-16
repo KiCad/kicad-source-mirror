@@ -92,10 +92,9 @@ int CN_ZONE_LAYER::AnchorCount() const
     if( !Valid() )
         return 0;
 
-    const ZONE*             zone    = static_cast<const ZONE*>( Parent() );
-    const SHAPE_LINE_CHAIN& outline = zone->GetFilledPolysList( m_layer )->COutline( m_subpolyIndex );
+    const ZONE* zone = static_cast<const ZONE*>( Parent() );
 
-    return outline.PointCount() ? 1 : 0;
+    return zone->GetFilledPolysList( m_layer )->COutline( m_subpolyIndex ).PointCount() ? 1 : 0;
 }
 
 
@@ -104,16 +103,15 @@ const VECTOR2I CN_ZONE_LAYER::GetAnchor( int n ) const
     if( !Valid() )
         return VECTOR2I();
 
-    const ZONE*             zone    = static_cast<const ZONE*>( Parent() );
-    const SHAPE_LINE_CHAIN& outline = zone->GetFilledPolysList( m_layer )->COutline( m_subpolyIndex );
+    const ZONE* zone = static_cast<const ZONE*>( Parent() );
 
-    return outline.CPoint( 0 );
+    return zone->GetFilledPolysList( m_layer )->COutline( m_subpolyIndex ).CPoint( 0 );
 }
 
 
 void CN_ITEM::RemoveInvalidRefs()
 {
-    for( auto it = m_connected.begin(); it != m_connected.end(); )
+    for( auto it = m_connected.begin(); it != m_connected.end(); /* increment in loop */ )
     {
         if( !(*it)->Valid() )
             it = m_connected.erase( it );
@@ -160,9 +158,10 @@ CN_ITEM* CN_LIST::Add( PAD* pad )
      return item;
 }
 
+
 CN_ITEM* CN_LIST::Add( PCB_TRACK* track )
 {
-    auto item = new CN_ITEM( track, true );
+    CN_ITEM* item = new CN_ITEM( track, true );
     m_items.push_back( item );
     item->AddAnchor( track->GetStart() );
     item->AddAnchor( track->GetEnd() );
@@ -172,9 +171,10 @@ CN_ITEM* CN_LIST::Add( PCB_TRACK* track )
     return item;
 }
 
+
 CN_ITEM* CN_LIST::Add( PCB_ARC* aArc )
 {
-    auto item = new CN_ITEM( aArc, true );
+    CN_ITEM* item = new CN_ITEM( aArc, true );
     m_items.push_back( item );
     item->AddAnchor( aArc->GetStart() );
     item->AddAnchor( aArc->GetEnd() );
@@ -184,39 +184,41 @@ CN_ITEM* CN_LIST::Add( PCB_ARC* aArc )
     return item;
 }
 
- CN_ITEM* CN_LIST::Add( PCB_VIA* via )
- {
-     auto item = new CN_ITEM( via, !via->GetIsFree(), 1 );
 
-     m_items.push_back( item );
-     item->AddAnchor( via->GetStart() );
+CN_ITEM* CN_LIST::Add( PCB_VIA* via )
+{
+    CN_ITEM* item = new CN_ITEM( via, !via->GetIsFree(), 1 );
 
-     item->SetLayers( LAYER_RANGE( via->TopLayer(), via->BottomLayer() ) );
-     addItemtoTree( item );
-     SetDirty();
-     return item;
- }
+    m_items.push_back( item );
+    item->AddAnchor( via->GetStart() );
 
- const std::vector<CN_ITEM*> CN_LIST::Add( ZONE* zone, PCB_LAYER_ID aLayer )
- {
-     const std::shared_ptr<SHAPE_POLY_SET>& polys = zone->GetFilledPolysList( aLayer );
+    item->SetLayers( LAYER_RANGE( via->TopLayer(), via->BottomLayer() ) );
+    addItemtoTree( item );
+    SetDirty();
+    return item;
+}
 
-     std::vector<CN_ITEM*> rv;
 
-     for( int j = 0; j < polys->OutlineCount(); j++ )
-     {
-         CN_ZONE_LAYER* zitem = new CN_ZONE_LAYER( zone, aLayer, j );
+const std::vector<CN_ITEM*> CN_LIST::Add( ZONE* zone, PCB_LAYER_ID aLayer )
+{
+    const std::shared_ptr<SHAPE_POLY_SET>& polys = zone->GetFilledPolysList( aLayer );
 
-         zitem->BuildRTree();
+    std::vector<CN_ITEM*> rv;
 
-         for( VECTOR2I pt : zone->GetFilledPolysList( aLayer )->COutline( j ).CPoints() )
-             zitem->AddAnchor( pt );
+    for( int j = 0; j < polys->OutlineCount(); j++ )
+    {
+        CN_ZONE_LAYER* zitem = new CN_ZONE_LAYER( zone, aLayer, j );
 
-         rv.push_back( Add( zitem ) );
-     }
+        zitem->BuildRTree();
 
-     return rv;
- }
+        for( VECTOR2I pt : zone->GetFilledPolysList( aLayer )->COutline( j ).CPoints() )
+            zitem->AddAnchor( pt );
+
+        rv.push_back( Add( zitem ) );
+    }
+
+    return rv;
+}
 
 
 CN_ITEM* CN_LIST::Add( CN_ZONE_LAYER* zitem )
@@ -233,23 +235,24 @@ void CN_LIST::RemoveInvalidItems( std::vector<CN_ITEM*>& aGarbage )
     if( !m_hasInvalid )
         return;
 
-    auto lastItem = std::remove_if(m_items.begin(), m_items.end(), [&aGarbage] ( CN_ITEM* item )
-    {
-        if( !item->Valid() )
-        {
-            aGarbage.push_back ( item );
-            return true;
-        }
+    auto lastItem = std::remove_if( m_items.begin(), m_items.end(),
+                                    [&aGarbage]( CN_ITEM* item )
+                                    {
+                                        if( !item->Valid() )
+                                        {
+                                            aGarbage.push_back ( item );
+                                            return true;
+                                        }
 
-        return false;
-    } );
+                                        return false;
+                                    } );
 
     m_items.resize( lastItem - m_items.begin() );
 
-    for( auto item : m_items )
+    for( CN_ITEM* item : m_items )
         item->RemoveInvalidRefs();
 
-    for( auto item : aGarbage )
+    for( CN_ITEM* item : aGarbage )
         m_index.Remove( item );
 
     m_hasInvalid = false;
@@ -375,7 +378,7 @@ bool CN_CLUSTER::Contains( const CN_ITEM* aItem )
 bool CN_CLUSTER::Contains( const BOARD_CONNECTED_ITEM* aItem )
 {
     return std::find_if( m_items.begin(), m_items.end(),
-                         [ &aItem ] ( const CN_ITEM* item )
+                         [&aItem]( const CN_ITEM* item )
                          {
                              return item->Valid() && item->Parent() == aItem;
                          } ) != m_items.end();
@@ -411,9 +414,7 @@ void CN_CLUSTER::Add( CN_ITEM* item )
         return;
 
     if( m_originNet <= 0 )
-    {
         m_originNet = netCode;
-    }
 
     if( item->Parent()->Type() == PCB_PAD_T )
     {
@@ -439,8 +440,6 @@ void CN_CLUSTER::Add( CN_ITEM* item )
         }
 
         if( m_originPad && item->Net() != m_originNet )
-        {
             m_conflicting = true;
-        }
     }
 }
