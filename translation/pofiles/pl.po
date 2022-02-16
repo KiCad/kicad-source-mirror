@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:25-0800\n"
-"PO-Revision-Date: 2022-02-14 17:24+0000\n"
-"Last-Translator: Krzysztof Kawa <christophorus72@gmail.com>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"PO-Revision-Date: 2022-02-16 17:20+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6798,9 +6798,8 @@ msgid "Eagle XML files"
 msgstr "Pliki Eagle XML"
 
 #: common/wildcards_and_files_ext.cpp:288
-#, fuzzy
 msgid "OrcadPCB2 netlist files"
-msgstr "Pliki listy sieci"
+msgstr "Pliki listy sieci programu OrcadPCB2"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "KiCad netlist files"
@@ -21391,20 +21390,19 @@ msgstr ""
 "Wartość kontrolna jest pokazywana jako pogrubiona.\n"
 "\n"
 "Obliczenia dotyczą prądów do 35A (zewnętrzne ścieżki) lub 17,5A (wewnętrzne "
-"ścieżki), przy wzroście temperatury do 100 st. C i szerokości do 400milsów "
-"(10 mm).\n"
+"ścieżki), przy wzroście temperatury do 100 st. C i szerokości do 400milsów ("
+"10 mm).\n"
 "\n"
 "Wzór z normy IPC 2221 to\n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>\n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>\n"
 "gdzie:<br>\n"
 "___I___ = maksymalny prąd w amperach<br>\n"
-"___&Delta;T___ = wzrost temperatury powyżej temperatury otoczenia w &deg;"
-"C<br>\n"
+"___&Delta;T___ = wzrost temperatury powyżej temperatury otoczenia w "
+"&deg;C<br>\n"
 "___W___ = szerokość milsach<br>\n"
 "___H___ = grubość (wysokość miedzi) w milsach<br>\n"
-"___K___ = 0.024 dla ścieżek wewnętrznych lub 0.048 dla ścieżek "
-"zewnętrznych<br>\n"
+"___K___ = 0.024 dla ścieżek wewnętrznych lub 0.048 dla ścieżek zewnętrznych\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -22559,7 +22557,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:596
 msgid "Selected options resulted in errors! Change them and try again."
-msgstr "Wybrane opcje spowodowały błędy! Zmień opcje i spróbuj ponownie."
+msgstr "Wybrane opcje powodują błędy! Zmień je i spróbuj ponownie."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:603
 #, c-format
@@ -22588,9 +22586,9 @@ msgid "Reannotate anyway?"
 msgstr "Ponumerować ponownie mimo to?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "Zduplikowane wystąpienie "
+msgstr "Zduplikowane wystąpienie %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
 msgid "Aborted: too many errors"
@@ -23285,9 +23283,8 @@ msgstr "Pełne kreskowanie"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:143
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:131
-#, fuzzy
 msgid "Outline hatch pitch:"
-msgstr "Szerokość obrysu:"
+msgstr "Szerokość kreskowania obrysu:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:157
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:89
@@ -24072,24 +24069,24 @@ msgid "Test for parity between PCB and schematic"
 msgstr "Testuj czy występuje zgodność pomiędzy PCB a schematem"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "Violations (%s)"
-msgstr "Naruszenia (%d)"
+msgstr "Naruszenia (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid "Unconnected Items (%s)"
-msgstr "Niepołączone elementy (%d)"
+msgstr "Niepołączone elementy (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic Parity (%s)"
-msgstr "Zgodność ze schematem (%d)"
+msgstr "Zgodność ze schematem (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored Tests (%s)"
-msgstr "Zignorowanych testów (%d)"
+msgstr "Zignorowanych testów (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.h:106 pcbnew/tools/pcb_actions.cpp:235
 msgid "Design Rules Checker"
@@ -26051,7 +26048,7 @@ msgstr "Inspekcja sieci"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:81
 msgid "Load and Test Netlist"
-msgstr ""
+msgstr "Wczytuje i przeprowadza test listy sieci"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:123
 msgid "Select Netlist"
@@ -29448,7 +29445,6 @@ msgid "Check rule syntax"
 msgstr "Sprawdź składnię reguł"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -29909,8 +29905,8 @@ msgstr ""
 "\n"
 "UWAGA: Zwraca prawdę, jeśli `A` znajduje się na danej warstwie, \n"
 "niezależnie czy reguła jest oceniana dla tej warstwy.\n"
-"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy"
-"\")`.\n"
+"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy\")`."
+"\n"
 "<br><br><br>\n"
 "\n"
 "### Więcej przykładów\n"
@@ -30006,7 +30002,7 @@ msgstr ""
 "    # Nie zezwalaj na nadpisywanie marginesów maski lutowniczej\n"
 "    (rule \"nie zezwalaj na nadpisywanie marginesów maski lutowniczej\"\n"
 "        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
-"        (condition \"A.Type == 'Pad'\"))"
+"        (condition \"A.Type == 'Pad'\"))\n"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
@@ -31019,7 +31015,7 @@ msgstr "(%s maks. wysokość %s; obecnie %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:216
 msgid "(TrueType font characters with insufficient stroke weight)"
-msgstr ""
+msgstr "(Znaki czcionki TrueType z niewystarczającą grubością obrysu)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:233
 #, c-format
@@ -31292,14 +31288,12 @@ msgstr ""
 "Wystąpił błąd przy próbie zapisu projektowej tablicy bibliotek footprintów."
 
 #: pcbnew/files.cpp:967
-#, fuzzy
 msgid "Converting zone fills"
-msgstr "Sprawdzenie wypełnień strefy..."
+msgstr "Konwersja wypełnień stref"
 
 #: pcbnew/files.cpp:972
-#, fuzzy
 msgid "Convert Zone(s)"
-msgstr "Konwertuj na strefę"
+msgstr "Konwertuj strefę(y)"
 
 #: pcbnew/files.cpp:1010 pcbnew/files.cpp:1150
 #: pcbnew/footprint_libraries_utils.cpp:365
@@ -33107,7 +33101,7 @@ msgstr "Wczytywanie komponentów..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1132
 msgid "Loading component 3D models..."
-msgstr "Ładowanie modeli 3D komponentów..."
+msgstr "Wczytywanie modeli 3D komponentów..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1210
 #: pcbnew/plugins/altium/altium_pcb.cpp:1302
@@ -33124,7 +33118,7 @@ msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1502
 msgid "Loading dimension drawings..."
-msgstr "Wczytywanie rysunków wymiarowych..."
+msgstr "Wczytywanie wymiarowania..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1523
 #: pcbnew/plugins/altium/altium_pcb.cpp:1530
@@ -34028,13 +34022,12 @@ msgstr "%d nie jest prawidłową liczbą warstw"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2175
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5448
-#, fuzzy
 msgid ""
 "The legacy zone fill strategy is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
 msgstr ""
 "Wypełnianie segmentami z poprzednich wydań nie jest już wspierane.\n"
-"Dokonać konwersji na wypełnienie polygonami?"
+"Dokonać konwersji na wypełnienie wygładzonymi polygonami?"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2178
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5447
@@ -34050,7 +34043,7 @@ msgstr ""
 "Zduplikowana nazwa NETCLASS '%s' w pliku '%s' w linii %d, przesunięcie %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3495
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: %s\n"
@@ -34058,7 +34051,7 @@ msgid ""
 "offset: %d."
 msgstr ""
 "Niepoprawny ID footprintu w\n"
-"plik: '%s'\n"
+"plik: %s\n"
 "linia: %d\n"
 "przesunięcie: %d."
 
@@ -34090,7 +34083,7 @@ msgstr ""
 "linia: %d przesunięcie: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5074
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: %s\n"
@@ -34098,7 +34091,7 @@ msgid ""
 "offset: %d."
 msgstr ""
 "Nieprawidłowy ID sieci w\n"
-"plik: '%s'\n"
+"plik: %s\n"
 "linia: %d\n"
 "przesunięcie: %d."
 
@@ -34116,7 +34109,7 @@ msgstr ""
 "przesunięcie: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5248
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: %s\n"
@@ -34124,12 +34117,12 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Nieprawidłowy ID sieci w\n"
-"plik: '%s'\n"
+"plik: %s\n"
 "linia: %d\n"
 "przesunięcie: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5353
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: %s;\n"
@@ -34137,18 +34130,17 @@ msgid ""
 "offset: %d."
 msgstr ""
 "Nieprawidłowy ID sieci w\n"
-"plik: '%s'\n"
+"plik: %s\n"
 "linia: %d\n"
 "przesunięcie: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5488
-#, fuzzy
 msgid ""
 "The segment zone fill mode is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
 msgstr ""
 "Wypełnianie segmentami z poprzednich wydań nie jest już wspierane.\n"
-"Dokonać konwersji na wypełnienie polygonami?"
+"Dokonać konwersji na wypełnienie wygładzonymi polygonami?"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:174
 #, c-format
@@ -34166,7 +34158,6 @@ msgid "Cannot rename temporary file '%s' to '%s'"
 msgstr "Nie można zmienić nazwy pliku tymczasowego '%s' na '%s'"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:343
-#, fuzzy
 msgid "Internal Group Data Error"
 msgstr "Uszkodzona wewnętrzna struktura danych grup"
 
@@ -34281,13 +34272,12 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "Zły ZSmoothing dla CZONE_CONTAINER \"%s\""
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2466
-#, fuzzy
 msgid ""
 "The legacy segment fill mode is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
 msgstr ""
 "Wypełnianie segmentami z poprzednich wydań nie jest już wspierane.\n"
-"Dokonać konwersji na wypełnienie polygonami?"
+"Dokonać konwersji na wypełnienie wygładzonymi polygonami?"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2506
 #, c-format
@@ -35277,21 +35267,20 @@ msgstr ""
 #: pcbnew/tools/board_editor_control.cpp:1439
 msgid "Some zone netcodes did not match and were not merged."
 msgstr ""
-"Niektóre kody sieci strefy nie pasowały do siebie i nie zostały scalone."
+"Niektóre z kodów sieci strefy nie pasują do siebie i nie zostały połączone."
 
 #: pcbnew/tools/board_editor_control.cpp:1445
 msgid "Some zone priorities did not match and were not merged."
-msgstr ""
-"Niektóre priorytety stref nie pasowały do siebie i nie zostały scalone."
+msgstr "Niektóre priorytety stref nie pasowały do siebie i nie zostały scalone."
 
 #: pcbnew/tools/board_editor_control.cpp:1451
 msgid "Some zones were rule areas and were not merged."
-msgstr "Niektóre strefy są strefami z ograniczeniami i nie zostały scalone."
+msgstr "Niektóre ze stref są strefami z ograniczeniami i nie zostały połączone."
 
 #: pcbnew/tools/board_editor_control.cpp:1457
 msgid "Some zone layer sets did not match and were not merged."
 msgstr ""
-"Niektóre zestawy warstw stref nie pasowały do siebie i nie zostały scalone."
+"Niektóre zestawy warstw stref nie pasoują do siebie i nie zostały scalone."
 
 #: pcbnew/tools/board_editor_control.cpp:1463
 msgid "Some zones did not intersect and were not merged."
