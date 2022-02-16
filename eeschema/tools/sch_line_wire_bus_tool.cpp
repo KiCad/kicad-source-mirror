@@ -472,6 +472,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
     SCH_LINE*             segment = nullptr;
     EE_GRID_HELPER        grid( m_toolMgr );
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    bool                  forceHV = m_frame->eeconfig()->m_Drawing.hv_lines_only;
 
     auto setCursor =
             [&]()
@@ -554,7 +555,36 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
         cursorPos = (wxPoint) grid.BestSnapAnchor( cursorPos, LAYER_CONNECTABLE, segment );
         controls->ForceCursorPosition( true, cursorPos );
 
-        bool forceHV = m_frame->eeconfig()->m_Drawing.hv_lines_only;
+        // Need to handle change in H/V mode while drawing
+        if( forceHV != m_frame->eeconfig()->m_Drawing.hv_lines_only )
+        {
+            forceHV = m_frame->eeconfig()->m_Drawing.hv_lines_only;
+
+            // Need to delete extra segment if we have one
+            if( !forceHV && m_wires.size() >= 2 && segment != nullptr )
+            {
+                m_wires.pop_back();
+                m_selectionTool->RemoveItemFromSel( segment );
+                delete segment;
+
+                segment = m_wires.back();
+                segment->SetEndPoint( cursorPos );
+            }
+            // Add a segment so we can move orthogonally
+            else if( forceHV && segment )
+            {
+                segment->SetEndPoint( cursorPos );
+
+                // Create a new segment, and chain it after the current segment.
+                segment = static_cast<SCH_LINE*>( segment->Duplicate() );
+                segment->SetFlags( IS_NEW | IS_MOVING );
+                segment->SetStartPoint( cursorPos );
+                m_wires.push_back( segment );
+
+                m_selectionTool->AddItemToSel( segment, true /*quiet mode*/ );
+            }
+        }
+
 
         //------------------------------------------------------------------------
         // Handle cancel:
