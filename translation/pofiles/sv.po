@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-16 17:22-0800\n"
-"PO-Revision-Date: 2022-02-17 01:22+0000\n"
+"PO-Revision-Date: 2022-02-18 13:22+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -18952,7 +18952,7 @@ msgstr "Kalkylatorverktyg"
 
 #: kicad/tools/kicad_manager_actions.cpp:104
 msgid "Run component calculations, track width calculations, etc."
-msgstr "Kör komponentberäkningar, spårbreddsberäkningar etc."
+msgstr "Beräkna komponentvärden, ledarbredder etc."
 
 #: kicad/tools/kicad_manager_actions.cpp:110
 msgid "Edit drawing sheet borders and title block"
@@ -20138,7 +20138,7 @@ msgstr "Externa lagerspår"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:201
 msgid "Trace width (W):"
-msgstr "Spårbredd (W):"
+msgstr "Ledarbredd (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:117
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:215
@@ -20610,7 +20610,6 @@ msgstr ""
 "Vill du avsluta och förkasta dina ändringar?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -20635,27 +20634,28 @@ msgid ""
 "___H___ is thickness (height) in mils<br>\n"
 "___K___ is 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
-"Om du anger maximal ström beräknas spårbredden för att passa.\n"
+"Om du anger maximal ström beräknas nödvändig ledarbredd för att hantera "
+"angiven ström.\n"
 "\n"
-"Om du anger en av spårbredderna beräknas den maximala strömmen den kan "
-"hantera. Därefter beräknas bredden för det andra spåret som också ska "
-"hantera denna ström.\n"
+"Om du anger en av ledarbredderna beräknas den maximala strömmen ledaren kan "
+"hantera. Därefter beräknas bredden för den andra ledaren som också ska "
+"hantera samma ström.\n"
 "\n"
-"Det kontrollerande värdet visas i fetstil.\n"
+"Det styrande värdet visas i fetstil.\n"
 "\n"
-"Beräkningarna gäller för strömmar upp till 35 A (extern) eller 17,5 A "
-"(intern), temperaturhöjningar upp till 100 ° C och bredder upp till 400 mil "
-"(10 mm).\n"
+"Beräkningarna gäller för strömmar upp till 35 A (yttre lager) eller 17,5 A ("
+"inre lager), temperaturhöjningar upp till 100 ° C och bredder upp till 400 "
+"mil (10 mm).\n"
 "\n"
 "Formeln, från IPC 2221, är  \n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>  \n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>  \n"
 "där:  \n"
 "___I___ är maximal ström i Ampere  \n"
 "___&Delta;T___ är temperaturhöjning över omgivningstemperatur i &deg;C  \n"
 "___W___ är bredd i mils  \n"
 "___H___ är tjocklek (höjd) i mils  \n"
-"___K___ är 0.024 för interna spår eller 0.048 för externa spår  \n"
+"___K___ är 0.024 för interna spår eller 0.048 för externa spår\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -25170,7 +25170,7 @@ msgstr "Via längd"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:81
 msgid "Track Length"
-msgstr "Spårlängd"
+msgstr "Ledarlängd"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:82
 msgid "Die Length"
@@ -26326,7 +26326,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:307
 msgid "Track width correction:"
-msgstr "Spårbreddskorrigering:"
+msgstr "Ledarbreddskorrigering:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:312
 msgid ""
@@ -26466,7 +26466,7 @@ msgstr "Differentiella parmått"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:79
 msgid "Single Track Length Tuning"
-msgstr "Enkel spårlängdjustering"
+msgstr "Längdjustering av en ledare"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:85
 msgid "Differential Pair Length Tuning"
@@ -27148,7 +27148,7 @@ msgstr "Via borr:"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:54
 msgid "Track Width and Via Size"
-msgstr "Spårbredd och Via-storlek"
+msgstr "Ledarbredd och Via-storlek"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:146
 msgid "Set Unused Pad Properties"
@@ -27409,7 +27409,7 @@ msgstr "Spårredigering"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:332
 msgid "Mouse drag track behavior:"
-msgstr "Musens dragspårbeteende:"
+msgstr "Musens beteende vid dragning av ledare:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:334
 msgid ""
@@ -27670,8 +27670,9 @@ msgid "Zone fill strategy"
 msgstr "Zonfyllningsstrategi"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:111
+#, fuzzy
 msgid "Mimic legacy behavior"
-msgstr "Efterlikna arv beteende"
+msgstr "Efterlikna tidigare versioners (legacy) beteende"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:112
 msgid ""
@@ -27696,7 +27697,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:134
 msgid "Allow fillets outside zone outline"
-msgstr "Tillåt filéer utanför zonerna"
+msgstr "Tillåt rundning utanför zonerna"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:149
 msgid "Length tuning"
@@ -27704,7 +27705,7 @@ msgstr "Längdjustering"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:153
 msgid "Include stackup height in track length calculations"
-msgstr "Räkna in lageruppbyggnadens höjd i spårlängdsuträkningar"
+msgstr "Räkna in lageruppbyggnadens höjd i ledarlängdsuträkningar"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:154
 msgid ""
@@ -27732,14 +27733,14 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:207
 msgid "Minimum track width:"
-msgstr "Minsta spårbredd:"
+msgstr "Minsta ledarbredd:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:212
 msgid ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"Minsta spårbredd. Om angiven är detta ett absolut minimum som inte kan "
+"Minsta ledarbredd. Om angiven är detta ett absolut minimum som inte kan "
 "underskridas av nätklasser, anpassade regler, eller andra inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:224
@@ -29211,7 +29212,7 @@ msgstr "Silkscreen-överlappning"
 
 #: pcbnew/drc/drc_item.cpp:186
 msgid "Trace length out of range"
-msgstr "Spårlängd utanför området"
+msgstr "Ledarlängd utanför tillåtet intervall"
 
 #: pcbnew/drc/drc_item.cpp:190
 msgid "Skew between traces out of range"
@@ -29614,7 +29615,7 @@ msgstr "Testar %d masköppningar mot %d silkscreen-funktioner."
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:83
 msgid "Checking track widths..."
-msgstr "Kontrollera spårbredder ..."
+msgstr "Kontrollerar ledarbredder ..."
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:82
 msgid "Checking via diameters..."
@@ -33153,7 +33154,7 @@ msgstr "Anpassad ledar-/via-storlek..."
 
 #: pcbnew/router/router_tool.cpp:150
 msgid "Shows a dialog for changing the track width and via size."
-msgstr "Visar en dialogruta för att ändra spårbredd och via storlek."
+msgstr "Visar en dialogruta för att ändra ledarbredd och via-storlek."
 
 #: pcbnew/router/router_tool.cpp:156
 msgid "Switch Track Posture"
@@ -33365,7 +33366,7 @@ msgstr "Hörnstil"
 #: pcbnew/router/router_tool.cpp:2125
 #, c-format
 msgid "Track Width: %s"
-msgstr "Spårbredd: %s"
+msgstr "Ledarbredd: %s"
 
 #: pcbnew/router/router_tool.cpp:2147
 msgid "Diff Pair Gap"
@@ -33482,9 +33483,9 @@ msgid ""
 "overridden by the board minimum width, or by the width of an existing track "
 "if the 'Use Existing Track Width' feature is enabled."
 msgstr ""
-"Välj standardbredden för nya spår. Observera att denna bredd kan överskrivas "
-"av kortets minsta spårbredd, eller av ett existerande spårs bredd om 'Använd "
-"existerande spårbredd' är aktiverad."
+"Välj standardbredden för nya ledare. Observera att denna bredd kan "
+"överskrivas av kortets minsta ledarbredd, eller av en existerande ledares "
+"bredd om 'Använd existerande ledarbredd' är aktiverad."
 
 #: pcbnew/toolbars_pcb_editor.cpp:540
 msgid ""
@@ -33736,7 +33737,7 @@ msgstr "Begränsningsrapport"
 
 #: pcbnew/tools/board_inspection_tool.cpp:729
 msgid "Track width resolution for:"
-msgstr "Upplösning av spårbredd för:"
+msgstr "Tar reda på ledarbredd för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:739
 #, c-format
@@ -33989,7 +33990,7 @@ msgstr "Välj referenspunkt för flytt ..."
 
 #: pcbnew/tools/edit_tool.cpp:1135
 msgid "Edit track width/via size"
-msgstr "Redigera spårbredd / via storlek"
+msgstr "Redigera ledarbredd / via-storlek"
 
 #: pcbnew/tools/edit_tool.cpp:1170
 msgid "At least two straight track segments must be selected."
@@ -34411,7 +34412,7 @@ msgstr "Speglar valt objekt"
 
 #: pcbnew/tools/pcb_actions.cpp:315
 msgid "Change Track Width"
-msgstr "Ändra spårbredd"
+msgstr "Ändra ledarbredd"
 
 #: pcbnew/tools/pcb_actions.cpp:315
 msgid "Updates selected track & via sizes"
@@ -34794,7 +34795,7 @@ msgstr "Skapa materialförteckning från mönsterkortet"
 
 #: pcbnew/tools/pcb_actions.cpp:625
 msgid "Switch Track Width to Next"
-msgstr "Byt spårbredd till nästa"
+msgstr "Byt till nästa ledarbredd"
 
 #: pcbnew/tools/pcb_actions.cpp:625
 msgid "Change track width to next pre-defined size"
@@ -34802,11 +34803,11 @@ msgstr "Byt ledarbredd till nästa fördefinierade bredd"
 
 #: pcbnew/tools/pcb_actions.cpp:630
 msgid "Switch Track Width to Previous"
-msgstr "Byt spårbredd till föregående"
+msgstr "Byt till föregående ledarbredd"
 
 #: pcbnew/tools/pcb_actions.cpp:631
 msgid "Change track width to previous pre-defined size"
-msgstr "Byt spårbredd till föregående fördefinierad bredd"
+msgstr "Byt till föregående fördefinierad ledarbredd"
 
 #: pcbnew/tools/pcb_actions.cpp:636
 msgid "Increase Via Size"
