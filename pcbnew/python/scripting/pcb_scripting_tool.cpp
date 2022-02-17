@@ -67,7 +67,7 @@ bool SCRIPTING_TOOL::Init()
         PyDict_SetItemString( sys_mod, "_pcbnew", mod );
         Py_DECREF( mod );
 
-        callLoadPlugins();
+        // plugins will be loaded later via ReloadPlugins()
     }
 
     return true;

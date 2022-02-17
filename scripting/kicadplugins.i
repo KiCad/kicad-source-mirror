@@ -253,7 +253,8 @@ def LoadPlugins(bundlepath=None, userpath=None, thirdpartypath=None):
         if not os.path.isdir( plugins_dir ):
             continue
 
-        sys.path.append( plugins_dir )
+        if plugins_dir not in sys.path:
+            sys.path.append( plugins_dir )
 
         for module in os.listdir(plugins_dir):
             fullPath = os.path.join( plugins_dir, module )
