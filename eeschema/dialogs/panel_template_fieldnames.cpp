@@ -89,7 +89,7 @@ PANEL_TEMPLATE_FIELDNAMES::~PANEL_TEMPLATE_FIELDNAMES()
 
 bool PANEL_TEMPLATE_FIELDNAMES::TransferDataToWindow()
 {
-    m_fields = m_templateMgr->GetTemplateFieldNames( true );
+    m_fields = m_templateMgr->GetTemplateFieldNames( m_global );
 
     return TransferDataToGrid();
 }
