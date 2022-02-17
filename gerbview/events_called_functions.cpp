@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,6 +76,7 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
                 GERBVIEW_FRAME::OnSelectHighlightChoice )
     EVT_CHOICE( ID_ON_ZOOM_SELECT, GERBVIEW_FRAME::OnSelectZoom )
     EVT_CHOICE( ID_ON_GRID_SELECT, GERBVIEW_FRAME::OnSelectGrid )
+    EVT_MENU( ID_GRID_SETTINGS, GERBVIEW_FRAME::OnGridSettings )
 
     EVT_UPDATE_UI( ID_ON_GRID_SELECT, GERBVIEW_FRAME::OnUpdateSelectGrid )
     EVT_UPDATE_UI( ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE, GERBVIEW_FRAME::OnUpdateSelectDCode )
