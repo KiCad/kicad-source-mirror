@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-16 17:22-0800\n"
-"PO-Revision-Date: 2022-02-16 13:03+0000\n"
+"PO-Revision-Date: 2022-02-18 13:22+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v6/zh_Hans/>\n"
@@ -4515,14 +4515,12 @@ msgid "Alias: "
 msgstr "别名： "
 
 #: common/filename_resolver.cpp:468
-#, fuzzy
 msgid "This path:"
-msgstr "此路径：wxT( "
+msgstr "此路径："
 
 #: common/filename_resolver.cpp:471
-#, fuzzy
 msgid "Existing path:"
-msgstr "现有路径：wxT( "
+msgstr "现有路径："
 
 #: common/filename_resolver.cpp:473
 msgid "Bad alias (duplicate name)"
