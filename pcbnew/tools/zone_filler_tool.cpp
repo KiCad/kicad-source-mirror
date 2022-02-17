@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017 CERN
- * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -157,7 +157,11 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
 
     if( filler.Fill( toFill ) )
     {
-        reporter->AdvancePhase();
+        if( aReporter )
+            aReporter->AdvancePhase();
+        else
+            reporter->AdvancePhase();
+
         commit.Push( _( "Fill Zone(s)" ), true, true, false );
         frame->m_ZoneFillsDirty = false;
     }
