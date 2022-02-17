@@ -424,6 +424,18 @@ void GERBER_JOBFILE_WRITER::addJSONFilesAttributes()
                 skip_file = true;
                 break;
 
+            case User_1:
+            case User_2:
+            case User_3:
+            case User_4:
+            case User_5:
+            case User_6:
+            case User_7:
+            case User_8:
+            case User_9:
+                gbr_layer_id = wxT( "Other,User" );
+                break;
+
             default:
                 skip_file = true;
                 m_reporter->Report( wxT( "Unexpected layer id in job file" ), RPT_SEVERITY_ERROR );
