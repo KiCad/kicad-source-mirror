@@ -58,7 +58,8 @@ MD5_HASH& MD5_HASH::operator=( const MD5_HASH& aOther )
 void MD5_HASH::Init()
 {
     m_valid = false;
-    md5_init(&m_ctx);
+    md5_init( &m_ctx );
+    memset( m_hash, 0, 16 );
 }
 
 
