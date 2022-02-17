@@ -249,12 +249,6 @@ void ZONE::SetLayer( PCB_LAYER_ID aLayer )
 
 void ZONE::SetLayerSet( LSET aLayerSet )
 {
-    if( GetIsRuleArea() )
-    {
-        // Rule areas can only exist on copper layers
-        aLayerSet &= LSET::AllCuMask();
-    }
-
     if( aLayerSet.count() == 0 )
         return;
 
@@ -653,32 +647,6 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
     // and filled polygons can explain the display and DRC calculation time:
     msg.Printf( wxT( "%d" ), (int) m_borderHatchLines.size() );
     aList.emplace_back( MSG_PANEL_ITEM( _( "HatchBorder Lines" ), msg ) );
-
-    PCB_LAYER_ID layer = m_layer;
-
-    // NOTE: This brings in dependence on PCB_EDIT_FRAME to the qa tests, which isn't ideal.
-    // TODO: Figure out a way for items to know the active layer without the whole edit frame?
-#if 0
-    if( PCB_EDIT_FRAME* pcbframe = dynamic_cast<PCB_EDIT_FRAME*>( aFrame ) )
-    {
-        if( m_FilledPolysList.count( pcbframe->GetActiveLayer() ) )
-            layer = pcbframe->GetActiveLayer();
-    }
-#endif
-
-    if( !GetIsRuleArea() )
-    {
-        auto layer_it = m_FilledPolysList.find( layer );
-
-        if( layer_it == m_FilledPolysList.end() )
-            layer_it = m_FilledPolysList.begin();
-
-        if( layer_it != m_FilledPolysList.end() )
-        {
-            msg.Printf( wxT( "%d" ), layer_it->second.TotalVertices() );
-            aList.emplace_back( MSG_PANEL_ITEM( _( "Corner Count" ), msg ) );
-        }
-    }
 }
 
 

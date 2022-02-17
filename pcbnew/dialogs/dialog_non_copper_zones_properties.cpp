@@ -81,7 +81,10 @@ DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* 
 
     m_ptr  = aSettings;
     m_settings = *aSettings;
-    m_settings.SetupLayersList( m_layers, m_parent, false );
+
+    bool fpEditorMode = m_parent->IsType( FRAME_FOOTPRINT_EDITOR );
+
+    m_settings.SetupLayersList( m_layers, m_parent, LSET::AllNonCuMask(), fpEditorMode );
 
     m_sdbSizerButtonsOK->SetDefault();
 

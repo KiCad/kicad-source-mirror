@@ -192,16 +192,14 @@ const static wxSize CHECKERBOARD_SIZE( 8, 8 );
 // A helper for setting up a dialog list for specifying zone layers.  Used by all three
 // zone settings dialogs.
 void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* aFrame,
-                                     bool aShowCopper, bool aFpEditorMode )
+                                     LSET aLayers, bool aFpEditorMode )
 {
     BOARD* board = aFrame->GetBoard();
     COLOR4D backgroundColor = aFrame->GetColorSettings()->GetColor( LAYER_PCB_BACKGROUND );
-    LSET layers = aShowCopper ? LSET::AllCuMask( board->GetCopperLayerCount() )
-                              : LSET::AllNonCuMask();
 
     // In the Footprint Editor In1_Cu is used as a proxy for "all inner layers"
     if( aFpEditorMode )
-        layers.set( In1_Cu );
+        aLayers.set( In1_Cu );
 
     wxDataViewColumn* checkColumn = aList->AppendToggleColumn( wxEmptyString );
     wxDataViewColumn* layerColumn = aList->AppendIconTextColumn( wxEmptyString );
@@ -210,7 +208,7 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
 
     int textWidth = 0;
 
-    for( LSEQ layer = layers.UIOrder(); layer; ++layer )
+    for( LSEQ layer = aLayers.UIOrder(); layer; ++layer )
     {
         PCB_LAYER_ID layerID = *layer;
         wxString layerName = board->GetLayerName( layerID );
