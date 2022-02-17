@@ -1705,43 +1705,36 @@ void DIALOG_NET_INSPECTOR::onSortingChanged( wxDataViewEvent& aEvent )
 
 void DIALOG_NET_INSPECTOR::adjustListColumns()
 {
-    /**
-     * Calculating optimal width of the first (Net) and the last (Pad Count) columns.
-     * That width must be enough to fit column header label and be not less than width of
-     * four chars (0000).
-     */
     wxWindowUpdateLocker locker( m_netsList );
 
-    wxClientDC dc( GetParent() );
+    int w0 = GetTextExtent( COLUMN_NET.display_name ).x;
+    int w1 = GetTextExtent( COLUMN_NAME.display_name ).x;
+    int w2 = GetTextExtent( COLUMN_PAD_COUNT.display_name ).x;
+    int w3 = GetTextExtent( COLUMN_VIA_COUNT.display_name ).x;
+    int w4 = GetTextExtent( COLUMN_VIA_LENGTH.display_name ).x;
+    int w5 = GetTextExtent( COLUMN_BOARD_LENGTH.display_name ).x;
+    int w6 = GetTextExtent( COLUMN_CHIP_LENGTH.display_name ).x;
+    int w7 = GetTextExtent( COLUMN_TOTAL_LENGTH.display_name ).x;
 
-    int h, minw, minw_col0, minw_col1;
-    int w0, w1, w2, w3, w4, w5, w6, w7;
-
-    dc.GetTextExtent( COLUMN_NET.display_name, &w0, &h );
-    dc.GetTextExtent( wxT( "MMMMMMMMMMMMM" ), &minw_col1, &h );
-    dc.GetTextExtent( COLUMN_PAD_COUNT.display_name, &w2, &h );
-    dc.GetTextExtent( COLUMN_VIA_COUNT.display_name, &w3, &h );
-    dc.GetTextExtent( COLUMN_VIA_LENGTH.display_name, &w4, &h );
-    dc.GetTextExtent( COLUMN_BOARD_LENGTH.display_name, &w5, &h );
-    dc.GetTextExtent( COLUMN_CHIP_LENGTH.display_name, &w6, &h );
-    dc.GetTextExtent( COLUMN_TOTAL_LENGTH.display_name, &w7, &h );
-    dc.GetTextExtent( wxT( "00000,000 mm" ), &minw, &h );
-    dc.GetTextExtent( wxT( "00000" ), &minw_col0, &h );
+    int minValueWidth = GetTextExtent( wxT( "00000,000 mm" ) ).x;
+    int minNumberWidth = GetTextExtent( wxT( "000" ) ).x;
+    int minNameWidth = GetTextExtent( wxT( "MMMMMM" ) ).x;
 
     // Considering left and right margins.
     // For wxRenderGeneric it is 5px.
     // Also account for the sorting arrow in the column header.
     // Column 0 also needs space for any potential expander icons.
+    const int margins = 15;
     const int extra_width = 30;
 
-    w0        = std::max( w0, minw_col0 ) + extra_width;
-    minw_col1 = minw_col1 + extra_width;
-    w2        = w2 + extra_width;
-    w3        = w3 + extra_width;
-    w4        = std::max( w4 + extra_width, minw );
-    w5        = std::max( w5 + extra_width, minw );
-    w6        = std::max( w6 + extra_width, minw );
-    w7        = std::max( w7 + extra_width, minw );
+    w0 = std::max( w0, minNumberWidth ) + extra_width;
+    w1 = std::max( w1, minNameWidth )   + margins;
+    w2 = std::max( w2, minNumberWidth ) + margins;
+    w3 = std::max( w3, minNumberWidth ) + margins;
+    w4 = std::max( w4, minValueWidth )  + margins;
+    w5 = std::max( w5, minValueWidth )  + margins;
+    w6 = std::max( w6, minValueWidth )  + margins;
+    w7 = std::max( w7, minValueWidth )  + margins;
 
     // the columns might have been reordered.  we work on the column model numbers though.
     std::vector<int> column_order( m_data_model->columnCount() );
@@ -1751,21 +1744,21 @@ void DIALOG_NET_INSPECTOR::adjustListColumns()
 
     assert( column_order.size() == 8 );
 
+    m_netsList->GetColumn( column_order[0] )->SetMinWidth( w0 );
+    m_netsList->GetColumn( column_order[1] )->SetMinWidth( w1 );
+    m_netsList->GetColumn( column_order[2] )->SetMinWidth( w2 );
+    m_netsList->GetColumn( column_order[3] )->SetMinWidth( w3 );
+    m_netsList->GetColumn( column_order[4] )->SetMinWidth( w4 );
+    m_netsList->GetColumn( column_order[5] )->SetMinWidth( w5 );
+    m_netsList->GetColumn( column_order[6] )->SetMinWidth( w6 );
+    m_netsList->GetColumn( column_order[7] )->SetMinWidth( w7 );
+
     // At resizing of the list the width of middle column (Net Names) changes only.
     int width = KIPLATFORM::UI::GetUnobscuredSize( m_netsList ).x;
-    w1 = width - w0 - w2 - w3 - w4 - w5 - w6 - w7;
+    int remaining = width - w0 - w2 - w3 - w4 - w5 - w6 - w7;
 
-    if( w1 < minw_col1 )
-        w1 = minw_col1;
-
-    m_netsList->GetColumn( column_order[0] )->SetWidth( w0 );
-    m_netsList->GetColumn( column_order[1] )->SetWidth( w1 );
-    m_netsList->GetColumn( column_order[2] )->SetWidth( w2 );
-    m_netsList->GetColumn( column_order[3] )->SetWidth( w3 );
-    m_netsList->GetColumn( column_order[4] )->SetWidth( w4 );
-    m_netsList->GetColumn( column_order[5] )->SetWidth( w5 );
-    m_netsList->GetColumn( column_order[6] )->SetWidth( w6 );
-    m_netsList->GetColumn( column_order[7] )->SetWidth( w7 );
+    if( remaining > w1 )
+        m_netsList->GetColumn( column_order[1] )->SetWidth( remaining );
 
     m_netsList->Refresh();
 
