@@ -445,7 +445,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             break;
 
         default:
-            wxFAIL_MSG( wxT( "Unhandled item <wxT( " ) + item->GetClass() + wxT( " )>" ) );
+            wxFAIL_MSG( wxT( "Unhandled item <" ) + item->GetClass() + wxT( ">" ) );
             break;
         }
     }

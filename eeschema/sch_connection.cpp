@@ -412,7 +412,7 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( std::vector<MSG_PANEL_ITEM>& aList ) 
     // CONNECTION_GRAPH entirely in the future, as they are mostly only useful for netlist exports.
 #if 0
     if( !IsBus() )
-        aList.emplace_back( _( "Net CodewxT( " ), wxString::Format( " )%d", m_net_code ) );
+        aList.emplace_back( _( "Net Code" ), wxString::Format( "%d", m_net_code ) );
 #endif
 
     if( auto alias = m_graph->GetBusAlias( m_name ) )
@@ -474,7 +474,7 @@ bool SCH_CONNECTION::MightBeBusLabel( const wxString& aLabel )
     // Weak heuristic for performance reasons.  Stronger test will be used for connectivity
     wxString label = UnescapeString( aLabel );
 
-    return label.Contains( wxT( "[wxT( " ) ) || label.Contains( wxT( " ){" ) );
+    return label.Contains( wxT( "[" ) ) || label.Contains( wxT( "{" ) );
 }
 
 
