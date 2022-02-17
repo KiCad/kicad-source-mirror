@@ -43,6 +43,7 @@ public:
     ~ZONE_FILLER();
 
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
+    PROGRESS_REPORTER* GetProgressReporter() const { return m_progressReporter; }
 
     /**
      * Fills the given list of zones.  Invalidates connectivity - it is up to the caller to obtain

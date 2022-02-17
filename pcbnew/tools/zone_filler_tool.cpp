@@ -133,10 +133,10 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
 
         button->Bind( wxEVT_COMMAND_HYPERLINK,
                       std::function<void( wxHyperlinkEvent& aEvent )>(
-                              [frame]( wxHyperlinkEvent& aEvent )
-                              {
-                                  frame->ShowBoardSetupDialog( _( "Rules" ) );
-                              } ) );
+                      [frame]( wxHyperlinkEvent& aEvent )
+                      {
+                          frame->ShowBoardSetupDialog( _( "Rules" ) );
+                      } ) );
 
         infobar->RemoveAllButtons();
         infobar->AddButton( button );
@@ -157,10 +157,7 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
 
     if( filler.Fill( toFill ) )
     {
-        if( aReporter )
-            aReporter->AdvancePhase();
-        else
-            reporter->AdvancePhase();
+        filler.GetProgressReporter()->AdvancePhase();
 
         commit.Push( _( "Fill Zone(s)" ), true, true, false );
         frame->m_ZoneFillsDirty = false;
