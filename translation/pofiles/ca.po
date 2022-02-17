@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:25-0800\n"
-"PO-Revision-Date: 2022-02-16 17:20+0000\n"
+"PO-Revision-Date: 2022-02-18 13:22+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -12390,6 +12390,9 @@ msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
 "Shift and Ctrl."
 msgstr ""
+"Les accions de clic esquerre (i arrossegament) depenen de dues tecles "
+"modificadores:\n"
+"Shift i Ctrl."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:98
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
@@ -12432,6 +12435,9 @@ msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Option, Shift and Cmd."
 msgstr ""
+"Les accions de clic esquerre (i arrossegament) depenen de 3 tecles "
+"modificadores:\n"
+"Opció, Shift i Cmd."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:198
@@ -12440,12 +12446,11 @@ msgstr "Shift+Cmd"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:196
 msgid "Symbol Field Automatic Placement"
-msgstr ""
+msgstr "Posicionat automàtic dels camps del símbol"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:198
-#, fuzzy
 msgid "A&utomatically place symbol fields"
-msgstr "Afegeix a&utomàticament els camps del component"
+msgstr "Posiciona a&utomàticament els camps del símbol"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:201
 msgid "A&llow field autoplace to change justification"
@@ -29951,9 +29956,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:275
-#, fuzzy
 msgid "No via hole size defined."
-msgstr "Mida de perforació de la via no permesa"
+msgstr "No s'ha definit una mida del forat de la via."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:290
 #, fuzzy
@@ -30167,9 +30171,8 @@ msgid "Board and netclass clearances apply only between copper items."
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:1013
-#, fuzzy
 msgid "Keepout constraint not met."
-msgstr "Sense empremtes"
+msgstr "No es compleix la restricció d'àrea restringida."
 
 #: pcbnew/drc/drc_engine.cpp:1015
 msgid "Disallow constraint not met."
@@ -30186,9 +30189,8 @@ msgid "Rule layer '%s' not matched; rule ignored."
 msgstr "La capa de normes '%s' no coincideix; norma ignorada."
 
 #: pcbnew/drc/drc_engine.cpp:1046 pcbnew/drc/drc_engine.cpp:1067
-#, fuzzy
 msgid "Rule layer not matched; rule ignored."
-msgstr "Elimina totes les capes"
+msgstr "La capa de normes no coincideix, norma ignorada."
 
 #: pcbnew/drc/drc_engine.cpp:1079
 msgid "Unconditional constraint applied."
@@ -30323,9 +30325,8 @@ msgid "Copper areas intersect"
 msgstr "Les àrees de coure es creuen o estan massa juntes"
 
 #: pcbnew/drc/drc_item.cpp:84
-#, fuzzy
 msgid "Copper zone net has no pads"
-msgstr "La zona de coure (nom de la xarxa %s): la xarxa no té pads connectats."
+msgstr "La xarxa de la zona de coure no té pads"
 
 #: pcbnew/drc/drc_item.cpp:88
 msgid "Thermal relief connection to zone incomplete"
@@ -30419,9 +30420,8 @@ msgid "Duplicate footprints"
 msgstr "Desa l'empremta"
 
 #: pcbnew/drc/drc_item.cpp:168
-#, fuzzy
 msgid "Missing footprint"
-msgstr "No falten empremtes."
+msgstr "Falta empremta"
 
 #: pcbnew/drc/drc_item.cpp:172
 #, fuzzy
@@ -30606,9 +30606,8 @@ msgid "Rule already has a '%s' constraint."
 msgstr ""
 
 #: pcbnew/drc/drc_rule_parser.cpp:407
-#, fuzzy
 msgid "Expecting number."
-msgstr "S'està esperant %s"
+msgstr "S'està esperant un número."
 
 #: pcbnew/drc/drc_rule_parser.cpp:422
 #, fuzzy
@@ -30660,9 +30659,8 @@ msgid "Checking pad, via and zone connections..."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:145
-#, fuzzy
 msgid "Checking net connections..."
-msgstr "Combina les zones"
+msgstr "S'estan comprovant les connexions de xarxa..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:190
 #, fuzzy
