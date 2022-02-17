@@ -142,11 +142,10 @@ public:
      * A helper routine for the various zone dialogs (copper, non-copper, keepout).
      * @param aList the wxDataViewListCtrl to populate
      * @param aFrame the parent editor frame
-     * @param aShowCopper indicates whether copper or technical layers should be shown
-     * @param aFpEditorMode true to show (when aShowCopper = true) the option: all inner layers
+     * @param aFpEditorMode true to show a single "Inner Layers" item for all inner copper layers
      */
-    void SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* aFrame,
-                          bool aShowCopper, bool aFpEditorMode = false );
+    void SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* aFrame, LSET aLayers,
+                          bool aFpEditorMode );
 
     /**
      * Function ExportSetting
@@ -160,22 +159,13 @@ public:
     void ExportSetting( ZONE& aTarget, bool aFullExport = true ) const;
 
     void SetCornerSmoothingType( int aType) { m_cornerSmoothingType = aType; }
-
     int GetCornerSmoothingType() const { return m_cornerSmoothingType; }
 
     void SetCornerRadius( int aRadius );
-
     unsigned int GetCornerRadius() const { return m_cornerRadius; }
 
-    ZONE_CONNECTION GetPadConnection() const
-    {
-        return m_padConnection;
-    }
-
-    void SetPadConnection( ZONE_CONNECTION aPadConnection )
-    {
-        m_padConnection = aPadConnection;
-    }
+    ZONE_CONNECTION GetPadConnection() const { return m_padConnection; }
+    void SetPadConnection( ZONE_CONNECTION aPadConnection ) { m_padConnection = aPadConnection; }
 
     /**
      * Accessors to parameters used in Rule Area zones:

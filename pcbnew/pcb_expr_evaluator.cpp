@@ -568,12 +568,13 @@ bool calcIsInsideArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CO
     }
     else
     {
-        if( aCtx->GetLayer() != UNDEFINED_LAYER
-                && !( aArea->GetLayerSet().Contains( aCtx->GetLayer() ) ) )
+        PCB_LAYER_ID layer = aCtx->GetLayer();
+
+        if( layer != UNDEFINED_LAYER && !( aArea->GetLayerSet().Contains( layer ) ) )
             return false;
 
         if( !shape )
-            shape = aItem->GetEffectiveShape( aCtx->GetLayer() );
+            shape = aItem->GetEffectiveShape( layer );
 
         return areaOutline.Collide( shape.get() );
     }

@@ -233,12 +233,6 @@ void ZONE::SetLayer( PCB_LAYER_ID aLayer )
 
 void ZONE::SetLayerSet( LSET aLayerSet )
 {
-    if( GetIsRuleArea() )
-    {
-        // Rule areas can only exist on copper layers
-        aLayerSet &= LSET::AllCuMask();
-    }
-
     if( aLayerSet.count() == 0 )
         return;
 
@@ -609,25 +603,6 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
     // and filled polygons can explain the display and DRC calculation time:
     msg.Printf( wxT( "%d" ), (int) m_borderHatchLines.size() );
     aList.emplace_back( MSG_PANEL_ITEM( _( "HatchBorder Lines" ), msg ) );
-
-    PCB_LAYER_ID layer = m_layer;
-
-    if( dynamic_cast<PCB_SCREEN*>( aFrame->GetScreen() ) )
-        layer = dynamic_cast<PCB_SCREEN*>( aFrame->GetScreen() )->m_Active_Layer;
-
-    if( !GetIsRuleArea() )
-    {
-        auto layer_it = m_FilledPolysList.find( layer );
-
-        if( layer_it == m_FilledPolysList.end() )
-            layer_it = m_FilledPolysList.begin();
-
-        if( layer_it != m_FilledPolysList.end() )
-        {
-            msg.Printf( wxT( "%d" ), layer_it->second->TotalVertices() );
-            aList.emplace_back( MSG_PANEL_ITEM( _( "Corner Count" ), msg ) );
-        }
-    }
 }
 
 

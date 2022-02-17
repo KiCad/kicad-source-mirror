@@ -186,7 +186,9 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
 
     m_ptr = aSettings;
     m_settings = *aSettings;
-    m_settings.SetupLayersList( m_layers, m_Parent, true );
+    m_settings.SetupLayersList( m_layers, m_Parent,
+                                LSET::AllCuMask( aParent->GetBoard()->GetCopperLayerCount() ),
+                                false );
 
     m_settingsExported = false;
     m_currentlySelectedNetcode = INVALID_NET_CODE;
