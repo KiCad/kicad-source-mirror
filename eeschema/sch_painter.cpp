@@ -1981,7 +1981,10 @@ void SCH_PAINTER::draw( SCH_SYMBOL* aSymbol, int aLayer )
         return;
 
     if( drawingShadows && !( aSymbol->IsBrightened() || aSymbol->IsSelected() ) )
-        return;
+    {
+        // Don't exit here; symbol may still have selected pins
+        // return;
+    }
 
     int unit = aSymbol->GetUnitSelection( &m_schematic->CurrentSheet() );
     int convert = aSymbol->GetConvert();
@@ -2001,7 +2004,7 @@ void SCH_PAINTER::draw( SCH_SYMBOL* aSymbol, int aLayer )
 
     orientSymbol( &tempSymbol, aSymbol->GetOrientation() );
 
-    for( auto& tempItem : tempSymbol.GetDrawItems() )
+    for( LIB_ITEM& tempItem : tempSymbol.GetDrawItems() )
     {
         tempItem.SetFlags( aSymbol->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED
         tempItem.MoveTo( tempItem.GetPosition() + (VECTOR2I) mapCoords( aSymbol->GetPosition() ) );
