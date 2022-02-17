@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:25-0800\n"
-"PO-Revision-Date: 2022-02-16 02:33+0000\n"
+"PO-Revision-Date: 2022-02-18 13:22+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -4616,7 +4616,7 @@ msgstr "别名： "
 
 #: common/filename_resolver.cpp:468
 msgid "This path:"
-msgstr "该路径："
+msgstr "此路径："
 
 #: common/filename_resolver.cpp:471
 msgid "Existing path:"
