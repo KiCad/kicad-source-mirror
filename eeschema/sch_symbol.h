@@ -694,13 +694,13 @@ private:
      */
     wxString    m_schLibSymbolName;
 
-    TRANSFORM   m_transform;    ///< The rotation/mirror transformation matrix.
-    SCH_FIELDS  m_fields;       ///< Variable length list of fields.
+    TRANSFORM                              m_transform; ///< The rotation/mirror transformation.
+    std::vector<SCH_FIELD>                 m_fields;    ///< Variable length list of fields.
 
-    std::unique_ptr< LIB_SYMBOL >          m_part;    // a flattened copy of the LIB_SYMBOL from
-                                                      // the PROJECT's libraries.
-    std::vector<std::unique_ptr<SCH_PIN>>  m_pins;    // a SCH_PIN for every LIB_PIN (all units)
-    std::unordered_map<LIB_PIN*, unsigned> m_pinMap;  // library pin pointer to SCH_PIN's index
+    std::unique_ptr< LIB_SYMBOL >          m_part;      ///< a flattened copy of the LIB_SYMBOL
+                                                        ///<   from the PROJECT's libraries.
+    std::vector<std::unique_ptr<SCH_PIN>>  m_pins;      ///< a SCH_PIN for every LIB_PIN (all units)
+    std::unordered_map<LIB_PIN*, unsigned> m_pinMap;    ///< library pin pointer : SCH_PIN's index
 
     bool        m_isInNetlist;  ///< True if the symbol should appear in the netlist
     bool        m_inBom;        ///< True to include in bill of materials export.
