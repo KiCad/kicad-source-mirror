@@ -520,7 +520,7 @@
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
                         <property name="maximum_size"></property>
-                        <property name="minimum_size">500,300</property>
+                        <property name="minimum_size">640,300</property>
                         <property name="name">m_netsList</property>
                         <property name="permission">protected</property>
                         <property name="pos"></property>
