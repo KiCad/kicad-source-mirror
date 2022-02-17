@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:25-0800\n"
-"PO-Revision-Date: 2022-02-16 22:56+0000\n"
+"PO-Revision-Date: 2022-02-17 01:22+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -1668,7 +1668,7 @@ msgstr "Kopiera KiCad versionsinformation till Urklipp"
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
-msgstr "&Rapportera Fel"
+msgstr "&Rapportera fel"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:661
 msgid "Report a problem with KiCad"
@@ -6342,11 +6342,11 @@ msgstr ""
 
 #: common/tool/actions.cpp:630
 msgid "Getting Started with KiCad"
-msgstr "Kom Igång med KiCad"
+msgstr "Kom igång med KiCad"
 
 #: common/tool/actions.cpp:631
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
-msgstr "Öppna \"Kom Igång med KiCad\"-guiden för nybörjare"
+msgstr "Öppna \"Kom igång med KiCad\"-guiden för nybörjare"
 
 #: common/tool/actions.cpp:636
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:31
@@ -6380,7 +6380,7 @@ msgstr "Öppna \"Donera till KiCad\" i en webbläsare"
 
 #: common/tool/actions.cpp:660
 msgid "Report Bug"
-msgstr "Rapportera Fel"
+msgstr "Rapportera fel"
 
 #: common/tool/common_control.cpp:219
 #, c-format
@@ -23996,7 +23996,7 @@ msgstr "Fyll på alla zoner innan du utför DRC"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
-msgstr "Rapportera alla fel för varje spår"
+msgstr "Rapportera alla fel för varje ledare"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:31
 msgid ""
@@ -32398,7 +32398,7 @@ msgid ""
 "KiCad team using the menu Help->Report Bug."
 msgstr ""
 "Stötte på ett fel under inläsning av nätlistan. Vänligen rapportera detta "
-"problem till KiCad-teamet genom menyn Hjälp -> Rapportera Fel."
+"problem till KiCad-teamet genom menyn Hjälp -> Rapportera fel."
 
 #: pcbnew/pcb_edit_frame.cpp:1592
 #, c-format
