@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-14 09:20-0800\n"
+"POT-Creation-Date: 2022-02-16 17:22-0800\n"
 "PO-Revision-Date: 2022-02-14 17:18+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v6/ko/>\n"
@@ -4552,12 +4552,12 @@ msgstr "별칭: "
 
 #: common/filename_resolver.cpp:468
 #, fuzzy
-msgid "This path:wxT( "
+msgid "This path:"
 msgstr "이 경로:"
 
 #: common/filename_resolver.cpp:471
 #, fuzzy
-msgid "Existing path:wxT( "
+msgid "Existing path:"
 msgstr "기존 경로:"
 
 #: common/filename_resolver.cpp:473
@@ -13238,9 +13238,9 @@ msgstr "할당된 네트클래스"
 msgid "Connection Name"
 msgstr "연결 이름"
 
-#: eeschema/sch_connection.cpp:415
-#, fuzzy
-msgid "Net CodewxT( "
+#: eeschema/sch_connection.cpp:415 pcbnew/dialogs/dialog_net_inspector.cpp:76
+#: pcbnew/netinfo_item.cpp:76
+msgid "Net Code"
 msgstr "네트 코드"
 
 #: eeschema/sch_connection.cpp:420 eeschema/sch_connection.cpp:433
@@ -18948,8 +18948,8 @@ msgid "Application failed to load:\n"
 msgstr "응용 프로그램 불러오기 실패:\n"
 
 #: kicad/tools/kicad_manager_control.cpp:670
-#: kicad/tools/kicad_manager_control.cpp:677 pcbnew/pcb_edit_frame.cpp:1558
-#: pcbnew/pcb_edit_frame.cpp:1588
+#: kicad/tools/kicad_manager_control.cpp:677 pcbnew/pcb_edit_frame.cpp:1551
+#: pcbnew/pcb_edit_frame.cpp:1581
 msgid "KiCad Error"
 msgstr "KiCad 오류"
 
@@ -21978,7 +21978,7 @@ msgstr "사전 정의된 크기"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:108
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:54
-#: pcbnew/dialogs/dialog_drc.cpp:193 pcbnew/pcb_edit_frame.cpp:1744
+#: pcbnew/dialogs/dialog_drc.cpp:193 pcbnew/pcb_edit_frame.cpp:1737
 msgid "Custom Rules"
 msgstr "사용자 정의 규칙"
 
@@ -24998,10 +24998,6 @@ msgstr "극 좌표계 사용"
 #: pcbnew/dialogs/dialog_move_exact_base.h:71
 msgid "Move Item"
 msgstr "항목 이동"
-
-#: pcbnew/dialogs/dialog_net_inspector.cpp:76 pcbnew/netinfo_item.cpp:76
-msgid "Net Code"
-msgstr "네트 코드"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:77 pcbnew/netinfo_item.cpp:74
 msgid "Net Name"
@@ -28407,6 +28403,7 @@ msgid "Check rule syntax"
 msgstr "규칙 문법을 체크"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
+#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -28532,8 +28529,8 @@ msgid ""
 "    A.inDiffPair('<net_name>')\n"
 "True if `A` has net that is part of the specified differential pair.\n"
 "`<net_name>` is the base name of the differential pair.  For example, "
-"`inDiffPair('CLK')`\n"
-"matches items in the `CLK_P` and `CLK_N` nets.\n"
+"`inDiffPair('/CLK')`\n"
+"matches items in the `/CLK_P` and `/CLK_N` nets.\n"
 "<br><br>\n"
 "\n"
 "    AB.isCoupledDiffPair()\n"
@@ -28573,20 +28570,20 @@ msgid ""
 "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
 "\n"
 "\n"
-"    (rule \"Distance between Vias of Different Nets\"  \n"
+"    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
 "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
 "\n"
-"    (rule \"Clearance between Pads of Different Nets\"  \n"
+"    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
 "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
 "\n"
 "\n"
-"    (rule \"Via Hole to Track Clearance\"  \n"
+"    (rule \"Via Hole to Track Clearance\"\n"
 "        (constraint hole_clearance (min 0.254mm))\n"
-"        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
-"    \n"
-"    (rule \"Pad to Track Clearance\"  \n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
+"\n"
+"    (rule \"Pad to Track Clearance\"\n"
 "        (constraint clearance (min 0.2mm))\n"
 "        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
 "\n"
@@ -28596,11 +28593,11 @@ msgid ""
 "        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
 "\n"
 "\n"
-"    (rule \"Max Drill Hole Size Mechanical\"  \n"
+"    (rule \"Max Drill Hole Size Mechanical\"\n"
 "        (constraint hole_size (max 6.3mm))\n"
 "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
-"    \n"
-"    (rule \"Max Drill Hole Size PTH\"  \n"
+"\n"
+"    (rule \"Max Drill Hole Size PTH\"\n"
 "        (constraint hole_size (max 6.35mm))\n"
 "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
@@ -28608,7 +28605,7 @@ msgid ""
 "    # Specify an optimal gap for a particular diff-pair\n"
 "    (rule \"dp clock gap\"\n"
 "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
-"        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
+"        (condition \"A.inDiffPair('/CLK')\"))\n"
 "\n"
 "    # Specify a larger clearance around any diff-pair\n"
 "    (rule \"dp clearance\"\n"
@@ -31305,11 +31302,11 @@ msgstr "기판 파일은 읽기 전용입니다."
 msgid "PCB file changes are unsaved"
 msgstr "PCB 파일 변경점이 저장되지 않음"
 
-#: pcbnew/pcb_edit_frame.cpp:1473
+#: pcbnew/pcb_edit_frame.cpp:1466
 msgid "The schematic for this board cannot be found."
 msgstr "이 기판의 회로도를 찾을 수 없습니다."
 
-#: pcbnew/pcb_edit_frame.cpp:1497
+#: pcbnew/pcb_edit_frame.cpp:1490
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
@@ -31319,11 +31316,11 @@ msgstr ""
 "다. 회로도로부터 PCB를 생성하거나 업데이트하려면, KiCad 프로젝트 매니저를 실"
 "행하여 프로젝트를 생성하세요."
 
-#: pcbnew/pcb_edit_frame.cpp:1519
+#: pcbnew/pcb_edit_frame.cpp:1512
 msgid "Eeschema netlist"
 msgstr "Eeschema 네트리스트"
 
-#: pcbnew/pcb_edit_frame.cpp:1530
+#: pcbnew/pcb_edit_frame.cpp:1523
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
@@ -31331,31 +31328,31 @@ msgstr ""
 "넷리스트를 읽는 동안 오류가 발생했습니다. 도움말->버그 보고 메뉴를 사용하여 "
 "KiCad 팀에 이 문제를 보고하십시오."
 
-#: pcbnew/pcb_edit_frame.cpp:1557
+#: pcbnew/pcb_edit_frame.cpp:1550
 #, c-format
 msgid "Schematic file '%s' not found."
 msgstr "회로도 파일 '%s'을(를) 찾을 수 없습니다."
 
-#: pcbnew/pcb_edit_frame.cpp:1587
+#: pcbnew/pcb_edit_frame.cpp:1580
 msgid "Eeschema failed to load."
 msgstr "Eeschema 로드에 실패했습니다."
 
-#: pcbnew/pcb_edit_frame.cpp:1738
+#: pcbnew/pcb_edit_frame.cpp:1731
 msgid "Edit design rules"
 msgstr "디자인 규칙 편집"
 
-#: pcbnew/pcb_edit_frame.cpp:1750
+#: pcbnew/pcb_edit_frame.cpp:1743
 msgid "Could not compile custom design rules."
 msgstr "사용자 정의 디자인 규칙을 컴파일할 수 없습니다."
 
-#: pcbnew/pcb_edit_frame.cpp:1785
+#: pcbnew/pcb_edit_frame.cpp:1778
 msgid "Export Hyperlynx Layout"
 msgstr "Hyperlynx 레이아웃 내보내기"
 
 #: pcbnew/pcb_expr_evaluator.cpp:95 pcbnew/pcb_expr_evaluator.cpp:264
 #: pcbnew/pcb_expr_evaluator.cpp:330 pcbnew/pcb_expr_evaluator.cpp:396
 #: pcbnew/pcb_expr_evaluator.cpp:614 pcbnew/pcb_expr_evaluator.cpp:716
-#: pcbnew/pcb_expr_evaluator.cpp:829
+#: pcbnew/pcb_expr_evaluator.cpp:824
 #, c-format
 msgid "Missing argument to '%s'"
 msgstr "'%s'에 대한 인수가 없습니다"
@@ -31377,7 +31374,7 @@ msgstr "풋프린트에 전면 코트야드가 없습니다."
 msgid "Footprint has no back courtyard."
 msgstr "풋프린트에 후면 코트야드가 없습니다."
 
-#: pcbnew/pcb_expr_evaluator.cpp:1152
+#: pcbnew/pcb_expr_evaluator.cpp:1153
 msgid "must be mm, in, or mil"
 msgstr "mm, in 또는 mil이어야 합니다"
 
@@ -36544,6 +36541,10 @@ msgstr "KiCad 회로도"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad 인쇄 회로 기판"
+
+#, fuzzy
+#~ msgid "Net CodewxT( "
+#~ msgstr "네트 코드"
 
 #~ msgid "Save changes to schematic before closing?"
 #~ msgstr "회로도를 닫기 전에 변경 내용을 저장 하겠습니까?"

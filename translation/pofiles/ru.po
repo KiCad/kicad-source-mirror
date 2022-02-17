@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-14 09:20-0800\n"
+"POT-Creation-Date: 2022-02-16 17:22-0800\n"
 "PO-Revision-Date: 2022-02-01 13:58+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v6/ru/>\n"
@@ -4615,12 +4615,12 @@ msgstr "Псевдоним: "
 
 #: common/filename_resolver.cpp:468
 #, fuzzy
-msgid "This path:wxT( "
+msgid "This path:"
 msgstr "Текущий путь:"
 
 #: common/filename_resolver.cpp:471
 #, fuzzy
-msgid "Existing path:wxT( "
+msgid "Existing path:"
 msgstr "Существующий путь:"
 
 #: common/filename_resolver.cpp:473
@@ -13345,9 +13345,9 @@ msgstr "Присвоенный класс цепей"
 msgid "Connection Name"
 msgstr "Имя соединения"
 
-#: eeschema/sch_connection.cpp:415
-#, fuzzy
-msgid "Net CodewxT( "
+#: eeschema/sch_connection.cpp:415 pcbnew/dialogs/dialog_net_inspector.cpp:76
+#: pcbnew/netinfo_item.cpp:76
+msgid "Net Code"
 msgstr "Код цепи"
 
 #: eeschema/sch_connection.cpp:420 eeschema/sch_connection.cpp:433
@@ -19071,8 +19071,8 @@ msgid "Application failed to load:\n"
 msgstr "Не удалось запустить приложение:\n"
 
 #: kicad/tools/kicad_manager_control.cpp:670
-#: kicad/tools/kicad_manager_control.cpp:677 pcbnew/pcb_edit_frame.cpp:1558
-#: pcbnew/pcb_edit_frame.cpp:1588
+#: kicad/tools/kicad_manager_control.cpp:677 pcbnew/pcb_edit_frame.cpp:1551
+#: pcbnew/pcb_edit_frame.cpp:1581
 msgid "KiCad Error"
 msgstr "Ошибка KiCad"
 
@@ -22120,7 +22120,7 @@ msgstr "Пред.установленные размеры"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:108
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:54
-#: pcbnew/dialogs/dialog_drc.cpp:193 pcbnew/pcb_edit_frame.cpp:1744
+#: pcbnew/dialogs/dialog_drc.cpp:193 pcbnew/pcb_edit_frame.cpp:1737
 msgid "Custom Rules"
 msgstr "Особые правила"
 
@@ -25188,10 +25188,6 @@ msgstr "Использовать полярные координаты"
 #: pcbnew/dialogs/dialog_move_exact_base.h:71
 msgid "Move Item"
 msgstr "Переместить элемент"
-
-#: pcbnew/dialogs/dialog_net_inspector.cpp:76 pcbnew/netinfo_item.cpp:76
-msgid "Net Code"
-msgstr "Код цепи"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:77 pcbnew/netinfo_item.cpp:74
 msgid "Net Name"
@@ -28651,6 +28647,7 @@ msgid "Check rule syntax"
 msgstr "Проверить синтаксис правил"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
+#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -28776,8 +28773,8 @@ msgid ""
 "    A.inDiffPair('<net_name>')\n"
 "True if `A` has net that is part of the specified differential pair.\n"
 "`<net_name>` is the base name of the differential pair.  For example, "
-"`inDiffPair('CLK')`\n"
-"matches items in the `CLK_P` and `CLK_N` nets.\n"
+"`inDiffPair('/CLK')`\n"
+"matches items in the `/CLK_P` and `/CLK_N` nets.\n"
 "<br><br>\n"
 "\n"
 "    AB.isCoupledDiffPair()\n"
@@ -28817,20 +28814,20 @@ msgid ""
 "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
 "\n"
 "\n"
-"    (rule \"Distance between Vias of Different Nets\"  \n"
+"    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
 "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
 "\n"
-"    (rule \"Clearance between Pads of Different Nets\"  \n"
+"    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
 "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
 "\n"
 "\n"
-"    (rule \"Via Hole to Track Clearance\"  \n"
+"    (rule \"Via Hole to Track Clearance\"\n"
 "        (constraint hole_clearance (min 0.254mm))\n"
-"        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
-"    \n"
-"    (rule \"Pad to Track Clearance\"  \n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
+"\n"
+"    (rule \"Pad to Track Clearance\"\n"
 "        (constraint clearance (min 0.2mm))\n"
 "        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
 "\n"
@@ -28840,11 +28837,11 @@ msgid ""
 "        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
 "\n"
 "\n"
-"    (rule \"Max Drill Hole Size Mechanical\"  \n"
+"    (rule \"Max Drill Hole Size Mechanical\"\n"
 "        (constraint hole_size (max 6.3mm))\n"
 "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
-"    \n"
-"    (rule \"Max Drill Hole Size PTH\"  \n"
+"\n"
+"    (rule \"Max Drill Hole Size PTH\"\n"
 "        (constraint hole_size (max 6.35mm))\n"
 "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
@@ -28852,7 +28849,7 @@ msgid ""
 "    # Specify an optimal gap for a particular diff-pair\n"
 "    (rule \"dp clock gap\"\n"
 "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
-"        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
+"        (condition \"A.inDiffPair('/CLK')\"))\n"
 "\n"
 "    # Specify a larger clearance around any diff-pair\n"
 "    (rule \"dp clearance\"\n"
@@ -31569,11 +31566,11 @@ msgstr "Файл платы доступен только для чтения."
 msgid "PCB file changes are unsaved"
 msgstr "Изменения файла платы не сохранены"
 
-#: pcbnew/pcb_edit_frame.cpp:1473
+#: pcbnew/pcb_edit_frame.cpp:1466
 msgid "The schematic for this board cannot be found."
 msgstr "Не удалось найти схему для этой платы."
 
-#: pcbnew/pcb_edit_frame.cpp:1497
+#: pcbnew/pcb_edit_frame.cpp:1490
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
@@ -31583,11 +31580,11 @@ msgstr ""
 "проектов. Для того чтобы создать или обновить плату из редактора схем, нужно "
 "запустить менеджер проектов KiCad и создать проект."
 
-#: pcbnew/pcb_edit_frame.cpp:1519
+#: pcbnew/pcb_edit_frame.cpp:1512
 msgid "Eeschema netlist"
 msgstr "Список цепей Eeschema"
 
-#: pcbnew/pcb_edit_frame.cpp:1530
+#: pcbnew/pcb_edit_frame.cpp:1523
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
@@ -31595,31 +31592,31 @@ msgstr ""
 "При считывании списка цепей получена ошибка. Сообщите об этой проблеме "
 "команду KiCad с помощью меню Справка -> Сообщить об ошибке."
 
-#: pcbnew/pcb_edit_frame.cpp:1557
+#: pcbnew/pcb_edit_frame.cpp:1550
 #, c-format
 msgid "Schematic file '%s' not found."
 msgstr "Файл схемы '%s' не найден."
 
-#: pcbnew/pcb_edit_frame.cpp:1587
+#: pcbnew/pcb_edit_frame.cpp:1580
 msgid "Eeschema failed to load."
 msgstr "Не удалось загрузить Eeschema."
 
-#: pcbnew/pcb_edit_frame.cpp:1738
+#: pcbnew/pcb_edit_frame.cpp:1731
 msgid "Edit design rules"
 msgstr "Правила проектирования"
 
-#: pcbnew/pcb_edit_frame.cpp:1750
+#: pcbnew/pcb_edit_frame.cpp:1743
 msgid "Could not compile custom design rules."
 msgstr "Не удалось скомпилировать особые правила проектирования."
 
-#: pcbnew/pcb_edit_frame.cpp:1785
+#: pcbnew/pcb_edit_frame.cpp:1778
 msgid "Export Hyperlynx Layout"
 msgstr "Экспорт макета Hyperlynx"
 
 #: pcbnew/pcb_expr_evaluator.cpp:95 pcbnew/pcb_expr_evaluator.cpp:264
 #: pcbnew/pcb_expr_evaluator.cpp:330 pcbnew/pcb_expr_evaluator.cpp:396
 #: pcbnew/pcb_expr_evaluator.cpp:614 pcbnew/pcb_expr_evaluator.cpp:716
-#: pcbnew/pcb_expr_evaluator.cpp:829
+#: pcbnew/pcb_expr_evaluator.cpp:824
 #, c-format
 msgid "Missing argument to '%s'"
 msgstr "Отсутствует аргумент для '%s'"
@@ -31642,7 +31639,7 @@ msgstr "Посад.место не имеет области установки 
 msgid "Footprint has no back courtyard."
 msgstr "Посад.место не имеет области установки снизу."
 
-#: pcbnew/pcb_expr_evaluator.cpp:1152
+#: pcbnew/pcb_expr_evaluator.cpp:1153
 msgid "must be mm, in, or mil"
 msgstr "должно быть mm, in, или mil"
 
@@ -36856,6 +36853,10 @@ msgstr "Схема KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Печатная плата KiCad"
+
+#, fuzzy
+#~ msgid "Net CodewxT( "
+#~ msgstr "Код цепи"
 
 #~ msgid "Save changes to schematic before closing?"
 #~ msgstr "Сохранить изменения в схеме перед закрытием?"

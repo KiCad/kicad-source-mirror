@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-14 09:20-0800\n"
+"POT-Creation-Date: 2022-02-16 17:22-0800\n"
 "PO-Revision-Date: 2022-02-16 13:03+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -4515,11 +4515,13 @@ msgid "Alias: "
 msgstr "别名： "
 
 #: common/filename_resolver.cpp:468
-msgid "This path:wxT( "
+#, fuzzy
+msgid "This path:"
 msgstr "此路径：wxT( "
 
 #: common/filename_resolver.cpp:471
-msgid "Existing path:wxT( "
+#, fuzzy
+msgid "Existing path:"
 msgstr "现有路径：wxT( "
 
 #: common/filename_resolver.cpp:473
@@ -13112,9 +13114,10 @@ msgstr "关联的网络类"
 msgid "Connection Name"
 msgstr "连接名称"
 
-#: eeschema/sch_connection.cpp:415
-msgid "Net CodewxT( "
-msgstr "网络 CodewxT( "
+#: eeschema/sch_connection.cpp:415 pcbnew/dialogs/dialog_net_inspector.cpp:76
+#: pcbnew/netinfo_item.cpp:76
+msgid "Net Code"
+msgstr "网络码"
 
 #: eeschema/sch_connection.cpp:420 eeschema/sch_connection.cpp:433
 #, c-format
@@ -18740,8 +18743,8 @@ msgid "Application failed to load:\n"
 msgstr "应用程序加载失败：\n"
 
 #: kicad/tools/kicad_manager_control.cpp:670
-#: kicad/tools/kicad_manager_control.cpp:677 pcbnew/pcb_edit_frame.cpp:1558
-#: pcbnew/pcb_edit_frame.cpp:1588
+#: kicad/tools/kicad_manager_control.cpp:677 pcbnew/pcb_edit_frame.cpp:1551
+#: pcbnew/pcb_edit_frame.cpp:1581
 msgid "KiCad Error"
 msgstr "KiCad 错误"
 
@@ -20306,11 +20309,13 @@ msgid ""
 msgstr ""
 "如果你指定最大电流，则会计算相应的布线宽度。\n"
 "\n"
-"如果你指定其中一个布线宽度，则将计算它可以处理的最大电流。然后将计算另外的同样处理此电流的布线宽度。\n"
+"如果你指定其中一个布线宽度，则将计算它可以处理的最大电流。然后将计算另外的同"
+"样处理此电流的布线宽度。\n"
 "\n"
 "控制值以粗体显示。\n"
 "\n"
-"计算适用于最大 35A（外部）或 17.5A（内部）的电流、高达 100 °C的温升和最多 400mil（10mm）的宽度。\n"
+"计算适用于最大 35A（外部）或 17.5A（内部）的电流、高达 100 °C的温升和最多 "
+"400mil（10mm）的宽度。\n"
 "\n"
 "来自 IPC 2221 的该公式，为\n"
 "<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
@@ -21757,7 +21762,7 @@ msgstr "预定义尺寸"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:108
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:54
-#: pcbnew/dialogs/dialog_drc.cpp:193 pcbnew/pcb_edit_frame.cpp:1744
+#: pcbnew/dialogs/dialog_drc.cpp:193 pcbnew/pcb_edit_frame.cpp:1737
 msgid "Custom Rules"
 msgstr "自定义规则"
 
@@ -24745,10 +24750,6 @@ msgstr "使用极坐标"
 msgid "Move Item"
 msgstr "移动项目"
 
-#: pcbnew/dialogs/dialog_net_inspector.cpp:76 pcbnew/netinfo_item.cpp:76
-msgid "Net Code"
-msgstr "网络码"
-
 #: pcbnew/dialogs/dialog_net_inspector.cpp:77 pcbnew/netinfo_item.cpp:74
 msgid "Net Name"
 msgstr "网络名称"
@@ -27208,7 +27209,9 @@ msgstr "模仿旧行为"
 msgid ""
 "Produces a slightly smoother outline at the expense of performance, some "
 "export fidelity issues, and overly aggressive higher-priority zone knockouts."
-msgstr "以牺牲性能、一些导出保真度问题和过于激进的高优先级区域挖空为代价，生成稍微平滑的轮廓。"
+msgstr ""
+"以牺牲性能、一些导出保真度问题和过于激进的高优先级区域挖空为代价，生成稍微平"
+"滑的轮廓。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:116
 msgid "Smoothed polygons (best performance)"
@@ -28093,6 +28096,7 @@ msgid "Check rule syntax"
 msgstr "检查规则语法"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
+#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -28218,8 +28222,8 @@ msgid ""
 "    A.inDiffPair('<net_name>')\n"
 "True if `A` has net that is part of the specified differential pair.\n"
 "`<net_name>` is the base name of the differential pair.  For example, "
-"`inDiffPair('CLK')`\n"
-"matches items in the `CLK_P` and `CLK_N` nets.\n"
+"`inDiffPair('/CLK')`\n"
+"matches items in the `/CLK_P` and `/CLK_N` nets.\n"
 "<br><br>\n"
 "\n"
 "    AB.isCoupledDiffPair()\n"
@@ -28259,20 +28263,20 @@ msgid ""
 "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
 "\n"
 "\n"
-"    (rule \"Distance between Vias of Different Nets\"  \n"
+"    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
 "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
 "\n"
-"    (rule \"Clearance between Pads of Different Nets\"  \n"
+"    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
 "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
 "\n"
 "\n"
-"    (rule \"Via Hole to Track Clearance\"  \n"
+"    (rule \"Via Hole to Track Clearance\"\n"
 "        (constraint hole_clearance (min 0.254mm))\n"
-"        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
-"    \n"
-"    (rule \"Pad to Track Clearance\"  \n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
+"\n"
+"    (rule \"Pad to Track Clearance\"\n"
 "        (constraint clearance (min 0.2mm))\n"
 "        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
 "\n"
@@ -28282,11 +28286,11 @@ msgid ""
 "        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
 "\n"
 "\n"
-"    (rule \"Max Drill Hole Size Mechanical\"  \n"
+"    (rule \"Max Drill Hole Size Mechanical\"\n"
 "        (constraint hole_size (max 6.3mm))\n"
 "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
-"    \n"
-"    (rule \"Max Drill Hole Size PTH\"  \n"
+"\n"
+"    (rule \"Max Drill Hole Size PTH\"\n"
 "        (constraint hole_size (max 6.35mm))\n"
 "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
@@ -28294,7 +28298,7 @@ msgid ""
 "    # Specify an optimal gap for a particular diff-pair\n"
 "    (rule \"dp clock gap\"\n"
 "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
-"        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
+"        (condition \"A.inDiffPair('/CLK')\"))\n"
 "\n"
 "    # Specify a larger clearance around any diff-pair\n"
 "    (rule \"dp clearance\"\n"
@@ -29554,8 +29558,10 @@ msgid ""
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"如果重新填充此电路板上的区域，则将应用铜边缘间隙设置 （参见电路板配置 > 设计规则 > 限制）。\n"
-"老版本的 KiCad 会将电路板边缘 (Edge Cuts 层) 的线粗细作为铜间距，因此新的填充结果可能与老版本的填充结果不同。"
+"如果重新填充此电路板上的区域，则将应用铜边缘间隙设置 （参见电路板配置 > 设计"
+"规则 > 限制）。\n"
+"老版本的 KiCad 会将电路板边缘 (Edge Cuts 层) 的线粗细作为铜间距，因此新的填充"
+"结果可能与老版本的填充结果不同。"
 
 #: pcbnew/files.cpp:548
 msgid "Edge Clearance Warning"
@@ -31019,11 +31025,11 @@ msgstr "电路板文件是只读的。"
 msgid "PCB file changes are unsaved"
 msgstr "PCB 文件变更未保存"
 
-#: pcbnew/pcb_edit_frame.cpp:1473
+#: pcbnew/pcb_edit_frame.cpp:1466
 msgid "The schematic for this board cannot be found."
 msgstr "找不到该电路板的原理图。"
 
-#: pcbnew/pcb_edit_frame.cpp:1497
+#: pcbnew/pcb_edit_frame.cpp:1490
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
@@ -31032,42 +31038,42 @@ msgstr ""
 "无法更新 PCB, 因为 PCB 编辑器是在独立模式下打开的。为了从原理图创建或更新 "
 "PCB, 你必须启动 KiCad 工程管理器并创建一个工程。"
 
-#: pcbnew/pcb_edit_frame.cpp:1519
+#: pcbnew/pcb_edit_frame.cpp:1512
 msgid "Eeschema netlist"
 msgstr "Eeschema 网表"
 
-#: pcbnew/pcb_edit_frame.cpp:1530
+#: pcbnew/pcb_edit_frame.cpp:1523
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
 msgstr ""
 "读取网表时收到一个错误。 请使用“帮助->报告错误”菜单向 KiCad 团队报告此问题。"
 
-#: pcbnew/pcb_edit_frame.cpp:1557
+#: pcbnew/pcb_edit_frame.cpp:1550
 #, c-format
 msgid "Schematic file '%s' not found."
 msgstr "没有找到原理图文件 '%s'。"
 
-#: pcbnew/pcb_edit_frame.cpp:1587
+#: pcbnew/pcb_edit_frame.cpp:1580
 msgid "Eeschema failed to load."
 msgstr "未能加载 Eeschema。"
 
-#: pcbnew/pcb_edit_frame.cpp:1738
+#: pcbnew/pcb_edit_frame.cpp:1731
 msgid "Edit design rules"
 msgstr "编辑设计规则"
 
-#: pcbnew/pcb_edit_frame.cpp:1750
+#: pcbnew/pcb_edit_frame.cpp:1743
 msgid "Could not compile custom design rules."
 msgstr "无法编译自定义设计规则。"
 
-#: pcbnew/pcb_edit_frame.cpp:1785
+#: pcbnew/pcb_edit_frame.cpp:1778
 msgid "Export Hyperlynx Layout"
 msgstr "导出 Hyperlynx 布局"
 
 #: pcbnew/pcb_expr_evaluator.cpp:95 pcbnew/pcb_expr_evaluator.cpp:264
 #: pcbnew/pcb_expr_evaluator.cpp:330 pcbnew/pcb_expr_evaluator.cpp:396
 #: pcbnew/pcb_expr_evaluator.cpp:614 pcbnew/pcb_expr_evaluator.cpp:716
-#: pcbnew/pcb_expr_evaluator.cpp:829
+#: pcbnew/pcb_expr_evaluator.cpp:824
 #, c-format
 msgid "Missing argument to '%s'"
 msgstr "缺少 '%s' 的参数"
@@ -31089,7 +31095,7 @@ msgstr "封装没有顶层外框。"
 msgid "Footprint has no back courtyard."
 msgstr "封装没有底层外框。"
 
-#: pcbnew/pcb_expr_evaluator.cpp:1152
+#: pcbnew/pcb_expr_evaluator.cpp:1153
 msgid "must be mm, in, or mil"
 msgstr "单位必须为 mm、in 或 mil"
 
@@ -31785,8 +31791,8 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
-"CADSTAR 模板 '%s' 具有不同的设置，用于\"保留敷铜- 不相交\"和\"保留敷铜 - 隔离\"。KiCad 不区分这两个设置。"
-"不相交敷铜的设置已被应用为 KiCad 区域的最小岛区。"
+"CADSTAR 模板 '%s' 具有不同的设置，用于\"保留敷铜- 不相交\"和\"保留敷铜 - 隔离"
+"\"。KiCad 不区分这两个设置。不相交敷铜的设置已被应用为 KiCad 区域的最小岛区。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1926
 #, c-format
@@ -31817,7 +31823,9 @@ msgid ""
 "The CADSTAR layer '%s' is defined as a power plane layer. However no net "
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
-msgstr "CADSTAR 层 '%s' 被定义为电源层。然而，不存在具有该名称的网络。已加载层，但未创建敷铜区。"
+msgstr ""
+"CADSTAR 层 '%s' 被定义为电源层。然而，不存在具有该名称的网络。已加载层，但未"
+"创建敷铜区。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2095
 msgid ""
@@ -31826,8 +31834,9 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
-"CADSTAR 设计包含没有直接 KiCad 等价物的铜元素。如果填充的是实体或图案填充，则它们已导入为 KiCad "
-"区域；如果形状是未填充的轮廓(开放或闭合)，则它们将导入为 KiCad 布线。"
+"CADSTAR 设计包含没有直接 KiCad 等价物的铜元素。如果填充的是实体或图案填充，则"
+"它们已导入为 KiCad 区域；如果形状是未填充的轮廓(开放或闭合)，则它们将导入为 "
+"KiCad 布线。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2200
 #, c-format
@@ -31933,8 +31942,8 @@ msgid ""
 "imported. Please review the design rules as copper pours will affected by "
 "this."
 msgstr ""
-"CADSTAR 设计包含关联了“间隔类”的网络。KiCad 没有与 CADSTAR "
-"的间隔类等效的元素，因此未导入这些元素。请检查设计规则，因为敷铜将受此影响。"
+"CADSTAR 设计包含关联了“间隔类”的网络。KiCad 没有与 CADSTAR 的间隔类等效的元"
+"素，因此未导入这些元素。请检查设计规则，因为敷铜将受此影响。"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:377
 #, c-format
@@ -36162,6 +36171,9 @@ msgstr "KiCad 原理图"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad 印刷电路板"
+
+#~ msgid "Net CodewxT( "
+#~ msgstr "网络 CodewxT( "
 
 #~ msgid "Save changes to schematic before closing?"
 #~ msgstr "是否在关闭前保存对原理图的变更？"
