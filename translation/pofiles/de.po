@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:25-0800\n"
-"PO-Revision-Date: 2022-02-16 22:56+0000\n"
+"PO-Revision-Date: 2022-02-18 13:22+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -4745,7 +4745,7 @@ msgstr "Dieser Pfad:"
 
 #: common/filename_resolver.cpp:471
 msgid "Existing path:"
-msgstr "Existierender Pfad:"
+msgstr "Bestehender Pfad:"
 
 #: common/filename_resolver.cpp:473
 msgid "Bad alias (duplicate name)"
