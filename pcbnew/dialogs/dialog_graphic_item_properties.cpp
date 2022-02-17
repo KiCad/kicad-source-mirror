@@ -130,8 +130,6 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     for( const std::pair<const PLOT_DASH_TYPE, lineTypeStruct>& typeEntry : lineTypeNames )
         m_lineStyleCombo->Append( typeEntry.second.name, KiBitmap( typeEntry.second.bitmap ) );
 
-    m_lineStyleCombo->Append( DEFAULT_STYLE );
-
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
     m_LayerSelectionCtrl->SetBoardFrame( m_parent );
     m_LayerSelectionCtrl->Resync();
@@ -169,12 +167,13 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::onFilledCheckbox( wxCommandEvent& event )
     }
     else
     {
-        int style = static_cast<int>( m_item->GetStroke().GetPlotStyle() );
+        PLOT_DASH_TYPE style = m_item->GetStroke().GetPlotStyle();
 
-        if( style == -1 )
-            m_lineStyleCombo->SetStringSelection( DEFAULT_STYLE );
-        else if( style < (int) lineTypeNames.size() )
-            m_lineStyleCombo->SetSelection( style );
+        if( style == PLOT_DASH_TYPE::DEFAULT )
+            style = PLOT_DASH_TYPE::SOLID;
+
+        if( (int) style < (int) lineTypeNames.size() )
+            m_lineStyleCombo->SetSelection( (int) style );
 
         m_lineStyleLabel->Enable( true );
         m_lineStyleCombo->Enable( true );

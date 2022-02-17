@@ -41,6 +41,7 @@
 #include <pcb_text.h>
 #include <fp_shape.h>
 #include <board_design_settings.h>
+#include <pcb_painter.h>        // for PCB_RENDER_SETTINGS
 #include <zone.h>
 #include <fp_text.h>
 #include <convert_basic_shapes_to_polygon.h>
@@ -546,28 +547,80 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
 {
     // The full width of the lines to create
     // The extra 1 protects the inner/outer radius values from degeneracy
-    const int linewidth = aShape->GetWidth() + 1;
+    const int      linewidth = aShape->GetWidth() + 1;
+    PLOT_DASH_TYPE lineStyle = aShape->GetStroke().GetPlotStyle();
 
-    switch( aShape->GetShape() )
+    if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
     {
-    case SHAPE_T::CIRCLE:
-    {
-        const SFVEC2F center3DU = TO_SFVEC2F( aShape->GetCenter() );
-        float         inner_radius3DU = TO_3DU( aShape->GetRadius() - linewidth / 2 );
-        float         outer_radius3DU = TO_3DU( aShape->GetRadius() + linewidth / 2 );
+        switch( aShape->GetShape() )
+        {
+        case SHAPE_T::CIRCLE:
+        {
+            const SFVEC2F center3DU = TO_SFVEC2F( aShape->GetCenter() );
+            float         inner_radius3DU = TO_3DU( aShape->GetRadius() - linewidth / 2 );
+            float         outer_radius3DU = TO_3DU( aShape->GetRadius() + linewidth / 2 );
 
-        if( inner_radius3DU < 0 )
-            inner_radius3DU = 0;
+            if( inner_radius3DU < 0 )
+                inner_radius3DU = 0;
 
-        if( aShape->IsFilled() )
-            aContainer->Add( new FILLED_CIRCLE_2D( center3DU, outer_radius3DU, *aOwner ) );
-        else
-            aContainer->Add( new RING_2D( center3DU, inner_radius3DU, outer_radius3DU, *aOwner ) );
-    }
+            if( aShape->IsFilled() )
+                aContainer->Add( new FILLED_CIRCLE_2D( center3DU, outer_radius3DU, *aOwner ) );
+            else
+                aContainer->Add( new RING_2D( center3DU, inner_radius3DU, outer_radius3DU, *aOwner ) );
+        }
+            break;
+
+        case SHAPE_T::RECT:
+            if( aShape->IsFilled() )
+            {
+                SHAPE_POLY_SET polyList;
+
+                aShape->TransformShapeWithClearanceToPolygon( polyList, UNDEFINED_LAYER, 0,
+                                                              ARC_HIGH_DEF, ERROR_INSIDE );
+
+                polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
+
+                ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aOwner );
+            }
+            else
+            {
+                std::vector<VECTOR2I> pts = aShape->GetRectCorners();
+
+                aContainer->Add( new ROUND_SEGMENT_2D( TO_SFVEC2F( pts[0] ), TO_SFVEC2F( pts[1] ),
+                                                       TO_3DU( linewidth ), *aOwner ) );
+                aContainer->Add( new ROUND_SEGMENT_2D( TO_SFVEC2F( pts[1] ), TO_SFVEC2F( pts[2] ),
+                                                       TO_3DU( linewidth ), *aOwner ) );
+                aContainer->Add( new ROUND_SEGMENT_2D( TO_SFVEC2F( pts[2] ), TO_SFVEC2F( pts[3] ),
+                                                       TO_3DU( linewidth ), *aOwner ) );
+                aContainer->Add( new ROUND_SEGMENT_2D( TO_SFVEC2F( pts[3] ), TO_SFVEC2F( pts[0] ),
+                                                       TO_3DU( linewidth ), *aOwner ) );
+            }
+            break;
+
+        case SHAPE_T::ARC:
+        {
+            unsigned int segCount = GetCircleSegmentCount( aShape->GetBoundingBox().GetSizeMax() );
+
+            transformArcToSegments( aShape->GetCenter(), aShape->GetStart(), aShape->GetArcAngle(),
+                                    segCount, linewidth, aContainer, *aOwner );
+        }
         break;
 
-    case SHAPE_T::RECT:
-        if( aShape->IsFilled() )
+        case SHAPE_T::SEGMENT:
+        {
+            const SFVEC2F start3DU = TO_SFVEC2F( aShape->GetStart() );
+            const SFVEC2F end3DU = TO_SFVEC2F( aShape->GetEnd() );
+            const double  linewidth3DU = TO_3DU( linewidth );
+
+            if( Is_segment_a_circle( start3DU, end3DU ) )
+                aContainer->Add( new FILLED_CIRCLE_2D( start3DU, linewidth3DU / 2, *aOwner ) );
+            else
+                aContainer->Add( new ROUND_SEGMENT_2D( start3DU, end3DU, linewidth3DU, *aOwner ) );
+        }
+        break;
+
+        case SHAPE_T::BEZIER:
+        case SHAPE_T::POLY:
         {
             SHAPE_POLY_SET polyList;
 
@@ -576,66 +629,49 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
 
             polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
 
+            if( polyList.IsEmpty() ) // Just for caution
+                break;
+
             ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aOwner );
         }
-        else
-        {
-            std::vector<VECTOR2I> pts = aShape->GetRectCorners();
-
-            aContainer->Add( new ROUND_SEGMENT_2D( TO_SFVEC2F( pts[0] ), TO_SFVEC2F( pts[1] ),
-                                                   TO_3DU( linewidth ), *aOwner ) );
-            aContainer->Add( new ROUND_SEGMENT_2D( TO_SFVEC2F( pts[1] ), TO_SFVEC2F( pts[2] ),
-                                                   TO_3DU( linewidth ), *aOwner ) );
-            aContainer->Add( new ROUND_SEGMENT_2D( TO_SFVEC2F( pts[2] ), TO_SFVEC2F( pts[3] ),
-                                                   TO_3DU( linewidth ), *aOwner ) );
-            aContainer->Add( new ROUND_SEGMENT_2D( TO_SFVEC2F( pts[3] ), TO_SFVEC2F( pts[0] ),
-                                                   TO_3DU( linewidth ), *aOwner ) );
-        }
         break;
 
-    case SHAPE_T::ARC:
-    {
-        unsigned int segCount = GetCircleSegmentCount( aShape->GetBoundingBox().GetSizeMax() );
-
-        transformArcToSegments( aShape->GetCenter(), aShape->GetStart(), aShape->GetArcAngle(),
-                                segCount, linewidth, aContainer, *aOwner );
-    }
-    break;
-
-    case SHAPE_T::SEGMENT:
-    {
-        const SFVEC2F start3DU = TO_SFVEC2F( aShape->GetStart() );
-        const SFVEC2F end3DU = TO_SFVEC2F( aShape->GetEnd() );
-        const double  linewidth3DU = TO_3DU( linewidth );
-
-        if( Is_segment_a_circle( start3DU, end3DU ) )
-            aContainer->Add( new FILLED_CIRCLE_2D( start3DU, linewidth3DU / 2, *aOwner ) );
-        else
-            aContainer->Add( new ROUND_SEGMENT_2D( start3DU, end3DU, linewidth3DU, *aOwner ) );
-    }
-    break;
-
-    case SHAPE_T::BEZIER:
-    case SHAPE_T::POLY:
-    {
-        SHAPE_POLY_SET polyList;
-
-        aShape->TransformShapeWithClearanceToPolygon( polyList, UNDEFINED_LAYER, 0,
-                                                      ARC_HIGH_DEF, ERROR_INSIDE );
-
-        polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
-
-        if( polyList.IsEmpty() ) // Just for caution
+        default:
+            wxFAIL_MSG( wxT( "BOARD_ADAPTER::addShapeWithClearance no implementation for " )
+                        + aShape->SHAPE_T_asString() );
             break;
-
-        ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aOwner );
+        }
     }
-    break;
+    else
+    {
+        std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapes( true );
+        SFVEC2F             a3DU;
+        SFVEC2F             b3DU;
+        double              width3DU = TO_3DU( linewidth );
 
-    default:
-        wxFAIL_MSG( wxT( "BOARD_ADAPTER::addShapeWithClearance no implementation for " )
-                    + aShape->SHAPE_T_asString() );
-        break;
+        const PCB_PLOT_PARAMS&     plotParams = aShape->GetBoard()->GetPlotOptions();
+        KIGFX::PCB_RENDER_SETTINGS renderSettings;
+
+        renderSettings.SetDashLengthRatio( plotParams.GetDashedLineDashRatio() );
+        renderSettings.SetGapLengthRatio( plotParams.GetDashedLineGapRatio() );
+
+        for( SHAPE* shape : shapes )
+        {
+            STROKE_PARAMS::Stroke( shape, lineStyle, linewidth, &renderSettings,
+                    [&]( const VECTOR2I& a, const VECTOR2I& b )
+                    {
+                        a3DU = TO_SFVEC2F( a );
+                        b3DU = TO_SFVEC2F( b );
+
+                        if( Is_segment_a_circle( a3DU, b3DU ) )
+                            aContainer->Add( new FILLED_CIRCLE_2D( a3DU, width3DU / 2, *aOwner ) );
+                        else
+                            aContainer->Add( new ROUND_SEGMENT_2D( a3DU, b3DU, width3DU, *aOwner ) );
+                    } );
+        }
+
+        for( SHAPE* shape : shapes )
+            delete shape;
     }
 }
 

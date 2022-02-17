@@ -205,14 +205,13 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataToWindow()
     if( stroke.GetWidth() >= 0 )
         m_borderWidth.SetValue( stroke.GetWidth() );
 
-    int style = static_cast<int>( stroke.GetPlotStyle() );
+    PLOT_DASH_TYPE style = stroke.GetPlotStyle();
 
-    if( style == -1 )
-        m_borderStyleCombo->SetStringSelection( DEFAULT_STYLE );
-    else if( style < (int) lineTypeNames.size() )
-        m_borderStyleCombo->SetSelection( style );
-    else
-        wxFAIL_MSG( "Line type not found in the type lookup map" );
+    if( style == PLOT_DASH_TYPE::DEFAULT )
+        style = PLOT_DASH_TYPE::SOLID;
+
+    if( (int) style < (int) lineTypeNames.size() )
+        m_borderStyleCombo->SetSelection( (int) style );
 
     m_borderWidth.Enable( stroke.GetWidth() >= 0 );
     m_borderStyleLabel->Enable( stroke.GetWidth() >= 0 );

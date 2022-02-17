@@ -77,18 +77,8 @@ public:
      *
      * @param aCachePointer: the pointer to the 3D cache manager.
      */
-    void Set3dCacheManager( S3D_CACHE* aCachePointer ) noexcept
-    {
-        m_3dModelManager = aCachePointer;
-    }
-
-    /**
-     * Return the 3D cache manager pointer.
-     */
-    S3D_CACHE* Get3dCacheManager() const noexcept
-    {
-        return m_3dModelManager;
-    }
+    void Set3dCacheManager( S3D_CACHE* aCacheMgr ) noexcept { m_3dModelManager = aCacheMgr; }
+    S3D_CACHE* Get3dCacheManager() const noexcept { return m_3dModelManager; }
 
     /**
      * Check if a layer is enabled.
@@ -107,25 +97,10 @@ public:
      *
      * @param aBoard board to process.
      */
-    void SetBoard( BOARD* aBoard ) noexcept
-    {
-        m_board = aBoard;
-    }
+    void SetBoard( BOARD* aBoard ) noexcept { m_board = aBoard; }
+    const BOARD* GetBoard() const noexcept { return m_board; }
 
-    /**
-     * Get current board to be rendered.
-     *
-     * @return BOARD pointer
-     */
-    const BOARD* GetBoard() const noexcept
-    {
-        return m_board;
-    }
-
-    void SetColorSettings( COLOR_SETTINGS* aSettings ) noexcept
-    {
-        m_colors = aSettings;
-    }
+    void SetColorSettings( COLOR_SETTINGS* aSettings ) noexcept { m_colors = aSettings; }
 
     /**
      * Function to be called by the render when it need to reload the settings for the board.
@@ -140,20 +115,14 @@ public:
      *
      * @return the conversion factor to transform a position from the board to 3D units.
      */
-    double BiuTo3dUnits() const noexcept
-    {
-        return m_biuTo3Dunits;
-    }
+    double BiuTo3dUnits() const noexcept { return m_biuTo3Dunits; }
 
     /**
      * Get the board outling bounding box.
      *
      * @return the board bounding box in 3D units.
      */
-    const BBOX_3D& GetBBox() const noexcept
-    {
-        return m_boardBoundingBox;
-    }
+    const BBOX_3D& GetBBox() const noexcept { return m_boardBoundingBox; }
 
     /**
      * Get the board body thickness, including internal copper layers (in 3D units).
@@ -181,30 +150,21 @@ public:
      *
      * @return size in BIU units.
      */
-    VECTOR2I GetBoardSize() const noexcept
-    {
-        return m_boardSize;
-    }
+    VECTOR2I GetBoardSize() const noexcept { return m_boardSize; }
 
     /**
      * Get the board center.
      *
      * @return position in BIU units.
      */
-    VECTOR2I GetBoardPos() const noexcept
-    {
-        return m_boardPos;
-    }
+    VECTOR2I GetBoardPos() const noexcept { return m_boardPos; }
 
     /**
      * The board center position in 3D units.
      *
      * @return board center vector position in 3D units.
      */
-    const SFVEC3F& GetBoardCenter() const noexcept
-    {
-        return m_boardCenter;
-    }
+    const SFVEC3F& GetBoardCenter() const noexcept { return m_boardCenter; }
 
     /**
      * Get the position of the footprint in 3d integer units considering if it is flipped or not.
@@ -220,10 +180,7 @@ public:
      *
      * @return the shape polygon
      */
-    const SHAPE_POLY_SET& GetBoardPoly() const noexcept
-    {
-        return m_board_poly;
-    }
+    const SHAPE_POLY_SET& GetBoardPoly() const noexcept { return m_board_poly; }
 
     /**
      * Get the technical color of a layer.
@@ -276,50 +233,13 @@ public:
      *
      * @return the map containers of this board.
      */
-    const MAP_CONTAINER_2D_BASE& GetLayerMap() const noexcept
-    {
-        return m_layerMap;
-    }
+    const MAP_CONTAINER_2D_BASE& GetLayerMap() const noexcept { return m_layerMap; }
+    const BVH_CONTAINER_2D* GetPlatedPadsFront() const noexcept { return m_platedPadsFront; }
+    const BVH_CONTAINER_2D* GetPlatedPadsBack() const noexcept { return m_platedPadsBack; }
 
-    const BVH_CONTAINER_2D* GetPlatedPadsFront() const noexcept
-    {
-        return m_platedPadsFront;
-    }
-
-    const BVH_CONTAINER_2D* GetPlatedPadsBack() const noexcept
-    {
-        return m_platedPadsBack;
-    }
-
-    /**
-     * Get the map of container that have the holes per layer.
-     *
-     * @return the map containers of holes from this board.
-     */
-    const MAP_CONTAINER_2D_BASE& GetLayerHoleMap() const noexcept
-    {
-        return m_layerHoleMap;
-    }
-
-    /**
-     * Get the inflated through hole outside diameters container.
-     *
-     * @return a container with holes.
-     */
-    const BVH_CONTAINER_2D& GetThroughHoleOds() const noexcept
-    {
-        return m_throughHoleOds;
-    }
-
-    /**
-     * Get the through hole annular rings container.
-     *
-     * @return a container with through hole annular rings.
-     */
-    const BVH_CONTAINER_2D& GetThroughHoleAnnularRings() const noexcept
-    {
-        return m_throughHoleAnnularRings;
-    }
+    const MAP_CONTAINER_2D_BASE& GetLayerHoleMap() const noexcept { return m_layerHoleMap; }
+    const BVH_CONTAINER_2D& GetThroughHoleIds() const noexcept { return m_throughHoleIds; }
+    const BVH_CONTAINER_2D& GetThroughHoleOds() const noexcept { return m_throughHoleOds; }
 
     /**
      * Get through hole outside diameter 2D polygons.
@@ -331,6 +251,11 @@ public:
     const SHAPE_POLY_SET& GetThroughHoleOdPolys() const noexcept
     {
         return m_throughHoleOdPolys;
+    }
+
+    const BVH_CONTAINER_2D& GetThroughHoleAnnularRings() const noexcept
+    {
+        return m_throughHoleAnnularRings;
     }
 
     const SHAPE_POLY_SET& GetThroughHoleAnnularRingPolys() const noexcept
@@ -356,61 +281,23 @@ public:
         return m_throughHoleViaOdPolys;
     }
 
-    /**
-     * Get the through hole inner diameter container.
-     *
-     * @return a container with holes inner diameters.
-     */
-    const BVH_CONTAINER_2D& GetThroughHoleIds() const noexcept
-    {
-        return m_throughHoleIds;
-    }
+    unsigned int GetViaCount() const noexcept { return m_viaCount; }
+    unsigned int GetHoleCount() const noexcept { return m_holeCount; }
 
     /**
-     * Get number of vias in this board.
-     */
-    unsigned int GetViaCount() const noexcept
-    {
-        return m_viaCount;
-    }
-
-    /**
-     * Get number of holes in this board.
-     */
-    unsigned int GetHoleCount() const noexcept
-    {
-        return m_holeCount;
-    }
-
-    /**
-     * Thee average diameter of the via holes.
-     *
      * @return via hole average diameter dimension in 3D units.
      */
-    float GetAverageViaHoleDiameter() const noexcept
-    {
-        return m_averageViaHoleDiameter;
-    }
+    float GetAverageViaHoleDiameter() const noexcept { return m_averageViaHoleDiameter; }
 
     /**
-     * Average diameter of through holes.
-     *
      * @return the average diameter of through holes in 3D units.
      */
-    float GetAverageHoleDiameter() const noexcept
-    {
-        return m_averageHoleDiameter;
-    }
+    float GetAverageHoleDiameter() const noexcept { return m_averageHoleDiameter; }
 
     /**
-     * Average width of the tracks.
-     *
      * @return average track width in 3D units.
      */
-    float GetAverageTrackWidth() const noexcept
-    {
-        return m_averageTrackWidth;
-    }
+    float GetAverageTrackWidth() const noexcept { return m_averageTrackWidth; }
 
     /**
      * @param aDiameter3DU diameter in 3DU.
@@ -429,30 +316,12 @@ public:
      *
      * @return the map with polygon's layers.
      */
-    const MAP_POLY& GetPolyMap() const noexcept
-    {
-        return m_layers_poly;
-    }
+    const MAP_POLY& GetPolyMap() const noexcept { return m_layers_poly; }
 
-    const SHAPE_POLY_SET* GetFrontPlatedPadPolys()
-    {
-        return m_frontPlatedPadPolys;
-    }
-
-    const SHAPE_POLY_SET* GetBackPlatedPadPolys()
-    {
-        return m_backPlatedPadPolys;
-    }
-
-    const MAP_POLY& GetHoleIdPolysMap() const noexcept
-    {
-        return m_layerHoleIdPolys;
-    }
-
-    const MAP_POLY& GetHoleOdPolysMap() const noexcept
-    {
-        return m_layerHoleOdPolys;
-    }
+    const SHAPE_POLY_SET* GetFrontPlatedPadPolys() { return m_frontPlatedPadPolys;  }
+    const SHAPE_POLY_SET* GetBackPlatedPadPolys() { return m_backPlatedPadPolys; }
+    const MAP_POLY& GetHoleIdPolysMap() const noexcept { return m_layerHoleIdPolys; }
+    const MAP_POLY& GetHoleOdPolysMap() const noexcept { return m_layerHoleOdPolys; }
 
 private:
     /**
@@ -521,50 +390,51 @@ public:
 
 public:
     EDA_3D_VIEWER_SETTINGS*     m_Cfg;
-    bool                        m_IsBoardView;
-    bool                        m_MousewheelPanning;
-    bool                        m_IsPreviewer;  ///< true if the board adaptater is living in a
-                                                ///< 3d preview panel, false for the standard 3D viewer
-                                                ///< allows specific features for the panel previewer
 
-    SFVEC4F m_BgColorBot;         ///< background bottom color
-    SFVEC4F m_BgColorTop;         ///< background top color
-    SFVEC4F m_BoardBodyColor;     ///< in realistic mode: FR4 board color
-    SFVEC4F m_SolderMaskColorBot; ///< in realistic mode: solder mask color ( bot )
-    SFVEC4F m_SolderMaskColorTop; ///< in realistic mode: solder mask color ( top )
-    SFVEC4F m_SolderPasteColor;   ///< in realistic mode: solder paste color
-    SFVEC4F m_SilkScreenColorBot; ///< in realistic mode: SilkScreen color ( bot )
-    SFVEC4F m_SilkScreenColorTop; ///< in realistic mode: SilkScreen color ( top )
-    SFVEC4F m_CopperColor;        ///< in realistic mode: copper color
+    bool              m_IsBoardView;
+    bool              m_MousewheelPanning;
+    bool              m_IsPreviewer;        ///< true if the board adaptater is living in a 3D
+                                            ///<   preview panel, false for the standard 3D viewer
+
+    SFVEC4F           m_BgColorBot;         ///< background bottom color
+    SFVEC4F           m_BgColorTop;         ///< background top color
+    SFVEC4F           m_BoardBodyColor;     ///< in realistic mode: FR4 board color
+    SFVEC4F           m_SolderMaskColorBot; ///< in realistic mode: solder mask color ( bot )
+    SFVEC4F           m_SolderMaskColorTop; ///< in realistic mode: solder mask color ( top )
+    SFVEC4F           m_SolderPasteColor;   ///< in realistic mode: solder paste color
+    SFVEC4F           m_SilkScreenColorBot; ///< in realistic mode: SilkScreen color ( bot )
+    SFVEC4F           m_SilkScreenColorTop; ///< in realistic mode: SilkScreen color ( top )
+    SFVEC4F           m_CopperColor;        ///< in realistic mode: copper color
 
 private:
     BOARD*            m_board;
     S3D_CACHE*        m_3dModelManager;
+    RENDER_SETTINGS*  m_renderSettings;
     COLOR_SETTINGS*   m_colors;
 
-    VECTOR2I          m_boardPos;          ///< Board center position in board internal units.
-    VECTOR2I          m_boardSize;         ///< Board size in board internal units.
-    SFVEC3F           m_boardCenter;       ///< 3D center position of the board in 3D units.
-    BBOX_3D           m_boardBoundingBox;  ///< 3D bounding box of the board in 3D units.
+    VECTOR2I          m_boardPos;           ///< Board center position in board internal units.
+    VECTOR2I          m_boardSize;          ///< Board size in board internal units.
+    SFVEC3F           m_boardCenter;        ///< 3D center position of the board in 3D units.
+    BBOX_3D           m_boardBoundingBox;   ///< 3D bounding box of the board in 3D units.
 
-    ///< Amalgamated polygon contours for various types of items
-    MAP_POLY          m_layers_poly;
+    MAP_POLY          m_layers_poly;        ///< Amalgamated polygon contours for various types of
+                                            ///<   items
 
     SHAPE_POLY_SET*   m_frontPlatedPadPolys;
     SHAPE_POLY_SET*   m_backPlatedPadPolys;
 
-    MAP_POLY          m_layerHoleOdPolys;               ///< Hole outer diameters (per layer)
-    MAP_POLY          m_layerHoleIdPolys;               ///< Hole inner diameters (per layer)
+    MAP_POLY          m_layerHoleOdPolys;              ///< Hole outer diameters (per layer)
+    MAP_POLY          m_layerHoleIdPolys;              ///< Hole inner diameters (per layer)
 
-    SHAPE_POLY_SET    m_nonPlatedThroughHoleOdPolys;    ///< NPTH outer diameters
-    SHAPE_POLY_SET    m_throughHoleOdPolys;             ///< PTH outer diameters
-    SHAPE_POLY_SET    m_throughHoleViaOdPolys;          ///< Via hole outer diameters
-    SHAPE_POLY_SET    m_throughHoleAnnularRingPolys;    ///< Via annular ring outer diameters
+    SHAPE_POLY_SET    m_nonPlatedThroughHoleOdPolys;   ///< NPTH outer diameters
+    SHAPE_POLY_SET    m_throughHoleOdPolys;            ///< PTH outer diameters
+    SHAPE_POLY_SET    m_throughHoleViaOdPolys;         ///< Via hole outer diameters
+    SHAPE_POLY_SET    m_throughHoleAnnularRingPolys;   ///< Via annular ring outer diameters
 
-    SHAPE_POLY_SET    m_board_poly;                     ///< Board outline polygon.
+    SHAPE_POLY_SET    m_board_poly;                    ///< Board outline polygon.
 
-    MAP_CONTAINER_2D_BASE  m_layerMap;                  ///< 2D elements for each layer.
-    MAP_CONTAINER_2D_BASE  m_layerHoleMap;              ///< Holes for each layer.
+    MAP_CONTAINER_2D_BASE  m_layerMap;                 ///< 2D elements for each layer.
+    MAP_CONTAINER_2D_BASE  m_layerHoleMap;             ///< Holes for each layer.
 
     BVH_CONTAINER_2D* m_platedPadsFront;
     BVH_CONTAINER_2D* m_platedPadsBack;
