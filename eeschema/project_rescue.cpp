@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,7 +89,6 @@ static void getSymbols( SCHEMATIC* aSchematic, std::vector<SCH_SYMBOL*>& aSymbol
 static LIB_SYMBOL* findSymbol( const wxString& aName, SYMBOL_LIBS* aLibs, bool aCached )
 {
     LIB_SYMBOL *symbol = nullptr;
-    // wxString new_name = LIB_ID::FixIllegalChars( aName, false );
 
     for( SYMBOL_LIB& each_lib : *aLibs )
     {
@@ -100,6 +99,17 @@ static LIB_SYMBOL* findSymbol( const wxString& aName, SYMBOL_LIBS* aLibs, bool a
             continue;
 
         symbol = each_lib.FindSymbol( aName );
+
+        // At some point during V5 development, the LIB_ID delimiter character ':' was
+        // replaced by '_' when writing the symbol cache library so we have to test for
+        // the LIB_NICKNAME_LIB_SYMBOL_NAME case.
+        if( symbol == nullptr && each_lib.IsCache() )
+        {
+            wxString name = aName;
+
+            if( name.Replace( wxT( ":" ), wxT( "_" ) ) )
+                symbol = each_lib.FindSymbol( name );
+        }
 
         if( symbol )
             break;
