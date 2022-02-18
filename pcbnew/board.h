@@ -866,31 +866,6 @@ public:
                    wxPoint aStartPointPosition, ZONE_BORDER_DISPLAY_STYLE aHatch );
 
     /**
-     * Process an area that has been modified, by normalizing its polygon against itself.
-     * i.e. convert a self-intersecting polygon to one (or more) non self-intersecting polygon(s)
-     *
-     * This may change the number and order of copper areas in the net.
-     *
-     * @param aNewZonesList is a PICKED_ITEMS_LIST where to store new created areas pickers.
-     * @param aCurrArea is the zone to process.
-     * @return true if changes are made.
-     */
-    bool NormalizeAreaPolygon( PICKED_ITEMS_LIST* aNewZonesList, ZONE* aCurrArea );
-
-    /**
-     * Process an area that has been modified, by normalizing its polygon
-     * and merging the intersecting polygons for any other areas on the same net.
-     *
-     * This may change the number and order of copper areas in the net.
-     *
-     * @param aModifiedZonesList is a #PICKED_ITEMS_LIST where to store deleted or added areas
-     *                           (useful in undo commands can be NULL).
-     * @param modified_area is the area to test.
-     * @return true if some areas modified.
-    */
-    bool OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList, ZONE* modified_area );
-
-    /**
      * Test for intersection of 2 copper areas.
      *
      * @param aZone1 is the area reference.

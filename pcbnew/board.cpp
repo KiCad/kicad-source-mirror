@@ -1832,54 +1832,6 @@ ZONE* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_
 }
 
 
-bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE* aCurrArea )
-{
-    // mark all areas as unmodified except this one, if modified
-    for( ZONE* zone : m_zones )
-        zone->SetLocalFlags( 0 );
-
-    aCurrArea->SetLocalFlags( 1 );
-
-    if( aCurrArea->Outline()->IsSelfIntersecting() )
-    {
-        aCurrArea->UnHatchBorder();
-
-        // Normalize copied area and store resulting number of polygons
-        int n_poly = aCurrArea->Outline()->NormalizeAreaOutlines();
-
-        // If clipping has created some polygons, we must add these new copper areas.
-        if( n_poly > 1 )
-        {
-            ZONE* NewArea;
-
-            // Move the newly created polygons to new areas, removing them from the current area
-            for( int ip = 1; ip < n_poly; ip++ )
-            {
-                // Create new copper area and copy poly into it
-                SHAPE_POLY_SET* new_p = new SHAPE_POLY_SET( aCurrArea->Outline()->UnitSet( ip ) );
-                NewArea = AddArea( aNewZonesList, aCurrArea->GetNetCode(), aCurrArea->GetLayer(),
-                                   wxPoint(0, 0), aCurrArea->GetHatchStyle() );
-
-                // remove the poly that was automatically created for the new area
-                // and replace it with a poly from NormalizeAreaOutlines
-                delete NewArea->Outline();
-                NewArea->SetOutline( new_p );
-                NewArea->HatchBorder();
-                NewArea->SetLocalFlags( 1 );
-            }
-
-            SHAPE_POLY_SET* new_p = new SHAPE_POLY_SET( aCurrArea->Outline()->UnitSet( 0 ) );
-            delete aCurrArea->Outline();
-            aCurrArea->SetOutline( new_p );
-        }
-    }
-
-    aCurrArea->HatchBorder();
-
-    return true;
-}
-
-
 bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
                                      OUTLINE_ERROR_HANDLER* aErrorHandler )
 {
