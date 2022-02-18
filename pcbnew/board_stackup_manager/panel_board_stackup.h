@@ -185,8 +185,9 @@ private:
 
     /**
      * Recompute the board thickness and update the textbox
+     * @return the computed value
      */
-    void computeBoardThickness();
+    int computeBoardThickness();
 
     void onColorSelected( wxCommandEvent& event );
     void onMaterialChange( wxCommandEvent& event );

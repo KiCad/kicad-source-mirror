@@ -371,7 +371,16 @@ int BOARD_STACKUP::BuildBoardThicknessFromStackup() const
     for( BOARD_STACKUP_ITEM* item : m_list )
     {
         if( item->IsThicknessEditable() && item->IsEnabled() )
+        {
             thickness += item->GetThickness();
+
+            // dielectric layers can have more than one main layer
+            // add thickness of all sublayers
+            for( int idx = 1; idx < item->GetSublayersCount(); idx++ )
+            {
+                thickness += item->GetThickness( idx );
+            }
+        }
     }
 
     return thickness;
