@@ -156,6 +156,17 @@ KIGFX::COLOR4D SCH_MARKER::getColor() const
 }
 
 
+SEVERITY SCH_MARKER::GetSeverity() const
+{
+    if( IsExcluded() )
+        return RPT_SEVERITY_EXCLUSION;
+
+    ERC_ITEM* item = static_cast<ERC_ITEM*>( m_rcItem.get() );
+
+    return Schematic()->ErcSettings().GetSeverity( item->GetErrorCode() );
+}
+
+
 void SCH_MARKER::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     PrintMarker( aSettings, aOffset );

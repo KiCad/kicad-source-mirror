@@ -60,6 +60,8 @@ public:
 
     SCH_LAYER_ID GetColorLayer() const;
 
+    SEVERITY GetSeverity() const override;
+
     void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     void Plot( PLOTTER* /* aPlotter */, bool /* aBackground */ ) const override
