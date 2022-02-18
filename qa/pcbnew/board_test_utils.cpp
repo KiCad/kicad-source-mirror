@@ -143,7 +143,9 @@ struct kitest_cmp_drawings
     bool operator()( const BOARD_ITEM* itemA, const BOARD_ITEM* itemB ) const
     {
         TEST( itemA->Type(), itemB->Type() );
-        TEST( itemA->GetLayer(), itemB->GetLayer() );
+
+        if( itemA->GetLayerSet() != itemB->GetLayerSet() )
+            return itemA->GetLayerSet().Seq() < itemB->GetLayerSet().Seq();
 
         if( itemA->Type() == PCB_FP_TEXT_T )
         {
@@ -261,7 +263,6 @@ void CheckFpPad( const PAD* expected, const PAD* pad )
     BOOST_CHECK_EQUAL( expected->GetDrillSize(), pad->GetDrillSize() );
     CHECK_ENUM_CLASS_EQUAL( expected->GetDrillShape(), pad->GetDrillShape() );
 
-    BOOST_CHECK_EQUAL( expected->GetLayer(), pad->GetLayer() ); // this is not used for pads I think
     BOOST_CHECK_EQUAL( expected->GetLayerSet(), pad->GetLayerSet() );
 
     BOOST_CHECK_EQUAL( expected->GetNetCode(), pad->GetNetCode() );
@@ -302,7 +303,6 @@ void CheckFpText( const FP_TEXT* expected, const FP_TEXT* text )
     BOOST_CHECK_EQUAL( expected->GetTextAngle(), text->GetTextAngle() );
     BOOST_CHECK_EQUAL( expected->IsKeepUpright(), text->IsKeepUpright() );
 
-    BOOST_CHECK_EQUAL( expected->GetLayer(), text->GetLayer() );
     BOOST_CHECK_EQUAL( expected->GetLayerSet(), text->GetLayerSet() );
     BOOST_CHECK_EQUAL( expected->IsVisible(), text->IsVisible() );
 
@@ -337,7 +337,6 @@ void CheckFpShape( const FP_SHAPE* expected, const FP_SHAPE* shape )
 
     CheckShapePolySet( &expected->GetPolyShape(), &shape->GetPolyShape() );
 
-    BOOST_CHECK_EQUAL( expected->GetLayer(), shape->GetLayer() );
     BOOST_CHECK_EQUAL( expected->GetLayerSet(), shape->GetLayerSet() );
 
     BOOST_CHECK_EQUAL( expected->GetStroke().GetWidth(), shape->GetStroke().GetWidth() );
@@ -359,7 +358,6 @@ void CheckFpZone( const FP_ZONE* expected, const FP_ZONE* zone )
     BOOST_CHECK_EQUAL( expected->GetLocalClearance(), zone->GetLocalClearance() );
     BOOST_CHECK_EQUAL( expected->GetMinThickness(), zone->GetMinThickness() );
 
-    BOOST_CHECK_EQUAL( expected->GetLayer(), zone->GetLayer() ); // this is not used for zones
     BOOST_CHECK_EQUAL( expected->GetLayerSet(), zone->GetLayerSet() );
 
     BOOST_CHECK_EQUAL( expected->IsFilled(), zone->IsFilled() );
