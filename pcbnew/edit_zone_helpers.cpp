@@ -101,9 +101,6 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
     if( net )   // net == NULL should not occur
         aZone->SetNetCode( net->GetNetCode() );
 
-    // Combine zones if possible
-    GetBoard()->OnAreaPolygonModified( &deletedList, aZone );
-
     UpdateCopyOfZonesList( pickedList, deletedList, GetBoard() );
 
     // refill zones with the new properties applied
@@ -147,27 +144,6 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
     GetBoard()->GetConnectivity()->Build( GetBoard() );
 
     pickedList.ClearItemsList();  // s_ItemsListPicker is no longer owner of picked items
-}
-
-
-bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList, ZONE* modified_area )
-{
-    // clip polygon against itself
-    bool modified = NormalizeAreaPolygon( aModifiedZonesList, modified_area );
-
-    // Test for bad areas: all zones must have more than 2 corners:
-    // Note: should not happen, but just in case.
-    for( ZONE* zone : m_zones )
-    {
-        if( zone->GetNumCorners() < 3 )
-        {
-            ITEM_PICKER picker( nullptr, zone, UNDO_REDO::DELETED );
-            aModifiedZonesList->PushItem( picker );
-            zone->SetFlags( STRUCT_DELETED );
-        }
-    }
-
-    return modified;
 }
 
 
