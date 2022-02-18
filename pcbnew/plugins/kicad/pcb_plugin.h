@@ -299,7 +299,7 @@ private:
 
     void formatRenderCache( const EDA_TEXT* aText, int aNestLevel ) const;
 
-    void formatLayer( const BOARD_ITEM* aItem ) const;
+    void formatLayer( PCB_LAYER_ID aLayer ) const;
 
     void formatLayers( LSET aLayerMask, int aNestLevel = 0 ) const;
 

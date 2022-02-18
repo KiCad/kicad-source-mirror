@@ -471,11 +471,9 @@ void PCB_PLUGIN::Format( const BOARD_ITEM* aItem, int aNestLevel ) const
 }
 
 
-void PCB_PLUGIN::formatLayer( const BOARD_ITEM* aItem ) const
+void PCB_PLUGIN::formatLayer( PCB_LAYER_ID aLayer ) const
 {
-    PCB_LAYER_ID layer = aItem->GetLayer();
-
-    m_out->Print( 0, " (layer %s)", m_out->Quotew( LSET::Name( layer ) ).c_str() );
+    m_out->Print( 0, " (layer %s)", m_out->Quotew( LSET::Name( aLayer ) ).c_str() );
 }
 
 
@@ -825,7 +823,7 @@ void PCB_PLUGIN::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) 
     else
         wxFAIL_MSG( wxT( "Cannot format unknown dimension type!" ) );
 
-    formatLayer( aDimension );
+    formatLayer( aDimension->GetLayer() );
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aDimension->m_Uuid.AsString() ) );
 
@@ -988,7 +986,7 @@ void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
             m_out->Print( 0, " (fill none)" );
     }
 
-    formatLayer( aShape );
+    formatLayer( aShape->GetLayer() );
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aShape->m_Uuid.AsString() ) );
 
@@ -1076,7 +1074,7 @@ void PCB_PLUGIN::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
             m_out->Print( 0, " (fill none)" );
     }
 
-    formatLayer( aFPShape );
+    formatLayer( aFPShape->GetLayer() );
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aFPShape->m_Uuid.AsString() ) );
 
@@ -1094,7 +1092,7 @@ void PCB_PLUGIN::format( const PCB_TARGET* aTarget, int aNestLevel ) const
     if( aTarget->GetWidth() != 0 )
         m_out->Print( 0, " (width %s)", FormatInternalUnits( aTarget->GetWidth() ).c_str() );
 
-    formatLayer( aTarget );
+    formatLayer( aTarget->GetLayer() );
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aTarget->m_Uuid.AsString() ) );
 
@@ -1133,7 +1131,7 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
     if( aFootprint->IsPlaced() )
         m_out->Print( 0, " placed" );
 
-    formatLayer( aFootprint );
+    formatLayer( aFootprint->GetLayer() );
 
     m_out->Print( 0, "\n" );
     m_out->Print( aNestLevel+1, "(tedit %lX)", (unsigned long)aFootprint->GetLastEditTime() );
@@ -1734,7 +1732,7 @@ void PCB_PLUGIN::format( const PCB_TEXT* aText, int aNestLevel ) const
 
     m_out->Print( 0, ")" );
 
-    formatLayer( aText );
+    formatLayer( aText->GetLayer() );
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aText->m_Uuid.AsString() ) );
 
@@ -1779,7 +1777,7 @@ void PCB_PLUGIN::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) const
     if( !aTextBox->GetTextAngle().IsZero() )
         m_out->Print( 0, " (angle %s)", FormatAngle( aTextBox->GetTextAngle() ).c_str() );
 
-    formatLayer( aTextBox );
+    formatLayer( aTextBox->GetLayer() );
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aTextBox->m_Uuid.AsString() ) );
 
@@ -1876,7 +1874,7 @@ void PCB_PLUGIN::format( const FP_TEXT* aText, int aNestLevel ) const
         m_out->Print( 0, " unlocked" );
 
     m_out->Print( 0, ")" );
-    formatLayer( aText );
+    formatLayer( aText->GetLayer() );
 
     if( !aText->IsVisible() )
         m_out->Print( 0, " hide" );
@@ -1923,7 +1921,7 @@ void PCB_PLUGIN::format( const FP_TEXTBOX* aTextBox, int aNestLevel ) const
     if( !aTextBox->GetTextAngle().IsZero() )
         m_out->Print( 0, " (angle %s)", FormatAngle( aTextBox->GetTextAngle() ).c_str() );
 
-    formatLayer( aTextBox );
+    formatLayer( aTextBox->GetLayer() );
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aTextBox->m_Uuid.AsString() ) );
 
@@ -2061,7 +2059,7 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
     }
     else
     {
-        formatLayer( aZone );
+        formatLayer( aZone->GetFirstLayer() );
     }
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aZone->m_Uuid.AsString() ) );

@@ -5735,7 +5735,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                 }
                 else
                 {
-                    filledLayer = zone->GetLayer();
+                    filledLayer = zone->GetFirstLayer();
                 }
 
                 bool island = false;
