@@ -287,8 +287,10 @@ bool zonesNeedUpdate( const FP_ZONE* a, const FP_ZONE* b )
     TEST_D( a->GetHatchOrientation().AsDegrees(), b->GetHatchOrientation().AsDegrees() );
     TEST( a->GetHatchSmoothingLevel(), b->GetHatchSmoothingLevel() );
     TEST( a->GetHatchSmoothingValue(), b->GetHatchSmoothingValue() );
-    TEST( a->GetHatchBorderAlgorithm(), b->GetHatchBorderAlgorithm() );
     TEST( a->GetHatchHoleMinArea(), b->GetHatchHoleMinArea() );
+
+    // This is just a display property
+    // TEST( a->GetHatchBorderAlgorithm(), b->GetHatchBorderAlgorithm() );
 
     TEST( a->Outline()->TotalVertices(), b->Outline()->TotalVertices() );
 
@@ -319,6 +321,7 @@ bool modelsNeedUpdate( const FP_3DMODEL& a, const FP_3DMODEL& b )
 
 bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint )
 {
+#define TEST_ATTR( a, b, attr ) TEST( ( a & attr ), ( b & attr ) );
     wxASSERT( aLibFootprint );
 
     if( IsFlipped() )
@@ -330,7 +333,11 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint )
 
     TEST( GetDescription(), aLibFootprint->GetDescription() );
     TEST( GetKeywords(), aLibFootprint->GetKeywords() );
-    TEST( GetAttributes(), aLibFootprint->GetAttributes() );
+
+    TEST_ATTR( GetAttributes(), aLibFootprint->GetAttributes(), FP_THROUGH_HOLE );
+    TEST_ATTR( GetAttributes(), aLibFootprint->GetAttributes(), FP_SMD );
+    TEST_ATTR( GetAttributes(), aLibFootprint->GetAttributes(), FP_ALLOW_SOLDERMASK_BRIDGES );
+    TEST_ATTR( GetAttributes(), aLibFootprint->GetAttributes(), FP_ALLOW_MISSING_COURTYARD );
 
     TEST( GetLocalClearance(), aLibFootprint->GetLocalClearance() );
     TEST( GetLocalSolderMaskMargin(), aLibFootprint->GetLocalSolderMaskMargin() );
