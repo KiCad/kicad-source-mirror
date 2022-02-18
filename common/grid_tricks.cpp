@@ -642,9 +642,8 @@ void GRID_TRICKS::paste_text( const wxString& cb_text )
 
     for( int row = start_row;  row < end_row;  ++row )
     {
-        // If number of selected rows bigger than count of rows in
-        // the clipboard, paste from the clipboard again and again
-        // while end of the selection is reached.
+        // If number of selected rows is larger than the count of rows on the clipboard, paste
+        // again and again until the end of the selection is reached.
         if( !rows.HasMoreTokens() )
             rows.SetString( cb_text, ROW_SEP, wxTOKEN_RET_EMPTY );
 
@@ -662,9 +661,12 @@ void GRID_TRICKS::paste_text( const wxString& cb_text )
 
         for( int col = start_col;  col < end_col;  ++col )
         {
-            // If number of selected columns bigger than count of columns in
-            // the clipboard, paste from the clipboard again and again while
-            // end of the selection is reached.
+            // Skip hidden columns
+            if( !m_grid->IsColShown( col ) )
+                continue;
+
+            // If number of selected cols is larger than the count of cols on the clipboard,
+            // paste again and again until the end of the selection is reached.
             if( !cols.HasMoreTokens() )
                 cols.SetString( rowTxt, COL_SEP, wxTOKEN_RET_EMPTY );
 
