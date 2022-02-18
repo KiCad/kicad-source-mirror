@@ -5735,6 +5735,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                 }
                 else
                 {
+                    // for legacy, single-layer zones
                     filledLayer = zone->GetFirstLayer();
                 }
 

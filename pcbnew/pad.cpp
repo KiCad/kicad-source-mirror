@@ -208,6 +208,16 @@ PCB_LAYER_ID PAD::GetLayer() const
 }
 
 
+PCB_LAYER_ID PAD::GetPrincipalLayer() const
+{
+    if( m_attribute == PAD_ATTRIB::SMD || m_attribute == PAD_ATTRIB::CONN )
+        return m_layer;
+
+    wxFAIL_MSG( wxT( "Non-SMD/CONN pads have no principal layer." ) );
+    return m_layer;
+}
+
+
 bool PAD::FlashLayer( LSET aLayers ) const
 {
     for( auto layer : aLayers.Seq() )

@@ -158,7 +158,7 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
                     if( pad->GetAttribute() == PAD_ATTRIB::SMD
                             || pad->GetAttribute() == PAD_ATTRIB::CONN )
                     {
-                        if( disabledLayers.test( item->GetLayer() ) )
+                        if( disabledLayers.test( pad->GetPrincipalLayer() ) )
                             badLayer = item->GetLayer();
                     }
                     else

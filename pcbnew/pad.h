@@ -588,6 +588,11 @@ public:
     PCB_LAYER_ID GetLayer() const override;
 
     /**
+     * @return the principal copper layer for SMD and CONN pads.
+     */
+    PCB_LAYER_ID GetPrincipalLayer() const;
+
+    /**
      * Check to see if the pad should be flashed to any of the layers in the set.
      *
      * @param aLayers set of layers to check the via against
