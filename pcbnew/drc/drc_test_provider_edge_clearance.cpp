@@ -255,7 +255,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                         m_largestClearance );
             }
 
-            if( testSilk && ( item->GetLayer() == F_SilkS || item->GetLayer() == B_SilkS ) )
+            if( testSilk && ( item->IsOnLayer( F_SilkS ) || item->IsOnLayer( B_SilkS ) ) )
             {
                 if( edgesTree.QueryColliding( item, UNDEFINED_LAYER, testLayer, nullptr,
                         [&]( BOARD_ITEM* edge ) -> bool

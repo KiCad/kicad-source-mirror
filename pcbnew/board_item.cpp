@@ -181,8 +181,8 @@ bool BOARD_ITEM::ptr_cmp::operator() ( const BOARD_ITEM* a, const BOARD_ITEM* b 
     if( a->Type() != b->Type() )
         return a->Type() < b->Type();
 
-    if( a->GetLayer() != b->GetLayer() )
-        return a->GetLayer() < b->GetLayer();
+    if( a->GetLayerSet() != b->GetLayerSet() )
+        return a->GetLayerSet().Seq() < b->GetLayerSet().Seq();
 
     if( a->m_Uuid != b->m_Uuid )       // UUIDs *should* always be unique (for valid boards anyway)
         return a->m_Uuid < b->m_Uuid;
