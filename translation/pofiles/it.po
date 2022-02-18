@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-16 17:22-0800\n"
-"PO-Revision-Date: 2022-02-10 21:56+0100\n"
+"PO-Revision-Date: 2022-02-18 12:04+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -4706,14 +4706,12 @@ msgid "Alias: "
 msgstr "Alias: "
 
 #: common/filename_resolver.cpp:468
-#, fuzzy
 msgid "This path:"
-msgstr "Questo percorso:wxT( "
+msgstr "Questo percorso:"
 
 #: common/filename_resolver.cpp:471
-#, fuzzy
 msgid "Existing path:"
-msgstr "Percorso esistente:wxT("
+msgstr "Percorso esistente:"
 
 #: common/filename_resolver.cpp:473
 msgid "Bad alias (duplicate name)"
@@ -13717,9 +13715,8 @@ msgid "Cannot open file '%s'."
 msgstr "Impossibile aprire il file \"%s\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:314
-#, fuzzy
 msgid "Storage file not fully parsed "
-msgstr "File magazzino non analizzato completamente (%d byte rimanenti)."
+msgstr "File magazzino non analizzato completamente "
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:476
 msgid "Compile mask not currently supported."
@@ -21872,9 +21869,9 @@ msgid "Reannotate anyway?"
 msgstr "Riannotare comunque?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "Istanza duplicata di "
+msgstr "Istanza duplicata di %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
 msgid "Aborted: too many errors"
@@ -25331,7 +25328,7 @@ msgstr "Ispettore collegamenti"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:83
 msgid "Load and Test Netlist"
-msgstr ""
+msgstr "Carica e verifica Netlist"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:125
 msgid "Select Netlist"
@@ -33727,28 +33724,27 @@ msgstr "Sblocca"
 
 #: pcbnew/tools/board_editor_control.cpp:1393
 msgid "Zones have insufficient overlap for merging."
-msgstr ""
+msgstr "Le zone hanno sovrapposizione insufficiente per la fusione."
 
 #: pcbnew/tools/board_editor_control.cpp:1439
 msgid "Some zone netcodes did not match and were not merged."
-msgstr ""
+msgstr "Alcuni netcode zona non corrispondono e non sono stati fusi."
 
 #: pcbnew/tools/board_editor_control.cpp:1445
 msgid "Some zone priorities did not match and were not merged."
-msgstr ""
+msgstr "Alcune priorità zona non corrispondono e non sono state fuse."
 
 #: pcbnew/tools/board_editor_control.cpp:1451
 msgid "Some zones were rule areas and were not merged."
-msgstr ""
+msgstr "Alcune zone erano aree di regole e non sono state fuse."
 
 #: pcbnew/tools/board_editor_control.cpp:1457
-#, fuzzy
 msgid "Some zone layer sets did not match and were not merged."
-msgstr "Strato regola \"%s\" non abbinato; regola ignorata."
+msgstr "Alcuni strati zone non hanno riscontro e non sono stati fusi."
 
 #: pcbnew/tools/board_editor_control.cpp:1463
 msgid "Some zones did not intersect and were not merged."
-msgstr ""
+msgstr "Alcune zone non intersecano e non sono state fuse."
 
 #: pcbnew/tools/board_editor_control.cpp:1529
 msgid "Duplicate zone"
@@ -36703,36 +36699,21 @@ msgid "The KiCad Developers"
 msgstr "Gli sviluppatori di KiCad"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
 msgid "Gerber file"
 msgstr "File Gerber"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:26
-#, fuzzy
 msgid "Excellon drill file"
-msgstr "Genera file forature Excellon2"
+msgstr "File forature Excellon"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
-#, fuzzy
 msgid "KiCad Project"
-msgstr "File progetto KiCad"
+msgstr "Progetto KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:12
-#, fuzzy
 msgid "KiCad Schematic"
-msgstr "Schema non-KiCad..."
+msgstr "Schema elettrico KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:27
-#, fuzzy
 msgid "KiCad Printed Circuit Board"
-msgstr "File di circuiti stampati KiCad"
-
-#, fuzzy
-#~ msgid "Net CodewxT( "
-#~ msgstr "Codice connessione"
-
-#~ msgid "kicad"
-#~ msgstr "kicad"
-
-#~ msgid "pcbcalculator"
-#~ msgstr "pcbcalculator"
+msgstr "Circuito stampato KiCad"
