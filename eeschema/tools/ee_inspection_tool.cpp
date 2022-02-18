@@ -517,13 +517,18 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 
         SCH_SYMBOL* symbol = (SCH_SYMBOL*) selection.Front();
 
-        datasheet = symbol->GetField( DATASHEET_FIELD )->GetText();
+        // Use GetShownText() to resolve any text variables
+        datasheet = symbol->GetField( DATASHEET_FIELD )->GetShownText();
     }
 
     if( datasheet.IsEmpty() || datasheet == wxT( "~" ) )
+    {
         m_frame->ShowInfoBarError( _( "No datasheet defined." ) );
+    }
     else
+    {
         GetAssociatedDocument( m_frame, datasheet, &m_frame->Prj() );
+    }
 
     return 0;
 }
