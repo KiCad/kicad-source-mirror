@@ -791,7 +791,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                                                                     aZone, aItem, Margin ) );
                         }
 
-                        addKnockout( aItem, aLayer, gap, ignoreLineWidths, aHoles );
+                        addKnockout( aItem, aLayer, gap + extra_margin, ignoreLineWidths, aHoles );
                     }
                 }
             };
@@ -859,7 +859,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                                                      aLayer );
 
                         SHAPE_POLY_SET poly;
-                        aKnockout->TransformShapeWithClearanceToPolygon( poly, aLayer, gap,
+                        aKnockout->TransformShapeWithClearanceToPolygon( poly, aLayer,
+                                                                         gap + extra_margin,
                                                                          m_maxError,
                                                                          ERROR_OUTSIDE );
                         aHoles.Append( poly );
