@@ -674,7 +674,7 @@ void BRDITEMS_PLOTTER::PlotFootprintShape( const FP_SHAPE* aShape )
         {
             radius = KiROUND( GetLineLength( aShape->GetCenter(), aShape->GetStart() ) );
             EDA_ANGLE startAngle( aShape->GetStart() - aShape->GetCenter() );
-            EDA_ANGLE endAngle = startAngle + aShape->GetArcAngle();
+            EDA_ANGLE endAngle = startAngle - aShape->GetArcAngle();
 
             // when startAngle == endAngle ThickArc() doesn't know whether it's 0 deg and 360 deg
             if( std::abs( aShape->GetArcAngle().AsDegrees() ) == 360.0 )
@@ -684,7 +684,7 @@ void BRDITEMS_PLOTTER::PlotFootprintShape( const FP_SHAPE* aShape )
             }
             else
             {
-                m_plotter->ThickArc( aShape->GetCenter(), -endAngle, -startAngle, radius,
+                m_plotter->ThickArc( aShape->GetCenter(), -startAngle, -endAngle, radius,
                                      thickness, GetPlotMode(), &gbr_metadata );
             }
         }
@@ -946,7 +946,7 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
         case SHAPE_T::ARC:
         {
             EDA_ANGLE startAngle( aShape->GetStart() - aShape->GetCenter() );
-            EDA_ANGLE endAngle = startAngle + aShape->GetArcAngle();
+            EDA_ANGLE endAngle = startAngle - aShape->GetArcAngle();
 
             // when startAngle == endAngle ThickArc() doesn't know whether it's 0 deg and 360 deg
             if( std::abs( aShape->GetArcAngle().AsDegrees() ) == 360.0 )
@@ -956,7 +956,7 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
             }
             else
             {
-                m_plotter->ThickArc( aShape->GetCenter(), -endAngle, -startAngle,
+                m_plotter->ThickArc( aShape->GetCenter(), -startAngle, -endAngle,
                                      aShape->GetRadius(), thickness, GetPlotMode(), &gbr_metadata );
             }
 
