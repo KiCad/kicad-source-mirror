@@ -88,6 +88,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
     bool                  wasDragging = m_moveInProgress && m_isDrag;
+    SCH_MOVE_TOOL_PARAMS* params = aEvent.Parameter<SCH_MOVE_TOOL_PARAMS*>();
 
     m_anchorPos.reset();
 
@@ -174,8 +175,11 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             if( !m_moveInProgress )    // Prepare to start moving/dragging
             {
                 SCH_ITEM* sch_item = (SCH_ITEM*) selection.Front();
-                bool      appendUndo = sch_item && sch_item->IsNew();
-                bool      placingNewItems = sch_item && sch_item->IsNew();
+                bool      appendUndo =
+                        params ? params->appendToLastUndo : ( sch_item && sch_item->IsNew() );
+                bool placingNewItems =
+                        params ? params->placingNewItems : ( sch_item && sch_item->IsNew() );
+
 
                 //------------------------------------------------------------------------
                 // Setup a drag or a move

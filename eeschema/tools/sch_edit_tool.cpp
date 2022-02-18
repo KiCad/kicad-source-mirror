@@ -1700,7 +1700,9 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
         m_frame->OnModify();
         m_frame->GetCanvas()->Refresh();
 
-        m_toolMgr->RunAction( EE_ACTIONS::drag );
+        SCH_MOVE_TOOL_PARAMS params = { .appendToLastUndo = true, .placingNewItems = false };
+
+        m_toolMgr->RunAction( EE_ACTIONS::drag, true, &params );
     }
 
     return 0;

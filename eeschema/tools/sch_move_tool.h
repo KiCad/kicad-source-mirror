@@ -40,6 +40,13 @@ struct SPECIAL_CASE_LABEL_INFO
 };
 
 
+struct SCH_MOVE_TOOL_PARAMS
+{
+    bool appendToLastUndo;
+    bool placingNewItems;
+};
+
+
 class SCH_MOVE_TOOL : public EE_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
