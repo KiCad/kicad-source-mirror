@@ -439,7 +439,7 @@ wxColor PANEL_SETUP_BOARD_STACKUP::GetSelectedColor( int aRow ) const
 }
 
 
-void PANEL_SETUP_BOARD_STACKUP::computeBoardThickness()
+int PANEL_SETUP_BOARD_STACKUP::computeBoardThickness()
 {
     int thickness = 0;
 
@@ -462,6 +462,8 @@ void PANEL_SETUP_BOARD_STACKUP::computeBoardThickness()
     // The text in the event will translate to the value for the text control
     // and is only updated if it changed
     m_tcCTValue->ChangeValue( thicknessStr );
+
+    return thickness;
 }
 
 
