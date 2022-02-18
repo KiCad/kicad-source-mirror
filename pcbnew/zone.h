@@ -183,6 +183,9 @@ public:
 
     virtual PCB_LAYER_ID GetLayer() const override;
 
+    // Return the first layer in GUI sequence.
+    PCB_LAYER_ID GetFirstLayer() const;
+
     virtual bool IsOnLayer( PCB_LAYER_ID ) const override;
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;

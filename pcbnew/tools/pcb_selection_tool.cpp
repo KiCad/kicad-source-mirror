@@ -2324,9 +2324,11 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         // If the footprint has no items except the reference and value fields, include the
         // footprint in the selections.
         if( footprint->GraphicalItems().empty()
-          && footprint->Pads().empty()
-          && footprint->Zones().empty() )
+                && footprint->Pads().empty()
+                && footprint->Zones().empty() )
+        {
             return true;
+        }
 
         for( const BOARD_ITEM* item : footprint->GraphicalItems() )
         {
@@ -2505,7 +2507,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         break;
     }
 
-    return aItem->ViewGetLOD( aItem->GetLayer(), view() ) < view()->GetScale();
+    return true;
 }
 
 

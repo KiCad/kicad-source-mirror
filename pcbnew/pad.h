@@ -585,6 +585,8 @@ public:
      */
     bool FlashLayer( int aLayer ) const;
 
+    PCB_LAYER_ID GetLayer() const override;
+
     /**
      * Check to see if the pad should be flashed to any of the layers in the set.
      *

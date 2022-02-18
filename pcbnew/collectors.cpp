@@ -376,7 +376,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
             break;
 
         case FP_TEXT::TEXT_is_DIVERS:
-            if( !m_Guide->IsLayerVisible( layer ) && m_Guide->IgnoreNonVisibleLayers() )
+            if( !m_Guide->IsLayerVisible( layer ) )
                 goto exit;
 
             break;
@@ -466,145 +466,144 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         }
     }
 
-    if( item->IsOnLayer( m_Guide->GetPreferredLayer() ) || m_Guide->IgnorePreferredLayer() )
+    if( ( item->IsOnLayer( m_Guide->GetPreferredLayer() ) )
+            && ( !item->IsLocked() || !m_Guide->IgnoreLockedItems() ) )
     {
-        PCB_LAYER_ID layer = item->GetLayer();
-
         // footprints and their subcomponents: reference, value and pads are not sensitive
         // to the layer visibility controls.  They all have their own separate visibility
         // controls for vias, GetLayer() has no meaning, but IsOnLayer() works fine. User
         // text in a footprint *is* sensitive to layer visibility but that was already handled.
 
-        if( via || footprint || pad || m_Guide->IsLayerVisible( layer )
-            || !m_Guide->IgnoreNonVisibleLayers() )
+        int  accuracy = KiROUND( 5 * m_Guide->OnePixelInIU() );
+
+        if( zone )
         {
-            if( !m_Guide->IsLayerLocked( layer ) || !m_Guide->IgnoreLockedLayers() )
+            if( zone->HitTestForCorner( m_refPos, accuracy * 2 )
+                    || zone->HitTestForEdge( m_refPos, accuracy ) )
             {
-                if( !item->IsLocked() || !m_Guide->IgnoreLockedItems() )
+                Append( item );
+                goto exit;
+            }
+            else if( !m_Guide->IgnoreZoneFills() )
+            {
+                for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
                 {
-                    int  accuracy = KiROUND( 5 * m_Guide->OnePixelInIU() );
+                    if( m_Guide->IsLayerVisible( layer )
+                            && zone->HitTestFilledArea( layer, m_refPos ) )
+                    {
+                        Append( item );
+                        goto exit;
+                    }
+                }
+            }
+        }
+        else if( footprint )
+        {
+            if( footprint->HitTest( m_refPos, accuracy )
+                    && footprint->HitTestAccurate( m_refPos, accuracy ) )
+            {
+                Append( item );
+                goto exit;
+            }
+        }
+        else if( pad || via )
+        {
+            if( item->HitTest( m_refPos, accuracy ) )
+            {
+                Append( item );
+                goto exit;
+            }
+        }
+        else
+        {
+            PCB_LAYER_ID layer = item->GetLayer();
 
-                    if( zone )
-                    {
-                        bool testFill = !m_Guide->IgnoreZoneFills();
+            if( m_Guide->IsLayerVisible( layer ) )
+            {
+                if( dimension )
+                {
+                    // Dimensions feel particularly hard to select, probably due to their
+                    // noisy shape making it feel like they should have a larger boundary.
+                    accuracy = KiROUND( accuracy * 1.5 );
+                }
 
-                        if( zone->HitTestForCorner( m_refPos, accuracy * 2 )
-                            || zone->HitTestForEdge( m_refPos, accuracy )
-                            || ( testFill && zone->HitTestFilledArea( layer, m_refPos ) ) )
-                        {
-                            Append( item );
-                            goto exit;
-                        }
-                    }
-                    else if( item->Type() == PCB_FOOTPRINT_T )
-                    {
-                        if( footprint->HitTest( m_refPos, accuracy )
-                            && footprint->HitTestAccurate( m_refPos, accuracy ) )
-                        {
-                            Append( item );
-                            goto exit;
-                        }
-                    }
-                    else if( shape )
-                    {
-                        if( shape->HitTest( m_refPos, accuracy ) )
-                        {
-                            Append( shape );
-                            goto exit;
-                        }
-                    }
-                    else if( dimension )
-                    {
-                        // Dimensions feel particularly hard to select, probably due to their
-                        // noisy shape making it feel like they should have a larger boundary.
-                        if( dimension->HitTest( m_refPos, KiROUND( accuracy * 1.5 ) ) )
-                        {
-                            Append( dimension );
-                            goto exit;
-                        }
-                    }
-                    else
-                    {
-                        if( item->HitTest( m_refPos, accuracy ) )
-                        {
-                            Append( item );
-                            goto exit;
-                        }
-                    }
+                if( item->HitTest( m_refPos, accuracy ) )
+                {
+                    Append( item );
+                    goto exit;
                 }
             }
         }
     }
 
-    if( m_Guide->IncludeSecondary() )
+    if( m_Guide->IncludeSecondary()
+            && ( !item->IsLocked() || !m_Guide->IgnoreLockedItems() ) )
     {
-        // for now, "secondary" means "tolerate any layer".  It has
-        // no effect on other criteria, since there is a separate "ignore" control for
-        // those in the COLLECTORS_GUIDE
-
-        PCB_LAYER_ID layer = item->GetLayer();
+        // for now, "secondary" means "tolerate any visible layer".  It has no effect on other
+        // criteria, since there is a separate "ignore" control for those in the COLLECTORS_GUIDE
 
         // footprints and their subcomponents: reference, value and pads are not sensitive
         // to the layer visibility controls.  They all have their own separate visibility
         // controls for vias, GetLayer() has no meaning, but IsOnLayer() works fine. User
         // text in a footprint *is* sensitive to layer visibility but that was already handled.
 
-        if( via || footprint || pad || zone || m_Guide->IsLayerVisible( layer )
-            || !m_Guide->IgnoreNonVisibleLayers() )
+        int  accuracy = KiROUND( 5 * m_Guide->OnePixelInIU() );
+
+        if( zone )
         {
-            if( !m_Guide->IsLayerLocked( layer ) || !m_Guide->IgnoreLockedLayers() )
+            if( zone->HitTestForCorner( m_refPos, accuracy * 2 )
+                    || zone->HitTestForEdge( m_refPos, accuracy ) )
             {
-                if( !item->IsLocked() || !m_Guide->IgnoreLockedItems() )
+                Append2nd( item );
+                goto exit;
+            }
+            else if( !m_Guide->IgnoreZoneFills() )
+            {
+                for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
                 {
-                    int  accuracy = KiROUND( 5 * m_Guide->OnePixelInIU() );
+                    if( m_Guide->IsLayerVisible( layer )
+                            && zone->HitTestFilledArea( layer, m_refPos ) )
+                    {
+                        Append2nd( item );
+                        goto exit;
+                    }
+                }
+            }
+        }
+        else if( item->Type() == PCB_FOOTPRINT_T )
+        {
+            if( footprint->HitTest( m_refPos, accuracy )
+                    && footprint->HitTestAccurate( m_refPos, accuracy ) )
+            {
+                Append2nd( item );
+                goto exit;
+            }
+        }
+        else if( pad || via )
+        {
+            if( item->HitTest( m_refPos, accuracy ) )
+            {
+                Append2nd( item );
+                goto exit;
+            }
+        }
+        else
+        {
+            PCB_LAYER_ID layer = item->GetLayer();
 
-                    if( zone )
-                    {
-                        bool testFill = !m_Guide->IgnoreZoneFills();
+            if( m_Guide->IsLayerVisible( layer ) )
+            {
+                if( dimension )
+                {
+                    // Dimensions feel particularly hard to select, probably due to their
+                    // noisy shape making it feel like they should have a larger boundary.
+                    accuracy = KiROUND( accuracy * 1.5 );
+                }
 
-                        if( zone->HitTestForCorner( m_refPos, accuracy * 2 )
-                            || zone->HitTestForEdge( m_refPos, accuracy )
-                            || ( testFill && zone->HitTestFilledArea( layer, m_refPos ) ) )
-                        {
-                            Append2nd( item );
-                            goto exit;
-                        }
-                    }
-                    else if( item->Type() == PCB_FOOTPRINT_T )
-                    {
-                        if( footprint->HitTest( m_refPos, accuracy )
-                            && footprint->HitTestAccurate( m_refPos, accuracy ) )
-                        {
-                            Append2nd( item );
-                            goto exit;
-                        }
-                    }
-                    else if( shape )
-                    {
-                        if( shape->HitTest( m_refPos, accuracy ) )
-                        {
-                            Append2nd( shape );
-                            goto exit;
-                        }
-                    }
-                    else if( dimension )
-                    {
-                        // Dimensions feels particularly hard to select, probably due to their
-                        // noisy shape making it feel like they should have a larger boundary.
-                        if( dimension->HitTest( m_refPos, KiROUND( accuracy * 1.5 ) ) )
-                        {
-                            Append2nd( dimension );
-                            goto exit;
-                        }
-                    }
-                    else
-                    {
-                        if( item->HitTest( m_refPos, 0 ) )
-                        {
-                            Append2nd( item );
-                            goto exit;
-                        }
-                    }
+                if( item->HitTest( m_refPos, accuracy ) )
+                {
+                    Append2nd( item );
+                    goto exit;
                 }
             }
         }

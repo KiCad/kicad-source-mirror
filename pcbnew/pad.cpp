@@ -200,6 +200,14 @@ bool PAD::IsFlipped() const
 }
 
 
+PCB_LAYER_ID PAD::GetLayer() const
+{
+    wxFAIL_MSG( wxT( "Pads exist on multiple layers.  GetLayer() has no meaning." ) );
+
+    return BOARD_ITEM::GetLayer();
+}
+
+
 bool PAD::FlashLayer( LSET aLayers ) const
 {
     for( auto layer : aLayers.Seq() )
@@ -958,7 +966,7 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     }
 
     wxString source;
-    int      clearance = GetOwnClearance( GetLayer(), &source );
+    int      clearance = GetOwnClearance( UNDEFINED_LAYER, &source );
 
     if( !source.IsEmpty() )
     {

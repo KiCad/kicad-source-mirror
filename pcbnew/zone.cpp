@@ -205,7 +205,18 @@ VECTOR2I ZONE::GetPosition() const
 
 PCB_LAYER_ID ZONE::GetLayer() const
 {
+    wxFAIL_MSG( wxT( "Zones exist on multiple layers.  GetLayer() has no meaning." ) );
+
     return BOARD_ITEM::GetLayer();
+}
+
+
+PCB_LAYER_ID ZONE::GetFirstLayer() const
+{
+    if( m_layerSet.size() )
+        return m_layerSet.UIOrder()[0];
+    else
+        return UNDEFINED_LAYER;
 }
 
 
@@ -226,8 +237,6 @@ bool ZONE::CommonLayerExists( const LSET aLayerSet ) const
 void ZONE::SetLayer( PCB_LAYER_ID aLayer )
 {
     SetLayerSet( LSET( aLayer ) );
-
-    m_layer = aLayer;
 }
 
 
@@ -255,14 +264,6 @@ void ZONE::SetLayerSet( LSET aLayerSet )
     }
 
     m_layerSet = aLayerSet;
-
-    // Set the single layer parameter.  For zones that can be on many layers, this parameter
-    // is arbitrary at best, but some code still uses it.
-    // Priority is F_Cu then B_Cu then to the first selected layer
-    m_layer = aLayerSet.Seq()[0];
-
-    if( m_layer != F_Cu && aLayerSet[B_Cu] )
-        m_layer = B_Cu;
 }
 
 
@@ -589,7 +590,7 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
     aList.emplace_back( _( "Filled Area" ), msg );
 
     wxString source;
-    int      clearance = GetOwnClearance( GetLayer(), &source );
+    int      clearance = GetOwnClearance( UNDEFINED_LAYER, &source );
 
     if( !source.IsEmpty() )
     {
@@ -647,12 +648,8 @@ void ZONE::Rotate( const VECTOR2I& aCentre, const EDA_ANGLE& aAngle )
 void ZONE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     Mirror( aCentre, aFlipLeftRight );
-    int copperLayerCount = GetBoard()->GetCopperLayerCount();
 
-    if( GetIsRuleArea() )
-        SetLayerSet( FlipLayerMask( GetLayerSet(), copperLayerCount ) );
-    else
-        SetLayer( FlipLayer( GetLayer(), copperLayerCount ) );
+    SetLayerSet( FlipLayerMask( GetLayerSet(), GetBoard()->GetCopperLayerCount() ) );
 }
 
 
@@ -854,7 +851,7 @@ void ZONE::HatchBorder()
     int  hatch_line_len = m_borderHatchPitch;
 
     // To have a better look, give a slope depending on the layer
-    int     layer = GetLayer();
+    int     layer = GetLayerSet().Seq()[0];
     int     slope_flag = (layer & 1) ? 1 : -1;  // 1 or -1
     double  slope = 0.707106 * slope_flag;      // 45 degrees slope
     int     max_a, min_a;
@@ -1181,7 +1178,9 @@ void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aCornerBuffer, int
 {
     // Creates the zone outline polygon (with holes if any)
     SHAPE_POLY_SET polybuffer;
-    BuildSmoothedPoly( polybuffer, GetLayer(), aBoardOutline );
+
+    // TODO: using GetFirstLayer() means it only works for single-layer zones....
+    BuildSmoothedPoly( polybuffer, GetFirstLayer(), aBoardOutline );
 
     // Calculate the polygon with clearance
     // holes are linked to the main outline, so only one polygon is created.

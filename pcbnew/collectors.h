@@ -63,36 +63,14 @@ public:
     virtual     ~COLLECTORS_GUIDE() {}
 
     /**
-     * @return true if the given layer is locked, else false.
-     */
-    virtual     bool IsLayerLocked( PCB_LAYER_ID layer ) const = 0;
-
-    /**
      * @return true if the given layer is visible, else false.
      */
     virtual     bool IsLayerVisible( PCB_LAYER_ID layer ) const = 0;
 
     /**
-     * @return true if should ignore locked layers, else false.
-     */
-    virtual     bool IgnoreLockedLayers() const = 0;
-
-    /**
-     * @return true if should ignore non-visible layers, else false.
-     */
-    virtual     bool IgnoreNonVisibleLayers() const = 0;
-
-    /**
      * @return the preferred layer for HitTest()ing.
      */
     virtual     PCB_LAYER_ID GetPreferredLayer() const = 0;
-
-    /**
-     * Provide wildcard behavior regarding the preferred layer.
-     *
-     * @return true if should ignore preferred layer, else false.
-     */
-    virtual     bool IgnorePreferredLayer() const = 0;
 
     /**
      * @return true if should ignore locked items, else false.
@@ -392,10 +370,7 @@ public:
         VECTOR2I one( 1, 1 );
 
         m_preferredLayer            = aPreferredLayer;
-        m_ignorePreferredLayer      = false;
         m_visibleLayers             = aVisibleLayerMask;
-        m_ignoreLockedLayers        = true;
-        m_ignoreNonVisibleLayers    = true;
         m_ignoreLockedItems         = false;
 
 #if defined(USE_MATCH_LAYER)
@@ -427,19 +402,6 @@ public:
     }
 
     /**
-     * @return true if the given layer is locked, else false.
-     */
-    bool IsLayerLocked( PCB_LAYER_ID aLayerId ) const override
-    {
-        return m_lockedLayers[aLayerId];
-    }
-
-    void SetLayerLocked( PCB_LAYER_ID aLayerId, bool isLocked )
-    {
-        m_lockedLayers.set( aLayerId, isLocked );
-    }
-
-    /**
      * @return true if the given layer is visible, else false.
      */
     bool IsLayerVisible( PCB_LAYER_ID aLayerId ) const override
@@ -453,30 +415,10 @@ public:
     void SetLayerVisibleBits( LSET aLayerBits ) { m_visibleLayers = aLayerBits; }
 
     /**
-     * @return true if should ignore locked layers, else false.
-     */
-    bool IgnoreLockedLayers() const override        { return m_ignoreLockedLayers; }
-    void SetIgnoreLockedLayers( bool ignore )       { m_ignoreLockedLayers = ignore; }
-
-    /**
-     * @return true if should ignore non-visible layers, else false.
-     */
-    bool IgnoreNonVisibleLayers() const override    { return m_ignoreNonVisibleLayers; }
-    void SetIgnoreNonVisibleLayers( bool ignore )   { m_ignoreLockedLayers = ignore; }
-
-    /**
      * @return int - the preferred layer for HitTest()ing.
      */
     PCB_LAYER_ID GetPreferredLayer() const override    { return m_preferredLayer; }
     void SetPreferredLayer( PCB_LAYER_ID aLayer )      { m_preferredLayer = aLayer; }
-
-    /**
-     * Provide wildcard behavior regarding the preferred layer.
-     *
-     * @return true if should ignore preferred layer, else false.
-     */
-    bool IgnorePreferredLayer() const override      { return  m_ignorePreferredLayer; }
-    void SetIgnorePreferredLayer( bool ignore )     { m_ignorePreferredLayer = ignore; }
 
     /**
      * @return true if should ignore locked items, else false.
@@ -575,13 +517,8 @@ private:
     // a carrier object and its functions are what is used, and data only indirectly.
 
     PCB_LAYER_ID m_preferredLayer;
-    bool    m_ignorePreferredLayer;
-
-    LSET    m_lockedLayers;                  ///< bit-mapped layer locked bits
-    bool    m_ignoreLockedLayers;
 
     LSET    m_visibleLayers;                 ///< bit-mapped layer visible bits
-    bool    m_ignoreNonVisibleLayers;
 
     bool    m_ignoreLockedItems;
     bool    m_includeSecondary;
