@@ -540,6 +540,19 @@ bool TRACKS_CLEANER::mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2 
         }
     }
 
+    // Now find the removed end(s) and stop merging if it is a node:
+    if( aSeg1->GetStart() != dummy_seg.GetStart() && aSeg1->GetStart() != dummy_seg.GetEnd() )
+     {
+        if( testTrackEndpointIsNode( aSeg1, true ) )
+            return false;
+    }
+
+    if( aSeg1->GetEnd() != dummy_seg.GetStart() && aSeg1->GetEnd() != dummy_seg.GetEnd() )
+    {
+        if( testTrackEndpointIsNode( aSeg1, false ) )
+            return false;
+    }
+
     std::shared_ptr<CLEANUP_ITEM> item = std::make_shared<CLEANUP_ITEM>( CLEANUP_MERGE_TRACKS );
     item->SetItems( aSeg1, aSeg2 );
     m_itemsList->push_back( item );
