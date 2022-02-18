@@ -621,6 +621,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
         newPin->SetOrientation( last->GetOrientation() );
         newPin->SetType( last->GetType() );
         newPin->SetShape( last->GetShape() );
+        newPin->SetParent( last->GetParent() );
 
         wxPoint pos = last->GetPosition();
 
