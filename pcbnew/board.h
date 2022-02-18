@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -292,8 +292,11 @@ public:
     void SetGenerator( const wxString& aGenerator ) { m_generator = aGenerator; }
     const wxString& GetGenerator() const { return m_generator; }
 
-    void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_MODE::INSERT ) override;
+    ///< @copydoc BOARD_ITEM_CONTAINER::Add()
+    void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_MODE::INSERT,
+              bool aSkipConnectivity = false ) override;
 
+    ///< @copydoc BOARD_ITEM_CONTAINER::Remove()
     void Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode = REMOVE_MODE::NORMAL ) override;
 
     /**

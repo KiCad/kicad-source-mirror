@@ -496,7 +496,7 @@ void FOOTPRINT::ClearAllNets()
 }
 
 
-void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
+void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity )
 {
     switch( aBoardItem->Type() )
     {

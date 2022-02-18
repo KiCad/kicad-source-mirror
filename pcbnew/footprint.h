@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,7 +126,8 @@ public:
     void SetPrivateLayers( LSET aLayers ) { m_privateLayers = aLayers; }
 
     ///< @copydoc BOARD_ITEM_CONTAINER::Add()
-    void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_MODE::INSERT ) override;
+    void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_MODE::INSERT,
+              bool aSkipConnectivity = false ) override;
 
     ///< @copydoc BOARD_ITEM_CONTAINER::Remove()
     void Remove( BOARD_ITEM* aItem, REMOVE_MODE aMode = REMOVE_MODE::NORMAL ) override;

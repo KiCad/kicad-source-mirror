@@ -671,7 +671,7 @@ void BOARD::CacheTriangulation( PROGRESS_REPORTER* aReporter, const std::vector<
 }
 
 
-void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
+void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity )
 {
     if( aBoardItem == nullptr )
     {
@@ -757,9 +757,11 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     aBoardItem->SetParent( this );
     aBoardItem->ClearEditFlags();
 
+    if( !aSkipConnectivity )
+        m_connectivity->Add( aBoardItem );
+
     if( aMode != ADD_MODE::BULK_INSERT && aMode != ADD_MODE::BULK_APPEND )
     {
-        m_connectivity->Add( aBoardItem );
         InvokeListeners( &BOARD_LISTENER::OnBoardItemAdded, *this, aBoardItem );
     }
 }

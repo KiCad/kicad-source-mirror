@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -60,8 +60,11 @@ public:
     /**
      * @brief Adds an item to the container.
      * @param aMode decides whether the item is added in the beginning or at the end of the list.
+     * @param aSkipConnectivity skip connectivity update (usefull for file loading, when
+     * the connectivity is updated after end of loading).
      */
-    virtual void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_MODE::INSERT ) = 0;
+    virtual void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_MODE::INSERT,
+                      bool aSkipConnectivity = false ) = 0;
 
     /**
      * @brief Removes an item from the container.

@@ -843,44 +843,44 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
         case T_gr_circle:
         case T_gr_rect:
             item = parsePCB_SHAPE();
-            m_board->Add( item, ADD_MODE::BULK_APPEND );
+            m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
 
         case T_gr_text:
             item = parsePCB_TEXT();
-            m_board->Add( item, ADD_MODE::BULK_APPEND );
+            m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
 
         case T_gr_text_box:
             item = parsePCB_TEXTBOX();
-            m_board->Add( item, ADD_MODE::BULK_APPEND );
+            m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
 
         case T_dimension:
             item = parseDIMENSION( m_board, false );
-            m_board->Add( item, ADD_MODE::BULK_APPEND );
+            m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
 
         case T_module:      // legacy token
         case T_footprint:
             item = parseFOOTPRINT();
-            m_board->Add( item, ADD_MODE::BULK_APPEND );
+            m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
 
         case T_segment:
             item = parsePCB_TRACK();
-            m_board->Add( item, ADD_MODE::BULK_APPEND );
+            m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
 
         case T_arc:
             item = parseARC();
-            m_board->Add( item, ADD_MODE::BULK_APPEND );
+            m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
 
@@ -890,19 +890,19 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
 
         case T_via:
             item = parsePCB_VIA();
-            m_board->Add( item, ADD_MODE::BULK_APPEND );
+            m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
 
         case T_zone:
             item = parseZONE( m_board );
-            m_board->Add( item, ADD_MODE::BULK_APPEND );
+            m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
 
         case T_target:
             item = parsePCB_TARGET();
-            m_board->Add( item, ADD_MODE::BULK_APPEND );
+            m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
 
@@ -1052,9 +1052,9 @@ void PCB_PARSER::resolveGroups( BOARD_ITEM* aParent )
             group->SetLocked( true );
 
         if( aGrp.parent->Type() == PCB_FOOTPRINT_T )
-            static_cast<FOOTPRINT*>( aGrp.parent )->Add( group );
+            static_cast<FOOTPRINT*>( aGrp.parent )->Add( group, ADD_MODE::INSERT, true );
         else
-            static_cast<BOARD*>( aGrp.parent )->Add( group );
+            static_cast<BOARD*>( aGrp.parent )->Add( group, ADD_MODE::INSERT, true );
     }
 
     wxString error;
@@ -2354,7 +2354,7 @@ void PCB_PARSER::parseNETINFO_ITEM()
     if( netCode > NETINFO_LIST::UNCONNECTED || !m_board->FindNet( NETINFO_LIST::UNCONNECTED ) )
     {
         NETINFO_ITEM* net = new NETINFO_ITEM( m_board, name, netCode );
-        m_board->Add( net );
+        m_board->Add( net, ADD_MODE::INSERT, true );
 
         // Store the new code mapping
         pushValueIntoMap( netCode, net->GetNetCode() );
@@ -3721,7 +3721,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
                 break;
 
             default:
-                footprint->Add( text, ADD_MODE::APPEND );
+                footprint->Add( text, ADD_MODE::APPEND, true );
             }
 
             break;
@@ -3732,7 +3732,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             FP_TEXTBOX* textbox = parseFP_TEXTBOX();
             textbox->SetParent( footprint.get() );
             textbox->SetDrawCoord();
-            footprint->Add( textbox, ADD_MODE::APPEND );
+            footprint->Add( textbox, ADD_MODE::APPEND, true );
             break;
         }
 
@@ -3746,14 +3746,14 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             FP_SHAPE* shape = parseFP_SHAPE();
             shape->SetParent( footprint.get() );
             shape->SetDrawCoord();
-            footprint->Add( shape, ADD_MODE::APPEND );
+            footprint->Add( shape, ADD_MODE::APPEND, true );
             break;
         }
 
         case T_dimension:
         {
             PCB_DIMENSION_BASE* dimension = parseDIMENSION( footprint.get(), true );
-            footprint->Add( dimension, ADD_MODE::APPEND );
+            footprint->Add( dimension, ADD_MODE::APPEND, true );
             break;
         }
 
@@ -3764,7 +3764,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
 
             RotatePoint( pt, footprint->GetOrientation() );
             pad->SetPosition( pt + footprint->GetPosition() );
-            footprint->Add( pad, ADD_MODE::APPEND );
+            footprint->Add( pad, ADD_MODE::APPEND, true );
             break;
         }
 
@@ -3779,7 +3779,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
         case T_zone:
         {
             ZONE* zone = parseZONE( footprint.get() );
-            footprint->Add( zone, ADD_MODE::APPEND );
+            footprint->Add( zone, ADD_MODE::APPEND, true );
             break;
         }
 
@@ -5872,7 +5872,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
         {
             int newnetcode = m_board->GetNetCount();
             net = new NETINFO_ITEM( m_board, netnameFromfile, newnetcode );
-            m_board->Add( net );
+            m_board->Add( net, ADD_MODE::INSERT, true );
 
             // Store the new code mapping
             pushValueIntoMap( newnetcode, net->GetNetCode() );
