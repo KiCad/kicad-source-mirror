@@ -57,7 +57,8 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
                                                     // selective inner copper layers
                                     "issue7567",    // DRC constraint to disallow holes gets SMD pads also
                                     "issue7975",    // Differential pair gap out of range fault by DRC
-                                    "issue8407"     // PCBNEW: Arc for diff pair has clearance DRC error
+                                    "issue8407",    // PCBNEW: Arc for diff pair has clearance DRC error
+                                    "issue10906"    // Soldermask bridge for only one object
                                   };
 
     for( const wxString& relPath : tests )

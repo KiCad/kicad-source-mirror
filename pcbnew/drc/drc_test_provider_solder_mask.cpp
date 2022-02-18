@@ -333,11 +333,17 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
                 if( otherNet > 0 && otherNet == itemNet )
                     return false;
 
+                if( aItem->GetParentFootprint() && other->GetParentFootprint() )
+                {
+                    int attr = static_cast<FOOTPRINT*>( aItem->GetParentFootprint() )->GetAttributes();
+
+                    if( attr & FP_ALLOW_SOLDERMASK_BRIDGES )
+                        return false;
+                }
+
                 if( pad && otherPad && pad->GetParent() == otherPad->GetParent() )
                 {
-                    if( pad->GetParent()->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES )
-                        return false;
-                    else if( pad->SameLogicalPadAs( otherPad ) )
+                    if( pad->SameLogicalPadAs( otherPad ) )
                         return false;
                 }
 
@@ -401,8 +407,13 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
                     {
                         std::pair<BOARD_ITEM*, PCB_LAYER_ID> key = { aItem, aRefLayer };
 
+                        // If the mask collides with the first object, add the object
+                        // net to our map and stop.  This cannot be an error yet.
                         if( m_maskApertureNetMap.count( key ) == 0 )
+                        {
                             m_maskApertureNetMap[ key ] = otherNet;
+                            return true;
+                        }
 
                         if( m_maskApertureNetMap.at( key ) == otherNet && otherNet > 0 )
                             return true;
@@ -413,7 +424,10 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
                         std::pair<BOARD_ITEM*, PCB_LAYER_ID> key = { other, aRefLayer };
 
                         if( m_maskApertureNetMap.count( key ) == 0 )
+                        {
                             m_maskApertureNetMap[ key ] = itemNet;
+                            return true;
+                        }
 
                         if( m_maskApertureNetMap.at( key ) == itemNet && itemNet > 0 )
                             return true;
