@@ -524,8 +524,13 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                                 // adding them.
                                 if( !foundLine->HasFlag( IS_CHANGED )
                                     && !foundLine->HasFlag( IS_NEW ) )
+                                {
                                     saveCopyInUndoList( (SCH_ITEM*) foundLine, UNDO_REDO::CHANGED,
                                                         true );
+
+                                    if( !foundLine->IsSelected() )
+                                        m_changedDragLines.insert( foundLine );
+                                }
 
                                 if( foundLine->GetStartPoint() == unselectedEnd )
                                     foundLine->MoveStart( splitDelta );
@@ -807,8 +812,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     } while( ( evt = Wait() ) ); //Should be assignment not equality test
 
-    // Save whatever new bend lines survived the drag
-    commitNewDragLines();
+    // Save whatever new bend lines and changed lines survived the drag
+    commitDragLines();
 
     controls->ForceCursorPosition( false );
     controls->ShowCursor( false );
@@ -1454,15 +1459,23 @@ void SCH_MOVE_TOOL::setTransitions()
 }
 
 
-void SCH_MOVE_TOOL::commitNewDragLines()
+void SCH_MOVE_TOOL::commitDragLines()
 {
     for( auto newLine : m_newDragLines )
     {
-        saveCopyInUndoList( newLine, UNDO_REDO::NEWITEM, true );
         newLine->ClearEditFlags();
+        saveCopyInUndoList( newLine, UNDO_REDO::NEWITEM, true );
+    }
+
+    // These lines have been changed, but aren't selected. We need
+    // to manually clear these edit flags or they'll stick around.
+    for( auto oldLine : m_changedDragLines )
+    {
+        oldLine->ClearEditFlags();
     }
 
     m_newDragLines.clear();
+    m_changedDragLines.clear();
 }
 
 

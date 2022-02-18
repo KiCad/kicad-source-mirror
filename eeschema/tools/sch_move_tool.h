@@ -75,7 +75,7 @@ private:
     void setTransitions() override;
 
     ///< Saves the new drag lines to the undo list
-    void commitNewDragLines();
+    void commitDragLines();
 
     ///< Clears the new drag lines and removes them from the screen
     void clearNewDragLines();
@@ -91,6 +91,8 @@ private:
     std::map<SCH_LINE*, EDA_ITEMS> m_lineConnectionCache;
     ///< Lines added at bend points dynamically during the move
     std::unordered_set<SCH_LINE*> m_newDragLines;
+    ///< Lines changed by drag algorithm that weren't selected
+    std::unordered_set<SCH_LINE*> m_changedDragLines;
 
     ///< Used for chaining commands
     VECTOR2I              m_moveOffset;
