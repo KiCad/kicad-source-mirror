@@ -81,7 +81,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
 {
     const std::shared_ptr<SHAPE>& edgeShape = edge->GetEffectiveShape( Edge_Cuts );
 
-    auto     constraint = m_drcEngine->EvalRules( aConstraintType, edge, item, item->GetLayer() );
+    auto     constraint = m_drcEngine->EvalRules( aConstraintType, edge, item, UNDEFINED_LAYER );
     int      minClearance = constraint.GetValue().Min();
     int      actual;
     VECTOR2I pos;
