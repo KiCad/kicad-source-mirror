@@ -97,16 +97,14 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
             [&]( BOARD_ITEM* item ) -> bool
             {
                 if( !m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_ON_EDGECUTS )
+                        && ( item->Type() == PCB_TEXT_T
+                                || item->Type() == PCB_TEXTBOX_T
+                                || BaseType( item->Type() ) == PCB_DIMENSION_T )
                         && item->GetLayer() == Edge_Cuts )
                 {
-                    if( item->Type() == PCB_TEXT_T
-                            || item->Type() == PCB_TEXTBOX_T
-                            || BaseType( item->Type() ) == PCB_DIMENSION_T )
-                    {
-                        std::shared_ptr<DRC_ITEM> drc = DRC_ITEM::Create( DRCE_TEXT_ON_EDGECUTS );
-                        drc->SetItems( item );
-                        reportViolation( drc, item->GetPosition(), Edge_Cuts );
-                    }
+                    std::shared_ptr<DRC_ITEM> drc = DRC_ITEM::Create( DRCE_TEXT_ON_EDGECUTS );
+                    drc->SetItems( item );
+                    reportViolation( drc, item->GetPosition(), Edge_Cuts );
                 }
 
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_ALLOWED_ITEMS ) )
