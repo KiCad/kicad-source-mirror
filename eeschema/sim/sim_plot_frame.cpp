@@ -476,10 +476,17 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
         return;
     }
 
-    m_simulator->LoadNetlist( formatter.GetString() );
-    updateTuners();
-    applyTuners();
-    m_simulator->Run();
+    std::unique_lock<std::mutex> simulatorLock( m_simulator->GetMutex(), std::try_to_lock );
+
+    if( simulatorLock.owns_lock() )
+    {
+        m_simulator->LoadNetlist( formatter.GetString() );
+        updateTuners();
+        applyTuners();
+        m_simulator->Run();
+    }
+    else
+        DisplayErrorMessage( this, _( "Another simulation is already running." ) );
 }
 
 
@@ -1808,12 +1815,20 @@ void SIM_PLOT_FRAME::onSimUpdate( wxCommandEvent& aEvent )
     }
     else
     {
-        // Incremental update
-        m_simConsole->Clear();
+        std::unique_lock<std::mutex> simulatorLock( m_simulator->GetMutex(), std::try_to_lock );
 
-        // Do not export netlist, it is already stored in the simulator
-        applyTuners();
-        m_simulator->Run();
+        if( simulatorLock.owns_lock() )
+        {
+            // Incremental update
+            m_simConsole->Clear();
+
+            // Do not export netlist, it is already stored in the simulator
+            applyTuners();
+
+            m_simulator->Run();
+        }
+        else
+            DisplayErrorMessage( this, _( "Another simulation is already running." ) );
     }
 }
 

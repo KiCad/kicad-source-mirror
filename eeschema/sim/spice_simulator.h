@@ -30,6 +30,7 @@
 #include "sim_types.h"
 #include "spice_settings.h"
 
+#include <mutex>
 #include <string>
 #include <vector>
 #include <complex>
@@ -62,6 +63,14 @@ public:
      *                  to be initialized.
      */
     virtual void Init( const SPICE_SIMULATOR_SETTINGS* aSettings = nullptr ) = 0;
+
+    /*
+     * @return mutex for exclusive access to the simulator.
+     */
+    std::mutex& GetMutex()
+    {
+        return m_mutex;
+    }
 
     /**
      * Load a netlist for the simulation.
@@ -204,6 +213,10 @@ protected:
 
     ///< We don't own this.  We are just borrowing it from the #SCHEMATIC_SETTINGS.
     std::shared_ptr<SPICE_SIMULATOR_SETTINGS> m_settings;
+
+private:
+    ///< For interprocess synchronisation.
+    std::mutex m_mutex;
 };
 
 #endif /* SPICE_SIMULATOR_H */
