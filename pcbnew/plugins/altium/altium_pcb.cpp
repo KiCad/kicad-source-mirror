@@ -1664,16 +1664,6 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
         checkpoint();
         APOLYGON6 elem( reader );
 
-        PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
-
-        if( klayer == UNDEFINED_LAYER )
-        {
-            wxLogWarning( _( "Polygon found on an Altium layer (%d) with no KiCad equivalent. "
-                             "It has been moved to KiCad layer Eco1_User." ),
-                          elem.layer );
-            klayer = Eco1_User;
-        }
-
         SHAPE_LINE_CHAIN linechain;
         HelperShapeLineChainFromAltiumVertices( linechain, elem.vertices );
 
@@ -1697,11 +1687,12 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
         m_polygons.emplace_back( zone );
 
         zone->SetNetCode( GetNetCode( elem.net ) );
-        zone->SetLayerSet( LSET( klayer ) );
         zone->SetPosition( elem.vertices.at( 0 ).position );
         zone->SetLocked( elem.locked );
         zone->SetPriority( elem.pourindex > 0 ? elem.pourindex : 0 );
         zone->Outline()->AddOutline( linechain );
+
+        HelperSetZoneLayers( zone, elem.layer );
 
         if( elem.pourindex > m_highest_pour_index )
             m_highest_pour_index = elem.pourindex;
@@ -1905,23 +1896,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem )
         zone->SetPosition( aElem.outline.at( 0 ).position );
         zone->Outline()->AddOutline( linechain );
 
-        if( aElem.layer == ALTIUM_LAYER::MULTI_LAYER )
-        {
-            zone->SetLayerSet( LSET::AllCuMask() );
-        }
-        else
-        {
-            PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
-
-            if( klayer == UNDEFINED_LAYER )
-            {
-                wxLogWarning( _( "Zone found on an Altium layer (%d) with no KiCad equivalent. "
-                                 "It has been moved to KiCad layer Eco1_User." ),
-                              aElem.layer );
-                klayer = Eco1_User;
-            }
-            zone->SetLayerSet( LSET( klayer ) );
-        }
+        HelperSetZoneLayers( zone, aElem.layer );
 
         zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
                                      ZONE::GetDefaultHatchPitch(), true );
@@ -1972,15 +1947,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
         zone->SetPosition( aElem.outline.at( 0 ).position );
         zone->Outline()->AddOutline( linechain );
 
-        if( aElem.layer == ALTIUM_LAYER::MULTI_LAYER )
-        {
-            zone->SetLayerSet( LSET::AllCuMask() );
-        }
-        else
-        {
-            std::vector<PCB_LAYER_ID> klayers = GetKicadLayersToIterate( aElem.layer );
-            zone->SetLayerSet( LSET( klayers.at( 0 ) ) );
-        }
+        HelperSetZoneLayers( zone, aElem.layer );
 
         zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
                                      ZONE::GetDefaultHatchPitch(), true );
@@ -3261,15 +3228,8 @@ void ALTIUM_PCB::ConvertFills6ToBoardItemWithNet( const AFILL6& aElem )
 
     zone->SetPosition( aElem.pos1 );
     zone->SetPriority( 1000 );
-    if( aElem.layer == ALTIUM_LAYER::MULTI_LAYER )
-    {
-        zone->SetLayerSet( LSET::AllCuMask() );
-    }
-    else
-    {
-        std::vector<PCB_LAYER_ID> klayers = GetKicadLayersToIterate( aElem.layer );
-        zone->SetLayerSet( LSET( klayers.at( 0 ) ) );
-    }
+
+    HelperSetZoneLayers( zone, aElem.layer );
 
     VECTOR2I p11( aElem.pos1.x, aElem.pos1.y );
     VECTOR2I p12( aElem.pos1.x, aElem.pos2.y );
@@ -3352,6 +3312,24 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
 }
 
 
+void ALTIUM_PCB::HelperSetZoneLayers( ZONE* aZone, const ALTIUM_LAYER aAltiumLayer )
+{
+    if( aAltiumLayer == ALTIUM_LAYER::MULTI_LAYER || aAltiumLayer == ALTIUM_LAYER::KEEP_OUT_LAYER )
+    {
+        aZone->SetLayerSet( LSET::AllCuMask() );
+    }
+    else
+    {
+        LSET layerSet;
+        for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aAltiumLayer ) )
+        {
+            layerSet.set( klayer );
+        }
+        aZone->SetLayerSet( layerSet );
+    }
+}
+
+
 void ALTIUM_PCB::HelperPcpShapeAsBoardKeepoutRegion( const PCB_SHAPE& aShape,
                                                      ALTIUM_LAYER     aAltiumLayer )
 {
@@ -3364,15 +3342,7 @@ void ALTIUM_PCB::HelperPcpShapeAsBoardKeepoutRegion( const PCB_SHAPE& aShape,
     zone->SetDoNotAllowFootprints( false );
     zone->SetDoNotAllowCopperPour( true );
 
-    if( aAltiumLayer == ALTIUM_LAYER::MULTI_LAYER )
-    {
-        zone->SetLayerSet( LSET::AllCuMask() );
-    }
-    else
-    {
-        std::vector<PCB_LAYER_ID> klayers = GetKicadLayersToIterate( aAltiumLayer );
-        zone->SetLayerSet( LSET( klayers.at( 0 ) ) );
-    }
+    HelperSetZoneLayers( zone, aAltiumLayer );
 
     aShape.EDA_SHAPE::TransformShapeWithClearanceToPolygon( *zone->Outline(), 0, ARC_HIGH_DEF,
                                                             ERROR_INSIDE, false );
@@ -3396,15 +3366,7 @@ void ALTIUM_PCB::HelperPcpShapeAsFootprintKeepoutRegion( FOOTPRINT*       aFootp
     zone->SetDoNotAllowFootprints( false );
     zone->SetDoNotAllowCopperPour( true );
 
-    if( aAltiumLayer == ALTIUM_LAYER::MULTI_LAYER )
-    {
-        zone->SetLayerSet( LSET::AllCuMask() );
-    }
-    else
-    {
-        std::vector<PCB_LAYER_ID> klayers = GetKicadLayersToIterate( aAltiumLayer );
-        zone->SetLayerSet( LSET( klayers.at( 0 ) ) );
-    }
+    HelperSetZoneLayers( zone, aAltiumLayer );
 
     aShape.EDA_SHAPE::TransformShapeWithClearanceToPolygon( *zone->Outline(), 0, ARC_HIGH_DEF,
                                                             ERROR_INSIDE, false );

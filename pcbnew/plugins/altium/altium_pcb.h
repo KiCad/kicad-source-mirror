@@ -216,6 +216,7 @@ private:
 
     void HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aVertices );
 
+    void HelperSetZoneLayers( ZONE* aZone, const ALTIUM_LAYER aAltiumLayer );
     void HelperPcpShapeAsBoardKeepoutRegion( const PCB_SHAPE& aShape, ALTIUM_LAYER aAltiumLayer );
     void HelperPcpShapeAsFootprintKeepoutRegion( FOOTPRINT* aFootprint, const PCB_SHAPE& aShape,
                                                  ALTIUM_LAYER aAltiumLayer );

@@ -146,7 +146,7 @@
     (solder_mask_margin 0.05) (thermal_bridge_angle 45) (tstamp f57881b5-c9c9-4bcf-be4b-dd8cfd505873))
   (pad "39" smd rect (at 0.835 1.835 180) (size 1.33 1.33) (layers "F.Cu" "F.Paste" "F.Mask")
     (solder_mask_margin 0.05) (thermal_bridge_angle 45) (tstamp 7c70a95d-e021-4338-a3de-d7656880600e))
-  (zone (net 0) (net_name "") (layer "F.Cu") (tstamp da4ad6f3-5f0a-4c19-ae8d-5aa0f1ec37b7) (hatch edge 0.508)
+  (zone (net 0) (net_name "") (layers *.Cu) (tstamp da4ad6f3-5f0a-4c19-ae8d-5aa0f1ec37b7) (hatch edge 0.508)
     (connect_pads (clearance 0))
     (min_thickness 0.254) (filled_areas_thickness no)
     (keepout (tracks allowed) (vias allowed) (pads allowed ) (copperpour not_allowed) (footprints allowed))
