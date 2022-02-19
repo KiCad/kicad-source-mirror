@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-16 17:22-0800\n"
-"PO-Revision-Date: 2022-02-16 13:03+0000\n"
+"PO-Revision-Date: 2022-02-20 11:55+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
 "Language: cs\n"
@@ -4569,14 +4569,12 @@ msgid "Alias: "
 msgstr "Alias: "
 
 #: common/filename_resolver.cpp:468
-#, fuzzy
 msgid "This path:"
-msgstr "Tato cesta:wxT( "
+msgstr "Tato cesta:"
 
 #: common/filename_resolver.cpp:471
-#, fuzzy
 msgid "Existing path:"
-msgstr "Existující cesta:wxT( "
+msgstr "Existující cesta:"
 
 #: common/filename_resolver.cpp:473
 msgid "Bad alias (duplicate name)"
@@ -12134,9 +12132,8 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:543
-#, fuzzy
 msgid "Remove Invalid Cells"
-msgstr "Odebrat položky"
+msgstr "Odstranit neplatné buňky"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
@@ -16778,9 +16775,9 @@ msgstr ""
 #: eeschema/tools/sch_editor_control.cpp:2257
 #: pcbnew/tools/board_editor_control.cpp:630
 #: pcbnew/tools/footprint_editor_control.cpp:574
-#, fuzzy, c-format
+#, c-format
 msgid "%d duplicate IDs replaced.\n"
-msgstr "%d duplicitní časová razítka byly nalezena a nahrazena.\n"
+msgstr "%d duplicitní ID byly nahrazeny.\n"
 
 #: eeschema/tools/sch_editor_control.cpp:2264
 #: pcbnew/tools/board_editor_control.cpp:645
@@ -17113,7 +17110,7 @@ msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:57
 msgid "(The decimal format does not use these settings)"
-msgstr ""
+msgstr "(Desetinný formát nepoužívá tato nastavení)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:61
 msgid "Usually: 3:3 in mm and 2:4 in inches"
@@ -18238,7 +18235,7 @@ msgstr "Upravit místní soubor v textovém editoru"
 
 #: kicad/menubar.cpp:225
 msgid "Archive all project files"
-msgstr "Archivovat všechny projekty"
+msgstr "Archivovat všechny soubory projektu"
 
 #: kicad/menubar.cpp:238
 msgid "Reveal project folder in Finder"
@@ -18297,11 +18294,10 @@ msgid "Apply Changes"
 msgstr "Použít změny"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:172
-#, fuzzy
 msgid ""
 "Are you sure you want to close the package manager and discard pending "
 "changes?"
-msgstr "Jste si jisti, že chcete smazat vybrané položky?"
+msgstr "Opravdu chcete zavřít Správce balíčků a ignorovat nevyřízené změny?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:174
 #: kicad/tools/kicad_manager_actions.cpp:117
@@ -18441,6 +18437,8 @@ msgid ""
 "Integrity of the downloaded package could not be verified, hash does not "
 "match. Are you sure you want to keep this file?"
 msgstr ""
+"Nelze ověřit integritu staženého balíčku, hash neodpovídá. Opravdu chcete "
+"tento soubor ponechat?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:519
 msgid "Keep downloaded file"
@@ -18451,6 +18449,8 @@ msgid ""
 "This package version is incompatible with your kicad version or platform. "
 "Are you sure you want to install it anyway?"
 msgstr ""
+"Tato verze balíčku je nekompatibilní s verzí kicadu nebo platformy. Opravdu "
+"chcete nainstalovat?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:561
 msgid "Install package"
@@ -18575,6 +18575,9 @@ msgid ""
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
 msgstr ""
+"Hash staženého archívu pro balíček %s neodpovídá vstupu repozitáře. To může "
+"znamenat problém s balíčkem, pokud problém přetrvává nahlásit správci "
+"repozitáře."
 
 #: kicad/pcm/pcm_task_manager.cpp:97
 #, c-format
@@ -18621,7 +18624,7 @@ msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:307
 msgid "Archive does not contain a valid metadata.json file"
-msgstr ""
+msgstr "Archiv neobsahuje platný soubor metadat .json"
 
 #: kicad/pcm/pcm_task_manager.cpp:315
 msgid "Archive metadata must have a single version defined"
@@ -18660,7 +18663,7 @@ msgstr "Adresář meta informací pro tuto šablonu nelze otevřít!"
 #: kicad/project_template.cpp:63
 #, fuzzy
 msgid "Couldn't find the meta HTML information file for this template!"
-msgstr "Nelze najít informační soubor meta HTML pro tuto šablonu!"
+msgstr "Nelze najít soubor informací HTML metadat pro tuto šablonu!"
 
 #: kicad/project_template.cpp:238
 #, c-format
@@ -18735,7 +18738,7 @@ msgstr "Otevřít adresář v Průzkumníku souborů"
 
 #: kicad/project_tree_pane.cpp:709 pcbnew/tools/pcb_actions.cpp:562
 msgid "Opens the directory in the default system file manager"
-msgstr ""
+msgstr "Otevře adresář ve výchozím správci souborů systému"
 
 #: kicad/project_tree_pane.cpp:716
 msgid "Reveals the directories in a Finder window"
@@ -18747,7 +18750,7 @@ msgstr "Otevřít adresáře v Průzkumníku souborů"
 
 #: kicad/project_tree_pane.cpp:719
 msgid "Opens the directories in the default system file manager"
-msgstr ""
+msgstr "Otevře adresáře ve výchozím správci souborů systému"
 
 #: kicad/project_tree_pane.cpp:730
 msgid "Open the file in a Text Editor"
@@ -22932,9 +22935,8 @@ msgstr "0.00000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:178
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:150
-#, fuzzy
 msgid "Suppress trailing zeroes"
-msgstr "Potlačit nuly na konci"
+msgstr "Potlačit koncové nuly"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:179
 msgid ""
@@ -23091,9 +23093,8 @@ msgid "Done.<br><br>"
 msgstr "Hotovo.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:462
-#, fuzzy
 msgid "Run clearance resolution tool..."
-msgstr "Rozlišení izolační mezery..."
+msgstr "Spusťte nástroj pro rozlišení izolační mezery..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:489
 msgid "Open the Board Setup... dialog"
@@ -23256,9 +23257,8 @@ msgid "Update selected footprint(s)"
 msgstr "Aktualizovat vybrané pouzdro(a)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:30
-#, fuzzy
 msgid "Update footprints matching reference designator:"
-msgstr "%s pouzdro s odkazem:"
+msgstr "Aktualizujte pouzdra v souladu s referencí schématu:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:38
 msgid "Update footprints matching value:"
@@ -23277,19 +23277,16 @@ msgid "Remove text items which are not in library footprint"
 msgstr "Odebrat textové položky, které nejsou v pouzdře knihovny"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:101
-#, fuzzy
 msgid "Update/reset text layers and visibilities"
-msgstr "Učinit vybrané pole viditelné"
+msgstr "Aktualizace/resetovat textových vrstev a viditelnosti"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:104
-#, fuzzy
 msgid "Update/reset text sizes, styles and positions"
-msgstr "Vynulovat existující očíslování"
+msgstr "Aktualizace/resetovat velikosti textu, stylů a poloh"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
-#, fuzzy
 msgid "Update/reset fabrication attributes"
-msgstr "Výstupy pro &výrobu"
+msgstr "Aktualizovat /resetovat výrobní atributy"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:110
 msgid "Update/reset 3D models"
@@ -23796,9 +23793,8 @@ msgstr "Posun Y"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:63
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:53
 #: pcbnew/fp_text_grid_table.cpp:123
-#, fuzzy
 msgid "Reference designator"
-msgstr "Referenční označení"
+msgstr "Reference schématu"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:136
 msgid "Side:"
@@ -23818,9 +23814,8 @@ msgstr "Přesunutí a umístění"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:204
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:134
-#, fuzzy
 msgid "Auto-placement Rules"
-msgstr "Automaticky umístit pole"
+msgstr "Pravidla automatického umístění"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:208
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:138
@@ -23898,9 +23893,8 @@ msgid "Clearances"
 msgstr "Izolační mezery"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:315
-#, fuzzy
 msgid "Set values to 0 to use Board Setup values."
-msgstr "Nastavte tyto hodnoty na 0 pro použití globálních hodnot."
+msgstr "Nastavte tyto hodnoty na 0 pro použití hodnot nastavení desky."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:319
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:219
@@ -24549,14 +24543,12 @@ msgid "Filter Settings"
 msgstr "Nastavení filtru"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:57
-#, fuzzy
 msgid "Locked graphics"
-msgstr "Uzamčené spoje"
+msgstr "Zamčená grafika"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:60
-#, fuzzy
 msgid "Unlocked graphics"
-msgstr "Odemčené spoje"
+msgstr "Odemčená grafika"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:63
 msgid "Locked footprints"
@@ -27468,14 +27460,12 @@ msgid "Select which origin is used for X,Y coordinate display."
 msgstr "Vyberte počátek, který se použije pro zobrazení souřadnic X, Y."
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
-#, fuzzy
 msgid "Increases right"
-msgstr "Zvětšit rozestup"
+msgstr "Zvýšení vpravo"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
-#, fuzzy
 msgid "Increases left"
-msgstr "Zvětšit tloušťku čáry"
+msgstr "Zvýšení vlevo"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:33
 msgid "X Axis"
@@ -27486,14 +27476,12 @@ msgid "Select which the direction on the screen in which the X axis increases."
 msgstr ""
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:39
-#, fuzzy
 msgid "Increases up"
-msgstr "Zvětšit rozestup"
+msgstr "Zvýšení nahoru"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:39
-#, fuzzy
 msgid "Increases down"
-msgstr "Zvětšit rozestup"
+msgstr "Zvýšení dolů"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:41
 msgid "Y Axis"
@@ -27520,9 +27508,8 @@ msgid "Arc/circle approximated by segments"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:68
-#, fuzzy
 msgid "Max allowed deviation:"
-msgstr "Maximální odchylka:"
+msgstr "Max povolená odchylka:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:70
 msgid ""
@@ -27572,9 +27559,8 @@ msgid "Allow fillets outside zone outline"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:149
-#, fuzzy
 msgid "Length tuning"
-msgstr "Ladění délky spoje"
+msgstr "Ladění délky"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:153
 msgid "Include stackup height in track length calculations"
@@ -27609,9 +27595,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:224
-#, fuzzy
 msgid "Minimum annular width:"
-msgstr "Minimální šířka:"
+msgstr "Minimální šířka prstence:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:229
 msgid ""
@@ -27681,7 +27666,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:354
 msgid "uVias"
-msgstr "mikro Via"
+msgstr "mikro Prokovy"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:370
 msgid "Minimum uVia diameter:"
@@ -28823,9 +28808,8 @@ msgid "via diameter"
 msgstr "průměr prokovu"
 
 #: pcbnew/drc/drc_engine.cpp:893
-#, fuzzy
 msgid "constraint"
-msgstr "Žádné omezení"
+msgstr "omezení"
 
 #: pcbnew/drc/drc_engine.cpp:896
 #, c-format
@@ -29242,7 +29226,7 @@ msgstr "Vlastnosti mřížky..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:210
 msgid "Checking track & via clearances..."
-msgstr "Kontrola izolační mezery spoje & prokovy..."
+msgstr "Kontrola izolační mezery spoje & prokovu..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:217
 msgid "Checking hole clearances..."
@@ -29301,9 +29285,8 @@ msgid "Checking footprints for overlapping courtyards..."
 msgstr "Kontrola pouzder pro obnovu obsazených oblastí..."
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:348
-#, fuzzy
 msgid "DPs evaluated:"
-msgstr "Pulzní hodnota:"
+msgstr "DPy vyhodnoceny:"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:460
 #, fuzzy, c-format
@@ -30482,12 +30465,11 @@ msgid "Footprints to New Library..."
 msgstr "Pouzdra do nové knihovny..."
 
 #: pcbnew/menubar_pcb_editor.cpp:156
-#, fuzzy
 msgid ""
 "Create a new footprint library containing the footprints used on board\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
-"Archivovat všechna pouzdra do nové knihovny\n"
+"Vytvořit novou knihovnu pouzder obsahující pouzdra použité na desce\n"
 "(pokud knihovna existuje, bude nahrazena)"
 
 #: pcbnew/menubar_pcb_editor.cpp:164
@@ -31465,9 +31447,8 @@ msgid "Loading components..."
 msgstr "Načítání komponent..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:974
-#, fuzzy
 msgid "Loading component 3D models..."
-msgstr "Načítání 3D modelů..."
+msgstr "Načítání 3D modelů komponent..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1051
 #: pcbnew/plugins/altium/altium_pcb.cpp:1137
@@ -33011,7 +32992,7 @@ msgstr "Prokov hodnoty třídy sítě"
 #: pcbnew/router/router_tool.cpp:247 pcbnew/tools/drawing_tool.cpp:113
 #, c-format
 msgid "Via %s, drill %s"
-msgstr "Prokov %s; vrt %s"
+msgstr "Prokov %s, vrt %s"
 
 #: pcbnew/router/router_tool.cpp:251 pcbnew/tools/drawing_tool.cpp:119
 #, c-format
