@@ -1236,7 +1236,8 @@ void PCB_EDIT_FRAME::ShowChangedLanguage()
     pane_info.Caption( _( "Appearance" ) );
     m_auimgr.Update();
 
-    m_appearancePanel->OnBoardChanged();
+    m_appearancePanel->OnLanguageChanged();
+    m_selectionFilterPanel->OnLanguageChanged();
 }
 
 

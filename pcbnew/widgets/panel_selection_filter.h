@@ -37,6 +37,8 @@ public:
 
     void SetCheckboxesFromFilter( SELECTION_FILTER_OPTIONS& aOptions );
 
+    void OnLanguageChanged();
+
 protected:
     void OnFilterChanged( wxCommandEvent& aEvent ) override;
 
