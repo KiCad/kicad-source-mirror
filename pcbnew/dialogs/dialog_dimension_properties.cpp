@@ -246,6 +246,7 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
     }
 
     m_orientation.SetAngleValue( text.GetTextAngle() );
+    m_cbKeepAligned->SetValue( m_dimension->GetKeepTextAligned() );
 
     m_bold->Check( text.IsBold() );
     m_italic->Check( text.IsItalic() );

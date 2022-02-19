@@ -656,7 +656,6 @@ void PCB_DIM_ALIGNED::updateText()
     if( m_textPosition == DIM_TEXT_POSITION::OUTSIDE )
     {
         int textOffsetDistance = m_text.GetEffectiveTextPenWidth() + m_text.GetTextHeight();
-
         EDA_ANGLE rotation;
 
         if( crossbarCenter.x == 0 )
@@ -667,8 +666,8 @@ void PCB_DIM_ALIGNED::updateText()
             rotation = ANGLE_90;
 
         VECTOR2I textOffset = crossbarCenter;
-        RotatePoint( crossbarCenter, rotation );
-        textOffset += crossbarCenter.Resize( textOffsetDistance );
+        RotatePoint( textOffset, rotation );
+        textOffset = crossbarCenter + textOffset.Resize( textOffsetDistance );
 
         m_text.SetTextPos( m_crossBarStart + textOffset );
     }
