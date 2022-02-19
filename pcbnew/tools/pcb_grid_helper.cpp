@@ -401,7 +401,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                 if( aFrom )
                     return;
 
-                const std::shared_ptr<SHAPE> eshape = aPad->GetEffectiveShape( aPad->GetLayer() );
+                const std::shared_ptr<SHAPE> eshape = aPad->GetEffectiveShape();
 
                 // PTH reduced to only a hole do not return a valid pad shape list
                 if( eshape->Type() != SH_COMPOUND )

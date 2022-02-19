@@ -59,6 +59,8 @@ public:
      */
     int EditPad( const TOOL_EVENT& aEvent );
 
+    bool InPadEditMode() { return m_editPad != niluuid; }
+
     wxString GetLastPadNumber() const { return m_lastPadNumber; }
     void SetLastPadNumber( const wxString& aPadNumber ) { m_lastPadNumber = aPadNumber; }
 
