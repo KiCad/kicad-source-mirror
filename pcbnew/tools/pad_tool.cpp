@@ -59,6 +59,17 @@ void PAD_TOOL::Reset( RESET_REASON aReason )
     if( aReason == MODEL_RELOAD )
         m_lastPadNumber = wxT( "1" );
 
+    if( m_editPad != niluuid )
+    {
+        PCB_DISPLAY_OPTIONS opts = frame()->GetDisplayOptions();
+        bool highContrast = ( opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL );
+
+        if( m_wasHighContrast != highContrast )
+            m_toolMgr->RunAction( ACTIONS::highContrastMode, true );
+
+        frame()->GetInfoBar()->Dismiss();
+    }
+
     m_editPad = niluuid;
 }
 
@@ -576,7 +587,7 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
         frame()->SetActiveLayer( layer );
 
         if( !m_wasHighContrast )
-            m_toolMgr->RunAction( ACTIONS::highContrastMode, false );
+            m_toolMgr->RunAction( ACTIONS::highContrastMode, true );
 
         if( PCB_ACTIONS::explodePad.GetHotKey() == PCB_ACTIONS::recombinePad.GetHotKey() )
         {
@@ -600,7 +611,7 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
         bool highContrast = ( opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL );
 
         if( m_wasHighContrast != highContrast )
-            m_toolMgr->RunAction( ACTIONS::highContrastMode, false );
+            m_toolMgr->RunAction( ACTIONS::highContrastMode, true );
 
         infoBar->Dismiss();
     }

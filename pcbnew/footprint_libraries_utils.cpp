@@ -48,6 +48,7 @@
 #include <settings/settings_manager.h>
 #include <footprint_editor_settings.h>
 #include "footprint_viewer_frame.h"
+#include "tools/pad_tool.h"
 #include <wx/choicdlg.h>
 #include <wx/filedlg.h>
 
@@ -784,6 +785,11 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( FOOTPRINT* aFootprint )
     if( !aFootprint )      // Happen if no footprint loaded
         return false;
 
+    PAD_TOOL* padTool = m_toolManager->GetTool<PAD_TOOL>();
+
+    if( padTool->InPadEditMode() )
+        m_toolManager->RunAction( PCB_ACTIONS::recombinePad, true );
+
     wxString libraryName = aFootprint->GetFPID().GetLibNickname();
     wxString footprintName = aFootprint->GetFPID().GetLibItemName();
     bool     nameChanged = m_footprintNameWhenLoaded != footprintName;
@@ -879,7 +885,6 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         return false;
     }
 
-    TOOL_MANAGER*   toolMgr = pcbframe->GetToolManager();
     BOARD*     mainpcb  = pcbframe->GetBoard();
     FOOTPRINT* sourceFootprint  = nullptr;
     FOOTPRINT* editorFootprint = GetBoard()->GetFirstFootprint();
@@ -906,14 +911,13 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         return false;
     }
 
-    if( aAddNew && toolMgr->GetTool<BOARD_EDITOR_CONTROL>()->PlacingFootprint() )
+    if( aAddNew && m_toolManager->GetTool<BOARD_EDITOR_CONTROL>()->PlacingFootprint() )
     {
         DisplayError( this, _( "Previous footprint placement still in progress." ) );
         return false;
     }
 
     m_toolManager->RunAction( PCB_ACTIONS::selectionClear, true );
-    toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     BOARD_COMMIT commit( pcbframe );
 
     // Create a copy for the board, first using Clone() to keep existing Uuids, and then either
@@ -960,7 +964,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         commit.Push( wxT( "Insert footprint" ) );
 
         pcbframe->Raise();
-        toolMgr->RunAction( PCB_ACTIONS::placeFootprint, true, newFootprint );
+        m_toolManager->RunAction( PCB_ACTIONS::placeFootprint, true, newFootprint );
     }
 
     newFootprint->ClearFlags();

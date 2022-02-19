@@ -400,7 +400,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                 if( aFrom )
                     return;
 
-                const std::shared_ptr<SHAPE> eshape = aPad->GetEffectiveShape( aPad->GetLayer() );
+                const std::shared_ptr<SHAPE> eshape = aPad->GetEffectiveShape();
 
                 wxASSERT( eshape->Type() == SH_COMPOUND );
                 const std::vector<SHAPE*> shapes =
