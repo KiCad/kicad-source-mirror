@@ -176,3 +176,23 @@ void PANEL_SELECTION_FILTER::onPopupSelection( wxCommandEvent& aEvent )
     wxCommandEvent dummy;
     OnFilterChanged( dummy );
 }
+
+
+void PANEL_SELECTION_FILTER::OnLanguageChanged()
+{
+    m_cbAllItems->SetLabel( _("All items") );
+   	m_cbLockedItems->SetLabel( _("Locked items") );
+   	m_cbLockedItems->SetToolTip( _("Allow selection of locked items") );
+   	m_cbFootprints->SetLabel( _("Footprints") );
+   	m_cbText->SetLabel( _("Text") );
+   	m_cbTracks->SetLabel( _("Tracks") );
+   	m_cbVias->SetLabel( _("Vias") );
+   	m_cbPads->SetLabel( _("Pads") );
+   	m_cbGraphics->SetLabel( _("Graphics") );
+   	m_cbZones->SetLabel( _("Zones") );
+   	m_cbKeepouts->SetLabel( _("Rule Areas") );
+   	m_cbDimensions->SetLabel( _("Dimensions") );
+   	m_cbOtherItems->SetLabel( _("Other items") );
+
+    m_cbAllItems->GetParent()->Layout();
+}

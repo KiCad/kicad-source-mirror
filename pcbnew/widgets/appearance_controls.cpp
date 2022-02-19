@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -332,28 +332,28 @@ const APPEARANCE_CONTROLS::APPEARANCE_SETTING APPEARANCE_CONTROLS::s_objectSetti
 #define RR  APPEARANCE_CONTROLS::APPEARANCE_SETTING   // Render Row abbreviation to reduce source width
 
     //     text                  id                        tooltip                   opacity slider
-    RR( _( "Tracks" ),           LAYER_TRACKS,             _( "Show tracks" ),       true ),
-    RR( _( "Vias" ),             LAYER_VIAS,               _( "Show all vias" ),     true ),
-    RR( _( "Pads" ),             LAYER_PADS,               _( "Show all pads" ),     true ),
-    RR( _( "Zones" ),            LAYER_ZONES,              _( "Show copper zones" ), true ),
+    RR( _HKI( "Tracks" ),           LAYER_TRACKS,             _HKI( "Show tracks" ),       true ),
+    RR( _HKI( "Vias" ),             LAYER_VIAS,               _HKI( "Show all vias" ),     true ),
+    RR( _HKI( "Pads" ),             LAYER_PADS,               _HKI( "Show all pads" ),     true ),
+    RR( _HKI( "Zones" ),            LAYER_ZONES,              _HKI( "Show copper zones" ), true ),
     RR(),
-    RR( _( "Footprints Front" ), LAYER_MOD_FR,             _( "Show footprints that are on board's front" ) ),
-    RR( _( "Footprints Back" ),  LAYER_MOD_BK,             _( "Show footprints that are on board's back" ) ),
-    RR( _( "Through-hole Pads" ),LAYER_PADS_TH,            _( "Show through-hole pads" ) ),
-    RR( _( "Values" ),           LAYER_MOD_VALUES,         _( "Show footprint values" ) ),
-    RR( _( "References" ),       LAYER_MOD_REFERENCES,     _( "Show footprint references" ) ),
-    RR( _( "Footprint Text" ),   LAYER_MOD_TEXT,           _( "Show all footprint text" ) ),
-    RR( _( "Hidden Text" ),      LAYER_MOD_TEXT_INVISIBLE, _( "Show footprint text marked as invisible" ) ),
+    RR( _HKI( "Footprints Front" ), LAYER_MOD_FR,             _HKI( "Show footprints that are on board's front" ) ),
+    RR( _HKI( "Footprints Back" ),  LAYER_MOD_BK,             _HKI( "Show footprints that are on board's back" ) ),
+    RR( _HKI( "Through-hole Pads" ),LAYER_PADS_TH,            _HKI( "Show through-hole pads" ) ),
+    RR( _HKI( "Values" ),           LAYER_MOD_VALUES,         _HKI( "Show footprint values" ) ),
+    RR( _HKI( "References" ),       LAYER_MOD_REFERENCES,     _HKI( "Show footprint references" ) ),
+    RR( _HKI( "Footprint Text" ),   LAYER_MOD_TEXT,           _HKI( "Show all footprint text" ) ),
+    RR( _HKI( "Hidden Text" ),      LAYER_MOD_TEXT_INVISIBLE, _HKI( "Show footprint text marked as invisible" ) ),
     RR(),
     RR(),
-    RR( _( "Ratsnest" ),         LAYER_RATSNEST,           _( "Show unconnected nets as a ratsnest") ),
-    RR( _( "No-Connects" ),      LAYER_NO_CONNECTS,        _( "Show a marker on pads which have no net connected" ) ),
-    RR( _( "DRC Warnings" ),     LAYER_DRC_WARNING,        _( "DRC violations with a Warning severity" ) ),
-    RR( _( "DRC Errors" ),       LAYER_DRC_ERROR,          _( "DRC violations with an Error severity" ) ),
-    RR( _( "DRC Exclusions" ),   LAYER_DRC_EXCLUSION,      _( "DRC violations which have been individually excluded" ) ),
-    RR( _( "Anchors" ),          LAYER_ANCHOR,             _( "Show footprint and text origins as a cross" ) ),
-    RR( _( "Drawing Sheet" ),    LAYER_DRAWINGSHEET,       _( "Show drawing sheet borders and title block" ) ),
-    RR( _( "Grid" ),             LAYER_GRID,               _( "Show the (x,y) grid dots" ) )
+    RR( _HKI( "Ratsnest" ),         LAYER_RATSNEST,           _HKI( "Show unconnected nets as a ratsnest") ),
+    RR( _HKI( "No-Connects" ),      LAYER_NO_CONNECTS,        _HKI( "Show a marker on pads which have no net connected" ) ),
+    RR( _HKI( "DRC Warnings" ),     LAYER_DRC_WARNING,        _HKI( "DRC violations with a Warning severity" ) ),
+    RR( _HKI( "DRC Errors" ),       LAYER_DRC_ERROR,          _HKI( "DRC violations with an Error severity" ) ),
+    RR( _HKI( "DRC Exclusions" ),   LAYER_DRC_EXCLUSION,      _HKI( "DRC violations which have been individually excluded" ) ),
+    RR( _HKI( "Anchors" ),          LAYER_ANCHOR,             _HKI( "Show footprint and text origins as a cross" ) ),
+    RR( _HKI( "Drawing Sheet" ),    LAYER_DRAWINGSHEET,       _HKI( "Show drawing sheet borders and title block" ) ),
+    RR( _HKI( "Grid" ),             LAYER_GRID,               _HKI( "Show the (x,y) grid dots" ) )
 };
 
 /// These GAL layers are shown in the Objects tab in the footprint editor
@@ -373,26 +373,26 @@ static std::set<int> s_allowedInFpEditor =
 
 // These are the built-in layer presets that cannot be deleted
 
-LAYER_PRESET APPEARANCE_CONTROLS::presetNoLayers( _( "No Layers" ), LSET() );
+LAYER_PRESET APPEARANCE_CONTROLS::presetNoLayers( _HKI( "No Layers" ), LSET() );
 
-LAYER_PRESET APPEARANCE_CONTROLS::presetAllLayers( _( "All Layers" ), LSET::AllLayersMask() );
+LAYER_PRESET APPEARANCE_CONTROLS::presetAllLayers( _HKI( "All Layers" ), LSET::AllLayersMask() );
 
-LAYER_PRESET APPEARANCE_CONTROLS::presetAllCopper( _( "All Copper Layers" ),
+LAYER_PRESET APPEARANCE_CONTROLS::presetAllCopper( _HKI( "All Copper Layers" ),
         LSET::AllCuMask().set( Edge_Cuts ) );
 
-LAYER_PRESET APPEARANCE_CONTROLS::presetInnerCopper( _( "Inner Copper Layers" ),
+LAYER_PRESET APPEARANCE_CONTROLS::presetInnerCopper( _HKI( "Inner Copper Layers" ),
         LSET::InternalCuMask().set( Edge_Cuts ) );
 
-LAYER_PRESET APPEARANCE_CONTROLS::presetFront( _( "Front Layers" ),
+LAYER_PRESET APPEARANCE_CONTROLS::presetFront( _HKI( "Front Layers" ),
         LSET::FrontMask().set( Edge_Cuts ) );
 
-LAYER_PRESET APPEARANCE_CONTROLS::presetFrontAssembly( _( "Front Assembly View" ),
+LAYER_PRESET APPEARANCE_CONTROLS::presetFrontAssembly( _HKI( "Front Assembly View" ),
         LSET::FrontAssembly().set( Edge_Cuts ), GAL_SET::DefaultVisible(), F_SilkS );
 
-LAYER_PRESET APPEARANCE_CONTROLS::presetBack( _( "Back Layers" ),
+LAYER_PRESET APPEARANCE_CONTROLS::presetBack( _HKI( "Back Layers" ),
         LSET::BackMask().set( Edge_Cuts ) );
 
-LAYER_PRESET APPEARANCE_CONTROLS::presetBackAssembly( _( "Back Assembly View" ),
+LAYER_PRESET APPEARANCE_CONTROLS::presetBackAssembly( _HKI( "Back Assembly View" ),
         LSET::BackAssembly().set( Edge_Cuts ), GAL_SET::DefaultVisible(), B_SilkS );
 
 
@@ -974,6 +974,31 @@ void APPEARANCE_CONTROLS::OnNetGridMouseEvent( wxMouseEvent& aEvent )
 }
 
 
+void APPEARANCE_CONTROLS::OnLanguageChanged()
+{
+    m_notebook->SetPageText( 0, _( "Layers" ) );
+    m_notebook->SetPageText( 1, _( "Objects" ) );
+    m_notebook->SetPageText( 2, _( "Nets" ) );
+
+    Freeze();
+    rebuildLayers();
+    rebuildLayerContextMenu();
+    rebuildLayerPresetsWidget();
+    rebuildViewportsWidget();
+    rebuildObjects();
+    rebuildNets();
+
+    syncColorsAndVisibility();
+    syncObjectSettings();
+    syncLayerPresetSelection();
+
+    UpdateDisplayOptions();
+
+    Thaw();
+    Refresh();
+}
+
+
 void APPEARANCE_CONTROLS::OnBoardChanged()
 {
     Freeze();
@@ -1524,33 +1549,33 @@ void APPEARANCE_CONTROLS::rebuildLayers()
         PCB_LAYER_ID layerId;
         wxString     tooltip;
     } non_cu_seq[] = {
-        { F_Adhes,          _( "Adhesive on board's front" ) },
-        { B_Adhes,          _( "Adhesive on board's back" ) },
-        { F_Paste,          _( "Solder paste on board's front" ) },
-        { B_Paste,          _( "Solder paste on board's back" ) },
-        { F_SilkS,          _( "Silkscreen on board's front" ) },
-        { B_SilkS,          _( "Silkscreen on board's back" ) },
-        { F_Mask,           _( "Solder mask on board's front" ) },
-        { B_Mask,           _( "Solder mask on board's back" ) },
-        { Dwgs_User,        _( "Explanatory drawings" ) },
-        { Cmts_User,        _( "Explanatory comments" ) },
-        { Eco1_User,        _( "User defined meaning" ) },
-        { Eco2_User,        _( "User defined meaning" ) },
-        { Edge_Cuts,        _( "Board's perimeter definition" ) },
-        { Margin,           _( "Board's edge setback outline" ) },
-        { F_CrtYd,          _( "Footprint courtyards on board's front" ) },
-        { B_CrtYd,          _( "Footprint courtyards on board's back" ) },
-        { F_Fab,            _( "Footprint assembly on board's front" ) },
-        { B_Fab,            _( "Footprint assembly on board's back" ) },
-        { User_1,           _( "User defined layer 1" ) },
-        { User_2,           _( "User defined layer 2" ) },
-        { User_3,           _( "User defined layer 3" ) },
-        { User_4,           _( "User defined layer 4" ) },
-        { User_5,           _( "User defined layer 5" ) },
-        { User_6,           _( "User defined layer 6" ) },
-        { User_7,           _( "User defined layer 7" ) },
-        { User_8,           _( "User defined layer 8" ) },
-        { User_9,           _( "User defined layer 9" ) },
+        { F_Adhes,          _HKI( "Adhesive on board's front" ) },
+        { B_Adhes,          _HKI( "Adhesive on board's back" ) },
+        { F_Paste,          _HKI( "Solder paste on board's front" ) },
+        { B_Paste,          _HKI( "Solder paste on board's back" ) },
+        { F_SilkS,          _HKI( "Silkscreen on board's front" ) },
+        { B_SilkS,          _HKI( "Silkscreen on board's back" ) },
+        { F_Mask,           _HKI( "Solder mask on board's front" ) },
+        { B_Mask,           _HKI( "Solder mask on board's back" ) },
+        { Dwgs_User,        _HKI( "Explanatory drawings" ) },
+        { Cmts_User,        _HKI( "Explanatory comments" ) },
+        { Eco1_User,        _HKI( "User defined meaning" ) },
+        { Eco2_User,        _HKI( "User defined meaning" ) },
+        { Edge_Cuts,        _HKI( "Board's perimeter definition" ) },
+        { Margin,           _HKI( "Board's edge setback outline" ) },
+        { F_CrtYd,          _HKI( "Footprint courtyards on board's front" ) },
+        { B_CrtYd,          _HKI( "Footprint courtyards on board's back" ) },
+        { F_Fab,            _HKI( "Footprint assembly on board's front" ) },
+        { B_Fab,            _HKI( "Footprint assembly on board's back" ) },
+        { User_1,           _HKI( "User defined layer 1" ) },
+        { User_2,           _HKI( "User defined layer 2" ) },
+        { User_3,           _HKI( "User defined layer 3" ) },
+        { User_4,           _HKI( "User defined layer 4" ) },
+        { User_5,           _HKI( "User defined layer 5" ) },
+        { User_6,           _HKI( "User defined layer 6" ) },
+        { User_7,           _HKI( "User defined layer 7" ) },
+        { User_8,           _HKI( "User defined layer 8" ) },
+        { User_9,           _HKI( "User defined layer 9" ) },
     };
 
     // There is a spacer added to the end of the list that we need to remove and re-add
@@ -1634,7 +1659,9 @@ void APPEARANCE_CONTROLS::rebuildLayers()
 
         setting->label = board->GetLayerName( layer );
         setting->id = layer;
-        setting->tooltip = entry.tooltip;
+        // Because non_cu_seq is created static, we must explicitly call wxGetTranslation for
+        // texts which are internationalized
+        setting->tooltip = wxGetTranslation( entry.tooltip );
 
         if( setting->ctl_panel == nullptr )
             appendLayer( setting );
@@ -1655,6 +1682,19 @@ void APPEARANCE_CONTROLS::rebuildLayers()
     m_layersOuterSizer->AddSpacer( 10 );
     m_windowLayers->SetBackgroundColour( m_layerPanelColour );
     m_windowLayers->Layout();
+
+    m_paneLayerDisplayOptions->SetLabel( _( "Layer Display Options" ) );
+
+    m_rbHighContrastNormal->SetLabel( _( "Normal" ) );
+    m_rbHighContrastNormal->SetToolTip( _( "Inactive layers will be shown in full color" ) );
+
+    m_rbHighContrastDim->SetLabel( _( "Dim" ) );
+    m_rbHighContrastDim->SetToolTip( _( "Inactive layers will be dimmed" ) );
+
+    m_rbHighContrastOff->SetLabel( _( "Hide" ) );
+    m_rbHighContrastOff->SetToolTip( _( "Inactive layers will be hidden" ) );
+
+    m_cbFlipBoard->SetLabel( _( "Flip board view" ) );
 }
 
 
@@ -1663,17 +1703,14 @@ void APPEARANCE_CONTROLS::rebuildLayerContextMenu()
     delete m_layerContextMenu;
     m_layerContextMenu = new wxMenu;
 
-    AddMenuItem( m_layerContextMenu, ID_SHOW_ALL_COPPER_LAYERS,
-                 _( "Show All Copper Layers" ),
+    AddMenuItem( m_layerContextMenu, ID_SHOW_ALL_COPPER_LAYERS, _( "Show All Copper Layers" ),
                  KiBitmap( BITMAPS::show_all_copper_layers ) );
-    AddMenuItem( m_layerContextMenu, ID_HIDE_ALL_COPPER_LAYERS,
-                 _( "Hide All Copper Layers" ),
+    AddMenuItem( m_layerContextMenu, ID_HIDE_ALL_COPPER_LAYERS, _( "Hide All Copper Layers" ),
                  KiBitmap( BITMAPS::show_no_copper_layers ) );
 
     m_layerContextMenu->AppendSeparator();
 
-    AddMenuItem( m_layerContextMenu, ID_HIDE_ALL_BUT_ACTIVE,
-                 _( "Hide All Layers But Active" ),
+    AddMenuItem( m_layerContextMenu, ID_HIDE_ALL_BUT_ACTIVE, _( "Hide All Layers But Active" ),
                  KiBitmap( BITMAPS::select_w_layer ) );
 
     m_layerContextMenu->AppendSeparator();
@@ -1694,8 +1731,7 @@ void APPEARANCE_CONTROLS::rebuildLayerContextMenu()
 
     m_layerContextMenu->AppendSeparator();
 
-    AddMenuItem( m_layerContextMenu, ID_PRESET_FRONT_ASSEMBLY,
-                 _( "Show Only Front Assembly Layers" ),
+    AddMenuItem( m_layerContextMenu, ID_PRESET_FRONT_ASSEMBLY, _( "Show Only Front Assembly Layers" ),
                  KiBitmap( BITMAPS::show_front_assembly_layers ) );
 
     AddMenuItem( m_layerContextMenu, ID_PRESET_FRONT, _( "Show Only Front Layers" ),
@@ -2120,9 +2156,8 @@ void APPEARANCE_CONTROLS::rebuildObjects()
 
             std::unique_ptr<APPEARANCE_SETTING>& setting = m_objectSettings.back();
 
-            // Because s_render_rows is created static, we must explicitly call
-            // wxGetTranslation for texts which are internationalized (tool tips
-            // and item names)
+            // Because s_render_rows is created static, we must explicitly call wxGetTranslation
+            // for texts which are internationalized (tool tips and item names)
             setting->tooltip = wxGetTranslation( s_setting.tooltip );
             setting->label   = wxGetTranslation( s_setting.label );
 
@@ -2192,6 +2227,9 @@ void APPEARANCE_CONTROLS::rebuildNets()
     // If the board isn't fully loaded, we can't yet rebuild
     if( !board->GetProject() )
         return;
+
+    m_staticTextNets->SetLabel( _( "Nets" ) );
+    m_staticTextNetClasses->SetLabel( _( "Net Classes" ) );
 
     KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
             m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings() );
@@ -2325,6 +2363,49 @@ void APPEARANCE_CONTROLS::rebuildNets()
         appendNetclass( idx++, classes.at( name ) );
     }
 
+    int      hotkey;
+    wxString msg;
+
+    m_paneNetDisplayOptions->SetLabel( _( "Net Display Options" ) );
+
+    hotkey = PCB_ACTIONS::netColorModeCycle.GetHotKey();
+
+    if( hotkey )
+        msg = wxString::Format( _( "Net colors (%s):" ), KeyNameFromKeyCode( hotkey ) );
+    else
+        msg = _( "Net colors:" );
+
+    m_txtNetDisplayTitle->SetLabel( msg );
+    m_txtNetDisplayTitle->SetToolTip( _( "Choose when to show net and netclass colors" ) );
+
+    m_rbNetColorAll->SetLabel( _( "All" ) );
+    m_rbNetColorAll->SetToolTip( _( "Net and netclass colors are shown on all copper items" ) );
+
+    m_rbNetColorRatsnest->SetLabel( _( "Ratsnest" ) );
+    m_rbNetColorRatsnest->SetToolTip( _( "Net and netclass colors are shown on the ratsnest only" ) );
+
+    m_rbNetColorOff->SetLabel( _( "None" ) );
+    m_rbNetColorOff->SetToolTip( _( "Net and netclass colors are not shown" ) );
+
+    hotkey = PCB_ACTIONS::ratsnestModeCycle.GetHotKey();
+
+    if( hotkey )
+        msg = wxString::Format( _( "Ratsnest display (%s):" ), KeyNameFromKeyCode( hotkey ) );
+    else
+        msg = _( "Ratsnest display:" );
+
+    m_txtRatsnestVisibility->SetLabel( msg );
+    m_txtRatsnestVisibility->SetToolTip( _( "Choose which ratsnest lines to display" ) );
+
+    m_rbRatsnestAllLayers->SetLabel( _( "All" ) );
+    m_rbRatsnestAllLayers->SetToolTip( _( "Show ratsnest lines to items on all layers" ) );
+
+    m_rbRatsnestVisLayers->SetLabel( _( "Visible layers" ) );
+    m_rbRatsnestVisLayers->SetToolTip( _( "Show ratsnest lines to items on visible layers" ) );
+
+    m_rbRatsnestNone->SetLabel( _( "None" ) );
+    m_rbRatsnestNone->SetToolTip( _( "Hide all ratsnest lines" ) );
+
     m_netclassOuterSizer->Layout();
 
     m_netsTable->Rebuild();
@@ -2334,10 +2415,15 @@ void APPEARANCE_CONTROLS::rebuildNets()
 
 void APPEARANCE_CONTROLS::rebuildLayerPresetsWidget()
 {
+    m_presetsLabel->SetLabel( _( "Presets (Ctrl+Tab):" ) );
+
     m_cbLayerPresets->Clear();
 
     for( std::pair<const wxString, LAYER_PRESET>& pair : m_layerPresets )
-        m_cbLayerPresets->Append( pair.first, static_cast<void*>( &pair.second ) );
+    {
+        m_cbLayerPresets->Append( wxGetTranslation( pair.first ),
+                                  static_cast<void*>( &pair.second ) );
+    }
 
     m_cbLayerPresets->Append( wxT( "-----" ) );
     m_cbLayerPresets->Append( _( "Save preset..." ) );
@@ -2548,6 +2634,8 @@ void APPEARANCE_CONTROLS::doApplyLayerPreset( const LAYER_PRESET& aPreset )
 
 void APPEARANCE_CONTROLS::rebuildViewportsWidget()
 {
+    m_presetsLabel->SetLabel( _( "Viewports (Alt+Tab):" ) );
+
     m_cbViewports->Clear();
 
     for( std::pair<const wxString, VIEWPORT>& pair : m_viewports )

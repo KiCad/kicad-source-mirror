@@ -199,6 +199,8 @@ public:
 
     wxSize GetBestSize() const;
 
+    void OnLanguageChanged();
+
     ///< Update the panel contents from the application and board models.
     void OnBoardChanged();
 

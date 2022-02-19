@@ -802,7 +802,8 @@ void FOOTPRINT_EDIT_FRAME::ShowChangedLanguage()
     lm_pane_info.Caption( _( "Appearance" ) );
 
     // update the layer manager
-    m_appearancePanel->OnBoardChanged();
+    m_appearancePanel->OnLanguageChanged();
+    m_selectionFilterPanel->OnLanguageChanged();
     UpdateUserInterface();
 
     // Now restore the visibility:
