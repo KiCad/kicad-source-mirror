@@ -27,10 +27,22 @@
 #include <compoundfilereader.h>
 #include <ki_exception.h>
 #include <math/util.h>
+#include <numeric>
 #include <sstream>
 #include <utf.h>
 #include <wx/log.h>
 #include <wx/translation.h>
+
+
+// Helper for debug logging
+std::string FormatPath( const std::vector<std::string>& aVectorPath )
+{
+    return std::accumulate( aVectorPath.cbegin(), aVectorPath.cend(), std::string(),
+                            []( const std::string& ss, const std::string& s )
+                            {
+                                return ss.empty() ? s : ss + '\\' + s;
+                            } );
+}
 
 
 ALTIUM_COMPOUND_FILE::ALTIUM_COMPOUND_FILE( const wxString& aFilePath )
@@ -96,13 +108,12 @@ FindStreamSingleLevel( const CFB::CompoundFileReader&  aReader,
                                }
                            }
                        } );
-
     return ret;
 }
 
 
 const CFB::COMPOUND_FILE_ENTRY*
-ALTIUM_COMPOUND_FILE::FindStream( const std::string& aStreamPath ) const
+ALTIUM_COMPOUND_FILE::FindStream( const std::vector<std::string>& aStreamPath ) const
 {
     if( !m_reader )
     {
@@ -111,24 +122,23 @@ ALTIUM_COMPOUND_FILE::FindStream( const std::string& aStreamPath ) const
 
     const CFB::COMPOUND_FILE_ENTRY* currentDirEntry = m_reader->GetRootEntry();
 
-    size_t startCh = 0;
-    size_t delimiter = aStreamPath.find( '\\', startCh );
-    while( delimiter != std::string::npos )
+    auto it = aStreamPath.cbegin();
+    while( currentDirEntry != nullptr )
     {
-        std::string directoryName = aStreamPath.substr( startCh, delimiter );
-        currentDirEntry =
-                FindStreamSingleLevel( *m_reader.get(), currentDirEntry, directoryName, false );
-        if( currentDirEntry == nullptr )
-        {
-            return nullptr;
-        }
+        const std::string& name = *it;
 
-        startCh = delimiter + 1;
-        delimiter = aStreamPath.find( '\\', startCh );
+        if( ++it == aStreamPath.cend() )
+        {
+            return FindStreamSingleLevel( *m_reader.get(), currentDirEntry, name, true );
+        }
+        else
+        {
+            currentDirEntry =
+                    FindStreamSingleLevel( *m_reader.get(), currentDirEntry, name, false );
+        }
     }
 
-    std::string fileName = aStreamPath.substr( startCh, delimiter );
-    return FindStreamSingleLevel( *m_reader.get(), currentDirEntry, fileName, true );
+    return nullptr;
 }
 
 

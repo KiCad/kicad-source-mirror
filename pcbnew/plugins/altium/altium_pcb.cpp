@@ -387,7 +387,7 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
         { true, ALTIUM_PCB_DIR::MODELS,
           [this, aFileMapping]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
           {
-              wxString dir( aFileMapping.at( ALTIUM_PCB_DIR::MODELS ) );
+              std::vector<std::string> dir{ aFileMapping.at( ALTIUM_PCB_DIR::MODELS ) };
               this->ParseModelsData( aFile, fileHeader, dir );
           } },
         { true, ALTIUM_PCB_DIR::COMPONENTBODIES6,
@@ -493,8 +493,7 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
                 continue;
             }
 
-            std::string mappedFile = mappedDirectory->second + "Header";
-
+            const std::vector<std::string>  mappedFile{ mappedDirectory->second, "Header" };
             const CFB::COMPOUND_FILE_ENTRY* file = altiumPcbFile.FindStream( mappedFile );
             if( file == nullptr )
             {
@@ -506,7 +505,7 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
 
             if( reader.HasParsingError() )
             {
-                wxLogError( _( "'%s' was not parsed correctly." ), mappedFile );
+                wxLogError( _( "'%s' was not parsed correctly." ), FormatPath( mappedFile ) );
                 continue;
             }
 
@@ -514,7 +513,7 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
 
             if( reader.GetRemainingBytes() != 0 )
             {
-                wxLogError( _( "'%s' was not fully parsed." ), mappedFile );
+                wxLogError( _( "'%s' was not fully parsed." ), FormatPath( mappedFile ) );
                 continue;
             }
         }
@@ -539,17 +538,16 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
             continue;
         }
 
-        std::string mappedFile = mappedDirectory->second;
-
+        std::vector<std::string> mappedFile{ mappedDirectory->second };
         if( directory != ALTIUM_PCB_DIR::FILE_HEADER )
-            mappedFile += "Data";
+            mappedFile.emplace_back( "Data" );
 
         const CFB::COMPOUND_FILE_ENTRY* file = altiumPcbFile.FindStream( mappedFile );
 
         if( file != nullptr )
             fp( altiumPcbFile, file );
         else if( isRequired )
-            wxLogError( _( "File not found: '%s'." ), mappedFile );
+            wxLogError( _( "File not found: '%s'." ), FormatPath( mappedFile ) );
     }
 
     // fixup zone priorities since Altium stores them in the opposite order
@@ -650,6 +648,7 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
     m_board->SetModified();
 }
 
+
 FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile,
                                        const wxString&             aFootprintName )
 {
@@ -669,11 +668,12 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
     //        ParseWideStrings6Data( altiumLibFile, unicodeStringsData );
     //    }
 
-    std::string                     streamName = aFootprintName.ToStdString() + "\\Data";
+    const std::vector<std::string>  streamName{ aFootprintName.ToStdString(), "Data" };
     const CFB::COMPOUND_FILE_ENTRY* footprintData = altiumLibFile.FindStream( streamName );
     if( footprintData == nullptr )
     {
-        THROW_IO_ERROR( wxString::Format( _( "File not found: '%s'." ), streamName ) );
+        THROW_IO_ERROR(
+                wxString::Format( _( "File not found: '%s'." ), FormatPath( streamName ) ) );
     }
 
     ALTIUM_PARSER parser( altiumLibFile, footprintData );
@@ -685,7 +685,8 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
     LIB_ID fpID = AltiumToKiCadLibID( "", footprintName ); // TODO: library name
     footprint->SetFPID( fpID );
 
-    std::string parametersStreamName = aFootprintName.ToStdString() + "\\Parameters";
+    const std::vector<std::string>  parametersStreamName{ aFootprintName.ToStdString(),
+                                                         "Parameters" };
     const CFB::COMPOUND_FILE_ENTRY* parametersData =
             altiumLibFile.FindStream( parametersStreamName );
     if( parametersData != nullptr )
@@ -698,8 +699,18 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
     }
     else
     {
-        wxLogError( _( "File not found: '%s'." ), parametersStreamName );
+        wxLogError( _( "File not found: '%s'." ), FormatPath( parametersStreamName ) );
         footprint->SetDescription( wxT( "" ) );
+    }
+
+    const std::vector<std::string> extendedPrimitiveInformationStreamName{
+        aFootprintName.ToStdString(), "ExtendedPrimitiveInformation", "Data"
+    };
+    const CFB::COMPOUND_FILE_ENTRY* extendedPrimitiveInformationData =
+            altiumLibFile.FindStream( extendedPrimitiveInformationStreamName );
+    if( extendedPrimitiveInformationData != nullptr )
+    {
+        // TODO: implement
     }
 
     footprint->SetReference( wxT( "REF**" ) );
@@ -767,12 +778,14 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
 
     if( parser.HasParsingError() )
     {
-        THROW_IO_ERROR( wxString::Format( wxT( "%s stream was not parsed correctly" ), streamName ) );
+        THROW_IO_ERROR( wxString::Format( wxT( "%s stream was not parsed correctly" ),
+                                          FormatPath( streamName ) ) );
     }
 
     if( parser.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( wxString::Format( wxT( "%s stream is not fully parsed" ), streamName ) );
+        THROW_IO_ERROR( wxString::Format( wxT( "%s stream is not fully parsed" ),
+                                          FormatPath( streamName ) ) );
     }
 
     return footprint.release();
@@ -1156,9 +1169,10 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const ALTIUM_COMPOUND_FILE&     aAl
 
         if( modelTuple == m_models.end() )
         {
-            THROW_IO_ERROR( wxString::Format( wxT( "ComponentsBodies6 stream tries to access "
-                                                   "model id %s which does not exist" ),
-                                              elem.modelId ) );
+            wxLogError( wxT( "ComponentsBodies6 stream tries to access model id %s which does not "
+                             "exist" ),
+                        elem.modelId );
+            continue;
         }
 
         FOOTPRINT*     footprint  = m_components.at( elem.component );
@@ -1538,7 +1552,8 @@ void ALTIUM_PCB::ParseDimensions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPc
 
 
 void ALTIUM_PCB::ParseModelsData( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
-                                  const CFB::COMPOUND_FILE_ENTRY* aEntry, const wxString& aRootDir )
+                                  const CFB::COMPOUND_FILE_ENTRY* aEntry,
+                                  const std::vector<std::string>& aRootDir )
 {
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading 3D models..." ) );
@@ -1583,7 +1598,9 @@ void ALTIUM_PCB::ParseModelsData( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
         checkpoint();
         AMODEL elem( reader );
 
-        wxString       stepPath = wxString::Format( aRootDir + wxT( "%d" ), idx );
+        std::vector<std::string> stepPath = aRootDir;
+        stepPath.emplace_back( std::to_string( idx ) );
+
         bool           validName = !elem.name.IsEmpty() && elem.name.IsAscii() &&
                                    wxString::npos == elem.name.find_first_of( invalidChars );
         wxString       storageName = !validName ? wxString::Format( wxT( "model_%d" ), idx )
@@ -1592,12 +1609,12 @@ void ALTIUM_PCB::ParseModelsData( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
 
         idx++;
 
-        const CFB::COMPOUND_FILE_ENTRY* stepEntry =
-                aAltiumPcbFile.FindStream( stepPath.ToStdString() );
+        const CFB::COMPOUND_FILE_ENTRY* stepEntry = aAltiumPcbFile.FindStream( stepPath );
 
         if( stepEntry == nullptr )
         {
-            wxLogError( _( "File not found: '%s'. 3D-model not imported." ), stepPath );
+            wxLogError( _( "File not found: '%s'. 3D-model not imported." ),
+                        FormatPath( stepPath ) );
             continue;
         }
 

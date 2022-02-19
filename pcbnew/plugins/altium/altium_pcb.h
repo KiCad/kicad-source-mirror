@@ -136,7 +136,8 @@ private:
     void ParseDimensions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParseModelsData( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
-                          const CFB::COMPOUND_FILE_ENTRY* aEntry, const wxString& aRootDir );
+                          const CFB::COMPOUND_FILE_ENTRY* aEntry,
+                          const std::vector<std::string>& aRootDir );
     void ParseNets6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                          const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,

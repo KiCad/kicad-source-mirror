@@ -27,6 +27,7 @@
 
 #include <map>
 #include <memory>
+#include <numeric>
 
 #include <wx/gdicmn.h>
 #include <math/vector2d.h>
@@ -38,6 +39,13 @@ namespace CFB
 class CompoundFileReader;
 struct COMPOUND_FILE_ENTRY;
 } // namespace CFB
+
+/**
+ * Helper for debug logging (vector -> string)
+ * @param aVectorPath path
+ * @return path formated as string
+ */
+std::string FormatPath( const std::vector<std::string>& aVectorPath );
 
 
 class ALTIUM_COMPOUND_FILE
@@ -55,7 +63,7 @@ public:
 
     const CFB::CompoundFileReader& GetCompoundFileReader() const { return *m_reader; }
 
-    const CFB::COMPOUND_FILE_ENTRY* FindStream( const std::string& aStreamPath ) const;
+    const CFB::COMPOUND_FILE_ENTRY* FindStream( const std::vector<std::string>& aStreamPath ) const;
 
 private:
     std::unique_ptr<CFB::CompoundFileReader> m_reader;

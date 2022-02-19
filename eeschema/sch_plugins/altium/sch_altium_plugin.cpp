@@ -306,7 +306,7 @@ void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
 
 void SCH_ALTIUM_PLUGIN::ParseStorage( const ALTIUM_COMPOUND_FILE& aAltiumSchFile )
 {
-    const CFB::COMPOUND_FILE_ENTRY* file = aAltiumSchFile.FindStream( "Storage" );
+    const CFB::COMPOUND_FILE_ENTRY* file = aAltiumSchFile.FindStream( { "Storage" } );
 
     if( file == nullptr )
         return;
@@ -342,7 +342,7 @@ void SCH_ALTIUM_PLUGIN::ParseStorage( const ALTIUM_COMPOUND_FILE& aAltiumSchFile
 
 void SCH_ALTIUM_PLUGIN::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile )
 {
-    const CFB::COMPOUND_FILE_ENTRY* file = aAltiumSchFile.FindStream( "FileHeader" );
+    const CFB::COMPOUND_FILE_ENTRY* file = aAltiumSchFile.FindStream( { "FileHeader" } );
 
     if( file == nullptr )
         THROW_IO_ERROR( "FileHeader not found" );

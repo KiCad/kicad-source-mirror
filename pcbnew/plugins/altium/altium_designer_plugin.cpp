@@ -77,26 +77,26 @@ BOARD* ALTIUM_DESIGNER_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendTo
     // clang-format off
     const std::map<ALTIUM_PCB_DIR, std::string> mapping = {
             { ALTIUM_PCB_DIR::FILE_HEADER, "FileHeader" },
-            { ALTIUM_PCB_DIR::ARCS6, "Arcs6\\" },
-            { ALTIUM_PCB_DIR::BOARD6, "Board6\\" },
-            { ALTIUM_PCB_DIR::BOARDREGIONS, "BoardRegions\\" },
-            { ALTIUM_PCB_DIR::CLASSES6, "Classes6\\" },
-            { ALTIUM_PCB_DIR::COMPONENTS6, "Components6\\" },
-            { ALTIUM_PCB_DIR::COMPONENTBODIES6, "ComponentBodies6\\" },
-            { ALTIUM_PCB_DIR::DIMENSIONS6, "Dimensions6\\" },
-            { ALTIUM_PCB_DIR::EXTENDPRIMITIVEINFORMATION, "ExtendedPrimitiveInformation\\" },
-            { ALTIUM_PCB_DIR::FILLS6, "Fills6\\" },
-            { ALTIUM_PCB_DIR::MODELS, "Models\\" },
-            { ALTIUM_PCB_DIR::NETS6, "Nets6\\" },
-            { ALTIUM_PCB_DIR::PADS6, "Pads6\\" },
-            { ALTIUM_PCB_DIR::POLYGONS6, "Polygons6\\" },
-            { ALTIUM_PCB_DIR::REGIONS6, "Regions6\\" },
-            { ALTIUM_PCB_DIR::RULES6, "Rules6\\" },
-            { ALTIUM_PCB_DIR::SHAPEBASEDREGIONS6, "ShapeBasedRegions6\\" },
-            { ALTIUM_PCB_DIR::TEXTS6, "Texts6\\" },
-            { ALTIUM_PCB_DIR::TRACKS6, "Tracks6\\" },
-            { ALTIUM_PCB_DIR::VIAS6, "Vias6\\" },
-            { ALTIUM_PCB_DIR::WIDESTRINGS6, "WideStrings6\\" }
+            { ALTIUM_PCB_DIR::ARCS6, "Arcs6" },
+            { ALTIUM_PCB_DIR::BOARD6, "Board6" },
+            { ALTIUM_PCB_DIR::BOARDREGIONS, "BoardRegions" },
+            { ALTIUM_PCB_DIR::CLASSES6, "Classes6" },
+            { ALTIUM_PCB_DIR::COMPONENTS6, "Components6" },
+            { ALTIUM_PCB_DIR::COMPONENTBODIES6, "ComponentBodies6" },
+            { ALTIUM_PCB_DIR::DIMENSIONS6, "Dimensions6" },
+            { ALTIUM_PCB_DIR::EXTENDPRIMITIVEINFORMATION, "ExtendedPrimitiveInformation" },
+            { ALTIUM_PCB_DIR::FILLS6, "Fills6" },
+            { ALTIUM_PCB_DIR::MODELS, "Models" },
+            { ALTIUM_PCB_DIR::NETS6, "Nets6" },
+            { ALTIUM_PCB_DIR::PADS6, "Pads6" },
+            { ALTIUM_PCB_DIR::POLYGONS6, "Polygons6" },
+            { ALTIUM_PCB_DIR::REGIONS6, "Regions6" },
+            { ALTIUM_PCB_DIR::RULES6, "Rules6" },
+            { ALTIUM_PCB_DIR::SHAPEBASEDREGIONS6, "ShapeBasedRegions6" },
+            { ALTIUM_PCB_DIR::TEXTS6, "Texts6" },
+            { ALTIUM_PCB_DIR::TRACKS6, "Tracks6" },
+            { ALTIUM_PCB_DIR::VIAS6, "Vias6" },
+            { ALTIUM_PCB_DIR::WIDESTRINGS6, "WideStrings6" }
     };
     // clang-format on
 
@@ -144,11 +144,12 @@ void ALTIUM_DESIGNER_PLUGIN::FootprintEnumerate( wxArrayString&  aFootprintNames
 
     try
     {
-        std::string                     streamName = "Library\\Data";
+        const std::vector<std::string>  streamName = { "Library", "Data" };
         const CFB::COMPOUND_FILE_ENTRY* libraryData = altiumLibFile.FindStream( streamName );
         if( libraryData == nullptr )
         {
-            THROW_IO_ERROR( wxString::Format( _( "File not found: '%s'." ), streamName ) );
+            THROW_IO_ERROR(
+                    wxString::Format( _( "File not found: '%s'." ), FormatPath( streamName ) ) );
         }
 
         ALTIUM_PARSER parser( altiumLibFile, libraryData );
@@ -167,12 +168,14 @@ void ALTIUM_DESIGNER_PLUGIN::FootprintEnumerate( wxArrayString&  aFootprintNames
 
         if( parser.HasParsingError() )
         {
-            THROW_IO_ERROR( wxString::Format( "%s stream was not parsed correctly", streamName ) );
+            THROW_IO_ERROR( wxString::Format( "%s stream was not parsed correctly",
+                                              FormatPath( streamName ) ) );
         }
 
         if( parser.GetRemainingBytes() != 0 )
         {
-            THROW_IO_ERROR( wxString::Format( "%s stream is not fully parsed", streamName ) );
+            THROW_IO_ERROR(
+                    wxString::Format( "%s stream is not fully parsed", FormatPath( streamName ) ) );
         }
     }
     catch( CFB::CFBException& exception )
