@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-16 17:22-0800\n"
-"PO-Revision-Date: 2022-02-01 13:58+0000\n"
+"PO-Revision-Date: 2022-02-20 11:55+0000\n"
 "Last-Translator: Jakub Janek <shaman.janek@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v6/sk/>\n"
 "Language: sk\n"
@@ -13820,9 +13820,8 @@ msgid "Cannot open file '%s'."
 msgstr "Nie je možné otvoriť súbor „%s“"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:314
-#, fuzzy
 msgid "Storage file not fully parsed "
-msgstr "Súbor „%s“ nebol úplne prečítaný"
+msgstr "Súbor úložiska nebol plne analyzovaný "
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:476
 #, fuzzy
@@ -34636,14 +34635,13 @@ msgid "Board overall dimensions: "
 msgstr "Celkové rozmery dosky: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:446
-#, fuzzy
 msgid "Min track/spacing: "
-msgstr "Minimálny rozstup mriežky:"
+msgstr "Minimálny rozstup mriežky: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:456
 #, fuzzy
 msgid "Copper Finish: "
-msgstr "Medená povrchová úprava:"
+msgstr "Medená povrchová úprava: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:464
 #, fuzzy
@@ -34664,9 +34662,8 @@ msgid "Impedance Control: "
 msgstr "Kontrola impedancie: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:506
-#, fuzzy
 msgid "Plated Board Edge: "
-msgstr "Okraj pokovovanej dosky"
+msgstr "Pokovená hrana dosky: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:514
 msgid "Edge card connectors: "
