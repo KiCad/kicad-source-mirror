@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-16 17:22-0800\n"
-"PO-Revision-Date: 2022-02-16 12:55+0000\n"
+"PO-Revision-Date: 2022-02-20 11:55+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v6/pl/>\n"
 "Language: pl\n"
@@ -4591,12 +4591,10 @@ msgid "Alias: "
 msgstr "Alias: "
 
 #: common/filename_resolver.cpp:468
-#, fuzzy
 msgid "This path:"
-msgstr "Ścieżka obecna:"
+msgstr "Obecna ścieżka:"
 
 #: common/filename_resolver.cpp:471
-#, fuzzy
 msgid "Existing path:"
 msgstr "Istniejąca ścieżka:"
 
@@ -17544,7 +17542,7 @@ msgstr "Pominięto plik '%s' (nieznany typ).\n"
 #: gerbview/files.cpp:537
 #, c-format
 msgid "Skipped file '%s' (gerber job file).\n"
-msgstr "Pomijany plik '%s' (plik zadań Gerber)\n"
+msgstr "Pomijany plik '%s' (zbiór zadań Gerber).\n"
 
 #: gerbview/files.cpp:578
 #, c-format
@@ -21927,7 +21925,7 @@ msgid ""
 "RefDes: %s Footprint: %s:%s at %s on PCB."
 msgstr ""
 "\n"
-"Odnośnik: %s Footprint %s:%s na %s na PCB."
+"Odnośnik: %s Footprint %s:%s na pozycji %s na PCB."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:618
 msgid "Reannotate anyway?"
@@ -28778,7 +28776,6 @@ msgid "Check rule syntax"
 msgstr "Sprawdź składnię reguł"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -29137,8 +29134,8 @@ msgstr ""
 "\n"
 "UWAGA: Zwraca prawdę, jeśli `A` znajduje się na danej warstwie, \n"
 "niezależnie czy reguła jest oceniana dla tej warstwy.\n"
-"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy"
-"\")`.\n"
+"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy\")`."
+"\n"
 "<br><br><br>\n"
 "\n"
 "### Więcej przykładów\n"
