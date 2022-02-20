@@ -307,7 +307,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     if( !DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::TransferDataFromWindow() )
         return false;
 
-    LAYER_NUM layer = m_LayerSelectionCtrl->GetLayerSelection();
+    int layer = m_LayerSelectionCtrl->GetLayerSelection();
 
     BOARD_COMMIT commit( m_parent );
     commit.Modify( m_item );
