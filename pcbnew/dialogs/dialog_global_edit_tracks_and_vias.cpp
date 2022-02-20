@@ -68,6 +68,7 @@ private:
     BOARD*          m_brd;
     int*            m_originalColWidths;
     PCB_SELECTION   m_selection;
+    std::vector<BOARD_ITEM*>  m_items_changed;        // a list of modified items
 
 public:
     DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParent );
@@ -357,7 +358,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
         m_parent->SetTrackSegmentWidth( aItem, aUndoList, true );
     }
 
-    m_brd->OnItemChanged( aItem );
+    m_items_changed.push_back( aItem );
 }
 
 
@@ -421,6 +422,12 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataFromWindow()
 
         for( PCB_TRACK* track : m_brd->Tracks() )
             m_parent->GetCanvas()->GetView()->Update( track );
+    }
+
+    if( m_items_changed.size() )
+    {
+        m_brd->OnItemsChanged( m_items_changed );
+        m_parent->OnModify();
     }
 
     return true;

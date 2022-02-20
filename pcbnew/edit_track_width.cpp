@@ -76,8 +76,6 @@ void PCB_EDIT_FRAME::SetTrackSegmentWidth( PCB_TRACK*         aTrackItem,
 
     if( initial_width != new_width || initial_drill != new_drill )
     {
-        OnModify();
-
         if( aItemsListPicker )
         {
             aTrackItem->SetWidth( initial_width );
