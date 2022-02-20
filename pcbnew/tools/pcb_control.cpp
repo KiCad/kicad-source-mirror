@@ -23,13 +23,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "edit_tool.h"
+#include <tools/edit_tool.h>
+#include <router/router_tool.h>
 #include <pgm_base.h>
-#include "pcb_actions.h"
-#include "pcb_control.h"
-#include "pcb_picker_tool.h"
-#include "pcb_selection_tool.h"
-#include "board_reannotate_tool.h"
+#include <tools/pcb_actions.h>
+#include <tools/pcb_control.h>
+#include <tools/pcb_picker_tool.h>
+#include <tools/pcb_selection_tool.h>
+#include <tools/board_reannotate_tool.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>
 #include <bitmaps.h>
 #include <board_commit.h>
@@ -1194,7 +1195,14 @@ int PCB_CONTROL::Redo( const TOOL_EVENT& aEvent )
 int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 {
     PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    ROUTER_TOOL*        routerTool = m_toolMgr->GetTool<ROUTER_TOOL>();
     PCB_SELECTION&      selection = selTool->GetSelection();
+
+    if( routerTool->RoutingInProgress() )
+    {
+        routerTool->UpdateMessagePanel();
+        return 0;
+    }
 
     if( selection.GetSize() == 1 )
     {

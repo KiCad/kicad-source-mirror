@@ -1111,7 +1111,7 @@ bool ROUTER_TOOL::prepareInteractive()
     m_endItem = nullptr;
     m_endSnapPoint = m_startSnapPoint;
 
-    updateMessagePanel();
+    UpdateMessagePanel();
     frame()->UndoRedoBlock( true );
 
     return true;
@@ -1125,7 +1125,7 @@ bool ROUTER_TOOL::finishInteractive()
     m_startItem = nullptr;
     m_endItem   = nullptr;
 
-    updateMessagePanel();
+    UpdateMessagePanel();
     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     controls()->SetAutoPan( false );
     controls()->ForceCursorPosition( false );
@@ -1211,7 +1211,7 @@ void ROUTER_TOOL::performRouting()
         else if( evt->IsAction( &ACT_SwitchCornerMode ) )
         {
             m_router->ToggleCornerMode();
-            updateMessagePanel();
+            UpdateMessagePanel();
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );        // refresh
         }
@@ -1230,7 +1230,7 @@ void ROUTER_TOOL::performRouting()
             }
             controls()->SetAutoPan( true );
             setCursor();
-            updateMessagePanel();
+            UpdateMessagePanel();
         }
         else if( evt->IsAction( &ACT_EndTrack ) || evt->IsDblClick( BUT_LEFT )  )
         {
@@ -1292,7 +1292,7 @@ int ROUTER_TOOL::SettingsDialog( const TOOL_EVENT& aEvent )
 
     settingsDlg.ShowModal();
 
-    updateMessagePanel();
+    UpdateMessagePanel();
 
     return 0;
 }
@@ -2067,13 +2067,13 @@ int ROUTER_TOOL::onTrackViaSizeChanged( const TOOL_EVENT& aEvent )
     // move routine without changing the destination
     m_router->Move( m_endSnapPoint, m_endItem );
 
-    updateMessagePanel();
+    UpdateMessagePanel();
 
     return 0;
 }
 
 
-void ROUTER_TOOL::updateMessagePanel()
+void ROUTER_TOOL::UpdateMessagePanel()
 {
     if( !m_router->RoutingInProgress() )
     {

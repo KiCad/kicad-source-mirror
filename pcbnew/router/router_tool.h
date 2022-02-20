@@ -63,6 +63,8 @@ public:
     // or a non-fanout-via to a single PCB_TRACK item.
     static void NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector );
 
+    void UpdateMessagePanel();
+
 private:
     void performRouting();
     void performDragging( int aMode = PNS::DM_ANY );
@@ -81,8 +83,6 @@ private:
     bool prepareInteractive();
     bool finishInteractive();
     void saveRouterDebugLog();
-
-    void updateMessagePanel();
 
 private:
     std::shared_ptr<ACTION_MENU> m_diffPairMenu;
