@@ -201,7 +201,8 @@ public:
     unsigned int GetUnconnectedCount() const;
 
     bool IsConnectedOnLayer( const BOARD_CONNECTED_ITEM* aItem,
-                             int aLayer, std::vector<KICAD_T> aTypes = {} ) const;
+                             int aLayer, std::vector<KICAD_T> aTypes = {},
+                             bool aIgnoreNets = false ) const;
 
     unsigned int GetNodeCount( int aNet = -1 ) const;
 

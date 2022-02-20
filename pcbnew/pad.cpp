@@ -237,7 +237,7 @@ bool PAD::FlashLayer( int aLayer ) const
 
         return board && board->GetConnectivity()->IsConnectedOnLayer( this,
                                                                       static_cast<int>( aLayer ),
-                                                                      types );
+                                                                      types, true );
 
     case PAD_ATTRIB::NPTH:
         if( GetShape() == PAD_SHAPE::CIRCLE && GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )

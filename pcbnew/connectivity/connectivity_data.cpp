@@ -378,7 +378,7 @@ void CONNECTIVITY_DATA::PropagateNets( BOARD_COMMIT* aCommit, PROPAGATE_MODE aMo
 
 
 bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, int aLayer,
-                                            std::vector<KICAD_T> aTypes ) const
+                                            std::vector<KICAD_T> aTypes, bool aIgnoreNets ) const
 {
     CN_CONNECTIVITY_ALGO::ITEM_MAP_ENTRY &entry = m_connAlgo->ItemEntry( aItem );
 
@@ -397,7 +397,7 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
         {
             if( connected->Valid()
                     && connected->Layers().Overlaps( aLayer )
-                    && connected->Net() == aItem->GetNetCode()
+                    && ( connected->Net() == aItem->GetNetCode() || aIgnoreNets )
                     && matchType( connected->Parent()->Type() ) )
             {
                     return true;
