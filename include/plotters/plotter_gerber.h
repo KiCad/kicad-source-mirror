@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -77,13 +77,23 @@ public:
     virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
                                OUTLINE_MODE tracemode, void* aData ) override;
 
-    virtual void ThickArc( const VECTOR2I& centre, const EDA_ANGLE& aStartAngle,
+    virtual void ThickArc( const VECTOR2I& aCentre, const EDA_ANGLE& aStartAngle,
                            const EDA_ANGLE& aEndAngle, int aRadius, int aWidth,
-                           OUTLINE_MODE tracemode, void* aData ) override;
+                           OUTLINE_MODE aTraceMode, void* aData ) override;
+
+    virtual void ThickArc( const VECTOR2I& aCentre, const VECTOR2I& aStart,
+                           const VECTOR2I& aEnd, int aWidth,
+                           OUTLINE_MODE aTraceMode, void* aData ) override;
+
+    virtual void ThickArc( const EDA_SHAPE& aArcShape,
+                           OUTLINE_MODE aTraceMode, void* aData ) override;
+
     virtual void ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width,
                             OUTLINE_MODE tracemode, void* aData ) override;
+
     virtual void ThickCircle( const VECTOR2I& pos, int diametre, int width,
                               OUTLINE_MODE tracemode, void* aData ) override;
+
     virtual void FilledCircle( const VECTOR2I& pos, int diametre,
                               OUTLINE_MODE tracemode, void* aData ) override;
 

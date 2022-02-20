@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -159,6 +159,9 @@ void PLOTTER::Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR
     EDA_ANGLE startAngle( aStart - aCenter );
     EDA_ANGLE endAngle( aEnd - aCenter );
     int       radius = ( aStart - aCenter ).EuclideanNorm();
+
+    #if 0
+    // Approximate arc by segments:
     int       numSegs = GetArcToSegmentCount( radius, aMaxError, FULL_CIRCLE );
     EDA_ANGLE delta = ANGLE_360 / std::max( 8, numSegs );
     VECTOR2I  start( aStart );
@@ -193,6 +196,25 @@ void PLOTTER::Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR
         LineTo( end );
         FinishTo( aCenter );
     }
+
+    #else
+    if( startAngle > endAngle )
+    {
+        if( endAngle < ANGLE_0 )
+            endAngle.Normalize();
+        else
+            startAngle = startAngle.Normalize() - ANGLE_360;
+    }
+
+    if( m_yaxisReversed )
+    {
+        std::swap( startAngle, endAngle );
+        startAngle = -startAngle;
+        endAngle = -endAngle;
+    }
+
+    Arc( aCenter, startAngle, endAngle, radius, aFill, aWidth );
+    #endif
 }
 
 
@@ -604,6 +626,42 @@ void PLOTTER::ThickArc( const VECTOR2I& centre, const EDA_ANGLE& aStartAngle,
         Arc( centre, aStartAngle, aEndAngle, aRadius + ( aWidth - m_currentPenWidth ) / 2,
              FILL_T::NO_FILL, -1 );
     }
+}
+
+
+void PLOTTER::ThickArc( const VECTOR2I& aCentre, const VECTOR2I& aStart,
+                        const VECTOR2I& aEnd, int aWidth,
+                        OUTLINE_MODE aTraceMode, void* aData )
+{
+    if( aTraceMode == FILLED )
+    {
+        Arc( aCentre, aStart, aEnd, FILL_T::NO_FILL, aWidth, GetPlotterArcHighDef() );
+    }
+    else
+    {
+        SetCurrentLineWidth( -1 );
+        int radius = ( aStart - aCentre ).EuclideanNorm();
+
+        int new_radius = radius - ( aWidth - m_currentPenWidth ) / 2;
+        VECTOR2I start = ( aStart - aCentre ).Resize( new_radius ) + aCentre;
+        VECTOR2I end = ( aEnd - aCentre ).Resize( new_radius ) + aCentre;
+
+        Arc( aCentre, start, end, FILL_T::NO_FILL, -1, GetPlotterArcHighDef() );
+
+        new_radius = radius + ( aWidth - m_currentPenWidth ) / 2;
+        start = ( aStart - aCentre ).Resize( new_radius ) + aCentre;
+        end = ( aEnd - aCentre ).Resize( new_radius ) + aCentre;
+
+        Arc( aCentre, start, end, FILL_T::NO_FILL, -1, GetPlotterArcHighDef() );
+    }
+}
+
+
+void PLOTTER::ThickArc( const EDA_SHAPE& aArcShape,
+                           OUTLINE_MODE aTraceMode, void* aData )
+{
+    ThickArc( aArcShape.getCenter(),aArcShape.GetStart(), aArcShape.GetEnd(),
+              aArcShape.GetWidth(), aTraceMode, aData );
 }
 
 

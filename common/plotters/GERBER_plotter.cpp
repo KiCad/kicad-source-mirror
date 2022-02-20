@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -1124,9 +1124,9 @@ void GERBER_PLOTTER::ThickSegment( const VECTOR2I& start, const VECTOR2I& end, i
     }
 }
 
-void GERBER_PLOTTER::ThickArc( const VECTOR2I& centre, const EDA_ANGLE& aStartAngle,
+void GERBER_PLOTTER::ThickArc( const VECTOR2I& aCentre, const EDA_ANGLE& aStartAngle,
                                const EDA_ANGLE& aEndAngle, int aRadius, int aWidth,
-                               OUTLINE_MODE tracemode, void* aData )
+                               OUTLINE_MODE aTraceMode, void* aData )
 {
     GBR_METADATA *gbr_metadata = static_cast<GBR_METADATA*>( aData );
     SetCurrentLineWidth( aWidth, gbr_metadata );
@@ -1134,18 +1134,56 @@ void GERBER_PLOTTER::ThickArc( const VECTOR2I& centre, const EDA_ANGLE& aStartAn
     if( gbr_metadata )
         formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
-    if( tracemode == FILLED )
+    if( aTraceMode == FILLED )
     {
-        Arc( centre, aStartAngle, aEndAngle, aRadius, FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
+        Arc( aCentre, aStartAngle, aEndAngle, aRadius, FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
     }
     else
     {
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-        Arc( centre, aStartAngle, aEndAngle, aRadius - ( aWidth - m_currentPenWidth ) / 2,
+        Arc( aCentre, aStartAngle, aEndAngle, aRadius - ( aWidth - m_currentPenWidth ) / 2,
              FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
-        Arc( centre, aStartAngle, aEndAngle, aRadius + ( aWidth - m_currentPenWidth ) / 2,
+        Arc( aCentre, aStartAngle, aEndAngle, aRadius + ( aWidth - m_currentPenWidth ) / 2,
              FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
     }
+}
+
+
+void GERBER_PLOTTER::ThickArc( const VECTOR2I& aCentre, const VECTOR2I& aStart,
+                               const VECTOR2I& aEnd, int aWidth,
+                               OUTLINE_MODE aTraceMode, void* aData )
+{
+    EDA_ANGLE start_angle( aStart - aCentre );
+    EDA_ANGLE end_angle( aEnd - aCentre );
+
+    if( start_angle > end_angle )
+    {
+        if( end_angle < ANGLE_0 )
+            end_angle.Normalize();
+        else
+            start_angle = start_angle.Normalize() - ANGLE_360;
+    }
+
+    int radius = (aStart - aCentre).EuclideanNorm();
+
+    if( !m_yaxisReversed )   // should be always the case
+    {
+        std::swap( end_angle, start_angle );
+        end_angle = -end_angle;
+        start_angle = -start_angle;
+    }
+
+    ThickArc( aCentre, start_angle, end_angle, radius, aWidth, aTraceMode, aData );
+}
+
+
+void GERBER_PLOTTER::ThickArc( const EDA_SHAPE& aArcShape,
+                           OUTLINE_MODE aTraceMode, void* aData )
+{
+    wxASSERT( aArcShape.GetShape() == SHAPE_T::ARC );
+
+    ThickArc( aArcShape.getCenter(), aArcShape.GetStart(), aArcShape.GetEnd(),
+              aArcShape.GetWidth(), aTraceMode, aData );
 }
 
 

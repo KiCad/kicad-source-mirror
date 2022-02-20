@@ -579,13 +579,14 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         if( track->Type() == PCB_ARC_T )
         {
             const     PCB_ARC* arc = static_cast<const PCB_ARC*>( track );
-            VECTOR2D  center( arc->GetCenter() );
-            int       radius = arc->GetRadius();
-            EDA_ANGLE start_angle = arc->GetArcAngleStart();
-            EDA_ANGLE end_angle = start_angle + arc->GetAngle();
+            PCB_SHAPE arc_shape( nullptr, SHAPE_T::ARC );
+            arc_shape.SetWidth( width );
+            arc_shape.SetStart( arc->GetStart() );
+            arc_shape.SetEnd( arc->GetEnd() );
+            arc_shape.SetCenter( arc->GetCenter() );
 
-            aPlotter->ThickArc( center, -end_angle, -start_angle, radius, width, plotMode,
-                                &gbr_metadata );
+            aPlotter->ThickArc( arc->GetCenter(), arc->GetStart(), arc->GetEnd(),
+                                width, plotMode, &gbr_metadata );
         }
         else
         {

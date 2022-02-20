@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -570,8 +570,6 @@ void HPGL_PLOTTER::ThickSegment( const VECTOR2I& start, const VECTOR2I& end,
 void HPGL_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
                         const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill, int aWidth )
 {
-    wxASSERT( m_outputFile );
-
     if( aRadius <= 0 )
         return;
 
@@ -608,6 +606,18 @@ void HPGL_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
                                        VECTOR2D( radius_device * 2, radius_device * 2 ) ) );
     m_current_item->lift_after = true;
     flushItem();
+}
+
+
+void HPGL_PLOTTER::Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart,
+                        const VECTOR2I& aEnd,
+                        FILL_T aFill, int aWidth, int aMaxError )
+{
+    EDA_ANGLE startAngle( aStart - aCenter );
+    EDA_ANGLE endAngle( aEnd - aCenter );
+    int       radius = ( aStart - aCenter ).EuclideanNorm();
+
+    Arc( aCenter, -endAngle, -startAngle, radius, aFill, aWidth );
 }
 
 

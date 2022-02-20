@@ -673,10 +673,9 @@ void BRDITEMS_PLOTTER::PlotFootprintShape( const FP_SHAPE* aShape )
         case SHAPE_T::ARC:
         {
             radius = KiROUND( GetLineLength( aShape->GetCenter(), aShape->GetStart() ) );
-            EDA_ANGLE startAngle( aShape->GetStart() - aShape->GetCenter() );
-            EDA_ANGLE endAngle = startAngle - aShape->GetArcAngle();
 
             // when startAngle == endAngle ThickArc() doesn't know whether it's 0 deg and 360 deg
+            // but it is a circle
             if( std::abs( aShape->GetArcAngle().AsDegrees() ) == 360.0 )
             {
                 m_plotter->ThickCircle( aShape->GetCenter(), radius * 2, thickness, GetPlotMode(),
@@ -684,8 +683,7 @@ void BRDITEMS_PLOTTER::PlotFootprintShape( const FP_SHAPE* aShape )
             }
             else
             {
-                m_plotter->ThickArc( aShape->GetCenter(), -startAngle, -endAngle, radius,
-                                     thickness, GetPlotMode(), &gbr_metadata );
+                m_plotter->ThickArc( *aShape, GetPlotMode(), &gbr_metadata );
             }
         }
             break;
@@ -945,10 +943,8 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
 
         case SHAPE_T::ARC:
         {
-            EDA_ANGLE startAngle( aShape->GetStart() - aShape->GetCenter() );
-            EDA_ANGLE endAngle = startAngle - aShape->GetArcAngle();
-
             // when startAngle == endAngle ThickArc() doesn't know whether it's 0 deg and 360 deg
+            // but it is a circle
             if( std::abs( aShape->GetArcAngle().AsDegrees() ) == 360.0 )
             {
                 m_plotter->ThickCircle( aShape->GetCenter(), aShape->GetRadius() * 2, thickness,
@@ -956,8 +952,7 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
             }
             else
             {
-                m_plotter->ThickArc( aShape->GetCenter(), -startAngle, -endAngle,
-                                     aShape->GetRadius(), thickness, GetPlotMode(), &gbr_metadata );
+                m_plotter->ThickArc( *aShape, GetPlotMode(), &gbr_metadata );
             }
 
             break;

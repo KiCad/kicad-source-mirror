@@ -309,13 +309,24 @@ public:
     // Higher level primitives -- can be drawn as line, sketch or 'filled'
     virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
                                OUTLINE_MODE tracemode, void* aData );
-    virtual void ThickArc( const VECTOR2I& centre, const EDA_ANGLE& StAngle,
-                           const EDA_ANGLE& EndAngle, int rayon, int width,
-                           OUTLINE_MODE tracemode, void* aData );
+
+    virtual void ThickArc( const VECTOR2I& aCentre, const EDA_ANGLE& StAngle,
+                           const EDA_ANGLE& EndAngle, int aRadius, int aWidth,
+                           OUTLINE_MODE aTraceMode, void* aData );
+
+    virtual void ThickArc( const VECTOR2I& aCentre, const VECTOR2I& aStart,
+                           const VECTOR2I& aEnd, int aWidth,
+                           OUTLINE_MODE aTraceMode, void* aData );
+
+    virtual void ThickArc( const EDA_SHAPE& aArcShape,
+                           OUTLINE_MODE aTraceMode, void* aData );
+
     virtual void ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width, OUTLINE_MODE tracemode,
                             void* aData );
+
     virtual void ThickCircle( const VECTOR2I& pos, int diametre, int width, OUTLINE_MODE tracemode,
                               void* aData );
+
     virtual void FilledCircle( const VECTOR2I& pos, int diametre, OUTLINE_MODE tracemode,
                                void* aData );
 
