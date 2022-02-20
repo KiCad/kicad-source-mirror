@@ -93,6 +93,11 @@ public:
      */
     int AddJunctionsIfNeeded( const TOOL_EVENT& aEvent );
 
+    /**
+     * Logic to remove wires when overlapping correct items
+     */
+    int TrimOverLappingWires( const TOOL_EVENT& aEvent );
+
 private:
     int       doDrawSegments( const std::string& aTool, int aType, bool aQuitOnDraw );
     SCH_LINE* startSegments( int aType, const VECTOR2D& aPos );

@@ -893,6 +893,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
         EE_SELECTION new_sel;
         new_sel.Add( newItem );
 
+        m_toolMgr->RunAction( EE_ACTIONS::trimOverlappingWires, true, &new_sel );
         m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &new_sel );
 
         m_frame->RecalculateConnections( LOCAL_CLEANUP );

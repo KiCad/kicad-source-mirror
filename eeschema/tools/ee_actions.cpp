@@ -692,6 +692,11 @@ TOOL_ACTION EE_ACTIONS::addNeededJunctions( "eeschema.InteractiveDrawingLineWire
         _( "Add Junctions to Selection where needed" ), "",
         BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
 
+TOOL_ACTION EE_ACTIONS::trimOverlappingWires( "eeschema.InteractiveDrawingLineWireBus.trimOverlappingWires",
+        AS_ACTIVE, 0, "",
+        "", "",
+        BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
+
 
 const DRAW_SEGMENT_EVENT_PARAMS drawWireActionParam = { LAYER_WIRE, false };
 TOOL_ACTION EE_ACTIONS::drawWire( "eeschema.InteractiveDrawingLineWireBus.drawWires",

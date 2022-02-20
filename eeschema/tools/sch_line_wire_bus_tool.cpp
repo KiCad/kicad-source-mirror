@@ -973,12 +973,62 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
 }
 
 
+int SCH_LINE_WIRE_BUS_TOOL::TrimOverLappingWires( const TOOL_EVENT& aEvent )
+{
+    EE_SELECTION* aSelection = aEvent.Parameter<EE_SELECTION*>();
+    SCHEMATIC* sch = getModel<SCHEMATIC>();
+    SCH_SCREEN* screen = sch->CurrentSheet().LastScreen();
+
+    std::set<SCH_LINE*> lines;
+    EDA_RECT bb = aSelection->GetBoundingBox();
+
+    for( EDA_ITEM* item : screen->Items().Overlapping( SCH_LINE_T, bb ) )
+        lines.insert( static_cast<SCH_LINE*>( item ) );
+
+    for( unsigned ii = 0; ii < aSelection->GetSize(); ii++ )
+    {
+        SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aSelection->GetItem( ii ) );
+        std::vector<wxPoint> pts = item->GetConnectionPoints();
+
+        if( !item || !item->IsConnectable() || ( item->Type() == SCH_LINE_T ) )
+            continue;
+
+        /// If the line intersects with an item in the selection at only two points,
+        /// then we can remove the line between the two points.
+        for( SCH_LINE* line : lines )
+        {
+            std::vector<wxPoint> conn_pts;
+
+            for( wxPoint pt : pts )
+            {
+                if( IsPointOnSegment( line->GetStartPoint(), line->GetEndPoint(), pt ) )
+                    conn_pts.push_back( pt );
+
+                if( conn_pts.size() > 2 )
+                    break;
+            }
+
+            if( conn_pts.size() == 2 )
+                m_frame->TrimWire( conn_pts[0], conn_pts[1] );
+        }
+    }
+
+    return 0;
+}
+
+
 int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION* aSelection = aEvent.Parameter<EE_SELECTION*>();
 
     std::vector<wxPoint> pts;
     std::vector<wxPoint> connections = m_frame->GetSchematicConnections();
+
+    std::set<SCH_LINE*> lines;
+    EDA_RECT bb = aSelection->GetBoundingBox();
+
+    for( EDA_ITEM* item : m_frame->GetScreen()->Items().Overlapping( SCH_LINE_T, bb ) )
+        lines.insert( static_cast<SCH_LINE*>( item ) );
 
     for( unsigned ii = 0; ii < aSelection->GetSize(); ii++ )
     {
@@ -1000,15 +1050,6 @@ int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( const TOOL_EVENT& aEvent )
             {
                 if( IsPointOnSegment( line->GetStartPoint(), line->GetEndPoint(), pt ) )
                     pts.push_back( pt );
-            }
-        }
-        else
-        {
-            // Clean up any wires that short non-wire connections in the list
-            for( auto pt = new_pts.begin(); pt != new_pts.end(); pt++ )
-            {
-                for( auto secondPt = pt + 1; secondPt != new_pts.end(); secondPt++ )
-                    m_frame->TrimWire( *pt, *secondPt );
             }
         }
     }
@@ -1035,6 +1076,7 @@ int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( const TOOL_EVENT& aEvent )
 void SCH_LINE_WIRE_BUS_TOOL::setTransitions()
 {
     Go( &SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded, EE_ACTIONS::addNeededJunctions.MakeEvent() );
+    Go( &SCH_LINE_WIRE_BUS_TOOL::TrimOverLappingWires, EE_ACTIONS::trimOverlappingWires.MakeEvent() );
     Go( &SCH_LINE_WIRE_BUS_TOOL::DrawSegments,         EE_ACTIONS::drawWire.MakeEvent() );
     Go( &SCH_LINE_WIRE_BUS_TOOL::DrawSegments,         EE_ACTIONS::drawBus.MakeEvent() );
     Go( &SCH_LINE_WIRE_BUS_TOOL::DrawSegments,         EE_ACTIONS::drawLines.MakeEvent() );
