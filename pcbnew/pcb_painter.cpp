@@ -424,7 +424,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
             {
                 // For single-layer objects, exclude all layers including ancillary layers
                 // such as holes, netnames, etc.
-                if( parentFP->GetPrivateLayers().test( item->GetLayer() ) )
+                if( parentFP->GetPrivateLayers().test( item->GetLayerSet().Seq()[0] ) )
                     return false;
             }
         }
