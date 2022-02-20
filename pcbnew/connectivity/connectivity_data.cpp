@@ -35,6 +35,8 @@
 #include <connectivity/connectivity_algo.h>
 #include <connectivity/from_to_cache.h>
 
+#include <geometry/shape_segment.h>
+#include <geometry/shape_circle.h>
 #include <ratsnest/ratsnest_data.h>
 #include <progress_reporter.h>
 #include <trigo.h>
@@ -378,7 +380,8 @@ void CONNECTIVITY_DATA::PropagateNets( BOARD_COMMIT* aCommit, PROPAGATE_MODE aMo
 
 
 bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, int aLayer,
-                                            std::vector<KICAD_T> aTypes, bool aIgnoreNets ) const
+                                            std::vector<KICAD_T> aTypes,
+                                            bool aCheckOptionalFlashing ) const
 {
     CN_CONNECTIVITY_ALGO::ITEM_MAP_ENTRY &entry = m_connAlgo->ItemEntry( aItem );
 
@@ -397,10 +400,28 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
         {
             if( connected->Valid()
                     && connected->Layers().Overlaps( aLayer )
-                    && ( connected->Net() == aItem->GetNetCode() || aIgnoreNets )
                     && matchType( connected->Parent()->Type() ) )
             {
+                if( connected->Net() == aItem->GetNetCode() )
+                {
                     return true;
+                }
+                else if( aCheckOptionalFlashing && aItem->Type() == PCB_PAD_T )
+                {
+                    const PAD*    pad = static_cast<const PAD*>( aItem );
+                    SHAPE_SEGMENT hole( *pad->GetEffectiveHoleShape() );
+                    PCB_LAYER_ID  layer = ToLAYER_ID( aLayer );
+
+                    return connected->Parent()->GetEffectiveShape( layer )->Collide( &hole );
+                }
+                else if( aCheckOptionalFlashing && aItem->Type() == PCB_VIA_T )
+                {
+                    const PCB_VIA* via = static_cast<const PCB_VIA*>( aItem );
+                    SHAPE_CIRCLE   hole( via->GetCenter(), via->GetDrillValue() / 2 );
+                    PCB_LAYER_ID   layer = ToLAYER_ID( aLayer );
+
+                    return connected->Parent()->GetEffectiveShape( layer )->Collide( &hole );
+                }
             }
         }
     }

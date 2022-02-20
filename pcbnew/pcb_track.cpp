@@ -492,9 +492,6 @@ bool PCB_VIA::FlashLayer( LSET aLayers ) const
 
 bool PCB_VIA::FlashLayer( int aLayer ) const
 {
-    std::vector<KICAD_T> types
-    { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_ZONE_T, PCB_FP_ZONE_T };
-
     // Return the "normal" shape if the caller doesn't specify a particular layer
     if( aLayer == UNDEFINED_LAYER )
         return true;
@@ -513,7 +510,11 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
     if( m_keepTopBottomLayer && ( aLayer == m_layer || aLayer == m_bottomLayer ) )
         return true;
 
-    return board->GetConnectivity()->IsConnectedOnLayer( this, static_cast<int>( aLayer ), types );
+    // Must be static to keep from raising its ugly head in performance profiles
+    static std::vector<KICAD_T> connectedTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T,
+                                                   PCB_ZONE_T, PCB_FP_ZONE_T };
+
+    return board->GetConnectivity()->IsConnectedOnLayer( this, aLayer, connectedTypes, true );
 }
 
 
