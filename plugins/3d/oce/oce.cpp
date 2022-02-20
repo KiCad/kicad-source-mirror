@@ -37,7 +37,7 @@ SCENEGRAPH* LoadModel( char const* filename );
 
 #define PLUGIN_OCE_MAJOR 1
 #define PLUGIN_OCE_MINOR 3
-#define PLUGIN_OCE_PATCH 0
+#define PLUGIN_OCE_PATCH 1
 #define PLUGIN_OCE_REVNO 0
 
 

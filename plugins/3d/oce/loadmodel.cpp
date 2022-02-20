@@ -1021,7 +1021,7 @@ bool processLabel( const TDF_Label& aLabel, DATA& aData, SGNODE* aParent,
     if( nullptr != aItems )
         aItems->push_back( pptr );
 
-    if( shapeLabel.HasChild() )
+    if( stype != TopAbs_SOLID && shapeLabel.HasChild() )
     {
         wxLogTrace( MASK_OCE, wxT( "Label %s has children" ), labelTag );
         TDF_ChildIterator it;
