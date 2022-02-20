@@ -1197,7 +1197,7 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     ROUTER_TOOL*        routerTool = m_toolMgr->GetTool<ROUTER_TOOL>();
     PCB_SELECTION&      selection = selTool->GetSelection();
 
-    if( routerTool->RoutingInProgress() )
+    if( routerTool && routerTool->RoutingInProgress() )
     {
         routerTool->UpdateMessagePanel();
         return 0;
