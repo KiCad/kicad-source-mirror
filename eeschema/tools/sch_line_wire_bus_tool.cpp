@@ -998,7 +998,7 @@ int SCH_LINE_WIRE_BUS_TOOL::TrimOverLappingWires( const TOOL_EVENT& aEvent )
     for( unsigned ii = 0; ii < aSelection->GetSize(); ii++ )
     {
         SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aSelection->GetItem( ii ) );
-        std::vector<wxPoint> pts = item->GetConnectionPoints();
+        std::vector<VECTOR2I> pts = item->GetConnectionPoints();
 
         if( !item || !item->IsConnectable() || ( item->Type() == SCH_LINE_T ) )
             continue;
@@ -1007,9 +1007,9 @@ int SCH_LINE_WIRE_BUS_TOOL::TrimOverLappingWires( const TOOL_EVENT& aEvent )
         /// then we can remove the line between the two points.
         for( SCH_LINE* line : lines )
         {
-            std::vector<wxPoint> conn_pts;
+            std::vector<VECTOR2I> conn_pts;
 
-            for( wxPoint pt : pts )
+            for( VECTOR2I pt : pts )
             {
                 if( IsPointOnSegment( line->GetStartPoint(), line->GetEndPoint(), pt ) )
                     conn_pts.push_back( pt );
