@@ -122,7 +122,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     if( !selection.Front()->IsNew() )
         saveCopyInUndoList( m_frame->GetCurSymbol(), UNDO_REDO::LIBEDIT );
 
-    m_cursor = controls->GetCursorPosition();
+    m_cursor = controls->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
     // Main loop: keep receiving events
     do
@@ -188,7 +188,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 // Set up the starting position and move/drag offset
                 //
-                m_cursor = controls->GetCursorPosition();
+                m_cursor = controls->GetCursorPosition( !evt->DisableGridSnapping() );
 
                 if( lib_item->IsNew() )
                 {
@@ -214,7 +214,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 else
                 {
-                    m_cursor = getViewControls()->GetCursorPosition( true );
+                    m_cursor = controls->GetCursorPosition( !evt->DisableGridSnapping() );
                     m_anchorPos = m_cursor;
                 }
 
@@ -229,7 +229,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             //------------------------------------------------------------------------
             // Follow the mouse
             //
-            m_cursor = controls->GetCursorPosition();
+            m_cursor = controls->GetCursorPosition( !evt->DisableGridSnapping() );
             VECTOR2I delta( m_cursor - prevPos );
             m_anchorPos = m_cursor;
 
