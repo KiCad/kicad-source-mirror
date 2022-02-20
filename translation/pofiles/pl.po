@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:25-0800\n"
-"PO-Revision-Date: 2022-02-16 17:20+0000\n"
+"PO-Revision-Date: 2022-02-20 11:55+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -4692,7 +4692,7 @@ msgstr "Alias: "
 
 #: common/filename_resolver.cpp:468
 msgid "This path:"
-msgstr "Ścieżka obecna:"
+msgstr "Obecna ścieżka:"
 
 #: common/filename_resolver.cpp:471
 msgid "Existing path:"
@@ -22579,7 +22579,7 @@ msgid ""
 "RefDes: %s Footprint: %s:%s at %s on PCB."
 msgstr ""
 "\n"
-"Odnośnik: %s Footprint %s:%s na %s na PCB."
+"Odnośnik: %s Footprint %s:%s na pozycji %s na PCB."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:618
 msgid "Reannotate anyway?"
