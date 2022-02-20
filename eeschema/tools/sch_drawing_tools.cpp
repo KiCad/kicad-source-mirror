@@ -283,12 +283,14 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                     symbol->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
 
                 symbol->ClearEditFlags();
+                m_view->Update( symbol );
+                m_frame->GetScreen()->Update( symbol );
 
+                m_toolMgr->RunAction( EE_ACTIONS::trimOverlappingWires, true,
+                                      &m_selectionTool->GetSelection() );
                 m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true,
                                       &m_selectionTool->GetSelection() );
 
-                m_view->Update( symbol );
-                m_frame->GetScreen()->Update( symbol );
                 m_frame->OnModify();
 
                 SCH_SYMBOL* nextSymbol = nullptr;

@@ -844,6 +844,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 m_frame->AddJunction( m_frame->GetScreen(), it.GetPosition(), true, false );
         }
 
+        m_toolMgr->RunAction( EE_ACTIONS::trimOverlappingWires, true, &selectionCopy );
         m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &selectionCopy );
 
         m_frame->RecalculateConnections( LOCAL_CLEANUP );
@@ -1433,6 +1434,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
     }
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
+    m_toolMgr->RunAction( EE_ACTIONS::trimOverlappingWires, true, &selection );
     m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &selection );
 
     m_frame->RecalculateConnections( LOCAL_CLEANUP );

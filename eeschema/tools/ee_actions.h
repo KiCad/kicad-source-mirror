@@ -73,6 +73,7 @@ public:
 
     // Schematic Tools
     static TOOL_ACTION addNeededJunctions;
+    static TOOL_ACTION trimOverlappingWires;
     static TOOL_ACTION pickerTool;
     static TOOL_ACTION placeSymbol;
     static TOOL_ACTION placePower;
