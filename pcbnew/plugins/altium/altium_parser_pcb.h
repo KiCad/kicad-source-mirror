@@ -119,14 +119,16 @@ enum class ALTIUM_CONNECT_STYLE
 
 enum class ALTIUM_RECORD
 {
-    ARC    = 1,
-    PAD    = 2,
-    VIA    = 3,
-    TRACK  = 4,
-    TEXT   = 5,
-    FILL   = 6,
+    UNKNOWN = -1,
+
+    ARC = 1,
+    PAD = 2,
+    VIA = 3,
+    TRACK = 4,
+    TEXT = 5,
+    FILL = 6,
     REGION = 11,
-    MODEL  = 12
+    MODEL = 12
 };
 
 enum class ALTIUM_PAD_SHAPE
@@ -161,11 +163,12 @@ enum class ALTIUM_PAD_MODE
     FULL_STACK        = 2
 };
 
-enum class ALTIUM_PAD_RULE
+enum class ALTIUM_MODE
 {
-    UNKNOWN = 0,
-    RULE    = 1,
-    MANUAL  = 2
+    UNKNOWN = -1,
+    NONE = 0, // TODO: correct ID?
+    RULE = 1,
+    MANUAL = 2
 };
 
 enum class ALTIUM_POLYGON_HATCHSTYLE
@@ -328,6 +331,29 @@ enum class ALTIUM_LAYER
 };
 
 class ALTIUM_PARSER;
+
+enum class AEXTENDED_PRIMITIVE_INFORMATION_TYPE
+{
+    UNKNOWN = -1,
+
+    MASK
+};
+
+struct AEXTENDED_PRIMITIVE_INFORMATION
+{
+    int           primitiveIndex;
+    ALTIUM_RECORD primitiveObjectId;
+
+    AEXTENDED_PRIMITIVE_INFORMATION_TYPE type;
+
+    // Type == Mask
+    ALTIUM_MODE pastemaskexpansionmode;
+    int32_t     pastemaskexpansionmanual;
+    ALTIUM_MODE soldermaskexpansionmode;
+    int32_t     soldermaskexpansionmanual;
+
+    explicit AEXTENDED_PRIMITIVE_INFORMATION( ALTIUM_PARSER& aReader );
+};
 
 struct ABOARD6_LAYER_STACKUP
 {
@@ -585,9 +611,9 @@ struct APAD6
 
     double          direction;
     bool            plated;
-    ALTIUM_PAD_RULE pastemaskexpansionmode;
+    ALTIUM_MODE     pastemaskexpansionmode;
     int32_t         pastemaskexpansionmanual;
-    ALTIUM_PAD_RULE soldermaskexpansionmode;
+    ALTIUM_MODE     soldermaskexpansionmode;
     int32_t         soldermaskexpansionmanual;
     double          holerotation;
 

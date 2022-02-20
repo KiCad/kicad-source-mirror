@@ -166,12 +166,92 @@ void altium_parse_polygons( std::map<wxString, wxString>& aProps,
     }
 }
 
+
+static ALTIUM_MODE ReadAltiumModeFromProperties( const std::map<wxString, wxString>& aProps,
+                                                 wxString                            aKey )
+{
+    wxString mode = ALTIUM_PARSER::ReadString( aProps, aKey, wxT( "" ) );
+
+    if( mode == wxT( "None" ) )
+        return ALTIUM_MODE::NONE;
+    else if( mode == wxT( "Rule" ) )
+        return ALTIUM_MODE::RULE;
+    else if( mode == wxT( "Manual" ) )
+        return ALTIUM_MODE::MANUAL;
+
+    wxLogError( _( "Unknown Mode string: '%s'." ), mode );
+    return ALTIUM_MODE::UNKNOWN;
+}
+
+
+static ALTIUM_RECORD ReadAltiumRecordFromProperties( const std::map<wxString, wxString>& aProps,
+                                                     wxString                            aKey )
+{
+    wxString record = ALTIUM_PARSER::ReadString( aProps, aKey, wxT( "" ) );
+
+    if( record == wxT( "Arc" ) )
+        return ALTIUM_RECORD::ARC;
+    else if( record == wxT( "Pad" ) )
+        return ALTIUM_RECORD::PAD;
+    else if( record == wxT( "Via" ) )
+        return ALTIUM_RECORD::VIA;
+    else if( record == wxT( "Track" ) )
+        return ALTIUM_RECORD::TRACK;
+    else if( record == wxT( "Text" ) )
+        return ALTIUM_RECORD::TEXT;
+    else if( record == wxT( "Fill" ) )
+        return ALTIUM_RECORD::FILL;
+    else if( record == wxT( "Region" ) ) // correct?
+        return ALTIUM_RECORD::REGION;
+    else if( record == wxT( "Model" ) )
+        return ALTIUM_RECORD::MODEL;
+
+    wxLogError( _( "Unknown Record name string: '%s'." ), record );
+    return ALTIUM_RECORD::UNKNOWN;
+}
+
+
+static AEXTENDED_PRIMITIVE_INFORMATION_TYPE
+ReadAltiumExtendedPrimitiveInformationTypeFromProperties(
+        const std::map<wxString, wxString>& aProps, wxString aKey )
+{
+    wxString parsedType = ALTIUM_PARSER::ReadString( aProps, aKey, wxT( "" ) );
+
+    if( parsedType == wxT( "Mask" ) )
+        return AEXTENDED_PRIMITIVE_INFORMATION_TYPE::MASK;
+
+    wxLogError( _( "Unknown Extended Primitive Information type: '%s'." ), parsedType );
+    return AEXTENDED_PRIMITIVE_INFORMATION_TYPE::UNKNOWN;
+}
+
+
+AEXTENDED_PRIMITIVE_INFORMATION::AEXTENDED_PRIMITIVE_INFORMATION( ALTIUM_PARSER& aReader )
+{
+    const std::map<wxString, wxString> props = aReader.ReadProperties();
+
+    if( props.empty() )
+        THROW_IO_ERROR( wxT( "ExtendedPrimitiveInformation stream has no properties!" ) );
+
+    primitiveIndex = ALTIUM_PARSER::ReadInt( props, wxT( "PRIMITIVEINDEX" ), -1 );
+    primitiveObjectId = ReadAltiumRecordFromProperties( props, wxT( "PRIMITIVEOBJECTID" ) );
+    type = ReadAltiumExtendedPrimitiveInformationTypeFromProperties( props, wxT( "TYPE" ) );
+
+    pastemaskexpansionmode = ReadAltiumModeFromProperties( props, wxT( "PASTEMASKEXPANSIONMODE" ) );
+    pastemaskexpansionmanual = ALTIUM_PARSER::ReadKicadUnit(
+            props, wxT( "PASTEMASKEXPANSION_MANUAL" ), wxT( "0mil" ) );
+    soldermaskexpansionmode =
+            ReadAltiumModeFromProperties( props, wxT( "SOLDERMASKEXPANSIONMODE" ) );
+    soldermaskexpansionmanual = ALTIUM_PARSER::ReadKicadUnit(
+            props, wxT( "SOLDERMASKEXPANSION_MANUAL" ), wxT( "0mil" ) );
+}
+
+
 ABOARD6::ABOARD6( ALTIUM_PARSER& aReader )
 {
     std::map<wxString, wxString> props = aReader.ReadProperties();
 
     if( props.empty() )
-        THROW_IO_ERROR( wxT( "Board6 stream has no props!" ) );
+        THROW_IO_ERROR( wxT( "Board6 stream has no properties!" ) );
 
     sheetpos  = VECTOR2I( ALTIUM_PARSER::ReadKicadUnit( props, wxT( "SHEETX" ), wxT( "0mil" ) ),
                           -ALTIUM_PARSER::ReadKicadUnit( props, wxT( "SHEETY" ), wxT( "0mil" ) ) );
@@ -634,8 +714,8 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
     pastemaskexpansionmanual  = aReader.ReadKicadUnit();
     soldermaskexpansionmanual = aReader.ReadKicadUnit();
     aReader.Skip( 7 );
-    pastemaskexpansionmode  = static_cast<ALTIUM_PAD_RULE>( aReader.Read<uint8_t>() );
-    soldermaskexpansionmode = static_cast<ALTIUM_PAD_RULE>( aReader.Read<uint8_t>() );
+    pastemaskexpansionmode = static_cast<ALTIUM_MODE>( aReader.Read<uint8_t>() );
+    soldermaskexpansionmode = static_cast<ALTIUM_MODE>( aReader.Read<uint8_t>() );
     aReader.Skip( 3 );
     holerotation = aReader.Read<double>();
 

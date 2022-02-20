@@ -32,4 +32,6 @@
     (stroke (width 0.5) (type solid)) (layer "F.Cu") (tstamp e16db058-fa43-40bf-9cff-c2ed4fab6ab5))
   (fp_line (start 13 5) (end 13 -5)
     (stroke (width 0.5) (type solid)) (layer "F.Cu") (tstamp 3de27c1c-897a-4a6c-b0f7-6b3c6fd91fd1))
+  (fp_line (start 13 5) (end 13 -5)
+    (stroke (width 0.3) (type solid)) (layer "F.Mask") (tstamp 3466cda7-8b6d-422c-92e4-d22bbe2d4a4d))
 )

@@ -379,6 +379,11 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
           {
               this->ParseBoard6Data( aFile, fileHeader );
           } },
+        { false, ALTIUM_PCB_DIR::EXTENDPRIMITIVEINFORMATION,
+          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParseExtendedPrimitiveInformationData( aFile, fileHeader );
+          } },
         { true, ALTIUM_PCB_DIR::COMPONENTS6,
           [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
           {
@@ -660,6 +665,7 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
     m_layermap.emplace( ALTIUM_LAYER::MECHANICAL_16, Eco2_User );
 
     m_unicodeStrings.clear();
+    m_extendedPrimitiveInformationMaps.clear();
     // TODO: WideStrings are stored as parameterMap in the case of footprints, not as binary
     //    std::string                     unicodeStringsStreamName = aFootprintName.ToStdString() + "\\WideStrings";
     //    const CFB::COMPOUND_FILE_ENTRY* unicodeStringsData = altiumLibFile.FindStream( unicodeStringsStreamName );
@@ -710,7 +716,7 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
             altiumLibFile.FindStream( extendedPrimitiveInformationStreamName );
     if( extendedPrimitiveInformationData != nullptr )
     {
-        // TODO: implement
+        ParseExtendedPrimitiveInformationData( altiumLibFile, extendedPrimitiveInformationData );
     }
 
     footprint->SetReference( wxT( "REF**" ) );
@@ -718,7 +724,7 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
     footprint->Reference().SetVisible( true ); // TODO: extract visibility information
     footprint->Value().SetVisible( true );
 
-    while( parser.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
+    for( int primitiveIndex = 0; parser.GetRemainingBytes() >= 4; primitiveIndex++ )
     {
         ALTIUM_RECORD recordtype = static_cast<ALTIUM_RECORD>( parser.Peek<uint8_t>() );
         switch( recordtype )
@@ -726,7 +732,7 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
         case ALTIUM_RECORD::ARC:
         {
             AARC6 arc( parser );
-            ConvertArcs6ToFootprintItem( footprint.get(), arc, false );
+            ConvertArcs6ToFootprintItem( footprint.get(), arc, primitiveIndex, false );
             break;
         }
         case ALTIUM_RECORD::PAD:
@@ -744,7 +750,7 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
         case ALTIUM_RECORD::TRACK:
         {
             ATRACK6 track( parser );
-            ConvertTracks6ToFootprintItem( footprint.get(), track, false );
+            ConvertTracks6ToFootprintItem( footprint.get(), track, primitiveIndex, false );
             break;
         }
         case ALTIUM_RECORD::TEXT:
@@ -858,6 +864,27 @@ void ALTIUM_PCB::ParseFileHeader( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
     //{
     //    THROW_IO_ERROR( "FileHeader stream is not fully parsed" );
     //}
+}
+
+void ALTIUM_PCB::ParseExtendedPrimitiveInformationData( const ALTIUM_COMPOUND_FILE& aAltiumPcbFile,
+                                                        const CFB::COMPOUND_FILE_ENTRY* aEntry )
+{
+    if( m_progressReporter )
+        m_progressReporter->Report( _( "Loading extended primitive information data..." ) );
+
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+
+    while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
+    {
+        checkpoint();
+        AEXTENDED_PRIMITIVE_INFORMATION elem( reader );
+
+        m_extendedPrimitiveInformationMaps[elem.primitiveObjectId].emplace( elem.primitiveIndex,
+                                                                            std::move( elem ) );
+    }
+
+    if( reader.GetRemainingBytes() != 0 )
+        THROW_IO_ERROR( wxT( "ExtendedPrimitiveInformation stream is not fully parsed" ) );
 }
 
 void ALTIUM_PCB::ParseBoard6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
@@ -2128,19 +2155,19 @@ void ALTIUM_PCB::ParseArcs6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
 
     ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
-    while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
+    for( int primitiveIndex = 0; reader.GetRemainingBytes() >= 4; primitiveIndex++ )
     {
         checkpoint();
         AARC6 elem( reader );
 
         if( elem.component == ALTIUM_COMPONENT_NONE )
         {
-            ConvertArcs6ToBoardItem( elem );
+            ConvertArcs6ToBoardItem( elem, primitiveIndex );
         }
         else
         {
             FOOTPRINT* footprint = HelperGetFootprint( elem.component );
-            ConvertArcs6ToFootprintItem( footprint, elem, true );
+            ConvertArcs6ToFootprintItem( footprint, elem, primitiveIndex, true );
         }
     }
 
@@ -2178,7 +2205,7 @@ void ALTIUM_PCB::ConvertArcs6ToPcbShape( const AARC6& aElem, PCB_SHAPE* aShape )
 }
 
 
-void ALTIUM_PCB::ConvertArcs6ToBoardItem( const AARC6& aElem )
+void ALTIUM_PCB::ConvertArcs6ToBoardItem( const AARC6& aElem, const int aPrimitiveIndex )
 {
     if( aElem.is_polygonoutline || aElem.subpolyindex != ALTIUM_POLYGON_NONE )
         return;
@@ -2200,11 +2227,27 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItem( const AARC6& aElem )
             ConvertArcs6ToBoardItemOnLayer( aElem, klayer );
         }
     }
+
+    for( const auto layerExpansionMask :
+         HelperGetSolderAndPasteMaskExpansions( ALTIUM_RECORD::ARC, aPrimitiveIndex, aElem.layer ) )
+    {
+        int width = aElem.width + ( layerExpansionMask.second * 2 );
+        if( width > 1 )
+        {
+            PCB_SHAPE* arc = new PCB_SHAPE( m_board );
+
+            ConvertArcs6ToPcbShape( aElem, arc );
+            arc->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
+            arc->SetLayer( layerExpansionMask.first );
+
+            m_board->Add( arc, ADD_MODE::APPEND );
+        }
+    }
 }
 
 
 void ALTIUM_PCB::ConvertArcs6ToFootprintItem( FOOTPRINT* aFootprint, const AARC6& aElem,
-                                              const bool aIsBoardImport )
+                                              const int aPrimitiveIndex, const bool aIsBoardImport )
 {
     if( aElem.is_polygonoutline || aElem.subpolyindex != ALTIUM_POLYGON_NONE )
         return;
@@ -2232,6 +2275,23 @@ void ALTIUM_PCB::ConvertArcs6ToFootprintItem( FOOTPRINT* aFootprint, const AARC6
             {
                 ConvertArcs6ToFootprintItemOnLayer( aFootprint, aElem, klayer );
             }
+        }
+    }
+
+    for( const auto layerExpansionMask :
+         HelperGetSolderAndPasteMaskExpansions( ALTIUM_RECORD::ARC, aPrimitiveIndex, aElem.layer ) )
+    {
+        int width = aElem.width + ( layerExpansionMask.second * 2 );
+        if( width > 1 )
+        {
+            FP_SHAPE* arc = new FP_SHAPE( aFootprint );
+
+            ConvertArcs6ToPcbShape( aElem, arc );
+            arc->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
+            arc->SetLayer( layerExpansionMask.first );
+
+            arc->SetLocalCoord();
+            aFootprint->Add( arc, ADD_MODE::APPEND );
         }
     }
 }
@@ -2508,12 +2568,12 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
         break;
     }
 
-    if( aElem.pastemaskexpansionmode == ALTIUM_PAD_RULE::MANUAL )
+    if( aElem.pastemaskexpansionmode == ALTIUM_MODE::MANUAL )
     {
         pad->SetLocalSolderPasteMargin( aElem.pastemaskexpansionmanual );
     }
 
-    if( aElem.soldermaskexpansionmode == ALTIUM_PAD_RULE::MANUAL )
+    if( aElem.soldermaskexpansionmode == ALTIUM_MODE::MANUAL )
     {
         pad->SetLocalSolderMaskMargin( aElem.soldermaskexpansionmanual );
     }
@@ -2807,19 +2867,19 @@ void ALTIUM_PCB::ParseTracks6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFil
 
     ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
-    while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
+    for( int primitiveIndex = 0; reader.GetRemainingBytes() >= 4; primitiveIndex++ )
     {
         checkpoint();
         ATRACK6 elem( reader );
 
         if( elem.component == ALTIUM_COMPONENT_NONE )
         {
-            ConvertTracks6ToBoardItem( elem );
+            ConvertTracks6ToBoardItem( elem, primitiveIndex );
         }
         else
         {
             FOOTPRINT* footprint = HelperGetFootprint( elem.component );
-            ConvertTracks6ToFootprintItem( footprint, elem, true );
+            ConvertTracks6ToFootprintItem( footprint, elem, primitiveIndex, true );
         }
     }
 
@@ -2830,7 +2890,7 @@ void ALTIUM_PCB::ParseTracks6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFil
 }
 
 
-void ALTIUM_PCB::ConvertTracks6ToBoardItem( const ATRACK6& aElem )
+void ALTIUM_PCB::ConvertTracks6ToBoardItem( const ATRACK6& aElem, const int aPrimitiveIndex )
 {
     if( aElem.is_polygonoutline || aElem.subpolyindex != ALTIUM_POLYGON_NONE )
         return;
@@ -2852,10 +2912,28 @@ void ALTIUM_PCB::ConvertTracks6ToBoardItem( const ATRACK6& aElem )
             ConvertTracks6ToBoardItemOnLayer( aElem, klayer );
         }
     }
+
+    for( const auto layerExpansionMask : HelperGetSolderAndPasteMaskExpansions(
+                 ALTIUM_RECORD::TRACK, aPrimitiveIndex, aElem.layer ) )
+    {
+        int width = aElem.width + ( layerExpansionMask.second * 2 );
+        if( width > 1 )
+        {
+            PCB_SHAPE* seg = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
+
+            seg->SetStart( aElem.start );
+            seg->SetEnd( aElem.end );
+            seg->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
+            seg->SetLayer( layerExpansionMask.first );
+
+            m_board->Add( seg, ADD_MODE::APPEND );
+        }
+    }
 }
 
 
 void ALTIUM_PCB::ConvertTracks6ToFootprintItem( FOOTPRINT* aFootprint, const ATRACK6& aElem,
+                                                const int  aPrimitiveIndex,
                                                 const bool aIsBoardImport )
 {
     if( aElem.is_polygonoutline || aElem.subpolyindex != ALTIUM_POLYGON_NONE )
@@ -2884,6 +2962,24 @@ void ALTIUM_PCB::ConvertTracks6ToFootprintItem( FOOTPRINT* aFootprint, const ATR
             {
                 ConvertTracks6ToFootprintItemOnLayer( aFootprint, aElem, klayer );
             }
+        }
+    }
+
+    for( const auto layerExpansionMask : HelperGetSolderAndPasteMaskExpansions(
+                 ALTIUM_RECORD::TRACK, aPrimitiveIndex, aElem.layer ) )
+    {
+        int width = aElem.width + ( layerExpansionMask.second * 2 );
+        if( width > 1 )
+        {
+            FP_SHAPE* seg = new FP_SHAPE( aFootprint, SHAPE_T::SEGMENT );
+
+            seg->SetStart( aElem.start );
+            seg->SetEnd( aElem.end );
+            seg->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
+            seg->SetLayer( layerExpansionMask.first );
+
+            seg->SetLocalCoord();
+            aFootprint->Add( seg, ADD_MODE::APPEND );
         }
     }
 }
@@ -3370,6 +3466,7 @@ void ALTIUM_PCB::HelperPcpShapeAsBoardKeepoutRegion( const PCB_SHAPE& aShape,
     m_board->Add( zone, ADD_MODE::APPEND );
 }
 
+
 void ALTIUM_PCB::HelperPcpShapeAsFootprintKeepoutRegion( FOOTPRINT*       aFootprint,
                                                          const PCB_SHAPE& aShape,
                                                          ALTIUM_LAYER     aAltiumLayer )
@@ -3393,4 +3490,59 @@ void ALTIUM_PCB::HelperPcpShapeAsFootprintKeepoutRegion( FOOTPRINT*       aFootp
 
     // TODO: zone->SetLocalCoord(); missing?
     aFootprint->Add( zone, ADD_MODE::APPEND );
+}
+
+
+std::vector<std::pair<PCB_LAYER_ID, int>> ALTIUM_PCB::HelperGetSolderAndPasteMaskExpansions(
+        const ALTIUM_RECORD aType, const int aPrimitiveIndex, const ALTIUM_LAYER aAltiumLayer )
+{
+    if( m_extendedPrimitiveInformationMaps.count( aType ) == 0 )
+        return {}; // there is nothing to parse
+
+    auto elems =
+            m_extendedPrimitiveInformationMaps[ALTIUM_RECORD::TRACK].equal_range( aPrimitiveIndex );
+    if( elems.first == elems.second )
+        return {}; // there is nothing to parse
+
+    std::vector<std::pair<PCB_LAYER_ID, int>> layerExpansionPairs;
+
+    for( auto it = elems.first; it != elems.second; ++it )
+    {
+        const AEXTENDED_PRIMITIVE_INFORMATION& pInf = it->second;
+
+        if( pInf.type == AEXTENDED_PRIMITIVE_INFORMATION_TYPE::MASK )
+        {
+            if( pInf.soldermaskexpansionmode == ALTIUM_MODE::MANUAL
+                || pInf.soldermaskexpansionmode == ALTIUM_MODE::RULE )
+            {
+                // TODO: what layers can lead to solder or paste mask usage? E.g. KEEP_OUT_LAYER and other top/bottom layers
+                if( aAltiumLayer == ALTIUM_LAYER::TOP_LAYER
+                    || aAltiumLayer == ALTIUM_LAYER::MULTI_LAYER )
+                {
+                    layerExpansionPairs.emplace_back( F_Mask, pInf.soldermaskexpansionmanual );
+                }
+                if( aAltiumLayer == ALTIUM_LAYER::BOTTOM_LAYER
+                    || aAltiumLayer == ALTIUM_LAYER::MULTI_LAYER )
+                {
+                    layerExpansionPairs.emplace_back( B_Mask, pInf.soldermaskexpansionmanual );
+                }
+            }
+            if( pInf.pastemaskexpansionmode == ALTIUM_MODE::MANUAL
+                || pInf.pastemaskexpansionmode == ALTIUM_MODE::RULE )
+            {
+                if( aAltiumLayer == ALTIUM_LAYER::TOP_LAYER
+                    || aAltiumLayer == ALTIUM_LAYER::MULTI_LAYER )
+                {
+                    layerExpansionPairs.emplace_back( F_Paste, pInf.pastemaskexpansionmanual );
+                }
+                if( aAltiumLayer == ALTIUM_LAYER::BOTTOM_LAYER
+                    || aAltiumLayer == ALTIUM_LAYER::MULTI_LAYER )
+                {
+                    layerExpansionPairs.emplace_back( B_Paste, pInf.pastemaskexpansionmanual );
+                }
+            }
+        }
+    }
+
+    return layerExpansionPairs;
 }
