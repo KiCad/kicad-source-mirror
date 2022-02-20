@@ -188,7 +188,7 @@ bool EDA_TEXT::Replace( const wxFindReplaceData& aSearchData )
 
 void EDA_TEXT::cacheShownText()
 {
-    if( m_text.IsEmpty() || m_text == wxT( "~" ) )     // ~ is legacy empty-string token
+    if( m_text.IsEmpty() )
     {
         m_shown_text = wxEmptyString;
         m_shown_text_has_text_var_refs = false;
