@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-16 17:22-0800\n"
-"PO-Revision-Date: 2022-02-18 13:22+0000\n"
+"PO-Revision-Date: 2022-02-25 13:54+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v6/ca/>\n"
 "Language: ca\n"
@@ -11995,9 +11995,8 @@ msgid "Dialog Preferences"
 msgstr "Preferències de diàleg"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:262
-#, fuzzy
 msgid "Show footprint previews in Symbol Chooser"
-msgstr "Mostra els pads al mode de delimitació"
+msgstr "Mostra la vista prèvia de l'empremta al selector de símbols"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:265
 msgid "Keep hierarchy navigator open"
@@ -12070,6 +12069,8 @@ msgstr "Rati de desplaçament del text:"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 msgid "Percentage of the text size to offset text above or below wire or bus"
 msgstr ""
+"Percentatge de la mida del text per desplaçar el text per sobre o per sota "
+"del cable o bus"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
 msgid "Global label size:"
@@ -12078,6 +12079,8 @@ msgstr "Mida de l'etiqueta global:"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 msgid "Percentage of the text size to use as space around a global label"
 msgstr ""
+"Percentatge de la mida del text a utilitzar com a espai al voltant d'una "
+"etiqueta global"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:118
 msgid "Pin symbol size:"
@@ -12198,7 +12201,7 @@ msgstr "Mostra el tipus &elèctric del pin"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:111
 msgid "&Pitch of repeated pins:"
-msgstr ""
+msgstr "&Pas dels pins repetits:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:115
 msgid "100"
@@ -12222,14 +12225,13 @@ msgstr "Un sobrenom de la fila de la taula de biblioteques està buit."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:354
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:537
-#, fuzzy
 msgid "A library table row path cell is empty."
-msgstr "El fitxer de la biblioteca de peces «%s» està buit."
+msgstr "Una cel·la del camí de la fila de la taula de la biblioteca està buida."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:356
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:539
 msgid "Invalid Row Definition"
-msgstr ""
+msgstr "Definició de fila invàlida"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:358
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:541
@@ -12237,12 +12239,13 @@ msgid ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
 msgstr ""
+"Les cel·les buides causaran que totes les files invàlides siguin eliminades "
+"de la taula."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:543
-#, fuzzy
 msgid "Remove Invalid Cells"
-msgstr "Mou l'element"
+msgstr "Elimina les cel·les invàlides"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
@@ -12259,15 +12262,14 @@ msgstr "Caràcter il·legal '%c' al sobrenom: '%s'"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:426
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:568
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:610
-#, fuzzy
 msgid "Library Nickname Error"
-msgstr "Editor de biblioteques"
+msgstr "Error de sobrenom de biblioteca"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:415
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:598
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
-msgstr ""
+msgstr "No hi poden haver diverses biblioteques amb el mateix sobrenom ('%s')."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:459 eeschema/symbol_library.cpp:550
 #, c-format
@@ -12275,14 +12277,12 @@ msgid "Symbol library '%s' failed to load."
 msgstr "No s'ha pogut carregar la biblioteca de símbols '%s'."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:462
-#, fuzzy
 msgid "Error Loading Library"
-msgstr "Error en crear la biblioteca de símbols «%s»"
+msgstr "Error en carregar la biblioteca"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:508
-#, fuzzy
 msgid "Warning: Duplicate Nickname"
-msgstr "Àlies dolent (nom duplicat)"
+msgstr "Alerta: Sobrenom duplicat"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:509
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:893
@@ -12302,19 +12302,20 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:909
 #: pcbnew/footprint_libraries_utils.cpp:529
 msgid "Skip"
-msgstr ""
+msgstr "Omet"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:529
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:909
-#, fuzzy
 msgid "Add Anyway"
-msgstr "Afegeix un àlies"
+msgstr "Afegeix de totes maneres"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:733
 msgid ""
 "Select one or more rows containing libraries in Legacy format (*.lib) to "
 "save as current KiCad format (*.kicad_sym)."
 msgstr ""
+"Selecciona una o més files que continguin biblioteques en format heretat (*."
+"lib) per desar-les en el format actual de KiCad (*.kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:741
 #, c-format
@@ -12322,6 +12323,8 @@ msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
 msgstr ""
+"Vols desar '%s' en el format actual de KiCad (*.kicad_sym) i substituir "
+"l'entrada heretada a la taula?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:747
 #, c-format
@@ -12329,6 +12332,8 @@ msgid ""
 "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
 "replace legacy entries in table?"
 msgstr ""
+"Vols desar %d biblioteques en format heretat en el format actual de KiCad (*."
+"kicad_sym) i substituir les entrades heretades a la taula?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:775
 #: pcbnew/dialogs/dialog_export_step.cpp:350
@@ -12352,11 +12357,13 @@ msgid ""
 "Changes must be saved or discarded before the symbol library table can be "
 "modified."
 msgstr ""
+"S'han realitzat modificacions en una o més biblioteques de símbols.\n"
+"Els canvis han de desar-se o descartar-se abans que es pugui modificar la "
+"taula de la biblioteca de símbols."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1052
-#, fuzzy
 msgid "Symbol Libraries"
-msgstr "Gestiona les biblioteques de símbols"
+msgstr "Biblioteques de símbols"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1074
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1104
@@ -12394,9 +12401,8 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:20
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:20
-#, fuzzy
 msgid "Libraries by Scope"
-msgstr "Taules de la biblioteca per àmbit"
+msgstr "Biblioteques per àmbit"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:61
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:58
@@ -12414,15 +12420,13 @@ msgid "Add empty row to table"
 msgstr "Afegeix una fila buida a la taula"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:110
-#, fuzzy
 msgid "Add existing library to table"
-msgstr "Obre una placa existent"
+msgstr "Afegeix una biblioteca existent a la taula"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:128
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:124
-#, fuzzy
 msgid "Remove library from table"
-msgstr "Suprimeix una biblioteca PCB d'aquesta taula de biblioteques"
+msgstr "Elimina una biblioteca existent de la taula"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:135
 msgid "Migrate Libraries"
@@ -12436,12 +12440,18 @@ msgstr "Substitucions de camins:"
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:167
 msgid "This is a read-only table which shows pertinent environment variables."
 msgstr ""
+"Aquesta és una taula de només lectura que mostra variables d'entorn "
+"pertinents."
 
 #: eeschema/eeschema.cpp:273
 msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
 msgstr ""
+"S'ha produït un error al intentar carregar la taula global de biblioteques "
+"de símbols.\n"
+"Si us plau, edita aquesta taula global de biblioteques de símbols al menú "
+"Preferències."
 
 #: eeschema/eeschema_config.cpp:68 eeschema/eeschema_config.cpp:245
 #: gerbview/gerbview_frame.cpp:1061 pagelayout_editor/pl_editor_frame.cpp:487
@@ -12517,12 +12527,12 @@ msgstr "Sense connectar"
 
 #: eeschema/erc.cpp:269
 msgid "Unresolved text variable in drawing sheet."
-msgstr ""
+msgstr "Variable de text sense resoldre a la fulla de dibuix."
 
 #: eeschema/erc.cpp:300
 #, c-format
 msgid "Bus alias %s has conflicting definitions on %s and %s"
-msgstr ""
+msgstr "L'àlies del bus %s té definicions conflictives a %s i %s"
 
 #: eeschema/erc.cpp:370
 #, c-format
@@ -12531,7 +12541,7 @@ msgstr "S'han assignat empremtes diferents a %s i %s"
 
 #: eeschema/erc.cpp:419
 msgid "Pins with \"no connection\" type are connected"
-msgstr ""
+msgstr "Els Pins de tipus \"no connectat\" estan connectats"
 
 #: eeschema/erc.cpp:533
 #, c-format
@@ -12551,12 +12561,11 @@ msgstr "La configuració actual no inclou la biblioteca '%s'."
 #: eeschema/erc.cpp:722
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
-msgstr ""
+msgstr "La biblioteca '%s' no està habilitada en la configuració actual."
 
 #: eeschema/erc_item.cpp:42
-#, fuzzy
 msgid "Conflicts"
-msgstr "Confirma"
+msgstr "Conflictes"
 
 #: eeschema/erc_item.cpp:43 pcbnew/dialogs/panel_edit_options_base.cpp:372
 #: pcbnew/drc/drc_item.cpp:47
@@ -12565,55 +12574,44 @@ msgstr "Miscel·lània"
 
 #: eeschema/erc_item.cpp:46
 msgid "Duplicate sheet names within a given sheet"
-msgstr ""
+msgstr "Noms de fulla duplicats dins d'una fulla donada"
 
 #: eeschema/erc_item.cpp:50
-#, fuzzy
 msgid "Pin not connected"
-msgstr "No connectat"
+msgstr "Pin no connectat"
 
 #: eeschema/erc_item.cpp:54
-#, fuzzy
 msgid "Input pin not driven by any Output pins"
-msgstr ""
-"Pin connectat a alguns altres pins, però no hi ha cap pin per conduir-lo"
+msgstr "Pin d'entrada no connectat a cap pin de sortida"
 
 #: eeschema/erc_item.cpp:58
-#, fuzzy
 msgid "Input Power pin not driven by any Output Power pins"
 msgstr ""
-"Pin connectat a alguns altres pins, però no hi ha cap pin per conduir-lo"
+"Pin d'entrada d'alimentació no connectat a cap pin de sortida d'alimentació"
 
 #: eeschema/erc_item.cpp:62 eeschema/erc_item.cpp:66
-#, fuzzy
 msgid "Conflict problem between pins"
-msgstr "Problema de conflicte entre pins. Gravetat: error"
+msgstr "Conflicte entre pins"
 
 #: eeschema/erc_item.cpp:70
-#, fuzzy
 msgid "Mismatch between hierarchical labels and sheet pins"
-msgstr ""
-"Falta de correspondència entre les etiquetes jeràrquiques i les fulles dels "
-"pins"
+msgstr "Desajustament entre les etiquetes jeràrquiques i els pins de la fulla"
 
 #: eeschema/erc_item.cpp:74
 msgid "A pin with a \"no connection\" flag is connected"
-msgstr ""
+msgstr "Un pin amb marca \"no connectat\" està connectat"
 
 #: eeschema/erc_item.cpp:78
-#, fuzzy
 msgid "Unconnected \"no connection\" flag"
-msgstr "Afegeix un indicador de no connexió"
+msgstr "Marca de \"no connectat\" sense connectar"
 
 #: eeschema/erc_item.cpp:82
-#, fuzzy
 msgid "Label not connected to anything"
-msgstr "L'etiqueta global no està connectada a cap altra etiqueta global"
+msgstr "Etiqueta no connectada a res"
 
 #: eeschema/erc_item.cpp:86
-#, fuzzy
 msgid "Global label not connected anywhere else in the schematic"
-msgstr "L'etiqueta global no està connectada a cap altra etiqueta global"
+msgstr "L'etiqueta global no està connectada enlloc a l'esquemàtic"
 
 #: eeschema/erc_item.cpp:90
 msgid "Labels are similar (lower/upper case difference only)"
@@ -12622,46 +12620,48 @@ msgstr ""
 "minúscules)"
 
 #: eeschema/erc_item.cpp:94
-#, fuzzy
 msgid "Different footprint assigned in another unit of the symbol"
-msgstr "Elimina totes les associacions d'empremtes"
+msgstr "Hi ha una empremta diferent assignada a una altra unitat del símbol"
 
 #: eeschema/erc_item.cpp:98
 msgid "Different net assigned to a shared pin in another unit of the symbol"
 msgstr ""
+"Xarxa diferent assignada a un pin compartit en una altra unitat del símbol"
 
 #: eeschema/erc_item.cpp:102
 msgid "Conflict between bus alias definitions across schematic sheets"
 msgstr ""
+"Conflicte entre definicions d'àlies de bus entre les fulles dels esquemàtics"
 
 #: eeschema/erc_item.cpp:106
 msgid "More than one name given to this bus or net"
-msgstr ""
+msgstr "Hi ha més d'un nom assignat a aquest bus o xarxa"
 
 #: eeschema/erc_item.cpp:110
 msgid "Net is graphically connected to a bus but not a bus member"
 msgstr ""
+"La xarxa està connectada gràficament a un bus però no a un membre del bus"
 
 #: eeschema/erc_item.cpp:114
 msgid "Label attached to bus item does not describe a bus"
-msgstr ""
+msgstr "L'etiqueta enganxada a l'element del bus no descriu un bus"
 
 #: eeschema/erc_item.cpp:118
 msgid "Buses are graphically connected but share no bus members"
 msgstr ""
+"Hi ha busos gràficament connectats però no comparteixen cap membre del bus"
 
 #: eeschema/erc_item.cpp:122
 msgid "Invalid connection between bus and net items"
-msgstr ""
+msgstr "Connexió no vàlida entre el bus i els elements de xarxa"
 
 #: eeschema/erc_item.cpp:126 pcbnew/drc/drc_item.cpp:174
 msgid "Unresolved text variable"
-msgstr ""
+msgstr "Variable de text sense resoldre"
 
 #: eeschema/erc_item.cpp:130
-#, fuzzy
 msgid "Wires not connected to anything"
-msgstr "L'etiqueta global no està connectada a cap altra etiqueta global"
+msgstr "Cables no connectats a res"
 
 #: eeschema/erc_item.cpp:134
 msgid "Library symbol issue"
@@ -12672,24 +12672,20 @@ msgid "Symbol is not annotated"
 msgstr "El símbol no està anotat"
 
 #: eeschema/erc_item.cpp:142
-#, fuzzy
 msgid "Symbol has more units than are defined"
-msgstr "Importa el fitxer d'associació d'empremtes"
+msgstr "El símbol té més unitats que les definides"
 
 #: eeschema/erc_item.cpp:146
-#, fuzzy
 msgid "Units of same symbol have different values"
-msgstr "No modifiquis els pads que tinguin una capa diferent"
+msgstr "Unitats del mateix símbol tenen valors diferents"
 
 #: eeschema/erc_item.cpp:150
-#, fuzzy
 msgid "Duplicate reference designators"
-msgstr "designador de la referència"
+msgstr "Indicadors de referència duplicats"
 
 #: eeschema/erc_item.cpp:154
-#, fuzzy
 msgid "Bus Entry needed"
-msgstr "Afegeix una entrada de bus"
+msgstr "Es necessita una entrada de bus"
 
 #: eeschema/fields_grid_table.cpp:135 eeschema/files-io.cpp:817
 #: eeschema/tools/sch_editor_control.cpp:101
@@ -12697,35 +12693,34 @@ msgid "Schematic Files"
 msgstr "Fitxers d'esquemàtic"
 
 #: eeschema/files-io.cpp:79
-#, fuzzy
 msgid "Create a new project for this schematic"
-msgstr "Crea un projecte nou a partir de la plantilla"
+msgstr "Crea un projecte nou a partir de l'esquemàtic"
 
 #: eeschema/files-io.cpp:81
 msgid ""
 "Creating a project will enable features such as text variables, net classes, "
 "and ERC exclusions"
 msgstr ""
+"Crear un projecte habilitarà característiques com ara variables de text, "
+"classes de xarxes, i exclusions de ERC"
 
 #: eeschema/files-io.cpp:128 eeschema/files-io.cpp:1181
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open."
-msgstr "El fitxer de l'esquemàtic «%s» ja està obert."
+msgstr "L'esquemàtic '%s' ja està obert."
 
 #: eeschema/files-io.cpp:150
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
-msgstr "No existeix l'esquemàtic «%s». Voleu crear-lo?"
+msgstr "No existeix l'esquemàtic '%s'. Vols crear-lo?"
 
 #: eeschema/files-io.cpp:168
-#, fuzzy
 msgid "Creating Schematic"
-msgstr "Imprimeix l'esquemàtic"
+msgstr "S'està creant l'esquemàtic"
 
 #: eeschema/files-io.cpp:169
-#, fuzzy
 msgid "Loading Schematic"
-msgstr "Imprimeix l'esquemàtic"
+msgstr "S'està carregant l'esquemàtic"
 
 #: eeschema/files-io.cpp:229
 msgid "Schematic file changes are unsaved"
@@ -12736,6 +12731,8 @@ msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
 msgstr ""
+"No s'ha pogut carregar l'esquemàtic sencer. S'han produït errors en intentar "
+"carregar fulles jeràrquiques."
 
 #: eeschema/files-io.cpp:273 eeschema/files-io.cpp:281
 #: eeschema/files-io.cpp:1256 eeschema/sheet.cpp:162
@@ -12759,16 +12756,19 @@ msgid ""
 "fixed.  Please save the schematic to repair the broken file or it may not be "
 "usable with other versions of KiCad."
 msgstr ""
+"S'ha trobat un error al carregar l'esquemàtic que ha estat corregit "
+"automàticament. Si us plau, desa l'esquemàtic per reparar el fitxer malmès o "
+"podria no poder utilitzar-se en altres versions de KiCad."
 
 #: eeschema/files-io.cpp:385
-#, fuzzy
 msgid "Illegal entry found in project file symbol library list."
-msgstr "Edita la taula de les biblioteques de símbols."
+msgstr ""
+"S'ha trobat una entrada il·legal al llistat de biblioteques de símbols del "
+"fitxer del projecte."
 
 #: eeschema/files-io.cpp:386
-#, fuzzy
 msgid "Project Load Warning"
-msgstr "Advertència de CvPcb"
+msgstr "Alerta de càrrega del projecte"
 
 #: eeschema/files-io.cpp:389
 msgid ""
@@ -12777,11 +12777,15 @@ msgid ""
 "\n"
 "This may cause broken symbol library links under certain conditions."
 msgstr ""
+"Les biblioteques de símbols definides en la llista de biblioteques de "
+"símbols del fitxer de projecte ja no són compatibles i s'eliminaran.\n"
+"\n"
+"Això pot causar enllaços trencats a la biblioteca de símbols sota certes "
+"condicions."
 
 #: eeschema/files-io.cpp:393
-#, fuzzy
 msgid "Do not show this dialog again."
-msgstr "No tornis a mostrar aquest missatge."
+msgstr "No tornis a mostrar aquest diàleg una altra vegada."
 
 #: eeschema/files-io.cpp:422
 #, c-format
@@ -12798,11 +12802,15 @@ msgid ""
 "missing symbols, either manual recovery of the schematic or recovery of the "
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
+"Això pot resultar en un esquemàtic trencat en certes condicions. Si a "
+"l'esquemàtic no li falten símbols al obrir-se, desa'l immediatament abans de "
+"fer qualsevol canvi per evitar la pèrdua de dades. Si falten símbols, es "
+"requerirà la recuperació manual de l'esquemàtic, o la recuperació del fitxer "
+"de cau de símbols de biblioteca i recarregar l'esquemàtic."
 
 #: eeschema/files-io.cpp:435
-#, fuzzy
 msgid "Load Without Cache File"
-msgstr "Carrega sense desar"
+msgstr "Carrega sense un fitxer de cau"
 
 #: eeschema/files-io.cpp:436
 msgid "Abort"
@@ -12818,32 +12826,27 @@ msgstr ""
 "nou format quan torneu a desar-lo."
 
 #: eeschema/files-io.cpp:527
-#, fuzzy
 msgid "Schematic is read only."
-msgstr "El fitxer de l'esquemàtic «%s» ja està obert."
+msgstr "L'esquemàtic és de només lectura."
 
 #: eeschema/files-io.cpp:552
-#, fuzzy
 msgid "Insert Schematic"
-msgstr "Importa un esquemàtic"
+msgstr "Inserta un esquemàtic"
 
 #: eeschema/files-io.cpp:580
-#, fuzzy
 msgid ""
 "This operation cannot be undone.\n"
 "\n"
 "Do you want to save the current document before proceeding?"
 msgstr ""
-"Aquesta operació no es pot desfer. A més, tingueu en compte que no "
-"s'annexaran els fulls jeràrquics.\n"
+"Aquesta operació no es pot desfer.\n"
 "\n"
-"Voleu desar el document actual abans de continuar?"
+"Vols desar el document actual abans de continuar?"
 
 #: eeschema/files-io.cpp:626 pcbnew/files.cpp:163
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:250
-#, fuzzy
 msgid "All supported formats|"
-msgstr "Tots els formats compatibles amb la biblioteca|"
+msgstr "Tots els formats suportats|"
 
 #: eeschema/files-io.cpp:628
 msgid "Import Schematic"
@@ -12855,12 +12858,12 @@ msgid "Unexpected file extension: '%s'."
 msgstr "Extensió de fitxer inesperada: '%s'."
 
 #: eeschema/files-io.cpp:714
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
 "%s"
 msgstr ""
-"S'ha produït un error en desar el fitxer de l'esquemàtic «%s».\n"
+"S'ha produït un error en desar el fitxer de l'esquemàtic '%s'.\n"
 "%s"
 
 #: eeschema/files-io.cpp:719 pcbnew/files.cpp:1031
@@ -12901,15 +12904,18 @@ msgid ""
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
+"No pot crear-se la carpeta '%s'.\n"
+"\n"
+"Si us plau, confirma que tens permisos d'escriptura i intenta-ho un altre "
+"cop."
 
 #: eeschema/files-io.cpp:972
 msgid "Saving will overwrite existing files."
 msgstr "Desar sobreescriurà els fitxers existents."
 
 #: eeschema/files-io.cpp:973
-#, fuzzy
 msgid "Save Warning"
-msgstr "Biblioteques específiques del projecte"
+msgstr "Alerta de desat"
 
 #: eeschema/files-io.cpp:976
 msgid ""
@@ -12920,24 +12926,20 @@ msgstr ""
 "\n"
 
 #: eeschema/files-io.cpp:977
-#, fuzzy
 msgid "Overwrite Files"
-msgstr "Sobreescriu"
+msgstr "Sobreescriu fitxers"
 
 #: eeschema/files-io.cpp:978
-#, fuzzy
 msgid "Abort Project Save"
-msgstr "Obre un projecte"
+msgstr "Avorta desar el projecte"
 
 #: eeschema/files-io.cpp:1191
-#, fuzzy
 msgid "Importing Schematic"
-msgstr "Importa un esquemàtic"
+msgstr "S'està important un esquemàtic"
 
 #: eeschema/files-io.cpp:1289
-#, fuzzy
 msgid "The current schematic has been modified.  Save changes?"
-msgstr "L'esquemàtic actual ha estat modificat. Voleu desar els canvis?"
+msgstr "L'esquemàtic actual ha estat modificat.  Vols desar els canvis?"
 
 #: eeschema/files-io.cpp:1375
 msgid ""
@@ -12958,6 +12960,8 @@ msgid ""
 "The file '%s` could not be opened.\n"
 "Manual recovery of automatically saved files is required."
 msgstr ""
+"No s'ha pogut obrir el fitxer '%s'.\n"
+"Es requereix la recuperació manual dels fitxers desats automàticament."
 
 #: eeschema/files-io.cpp:1432
 msgid "The following automatically saved file(s) could not be restored\n"
@@ -12966,6 +12970,7 @@ msgstr "El següent fitxer desat automàticament no pot ser restaurat\n"
 #: eeschema/files-io.cpp:1437
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr ""
+"Es requereix la recuperació manual per restaurar el(s) fitxer(s) anterior(s)."
 
 #: eeschema/files-io.cpp:1459
 msgid "The following automatically saved file(s) could not be removed\n"
@@ -12973,7 +12978,7 @@ msgstr "El següent fitxer(s) desat automàticament no ha pogut ser tret\n"
 
 #: eeschema/files-io.cpp:1464
 msgid "Manual removal will be required for the file(s) above."
-msgstr ""
+msgstr "Es requereix l'eliminació manual pel(s) fitxer(s) anterior(s)."
 
 #: eeschema/files-io.cpp:1475
 #, c-format
@@ -12991,6 +12996,8 @@ msgid ""
 "This file must be manually removed or the auto save feature will be\n"
 "shown every time the schematic editor is launched."
 msgstr ""
+"Aquest fitxer ha de ser eliminat manualment o la característica de desat\n"
+"automàtic serà mostrada cada vegada que es llanci l'editor d'esquemàtic."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1399
 msgid "Alias of"
@@ -13003,19 +13010,18 @@ msgid "Unknown"
 msgstr "Desconegut"
 
 #: eeschema/getpart.cpp:141 pcbnew/load_select_footprint.cpp:255
-#, fuzzy
 msgid "Recently Used"
-msgstr "Elimina els elements"
+msgstr "Utilitzats recentment"
 
 #: eeschema/getpart.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid "Choose Power Symbol (%d items loaded)"
-msgstr "Seleccioneu el component (%d elements carregats)"
+msgstr "Selecciona el símbol de alimentació (%d elements carregats)"
 
 #: eeschema/getpart.cpp:161 eeschema/symbol_viewer_frame.cpp:855
-#, fuzzy, c-format
+#, c-format
 msgid "Choose Symbol (%d items loaded)"
-msgstr "Seleccioneu el component (%d elements carregats)"
+msgstr "Selecciona símbol (%d elements carregats)"
 
 #: eeschema/getpart.cpp:253
 #, c-format
@@ -13062,13 +13068,11 @@ msgstr "No"
 
 #: eeschema/lib_field.cpp:476 eeschema/lib_text.cpp:363
 #: eeschema/sch_field.cpp:599
-#, fuzzy
 msgid "H Justification"
 msgstr "Justificació H"
 
 #: eeschema/lib_field.cpp:485 eeschema/lib_text.cpp:372
 #: eeschema/sch_field.cpp:608
-#, fuzzy
 msgid "V Justification"
 msgstr "Justificació V"
 
@@ -13111,24 +13115,24 @@ msgid "Pin %s [%s, %s, %s]"
 msgstr "Pin %s [%s, %s, %s]"
 
 #: eeschema/lib_pin.cpp:1211
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s [%s, %s]"
-msgstr "Pin %s, %s, %s"
+msgstr "Pin %s [%s, %s]"
 
 #: eeschema/lib_shape.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Arc, radius %s"
-msgstr "radi %s"
+msgstr "Arc, radi %s"
 
 #: eeschema/lib_shape.cpp:369
-#, fuzzy, c-format
+#, c-format
 msgid "Circle, radius %s"
-msgstr "radi %s"
+msgstr "Cercle, radi %s"
 
 #: eeschema/lib_shape.cpp:378
 #, c-format
 msgid "Polyline, %d points"
-msgstr ""
+msgstr "Polilínia, %d punts"
 
 #: eeschema/lib_shape.cpp:382
 #, c-format
@@ -13136,9 +13140,9 @@ msgid "Bezier Curve, %d points"
 msgstr "Corba Bezier, %d punts"
 
 #: eeschema/lib_text.cpp:403 eeschema/sch_text.cpp:673
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic Text '%s'"
-msgstr "Text gràfic %s"
+msgstr "Text gràfic '%s'"
 
 #: eeschema/libarch.cpp:101
 #, c-format
@@ -13161,20 +13165,18 @@ msgstr "S'han produït errors en crear la biblioteca de símbols %s."
 
 #: eeschema/menubar.cpp:65 kicad/menubar.cpp:65
 #: pagelayout_editor/menubar.cpp:57 pcbnew/menubar_pcb_editor.cpp:67
-#, fuzzy
 msgid "Open Recent"
-msgstr "Obre un &recent"
+msgstr "Obre recent"
 
 #: eeschema/menubar.cpp:93
 msgid "Insert Schematic Sheet Content..."
 msgstr "Inserta el contingut de la fulla de l'esquemàtic..."
 
 #: eeschema/menubar.cpp:94
-#, fuzzy
 msgid ""
 "Append schematic sheet content from another project to the current sheet"
 msgstr ""
-"Importa el contingut d'un full d'esquemàtic des d'un altre projecte al full "
+"Annexa el contingut d'un full d'esquemàtic des d'un altre projecte al full "
 "actual"
 
 #: eeschema/menubar.cpp:102 pcbnew/menubar_footprint_editor.cpp:65
@@ -13187,12 +13189,11 @@ msgid "Non-KiCad Schematic..."
 msgstr "Esquemàtic No-Kicad..."
 
 #: eeschema/menubar.cpp:105
-#, fuzzy
 msgid ""
 "Replace current schematic sheet with one imported from another application"
 msgstr ""
-"Importa el contingut d'un full d'esquemàtic des d'un altre projecte al full "
-"actual"
+"Substitueix el full d'esquemàtic actual amb un importat des d'un altra "
+"aplicació"
 
 #: eeschema/menubar.cpp:109
 msgid "Footprint Assignments..."
@@ -13206,9 +13207,8 @@ msgid "Export"
 msgstr "Exporta+"
 
 #: eeschema/menubar.cpp:117
-#, fuzzy
 msgid "Drawing to Clipboard"
-msgstr "Exporta els dibuixos al porta-retalls"
+msgstr "Dibuix al porta-retalls"
 
 #: eeschema/menubar.cpp:118 pcbnew/menubar_pcb_editor.cpp:110
 #: pcbnew/pcb_edit_frame.cpp:200
@@ -13219,9 +13219,8 @@ msgstr "Llista de xarxes..."
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:123
 #: gerbview/menubar.cpp:174 pagelayout_editor/menubar.cpp:116
 #: pcbnew/menubar_footprint_editor.cpp:137 pcbnew/menubar_pcb_editor.cpp:244
-#, fuzzy
 msgid "&Units"
-msgstr "Unitats"
+msgstr "&Unitats"
 
 #: eeschema/menubar.cpp:296
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:181
@@ -13235,7 +13234,7 @@ msgstr "A&fegeix"
 #: pagelayout_editor/menubar.cpp:170 pcbnew/menubar_footprint_editor.cpp:246
 #: pcbnew/menubar_pcb_editor.cpp:461
 msgid "&Inspect"
-msgstr ""
+msgstr "&Inspecciona"
 
 #: eeschema/menubar.cpp:298 gerbview/menubar.cpp:225 kicad/menubar.cpp:193
 #: pcbnew/menubar_footprint_editor.cpp:247 pcbnew/menubar_pcb_editor.cpp:462
@@ -13259,6 +13258,8 @@ msgid ""
 "Multiple symbols have the same reference designator.\n"
 "Annotation must be corrected before simulating."
 msgstr ""
+"Múltiples símbols tenen el mateix designador de referència.\n"
+"L'anotació ha de ser corregida abans de simular."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:134
 #, c-format
@@ -13267,11 +13268,11 @@ msgstr "Error d'ordre. Codi de retorn %d."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:139
 msgid "Success."
-msgstr ""
+msgstr "Èxit."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:186
 msgid "Error: duplicate sheet names. Continue?"
-msgstr ""
+msgstr "Error: nom de fulla duplicat. Vols continuar?"
 
 #: eeschema/pin_type.cpp:56
 msgid "Free"
@@ -13349,12 +13350,12 @@ msgstr ""
 #: eeschema/project_rescue.cpp:305 eeschema/project_rescue.cpp:468
 #, c-format
 msgid "Rescue symbol %s found only in cache library to %s."
-msgstr ""
+msgstr "S'ha recuperat el símbol %s trobat únicament a la biblioteca cau a %s."
 
 #: eeschema/project_rescue.cpp:308 eeschema/project_rescue.cpp:474
 #, c-format
 msgid "Rescue modified symbol %s to %s"
-msgstr ""
+msgstr "S'ha recuperat el símbol modificat %s a %s"
 
 #: eeschema/project_rescue.cpp:568
 msgid "This project has nothing to rescue."
@@ -13376,11 +13377,10 @@ msgid "Failed to save rescue library %s."
 msgstr "No s'ha pogut desar la biblioteca de recuperació %s."
 
 #: eeschema/project_rescue.cpp:839
-#, fuzzy
 msgid "Error occurred saving project specific symbol library table."
 msgstr ""
-"S'ha produït un error quan s'intentava desar la peça a la biblioteca de "
-"símbols «%s»."
+"S'ha produït un error quan s'intentava desar la taula de biblioteques de "
+"símbols específica del projecte."
 
 #: eeschema/sch_base_frame.cpp:217
 #, c-format
@@ -13473,15 +13473,18 @@ msgid ""
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
 msgstr ""
+"No es pot actualitzar la PCB, ja que l'Editor d'esquemàtics està obert en "
+"mode independent. Per crear/actualitzar PCBs des de l'esquemàtic, executa el "
+"shell de KiCad i crea un projecte."
 
 #: eeschema/sch_edit_frame.cpp:977
 msgid "New Schematic"
 msgstr "Nou esquemàtic"
 
 #: eeschema/sch_edit_frame.cpp:989
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' already exists."
-msgstr "El fitxer de l'esquemàtic «%s» ja està obert."
+msgstr "Ja existeix el fitxer de esquemàtic '%s'."
 
 #: eeschema/sch_edit_frame.cpp:1010
 msgid "Open Schematic"
@@ -13492,9 +13495,8 @@ msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "Per assignar empremtes es necessita un esquemàtic completament anotat."
 
 #: eeschema/sch_edit_frame.cpp:1092
-#, fuzzy
 msgid "Could not open CvPcb"
-msgstr "Tanca CvPcb"
+msgstr "No s'ha pogut obrir el CvPcb"
 
 #: eeschema/sch_edit_frame.cpp:1301 eeschema/sim/sim_plot_frame.cpp:353
 #: kicad/kicad_manager_frame.cpp:640 pcbnew/footprint_edit_frame.cpp:861
@@ -13527,7 +13529,7 @@ msgstr "Ves a la pàgina %s (%s)"
 
 #: eeschema/sch_field.cpp:661
 msgid "Back to Previous Selected Sheet"
-msgstr ""
+msgstr "Enrere a la fulla seleccionada prèviament"
 
 #: eeschema/sch_field.cpp:689
 #, fuzzy
@@ -13587,7 +13589,7 @@ msgstr "Cable, longitud %s"
 #: eeschema/sch_line.cpp:787
 #, c-format
 msgid "Bus, length %s"
-msgstr ""
+msgstr "Bus, longitud %s"
 
 #: eeschema/sch_line.cpp:788
 #, c-format
@@ -13621,10 +13623,12 @@ msgstr "No connexió"
 #: eeschema/sch_plugin.cpp:138
 msgid "Enable <b>debug</b> logging for Symbol*() functions in this SCH_PLUGIN."
 msgstr ""
+"Habilita el registre de <b>depuració</b> en les funcions Symbol*() en aquest "
+"SCH_PLUGIN."
 
 #: eeschema/sch_plugin.cpp:142
 msgid "Regular expression <b>symbol name</b> filter."
-msgstr ""
+msgstr "Filtre d'expressions regulars <b>nom del símbol</b>."
 
 #: eeschema/sch_plugin.cpp:146 pcbnew/plugin.cpp:157
 msgid ""
@@ -13650,6 +13654,8 @@ msgstr ""
 msgid ""
 "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() functions."
 msgstr ""
+"Introdueix el símbol de python que implementa les funcions "
+"SCH_PLUGIN::Symbol*()."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:250
 #: pcbnew/plugins/altium/altium_pcb.cpp:66
@@ -13687,11 +13693,11 @@ msgstr "El pin té un tipus elèctric inesperat."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:695
 msgid "Pin has unexpected outer edge type."
-msgstr ""
+msgstr "El pin té un tipus de vora exterior inesperat."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:698
 msgid "Pin has unexpected inner edge type."
-msgstr ""
+msgstr "El pin té un tipus de vora interior inesperat."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:861
 #, c-format
@@ -13701,7 +13707,7 @@ msgstr "No s'ha trobat el propietari de l'etiqueta (%d)."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:978
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
-msgstr ""
+msgstr "El bezier té %d punts de control. Se n'esperen almenys 2."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1035
 #, c-format
@@ -13750,12 +13756,12 @@ msgstr "No s'ha trobat el propietari de l'entrada de la fulla (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1787
 msgid "Power Port has unknown style, use bar instead."
-msgstr ""
+msgstr "El port d'alimentació té un estil desconegut, utilitza la barra."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1828
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
-msgstr ""
+msgstr "El símbol d'alimentació crea una etiqueta global amb el nom '%s'"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1944
 #, c-format
@@ -13763,9 +13769,9 @@ msgid "Port %s has no connections."
 msgstr "El port %s no té connexions."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2135
-#, fuzzy, c-format
+#, c-format
 msgid "Embedded file %s not found in storage."
-msgstr "No s'ha trobat el fitxer de recuperació «%s»."
+msgstr "No s'ha trobat el fitxer incrustat %s a l'emmagatzematge."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2152
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2171
@@ -13813,6 +13819,11 @@ msgid ""
 "Current Design size: %.2f, %.2f millimeters. \n"
 "Maximum permitted design size: %.2f, %.2f millimeters.\n"
 msgstr ""
+"El disseny és massa gran i no es pot importar a KiCad.\n"
+"Si us plau redueix la mida màxima del disseny a CADSTAR navegant a:\n"
+"Pestanya Design -> Properties -> Design Options -> Maximum Design Size.\n"
+"Mida del disseny actual: %.2f, %.2f mil·límetres.\n"
+"Mida màxima del disseny permès: %.2f, %.2f mil·límetres.\n"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:128
 #, c-format
@@ -13820,12 +13831,16 @@ msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "master variant ('%s') was loaded."
 msgstr ""
+"El disseny de CADSTAR conté variants que no tenen equivalent a KiCad. Només "
+"s'ha carregat la variant principal ('%s')."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:137
 msgid ""
 "The CADSTAR design contains grouped items which has no KiCad equivalent. Any "
 "grouped items have been ungrouped."
 msgstr ""
+"El disseny de CADSTAR conté elements agrupats que no tenen equivalent a "
+"KiCad. Tots els elements agrupats s'han desagrupat."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:144
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:160
@@ -13833,6 +13848,9 @@ msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
 msgstr ""
+"El disseny CADSTAR conté blocs de reutilització que no tenen equivalent a "
+"KiCad. La informació dels blocs de reutilització s'ha descartat durant la "
+"importació."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:258
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:165
@@ -13840,10 +13858,12 @@ msgid ""
 "The CADSTAR design has been imported successfully.\n"
 "Please review the import errors and warnings (if any)."
 msgstr ""
+"El disseny de CADSTAR ha estat importat amb èxit.\n"
+"Si us plau revisa els errors d'importació i les alertes (si n'hi ha)."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:312
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
-msgstr ""
+msgstr "L'esquemàtic de CADSTAR podria estar corrupte: no hi ha fulla arrel."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:390
 #, c-format
@@ -13852,6 +13872,9 @@ msgid ""
 "be found in the symbol library. The part has not been loaded into the KiCad "
 "library."
 msgstr ""
+"La definició del component '%s' fa referència al símbol '%s' (alternatiu "
+"'%s') que no s'ha pogut trobar a la biblioteca de símbols. El component no "
+"s'ha carregat a la biblioteca de KiCad."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:440
 #, c-format
@@ -13859,6 +13882,8 @@ msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
 "The symbol was not loaded"
 msgstr ""
+"El símbol '%s' fa referència al component '%s' que no s'ha pogut trobar a la "
+"biblioteca. El símbol no s'ha carregat"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:549
 #, c-format
@@ -14009,9 +14034,8 @@ msgid "Missing floating point number"
 msgstr "Falta un número de punt flotant"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:739
-#, fuzzy
 msgid "Invalid pin names definition"
-msgstr "Definició del perímetre de la placa"
+msgstr "Definició dels noms dels pins invàlida"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:761
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1712
@@ -14077,9 +14101,9 @@ msgstr "Fitxer de la biblioteca '%s' no trobat."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2083
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4281
-#, fuzzy, c-format
+#, c-format
 msgid "library %s does not contain a symbol named %s"
-msgstr "la biblioteca %s no conté un àlies %s"
+msgstr "la biblioteca %s no conté un símbol anomenat %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2251
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4461
@@ -29747,9 +29771,8 @@ msgid "Checking net connections..."
 msgstr "S'estan comprovant les connexions de xarxa..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:194
-#, fuzzy
 msgid "Gathering copper items..."
-msgstr "Propietats de la quadrícula"
+msgstr "S'estan reunint els elements de coure..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:210
 msgid "Checking track & via clearances..."
@@ -29764,18 +29787,16 @@ msgid "Checking pad clearances..."
 msgstr "S'estan verificant els marges dels pads..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:233
-#, fuzzy
 msgid "Checking pads..."
-msgstr "Combina les zones"
+msgstr "S'estan verificant els pads..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:241
 msgid "Checking copper zone clearances..."
 msgstr "S'estan verificant els marges de les zones de coure..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:248
-#, fuzzy
 msgid "Checking zones..."
-msgstr "Combina les zones"
+msgstr "S'estan verificant les zones..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:311
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:358
@@ -29801,14 +29822,12 @@ msgid "(nets %s and %s)"
 msgstr "Rescata %s com a %s"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:89
-#, fuzzy
 msgid "Checking footprint courtyard definitions..."
-msgstr "No s'ha trobat l'empremta «%s»"
+msgstr "S'estan verificant les definicions dels patis d'empremtes..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:94
-#, fuzzy
 msgid "Gathering footprint courtyards..."
-msgstr "No s'ha trobat l'empremta «%s»"
+msgstr "S'estan reunint els patis d'empremtes..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:152
 msgid "Checking footprints for overlapping courtyards..."
@@ -29852,19 +29871,16 @@ msgstr ""
 "S'estan verificant els marges de la serigrafia a la vora de la placa..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:77
-#, fuzzy
 msgid "Checking pad holes..."
-msgstr "Combina les zones"
+msgstr "S'estan verificant els forats dels pads..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:100
-#, fuzzy
 msgid "Checking via holes..."
-msgstr "Combina les zones"
+msgstr "S'estan verificant els forats de les vies..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:105
-#, fuzzy
 msgid "Checking micro-via holes..."
-msgstr "Combina les zones"
+msgstr "S'estan verificant els forats de les micro-vies..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:167
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:232
@@ -29914,9 +29930,8 @@ msgid "No pad found for pin %s in schematic."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:218
-#, fuzzy
 msgid "Checking PCB to schematic parity..."
-msgstr "Actualitza el PCB a partir de l'esquemàtic"
+msgstr "S'està verificant la PCB amb la paritat de l'esquemàtic..."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:225
 msgid "No netlist provided, skipping LVS."
@@ -29962,14 +29977,12 @@ msgid "(layer %s)"
 msgstr "(capa %s)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:261
-#, fuzzy
 msgid "Checking board outline..."
-msgstr "Delimitacions de la placa"
+msgstr "S'està verificant el contorn de la placa..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:269
-#, fuzzy
 msgid "Checking disabled layers..."
-msgstr "Inclou els elements en les capes &invisibles"
+msgstr "S'estan verificant les capes deshabilitades..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:277
 msgid "Checking text variables..."
@@ -30096,18 +30109,18 @@ msgid "No footprint for automated placement."
 msgstr ""
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "Placement file: '%s'."
-msgstr "Fitxer de còpia de seguretat: «%s»"
+msgstr "Fitxer de posicionaments: '%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:583
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint report file created:\n"
 "'%s'."
 msgstr ""
 "S'ha creat el fitxer d'informe d'empremta:\n"
-"«%s»"
+"'%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:584
 msgid "Footprint Report"
@@ -30125,9 +30138,9 @@ msgid "Created file '%s'."
 msgstr "S'ha creat el fitxer '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid "Created Gerber job file '%s'."
-msgstr "Crea el fitxer de treball Gerber «%s»"
+msgstr "S'ha creat el fitxer de treball Gerber '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:579
 msgid "Board stackup settings not up to date."
@@ -30453,9 +30466,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/footprint_editor_utils.cpp:297
-#, fuzzy
 msgid "Library not found in footprint library table."
-msgstr "Edita la taula de les biblioteques d'empremtes"
+msgstr "No s'ha trobat la biblioteca a la taula de biblioteques d'empremtes."
 
 #: pcbnew/footprint_editor_utils.cpp:306
 #, c-format
@@ -30465,14 +30477,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:921
-#, fuzzy
 msgid "Footprint library not enabled."
-msgstr "Edita la taula de les biblioteques d'empremtes"
+msgstr "Biblioteca d'empremtes no habilitada."
 
 #: pcbnew/footprint_info_impl.cpp:131
-#, fuzzy
 msgid "Fetching footprint libraries..."
-msgstr "Assistent per afegir biblioteques d'empremtes"
+msgstr "S'estan reunint les biblioteques d'empremtes..."
 
 #: pcbnew/footprint_info_impl.cpp:159
 msgid "Loading footprints..."
@@ -30518,22 +30528,22 @@ msgid "Footprint exported to file '%s'."
 msgstr "Empremta exportada al fitxer '%s'."
 
 #: pcbnew/footprint_libraries_utils.cpp:468
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s is read only."
-msgstr "La biblioteca «%s» només és de lectura"
+msgstr "La biblioteca '%s' només és de lectura."
 
 #: pcbnew/footprint_libraries_utils.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s already exists."
-msgstr "El fitxer «%s» ja existeix a la llista"
+msgstr "La biblioteca %s ja existeix."
 
 #: pcbnew/footprint_libraries_utils.cpp:632
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:961
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2513
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2589
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is read only."
-msgstr "La biblioteca «%s» només és de lectura"
+msgstr "La biblioteca '%s' només és de lectura."
 
 #: pcbnew/footprint_libraries_utils.cpp:638
 #, fuzzy, c-format
@@ -30563,9 +30573,8 @@ msgstr ""
 
 #: pcbnew/footprint_libraries_utils.cpp:878
 #: pcbnew/footprint_viewer_frame.cpp:716
-#, fuzzy
 msgid "No board currently open."
-msgstr "No hi ha en aquest moment cap placa editada"
+msgstr "Actualment no hi ha cap placa oberta."
 
 #: pcbnew/footprint_libraries_utils.cpp:905
 msgid ""
@@ -30596,9 +30605,9 @@ msgid "No footprint name specified.  Footprint could not be saved."
 msgstr "La biblioteca no està establerta, no es pot desar l'empremta."
 
 #: pcbnew/footprint_libraries_utils.cpp:1071
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s already exists in %s."
-msgstr "L'empremta %s ja existeix a la biblioteca «%s»"
+msgstr "L'empremta %s ja existeix a %s."
 
 #: pcbnew/footprint_libraries_utils.cpp:1087
 #, fuzzy, c-format
@@ -30635,15 +30644,15 @@ msgid ""
 msgstr ""
 
 #: pcbnew/footprint_viewer_frame.cpp:674
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not load footprint '%s' from library '%s'.\n"
 "\n"
 "%s"
 msgstr ""
-"No es pot carregar l'empremta «%s» de la biblioteca «%s».\n"
+"No es pot carregar l'empremta '%s' des de la biblioteca '%s'.\n"
 "\n"
-"Error %s."
+"%s"
 
 #: pcbnew/footprint_viewer_frame.cpp:911
 #, c-format
@@ -30653,9 +30662,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/footprint_viewer_frame.cpp:914
-#, fuzzy
 msgid "Footprint library not found."
-msgstr "No s'ha trobat l'empremta"
+msgstr "No s'ha trobat la biblioteca d'empremtes."
 
 #: pcbnew/footprint_viewer_frame.cpp:918
 #, c-format
@@ -30762,9 +30770,8 @@ msgid "No file selected!"
 msgstr "No s'ha seleccionat cap fitxer!"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:288
-#, fuzzy
 msgid "Please select a valid layer."
-msgstr "Seleccioneu un fitxer netlist vàlid"
+msgstr "Si us plau selecciona una capa vàlida."
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:337
 msgid "Items in the imported file could not be handled properly."
@@ -30884,9 +30891,9 @@ msgid "Footprints [%u items]"
 msgstr "Empremtes [%u elements]"
 
 #: pcbnew/load_select_footprint.cpp:432
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' saved."
-msgstr "S'ha desat l'empremta «%s»"
+msgstr "S'ha desat l'empremta '%s'."
 
 #: pcbnew/load_select_footprint.cpp:442
 #, fuzzy, c-format
@@ -30895,19 +30902,16 @@ msgstr "La biblioteca d'empremtes «%s» s'ha desat com a «%s»."
 
 #: pcbnew/menubar_footprint_editor.cpp:68
 #: pcbnew/menubar_footprint_editor.cpp:77
-#, fuzzy
 msgid "Footprint..."
-msgstr "&Empremta"
+msgstr "Empremta..."
 
 #: pcbnew/menubar_footprint_editor.cpp:69 pcbnew/menubar_pcb_editor.cpp:112
-#, fuzzy
 msgid "Graphics..."
-msgstr "Importa formes"
+msgstr "Gràfics..."
 
 #: pcbnew/menubar_footprint_editor.cpp:78
-#, fuzzy
 msgid "View as &PNG..."
-msgstr "E&xporta les dreceres de teclat"
+msgstr "Veure com a &PNG..."
 
 #: pcbnew/menubar_footprint_editor.cpp:79
 #, fuzzy
@@ -30925,9 +30929,8 @@ msgid "&Contrast Mode"
 msgstr "Commuta el mode d'alt contrast"
 
 #: pcbnew/menubar_footprint_editor.cpp:208
-#, fuzzy
 msgid "&Load Footprint from PCB..."
-msgstr "Carrega &l'empremta"
+msgstr "Carrega &l'empremta des de PCB..."
 
 #: pcbnew/menubar_footprint_editor.cpp:209
 #, fuzzy
@@ -30954,28 +30957,24 @@ msgid "Clear board and get last rescue file automatically saved by PCB editor"
 msgstr "Neteja la placa i obté l'últim fitxer de rescat desat per Pcbnew"
 
 #: pcbnew/menubar_pcb_editor.cpp:111
-#, fuzzy
 msgid "Specctra Session..."
-msgstr "&Specctra Session"
+msgstr "Sessió Specctra..."
 
 #: pcbnew/menubar_pcb_editor.cpp:116
-#, fuzzy
 msgid "Non-KiCad Board File..."
-msgstr "Importació d'un fitxer de placa no de Kicad"
+msgstr "Fitxer de placa No-KiCad..."
 
 #: pcbnew/menubar_pcb_editor.cpp:117
 msgid "Import board file from other applications"
 msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:129
-#, fuzzy
 msgid "Specctra DSN..."
-msgstr "&Specctra DSN"
+msgstr "DSN Specctra..."
 
 #: pcbnew/menubar_pcb_editor.cpp:130
-#, fuzzy
 msgid "GenCAD..."
-msgstr "&GenCAD"
+msgstr "GenCAD..."
 
 #: pcbnew/menubar_pcb_editor.cpp:130
 #, fuzzy
@@ -30983,18 +30982,16 @@ msgid "Export GenCAD board representation"
 msgstr "Exporta-ho als altres fulls"
 
 #: pcbnew/menubar_pcb_editor.cpp:132
-#, fuzzy
 msgid "VRML..."
-msgstr "&VRML"
+msgstr "VRML..."
 
 #: pcbnew/menubar_pcb_editor.cpp:132
 msgid "Export VRML 3D board representation"
 msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:134
-#, fuzzy
 msgid "IDFv3..."
-msgstr "I&DFv3"
+msgstr "IDFv3..."
 
 #: pcbnew/menubar_pcb_editor.cpp:134
 msgid "Export IDF 3D board representation"
@@ -31017,9 +31014,8 @@ msgid "Export SVG board representation"
 msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:140
-#, fuzzy
 msgid "Footprint Association (.cmp) File..."
-msgstr "Desa el fitxer de l'associació de l'empremta"
+msgstr "Fitxer d'associació d'empremtes (.cmp)..."
 
 #: pcbnew/menubar_pcb_editor.cpp:141
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
@@ -31030,9 +31026,8 @@ msgid "Hyperlynx..."
 msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:150
-#, fuzzy
 msgid "Footprints to Library..."
-msgstr "Obre una empremta d'una biblioteca"
+msgstr "Empremtes cap a biblioteca..."
 
 #: pcbnew/menubar_pcb_editor.cpp:151
 msgid ""
@@ -31041,9 +31036,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:155
-#, fuzzy
 msgid "Footprints to New Library..."
-msgstr "Obre una empremta d'una biblioteca"
+msgstr "Empremtes cap a Nova biblioteca..."
 
 #: pcbnew/menubar_pcb_editor.cpp:156
 #, fuzzy
@@ -31150,9 +31144,8 @@ msgid "Read Shape Description File..."
 msgstr "Llegeix el fitxer de descripció de formes..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:210
-#, fuzzy
 msgid "Shape Description File"
-msgstr "Llegeix el fitxer de descripció de formes..."
+msgstr "Fitxer de descripció de forma"
 
 #: pcbnew/microwave/microwave_polygon.cpp:314
 msgid "Shape has a null size."
@@ -31235,14 +31228,14 @@ msgid "Changed %s value from %s to %s."
 msgstr "Valor %s canviat de %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s symbol association from %s to %s."
-msgstr "Pad %s en %s de %s"
+msgstr "Actualitza l'associació de símbols %s de %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s symbol association from %s to %s."
-msgstr "Pad %s en %s de %s"
+msgstr "Associació de símbols %s actualitzada de %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:343
 #, c-format
@@ -31716,9 +31709,8 @@ msgid "Round Radius Ratio"
 msgstr "Executa la simulació"
 
 #: pcbnew/pcb_base_frame.cpp:151
-#, fuzzy
 msgid "Error loading project footprint libraries."
-msgstr "Edita la taula de les biblioteques d'empremtes"
+msgstr "Error en carregar les biblioteques d'empremtes del projecte."
 
 #: pcbnew/pcb_dimension.cpp:303
 msgid "Prefix"
@@ -31757,9 +31749,8 @@ msgid "The auto save file '%s' could not be removed!"
 msgstr "¡No es pot eliminar el fitxer de desat automàtic '%s'!"
 
 #: pcbnew/pcb_edit_frame.cpp:1168
-#, fuzzy
 msgid "Board file is read only."
-msgstr "Únicament l'àrea de la placa"
+msgstr "El fitxer de placa només és de lectura."
 
 #: pcbnew/pcb_edit_frame.cpp:1202
 msgid "PCB file changes are unsaved"
@@ -31802,9 +31793,8 @@ msgid "Edit design rules"
 msgstr "Edita normes de disseny"
 
 #: pcbnew/pcb_edit_frame.cpp:1743
-#, fuzzy
 msgid "Could not compile custom design rules."
-msgstr "No s'ha pogut obrir el fitxer de configuració"
+msgstr "No s'han pogut compilar les normes de disseny personalitzades."
 
 #: pcbnew/pcb_edit_frame.cpp:1778
 msgid "Export Hyperlynx Layout"
@@ -31824,19 +31814,16 @@ msgid "Unrecognized layer '%s'"
 msgstr "Capa no reconeguda '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:498
-#, fuzzy
 msgid "Footprint's courtyard is not a single, closed shape."
-msgstr "Patis de les empremtes en la part posterior de la placa"
+msgstr "El pati d'empremtes no té una forma única i tancada."
 
 #: pcbnew/pcb_expr_evaluator.cpp:511
-#, fuzzy
 msgid "Footprint has no front courtyard."
-msgstr "No s'ha trobat l'empremta «%s»"
+msgstr "L'empremta no té un pati frontal."
 
 #: pcbnew/pcb_expr_evaluator.cpp:528
-#, fuzzy
 msgid "Footprint has no back courtyard."
-msgstr "No s'ha trobat l'empremta «%s»"
+msgstr "L'empremta no té un pati posterior."
 
 #: pcbnew/pcb_expr_evaluator.cpp:1153
 msgid "must be mm, in, or mil"
@@ -32059,9 +32046,9 @@ msgid "'%s' was not parsed correctly."
 msgstr "La zona de coure (nom de la xarxa %s): la xarxa no té pads connectats."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:498
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' was not fully parsed."
-msgstr "No s'ha llegit totalment el fitxer <%s>"
+msgstr "'%s' no s'ha analitzat totalment."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:533
 #, c-format
@@ -32069,9 +32056,8 @@ msgid "File not found: '%s'."
 msgstr "No s'ha trobat el fitxer: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:710
-#, fuzzy
 msgid "Loading board data..."
-msgstr "Carrega un fitxer &Gerber"
+msgstr "S'estan carregant les dades de la placa..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:888
 #, fuzzy
@@ -32143,14 +32129,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1619
-#, fuzzy
 msgid "Loading rules..."
-msgstr "Carrega un fitxer &Gerber"
+msgstr "S'estan carregant les normes..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1651
-#, fuzzy
 msgid "Loading board regions..."
-msgstr "Carrega un fitxer &Gerber"
+msgstr "S'estan carregant les regions de la placa..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1673
 #, fuzzy
@@ -32311,9 +32295,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2826
-#, fuzzy
 msgid "Loading rectangles..."
-msgstr "Carrega un fitxer &Gerber"
+msgstr "S'estan carregant els rectangles..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2846
 #, c-format
@@ -32650,9 +32633,9 @@ msgid "<package> '%s' duplicated in <library> '%s'"
 msgstr "S'ha trobat el component «%s» a la biblioteca«%s»"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1164
-#, fuzzy, c-format
+#, c-format
 msgid "No '%s' package in library '%s'."
-msgstr "S'ha desat la peça «%s» a la biblioteca «%s»"
+msgstr "No s'ha trobat el paquet '%s' a la biblioteca '%s'."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1395
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2187
@@ -32699,9 +32682,9 @@ msgid "Could not find units value, defaulting to mils."
 msgstr ""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find column label %s."
-msgstr "No s'ha pogut trobar el fitxer de biblioteca %s"
+msgstr "No s'ha trobat l'etiqueta de la columna %s."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:359
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:442
@@ -32791,9 +32774,9 @@ msgid "Invalid custom pad '%s'. Replacing with circular pad."
 msgstr ""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2367
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find custom pad '%s'."
-msgstr "No s'ha pogut trobar el fitxer de biblioteca %s"
+msgstr "No s'ha trobat el pad personalitzat '%s'."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2567
 #, c-format
@@ -32801,9 +32784,9 @@ msgid "Expecting etch data to be on copper layer. Row found on layer '%s'"
 msgstr ""
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:91
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot convert '%s' to an integer."
-msgstr "No es pot convertir «%s» a un enter"
+msgstr "No es pot convertir '%s' a un enter."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:228
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:875
@@ -32814,9 +32797,9 @@ msgstr "No s'ha trobat la biblioteca d'empremtes '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:282
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:303
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' has no footprint '%s'."
-msgstr "la biblioteca «%s» no té cap empremta «%s» a eliminar"
+msgstr "La biblioteca '%s' no té l'empremta '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:347
 #: pcbnew/plugins/kicad/pcb_parser.cpp:667
@@ -32843,16 +32826,16 @@ msgid "Library folder '%s' has unexpected sub-folders."
 msgstr ""
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1007
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file '%s' found in library '%s'."
-msgstr "No s'ha trobat el nom de la peça «%s» a la biblioteca «%s»"
+msgstr "Fitxer inesperat '%s' trobat a la biblioteca '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1026
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2678
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3238
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' cannot be deleted."
-msgstr "no es pot eliminar la biblioteca d'empremtes «%s»"
+msgstr "No es pot eliminar la biblioteca d'empremtes '%s'."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:178
 #, fuzzy, c-format
@@ -32960,17 +32943,17 @@ msgstr ""
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4676
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4754
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"número en punt flotant no vàlid a\n"
-"fitxer: <%s>\n"
+"ID de xarxa no vàlida a\n"
+"fitxer: '%s'\n"
 "línia: %d\n"
-"desplaçament: %d"
+"òfset: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4848
 #, fuzzy, c-format
@@ -33012,14 +32995,14 @@ msgid "Legacy Zone Warning"
 msgstr "Advertència de CvPcb"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create footprint library '%s'."
-msgstr "No es pot crear el camí a la biblioteca d'empremtes «%s»"
+msgstr "No es pot crear la biblioteca d'empremtes '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:178
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' is read only."
-msgstr "La biblioteca «%s» només és de lectura"
+msgstr "La biblioteca d'empremtes '%s' només és de lectura."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:216
 #, c-format
@@ -33059,9 +33042,8 @@ msgid "unknown zone corner smoothing type %d"
 msgstr ""
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2351
-#, fuzzy
 msgid "This file does not contain a PCB."
-msgstr "No existeix el fitxer netlist"
+msgstr "Aquest fitxer no conté una PCB."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2501
 #, c-format
@@ -33088,14 +33070,14 @@ msgid "Insufficient permissions to delete '%s'."
 msgstr "Permisos insuficients per a eliminar '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2608
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot overwrite library path '%s'."
-msgstr "No es pot crear el camí a la biblioteca d'empremtes «%s»"
+msgstr "No es pot sobreescriure el camí de la biblioteca '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2660
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
-msgstr "No s'ha trobat el nom de la peça «%s» a la biblioteca «%s»"
+msgstr "S'ha trobat un fitxer inesperat '%s' al camí de la biblioteca '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:596
 #, c-format
@@ -33164,9 +33146,9 @@ msgstr ""
 "línia: %d, òfset: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3012
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' is empty."
-msgstr "Fitxer <%s> inserit"
+msgstr "El fitxer '%s' està buit."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3015
 #, c-format
@@ -33184,14 +33166,13 @@ msgid "KiCad only supports 32 signal layers."
 msgstr ""
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:93
-#, fuzzy
 msgid "Unable to find library section."
-msgstr "No s'ha pogut trobar el fitxer de biblioteca %s"
+msgstr "No es pot trobar la secció de la biblioteca."
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find viaStyleDef %s."
-msgstr "No es pot trobar un visualitzador PDF per «%s»"
+msgstr "No s'ha pogut trobar viaStyleDef %s."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:71
 msgid "Exception on python action plugin code"
@@ -33382,10 +33363,9 @@ msgid "Tuned: skew "
 msgstr ""
 
 #: pcbnew/router/pns_router.cpp:212
-#, fuzzy
 msgid "Diff pair gap is less than board minimum clearance."
 msgstr ""
-"La mida de perforació de la via és més petita que el diàmetre de la via"
+"L'espaiat del parell diferencial és més petit que el marge mínim de la placa."
 
 #: pcbnew/router/pns_router.cpp:232
 msgid "Cannot start routing from a non-plated hole."
@@ -33459,9 +33439,8 @@ msgid "Adds a microvia at the end of currently routed track."
 msgstr ""
 
 #: pcbnew/router/router_tool.cpp:123
-#, fuzzy
 msgid "Select Layer and Place Through Via..."
-msgstr "Selecciona la capa i afegeix a través d'una via"
+msgstr "Selecciona capa i posiciona una via passant..."
 
 #: pcbnew/router/router_tool.cpp:124
 msgid ""
@@ -33470,9 +33449,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/router/router_tool.cpp:132
-#, fuzzy
 msgid "Select Layer and Place Blind/Buried Via..."
-msgstr "Selecciona la capa i afegeix una via cega o enterrada"
+msgstr "Selecciona capa i posiciona una via cega/enterrada..."
 
 #: pcbnew/router/router_tool.cpp:133
 msgid ""
@@ -33481,20 +33459,19 @@ msgid ""
 msgstr ""
 
 #: pcbnew/router/router_tool.cpp:141
-#, fuzzy
 msgid "Select Layer and Place Micro Via..."
-msgstr "Selecciona la capa i afegeix a través d'una via"
+msgstr "Selecciona capa i posiciona una micro via..."
 
 #: pcbnew/router/router_tool.cpp:142
-#, fuzzy
 msgid ""
 "Select a layer, then add a micro via at the end of currently routed track."
-msgstr "El text (o valor) del camp seleccionat en aquest moment"
+msgstr ""
+"Selecciona una capa, després afegeix una micro via al final de la pista "
+"actualment enrutada."
 
 #: pcbnew/router/router_tool.cpp:149
-#, fuzzy
 msgid "Custom Track/Via Size..."
-msgstr "Mida de pista/via personalitzada"
+msgstr "Pista personalitzada/Mida de via..."
 
 #: pcbnew/router/router_tool.cpp:150
 msgid "Shows a dialog for changing the track width and via size."
@@ -33541,9 +33518,8 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:215 pcbnew/router/router_tool.cpp:336
 #: pcbnew/tools/drawing_tool.cpp:101
-#, fuzzy
 msgid "Use Custom Values..."
-msgstr "Utilitza els valors de Netclass"
+msgstr "Utilitza valors personalitzats..."
 
 #: pcbnew/router/router_tool.cpp:216 pcbnew/tools/drawing_tool.cpp:102
 #, fuzzy
@@ -33647,19 +33623,16 @@ msgid ""
 msgstr "Les microvies han d'estar habilitades als ajusts del disseny."
 
 #: pcbnew/router/router_tool.cpp:987
-#, fuzzy
 msgid "Blind/buried via need 2 different layers."
-msgstr "No modifiquis els pads que tinguin una capa diferent"
+msgstr "Les vies cegues/enterrades necessiten dues capes diferents."
 
 #: pcbnew/router/router_tool.cpp:1065
-#, fuzzy
 msgid "Tracks on Copper layers only."
-msgstr "Pistes únicament en les capes de coure"
+msgstr "Pistes únicament en les capes de coure."
 
 #: pcbnew/router/router_tool.cpp:1503 pcbnew/router/router_tool.cpp:2016
-#, fuzzy
 msgid "The selected item is locked."
-msgstr "Mou els elements seleccionats"
+msgstr "L'element seleccionat està bloquejat."
 
 #: pcbnew/router/router_tool.cpp:1505
 #, fuzzy
@@ -33734,9 +33707,8 @@ msgid "Diff Pair Gap"
 msgstr "Parell &diferencial"
 
 #: pcbnew/sel_layer.cpp:340
-#, fuzzy
 msgid "Warning: top and bottom layers are same."
-msgstr "Advertència: l'opció de l'escala està establerta a un valor molt gran"
+msgstr "Alerta: les capes superior i inferior són la mateixa."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:113
 msgid "BOARD exported OK."
@@ -33776,9 +33748,9 @@ msgid "Session via padstack has no shapes"
 msgstr ""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported via shape: %s."
-msgstr "Tipus DRAWSEGMENT no admès %s"
+msgstr "Forma de via no suportada: %s."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:246
 #: pcbnew/specctra_import_export/specctra_import.cpp:271
@@ -33861,9 +33833,8 @@ msgid "Track: %s (%s)"
 msgstr "Valor %s de %s"
 
 #: pcbnew/toolbars_pcb_editor.cpp:664 pcbnew/toolbars_pcb_editor.cpp:732
-#, fuzzy
 msgid "Edit Pre-defined Sizes..."
-msgstr "Edita el camp de l'empremta"
+msgstr "Edita mides predefinides..."
 
 #: pcbnew/toolbars_pcb_editor.cpp:701
 #, fuzzy
@@ -33913,9 +33884,9 @@ msgid "KiCad board netlist files"
 msgstr "Fitxers netlist de KiCad (*.net)|*.net"
 
 #: pcbnew/tools/board_editor_control.cpp:484
-#, fuzzy, c-format
+#, c-format
 msgid "Path `%s` is read only."
-msgstr "La biblioteca «%s» només és de lectura"
+msgstr "El camí '%s' és de només lectura."
 
 #: pcbnew/tools/board_editor_control.cpp:485
 msgid "I/O Error"
@@ -34212,9 +34183,8 @@ msgid "Thickness (mils)"
 msgstr "Grossor (mils)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:292
-#, fuzzy
 msgid "Loss Tangent"
-msgstr "Tangent de pèrdua magnètica"
+msgstr "Tangent de pèrdua"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:315
 #, fuzzy
@@ -34308,9 +34278,8 @@ msgid "Draw a dimension"
 msgstr "Traça una acotació"
 
 #: pcbnew/tools/drawing_tool.cpp:1183
-#, fuzzy
 msgid "No graphic items found in file."
-msgstr "Mostra els elements gràfics al mode d'esbós"
+msgstr "No s'han trobat elements gràfics al fitxer."
 
 #: pcbnew/tools/drawing_tool.cpp:1233 pcbnew/tools/drawing_tool.cpp:1304
 #, fuzzy
@@ -34326,9 +34295,8 @@ msgid "Self-intersecting polygons are not allowed"
 msgstr ""
 
 #: pcbnew/tools/drawing_tool.cpp:2603
-#, fuzzy
 msgid "Via location violates DRC."
-msgstr "Ajusts de la simulació"
+msgstr "La ubicació de la via infringeix el DRC."
 
 #: pcbnew/tools/drawing_tool.cpp:2707
 msgid "Place via"
@@ -34365,9 +34333,8 @@ msgid "Drag Arc Track"
 msgstr "Arrossega la via o pista"
 
 #: pcbnew/tools/edit_tool.cpp:741
-#, fuzzy
 msgid "Select reference point for move..."
-msgstr "Selecciona el punt de referència"
+msgstr "Selecciona el punt de referència a moure..."
 
 #: pcbnew/tools/edit_tool.cpp:1135
 msgid "Edit track width/via size"
@@ -34420,14 +34387,12 @@ msgid "Duplicated %d item(s)"
 msgstr "S'ha(n) duplicat %d element(s)"
 
 #: pcbnew/tools/edit_tool.cpp:2399
-#, fuzzy
 msgid "Select reference point for the copy..."
-msgstr "Selecciona el punt de referència"
+msgstr "Selecciona el punt de referència per la còpia..."
 
 #: pcbnew/tools/edit_tool.cpp:2400 pcbnew/tools/edit_tool.cpp:2417
-#, fuzzy
 msgid "Selection copied"
-msgstr "Selecciona el fitxer..."
+msgstr "Selecció copiada"
 
 #: pcbnew/tools/edit_tool.cpp:2401
 #, fuzzy
@@ -34461,9 +34426,8 @@ msgid "Paste Pad Properties"
 msgstr "Propietats del pad"
 
 #: pcbnew/tools/pad_tool.cpp:257
-#, fuzzy
 msgid "Push Pad Settings"
-msgstr "Ajusts..."
+msgstr "Aplica els ajustaments del pad"
 
 #: pcbnew/tools/pad_tool.cpp:324
 #, c-format
@@ -34693,9 +34657,8 @@ msgid "Add a zone with the same settings as an existing zone"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:185
-#, fuzzy
 msgid "Import Graphics..."
-msgstr "Importa formes"
+msgstr "Importa gràfics..."
 
 #: pcbnew/tools/pcb_actions.cpp:185
 #, fuzzy
@@ -34804,18 +34767,16 @@ msgid "Duplicates the selected item(s), incrementing pad numbers"
 msgstr "Duplica els elements seleccionats amb l'increment del número del pad"
 
 #: pcbnew/tools/pcb_actions.cpp:280
-#, fuzzy
 msgid "Move Exactly..."
-msgstr "Mou exactament"
+msgstr "Mou exactament..."
 
 #: pcbnew/tools/pcb_actions.cpp:280
 msgid "Moves the selected item(s) by an exact amount"
 msgstr "Mou els elements seleccionats per una quantitat exacta"
 
 #: pcbnew/tools/pcb_actions.cpp:286
-#, fuzzy
 msgid "Create Array..."
-msgstr "Crea una matriu"
+msgstr "Crea una matriu..."
 
 #: pcbnew/tools/pcb_actions.cpp:286
 msgid "Create array"
@@ -34868,9 +34829,8 @@ msgid "Hide Footprint Tree"
 msgstr "Mostra les referències de l'empremta"
 
 #: pcbnew/tools/pcb_actions.cpp:349
-#, fuzzy
 msgid "New Footprint..."
-msgstr "&Nova empremta"
+msgstr "Nova empremta..."
 
 #: pcbnew/tools/pcb_actions.cpp:349
 #, fuzzy
@@ -34878,9 +34838,8 @@ msgid "Create a new, empty footprint"
 msgstr "Crea una nova empremta"
 
 #: pcbnew/tools/pcb_actions.cpp:354
-#, fuzzy
 msgid "Create Footprint..."
-msgstr "Desa l'empremta"
+msgstr "Crea empremta..."
 
 #: pcbnew/tools/pcb_actions.cpp:354
 #, fuzzy
@@ -34917,9 +34876,8 @@ msgid "Paste Footprint"
 msgstr "Desa l'empremta"
 
 #: pcbnew/tools/pcb_actions.cpp:384
-#, fuzzy
 msgid "Import Footprint..."
-msgstr "Importa una empremta"
+msgstr "Importa una empremta..."
 
 #: pcbnew/tools/pcb_actions.cpp:384
 #, fuzzy
@@ -34927,9 +34885,8 @@ msgid "Import footprint from file"
 msgstr "&Importa l'empremta des d'un fitxer"
 
 #: pcbnew/tools/pcb_actions.cpp:389
-#, fuzzy
 msgid "Export Footprint..."
-msgstr "Exporta l'empremta"
+msgstr "Exporta l'empremta..."
 
 #: pcbnew/tools/pcb_actions.cpp:389
 #, fuzzy
@@ -34937,9 +34894,8 @@ msgid "Export footprint to file"
 msgstr "Exporta una empremta a l'editor"
 
 #: pcbnew/tools/pcb_actions.cpp:394
-#, fuzzy
 msgid "Footprint Properties..."
-msgstr "Propietats de l'empremta"
+msgstr "Propietats de l'empremta..."
 
 #: pcbnew/tools/pcb_actions.cpp:394
 #, fuzzy
@@ -34952,9 +34908,8 @@ msgid "Show the footprint checker window"
 msgstr "Inicia el comprovador de les regles de disseny (DRC)"
 
 #: pcbnew/tools/pcb_actions.cpp:406
-#, fuzzy
 msgid "Update Footprint..."
-msgstr "Desa l'empremta"
+msgstr "Actualitza l'empremta..."
 
 #: pcbnew/tools/pcb_actions.cpp:407
 #, fuzzy
@@ -34962,9 +34917,8 @@ msgid "Update footprint to include any changes from the library"
 msgstr "Desa l'empremta a la biblioteca activa"
 
 #: pcbnew/tools/pcb_actions.cpp:412
-#, fuzzy
 msgid "Update Footprints from Library..."
-msgstr "Obre una empremta d'una biblioteca"
+msgstr "Actualitza empremtes des de la biblioteca..."
 
 #: pcbnew/tools/pcb_actions.cpp:413
 #, fuzzy
@@ -34972,9 +34926,8 @@ msgid "Update footprints to include any changes from the library"
 msgstr "Desa l'empremta a la biblioteca activa"
 
 #: pcbnew/tools/pcb_actions.cpp:418
-#, fuzzy
 msgid "Remove Unused Pads..."
-msgstr "Enumera els pads"
+msgstr "Elimina els pads sense utilitzar..."
 
 #: pcbnew/tools/pcb_actions.cpp:419
 msgid ""
@@ -34987,9 +34940,8 @@ msgid "Assign a different footprint from the library"
 msgstr "Obre una empremta d'una biblioteca"
 
 #: pcbnew/tools/pcb_actions.cpp:429
-#, fuzzy
 msgid "Change Footprints..."
-msgstr "Canvia l'empremta"
+msgstr "Canvia empremtes..."
 
 #: pcbnew/tools/pcb_actions.cpp:429
 #, fuzzy
@@ -35005,9 +34957,8 @@ msgid "Move tracks or drawings from one layer to another"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:439
-#, fuzzy
 msgid "Edit Track & Via Properties..."
-msgstr "Propietats de la pista i via"
+msgstr "Edita propietats de pistes i vies..."
 
 #: pcbnew/tools/pcb_actions.cpp:440
 #, fuzzy
@@ -35020,27 +34971,24 @@ msgid "Edit Text and graphics properties globally across board"
 msgstr "Edita les propietats del camp"
 
 #: pcbnew/tools/pcb_actions.cpp:451
-#, fuzzy
 msgid "Global Deletions..."
-msgstr "Eliminacions &globals"
+msgstr "Eliminacions globals..."
 
 #: pcbnew/tools/pcb_actions.cpp:452
 msgid "Delete tracks, footprints and graphic items from board"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:457
-#, fuzzy
 msgid "Cleanup Tracks & Vias..."
-msgstr "Nete&ja les pistes i les vies"
+msgstr "Neteja pistes i les vies..."
 
 #: pcbnew/tools/pcb_actions.cpp:458
 msgid "Cleanup redundant items, shorting items, etc."
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:463
-#, fuzzy
 msgid "Cleanup Graphics..."
-msgstr "Importa formes"
+msgstr "Neteja gràfics..."
 
 #: pcbnew/tools/pcb_actions.cpp:464
 msgid "Cleanup redundant items, etc."
@@ -35119,9 +35067,8 @@ msgid "Replace the current pad's properties with those copied earlier"
 msgstr "Copia els ajusts del pad actual als ajusts de disseny de la placa"
 
 #: pcbnew/tools/pcb_actions.cpp:514
-#, fuzzy
 msgid "Push Pad Properties to Other Pads..."
-msgstr "Propietats del pad"
+msgstr "Aplica propietats del pad a altres pads..."
 
 #: pcbnew/tools/pcb_actions.cpp:515
 #, fuzzy
@@ -35129,9 +35076,8 @@ msgid "Copy the current pad's properties to other pads"
 msgstr "Copia els ajusts actuals del pad a altres pads"
 
 #: pcbnew/tools/pcb_actions.cpp:520
-#, fuzzy
 msgid "Renumber Pads..."
-msgstr "Enumera els pads"
+msgstr "Re-enumera pads..."
 
 #: pcbnew/tools/pcb_actions.cpp:521
 msgid "Renumber pads by clicking on them in the desired order"
@@ -35164,9 +35110,8 @@ msgid "Regroups all touching graphic shapes into the edited pad"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:545
-#, fuzzy
 msgid "Default Pad Properties..."
-msgstr "&Propietats del pad"
+msgstr "Propietats per defecte del pad..."
 
 #: pcbnew/tools/pcb_actions.cpp:546
 #, fuzzy
@@ -35191,27 +35136,24 @@ msgid "Reveals the plugins folder in a Finder window"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:570
-#, fuzzy
 msgid "Board Setup..."
-msgstr "Configuració de &les capes"
+msgstr "Configuració de placa..."
 
 #: pcbnew/tools/pcb_actions.cpp:571
 msgid "Edit board setup including layers, design rules and various defaults"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:576
-#, fuzzy
 msgid "Import Netlist..."
-msgstr "Importa els pins del full"
+msgstr "Importa llista de xarxes..."
 
 #: pcbnew/tools/pcb_actions.cpp:576
 msgid "Read netlist and update board connectivity"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:581
-#, fuzzy
 msgid "Import Specctra Session..."
-msgstr "&Specctra Session"
+msgstr "Importa sessió Specctra..."
 
 #: pcbnew/tools/pcb_actions.cpp:581
 #, fuzzy
@@ -35219,9 +35161,8 @@ msgid "Import routed Specctra session (*.ses) file"
 msgstr "Importa un fitxer de Specctra Session encaminat (*.ses)"
 
 #: pcbnew/tools/pcb_actions.cpp:586
-#, fuzzy
 msgid "Export Specctra DSN..."
-msgstr "&Specctra DSN"
+msgstr "Exporta Specctra DSN..."
 
 #: pcbnew/tools/pcb_actions.cpp:586
 #, fuzzy
@@ -35238,9 +35179,8 @@ msgid "Generate Gerbers for fabrication"
 msgstr "Genera els fitxers per a la fabricació"
 
 #: pcbnew/tools/pcb_actions.cpp:596
-#, fuzzy
 msgid "Drill Files (.drl)..."
-msgstr "Fitxers de perforació (*.drl)|*.drl;*.DRL"
+msgstr "Fitxers de foradats (*.drl)..."
 
 #: pcbnew/tools/pcb_actions.cpp:596
 #, fuzzy
@@ -35259,18 +35199,16 @@ msgstr ""
 "posicionar-les"
 
 #: pcbnew/tools/pcb_actions.cpp:607
-#, fuzzy
 msgid "Footprint Report (.rpt)..."
-msgstr "Informe de l'empremta"
+msgstr "Informe d'empremtes (.rpt)..."
 
 #: pcbnew/tools/pcb_actions.cpp:608
 msgid "Create report of all footprints from current board"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:613
-#, fuzzy
 msgid "IPC-D-356 Netlist File..."
-msgstr "Fitxer netlist IPC-D-356"
+msgstr "Fitxer llistat de xarxes IPC-D-356..."
 
 #: pcbnew/tools/pcb_actions.cpp:613
 msgid "Generate IPC-D-356 netlist file"
@@ -35328,9 +35266,8 @@ msgid "Merge zones"
 msgstr "Combina les zones"
 
 #: pcbnew/tools/pcb_actions.cpp:654
-#, fuzzy
 msgid "Duplicate Zone onto Layer..."
-msgstr "Duplica el nom del full"
+msgstr "Duplica la zona a la capa..."
 
 #: pcbnew/tools/pcb_actions.cpp:654
 msgid "Duplicate zone outline onto a different layer"
@@ -35425,9 +35362,8 @@ msgid "Leave the current group"
 msgstr "Utilitza únicament la &pàgina actual"
 
 #: pcbnew/tools/pcb_actions.cpp:724
-#, fuzzy
 msgid "Append Board..."
-msgstr "&Annexa la placa"
+msgstr "Annexa la placa..."
 
 #: pcbnew/tools/pcb_actions.cpp:724
 #, fuzzy
@@ -35840,9 +35776,8 @@ msgid "Shows board statistics"
 msgstr "Mostra l'embolic de la placa"
 
 #: pcbnew/tools/pcb_actions.cpp:1100
-#, fuzzy
 msgid "Clearance Resolution..."
-msgstr "Tanca la delimitació de la zona"
+msgstr "Resolució del marge..."
 
 #: pcbnew/tools/pcb_actions.cpp:1101
 msgid ""
@@ -36005,9 +35940,8 @@ msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1270
-#, fuzzy
 msgid "Filter Selected Items..."
-msgstr "Selecció del filtre"
+msgstr "Filtra els elements seleccionats..."
 
 #: pcbnew/tools/pcb_actions.cpp:1270
 #, fuzzy
@@ -36088,18 +36022,16 @@ msgid "Route differential pairs"
 msgstr "Parell &diferencial"
 
 #: pcbnew/tools/pcb_actions.cpp:1330
-#, fuzzy
 msgid "Interactive Router Settings..."
-msgstr "Encaminament &interactiu"
+msgstr "Opcions de l'enrutador interactiu..."
 
 #: pcbnew/tools/pcb_actions.cpp:1330
 msgid "Open Interactive Router settings"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1335
-#, fuzzy
 msgid "Differential Pair Dimensions..."
-msgstr "Dimensions del parell diferencial"
+msgstr "Dimensions del parell diferencial..."
 
 #: pcbnew/tools/pcb_actions.cpp:1335
 msgid "Open Differential Pair Dimension settings"
@@ -36139,9 +36071,8 @@ msgid "Cycle router to the next mode"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1360
-#, fuzzy
 msgid "Set Layer Pair..."
-msgstr "Estab&leix el parell de capes"
+msgstr "Estableix el parell de capes..."
 
 #: pcbnew/tools/pcb_actions.cpp:1360
 msgid "Change active layer pair for routing"
@@ -36165,9 +36096,8 @@ msgid "Undo Last Segment"
 msgstr "Desfés l'última edició"
 
 #: pcbnew/tools/pcb_actions.cpp:1390
-#, fuzzy
 msgid "Walks the current track back one segment."
-msgstr "Desa la biblioteca activa actual"
+msgstr "Recorre la pista actual un segment cap endarrere."
 
 #: pcbnew/tools/pcb_actions.cpp:1395
 msgid ""
@@ -36175,9 +36105,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1419
-#, fuzzy
 msgid "Length Tuning Settings..."
-msgstr "Ajusts generals dels pins"
+msgstr "Ajustaments de longitud..."
 
 #: pcbnew/tools/pcb_actions.cpp:1420
 msgid "Sets the length tuning parameters for currently routed item."
@@ -36196,9 +36125,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:585
-#, fuzzy
 msgid "Item locked."
-msgstr "Rellotge invers"
+msgstr "Element bloquejat."
 
 #: pcbnew/tools/pcb_control.cpp:866
 msgid "Invalid clipboard contents"
@@ -36293,9 +36221,8 @@ msgid "Position Relative"
 msgstr "Posició relativa"
 
 #: pcbnew/tools/position_relative_tool.cpp:172
-#, fuzzy
 msgid "Click on reference item..."
-msgstr "Selecciona el punt de referència"
+msgstr "Fes clic a l'element de referència..."
 
 #: pcbnew/tools/zone_create_helper.cpp:176
 msgid "Add a zone cutout"
@@ -36860,14 +36787,12 @@ msgid "Hide All Other Netclasses"
 msgstr "Afegeix una altra classe de xarxa"
 
 #: pcbnew/widgets/appearance_controls.cpp:2341
-#, fuzzy
 msgid "Save preset..."
-msgstr "Anomena i &desa"
+msgstr "Desa pre-ajustament..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2342
-#, fuzzy
 msgid "Delete preset..."
-msgstr "Elimina la xarxa"
+msgstr "Elimina pre-ajustament..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2420
 #, fuzzy
