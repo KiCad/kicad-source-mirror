@@ -249,6 +249,16 @@ wxString PATHS::GetStockTemplatesPath()
 }
 
 
+wxString PATHS::GetLocaleDataPath()
+{
+    wxString path;
+
+    path = GetStockDataPath() + wxT( "/internat" );
+
+    return path;
+}
+
+
 wxString PATHS::GetStockPluginsPath()
 {
     wxFileName fn;

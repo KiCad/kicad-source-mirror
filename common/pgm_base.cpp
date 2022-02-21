@@ -57,6 +57,7 @@
 #include <settings/settings_manager.h>
 #include <systemdirsappend.h>
 #include <trace_helpers.h>
+#include <paths.h>
 
 
 /**
@@ -544,48 +545,7 @@ void PGM_BASE::SetLanguageIdentifier( int menu_id )
 
 void PGM_BASE::SetLanguagePath()
 {
-    SEARCH_STACK    guesses;
-
-    SystemDirsAppend( &guesses );
-
-    // Add our internat dir to the wxLocale catalog of paths
-    for( unsigned i = 0; i < guesses.GetCount(); i++ )
-    {
-        wxFileName fn( guesses[i], wxEmptyString );
-
-        // Append path for Windows and unix KiCad package install
-        fn.AppendDir( "share" );
-        fn.AppendDir( "internat" );
-
-        if( fn.IsDirReadable() )
-        {
-            wxLogTrace( traceLocale, "Adding locale lookup path: " + fn.GetPath() );
-            wxLocale::AddCatalogLookupPathPrefix( fn.GetPath() );
-        }
-
-        // Append path for unix standard install
-        fn.RemoveLastDir();
-        fn.AppendDir( "kicad" );
-        fn.AppendDir( "internat" );
-
-        if( fn.IsDirReadable() )
-        {
-            wxLogTrace( traceLocale, "Adding locale lookup path: " + fn.GetPath() );
-            wxLocale::AddCatalogLookupPathPrefix( fn.GetPath() );
-        }
-
-        // Append path for macOS install
-        fn.RemoveLastDir();
-        fn.RemoveLastDir();
-        fn.RemoveLastDir();
-        fn.AppendDir( "internat" );
-
-        if( fn.IsDirReadable() )
-        {
-            wxLogTrace( traceLocale, "Adding locale lookup path: " + fn.GetPath() );
-            wxLocale::AddCatalogLookupPathPrefix( fn.GetPath() );
-        }
-    }
+    wxLocale::AddCatalogLookupPathPrefix( PATHS::GetLocaleDataPath() );
 
     if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
     {
