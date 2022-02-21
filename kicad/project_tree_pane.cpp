@@ -281,8 +281,8 @@ wxString PROJECT_TREE_PANE::GetFileExt( TREE_FILE_TYPE type )
     case TREE_FILE_TYPE::FOOTPRINT_FILE:        return KiCadFootprintFileExtension;
     case TREE_FILE_TYPE::SCHEMATIC_LIBFILE:     return LegacySymbolLibFileExtension;
     case TREE_FILE_TYPE::SEXPR_SYMBOL_LIB_FILE: return KiCadSymbolLibFileExtension;
-    case TREE_FILE_TYPE::ZIP_ARCHIVE:           return DesignRulesFileExtension;
-    case TREE_FILE_TYPE::DESIGN_RULES:          return ArchiveFileExtension;
+    case TREE_FILE_TYPE::DESIGN_RULES:          return DesignRulesFileExtension;
+    case TREE_FILE_TYPE::ZIP_ARCHIVE:           return ArchiveFileExtension;
     default:                                    return wxEmptyString;
     }
 }
