@@ -153,13 +153,13 @@ const wxString& PGM_BASE::GetTextEditor( bool aCanShowFileChooser )
 
     if( !editorname )
     {
-        if( !wxGetEnv( "EDITOR", &editorname ) )
+        if( !wxGetEnv(  wxT( "EDITOR" ), &editorname ) )
         {
             // If there is no EDITOR variable set, try the desktop default
 #ifdef __WXMAC__
-            editorname = "/usr/bin/open -e";
+            editorname = wxT( "/usr/bin/open -e" );
 #elif __WXX11__
-            editorname = "/usr/bin/xdg-open";
+            editorname =  wxT( "/usr/bin/xdg-open" );
 #endif
         }
     }
@@ -228,7 +228,7 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit )
     // Init KiCad environment
     // the environment variable KICAD (if exists) gives the kicad path:
     // something like set KICAD=d:\kicad
-    bool isDefined = wxGetEnv( "KICAD", &m_kicad_env );
+    bool isDefined = wxGetEnv( wxT( "KICAD" ), &m_kicad_env );
 
     if( isDefined )    // ensure m_kicad_env ends by "/"
     {
@@ -239,7 +239,7 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit )
     }
 
     // Init parameters for configuration
-    App().SetVendorName( "KiCad" );
+    App().SetVendorName(  wxT( "KiCad" ) );
     App().SetAppName( pgm_name );
 
     // Install some image handlers, mainly for help
@@ -356,7 +356,7 @@ void PGM_BASE::loadCommonSettings()
 
     for( const std::pair<wxString, ENV_VAR_ITEM> it : GetCommonSettings()->m_Env.vars )
     {
-        wxLogTrace( traceEnvVars, "PGM_BASE::loadSettings: Found entry %s = %s",
+        wxLogTrace( traceEnvVars, wxT( "PGM_BASE::loadSettings: Found entry %s = %s" ),
                     it.first, it.second.GetValue() );
 
         // Do not store the env var PROJECT_VAR_NAME ("KIPRJMOD") definition if for some reason
@@ -413,7 +413,7 @@ bool PGM_BASE::SetLanguage( wxString& aErrMsg, bool first_time )
     }
 
     // dictionary file name without extend (full name is kicad.mo)
-    wxString dictionaryName( "kicad" );
+    wxString dictionaryName( wxT( "kicad" ) );
 
     delete m_locale;
     m_locale = new wxLocale;
@@ -422,7 +422,7 @@ bool PGM_BASE::SetLanguage( wxString& aErrMsg, bool first_time )
     // false just because it failed to load wxstd catalog
     if( !m_locale->Init( m_language_id, wxLOCALE_DONT_LOAD_DEFAULT ) )
     {
-        wxLogTrace( traceLocale, "This language is not supported by the system." );
+        wxLogTrace( traceLocale, wxT( "This language is not supported by the system." ) );
 
         setLanguageId( wxLANGUAGE_DEFAULT );
         delete m_locale;
@@ -435,7 +435,7 @@ bool PGM_BASE::SetLanguage( wxString& aErrMsg, bool first_time )
     }
     else if( !first_time )
     {
-        wxLogTrace( traceLocale, "Search for dictionary %s.mo in %s",
+        wxLogTrace( traceLocale, wxT( "Search for dictionary %s.mo in %s" ) ,
                     dictionaryName, m_locale->GetName() );
     }
 
@@ -472,7 +472,7 @@ bool PGM_BASE::SetLanguage( wxString& aErrMsg, bool first_time )
     // the verification is skipped.
     if( !m_locale->IsLoaded( dictionaryName ) && m_language_id != wxLANGUAGE_ENGLISH )
     {
-        wxLogTrace( traceLocale, "Unable to load dictionary %s.mo in %s",
+        wxLogTrace( traceLocale, wxT( "Unable to load dictionary %s.mo in %s" ),
                     dictionaryName, m_locale->GetName() );
 
         setLanguageId( wxLANGUAGE_DEFAULT );
@@ -494,7 +494,7 @@ bool PGM_BASE::SetDefaultLanguage( wxString& aErrMsg )
     setLanguageId( wxLANGUAGE_DEFAULT );
 
     // dictionary file name without extend (full name is kicad.mo)
-    wxString dictionaryName( "kicad" );
+    wxString dictionaryName( wxT( "kicad" ) );
 
     delete m_locale;
     m_locale = new wxLocale;
@@ -510,7 +510,7 @@ bool PGM_BASE::SetDefaultLanguage( wxString& aErrMsg )
     // the verification is skipped.
     if( !m_locale->IsLoaded( dictionaryName ) && m_language_id != wxLANGUAGE_ENGLISH )
     {
-        wxLogTrace( traceLocale, "Unable to load dictionary %s.mo in %s",
+        wxLogTrace( traceLocale, wxT( "Unable to load dictionary %s.mo in %s" ),
                     dictionaryName, m_locale->GetName() );
 
         setLanguageId( wxLANGUAGE_DEFAULT );
@@ -529,7 +529,7 @@ bool PGM_BASE::SetDefaultLanguage( wxString& aErrMsg )
 
 void PGM_BASE::SetLanguageIdentifier( int menu_id )
 {
-    wxLogTrace( traceLocale, "Select language ID %d from %d possible languages.",
+    wxLogTrace( traceLocale, wxT( "Select language ID %d from %d possible languages." ),
                 menu_id, (int)arrayDim( LanguagesList )-1 );
 
     for( unsigned ii = 0;  LanguagesList[ii].m_KI_Lang_Identifier != 0; ii++ )
@@ -551,7 +551,7 @@ void PGM_BASE::SetLanguagePath()
     {
         wxFileName fn( Pgm().GetExecutablePath() );
         fn.RemoveLastDir();
-        fn.AppendDir( "translation" );
+        fn.AppendDir( wxT( "translation" ) );
         wxLocale::AddCatalogLookupPathPrefix( fn.GetPath() );
     }
 }
@@ -564,7 +564,7 @@ bool PGM_BASE::SetLocalEnvVariable( const wxString& aName, const wxString& aValu
     if( aName.IsEmpty() )
     {
         wxLogTrace( traceEnvVars,
-                    "PGM_BASE::SetLocalEnvVariable: Attempt to set empty variable to value %s",
+                    wxT( "PGM_BASE::SetLocalEnvVariable: Attempt to set empty variable to value %s" ),
                     aValue );
         return false;
     }
@@ -573,13 +573,13 @@ bool PGM_BASE::SetLocalEnvVariable( const wxString& aName, const wxString& aValu
     if( wxGetEnv( aName, &env ) )
     {
         wxLogTrace( traceEnvVars,
-                    "PGM_BASE::SetLocalEnvVariable: Environment variable %s already set to %s",
+                    wxT( "PGM_BASE::SetLocalEnvVariable: Environment variable %s already set to %s" ),
                     aName, env );
         return env == aValue;
     }
 
     wxLogTrace( traceEnvVars,
-                "PGM_BASE::SetLocalEnvVariable: Setting local environment variable %s to %s",
+                wxT( "PGM_BASE::SetLocalEnvVariable: Setting local environment variable %s to %s" ),
                 aName, aValue );
 
     return wxSetEnv( aName, aValue );
@@ -593,7 +593,7 @@ void PGM_BASE::SetLocalEnvVariables()
     for( const std::pair<wxString, ENV_VAR_ITEM> m_local_env_var : GetCommonSettings()->m_Env.vars )
     {
         wxLogTrace( traceEnvVars,
-                    "PGM_BASE::SetLocalEnvVariables: Setting local environment variable %s to %s",
+                    wxT( "PGM_BASE::SetLocalEnvVariables: Setting local environment variable %s to %s" ),
                     m_local_env_var.first,
                     m_local_env_var.second.GetValue() );
         wxSetEnv( m_local_env_var.first, m_local_env_var.second.GetValue() );
