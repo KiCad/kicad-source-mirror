@@ -416,6 +416,10 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
                 {
                     return true;
                 }
+                // For optionally-flashed layers we normally want to avoid different-net items
+                // by dropping the flashing.  However, if the different-net item collides with
+                // our hole then that's not going to help.  Showing the flashing in that case
+                // is clearer (and highlights the probable DRC error better).
                 else if( aCheckOptionalFlashing && aItem->Type() == PCB_PAD_T )
                 {
                     const PAD*    pad = static_cast<const PAD*>( aItem );
