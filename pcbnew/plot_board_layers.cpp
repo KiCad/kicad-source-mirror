@@ -925,10 +925,12 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 continue;
 
             // add shapes inflated by aMinThickness/2 in areas
-            zone->TransformSmoothedOutlineToPolygon( areas, inflate + zone_margin, boardOutline );
+            zone->TransformSmoothedOutlineToPolygon( areas, inflate + zone_margin, maxError,
+                                                     ERROR_OUTSIDE, boardOutline );
 
             // add shapes with their exact mask layer size in initialPolys
-            zone->TransformSmoothedOutlineToPolygon( initialPolys, zone_margin, boardOutline );
+            zone->TransformSmoothedOutlineToPolygon( initialPolys, zone_margin, maxError,
+                                                     ERROR_OUTSIDE, boardOutline );
         }
     }
 
