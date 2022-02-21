@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -258,9 +258,9 @@ bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         {
             wxString ext = wxFileName( aFileSet[i] ).GetExt().Lower();
 
-            if( ext == wxT( "zip" ) )
+            if( ext == ArchiveFileExtension )
                 LoadZipArchiveFile( aFileSet[i] );
-            else if( ext == wxT( "gbrprj" ) )
+            else if( ext == GerberJobFileExtension )
                 LoadGerberJobFile( aFileSet[i] );
             else
             {
