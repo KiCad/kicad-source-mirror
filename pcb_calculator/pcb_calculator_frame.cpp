@@ -93,7 +93,7 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     AddCalculator( new PANEL_ATTENUATORS( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
                    _( "RF Attenuators" ) );
     AddCalculator( new PANEL_TRANSLINE( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
-                   _( "TransLine ") );
+                   _( "Transmission Lines") );
 
     m_treebook->AddPage( nullptr, _( "Memo" ) );
 
@@ -136,9 +136,9 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     Bind( wxEVT_SYS_COLOUR_CHANGED,
           wxSysColourChangedEventHandler( PCB_CALCULATOR_FRAME::onThemeChanged ), this );
-    
+
     m_treebook->Connect( wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED, wxTreebookEventHandler(
-                         PCB_CALCULATOR_FRAME::OnPageChanged  ), NULL, this );    
+                         PCB_CALCULATOR_FRAME::OnPageChanged  ), NULL, this );
 }
 
 
@@ -154,7 +154,7 @@ PCB_CALCULATOR_FRAME::~PCB_CALCULATOR_FRAME()
 void PCB_CALCULATOR_FRAME::OnPageChanged ( wxTreebookEvent& aEvent )
 {
     int page = aEvent.GetSelection();
-    
+
     // If the selected page is a top level page
     if ( m_treebook->GetPageParent( page ) == wxNOT_FOUND )
     {
