@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-16 17:22-0800\n"
-"PO-Revision-Date: 2022-02-18 13:22+0000\n"
+"PO-Revision-Date: 2022-02-25 13:54+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -1364,12 +1364,10 @@ msgid "Bitmap to Component Converter"
 msgstr "Bitmapp till Komponent-konverterare"
 
 #: common/base_units.cpp:437
-#, fuzzy
 msgid "sq. mm"
 msgstr "mm²"
 
 #: common/base_units.cpp:439
-#, fuzzy
 msgid "cu. mm"
 msgstr "mm³"
 
@@ -1998,8 +1996,8 @@ msgid ""
 "Select this option if you not sure about configuring the global %s library "
 "table"
 msgstr ""
-"Välj det här alternativet om du inte är säker på den globala %s "
-"bibliotektabellens konfiguration"
+"Välj det här alternativet om du inte är säker på att konfigurera den globala "
+"%s bibliotektabellen"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:55
 #, c-format
@@ -2188,7 +2186,7 @@ msgstr "Återställ rutnätsstorlekar"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
 msgid "Resets the list of grid sizes to default values"
-msgstr "Återställer listan för rutnätsstorlekar till standardvärden"
+msgstr "Återställer listan över rutnätsstorlekar till dess standardvärden"
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
@@ -11814,7 +11812,7 @@ msgid ""
 msgstr ""
 "I kretsschemaredigerare:\n"
 "Om aktiverat, väljer klick på ett stift överordnad symbol.\n"
-"Om inaktiverat, väljer klicka på ett stift bara det stiftet."
+"Om inaktiverat, väljer klick på ett stift bara det stiftet."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:84
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:132
@@ -12167,15 +12165,13 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:543
-#, fuzzy
 msgid "Remove Invalid Cells"
-msgstr "Ta bort objekt"
+msgstr "Ta bort ogiltiga celler"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
-#, fuzzy
 msgid "Cancel Table Update"
-msgstr "Hålets diameter:"
+msgstr "Avbryt uppdatering av tabell"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
@@ -13563,9 +13559,8 @@ msgid "Cannot open file '%s'."
 msgstr "Det går inte att öppna filen '%s'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:314
-#, fuzzy
 msgid "Storage file not fully parsed "
-msgstr "Lagringsfilen ofullständigt inläst (%d bytes återstår)."
+msgstr "Lagringsfilen ofullständigt inläst "
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:476
 msgid "Compile mask not currently supported."
@@ -17652,9 +17647,8 @@ msgstr ""
 "Därför är storleken på vissa artiklar odefinierad"
 
 #: gerbview/rs274d.cpp:414
-#, fuzzy
 msgid "Invalid Code Number"
-msgstr "Ogiltigt stiftnummer"
+msgstr "Ogiltigt kodnummer"
 
 #: gerbview/rs274d.cpp:622
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
@@ -21628,7 +21622,7 @@ msgid ""
 "Any reference types %s will not be annotated."
 msgstr ""
 "\n"
-"Eventuella referenstyper %s kommer inte att kommenteras."
+"Eventuella referenstyper %s kommer inte att numreras."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:323
 msgid ""
@@ -21798,7 +21792,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:596
 msgid "Selected options resulted in errors! Change them and try again."
-msgstr ""
+msgstr "Valda alternativ orsakar fel! Ändra alternativ och försök igen."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:603
 #, c-format
@@ -21827,9 +21821,9 @@ msgid "Reannotate anyway?"
 msgstr "Kommentera ändå?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "Dubbla objekt %s%s\n"
+msgstr "Flera förekomster av objekt %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
 msgid "Aborted: too many errors"
@@ -25258,9 +25252,8 @@ msgid "Net Inspector"
 msgstr "Nätinspektör"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:83
-#, fuzzy
 msgid "Load and Test Netlist"
-msgstr "Ladda Net List"
+msgstr "Ladda och testa nätlista"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:125
 msgid "Select Netlist"
@@ -25356,9 +25349,9 @@ msgid "Center:"
 msgstr "Centrum:"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Corner %d"
-msgstr "Hörnradie:"
+msgstr "Hörn %d"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:334
 msgid "Polygon must have at least 3 corners"
@@ -25453,9 +25446,8 @@ msgid "corners count %d"
 msgstr "hörn räknas %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:739
-#, fuzzy
 msgid "Unknown primitive"
-msgstr "Transform Primitive"
+msgstr "Okänd primitiv form"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:919
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
@@ -26745,7 +26737,7 @@ msgstr "<ingen vald>"
 #: pcbnew/dialogs/dialog_position_relative.cpp:264
 #, fuzzy, c-format
 msgid "Reference item: %s"
-msgstr "Referens '%s'"
+msgstr "Referensobjekt '%s'"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -28901,7 +28893,7 @@ msgstr "mönsterkortsinställningarnas begränsningar för kanter"
 #: pcbnew/drc/drc_engine.cpp:189
 #, fuzzy
 msgid "board setup constraints courtyard"
-msgstr "mönsterkortsinställningarnas begränsningar för courtyard"
+msgstr "mönsterkortsinställningarnas begränsningar för gårdsplan"
 
 #: pcbnew/drc/drc_engine.cpp:196
 msgid "board setup micro-via constraints"
@@ -28969,24 +28961,20 @@ msgid "undefined"
 msgstr "odefinierad"
 
 #: pcbnew/drc/drc_engine.cpp:890
-#, fuzzy
 msgid "track width"
-msgstr "Spårtjocklek"
+msgstr "ledarbredd"
 
 #: pcbnew/drc/drc_engine.cpp:891
-#, fuzzy
 msgid "annular width"
-msgstr "Ringformad bredd"
+msgstr "kragbredd"
 
 #: pcbnew/drc/drc_engine.cpp:892
-#, fuzzy
 msgid "via diameter"
-msgstr "Via-diameter"
+msgstr "via-diameter"
 
 #: pcbnew/drc/drc_engine.cpp:893
-#, fuzzy
 msgid "constraint"
-msgstr "Ingen begränsning"
+msgstr "begränsning"
 
 #: pcbnew/drc/drc_engine.cpp:896
 #, c-format
@@ -29990,14 +29978,12 @@ msgid "Clearance Override"
 msgstr "Åsidosätt isolationsavstånd"
 
 #: pcbnew/footprint.cpp:2393 pcbnew/pad.cpp:1703
-#, fuzzy
 msgid "Solderpaste Margin Override"
-msgstr "Lokal marginal för lödpasta"
+msgstr "Lokal marginal för lodpasta"
 
 #: pcbnew/footprint.cpp:2397 pcbnew/pad.cpp:1706
-#, fuzzy
 msgid "Solderpaste Margin Ratio Override"
-msgstr "Lokal proportion för lödpastemarginal"
+msgstr "Lokal proportion för lodpastemarginal"
 
 #: pcbnew/footprint.cpp:2400 pcbnew/pad.cpp:1708 pcbnew/zone.cpp:1490
 msgid "Thermal Relief Width"
@@ -31451,9 +31437,8 @@ msgid "removed annular ring"
 msgstr "borttagen ringring"
 
 #: pcbnew/pcb_track.cpp:659
-#, fuzzy
 msgid "Track (arc)"
-msgstr "Kopiera spår"
+msgstr "Ledare (båge)"
 
 #: pcbnew/pcb_track.cpp:674
 msgid "Segment Length"
@@ -31604,14 +31589,12 @@ msgid "File not found: '%s'."
 msgstr "Filen hittades inte: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:710
-#, fuzzy
 msgid "Loading board data..."
-msgstr "Läser in kortregioner..."
+msgstr "Läser in mönsterkortsdata..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:888
-#, fuzzy
 msgid "Loading netclasses..."
-msgstr "Läser in nät..."
+msgstr "Läser in nätklasser..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:910
 #, c-format
@@ -31619,14 +31602,12 @@ msgid "Duplicate netclass name '%s'."
 msgstr "Dublett av nätklassnamn '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:927
-#, fuzzy
 msgid "Loading components..."
-msgstr "Läser in nät..."
+msgstr "Läser in komponenter..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:974
-#, fuzzy
 msgid "Loading component 3D models..."
-msgstr "Laddar 3D-modeller..."
+msgstr "Läser in 3D-modeller..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1051
 #: pcbnew/plugins/altium/altium_pcb.cpp:1137
@@ -31642,9 +31623,8 @@ msgstr ""
 "Den har flyttats till KiCad-lager Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1330
-#, fuzzy
 msgid "Loading dimension drawings..."
-msgstr "Läser in Unicode-strängar..."
+msgstr "Läser in måttritningar..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1351
 #: pcbnew/plugins/altium/altium_pcb.cpp:1358
@@ -31985,9 +31965,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "CADSTAR:s lödyte-definition '%s' har importeringsfel: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
-msgstr "Det gick inte att hitta en PDF-visare för '%s'."
+msgstr "Kan inte hitta lödyteindex '%d' i fotavtryck '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1291
 #, c-format
@@ -33596,28 +33576,27 @@ msgstr "Lås upp"
 
 #: pcbnew/tools/board_editor_control.cpp:1393
 msgid "Zones have insufficient overlap for merging."
-msgstr ""
+msgstr "Zoner har otillräcklig överlappning för att kunna slås ihop."
 
 #: pcbnew/tools/board_editor_control.cpp:1439
 msgid "Some zone netcodes did not match and were not merged."
-msgstr ""
+msgstr "Några nätkoder för zoner överensstämde inte och slogs inte ihop."
 
 #: pcbnew/tools/board_editor_control.cpp:1445
 msgid "Some zone priorities did not match and were not merged."
-msgstr ""
+msgstr "Några prioriteter för zoner överensstämde inte och slogs inte samman."
 
 #: pcbnew/tools/board_editor_control.cpp:1451
 msgid "Some zones were rule areas and were not merged."
-msgstr ""
+msgstr "Några zoner var regelytor och slogs inte samman."
 
 #: pcbnew/tools/board_editor_control.cpp:1457
-#, fuzzy
 msgid "Some zone layer sets did not match and were not merged."
-msgstr "Regellager \"%s\" matchade inte, regel ingorerad."
+msgstr "Vissa zonlager överensstämde inte och slogs inte ihop."
 
 #: pcbnew/tools/board_editor_control.cpp:1463
 msgid "Some zones did not intersect and were not merged."
-msgstr ""
+msgstr "Vissa zoner var inte i kontakt med varandra och slogs inte ihop."
 
 #: pcbnew/tools/board_editor_control.cpp:1529
 msgid "Duplicate zone"
@@ -34112,7 +34091,7 @@ msgstr "Redigera padformer"
 #: pcbnew/tools/pad_tool.cpp:812
 #, fuzzy
 msgid "Recombine pads"
-msgstr "Rekombinerar lödytor"
+msgstr "Rekombinera lödytor"
 
 #: pcbnew/tools/pcb_actions.cpp:48
 msgid "Create Polygon from Selection"
