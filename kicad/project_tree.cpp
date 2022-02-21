@@ -103,6 +103,7 @@ void PROJECT_TREE::LoadIcons()
     m_imageList->Add( KiBitmap( BITMAPS::library ) );                // TREE_SCHEMATIC_LIBFILE
     m_imageList->Add( KiBitmap( BITMAPS::library ) );                // TREE_SEXPR_SYMBOL_LIB_FILE
     m_imageList->Add( KiBitmap( BITMAPS::editor ) );                 // DESIGN_RULES
+    m_imageList->Add( KiBitmap( BITMAPS::zip ) );                    // ZIP_ARCHIVE
 
     SetImageList( m_imageList );
 }
