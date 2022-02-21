@@ -851,7 +851,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                     if( aKnockout->GetIsRuleArea() )
                     {
                         // Keepouts use outline with no clearance
-                        aKnockout->TransformSmoothedOutlineToPolygon( aHoles, 0, nullptr );
+                        aKnockout->TransformSmoothedOutlineToPolygon( aHoles, 0, m_maxError,
+                                                                      ERROR_OUTSIDE, nullptr );
                     }
                     else
                     {

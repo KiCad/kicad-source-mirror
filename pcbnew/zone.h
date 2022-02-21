@@ -404,6 +404,7 @@ public:
      * @param aBoardOutline is the board outline (if a valid one exists; nullptr otherwise)
      */
     void TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aClearance,
+                                            int aError, ERROR_LOC aErrorLoc,
                                             SHAPE_POLY_SET* aBoardOutline ) const;
 
     /**

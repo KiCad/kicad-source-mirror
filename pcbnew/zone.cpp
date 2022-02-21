@@ -1174,6 +1174,7 @@ double ZONE::CalculateOutlineArea()
 
 
 void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aClearance,
+                                              int aMaxError, ERROR_LOC aErrorLoc,
                                               SHAPE_POLY_SET* aBoardOutline ) const
 {
     // Creates the zone outline polygon (with holes if any)
@@ -1193,6 +1194,10 @@ void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aCornerBuffer, int
             maxError = board->GetDesignSettings().m_MaxError;
 
         int segCount = GetArcToSegmentCount( aClearance, maxError, FULL_CIRCLE );
+
+        if( aErrorLoc == ERROR_OUTSIDE )
+            aClearance += aMaxError;
+
         polybuffer.Inflate( aClearance, segCount );
     }
 
@@ -1300,6 +1305,10 @@ void ZONE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     if( aClearance )
     {
         int numSegs = GetArcToSegmentCount( aClearance, aError, FULL_CIRCLE );
+
+        if( aErrorLoc == ERROR_OUTSIDE )
+            aClearance += aError;
+
         aCornerBuffer.InflateWithLinkedHoles( aClearance, numSegs, SHAPE_POLY_SET::PM_FAST );
     }
 }
