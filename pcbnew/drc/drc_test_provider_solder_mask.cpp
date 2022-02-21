@@ -403,15 +403,20 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
 
                 if( itemShape->Collide( otherShape.get(), clearance, &actual, &pos ) )
                 {
+                    // Simple mask apertures aren't associated with copper items, so they only
+                    // constitute a bridge when they expose other copper items having at least
+                    // two distinct nets.  We use a map to record the first net exposed by each
+                    // mask aperture.
+
                     if( isMaskAperture( aItem ) )
                     {
                         std::pair<BOARD_ITEM*, PCB_LAYER_ID> key = { aItem, aRefLayer };
 
-                        // If the mask collides with the first object, add the object
-                        // net to our map and stop.  This cannot be an error yet.
                         if( m_maskApertureNetMap.count( key ) == 0 )
                         {
                             m_maskApertureNetMap[ key ] = otherNet;
+
+                            // First net; no bridge yet....
                             return true;
                         }
 
@@ -426,6 +431,8 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
                         if( m_maskApertureNetMap.count( key ) == 0 )
                         {
                             m_maskApertureNetMap[ key ] = itemNet;
+
+                            // First net; no bridge yet....
                             return true;
                         }
 
@@ -504,10 +511,19 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
             {
                 if( isMaskAperture( aItem ) )
                 {
-                    std::pair<BOARD_ITEM*, PCB_LAYER_ID> key = { aItem, aMaskLayer };
+                    // Simple mask apertures aren't associated with copper items, so they only
+                    // constitute a bridge when they expose other copper items having at least
+                    // two distinct nets.  We use a map to record the first net exposed by each
+                    // mask aperture.
 
+                    std::pair<BOARD_ITEM*, PCB_LAYER_ID> key = { aItem, aMaskLayer };
                     if( m_maskApertureNetMap.count( key ) == 0 )
+                    {
                         m_maskApertureNetMap[ key ] = zoneNet;
+
+                        // First net; no bridge yet....
+                        continue;
+                    }
 
                     if( m_maskApertureNetMap.at( key ) == zoneNet && zoneNet > 0 )
                         continue;
