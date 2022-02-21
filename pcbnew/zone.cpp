@@ -717,10 +717,7 @@ void ZONE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     Mirror( aCentre, aFlipLeftRight );
     int copperLayerCount = GetBoard()->GetCopperLayerCount();
 
-    if( GetIsRuleArea() )
-        SetLayerSet( FlipLayerMask( GetLayerSet(), copperLayerCount ) );
-    else
-        SetLayer( FlipLayer( GetLayer(), copperLayerCount ) );
+    SetLayerSet( FlipLayerMask( GetLayerSet(), copperLayerCount ) );
 }
 
 
