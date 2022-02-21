@@ -4012,6 +4012,8 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
 
     std::unique_ptr<PAD> pad = std::make_unique<PAD>( aParent );
 
+    // File only contains a token if RemoveUnconnected is true
+    pad->SetRemoveUnconnected( false );
     // File only contains a token if KeepTopBottom is true
     pad->SetKeepTopBottom( false );
 
@@ -4493,6 +4495,9 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
         pad->SetNumber( wxEmptyString );
     }
 
+    if( !pad->GetRemoveUnconnected() )
+        pad->SetKeepTopBottom( true );
+
     return pad.release();
 }
 
@@ -4791,6 +4796,11 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
 
     std::unique_ptr<PCB_VIA> via = std::make_unique<PCB_VIA>( m_board );
 
+    // File only contains a token if RemoveUnconnected is true
+    via->SetRemoveUnconnected( false );
+    // File only contains a token if KeepTopBottom is true
+    via->SetKeepTopBottom( false );
+
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
         if( token == T_locked )
@@ -4894,6 +4904,9 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
             Expecting( "blind, micro, at, size, drill, layers, net, free, tstamp, or status" );
         }
     }
+
+    if( !via->GetRemoveUnconnected() )
+        via->SetKeepTopBottom( true );
 
     return via.release();
 }
