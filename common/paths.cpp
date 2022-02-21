@@ -239,6 +239,16 @@ wxString PATHS::GetStockScriptingPath()
 }
 
 
+wxString PATHS::GetStockTemplatesPath()
+{
+    wxString path;
+
+    path = GetStockDataPath() + wxT( "/template" );
+
+    return path;
+}
+
+
 wxString PATHS::GetStockPluginsPath()
 {
     wxFileName fn;
