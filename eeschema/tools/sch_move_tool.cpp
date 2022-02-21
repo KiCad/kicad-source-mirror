@@ -446,6 +446,11 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
             }
         }
+        else if( evt->IsAction( &EE_ACTIONS::highlightNet )
+                    || evt->IsAction( &EE_ACTIONS::explicitCrossProbe ) )
+        {
+            // These don't make any sense during a move.  Eat them.
+        }
         //------------------------------------------------------------------------
         // Handle context menu
         //
