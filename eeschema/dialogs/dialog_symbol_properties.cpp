@@ -544,7 +544,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 #ifdef KICAD_SPICE
     int diff = m_fields->size();
 
-    DIALOG_SPICE_MODEL dialog( this, *m_symbol, m_fields );
+    DIALOG_SPICE_MODEL dialog( this, *m_symbol, *m_fields );
 
     if( dialog.ShowModal() != wxID_OK )
         return;

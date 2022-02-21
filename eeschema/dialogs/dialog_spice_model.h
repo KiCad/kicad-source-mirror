@@ -29,17 +29,21 @@
 #include <netlist_exporter_pspice.h>
 #include <scintilla_tricks.h>
 
-#include <sim/spice_model.h>
+#include <sim/sim_model.h>
 #include <sch_symbol.h>
+
+// Some probable wxWidgets bugs encountered when writing this class:
+// 1. There are rendering problems with wxPropertyGrid on Linux, GTK, Xorg when
+//    wxPG_NATIVE_DOUBLE_BUFFERING flag is not set.
+// 2. wxPropertyGridManager->ShowHeader() segfaults when called from this dialog's constructor.
 
 template <typename T>
 class DIALOG_SPICE_MODEL : public DIALOG_SPICE_MODEL_BASE
 {
 public:
-    enum COLUMN { DESCRIPTION, NAME, VALUE, UNIT };
+    enum class COLUMN : int { DESCRIPTION = 0, VALUE, UNIT, DEFAULT, TYPE, END_ };
 
-    DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
-                        std::vector<T>* aSchFields );
+    DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol, std::vector<T>& aSchFields );
 
 private:
     bool TransferDataFromWindow() override;
@@ -50,15 +54,19 @@ private:
 
     void onDeviceTypeChoice( wxCommandEvent& aEvent ) override;
     void onTypeChoice( wxCommandEvent& aEvent ) override;
-    void onGridCellChange( wxGridEvent& aEvent ) override;
+    
+    void addParamPropertyIfRelevant( const SIM_MODEL::PARAM& aParam );
+    wxPGProperty* newParamProperty( const SIM_MODEL::PARAM& aParam ) const;
 
     SCH_SYMBOL& m_symbol;
-    std::vector<T>* m_fields;
+    std::vector<T>& m_fields;
 
-    std::vector<SPICE_MODEL> m_models;
-    std::map<SPICE_MODEL::DEVICE_TYPE, SPICE_MODEL::TYPE> m_curModelTypeOfDeviceType;
-    SPICE_MODEL::TYPE m_curModelType = SPICE_MODEL::TYPE::NONE;
+    std::vector<std::unique_ptr<SIM_MODEL>> m_models;
+    std::map<SIM_MODEL::DEVICE_TYPE, SIM_MODEL::TYPE> m_curModelTypeOfDeviceType;
+    SIM_MODEL::TYPE m_curModelType = SIM_MODEL::TYPE::NONE;
 
+    wxPropertyGridPage* m_paramGrid;
+    wxPGProperty* m_firstCategory; // Used to add principal parameters to root (any better ideas?)
     std::unique_ptr<SCINTILLA_TRICKS> m_scintillaTricks;
 };
 

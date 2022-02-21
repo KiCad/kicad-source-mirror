@@ -27,10 +27,13 @@
 #ifndef NGSPICE_H
 #define NGSPICE_H
 
-#include "spice_simulator.h"
+#include <sim/spice_simulator.h>
+#include <sim/sim_model.h>
+#include <sim/sim_value.h>
 
 #include <wx/dynlib.h>
 #include <ngspice/sharedspice.h>
+#include <enum_vector.h>
 
 // We have an issue here where NGSPICE incorrectly used bool for years
 // and defined it to be int when in C-mode.  We cannot adjust the function
@@ -47,55 +50,58 @@ class wxDynamicLibrary;
 class NGSPICE : public SPICE_SIMULATOR
 {
 public:
-    enum class PARAM_DIR
-    {
-        IN,
-        OUT,
-        INOUT
-    };
+    DEFINE_ENUM_CLASS_WITH_ITERATOR( MODEL_TYPE,
+        NONE,
+        RESISTOR,
+        CAPACITOR,
+        INDUCTOR,
+        LTRA,
+        TRANLINE,
+        URC,
+        TRANSLINE,
+        SWITCH,
+        CSWITCH,
+        DIODE,
+        BJT,
+        VBIC,
+        HICUM2,
+        JFET,
+        JFET2,
+        MES,
+        MESA,
+        HFET1,
+        HFET2,
+        MOS1,
+        MOS2,
+        MOS3,
+        BSIM1,
+        BSIM2,
+        MOS6,
+        BSIM3,
+        MOS9,
+        B4SOI,
+        BSIM4,
+        B3SOIFD,
+        B3SOIDD,
+        B3SOIPD,
+        HISIM2,
+        HISIMHV1,
+        HISIMHV2
+    )
 
-    enum class PARAM_TYPE
-    {
-        FLAG,
-        INTEGER,
-        REAL,
-        COMPLEX,
-        NODE,
-        INSTANCE,
-        STRING,
-        PARSETREE,
-        VECTOR,
-        FLAGVEC,
-        INTVEC,
-        REALVEC,
-        CPLXVEC,
-        NODEVEC,
-        INSTVEC,
-        STRINGVEC
-    };
-
-    struct PARAM_INFO
-    {
-        unsigned int id;
-        PARAM_DIR dir;
-        PARAM_TYPE type;
-        wxString unit;
-        wxString defaultValueOfVariant1;
-        wxString defaultValueOfVariant2;
-        wxString description;
-    };
-
-    enum class MODEL_TYPE; // Defined in ngspice_devices.cpp.
-
+    // May be moved to the SPICE_MODEL class later.
     struct MODEL_INFO
     {
         wxString name;
         wxString variant1;
         wxString variant2;
         wxString description;
-        std::map<wxString, PARAM_INFO> modelParams;
-        std::map<wxString, PARAM_INFO> instanceParams;
+        std::vector<SIM_MODEL::PARAM::INFO> modelParams;
+        std::vector<SIM_MODEL::PARAM::INFO> instanceParams;
     };
+
+
+    static const MODEL_INFO& ModelInfo( MODEL_TYPE aType );
 
     NGSPICE();
     virtual ~NGSPICE();
@@ -141,8 +147,6 @@ public:
 
     ///< @copydoc SPICE_SIMULATOR::GetPhasePlot()
     std::vector<double> GetPhasePlot( const std::string& aName, int aMaxLen = -1 ) override final;
-
-    MODEL_INFO GetModelInfo( MODEL_TYPE aDeviceType );
 
     std::vector<std::string> GetSettingCommands() const override final;
 

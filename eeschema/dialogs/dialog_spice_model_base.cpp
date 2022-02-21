@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.1)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -94,40 +94,9 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	bSizer12->Add( fgSizer16, 0, wxEXPAND, 5 );
 
-	m_paramGrid = new WX_GRID( m_parametersPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-
-	// Grid
-	m_paramGrid->CreateGrid( 0, 4 );
-	m_paramGrid->EnableEditing( true );
-	m_paramGrid->EnableGridLines( true );
-	m_paramGrid->EnableDragGridSize( false );
-	m_paramGrid->SetMargins( 0, 0 );
-
-	// Columns
-	m_paramGrid->SetColSize( 0, 300 );
-	m_paramGrid->SetColSize( 1, 80 );
-	m_paramGrid->SetColSize( 2, 80 );
-	m_paramGrid->SetColSize( 3, 50 );
-	m_paramGrid->EnableDragColMove( true );
-	m_paramGrid->EnableDragColSize( true );
-	m_paramGrid->SetColLabelValue( 0, wxT("Description") );
-	m_paramGrid->SetColLabelValue( 1, wxT("Name") );
-	m_paramGrid->SetColLabelValue( 2, wxT("Value") );
-	m_paramGrid->SetColLabelValue( 3, wxT("Unit") );
-	m_paramGrid->SetColLabelSize( 22 );
-	m_paramGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-
-	// Rows
-	m_paramGrid->EnableDragRowSize( false );
-	m_paramGrid->SetRowLabelSize( 0 );
-	m_paramGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-
-	// Label Appearance
-	m_paramGrid->SetLabelFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
-
-	// Cell Defaults
-	m_paramGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizer12->Add( m_paramGrid, 1, wxALL|wxEXPAND, 5 );
+	m_paramGridMgr = new wxPropertyGridManager(m_parametersPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxPGMAN_DEFAULT_STYLE);
+	m_paramGridMgr->SetExtraStyle( wxPG_EX_MODE_BUTTONS|wxPG_EX_NATIVE_DOUBLE_BUFFERING );
+	bSizer12->Add( m_paramGridMgr, 1, wxALL|wxEXPAND, 5 );
 
 
 	m_parametersPanel->SetSizer( bSizer12 );
@@ -251,14 +220,12 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	this->SetSizer( bSizer8 );
 	this->Layout();
-	bSizer8->Fit( this );
 
 	this->Centre( wxBOTH );
 
 	// Connect Events
 	m_deviceTypeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onDeviceTypeChoice ), NULL, this );
 	m_typeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onTypeChoice ), NULL, this );
-	m_paramGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_SPICE_MODEL_BASE::onGridCellChange ), NULL, this );
 }
 
 DIALOG_SPICE_MODEL_BASE::~DIALOG_SPICE_MODEL_BASE()
@@ -266,6 +233,5 @@ DIALOG_SPICE_MODEL_BASE::~DIALOG_SPICE_MODEL_BASE()
 	// Disconnect Events
 	m_deviceTypeChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onDeviceTypeChoice ), NULL, this );
 	m_typeChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onTypeChoice ), NULL, this );
-	m_paramGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_SPICE_MODEL_BASE::onGridCellChange ), NULL, this );
 
 }
