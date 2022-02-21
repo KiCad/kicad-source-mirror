@@ -122,6 +122,11 @@ public:
     static wxString GetStockDemosPath();
 
     /**
+     * Gets the stock (install) templates path
+     */
+    static wxString GetStockTemplatesPath();
+
+    /**
      * Gets the stock (install) 3d viewer plugins path
      */
     static wxString GetUserCachePath();

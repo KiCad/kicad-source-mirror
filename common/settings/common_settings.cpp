@@ -509,44 +509,7 @@ void COMMON_SETTINGS::InitializeEnvironment()
     path.AppendDir( wxT( "3dmodels" ) );
     addVar( wxT( "KICAD6_3DMODEL_DIR" ), path.GetFullPath() );
 
-    // We don't have just one default template path, so use this logic that originally was in
-    // PGM_BASE::InitPgm to determine the best default template path
-    {
-        // Attempt to find the best default template path.
-        SEARCH_STACK bases;
-        SEARCH_STACK templatePaths;
-
-        SystemDirsAppend( &bases );
-
-        for( unsigned i = 0; i < bases.GetCount(); ++i )
-        {
-            wxFileName fn( bases[i], wxEmptyString );
-
-            // Add KiCad template file path to search path list.
-            fn.AppendDir( "template" );
-
-            // Only add path if exists and can be read by the user.
-            if( fn.DirExists() && fn.IsDirReadable() )
-            {
-                wxLogTrace( tracePathsAndFiles, "Checking template path '%s' exists",
-                            fn.GetPath() );
-                templatePaths.AddPaths( fn.GetPath() );
-            }
-        }
-
-        if( templatePaths.IsEmpty() )
-        {
-            path = basePath;
-            path.AppendDir( "template" );
-        }
-        else
-        {
-            // Take the first one.  There may be more but this will likely be the best option.
-            path.AssignDir( templatePaths[0] );
-        }
-
-        addVar( wxT( "KICAD6_TEMPLATE_DIR" ), path.GetFullPath() );
-    }
+    addVar( wxT( "KICAD6_TEMPLATE_DIR" ), PATHS::GetStockTemplatesPath() );
 
     addVar( wxT( "KICAD_USER_TEMPLATE_DIR" ), PATHS::GetUserTemplatesPath() );
 
