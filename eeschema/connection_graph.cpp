@@ -1901,7 +1901,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
     // member to have the correct connection info
     if( conn->IsBus() && !stale_bus_members.empty() )
     {
-        for( auto stale_member : stale_bus_members )
+        for( SCH_CONNECTION* stale_member : stale_bus_members )
         {
             for( CONNECTION_SUBGRAPH* subgraph : visited )
             {
@@ -1933,13 +1933,13 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
 std::shared_ptr<SCH_CONNECTION> CONNECTION_GRAPH::getDefaultConnection( SCH_ITEM* aItem,
         CONNECTION_SUBGRAPH* aSubgraph )
 {
-    auto c = std::shared_ptr<SCH_CONNECTION>( nullptr );
+    std::shared_ptr<SCH_CONNECTION> c = std::shared_ptr<SCH_CONNECTION>( nullptr );
 
     switch( aItem->Type() )
     {
     case SCH_PIN_T:
     {
-        auto pin = static_cast<SCH_PIN*>( aItem );
+        SCH_PIN* pin = static_cast<SCH_PIN*>( aItem );
 
         if( pin->IsPowerConnection() )
             c = std::make_shared<SCH_CONNECTION>( aItem, aSubgraph->m_sheet );
@@ -1981,7 +1981,7 @@ SCH_CONNECTION* CONNECTION_GRAPH::matchBusMember( SCH_CONNECTION* aBusConnection
         // Vector bus: compare against index, because we allow the name
         // to be different
 
-        for( const auto& bus_member : aBusConnection->Members() )
+        for( const std::shared_ptr<SCH_CONNECTION>& bus_member : aBusConnection->Members() )
         {
             if( bus_member->VectorIndex() == aSearch->VectorIndex() )
             {
@@ -1993,14 +1993,14 @@ SCH_CONNECTION* CONNECTION_GRAPH::matchBusMember( SCH_CONNECTION* aBusConnection
     else
     {
         // Group bus
-        for( const auto& c : aBusConnection->Members() )
+        for( const std::shared_ptr<SCH_CONNECTION>& c : aBusConnection->Members() )
         {
             // Vector inside group: compare names, because for bus groups
             // we expect the naming to be consistent across all usages
             // TODO(JE) explain this in the docs
             if( c->Type() == CONNECTION_TYPE::BUS )
             {
-                for( const auto& bus_member : c->Members() )
+                for( const std::shared_ptr<SCH_CONNECTION>& bus_member : c->Members() )
                 {
                     if( bus_member->LocalName() == aSearch->LocalName() )
                     {
@@ -2051,7 +2051,7 @@ std::vector<const CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigrati
 {
     std::vector<const CONNECTION_SUBGRAPH*> ret;
 
-    for( auto&& subgraph : m_subgraphs )
+    for( CONNECTION_SUBGRAPH* subgraph : m_subgraphs )
     {
         // Graph is supposed to be up-to-date before calling this
         wxASSERT( !subgraph->m_dirty );
@@ -2313,8 +2313,8 @@ bool CONNECTION_GRAPH::ercCheckMultipleDrivers( const CONNECTION_SUBGRAPH* aSubg
 
 bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSubgraph )
 {
-    auto sheet = aSubgraph->m_sheet;
-    auto screen = sheet.LastScreen();
+    const SCH_SHEET_PATH& sheet = aSubgraph->m_sheet;
+    SCH_SCREEN* screen = sheet.LastScreen();
 
     SCH_ITEM* net_item = nullptr;
     SCH_ITEM* bus_item = nullptr;
@@ -2371,8 +2371,8 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
 bool CONNECTION_GRAPH::ercCheckBusToBusConflicts( const CONNECTION_SUBGRAPH* aSubgraph )
 {
     wxString msg;
-    auto sheet = aSubgraph->m_sheet;
-    auto screen = sheet.LastScreen();
+    const SCH_SHEET_PATH& sheet = aSubgraph->m_sheet;
+    SCH_SCREEN* screen = sheet.LastScreen();
 
     SCH_ITEM* label = nullptr;
     SCH_ITEM* port = nullptr;
@@ -2440,8 +2440,8 @@ bool CONNECTION_GRAPH::ercCheckBusToBusConflicts( const CONNECTION_SUBGRAPH* aSu
 bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH* aSubgraph )
 {
     bool conflict = false;
-    auto sheet = aSubgraph->m_sheet;
-    auto screen = sheet.LastScreen();
+    const SCH_SHEET_PATH& sheet = aSubgraph->m_sheet;
+    SCH_SCREEN* screen = sheet.LastScreen();
 
     SCH_BUS_WIRE_ENTRY* bus_entry = nullptr;
     SCH_ITEM* bus_wire = nullptr;
@@ -2453,7 +2453,7 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
         return true;
     }
 
-    for( auto item : aSubgraph->m_items )
+    for( SCH_ITEM* item : aSubgraph->m_items )
     {
         switch( item->Type() )
         {
@@ -2509,7 +2509,9 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
     // or global label
     if( conflict && CONNECTION_SUBGRAPH::GetDriverPriority( aSubgraph->m_driver )
                        >= CONNECTION_SUBGRAPH::PRIORITY::POWER_PIN )
+    {
         conflict = false;
+    }
 
     if( conflict )
     {
@@ -2653,8 +2655,8 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
             wxString name = pin->Connection( &sheet )->Name();
             wxString local_name = pin->Connection( &sheet )->Name( true );
 
-            if( m_global_label_cache.count( name )  ||
-                ( m_local_label_cache.count( std::make_pair( sheet, local_name ) ) ) )
+            if( m_global_label_cache.count( name )
+                    || m_local_label_cache.count( std::make_pair( sheet, local_name ) ) )
             {
                 has_other_connections = true;
             }
@@ -2787,7 +2789,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
                 return false;
             };
 
-    for( auto item : aSubgraph->m_items )
+    for( SCH_ITEM* item : aSubgraph->m_items )
     {
         switch( item->Type() )
         {
@@ -2837,9 +2839,9 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
 
     if( isGlobal )
     {
-        // This will be set to true if the global is connected to a pin above, but we
-        // want to reset this to false so that globals get flagged if they only have a
-        // single instance connected to a single pin
+        // This will be set to true if the global is connected to a pin above, but we want to
+        // reset this to false so that globals get flagged if they only have a single instance
+        // connected to a single pin
         hasOtherConnections = ( pinCount > 1 );
 
         auto it = m_net_name_to_subgraphs_map.find( name );
@@ -2853,9 +2855,9 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     else if( text->Type() == SCH_HIER_LABEL_T )
     {
         // For a hier label, check if the parent pin is connected
-        if( aSubgraph->m_hier_parent &&
-            ( aSubgraph->m_hier_parent->m_strong_driver ||
-                aSubgraph->m_hier_parent->m_drivers.size() > 1) )
+        if( aSubgraph->m_hier_parent
+                && ( aSubgraph->m_hier_parent->m_strong_driver
+                        || aSubgraph->m_hier_parent->m_drivers.size() > 1) )
         {
             // For now, a simple check: if there is more than one driver, the parent is probably
             // connected elsewhere (because at least one driver will be the hier pin itself)
