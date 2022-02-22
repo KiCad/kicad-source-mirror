@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:25-0800\n"
 "PO-Revision-Date: 2022-02-25 13:57+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Last-Translator: Axel Henriksson <axe.henriksson@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
 "Language: sv\n"
@@ -20838,7 +20838,7 @@ msgstr "Spårtjocklek (H):"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:138
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:236
 msgid "Cross-section area:"
-msgstr "Tvärsnittsområde:"
+msgstr "Tvärsnittsarea:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:146
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:244
