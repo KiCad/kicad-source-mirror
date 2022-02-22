@@ -836,6 +836,16 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
+        if( step == SET_HEIGHT )
+        {
+            if( dimension->GetStart().x != dimension->GetEnd().x
+                    && dimension->GetStart().y != dimension->GetEnd().y )
+            {
+                // Not cardinal.  Grid snapping doesn't make sense for height.
+                grid.SetUseGrid( false );
+            }
+        }
+
         VECTOR2I cursorPos = evt->HasPosition() ? evt->Position() : m_controls->GetMousePosition();
 
         cursorPos = grid.BestSnapAnchor( cursorPos, nullptr );

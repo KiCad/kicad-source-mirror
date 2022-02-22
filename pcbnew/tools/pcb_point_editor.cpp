@@ -322,6 +322,9 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
         points->AddPoint( dimension->GetCrossbarStart() );
         points->AddPoint( dimension->GetCrossbarEnd() );
 
+        points->Point( DIM_START ).SetSnapConstraint( ALL_LAYERS );
+        points->Point( DIM_END ).SetSnapConstraint( ALL_LAYERS );
+
         if( aItem->Type() == PCB_DIM_ALIGNED_T )
         {
             // Dimension height setting - edit points should move only along the feature lines
@@ -344,8 +347,11 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
         points->AddPoint( dimension->GetStart() );
         points->AddPoint( dimension->GetEnd() );
 
+        points->Point( DIM_START ).SetSnapConstraint( ALL_LAYERS );
+
         points->Point( DIM_END ).SetConstraint( new EC_45DEGREE( points->Point( DIM_END ),
                                                                  points->Point( DIM_START ) ) );
+        points->Point( DIM_END ).SetSnapConstraint( IGNORE_SNAPS );
 
         break;
     }
@@ -360,12 +366,16 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
         points->AddPoint( dimension->Text().GetPosition() );
         points->AddPoint( dimension->GetKnee() );
 
+        points->Point( DIM_START ).SetSnapConstraint( ALL_LAYERS );
+        points->Point( DIM_END ).SetSnapConstraint( ALL_LAYERS );
+
         points->Point( DIM_KNEE ).SetConstraint( new EC_LINE( points->Point( DIM_START ),
                                                               points->Point( DIM_END ) ) );
+        points->Point( DIM_KNEE ).SetSnapConstraint( IGNORE_SNAPS );
 
         points->Point( DIM_TEXT ).SetConstraint( new EC_45DEGREE( points->Point( DIM_TEXT ),
                                                                   points->Point( DIM_KNEE ) ) );
-        points->Point( DIM_TEXT ).SetGridConstraint( IGNORE_GRID );
+        points->Point( DIM_TEXT ).SetSnapConstraint( IGNORE_SNAPS );
 
         break;
     }
@@ -379,9 +389,12 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
         points->AddPoint( dimension->GetEnd() );
         points->AddPoint( dimension->Text().GetPosition() );
 
+        points->Point( DIM_START ).SetSnapConstraint( ALL_LAYERS );
+        points->Point( DIM_END ).SetSnapConstraint( ALL_LAYERS );
+
         points->Point( DIM_TEXT ).SetConstraint( new EC_45DEGREE( points->Point( DIM_TEXT ),
                                                                   points->Point( DIM_END ) ) );
-        points->Point( DIM_TEXT ).SetGridConstraint( IGNORE_GRID );
+        points->Point( DIM_TEXT ).SetSnapConstraint( IGNORE_SNAPS );
 
         break;
     }
@@ -470,10 +483,6 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     bool lock45 = false;
 
     BOARD_COMMIT commit( editFrame );
-    LSET snapLayers = item->GetLayerSet();
-
-    if( BaseType( item->Type() ) == PCB_DIMENSION_T )
-        snapLayers = LSET::AllLayersMask();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -524,19 +533,16 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             }
 
             VECTOR2I pos = evt->Position();
+            LSET     snapLayers;
 
-            //TODO: unify the constraints to solve simultaneously instead of sequentially
-            switch( m_editedPoint->GetGridConstraint() )
+            switch( m_editedPoint->GetSnapConstraint() )
             {
-            case IGNORE_GRID:
-                m_editedPoint->SetPosition( pos );
-                break;
+            case IGNORE_SNAPS:                                      break;
+            case OBJECT_LAYERS: snapLayers = item->GetLayerSet();   break;
+            case ALL_LAYERS:    snapLayers = LSET::AllLayersMask(); break;
+            }
 
-            case SNAP_TO_GRID:
-                m_editedPoint->SetPosition( grid.BestSnapAnchor( pos, snapLayers, { item } ) );
-                break;
-
-            case SNAP_BY_GRID:
+            if( m_editedPoint->GetGridConstraint() == SNAP_BY_GRID )
             {
                 if( grid.GetUseGrid() )
                 {
@@ -544,31 +550,31 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
                     VECTOR2I last = m_editedPoint->GetPosition();
                     VECTOR2I delta = pos - last;
-                    VECTOR2I deltaGrid = gridPt - grid.BestSnapAnchor( last, {}, { item } );
 
                     if( abs( delta.x ) > grid.GetGrid().x / 2 )
-                        pos.x = last.x + deltaGrid.x;
+                        pos.x = last.x + ( grid.GetGrid().x * sign( delta.x ) );
                     else
                         pos.x = last.x;
 
                     if( abs( delta.y ) > grid.GetGrid().y / 2 )
-                        pos.y = last.y + deltaGrid.y;
+                        pos.y = last.y + ( grid.GetGrid().y * sign( delta.y ) );
                     else
                         pos.y = last.y;
                 }
+            }
 
-                m_editedPoint->SetPosition( pos );
-                break;
-            }
-            }
+            m_editedPoint->SetPosition( pos );
 
             // The alternative constraint limits to 45 degrees
             if( lock45 )
-                m_altConstraint->Apply();
-            else
-                m_editedPoint->ApplyConstraint();
-
-            if( m_editedPoint->GetGridConstraint() == SNAP_TO_GRID )
+            {
+                m_altConstraint->Apply( grid );
+            }
+            else if( m_editedPoint->IsConstrained() )
+            {
+                m_editedPoint->ApplyConstraint( grid );
+            }
+            else if( m_editedPoint->GetGridConstraint() == SNAP_TO_GRID )
             {
                 m_editedPoint->SetPosition( grid.BestSnapAnchor( m_editedPoint->GetPosition(),
                                                                  snapLayers, { item } ) );

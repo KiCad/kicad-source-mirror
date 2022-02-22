@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -28,6 +28,7 @@
 #define EDIT_CONSTRAINTS_H_
 
 #include <math/vector2d.h>
+#include <tool/grid_helper.h>
 #include <functional>
 
 class EDIT_POINT;
@@ -40,6 +41,14 @@ enum GRID_CONSTRAINT_TYPE
     IGNORE_GRID,
     SNAP_TO_GRID,
     SNAP_BY_GRID    // Keep it on grid if it started on grid (treat x and y independently)
+};
+
+
+enum SNAP_CONSTRAINT_TYPE
+{
+    IGNORE_SNAPS,
+    OBJECT_LAYERS,
+    ALL_LAYERS
 };
 
 
@@ -56,21 +65,23 @@ public:
     /**
      * @param aConstrained is EDIT_POINT to which the constraint is applied.
      */
-    EDIT_CONSTRAINT( EDIT_TYPE& aConstrained ) : m_constrained( aConstrained ) {};
+    EDIT_CONSTRAINT( EDIT_TYPE& aConstrained ) :
+            m_constrained( aConstrained )
+    {};
 
     virtual ~EDIT_CONSTRAINT() {};
 
     /**
      * Correct coordinates of the constrained edit handle.
      */
-    virtual void Apply( EDIT_TYPE& aHandle ) = 0;
+    virtual void Apply( EDIT_TYPE& aHandle, const GRID_HELPER& aGrid ) = 0;
 
     /**
      * Correct coordinates of the constrained edit handle.
      */
-    void Apply()
+    void Apply( const GRID_HELPER& aGrid )
     {
-        Apply( m_constrained );
+        Apply( m_constrained, aGrid );
     }
 
 protected:
@@ -89,11 +100,12 @@ public:
      * @param aConstrainer is the point that is the source of the constrain.
      */
     EC_VERTICAL( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer ) :
-        EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ), m_constrainer( aConstrainer )
+            EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ),
+            m_constrainer( aConstrainer )
     {}
 
     ///< @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply( EDIT_POINT& aHandle ) override;
+    virtual void Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid ) override;
 
 private:
     const EDIT_POINT& m_constrainer;      ///< Point that imposes the constraint.
@@ -111,11 +123,12 @@ public:
      * @param aConstrainer is the point that is the source of the constrain.
      */
     EC_HORIZONTAL( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer ) :
-        EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ), m_constrainer( aConstrainer )
+            EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ),
+            m_constrainer( aConstrainer )
     {}
 
     ///< @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply( EDIT_POINT& aHandle ) override;
+    virtual void Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid ) override;
 
 private:
     const EDIT_POINT& m_constrainer;    ///< Point that imposes the constraint.
@@ -134,11 +147,12 @@ public:
      * @param aConstrainer is the point that is the source of the constrain.
      */
     EC_45DEGREE( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer ) :
-        EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ), m_constrainer( aConstrainer )
+            EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ),
+            m_constrainer( aConstrainer )
     {}
 
     ///< @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply( EDIT_POINT& aHandle ) override;
+    virtual void Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid ) override;
 
 private:
     const EDIT_POINT& m_constrainer;    ///< Point that imposes the constraint.
@@ -155,7 +169,7 @@ public:
     EC_LINE( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer );
 
     ///< @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply( EDIT_POINT& aHandle ) override;
+    virtual void Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid ) override;
 
 private:
     const EDIT_POINT& m_constrainer;    ///< Point that imposes the constraint.
@@ -175,11 +189,13 @@ public:
      * @param aEnd is the point that decides on the radius of the circle.
      */
     EC_CIRCLE( EDIT_POINT& aConstrained, const EDIT_POINT& aCenter, const EDIT_POINT& aEnd ) :
-        EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ), m_center( aCenter ), m_end( aEnd )
+            EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ),
+            m_center( aCenter ),
+            m_end( aEnd )
     {}
 
     ///< @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply( EDIT_POINT& aHandle ) override;
+    virtual void Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid ) override;
 
 private:
     ///< Point that imposes the constraint (center of the circle).
@@ -202,7 +218,7 @@ public:
     virtual ~EC_CONVERGING();
 
     ///< @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply( EDIT_LINE& aHandle ) override;
+    virtual void Apply( EDIT_LINE& aHandle, const GRID_HELPER& aGrid ) override;
 
 private:
     ///< Constraint for origin side segment.
@@ -224,31 +240,6 @@ private:
 
 
 /**
- * #EDIT_CONSTRAINT for a EDIT_LINE, one of the ends is snapped to a spot determined by a
- * transform function passed as parameter (e.g. it can be snapped to a grid), instead of having
- * the line center snapped to a point.
- */
-class EC_SNAPLINE : public EDIT_CONSTRAINT<EDIT_LINE>
-{
-public:
-    ///< Typedef for a function that determines snapping point.
-    typedef std::function<VECTOR2D( const VECTOR2D& )> V2D_TRANSFORM_FUN;
-
-    EC_SNAPLINE( EDIT_LINE& aLine, V2D_TRANSFORM_FUN aSnapFun );
-
-    virtual ~EC_SNAPLINE()
-    {}
-
-    ///< @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply( EDIT_LINE& aHandle ) override;
-
-private:
-    ///< Function that determines snapping point.
-    V2D_TRANSFORM_FUN m_snapFun;
-};
-
-
-/**
  * #EDIT_CONSTRAINT for a EDIT_LINE, that constrains the line to move perpendicular
  * to the line itself.
  */
@@ -262,7 +253,7 @@ public:
     {}
 
     ///< @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply( EDIT_LINE& aHandle ) override;
+    virtual void Apply( EDIT_LINE& aHandle, const GRID_HELPER& aGrid ) override;
 
 private:
     VECTOR2I m_mid;

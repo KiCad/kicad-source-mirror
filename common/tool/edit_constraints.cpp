@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -29,45 +29,78 @@
 #include <geometry/seg.h>
 #include <trigo.h>
 
-#include <utility>
 #include <geometry/geometry_utils.h>
 
 
-void EC_VERTICAL::Apply( EDIT_POINT& aHandle )
+void EC_VERTICAL::Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid )
 {
     VECTOR2I point = aHandle.GetPosition();
+
+    if( aHandle.GetGridConstraint() == SNAP_TO_GRID )
+        point = aGrid.AlignGrid( point );
+
     point.x = m_constrainer.GetPosition().x;
     aHandle.SetPosition( point );
 }
 
 
-void EC_HORIZONTAL::Apply( EDIT_POINT& aHandle )
+void EC_HORIZONTAL::Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid )
 {
     VECTOR2I point = aHandle.GetPosition();
+
+    if( aHandle.GetGridConstraint() == SNAP_TO_GRID )
+        point = aGrid.AlignGrid( point );
+
     point.y = m_constrainer.GetPosition().y;
     aHandle.SetPosition( point );
 }
 
 
-void EC_45DEGREE::Apply( EDIT_POINT& aHandle )
+void EC_45DEGREE::Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid )
 {
     VECTOR2I lineVector( aHandle.GetPosition() - m_constrainer.GetPosition() );
     VECTOR2I newLineVector = GetVectorSnapped45( lineVector );
 
-    aHandle.SetPosition( m_constrainer.GetPosition() + newLineVector );
+    if( aHandle.GetGridConstraint() == SNAP_TO_GRID
+            && ( newLineVector.x == 0 || newLineVector.y == 0 ) )
+    {
+        VECTOR2I snap = aGrid.AlignGrid( m_constrainer.GetPosition() + newLineVector );
+
+        if( newLineVector.x == 0 )
+            aHandle.SetPosition( VECTOR2I( m_constrainer.GetPosition().x, snap.y ) );
+        else
+            aHandle.SetPosition( VECTOR2I( snap.x, m_constrainer.GetPosition().y ) );
+    }
+    else
+    {
+        aHandle.SetPosition( m_constrainer.GetPosition() + newLineVector );
+    }
 }
 
 
 EC_LINE::EC_LINE( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer ) :
-    EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ), m_constrainer( aConstrainer )
+        EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ),
+        m_constrainer( aConstrainer )
 {
     m_line = m_constrained.GetPosition() - m_constrainer.GetPosition();
 }
 
 
-void EC_LINE::Apply( EDIT_POINT& aHandle )
+void EC_LINE::Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid )
 {
     SEG main( m_constrainer.GetPosition(), m_constrainer.GetPosition() + m_line );
+
+    if( aHandle.GetGridConstraint() == SNAP_TO_GRID
+            && ( m_line.x == 0 || m_line.y == 0 ) )
+    {
+        VECTOR2I snappedHandle = aGrid.AlignGrid( aHandle.GetPosition() );
+
+        if( m_line.x == 0 )
+            aHandle.SetPosition( VECTOR2I( aHandle.GetPosition().x, snappedHandle.y ) );
+        else
+            aHandle.SetPosition( VECTOR2I( snappedHandle.x, aHandle.GetPosition().y ) );
+    }
+
     SEG projection( aHandle.GetPosition(), aHandle.GetPosition() + m_line.Perpendicular() );
 
     if( OPT_VECTOR2I intersect = projection.IntersectLines( main ) )
@@ -75,7 +108,7 @@ void EC_LINE::Apply( EDIT_POINT& aHandle )
 }
 
 
-void EC_CIRCLE::Apply( EDIT_POINT& aHandle )
+void EC_CIRCLE::Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid )
 {
     VECTOR2I centerToEnd = m_end.GetPosition() - m_center.GetPosition();
     VECTOR2I centerToPoint = aHandle.GetPosition() - m_center.GetPosition();
@@ -92,7 +125,8 @@ void EC_CIRCLE::Apply( EDIT_POINT& aHandle )
 
 EC_CONVERGING::EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints ) :
     EDIT_CONSTRAINT<EDIT_LINE>( aLine ),
-    m_colinearConstraint( nullptr ), m_editPoints( aPoints )
+    m_colinearConstraint( nullptr ),
+    m_editPoints( aPoints )
 {
     // Dragged segment endings
     EDIT_POINT& origin = aLine.GetOrigin();
@@ -129,7 +163,7 @@ EC_CONVERGING::~EC_CONVERGING()
 }
 
 
-void EC_CONVERGING::Apply( EDIT_LINE& aHandle )
+void EC_CONVERGING::Apply( EDIT_LINE& aHandle, const GRID_HELPER& aGrid )
 {
     // The dragged segment endpoints
     EDIT_POINT& origin = aHandle.GetOrigin();
@@ -137,16 +171,16 @@ void EC_CONVERGING::Apply( EDIT_LINE& aHandle )
 
     if( m_colinearConstraint )
     {
-        m_colinearConstraint->Apply( origin );
-        m_colinearConstraint->Apply( end );
+        m_colinearConstraint->Apply( origin, aGrid );
+        m_colinearConstraint->Apply( end, aGrid );
     }
 
     // The dragged segment
     SEG dragged( origin.GetPosition(), origin.GetPosition() + m_draggedVector );
 
     // Do not allow points on the adjacent segments move freely
-    m_originSideConstraint->Apply();
-    m_endSideConstraint->Apply();
+    m_originSideConstraint->Apply( aGrid );
+    m_endSideConstraint->Apply( aGrid );
 
     EDIT_POINT& prevOrigin = *m_editPoints.Previous( origin, false );
     EDIT_POINT& nextEnd = *m_editPoints.Next( end, false );
@@ -180,20 +214,6 @@ void EC_CONVERGING::Apply( EDIT_LINE& aHandle )
 }
 
 
-EC_SNAPLINE::EC_SNAPLINE( EDIT_LINE& aLine, V2D_TRANSFORM_FUN aSnapFun ) :
-    EDIT_CONSTRAINT<EDIT_LINE>( aLine ), m_snapFun( std::move(aSnapFun) )
-{}
-
-
-void EC_SNAPLINE::Apply( EDIT_LINE& aHandle )
-{
-    VECTOR2D delta = aHandle.GetEnd().GetPosition() - aHandle.GetOrigin().GetPosition();
-
-    aHandle.GetOrigin().SetPosition( m_snapFun( aHandle.GetOrigin().GetPosition() ) );
-    aHandle.GetEnd().SetPosition( aHandle.GetOrigin().GetPosition() + delta );
-}
-
-
 EC_PERPLINE::EC_PERPLINE( EDIT_LINE& aLine ) :
     EDIT_CONSTRAINT<EDIT_LINE>( aLine )
 {
@@ -202,7 +222,7 @@ EC_PERPLINE::EC_PERPLINE( EDIT_LINE& aLine ) :
 }
 
 
-void EC_PERPLINE::Apply( EDIT_LINE& aHandle )
+void EC_PERPLINE::Apply( EDIT_LINE& aHandle, const GRID_HELPER& aGrid )
 {
     SEG main( m_mid, m_mid + m_line );
     SEG projection( aHandle.GetPosition(), aHandle.GetPosition() + m_line.Perpendicular() );

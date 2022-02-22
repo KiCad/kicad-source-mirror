@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017 CERN
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -55,6 +55,7 @@ public:
             m_isActive( false ),
             m_isHover( false ),
             m_gridConstraint( SNAP_TO_GRID ),
+            m_snapConstraint( OBJECT_LAYERS ),
             m_connected( aConnected )
     {
     }
@@ -162,10 +163,10 @@ public:
     /**
      * Correct coordinates of an EDIT_POINT by applying previously set constraint.
      */
-    virtual void ApplyConstraint()
+    virtual void ApplyConstraint( const GRID_HELPER& aGrid )
     {
         if( m_constraint )
-            m_constraint->Apply();
+            m_constraint->Apply( aGrid );
     }
 
     bool IsActive() const { return m_isActive; }
@@ -176,6 +177,9 @@ public:
 
     GRID_CONSTRAINT_TYPE GetGridConstraint() const { return m_gridConstraint; }
     void SetGridConstraint( GRID_CONSTRAINT_TYPE aConstraint ) { m_gridConstraint = aConstraint; }
+
+    SNAP_CONSTRAINT_TYPE GetSnapConstraint() const { return m_snapConstraint; }
+    void SetSnapConstraint( SNAP_CONSTRAINT_TYPE aConstraint ) { m_snapConstraint = aConstraint; }
 
     bool operator==( const EDIT_POINT& aOther ) const
     {
@@ -196,6 +200,7 @@ private:
     bool                 m_isActive;        ///< True if this point is being manipulated.
     bool                 m_isHover;         ///< True if this point is being hovered over.
     GRID_CONSTRAINT_TYPE m_gridConstraint;  ///< Describe the grid snapping behavior.
+    SNAP_CONSTRAINT_TYPE m_snapConstraint;  ///< Describe the object snapping behavior.
 
     ///< An optional connected item record used to mimic polyLine behavior with individual
     ///< line segments.
@@ -243,13 +248,13 @@ public:
     }
 
     ///< @copydoc EDIT_POINT::ApplyConstraint()
-    virtual void ApplyConstraint() override
+    virtual void ApplyConstraint( const GRID_HELPER& aGrid ) override
     {
         if( m_constraint )
-            m_constraint->Apply();
+            m_constraint->Apply( aGrid );
 
-        m_origin.ApplyConstraint();
-        m_end.ApplyConstraint();
+        m_origin.ApplyConstraint( aGrid );
+        m_end.ApplyConstraint( aGrid );
     }
 
     /**
