@@ -350,9 +350,6 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         }
     }
 
-    // Bitmaps are cached in Opengl: clear the cache, because
-    // the cache data can be invalid
-    GetCanvas()->GetView()->RecacheAllItems();
     GetCanvas()->GetView()->ClearHiddenFlags();
 }
 
@@ -383,7 +380,6 @@ void SCH_EDIT_FRAME::RollbackSchematicFromUndo()
         m_toolManager->GetTool<EE_SELECTION_TOOL>()->RebuildSelection();
     }
 
-    SyncView();
     GetCanvas()->Refresh();
 }
 
