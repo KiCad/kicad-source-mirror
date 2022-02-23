@@ -47,6 +47,16 @@ public:
     {}
 
     /**
+     * Create a rectangle defined by a BOX2.
+     */
+    SHAPE_RECT( const BOX2I& aBox ) :
+        SHAPE( SH_RECT ),
+        m_p0( aBox.GetPosition() ),
+        m_w( aBox.GetWidth() ),
+        m_h( aBox.GetHeight() )
+    {}
+
+    /**
      * Create a rectangle defined by top-left corner (aX0, aY0), width aW and height aH.
      */
     SHAPE_RECT( int aX0, int aY0, int aW, int aH ) :
