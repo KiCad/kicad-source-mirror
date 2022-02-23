@@ -1493,25 +1493,15 @@ void APPEARANCE_CONTROLS::rebuildLayers()
                         [&]( wxCommandEvent& aEvent )
                         {
                             wxObject* btn = aEvent.GetEventObject();
-                            int layId = static_cast<wxWindow*>( btn )->GetId();
-                            bool isVisible = aEvent.GetInt();
+                            int       layerId = static_cast<wxWindow*>( btn )->GetId();
 
-                            wxASSERT( layId >= 0 && layId < PCB_LAYER_ID_COUNT );
-
-                            if( m_isFpEditor && LSET::ForbiddenFootprintLayers().test( layId ) )
-                            {
-                                static_cast<BITMAP_TOGGLE*>( btn )->SetValue( !isVisible );
-                                return;
-                            }
-
-                            onLayerVisibilityChanged( static_cast<PCB_LAYER_ID>( layId ),
-                                                      isVisible, true );
+                            onLayerVisibilityToggled( static_cast<PCB_LAYER_ID>( layerId ) );
                         } );
 
                 swatch->Bind( COLOR_SWATCH_CHANGED, &APPEARANCE_CONTROLS::OnColorSwatchChanged,
                               this );
-                swatch->SetReadOnlyCallback(std::bind( &APPEARANCE_CONTROLS::onReadOnlySwatch,
-                                                       this ) );
+                swatch->SetReadOnlyCallback( std::bind( &APPEARANCE_CONTROLS::onReadOnlySwatch,
+                                                        this ) );
                 swatch->SetReadOnly( readOnly );
 
                 panel->Bind( wxEVT_RIGHT_DOWN, &APPEARANCE_CONTROLS::rightClickHandler, this );
@@ -1926,24 +1916,15 @@ void APPEARANCE_CONTROLS::rightClickHandler( wxMouseEvent& aEvent )
 };
 
 
-void APPEARANCE_CONTROLS::onLayerVisibilityChanged( PCB_LAYER_ID aLayer, bool isVisible,
-                                                    bool isFinal )
+void APPEARANCE_CONTROLS::onLayerVisibilityToggled( PCB_LAYER_ID aLayer )
 {
     LSET visibleLayers = getVisibleLayers();
 
-    if( visibleLayers.test( aLayer ) != isVisible )
-    {
-        visibleLayers.set( aLayer, isVisible );
-
-        setVisibleLayers( visibleLayers );
-
-        m_frame->GetCanvas()->GetView()->SetLayerVisible( aLayer, isVisible );
-    }
+    visibleLayers.set( aLayer, !visibleLayers.test( aLayer ) );
+    m_frame->GetCanvas()->GetView()->SetLayerVisible( aLayer, visibleLayers.test( aLayer ) );
 
     syncLayerPresetSelection();
-
-    if( isFinal )
-        m_frame->GetCanvas()->Refresh();
+    m_frame->GetCanvas()->Refresh();
 }
 
 
