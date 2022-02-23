@@ -2634,7 +2634,7 @@ void APPEARANCE_CONTROLS::doApplyLayerPreset( const LAYER_PRESET& aPreset )
 
 void APPEARANCE_CONTROLS::rebuildViewportsWidget()
 {
-    m_presetsLabel->SetLabel( _( "Viewports (Alt+Tab):" ) );
+    m_viewportsLabel->SetLabel( _( "Viewports (Alt+Tab):" ) );
 
     m_cbViewports->Clear();
 
