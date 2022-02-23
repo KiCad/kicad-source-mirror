@@ -248,6 +248,19 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 }
 
 
+// Drawing outline fonts, and to a lesser extent stroke fonts and stroke font drop-shadows, is
+// expensive.  At small effective sizes (ie: zoomed out) the differences between outline and/or
+// stroke fonts and the bitmap font becomes immaterial, and there's often more to draw when
+// zoomed out so the performance gain becomes more material.
+#define BITMAP_FONT_LOD_THRESHOLD 3.5
+
+
+bool SCH_PAINTER::underLODThreshold( int aFontSize )
+{
+    return aFontSize * m_gal->GetWorldScale() < BITMAP_FONT_LOD_THRESHOLD;
+}
+
+
 bool SCH_PAINTER::isUnitAndConversionShown( const LIB_ITEM* aItem ) const
 {
     if( m_schSettings.m_ShowUnit            // showing a specific unit
@@ -484,6 +497,20 @@ void SCH_PAINTER::strokeText( const wxString& aText, const VECTOR2D& aPosition,
 }
 
 
+void SCH_PAINTER::bitmapText( const wxString& aText, const VECTOR2D& aPosition,
+                              const TEXT_ATTRIBUTES& aAttrs )
+{
+
+    m_gal->SetGlyphSize( aAttrs.m_Size );
+    m_gal->SetLineWidth( aAttrs.m_StrokeWidth );
+
+    m_gal->SetHorizontalJustify( aAttrs.m_Halign );
+    m_gal->SetVerticalJustify( aAttrs.m_Valign );
+
+    m_gal->BitmapText( aText, aPosition, aAttrs.m_Angle );
+}
+
+
 void SCH_PAINTER::boxText( const wxString& aText, const VECTOR2D& aPosition,
                            const TEXT_ATTRIBUTES& aAttrs )
 {
@@ -515,7 +542,7 @@ void SCH_PAINTER::boxText( const wxString& aText, const VECTOR2D& aPosition,
 
     // Many fonts draw diacriticals, descenders, etc. outside the X-height of the font.  This
     // will cacth most (but probably not all) of them.
-    box.Inflate( 0, aAttrs.m_StrokeWidth * 1.5 );
+    box.Inflate( 0, aAttrs.m_StrokeWidth );
 
     box.Normalize();       // Make h and v sizes always >= 0
     box = box.GetBoundingBoxRotated( (VECTOR2I) aPosition, aAttrs.m_Angle );
@@ -833,7 +860,8 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
     VECTOR2I textpos = bbox.Centre();
 
     if( drawingShadows && ( eeconfig()->m_Selection.text_as_box
-                            || aField->GetDrawFont()->IsOutline() ) )
+                            || aField->GetDrawFont()->IsOutline()
+                            || underLODThreshold( aField->GetTextHeight() ) ) )
     {
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( true );
@@ -847,7 +875,10 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
         attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
         attrs.m_StrokeWidth = getTextThickness( aField, drawingShadows );
 
-        strokeText( UnescapeString( aField->GetText() ), textpos, attrs );
+        if( underLODThreshold( aField->GetTextHeight() ) )
+            bitmapText( UnescapeString( aField->GetText() ), textpos, attrs );
+        else
+            strokeText( UnescapeString( aField->GetText() ), textpos, attrs );
     }
 
     // Draw the umbilical line when in the schematic editor
@@ -890,7 +921,8 @@ void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer )
     m_gal->SetStrokeColor( color );
 
     if( drawingShadows && ( eeconfig()->m_Selection.text_as_box
-                            || aText->GetDrawFont()->IsOutline() ) )
+                            || aText->GetDrawFont()->IsOutline()
+                            || underLODThreshold( aText->GetTextHeight() ) ) )
     {
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( true );
@@ -911,7 +943,10 @@ void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer )
         attrs.m_Halign = GR_TEXT_H_ALIGN_CENTER;
         attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
 
-        strokeText( aText->GetText(), pos, attrs );
+        if( underLODThreshold( aText->GetTextHeight() ) )
+            bitmapText( aText->GetText(), pos, attrs );
+        else
+            strokeText( aText->GetText(), pos, attrs );
     }
 }
 
@@ -943,6 +978,9 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer )
                     attrs.m_Angle = aTextBox->GetDrawRotation();
                     attrs.m_StrokeWidth = getTextThickness( aTextBox, drawingShadows );
 
+                    // Note: don't check LODThreshold for textboxes: the bitmap font may mess
+                    // up tab positioning.
+
                     strokeText( shownText, aTextBox->GetDrawPos(), attrs );
                }
             };
@@ -955,7 +993,8 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer )
     {
         if( eeconfig()->m_Selection.fill_shapes
                 || eeconfig()->m_Selection.text_as_box
-                || aTextBox->GetDrawFont()->IsOutline() )
+                || aTextBox->GetDrawFont()->IsOutline()
+                || underLODThreshold( aTextBox->GetTextHeight() ) )
         {
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );
@@ -1361,9 +1400,14 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
                 attrs.m_StrokeWidth = thickness[i];
 
                 if( drawingShadows && ( eeconfig()->m_Selection.text_as_box
-                                        || aPin->GetDrawFont()->IsOutline() ) )
+                                        || aPin->GetDrawFont()->IsOutline()
+                                        || underLODThreshold( size[i] ) ) )
                 {
                     boxText( text[i], aPos, attrs );
+                }
+                else if( underLODThreshold( size[i] ) )
+                {
+                    bitmapText( text[i], aPos, attrs );
                 }
                 else
                 {
@@ -1768,7 +1812,8 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
     wxString shownText( aText->GetShownText() );
 
     if( drawingShadows && ( eeconfig()->m_Selection.text_as_box
-                            || aText->GetDrawFont()->IsOutline() ) )
+                            || aText->GetDrawFont()->IsOutline()
+                            || underLODThreshold( aText->GetTextHeight() ) ) )
     {
         EDA_RECT bBox = aText->GetBoundingBox();
         bBox.RevertYAxis();
@@ -1785,19 +1830,26 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
         attrs.m_Angle = aText->GetDrawRotation();
         attrs.m_StrokeWidth = getTextThickness( aText, drawingShadows );
 
-        std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
-
-        if( !text_offset.x && !text_offset.y )
-            cache = aText->GetRenderCache( shownText );
-
-        if( cache )
+        if( underLODThreshold( aText->GetTextHeight() ) )
         {
-            for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
-                m_gal->DrawGlyph( *glyph.get() );
+            bitmapText( shownText, aText->GetDrawPos() + text_offset, attrs );
         }
         else
         {
-            strokeText( shownText, aText->GetDrawPos() + text_offset, attrs );
+            std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
+
+            if( !text_offset.x && !text_offset.y )
+                cache = aText->GetRenderCache( shownText );
+
+            if( cache )
+            {
+                for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
+                    m_gal->DrawGlyph( *glyph.get() );
+            }
+            else
+            {
+                strokeText( shownText, aText->GetDrawPos() + text_offset, attrs );
+            }
         }
     }
 }
@@ -1819,6 +1871,9 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
                     TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
                     attrs.m_Angle = aTextBox->GetDrawRotation();
                     attrs.m_StrokeWidth = getTextThickness( aTextBox, drawingShadows );
+
+                    // Note: don't check LODThreshold for textboxes: the bitmap font may mess
+                    // up tab positioning.
 
                     std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
 
@@ -1847,7 +1902,8 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
     {
         if( eeconfig()->m_Selection.fill_shapes
                 || eeconfig()->m_Selection.text_as_box
-                || aTextBox->GetDrawFont()->IsOutline() )
+                || aTextBox->GetDrawFont()->IsOutline()
+                || underLODThreshold( aTextBox->GetTextHeight() ) )
         {
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );
@@ -2104,7 +2160,8 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
     m_gal->SetFillColor( color );
 
     if( drawingShadows && ( eeconfig()->m_Selection.text_as_box
-                            || aField->GetDrawFont()->IsOutline() ) )
+                            || aField->GetDrawFont()->IsOutline()
+                            || underLODThreshold( aField->GetTextHeight() ) ) )
     {
         bbox.RevertYAxis();
         m_gal->SetIsStroke( true );
@@ -2122,18 +2179,25 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
         attributes.m_StrokeWidth = getTextThickness( aField, drawingShadows );
         attributes.m_Angle = orient;
 
-        std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
-
-        cache = aField->GetRenderCache( shownText, textpos, attributes );
-
-        if( cache )
+        if( underLODThreshold( aField->GetTextHeight() ) )
         {
-            for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
-                m_gal->DrawGlyph( *glyph.get() );
+            bitmapText( shownText, textpos, attributes );
         }
         else
         {
-            strokeText( shownText, textpos, attributes );
+            std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
+
+            cache = aField->GetRenderCache( shownText, textpos, attributes );
+
+            if( cache )
+            {
+                for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
+                    m_gal->DrawGlyph( *glyph.get() );
+            }
+            else
+            {
+                strokeText( shownText, textpos, attributes );
+            }
         }
     }
 

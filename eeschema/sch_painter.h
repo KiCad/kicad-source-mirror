@@ -183,6 +183,8 @@ private:
     int internalPinDecoSize( const LIB_PIN &aPin );
     int externalPinDecoSize( const LIB_PIN &aPin );
 
+    bool underLODThreshold( int aFontSize );
+
     bool isUnitAndConversionShown( const LIB_ITEM* aItem ) const;
 
     float getShadowWidth( bool aForHighlight ) const;
@@ -194,6 +196,8 @@ private:
 
     void triLine ( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D &c );
     void strokeText( const wxString& aText, const VECTOR2D& aPosition,
+                     const TEXT_ATTRIBUTES& aAttributes );
+    void bitmapText( const wxString& aText, const VECTOR2D& aPosition,
                      const TEXT_ATTRIBUTES& aAttributes );
     void boxText( const wxString& aText, const VECTOR2D& aPosition,
                   const TEXT_ATTRIBUTES& aAttrs );
