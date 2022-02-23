@@ -72,6 +72,10 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     gal->SetIsFill( false );
     gal->SetLineWidth( 1.0 );
     auto cfg = static_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
+
+    if( !cfg )
+        return;
+
     auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
 
     COLOR4D    defaultColor = rs->GetColor( nullptr, LAYER_RATSNEST );
