@@ -520,15 +520,29 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
             for( PAD* pad : footprint->Pads() )
             {
-                // Getting pads from the footprint requires re-checking that the pad is shown
-                if( ( aFrom || m_magneticSettings->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
-                    && pad->GetBoundingBox().Contains( wxPoint( aRefPos.x, aRefPos.y ) )
-                    && view->IsVisible( pad )
-                    && ( !isHighContrast || activeLayers.count( pad->GetLayer() ) )
-                    && pad->ViewGetLOD( pad->GetLayer(), view ) < view->GetScale() )
+                if( !aFrom && m_magneticSettings->pads != MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
+                    continue;
+
+                if( !view->IsVisible( pad ) || !pad->GetBoundingBox().Contains( aRefPos ) )
+                    continue;
+
+                // Getting pads from a footprint requires re-checking that the pads are shown
+                bool onActiveLayer = !isHighContrast;
+                bool isLODVisible = false;
+
+                for( PCB_LAYER_ID layer : pad->GetLayerSet().Seq() )
                 {
-                    handlePadShape( pad );
-                    break;
+                    if( !onActiveLayer && activeLayers.count( layer ) )
+                        onActiveLayer = true;
+
+                    if( !isLODVisible && pad->ViewGetLOD( layer, view ) < view->GetScale() )
+                        isLODVisible = true;
+
+                    if( onActiveLayer && isLODVisible )
+                    {
+                        handlePadShape( pad );
+                        break;
+                    }
                 }
             }
 

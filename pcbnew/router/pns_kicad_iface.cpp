@@ -199,12 +199,7 @@ bool isEdge( const PNS::ITEM* aItem )
 {
     const BOARD_ITEM *parent = aItem->Parent();
 
-    if( parent )
-    {
-        return parent->GetLayer() == Edge_Cuts || parent->GetLayer () == Margin;
-    }
-
-    return false;
+    return parent && ( parent->IsOnLayer( Edge_Cuts ) || parent->IsOnLayer( Margin ) );
 }
 
 
