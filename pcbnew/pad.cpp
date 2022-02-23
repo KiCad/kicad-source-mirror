@@ -200,7 +200,7 @@ bool PAD::IsFlipped() const
 
 bool PAD::FlashLayer( LSET aLayers ) const
 {
-    for( auto layer : aLayers.Seq() )
+    for( PCB_LAYER_ID layer : aLayers.Seq() )
     {
         if( FlashLayer( layer ) )
             return true;
@@ -1318,7 +1318,14 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
     // Handle board visibility
     if( board )
-        visible = board->GetVisibleLayers() & board->GetEnabledLayers();
+        visible &= board->GetEnabledLayers();
+
+    // Handle view visibility
+    for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
+    {
+        if( !aView->IsLayerVisible( layer ) )
+            visible.set( layer, false );
+    }
 
     // Handle Render tab switches
     if( ( GetAttribute() == PAD_ATTRIB::PTH || GetAttribute() == PAD_ATTRIB::NPTH )
