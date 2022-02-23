@@ -751,7 +751,8 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     else
         m_netClasses = aOther.m_netClasses;
 
-    m_defaultZoneSettings    = aOther.m_defaultZoneSettings;
+    m_Pad_Master          = std::make_unique<PAD>( *aOther.m_Pad_Master );
+    m_defaultZoneSettings = aOther.m_defaultZoneSettings;
 }
 
 
