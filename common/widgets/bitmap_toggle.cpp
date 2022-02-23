@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -26,6 +26,7 @@
 
 #include <wx/sizer.h>
 #include <wx/statbmp.h>
+#include <wx/timer.h>
 
 wxDEFINE_EVENT( TOGGLE_CHANGED, wxCommandEvent );
 
@@ -35,7 +36,8 @@ BITMAP_TOGGLE::BITMAP_TOGGLE( wxWindow *aParent, wxWindowID aId, const wxBitmap&
         wxPanel( aParent, aId ),
         m_checked( aChecked ),
         m_unchecked_bitmap( aUncheckedBitmap ),
-        m_checked_bitmap( aCheckedBitmap )
+        m_checked_bitmap( aCheckedBitmap ),
+        m_debounce( 0 )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( sizer );
@@ -47,13 +49,21 @@ BITMAP_TOGGLE::BITMAP_TOGGLE( wxWindow *aParent, wxWindowID aId, const wxBitmap&
     sizer->Add( m_bitmap, 0, 0 );
 
     m_bitmap->Bind( wxEVT_LEFT_UP,
-                    [&]( wxMouseEvent& )
+                    [&]( wxMouseEvent& event )
                     {
+                        wxLongLong now = wxGetLocalTimeMillis();
+
+                        if( now - m_debounce < 50 )
+                            return;
+                        else
+                            m_debounce = now;
+
                         SetValue( !GetValue() );
-                        wxCommandEvent event( TOGGLE_CHANGED );
-                        event.SetInt( m_checked );
-                        event.SetEventObject( this );
-                        wxPostEvent( this, event );
+
+                        wxCommandEvent command( TOGGLE_CHANGED );
+                        command.SetInt( m_checked );
+                        command.SetEventObject( this );
+                        wxPostEvent( this, command );
                     } );
 
     auto passOnEvent =

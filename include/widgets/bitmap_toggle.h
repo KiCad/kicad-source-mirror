@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -65,15 +65,13 @@ public:
     }
 
 private:
-    bool m_checked;
+    bool            m_checked;
 
     wxStaticBitmap* m_bitmap;
+    wxBitmap        m_unchecked_bitmap;
+    wxBitmap        m_checked_bitmap;
 
-    ///< Bitmap to display in unchecked state
-    wxBitmap m_unchecked_bitmap;
-
-    ///< Bitmap to display in checked state
-    wxBitmap m_checked_bitmap;
+    wxLongLong      m_debounce;            // Timestamp for debouncing events
 };
 
 #endif
