@@ -57,7 +57,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
         zoneInfo << *aZone;
         dialogResult = InvokeRuleAreaEditor( this, &zoneInfo );
     }
-    else if( IsCopperLayer( aZone->GetLayer() ) )
+    else if( IsCopperLayer( aZone->GetFirstLayer() ) )
     {
         // edit a zone on a copper layer
         zoneInfo << *aZone;
