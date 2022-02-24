@@ -183,6 +183,9 @@ private:
     int internalPinDecoSize( const LIB_PIN &aPin );
     int externalPinDecoSize( const LIB_PIN &aPin );
 
+    // Indicates the item is drawn on a non-cached layer in OpenGL
+    bool nonCached( const EDA_ITEM* aItem );
+
     bool underLODThreshold( int aFontSize );
 
     bool isUnitAndConversionShown( const LIB_ITEM* aItem ) const;

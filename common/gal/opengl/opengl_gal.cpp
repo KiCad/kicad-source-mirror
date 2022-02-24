@@ -1340,8 +1340,6 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2I& aPosition,
     switch( GetVerticalJustify() )
     {
     case GR_TEXT_V_ALIGN_TOP:
-        Translate( VECTOR2D( 0, -textSize.y ) );
-        overbarHeight = -textSize.y / 2.0;
         break;
 
     case GR_TEXT_V_ALIGN_CENTER:
@@ -1350,6 +1348,8 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2I& aPosition,
         break;
 
     case GR_TEXT_V_ALIGN_BOTTOM:
+        Translate( VECTOR2D( 0, -textSize.y ) );
+        overbarHeight = -textSize.y / 2.0;
         break;
     }
 

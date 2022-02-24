@@ -255,6 +255,14 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 #define BITMAP_FONT_LOD_THRESHOLD 3.5
 
 
+bool SCH_PAINTER::nonCached( const EDA_ITEM* aItem )
+{
+    // TODO: it would be nice to have a more definitive test for this, but we've currently got
+    // no access to the VIEW_GROUP to see if it's cached or not.
+    return aItem->IsSelected();
+}
+
+
 bool SCH_PAINTER::underLODThreshold( int aFontSize )
 {
     return aFontSize * m_gal->GetWorldScale() < BITMAP_FONT_LOD_THRESHOLD;
@@ -875,7 +883,7 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
         attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
         attrs.m_StrokeWidth = getTextThickness( aField, drawingShadows );
 
-        if( underLODThreshold( aField->GetTextHeight() ) )
+        if( nonCached( aField ) && underLODThreshold( aField->GetTextHeight() ) )
             bitmapText( UnescapeString( aField->GetText() ), textpos, attrs );
         else
             strokeText( UnescapeString( aField->GetText() ), textpos, attrs );
@@ -943,7 +951,7 @@ void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer )
         attrs.m_Halign = GR_TEXT_H_ALIGN_CENTER;
         attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
 
-        if( underLODThreshold( aText->GetTextHeight() ) )
+        if( nonCached( aText ) && underLODThreshold( aText->GetTextHeight() ) )
             bitmapText( aText->GetText(), pos, attrs );
         else
             strokeText( aText->GetText(), pos, attrs );
@@ -1405,7 +1413,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
                 {
                     boxText( text[i], aPos, attrs );
                 }
-                else if( underLODThreshold( size[i] ) )
+                else if( nonCached( aPin ) && underLODThreshold( size[i] ) )
                 {
                     bitmapText( text[i], aPos, attrs );
                 }
@@ -1830,7 +1838,7 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
         attrs.m_Angle = aText->GetDrawRotation();
         attrs.m_StrokeWidth = getTextThickness( aText, drawingShadows );
 
-        if( underLODThreshold( aText->GetTextHeight() ) )
+        if( nonCached( aText ) && underLODThreshold( aText->GetTextHeight() ) )
         {
             bitmapText( shownText, aText->GetDrawPos() + text_offset, attrs );
         }
@@ -2179,7 +2187,7 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
         attributes.m_StrokeWidth = getTextThickness( aField, drawingShadows );
         attributes.m_Angle = orient;
 
-        if( underLODThreshold( aField->GetTextHeight() ) )
+        if( nonCached( aField ) && underLODThreshold( aField->GetTextHeight() ) )
         {
             bitmapText( shownText, textpos, attributes );
         }
