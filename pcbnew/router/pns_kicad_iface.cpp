@@ -1250,10 +1250,13 @@ bool PNS_KICAD_IFACE::IsItemVisible( const PNS::ITEM* aItem ) const
     if( settings->GetHighContrast() )
         isOnVisibleLayer = item->IsOnLayer( settings->GetPrimaryHighContrastLayer() );
 
-    if( m_view->IsVisible( item ) && isOnVisibleLayer
-            && item->ViewGetLOD( item->GetLayer(), m_view ) < m_view->GetScale() )
+    if( m_view->IsVisible( item ) && isOnVisibleLayer )
     {
-        return true;
+        for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
+        {
+            if( item->ViewGetLOD( layer, m_view ) < m_view->GetScale() )
+                return true;
+        }
     }
 
     // Items hidden in the router are not hidden on the board
