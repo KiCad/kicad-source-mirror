@@ -367,7 +367,8 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
         delete oldBuffer;
     }
 
-    commit.Push( _( "Apply action script" ) );
+    // Apply changes, UndoList already handled
+    commit.Push( _( "Apply action script" ), false );
     ActivateGalCanvas();
 }
 
