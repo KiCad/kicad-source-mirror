@@ -2469,13 +2469,31 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             if( DRC_ENGINE::IsNetTie( aOther ) )
                 return false;
 
+            DRC_CONSTRAINT constraint;
+
+            if( ( aOther->Type() == PCB_ZONE_T || aOther->Type() == PCB_FP_ZONE_T )
+                    && static_cast<ZONE*>( aOther )->GetIsRuleArea() )
+            {
+                ZONE* zone = static_cast<ZONE*>( aOther );
+
+                if( zone->GetDoNotAllowVias() )
+                    return true;
+
+                constraint = m_drcEngine->EvalRules( DISALLOW_CONSTRAINT, aVia, nullptr,
+                                                     UNDEFINED_LAYER );
+
+                if( constraint.m_DisallowFlags && constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
+                    return true;
+
+                return false;
+            }
+
             BOARD_CONNECTED_ITEM* cItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( aOther );
 
             if( cItem && cItem->GetNetCode() == aVia->GetNetCode() )
                 return false;
 
-            DRC_CONSTRAINT constraint;
-            int            clearance;
+            int  clearance;
 
             for( PCB_LAYER_ID layer : aOther->GetLayerSet().Seq() )
             {
@@ -2546,17 +2564,24 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 if( !item )
                     continue;
 
-                if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+                if( ( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+                        && !static_cast<ZONE*>( item )->GetIsRuleArea() )
+                {
                     continue;       // stitching vias bind to zones, so ignore them
-
-                if( item->Type() == PCB_FOOTPRINT_T || item->Type() == PCB_GROUP_T )
+                }
+                else if( item->Type() == PCB_FOOTPRINT_T || item->Type() == PCB_GROUP_T )
+                {
                     continue;       // check against children, but not against footprint itself
-
-                if( item->Type() == PCB_FP_TEXT_T && !static_cast<FP_TEXT*>( item )->IsVisible() )
+                }
+                else if( item->Type() == PCB_FP_TEXT_T
+                            && !static_cast<FP_TEXT*>( item )->IsVisible() )
+                {
                     continue;       // ignore hidden items
-
-                if( checkedItems.count( item ) )
-                    continue;
+                }
+                else if( checkedItems.count( item ) )
+                {
+                    continue;       // already checked
+                }
 
                 if( hasDRCViolation( aVia, item ) )
                     return true;
@@ -2606,7 +2631,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             std::sort( foundZones.begin(), foundZones.end(),
                     [] ( const ZONE* a, const ZONE* b )
                     {
-                        return a->GetLayer() < b->GetLayer();
+                        return a->GetFirstLayer() < b->GetFirstLayer();
                     } );
 
             // first take the net of the active layer
