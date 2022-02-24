@@ -268,8 +268,21 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
 
         if( outlines == 0 )
         {
-            // TODO: why does this trash memory?
-            // frame->ShowInfoBarWarning( _( "Zone has no connections." ) );
+            WX_INFOBAR* infobar = frame->GetInfoBar();
+
+#ifdef __WXMAC__
+            // I haven't a clue why this is needed, but if you start another operation before the
+            // animation is over then you end up accessing deleted view items.
+            infobar->SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
+#endif
+
+            infobar->RemoveAllButtons();
+            infobar->ShowMessageFor( _( "Zone has no connections." ), 4000, wxICON_WARNING );
+
+#ifdef __WXMAC__
+            infobar->SetShowHideEffects( wxSHOW_EFFECT_ROLL_TO_BOTTOM, wxSHOW_EFFECT_ROLL_TO_TOP );
+            infobar->SetEffectDuration( 300 );
+#endif
             break;
         }
     }
