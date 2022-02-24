@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2016 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -285,7 +285,12 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
     if( g_filterByLayer && m_layerFilter->SetLayerSelection( g_layerFilter ) != wxNOT_FOUND )
         m_layerFilterOpt->SetValue( true );
     else if( item )
-        m_layerFilter->SetLayerSelection( item->GetLayer() );
+    {
+        if( item->Type() == PCB_ZONE_T ) // a zone can be on more than one layer
+            m_layerFilter->SetLayerSelection( static_cast<ZONE*>(item)->GetFirstLayer() );
+        else
+            m_layerFilter->SetLayerSelection( item->GetLayer() );
+    }
 
     m_trackWidthSelectBox->SetSelection( (int) m_trackWidthSelectBox->GetCount() - 1 );
     m_viaSizesSelectBox->SetSelection( (int) m_viaSizesSelectBox->GetCount() - 1 );
