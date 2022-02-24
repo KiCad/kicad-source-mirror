@@ -2545,35 +2545,30 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             const wxPoint position = aVia->GetPosition();
             const LSET    lset = aVia->GetLayerSet();
 
-            std::vector<ZONE*> foundZones;
-
-            for( ZONE* zone : m_board->Zones() )
+            // first take the net of the active layer
+            if( lset.test( m_frame->GetActiveLayer() ) )
             {
-                for( PCB_LAYER_ID layer : LSET( zone->GetLayerSet() & lset ).Seq() )
+                for( ZONE* z : m_board->Zones() )
                 {
-                    if( zone->HitTestFilledArea( layer, position ) )
-                        foundZones.push_back( zone );
+                    if( z->IsOnLayer( m_frame->GetActiveLayer() ) )
+                    {
+                        if( z->HitTestFilledArea( m_frame->GetActiveLayer(), position ) )
+                            return z->GetNetCode();
+                    }
                 }
             }
 
-            std::sort( foundZones.begin(), foundZones.end(),
-                    [] ( const ZONE* a, const ZONE* b )
-                    {
-                        return a->GetFirstLayer() < b->GetFirstLayer();
-                    } );
-
-            // first take the net of the active layer
-            for( ZONE* z : foundZones )
-            {
-                if( m_frame->GetActiveLayer() == z->GetLayer() )
-                    return z->GetNetCode();
-            }
-
             // none? take the topmost visible layer
-            for( ZONE* z : foundZones )
+            for( PCB_LAYER_ID layer : LSET( m_board->GetVisibleLayers() & lset ).Seq() )
             {
-                if( m_board->IsLayerVisible( z->GetLayer() ) )
-                    return z->GetNetCode();
+                for( ZONE* z : m_board->Zones() )
+                {
+                    if( z->IsOnLayer( m_frame->GetActiveLayer() ) )
+                    {
+                        if( z->HitTestFilledArea( layer, position ) )
+                            return z->GetNetCode();
+                    }
+                }
             }
 
             return -1;
