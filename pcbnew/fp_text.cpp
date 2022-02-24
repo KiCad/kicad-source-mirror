@@ -241,11 +241,11 @@ EDA_ANGLE FP_TEXT::GetDrawRotation() const
 
     if( IsKeepUpright() )
     {
-        // Keep angle between 0 .. 90 deg. Otherwise the text is not easy to read
+        // Keep angle between ]-90 .. 90 deg]. Otherwise the text is not easy to read
         while( rotation > ANGLE_90 )
             rotation -= ANGLE_180;
 
-        while( rotation < ANGLE_0 )
+        while( rotation <= -ANGLE_90 )
             rotation += ANGLE_180;
     }
     else
