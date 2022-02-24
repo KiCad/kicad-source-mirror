@@ -1300,6 +1300,9 @@ TOOL_ACTION PCB_ACTIONS::zoneFillAll( "pcbnew.ZoneFiller.zoneFillAll",
         _( "Fill All Zones" ), _( "Update copper fill of all zones" ),
         BITMAPS::fill_zone );
 
+TOOL_ACTION PCB_ACTIONS::zoneFillDirty( "pcbnew.ZoneFiller.zoneFillDirty",
+        AS_CONTEXT );
+
 TOOL_ACTION PCB_ACTIONS::zoneUnfill( "pcbnew.ZoneFiller.zoneUnfill",
         AS_GLOBAL, 0, "",
         _( "Unfill Zone" ), _( "Remove copper fill from selected zone(s)" ),

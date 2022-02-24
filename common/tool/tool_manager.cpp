@@ -561,7 +561,7 @@ void TOOL_MANAGER::ResetTools( TOOL_BASE::RESET_REASON aReason )
 
 void TOOL_MANAGER::InitTools()
 {
-    for( TOOL_VEC::iterator it = m_toolOrder.begin(); it != m_toolOrder.end(); /* iter inside */ )
+    for( auto it = m_toolOrder.begin(); it != m_toolOrder.end(); /* iter inside */ )
     {
         TOOL_BASE* tool = *it;
         wxASSERT( m_toolState.count( tool ) );

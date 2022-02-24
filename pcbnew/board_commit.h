@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -22,8 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __BOARD_COMMIT_H
-#define __BOARD_COMMIT_H
+#ifndef BOARD_COMMIT_H
+#define BOARD_COMMIT_H
 
 #include <commit.h>
 
@@ -45,7 +46,7 @@ public:
 
     virtual void Push( const wxString& aMessage = wxT( "A commit" ),
                        bool aCreateUndoEntry = true, bool aSetDirtyBit = true,
-                       bool aUpdateConnectivity = true ) override;
+                       bool aUpdateConnectivity = true, bool aZoneFillOp = false ) override;
 
     virtual void Revert() override;
     COMMIT&      Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType ) override;
@@ -66,10 +67,13 @@ public:
 private:
     virtual EDA_ITEM* parentObject( EDA_ITEM* aItem ) const override;
 
+    void dirtyIntersectingZones( BOARD_ITEM* item );
+
 private:
-    TOOL_MANAGER* m_toolMgr;
-    bool          m_isFootprintEditor;
-    bool          m_resolveNetConflicts;
+    TOOL_MANAGER*  m_toolMgr;
+    bool           m_isFootprintEditor;
+    bool           m_isBoardEditor;
+    bool           m_resolveNetConflicts;
 };
 
 #endif

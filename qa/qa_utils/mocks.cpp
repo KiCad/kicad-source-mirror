@@ -35,6 +35,7 @@
 #include <footprint_wizard_frame.h>
 #include <footprint.h>
 #include <tools/pcb_actions.h>
+#include <tools/zone_filler_tool.h>
 #include <router/router_tool.h>
 #include <dialog_find.h>
 #include <dialog_filter_selection.h>
@@ -616,6 +617,28 @@ void PCB_TOOL_BASE::setTransitions()
 bool PCB_TOOL_BASE::Is45Limited() const
 {
     return false;
+}
+
+
+ZONE_FILLER_TOOL::ZONE_FILLER_TOOL() :
+    PCB_TOOL_BASE( "pcbnew.ZoneFiller" ),
+    m_fillInProgress( false )
+{
+}
+
+
+ZONE_FILLER_TOOL::~ZONE_FILLER_TOOL()
+{
+}
+
+
+void ZONE_FILLER_TOOL::Reset( RESET_REASON aReason )
+{
+}
+
+
+void ZONE_FILLER_TOOL::setTransitions()
+{
 }
 
 

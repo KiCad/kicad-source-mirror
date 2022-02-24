@@ -1020,16 +1020,11 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new CONVERT_TOOL );
     m_toolManager->RegisterTool( new SCRIPTING_TOOL );
 
-    m_toolManager->GetTool<PCB_SELECTION_TOOL>()->SetIsFootprintEditor( true );
-    m_toolManager->GetTool<EDIT_TOOL>()->SetIsFootprintEditor( true );
-    m_toolManager->GetTool<PAD_TOOL>()->SetIsFootprintEditor( true );
-    m_toolManager->GetTool<DRAWING_TOOL>()->SetIsFootprintEditor( true );
-    m_toolManager->GetTool<PCB_POINT_EDITOR>()->SetIsFootprintEditor( true );
-    m_toolManager->GetTool<PCB_CONTROL>()->SetIsFootprintEditor( true );
-    m_toolManager->GetTool<PCB_PICKER_TOOL>()->SetIsFootprintEditor( true );
-    m_toolManager->GetTool<POSITION_RELATIVE_TOOL>()->SetIsFootprintEditor( true );
-    m_toolManager->GetTool<GROUP_TOOL>()->SetIsFootprintEditor( true );
-    m_toolManager->GetTool<SCRIPTING_TOOL>()->SetIsFootprintEditor( true );
+    for( TOOL_BASE* tool : m_toolManager->Tools() )
+    {
+        if( PCB_TOOL_BASE* pcbTool = dynamic_cast<PCB_TOOL_BASE*>( tool ) )
+            pcbTool->SetIsFootprintEditor( true );
+    }
 
     m_toolManager->GetTool<PCB_VIEWER_TOOLS>()->SetFootprintFrame( true );
     m_toolManager->InitTools();

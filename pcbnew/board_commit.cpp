@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -28,6 +28,7 @@
 #include <pcb_group.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
+#include <tools/zone_filler_tool.h>
 #include <view/view.h>
 #include <board_commit.h>
 #include <tools/pcb_tool_base.h>
@@ -42,6 +43,7 @@ using namespace std::placeholders;
 BOARD_COMMIT::BOARD_COMMIT( TOOL_MANAGER* aToolMgr ) :
         m_toolMgr( aToolMgr ),
         m_isFootprintEditor( false ),
+        m_isBoardEditor( false ),
         m_resolveNetConflicts( false )
 {
 }
@@ -52,6 +54,7 @@ BOARD_COMMIT::BOARD_COMMIT( PCB_TOOL_BASE* aTool ) :
 {
     m_toolMgr = aTool->GetManager();
     m_isFootprintEditor = aTool->IsFootprintEditor();
+    m_isBoardEditor = aTool->IsBoardEditor();
 }
 
 
@@ -60,6 +63,7 @@ BOARD_COMMIT::BOARD_COMMIT( EDA_DRAW_FRAME* aFrame ) :
 {
     m_toolMgr = aFrame->GetToolManager();
     m_isFootprintEditor = aFrame->IsType( FRAME_FOOTPRINT_EDITOR );
+    m_isBoardEditor = aFrame->IsType( FRAME_PCB_EDITOR );
 }
 
 
@@ -96,18 +100,59 @@ COMMIT& BOARD_COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag
 }
 
 
+void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item )
+{
+    if( item->Type() == PCB_FOOTPRINT_T )
+    {
+        static_cast<FOOTPRINT*>( item )->RunOnChildren(
+                [&]( BOARD_ITEM* child )
+                {
+                    dirtyIntersectingZones( child );
+                } );
+    }
+    else if( item->Type() == PCB_GROUP_T )
+    {
+        static_cast<PCB_GROUP*>( item )->RunOnChildren(
+                [&]( BOARD_ITEM* child )
+                {
+                    dirtyIntersectingZones( child );
+                } );
+    }
+    else
+    {
+        ZONE_FILLER_TOOL* zoneFillerTool = m_toolMgr->GetTool<ZONE_FILLER_TOOL>();
+        BOARD*            board = static_cast<BOARD*>( m_toolMgr->GetModel() );
+        EDA_RECT          bbox = item->GetBoundingBox();
+        LSET              layers = item->GetLayerSet();
+
+        for( ZONE* zone : board->Zones() )
+        {
+            if( zone->GetIsRuleArea() )
+                continue;
+
+            if( ( zone->GetLayerSet() & layers ).any()
+                    && zone->GetCachedBoundingBox().Intersects( bbox ) )
+            {
+                zoneFillerTool->DirtyZone( zone );
+            }
+        }
+    }
+}
+
+
 void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool aSetDirtyBit,
-                         bool aUpdateConnectivity )
+                         bool aUpdateConnectivity, bool aZoneFillOp )
 {
     // Objects potentially interested in changes:
     PICKED_ITEMS_LIST   undoList;
     KIGFX::VIEW*        view = m_toolMgr->GetView();
-    BOARD*              board = (BOARD*) m_toolMgr->GetModel();
+    BOARD*              board = static_cast<BOARD*>( m_toolMgr->GetModel() );
     PCB_BASE_FRAME*     frame = dynamic_cast<PCB_BASE_FRAME*>( m_toolMgr->GetToolHolder() );
     std::set<EDA_ITEM*> savedModules;
     PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     bool                itemsDeselected = false;
     bool                solderMaskDirty = false;
+    bool                autofillZones = false;
 
     std::vector<BOARD_ITEM*> bulkAddedItems;
     std::vector<BOARD_ITEM*> bulkRemovedItems;
@@ -115,6 +160,14 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
     if( Empty() )
         return;
+
+    if( m_isBoardEditor && !aZoneFillOp && frame->GetPcbNewSettings()->m_AutoRefillZones )
+    {
+        autofillZones = true;
+
+        for( ZONE* zone : board->Zones() )
+            zone->CacheBoundingBox();
+    }
 
     for( COMMIT_LINE& ent : m_changes )
     {
@@ -205,6 +258,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                     }
                 }
 
+                if( autofillZones )
+                    dirtyIntersectingZones( boardItem );
+
                 if( view && boardItem->Type() != PCB_NETINFO_T )
                     view->Add( boardItem );
 
@@ -223,6 +279,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                     selTool->RemoveItemFromSel( boardItem, true /* quiet mode */ );
                     itemsDeselected = true;
                 }
+
+                if( autofillZones )
+                    dirtyIntersectingZones( boardItem );
 
                 switch( boardItem->Type() )
                 {
@@ -334,7 +393,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                     bulkRemovedItems.push_back( boardItem );
                     break;
 
-                default:                        // other types do not need to (or should not) be handled
+                default:                // other types do not need to (or should not) be handled
                     wxASSERT( false );
                     break;
                 }
@@ -360,6 +419,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                         connectivity->MarkItemNetAsDirty( static_cast<BOARD_ITEM*>( ent.m_copy ) );
 
                     connectivity->Update( boardItem );
+                }
+
+                if( autofillZones )
+                {
+                    dirtyIntersectingZones( static_cast<BOARD_ITEM*>( ent.m_copy ));   // before
+                    dirtyIntersectingZones( boardItem );                               // after
                 }
 
                 if( view )
@@ -400,7 +465,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
     if( itemsChanged.size() > 0 )
         board->OnItemsChanged( itemsChanged );
 
-    if( !m_isFootprintEditor )
+    if( m_isBoardEditor )
     {
         size_t num_changes = m_changes.size();
 
@@ -415,48 +480,47 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
             connectivity->ClearDynamicRatsnest();
         }
 
-        if( frame && solderMaskDirty )
+        if( solderMaskDirty )
             frame->HideSolderMask();
 
-        if( frame )
-            frame->GetCanvas()->RedrawRatsnest();
+        frame->GetCanvas()->RedrawRatsnest();
 
-        if( m_changes.size() > num_changes )
+        // Log undo items for any connectivity changes
+        for( size_t i = num_changes; i < m_changes.size(); ++i )
         {
-            for( size_t i = num_changes; i < m_changes.size(); ++i )
+            COMMIT_LINE& ent = m_changes[i];
+
+            wxASSERT( ( ent.m_type & CHT_TYPE ) == CHT_MODIFY );
+
+            BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( ent.m_item );
+
+            if( aCreateUndoEntry )
             {
-                COMMIT_LINE& ent = m_changes[i];
-
-                // This should only be modifications from the connectivity algo
-                wxASSERT( ( ent.m_type & CHT_TYPE ) == CHT_MODIFY );
-
-                BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( ent.m_item );
-
-                if( aCreateUndoEntry )
-                {
-                    ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::CHANGED );
-                    wxASSERT( ent.m_copy );
-                    itemWrapper.SetLink( ent.m_copy );
-                    undoList.PushItem( itemWrapper );
-                }
-                else
-                {
-                    delete ent.m_copy;
-                }
-
-                if( view )
-                    view->Update( boardItem );
+                ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::CHANGED );
+                wxASSERT( ent.m_copy );
+                itemWrapper.SetLink( ent.m_copy );
+                undoList.PushItem( itemWrapper );
             }
+            else
+            {
+                delete ent.m_copy;
+            }
+
+            if( view )
+                view->Update( boardItem );
         }
     }
 
-    if( !m_isFootprintEditor && aCreateUndoEntry && frame )
+    if( m_isBoardEditor && aCreateUndoEntry )
         frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNSPECIFIED );
 
     m_toolMgr->PostEvent( { TC_MESSAGE, TA_MODEL_CHANGE, AS_GLOBAL } );
 
     if( itemsDeselected )
         m_toolMgr->PostEvent( EVENTS::UnselectedEvent );
+
+    if( autofillZones )
+        m_toolMgr->RunAction( PCB_ACTIONS::zoneFillDirty );
 
     if( frame )
     {

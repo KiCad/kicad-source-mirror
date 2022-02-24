@@ -66,7 +66,6 @@ public:
     typedef std::map<std::string, TOOL_STATE*> NAME_STATE_MAP;
     typedef std::map<TOOL_ID, TOOL_STATE*> ID_STATE_MAP;
     typedef std::list<TOOL_ID> ID_LIST;
-    typedef std::vector<TOOL_BASE*> TOOL_VEC;
 
     /**
      * Generates a unique ID from for a tool with given name.
@@ -225,6 +224,11 @@ public:
 
         return nullptr;
     }
+
+    /*
+     * Return all registered tools.
+     */
+    std::vector<TOOL_BASE*> Tools() { return m_toolOrder; }
 
     /**
      * Deactivate the currently active tool.
@@ -531,7 +535,7 @@ private:
     void setActiveState( TOOL_STATE* aState );
 
     ///< List of tools in the order they were registered
-    TOOL_VEC m_toolOrder;
+    std::vector<TOOL_BASE*> m_toolOrder;
 
     ///< Index of registered tools current states, associated by tools' objects.
     TOOL_STATE_MAP m_toolState;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -28,6 +28,7 @@
 #define ZONE_FILLER_TOOL_H
 
 #include <tools/pcb_tool_base.h>
+#include <zone.h>
 
 
 class PCB_EDIT_FRAME;
@@ -52,10 +53,16 @@ public:
 
     int ZoneFill( const TOOL_EVENT& aEvent );
     int ZoneFillAll( const TOOL_EVENT& aEvent );
+    int ZoneFillDirty( const TOOL_EVENT& aEvent );
     int ZoneUnfill( const TOOL_EVENT& aEvent );
     int ZoneUnfillAll( const TOOL_EVENT& aEvent );
 
     bool IsBusy() { return m_fillInProgress; }
+
+    void DirtyZone( ZONE* aZone )
+    {
+        m_dirtyZoneIDs.insert( aZone->m_Uuid );
+    }
 
 private:
     ///< Refocus on an idle event (used after the Progress Reporter messes up the focus).
@@ -66,6 +73,8 @@ private:
 
 private:
     bool m_fillInProgress;
+
+    std::set<KIID> m_dirtyZoneIDs;
 };
 
 #endif

@@ -76,7 +76,8 @@ public:
      * Creates a tool with given id & name. The name must be unique. */
     PCB_TOOL_BASE( TOOL_ID aId, const std::string& aName ) :
             TOOL_INTERACTIVE ( aId, aName ),
-            m_isFootprintEditor( false )
+            m_isFootprintEditor( false ),
+            m_isBoardEditor( false )
     {};
 
     /**
@@ -85,7 +86,8 @@ public:
      * Creates a tool with given name. The name must be unique. */
     PCB_TOOL_BASE( const std::string& aName ) :
             TOOL_INTERACTIVE ( aName ),
-            m_isFootprintEditor( false )
+            m_isFootprintEditor( false ),
+            m_isBoardEditor( false )
     {};
 
     virtual ~PCB_TOOL_BASE() {};
@@ -102,6 +104,9 @@ public:
      */
     void SetIsFootprintEditor( bool aEnabled ) { m_isFootprintEditor = aEnabled; }
     bool IsFootprintEditor() const { return m_isFootprintEditor; }
+
+    void SetIsBoardEditor( bool aEnabled ) { m_isBoardEditor = aEnabled; }
+    bool IsBoardEditor() const { return m_isBoardEditor; }
 
     /**
      * Should the tool use its 45° mode option?
@@ -179,6 +184,7 @@ protected:
 
 protected:
     bool m_isFootprintEditor;
+    bool m_isBoardEditor;
 };
 
 #endif

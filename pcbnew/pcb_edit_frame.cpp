@@ -568,6 +568,12 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new SCRIPTING_TOOL );
     m_toolManager->InitTools();
 
+    for( TOOL_BASE* tool : m_toolManager->Tools() )
+    {
+        if( PCB_TOOL_BASE* pcbTool = dynamic_cast<PCB_TOOL_BASE*>( tool ) )
+            pcbTool->SetIsBoardEditor( true );
+    }
+
     // Run the selection tool, it is supposed to be always active
     m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 }

@@ -363,7 +363,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	sbSizerPcbGraphics = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Graphics Editing") ), wxVERTICAL );
 
 	m_cbPcbGraphic45Mode = new wxCheckBox( sbSizerPcbGraphics->GetStaticBox(), wxID_ANY, _("Limit actions to 45 degrees from start"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerPcbGraphics->Add( m_cbPcbGraphic45Mode, 0, wxALL, 5 );
+	sbSizerPcbGraphics->Add( m_cbPcbGraphic45Mode, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	pcbOptionsSizer->Add( sbSizerPcbGraphics, 0, wxEXPAND|wxTOP, 5 );
@@ -377,11 +377,11 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 	sbSizer4->Add( m_showPageLimits, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_autoRefillZones = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Refill zones after Zone Properties dialog"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_autoRefillZones = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Auto-refill zones"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_autoRefillZones->SetValue(true);
 	m_autoRefillZones->SetToolTip( _("If checked, zones will be re-filled after editing the properties of the zone using the Zone Properties dialog") );
 
-	sbSizer4->Add( m_autoRefillZones, 0, wxALL, 5 );
+	sbSizer4->Add( m_autoRefillZones, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	pcbOptionsSizer->Add( sbSizer4, 1, wxEXPAND|wxTOP, 5 );
