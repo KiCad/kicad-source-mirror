@@ -91,6 +91,7 @@ private:
     bool                       m_lastTextItalic;
     bool                       m_lastNetClassDirectiveItalic;
     FILL_T                     m_lastFillStyle;
+    wxString                   m_mruPath;
 
     ///< Re-entrancy guards
     bool                       m_inPlaceSymbol;

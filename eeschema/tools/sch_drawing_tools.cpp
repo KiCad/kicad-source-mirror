@@ -66,6 +66,7 @@ SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         m_lastTextItalic( false ),
         m_lastNetClassDirectiveItalic( true ),
         m_lastFillStyle( FILL_T::NO_FILL ),
+        m_mruPath( wxEmptyString ),
         m_inPlaceSymbol( false ),
         m_inDrawShape( false ),
         m_inPlaceImage( false ),
@@ -494,7 +495,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 // having an auto-pan
                 EDA_RECT canvas_area = GetCanvasFreeAreaPixels();
 
-                wxFileDialog dlg( m_frame, _( "Choose Image" ), wxEmptyString, wxEmptyString,
+                wxFileDialog dlg( m_frame, _( "Choose Image" ), m_mruPath, wxEmptyString,
                                   _( "Image Files" ) + wxS( " " ) + wxImage::GetImageExtWildcard(),
                                   wxFD_OPEN );
 
@@ -515,6 +516,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 cursorPos = controls->GetMousePosition( true );
 
                 wxString fullFilename = dlg.GetPath();
+                m_mruPath = wxPathOnly( fullFilename );
 
                 if( wxFileExists( fullFilename ) )
                     image = new SCH_BITMAP( cursorPos );
