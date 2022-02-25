@@ -431,7 +431,9 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics( const wxPoint& 
     t->SetText( StringFromValue( EDA_UNITS::UNSCALED, settings.GetCopperLayerCount(), false ) );
     colData1.push_back( t );
 
-    EDA_RECT size = m_frame->GetBoard()->ComputeBoundingBox( true );
+    SHAPE_POLY_SET outline;
+    m_frame->GetBoard()->GetBoardPolygonOutlines( outline );
+    BOX2I size = outline.BBox();
     t = static_cast<PCB_TEXT*>( dataStyle->Duplicate() );
     t->SetText( _( "Board overall dimensions: " ) );
     colLabel1.push_back( t );
