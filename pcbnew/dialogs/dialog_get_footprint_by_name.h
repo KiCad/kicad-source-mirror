@@ -50,6 +50,8 @@ public:
         // Hide help string until someone implements successive placement (#2227)
         m_multipleHint->Show( false );
 
+        SetInitialFocus( m_SearchTextCtrl );
+
         SetupStandardButtons();
 
         // Dialog should not shrink beyond it's minimal size.
