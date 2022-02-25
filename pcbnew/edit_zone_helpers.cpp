@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * Some code comes from FreePCB.
  *
@@ -124,28 +124,23 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
     commit.Stage( pickedList );
 
     // Only auto-refill zones here if in user preferences
-    if( Settings().m_AutoRefillZones )
+    if( Settings().m_AutoRefillZones && zones_to_refill.size() )
     {
-        if( zones_to_refill.size() )
-        {
-            ZONE_FILLER filler( GetBoard(), &commit );
-            wxString    title = wxString::Format( _( "Refill %d Zones" ),
-                                                  (int) zones_to_refill.size() );
+        ZONE_FILLER filler( GetBoard(), &commit );
+        wxString title = wxString::Format( _( "Refill %d Zones" ), (int) zones_to_refill.size() );
 
-            std::unique_ptr<WX_PROGRESS_REPORTER> reporter;
-            reporter = std::make_unique<WX_PROGRESS_REPORTER>( this, title, 4 );
-            filler.SetProgressReporter( reporter.get() );
+        std::unique_ptr<WX_PROGRESS_REPORTER> reporter;
+        reporter = std::make_unique<WX_PROGRESS_REPORTER>( this, title, 4 );
+        filler.SetProgressReporter( reporter.get() );
 
-            if( !filler.Fill( zones_to_refill ) )
-            {
-                GetBoard()->GetConnectivity()->Build( GetBoard() );
-                // User has already OK'ed dialog so we're going to go ahead and commit even if the
-                // fill was cancelled.
-            }
-        }
+        filler.Fill( zones_to_refill );
     }
 
     commit.Push( _( "Modify zone properties" ) );
+
+    if( Settings().m_AutoRefillZones && zones_to_refill.size() )
+        GetBoard()->GetConnectivity()->Build( GetBoard() );
+
     GetBoard()->GetConnectivity()->RecalculateRatsnest();
 
     pickedList.ClearItemsList();  // s_ItemsListPicker is no longer owner of picked items
