@@ -2412,7 +2412,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 constraint = m_drcEngine->EvalRules( DISALLOW_CONSTRAINT, aVia, nullptr,
                                                      UNDEFINED_LAYER );
 
-                if( constraint.m_DisallowFlags && constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
+                if( constraint.m_DisallowFlags )
                     return true;
 
                 return false;
