@@ -89,7 +89,8 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_propertiesFrameWidth( 200 ),
         m_originSelectBox( nullptr ),
         m_originSelectChoice( 0 ),
-        m_pageSelectBox( nullptr )
+        m_pageSelectBox( nullptr ),
+        m_mruImagePath( wxEmptyString )
 {
     m_maximizeByDefault = true;
     m_userUnits = EDA_UNITS::MILLIMETRES;
@@ -849,7 +850,7 @@ DS_DATA_ITEM* PL_EDITOR_FRAME::AddDrawingSheetItem( int aType )
 
     case DS_DATA_ITEM::DS_BITMAP:
     {
-        wxFileDialog fileDlg( this, _( "Choose Image" ), wxEmptyString, wxEmptyString,
+        wxFileDialog fileDlg( this, _( "Choose Image" ), m_mruImagePath, wxEmptyString,
                               _( "Image Files" ) + wxS( " " ) + wxImage::GetImageExtWildcard(),
                               wxFD_OPEN );
 
@@ -857,6 +858,7 @@ DS_DATA_ITEM* PL_EDITOR_FRAME::AddDrawingSheetItem( int aType )
             return nullptr;
 
         wxString fullFilename = fileDlg.GetPath();
+        m_mruImagePath = wxPathOnly( fullFilename );
 
         if( !wxFileExists( fullFilename ) )
         {

@@ -88,6 +88,7 @@ private:
     LABEL_SPIN_STYLE           m_lastTextOrientation;
     bool                       m_lastTextBold;
     bool                       m_lastTextItalic;
+    wxString                   m_mruPath;
 
     ///< Re-entrancy guards
     bool                       m_inPlaceSymbol;

@@ -285,6 +285,7 @@ private:
     int         m_originSelectChoice;   // the last choice for m_originSelectBox
     wxChoice*   m_pageSelectBox;        // The page number sel'ector (page 1 or other pages
                                         // useful when there are some items which are
+    wxString    m_mruImagePath;         // Most recently used path for placing a new image
                                         // only on page 1, not on page 1
     wxPoint     m_grid_origin;
 };
