@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-14 09:25-0800\n"
+"POT-Creation-Date: 2022-02-25 11:58-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -14822,8 +14822,8 @@ msgstr "High speed"
 msgid "RF Attenuators"
 msgstr "RF Attenuators"
 
-msgid "TransLine "
-msgstr "TransLine "
+msgid "Transmission Lines"
+msgstr "Transmission Lines"
 
 msgid "Memo"
 msgstr "Memo"
@@ -15108,6 +15108,9 @@ msgstr "Autoplace components"
 
 msgid "This is the default net class."
 msgstr "This is the default net class."
+
+msgid "Tessellating copper zones..."
+msgstr "Tessellating copper zones..."
 
 msgid "PCB"
 msgstr "PCB"
@@ -15490,6 +15493,9 @@ msgstr "Convert lines to rectangle"
 
 msgid "Unknown cleanup action"
 msgstr "Unknown cleanup action"
+
+msgid "Updating nets..."
+msgstr "Updating nets..."
 
 msgid "(self-intersecting)"
 msgstr "(self-intersecting)"
@@ -17927,9 +17933,6 @@ msgstr "Rectangle Properties"
 msgid "Line Segment Properties"
 msgstr "Line Segment Properties"
 
-msgid "Line width may not be 0 for unfilled shapes."
-msgstr "Line width may not be 0 for unfilled shapes."
-
 msgid "Modify drawing properties"
 msgstr "Modify drawing properties"
 
@@ -18247,6 +18250,9 @@ msgstr "Ring"
 
 msgid "Center:"
 msgstr "Center:"
+
+msgid "Line width may not be 0 for unfilled shapes."
+msgstr "Line width may not be 0 for unfilled shapes."
 
 #, c-format
 msgid "Corner %d"
@@ -19845,8 +19851,8 @@ msgstr "Limit actions to 45 degrees from start"
 msgid "Draw an outline to show the sheet size."
 msgstr "Draw an outline to show the sheet size."
 
-msgid "Refill zones after Zone Properties dialog"
-msgstr "Refill zones after Zone Properties dialog"
+msgid "Auto-refill zones"
+msgstr "Auto-refill zones"
 
 msgid ""
 "If checked, zones will be re-filled after editing the properties of the zone "
@@ -21246,9 +21252,6 @@ msgstr "keepout area"
 msgid "keepout area '%s'"
 msgstr "keepout area '%s'"
 
-msgid "Tessellating copper zones..."
-msgstr "Tessellating copper zones..."
-
 #, c-format
 msgid "Resolved zone connection type: %s."
 msgstr "Resolved zone connection type: %s."
@@ -21918,10 +21921,6 @@ msgstr "(%s min spoke count %d; actual %d)"
 
 msgid "Modify zone properties"
 msgstr "Modify zone properties"
-
-#, c-format
-msgid "Refill %d Zones"
-msgstr "Refill %d Zones"
 
 msgid "Export D-356 Test File"
 msgstr "Export D-356 Test File"
@@ -23435,6 +23434,18 @@ msgid "Unknown mapping of the Altium layer '%s'."
 msgstr "Unknown mapping of the Altium layer '%s'."
 
 #, c-format
+msgid "Unknown Mode string: '%s'."
+msgstr "Unknown Mode string: '%s'."
+
+#, c-format
+msgid "Unknown Record name string: '%s'."
+msgstr "Unknown Record name string: '%s'."
+
+#, c-format
+msgid "Unknown Extended Primitive Information type: '%s'."
+msgstr "Unknown Extended Primitive Information type: '%s'."
+
+#, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr "Pads6 stream has unexpected length for subrecord 6: %d."
 
@@ -23460,6 +23471,9 @@ msgstr "'%s' was not fully parsed."
 #, c-format
 msgid "Record of unknown type: '%d'."
 msgstr "Record of unknown type: '%d'."
+
+msgid "Loading extended primitive information data..."
+msgstr "Loading extended primitive information data..."
 
 msgid "Loading board data..."
 msgstr "Loading board data..."
@@ -23505,14 +23519,6 @@ msgstr "Loading nets..."
 msgid "Loading polygons..."
 msgstr "Loading polygons..."
 
-#, c-format
-msgid ""
-"Polygon found on an Altium layer (%d) with no KiCad equivalent. It has been "
-"moved to KiCad layer Eco1_User."
-msgstr ""
-"Polygon found on an Altium layer (%d) with no KiCad equivalent. It has been "
-"moved to KiCad layer Eco1_User."
-
 msgid "Loading rules..."
 msgstr "Loading rules..."
 
@@ -23521,14 +23527,6 @@ msgstr "Loading board regions..."
 
 msgid "Loading zones..."
 msgstr "Loading zones..."
-
-#, c-format
-msgid ""
-"Zone found on an Altium layer (%d) with no KiCad equivalent. It has been "
-"moved to KiCad layer Eco1_User."
-msgstr ""
-"Zone found on an Altium layer (%d) with no KiCad equivalent. It has been "
-"moved to KiCad layer Eco1_User."
 
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
@@ -26782,6 +26780,16 @@ msgstr "Rules"
 msgid "Zone fills may be inaccurate.  DRC rules contain errors."
 msgstr "Zone fills may be inaccurate.  DRC rules contain errors."
 
+#, c-format
+msgid "Refill %d Zones"
+msgstr "Refill %d Zones"
+
+msgid "Auto-fill Zone(s)"
+msgstr "Auto-fill Zone(s)"
+
+msgid "Zone has no connections."
+msgstr "Zone has no connections."
+
 msgid "Incomplete undo/redo operation: some items not found"
 msgstr "Incomplete undo/redo operation: some items not found"
 
@@ -26999,6 +27007,9 @@ msgid ""
 msgstr ""
 "Double click (or middle click) to change color; right click for more actions"
 
+msgid "Objects"
+msgstr "Objects"
+
 msgid "Double click or middle click for color change, right click for menu"
 msgstr "Double click or middle click for color change, right click for menu"
 
@@ -27144,6 +27155,9 @@ msgstr "Show All Netclasses"
 msgid "Hide All Other Netclasses"
 msgstr "Hide All Other Netclasses"
 
+msgid "Presets (Ctrl+Tab):"
+msgstr "Presets (Ctrl+Tab):"
+
 msgid "Save preset..."
 msgstr "Save preset..."
 
@@ -27164,6 +27178,9 @@ msgstr "Delete Preset"
 
 msgid "Select preset:"
 msgstr "Select preset:"
+
+msgid "Viewports (Alt+Tab):"
+msgstr "Viewports (Alt+Tab):"
 
 msgid "Save viewport..."
 msgstr "Save viewport..."
@@ -27196,26 +27213,17 @@ msgstr ""
 "The current color theme is read-only.  Create a new theme in Preferences to "
 "enable color editing."
 
-msgid "Objects"
-msgstr "Objects"
-
 msgid "Show the Net Inspector"
 msgstr "Show the Net Inspector"
 
 msgid "Configure net classes"
 msgstr "Configure net classes"
 
-msgid "Presets (Ctrl+Tab):"
-msgstr "Presets (Ctrl+Tab):"
-
 msgid "(unsaved)"
 msgstr "(unsaved)"
 
 msgid "Layer presets"
 msgstr "Layer presets"
-
-msgid "Viewports (Alt+Tab):"
-msgstr "Viewports (Alt+Tab):"
 
 #, c-format
 msgid "Only %s"
@@ -27282,9 +27290,6 @@ msgstr "Filled Area"
 msgid "HatchBorder Lines"
 msgstr "HatchBorder Lines"
 
-msgid "Corner Count"
-msgstr "Corner Count"
-
 #, c-format
 msgid "Rule Area Cutout on %s"
 msgstr "Rule Area Cutout on %s"
@@ -27327,9 +27332,6 @@ msgstr "Refill"
 
 msgid "Continue without Refill"
 msgstr "Continue without Refill"
-
-msgid "Performing polygon fills..."
-msgstr "Performing polygon fills…"
 
 msgid "inherited"
 msgstr "inherited"
@@ -27447,6 +27449,34 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "TransLine "
+#~ msgstr "TransLine "
+
+#~ msgid "Refill zones after Zone Properties dialog"
+#~ msgstr "Refill zones after Zone Properties dialog"
+
+#, c-format
+#~ msgid ""
+#~ "Polygon found on an Altium layer (%d) with no KiCad equivalent. It has "
+#~ "been moved to KiCad layer Eco1_User."
+#~ msgstr ""
+#~ "Polygon found on an Altium layer (%d) with no KiCad equivalent. It has "
+#~ "been moved to KiCad layer Eco1_User."
+
+#, c-format
+#~ msgid ""
+#~ "Zone found on an Altium layer (%d) with no KiCad equivalent. It has been "
+#~ "moved to KiCad layer Eco1_User."
+#~ msgstr ""
+#~ "Zone found on an Altium layer (%d) with no KiCad equivalent. It has been "
+#~ "moved to KiCad layer Eco1_User."
+
+#~ msgid "Corner Count"
+#~ msgstr "Corner Count"
+
+#~ msgid "Performing polygon fills..."
+#~ msgstr "Performing polygon fills…"
 
 #~ msgid "Duplicate instances of "
 #~ msgstr "Duplicate instances of "
