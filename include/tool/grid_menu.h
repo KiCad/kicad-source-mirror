@@ -35,6 +35,8 @@ class GRID_MENU : public ACTION_MENU
 public:
     GRID_MENU( EDA_DRAW_FRAME* aParent );
 
+    void UpdateTitle() override;
+
     static void BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* aCfg,
                                  EDA_DRAW_FRAME* aParent );
 

@@ -34,6 +34,8 @@ class ZOOM_MENU : public ACTION_MENU
 public:
     ZOOM_MENU( EDA_DRAW_FRAME* aParent );
 
+    void UpdateTitle() override;
+
 private:
     ACTION_MENU* create() const override
     {

@@ -37,7 +37,7 @@ GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) :
         ACTION_MENU( true ),
         m_parent( aParent )
 {
-    SetTitle( _( "Grid" ) );
+    UpdateTitle();
     SetIcon( BITMAPS::grid_select );
 
     APP_SETTINGS_BASE* settings = m_parent->config();
@@ -56,6 +56,12 @@ OPT_TOOL_EVENT GRID_MENU::eventHandler( const wxMenuEvent& aEvent )
     OPT_TOOL_EVENT event( ACTIONS::gridPreset.MakeEvent() );
     event->SetParameter( (intptr_t) aEvent.GetId() - ID_POPUP_GRID_START );
     return event;
+}
+
+
+void GRID_MENU::UpdateTitle()
+{
+    SetTitle( _( "Grid" ) );
 }
 
 

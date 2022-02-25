@@ -40,13 +40,8 @@ ZOOM_MENU::ZOOM_MENU( EDA_DRAW_FRAME* aParent ) :
         ACTION_MENU( true ),
         m_parent( aParent )
 {
-    SetTitle( _( "Zoom" ) );
+    UpdateTitle();
     SetIcon( BITMAPS::zoom_selection );
-
-    int i = ID_POPUP_ZOOM_LEVEL_START + 1;  // 0 reserved for menus which support auto-zoom
-
-    for( double factor : m_parent->config()->m_Window.zoom_factors )
-        Append( i++, wxString::Format( _( "Zoom: %.2f" ), factor ), wxEmptyString, wxITEM_CHECK );
 }
 
 
@@ -58,17 +53,30 @@ OPT_TOOL_EVENT ZOOM_MENU::eventHandler( const wxMenuEvent& aEvent )
 }
 
 
+void ZOOM_MENU::UpdateTitle()
+{
+    SetTitle( _( "Zoom" ) );
+}
+
+
 void ZOOM_MENU::update()
 {
+    Clear();
+
+    int ii = ID_POPUP_ZOOM_LEVEL_START + 1;  // 0 reserved for menus which support auto-zoom
+
+    for( double factor : m_parent->config()->m_Window.zoom_factors )
+        Append( ii++, wxString::Format( _( "Zoom: %.2f" ), factor ), wxEmptyString, wxITEM_CHECK );
+
     double zoom = m_parent->GetCanvas()->GetGAL()->GetZoomFactor();
 
     const std::vector<double>& zoomList = m_parent->config()->m_Window.zoom_factors;
 
-    for( size_t i = 0; i < zoomList.size(); ++i )
+    for( size_t jj = 0; jj < zoomList.size(); ++jj )
     {
         // Search for a value near the current zoom setting:
-        double rel_error = std::fabs( zoomList[i] - zoom ) / zoom;
+        double rel_error = std::fabs( zoomList[jj] - zoom ) / zoom;
         // IDs start with 1 (leaving 0 for auto-zoom)
-        Check( ID_POPUP_ZOOM_LEVEL_START + i + 1, rel_error < 0.1 );
+        Check( ID_POPUP_ZOOM_LEVEL_START + jj + 1, rel_error < 0.1 );
     }
 }
