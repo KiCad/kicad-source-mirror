@@ -86,7 +86,7 @@ void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRep
 
     if( filler.Fill( toFill, true, aCaller ) )
     {
-        commit.Push( _( "Fill Zone(s)" ), true, true, false, true );
+        commit.Push( _( "Fill Zone(s)" ), SKIP_CONNECTIVITY | ZONE_FILL_OP );
         getEditFrame<PCB_EDIT_FRAME>()->m_ZoneFillsDirty = false;
     }
     else
@@ -161,7 +161,7 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
     {
         filler.GetProgressReporter()->AdvancePhase();
 
-        commit.Push( _( "Fill Zone(s)" ), true, true, false, true );
+        commit.Push( _( "Fill Zone(s)" ), SKIP_CONNECTIVITY | ZONE_FILL_OP );
         frame->m_ZoneFillsDirty = false;
     }
     else
@@ -247,7 +247,7 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
     }
 
     if( filler.Fill( toFill ) )
-        commit.Push( _( "Auto-fill Zone(s)" ), false, false, false, true );
+        commit.Push( _( "Auto-fill Zone(s)" ), APPEND_UNDO | SKIP_CONNECTIVITY | ZONE_FILL_OP );
     else
         commit.Revert();
 
@@ -270,19 +270,20 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
         {
             WX_INFOBAR* infobar = frame->GetInfoBar();
 
-#ifdef __WXMAC__
             // I haven't a clue why this is needed, but if you start another operation before the
             // animation is over then you end up accessing deleted view items.
+            wxShowEffect savedShowEffect = infobar->GetShowEffect();
+            wxShowEffect savedHideEffect = infobar->GetHideEffect();
+            int          savedEffectDuration = infobar->GetEffectDuration();
+
             infobar->SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
-#endif
+            {
+                infobar->RemoveAllButtons();
+                infobar->ShowMessageFor( _( "Zone has no connections." ), 4000, wxICON_WARNING );
+            }
+            infobar->SetShowHideEffects( savedShowEffect, savedHideEffect );
+            infobar->SetEffectDuration( savedEffectDuration );
 
-            infobar->RemoveAllButtons();
-            infobar->ShowMessageFor( _( "Zone has no connections." ), 4000, wxICON_WARNING );
-
-#ifdef __WXMAC__
-            infobar->SetShowHideEffects( wxSHOW_EFFECT_ROLL_TO_BOTTOM, wxSHOW_EFFECT_ROLL_TO_TOP );
-            infobar->SetEffectDuration( 300 );
-#endif
             break;
         }
     }
@@ -330,7 +331,7 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
     if( filler.Fill( toFill ) )
     {
         reporter->AdvancePhase();
-        commit.Push( _( "Fill Zone(s)" ), true, true, false, true );
+        commit.Push( _( "Fill Zone(s)" ), SKIP_CONNECTIVITY | ZONE_FILL_OP );
     }
     else
     {
@@ -367,7 +368,7 @@ int ZONE_FILLER_TOOL::ZoneUnfill( const TOOL_EVENT& aEvent )
         zone->UnFill();
     }
 
-    commit.Push( _( "Unfill Zone" ), true, true, true, true );
+    commit.Push( _( "Unfill Zone" ), ZONE_FILL_OP );
     canvas()->Refresh();
 
     return 0;
@@ -385,7 +386,7 @@ int ZONE_FILLER_TOOL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
         zone->UnFill();
     }
 
-    commit.Push( _( "Unfill All Zones" ), true, true, true, true );
+    commit.Push( _( "Unfill All Zones" ), ZONE_FILL_OP );
     canvas()->Refresh();
 
     return 0;

@@ -371,7 +371,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     }
 
     // Apply changes, UndoList already handled
-    commit.Push( _( "Apply action script" ), false );
+    commit.Push( _( "Apply action script" ), SKIP_UNDO | SKIP_SET_DIRTY );
     ActivateGalCanvas();
 }
 

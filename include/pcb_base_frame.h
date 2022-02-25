@@ -333,6 +333,12 @@ public:
     virtual void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
                                      UNDO_REDO aTypeCommand ) = 0;
 
+    /**
+     * As SaveCopyInUndoList, but appends the changes to the last undo item on the stack.
+     */
+    virtual void AppendCopyToUndoList( const PICKED_ITEMS_LIST& aItemsList,
+                                       UNDO_REDO aTypeCommand ) = 0;
+
 
     /**
      * Show the dialog box for a layer selection.

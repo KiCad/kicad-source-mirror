@@ -967,7 +967,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         filler.SetProgressReporter( &progressReporter );
 
         if( filler.Fill( toFill ) )
-            commit.Push( _( "Convert Zone(s)" ), true, true, false );
+            commit.Push( _( "Convert Zone(s)" ), SKIP_CONNECTIVITY );
 
         GetBoard()->BuildConnectivity( &progressReporter );
     }

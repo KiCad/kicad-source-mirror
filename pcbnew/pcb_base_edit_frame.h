@@ -103,6 +103,12 @@ public:
     void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UNDO_REDO aCommandType ) override;
 
     /**
+     * As SaveCopyInUndoList, but appends the changes to the last undo item on the stack.
+     */
+    void AppendCopyToUndoList( const PICKED_ITEMS_LIST& aItemsList,
+                               UNDO_REDO aCommandType ) override;
+
+    /**
      * Redo the last edit:
      *  - Save the current board in Undo list
      *  - Get an old version of the board from Redo list
@@ -223,6 +229,9 @@ protected:
                                FP_LIB_TABLE* aTable );
 
     void handleActivateEvent( wxActivateEvent& aEvent ) override;
+
+    void saveCopyInUndoList( PICKED_ITEMS_LIST* commandToUndo, const PICKED_ITEMS_LIST& aItemsList,
+                             UNDO_REDO aCommandType );
 
     void unitsChangeRefresh() override;
 

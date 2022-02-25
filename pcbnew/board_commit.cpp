@@ -140,8 +140,7 @@ void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item )
 }
 
 
-void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool aSetDirtyBit,
-                         bool aUpdateConnectivity, bool aZoneFillOp )
+void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 {
     // Objects potentially interested in changes:
     PICKED_ITEMS_LIST   undoList;
@@ -161,7 +160,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
     if( Empty() )
         return;
 
-    if( m_isBoardEditor && !aZoneFillOp && frame->GetPcbNewSettings()->m_AutoRefillZones )
+    if( m_isBoardEditor
+            && !( aCommitFlags & ZONE_FILL_OP )
+            && frame->GetPcbNewSettings()->m_AutoRefillZones )
     {
         autofillZones = true;
 
@@ -199,7 +200,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 wxASSERT( ent.m_item->Type() == PCB_FOOTPRINT_T );
                 wxASSERT( ent.m_copy->Type() == PCB_FOOTPRINT_T );
 
-                if( aCreateUndoEntry && frame )
+                if( !( aCommitFlags & SKIP_UNDO ) )
                 {
                     ITEM_PICKER itemWrapper( nullptr, ent.m_item, UNDO_REDO::CHANGED );
                     itemWrapper.SetLink( ent.m_copy );
@@ -248,7 +249,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 }
                 else
                 {
-                    if( aCreateUndoEntry )
+                    if( !( aCommitFlags & SKIP_UNDO ) )
                         undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::NEWITEM ) );
 
                     if( !( changeFlags & CHT_DONE ) )
@@ -271,7 +272,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
             {
                 PCB_GROUP* parentGroup = boardItem->GetParentGroup();
 
-                if( !m_isFootprintEditor && aCreateUndoEntry )
+                if( !m_isFootprintEditor && !( aCommitFlags & SKIP_UNDO ) )
                     undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::DELETED ) );
 
                 if( boardItem->IsSelected() )
@@ -403,7 +404,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
             case CHT_MODIFY:
             {
-                if( !m_isFootprintEditor && aCreateUndoEntry )
+                if( !m_isFootprintEditor && !( aCommitFlags & SKIP_UNDO ) )
                 {
                     ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::CHANGED );
                     wxASSERT( ent.m_copy );
@@ -411,7 +412,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                     undoList.PushItem( itemWrapper );
                 }
 
-                if( aUpdateConnectivity )
+                if( !( aCommitFlags & SKIP_CONNECTIVITY ) )
                 {
                     std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
 
@@ -444,7 +445,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 itemsChanged.push_back( boardItem );
 
                 // if no undo entry is needed, the copy would create a memory leak
-                if( !aCreateUndoEntry )
+                if( aCommitFlags & SKIP_UNDO )
                     delete ent.m_copy;
 
                 break;
@@ -469,7 +470,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
     {
         size_t num_changes = m_changes.size();
 
-        if( aUpdateConnectivity )
+        if( !( aCommitFlags & SKIP_CONNECTIVITY ) )
         {
             std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
 
@@ -494,7 +495,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
             BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( ent.m_item );
 
-            if( aCreateUndoEntry )
+            if( !( aCommitFlags & SKIP_UNDO ) )
             {
                 ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::CHANGED );
                 wxASSERT( ent.m_copy );
@@ -511,8 +512,13 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
         }
     }
 
-    if( m_isBoardEditor && aCreateUndoEntry )
-        frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNSPECIFIED );
+    if( m_isBoardEditor && !( aCommitFlags & SKIP_UNDO ) )
+    {
+        if( aCommitFlags & APPEND_UNDO )
+            frame->AppendCopyToUndoList( undoList, UNDO_REDO::UNSPECIFIED );
+        else
+            frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNSPECIFIED );
+    }
 
     m_toolMgr->PostEvent( { TC_MESSAGE, TA_MODEL_CHANGE, AS_GLOBAL } );
 
@@ -524,7 +530,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
     if( frame )
     {
-        if( aSetDirtyBit )
+        if( !( aCommitFlags & SKIP_SET_DIRTY ) )
             frame->OnModify();
         else
             frame->Update3DView( true, frame->Settings().m_Display.m_Live3DRefresh );

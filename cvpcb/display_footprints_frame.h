@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2007-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,26 +87,9 @@ public:
 
     FOOTPRINT* GetFootprint( const wxString& aFootprintName, REPORTER& aReporter );
 
-    /**
-     * Does nothing in CvPcb but defined because it is a pure virtual in #PCB_BASE_FRAME.
-     */
-    void SaveCopyInUndoList( EDA_ITEM* aItemToCopy, UNDO_REDO aTypeCommand = UNDO_REDO::UNSPECIFIED ) override
-    {
-    }
-
-
-    /**
-     * Create a new entry in undo list of commands.
-     *
-     * Add a list of pickers to handle a list of items.
-     *
-     * @param aItemsList is the list of items modified by the command to undo
-     * @param aTypeCommand is command type (see enum UNDO_REDO)
-     */
-    void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UNDO_REDO aTypeCommand ) override
-    {
-        // currently: do nothing in CvPcb.
-    }
+    void SaveCopyInUndoList( EDA_ITEM*, UNDO_REDO ) override {}
+    void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO ) override {}
+    void AppendCopyToUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO ) override {}
 
     SELECTION& GetCurrentSelection() override;
 

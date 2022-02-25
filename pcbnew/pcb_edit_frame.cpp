@@ -877,7 +877,7 @@ void PCB_EDIT_FRAME::ResolveDRCExclusions()
     for( PCB_MARKER* marker : GetBoard()->ResolveDRCExclusions() )
         commit.Add( marker );
 
-    commit.Push( wxEmptyString, false, false );
+    commit.Push( wxEmptyString, SKIP_UNDO | SKIP_SET_DIRTY );
 
     for( PCB_MARKER* marker : GetBoard()->Markers() )
     {

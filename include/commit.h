@@ -131,9 +131,7 @@ public:
                            UNDO_REDO aModFlag = UNDO_REDO::UNSPECIFIED );
 
     ///< Execute the changes.
-    virtual void Push( const wxString& aMessage = wxT( "A commit" ),
-                       bool aCreateUndoEntry = true, bool aSetDirtyBit = true,
-                       bool aUpdateConnectivity = true, bool aZoneFillOp = false ) = 0;
+    virtual void Push( const wxString& aMessage = wxT( "A commit" ), int aFlags = 0 ) = 0;
 
     ///< Revert the commit by restoring the modified items state.
     virtual void Revert() = 0;

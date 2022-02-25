@@ -35,6 +35,12 @@ class TOOL_MANAGER;
 class EDA_DRAW_FRAME;
 class TOOL_BASE;
 
+#define SKIP_UNDO          0x0001
+#define APPEND_UNDO        0x0002
+#define SKIP_SET_DIRTY     0x0004
+#define SKIP_CONNECTIVITY  0x0008
+#define ZONE_FILL_OP       0x0010
+
 class BOARD_COMMIT : public COMMIT
 {
 public:
@@ -45,14 +51,13 @@ public:
     virtual ~BOARD_COMMIT();
 
     virtual void Push( const wxString& aMessage = wxT( "A commit" ),
-                       bool aCreateUndoEntry = true, bool aSetDirtyBit = true,
-                       bool aUpdateConnectivity = true, bool aZoneFillOp = false ) override;
+                       int aCommitFlags = 0 ) override;
 
     virtual void Revert() override;
     COMMIT&      Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType ) override;
     COMMIT&      Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType ) override;
-    COMMIT&      Stage(
-                 const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag = UNDO_REDO::UNSPECIFIED ) override;
+    COMMIT&      Stage( const PICKED_ITEMS_LIST& aItems,
+                        UNDO_REDO aModFlag = UNDO_REDO::UNSPECIFIED ) override;
 
     /**
      * Sets a flag that will cause Push() to resolve net conflicts on track/via clusters instead
