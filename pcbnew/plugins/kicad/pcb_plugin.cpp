@@ -1134,12 +1134,9 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
     formatLayer( aFootprint->GetLayer() );
 
     m_out->Print( 0, "\n" );
-    m_out->Print( aNestLevel+1, "(tedit %lX)", (unsigned long)aFootprint->GetLastEditTime() );
 
     if( !( m_ctl & CTL_OMIT_TSTAMPS ) )
-        m_out->Print( 0, " (tstamp %s)", TO_UTF8( aFootprint->m_Uuid.AsString() ) );
-
-    m_out->Print( 0, "\n" );
+        m_out->Print( aNestLevel+1, "(tstamp %s)\n", TO_UTF8( aFootprint->m_Uuid.AsString() ) );
 
     if( !( m_ctl & CTL_OMIT_AT ) )
     {

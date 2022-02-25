@@ -336,20 +336,6 @@ public:
 
     bool LegacyPadsLocked() const { return m_fpStatus & FP_PADS_are_LOCKED;  }
 
-    /*
-    void SetPadsLocked( bool aPadsLocked )
-    {
-        if( aPadsLocked )
-            m_fpStatus |= FP_PADS_are_LOCKED;
-        else
-            m_fpStatus &= ~FP_PADS_are_LOCKED;
-    }
-    */
-
-    void SetLastEditTime( timestamp_t aTime ) { m_lastEditTime = aTime; }
-    void SetLastEditTime() { m_lastEditTime = time( nullptr ); }
-    timestamp_t GetLastEditTime() const { return m_lastEditTime; }
-
     /**
      * Test if footprint attributes for type (SMD/Through hole/Other) match the expected
      * type based on the pads in the footprint.

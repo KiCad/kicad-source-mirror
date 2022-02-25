@@ -116,7 +116,8 @@ class SHAPE_LINE_CHAIN;
 //#define SEXPR_BOARD_FILE_VERSION    20211231  // Private footprint layers
 //#define SEXPR_BOARD_FILE_VERSION    20211232  // Fonts
 //#define SEXPR_BOARD_FILE_VERSION    20220131  // Textboxes
-#define SEXPR_BOARD_FILE_VERSION      20220211  // End support for V5 zone fill strategy
+//#define SEXPR_BOARD_FILE_VERSION    20220211  // End support for V5 zone fill strategy
+#define SEXPR_BOARD_FILE_VERSION    20220225  // Remove TEDIT
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting

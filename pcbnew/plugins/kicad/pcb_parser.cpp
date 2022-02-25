@@ -3543,7 +3543,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
         }
 
         case T_tedit:
-            footprint->SetLastEditTime( parseHex() );
+            parseHex();
             NeedRIGHT();
             break;
 

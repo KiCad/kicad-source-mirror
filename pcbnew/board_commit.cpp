@@ -209,7 +209,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 }
 
                 savedModules.insert( ent.m_item );
-                static_cast<FOOTPRINT*>( ent.m_item )->SetLastEditTime();
             }
         }
 

@@ -510,7 +510,6 @@ void PCB_FOOTPRINT::AddToBoard()
     footprint->SetPosition( VECTOR2I( m_positionX, m_positionY ) );
     footprint->SetLayer( m_Mirror ? B_Cu : F_Cu );
     footprint->SetOrientation( m_rotation );
-    footprint->SetLastEditTime( 0 );
 
     LIB_ID fpID;
     fpID.Parse( m_compRef, true );

@@ -1179,7 +1179,9 @@ void LEGACY_PLUGIN::loadFOOTPRINT( FOOTPRINT* aFootprint )
             int          orient    = intParse( data, &data );
             int          layer_num = intParse( data, &data );
             PCB_LAYER_ID layer_id  = leg_layer2new( m_cu_count,  layer_num );
-            long         edittime  = hexParse( data, &data );
+
+            [[maybe_unused]] long edittime  = hexParse( data, &data );
+
             char*        uuid      = strtok_r( (char*) data, delims, (char**) &data );
 
             data = strtok_r( (char*) data+1, delims, (char**) &data );
@@ -1196,7 +1198,6 @@ void LEGACY_PLUGIN::loadFOOTPRINT( FOOTPRINT* aFootprint )
             aFootprint->SetLayer( layer_id );
             aFootprint->SetOrientation( EDA_ANGLE( orient, TENTHS_OF_A_DEGREE_T ) );
             const_cast<KIID&>( aFootprint->m_Uuid ) = KIID( uuid );
-            aFootprint->SetLastEditTime( edittime );
         }
         else if( TESTLINE( "Sc" ) )         // timestamp
         {
