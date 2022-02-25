@@ -316,7 +316,9 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 
         // interline spacing is only *between* lines, so total height is the height of the first
         // line plus the interline distance (with interline spacing) for all subsequent lines
-        textsize.y += KiROUND( ( strings.GetCount() - 1 ) * interline );
+        // Don't add interline spacing to empty textboxes
+        if( strings.GetCount() )
+            textsize.y += KiROUND( ( strings.GetCount() - 1 ) * interline );
     }
 
     rect.SetSize( textsize );
