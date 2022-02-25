@@ -847,14 +847,15 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
 }
 
 
-std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( ) const
+std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangulate ) const
 {
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
     KIGFX::GAL_DISPLAY_OPTIONS      empty_opts;
     KIFONT::FONT*                   font = GetDrawFont();
     int                             penWidth = GetEffectiveTextPenWidth();
 
-    CALLBACK_GAL callback_gal( empty_opts,
+    CALLBACK_GAL callback_gal(
+            empty_opts,
             // Stroke callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
             {
@@ -870,6 +871,15 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( ) const
 
                 shape->AddShape( triShape );
             } );
+
+    if( !aTriangulate )
+    {
+        callback_gal.SetOutlineCallback(
+                [&]( const SHAPE_LINE_CHAIN& aPoly )
+                {
+                    shape->AddShape( aPoly.Clone() );
+                } );
+    }
 
     TEXT_ATTRIBUTES attrs = GetAttributes();
     attrs.m_Angle = GetDrawRotation();
