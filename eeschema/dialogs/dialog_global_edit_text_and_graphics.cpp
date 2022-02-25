@@ -84,7 +84,6 @@ public:
     ~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS() override;
 
 protected:
-    void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnReferenceFilterText( wxCommandEvent& event ) override
     {
         m_referenceFilterOpt->SetValue( true );
@@ -92,6 +91,14 @@ protected:
     void OnSymbolFilterText( wxCommandEvent& event ) override
     {
         m_symbolFilterOpt->SetValue( true );
+    }
+    void OnFieldNameFilterText( wxCommandEvent& event ) override
+    {
+        m_fieldnameFilterOpt->SetValue( true );
+    }
+    void OnNetFilterText( wxCommandEvent& event ) override
+    {
+        m_netFilterOpt->SetValue( true );
     }
 
     bool TransferDataToWindow() override;
@@ -227,11 +234,6 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     m_setDotColor->SetValue( false );
 
     return true;
-}
-
-
-void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::OnUpdateUI( wxUpdateUIEvent&  )
-{
 }
 
 
