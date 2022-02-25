@@ -419,7 +419,7 @@ void DIALOG_ABOUT::createNotebookHtmlPage( wxNotebook* aParent, const wxString& 
 wxStaticText* DIALOG_ABOUT::wxStaticTextRef( wxScrolledWindow* aParent, const wxString& aReference )
 {
     wxStaticText* text = new wxStaticText( aParent, wxID_ANY,
-                                           wxT( "(wxT( " ) + aReference + wxT( " ))" ) );
+                                           wxT( "(" ) + aReference + wxT( ")" ) );
 
     return text;
 }
