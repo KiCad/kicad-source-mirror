@@ -417,10 +417,13 @@ void SCH_LINE::MirrorHorizontally( int aCenter )
 
 void SCH_LINE::Rotate( const VECTOR2I& aCenter )
 {
+    // When we allow off grid items, the
+    // else if should become a plain if to allow
+    // rotation around the center of the line
     if( m_flags & STARTPOINT )
         RotatePoint( m_start, aCenter, ANGLE_90 );
 
-    if( m_flags & ENDPOINT )
+    else if( m_flags & ENDPOINT )
         RotatePoint( m_end, aCenter, ANGLE_90 );
 }
 

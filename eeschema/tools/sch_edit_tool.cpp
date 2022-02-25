@@ -463,7 +463,6 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     int       principalItemCount = 0;  // User-selected items (as opposed to connected wires)
     VECTOR2I  rotPoint;
     bool      moving = false;
-    bool      connections = false;
 
     for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
     {
@@ -532,6 +531,28 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         }
 
         case SCH_LINE_T:
+        {
+            SCH_LINE* line = static_cast<SCH_LINE*>( head );
+
+            // Equal checks for both and neither. We need this because on undo
+            // the item will have both flags cleared, but will be selected, so it is possible
+            // for the user to get a selected line with neither endpoint selected. We
+            // set flags to make sure Rotate() works when we call it.
+            if( line->HasFlag( STARTPOINT ) == line->HasFlag( ENDPOINT ) )
+            {
+                line->SetFlags( STARTPOINT | ENDPOINT );
+                // When we allow off grid items, the rotPoint should be set to the midpoint
+                // of the line to allow rotation around the center, and the next if
+                // should become an else-if
+            }
+
+            if( line->HasFlag( STARTPOINT ) )
+                rotPoint = line->GetEndPoint();
+            else if( line->HasFlag( ENDPOINT ) )
+                rotPoint = line->GetStartPoint();
+        }
+
+            KI_FALLTHROUGH;
         case SCH_BUS_BUS_ENTRY_T:
         case SCH_BUS_WIRE_ENTRY_T:
             for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
@@ -585,7 +606,6 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             UNIMPLEMENTED_FOR( head->GetClass() );
         }
 
-        connections = head->IsConnectable();
         m_frame->UpdateItem( head, false, true );
     }
     else
@@ -664,7 +684,6 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             }
         }
 
-        connections |= item->IsConnectable();
         m_frame->UpdateItem( item, false, true );
         updateItem( item, true );
     }
@@ -680,8 +699,8 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         if( selection.IsHover() )
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-        if( connections )
-            m_frame->TestDanglingEnds();
+        m_frame->RecalculateConnections( LOCAL_CLEANUP );
+        m_frame->TestDanglingEnds();
 
         m_frame->OnModify();
     }
