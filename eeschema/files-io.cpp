@@ -1080,6 +1080,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
     }
     else
     {
+        RecordERCExclusions();  // ensure ERC Exclusions list is up to date
         GetSettingsManager()->SaveProject();
     }
 
