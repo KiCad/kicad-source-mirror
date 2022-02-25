@@ -579,14 +579,19 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         if( track->Type() == PCB_ARC_T )
         {
             const     PCB_ARC* arc = static_cast<const PCB_ARC*>( track );
-            PCB_SHAPE arc_shape( nullptr, SHAPE_T::ARC );
-            arc_shape.SetWidth( width );
-            arc_shape.SetStart( arc->GetStart() );
-            arc_shape.SetEnd( arc->GetEnd() );
-            arc_shape.SetCenter( arc->GetCenter() );
 
-            aPlotter->ThickArc( arc->GetCenter(), arc->GetStart(), arc->GetEnd(),
-                                width, plotMode, &gbr_metadata );
+            // ThickArc expects only positive angle arcs, so flip start/end if
+            // we are negative
+            if( arc->GetAngle() < ANGLE_0 )
+            {
+                aPlotter->ThickArc( arc->GetCenter(), arc->GetEnd(), arc->GetStart(),
+                                    width, plotMode, &gbr_metadata );
+            }
+            else
+            {
+                aPlotter->ThickArc( arc->GetCenter(), arc->GetStart(), arc->GetEnd(),
+                                    width, plotMode, &gbr_metadata );
+            }
         }
         else
         {
