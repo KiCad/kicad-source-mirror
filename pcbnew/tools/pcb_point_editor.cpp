@@ -546,7 +546,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 if( grid.GetUseGrid() )
                 {
-                    VECTOR2I gridPt = grid.BestSnapAnchor( pos, {}, { item } );
+                    // VECTOR2I gridPt = grid.BestSnapAnchor( pos, {}, { item } );
 
                     VECTOR2I last = m_editedPoint->GetPosition();
                     VECTOR2I delta = pos - last;

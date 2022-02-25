@@ -218,8 +218,8 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
                                                        wxEmptyString );
 
         button->Bind( wxEVT_COMMAND_HYPERLINK,
-                      std::function<void( wxHyperlinkEvent& aEvent )>(
-                      [frame]( wxHyperlinkEvent& aEvent )
+                      std::function<void( wxHyperlinkEvent& aLocEvent )>(
+                      [frame]( wxHyperlinkEvent& aLocEvent )
                       {
                           frame->ShowBoardSetupDialog( _( "Rules" ) );
                       } ) );
