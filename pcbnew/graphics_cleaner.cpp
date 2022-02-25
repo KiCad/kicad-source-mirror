@@ -297,9 +297,10 @@ void GRAPHICS_CLEANER::mergeRects()
                 if( !m_dryRun )
                 {
                     PCB_SHAPE* rect;
+                    FP_SHAPE* fp_rect = nullptr;
 
                     if( m_parentFootprint )
-                        rect = new FP_SHAPE( m_parentFootprint );
+                        rect = fp_rect = new FP_SHAPE( m_parentFootprint );
                     else
                         rect = new PCB_SHAPE();
 
@@ -309,6 +310,9 @@ void GRAPHICS_CLEANER::mergeRects()
                     rect->SetEnd( bottom->end );
                     rect->SetLayer( top->shape->GetLayer() );
                     rect->SetStroke( top->shape->GetStroke() );
+
+                    if( fp_rect )
+                        fp_rect->SetLocalCoord();
 
                     m_commit.Add( rect );
                     m_commit.Remove( left->shape );
