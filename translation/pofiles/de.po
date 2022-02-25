@@ -8,7 +8,7 @@
 # ZbeeGin <zbeegin@op.pl>, 2021.
 # Dominik Wernberger <dominik.wernberger@gmx.de>, 2021.
 # Flo082002 <flos6323@gmail.com>, 2021.
-# Benedikt Freisen <b.freisen@gmx.net>, 2021.
+# Benedikt Freisen <b.freisen@gmx.net>, 2021, 2022.
 # Mark Hämmerling <dev@markh.de>, 2021, 2022.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2022.
 msgid ""
@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 09:25-0800\n"
-"PO-Revision-Date: 2022-02-18 13:22+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"PO-Revision-Date: 2022-02-25 19:58+0000\n"
+"Last-Translator: Benedikt Freisen <b.freisen@gmx.net>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.11.1-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4211,7 +4211,7 @@ msgstr "Zone"
 
 #: common/eda_item.cpp:329 pcbnew/pcb_track.cpp:694
 msgid "Track"
-msgstr "Leiterbahn"
+msgstr "Spur"
 
 #: common/eda_item.cpp:330 pcbnew/dialogs/dialog_board_statistics.cpp:497
 #: pcbnew/pcb_track.cpp:751
