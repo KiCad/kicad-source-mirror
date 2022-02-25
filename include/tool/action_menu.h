@@ -157,6 +157,11 @@ public:
     void UpdateAll();
 
     /**
+     * Used by some menus to just-in-time translate their titles.
+     */
+    virtual void UpdateTitle() {}
+
+    /**
      * Clear the dirty flag on the menu and all descendants.
      */
     void ClearDirty();

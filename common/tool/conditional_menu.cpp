@@ -146,20 +146,21 @@ void CONDITIONAL_MENU::Evaluate( SELECTION& aSelection )
         switch( entry.Type() )
         {
             case ENTRY::ACTION:
-                menuItem = Add( *entry.Action(), entry.IsCheckmarkEntry() );
+                Add( *entry.Action(), entry.IsCheckmarkEntry() );
                 menu_count++;
                 break;
 
             case ENTRY::MENU:
-                menuItem = Add( entry.Menu() );
+                entry.Menu()->UpdateTitle();
+                Add( entry.Menu() );
                 menu_count++;
                 break;
 
             case ENTRY::WXITEM:
                 menuItem = new wxMenuItem( this,
                                            entry.wxItem()->GetId(),
-                                           entry.wxItem()->GetItemLabel(),
-                                           entry.wxItem()->GetHelp(),
+                                           wxGetTranslation( entry.wxItem()->GetItemLabel() ),
+                                           wxGetTranslation( entry.wxItem()->GetHelp() ),
                                            entry.wxItem()->GetKind() );
 
                 if( !!entry.GetIcon() )
@@ -173,7 +174,7 @@ void CONDITIONAL_MENU::Evaluate( SELECTION& aSelection )
 
             case ENTRY::SEPARATOR:
                 if( menu_count )
-                    menuItem = AppendSeparator();
+                    AppendSeparator();
 
                 menu_count = 0;
                 break;
