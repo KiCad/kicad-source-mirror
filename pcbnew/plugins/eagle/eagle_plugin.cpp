@@ -1206,7 +1206,25 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
             valueNamePresetInPackageLayout = false;
         }
 
-        footprint->SetReference( FROM_UTF8( e.name.c_str() ) );
+        wxString reference = e.name;
+
+        // EAGLE allows references to be single digits.  This breaks KiCad
+        // netlisting, which requires parts to have non-digit + digit
+        // annotation.  If the reference begins with a number, we prepend
+        // 'UNK' (unknown) for the symbol designator.
+        if( reference.find_first_not_of( "0123456789" ) != 0 )
+            reference.Prepend( "UNK" );
+
+        // EAGLE allows designator to start with # but that is used in KiCad
+        // for symbols which do not have a footprint
+        if( reference.find_first_not_of( "#" ) != 0 )
+            reference.Prepend( "UNK" );
+
+        // reference must end with a number but EAGLE does not enforce this
+        if( reference.find_last_not_of( "0123456789" ) == (reference.Length()-1) )
+            reference.Append( "0" );
+
+        footprint->SetReference( reference );
         footprint->SetValue( FROM_UTF8( e.value.c_str() ) );
 
         if( !e.smashed )
@@ -1260,17 +1278,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
                         {
                         case EATTR::VALUE :
                         {
-                            wxString reference = e.name;
-
-                            // EAGLE allows references to be single digits.  This breaks KiCad
-                            // netlisting, which requires parts to have non-digit + digit
-                            // annotation.  If the reference begins with a number, we prepend
-                            // 'UNK' (unknown) for the symbol designator.
-                            if( reference.find_first_not_of( "0123456789" ) == wxString::npos )
-                                reference.Prepend( wxT( "UNK" ) );
-
                             nameAttr->name = reference;
-                            footprint->SetReference( reference );
 
                             if( refanceNamePresetInPackageLayout )
                                 footprint->Reference().SetVisible( true );
