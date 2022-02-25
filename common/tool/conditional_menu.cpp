@@ -107,12 +107,14 @@ void CONDITIONAL_MENU::Resolve()
     Evaluate( g_resolveDummySelection );
     UpdateAll();
 
-    runOnSubmenus( [] ( ACTION_MENU* aMenu ) {
-        CONDITIONAL_MENU* conditionalMenu = dynamic_cast<CONDITIONAL_MENU*>( aMenu );
+    runOnSubmenus(
+            [] ( ACTION_MENU* aMenu )
+            {
+                CONDITIONAL_MENU* conditionalMenu = dynamic_cast<CONDITIONAL_MENU*>( aMenu );
 
-        if( conditionalMenu )
-            conditionalMenu->Resolve();
-    } );
+                if( conditionalMenu )
+                    conditionalMenu->Resolve();
+            } );
 }
 
 
@@ -186,13 +188,13 @@ void CONDITIONAL_MENU::Evaluate( SELECTION& aSelection )
     // they are updated. This is also required on GTK to make sure the menus have the proper
     // size when created.
     runOnSubmenus(
-        [&aSelection]( ACTION_MENU* aMenu )
-        {
-            CONDITIONAL_MENU* conditionalMenu = dynamic_cast<CONDITIONAL_MENU*>( aMenu );
+            [&aSelection]( ACTION_MENU* aMenu )
+            {
+                CONDITIONAL_MENU* conditionalMenu = dynamic_cast<CONDITIONAL_MENU*>( aMenu );
 
-            if( conditionalMenu )
-                conditionalMenu->Evaluate( aSelection );
-        } );
+                if( conditionalMenu )
+                    conditionalMenu->Evaluate( aSelection );
+            } );
 }
 
 
@@ -209,6 +211,7 @@ void CONDITIONAL_MENU::addEntry( ENTRY aEntry )
 
     m_entries.insert( it, aEntry );
 }
+
 
 CONDITIONAL_MENU::ENTRY::ENTRY( const ENTRY& aEntry )
 {

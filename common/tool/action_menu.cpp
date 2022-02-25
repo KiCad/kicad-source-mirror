@@ -167,7 +167,7 @@ wxMenuItem* ACTION_MENU::Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry
     BITMAPS icon = aAction.GetIcon();
 
     // Allow the label to be overridden at point of use
-    wxString menuLabel = aOverrideLabel.IsEmpty() ? aAction.GetMenuItem() :  aOverrideLabel;
+    wxString menuLabel = aOverrideLabel.IsEmpty() ? aAction.GetMenuItem() : aOverrideLabel;
 
     wxMenuItem* item = new wxMenuItem( this, aAction.GetUIId(), menuLabel,
                                        aAction.GetDescription(),

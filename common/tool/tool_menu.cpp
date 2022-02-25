@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2019 KiCad Developers, see CHANGELOG.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see CHANGELOG.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,8 +26,6 @@
 #include <tool/tool_interactive.h>
 #include <tool/action_menu.h>
 #include <tool/actions.h>
-#include <tool/zoom_menu.h>
-#include <tool/grid_menu.h>
 #include <tool/selection.h>
 
 

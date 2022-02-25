@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2016 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -164,7 +164,7 @@ int COMMON_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
     KIWAY_PLAYER* editor = m_frame->Kiway().Player( playerType, true );
 
     // editor can be null if Player() fails:
-    wxCHECK_MSG( editor != nullptr, 0, "Cannot open/create the editor frame" );
+    wxCHECK_MSG( editor != nullptr, 0, wxT( "Cannot open/create the editor frame" ) );
 
     // Needed on Windows, other platforms do not use it, but it creates no issue
     if( editor->IsIconized() )
@@ -187,8 +187,8 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
     wxString msg;
 
     // the URL of help files is "https://docs.kicad.org/<version>/<language>/<name>/"
-    const wxString baseUrl = URL_DOCUMENTATION + GetMajorMinorVersion() + "/"
-                             + Pgm().GetLocale()->GetName().BeforeLast( '_' ) + "/";
+    const wxString baseUrl = URL_DOCUMENTATION + GetMajorMinorVersion() + wxT( "/" )
+                             + Pgm().GetLocale()->GetName().BeforeLast( '_' ) + wxT( "/" );
 
     /* We have to get document for beginners,
      * or the full specific doc

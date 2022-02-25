@@ -30,9 +30,7 @@
 #include <tool/actions.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <bitmaps.h>
-#include <convert_to_biu.h>
 #include <functional>
-#include <zoom_defines.h>
 
 using namespace std::placeholders;
 

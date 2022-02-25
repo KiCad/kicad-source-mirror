@@ -281,8 +281,10 @@ void EE_SELECTION_TOOL::Reset( RESET_REASON aReason )
             m_isSymbolViewer = symbolViewerFrame != nullptr;
     }
     else
+    {
         // Restore previous properties of selected items and remove them from containers
         ClearSelection();
+    }
 
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
     getView()->Remove( &m_selection );
