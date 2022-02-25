@@ -1991,6 +1991,24 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 {
     const RENDER_SETTINGS* settings = getView()->GetPainter()->GetSettings();
 
+    auto visibleLayers =
+            [&]()
+            {
+                if( m_isFootprintEditor )
+                {
+                    LSET set;
+
+                    for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
+                        set.set( layer, view()->IsLayerVisible( layer ) );
+
+                    return set;
+                }
+                else
+                {
+                    return board()->GetVisibleLayers();
+                }
+            };
+
     if( settings->GetHighContrast() )
     {
         std::set<unsigned int> activeLayers = settings->GetHighContrastLayers();
@@ -2084,7 +2102,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         }
 
         // zones can exist on multiple layers!
-        if( !( zone->GetLayerSet() & board()->GetVisibleLayers() ).any() )
+        if( !( zone->GetLayerSet() & visibleLayers() ).any() )
             return false;
 
         break;
@@ -2114,7 +2132,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         via = static_cast<const PCB_VIA*>( aItem );
 
         // For vias it is enough if only one of its layers is visible
-        if( !( board()->GetVisibleLayers() & via->GetLayerSet() ).any() )
+        if( !( visibleLayers() & via->GetLayerSet() ).any() )
             return false;
 
         break;
@@ -2175,7 +2193,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
             // A pad's hole is visible on every layer the pad is visible on plus many layers the
             // pad is not visible on -- so we only need to check for any visible hole layers.
-            if( !( board()->GetVisibleLayers() & LSET::PhysicalLayersMask() ).any() )
+            if( !( visibleLayers() & LSET::PhysicalLayersMask() ).any() )
                 return false;
         }
         else
@@ -2186,7 +2204,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
             else if( pad->IsOnLayer( B_Cu ) && !board()->IsElementVisible( LAYER_PAD_BK ) )
                 return false;
 
-            if( !( pad->GetLayerSet() & board()->GetVisibleLayers() ).any() )
+            if( !( pad->GetLayerSet() & visibleLayers() ).any() )
                 return false;
         }
 
