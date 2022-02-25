@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-16 17:22-0800\n"
+"POT-Creation-Date: 2022-02-25 11:59-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -17563,9 +17563,6 @@ msgstr "Rectangle Properties"
 msgid "Line Segment Properties"
 msgstr "Line Segment Properties"
 
-msgid "Line width may not be 0 for unfilled shapes."
-msgstr "Line width may not be 0 for unfilled shapes."
-
 msgid "Modify drawing properties"
 msgstr "Modify drawing properties"
 
@@ -17880,6 +17877,9 @@ msgstr "Ring"
 
 msgid "Center:"
 msgstr "Center:"
+
+msgid "Line width may not be 0 for unfilled shapes."
+msgstr "Line width may not be 0 for unfilled shapes."
 
 #, c-format
 msgid "Corner %d"
@@ -26152,6 +26152,9 @@ msgid ""
 msgstr ""
 "Double click (or middle click) to change color; right click for more actions"
 
+msgid "Objects"
+msgstr "Objects"
+
 msgid "Double click or middle click for color change, right click for menu"
 msgstr "Double click or middle click for color change, right click for menu"
 
@@ -26297,6 +26300,9 @@ msgstr "Show All Netclasses"
 msgid "Hide All Other Netclasses"
 msgstr "Hide All Other Netclasses"
 
+msgid "Presets (Ctrl+Tab):"
+msgstr "Presets (Ctrl+Tab):"
+
 msgid "Save preset..."
 msgstr "Save preset..."
 
@@ -26328,17 +26334,11 @@ msgstr ""
 "The current color theme is read-only.  Create a new theme in Preferences to "
 "enable color editing."
 
-msgid "Objects"
-msgstr "Objects"
-
 msgid "Show the Net Inspector"
 msgstr "Show the Net Inspector"
 
 msgid "Configure net classes"
 msgstr "Configure net classes"
-
-msgid "Presets (Ctrl+Tab):"
-msgstr "Presets (Ctrl+Tab):"
 
 msgid "(unsaved)"
 msgstr "(unsaved)"
@@ -26410,9 +26410,6 @@ msgstr "Filled Area"
 
 msgid "HatchBorder Lines"
 msgstr "HatchBorder Lines"
-
-msgid "Corner Count"
-msgstr "Corner Count"
 
 #, c-format
 msgid "Rule Area Cutout on %s"
@@ -26558,6 +26555,9 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Corner Count"
+#~ msgstr "Corner Count"
 
 #~ msgid "This path:wxT( "
 #~ msgstr "This path:wxT( "
