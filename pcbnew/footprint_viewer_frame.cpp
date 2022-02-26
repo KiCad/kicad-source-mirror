@@ -92,7 +92,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
     // listbox events
     EVT_LISTBOX( ID_MODVIEW_LIB_LIST, FOOTPRINT_VIEWER_FRAME::ClickOnLibList )
     EVT_LISTBOX( ID_MODVIEW_FOOTPRINT_LIST, FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList )
-    EVT_LISTBOX_DCLICK( ID_MODVIEW_FOOTPRINT_LIST, FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList )
 
 END_EVENT_TABLE()
 
@@ -172,6 +171,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     m_fpList = new wxListBox( fpPanel, ID_MODVIEW_FOOTPRINT_LIST, wxDefaultPosition, wxDefaultSize,
                               0, nullptr, wxLB_HSCROLL | wxNO_BORDER );
+
+    m_fpList->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList ), nullptr, this );
     fpSizer->Add( m_fpList, 1, wxEXPAND, 5 );
 
     fpPanel->SetSizer( fpSizer );
@@ -301,6 +302,7 @@ FOOTPRINT_VIEWER_FRAME::~FOOTPRINT_VIEWER_FRAME()
     GetCanvas()->GetView()->Clear();
     // Be sure any event cannot be fired after frame deletion:
     GetCanvas()->SetEvtHandlerEnabled( false );
+    m_fpList->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList ), nullptr, this );
 }
 
 
@@ -687,9 +689,10 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& aEvent )
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList( wxCommandEvent& aEvent )
+void FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList( wxMouseEvent& aEvent )
 {
-    AddFootprintToPCB( aEvent );
+    wxCommandEvent evt;
+    AddFootprintToPCB( evt );
 }
 
 
