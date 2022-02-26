@@ -26,34 +26,30 @@
 // (unless you want to improve it).
 
 #include <wx/clipbrd.h>
-
-#include <qa_utils/utility_registry.h>
 #include <pgm_base.h>
-
 #include <profile.h>
 #include <trace_helpers.h>
-
 #include <view/view_overlay.h>
 
-#include "pns_log.h"
-#include "router/pns_diff_pair.h"
-#include "router/pns_utils.h"
-
-#include "pns_log_viewer_frame.h"
-
-#include "qa/drc_proto/drc_proto.h"
 
 #include "label_manager.h"
-#define TOM_EXTRA_DEBUG
+
+#include "pns_log_file.h"
+#include "pns_log_player.h"
+#include "pns_log_viewer_frame.h"
+
+#include "router/pns_diff_pair.h"
+#include "router/pns_utils.h"
+#include "router/router_preview_item.h"
 
 
 
 class WX_SHAPE_TREE_ITEM_DATA : public wxClientData
 {
 public:
-    WX_SHAPE_TREE_ITEM_DATA( PNS_TEST_DEBUG_DECORATOR::DEBUG_ENT* item ) : m_item( item ){};
+    WX_SHAPE_TREE_ITEM_DATA( PNS_DEBUG_SHAPE* item ) : m_item( item ){};
 
-    PNS_TEST_DEBUG_DECORATOR::DEBUG_ENT* m_item;
+    PNS_DEBUG_SHAPE* m_item;
 };
 
 
@@ -179,9 +175,9 @@ void PNS_LOG_VIEWER_FRAME::createUserTools()
 }
 
 
-PNS_TEST_DEBUG_DECORATOR::STAGE* PNS_LOG_VIEWER_FRAME::getCurrentStage()
+PNS_DEBUG_STAGE* PNS_LOG_VIEWER_FRAME::getCurrentStage()
 {
-    PNS_TEST_DEBUG_DECORATOR* dbgd = m_env->GetDebugDecorator();
+    PNS_TEST_DEBUG_DECORATOR* dbgd = m_logPlayer->GetDebugDecorator();
     int                       count = dbgd->GetStageCount();
 
     int iter = m_rewindIter;
@@ -201,18 +197,19 @@ PNS_TEST_DEBUG_DECORATOR::STAGE* PNS_LOG_VIEWER_FRAME::getCurrentStage()
 
 void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
 {
-    if( !m_env )
+    if( !m_logPlayer )
         return;
 
-    PNS_TEST_DEBUG_DECORATOR::STAGE* st = getCurrentStage();
+    PNS_DEBUG_STAGE* st = getCurrentStage();
 
     if( !st )
         return;
 
     m_overlay.reset( new PNS_LOG_VIEWER_OVERLAY ( m_galPanel->GetGAL() ) );
     m_galPanel->GetView()->Add( m_overlay.get() );
+    //m_galPanel->GetGAL()->EnableDepthTest( false );
 
-    auto drawShapes = [&]( PNS_TEST_DEBUG_DECORATOR::DEBUG_ENT* ent ) -> bool
+    auto drawShapes = [&]( PNS_DEBUG_SHAPE* ent ) -> bool
     {
         bool isEnabled = ent->IsVisible();
         bool isSelected = false;
@@ -233,8 +230,10 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
                 color.Brighten( 0.5 );
             }
 
+            color.a = 1.0;
+
             m_overlay->SetStrokeColor( color );
-            m_overlay->SetLineWidth( ent->m_width );
+            m_overlay->SetLineWidth( m_showThinLines ? 10000 : ent->m_width );
 
             switch( sh->Type() )
             {
@@ -277,36 +276,18 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
 }
 
 
-static BOARD* loadBoard( const std::string& filename )
-{
-    PLUGIN::RELEASER pi( new PCB_PLUGIN );
-    BOARD*           brd = nullptr;
-
-    try
-    {
-        brd = pi->Load( wxString( filename.c_str() ), nullptr, nullptr );
-    }
-    catch( const IO_ERROR& )
-    {
-        return nullptr;
-    }
-
-    return brd;
-}
-
-
 void PNS_LOG_VIEWER_FRAME::SetLogFile( PNS_LOG_FILE* aLog )
 {
     m_logFile.reset( aLog );
 
     SetBoard( m_logFile->GetBoard() );
 
-    m_env.reset( new PNS_TEST_ENVIRONMENT );
+    m_logPlayer.reset( new PNS_LOG_PLAYER );
 
-    m_env->SetMode( PNS::PNS_MODE_ROUTE_SINGLE );
-    m_env->ReplayLog( m_logFile.get(), 0, 0, -1);
+    m_logPlayer->SetMode( PNS::PNS_MODE_ROUTE_SINGLE );
+    m_logPlayer->ReplayLog( m_logFile.get(), 0, 0, -1);
 
-    auto dbgd = m_env->GetDebugDecorator();
+    auto dbgd = m_logPlayer->GetDebugDecorator();
     int  n_stages = dbgd->GetStageCount();
     m_rewindSlider->SetMax( n_stages - 1 );
     m_rewindSlider->SetValue( n_stages - 1 );
@@ -325,6 +306,7 @@ void PNS_LOG_VIEWER_FRAME::SetLogFile( PNS_LOG_FILE* aLog )
 
     drawLoggedItems( m_rewindIter );
     updateDumpPanel( m_rewindIter );
+    updatePnsPreviewItems( m_rewindIter );
 }
 
 
@@ -361,12 +343,27 @@ void PNS_LOG_VIEWER_FRAME::onListChecked( wxCommandEvent& event )
     drawLoggedItems( m_rewindIter );
 }
 
+void PNS_LOG_VIEWER_FRAME::onShowThinLinesChecked( wxCommandEvent& event )
+{
+    m_showThinLines = event.GetInt();
+    drawLoggedItems( m_rewindIter );
+    updatePnsPreviewItems( m_rewindIter );
+}
+
+void PNS_LOG_VIEWER_FRAME::onShowRPIsChecked( wxCommandEvent& event )
+{
+    m_showRPIs = event.GetInt();
+    drawLoggedItems( m_rewindIter );
+    updatePnsPreviewItems( m_rewindIter );
+}
+
 
 void PNS_LOG_VIEWER_FRAME::onRewindScroll( wxScrollEvent& event )
 {
     m_rewindIter = event.GetPosition();
     drawLoggedItems( m_rewindIter );
     updateDumpPanel( m_rewindIter );
+    updatePnsPreviewItems( m_rewindIter );
     char str[128];
     sprintf( str, "%d", m_rewindIter );
     m_rewindPos->SetValue( str );
@@ -381,6 +378,7 @@ void PNS_LOG_VIEWER_FRAME::onBtnRewindLeft( wxCommandEvent& event )
         m_rewindIter--;
         drawLoggedItems( m_rewindIter );
         updateDumpPanel( m_rewindIter );
+        updatePnsPreviewItems( m_rewindIter );
         char str[128];
         sprintf( str, "%d", m_rewindIter );
         m_rewindPos->SetValue( str );
@@ -390,7 +388,7 @@ void PNS_LOG_VIEWER_FRAME::onBtnRewindLeft( wxCommandEvent& event )
 
 void PNS_LOG_VIEWER_FRAME::onBtnRewindRight( wxCommandEvent& event )
 {
-    auto dbgd = m_env->GetDebugDecorator();
+    auto dbgd = m_logPlayer->GetDebugDecorator();
     int  count = dbgd->GetStageCount();
 
     if( m_rewindIter < count )
@@ -398,6 +396,7 @@ void PNS_LOG_VIEWER_FRAME::onBtnRewindRight( wxCommandEvent& event )
         m_rewindIter++;
         drawLoggedItems( m_rewindIter );
         updateDumpPanel( m_rewindIter );
+        updatePnsPreviewItems( m_rewindIter );
         char str[128];
         sprintf( str, "%d", m_rewindIter );
         m_rewindPos->SetValue( str );
@@ -407,12 +406,12 @@ void PNS_LOG_VIEWER_FRAME::onBtnRewindRight( wxCommandEvent& event )
 
 void PNS_LOG_VIEWER_FRAME::onRewindCountText( wxCommandEvent& event )
 {
-    if( !m_env )
+    if( !m_logPlayer )
         return;
 
     int val = wxAtoi( m_rewindPos->GetValue() );
 
-    auto dbgd = m_env->GetDebugDecorator();
+    auto dbgd = m_logPlayer->GetDebugDecorator();
     int  count = dbgd->GetStageCount();
 
     if( val < 0 )
@@ -425,6 +424,7 @@ void PNS_LOG_VIEWER_FRAME::onRewindCountText( wxCommandEvent& event )
     m_rewindSlider->SetValue( m_rewindIter );
     drawLoggedItems( m_rewindIter );
     updateDumpPanel( m_rewindIter );
+    updatePnsPreviewItems( m_rewindIter );
 
     event.Skip();
 }
@@ -469,12 +469,12 @@ void PNS_LOG_VIEWER_FRAME::onListRightClick( wxMouseEvent& event )
     {
         wxString s;
 
-        PNS_TEST_DEBUG_DECORATOR::STAGE* st = getCurrentStage();
+        PNS_DEBUG_STAGE* st = getCurrentStage();
 
         if( !st )
             return;
 
-        auto formatShapes = [&]( PNS_TEST_DEBUG_DECORATOR::DEBUG_ENT* ent ) -> bool
+        auto formatShapes = [&]( PNS_DEBUG_SHAPE* ent ) -> bool
         {
             if( ent->m_selected )
             {
@@ -512,7 +512,7 @@ void PNS_LOG_VIEWER_FRAME::onListSelect( wxCommandEvent& event )
 
 
 void PNS_LOG_VIEWER_FRAME::buildListTree( wxTreeListItem item,
-                                          PNS_TEST_DEBUG_DECORATOR::DEBUG_ENT* ent, int depth )
+                                          PNS_DEBUG_SHAPE* ent, int depth )
 {
 #ifdef EXTRA_VERBOSE
     for( int i = 0; i < depth * 2; i++ )
@@ -574,7 +574,7 @@ static void expandAllChildren( wxTreeListCtrl* tree, int maxLevel = 0 )
         WX_SHAPE_TREE_ITEM_DATA* idata =
                 static_cast<WX_SHAPE_TREE_ITEM_DATA*>( tree->GetItemData( child ) );
 
-        if( idata->m_item->m_level > maxLevel )
+        if( idata->m_item->m_level <= maxLevel )
             tree->Expand ( child );
         else
             tree->Collapse ( child );
@@ -596,10 +596,10 @@ static void collapseAllChildren( wxTreeListCtrl* tree )
 
 void PNS_LOG_VIEWER_FRAME::updateDumpPanel( int iter )
 {
-    if( !m_env )
+    if( !m_logPlayer )
         return;
 
-    auto dbgd = m_env->GetDebugDecorator();
+    auto dbgd = m_logPlayer->GetDebugDecorator();
     int  count = dbgd->GetStageCount();
 
     wxArrayString dumpStrings;
@@ -625,44 +625,71 @@ void PNS_LOG_VIEWER_FRAME::updateDumpPanel( int iter )
     m_itemList->Refresh();
 }
 
-
-int replay_main_func( int argc, char* argv[] )
+void PNS_LOG_VIEWER_FRAME::updatePnsPreviewItems( int iter )
 {
-    auto frame = new PNS_LOG_VIEWER_FRAME( nullptr );
+    auto viewTracker = m_logPlayer->GetViewTracker();
+    PNS_LOG_VIEW_TRACKER::VIEW_ENTRIES& entries = viewTracker->GetEntriesForStage( iter );
+    auto view = m_galPanel->GetView();
+    printf("DBG updatePnsPreviewItems: %d items\n", entries.size() );
 
-    //  drcCreateTestsProviderClearance();
-    //  drcCreateTestsProviderEdgeClearance();
+    m_previewItems.reset( new KIGFX::VIEW_GROUP( m_galPanel->GetView() ) );
+    m_galPanel->GetView()->Add( m_previewItems.get() );
+    m_previewItems->SetLayer( LAYER_SELECT_OVERLAY ) ;
+    m_galPanel->GetView()->SetLayerVisible( LAYER_SELECT_OVERLAY );
 
-    if( argc >= 2 && std::string( argv[1] ) == "-h" )
+    if( !m_showRPIs )
+        return;
+
+    for( auto& ent : entries )
     {
-        printf( "PNS Log (Re)player. Allows to step through the log written by the ROUTER_TOOL "
-                "in debug KiCad builds. " );
-        printf( "Requires a board file with UUIDs and a matching log file. Both are written to "
-                "/tmp when you press '0' during routing." );
-        return 0;
+        if ( ent.isHideOp )
+        {
+    
+            auto parent = ent.item->Parent();
+            if( parent )
+            {
+
+                view->Hide( parent );
+            }
+        }
+        else
+        {
+            ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( ent.item, view );
+            pitem->Update( ent.item );
+            m_previewItems->Add(pitem);
+    //        printf("DBG vadd %p total %d\n", pitem, m_previewItems->GetSize() );
+        }
     }
 
-    if( argc < 3 )
+    view->SetVisible( m_previewItems.get(), true );
+    
+    view->Update( m_previewItems.get() );
+    printf("DBG vgrp %p total %d\n", m_previewItems.get(), m_previewItems->GetSize() );
+
+    
+    //view->UpdateAllItems( KIGFX::ALL );
+}
+
+#if 0
+
+static BOARD* loadBoard( const std::string& filename )
+{
+    PLUGIN::RELEASER pi( new PCB_PLUGIN );
+    BOARD*           brd = nullptr;
+
+    try
     {
-        printf( "Expected parameters: log_file.log board_file.dump\n" );
-        return 0;
+        brd = pi->Load( wxString( filename.c_str() ), nullptr, nullptr );
+    }
+    catch( const IO_ERROR& )
+    {
+        return nullptr;
     }
 
-    PNS_LOG_FILE* logFile = new PNS_LOG_FILE;
-    logFile->Load( argv[1], argv[2] );
-
-    frame->SetLogFile( logFile );
-    //SetTopFrame( frame );      // wxApp gets a face.
-
-    return 0;
+    return brd;
 }
 
 
-static bool registered2 = UTILITY_REGISTRY::Register( {
-        "replay",
-        "PNS Log Player",
-        replay_main_func,
-} );
 
 
 
@@ -788,3 +815,5 @@ static bool registered4 = UTILITY_REGISTRY::Register( {
         "Renderer performance test",
         ttt_main_func,
 } );
+
+#endif

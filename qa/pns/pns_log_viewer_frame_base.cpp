@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Feb  6 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,23 +38,38 @@ PNS_LOG_VIEWER_FRAME_BASE::PNS_LOG_VIEWER_FRAME_BASE( wxWindow* parent, wxWindow
 	m_rewindText->Wrap( -1 );
 	fgSizer3->Add( m_rewindText, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_rewindLeft = new wxButton( this, wxID_ANY, wxT("<"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_rewindLeft->SetMaxSize( wxSize( 60,-1 ) );
+	m_rewindLeft = new wxButton( this, wxID_ANY, wxT("<"), wxDefaultPosition, wxSize( 50,-1 ), 0 );
+	m_rewindLeft->SetMaxSize( wxSize( 50,-1 ) );
 
-	fgSizer3->Add( m_rewindLeft, 0, wxALL, 5 );
+	fgSizer3->Add( m_rewindLeft, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_rewindSlider = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxSize( 200,-1 ), wxSL_HORIZONTAL );
 	m_rewindSlider->SetMinSize( wxSize( 200,-1 ) );
 
 	fgSizer3->Add( m_rewindSlider, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_rewindRight = new wxButton( this, wxID_ANY, wxT(">"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_rewindRight->SetMaxSize( wxSize( 60,-1 ) );
+	m_rewindRight = new wxButton( this, wxID_ANY, wxT(">"), wxDefaultPosition, wxSize( 50,-1 ), 0 );
+	m_rewindRight->SetMaxSize( wxSize( 50,-1 ) );
 
-	fgSizer3->Add( m_rewindRight, 1, wxALL, 5 );
+	fgSizer3->Add( m_rewindRight, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_rewindPos = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	m_rewindPos = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 50,-1 ), wxTE_PROCESS_ENTER );
+	m_rewindPos->SetMaxSize( wxSize( 50,-1 ) );
+
 	fgSizer3->Add( m_rewindPos, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
+
+	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Filter:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2->Wrap( -1 );
+	fgSizer3->Add( m_staticText2, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_filterString = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_filterString, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_chkShowRPItems = new wxCheckBox( this, wxID_ANY, wxT("Show RPIs"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_chkShowRPItems, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_chkThinLines = new wxCheckBox( this, wxID_ANY, wxT("Thin lines"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_chkThinLines, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	m_mainSizer->Add( fgSizer3, 0, wxEXPAND, 5 );
@@ -97,6 +112,8 @@ PNS_LOG_VIEWER_FRAME_BASE::PNS_LOG_VIEWER_FRAME_BASE( wxWindow* parent, wxWindow
 	m_rewindRight->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onBtnRewindRight ), NULL, this );
 	m_rewindPos->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onRewindCountText2 ), NULL, this );
 	m_rewindPos->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onRewindCountText ), NULL, this );
+	m_chkShowRPItems->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onShowRPIsChecked ), NULL, this );
+	m_chkThinLines->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onShowThinLinesChecked ), NULL, this );
 }
 
 PNS_LOG_VIEWER_FRAME_BASE::~PNS_LOG_VIEWER_FRAME_BASE()
@@ -115,5 +132,7 @@ PNS_LOG_VIEWER_FRAME_BASE::~PNS_LOG_VIEWER_FRAME_BASE()
 	m_rewindRight->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onBtnRewindRight ), NULL, this );
 	m_rewindPos->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onRewindCountText2 ), NULL, this );
 	m_rewindPos->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onRewindCountText ), NULL, this );
+	m_chkShowRPItems->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onShowRPIsChecked ), NULL, this );
+	m_chkThinLines->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PNS_LOG_VIEWER_FRAME_BASE::onShowThinLinesChecked ), NULL, this );
 
 }

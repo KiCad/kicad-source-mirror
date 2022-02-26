@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Feb  6 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -22,6 +22,7 @@
 #include <wx/button.h>
 #include <wx/slider.h>
 #include <wx/textctrl.h>
+#include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/treelist.h>
 #include <wx/statusbr.h>
@@ -46,11 +47,15 @@ class PNS_LOG_VIEWER_FRAME_BASE : public wxFrame
 		wxSlider* m_rewindSlider;
 		wxButton* m_rewindRight;
 		wxTextCtrl* m_rewindPos;
+		wxStaticText* m_staticText2;
+		wxTextCtrl* m_filterString;
+		wxCheckBox* m_chkShowRPItems;
+		wxCheckBox* m_chkThinLines;
 		wxBoxSizer* m_viewSizer;
 		wxTreeListCtrl* m_itemList;
 		wxStatusBar* m_statusBar;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void onReload( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onExit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBtnRewindLeft( wxCommandEvent& event ) { event.Skip(); }
@@ -58,6 +63,8 @@ class PNS_LOG_VIEWER_FRAME_BASE : public wxFrame
 		virtual void onBtnRewindRight( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRewindCountText2( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRewindCountText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onShowRPIsChecked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onShowThinLinesChecked( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

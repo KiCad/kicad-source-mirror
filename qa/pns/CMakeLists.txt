@@ -51,15 +51,19 @@ add_executable( test_pns
     ../../pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp
     ../../pcbnew/drc/drc_engine.cpp
     ../../pcbnew/drc/drc_item.cpp
-    pns_log.cpp
-    pns_log_viewer.cpp
+    pns_log_file.cpp
+    pns_log_player.cpp
+    pns_test_debug_decorator.cpp
+    pns_log_viewer_frame.cpp
     pns_log_viewer_frame_base.cpp
+    label_manager.cpp
     ../qa_utils/pcb_test_frame.cpp
     ../qa_utils/test_app_main.cpp
     ../qa_utils/utility_program.cpp
     ../qa_utils/mocks.cpp
     ../../common/base_units.cpp
     playground.cpp
+    main.cpp
   )
 
 # Pcbnew tests, so pretend to be pcbnew (for units, etc)

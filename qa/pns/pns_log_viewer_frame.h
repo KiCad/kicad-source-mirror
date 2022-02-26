@@ -31,8 +31,12 @@
 #include <pcb_painter.h>
 #include <pcb_test_frame.h>
 
-#include "pns_log.h"
+#include "pns_log_file.h"
+#include "pns_log_player.h"
+#include "pns_test_debug_decorator.h"
 #include "pns_log_viewer_frame_base.h"
+
+#include "label_manager.h"
 
 #define ID_LIST_COPY 10001
 #define ID_LIST_SHOW_ALL 10002
@@ -52,13 +56,13 @@ public:
     std::shared_ptr<PNS_LOG_VIEWER_OVERLAY> GetOverlay() const { return m_overlay; }
 
 private:
-    void         drawLoggedItems( int iter );
-    void         updateDumpPanel( int iter );
-    virtual void createUserTools() override;
-    void         buildListTree( wxTreeListItem item, PNS_TEST_DEBUG_DECORATOR::DEBUG_ENT* ent,
-                                int depth = 0 );
-    void         syncModel();
-    PNS_TEST_DEBUG_DECORATOR::STAGE* getCurrentStage();
+    void             drawLoggedItems( int iter );
+    void             updateDumpPanel( int iter );
+    virtual void     createUserTools() override;
+    void             buildListTree( wxTreeListItem item, PNS_DEBUG_SHAPE* ent, int depth = 0 );
+    void             syncModel();
+    PNS_DEBUG_STAGE* getCurrentStage();
+    void             updatePnsPreviewItems( int iter );
 
     virtual void onReload( wxCommandEvent& event ) override;
     virtual void onExit( wxCommandEvent& event ) override;
@@ -69,27 +73,36 @@ private:
     virtual void onBtnRewindLeft( wxCommandEvent& event ) override;
     virtual void onBtnRewindRight( wxCommandEvent& event ) override;
     virtual void onListChecked( wxCommandEvent& event );
+    virtual void onShowThinLinesChecked( wxCommandEvent& event ) override;
+    virtual void onShowRPIsChecked( wxCommandEvent& event ) override;
 
-    std::shared_ptr<PNS_LOG_VIEWER_OVERLAY>  m_overlay;
-    std::shared_ptr<PNS_LOG_FILE>         m_logFile;
-    std::shared_ptr<PNS_TEST_ENVIRONMENT> m_env;
-    int                                   m_rewindIter;
-    wxMenu*                               m_listPopupMenu;
+    std::shared_ptr<PNS_LOG_VIEWER_OVERLAY> m_overlay;
+    std::shared_ptr<PNS_LOG_FILE>           m_logFile;
+    std::shared_ptr<PNS_LOG_PLAYER>         m_logPlayer;
+    int                                     m_rewindIter;
+    wxMenu*                                 m_listPopupMenu;
+    std::shared_ptr<KIGFX::VIEW_GROUP>      m_previewItems;
+
+    bool m_showThinLines = true;
+    bool m_showRPIs = true;
 };
 
 class LABEL_MANAGER;
 
 class PNS_LOG_VIEWER_OVERLAY : public KIGFX::VIEW_OVERLAY
 {
-    public:
-        PNS_LOG_VIEWER_OVERLAY( KIGFX::GAL* aGal );
-        void AnnotatedPolyline( const SHAPE_LINE_CHAIN& aL, std::string name, bool aShowVertexNumbers = false );
-        void AnnotatedPoint( const VECTOR2I p, int size, std::string name = "", bool aShowVertexNumbers = false );
-        void Arc( const SHAPE_ARC& arc );
-        void DrawAnnotations();
+public:
+    PNS_LOG_VIEWER_OVERLAY( KIGFX::GAL* aGal );
+    void AnnotatedPolyline( const SHAPE_LINE_CHAIN& aL, std::string name,
+                            bool aShowVertexNumbers = false );
+    void AnnotatedPoint( const VECTOR2I p, int size, std::string name = "",
+                         bool aShowVertexNumbers = false );
+    void Arc( const SHAPE_ARC& arc );
+    void DrawAnnotations();
 
-    private:
-        std::unique_ptr<LABEL_MANAGER> m_labelMgr;
+private:
+
+    std::unique_ptr<LABEL_MANAGER> m_labelMgr;
 };
 
 #endif
