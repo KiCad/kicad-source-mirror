@@ -122,7 +122,7 @@ private:
     void selectNext( wxListBox* aListBox );
     void ClickOnLibList( wxCommandEvent& aEvent );
     void ClickOnFootprintList( wxCommandEvent& aEvent );
-    void DClickOnFootprintList( wxCommandEvent& aEvent );
+    void DClickOnFootprintList( wxMouseEvent& aEvent );
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
