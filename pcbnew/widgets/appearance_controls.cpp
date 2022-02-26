@@ -1922,6 +1922,7 @@ void APPEARANCE_CONTROLS::onLayerVisibilityToggled( PCB_LAYER_ID aLayer )
     LSET visibleLayers = getVisibleLayers();
 
     visibleLayers.set( aLayer, !visibleLayers.test( aLayer ) );
+    setVisibleLayers( visibleLayers );
     m_frame->GetCanvas()->GetView()->SetLayerVisible( aLayer, visibleLayers.test( aLayer ) );
 
     syncLayerPresetSelection();
