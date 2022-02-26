@@ -751,10 +751,12 @@ public:
         m_view->Add( m_items );
     }
 
-    virtual void AddPoint( const VECTOR2I& aP, const COLOR4D& aColor, int aSize,
-                           const std::string& aName,
+    virtual void AddPoint( const VECTOR2I& aP, const KIGFX::COLOR4D& aColor, int aSize,
+                           const wxString& aName = wxT( "" ),
                            const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
+
     {
+        #if 0
         SHAPE_LINE_CHAIN l;
 
         l.Append( aP - VECTOR2I( -aSize, -aSize ) );
@@ -767,52 +769,7 @@ public:
         l.Append( aP + VECTOR2I( aSize, -aSize ) );
 
         AddLine( l, aColor, 10000, aName );
-    }
-
-    virtual void AddBox( const BOX2I& aB, const COLOR4D& aColor, const std::string& aName,
-                         const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
-    {
-        SHAPE_LINE_CHAIN l;
-
-        VECTOR2I o = aB.GetOrigin();
-        VECTOR2I s = aB.GetSize();
-
-        l.Append( o );
-        l.Append( o.x + s.x, o.y );
-        l.Append( o.x + s.x, o.y + s.y );
-        l.Append( o.x, o.y + s.y );
-        l.Append( o );
-
-        AddLine( l, aColor, 10000, aName, aSrcLoc );
-    }
-
-    virtual void AddSegment( const SEG& aS, const COLOR4D& aColor, const std::string& aName,
-                             const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
-    {
-        SHAPE_LINE_CHAIN l;
-
-        l.Append( aS.A );
-        l.Append( aS.B );
-
-        AddLine( l, aColor, 10000, aName, aSrcLoc );
-    }
-
-
-    virtual void AddLine( const SHAPE_LINE_CHAIN& aLine, const COLOR4D& aColor,
-                          int aWidth, const std::string& aName,
-                          const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
-    {
-        if( !m_view )
-            return;
-
-        ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( nullptr, m_view );
-
-        pitem->SetColor( aColor );
-        pitem->Line( aLine, aWidth );
-
-        // Should not be needed, as m_items has been passed as a parent group in alloc;
-        m_items->Add( pitem );
-        m_view->Update( m_items );
+        #endif
     }
 
     void Clear() override

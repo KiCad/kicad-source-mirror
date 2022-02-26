@@ -474,8 +474,8 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
     else if( !affectedArea )
         affectedArea = BOX2I( aP ); // No valid area yet? set to minimum to disable optimization
 
-    PNS_DBG( Dbg(), AddPoint, anchor, YELLOW, 100000, "drag-anchor" );
-    PNS_DBG( Dbg(), AddBox, *affectedArea, RED, "drag-affected-area" );
+    PNS_DBG( Dbg(), AddPoint, anchor, YELLOW, 100000, wxT( "drag-anchor" ) );
+    PNS_DBG( Dbg(), AddShape, *affectedArea, RED, 0, wxT( "drag-affected-area" ) );
 
     optimizer.SetRestrictArea( *affectedArea );
     optimizer.Optimize( &aDragged );
@@ -483,7 +483,7 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
     OPT_BOX2I optArea = aDragged.ChangedArea( &aOrig );
 
     if( optArea )
-        PNS_DBG( Dbg(), AddBox, *optArea, BLUE, "drag-opt-area" );
+        PNS_DBG( Dbg(), AddShape, *optArea, BLUE, 0, wxT( "drag-opt-area" ) );
 
     m_lastNode->Add( aDragged );
     m_draggedItems.Clear();
@@ -578,8 +578,8 @@ bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
 
         if( ok )
         {
-            PNS_DBG( Dbg(), AddLine, origLine.CLine(), BLUE, 50000, "drag-orig-line" );
-            PNS_DBG( Dbg(), AddLine, draggedWalk.CLine(), CYAN, 75000, "drag-walk" );
+            PNS_DBG( Dbg(), AddShape, &origLine.CLine(), BLUE, 50000, wxT( "drag-orig-line" ) );
+            PNS_DBG( Dbg(), AddShape, &draggedWalk.CLine(), CYAN, 75000, wxT( "drag-walk" ) );
             m_lastNode->Remove( origLine );
             optimizeAndUpdateDraggedLine( draggedWalk, origLine, aP );
         }
@@ -624,7 +624,7 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
         else
             dragged.DragCorner( aP, m_draggedSegmentIndex );
 
-        PNS_DBG( Dbg(), AddLine, dragged.CLine(), BLUE, 5000, "drag-shove-line" );
+        PNS_DBG( Dbg(), AddShape, &dragged.CLine(), BLUE, 5000, wxT( "drag-shove-line" ) );
 
         SHOVE::SHOVE_STATUS st = m_shove->ShoveLines( dragged );
 

@@ -550,7 +550,7 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
 
     do {
         snprintf( name, sizeof( name ), "walk-round-%d", round );
-        PNS_DBG( Dbg(), BeginGroup, name );
+        PNS_DBG( Dbg(), BeginGroup, name, 0 );
 
         viaOk = buildInitialLine( walkP, initTrack, round == 0 );
 
@@ -567,8 +567,8 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
             int len_cw = wr.statusCw == WALKAROUND::DONE ? l_cw.Length() : INT_MAX;
             int len_ccw = wr.statusCcw == WALKAROUND::DONE ? l_ccw.Length() : INT_MAX;
 
-            PNS_DBG( Dbg(), AddLine, wr.lineCw.CLine(), CYAN, 10000, "wf-result-cw" );
-            PNS_DBG( Dbg(), AddLine, wr.lineCcw.CLine(), BLUE, 20000, "wf-result-ccw" );
+            PNS_DBG( Dbg(), AddItem, &wr.lineCw, CYAN, 10000, wxT( "wf-result-cw" ) );
+            PNS_DBG( Dbg(), AddItem, &wr.lineCcw, BLUE, 20000, wxT( "wf-result-ccw" ) );
 
             int bestLength = len_cw < len_ccw ? len_cw : len_ccw;
 
@@ -596,8 +596,8 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
                 {
                     int idx_ccw = l_ccw.Split( p_ccw );
                     l_ccw = l_ccw.Slice( 0, idx_ccw );
-                    PNS_DBG( Dbg(), AddPoint, p_ccw, BLUE, 500000, "hug-target-ccw" );
-                    PNS_DBG( Dbg(), AddLine, l_ccw, MAGENTA, 200000, "wh-result-ccw" );
+                    PNS_DBG( Dbg(), AddPoint, p_ccw, BLUE, 500000, wxT( "hug-target-ccw" ) );
+                    PNS_DBG( Dbg(), AddShape, &l_ccw, MAGENTA, 200000, wxT( "wh-result-ccw" ) );
                 }
             }
 
@@ -609,8 +609,8 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
                 {
                     int idx_cw = l_cw.Split( p_cw );
                     l_cw = l_cw.Slice( 0, idx_cw );
-                    PNS_DBG( Dbg(), AddPoint, p_cw, YELLOW, 500000, "hug-target-cw" );
-                    PNS_DBG( Dbg(), AddLine, l_cw, BLUE, 200000, "wh-result-cw" );
+                    PNS_DBG( Dbg(), AddPoint, p_cw, YELLOW, 500000,  wxT( "hug-target-cw" ) );
+                    PNS_DBG( Dbg(), AddShape, &l_cw, BLUE, 200000,  wxT( "wh-result-cw" ) );
                 }
             }
 
@@ -641,7 +641,7 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
         round++;
     } while( round < 2 && m_placingVia );
 
-    PNS_DBG( Dbg(), AddLine, walkFull.CLine(), GREEN, 200000, "walk-full" );
+    PNS_DBG( Dbg(), AddItem, &walkFull, GREEN, 200000, wxT( "walk-full" ) );
 
     switch( Settings().OptimizerEffort() )
     {
@@ -887,7 +887,7 @@ bool LINE_PLACER::optimizeTailHeadTransition()
     // the optimized line
 
 
-    PNS_DBG( Dbg(), AddLine, new_head.CLine(), LIGHTCYAN, 10000, "ht-newline" );
+    PNS_DBG( Dbg(), AddItem, &new_head, LIGHTCYAN, 10000, wxT( "ht-newline" ) );
 
     if( OPTIMIZER::Optimize( &new_head, OPTIMIZER::MERGE_SEGMENTS, m_currentNode ) )
     {
@@ -923,32 +923,32 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
                 m_head.ShapeCount(),
                 m_tail.ShapeCount() );
 
-    PNS_DBG( Dbg(), BeginGroup, "route-step" );
+    PNS_DBG( Dbg(), BeginGroup, wxT( "route-step" ), 0 );
 
-    PNS_DBG( Dbg(), AddLine, m_tail.CLine(), WHITE, 10000, "tail-init" );
-    PNS_DBG( Dbg(), AddLine, m_head.CLine(), GREEN, 10000, "head-init" );
+    PNS_DBG( Dbg(), AddItem, &m_tail, WHITE, 10000, wxT( "tail-init" ) );
+    PNS_DBG( Dbg(), AddItem, &m_head, GREEN, 10000, wxT( "head-init" ) );
 
     for( i = 0; i < n_iter; i++ )
     {
         if( !go_back && Settings().FollowMouse() )
             reduceTail( aP );
 
-        PNS_DBG( Dbg(), AddLine, m_tail.CLine(), WHITE, 10000, "tail-after-reduce" );
-        PNS_DBG( Dbg(), AddLine, m_head.CLine(), GREEN, 10000, "head-after-reduce" );
+        PNS_DBG( Dbg(), AddItem, &m_tail, WHITE, 10000, wxT( "tail-after-reduce" ) );
+        PNS_DBG( Dbg(), AddItem, &m_head, GREEN, 10000, wxT( "head-after-reduce" ) );
 
         go_back = false;
 
         if( !routeHead( aP, new_head ) )
+        {
             fail = true;
+        }
 
-        PNS_DBG( Dbg(), AddLine, new_head.CLine(), LIGHTGREEN, 100000, "new_head" );
+        PNS_DBG( Dbg(), AddItem, &new_head, LIGHTGREEN, 100000, wxT( "new_head" ) );
 
         if( fail )
             break;
 
         m_head = new_head;
-
-        PNS_DBG( Dbg(), AddLine, m_head.CLine(), LIGHTGREEN, 100000, "head-new" );
 
         if( handleSelfIntersections() )
         {
@@ -956,8 +956,8 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
             go_back = true;
         }
 
-        PNS_DBG( Dbg(), AddLine, m_tail.CLine(), WHITE, 10000, "tail-after-si" );
-        PNS_DBG( Dbg(), AddLine, m_head.CLine(), GREEN, 10000, "head-after-si" );
+        PNS_DBG( Dbg(), AddItem, &m_tail, WHITE, 10000, wxT( "tail-after-si" ) );
+        PNS_DBG( Dbg(), AddItem, &m_head, GREEN, 10000, wxT( "head-after-si" ) );
 
         if( !go_back && handlePullback() )
         {
@@ -965,8 +965,8 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
             go_back = true;
         }
 
-        PNS_DBG( Dbg(), AddLine, m_tail.CLine(), WHITE, 100000, "tail-after-pb" );
-        PNS_DBG( Dbg(), AddLine, m_head.CLine(), GREEN, 100000, "head-after-pb" );
+        PNS_DBG( Dbg(), AddItem, &m_tail, WHITE, 100000, wxT( "tail-after-pb" ) );
+        PNS_DBG( Dbg(), AddItem, &m_head, GREEN, 100000, wxT( "head-after-pb" ) );
     }
 
     if( fail )
@@ -988,16 +988,16 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
 
     if( !fail && Settings().FollowMouse() )
     {
-        PNS_DBG( Dbg(), AddLine, m_tail.CLine(), WHITE, 10000, "tail-pre-merge" );
-        PNS_DBG( Dbg(), AddLine, m_head.CLine(), GREEN, 10000, "head-pre-merge" );
+        PNS_DBG( Dbg(), AddItem, &m_tail, WHITE, 10000, wxT( "tail-pre-merge" ) );
+        PNS_DBG( Dbg(), AddItem, &m_head, GREEN, 10000, wxT( "head-pre-merge" ) );
 
         if( !optimizeTailHeadTransition() )
         {
             mergeHead();
         }
 
-        PNS_DBG( Dbg(), AddLine, m_tail.CLine(), WHITE, 100000, "tail-post-merge" );
-        PNS_DBG( Dbg(), AddLine, m_head.CLine(), GREEN, 100000, "head-post-merge" );
+        PNS_DBG( Dbg(), AddItem, &m_tail, WHITE, 100000, wxT( "tail-post-merge" ) );
+        PNS_DBG( Dbg(), AddItem, &m_head, GREEN, 100000, wxT( "head-post-merge" ) );
     }
 
     PNS_DBGN( Dbg(), EndGroup );
@@ -1022,8 +1022,8 @@ const LINE LINE_PLACER::Trace() const
     tmp.SetShape( m_tail.CLine() );
     tmp.Line().Append( m_head.CLine() );
 
-    PNS_DBG( Dbg(), AddLine, m_tail.CLine(), GREEN, 100000, "tmp-tail" );
-    PNS_DBG( Dbg(), AddLine, m_head.CLine(), LIGHTGREEN, 100000, "tmp-head" );
+    PNS_DBG( Dbg(), AddItem, &m_tail, GREEN, 100000, wxT( "tmp-tail" ) );
+    PNS_DBG( Dbg(), AddItem, &m_head, LIGHTGREEN, 100000, wxT( "tmp-head" ) );
 
     tmp.Line().Simplify();
     return tmp;

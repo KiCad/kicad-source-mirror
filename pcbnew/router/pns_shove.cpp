@@ -67,10 +67,8 @@ void SHOVE::replaceLine( LINE& aOld, LINE& aNew, bool aIncludeInChangedArea, NOD
 
         if( changed_area )
         {
-            if( Dbg() )
-            {
-                Dbg()->AddBox( *changed_area, BLUE, "shove-changed-area" );
-            }
+            SHAPE_RECT r( *changed_area );
+            PNS_DBG(Dbg(), AddShape, &r, BLUE, 0, wxT( "shove-changed-area" ) );
 
             m_affectedArea =
                     m_affectedArea ? m_affectedArea->Merge( *changed_area ) : *changed_area;
@@ -277,6 +275,8 @@ SHOVE::SHOVE_STATUS SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE&
 
     int attempt;
 
+    PNS_DBG( Dbg(), BeginGroup, "shove-details", 1 );
+
     for( attempt = 0; attempt < 4; attempt++ )
     {
         bool invertTraversal = ( attempt >= 2 );
@@ -290,9 +290,9 @@ SHOVE::SHOVE_STATUS SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE&
         {
             const SHAPE_LINE_CHAIN& hull = aHulls[invertTraversal ? aHulls.size() - 1 - i : i];
 
-            PNS_DBG( Dbg(), AddLine, hull, YELLOW, 10000, "hull" );
-            PNS_DBG( Dbg(), AddLine, path, WHITE, l.Width(), "path" );
-            PNS_DBG( Dbg(), AddLine, obs, LIGHTGRAY, aObstacleLine.Width(), "obs" );
+            PNS_DBG( Dbg(), AddShape, &hull, YELLOW, 10000, wxT( "hull" ) );
+            PNS_DBG( Dbg(), AddShape, &path, WHITE, l.Width(), wxT( "path" ) );
+            PNS_DBG( Dbg(), AddShape, &obs, LIGHTGRAY, aObstacleLine.Width(),  wxT( "obs" ) );
 
             if( !l.Walkaround( hull, path, clockwise ) )
             {
@@ -300,6 +300,8 @@ SHOVE::SHOVE_STATUS SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE&
                                                            hull.Format().c_str(),
                                                            l.CLine().Format().c_str(),
                                                            clockwise? 1 : 0) );
+
+                PNS_DBGN( Dbg(), EndGroup );
                 return SH_INCOMPLETE;
             }
 
@@ -358,12 +360,6 @@ SHOVE::SHOVE_STATUS SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE&
 
         bool colliding = l.Collide( &aCurLine, m_currentNode );
 
-#ifdef DEBUG
-        char str[128];
-        sprintf( str, "att-%d-shoved", attempt );
-        Dbg()->AddLine( l.CLine(), BLUE, 20000, str );
-#endif
-
         if(( aCurLine.Marker() & MK_HEAD ) && !colliding )
         {
             JOINT* jtStart = m_currentNode->FindJoint( aCurLine.CPoint( 0 ), &aCurLine );
@@ -384,8 +380,12 @@ SHOVE::SHOVE_STATUS SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE&
 
         aResultLine.SetShape( l.CLine() );
 
+        PNS_DBGN( Dbg(), EndGroup );
+
         return SH_OK;
     }
+
+    PNS_DBGN( Dbg(), EndGroup );
 
     return SH_INCOMPLETE;
 }
@@ -465,12 +465,6 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& 
             hulls.push_back( aCurLine.Via().Hull( viaClearance, obstacleLineWidth ) );
         }
 
-#ifdef DEBUG
-        char str[128];
-        sprintf( str, "current-cl-%d", clearance );
-        Dbg()->AddLine( aCurLine.CLine(), BLUE, 20000, str );
-#endif
-
         rv = shoveLineToHullSet( aCurLine, aObstacleLine, aResultLine, hulls );
     }
 
@@ -492,7 +486,10 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSegment( LINE& aCurrent, SEGMENT* aObstacl
     SEGMENT tmp( *aObstacleSeg );
 
     if( obstacleLine.HasLockedSegments() )
+    {
+        PNS_DBG(Dbg(), Message, "try walk (locked segments)");
         return SH_TRY_WALK;
+    }
 
     SHOVE_STATUS rv = ShoveObstacleLine( aCurrent, obstacleLine, shovedLine );
 
@@ -512,19 +509,10 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSegment( LINE& aCurrent, SEGMENT* aObstacl
 
     if( Dbg() )
     {
-        Dbg()->BeginGroup( wxString::Format( wxT( "on-colliding-segment-iter-%d" ),
-                                             m_iter ).ToStdString() );
-        Dbg()->AddSegment( tmp.Seg(), WHITE, "obstacle-segment" );
-        Dbg()->AddLine( aCurrent.CLine(), RED, 10000, "current-line" );
-        Dbg()->AddLine( obstacleLine.CLine(), GREEN, 10000, "obstacle-line" );
-        Dbg()->AddLine( shovedLine.CLine(), BLUE, 10000, "shoved-line" );
-
-        if( rv == SH_OK )
-            Dbg()->Message( "Shove success" );
-        else
-            Dbg()->Message( "Shove FAIL" );
-
-        Dbg()->EndGroup();
+        PNS_DBG( Dbg(), AddItem, aObstacleSeg, BLUE, 0, wxT( "shove-changed-area" ) );
+        PNS_DBG( Dbg(), AddItem, &aCurrent, RED, 10000, wxT( "current-line" ) );
+        PNS_DBG( Dbg(), AddItem, &obstacleLine, GREEN, 10000, wxT( "obstacle-line" ) );
+        PNS_DBG( Dbg(), AddItem, &shovedLine, BLUE, 10000, wxT( "shoved-line" ) );
     }
 
     if( rv == SH_OK )
@@ -580,16 +568,10 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingArc( LINE& aCurrent, ARC* aObstacleArc )
 
     assert( obstacleLine.LayersOverlap( &shovedLine ) );
 
-    if ( Dbg() )
-    {
-        Dbg()->BeginGroup( wxString::Format( wxT( "on-colliding-arc-iter-%d" ),
-                                             m_iter ).ToStdString() );
-        Dbg()->AddLine( tmp.CLine(), WHITE, 10000, "obstacle-segment" );
-        Dbg()->AddLine( aCurrent.CLine(), RED, 10000, "current-line" );
-        Dbg()->AddLine( obstacleLine.CLine(), GREEN, 10000, "obstacle-line" );
-        Dbg()->AddLine( shovedLine.CLine(), BLUE, 10000, "shoved-line" );
-        Dbg()->EndGroup();
-    }
+    PNS_DBG( Dbg(), AddItem, &tmp, WHITE, 10000, wxT( "obstacle-arc" ) );
+    PNS_DBG( Dbg(), AddItem, &aCurrent, RED, 10000, wxT( "current-line" ) );
+    PNS_DBG( Dbg(), AddItem, &obstacleLine, GREEN, 10000, wxT( "obstacle-line" ) );
+    PNS_DBG( Dbg(), AddItem, &shovedLine, BLUE, 10000, wxT( "shoved-line" ) );
 
     if( rv == SH_OK )
     {
@@ -624,10 +606,9 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingLine( LINE& aCurrent, LINE& aObstacle )
 
     SHOVE_STATUS rv = ShoveObstacleLine( aCurrent, aObstacle, shovedLine );
 
-    Dbg()->BeginGroup( "on-colliding-line" );
-    Dbg()->AddLine( aObstacle.CLine(), RED, 100000, "obstacle-line" );
-    Dbg()->AddLine( aCurrent.CLine(), GREEN, 150000, "current-line" );
-    Dbg()->AddLine( shovedLine.CLine(), BLUE, 200000, "shoved-line" );
+    PNS_DBG( Dbg(), AddItem, &aObstacle, RED, 100000, wxT( "obstacle-line" ) );
+    PNS_DBG( Dbg(), AddItem, &aCurrent, GREEN, 150000, wxT( "current-line" ) );
+    PNS_DBG( Dbg(), AddItem, &shovedLine, BLUE, 200000, wxT( "shoved-line" ) );
 
     if( rv == SH_OK )
     {
@@ -766,13 +747,8 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle )
     replaceLine( aCurrent, walkaroundLine );
     walkaroundLine.SetRank( nextRank );
 
-    if( Dbg() )
-    {
-        Dbg()->BeginGroup( "on-colliding-solid" );
-        Dbg()->AddLine( aCurrent.CLine(), RED, 10000, "current-line" );
-        Dbg()->AddLine( walkaroundLine.CLine(), BLUE, 10000, "walk-line" );
-        Dbg()->EndGroup();
-    }
+    PNS_DBG( Dbg(), AddItem, &aCurrent, RED, 10000, wxT( "current-line" ) );
+    PNS_DBG( Dbg(), AddItem, &walkaroundLine, BLUE, 10000, wxT( "walk-line" ) );
 
     popLineStack();
 
@@ -930,6 +906,7 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
     }
 
     pushedVia->SetRank( aCurrentRank - 1 );
+    PNS_DBG( Dbg(), Message, wxString::Format("PushViaRank %d\n", pushedVia->Rank() ) );
 
     if( aVia->Marker() & MK_HEAD )      // push
     {
@@ -965,6 +942,9 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
             replaceLine( lp.first, lp.second );
             lp.second.SetRank( aCurrentRank - 1 );
 
+
+            PNS_DBG( Dbg(), Message, wxString::Format("PushViaF %p %d\n", &lp.second, lp.second.SegmentCount() ) );
+
             if( !pushLineStack( lp.second, true ) )
                 return SH_INCOMPLETE;
         }
@@ -973,8 +953,8 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
             m_currentNode->Remove( lp.first );
         }
 
-        PNS_DBG( Dbg(), AddLine, lp.first.CLine(), LIGHTGREEN, 10000, "fan-pre" );
-        PNS_DBG( Dbg(), AddLine, lp.second.CLine(), LIGHTRED, 10000, "fan-post" );
+        PNS_DBG( Dbg(), AddItem, &lp.first, LIGHTGREEN, 10000, wxT( "fan-pre" ) );
+        PNS_DBG( Dbg(), AddItem, &lp.second, LIGHTRED, 10000, wxT( "fan-post" ) );
     }
 
     return SH_OK;
@@ -995,16 +975,15 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
     bool viaCollision = false;
     VECTOR2I mtvLine, mtvVia;
 
-    PNS_DBG( Dbg(), BeginGroup, "push-via-by-line" );
+    PNS_DBG( Dbg(), BeginGroup, "push-via-by-line", 1 );
 
     if( aCurrent->OfKind( ITEM::LINE_T ) )
     {
+        VIA vtmp ( *aObstacleVia );
         LINE* currentLine = (LINE*) aCurrent;
 
-#if 0
-        m_logger.NewGroup( "push-via-by-line", m_iter );
-        m_logger.Log( currentLine, 4, "current" );
-#endif
+        PNS_DBG( Dbg(), AddItem, currentLine, LIGHTRED, 10000, wxT( "current-line" ) );
+        PNS_DBG( Dbg(), AddItem, &vtmp, LIGHTRED, 100000, wxT( "orig-via" ) );
 
         lineCollision = aObstacleVia->Shape()->Collide( currentLine->Shape(),
                                                         clearance + currentLine->Width() / 2,
@@ -1115,6 +1094,11 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
     m_logger.Log( &aCurrent, 1, "current-line" );
     m_logger.Log( &shoved, 3, "shoved-line" );
 #endif
+
+    PNS_DBG( Dbg(), AddItem, aObstacleVia, YELLOW, 0, wxT( "rr-the-via" ) );
+    PNS_DBG( Dbg(), AddItem, &aCurrent, BLUE, 0, wxT( "rr-current-line" ) );
+    PNS_DBG( Dbg(), AddItem, &shoved, GREEN, 0, wxT( "rr-shoved-line" ) );
+
     int currentRank = aCurrent.Rank();
     replaceLine( aCurrent, shoved );
 
@@ -1129,12 +1113,19 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
 
 void SHOVE::unwindLineStack( LINKED_ITEM* aSeg )
 {
+    int d = 0;
+
     for( std::vector<LINE>::iterator i = m_lineStack.begin(); i != m_lineStack.end() ; )
     {
         if( i->ContainsLink( aSeg ) )
+        {
+            PNS_DBG(Dbg(), Message, wxString::Format("Unwind lc %d (depth %d/%d)", i->SegmentCount(), d, (int)m_lineStack.size() ) );
             i = m_lineStack.erase( i );
+        }
         else
             i++;
+
+        d++;
     }
 
     for( std::vector<LINE>::iterator i = m_optimizerQueue.begin(); i != m_optimizerQueue.end() ; )
@@ -1216,9 +1207,12 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
     NODE::OPT_OBSTACLE nearest;
     SHOVE_STATUS st = SH_NULL;
 
-#ifdef DEBUG
+    if( Dbg() )
+    {
     Dbg()->SetIteration( aIter );
-#endif
+    }
+
+    PNS_DBG( Dbg(), AddItem, &currentLine, RED, currentLine.Width(), wxString::Format( "current-coll-chk rank %d", currentLine.Rank() ) );
 
     for( ITEM::PnsKind search_order : { ITEM::SOLID_T, ITEM::VIA_T, ITEM::SEGMENT_T } )
     {
@@ -1226,8 +1220,8 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
          if( nearest )
              PNS_DBG( Dbg(), Message,
-                      wxString::Format( wxT( "nearest %p %s" ), nearest->m_item,
-                                        nearest->m_item->KindStr() ) );
+                      wxString::Format( wxT( "nearest %p %s rank %d" ), nearest->m_item,
+                                        nearest->m_item->KindStr(), nearest->m_item->Rank() ) );
 
          if( nearest )
             break;
@@ -1252,7 +1246,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
         {
         case ITEM::VIA_T:
         {
-            PNS_DBG( Dbg(), Message, wxString::Format( "iter %d: reverse-collide-via", aIter ) );
+            PNS_DBG( Dbg(), BeginGroup, wxString::Format( "iter %d: reverse-collide-via", aIter ).ToStdString(), 0 );
 
             if( currentLine.EndsWithVia() )
             {
@@ -1263,17 +1257,21 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
                 st = onReverseCollidingVia( currentLine, (VIA*) ni );
             }
 
+            PNS_DBGN( Dbg(), EndGroup );
+
             break;
         }
 
         case ITEM::SEGMENT_T:
         {
-            PNS_DBG( Dbg(), Message, wxString::Format( "iter %d: reverse-collide-segment ",
-                                                       aIter ) );
+            PNS_DBG( Dbg(), BeginGroup, wxString::Format( "iter %d: reverse-collide-segment ",
+                                                       aIter ).ToStdString(), 0 );
             LINE revLine = assembleLine( static_cast<SEGMENT*>( ni ) );
 
             popLineStack();
             st = onCollidingLine( revLine, currentLine );
+
+            PNS_DBGN( Dbg(), EndGroup );
 
             if( !pushLineStack( revLine ) )
                 return SH_INCOMPLETE;
@@ -1284,11 +1282,13 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
         case ITEM::ARC_T:
         {
             //TODO(snh): Handle Arc shove separate from track
-            PNS_DBG( Dbg(), Message, wxString::Format( "iter %d: reverse-collide-arc ", aIter ) );
+            PNS_DBG( Dbg(), BeginGroup, wxString::Format( "iter %d: reverse-collide-arc ", aIter ).ToStdString(), 0 );
             LINE revLine = assembleLine( static_cast<ARC*>( ni ) );
 
             popLineStack();
             st = onCollidingLine( revLine, currentLine );
+
+            PNS_DBGN( Dbg(), EndGroup );
 
             if( !pushLineStack( revLine ) )
                 return SH_INCOMPLETE;
@@ -1307,38 +1307,45 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
         switch( ni->Kind() )
         {
         case ITEM::SEGMENT_T:
-            PNS_DBG( Dbg(), Message, wxString::Format( "iter %d: collide-segment ", aIter ) );
+            PNS_DBG( Dbg(), BeginGroup, wxString::Format( "iter %d: collide-segment ", aIter ), 0 );
 
             st = onCollidingSegment( currentLine, (SEGMENT*) ni );
 
             if( st == SH_TRY_WALK )
                 st = onCollidingSolid( currentLine, ni );
+            PNS_DBGN( Dbg(), EndGroup );
 
             break;
 
             //TODO(snh): Customize Arc collide
         case ITEM::ARC_T:
-            PNS_DBG( Dbg(), Message, wxString::Format( "iter %d: collide-arc ", aIter ) );
+            PNS_DBG( Dbg(), BeginGroup, wxString::Format( "iter %d: collide-arc ", aIter ), 0 );
 
             st = onCollidingArc( currentLine, static_cast<ARC*>( ni ) );
 
             if( st == SH_TRY_WALK )
                 st = onCollidingSolid( currentLine, ni );
 
+            PNS_DBGN( Dbg(), EndGroup );
+
             break;
 
         case ITEM::VIA_T:
-            PNS_DBG( Dbg(), Message, wxString::Format( "iter %d: shove-via ", aIter ) );
+            PNS_DBG( Dbg(), BeginGroup, wxString::Format( "iter %d: collide-via (fixup: %d)", aIter, 0 ), 0 );
             st = onCollidingVia( &currentLine, (VIA*) ni );
 
             if( st == SH_TRY_WALK )
                 st = onCollidingSolid( currentLine, ni );
 
+            PNS_DBGN( Dbg(), EndGroup );
+
             break;
 
         case ITEM::SOLID_T:
-            PNS_DBG( Dbg(), Message, wxString::Format( "iter %d: walk-solid ", aIter ) );
+            PNS_DBG( Dbg(), BeginGroup, wxString::Format( "iter %d: walk-solid ", aIter ), 0);
             st = onCollidingSolid( currentLine, (SOLID*) ni );
+            PNS_DBGN( Dbg(), EndGroup );
+
             break;
 
         default:
@@ -1391,6 +1398,8 @@ SHOVE::SHOVE_STATUS SHOVE::shoveMainLoop()
 
         if( st == SH_INCOMPLETE || timeLimit.Expired() || m_iter >= iterLimit )
         {
+            PNS_DBG( Dbg(), Message, wxString::Format( "Fail [time limit expired: %d iter %d iter limit %d",
+                                               timeLimit.Expired()?1:0, m_iter, iterLimit ) );
             st = SH_INCOMPLETE;
             break;
         }
@@ -1462,7 +1471,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveLines( const LINE& aCurrentHead )
     head.Mark( MK_HEAD );
     head.SetRank( 100000 );
 
-    PNS_DBG( Dbg(), AddLine, head.CLine(), CYAN, head.Width(), "head, after shove" );
+    PNS_DBG( Dbg(), AddItem, &head, CYAN, 0, wxT( "head, after shove" ) );
 
     if( head.EndsWithVia() )
     {
@@ -1757,10 +1766,9 @@ void SHOVE::runOptimizer( NODE* aNode )
 
     if( area )
     {
-        if( Dbg() )
-        {
-            Dbg()->AddBox( *area, BLUE, "opt-area" );
-        }
+        SHAPE_RECT r( *area );
+
+        PNS_DBG( Dbg(), AddShape, &r, BLUE, 0, wxT( "opt-area" ) );
 
         optFlags |= OPTIMIZER::RESTRICT_AREA;
         optimizer.SetRestrictArea( *area, false );

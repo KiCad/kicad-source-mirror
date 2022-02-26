@@ -603,7 +603,7 @@ bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult, LINE* aRoot )
 
     if( aRoot )
     {
-        PNS_DBG( dbg, AddLine, aRoot->CLine(), BLUE, 100000, "root-line" );
+        PNS_DBG( dbg, AddItem, aRoot, BLUE, 100000, wxT( "root-line" ) );
     }
 
 

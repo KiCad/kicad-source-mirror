@@ -76,7 +76,7 @@ void MOUSE_TRAIL_TRACER::AddTrailPoint( const VECTOR2I& aP )
 
     DEBUG_DECORATOR *dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
 
-    PNS_DBG( dbg, AddLine, m_trail, CYAN, 50000, "mt-trail" );
+    PNS_DBG( dbg, AddShape, &m_trail, CYAN, 50000, wxT( "mt-trail" ) );
 }
 
 
@@ -117,7 +117,7 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
     straight.Append( m_trail.Reverse() );
     straight.Simplify();
 
-    PNS_DBG( dbg, AddLine, straight, m_forced ? BLUE : GREEN, 100000, "mt-straight" );
+    PNS_DBG( dbg, AddShape, &straight, m_forced ? BLUE : GREEN, 100000, wxT( "mt-straight" ) );
 
     double areaS = straight.Area();
 
@@ -126,7 +126,7 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
     diag.SetClosed( true );
     diag.Simplify();
 
-    PNS_DBG( dbg, AddLine, diag, YELLOW, 100000, "mt-diag" );
+    PNS_DBG( dbg, AddShape, &diag, YELLOW, 100000, wxT( "mt-diag" ) );
 
     double areaDiag = diag.Area();
     double ratio    = areaS / ( areaDiag + 1.0 );

@@ -26,10 +26,13 @@
 #include <math/box2.h>
 #include <geometry/seg.h>
 #include <geometry/shape_line_chain.h>
+#include <geometry/shape_rect.h>
 
 #include <gal/color4d.h>
 
 namespace PNS {
+
+class ITEM;
 
 class DEBUG_DECORATOR
 {
@@ -56,27 +59,54 @@ public:
     void SetDebugEnabled( bool aEnabled ) { m_debugEnabled = aEnabled;}
     bool IsDebugEnabled() const { return m_debugEnabled; }
 
-    virtual void SetIteration( int iter ){};
+    virtual void SetIteration( int iter ) {};
+
     virtual void Message( const wxString& msg,
                           const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ){};
-    virtual void NewStage( const std::string& name, int iter,
+
+    virtual void NewStage( const wxString& name, int iter,
                            const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ){};
-    virtual void BeginGroup( const std::string& name,
+
+    virtual void BeginGroup( const wxString& name, int aLevel = 0,
                              const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ){};
+
     virtual void EndGroup( const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ){};
+
     virtual void AddPoint( const VECTOR2I& aP, const KIGFX::COLOR4D& aColor, int aSize,
-                           const std::string& aName,
+                           const wxString& aName = wxT( "" ),
                            const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ){};
-    virtual void AddLine( const SHAPE_LINE_CHAIN& aLine, const KIGFX::COLOR4D& aColor,
-                          int aWidth, const std::string& aName,
-                          const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ){};
-    virtual void AddSegment( const SEG& aS, const KIGFX::COLOR4D& aColor,
-                             const std::string& aName,
-                             const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ){};
-    virtual void AddBox( const BOX2I& aB, const KIGFX::COLOR4D& aColor,
-                         const std::string& aName,
-                         const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ){};
-    virtual void Clear(){};
+
+    virtual void AddItem( const ITEM* aItem, const KIGFX::COLOR4D& aColor,
+                         int aOverrideWidth = 0,
+                         const wxString& aName = wxT( "" ),
+                         const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) {};
+
+    virtual void AddShape( const SHAPE* aShape, const KIGFX::COLOR4D& aColor,
+                         int aOverrideWidth = 0,
+                         const wxString& aName = wxT( "" ),
+                         const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) {};
+
+    void AddShape( const BOX2I& aBox, const KIGFX::COLOR4D& aColor,
+                         int aOverrideWidth = 0,
+                         const wxString& aName = wxT( "" ),
+                         const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() )
+    {
+        SHAPE_RECT r( aBox );
+        AddShape( &r, aColor, aOverrideWidth, aName, aSrcLoc );
+    }
+
+    void AddShape( const SEG& aSeg, const KIGFX::COLOR4D& aColor,
+                         int aOverrideWidth = 0,
+                         const wxString& aName = wxT( "" ),
+                         const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() )
+    {
+        SHAPE_LINE_CHAIN lc;
+        lc.Append( aSeg.A );
+        lc.Append( aSeg.B );
+        AddShape( &lc, aColor, aOverrideWidth, aName, aSrcLoc );
+    }
+
+    virtual void Clear() {};
 
 private:
 

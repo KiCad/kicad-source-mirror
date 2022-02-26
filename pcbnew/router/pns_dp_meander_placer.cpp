@@ -205,13 +205,13 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     for( const ITEM* item : m_tunedPathP.CItems() )
     {
         if( const LINE* l = dyn_cast<const LINE*>( item ) )
-            PNS_DBG( Dbg(), AddLine, l->CLine(), YELLOW, 10000, "tuned-path-p" );
+            PNS_DBG( Dbg(), AddShape, &l->CLine(), YELLOW, 10000, wxT( "tuned-path-p" ) );
     }
 
     for( const ITEM* item : m_tunedPathN.CItems() )
     {
         if( const LINE* l = dyn_cast<const LINE*>( item ) )
-            PNS_DBG( Dbg(), AddLine, l->CLine(), YELLOW, 10000, "tuned-path-n" );
+            PNS_DBG( Dbg(), AddShape, &l->CLine(), YELLOW, 10000, wxT( "tuned-path-n" ) );
     }
 
     int curIndexP = 0, curIndexN = 0;
@@ -220,7 +220,7 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     {
         SEG base = baselineSegment( sp );
 
-        PNS_DBG( Dbg(), AddSegment, base, GREEN, "dp-baseline" );
+        PNS_DBG( Dbg(), AddShape, base, GREEN, 10000, wxT( "dp-baseline" ) );
 
         while( sp.indexP >= curIndexP && curIndexP != -1 )
         {
