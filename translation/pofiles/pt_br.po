@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 11:58-0800\n"
-"PO-Revision-Date: 2022-02-16 02:33+0000\n"
+"PO-Revision-Date: 2022-03-01 09:55+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.11.1-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -21418,9 +21418,8 @@ msgid "RF Attenuators"
 msgstr "Atenuadores de RF"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:96
-#, fuzzy
 msgid "Transmission Lines"
-msgstr "Linha de transmissão"
+msgstr "Linhas de transmissão"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:98
 msgid "Memo"
@@ -22416,9 +22415,8 @@ msgid "Unknown cleanup action"
 msgstr "Ação de limpeza desconhecida"
 
 #: pcbnew/connectivity/connectivity_data.cpp:100
-#, fuzzy
 msgid "Updating nets..."
-msgstr "Atualizando redes"
+msgstr "Atualizando as nets..."
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:379
 #: pcbnew/convert_shape_list_to_polygon.cpp:531
@@ -28402,9 +28400,8 @@ msgid "Draw an outline to show the sheet size."
 msgstr "Desenhe um contorno para mostrar o tamanho da página."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:380
-#, fuzzy
 msgid "Auto-refill zones"
-msgstr "Preencher Zonas"
+msgstr "Regiões de preenchimento automático"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:382
 msgid ""
@@ -33175,19 +33172,19 @@ msgid "Unknown mapping of the Altium layer '%s'."
 msgstr "Mapeamento desconhecido da camada Altium '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:182
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Mode string: '%s'."
-msgstr "Nó desconhecido '%s' em '%s'"
+msgstr "Modo string desconhecido: '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Record name string: '%s'."
-msgstr "Registro ID desconhecido: %d."
+msgstr "O registro do nome da string é desconhecido: '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Extended Primitive Information type: '%s'."
-msgstr "Tipo MIME desconhecido para o arquivo da documentação '%s'"
+msgstr "O tipo da informação primitiva estendida é desconhecida: '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:774
 #, c-format
@@ -33231,7 +33228,7 @@ msgstr "Registro de tipo desconhecido: '%d'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:873
 msgid "Loading extended primitive information data..."
-msgstr ""
+msgstr "Carregando os dados das informações primitivas estendidas..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:894
 msgid "Loading board data..."
@@ -37630,14 +37627,12 @@ msgid "Refill %d Zones"
 msgstr "Recarrega %d zonas"
 
 #: pcbnew/tools/zone_filler_tool.cpp:250
-#, fuzzy
 msgid "Auto-fill Zone(s)"
-msgstr "Preenche Zona(s)"
+msgstr "Região(ões) de preenchimento automático"
 
 #: pcbnew/tools/zone_filler_tool.cpp:282
-#, fuzzy
 msgid "Zone has no connections."
-msgstr "A porta %s não possui conexões."
+msgstr "A região não possui conexões."
 
 #: pcbnew/undo_redo.cpp:555
 msgid "Incomplete undo/redo operation: some items not found"
