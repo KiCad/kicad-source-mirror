@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 11:58-0800\n"
-"PO-Revision-Date: 2022-02-18 13:22+0000\n"
+"PO-Revision-Date: 2022-03-01 09:55+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.11.1-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -20890,7 +20890,6 @@ msgid "RF Attenuators"
 msgstr "RF 衰减器"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:96
-#, fuzzy
 msgid "Transmission Lines"
 msgstr "传输线"
 
@@ -21879,9 +21878,8 @@ msgid "Unknown cleanup action"
 msgstr "未知的清除操作"
 
 #: pcbnew/connectivity/connectivity_data.cpp:100
-#, fuzzy
 msgid "Updating nets..."
-msgstr "正在更新网络"
+msgstr "正在更新网络…"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:379
 #: pcbnew/convert_shape_list_to_polygon.cpp:531
@@ -22842,8 +22840,9 @@ msgstr "完全填充"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:143
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:131
+#, fuzzy
 msgid "Outline hatch pitch:"
-msgstr ""
+msgstr "描绘 hatch pitch 轮廓："
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:157
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:89
@@ -27683,9 +27682,8 @@ msgid "Draw an outline to show the sheet size."
 msgstr "画一个轮廓来显示图框尺寸。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:380
-#, fuzzy
 msgid "Auto-refill zones"
-msgstr "补充区域"
+msgstr "自动重填区域"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:382
 msgid ""
@@ -32410,19 +32408,19 @@ msgid "Unknown mapping of the Altium layer '%s'."
 msgstr "Altium 层 \"%s\" 的未知映射。"
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:182
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Mode string: '%s'."
-msgstr "未知节点 '%s' (在 '%s' 中)"
+msgstr "未知模式字符串：“%s”。"
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Record name string: '%s'."
-msgstr "未知的记录编号： %d。"
+msgstr "未知的记录名字符串：“%s”。"
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Extended Primitive Information type: '%s'."
-msgstr "文档文件 \"%s\" 的 MIME 类型未知"
+msgstr "未知得扩展基本元素信息类型：“%s”。"
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:774
 #, c-format
@@ -32464,7 +32462,7 @@ msgstr "未知类型的记录：\"%d\"。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:873
 msgid "Loading extended primitive information data..."
-msgstr ""
+msgstr "正在加载扩展基本元素信息数据…"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:894
 msgid "Loading board data..."
@@ -36691,14 +36689,12 @@ msgid "Refill %d Zones"
 msgstr "重新填充 %d 区域"
 
 #: pcbnew/tools/zone_filler_tool.cpp:250
-#, fuzzy
 msgid "Auto-fill Zone(s)"
-msgstr "填充区域"
+msgstr "自动重填区域"
 
 #: pcbnew/tools/zone_filler_tool.cpp:282
-#, fuzzy
 msgid "Zone has no connections."
-msgstr "端口 %s 无连接。"
+msgstr "区域无连接。"
 
 #: pcbnew/undo_redo.cpp:555
 msgid "Incomplete undo/redo operation: some items not found"
