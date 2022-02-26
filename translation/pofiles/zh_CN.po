@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 11:59-0800\n"
 "PO-Revision-Date: 2022-03-01 09:58+0000\n"
-"Last-Translator: Tian Yunhao <t123yh@outlook.com>\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v6/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -10624,7 +10624,7 @@ msgstr "结晶型场效应晶体管"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:84
 msgid "Subcircuit"
-msgstr "支路"
+msgstr "子电路"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:450
 msgid ""
