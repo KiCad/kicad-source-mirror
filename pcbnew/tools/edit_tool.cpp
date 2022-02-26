@@ -290,6 +290,22 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
             {
                 sTool->FilterCollectorForFreePads( aCollector );
                 sTool->FilterCollectorForHierarchy( aCollector, true );
+
+                // drop a knee between two segments to a single segment
+                if( aCollector.GetCount() == 2 && dynamic_cast<PCB_TRACK*>( aCollector[0] ) )
+                {
+                    static KICAD_T types[] = { PCB_VIA_T, PCB_TRACE_T, PCB_ARC_T, EOT };
+
+                    PCB_TRACK*  a = static_cast<PCB_TRACK*>( aCollector[0] );
+                    PCB_TRACK*  b = static_cast<PCB_TRACK*>( aCollector[1] );
+                    const auto& c = aCollector[0]->GetBoard()->GetConnectivity();
+
+                    int  dist = a->GetWidth() / 2;
+                    auto connectedItems = c->GetConnectedItemsAtAnchor( a, aPt, types, dist );
+
+                    if( alg::contains( connectedItems, b ) )
+                        aCollector.Remove( b );
+                }
             },
             true /* prompt user regarding locked items */ );
 
@@ -1216,8 +1232,8 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
         auto processFilletOp =
                 [&]( bool aStartPoint )
                 {
-            VECTOR2I anchor = ( aStartPoint ) ? track->GetStart() : track->GetEnd();
-                    auto connectivity = board()->GetConnectivity();
+                    std::shared_ptr<CONNECTIVITY_DATA> connectivity = board()->GetConnectivity();
+                    VECTOR2I anchor = ( aStartPoint ) ? track->GetStart() : track->GetEnd();
                     auto itemsOnAnchor = connectivity->GetConnectedItemsAtAnchor( track, anchor,
                                                                                   track_types );
 
