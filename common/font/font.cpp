@@ -214,7 +214,7 @@ VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* a
             {
                 BOX2I bbox;
 
-                nextPosition = aFont->GetTextAsGlyphs( &bbox, aGlyphs, aNode->wxString(), aSize,
+                nextPosition = aFont->GetTextAsGlyphs( &bbox, aGlyphs, aNode->asWxString(), aSize,
                                                        aPosition, aAngle, aMirror, aOrigin,
                                                        textStyle );
 
@@ -354,10 +354,10 @@ void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords,
 
             if( aNode->has_content() )
             {
-                VECTOR2I next = aFont->GetTextAsGlyphs( nullptr, nullptr, aNode->wxString(),
+                VECTOR2I next = aFont->GetTextAsGlyphs( nullptr, nullptr, aNode->asWxString(),
                                                         aSize, { 0, 0 }, ANGLE_0, false, { 0, 0 },
                                                         textStyle );
-                word += aNode->wxString();
+                word += aNode->asWxString();
                 width += next.x;
             }
 
@@ -379,7 +379,7 @@ void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords,
         else
         {
             wxString      space( wxS( " " ) );
-            wxString      textRun = aNode->wxString();
+            wxString      textRun = aNode->asWxString();
             wxArrayString words;
 
             wxStringSplit( textRun, words, ' ' );
