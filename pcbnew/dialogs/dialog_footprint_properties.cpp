@@ -144,6 +144,28 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     m_bpAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
     m_bpDelete->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
+    // We can't set the tab order through wxWidgets due to shortcomings in their mnemonics
+    // implementation on MSW
+    m_tabOrder = {
+        m_itemsGrid,
+        m_ModPositionX,
+        m_ModPositionY,
+        m_orientationCtrl,
+        m_BoardSideCtrl,
+        m_cbLocked,
+        m_componentType,
+        m_boardOnly,
+        m_excludeFromPosFiles,
+        m_excludeFromBOM,
+        m_noCourtyards,
+      	m_NetClearanceCtrl,
+        m_SolderMaskMarginCtrl,
+      	m_allowSolderMaskBridges,
+        m_SolderPasteMarginCtrl,
+      	m_PasteMarginRatioCtrl,
+        m_ZoneConnectionChoice
+    };
+
     SetupStandardButtons();
 
     finishDialogSettings();
