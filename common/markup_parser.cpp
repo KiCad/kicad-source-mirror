@@ -21,6 +21,7 @@
 
 #include <markup_parser.h>
 #include <sstream>
+#include "macros.h"
 
 using namespace MARKUP;
 
@@ -53,6 +54,12 @@ std::string NODE::typeString() const
     else                                                os << "other";
 
     return os.str();
+}
+
+
+wxString NODE::wxString() const
+{
+    return FROM_UTF8( string().c_str() );
 }
 
 

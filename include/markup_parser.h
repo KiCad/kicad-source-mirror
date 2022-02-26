@@ -42,6 +42,8 @@ struct NODE : parse_tree::basic_node<NODE>
 
     std::string typeString() const;
 
+    wxString wxString() const;
+
     bool isOverbar() const     { return is_type<MARKUP::overbar>(); }
     bool isSubscript() const   { return is_type<MARKUP::subscript>(); }
     bool isSuperscript() const { return is_type<MARKUP::superscript>(); }

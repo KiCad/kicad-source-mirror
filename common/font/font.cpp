@@ -34,6 +34,7 @@
 
 // The "official" name of the building Kicad stroke font (always existing)
 #include <font/kicad_font_name.h>
+#include "macros.h"
 
 
 // markup_parser.h includes pegtl.hpp which includes windows.h... which leaks #define DrawText
@@ -211,11 +212,11 @@ VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* a
 
             if( aNode->has_content() )
             {
-                std::string txt = aNode->string();
-                BOX2I       bbox;
+                BOX2I bbox;
 
-                nextPosition = aFont->GetTextAsGlyphs( &bbox, aGlyphs, txt, aSize, aPosition, aAngle,
-                                                       aMirror, aOrigin, textStyle );
+                nextPosition = aFont->GetTextAsGlyphs( &bbox, aGlyphs, aNode->wxString(), aSize,
+                                                       aPosition, aAngle, aMirror, aOrigin,
+                                                       textStyle );
 
                 if( aBoundingBox )
                     aBoundingBox->Merge( bbox );
@@ -238,7 +239,7 @@ VECTOR2I FONT::drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYP
                            const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
                            TEXT_STYLE_FLAGS aTextStyle ) const
 {
-    MARKUP::MARKUP_PARSER         markupParser( aText.ToStdString() );
+    MARKUP::MARKUP_PARSER         markupParser( TO_UTF8( aText ) );
     std::unique_ptr<MARKUP::NODE> root = markupParser.Parse();
 
     return ::drawMarkup( aBoundingBox, aGlyphs, root, aPosition, this, aSize, aAngle, aMirror,
@@ -348,14 +349,15 @@ void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords,
 
         if( escapeChar )
         {
-            wxString word = wxString::Format( "%c{", escapeChar );
+            wxString word = wxString::Format( wxT( "%c{" ), escapeChar );
             int      width = 0;
 
             if( aNode->has_content() )
             {
-                VECTOR2I next = aFont->GetTextAsGlyphs( nullptr, nullptr, aNode->string(), aSize,
-                                                        {0,0}, ANGLE_0, false, {0,0}, textStyle );
-                word += aNode->string();
+                VECTOR2I next = aFont->GetTextAsGlyphs( nullptr, nullptr, aNode->wxString(),
+                                                        aSize, { 0, 0 }, ANGLE_0, false, { 0, 0 },
+                                                        textStyle );
+                word += aNode->wxString();
                 width += next.x;
             }
 
@@ -370,14 +372,14 @@ void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords,
                 width += childWord.second;
             }
 
-            word += "}";
+            word += wxT( "}" );
             aWords->emplace_back( std::make_pair( word, width ) );
             return;
         }
         else
         {
             wxString      space( wxS( " " ) );
-            wxString      textRun( aNode->string() );
+            wxString      textRun = aNode->wxString();
             wxArrayString words;
 
             wxStringSplit( textRun, words, ' ' );
@@ -403,7 +405,7 @@ void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords,
 void FONT::wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords, const wxString& aText,
                             const VECTOR2I& aSize, TEXT_STYLE_FLAGS aTextStyle ) const
 {
-    MARKUP::MARKUP_PARSER         markupParser( aText.ToStdString() );
+    MARKUP::MARKUP_PARSER         markupParser( TO_UTF8( aText ) );
     std::unique_ptr<MARKUP::NODE> root = markupParser.Parse();
 
     ::wordbreakMarkup( aWords, root, this, aSize, aTextStyle );
