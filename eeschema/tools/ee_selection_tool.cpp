@@ -723,6 +723,11 @@ OPT_TOOL_EVENT EE_SELECTION_TOOL::autostartEvent( TOOL_EVENT* aEvent, EE_GRID_HE
 
 int EE_SELECTION_TOOL::disambiguateCursor( const TOOL_EVENT& aEvent )
 {
+    wxMouseState keyboardState = wxGetMouseState();
+
+    setModifiersState( keyboardState.ShiftDown(), keyboardState.ControlDown(),
+                       keyboardState.AltDown() );
+
     m_skip_heuristics = true;
     SelectPoint( m_originalCursor, EE_COLLECTOR::AllItems, nullptr, &m_canceledMenu, false,
                  m_additive, m_subtractive, m_exclusive_or );

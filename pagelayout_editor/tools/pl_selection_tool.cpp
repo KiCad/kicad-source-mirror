@@ -235,6 +235,11 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
 int PL_SELECTION_TOOL::disambiguateCursor( const TOOL_EVENT& aEvent )
 {
+    wxMouseState keyboardState = wxGetMouseState();
+
+    setModifiersState( keyboardState.ShiftDown(), keyboardState.ControlDown(),
+                       keyboardState.AltDown() );
+
     m_skip_heuristics = true;
     SelectPoint( m_originalCursor, &m_canceledMenu );
     m_skip_heuristics = false;

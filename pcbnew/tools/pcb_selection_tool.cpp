@@ -926,6 +926,11 @@ bool PCB_SELECTION_TOOL::selectMultiple()
 
 int PCB_SELECTION_TOOL::disambiguateCursor( const TOOL_EVENT& aEvent )
 {
+    wxMouseState keyboardState = wxGetMouseState();
+
+    setModifiersState( keyboardState.ShiftDown(), keyboardState.ControlDown(),
+                       keyboardState.AltDown() );
+
     m_skip_heuristics = true;
     selectPoint( m_originalCursor, false, &m_canceledMenu );
     m_skip_heuristics = false;
