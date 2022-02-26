@@ -546,18 +546,19 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 if( grid.GetUseGrid() )
                 {
-                    // VECTOR2I gridPt = grid.BestSnapAnchor( pos, {}, { item } );
+                    VECTOR2I gridPt = grid.BestSnapAnchor( pos, {}, { item } );
 
                     VECTOR2I last = m_editedPoint->GetPosition();
                     VECTOR2I delta = pos - last;
+                    VECTOR2I deltaGrid = gridPt - grid.BestSnapAnchor( last, {}, { item } );
 
                     if( abs( delta.x ) > grid.GetGrid().x / 2 )
-                        pos.x = last.x + ( grid.GetGrid().x * sign( delta.x ) );
+                        pos.x = last.x + deltaGrid.x;
                     else
                         pos.x = last.x;
 
                     if( abs( delta.y ) > grid.GetGrid().y / 2 )
-                        pos.y = last.y + ( grid.GetGrid().y * sign( delta.y ) );
+                        pos.y = last.y + deltaGrid.y;
                     else
                         pos.y = last.y;
                 }
