@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 11:58-0800\n"
 "PO-Revision-Date: 2022-03-01 09:55+0000\n"
-"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
+"Last-Translator: Tian Yunhao <t123yh@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -1537,7 +1537,7 @@ msgstr "KiCad 用户论坛 - "
 
 #: common/dialog_about/AboutDialog_main.cpp:187
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr "完整的 KiCad EDA 工具箱发布遵循"
+msgstr "完整 KiCad EDA 工具箱的发行，遵循以下许可协议"
 
 #: common/dialog_about/AboutDialog_main.cpp:189
 msgid "GNU General Public License (GPL) version 3 or any later version"
@@ -2775,7 +2775,7 @@ msgstr "视图预设切换器"
 
 #: common/dialogs/panel_color_settings.cpp:51
 msgid "Reveal Themes in Finder"
-msgstr "在访达中显示主题文件"
+msgstr "在“访达”中显示主题文件"
 
 #: common/dialogs/panel_color_settings.cpp:131
 msgid "New theme name:"
@@ -13401,7 +13401,7 @@ msgstr "打开最近使用"
 
 #: eeschema/menubar.cpp:93
 msgid "Insert Schematic Sheet Content..."
-msgstr "插入原理表内容..."
+msgstr "插入原理图内容..."
 
 #: eeschema/menubar.cpp:94
 msgid ""
@@ -21449,7 +21449,7 @@ msgstr "Epsilon R（相对介电常数）的值不正确"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:51
 msgid "Incorrect value for Loss Tangent"
-msgstr "损耗切线的值不正确"
+msgstr "损耗角正切值不正确"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:93
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:84
@@ -21465,7 +21465,7 @@ msgstr "Epsilon R（相对介电常数）"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:95
 msgid "Loss Tg"
-msgstr "Loss Tg（损耗切线）"
+msgstr "Loss Tg（损耗角正切）"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:35
 msgid "Epsilon R:"
@@ -21473,7 +21473,7 @@ msgstr "Epsilon R（相对介电常数）:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:39
 msgid "Loss Tg:"
-msgstr "Loss Tg（损耗切线）:"
+msgstr "Loss Tg（损耗角正切）:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
 msgid "Common materials:"
@@ -21581,7 +21581,7 @@ msgstr ""
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1054
 msgid ""
 "Incorrect value for Loss tg (Loss tg must be positive or null if not used)"
-msgstr "损耗切线的不正确值（如果不使用，则损耗切线必须为正数或空）"
+msgstr "损耗角正切的值不正确（如果不使用，则该值必须为正数或空）"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1101
 msgid "A layer thickness is < 0. Fix it"
@@ -21668,7 +21668,7 @@ msgid ""
 "Loss tangent and EpsilonR will be added to constraints."
 msgstr ""
 "如果设置了阻抗控制选项，\n"
-"损耗切线和相对介电常数将添加到约束中。"
+"损耗角正切值和相对介电常数将添加到约束中。"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:45
 msgid "Add Dielectric Layer..."
@@ -21685,7 +21685,7 @@ msgstr "ID"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:111
 msgid "Loss Tan"
-msgstr "Loss Tangent（损耗切线）"
+msgstr "Loss Tangent（损耗角正切）"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:132
 msgid "Board thickness from stackup:"
@@ -22405,7 +22405,7 @@ msgstr "物理压层"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:99
 msgid "Board Finish"
-msgstr "电路板完成"
+msgstr "电路板后处理"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:100 pcbnew/dialogs/dialog_plot.cpp:963
 msgid "Solder Mask/Paste"
@@ -26998,7 +26998,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:73
 msgid "Position Relative To Reference Item"
-msgstr "相对于参考项目的位置"
+msgstr "放置到参考项的相对位置"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:207
 msgid "Print according to objects tab of appearance manager"
@@ -29832,7 +29832,7 @@ msgstr "通孔间隙违规"
 
 #: pcbnew/drc/drc_item.cpp:104
 msgid "Drilled holes too close together"
-msgstr "钻孔太靠近了"
+msgstr "钻孔之间距离过近"
 
 #: pcbnew/drc/drc_item.cpp:108
 msgid "Drilled holes co-located"
@@ -34482,7 +34482,7 @@ msgstr "未发现电路板问题。"
 
 #: pcbnew/tools/board_editor_control.cpp:663
 msgid "Updating PCB requires a fully annotated schematic."
-msgstr "更新印刷电路板需要一张完整批注的原理图。"
+msgstr "请先将原理图完整批注，然后才能更新 PCB。"
 
 #: pcbnew/tools/board_editor_control.cpp:677
 msgid ""
@@ -34786,7 +34786,7 @@ msgstr "粗细 (mils)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:292
 msgid "Loss Tangent"
-msgstr "Loss Tangent（损耗切线）"
+msgstr "Loss Tangent（损耗角正切）"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:315
 msgid "Dielectric"
@@ -36335,7 +36335,7 @@ msgstr "所选项沿垂直轴分布"
 
 #: pcbnew/tools/pcb_actions.cpp:1214
 msgid "Position Relative To..."
-msgstr "相対位置..."
+msgstr "放置到相对位置..."
 
 #: pcbnew/tools/pcb_actions.cpp:1215
 msgid "Positions the selected item(s) by an exact amount relative to another"
