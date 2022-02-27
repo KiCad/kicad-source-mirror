@@ -557,7 +557,7 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     case SHAPE_T::ARC:
         aList.emplace_back( shape, _( "Arc" ) );
 
-        msg.Printf( wxT( "%.1f" ), GetArcAngle().AsDegrees() );
+        msg = MessageTextFromValue( GetArcAngle() );
         aList.emplace_back( _( "Angle" ), msg );
 
         msg = MessageTextFromValue( units, GetRadius() );
@@ -596,9 +596,9 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
         aList.emplace_back( _( "Length" ), msg );
 
         // angle counter-clockwise from 3'o-clock
-        const double deg = RAD2DEG( atan2( (double)( GetStart().y - GetEnd().y ),
-                                           (double)( GetEnd().x - GetStart().x ) ) );
-        aList.emplace_back( _( "Angle" ), wxString::Format( "%.1f", deg ) );
+        EDA_ANGLE angle( atan2( (double)( GetStart().y - GetEnd().y ),
+                                (double)( GetEnd().x - GetStart().x ) ), RADIANS_T );
+        aList.emplace_back( _( "Angle" ), MessageTextFromValue( angle ) );
         break;
     }
 

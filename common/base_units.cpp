@@ -115,6 +115,15 @@ wxString MessageTextFromValue( EDA_UNITS aUnits, long long int aValue, bool aAdd
 }
 
 
+wxString MessageTextFromValue( EDA_ANGLE aValue, bool aAddUnitLabel )
+{
+    if( aAddUnitLabel )
+        return wxString::Format( wxT( "%.1f°" ), aValue.AsDegrees() );
+    else
+        return wxString::Format( wxT( "%.1f" ), aValue.AsDegrees() );
+}
+
+
 // A lower-precision (for readability) version of StringFromValue()
 wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitLabel,
                                EDA_DATA_TYPE aType )

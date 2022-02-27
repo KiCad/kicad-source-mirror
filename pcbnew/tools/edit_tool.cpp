@@ -334,14 +334,15 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     if( selection.Size() != 1 || selection.Front()->Type() != PCB_ARC_T )
         return 0;
 
-    PCB_ARC* theArc = static_cast<PCB_ARC*>( selection.Front() );
-    double   arcAngleDegrees = std::abs( theArc->GetAngle().AsDegrees() );
+    PCB_ARC*  theArc = static_cast<PCB_ARC*>( selection.Front() );
+    EDA_ANGLE maxTangentDeviation( ADVANCED_CFG::GetCfg().m_MaxTangentAngleDeviation, DEGREES_T );
 
-    if( arcAngleDegrees + ADVANCED_CFG::GetCfg().m_MaxTangentAngleDeviation >= 180.0 )
+    if( theArc->GetAngle() + maxTangentDeviation >= ANGLE_180 )
     {
-        frame()->ShowInfoBarError(
-                wxString::Format( _( "Unable to resize arc tracks %.1f degrees or greater." ),
-                                  180.0 - ADVANCED_CFG::GetCfg().m_MaxTangentAngleDeviation ) );
+        wxString msg = wxString::Format( _( "Unable to resize arc tracks of %s or greater." ),
+                                         MessageTextFromValue( ANGLE_180 - maxTangentDeviation ) );
+        frame()->ShowInfoBarError( msg );
+
         return 0; // don't bother with > 180 degree arcs
     }
 
@@ -367,55 +368,52 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     KICAD_T track_types[] = { PCB_PAD_T, PCB_VIA_T, PCB_TRACE_T, PCB_ARC_T, EOT };
 
     auto getUniqueTrackAtAnchorCollinear =
-        [&]( const VECTOR2I& aAnchor, const SEG& aCollinearSeg ) -> PCB_TRACK*
-        {
-            auto conn = board()->GetConnectivity();
-
-            // Allow items at a distance within the width of the arc track
-            int allowedDeviation = theArc->GetWidth();
-
-            std::vector<BOARD_CONNECTED_ITEM*> itemsOnAnchor;
-
-            for( int i = 0; i < 3; i++ )
+            [&]( const VECTOR2I& aAnchor, const SEG& aCollinearSeg ) -> PCB_TRACK*
             {
-                itemsOnAnchor = conn->GetConnectedItemsAtAnchor( theArc, aAnchor, track_types,
-                                                                 allowedDeviation );
-                allowedDeviation /= 2;
+                auto conn = board()->GetConnectivity();
 
-                if( itemsOnAnchor.size() == 1 )
-                    break;
-            }
+                // Allow items at a distance within the width of the arc track
+                int allowedDeviation = theArc->GetWidth();
 
-            PCB_TRACK* retval = nullptr;
+                std::vector<BOARD_CONNECTED_ITEM*> itemsOnAnchor;
 
-            if( itemsOnAnchor.size() == 1 && itemsOnAnchor.front()->Type() == PCB_TRACE_T )
-            {
-                retval = static_cast<PCB_TRACK*>( itemsOnAnchor.front() );
-                SEG trackSeg( retval->GetStart(), retval->GetEnd() );
-
-                // Allow deviations in colinearity as defined in ADVANCED_CFG
-                if( trackSeg.Angle( aCollinearSeg )
-                    > EDA_ANGLE( ADVANCED_CFG::GetCfg().m_MaxTangentAngleDeviation, DEGREES_T ) )
+                for( int i = 0; i < 3; i++ )
                 {
-                    retval = nullptr;
+                    itemsOnAnchor = conn->GetConnectedItemsAtAnchor( theArc, aAnchor, track_types,
+                                                                     allowedDeviation );
+                    allowedDeviation /= 2;
+
+                    if( itemsOnAnchor.size() == 1 )
+                        break;
                 }
-            }
 
-            if( !retval )
-            {
-                retval = new PCB_TRACK( theArc->GetParent() );
-                retval->SetStart( aAnchor );
-                retval->SetEnd( aAnchor );
-                retval->SetNet( theArc->GetNet() );
-                retval->SetLayer( theArc->GetLayer() );
-                retval->SetWidth( theArc->GetWidth() );
-                retval->SetLocked( theArc->IsLocked() );
-                retval->SetFlags( IS_NEW );
-                getView()->Add( retval );
-            }
+                PCB_TRACK* retval = nullptr;
 
-            return retval;
-        };
+                if( itemsOnAnchor.size() == 1 && itemsOnAnchor.front()->Type() == PCB_TRACE_T )
+                {
+                    retval = static_cast<PCB_TRACK*>( itemsOnAnchor.front() );
+                    SEG trackSeg( retval->GetStart(), retval->GetEnd() );
+
+                    // Allow deviations in colinearity as defined in ADVANCED_CFG
+                    if( trackSeg.Angle( aCollinearSeg ) > maxTangentDeviation )
+                        retval = nullptr;
+                }
+
+                if( !retval )
+                {
+                    retval = new PCB_TRACK( theArc->GetParent() );
+                    retval->SetStart( aAnchor );
+                    retval->SetEnd( aAnchor );
+                    retval->SetNet( theArc->GetNet() );
+                    retval->SetLayer( theArc->GetLayer() );
+                    retval->SetWidth( theArc->GetWidth() );
+                    retval->SetLocked( theArc->IsLocked() );
+                    retval->SetFlags( IS_NEW );
+                    getView()->Add( retval );
+                }
+
+                return retval;
+            };
 
     PCB_TRACK* trackOnStart = getUniqueTrackAtAnchorCollinear( theArc->GetStart(), tanStart);
     PCB_TRACK* trackOnEnd = getUniqueTrackAtAnchorCollinear( theArc->GetEnd(), tanEnd );
@@ -441,13 +439,13 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     tanIntersect = tanStart.IntersectLines( tanEnd ).get();
 
     auto isTrackStartClosestToArcStart =
-        [&]( PCB_TRACK* aTrack ) -> bool
-        {
-            double trackStartToArcStart = GetLineLength( aTrack->GetStart(), theArc->GetStart() );
-            double trackEndToArcStart = GetLineLength( aTrack->GetEnd(), theArc->GetStart() );
+            [&]( PCB_TRACK* aTrack ) -> bool
+            {
+                double trackStartToArcStart = GetLineLength( aTrack->GetStart(), theArc->GetStart() );
+                double trackEndToArcStart = GetLineLength( aTrack->GetEnd(), theArc->GetStart() );
 
-            return trackStartToArcStart < trackEndToArcStart;
-        };
+                return trackStartToArcStart < trackEndToArcStart;
+            };
 
     bool isStartTrackOnStartPt = isTrackStartClosestToArcStart( trackOnStart );
     bool isEndTrackOnStartPt = isTrackStartClosestToArcStart( trackOnEnd );
@@ -790,12 +788,12 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         }
     }
 
-    bool        restore_state = false;
-    VECTOR2I    originalPos;
-    VECTOR2I    totalMovement;
+    bool            restore_state = false;
+    VECTOR2I        originalPos;
+    VECTOR2I        totalMovement;
     PCB_GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
-    TOOL_EVENT* evt = &aEvent;
-    VECTOR2I    prevPos;
+    TOOL_EVENT*     evt = &aEvent;
+    VECTOR2I        prevPos;
 
     bool lock45          = false;
     bool eatFirstMouseUp = true;
@@ -1151,7 +1149,7 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_commit->Push( _("Edit track width/via size") );
+    m_commit->Push( _( "Edit track width/via size" ) );
 
     if( selection.IsHover() )
     {

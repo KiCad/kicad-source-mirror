@@ -105,6 +105,8 @@ wxString MessageTextFromValue( EDA_UNITS aUnits, int aValue, bool aAddUnitLabel 
 wxString MessageTextFromValue( EDA_UNITS aUnits, long long int aValue, bool aAddUnitLabel = true,
                                EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
+wxString MessageTextFromValue( EDA_ANGLE aValue, bool aAddUnitLabel = true );
+
 /**
  * Function StringFromValue
  * returns the string from \a aValue according to units (inch, mm ...) for display,
