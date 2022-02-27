@@ -205,7 +205,11 @@ void GRAPHICS_IMPORTER_BUFFER::PostprocessNestedPolygons()
         }
     }
 
-    convertPolygon( newShapes, polypaths, m_shapeFillRules[curShapeIdx], lastWidth );
+    POLY_FILL_RULE last_rule = ( curShapeIdx >= 0 && m_shapeFillRules.size() )
+                                ? m_shapeFillRules[curShapeIdx]
+                                : POLY_FILL_RULE::PF_EVEN_ODD;
+
+    convertPolygon( newShapes, polypaths, last_rule, lastWidth );
 
     m_shapes.swap( newShapes );
 }
