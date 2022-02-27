@@ -911,7 +911,10 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         return false;
     }
 
-    if( aAddNew && m_toolManager->GetTool<BOARD_EDITOR_CONTROL>()->PlacingFootprint() )
+    TOOL_MANAGER* pcb_ToolManager = pcbframe ? pcbframe->GetToolManager() : nullptr;
+
+    if( aAddNew && pcb_ToolManager
+            && pcb_ToolManager->GetTool<BOARD_EDITOR_CONTROL>()->PlacingFootprint() )
     {
         DisplayError( this, _( "Previous footprint placement still in progress." ) );
         return false;
@@ -964,7 +967,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         commit.Push( wxT( "Insert footprint" ) );
 
         pcbframe->Raise();
-        m_toolManager->RunAction( PCB_ACTIONS::placeFootprint, true, newFootprint );
+        pcb_ToolManager->RunAction( PCB_ACTIONS::placeFootprint, true, newFootprint );
     }
 
     newFootprint->ClearFlags();
