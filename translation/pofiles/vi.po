@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 11:59-0800\n"
-"PO-Revision-Date: 2021-11-28 23:29+0000\n"
+"PO-Revision-Date: 2022-03-01 09:58+0000\n"
 "Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v6/vi/>"
+"\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.11.1-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -9429,66 +9429,69 @@ msgstr "Chung cho tất cả & các đơn vị trong biểu tượng"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:52
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:170
+#, fuzzy
 msgid "Common to all body &styles (De Morgan)"
-msgstr ""
+msgstr "Thông thường với tất cả các kiểu và body (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.h:52
 msgid "Drawing Properties"
-msgstr ""
+msgstr "Thuộc tính bản vẽ"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:233
 #: eeschema/dialogs/dialog_symbol_properties.cpp:557
 msgid "References must start with a letter."
-msgstr ""
+msgstr "Các tham chiếu phải bắt đầu bằng một chữ cái."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:253
 #: eeschema/dialogs/dialog_sheet_properties.cpp:195
 #: eeschema/dialogs/dialog_symbol_properties.cpp:574
 msgid "Fields must have a name."
-msgstr ""
+msgstr "Các trường phải có tên."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:270
+#, fuzzy
 msgid "Aliased symbol must have a parent selected"
-msgstr ""
+msgstr "Ký hiệu bí danh phải có một gốc được chọn"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:282
 msgid "Delete extra units from symbol?"
-msgstr ""
+msgstr "Xóa các đơn vị bổ sung khỏi biểu tượng không ?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:288
 msgid "Delete alternate body style (De Morgan) from symbol?"
-msgstr ""
+msgstr "Xóa kiểu cơ thể thay thế (De Morgan) khỏi biểu tượng không?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:316
 #, c-format
 msgid "The name '%s' conflicts with an existing entry in the library '%s'."
-msgstr ""
+msgstr "Tên '%s' xung đột với một mục hiện có trong thư viện '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:432
 #, c-format
 msgid "The name '%s' is already in use."
-msgstr ""
+msgstr "Tên '%s' đã được sử dụng."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:510
 #: eeschema/dialogs/dialog_sheet_properties.cpp:734
 #: eeschema/dialogs/dialog_symbol_properties.cpp:885
 #, c-format
 msgid "The first %d fields are mandatory."
-msgstr ""
+msgstr "Các trường %d đầu tiên là bắt buộc."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:645
 msgid "Add Footprint Filter"
-msgstr ""
+msgstr "Thêm Bộ lọc Footprint"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:688
 msgid "Edit Footprint Filter"
-msgstr ""
+msgstr "Chỉnh sửa Bộ lọc Footprint"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:30
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:24
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:27
+#, fuzzy
 msgid "Fields"
-msgstr ""
+msgstr "Các trường"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:58
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:52
@@ -9509,14 +9512,14 @@ msgstr "Hiển thị"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:56
 #: eeschema/fields_grid_table.cpp:214
 msgid "H Align"
-msgstr ""
+msgstr "Căn chỉnh H"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:60
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:54
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/fields_grid_table.cpp:215
 msgid "V Align"
-msgstr ""
+msgstr "Căn chỉnh V"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:57
@@ -9525,13 +9528,13 @@ msgstr ""
 #: eeschema/lib_text.cpp:353 eeschema/sch_field.cpp:589
 #: eeschema/sch_text.cpp:781
 msgid "Text Size"
-msgstr ""
+msgstr "Cỡ chữ"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:85
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:80
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:83
 msgid "Add field"
-msgstr ""
+msgstr "Thêm Trường"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:90
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:85
@@ -9539,7 +9542,7 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:115
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:111
 msgid "Move up"
-msgstr ""
+msgstr "Di chuyển Lên"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:95
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:90
@@ -9547,31 +9550,31 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:120
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:116
 msgid "Move down"
-msgstr ""
+msgstr "Di chuyển xuống"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:103
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:98
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:101
 msgid "Delete field"
-msgstr ""
+msgstr "Xóa trường"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:131
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:114
 msgid "Description:"
-msgstr ""
+msgstr "Miêu tả:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:138
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:121
 msgid "Keywords:"
-msgstr ""
+msgstr "Từ khóa:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:145
 msgid "Derive from symbol:"
-msgstr ""
+msgstr "Xuất phát từ biểu tượng:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:149
 msgid "<None>"
-msgstr ""
+msgstr "<Không>"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:150
 msgid ""
@@ -9583,18 +9586,25 @@ msgid ""
 "derived from another symbols or they stand alone as\n"
 "root symbols."
 msgstr ""
+"Chọn biểu tượng để lấy biểu tượng này từ hoặc chọn\n"
+"<Không> cho biểu tượng gốc.\n"
+"\n"
+"Các ký hiệu có nguồn gốc trước đây được gọi là bí danh.\n"
+"Điều này không còn đúng nữa và tất cả các ký hiệu đều\n"
+"bắt nguồn từ các biểu tượng khác hoặc chúng đứng riêng lẻ như\n"
+"các ký hiệu gốc."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
 msgid "Has alternate body style (De Morgan)"
-msgstr ""
+msgstr "Có kiểu dáng thay thế (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:169
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
-msgstr ""
+msgstr "Chọn tùy chọn này nếu biểu tượng có kiểu dáng thay thế (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:173
 msgid "Define as power symbol"
-msgstr ""
+msgstr "Xác định là biểu tượng nguồn"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:174
 msgid ""
@@ -9603,64 +9613,73 @@ msgid ""
 "from editing in Eeschema.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
+"Đặt tùy chọn này làm cho biểu tượng được đề cập xuất hiện trong\n"
+"hộp thoại \"thêm cổng nguồn\". Nó sẽ khóa văn bản giá trị để bảo vệ nó\n"
+"khỏi chỉnh sửa ở Eeschema. Biểu tượng sẽ không được bao gồm trong\n"
+"BOM và không thể được chỉ định một dấu chân."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:187
 msgid "Number of Units:"
-msgstr ""
+msgstr "Số lượng đơn vị:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:189
 msgid "Enter the number of units for a symbol that contains more than one unit"
-msgstr ""
+msgstr "Nhập số lượng đơn vị cho một ký hiệu chứa nhiều hơn một đơn vị"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:199
 msgid "All units are interchangeable"
-msgstr ""
+msgstr "Tất cả các đơn vị có thể hoán đổi cho nhau"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:200
 msgid ""
 "Check this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
+"Kiểm tra lựa chọn này khi tất cả các đơn vị biểu tượng đều giống nhau ngoại "
+"trừ\n"
+"cho số pin."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:214
 msgid "Pin Text Options"
-msgstr ""
+msgstr "Tùy chọn văn bản Pin"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:216
 msgid "Show pin number"
-msgstr ""
+msgstr "Hiển thị số pin"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:218
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:178
 msgid "Show or hide pin numbers"
-msgstr ""
+msgstr "Hiển thị hoặc ẩn số pin"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:222
 msgid "Show pin name"
-msgstr ""
+msgstr "Hiển thị tên pin"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:224
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:184
 msgid "Show or hide pin names"
-msgstr ""
+msgstr "Hiển thị hoặc ẩn tên pin"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:231
 msgid "Place pin names inside"
-msgstr ""
+msgstr "Đặt tên pin bên trong"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:233
 msgid ""
 "Check this option to have pin names inside the body and pin number outside.\n"
 "If not checked pins names and pins numbers are outside."
 msgstr ""
+"Chọn tùy chọn này để có tên pin bên trong thân và số pin bên ngoài.\n"
+"Nếu không kiểm tra được tên chân và số chân ở bên ngoài."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:240
 msgid "Position offset:"
-msgstr ""
+msgstr "Vị trí offset:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:242
 msgid "Margin between the pin name position and the symbol body."
-msgstr ""
+msgstr "Khoảng cách giữa vị trí tên pin và thân biểu tượng."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:249
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:133
@@ -9676,11 +9695,11 @@ msgstr ""
 #: pcbnew/microwave/microwave_polygon.cpp:147
 #: pcbnew/microwave/microwave_polygon.cpp:156
 msgid "units"
-msgstr ""
+msgstr "đơn vị"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:280
 msgid "Footprint filters:"
-msgstr ""
+msgstr "Bộ lọc footprint:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:282
 msgid ""
@@ -9688,30 +9707,33 @@ msgid ""
 "Footprints names can used wildcards like sm* to allow all footprints names "
 "starting by sm."
 msgstr ""
+"Danh sách các tên footprint có thể được sử dụng cho biểu tượng này.\n"
+"Tên footprint có thể sử dụng các ký tự đại diện như sm* để cho phép tất cả "
+"các tên dấu chân bắt đầu bằng sm."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:293
 msgid "Add footprint filter"
-msgstr ""
+msgstr "Thêm Bộ lọc Footprint"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:298
 msgid "Edit footprint filter"
-msgstr ""
+msgstr "Chỉnh sửa Bộ lọc Footprint"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:306
 msgid "Delete footprint filter"
-msgstr ""
+msgstr "Xóa bộ lọc footprint"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:320
 msgid "Footprint Filters"
-msgstr ""
+msgstr "Bộ lọc footprint"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:333
 msgid "Edit Spice Model..."
-msgstr ""
+msgstr "Chỉnh sửa Mô hình Spice..."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:115
 msgid "Library Symbol Properties"
-msgstr ""
+msgstr "Thuộc tính Ký hiệu Thư viện"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:28
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:37
@@ -9723,7 +9745,7 @@ msgstr "Văn bản:"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:72
 #, c-format
 msgid "(%s)"
-msgstr ""
+msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:93
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:233
@@ -9731,7 +9753,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:177
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:170
 msgid "Position X:"
-msgstr ""
+msgstr "Vị trí X:"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:117
 #: eeschema/fields_grid_table.cpp:166 eeschema/fields_grid_table.cpp:436
@@ -9752,7 +9774,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:198
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:181
 msgid "Position Y:"
-msgstr ""
+msgstr "Vị trí Y:"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:143
 msgid "H Align:"
@@ -9764,15 +9786,16 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:189
 msgid "Common to all units"
-msgstr ""
+msgstr "Phổ biến cho tất cả các đơn vị"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:192
+#, fuzzy
 msgid "Common to all body styles"
-msgstr ""
+msgstr "Phổ biến cho tất cả các kiểu thân"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.h:81
 msgid "Text Item Properties"
-msgstr ""
+msgstr "Thuộc tính mục văn bản"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:53
 msgid "Leave unchanged"
@@ -9784,7 +9807,7 @@ msgstr "Kiểu:"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:76
 msgid "Set width to 0 to use Netclass line widths."
-msgstr ""
+msgstr "Đặt độ rộng thành 0 để sử dụng độ rộng dòng từ Netclass."
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.h:67
 #, fuzzy
@@ -9793,11 +9816,11 @@ msgstr "Thuộc tính nhãn"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:102
 msgid "Conflicting Labels"
-msgstr ""
+msgstr "Các nhãn xung đột"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:103
 msgid "New Label"
-msgstr ""
+msgstr "Nhãn mới"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:104
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:86
@@ -9806,56 +9829,61 @@ msgstr ""
 #: pcbnew/pcb_shape.cpp:155 pcbnew/pcb_text.cpp:118 pcbnew/pcb_track.cpp:773
 #: pcbnew/zone.cpp:601
 msgid "Status"
-msgstr ""
+msgstr "Tình trạng"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:215
 msgid "Updated"
-msgstr ""
+msgstr "Đã cập nhật"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:19
 msgid ""
 "This schematic has one or more buses with more than one label.\n"
 "This was allowed in previous KiCad versions but is no longer permitted."
 msgstr ""
+"Sơ đồ này có một hoặc nhiều bus với nhiều nhãn.\n"
+"Điều này đã được cho phép trong các phiên bản KiCad trước đó nhưng không còn "
+"được phép nữa."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:23
 msgid ""
 "Please select a new name for each of the buses below.\n"
 "A name has been suggested for you based on the labels attached to the bus."
 msgstr ""
+"Vui lòng chọn tên mới cho mỗi bus bên dưới.\n"
+"Tên đã được gợi ý cho bạn dựa trên các nhãn gắn trên xe buýt."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:32
 msgid "Proposed new name:"
-msgstr ""
+msgstr "Tên mới được đề xuất:"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:45
 msgid "Accept Name"
-msgstr ""
+msgstr "Chấp nhận tên"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.h:53
 msgid "Migrate Buses"
-msgstr ""
+msgstr "Chuyển bus"
 
 #: eeschema/dialogs/dialog_netlist.cpp:268
 #: eeschema/dialogs/dialog_netlist_base.h:69
 msgid "Export Netlist"
-msgstr ""
+msgstr "Xuất Netlist"
 
 #: eeschema/dialogs/dialog_netlist.cpp:300
 msgid "Simulator requires a fully annotated schematic."
-msgstr ""
+msgstr "Trình mô phỏng yêu cầu một giản đồ được chú thích đầy đủ."
 
 #: eeschema/dialogs/dialog_netlist.cpp:326
 msgid "Reformat passive symbol values"
-msgstr ""
+msgstr "Định dạng lại các giá trị ký hiệu thụ động"
 
 #: eeschema/dialogs/dialog_netlist.cpp:327
 msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
-msgstr ""
+msgstr "Định dạng lại các giá trị ký hiệu thụ động, ví dụ: 1M -> 1Meg"
 
 #: eeschema/dialogs/dialog_netlist.cpp:332
 msgid "External simulator command:"
-msgstr ""
+msgstr "Lệnh mô phỏng bên ngoài:"
 
 #: eeschema/dialogs/dialog_netlist.cpp:333
 msgid ""
@@ -9863,40 +9891,43 @@ msgid ""
 "Usually <path to spice binary> %I\n"
 "%I will be replaced by the actual spice netlist name"
 msgstr ""
+"Nhập dòng lệnh để chạy spice\n"
+"Thường <đường dẫn đến tệp nhị phân spice >% I\n"
+"% Tôi sẽ được thay thế bằng tên netlist spice thực tế"
 
 #: eeschema/dialogs/dialog_netlist.cpp:347
 msgid "Create Netlist and Run Simulator Command"
-msgstr ""
+msgstr "Tạo Netlist và Chạy lệnh Mô phỏng"
 
 #: eeschema/dialogs/dialog_netlist.cpp:398
 msgid "Netlist command:"
-msgstr ""
+msgstr "Lệnh Netlist:"
 
 #: eeschema/dialogs/dialog_netlist.cpp:444
 msgid "Save Netlist File"
-msgstr ""
+msgstr "Lưu tệp Netlist"
 
 #: eeschema/dialogs/dialog_netlist.cpp:477
 #, c-format
 msgid "%s Export"
-msgstr ""
+msgstr "%s Xuất"
 
 #: eeschema/dialogs/dialog_netlist.cpp:506
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
 msgid "Exporting netlist requires a fully annotated schematic."
-msgstr ""
+msgstr "Xuất netlist đòi hỏi một sơ đồ được chú thích đầy đủ."
 
 #: eeschema/dialogs/dialog_netlist.cpp:629
 msgid "This plugin already exists."
-msgstr ""
+msgstr "Plugin này đã tồn tại."
 
 #: eeschema/dialogs/dialog_netlist.cpp:662
 msgid "You must provide a netlist generator command string"
-msgstr ""
+msgstr "Bạn phải cung cấp một chuỗi lệnh trình tạo netlist"
 
 #: eeschema/dialogs/dialog_netlist.cpp:668
 msgid "You must provide a netlist generator title"
-msgstr ""
+msgstr "Bạn phải cung cấp một tiêu đề để tạo netlist"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:39
 msgid "Add Generator..."
@@ -10557,12 +10588,12 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:67
 msgid "Formatting"
-msgstr ""
+msgstr "Định dạng"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:68
 #: eeschema/eeschema_config.cpp:72
 msgid "Field Name Templates"
-msgstr ""
+msgstr "Tên trường mẫu"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:70
 msgid "Electrical Rules"
@@ -10780,7 +10811,7 @@ msgstr "Kiểu"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:117
 msgid "Border width:"
-msgstr ""
+msgstr "Chiều rộng viền:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:131
 msgid "Border color:"
@@ -12682,7 +12713,7 @@ msgstr "Tùy chọn hiển thị"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:24
 #: pcbnew/footprint_edit_frame.cpp:1001 pcbnew/pcbnew_config.cpp:58
 msgid "Editing Options"
-msgstr ""
+msgstr "Các tùy chọn chỉnh sửa"
 
 #: eeschema/eeschema_config.cpp:99 pcbnew/pcbnew_config.cpp:81
 #, fuzzy
@@ -17665,7 +17696,7 @@ msgstr ""
 
 #: gerbview/gerbview_frame.cpp:1059
 msgid "GerbView"
-msgstr ""
+msgstr "Gerbview"
 
 #: gerbview/gerbview_frame.cpp:1064
 #, fuzzy
@@ -19160,7 +19191,7 @@ msgstr ""
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:38
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:231
 msgid "Count"
-msgstr ""
+msgstr "Bá tước"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:30
 msgid "Y start:"
@@ -19387,7 +19418,7 @@ msgstr ""
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:420
 #: pcbnew/footprint_edit_frame.cpp:1003
 msgid "Default Values"
-msgstr ""
+msgstr "Giá trị mặc định"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:456
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:351
@@ -23114,7 +23145,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_drc.cpp:263
 msgid "Done.<br><br>"
-msgstr ""
+msgstr "Xong. <br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:462
 msgid "Run clearance resolution tool..."
@@ -23164,12 +23195,12 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:77
 msgid "Tests Running..."
-msgstr ""
+msgstr "Các kiểm tra đang chạy..."
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:105
 #, c-format
 msgid "Violations (%d)"
-msgstr ""
+msgstr "Vi phạm (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:117
 #, c-format
@@ -23184,7 +23215,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_drc_base.cpp:192
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
 msgid "Delete Marker"
-msgstr ""
+msgstr "Xóa điểm đánh dấu"
 
 #: pcbnew/dialogs/dialog_drc_base.h:102
 msgid "DRC Control"
@@ -31093,7 +31124,7 @@ msgstr ""
 
 #: pcbnew/pcbnew_config.cpp:61
 msgid "Origins & Axes"
-msgstr ""
+msgstr "Gốc và trục"
 
 #: pcbnew/pcbnew_printout.cpp:110
 msgid "Multiple Layers"
@@ -31124,7 +31155,7 @@ msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:76
 msgid "Error reading file: cannot determine length."
-msgstr ""
+msgstr "Lỗi khi đọc tệp: không xác định được độ dài."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:87
 #, fuzzy
