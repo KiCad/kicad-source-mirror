@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -35,8 +35,7 @@ SYMBOL_ASYNC_LOADER::SYMBOL_ASYNC_LOADER( const std::vector<wxString>& aNickname
         m_onlyPowerSymbols( aOnlyPowerSymbols ),
         m_output( aOutput ),
         m_reporter( aReporter ),
-        m_nextLibrary( 0 ),
-        m_canceled( false )
+        m_nextLibrary( 0 )
 {
     wxASSERT( m_table );
     m_threadCount = std::max<size_t>( 1, std::thread::hardware_concurrency() );
@@ -48,7 +47,7 @@ SYMBOL_ASYNC_LOADER::SYMBOL_ASYNC_LOADER( const std::vector<wxString>& aNickname
 
 SYMBOL_ASYNC_LOADER::~SYMBOL_ASYNC_LOADER()
 {
-    Abort();
+    Join();
 }
 
 
@@ -88,13 +87,6 @@ bool SYMBOL_ASYNC_LOADER::Join()
 }
 
 
-void SYMBOL_ASYNC_LOADER::Abort()
-{
-    m_canceled.store( true );
-    Join();
-}
-
-
 bool SYMBOL_ASYNC_LOADER::Done()
 {
     return m_nextLibrary.load() >= m_nicknames.size();
@@ -110,11 +102,15 @@ std::vector<SYMBOL_ASYNC_LOADER::LOADED_PAIR> SYMBOL_ASYNC_LOADER::worker()
     for( size_t libraryIndex = m_nextLibrary++; libraryIndex < m_nicknames.size();
          libraryIndex = m_nextLibrary++ )
     {
-        if( m_canceled.load() )
+        const wxString& nickname = m_nicknames[libraryIndex];
+
+        if( m_reporter )
+            m_reporter->AdvancePhase( wxString::Format( _( "Loading library %s..." ), nickname ) );
+
+        if( m_reporter && m_reporter->IsCancelled() )
             break;
 
-        const wxString& nickname = m_nicknames[libraryIndex];
-        LOADED_PAIR     pair( nickname, {} );
+        LOADED_PAIR pair( nickname, {} );
 
         try
         {
@@ -129,9 +125,6 @@ std::vector<SYMBOL_ASYNC_LOADER::LOADED_PAIR> SYMBOL_ASYNC_LOADER::worker()
             std::lock_guard<std::mutex> lock( m_errorMutex );
             m_errors += msg;
         }
-
-        if( m_reporter )
-            m_reporter->AdvancePhase( wxString::Format( _( "Loading library %s..." ), nickname ) );
     }
 
     return ret;

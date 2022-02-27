@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -62,11 +62,6 @@ public:
      */
     bool Join();
 
-    /**
-     * Cancels a load in-progress
-     */
-    void Abort();
-
     ///< Return true if loading is done
     bool Done();
 
@@ -97,7 +92,6 @@ private:
 
     size_t              m_threadCount;
     std::atomic<size_t> m_nextLibrary;
-    std::atomic_bool    m_canceled;
     wxString            m_errors;
     std::mutex          m_errorMutex;
 

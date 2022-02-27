@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -35,7 +35,7 @@
 
 bool SYMBOL_TREE_MODEL_ADAPTER::m_show_progress = true;
 
-#define PROGRESS_INTERVAL_MILLIS 66
+#define PROGRESS_INTERVAL_MILLIS 33      // 30 FPS refresh rate
 
 
 wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
@@ -56,7 +56,7 @@ SYMBOL_TREE_MODEL_ADAPTER::~SYMBOL_TREE_MODEL_ADAPTER()
 {}
 
 
-void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNicknames,
+bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNicknames,
                                               wxWindow* aParent )
 {
     std::unique_ptr<WX_PROGRESS_REPORTER> prg = nullptr;
@@ -82,20 +82,18 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
 
     while( !loader.Done() )
     {
-        if( prg )
-            prg->KeepRefreshing();
+        if( prg && !prg->KeepRefreshing() )
+            break;
 
         wxMilliSleep( PROGRESS_INTERVAL_MILLIS );
     }
 
-    if( prg && prg->IsCancelled() )
-    {
-        loader.Abort();
-    }
-    else
-    {
-        loader.Join();
-    }
+    loader.Join();
+
+    bool cancelled = false;
+
+    if( prg )
+        cancelled = prg->IsCancelled();
 
     if( !loader.GetErrors().IsEmpty() )
     {
@@ -134,6 +132,8 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
         prg.reset();
         m_show_progress = false;
     }
+
+    return !cancelled;
 }
 
 

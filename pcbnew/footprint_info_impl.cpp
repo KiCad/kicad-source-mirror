@@ -143,7 +143,7 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
         if( m_progress_reporter && !m_progress_reporter->KeepRefreshing() )
             m_cancelled = true;
 
-        wxMilliSleep( 20 );
+        wxMilliSleep( 33 /* 30 FPS refresh rate */);
     }
 
     if( m_cancelled )
@@ -326,7 +326,7 @@ bool FOOTPRINT_LIST_IMPL::joinWorkers()
         if( m_progress_reporter && !m_progress_reporter->KeepRefreshing() )
             m_cancelled = true;
 
-        wxMilliSleep( 30 );
+        wxMilliSleep( 33 /* 30 FPS refresh rate */ );
     }
 
     for( auto& thr : threads )

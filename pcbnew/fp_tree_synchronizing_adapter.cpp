@@ -64,7 +64,7 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::IsContainer( const wxDataViewItem& aItem ) c
 }
 
 
-#define PROGRESS_INTERVAL_MILLIS 66
+#define PROGRESS_INTERVAL_MILLIS 33     // 30 FPS refresh rate
 
 void FP_TREE_SYNCHRONIZING_ADAPTER::Sync()
 {

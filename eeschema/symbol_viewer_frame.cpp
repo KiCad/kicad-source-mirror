@@ -837,11 +837,16 @@ void SYMBOL_VIEWER_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
 
     // Container doing search-as-you-type.
     SYMBOL_LIB_TABLE* libs = Prj().SchSymbolLibTable();
-    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> adapter =
-            SYMBOL_TREE_MODEL_ADAPTER::Create( this, libs );
+    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> dataPtr
+                                    = SYMBOL_TREE_MODEL_ADAPTER::Create( this, libs );
+    SYMBOL_TREE_MODEL_ADAPTER* modelAdapter
+                                    = static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( dataPtr.get() );
 
-    const auto libNicknames = libs->GetLogicalLibs();
-    static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( adapter.get() )->AddLibraries( libNicknames, this );
+    if( !modelAdapter->AddLibraries( libs->GetLogicalLibs(), this ) )
+    {
+        // loading cancelled by user
+        return;
+    }
 
     LIB_SYMBOL* current = GetSelectedSymbol();
     LIB_ID id;
@@ -850,13 +855,13 @@ void SYMBOL_VIEWER_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
     if( current )
     {
         id = current->GetLibId();
-        adapter->SetPreselectNode( id, unit );
+        modelAdapter->SetPreselectNode( id, unit );
     }
 
     wxString dialogTitle;
-    dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ), adapter->GetItemCount() );
+    dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ), modelAdapter->GetItemCount() );
 
-    DIALOG_CHOOSE_SYMBOL dlg( this, dialogTitle, adapter, m_convert, false, false, false );
+    DIALOG_CHOOSE_SYMBOL dlg( this, dialogTitle, dataPtr, m_convert, false, false, false );
 
     if( dlg.ShowQuasiModal() == wxID_CANCEL )
         return;

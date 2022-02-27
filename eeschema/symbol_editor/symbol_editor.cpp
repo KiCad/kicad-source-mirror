@@ -1119,7 +1119,7 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
         if( resyncLibTree )
         {
             FreezeLibraryTree();
-            SyncLibraries( true, forceRefresh );
+            SyncLibraries( true, false, forceRefresh );
             ThawLibraryTree();
         }
     }
