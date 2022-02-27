@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 11:59-0800\n"
-"PO-Revision-Date: 2022-02-20 11:55+0000\n"
+"PO-Revision-Date: 2022-03-01 09:58+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
 "Language: cs\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.11.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -20651,7 +20651,7 @@ msgstr "Výška substrátu"
 #: pcb_calculator/transline_ident.cpp:314
 #, fuzzy
 msgid "Height of box top"
-msgstr "Výška obdélníku"
+msgstr "Vzdálenost k horní části krabice"
 
 #: pcb_calculator/transline_ident.cpp:129
 #: pcb_calculator/transline_ident.cpp:168
@@ -22772,9 +22772,8 @@ msgid "Pad Numbering:"
 msgstr "Číslování plošek:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:341
-#, fuzzy
 msgid "Circular Array"
-msgstr "Kruhová sestava"
+msgstr "Kruhová řada"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:350
 msgid "Footprint Annotation"
@@ -23023,7 +23022,7 @@ msgstr "Nastavit rozměry mřížky"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:302
 msgid "Automatically set the text orientation to match the dimension lines"
-msgstr ""
+msgstr "Automaticky nastavit orientaci textu tak, aby odpovídali kótám"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:307
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:191
@@ -23065,7 +23064,7 @@ msgstr "Kótovací čára"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:353
 msgid "Thickness of the dimension lines"
-msgstr ""
+msgstr "Tloušťka čar kót"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:367
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:139
@@ -23373,9 +23372,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step.cpp:214
-#, fuzzy
 msgid "Model Scale Warning"
-msgstr "Záznam varování"
+msgstr "Měřítko modelu Varování"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:276
 msgid "STEP export failed!  Please save the PCB and try again"
@@ -23421,12 +23419,10 @@ msgstr "Uživatelem definovaný počátek"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:47
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
-#, fuzzy
 msgid "Board center origin"
-msgstr "Obrys desky"
+msgstr "Počáteční bod ve středu desky"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:54
-#, fuzzy
 msgid "User Defined Origin"
 msgstr "Uživatelem definovaný počátek"
 
@@ -24052,9 +24048,8 @@ msgstr "Teplotní profil"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:419
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:319
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:769
-#, fuzzy
 msgid "Clearance Overrides and Settings"
-msgstr "Místní izolační mezery a nastavení"
+msgstr "Izolační mezera Přepsání a nastavení"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:438
 msgid ""
@@ -24160,7 +24155,6 @@ msgid "All footprint generator scripts were loaded"
 msgstr "Všechny skripty generátoru pouzdra byly načteny"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:65
-#, fuzzy
 msgid "Available Footprint Generators"
 msgstr "Dostupné generátory pouzder"
 
@@ -24258,9 +24252,8 @@ msgid "Include only SMD footprints"
 msgstr "Zahrnout pouze SMD pouzdra"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:77
-#, fuzzy
 msgid "Exclude all footprints with through hole pads"
-msgstr "Smazat pouzdra bez symbolů"
+msgstr "Vyloučit všechna pouzdra s průchozí dírou plošek"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:80
 msgid "Include board edge layer"
@@ -24973,7 +24966,6 @@ msgid "Select Copper Layer Pair"
 msgstr "Výběr páru vrstev mědi"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:105
-#, fuzzy
 msgid "Rotate around item anchor"
 msgstr "Otočit kolem kotvy položky"
 
@@ -24983,9 +24975,8 @@ msgstr "Otočit kolem centra výběru"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:111
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
-#, fuzzy
 msgid "Rotate around local coordinates origin"
-msgstr "Rotace kolem počátku lokálních souřadnic"
+msgstr "Otáčení kolem počátku lokálních souřadnic"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:114
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
@@ -25014,9 +25005,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
-#, fuzzy
 msgid "Rotate around center of selection"
-msgstr "Přiblížit na výběr"
+msgstr "Otočit se kolem středu výběru"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:84
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:116
@@ -25099,9 +25089,8 @@ msgid "Report file"
 msgstr "Soubor hlášení"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:44
-#, fuzzy
 msgid "Show zero pad nets"
-msgstr "Zobrazit číslo plošky"
+msgstr "Zobrazit nepřipojené sítě"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:48
 msgid "Group by:"
@@ -25205,9 +25194,8 @@ msgid "Replace footprints with those specified in netlist"
 msgstr "Smazat všechna přiřazení pouzder"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:57
-#, fuzzy
 msgid "Delete footprints with no components in netlist"
-msgstr "Smazat všechna přiřazení pouzder"
+msgstr "Smazat všechna pouzdra bez komponentů v netlistu"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:60
 #, fuzzy
@@ -25227,7 +25215,6 @@ msgid "degree"
 msgstr "stupeň"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:84
-#, fuzzy
 msgid "Non Copper Zones Properties"
 msgstr "Vlastnosti zón bez mědi"
 
@@ -25419,37 +25406,32 @@ msgid "Too large value for pad delta size."
 msgstr "Příliš velká hodnota pro velikost sklonu plošky."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1343
-#, fuzzy
 msgid "Warning: Through hole pad has no hole."
-msgstr "Chyba: Ploška s průchozí dírou nemá žádný otvor."
+msgstr "Varování: Ploška s průchozí dírou nemá žádný otvor."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1350
-#, fuzzy
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use an SMD pad "
 "instead."
 msgstr ""
-"Chyba: Plošky konektoru neobsahují žádnou pájecí pastu. Použijte místo nich "
-"SMD plošky."
+"Varování: Plošky konektoru obvykle neobsahují žádnou pájecí pastu. Použijte "
+"místo nich SMD plošky."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1360
 msgid "Warning: SMD pad has no outer layers."
 msgstr "Varování: SMD ploška není na vnější vrstvě."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1369
-#, fuzzy
 msgid "Warning: Fiducial property makes no sense on NPTH pads."
-msgstr "Varování: Vlastnost Fiducial nelze použít pro NPTH plošky."
+msgstr "Varování: Vlastnost Fiducial nemá smysl pro NPTH plošky."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1375
-#, fuzzy
 msgid "Warning: Testpoint property makes no sense on NPTH pads."
-msgstr "Varování: Vlastnost Testpoint nelze nastavit na NPTH plošky."
+msgstr "Varování: Vlastnost Testpoint nemá smysl pro NPTH plošky."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1381
-#, fuzzy
 msgid "Warning: Heatsink property makes no sense of NPTH pads."
-msgstr "Varování: Vlastnost Chladič nelze nastavit na NPTH plošky."
+msgstr "Varování: Vlastnost Chladič nemá smysl pro NPTH plošky."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1387
 #, fuzzy
@@ -26170,9 +26152,8 @@ msgstr ""
 "Používá se ke kontrole propojení v nástrojích CAM a v prohlížečích Gerber."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:241
-#, fuzzy
 msgid "Disable aperture macros (not recommended)"
-msgstr "Desetinný formát (doporučeno)"
+msgstr "Zakázat makra otvorů (nedoporučuje se)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:242
 msgid ""
@@ -26626,9 +26607,8 @@ msgid "Reference item: <none selected>"
 msgstr "Položka Reference: <není vybrána>"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:35
-#, fuzzy
 msgid "Use Local Origin"
-msgstr "Reset lokálních souřadnic"
+msgstr "Použít lokální počátek"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:38
 msgid "Use Grid Origin"
@@ -26721,9 +26701,8 @@ msgid "Do not modify pads having a different type"
 msgstr "Neupravujte plošky mající odlišný typ"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.h:51
-#, fuzzy
 msgid "Push Pad Properties"
-msgstr "Vlastnosti plošky"
+msgstr "Vynutit vlastnosti plošky"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:155
 msgid "No layers selected."
@@ -32127,7 +32106,7 @@ msgstr "Nepodařilo se přečíst soubor "
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:251
 #, c-format
 msgid "Unknown FABMASTER section %s:%s at row %zu."
-msgstr ""
+msgstr "Neznámá FABMASTER sekce %s:%s v řádku %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:268
 #, c-format
