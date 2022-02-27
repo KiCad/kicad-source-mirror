@@ -456,15 +456,13 @@ public:
             wxString newProjectFootprintLib = pathSep + m_newProjectName + wxT( ".pretty" ) + pathSep;
 
             if( destPath.StartsWith( m_projectDirPath ) )
-            {
                 destPath.Replace( m_projectDirPath, m_newProjectDirPath, false );
-                destFile.SetPath( destPath );
-            }
-
-            if( destName == m_projectName )
-                destFile.SetName( m_newProjectName );
 
             destPath.Replace( srcProjectFootprintLib, newProjectFootprintLib, true );
+
+            if( destName == m_projectName && ext != wxT( "zip" ) /* don't rename archives */ )
+                destFile.SetName( m_newProjectName );
+
             destFile.SetPath( destPath );
 
             KiCopyFile( aSrcFilePath, destFile.GetFullPath(), m_errors );
