@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 11:58-0800\n"
-"PO-Revision-Date: 2022-02-25 13:57+0000\n"
+"PO-Revision-Date: 2022-03-01 09:54+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.11.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -14455,6 +14455,8 @@ msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
 "the library. Did you export all items of the design?"
 msgstr ""
+"El símbol ID '%s' fa referència a un símbol de biblioteca '%s' que no s'ha "
+"pogut trobar. Has exportat tots els elements del disseny?"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:558
 #, c-format
@@ -14462,6 +14464,8 @@ msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
 "pins. The expected number of pins is 1 but %d were found."
 msgstr ""
+"L'ID de símbol '%s' és una referència de senyal o una senyal global però té "
+"massa pins. El número esperat de pins és 1, però se n'han trobat %d."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:690
 #, c-format
@@ -14469,6 +14473,8 @@ msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a symbol or a net "
 "power / symbol. The symbol was not loaded."
 msgstr ""
+"L'ID de símbol '%s' és d'un tipus desconegut. No és ni un símbol ni una "
+"xarxa/símbol d'alimentació. El símbol no s'ha carregat."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:706
 #, c-format
@@ -14477,6 +14483,9 @@ msgid ""
 "supported in KiCad. When the symbol is reloaded from the library, it will "
 "revert to the original 1:1 scale."
 msgstr ""
+"El símbol '%s' s'escala a l'esquemàtic CADSTAR original, però això no està "
+"suportat a KiCad. Quan el símbol sigui carregat un altre cop des de la "
+"biblioteca, es tornarà a l'escala 1:1 original."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1180
 #, c-format
@@ -14484,10 +14493,14 @@ msgid ""
 "Documentation Symbol '%s' refers to symbol definition ID '%s' which does not "
 "exist in the library. The symbol was not loaded."
 msgstr ""
+"El símbol de documentació '%s' es refereix a l'ID de definició de símbol "
+"'%s' que no existeix a la biblioteca. El símbol no s'ha carregat."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1289
 msgid "Text Variables could not be set as there is no project attached."
 msgstr ""
+"No s'han pogut establir les variables de text perquè no hi ha cap projecte "
+"adjunt."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1734
 #, c-format
@@ -14496,6 +14509,9 @@ msgid ""
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
 msgstr ""
+"El símbol '%s' és rotat per un angle de %.1f graus al disseny CADSTAR "
+"original, però KiCad només admet angles de rotació múltiples de 90 graus. "
+"Les línies de connexió necessitaran un ajustament manual."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1748
 #, c-format
@@ -22521,9 +22537,8 @@ msgid "Unknown cleanup action"
 msgstr "Desfés l'última acció"
 
 #: pcbnew/connectivity/connectivity_data.cpp:100
-#, fuzzy
 msgid "Updating nets..."
-msgstr "Actualitza el netlist"
+msgstr "S'estan actualitzant les xarxes..."
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:379
 #: pcbnew/convert_shape_list_to_polygon.cpp:531
@@ -33096,19 +33111,19 @@ msgid "Unknown mapping of the Altium layer '%s'."
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:182
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Mode string: '%s'."
-msgstr "Node '%s' desconegut a '%s'"
+msgstr "Mode de cadena desconegut: '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Record name string: '%s'."
-msgstr "Id de registre desconegut: %d."
+msgstr "Cadena del nom del registre desconegut: '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Extended Primitive Information type: '%s'."
-msgstr "Tipus MIME desconegut per al fitxer de documentació '%s'"
+msgstr "Tipus d'informació de primitiva estesa desconeguda: '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:774
 #, c-format
