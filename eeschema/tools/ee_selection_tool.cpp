@@ -165,11 +165,11 @@ bool EE_SELECTION_TOOL::Init()
                                         SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_LABEL_T,
                                         SCH_SHEET_PIN_T, SCH_PIN_T, EOT };
 
-    auto wireSelection =      E_C::MoreThan( 0 ) && E_C::OnlyType( SCH_LINE_LOCATE_WIRE_T );
-    auto busSelection =       E_C::MoreThan( 0 ) && E_C::OnlyType( SCH_LINE_LOCATE_BUS_T );
-    auto wireOrBusSelection = E_C::MoreThan( 0 ) && E_C::OnlyTypes( wireOrBusTypes );
-    auto connectedSelection = E_C::MoreThan( 0 ) && E_C::OnlyTypes( connectedTypes );
-    auto sheetSelection =     E_C::Count( 1 )    && E_C::OnlyType( SCH_SHEET_T );
+    auto wireSelection =      E_C::Count( 1 ) && E_C::OnlyType( SCH_LINE_LOCATE_WIRE_T );
+    auto busSelection =       E_C::Count( 1 ) && E_C::OnlyType( SCH_LINE_LOCATE_BUS_T );
+    auto wireOrBusSelection = E_C::Count( 1 ) && E_C::OnlyTypes( wireOrBusTypes );
+    auto connectedSelection = E_C::Count( 1 ) && E_C::OnlyTypes( connectedTypes );
+    auto sheetSelection =     E_C::Count( 1 ) && E_C::OnlyType( SCH_SHEET_T );
 
     auto schEditSheetPageNumberCondition =
             [&] ( const SELECTION& aSel )
@@ -219,7 +219,7 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::finishBus,          SCH_LINE_WIRE_BUS_TOOL::IsDrawingBus, 100 );
 
     menu.AddSeparator( 200 );
-    menu.AddItem( EE_ACTIONS::selectConnection,   wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
+    menu.AddItem( EE_ACTIONS::selectConnection,   connectedSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::placeJunction,      wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::placeLabel,         wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::placeGlobalLabel,   wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
