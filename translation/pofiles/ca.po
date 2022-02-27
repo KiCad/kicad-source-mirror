@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 11:59-0800\n"
-"PO-Revision-Date: 2022-02-25 13:54+0000\n"
+"PO-Revision-Date: 2022-03-01 09:58+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v6/ca/>\n"
 "Language: ca\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.11.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -12259,9 +12259,8 @@ msgstr "Elimina les cel·les invàlides"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
-#, fuzzy
 msgid "Cancel Table Update"
-msgstr "Marge del diàmetre del forat:"
+msgstr "Cancel·la actualització de taula"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
@@ -13901,6 +13900,8 @@ msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
 "the library. Did you export all items of the design?"
 msgstr ""
+"El símbol ID '%s' fa referència a un símbol de biblioteca '%s' que no s'ha "
+"pogut trobar. Has exportat tots els elements del disseny?"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:559
 #, c-format
@@ -13908,6 +13909,8 @@ msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
 "pins. The expected number of pins is 1 but %d were found."
 msgstr ""
+"L'ID de símbol '%s' és una referència de senyal o una senyal global però té "
+"massa pins. El número esperat de pins és 1, però se n'han trobat %d."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:691
 #, c-format
@@ -13915,6 +13918,8 @@ msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a symbol or a net "
 "power / symbol. The symbol was not loaded."
 msgstr ""
+"L'ID de símbol '%s' és d'un tipus desconegut. No és ni un símbol ni una "
+"xarxa/símbol d'alimentació. El símbol no s'ha carregat."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:707
 #, c-format
@@ -13923,6 +13928,9 @@ msgid ""
 "supported in KiCad. When the symbol is reloaded from the library, it will "
 "revert to the original 1:1 scale."
 msgstr ""
+"El símbol '%s' s'escala a l'esquemàtic CADSTAR original, però això no està "
+"suportat a KiCad. Quan el símbol sigui carregat un altre cop des de la "
+"biblioteca, es tornarà a l'escala 1:1 original."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1190
 #, c-format
@@ -13930,10 +13938,14 @@ msgid ""
 "Documentation Symbol '%s' refers to symbol definition ID '%s' which does not "
 "exist in the library. The symbol was not loaded."
 msgstr ""
+"El símbol de documentació '%s' es refereix a l'ID de definició de símbol "
+"'%s' que no existeix a la biblioteca. El símbol no s'ha carregat."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1297
 msgid "Text Variables could not be set as there is no project attached."
 msgstr ""
+"No s'han pogut establir les variables de text perquè no hi ha cap projecte "
+"adjunt."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1740
 #, c-format
@@ -13942,6 +13954,9 @@ msgid ""
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
 msgstr ""
+"El símbol '%s' és rotat per un angle de %.1f graus al disseny CADSTAR "
+"original, però KiCad només admet angles de rotació múltiples de 90 graus. "
+"Les línies de connexió necessitaran un ajustament manual."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1754
 #, c-format
