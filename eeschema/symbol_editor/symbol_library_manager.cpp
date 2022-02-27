@@ -74,8 +74,6 @@ void SYMBOL_LIBRARY_MANAGER::Sync( const wxString& aForceRefresh,
 
 void SYMBOL_LIBRARY_MANAGER::Preload( PROGRESS_REPORTER& aReporter )
 {
-    const int progressIntervalMillis = 60;
-
     SYMBOL_ASYNC_LOADER loader( symTable()->GetLogicalLibs(), symTable(), false, nullptr,
                                 &aReporter );
 
@@ -85,19 +83,13 @@ void SYMBOL_LIBRARY_MANAGER::Preload( PROGRESS_REPORTER& aReporter )
 
     while( !loader.Done() )
     {
-        aReporter.KeepRefreshing();
+        if( !aReporter.KeepRefreshing() )
+            break;
 
-        wxMilliSleep( progressIntervalMillis );
+        wxMilliSleep( 33 /* 30 FPS refresh rate */ );
     }
 
-    if( aReporter.IsCancelled() )
-    {
-        loader.Abort();
-    }
-    else
-    {
-        loader.Join();
-    }
+    loader.Join();
 
     if( !loader.GetErrors().IsEmpty() )
     {
@@ -116,7 +108,7 @@ void SYMBOL_LIBRARY_MANAGER::Preload( PROGRESS_REPORTER& aReporter )
 
 bool SYMBOL_LIBRARY_MANAGER::HasModifications() const
 {
-    for( const auto& lib : m_libs )
+    for( const std::pair<const wxString, LIB_BUFFER>& lib : m_libs )
     {
         if( lib.second.IsModified() )
             return true;
@@ -130,7 +122,7 @@ int SYMBOL_LIBRARY_MANAGER::GetHash() const
 {
     int hash = symTable()->GetModifyHash();
 
-    for( const auto& lib : m_libs )
+    for( const std::pair<const wxString, LIB_BUFFER>& lib : m_libs )
         hash += lib.second.GetHash();
 
     return hash;
@@ -144,7 +136,7 @@ int SYMBOL_LIBRARY_MANAGER::GetLibraryHash( const wxString& aLibrary ) const
     if( libBufIt != m_libs.end() )
         return libBufIt->second.GetHash();
 
-    auto row = GetLibrary( aLibrary );
+    SYMBOL_LIB_TABLE_ROW* row = GetLibrary( aLibrary );
 
     // return -1 if library does not exist or 0 if not modified
     return row ? std::hash<std::string>{}( aLibrary.ToStdString() +
@@ -156,7 +148,7 @@ wxArrayString SYMBOL_LIBRARY_MANAGER::GetLibraryNames() const
 {
     wxArrayString res;
 
-    for( const auto& libName : symTable()->GetLogicalLibs() )
+    for( const wxString& libName : symTable()->GetLogicalLibs() )
         res.Add( libName );
 
     return res;

@@ -127,13 +127,20 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     LoadSettings( m_settings );
 
     m_libMgr = new SYMBOL_LIBRARY_MANAGER( *this );
+    bool loadingCancelled = false;
 
-    // Preload libraries before using SyncLibraries the first time, as the preload is threaded
-    WX_PROGRESS_REPORTER reporter( this, _( "Loading Symbol Libraries" ),
-                                   m_libMgr->GetLibraryCount(), true );
-    m_libMgr->Preload( reporter );
+    {
+        // Preload libraries before using SyncLibraries the first time, as the preload is
+        // multi-threaded
+        WX_PROGRESS_REPORTER reporter( this, _( "Loading Symbol Libraries" ),
+                                       m_libMgr->GetLibraryCount(), true );
+        m_libMgr->Preload( reporter );
 
-    SyncLibraries( false );
+        loadingCancelled = reporter.IsCancelled();
+        wxSafeYield();
+    }
+
+    SyncLibraries( false, loadingCancelled );
     m_treePane = new SYMBOL_TREE_PANE( this, m_libMgr );
 
     resolveCanvasType();
@@ -235,6 +242,9 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Ensure the window is on top
     Raise();
+
+    if( loadingCancelled )
+        ShowInfoBarWarning( _( "Symbol library loading was cancelled by user." ) );
 }
 
 
@@ -922,7 +932,8 @@ wxString SYMBOL_EDIT_FRAME::getTargetLib() const
 }
 
 
-void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress, const wxString& aForceRefresh )
+void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress, bool aPreloadCancelled,
+                                       const wxString& aForceRefresh )
 {
     LIB_ID selected;
 
@@ -941,7 +952,7 @@ void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress, const wxString& aForc
                                                                     libName ) );
                 } );
     }
-    else
+    else if( !aPreloadCancelled )
     {
         m_libMgr->Sync( aForceRefresh,
                 [&]( int progress, int max, const wxString& libName )

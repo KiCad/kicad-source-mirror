@@ -105,7 +105,10 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilte
     Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
     Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
-    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> adapter = SYMBOL_TREE_MODEL_ADAPTER::Create( this, libs );
+    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> dataPtr
+                                    = SYMBOL_TREE_MODEL_ADAPTER::Create( this, libs );
+    SYMBOL_TREE_MODEL_ADAPTER* modelAdapter
+                                    = static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( dataPtr.get() );
     bool loaded = false;
 
     if( aFilter )
@@ -117,14 +120,14 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilte
             if( libs->HasLibrary( liblist[ii], true ) )
             {
                 loaded = true;
-                static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( adapter.get() )->AddLibrary( liblist[ii] );
+                modelAdapter->AddLibrary( liblist[ii] );
             }
         }
 
-        adapter->AssignIntrinsicRanks();
+        modelAdapter->AssignIntrinsicRanks();
 
         if( aFilter->GetFilterPowerSymbols() )
-            adapter->SetFilter( SYMBOL_TREE_MODEL_ADAPTER::SYM_FILTER_POWER );
+            modelAdapter->SetFilter( SYMBOL_TREE_MODEL_ADAPTER::SYM_FILTER_POWER );
     }
 
     std::vector< LIB_TREE_ITEM* > history_list;
@@ -138,29 +141,34 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilte
             history_list.push_back( symbol );
     }
 
-    adapter->DoAddLibrary( wxT( "-- " ) + _( "Recently Used" ) + " --", wxEmptyString, history_list,
-                           true );
+    modelAdapter->DoAddLibrary( wxT( "-- " ) + _( "Recently Used" ) + wxT( " --" ), wxEmptyString,
+                                history_list, true );
 
     if( !aHistoryList.empty() )
-        adapter->SetPreselectNode( aHistoryList[0].LibId, aHistoryList[0].Unit );
+        modelAdapter->SetPreselectNode( aHistoryList[0].LibId, aHistoryList[0].Unit );
 
     const std::vector< wxString > libNicknames = libs->GetLogicalLibs();
 
     if( !loaded )
-         static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( adapter.get() )->AddLibraries( libNicknames,
-                                                  this );
+    {
+        if( !modelAdapter->AddLibraries( libNicknames, this ) )
+        {
+            // loading cancelled by user
+            return PICKED_SYMBOL();
+        }
+    }
 
     if( aHighlight && aHighlight->IsValid() )
-        adapter->SetPreselectNode( *aHighlight, /* aUnit */ 0 );
+        modelAdapter->SetPreselectNode( *aHighlight, /* aUnit */ 0 );
 
     wxString dialogTitle;
 
-    if( adapter->GetFilter() == SYMBOL_TREE_MODEL_ADAPTER::SYM_FILTER_POWER )
-        dialogTitle.Printf( _( "Choose Power Symbol (%d items loaded)" ), adapter->GetItemCount() );
+    if( modelAdapter->GetFilter() == SYMBOL_TREE_MODEL_ADAPTER::SYM_FILTER_POWER )
+        dialogTitle.Printf( _( "Choose Power Symbol (%d items loaded)" ), dataPtr->GetItemCount() );
     else
-        dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ), adapter->GetItemCount() );
+        dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ), dataPtr->GetItemCount() );
 
-    DIALOG_CHOOSE_SYMBOL dlg( this, dialogTitle, adapter, aConvert, aAllowFields, aShowFootprints,
+    DIALOG_CHOOSE_SYMBOL dlg( this, dialogTitle, dataPtr, aConvert, aAllowFields, aShowFootprints,
                               aUseLibBrowser );
 
     if( dlg.ShowModal() == wxID_CANCEL )

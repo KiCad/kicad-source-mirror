@@ -175,7 +175,7 @@ set( EESCHEMA_SRCS
     fields_grid_table.cpp
     files-io.cpp
     generate_alias_info.cpp
-    getpart.cpp
+    picksymbol.cpp
     hierarch.cpp
     lib_shape.cpp
     lib_item.cpp
