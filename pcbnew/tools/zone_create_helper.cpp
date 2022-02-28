@@ -269,7 +269,7 @@ bool ZONE_CREATE_HELPER::OnFirstPoint( POLYGON_GEOM_MANAGER& aMgr )
 
             // set up properties from zone
             const auto& settings = *m_parentView.GetPainter()->GetSettings();
-            COLOR4D color = settings.GetColor( nullptr, m_zone->GetLayer() );
+            COLOR4D color = settings.GetColor( nullptr, m_zone->GetFirstLayer() );
 
             m_previewItem.SetStrokeColor( COLOR4D::WHITE );
             m_previewItem.SetFillColor( color.WithAlpha( 0.2 ) );
