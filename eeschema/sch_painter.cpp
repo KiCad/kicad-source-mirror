@@ -630,7 +630,7 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
             COLOR4D fillColor;
 
             if( shape->GetFillMode() == FILL_T::FILLED_SHAPE )
-                fillColor = getRenderColor( aItem, LAYER_DEVICE, false );
+                return false;   // rendered on LAYER_NOTES or LAYER_DEVICE
             else if( shape->GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
                 fillColor = getRenderColor( aItem, LAYER_DEVICE_BACKGROUND, false );
             else if( shape->GetFillMode() == FILL_T::FILLED_WITH_COLOR )
@@ -763,29 +763,23 @@ void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer )
     }
     else if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND )
     {
-        if( aShape->IsFilled() )
+        if( aShape->GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR
+                || aShape->GetFillMode() == FILL_T::FILLED_WITH_COLOR )
         {
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );
-
-            if( aShape->GetFillColor() == COLOR4D::UNSPECIFIED )
-            {
-                if( aShape->GetFillMode() == FILL_T::FILLED_SHAPE )
-                    m_gal->SetFillColor( getRenderColor( aShape, LAYER_DEVICE, false ) );
-                else
-                    m_gal->SetFillColor( color );
-            }
-            else
-            {
-                m_gal->SetFillColor( aShape->GetFillColor() );
-            }
-
             drawShape( aShape );
         }
     }
-    else if( aLayer == LAYER_DEVICE
-                || ( m_schSettings.m_IsSymbolEditor && aLayer == LAYER_NOTES ) )
+    else if( aLayer == LAYER_DEVICE || ( m_schSettings.m_IsSymbolEditor && aLayer == LAYER_NOTES ) )
     {
+        if( aShape->GetFillMode() == FILL_T::FILLED_SHAPE )
+        {
+            m_gal->SetIsFill( true );
+            m_gal->SetIsStroke( false );
+            drawShape( aShape );
+        }
+
         int lineWidth = getLineWidth( aShape, drawingShadows );
 
         if( lineWidth > 0 )
