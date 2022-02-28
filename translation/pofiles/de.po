@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 11:59-0800\n"
-"PO-Revision-Date: 2022-02-25 19:58+0000\n"
-"Last-Translator: Benedikt Freisen <b.freisen@gmx.net>\n"
+"PO-Revision-Date: 2022-03-01 09:58+0000\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -16114,7 +16114,7 @@ msgstr "Pinlänge zu anderen Pins im Symbol kopieren"
 
 #: eeschema/tools/ee_actions.cpp:267
 msgid "Push Pin Name Size"
-msgstr "Größe Pinnamen übertragen"
+msgstr "Pinnamengröße übertragen"
 
 #: eeschema/tools/ee_actions.cpp:267
 msgid "Copy pin name size to other pins in symbol"
@@ -16122,7 +16122,7 @@ msgstr "Pinnamengröße zu anderen Pins im Symbol kopieren"
 
 #: eeschema/tools/ee_actions.cpp:272
 msgid "Push Pin Number Size"
-msgstr "Größe Pinnummern übertragen"
+msgstr "Pinnummerngröße übertragen"
 
 #: eeschema/tools/ee_actions.cpp:272
 msgid "Copy pin number size to other pins in symbol"
@@ -16230,7 +16230,7 @@ msgstr "Zeichnungsblatt beenden"
 
 #: eeschema/tools/ee_actions.cpp:368
 msgid "Repeat Last Item"
-msgstr "Letzten Vorgang wiederholen"
+msgstr "Letztes Element wiederholen"
 
 #: eeschema/tools/ee_actions.cpp:368
 msgid "Duplicates the last drawn item"
