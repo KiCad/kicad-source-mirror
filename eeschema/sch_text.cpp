@@ -492,7 +492,7 @@ bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
                 m_isDangling = false;
 
                 if( aPath && item.GetType() != PIN_END )
-                    m_connected_items[ *aPath ].insert( static_cast<SCH_ITEM*>( item.GetItem() ) );
+                    AddConnectionTo( *aPath, static_cast<SCH_ITEM*>( item.GetItem() ) );
             }
 
             break;
