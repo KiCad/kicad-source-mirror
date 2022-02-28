@@ -842,8 +842,18 @@ void GERBER_PLOTTER::plotArc( const SHAPE_ARC& aArc, bool aPlotInRegion )
     wxPoint start( aArc.GetP0() );
     wxPoint end( aArc.GetP1() );
     wxPoint center( aArc.GetCenter() );
-    double start_angle = aArc.GetStartAngle();
-    double end_angle = aArc.GetEndAngle();
+    double startAngle = aArc.GetStartAngle();
+    double endAngle = aArc.GetEndAngle();
+
+    if( startAngle > endAngle )
+    {
+        if( endAngle < 0.0 )
+            endAngle = NormalizeAnglePos( endAngle ) ;
+        else
+        {
+            startAngle = NormalizeAnglePos( startAngle ) - 3600.0;
+        }
+    }
 
     if( !aPlotInRegion )
         MoveTo( start);
@@ -855,7 +865,7 @@ void GERBER_PLOTTER::plotArc( const SHAPE_ARC& aArc, bool aPlotInRegion )
 
     fprintf( m_outputFile, "G75*\n" );        // Multiquadrant (360 degrees) mode
 
-    if( start_angle < end_angle )
+    if( startAngle > endAngle )
         fprintf( m_outputFile, "G03*\n" );    // Active circular interpolation, CCW
     else
         fprintf( m_outputFile, "G02*\n" );    // Active circular interpolation, CW
@@ -1010,6 +1020,10 @@ void GERBER_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill, int 
                 const SHAPE_ARC& arc = aPoly.Arc( arcindex );
 
                 plotArc( arc, ii > 0 );
+
+                // skip points on arcs, since we plot the arc itself
+                while( ii+1 < aPoly.PointCount() && arcindex == aPoly.ArcIndex( ii+1 ) )
+                    ii++;
             }
         }
 
@@ -1040,12 +1054,17 @@ void GERBER_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill, int 
                 const SHAPE_ARC& arc = aPoly.Arc( arcindex );
 
                 plotArc( arc, ii > 0 );
+
+                // skip points on arcs, since we plot the arc itself
+                while( ii+1 < aPoly.PointCount() && arcindex == aPoly.ArcIndex( ii+1 ) )
+                    ii++;
             }
         }
 
         // Ensure the thick outline is closed for filled polygons
         // (if not filled, could be only a polyline)
-        if( aFill != FILL_T::NO_FILL && ( aPoly.CPoint( 0 ) != aPoly.CPoint( -1 ) ) )
+        if( ( aPoly.CPoint( 0 ) != aPoly.CPoint( -1 ) )
+            && ( aPoly.IsClosed() || aFill != FILL_T::NO_FILL ) )
             LineTo( wxPoint( aPoly.CPoint( 0 ) ) );
 
         PenFinish();
