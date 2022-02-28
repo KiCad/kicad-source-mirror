@@ -917,10 +917,10 @@ const EDA_RECT LIB_SYMBOL::GetBodyBoundingBox( int aUnit, int aConvert, bool aIn
         {
             const LIB_PIN& pin = static_cast<const LIB_PIN&>( item );
 
-            // Note: the roots of the pins are always inlcuded for symbols that don't have a
+            // Note: the roots of the pins are always included for symbols that don't have a
             // well-defined body.
 
-            if( aIncludePins )
+            if( aIncludePins && pin.IsVisible() )
                 bbox.Merge( pin.GetBoundingBox( false, true ) );
             else
                 bbox.Merge( pin.GetPinRoot() );
