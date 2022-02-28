@@ -135,14 +135,14 @@ public:
      */
     void DoAutoplace( bool aManual )
     {
-        bool            force_wire_spacing = false;
+        bool            forceWireSpacing = false;
         SIDE_AND_NPINS  sideandpins = chooseSideForFields( aManual );
         SIDE            field_side = sideandpins.side;
         VECTOR2I        fbox_pos = fieldBoxPlacement( sideandpins );
         EDA_RECT        field_box( fbox_pos, m_fbox_size );
 
         if( aManual )
-            force_wire_spacing = fitFieldsBetweenWires( &field_box, field_side );
+            forceWireSpacing = fitFieldsBetweenWires( &field_box, field_side );
 
         // Move the fields
         int last_y_coord = field_box.GetTop();
@@ -150,6 +150,9 @@ public:
         for( unsigned field_idx = 0; field_idx < m_fields.size(); ++field_idx )
         {
             SCH_FIELD* field = m_fields[field_idx];
+            
+            if( !field->IsVisible() )
+                continue;
 
             if( m_allow_rejustify )
             {
@@ -166,9 +169,8 @@ public:
                 }
             }
 
-            VECTOR2I pos(
-                    fieldHorizPlacement( field, field_box ),
-                    fieldVertPlacement( field, field_box, &last_y_coord, !force_wire_spacing ) );
+            VECTOR2I pos( fieldHPlacement( field, field_box ),
+                          fieldVPlacement( field, field_box, &last_y_coord, !forceWireSpacing ) );
 
             if( m_align_to_grid )
             {
@@ -193,7 +195,15 @@ protected:
         int max_field_width = 0;
         int total_height = 0;
 
+        std::vector<SCH_FIELD*> visibleFields;
+
         for( SCH_FIELD* field : m_fields )
+        {
+            if( field->IsVisible() )
+                visibleFields.push_back( field );
+        }
+
+        for( SCH_FIELD* field : visibleFields )
         {
             if( m_symbol->GetTransform().y1 )
                 field->SetTextAngle( ANGLE_VERTICAL );
@@ -207,7 +217,7 @@ protected:
             max_field_width = std::max( max_field_width, field_width );
 
             // Remove interline spacing from field_height for last line.
-            if( field == m_fields[ m_fields.size() - 1 ] )
+            if( field == visibleFields.back() )
                 field_height *= 0.62;
 
             if( !aDynamic )
@@ -314,6 +324,7 @@ protected:
             if( item_box.Intersects( aRect ) )
                 filtered.push_back( item );
         }
+
         return filtered;
     }
 
@@ -529,8 +540,8 @@ protected:
     VECTOR2I fieldBoxPlacement( SIDE_AND_NPINS aFieldSideAndPins )
     {
         VECTOR2I fbox_center = m_symbol_bbox.Centre();
-        int     offs_x = ( m_symbol_bbox.GetWidth() + m_fbox_size.GetWidth() ) / 2;
-        int     offs_y = ( m_symbol_bbox.GetHeight() + m_fbox_size.GetHeight() ) / 2;
+        int      offs_x = ( m_symbol_bbox.GetWidth() + m_fbox_size.GetWidth() ) / 2;
+        int      offs_y = ( m_symbol_bbox.GetHeight() + m_fbox_size.GetHeight() ) / 2;
 
         if( aFieldSideAndPins.side.x != 0 )
             offs_x += HPADDING;
@@ -634,7 +645,7 @@ protected:
      *
      * @return Correct field horizontal position
      */
-    int fieldHorizPlacement( SCH_FIELD *aField, const EDA_RECT &aFieldBox )
+    int fieldHPlacement( SCH_FIELD *aField, const EDA_RECT &aFieldBox )
     {
         int field_hjust;
         int field_xcoord;
@@ -669,13 +680,13 @@ protected:
      *
      * @param aField - the field to place.
      * @param aFieldBox - box in which fields will be placed.
-     * @param aPosAccum - pointer to a position accumulator
+     * @param aAccumulatedPosition - pointer to a position accumulator
      * @param aDynamic - use dynamic spacing
      *
      * @return Correct field vertical position
      */
-    int fieldVertPlacement( SCH_FIELD *aField, const EDA_RECT &aFieldBox, int *aPosAccum,
-                            bool aDynamic )
+    int fieldVPlacement( SCH_FIELD *aField, const EDA_RECT &aFieldBox, int *aAccumulatedPosition,
+                         bool aDynamic )
     {
         int field_height;
         int padding;
@@ -696,9 +707,9 @@ protected:
             padding = FIELD_PADDING;
         }
 
-        int placement = *aPosAccum + padding / 2 + field_height / 2;
+        int placement = *aAccumulatedPosition + padding / 2 + field_height / 2;
 
-        *aPosAccum += padding + field_height;
+        *aAccumulatedPosition += padding + field_height;
 
         return placement;
     }
