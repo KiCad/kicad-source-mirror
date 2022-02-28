@@ -26,7 +26,7 @@
 #define SCH_ITEM_H
 
 #include <unordered_map>
-#include <unordered_set>
+#include <set>
 
 #include <eda_item.h>
 #include <plotters/plotter.h>
@@ -130,7 +130,7 @@ private:
 };
 
 
-typedef std::unordered_set<SCH_ITEM*> SCH_ITEM_SET;
+typedef std::vector<SCH_ITEM*> SCH_ITEM_SET;
 
 
 /**

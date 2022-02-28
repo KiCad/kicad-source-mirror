@@ -183,7 +183,11 @@ SCH_ITEM_SET& SCH_ITEM::ConnectedItems( const SCH_SHEET_PATH& aSheet )
 
 void SCH_ITEM::AddConnectionTo( const SCH_SHEET_PATH& aSheet, SCH_ITEM* aItem )
 {
-    m_connected_items[ aSheet ].insert( aItem );
+    // The vector elements are small, so reserve 1k at a time to prevent re-allocations
+    if( m_connected_items[ aSheet ].capacity() == 0 )
+        m_connected_items[ aSheet ].reserve( 1024 );
+
+    m_connected_items[ aSheet ].emplace_back( aItem );
 }
 
 

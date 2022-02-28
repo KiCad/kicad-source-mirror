@@ -637,8 +637,8 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                         else
                             bus_entry->m_connected_bus_items[1] = busLine;
 
-                        bus_entry->ConnectedItems( aSheet ).insert( busLine );
-                        busLine->ConnectedItems( aSheet ).insert( bus_entry );
+                        bus_entry->AddConnectionTo( aSheet, busLine );
+                        busLine->AddConnectionTo( aSheet, bus_entry );
                     }
                 }
             }
@@ -682,8 +682,8 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                     test_item->ConnectionPropagatesTo( connected_item ) &&
                     bus_connection_ok )
                 {
-                    connected_item->ConnectedItems( aSheet ).insert( test_item );
-                    test_item->ConnectedItems( aSheet ).insert( connected_item );
+                    connected_item->AddConnectionTo( aSheet, test_item );
+                    test_item->AddConnectionTo( aSheet, connected_item );
                 }
             }
 
