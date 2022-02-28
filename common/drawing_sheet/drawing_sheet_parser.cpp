@@ -33,6 +33,7 @@
 #include <drawing_sheet/ds_painter.h>
 #include <drawing_sheet/drawing_sheet_lexer.h>
 #include <drawing_sheet/ds_file_versions.h>
+#include <font/font.h>
 
 using namespace DRAWINGSHEET_T;
 
@@ -696,11 +697,20 @@ void DRAWING_SHEET_PARSER::parseText( DS_DATA_ITEM_TEXT* aItem )
             break;
 
         case T_font:
+        {
+            wxString faceName;
+
             for( token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
             {
                 switch( token )
                 {
                 case T_LEFT:
+                    break;
+
+                case T_face:
+                    NeedSYMBOL();
+                    faceName = FromUTF8();
+                    NeedRIGHT();
                     break;
 
                 case T_bold:
@@ -727,7 +737,12 @@ void DRAWING_SHEET_PARSER::parseText( DS_DATA_ITEM_TEXT* aItem )
                     break;
                 }
             }
+
+            if( !faceName.IsEmpty() )
+                aItem->m_Font = KIFONT::FONT::GetFont( faceName, aItem->m_Bold, aItem->m_Italic );
+
             break;
+        }
 
         case T_justify:
             for( token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )

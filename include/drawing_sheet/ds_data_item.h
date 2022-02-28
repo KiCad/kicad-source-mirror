@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -339,6 +339,7 @@ public:
     GR_TEXT_V_ALIGN_T   m_Vjustify;
     bool                m_Italic;
     bool                m_Bold;
+    KIFONT::FONT*       m_Font;
     VECTOR2D            m_TextSize;
     VECTOR2D            m_BoundingBoxSize;      // When not null, this is the max size of the
                                                 // full text.  The text size will be modified

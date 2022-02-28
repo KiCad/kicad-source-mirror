@@ -6,6 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -45,34 +46,34 @@ class PROPERTIES_FRAME : public PANEL_PROPERTIES_BASE
     PL_EDITOR_FRAME*  m_parent;
     SCINTILLA_TRICKS* m_scintillaTricks;
 
-    UNIT_BINDER m_textCtrlTextSizeXBinder;
-    UNIT_BINDER m_textCtrlTextSizeYBinder;
+    UNIT_BINDER m_textSizeX;
+    UNIT_BINDER m_textSizeY;
 
-    UNIT_BINDER m_textCtrlConstraintXBinder;
-    UNIT_BINDER m_textCtrlConstraintYBinder;
+    UNIT_BINDER m_constraintX;
+    UNIT_BINDER m_constraintY;
 
-    UNIT_BINDER m_textCtrlPosXBinder;
-    UNIT_BINDER m_textCtrlPosYBinder;
+    UNIT_BINDER m_textPosX;
+    UNIT_BINDER m_textPosY;
 
-    UNIT_BINDER m_textCtrlEndXBinder;
-    UNIT_BINDER m_textCtrlEndYBinder;
+    UNIT_BINDER m_textEndX;
+    UNIT_BINDER m_textEndY;
 
-    UNIT_BINDER m_textCtrlStepXBinder;
-    UNIT_BINDER m_textCtrlStepYBinder;
+    UNIT_BINDER m_textStepX;
+    UNIT_BINDER m_textStepY;
 
-    UNIT_BINDER m_textCtrlDefaultTextSizeXBinder;
-    UNIT_BINDER m_textCtrlDefaultTextSizeYBinder;
+    UNIT_BINDER m_defaultTextSizeX;
+    UNIT_BINDER m_defaultTextSizeY;
 
-    UNIT_BINDER m_textCtrlDefaultLineWidthBinder;
-    UNIT_BINDER m_textCtrlDefaultTextThicknessBinder;
+    UNIT_BINDER m_defaultLineWidth;
+    UNIT_BINDER m_defaultTextThickness;
 
-    UNIT_BINDER m_textCtrlLeftMarginBinder;
-    UNIT_BINDER m_textCtrlRightMarginBinder;
+    UNIT_BINDER m_textLeftMargin;
+    UNIT_BINDER m_textRightMargin;
 
-    UNIT_BINDER m_textCtrlTopMarginBinder;
-    UNIT_BINDER m_textCtrlBottomMarginBinder;
+    UNIT_BINDER m_textTopMargin;
+    UNIT_BINDER m_textBottomMargin;
 
-    UNIT_BINDER m_textCtrlThicknessBinder;
+    UNIT_BINDER m_lineWidth;
 
 public:
     PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent );
@@ -84,6 +85,8 @@ public:
     void OnSetDefaultValues( wxCommandEvent& event ) override;
     void onScintillaCharAdded( wxStyledTextEvent &aEvent );
 	void onHelp( wxCommandEvent& aEvent ) override;
+    void onHAlignButton( wxCommandEvent &aEvent );
+    void onVAlignButton( wxCommandEvent &aEvent );
 
     // Data transfer from general properties to widgets
     void CopyPrmsFromGeneralToPanel();

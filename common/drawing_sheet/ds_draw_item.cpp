@@ -184,8 +184,7 @@ bool DS_DRAW_ITEM_TEXT::HitTest( const EDA_RECT& aRect, bool aContains, int aAcc
 
 wxString DS_DRAW_ITEM_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Text '%s'" ),
-                             GetShownText() );
+    return wxString::Format( _( "Text '%s'" ), GetShownText() );
 }
 
 

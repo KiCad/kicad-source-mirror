@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
@@ -33,6 +33,7 @@
 #include <drawing_sheet/ds_data_model.h>
 #include <drawing_sheet/drawing_sheet_lexer.h>
 #include <drawing_sheet/ds_file_versions.h>
+#include <font/font.h>
 
 #include <wx/msgdlg.h>
 
@@ -251,6 +252,9 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const
     if( write_thickness || write_size || aItem->m_Bold || aItem->m_Italic )
     {
         m_out->Print( 0, " (font" );
+
+        if( aItem->m_Font && !aItem->m_Font->Name().IsEmpty() )
+            m_out->Print( 0, " (face \"%s\")", aItem->m_Font->NameAsToken() );
 
         if( write_thickness )
             m_out->Print( 0, " (linewidth %s)", double2Str( aItem->m_LineWidth ).c_str() );

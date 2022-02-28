@@ -302,14 +302,15 @@ class DS_DRAW_ITEM_TEXT : public DS_DRAW_ITEM_BASE, public EDA_TEXT
 {
 public:
     DS_DRAW_ITEM_TEXT( DS_DATA_ITEM* aPeer, int aIndex, const wxString& aText, const VECTOR2I& aPos,
-                       const VECTOR2I& aSize, int aPenWidth, bool aItalic = false,
-                       bool aBold = false ) :
+                       const VECTOR2I& aSize, int aPenWidth, KIFONT::FONT* aFont,
+                       bool aItalic = false, bool aBold = false ) :
             DS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_TEXT_T),
             EDA_TEXT( aText )
     {
         SetTextPos( aPos );
         SetTextSize( (wxSize) aSize );
         SetTextThickness( aPenWidth );
+        SetFont( aFont );
         SetItalic( aItalic );
         SetBold( aBold );
     }

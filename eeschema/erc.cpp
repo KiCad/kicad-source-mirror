@@ -277,11 +277,10 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
             {
                 if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
                 {
-                    std::shared_ptr<ERC_ITEM> ercItem =
-                            ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
-                    ercItem->SetErrorMessage( _( "Unresolved text variable in drawing sheet." ) );
+                    std::shared_ptr<ERC_ITEM> erc = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
+                    erc->SetErrorMessage( _( "Unresolved text variable in drawing sheet." ) );
 
-                    SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
+                    SCH_MARKER* marker = new SCH_MARKER( erc, text->GetPosition() );
                     screen->Append( marker );
                 }
             }
