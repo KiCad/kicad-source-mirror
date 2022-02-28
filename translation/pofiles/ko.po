@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 11:59-0800\n"
-"PO-Revision-Date: 2022-02-14 17:18+0000\n"
+"PO-Revision-Date: 2022-03-01 09:58+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v6/ko/>\n"
 "Language: ko\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.11.1-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -4557,12 +4557,10 @@ msgid "Alias: "
 msgstr "별칭: "
 
 #: common/filename_resolver.cpp:468
-#, fuzzy
 msgid "This path:"
 msgstr "이 경로:"
 
 #: common/filename_resolver.cpp:471
-#, fuzzy
 msgid "Existing path:"
 msgstr "기존 경로:"
 
@@ -12091,15 +12089,13 @@ msgstr "셀이 비어 있으면 테이블에서 제거할 수 없는 모든 행�
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:543
-#, fuzzy
 msgid "Remove Invalid Cells"
-msgstr "항목 제거"
+msgstr "잘못된 셀 제거"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
-#, fuzzy
 msgid "Cancel Table Update"
-msgstr "클리어런스 홀 직경:"
+msgstr "테이블 업데이트 취소"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
@@ -13473,9 +13469,8 @@ msgid "Cannot open file '%s'."
 msgstr "'%s' 파일을 열 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:314
-#, fuzzy
 msgid "Storage file not fully parsed "
-msgstr "저장소 파일이 완전히 파싱되지 않았습니다 (%d바이트 남음)."
+msgstr "저장소 파일이 완전히 구문 분석되지 않음 "
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:476
 msgid "Compile mask not currently supported."
@@ -17556,9 +17551,8 @@ msgstr ""
 "따라서, 일부 개체의 크기가 정의되지 않습니다"
 
 #: gerbview/rs274d.cpp:414
-#, fuzzy
 msgid "Invalid Code Number"
-msgstr "잘못된 핀 번호"
+msgstr "잘못된 코드 번호"
 
 #: gerbview/rs274d.cpp:622
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
@@ -20500,7 +20494,6 @@ msgstr ""
 "변경 사항을 취소하고 종료 하시겠습니까?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -20527,8 +20520,8 @@ msgid ""
 msgstr ""
 "최대전류를 지정하면, 배선의 폭은 이에 맞추어 계산됩니다.\n"
 "\n"
-"배선의 폭 중 하나를 지정하면, 이를 처리할 수 있는 최대 전류가 계산됩니다. 이"
-"후, 다른 배선에서 최대 전류를 처리하기 위한 폭 또한 계산됩니다.\n"
+"배선의 폭 중 하나를 지정하면, 이를 처리할 수 있는 최대 전류가 계산됩니다. "
+"이후, 다른 배선에서 최대 전류를 처리하기 위한 폭 또한 계산됩니다.\n"
 "\n"
 "제어 값은 볼드체로 표시됩니다.\n"
 "\n"
@@ -20536,14 +20529,14 @@ msgstr ""
 "400mil (10mm) 까지의 범위에서 유효합니다.\n"
 "\n"
 "IPC 2221에서의 수식은\n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>  \n"
-"이때:  \n"
-"__I__ = 최대 전류 (A)  \n"
-"__&Delta;T__ = 주위 환경으로부터의 온도 상승 &deg;C  \n"
-"__W__ = 폭 (mils)  \n"
-"__H__ = 두께 (mils)  \n"
-"__K__ = 내부 배선에 대해서 0.024, 외부 배선에 대해서 0.048  \n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
+"H)<sup>0.725</sup>___</center>\n"
+"이때:<br>\n"
+"___I___ = 최대 전류 (A)<br>\n"
+"___&Delta;T___ = 주위 환경으로부터의 온도 상승 &deg;C<br>\n"
+"___W___ = 폭 (mils)<br>\n"
+"___H___ = 두께 (mils)<br>\n"
+"___K___ 내부 배선은 0.024, 외부 배선은 0.048\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -21684,7 +21677,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:596
 msgid "Selected options resulted in errors! Change them and try again."
-msgstr ""
+msgstr "선택한 옵션에 오류가 발생했습니다! 변경하고 다시 시도하십시오."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:603
 #, c-format
@@ -21712,9 +21705,9 @@ msgid "Reannotate anyway?"
 msgstr "다시 주석을 달까요?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "중복된 항목 %s%s\n"
+msgstr "중복된 항목 %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
 msgid "Aborted: too many errors"
@@ -25118,9 +25111,8 @@ msgid "Net Inspector"
 msgstr "네트 검사기"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:83
-#, fuzzy
 msgid "Load and Test Netlist"
-msgstr "네트리스트 읽기"
+msgstr "네트리스트 로드 및 테스트"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:125
 msgid "Select Netlist"
@@ -25218,9 +25210,9 @@ msgid "Line width may not be 0 for unfilled shapes."
 msgstr "채워지지 않은 도형의 경우, 선의 굵기는 0이 될 수 없습니다."
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Corner %d"
-msgstr "모서리 반경:"
+msgstr "모서리 %d"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:334
 msgid "Polygon must have at least 3 corners"
@@ -25314,9 +25306,8 @@ msgid "corners count %d"
 msgstr "모서리 수 %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:739
-#, fuzzy
 msgid "Unknown primitive"
-msgstr "기본 요소 변환"
+msgstr "근원을 알 수 없음"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:919
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
@@ -26592,9 +26583,9 @@ msgid "<none selected>"
 msgstr "<선택되지 않음>"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Reference item: %s"
-msgstr "참조 '%s'"
+msgstr "참조 항목 : %s"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -28420,7 +28411,6 @@ msgid "Check rule syntax"
 msgstr "규칙 문법을 체크"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -28629,20 +28619,20 @@ msgid ""
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 msgstr ""
-"### 상위 레벨 규정\n"
+"### 최상위 조항\n"
 "\n"
-"    (version <숫자>)\n"
+"    (version <번호>)\n"
 "\n"
 "    (rule <규칙_이름> <규칙_절> ...)\n"
 "\n"
 "\n"
 "<br><br>\n"
 "\n"
-"### 규칙 절\n"
+"### 규칙 조항\n"
 "\n"
 "    (constraint <제약_형식> ...)\n"
 "\n"
-"    (condition \"<표현>\")\n"
+"    (condition \"<표현식>\")\n"
 "\n"
 "    (layer \"<레이어_이름>\")\n"
 "\n"
@@ -28686,7 +28676,7 @@ msgstr ""
 "\n"
 "### 예시\n"
 "\n"
-"    (version 1)\n"
+"    (버전 1)\n"
 "\n"
 "    (rule HV\n"
 "       (constraint clearance (min 1.5mm))\n"
@@ -28700,7 +28690,7 @@ msgstr ""
 "\n"
 "\n"
 "    (rule HV_HV\n"
-"       # wider clearance between HV tracks\n"
+"       # HV 트랙 사이의 더 넓은 간격\n"
 "       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
 "       (condition \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
 "\n"
@@ -28712,71 +28702,67 @@ msgstr ""
 "\n"
 "### 참고\n"
 "\n"
-"Version 절이 첫 번째 절이 되어야 합니다.  이는 파일의 문법 버전을 알려주"
-"며, \n"
-"훗날 규칙 파서가 자동 업데이트를 진행하는 데 도움을 줍니다.  이는\n"
-"\"1\" 로 설정되어야 합니다.\n"
+"버전 절이 첫 번째 절이 되어야 합니다.  이는 파일의 문법 버전을 알려주며, \n"
+"향후 규칙 구문 분석기가 자동 업데이트를 진행하는 데 도움을 줍니다.\n"
+"이는 \"1\" 로 설정되어야 합니다.\n"
 "\n"
-"규칙은 특이도에 따라 정렬되어야 합니다. 이후의 규칙이\n"
-"이전의 규칙보다 우선하며, 적절한 규칙을 찾았을 경우엔\n"
-"더이상뒤의 규칙을 체크하지 않습니다.\n"
+"규칙은 구체성에 따라 정렬되어야 하고,\n"
+"이후의 규칙은 이전 규칙보다 우선하며,\n"
+"일치하는 규칙이 발견되면 더 이상의 규칙은 확인하지 않습니다.\n"
 "\n"
-"Ctrl + /을 눌러 주석 처리 또는 해제를 할 수 있습니다.\n"
+"Ctrl+/ 을 사용하여 줄에 주석을 달거나 주석을 해제합니다.\n"
 "<br><br><br>\n"
 "\n"
 "### 표현식 함수\n"
 "\n"
-"모든 함수 매개변수는 간단한 와일드카드를 지원합니다 (`*` and `?`).\n"
+"모든 함수 매개변수는 간단한 와일드카드를 지원한다 (`*`와 `?`).\n"
 "<br><br>\n"
 "\n"
 "    A.insideCourtyard('<footprint_refdes>')\n"
-"`A`의 일부가 제시된 풋프린트의 주요 코트야드 범위 내에 있을 경우 참이 됩니"
-"다.\n"
+"`A`의 일부가 지정된 풋프린트의 주요 코트야드 범위 내에 있을 경우 참이 된다.\n"
 "<br><br>\n"
 "\n"
 "    A.insideFrontCourtyard('<footprint_refdes>')\n"
-"`A`의 일부가 제시된 풋프린트의 전면 코트야드 범위 내에 있을 경우 참이 됩니"
-"다.\n"
+"`A`의 일부가 지정된 풋프린트의 전면 코트야드 범위 내에 있을 경우 참이 된다.\n"
 "<br><br>\n"
 "\n"
 "    A.insideBackCourtyard('<footprint_refdes>')\n"
-"`A`의 일부가 제시된 풋프린트의 후면 코트야드 범위 내에 있을 경우 참이 됩니"
-"다.\n"
+"`A`의 일부가 지정된 풋프린트의 후면 코트야드 범위 내에 있을 경우 참이 된다.\n"
 "<br><br>\n"
 "\n"
 "    A.insideArea('<zone_name>')\n"
-"`A`의 일부가 제시된 영역의 테두리 내에 있을 경우 참이 됩니다.\n"
+"`A`의 일부가 제시된 영역의 테두리 내에 있을 경우 참이 된다.\n"
 "<br><br>\n"
 "\n"
 "    A.isPlated()\n"
-"`A`가 도금된 홀을 포함할 때 참이 됩니다.\n"
+"`A`가 도금된 홀을 포함할 때 참이 된다.\n"
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<net_name>')\n"
-"`A`가 제시된 차동 쌍의 일부에 포함되는 네트를 가지고 있을 경우 참이 됩니다.\n"
-"`<net_name>` 는 차동 쌍의 기본 이름입니다.  예를 들면,`inDiffPair('CLK')`\n"
-"는 `CLK_P` 와 `CLK_N` 네트 안의 항목들과 대응됩니다.\n"
+"`A`가 제시된 차동 쌍의 일부에 포함되는 네트를 가지고 있을 경우 참이 된다.\n"
+"`<net_name>`은 차동 쌍의 기본 이름이다.  예를 들어, `inDiffPair('/CLK')`은\n"
+"`/CLK_P` 와 `/CLK_N` 네트 안의 항목들과 대응됩니다.\n"
 "<br><br>\n"
 "\n"
 "    AB.isCoupledDiffPair()\n"
-"`A`와 `B`같은 차동 쌍의 멤버일 경우 참이 됩니다.\n"
+"`A`와 `B`같은 차동 쌍의 멤버일 경우 참이 된다.\n"
 "<br><br>\n"
 "\n"
 "    A.memberOf('<group_name>')\n"
-"`A`가 제시된 그룹의 멤버일 경우 참이 됩니다. 중첩된 멤버십을 포함합니다.\n"
+"`A`가 제시된 그룹의 멤버일 경우 참이 된다. 중첩된 구성원을 포함합니다.\n"
 "<br><br>\n"
 "\n"
 "    A.existsOnLayer('<layer_name>')\n"
-"`A`가 제시된 레이어에 존재할 경우 참이 됩니다.  레이어의 이름은 \n"
-"기판 설정 > 기판 편집기 레이어에 할당된 이름이거나,\n"
-"표준 명칭이 될 수 있습니다 (예시: `F.Cu`).\n"
+"`A`가 제시된 레이어에 존재할 경우 참이 된다. 레이어 이름은\n"
+"Board Setup > Board Editor Layers에서 할당된 이름 또는\n"
+"정식 이름이 될 수 있다(예: `F.Cu`).\n"
 "\n"
-"참고: 규칙이 해당 레이어에 적용되는지 여부와 관계 없이,\n"
+"주의: 규칙이 해당 레이어에 적용되는지 여부와 관계 없이,\n"
 "`A`가 제시된 레이어에 있을 경우 참을 반환합니다.\n"
-"후자의 경우 `(layer \"layer_name\")` 규칙 절을 사용합니다.\n"
+"후자의 경우 규칙에서`(layer \"layer_name\")` 절을 사용합니다.\n"
 "<br><br><br>\n"
 "\n"
-"### 더 많은 예시들\n"
+"### 더 많은 예시\n"
 "\n"
 "    (rule \"copper keepout\"\n"
 "       (constraint disallow track via zone)\n"
@@ -28789,26 +28775,26 @@ msgstr ""
 "       (condition \"A.insideCourtyard('U3')\"))\n"
 "\n"
 "\n"
-"    # prevent silk over tented vias\n"
+"    # 천막 비아에 실크 방지\n"
 "    (rule silk_over_via\n"
 "       (constraint silk_clearance (min 0.2mm))\n"
 "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
 "\n"
 "\n"
-"    (rule \"Distance between Vias of Different Nets\"  \n"
+"    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
 "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
 "\n"
-"    (rule \"Clearance between Pads of Different Nets\"  \n"
+"    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
 "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
 "\n"
 "\n"
-"    (rule \"Via Hole to Track Clearance\"  \n"
+"    (rule \"Via Hole to Track Clearance\"\n"
 "        (constraint hole_clearance (min 0.254mm))\n"
-"        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
-"    \n"
-"    (rule \"Pad to Track Clearance\"  \n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
+"\n"
+"    (rule \"Pad to Track Clearance\"\n"
 "        (constraint clearance (min 0.2mm))\n"
 "        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
 "\n"
@@ -28818,21 +28804,21 @@ msgstr ""
 "        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
 "\n"
 "\n"
-"    (rule \"Max Drill Hole Size Mechanical\"  \n"
-"        (constraint hole (max 6.3mm))\n"
+"    (rule \"Max Drill Hole Size Mechanical\"\n"
+"        (constraint hole_size (max 6.3mm))\n"
 "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
-"    \n"
-"    (rule \"Max Drill Hole Size PTH\"  \n"
-"        (constraint hole (max 6.35mm))\n"
+"\n"
+"    (rule \"Max Drill Hole Size PTH\"\n"
+"        (constraint hole_size (max 6.35mm))\n"
 "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
 "\n"
-"    # Specify an optimal gap for a particular diff-pair\n"
+"    # 특정 diff 쌍에 대한 최적의 간격을 지정함\n"
 "    (rule \"dp clock gap\"\n"
 "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
-"        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
+"        (condition \"A.inDiffPair('/CLK')\"))\n"
 "\n"
-"    # Specify a larger clearance around any diff-pair\n"
+"    # diff 쌍 주변에 더 큰 간격을 지정함\n"
 "    (rule \"dp clearance\"\n"
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
@@ -29001,24 +28987,20 @@ msgid "undefined"
 msgstr "정의되지 않음"
 
 #: pcbnew/drc/drc_engine.cpp:890
-#, fuzzy
 msgid "track width"
 msgstr "배선 두께"
 
 #: pcbnew/drc/drc_engine.cpp:891
-#, fuzzy
 msgid "annular width"
 msgstr "환형 폭"
 
 #: pcbnew/drc/drc_engine.cpp:892
-#, fuzzy
 msgid "via diameter"
 msgstr "비아 지름"
 
 #: pcbnew/drc/drc_engine.cpp:893
-#, fuzzy
 msgid "constraint"
-msgstr "색상 인쇄"
+msgstr "강제"
 
 #: pcbnew/drc/drc_engine.cpp:896
 #, c-format
@@ -31463,9 +31445,8 @@ msgid "removed annular ring"
 msgstr "환형 고리 제거됨"
 
 #: pcbnew/pcb_track.cpp:660
-#, fuzzy
 msgid "Track (arc)"
-msgstr "트랙"
+msgstr "배선(호)"
 
 #: pcbnew/pcb_track.cpp:675
 msgid "Segment Length"
@@ -31615,14 +31596,12 @@ msgid "File not found: '%s'."
 msgstr "파일을 찾지 못했습니다: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:710
-#, fuzzy
 msgid "Loading board data..."
-msgstr "기판 영역 불러오는 중..."
+msgstr "보드 데이터 로드 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:888
-#, fuzzy
 msgid "Loading netclasses..."
-msgstr "네트 불러오는 중..."
+msgstr "네트클래스 로드 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:910
 #, c-format
@@ -31630,14 +31609,12 @@ msgid "Duplicate netclass name '%s'."
 msgstr "중복된 네트클래스 이름 '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:927
-#, fuzzy
 msgid "Loading components..."
-msgstr "네트 불러오는 중..."
+msgstr "컴포넌트 로드 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:974
-#, fuzzy
 msgid "Loading component 3D models..."
-msgstr "3D 모델을 불러오는 중입니다..."
+msgstr "컴포넌트 3D 모델을 불러오는 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1051
 #: pcbnew/plugins/altium/altium_pcb.cpp:1137
@@ -31653,9 +31630,8 @@ msgstr ""
 "이어 Eco1_User로 이동되었습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1330
-#, fuzzy
 msgid "Loading dimension drawings..."
-msgstr "유니코드 문자열 로드 중..."
+msgstr "치수 도면 로드 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1351
 #: pcbnew/plugins/altium/altium_pcb.cpp:1358
@@ -31992,9 +31968,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "CADSTAR 패드 정의 '%s' 불러오기 오류가 발생하였습니다: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
-msgstr "'%s'에 대한 PDF 뷰어를 찾을 수 없음."
+msgstr "패드 인덱스 '%d'를 풋프린트 '%s'에서 찾을 수 없습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1291
 #, c-format
@@ -33609,28 +33585,27 @@ msgstr "잠금 해제"
 
 #: pcbnew/tools/board_editor_control.cpp:1393
 msgid "Zones have insufficient overlap for merging."
-msgstr ""
+msgstr "영역이 병합하기에 충분하지 않습니다."
 
 #: pcbnew/tools/board_editor_control.cpp:1439
 msgid "Some zone netcodes did not match and were not merged."
-msgstr ""
+msgstr "일부 영역 네트코드가 일치하지 않아 병합되지 않았습니다."
 
 #: pcbnew/tools/board_editor_control.cpp:1445
 msgid "Some zone priorities did not match and were not merged."
-msgstr ""
+msgstr "일부 영역 우선 순위가 일치하지 않아 병합되지 않았습니다."
 
 #: pcbnew/tools/board_editor_control.cpp:1451
 msgid "Some zones were rule areas and were not merged."
-msgstr ""
+msgstr "일부 영역은 규칙 영역이었고 병합되지 않았습니다."
 
 #: pcbnew/tools/board_editor_control.cpp:1457
-#, fuzzy
 msgid "Some zone layer sets did not match and were not merged."
-msgstr "규칙 레이어 '%s' 일치하지 않음; 규칙이 무시되었습니다."
+msgstr "일부 구역 레이어 세트가 일치하지 않아 병합되지 않았습니다."
 
 #: pcbnew/tools/board_editor_control.cpp:1463
 msgid "Some zones did not intersect and were not merged."
-msgstr ""
+msgstr "일부 영역은 교차하지 않고 병합되지 않았습니다."
 
 #: pcbnew/tools/board_editor_control.cpp:1529
 msgid "Duplicate zone"
