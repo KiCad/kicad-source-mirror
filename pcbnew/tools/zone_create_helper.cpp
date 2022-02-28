@@ -206,13 +206,9 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
 
             aZone->HatchBorder();
 
-            // TODO Refill zones when KiCad supports auto re-fill
-
             commit.Add( aZone.get() );
-
-            std::lock_guard<KISPINLOCK> lock( board->GetConnectivity()->GetLock() );
-
             commit.Push( _( "Add a zone" ) );
+
             m_tool.GetManager()->RunAction( PCB_ACTIONS::selectItem, true, aZone.release() );
             break;
         }
