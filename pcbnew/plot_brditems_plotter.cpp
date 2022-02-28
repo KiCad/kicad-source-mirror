@@ -707,7 +707,7 @@ void BRDITEMS_PLOTTER::PlotFootprintShape( const FP_SHAPE* aShape )
                     }
                 }
 
-                if( sketch || thickness > 0 )
+                if( sketch )
                 {
                     for( size_t i = 1; i < cornerList.size(); i++ )
                     {
@@ -719,8 +719,7 @@ void BRDITEMS_PLOTTER::PlotFootprintShape( const FP_SHAPE* aShape )
                                              GetPlotMode(), &gbr_metadata );
 
                 }
-
-                if( !sketch && aShape->IsFilled() )
+                else
                 {
                     // This must be simplified and fractured to prevent overlapping polygons
                     // from generating invalid Gerber files
@@ -966,7 +965,7 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
         case SHAPE_T::POLY:
             if( aShape->IsPolyShapeValid() )
             {
-                if( sketch || thickness > 0 )
+                if( sketch )
                 {
                     for( auto it = aShape->GetPolyShape().CIterateSegments( 0 ); it; it++ )
                     {
@@ -975,8 +974,7 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
                                                  &gbr_metadata );
                     }
                 }
-
-                if( !sketch && aShape->IsFilled() )
+                else
                 {
                     m_plotter->SetCurrentLineWidth( thickness, &gbr_metadata );
 
@@ -985,13 +983,18 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
                     // ( for the future or to show a non expected shape )
                     // This must be simplified and fractured to prevent overlapping polygons
                     // from generating invalid Gerber files
-                    auto tmpPoly = SHAPE_POLY_SET( aShape->GetPolyShape() );
+                    SHAPE_POLY_SET tmpPoly = SHAPE_POLY_SET( aShape->GetPolyShape() );
                     tmpPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+                    FILL_T fill = aShape->IsFilled() ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL;
 
                     for( int jj = 0; jj < tmpPoly.OutlineCount(); ++jj )
                     {
                         SHAPE_LINE_CHAIN& poly = tmpPoly.Outline( jj );
-                        m_plotter->PlotPoly( poly, FILL_T::FILLED_SHAPE, thickness, &gbr_metadata );
+
+                        // Ensure the polygon is closed:
+                        poly.SetClosed( true );
+
+                        m_plotter->PlotPoly( poly, fill, thickness, &gbr_metadata );
                     }
                 }
             }
