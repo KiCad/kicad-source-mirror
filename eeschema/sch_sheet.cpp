@@ -248,7 +248,9 @@ bool SCH_SHEET::ResolveTextVar( wxString* token, int aDepth ) const
 
     PROJECT *project = &Schematic()->Prj();
 
-    if( m_screen->GetTitleBlock().TextVarResolver( token, project ) )
+    // We cannot resolve text variables initially on load as we need to first load the screen and
+    // then parse the hierarchy.  So skip the resolution if the screen isn't set yet
+    if( m_screen && m_screen->GetTitleBlock().TextVarResolver( token, project ) )
     {
         return true;
     }
