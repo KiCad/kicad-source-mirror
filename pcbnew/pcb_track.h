@@ -233,11 +233,13 @@ public:
 protected:
     void GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) const;
 
+public:
+    mutable VECTOR2I m_LastNetnamePosition;
 
+protected:
     int      m_Width; ///< Thickness of track, or via diameter
     VECTOR2I m_Start; ///< Line start point
     VECTOR2I m_End;   ///< Line end point
-
 };
 
 

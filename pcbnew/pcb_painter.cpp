@@ -572,29 +572,39 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
             return;
 
         // When drawing netnames, clip the track to the viewport
-        BOX2D    viewport;
-        VECTOR2D screenSize = m_gal->GetScreenPixelSize();
+        BOX2D             viewport;
+        VECTOR2D          screenSize = m_gal->GetScreenPixelSize();
         const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
 
         viewport.SetOrigin( VECTOR2D( matrix * VECTOR2D( 0, 0 ) ) );
         viewport.SetEnd( VECTOR2D( matrix * screenSize ) );
 
         EDA_RECT clipBox( viewport.Normalize() );
+        SEG      visibleSeg( start, end );
 
-        ClipLine( &clipBox, start.x, start.y, end.x, end.y );
-
-        VECTOR2I line = ( end - start );
-        double length = line.EuclideanNorm();
+        ClipLine( &clipBox, visibleSeg.A.x, visibleSeg.A.y, visibleSeg.B.x, visibleSeg.B.y );
 
         // Check if the track is long enough to have a netname displayed
-        if( length < 6 * width )
+        if( visibleSeg.Length() < 6 * width )
             return;
 
         const     wxString& netName = UnescapeString( aTrack->GetShortNetname() );
         double    textSize = width;
         double    penWidth = width / 12.0;
-        VECTOR2D  textPosition = start + line / 2.0;     // center of the track
+        VECTOR2D  textPosition = ( visibleSeg.A + visibleSeg.B ) / 2.0;  // center of the track
         EDA_ANGLE textOrientation;
+
+        // If the last position is still on the track, and it's some reasonable distance inside
+        // the viewport then don't move the netname; just use the last position.
+        if( visibleSeg.Distance( aTrack->m_LastNetnamePosition ) < penWidth
+                && clipBox.Inflate( -width * 6 ).Contains( aTrack->m_LastNetnamePosition ) )
+        {
+            textPosition = aTrack->m_LastNetnamePosition;
+        }
+        else
+        {
+            aTrack->m_LastNetnamePosition = textPosition;
+        }
 
         if( end.y == start.y ) // horizontal
         {
@@ -608,7 +618,8 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
         }
         else
         {
-            textOrientation = EDA_ANGLE( -atan( line.y / line.x ), RADIANS_T );
+            textOrientation = EDA_ANGLE( visibleSeg.B - visibleSeg.A ) + ANGLE_90;
+            textOrientation.Normalize90();
             textPosition.x += penWidth / 1.4;
             textPosition.y += penWidth / 1.4;
         }

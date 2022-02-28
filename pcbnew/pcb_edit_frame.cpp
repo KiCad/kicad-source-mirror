@@ -322,7 +322,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                 if( GetCanvas()->GetView()->GetViewport() != m_lastViewport )
                 {
                     m_lastViewport = GetCanvas()->GetView()->GetViewport();
-                    m_redrawNetnamesTimer.StartOnce( 100 );
+                    m_redrawNetnamesTimer.StartOnce( 200 );
                 }
 
                 // Do not forget to pass the Idle event to other clients:
