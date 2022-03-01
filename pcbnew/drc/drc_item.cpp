@@ -77,12 +77,12 @@ DRC_ITEM DRC_ITEM::edgeClearance( DRCE_EDGE_CLEARANCE,
         wxT( "copper_edge_clearance" ) );
 
 DRC_ITEM DRC_ITEM::zonesIntersect( DRCE_ZONES_INTERSECT,
-        _( "Copper areas intersect" ),
+        _( "Copper zones intersect" ),
         wxT( "zones_intersect" ) );
 
-DRC_ITEM DRC_ITEM::zoneHasEmptyNet( DRCE_ZONE_HAS_EMPTY_NET,
-        _( "Copper zone net has no pads" ),
-        wxT( "zone_has_empty_net" ) );
+DRC_ITEM DRC_ITEM::isolatedCopper( DRCE_ISOLATED_COPPER,
+        _( "Isolated copper fill" ),
+        wxT( "isolated_copper" ) );
 
 DRC_ITEM DRC_ITEM::starvedThermal( DRCE_STARVED_THERMAL,
         _( "Thermal relief connection to zone incomplete" ),
@@ -292,7 +292,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::heading_misc,
             DRC_ITEM::itemsNotAllowed,
             DRC_ITEM::zonesIntersect,
-            DRC_ITEM::zoneHasEmptyNet,
+            DRC_ITEM::isolatedCopper,
             DRC_ITEM::padstack,
             DRC_ITEM::pthInsideCourtyard,
             DRC_ITEM::npthInsideCourtyard,
@@ -318,7 +318,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_TRACKS_CROSSING:          return std::make_shared<DRC_ITEM>( tracksCrossing );
     case DRCE_EDGE_CLEARANCE:           return std::make_shared<DRC_ITEM>( edgeClearance );
     case DRCE_ZONES_INTERSECT:          return std::make_shared<DRC_ITEM>( zonesIntersect );
-    case DRCE_ZONE_HAS_EMPTY_NET:       return std::make_shared<DRC_ITEM>( zoneHasEmptyNet );
+    case DRCE_ISOLATED_COPPER:          return std::make_shared<DRC_ITEM>( isolatedCopper );
     case DRCE_STARVED_THERMAL:          return std::make_shared<DRC_ITEM>( starvedThermal );
     case DRCE_DANGLING_VIA:             return std::make_shared<DRC_ITEM>( viaDangling );
     case DRCE_DANGLING_TRACK:           return std::make_shared<DRC_ITEM>( trackDangling );

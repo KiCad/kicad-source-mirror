@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,8 +43,8 @@ enum PCB_DRC_CODE {
     DRCE_CLEARANCE,                      // items are too close together
     DRCE_TRACKS_CROSSING,                // tracks are crossing
     DRCE_EDGE_CLEARANCE,                 // a copper item is too close to the board edge
-    DRCE_ZONES_INTERSECT,                // copper area outlines intersect
-    DRCE_ZONE_HAS_EMPTY_NET,             // copper area has a net but no pads in nets, which is suspicious
+    DRCE_ZONES_INTERSECT,                // copper zone outlines intersect
+    DRCE_ISOLATED_COPPER,                // copper fill with no electrical connections
     DRCE_STARVED_THERMAL,                // insufficient number of thermal spokes connected to zone
     DRCE_DANGLING_VIA,                   // via which isn't connected to anything
     DRCE_DANGLING_TRACK,                 // track with at least one end not connected to anything
@@ -156,7 +156,7 @@ private:
     static DRC_ITEM tracksCrossing;
     static DRC_ITEM edgeClearance;
     static DRC_ITEM zonesIntersect;
-    static DRC_ITEM zoneHasEmptyNet;
+    static DRC_ITEM isolatedCopper;
     static DRC_ITEM starvedThermal;
     static DRC_ITEM viaDangling;
     static DRC_ITEM trackDangling;

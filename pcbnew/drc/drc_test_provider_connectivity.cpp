@@ -38,7 +38,7 @@
     Errors generated:
     - DRCE_DANGLING_TRACK
     - DRCE_DANGLING_VIA
-    - DRCE_ZONE_HAS_EMPTY_NET
+    - DRCE_ISOLATED_COPPER
 */
 
 class DRC_TEST_PROVIDER_CONNECTIVITY : public DRC_TEST_PROVIDER
@@ -73,15 +73,23 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 
     BOARD* board = m_drcEngine->GetBoard();
 
-    std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
+    std::shared_ptr<CONNECTIVITY_DATA>        connectivity = board->GetConnectivity();
+    std::vector<CN_ZONE_ISOLATED_ISLAND_LIST> islandsList;
+
+    for( ZONE* zone : board->Zones() )
+    {
+        if( !zone->GetIsRuleArea() )
+            islandsList.emplace_back( CN_ZONE_ISOLATED_ISLAND_LIST( zone ) );
+    }
 
     // Rebuild just in case. This really needs to be reliable.
     connectivity->Clear();
     connectivity->Build( board, m_drcEngine->GetProgressReporter() );
+    connectivity->FindIsolatedCopperIslands( islandsList );
 
     int delta = 100;  // This is the number of tests between 2 calls to the progress bar
     int ii = 0;
-    int count = board->Tracks().size() + board->Zones().size();
+    int count = board->Tracks().size() + islandsList.size();
 
     ii += count;      // We gave half of this phase to CONNECTIVITY_DATA::Build()
     count += count;
@@ -99,7 +107,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
             continue;
 
         if( !reportProgress( ii++, count, delta ) )
-            break;
+            return false;   // DRC cancelled
 
         // Test for dangling items
         int code = track->Type() == PCB_VIA_T ? DRCE_DANGLING_VIA : DRCE_DANGLING_TRACK;
@@ -114,28 +122,30 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
     }
 
     /* test starved zones */
-    for( ZONE* zone : board->Zones() )
+    for( CN_ZONE_ISOLATED_ISLAND_LIST& zone : islandsList )
     {
-        if( m_drcEngine->IsErrorLimitExceeded( DRCE_ZONE_HAS_EMPTY_NET ) )
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_ISOLATED_COPPER ) )
             break;
-
-        if( !zone->IsOnCopperLayer() )
-            continue;
 
         if( !reportProgress( ii++, count, delta ) )
             return false;   // DRC cancelled
 
-        int netcode = zone->GetNetCode();
-        // a netcode < 0 or > 0 and no pad in net is a error or strange
-        // perhaps a "dead" net, which happens when all pads in this net were removed
-        // Remark: a netcode < 0 should not happen (this is more a bug somewhere)
-        int pads_in_net = ( netcode > 0 ) ? connectivity->GetPadCount( netcode ) : 1;
-
-        if( ( netcode < 0 ) || pads_in_net == 0 )
+        for( PCB_LAYER_ID layer : zone.m_zone->GetLayerSet().Seq() )
         {
-            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ZONE_HAS_EMPTY_NET );
-            drcItem->SetItems( zone );
-            reportViolation( drcItem, zone->GetPosition(), zone->GetLayer() );
+            if( !zone.m_islands.count( layer ) )
+                continue;
+
+            std::shared_ptr<SHAPE_POLY_SET> poly = zone.m_zone->GetFilledPolysList( layer );
+
+            for( int idx : zone.m_islands.at( layer ) )
+            {
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_ISOLATED_COPPER ) )
+                    break;
+
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ISOLATED_COPPER );
+                drcItem->SetItems( zone.m_zone );
+                reportViolation( drcItem, poly->Outline( idx ).CPoint( 0 ), layer );
+            }
         }
     }
 
