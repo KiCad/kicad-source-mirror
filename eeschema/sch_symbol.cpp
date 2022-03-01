@@ -583,8 +583,15 @@ const wxString SCH_SYMBOL::GetValue( const SCH_SHEET_PATH* sheet, bool aResolve 
     {
         if( instance.m_Path == path && !instance.m_Value.IsEmpty() )
         {
-            // This can only be an override from an Update Schematic from PCB, and therefore
-            // will always be fully resolved.
+            // This can only be overridden by a new value but if we are resolving,
+            // make sure that the symbol returns the fully resolved text
+            if( aResolve )
+            {
+                SCH_SYMBOL new_sym( *this );
+                new_sym.GetField( VALUE_FIELD )->SetText( instance.m_Value );
+                return new_sym.GetField( VALUE_FIELD )->GetShownText();
+            }
+
             return instance.m_Value;
         }
     }
