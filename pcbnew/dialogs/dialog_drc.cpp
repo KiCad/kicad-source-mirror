@@ -359,7 +359,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 
     if( node && item && item != DELETED_BOARD_ITEM::GetInstance() )
     {
-        PCB_LAYER_ID             principalLayer = item->GetLayer();
+        PCB_LAYER_ID             principalLayer;
         LSET                     violationLayers;
         std::shared_ptr<RC_ITEM> rc_item = node->m_RcItem;
         BOARD_ITEM*              a = board->GetItem( rc_item->GetMainItemID() );
@@ -385,19 +385,22 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
         }
         else
         {
+            principalLayer = UNDEFINED_LAYER;
+
             if( a || b || c || d )
                 violationLayers = LSET::AllLayersMask();
 
-            for( BOARD_ITEM* it: {a, b, c, d} )
+            // Try to initialize principalLayer to a valid layer.  Note that some markers have
+            // a layer set to UNDEFINED_LAYER, so we may need to keep looking.
+
+            for( BOARD_ITEM* it: { a, b, c, d } )
             {
                 if( !it )
                     continue;
 
                 LSET layersList = getActiveLayers( it );
                 violationLayers &= layersList;
-                // Try to initialize principalLayer to a valid layer
-                // Some markers have a layer set to UNDEFINED_LAYER, and setting
-                // principalLayer to a valid layer can be useful
+
                 if( principalLayer <= UNDEFINED_LAYER )
                     principalLayer = layersList.Seq().front();
             }
