@@ -259,35 +259,6 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
     canvas()->Refresh();
     m_fillInProgress = false;
 
-    for( ZONE* zone : toFill )
-    {
-        int outlines = 0;
-
-        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
-            outlines += zone->GetFilledPolysList( layer )->OutlineCount();
-
-        if( outlines == 0 )
-        {
-            WX_INFOBAR* infobar = frame->GetInfoBar();
-
-            // I haven't a clue why this is needed, but if you start another operation before the
-            // animation is over then you end up accessing deleted view items.
-            wxShowEffect savedShowEffect = infobar->GetShowEffect();
-            wxShowEffect savedHideEffect = infobar->GetHideEffect();
-            int          savedEffectDuration = infobar->GetEffectDuration();
-
-            infobar->SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
-            {
-                infobar->RemoveAllButtons();
-                infobar->ShowMessageFor( _( "Zone has no connections." ), 4000, wxICON_WARNING );
-            }
-            infobar->SetShowHideEffects( savedShowEffect, savedHideEffect );
-            infobar->SetEffectDuration( savedEffectDuration );
-
-            break;
-        }
-    }
-
     // wxWidgets has keyboard focus issues after the progress reporter.  Re-setting the focus
     // here doesn't work, so we delay it to an idle event.
     canvas()->Bind( wxEVT_IDLE, &ZONE_FILLER_TOOL::singleShotRefocus, this );
