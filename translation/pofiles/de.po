@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 11:58-0800\n"
 "PO-Revision-Date: 2022-03-08 00:49+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -11760,8 +11760,9 @@ msgid "ohm"
 msgstr "Ohm"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:965
+#, fuzzy
 msgid "Propagation delay"
-msgstr ""
+msgstr "Gatterlaufzeit"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:972
 #, fuzzy
