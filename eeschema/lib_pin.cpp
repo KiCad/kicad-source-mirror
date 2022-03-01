@@ -783,7 +783,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const VECTOR2I& aPinPos, int aPin
                 if( aDrawPinNum )
                 {
                     plotText( x1 - num_offset, ( y1 + aPinPos.y) / 2, numColor, number,
-                              ANGLE_VERTICAL, m_nameTextSize, GR_TEXT_H_ALIGN_CENTER,
+                              ANGLE_VERTICAL, m_numTextSize, GR_TEXT_H_ALIGN_CENTER,
                               GR_TEXT_V_ALIGN_BOTTOM, numPenWidth );
                 }
             }
