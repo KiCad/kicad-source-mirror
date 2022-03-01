@@ -497,7 +497,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                 }
             }
         }
-        else if( footprint )
+        else if( item == footprint )
         {
             if( footprint->HitTest( m_refPos, accuracy )
                     && footprint->HitTestAccurate( m_refPos, accuracy ) )
