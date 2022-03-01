@@ -878,6 +878,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         aStatusReporter->Report( _( "Build Tech layers" ) );
 
     // draw graphic items, on technical layers
+
+    // Vertical walls (layer thickness) around shapes is really time consumming
+    // They are built on request
+    bool buildVerticalWallsForTechLayers = m_Cfg->m_Render.opengl_copper_thickness
+                              && m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL;
+
     static const PCB_LAYER_ID teckLayerList[] = {
             B_Adhes,
             F_Adhes,
@@ -951,39 +957,42 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
         }
 
-        // Add drawing contours
-        for( BOARD_ITEM* item : m_board->Drawings() )
+        // Add drawing contours (vertical walls)
+        if( buildVerticalWallsForTechLayers )
         {
-            if( !item->IsOnLayer( curr_layer_id ) )
-                continue;
-
-            switch( item->Type() )
+            for( BOARD_ITEM* item : m_board->Drawings() )
             {
-            case PCB_SHAPE_T:
-                item->TransformShapeWithClearanceToPolygon( *layerPoly, curr_layer_id, 0,
-                                                            ARC_HIGH_DEF, ERROR_INSIDE );
-                break;
+                if( !item->IsOnLayer( curr_layer_id ) )
+                    continue;
 
-            case PCB_TEXT_T:
-            {
-                PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
-
-                text->TransformTextShapeWithClearanceToPolygon( *layerPoly, curr_layer_id, 0,
+                switch( item->Type() )
+                {
+                case PCB_SHAPE_T:
+                    item->TransformShapeWithClearanceToPolygon( *layerPoly, curr_layer_id, 0,
                                                                 ARC_HIGH_DEF, ERROR_INSIDE );
-                break;
-            }
+                    break;
 
-            case PCB_TEXTBOX_T:
-            {
-                PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
+                case PCB_TEXT_T:
+                {
+                    PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
 
-                textbox->TransformTextShapeWithClearanceToPolygon( *layerPoly, curr_layer_id, 0,
-                                                                   ARC_HIGH_DEF, ERROR_INSIDE );
-                break;
-            }
+                    text->TransformTextShapeWithClearanceToPolygon( *layerPoly, curr_layer_id, 0,
+                                                                    ARC_HIGH_DEF, ERROR_INSIDE );
+                    break;
+                }
 
-            default:
-                break;
+                case PCB_TEXTBOX_T:
+                {
+                    PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
+
+                    textbox->TransformTextShapeWithClearanceToPolygon( *layerPoly, curr_layer_id, 0,
+                                                                       ARC_HIGH_DEF, ERROR_INSIDE );
+                    break;
+                }
+
+                default:
+                    break;
+                }
             }
         }
 
@@ -1011,35 +1020,37 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         }
 
 
-        // Add footprints tech layers - contours
-        for( FOOTPRINT* footprint : m_board->Footprints() )
+        // Add footprints tech layers - contours (vertical walls)
+        if( buildVerticalWallsForTechLayers )
         {
-            if( ( curr_layer_id == F_SilkS ) || ( curr_layer_id == B_SilkS ) )
+            for( FOOTPRINT* footprint : m_board->Footprints() )
             {
-                int linewidth = m_board->GetDesignSettings().m_LineThickness[ LAYER_CLASS_SILK ];
-
-                for( PAD* pad : footprint->Pads() )
+                if( ( curr_layer_id == F_SilkS ) || ( curr_layer_id == B_SilkS ) )
                 {
-                    if( !pad->IsOnLayer( curr_layer_id ) )
-                        continue;
+                    int linewidth = m_board->GetDesignSettings().m_LineThickness[ LAYER_CLASS_SILK ];
 
-                    buildPadOutlineAsPolygon( pad, *layerPoly, linewidth );
+                    for( PAD* pad : footprint->Pads() )
+                    {
+                        if( !pad->IsOnLayer( curr_layer_id ) )
+                            continue;
+
+                        buildPadOutlineAsPolygon( pad, *layerPoly, linewidth );
+                    }
                 }
-            }
-            else
-            {
-                footprint->TransformPadsWithClearanceToPolygon( *layerPoly, curr_layer_id, 0,
-                                                                ARC_HIGH_DEF, ERROR_INSIDE );
-            }
+                else
+                {
+                    footprint->TransformPadsWithClearanceToPolygon( *layerPoly, curr_layer_id, 0,
+                                                                    ARC_HIGH_DEF, ERROR_INSIDE );
+                }
 
-            // On tech layers, use a poor circle approximation, only for texts (stroke font)
-            footprint->TransformFPTextWithClearanceToPolygonSet( *layerPoly, curr_layer_id, 0,
-                                                                 ARC_HIGH_DEF, ERROR_INSIDE );
+                // On tech layers, use a poor circle approximation, only for texts (stroke font)
+                footprint->TransformFPTextWithClearanceToPolygonSet( *layerPoly, curr_layer_id, 0,
+                                                                     ARC_HIGH_DEF, ERROR_INSIDE );
 
-            // Add the remaining things with dynamic seg count for circles
-            transformFPShapesToPolygon( footprint, curr_layer_id, *layerPoly );
+                // Add the remaining things with dynamic seg count for circles
+                transformFPShapesToPolygon( footprint, curr_layer_id, *layerPoly );
+            }
         }
-
 
         // Draw non copper zones
         if( m_Cfg->m_Render.show_zones )
@@ -1050,10 +1061,14 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     addSolidAreasShapes( zone, layerContainer, curr_layer_id );
             }
 
-            for( ZONE* zone : m_board->Zones() )
+            if( buildVerticalWallsForTechLayers )
             {
-                if( zone->IsOnLayer( curr_layer_id ) )
-                    zone->TransformSolidAreasShapesToPolygon( curr_layer_id, *layerPoly );
+                for( ZONE* zone : m_board->Zones() )
+                {
+
+                    if( zone->IsOnLayer( curr_layer_id ) )
+                        zone->TransformSolidAreasShapesToPolygon( curr_layer_id, *layerPoly );
+                }
             }
         }
 
