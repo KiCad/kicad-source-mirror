@@ -605,6 +605,20 @@ double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( board )
         visible = board->GetVisibleLayers() & board->GetEnabledLayers();
 
+    // In high contrast mode don't show vias that don't cross the high-contrast layer
+    if( renderSettings->GetHighContrast() )
+    {
+        PCB_LAYER_ID highContrastLayer = renderSettings->GetPrimaryHighContrastLayer();
+
+        if( LSET::FrontTechMask().Contains( highContrastLayer ) )
+            highContrastLayer = F_Cu;
+        else if( LSET::BackTechMask().Contains( highContrastLayer ) )
+            highContrastLayer = B_Cu;
+
+        if( !GetLayerSet().Contains( highContrastLayer ) )
+            return HIDE;
+    }
+
     if( IsViaPadLayer( aLayer ) )
     {
         if( !FlashLayer( visible ) )
