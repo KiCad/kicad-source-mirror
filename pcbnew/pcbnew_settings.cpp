@@ -43,7 +43,7 @@
 
 
 ///! Update the schema version whenever a migration is required
-const int pcbnewSchemaVersion = 1;
+const int pcbnewSchemaVersion = 2;
 
 
 PCBNEW_SETTINGS::PCBNEW_SETTINGS()
@@ -72,7 +72,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_PolarCoords( false ),
           m_RotationAngle( ANGLE_90 ),
           m_ShowPageLimits( true ),
-          m_AutoRefillZones( true ),
+          m_AutoRefillZones( false ),
           m_AllowFreePads( false ),
           m_PnsSettings( nullptr ),
           m_FootprintViewerZoom( 1.0 )
@@ -127,7 +127,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_Use45DegreeLimit, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.auto_fill_zones",
-            &m_AutoRefillZones, true ) );
+            &m_AutoRefillZones, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.allow_free_pads",
             &m_AllowFreePads, false ) );
@@ -531,6 +531,16 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
                 }
                 catch( ... )
                 {}
+
+                return true;
+            } );
+
+    registerMigration( 1, 2,
+            [&]()
+            {
+                // In version 1 this meant "after Zone Properties dialog", but it now means
+                // "everywhere" so we knock it off on transition.
+                Set( "editing.auto_fill_zones", false );
 
                 return true;
             } );
