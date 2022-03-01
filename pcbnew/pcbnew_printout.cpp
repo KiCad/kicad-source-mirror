@@ -145,7 +145,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
     RENDER_SETTINGS* renderSettings = aView.GetPainter()->GetSettings();
     // A color to do not print objects on some layers, when the layer must be enabled
     // to print some other objects
-    COLOR4D invisible_color( 0.0, 0.0, 0.0, 0.0 );
+    COLOR4D invisible_color = COLOR4D::UNSPECIFIED;
 
     if( m_pcbnewSettings.m_AsItemCheckboxes )
     {

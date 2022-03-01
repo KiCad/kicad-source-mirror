@@ -373,13 +373,12 @@ double FP_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         return HIDE;
 
     RENDER_SETTINGS* renderSettings = aView->GetPainter()->GetSettings();
-    COLOR4D          backgroundColor = renderSettings->GetLayerColor( LAYER_PCB_BACKGROUND );
 
     // Handle Render tab switches
     if( m_Type == TEXT_is_VALUE || GetText() == wxT( "${VALUE}" ) )
     {
         if( !aView->IsLayerVisible( LAYER_MOD_VALUES )
-                || renderSettings->GetLayerColor( LAYER_MOD_VALUES ) == backgroundColor )
+                || renderSettings->GetLayerColor( LAYER_MOD_VALUES ) == COLOR4D::UNSPECIFIED )
         {
             return HIDE;
         }
@@ -388,7 +387,7 @@ double FP_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( m_Type == TEXT_is_REFERENCE || GetText() == wxT( "${REFERENCE}" ) )
     {
         if( !aView->IsLayerVisible( LAYER_MOD_REFERENCES )
-                || renderSettings->GetLayerColor( LAYER_MOD_REFERENCES ) == backgroundColor )
+                || renderSettings->GetLayerColor( LAYER_MOD_REFERENCES ) == COLOR4D::UNSPECIFIED )
         {
             return HIDE;
         }
