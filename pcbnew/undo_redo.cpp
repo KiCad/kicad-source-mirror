@@ -235,8 +235,6 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
                 ITEM_PICKER picker( nullptr, item, UNDO_REDO::CHANGED );
                 picker.SetLink( clone );
                 commandToUndo->PushItem( picker );
-
-                orig->SetLastEditTime();
             }
             else
             {

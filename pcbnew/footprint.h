@@ -340,7 +340,6 @@ public:
     */
 
     void SetLastEditTime( timestamp_t aTime ) { m_lastEditTime = aTime; }
-    void SetLastEditTime() { m_lastEditTime = time( nullptr ); }
     timestamp_t GetLastEditTime() const { return m_lastEditTime; }
 
     /**

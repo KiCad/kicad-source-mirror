@@ -1235,16 +1235,6 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         msg = footprint->GetFPID().GetLibItemName().wx_str();
         msgItems.emplace_back( MSG_PANEL_ITEM( _( "Footprint Name" ), msg ) );
 
-        wxDateTime date( static_cast<time_t>( footprint->GetLastEditTime() ) );
-
-        if( footprint->GetLastEditTime() && date.IsValid() )
-        // Date format: see http://www.cplusplus.com/reference/ctime/strftime
-            msg = date.Format( wxT( "%b %d, %Y" ) ); // Abbreviated_month_name Day, Year
-        else
-            msg = _( "Unknown" );
-
-        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Last Change" ), msg ) );
-
         msg.Printf( wxT( "%zu" ), (size_t) footprint->GetPadCount( DO_NOT_INCLUDE_NPTH ) );
         msgItems.emplace_back( MSG_PANEL_ITEM( _( "Pads" ), msg ) );
 

@@ -1182,9 +1182,6 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName, b
     // Creates the new footprint and add it to the head of the linked list of footprints
     FOOTPRINT* footprint = new FOOTPRINT( GetBoard() );
 
-    // Update parameters: timestamp ...
-    footprint->SetLastEditTime();
-
     // Update its name in lib
     footprint->SetFPID( LIB_ID( wxEmptyString, footprintName ) );
 

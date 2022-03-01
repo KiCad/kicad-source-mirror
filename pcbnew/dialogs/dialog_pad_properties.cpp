@@ -1635,8 +1635,6 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 
     if( footprint )
     {
-        footprint->SetLastEditTime();
-
         // compute the pos 0 value, i.e. pad position for footprint with orientation = 0
         // i.e. relative to footprint origin (footprint position)
         wxPoint pt = m_currentPad->GetPosition() - footprint->GetPosition();

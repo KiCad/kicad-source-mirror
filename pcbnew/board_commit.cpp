@@ -152,7 +152,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 }
 
                 savedModules.insert( ent.m_item );
-                static_cast<FOOTPRINT*>( ent.m_item )->SetLastEditTime();
             }
         }
 
