@@ -882,7 +882,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                     continue;
 
                 // test for different priorities
-                if( zoneA->GetPriority() != zoneB->GetPriority() )
+                if( zoneA->GetAssignedPriority() != zoneB->GetAssignedPriority() )
                     continue;
 
                 // rule areas may overlap at will

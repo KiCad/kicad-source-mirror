@@ -238,7 +238,7 @@ void TEARDROP_MANAGER::setTeardropPriorities()
             priority_base = MAGIC_TEARDROP_ZONE_ID;
         }
 
-        td->SetPriority( priority_base++ );
+        td->SetAssignedPriority( priority_base++ );
     }
 }
 

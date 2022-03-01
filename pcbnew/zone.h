@@ -126,12 +126,16 @@ public:
     /**
      * @param aPriority is the priority level.
      */
-    void SetPriority( unsigned aPriority ) { m_priority = aPriority; }
+    void SetAssignedPriority( unsigned aPriority ) { m_priority = aPriority; }
 
     /**
      * @return the priority level of this zone.
      */
-    unsigned GetPriority() const { return m_priority; }
+    unsigned GetAssignedPriority() const { return m_priority; }
+
+    bool HigherPriority( const ZONE* aOther ) const;
+
+    bool SameNet( const ZONE* aOther ) const;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 

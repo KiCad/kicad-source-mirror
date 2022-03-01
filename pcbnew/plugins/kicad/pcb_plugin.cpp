@@ -2078,8 +2078,8 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
     m_out->Print( 0, " (hatch %s %s)\n", hatch.c_str(),
                   FormatInternalUnits( aZone->GetBorderHatchPitch() ).c_str() );
 
-    if( aZone->GetPriority() > 0 )
-        m_out->Print( aNestLevel+1, "(priority %d)\n", aZone->GetPriority() );
+    if( aZone->GetAssignedPriority() > 0 )
+        m_out->Print( aNestLevel+1, "(priority %d)\n", aZone->GetAssignedPriority() );
 
     m_out->Print( aNestLevel+1, "(connect_pads" );
 

@@ -66,7 +66,7 @@ bool ZONE::IsSame( const ZONE& aZoneToCompare )
     if( GetNetCode() != aZoneToCompare.GetNetCode() )
         return false;
 
-    if( GetPriority() != aZoneToCompare.GetPriority() )
+    if( GetAssignedPriority() != aZoneToCompare.GetAssignedPriority() )
         return false;
 
     // Compare zone specific parameters

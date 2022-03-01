@@ -203,7 +203,7 @@ void PCB_POLYGON::AddToBoard()
 
         zone->SetLocalClearance( m_width );
 
-        zone->SetPriority( m_priority );
+        zone->SetAssignedPriority( m_priority );
 
         zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
                                      zone->GetDefaultHatchPitch(), true );

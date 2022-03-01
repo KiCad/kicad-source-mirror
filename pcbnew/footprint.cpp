@@ -2310,7 +2310,7 @@ bool FOOTPRINT::cmp_pads::operator()( const PAD* aFirst, const PAD* aSecond ) co
 
 bool FOOTPRINT::cmp_zones::operator()( const FP_ZONE* aFirst, const FP_ZONE* aSecond ) const
 {
-    TEST( aFirst->GetPriority(), aSecond->GetPriority() );
+    TEST( aFirst->GetAssignedPriority(), aSecond->GetAssignedPriority() );
     TEST( aFirst->GetLayerSet().Seq(), aSecond->GetLayerSet().Seq() );
 
     TEST( aFirst->Outline()->TotalVertices(), aSecond->Outline()->TotalVertices() );

@@ -179,6 +179,21 @@ EDA_ITEM* ZONE::Clone() const
 }
 
 
+bool ZONE::HigherPriority( const ZONE* aOther ) const
+{
+    if( m_priority != aOther->m_priority )
+        return m_priority > aOther->m_priority;
+
+    return m_Uuid > aOther->m_Uuid;
+}
+
+
+bool ZONE::SameNet( const ZONE* aOther ) const
+{
+    return GetNetCode() == aOther->GetNetCode();
+}
+
+
 bool ZONE::UnFill()
 {
     bool change = false;
@@ -549,7 +564,8 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
         }
 
         // Display priority level
-        aList.emplace_back( _( "Priority" ), wxString::Format( wxT( "%d" ), GetPriority() ) );
+        aList.emplace_back( _( "Priority" ),
+                            wxString::Format( wxT( "%d" ), GetAssignedPriority() ) );
     }
 
     if( aFrame->GetName() == PCB_EDIT_FRAME_NAME )
@@ -1337,7 +1353,7 @@ static struct ZONE_DESC
         REGISTER_TYPE( ZONE );
         propMgr.InheritsAfter( TYPE_HASH( ZONE ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
         propMgr.AddProperty( new PROPERTY<ZONE, unsigned>( _HKI( "Priority" ),
-                    &ZONE::SetPriority, &ZONE::GetPriority ) );
+                    &ZONE::SetAssignedPriority, &ZONE::GetAssignedPriority ) );
         //propMgr.AddProperty( new PROPERTY<ZONE, bool>( "Filled",
                     //&ZONE::SetIsFilled, &ZONE::IsFilled ) );
         propMgr.AddProperty( new PROPERTY<ZONE, wxString>( _HKI( "Name" ),

@@ -5324,7 +5324,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
     else
         zone = std::make_unique<ZONE>( aParent );
 
-    zone->SetPriority( 0 );
+    zone->SetAssignedPriority( 0 );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -5397,7 +5397,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
             break;
 
         case T_priority:
-            zone->SetPriority( parseInt( "zone priority" ) );
+            zone->SetAssignedPriority( parseInt( "zone priority" ) );
             NeedRIGHT();
             break;
 

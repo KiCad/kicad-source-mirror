@@ -2706,7 +2706,7 @@ bool FABMASTER::loadZone( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
     }
     else
     {
-        zone->SetPriority( 50 );
+        zone->SetAssignedPriority( 50 );
     }
 
     zone->SetLocalClearance( 0 );
@@ -3021,7 +3021,7 @@ bool FABMASTER::orderZones( BOARD* aBoard )
             priority = 0;
         }
 
-        zone->SetPriority( priority );
+        zone->SetAssignedPriority( priority );
         priority += 10;
     }
 

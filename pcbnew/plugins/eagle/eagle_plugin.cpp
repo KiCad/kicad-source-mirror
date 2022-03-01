@@ -1530,7 +1530,7 @@ ZONE* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
     }
 
     int rank = p.rank ? (p.max_priority - *p.rank) : p.max_priority;
-    zone->SetPriority( rank );
+    zone->SetAssignedPriority( rank );
 
     return zone;
 }

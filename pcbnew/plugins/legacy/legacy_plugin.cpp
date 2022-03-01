@@ -2520,7 +2520,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
         else if( TESTLINE( "ZPriority" ) )
         {
             int priority = intParse( line + SZ( "ZPriority" ) );
-            zc->SetPriority( priority );
+            zc->SetAssignedPriority( priority );
         }
         else if( TESTLINE( "$POLYSCORNERS" ) )
         {

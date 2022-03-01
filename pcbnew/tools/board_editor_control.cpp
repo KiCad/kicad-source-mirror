@@ -1440,7 +1440,7 @@ int BOARD_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
             continue;
         }
 
-        if( curr_area->GetPriority() != firstZone->GetPriority() )
+        if( curr_area->GetAssignedPriority() != firstZone->GetAssignedPriority() )
         {
             wxLogMessage( _( "Some zone priorities did not match and were not merged." ) );
             continue;

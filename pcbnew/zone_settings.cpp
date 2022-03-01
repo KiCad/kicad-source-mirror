@@ -91,7 +91,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
 
 ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE& aSource )
 {
-    m_ZonePriority                = aSource.GetPriority();
+    m_ZonePriority                = aSource.GetAssignedPriority();
     m_FillMode                    = aSource.GetFillMode();
     m_ZoneClearance               = aSource.GetLocalClearance();
     m_ZoneMinThickness            = aSource.GetMinThickness();
@@ -158,7 +158,7 @@ void ZONE_SETTINGS::ExportSetting( ZONE& aTarget, bool aFullExport ) const
 
     if( aFullExport )
     {
-        aTarget.SetPriority( m_ZonePriority );
+        aTarget.SetAssignedPriority( m_ZonePriority );
         aTarget.SetLayerSet( m_Layers );
         aTarget.SetZoneName( m_Name );
 

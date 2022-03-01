@@ -106,6 +106,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
     // Update and cache zone bounding boxes and pad effective shapes so that we don't have to
     // make them thread-safe.
+    //
     for( ZONE* zone : m_board->Zones() )
     {
         zone->CacheBoundingBox();
@@ -136,10 +137,11 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
     }
 
     // Sort by priority to reduce deferrals waiting on higher priority zones.
+    //
     std::sort( aZones.begin(), aZones.end(),
                []( const ZONE* lhs, const ZONE* rhs )
                {
-                   return lhs->GetPriority() > rhs->GetPriority();
+                   return lhs->HigherPriority( rhs );
                } );
 
     for( ZONE* zone : aZones )
@@ -151,8 +153,8 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         if( m_commit )
             m_commit->Modify( zone );
 
-        // calculate the hash value for filled areas. it will be used later
-        // to know if the current filled areas are up to date
+        // calculate the hash value for filled areas. it will be used later to know if the
+        // current filled areas are up to date
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
             zone->BuildHashValue( layer );
@@ -164,8 +166,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
         islandsList.emplace_back( CN_ZONE_ISOLATED_ISLAND_LIST( zone ) );
 
-        // Remove existing fill first to prevent drawing invalid polygons
-        // on some platforms
+        // Remove existing fill first to prevent drawing invalid polygons on some platforms
         zone->UnFill();
     }
 
@@ -191,11 +192,11 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 if( !aOtherZone->GetLayerSet().test( aLayer ) )
                     return false;
 
-                if( aOtherZone->GetPriority() <= aZone->GetPriority() )
+                if( aZone->HigherPriority( aOtherZone ) )
                     return false;
 
                 // Same-net zones always use outline to produce predictable results
-                if( aOtherZone->GetNetCode() == aZone->GetNetCode() )
+                if( aOtherZone->SameNet( aZone ) )
                     return false;
 
                 // A higher priority zone is found: if we intersect and it's not filled yet
@@ -255,6 +256,8 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 return num;
             };
 
+    // Calculate the copper fills (NB: this is multi-threaded)
+    //
     while( !toFill.empty() )
     {
         size_t parallelThreadCount = std::min( cores, toFill.size() );
@@ -263,7 +266,9 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         nextItem = 0;
 
         if( parallelThreadCount <= 1 )
+        {
             fill_lambda( m_progressReporter );
+        }
         else
         {
             for( size_t ii = 0; ii < parallelThreadCount; ++ii )
@@ -292,9 +297,13 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
             break;
     }
 
+    // Triangulate the copper fills (NB: this is multi-threaded)
+    //
     m_board->CacheTriangulation( m_progressReporter, aZones );
 
-    // Now update the connectivity to check for copper islands
+    // Now update the connectivity to check for isolated copper islands
+    // (NB: FindIsolatedCopperIslands() is multi-threaded)
+    //
     if( m_progressReporter )
     {
         if( m_progressReporter->IsCancelled() )
@@ -321,7 +330,9 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         zone->SetIsFilled( true );
     }
 
-    // Now remove insulated copper islands
+    // Now remove isolated copper islands according to the isolated islands strategy assigned
+    // by the user (always, never, below-certain-size).
+    //
     for( CN_ZONE_ISOLATED_ISLAND_LIST& zone : islandsList )
     {
         for( PCB_LAYER_ID layer : zone.m_zone->GetLayerSet().Seq() )
@@ -363,6 +374,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
     }
 
     // Now remove islands outside the board edge
+    //
     for( ZONE* zone : aZones )
     {
         LSET zoneCopperLayers = zone->GetLayerSet() & LSET::AllCuMask( MAX_CU_LAYERS );
@@ -751,7 +763,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
         if( !track->IsOnLayer( aLayer ) )
             continue;
 
-        if( track->GetNetCode() == aZone->GetNetCode()  && ( aZone->GetNetCode() != 0) )
+        if( track->GetNetCode() == aZone->GetNetCode() && ( aZone->GetNetCode() != 0) )
             continue;
 
         if( checkForCancel( m_progressReporter ) )
@@ -803,8 +815,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
         knockoutGraphicClearance( &footprint->Reference() );
         knockoutGraphicClearance( &footprint->Value() );
 
-        // Don't knock out holes in zones that share a net
-        // with a nettie footprint
+        // Don't knock out holes in zones that share a net with a nettie footprint
         if( footprint->IsNetTie() )
         {
             for( PAD* pad : footprint->Pads() )
@@ -879,13 +890,10 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
             if( otherZone->GetDoNotAllowCopperPour() && !aZone->IsTeardropArea() )
                 knockoutZoneClearance( otherZone );
         }
-        else
+        else if( otherZone->HigherPriority( aZone ) )
         {
-            if( otherZone->GetNetCode() != aZone->GetNetCode()
-                    && otherZone->GetPriority() > aZone->GetPriority() )
-            {
+            if( !otherZone->SameNet( aZone ) )
                 knockoutZoneClearance( otherZone );
-            }
         }
     }
 
@@ -901,13 +909,10 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                 if( otherZone->GetDoNotAllowCopperPour() && !aZone->IsTeardropArea() )
                     knockoutZoneClearance( otherZone );
             }
-            else
+            else if( otherZone->HigherPriority( aZone ) )
             {
-                if( otherZone->GetNetCode() != aZone->GetNetCode()
-                        && otherZone->GetPriority() > aZone->GetPriority() )
-                {
+                if( !otherZone->SameNet( aZone ) )
                     knockoutZoneClearance( otherZone );
-                }
             }
         }
     }
@@ -931,15 +936,12 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID a
                     return;
 
                 if( aKnockout->GetCachedBoundingBox().Intersects( aZone->GetCachedBoundingBox() ) )
-                {
                     aRawFill.BooleanSubtract( *aKnockout->Outline(), SHAPE_POLY_SET::PM_FAST );
-                }
             };
 
     for( ZONE* otherZone : m_board->Zones() )
     {
-        if( otherZone->GetNetCode() == aZone->GetNetCode()
-                && otherZone->GetPriority() > aZone->GetPriority() )
+        if( otherZone->SameNet( aZone ) && otherZone->HigherPriority( aZone ) )
         {
             // Do not remove teardrop area: it is not useful and not good
             if( !otherZone->IsTeardropArea() )
@@ -951,8 +953,7 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID a
     {
         for( ZONE* otherZone : footprint->Zones() )
         {
-            if( otherZone->GetNetCode() == aZone->GetNetCode()
-                    && otherZone->GetPriority() > aZone->GetPriority() )
+            if( otherZone->SameNet( aZone ) && otherZone->HigherPriority( aZone ) )
             {
                 // Do not remove teardrop area: it is not useful and not good
                 if( !otherZone->IsTeardropArea() )

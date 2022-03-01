@@ -1827,7 +1827,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
 
         zone->SetZoneName( csTemplate.Name );
         zone->SetLayer( getKiCadLayer( csTemplate.LayerID ) );
-        zone->SetPriority( 1 ); // initially 1, we will increase in calculateZonePriorities
+        zone->SetAssignedPriority( 1 ); // initially 1, we will increase in calculateZonePriorities
 
         if( !( csTemplate.NetID.IsEmpty() || csTemplate.NetID == wxT( "NONE" ) ) )
             zone->SetNet( getKiCadNet( csTemplate.NetID ) );
@@ -2009,7 +2009,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
                 zone->SetFillMode( ZONE_FILL_MODE::POLYGONS );
                 zone->SetPadConnection( ZONE_CONNECTION::FULL );
                 zone->SetMinIslandArea( -1 );
-                zone->SetPriority( 0 ); // Priority always 0 (lowest priority) for implied power planes.
+                zone->SetAssignedPriority( 0 ); // Priority always 0 (lowest priority) for implied power planes.
                 zone->SetNet( getKiCadNet( netid ) );
             }
         }
@@ -2152,7 +2152,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
             zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
             zone->SetPadConnection( ZONE_CONNECTION::FULL );
             zone->SetNet( getKiCadNet( csCopper.NetRef.NetID ) );
-            zone->SetPriority( m_zonesMap.size() + 1 ); // Highest priority (always fill first)
+            zone->SetAssignedPriority( m_zonesMap.size() + 1 ); // Highest priority (always fill first)
 
             SHAPE_POLY_SET fill( *zone->Outline() );
             fill.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_STRICTLY_SIMPLE );
@@ -3832,13 +3832,13 @@ bool CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities( PCB_LAYER_ID& aLayer )
 
         wxASSERT( !isLowerPriority( id, prevID ) );
 
-        int newPriority = m_zonesMap.at( prevID )->GetPriority();
+        int newPriority = m_zonesMap.at( prevID )->GetAssignedPriority();
 
         // Only increase priority of the current zone
         if( isLowerPriority( prevID, id ) )
             newPriority++;
 
-        m_zonesMap.at( id )->SetPriority( newPriority );
+        m_zonesMap.at( id )->SetAssignedPriority( newPriority );
         prevID = id;
     }
 
@@ -3849,8 +3849,8 @@ bool CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities( PCB_LAYER_ID& aLayer )
 
         for( const TEMPLATE_ID& losingID : idPair.second )
         {
-            if( m_zonesMap.at( losingID )->GetPriority()
-                > m_zonesMap.at( winningID )->GetPriority() )
+            if( m_zonesMap.at( losingID )->GetAssignedPriority()
+                > m_zonesMap.at( winningID )->GetAssignedPriority() )
             {
                 return false;
             }

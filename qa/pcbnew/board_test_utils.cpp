@@ -353,7 +353,7 @@ void CheckFpZone( const FP_ZONE* expected, const FP_ZONE* zone )
     BOOST_CHECK_EQUAL( expected->IsLocked(), zone->IsLocked() );
 
     BOOST_CHECK_EQUAL( expected->GetNetCode(), zone->GetNetCode() );
-    BOOST_CHECK_EQUAL( expected->GetPriority(), zone->GetPriority() );
+    BOOST_CHECK_EQUAL( expected->GetAssignedPriority(), zone->GetAssignedPriority() );
     CHECK_ENUM_CLASS_EQUAL( expected->GetPadConnection(), zone->GetPadConnection() );
     BOOST_CHECK_EQUAL( expected->GetLocalClearance(), zone->GetLocalClearance() );
     BOOST_CHECK_EQUAL( expected->GetMinThickness(), zone->GetMinThickness() );

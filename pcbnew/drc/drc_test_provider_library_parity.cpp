@@ -260,7 +260,7 @@ bool zonesNeedUpdate( const FP_ZONE* a, const FP_ZONE* b )
     TEST( a->GetCornerSmoothingType(), b->GetCornerSmoothingType() );
     TEST( a->GetCornerRadius(), b->GetCornerRadius() );
     TEST( a->GetZoneName(), b->GetZoneName() );
-    TEST( a->GetPriority(), b->GetPriority() );
+    TEST( a->GetAssignedPriority(), b->GetAssignedPriority() );
 
     TEST( a->GetIsRuleArea(), b->GetIsRuleArea() );
     TEST( a->GetDoNotAllowCopperPour(), b->GetDoNotAllowCopperPour() );

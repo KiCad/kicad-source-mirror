@@ -562,23 +562,23 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
             continue;
 
         // Altium "fills" - not poured in Altium
-        if( zone->GetPriority() == 1000 )
+        if( zone->GetAssignedPriority() == 1000 )
         {
             // Unlikely, but you never know
             if( m_highest_pour_index >= 1000 )
-                zone->SetPriority( m_highest_pour_index + 1 );
+                zone->SetAssignedPriority( m_highest_pour_index + 1 );
 
             continue;
         }
 
-        int priority = m_highest_pour_index - zone->GetPriority();
+        int priority = m_highest_pour_index - zone->GetAssignedPriority();
 
-        zone->SetPriority( priority >= 0 ? priority : 0 );
+        zone->SetAssignedPriority( priority >= 0 ? priority : 0 );
     }
 
     // change priority of outer zone to zero
     for( std::pair<const ALTIUM_LAYER, ZONE*>& zone : m_outer_plane )
-        zone.second->SetPriority( 0 );
+        zone.second->SetAssignedPriority( 0 );
 
     // Altium doesn't appear to store either the dimension value nor the dimensioned object in
     // the dimension record.  (Yes, there is a REFERENCE0OBJECTID, but it doesn't point to the
@@ -1733,7 +1733,7 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
         zone->SetNetCode( GetNetCode( elem.net ) );
         zone->SetPosition( elem.vertices.at( 0 ).position );
         zone->SetLocked( elem.locked );
-        zone->SetPriority( elem.pourindex > 0 ? elem.pourindex : 0 );
+        zone->SetAssignedPriority( elem.pourindex > 0 ? elem.pourindex : 0 );
         zone->Outline()->AddOutline( linechain );
 
         HelperSetZoneLayers( zone, elem.layer );
@@ -1779,7 +1779,7 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
         if( IsAltiumLayerAPlane( elem.layer ) )
         {
             // outer zone will be set to priority 0 later.
-            zone->SetPriority( 1 );
+            zone->SetAssignedPriority( 1 );
 
             // check if this is the outer zone by simply comparing the BBOX
             const auto& outer_plane = m_outer_plane.find( elem.layer );
@@ -3340,7 +3340,7 @@ void ALTIUM_PCB::ConvertFills6ToBoardItemWithNet( const AFILL6& aElem )
     zone->SetNetCode( GetNetCode( aElem.net ) );
 
     zone->SetPosition( aElem.pos1 );
-    zone->SetPriority( 1000 );
+    zone->SetAssignedPriority( 1000 );
 
     HelperSetZoneLayers( zone, aElem.layer );
 
