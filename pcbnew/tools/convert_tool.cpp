@@ -664,6 +664,7 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                     track->SetLayer( targetLayer );
                     track->SetStart( graphic->GetStart() );
                     track->SetEnd( graphic->GetEnd() );
+                    track->SetWidth( graphic->GetWidth() );
                     commit.Add( track );
 
                     return true;
@@ -676,6 +677,7 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                     arc->SetStart( graphic->GetStart() );
                     arc->SetEnd( graphic->GetEnd() );
                     arc->SetMid( graphic->GetArcMid() );
+                    arc->SetWidth( graphic->GetWidth() );
                     commit.Add( arc );
 
                     return true;
