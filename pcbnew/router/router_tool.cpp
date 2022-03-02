@@ -2063,6 +2063,8 @@ int ROUTER_TOOL::onTrackViaSizeChanged( const TOOL_EVENT& aEvent )
 
     // Changing the track width can affect the placement, so call the
     // move routine without changing the destination
+    // Update end item first to avoid moving to an invalid/missing item
+    updateEndItem( aEvent );
     m_router->Move( m_endSnapPoint, m_endItem );
 
     UpdateMessagePanel();
