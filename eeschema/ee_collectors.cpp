@@ -146,48 +146,8 @@ void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], co
 
     if( aScreen )
     {
-        // Symbols and sheets own their own children so have to be visited even if
-        // they're not in the filter list
-        bool symbolsVisited = false;
-        bool sheetsVisited = false;
-        bool globalLabelsVisited = false;
-
-        EE_RTREE& items = aScreen->Items();
-
-        for( const KICAD_T *filter = aFilterList; *filter != EOT; ++filter )
-        {
-            for( SCH_ITEM *item : items.Overlapping( *filter, aPos, m_Threshold ) )
-            {
-                if( *filter == SCH_SYMBOL_T || *filter == SCH_LOCATE_ANY_T )
-                    symbolsVisited = true;
-
-                if( *filter == SCH_SHEET_T || *filter == SCH_LOCATE_ANY_T )
-                    sheetsVisited = true;
-
-                if( *filter == SCH_GLOBAL_LABEL_T || *filter == SCH_LOCATE_ANY_T )
-                    globalLabelsVisited = true;
-
-                item->Visit( m_inspector, nullptr, m_scanTypes );
-            }
-        }
-
-        if( !symbolsVisited )
-        {
-            for( SCH_ITEM *item : items.Overlapping( SCH_SYMBOL_T, aPos, m_Threshold ) )
-                item->Visit( m_inspector, nullptr, m_scanTypes );
-        }
-
-        if( !sheetsVisited )
-        {
-            for( SCH_ITEM *item : items.Overlapping( SCH_SHEET_T, aPos, m_Threshold ) )
-                item->Visit( m_inspector, nullptr, m_scanTypes );
-        }
-
-        if( !globalLabelsVisited )
-        {
-            for( SCH_ITEM *item : items.Overlapping( SCH_GLOBAL_LABEL_T, aPos, m_Threshold ) )
-                item->Visit( m_inspector, nullptr, m_scanTypes );
-        }
+        for( SCH_ITEM *item : aScreen->Items().Overlapping( SCH_LOCATE_ANY_T, aPos, m_Threshold ) )
+            item->Visit( m_inspector, nullptr, m_scanTypes );
     }
 }
 
