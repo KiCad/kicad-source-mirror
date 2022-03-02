@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 11:59-0800\n"
-"PO-Revision-Date: 2022-02-16 13:03+0000\n"
+"PO-Revision-Date: 2022-03-08 00:49+0000\n"
 "Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "v6/es_MX/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4613,12 +4613,10 @@ msgid "Alias: "
 msgstr "Alias: "
 
 #: common/filename_resolver.cpp:468
-#, fuzzy
 msgid "This path:"
 msgstr "Esta ruta:"
 
 #: common/filename_resolver.cpp:471
-#, fuzzy
 msgid "Existing path:"
 msgstr "Ruta existente:"
 
@@ -12259,15 +12257,13 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:543
-#, fuzzy
 msgid "Remove Invalid Cells"
-msgstr "Eliminar elementos"
+msgstr "Eliminar celdas inválidas"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
-#, fuzzy
 msgid "Cancel Table Update"
-msgstr "Diámetro de agujero de separación:"
+msgstr "Cancelar actualización de la tabla"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
@@ -13671,11 +13667,8 @@ msgid "Cannot open file '%s'."
 msgstr "No puede abrirse el archivo '%s'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:314
-#, fuzzy
 msgid "Storage file not fully parsed "
-msgstr ""
-"El archivo de almacenamiento no fue completamente analizado (quedan %d "
-"bytes)."
+msgstr "El archivo de almacenamiento no fue completamente analizado "
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:476
 msgid "Compile mask not currently supported."
@@ -17807,9 +17800,8 @@ msgstr ""
 "Por lo que el tamaño de algunos elementos está indefinido"
 
 #: gerbview/rs274d.cpp:414
-#, fuzzy
 msgid "Invalid Code Number"
-msgstr "Número de pin inválido"
+msgstr "Número de código inválido"
 
 #: gerbview/rs274d.cpp:622
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
@@ -20791,7 +20783,6 @@ msgstr ""
 "¿Desea descartar los cambios y salir?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -20816,8 +20807,8 @@ msgid ""
 "___H___ is thickness (height) in mils<br>\n"
 "___K___ is 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
-"Si especifica la corriente máxima, se calculará el grosor de pista "
-"adecuado.\n"
+"Si especifica la corriente máxima, se calculará el grosor de pista adecuado."
+"\n"
 "\n"
 "Si especifica uno de los grosores de pista, se calculará la corriente máxima "
 "que puede soportar. También se calculará el grosor de la otra pista para que "
@@ -20829,16 +20820,16 @@ msgstr ""
 "17,5 A (pistas internas), aumentos de temperatura de hasta 100 ºC y grosores "
 "de hasta 400 mil (10 mm).\n"
 "\n"
-"La fórmula, de IPC 2221, es  \n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>  \n"
-"dónde:  \n"
-"___I___ es la corriente máxima en A  \n"
+"La fórmula, de IPC 2221, es\n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>\n"
+"dónde:\n"
+"___I___ es la corriente máxima en A\n"
 "___&Delta;T___ es el aumento de temperatura por encima de la temperatura "
-"ambiente en &deg;C  \n"
-"___W___ es el ancho en mils  \n"
-"___H___ es el espesor (altura ) en mils  \n"
-"___K___ es 0.024 para pistas internas ó 0,048 para pistas externas  \n"
+"ambiente en &deg;C\n"
+"___W___ es el ancho en mils\n"
+"___H___ es el espesor (altura ) en mils\n"
+"___K___ es 0.024 para pistas internas ó 0,048 para pistas externas\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -21988,6 +21979,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:596
 msgid "Selected options resulted in errors! Change them and try again."
 msgstr ""
+"¡Las opciones seleccionadas resultaron en errores! Cámbielas y vuelva a "
+"intentarlo."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:603
 #, c-format
@@ -25476,9 +25469,8 @@ msgid "Net Inspector"
 msgstr "Inspector de red"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:83
-#, fuzzy
 msgid "Load and Test Netlist"
-msgstr "Leer lista de redes"
+msgstr "Cargar y probar lista de redes"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:125
 msgid "Select Netlist"
@@ -25579,9 +25571,9 @@ msgid "Line width may not be 0 for unfilled shapes."
 msgstr "El ancho de línea no puede ser 0 para formas sin relleno."
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Corner %d"
-msgstr "Esquinas"
+msgstr "Esquina %d"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:334
 msgid "Polygon must have at least 3 corners"
@@ -25675,9 +25667,8 @@ msgid "corners count %d"
 msgstr "número de esquinas %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:739
-#, fuzzy
 msgid "Unknown primitive"
-msgstr "tipo de pin desconocido"
+msgstr "Primitiva desconocida"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:919
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
@@ -26993,9 +26984,9 @@ msgid "<none selected>"
 msgstr "<nada seleccionado>"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Reference item: %s"
-msgstr "Referencia '%s'"
+msgstr "Artículo de referencia: %s"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -28861,7 +28852,6 @@ msgid "Check rule syntax"
 msgstr "Verificar reglas de sintaxis"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -29090,11 +29080,11 @@ msgstr ""
 "\n"
 "<br><br>\n"
 "\n"
-"### Tipos de requerimientos\n"
+"### Tipos de restricciones\n"
 "\n"
 " * annular\\_width\n"
 " * clearance\n"
-" * courtyard\\_clearance\n"
+" * courtyard_clearance\n"
 " * diff\\_pair\\_gap\n"
 " * diff\\_pair\\_uncoupled\n"
 " * disallow\n"
@@ -29160,8 +29150,8 @@ msgstr ""
 "\n"
 "Las reglas deberían ser ordenadas por especificidad.\n"
 "Las reglas posteriores tienen precedencia sobre las reglas anteriores;\n"
-"una vez que se encuentra una regla coincidente, no se comprobarán más "
-"reglas.\n"
+"una vez que se encuentra una regla coincidente, no se comprobarán más reglas."
+"\n"
 "\n"
 "Use Ctrl+/ para comentar o descomentar la(s) línea(s).\n"
 "<br><br><br>\n"
@@ -29196,8 +29186,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<net_name>')\n"
-"Verdadero si `A` tiene una red que es parte del par diferencial "
-"especificado.\n"
+"Verdadero si `A` tiene una red que es parte del par diferencial especificado."
+"\n"
 "`<net_name>` es el nombre base del par diferencial. Por ejemplo, "
 "`inDiffPair('CLK')`\n"
 "coincide con los elementos en las redes `CLK_P` y `CLK_N`.\n"
@@ -29246,7 +29236,7 @@ msgstr ""
 "        (constraint hole_to_hole (min 0.254mm))\n"
 "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
 "\n"
-"    (rule \"Clearance between Pads of Different Nets\"  \n"
+"    (rule \"Clearance betwen Pads of Different Nets\"  \n"
 "        (constraint clearance (min 3.0mm))\n"
 "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
 "\n"
@@ -29453,24 +29443,20 @@ msgid "undefined"
 msgstr "indefinido"
 
 #: pcbnew/drc/drc_engine.cpp:890
-#, fuzzy
 msgid "track width"
 msgstr "Ancho de pista"
 
 #: pcbnew/drc/drc_engine.cpp:891
-#, fuzzy
 msgid "annular width"
 msgstr "Ancho de anular"
 
 #: pcbnew/drc/drc_engine.cpp:892
-#, fuzzy
 msgid "via diameter"
 msgstr "Diámetro de vía"
 
 #: pcbnew/drc/drc_engine.cpp:893
-#, fuzzy
 msgid "constraint"
-msgstr "Limitaciones:"
+msgstr "Restricción"
 
 #: pcbnew/drc/drc_engine.cpp:896
 #, c-format
@@ -31959,9 +31945,8 @@ msgid "removed annular ring"
 msgstr "anillo anular eliminado"
 
 #: pcbnew/pcb_track.cpp:660
-#, fuzzy
 msgid "Track (arc)"
-msgstr "Pista "
+msgstr "Pista (arco)"
 
 #: pcbnew/pcb_track.cpp:675
 msgid "Segment Length"
@@ -32116,12 +32101,10 @@ msgid "File not found: '%s'."
 msgstr "Archivo no encontrado: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:710
-#, fuzzy
 msgid "Loading board data..."
-msgstr "Cargando regiones de placa..."
+msgstr "Cargando datos de placa..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:888
-#, fuzzy
 msgid "Loading netclasses..."
 msgstr "Cargando redes..."
 
@@ -32131,14 +32114,12 @@ msgid "Duplicate netclass name '%s'."
 msgstr "Nombre de clase de red '%s' duplicado."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:927
-#, fuzzy
 msgid "Loading components..."
-msgstr "Cargando redes..."
+msgstr "Cargando componentes..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:974
-#, fuzzy
 msgid "Loading component 3D models..."
-msgstr "Cargando modelos 3D..."
+msgstr "Cargando componente de modelos 3D..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1051
 #: pcbnew/plugins/altium/altium_pcb.cpp:1137
@@ -32154,9 +32135,8 @@ msgstr ""
 "de KiCad. Se ha movido a la capa de KiCad Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1330
-#, fuzzy
 msgid "Loading dimension drawings..."
-msgstr "Cargando cadenas unicode..."
+msgstr "Cargando dimensiones de dibujos..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1351
 #: pcbnew/plugins/altium/altium_pcb.cpp:1358
@@ -32502,9 +32482,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "La definición de pad de CADSTAR '%s' tiene errores de importación: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
-msgstr "No se ha podido encontrar un visor de PDF para '%s'."
+msgstr "No se ha podido encontrar el índice del pad '%d' en la huella '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1291
 #, c-format
@@ -34153,28 +34133,27 @@ msgstr "Desbloquear"
 
 #: pcbnew/tools/board_editor_control.cpp:1393
 msgid "Zones have insufficient overlap for merging."
-msgstr ""
+msgstr "Las zonas tienen una superposición insuficiente para ser fusionadas."
 
 #: pcbnew/tools/board_editor_control.cpp:1439
 msgid "Some zone netcodes did not match and were not merged."
-msgstr ""
+msgstr "Algunos códigos de red no coincidieron y no fueron unidos."
 
 #: pcbnew/tools/board_editor_control.cpp:1445
 msgid "Some zone priorities did not match and were not merged."
-msgstr ""
+msgstr "Algunas prioridades de zona no coincidieron y no fueron unidas."
 
 #: pcbnew/tools/board_editor_control.cpp:1451
 msgid "Some zones were rule areas and were not merged."
-msgstr ""
+msgstr "Algunas zonas eran áreas de la regla y no se fusionaron."
 
 #: pcbnew/tools/board_editor_control.cpp:1457
-#, fuzzy
 msgid "Some zone layer sets did not match and were not merged."
-msgstr "Capa de reglas '%s' no coincide; regla ignorada."
+msgstr "Algunos conjuntos de capa de zona no coinciden y no fueron unidos."
 
 #: pcbnew/tools/board_editor_control.cpp:1463
 msgid "Some zones did not intersect and were not merged."
-msgstr ""
+msgstr "Algunas zonas no se intersectaban y no fueron unidas."
 
 #: pcbnew/tools/board_editor_control.cpp:1529
 msgid "Duplicate zone"
