@@ -164,6 +164,11 @@ public:
      */
     void UpdateTitleAndInfo();
 
+    /**
+     * Display the size of the sheet to the message panel.
+     */
+    void UpdateMsgPanelInfo();
+
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;

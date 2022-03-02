@@ -74,8 +74,6 @@ public:
 
     void SetBoundingBox( const EDA_RECT& aBox ) { m_boundingBox = aBox; }
 
-    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList );
-
 #if defined(DEBUG)
     void    Show( int nestLevel, std::ostream& os ) const;
 #endif

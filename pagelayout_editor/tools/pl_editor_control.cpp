@@ -161,10 +161,7 @@ int PL_EDITOR_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     }
     else
     {
-        std::vector<MSG_PANEL_ITEM> msgItems;
-        m_frame->GetPageLayout().GetMsgPanelInfo( m_frame, msgItems );
-        m_frame->SetMsgPanel( msgItems );
-
+        m_frame->UpdateMsgPanelInfo();
         m_frame->GetPropertiesFrame()->CopyPrmsFromItemToPanel( nullptr );
     }
 

@@ -749,8 +749,6 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     line.Printf( _("coord origin: %s"),
                  m_originSelectBox->GetString( m_originSelectChoice ).GetData() );
     SetStatusText( line, 5 );
-
-    // Display units
 }
 
 
@@ -801,6 +799,7 @@ void PL_EDITOR_FRAME::HardRedraw()
 
     m_propertiesPagelayout->CopyPrmsFromItemToPanel( item );
     m_propertiesPagelayout->CopyPrmsFromGeneralToPanel();
+    UpdateMsgPanelInfo();
     GetCanvas()->Refresh();
 }
 
@@ -925,3 +924,18 @@ bool PL_EDITOR_FRAME::GetPageNumberOption() const
 {
     return m_pageSelectBox->GetSelection() == 0;
 }
+
+#if 1
+void PL_EDITOR_FRAME::UpdateMsgPanelInfo()
+{
+    VECTOR2D size = GetPageSettings().GetSizeIU();
+
+    std::vector<MSG_PANEL_ITEM> msgItems;
+    msgItems.emplace_back( _( "Page Width" ), MessageTextFromValue( GetUserUnits(), size.x ) );
+
+    msgItems.emplace_back(
+            _( "Page Height" ), MessageTextFromValue( GetUserUnits(), size.y ) );
+
+    SetMsgPanel( msgItems );
+}
+#endif
