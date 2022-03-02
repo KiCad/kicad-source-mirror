@@ -9,14 +9,14 @@
 # Jan Vykydal <vvykys@gmail.com>, 2020, 2021.
 # Jan Straka <bach@email.cz>, 2020, 2021, 2022.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
-# Radek Kuznik <radek.kzn@gmail.com>, 2021.
+# Radek Kuznik <radek.kzn@gmail.com>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 11:58-0800\n"
-"PO-Revision-Date: 2022-03-01 09:55+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
+"PO-Revision-Date: 2022-03-08 00:49+0000\n"
+"Last-Translator: Radek K <radek.kzn@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.11.1-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -9379,9 +9379,8 @@ msgid "0"
 msgstr "0"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:119
-#, fuzzy
 msgid "Pin count:"
-msgstr "počet vývodů"
+msgstr "počet vývodů:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:133
 #, fuzzy
@@ -9786,9 +9785,8 @@ msgstr "Styl:"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:213
 #: eeschema/dialogs/dialog_text_properties_base.cpp:207
-#, fuzzy
 msgid "Background fill"
-msgstr "Pozadí výplně:"
+msgstr "Pozadí výplně"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:239
 #, fuzzy
@@ -10664,9 +10662,9 @@ msgid "Set line color to transparent to use Schematic Editor colors."
 msgstr "Nastavit barvu průhlednosti pro použití barev editoru schémat."
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Properties"
-msgstr "Vlastnosti"
+msgstr "%s vlastnosti"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:66
 msgid "Connection type:"
@@ -11641,9 +11639,8 @@ msgid "Length in wavelength"
 msgstr "Délka v pouzdře"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1000
-#, fuzzy
 msgid "Use time delay"
-msgstr "Časová prodleva:"
+msgstr "Časová prodleva"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1000
 msgid "Use frequency and number of wavelength"
@@ -17969,18 +17966,14 @@ msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr "<b>Nejsou dostupné vrstvy</b> v Gerbview k načtení souborů"
 
 #: gerbview/files.cpp:43
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Not loaded:</b> <i>%s</i>"
-msgstr ""
-"\n"
-"<b>Nenačteno:</b> <i>%s</i>"
+msgstr "<b>Nenačteno:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Memory was exhausted reading:</b> <i>%s</i>"
-msgstr ""
-"\n"
-"<b>Paměť byla vyčerpána čtením:</b> <i>%s</i>"
+msgstr "<b>Paměť byla vyčerpána čtením:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:87
 msgid "Zip files"
@@ -18080,24 +18073,24 @@ msgid "Zip file '%s' cannot be opened."
 msgstr "Soubor Zip '%s' nelze otevřít."
 
 #: gerbview/files.cpp:479
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (gerber job file)."
-msgstr "Přeskočený soubor '%s' (gerber job soubor).\n"
+msgstr "Přeskočený soubor '%s' (gerber job soubor)."
 
 #: gerbview/files.cpp:524
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>"
-msgstr "<b>Nelze vytvořit přechodný soubor '%s'.</b>\n"
+msgstr "<b>Nelze vytvořit dočasný soubor '%s'.</b>"
 
 #: gerbview/files.cpp:549
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (unknown type)."
-msgstr "Přeskočený soubor '%s' (neznámý typ).\n"
+msgstr "Přeskočený soubor '%s' (neznámý typ)."
 
 #: gerbview/files.cpp:586
-#, fuzzy, c-format
+#, c-format
 msgid "<b>unzipped file %s read error</b>"
-msgstr "<b> rozbalený soubor %s chyba čtení </b>\n"
+msgstr "<b> rozbalený soubor %s chyba čtení </b>"
 
 #: gerbview/files.cpp:634
 msgid "Open Zip File"
@@ -19407,9 +19400,8 @@ msgid "Couldn't open the meta information directory for this template!"
 msgstr "Adresář meta informací pro tuto šablonu nelze otevřít!"
 
 #: kicad/project_template.cpp:63
-#, fuzzy
 msgid "Couldn't find the meta HTML information file for this template!"
-msgstr "Nelze najít soubor informací HTML metadat pro tuto šablonu!"
+msgstr "Nelze najít HTML soubor s metadaty pro tuto šablonu!"
 
 #: kicad/project_template.cpp:238
 #, c-format
@@ -22216,9 +22208,8 @@ msgid "Unknown cleanup action"
 msgstr "Neznámá metoda čištění"
 
 #: pcbnew/connectivity/connectivity_data.cpp:100
-#, fuzzy
 msgid "Updating nets..."
-msgstr "Aktualizace sítí"
+msgstr "Aktualizace sítí..."
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:379
 #: pcbnew/convert_shape_list_to_polygon.cpp:531
@@ -24337,9 +24328,8 @@ msgid "Export SVG File"
 msgstr "Export SVG souboru"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:180
-#, fuzzy
 msgid "Are you sure you want to overwrite the existing file?"
-msgstr "Jste si jisti, že chcete smazat položku?"
+msgstr "Jste si jisti, že chcete přepsat exitující soubor?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:255
 #: pcbnew/plugins/altium/altium_pcb.cpp:1613
@@ -25641,9 +25631,8 @@ msgid "Text && graphics formatting"
 msgstr "Text & grafika"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
-#, fuzzy
 msgid "Design rule constraints"
-msgstr "Nastavení návrhu průchidek:"
+msgstr "Omezení návrhových pravidel"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:64
 #, fuzzy
@@ -26592,9 +26581,8 @@ msgid "Zone knockout:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
-#, fuzzy
 msgid "Pad shape"
-msgstr "Tvar plošky:"
+msgstr "Tvar plošky"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
 #, fuzzy
@@ -26757,9 +26745,8 @@ msgid "Force plotting of invisible values / refs"
 msgstr "Vynutit kreslení neviditelných hodnot / referencí"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:89
-#, fuzzy
 msgid "Force plot invisible footprint values and reference designators"
-msgstr "Vynutit kreslení neviditelných hodnot a/nebo referencí"
+msgstr "Vynutit kreslení neviditelných hodnot a referencí"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid "Plot Edge.Cuts on all layers"
@@ -27651,14 +27638,12 @@ msgid "Change text box properties"
 msgstr "Změnit vlastnosti textu"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:137
-#, fuzzy
 msgid "Text Width:"
-msgstr "Text Šířka"
+msgstr "Šířka textu:"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:153
-#, fuzzy
 msgid "Text Height:"
-msgstr "Text Výška"
+msgstr "Výška textu:"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:203
 #, fuzzy
@@ -28476,9 +28461,8 @@ msgid "Silkscreen"
 msgstr "Potisk"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:417
-#, fuzzy
 msgid "Minimum item clearance:"
-msgstr "Min. izolační mezera:"
+msgstr "Minimální izolační mezera:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:422
 msgid ""
@@ -30184,9 +30168,8 @@ msgid "Rule already has a '%s' constraint."
 msgstr ""
 
 #: pcbnew/drc/drc_rule_parser.cpp:407
-#, fuzzy
 msgid "Expecting number."
-msgstr "Očekávám %s"
+msgstr "Očekává se číslo."
 
 #: pcbnew/drc/drc_rule_parser.cpp:422
 #, fuzzy
@@ -32618,9 +32601,9 @@ msgid "'%s' was not fully parsed."
 msgstr "'%s' nebyl zcela analyzován."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:781
-#, fuzzy, c-format
+#, c-format
 msgid "Record of unknown type: '%d'."
-msgstr "neznámá ploška typu: %d"
+msgstr "Záznamů s neznámým typem: '%d'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:873
 msgid "Loading extended primitive information data..."
@@ -34407,16 +34390,14 @@ msgstr "Pevný tvar"
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:48
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:117
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:186
-#, fuzzy
 msgid "Max length"
-msgstr "Délka prokovu:"
+msgstr "Maximální délka"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:55
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:124
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:193
-#, fuzzy
 msgid "Max height"
-msgstr "Max výška:"
+msgstr "Maximální výška"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:66
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:135
@@ -36923,9 +36904,8 @@ msgid "Select"
 msgstr "Výběr"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:1114
-#, fuzzy
 msgid "Select/Expand Connection..."
-msgstr "Vyberte/Rozbalte spojení"
+msgstr "Vyberte/Rozbalte spojení..."
 
 #: pcbnew/tools/placement_tool.cpp:65
 msgid "Align/Distribute"
