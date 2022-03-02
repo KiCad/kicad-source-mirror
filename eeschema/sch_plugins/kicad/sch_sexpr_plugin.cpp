@@ -1090,14 +1090,12 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
         m_out->Print( 0, ")" );
     }
 
-    int unit = -1;
+    int unit = aSymbol->GetUnit();
 
-    if( !( aSymbol->GetInstanceReferences().size() > 1 ) )
-        unit = aSymbol->GetUnit();
-    else if( aSheetPath != nullptr )
+    if( ( aSymbol->GetInstanceReferences().size() > 1 ) && aSheetPath )
         unit = aSymbol->GetUnitSelection( aSheetPath );
-    if ( unit >= 0 )
-        m_out->Print( 0, " (unit %d)", unit );
+
+    m_out->Print( 0, " (unit %d)", unit );
 
     if( aSymbol->GetConvert() == LIB_ITEM::LIB_CONVERT::DEMORGAN )
         m_out->Print( 0, " (convert %d)", aSymbol->GetConvert() );

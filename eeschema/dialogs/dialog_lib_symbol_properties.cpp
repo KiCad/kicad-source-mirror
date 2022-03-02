@@ -593,7 +593,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 {
 #ifdef KICAD_SPICE
     int diff = m_fields->size();
-    auto symbol = SCH_SYMBOL( *m_libEntry, m_libEntry->GetLibId(), nullptr );
+    auto symbol = SCH_SYMBOL( *m_libEntry, m_libEntry->GetLibId(), nullptr, 0 );
 
     DIALOG_SPICE_MODEL dialog( this, symbol, m_fields );
 
