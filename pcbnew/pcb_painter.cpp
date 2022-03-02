@@ -894,123 +894,124 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
     if( IsNetnameLayer( aLayer ) )
     {
-        // Is anything that we can display enabled?
-        bool displayNetname = ( (pcbconfig() && pcbconfig()->m_Display.m_NetNames == 1)
-                                || (pcbconfig() && pcbconfig()->m_Display.m_NetNames == 3 ) )
-                                && !aPad->GetNetname().empty();
+        if( !pcbconfig() )
+            return;
 
-        bool displayPadNumber = !pcbconfig() || pcbconfig()->m_Display.m_PadNumbers;
+        PCBNEW_SETTINGS::DISPLAY_OPTIONS& displayOpts = pcbconfig()->m_Display;
+        wxString                          netname;
+        wxString                          padNumber;
 
-        if( displayNetname || displayPadNumber )
+        if( displayOpts.m_PadNumbers )
+            padNumber = UnescapeString( aPad->GetNumber() );
+
+        if( displayOpts.m_NetNames == 1 || displayOpts.m_NetNames == 3 )
+            netname = UnescapeString( aPad->GetShortNetname() );
+
+        if( displayOpts.m_PadNoConnects
+                && aPad->GetShortNetname().StartsWith( wxT( "unconnected-(" ) ) )
         {
-            EDA_RECT padBBox = aPad->GetBoundingBox();
-            VECTOR2D position = padBBox.Centre();
-            VECTOR2D padsize = VECTOR2D( padBBox.GetSize() );
+            wxString pinType = aPad->GetPinType();
 
-            if( aPad->GetShape() != PAD_SHAPE::CUSTOM )
-            {
-                // Don't allow a 45° rotation to bloat a pad's bounding box unnecessarily
-                double limit = std::min( aPad->GetSize().x, aPad->GetSize().y ) * 1.1;
-
-                if( padsize.x > limit && padsize.y > limit )
-                {
-                    padsize.x = limit;
-                    padsize.y = limit;
-                }
-            }
-
-            double maxSize = PCB_RENDER_SETTINGS::MAX_FONT_SIZE;
-            double size = padsize.y;
-
-            m_gal->Save();
-            m_gal->Translate( position );
-
-            // Keep the size ratio for the font, but make it smaller
-            if( padsize.x < padsize.y )
-            {
-                m_gal->Rotate( -ANGLE_90.AsRadians() );
-                size = padsize.x;
-                std::swap( padsize.x, padsize.y );
-            }
-
-            // Font size limits
-            if( size > maxSize )
-                size = maxSize;
-
-            // Default font settings
-            m_gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
-            m_gal->SetVerticalJustify( GR_TEXT_V_ALIGN_CENTER );
-            m_gal->SetFontBold( false );
-            m_gal->SetFontItalic( false );
-            m_gal->SetFontUnderlined( false );
-            m_gal->SetTextMirrored( false );
-            m_gal->SetStrokeColor( m_pcbSettings.GetColor( aPad, aLayer ) );
-            m_gal->SetIsStroke( true );
-            m_gal->SetIsFill( false );
-
-            // We have already translated the GAL to be centered at the center of the pad's
-            // bounding box
-            VECTOR2I textpos( 0, 0 );
-
-            // Divide the space, to display both pad numbers and netnames and set the Y text
-            // position to display 2 lines
-            if( displayNetname && displayPadNumber )
-            {
-                size = size / 2.5;
-                textpos.y = size / 1.7;
-            }
-
-            if( displayNetname )
-            {
-                wxString netname = UnescapeString( aPad->GetShortNetname() );
-                wxString pinType = aPad->GetPinType();
-
-                // If the pad is actually not connected (unique pad in the net),
-                // shorten the displayed netname (actual name not useful)
-                // Can happen if the pad netname is edited inside the board editor, therefore
-                // having a netname not coming from schematic
-                if( netname.StartsWith( wxT( "unconnected-(" ) ) )
-                {
-                    if( pinType == wxT( "no_connect" ) || pinType.EndsWith( wxT( "+no_connect" ) ) )
-                        netname = wxT( "x" );
-                    else if( pinType == wxT( "free" ) )
-                        netname = wxT( "*" );
-                }
-
-                // approximate the size of net name text:
-                double tsize = 1.5 * padsize.x / std::max( PrintableCharCount( netname ), 1 );
-                tsize = std::min( tsize, size );
-
-                // Use a smaller text size to handle interline, pen size...
-                tsize *= 0.7;
-                VECTOR2D namesize( tsize, tsize );
-
-                m_gal->SetGlyphSize( namesize );
-                m_gal->SetLineWidth( namesize.x / 12.0 );
-                m_gal->BitmapText( netname, textpos, ANGLE_HORIZONTAL );
-            }
-
-            if( displayPadNumber )
-            {
-                const wxString& padNumber = aPad->GetNumber();
-                textpos.y = -textpos.y;
-
-                // approximate the size of the pad number text:
-                double tsize = 1.5 * padsize.x / std::max( PrintableCharCount( padNumber ), 1 );
-                tsize = std::min( tsize, size );
-
-                // Use a smaller text size to handle interline, pen size...
-                tsize *= 0.7;
-                tsize = std::min( tsize, size );
-                VECTOR2D numsize( tsize, tsize );
-
-                m_gal->SetGlyphSize( numsize );
-                m_gal->SetLineWidth( numsize.x / 12.0 );
-                m_gal->BitmapText( padNumber, textpos, ANGLE_HORIZONTAL );
-            }
-
-            m_gal->Restore();
+            if( pinType == wxT( "no_connect" ) || pinType.EndsWith( wxT( "+no_connect" ) ) )
+                netname = wxT( "x" );
+            else if( pinType == wxT( "free" ) )
+                netname = wxT( "*" );
         }
+
+        if( netname.IsEmpty() && padNumber.IsEmpty() )
+            return;
+
+        EDA_RECT padBBox = aPad->GetBoundingBox();
+        VECTOR2D position = padBBox.Centre();
+        VECTOR2D padsize = VECTOR2D( padBBox.GetSize() );
+
+        if( aPad->GetShape() != PAD_SHAPE::CUSTOM )
+        {
+            // Don't allow a 45° rotation to bloat a pad's bounding box unnecessarily
+            double limit = std::min( aPad->GetSize().x, aPad->GetSize().y ) * 1.1;
+
+            if( padsize.x > limit && padsize.y > limit )
+            {
+                padsize.x = limit;
+                padsize.y = limit;
+            }
+        }
+
+        double maxSize = PCB_RENDER_SETTINGS::MAX_FONT_SIZE;
+        double size = padsize.y;
+
+        m_gal->Save();
+        m_gal->Translate( position );
+
+        // Keep the size ratio for the font, but make it smaller
+        if( padsize.x < padsize.y )
+        {
+            m_gal->Rotate( -ANGLE_90.AsRadians() );
+            size = padsize.x;
+            std::swap( padsize.x, padsize.y );
+        }
+
+        // Font size limits
+        if( size > maxSize )
+            size = maxSize;
+
+        // Default font settings
+        m_gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
+        m_gal->SetVerticalJustify( GR_TEXT_V_ALIGN_CENTER );
+        m_gal->SetFontBold( false );
+        m_gal->SetFontItalic( false );
+        m_gal->SetFontUnderlined( false );
+        m_gal->SetTextMirrored( false );
+        m_gal->SetStrokeColor( m_pcbSettings.GetColor( aPad, aLayer ) );
+        m_gal->SetIsStroke( true );
+        m_gal->SetIsFill( false );
+
+        // We have already translated the GAL to be centered at the center of the pad's
+        // bounding box
+        VECTOR2I textpos( 0, 0 );
+
+        // Divide the space, to display both pad numbers and netnames and set the Y text
+        // position to display 2 lines
+        if( !netname.IsEmpty() && !padNumber.IsEmpty() )
+        {
+            size = size / 2.5;
+            textpos.y = size / 1.7;
+        }
+
+        if( !netname.IsEmpty() )
+        {
+            // approximate the size of net name text:
+            double tsize = 1.5 * padsize.x / std::max( PrintableCharCount( netname ), 1 );
+            tsize = std::min( tsize, size );
+
+            // Use a smaller text size to handle interline, pen size...
+            tsize *= 0.7;
+            VECTOR2D namesize( tsize, tsize );
+
+            m_gal->SetGlyphSize( namesize );
+            m_gal->SetLineWidth( namesize.x / 12.0 );
+            m_gal->BitmapText( netname, textpos, ANGLE_HORIZONTAL );
+        }
+
+        if( !padNumber.IsEmpty() )
+        {
+            textpos.y = -textpos.y;
+
+            // approximate the size of the pad number text:
+            double tsize = 1.5 * padsize.x / std::max( PrintableCharCount( padNumber ), 1 );
+            tsize = std::min( tsize, size );
+
+            // Use a smaller text size to handle interline, pen size...
+            tsize *= 0.7;
+            tsize = std::min( tsize, size );
+            VECTOR2D numsize( tsize, tsize );
+
+            m_gal->SetGlyphSize( numsize );
+            m_gal->SetLineWidth( numsize.x / 12.0 );
+            m_gal->BitmapText( padNumber, textpos, ANGLE_HORIZONTAL );
+        }
+
+        m_gal->Restore();
 
         return;
     }
