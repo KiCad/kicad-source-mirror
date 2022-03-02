@@ -317,6 +317,28 @@ void SCH_SHEET::SwapData( SCH_ITEM* aItem )
 }
 
 
+void SCH_SHEET::SetFields( const std::vector<SCH_FIELD>& aFields )
+{
+    m_fields = aFields;
+    int next_id = SHEET_MANDATORY_FIELDS;
+
+    for( int ii = 0; ii < int( m_fields.size() ); )
+    {
+        if( m_fields[ii].GetId() < 0 || m_fields[ii].GetId() >= ssize_t( m_fields.size() ) )
+            m_fields[ii].SetId( next_id++ );
+
+        if( m_fields[ii].GetId() != ii )
+            std::swap( m_fields[ii], m_fields[m_fields[ii].GetId()]);
+
+        if( m_fields[ii].GetId() == ii )
+            ++ii;
+    }
+
+    // Make sure that we get the UNIX variant of the file path
+    SetFileName( m_fields[SHEETFILENAME].GetText() );
+}
+
+
 void SCH_SHEET::AddPin( SCH_SHEET_PIN* aSheetPin )
 {
     wxASSERT( aSheetPin != nullptr );

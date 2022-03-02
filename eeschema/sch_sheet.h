@@ -95,23 +95,7 @@ public:
      *
      * @param aFields are the fields to set in this symbol.
      */
-    void SetFields( const std::vector<SCH_FIELD>& aFields )
-    {
-        m_fields = aFields;
-        int next_id = SHEET_MANDATORY_FIELDS;
-
-        for( int ii = 0; ii < int( m_fields.size() ); )
-        {
-            if( m_fields[ii].GetId() < 0 || m_fields[ii].GetId() >= ssize_t( m_fields.size() ) )
-                m_fields[ii].SetId( next_id++ );
-
-            if( m_fields[ii].GetId() != ii )
-                std::swap( m_fields[ii], m_fields[m_fields[ii].GetId()]);
-
-            if( m_fields[ii].GetId() == ii )
-                ++ii;
-        }
-    }
+    void SetFields( const std::vector<SCH_FIELD>& aFields );
 
     wxString GetName() const { return m_fields[ SHEETNAME ].GetText(); }
 
