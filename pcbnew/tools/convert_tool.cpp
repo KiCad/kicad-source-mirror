@@ -689,8 +689,7 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
     {
         if( !IsCopperLayer( targetLayer ) )
         {
-            if( copperLayer == UNSELECTED_LAYER )
-                copperLayer = frame->SelectOneLayer( F_Cu, LSET::AllNonCuMask() );
+            copperLayer = frame->SelectOneLayer( F_Cu, LSET::AllNonCuMask() );
 
             if( copperLayer == UNDEFINED_LAYER )    // User canceled
                 return true;
