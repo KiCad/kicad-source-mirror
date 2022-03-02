@@ -15,15 +15,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 11:59-0800\n"
-"PO-Revision-Date: 2022-03-01 09:58+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
+"PO-Revision-Date: 2022-03-08 00:49+0000\n"
+"Last-Translator: Radek K <radek.kzn@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.11.1-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -18671,9 +18671,8 @@ msgid "Couldn't open the meta information directory for this template!"
 msgstr "Adresář meta informací pro tuto šablonu nelze otevřít!"
 
 #: kicad/project_template.cpp:63
-#, fuzzy
 msgid "Couldn't find the meta HTML information file for this template!"
-msgstr "Nelze najít soubor informací HTML metadat pro tuto šablonu!"
+msgstr "Nelze najít HTML soubor s metadaty pro tuto šablonu!"
 
 #: kicad/project_template.cpp:238
 #, c-format
@@ -23557,9 +23556,8 @@ msgid "Export SVG File"
 msgstr "Export SVG souboru"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:179
-#, fuzzy
 msgid "Are you sure you want to overwrite the existing file?"
-msgstr "Jste si jisti, že chcete smazat položku?"
+msgstr "Jste si jisti, že chcete přepsat exitující soubor?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:254
 #: pcbnew/plugins/altium/altium_pcb.cpp:1399
@@ -25966,9 +25964,8 @@ msgid "Force plotting of invisible values / refs"
 msgstr "Vynutit kreslení neviditelných hodnot / referencí"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:89
-#, fuzzy
 msgid "Force plot invisible footprint values and reference designators"
-msgstr "Vynutit kreslení neviditelných hodnot a/nebo referencí"
+msgstr "Vynutit kreslení neviditelných hodnot a referencí"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid "Plot Edge.Cuts on all layers"
@@ -27689,9 +27686,8 @@ msgid "Silkscreen"
 msgstr "Potisk"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:427
-#, fuzzy
 msgid "Minimum item clearance:"
-msgstr "Min. izolační mezera:"
+msgstr "Minimální izolační mezera:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:432
 msgid ""
