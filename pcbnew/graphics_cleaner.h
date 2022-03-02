@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,15 +49,17 @@ private:
     bool isNullShape( PCB_SHAPE* aShape );
     bool areEquivalent( PCB_SHAPE* aShape1, PCB_SHAPE* aShape2 );
 
-    void cleanupSegments();
+    void cleanupShapes();
     void mergeRects();
 
 private:
-    DRAWINGS&                   m_drawings;
-    FOOTPRINT*                  m_parentFootprint;  // nullptr if not in Footprint Editor
-    BOARD_COMMIT&               m_commit;
-    bool                        m_dryRun;
-    std::vector<std::shared_ptr<CLEANUP_ITEM> >* m_itemsList;
+    DRAWINGS&     m_drawings;
+    FOOTPRINT*    m_parentFootprint;  // nullptr if not in Footprint Editor
+    BOARD_COMMIT& m_commit;
+    bool          m_dryRun;
+    int           m_epsilon;
+
+    std::vector<std::shared_ptr<CLEANUP_ITEM>>* m_itemsList;
 };
 
 

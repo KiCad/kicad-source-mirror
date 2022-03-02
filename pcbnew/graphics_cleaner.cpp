@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,7 @@
 #include <pcb_shape.h>
 #include <fp_shape.h>
 #include <graphics_cleaner.h>
+#include <board_design_settings.h>
 
 
 GRAPHICS_CLEANER::GRAPHICS_CLEANER( DRAWINGS& aDrawings, FOOTPRINT* aParentFootprint,
@@ -50,20 +51,28 @@ void GRAPHICS_CLEANER::CleanupBoard( bool aDryRun,
     m_dryRun = aDryRun;
     m_itemsList = aItemsList;
 
-    // Clear the flag used to mark some segments as deleted, in dry run:
+    m_epsilon = m_commit.GetBoard()->GetDesignSettings().m_MaxError;
+
+    // Clear the flag used to mark some shapes as deleted, in dry run:
     for( BOARD_ITEM* drawing : m_drawings )
         drawing->ClearFlags( IS_DELETED );
 
     if( aDeleteRedundant )
-        cleanupSegments();
+        cleanupShapes();
 
     if( aMergeRects )
         mergeRects();
 
-    // Clear the flag used to mark some segments:
+    // Clear the flag used to mark some shapes:
     for( BOARD_ITEM* drawing : m_drawings )
         drawing->ClearFlags( IS_DELETED );
 }
+
+
+bool equivalent( const VECTOR2I& a, const VECTOR2I& b, int epsilon )
+{
+    return abs( a.x - b.x ) < epsilon && abs( a.y - b.y ) < epsilon;
+};
 
 
 bool GRAPHICS_CLEANER::isNullShape( PCB_SHAPE* aShape )
@@ -73,7 +82,7 @@ bool GRAPHICS_CLEANER::isNullShape( PCB_SHAPE* aShape )
     case SHAPE_T::SEGMENT:
     case SHAPE_T::RECT:
     case SHAPE_T::ARC:
-        return aShape->GetStart() == aShape->GetEnd();
+        return equivalent( aShape->GetStart(), aShape->GetEnd(), m_epsilon );
 
     case SHAPE_T::CIRCLE:
         return aShape->GetRadius() == 0;
@@ -106,22 +115,23 @@ bool GRAPHICS_CLEANER::areEquivalent( PCB_SHAPE* aShape1, PCB_SHAPE* aShape2 )
     case SHAPE_T::SEGMENT:
     case SHAPE_T::RECT:
     case SHAPE_T::CIRCLE:
-        return aShape1->GetStart() == aShape2->GetStart()
-                && aShape1->GetEnd() == aShape2->GetEnd();
+        return equivalent( aShape1->GetStart(), aShape2->GetStart(), m_epsilon )
+                && equivalent( aShape1->GetEnd(), aShape2->GetEnd(), m_epsilon );
 
     case SHAPE_T::ARC:
-        return aShape1->GetCenter() == aShape2->GetCenter()
-                && aShape1->GetStart() == aShape2->GetStart()
-                && aShape1->GetArcAngle() == aShape2->GetArcAngle();
+        return equivalent( aShape1->GetCenter(), aShape2->GetCenter(), m_epsilon )
+                && equivalent( aShape1->GetStart(), aShape2->GetStart(), m_epsilon )
+                && equivalent( aShape1->GetEnd(), aShape2->GetEnd(), m_epsilon );
 
     case SHAPE_T::POLY:
         // TODO
         return false;
 
     case SHAPE_T::BEZIER:
-        return aShape1->GetBezierC1() == aShape2->GetBezierC1()
-                && aShape1->GetBezierC2() == aShape2->GetBezierC2()
-                && aShape1->GetBezierPoints() == aShape2->GetBezierPoints();
+        return equivalent( aShape1->GetStart(), aShape2->GetStart(), m_epsilon )
+                && equivalent( aShape1->GetEnd(), aShape2->GetEnd(), m_epsilon )
+                && equivalent( aShape1->GetBezierC1(), aShape2->GetBezierC1(), m_epsilon )
+                && equivalent( aShape1->GetBezierC2(), aShape2->GetBezierC2(), m_epsilon );
 
     default:
         wxFAIL_MSG( wxT( "GRAPHICS_CLEANER::areEquivalent unimplemented for " )
@@ -131,45 +141,45 @@ bool GRAPHICS_CLEANER::areEquivalent( PCB_SHAPE* aShape1, PCB_SHAPE* aShape2 )
 }
 
 
-void GRAPHICS_CLEANER::cleanupSegments()
+void GRAPHICS_CLEANER::cleanupShapes()
 {
-    // Remove duplicate segments (2 superimposed identical segments):
+    // Remove duplicate shapes (2 superimposed identical shapes):
     for( auto it = m_drawings.begin(); it != m_drawings.end(); it++ )
     {
-        PCB_SHAPE* segment = dynamic_cast<PCB_SHAPE*>( *it );
+        PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( *it );
 
-        if( !segment || segment->GetShape() != SHAPE_T::SEGMENT || segment->HasFlag( IS_DELETED ) )
+        if( !shape || shape->HasFlag( IS_DELETED ) )
             continue;
 
-        if( isNullShape( segment ) )
+        if( isNullShape( shape ) )
         {
             std::shared_ptr<CLEANUP_ITEM> item = std::make_shared<CLEANUP_ITEM>( CLEANUP_NULL_GRAPHIC );
-            item->SetItems( segment );
+            item->SetItems( shape );
             m_itemsList->push_back( item );
 
             if( !m_dryRun )
-                m_commit.Remove( segment );
+                m_commit.Remove( shape );
 
             continue;
         }
 
         for( auto it2 = it + 1; it2 != m_drawings.end(); it2++ )
         {
-            PCB_SHAPE* segment2 = dynamic_cast<PCB_SHAPE*>( *it2 );
+            PCB_SHAPE* shape2 = dynamic_cast<PCB_SHAPE*>( *it2 );
 
-            if( !segment2 || segment2->HasFlag( IS_DELETED ) )
+            if( !shape2 || shape2->HasFlag( IS_DELETED ) )
                 continue;
 
-            if( areEquivalent( segment, segment2 ) )
+            if( areEquivalent( shape, shape2 ) )
             {
                 std::shared_ptr<CLEANUP_ITEM> item = std::make_shared<CLEANUP_ITEM>( CLEANUP_DUPLICATE_GRAPHIC );
-                item->SetItems( segment2 );
+                item->SetItems( shape2 );
                 m_itemsList->push_back( item );
 
-                segment2->SetFlags( IS_DELETED );
+                shape2->SetFlags(IS_DELETED );
 
                 if( !m_dryRun )
-                    m_commit.Remove( segment2 );
+                    m_commit.Remove( shape2 );
             }
         }
     }

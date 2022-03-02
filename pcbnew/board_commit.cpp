@@ -72,6 +72,12 @@ BOARD_COMMIT::~BOARD_COMMIT()
 }
 
 
+BOARD* BOARD_COMMIT::GetBoard() const
+{
+    return static_cast<BOARD*>( m_toolMgr->GetModel() );
+}
+
+
 COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
 {
     // if aItem belongs a footprint, the full footprint will be saved
