@@ -28,6 +28,7 @@
 #include <commit.h>
 
 class BOARD_ITEM;
+class BOARD;
 class PICKED_ITEMS_LIST;
 class PCB_TOOL_BASE;
 class TOOL_MANAGER;
@@ -42,6 +43,8 @@ public:
     BOARD_COMMIT( PCB_TOOL_BASE *aTool );
 
     virtual ~BOARD_COMMIT();
+
+    BOARD* GetBoard() const;
 
     virtual void Push( const wxString& aMessage = wxT( "A commit" ),
                        bool aCreateUndoEntry = true, bool aSetDirtyBit = true ) override;

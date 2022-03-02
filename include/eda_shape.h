@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -214,11 +214,11 @@ public:
 
     void SetPolyShape( const SHAPE_POLY_SET& aShape ) { m_poly = aShape; }
 
-    void SetBezierPoints( const std::vector<wxPoint>& aPoints ) { m_bezierPoints = aPoints; }
+    void SetPolyPoints( const std::vector<wxPoint>& aPoints );
 
     /**
-     * Rebuild the m_BezierPoints vertex list that approximate the Bezier curve
-     * by a list of segments.
+     * Rebuild the m_bezierPoints vertex list that approximate the Bezier curve by a list of
+     * segments.
      *
      * Has meaning only for BEZIER shape.
      *
@@ -227,8 +227,6 @@ public:
      *                   segment in list. Good values are between m_width/2 and m_width.
      */
     void RebuildBezierToSegmentsPointsList( int aMinSegLen );
-
-    void SetPolyPoints( const std::vector<wxPoint>& aPoints );
 
     /**
      * Make a set of SHAPE objects representing the EDA_SHAPE.  Caller owns the objects.
