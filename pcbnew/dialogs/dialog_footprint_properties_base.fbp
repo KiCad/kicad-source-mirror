@@ -2625,7 +2625,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass"></property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">This is the local clearance between pads and the solder paste for this footprint.&#x0A;This value can be superseded by a pad local values.&#x0A;The final clearance value is the sum of this value and the clearance value ratio.&#x0A;A negative value means a smaller mask size than pad size.</property>
+                                                            <property name="tooltip">This is the local clearance between pads and the solder paste for this footprint.&#x0A;This value can be superseded by a pad local values.&#x0A;The final clearance value is the sum of this value and the clearance value ratio.&#x0A;A negative value means a smaller stencil aperture size than pad size.</property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
@@ -2820,7 +2820,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass"></property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">This is the local clearance ratio in percent between pads and the solder paste for this footprint.&#x0A;A value of 10 means the clearance value is 10 percent of the pad size.&#x0A;This value can be superseded by a pad local value.&#x0A;The final clearance value is the sum of this value and the clearance value.&#x0A;A negative value means a smaller mask size than pad size.</property>
+                                                            <property name="tooltip">This is the local clearance ratio applied as a percentage of the pad width and height for this footprint.&#x0A;A value of 10 means the horizontal clearance value is 10% of the pad’s width, and the vertical clearance value is 10% of the pad’s height.&#x0A;This value can be superseded by a pad local value.&#x0A;The final clearance value is the sum of this value and the absolute clearance value.&#x0A;A negative value means a smaller stencil aperture size than pad size.</property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
