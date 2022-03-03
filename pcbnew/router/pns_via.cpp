@@ -32,23 +32,29 @@ namespace PNS {
 bool VIA::PushoutForce( NODE* aNode, const ITEM* aOther, VECTOR2I& aForce )
 {
     int      clearance = aNode->GetClearance( this, aOther );
-    int      holeClearance = aNode->GetHoleClearance( this, aOther );
-    int      hole2holeClearance = aNode->GetHoleToHoleClearance( this, aOther );
-    VECTOR2I f[4], force;
+    VECTOR2I elementForces[4], force;
+    size_t   nf = 0;
 
-    if( aOther->Hole() )
+    if( aNode->GetCollisionQueryScope() == NODE::CQS_ALL_RULES )
     {
-        aOther->Hole()->Collide( Shape(), holeClearance, &f[0] );
-        aOther->Hole()->Collide( Hole(), hole2holeClearance, &f[1] );
+        int holeClearance = aNode->GetHoleClearance( this, aOther );
+        int hole2holeClearance = aNode->GetHoleToHoleClearance( this, aOther );
+
+        if( aOther->Hole() )
+        {
+            aOther->Hole()->Collide( Shape(), holeClearance, &elementForces[nf++] );
+            aOther->Hole()->Collide( Hole(), hole2holeClearance, &elementForces[nf++] );
+        }
+
+        aOther->Shape()->Collide( Hole(), holeClearance, &elementForces[nf++] );
     }
 
-    aOther->Shape()->Collide( Shape(), clearance, &f[2] );
-    aOther->Shape()->Collide( Hole(), holeClearance, &f[3] );
+    aOther->Shape()->Collide( Shape(), clearance, &elementForces[nf++] );
 
-    for( int i = 0; i < 4; i++ )
+    for( size_t i = 0; i < nf; i++ )
     {
-        if( f[i].SquaredEuclideanNorm() > force.SquaredEuclideanNorm() )
-            force = f[i];
+        if( elementForces[i].SquaredEuclideanNorm() > force.SquaredEuclideanNorm() )
+            force = elementForces[i];
     }
 
     aForce = force;

@@ -146,6 +146,14 @@ protected:
 class NODE
 {
 public:
+
+///< Supported item types
+    enum COLLISION_QUERY_SCOPE
+    {
+        CQS_ALL_RULES               =    1, ///< check all rules
+        CQS_IGNORE_HOLE_CLEARANCE   =    2  ///< check everything except hole2hole / hole2copper
+    };
+
     typedef OPT<OBSTACLE>         OPT_OBSTACLE;
     typedef std::vector<ITEM*>    ITEM_VECTOR;
     typedef std::vector<OBSTACLE> OBSTACLES;
@@ -388,6 +396,16 @@ public:
 
     void FixupVirtualVias();
 
+    void SetCollisionQueryScope( COLLISION_QUERY_SCOPE aScope )
+    {
+        m_collisionQueryScope = aScope;
+    }
+
+    COLLISION_QUERY_SCOPE GetCollisionQueryScope() const
+    {
+        return m_collisionQueryScope;
+    }
+
 private:
     void Add( std::unique_ptr< ITEM > aItem, bool aAllowRedundant = false );
 
@@ -460,6 +478,8 @@ private:
                                         ///< inheritance chain)
 
     std::unordered_set<ITEM*> m_garbageItems;
+
+    COLLISION_QUERY_SCOPE m_collisionQueryScope;
 };
 
 }

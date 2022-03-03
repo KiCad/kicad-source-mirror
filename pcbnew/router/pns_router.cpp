@@ -157,6 +157,15 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
     if( aStartItems.Empty() )
         return false;
 
+    if( Settings().Mode() == RM_MarkObstacles )
+    {
+        m_world->SetCollisionQueryScope( NODE::CQS_ALL_RULES );
+    }
+    else
+    {
+        m_world->SetCollisionQueryScope( NODE::CQS_IGNORE_HOLE_CLEARANCE );
+    }
+
     if( aStartItems.Count( ITEM::SOLID_T ) == aStartItems.Size() )
     {
         m_dragger = std::make_unique<COMPONENT_DRAGGER>( this );
@@ -372,6 +381,15 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
 
 bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
 {
+    if( Settings().Mode() == RM_MarkObstacles )
+    {
+        m_world->SetCollisionQueryScope( NODE::CQS_ALL_RULES );
+    }
+    else
+    {
+        m_world->SetCollisionQueryScope( NODE::CQS_IGNORE_HOLE_CLEARANCE );
+    }
+
     if( !isStartingPointRoutable( aP, aStartItem, aLayer ) )
         return false;
 

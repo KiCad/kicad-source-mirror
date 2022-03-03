@@ -59,6 +59,7 @@ NODE::NODE()
     m_maxClearance = 800000;    // fixme: depends on how thick traces are.
     m_ruleResolver = nullptr;
     m_index = new INDEX;
+    m_collisionQueryScope = CQS_ALL_RULES;
 
 #ifdef DEBUG
     allocNodes.insert( this );
@@ -146,6 +147,7 @@ NODE* NODE::Branch()
     child->m_ruleResolver = m_ruleResolver;
     child->m_root = isRoot() ? this : m_root;
     child->m_maxClearance = m_maxClearance;
+    child->m_collisionQueryScope = m_collisionQueryScope;
 
     // Immediate offspring of the root branch needs not copy anything. For the rest, deep-copy
     // joints, overridden item maps and pointers to stored items.
@@ -385,7 +387,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
                 updateNearest( ip, obstacle.m_item, obstacleHull, false );
         }
 
-        if( obstacle.m_item->Hole() )
+        if( m_collisionQueryScope == CQS_ALL_RULES && obstacle.m_item->Hole() )
         {
             clearance = GetHoleClearance( obstacle.m_item, aLine ) + aLine->Width() / 2;
             obstacleHull = obstacle.m_item->HoleHull( clearance + PNS_HULL_MARGIN, 0, layer );
@@ -427,8 +429,6 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
 
     if( nearest.m_distFirst == INT_MAX )
         nearest.m_item = obstacleList[0].m_item;
-
-    // debugDecorator->AddLine( nearest.m_hull, YELLOW, 60000, "obstacle-nearest-hull" );
 
     return nearest;
 }

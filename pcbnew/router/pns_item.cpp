@@ -88,7 +88,7 @@ bool ITEM::collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferent
     if( zoneB && Parent() && !checkKeepout( zoneB, Parent() ) )
         return false;
 
-    if( holeA || holeB )
+    if( aNode->GetCollisionQueryScope() == NODE::CQS_ALL_RULES && (holeA || holeB ) )
     {
         int holeClearance = aNode->GetHoleClearance( this, aOther );
 
