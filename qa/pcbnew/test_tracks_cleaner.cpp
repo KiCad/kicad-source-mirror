@@ -69,7 +69,8 @@ BOOST_FIXTURE_TEST_CASE( FailedToCleanRegressionTests, TRACK_CLEANER_TEST_FIXTUR
         { "issue2904",    false,     false,    false,     true,      false,    false,       9    },
         { "issue5093",    false,     false,    false,     false,     true,     false,     118    },
         { "issue7004",    false,     true,     false,     false,     false,    true,       25    },
-        { "issue8883",    true,      true,     true,      true,      false,    true,       80    }
+        { "issue8883",    true,      true,     true,      true,      false,    true,       80    },
+        { "issue10916",   false,     false,    true,      false,     false,    false,       0    }
     };
 
     for( const TEST_DESCRIPTION& entry : tests )
