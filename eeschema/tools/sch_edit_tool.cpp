@@ -97,8 +97,8 @@ private:
 
         if( !symbol )
         {
-            Append( ID_POPUP_SCH_UNFOLD_BUS, _( "no symbol selected" ), wxEmptyString );
-            Enable( ID_POPUP_SCH_UNFOLD_BUS, false );
+            Append( ID_POPUP_SCH_SELECT_UNIT_CMP, _( "no symbol selected" ), wxEmptyString );
+            Enable( ID_POPUP_SCH_SELECT_UNIT_CMP, false );
             return;
         }
 
@@ -106,8 +106,8 @@ private:
 
         if( !symbol->GetLibSymbolRef() || symbol->GetLibSymbolRef()->GetUnitCount() < 2 )
         {
-            Append( ID_POPUP_SCH_UNFOLD_BUS, _( "symbol is not multi-unit" ), wxEmptyString );
-            Enable( ID_POPUP_SCH_UNFOLD_BUS, false );
+            Append( ID_POPUP_SCH_SELECT_UNIT_CMP, _( "symbol is not multi-unit" ), wxEmptyString );
+            Enable( ID_POPUP_SCH_SELECT_UNIT_CMP, false );
             return;
         }
 
