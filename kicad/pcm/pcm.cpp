@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Andrew Lutsenko, anlutsenko at gmail dot com
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -200,11 +200,11 @@ bool PLUGIN_CONTENT_MANAGER::DownloadToStream( const wxString& aUrl, std::ostrea
             return true;
         }
 
-        if( dltotal > 1024 )
+        if( dltotal > 1000 )
         {
             aReporter->SetCurrentProgress( dlnow / (double) dltotal );
-            aReporter->Report( wxString::Format( _( "Downloading %lld/%lld Kb" ), dlnow / 1024,
-                                                 dltotal / 1024 ) );
+            aReporter->Report( wxString::Format( _( "Downloading %lld/%lld kB" ), dlnow / 1000,
+                                                 dltotal / 1000 ) );
         }
         else
         {

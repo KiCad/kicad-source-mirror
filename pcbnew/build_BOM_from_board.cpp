@@ -38,7 +38,7 @@
 
 /* creates a BOM list from board
  *  The format is:
- *  "Id";"Designator";"Package";"Number";"Designation";"Supplier and ref";
+ *  "Id";"Designator";"Footprint";"Number";"Designation";"Supplier and ref";
  *  1;"P1";"DB25FC";1;"DB25FEMELLE";;;
  *  2;"U9";"PGA120";1;"4003APG120";;;
  *  3;"JP1";"pin_array_8x2";1;"CONN_8X2";;;
@@ -109,7 +109,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
     msg = wxT( "\"" );
     msg << _( "Id" ) << wxT( "\";\"" );
     msg << _( "Designator" ) << wxT( "\";\"" );
-    msg << _( "Package" ) << wxT( "\";\"" );
+    msg << _( "Footprint" ) << wxT( "\";\"" );
     msg << _( "Quantity" ) << wxT( "\";\"" );
     msg << _( "Designation" ) << wxT( "\";\"" );
     msg << _( "Supplier and ref" ) << wxT( "\";\n" );

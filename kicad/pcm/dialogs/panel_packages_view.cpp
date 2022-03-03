@@ -387,12 +387,12 @@ wxString PANEL_PACKAGES_VIEW::toHumanReadableSize( const boost::optional<uint64_
     uint64_t b = size.get();
 
     if( b >= 1024 * 1024 )
-        return wxString::Format( "%.1f Mb", b / 1024.0 / 1024.0 );
+        return wxString::Format( "%.1f MB", b / 1000.0 / 1000.0 );
 
     if( b >= 1024 )
-        return wxString::Format( "%lld Kb", b / 1024 );
+        return wxString::Format( "%lld kB", b / 1000 );
 
-    return wxString::Format( "%lld b", b );
+    return wxString::Format( "%lld B", b );
 }
 
 

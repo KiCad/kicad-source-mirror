@@ -83,7 +83,7 @@ void DIALOG_PCM_PROGRESS::SetDownloadProgress( uint64_t aDownloaded, uint64_t aT
 
 uint64_t DIALOG_PCM_PROGRESS::toKb( uint64_t aValue )
 {
-    return ( aValue + 1023 ) / 1024;
+    return ( aValue + 999 ) / 1000;
 }
 
 
@@ -134,7 +134,7 @@ bool DIALOG_PCM_PROGRESS::updateUI()
     }
     else
     {
-        m_downloadText->SetLabel( wxString::Format( _( "Downloaded %lld/%lld Kb" ),
+        m_downloadText->SetLabel( wxString::Format( _( "Downloaded %lld/%lld kB" ),
                                                     toKb( m_downloaded.load() ),
                                                     toKb( m_downloadTotal.load() ) ) );
 
