@@ -828,8 +828,7 @@ void SYMBOL_EDIT_FRAME::CopySymbolToClipboard()
 
 void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
 {
-    int dummyUnit;
-    LIB_ID libId = m_treePane->GetLibTree()->GetSelectedLibId( &dummyUnit );
+    LIB_ID libId = GetTargetLibId();
     wxString lib = libId.GetLibNickname();
 
     if( !m_libMgr->LibraryExists( lib ) )
