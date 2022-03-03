@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 11:58-0800\n"
-"PO-Revision-Date: 2022-03-01 09:54+0000\n"
+"PO-Revision-Date: 2022-03-08 00:49+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.1-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -8015,6 +8015,7 @@ msgstr ""
 "XSLT. El procés de conversió complet està gestionat per Eeschema, després "
 "d'haver estat configurat per executar `xsltproc` d'una manera específica.\n"
 "\n"
+"\n"
 "Un script de Python és més fàcil de crear.\n"
 "\n"
 "# 4 - Inicialització de la finestra de diàleg\n"
@@ -8057,8 +8058,8 @@ msgstr ""
 "Una línia d'ordres per a Windows seria la següent.\n"
 "\n"
 "```\n"
-"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%I"
-"\"\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%"
+"I\"\n"
 "```\n"
 "\n"
 "Una línia d'ordres per a Linux seria la següent.\n"
@@ -8081,8 +8082,8 @@ msgstr ""
 "o\n"
 "\n"
 "```\n"
-"python /usr/local/kicad/bin/plugins/bom-in-python/elmeuconvertidor .xsl \"%I"
-"\" \"%O\"\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/elmeuconvertidor .xsl \"%"
+"I\" \"%O\"\n"
 "```\n"
 "\n"
 "El format de la línia d'ordres accepta paràmetres pels noms de fitxers. Els "
@@ -8112,6 +8113,7 @@ msgstr ""
 "del seu tipus.\n"
 "Aleshores has d'afegir a l'opció ***%O*** l'extensió de fitxer correcte.\n"
 "\n"
+"\n"
 "Per exemple:\n"
 "\n"
 " * **%O.csv** per crear un fitxer .csv (fitxer amb valors separats per "
@@ -8135,8 +8137,8 @@ msgstr ""
 "\n"
 "A Linux:\n"
 "```\n"
-"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-"xsl \"%I\"\n"
+"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+"pcb.xsl \"%I\"\n"
 "```\n"
 "\n"
 "Els exemples anteriors assumeixen que `xsltproc` està instal·lat al teu PC "
@@ -8165,8 +8167,8 @@ msgstr ""
 "\n"
 "A Linux:\n"
 "```\n"
-"python /usr/local/kicad/bin/plugins/bom-in-python/el_meu_script_python.py "
-"\"%I\" \"%O.csv\"\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/el_meu_script_python.py \"%"
+"I\" \"%O.csv\"\n"
 "```\n"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:37
@@ -14519,6 +14521,8 @@ msgid ""
 "Symbol '%s' references sheet ID '%s' which does not exist in the design. The "
 "symbol was not loaded."
 msgstr ""
+"El símbol '%s' fa referència a la fulla amb l'ID '%s' que no existeix al "
+"disseny. El símbol no s'ha carregat."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1885
 #, c-format
@@ -14526,6 +14530,8 @@ msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
 "and may require manual fixing."
 msgstr ""
+"La xarxa %s fa referència a un element de xarxa desconegut %s. La xarxa no "
+"s'ha carregat correctament i pot requerir arreglar-ho manualment."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2193
 #, c-format
@@ -14534,6 +14540,9 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
+"El bloc amb ID %s (Nom: '%s') està dibuixat a la fulla '%s' però no està "
+"vinculat a una altra fulla del disseny. KiCad requereix que tots els símbols "
+"de fulla estiguin associats a una fulla, així que no s'ha carregat el bloc."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2218
 #, c-format
@@ -14541,6 +14550,8 @@ msgid ""
 "The CADSTAR schematic might be corrupt: Block %s references a child sheet "
 "but has no Figure defined."
 msgstr ""
+"L'esquemàtic de CADSTAR podria estar corromput: el Bloc %s fa referència a "
+"una fulla secundaria, però no té cap Figura definida."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3060
@@ -14554,6 +14565,8 @@ msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
 "in the schematic."
 msgstr ""
+"Error en analitzar el fitxer Eagle. No s'ha pogut trobar la instància '%s', "
+"però se'n fa referència a l'esquema."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1317
 #, c-format
@@ -14667,16 +14680,15 @@ msgstr "Tipus de pàgina no vàlida"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1807
 msgid "Invalid title block comment number"
-msgstr ""
+msgstr "Número de comentari de bloc de títol invàlid"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1904
 msgid "Invalid sheet pin name"
 msgstr "Nom de la fulla del pin no vàlid"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1912
-#, fuzzy
 msgid "Empty sheet pin name"
-msgstr "Importa els pins del full"
+msgstr "Nom de pin de fulla buit"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2377
 msgid "Invalid symbol library name"
@@ -14709,7 +14721,7 @@ msgstr "Permisos insuficients per a llegir la biblioteca '%s'."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:179
 msgid "symbol document library file is empty"
-msgstr ""
+msgstr "el document de biblioteca de símbols està buit"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:545
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:585
@@ -14723,7 +14735,7 @@ msgstr ""
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin_helpers.cpp:257
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin_helpers.cpp:276
 msgid "unexpected end of line"
-msgstr ""
+msgstr "final de línia inesperat"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:362
 #, c-format
@@ -14732,7 +14744,7 @@ msgstr "'%s' no sembla ser un fitxer d'Eeschema."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:392
 msgid "Missing 'EELAYER END'"
-msgstr ""
+msgstr "Falta 'EELAYER END'"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:440
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:712
@@ -14746,7 +14758,7 @@ msgstr "Acabament de fitxer inesperat"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1004
 msgid "expected 'Italics' or '~'"
-msgstr ""
+msgstr "s'esperava 'Itàlica' o '~'"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1268
 msgid "symbol field text attributes must be 3 characters wide"
@@ -31336,7 +31348,7 @@ msgid ""
 "Failed to rename temporary file '%s."
 msgstr ""
 "Error en desar el fitxer de la placa '%s'.\n"
-"Error en canviar el nom del fitxer temporal '%s'."
+"No s'ha pogut canviar el nom al fitxer temporal '%s'."
 
 #: pcbnew/files.cpp:1196
 #, c-format
