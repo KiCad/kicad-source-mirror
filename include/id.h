@@ -217,7 +217,9 @@ enum main_id
 
     // Reseve ID for popup menus, when we need to know a menu item is inside a popup menu
     ID_POPUP_MENU_START,
-    ID_POPUP_MENU_END = ID_POPUP_MENU_START + 1000,
+    // The extra here need to minimum be larger than MAX_BUS_UNFOLD_MENU_ITEMS + MAX_UNIT_COUNT_PER_PACKAGE
+    // These values are stored in eeschema_id.h
+    ID_POPUP_MENU_END = ID_POPUP_MENU_START + 2048,
 
     ID_END_LIST
 };
