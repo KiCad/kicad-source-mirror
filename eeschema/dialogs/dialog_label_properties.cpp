@@ -666,9 +666,6 @@ void DIALOG_LABEL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         m_grid->SetFocus();
         m_grid->MakeCellVisible( m_delayedFocusRow, m_delayedFocusColumn );
         m_grid->SetGridCursor( m_delayedFocusRow, m_delayedFocusColumn );
-
-        m_grid->EnableCellEditControl( true );
-        m_grid->ShowCellEditControl();
     }
 
     m_delayedFocusRow = -1;
