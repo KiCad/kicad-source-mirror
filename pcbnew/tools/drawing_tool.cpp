@@ -113,7 +113,7 @@ protected:
 
             if( via.m_Drill > 0 )
             {
-                msg.Printf( _("Via %s, drill %s" ),
+                msg.Printf( _("Via %s, hole %s" ),
                             MessageTextFromValue( units, via.m_Diameter ),
                             MessageTextFromValue( units, via.m_Drill ) );
             }

@@ -227,10 +227,10 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetclassesGrid()
         m_netclassGrid->SetCellValue( row, col, StringFromValue( m_parent->GetUserUnits(), val, true ) )
 
     m_netclassGrid->SetCellValue( 0, GRID_TRACKSIZE, _( "Track Width" ) );
-    m_netclassGrid->SetCellValue( 0, GRID_VIASIZE, _( "Via Size" ) );
-    m_netclassGrid->SetCellValue( 0, GRID_VIADRILL, _( "Via Drill" ) );
-    m_netclassGrid->SetCellValue( 0, GRID_uVIASIZE, _( "uVia Size" ) );
-    m_netclassGrid->SetCellValue( 0, GRID_uVIADRILL, _( "uVia Drill" ) );
+    m_netclassGrid->SetCellValue( 0, GRID_VIASIZE, _( "Via Diameter" ) );
+    m_netclassGrid->SetCellValue( 0, GRID_VIADRILL, _( "Via Hole" ) );
+    m_netclassGrid->SetCellValue( 0, GRID_uVIASIZE, _( "uVia Diameter" ) );
+    m_netclassGrid->SetCellValue( 0, GRID_uVIADRILL, _( "uVia Hole" ) );
 
     NETCLASSES& netclasses = m_brd->GetDesignSettings().GetNetClasses();
     NETCLASS*   defaultNetclass = m_brd->GetDesignSettings().GetDefault();

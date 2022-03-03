@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -794,7 +794,7 @@ void PCB_VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     msg = MessageTextFromValue( aFrame->GetUserUnits(), GetDrillValue() );
 
-    aList.emplace_back( _( "Drill" ), msg );
+    aList.emplace_back( _( "Hole" ), msg );
 
     wxString  source;
     int clearance = GetOwnClearance( GetLayer(), &source );
@@ -1209,7 +1209,7 @@ static struct TRACK_VIA_DESC
         propMgr.ReplaceProperty( TYPE_HASH( PCB_TRACK ), _HKI( "Width" ),
             new PROPERTY<PCB_VIA, int, PCB_TRACK>( _HKI( "Diameter" ),
             &PCB_VIA::SetWidth, &PCB_VIA::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<PCB_VIA, int>( _HKI( "Drill" ),
+        propMgr.AddProperty( new PROPERTY<PCB_VIA, int>( _HKI( "Hole" ),
             &PCB_VIA::SetDrill, &PCB_VIA::GetDrillValue, PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ),
             new PROPERTY_ENUM<PCB_VIA, PCB_LAYER_ID, BOARD_ITEM>( _HKI( "Layer Top" ),

@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -244,7 +244,7 @@ protected:
             else
             {
                 if( via.m_Drill > 0 )
-                    msg.Printf( _("Via %s, drill %s" ),
+                    msg.Printf( _("Via %s, hole %s" ),
                                 MessageTextFromValue( units, via.m_Diameter ),
                                 MessageTextFromValue( units, via.m_Drill ) );
                 else
