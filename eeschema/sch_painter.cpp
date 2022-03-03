@@ -1602,6 +1602,11 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
     if( drawingShadows && !( aLine->IsBrightened() || aLine->IsSelected() ) )
         return;
 
+    // Line end dangling status isn't updated until the line is finished drawing,
+    // so don't warn them about ends that are probably connected
+    if( aLine->IsNew() && drawingDangling )
+        return;
+
     COLOR4D        color = getRenderColor( aLine, aLine->GetLayer(), drawingShadows );
     float          width = getLineWidth( aLine, drawingShadows );
     PLOT_DASH_TYPE lineStyle = aLine->GetEffectiveLineStyle();

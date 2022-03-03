@@ -197,10 +197,8 @@ private:
      * @param collector EE_COLLECTOR with elements to filter
      * @param aWhere point where we should narrow (if relevant)
      * @param aCheckLocked If false, remove locked elements from #collector
-     * @param aSelectPoints If true, set STARTPOINT/ENDPOINT flags on individual wires
      */
-    void narrowSelection( EE_COLLECTOR& collector, const VECTOR2I& aWhere, bool aCheckLocked,
-                          bool aSelectPoints );
+    void narrowSelection( EE_COLLECTOR& collector, const VECTOR2I& aWhere, bool aCheckLocked );
 
     /**
      * This is the primary SelectPoint method that will prompt the user with a menu to disambiguate
@@ -208,6 +206,7 @@ private:
      * actual selection group.
      *
      * @param aCollector is an EE_COLLECTOR that already has collected items
+     * @param aWhere position of the selected point
      * @param aItem is set to the newly selected item if only one was selected, otherwise is
      *              unchanged.
      * @param aSelectionCancelledFlag allows the function to inform its caller that a selection
@@ -217,7 +216,7 @@ private:
      * @param aSubtract indicates if found item(s) should be subtracted from the selection
      * @param aExclusiveOr indicates if found item(s) should be toggle in the selection
      */
-    bool selectPoint( EE_COLLECTOR& aCollector, EDA_ITEM** aItem = nullptr,
+    bool selectPoint( EE_COLLECTOR& aCollector, const VECTOR2I& aWhere, EDA_ITEM** aItem = nullptr,
                       bool* aSelectionCancelledFlag = nullptr, bool aAdd = false,
                       bool aSubtract = false, bool aExclusiveOr = false );
 

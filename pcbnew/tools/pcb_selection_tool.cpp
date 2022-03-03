@@ -3016,18 +3016,18 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
 {
     std::unordered_set<BOARD_ITEM*> toAdd;
 
-    // Set TEMP_SELECTED on all parents which are included in the GENERAL_COLLECTOR.  This
+    // Set CANDIDATE on all parents which are included in the GENERAL_COLLECTOR.  This
     // algorithm is O3n, whereas checking for the parent inclusion could potentially be On^2.
     for( int j = 0; j < aCollector.GetCount(); j++ )
     {
         if( aCollector[j]->GetParent() )
-            aCollector[j]->GetParent()->ClearFlags( TEMP_SELECTED );
+            aCollector[j]->GetParent()->ClearFlags( CANDIDATE );
     }
 
     if( aMultiselect )
     {
         for( int j = 0; j < aCollector.GetCount(); j++ )
-            aCollector[j]->SetFlags( TEMP_SELECTED );
+            aCollector[j]->SetFlags( CANDIDATE );
     }
 
     for( int j = 0; j < aCollector.GetCount(); )
@@ -3048,7 +3048,7 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
             if( aTop != item )
             {
                 toAdd.insert( aTop );
-                aTop->SetFlags( TEMP_SELECTED );
+                aTop->SetFlags( CANDIDATE );
 
                 aCollector.Remove( item );
                 continue;
@@ -3063,7 +3063,7 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
         }
 
         // Footprints are a bit easier as they can't be nested.
-        if( parent && ( parent->GetFlags() & TEMP_SELECTED ) )
+        if( parent && ( parent->GetFlags() & CANDIDATE ) )
         {
             // Remove children of selected items
             aCollector.Remove( item );

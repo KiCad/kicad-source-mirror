@@ -45,8 +45,8 @@
 #define IS_WIRE_IMAGE  (1 << 8)    ///< Item to be drawn as wireframe while editing
 #define STARTPOINT     (1 << 9)    ///< When a line is selected, these flags indicate which
 #define ENDPOINT       (1 << 10)   ///< ends.  (Used to support dragging.)
-#define SELECTED       (1 << 11)
-#define TEMP_SELECTED  (1 << 12)   ///< flag indicating that the structure has already selected
+#define SELECTED       (1 << 11)   ///< Item was manually selected by the user
+#define SELECTED_BY_DRAG (1 << 12)   ///< Item was algorithmically selected as a dragged item
 #define STRUCT_DELETED (1 << 13)   ///< flag indication structures to be erased
 #define CANDIDATE      (1 << 14)   ///< flag indicating that the structure is connected
 #define SKIP_STRUCT    (1 << 15)   ///< flag indicating that the structure should be ignored

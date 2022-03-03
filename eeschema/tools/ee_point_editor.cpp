@@ -1010,9 +1010,9 @@ void EE_POINT_EDITOR::updateParentItem() const
         if( connected.first )
         {
             if( connected.second == STARTPOINT )
-                static_cast<SCH_LINE*>( connected.first )->SetStartPoint( line->GetPosition() );
+                static_cast<SCH_LINE*>( connected.first )->SetStartPoint( line->GetStartPoint() );
             else if( connected.second == ENDPOINT )
-                static_cast<SCH_LINE*>( connected.first )->SetEndPoint( line->GetPosition() );
+                static_cast<SCH_LINE*>( connected.first )->SetEndPoint( line->GetStartPoint() );
 
             updateItem( connected.first, true );
         }

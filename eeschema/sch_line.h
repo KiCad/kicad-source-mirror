@@ -256,6 +256,7 @@ public:
 
     VECTOR2I GetPosition() const override { return m_start; }
     void     SetPosition( const VECTOR2I& aPosition ) override;
+    VECTOR2I GetSortPosition() const override { return GetMidPoint(); }
 
     bool IsPointClickableAnchor( const VECTOR2I& aPos ) const override
     {

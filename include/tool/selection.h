@@ -34,7 +34,6 @@
 #include <eda_item.h>
 #include <view/view_group.h>
 
-class EDA_ITEM;
 
 class SELECTION : public KIGFX::VIEW_GROUP
 {
@@ -126,21 +125,21 @@ public:
         std::sort( sorted_items.begin(), sorted_items.end(), [&]( EDA_ITEM* a, EDA_ITEM* b ) {
             if( a->Type() == b->Type() )
             {
-                if( a->GetPosition().x == b->GetPosition().x )
+                if( a->GetSortPosition().x == b->GetSortPosition().x )
                 {
                     // Ensure deterministic sort
-                    if( a->GetPosition().y == b->GetPosition().y )
+                    if( a->GetSortPosition().y == b->GetSortPosition().y )
                         return a->m_Uuid < b->m_Uuid;
 
                     if( topBeforeBottom )
-                        return a->GetPosition().y < b->GetPosition().y;
+                        return a->GetSortPosition().y < b->GetSortPosition().y;
                     else
-                        return a->GetPosition().y > b->GetPosition().y;
+                        return a->GetSortPosition().y > b->GetSortPosition().y;
                 }
                 else if( leftBeforeRight )
-                    return a->GetPosition().x < b->GetPosition().x;
+                    return a->GetSortPosition().x < b->GetSortPosition().x;
                 else
-                    return a->GetPosition().x > b->GetPosition().x;
+                    return a->GetSortPosition().x > b->GetSortPosition().x;
             }
             else
                 return a->Type() < b->Type();

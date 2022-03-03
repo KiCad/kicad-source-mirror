@@ -377,7 +377,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             // Collect items at the clicked location (doesn't select them yet)
             EE_COLLECTOR collector;
             CollectHits( collector, evt->Position() );
-            narrowSelection( collector, evt->Position(), false, false );
+            narrowSelection( collector, evt->Position(), false );
 
             if( collector.GetCount() == 1 && !m_isSymbolEditor && !modifier_enabled )
             {
@@ -405,7 +405,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             if( !selCancelled )
             {
-                selectPoint( collector, nullptr, nullptr, m_additive, m_subtractive, m_exclusive_or );
+                selectPoint( collector, evt->Position(), nullptr, nullptr, m_additive,
+                             m_subtractive, m_exclusive_or );
                 m_selection.SetIsHover( false );
             }
         }
@@ -580,7 +581,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             if( CollectHits( collector, evt->Position() ) )
             {
-                narrowSelection( collector, evt->Position(), false, false );
+                narrowSelection( collector, evt->Position(), false );
 
                 if( collector.GetCount() == 1 && !modifier_enabled )
                 {
@@ -797,7 +798,7 @@ bool EE_SELECTION_TOOL::CollectHits( EE_COLLECTOR& aCollector, const VECTOR2I& a
 
 
 void EE_SELECTION_TOOL::narrowSelection( EE_COLLECTOR& collector, const VECTOR2I& aWhere,
-                                         bool aCheckLocked, bool aSelectPoints )
+                                         bool aCheckLocked )
 {
     for( int i = collector.GetCount() - 1; i >= 0; --i )
     {
@@ -812,20 +813,6 @@ void EE_SELECTION_TOOL::narrowSelection( EE_COLLECTOR& collector, const VECTOR2I
             collector.Remove( i );
             continue;
         }
-
-        // SelectPoint, unlike other selection routines, can select line ends
-        if( aSelectPoints && collector[i]->Type() == SCH_LINE_T )
-        {
-            SCH_LINE* line = (SCH_LINE*) collector[i];
-            line->ClearFlags( STARTPOINT | ENDPOINT );
-
-            if( HitTestPoints( line->GetStartPoint(), aWhere, collector.m_Threshold ) )
-                line->SetFlags( STARTPOINT );
-            else if( HitTestPoints( line->GetEndPoint(), aWhere, collector.m_Threshold ) )
-                line->SetFlags( ENDPOINT );
-            else
-                line->SetFlags( STARTPOINT | ENDPOINT );
-        }
     }
 
     // Apply some ugly heuristics to avoid disambiguation menus whenever possible
@@ -836,9 +823,9 @@ void EE_SELECTION_TOOL::narrowSelection( EE_COLLECTOR& collector, const VECTOR2I
 }
 
 
-bool EE_SELECTION_TOOL::selectPoint( EE_COLLECTOR& aCollector, EDA_ITEM** aItem,
-                                     bool* aSelectionCancelledFlag, bool aAdd, bool aSubtract,
-                                     bool aExclusiveOr )
+bool EE_SELECTION_TOOL::selectPoint( EE_COLLECTOR& aCollector, const VECTOR2I& aWhere,
+                                     EDA_ITEM** aItem, bool* aSelectionCancelledFlag, bool aAdd,
+                                     bool aSubtract, bool aExclusiveOr )
 {
     m_selection.ClearReferencePoint();
 
@@ -873,13 +860,33 @@ bool EE_SELECTION_TOOL::selectPoint( EE_COLLECTOR& aCollector, EDA_ITEM** aItem,
     {
         for( int i = 0; i < aCollector.GetCount(); ++i )
         {
+            EDA_ITEM_FLAGS flags = 0;
+
+            // Handle line ends specially
+            if( aCollector[i]->Type() == SCH_LINE_T )
+            {
+                SCH_LINE* line = (SCH_LINE*) aCollector[i];
+
+                if( HitTestPoints( line->GetStartPoint(), aWhere, aCollector.m_Threshold ) )
+                    flags = STARTPOINT;
+                else if( HitTestPoints( line->GetEndPoint(), aWhere, aCollector.m_Threshold ) )
+                    flags = ENDPOINT;
+                else
+                    flags = STARTPOINT | ENDPOINT;
+            }
+
             if( aSubtract || ( aExclusiveOr && aCollector[i]->IsSelected() ) )
             {
-                unselect( aCollector[i] );
-                anySubtracted = true;
+                aCollector[i]->ClearFlags( flags );
+                if( !aCollector[i]->HasFlag( STARTPOINT ) && !aCollector[i]->HasFlag( ENDPOINT ) )
+                {
+                    unselect( aCollector[i] );
+                    anySubtracted = true;
+                }
             }
             else
             {
+                aCollector[i]->SetFlags( flags );
                 select( aCollector[i] );
                 anyAdded = true;
             }
@@ -915,9 +922,10 @@ bool EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFil
     if( !CollectHits( collector, aWhere, aFilterList ) )
         return false;
 
-    narrowSelection( collector, aWhere, aCheckLocked, true );
+    narrowSelection( collector, aWhere, aCheckLocked );
 
-    return selectPoint( collector, aItem, aSelectionCancelledFlag, aAdd, aSubtract, aExclusiveOr );
+    return selectPoint( collector, aWhere, aItem, aSelectionCancelledFlag, aAdd, aSubtract,
+                        aExclusiveOr );
 }
 
 
@@ -1234,7 +1242,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
 
                 if( item )
                 {
-                    item->ClearFlags( TEMP_SELECTED | STARTPOINT | ENDPOINT );
+                    item->ClearFlags( CANDIDATE );
                     nearbyItems.push_back( item );
                 }
 
@@ -1253,49 +1261,53 @@ bool EE_SELECTION_TOOL::selectMultiple()
 
             bool anyAdded = false;
             bool anySubtracted = false;
-            auto selectItem =
-                    [&]( EDA_ITEM* aItem )
+            auto selectItem = [&]( EDA_ITEM* aItem )
+            {
+                EDA_ITEM_FLAGS flags = 0;
+
+                // Handle line ends specially
+                if( aItem->Type() == SCH_LINE_T )
+                {
+                    SCH_LINE* line = (SCH_LINE*) aItem;
+
+                    if( selectionRect.Contains( line->GetStartPoint() ) )
+                        flags |= STARTPOINT;
+
+                    if( selectionRect.Contains( line->GetEndPoint() ) )
+                        flags |= ENDPOINT;
+
+
+                    // If no ends were selected, select whole line (both ends)
+                    // Also select both ends if the selection overlaps the midpoint
+                    if( ( !( flags & STARTPOINT ) && !( flags & ENDPOINT ) )
+                        || selectionRect.Contains( line->GetMidPoint() ) )
                     {
-                        if( m_subtractive || ( m_exclusive_or && aItem->IsSelected() ) )
-                        {
-                            unselect( aItem );
-                            anySubtracted = true;
-                        }
-                        else
-                        {
-                            select( aItem );
+                        flags = STARTPOINT | ENDPOINT;
+                    }
+                }
 
-                            // Lines can have just one end selected
-                            if( aItem->Type() == SCH_LINE_T )
-                            {
-                                SCH_LINE* line = static_cast<SCH_LINE*>( aItem );
-
-                                line->ClearFlags( STARTPOINT | ENDPOINT );
-
-                                if( selectionRect.Contains( line->GetStartPoint() ) )
-                                    line->SetFlags( STARTPOINT );
-
-                                if( selectionRect.Contains( line->GetEndPoint() ) )
-                                    line->SetFlags( ENDPOINT );
-
-                                // If no ends were selected, select whole line (both ends)
-                                // Also select both ends if the selection overlaps the midpoint
-                                if( ( !line->HasFlag( STARTPOINT ) && !line->HasFlag( ENDPOINT ) )
-                                    || selectionRect.Contains( line->GetMidPoint() ) )
-                                {
-                                    line->SetFlags( STARTPOINT | ENDPOINT );
-                                }
-                            }
-
-                            anyAdded = true;
-                        }
-                    };
+                if( m_subtractive || ( m_exclusive_or && aItem->IsSelected() ) )
+                {
+                    aItem->ClearFlags( flags );
+                    if( !aItem->HasFlag( STARTPOINT ) && !aItem->HasFlag( ENDPOINT ) )
+                    {
+                        unselect( aItem );
+                        anySubtracted = true;
+                    }
+                }
+                else
+                {
+                    aItem->SetFlags( flags );
+                    select( aItem );
+                    anyAdded = true;
+                }
+            };
 
             for( EDA_ITEM* item : nearbyItems )
             {
                 if( Selectable( item ) && item->HitTest( selectionRect, isWindowSelection ) )
                 {
-                    item->SetFlags( TEMP_SELECTED );
+                    item->SetFlags( CANDIDATE );
                     selectItem( item );
                 }
             }
@@ -1303,7 +1315,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
             for( EDA_ITEM* item : nearbyChildren )
             {
                 if( Selectable( item )
-                        && !item->GetParent()->HasFlag( TEMP_SELECTED )
+                        && !item->GetParent()->HasFlag( CANDIDATE )
                         && item->HitTest( selectionRect, isWindowSelection ) )
                 {
                     selectItem( item );
@@ -1886,7 +1898,12 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* a
     KICAD_T itemType = aItem->Type();
 
     if( aMode == SELECTED )
+    {
         aItem->ClearSelected();
+        // Lines need endpoints cleared here
+        if( aItem->Type() == SCH_LINE_T )
+            aItem->ClearFlags( STARTPOINT | ENDPOINT );
+    }
     else if( aMode == BRIGHTENED )
         aItem->ClearBrightened();
 

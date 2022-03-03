@@ -164,7 +164,7 @@ public:
 
     void ClearTempFlags()
     {
-        ClearFlags( CANDIDATE | TEMP_SELECTED | IS_LINKED | SKIP_STRUCT | DO_NOT_DRAW );
+        ClearFlags( CANDIDATE | SELECTED_BY_DRAG | IS_LINKED | SKIP_STRUCT | DO_NOT_DRAW );
     }
 
     void ClearEditFlags()
@@ -255,6 +255,15 @@ public:
      * than their anchor.
      */
     virtual const VECTOR2I GetFocusPosition() const { return GetPosition(); }
+
+    /**
+     * Return the coordinates that should be used for sorting this element
+     * visually compared to other elements. For instance, for lines the midpoint
+     * might be a better sorting point than either end.
+     *
+     * @return X,Y coordinate of the sort point
+     */
+    virtual VECTOR2I GetSortPosition() const { return GetPosition(); }
 
     /**
      * Create a duplicate of this item with linked list members set to NULL.

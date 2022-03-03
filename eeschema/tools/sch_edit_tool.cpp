@@ -498,7 +498,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     {
         SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
 
-        if( item->HasFlag( TEMP_SELECTED ) )
+        if( item->HasFlag( SELECTED_BY_DRAG ) )
             continue;
 
         principalItemCount++;
@@ -652,7 +652,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
         // We've already rotated the user selected item if there was only one.  We're just
         // here to rotate the ends of wires that were attached to it.
-        if( principalItemCount == 1 && !item->HasFlag( TEMP_SELECTED ) )
+        if( principalItemCount == 1 && !item->HasFlag( SELECTED_BY_DRAG ) )
             continue;
 
         if( !moving )
