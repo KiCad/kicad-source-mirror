@@ -138,7 +138,7 @@ VECTOR2I LIB_TEXTBOX::GetDrawPos() const
 }
 
 
-int LIB_TEXTBOX::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompareFlags ) const
+int LIB_TEXTBOX::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
 {
     wxASSERT( aOther.Type() == LIB_TEXTBOX_T );
 

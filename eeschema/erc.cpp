@@ -756,8 +756,9 @@ int ERC_TESTER::TestLibSymbolIssues()
             }
 
             std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
+            constexpr int flags = LIB_ITEM::COMPARE_FLAGS::EQUALITY | LIB_ITEM::COMPARE_FLAGS::ERC;
 
-            if( *flattenedSymbol != *libSymbolInSchematic )
+            if( flattenedSymbol->Compare( *libSymbolInSchematic, flags ) != 0 )
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
                 ercItem->SetItems( symbol );

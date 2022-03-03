@@ -84,7 +84,7 @@ EDA_ITEM* LIB_TEXT::Clone() const
 }
 
 
-int LIB_TEXT::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompareFlags ) const
+int LIB_TEXT::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
 {
     wxASSERT( aOther.Type() == LIB_TEXT_T );
 

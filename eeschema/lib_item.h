@@ -73,11 +73,19 @@ public:
     /**
      * The list of flags used by the #compare function.
      *
-     * - NORMAL This compares everything between two #LIB_ITEM objects.
-     * - UNIT This compare flag ignores unit and convert and pin number information when
-     *        comparing #LIB_ITEM objects for unit comparison.
+     * - UNIT This flag relaxes unit, conversion and pin number constraints.  It is used for
+     *        #LIB_ITEM object unit comparisons.
+     * - EQUALITY This flag relaxes ordering contstraints so that fields, etc. don't have to
+     *            appear in the same order to be considered equal.
+     * - ERC This flag relaxes constraints on data that is settable in the schematic editor.  It
+     *       compares only symbol-editor-only data.
      */
-    enum COMPARE_FLAGS : int { NORMAL = 0x00, UNIT = 0x01, EQUALITY = 0x02 };
+    enum COMPARE_FLAGS : int
+    {
+        UNIT     = 0x01,
+        EQUALITY = 0x02,
+        ERC      = 0x04
+    };
 
     /**
      * Provide a user-consumable name of the object type.  Perform localization when
@@ -294,8 +302,7 @@ protected:
      *         zero if the object is equal to \a aOther object, or greater than 0 if the
      *         object is greater than \a aOther object.
      */
-    virtual int compare( const LIB_ITEM& aOther,
-            LIB_ITEM::COMPARE_FLAGS aCompareFlags = LIB_ITEM::COMPARE_FLAGS::NORMAL ) const;
+    virtual int compare( const LIB_ITEM& aOther, int aCompareFlags = 0 ) const;
 
     /**
      * Print the item to \a aDC.

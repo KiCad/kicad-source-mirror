@@ -884,7 +884,7 @@ EDA_ITEM* LIB_PIN::Clone() const
 }
 
 
-int LIB_PIN::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompareFlags ) const
+int LIB_PIN::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
 {
     wxASSERT( aOther.Type() == LIB_PIN_T );
 

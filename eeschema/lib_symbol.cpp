@@ -209,7 +209,7 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
 }
 
 
-int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, LIB_ITEM::COMPARE_FLAGS aCompareFlags ) const
+int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags ) const
 {
     if( m_me == aRhs.m_me )
         return 0;
@@ -322,17 +322,20 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, LIB_ITEM::COMPARE_FLAGS aCompar
     if( m_unitsLocked != aRhs.m_unitsLocked )
         return ( m_unitsLocked ) ? 1 : -1;
 
-    if( m_showPinNames != aRhs.m_showPinNames )
-        return ( m_showPinNames ) ? 1 : -1;
+    if( ( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::ERC ) == 0 )
+    {
+        if( m_showPinNames != aRhs.m_showPinNames )
+            return ( m_showPinNames ) ? 1 : -1;
 
-    if( m_showPinNumbers != aRhs.m_showPinNumbers )
-        return ( m_showPinNumbers ) ? 1 : -1;
+        if( m_showPinNumbers != aRhs.m_showPinNumbers )
+            return ( m_showPinNumbers ) ? 1 : -1;
 
-    if( m_includeInBom != aRhs.m_includeInBom )
-        return ( m_includeInBom ) ? 1 : -1;
+        if( m_includeInBom != aRhs.m_includeInBom )
+            return ( m_includeInBom ) ? 1 : -1;
 
-    if( m_includeOnBoard != aRhs.m_includeOnBoard )
-        return ( m_includeOnBoard ) ? 1 : -1;
+        if( m_includeOnBoard != aRhs.m_includeOnBoard )
+            return ( m_includeOnBoard ) ? 1 : -1;
+    }
 
     return 0;
 }

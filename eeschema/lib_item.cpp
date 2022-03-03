@@ -71,7 +71,7 @@ void LIB_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 }
 
 
-int LIB_ITEM::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompareFlags ) const
+int LIB_ITEM::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
 {
     if( Type() != aOther.Type() )
         return Type() - aOther.Type();

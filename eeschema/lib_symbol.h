@@ -618,8 +618,7 @@ public:
      *         1 if this symbol is greater than \a aRhs
      *         0 if this symbol is the same as \a aRhs
      */
-    int Compare( const LIB_SYMBOL& aRhs,
-                 LIB_ITEM::COMPARE_FLAGS aCompareFlags = LIB_ITEM::COMPARE_FLAGS::NORMAL ) const;
+    int Compare( const LIB_SYMBOL& aRhs, int aCompareFlags = 0 ) const;
 
     bool operator==( const LIB_SYMBOL* aSymbol ) const { return this == aSymbol; }
     bool operator==( const LIB_SYMBOL& aSymbol ) const

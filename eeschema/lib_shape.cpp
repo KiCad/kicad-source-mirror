@@ -66,7 +66,7 @@ EDA_ITEM* LIB_SHAPE::Clone() const
 }
 
 
-int LIB_SHAPE::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompareFlags ) const
+int LIB_SHAPE::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
 {
     int retv = LIB_ITEM::compare( aOther, aCompareFlags );
 
