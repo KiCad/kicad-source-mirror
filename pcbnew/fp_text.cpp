@@ -372,13 +372,10 @@ double FP_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( !aView->IsLayerVisible( GetLayer() ) )
         return HIDE;
 
-    RENDER_SETTINGS* renderSettings = aView->GetPainter()->GetSettings();
-
     // Handle Render tab switches
     if( m_Type == TEXT_is_VALUE || GetText() == wxT( "${VALUE}" ) )
     {
-        if( !aView->IsLayerVisible( LAYER_MOD_VALUES )
-                || renderSettings->GetLayerColor( LAYER_MOD_VALUES ) == COLOR4D::UNSPECIFIED )
+        if( !aView->IsLayerVisible( LAYER_MOD_VALUES ) )
         {
             return HIDE;
         }
@@ -386,8 +383,7 @@ double FP_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
     if( m_Type == TEXT_is_REFERENCE || GetText() == wxT( "${REFERENCE}" ) )
     {
-        if( !aView->IsLayerVisible( LAYER_MOD_REFERENCES )
-                || renderSettings->GetLayerColor( LAYER_MOD_REFERENCES ) == COLOR4D::UNSPECIFIED )
+        if( !aView->IsLayerVisible( LAYER_MOD_REFERENCES ) )
         {
             return HIDE;
         }
