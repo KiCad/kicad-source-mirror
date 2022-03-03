@@ -160,7 +160,7 @@ int SYMBOL_EDITOR_CONTROL::AddSymbol( const TOOL_EVENT& aEvent )
 
         if( libName.IsEmpty() )
         {
-            msg.Printf( _( "No symbol library selected." ), libName );
+            msg.Printf( _( "No symbol library selected." ) );
             m_frame->ShowInfoBarError( msg );
             return 0;
         }
@@ -255,10 +255,17 @@ int SYMBOL_EDITOR_CONTROL::DuplicateSymbol( const TOOL_EVENT& aEvent )
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
         SYMBOL_EDIT_FRAME* editFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+        LIB_ID             sel = editFrame->GetTargetLibId();
+        wxString           msg;
 
-        LIB_ID          sel = editFrame->GetTreeLIBID();
+        if( !sel.IsValid() )
+        {
+            msg.Printf( _( "No symbol selected" ) );
+            m_frame->ShowInfoBarError( msg );
+            return 0;
+        }
+
         const wxString& libName = sel.GetLibNickname();
-        wxString        msg;
 
         if( editFrame->GetLibManager().IsLibraryReadOnly( libName ) )
         {
