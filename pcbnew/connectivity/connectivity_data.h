@@ -201,7 +201,8 @@ public:
     unsigned int GetUnconnectedCount() const;
 
     bool IsConnectedOnLayer( const BOARD_CONNECTED_ITEM* aItem,
-                             int aLayer, std::vector<KICAD_T> aTypes = {},
+                             int aLayer,
+                             const std::initializer_list<KICAD_T>& aTypes = {},
                              bool aCheckOptionalFlashing = false ) const;
 
     unsigned int GetNodeCount( int aNet = -1 ) const;
@@ -267,7 +268,7 @@ public:
      * @param aTypes allows one to filter by item types.
      */
     const std::vector<BOARD_CONNECTED_ITEM*> GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem,
-            const KICAD_T aTypes[], bool aIgnoreNetcodes = false ) const;
+            const std::initializer_list<KICAD_T>& aTypes, bool aIgnoreNetcodes = false ) const;
 
     /**
      * Function GetNetItems()

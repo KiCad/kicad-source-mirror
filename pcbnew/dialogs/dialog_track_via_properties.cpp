@@ -672,9 +672,9 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
         for( EDA_ITEM* item : m_items )
         {
-            const KICAD_T ourTypes[] = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_FOOTPRINT_T, EOT };
             BOARD_CONNECTED_ITEM* boardItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
-            auto connectedItems = connectivity->GetConnectedItems( boardItem, ourTypes, true );
+            auto connectedItems = connectivity->GetConnectedItems( boardItem,
+                    { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_FOOTPRINT_T }, true );
 
             for ( BOARD_CONNECTED_ITEM* citem : connectedItems )
             {

@@ -305,20 +305,17 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 
 const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode )
 {
-    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_ZONE_T,
-                                  PCB_FOOTPRINT_T, EOT };
-    constexpr KICAD_T no_zones[] = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T,
-                                     PCB_FOOTPRINT_T, EOT };
-
     if( aMode == CSM_PROPAGATE )
-        return SearchClusters( aMode, no_zones, -1 );
+        return SearchClusters( aMode,
+        { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_FOOTPRINT_T }, -1 );
     else
-        return SearchClusters( aMode, types, -1 );
+        return SearchClusters( aMode,
+        { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_ZONE_T, PCB_FOOTPRINT_T }, -1 );
 }
 
 
 const CN_CONNECTIVITY_ALGO::CLUSTERS
-CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, const KICAD_T aTypes[],
+CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, const std::initializer_list<KICAD_T>& aTypes,
                                       int aSingleNet, CN_ITEM* rootItem )
 {
     bool withinAnyNet = ( aMode != CSM_PROPAGATE );
@@ -345,9 +342,9 @@ CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode, const KICAD_T a
 
                 bool found = false;
 
-                for( int i = 0; aTypes[i] != EOT; i++ )
+                for( KICAD_T type : aTypes )
                 {
-                    if( aItem->Parent()->Type() == aTypes[i] )
+                    if( aItem->Parent()->Type() == type )
                     {
                         found = true;
                         break;

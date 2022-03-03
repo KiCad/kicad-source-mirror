@@ -545,8 +545,8 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
         return true;
 
     // Must be static to keep from raising its ugly head in performance profiles
-    static std::vector<KICAD_T> connectedTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T,
-                                                   PCB_ZONE_T, PCB_FP_ZONE_T };
+    static std::initializer_list<KICAD_T> connectedTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T,
+                                                             PCB_ZONE_T, PCB_FP_ZONE_T };
 
     return board->GetConnectivity()->IsConnectedOnLayer( this, aLayer, connectedTypes, true );
 }

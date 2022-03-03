@@ -424,9 +424,8 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                                          minSpokes ) );
 
             std::shared_ptr<CONNECTIVITY_DATA> connectivity = pad->GetBoard()->GetConnectivity();
-            const KICAD_T zones[] = { PCB_ZONE_T, EOT };
 
-            if( !alg::contains( connectivity->GetConnectedItems( pad, zones ), zone ) )
+            if( !alg::contains( connectivity->GetConnectedItems( pad, { PCB_ZONE_T } ), zone ) )
                 r->Report( _( "Items are not connected.  No thermal spokes will be generated." ) );
         }
         else if( constraint.m_ZoneConnection == ZONE_CONNECTION::NONE )

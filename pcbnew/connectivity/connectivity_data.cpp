@@ -30,6 +30,7 @@
 #include <thread>
 #include <algorithm>
 #include <future>
+#include <initializer_list>
 
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
@@ -390,7 +391,7 @@ void CONNECTIVITY_DATA::PropagateNets( BOARD_COMMIT* aCommit, PROPAGATE_MODE aMo
 
 
 bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, int aLayer,
-                                            std::vector<KICAD_T> aTypes,
+                                            const std::initializer_list<KICAD_T>& aTypes,
                                             bool aCheckOptionalFlashing ) const
 {
     CN_CONNECTIVITY_ALGO::ITEM_MAP_ENTRY &entry = m_connAlgo->ItemEntry( aItem );
@@ -398,10 +399,10 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
     auto matchType =
             [&]( KICAD_T aItemType )
             {
-                if( aTypes.empty() )
+                if( aTypes.size() == 0 )
                     return true;
 
-                return std::count( aTypes.begin(), aTypes.end(), aItemType ) > 0;
+                return alg::contains( aTypes, aItemType);
             };
 
     for( CN_ITEM* citem : entry.GetItems() )
@@ -474,12 +475,9 @@ void CONNECTIVITY_DATA::Clear()
 
 
 const std::vector<BOARD_CONNECTED_ITEM*>
-CONNECTIVITY_DATA::GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem, const KICAD_T aTypes[],
-                                      bool aIgnoreNetcodes ) const
+CONNECTIVITY_DATA::GetConnectedItems( const BOARD_CONNECTED_ITEM *aItem,
+        const std::initializer_list<KICAD_T>& aTypes, bool aIgnoreNetcodes ) const
 {
-    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_ZONE_T,
-                                  PCB_FOOTPRINT_T, EOT };
-
     std::vector<BOARD_CONNECTED_ITEM*> rv;
     CN_CONNECTIVITY_ALGO::CLUSTER_SEARCH_MODE searchMode;
 
@@ -488,7 +486,7 @@ CONNECTIVITY_DATA::GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem, const K
     else
         searchMode = CN_CONNECTIVITY_ALGO::CSM_CONNECTIVITY_CHECK;
 
-    const auto clusters = m_connAlgo->SearchClusters( searchMode, types,
+    const auto clusters = m_connAlgo->SearchClusters( searchMode, aTypes,
                                                       aIgnoreNetcodes ? -1 : aItem->GetNetCode() );
 
     for( const std::shared_ptr<CN_CLUSTER>& cl : clusters )

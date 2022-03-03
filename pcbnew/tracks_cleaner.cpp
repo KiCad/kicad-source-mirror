@@ -461,15 +461,15 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
 
 bool TRACKS_CLEANER::mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2 )
 {
-    KICAD_T items[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, PCB_ZONE_T };
-
     if( aSeg1->IsLocked() || aSeg2->IsLocked() )
         return false;
 
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_brd->GetConnectivity();
 
-    std::vector<BOARD_CONNECTED_ITEM*> tracks = connectivity->GetConnectedItems( aSeg1, items );
-    std::vector<BOARD_CONNECTED_ITEM*> tracks2 = connectivity->GetConnectedItems( aSeg2, items );
+    std::vector<BOARD_CONNECTED_ITEM*> tracks = connectivity->GetConnectedItems( aSeg1,
+            { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, PCB_ZONE_T } );
+    std::vector<BOARD_CONNECTED_ITEM*> tracks2 = connectivity->GetConnectedItems( aSeg2,
+            { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, PCB_ZONE_T } );
 
     std::move( tracks2.begin(), tracks2.end(), std::back_inserter( tracks ) );
     std::sort( tracks.begin(), tracks.end() );

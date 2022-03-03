@@ -232,7 +232,7 @@ bool PAD::FlashLayer( LSET aLayers ) const
 
 bool PAD::FlashLayer( int aLayer ) const
 {
-    std::vector<KICAD_T> types
+    std::initializer_list<KICAD_T> types
     { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, PCB_ZONE_T, PCB_FP_ZONE_T };
 
     const BOARD* board = GetBoard();

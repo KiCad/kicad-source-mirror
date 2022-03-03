@@ -1163,7 +1163,6 @@ int PCB_SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 void PCB_SELECTION_TOOL::selectAllConnectedTracks(
         const std::vector<BOARD_CONNECTED_ITEM*>& aStartItems, STOP_CONDITION aStopCondition )
 {
-    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, EOT };
     const LSET        allCuMask = LSET::AllCuMask();
 
     PROF_TIMER refreshTimer;
@@ -1191,8 +1190,8 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
         if( startItem->HasFlag( SKIP_STRUCT ) ) // Skip already visited items
             continue;
 
-        std::vector<BOARD_CONNECTED_ITEM*> connectedItems =
-                connectivity->GetConnectedItems( startItem, types, true );
+        auto connectedItems = connectivity->GetConnectedItems( startItem,
+                { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T }, true );
 
         // Build maps of connected items
         for( BOARD_CONNECTED_ITEM* item : connectedItems )
