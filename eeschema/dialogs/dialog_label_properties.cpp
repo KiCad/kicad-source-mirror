@@ -246,20 +246,6 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
 
         m_valueCombo->Append( existingLabelArray );
     }
-    else if( m_currentLabel->Type() == SCH_DIRECTIVE_LABEL_T )
-    {
-        // Load the combobox with existing existing netclass names.  While it's not the only
-        // think a directive is used for, it is the most common.
-        NET_SETTINGS& netSettings = m_Parent->Schematic().Prj().GetProjectFile().NetSettings();
-        wxArrayString existingNetclassNames;
-
-        existingNetclassNames.push_back( netSettings.m_NetClasses.GetDefault()->GetName() );
-
-        for( const std::pair<const wxString, NETCLASSPTR>& pair : netSettings.m_NetClasses )
-            existingNetclassNames.push_back( pair.second->GetName() );
-
-        m_valueCombo->Append( existingNetclassNames );
-    }
 
     // Push a copy of each field into m_updateFields
     for( SCH_FIELD& field : m_currentLabel->GetFields() )
