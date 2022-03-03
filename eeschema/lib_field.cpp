@@ -179,7 +179,7 @@ void LIB_FIELD::Copy( LIB_FIELD* aTarget ) const
 }
 
 
-int LIB_FIELD::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompareFlags ) const
+int LIB_FIELD::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
 {
     wxASSERT( aOther.Type() == LIB_FIELD_T );
 

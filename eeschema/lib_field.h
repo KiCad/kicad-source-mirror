@@ -185,8 +185,7 @@ private:
      *      - Field width.
      *      - Field height.
      */
-    int compare( const LIB_ITEM& aOther,
-            LIB_ITEM::COMPARE_FLAGS aCompareFlags = LIB_ITEM::COMPARE_FLAGS::NORMAL ) const override;
+    int compare( const LIB_ITEM& aOther, int aCompareFlags = 0 ) const override;
 
     /**
      * Print the field.
