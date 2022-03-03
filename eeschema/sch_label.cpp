@@ -921,6 +921,16 @@ SCH_DIRECTIVE_LABEL::SCH_DIRECTIVE_LABEL( const VECTOR2I& pos ) :
 }
 
 
+void SCH_DIRECTIVE_LABEL::SwapData( SCH_ITEM* aItem )
+{
+    SCH_LABEL_BASE::SwapData( aItem );
+    SCH_DIRECTIVE_LABEL* label = static_cast<SCH_DIRECTIVE_LABEL*>( aItem );
+
+    std::swap( m_pinLength, label->m_pinLength );
+    std::swap( m_symbolSize, label->m_symbolSize );
+}
+
+
 SCH_DIRECTIVE_LABEL::SCH_DIRECTIVE_LABEL( const SCH_DIRECTIVE_LABEL& aClassLabel ) :
         SCH_LABEL_BASE( aClassLabel )
 {

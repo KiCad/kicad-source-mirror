@@ -230,6 +230,8 @@ public:
         return new SCH_DIRECTIVE_LABEL( *this );
     }
 
+    void SwapData( SCH_ITEM* aItem ) override;
+
     int GetPinLength() const { return m_pinLength; }
     void SetPinLength( int aLength ) { m_pinLength = aLength; }
 
