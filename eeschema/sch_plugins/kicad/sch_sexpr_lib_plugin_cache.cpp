@@ -329,13 +329,10 @@ void SCH_SEXPR_PLUGIN_CACHE::saveSymbolDrawItem( LIB_ITEM* aItem, OUTPUTFORMATTE
     case LIB_SHAPE_T:
     {
         LIB_SHAPE*    shape = static_cast<LIB_SHAPE*>( aItem );
-        STROKE_PARAMS stroke;
+        STROKE_PARAMS stroke = shape->GetStroke();
         FILL_T        fillMode = shape->GetFillMode();
+        COLOR4D       fillColor = shape->GetFillColor();
         bool          isPrivate = shape->IsPrivate();
-
-        stroke.SetWidth( shape->GetWidth() );
-
-        COLOR4D fillColor = shape->GetFillColor();
 
         switch( shape->GetShape() )
         {
