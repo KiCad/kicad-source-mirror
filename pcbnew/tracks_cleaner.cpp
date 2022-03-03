@@ -461,39 +461,62 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
 
 bool TRACKS_CLEANER::mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2 )
 {
+    KICAD_T items[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, PCB_ZONE_T };
+
     if( aSeg1->IsLocked() || aSeg2->IsLocked() )
         return false;
 
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_brd->GetConnectivity();
 
-    std::vector<PCB_TRACK*> tracks = connectivity->GetConnectedTracks( aSeg1 );
-    std::vector<PCB_TRACK*> tracks2 = connectivity->GetConnectedTracks( aSeg2 );
+    std::vector<BOARD_CONNECTED_ITEM*> tracks = connectivity->GetConnectedItems( aSeg1, items );
+    std::vector<BOARD_CONNECTED_ITEM*> tracks2 = connectivity->GetConnectedItems( aSeg2, items );
 
     std::move( tracks2.begin(), tracks2.end(), std::back_inserter( tracks ) );
+    std::sort( tracks.begin(), tracks.end() );
+    tracks.erase( std::unique( tracks.begin(), tracks.end() ), tracks.end() );
 
     tracks.erase(
-            std::remove_if( tracks.begin(), tracks.end(), [ aSeg1, aSeg2 ]( PCB_TRACK* aTest )
+            std::remove_if( tracks.begin(), tracks.end(), [ aSeg1, aSeg2 ]( BOARD_CONNECTED_ITEM* aTest )
             {
                 return ( aTest == aSeg1 ) || ( aTest == aSeg2 );
             } ), tracks.end() );
 
     std::set<VECTOR2I> pts;
 
-    // Collect the unique points where the two tracks are connected to others
-    for( PCB_TRACK* track : tracks )
+    // Collect the unique points where the two tracks are connected to other items
+    for( BOARD_CONNECTED_ITEM* citem : tracks )
     {
-        if( track->IsPointOnEnds( aSeg1->GetStart() ) )
-            pts.emplace( aSeg1->GetStart() );
 
-        if( track->IsPointOnEnds( aSeg1->GetEnd() ) )
-            pts.emplace( aSeg1->GetEnd() );
+        if( PCB_TRACK* track = dyn_cast<PCB_TRACK*>( citem ) )
+        {
+            if( track->IsPointOnEnds( aSeg1->GetStart() ) )
+                pts.emplace( aSeg1->GetStart() );
 
-        if( track->IsPointOnEnds( aSeg2->GetStart() ) )
-            pts.emplace( aSeg2->GetStart() );
+            if( track->IsPointOnEnds( aSeg1->GetEnd() ) )
+                pts.emplace( aSeg1->GetEnd() );
 
-        if( track->IsPointOnEnds( aSeg2->GetEnd() ) )
-            pts.emplace( aSeg2->GetEnd() );
+            if( track->IsPointOnEnds( aSeg2->GetStart() ) )
+                pts.emplace( aSeg2->GetStart() );
+
+            if( track->IsPointOnEnds( aSeg2->GetEnd() ) )
+                pts.emplace( aSeg2->GetEnd() );
+        }
+        else
+        {
+            if( citem->HitTest( aSeg1->GetStart(), ( aSeg1->GetWidth() + 1 ) / 2 ) )
+                pts.emplace( aSeg1->GetStart() );
+
+            if( citem->HitTest( aSeg1->GetEnd(), ( aSeg1->GetWidth() + 1 ) / 2  ) )
+                pts.emplace( aSeg1->GetEnd() );
+
+            if( citem->HitTest( aSeg2->GetStart(), ( aSeg2->GetWidth() + 1 ) / 2  ) )
+                pts.emplace( aSeg2->GetStart() );
+
+            if( citem->HitTest( aSeg2->GetEnd(), ( aSeg2->GetWidth() + 1 ) / 2  ) )
+                pts.emplace( aSeg2->GetEnd() );
+        }
     }
+
 
     // This means there is a node in the center
     if( pts.size() > 2 )
