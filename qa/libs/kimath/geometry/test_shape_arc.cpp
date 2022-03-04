@@ -789,10 +789,9 @@ static const std::vector<ARC_ARC_COLLIDE_CASE> arc_arc_collide_cases = {
       0,
       true },
     { "case 12: Simulated differential pair meander",
-      { 94.6551, 88.295989, 95.6551, 88.295989, 90.0, 0.1 },
-      { 94.6551, 88.295989, 95.8551, 88.295989, 90.0, 0.1 },
-      // Offset needed due to rounding errors of integer coordinates
-      0.1 - PcbIu2mm( SHAPE_ARC::MIN_PRECISION_IU ),
+      { 94.6551, 88.296, 95.6551, 88.296, 90.0, 0.1 },
+      { 94.6551, 88.296, 95.8551, 88.296, 90.0, 0.1 },
+      0.1,
       false },
     { "case 13: One arc fully enclosed in other, non-concentric",
       { 73.77532, 93.413654, 75.70532, 93.883054, 60.0, 0.1 },
@@ -845,7 +844,7 @@ BOOST_AUTO_TEST_CASE( CollideArc )
             bool result_chain_to_arc =
                     arc1_slc_sh->Collide( arc2_sh, clearance, &actual, &location );
 
-            clearance = clearance + ( arc2.GetWidth() / 2 );
+            clearance = ( arc1.GetWidth() / 2 ) + ( arc2.GetWidth() / 2 );
             bool result_chain_to_chain =
                     arc1_slc_sh->Collide( arc2_slc_sh, clearance, &actual, &location );
 
