@@ -905,53 +905,24 @@ void ZONE::HatchBorder()
     min_a += offset;
 
     // loop through hatch lines
-    #define MAXPTS 200      // Usually we store only few values per one hatch line
-                            // depending on the complexity of the zone outline
-
-    static std::vector<VECTOR2I> pointbuffer;
-    pointbuffer.clear();
-    pointbuffer.reserve( MAXPTS + 2 );
+    std::vector<VECTOR2I> pointbuffer;
+    pointbuffer.reserve( 256 );
 
     for( int a = min_a; a < max_a; a += spacing )
     {
-        // get intersection points for this hatch line
-
-        // Note: because we should have an even number of intersections with the
-        // current hatch line and the zone outline (a closed polygon,
-        // or a set of closed polygons), if an odd count is found
-        // we skip this line (should not occur)
         pointbuffer.clear();
 
         // Iterate through all vertices
         for( auto iterator = m_Poly->IterateSegmentsWithHoles(); iterator; iterator++ )
         {
             double x, y;
-            bool   ok;
 
             SEG segment = *iterator;
 
-            ok = FindLineSegmentIntersection( a, slope, segment.A.x, segment.A.y, segment.B.x,
-                                              segment.B.y, x, y );
-
-            if( ok )
-            {
-                VECTOR2I point( KiROUND( x ), KiROUND( y ) );
-                pointbuffer.push_back( point );
-            }
-
-            if( pointbuffer.size() >= MAXPTS ) // overflow
-            {
-                wxASSERT( 0 );
-                break;
-            }
+            if( FindLineSegmentIntersection( a, slope, segment.A.x, segment.A.y, segment.B.x,
+                    segment.B.y, x, y ) )
+                pointbuffer.emplace_back( KiROUND( x ), KiROUND( y ) );
         }
-
-        // ensure we have found an even intersection points count
-        // because intersections are the ends of segments
-        // inside the polygon(s) and a segment has 2 ends.
-        // if not, this is a strange case (a bug ?) so skip this hatch
-        if( pointbuffer.size() % 2 != 0 )
-            continue;
 
         // sort points in order of descending x (if more than 2) to
         // ensure the starting point and the ending point of the same segment
@@ -960,7 +931,7 @@ void ZONE::HatchBorder()
             sort( pointbuffer.begin(), pointbuffer.end(), sortEndsByDescendingX );
 
         // creates lines or short segments inside the complex polygon
-        for( unsigned ip = 0; ip < pointbuffer.size(); ip += 2 )
+        for( size_t ip = 0; ip + 1 < pointbuffer.size(); ip += 2 )
         {
             int dx = pointbuffer[ip + 1].x - pointbuffer[ip].x;
 
