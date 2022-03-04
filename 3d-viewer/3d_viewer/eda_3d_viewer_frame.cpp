@@ -142,7 +142,7 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     m_auimgr.SetManagedWindow( this );
 
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer( 6 ) );
-    m_auimgr.AddPane( m_infoBar, EDA_PANE().InfoBar().Name( "InfoBar" ).Top().Layer(1) );
+    m_auimgr.AddPane( m_infoBar, EDA_PANE().InfoBar().Name( "InfoBar" ).Top().Layer( 1 ) );
     m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
     // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
@@ -186,10 +186,6 @@ EDA_3D_VIEWER_FRAME::~EDA_3D_VIEWER_FRAME()
     m_canvas->SetEventDispatcher( nullptr );
 
     m_auimgr.UnInit();
-
-    // m_canvas delete will be called by wxWidget manager
-    //delete m_canvas;
-    //m_canvas = nullptr;
 }
 
 
@@ -255,7 +251,6 @@ void EDA_3D_VIEWER_FRAME::setupUIConditions()
     mgr->SetConditions( EDA_3D_ACTIONS::show1mmGrid,   GridSizeCheck( GRID3D_TYPE::GRID_1MM ) );
     mgr->SetConditions( EDA_3D_ACTIONS::toggleOrtho,   ACTION_CONDITIONS().Check( ortho ) );
 
-#undef FlagCheck
 #undef GridSizeCheck
 }
 
@@ -310,10 +305,6 @@ void EDA_3D_VIEWER_FRAME::OnCloseWindow( wxCloseEvent &event )
 
     if( m_canvas )
         m_canvas->Close();
-
-    // m_canvas delete will be called by wxWidget manager
-    //delete m_canvas;
-    //m_canvas = nullptr;
 
     Destroy();
     event.Skip( true );
@@ -444,16 +435,14 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
     {
         m_boardAdapter.m_Cfg = cfg;
 
-        // When opening the 3D viewer, we use the opengl mode, never the ray tracing engine
-        // because the ray tracing is very time consumming, and can be seen as not working
+        // When opening the 3D viewer, we use the OpenGL mode, never the ray tracing engine
+        // because the ray tracing is very time consuming, and can be seen as not working
         // (freeze window) with large boards.
         m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::OPENGL;
 
         m_canvas->SetAnimationEnabled( cfg->m_Camera.animation_enabled );
         m_canvas->SetMovingSpeedMultiplier( cfg->m_Camera.moving_speed_multiplier );
         m_canvas->SetProjectionMode( cfg->m_Camera.projection_mode );
-
-#undef TRANSFER_SETTING
     }
 }
 
@@ -610,6 +599,7 @@ void EDA_3D_VIEWER_FRAME::loadCommonSettings()
 
     const DPI_SCALING dpi{ settings, this };
     m_canvas->SetScaleFactor( dpi.GetScaleFactor() );
+
     // TODO(JE) use all control options
     m_boardAdapter.m_MousewheelPanning = settings->m_Input.scroll_modifier_zoom != 0;
 }
