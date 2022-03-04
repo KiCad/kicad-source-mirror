@@ -46,11 +46,16 @@ SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint
         m_width( aWidth )
 {
     m_start = aArcStartPoint;
-    m_mid = aArcStartPoint;
-    m_end = aArcStartPoint;
 
-    RotatePoint( m_mid, aArcCenter, -aCenterAngle / 2.0 );
-    RotatePoint( m_end, aArcCenter, -aCenterAngle );
+    VECTOR2D mid = aArcStartPoint;
+    VECTOR2D end = aArcStartPoint;
+    VECTOR2D center = aArcCenter;
+
+    RotatePoint( mid, center, -aCenterAngle / 2.0 );
+    RotatePoint( end, center, -aCenterAngle );
+
+    m_mid = VECTOR2I( KiROUND( mid.x ), KiROUND( mid.y ) );
+    m_end = VECTOR2I( KiROUND( end.x ), KiROUND( end.y ) );
 
     update_bbox();
 }
