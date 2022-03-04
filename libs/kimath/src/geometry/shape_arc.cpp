@@ -319,11 +319,13 @@ void SHAPE_ARC::update_bbox()
     int quad_angle_start = std::ceil( start_angle.AsDegrees() / 90.0 );
     int quad_angle_end = std::floor( end_angle.AsDegrees() / 90.0 );
 
+    VECTOR2I center = GetCenter();
+    const int radius = KiROUND( GetRadius() );
+
     // count through quadrants included in arc
     for( int quad_angle = quad_angle_start; quad_angle <= quad_angle_end; ++quad_angle )
     {
-        const int radius = KiROUND( GetRadius() );
-        VECTOR2I  quad_pt = GetCenter();
+        VECTOR2I  quad_pt = center;
 
         switch( quad_angle % 4 )
         {
