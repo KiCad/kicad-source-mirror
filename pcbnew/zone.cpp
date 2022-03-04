@@ -1149,7 +1149,7 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
         return false;
 
     // Processing of arc shapes in zones is not yet supported because Clipper can't do boolean
-    // operations on them.  The poly outline must be flattened first.
+    // operations on them.  The poly outline must be converted to segments first.
     SHAPE_POLY_SET flattened = *m_Poly;
     flattened.ClearArcs();
 
