@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 11:58-0800\n"
-"PO-Revision-Date: 2022-02-07 22:32+0000\n"
+"PO-Revision-Date: 2022-03-08 00:49+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -4645,9 +4645,9 @@ msgid "Error loading font '%s'."
 msgstr "เกิดผิดพลาดอ่านแบบอักษร '%s'"
 
 #: common/font/fontconfig.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Font '%s' not found; substituting '%s'."
-msgstr "ฟุ้ทพรินท์ '%s' หาไม่พบ"
+msgstr "ไม่พบฟ้อนท์ '%s'; แทนที่ด้วย '%s'"
 
 #: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:884
 #: eeschema/symbol_editor/symbol_library_manager.cpp:104
@@ -5141,14 +5141,12 @@ msgid "Symbol fields"
 msgstr "ช่องสัญลักษณ์"
 
 #: common/layer_id.cpp:117
-#, fuzzy
 msgid "Sheet references"
-msgstr "อ้างอิงระหว่างชีต"
+msgstr "อ้างอิงชีต"
 
 #: common/layer_id.cpp:118
-#, fuzzy
 msgid "Net class references"
-msgstr "เน็ตคลาส"
+msgstr "อ้างอิงเน็ตคลาส"
 
 #: common/layer_id.cpp:119
 msgid "Symbol body outlines"
@@ -5164,9 +5162,8 @@ msgid "Schematic text && graphics"
 msgstr "ข้อความในวงจรและกราฟิก"
 
 #: common/layer_id.cpp:122
-#, fuzzy
 msgid "Schematic text && graphics backgrounds"
-msgstr "ข้อความในวงจรและกราฟิก"
+msgstr "ข้อความบนวงจร&&กราฟิกพื้นหลัง"
 
 #: common/layer_id.cpp:123
 msgid "Pins"
@@ -5210,9 +5207,8 @@ msgid "ERC errors"
 msgstr "ผิดพลาด ERC"
 
 #: common/layer_id.cpp:133
-#, fuzzy
 msgid "ERC exclusions"
-msgstr "ยกเว้น DRC"
+msgstr "ยกเว้น ERC"
 
 #: common/layer_id.cpp:134 common/layer_id.cpp:171
 #: pcbnew/widgets/appearance_controls.cpp:354
@@ -5631,14 +5627,12 @@ msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "บีบอัดไฟล์ '%s' สำเร็จ (%s ไม่บีบ, %s บีบอัด)"
 
 #: common/rc_item.cpp:362
-#, fuzzy
 msgid "Excluded warning: "
-msgstr "ไม่รวม "
+msgstr "ไม่รวมคำเตือน: "
 
 #: common/rc_item.cpp:364
-#, fuzzy
 msgid "Excluded error: "
-msgstr "ไม่รวม "
+msgstr "ไม่รวมข้อผิดพลาด: "
 
 #: common/rc_item.cpp:368
 msgid "Warning: "
@@ -6169,9 +6163,8 @@ msgid "Cycle inactive layers between normal, dimmed, and hidden"
 msgstr "วนวงกลมเลเยอร์ไม่ทำงานระหว่าง ปกติ,จางและซ่อน"
 
 #: common/tool/actions.cpp:549
-#, fuzzy
 msgid "Draw Bounding Boxes"
-msgstr "กรอบสี่เหลี่ยม"
+msgstr "วาดกรอบล้อมรอบ"
 
 #: common/tool/actions.cpp:554
 msgid "Select item(s)"
@@ -6398,9 +6391,8 @@ msgid "Mirroring for Y axis is not supported yet"
 msgstr "กลับกระจกบนแกน Y ไม่สนับสนุน"
 
 #: common/widgets/font_choice.cpp:58
-#, fuzzy
 msgid "<not found>"
-msgstr "%s ไม่พบ"
+msgstr "<ไม่พบ>"
 
 #: common/widgets/footprint_preview_widget.cpp:103
 msgid "Footprint not found."
@@ -6703,9 +6695,8 @@ msgid "Eagle XML files"
 msgstr "ไฟล์ Eagle XML"
 
 #: common/wildcards_and_files_ext.cpp:288
-#, fuzzy
 msgid "OrcadPCB2 netlist files"
-msgstr "ไฟล์รายชื่อเน็ต KiCad"
+msgstr "ไฟล์รายชื่อเน็ต OrcadPCB2"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "KiCad netlist files"
@@ -6761,9 +6752,8 @@ msgid "Legacy footprint library files"
 msgstr "ไฟล์ไลบรารีฟุ้ทพรินท์ รุ่นเก่า"
 
 #: common/wildcards_and_files_ext.cpp:375
-#, fuzzy
 msgid "Altium PCB footprint library files"
-msgstr "ไฟล์ไลบรารีพีซีบีฟุ้ทพรินท์ gEDA"
+msgstr "ไฟล์ไลบรารีฟุ้ทพรินท์ Altium PCB"
 
 #: common/wildcards_and_files_ext.cpp:381
 msgid "Eagle ver. 6.x XML library files"
@@ -8506,9 +8496,8 @@ msgid "Violation Severity"
 msgstr "ระดับการละเมิด"
 
 #: eeschema/dialogs/dialog_erc.cpp:791 pcbnew/dialogs/dialog_drc.cpp:722
-#, fuzzy
 msgid "Edit ignored violations..."
-msgstr "แก้ไขระดับการละเมิด…"
+msgstr "แก้ไขการละเมิดที่ถูกละเลย…"
 
 #: eeschema/dialogs/dialog_erc.cpp:868 pcbnew/dialogs/dialog_gendrill.cpp:484
 #, c-format
@@ -8554,9 +8543,9 @@ msgid "Violations (%d)"
 msgstr "การละเมิด (%d)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored Tests (%d)"
-msgstr "ชิ้นส่วนที่ไม่เชื่อมต่อ (%d)"
+msgstr "ละเลยการทดสอบ (%d)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:139
 #: pcbnew/dialogs/dialog_drc_base.cpp:183
@@ -8616,7 +8605,7 @@ msgstr "(%s)"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:108
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:83
 msgid "Font:"
-msgstr ""
+msgstr "ฟ้อนท์:"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:101
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:173
@@ -8629,21 +8618,18 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:174
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:112
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:87
-#, fuzzy
 msgid "KiCad Font"
-msgstr "KiCad "
+msgstr "ฟ้อนท์ KiCad"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:116
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:85
-#, fuzzy
 msgid "Horizontal text"
-msgstr "แนวนอน"
+msgstr "ข้อความแนวนอน"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:121
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:90
-#, fuzzy
 msgid "Vertical text"
-msgstr "แนวตั้ง"
+msgstr "ข้อความแนวตั้ง"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:146
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:115
@@ -8657,9 +8643,8 @@ msgstr "จัดชิดซ้าย"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:120
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:104
 #: eeschema/dialogs/dialog_text_properties_base.cpp:104
-#, fuzzy
 msgid "Align horizontal center"
-msgstr "จัดชิดกึ่งกลางแนวนอน"
+msgstr "จัดแนวกึ่งกลางแกนนอน"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:156
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:125
@@ -8681,9 +8666,8 @@ msgstr "จัดชิดบน"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:140
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:119
 #: eeschema/dialogs/dialog_text_properties_base.cpp:119
-#, fuzzy
 msgid "Align vertical center"
-msgstr "จัดชิดกึ่งกลางแนวตั้ง"
+msgstr "จัดแนวกึ่งกลางแกนตั้ง"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:176
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:145
@@ -8857,9 +8841,8 @@ msgstr "สไตล์เส้น:"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:219
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:90
 #: eeschema/dialogs/dialog_text_properties_base.cpp:213
-#, fuzzy
 msgid "Fill color:"
-msgstr "สีเส้นตรง:"
+msgstr "สีเติมเต็ม:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:363
 msgid "Junction size:"
@@ -8952,9 +8935,8 @@ msgid "Junction Properties"
 msgstr "คุณสมบัติจุดเชื่อมต่อ"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:93
-#, fuzzy
 msgid "Pin length:"
-msgstr "ความยาวขา(&P):"
+msgstr "ความยาวขา:"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:98
 msgid "Global Label Properties"
@@ -8970,23 +8952,20 @@ msgid "Label Properties"
 msgstr "คุณสมบัติป้ายชื่อ"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:101
-#, fuzzy
 msgid "Directive Label Properties"
-msgstr "คุณสมบัติป้ายชื่อลำดับขั้น"
+msgstr "คุณสมบัติป้ายชื่อคำสั่ง"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:102
 msgid "Hierarchical Sheet Pin Properties"
 msgstr "คุณสมบัติขาชีทชนิดลำดับขั้น"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:392
-#, fuzzy
 msgid "Label can not be empty."
-msgstr "ชื่อเน็ต ปล่อยว่างไม่ได้"
+msgstr "ป้ายชื่อว่างไม่ได้"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:572
-#, fuzzy
 msgid "The first field is mandatory."
-msgstr "ฟิลด์แรก %d เป็นฟิลด์บังคับ"
+msgstr "ฟิลด์แรกเป็นฟิลด์บังคับ"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:29
 #: eeschema/dialogs/dialog_label_properties_base.cpp:38
@@ -9160,13 +9139,12 @@ msgid "Passive"
 msgstr "แพสซีฟ"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:161
-#, fuzzy
 msgid "Dot"
 msgstr "จุด"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:167
 msgid "Diamond"
-msgstr ""
+msgstr "เพชร"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:177
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
@@ -9217,7 +9195,7 @@ msgstr "ขนาดชื่อ"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:593
 msgid "ALL"
-msgstr ""
+msgstr "ทั้งหมด"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:633
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:55
@@ -9276,14 +9254,12 @@ msgid "0"
 msgstr "0"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:119
-#, fuzzy
 msgid "Pin count:"
-msgstr "จำนวนขา"
+msgstr "จำนวนขา:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:133
-#, fuzzy
 msgid "Duplicate pins:"
-msgstr "ฟุ้ทพรินท์ซ้ำ"
+msgstr "ขาซ้ำ:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:74
 msgid "Pin Table"
@@ -9397,9 +9373,8 @@ msgstr "สัญลักษณ์ใหม่"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:161
 #: eeschema/dialogs/dialog_text_properties_base.cpp:158
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:150
-#, fuzzy
 msgid "Border"
-msgstr "ลำดับ"
+msgstr "ขอบเขต"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:38
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:117
@@ -9408,9 +9383,8 @@ msgid "Border width:"
 msgstr "ความกว้างขอบนอก:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:52
-#, fuzzy
 msgid "Set border width to 0 to use Schematic default symbol line width."
-msgstr "ตั้งความกว้างเป็น 0 เพื่อใช้ขนาดเส้นจากเน็ตคลาส"
+msgstr "ตั้งความกว้างขอบเขตเป็น 0 เพื่อใช้ค่าปริยายของขนาดเส้นตรงของวงจร"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:60
 msgid "Fill Style"
@@ -9429,15 +9403,13 @@ msgid "Fill with body background color"
 msgstr "ใส่ทึบด้วยสีพื้นของตัวเอง"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:76
-#, fuzzy
 msgid "Fill with:"
-msgstr "ประเภทเติม:"
+msgstr "เติมเต็มด้วย:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:91
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:168
-#, fuzzy
 msgid "Private to Symbol Editor"
-msgstr "แก้ไขด้วยตัวแก้ไขสัญลักษณ์"
+msgstr "เป็นส่วนตัวไปที่เครื่องมือแก้ไขสัญลักษณ์"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:97
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:167
@@ -9667,9 +9639,8 @@ msgstr "คุณสมบัติไลบรารีสัญลักษณ
 
 #: eeschema/dialogs/dialog_lib_textbox_properties.cpp:217
 #: eeschema/dialogs/dialog_text_properties.cpp:354
-#, fuzzy
 msgid "Text can not be empty."
-msgstr "ชื่อเน็ต ปล่อยว่างไม่ได้"
+msgstr "ข้อความปล่อยว่างไม่ได้"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:201
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:64
@@ -9679,21 +9650,18 @@ msgstr "สไตล์:"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:213
 #: eeschema/dialogs/dialog_text_properties_base.cpp:207
-#, fuzzy
 msgid "Background fill"
-msgstr "ใส่ทึบพื้นหลัง:"
+msgstr "เติมเต็มพื้นหลัง"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:239
-#, fuzzy
 msgid "Private to symbol editor"
-msgstr "แก้ไขด้วยตัวแก้ไขสัญลักษณ์"
+msgstr "เป็นส่วนตัวไปที่เครื่องมือแก้ไขสัญลักษณ์"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.h:106
 #: eeschema/dialogs/dialog_text_properties.cpp:54
 #: pcbnew/dialogs/dialog_textbox_properties_base.h:103
-#, fuzzy
 msgid "Text Box Properties"
-msgstr "คุณสมบัติข้อความ"
+msgstr "คุณสมบัติกล่องข้อความ"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:76
 msgid "Set width to 0 to use Netclass line widths."
@@ -10535,19 +10503,17 @@ msgid "Filled shape"
 msgstr "เติมเต็มรูปร่าง"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:110
-#, fuzzy
 msgid "Set line width to 0 to use Schematic Editor line widths."
-msgstr "ตั้งความกว้างเป็น 0 เพื่อใช้ขนาดเส้นจากเน็ตคลาส"
+msgstr "ตั้งความกว้างเส้นตรงเป็น 0 เพื่อใช้ขนาดเส้นตรงจากเครื่องมือแก้ไขวงจร"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:114
-#, fuzzy
 msgid "Set line color to transparent to use Schematic Editor colors."
-msgstr "กำหนดสีเป็นโปร่งใสเพื่อใช้สีจากเครื่องมือแก้ไขวงจร"
+msgstr "กำหนดสีเส้นตรงเป็นโปร่งใสเพื่อใช้สีจากเครื่องมือแก้ไขวงจร"
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Properties"
-msgstr "คุณสมบัติ"
+msgstr "คุณสมบัติ %s"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:66
 msgid "Connection type:"
@@ -11039,9 +11005,8 @@ msgid "Subcircuit"
 msgstr "วงจรย่อย"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:85
-#, fuzzy
 msgid "Code Model"
-msgstr "โมเดล"
+msgstr "โมเดลโค้ด"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:497
 msgid ""
@@ -11069,19 +11034,16 @@ msgid "For a JFET, pin order is drain, gate, source"
 msgstr "สำหรับเจเฟ็ต ลำดับขาคือเดรน, เกต, ซอส"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:803
-#, fuzzy
 msgid "Invalid Impedance value"
-msgstr "ค่าคุณสมบัติไม่ถูกต้อง"
+msgstr "ค่าอิมพีแดนซ์ไม่ถูกต้อง"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:818
-#, fuzzy
 msgid "Invalid delay value"
-msgstr "ค่าคุณสมบัติไม่ถูกต้อง"
+msgstr "ค่าความหน่วงไม่ถูกต้อง"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:833
-#, fuzzy
 msgid "Invalid frequency value"
-msgstr "ค่าคุณสมบัติไม่ถูกต้อง"
+msgstr "ค่าความถี่ไม่ถูกต้อง"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:845
 #, fuzzy
