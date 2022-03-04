@@ -620,6 +620,20 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
     // and filled polygons can explain the display and DRC calculation time:
     msg.Printf( wxT( "%d" ), (int) m_borderHatchLines.size() );
     aList.emplace_back( MSG_PANEL_ITEM( _( "HatchBorder Lines" ), msg ) );
+
+    if( !m_FilledPolysList.empty() )
+    {
+        count = 0;
+
+        for( auto item: m_FilledPolysList )
+        {
+            const std::shared_ptr<SHAPE_POLY_SET>& polyset = item.second;
+            count +=  polyset->TotalVertices();
+        }
+
+        msg.Printf( wxT( "%d" ), count );
+        aList.emplace_back( MSG_PANEL_ITEM( _( "Corner Count" ), msg ) );
+    }
 }
 
 
