@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 11:59-0800\n"
-"PO-Revision-Date: 2022-03-01 09:58+0000\n"
+"PO-Revision-Date: 2022-03-08 00:49+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v6/ca/>\n"
 "Language: ca\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.1-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -7875,6 +7875,7 @@ msgstr ""
 "XSLT. El procés de conversió complet està gestionat per Eeschema, després "
 "d'haver estat configurat per executar `xsltproc` d'una manera específica.\n"
 "\n"
+"\n"
 "Un script de Python és més fàcil de crear.\n"
 "\n"
 "# 4 - Inicialització de la finestra de diàleg\n"
@@ -7917,8 +7918,8 @@ msgstr ""
 "Una línia d'ordres per a Windows seria la següent.\n"
 "\n"
 "```\n"
-"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%I"
-"\"\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%"
+"I\"\n"
 "```\n"
 "\n"
 "Una línia d'ordres per a Linux seria la següent.\n"
@@ -7941,8 +7942,8 @@ msgstr ""
 "o\n"
 "\n"
 "```\n"
-"python /usr/local/kicad/bin/plugins/bom-in-python/elmeuconvertidor .xsl \"%I"
-"\" \"%O\"\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/elmeuconvertidor .xsl \"%"
+"I\" \"%O\"\n"
 "```\n"
 "\n"
 "El format de la línia d'ordres accepta paràmetres pels noms de fitxers. Els "
@@ -7972,6 +7973,7 @@ msgstr ""
 "del seu tipus.\n"
 "Aleshores has d'afegir a l'opció ***%O*** l'extensió de fitxer correcte.\n"
 "\n"
+"\n"
 "Per exemple:\n"
 "\n"
 " * **%O.csv** per crear un fitxer .csv (fitxer amb valors separats per "
@@ -7995,8 +7997,8 @@ msgstr ""
 "\n"
 "A Linux:\n"
 "```\n"
-"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-"xsl \"%I\"\n"
+"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+"pcb.xsl \"%I\"\n"
 "```\n"
 "\n"
 "Els exemples anteriors assumeixen que `xsltproc` està instal·lat al teu PC "
@@ -8025,8 +8027,8 @@ msgstr ""
 "\n"
 "A Linux:\n"
 "```\n"
-"python /usr/local/kicad/bin/plugins/bom-in-python/el_meu_script_python.py "
-"\"%I\" \"%O.csv\"\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/el_meu_script_python.py \"%"
+"I\" \"%O.csv\"\n"
 "```\n"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:37
@@ -13673,9 +13675,8 @@ msgid "Cannot open file '%s'."
 msgstr "No s'ha pogut obrir el fitxer '%s'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:314
-#, fuzzy
 msgid "Storage file not fully parsed "
-msgstr "No s'ha llegit totalment el fitxer <%s>"
+msgstr "No s'ha pogut analitzar totalment el fitxer d'emmagazematge "
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:476
 msgid "Compile mask not currently supported."
@@ -13739,9 +13740,8 @@ msgid "Rounded rectangle's owner (%d) not found."
 msgstr "No s'ha trobat el propietari del rectangle arrodonit (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1324
-#, fuzzy
 msgid "Arcs on schematic not currently supported."
-msgstr "No hi ha en aquest moment cap placa editada"
+msgstr "Els arcs a l'esquemàtic actualment no estan suportats."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1334
 #, c-format
@@ -13964,6 +13964,8 @@ msgid ""
 "Symbol '%s' references sheet ID '%s' which does not exist in the design. The "
 "symbol was not loaded."
 msgstr ""
+"El símbol '%s' fa referència a la fulla amb l'ID '%s' que no existeix al "
+"disseny. El símbol no s'ha carregat."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1889
 #, c-format
@@ -13971,6 +13973,8 @@ msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
 "and may require manual fixing."
 msgstr ""
+"La xarxa %s fa referència a un element de xarxa desconegut %s. La xarxa no "
+"s'ha carregat correctament i pot requerir arreglar-ho manualment."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2181
 #, c-format
@@ -13979,6 +13983,9 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
+"El bloc amb ID %s (Nom: '%s') està dibuixat a la fulla '%s' però no està "
+"vinculat a una altra fulla del disseny. KiCad requereix que tots els símbols "
+"de fulla estiguin associats a una fulla, així que no s'ha carregat el bloc."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2206
 #, c-format
@@ -13986,6 +13993,8 @@ msgid ""
 "The CADSTAR schematic might be corrupt: Block %s references a child sheet "
 "but has no Figure defined."
 msgstr ""
+"L'esquemàtic de CADSTAR podria estar corromput: el Bloc %s fa referència a "
+"una fulla secundaria, però no té cap Figura definida."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3051
@@ -13999,6 +14008,8 @@ msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
 "in the schematic."
 msgstr ""
+"Error en analitzar el fitxer Eagle. No s'ha pogut trobar la instància '%s', "
+"però se'n fa referència a l'esquema."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1317
 #, c-format
@@ -14099,16 +14110,15 @@ msgstr "Tipus de pàgina no vàlida"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1687
 msgid "Invalid title block comment number"
-msgstr ""
+msgstr "Número de comentari de bloc de títol invàlid"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1784
 msgid "Invalid sheet pin name"
 msgstr "Nom de la fulla del pin no vàlid"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1792
-#, fuzzy
 msgid "Empty sheet pin name"
-msgstr "Importa els pins del full"
+msgstr "Nom de pin de fulla buit"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2233
 msgid "Invalid symbol library name"
@@ -14154,7 +14164,7 @@ msgstr "No es pot eliminar la biblioteca de símbols '%s'."
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1080
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:3070
 msgid "unexpected end of line"
-msgstr ""
+msgstr "final de línia inesperat"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:350
 msgid "expected unquoted string"
@@ -14167,7 +14177,7 @@ msgstr "'%s' no sembla ser un fitxer d'Eeschema."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:887
 msgid "Missing 'EELAYER END'"
-msgstr ""
+msgstr "Falta 'EELAYER END'"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:935
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1207
@@ -14181,7 +14191,7 @@ msgstr "Acabament de fitxer inesperat"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1499
 msgid "expected 'Italics' or '~'"
-msgstr ""
+msgstr "s'esperava 'Itàlica' o '~'"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1763
 msgid "symbol field text attributes must be 3 characters wide"
@@ -14198,7 +14208,7 @@ msgstr "Permisos insuficients per a llegir la biblioteca '%s'."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2712
 msgid "symbol document library file is empty"
-msgstr ""
+msgstr "el document de biblioteca de símbols està buit"
 
 #: eeschema/sch_screen.cpp:644 eeschema/sch_screen.cpp:736
 #, c-format
@@ -25766,9 +25776,9 @@ msgid "Line width may not be 0 for unfilled shapes."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Corner %d"
-msgstr "Cantonades"
+msgstr "Cantonada %d"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:334
 msgid "Polygon must have at least 3 corners"
@@ -30309,13 +30319,13 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1044
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving board file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"Error en desar el fitxer de la placa «%s».\n"
-"%s"
+"Error en desar el fitxer de la placa '%s'.\n"
+"No s'ha pogut canviar el nom al fitxer temporal '%s'."
 
 #: pcbnew/files.cpp:1157
 #, fuzzy, c-format
@@ -30365,9 +30375,9 @@ msgid "Attributes:"
 msgstr "Atributs:"
 
 #: pcbnew/footprint.cpp:983
-#, fuzzy, c-format
+#, c-format
 msgid "3D-Shape: %s"
-msgstr "Forma 3D"
+msgstr "Forma 3D: %s"
 
 #: pcbnew/footprint.cpp:983
 msgid "<none>"
@@ -30425,9 +30435,8 @@ msgid "Solderpaste Margin Ratio Override"
 msgstr "Anul·lació del rati de marge de la pasta de soldadura"
 
 #: pcbnew/footprint.cpp:2400 pcbnew/pad.cpp:1715 pcbnew/zone.cpp:1467
-#, fuzzy
 msgid "Thermal Relief Width"
-msgstr "Amplada de l'alleujament tèrmic:"
+msgstr "Amplada de l'alleujament tèrmic"
 
 #: pcbnew/footprint.cpp:2404 pcbnew/pad.cpp:1718 pcbnew/zone.cpp:1464
 #, fuzzy
@@ -30542,9 +30551,8 @@ msgid "Import Footprint"
 msgstr "Importa una empremta"
 
 #: pcbnew/footprint_libraries_utils.cpp:268
-#, fuzzy
 msgid "Not a footprint file."
-msgstr "No és un fitxer d'empremta"
+msgstr "No és un fitxer d'empremtes."
 
 #: pcbnew/footprint_libraries_utils.cpp:280
 #, c-format
@@ -32935,17 +32943,17 @@ msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "Nom de NETCLASS '%s' duplicat al fitxer '%s' a la línia %d, òfset %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3250
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"número en punt flotant no vàlid a\n"
-"fitxer: <%s>\n"
+"ID d'empremta invàlid a\n"
+"fitxer: '%s'\n"
 "línia: %d\n"
-"desplaçament: %d"
+"òfset: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3568
 #, fuzzy, c-format
@@ -33002,17 +33010,17 @@ msgstr ""
 "desplaçament: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4971
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 " file: '%s;\n"
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"número en punt flotant no vàlid a\n"
-"fitxer: <%s>\n"
+"ID de xarxa invàlid a\n"
+"fitxer: '%s';\n"
 "línia: %d\n"
-"desplaçament: %d"
+"òfset: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5090
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2496
@@ -34040,9 +34048,9 @@ msgid "Zone connection resolution for:"
 msgstr "Resolució de la connexió de zona per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:397
-#, fuzzy, c-format
+#, c-format
 msgid "Zone thermal relief: %s."
-msgstr "Alleujament tèrmic"
+msgstr "Alleujament tèrmic de la zona: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:402
 #: pcbnew/tools/board_inspection_tool.cpp:421 pcbnew/zone.cpp:335
