@@ -178,6 +178,12 @@ void FP_SHAPE::SetCenter0( const VECTOR2I& aCenter )
 
 VECTOR2I FP_SHAPE::GetArcMid0() const
 {
+    // If none of the input data have changed since we loaded the arc,
+    // keep the original mid point data to minimize churn
+    if( m_arcMidData_0.start == m_start && m_arcMidData_0.end == m_end
+            && m_arcMidData_0.center == m_arcCenter )
+        return m_arcMidData_0.mid;
+
     VECTOR2I mid0 = m_start0;
     RotatePoint( mid0, m_arcCenter0, -GetArcAngle() / 2.0 );
     return mid0;
@@ -202,6 +208,11 @@ void FP_SHAPE::SetArcGeometry0( const VECTOR2I& aStart0, const VECTOR2I& aMid0,
     m_start0 = aStart0;
     m_end0 = aEnd0;
     m_arcCenter0 = CalcArcCenter( aStart0, aMid0, aEnd0 );
+
+    m_arcMidData_0.center = m_arcCenter0;
+    m_arcMidData_0.end = m_end0;
+    m_arcMidData_0.mid = aMid0;
+    m_arcMidData_0.start = m_start0;
 }
 
 

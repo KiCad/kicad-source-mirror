@@ -1000,12 +1000,9 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
         }
     }
 
-    arc->SetStart( startPoint );
-    arc->SetEnd( endPoint );
-
     if( hasMidPoint )
     {
-        arc->SetCenter( CalcArcCenter( arc->GetStart(), midPoint, arc->GetEnd() ) );
+        arc->SetArcGeometry( startPoint, midPoint, endPoint);
 
 #if 1   // This code will be removed if the current code in Eeschema is modified to allow
         // full support of arcs >= 180 deg without issue.
@@ -1030,6 +1027,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
             VECTOR2I new_center = CalcArcCenter( arc->GetStart(), arc->GetEnd(),
                                   EDA_ANGLE( 179.5, DEGREES_T ) );
             arc->SetCenter( new_center );
+            arc->SetCachedArcData( startPoint, midPoint, endPoint, new_center );
         }
 #endif
     }
@@ -1041,9 +1039,8 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
          * between LibEdit and PCBNew.  Since we now use a common class (EDA_SHAPE) for both we
          * need to flip one of them.  LibEdit drew the short straw.
          */
-        VECTOR2I temp = arc->GetStart();
-        arc->SetStart( arc->GetEnd() );
-        arc->SetEnd( temp );
+        arc->SetStart( endPoint );
+        arc->SetEnd( startPoint );
     }
     else
     {

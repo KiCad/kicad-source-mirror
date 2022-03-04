@@ -437,6 +437,12 @@ void EDA_SHAPE::SetCenter( const VECTOR2I& aCenter )
 
 VECTOR2I EDA_SHAPE::GetArcMid() const
 {
+    // If none of the input data have changed since we loaded the arc,
+    // keep the original mid point data to minimize churn
+    if( m_arcMidData.start == m_start && m_arcMidData.end == m_end
+            && m_arcMidData.center == m_arcCenter )
+        return m_arcMidData.mid;
+
     VECTOR2I mid = m_start;
     RotatePoint( mid, m_arcCenter, -GetArcAngle() / 2.0 );
     return mid;
@@ -487,19 +493,34 @@ int EDA_SHAPE::GetRadius() const
 }
 
 
+void EDA_SHAPE::SetCachedArcData( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd, const VECTOR2I& aCenter )
+{
+    m_arcMidData.start = aStart;
+    m_arcMidData.end = aEnd;
+    m_arcMidData.center = aCenter;
+    m_arcMidData.mid = aMid;
+}
+
+
 void EDA_SHAPE::SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd )
 {
+    m_arcMidData = {};
     m_start = aStart;
     m_end = aEnd;
     m_arcCenter = CalcArcCenter( aStart, aMid, aEnd );
+    VECTOR2I new_mid = GetArcMid();
+
     m_endsSwapped = false;
+
+    // Watch the ordering here.  GetArcMid above needs to be called prior to initializing the
+    // m_arcMidData structure in order to ensure we get the calculated variant, not the cached
+    SetCachedArcData( aStart, aMid, aEnd, m_arcCenter );
 
     /*
      * If the input winding doesn't match our internal winding, the calculated midpoint will end
      * up on the other side of the arc.  In this case, we need to flip the start/end points and
      * flag this change for the system.
      */
-    VECTOR2I new_mid = GetArcMid();
     VECTOR2D dist( new_mid - aMid );
     VECTOR2D dist2( new_mid - m_arcCenter );
 
