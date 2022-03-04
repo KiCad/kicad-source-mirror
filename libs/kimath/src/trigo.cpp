@@ -357,6 +357,9 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, cons
     double aSlope = yDelta_21 / xDelta_21;
     double bSlope = yDelta_32 / xDelta_32;
 
+    double daSlope = aSlope * VECTOR2D( 0.5 / yDelta_21, 0.5 / xDelta_21 ).EuclideanNorm();
+    double dbSlope = bSlope * VECTOR2D( 0.5 / yDelta_32, 0.5 / xDelta_32 ).EuclideanNorm();
+
     if( aSlope == bSlope )
     {
         if( aStart == aEnd )
@@ -381,12 +384,80 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, cons
     if( aSlope == 0.0 )
         aSlope = std::numeric_limits<double>::epsilon();
 
-    center.x = ( aSlope * bSlope * ( aStart.y - aEnd.y ) +
-                 bSlope * ( aStart.x + aMid.x ) -
-                 aSlope * ( aMid.x + aEnd.x ) ) / ( 2 * ( bSlope - aSlope ) );
+    // What follows is the calculation of the center using the slope of the two lines as well as
+    // the propagated error that occurs when rounding to the nearest nanometer.  The error can be
+    // ±0.5 units but can add up to multiple nanometers after the full calculation is performed.
+    // All variables starting with `d` are the delta of that variable.  This is approximately equal
+    // to the standard deviation.
+    // We ignore the possible covariance between variables.  We also truncate our series expansion
+    // at the first term.  These are reasonable assumptions as the worst-case scenario is that we
+    // underestimate the potential uncertainty, which would potentially put us back at the status quo
+    double abSlopeStartEndY = aSlope * bSlope * ( aStart.y - aEnd.y );
+    double dabSlopeStartEndY = abSlopeStartEndY * std::sqrt( ( daSlope / aSlope * daSlope / aSlope )
+                                                           + ( dbSlope / bSlope * dbSlope / bSlope )
+                                                           + ( M_SQRT1_2 / ( aStart.y - aEnd.y )
+                                                               * M_SQRT1_2 / ( aStart.y - aEnd.y ) ) );
 
-    center.y = ( ( ( aStart.x + aMid.x ) / 2.0 - center.x ) / aSlope +
-                 ( aStart.y + aMid.y ) / 2.0 );
+    double bSlopeStartMidX = bSlope * ( aStart.x + aMid.x );
+    double dbSlopeStartMidX = bSlopeStartMidX * std::sqrt( ( dbSlope / bSlope * dbSlope / bSlope )
+                                                         + ( M_SQRT1_2 / ( aStart.x + aMid.x )
+                                                                 * M_SQRT1_2 / ( aStart.x + aMid.x ) ) );
+
+    double aSlopeMidEndX = aSlope * ( aMid.x + aEnd.x );
+    double daSlopeMidEndX = aSlopeMidEndX * std::sqrt( ( daSlope / aSlope * daSlope / aSlope )
+                                                     + ( M_SQRT1_2 / ( aMid.x + aEnd.x )
+                                                             * M_SQRT1_2 / ( aMid.x + aEnd.x ) ) );
+
+    double twiceBASlopeDiff = 2 * ( bSlope - aSlope );
+    double dtwiceBASlopeDiff = 2 * std::sqrt( dbSlope * dbSlope + daSlope * daSlope );
+
+    double centerNumeratorX = abSlopeStartEndY + bSlopeStartMidX - aSlopeMidEndX;
+    double dCenterNumeratorX = std::sqrt( dabSlopeStartEndY * dabSlopeStartEndY
+                                       + dbSlopeStartMidX * dbSlopeStartMidX
+                                       + daSlopeMidEndX * daSlopeMidEndX );
+
+    double centerX = ( abSlopeStartEndY + bSlopeStartMidX - aSlopeMidEndX ) / twiceBASlopeDiff;
+
+    double dCenterX = centerX * std::sqrt( ( dCenterNumeratorX / centerNumeratorX * dCenterNumeratorX / centerNumeratorX )
+                                         + ( dtwiceBASlopeDiff / twiceBASlopeDiff * dtwiceBASlopeDiff / twiceBASlopeDiff ) );
+
+
+    double centerNumeratorY = ( ( aStart.x + aMid.x ) / 2.0 - centerX );
+    double dCenterNumeratorY = std::sqrt( 1.0 / 8.0 + dCenterX * dCenterX );
+
+    double centerFirstTerm = centerNumeratorY / aSlope;
+    double dcenterFirstTermY = centerFirstTerm * std::sqrt(
+                                          ( dCenterNumeratorY/ centerNumeratorY * dCenterNumeratorY / centerNumeratorY )
+                                        + ( daSlope / aSlope * daSlope / aSlope ) );
+
+    double centerY = centerFirstTerm + ( aStart.y + aMid.y ) / 2.0;
+    double dCenterY = std::sqrt( dcenterFirstTermY * dcenterFirstTermY + 1.0 / 8.0 );
+
+    double rounded100CenterX = std::floor( ( centerX + 50.0 ) / 100.0 ) * 100.0;
+    double rounded100CenterY = std::floor( ( centerY + 50.0 ) / 100.0 ) * 100.0;
+    double rounded10CenterX = std::floor( ( centerX + 5.0 ) / 10.0 ) * 10.0;
+    double rounded10CenterY = std::floor( ( centerY + 5.0 ) / 10.0 ) * 10.0;
+
+    // The last step is to find the nice, round numbers near our baseline estimate and see if they are within our uncertainty
+    // range.  If they are, then we use this round value as the true value.  This is justified because ALL values within the
+    // uncertainty range are equally true.  Using a round number will make sure that we are on a multiple of 1mil or 100nm
+    // when calculating centers.
+    if( std::abs( rounded100CenterX - centerX ) < dCenterX && std::abs( rounded100CenterY - centerY ) < dCenterY )
+    {
+        center.x = rounded100CenterX;
+        center.y = rounded100CenterY;
+    }
+    else if( std::abs( rounded10CenterX - centerX ) < dCenterX && std::abs( rounded10CenterY - centerY ) < dCenterY )
+    {
+        center.x = rounded10CenterX;
+        center.y = rounded10CenterY;
+    }
+    else
+    {
+        center.x = centerX;
+        center.y = centerY;
+    }
+
 
     return center;
 }
