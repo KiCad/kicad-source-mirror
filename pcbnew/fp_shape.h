@@ -165,6 +165,8 @@ protected:
     wxPoint m_arcCenter0;   ///< Center of arc, relative to footprint origin, orient 0.
     wxPoint m_bezierC1_0;   ///< Bezier Control Point 1, relative to footprint origin, orient 0.
     wxPoint m_bezierC2_0;   ///< Bezier Control Point 2, relative to footprint origin, orient 0.
+
+    ARC_MID  m_arcMidData_0; ///< Originating Arc data, orient 0
 };
 
 #endif    // FP_SHAPE_H

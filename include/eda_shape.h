@@ -59,6 +59,15 @@ enum class FILL_T : int
 };
 
 
+// Holding struct to keep originating midpoint
+struct ARC_MID
+{
+    wxPoint mid;
+    wxPoint start;
+    wxPoint end;
+    wxPoint center;
+};
+
 class EDA_SHAPE
 {
 public:
@@ -187,6 +196,17 @@ public:
      */
     void SetArcGeometry( const wxPoint& aStart, const wxPoint& aMid, const wxPoint& aEnd );
 
+    /**
+     * Set the data used for mid point caching.  If the controlling points remain constant, then
+     * we keep the midpoint the same as it was when read in.  This minimizes VCS churn
+     *
+     * @param aStart Cached start point
+     * @param aMid Cached mid point
+     * @param aEnd Cached end point
+     * @param aCenter Calculated center point using the preceeding three
+     */
+    void SetCachedArcData( const wxPoint& aStart, const wxPoint& aMid, const wxPoint& aEnd, const wxPoint& aCenter );
+
     const std::vector<wxPoint>& GetBezierPoints() const { return m_bezierPoints; }
 
     /**
@@ -303,6 +323,7 @@ protected:
     wxPoint              m_end;          // Line end point or Circle 3 o'clock point
 
     wxPoint              m_arcCenter;    // Used only for Arcs: arc end point
+    ARC_MID              m_arcMidData;        // Used to store originating data
 
     wxPoint              m_bezierC1;     // Bezier Control Point 1
     wxPoint              m_bezierC2;     // Bezier Control Point 2

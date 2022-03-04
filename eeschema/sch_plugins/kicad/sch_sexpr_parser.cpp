@@ -1013,15 +1013,15 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
         }
     }
 
-    arc->SetStart( startPoint );
-    arc->SetEnd( endPoint );
-
     if( hasMidPoint )
     {
-        arc->SetCenter( (wxPoint) CalcArcCenter( arc->GetStart(), midPoint, arc->GetEnd() ) );
+        arc->SetArcGeometry( startPoint, midPoint, endPoint);
     }
     else if( hasAngles )
     {
+        arc->SetStart( startPoint );
+        arc->SetEnd( endPoint );
+
         /**
          * This accounts for an oddity in the old library format, where the symbol is overdefined.
          * The previous draw (based on wxwidgets) used start point and end point and always drew
@@ -1035,6 +1035,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
             arc->SetStart( arc->GetEnd() );
             arc->SetEnd( temp );
         }
+
         arc->SetCenter( center );
     }
     else
