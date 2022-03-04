@@ -936,7 +936,15 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID a
                     return;
 
                 if( aKnockout->GetCachedBoundingBox().Intersects( aZone->GetCachedBoundingBox() ) )
-                    aRawFill.BooleanSubtract( *aKnockout->Outline(), SHAPE_POLY_SET::PM_FAST );
+                {
+                    // Processing of arc shapes in zones is not yet supported because Clipper
+                    // can't do boolean operations on them.  The poly outline must be converted to
+                    // segments first.
+                    SHAPE_POLY_SET outline = *aKnockout->Outline();
+                    outline.ClearArcs();
+
+                    aRawFill.BooleanSubtract( outline, SHAPE_POLY_SET::PM_FAST );
+                }
             };
 
     for( ZONE* otherZone : m_board->Zones() )
