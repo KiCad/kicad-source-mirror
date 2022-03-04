@@ -197,17 +197,8 @@ bool calcIsInsideCourtyard( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox,
 
     footprintCourtyard = aFootprint->GetPolyCourtyard( aSide );
 
-    if( aItem->Type() == PCB_ZONE_T || aItem->Type() == PCB_FP_ZONE_T )
-    {
-        // A zone must be entirely inside the courtyard to be considered
-        if( !aFootprint->GetBoundingBox().Contains( aItemBBox ) )
-            return false;
-    }
-    else
-    {
-        if( !aFootprint->GetBoundingBox().Intersects( aItemBBox ) )
-            return false;
-    }
+    if( !aFootprint->GetBoundingBox().Intersects( aItemBBox ) )
+        return false;
 
     if( !aItemShape )
         aItemShape = aItem->GetEffectiveShape( aCtx->GetLayer() );
