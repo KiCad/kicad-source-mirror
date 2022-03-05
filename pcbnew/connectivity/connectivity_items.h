@@ -304,10 +304,9 @@ public:
         m_cachedPoly = std::make_unique<POLY_GRID_PARTITION>( outline, 16 );
     }
 
-    int SubpolyIndex() const
-    {
-        return m_subpolyIndex;
-    }
+    int SubpolyIndex() const { return m_subpolyIndex; }
+
+    PCB_LAYER_ID GetLayer() const { return m_layer; }
 
     bool ContainsAnchor( const CN_ANCHOR_PTR anchor ) const
     {

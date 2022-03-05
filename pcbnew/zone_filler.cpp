@@ -363,10 +363,16 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         }
     }
 
-    // Now remove islands outside the board edge
+    // Now remove islands which are either outside the board edge or fail to meet the minimum
+    // area requirements
     for( ZONE* zone : aZones )
     {
-        LSET zoneCopperLayers = zone->GetLayerSet() & LSET::AllCuMask( MAX_CU_LAYERS );
+        LSET   zoneCopperLayers = zone->GetLayerSet() & LSET::AllCuMask( MAX_CU_LAYERS );
+
+        // Min-thickness is the web thickness.  On the other hand, a blob min-thickness by
+        // min-thickness is not useful.  Since there's no obvious definition of web vs. blob, we
+        // arbitrarily choose "at least 2X the area".
+        double minArea = (double) zone->GetMinThickness() * zone->GetMinThickness() * 2;
 
         for( PCB_LAYER_ID layer : zoneCopperLayers.Seq() )
         {
@@ -379,8 +385,12 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
             {
                 std::vector<SHAPE_LINE_CHAIN>& island = poly.Polygon( ii );
 
-                if( island.empty() || !m_boardOutline.Contains( island.front().CPoint( 0 ) ) )
+                if( island.empty()
+                        || !m_boardOutline.Contains( island.front().CPoint( 0 ) )
+                        || island.front().Area() < minArea )
+                {
                     poly.DeletePolygon( ii );
+                }
             }
 
             zone->SetFilledPolysList( layer, poly );
@@ -709,10 +719,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
 
                     if( aPad->GetNetCode() > 0 && aPad->GetNetCode() == aZone->GetNetCode() )
                     {
-                        // For pads having the same netcode as the zone, the net and hole
-                        // clearances have no meanings.
-                        // So just knock out the greater of the zone's local clearance and
-                        // thermal relief.
+                        // For unconnected but same-net pads, electrical clearances don't apply.
+                        // Use the greater of the zone's local clearance and thermal relief.
                         gap = std::max( zone_clearance, aZone->GetThermalReliefGap( aPad ) );
                         knockoutHoleClearance = false;
                     }
@@ -767,18 +775,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                         int      gap = 0;
                         bool     checkHoleClearance = true;
 
-                        if( via->GetNetCode() > 0 && via->GetNetCode() == aZone->GetNetCode() )
-                        {
-                            // For pads having the same netcode as the zone, the net and hole
-                            // clearances have no meanings.
-                            // So just knock out the zone's local clearance.
-                            gap = zone_clearance;
-                            checkHoleClearance = false;
-                        }
-                        else
-                        {
-                            gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aTrack, aLayer );
-                        }
+                        gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aTrack, aLayer );
 
                         if( via->FlashLayer( aLayer ) )
                         {
@@ -815,7 +812,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
         if( !track->IsOnLayer( aLayer ) )
             continue;
 
-        if( track->GetNetCode() == aZone->GetNetCode()  && ( aZone->GetNetCode() != 0) )
+        if( track->GetNetCode() == aZone->GetNetCode() && ( aZone->GetNetCode() != 0) )
             continue;
 
         if( checkForCancel( m_progressReporter ) )
@@ -867,8 +864,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
         knockoutGraphicClearance( &footprint->Reference() );
         knockoutGraphicClearance( &footprint->Value() );
 
-        // Don't knock out holes in zones that share a net
-        // with a nettie footprint
+        // Don't knock out holes in zones that share a net with a nettie footprint
         if( footprint->IsNetTie() )
         {
             for( PAD* pad : footprint->Pads() )
