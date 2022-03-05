@@ -558,64 +558,64 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
                                           std::vector<PAD*>& aNoConnectionPads )
 {
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    ZONE_CONNECTION        connection;
     DRC_CONSTRAINT         constraint;
+    int                    gap;
     SHAPE_POLY_SET         holes;
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
         {
-            if( !pad->IsOnLayer( aLayer )
-                    || pad->GetNetCode() != aZone->GetNetCode()
-                    || pad->GetNetCode() <= 0 )
+            EDA_RECT padBBox = pad->GetBoundingBox();
+            padBBox.Inflate( m_worstClearance );
+
+            if( !pad->IsOnLayer( aLayer ) || !padBBox.Intersects( aZone->GetCachedBoundingBox() ) )
+                continue;
+
+            if( pad->GetNetCode() != aZone->GetNetCode() || pad->GetNetCode() <= 0 )
             {
+                // collect these for knockout in buildCopperItemClearances()
                 aNoConnectionPads.push_back( pad );
                 continue;
             }
 
-            // a teardrop area is always fully connected to its pad
-            // (always equiv to ZONE_CONNECTION::FULL)
             if( aZone->IsTeardropArea() )
-                continue;
-
-            constraint = bds.m_DRCEngine->EvalZoneConnection( pad, aZone, aLayer );
-            ZONE_CONNECTION conn = constraint.m_ZoneConnection;
-
-            if( conn == ZONE_CONNECTION::FULL )
-                continue;
-
-            constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad, aZone,
-                                                     aLayer );
-            int gap = constraint.GetValue().Min();
-
-            EDA_RECT item_boundingbox = pad->GetBoundingBox();
-            item_boundingbox.Inflate( gap, gap );
-
-            if( !item_boundingbox.Intersects( aZone->GetCachedBoundingBox() ) )
-                continue;
-
-            // If the pad is flashed to the current layer, or is on the same layer and shares a
-            // netcode, then we need to knock out the thermal relief.
-            if( pad->FlashLayer( aLayer ) )
             {
-                if( conn == ZONE_CONNECTION::THERMAL )
-                    aThermalConnectionPads.push_back( pad );
-                else if( conn == ZONE_CONNECTION::NONE )
-                    aNoConnectionPads.push_back( pad );
-
-                addKnockout( pad, aLayer, gap, holes );
+                connection = ZONE_CONNECTION::FULL;
             }
             else
             {
-                // If the pad isn't flashed on the current layer but has a hole, knock out a
-                // thermal relief for the hole.
-                if( pad->GetDrillSize().x == 0 && pad->GetDrillSize().y == 0 )
-                    continue;
+                constraint = bds.m_DRCEngine->EvalZoneConnection( pad, aZone, aLayer );
+                connection = constraint.m_ZoneConnection;
+            }
 
-                aNoConnectionPads.push_back( pad );
+            switch( connection )
+            {
+            case ZONE_CONNECTION::THERMAL:
+                constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad, aZone,
+                                                         aLayer );
+                gap = constraint.GetValue().Min();
+                break;
 
-                // Note: drill size represents finish size, which means the actual holes size is
-                // the plating thickness larger.
+            case ZONE_CONNECTION::NONE:
+                gap = aZone->GetLocalClearance();
+                break;
+
+            default:
+                // No knockout
+                continue;
+            }
+
+            if( pad->FlashLayer( aLayer ) )
+            {
+                aThermalConnectionPads.push_back( pad );
+                addKnockout( pad, aLayer, gap, holes );
+            }
+            else if( pad->GetDrillSize().x > 0 )
+            {
+                // Note: drill size represents finish size, which means the actual holes size
+                // is the plating thickness larger.
                 if( pad->GetAttribute() == PAD_ATTRIB::PTH )
                     gap += pad->GetBoard()->GetDesignSettings().GetHolePlatingThickness();
 
@@ -668,37 +668,21 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
     auto knockoutPadClearance =
             [&]( PAD* aPad )
             {
-                if( aPad->GetBoundingBox().Intersects( zone_boundingbox ) )
+                int  gap = 0;
+                bool flashLayer = aPad->FlashLayer( aLayer );
+
+                if( flashLayer || aPad->GetDrillSize().x > 0 )
+                    gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aPad, aLayer );
+
+                if( flashLayer )
+                    addKnockout( aPad, aLayer, gap + extra_margin, aHoles );
+
+                if( aPad->GetDrillSize().x > 0 )
                 {
-                    int  gap = 0;
-                    bool knockoutHoleClearance = true;
+                    gap = std::max( gap, evalRulesForItems( HOLE_CLEARANCE_CONSTRAINT, aZone,
+                                                            aPad, aLayer ) );
 
-                    if( aPad->GetNetCode() > 0 && aPad->GetNetCode() == aZone->GetNetCode() )
-                    {
-                        // For unconnected but same-net pads, electrical clearances don't apply.
-                        // Use the greater of the zone's local clearance and thermal relief.
-                        gap = std::max( aZone->GetLocalClearance(), aZone->GetThermalReliefGap() );
-                        knockoutHoleClearance = false;
-                    }
-                    else
-                    {
-                        gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aPad, aLayer );
-                    }
-
-                    gap += extra_margin;
-
-                    if( aPad->FlashLayer( aLayer ) )
-                        addKnockout( aPad, aLayer, gap, aHoles );
-                    else if( aPad->GetDrillSize().x > 0 )
-                        addHoleKnockout( aPad, gap, aHoles );
-
-                    if( knockoutHoleClearance && aPad->GetDrillSize().x > 0 )
-                    {
-                        gap = evalRulesForItems( HOLE_CLEARANCE_CONSTRAINT, aZone, aPad, aLayer );
-                        gap += extra_margin;
-
-                        addHoleKnockout( aPad, gap, aHoles );
-                    }
+                    addHoleKnockout( aPad, gap + extra_margin, aHoles );
                 }
             };
 
