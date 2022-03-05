@@ -28,12 +28,12 @@
 #include "dialog_signal_list_base.h"
 
 class SIM_PLOT_FRAME;
-class NETLIST_EXPORTER_PSPICE_SIM;
+class NGSPICE_CIRCUIT_MODEL;
 
 class DIALOG_SIGNAL_LIST : public DIALOG_SIGNAL_LIST_BASE
 {
 public:
-    DIALOG_SIGNAL_LIST( SIM_PLOT_FRAME* aParent, NETLIST_EXPORTER_PSPICE_SIM* aExporter );
+    DIALOG_SIGNAL_LIST( SIM_PLOT_FRAME* aParent, NGSPICE_CIRCUIT_MODEL* aExporter );
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
@@ -48,7 +48,7 @@ private:
     bool addSignalToPlotFrame( const wxString& aPlotName );
 
     SIM_PLOT_FRAME* m_plotFrame;
-    NETLIST_EXPORTER_PSPICE_SIM* m_exporter;
+    NGSPICE_CIRCUIT_MODEL* m_exporter;
 };
 
 #endif /* DIALOG_SIGNAL_LIST_H */

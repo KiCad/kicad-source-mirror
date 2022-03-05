@@ -24,13 +24,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "netlist_exporter_pspice_sim.h"
+#include "ngspice_helpers.h"
 #include <string_utils.h>
 #include <macros.h>     // for TO_UTF8 def
 #include <wx/regex.h>
 #include <wx/tokenzr.h>
 
-wxString NETLIST_EXPORTER_PSPICE_SIM::ComponentToVector(
+wxString NGSPICE_CIRCUIT_MODEL::ComponentToVector(
         const wxString& aName, SIM_PLOT_TYPE aType, const wxString& aParam ) const
 {
     wxString res;
@@ -73,7 +73,7 @@ wxString NETLIST_EXPORTER_PSPICE_SIM::ComponentToVector(
 }
 
 
-SIM_PLOT_TYPE NETLIST_EXPORTER_PSPICE_SIM::VectorToSignal(
+SIM_PLOT_TYPE NGSPICE_CIRCUIT_MODEL::VectorToSignal(
         const std::string& aVector, wxString& aSignal ) const
 {
     using namespace std;
@@ -108,7 +108,7 @@ SIM_PLOT_TYPE NETLIST_EXPORTER_PSPICE_SIM::VectorToSignal(
 }
 
 
-const std::vector<wxString>& NETLIST_EXPORTER_PSPICE_SIM::GetCurrents( SPICE_PRIMITIVE aPrimitive )
+const std::vector<wxString>& NGSPICE_CIRCUIT_MODEL::GetCurrents( SPICE_PRIMITIVE aPrimitive )
 {
     static const std::vector<wxString> passive = { "I" };
     static const std::vector<wxString> diode = { "Id" };
@@ -139,7 +139,7 @@ const std::vector<wxString>& NETLIST_EXPORTER_PSPICE_SIM::GetCurrents( SPICE_PRI
 }
 
 
-wxString NETLIST_EXPORTER_PSPICE_SIM::GetSheetSimCommand()
+wxString NGSPICE_CIRCUIT_MODEL::GetSheetSimCommand()
 {
     wxString simCmd;
 
@@ -155,19 +155,19 @@ wxString NETLIST_EXPORTER_PSPICE_SIM::GetSheetSimCommand()
 }
 
 
-wxString NETLIST_EXPORTER_PSPICE_SIM::GetUsedSimCommand()
+wxString NGSPICE_CIRCUIT_MODEL::GetUsedSimCommand()
 {
     return m_simCommand.IsEmpty() ? GetSheetSimCommand() : m_simCommand;
 }
 
 
-SIM_TYPE NETLIST_EXPORTER_PSPICE_SIM::GetSimType()
+SIM_TYPE NGSPICE_CIRCUIT_MODEL::GetSimType()
 {
     return CommandToSimType( GetUsedSimCommand() );
 }
 
 
-SIM_TYPE NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( const wxString& aCmd )
+SIM_TYPE NGSPICE_CIRCUIT_MODEL::CommandToSimType( const wxString& aCmd )
 {
     const std::vector<std::pair<wxString, SIM_TYPE>> simCmds = {
         { "^.ac\\M.*", ST_AC },
@@ -193,7 +193,7 @@ SIM_TYPE NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( const wxString& aCmd )
 }
 
 
-bool NETLIST_EXPORTER_PSPICE_SIM::ParseDCCommand( const wxString& aCmd, SPICE_DC_PARAMS* aSource1,
+bool NGSPICE_CIRCUIT_MODEL::ParseDCCommand( const wxString& aCmd, SPICE_DC_PARAMS* aSource1,
                                                   SPICE_DC_PARAMS* aSource2 )
 {
     if( !aCmd.Lower().StartsWith( ".dc" ) )
@@ -225,7 +225,7 @@ bool NETLIST_EXPORTER_PSPICE_SIM::ParseDCCommand( const wxString& aCmd, SPICE_DC
 }
 
 
-void NETLIST_EXPORTER_PSPICE_SIM::writeDirectives( OUTPUTFORMATTER* aFormatter, unsigned aCtl ) const
+void NGSPICE_CIRCUIT_MODEL::writeDirectives( OUTPUTFORMATTER* aFormatter, unsigned aCtl ) const
 {
     // Add a directive to obtain currents
     //aFormatter->Print( 0, ".options savecurrents\n" );        // does not work :(
@@ -233,7 +233,7 @@ void NETLIST_EXPORTER_PSPICE_SIM::writeDirectives( OUTPUTFORMATTER* aFormatter, 
     for( const auto& item : GetSpiceItems() )
     {
         for( const auto& current :
-                NETLIST_EXPORTER_PSPICE_SIM::GetCurrents( (SPICE_PRIMITIVE) item.m_primitive ) )
+                NGSPICE_CIRCUIT_MODEL::GetCurrents( (SPICE_PRIMITIVE) item.m_primitive ) )
         {
             if( !item.m_enabled )
                 continue;

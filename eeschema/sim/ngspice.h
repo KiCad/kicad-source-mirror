@@ -43,6 +43,7 @@
 
 class wxDynamicLibrary;
 
+
 class NGSPICE : public SPICE_SIMULATOR
 {
 public:
@@ -50,48 +51,51 @@ public:
     virtual ~NGSPICE();
 
     ///< @copydoc SPICE_SIMULATOR::Init()
-    void Init( const SPICE_SIMULATOR_SETTINGS* aSettings = nullptr ) override;
+    void Init( const SPICE_SIMULATOR_SETTINGS* aSettings = nullptr ) override final;
 
-    ///< @copydoc SPICE_SIMULATOR::LoadNetlist()
-    bool LoadNetlist( const std::string& aNetlist ) override;
+    ///< @copydoc SPICE_SIMULATOR::Attach()
+    bool Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel ) override final;
+
+    ///< Load a netlist for the simulation
+    bool LoadNetlist( const std::string& aNetlist ) override final;
 
     ///< @copydoc SPICE_SIMULATOR::Run()
-    bool Run() override;
+    bool Run() override final;
 
     ///< @copydoc SPICE_SIMULATOR::Stop()
-    bool Stop() override;
+    bool Stop() override final;
 
     ///< @copydoc SPICE_SIMULATOR::IsRunning()
-    bool IsRunning() override;
+    bool IsRunning() override final;
 
     ///< @copydoc SPICE_SIMULATOR::Command()
-    bool Command( const std::string& aCmd ) override;
+    bool Command( const std::string& aCmd ) override final;
 
     ///< @copydoc SPICE_SIMULATOR::GetXAxis()
-    std::string GetXAxis( SIM_TYPE aType ) const override;
+    std::string GetXAxis( SIM_TYPE aType ) const override final;
 
     ///< @copydoc SPICE_SIMULATOR::AllPlots()
-    std::vector<std::string> AllPlots() const override;
+    std::vector<std::string> AllPlots() const override final;
 
     ///< @copydoc SPICE_SIMULATOR::GetPlot()
-    std::vector<COMPLEX> GetPlot( const std::string& aName, int aMaxLen = -1 ) override;
+    std::vector<COMPLEX> GetPlot( const std::string& aName, int aMaxLen = -1 ) override final;
 
     ///< @copydoc SPICE_SIMULATOR::GetRealPlot()
-    std::vector<double> GetRealPlot( const std::string& aName, int aMaxLen = -1 ) override;
+    std::vector<double> GetRealPlot( const std::string& aName, int aMaxLen = -1 ) override final;
 
     ///< @copydoc SPICE_SIMULATOR::GetImagPlot()
-    std::vector<double> GetImagPlot( const std::string& aName, int aMaxLen = -1 ) override;
+    std::vector<double> GetImagPlot( const std::string& aName, int aMaxLen = -1 ) override final;
 
     ///< @copydoc SPICE_SIMULATOR::GetMagPlot()
-    std::vector<double> GetMagPlot( const std::string& aName, int aMaxLen = -1 ) override;
+    std::vector<double> GetMagPlot( const std::string& aName, int aMaxLen = -1 ) override final;
 
     ///< @copydoc SPICE_SIMULATOR::GetPhasePlot()
-    std::vector<double> GetPhasePlot( const std::string& aName, int aMaxLen = -1 ) override;
+    std::vector<double> GetPhasePlot( const std::string& aName, int aMaxLen = -1 ) override final;
 
-    std::vector<std::string> GetSettingCommands() const override;
+    std::vector<std::string> GetSettingCommands() const override final;
 
     ///< @copydoc SPICE_SIMULATOR::GetNetlist()
-    virtual const std::string GetNetlist() const override;
+    virtual const std::string GetNetlist() const override final;
 
 private:
     void init();

@@ -305,7 +305,7 @@ if( KICAD_SPICE )
         dialogs/dialog_sim_settings_base.cpp
         dialogs/dialog_spice_model.cpp
         dialogs/dialog_spice_model_base.cpp
-        sim/netlist_exporter_pspice_sim.cpp
+        sim/ngspice_helpers.cpp
         sim/ngspice.cpp
         sim/sim_panel_base.cpp
         sim/sim_plot_colors.cpp

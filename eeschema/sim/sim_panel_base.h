@@ -27,7 +27,7 @@
 #define __SIM_PLOT_PANEL_BASE_H
 
 #include "sim_types.h"
-#include "netlist_exporter_pspice_sim.h"
+#include "ngspice_helpers.h"
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -58,7 +58,7 @@ protected:
 
     void setSimCommand( const wxString& aSimCommand )
     {
-        wxCHECK_RET( GetType() == NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( aSimCommand ),
+        wxCHECK_RET( GetType() == NGSPICE_CIRCUIT_MODEL::CommandToSimType( aSimCommand ),
                      "Cannot change the type of simulation of the existing plot panel" );
 
         m_simCommand = aSimCommand;

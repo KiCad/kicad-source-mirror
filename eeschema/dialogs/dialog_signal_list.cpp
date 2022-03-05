@@ -28,11 +28,11 @@
 #include <string_utils.h>
 #include <sim/sim_plot_frame.h>
 
-#include <sim/netlist_exporter_pspice_sim.h>
+#include <sim/ngspice_helpers.h>
 
 
 DIALOG_SIGNAL_LIST::DIALOG_SIGNAL_LIST( SIM_PLOT_FRAME* aParent,
-                                        NETLIST_EXPORTER_PSPICE_SIM* aExporter ) :
+                                        NGSPICE_CIRCUIT_MODEL* aExporter ) :
     DIALOG_SIGNAL_LIST_BASE( aParent ),
     m_plotFrame( aParent ),
     m_exporter( aExporter )
@@ -76,7 +76,7 @@ bool DIALOG_SIGNAL_LIST::TransferDataToWindow()
             {
                 // Add all possible currents for the primitive
                 for( const auto& current :
-                     NETLIST_EXPORTER_PSPICE_SIM::GetCurrents( (SPICE_PRIMITIVE) item.m_primitive ) )
+                     NGSPICE_CIRCUIT_MODEL::GetCurrents( (SPICE_PRIMITIVE) item.m_primitive ) )
                 {
                     m_signals->Append( wxString::Format( "%s(%s)", current, item.m_refName ) );
                 }

@@ -37,7 +37,7 @@
 #include <widgets/tuner_slider.h>
 #include <dialogs/dialog_signal_list.h>
 #include "string_utils.h"
-#include "netlist_exporter_pspice_sim.h"
+#include "ngspice_helpers.h"
 #include <pgm_base.h>
 #include "ngspice.h"
 #include "sim_plot_colors.h"
@@ -129,7 +129,7 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     icon.CopyFromBitmap( KiBitmap( BITMAPS::simulator ) );
     SetIcon( icon );
 
-    m_simulator = SPICE_SIMULATOR::CreateInstance( "ngspice" );
+    m_simulator = SIMULATOR::CreateInstance( "ngspice" );
 
     if( !m_simulator )
     {
@@ -157,7 +157,7 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // instead of being behind the dialog frame (as it does)
     m_settingsDlg = nullptr;
 
-    m_exporter.reset( new NETLIST_EXPORTER_PSPICE_SIM( &m_schematicFrame->Schematic() ) );
+    m_exporter.reset( new NGSPICE_CIRCUIT_MODEL( &m_schematicFrame->Schematic() ) );
 
     Bind( EVT_SIM_UPDATE, &SIM_PLOT_FRAME::onSimUpdate, this );
     Bind( EVT_SIM_REPORT, &SIM_PLOT_FRAME::onSimReport, this );
@@ -239,6 +239,7 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 SIM_PLOT_FRAME::~SIM_PLOT_FRAME()
 {
+    m_simulator->Attach( nullptr );
     m_simulator->SetReporter( nullptr );
     delete m_reporter;
     delete m_signalsIconColorList;
@@ -456,8 +457,6 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
     wxCHECK_RET( m_exporter->CommandToSimType( getCurrentSimCommand() ) != ST_UNKNOWN,
             "Unknown simulation type" );
 
-    STRING_FORMATTER formatter;
-
     if( !m_settingsDlg )
         m_settingsDlg = new DIALOG_SIM_SETTINGS( this, m_exporter, m_simulator->Settings() );
 
@@ -468,8 +467,9 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
     else
         m_exporter->SetSimCommand( aSimCommand );
 
+    m_exporter->SetOptions( m_settingsDlg->GetNetlistOptions() );
 
-    if( !m_exporter->Format( &formatter, m_settingsDlg->GetNetlistOptions() ) )
+    if( !m_simulator->Attach( m_exporter ) )
     {
         DisplayErrorMessage( this, _( "There were errors during netlist export, aborted." ) );
         return;
@@ -479,7 +479,6 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
 
     if( simulatorLock.owns_lock() )
     {
-        m_simulator->LoadNetlist( formatter.GetString() );
         updateTuners();
         applyTuners();
         m_simulator->Run();
@@ -492,7 +491,7 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
 SIM_PANEL_BASE* SIM_PLOT_FRAME::NewPlotPanel( wxString aSimCommand )
 {
     SIM_PANEL_BASE* plotPanel = nullptr;
-    SIM_TYPE        simType   = NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( aSimCommand );
+    SIM_TYPE        simType   = NGSPICE_CIRCUIT_MODEL::CommandToSimType( aSimCommand );
 
     if( SIM_PANEL_BASE::IsPlottable( simType ) )
     {
@@ -614,7 +613,7 @@ SIM_PLOT_PANEL* SIM_PLOT_FRAME::GetCurrentPlot() const
 }
 
 
-const NETLIST_EXPORTER_PSPICE_SIM* SIM_PLOT_FRAME::GetExporter() const
+const NGSPICE_CIRCUIT_MODEL* SIM_PLOT_FRAME::GetExporter() const
 {
     return m_exporter.get();
 }
@@ -1473,7 +1472,7 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
             oldCommand = wxString();
 
         wxString newCommand = m_settingsDlg->GetSimCommand();
-        SIM_TYPE newSimType = NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( newCommand );
+        SIM_TYPE newSimType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( newCommand );
 
         // If it is a new simulation type, open a new plot
         // For the DC sim, check if sweep source type has changed (char 4 will contain 'v',

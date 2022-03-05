@@ -28,6 +28,7 @@
 #include <config.h>     // Needed for MSW compilation
 #include <wx/log.h>
 
+#include "ngspice_helpers.h"
 #include "ngspice.h"
 #include "spice_reporter.h"
 #include "spice_settings.h"
@@ -254,6 +255,29 @@ vector<double> NGSPICE::GetPhasePlot( const string& aName, int aMaxLen )
 }
 
 
+bool NGSPICE::Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel )
+{
+    NGSPICE_CIRCUIT_MODEL* model = dynamic_cast<NGSPICE_CIRCUIT_MODEL*>( aModel.get() );
+    wxASSERT( model != nullptr );
+    STRING_FORMATTER formatter;
+
+    if( model->GetNetlist( &formatter ) )
+    {
+        SIMULATOR::Attach( aModel );
+
+        LoadNetlist( formatter.GetString() );
+
+        return true;
+    }
+    else
+    {
+        SIMULATOR::Attach( nullptr );
+
+        return false;
+    }
+}
+
+
 bool NGSPICE::LoadNetlist( const string& aNetlist )
 {
     LOCALE_IO c_locale;       // ngspice works correctly only with C locale
@@ -271,6 +295,8 @@ bool NGSPICE::LoadNetlist( const string& aNetlist )
     }
 
     lines.push_back( nullptr ); // sentinel, as requested in ngSpice_Circ description
+
+    Command( "remcirc" );
     m_ngSpice_Circ( lines.data() );
 
     for( auto line : lines )

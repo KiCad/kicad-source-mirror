@@ -71,7 +71,7 @@ if( KICAD_SPICE )
     set( QA_EESCHEMA_SRCS
         ${QA_EESCHEMA_SRCS}
         # Simulation tests
-        sim/test_netlist_exporter_pspice_sim.cpp
+        sim/test_ngspice_helpers.cpp
     )
 endif()
 

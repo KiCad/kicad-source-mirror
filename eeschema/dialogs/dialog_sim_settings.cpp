@@ -24,7 +24,7 @@
  */
 
 #include "dialog_sim_settings.h"
-#include <sim/netlist_exporter_pspice_sim.h>
+#include <sim/ngspice_helpers.h>
 #include <sim/ngspice.h>
 
 #include <confirm.h>
@@ -57,7 +57,7 @@ static wxString getStringSelection( const wxChoice* aCtrl )
 
 
 DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent,
-                                          std::shared_ptr<NETLIST_EXPORTER_PSPICE_SIM> aExporter,
+                                          std::shared_ptr<NGSPICE_CIRCUIT_MODEL> aExporter,
                                           std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& aSettings ) :
         DIALOG_SIM_SETTINGS_BASE( aParent ),
         m_exporter( aExporter ),

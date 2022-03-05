@@ -27,7 +27,7 @@
 #include "sim_panel_base.h"
 
 #include "sim_plot_frame.h"
-#include "netlist_exporter_pspice_sim.h"
+#include "ngspice_helpers.h"
 
 
 SIM_PANEL_BASE::SIM_PANEL_BASE() : m_simCommand( wxEmptyString )
@@ -71,7 +71,7 @@ bool SIM_PANEL_BASE::IsPlottable( SIM_TYPE aSimType )
 
 SIM_TYPE SIM_PANEL_BASE::GetType() const
 {
-    return NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( m_simCommand );
+    return NGSPICE_CIRCUIT_MODEL::CommandToSimType( m_simCommand );
 }
 
 

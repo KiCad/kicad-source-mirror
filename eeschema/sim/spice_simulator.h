@@ -29,6 +29,7 @@
 
 #include "sim_types.h"
 #include "spice_settings.h"
+#include "simulator.h"
 
 #include <mutex>
 #include <string>
@@ -43,18 +44,16 @@ class SPICE_REPORTER;
 typedef std::complex<double> COMPLEX;
 
 
-class SPICE_SIMULATOR
+class SPICE_SIMULATOR : public SIMULATOR
 {
 public:
     SPICE_SIMULATOR() :
+        SIMULATOR(),
         m_reporter( nullptr ),
         m_settings( nullptr )
     {}
 
     virtual ~SPICE_SIMULATOR() {}
-
-    ///< Create a simulator instance of particular type (currently only ngspice is handled)
-    static std::shared_ptr<SPICE_SIMULATOR> CreateInstance( const std::string& aName );
 
     /*
      * Initialize the simulator using the optional \a aSettings.
@@ -64,41 +63,12 @@ public:
      */
     virtual void Init( const SPICE_SIMULATOR_SETTINGS* aSettings = nullptr ) = 0;
 
-    /*
-     * @return mutex for exclusive access to the simulator.
-     */
-    std::mutex& GetMutex()
-    {
-        return m_mutex;
-    }
-
     /**
      * Load a netlist for the simulation.
      *
      * @return True in case of success, false otherwise.
      */
     virtual bool LoadNetlist( const std::string& aNetlist ) = 0;
-
-    /**
-     * Execute the simulation with currently loaded netlist.
-     *
-     * @return True in case of success, false otherwise.
-     */
-    virtual bool Run() = 0;
-
-    /**
-     * Halt the simulation.
-     *
-     * @return True in case of success, false otherwise.
-     */
-    virtual bool Stop() = 0;
-
-    /**
-     * Check if simulation is running at the moment.
-     *
-     * @return True if simulation is currently executed.
-     */
-    virtual bool IsRunning() = 0;
 
     /**
      * Execute a Spice command as if it was typed into console.
@@ -213,10 +183,6 @@ protected:
 
     ///< We don't own this.  We are just borrowing it from the #SCHEMATIC_SETTINGS.
     std::shared_ptr<SPICE_SIMULATOR_SETTINGS> m_settings;
-
-private:
-    ///< For interprocess synchronisation.
-    std::mutex m_mutex;
 };
 
 #endif /* SPICE_SIMULATOR_H */

@@ -27,7 +27,7 @@
 
 #include <confirm.h>
 
-std::shared_ptr<SPICE_SIMULATOR> SPICE_SIMULATOR::CreateInstance( const std::string& )
+std::shared_ptr<SPICE_SIMULATOR> SIMULATOR::CreateInstance( const std::string& )
 {
     try
     {

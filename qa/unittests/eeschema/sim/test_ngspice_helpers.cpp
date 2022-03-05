@@ -24,7 +24,7 @@
 
 /**
  * @file
- * Test suite for NETLIST_EXPORTER_PSPICE_SIM
+ * Test suite for NGSPICE_CIRCUIT_MODEL
  */
 
 #include <string.h>
@@ -36,12 +36,12 @@
 #include <project.h>
 #include <schematic.h>
 #include <settings/settings_manager.h>
-#include <sim/netlist_exporter_pspice_sim.h>
+#include <sim/ngspice_helpers.h>
 
-class TEST_NETLIST_EXPORTER_PSPICE_SIM
+class TEST_NGSPICE_HELPERS
 {
 public:
-    TEST_NETLIST_EXPORTER_PSPICE_SIM() :
+    TEST_NGSPICE_HELPERS() :
             m_manager( true ),
             m_schematic( nullptr ),
             m_exporter( &m_schematic )
@@ -50,7 +50,7 @@ public:
         m_schematic.SetProject( &m_manager.Prj() );
     }
 
-    virtual ~TEST_NETLIST_EXPORTER_PSPICE_SIM()
+    virtual ~TEST_NGSPICE_HELPERS()
     {
         m_schematic.Reset();
     }
@@ -59,14 +59,14 @@ public:
 
     SCHEMATIC m_schematic;
 
-    NETLIST_EXPORTER_PSPICE_SIM m_exporter;
+    NGSPICE_CIRCUIT_MODEL m_exporter;
 };
 
 
 /**
  * Declare the test suite
  */
-BOOST_FIXTURE_TEST_SUITE( NetlistExporterPspiceSim, TEST_NETLIST_EXPORTER_PSPICE_SIM )
+BOOST_FIXTURE_TEST_SUITE( NgspiceCircuitModel, TEST_NGSPICE_HELPERS )
 
 
 /**
@@ -109,7 +109,7 @@ BOOST_AUTO_TEST_CASE( CommandToSimType )
 
     for( auto& step : testData )
     {
-        SIM_TYPE result = NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( step.command );
+        SIM_TYPE result = NGSPICE_CIRCUIT_MODEL::CommandToSimType( step.command );
 
         BOOST_CHECK_EQUAL( result, step.type );
     }
@@ -117,7 +117,7 @@ BOOST_AUTO_TEST_CASE( CommandToSimType )
     for( auto& step : testData )
     {
         step.command.Append( "\n" );
-        SIM_TYPE result = NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( step.command );
+        SIM_TYPE result = NGSPICE_CIRCUIT_MODEL::CommandToSimType( step.command );
 
         BOOST_CHECK_EQUAL( result, step.type );
     }

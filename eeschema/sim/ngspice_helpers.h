@@ -31,6 +31,7 @@
 #include <vector>
 
 #include "sim_types.h"
+#include "spice_simulator.h"
 #include "spice_value.h"
 
 
@@ -43,14 +44,14 @@ struct SPICE_DC_PARAMS
 };
 
 /// Special netlist exporter flavor that allows one to override simulation commands
-class NETLIST_EXPORTER_PSPICE_SIM : public NETLIST_EXPORTER_PSPICE
+class NGSPICE_CIRCUIT_MODEL : public NETLIST_EXPORTER_PSPICE, public SIMULATION_MODEL
 {
 public:
-    NETLIST_EXPORTER_PSPICE_SIM( SCHEMATIC_IFACE* aSchematic ) :
+    NGSPICE_CIRCUIT_MODEL( SCHEMATIC_IFACE* aSchematic ) :
             NETLIST_EXPORTER_PSPICE( aSchematic )
     {
     }
-    virtual ~NETLIST_EXPORTER_PSPICE_SIM() {}
+    virtual ~NGSPICE_CIRCUIT_MODEL() {}
 
     /**
      * Return name of Spice dataset for a specific plot.
@@ -79,6 +80,16 @@ public:
      * Return a list of currents that can be probed in a Spice primitive.
      */
     static const std::vector<wxString>& GetCurrents( SPICE_PRIMITIVE aPrimitive );
+
+    void SetOptions( int aOptions )
+    {
+        m_options = aOptions;
+    }
+
+    bool GetNetlist( OUTPUTFORMATTER* aFormatter )
+    {
+        return NGSPICE_CIRCUIT_MODEL::Format( aFormatter, m_options );
+    }
 
     /**
      * Override the simulation command directive.
@@ -152,6 +163,7 @@ private:
 
     ///< Custom simulation command (has priority over the schematic sheet simulation commands)
     wxString m_simCommand;
+    int m_options;
 };
 
 #endif /* NETLIST_EXPORTER_PSPICE_SIM_H */
