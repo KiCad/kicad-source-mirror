@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 11:59-0800\n"
-"PO-Revision-Date: 2022-02-01 13:58+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2022-03-08 00:49+0000\n"
+"Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v6/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4620,12 +4620,10 @@ msgid "Alias: "
 msgstr "Псевдоним: "
 
 #: common/filename_resolver.cpp:468
-#, fuzzy
 msgid "This path:"
 msgstr "Текущий путь:"
 
 #: common/filename_resolver.cpp:471
-#, fuzzy
 msgid "Existing path:"
 msgstr "Существующий путь:"
 
@@ -12194,15 +12192,13 @@ msgstr "Пустые ячейки приведут к удалению неве�
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:543
-#, fuzzy
 msgid "Remove Invalid Cells"
-msgstr "Удалить элементы"
+msgstr "Удалить неверные ячейки"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
-#, fuzzy
 msgid "Cancel Table Update"
-msgstr "Диаметр перех.отв. с зазором:"
+msgstr "Отменить обновление таблицы"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
@@ -13580,9 +13576,8 @@ msgid "Cannot open file '%s'."
 msgstr "Не удалось открыть файл '%s'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:314
-#, fuzzy
 msgid "Storage file not fully parsed "
-msgstr "Файл хранилища обработан не полностью (%d байт осталось)."
+msgstr "Файл хранилища обработан не полностью "
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:476
 msgid "Compile mask not currently supported."
@@ -17674,9 +17669,8 @@ msgstr ""
 "Поэтому размер некоторых элементов не определён"
 
 #: gerbview/rs274d.cpp:414
-#, fuzzy
 msgid "Invalid Code Number"
-msgstr "Неверный номер вывода"
+msgstr "Неверный номер кода"
 
 #: gerbview/rs274d.cpp:622
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
@@ -20630,7 +20624,6 @@ msgstr ""
 "Желаете выйти и отказаться от изменений?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -20657,24 +20650,25 @@ msgid ""
 msgstr ""
 "При указании максимального тока будет рассчитана ширина дорожек.\n"
 "\n"
-"При указании ширины наружной/внутренней дорожки будут рассчитаны "
-"максимальный ток и ширина другого типа дорожек.\n"
+"При указании ширины одной из дорожек, будет рассчитан максимальный ток для "
+"неё. Ширина остальных дорожек будет рассчитана исходя из полученного "
+"максимального тока.\n"
 "\n"
 "Изменяемое значение выделяется полужирным шрифтом.\n"
 "\n"
 "Точность расчётов обеспечивается при токах до 35А в наружных дорожках, 17.5А "
-"во внутренних дорожках, повышении температуры максимум на 100°C и ширине "
+"во внутренних дорожках, при повышении температуры максимум на 100°C и ширине "
 "дорожек до 10мм (400мил).\n"
 "\n"
 "Расчёт выполняется по формуле из IPC 2221\n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>\n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>\n"
 "где:\n"
 "___I___ = максимальный ток в амперах\n"
 "___&Delta;T___ = повышение температуры в &deg;C\n"
 "___W___ = ширина в милах\n"
 "___H___ = толщина (высота) дорожки в милах\n"
-"___K___ = 0.024 для внутренних дорожек или 0.048 для наружных  \n"
+"___K___ = 0.024 для внутренних дорожек или 0.048 для наружных\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -21821,6 +21815,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:596
 msgid "Selected options resulted in errors! Change them and try again."
 msgstr ""
+"Выбранные параметры приводят к ошибками! Измените их и попробуйте снова."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:603
 #, c-format
@@ -21849,9 +21844,9 @@ msgid "Reannotate anyway?"
 msgstr "Всё равно обозначить?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "Дублирование элементов %s%s\n"
+msgstr "Дублирование элементов %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
 msgid "Aborted: too many errors"
@@ -25309,7 +25304,7 @@ msgstr "Инспектор цепей"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:83
 msgid "Load and Test Netlist"
-msgstr ""
+msgstr "Загрузить и проверить список цепей"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:125
 msgid "Select Netlist"
@@ -25410,9 +25405,9 @@ msgid "Line width may not be 0 for unfilled shapes."
 msgstr "Ширина линии не может быть нулевой для незаполненных фигур."
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Corner %d"
-msgstr "Радиус скругления:"
+msgstr "Угол %d"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:334
 msgid "Polygon must have at least 3 corners"
@@ -25506,9 +25501,8 @@ msgid "corners count %d"
 msgstr "кол. вершин %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:739
-#, fuzzy
 msgid "Unknown primitive"
-msgstr "Преобразовать примитив"
+msgstr "Неизвестный примитив"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:919
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
@@ -26809,9 +26803,9 @@ msgid "<none selected>"
 msgstr "<не выбрано>"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Reference item: %s"
-msgstr "Обозначение '%s'"
+msgstr "Опорный элемент: %s"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -28664,7 +28658,6 @@ msgid "Check rule syntax"
 msgstr "Проверить синтаксис правил"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -28895,7 +28888,7 @@ msgstr ""
 "\n"
 "### Типы ограничений\n"
 "\n"
-" * annular_width\n"
+" * annular\\_width\n"
 " * clearance\n"
 " * courtyard_clearance\n"
 " * diff\\_pair\\_gap\n"
@@ -28903,8 +28896,8 @@ msgstr ""
 " * disallow\n"
 " * edge\\_clearance\n"
 " * length\n"
-" * hole\n"
 " * hole\\_clearance\n"
+" * hole\\_size\n"
 " * silk\\_clearance\n"
 " * skew\n"
 " * track\\_width\n"
@@ -28975,8 +28968,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.insideCourtyard('<обозначения_посад.мест>')\n"
-"Истина если любая часть `A` лежит в главной области установки указанных "
-"посад.мест.\n"
+"Истина если любая часть `A` лежит в главной области установки указанных посад"
+".мест.\n"
 "<br><br>\n"
 "\n"
 "    A.insideFrontCourtyard('<обозначения_посад.мест>')\n"
@@ -29008,8 +29001,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.memberOf('<имя_группы>')\n"
-"Истина если `A` является членом указанной группы (включая вложенные "
-"группы).\n"
+"Истина если `A` является членом указанной группы (включая вложенные группы)."
+"\n"
 "<br><br>\n"
 "\n"
 "    A.existsOnLayer('<имя_слоя>')\n"
@@ -29043,20 +29036,20 @@ msgstr ""
 "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
 "\n"
 "\n"
-"    (rule \"Distance between Vias of Different Nets\"  \n"
+"    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
 "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
 "\n"
-"    (rule \"Clearance between Pads of Different Nets\"  \n"
+"    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
 "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
 "\n"
 "\n"
-"    (rule \"Via Hole to Track Clearance\"  \n"
+"    (rule \"Via Hole to Track Clearance\"\n"
 "        (constraint hole_clearance (min 0.254mm))\n"
-"        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
 "    \n"
-"    (rule \"Pad to Track Clearance\"  \n"
+"    (rule \"Pad to Track Clearance\"\n"
 "        (constraint clearance (min 0.2mm))\n"
 "        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
 "\n"
@@ -29066,11 +29059,11 @@ msgstr ""
 "        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
 "\n"
 "\n"
-"    (rule \"Max Drill Hole Size Mechanical\"  \n"
+"    (rule \"Max Drill Hole Size Mechanical\"\n"
 "        (constraint hole_size (max 6.3mm))\n"
 "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
 "    \n"
-"    (rule \"Max Drill Hole Size PTH\"  \n"
+"    (rule \"Max Drill Hole Size PTH\"\n"
 "        (constraint hole_size (max 6.35mm))\n"
 "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
@@ -29078,7 +29071,7 @@ msgstr ""
 "    # Задать особый зазор для отдельной диф.пары\n"
 "    (rule \"dp clock gap\"\n"
 "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
-"        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
+"        (condition \"A.inDiffPair('/CLK')\"))\n"
 "\n"
 "    # Задать больший зазор между слоями меди и всеми диф.парами\n"
 "    (rule \"dp clearance\"\n"
@@ -29251,24 +29244,20 @@ msgid "undefined"
 msgstr "не определено"
 
 #: pcbnew/drc/drc_engine.cpp:890
-#, fuzzy
 msgid "track width"
-msgstr "Ширина дорожки"
+msgstr "ширина дорожки"
 
 #: pcbnew/drc/drc_engine.cpp:891
-#, fuzzy
 msgid "annular width"
-msgstr "Ширина пояска"
+msgstr "ширина пояска"
 
 #: pcbnew/drc/drc_engine.cpp:892
-#, fuzzy
 msgid "via diameter"
-msgstr "Диаметр перех.отв."
+msgstr "диаметр перех.отв."
 
 #: pcbnew/drc/drc_engine.cpp:893
-#, fuzzy
 msgid "constraint"
-msgstr "Без ограничений"
+msgstr "ограничение"
 
 #: pcbnew/drc/drc_engine.cpp:896
 #, c-format
@@ -31728,9 +31717,8 @@ msgid "removed annular ring"
 msgstr "удалённый поясок"
 
 #: pcbnew/pcb_track.cpp:660
-#, fuzzy
 msgid "Track (arc)"
-msgstr "Зазоры дорожек"
+msgstr "Дорожка (дуга)"
 
 #: pcbnew/pcb_track.cpp:675
 msgid "Segment Length"
@@ -31879,14 +31867,12 @@ msgid "File not found: '%s'."
 msgstr "Файл не найден: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:710
-#, fuzzy
 msgid "Loading board data..."
-msgstr "Загрузка областей платы..."
+msgstr "Загрузка данных платы..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:888
-#, fuzzy
 msgid "Loading netclasses..."
-msgstr "Загрузка цепей..."
+msgstr "Загрузка классов цепей..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:910
 #, c-format
@@ -31894,12 +31880,10 @@ msgid "Duplicate netclass name '%s'."
 msgstr "Дубликат имени класса цепей '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:927
-#, fuzzy
 msgid "Loading components..."
-msgstr "Загрузка цепей..."
+msgstr "Загрузка компонентов..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:974
-#, fuzzy
 msgid "Loading component 3D models..."
 msgstr "Загрузка 3D моделей..."
 
@@ -31917,9 +31901,8 @@ msgstr ""
 "размещена на слое Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1330
-#, fuzzy
 msgid "Loading dimension drawings..."
-msgstr "Загрузка строк Unicode..."
+msgstr "Загрузка размерных линий..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1351
 #: pcbnew/plugins/altium/altium_pcb.cpp:1358
@@ -32262,9 +32245,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "При импорте описания конт.пл. '%s' CADSTAR возникли ошибки: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
-msgstr "Не удалось найти PDF-просмотрщик для '%s'."
+msgstr "Не удалось найти конт.пл. с индексом '%d' в посад.месте '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1291
 #, c-format
@@ -33887,36 +33870,27 @@ msgstr "Разблокировать"
 
 #: pcbnew/tools/board_editor_control.cpp:1393
 msgid "Zones have insufficient overlap for merging."
-msgstr ""
+msgstr "Зоны недостаточно пересекаются для слияния."
 
 #: pcbnew/tools/board_editor_control.cpp:1439
-#, fuzzy
 msgid "Some zone netcodes did not match and were not merged."
-msgstr ""
-"Некоторые элементы не прошли проверку DRC и, поэтому, остались без изменений."
+msgstr "Цепи некоторых зон не совпадают, они не были объединены."
 
 #: pcbnew/tools/board_editor_control.cpp:1445
-#, fuzzy
 msgid "Some zone priorities did not match and were not merged."
-msgstr ""
-"Некоторые элементы не прошли проверку DRC и, поэтому, остались без изменений."
+msgstr "Приоритеты некоторых зон не совпадают, они не были объединены."
 
 #: pcbnew/tools/board_editor_control.cpp:1451
-#, fuzzy
 msgid "Some zones were rule areas and were not merged."
-msgstr ""
-"Некоторые элементы не прошли проверку DRC и, поэтому, остались без изменений."
+msgstr "Некоторые зоны являются зонами запрета, они не были объединены."
 
 #: pcbnew/tools/board_editor_control.cpp:1457
-#, fuzzy
 msgid "Some zone layer sets did not match and were not merged."
-msgstr "Cлой правила \"%s\" не совпадает; правило проигнорировано."
+msgstr "Наборы слоёв некоторых зон не совпадают, они не были объединены."
 
 #: pcbnew/tools/board_editor_control.cpp:1463
-#, fuzzy
 msgid "Some zones did not intersect and were not merged."
-msgstr ""
-"Некоторые элементы не прошли проверку DRC и, поэтому, остались без изменений."
+msgstr "Некоторые зоны не пересекаются, они не были объединены."
 
 #: pcbnew/tools/board_editor_control.cpp:1529
 msgid "Duplicate zone"
