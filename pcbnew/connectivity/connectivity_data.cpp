@@ -413,21 +413,35 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
                     && connected->Layers().Overlaps( aLayer )
                     && matchType( connected->Parent()->Type() ) )
             {
-                if( connected->Net() == aItem->GetNetCode() )
-                {
-                    return true;
-                }
-                // For optionally-flashed layers we normally want to avoid different-net items
-                // by dropping the flashing.  However, if the different-net item collides with
-                // our hole then that's not going to help.  Showing the flashing in that case
-                // is clearer (and highlights the probable DRC error better).
-                else if( aCheckOptionalFlashing && aItem->Type() == PCB_PAD_T )
+                if( aCheckOptionalFlashing && aItem->Type() == PCB_PAD_T )
                 {
                     const PAD*    pad = static_cast<const PAD*>( aItem );
                     SHAPE_SEGMENT hole( *pad->GetEffectiveHoleShape() );
                     PCB_LAYER_ID  layer = ToLAYER_ID( aLayer );
 
-                    return connected->Parent()->GetEffectiveShape( layer )->Collide( &hole );
+                    if( connected->Net() != aItem->GetNetCode() )
+                    {
+                        // Even if the nets aren't the same, we need to check for a physical
+                        // connection with the unflashed pad's hole (as its walls are plated).
+                        return connected->Parent()->GetEffectiveShape( layer )->Collide( &hole );
+                    }
+                    else if( CN_ZONE_LAYER* zoneLayer = dynamic_cast<CN_ZONE_LAYER*>( connected ) )
+                    {
+                        ZONE*                   zone = static_cast<ZONE*>( zoneLayer->Parent() );
+                        int                     idx = zoneLayer->SubpolyIndex();
+                        const SHAPE_LINE_CHAIN& island = zone->GetFill( layer )->COutline( idx );
+                        std::shared_ptr<SHAPE>  flashing = pad->GetEffectiveShape();
+
+                        for( const VECTOR2I& pt : island.CPoints() )
+                        {
+                            if( !flashing->Collide( pt ) )
+                                return true;
+                        }
+
+                        // If the entire island is inside the pad's flashing then the pad won't
+                        // *actually* connect to anything *else* so don't consider it connected.
+                        return false;
+                    }
                 }
                 else if( aCheckOptionalFlashing && aItem->Type() == PCB_VIA_T )
                 {
@@ -435,8 +449,32 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
                     SHAPE_CIRCLE   hole( via->GetCenter(), via->GetDrillValue() / 2 );
                     PCB_LAYER_ID   layer = ToLAYER_ID( aLayer );
 
-                    return connected->Parent()->GetEffectiveShape( layer )->Collide( &hole );
+                    if( connected->Net() != aItem->GetNetCode() )
+                    {
+                        // Even if the nets aren't the same, we need to check for a physical
+                        // connection with the unflashed via's hole (as its walls are plated).
+                        return connected->Parent()->GetEffectiveShape( layer )->Collide( &hole );
+                    }
+                    else if( CN_ZONE_LAYER* zoneLayer = dynamic_cast<CN_ZONE_LAYER*>( connected ) )
+                    {
+                        ZONE*                   zone = static_cast<ZONE*>( zoneLayer->Parent() );
+                        int                     idx = zoneLayer->SubpolyIndex();
+                        const SHAPE_LINE_CHAIN& island = zone->GetFill( layer )->COutline( idx );
+                        SHAPE_CIRCLE            flashing( via->GetCenter(), via->GetWidth() / 2 );
+
+                        for( const VECTOR2I& pt : island.CPoints() )
+                        {
+                            if( !flashing.SHAPE::Collide( pt ) )
+                                return true;
+                        }
+
+                        // If the entire island is inside the via's flashing then the via won't
+                        // *actually* connect to anything *else* so don't consider it connected.
+                        return false;
+                    }
                 }
+
+                return connected->Net() == aItem->GetNetCode();
             }
         }
     }

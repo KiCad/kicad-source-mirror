@@ -314,10 +314,9 @@ public:
         }
     }
 
-    int SubpolyIndex() const
-    {
-        return m_subpolyIndex;
-    }
+    int SubpolyIndex() const { return m_subpolyIndex; }
+
+    PCB_LAYER_ID GetLayer() const { return m_layer; }
 
     bool ContainsPoint( const VECTOR2I& p ) const
     {
