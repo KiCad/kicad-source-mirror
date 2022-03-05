@@ -2,7 +2,7 @@
 # mentioned in every translation file „Language-Team” sections.
 # This file is distributed under GNU Free Documentation License.
 # http://www.gnu.org/licenses/fdl-1.3.html
-# Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>, 2020, 2021.
+# Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>, 2020, 2021, 2022.
 # ZbeeGin <zbeegin@op.pl>, 2020, 2021.
 # Дмитрий Дёмин <dmitrodem@gmail.com>, 2021.
 # dsa-t <dudesuchamazing@gmail.com>, 2022.
@@ -11,17 +11,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 11:58-0800\n"
-"PO-Revision-Date: 2022-02-01 13:57+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"PO-Revision-Date: 2022-03-08 00:49+0000\n"
+"Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -3034,7 +3034,7 @@ msgstr "(это может исправить некоторые проблем�
 
 #: common/dialogs/panel_common_settings_base.cpp:171
 msgid "High-contrast mode dimming factor:"
-msgstr ""
+msgstr "Уровень затенения высоко-контрастного режима:"
 
 #: common/dialogs/panel_common_settings_base.cpp:178
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:75
@@ -3463,9 +3463,8 @@ msgstr "Штрихпунктир"
 
 #: common/dialogs/panel_setup_netclasses.cpp:97 common/eda_shape.cpp:1605
 #: include/stroke_params.h:74
-#, fuzzy
 msgid "Dash-Dot-Dot"
-msgstr "Штрихпунктир"
+msgstr "Штрихпунктир двойной"
 
 #: common/dialogs/panel_setup_netclasses.cpp:442
 msgid "Netclass must have a name."
@@ -4176,9 +4175,8 @@ msgstr "Графика"
 #: common/eda_item.cpp:373 eeschema/lib_textbox.cpp:367
 #: eeschema/sch_textbox.cpp:370 pcbnew/fp_textbox.cpp:206
 #: pcbnew/pcb_textbox.cpp:184
-#, fuzzy
 msgid "Text Box"
-msgstr "Позиция X"
+msgstr "Надпись"
 
 #: common/eda_item.cpp:323 common/eda_item.cpp:324 common/eda_item.cpp:325
 #: common/eda_item.cpp:326 common/eda_item.cpp:332 common/eda_item.cpp:333
@@ -4252,9 +4250,8 @@ msgstr "Метка цепи"
 
 #: common/eda_item.cpp:353 eeschema/sch_label.cpp:750
 #: eeschema/sch_label.cpp:1053
-#, fuzzy
 msgid "Directive Label"
-msgstr "Метка цепи"
+msgstr "Директивная метка"
 
 #: common/eda_item.cpp:354 eeschema/sch_label.cpp:751
 msgid "Global Label"
@@ -5264,12 +5261,10 @@ msgid "Symbol fields"
 msgstr "Поля символов"
 
 #: common/layer_id.cpp:117
-#, fuzzy
 msgid "Sheet references"
 msgstr "Обозначения листов"
 
 #: common/layer_id.cpp:118
-#, fuzzy
 msgid "Net class references"
 msgstr "Классы цепей"
 
@@ -5287,7 +5282,6 @@ msgid "Schematic text && graphics"
 msgstr "Надписи и графика"
 
 #: common/layer_id.cpp:122
-#, fuzzy
 msgid "Schematic text && graphics backgrounds"
 msgstr "Надписи и графика"
 
@@ -5755,16 +5749,12 @@ msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "Zip архив '%s' создан (%s несжатым, %s сжатым)."
 
 #: common/rc_item.cpp:362
-#, fuzzy
 msgid "Excluded warning: "
-msgstr ""
-"\n"
-"Исключены:"
+msgstr "Исключённое предупреждение: "
 
 #: common/rc_item.cpp:364
-#, fuzzy
 msgid "Excluded error: "
-msgstr "Исключён "
+msgstr "Исключённая ошибка: "
 
 #: common/rc_item.cpp:368
 msgid "Warning: "
@@ -6298,9 +6288,8 @@ msgstr ""
 "режиме"
 
 #: common/tool/actions.cpp:549
-#, fuzzy
 msgid "Draw Bounding Boxes"
-msgstr "Габариты"
+msgstr "Чертить контур габаритов"
 
 #: common/tool/actions.cpp:554
 msgid "Select item(s)"
@@ -6833,9 +6822,8 @@ msgid "Eagle XML files"
 msgstr "Файлы Eagle XML"
 
 #: common/wildcards_and_files_ext.cpp:288
-#, fuzzy
 msgid "OrcadPCB2 netlist files"
-msgstr "Файлы списка цепей KiCad"
+msgstr "Файлы списка цепей OrcadPCB2"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "KiCad netlist files"
@@ -6891,9 +6879,8 @@ msgid "Legacy footprint library files"
 msgstr "Файлы библиотек посад.мест KiCad"
 
 #: common/wildcards_and_files_ext.cpp:375
-#, fuzzy
 msgid "Altium PCB footprint library files"
-msgstr "Файл библиотеки посад.мест Geda PCB"
+msgstr "Файл библиотеки посад.мест Altium PCB"
 
 #: common/wildcards_and_files_ext.cpp:381
 msgid "Eagle ver. 6.x XML library files"
@@ -8662,9 +8649,8 @@ msgid "Violation Severity"
 msgstr "Уровни нарушений"
 
 #: eeschema/dialogs/dialog_erc.cpp:791 pcbnew/dialogs/dialog_drc.cpp:722
-#, fuzzy
 msgid "Edit ignored violations..."
-msgstr "Править уровни нарушений..."
+msgstr "Править игнорируемые нарушения..."
 
 #: eeschema/dialogs/dialog_erc.cpp:868 pcbnew/dialogs/dialog_gendrill.cpp:484
 #, c-format
@@ -8710,9 +8696,9 @@ msgid "Violations (%d)"
 msgstr "Нарушения (%d)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored Tests (%d)"
-msgstr "Не подключённые элементы (%d)"
+msgstr "Игнорируемые тесты (%d)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:139
 #: pcbnew/dialogs/dialog_drc_base.cpp:183
@@ -8810,7 +8796,6 @@ msgstr "Выровнять слева"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:120
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:104
 #: eeschema/dialogs/dialog_text_properties_base.cpp:104
-#, fuzzy
 msgid "Align horizontal center"
 msgstr "Выровнять по гор.центру"
 
@@ -8834,7 +8819,6 @@ msgstr "Выровнять сверху"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:140
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:119
 #: eeschema/dialogs/dialog_text_properties_base.cpp:119
-#, fuzzy
 msgid "Align vertical center"
 msgstr "Выровнять по верт.центру"
 
@@ -9106,7 +9090,6 @@ msgid "Junction Properties"
 msgstr "Свойства соединений"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:93
-#, fuzzy
 msgid "Pin length:"
 msgstr "Длина вывода:"
 
@@ -9124,18 +9107,16 @@ msgid "Label Properties"
 msgstr "Свойства метки"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:101
-#, fuzzy
 msgid "Directive Label Properties"
-msgstr "Свойства иерархической метки"
+msgstr "Свойства директивной метки"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:102
 msgid "Hierarchical Sheet Pin Properties"
 msgstr "Свойства вывода иерархического листа"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:392
-#, fuzzy
 msgid "Label can not be empty."
-msgstr "Имя цепи не может быть пустым."
+msgstr "Имя метки не может быть пустой."
 
 #: eeschema/dialogs/dialog_label_properties.cpp:572
 msgid "The first field is mandatory."
@@ -9318,7 +9299,7 @@ msgstr "Точка"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:167
 msgid "Diamond"
-msgstr ""
+msgstr "Ромб"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:177
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
@@ -9369,7 +9350,7 @@ msgstr "Размер имени"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:593
 msgid "ALL"
-msgstr ""
+msgstr "Все"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:633
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:55
@@ -9428,14 +9409,12 @@ msgid "0"
 msgstr "0"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:119
-#, fuzzy
 msgid "Pin count:"
-msgstr "количеству выводов"
+msgstr "Кол. выводов:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:133
-#, fuzzy
 msgid "Duplicate pins:"
-msgstr "Дубликат посад.места"
+msgstr "Дубликаты выводов:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:74
 msgid "Pin Table"
@@ -9549,9 +9528,8 @@ msgstr "Создать символ"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:161
 #: eeschema/dialogs/dialog_text_properties_base.cpp:158
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:150
-#, fuzzy
 msgid "Border"
-msgstr "Порядок"
+msgstr "Контур"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:38
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:117
@@ -9560,9 +9538,8 @@ msgid "Border width:"
 msgstr "Ширина контура:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:52
-#, fuzzy
 msgid "Set border width to 0 to use Schematic default symbol line width."
-msgstr "Установите 0 для использования ширины из класса цепей."
+msgstr "Установите 0 для использования значения по умолчанию."
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:60
 msgid "Fill Style"
@@ -9586,9 +9563,8 @@ msgstr "Залить цветом:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:91
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:168
-#, fuzzy
 msgid "Private to Symbol Editor"
-msgstr "Править в редакторе символов"
+msgstr "Только для редактора символов"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:97
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:167
@@ -9833,21 +9809,18 @@ msgstr "Стиль:"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:213
 #: eeschema/dialogs/dialog_text_properties_base.cpp:207
-#, fuzzy
 msgid "Background fill"
-msgstr "Заливка фона:"
+msgstr "Заливка фона"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:239
-#, fuzzy
 msgid "Private to symbol editor"
-msgstr "Править в редакторе символов"
+msgstr "Только для редактора символов"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.h:106
 #: eeschema/dialogs/dialog_text_properties.cpp:54
 #: pcbnew/dialogs/dialog_textbox_properties_base.h:103
-#, fuzzy
 msgid "Text Box Properties"
-msgstr "Свойства текста"
+msgstr "Свойства надписи"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:76
 msgid "Set width to 0 to use Netclass line widths."
@@ -10703,12 +10676,10 @@ msgid "Filled shape"
 msgstr "Заполненная фигура"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:110
-#, fuzzy
 msgid "Set line width to 0 to use Schematic Editor line widths."
-msgstr "Установите 0 для использования ширины из класса цепей."
+msgstr "Установите 0 для использования значения по умолчанию."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:114
-#, fuzzy
 msgid "Set line color to transparent to use Schematic Editor colors."
 msgstr "Установите цвет прозрачным для использования цвета по умолчанию."
 
@@ -11243,49 +11214,40 @@ msgid "For a JFET, pin order is drain, gate, source"
 msgstr "Для JFET порядок выводов: С, З, И"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:803
-#, fuzzy
 msgid "Invalid Impedance value"
-msgstr "Неверное значение свойства"
+msgstr "Неверное значение импеданса"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:818
-#, fuzzy
 msgid "Invalid delay value"
-msgstr "Неверное значение свойства"
+msgstr "Неверное значение задержки"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:833
-#, fuzzy
 msgid "Invalid frequency value"
-msgstr "Неверное значение свойства"
+msgstr "Неверное значение частоты"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:845
-#, fuzzy
 msgid "Invalid length in wavelength value"
-msgstr "Неверное альтернативное имя вывода"
+msgstr "Неверное значение длинны волны"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:870
-#, fuzzy
 msgid "Invalid resistance value"
-msgstr "Неверное значение свойства"
+msgstr "Неверное значение сопротивления"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:881
-#, fuzzy
 msgid "Invalid capacitance value"
-msgstr "Неверное значение Spice-модели"
+msgstr "Неверное значение ёмкости"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:892
-#, fuzzy
 msgid "Invalid inductance value"
-msgstr "Неверное значение Spice-модели"
+msgstr "Неверное значение индуктивности"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:903
-#, fuzzy
 msgid "Invalid conductance value"
-msgstr "Неверное значение свойства"
+msgstr "Неверное значение проводимости"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:914
-#, fuzzy
 msgid "Invalid length value"
-msgstr "Неверное значение свойства"
+msgstr "Неверное значение длинны"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1066
 #, c-format
@@ -11648,9 +11610,8 @@ msgid "Source"
 msgstr "Источник"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:938
-#, fuzzy
 msgid "Line model"
-msgstr "Цвет линии:"
+msgstr "Модель линии"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:954
 #: pcb_calculator/transline_ident.cpp:149
@@ -12729,15 +12690,13 @@ msgstr "Пустые ячейки приведут к удалению неве�
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:550
-#, fuzzy
 msgid "Remove Invalid Cells"
-msgstr "Удалить элементы"
+msgstr "Удалить неверные ячейки"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:551
-#, fuzzy
 msgid "Cancel Table Update"
-msgstr "Диаметр перех.отв. с зазором:"
+msgstr "Отменить обновление таблицы"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
@@ -18355,9 +18314,8 @@ msgstr ""
 "Поэтому размер некоторых элементов не определён"
 
 #: gerbview/rs274d.cpp:413
-#, fuzzy
 msgid "Invalid Code Number"
-msgstr "Неверный номер вывода"
+msgstr "Неверный номер кода"
 
 #: gerbview/rs274d.cpp:621
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
@@ -21345,7 +21303,6 @@ msgstr ""
 "Желаете выйти и отказаться от изменений?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -21372,24 +21329,25 @@ msgid ""
 msgstr ""
 "При указании максимального тока будет рассчитана ширина дорожек.\n"
 "\n"
-"При указании ширины наружной/внутренней дорожки будут рассчитаны "
-"максимальный ток и ширина другого типа дорожек.\n"
+"При указании ширины одной из дорожек, будет рассчитан максимальный ток для "
+"неё. Ширина остальных дорожек будет рассчитана исходя из полученного "
+"максимального тока.\n"
 "\n"
 "Изменяемое значение выделяется полужирным шрифтом.\n"
 "\n"
 "Точность расчётов обеспечивается при токах до 35А в наружных дорожках, 17.5А "
-"во внутренних дорожках, повышении температуры максимум на 100°C и ширине "
+"во внутренних дорожках, при повышении температуры максимум на 100°C и ширине "
 "дорожек до 10мм (400мил).\n"
 "\n"
 "Расчёт выполняется по формуле из IPC 2221\n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>\n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>\n"
 "где:\n"
 "___I___ = максимальный ток в амперах\n"
 "___&Delta;T___ = повышение температуры в &deg;C\n"
 "___W___ = ширина в милах\n"
 "___H___ = толщина (высота) дорожки в милах\n"
-"___K___ = 0.024 для внутренних дорожек или 0.048 для наружных  \n"
+"___K___ = 0.024 для внутренних дорожек или 0.048 для наружных\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -22559,6 +22517,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:596
 msgid "Selected options resulted in errors! Change them and try again."
 msgstr ""
+"Выбранные параметры приводят к ошибками! Измените их и попробуйте снова."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:603
 #, c-format
@@ -22587,9 +22546,9 @@ msgid "Reannotate anyway?"
 msgstr "Всё равно обозначить?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "Дублирование элементов %s%s\n"
+msgstr "Дублирование элементов %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
 msgid "Aborted: too many errors"
@@ -26056,7 +26015,7 @@ msgstr "Инспектор цепей"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:81
 msgid "Load and Test Netlist"
-msgstr ""
+msgstr "Загрузить и проверить список цепей"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:123
 msgid "Select Netlist"
@@ -26157,9 +26116,9 @@ msgid "Line width may not be 0 for unfilled shapes."
 msgstr "Ширина линии не может быть нулевой для незаполненных фигур."
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid "Corner %d"
-msgstr "Радиус скругления:"
+msgstr "Угол %d"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:341
 msgid "Polygon must have at least 3 corners"
@@ -26253,9 +26212,8 @@ msgid "corners count %d"
 msgstr "кол. вершин %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:740
-#, fuzzy
 msgid "Unknown primitive"
-msgstr "Преобразовать примитив"
+msgstr "Неизвестный примитив"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:929
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
@@ -27560,9 +27518,9 @@ msgid "<none selected>"
 msgstr "<не выбрано>"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:255
-#, fuzzy, c-format
+#, c-format
 msgid "Reference item: %s"
-msgstr "Обозначение '%s'"
+msgstr "Опорный элемент: %s"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
@@ -30140,24 +30098,20 @@ msgid "undefined"
 msgstr "не определено"
 
 #: pcbnew/drc/drc_engine.cpp:924
-#, fuzzy
 msgid "track width"
-msgstr "Ширина дорожки"
+msgstr "ширина дорожки"
 
 #: pcbnew/drc/drc_engine.cpp:925
-#, fuzzy
 msgid "annular width"
-msgstr "Ширина пояска"
+msgstr "ширина пояска"
 
 #: pcbnew/drc/drc_engine.cpp:926
-#, fuzzy
 msgid "via diameter"
-msgstr "Диаметр перех.отв."
+msgstr "диаметр перех.отв."
 
 #: pcbnew/drc/drc_engine.cpp:927
-#, fuzzy
 msgid "constraint"
-msgstr "Без ограничений"
+msgstr "ограничение"
 
 #: pcbnew/drc/drc_engine.cpp:930
 #, c-format
@@ -32877,9 +32831,8 @@ msgid "removed annular ring"
 msgstr "удалённый поясок"
 
 #: pcbnew/pcb_track.cpp:711
-#, fuzzy
 msgid "Track (arc)"
-msgstr "Зазоры дорожек"
+msgstr "Дорожка (дуга)"
 
 #: pcbnew/pcb_track.cpp:726
 msgid "Segment Length"
@@ -33048,14 +33001,12 @@ msgid "Loading extended primitive information data..."
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:894
-#, fuzzy
 msgid "Loading board data..."
-msgstr "Загрузка областей платы..."
+msgstr "Загрузка данных платы..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1077
-#, fuzzy
 msgid "Loading netclasses..."
-msgstr "Загрузка цепей..."
+msgstr "Загрузка классов цепей..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1099
 #, c-format
@@ -33063,12 +33014,10 @@ msgid "Duplicate netclass name '%s'."
 msgstr "Дубликат имени класса цепей '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1114
-#, fuzzy
 msgid "Loading components..."
-msgstr "Загрузка цепей..."
+msgstr "Загрузка компонентов..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1172
-#, fuzzy
 msgid "Loading component 3D models..."
 msgstr "Загрузка 3D моделей..."
 
@@ -33086,9 +33035,8 @@ msgstr ""
 "размещена на слое Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1543
-#, fuzzy
 msgid "Loading dimension drawings..."
-msgstr "Загрузка строк Unicode..."
+msgstr "Загрузка размерных линий..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1564
 #: pcbnew/plugins/altium/altium_pcb.cpp:1571
@@ -33361,9 +33309,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "При импорте описания конт.пл. '%s' CADSTAR возникли ошибки: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1257
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
-msgstr "Не удалось найти PDF-просмотрщик для '%s'."
+msgstr "Не удалось найти конт.пл. с индексом '%d' в посад.месте '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1290
 #, c-format
@@ -35202,36 +35150,27 @@ msgstr "Разблокировать"
 
 #: pcbnew/tools/board_editor_control.cpp:1393
 msgid "Zones have insufficient overlap for merging."
-msgstr ""
+msgstr "Зоны недостаточно пересекаются для слияния."
 
 #: pcbnew/tools/board_editor_control.cpp:1439
-#, fuzzy
 msgid "Some zone netcodes did not match and were not merged."
-msgstr ""
-"Некоторые элементы не прошли проверку DRC и, поэтому, остались без изменений."
+msgstr "Цепи некоторых зон не совпадают, они не были объединены."
 
 #: pcbnew/tools/board_editor_control.cpp:1445
-#, fuzzy
 msgid "Some zone priorities did not match and were not merged."
-msgstr ""
-"Некоторые элементы не прошли проверку DRC и, поэтому, остались без изменений."
+msgstr "Приоритеты некоторых зон не совпадают, они не были объединены."
 
 #: pcbnew/tools/board_editor_control.cpp:1451
-#, fuzzy
 msgid "Some zones were rule areas and were not merged."
-msgstr ""
-"Некоторые элементы не прошли проверку DRC и, поэтому, остались без изменений."
+msgstr "Некоторые зоны являются зонами запрета, они не были объединены."
 
 #: pcbnew/tools/board_editor_control.cpp:1457
-#, fuzzy
 msgid "Some zone layer sets did not match and were not merged."
-msgstr "Cлой правила \"%s\" не совпадает; правило проигнорировано."
+msgstr "Наборы слоёв некоторых зон не совпадают, они не были объединены."
 
 #: pcbnew/tools/board_editor_control.cpp:1463
-#, fuzzy
 msgid "Some zones did not intersect and were not merged."
-msgstr ""
-"Некоторые элементы не прошли проверку DRC и, поэтому, остались без изменений."
+msgstr "Некоторые зоны не пересекаются, они не были объединены."
 
 #: pcbnew/tools/board_editor_control.cpp:1529
 msgid "Duplicate zone"
