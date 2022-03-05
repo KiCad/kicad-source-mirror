@@ -73,7 +73,7 @@ BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_REGRESSION_TEST_FIXTURE 
     }
     else
     {
-        BOOST_CHECK_EQUAL( violations.size(), 5 );
+        BOOST_CHECK_EQUAL( violations.size(), 7 );
 
         std::map<KIID, EDA_ITEM*> itemMap;
         m_board->FillItemMap( itemMap );

@@ -115,9 +115,9 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
     // These documents at one time failed to catch DRC errors that they should have.
 
     std::vector< std::pair<wxString, int> > tests = { { "issue1358", 2 },
-                                                      { "issue2512", 4 },
+                                                      { "issue2512", 5 },
                                                       { "issue2528", 1 },
-                                                      { "issue5750", 4 },
+                                                      { "issue5750", 5 },
                                                       { "issue5854", 3 },
                                                       { "issue6879", 6 },
                                                       { "issue6945", 2 },
