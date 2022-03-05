@@ -520,6 +520,8 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
 
     if( GetIsRuleArea() )
         msg = _( "Rule Area" );
+    else if( IsTeardropArea() )
+        msg = _( "Teardrop Area" );
     else if( IsOnCopperLayer() )
         msg = _( "Copper Zone" );
     else
@@ -1068,6 +1070,12 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
     const BOARD* board = GetBoard();
     int          maxError = ARC_HIGH_DEF;
     bool         keepExternalFillets = false;
+    bool         smooth_requested = m_cornerSmoothingType == ZONE_SETTINGS::SMOOTHING_CHAMFER
+                                    || m_cornerSmoothingType == ZONE_SETTINGS::SMOOTHING_FILLET;
+
+    if( IsTeardropArea() )  // We use teardrop shapes with no smoothing
+                            // these shapes are already optimized
+        smooth_requested = false;
 
     if( board )
     {
@@ -1079,6 +1087,10 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
 
     auto smooth = [&]( SHAPE_POLY_SET& aPoly )
                   {
+
+                      if( !smooth_requested )
+                          return;
+
                       switch( m_cornerSmoothingType )
                       {
                       case ZONE_SETTINGS::SMOOTHING_CHAMFER:
@@ -1107,7 +1119,7 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
     // Should external fillets (that is, those applied to concave corners) be kept?  While it
     // seems safer to never have copper extend outside the zone outline, 5.1.x and prior did
     // indeed fill them so we leave the mode available.
-    if( keepExternalFillets )
+    if( keepExternalFillets && smooth_requested )
     {
         withFillets = flattened;
         smooth( withFillets );

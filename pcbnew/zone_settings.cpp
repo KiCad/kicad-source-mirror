@@ -122,6 +122,11 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE& aSource )
     m_removeIslands               = aSource.GetIslandRemovalMode();
     m_minIslandArea               = aSource.GetMinIslandArea();
 
+    // Currently, the teardrop area type is not really a ZONE_SETTINGS parameter,
+    // but a ZONE parameter only.
+    // However it can be used in dialogs
+    m_TeardropType                = aSource.GetTeardropAreaType();
+
     m_Layers = aSource.GetLayerSet();
 
     return *this;
@@ -155,6 +160,12 @@ void ZONE_SETTINGS::ExportSetting( ZONE& aTarget, bool aFullExport ) const
     aTarget.SetLocked( m_Locked );
     aTarget.SetIslandRemovalMode( GetIslandRemovalMode() );
     aTarget.SetMinIslandArea( GetMinIslandArea() );
+    // Currently, the teardrop area type is not imported from a ZONE_SETTINGS, because
+    // it is not really a ZONE_SETTINGS parameter, but a ZONE parameter only
+#if 0
+    aTarget.SetTeardropAreaType( m_TeardropType );
+#endif
+
 
     if( aFullExport )
     {

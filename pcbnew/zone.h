@@ -34,6 +34,7 @@
 #include <layer_ids.h>
 #include <geometry/shape_poly_set.h>
 #include <zone_settings.h>
+#include <teardrop/teardrop_types.h>
 
 
 class EDA_RECT;
@@ -43,18 +44,6 @@ class BOARD;
 class ZONE;
 class MSG_PANEL_ITEM;
 
-/**
- * define the type of a teardrop: on a via or pad, or atrack end
- */
-enum class TEARDROP_TYPE
-{
-    TD_NONE = 0,        // Not a teardrop: just a standard zone
-    TD_UNSPECIFIED,     // Not specified/unknown teardrop type
-    TD_VIAPAD,          // a teardrop on a via or pad
-    TD_TRACKEND         // a teardrop on a track end
-                        // (when 2 tracks having different widths have a teardrop on the
-                        // end of the largest track)
-};
 
 /**
  * Handle a list of polygons defining a copper zone.

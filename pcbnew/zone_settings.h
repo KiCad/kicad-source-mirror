@@ -33,6 +33,7 @@
 #include <layer_ids.h>
 #include <zones.h>
 #include <geometry/eda_angle.h>
+#include <teardrop/teardrop_types.h>
 
 class wxDataViewListCtrl;
 
@@ -106,6 +107,11 @@ public:
 
     bool            m_Zone_45_Only;
     bool            m_Locked;
+
+    /* A zone outline can be a teardrop zone with different rules
+     * priority, smoothed corners, thermal relief...
+     */
+    TEARDROP_TYPE   m_TeardropType;
 
 private:
     int             m_cornerSmoothingType;   // Corner smoothing type
