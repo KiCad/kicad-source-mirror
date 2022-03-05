@@ -66,7 +66,7 @@ BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_REGRESSION_TEST_FIXTURE 
 
     bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
 
-    if( violations.size() == 5 )
+    if( violations.size() == 7 )
     {
         BOOST_CHECK_EQUAL( 1, 1 );  // quiet "did not check any assertions" warning
         BOOST_TEST_MESSAGE( "DRC solder mask bridge test passed" );
