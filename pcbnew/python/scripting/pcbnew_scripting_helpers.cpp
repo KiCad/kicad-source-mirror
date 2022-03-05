@@ -257,7 +257,7 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard, IO_MGR::PCB_FILE_T aFormat )
     pro.MakeAbsolute();
     wxString projectPath = pro.GetFullPath();
 
-    GetSettingsManager()->SaveProjectAs( pro.GetFullPath() );
+    GetSettingsManager()->SaveProjectAs( pro.GetFullPath(), aBoard->GetProject() );
 
     return true;
 }

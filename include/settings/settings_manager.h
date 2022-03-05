@@ -276,23 +276,27 @@ public:
     /**
      * Saves a loaded project.
      * @param aFullPath is the project name to save.  If empty, will save the first loaded project.
+     * @param aProject is the project to save, or nullptr to save the active project (Prj() return)
      * @return true if save was successful
      */
-    bool SaveProject( const wxString& aFullPath = wxEmptyString );
+    bool SaveProject( const wxString& aFullPath = wxEmptyString, PROJECT* aProject = nullptr );
 
     /**
      * Sets the currently loaded project path and saves it (pointers remain valid)
      * Note that this will not modify the read-only state of the project, so it will have no effect
      * if the project is marked as read-only!
      * @param aFullPath is the full filename to set for the project
+     * @param aProject is the project to save, or nullptr to save the active project (Prj() return)
      */
-    void SaveProjectAs( const wxString& aFullPath );
+    void SaveProjectAs( const wxString& aFullPath, PROJECT* aProject = nullptr );
 
     /**
      * Saves a copy of the current project under the given path.  Will save the copy even if the
      * current project is marked as read-only.
+     * @param aFullPath is the full filename to set for the project
+     * @param aProject is the project to save, or nullptr to save the active project (Prj() return)
      */
-    void SaveProjectCopy( const wxString& aFullPath );
+    void SaveProjectCopy( const wxString& aFullPath, PROJECT* aProject = nullptr );
 
     /**
      * @return the full path to where project backups should be stored
