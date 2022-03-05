@@ -630,7 +630,7 @@ void PNS_LOG_VIEWER_FRAME::updatePnsPreviewItems( int iter )
     auto viewTracker = m_logPlayer->GetViewTracker();
     PNS_LOG_VIEW_TRACKER::VIEW_ENTRIES& entries = viewTracker->GetEntriesForStage( iter );
     auto view = m_galPanel->GetView();
-    printf("DBG updatePnsPreviewItems: %d items\n", entries.size() );
+    printf("DBG updatePnsPreviewItems: %lu items\n", entries.size() );
 
     m_previewItems.reset( new KIGFX::VIEW_GROUP( m_galPanel->GetView() ) );
     m_galPanel->GetView()->Add( m_previewItems.get() );
