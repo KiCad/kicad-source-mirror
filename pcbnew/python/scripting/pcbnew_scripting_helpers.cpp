@@ -141,8 +141,11 @@ BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
 
     if( !project )
     {
-        GetSettingsManager()->LoadProject( projectPath, false );
-        project = GetSettingsManager()->GetProject( projectPath );
+        if( wxFileExists( projectPath ) )
+        {
+            GetSettingsManager()->LoadProject( projectPath, false );
+            project = GetSettingsManager()->GetProject( projectPath );
+        }
     }
     else if( s_PcbEditFrame && project == &GetSettingsManager()->Prj() )
     {
