@@ -2336,51 +2336,31 @@ void FOOTPRINT::TransformPadsWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuff
 {
     for( const PAD* pad : m_pads )
     {
-        if( aLayer != UNDEFINED_LAYER && !pad->IsOnLayer(aLayer) )
-            continue;
-
-        if( !pad->FlashLayer( aLayer ) && IsCopperLayer( aLayer ) )
-            continue;
-
-        // NPTH pads are not drawn on layers if the shape size and pos is the same
-        // as their hole:
-        if( aSkipNPTHPadsWihNoCopper && pad->GetAttribute() == PAD_ATTRIB::NPTH )
-        {
-            if( pad->GetDrillSize() == pad->GetSize() && pad->GetOffset() == VECTOR2I( 0, 0 ) )
-            {
-                switch( pad->GetShape() )
-                {
-                case PAD_SHAPE::CIRCLE:
-                    if( pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
-                        continue;
-
-                    break;
-
-                case PAD_SHAPE::OVAL:
-                    if( pad->GetDrillShape() != PAD_DRILL_SHAPE_CIRCLE )
-                        continue;
-
-                    break;
-
-                default:
-                    break;
-                }
-            }
-        }
-
-        const bool isPlated = ( ( aLayer == F_Cu ) && pad->FlashLayer( F_Mask ) ) ||
-                              ( ( aLayer == B_Cu ) && pad->FlashLayer( B_Mask ) );
-
-        if( aSkipPlatedPads && isPlated )
-            continue;
-
-        if( aSkipNonPlatedPads && !isPlated )
+        if( !pad->FlashLayer( aLayer ) )
             continue;
 
         VECTOR2I clearance( aClearance, aClearance );
 
         switch( aLayer )
         {
+        case F_Cu:
+            if( aSkipPlatedPads && pad->FlashLayer( F_Mask ) )
+                continue;
+
+            if( aSkipNonPlatedPads && !pad->FlashLayer( F_Mask ) )
+                continue;
+
+            break;
+
+        case B_Cu:
+            if( aSkipPlatedPads && pad->FlashLayer( B_Mask ) )
+                continue;
+
+            if( aSkipNonPlatedPads && !pad->FlashLayer( B_Mask ) )
+                continue;
+
+            break;
+
         case F_Mask:
         case B_Mask:
             clearance.x += pad->GetSolderMaskExpansion();
