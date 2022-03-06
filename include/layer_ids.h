@@ -225,6 +225,8 @@ enum GAL_LAYER_ID: int
     LAYER_DRC_EXCLUSION      = GAL_LAYER_ID_START + 37, ///< layer for drc markers which have been individually excluded
     LAYER_MARKER_SHADOWS     = GAL_LAYER_ID_START + 38, ///< shadows for drc markers
 
+    LAYER_LOCKED_ITEM_SHADOW = GAL_LAYER_ID_START + 39, ///< shadow layer for locked items
+
     // Add layers below this point that do not have visibility controls, so don't need explicit
     // enum values
 

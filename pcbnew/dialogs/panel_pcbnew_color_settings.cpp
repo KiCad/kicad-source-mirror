@@ -39,7 +39,7 @@ std::string g_previewBoard =
         "  (net 0 \"\")\n"
         "  (net 1 \"GND\")\n"
         "\n"
-        "  (module \"Wire_Pads:SolderWirePad_single_1-2mmDrill\" (layer \"F.Cu\") (tedit 5F2C4AD9) (tstamp 196cc548-e42d-4d1f-b07f-f00a85d6308b)\n"
+        "  (footprint \"Wire_Pads:SolderWirePad_single_1-2mmDrill\" (layer \"F.Cu\") (tedit 5F2C4AD9) (tstamp 196cc548-e42d-4d1f-b07f-f00a85d6308b)\n"
         "    (at 22.7 34.09)\n"
         "    (fp_text reference \"\" (at 0 -3.81) (layer \"F.SilkS\") hide\n"
         "      (effects (font (size 1 1) (thickness 0.15)))\n"
@@ -53,7 +53,7 @@ std::string g_previewBoard =
         "      (net 1 \"GND\") (tstamp 907d213c-9e76-496e-8ff8-f5d804b4ebf3))\n"
         "  )\n"
         "\n"
-        "  (module \"Capacitors_THT:CP_Radial_D5.0mm_P2.00mm\" (layer \"F.Cu\") (tedit 5C22DE58) (tstamp 380485fd-bd1d-4d52-80be-e1a4da6db230)\n"
+        "  (footprint \"Capacitors_THT:CP_Radial_D5.0mm_P2.00mm\" (layer \"F.Cu\") (tedit 5C22DE58) (tstamp 380485fd-bd1d-4d52-80be-e1a4da6db230)\n"
         "    (at 21.675 27.9525)\n"
         "    (descr \"CP, Radial series, Radial, pin pitch=2.00mm, , diameter=5mm, Electrolytic Capacitor\")\n"
         "    (tags \"CP Radial series Radial pin pitch 2.00mm  diameter 5mm Electrolytic Capacitor\")\n"
@@ -88,7 +88,7 @@ std::string g_previewBoard =
         "    )\n"
         "  )\n"
         "\n"
-        "  (module \"Wire_Pads:SolderWirePad_single_1mmDrill\" (layer \"F.Cu\") (tedit 0) (tstamp 473e3291-e4a8-4615-824b-1aa98b60e481)\n"
+        "  (footprint \"Wire_Pads:SolderWirePad_single_1mmDrill\" locked (layer \"F.Cu\") (tedit 0) (tstamp 473e3291-e4a8-4615-824b-1aa98b60e481)\n"
         "    (at 44.8525 24.46)\n"
         "    (fp_text reference \"Hidden RefDes\" (at -0.2835 7.47025 180) (layer \"F.SilkS\") hide\n"
         "      (effects (font (size 1 1) (thickness 0.15)))\n"
@@ -105,7 +105,7 @@ std::string g_previewBoard =
         "    (pad \"1\" thru_hole circle (at 0 0) (size 2.49936 2.49936) (drill 1.00076) (layers *.Cu *.Mask) (tstamp ec712720-3eda-4621-ad13-dc832c80aef6))\n"
         "  )\n"
         "\n"
-        "  (module \"Wire_Pads:SolderWirePad_single_1mmDrill\" (layer \"F.Cu\") (tedit 0) (tstamp 621d7aa9-bc19-436a-9ebe-ef9cdda47103)\n"
+        "  (footprint \"Wire_Pads:SolderWirePad_single_1mmDrill\" (layer \"F.Cu\") (tedit 0) (tstamp 621d7aa9-bc19-436a-9ebe-ef9cdda47103)\n"
         "    (at 44.8525 20.9675)\n"
         "    (fp_text reference \"\" (at 2.2225 0 90) (layer \"F.SilkS\") hide\n"
         "      (effects (font (size 1.3 1.5) (thickness 0.25)))\n"
@@ -123,7 +123,7 @@ std::string g_previewBoard =
         "      (net 1 \"GND\") (tstamp 5c04f147-7717-4bbf-88a9-07e172a78a08))\n"
         "  )\n"
         "\n"
-        "  (module \"Resistors_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal\" (layer \"F.Cu\") (tedit 5A1048BD) (tstamp 90b0a5fc-e8b0-4fa0-a8bd-198c1d756a29)\n"
+        "  (footprint \"Resistors_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal\" (layer \"F.Cu\") (tedit 5A1048BD) (tstamp 90b0a5fc-e8b0-4fa0-a8bd-198c1d756a29)\n"
         "    (at 28.9775 20.9675)\n"
         "    (descr \"Resistor, Axial_DIN0207 series, Axial, Horizontal, pin pitch=10.16mm, 0.25W = 1/4W, length*diameter=6.3*2.5mm^2, http://cdn-reichelt.de/documents/datenblatt/B400/1_4W%23YAG.pdf\")\n"
         "    (tags \"Resistor Axial_DIN0207 series Axial Horizontal pin pitch 10.16mm 0.25W = 1/4W length 6.3mm diameter 2.5mm\")\n"
@@ -161,7 +161,7 @@ std::string g_previewBoard =
         "    )\n"
         "  )\n"
         "\n"
-        "  (module \"Resistors_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal\" (layer \"F.Cu\") (tedit 5A1048BD) (tstamp c3f66ae9-669e-4889-915f-2cccae13db42)\n"
+        "  (footprint \"Resistors_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal\" (layer \"F.Cu\") (tedit 5A1048BD) (tstamp c3f66ae9-669e-4889-915f-2cccae13db42)\n"
         "    (at 28.9775 27.9525)\n"
         "    (descr \"Resistor, Axial_DIN0207 series, Axial, Horizontal, pin pitch=10.16mm, 0.25W = 1/4W, length*diameter=6.3*2.5mm^2, http://cdn-reichelt.de/documents/datenblatt/B400/1_4W%23YAG.pdf\")\n"
         "    (tags \"Resistor Axial_DIN0207 series Axial Horizontal pin pitch 10.16mm 0.25W = 1/4W length 6.3mm diameter 2.5mm\")\n"
@@ -199,7 +199,7 @@ std::string g_previewBoard =
         "    )\n"
         "  )\n"
         "\n"
-        "  (module \"Resistors_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal\" (layer \"F.Cu\") (tedit 5A1048BD) (tstamp e072334e-f411-41c9-ade0-5444e440897b)\n"
+        "  (footprint \"Resistors_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal\" (layer \"F.Cu\") (tedit 5A1048BD) (tstamp e072334e-f411-41c9-ade0-5444e440897b)\n"
         "    (at 39.1375 24.46 180)\n"
         "    (descr \"Resistor, Axial_DIN0207 series, Axial, Horizontal, pin pitch=10.16mm, 0.25W = 1/4W, length*diameter=6.3*2.5mm^2, http://cdn-reichelt.de/documents/datenblatt/B400/1_4W%23YAG.pdf\")\n"
         "    (tags \"Resistor Axial_DIN0207 series Axial Horizontal pin pitch 10.16mm 0.25W = 1/4W length 6.3mm diameter 2.5mm\")\n"
@@ -236,7 +236,7 @@ std::string g_previewBoard =
         "    )\n"
         "  )\n"
         "\n"
-        "  (module \"Capacitors_THT:CP_Radial_D5.0mm_P2.00mm\" (layer \"F.Cu\") (tedit 5C22DE41) (tstamp fa4fd0e8-6269-4cb7-a049-03c4e343895c)\n"
+        "  (footprint \"Capacitors_THT:CP_Radial_D5.0mm_P2.00mm\" (layer \"F.Cu\") (tedit 5C22DE41) (tstamp fa4fd0e8-6269-4cb7-a049-03c4e343895c)\n"
         "    (at 21.675 20.9675)\n"
         "    (descr \"CP, Radial series, Radial, pin pitch=2.00mm, , diameter=5mm, Electrolytic Capacitor\")\n"
         "    (tags \"CP Radial series Radial pin pitch 2.00mm  diameter 5mm Electrolytic Capacitor\")\n"
@@ -400,6 +400,8 @@ PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( wxWindow* aParent, BOA
 
         m_validLayers.push_back( id );
     }
+
+    m_validLayers.push_back( LAYER_LOCKED_ITEM_SHADOW );
 
     // NOTE: Main board layers are added by createSwatches()
 

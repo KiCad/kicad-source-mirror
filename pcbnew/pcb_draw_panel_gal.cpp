@@ -80,6 +80,7 @@ const int GAL_LAYER_ORDER[] =
 
     LAYER_RATSNEST,
     LAYER_ANCHOR,
+    LAYER_LOCKED_ITEM_SHADOW,
     LAYER_VIA_HOLES, LAYER_VIA_HOLEWALLS,
     LAYER_PAD_PLATEDHOLES, LAYER_PAD_HOLEWALLS, LAYER_NON_PLATEDHOLES,
     LAYER_VIA_THROUGH, LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA,
@@ -276,7 +277,7 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
                 LAYER_VIA_HOLEWALLS,
                 LAYER_DRC_ERROR, LAYER_DRC_WARNING, LAYER_DRC_EXCLUSION, LAYER_MARKER_SHADOWS,
                 LAYER_SELECT_OVERLAY, LAYER_GP_OVERLAY,
-                LAYER_RATSNEST, LAYER_CURSOR, LAYER_ANCHOR
+                LAYER_RATSNEST, LAYER_CURSOR, LAYER_ANCHOR, LAYER_LOCKED_ITEM_SHADOW
         };
 
         for( unsigned int i : layers )
@@ -559,6 +560,9 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
 
     m_view->SetLayerTarget( LAYER_ANCHOR, KIGFX::TARGET_NONCACHED );
     m_view->SetLayerDisplayOnly( LAYER_ANCHOR );
+
+    m_view->SetLayerTarget( LAYER_LOCKED_ITEM_SHADOW, KIGFX::TARGET_NONCACHED );
+    m_view->SetLayerDisplayOnly( LAYER_LOCKED_ITEM_SHADOW );
 
     // Some more required layers settings
     m_view->SetRequired( LAYER_VIA_NETNAMES, LAYER_VIAS );

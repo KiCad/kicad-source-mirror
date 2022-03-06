@@ -1872,6 +1872,18 @@ void PCB_PAINTER::draw( const FOOTPRINT* aFootprint, int aLayer )
         m_gal->DrawLine( center - VECTOR2D( anchorSize, 0 ), center + VECTOR2D( anchorSize, 0 ) );
         m_gal->DrawLine( center - VECTOR2D( 0, anchorSize ), center + VECTOR2D( 0, anchorSize ) );
     }
+
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW && aFootprint->IsLocked() )
+    {
+        const COLOR4D color = m_pcbSettings.GetColor( aFootprint, aLayer );
+
+        m_gal->SetIsFill( true );
+        m_gal->SetIsStroke( false );
+        m_gal->SetFillColor( color );
+
+        SHAPE_POLY_SET poly = aFootprint->GetBoundingHull();
+        m_gal->DrawPolygon( poly );
+    }
 }
 
 

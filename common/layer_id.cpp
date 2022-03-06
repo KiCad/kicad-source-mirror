@@ -176,6 +176,7 @@ wxString LayerName( int aLayer )
     case LAYER_GRID_AXES:               return _( "Grid axes" );
     case LAYER_PCB_BACKGROUND:          return _( "Background" );
     case LAYER_SELECT_OVERLAY:          return _( "Selection highlight" );
+    case LAYER_LOCKED_ITEM_SHADOW:      return _( "Locked item shadow" );
 
     default:
         wxCHECK_MSG( false, wxEmptyString, wxString::Format( "Unknown layer ID %d", aLayer ) );

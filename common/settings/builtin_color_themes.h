@@ -79,6 +79,7 @@ static const std::map<int, COLOR4D> s_defaultTheme =
             { LAYER_GERBVIEW_DRAWINGSHEET,  CSS_COLOR( 0, 0, 132, 1 ) },
 
             { LAYER_ANCHOR,                 CSS_COLOR( 255, 38,  226, 1 ) },
+            { LAYER_LOCKED_ITEM_SHADOW,     CSS_COLOR( 255, 38,  226, 0.5 ) },
             { LAYER_AUX_ITEMS,              CSS_COLOR( 255, 255, 255, 1 ) },
             { LAYER_PCB_BACKGROUND,         CSS_COLOR( 0,   16,  35,  1 ) },
             { LAYER_CURSOR,                 CSS_COLOR( 255, 255, 255, 1 ) },
@@ -227,6 +228,7 @@ static const std::map<int, COLOR4D> s_classicTheme =
             { LAYER_GERBVIEW_DRAWINGSHEET,  COLOR4D( RED ) },
 
             { LAYER_ANCHOR,                 COLOR4D( BLUE ) },
+            { LAYER_LOCKED_ITEM_SHADOW,     COLOR4D( BLUE ) },
             { LAYER_AUX_ITEMS,              COLOR4D( WHITE ) },
             { LAYER_PCB_BACKGROUND,         COLOR4D( BLACK ) },
             { LAYER_CURSOR,                 COLOR4D( WHITE ) },

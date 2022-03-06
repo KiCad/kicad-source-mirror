@@ -1399,6 +1399,8 @@ void FOOTPRINT::ViewGetLayers( int aLayers[], int& aCount ) const
         break;
     }
 
+    aLayers[ aCount++ ] = LAYER_LOCKED_ITEM_SHADOW;
+
     // If there are no pads, and only drawings on a silkscreen layer, then report the silkscreen
     // layer as well so that the component can be edited with the silkscreen layer
     bool f_silk = false, b_silk = false, non_silk = false;
@@ -1426,6 +1428,9 @@ void FOOTPRINT::ViewGetLayers( int aLayers[], int& aCount ) const
 
 double FOOTPRINT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
+        return 0.0;
+
     int layer = ( m_layer == F_Cu ) ? LAYER_MOD_FR :
                 ( m_layer == B_Cu ) ? LAYER_MOD_BK : LAYER_ANCHOR;
 

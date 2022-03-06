@@ -352,6 +352,7 @@ const APPEARANCE_CONTROLS::APPEARANCE_SETTING APPEARANCE_CONTROLS::s_objectSetti
     RR( _HKI( "DRC Errors" ),       LAYER_DRC_ERROR,          _HKI( "DRC violations with an Error severity" ) ),
     RR( _HKI( "DRC Exclusions" ),   LAYER_DRC_EXCLUSION,      _HKI( "DRC violations which have been individually excluded" ) ),
     RR( _HKI( "Anchors" ),          LAYER_ANCHOR,             _HKI( "Show footprint and text origins as a cross" ) ),
+    RR( _HKI( "Locked Marker" ),    LAYER_LOCKED_ITEM_SHADOW, _HKI( "Show marker shadow on locked footprints" ) ),
     RR( _HKI( "Drawing Sheet" ),    LAYER_DRAWINGSHEET,       _HKI( "Show drawing sheet borders and title block" ) ),
     RR( _HKI( "Grid" ),             LAYER_GRID,               _HKI( "Show the (x,y) grid dots" ) )
 };

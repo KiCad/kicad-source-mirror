@@ -976,6 +976,7 @@ GAL_SET GAL_SET::DefaultVisible()
         LAYER_DRAW_BITMAPS,
         LAYER_PADS,
         LAYER_ZONES,
+        LAYER_LOCKED_ITEM_SHADOW
     };
 
     static const GAL_SET saved( visible, arrayDim( visible ) );
