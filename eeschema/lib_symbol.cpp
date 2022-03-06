@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -883,7 +883,8 @@ void LIB_SYMBOL::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-const EDA_RECT LIB_SYMBOL::GetBodyBoundingBox( int aUnit, int aConvert, bool aIncludePins ) const
+const EDA_RECT LIB_SYMBOL::GetBodyBoundingBox( int aUnit, int aConvert, bool aIncludePins,
+                                               bool aIncludePrivateItems ) const
 {
     EDA_RECT bbox;
 
@@ -893,6 +894,9 @@ const EDA_RECT LIB_SYMBOL::GetBodyBoundingBox( int aUnit, int aConvert, bool aIn
             continue;
 
         if( item.m_convert > 0 && aConvert > 0 && aConvert != item.m_convert )
+            continue;
+
+        if( item.IsPrivate() && !aIncludePrivateItems )
             continue;
 
         if( item.Type() == LIB_FIELD_T )
