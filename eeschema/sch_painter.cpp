@@ -940,15 +940,39 @@ void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer )
         TEXT_ATTRIBUTES attrs = aText->GetAttributes();
         attrs.m_StrokeWidth = getTextThickness( aText, drawingShadows );
 
-        // Because the text position is the bounding box center, the text
-        // is drawn as centered.
-        attrs.m_Halign = GR_TEXT_H_ALIGN_CENTER;
+        if( attrs.m_Angle == ANGLE_VERTICAL )
+        {
+            switch( attrs.m_Halign )
+            {
+            case GR_TEXT_H_ALIGN_LEFT:   pos.y = bBox.GetBottom();                         break;
+            case GR_TEXT_H_ALIGN_CENTER: pos.y = ( bBox.GetTop() + bBox.GetBottom() ) / 2; break;
+            case GR_TEXT_H_ALIGN_RIGHT:  pos.y = bBox.GetTop();                            break;
+            }
+        }
+        else
+        {
+            switch( attrs.m_Halign )
+            {
+            case GR_TEXT_H_ALIGN_LEFT:   pos.x = bBox.GetLeft();                           break;
+            case GR_TEXT_H_ALIGN_CENTER: pos.x = ( bBox.GetLeft() + bBox.GetRight() ) / 2; break;
+            case GR_TEXT_H_ALIGN_RIGHT:  pos.x = bBox.GetRight();                          break;
+            }
+        }
+
+        // Because the text vertical position is the bounding box center, the text is drawn as
+        // vertically centered.
         attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
 
-        if( nonCached( aText ) && underLODThreshold( aText->GetTextHeight() ) )
-            bitmapText( aText->GetText(), pos, attrs );
+        if( nonCached( aText )
+                && underLODThreshold( aText->GetTextHeight() )
+                && !shownText.Contains( wxT( "\n" ) ) )
+        {
+            bitmapText( shownText, pos, attrs );
+        }
         else
-            strokeText( aText->GetText(), pos, attrs );
+        {
+            strokeText( shownText, pos, attrs );
+        }
     }
 }
 
