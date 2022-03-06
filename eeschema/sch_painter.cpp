@@ -1053,8 +1053,10 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer )
     {
         drawText();
 
-        if( aTextBox->GetEffectivePenWidth( &m_schSettings ) > 0 )
+        if( borderWidth > 0 )
         {
+            m_gal->SetLineWidth( borderWidth );
+
             if( !m_schSettings.m_OverrideItemColors && !aTextBox->IsBrightened()
                     && aTextBox->GetStroke().GetColor() != COLOR4D::UNSPECIFIED )
             {
