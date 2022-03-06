@@ -1856,7 +1856,9 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
         attrs.m_Angle = aText->GetDrawRotation();
         attrs.m_StrokeWidth = getTextThickness( aText, drawingShadows );
 
-        if( nonCached( aText ) && underLODThreshold( aText->GetTextHeight() ) )
+        if( nonCached( aText )
+                && underLODThreshold( aText->GetTextHeight() )
+                && !shownText.Contains( wxT( "\n" ) ) )
         {
             bitmapText( shownText, aText->GetDrawPos() + text_offset, attrs );
         }
