@@ -75,6 +75,7 @@ EDA_ITEM* LIB_TEXT::Clone() const
 
     newitem->m_unit      = m_unit;
     newitem->m_convert   = m_convert;
+    newitem->m_private   = m_private;
     newitem->m_flags     = m_flags;
 
     newitem->SetText( GetText() );
