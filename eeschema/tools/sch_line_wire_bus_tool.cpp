@@ -1031,10 +1031,11 @@ int SCH_LINE_WIRE_BUS_TOOL::TrimOverLappingWires( const TOOL_EVENT& aEvent )
     for( unsigned ii = 0; ii < aSelection->GetSize(); ii++ )
     {
         SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aSelection->GetItem( ii ) );
-        std::vector<VECTOR2I> pts = item->GetConnectionPoints();
 
         if( !item || !item->IsConnectable() || ( item->Type() == SCH_LINE_T ) )
             continue;
+
+        std::vector<VECTOR2I> pts = item->GetConnectionPoints();
 
         /// If the line intersects with an item in the selection at only two points,
         /// then we can remove the line between the two points.

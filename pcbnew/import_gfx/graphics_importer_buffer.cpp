@@ -207,7 +207,7 @@ void GRAPHICS_IMPORTER_BUFFER::PostprocessNestedPolygons()
         }
     }
 
-    POLY_FILL_RULE last_rule = curShapeIdx>= 0 && m_shapeFillRules.size()
+    POLY_FILL_RULE last_rule = ( m_shapeFillRules.size() && curShapeIdx >= 0 )
                                 ? m_shapeFillRules[curShapeIdx]
                                 : POLY_FILL_RULE::PF_EVEN_ODD;
 

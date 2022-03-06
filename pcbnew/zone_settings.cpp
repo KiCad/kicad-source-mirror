@@ -86,6 +86,8 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     SetDoNotAllowTracks( true );
     SetDoNotAllowPads( true );
     SetDoNotAllowFootprints( false );
+
+    m_TeardropType = TEARDROP_TYPE::TD_NONE;
 }
 
 

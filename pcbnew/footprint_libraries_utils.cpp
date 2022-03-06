@@ -911,10 +911,9 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         return false;
     }
 
-    TOOL_MANAGER* pcb_ToolManager = pcbframe ? pcbframe->GetToolManager() : nullptr;
+    TOOL_MANAGER* pcb_ToolManager = pcbframe->GetToolManager();
 
-    if( aAddNew && pcb_ToolManager
-            && pcb_ToolManager->GetTool<BOARD_EDITOR_CONTROL>()->PlacingFootprint() )
+    if( aAddNew && pcb_ToolManager->GetTool<BOARD_EDITOR_CONTROL>()->PlacingFootprint() )
     {
         DisplayError( this, _( "Previous footprint placement still in progress." ) );
         return false;

@@ -39,6 +39,7 @@ GRAPHICS_CLEANER::GRAPHICS_CLEANER( DRAWINGS& aDrawings, FOOTPRINT* aParentFootp
         m_parentFootprint( aParentFootprint ),
         m_commit( aCommit ),
         m_dryRun( true ),
+        m_epsilon( 0 ),
         m_itemsList( nullptr )
 {
 }
