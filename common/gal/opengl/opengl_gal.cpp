@@ -1296,8 +1296,13 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2I& aPosition,
                              const EDA_ANGLE& aAngle )
 {
     // Fallback to generic impl (which uses the stroke font) on cases we don't handle
-    if( IsTextMirrored() || aText.Contains( wxT( "^{" ) ) || aText.Contains( wxT( "_{" ) ) )
+    if( IsTextMirrored()
+            || aText.Contains( wxT( "^{" ) )
+            || aText.Contains( wxT( "_{" ) )
+            || aText.Contains( wxT( "\n" ) ) )
+    {
         return GAL::BitmapText( aText, aPosition, aAngle );
+    }
 
     const UTF8   text( aText );
     VECTOR2D     textSize;
