@@ -198,7 +198,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
         m_shape->SetStart( VECTOR2I( m_startX.GetValue(), m_startY.GetValue() ) );
         m_shape->SetEnd( VECTOR2I( m_endX.GetValue(), m_endY.GetValue() ) );
         m_shape->SetBezierC1( VECTOR2I( m_ctrl1X.GetValue(), m_ctrl1Y.GetValue()));
-        m_shape->SetBezierC1( VECTOR2I( m_ctrl2X.GetValue(), m_ctrl2Y.GetValue()));
+        m_shape->SetBezierC2( VECTOR2I( m_ctrl2X.GetValue(), m_ctrl2Y.GetValue()));
         break;
 
     case SHAPE_T::ARC:
