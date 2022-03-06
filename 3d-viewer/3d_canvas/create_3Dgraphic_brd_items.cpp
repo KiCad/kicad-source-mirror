@@ -493,15 +493,10 @@ void BOARD_ADAPTER::addPadsWithClearance( const FOOTPRINT* aFootprint,
 {
     for( PAD* pad : aFootprint->Pads() )
     {
-        if( !pad->IsOnLayer( aLayerId ) )
+        if( !pad->FlashLayer( aLayerId ) )
             continue;
 
-        // Skip pad annulus when not connected on this layer (if removing is enabled)
-        if( !pad->FlashLayer( aLayerId ) && IsCopperLayer( aLayerId ) )
-            continue;
-
-        // NPTH pads are not drawn on layers if the
-        // shape size and pos is the same as their hole:
+        // NPTH pads are not drawn on layers if the shape size and pos is the same as their hole:
         if( aSkipNPTHPadsWihNoCopper && ( pad->GetAttribute() == PAD_ATTRIB::NPTH ) )
         {
             if( pad->GetDrillSize() == pad->GetSize() && pad->GetOffset() == wxPoint( 0, 0 ) )
@@ -526,19 +521,28 @@ void BOARD_ADAPTER::addPadsWithClearance( const FOOTPRINT* aFootprint,
             }
         }
 
-        const bool isPlated = ( ( aLayerId == F_Cu ) && pad->FlashLayer( F_Mask ) ) ||
-                              ( ( aLayerId == B_Cu ) && pad->FlashLayer( B_Mask ) );
-
-        if( aSkipPlatedPads && isPlated )
-            continue;
-
-        if( aSkipNonPlatedPads && !isPlated )
-            continue;
-
         wxSize margin( aInflateValue, aInflateValue );
 
         switch( aLayerId )
         {
+        case F_Cu:
+            if( aSkipPlatedPads && pad->FlashLayer( F_Mask ) )
+                continue;
+
+            if( aSkipNonPlatedPads && !pad->FlashLayer( F_Mask ) )
+                continue;
+
+            break;
+
+        case B_Cu:
+            if( aSkipPlatedPads && pad->FlashLayer( B_Mask ) )
+                continue;
+
+            if( aSkipNonPlatedPads && !pad->FlashLayer( B_Mask ) )
+                continue;
+
+            break;
+
         case F_Mask:
         case B_Mask:
             margin.x += pad->GetSolderMaskMargin();

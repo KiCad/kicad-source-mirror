@@ -216,31 +216,11 @@ bool PAD::FlashLayer( int aLayer ) const
     std::vector<KICAD_T> types
     { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, PCB_ZONE_T, PCB_FP_ZONE_T };
 
-    const BOARD* board = GetBoard();
+    if( aLayer != UNDEFINED_LAYER && !IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) ) )
+        return false;
 
-    switch( GetAttribute() )
+    if( GetAttribute() == PAD_ATTRIB::NPTH && IsCopperLayer( aLayer ) )
     {
-    case PAD_ATTRIB::PTH:
-        if( aLayer == UNDEFINED_LAYER )
-            return true;
-
-        /// Heat sink pads always get copper
-        if( GetProperty() == PAD_PROP::HEATSINK )
-            return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
-
-        if( !m_removeUnconnectedLayer )
-            return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
-
-        // Plated through hole pads need copper on the top/bottom layers for proper soldering
-        // Unless the user has removed them in the pad dialog
-        if( m_keepTopBottomLayer && ( aLayer == F_Cu || aLayer == B_Cu ) )
-            return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
-
-        return board && board->GetConnectivity()->IsConnectedOnLayer( this,
-                                                                      static_cast<int>( aLayer ),
-                                                                      types, true );
-
-    case PAD_ATTRIB::NPTH:
         if( GetShape() == PAD_SHAPE::CIRCLE && GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
         {
             if( GetOffset() == wxPoint( 0, 0 ) && GetDrillSize().x >= GetSize().x )
@@ -254,17 +234,32 @@ bool PAD::FlashLayer( int aLayer ) const
                 return false;
             }
         }
+    }
 
-        KI_FALLTHROUGH;
+    if( LSET::FrontBoardTechMask().test( aLayer ) )
+        aLayer = F_Cu;
+    else if( LSET::BackBoardTechMask().test( aLayer ) )
+        aLayer = B_Cu;
 
-    case PAD_ATTRIB::SMD:
-    case PAD_ATTRIB::CONN:
-    default:
-        if( aLayer == UNDEFINED_LAYER )
+    if( GetAttribute() == PAD_ATTRIB::PTH && IsCopperLayer( aLayer ) )
+    {
+        /// Heat sink pads always get copper
+        if( GetProperty() == PAD_PROP::HEATSINK )
             return true;
 
-        return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
+        if( !m_removeUnconnectedLayer )
+            return true;
+
+        // Plated through hole pads need copper on the top/bottom layers for proper soldering
+        // Unless the user has removed them in the pad dialog
+        if( m_keepTopBottomLayer && ( aLayer == F_Cu || aLayer == B_Cu ) )
+            return true;
+
+        if( const BOARD* board = GetBoard() )
+            return board->GetConnectivity()->IsConnectedOnLayer( this, aLayer, types, true );
     }
+
+    return true;
 }
 
 

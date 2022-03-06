@@ -504,7 +504,7 @@ void RENDER_3D_OPENGL::setCopperMaterial()
 void RENDER_3D_OPENGL::setPlatedCopperAndDepthOffset( PCB_LAYER_ID aLayer_id )
 {
     glEnable( GL_POLYGON_OFFSET_FILL );
-    glPolygonOffset(-0.1f, -2.0f );
+    glPolygonOffset( -0.1f, -2.0f );
     setLayerMaterial( aLayer_id );
 }
 
@@ -704,18 +704,16 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
             {
                 pLayerDispList->DrawAllCameraCulled( m_camera.GetPos().z, drawMiddleSegments );
 
-                // Draw copper plated pads
-                if( ( ( layer_id == F_Cu ) || ( layer_id == B_Cu ) ) &&
-                    ( m_platedPadsFront || m_platedPadsBack ) )
-                    setPlatedCopperAndDepthOffset( layer_id );
-
+                // Draw plated pads
                 if( layer_id == F_Cu && m_platedPadsFront )
                 {
+                    setPlatedCopperAndDepthOffset( layer_id );
                     m_platedPadsFront->DrawAllCameraCulled( m_camera.GetPos().z,
                                                             drawMiddleSegments );
                 }
                 else if( layer_id == B_Cu && m_platedPadsBack )
                 {
+                    setPlatedCopperAndDepthOffset( layer_id );
                     m_platedPadsBack->DrawAllCameraCulled( m_camera.GetPos().z,
                                                            drawMiddleSegments );
                 }
@@ -751,16 +749,10 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                                                                           viasHolesLayer,
                                                                           m_antiBoard );
 
-                        // Draw copper plated pads
-
-                        if( ( ( layer_id == F_Cu ) || ( layer_id == B_Cu ) ) &&
-                            ( m_platedPadsFront || m_platedPadsBack ) )
-                        {
-                            setPlatedCopperAndDepthOffset( layer_id );
-                        }
-
+                        // Draw plated pads
                         if( layer_id == F_Cu && m_platedPadsFront )
                         {
+                            setPlatedCopperAndDepthOffset( layer_id );
                             m_platedPadsFront->DrawAllCameraCulledSubtractLayer(
                                     drawMiddleSegments,
                                     m_outerThroughHoles,
@@ -769,6 +761,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                         }
                         else if( layer_id == B_Cu && m_platedPadsBack )
                         {
+                            setPlatedCopperAndDepthOffset( layer_id );
                             m_platedPadsBack->DrawAllCameraCulledSubtractLayer(
                                     drawMiddleSegments,
                                     m_outerThroughHoles,
@@ -785,21 +778,16 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                                                                       m_outerThroughHoles,
                                                                       m_antiBoard );
 
-                    // Draw copper plated pads
-                    if( ( ( layer_id == F_Cu ) || ( layer_id == B_Cu ) ) &&
-                        ( m_platedPadsFront || m_platedPadsBack ) )
-                    {
-                        setPlatedCopperAndDepthOffset( layer_id );
-                    }
-
                     if( layer_id == F_Cu && m_platedPadsFront )
                     {
+                        setPlatedCopperAndDepthOffset( layer_id );
                         m_platedPadsFront->DrawAllCameraCulledSubtractLayer( drawMiddleSegments,
                                                                              m_outerThroughHoles,
                                                                              m_antiBoard );
                     }
                     else if( layer_id == B_Cu && m_platedPadsBack )
                     {
+                        setPlatedCopperAndDepthOffset( layer_id );
                         m_platedPadsBack->DrawAllCameraCulledSubtractLayer( drawMiddleSegments,
                                                                             m_outerThroughHoles,
                                                                             m_antiBoard );

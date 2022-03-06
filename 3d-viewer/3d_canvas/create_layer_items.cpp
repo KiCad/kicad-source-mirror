@@ -549,7 +549,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         for( FOOTPRINT* footprint : m_board->Footprints() )
         {
             addPadsWithClearance( footprint, m_platedPadsFront, F_Cu, 0, true, false, true );
-
             addPadsWithClearance( footprint, m_platedPadsBack, B_Cu, 0, true, false, true );
         }
 
@@ -569,8 +568,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             // Add pads to polygon list
             for( FOOTPRINT* footprint : m_board->Footprints() )
             {
-                // Note: NPTH pads are not drawn on copper layers when the pad
-                // has same shape as its hole
+                // Note: NPTH pads are not drawn on copper layers when the pad has same shape as
+                // its hole
                 footprint->TransformPadsWithClearanceToPolygon( *layerPoly, curr_layer_id,
                                                                 0, ARC_HIGH_DEF, ERROR_INSIDE,
                                                                 true, renderPlatedPadsAsPlated,

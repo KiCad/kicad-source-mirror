@@ -374,6 +374,22 @@ OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateLayerList( const BVH_CONTAINER_2D*
 }
 
 
+OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateEmptyLayerList( PCB_LAYER_ID aLayerId )
+{
+    float layer_z_bot = 0.0f;
+    float layer_z_top = 0.0f;
+
+    getLayerZPos( aLayerId, layer_z_top, layer_z_bot );
+
+    TRIANGLE_DISPLAY_LIST* layerTriangles = new TRIANGLE_DISPLAY_LIST( 1 );
+
+    // store in a list so it will be latter deleted
+    m_triangles.push_back( layerTriangles );
+
+    return new OPENGL_RENDER_LIST( *layerTriangles, m_circleTexture, layer_z_bot, layer_z_top );
+}
+
+
 OPENGL_RENDER_LIST* RENDER_3D_OPENGL::createBoard( const SHAPE_POLY_SET& aBoardPoly,
                                                    const BVH_CONTAINER_2D* aThroughHoles )
 {
@@ -388,9 +404,8 @@ OPENGL_RENDER_LIST* RENDER_3D_OPENGL::createBoard( const SHAPE_POLY_SET& aBoardP
 
     if( listBoardObject2d.size() > 0 )
     {
-        // We will set a unitary Z so it will in future used with transformations
-        // since the board poly will be used not only to draw itself but also the
-        // solder mask layers.
+        // We will set a unitary Z so it will in future used with transformations since the
+        // board poly will be used not only to draw itself but also the solder mask layers.
         const float layer_z_top = 1.0f;
         const float layer_z_bot = 0.0f;
 
@@ -563,7 +578,7 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
         const BVH_CONTAINER_2D* container2d = ii.second;
 
         SHAPE_POLY_SET polyListSubtracted;
-        SHAPE_POLY_SET* aPolyList = nullptr;
+        SHAPE_POLY_SET* polyList = nullptr;
 
         // Load the vertical (Z axis) component of shapes
 
@@ -580,9 +595,8 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
                 {
                     polyListSubtracted.BooleanSubtract( m_boardAdapter.GetThroughHoleOdPolys(),
                                                         SHAPE_POLY_SET::PM_FAST );
-                    polyListSubtracted.BooleanSubtract(
-                            m_boardAdapter.GetOuterNonPlatedThroughHolePoly(),
-                            SHAPE_POLY_SET::PM_FAST );
+                    polyListSubtracted.BooleanSubtract( m_boardAdapter.GetOuterNonPlatedThroughHolePoly(),
+                                                        SHAPE_POLY_SET::PM_FAST );
                 }
 
                 if( m_boardAdapter.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) )
@@ -600,10 +614,10 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
                 }
             }
 
-            aPolyList = &polyListSubtracted;
+            polyList = &polyListSubtracted;
         }
 
-        OPENGL_RENDER_LIST* oglList = generateLayerList( container2d, aPolyList, layer_id,
+        OPENGL_RENDER_LIST* oglList = generateLayerList( container2d, polyList, layer_id,
                                                          &m_boardAdapter.GetThroughHoleIds() );
 
         if( oglList != nullptr )
@@ -626,6 +640,10 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
             m_platedPadsFront = generateLayerList( m_boardAdapter.GetPlatedPadsFront(),
                                                    &polySubtracted, F_Cu );
+
+            // An entry for F_Cu must exist in m_layers or we'll never look at m_platedPadsFront
+            if( m_layers.count( F_Cu ) == 0 )
+                m_layers[F_Cu] = generateEmptyLayerList( F_Cu );
         }
 
         if( m_boardAdapter.GetBackPlatedPadPolys() )
@@ -640,6 +658,10 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
             m_platedPadsBack = generateLayerList( m_boardAdapter.GetPlatedPadsBack(),
                                                   &polySubtracted, B_Cu );
+
+            // An entry for B_Cu must exist in m_layers or we'll never look at m_platedPadsBack
+            if( m_layers.count( B_Cu ) == 0 )
+                m_layers[B_Cu] = generateEmptyLayerList( B_Cu );
         }
     }
 
