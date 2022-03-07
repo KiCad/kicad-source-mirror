@@ -453,10 +453,16 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnSymbolNameText( wxCommandEvent& event )
 
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnSymbolNameKillFocus( wxFocusEvent& event )
 {
-    if( !m_delayedFocusCtrl && !m_SymbolNameCtrl->GetValidator()->Validate( m_SymbolNameCtrl ) )
+    if( !m_delayedFocusCtrl )
     {
+        // If the validation fails and we throw up a dialog then GTK will give us another
+        // KillFocus event and we end up in infinite recursion.  So we use m_delayedFocusCtrl
+        // as a re-entrancy block and then clear it again if validation passes.
         m_delayedFocusCtrl = m_SymbolNameCtrl;
         m_delayedFocusPage = 0;
+
+        if( m_SymbolNameCtrl->GetValidator()->Validate( m_SymbolNameCtrl ) )
+            m_delayedFocusCtrl = nullptr;
     }
 
     event.Skip();
