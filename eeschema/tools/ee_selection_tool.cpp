@@ -311,6 +311,7 @@ const KICAD_T movableSymbolItems[] =
 {
     LIB_SHAPE_T,
     LIB_TEXT_T,
+    LIB_TEXTBOX_T,
     LIB_PIN_T,
     LIB_FIELD_T,
     EOT
