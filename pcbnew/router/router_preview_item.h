@@ -55,14 +55,11 @@ public:
         PR_SHAPE
     };
 
+    ROUTER_PREVIEW_ITEM( const SHAPE& aShape, KIGFX::VIEW* aView = nullptr);
     ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem = nullptr, KIGFX::VIEW* aView = nullptr);
     ~ROUTER_PREVIEW_ITEM();
 
     void Update( const PNS::ITEM* aItem );
-
-    void Line( const SHAPE_LINE_CHAIN& aLine, int aWidth = 0, int aStyle = -1 );
-    void Box( const BOX2I& aBox, int aStyle = 0 );
-    void Point ( const VECTOR2I& aPos, int aStyle = 0);
 
     void SetColor( const KIGFX::COLOR4D& aColor )
     {

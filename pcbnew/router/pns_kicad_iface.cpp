@@ -1391,8 +1391,7 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool 
 
 void PNS_KICAD_IFACE::DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aColor )
 {
-    ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( nullptr, m_view );
-    pitem->Line( aRatline, 10000, aColor );
+    ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aRatline, m_view );
     m_previewItems->Add( pitem );
     m_view->Update( m_previewItems );
 }

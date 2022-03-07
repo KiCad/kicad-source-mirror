@@ -62,6 +62,28 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, KIGFX::VIEW* a
 }
 
 
+ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const SHAPE& aShape, KIGFX::VIEW* aView ) :
+    EDA_ITEM( NOT_USED )
+{
+    m_view = aView;
+
+    m_shape = aShape.Clone();
+    m_hole = nullptr;
+
+    m_clearance = -1;
+    m_originLayer = m_layer = LAYER_SELECT_OVERLAY ;
+
+    m_showClearance = false;
+
+    // initialize variables, overwritten by Update( aItem ), if aItem != NULL
+    m_router = nullptr;
+    m_type = PR_SHAPE;
+    m_style = 0;
+    m_width = 0;
+    m_depth = 0;
+}
+
+
 ROUTER_PREVIEW_ITEM::~ROUTER_PREVIEW_ITEM()
 {
     delete m_shape;
@@ -439,32 +461,6 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
             drawShape( m_shape, gal );
         }
     }
-}
-
-
-void ROUTER_PREVIEW_ITEM::Line( const SHAPE_LINE_CHAIN& aLine, int aWidth, int aStyle )
-{
-    m_width = aWidth;
-
-    if( aStyle >= 0 )
-        m_color = assignColor( aStyle );
-
-    m_type = PR_SHAPE;
-    m_depth = -1024;        // TODO gal->GetMinDepth()
-
-    SHAPE_LINE_CHAIN *lc = static_cast<SHAPE_LINE_CHAIN*>( aLine.Clone() );
-    lc->SetWidth( aWidth );
-    m_shape = lc;
-}
-
-
-void ROUTER_PREVIEW_ITEM::Point( const VECTOR2I& aPos, int aStyle )
-{
-}
-
-
-void ROUTER_PREVIEW_ITEM::Box( const BOX2I& aBox, int aStyle )
-{
 }
 
 
