@@ -92,7 +92,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	bSizerTop->Add( sbFilters, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 
-	bMainSizer->Add( bSizerTop, 1, wxEXPAND, 5 );
+	bMainSizer->Add( bSizerTop, 0, wxEXPAND, 5 );
 
 
 	bMainSizer->Add( 0, 0, 0, wxTOP, 5 );
