@@ -38,8 +38,6 @@
 #include <callback_gal.h>
 #include <convert_basic_shapes_to_polygon.h>
 
-using KIGFX::PCB_RENDER_SETTINGS;
-
 
 PCB_TEXT::PCB_TEXT( BOARD_ITEM* parent ) :
     BOARD_ITEM( parent, PCB_TEXT_T ),
@@ -99,6 +97,31 @@ wxString PCB_TEXT::GetShownText( int aDepth ) const
         text = ExpandTextVars( text, &pcbTextResolver, &boardTextResolver, board->GetProject() );
 
     return text;
+}
+
+
+double PCB_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+{
+    constexpr double HIDE = std::numeric_limits<double>::max();
+
+    KIGFX::PCB_PAINTER*  painter = static_cast<KIGFX::PCB_PAINTER*>( aView->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
+
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
+    {
+        // Hide shadow if the main layer is not shown
+        if( !aView->IsLayerVisible( m_layer ) )
+            return HIDE;
+
+        // Hide shadow on dimmed tracks
+        if( renderSettings->GetHighContrast() )
+        {
+            if( m_layer != renderSettings->GetPrimaryHighContrastLayer() )
+                return HIDE;
+        }
+    }
+
+    return 0.0;
 }
 
 

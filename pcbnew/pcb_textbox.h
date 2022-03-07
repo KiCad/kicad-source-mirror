@@ -118,6 +118,9 @@ public:
 
     BITMAPS GetMenuImage() const override;
 
+    ///< @copydoc VIEW_ITEM::ViewGetLOD
+    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+
     // Virtual function
     EDA_ITEM* Clone() const override;
 

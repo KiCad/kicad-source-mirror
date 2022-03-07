@@ -31,6 +31,7 @@
 #include <base_units.h>
 #include <geometry/shape_compound.h>
 #include <pcb_shape.h>
+#include <pcb_painter.h>
 #include "macros.h"
 
 PCB_SHAPE::PCB_SHAPE( BOARD_ITEM* aParent, KICAD_T aItemType, SHAPE_T aShapeType ) :
@@ -169,6 +170,32 @@ VECTOR2I PCB_SHAPE::getParentPosition() const
         return GetParentFootprint()->GetPosition();
     else
         return VECTOR2I( 0, 0 );
+}
+
+
+double PCB_SHAPE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+{
+    constexpr double HIDE = std::numeric_limits<double>::max();
+    constexpr double SHOW = 0.0;
+
+    KIGFX::PCB_PAINTER*  painter = static_cast<KIGFX::PCB_PAINTER*>( aView->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
+
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
+    {
+        // Hide shadow if the main layer is not shown
+        if( !aView->IsLayerVisible( m_layer ) )
+            return HIDE;
+
+        // Hide shadow on dimmed tracks
+        if( renderSettings->GetHighContrast() )
+        {
+            if( m_layer != renderSettings->GetPrimaryHighContrastLayer() )
+                return HIDE;
+        }
+    }
+
+    return SHOW;
 }
 
 

@@ -1399,7 +1399,8 @@ void FOOTPRINT::ViewGetLayers( int aLayers[], int& aCount ) const
         break;
     }
 
-    aLayers[ aCount++ ] = LAYER_LOCKED_ITEM_SHADOW;
+    if( IsLocked() )
+        aLayers[ aCount++ ] = LAYER_LOCKED_ITEM_SHADOW;
 
     // If there are no pads, and only drawings on a silkscreen layer, then report the silkscreen
     // layer as well so that the component can be edited with the silkscreen layer

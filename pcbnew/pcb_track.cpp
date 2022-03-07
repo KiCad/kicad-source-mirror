@@ -558,6 +558,9 @@ void PCB_TRACK::ViewGetLayers( int aLayers[], int& aCount ) const
     aLayers[0] = GetLayer();
     aLayers[1] = GetNetnameLayer( aLayers[0] );
     aCount = 2;
+
+    if( IsLocked() )
+        aLayers[ aCount++ ] = LAYER_LOCKED_ITEM_SHADOW;
 }
 
 
@@ -601,6 +604,20 @@ double PCB_TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         return ( double ) Millimeter2iu( 4 ) / ( m_Width + 1 );
     }
 
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
+    {
+        // Hide shadow if the main layer is not shown
+        if( !aView->IsLayerVisible( m_layer ) )
+            return HIDE;
+
+        // Hide shadow on dimmed tracks
+        if( renderSettings->GetHighContrast() )
+        {
+            if( m_layer != renderSettings->GetPrimaryHighContrastLayer() )
+                return HIDE;
+        }
+    }
+
     // Other layers are shown without any conditions
     return 0.0;
 }
@@ -636,6 +653,9 @@ void PCB_VIA::ViewGetLayers( int aLayers[], int& aCount ) const
     }
 
     aCount = 4;
+
+    if( IsLocked() )
+        aLayers[ aCount++ ] = LAYER_LOCKED_ITEM_SHADOW;
 }
 
 

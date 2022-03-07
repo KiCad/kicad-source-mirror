@@ -154,6 +154,9 @@ public:
 
     virtual const BOX2I ViewBBox() const override;
 
+    ///< @copydoc VIEW_ITEM::ViewGetLOD
+    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+
     virtual void SwapData( BOARD_ITEM* aImage ) override;
 
     struct cmp_drawings

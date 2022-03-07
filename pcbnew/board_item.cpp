@@ -135,6 +135,9 @@ void BOARD_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
     // Basic fallback
     aCount = 1;
     aLayers[0] = m_layer;
+
+    if( IsLocked() )
+        aLayers[aCount++] = LAYER_LOCKED_ITEM_SHADOW;
 }
 
 

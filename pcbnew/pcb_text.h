@@ -139,6 +139,9 @@ public:
 
     BITMAPS GetMenuImage() const override;
 
+    ///< @copydoc VIEW_ITEM::ViewGetLOD
+    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+
     // Virtual function
     const EDA_RECT GetBoundingBox() const override;
 

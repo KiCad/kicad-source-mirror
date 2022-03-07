@@ -636,22 +636,27 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
 
         return;
     }
-    else if( IsCopperLayer( aLayer ) )
+    else if( IsCopperLayer( aLayer ) || aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {
         // Draw a regular track
-        bool outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayPcbTrackFill;
+        bool outline_mode = pcbconfig()
+                            && !pcbconfig()->m_Display.m_DisplayPcbTrackFill
+                            && aLayer != LAYER_LOCKED_ITEM_SHADOW;
         m_gal->SetStrokeColor( color );
         m_gal->SetFillColor( color );
         m_gal->SetIsStroke( outline_mode );
         m_gal->SetIsFill( not outline_mode );
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
 
+        if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
+            width = width * 1.5;
+
         m_gal->DrawSegment( start, end, width );
     }
 
     // Clearance lines
     if( pcbconfig() && pcbconfig()->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS
-            && !m_pcbSettings.m_isPrinting )
+            && !m_pcbSettings.m_isPrinting && aLayer != LAYER_LOCKED_ITEM_SHADOW )
     {
         int clearance = aTrack->GetOwnClearance( m_pcbSettings.GetActiveLayer() );
 
@@ -678,15 +683,20 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
         // Ummm, yeah.  Anyone fancy implementing text on a path?
         return;
     }
-    else if( IsCopperLayer( aLayer ) )
+    else if( IsCopperLayer( aLayer ) || aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {
         // Draw a regular track
-        bool outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayPcbTrackFill;
+        bool outline_mode = pcbconfig()
+                            && !pcbconfig()->m_Display.m_DisplayPcbTrackFill
+                            && aLayer != LAYER_LOCKED_ITEM_SHADOW;
         m_gal->SetStrokeColor( color );
         m_gal->SetFillColor( color );
         m_gal->SetIsStroke( outline_mode );
         m_gal->SetIsFill( not outline_mode );
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+
+        if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
+            width = width * 1.5;
 
         m_gal->DrawArcSegment( center, radius, start_angle, start_angle + angle, width,
                                m_maxError );
@@ -694,7 +704,7 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
 
     // Clearance lines
     if( pcbconfig() && pcbconfig()->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS
-            && !m_pcbSettings.m_isPrinting )
+            && !m_pcbSettings.m_isPrinting && aLayer != LAYER_LOCKED_ITEM_SHADOW )
     {
         int clearance = aArc->GetOwnClearance( m_pcbSettings.GetActiveLayer() );
 
@@ -809,7 +819,9 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         return;
     }
 
-    bool outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayViaFill;
+    bool outline_mode = pcbconfig()
+                        && !pcbconfig()->m_Display.m_DisplayViaFill
+                        && aLayer != LAYER_LOCKED_ITEM_SHADOW;
 
     if( outline_mode )
     {
@@ -861,6 +873,19 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
             m_gal->SetFillColor( m_pcbSettings.GetColor( aVia, layerBottom ) );
 
         m_gal->DrawArc( center, radius, EDA_ANGLE( 60, DEGREES_T ), EDA_ANGLE( 120, DEGREES_T ) );
+    }
+
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW )    // draw a ring around the via
+    {
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
+        m_gal->SetStrokeColor( color );
+
+        int ring_width = aVia->GetWidth() * 0.2;
+        m_gal->SetLineWidth( ring_width );
+
+        m_gal->DrawCircle( center, ( aVia->GetWidth() + ring_width ) / 2.0 );
+        return;
     }
 
     // Clearance lines
@@ -1341,10 +1366,16 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
 void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 {
-    const COLOR4D& color = m_pcbSettings.GetColor( aShape, aShape->GetLayer() );
+    COLOR4D        color = m_pcbSettings.GetColor( aShape, aShape->GetLayer() );
     bool           outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayGraphicsFill;
     int            thickness = getLineThickness( aShape->GetWidth() );
     PLOT_DASH_TYPE lineStyle = aShape->GetStroke().GetPlotStyle();
+
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
+    {
+        color = m_pcbSettings.GetColor( aShape, aLayer );
+        thickness = std::max( thickness * 3, Millimeter2iu( 0.2 ) );
+    }
 
     if( outline_mode )
     {
@@ -1592,9 +1623,25 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
     if( resolvedText.Length() == 0 )
         return;
 
-    const COLOR4D&  color = m_pcbSettings.GetColor( aText, aText->GetLayer() );
-    bool            outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayTextFill;
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW )    // happens only if locked
+    {
+        const COLOR4D color = m_pcbSettings.GetColor( aText, aLayer );
+
+        m_gal->SetIsFill( true );
+        m_gal->SetIsStroke( false );
+        m_gal->SetFillColor( color );
+
+        SHAPE_POLY_SET poly;
+        aText->TransformShapeWithClearanceToPolygon( poly, aText->GetLayer(), 0, m_maxError,
+                                                     ERROR_OUTSIDE );
+        m_gal->DrawPolygon( poly );
+
+        return;
+    }
+
     TEXT_ATTRIBUTES attrs = aText->GetAttributes();
+    const COLOR4D& color = m_pcbSettings.GetColor( aText, aText->GetLayer() );
+    bool           outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayTextFill;
 
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
@@ -1660,6 +1707,24 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
     PLOT_DASH_TYPE lineStyle = aTextBox->GetStroke().GetPlotStyle();
     wxString       resolvedText( aTextBox->GetShownText() );
 
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW )    // happens only if locked
+    {
+        const COLOR4D sh_color = m_pcbSettings.GetColor( aTextBox, aLayer );
+
+        m_gal->SetIsFill( true );
+        m_gal->SetIsStroke( false );
+        m_gal->SetFillColor( sh_color );
+        m_gal->SetStrokeColor( sh_color );
+
+        // Draw the box with a larger thickness than box thickness to show
+        // the shadow mask
+        std::vector<VECTOR2I> pts = aTextBox->GetCorners();
+        int line_thickness = std::max( thickness*3, Millimeter2iu( 0.2 ) );
+
+        for( size_t ii = 0; ii < pts.size(); ++ii )
+            m_gal->DrawSegment( pts[ ii ], pts[ (ii + 1) % pts.size() ], line_thickness );
+    }
+
     m_gal->SetFillColor( color );
     m_gal->SetStrokeColor( color );
     m_gal->SetIsFill( true );
@@ -1699,6 +1764,14 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
     attrs.m_StrokeWidth = getLineThickness( aTextBox->GetEffectiveTextPenWidth() );
 
     std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = aTextBox->GetRenderCache( resolvedText );
+
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
+    {
+        const COLOR4D sh_color = m_pcbSettings.GetColor( aTextBox, aLayer );
+        m_gal->SetFillColor( sh_color );
+        m_gal->SetStrokeColor( sh_color );
+        attrs.m_StrokeWidth *= 3;
+    }
 
     if( cache )
     {
@@ -1873,7 +1946,7 @@ void PCB_PAINTER::draw( const FOOTPRINT* aFootprint, int aLayer )
         m_gal->DrawLine( center - VECTOR2D( 0, anchorSize ), center + VECTOR2D( 0, anchorSize ) );
     }
 
-    if( aLayer == LAYER_LOCKED_ITEM_SHADOW && aFootprint->IsLocked() )
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW )    // happens only if locked
     {
         const COLOR4D color = m_pcbSettings.GetColor( aFootprint, aLayer );
 

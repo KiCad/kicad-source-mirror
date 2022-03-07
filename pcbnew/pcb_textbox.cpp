@@ -36,8 +36,6 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include "macros.h"
 
-using KIGFX::PCB_RENDER_SETTINGS;
-
 
 PCB_TEXTBOX::PCB_TEXTBOX( BOARD_ITEM* parent ) :
     PCB_SHAPE( parent, PCB_TEXTBOX_T, SHAPE_T::RECT ),
@@ -118,6 +116,31 @@ VECTOR2I PCB_TEXTBOX::GetDrawPos() const
 
     RotatePoint( offset, GetDrawRotation() );
     return textAnchor + offset;
+}
+
+
+double PCB_TEXTBOX::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+{
+    constexpr double HIDE = std::numeric_limits<double>::max();
+
+    KIGFX::PCB_PAINTER*  painter = static_cast<KIGFX::PCB_PAINTER*>( aView->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
+
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
+    {
+        // Hide shadow if the main layer is not shown
+        if( !aView->IsLayerVisible( m_layer ) )
+            return HIDE;
+
+        // Hide shadow on dimmed tracks
+        if( renderSettings->GetHighContrast() )
+        {
+            if( m_layer != renderSettings->GetPrimaryHighContrastLayer() )
+                return HIDE;
+        }
+    }
+
+    return 0.0;
 }
 
 
