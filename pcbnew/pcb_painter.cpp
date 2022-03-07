@@ -590,7 +590,7 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
 
         const     wxString& netName = UnescapeString( aTrack->GetShortNetname() );
         double    textSize = width;
-        double    penWidth = width / 12.0;
+        double    penWidth = textSize / 12.0;
         VECTOR2D  textPosition = ( visibleSeg.A + visibleSeg.B ) / 2.0;  // center of the track
         EDA_ANGLE textOrientation;
 
@@ -609,19 +609,15 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
         if( end.y == start.y ) // horizontal
         {
             textOrientation = ANGLE_HORIZONTAL;
-            textPosition.y += penWidth;
         }
         else if( end.x == start.x ) // vertical
         {
             textOrientation = ANGLE_VERTICAL;
-            textPosition.x += penWidth;
         }
         else
         {
             textOrientation = EDA_ANGLE( visibleSeg.B - visibleSeg.A ) + ANGLE_90;
             textOrientation.Normalize90();
-            textPosition.x += penWidth / 1.4;
-            textPosition.y += penWidth / 1.4;
         }
 
         m_gal->SetIsStroke( true );
@@ -789,7 +785,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         tsize = std::min( tsize, size );
 
         // Use a smaller text size to handle interline, pen size..
-        tsize *= 0.7;
+        tsize *= 0.75;
         VECTOR2D namesize( tsize, tsize );
 
         m_gal->SetGlyphSize( namesize );
@@ -985,7 +981,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             tsize = std::min( tsize, size );
 
             // Use a smaller text size to handle interline, pen size...
-            tsize *= 0.7;
+            tsize *= 0.75;
             VECTOR2D namesize( tsize, tsize );
 
             m_gal->SetGlyphSize( namesize );
@@ -1002,7 +998,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             tsize = std::min( tsize, size );
 
             // Use a smaller text size to handle interline, pen size...
-            tsize *= 0.7;
+            tsize *= 0.75;
             tsize = std::min( tsize, size );
             VECTOR2D numsize( tsize, tsize );
 

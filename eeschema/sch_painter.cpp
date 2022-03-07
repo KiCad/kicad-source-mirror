@@ -508,9 +508,10 @@ void SCH_PAINTER::strokeText( const wxString& aText, const VECTOR2D& aPosition,
 void SCH_PAINTER::bitmapText( const wxString& aText, const VECTOR2D& aPosition,
                               const TEXT_ATTRIBUTES& aAttrs )
 {
-
-    m_gal->SetGlyphSize( aAttrs.m_Size );
-    m_gal->SetLineWidth( aAttrs.m_StrokeWidth );
+    // Bitmap font has different metrics than the stroke font so we compensate a bit before
+    // stroking
+    m_gal->SetGlyphSize( VECTOR2I( aAttrs.m_Size.x * 0.60, aAttrs.m_Size.y * 0.72 ) );
+    m_gal->SetLineWidth( aAttrs.m_StrokeWidth * 1.2 );
 
     m_gal->SetHorizontalJustify( aAttrs.m_Halign );
     m_gal->SetVerticalJustify( aAttrs.m_Valign );
