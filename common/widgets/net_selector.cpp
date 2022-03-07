@@ -335,7 +335,12 @@ protected:
             }
         }
 
-        std::sort( netNames.begin(), netNames.end() );
+        std::sort( netNames.begin(), netNames.end(),
+                []( const wxString& lhs, const wxString& rhs )
+                {
+                    return StrNumCmp( lhs, rhs, true /* ignore case */ ) < 0;
+                } );
+
 
         // Special handling for <no net>
         if( filter.IsEmpty() || wxString( NO_NET ).MakeLower().Matches( filter ) )
