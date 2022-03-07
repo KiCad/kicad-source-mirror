@@ -214,7 +214,7 @@ void MD5_HASH::md5_transform( MD5_CTX* ctx, uint8_t data[] )
 
 void MD5_HASH::md5_init( MD5_CTX* ctx )
 {
-    memset( ctx->data, 64, 0 );
+    memset( ctx->data, 0, 64 );
     ctx->datalen = 0;
     ctx->bitlen[0] = 0;
     ctx->bitlen[1] = 0;
