@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 11:59-0800\n"
-"PO-Revision-Date: 2022-03-01 09:58+0000\n"
+"PO-Revision-Date: 2022-03-08 00:49+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.1-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -16158,7 +16158,7 @@ msgstr "Knotenpunkt hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:299
 msgid "Add a junction"
-msgstr "Knotenpunkt hinzufügen"
+msgstr "Einen Knotenpunkt hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:305
 msgid "Add Wire to Bus Entry"
@@ -16234,7 +16234,7 @@ msgstr "Letztes Element wiederholen"
 
 #: eeschema/tools/ee_actions.cpp:368
 msgid "Duplicates the last drawn item"
-msgstr "Zuletzt gewählte(s) Element(e) duplizieren"
+msgstr "Dupliziert das zuletzt gezeichnete Element"
 
 #: eeschema/tools/ee_actions.cpp:372 pcbnew/tools/pcb_actions.cpp:293
 msgid "Rotate Clockwise"
@@ -16282,7 +16282,7 @@ msgstr "Referenzbezeichner bearbeiten..."
 
 #: eeschema/tools/ee_actions.cpp:402
 msgid "Displays reference designator dialog"
-msgstr "Anzeige des Dialogs für die Referenzfelder"
+msgstr "Zeigt den Dialog für den Referenzbezeichner"
 
 #: eeschema/tools/ee_actions.cpp:408
 msgid "Edit Value..."
@@ -16290,7 +16290,7 @@ msgstr "Wert bearbeiten..."
 
 #: eeschema/tools/ee_actions.cpp:408
 msgid "Displays value field dialog"
-msgstr "Anzeige der Elementeigenschaften"
+msgstr "Zeigt den Dialog für das Wertfeld"
 
 #: eeschema/tools/ee_actions.cpp:414
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:251
@@ -16574,7 +16574,7 @@ msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
 msgstr ""
-"Bibliothekssymbol-Verweise in alten Schaltplänen der Symbol-"
+"Bibliothekssymbol-Verweise in veralteten Schaltplänen der Symbol-"
 "Bibliothekstabelle neu zuordnen"
 
 #: eeschema/tools/ee_actions.cpp:611
@@ -30703,11 +30703,11 @@ msgid ""
 "and update your footprint lib table\n"
 "before deleting a footprint"
 msgstr ""
-"Verändern der im alten Format vorliegenden Bibliotheken (.mod-Dateien) ist "
-"nicht möglich.\n"
+"Verändern von im alten Format vorliegenden Bibliotheken (.mod-Dateien) ist "
+"nicht möglich\n"
 "Bitte speichern Sie die aktuelle Bibliothek im neuen .pretty-Format\n"
 "und aktualisieren Sie die Footprint-Bibliothekstabelle,\n"
-"um den Footprint löschen zu können"
+"um einen Footprint löschen zu können"
 
 #: pcbnew/footprint_libraries_utils.cpp:87
 msgid "Import Footprint"
