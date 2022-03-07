@@ -27,6 +27,7 @@
 #include <limits>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
+#include <harfbuzz/hb.h>
 #include <harfbuzz/hb-ft.h>
 #include <bezier_curves.h>
 #include <geometry/shape_poly_set.h>
@@ -61,7 +62,25 @@ wxString OUTLINE_FONT::FreeTypeVersion()
     FT_Library_Version( m_freeType, &major, &minor, &patch );
 
     return wxString::Format( "%d.%d.%d", major, minor, patch );
- }
+}
+
+
+wxString OUTLINE_FONT::HarfBuzzVersion()
+{
+    return wxString::FromUTF8( HB_VERSION_STRING );
+}
+
+
+wxString OUTLINE_FONT::FontConfigVersion()
+{
+    return fontconfig::FONTCONFIG::Version();
+}
+
+
+wxString OUTLINE_FONT::FontLibraryVersion()
+{
+    return wxString::Format( "FreeType %s HarfBuzz %s", FreeTypeVersion(), HarfBuzzVersion() );
+}
 
 
 OUTLINE_FONT* OUTLINE_FONT::LoadFont( const wxString& aFontName, bool aBold, bool aItalic )

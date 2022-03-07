@@ -37,6 +37,12 @@ inline static FcChar8* wxStringToFcChar8( const wxString& str )
 }
 
 
+wxString FONTCONFIG::Version()
+{
+    return wxString::Format( "%d.%d.%d", FC_MAJOR, FC_MINOR, FC_REVISION );
+}
+
+
 FONTCONFIG::FONTCONFIG()
 {
     (void) FcInitLoadConfigAndFonts();

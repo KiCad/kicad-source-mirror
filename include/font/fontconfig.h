@@ -34,6 +34,8 @@ class FONTCONFIG
 public:
     FONTCONFIG();
 
+    static wxString Version();
+
     /**
      * Given a fully-qualified font name ("Times:Bold:Italic") find the closest matching font
      * and return its filepath in \a aFontFile.
