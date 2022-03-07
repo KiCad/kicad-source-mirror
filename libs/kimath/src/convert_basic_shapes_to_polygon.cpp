@@ -576,6 +576,17 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStar
                             const VECTOR2I& aMid, const VECTOR2I& aEnd, int aWidth,
                             int aError, ERROR_LOC aErrorLoc )
 {
+    SEG startToEnd( aStart, aEnd );
+    int distanceToMid = startToEnd.Distance( aMid );
+
+    if( distanceToMid <= 1 )
+    {
+        // Not an arc but essentially a straight line with a small error
+        TransformOvalToPolygon( aCornerBuffer, aStart, aEnd, aWidth + distanceToMid, aError,
+                                aErrorLoc );
+        return;
+    }
+
     // This appproximation builds a single polygon by starting with a 180 degree arc at one
     // end, then the outer edge of the arc, then a 180 degree arc at the other end, and finally
     // the inner edge of the arc.
