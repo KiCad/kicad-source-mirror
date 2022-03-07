@@ -794,6 +794,11 @@ void ROUTER::ToggleViaPlacement()
     {
         bool toggle = !m_placer->IsPlacingVia();
         m_placer->ToggleVia( toggle );
+
+        if( m_logger )
+        {
+            m_logger->Log( LOGGER::EVT_TOGGLE_VIA );
+        }
     }
 }
 
