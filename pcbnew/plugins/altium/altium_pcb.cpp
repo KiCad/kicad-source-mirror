@@ -2903,7 +2903,7 @@ void ALTIUM_PCB::ConvertTracks6ToBoardItem( const ATRACK6& aElem, const int aPri
         shape.SetEnd( aElem.end );
         shape.SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
 
-        HelperPcpShapeAsBoardKeepoutRegion( shape, aElem.layer );
+        HelperPcpShapeAsBoardKeepoutRegion( shape, aElem.layer, aElem.keepoutrestrictions );
     }
     else
     {
@@ -2947,7 +2947,8 @@ void ALTIUM_PCB::ConvertTracks6ToFootprintItem( FOOTPRINT* aFootprint, const ATR
         shape.SetEnd( aElem.end );
         shape.SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
 
-        HelperPcpShapeAsFootprintKeepoutRegion( aFootprint, shape, aElem.layer );
+        HelperPcpShapeAsFootprintKeepoutRegion( aFootprint, shape, aElem.layer,
+                                                aElem.keepoutrestrictions );
     }
     else
     {
@@ -3443,19 +3444,32 @@ void ALTIUM_PCB::HelperSetZoneLayers( ZONE* aZone, const ALTIUM_LAYER aAltiumLay
 }
 
 
-void ALTIUM_PCB::HelperPcpShapeAsBoardKeepoutRegion( const PCB_SHAPE& aShape,
-                                                     ALTIUM_LAYER     aAltiumLayer )
+void ALTIUM_PCB::HelperSetZoneKeepoutRestrictions( ZONE* aZone, const uint8_t aKeepoutRestrictions )
+{
+    bool keepoutRestrictionVia = ( aKeepoutRestrictions & 0x01 ) != 0;
+    bool keepoutRestrictionTrack = ( aKeepoutRestrictions & 0x02 ) != 0;
+    bool keepoutRestrictionCopper = ( aKeepoutRestrictions & 0x04 ) != 0;
+    bool keepoutRestrictionSMDPad = ( aKeepoutRestrictions & 0x08 ) != 0;
+    bool keepoutRestrictionTHPad = ( aKeepoutRestrictions & 0x10 ) != 0;
+
+    aZone->SetDoNotAllowVias( keepoutRestrictionVia );
+    aZone->SetDoNotAllowTracks( keepoutRestrictionTrack );
+    aZone->SetDoNotAllowCopperPour( keepoutRestrictionCopper );
+    aZone->SetDoNotAllowPads( keepoutRestrictionSMDPad && keepoutRestrictionTHPad );
+    aZone->SetDoNotAllowFootprints( false );
+}
+
+
+void ALTIUM_PCB::HelperPcpShapeAsBoardKeepoutRegion( const PCB_SHAPE&   aShape,
+                                                     const ALTIUM_LAYER aAltiumLayer,
+                                                     const uint8_t      aKeepoutRestrictions )
 {
     ZONE* zone = new ZONE( m_board );
 
     zone->SetIsRuleArea( true );
-    zone->SetDoNotAllowTracks( false );
-    zone->SetDoNotAllowVias( false );
-    zone->SetDoNotAllowPads( false );
-    zone->SetDoNotAllowFootprints( false );
-    zone->SetDoNotAllowCopperPour( true );
 
     HelperSetZoneLayers( zone, aAltiumLayer );
+    HelperSetZoneKeepoutRestrictions( zone, aKeepoutRestrictions );
 
     aShape.EDA_SHAPE::TransformShapeWithClearanceToPolygon( *zone->Outline(), 0, ARC_HIGH_DEF,
                                                             ERROR_INSIDE, false );
@@ -3467,20 +3481,17 @@ void ALTIUM_PCB::HelperPcpShapeAsBoardKeepoutRegion( const PCB_SHAPE& aShape,
 }
 
 
-void ALTIUM_PCB::HelperPcpShapeAsFootprintKeepoutRegion( FOOTPRINT*       aFootprint,
-                                                         const PCB_SHAPE& aShape,
-                                                         ALTIUM_LAYER     aAltiumLayer )
+void ALTIUM_PCB::HelperPcpShapeAsFootprintKeepoutRegion( FOOTPRINT*         aFootprint,
+                                                         const PCB_SHAPE&   aShape,
+                                                         const ALTIUM_LAYER aAltiumLayer,
+                                                         const uint8_t      aKeepoutRestrictions )
 {
     FP_ZONE* zone = new FP_ZONE( aFootprint );
 
     zone->SetIsRuleArea( true );
-    zone->SetDoNotAllowTracks( false );
-    zone->SetDoNotAllowVias( false );
-    zone->SetDoNotAllowPads( false );
-    zone->SetDoNotAllowFootprints( false );
-    zone->SetDoNotAllowCopperPour( true );
 
     HelperSetZoneLayers( zone, aAltiumLayer );
+    HelperSetZoneKeepoutRestrictions( zone, aKeepoutRestrictions );
 
     aShape.EDA_SHAPE::TransformShapeWithClearanceToPolygon( *zone->Outline(), 0, ARC_HIGH_DEF,
                                                             ERROR_INSIDE, false );

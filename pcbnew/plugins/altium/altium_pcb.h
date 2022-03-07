@@ -220,9 +220,13 @@ private:
     void HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aVertices );
 
     void HelperSetZoneLayers( ZONE* aZone, const ALTIUM_LAYER aAltiumLayer );
-    void HelperPcpShapeAsBoardKeepoutRegion( const PCB_SHAPE& aShape, ALTIUM_LAYER aAltiumLayer );
+    void HelperSetZoneKeepoutRestrictions( ZONE* aZone, const uint8_t aKeepoutRestrictions );
+    void HelperPcpShapeAsBoardKeepoutRegion( const PCB_SHAPE&   aShape,
+                                             const ALTIUM_LAYER aAltiumLayer,
+                                             const uint8_t      aKeepoutRestrictions = 0x1F );
     void HelperPcpShapeAsFootprintKeepoutRegion( FOOTPRINT* aFootprint, const PCB_SHAPE& aShape,
-                                                 ALTIUM_LAYER aAltiumLayer );
+                                                 const ALTIUM_LAYER aAltiumLayer,
+                                                 const uint8_t      aKeepoutRestrictions = 0x1F );
 
     std::vector<std::pair<PCB_LAYER_ID, int>>
     HelperGetSolderAndPasteMaskExpansions( const ALTIUM_RECORD aType, const int aPrimitiveIndex,

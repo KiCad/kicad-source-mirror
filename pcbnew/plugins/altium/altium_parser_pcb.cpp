@@ -853,6 +853,16 @@ ATRACK6::ATRACK6( ALTIUM_PARSER& aReader )
     end   = aReader.ReadVector2I();
     width = aReader.ReadKicadUnit();
 
+    if( aReader.GetRemainingSubrecordBytes() >= 13 )
+    {
+        aReader.Skip( 12 );
+        keepoutrestrictions = aReader.Read<uint8_t>();
+    }
+    else
+    {
+        keepoutrestrictions = is_keepout ? 0x1F : 0;
+    }
+
     aReader.SkipSubrecord();
 
     if( aReader.HasParsingError() )

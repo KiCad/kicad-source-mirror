@@ -656,6 +656,7 @@ struct ATRACK6
     uint16_t     net;
     uint16_t     component;
     uint16_t     subpolyindex;
+    uint8_t      keepoutrestrictions;
 
     VECTOR2I start;
     VECTOR2I end;
