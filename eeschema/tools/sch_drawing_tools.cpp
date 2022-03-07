@@ -22,9 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "sch_drawing_tools.h"
-#include "ee_selection_tool.h"
-#include "ee_grid_helper.h"
+#include <tools/sch_drawing_tools.h>
+#include <tools/ee_selection_tool.h>
+#include <tools/ee_grid_helper.h>
 #include <ee_actions.h>
 #include <sch_edit_frame.h>
 #include <project.h>
@@ -983,6 +983,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     SCH_ITEM*             item = nullptr;
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
+    bool                  ignorePrimePosition = false;
 
     if( m_inTwoClickPlace )
         return 0;
@@ -1044,10 +1045,17 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     setCursor();
 
     // Prime the pump if the tool isn't being re-activated
-    if( aEvent.HasPosition() || ( !aEvent.IsReactivate()
-            && ( isText || isGlobalLabel || isHierLabel || isNetLabel ) ) )
+    if( aEvent.HasPosition() )
     {
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
+        m_toolMgr->PrimeTool( aEvent.Position() );
+    }
+    else if( !aEvent.IsReactivate() && ( isText
+                                         || isGlobalLabel
+                                         || isHierLabel
+                                         || isNetLabel ) )
+    {
+        m_toolMgr->PrimeTool( { 0, 0 } );
+        ignorePrimePosition = true;
     }
 
     // Main loop: keep receiving events
@@ -1164,11 +1172,17 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     }
                 }
 
-                // Restore cursor after dialog
-                controls->WarpCursor( controls->GetCursorPosition(), true );
+                // If we started with a click on a tool button or menu then continue with the
+                // current mouse position.  Otherwise warp back to the original click position.
+                if( evt->IsPrime() && ignorePrimePosition )
+                    cursorPos = grid.Align( controls->GetMousePosition() );
+                else
+                    controls->WarpCursor( cursorPos, true );
 
                 if( item )
                 {
+                    item->SetPosition( (wxPoint) cursorPos );
+
                     item->SetFlags( IS_NEW | IS_MOVING );
                     item->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
                     updatePreview();
