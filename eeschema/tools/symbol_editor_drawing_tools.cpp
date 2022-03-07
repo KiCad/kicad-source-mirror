@@ -26,6 +26,7 @@
 #include <symbol_edit_frame.h>
 #include <tools/symbol_editor_drawing_tools.h>
 #include <tools/symbol_editor_pin_tool.h>
+#include <tools/ee_grid_helper.h>
 #include <bitmaps.h>
 #include <lib_text.h>
 #include <dialogs/dialog_lib_text_properties.h>
@@ -67,12 +68,16 @@ bool SYMBOL_EDITOR_DRAWING_TOOLS::Init()
 
 int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 {
-    KICAD_T   type = aEvent.Parameter<KICAD_T>();
-    auto*     settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
-    auto*     pinTool = type == LIB_PIN_T ? m_toolMgr->GetTool<SYMBOL_EDITOR_PIN_TOOL>() : nullptr;
-    VECTOR2I  cursorPos;
-    EDA_ITEM* item   = nullptr;
-    bool      isText = aEvent.IsAction( &EE_ACTIONS::placeSymbolText );
+    KICAD_T type = aEvent.Parameter<KICAD_T>();
+    auto*   settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    auto*   pinTool = type == LIB_PIN_T ? m_toolMgr->GetTool<SYMBOL_EDITOR_PIN_TOOL>() : nullptr;
+
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    EE_GRID_HELPER        grid( m_toolMgr );
+    VECTOR2I              cursorPos;
+    bool                  ignorePrimePosition = false;
+    LIB_ITEM*             item   = nullptr;
+    bool                  isText = aEvent.IsAction( &EE_ACTIONS::placeSymbolText );
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
@@ -92,20 +97,30 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
-    getViewControls()->ShowCursor( true );
+    controls->ShowCursor( true );
     // Set initial cursor
     setCursor();
 
     // Prime the pump
-    if( aEvent.HasPosition() || ( isText && !aEvent.IsReactivate() ) )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
+    if( aEvent.HasPosition() )
+    {
+        m_toolMgr->PrimeTool( aEvent.Position() );
+    }
+    else if( !aEvent.IsReactivate() && isText )
+    {
+        m_toolMgr->PrimeTool( { 0, 0 } );
+        ignorePrimePosition = true;
+    }
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
-        cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
+        cursorPos = grid.Align( controls->GetMousePosition() );
+        controls->ForceCursorPosition( true, cursorPos );
 
         auto cleanup =
                 [&] ()
@@ -132,12 +147,26 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsActivate() )
         {
-            if( item )
-                cleanup();
-
-            if( evt->IsMoveTool() )
+            if( item && evt->IsMoveTool() )
             {
-                // leave ourselves on the stack so we come back after the move
+                // we're already moving our own item; ignore the move tool
+                evt->SetPassEvent( false );
+                continue;
+            }
+
+            if( item )
+            {
+                m_frame->ShowInfoBarMsg( _( "Press <ESC> to cancel item creation." ) );
+                evt->SetPassEvent( false );
+                continue;
+            }
+
+            if( evt->IsPointEditor() )
+            {
+                // don't exit (the point editor runs in the background)
+            }
+            else if( evt->IsMoveTool() )
+            {
                 break;
             }
             else
@@ -188,11 +217,17 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     wxFAIL_MSG( wxT( "TwoClickPlace(): unknown type" ) );
                 }
 
-                // Restore cursor after dialog
-                getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
+                // If we started with a click on a tool button or menu then continue with the
+                // current mouse position.  Otherwise warp back to the original click position.
+                if( evt->IsPrime() && ignorePrimePosition )
+                    cursorPos = grid.Align( controls->GetMousePosition() );
+                else
+                    controls->WarpCursor( cursorPos, true );
 
                 if( item )
                 {
+                    item->SetPosition( wxPoint( cursorPos.x, -cursorPos.y ) );
+
                     item->SetFlags( IS_NEW | IS_MOVING );
                     m_view->ClearPreview();
                     m_view->AddToPreview( item->Clone() );
@@ -202,7 +237,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     setCursor();
                 }
 
-                getViewControls()->SetCursorPosition( cursorPos, false );
+                controls->SetCursorPosition( cursorPos, false );
             }
             // ... and second click places:
             else
@@ -239,7 +274,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         }
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
-            static_cast<LIB_ITEM*>( item )->SetPosition( wxPoint( cursorPos.x, -cursorPos.y ) );
+            item->SetPosition( wxPoint( cursorPos.x, -cursorPos.y ) );
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
         }
@@ -249,12 +284,12 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         }
 
         // Enable autopanning and cursor capture only when there is an item to be placed
-        getViewControls()->SetAutoPan( item != nullptr );
-        getViewControls()->CaptureCursor( item != nullptr );
+        controls->SetAutoPan( item != nullptr );
+        controls->CaptureCursor( item != nullptr );
     }
 
-    getViewControls()->SetAutoPan( false );
-    getViewControls()->CaptureCursor( false );
+    controls->SetAutoPan( false );
+    controls->CaptureCursor( false );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     return 0;
 }
