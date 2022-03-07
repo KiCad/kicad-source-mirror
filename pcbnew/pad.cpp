@@ -235,7 +235,7 @@ bool PAD::FlashLayer( int aLayer ) const
     static std::initializer_list<KICAD_T> types
     { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, PCB_ZONE_T, PCB_FP_ZONE_T };
 
-    if( !IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) ) )
+    if( aLayer != UNDEFINED_LAYER && !IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) ) )
         return false;
 
     if( GetAttribute() == PAD_ATTRIB::NPTH )
