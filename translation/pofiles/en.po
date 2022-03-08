@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-25 11:59-0800\n"
+"POT-Creation-Date: 2022-03-07 16:51-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -8721,21 +8721,6 @@ msgstr "Alias of"
 msgid "Unknown"
 msgstr "Unknown"
 
-msgid "Recently Used"
-msgstr "Recently Used"
-
-#, c-format
-msgid "Choose Power Symbol (%d items loaded)"
-msgstr "Choose Power Symbol (%d items loaded)"
-
-#, c-format
-msgid "Choose Symbol (%d items loaded)"
-msgstr "Choose Symbol (%d items loaded)"
-
-#, c-format
-msgid "No alternate body style found for symbol '%s' in library '%s'."
-msgstr "No alternate body style found for symbol '%s' in library '%s'."
-
 msgid "Navigator"
 msgstr "Navigator"
 
@@ -8888,6 +8873,21 @@ msgstr "Success."
 
 msgid "Error: duplicate sheet names. Continue?"
 msgstr "Error: duplicate sheet names. Continue?"
+
+msgid "Recently Used"
+msgstr "Recently Used"
+
+#, c-format
+msgid "Choose Power Symbol (%d items loaded)"
+msgstr "Choose Power Symbol (%d items loaded)"
+
+#, c-format
+msgid "Choose Symbol (%d items loaded)"
+msgstr "Choose Symbol (%d items loaded)"
+
+#, c-format
+msgid "No alternate body style found for symbol '%s' in library '%s'."
+msgstr "No alternate body style found for symbol '%s' in library '%s'."
 
 msgid "Free"
 msgstr "Free"
@@ -10355,6 +10355,10 @@ msgid "'%s' is not a valid Spice value."
 msgstr "'%s' is not a valid Spice value."
 
 #, c-format
+msgid "Loading library %s..."
+msgstr "Loading library %s..."
+
+#, c-format
 msgid ""
 "Error loading symbol library %s.\n"
 "\n"
@@ -10363,10 +10367,6 @@ msgstr ""
 "Error loading symbol library %s.\n"
 "\n"
 "%s\n"
-
-#, c-format
-msgid "Loading library %s..."
-msgstr "Loading library %s..."
 
 msgid ""
 "Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
@@ -10398,6 +10398,9 @@ msgstr "Libraries"
 
 msgid "Library changes are unsaved"
 msgstr "Library changes are unsaved"
+
+msgid "Symbol library loading was cancelled by user."
+msgstr "Symbol library loading was cancelled by user."
 
 #, c-format
 msgid "Unit %s"
