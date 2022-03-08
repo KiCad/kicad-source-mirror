@@ -443,9 +443,10 @@ bool calcIsInsideArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CO
                        ZONE* aArea )
 {
     BOARD*                 board = aArea->GetBoard();
+    EDA_RECT               areaBBox = aArea->GetBoundingBox();
     std::shared_ptr<SHAPE> shape;
 
-    if( !aArea->GetBoundingBox().Intersects( aItemBBox ) )
+    if( !areaBBox.Intersects( aItemBBox ) )
         return false;
 
     // Collisions include touching, so we need to deflate outline by enough to exclude it.
@@ -549,7 +550,7 @@ bool calcIsInsideArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CO
             {
                 if( aCtx->GetLayer() == layer || aCtx->GetLayer() == UNDEFINED_LAYER )
                 {
-                    if( zoneRTree->QueryColliding( aItemBBox, &areaOutline, layer ) )
+                    if( zoneRTree->QueryColliding( areaBBox, &areaOutline, layer ) )
                         return true;
                 }
             }
