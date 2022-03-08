@@ -259,7 +259,7 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
         // N.B. The order of evaluation is critical here as MapAngles will modify t1, t2
         // and the Normalize routine depends on these modifications for the correct output
         bool transformed = aTransform.MapAngles( &t1, &t2 );
-        bool transformed2 = ( ( t1 - t2 ).Normalize180() > 0 );
+        bool transformed2 = ( NormalizeAngle180( t1 - t2 ) > 0 );
 
         if( transformed  == transformed2 )
             std::swap( pt1, pt2 );
