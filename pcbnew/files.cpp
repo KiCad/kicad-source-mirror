@@ -1007,20 +1007,17 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
         GetBoard()->SynchronizeNetsAndNetClasses();
     }
 
-    wxFileName tempFile( aFileName );
+    wxStandardPaths& paths = wxStandardPaths::Get();
+    wxString tempFile = wxFileName::CreateTempFileName(
+            paths.GetTempDir() + wxFileName::GetPathSeparator() + wxT( "pcbnew" ) );
     wxString   upperTxt;
     wxString   lowerTxt;
-
-    tempFile.SetName( wxT( "." ) + tempFile.GetName() );
-    tempFile.SetExt( tempFile.GetExt() + wxT( "$" ) );
 
     try
     {
         PLUGIN::RELEASER    pi( IO_MGR::PluginFind( IO_MGR::KICAD_SEXP ) );
 
-        wxASSERT( tempFile.IsAbsolute() );
-
-        pi->Save( tempFile.GetFullPath(), GetBoard(), nullptr );
+        pi->Save( tempFile, GetBoard(), nullptr );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -1028,26 +1025,26 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
                                               pcbFileName.GetFullPath(),
                                               ioe.What() ) );
 
-        lowerTxt.Printf( _( "Failed to create temporary file '%s'." ), tempFile.GetFullPath() );
+        lowerTxt.Printf( _( "Failed to create temporary file '%s'." ), tempFile );
 
         SetMsgPanel( upperTxt, lowerTxt );
 
         // In case we started a file but didn't fully write it, clean up
-        wxRemoveFile( tempFile.GetFullPath() );
+        wxRemoveFile( tempFile );
 
         return false;
     }
 
     // If save succeeded, replace the original with what we just wrote
-    if( !wxRenameFile( tempFile.GetFullPath(), pcbFileName.GetFullPath() ) )
+    if( !wxRenameFile( tempFile, pcbFileName.GetFullPath() ) )
     {
         DisplayError( this, wxString::Format( _( "Error saving board file '%s'.\n"
                                                  "Failed to rename temporary file '%s." ),
                                               pcbFileName.GetFullPath(),
-                                              tempFile.GetFullPath() ) );
+                                              tempFile ) );
 
         lowerTxt.Printf( _( "Failed to rename temporary file '%s'." ),
-                         tempFile.GetFullPath() );
+                         tempFile );
 
         SetMsgPanel( upperTxt, lowerTxt );
 

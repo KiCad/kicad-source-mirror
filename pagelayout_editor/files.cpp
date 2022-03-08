@@ -37,6 +37,8 @@
 #include "properties_frame.h"
 
 #include <wx/filedlg.h>
+#include <wx/filename.h>
+#include <wx/stdpaths.h>
 
 bool PL_EDITOR_FRAME::saveCurrentPageLayout()
 {
@@ -288,23 +290,23 @@ bool PL_EDITOR_FRAME::SaveDrawingSheetFile( const wxString& aFullFileName )
 {
     if( !aFullFileName.IsEmpty() )
     {
-        wxFileName tempFile( aFullFileName );
-        tempFile.SetName( wxT( "." ) + tempFile.GetName() );
-        tempFile.SetExt( tempFile.GetExt() + wxT( "$" ) );
+        wxStandardPaths& paths = wxStandardPaths::Get();
+        wxString tempFile = wxFileName::CreateTempFileName(
+                paths.GetTempDir() + wxFileName::GetPathSeparator() + wxT( "pledit" ) );
 
         try
         {
-            DS_DATA_MODEL::GetTheInstance().Save( tempFile.GetFullPath() );
+            DS_DATA_MODEL::GetTheInstance().Save( tempFile );
         }
         catch( const IO_ERROR& )
         {
             // In case we started a file but didn't fully write it, clean up
-            wxRemoveFile( tempFile.GetFullPath() );
+            wxRemoveFile( tempFile);
 
             return false;
         }
 
-        if( !wxRenameFile( tempFile.GetFullPath(), aFullFileName ) )
+        if( !wxRenameFile( tempFile, aFullFileName ) )
             return false;
 
         GetScreen()->SetContentModified( false );
