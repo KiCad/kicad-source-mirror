@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-07 09:31+0100\n"
+"POT-Creation-Date: 2022-03-07 16:51-0800\n"
 "PO-Revision-Date: 2022-03-05 18:16+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -3866,7 +3866,7 @@ msgstr "Commentaire"
 msgid "Text '%s'"
 msgstr "Texte '%s'"
 
-#: common/drawing_sheet/ds_draw_item.cpp:387 eeschema/lib_shape.cpp:386
+#: common/drawing_sheet/ds_draw_item.cpp:387 eeschema/lib_shape.cpp:391
 #: eeschema/sch_shape.cpp:348
 #, c-format
 msgid "Rectangle, width %s height %s"
@@ -4761,12 +4761,12 @@ msgstr "Problèmes d'écriture du fichier de configuration"
 msgid "Default Font"
 msgstr "Fonte par Défaut"
 
-#: common/font/fontconfig.cpp:112
+#: common/font/fontconfig.cpp:118
 #, c-format
 msgid "Error loading font '%s'."
 msgstr "Erreur de chargement de la fonte '%s'."
 
-#: common/font/fontconfig.cpp:114
+#: common/font/fontconfig.cpp:120
 #, c-format
 msgid "Font '%s' not found; substituting '%s'."
 msgstr "Fonte '%s' introuvable; remplacée par '%s'."
@@ -6685,8 +6685,8 @@ msgid "<create net>"
 msgstr "<créer net>"
 
 #: common/widgets/net_selector.cpp:84
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:643
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:686
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:649
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:692
 msgid "Filter:"
 msgstr "Filtre:"
 
@@ -9685,18 +9685,18 @@ msgstr ""
 msgid "The name '%s' is already in use."
 msgstr "Le nom '%s' est déjà utilisé."
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:508
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:514
 #: eeschema/dialogs/dialog_sheet_properties.cpp:734
 #: eeschema/dialogs/dialog_symbol_properties.cpp:904
 #, c-format
 msgid "The first %d fields are mandatory."
 msgstr "Les %d premiers champs sont obligatoires."
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:643
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:649
 msgid "Add Footprint Filter"
 msgstr "Ajouter Filtre Empreintes"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:686
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:692
 msgid "Edit Footprint Filter"
 msgstr "Éditer Filtre d'Empreintes"
 
@@ -13682,22 +13682,22 @@ msgstr "Pin %s [%s, %s, %s]"
 msgid "Pin %s [%s, %s]"
 msgstr "Pin %s [%s, %s]"
 
-#: eeschema/lib_shape.cpp:378 eeschema/sch_shape.cpp:340
+#: eeschema/lib_shape.cpp:383 eeschema/sch_shape.cpp:340
 #, c-format
 msgid "Arc, radius %s"
 msgstr "Arc, rayon %s"
 
-#: eeschema/lib_shape.cpp:382 eeschema/sch_shape.cpp:344
+#: eeschema/lib_shape.cpp:387 eeschema/sch_shape.cpp:344
 #, c-format
 msgid "Circle, radius %s"
 msgstr "Cercle, rayon %s"
 
-#: eeschema/lib_shape.cpp:391 eeschema/sch_shape.cpp:353
+#: eeschema/lib_shape.cpp:396 eeschema/sch_shape.cpp:353
 #, c-format
 msgid "Polyline, %d points"
 msgstr "Poly-ligne, %d points"
 
-#: eeschema/lib_shape.cpp:395 eeschema/sch_shape.cpp:357
+#: eeschema/lib_shape.cpp:400 eeschema/sch_shape.cpp:357
 #, c-format
 msgid "Bezier Curve, %d points"
 msgstr "Courbe de Bézier, %d points"
@@ -17473,13 +17473,13 @@ msgstr "Avertissements de Symboles"
 msgid "No datasheet defined."
 msgstr "Aucune fiche de données n’a été définie."
 
-#: eeschema/tools/ee_selection_tool.cpp:1619
+#: eeschema/tools/ee_selection_tool.cpp:1620
 #: pagelayout_editor/tools/pl_selection_tool.cpp:623
 #: pcbnew/tools/pcb_selection_tool.cpp:2177
 msgid "Select &All\tA"
 msgstr "Tout Sélectionner\tT"
 
-#: eeschema/tools/ee_selection_tool.cpp:1622
+#: eeschema/tools/ee_selection_tool.cpp:1623
 #: pcbnew/tools/pcb_selection_tool.cpp:2180
 msgid "&Expand Selection\tE"
 msgstr "&Expandre Sélection\tE"
@@ -17500,7 +17500,7 @@ msgid "Could not load image from '%s'."
 msgstr "Impossible de charger l’image depuis '%s'."
 
 #: eeschema/tools/sch_drawing_tools.cpp:655
-#: eeschema/tools/sch_drawing_tools.cpp:1211
+#: eeschema/tools/sch_drawing_tools.cpp:1220
 msgid "No new hierarchical labels found."
 msgstr "Pas de nouveau label hiérarchique trouvé."
 
@@ -17510,15 +17510,16 @@ msgstr ""
 "L’emplacement de la jonction ne contient pas de fils et/ou de pins "
 "connectables."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1139
+#: eeschema/tools/sch_drawing_tools.cpp:1148
+#: eeschema/tools/symbol_editor_drawing_tools.cpp:161
 msgid "Press <ESC> to cancel item creation."
 msgstr "Appuyez <ESC> sur pour annuler la création d'éléments."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1199
+#: eeschema/tools/sch_drawing_tools.cpp:1208
 msgid "Click over a sheet."
 msgstr "Cliquez sur une feuille."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1544
+#: eeschema/tools/sch_drawing_tools.cpp:1559
 msgid "Press <ESC> to cancel sheet creation."
 msgstr "Appuyez <ESC> sur pour annuler la création de feuilles."
 
@@ -33462,23 +33463,23 @@ msgstr ""
 msgid "Loading tracks..."
 msgstr "Chargement des pistes..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3035
+#: pcbnew/plugins/altium/altium_pcb.cpp:3036
 msgid "Loading unicode strings..."
 msgstr "Chargement de chaînes unicode..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3049
+#: pcbnew/plugins/altium/altium_pcb.cpp:3050
 msgid "Loading text..."
 msgstr "Chargement des textes..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3078
-#: pcbnew/plugins/altium/altium_pcb.cpp:3093
+#: pcbnew/plugins/altium/altium_pcb.cpp:3079
+#: pcbnew/plugins/altium/altium_pcb.cpp:3094
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr ""
 "Ignore le code-barre sur la couche Altium %d (pas pris en charge "
 "actuellement)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3256
+#: pcbnew/plugins/altium/altium_pcb.cpp:3257
 msgid "Loading rectangles..."
 msgstr "Chargement rectangles..."
 
@@ -38467,11 +38468,6 @@ msgstr "freins thermiques pour pads traversants"
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
-msgid "bitmap2component"
-msgstr "bitmap2component"
-
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -38482,10 +38478,9 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+msgid "bitmap2component"
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
@@ -38499,10 +38494,9 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -38512,9 +38506,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
-msgid "kicad"
-msgstr "kicad"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -38529,10 +38523,6 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
-msgid "pcbcalculator"
-msgstr "pcbcalculator"
-
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -38540,11 +38530,6 @@ msgstr "Calculateur pour PCB KiCad"
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
@@ -38557,6 +38542,10 @@ msgstr "Éditeur de circuit imprimé"
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
+
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+msgid "pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -38610,6 +38599,12 @@ msgstr "Schématique KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Fichier Circuit Imprimé KiCad"
+
+#~ msgid "kicad"
+#~ msgstr "kicad"
+
+#~ msgid "pcbcalculator"
+#~ msgstr "pcbcalculator"
 
 #~ msgid "Via Drill"
 #~ msgstr "Perçage Via"

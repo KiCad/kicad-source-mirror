@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-25 11:58-0800\n"
+"POT-Creation-Date: 2022-03-07 16:51-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -499,8 +499,8 @@ msgstr "Rendering Options"
 msgid "Show model bounding boxes"
 msgstr "Show model bounding boxes"
 
-msgid "Show copper thickness"
-msgstr "Show copper thickness"
+msgid "Show copper and tech layers thickness (very slow)"
+msgstr "Show copper and tech layers thickness (very slow)"
 
 msgid "Highlight items on rollover"
 msgstr "Highlight items on rollover"
@@ -8989,21 +8989,6 @@ msgstr "Alias of"
 msgid "Unknown"
 msgstr "Unknown"
 
-msgid "Recently Used"
-msgstr "Recently Used"
-
-#, c-format
-msgid "Choose Power Symbol (%d items loaded)"
-msgstr "Choose Power Symbol (%d items loaded)"
-
-#, c-format
-msgid "Choose Symbol (%d items loaded)"
-msgstr "Choose Symbol (%d items loaded)"
-
-#, c-format
-msgid "No alternate body style found for symbol '%s' in library '%s'."
-msgstr "No alternate body style found for symbol '%s' in library '%s'."
-
 msgid "Navigator"
 msgstr "Navigator"
 
@@ -9165,6 +9150,21 @@ msgstr "Success."
 
 msgid "Error: duplicate sheet names. Continue?"
 msgstr "Error: duplicate sheet names. Continue?"
+
+msgid "Recently Used"
+msgstr "Recently Used"
+
+#, c-format
+msgid "Choose Power Symbol (%d items loaded)"
+msgstr "Choose Power Symbol (%d items loaded)"
+
+#, c-format
+msgid "Choose Symbol (%d items loaded)"
+msgstr "Choose Symbol (%d items loaded)"
+
+#, c-format
+msgid "No alternate body style found for symbol '%s' in library '%s'."
+msgstr "No alternate body style found for symbol '%s' in library '%s'."
 
 msgid "Free"
 msgstr "Free"
@@ -10620,6 +10620,10 @@ msgid "'%s' is not a valid Spice value."
 msgstr "'%s' is not a valid Spice value."
 
 #, c-format
+msgid "Loading library %s..."
+msgstr "Loading library %s..."
+
+#, c-format
 msgid ""
 "Error loading symbol library %s.\n"
 "\n"
@@ -10628,10 +10632,6 @@ msgstr ""
 "Error loading symbol library %s.\n"
 "\n"
 "%s\n"
-
-#, c-format
-msgid "Loading library %s..."
-msgstr "Loading library %s..."
 
 msgid ""
 "Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
@@ -10663,6 +10663,9 @@ msgstr "Libraries"
 
 msgid "Library changes are unsaved"
 msgstr "Library changes are unsaved"
+
+msgid "Symbol library loading was cancelled by user."
+msgstr "Symbol library loading was cancelled by user."
 
 #, c-format
 msgid "Unit %s"
@@ -13204,8 +13207,8 @@ msgid "Aborting remaining tasks."
 msgstr "Aborting remaining tasks."
 
 #, c-format
-msgid "Downloaded %lld/%lld Kb"
-msgstr "Downloaded %lld/%lld Kb"
+msgid "Downloaded %lld/%lld kB"
+msgstr "Downloaded %lld/%lld kB"
 
 msgid "Download Progress"
 msgstr "Download Progress"
@@ -13309,8 +13312,8 @@ msgid "Error loading installed packages list: %s"
 msgstr "Error loading installed packages list: %s"
 
 #, c-format
-msgid "Downloading %lld/%lld Kb"
-msgstr "Downloading %lld/%lld Kb"
+msgid "Downloading %lld/%lld kB"
+msgstr "Downloading %lld/%lld kB"
 
 msgid "Download is too large."
 msgstr "Download is too large."
@@ -13801,12 +13804,6 @@ msgstr "First page only"
 
 msgid "Subsequent pages only"
 msgstr "Subsequent pages only"
-
-msgid "H align:"
-msgstr "H align:"
-
-msgid "V align:"
-msgstr "V align:"
 
 msgid "Text width:"
 msgstr "Text width:"
@@ -16162,6 +16159,15 @@ msgstr "Cleanup Tracks and Vias"
 msgid "Constraints Resolution Report"
 msgstr "Constraints Resolution Report"
 
+msgid "Teardrop on Vias/Pads Properties"
+msgstr "Teardrop on Vias/Pads Properties"
+
+msgid "Teardrop on Tracks Properties"
+msgstr "Teardrop on Tracks Properties"
+
+msgid "Teardrop Properties"
+msgstr "Teardrop Properties"
+
 msgid "Chamfer distance:"
 msgstr "Chamfer distance:"
 
@@ -16348,15 +16354,15 @@ msgstr "Minimum island size:"
 msgid "Isolated islands smaller than this will be removed"
 msgstr "Isolated islands smaller than this will be removed"
 
-msgid "Export Settings to Other Zones"
-msgstr "Export Settings to Other Zones"
+msgid "Export Settings to Other Similar Zones"
+msgstr "Export Settings to Other Similar Zones"
 
 msgid ""
-"Export this zone setup (excluding layer and net selection) to all other "
-"copper zones."
+"Export this zone setup (excluding layer and net selection) to other similar "
+"copper zones (teardrops or usual copper zones)."
 msgstr ""
-"Export this zone setup (excluding layer and net selection) to all other "
-"copper zones."
+"Export this zone setup (excluding layer and net selection) to other similar "
+"copper zones (teardrops or usual copper zones)."
 
 msgid "Copper Zone Properties"
 msgstr "Copper Zone Properties"
@@ -17327,32 +17333,37 @@ msgid ""
 "This value can be superseded by a pad local values.\n"
 "The final clearance value is the sum of this value and the clearance value "
 "ratio.\n"
-"A negative value means a smaller mask size than pad size."
+"A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
 "This is the local clearance between pads and the solder paste for this "
 "footprint.\n"
 "This value can be superseded by a pad local values.\n"
 "The final clearance value is the sum of this value and the clearance value "
 "ratio.\n"
-"A negative value means a smaller mask size than pad size."
+"A negative value means a smaller stencil aperture size than pad size."
 
 msgid "Solder paste relative clearance:"
 msgstr "Solder paste relative clearance:"
 
+#, c-format
 msgid ""
-"This is the local clearance ratio in percent between pads and the solder "
-"paste for this footprint.\n"
-"A value of 10 means the clearance value is 10 percent of the pad size.\n"
+"This is the local clearance ratio applied as a percentage of the pad width "
+"and height for this footprint.\n"
+"A value of 10 means the horizontal clearance value is 10% of the pad’s "
+"width, and the vertical clearance value is 10% of the pad’s height.\n"
 "This value can be superseded by a pad local value.\n"
-"The final clearance value is the sum of this value and the clearance value.\n"
-"A negative value means a smaller mask size than pad size."
+"The final clearance value is the sum of this value and the absolute "
+"clearance value.\n"
+"A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"This is the local clearance ratio in percent between pads and the solder "
-"paste for this footprint.\n"
-"A value of 10 means the clearance value is 10 percent of the pad size.\n"
+"This is the local clearance ratio applied as a percentage of the pad width "
+"and height for this footprint.\n"
+"A value of 10 means the horizontal clearance value is 10% of the pad’s "
+"width, and the vertical clearance value is 10% of the pad’s height.\n"
 "This value can be superseded by a pad local value.\n"
-"The final clearance value is the sum of this value and the clearance value.\n"
-"A negative value means a smaller mask size than pad size."
+"The final clearance value is the sum of this value and the absolute "
+"clearance value.\n"
+"A negative value means a smaller stencil aperture size than pad size."
 
 msgid ""
 "Note: solder mask and paste values are used only for pads on copper layers."
@@ -17442,7 +17453,7 @@ msgid ""
 "this footprint.\n"
 "The final clearance value is the sum of this value and the clearance value "
 "ratio.\n"
-"A negative value means a smaller mask size than pad size.\n"
+"A negative value means a smaller stencil aperture size than pad size.\n"
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
@@ -17450,26 +17461,31 @@ msgstr ""
 "this footprint.\n"
 "The final clearance value is the sum of this value and the clearance value "
 "ratio.\n"
-"A negative value means a smaller mask size than pad size.\n"
+"A negative value means a smaller stencil aperture size than pad size.\n"
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 
+#, c-format
 msgid ""
-"This is the local clearance ratio in percent between pads and the\n"
-"solder paste for this footprint.\n"
-"A value of 10 means the clearance value is 10 percent of the pad size.\n"
-"The final clearance value is the sum of this value and the clearance value.\n"
-"A negative value means a smaller mask size than pad size.\n"
-"This value can be overridden on a pad-by-pad basis in the Local\n"
-"Clearance and Settings tab of Pad Properties."
+"This is the local clearance ratio applied as a percentage of the pad width "
+"and height for this footprint.\n"
+"A value of 10 means the horizontal clearance value is 10% of the pad’s "
+"width, and the vertical clearance value is 10% of the pad’s height.\n"
+"The final clearance value is the sum of this value and the absolute "
+"clearance value.\n"
+"A negative value means a smaller stencil aperture size than pad size.\n"
+"This value can be overridden on a pad-by-pad basis in the Local Clearance "
+"and Settings tab of Pad Properties."
 msgstr ""
-"This is the local clearance ratio in percent between pads and the\n"
-"solder paste for this footprint.\n"
-"A value of 10 means the clearance value is 10 percent of the pad size.\n"
-"The final clearance value is the sum of this value and the clearance value.\n"
-"A negative value means a smaller mask size than pad size.\n"
-"This value can be overridden on a pad-by-pad basis in the Local\n"
-"Clearance and Settings tab of Pad Properties."
+"This is the local clearance ratio applied as a percentage of the pad width "
+"and height for this footprint.\n"
+"A value of 10 means the horizontal clearance value is 10% of the pad’s "
+"width, and the vertical clearance value is 10% of the pad’s height.\n"
+"The final clearance value is the sum of this value and the absolute "
+"clearance value.\n"
+"A negative value means a smaller stencil aperture size than pad size.\n"
+"This value can be overridden on a pad-by-pad basis in the Local Clearance "
+"and Settings tab of Pad Properties."
 
 msgid "All footprint generator scripts were loaded"
 msgstr "All footprint generator scripts were loaded"
@@ -17867,11 +17883,11 @@ msgstr "Keep upright"
 msgid "Set to layer default values:"
 msgstr "Set to layer default values:"
 
-msgid "Via Drill"
-msgstr "Via Drill"
+msgid "Via Diameter"
+msgstr "Via Diameter"
 
-msgid "uVia Drill"
-msgstr "µVia Drill"
+msgid "uVia Diameter"
+msgstr "uVia Diameter"
 
 msgid "Filter Items"
 msgstr "Filter Items"
@@ -19623,14 +19639,8 @@ msgstr "Start, end, and connected layers"
 msgid "Track & Via Properties"
 msgstr "Track & Via Properties"
 
-msgid "Via drill size must be smaller than via diameter"
-msgstr "Via drill size must be smaller than via diameter"
-
-msgid "Via drill:"
-msgstr "Via drill:"
-
-msgid "Track Width and Via Size"
-msgstr "Track Width and Via Size"
+msgid "Track and Via Dimensions"
+msgstr "Track and Via Dimensions"
 
 msgid "Set Unused Pad Properties"
 msgstr "Set Unused Pad Properties"
@@ -21201,8 +21211,8 @@ msgstr "Pre-defined track and via dimensions:"
 msgid "7"
 msgstr "7"
 
-msgid "Size"
-msgstr "Size"
+msgid "Diameter"
+msgstr "Diameter"
 
 msgid "Hole"
 msgstr "Hole"
@@ -21445,11 +21455,11 @@ msgstr "Tracks crossing"
 msgid "Board edge clearance violation"
 msgstr "Board edge clearance violation"
 
-msgid "Copper areas intersect"
-msgstr "Copper areas intersect"
+msgid "Copper zones intersect"
+msgstr "Copper zones intersect"
 
-msgid "Copper zone net has no pads"
-msgstr "Copper zone net has no pads"
+msgid "Isolated copper fill"
+msgstr "Isolated copper fill"
 
 msgid "Thermal relief connection to zone incomplete"
 msgstr "Thermal relief connection to zone incomplete"
@@ -22758,6 +22768,9 @@ msgstr "Complex Shape"
 msgid "Symmetrical"
 msgstr "Symmetrical"
 
+msgid "Size"
+msgstr "Size"
+
 msgid "Read Shape Description File..."
 msgstr "Read Shape Description File…"
 
@@ -23077,9 +23090,6 @@ msgstr "Heat sink"
 msgid "Castellated"
 msgstr "Castellated"
 
-msgid "Diameter"
-msgstr "Diameter"
-
 msgid "Length in Package"
 msgstr "Length in Package"
 
@@ -23370,9 +23380,6 @@ msgstr "Blind/Buried Via"
 
 msgid "Through Via"
 msgstr "Through Via"
-
-msgid "Drill"
-msgstr "Drill"
 
 #, c-format
 msgid "Min Annular Width: %s"
@@ -24727,8 +24734,8 @@ msgid "Via netclass values"
 msgstr "Via netclass values"
 
 #, c-format
-msgid "Via %s, drill %s"
-msgstr "Via %s, drill %s"
+msgid "Via %s, hole %s"
+msgstr "Via %s, hole %s"
 
 #, c-format
 msgid "Via %s"
@@ -25259,9 +25266,6 @@ msgstr "Track width resolution for:"
 msgid "Width constraints: min %s; opt %s; max %s."
 msgstr "Width constraints: min %s; opt %s; max %s."
 
-msgid "Via Diameter"
-msgstr "Via Diameter"
-
 msgid "Via diameter resolution for:"
 msgstr "Via diameter resolution for:"
 
@@ -25440,8 +25444,8 @@ msgid "Special Tools"
 msgstr "Special Tools"
 
 #, c-format
-msgid "Unable to resize arc tracks %.1f degrees or greater."
-msgstr "Unable to resize arc tracks %.1f degrees or greater."
+msgid "Unable to resize arc tracks of %s or greater."
+msgstr "Unable to resize arc tracks of %s or greater."
 
 msgid "Drag Arc Track"
 msgstr "Drag Arc Track"
@@ -26787,9 +26791,6 @@ msgstr "Refill %d Zones"
 msgid "Auto-fill Zone(s)"
 msgstr "Auto-fill Zone(s)"
 
-msgid "Zone has no connections."
-msgstr "Zone has no connections."
-
 msgid "Incomplete undo/redo operation: some items not found"
 msgstr "Incomplete undo/redo operation: some items not found"
 
@@ -27247,6 +27248,9 @@ msgstr "Other items"
 msgid "Rule Area"
 msgstr "Rule Area"
 
+msgid "Teardrop Area"
+msgstr "Teardrop Area"
+
 msgid "Copper Zone"
 msgstr "Copper Zone"
 
@@ -27289,6 +27293,9 @@ msgstr "Filled Area"
 
 msgid "HatchBorder Lines"
 msgstr "HatchBorder Lines"
+
+msgid "Corner Count"
+msgstr "Corner Count"
 
 #, c-format
 msgid "Rule Area Cutout on %s"
@@ -27450,6 +27457,136 @@ msgstr "KiCad Schematic"
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
 
+#~ msgid "Show copper thickness"
+#~ msgstr "Show copper thickness"
+
+#, c-format
+#~ msgid "Downloaded %lld/%lld Kb"
+#~ msgstr "Downloaded %lld/%lld Kb"
+
+#, c-format
+#~ msgid "Downloading %lld/%lld Kb"
+#~ msgstr "Downloading %lld/%lld Kb"
+
+#~ msgid "H align:"
+#~ msgstr "H align:"
+
+#~ msgid "V align:"
+#~ msgstr "V align:"
+
+#~ msgid "Export Settings to Other Zones"
+#~ msgstr "Export Settings to Other Zones"
+
+#~ msgid ""
+#~ "Export this zone setup (excluding layer and net selection) to all other "
+#~ "copper zones."
+#~ msgstr ""
+#~ "Export this zone setup (excluding layer and net selection) to all other "
+#~ "copper zones."
+
+#~ msgid ""
+#~ "This is the local clearance between pads and the solder paste for this "
+#~ "footprint.\n"
+#~ "This value can be superseded by a pad local values.\n"
+#~ "The final clearance value is the sum of this value and the clearance "
+#~ "value ratio.\n"
+#~ "A negative value means a smaller mask size than pad size."
+#~ msgstr ""
+#~ "This is the local clearance between pads and the solder paste for this "
+#~ "footprint.\n"
+#~ "This value can be superseded by a pad local values.\n"
+#~ "The final clearance value is the sum of this value and the clearance "
+#~ "value ratio.\n"
+#~ "A negative value means a smaller mask size than pad size."
+
+#~ msgid ""
+#~ "This is the local clearance ratio in percent between pads and the solder "
+#~ "paste for this footprint.\n"
+#~ "A value of 10 means the clearance value is 10 percent of the pad size.\n"
+#~ "This value can be superseded by a pad local value.\n"
+#~ "The final clearance value is the sum of this value and the clearance "
+#~ "value.\n"
+#~ "A negative value means a smaller mask size than pad size."
+#~ msgstr ""
+#~ "This is the local clearance ratio in percent between pads and the solder "
+#~ "paste for this footprint.\n"
+#~ "A value of 10 means the clearance value is 10 percent of the pad size.\n"
+#~ "This value can be superseded by a pad local value.\n"
+#~ "The final clearance value is the sum of this value and the clearance "
+#~ "value.\n"
+#~ "A negative value means a smaller mask size than pad size."
+
+#~ msgid ""
+#~ "This is the local clearance between pads and the solder paste for\n"
+#~ "this footprint.\n"
+#~ "The final clearance value is the sum of this value and the clearance "
+#~ "value ratio.\n"
+#~ "A negative value means a smaller mask size than pad size.\n"
+#~ "This value can be overridden on a pad-by-pad basis in the Local\n"
+#~ "Clearance and Settings tab of Pad Properties."
+#~ msgstr ""
+#~ "This is the local clearance between pads and the solder paste for\n"
+#~ "this footprint.\n"
+#~ "The final clearance value is the sum of this value and the clearance "
+#~ "value ratio.\n"
+#~ "A negative value means a smaller mask size than pad size.\n"
+#~ "This value can be overridden on a pad-by-pad basis in the Local\n"
+#~ "Clearance and Settings tab of Pad Properties."
+
+#~ msgid ""
+#~ "This is the local clearance ratio in percent between pads and the\n"
+#~ "solder paste for this footprint.\n"
+#~ "A value of 10 means the clearance value is 10 percent of the pad size.\n"
+#~ "The final clearance value is the sum of this value and the clearance "
+#~ "value.\n"
+#~ "A negative value means a smaller mask size than pad size.\n"
+#~ "This value can be overridden on a pad-by-pad basis in the Local\n"
+#~ "Clearance and Settings tab of Pad Properties."
+#~ msgstr ""
+#~ "This is the local clearance ratio in percent between pads and the\n"
+#~ "solder paste for this footprint.\n"
+#~ "A value of 10 means the clearance value is 10 percent of the pad size.\n"
+#~ "The final clearance value is the sum of this value and the clearance "
+#~ "value.\n"
+#~ "A negative value means a smaller mask size than pad size.\n"
+#~ "This value can be overridden on a pad-by-pad basis in the Local\n"
+#~ "Clearance and Settings tab of Pad Properties."
+
+#~ msgid "Via Drill"
+#~ msgstr "Via Drill"
+
+#~ msgid "uVia Drill"
+#~ msgstr "µVia Drill"
+
+#~ msgid "Via drill size must be smaller than via diameter"
+#~ msgstr "Via drill size must be smaller than via diameter"
+
+#~ msgid "Via drill:"
+#~ msgstr "Via drill:"
+
+#~ msgid "Track Width and Via Size"
+#~ msgstr "Track Width and Via Size"
+
+#~ msgid "Copper areas intersect"
+#~ msgstr "Copper areas intersect"
+
+#~ msgid "Copper zone net has no pads"
+#~ msgstr "Copper zone net has no pads"
+
+#~ msgid "Drill"
+#~ msgstr "Drill"
+
+#, c-format
+#~ msgid "Via %s, drill %s"
+#~ msgstr "Via %s, drill %s"
+
+#, c-format
+#~ msgid "Unable to resize arc tracks %.1f degrees or greater."
+#~ msgstr "Unable to resize arc tracks %.1f degrees or greater."
+
+#~ msgid "Zone has no connections."
+#~ msgstr "Zone has no connections."
+
 #~ msgid "TransLine "
 #~ msgstr "TransLine "
 
@@ -27471,9 +27608,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ msgstr ""
 #~ "Zone found on an Altium layer (%d) with no KiCad equivalent. It has been "
 #~ "moved to KiCad layer Eco1_User."
-
-#~ msgid "Corner Count"
-#~ msgstr "Corner Count"
 
 #~ msgid "Performing polygon fills..."
 #~ msgstr "Performing polygon fills…"
