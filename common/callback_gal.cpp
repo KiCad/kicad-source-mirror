@@ -21,11 +21,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <plotters/plotter.h>
 #include <trigo.h>
+#include <convert_to_biu.h>
+#include <convert_basic_shapes_to_polygon.h>
+#include <geometry/geometry_utils.h>
 
 #include <callback_gal.h>
-
 
 using namespace KIGFX;
 
@@ -39,7 +40,22 @@ void CALLBACK_GAL::DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTotal 
         for( const std::vector<VECTOR2D>& pointList : glyph )
         {
             for( size_t ii = 1; ii < pointList.size(); ii++ )
-                m_strokeCallback( pointList[ ii - 1], pointList[ii] );
+            {
+                if( m_stroke )
+                {
+                    m_strokeCallback( pointList[ ii - 1 ], pointList[ ii ] );
+                }
+                else
+                {
+                    int            strokeWidth = GetLineWidth();
+                    SHAPE_POLY_SET poly;
+
+                    TransformOvalToPolygon( poly, pointList[ ii - 1 ], pointList[ ii ],
+                                            strokeWidth, strokeWidth / 48, ERROR_OUTSIDE );
+
+                    m_outlineCallback( poly.Outline( 0 ) );
+                }
+            }
         }
     }
     else if( aGlyph.IsOutline() )

@@ -259,6 +259,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     m_cbLocked->SetValue( m_item->IsLocked() );
 
     m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() );
+    m_cbKnockout->SetValue( m_item->IsKnockout() );
 
     m_fontCtrl->SetFontSelection( m_edaText->GetFont() );
 
@@ -395,6 +396,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     m_item->SetLocked( m_cbLocked->GetValue() );
 
     m_item->SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
+    m_item->SetIsKnockout( m_cbKnockout->GetValue() );
 
     if( m_fontCtrl->HaveFontSelection() )
     {

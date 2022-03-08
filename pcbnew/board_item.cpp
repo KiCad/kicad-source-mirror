@@ -69,7 +69,7 @@ bool BOARD_ITEM::IsLocked() const
 
     const BOARD* board = GetBoard();
 
-    return board && board->GetBoardUse() != BOARD_USE::FPHOLDER && GetState( LOCKED );
+    return board && board->GetBoardUse() != BOARD_USE::FPHOLDER && m_isLocked;
 }
 
 

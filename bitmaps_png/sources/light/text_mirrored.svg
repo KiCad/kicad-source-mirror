@@ -28,7 +28,7 @@
      showgrid="true"
      inkscape:zoom="21.189179"
      inkscape:cx="12.751369"
-     inkscape:cy="11.535261"
+     inkscape:cy="12.434844"
      inkscape:window-x="0"
      inkscape:window-y="23"
      inkscape:window-maximized="0"
@@ -81,14 +81,14 @@
      id="title176">add_glabel</title>
   <text
      xml:space="preserve"
-     style="font-style:normal;font-weight:normal;font-size:26.6667px;line-height:1.25;font-family:sans-serif;fill:#333333;fill-opacity:1;stroke:none"
-     x="-21.317667"
-     y="20.574646"
+     style="font-style:normal;font-weight:normal;font-size:26.7797px;line-height:1.25;font-family:sans-serif;fill:#333333;fill-opacity:1;stroke:none;stroke-width:1.11582"
+     x="-21.453262"
+     y="20.113962"
      id="text863"
-     transform="scale(-1,1)"><tspan
+     transform="scale(-0.95860218,1.0431856)"><tspan
        sodipodi:role="line"
        id="tspan861"
-       x="-21.317667"
-       y="20.574646"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26.6667px;font-family:'Gurmukhi MN';-inkscape-font-specification:'Gurmukhi MN';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#333333">R</tspan></text>
+       x="-21.453262"
+       y="20.113962"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26.7797px;font-family:'Gurmukhi MN';-inkscape-font-specification:'Gurmukhi MN';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#333333;stroke-width:1.11582">R</tspan></text>
 </svg>

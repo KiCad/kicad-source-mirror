@@ -2877,7 +2877,18 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT()
         {
         case T_layer:
             text->SetLayer( parseBoardItemLayer() );
-            NeedRIGHT();
+
+            token = NextTok();
+
+            if( token == T_knockout )
+            {
+                text->SetIsKnockout( true );
+                token = NextTok();
+            }
+
+            if( (int) token != DSN_RIGHT )
+                Expecting( DSN_RIGHT );
+
             break;
 
         case T_tstamp:
@@ -3904,7 +3915,18 @@ FP_TEXT* PCB_PARSER::parseFP_TEXT()
         {
         case T_layer:
             text->SetLayer( parseBoardItemLayer() );
-            NeedRIGHT();
+
+            token = NextTok();
+
+            if( token == T_knockout )
+            {
+                text->SetIsKnockout( true );
+                token = NextTok();
+            }
+
+            if( (int) token != DSN_RIGHT )
+                Expecting( DSN_RIGHT );
+
             break;
 
         case T_hide:

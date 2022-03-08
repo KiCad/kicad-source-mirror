@@ -471,9 +471,11 @@ void PCB_PLUGIN::Format( const BOARD_ITEM* aItem, int aNestLevel ) const
 }
 
 
-void PCB_PLUGIN::formatLayer( PCB_LAYER_ID aLayer ) const
+void PCB_PLUGIN::formatLayer( PCB_LAYER_ID aLayer, bool aIsKnockout ) const
 {
-    m_out->Print( 0, " (layer %s)", m_out->Quotew( LSET::Name( aLayer ) ).c_str() );
+    m_out->Print( 0, " (layer %s%s)",
+                  m_out->Quotew( LSET::Name( aLayer ) ).c_str(),
+                  aIsKnockout ? " knockout" : "" );
 }
 
 
@@ -1729,7 +1731,7 @@ void PCB_PLUGIN::format( const PCB_TEXT* aText, int aNestLevel ) const
 
     m_out->Print( 0, ")" );
 
-    formatLayer( aText->GetLayer() );
+    formatLayer( aText->GetLayer(), aText->IsKnockout() );
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aText->m_Uuid.AsString() ) );
 
@@ -1871,7 +1873,7 @@ void PCB_PLUGIN::format( const FP_TEXT* aText, int aNestLevel ) const
         m_out->Print( 0, " unlocked" );
 
     m_out->Print( 0, ")" );
-    formatLayer( aText->GetLayer() );
+    formatLayer( aText->GetLayer(), aText->IsKnockout() );
 
     if( !aText->IsVisible() )
         m_out->Print( 0, " hide" );

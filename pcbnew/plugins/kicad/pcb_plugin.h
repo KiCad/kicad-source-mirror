@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN.
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,7 +117,8 @@ class SHAPE_LINE_CHAIN;
 //#define SEXPR_BOARD_FILE_VERSION    20211232  // Fonts
 //#define SEXPR_BOARD_FILE_VERSION    20220131  // Textboxes
 //#define SEXPR_BOARD_FILE_VERSION    20220211  // End support for V5 zone fill strategy
-#define SEXPR_BOARD_FILE_VERSION    20220225  // Remove TEDIT
+//#define SEXPR_BOARD_FILE_VERSION    20220225  // Remove TEDIT
+#define SEXPR_BOARD_FILE_VERSION    20220308  // Knockout text
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting
@@ -300,7 +301,7 @@ private:
 
     void formatRenderCache( const EDA_TEXT* aText, int aNestLevel ) const;
 
-    void formatLayer( PCB_LAYER_ID aLayer ) const;
+    void formatLayer( PCB_LAYER_ID aLayer, bool aIsKnockout = false ) const;
 
     void formatLayers( LSET aLayerMask, int aNestLevel = 0 ) const;
 

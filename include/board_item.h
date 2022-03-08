@@ -54,6 +54,8 @@ public:
     BOARD_ITEM( BOARD_ITEM* aParent, KICAD_T idtype, PCB_LAYER_ID aLayer = F_Cu ) :
             EDA_ITEM( aParent, idtype ),
             m_layer( aLayer ),
+            m_isKnockout( false ),
+            m_isLocked( false ),
             m_group( nullptr )
     {
     }
@@ -215,28 +217,11 @@ public:
         return m_layer == aLayer;
     }
 
-    /**
-     * Test to see if this object is a track or via (or microvia).
-     *
-     * @return true if a track or via, else false.
-     */
-    bool IsTrack() const
-    {
-        return ( Type() == PCB_TRACE_T ) || ( Type() == PCB_VIA_T );
-    }
+    virtual bool IsKnockout() const { return m_isKnockout; }
+    virtual void SetIsKnockout( bool aKnockout ) { m_isKnockout = aKnockout; }
 
-    /**
-     * @return true if the object is locked, else false.
-     */
     virtual bool IsLocked() const;
-
-    /**
-     * Modify the 'lock' status for of the item.
-     */
-    virtual void SetLocked( bool aLocked )
-    {
-        SetState( LOCKED, aLocked );
-    }
+    virtual void SetLocked( bool aLocked ) { m_isLocked = aLocked; }
 
     /**
      * Delete this object after removing from its parent if it has one.
@@ -307,12 +292,16 @@ public:
 
 protected:
     /**
-     * Return a string (to be shown to the user) describing a layer mask. The BOARD is needed
-     * because layer names are customizable.
+     * Return a string (to be shown to the user) describing a layer mask.
      */
     virtual wxString layerMaskDescribe() const;
 
+protected:
     PCB_LAYER_ID    m_layer;
+    bool            m_isKnockout;
+
+    bool            m_isLocked;
+
     PCB_GROUP*      m_group;
 };
 

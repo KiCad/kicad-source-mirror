@@ -61,6 +61,7 @@
 #include <gr_text.h>
 #include <pgm_base.h>
 #include "pcbnew_settings.h"
+#include "callback_gal.h"
 
 using namespace KIGFX;
 
@@ -1591,38 +1592,73 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
     if( resolvedText.Length() == 0 )
         return;
 
-    const COLOR4D& color = m_pcbSettings.GetColor( aText, aText->GetLayer() );
-    bool           outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayTextFill;
+    const COLOR4D&  color = m_pcbSettings.GetColor( aText, aText->GetLayer() );
+    bool            outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayTextFill;
+    TEXT_ATTRIBUTES attrs = aText->GetAttributes();
 
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
 
-    TEXT_ATTRIBUTES attrs = aText->GetAttributes();
+    if( aText->IsKnockout() )
+    {
+        KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
+        SHAPE_POLY_SET             knockouts;
 
-    if( outline_mode )
-        attrs.m_StrokeWidth = m_pcbSettings.m_outlineWidth;
-    else
+        CALLBACK_GAL callback_gal( empty_opts,
+                // Polygon callback
+                [&]( const SHAPE_LINE_CHAIN& aPoly )
+                {
+                    knockouts.AddOutline( aPoly );
+                } );
+
+        KIFONT::FONT* font = aText->GetDrawFont();
+
         attrs.m_StrokeWidth = getLineThickness( aText->GetEffectiveTextPenWidth() );
 
-    std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = aText->GetRenderCache( resolvedText );
+        callback_gal.SetIsFill( font->IsOutline() );
+        callback_gal.SetIsStroke( font->IsStroke() );
+        callback_gal.SetLineWidth( attrs.m_StrokeWidth );
+        font->Draw( &callback_gal, resolvedText, aText->GetDrawPos(), attrs );
 
-    if( cache )
-    {
-        for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
-            m_gal->DrawGlyph( *glyph.get() );
+        SHAPE_POLY_SET finalPoly;
+        int            margin = attrs.m_StrokeWidth * 1.5;
+
+        aText->TransformBoundingBoxWithClearanceToPolygon( &finalPoly, margin );
+        finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
+        finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+        m_gal->SetIsStroke( false );
+        m_gal->SetIsFill( true );
+        m_gal->DrawPolygon( finalPoly );
     }
     else
     {
-        strokeText( resolvedText, aText->GetTextPos(), attrs );
+        if( outline_mode )
+            attrs.m_StrokeWidth = m_pcbSettings.m_outlineWidth;
+        else
+            attrs.m_StrokeWidth = getLineThickness( aText->GetEffectiveTextPenWidth() );
+
+        std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = aText->GetRenderCache( resolvedText );
+
+        if( cache )
+        {
+            for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
+                m_gal->DrawGlyph( *glyph.get() );
+        }
+        else
+        {
+            strokeText( resolvedText, aText->GetTextPos(), attrs );
+        }
     }
 }
 
 
 void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
 {
-    const COLOR4D& color = m_pcbSettings.GetColor( aTextBox, aTextBox->GetLayer() );
+    const COLOR4D& color = m_pcbSettings.GetColor( aTextBox, aLayer );
     int            thickness = getLineThickness( aTextBox->GetWidth() );
     PLOT_DASH_TYPE lineStyle = aTextBox->GetStroke().GetPlotStyle();
+    wxString       resolvedText( aTextBox->GetShownText() );
 
     m_gal->SetFillColor( color );
     m_gal->SetStrokeColor( color );
@@ -1656,8 +1692,6 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
             delete shape;
     }
 
-    wxString resolvedText( aTextBox->GetShownText() );
-
     if( resolvedText.Length() == 0 )
         return;
 
@@ -1685,31 +1719,64 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
     if( resolvedText.Length() == 0 )
         return;
 
-    const COLOR4D& color = m_pcbSettings.GetColor( aText, aLayer );
-    bool           outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayTextFill;
+    const COLOR4D&  color = m_pcbSettings.GetColor( aText, aLayer );
+    bool            outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayTextFill;
+    TEXT_ATTRIBUTES attrs = aText->GetAttributes();
 
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
-
-    TEXT_ATTRIBUTES attrs = aText->GetAttributes();
-
     attrs.m_Angle = aText->GetDrawRotation();
 
-    if( outline_mode )
-        attrs.m_StrokeWidth = m_pcbSettings.m_outlineWidth;
-    else
+    if( aText->IsKnockout() )
+    {
+        KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
+        SHAPE_POLY_SET             knockouts;
+
+        CALLBACK_GAL callback_gal( empty_opts,
+                // Polygon callback
+                [&]( const SHAPE_LINE_CHAIN& aPoly )
+                {
+                    knockouts.AddOutline( aPoly );
+                } );
+
+        KIFONT::FONT* font = aText->GetDrawFont();
+
         attrs.m_StrokeWidth = getLineThickness( aText->GetEffectiveTextPenWidth() );
 
-    std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = aText->GetRenderCache( resolvedText );
+        callback_gal.SetIsFill( font->IsOutline() );
+        callback_gal.SetIsStroke( font->IsStroke() );
+        callback_gal.SetLineWidth( attrs.m_StrokeWidth );
+        font->Draw( &callback_gal, resolvedText, aText->GetDrawPos(), attrs );
 
-    if( cache )
-    {
-        for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
-            m_gal->DrawGlyph( *glyph.get() );
+        SHAPE_POLY_SET finalPoly;
+        int            margin = attrs.m_StrokeWidth * 1.5;
+
+        aText->TransformBoundingBoxWithClearanceToPolygon( &finalPoly, margin );
+        finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
+        finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+        m_gal->SetIsStroke( false );
+        m_gal->SetIsFill( true );
+        m_gal->DrawPolygon( finalPoly );
     }
     else
     {
-        strokeText( resolvedText, aText->GetTextPos(), attrs );
+        if( outline_mode )
+            attrs.m_StrokeWidth = m_pcbSettings.m_outlineWidth;
+        else
+            attrs.m_StrokeWidth = getLineThickness( aText->GetEffectiveTextPenWidth() );
+
+        std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = aText->GetRenderCache( resolvedText );
+
+        if( cache )
+        {
+            for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
+                m_gal->DrawGlyph( *glyph.get() );
+        }
+        else
+        {
+            strokeText( resolvedText, aText->GetTextPos(), attrs );
+        }
     }
 
     // Draw the umbilical line

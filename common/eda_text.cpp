@@ -853,38 +853,48 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangula
     KIGFX::GAL_DISPLAY_OPTIONS      empty_opts;
     KIFONT::FONT*                   font = GetDrawFont();
     int                             penWidth = GetEffectiveTextPenWidth();
+    TEXT_ATTRIBUTES                 attrs = GetAttributes();
+    attrs.m_Angle = GetDrawRotation();
 
-    CALLBACK_GAL callback_gal(
-            empty_opts,
-            // Stroke callback
-            [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
-            {
-                shape->AddShape( new SHAPE_SEGMENT( aPt1, aPt2, penWidth ) );
-            },
-            // Triangulation callback
-            [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
-            {
-                SHAPE_SIMPLE* triShape = new SHAPE_SIMPLE;
-
-                for( const VECTOR2I& point : { aPt1, aPt2, aPt3 } )
-                    triShape->Append( point.x, point.y );
-
-                shape->AddShape( triShape );
-            } );
-
-    if( !aTriangulate )
+    if( aTriangulate )
     {
-        callback_gal.SetOutlineCallback(
+        CALLBACK_GAL callback_gal(
+                empty_opts,
+                // Stroke callback
+                [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
+                {
+                    shape->AddShape( new SHAPE_SEGMENT( aPt1, aPt2, penWidth ) );
+                },
+                // Triangulation callback
+                [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
+                {
+                    SHAPE_SIMPLE* triShape = new SHAPE_SIMPLE;
+
+                    for( const VECTOR2I& point : { aPt1, aPt2, aPt3 } )
+                        triShape->Append( point.x, point.y );
+
+                    shape->AddShape( triShape );
+                } );
+
+        font->Draw( &callback_gal, GetShownText(), GetDrawPos(), attrs );
+    }
+    else
+    {
+        CALLBACK_GAL callback_gal(
+                empty_opts,
+                // Stroke callback
+                [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
+                {
+                    shape->AddShape( new SHAPE_SEGMENT( aPt1, aPt2, penWidth ) );
+                },
+                // Outline callback
                 [&]( const SHAPE_LINE_CHAIN& aPoly )
                 {
                     shape->AddShape( aPoly.Clone() );
                 } );
+
+        font->Draw( &callback_gal, GetShownText(), GetDrawPos(), attrs );
     }
-
-    TEXT_ATTRIBUTES attrs = GetAttributes();
-    attrs.m_Angle = GetDrawRotation();
-
-    font->Draw( &callback_gal, GetShownText(), GetDrawPos(), attrs );
 
     return shape;
 }

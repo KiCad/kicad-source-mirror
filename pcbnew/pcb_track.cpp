@@ -1117,9 +1117,6 @@ wxString PCB_TRACK::ShowState( int stateBits )
     if( stateBits & IS_LINKED )
         ret << wxT( " | IS_LINKED" );
 
-    if( stateBits & LOCKED )
-        ret << wxT( " | LOCKED" );
-
     if( stateBits & IN_EDIT )
         ret << wxT( " | IN_EDIT" );
 
