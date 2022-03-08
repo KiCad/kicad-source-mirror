@@ -1722,9 +1722,15 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
 
 void PCB_PLUGIN::format( const PCB_TEXT* aText, int aNestLevel ) const
 {
-    m_out->Print( aNestLevel, "(gr_text %s (at %s",
+    m_out->Print( aNestLevel, "(gr_text" );
+
+    if( aText->IsLocked() )
+        m_out->Print( 0, " locked" );
+
+    m_out->Print( 0, " %s (at %s",
                   m_out->Quotew( aText->GetText() ).c_str(),
                   FormatInternalUnits( aText->GetTextPos() ).c_str() );
+
 
     if( !aText->GetTextAngle().IsZero() )
         m_out->Print( 0, " %s", FormatAngle( aText->GetTextAngle() ).c_str() );

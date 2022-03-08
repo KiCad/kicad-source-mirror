@@ -2698,7 +2698,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
     }
 
     default:
-        Expecting( "gr_arc, gr_circle, gr_curve, gr_line, gr_poly, or gp_rect" );
+        Expecting( "gr_arc, gr_circle, gr_curve, gr_line, gr_poly, or gr_rect" );
     }
 
     bool foundFill = false;
@@ -2834,11 +2834,19 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT()
     wxCHECK_MSG( CurTok() == T_gr_text, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_TEXT." ) );
 
-    T token;
-
     std::unique_ptr<PCB_TEXT> text = std::make_unique<PCB_TEXT>( m_board );
 
-    NeedSYMBOLorNUMBER();
+    T token = NextTok();
+
+    if( token == T_locked )
+    {
+        text->SetLocked( true );
+        token = NextTok();
+    }
+
+    if( !IsSymbol( token ) && (int) token != DSN_NUMBER )
+        Expecting( "text value" );
+
     text->SetText( FromUTF8() );
 
     NeedLEFT();
@@ -2906,7 +2914,7 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT()
             break;
 
         default:
-            Expecting( "layer, effects, render_cache or tstamp" );
+            Expecting( "layer, effects, locked, render_cache or tstamp" );
         }
     }
 
