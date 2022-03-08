@@ -88,8 +88,10 @@ private:
      */
     bool fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LAYER_ID aDebugLayer,
                          const SHAPE_POLY_SET& aSmoothedOutline,
-                         const SHAPE_POLY_SET& aMaxExtents, SHAPE_POLY_SET& aRawPolys );
+                         const SHAPE_POLY_SET& aMaxExtents, SHAPE_POLY_SET& aFillPolys );
 
+    bool fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
+                            const SHAPE_POLY_SET& aSmoothedOutline, SHAPE_POLY_SET& aFillPolys );
     /**
      * Function buildThermalSpokes
      * Constructs a list of all thermal spokes for the given zone.
@@ -108,7 +110,7 @@ private:
      * @param aFillPolys: A reference to a SHAPE_POLY_SET buffer to store polygons with no holes
      * (holes are linked to main outline by overlapping segments, and these polygons are shrunk
      * by aZone->GetMinThickness() / 2 to be drawn with a outline thickness = aZone->GetMinThickness()
-     * aFinalPolys are polygons that will be drawn on screen and plotted
+     * aFillPolys are polygons that will be drawn on screen and plotted
      */
     bool fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aFillPolys );
 
@@ -116,11 +118,11 @@ private:
      * for zones having the ZONE_FILL_MODE::ZONE_FILL_MODE::HATCH_PATTERN, create a grid pattern
      * in filled areas of aZone, giving to the filled polygons a fill style like a grid
      * @param aZone is the zone to modify
-     * @param aRawPolys: A reference to a SHAPE_POLY_SET buffer containing the initial
+     * @param aFillPolys: A reference to a SHAPE_POLY_SET buffer containing the initial
      * filled areas, and after adding the grid pattern, the modified filled areas with holes
      */
     bool addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LAYER_ID aDebugLayer,
-                                 SHAPE_POLY_SET& aRawPolys );
+                                 SHAPE_POLY_SET& aFillPolys );
 
     BOARD*                m_board;
     SHAPE_POLY_SET        m_boardOutline;       // the board outlines, if exists

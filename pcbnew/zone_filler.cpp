@@ -960,7 +960,7 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID a
             SHAPE_POLY_SET d = a; \
             d.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE ); \
             d.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE ); \
-            aRawPolys = d; \
+            aFillPolys = d; \
             return false; \
         } \
     }
@@ -977,11 +977,9 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID a
  * 5 - Removes unconnected copper islands, deleting any affected spokes
  * 6 - Adds in the remaining spokes
  */
-bool ZONE_FILLER::fillCopperZone( const ZONE* aZone,
-                                  PCB_LAYER_ID aLayer, PCB_LAYER_ID aDebugLayer,
+bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LAYER_ID aDebugLayer,
                                   const SHAPE_POLY_SET& aSmoothedOutline,
-                                  const SHAPE_POLY_SET& aMaxExtents,
-                                  SHAPE_POLY_SET& aRawPolys )
+                                  const SHAPE_POLY_SET& aMaxExtents, SHAPE_POLY_SET& aFillPolys )
 {
     m_maxError = m_board->GetDesignSettings().m_MaxError;
 
@@ -1010,14 +1008,14 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone,
     std::deque<SHAPE_LINE_CHAIN> thermalSpokes;
     SHAPE_POLY_SET               clearanceHoles;
 
-    aRawPolys = aSmoothedOutline;
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In1_Cu, wxT( "smoothed-outline" ) );
+    aFillPolys = aSmoothedOutline;
+    DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In1_Cu, wxT( "smoothed-outline" ) );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
 
-    knockoutThermalReliefs( aZone, aLayer, aRawPolys, thermalConnectionPads, noConnectionPads );
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In2_Cu, wxT( "minus-thermal-reliefs" ) );
+    knockoutThermalReliefs( aZone, aLayer, aFillPolys, thermalConnectionPads, noConnectionPads );
+    DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In2_Cu, wxT( "minus-thermal-reliefs" ) );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
@@ -1036,7 +1034,7 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone,
     // Create a temporary zone that we can hit-test spoke-ends against.  It's only temporary
     // because the "real" subtract-clearance-holes has to be done after the spokes are added.
     static const bool USE_BBOX_CACHES = true;
-    SHAPE_POLY_SET testAreas = aRawPolys;
+    SHAPE_POLY_SET testAreas = aFillPolys;
     testAreas.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
     DUMP_POLYS_TO_COPPER_LAYER( testAreas, In4_Cu, wxT( "minus-clearance-holes" ) );
 
@@ -1070,7 +1068,7 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone,
             if( m_debugZoneFiller )
                 debugSpokes.AddOutline( spoke );
 
-            aRawPolys.AddOutline( spoke );
+            aFillPolys.AddOutline( spoke );
             continue;
         }
 
@@ -1090,7 +1088,7 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone,
                 if( m_debugZoneFiller )
                     debugSpokes.AddOutline( spoke );
 
-                aRawPolys.AddOutline( spoke );
+                aFillPolys.AddOutline( spoke );
                 break;
             }
         }
@@ -1101,14 +1099,14 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone,
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
 
-    aRawPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In8_Cu, wxT( "after-spoke-trimming" ) );
+    aFillPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
+    DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In8_Cu, wxT( "after-spoke-trimming" ) );
 
     // Prune features that don't meet minimum-width criteria
     if( half_min_width - epsilon > epsilon )
-        aRawPolys.Deflate( half_min_width - epsilon, numSegs, cornerStrategy );
+        aFillPolys.Deflate( half_min_width - epsilon, numSegs, cornerStrategy );
 
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In9_Cu, wxT( "deflated" ) );
+    DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In9_Cu, wxT( "deflated" ) );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
@@ -1116,7 +1114,7 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone,
     // Now remove the non filled areas due to the hatch pattern
     if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
     {
-        if( !addHatchFillTypeOnZone( aZone, aLayer, aDebugLayer, aRawPolys ) )
+        if( !addHatchFillTypeOnZone( aZone, aLayer, aDebugLayer, aFillPolys ) )
             return false;
     }
 
@@ -1125,22 +1123,98 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone,
 
     // Re-inflate after pruning of areas that don't meet minimum-width criteria
     if( half_min_width - epsilon > epsilon )
-        aRawPolys.Inflate( half_min_width - epsilon, numSegs, cornerStrategy );
+        aFillPolys.Inflate( half_min_width - epsilon, numSegs, cornerStrategy );
 
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In15_Cu, wxT( "after-reinflating" ) );
+    DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In15_Cu, wxT( "after-reinflating" ) );
 
     // Ensure additive changes (thermal stubs and particularly inflating acute corners) do not
     // add copper outside the zone boundary or inside the clearance holes
-    aRawPolys.BooleanIntersection( aMaxExtents, SHAPE_POLY_SET::PM_FAST );
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In16_Cu, wxT( "after-trim-to-outline" ) );
-    aRawPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In17_Cu, wxT( "after-trim-to-clearance-holes" ) );
+    aFillPolys.BooleanIntersection( aMaxExtents, SHAPE_POLY_SET::PM_FAST );
+    DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In16_Cu, wxT( "after-trim-to-outline" ) );
+    aFillPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
+    DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In17_Cu, wxT( "after-trim-to-clearance-holes" ) );
 
     // Lastly give any same-net but higher-priority zones control over their own area.
-    subtractHigherPriorityZones( aZone, aLayer, aRawPolys );
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In18_Cu, wxT( "minus-higher-priority-zones" ) );
+    subtractHigherPriorityZones( aZone, aLayer, aFillPolys );
+    DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In18_Cu, wxT( "minus-higher-priority-zones" ) );
 
-    aRawPolys.Fracture( SHAPE_POLY_SET::PM_FAST );
+    aFillPolys.Fracture( SHAPE_POLY_SET::PM_FAST );
+    return true;
+}
+
+
+bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
+                                     const SHAPE_POLY_SET& aSmoothedOutline,
+                                     SHAPE_POLY_SET& aFillPolys )
+{
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    EDA_RECT               zone_boundingbox = aZone->GetCachedBoundingBox();
+    SHAPE_POLY_SET         clearanceHoles;
+    long                   ticker = 0;
+
+    auto checkForCancel =
+            [&ticker]( PROGRESS_REPORTER* aReporter ) -> bool
+            {
+                return aReporter && ( ticker++ % 50 ) == 0 && aReporter->IsCancelled();
+            };
+
+    auto knockoutGraphicClearance =
+            [&]( BOARD_ITEM* aItem )
+            {
+                if( aItem->IsKnockout() && aItem->IsOnLayer( aLayer )
+                        && aItem->GetBoundingBox().Intersects( zone_boundingbox ) )
+                {
+                    DRC_CONSTRAINT cc = bds.m_DRCEngine->EvalRules( MECHANICAL_CLEARANCE_CONSTRAINT,
+                                                                    aZone, aItem, aLayer );
+
+                    addKnockout( aItem, aLayer, cc.GetValue().Min(), false, clearanceHoles );
+                }
+            };
+
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+    {
+        if( checkForCancel( m_progressReporter ) )
+            return false;
+
+        knockoutGraphicClearance( &footprint->Reference() );
+        knockoutGraphicClearance( &footprint->Value() );
+
+        for( BOARD_ITEM* item : footprint->GraphicalItems() )
+            knockoutGraphicClearance( item );
+    }
+
+    for( BOARD_ITEM* item : m_board->Drawings() )
+    {
+        if( checkForCancel( m_progressReporter ) )
+            return false;
+
+        knockoutGraphicClearance( item );
+    }
+
+    aFillPolys = aSmoothedOutline;
+    aFillPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
+
+    // Features which are min_width should survive pruning; features that are *less* than
+    // min_width should not.  Therefore we subtract epsilon from the min_width when
+    // deflating/inflating.
+    int half_min_width = aZone->GetMinThickness() / 2;
+    int epsilon = Millimeter2iu( 0.001 );
+    int numSegs = GetArcToSegmentCount( half_min_width, m_maxError, FULL_CIRCLE );
+
+    aFillPolys.Deflate( half_min_width - epsilon, numSegs );
+
+    // Remove the non filled areas due to the hatch pattern
+    if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
+    {
+        if( !addHatchFillTypeOnZone( aZone, aLayer, aLayer, aFillPolys ) )
+            return false;
+    }
+
+    // Re-inflate after pruning of areas that don't meet minimum-width criteria
+    if( half_min_width - epsilon > epsilon )
+        aFillPolys.Inflate( half_min_width - epsilon, numSegs );
+
+    aFillPolys.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
     return true;
 }
 
@@ -1176,27 +1250,8 @@ bool ZONE_FILLER::fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_S
     }
     else
     {
-        // Features which are min_width should survive pruning; features that are *less* than
-        // min_width should not.  Therefore we subtract epsilon from the min_width when
-        // deflating/inflating.
-        int half_min_width = aZone->GetMinThickness() / 2;
-        int epsilon = Millimeter2iu( 0.001 );
-        int numSegs = GetArcToSegmentCount( half_min_width, m_maxError, FULL_CIRCLE );
-
-        smoothedPoly.Deflate( half_min_width - epsilon, numSegs );
-
-        // Remove the non filled areas due to the hatch pattern
-        if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
-            addHatchFillTypeOnZone( aZone, aLayer, debugLayer, smoothedPoly );
-
-        // Re-inflate after pruning of areas that don't meet minimum-width criteria
-        if( half_min_width - epsilon > epsilon )
-            smoothedPoly.Inflate( half_min_width - epsilon, numSegs );
-
-        aFillPolys = smoothedPoly;
-
-        aFillPolys.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-        aZone->SetNeedRefill( false );
+        if( fillNonCopperZone( aZone, aLayer, smoothedPoly, aFillPolys ) )
+            aZone->SetNeedRefill( false );
     }
 
     return true;
@@ -1324,7 +1379,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
 
 
 bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
-                                          PCB_LAYER_ID aDebugLayer, SHAPE_POLY_SET& aRawPolys )
+                                          PCB_LAYER_ID aDebugLayer, SHAPE_POLY_SET& aFillPolys )
 {
     // Build grid:
 
@@ -1340,7 +1395,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
     int linethickness = thickness - aZone->GetMinThickness();
     int gridsize = thickness + aZone->GetHatchGap();
 
-    SHAPE_POLY_SET filledPolys = aRawPolys;
+    SHAPE_POLY_SET filledPolys = aFillPolys;
     // Use a area that contains the rotated bbox by orientation, and after rotate the result
     // by -orientation.
     if( !aZone->GetHatchOrientation().IsZero() )
@@ -1462,7 +1517,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
 
     // The fill has already been deflated to ensure GetMinThickness() so we just have to
     // account for anything beyond that.
-    SHAPE_POLY_SET deflatedFilledPolys = aRawPolys;
+    SHAPE_POLY_SET deflatedFilledPolys = aFillPolys;
     deflatedFilledPolys.Deflate( outline_margin - aZone->GetMinThickness(), 16 );
     holes.BooleanIntersection( deflatedFilledPolys, SHAPE_POLY_SET::PM_FAST );
     DUMP_POLYS_TO_COPPER_LAYER( holes, In11_Cu, wxT( "fill-clipped-hatch-holes" ) );
@@ -1545,8 +1600,8 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
 
     // create grid. Use SHAPE_POLY_SET::PM_STRICTLY_SIMPLE to
     // generate strictly simple polygons needed by Gerber files and Fracture()
-    aRawPolys.BooleanSubtract( aRawPolys, holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-    DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In14_Cu, wxT( "after-hatching" ) );
+    aFillPolys.BooleanSubtract( aFillPolys, holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In14_Cu, wxT( "after-hatching" ) );
 
     return true;
 }
