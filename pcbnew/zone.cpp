@@ -1090,6 +1090,8 @@ void ZONE::CacheTriangulation( PCB_LAYER_ID aLayer )
     {
         for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
             pair.second.CacheTriangulation();
+
+        m_Poly->CacheTriangulation( false );
     }
     else
     {
