@@ -19,7 +19,7 @@ class TestTracks(unittest.TestCase):
         arcs = [t.Cast() for t in self.pcb.Tracks() if t.GetClass() == 'PCB_ARC']
         self.assertEqual(13, len(arcs))
         arc = sorted(arcs, key=lambda t: [t.GetStart()[0], t.GetStart()[1]])[0]
-        self.assertEqual([29414211, 26499999], [arc.GetCenter()[0], arc.GetCenter()[1]])
+        self.assertEqual( [29414200, 26500000], [arc.GetCenter()[0], arc.GetCenter()[1]] )
         self.assertEqual([1800, 2250], [round(arc.GetArcAngleStart()), round(arc.GetArcAngleEnd())])
         self.assertEqual(2414211, round(arc.GetRadius()))
 
