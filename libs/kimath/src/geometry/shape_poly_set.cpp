@@ -1518,7 +1518,7 @@ bool SHAPE_POLY_SET::Collide( const SHAPE* aShape, int aClearance, int* aActual,
         return false;
     }
 
-    const_cast<SHAPE_POLY_SET*>( this )->CacheTriangulation( true );
+    const_cast<SHAPE_POLY_SET*>( this )->CacheTriangulation( false );
 
     int      actual = INT_MAX;
     VECTOR2I location;
