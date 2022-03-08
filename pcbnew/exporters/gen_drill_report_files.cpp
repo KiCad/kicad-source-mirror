@@ -204,13 +204,19 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
             break;
 
         case PCB_TEXT_T:
-            itemplotter.PlotPcbText( static_cast<PCB_TEXT*>( item ), item->GetLayer() );
+        {
+            PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
+            itemplotter.PlotPcbText( text, text->GetLayer(), text->IsKnockout() );
             break;
+        }
 
         case PCB_TEXTBOX_T:
-            itemplotter.PlotPcbText( static_cast<PCB_TEXTBOX*>( item ), item->GetLayer() );
-            itemplotter.PlotPcbShape( static_cast<PCB_TEXTBOX*>( item ) );
+        {
+            PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
+            itemplotter.PlotPcbText( textbox, textbox->GetLayer(), textbox->IsKnockout() );
+            itemplotter.PlotPcbShape( textbox );
             break;
+        }
 
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_CENTER_T:

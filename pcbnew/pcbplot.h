@@ -90,8 +90,9 @@ public:
 
     void PlotDimension( const PCB_DIMENSION_BASE* aDim );
     void PlotPcbTarget( const PCB_TARGET* aMire );
-    void PlotFilledAreas( const ZONE* aZone, const SHAPE_POLY_SET& aPolysList );
-    void PlotPcbText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer );
+    void PlotFilledAreas( const ZONE* aZone, PCB_LAYER_ID aLayer,
+                          const SHAPE_POLY_SET& aPolysList );
+    void PlotPcbText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, bool aIsKnockout );
     void PlotPcbShape( const PCB_SHAPE* aShape );
 
     /**

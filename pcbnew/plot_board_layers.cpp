@@ -626,13 +626,13 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 }
             }
 
-            itemplotter.PlotFilledAreas( zone, mainArea );
+            itemplotter.PlotFilledAreas( zone, layer, mainArea );
 
             if( !islands.IsEmpty() )
             {
                 ZONE dummy( *zone );
                 dummy.SetNet( &nonet );
-                itemplotter.PlotFilledAreas( &dummy, islands );
+                itemplotter.PlotFilledAreas( &dummy, layer, islands );
             }
         }
     }
@@ -973,7 +973,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     areas.BooleanAdd( initialPolys, SHAPE_POLY_SET::PM_FAST );
     areas.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
-    itemplotter.PlotFilledAreas( &zone, areas );
+    itemplotter.PlotFilledAreas( &zone, layer, areas );
 #else
 
     // Remove initial shapes: each shape will be added later, as flashed item or region

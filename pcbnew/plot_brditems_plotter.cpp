@@ -37,6 +37,7 @@
 #include <math/vector2d.h>                    // for VECTOR2I
 #include <plotters/plotter_gerber.h>
 #include <trigo.h>
+#include <callback_gal.h>
 
 #include <board_design_settings.h>            // for BOARD_DESIGN_SETTINGS
 #include <core/typeinfo.h>                    // for dyn_cast, PCB_DIMENSION_T
@@ -352,13 +353,19 @@ void BRDITEMS_PLOTTER::PlotPcbGraphicItem( const BOARD_ITEM* item )
         break;
 
     case PCB_TEXT_T:
-        PlotPcbText( static_cast<const PCB_TEXT*>( item ), item->GetLayer() );
+    {
+        const PCB_TEXT* text = static_cast<const PCB_TEXT*>( item );
+        PlotPcbText( text, text->GetLayer(), text->IsKnockout() );
         break;
+    }
 
     case PCB_TEXTBOX_T:
-        PlotPcbText( static_cast<const PCB_TEXTBOX*>( item ), item->GetLayer() );
-        PlotPcbShape( static_cast<const PCB_TEXTBOX*>( item ) );
+    {
+        const PCB_TEXTBOX* textbox = static_cast<const PCB_TEXTBOX*>( item );
+        PlotPcbText( textbox, textbox->GetLayer(), textbox->IsKnockout() );
+        PlotPcbShape( textbox );
         break;
+    }
 
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_CENTER_T:
@@ -441,7 +448,7 @@ void BRDITEMS_PLOTTER::PlotDimension( const PCB_DIMENSION_BASE* aDim )
     // the white items are not seen on a white paper or screen
     m_plotter->SetColor( color != WHITE ? color : LIGHTGRAY);
 
-    PlotPcbText( &aDim->Text(), aDim->GetLayer() );
+    PlotPcbText( &aDim->Text(), aDim->GetLayer(), false );
 
     for( const std::shared_ptr<SHAPE>& shape : aDim->GetShapes() )
     {
@@ -559,7 +566,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
 
             if( m_layerMask[ textbox->GetLayer() ] )
             {
-                PlotPcbText( textbox, textbox->GetLayer() );
+                PlotPcbText( textbox, textbox->GetLayer(), textbox->IsKnockout() );
                 PlotFootprintShape( textbox );
             }
 
@@ -771,10 +778,11 @@ void BRDITEMS_PLOTTER::PlotFootprintShape( const FP_SHAPE* aShape )
 }
 
 
-void BRDITEMS_PLOTTER::PlotPcbText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer )
+void BRDITEMS_PLOTTER::PlotPcbText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, bool aIsKnockout )
 {
-    wxString      shownText( aText->GetShownText() );
-    KIFONT::FONT* font = aText->GetDrawFont();
+    wxString        shownText( aText->GetShownText() );
+    KIFONT::FONT*   font = aText->GetDrawFont();
+    TEXT_ATTRIBUTES attrs = aText->GetAttributes();
 
     if( shownText.IsEmpty() )
         return;
@@ -792,20 +800,42 @@ void BRDITEMS_PLOTTER::PlotPcbText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer )
 
     VECTOR2I size = aText->GetTextSize();
     VECTOR2I pos = aText->GetTextPos();
-    int     thickness = aText->GetEffectiveTextPenWidth();
+
+    attrs.m_StrokeWidth = aText->GetEffectiveTextPenWidth();
 
     if( aText->IsMirrored() )
         size.x = -size.x;
 
-    // Non bold texts thickness is clamped at 1/6 char size by the low level draw function.
-    // but in Pcbnew we do not manage bold texts and thickness up to 1/4 char size
-    // (like bold text) and we manage the thickness.
-    // So we set bold flag to true
-    bool allow_bold = true;
+    m_plotter->SetCurrentLineWidth( attrs.m_StrokeWidth );
 
-    m_plotter->SetCurrentLineWidth( thickness );
+    if( aIsKnockout )
+    {
+        KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
+        SHAPE_POLY_SET             knockouts;
 
-    if( aText->IsMultilineAllowed() )
+        CALLBACK_GAL callback_gal( empty_opts,
+                // Polygon callback
+                [&]( const SHAPE_LINE_CHAIN& aPoly )
+                {
+                    knockouts.AddOutline( aPoly );
+                } );
+
+        callback_gal.SetIsFill( font->IsOutline() );
+        callback_gal.SetIsStroke( font->IsStroke() );
+        font->Draw( &callback_gal, shownText, aText->GetDrawPos(), attrs );
+
+        SHAPE_POLY_SET finalPoly;
+        int            margin = attrs.m_StrokeWidth * 1.5;
+
+        aText->TransformBoundingBoxWithClearanceToPolygon( &finalPoly, margin );
+        finalPoly.Rotate( -aText->GetDrawRotation(), aText->GetTextPos() );
+        finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
+        finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+        for( int ii = 0; ii < finalPoly.OutlineCount(); ++ii )
+            m_plotter->PlotPoly( finalPoly.Outline( ii ), FILL_T::FILLED_SHAPE, 0, &gbr_metadata );
+    }
+    else if( aText->IsMultilineAllowed() )
     {
         std::vector<VECTOR2I> positions;
         wxArrayString strings_list;
@@ -818,20 +848,21 @@ void BRDITEMS_PLOTTER::PlotPcbText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer )
         {
             wxString& txt =  strings_list.Item( ii );
             m_plotter->Text( positions[ii], color, txt, aText->GetDrawRotation(), size,
-                             aText->GetHorizJustify(), aText->GetVertJustify(), thickness,
-                             aText->IsItalic(), allow_bold, false, font, &gbr_metadata );
+                             attrs.m_Halign, attrs.m_Valign, attrs.m_StrokeWidth, attrs.m_Italic,
+                             attrs.m_Bold, false, font, &gbr_metadata );
         }
     }
     else
     {
-        m_plotter->Text( pos, color, shownText, aText->GetDrawRotation(), size,
-                         aText->GetHorizJustify(), aText->GetVertJustify(), thickness,
-                         aText->IsItalic(), allow_bold, false, font, &gbr_metadata );
+        m_plotter->Text( pos, color, shownText, aText->GetDrawRotation(), size, attrs.m_Halign,
+                         attrs.m_Valign, attrs.m_StrokeWidth, attrs.m_Italic, attrs.m_Bold, false,
+                         font, &gbr_metadata );
     }
 }
 
 
-void BRDITEMS_PLOTTER::PlotFilledAreas( const ZONE* aZone, const SHAPE_POLY_SET& polysList )
+void BRDITEMS_PLOTTER::PlotFilledAreas( const ZONE* aZone, PCB_LAYER_ID aLayer,
+                                        const SHAPE_POLY_SET& polysList )
 {
     if( polysList.IsEmpty() )
         return;
@@ -860,7 +891,7 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( const ZONE* aZone, const SHAPE_POLY_SET&
         }
     }
 
-    m_plotter->SetColor( getColor( aZone->GetLayer() ) );
+    m_plotter->SetColor( getColor( aLayer ) );
 
     m_plotter->StartBlock( nullptr );    // Clean current object attributes
 

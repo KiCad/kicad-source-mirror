@@ -964,8 +964,10 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCorn
 
     for( VECTOR2I& corner : corners )
     {
-        // Rotate polygon
-        RotatePoint( corner, GetDrawPos(), GetDrawRotation() );
+        // Rotate if we're using GetEffectiveTextShape()
+        if( GetDrawFont()->IsOutline() )
+            RotatePoint( corner, GetDrawPos(), GetDrawRotation() );
+
         aCornerBuffer->Append( corner.x, corner.y );
     }
 }

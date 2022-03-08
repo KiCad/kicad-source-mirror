@@ -47,9 +47,11 @@
 #include <project/net_settings.h>
 #include <settings/color_settings.h>
 #include <settings/common_settings.h>
+#include <pcbnew_settings.h>
 
 #include <convert_basic_shapes_to_polygon.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <callback_gal.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_rect.h>
@@ -60,8 +62,6 @@
 #include <kiface_base.h>
 #include <gr_text.h>
 #include <pgm_base.h>
-#include "pcbnew_settings.h"
-#include "callback_gal.h"
 
 using namespace KIGFX;
 
@@ -1752,6 +1752,7 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
         int            margin = attrs.m_StrokeWidth * 1.5;
 
         aText->TransformBoundingBoxWithClearanceToPolygon( &finalPoly, margin );
+        finalPoly.Rotate( -aText->GetDrawRotation(), aText->GetTextPos() );
         finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
         finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
 
