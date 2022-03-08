@@ -643,7 +643,16 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 // Seems like we want to plot from back to front?
 static const PCB_LAYER_ID plot_seq[] = {
 
-    B_Adhes,        // 32
+    User_9,
+    User_8,
+    User_7,
+    User_6,
+    User_5,
+    User_4,
+    User_3,
+    User_2,
+    User_1,
+    B_Adhes,
     F_Adhes,
     B_Paste,
     F_Paste,
