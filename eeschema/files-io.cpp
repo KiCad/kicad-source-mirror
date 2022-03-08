@@ -62,6 +62,7 @@
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
 #include <wx/log.h>
+#include <wx/stdpaths.h>
 #include <tools/ee_inspection_tool.h>
 #include <paths.h>
 #include <wx_filename.h>  // For ::ResolvePossibleSymlinks
@@ -693,9 +694,9 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
     if( !IsWritable( schematicFileName ) )
         return false;
 
-    wxFileName tempFile( schematicFileName );
-    tempFile.SetName( wxT( "." ) + tempFile.GetName() );
-    tempFile.SetExt( tempFile.GetExt() + wxT( "$" ) );
+    wxStandardPaths& paths = wxStandardPaths::Get();
+    wxString tempFile = wxFileName::CreateTempFileName(
+            paths.GetTempDir() + wxFileName::GetPathSeparator() + wxT( "eeschema" ) );
 
     // Save
     wxLogTrace( traceAutoSave, "Saving file " + schematicFileName.GetFullPath() );
@@ -706,7 +707,7 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
 
     try
     {
-        pi->Save( tempFile.GetFullPath(), aSheet, &Schematic() );
+        pi->Save( tempFile, aSheet, &Schematic() );
         success = true;
     }
     catch( const IO_ERROR& ioe )
@@ -717,11 +718,11 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
         DisplayError( this, msg );
 
         msg.Printf( _( "Failed to create temporary file '%s'." ),
-                    tempFile.GetFullPath() );
+                    tempFile );
         SetMsgPanel( wxEmptyString, msg );
 
         // In case we started a file but didn't fully write it, clean up
-        wxRemoveFile( tempFile.GetFullPath() );
+        wxRemoveFile( tempFile );
 
         success = false;
     }
@@ -729,18 +730,18 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
     if( success )
     {
         // Replace the original with the temporary file we just wrote
-        success = wxRenameFile( tempFile.GetFullPath(), schematicFileName.GetFullPath() );
+        success = wxRenameFile( tempFile, schematicFileName.GetFullPath() );
 
         if( !success )
         {
             msg.Printf( _( "Error saving schematic file '%s'.\n"
                            "Failed to rename temporary file '%s'." ),
                         schematicFileName.GetFullPath(),
-                        tempFile.GetFullPath() );
+                        tempFile );
             DisplayError( this, msg );
 
             msg.Printf( _( "Failed to rename temporary file '%s'." ),
-                        tempFile.GetFullPath() );
+                        tempFile );
             SetMsgPanel( wxEmptyString, msg );
         }
     }
