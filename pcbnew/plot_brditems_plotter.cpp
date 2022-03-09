@@ -828,7 +828,6 @@ void BRDITEMS_PLOTTER::PlotPcbText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, 
         int            margin = attrs.m_StrokeWidth * 1.5;
 
         aText->TransformBoundingBoxWithClearanceToPolygon( &finalPoly, margin );
-        finalPoly.Rotate( -aText->GetDrawRotation(), aText->GetTextPos() );
         finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
         finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
 

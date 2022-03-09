@@ -235,7 +235,14 @@ public:
     void TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCornerBuffer,
                                                      int aClearanceValue ) const;
 
-    std::shared_ptr<SHAPE_COMPOUND> GetEffectiveTextShape( bool aTriangulate = true ) const;
+    /**
+     * build a list of segments (SHAPE_SEGMENT) to describe a text shape.
+     * @param aTriangulate: true to build also the triangulation of each shape
+     * @param aUseTextRotation: true to use the actual text draw rotation.
+     * false to build a list of shape for a not rotated text ("native" shapes).
+     */
+    std::shared_ptr<SHAPE_COMPOUND> GetEffectiveTextShape( bool aTriangulate = true,
+                                                           bool aUseTextRotation = true ) const;
 
     /**
      * Test if \a aPoint is within the bounds of this object.

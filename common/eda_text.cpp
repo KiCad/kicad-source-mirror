@@ -847,14 +847,15 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
 }
 
 
-std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangulate ) const
+std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangulate,
+                                                                 bool aUseTextRotation ) const
 {
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
     KIGFX::GAL_DISPLAY_OPTIONS      empty_opts;
     KIFONT::FONT*                   font = GetDrawFont();
     int                             penWidth = GetEffectiveTextPenWidth();
     TEXT_ATTRIBUTES                 attrs = GetAttributes();
-    attrs.m_Angle = GetDrawRotation();
+    attrs.m_Angle = aUseTextRotation ? GetDrawRotation() : ANGLE_0;
 
     if( aTriangulate )
     {
@@ -947,7 +948,7 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCorn
     // TrueType bounding boxes aren't guaranteed to include all descenders, diacriticals, etc.
     // Since we use this for zone knockouts and DRC, we need something more accurate.
     if( GetDrawFont()->IsOutline() )
-        rect = GetEffectiveTextShape()->BBox();
+        rect = GetEffectiveTextShape( false, false )->BBox();
 
     rect.Inflate( aClearanceValue );
 
@@ -964,9 +965,7 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCorn
 
     for( VECTOR2I& corner : corners )
     {
-        // Rotate if we're using GetEffectiveTextShape()
-        if( GetDrawFont()->IsOutline() )
-            RotatePoint( corner, GetDrawPos(), GetDrawRotation() );
+        RotatePoint( corner, GetDrawPos(), GetDrawRotation() );
 
         aCornerBuffer->Append( corner.x, corner.y );
     }
