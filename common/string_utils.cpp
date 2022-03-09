@@ -50,6 +50,8 @@ wxString ConvertToNewOverbarNotation( const wxString& aOldStr )
     if( aOldStr == wxT( "~" ) )
         return aOldStr;
 
+    newStr.reserve( aOldStr.length() );
+
     for( wxString::const_iterator chIt = aOldStr.begin(); chIt != aOldStr.end(); ++chIt )
     {
         if( *chIt == '~' )
@@ -315,6 +317,8 @@ wxString TitleCaps( const wxString& aString )
 
     wxStringSplit( aString, words, ' ' );
 
+    result.reserve( aString.length() );
+
     for( const wxString& word : words )
     {
         if( !result.IsEmpty() )
@@ -433,6 +437,8 @@ std::string EscapedUTF8( const wxString& aString )
 
     std::string ret;
 
+    ret.reserve( utf8.length() + 2 );
+
     ret += '"';
 
     for( std::string::const_iterator it = utf8.begin();  it!=utf8.end();  ++it )
@@ -463,6 +469,8 @@ std::string EscapedUTF8( const wxString& aString )
 wxString EscapeHTML( const wxString& aString )
 {
     wxString converted;
+
+    converted.reserve( aString.length() );
 
     for( wxUniChar c : aString )
     {
