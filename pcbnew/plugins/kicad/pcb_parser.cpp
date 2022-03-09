@@ -5356,6 +5356,9 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
     zone->SetAssignedPriority( 0 );
 
+    // This is the default for board files:
+    zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::ALWAYS );
+
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
         if( token == T_locked )

@@ -49,6 +49,7 @@ ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent, bool aInFP ) :
     m_CornerSelection = nullptr;                // no corner is selected
     m_isFilled = false;                         // fill status : true when the zone is filled
     m_teardropType = TEARDROP_TYPE::TD_NONE;
+    m_islandRemovalMode = ISLAND_REMOVAL_MODE::ALWAYS;
     m_borderStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE;
     m_borderHatchPitch = GetDefaultHatchPitch();
     m_priority = 0;
