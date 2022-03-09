@@ -142,6 +142,8 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
 {
     wxString converted;
 
+    converted.reserve( aSource.length() );
+
     for( wxUniChar c: aSource )
     {
         if( aContext == CTX_NETNAME )
@@ -232,8 +234,16 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
 
 wxString UnescapeString( const wxString& aSource )
 {
+    size_t sourceLen = aSource.length();
+
+    // smallest escape string is three characters, shortcut everything else
+    if( sourceLen <= 2 )
+    {
+        return aSource;
+    }
+
     wxString newbuf;
-    size_t   sourceLen = aSource.length();
+    newbuf.reserve( sourceLen );
 
     for( size_t i = 0; i < sourceLen; ++i )
     {
