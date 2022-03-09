@@ -1,4 +1,5 @@
 %ignore EDA_SHAPE::getCenter;
+#pragma SWIG nowarn=503
 
 %{
 #include <geometry/eda_angle.h>

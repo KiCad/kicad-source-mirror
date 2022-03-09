@@ -29,6 +29,8 @@
 %ignore VECTOR2<int>::ECOORD_MAX;
 %ignore VECTOR2<int>::ECOORD_MIN;
 
+#pragma SWIG nowarn=317
+
 
 %rename(getWxPoint) operator wxPoint;
 %rename(getWxSize) operator wxSize;
