@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers.
+ * Copyright (C) 2004-2022 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,13 +66,26 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
     if( !reportPhase( _( "Checking keepouts & disallow constraints..." ) ) )
         return false;   // DRC cancelled
 
-    // Zones can be expensive (particularly when multi-layer), so we run the progress bar on them
-    BOARD* board = m_drcEngine->GetBoard();
-    int    boardZoneCount = board->Zones().size();
-    int    delta = std::max( 1, boardZoneCount / board->GetCopperLayerCount() );
+    int    count = 0;
+    int    delta = 10;
     int    ii = 0;
 
-    auto doCheckItem =
+    auto checkTextOnEdgeCuts =
+            [&]( BOARD_ITEM* item )
+            {
+                if( item->Type() == PCB_TEXT_T || item->Type() == PCB_TEXTBOX_T
+                        || BaseType( item->Type() ) == PCB_DIMENSION_T )
+                {
+                    if( item->GetLayer() == Edge_Cuts )
+                    {
+                        std::shared_ptr<DRC_ITEM> drc = DRC_ITEM::Create( DRCE_TEXT_ON_EDGECUTS );
+                        drc->SetItems( item );
+                        reportViolation( drc, item->GetPosition(), Edge_Cuts );
+                    }
+                }
+            };
+
+    auto checkDisallow =
             [&]( BOARD_ITEM* item )
             {
                 auto constraint = m_drcEngine->EvalRules( DISALLOW_CONSTRAINT, item, nullptr,
@@ -93,60 +106,80 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                 }
             };
 
-    auto checkItem =
+    forEachGeometryItem( {}, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
-                if( !m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_ON_EDGECUTS )
-                        && ( item->Type() == PCB_TEXT_T
-                                || item->Type() == PCB_TEXTBOX_T
-                                || BaseType( item->Type() ) == PCB_DIMENSION_T )
-                        && item->GetLayer() == Edge_Cuts )
+                ZONE* zone = dynamic_cast<ZONE*>( item );
+
+                if( zone && zone->GetIsRuleArea() )
+                    return true;
+
+                // Report progress on zone copper layers only.  Everything else is in the noise.
+                if( zone )
                 {
-                    std::shared_ptr<DRC_ITEM> drc = DRC_ITEM::Create( DRCE_TEXT_ON_EDGECUTS );
-                    drc->SetItems( item );
-                    reportViolation( drc, item->GetPosition(), Edge_Cuts );
-                }
-
-                if( m_drcEngine->IsErrorLimitExceeded( DRCE_ALLOWED_ITEMS ) )
-                    return false;
-
-                if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
-                {
-                    ZONE* zone = static_cast<ZONE*>( item );
-
-                    if( zone->GetIsRuleArea() )
-                        return true;
-
-                    if( item->Type() == PCB_ZONE_T )
+                    for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
                     {
-                        if( !reportProgress( ii++, boardZoneCount, delta ) )
-                            return false;   // DRC cancelled
+                        if( IsCopperLayer( layer ) )
+                            count++;
                     }
                 }
 
-                item->ClearFlags( HOLE_PROXY );
-                doCheckItem( item );
+                return true;
+            } );
 
-                bool hasHole;
+    forEachGeometryItem( {}, LSET::AllLayersMask(),
+            [&]( BOARD_ITEM* item ) -> bool
+            {
+                if( !m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_ON_EDGECUTS ) )
+                    checkTextOnEdgeCuts( item );
 
-                switch( item->Type() )
+                if( !m_drcEngine->IsErrorLimitExceeded( DRCE_ALLOWED_ITEMS ) )
                 {
-                case PCB_VIA_T: hasHole = true;                                           break;
-                case PCB_PAD_T: hasHole = static_cast<PAD*>( item )->GetDrillSizeX() > 0; break;
-                default:        hasHole = false;                                          break;
-                }
+                    ZONE* zone = dynamic_cast<ZONE*>( item );
+                    PAD*  pad = dynamic_cast<PAD*>( item );
 
-                if( hasHole )
-                {
-                    item->SetFlags( HOLE_PROXY );
-                    doCheckItem( item );
-                    item->ClearFlags( HOLE_PROXY );
+                    if( zone && zone->GetIsRuleArea() )
+                        return true;
+
+                    // Report progress on zone copper layers only.  Everything else is in the
+                    // noise.
+                    if( zone )
+                    {
+                        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+                        {
+                            if( IsCopperLayer( layer ) )
+                            {
+                                if( !reportProgress( ii++, count, delta ) )
+                                    return false;   // DRC cancelled
+                            }
+                        }
+                    }
+
+                    item->ClearFlags( HOLE_PROXY );     // Just in case
+
+                    checkDisallow( item );
+
+                    bool hasHole;
+
+                    switch( item->Type() )
+                    {
+                    case PCB_VIA_T: hasHole = true;                     break;
+                    case PCB_PAD_T: hasHole = pad->GetDrillSizeX() > 0; break;
+                    default:        hasHole = false;                    break;
+                    }
+
+                    if( hasHole )
+                    {
+                        item->SetFlags( HOLE_PROXY );
+                        {
+                            checkDisallow( item );
+                        }
+                        item->ClearFlags( HOLE_PROXY );
+                    }
                 }
 
                 return true;
-            };
-
-    forEachGeometryItem( {}, LSET::AllLayersMask(), checkItem );
+            } );
 
     reportRuleStatistics();
 

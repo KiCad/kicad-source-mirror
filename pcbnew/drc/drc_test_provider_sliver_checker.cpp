@@ -75,8 +75,6 @@ wxString DRC_TEST_PROVIDER_SLIVER_CHECKER::layerDesc( PCB_LAYER_ID aLayer )
 
 bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
 {
-    const int delta = 250;  // This is the number of tests between 2 calls to the progress bar
-
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_COPPER_SLIVER ) )
         return true;    // Continue with other tests
 
@@ -88,29 +86,30 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
     int    testLength = widthTolerance / ( 2 * sin( DEG2RAD( angleTolerance / 2 ) ) );
     LSET   copperLayers = m_drcEngine->GetBoard()->GetEnabledLayers() & LSET::AllCuMask();
 
+    // Report progress on board zones only.  Everything else is in the noise.
+    int    zoneLayerCount = 0;
+    int    delta = 5;
+    int    ii = 0;
+
+    for( PCB_LAYER_ID layer : copperLayers.Seq() )
+    {
+        for( ZONE* zone : m_drcEngine->GetBoard()->Zones() )
+        {
+            if( !zone->GetIsRuleArea() && zone->IsOnLayer( layer ) )
+                zoneLayerCount++;
+        }
+    }
+
     for( PCB_LAYER_ID layer : copperLayers.Seq() )
     {
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_COPPER_SLIVER ) )
             continue;
 
-        int            itemCount = 0;
-        int            itemIdx = 0;
         SHAPE_POLY_SET poly;
 
-
         forEachGeometryItem( s_allBasicItems, LSET().set( layer ),
                 [&]( BOARD_ITEM* item ) -> bool
                 {
-                    ++itemCount;
-                    return true;
-                } );
-
-        forEachGeometryItem( s_allBasicItems, LSET().set( layer ),
-                [&]( BOARD_ITEM* item ) -> bool
-                {
-                    if( !reportProgress( itemIdx++, itemCount, delta ) )
-                        return false;
-
                     if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
                     {
                         ZONE* zone = static_cast<ZONE*>( item );
@@ -122,6 +121,12 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
                     {
                         item->TransformShapeWithClearanceToPolygon( poly, layer, 0, ARC_LOW_DEF,
                                                                     ERROR_OUTSIDE );
+                    }
+
+                    if( item->Type() == PCB_ZONE_T )
+                    {
+                        if( !reportProgress( ii++, zoneLayerCount, delta ) )
+                            return false;   // DRC cancelled
                     }
 
                     return true;

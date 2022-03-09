@@ -221,7 +221,11 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
 
     std::map<DRC_RULE*, std::set<BOARD_CONNECTED_ITEM*> > itemSets;
 
-    auto evaluateLengthConstraints =
+    std::shared_ptr<FROM_TO_CACHE> ftCache = m_board->GetConnectivity()->GetFromToCache();
+
+    ftCache->Rebuild( m_board );
+
+    forEachGeometryItem( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T }, LSET::AllCuMask(),
             [&]( BOARD_ITEM *item ) -> bool
             {
                 const DRC_CONSTRAINT_T constraintsToCheck[] = {
@@ -244,14 +248,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                 }
 
                 return true;
-            };
-
-    auto ftCache = m_board->GetConnectivity()->GetFromToCache();
-
-    ftCache->Rebuild( m_board );
-
-    forEachGeometryItem( { PCB_TRACE_T, PCB_VIA_T, PCB_ARC_T }, LSET::AllCuMask(),
-                         evaluateLengthConstraints );
+            } );
 
     std::map<DRC_RULE*, std::vector<CONNECTION> > matches;
 

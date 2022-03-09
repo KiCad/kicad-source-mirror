@@ -191,8 +191,11 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
         return false;   // DRC cancelled
 
     static const std::vector<KICAD_T> itemTypes = {
-        PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, PCB_SHAPE_T, PCB_FP_SHAPE_T,
-        PCB_TEXT_T, PCB_FP_TEXT_T, PCB_DIMENSION_T
+        PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
+        PCB_PAD_T,
+        PCB_SHAPE_T, PCB_FP_SHAPE_T,
+        PCB_TEXT_T, PCB_FP_TEXT_T, PCB_TEXTBOX_T, PCB_FP_TEXTBOX_T,
+        PCB_DIMENSION_T
     };
 
     forEachGeometryItem( itemTypes, LSET::AllCuMask(), countItems );

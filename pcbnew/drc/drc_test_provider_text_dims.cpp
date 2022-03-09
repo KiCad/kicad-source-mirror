@@ -88,13 +88,6 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
     if( !reportPhase( _( "Checking text dimensions..." ) ) )
         return false;       // DRC cancelled
 
-    auto countItems =
-            [&]( BOARD_ITEM* item ) -> bool
-            {
-                ++count;
-                return true;
-            };
-
     auto checkTextHeight =
             [&]( BOARD_ITEM* item, EDA_TEXT* text ) -> bool
             {
@@ -262,7 +255,17 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                 return true;
             };
 
-    auto checkTextDims =
+    static const std::vector<KICAD_T> itemTypes = { PCB_TEXT_T, PCB_FP_TEXT_T,
+                                                    PCB_TEXTBOX_T, PCB_FP_TEXTBOX_T };
+
+    forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
+            [&]( BOARD_ITEM* item ) -> bool
+            {
+                ++count;
+                return true;
+            } );
+
+    forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
                 if( !reportProgress( ii++, count, delta ) )
@@ -297,12 +300,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                     return false;
 
                 return true;
-            };
-
-    static const std::vector<KICAD_T> itemTypes = { PCB_TEXT_T, PCB_FP_TEXT_T };
-
-    forEachGeometryItem( itemTypes, LSET::AllLayersMask(), countItems );
-    forEachGeometryItem( itemTypes, LSET::AllLayersMask(), checkTextDims );
+            } );
 
     reportRuleStatistics();
 

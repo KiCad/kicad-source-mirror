@@ -125,7 +125,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
 
     m_holeTree.clear();
 
-    auto countItems =
+    forEachGeometryItem( { PCB_PAD_T, PCB_VIA_T }, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
                 if( item->Type() == PCB_PAD_T )
@@ -134,9 +134,11 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
                     ++count;
 
                 return true;
-            };
+            } );
 
-    auto addToHoleTree =
+    count *= 2;  // One for adding to the rtree; one for checking
+
+    forEachGeometryItem( { PCB_PAD_T, PCB_VIA_T }, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
                 if( !reportProgress( ii++, count, delta ) )
@@ -160,13 +162,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
                 }
 
                 return true;
-            };
-
-    forEachGeometryItem( { PCB_PAD_T, PCB_VIA_T }, LSET::AllLayersMask(), countItems );
-
-    count *= 2;  // One for adding to tree; one for checking
-
-    forEachGeometryItem( { PCB_PAD_T, PCB_VIA_T }, LSET::AllLayersMask(), addToHoleTree );
+            } );
 
     std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, int> checkedPairs;
 

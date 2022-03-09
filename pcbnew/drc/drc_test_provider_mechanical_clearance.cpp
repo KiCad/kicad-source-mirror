@@ -141,14 +141,25 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
     size_t count = 0;
     size_t ii = 0;
 
-    auto countItems =
+    if( !reportPhase( _( "Gathering items..." ) ) )
+        return false;   // DRC cancelled
+
+    static const std::vector<KICAD_T> itemTypes = {
+        PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
+        PCB_PAD_T,
+        PCB_SHAPE_T, PCB_FP_SHAPE_T,
+        PCB_TEXT_T, PCB_FP_TEXT_T, PCB_TEXTBOX_T, PCB_FP_TEXTBOX_T,
+        PCB_DIMENSION_T
+    };
+
+    forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
                 ++count;
                 return true;
-            };
+            } );
 
-    auto addToItemTree =
+    forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
                 if( !reportProgress( ii++, count, delta ) )
@@ -171,23 +182,24 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
                     m_itemTree.Insert( item, layer, m_largestClearance );
 
                 return true;
-            };
-
-    if( !reportPhase( _( "Gathering items..." ) ) )
-        return false;   // DRC cancelled
-
-    static const std::vector<KICAD_T> itemTypes = {
-        PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, PCB_SHAPE_T, PCB_FP_SHAPE_T,
-        PCB_TEXT_T, PCB_FP_TEXT_T, PCB_DIMENSION_T
-    };
-
-    forEachGeometryItem( itemTypes, LSET::AllLayersMask(), countItems );
-    forEachGeometryItem( itemTypes, LSET::AllLayersMask(), addToItemTree );
+            } );
 
     std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, int> checkedPairs;
 
-    auto testItem =
-            [&]( BOARD_ITEM* item, PCB_LAYER_ID layer )
+    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE )
+            || !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_CLEARANCE ) )
+    {
+        if( !reportPhase( _( "Checking mechanical clearances..." ) ) )
+            return false;   // DRC cancelled
+
+        ii = 0;
+
+        for( BOARD_ITEM* item : m_items )
+        {
+            if( !reportProgress( ii++, m_items.size(), delta ) )
+                break;
+
+            for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
             {
                 std::shared_ptr<SHAPE> itemShape = item->GetEffectiveShape( layer );
 
@@ -221,27 +233,13 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
                         m_largestClearance );
 
                 testItemAgainstZones( item, layer );
-            };
-
-    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE )
-            || !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_CLEARANCE ) )
-    {
-        if( !reportPhase( _( "Checking mechanical clearances..." ) ) )
-            return false;   // DRC cancelled
-
-        ii = 0;
-
-        for( BOARD_ITEM* item : m_items )
-        {
-            if( !reportProgress( ii++, m_items.size(), delta ) )
-                break;
-
-            for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
-                testItem( item, layer );
+            }
         }
     }
 
     count = 0;
+    ii = 0;
+
     forEachGeometryItem( { PCB_ZONE_T, PCB_FP_ZONE_T, PCB_SHAPE_T, PCB_FP_SHAPE_T },
             LSET::AllCuMask(),
             [&]( BOARD_ITEM* item ) -> bool
@@ -267,14 +265,11 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
                 }
 
                 if( zone )
-                {
                     count += ( item->GetLayerSet() & LSET::AllCuMask() ).count();
-                }
 
                 return true;
             } );
 
-    ii = 0;
     forEachGeometryItem( { PCB_ZONE_T, PCB_FP_ZONE_T, PCB_SHAPE_T, PCB_FP_SHAPE_T },
             LSET::AllCuMask(),
             [&]( BOARD_ITEM* item ) -> bool
@@ -488,6 +483,7 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testShapeLineChain( const SHAPE_LIN
                         collisions.back().first = pos;
                         collisions.back().second = actual;
                     }
+
                     continue;
                 }
 

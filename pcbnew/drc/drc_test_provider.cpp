@@ -208,8 +208,14 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
 
                 n++;
             }
-            else if( typeMask[ PCB_TEXT_T ]
-                    && ( item->Type() == PCB_TEXT_T || item->Type() == PCB_TEXTBOX_T ) )
+            else if( typeMask[ PCB_TEXT_T ] && item->Type() == PCB_TEXT_T )
+            {
+                if( !aFunc( item ) )
+                    return n;
+
+                n++;
+            }
+            else if( typeMask[ PCB_TEXTBOX_T ] && item->Type() == PCB_TEXTBOX_T )
             {
                 if( !aFunc( item ) )
                     return n;
@@ -288,8 +294,14 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
 
                     n++;
                 }
-                else if( typeMask[ PCB_FP_TEXT_T ]
-                        && ( dwg->Type() == PCB_FP_TEXT_T || dwg->Type() == PCB_FP_TEXTBOX_T ) )
+                else if( typeMask[ PCB_FP_TEXT_T ] && dwg->Type() == PCB_FP_TEXT_T )
+                {
+                    if( !aFunc( dwg ) )
+                        return n;
+
+                    n++;
+                }
+                else if( typeMask[ PCB_FP_TEXTBOX_T ] && dwg->Type() == PCB_FP_TEXTBOX_T )
                 {
                     if( !aFunc( dwg ) )
                         return n;

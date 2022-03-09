@@ -146,7 +146,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     DRC_RTREE                               edgesTree;
     std::vector<BOARD_ITEM*>                boardItems;     // we don't own these
 
-    auto queryBoardOutlineItems =
+    forEachGeometryItem( { PCB_SHAPE_T, PCB_FP_SHAPE_T }, LSET( 2, Edge_Cuts, Margin ),
             [&]( BOARD_ITEM *item ) -> bool
             {
                 PCB_SHAPE*    shape = static_cast<PCB_SHAPE*>( item );
@@ -194,20 +194,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                 edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
                 edges.back()->SetStroke( stroke );
                 return true;
-            };
-
-    auto queryBoardGeometryItems =
-            [&]( BOARD_ITEM *item ) -> bool
-            {
-                if( !isInvisibleText( item ) )
-                    boardItems.push_back( item );
-
-                return true;
-            };
-
-    forEachGeometryItem( { PCB_SHAPE_T, PCB_FP_SHAPE_T }, LSET( 2, Edge_Cuts, Margin ),
-                         queryBoardOutlineItems );
-    forEachGeometryItem( s_allBasicItemsButZones, LSET::AllLayersMask(), queryBoardGeometryItems );
+            } );
 
     for( const std::unique_ptr<PCB_SHAPE>& edge : edges )
     {
@@ -217,6 +204,15 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                 edgesTree.Insert( edge.get(), layer, m_largestClearance );
         }
     }
+
+    forEachGeometryItem( s_allBasicItemsButZones, LSET::AllLayersMask(),
+            [&]( BOARD_ITEM *item ) -> bool
+            {
+                if( !isInvisibleText( item ) )
+                    boardItems.push_back( item );
+
+                return true;
+            } );
 
     wxString val;
     wxGetEnv( "WXTRACE", &val );

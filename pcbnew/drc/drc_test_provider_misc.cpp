@@ -263,15 +263,20 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
     int       ii = 0;
     int       items = 0;
 
-    auto countItems =
+    static const std::vector<KICAD_T> itemTypes = {
+        PCB_TEXT_T, PCB_FP_TEXT_T, PCB_TEXTBOX_T, PCB_FP_TEXTBOX_T,
+        PCB_DIMENSION_T
+    };
+
+    forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
                 ++items;
                 return true;
-            };
+            } );
 
-    auto checkTextVars =
-            [&]( EDA_ITEM* item ) -> bool
+    forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
+            [&]( BOARD_ITEM* item ) -> bool
             {
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
                     return false;
@@ -290,10 +295,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
                     reportViolation( drcItem, boardItem->GetPosition(), boardItem->GetLayer() );
                 }
                 return true;
-            };
-
-    forEachGeometryItem( { PCB_FP_TEXT_T, PCB_TEXT_T }, LSET::AllLayersMask(), countItems );
-    forEachGeometryItem( { PCB_FP_TEXT_T, PCB_TEXT_T }, LSET::AllLayersMask(), checkTextVars );
+            } );
 
     DS_PROXY_VIEW_ITEM* drawingSheet = m_drcEngine->GetDrawingSheet();
     DS_DRAW_ITEM_LIST   drawItems;

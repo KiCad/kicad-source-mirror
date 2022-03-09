@@ -328,7 +328,7 @@ public:
 
         // Special case the polygon case.  Otherwise we'll call its Collide() method which will
         // triangulate it as well and then do triangle/triangle collisions.  This ends up being
-        // slower than 4 calls to PointInside().
+        // *much* slower than 4 calls to PointInside().
         auto polyVisitor =
                 [&]( ITEM_WITH_SHAPE* aItem ) -> bool
                 {
