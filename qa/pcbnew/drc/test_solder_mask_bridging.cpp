@@ -43,7 +43,8 @@ struct DRC_REGRESSION_TEST_FIXTURE
 
 BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_REGRESSION_TEST_FIXTURE )
 {
-    KI_TEST::LoadBoard( m_settingsManager, "solder_mask_bridge_test", m_board );
+    wxString brd_name( wxT( "solder_mask_bridge_test" ) );
+    KI_TEST::LoadBoard( m_settingsManager, brd_name, m_board );
     KI_TEST::FillZones( m_board.get() );
 
     std::vector<DRC_ITEM>  violations;
@@ -66,14 +67,16 @@ BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_REGRESSION_TEST_FIXTURE 
 
     bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
 
-    if( violations.size() == 7 )
+    const int expected_err_cnt = 5;
+
+    if( violations.size() == expected_err_cnt )
     {
         BOOST_CHECK_EQUAL( 1, 1 );  // quiet "did not check any assertions" warning
         BOOST_TEST_MESSAGE( "DRC solder mask bridge test passed" );
     }
     else
     {
-        BOOST_CHECK_EQUAL( violations.size(), 7 );
+        BOOST_CHECK_EQUAL( violations.size(), expected_err_cnt );
 
         std::map<KIID, EDA_ITEM*> itemMap;
         m_board->FillItemMap( itemMap );
@@ -81,6 +84,6 @@ BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_REGRESSION_TEST_FIXTURE 
         for( const DRC_ITEM& item : violations )
             BOOST_TEST_MESSAGE( item.ShowReport( EDA_UNITS::INCHES, RPT_SEVERITY_ERROR, itemMap ) );
 
-        BOOST_ERROR( "DRC solder mask bridge test failed" );
+        BOOST_ERROR( wxString::Format( "DRC solder mask bridge test failed board <%s>", brd_name ) );
     }
 }

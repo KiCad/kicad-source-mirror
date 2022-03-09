@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,7 +117,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
     std::vector< std::pair<wxString, int> > tests = { { "issue1358", 2 },
                                                       { "issue2512", 5 },
                                                       { "issue2528", 1 },
-                                                      { "issue5750", 5 },
+                                                      { "issue5750", 4 },   //Shorting zone fills pass DRC in some cases
                                                       { "issue5854", 3 },
                                                       { "issue6879", 6 },
                                                       { "issue6945", 2 },

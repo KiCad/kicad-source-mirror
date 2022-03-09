@@ -150,7 +150,7 @@
     (connect_pads (clearance 0))
     (min_thickness 0.254) (filled_areas_thickness no)
     (keepout (tracks allowed) (vias allowed) (pads allowed ) (copperpour not_allowed) (footprints allowed))
-    (fill (thermal_gap 0.508) (thermal_bridge_width 0.508))
+    (fill (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 2) (island_area_min 10))
     (polygon
       (pts
         (xy -9 -15)
