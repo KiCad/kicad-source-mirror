@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 16:51-0800\n"
-"PO-Revision-Date: 2022-03-08 00:49+0000\n"
+"PO-Revision-Date: 2022-03-13 03:55+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -4770,7 +4770,7 @@ msgstr "Projekthanterare"
 #: eeschema/menubar.cpp:130 eeschema/sch_edit_frame.cpp:1311
 #: kicad/tools/kicad_manager_actions.cpp:69
 msgid "Schematic Editor"
-msgstr "Schema-Redigerare"
+msgstr "Kretsschemaredigerare"
 
 #: common/hotkey_store.cpp:74 kicad/tools/kicad_manager_actions.cpp:81
 #: pcbnew/menubar_pcb_editor.cpp:184 pcbnew/pcb_edit_frame.cpp:178
@@ -4782,7 +4782,7 @@ msgstr "Mönsterkortsredigerare"
 #: pagelayout_editor/menubar.cpp:86 pagelayout_editor/pl_editor_frame.cpp:487
 #: pagelayout_editor/pl_editor_frame.cpp:564
 msgid "Drawing Sheet Editor"
-msgstr "Ritningsblads-redigerare"
+msgstr "Ritningsbladsredigerare"
 
 #: common/hotkey_store.cpp:156
 msgid "Gestures"
@@ -5425,7 +5425,7 @@ msgstr "Körbar file"
 
 #: common/pgm_base.cpp:201
 msgid "Select Preferred Editor"
-msgstr "Välj Önskad Redigerare"
+msgstr "Välj önskad redigerare"
 
 #: common/pgm_base.cpp:221
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -8759,7 +8759,7 @@ msgstr "Sätt diametern till 0 för att använda schemats knutpunktsstorlek."
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:80
 msgid "Set color to transparent to use Schematic Editor colors."
-msgstr "Välj transparent färg för att använda schemaredigerarens färger."
+msgstr "Välj transparent färg för att använda kretsschemaredigerarens färger."
 
 #: eeschema/dialogs/dialog_junction_props_base.h:59
 msgid "Junction Properties"
@@ -11639,7 +11639,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
-msgstr "Uppdatera referenser för symboler som har ändrats i PCB-redigeraren."
+msgstr ""
+"Uppdatera referenser för symboler som har ändrats i mönsterkortsredigeraren."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:59
 msgid "Footprint assignments"
@@ -11655,7 +11656,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
-msgstr "Uppdatera symbolvärden som har ersatts i PCB-redigeraren."
+msgstr "Uppdatera symbolvärden som har ersatts i mönsterkortsredigeraren."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:69
 msgid "Net names"
@@ -11769,7 +11770,7 @@ msgstr "Markera korsade nät"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
 msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr "Markera nät när de är markerade i PCB-redigeraren"
+msgstr "Markera nät när de är markerade i mönsterkortsredigeraren"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
 msgid "Constrain buses and wires to H or V"
@@ -12104,7 +12105,7 @@ msgstr "Färgtema"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:25
 msgid "Use schematic editor color theme"
-msgstr "Använd schemaredigerarens färgtema"
+msgstr "Använd kretsschemaredigerarens färgtema"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:31
 msgid "Use theme:"
@@ -12906,7 +12907,7 @@ msgid ""
 "shown every time the schematic editor is launched."
 msgstr ""
 "Denna fil måste tas bort manuellt, annars kommer autospar-\n"
-"funktionen visas varje gång schema-redigeraren startas."
+"funktionen visas varje gång kretsschemaredigeraren startas."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1406
 msgid "Alias of"
@@ -13053,7 +13054,7 @@ msgstr "Fel uppstod när symbolbiblioteket %s skapades."
 #: eeschema/menubar.cpp:65 kicad/menubar.cpp:65
 #: pagelayout_editor/menubar.cpp:57 pcbnew/menubar_pcb_editor.cpp:67
 msgid "Open Recent"
-msgstr "Öppna de senaste"
+msgstr "Öppna senaste"
 
 #: eeschema/menubar.cpp:93
 #, fuzzy
@@ -13356,7 +13357,7 @@ msgstr "Följande bibliotek hittades inte:"
 #: eeschema/sch_edit_frame.cpp:224
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:63
 msgid "KiCad Schematic Editor"
-msgstr "KiCads schemaredigerare"
+msgstr "KiCads kretsschemaredigerare"
 
 #: eeschema/sch_edit_frame.cpp:302
 #, fuzzy
@@ -13379,9 +13380,9 @@ msgid ""
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
 msgstr ""
-"Det går inte att uppdatera kretskortet eftersom shcemaredigeraren är öppnad "
-"i fristående läge. För att skapa/uppdatera kretskort från scheman, starta "
-"Kicad-skalet och skapa ett projekt."
+"Det går inte att uppdatera mönsterkortet eftersom kretsschemaredigeraren är "
+"öppnad i fristående läge. För att skapa/uppdatera mönsterkort från scheman, "
+"starta Kicad-skalet och skapa ett projekt."
 
 #: eeschema/sch_edit_frame.cpp:977
 msgid "New Schematic"
@@ -16286,7 +16287,7 @@ msgstr "Markera trådar och stift i ett nät"
 
 #: eeschema/tools/ee_actions.cpp:551
 msgid "Edit with Symbol Editor"
-msgstr "Redigera med Symbol Editor"
+msgstr "Redigera med Symbolredigeraren"
 
 #: eeschema/tools/ee_actions.cpp:551
 msgid "Open the selected symbol in the Symbol Editor"
@@ -16392,11 +16393,11 @@ msgstr "Exportera ritning av aktuellt ark till Urklipp"
 
 #: eeschema/tools/ee_actions.cpp:621
 msgid "Switch to PCB Editor"
-msgstr "Byt till PCB Editor"
+msgstr "Byt till mönsterkortsredigeraren"
 
 #: eeschema/tools/ee_actions.cpp:621
 msgid "Open PCB in board editor"
-msgstr "Öppna PCB i kortredigeraren"
+msgstr "Öppna mönsterkort i mönsterkortsredigeraren"
 
 #: eeschema/tools/ee_actions.cpp:626
 msgid "Export Netlist..."
@@ -16420,7 +16421,7 @@ msgstr "Markera på PCB"
 
 #: eeschema/tools/ee_actions.cpp:636
 msgid "Highlight corresponding items in PCB editor"
-msgstr "Markera motsvarande objekt i kortredigeraren"
+msgstr "Markera motsvarande objekt i mönsterkortsredigeraren"
 
 #: eeschema/tools/ee_actions.cpp:641
 msgid "Show Hidden Pins"
@@ -16468,7 +16469,7 @@ msgstr "Ange ark"
 
 #: eeschema/tools/ee_actions.cpp:669
 msgid "Display the selected sheet's contents in the schematic editor"
-msgstr "Visa det valda bladets innehåll i schemaredigeraren"
+msgstr "Visa det valda arkets innehåll i kretsschemaredigeraren"
 
 #: eeschema/tools/ee_actions.cpp:675
 msgid "Leave Sheet"
@@ -16476,7 +16477,7 @@ msgstr "Lämna arket"
 
 #: eeschema/tools/ee_actions.cpp:675
 msgid "Display the parent sheet in the schematic editor"
-msgstr "Visa det överordnat bladet i schemaredigeraren"
+msgstr "Visa det överordnat arket i kretsschemaredigeraren"
 
 #: eeschema/tools/ee_actions.cpp:680
 msgid "Hierarchy Navigator"
@@ -17773,7 +17774,7 @@ msgstr "Visa källfil för det aktuella lagret"
 
 #: gerbview/tools/gerbview_actions.cpp:81
 msgid "Export to PCB Editor..."
-msgstr "Exportera till PCB-redigerare..."
+msgstr "Exportera till mönsterkortsredigerare..."
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "Export data as a KiCad PCB file"
@@ -18273,7 +18274,7 @@ msgstr "Importera EAGLE CAD XML-schemat och kort"
 
 #: kicad/menubar.cpp:115
 msgid "&Archive Project..."
-msgstr "& Arkivprojekt ..."
+msgstr "& Arkivera projektfiler..."
 
 #: kicad/menubar.cpp:116
 msgid "Archive all needed project files into zip archive"
@@ -18281,7 +18282,7 @@ msgstr "Arkivera alla projektfiler som behövs i zip-arkivet"
 
 #: kicad/menubar.cpp:120
 msgid "&Unarchive Project..."
-msgstr "& Ta bort arkivprojekt ..."
+msgstr "& Packa upp arkiverat projekt..."
 
 #: kicad/menubar.cpp:121 kicad/menubar.cpp:229
 msgid "Unarchive project files from zip archive"
@@ -18789,7 +18790,7 @@ msgstr "Byt till detta projekt"
 
 #: kicad/project_tree_pane.cpp:689
 msgid "Close all editors, and switch to the selected project"
-msgstr "Stäng alla redaktörer och växla till det valda projektet"
+msgstr "Stäng alla redigerare och växla till det valda projektet"
 
 #: kicad/project_tree_pane.cpp:696
 msgid "New Directory..."
@@ -19423,7 +19424,7 @@ msgstr "Layoutfilen är skrivskyddat."
 
 #: pagelayout_editor/pl_editor_frame.cpp:101
 msgid "KiCad Drawing Sheet Editor"
-msgstr "KiCad-ritningsbladsredigerare"
+msgstr "KiCad-ritningsarksredigerare"
 
 #: pagelayout_editor/pl_editor_frame.cpp:158
 msgid "coord origin: Right Bottom page corner"
@@ -20650,18 +20651,18 @@ msgstr ""
 "\n"
 "Det styrande värdet visas i fetstil.\n"
 "\n"
-"Beräkningarna gäller för strömmar upp till 35 A (yttre lager) eller 17,5 A "
-"(inre lager), temperaturhöjningar upp till 100 ° C och bredder upp till 400 "
+"Beräkningarna gäller för strömmar upp till 35 A (yttre lager) eller 17,5 A ("
+"inre lager), temperaturhöjningar upp till 100 ° C och bredder upp till 400 "
 "mil (10 mm).\n"
 "\n"
-"Formeln, från IPC 2221, är  \n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>  \n"
-"där:  \n"
-"___I___ är maximal ström i Ampere  \n"
-"___&Delta;T___ är temperaturhöjning över omgivningstemperatur i &deg;C  \n"
-"___W___ är bredd i mils  \n"
-"___H___ är tjocklek (höjd) i mils  \n"
+"Formeln, från IPC 2221, är \n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center> \n"
+"där: \n"
+"___I___ är maximal ström i Ampere \n"
+"___&Delta;T___ är temperaturhöjning över omgivningstemperatur i &deg;C \n"
+"___W___ är bredd i mils \n"
+"___H___ är tjocklek (höjd) i mils \n"
 "___K___ är 0.024 för interna spår eller 0.048 för externa spår\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
@@ -21388,7 +21389,7 @@ msgstr "Förlust Tan"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:132
 msgid "Board thickness from stackup:"
-msgstr "Korttjocklek från kortuppbyggnad:"
+msgstr "Mönsterkortstjocklek från lageruppbyggnad:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:139
 msgid "Adjust Dielectric Thickness"
@@ -22861,6 +22862,7 @@ msgid "Pad numbering skip:"
 msgstr "Hoppning av padnummerering:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:206
+#, fuzzy
 msgid "Grid Array"
 msgstr "Grid Array"
 
@@ -24432,7 +24434,7 @@ msgstr "Välj ett GenCAD-exportfilnamn"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:136
 msgid "Flip bottom footprint padstacks"
-msgstr "Vänd ned fotplattorna för fotavtryck"
+msgstr "Vänd kragstaplarna för undersidans fotavtryck"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:137
 msgid "Generate unique pin names"
@@ -24762,6 +24764,7 @@ msgstr "Kopparlager"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:216
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:135
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:57
+#, fuzzy
 msgid "Edge Cuts"
 msgstr "Edge Cuts"
 
@@ -29169,7 +29172,7 @@ msgstr "Via-diameter"
 
 #: pcbnew/drc/drc_item.cpp:122
 msgid "Padstack is not valid"
-msgstr "Padstack är inte giltigt"
+msgstr "Kragstapeln är inte giltig"
 
 #: pcbnew/drc/drc_item.cpp:126
 msgid "Micro via drill out of range"
@@ -29769,7 +29772,7 @@ msgstr "Skapade Gerber-jobbfil '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:591
 msgid "Board stackup settings not up to date."
-msgstr "Kortets lageruppbyggnadsinställningar är inte up-to-date."
+msgstr "Kortets lageruppbyggnadsinställningar är inte aktuella."
 
 #: pcbnew/files.cpp:144
 msgid "All KiCad Board Files"
@@ -30546,7 +30549,7 @@ msgstr "& Ladda fotavtryck från kretskort ..."
 
 #: pcbnew/menubar_footprint_editor.cpp:209
 msgid "Load a footprint from the current board into the editor"
-msgstr "Ladda ett fotavtryck från det aktuella kortet i redigeraren"
+msgstr "Ladda ett fotavtryck från det aktuella mönsterkortet i redigeraren"
 
 #: pcbnew/menubar_footprint_editor.cpp:213
 msgid "&Insert Footprint on PCB"
@@ -30563,8 +30566,8 @@ msgstr "Rädda"
 #: pcbnew/menubar_pcb_editor.cpp:101
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
 msgstr ""
-"Rensa mönsterkort och hämta senaste återhämtningsfil automatiskt sparad av "
-"mönsterkortsredigeraren"
+"Rensa mönsterkort och hämta mönsterkortsredigerarens senaste automatiskt "
+"sparade återhämtningsfil"
 
 #: pcbnew/menubar_pcb_editor.cpp:111
 msgid "Specctra Session..."
@@ -31185,19 +31188,19 @@ msgstr "Fälla"
 
 #: pcbnew/pad.cpp:1145
 msgid "Roundrect"
-msgstr "Roundrect"
+msgstr "Rundad rektangel"
 
 #: pcbnew/pad.cpp:1146
 msgid "Chamferedrect"
-msgstr "Chamferedrect"
+msgstr "Fasad rektangel"
 
 #: pcbnew/pad.cpp:1147
 msgid "CustomShape"
-msgstr "CustomShape"
+msgstr "Anpassad form"
 
 #: pcbnew/pad.cpp:1159
 msgid "Conn"
-msgstr "Conn"
+msgstr "Kontakt"
 
 #: pcbnew/pad.cpp:1172
 #, c-format
@@ -31332,8 +31335,8 @@ msgid ""
 "order to create or update PCBs from schematics, you must launch the KiCad "
 "project manager and create a project."
 msgstr ""
-"Kunde inte uppdatera kretskortet eftersom kortredigeraren är öppnad i "
-"fristående läge. För att skapa eller uppdatera mönsterkort från scheman "
+"Kunde inte uppdatera kretskortet eftersom mönsterkortsredigeraren är öppnad "
+"i fristående läge. För att skapa eller uppdatera mönsterkort från scheman "
 "måste du starta KiCads projekthanterare och skapa ett projekt."
 
 #: pcbnew/pcb_edit_frame.cpp:1527
@@ -31526,11 +31529,11 @@ msgstr "Origo Y"
 
 #: pcbnew/pcb_track.cpp:1173
 msgid "Layer Top"
-msgstr "Layer Top"
+msgstr "Övre lager"
 
 #: pcbnew/pcb_track.cpp:1175
 msgid "Layer Bottom"
-msgstr "Lagerbotten"
+msgstr "Undre lager"
 
 #: pcbnew/pcb_track.cpp:1177
 msgid "Via Type"
@@ -31774,7 +31777,7 @@ msgstr "Fotavtryck %s lödyta %s använder ett hål av okänd typ %d."
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
-"Fotavtryck %s har en lödyta %s som använder en komplex lödyte-stack, vilket "
+"Fotavtryck %s har en lödyta %s som använder en komplex kragstapel, vilket "
 "inte stöds ännu."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2217
@@ -31804,7 +31807,7 @@ msgstr "Kopparfri lödyta '%s' har ett hål, vilket inte stöds."
 #: pcbnew/plugins/altium/altium_pcb.cpp:2296
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
-msgstr "Kopparfri lödyta %s har en komplex lödyte-stack (stöds inte ännu)."
+msgstr "Kopparfri lödyta %s har en komplex kragstapel, vilket inte stöds ännu."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2450
 #, c-format
@@ -31940,7 +31943,7 @@ msgstr ""
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:511
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
-msgstr "Oväntat lager '%s' i lagerstapel."
+msgstr "Oväntat lager '%s' i lageruppbyggnad."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:674
 #, c-format
@@ -31975,9 +31978,9 @@ msgid ""
 "supported in KiCad. Please review the imported pads as they may require "
 "manual correction."
 msgstr ""
-"CADSTAR:s lödyte-definition '%s' är en komplex lödyte-uppsättning, vilket "
-"inte stöds i KiCad. Vänligen se över de importerade lödytorna då de kan "
-"behöva manuell rättning."
+"CADSTAR:s lödyte-definition '%s' är en komplex kragstapel, vilket inte stöds "
+"i KiCad. Vänligen kontrollera de importerade lödytorna då de kan behöva "
+"manuell rättning."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1207
 #, c-format
@@ -32410,7 +32413,7 @@ msgstr "Ogiltigt format för id-sträng '%s' på anpassad lödyta rad %zu."
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1007
 #, c-format
 msgid "Could not insert graphical item %d into padstack '%s'."
-msgstr "Kunde inte sätta in grafiskt element %d i lödyte-stack '%s'."
+msgstr "Kunde inte sätta in grafiskt element %d i kragstapel '%s'."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1014
 #, c-format
@@ -32752,7 +32755,7 @@ msgstr "Otillräckliga behörigheter för att radera '%s'."
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2608
 #, c-format
 msgid "Cannot overwrite library path '%s'."
-msgstr "Kunde inte skriva över biblioteksökvägen '%s'."
+msgstr "Kunde inte skriva över bibliotekssökvägen '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2660
 #, c-format
@@ -33422,7 +33425,7 @@ msgstr "Sessionsfilen använder ogiltigt lager-id '%s'."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:217
 msgid "Session via padstack has no shapes"
-msgstr "Session via padstack har inga former"
+msgstr "Sessionens kragstapel för via har inga former"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:226
 #, c-format
@@ -33460,7 +33463,7 @@ msgstr "Referens '%s' hittades inte."
 #: pcbnew/specctra_import_export/specctra_import.cpp:501
 #, c-format
 msgid "A wire_via refers to missing padstack '%s'."
-msgstr "En wire_via refererar till en saknad padstack '%s'."
+msgstr "En wire_via refererar till en saknad kragstapel '%s'."
 
 #: pcbnew/toolbars_footprint_editor.cpp:92
 msgid "Load footprint from current board"
@@ -34353,11 +34356,11 @@ msgstr "Visa fönstret för kontroll av designregler"
 
 #: pcbnew/tools/pcb_actions.cpp:234
 msgid "Open in Footprint Editor"
-msgstr "Öppna i Footprint Editor"
+msgstr "Öppna i fotavtrycksredigeraren"
 
 #: pcbnew/tools/pcb_actions.cpp:235 pcbnew/tools/pcb_actions.cpp:242
 msgid "Opens the selected footprint in the Footprint Editor"
-msgstr "Öppnar det valda fotavtrycket i Footprint Editor"
+msgstr "Öppnar det valda fotavtrycket i fotavtrycksredigeraren"
 
 #: pcbnew/tools/pcb_actions.cpp:249
 msgid ""
@@ -35539,35 +35542,35 @@ msgstr "Öppna inställningarna för differentiell pardimension"
 
 #: pcbnew/tools/pcb_actions.cpp:1340
 msgid "Router Highlight Mode"
-msgstr "Router Highlight Mode"
+msgstr "Routerläge framhäv kollisioner"
 
 #: pcbnew/tools/pcb_actions.cpp:1340
 msgid "Switch router to highlight mode"
-msgstr "Byt router till markeringsläge"
+msgstr "Ställ om ledardragning till läge som framhäver kollisioner"
 
 #: pcbnew/tools/pcb_actions.cpp:1345
 msgid "Router Shove Mode"
-msgstr "Router Shove Mode"
+msgstr "Routerläge knuffa"
 
 #: pcbnew/tools/pcb_actions.cpp:1345
 msgid "Switch router to shove mode"
-msgstr "Byt router till shove-läge"
+msgstr "Ställ om ledardragning till läge som knuffar andra objekt ur vägen"
 
 #: pcbnew/tools/pcb_actions.cpp:1350
 msgid "Router Walkaround Mode"
-msgstr "Router Walkaround-läge"
+msgstr "Routerläge gå runt"
 
 #: pcbnew/tools/pcb_actions.cpp:1350
 msgid "Switch router to walkaround mode"
-msgstr "Byt router till walkaround-läge"
+msgstr "Ställ om ledardragning till läge som går runt hinder"
 
 #: pcbnew/tools/pcb_actions.cpp:1355
 msgid "Cycle Router Mode"
-msgstr "Byt dragningsläge"
+msgstr "Byt ledardragningsläge"
 
 #: pcbnew/tools/pcb_actions.cpp:1355
 msgid "Cycle router to the next mode"
-msgstr "Byt till nästa dragningsläge"
+msgstr "Byt till nästa ledardragningsläge"
 
 #: pcbnew/tools/pcb_actions.cpp:1360
 msgid "Set Layer Pair..."
@@ -36413,7 +36416,7 @@ msgid "HatchBorder Lines"
 msgstr "Rutnäts kantlinjer"
 
 #: pcbnew/zone.cpp:855
-#, c-format
+#, c-format, fuzzy
 msgid "Rule Area Cutout on %s"
 msgstr "Rule Area Cutout on %s"
 
@@ -36486,7 +36489,7 @@ msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
-msgstr "KiCad schemaredigerare (fristående)"
+msgstr "KiCad kretsschemaredigerare (fristående)"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Schematic Capture Tool"
@@ -36494,7 +36497,7 @@ msgstr "Kretsschemaredigerare"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "Standalone schematic editor for KiCad schematics"
-msgstr "Fristående schemaredigerare för KiCad-scheman"
+msgstr "Fristående kretsschemaredigerare för KiCad-scheman"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
@@ -36535,7 +36538,7 @@ msgstr "Kalkylator för elektronikrelaterade beräkningar"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
-msgstr "KiCad PCB-redigerare (fristående)"
+msgstr "KiCad mönsterkortsredigerare (fristående)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "PCB layout editor"
@@ -36543,7 +36546,7 @@ msgstr "Mönsterkortsredigerare"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
-msgstr "Fristående kretskortsredigerare för KiCad-kort"
+msgstr "Fristående mönsterkortsredigerare för KiCad-mönsterkort"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "pcbnew"
