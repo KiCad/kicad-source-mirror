@@ -958,6 +958,17 @@ std::vector<SCH_PIN*> SCH_SYMBOL::GetPins( const SCH_SHEET_PATH* aSheet ) const
 }
 
 
+std::vector<SCH_PIN*> SCH_SYMBOL::GetAllPins() const
+{
+    std::vector<SCH_PIN*> pins;
+
+    for( const auto& p : m_pins )
+        pins.push_back( p.get() );
+
+    return pins;
+}
+
+
 void SCH_SYMBOL::SwapData( SCH_ITEM* aItem )
 {
     wxCHECK_RET( (aItem != nullptr) && (aItem->Type() == SCH_SYMBOL_T),

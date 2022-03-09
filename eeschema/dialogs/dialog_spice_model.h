@@ -41,7 +41,8 @@ template <typename T>
 class DIALOG_SPICE_MODEL : public DIALOG_SPICE_MODEL_BASE
 {
 public:
-    enum class COLUMN : int { DESCRIPTION = 0, VALUE, UNIT, DEFAULT, TYPE, END_ };
+    enum class PARAM_COLUMN : int { DESCRIPTION, VALUE, UNIT, DEFAULT, TYPE, END_ };
+    enum class PIN_COLUMN : int { SYMBOL, MODEL };
 
     DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol, std::vector<T>& aSchFields );
 
@@ -49,14 +50,27 @@ private:
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
 
-    void updateModel();
     void updateWidgets();
-
-    void onDeviceTypeChoice( wxCommandEvent& aEvent ) override;
-    void onTypeChoice( wxCommandEvent& aEvent ) override;
+    void updateModelParamsTab();
+    void updateModelCodeTab();
+    void updatePinAssignmentsTab();
+    void updatePinAssignmentsGridEditors();
     
     void addParamPropertyIfRelevant( const SIM_MODEL::PARAM& aParam );
     wxPGProperty* newParamProperty( const SIM_MODEL::PARAM& aParam ) const;
+
+    SIM_MODEL& getCurModel() const;
+    wxString getSymbolPinString( int aSymbolPinNumber ) const;
+    wxString getModelPinString( int aModelPinNumber ) const;
+    int getModelPinNumber( const wxString& aModelPinString ) const;
+
+    void onDeviceTypeChoice( wxCommandEvent& aEvent ) override;
+    void onTypeChoice( wxCommandEvent& aEvent ) override;
+    void onPinAssignmentsGridCellChange( wxGridEvent& aEvent ) override;
+    void onPinAssignmentsGridSize( wxSizeEvent& aEvent ) override;
+
+    virtual void onSelectionChange( wxPropertyGridEvent& aEvent );
+    //void onPropertyChanged( wxPropertyGridEvent& aEvent ) override;
 
     SCH_SYMBOL& m_symbol;
     std::vector<T>& m_fields;
@@ -65,7 +79,6 @@ private:
     std::map<SIM_MODEL::DEVICE_TYPE, SIM_MODEL::TYPE> m_curModelTypeOfDeviceType;
     SIM_MODEL::TYPE m_curModelType = SIM_MODEL::TYPE::NONE;
 
-    wxPropertyGridPage* m_paramGrid;
     wxPGProperty* m_firstCategory; // Used to add principal parameters to root (any better ideas?)
     std::unique_ptr<SCINTILLA_TRICKS> m_scintillaTricks;
 };

@@ -31,7 +31,8 @@
 class SIM_MODEL_BEHAVIORAL : public SIM_MODEL
 {
 public:
-    SIM_MODEL_BEHAVIORAL( TYPE aType );
+    template <typename T = void>
+    SIM_MODEL_BEHAVIORAL( TYPE aType, int symbolPinCount, const std::vector<T>* aFields = nullptr );
 
     void WriteCode( wxString& aCode ) override;
 

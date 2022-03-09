@@ -25,13 +25,13 @@
 #ifndef SIM_MODEL_H
 #define SIM_MODEL_H
 
-#include <map>
-#include <stdexcept>
 #include <enum_vector.h>
 #include <sch_field.h>
 #include <lib_field.h>
 #include <sim/sim_value.h>
 #include <wx/string.h>
+#include <map>
+#include <stdexcept>
 
 
 class SIM_MODEL
@@ -40,6 +40,7 @@ public:
     static constexpr auto DEVICE_TYPE_FIELD = "Model_Device";
     static constexpr auto TYPE_FIELD = "Model_Type";
     static constexpr auto FILE_FIELD = "Model_File";
+    static constexpr auto PIN_SEQUENCE_FIELD = "Model_Pin_Sequence";
     static constexpr auto PARAMS_FIELD = "Model_Params";
 
 
@@ -237,6 +238,15 @@ public:
     };
 
 
+    struct PIN
+    {
+        static constexpr auto NOT_CONNECTED = 0;
+
+        int symbolPinNumber;
+        const wxString name;
+    };
+
+
     struct PARAM
     {
         enum class DIR
@@ -290,16 +300,19 @@ public:
 
 
     static DEVICE_INFO DeviceTypeInfo( DEVICE_TYPE aDeviceType );
-
     static INFO TypeInfo( TYPE aType );
 
     template <typename T>
     static TYPE ReadTypeFromFields( const std::vector<T>& aFields );
 
-    template <typename T>
-    static std::unique_ptr<SIM_MODEL> Create( const std::vector<T>& aFields );
 
-    static std::unique_ptr<SIM_MODEL> Create( TYPE aType );
+    template <typename T>
+    static std::unique_ptr<SIM_MODEL> Create( int symbolPinCount, const std::vector<T>& aFields );
+
+    template <typename T = void>
+    static std::unique_ptr<SIM_MODEL> Create( TYPE aType,
+                                              int symbolPinCount,
+                                              const std::vector<T>* aFields = nullptr );
 
 
     // Move semantics.
@@ -312,40 +325,59 @@ public:
 
     SIM_MODEL( TYPE aType );
 
+
     template <typename T>
-    SIM_MODEL( const std::vector<T>& aFields );
+    void ReadDataFields( int symbolPinCount, const std::vector<T>* aFields );
+
+    // C++ doesn't allow virtual template methods, so we do this:
+    virtual void ReadDataSchFields( int symbolPinCount, const std::vector<SCH_FIELD>* aFields );
+    virtual void ReadDataLibFields( int symbolPinCount, const std::vector<LIB_FIELD>* aFields );
 
 
     template <typename T>
     void WriteFields( std::vector<T>& aFields );
 
     // C++ doesn't allow virtual template methods, so we do this:
-    virtual void DoWriteSchFields( std::vector<SCH_FIELD>& aFields );
-    virtual void DoWriteLibFields( std::vector<LIB_FIELD>& aFields );
+    virtual void WriteDataSchFields( std::vector<SCH_FIELD>& aFields );
+    virtual void WriteDataLibFields( std::vector<LIB_FIELD>& aFields );
 
     virtual void WriteCode( wxString& aCode ) = 0;
 
+
     TYPE GetType() { return m_type; }
 
-    wxString GetFile() { return m_file; }
-    void SetFile( const wxString& aFile ) { m_file = aFile; }
+    virtual wxString GetFile() { return m_file; }
+    virtual void SetFile( const wxString& aFile ) { m_file = aFile; }
 
+    std::vector<PIN>& Pins() { return m_pins; }
     std::vector<PARAM>& Params() { return m_params; }
 
 
 private:
     TYPE m_type;
     wxString m_file;
+    std::vector<PIN> m_pins;
     std::vector<PARAM> m_params;
 
 
     template <typename T>
-    static wxString getFieldValue( const std::vector<T>& aFields, const wxString& aFieldName );
+    void doReadDataFields( int symbolPinCount, const std::vector<T>* aFields );
+
+    template <typename T>
+    void doWriteFields( std::vector<T>& aFields );
+
+
+    template <typename T>
+    static wxString getFieldValue( const std::vector<T>* aFields, const wxString& aFieldName );
 
     template <typename T>
     static void setFieldValue( std::vector<T>& aFields, const wxString& aFieldName,
                                const wxString& aValue );
 
+    virtual std::vector<wxString> getPinNames() { return {}; }
+
+    wxString generatePinSequence();
+    void parsePinSequence( int symbolPinCount, const wxString& aPinSequence );
 
     virtual wxString generateParamValuePairs();
     virtual void parseParamValuePairs( const wxString& aParamValuePairs );

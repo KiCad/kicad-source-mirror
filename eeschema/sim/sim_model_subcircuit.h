@@ -31,7 +31,8 @@
 class SIM_MODEL_SUBCIRCUIT : public SIM_MODEL
 {
 public:
-    SIM_MODEL_SUBCIRCUIT( TYPE aType );
+    template <typename T = void>
+    SIM_MODEL_SUBCIRCUIT( TYPE aType, int symbolPinCount, const std::vector<T>* aFields = nullptr );
 
     void WriteCode( wxString& aCode ) override;
 };

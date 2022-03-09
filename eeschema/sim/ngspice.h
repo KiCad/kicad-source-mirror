@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -58,7 +58,7 @@ public:
         LTRA,
         TRANLINE,
         URC,
-        TRANSLINE,
+        //TRANSLINE,
         SWITCH,
         CSWITCH,
         DIODE,
@@ -95,6 +95,7 @@ public:
         wxString name;
         wxString variant1;
         wxString variant2;
+        std::vector<wxString> pinNames;
         wxString description;
         std::vector<SIM_MODEL::PARAM::INFO> modelParams;
         std::vector<SIM_MODEL::PARAM::INFO> instanceParams;

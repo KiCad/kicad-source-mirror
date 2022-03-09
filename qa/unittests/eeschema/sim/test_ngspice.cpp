@@ -73,10 +73,10 @@ BOOST_AUTO_TEST_CASE( Models )
             BOOST_CHECK_EQUAL( instanceParamCount, 5 );
             break;
         
-        case NGSPICE::MODEL_TYPE::TRANSLINE:
+        /*case NGSPICE::MODEL_TYPE::TRANSLINE:
             BOOST_CHECK_EQUAL( modelParamCount, 6 );
             BOOST_CHECK_EQUAL( instanceParamCount, 3 );
-            break;
+            break;*/
         
         case NGSPICE::MODEL_TYPE::DIODE:
             BOOST_CHECK_EQUAL( modelParamCount, 76 );

@@ -22,9 +22,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <widgets/wx_grid.h>
 #include <dialog_spice_model.h>
+#include <sim/sim_property.h>
+#include <widgets/wx_grid.h>
+#include <kiplatform/ui.h>
 #include <confirm.h>
+#include <locale_io.h>
 
 using TYPE = SIM_VALUE_BASE::TYPE;
 using CATEGORY = SIM_MODEL::PARAM::CATEGORY;
@@ -49,11 +52,12 @@ DIALOG_SPICE_MODEL<T>::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbo
         {
             if( type == typeFromFields )
             {
-                m_models.push_back( SIM_MODEL::Create( aFields ) );
+                m_models.push_back( SIM_MODEL::Create( type, m_symbol.GetAllPins().size(),
+                                                       &aFields ) );
                 m_curModelType = type;
             }
             else
-                m_models.push_back( SIM_MODEL::Create( type ) );
+                m_models.push_back( SIM_MODEL::Create( type, m_symbol.GetAllPins().size() ) );
 
             SIM_MODEL::DEVICE_TYPE deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
 
@@ -74,10 +78,37 @@ DIALOG_SPICE_MODEL<T>::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbo
     for( SIM_MODEL::DEVICE_TYPE deviceType : SIM_MODEL::DEVICE_TYPE_ITERATOR() )
         m_deviceTypeChoice->Append( SIM_MODEL::DeviceTypeInfo( deviceType ).description );
 
-    m_paramGrid = m_paramGridMgr->AddPage();
-
 
     m_scintillaTricks = std::make_unique<SCINTILLA_TRICKS>( m_codePreview, wxT( "{}" ), false );
+
+    m_paramGridMgr->Bind( wxEVT_PG_SELECTED, &DIALOG_SPICE_MODEL::onSelectionChange, this );
+
+    m_paramGrid->SetValidationFailureBehavior( wxPG_VFB_STAY_IN_PROPERTY
+                                               | wxPG_VFB_BEEP
+                                               | wxPG_VFB_MARK_CELL );
+
+    m_paramGrid->SetColumnProportion( static_cast<int>( PARAM_COLUMN::DESCRIPTION ), 50 );
+    m_paramGrid->SetColumnProportion( static_cast<int>( PARAM_COLUMN::VALUE ), 18 );
+    m_paramGrid->SetColumnProportion( static_cast<int>( PARAM_COLUMN::UNIT ), 10 );
+    m_paramGrid->SetColumnProportion( static_cast<int>( PARAM_COLUMN::DEFAULT ), 12 );
+    m_paramGrid->SetColumnProportion( static_cast<int>( PARAM_COLUMN::TYPE ), 10 );
+
+    if( wxPropertyGrid* grid = m_paramGrid->GetGrid() )
+    {
+        grid->AddActionTrigger( wxPG_ACTION_EDIT, WXK_RETURN );
+        grid->DedicateKey( WXK_RETURN );
+        grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_RETURN );
+
+        grid->DedicateKey( WXK_UP );
+        grid->DedicateKey( WXK_DOWN );
+
+        // Doesn't work for some reason.
+        //grid->DedicateKey( WXK_TAB );
+        //grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_TAB );
+        //grid->AddActionTrigger( wxPG_ACTION_PREV_PROPERTY, WXK_TAB, wxMOD_SHIFT );
+    }
+    else
+        wxFAIL;
 
     Layout();
 }
@@ -89,7 +120,7 @@ bool DIALOG_SPICE_MODEL<T>::TransferDataFromWindow()
     if( !DIALOG_SPICE_MODEL_BASE::TransferDataFromWindow() )
         return false;
 
-    m_models[static_cast<int>( m_curModelType )]->WriteFields( m_fields );
+    getCurModel().WriteFields( m_fields );
 
     return true;
 }
@@ -100,8 +131,8 @@ bool DIALOG_SPICE_MODEL<T>::TransferDataToWindow()
 {
     try
     {
-        m_models[static_cast<int>( SIM_MODEL::ReadTypeFromFields( m_fields ) )]
-            = SIM_MODEL::Create( m_fields );
+        m_models.at( static_cast<int>( SIM_MODEL::ReadTypeFromFields( m_fields ) ) )
+            = SIM_MODEL::Create( m_symbol.GetAllPins().size(), m_fields );
     }
     catch( KI_PARAM_ERROR& e )
     {
@@ -117,6 +148,15 @@ bool DIALOG_SPICE_MODEL<T>::TransferDataToWindow()
 
 template <typename T>
 void DIALOG_SPICE_MODEL<T>::updateWidgets()
+{
+    updateModelParamsTab();
+    updateModelCodeTab();
+    updatePinAssignmentsTab();
+}
+
+
+template <typename T>
+void DIALOG_SPICE_MODEL<T>::updateModelParamsTab()
 {
     SIM_MODEL::DEVICE_TYPE deviceType = SIM_MODEL::TypeInfo( m_curModelType ).deviceType;
 
@@ -141,11 +181,11 @@ void DIALOG_SPICE_MODEL<T>::updateWidgets()
 
     // This wxPropertyGridManager stuff has to be here because it segfaults in the constructor.
 
-    m_paramGridMgr->SetColumnCount( static_cast<int>( COLUMN::END_ ) );
+    m_paramGridMgr->SetColumnCount( static_cast<int>( PARAM_COLUMN::END_ ) );
 
-    m_paramGridMgr->SetColumnTitle( static_cast<int>( COLUMN::UNIT ), "Unit" );
-    m_paramGridMgr->SetColumnTitle( static_cast<int>( COLUMN::DEFAULT ), "Default" );
-    m_paramGridMgr->SetColumnTitle( static_cast<int>( COLUMN::TYPE ), "Type" );
+    m_paramGridMgr->SetColumnTitle( static_cast<int>( PARAM_COLUMN::UNIT ), "Unit" );
+    m_paramGridMgr->SetColumnTitle( static_cast<int>( PARAM_COLUMN::DEFAULT ), "Default" );
+    m_paramGridMgr->SetColumnTitle( static_cast<int>( PARAM_COLUMN::TYPE ), "Type" );
 
     m_paramGridMgr->ShowHeader();
 
@@ -176,9 +216,7 @@ void DIALOG_SPICE_MODEL<T>::updateWidgets()
     m_paramGrid->Append( new wxPropertyCategory( "Flags" ) );
     m_paramGrid->HideProperty( "Flags" );
 
-    SIM_MODEL& curModel = *m_models[static_cast<int>( m_curModelType )];
-
-    for( const SIM_MODEL::PARAM& param : curModel.Params() )
+    for( const SIM_MODEL::PARAM& param : getCurModel().Params() )
         addParamPropertyIfRelevant( param );
 
     m_paramGrid->CollapseAll();
@@ -186,36 +224,107 @@ void DIALOG_SPICE_MODEL<T>::updateWidgets()
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::onDeviceTypeChoice( wxCommandEvent& aEvent )
+void DIALOG_SPICE_MODEL<T>::updateModelCodeTab()
 {
-    SIM_MODEL::DEVICE_TYPE deviceType =
-        static_cast<SIM_MODEL::DEVICE_TYPE>( m_deviceTypeChoice->GetSelection() );
-
-    m_curModelType = m_curModelTypeOfDeviceType.at( deviceType );
-
-    updateWidgets();
 }
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
+void DIALOG_SPICE_MODEL<T>::updatePinAssignmentsTab()
 {
-    SIM_MODEL::DEVICE_TYPE deviceType =
-        static_cast<SIM_MODEL::DEVICE_TYPE>( m_deviceTypeChoice->GetSelection() );
-    wxString typeDescription = m_typeChoice->GetString( m_typeChoice->GetSelection() );
+    m_pinAssignmentsGrid->ClearRows();
 
-    for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
+    std::vector<SCH_PIN*> pinList = m_symbol.GetAllPins();
+
+    m_pinAssignmentsGrid->AppendRows( static_cast<int>( pinList.size() ) );
+
+    for( int i = 0; i < m_pinAssignmentsGrid->GetNumberRows(); ++i )
     {
-        if( deviceType == SIM_MODEL::TypeInfo( type ).deviceType
-            && typeDescription == SIM_MODEL::TypeInfo( type ).description )
-        {
-            m_curModelType = type;
-            break;
-        }
+        wxString symbolPinString = getSymbolPinString( i + 1 );
+
+        m_pinAssignmentsGrid->SetReadOnly( i, static_cast<int>( PIN_COLUMN::SYMBOL ) );
+        m_pinAssignmentsGrid->SetCellValue( i, static_cast<int>( PIN_COLUMN::SYMBOL ),
+                                            symbolPinString );
+
+        // Using `new` here shouldn't cause a memory leak because `SetCellEditor()` calls
+        // `DecRef()` on its last editor.
+        m_pinAssignmentsGrid->SetCellEditor( i, static_cast<int>( PIN_COLUMN::MODEL ),
+                                             new wxGridCellChoiceEditor() );
+        m_pinAssignmentsGrid->SetCellValue( i, static_cast<int>( PIN_COLUMN::MODEL ),
+                                            "Not Connected" );
     }
 
-    m_curModelTypeOfDeviceType.at( deviceType ) = m_curModelType;
-    updateWidgets();
+    for( unsigned int i = 0; i < getCurModel().Pins().size(); ++i )
+    {
+        int symbolPinNumber = getCurModel().Pins().at( i ).symbolPinNumber;
+
+        if( symbolPinNumber == SIM_MODEL::PIN::NOT_CONNECTED )
+            continue;
+
+        wxString modelPinString = getModelPinString( i + 1 );
+        wxArrayString choices; 
+
+        m_pinAssignmentsGrid->SetCellValue( symbolPinNumber - 1,
+                                            static_cast<int>( PIN_COLUMN::MODEL ),
+                                            modelPinString );
+    }
+
+    updatePinAssignmentsGridEditors();
+
+    // TODO: Show a preview of the symbol with the pin numbers shown.
+    // TODO: Maybe show a preview of the code for subcircuits and code models.
+}
+
+
+template <typename T>
+void DIALOG_SPICE_MODEL<T>::updatePinAssignmentsGridEditors()
+{
+    wxString modelPinChoicesString = "";
+    bool isFirst = true;
+
+    for( unsigned int i = 0; i < getCurModel().Pins().size(); ++i )
+    {
+        const SIM_MODEL::PIN& modelPin = getCurModel().Pins().at( i );
+        int modelPinNumber = static_cast<int>( i + 1 );
+
+        if( modelPin.symbolPinNumber != SIM_MODEL::PIN::NOT_CONNECTED )
+            continue;
+
+        if( isFirst )
+        {
+            modelPinChoicesString << getModelPinString( modelPinNumber );
+            isFirst = false;
+        }
+        else
+            modelPinChoicesString << "," << getModelPinString( modelPinNumber );
+    }
+
+    if( !isFirst )
+        modelPinChoicesString << ",";
+
+    modelPinChoicesString << "Not Connected";
+
+    for( int i = 0; i < m_pinAssignmentsGrid->GetNumberRows(); ++i )
+    {
+        wxGridCellChoiceEditor* editor = static_cast<wxGridCellChoiceEditor*>(
+            m_pinAssignmentsGrid->GetCellEditor( i, static_cast<int>( PIN_COLUMN::MODEL ) ) );
+
+        if( !editor )
+        {
+            // Shouldn't happen.
+            wxFAIL_MSG( "Grid cell editor is null" );
+            return;
+        }
+
+        wxString curModelPinString = m_pinAssignmentsGrid->GetCellValue(
+                i, static_cast<int>( PIN_COLUMN::MODEL ) );
+
+        if( curModelPinString == "Not Connected" )
+            editor->SetParameters( modelPinChoicesString );
+        else
+            editor->SetParameters( curModelPinString + "," + modelPinChoicesString );
+
+    }
 }
 
 
@@ -295,26 +404,28 @@ wxPGProperty* DIALOG_SPICE_MODEL<T>::newParamProperty( const SIM_MODEL::PARAM& a
     switch( aParam.info.type )
     {
     case TYPE::INT:
-        prop = new wxIntProperty( paramDescription );
+        prop = new SIM_PROPERTY( paramDescription,aParam.info.name, *aParam.value,
+                                 SIM_VALUE_BASE::TYPE::INT );
         break;
 
     case TYPE::FLOAT:
-        prop = new wxFloatProperty( paramDescription );
+        prop = new SIM_PROPERTY( paramDescription,aParam.info.name, *aParam.value,
+                                 SIM_VALUE_BASE::TYPE::FLOAT );
         break;
 
     case TYPE::BOOL:
-        prop = new wxBoolProperty( paramDescription );
+        prop = new wxBoolProperty( paramDescription, aParam.info.name );
         prop->SetAttribute( wxPG_BOOL_USE_CHECKBOX, true );
         break;
 
     default:
-        prop = new wxStringProperty( paramDescription );
+        prop = new wxStringProperty( paramDescription, aParam.info.name );
         break;
     }
 
     prop->SetAttribute( wxPG_ATTR_UNITS, aParam.info.unit );
 
-    // Legacy due to the way we extracted parameters from Ngspice.
+    // Legacy due to the way we extracted the parameters from Ngspice.
     if( aParam.isOtherVariant )
         prop->SetCell( 3, aParam.info.defaultValueOfOtherVariant );
     else
@@ -325,7 +436,7 @@ wxPGProperty* DIALOG_SPICE_MODEL<T>::newParamProperty( const SIM_MODEL::PARAM& a
     switch( aParam.info.type )
     {
     case TYPE::BOOL:           typeStr = wxString( "Bool"           ); break;
-    case TYPE::INT:            typeStr = wxString( "Integer"        ); break;
+    case TYPE::INT:            typeStr = wxString( "Int"            ); break;
     case TYPE::FLOAT:          typeStr = wxString( "Float"          ); break;
     case TYPE::COMPLEX:        typeStr = wxString( "Complex"        ); break;
     case TYPE::STRING:         typeStr = wxString( "String"         ); break;
@@ -335,7 +446,178 @@ wxPGProperty* DIALOG_SPICE_MODEL<T>::newParamProperty( const SIM_MODEL::PARAM& a
     case TYPE::COMPLEX_VECTOR: typeStr = wxString( "Complex Vector" ); break;
     }
 
-    prop->SetCell( static_cast<int>( COLUMN::TYPE ), typeStr );
+    prop->SetCell( static_cast<int>( PARAM_COLUMN::TYPE ), typeStr );
 
     return prop;
 }
+
+
+template <typename T>
+SIM_MODEL& DIALOG_SPICE_MODEL<T>::getCurModel() const
+{
+    return *m_models.at( static_cast<int>( m_curModelType ) );
+}
+
+
+template <typename T>
+wxString DIALOG_SPICE_MODEL<T>::getSymbolPinString( int symbolPinNumber ) const
+{
+    wxString name = "";
+    SCH_PIN* symbolPin = m_symbol.GetAllPins().at( symbolPinNumber - 1 );
+
+    if( symbolPin )
+        name = symbolPin->GetShownName();
+
+    LOCALE_IO toggle;
+
+    if( name.IsEmpty() )
+        return wxString::Format( "%d", symbolPinNumber );
+    else
+        return wxString::Format( "%d (%s)", symbolPinNumber, symbolPin->GetShownName() );
+}
+
+
+template <typename T>
+wxString DIALOG_SPICE_MODEL<T>::getModelPinString( int modelPinNumber ) const
+{
+    const wxString& pinName = getCurModel().Pins().at( modelPinNumber - 1 ).name;
+
+    LOCALE_IO toggle;
+
+    if( pinName.IsEmpty() )
+        return wxString::Format( "%d", modelPinNumber, pinName );
+    else
+        return wxString::Format( "%d (%s)", modelPinNumber, pinName );
+}
+
+
+template <typename T>
+int DIALOG_SPICE_MODEL<T>::getModelPinNumber( const wxString& aModelPinString ) const
+{
+    if( aModelPinString == "Not Connected" )
+        return SIM_MODEL::PIN::NOT_CONNECTED;
+
+    int length = aModelPinString.Find( " " );
+
+    if( length == wxNOT_FOUND )
+        length = static_cast<int>( aModelPinString.Length() );
+
+    long result = 0;
+    aModelPinString.Mid( 0, length ).ToCLong( &result );
+
+    return static_cast<int>( result );
+}
+
+
+template <typename T>
+void DIALOG_SPICE_MODEL<T>::onDeviceTypeChoice( wxCommandEvent& aEvent )
+{
+    SIM_MODEL::DEVICE_TYPE deviceType =
+        static_cast<SIM_MODEL::DEVICE_TYPE>( m_deviceTypeChoice->GetSelection() );
+
+    m_curModelType = m_curModelTypeOfDeviceType.at( deviceType );
+
+    updateWidgets();
+}
+
+
+template <typename T>
+void DIALOG_SPICE_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
+{
+    SIM_MODEL::DEVICE_TYPE deviceType =
+        static_cast<SIM_MODEL::DEVICE_TYPE>( m_deviceTypeChoice->GetSelection() );
+    wxString typeDescription = m_typeChoice->GetString( m_typeChoice->GetSelection() );
+
+    for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
+    {
+        if( deviceType == SIM_MODEL::TypeInfo( type ).deviceType
+            && typeDescription == SIM_MODEL::TypeInfo( type ).description )
+        {
+            m_curModelType = type;
+            break;
+        }
+    }
+
+    m_curModelTypeOfDeviceType.at( deviceType ) = m_curModelType;
+    updateWidgets();
+}
+
+
+template <typename T>
+void DIALOG_SPICE_MODEL<T>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent )
+{
+    int symbolPinNumber = aEvent.GetRow() + 1;
+    int oldModelPinNumber = getModelPinNumber( aEvent.GetString() );
+    int modelPinNumber = getModelPinNumber(
+            m_pinAssignmentsGrid->GetCellValue( aEvent.GetRow(), aEvent.GetCol() ) );
+
+    if( oldModelPinNumber != SIM_MODEL::PIN::NOT_CONNECTED )
+        getCurModel().Pins().at( oldModelPinNumber - 1 ).symbolPinNumber =
+                SIM_MODEL::PIN::NOT_CONNECTED;
+
+    if( modelPinNumber != SIM_MODEL::PIN::NOT_CONNECTED )
+        getCurModel().Pins().at( modelPinNumber - 1 ).symbolPinNumber = symbolPinNumber;
+
+    updatePinAssignmentsGridEditors();
+
+    aEvent.Skip();
+}
+
+
+template <typename T>
+void DIALOG_SPICE_MODEL<T>::onPinAssignmentsGridSize( wxSizeEvent& aEvent )
+{
+    wxGridUpdateLocker deferRepaintsTillLeavingScope( m_pinAssignmentsGrid );
+
+    int gridWidth = KIPLATFORM::UI::GetUnobscuredSize( m_pinAssignmentsGrid ).x;
+    m_pinAssignmentsGrid->SetColSize( static_cast<int>( PIN_COLUMN::MODEL ), gridWidth / 2 );
+    m_pinAssignmentsGrid->SetColSize( static_cast<int>( PIN_COLUMN::SYMBOL ), gridWidth / 2 );
+
+    aEvent.Skip();
+}
+
+
+template <typename T>
+void DIALOG_SPICE_MODEL<T>::onSelectionChange( wxPropertyGridEvent& aEvent )
+{
+    // TODO: Activate also when the whole property grid is selected with tab key.
+
+    wxPropertyGrid* grid = m_paramGrid->GetGrid();
+    if( !grid )
+    {
+        wxFAIL;
+        return;
+    }
+
+    wxWindow* editorControl = grid->GetEditorControl();
+    if( !editorControl )
+    {
+        wxFAIL;
+        return;
+    }
+    
+    // Without this, the user had to press tab before they could edit the field.
+    editorControl->SetFocus();
+}
+
+
+/*template <typename T>
+void DIALOG_SPICE_MODEL<T>::onPropertyChanged( wxPropertyGridEvent& aEvent )
+{
+    wxString name = aEvent.GetPropertyName();
+    
+    for( SIM_MODEL::PARAM& param : getCurModel().Params() )
+    {
+        if( param.info.name == name )
+        {
+            try
+            {
+                param.value->FromString( m_paramGrid->GetPropertyValueAsString( param.info.name ) );
+            }
+            catch( KI_PARAM_ERROR& e )
+            {
+                DisplayErrorMessage( this, e.What() );
+            }
+        }
+    }
+}*/

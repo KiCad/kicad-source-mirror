@@ -31,7 +31,8 @@
 class SIM_MODEL_SOURCE : public SIM_MODEL
 {
 public:
-    SIM_MODEL_SOURCE( TYPE aType );
+    template <typename T = void>
+    SIM_MODEL_SOURCE( TYPE aType, int symbolPinCount, const std::vector<T>* aFields = nullptr );
 
     void WriteCode( wxString& aCode ) override;
 

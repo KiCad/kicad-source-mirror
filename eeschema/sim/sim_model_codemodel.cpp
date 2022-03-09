@@ -24,7 +24,18 @@
 
 #include <sim/sim_model_codemodel.h>
 
-SIM_MODEL_CODEMODEL::SIM_MODEL_CODEMODEL( TYPE aType ) : SIM_MODEL( aType )
+
+template SIM_MODEL_CODEMODEL::SIM_MODEL_CODEMODEL( TYPE aType, int symbolPinCount,
+                                                   const std::vector<void>* aFields );
+template SIM_MODEL_CODEMODEL::SIM_MODEL_CODEMODEL( TYPE aType, int symbolPinCount,
+                                                   const std::vector<SCH_FIELD>* aFields );
+template SIM_MODEL_CODEMODEL::SIM_MODEL_CODEMODEL( TYPE aType, int symbolPinCount,
+                                                   const std::vector<LIB_FIELD>* aFields );
+
+template <typename T>
+SIM_MODEL_CODEMODEL::SIM_MODEL_CODEMODEL( TYPE aType, int symbolPinCount,
+                                          const std::vector<T>* aFields )
+    : SIM_MODEL( aType )
 {
 }
 

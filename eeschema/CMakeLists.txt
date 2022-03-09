@@ -318,6 +318,7 @@ if( KICAD_SPICE )
         sim/sim_plot_frame.cpp
         sim/sim_plot_frame_base.cpp
         sim/sim_plot_panel.cpp
+        sim/sim_property.cpp
         sim/sim_workbook.cpp
         sim/sim_model.cpp
         sim/sim_model_behavioral.cpp

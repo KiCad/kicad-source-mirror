@@ -25,8 +25,11 @@
 #ifndef SIM_VALUE_H
 #define SIM_VALUE_H
 
-#include <memory>
 #include <wx/string.h>
+#include <core/optional.h>
+#include <memory>
+#include <pegtl.hpp>
+
 
 class SIM_VALUE_BASE
 {
@@ -48,11 +51,17 @@ public:
     static std::unique_ptr<SIM_VALUE_BASE> Create( TYPE aType, wxString aString );
     static std::unique_ptr<SIM_VALUE_BASE> Create( TYPE aType );
 
+    virtual ~SIM_VALUE_BASE() = default;
+    SIM_VALUE_BASE() = default;
+
     void operator=( const wxString& aString );
     virtual bool operator==( const SIM_VALUE_BASE& aOther ) const = 0;
 
     virtual void FromString( const wxString& aString ) = 0;
     virtual wxString ToString() const = 0;
+
+    // For parsers that don't accept strings with our suffixes.
+    virtual wxString ToSimpleString() const = 0;
 };
 
 
@@ -65,12 +74,134 @@ public:
 
     void FromString( const wxString& aString ) override;
     wxString ToString() const override;
+    wxString ToSimpleString() const override;
 
     void operator=( const T& aValue );
     bool operator==( const SIM_VALUE_BASE& aOther ) const override;
 
 private:
-    T m_value;
+    OPT<T> m_value = NULLOPT;
+
+    wxString getMetricSuffix();
 };
 
-#endif /* SIM_VALUE_H */
+
+namespace SIM_VALUE_PARSER
+{
+    using namespace tao::pegtl;
+
+    enum class NOTATION
+    {
+        SI,
+        SPICE
+    };
+
+    template <NOTATION Notation>
+    wxString allowedIntChars;
+
+
+    struct spaces : plus<space> {};
+    struct digits : plus<tao::pegtl::digit> {}; // For some reason it fails on just "digit".
+
+    struct sign : one<'+', '-'> {};
+
+    struct intPart : digits {};
+
+    //struct fracPartPrefix : one<'.'> {};
+    struct fracPart : digits {};
+    //struct fracPartWithPrefix : seq<fracPartPrefix, fracPart> {};
+
+
+    template <SIM_VALUE_BASE::TYPE ValueType>
+    struct significand;
+    
+    template <> struct significand<SIM_VALUE_BASE::TYPE::FLOAT> :
+        sor<seq<intPart, one<'.'>, fracPart>,
+            seq<intPart, one<'.'>>,
+            intPart,
+            seq<one<'.'>, fracPart>,
+            one<'.'>> {};
+
+    template <> struct significand<SIM_VALUE_BASE::TYPE::INT> : intPart {};
+
+
+    struct exponentPrefix : one<'e', 'E'> {};
+    struct exponent : seq<opt<sign>, opt<digits>> {};
+    struct exponentWithPrefix : seq<exponentPrefix, exponent> {};
+
+
+    template <SIM_VALUE_BASE::TYPE ValueType, NOTATION Notation>
+    struct metricSuffix;
+
+    template <> struct metricSuffix<SIM_VALUE_BASE::TYPE::INT, NOTATION::SI>
+        : one<'k', 'K', 'M', 'G', 'T', 'P', 'E'> {};
+    template <> struct metricSuffix<SIM_VALUE_BASE::TYPE::INT, NOTATION::SPICE>
+        : sor<TAO_PEGTL_ISTRING( "k" ),
+              TAO_PEGTL_ISTRING( "Meg" ),
+              TAO_PEGTL_ISTRING( "G" ),
+              TAO_PEGTL_ISTRING( "T" )> {};
+
+    template <> struct metricSuffix<SIM_VALUE_BASE::TYPE::FLOAT, NOTATION::SI>
+        : one<'a', 'f', 'p', 'n', 'u', 'm', 'k', 'K', 'M', 'G', 'T', 'P', 'E'> {};
+    template <> struct metricSuffix<SIM_VALUE_BASE::TYPE::FLOAT, NOTATION::SPICE>
+        : sor<TAO_PEGTL_ISTRING( "f" ),
+              TAO_PEGTL_ISTRING( "p" ),
+              TAO_PEGTL_ISTRING( "n" ),
+              TAO_PEGTL_ISTRING( "u" ),
+              TAO_PEGTL_ISTRING( "m" ),
+              //TAO_PEGTL_ISTRING( "mil" ),
+              TAO_PEGTL_ISTRING( "k" ),
+              TAO_PEGTL_ISTRING( "Meg" ),
+              TAO_PEGTL_ISTRING( "G" ),
+              TAO_PEGTL_ISTRING( "T" )> {};
+
+
+    template <SIM_VALUE_BASE::TYPE ValueType, NOTATION Notation>
+    struct number : seq<significand<ValueType>,
+                        opt<exponentWithPrefix>,
+                        opt<metricSuffix<ValueType, Notation>>> {};
+
+    template <SIM_VALUE_BASE::TYPE ValueType, NOTATION Notation>
+    struct numberGrammar : must<opt<number<ValueType, Notation>>, eof> {};
+
+
+    template <typename Rule>
+    struct numberSelector : std::false_type {};
+
+    template <> struct numberSelector<significand<SIM_VALUE_BASE::TYPE::INT>> : std::true_type {};
+    template <> struct numberSelector<significand<SIM_VALUE_BASE::TYPE::FLOAT>> : std::true_type {};
+    template <> struct numberSelector<intPart> : std::true_type {};
+    template <> struct numberSelector<fracPart> : std::true_type {};
+    template <> struct numberSelector<exponent> : std::true_type {};
+    template <> struct numberSelector<metricSuffix<SIM_VALUE_BASE::TYPE::INT, NOTATION::SI>>
+        : std::true_type {};
+    template <> struct numberSelector<metricSuffix<SIM_VALUE_BASE::TYPE::INT, NOTATION::SPICE>>
+        : std::true_type {};
+    template <> struct numberSelector<metricSuffix<SIM_VALUE_BASE::TYPE::FLOAT, NOTATION::SI>>
+        : std::true_type {};
+    template <> struct numberSelector<metricSuffix<SIM_VALUE_BASE::TYPE::FLOAT, NOTATION::SPICE>>
+        : std::true_type {};
+
+    struct PARSE_RESULT
+    {
+        bool isEmpty = true;
+        std::string significand;
+        OPT<long> intPart;
+        OPT<long> fracPart;
+        OPT<long> exponent;
+        OPT<long> metricSuffixExponent;
+    };
+
+    bool IsValid( const wxString& aString,
+                  SIM_VALUE_BASE::TYPE aValueType = SIM_VALUE_BASE::TYPE::FLOAT,
+                  NOTATION aNotation = NOTATION::SI );
+    PARSE_RESULT Parse( const wxString& aString,
+                        SIM_VALUE_BASE::TYPE aValueType = SIM_VALUE_BASE::TYPE::FLOAT,
+                        NOTATION aNotation = NOTATION::SI );
+
+    long MetricSuffixToExponent( std::string aMetricSuffix, NOTATION aNotation = NOTATION::SI );
+    wxString ExponentToMetricSuffix( double aExponent, long& aReductionExponent,
+                                     NOTATION aNotation = NOTATION::SI );
+}
+
+#endif // SIM_VALUE_H

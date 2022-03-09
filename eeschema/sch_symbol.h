@@ -479,6 +479,14 @@ public:
      */
     std::vector<SCH_PIN*> GetPins( const SCH_SHEET_PATH* aSheet = nullptr ) const;
 
+    /**
+     * Retrieve all SCH_PINs (from all sheets)
+     *
+     * @return a vector of pointers (non-owning) to SCH_PINs
+     */
+    std::vector<SCH_PIN*> GetAllPins() const;
+
+
     std::vector<std::unique_ptr<SCH_PIN>>& GetRawPins() { return m_pins; }
 
     /**

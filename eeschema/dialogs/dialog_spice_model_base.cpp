@@ -46,7 +46,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_staticText124->Wrap( -1 );
 	fgSizer15->Add( m_staticText124, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_staticText125 = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, wxT("/home/mikolaj/Downloads/1N4148.lib"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText125 = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, wxT("etc/kicad-sim/diodes.lib"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText125->Wrap( -1 );
 	fgSizer15->Add( m_staticText125, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
@@ -94,8 +94,10 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	bSizer12->Add( fgSizer16, 0, wxEXPAND, 5 );
 
-	m_paramGridMgr = new wxPropertyGridManager(m_parametersPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxPGMAN_DEFAULT_STYLE);
+	m_paramGridMgr = new wxPropertyGridManager(m_parametersPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxPGMAN_DEFAULT_STYLE|wxPG_SPLITTER_AUTO_CENTER);
 	m_paramGridMgr->SetExtraStyle( wxPG_EX_MODE_BUTTONS|wxPG_EX_NATIVE_DOUBLE_BUFFERING );
+
+	m_paramGrid = m_paramGridMgr->AddPage( wxT("Page"), wxNullBitmap );
 	bSizer12->Add( m_paramGridMgr, 1, wxALL|wxEXPAND, 5 );
 
 
@@ -165,34 +167,34 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxVERTICAL );
 
-	m_pinAssignmentGrid = new WX_GRID( m_pinAssignmentsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_pinAssignmentsGrid = new WX_GRID( m_pinAssignmentsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
-	m_pinAssignmentGrid->CreateGrid( 0, 2 );
-	m_pinAssignmentGrid->EnableEditing( true );
-	m_pinAssignmentGrid->EnableGridLines( true );
-	m_pinAssignmentGrid->EnableDragGridSize( false );
-	m_pinAssignmentGrid->SetMargins( 0, 0 );
+	m_pinAssignmentsGrid->CreateGrid( 0, 2 );
+	m_pinAssignmentsGrid->EnableEditing( true );
+	m_pinAssignmentsGrid->EnableGridLines( true );
+	m_pinAssignmentsGrid->EnableDragGridSize( false );
+	m_pinAssignmentsGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_pinAssignmentGrid->SetColSize( 0, 160 );
-	m_pinAssignmentGrid->SetColSize( 1, 160 );
-	m_pinAssignmentGrid->EnableDragColMove( false );
-	m_pinAssignmentGrid->EnableDragColSize( true );
-	m_pinAssignmentGrid->SetColLabelValue( 0, wxT("Schematic Pin") );
-	m_pinAssignmentGrid->SetColLabelValue( 1, wxT("Model Pin") );
-	m_pinAssignmentGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+	m_pinAssignmentsGrid->SetColSize( 0, 160 );
+	m_pinAssignmentsGrid->SetColSize( 1, 160 );
+	m_pinAssignmentsGrid->EnableDragColMove( false );
+	m_pinAssignmentsGrid->EnableDragColSize( true );
+	m_pinAssignmentsGrid->SetColLabelValue( 0, wxT("Symbol Pin") );
+	m_pinAssignmentsGrid->SetColLabelValue( 1, wxT("Model Pin") );
+	m_pinAssignmentsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
-	m_pinAssignmentGrid->EnableDragRowSize( false );
-	m_pinAssignmentGrid->SetRowLabelSize( 0 );
-	m_pinAssignmentGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+	m_pinAssignmentsGrid->EnableDragRowSize( false );
+	m_pinAssignmentsGrid->SetRowLabelSize( 0 );
+	m_pinAssignmentsGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Label Appearance
 
 	// Cell Defaults
-	m_pinAssignmentGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizer10->Add( m_pinAssignmentGrid, 1, wxALL|wxEXPAND, 5 );
+	m_pinAssignmentsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	bSizer10->Add( m_pinAssignmentsGrid, 1, wxALL|wxEXPAND, 5 );
 
 
 	m_pinAssignmentsPanel->SetSizer( bSizer10 );
@@ -226,6 +228,9 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	// Connect Events
 	m_deviceTypeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onDeviceTypeChoice ), NULL, this );
 	m_typeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onTypeChoice ), NULL, this );
+	m_paramGridMgr->Connect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( DIALOG_SPICE_MODEL_BASE::onPropertyChanged ), NULL, this );
+	m_pinAssignmentsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_SPICE_MODEL_BASE::onPinAssignmentsGridCellChange ), NULL, this );
+	m_pinAssignmentsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SPICE_MODEL_BASE::onPinAssignmentsGridSize ), NULL, this );
 }
 
 DIALOG_SPICE_MODEL_BASE::~DIALOG_SPICE_MODEL_BASE()
@@ -233,5 +238,8 @@ DIALOG_SPICE_MODEL_BASE::~DIALOG_SPICE_MODEL_BASE()
 	// Disconnect Events
 	m_deviceTypeChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onDeviceTypeChoice ), NULL, this );
 	m_typeChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onTypeChoice ), NULL, this );
+	m_paramGridMgr->Disconnect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( DIALOG_SPICE_MODEL_BASE::onPropertyChanged ), NULL, this );
+	m_pinAssignmentsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_SPICE_MODEL_BASE::onPinAssignmentsGridCellChange ), NULL, this );
+	m_pinAssignmentsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SPICE_MODEL_BASE::onPinAssignmentsGridSize ), NULL, this );
 
 }
