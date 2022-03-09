@@ -217,11 +217,7 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook* parent, const wxString& ti
     m_TitleStringCtrl     = nullptr;
     m_AdjustPassiveValues = nullptr;
 
-    wxString netfmtName = static_cast<NETLIST_DIALOG*>( parent->GetParent() )->m_DefaultNetFmtName;
-
-    bool selected = m_pageNetFmtName == netfmtName;
-
-    parent->AddPage( this, title, selected );
+    parent->AddPage( this, title, false );
 
     wxBoxSizer* MainBoxSizer = new wxBoxSizer( wxVERTICAL );
     SetSizer( MainBoxSizer );
@@ -266,6 +262,15 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
 
     SetupStandardButtons( { { wxID_OK,     _( "Export Netlist" ) },
                             { wxID_CANCEL, _( "Close" )          } } );
+
+    for( int ii = 0; m_PanelNetType[ii] && ii < 4 + CUSTOMPANEL_COUNTMAX; ++ii )
+    {
+        if( m_PanelNetType[ii]->GetPageNetFmtName() == settings.m_NetFormatName )
+        {
+            m_NoteBook->ChangeSelection( ii );
+            break;
+        }
+    }
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -427,7 +432,6 @@ void NETLIST_DIALOG::NetlistUpdateOpt()
 
     settings.m_SpiceAdjustPassiveValues = adjust;
     settings.m_SpiceCommandString       = spice_cmd_string;
-    settings.m_NetFormatName            = wxEmptyString;
     settings.m_NetFormatName            = m_DefaultNetFmtName;
 }
 
