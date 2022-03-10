@@ -4,17 +4,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 16:51-0800\n"
-"PO-Revision-Date: 2021-11-05 13:01+0000\n"
+"PO-Revision-Date: 2022-03-13 03:55+0000\n"
 "Last-Translator: ___davidpr <david.pribic95@gmail.com>\n"
-"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
-"source/sr/>\n"
+"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v6/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Poedit-Bookmarks: -1,-1,5234,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
@@ -68,9 +67,9 @@ msgid "Simplifying polygons on B_Cu"
 msgstr ""
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Сви бакарни слојеви"
+msgstr "Поједностављање %d бакарних слојева"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:841
 msgid "Simplify holes contours"
@@ -4876,9 +4875,9 @@ msgid "Gestures"
 msgstr ""
 
 #: common/kiway.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load kiface library '%s'."
-msgstr "Попуњавање зона"
+msgstr "Грешка у учитавању kiface библиотеке '%s'."
 
 #: common/kiway.cpp:265
 #, c-format
@@ -5697,9 +5696,9 @@ msgstr "фајл не постоји"
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:344
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:101
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create file '%s'."
-msgstr "Попуњавање зона"
+msgstr "Грешка у креирању датотеке '%s'."
 
 #: common/project/project_archiver.cpp:205
 #, c-format
@@ -5729,9 +5728,9 @@ msgid "Warning: "
 msgstr "Упозорење: "
 
 #: common/richio.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open %s for reading."
-msgstr "Попуњавање зона"
+msgstr "Немогуће отворити %s за читање."
 
 #: common/richio.cpp:221 common/richio.cpp:317
 msgid "Maximum line length exceeded"
@@ -6726,9 +6725,9 @@ msgid "Reset to Defaults"
 msgstr ""
 
 #: common/widgets/paged_dialog.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Reset %s to Defaults"
-msgstr "Врати на почетна подешавања"
+msgstr "Врати %s на почетна подешавања"
 
 #: common/widgets/unit_binder.cpp:222
 #, c-format
@@ -7220,9 +7219,9 @@ msgid ""
 msgstr ""
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Project file: '%s'"
-msgstr "Пројект"
+msgstr "Датотека пројекта: '%s'"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:103
 #: eeschema/dialogs/dialog_bom.cpp:449
