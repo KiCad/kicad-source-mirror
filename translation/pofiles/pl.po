@@ -7,17 +7,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 16:51-0800\n"
-"PO-Revision-Date: 2022-03-01 09:55+0000\n"
+"PO-Revision-Date: 2022-03-13 03:57+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.11.1-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -735,9 +735,8 @@ msgid "Show model bounding boxes"
 msgstr "Pokaż bryły brzegowe modeli"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:28
-#, fuzzy
 msgid "Show copper and tech layers thickness (very slow)"
-msgstr "Pokaż grubość miedzi"
+msgstr "Pokaż grubość warstw technicznych oraz miedzi (bardzo wolne)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:31
 msgid "Highlight items on rollover"
@@ -15661,9 +15660,8 @@ msgid "Library changes are unsaved"
 msgstr "Zmiany w bibliotece nie są zapisane"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:247
-#, fuzzy
 msgid "Symbol library loading was cancelled by user."
-msgstr "Biblioteka '%s' już istnieje."
+msgstr "Wczytywanie biblioteki symboli zostało anulowane przez użytkownika."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:591
 #: eeschema/tools/sch_edit_tool.cpp:118
@@ -16530,7 +16528,7 @@ msgstr "Kopiuje rozmiar numeru pinu do pozostałych pinów w symbolu"
 
 #: eeschema/tools/ee_actions.cpp:271
 msgid "Add Symbol"
-msgstr "Dodaj sybmbol"
+msgstr "Dodaj symbol"
 
 #: eeschema/tools/ee_actions.cpp:271
 msgid "Add a symbol"
@@ -19176,9 +19174,9 @@ msgid "Aborting remaining tasks."
 msgstr "Przerywanie pozostałych zadań."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "Downloaded %lld/%lld kB"
-msgstr "Pobrane %lld/%lld Kb"
+msgstr "Pobrane %lld/%lld kB"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
 msgid "Download Progress"
@@ -19312,9 +19310,9 @@ msgid "Error loading installed packages list: %s"
 msgstr "Błąd podczas ładowania listy zainstalowanych pakietów: %s"
 
 #: kicad/pcm/pcm.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "Downloading %lld/%lld kB"
-msgstr "Pobieranie %lld/%lld Kb"
+msgstr "Pobieranie %lld/%lld kB"
 
 #: kicad/pcm/pcm.cpp:231
 msgid "Download is too large."
@@ -23209,19 +23207,16 @@ msgid "Constraints Resolution Report"
 msgstr "Raport z analizy ograniczeń"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:202
-#, fuzzy
 msgid "Teardrop on Vias/Pads Properties"
-msgstr "Łezki na polach wewnątrz stref"
+msgstr "Właściwości łezek na polach lut. i przelotkach"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:206
-#, fuzzy
 msgid "Teardrop on Tracks Properties"
-msgstr "Łezki na polach wewnątrz stref"
+msgstr "Właściwości łezek na ścieżkach"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:210
-#, fuzzy
 msgid "Teardrop Properties"
-msgstr "Właściwości grup"
+msgstr "Właściwości łezek"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:404
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:167
@@ -23489,18 +23484,16 @@ msgid "Isolated islands smaller than this will be removed"
 msgstr "Wysepki stref mniejsze niż ta zostaną usunięte"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:398
-#, fuzzy
 msgid "Export Settings to Other Similar Zones"
-msgstr "Eksportuj ustawienia do innych stref"
+msgstr "Eksportuj ustawienia do innych podobnych stref"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:399
-#, fuzzy
 msgid ""
 "Export this zone setup (excluding layer and net selection) to other similar "
 "copper zones (teardrops or usual copper zones)."
 msgstr ""
-"Eksportuj ustawienia tej strefy do wszystkich innych stref miedzi (z "
-"wyłączeniem ustawień warstw i sieci)."
+"Eksportuj ustawienia tej strefy (z wyłączeniem ustawień warstw i sieci) do "
+"wszystkich podobnych stref miedzi (łezek lub zwykłych stref)."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:142
 msgid "Copper Zone Properties"
@@ -24897,7 +24890,6 @@ msgid "Solder paste absolute clearance:"
 msgstr "Całkowity prześwit pasty lutowniczej:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:303
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder paste for this "
 "footprint.\n"
@@ -24908,8 +24900,8 @@ msgid ""
 msgstr ""
 "Jest to wartość lokalna prześwitu pomiędzy polami lutowniczymi a maską pasty "
 "lutowniczej dla tego footprintu.\n"
-"Wartość ta może zostać zastąpiona przez lokalne ustawienia pól "
-"lutowniczych.\n"
+"Wartość ta może zostać zastąpiona przez lokalne ustawienia pól lutowniczych."
+"\n"
 "Ostateczny rozmiar prześwitu jest sumą tej wartości i stosunku pomiędzy "
 "prześwitami.\n"
 "Wartość ujemna oznacza mniejszy rozmiar maski niż rozmiar pola lutowniczego."
@@ -24935,8 +24927,8 @@ msgid ""
 msgstr ""
 "Jest to lokalny stosunek wyrażony w procentach pomiędzy polami lutowniczymi "
 "a maską pasty lutowniczej dla danego footprintu.\n"
-"Wartość 10 oznacza, że szerokość prześwitu to 10 procent rozmiaru pola "
-"lutowniczego.\n"
+"Wartość 10 oznacza, że szerokość prześwitu to 10% szerokości pola "
+"lutowniczego jak i 10% jego wysokości.\n"
 "Wartość ta może zostać zastąpiona przez lokalną wartość z ustawień pól "
 "lutowniczych.\n"
 "Ostateczny rozmiar prześwitu jest sumą tej wartości i rozmiaru prześwitu.\n"
@@ -25060,7 +25052,6 @@ msgstr ""
 "przez Lokalne ustawienia prześwitu dla pól lutowniczych."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:274
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder paste for\n"
 "this footprint.\n"
@@ -25075,8 +25066,8 @@ msgstr ""
 "dla tego footprintu.\n"
 "Ostateczny rozmiar prześwitu jest sumą tej wartości i stosunku pomiędzy "
 "prześwitami.\n"
-"Wartość ujemna oznacza mniejszy rozmiar maski niż rozmiar pola "
-"lutowniczego.\n"
+"Wartość ujemna oznacza mniejszy rozmiar maski niż rozmiar pola lutowniczego."
+"\n"
 "Wartość ta może zostać zastąpiona dla poszczególnych pól lutowniczych\n"
 "przez Lokalne ustawienia prześwitu dla pól lutowniczych."
 
@@ -25094,14 +25085,14 @@ msgid ""
 "and Settings tab of Pad Properties."
 msgstr ""
 "Jest to lokalny prześwit wyrażony w procentach pomiędzy polami lutowniczymi "
-"a maską pasty lutowniczej\n"
-"dla danego footprintu.\n"
-"Wartość 10 oznacza, że prześwit to 10 procent rozmiaru pola lutowniczego.\n"
+"a maską pasty lutowniczej dla danego footprintu.\n"
+"Wartość 10 oznacza, że prześwit to 10% procent szerokości pola lutowniczego, "
+"jak i 10% jego wysokości.\n"
 "Ostateczny rozmiar prześwitu jest sumą tej wartości i rozmiaru prześwitu.\n"
-"Wartość ujemna oznacza, że maska jest mniejsza niż rozmiar pola "
-"lutowniczego.\n"
-"Wartość ta może zostać zastąpiona dla poszczególnych pól lutowniczych\n"
-"przez Lokalne ustawienia prześwitu dla pól lutowniczych."
+"Wartość ujemna oznacza, że maska jest mniejsza niż rozmiar pola lutowniczego."
+"\n"
+"Wartość ta może zostać zastąpiona dla poszczególnych pól lutowniczych przez "
+"Lokalne ustawienia prześwitu dla pól lutowniczych."
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:144
 msgid "All footprint generator scripts were loaded"
@@ -25667,9 +25658,8 @@ msgid "Via Diameter"
 msgstr "Średnica przelotki"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:232
-#, fuzzy
 msgid "uVia Diameter"
-msgstr "Średnica przelotki"
+msgstr "Średnica mikroprzelotki"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:39
 msgid "Filter Items"
@@ -28020,9 +28010,8 @@ msgid "Track & Via Properties"
 msgstr "Właściwości ścieżek i przelotek"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:53
-#, fuzzy
 msgid "Track and Via Dimensions"
-msgstr "Predefiniowane rozmiary ścieżek i przelotek"
+msgstr "Rozmiary ścieżek i przelotek"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:147
 msgid "Set Unused Pad Properties"
@@ -30434,14 +30423,12 @@ msgid "Board edge clearance violation"
 msgstr "Naruszenie prześwitu do krawędzi płytki"
 
 #: pcbnew/drc/drc_item.cpp:80
-#, fuzzy
 msgid "Copper zones intersect"
 msgstr "Obszary miedzi zachodzą na siebie"
 
 #: pcbnew/drc/drc_item.cpp:84
-#, fuzzy
 msgid "Isolated copper fill"
-msgstr "Unikaj wypełnień stref"
+msgstr "Unikaj izolowanych wypełnień stref"
 
 #: pcbnew/drc/drc_item.cpp:88
 msgid "Thermal relief connection to zone incomplete"
@@ -34740,9 +34727,9 @@ msgid "Via netclass values"
 msgstr "Użyj wartości z klas sieci"
 
 #: pcbnew/router/router_tool.cpp:247 pcbnew/tools/drawing_tool.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Via %s, hole %s"
-msgstr "Przelotka %s na %s"
+msgstr "Przelotka %s, otwór %s"
 
 #: pcbnew/router/router_tool.cpp:251 pcbnew/tools/drawing_tool.cpp:122
 #, c-format
@@ -35708,9 +35695,9 @@ msgid "Special Tools"
 msgstr "Narzędzia specjalne"
 
 #: pcbnew/tools/edit_tool.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to resize arc tracks of %s or greater."
-msgstr "Nie można zmienić rozmiaru ścieżek po łuku o %.1f stopni lub więcej."
+msgstr "Nie można zmienić rozmiaru ścieżek po łuku o %s lub więcej."
 
 #: pcbnew/tools/edit_tool.cpp:673
 msgid "Drag Arc Track"
@@ -38154,9 +38141,8 @@ msgid "Rule Area"
 msgstr "Strefa z regułami"
 
 #: pcbnew/zone.cpp:524
-#, fuzzy
 msgid "Teardrop Area"
-msgstr "Utworzono %d łezek"
+msgstr "Obszar łezek"
 
 #: pcbnew/zone.cpp:526
 msgid "Copper Zone"
