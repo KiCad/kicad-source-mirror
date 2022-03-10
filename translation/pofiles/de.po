@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 16:51-0800\n"
-"PO-Revision-Date: 2022-03-08 00:49+0000\n"
+"PO-Revision-Date: 2022-03-13 03:55+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -1775,7 +1775,7 @@ msgstr "Versionsinformationen zu Bibliotheken"
 
 #: common/dialog_about/dialog_about_base.cpp:58
 msgid "&Copy Version Info"
-msgstr "&Kopiere Versionsinfo"
+msgstr "Versionsinfo &kopieren"
 
 #: common/dialog_about/dialog_about_base.cpp:59
 msgid "Copy KiCad version info to the clipboard"
@@ -15244,9 +15244,8 @@ msgid "Library changes are unsaved"
 msgstr "Änderungen an der Bibliothek sind nicht gespeichert"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:247
-#, fuzzy
 msgid "Symbol library loading was cancelled by user."
-msgstr "Symbolbibliothek \"%s\" existiert bereits."
+msgstr "Laden der Symbolbibliothek wurde durch den Benutzer abgebrochen."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:594
 #: eeschema/tools/sch_edit_tool.cpp:117
@@ -16295,7 +16294,7 @@ msgstr "Wert bearbeiten..."
 
 #: eeschema/tools/ee_actions.cpp:408
 msgid "Displays value field dialog"
-msgstr "Zeigt den Dialog für das Wertfeld"
+msgstr "Zeigt den Dialog für die Angabe des Bauteilwerts"
 
 #: eeschema/tools/ee_actions.cpp:414
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:251
@@ -16304,11 +16303,11 @@ msgstr "Footprint bearbeiten..."
 
 #: eeschema/tools/ee_actions.cpp:414
 msgid "Displays footprint field dialog"
-msgstr "Anzeige des Dialogs für die Footprintfelder"
+msgstr "Zeigt den Dialog für die Auswahl des Footprints"
 
 #: eeschema/tools/ee_actions.cpp:420
 msgid "Autoplace Fields"
-msgstr "Felder automatisch platzieren"
+msgstr "Felder automatisch anordnen"
 
 #: eeschema/tools/ee_actions.cpp:420
 msgid "Runs the automatic placement algorithm on the symbol or sheet's fields"
@@ -30694,8 +30693,8 @@ msgid ""
 "and update your footprint lib table\n"
 "to save your footprint (a .kicad_mod file) in the .pretty library folder"
 msgstr ""
-"Schreiben/Verändern der im alten Format vorliegenden Bibliotheken (.mod-"
-"Dateien) ist nicht möglich\n"
+"Bibliotheken im veralteten Format (.mod-Dateien) können nicht geschrieben/"
+"verändert werden\n"
 "Bitte speichern Sie die aktuelle Bibliothek im neuen .pretty-Format\n"
 "und aktualisieren Sie die Footprint-Bibliothekstabelle,\n"
 "um den Footprint (eine .kicad_mod-Datei) im Bibliotheksordner speichern zu "
@@ -34603,7 +34602,7 @@ msgstr "Bemaßung zeichnen"
 
 #: pcbnew/tools/drawing_tool.cpp:1183
 msgid "No graphic items found in file."
-msgstr "Keinen Grafische Elemente in der zu importierenden Datei gefunden."
+msgstr "Keine Grafikelemente in der zu importierenden Datei gefunden."
 
 #: pcbnew/tools/drawing_tool.cpp:1233 pcbnew/tools/drawing_tool.cpp:1304
 msgid "Place a DXF_SVG drawing"
@@ -35133,7 +35132,7 @@ msgstr "Neuen Footprint mittels des Footprint Wizards erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:359
 msgid "Edit Footprint"
-msgstr "Bearbeite Footprint"
+msgstr "Footprint bearbeiten"
 
 #: pcbnew/tools/pcb_actions.cpp:359
 msgid "Show selected footprint on editor canvas"
@@ -35141,7 +35140,7 @@ msgstr "Ausgewählten Footprint auf der Editor-Zeichenfläche anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:364
 msgid "Delete Footprint from Library"
-msgstr "Lösche Footprint aus Bibliothek"
+msgstr "Footprint aus Bibliothek entfernen"
 
 #: pcbnew/tools/pcb_actions.cpp:369
 msgid "Cut Footprint"
