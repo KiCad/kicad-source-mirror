@@ -158,7 +158,7 @@ bool SCRIPTING::scriptingSetup()
 
     // Prevent Mac builds from generating JIT versions as this will break
     // the package signing
-    wxSetEnv( "PYTHONDONTWRITEBYTECODE", "1" );
+    wxSetEnv( wxT( "PYTHONDONTWRITEBYTECODE" ), wxT( "1" ) );
 
     // Add default paths to PYTHONPATH
     wxString pypath;
@@ -167,7 +167,7 @@ bool SCRIPTING::scriptingSetup()
     pypath += PATHS::GetOSXKicadDataDir() + wxT( "/scripting" );
 
     // $(KICAD_PATH)/scripting/plugins is always added in kicadplugins.i
-    if( wxGetenv("KICAD_PATH") != nullptr )
+    if( wxGetenv( "KICAD_PATH" ) != nullptr )
     {
         pypath += wxT( ":" ) + wxString( wxGetenv("KICAD_PATH") );
     }
@@ -183,7 +183,7 @@ bool SCRIPTING::scriptingSetup()
     }
 
     // set $PYTHONPATH
-    wxSetEnv( "PYTHONPATH", pypath );
+    wxSetEnv( wxT( "PYTHONPATH" ), pypath );
 
     wxString pyhome;
 
@@ -191,7 +191,7 @@ bool SCRIPTING::scriptingSetup()
               wxT( "Contents/Frameworks/Python.framework/Versions/Current" );
 
     // set $PYTHONHOME
-    wxSetEnv( "PYTHONHOME", pyhome );
+    wxSetEnv( wxT( "PYTHONHOME" ), pyhome );
 #else
     wxString pypath;
 
