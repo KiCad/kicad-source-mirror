@@ -387,6 +387,7 @@ wxString SETTINGS_MANAGER::GetPathForSettingsFile( JSON_SETTINGS* aSettings )
         return GetUserSettingsPath();
 
     case SETTINGS_LOC::PROJECT:
+        // TODO: MDI support
         return Prj().GetProjectPath();
 
     case SETTINGS_LOC::COLORS:
@@ -972,7 +973,7 @@ bool SETTINGS_MANAGER::SaveProject( const wxString& aFullPath, PROJECT* aProject
         return false;
 
     PROJECT_FILE* project     = m_project_files.at( path );
-    wxString      projectPath = GetPathForSettingsFile( project );
+    wxString      projectPath = aProject->GetProjectPath();
 
     project->SaveToFile( projectPath );
     aProject->GetLocalSettings().SaveToFile( projectPath );
