@@ -142,7 +142,15 @@ bool ConvertSmartQuotesAndDashes( wxString* aString )
 
 wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
 {
-    wxString converted;
+    wxString          converted;
+    std::vector<bool> braceStack;    // true == formatting construct
+
+    auto hasFormattingPrefix =
+            [&]()
+            {
+                static wxString prefixes = wxT( "~_^" );
+                return !converted.IsEmpty() && prefixes.Find( converted.Last() ) >= 0;
+            };
 
     converted.reserve( aSource.length() );
 
@@ -159,7 +167,7 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
         }
         else if( aContext == CTX_LIBID )
         {
-            if( c == '{' )
+            if( c == '{' && !hasFormattingPrefix() )
                 converted += wxT( "{brace}" );
             else if( c == '/' )
                 converted += wxT( "{slash}" );
@@ -227,7 +235,9 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
                 converted += c;
         }
         else
+        {
             converted += c;
+        }
     }
 
     return converted;
