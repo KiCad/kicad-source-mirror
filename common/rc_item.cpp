@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ wxString RC_ITEM::GetErrorMessage() const
 
 wxString RC_ITEM::ShowCoord( EDA_UNITS aUnits, const VECTOR2I& aPos )
 {
-    return wxString::Format( "@(%s, %s)",
+    return wxString::Format( wxT( "@(%s, %s)" ),
                              MessageTextFromValue( aUnits, aPos.x ),
                              MessageTextFromValue( aUnits, aPos.y ) );
 }

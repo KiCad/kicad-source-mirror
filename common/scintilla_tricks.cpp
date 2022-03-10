@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -268,7 +268,7 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
         for( int ii = startLine; ii <= endLine; ++ii )
         {
             if( comment )
-                m_te->InsertText( m_te->PositionFromLine( ii ), "#" );
+                m_te->InsertText( m_te->PositionFromLine( ii ), wxT( "#" ) );
             else if( firstNonWhitespace( ii, &whitespaceCount ) == '#' )
                 m_te->DeleteRange( m_te->PositionFromLine( ii ) + whitespaceCount, 1 );
         }

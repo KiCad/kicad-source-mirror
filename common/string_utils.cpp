@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@ wxString ConvertToNewOverbarNotation( const wxString& aOldStr )
     bool inOverbar = false;
 
     // Don't get tripped up by the legacy empty-string token.
-    if( aOldStr == "~" )
+    if( aOldStr == wxT( "~" ) )
         return aOldStr;
 
     newStr.reserve( aOldStr.length() );
@@ -64,12 +64,12 @@ wxString ConvertToNewOverbarNotation( const wxString& aOldStr )
                 {
                     // This way the subsequent opening curly brace will not start an
                     // overbar.
-                    newStr << "~~{}";
+                    newStr << wxT( "~~{}" );
                     continue;
                 }
 
                 // Two subsequent tildes mean a tilde.
-                newStr << "~";
+                newStr << wxT( "~" );
                 ++chIt;
                 continue;
             }
@@ -83,12 +83,12 @@ wxString ConvertToNewOverbarNotation( const wxString& aOldStr )
             {
                 if( inOverbar )
                 {
-                    newStr << "}";
+                    newStr << wxT( "}" );
                     inOverbar = false;
                 }
                 else
                 {
-                    newStr << "~{";
+                    newStr << wxT( "~{" );
                     inOverbar = true;
                 }
 
@@ -98,7 +98,7 @@ wxString ConvertToNewOverbarNotation( const wxString& aOldStr )
         else if( ( *chIt == ' ' || *chIt == '}' || *chIt == ')' ) && inOverbar )
         {
             // Spaces were used to terminate overbar as well
-            newStr << "}";
+            newStr << wxT( "}" );
             inOverbar = false;
         }
 
@@ -107,7 +107,7 @@ wxString ConvertToNewOverbarNotation( const wxString& aOldStr )
 
     // Explicitly end the overbar even if there was no terminating '~' in the aOldStr.
     if( inOverbar )
-        newStr << "}";
+        newStr << wxT( "}" );
 
     return newStr;
 }
@@ -159,89 +159,89 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
         if( aContext == CTX_NETNAME )
         {
             if( c == '/' )
-                converted += "{slash}";
+                converted += wxT( "{slash}" );
             else if( c == '\n' || c == '\r' )
-                converted += "";    // drop
+                converted += wxEmptyString;    // drop
             else
                 converted += c;
         }
         else if( aContext == CTX_LIBID )
         {
             if( c == '{' && !hasFormattingPrefix() )
-                converted += "{brace}";
+                converted += wxT( "{brace}" );
             else if( c == '/' )
-                converted += "{slash}";
+                converted += wxT( "{slash}" );
             else if( c == '\\' )
-                converted += "{backslash}";
+                converted += wxT( "{backslash}" );
             else if( c == '<' )
-                converted += "{lt}";
+                converted += wxT( "{lt}" );
             else if( c == '>' )
-                converted += "{gt}";
+                converted += wxT( "{gt}" );
             else if( c == ':' )
-                converted += "{colon}";
+                converted += wxT( "{colon}" );
             else if( c == '\"' )
-                converted += "{dblquote}";
+                converted += wxT( "{dblquote}" );
             else if( c == '\n' || c == '\r' )
-                converted += "";    // drop
+                converted += wxEmptyString;    // drop
             else
                 converted += c;
         }
         else if( aContext == CTX_IPC )
         {
             if( c == '/' )
-                converted += "{slash}";
+                converted += wxT( "{slash}" );
             else if( c == ',' )
-                converted += "{comma}";
+                converted += wxT( "{comma}" );
             else if( c == '\"' )
-                converted += "{dblquote}";
+                converted += wxT( "{dblquote}" );
             else
                 converted += c;
         }
         else if( aContext == CTX_QUOTED_STR )
         {
             if( c == '\"' )
-                converted += "{dblquote}";
+                converted += wxT( "{dblquote}" );
             else
                 converted += c;
         }
         else if( aContext == CTX_LINE )
         {
             if( c == '\n' || c == '\r' )
-                converted += "{return}";
+                converted += wxT( "{return}" );
             else
                 converted += c;
         }
         else if( aContext == CTX_FILENAME )
         {
             if( c == '{' )
-                converted += "{brace}";
+                converted += wxT( "{brace}" );
             else if( c == '/' )
-                converted += "{slash}";
+                converted += wxT( "{slash}" );
             else if( c == '\\' )
-                converted += "{backslash}";
+                converted += wxT( "{backslash}" );
             else if( c == '\"' )
-                converted += "{dblquote}";
+                converted += wxT( "{dblquote}" );
             else if( c == '<' )
-                converted += "{lt}";
+                converted += wxT( "{lt}" );
             else if( c == '>' )
-                converted += "{gt}";
+                converted += wxT( "{gt}" );
             else if( c == '|' )
-                converted += "{bar}";
+                converted += wxT( "{bar}" );
             else if( c == ':' )
-                converted += "{colon}";
+                converted += wxT( "{colon}" );
             else if( c == '\t' )
-                converted += "{tab}";
+                converted += wxT( "{tab}" );
             else if( c == '\n' || c == '\r' )
-                converted += "{return}";
+                converted += wxT( "{return}" );
             else
                 converted += c;
         }
         else if( aContext == CTX_NO_SPACE )
         {
             if( c == ' ' )
-                converted += "{space}";
+                converted += wxT( "{space}" );
             else if( c == '{' )
-                converted += "{brace}";
+                converted += wxT( "{brace}" );
             else
                 converted += c;
         }
@@ -302,24 +302,24 @@ wxString UnescapeString( const wxString& aSource )
                     token.append( ch );
             }
 
-            if(      token == wxS( "dblquote" ) )  newbuf.append( wxS( "\"" ) );
-            else if( token == wxS( "quote" ) )     newbuf.append( wxS( "'" ) );
-            else if( token == wxS( "lt" ) )        newbuf.append( wxS( "<" ) );
-            else if( token == wxS( "gt" ) )        newbuf.append( wxS( ">" ) );
-            else if( token == wxS( "backslash" ) ) newbuf.append( wxS( "\\" ) );
-            else if( token == wxS( "slash" ) )     newbuf.append( wxS( "/" ) );
-            else if( token == wxS( "bar" ) )       newbuf.append( wxS( "|" ) );
-            else if( token == wxS( "comma" ) )     newbuf.append( wxS( "," ) );
-            else if( token == wxS( "colon" ) )     newbuf.append( wxS( ":" ) );
-            else if( token == wxS( "space" ) )     newbuf.append( wxS( " " ) );
-            else if( token == wxS( "dollar" ) )    newbuf.append( wxS( "$" ) );
-            else if( token == wxS( "tab" ) )       newbuf.append( wxS( "\t" ) );
-            else if( token == wxS( "return" ) )    newbuf.append( wxS( "\n" ) );
-            else if( token == wxS( "brace" ) )     newbuf.append( wxS( "{" ) );
-            else if( token.IsEmpty() )             newbuf.append( wxS( "{" ) );
+            if(      token == wxT( "dblquote" ) )  newbuf.append( wxT( "\"" ) );
+            else if( token == wxT( "quote" ) )     newbuf.append( wxT( "'" ) );
+            else if( token == wxT( "lt" ) )        newbuf.append( wxT( "<" ) );
+            else if( token == wxT( "gt" ) )        newbuf.append( wxT( ">" ) );
+            else if( token == wxT( "backslash" ) ) newbuf.append( wxT( "\\" ) );
+            else if( token == wxT( "slash" ) )     newbuf.append( wxT( "/" ) );
+            else if( token == wxT( "bar" ) )       newbuf.append( wxT( "|" ) );
+            else if( token == wxT( "comma" ) )     newbuf.append( wxT( "," ) );
+            else if( token == wxT( "colon" ) )     newbuf.append( wxT( ":" ) );
+            else if( token == wxT( "space" ) )     newbuf.append( wxT( " " ) );
+            else if( token == wxT( "dollar" ) )    newbuf.append( wxT( "$" ) );
+            else if( token == wxT( "tab" ) )       newbuf.append( wxT( "\t" ) );
+            else if( token == wxT( "return" ) )    newbuf.append( wxT( "\n" ) );
+            else if( token == wxT( "brace" ) )     newbuf.append( wxT( "{" ) );
+            else if( token.IsEmpty() )             newbuf.append( wxT( "{" ) );
             else
             {
-                newbuf.append( "{" + UnescapeString( token ) + "}" );
+                newbuf.append( wxT( "{" ) + UnescapeString( token ) + wxT( "}" ) );
             }
         }
         else
@@ -452,8 +452,8 @@ std::string EscapedUTF8( const wxString& aString )
     wxString str = aString;
 
     // No new-lines allowed in quoted strings
-    str.Replace( "\r\n", "\r" );
-    str.Replace( "\n", "\r" );
+    str.Replace( wxT( "\r\n" ), wxT( "\r" ) );
+    str.Replace( wxT( "\n" ), wxT( "\r" ) );
 
     std::string utf8 = TO_UTF8( aString );
 
@@ -497,15 +497,15 @@ wxString EscapeHTML( const wxString& aString )
     for( wxUniChar c : aString )
     {
         if( c == '\"' )
-            converted += "&quot;";
+            converted += wxT( "&quot;" );
         else if( c == '\'' )
-            converted += "&apos;";
+            converted += wxT( "&apos;" );
         else if( c == '&' )
-            converted += "&amp;";
+            converted += wxT( "&amp;" );
         else if( c == '<' )
-            converted += "&lt;";
+            converted += wxT( "&lt;" );
         else if( c == '>' )
-            converted += "&gt;";
+            converted += wxT( "&gt;" );
         else
             converted += c;
     }
