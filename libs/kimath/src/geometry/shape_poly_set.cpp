@@ -717,8 +717,8 @@ void SHAPE_POLY_SET::BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_P
 void SHAPE_POLY_SET::InflateWithLinkedHoles( int aFactor, int aCircleSegmentsCount,
                                              POLYGON_MODE aFastMode )
 {
+    Unfracture( aFastMode );
     Inflate( aFactor, aCircleSegmentsCount );
-    Simplify( aFastMode );
     Fracture( aFastMode );
 }
 
