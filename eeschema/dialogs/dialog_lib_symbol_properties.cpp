@@ -448,7 +448,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
 
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnSymbolNameText( wxCommandEvent& event )
 {
-    if( !m_Parent->IsSymbolFromSchematic() )
+    if( !m_Parent->IsSymbolFromSchematic() || m_OptionPower->IsChecked() )
         m_grid->SetCellValue( VALUE_FIELD, FDC_VALUE, m_SymbolNameCtrl->GetValue() );
 }
 
