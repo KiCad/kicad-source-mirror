@@ -1036,24 +1036,26 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
         Kiway().CommonSettingsChanged( false, true );
 
         PCBNEW_SETTINGS* settings = GetPcbNewSettings();
+        static LSET      maskAndPasteLayers = LSET( 4, F_Mask, F_Paste, B_Mask, B_Paste );
+
+        bool maskOrPasteVisible = ( GetBoard()->GetVisibleLayers() & maskAndPasteLayers ).any();
 
         GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
                 [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
                 {
                     if( dynamic_cast<PCB_TRACK*>( aItem ) )
                     {
-                        if( settings->m_Display.m_PadClearance )
-                            return true;        // clearance values
+                        return settings->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS;
                     }
                     else if( dynamic_cast<PAD*>( aItem ) )
                     {
-                        if( settings->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS )
-                            return true;        // clearance values
+                        return settings->m_Display.m_PadClearance || maskOrPasteVisible;
                     }
                     else if( dynamic_cast<EDA_TEXT*>( aItem ) )
                     {
-                        if( dynamic_cast<EDA_TEXT*>( aItem )->HasTextVars() )
-                            return true;        // text variables
+                        EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
+
+                        return text->HasTextVars();
                     }
 
                     return false;
