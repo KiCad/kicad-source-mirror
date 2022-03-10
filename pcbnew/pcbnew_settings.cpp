@@ -135,12 +135,22 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM_LAMBDA<int>( "editing.rotation_angle",
             [this] () -> int
             {
-                return m_RotationAngle.AsTenthsOfADegree();
+                int rot = m_RotationAngle.AsTenthsOfADegree();
+
+                // Don't store values larger than 360 degrees
+                return rot % 3600;
             },
             [this] ( int aVal )
             {
                 if( aVal )
                     m_RotationAngle = EDA_ANGLE( aVal, TENTHS_OF_A_DEGREE_T );
+
+                // A misconfiguration allowed some angles to be stored as tenth of a degree but read
+                // as tens of degrees.  By disallowing storage of values larger than 360, we can weed out
+                // those invalid values here.
+                while( m_RotationAngle > ANGLE_360 )
+                    m_RotationAngle = m_RotationAngle / 100;
+
             },
             900 ) );
 
