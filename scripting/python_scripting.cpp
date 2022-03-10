@@ -156,6 +156,10 @@ bool SCRIPTING::scriptingSetup()
   #endif
 #elif defined( __WXMAC__ )
 
+    // Prevent Mac builds from generating JIT versions as this will break
+    // the package signing
+    wxSetEnv( "PYTHONDONTWRITEBYTECODE", "1" );
+
     // Add default paths to PYTHONPATH
     wxString pypath;
 
