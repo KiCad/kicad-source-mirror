@@ -85,6 +85,8 @@ public:
     }
 #endif
 
+    const EDA_RECT GetBoundingBox() const override;
+
     VECTOR2I GetPosition() const override
     {
         static VECTOR2I dummy( 0, 0 );
@@ -166,6 +168,8 @@ public:
     {
         return m_parent;
     }
+
+    bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override;
 
 private:
     friend class NETINFO_LIST;

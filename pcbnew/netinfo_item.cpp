@@ -33,6 +33,7 @@
 #include <base_units.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <connectivity/connectivity_data.h>
 #include <footprint.h>
 #include <pcb_track.h>
 #include <pad.h>
@@ -129,4 +130,31 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
             aList.emplace_back( _( "In Package" ), msg );
         }
     }
+}
+
+
+bool NETINFO_ITEM::Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const
+{
+    return BOARD_ITEM::Matches( GetNetname(), aSearchData );
+}
+
+
+const EDA_RECT NETINFO_ITEM::GetBoundingBox() const
+{
+    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_ZONE_T, PCB_PAD_T, EOT };
+    auto              connectivity = GetBoard()->GetConnectivity();
+
+    std::vector<BOARD_CONNECTED_ITEM*> items = connectivity->GetNetItems( m_netCode, types );
+    EDA_RECT                           bbox = EDA_RECT( wxPoint( 0, 0 ), wxPoint( 0, 0 ) );
+
+    if( items.size() >= 1 )
+    {
+        bbox = items.at( 0 )->GetBoundingBox();
+
+        for( BOARD_CONNECTED_ITEM* item : items )
+        {
+            bbox.Merge( item->GetBoundingBox() );
+        }
+    }
+    return bbox;
 }

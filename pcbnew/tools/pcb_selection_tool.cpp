@@ -1823,9 +1823,60 @@ void PCB_SELECTION_TOOL::FindItem( BOARD_ITEM* aItem )
 
     if( aItem )
     {
-        select( aItem );
-        m_frame->FocusOnLocation( aItem->GetPosition() );
+        switch( aItem->Type() )
+        {
+        case PCB_NETINFO_T:
+        {
+            int netCode = static_cast<NETINFO_ITEM*>( aItem )->GetNetCode();
 
+            if( netCode > 0 )
+            {
+                selectAllItemsOnNet( netCode, true );
+                m_frame->FocusOnLocation( aItem->GetCenter() );
+            }
+            break;
+        }
+        default:
+            select( aItem );
+            m_frame->FocusOnLocation( aItem->GetPosition() );
+        }
+
+        // If the item has a bouding box, then zoom out if needed
+        if( aItem->GetBoundingBox().GetHeight() > 0 && aItem->GetBoundingBox().GetWidth() > 0 )
+        {
+            // This adds some margin
+            double marginFactor = 2;
+
+            KIGFX::PCB_VIEW* pcbView = canvas()->GetView();
+            BOX2D            screenBox = pcbView->GetViewport();
+            wxSize           screenSize = wxSize( screenBox.GetWidth(), screenBox.GetHeight() );
+            screenSize /= marginFactor;
+
+            wxPoint   screenPos = wxPoint( screenBox.GetOrigin() );
+            EDA_RECT* screenRect = new EDA_RECT( screenPos, screenSize );
+
+            if( !screenRect->Contains( aItem->GetBoundingBox() ) )
+            {
+                double scaleX = screenSize.GetWidth()
+                                / static_cast<double>( aItem->GetBoundingBox().GetWidth() );
+                double scaleY = screenSize.GetHeight()
+                                / static_cast<double>( aItem->GetBoundingBox().GetHeight() );
+
+
+                scaleX /= marginFactor;
+                scaleY /= marginFactor;
+
+                double scale = scaleX > scaleY ? scaleY : scaleX;
+
+                if( scale < 1 ) // Don't zoom in, only zoom out
+                {
+                    pcbView->SetScale( pcbView->GetScale() * ( scale ) );
+
+                    //Let's refocus because there is an algortihm to avoid dialogs in there.
+                    m_frame->FocusOnLocation( aItem->GetCenter() );
+                }
+            }
+        }
         // Inform other potentially interested tools
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
     }

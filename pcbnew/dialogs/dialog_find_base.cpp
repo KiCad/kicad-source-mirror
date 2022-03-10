@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version May 14 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -75,11 +75,9 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_includeMarkers->SetValue(true);
 	sizerInclude->Add( m_includeMarkers, 0, wxALL, 5 );
 
-	m_includeVias = new wxCheckBox( this, wxID_ANY, _("Vias"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_includeVias->SetValue(true);
-	m_includeVias->Hide();
-
-	sizerInclude->Add( m_includeVias, 0, wxALL, 5 );
+	m_includeNets = new wxCheckBox( this, wxID_ANY, _("Search net names"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_includeNets->SetValue(true);
+	sizerInclude->Add( m_includeNets, 0, wxALL, 5 );
 
 
 	leftSizer->Add( sizerInclude, 0, wxEXPAND, 5 );

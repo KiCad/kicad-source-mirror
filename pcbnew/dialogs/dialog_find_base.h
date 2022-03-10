@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version May 14 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,10 +20,10 @@
 #include <wx/combobox.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
-#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/button.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
 
@@ -48,7 +48,7 @@ class DIALOG_FIND_BASE : public DIALOG_SHIM
 		wxCheckBox* m_includeValues;
 		wxCheckBox* m_includeTexts;
 		wxCheckBox* m_includeMarkers;
-		wxCheckBox* m_includeVias;
+		wxCheckBox* m_includeNets;
 		wxButton* m_findNext;
 		wxButton* m_findPrevious;
 		wxButton* m_searchAgain;
