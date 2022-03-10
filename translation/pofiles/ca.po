@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 16:51-0800\n"
-"PO-Revision-Date: 2022-03-08 00:49+0000\n"
+"PO-Revision-Date: 2022-03-13 03:55+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v6/ca/>\n"
 "Language: ca\n"
@@ -4611,12 +4611,10 @@ msgid "Alias: "
 msgstr "Àlies: "
 
 #: common/filename_resolver.cpp:468
-#, fuzzy
 msgid "This path:"
 msgstr "Aquest camí:"
 
 #: common/filename_resolver.cpp:471
-#, fuzzy
 msgid "Existing path:"
 msgstr "Camí existent:"
 
@@ -7296,9 +7294,8 @@ msgid "Assign footprint"
 msgstr "Assigna empremta"
 
 #: cvpcb/tools/cvpcb_actions.cpp:109
-#, fuzzy
 msgid "Assign footprint to selected symbols"
-msgstr "No s'ha especificat cap empremta"
+msgstr "Assigna empremtes als símbols seleccionats"
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
 msgid "Automatically assign footprints"
@@ -7313,9 +7310,8 @@ msgid "Delete association"
 msgstr "Esborra associació"
 
 #: cvpcb/tools/cvpcb_actions.cpp:122
-#, fuzzy
 msgid "Delete selected footprint associations"
-msgstr "Elimina totes les associacions d'empremtes"
+msgstr "Esborra les associacions d'empremtes seleccionades"
 
 #: cvpcb/tools/cvpcb_actions.cpp:127 cvpcb/tools/cvpcb_actions.cpp:128
 msgid "Delete all footprint associations"
@@ -7339,9 +7335,8 @@ msgid "Filter footprint list by pin count"
 msgstr "Filtra la llista de les empremtes pel nombre de pins"
 
 #: cvpcb/tools/cvpcb_actions.cpp:149
-#, fuzzy
 msgid "Filter by library"
-msgstr "Filtra la llista de les empremtes per biblioteca"
+msgstr "Filtra per biblioteca"
 
 #: cvpcb/tools/cvpcb_actions.cpp:150
 msgid "Filter footprint list by library"
@@ -9054,9 +9049,8 @@ msgstr "Símbol nou"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:39
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:180
-#, fuzzy
 msgid "Set to 0 to use default values"
-msgstr "Establiu-ho a 0 per utilitzar els valors per defecte"
+msgstr "Estableix a 0 per utilitzar els valors per defecte"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:43
 msgid "Do not fill"
@@ -11630,7 +11624,7 @@ msgstr "Propietats del text"
 
 #: eeschema/dialogs/dialog_text_and_label_properties.cpp:347
 msgid "Label requires non-empty text."
-msgstr ""
+msgstr "L'etiqueta requereix un text no buit."
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:26
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:73
@@ -11677,9 +11671,8 @@ msgid "Justification"
 msgstr "Justificació"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:127
-#, fuzzy
 msgid "Bold and italic"
-msgstr "Cursiva negreta"
+msgstr "Negreta i cursiva"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:42
 #: pcbnew/dialogs/dialog_netlist.cpp:77 pcbnew/dialogs/dialog_update_pcb.cpp:49
@@ -14168,7 +14161,7 @@ msgstr "final de línia inesperat"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:350
 msgid "expected unquoted string"
-msgstr ""
+msgstr "s'esperava una cadena sense cometes"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:857
 #, c-format
@@ -14196,6 +14189,7 @@ msgstr "s'esperava 'Itàlica' o '~'"
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1763
 msgid "symbol field text attributes must be 3 characters wide"
 msgstr ""
+"els atributs del camp de text del símbol han de tenir 3 caràcters d'amplada"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2617
 msgid "Unexpected end of file."
@@ -24571,9 +24565,8 @@ msgid "Footprint name:"
 msgstr "Nom de l'empremta:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:175
-#, fuzzy
 msgid "Component type:"
-msgstr "Nom del component:"
+msgstr "Tipus de component:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:215
 msgid "Set values to 0 to use netclass values."
@@ -30454,9 +30447,8 @@ msgid "footprint %s"
 msgstr "empremta %s"
 
 #: pcbnew/footprint_edit_frame.cpp:118
-#, fuzzy
 msgid "KiCad Footprint Editor"
-msgstr "Editor d'empremtes"
+msgstr "Editor d'empremtes KiCad"
 
 #: pcbnew/footprint_edit_frame.cpp:200 pcbnew/zone_settings.cpp:217
 #, fuzzy
