@@ -427,14 +427,15 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
                     }
                     else if( CN_ZONE_LAYER* zoneLayer = dynamic_cast<CN_ZONE_LAYER*>( connected ) )
                     {
-                        ZONE*                   zone = static_cast<ZONE*>( zoneLayer->Parent() );
-                        int                     idx = zoneLayer->SubpolyIndex();
-                        const SHAPE_LINE_CHAIN& island = zone->GetFill( layer )->COutline( idx );
-                        std::shared_ptr<SHAPE>  flashing = pad->GetEffectiveShape();
+                        BOARD_CONNECTED_ITEM* item = zoneLayer->Parent();
+                        int                   islandIdx = zoneLayer->SubpolyIndex();
 
-                        for( const VECTOR2I& pt : island.CPoints() )
+                        const auto& fill = static_cast<ZONE*>( item )->GetFilledPolysList( layer );
+                        const auto& padOutline = pad->GetEffectivePolygon()->Outline( 0 );
+
+                        for( const VECTOR2I& pt : fill->COutline( islandIdx ).CPoints() )
                         {
-                            if( !flashing->Collide( pt ) )
+                            if( !padOutline.PointInside( pt ) )
                                 return true;
                         }
 
