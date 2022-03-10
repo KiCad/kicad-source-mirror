@@ -168,7 +168,6 @@ private:
 
 public:
     SCH_EDIT_FRAME*      m_Parent;
-    wxString             m_DefaultNetFmtName;
     NETLIST_PAGE_DIALOG* m_PanelNetType[4 + CUSTOMPANEL_COUNTMAX];
 };
 
@@ -241,8 +240,6 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
     m_Parent = parent;
 
     SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
-
-    m_DefaultNetFmtName = settings.m_NetFormatName;
 
     for( NETLIST_PAGE_DIALOG*& page : m_PanelNetType)
         page = nullptr;
@@ -417,8 +414,6 @@ void NETLIST_DIALOG::OnNetlistTypeSelection( wxNotebookEvent& event )
     if( currPage == nullptr )
         return;
 
-    m_DefaultNetFmtName = currPage->GetPageNetFmtName();
-
     m_buttonDelGenerator->Enable( currPage->m_IdNetType >= NET_TYPE_CUSTOM1 );
 }
 
@@ -432,7 +427,7 @@ void NETLIST_DIALOG::NetlistUpdateOpt()
 
     settings.m_SpiceAdjustPassiveValues = adjust;
     settings.m_SpiceCommandString       = spice_cmd_string;
-    settings.m_NetFormatName            = m_DefaultNetFmtName;
+    settings.m_NetFormatName            = m_PanelNetType[m_NoteBook->GetSelection()]->GetPageNetFmtName();
 }
 
 
@@ -595,7 +590,6 @@ void NETLIST_DIALOG::OnDelGenerator( wxCommandEvent& event )
 
     currPage->m_CommandStringCtrl->SetValue( wxEmptyString );
     currPage->m_TitleStringCtrl->SetValue( wxEmptyString );
-    m_DefaultNetFmtName = m_PanelNetType[PANELPCBNEW]->GetPageNetFmtName();
 
     WriteCurrentNetlistSetup();
 
@@ -722,17 +716,8 @@ int InvokeDialogNetList( SCH_EDIT_FRAME* aCaller )
 {
     NETLIST_DIALOG dlg( aCaller );
 
-    SCHEMATIC_SETTINGS& settings = aCaller->Schematic().Settings();
-
-    wxString curr_default_netformat = settings.m_NetFormatName;
-
     int ret = dlg.ShowModal();
-
-    // Update the default netlist and store it in prj config if it was explicitly changed.
-    settings.m_NetFormatName = dlg.m_DefaultNetFmtName; // can have temporary changed
-
-    if( curr_default_netformat != dlg.m_DefaultNetFmtName )
-        aCaller->SaveProjectSettings();
+    aCaller->SaveProjectSettings();
 
     return ret;
 }
