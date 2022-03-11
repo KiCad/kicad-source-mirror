@@ -208,6 +208,9 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter, bool aFollowTracks
 
 void TEARDROP_MANAGER::setTeardropPriorities()
 {
+    // Note: a teardrop area is on only one layer, so using GetFirstLayer() is OK
+    // to know the zone layer of a teardrop
+
     int priority_base = MAGIC_TEARDROP_ZONE_ID;
 
     // The sort function to sort by increasing copper layers. Group by layers.
@@ -216,10 +219,10 @@ void TEARDROP_MANAGER::setTeardropPriorities()
     {
         bool operator()(ZONE* a, ZONE* b) const
             {
-                if( a->GetLayer() == b->GetLayer() )
+                if( a->GetFirstLayer() == b->GetFirstLayer() )
                     return a->GetOutlineArea() > b->GetOutlineArea();
 
-                return a->GetLayer() < b->GetLayer();
+                return a->GetFirstLayer() < b->GetFirstLayer();
             }
     } compareLess;
 
@@ -232,9 +235,9 @@ void TEARDROP_MANAGER::setTeardropPriorities()
 
     for( ZONE* td: m_createdTdList )
     {
-        if( td->GetLayer() != curr_layer )
+        if( td->GetFirstLayer() != curr_layer )
         {
-            curr_layer = td->GetLayer();
+            curr_layer = td->GetFirstLayer();
             priority_base = MAGIC_TEARDROP_ZONE_ID;
         }
 

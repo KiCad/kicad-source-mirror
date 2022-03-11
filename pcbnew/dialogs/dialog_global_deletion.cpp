@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -143,11 +143,12 @@ void DIALOG_GLOBAL_DELETION::DoGlobalDeletions()
     if( delete_all || m_delZones->GetValue() )
     {
         int area_index = 0;
-        auto item = board->GetArea( area_index );
+        ZONE* item = board->GetArea( area_index );
 
         while( item )
         {
-            if( delete_all || layers_filter[item->GetLayer()] )
+            // The zone will be deleted if it is ar least on one selected layer.
+            if( delete_all || ( layers_filter & item->GetLayerSet() ).any() )
             {
                 commit.Remove( item );
                 gen_rastnest = true;
