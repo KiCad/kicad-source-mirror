@@ -193,13 +193,37 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter, bool aFollowTracks
     // Now set priority of teardrops now all teardrops are added
     setTeardropPriorities();
 
+    // Fill teardrop shapes. This is a rough calculation, just to show a filled
+    // shape on screen, but most of time this is a good shape.
+    // Exact shapes can be calculated only on a full zone refill, **much more** time consuming
+    if( m_createdTdList.size() )
+    {
+        int epsilon = Millimeter2iu( 0.001 );
+
+        for( ZONE* zone: m_createdTdList )
+        {
+            int half_min_width = zone->GetMinThickness() / 2;
+            int numSegs = GetArcToSegmentCount( half_min_width, Millimeter2iu( 0.005 ), FULL_CIRCLE );
+            SHAPE_POLY_SET filledPolys = *zone->Outline();
+
+            filledPolys.Deflate( half_min_width - epsilon, numSegs );
+
+            // Re-inflate after pruning of areas that don't meet minimum-width criteria
+            if( half_min_width - epsilon > epsilon )
+                filledPolys.Inflate( half_min_width - epsilon, numSegs );
+
+            zone->SetFilledPolysList( zone->GetFirstLayer(), filledPolys );
+        }
+    }
+
     if( count || removed_cnt || track2trackCount )
     {
-        ZONE_FILLER filler( m_board, aCommitter );
-        (void)filler.Fill( m_board->Zones() );
-
         if( aCommitter )
             aCommitter->Push( _( "Add teardrops" ) );
+
+        // Note:
+        // Refill zones can be made only with clean data, especially connectivity data,
+        // therefore only after changes are pushed to avoid crashes in some cases
     }
 
     return count + track2trackCount;
