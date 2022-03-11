@@ -1090,12 +1090,8 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
         m_out->Print( 0, ")" );
     }
 
-    int unit = aSymbol->GetUnit();
-
-    if( ( aSymbol->GetInstanceReferences().size() > 1 ) && aSheetPath )
-        unit = aSymbol->GetUnitSelection( aSheetPath );
-
-    m_out->Print( 0, " (unit %d)", unit );
+    // Always set the unit to 1.  The real symbol unit is saved in the sheet instance data.
+    m_out->Print( 0, " (unit 1)" );
 
     if( aSymbol->GetConvert() == LIB_ITEM::LIB_CONVERT::DEMORGAN )
         m_out->Print( 0, " (convert %d)", aSymbol->GetConvert() );
@@ -1116,10 +1112,35 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
 
     for( SCH_FIELD& field : aSymbol->GetFields() )
     {
-        saveField( &field, aNestLevel + 1 );
+        int id = field.GetId();
+        wxString value = field.GetText();
+
+        // The reference field is always set to uninitialized and the value and footprint fields
+        // are always empty.  The actual reference, value, and footprint field values are stored
+        // in the instance data.  This prevents unwanted file change churn in shared schematics.
+        if( id == REFERENCE_FIELD )
+            field.SetText( aSymbol->GetPrefix() + wxT( "?" ) );
+        else if( id == VALUE_FIELD || id == FOOTPRINT_FIELD )
+            field.SetText( wxEmptyString );
+
+        try
+        {
+            saveField( &field, aNestLevel + 1 );
+        }
+        catch( ... )
+        {
+            // Restore the changed field info on write error.
+            if( id == REFERENCE_FIELD || id == VALUE_FIELD || id == FOOTPRINT_FIELD )
+                field.SetText( value );
+
+            throw;
+        }
+
+        if( id == REFERENCE_FIELD || id == VALUE_FIELD || id == FOOTPRINT_FIELD )
+            field.SetText( value );
     }
 
-    for( const SCH_PIN* pin : aSymbol->GetPins() )
+    for( const std::unique_ptr<SCH_PIN>& pin : aSymbol->GetRawPins() )
     {
         if( pin->GetAlt().IsEmpty() )
         {
