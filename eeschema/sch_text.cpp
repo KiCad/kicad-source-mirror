@@ -861,15 +861,13 @@ bool SCH_LABEL::IsType( const KICAD_T aScanTypes[] ) const
 
     wxCHECK_MSG( Schematic(), false, wxT( "No parent SCHEMATIC set for SCH_LABEL!" ) );
 
-    SCH_SHEET_PATH current = Schematic()->CurrentSheet();
+    const SCH_ITEM_SET& item_set = m_connected_items.at( Schematic()->CurrentSheet() );
 
     for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
     {
         if( *p == SCH_LABEL_LOCATE_WIRE_T )
         {
-            wxASSERT( m_connected_items.count( current ) );
-
-            for( SCH_ITEM* connection : m_connected_items.at( current ) )
+            for( SCH_ITEM* connection : item_set )
             {
                 if( connection->IsType( wireTypes ) )
                     return true;
@@ -877,9 +875,7 @@ bool SCH_LABEL::IsType( const KICAD_T aScanTypes[] ) const
         }
         else if ( *p == SCH_LABEL_LOCATE_BUS_T )
         {
-            wxASSERT( m_connected_items.count( current ) );
-
-            for( SCH_ITEM* connection : m_connected_items.at( current ) )
+            for( SCH_ITEM* connection : item_set )
             {
                 if( connection->IsType( busTypes ) )
                     return true;
