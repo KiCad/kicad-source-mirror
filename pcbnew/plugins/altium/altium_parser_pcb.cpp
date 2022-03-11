@@ -592,6 +592,16 @@ AARC6::AARC6( ALTIUM_PARSER& aReader )
     endangle   = aReader.Read<double>();
     width      = aReader.ReadKicadUnit();
 
+    if( aReader.GetRemainingSubrecordBytes() >= 12 )
+    {
+        aReader.Skip( 11 );
+        keepoutrestrictions = aReader.Read<uint8_t>();
+    }
+    else
+    {
+        keepoutrestrictions = is_keepout ? 0x1F : 0;
+    }
+
     aReader.SkipSubrecord();
 
     if( aReader.HasParsingError() )
@@ -957,6 +967,16 @@ AFILL6::AFILL6( ALTIUM_PARSER& aReader )
     pos2     = aReader.ReadVector2I();
     rotation = aReader.Read<double>();
 
+    if( aReader.GetRemainingSubrecordBytes() >= 10 )
+    {
+        aReader.Skip( 9 );
+        keepoutrestrictions = aReader.Read<uint8_t>();
+    }
+    else
+    {
+        keepoutrestrictions = is_keepout ? 0x1F : 0;
+    }
+
     aReader.SkipSubrecord();
 
     if( aReader.HasParsingError() )
@@ -997,6 +1017,8 @@ AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
     bool is_cutout = ALTIUM_PARSER::ReadBool( properties, wxT( "ISBOARDCUTOUT" ), false );
 
     is_shapebased = ALTIUM_PARSER::ReadBool( properties, wxT( "ISSHAPEBASED" ), false );
+    keepoutrestrictions = static_cast<uint8_t>(
+            ALTIUM_PARSER::ReadInt( properties, wxT( "KEEPOUTRESTRIC" ), 0x1F ) );
 
     // TODO: this can differ from the other subpolyindex?!
     //subpolyindex = static_cast<uint16_t>(

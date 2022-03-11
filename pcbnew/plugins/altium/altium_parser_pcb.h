@@ -524,6 +524,7 @@ struct AREGION6
     uint16_t     net;
     uint16_t     component;
     uint16_t     subpolyindex;
+    uint8_t      keepoutrestrictions;
     uint16_t     holecount;
 
     ALTIUM_REGION_KIND kind; // I assume this means if normal or keepout?
@@ -544,6 +545,7 @@ struct AARC6
     uint16_t     net;
     uint16_t     component;
     uint16_t     subpolyindex;
+    uint8_t      keepoutrestrictions;
 
     VECTOR2I center;
     uint32_t radius;
@@ -699,6 +701,7 @@ struct AFILL6
     ALTIUM_LAYER layer;
     uint16_t     component;
     uint16_t     net;
+    uint8_t      keepoutrestrictions;
 
     VECTOR2I pos1;
     VECTOR2I pos2;

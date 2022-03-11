@@ -223,10 +223,10 @@ private:
     void HelperSetZoneKeepoutRestrictions( ZONE* aZone, const uint8_t aKeepoutRestrictions );
     void HelperPcpShapeAsBoardKeepoutRegion( const PCB_SHAPE&   aShape,
                                              const ALTIUM_LAYER aAltiumLayer,
-                                             const uint8_t      aKeepoutRestrictions = 0x1F );
+                                             const uint8_t      aKeepoutRestrictions );
     void HelperPcpShapeAsFootprintKeepoutRegion( FOOTPRINT* aFootprint, const PCB_SHAPE& aShape,
                                                  const ALTIUM_LAYER aAltiumLayer,
-                                                 const uint8_t      aKeepoutRestrictions = 0x1F );
+                                                 const uint8_t      aKeepoutRestrictions );
 
     std::vector<std::pair<PCB_LAYER_ID, int>>
     HelperGetSolderAndPasteMaskExpansions( const ALTIUM_RECORD aType, const int aPrimitiveIndex,

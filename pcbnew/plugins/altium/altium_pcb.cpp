@@ -1931,11 +1931,8 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem )
         m_board->Add( zone, ADD_MODE::APPEND );
 
         zone->SetIsRuleArea( true );
-        zone->SetDoNotAllowTracks( false );
-        zone->SetDoNotAllowVias( false );
-        zone->SetDoNotAllowPads( false );
-        zone->SetDoNotAllowFootprints( false );
-        zone->SetDoNotAllowCopperPour( true );
+
+        HelperSetZoneKeepoutRestrictions( zone, aElem.keepoutrestrictions );
 
         zone->SetPosition( aElem.outline.at( 0 ).position );
         zone->Outline()->AddOutline( linechain );
@@ -1982,11 +1979,8 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
         aFootprint->Add( zone, ADD_MODE::APPEND );
 
         zone->SetIsRuleArea( true );
-        zone->SetDoNotAllowTracks( false );
-        zone->SetDoNotAllowVias( false );
-        zone->SetDoNotAllowPads( false );
-        zone->SetDoNotAllowFootprints( false );
-        zone->SetDoNotAllowCopperPour( true );
+
+        HelperSetZoneKeepoutRestrictions( zone, aElem.keepoutrestrictions );
 
         zone->SetPosition( aElem.outline.at( 0 ).position );
         zone->Outline()->AddOutline( linechain );
@@ -2218,7 +2212,7 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItem( const AARC6& aElem, const int aPrimiti
         ConvertArcs6ToPcbShape( aElem, &shape );
         shape.SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
 
-        HelperPcpShapeAsBoardKeepoutRegion( shape, aElem.layer );
+        HelperPcpShapeAsBoardKeepoutRegion( shape, aElem.layer, aElem.keepoutrestrictions );
     }
     else
     {
@@ -2260,7 +2254,8 @@ void ALTIUM_PCB::ConvertArcs6ToFootprintItem( FOOTPRINT* aFootprint, const AARC6
         ConvertArcs6ToPcbShape( aElem, &shape );
         shape.SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
 
-        HelperPcpShapeAsFootprintKeepoutRegion( aFootprint, shape, aElem.layer );
+        HelperPcpShapeAsFootprintKeepoutRegion( aFootprint, shape, aElem.layer,
+                                                aElem.keepoutrestrictions );
     }
     else
     {
@@ -3315,7 +3310,8 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItem( FOOTPRINT* aFootprint, const AFIL
             shape.Rotate( center, EDA_ANGLE( aElem.rotation, DEGREES_T ) );
         }
 
-        HelperPcpShapeAsFootprintKeepoutRegion( aFootprint, shape, aElem.layer );
+        HelperPcpShapeAsFootprintKeepoutRegion( aFootprint, shape, aElem.layer,
+                                                aElem.keepoutrestrictions );
     }
     else if( aIsBoardImport && IsAltiumLayerCopper( aElem.layer )
              && aElem.net != ALTIUM_NET_UNCONNECTED )
@@ -3365,11 +3361,8 @@ void ALTIUM_PCB::ConvertFills6ToBoardItemWithNet( const AFILL6& aElem )
     if( aElem.is_keepout )
     {
         zone->SetIsRuleArea( true );
-        zone->SetDoNotAllowTracks( false );
-        zone->SetDoNotAllowVias( false );
-        zone->SetDoNotAllowPads( false );
-        zone->SetDoNotAllowFootprints( false );
-        zone->SetDoNotAllowCopperPour( true );
+
+        HelperSetZoneKeepoutRestrictions( zone, aElem.keepoutrestrictions );
     }
 
     if( aElem.rotation != 0. )

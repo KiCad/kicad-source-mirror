@@ -60,10 +60,13 @@ types:
     - id: sub1_len
       type: u4
     - id: data
-      type: arc_sub1
+      type: arc_sub1(sub1_len)
       size: sub1_len
 
   arc_sub1:
+    params:
+      - id: sub1_len
+        type: u4
     seq:
       - id: layer
         type: u1
@@ -102,6 +105,10 @@ types:
         type: f8
       - id: width
         type: u4
+      - size: 11
+      - id: keepout_restrictions
+        type: keepout_restrictions
+        if: sub1_len >= 57
 
   pad:
     seq:
@@ -366,10 +373,13 @@ types:
     - id: sub1_len
       type: u4
     - id: data
-      type: track_sub1
+      type: track_sub1(sub1_len)
       size: sub1_len
 
   track_sub1:
+    params:
+      - id: sub1_len
+        type: u4
     seq:
       - id: layer
         type: u1
@@ -405,6 +415,10 @@ types:
         type: xy
       - id: width # 29
         type: s4
+      - size: 12
+      - id: keepout_restrictions
+        type: keepout_restrictions
+        if: sub1_len >= 46
 
   text:
     seq:
@@ -527,10 +541,13 @@ types:
     - id: sub1_len
       type: u4
     - id: data
-      type: fill_sub1
+      type: fill_sub1(sub1_len)
       size: sub1_len
 
   fill_sub1:
+    params:
+      - id: sub1_len
+        type: u4
     seq:
       - id: layer
         type: u1
@@ -564,6 +581,10 @@ types:
         type: xy
       - id: rotation
         type: f8
+      - size: 9
+      - id: keepout_restrictions
+        type: keepout_restrictions
+        if: sub1_len >= 47
 
   region:
     seq:
@@ -653,6 +674,21 @@ types:
     - id: properties
       size: propterties_len
       type: str
+
+  keepout_restrictions:
+    seq:
+      - id: keepout_restriction_unknown  # not used
+        type: b3
+      - id: keepout_restriction_pth
+        type: b1
+      - id: keepout_restriction_smd
+        type: b1
+      - id: keepout_restriction_copper
+        type: b1
+      - id: keepout_restriction_track
+        type: b1
+      - id: keepout_restriction_via
+        type: b1
 
   xy:
     seq:
