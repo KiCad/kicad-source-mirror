@@ -26,6 +26,7 @@
 #define SCH_ITEM_H
 
 #include <unordered_map>
+#include <map>
 #include <set>
 
 #include <eda_item.h>
@@ -481,7 +482,7 @@ protected:
                                           // to store a initial pos of the item or mouse cursor
 
     /// Store pointers to other items that are connected to this one, per sheet.
-    std::unordered_map<SCH_SHEET_PATH, SCH_ITEM_SET> m_connected_items;
+    std::map<SCH_SHEET_PATH, SCH_ITEM_SET, SHEET_PATH_CMP> m_connected_items;
 
     /// Store connectivity information, per sheet.
     std::unordered_map<SCH_SHEET_PATH, SCH_CONNECTION*> m_connection_map;

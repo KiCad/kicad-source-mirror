@@ -378,6 +378,9 @@ void CONNECTION_SUBGRAPH::UpdateItemConnections()
     {
         SCH_CONNECTION* item_conn = item->GetOrInitConnection( m_sheet, m_graph );
 
+        if( !item_conn )
+            continue;
+
         if( ( m_driver_connection->IsBus() && item_conn->IsNet() ) ||
             ( m_driver_connection->IsNet() && item_conn->IsBus() ) )
         {
