@@ -28,7 +28,10 @@
 #include <strsafe.h>
 #include <config.h>
 #include <VersionHelpers.h>
-#include <werapi.h>
+
+#if defined( _MSC_VER )
+#include <werapi.h>     // issues on msys2
+#endif
 
 
 bool KIPLATFORM::APP::Init()
@@ -42,8 +45,10 @@ bool KIPLATFORM::APP::Init()
     // undo wxwidgets trying to hide errors
     SetErrorMode( 0 );
 
+#if defined( _MSC_VER )
     // ensure the WER crash report dialog always appears
     WerSetFlags( WER_FAULT_REPORTING_ALWAYS_SHOW_UI );
+#endif
 
     return true;
 }
