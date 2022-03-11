@@ -194,7 +194,7 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
     m_includeReferences = nullptr;
     m_includeTexts = nullptr;
     m_includeMarkers = nullptr;
-    m_includeVias = nullptr;
+    m_includeNets = nullptr;
     m_findNext = nullptr;
     m_findPrevious = nullptr;
     m_searchAgain = nullptr;
