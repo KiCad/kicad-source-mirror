@@ -28,6 +28,7 @@
 #include <strsafe.h>
 #include <config.h>
 #include <VersionHelpers.h>
+#include <werapi.h>
 
 
 bool KIPLATFORM::APP::Init()
@@ -37,6 +38,12 @@ bool KIPLATFORM::APP::Init()
     // for half a hour _CRTDBG_ALLOC_MEM_DF is the usual default for MSVC.
     _CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF );
 #endif
+
+    // undo wxwidgets trying to hide errors
+    SetErrorMode( 0 );
+
+    // ensure the WER crash report dialog always appears
+    WerSetFlags( WER_FAULT_REPORTING_ALWAYS_SHOW_UI );
 
     return true;
 }
