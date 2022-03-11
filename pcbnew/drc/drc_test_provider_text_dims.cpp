@@ -304,7 +304,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
 
     reportRuleStatistics();
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 

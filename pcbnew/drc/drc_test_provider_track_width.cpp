@@ -165,7 +165,7 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
 
     reportRuleStatistics();
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 

@@ -151,15 +151,15 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
     for( PCB_TRACK* item : board->Tracks() )
     {
         if( !reportProgress( ii++, board->Tracks().size(), delta ) )
-            break;
+            return false;   // DRC cancelled
 
         if( !checkAnnularWidth( item ) )
-            return false;   // DRC cancelled
+            break;
     }
 
     reportRuleStatistics();
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 

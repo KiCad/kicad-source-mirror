@@ -177,7 +177,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 
     reportRuleStatistics();
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 

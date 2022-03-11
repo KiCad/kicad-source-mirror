@@ -75,6 +75,8 @@ public:
     DRC_TEST_PROVIDER ();
     virtual ~DRC_TEST_PROVIDER() = default;
 
+    static void Init();
+
     void SetDRCEngine( DRC_ENGINE *engine )
     {
         m_drcEngine = engine;

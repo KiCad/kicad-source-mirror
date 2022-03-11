@@ -155,7 +155,7 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
 
     reportRuleStatistics();
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 

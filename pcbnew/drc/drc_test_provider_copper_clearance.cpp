@@ -251,7 +251,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 
     reportRuleStatistics();
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 
@@ -372,7 +372,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
         }
     }
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 
@@ -562,7 +562,12 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                     m_largestClearance );
 
             for( ZONE* zone : m_copperZones )
+            {
                 testItemAgainstZone( track, zone, layer );
+
+                if( m_drcEngine->IsCancelled() )
+                    break;
+            }
         }
     }
 }
@@ -660,7 +665,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             reportViolation( drce, otherPad->GetPosition(), aLayer );
         }
 
-        return true;
+        return !m_drcEngine->IsCancelled();
     }
 
     if( testClearance )
@@ -767,7 +772,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
         }
     }
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 
@@ -789,9 +794,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
     {
         for( PAD* pad : footprint->Pads() )
         {
-            if( !reportProgress( ii++, count, delta ) )
-                break;
-
             for( PCB_LAYER_ID layer : pad->GetLayerSet().Seq() )
             {
                 std::shared_ptr<SHAPE> padShape = pad->GetEffectiveShape( layer );
@@ -826,9 +828,20 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
                         m_largestClearance );
 
                 for( ZONE* zone : m_copperZones )
+                {
                     testItemAgainstZone( pad, zone, layer );
+
+                    if( m_drcEngine->IsCancelled() )
+                        return;
+                }
             }
+
+            if( !reportProgress( ii++, count, delta ) )
+                return;
         }
+
+        if( m_drcEngine->IsCancelled() )
+            return;
     }
 }
 
@@ -865,7 +878,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
         for( size_t ia = 0; ia < m_copperZones.size(); ia++ )
         {
             if( !reportProgress( layer_id * m_copperZones.size() + ia, B_Cu * m_copperZones.size(), delta ) )
-                break;
+                return;     // DRC cancelled
 
             ZONE* zoneA = m_copperZones[ia];
 
@@ -1000,6 +1013,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
 
                     reportViolation( drce, conflict.first, layer );
                 }
+
+                if( m_drcEngine->IsCancelled() )
+                    return;
             }
         }
     }

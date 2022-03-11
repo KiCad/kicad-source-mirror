@@ -542,8 +542,6 @@ bool calcIsInsideArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CO
 
         DRC_RTREE* zoneRTree = board->m_CopperZoneRTrees[ zone ].get();
 
-        std::vector<SHAPE*> shapes;
-
         if( zoneRTree )
         {
             for( PCB_LAYER_ID layer : aArea->GetLayerSet().Seq() )

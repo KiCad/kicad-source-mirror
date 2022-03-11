@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <thread>
 #include <reporter.h>
 #include <progress_reporter.h>
 #include <string_utils.h>
@@ -602,59 +603,78 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
             m_errorLimits[ ii ] = ERROR_LIMIT;
     }
 
+    DRC_TEST_PROVIDER::Init();
+
     m_board->IncrementTimeStamp();      // Invalidate all caches
 
     if( !ReportPhase( _( "Tessellating copper zones..." ) ) )
         return;
 
-    // Number of zones between progress bar updates
-    int                delta = 5;
-    std::vector<ZONE*> copperZones;
-
-    for( ZONE* zone : m_board->Zones() )
-    {
-        zone->CacheBoundingBox();
-        zone->CacheTriangulation();
-
-        if( ( zone->GetLayerSet() & LSET::AllCuMask() ).any() && !zone->GetIsRuleArea() )
-            copperZones.push_back( zone );
-    }
+    // Cache zone bounding boxes, triangulation, copper zone rtrees, and footprint courtyards
+    // before we start.
+    //
+    std::vector<ZONE*> allZones = m_board->Zones();
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( ZONE* zone : footprint->Zones() )
-        {
-            zone->CacheBoundingBox();
-            zone->CacheTriangulation();
-
-            if( ( zone->GetLayerSet() & LSET::AllCuMask() ).any() && !zone->GetIsRuleArea() )
-                copperZones.push_back( zone );
-        }
+            allZones.push_back( zone );
 
         footprint->BuildPolyCourtyards();
     }
 
-    int zoneCount = copperZones.size();
+    size_t              count = allZones.size();
+    std::atomic<size_t> next( 0 );
+    std::atomic<size_t> done( 0 );
+    std::atomic<size_t> threads_finished( 0 );
+    size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
 
-    for( int ii = 0; ii < zoneCount; ++ii )
+    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
     {
-        ZONE* zone = copperZones[ ii ];
+        std::thread t = std::thread(
+                [ this, &allZones, &done, &threads_finished, &next, count ]( )
+                {
+                    for( size_t i = next.fetch_add( 1 ); i < count; i = next.fetch_add( 1 ) )
+                    {
+                        ZONE* zone = allZones[ i ];
 
-        if( ( ii % delta ) == 0 || ii == zoneCount -  1 )
-        {
-            if( !ReportProgress( (double) ii / (double) zoneCount ) )
-                return;
-        }
+                        zone->CacheBoundingBox();
+                        zone->CacheTriangulation();
 
-        m_board->m_CopperZoneRTrees[ zone ] = std::make_unique<DRC_RTREE>();
+                        if( !zone->GetIsRuleArea() && zone->IsOnCopperLayer() )
+                        {
+                            std::unique_ptr<DRC_RTREE> rtree = std::make_unique<DRC_RTREE>();
 
-        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
-        {
-            if( IsCopperLayer( layer ) )
-                m_board->m_CopperZoneRTrees[ zone ]->Insert( zone, layer );
-        }
+                            for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+                            {
+                                if( IsCopperLayer( layer ) )
+                                    rtree->Insert( zone, layer );
+                            }
+
+                            std::unique_lock<std::mutex> cacheLock( m_board->m_CachesMutex );
+                            m_board->m_CopperZoneRTrees[ zone ] = std::move( rtree );
+                        }
+
+                        if( IsCancelled() )
+                            break;
+
+                        done.fetch_add( 1 );
+                    }
+
+                    threads_finished.fetch_add( 1 );
+                } );
+
+        t.detach();
     }
 
+    while( threads_finished < parallelThreadCount )
+    {
+        ReportProgress( (double) done / (double) count );
+        std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
+    }
+
+    // Now run the tests.
+    //
     for( DRC_TEST_PROVIDER* provider : m_testProviders )
     {
         ReportAux( wxString::Format( wxT( "Run DRC provider: '%s'" ), provider->GetName() ) );
@@ -1419,6 +1439,12 @@ bool DRC_ENGINE::ReportPhase( const wxString& aMessage )
 
     m_progressReporter->AdvancePhase( aMessage );
     return m_progressReporter->KeepRefreshing( false );
+}
+
+
+bool DRC_ENGINE::IsCancelled() const
+{
+    return m_progressReporter && m_progressReporter->IsCancelled();
 }
 
 

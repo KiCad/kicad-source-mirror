@@ -137,7 +137,7 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
         }
     }
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 
@@ -297,10 +297,13 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
                 for( const PAD* padA : fpA->Pads() )
                     testPadAgainstCourtyards( padA, fpB );
             }
+
+            if( m_drcEngine->IsCancelled() )
+                return false;
         }
     }
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 

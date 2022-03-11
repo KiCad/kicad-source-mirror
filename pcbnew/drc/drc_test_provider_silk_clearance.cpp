@@ -248,7 +248,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 
     reportRuleStatistics();
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 

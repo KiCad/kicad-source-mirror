@@ -170,6 +170,7 @@ public:
     bool ReportProgress( double aProgress );
     bool ReportPhase( const wxString& aMessage );
     void ReportAux( const wxString& aStr );
+    bool IsCancelled() const;
 
     bool QueryWorstConstraint( DRC_CONSTRAINT_T aRuleId, DRC_CONSTRAINT& aConstraint );
 

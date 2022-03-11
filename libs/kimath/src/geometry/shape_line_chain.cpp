@@ -143,8 +143,9 @@ void SHAPE_LINE_CHAIN::fixIndicesRotation()
         std::rotate( m_points.rbegin(), m_points.rbegin() + 1, m_points.rend() );
         std::rotate( m_shapes.rbegin(), m_shapes.rbegin() + 1, m_shapes.rend() );
 
-        // Sanity check - avoid infinite loops
-        wxCHECK( rotations++ <= m_shapes.size(), /* void */ );
+        // Sanity check - avoid infinite loops  (NB: wxCHECK is not thread-safe)
+        if( rotations++ > m_shapes.size() )
+            return;
     }
 }
 

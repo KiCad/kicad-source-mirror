@@ -317,6 +317,9 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
             break;
 
+        if( m_drcEngine->IsCancelled() )
+            return;
+
         DS_DRAW_ITEM_TEXT* text = dynamic_cast<DS_DRAW_ITEM_TEXT*>( item );
 
         if( text && text->GetShownText().Matches( wxT( "*${*}*" ) ) )
@@ -366,7 +369,7 @@ bool DRC_TEST_PROVIDER_MISC::Run()
         testAssertions();
     }
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 

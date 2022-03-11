@@ -49,6 +49,24 @@ DRC_TEST_PROVIDER::DRC_TEST_PROVIDER() :
 }
 
 
+void DRC_TEST_PROVIDER::Init()
+{
+    if( s_allBasicItems.size() == 0 )
+    {
+        for( int i = 0; i < MAX_STRUCT_TYPE_ID; i++ )
+        {
+            if( i != PCB_FOOTPRINT_T && i != PCB_GROUP_T )
+            {
+                s_allBasicItems.push_back( (KICAD_T) i );
+
+                if( i != PCB_ZONE_T && i != PCB_FP_ZONE_T )
+                    s_allBasicItemsButZones.push_back( (KICAD_T) i );
+            }
+        }
+    }
+}
+
+
 const wxString DRC_TEST_PROVIDER::GetName() const { return "<no name test>"; }
 const wxString DRC_TEST_PROVIDER::GetDescription() const { return ""; }
 
@@ -142,20 +160,6 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
     BOARD *brd = m_drcEngine->GetBoard();
     std::bitset<MAX_STRUCT_TYPE_ID> typeMask;
     int n = 0;
-
-    if( s_allBasicItems.size() == 0 )
-    {
-        for( int i = 0; i < MAX_STRUCT_TYPE_ID; i++ )
-        {
-            if( i != PCB_FOOTPRINT_T && i != PCB_GROUP_T )
-            {
-                s_allBasicItems.push_back( (KICAD_T) i );
-
-                if( i != PCB_ZONE_T && i != PCB_FP_ZONE_T )
-                    s_allBasicItemsButZones.push_back( (KICAD_T) i );
-            }
-        }
-    }
 
     if( aTypes.size() == 0 )
     {

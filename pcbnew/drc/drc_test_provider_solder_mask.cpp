@@ -458,7 +458,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
                     reportViolation( drce, pos, aTargetLayer );
                 }
 
-                return true;
+                return !m_drcEngine->IsCancelled();
             },
             m_largestClearance );
 }
@@ -547,6 +547,9 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
                 reportViolation( drce, pos, aTargetLayer );
             }
         }
+
+        if( m_drcEngine->IsCancelled() )
+            return;
     }
 }
 
@@ -658,7 +661,7 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::Run()
 
     reportRuleStatistics();
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 

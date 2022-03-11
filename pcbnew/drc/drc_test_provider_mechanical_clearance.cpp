@@ -352,18 +352,19 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
                         }
 
                         if( zone )
-                        {
                             testZoneLayer( static_cast<ZONE*>( item ), layer, c );
-                        }
                     }
+
+                    if( m_drcEngine->IsCancelled() )
+                        return false;
                 }
 
-                return true;
+                return !m_drcEngine->IsCancelled();
             } );
 
     reportRuleStatistics();
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 
@@ -555,6 +556,9 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAY
                     reportViolation( drce, pos, aLayer );
                 }
             }
+
+            if( m_drcEngine->IsCancelled() )
+                return;
         }
 
         // Step two: interior hole clearance violations
@@ -562,6 +566,9 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAY
         for( int holeIdx = 0; holeIdx < fill.HoleCount( outlineIdx ); ++holeIdx )
         {
             testShapeLineChain( fill.Hole( outlineIdx, holeIdx ), 0, aLayer, aZone, aConstraint );
+
+            if( m_drcEngine->IsCancelled() )
+                return;
         }
     }
 }
@@ -687,7 +694,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* it
         }
     }
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 
@@ -822,6 +829,9 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* a
                 }
             }
         }
+
+        if( m_drcEngine->IsCancelled() )
+            return;
     }
 }
 

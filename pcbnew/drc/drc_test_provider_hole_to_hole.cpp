@@ -256,11 +256,14 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
                         m_largestClearance );
             }
         }
+
+        if( m_drcEngine->IsCancelled() )
+            return false;
     }
 
     reportRuleStatistics();
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 
@@ -315,7 +318,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::testHoleAgainstHole( BOARD_ITEM* aItem, SHA
         }
     }
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 

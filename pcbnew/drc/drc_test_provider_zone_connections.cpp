@@ -106,6 +106,9 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
                     if( m_drcEngine->IsErrorLimitExceeded( DRCE_STARVED_THERMAL ) )
                         return true;
 
+                    if( m_drcEngine->IsCancelled() )
+                        return false;
+
                     // Quick tests for "connected":
                     //
                     if( !pad->FlashLayer( layer ) )
@@ -189,7 +192,7 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
         }
     }
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 
