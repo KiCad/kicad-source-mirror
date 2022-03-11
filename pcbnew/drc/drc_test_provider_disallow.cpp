@@ -56,12 +56,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "disallow";
+        return wxT( "disallow" );
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests for disallowed items (e.g. keepouts)";
+        return wxT( "Tests for disallowed items (e.g. keepouts)" );
     }
 };
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2021 KiCad Developers.
+ * Copyright (C) 2004-2022 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,12 +59,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "miscellaneous";
+        return wxT( "miscellaneous" );
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Misc checks (board outline, missing textvars)";
+        return wxT( "Misc checks (board outline, missing textvars)" );
     }
 
 private:
@@ -304,11 +304,11 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
         return;
 
     drawItems.SetMilsToIUfactor( IU_PER_MILS );
-    drawItems.SetPageNumber( "1" );
+    drawItems.SetPageNumber( wxT( "1" ) );
     drawItems.SetSheetCount( 1 );
-    drawItems.SetFileName( "dummyFilename" );
-    drawItems.SetSheetName( "dummySheet" );
-    drawItems.SetSheetLayer( "dummyLayer" );
+    drawItems.SetFileName( wxT( "dummyFilename" ) );
+    drawItems.SetSheetName( wxT( "dummySheet" ) );
+    drawItems.SetSheetLayer( wxT( "dummyLayer" ) );
     drawItems.SetProject( m_board->GetProject() );
     drawItems.BuildDrawItemsList( drawingSheet->GetPageInfo(), drawingSheet->GetTitleBlock() );
 

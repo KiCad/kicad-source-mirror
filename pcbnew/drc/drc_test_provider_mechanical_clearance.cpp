@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 KiCad Developers.
+ * Copyright (C) 2021-2022 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,12 +62,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "mechanical_clearance";
+        return wxT( "mechanical_clearance" );
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests item clearances irrespective of nets";
+        return wxT( "Tests item clearances irrespective of nets" );
     }
 
 private:
@@ -106,7 +106,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
 
     if( m_largestClearance <= 0 )
     {
-        reportAux( "No Clearance constraints found. Tests not run." );
+        reportAux( wxT( "No Clearance constraints found. Tests not run." ) );
         return true;   // continue with other tests
     }
 
@@ -134,7 +134,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
         }
     }
 
-    reportAux( "Worst clearance : %d nm", m_largestClearance );
+    reportAux( wxT( "Worst clearance : %d nm" ), m_largestClearance );
 
     // This is the number of tests between 2 calls to the progress bar
     size_t delta = 50;

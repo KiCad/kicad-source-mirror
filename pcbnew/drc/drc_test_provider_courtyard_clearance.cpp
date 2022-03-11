@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers.
+ * Copyright (C) 2004-2022 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,12 +56,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "courtyard_clearance";
+        return wxT( "courtyard_clearance" );
     }
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests footprints' courtyard clearance";
+        return wxT( "Tests footprints' courtyard clearance" );
     }
 
 private:
@@ -89,7 +89,7 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
     }
     else
     {
-        reportAux( "All courtyard violations ignored. Tests not run." );
+        reportAux( wxT( "All courtyard violations ignored. Tests not run." ) );
         return true;        // continue with other tests
     }
 
@@ -315,7 +315,7 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::Run()
     if( m_drcEngine->QueryWorstConstraint( COURTYARD_CLEARANCE_CONSTRAINT, constraint ) )
         m_largestClearance = constraint.GetValue().Min();
 
-    reportAux( "Worst courtyard clearance : %d nm", m_largestClearance );
+    reportAux( wxT( "Worst courtyard clearance : %d nm" ), m_largestClearance );
 
     if( !testFootprintCourtyardDefinitions() )
         return false;

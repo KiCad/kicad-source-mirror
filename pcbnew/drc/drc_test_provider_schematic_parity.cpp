@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2021 KiCad Developers.
+ * Copyright (C) 2004-2022 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,12 +60,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "schematic_parity";
+        return wxT( "schematic_parity" );
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Performs layout-vs-schematics integity check";
+        return wxT( "Performs layout-vs-schematics integity check" );
     }
 
 private:
@@ -218,7 +218,7 @@ bool DRC_TEST_PROVIDER_SCHEMATIC_PARITY::Run()
 
         if( !netlist )
         {
-            reportAux( _( "No netlist provided, skipping schematic parity tests." ) );
+            reportAux( wxT( "No netlist provided, skipping schematic parity tests." ) );
             return true;
         }
 
@@ -227,7 +227,7 @@ bool DRC_TEST_PROVIDER_SCHEMATIC_PARITY::Run()
         reportRuleStatistics();
     }
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 

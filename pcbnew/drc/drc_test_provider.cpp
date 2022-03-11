@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,7 +67,7 @@ void DRC_TEST_PROVIDER::Init()
 }
 
 
-const wxString DRC_TEST_PROVIDER::GetName() const { return "<no name test>"; }
+const wxString DRC_TEST_PROVIDER::GetName() const { return wxT( "<no name test>" ); }
 const wxString DRC_TEST_PROVIDER::GetDescription() const { return ""; }
 
 
@@ -140,13 +140,13 @@ void DRC_TEST_PROVIDER::reportRuleStatistics()
     if( !m_isRuleDriven )
         return;
 
-    m_drcEngine->ReportAux( "Rule hit statistics: " );
+    m_drcEngine->ReportAux( wxT( "Rule hit statistics: " ) );
 
     for( const std::pair<const DRC_RULE* const, int>& stat : m_stats )
     {
         if( stat.first )
         {
-            m_drcEngine->ReportAux( wxString::Format( " - rule '%s': %d hits ",
+            m_drcEngine->ReportAux( wxString::Format( wxT( " - rule '%s': %d hits " ),
                                                       stat.first->m_Name,
                                                       stat.second ) );
         }

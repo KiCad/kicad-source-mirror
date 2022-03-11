@@ -59,12 +59,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "library_parity";
+        return wxT( "library_parity" );
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Performs board footprint vs library integity checks";
+        return wxT( "Performs board footprint vs library integity checks" );
     }
 };
 
@@ -505,7 +505,7 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
             if( !m_drcEngine->IsErrorLimitExceeded( DRCE_LIB_FOOTPRINT_ISSUES ) )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_LIB_FOOTPRINT_ISSUES );
-                msg.Printf( "Footprint '%s' not found in library '%s'.",
+                msg.Printf( _( "Footprint '%s' not found in library '%s'." ),
                             fpName,
                             libName );
                 drcItem->SetErrorMessage( msg );
@@ -518,7 +518,7 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
             if( !m_drcEngine->IsErrorLimitExceeded( DRCE_LIB_FOOTPRINT_MISMATCH ) )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_LIB_FOOTPRINT_MISMATCH );
-                msg.Printf( "Footprint '%s' does not match copy in library '%s'.",
+                msg.Printf( _( "Footprint '%s' does not match copy in library '%s'." ),
                             fpName,
                             libName );
                 drcItem->SetErrorMessage( msg );

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers.
+ * Copyright (C) 2004-2022 KiCad Developers.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -66,12 +66,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "diff_pair_coupling";
+        return wxT( "diff_pair_coupling" );
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests differential pair coupling";
+        return wxT( "Tests differential pair coupling" );
     }
 
 private:
@@ -282,7 +282,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
                 if( refNet && DRC_ENGINE::IsNetADiffPair( m_board, refNet, key.netP, key.netN ) )
                 {
-                    drc_dbg( 10, "eval dp %p\n", item );
+                    drc_dbg( 10, wxT( "eval dp %p\n" ), item );
 
                     const DRC_CONSTRAINT_T constraintsToCheck[] = {
                             DIFF_PAIR_GAP_CONSTRAINT,
@@ -297,7 +297,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                         if( constraint.IsNull() || constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
                             continue;
 
-                        drc_dbg( 10, "cns %d item %p\n", constraintsToCheck[i], item );
+                        drc_dbg( 10, wxT( "cns %d item %p\n" ), constraintsToCheck[i], item );
 
                         key.parentRule = constraint.GetParentRule();
 
@@ -316,7 +316,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
     forEachGeometryItem( { PCB_TRACE_T, PCB_VIA_T, PCB_ARC_T }, LSET::AllCuMask(),
                          evaluateDpConstraints );
 
-    drc_dbg( 10, "dp rule matches %d\n", (int) dpRuleMatches.size() );
+    drc_dbg( 10, wxT( "dp rule matches %d\n" ), (int) dpRuleMatches.size() );
 
 
     DRC_RTREE copperTree;
@@ -350,8 +350,10 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
         wxString nameP = niP->GetNetname();
         wxString nameN = niN->GetNetname();
 
-        reportAux( wxString::Format( "Rule '%s', DP: (+) %s - (-) %s",
-                                     it.first.parentRule->m_Name, nameP, nameN ) );
+        reportAux( wxString::Format( wxT( "Rule '%s', DP: (+) %s - (-) %s" ),
+                                     it.first.parentRule->m_Name,
+                                     nameP,
+                                     nameN ) );
 
         extractDiffPairCoupledItems( it.second, copperTree );
 
@@ -359,7 +361,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
         it.second.totalLengthN = 0;
         it.second.totalLengthP = 0;
 
-        drc_dbg(10, "       coupled prims : %d\n", (int) it.second.coupled.size() );
+        drc_dbg(10, wxT( "       coupled prims : %d\n" ), (int) it.second.coupled.size() );
 
         OPT<DRC_CONSTRAINT> gapConstraint =
                 it.first.parentRule->FindConstraint( DIFF_PAIR_GAP_CONSTRAINT );
@@ -403,7 +405,9 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                 overlay->Line( cpair.coupledN );
             }
 
-            drc_dbg( 10, "               len %d gap %d l %d\n", length, gap,
+            drc_dbg( 10, wxT( "               len %d gap %d l %d\n" ),
+                     length,
+                     gap,
                      cpair.parentP->GetLayer() );
 
             if( gapConstraint )
@@ -429,8 +433,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
         }
 
         int totalLen = std::max( it.second.totalLengthN, it.second.totalLengthP );
-        reportAux( wxString::Format( "   - coupled length: %s, total length: %s",
-
+        reportAux( wxString::Format( wxT( "   - coupled length: %s, total length: %s" ),
                                      MessageTextFromValue( userUnits(), it.second.totalCoupled ),
                                      MessageTextFromValue( userUnits(), totalLen ) ) );
 
@@ -477,8 +480,8 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                     auto val = gapConstraint->GetValue();
                     auto drcItem = DRC_ITEM::Create( DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE );
 
-                    m_msg = drcItem->GetErrorText() + " (" +
-                            gapConstraint->GetParentRule()->m_Name + " ";
+                    m_msg = drcItem->GetErrorText() + wxT( " (" ) +
+                            gapConstraint->GetParentRule()->m_Name + wxS( " " );
 
                     if( val.HasMin() )
                         m_msg += wxString::Format( _( "minimum gap: %s; " ),

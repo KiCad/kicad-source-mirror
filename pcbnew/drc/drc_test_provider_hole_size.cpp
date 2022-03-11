@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers.
+ * Copyright (C) 2004-2022 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,12 +52,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "hole_size";
+        return wxT( "hole_size" );
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests sizes of drilled holes (via/pad drills)";
+        return wxT( "Tests sizes of drilled holes (via/pad drills)" );
     }
 
 private:
@@ -124,7 +124,7 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
 
     reportRuleStatistics();
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 

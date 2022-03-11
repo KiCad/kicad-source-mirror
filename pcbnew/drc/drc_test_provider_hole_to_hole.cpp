@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers.
+ * Copyright (C) 2004-2022 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,12 +58,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "hole_to_hole_clearance";
+        return wxT( "hole_to_hole_clearance" );
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests hole to hole spacing";
+        return wxT( "Tests hole to hole spacing" );
     }
 
 private:
@@ -96,7 +96,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILLED_HOLES_TOO_CLOSE )
             && m_drcEngine->IsErrorLimitExceeded( DRCE_DRILLED_HOLES_COLOCATED ) )
     {
-        reportAux( "Hole to hole violations ignored. Tests not run." );
+        reportAux( wxT( "Hole to hole violations ignored. Tests not run." ) );
         return true;        // continue with other tests
     }
 
@@ -107,11 +107,11 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
     if( m_drcEngine->QueryWorstConstraint( HOLE_TO_HOLE_CONSTRAINT, worstClearanceConstraint ) )
     {
         m_largestClearance = worstClearanceConstraint.GetValue().Min();
-        reportAux( "Worst hole to hole : %d nm", m_largestClearance );
+        reportAux( wxT( "Worst hole to hole : %d nm" ), m_largestClearance );
     }
     else
     {
-        reportAux( "No hole to hole constraints found. Skipping check." );
+        reportAux( wxT( "No hole to hole constraints found. Skipping check." ) );
         return true;        // continue with other tests
     }
 

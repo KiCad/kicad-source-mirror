@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 KiCad Developers.
+ * Copyright (C) 2021-2022 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,12 +58,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "zone connections";
+        return wxT( "zone connections" );
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Checks thermal reliefs for a sufficient number of connecting spokes";
+        return wxT( "Checks thermal reliefs for a sufficient number of connecting spokes" );
     }
 };
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers.
+ * Copyright (C) 2004-2022 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,13 +63,13 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "solder_mask_issues";
+        return wxT( "solder_mask_issues" );
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests for silkscreen being clipped by solder mask and copper being exposed by "
-               "mask apertures of other nets";
+        return wxT( "Tests for silkscreen being clipped by solder mask and copper being exposed "
+                    "by mask apertures of other nets" );
     }
 
 private:
@@ -618,7 +618,7 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::Run()
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_CLEARANCE )
             && m_drcEngine->IsErrorLimitExceeded( DRCE_SOLDERMASK_BRIDGE ) )
     {
-        reportAux( "Solder mask violations ignored. Tests not run." );
+        reportAux( wxT( "Solder mask violations ignored. Tests not run." ) );
         return true;    // continue with other tests
     }
 
@@ -642,7 +642,7 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::Run()
     if( m_drcEngine->QueryWorstConstraint( SILK_CLEARANCE_CONSTRAINT, worstClearanceConstraint ) )
         m_largestClearance = std::max( m_largestClearance, worstClearanceConstraint.m_Value.Min() );
 
-    reportAux( "Worst clearance : %d nm", m_largestClearance );
+    reportAux( wxT( "Worst clearance : %d nm" ), m_largestClearance );
 
     if( !reportPhase( _( "Building solder mask..." ) ) )
         return false;   // DRC cancelled

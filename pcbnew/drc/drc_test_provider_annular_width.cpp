@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers.
+ * Copyright (C) 2004-2022 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,12 +54,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "annular_width";
+        return wxT( "annular_width" );
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests pad/via annular rings";
+        return wxT( "Tests pad/via annular rings" );
     }
 };
 
@@ -68,7 +68,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
 {
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_ANNULAR_WIDTH ) )
     {
-        reportAux( "Annular width violations ignored. Skipping check." );
+        reportAux( wxT( "Annular width violations ignored. Skipping check." ) );
         return true;    // continue with other tests
     }
 
@@ -76,7 +76,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
 
     if( !m_drcEngine->HasRulesForConstraintType( ANNULAR_WIDTH_CONSTRAINT ) )
     {
-        reportAux( "No annular width constraints found. Tests not run." );
+        reportAux( wxT( "No annular width constraints found. Tests not run." ) );
         return true;    // continue with other tests
     }
 

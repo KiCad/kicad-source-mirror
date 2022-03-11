@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2021 KiCad Developers.
+ * Copyright (C) 2004-2022 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,12 +60,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "edge_clearance";
+        return wxT( "edge_clearance" );
     }
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests items vs board edge clearance";
+        return wxT( "Tests items vs board edge clearance" );
     }
 
 private:
@@ -129,7 +129,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     }
     else
     {
-        reportAux( "Edge clearance violations ignored. Tests not run." );
+        reportAux( wxT( "Edge clearance violations ignored. Tests not run." ) );
         return true;         // continue with other tests
     }
 
@@ -140,7 +140,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     if( m_drcEngine->QueryWorstConstraint( EDGE_CLEARANCE_CONSTRAINT, worstClearanceConstraint ) )
         m_largestClearance = worstClearanceConstraint.GetValue().Min();
 
-    reportAux( "Worst clearance : %d nm", m_largestClearance );
+    reportAux( wxT( "Worst clearance : %d nm" ), m_largestClearance );
 
     std::vector<std::unique_ptr<PCB_SHAPE>> edges;          // we own these
     DRC_RTREE                               edgesTree;
@@ -217,8 +217,9 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     wxString val;
     wxGetEnv( "WXTRACE", &val );
 
-    drc_dbg( 2, "outline: %d items, board: %d items\n",
-             (int) edges.size(), (int) boardItems.size() );
+    drc_dbg( 2, wxT( "outline: %d items, board: %d items\n" ),
+             (int) edges.size(),
+             (int) boardItems.size() );
 
     // This is the number of tests between 2 calls to the progress bar
     const int delta = 50;
@@ -274,7 +275,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
     reportRuleStatistics();
 
-    return true;
+    return !m_drcEngine->IsCancelled();
 }
 
 

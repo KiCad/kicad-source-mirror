@@ -56,12 +56,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "sliver checker";
+        return wxT( "sliver checker" );
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Checks copper layers for slivers";
+        return wxT( "Checks copper layers for slivers" );
     }
 
 private:

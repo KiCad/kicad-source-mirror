@@ -55,12 +55,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "text_dimensions";
+        return wxT( "text_dimensions" );
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests text height and thickness";
+        return wxT( "Tests text height and thickness" );
     }
 };
 
@@ -74,14 +74,14 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_HEIGHT )
             && m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_THICKNESS ) )
     {
-        reportAux( "Text dimension violations ignored. Tests not run." );
+        reportAux( wxT( "Text dimension violations ignored. Tests not run." ) );
         return true;        // continue with other tests
     }
 
     if( !m_drcEngine->HasRulesForConstraintType( TEXT_HEIGHT_CONSTRAINT )
             && !m_drcEngine->HasRulesForConstraintType( TEXT_THICKNESS_CONSTRAINT ) )
     {
-        reportAux( "No text height or text thickness constraints found. Tests not run." );
+        reportAux( wxT( "No text height or text thickness constraints found. Tests not run." ) );
         return true;        // continue with other tests
     }
 
