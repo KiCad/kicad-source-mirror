@@ -130,6 +130,8 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     for( const std::pair<const PLOT_DASH_TYPE, lineTypeStruct>& typeEntry : lineTypeNames )
         m_lineStyleCombo->Append( typeEntry.second.name, KiBitmap( typeEntry.second.bitmap ) );
 
+    m_lineStyleCombo->Append( DEFAULT_STYLE );
+
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
     m_LayerSelectionCtrl->SetBoardFrame( m_parent );
     m_LayerSelectionCtrl->Resync();

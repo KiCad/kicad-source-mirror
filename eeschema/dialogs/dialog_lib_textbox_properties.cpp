@@ -52,6 +52,7 @@ DIALOG_LIB_TEXTBOX_PROPERTIES::DIALOG_LIB_TEXTBOX_PROPERTIES( SYMBOL_EDIT_FRAME*
         m_borderStyleCombo->Append( typeEntry.second.name, KiBitmap( typeEntry.second.bitmap ) );
 
     m_borderStyleCombo->Append( DEFAULT_STYLE );
+
     m_fillColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
     m_textCtrl->SetEOLMode( wxSTC_EOL_LF );

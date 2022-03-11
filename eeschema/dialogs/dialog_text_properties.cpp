@@ -59,6 +59,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
             m_borderStyleCombo->Append( typeEntry.second.name, KiBitmap( typeEntry.second.bitmap ) );
 
         m_borderStyleCombo->Append( DEFAULT_STYLE );
+
         m_fillColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
     }
     else
