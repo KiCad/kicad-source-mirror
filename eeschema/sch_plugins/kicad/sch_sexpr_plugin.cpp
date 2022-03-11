@@ -685,8 +685,11 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
         m_out->Print( 0, ")" );
     }
 
-    // Always set the unit to 1.  The real symbol unit is saved in the sheet instance data.
-    m_out->Print( 0, " (unit 1)" );
+    int unit = ( aSymbol->GetInstanceReferences().size() == 0 ) ?
+               aSymbol->GetUnit() :
+               aSymbol->GetInstanceReferences()[0].m_Unit;
+
+    m_out->Print( 0, " (unit %d)", unit );
 
     if( aSymbol->GetConvert() == LIB_ITEM::LIB_CONVERT::DEMORGAN )
         m_out->Print( 0, " (convert %d)", aSymbol->GetConvert() );
@@ -710,13 +713,27 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
         int id = field.GetId();
         wxString value = field.GetText();
 
-        // The reference field is always set to uninitialized and the value and footprint fields
-        // are always empty.  The actual reference, value, and footprint field values are stored
-        // in the instance data.  This prevents unwanted file change churn in shared schematics.
+        // The instance fields are always set to the first sheet instance of the project to
+        // schematic file changes when switching sheet instances with the current project
+        // schematic.  It does not solve the problem for schematics shared between projects.
         if( id == REFERENCE_FIELD )
-            field.SetText( aSymbol->GetPrefix() + wxT( "?" ) );
-        else if( id == VALUE_FIELD || id == FOOTPRINT_FIELD )
-            field.SetText( wxEmptyString );
+        {
+            field.SetText( ( aSymbol->GetInstanceReferences().size() == 0 ) ?
+                           value :
+                           aSymbol->GetInstanceReferences()[0].m_Reference );
+        }
+        else if( id == VALUE_FIELD )
+        {
+            field.SetText( ( aSymbol->GetInstanceReferences().size() == 0 ) ?
+                           value :
+                           aSymbol->GetInstanceReferences()[0].m_Value );
+        }
+        else if( id == FOOTPRINT_FIELD )
+        {
+            field.SetText( ( aSymbol->GetInstanceReferences().size() == 0 ) ?
+                           value :
+                           aSymbol->GetInstanceReferences()[0].m_Footprint );
+        }
 
         try
         {
@@ -724,7 +741,7 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
         }
         catch( ... )
         {
-            // Restore the changed field info on write error.
+            // Restore the changed field text on write error.
             if( id == REFERENCE_FIELD || id == VALUE_FIELD || id == FOOTPRINT_FIELD )
                 field.SetText( value );
 
