@@ -371,6 +371,33 @@ private:
     void buildConnectionGraph();
 
     /**
+     * Generates individual item subgraphs on a per-sheet basis
+     */
+    void buildItemSubGraphs();
+
+    /**
+     * Finds all subgraphs in the connection graph and calls ResolveDrivers() in
+     * parallel
+     */
+    void resolveAllDrivers();
+
+    /**
+     * Maps the driver values for each subgraph
+     */
+    void collectAllDriverValues();
+
+    /**
+     * Iterate through the invisible power pins to collect the global labels
+     * as drivers
+     */
+    void generateInvisiblePinSubGraphs();
+
+    /**
+     * Process all subgraphs to assign netcodes and merge subgraphs based on labels
+     */
+    void processSubGraphs();
+
+    /**
      * Helper to assign a new net code to a connection
      *
      * @return the assigned code

@@ -183,11 +183,13 @@ SCH_ITEM_SET& SCH_ITEM::ConnectedItems( const SCH_SHEET_PATH& aSheet )
 
 void SCH_ITEM::AddConnectionTo( const SCH_SHEET_PATH& aSheet, SCH_ITEM* aItem )
 {
-    // The vector elements are small, so reserve 1k at a time to prevent re-allocations
-    if( m_connected_items[ aSheet ].capacity() == 0 )
-        m_connected_items[ aSheet ].reserve( 1024 );
+    SCH_ITEM_SET& set = m_connected_items[ aSheet ];
 
-    m_connected_items[ aSheet ].emplace_back( aItem );
+    // The vector elements are small, so reserve 1k at a time to prevent re-allocations
+    if( set.size() == set.capacity() )
+        set.reserve( set.size() + 4096 );
+
+    set.emplace_back( aItem );
 }
 
 
@@ -217,6 +219,9 @@ SCH_CONNECTION* SCH_ITEM::InitializeConnection( const SCH_SHEET_PATH& aSheet,
 SCH_CONNECTION* SCH_ITEM::GetOrInitConnection( const SCH_SHEET_PATH& aSheet,
                                                CONNECTION_GRAPH* aGraph )
 {
+    if( !IsConnectable() )
+        return nullptr;
+
     SetConnectivityDirty( false );
 
     SCH_CONNECTION* connection = Connection( &aSheet );

@@ -708,19 +708,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
 }
 
 
-// TODO(JE) This won't give the same subgraph IDs (and eventually net/graph codes)
-// to the same subgraph necessarily if it runs over and over again on the same
-// sheet.  We need:
-//
-//  a) a cache of net/bus codes, like used before
-//  b) to persist the CONNECTION_GRAPH globally so the cache is persistent,
-//  c) some way of trying to avoid changing net names.  so we should keep track
-//     of the previous driver of a net, and if it comes down to choosing between
-//     equally-prioritized drivers, choose the one that already exists as a driver
-//     on some portion of the items.
-
-
-void CONNECTION_GRAPH::buildConnectionGraph()
+void CONNECTION_GRAPH::buildItemSubGraphs()
 {
     // Recache all bus aliases for later use
     wxCHECK_RET( m_schematic, "Connection graph cannot be built without schematic pointer" );
@@ -754,21 +742,25 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 connection->SetSubgraphCode( subgraph->m_code );
                 m_item_to_subgraph_map[item] = subgraph;
 
-                std::list<SCH_ITEM*> members;
+                std::list<SCH_ITEM*> memberlist;
 
                 auto get_items =
                         [&]( SCH_ITEM* aItem ) -> bool
                         {
                             SCH_CONNECTION* conn = aItem->GetOrInitConnection( sheet, this );
+                            bool unique = !( aItem->GetFlags() & CANDIDATE );
 
-                            return ( conn->SubgraphCode() == 0 );
+                            aItem->SetFlags( CANDIDATE );
+
+                            return ( unique && conn && ( conn->SubgraphCode() == 0 ) );
                         };
+
 
                 std::copy_if( item->ConnectedItems( sheet ).begin(),
                               item->ConnectedItems( sheet ).end(),
-                              std::back_inserter( members ), get_items );
+                              std::back_inserter( memberlist ), get_items );
 
-                for( SCH_ITEM* connected_item : members )
+                for( SCH_ITEM* connected_item : memberlist )
                 {
                     if( connected_item->Type() == SCH_NO_CONNECT_T )
                         subgraph->m_no_connect = connected_item;
@@ -782,12 +774,15 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                         connected_conn->SetSubgraphCode( subgraph->m_code );
                         m_item_to_subgraph_map[connected_item] = subgraph;
                         subgraph->AddItem( connected_item );
+                        SCH_ITEM_SET citemset = connected_item->ConnectedItems( sheet );
 
-                        std::copy_if( connected_item->ConnectedItems( sheet ).begin(),
-                                      connected_item->ConnectedItems( sheet ).end(),
-                                      std::back_inserter( members ), get_items );
+                        std::copy_if( citemset.begin(), citemset.end(),
+                                      std::back_inserter( memberlist ), get_items );
                     }
                 }
+
+                for( SCH_ITEM* connected_item : memberlist )
+                    connected_item->ClearFlags( CANDIDATE );
 
                 subgraph->m_dirty = true;
                 m_subgraphs.push_back( subgraph );
@@ -795,11 +790,10 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         }
     }
 
-    /**
-     * TODO(JE): Net codes are non-deterministic.  Fortunately, they are also not really used for
-     * anything. We should consider removing them entirely and just using net names everywhere.
-     */
+}
 
+void CONNECTION_GRAPH::resolveAllDrivers()
+{
     // Resolve drivers for subgraphs and propagate connectivity info
 
     // We don't want to spin up a new thread for fewer than 8 nets (overhead costs)
@@ -879,7 +873,11 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                   {
                       return candidate->m_driver;
                   } );
+}
 
+
+void CONNECTION_GRAPH::collectAllDriverValues()
+{
     // Check for subgraphs with the same net name but only weak drivers.
     // For example, two wires that are both connected to hierarchical
     // sheet pins that happen to have the same name, but are not the same.
@@ -934,7 +932,11 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             }
         }
     }
+}
 
+
+void CONNECTION_GRAPH::generateInvisiblePinSubGraphs()
+{
     // Generate subgraphs for invisible power pins.  These will be merged with other subgraphs
     // on the same sheet in the next loop.
 
@@ -954,7 +956,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         SCH_CONNECTION* connection = pin->GetOrInitConnection( sheet, this );
 
         // If this pin already has a subgraph, don't need to process
-        if( connection->SubgraphCode() > 0 )
+        if( !connection || connection->SubgraphCode() > 0 )
             continue;
 
         connection->SetName( pin->GetShownName() );
@@ -991,7 +993,11 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
         connection->SetSubgraphCode( subgraph->m_code );
     }
+}
 
+
+void CONNECTION_GRAPH::processSubGraphs()
+{
     // Here we do all the local (sheet) processing of each subgraph, including assigning net
     // codes, merging subgraphs together that use label connections, etc.
 
@@ -1318,6 +1324,49 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                     subgraph->m_driver_connection->Name() );
     }
 
+}
+
+
+// TODO(JE) This won't give the same subgraph IDs (and eventually net/graph codes)
+// to the same subgraph necessarily if it runs over and over again on the same
+// sheet.  We need:
+//
+//  a) a cache of net/bus codes, like used before
+//  b) to persist the CONNECTION_GRAPH globally so the cache is persistent,
+//  c) some way of trying to avoid changing net names.  so we should keep track
+//     of the previous driver of a net, and if it comes down to choosing between
+//     equally-prioritized drivers, choose the one that already exists as a driver
+//     on some portion of the items.
+
+
+void CONNECTION_GRAPH::buildConnectionGraph()
+{
+    // Recache all bus aliases for later use
+    wxCHECK_RET( m_schematic, wxT( "Connection graph cannot be built without schematic pointer" ) );
+
+    SCH_SHEET_LIST all_sheets = m_schematic->GetSheets();
+
+    for( unsigned i = 0; i < all_sheets.size(); i++ )
+    {
+        for( const auto& alias : all_sheets[i].LastScreen()->GetBusAliases() )
+            m_bus_alias_cache[ alias->GetName() ] = alias;
+    }
+
+    buildItemSubGraphs();
+
+    /**
+     * TODO(JE): Net codes are non-deterministic.  Fortunately, they are also not really used for
+     * anything. We should consider removing them entirely and just using net names everywhere.
+     */
+
+    resolveAllDrivers();
+
+    collectAllDriverValues();
+
+    generateInvisiblePinSubGraphs();
+
+    processSubGraphs();
+
     // Absorbed subgraphs should no longer be considered
     alg::delete_if( m_driver_subgraphs, [&]( const CONNECTION_SUBGRAPH* candidate ) -> bool
                                         {
@@ -1340,7 +1389,13 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         m_sheet_to_subgraphs_map[ subgraph->m_sheet ].emplace_back( subgraph );
 
     // Update item connections at this point so that neighbor propagation works
-    nextSubgraph.store( 0 );
+    std::atomic<size_t> nextSubgraph( 0 );
+
+    // We don't want to spin up a new thread for fewer than 8 nets (overhead costs)
+    size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
+            ( m_subgraphs.size() + 3 ) / 4 );
+
+    std::vector<std::future<size_t>> returns( parallelThreadCount );
 
     auto preliminaryUpdateTask =
             [&]() -> size_t
