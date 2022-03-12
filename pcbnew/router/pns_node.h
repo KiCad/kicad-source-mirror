@@ -103,12 +103,13 @@ public:
  */
 struct OBSTACLE
 {
-    const ITEM*      m_head;        ///< Item we search collisions with
+    const ITEM*      m_head;           ///< Item we search collisions with
 
-    ITEM*            m_item;        ///< Item found to be colliding with m_head
-    SHAPE_LINE_CHAIN m_hull;        ///< Hull of the colliding m_item
-    VECTOR2I         m_ipFirst;     ///< First intersection between m_head and m_hull
-    int              m_distFirst;   ///< ... and the distance thereof
+    ITEM*            m_item;           ///< Item found to be colliding with m_head
+    SHAPE_LINE_CHAIN m_hull;           ///< Hull of the colliding m_item
+    VECTOR2I         m_ipFirst;        ///< First intersection between m_head and m_hull
+    int              m_distFirst;      ///< ... and the distance thereof
+    int              m_maxFanoutWidth; ///< worst case (largest) width of the tracks connected to the item
 };
 
 class OBSTACLE_VISITOR
