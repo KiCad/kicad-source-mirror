@@ -1010,7 +1010,10 @@ add_subdirectory( cvpcb )               # must be after pcbnew
 add_subdirectory( kicad )               # should follow pcbnew, eeschema
 add_subdirectory( tools )
 add_subdirectory( utils )
-add_subdirectory( qa )
+
+if( KICAD_BUILD_QA_TESTS )
+    add_subdirectory( qa )
+endif()
 
 # Demos
 if( KICAD_INSTALL_DEMOS )
