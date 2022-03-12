@@ -462,14 +462,18 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
                     else if( CN_ZONE_LAYER* zoneLayer = dynamic_cast<CN_ZONE_LAYER*>( connected ) )
                     {
                         ZONE*                   zone = static_cast<ZONE*>( zoneLayer->Parent() );
-                        int                     idx = zoneLayer->SubpolyIndex();
-                        const SHAPE_LINE_CHAIN& island = zone->GetFill( layer )->COutline( idx );
-                        SHAPE_CIRCLE            flashing( via->GetCenter(), via->GetWidth() / 2 );
 
-                        for( const VECTOR2I& pt : island.CPoints() )
+                        if( zone->GetFill( layer )->OutlineCount() )
                         {
-                            if( !flashing.SHAPE::Collide( pt ) )
-                                return true;
+                            int                     idx = zoneLayer->SubpolyIndex();
+                            const SHAPE_LINE_CHAIN& island = zone->GetFill( layer )->COutline( idx );
+                            SHAPE_CIRCLE            flashing( via->GetCenter(), via->GetWidth() / 2 );
+
+                            for( const VECTOR2I& pt : island.CPoints() )
+                            {
+                                if( !flashing.SHAPE::Collide( pt ) )
+                                    return true;
+                            }
                         }
 
                         // If the entire island is inside the via's flashing then the via won't
