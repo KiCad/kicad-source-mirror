@@ -855,7 +855,11 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangula
     KIFONT::FONT*                   font = GetDrawFont();
     int                             penWidth = GetEffectiveTextPenWidth();
     TEXT_ATTRIBUTES                 attrs = GetAttributes();
-    attrs.m_Angle = aUseTextRotation ? GetDrawRotation() : ANGLE_0;
+
+    if( aUseTextRotation )
+        attrs.m_Angle = GetDrawRotation();
+    else
+        attrs.m_Angle = ANGLE_0;
 
     if( aTriangulate )
     {

@@ -483,7 +483,6 @@ void FP_TEXT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffe
     SHAPE_POLY_SET buffer;
 
     EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( &buffer, aClearance );
-    buffer.Rotate( -GetDrawRotation(), GetTextPos() );
     aCornerBuffer.Append( buffer );
 }
 

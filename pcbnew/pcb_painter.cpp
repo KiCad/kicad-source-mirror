@@ -1825,7 +1825,6 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
         int            margin = attrs.m_StrokeWidth * 1.5;
 
         aText->TransformBoundingBoxWithClearanceToPolygon( &finalPoly, margin );
-        finalPoly.Rotate( -aText->GetDrawRotation(), aText->GetTextPos() );
         finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
         finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
 

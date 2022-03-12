@@ -68,31 +68,68 @@ void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContaine
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
     KIFONT::FONT*              font = aText->GetDrawFont();
-    float                      penWidth = TO_3DU( aText->GetEffectiveTextPenWidth() );
+    TEXT_ATTRIBUTES            attrs = aText->GetAttributes();
+    float                      penWidth_3DU = TO_3DU( aText->GetEffectiveTextPenWidth() );
 
-    CALLBACK_GAL callback_gal( empty_opts,
-            // Stroke callback
-            [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
-            {
-                const SFVEC2F pt1_3DU = TO_SFVEC2F( aPt1 );
-                const SFVEC2F pt2_3DU = TO_SFVEC2F( aPt2 );
+    if( aOwner && aOwner->IsKnockout() )
+    {
+        SHAPE_POLY_SET knockouts;
 
-                if( Is_segment_a_circle( pt1_3DU, pt2_3DU ) )
-                    aContainer->Add( new FILLED_CIRCLE_2D( pt1_3DU, penWidth / 2, *aOwner ) );
-                else
-                    aContainer->Add( new ROUND_SEGMENT_2D( pt1_3DU, pt2_3DU, penWidth, *aOwner ) );
-            },
-            // Triangulation callback
-            [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
-            {
-                aContainer->Add( new TRIANGLE_2D( TO_SFVEC2F( aPt1 ), TO_SFVEC2F( aPt2 ),
-                                                  TO_SFVEC2F( aPt3 ), *aOwner ) );
-            } );
+        CALLBACK_GAL callback_gal( empty_opts,
+                // Polygon callback
+                [&]( const SHAPE_LINE_CHAIN& aPoly )
+                {
+                    knockouts.AddOutline( aPoly );
+                } );
 
-    TEXT_ATTRIBUTES attrs = aText->GetAttributes();
-    attrs.m_Angle = aText->GetDrawRotation();
+        attrs.m_StrokeWidth = aText->GetEffectiveTextPenWidth();
+        attrs.m_Angle = aText->GetDrawRotation();
 
-    font->Draw( &callback_gal, aText->GetShownText(), aText->GetDrawPos(), attrs );
+        callback_gal.SetIsFill( font->IsOutline() );
+        callback_gal.SetIsStroke( font->IsStroke() );
+        callback_gal.SetLineWidth( attrs.m_StrokeWidth );
+        font->Draw( &callback_gal, aText->GetShownText(), aText->GetDrawPos(), attrs );
+
+        SHAPE_POLY_SET finalPoly;
+        int            margin = attrs.m_StrokeWidth * 1.5;
+
+        aText->TransformBoundingBoxWithClearanceToPolygon( &finalPoly, margin );
+        finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
+        finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+        ConvertPolygonToTriangles( finalPoly, *aContainer, m_biuTo3Dunits, *aOwner );
+    }
+    else
+    {
+        CALLBACK_GAL callback_gal( empty_opts,
+                // Stroke callback
+                [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
+                {
+                    const SFVEC2F pt1_3DU = TO_SFVEC2F( aPt1 );
+                    const SFVEC2F pt2_3DU = TO_SFVEC2F( aPt2 );
+
+                    if( Is_segment_a_circle( pt1_3DU, pt2_3DU ) )
+                    {
+                        aContainer->Add( new FILLED_CIRCLE_2D( pt1_3DU, penWidth_3DU / 2,
+                                                               *aOwner ) );
+                    }
+                    else
+                    {
+                        aContainer->Add( new ROUND_SEGMENT_2D( pt1_3DU, pt2_3DU, penWidth_3DU,
+                                                               *aOwner ) );
+                    }
+                },
+                // Triangulation callback
+                [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
+                {
+                    aContainer->Add( new TRIANGLE_2D( TO_SFVEC2F( aPt1 ), TO_SFVEC2F( aPt2 ),
+                                                      TO_SFVEC2F( aPt3 ), *aOwner ) );
+                } );
+
+        attrs.m_Angle = aText->GetDrawRotation();
+
+        font->Draw( &callback_gal, aText->GetShownText(), aText->GetDrawPos(), attrs );
+    }
 }
 
 
