@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-08 15:28+0100\n"
-"PO-Revision-Date: 2022-03-08 16:04+0100\n"
+"PO-Revision-Date: 2022-03-12 17:46+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-source/it/>\n"
 "Language: it\n"
@@ -16544,7 +16544,7 @@ msgstr "Aggiungi un filo"
 
 #: eeschema/tools/ee_actions.cpp:712
 msgid "Add Bus"
-msgstr "Aggiungi Bus"
+msgstr "Aggiungi bus"
 
 #: eeschema/tools/ee_actions.cpp:712
 msgid "Add a bus"
