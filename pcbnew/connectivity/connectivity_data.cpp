@@ -427,20 +427,23 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
                     }
                     else if( CN_ZONE_LAYER* zoneLayer = dynamic_cast<CN_ZONE_LAYER*>( connected ) )
                     {
-                        BOARD_CONNECTED_ITEM* item = zoneLayer->Parent();
-                        int                   islandIdx = zoneLayer->SubpolyIndex();
+                        ZONE* zone = static_cast<ZONE*>( zoneLayer->Parent() );
+                        int   islandIdx = zoneLayer->SubpolyIndex();
 
-                        const auto& fill = static_cast<ZONE*>( item )->GetFilledPolysList( layer );
-                        const auto& padOutline = pad->GetEffectivePolygon()->Outline( 0 );
-
-                        for( const VECTOR2I& pt : fill->COutline( islandIdx ).CPoints() )
+                        if( zone->IsFilled() )
                         {
-                            if( !padOutline.PointInside( pt ) )
-                                return true;
+                            const auto& fill = zone->GetFilledPolysList( layer );
+                            const auto& padOutline = pad->GetEffectivePolygon()->Outline( 0 );
+
+                            for( const VECTOR2I& pt : fill->COutline( islandIdx ).CPoints() )
+                            {
+                                if( !padOutline.PointInside( pt ) )
+                                    return true;
+                            }
                         }
 
-                        // If the entire island is inside the pad's flashing then the pad won't
-                        // *actually* connect to anything *else* so don't consider it connected.
+                        // If the zone isn't filled, or the entire island is inside the pad's
+                        // flashing then the pad won't _actually_ connect to anything else.
                         return false;
                     }
                 }
