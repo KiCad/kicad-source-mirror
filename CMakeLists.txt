@@ -503,9 +503,10 @@ endif()
 # KIFACE_SUFFIX is the file extension used for top level program modules which
 # implement the KIFACE interface.  A valid suffix starts with a period '.'.
 
-if( false )
-    # This is the eventual situation near milestone C) of modular-kicad blueprint.
-    # Until then we use .kiface extension so we don't collide with python DSO.
+if( WIN32 )
+    # We use .kiface extension so we don't collide with python DSO. (Linux/mac issue?)
+    # Windows works fine with the native dll extension
+    # which also resolves metadata issues because windows wants to see the dll extension
     set( KIFACE_SUFFIX  ${CMAKE_SHARED_MODULE_SUFFIX} )
 else()
     # Temporary situation until we can dovetail the python DSO into the kiface DSO.
