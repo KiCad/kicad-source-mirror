@@ -39,8 +39,12 @@ bool KIPLATFORM::APP::Init()
     _CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF );
 #endif
 
+#if defined( DEBUG )
     // undo wxwidgets trying to hide errors
     SetErrorMode( 0 );
+#else
+    SetErrorMode( SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX );
+#endif
 
     // ensure the WER crash report dialog always appears
     WerSetFlags( WER_FAULT_REPORTING_ALWAYS_SHOW_UI );
