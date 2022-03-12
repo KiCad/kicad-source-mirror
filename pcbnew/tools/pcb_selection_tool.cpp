@@ -2441,6 +2441,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
     const ZONE*    zone = nullptr;
     const PCB_VIA* via = nullptr;
     const PAD*     pad = nullptr;
+    const FP_TEXT* text = nullptr;
 
     switch( aItem->Type() )
     {
@@ -2499,6 +2500,11 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
     case PCB_FP_TEXT_T:
         if( m_isFootprintEditor )
         {
+            text = static_cast<const FP_TEXT*>( aItem );
+
+            if( !text->IsVisible() && !view()->IsLayerVisible( LAYER_MOD_TEXT_INVISIBLE ) )
+                return false;
+
             if( !view()->IsLayerVisible( aItem->GetLayer() ) )
                 return false;
         }
