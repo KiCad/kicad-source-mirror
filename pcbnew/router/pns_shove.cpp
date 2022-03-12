@@ -230,10 +230,12 @@ SHOVE::SHOVE_STATUS SHOVE::shoveLineFromLoneVia( const LINE& aCurLine, const LIN
 
     int obstacleLineWidth = aObstacleLine.Width();
     int clearance = getClearance( &aCurLine, &aObstacleLine );
-    int holeClearance = getHoleClearance( &aCurLine.Via(), &aObstacleLine );
+
+/*    int holeClearance = getHoleClearance( &aCurLine.Via(), &aObstacleLine );
 
     if( holeClearance + aCurLine.Via().Drill() / 2 > clearance + aCurLine.Via().Diameter() / 2 )
         clearance = holeClearance + aCurLine.Via().Drill() / 2 - aCurLine.Via().Diameter() / 2;
+*/
 
     SHAPE_LINE_CHAIN hull = aCurLine.Via().Hull( clearance, obstacleLineWidth, aCurLine.Layer() );
     SHAPE_LINE_CHAIN path_cw;
@@ -457,10 +459,10 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& 
         {
             const VIA& via = aCurLine.Via();
             int viaClearance = getClearance( &via, &aObstacleLine );
-            int holeClearance = getHoleClearance( &via, &aObstacleLine );
+            /*int holeClearance = getHoleClearance( &via, &aObstacleLine );
 
             if( holeClearance + via.Drill() / 2 > viaClearance + via.Diameter() / 2 )
-                viaClearance = holeClearance + via.Drill() / 2 - via.Diameter() / 2;
+                viaClearance = holeClearance + via.Drill() / 2 - via.Diameter() / 2;*/
 
             hulls.push_back( aCurLine.Via().Hull( viaClearance, obstacleLineWidth ) );
         }
