@@ -122,7 +122,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* item )
             }
         }
 
-        if( ( zone->GetLayerSet() & LSET::AllCuMask() ).any() && !zone->GetIsRuleArea() )
+        if( zone->IsOnCopperLayer() && !zone->GetIsRuleArea() )
             m_copperZones.push_back( zone );
     }
     else if( item->Type() == PCB_PAD_T )
@@ -189,6 +189,9 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::buildRTrees()
     m_tesselatedTree = std::make_unique<DRC_RTREE>();
     m_itemTree = std::make_unique<DRC_RTREE>();
     m_copperZones.clear();
+
+    // Unlikely to be correct, but better than starting at 0
+    m_copperZones.reserve( m_board->Zones().size() );
 
     forEachGeometryItem( s_allBasicItems, layers,
             [&]( BOARD_ITEM* item ) -> bool
@@ -646,6 +649,9 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::Run()
 
     if( !reportPhase( _( "Building solder mask..." ) ) )
         return false;   // DRC cancelled
+
+    m_checkedPairs.clear();
+    m_maskApertureNetMap.clear();
 
     buildRTrees();
 
