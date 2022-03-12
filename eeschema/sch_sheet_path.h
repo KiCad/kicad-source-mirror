@@ -393,14 +393,6 @@ namespace std
     };
 }
 
-struct SHEET_PATH_CMP
-{
-    bool operator()( const SCH_SHEET_PATH& lhs, const SCH_SHEET_PATH& rhs ) const
-    {
-        return lhs.GetCurrentHash() < rhs.GetCurrentHash();
-    }
-};
-
 
 typedef std::vector< SCH_SHEET_PATH >            SCH_SHEET_PATHS;
 typedef SCH_SHEET_PATHS::iterator                SCH_SHEET_PATHS_ITER;
