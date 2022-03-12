@@ -102,23 +102,18 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
                 return false;   // DRC cancelled
         }
 
-        std::vector<PCB_VIA*> vias;
-
         for( PCB_TRACK* track : m_drcEngine->GetBoard()->Tracks() )
         {
             if( track->Type() == PCB_VIA_T )
-                vias.push_back( static_cast<PCB_VIA*>( track ) );
-        }
+            {
+                bool exceedMicro = m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_DRILL_OUT_OF_RANGE );
+                bool exceedStd = m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE );
 
-        for( PCB_VIA* via : vias )
-        {
-            bool exceedMicro = m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_DRILL_OUT_OF_RANGE );
-            bool exceedStd = m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE );
+                if( exceedMicro && exceedStd )
+                    break;
 
-            if( exceedMicro && exceedStd )
-                break;
-
-            checkVia( via, exceedMicro, exceedStd );
+                checkVia( static_cast<PCB_VIA*>( track ), exceedMicro, exceedStd );
+            }
         }
     }
 

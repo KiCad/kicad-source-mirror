@@ -23,7 +23,6 @@
 #include <pad.h>
 #include <pcb_track.h>
 
-#include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
@@ -75,16 +74,19 @@ private:
 
     using CONNECTION = DRC_LENGTH_REPORT::ENTRY;
 
-    void checkLengths( DRC_CONSTRAINT& aConstraint, std::vector<CONNECTION>& aMatchedConnections );
-    void checkSkews( DRC_CONSTRAINT& aConstraint, std::vector<CONNECTION>& aMatchedConnections );
-    void checkViaCounts( DRC_CONSTRAINT& aConstraint, std::vector<CONNECTION>& aMatchedConnections );
+    void checkLengths( const DRC_CONSTRAINT& aConstraint,
+                       const std::vector<CONNECTION>& aMatchedConnections );
+    void checkSkews( const DRC_CONSTRAINT& aConstraint,
+                     const std::vector<CONNECTION>& aMatchedConnections );
+    void checkViaCounts( const DRC_CONSTRAINT& aConstraint,
+                         const std::vector<CONNECTION>& aMatchedConnections );
 
     BOARD* m_board;
     DRC_LENGTH_REPORT m_report;
 };
 
-void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengths( DRC_CONSTRAINT& aConstraint,
-                                                     std::vector<CONNECTION>& aMatchedConnections )
+void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengths( const DRC_CONSTRAINT& aConstraint,
+                                                     const std::vector<CONNECTION>& aMatchedConnections )
 {
     for( const DRC_LENGTH_REPORT::ENTRY& ent : aMatchedConnections )
     {
@@ -136,8 +138,8 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengths( DRC_CONSTRAINT& aConstraint
     }
 }
 
-void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( DRC_CONSTRAINT& aConstraint,
-                                                   std::vector<CONNECTION>& aMatchedConnections )
+void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( const DRC_CONSTRAINT& aConstraint,
+                                                   const std::vector<CONNECTION>& aMatchedConnections )
 {
     int avgLength = 0;
 
@@ -174,8 +176,8 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( DRC_CONSTRAINT& aConstraint,
 }
 
 
-void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkViaCounts( DRC_CONSTRAINT& aConstraint,
-                                                       std::vector<CONNECTION>& aMatchedConnections )
+void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkViaCounts( const DRC_CONSTRAINT& aConstraint,
+                                                       const std::vector<CONNECTION>& aMatchedConnections )
 {
     for( const auto& ent : aMatchedConnections )
     {
@@ -225,9 +227,24 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
 
     ftCache->Rebuild( m_board );
 
+    // This is the number of tests between 2 calls to the progress bar
+    const size_t delta = 50;
+    size_t       count = 0;
+    size_t       ii = 0;
+
     forEachGeometryItem( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T }, LSET::AllCuMask(),
             [&]( BOARD_ITEM *item ) -> bool
             {
+                count++;
+                return true;
+            } );
+
+    forEachGeometryItem( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T }, LSET::AllCuMask(),
+            [&]( BOARD_ITEM *item ) -> bool
+            {
+                if( !reportProgress( ii++, count, delta ) )
+                    return false;
+
                 const DRC_CONSTRAINT_T constraintsToCheck[] = {
                         LENGTH_CONSTRAINT,
                         SKEW_CONSTRAINT,
@@ -250,17 +267,16 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                 return true;
             } );
 
-    std::map<DRC_RULE*, std::vector<CONNECTION> > matches;
+    std::map< DRC_RULE*, std::vector<CONNECTION> > matches;
 
-    for( auto it : itemSets )
+    for( const std::pair< DRC_RULE* const, std::set<BOARD_CONNECTED_ITEM*> >& it : itemSets )
     {
         std::map<int, std::set<BOARD_CONNECTED_ITEM*> > netMap;
 
-        for( auto citem : it.second )
+        for( BOARD_CONNECTED_ITEM* citem : it.second )
             netMap[ citem->GetNetCode() ].insert( citem );
 
-
-        for( auto nitem : netMap )
+        for( const std::pair< const int, std::set<BOARD_CONNECTED_ITEM*> >& nitem : netMap )
         {
             CONNECTION ent;
             ent.items = nitem.second;
@@ -327,10 +343,19 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
 
     if( !aDelayReportMode )
     {
-        for( auto it : matches )
+        if( !reportPhase( _( "Checking length constraints..." ) ) )
+            return false;
+
+        ii = 0;
+        count = matches.size();
+
+        for( std::pair< DRC_RULE* const, std::vector<CONNECTION> > it : matches )
         {
             DRC_RULE *rule = it.first;
             auto& matchedConnections = it.second;
+
+            if( !reportProgress( ii++, count, delta ) )
+                return false;
 
             std::sort( matchedConnections.begin(), matchedConnections.end(),
                        [] ( const CONNECTION&a, const CONNECTION&b ) -> int
@@ -341,7 +366,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
             reportAux( wxString::Format( wxT( "Length-constrained traces for rule '%s':" ),
                                          it.first->m_Name ) );
 
-            for( auto& ent : matchedConnections )
+            for( const DRC_LENGTH_REPORT::ENTRY& ent : matchedConnections )
             {
                 reportAux(wxString::Format( wxT( " - net: %s, from: %s, to: %s, "
                                                  "%d matching items, "

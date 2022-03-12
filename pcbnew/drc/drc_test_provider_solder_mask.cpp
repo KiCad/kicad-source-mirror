@@ -180,8 +180,8 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::buildRTrees()
     LSET   layers = { 4, F_Mask, B_Mask, F_Cu, B_Cu };
 
     size_t delta = 50;    // Number of tests between 2 calls to the progress bar
-    int    itemCount = 0;
-    int    itemIdx = 0;
+    int    count = 0;
+    int    ii = 0;
 
     solderMask->GetFill( F_Mask )->RemoveAllContours();
     solderMask->GetFill( B_Mask )->RemoveAllContours();
@@ -193,14 +193,14 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::buildRTrees()
     forEachGeometryItem( s_allBasicItems, layers,
             [&]( BOARD_ITEM* item ) -> bool
             {
-                ++itemCount;
+                ++count;
                 return true;
             } );
 
     forEachGeometryItem( s_allBasicItems, layers,
             [&]( BOARD_ITEM* item ) -> bool
             {
-                if( !reportProgress( itemIdx++, itemCount, delta ) )
+                if( !reportProgress( ii++, count, delta ) )
                     return false;
 
                 addItemToRTrees( item );
@@ -233,13 +233,13 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testSilkToMaskClearance()
     LSET   silkLayers = { 2, F_SilkS, B_SilkS };
 
     size_t delta = 100;    // Number of tests between 2 calls to the progress bar
-    int    itemCount = 0;
-    int    itemIdx = 0;
+    int    count = 0;
+    int    ii = 0;
 
     forEachGeometryItem( s_allBasicItems, silkLayers,
             [&]( BOARD_ITEM* item ) -> bool
             {
-                ++itemCount;
+                ++count;
                 return true;
             } );
 
@@ -249,7 +249,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testSilkToMaskClearance()
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_CLEARANCE ) )
                     return false;
 
-                if( !reportProgress( itemIdx++, itemCount, delta ) )
+                if( !reportProgress( ii++, count, delta ) )
                     return false;
 
                 if( isInvisibleText( item ) )
@@ -559,13 +559,13 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskBridges()
     LSET   copperAndMaskLayers = { 4, F_Mask, B_Mask, F_Cu, B_Cu };
 
     size_t delta = 50;    // Number of tests between 2 calls to the progress bar
-    int    itemCount = 0;
-    int    itemIdx = 0;
+    int    count = 0;
+    int    ii = 0;
 
     forEachGeometryItem( s_allBasicItemsButZones, copperAndMaskLayers,
             [&]( BOARD_ITEM* item ) -> bool
             {
-                ++itemCount;
+                ++count;
                 return true;
             } );
 
@@ -575,7 +575,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskBridges()
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_SOLDERMASK_BRIDGE ) )
                     return false;
 
-                if( !reportProgress( itemIdx++, itemCount, delta ) )
+                if( !reportProgress( ii++, count, delta ) )
                     return false;
 
                 EDA_RECT itemBBox = item->GetBoundingBox();

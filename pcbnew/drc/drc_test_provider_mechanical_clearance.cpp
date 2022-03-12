@@ -82,9 +82,8 @@ private:
     void testZoneLayer( ZONE* aZone, PCB_LAYER_ID aLayer, DRC_CONSTRAINT& aConstraint );
 
 private:
-    DRC_RTREE                m_itemTree;
-    std::vector<BOARD_ITEM*> m_items;
-    std::vector<ZONE*>       m_zones;
+    DRC_RTREE          m_itemTree;
+    std::vector<ZONE*> m_zones;
 };
 
 
@@ -93,7 +92,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
     m_board = m_drcEngine->GetBoard();
     m_itemTree.clear();
     m_zones.clear();
-    m_items.clear();
+    m_zones.reserve( m_board->Zones().size() );
 
     int            errorMax = m_board->GetDesignSettings().m_MaxError;
     DRC_CONSTRAINT worstConstraint;
@@ -137,7 +136,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
     reportAux( wxT( "Worst clearance : %d nm" ), m_largestClearance );
 
     // This is the number of tests between 2 calls to the progress bar
-    size_t delta = 50;
+    size_t delta = 100;
     size_t count = 0;
     size_t ii = 0;
 
@@ -165,8 +164,6 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
                 if( !reportProgress( ii++, count, delta ) )
                     return false;
 
-                m_items.push_back( item );
-
                 LSET layers = item->GetLayerSet();
 
                 // Special-case pad holes which pierce all the copper layers
@@ -185,6 +182,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
             } );
 
     std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, int> checkedPairs;
+    ii = 0;
 
     if( !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE )
             || !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_CLEARANCE ) )
@@ -192,49 +190,51 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
         if( !reportPhase( _( "Checking mechanical clearances..." ) ) )
             return false;   // DRC cancelled
 
-        ii = 0;
+        forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
+                [&]( BOARD_ITEM* item ) -> bool
+                {
+                    if( !reportProgress( ii++, count, delta ) )
+                        return false;
 
-        for( BOARD_ITEM* item : m_items )
-        {
-            if( !reportProgress( ii++, m_items.size(), delta ) )
-                break;
+                    for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
+                    {
+                        std::shared_ptr<SHAPE> itemShape = item->GetEffectiveShape( layer );
 
-            for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
-            {
-                std::shared_ptr<SHAPE> itemShape = item->GetEffectiveShape( layer );
+                        m_itemTree.QueryColliding( item, layer, layer,
+                                // Filter:
+                                [&]( BOARD_ITEM* other ) -> bool
+                                {
+                                    BOARD_ITEM* a = item;
+                                    BOARD_ITEM* b = other;
 
-                m_itemTree.QueryColliding( item, layer, layer,
-                        // Filter:
-                        [&]( BOARD_ITEM* other ) -> bool
-                        {
-                            BOARD_ITEM* a = item;
-                            BOARD_ITEM* b = other;
+                                    // store canonical order so we don't collide in both
+                                    // directions (a:b and b:a)
+                                    if( static_cast<void*>( a ) > static_cast<void*>( b ) )
+                                        std::swap( a, b );
 
-                            // store canonical order so we don't collide in both directions
-                            // (a:b and b:a)
-                            if( static_cast<void*>( a ) > static_cast<void*>( b ) )
-                                std::swap( a, b );
+                                    if( checkedPairs.count( { a, b } ) )
+                                    {
+                                        return false;
+                                    }
+                                    else
+                                    {
+                                        checkedPairs[ { a, b } ] = 1;
+                                        return true;
+                                    }
+                                },
+                                // Visitor:
+                                [&]( BOARD_ITEM* other ) -> bool
+                                {
+                                    return testItemAgainstItem( item, itemShape.get(), layer,
+                                                                other );
+                                },
+                                m_largestClearance );
 
-                            if( checkedPairs.count( { a, b } ) )
-                            {
-                                return false;
-                            }
-                            else
-                            {
-                                checkedPairs[ { a, b } ] = 1;
-                                return true;
-                            }
-                        },
-                        // Visitor:
-                        [&]( BOARD_ITEM* other ) -> bool
-                        {
-                            return testItemAgainstItem( item, itemShape.get(), layer, other );
-                        },
-                        m_largestClearance );
+                        testItemAgainstZones( item, layer );
+                    }
 
-                testItemAgainstZones( item, layer );
-            }
-        }
+                    return true;
+                } );
     }
 
     count = 0;

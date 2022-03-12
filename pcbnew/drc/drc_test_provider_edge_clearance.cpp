@@ -142,9 +142,8 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
     reportAux( wxT( "Worst clearance : %d nm" ), m_largestClearance );
 
-    std::vector<std::unique_ptr<PCB_SHAPE>> edges;          // we own these
+    std::vector<std::unique_ptr<PCB_SHAPE>> edges;
     DRC_RTREE                               edgesTree;
-    std::vector<BOARD_ITEM*>                boardItems;     // we don't own these
 
     forEachGeometryItem( { PCB_SHAPE_T, PCB_FP_SHAPE_T }, LSET( 2, Edge_Cuts, Margin ),
             [&]( BOARD_ITEM *item ) -> bool
@@ -205,73 +204,71 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
         }
     }
 
+    // This is the number of tests between 2 calls to the progress bar
+    const int delta = 100;
+    int       count = 0;
+    int       ii = 0;
+
     forEachGeometryItem( s_allBasicItemsButZones, LSET::AllLayersMask(),
             [&]( BOARD_ITEM *item ) -> bool
             {
-                if( !isInvisibleText( item ) )
-                    boardItems.push_back( item );
-
+                count++;
                 return true;
             } );
 
-    wxString val;
-    wxGetEnv( "WXTRACE", &val );
-
-    drc_dbg( 2, wxT( "outline: %d items, board: %d items\n" ),
-             (int) edges.size(),
-             (int) boardItems.size() );
-
-    // This is the number of tests between 2 calls to the progress bar
-    const int delta = 50;
-    int       ii = 0;
-
-    for( BOARD_ITEM* item : boardItems )
-    {
-        bool testCopper = !m_drcEngine->IsErrorLimitExceeded( DRCE_EDGE_CLEARANCE );
-        bool testSilk = !m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_CLEARANCE );
-
-        if( !testCopper && !testSilk )
-            break;
-
-        if( !reportProgress( ii++, boardItems.size(), delta ) )
-            return false;   // DRC cancelled
-
-        const std::shared_ptr<SHAPE>& itemShape = item->GetEffectiveShape();
-
-        for( PCB_LAYER_ID testLayer : { Edge_Cuts, Margin } )
-        {
-            if( testCopper && item->IsOnCopperLayer() )
+    forEachGeometryItem( s_allBasicItemsButZones, LSET::AllLayersMask(),
+            [&]( BOARD_ITEM *item ) -> bool
             {
-                edgesTree.QueryColliding( item, UNDEFINED_LAYER, testLayer, nullptr,
-                        [&]( BOARD_ITEM* edge ) -> bool
-                        {
-                            return testAgainstEdge( item, itemShape.get(), edge,
-                                                    EDGE_CLEARANCE_CONSTRAINT,
-                                                    DRCE_EDGE_CLEARANCE );
-                        },
-                        m_largestClearance );
-            }
+                bool testCopper = !m_drcEngine->IsErrorLimitExceeded( DRCE_EDGE_CLEARANCE );
+                bool testSilk = !m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_CLEARANCE );
 
-            if( testSilk && ( item->IsOnLayer( F_SilkS ) || item->IsOnLayer( B_SilkS ) ) )
-            {
-                if( edgesTree.QueryColliding( item, UNDEFINED_LAYER, testLayer, nullptr,
-                        [&]( BOARD_ITEM* edge ) -> bool
+                if( !testCopper && !testSilk )
+                    return false;    // We're done
+
+                if( !reportProgress( ii++, count, delta ) )
+                    return false;    // DRC cancelled; we're done
+
+                if( isInvisibleText( item ) )
+                    return true;     // Continue with other items
+
+                const std::shared_ptr<SHAPE>& itemShape = item->GetEffectiveShape();
+
+                for( PCB_LAYER_ID testLayer : { Edge_Cuts, Margin } )
+                {
+                    if( testCopper && item->IsOnCopperLayer() )
+                    {
+                        edgesTree.QueryColliding( item, UNDEFINED_LAYER, testLayer, nullptr,
+                                [&]( BOARD_ITEM* edge ) -> bool
+                                {
+                                    return testAgainstEdge( item, itemShape.get(), edge,
+                                                            EDGE_CLEARANCE_CONSTRAINT,
+                                                            DRCE_EDGE_CLEARANCE );
+                                },
+                                m_largestClearance );
+                    }
+
+                    if( testSilk && ( item->IsOnLayer( F_SilkS ) || item->IsOnLayer( B_SilkS ) ) )
+                    {
+                        if( edgesTree.QueryColliding( item, UNDEFINED_LAYER, testLayer, nullptr,
+                                [&]( BOARD_ITEM* edge ) -> bool
+                                {
+                                    return testAgainstEdge( item, itemShape.get(), edge,
+                                                            SILK_CLEARANCE_CONSTRAINT,
+                                                            DRCE_SILK_CLEARANCE );
+                                },
+                                m_largestClearance ) )
                         {
-                            return testAgainstEdge( item, itemShape.get(), edge,
-                                                    SILK_CLEARANCE_CONSTRAINT,
-                                                    DRCE_SILK_CLEARANCE );
-                        },
-                        m_largestClearance ) )
-                {
-                    // violations reported during QueryColliding
+                            // violations reported during QueryColliding
+                        }
+                        else
+                        {
+                            // TODO: check postion being outside board boundary
+                        }
+                    }
                 }
-                else
-                {
-                    // TODO: check postion being outside board boundary
-                }
-            }
-        }
-    }
+
+                return true;
+            } );
 
     reportRuleStatistics();
 

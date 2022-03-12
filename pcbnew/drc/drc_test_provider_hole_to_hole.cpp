@@ -119,7 +119,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
         return false;   // DRC cancelled
 
     // This is the number of tests between 2 calls to the progress bar
-    const size_t delta = 50;
+    const size_t delta = 100;
     size_t       count = 0;
     size_t       ii = 0;
 
@@ -128,11 +128,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
     forEachGeometryItem( { PCB_PAD_T, PCB_VIA_T }, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
-                if( item->Type() == PCB_PAD_T )
-                    ++count;
-                else if( item->Type() == PCB_VIA_T )
-                    ++count;
-
+                ++count;
                 return true;
             } );
 

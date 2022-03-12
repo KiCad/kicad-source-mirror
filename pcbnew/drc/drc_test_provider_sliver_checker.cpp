@@ -102,11 +102,17 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
         }
     }
 
+    // The first completion may be a long time coming, so this one gets us started.
+    zoneLayerCount++;
+
+    if( !m_drcEngine->ReportProgress( 1.0 / (double) zoneLayerCount ) )
+        return false;   // DRC cancelled
+
     std::vector<SHAPE_POLY_SET> layerPolys;
     layerPolys.resize( layerCount );
 
     std::atomic<size_t> next( 0 );
-    std::atomic<size_t> done( 0 );
+    std::atomic<size_t> done( 1 );
     std::atomic<size_t> threads_finished( 0 );
     size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
 
@@ -131,7 +137,9 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
                                         {
                                             SHAPE_POLY_SET layerPoly = *zone->GetFill( layer );
                                             layerPoly.Unfracture( SHAPE_POLY_SET::PM_FAST );
-                                            poly.BooleanAdd( layerPoly, SHAPE_POLY_SET::PM_FAST );
+
+                                            for( int jj = 0; jj < layerPoly.OutlineCount(); ++jj )
+                                                poly.AddOutline( layerPoly.Outline( jj ) );
 
                                             // Report progress on board zones only.  Everything
                                             // else is in the noise.

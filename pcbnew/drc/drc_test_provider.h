@@ -112,6 +112,8 @@ protected:
     static std::vector<KICAD_T> s_allBasicItemsButZones;
 
     EDA_UNITS   userUnits() const;
+
+protected:
     DRC_ENGINE* m_drcEngine;
     std::unordered_map<const DRC_RULE*, int> m_stats;
     bool        m_isRuleDriven = true;
