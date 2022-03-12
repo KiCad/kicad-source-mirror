@@ -1,6 +1,5 @@
-(footprint "Espressif ESP32-WROOM-32" (version 20220211) (generator pcbnew)
+(footprint "Espressif ESP32-WROOM-32" (version 20220308) (generator pcbnew)
   (layer "F.Cu")
-  (tedit 0)
   (descr "39-SMD Module")
   (fp_text reference "REF**" (at 0 0) (layer "F.SilkS")
       (effects (font (size 1.27 1.27) (thickness 0.15)))
@@ -149,7 +148,7 @@
   (zone (net 0) (net_name "") (layers *.Cu) (tstamp da4ad6f3-5f0a-4c19-ae8d-5aa0f1ec37b7) (hatch edge 0.508)
     (connect_pads (clearance 0))
     (min_thickness 0.254) (filled_areas_thickness no)
-    (keepout (tracks allowed) (vias allowed) (pads allowed ) (copperpour not_allowed) (footprints allowed))
+    (keepout (tracks not_allowed) (vias not_allowed) (pads not_allowed ) (copperpour not_allowed) (footprints allowed))
     (fill (thermal_gap 0.508) (thermal_bridge_width 0.508) (island_removal_mode 2) (island_area_min 10))
     (polygon
       (pts
