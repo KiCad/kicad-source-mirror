@@ -811,7 +811,7 @@ install( DIRECTORY ${PROJECT_SOURCE_DIR}/pcbnew/python/plugins/
 # Here is built the _pcbnew.{so,pyd} which is the native part of the pcbnew Python library
 # when Python is used from the command line.
 
-if( MINGW OR VCPKG_TOOLCHAIN )
+if( WIN32 )
     install( FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.pyd DESTINATION ${PYTHON_DEST} )
     set( PYMOD_EXT "pyd" )
 elseif( APPLE )
