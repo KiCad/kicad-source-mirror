@@ -1,20 +1,20 @@
 # lê văn lập <levanlap2502@gmail.com>, 2020, 2021, 2022.
-# Trần Phi Hải <tranphihai-focus@outlook.com>, 2021.
+# Trần Phi Hải <tranphihai-focus@outlook.com>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 16:51-0800\n"
-"PO-Revision-Date: 2022-03-01 09:55+0000\n"
-"Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"PO-Revision-Date: 2022-03-12 04:35+0000\n"
+"Last-Translator: Trần Phi Hải <tranphihai-focus@outlook.com>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
+"master-source/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11.1-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -25,8 +25,9 @@ msgid "All Files"
 msgstr "Tất cả Tập tin"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:301
+#, fuzzy
 msgid "Build board outline"
-msgstr "Xây dựng đường biên dạng bo mạch"
+msgstr "Xây dựng đường bao ngoài bo mạch"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:506
 msgid "Create layers"
@@ -34,8 +35,9 @@ msgstr "Tạo các lớp"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:655
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:100
+#, fuzzy
 msgid "No footprint loaded."
-msgstr "Không có footprint nào được nạp vào."
+msgstr "Không có footprint nào được nhập vào."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:671
 msgid ""
@@ -55,40 +57,43 @@ msgid "Create tracks and vias"
 msgstr "Tạo các đường mạch và vias"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:689
+#, fuzzy
 msgid "Create zones"
-msgstr "Tạo các vùng biên dạng"
+msgstr "Tạo các vùng bao phủ đồng"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:758
+#, fuzzy
 msgid "Simplifying copper layers polygons"
-msgstr "Đơn giản hóa các đa giác lớp phủ đồng"
+msgstr "Làm giảm góc nhọn các vùng phủ ở các lớp"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:767
 #, fuzzy
 msgid "Simplifying polygons on F_Cu"
-msgstr "Đơn giản hóa các đa giác lớp phủ đồng"
+msgstr "Làm giảm góc nhọn của lớp phủ đồng"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:778
 #, fuzzy
 msgid "Simplifying polygons on B_Cu"
-msgstr "Đơn giản hóa các đa giác lớp phủ đồng"
+msgstr "Làm giảm góc nhọn lớp phủ đồng mặt dưới bo mạch"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:808
 #, fuzzy, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Đơn giản hóa các đa giác lớp phủ đồng"
+msgstr "Làm giảm góc nhọn %d  của vùng bao phủ ở các lớp"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:848
 msgid "Simplify holes contours"
 msgstr "Đơn giản hóa đường viền lỗ"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:877
+#, fuzzy
 msgid "Build Tech layers"
-msgstr "Xây dựng các lớp Công nghệ"
+msgstr "Xây dựng các lớp ghi chú kỹ thuật"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:917
 #, fuzzy, c-format
 msgid "Build Tech layer %d"
-msgstr "Xây dựng các lớp Công nghệ"
+msgstr "Xây dựng các lớp ghi chú kỹ thuật %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1082
 msgid "Build BVH for holes and vias"
@@ -130,7 +135,7 @@ msgstr "Tải OpenGL: các lớp"
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:576
 #, fuzzy, c-format
 msgid "Load OpenGL layer %d"
-msgstr "Tải OpenGL: các lớp"
+msgstr "Tải OpenGL: các lớp%d"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:672
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:784
@@ -175,21 +180,24 @@ msgid "Rendering time %.3f s"
 msgstr "Thời gian hiển thị %.3f s"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:394
-#, c-format
+#, c-format, fuzzy
 msgid "Rendering: %.0f %%"
-msgstr "Rendering: %.0f %%"
+msgstr "Đang quét ảnh: %.0f %%"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:842
+#, fuzzy
 msgid "Rendering: Post processing shader"
-msgstr "Rendering: Phương pháp xử lý đổ bóng"
+msgstr "Quét ảnh: Xuất tạo đổ bóng"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:50
+#, fuzzy
 msgid "Export Current View as PNG..."
-msgstr "Xuất Chế độ xem hiện tại dưới dạng PNG ..."
+msgstr "Xuất góc nhìn hiện tại ra ảnh PNG ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:55
+#, fuzzy
 msgid "Export Current View as JPEG..."
-msgstr "Xuất Chế độ xem hiện tại dưới dạng JPEG ..."
+msgstr "Xuất góc nhìn hiện tại ra ảnh JPEG ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61 common/eda_base_frame.cpp:1045
 #: common/hotkey_store.cpp:76 common/tool/actions.cpp:572
@@ -202,8 +210,9 @@ msgid "Copy 3D Image"
 msgstr "Sao chép hình ảnh 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:107
+#, fuzzy
 msgid "Raytracing"
-msgstr "Kỹ thuật Raytracing"
+msgstr "Quét tạo tia sáng, ánh sáng"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:112 common/tool/actions.cpp:608
 #: cvpcb/menubar.cpp:74 eeschema/menubar.cpp:291
@@ -211,8 +220,9 @@ msgstr "Kỹ thuật Raytracing"
 #: gerbview/menubar.cpp:213 kicad/menubar.cpp:178
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:241
 #: pcbnew/menubar_pcb_editor.cpp:458
+#, fuzzy
 msgid "Preferences..."
-msgstr "Tùy chỉnh..."
+msgstr "Cấu hình..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:113 common/tool/actions.cpp:608
 #: cvpcb/menubar.cpp:75 eeschema/menubar.cpp:292
@@ -220,8 +230,9 @@ msgstr "Tùy chỉnh..."
 #: gerbview/menubar.cpp:214 kicad/menubar.cpp:179
 #: pagelayout_editor/menubar.cpp:157 pcbnew/menubar_footprint_editor.cpp:242
 #: pcbnew/menubar_pcb_editor.cpp:459
+#, fuzzy
 msgid "Show preferences for all open tools"
-msgstr "Hiển thị tùy chỉnh cho tất cả các công cụ đang mở"
+msgstr "Hiển thị cấu hình cho tất cả các công cụ đang mở"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:117
 msgid "Reset to Default Settings"
@@ -246,8 +257,9 @@ msgstr "&Tập tin"
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:180
 #: pagelayout_editor/menubar.cpp:167 pcbnew/menubar_footprint_editor.cpp:252
 #: pcbnew/menubar_pcb_editor.cpp:470
+#, fuzzy
 msgid "&Edit"
-msgstr "&Biên tập"
+msgstr "&Sửa đổi"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:147 eeschema/menubar.cpp:304
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:181
@@ -260,8 +272,9 @@ msgstr "&Hiển thị"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:148 cvpcb/menubar.cpp:89
 #: gerbview/menubar.cpp:227 kicad/menubar.cpp:192
+#, fuzzy
 msgid "&Preferences"
-msgstr "&Tùy chỉnh"
+msgstr "&Cấu hình"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
 msgid "Reload board"
@@ -279,7 +292,7 @@ msgstr "Hiển thị chế độ xem hiện tại bằng Raytracing"
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:73
 #, fuzzy
 msgid "KiCad 3D Viewer"
-msgstr "Trình xem 3D"
+msgstr "Trình xem 3D KiCad"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:512
 msgid "3D Image File Name"
@@ -291,7 +304,7 @@ msgstr "Tên File hình ảnh 3D"
 #, fuzzy, c-format
 msgid "Insufficient permissions to save file '%s'."
 msgstr ""
-"Không đủ quyền cần thiết để lưu File\n"
+"Không đủ quyền truy cập để lưu File\n"
 "%s"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:534 common/confirm.cpp:130
@@ -346,12 +359,14 @@ msgid "Rotate Z Counterclockwise"
 msgstr "Xoay Z theo chiều ngược kim đồng hồ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
+#, fuzzy
 msgid "Move board Left"
-msgstr "Di chuyển bo mạch Sang Trái"
+msgstr "Di chuyển bo mạch sang trái"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:85
+#, fuzzy
 msgid "Move board Right"
-msgstr "Di chuyển bo mạch Sang phải"
+msgstr "Di chuyển bo mạch sang phải"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:91
 msgid "Move board Up"
@@ -362,53 +377,63 @@ msgid "Move board Down"
 msgstr "Di chuyển bo mạch xuống dưới"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:103
+#, fuzzy
 msgid "Home view"
-msgstr "Xem trang chủ"
+msgstr "Góc nhìn chủ đạo"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:109
+#, fuzzy
 msgid "Reset view"
-msgstr "Đặt lại khung nhìn"
+msgstr "Thiết lập góc nhìn mặc định"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:115
 msgid "Flip Board"
 msgstr "Lật bo mạch"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:115
+#, fuzzy
 msgid "Flip the board view"
-msgstr "Lật tầm nhìn bo mạch"
+msgstr "Đảo góc nhìn bo mạch"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
+#, fuzzy
 msgid "Toggle orthographic projection"
-msgstr "Chuyển đổi phép chiếu hình"
+msgstr "Chuyển đổi không gian hình chiếu"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:192
+#, fuzzy
 msgid "Enable/disable orthographic projection"
-msgstr "Bật/tắt phép chiếu hình"
+msgstr "Bật/tắt hình chiếu dạng vuông góc"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:126
 msgid "View Front"
-msgstr "Xem mặt trước"
+msgstr "Góc nhìn mặt trước"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:132
+#, fuzzy
 msgid "View Back"
-msgstr "Xem mặt sau"
+msgstr "Góc nhìn mặt sau"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:138
+#, fuzzy
 msgid "View Left"
-msgstr "Xem mặt Trái"
+msgstr "Góc nhìn  bên trái"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:144
+#, fuzzy
 msgid "View Right"
-msgstr "Xem mặt Phải"
+msgstr "Góc nhìn  bên phải"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
+#, fuzzy
 msgid "View Top"
-msgstr "Xem mặt trên cùng"
+msgstr "Góc nhìn phía trên"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:156
+#, fuzzy
 msgid "View Bottom"
-msgstr "Xem mặt Dưới cùng"
+msgstr "Góc nhìn bên dưới"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:161
 msgid "No 3D Grid"
@@ -435,57 +460,63 @@ msgid "Render Realistic Materials"
 msgstr "Hiển thị vật liệu thực tế"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:188
+#, fuzzy
 msgid "Use all material properties from each 3D model file"
-msgstr "Sử dụng tất cả các thuộc tính vật liệu từ mỗi file mô hình 3D"
+msgstr "Sử dụng tất cả  thuộc tính vật liệu từ mỗi tập tin 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
 #, fuzzy
 msgid "Render Solid Colors"
-msgstr "Render Bóng đổ"
+msgstr "Quét màu thành khối đặc"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from model 3D model file"
-msgstr "Chỉ sử dụng thuộc tính màu khuếch tán từ mô hình trong file mô hình 3D"
+msgstr "Chỉ mở mức độ phân tán màu từ tập tin 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 #, fuzzy
 msgid "Render CAD Colors"
-msgstr "Màu đã định nghĩa"
+msgstr "Quét màu cho bản vẽ CAD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
+#, fuzzy
 msgid "Use a CAD color style based on the diffuse color of the material"
-msgstr "Sử dụng kiểu màu CAD dựa trên màu khuếch tán của vật liệu"
+msgstr "Sử dụng bản màu vẽ CAD dựa trên độ phân tán của vật liệu"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:208
+#, fuzzy
 msgid "Toggle Through Hole 3D models"
-msgstr "Bật tắt các mô hình lỗ 3D linh kiện xuyên lỗ"
+msgstr "Chuyển đổi 3D linh kiện xuyên lỗ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:209
 #, fuzzy
 msgid "Toggle 3D models for 'Through hole' type components"
-msgstr "Bật tắt các mô hình 3D với thuộc tính 'Through hole'"
+msgstr "Chuyển đôii 3D cho loại 'linh kiện xuyên lỗ'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:215
+#, fuzzy
 msgid "Toggle SMD 3D models"
-msgstr "Bật tắt mô hình 3D linh kiện SMD"
+msgstr "Chuyển đổi 3D cho 'linh kiện SMD'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:216
 #, fuzzy
 msgid "Toggle 3D models for 'Surface mount' type components"
-msgstr "Bật tắt các mô hình 3D với thuộc tính 'Surface mount'"
+msgstr "Chuyển đổi 3D cho 'Linh kiện dán'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
 #, fuzzy
 msgid "Toggle Other 3D models"
-msgstr "Bật tắt mô hình 3D linh kiện SMD"
+msgstr "Chuyển đổi hiển thị 3D cho phần phụ trợ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
+#, fuzzy
 msgid "Toggle 3D models for 'Other' type components"
-msgstr "Chuyển đổi mô hình 3D cho các thành phần loại 'Khác'"
+msgstr "Chuyển đổi hiển thị 3D cho 'Linh kiện đặc biệt'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:227
+#, fuzzy
 msgid "Show Model Bounding Boxes"
-msgstr "Hiện thị Hộp Giới hạn Mô hình"
+msgstr "Hiện thị hộp bao khung"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:232
 msgid "Toggle realistic mode"
@@ -500,61 +531,72 @@ msgid "Show 3D Axis"
 msgstr "Hiện Trục 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:245
+#, fuzzy
 msgid "Toggle zone display"
-msgstr "Chuyển đổi hiển thị vùng"
+msgstr "Mở hay tắt vùng bao phủ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:249
 msgid "Toggle adhesive display"
-msgstr "Bật tắt hiển thị lớp adhesive"
+msgstr "Bật tắt lớp adhesive"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:249
+#, fuzzy
 msgid "Toggle display of adhesive layers"
-msgstr "Bật tắt hiển thị các lớp adhesive"
+msgstr "Bật tắt các lớp adhesive"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:253
 msgid "Toggle silkscreen display"
-msgstr "Bật tắt hiển thị lớp silkscreen"
+msgstr "Bật tắt hiển thị lớp in chữ silkscreen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:253
+#, fuzzy
 msgid "Toggle display of silkscreen layers"
-msgstr "Bật tắt hiển thị lớp silkscreen"
+msgstr "Bật tắt hiển thị lớp in chữ silkscreen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:257
+#, fuzzy
 msgid "Toggle solder mask display"
-msgstr "Bật tắt hiển thị lớp solder mask"
+msgstr "Bật tắt lớp che phủ bề mặt solder mask"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:257
+#, fuzzy
 msgid "Toggle display of solder mask layers"
-msgstr "Bật tắt hiển thị các lớp solder mask"
+msgstr "Bật tắt hiển thị các lớp che phủ bề mặt solder mask"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:261
+#, fuzzy
 msgid "Toggle solder paste display"
-msgstr "Bật tắt hiển thị các lớp solder paste"
+msgstr "Bật tắt hiển thị lớp chì kem solder paste"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:261
+#, fuzzy
 msgid "Toggle display of solder paste layers"
-msgstr "Bật tắt hiển thị các lớp solder paste"
+msgstr "Bật tắt hiển thị các lớp chì kem solder paste"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:265
+#, fuzzy
 msgid "Toggle comments display"
-msgstr "Chuyển đổi hiển thị nhận xét"
+msgstr "Tắt mở dòng ghi chú"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:265
+#, fuzzy
 msgid "Toggle display of comments and drawings layers"
-msgstr "Bật tắt hiển thị các lớp comments và drawings"
+msgstr "Bật tắt hiển thị các lớp ghi chú và bản vẽ kiểu mẫu bo mạch"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:269
+#, fuzzy
 msgid "Toggle ECO display"
-msgstr "Bật tắt hình lớp ECO"
+msgstr "Bật tắt lớp chú giải ECO về đặc tính bo mạch"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:269
+#, fuzzy
 msgid "Toggle display of ECO layers"
-msgstr "Bật tắt hiển thị lớp ECO"
+msgstr "Bật tắt lớp chú giải ECO"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
-#, c-format
+#, c-format, fuzzy
 msgid "All supported files (%s)"
-msgstr "Tất cả các tệp được hỗ trợ (%s)"
+msgstr "Tất cả các dạng tệp tin được hỗ trợ (%s)"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:58
 msgid "Available paths:"
