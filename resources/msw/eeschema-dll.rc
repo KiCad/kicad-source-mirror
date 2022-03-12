@@ -1,4 +1,4 @@
 #define RC_VER_FILE_DESCRIPTION "KiCad Schematic Editor " KICAD_WIN32_RC_PRODVER_STR
 #define RC_VER_INTERNALNAME "_eeschema"
-#define RC_VER_ORIGINALFILENAME "_eeschema.kiface"
+#define RC_VER_ORIGINALFILENAME "_eeschema.dll"
 #include "kiwin32-dll.rc"

@@ -1,4 +1,4 @@
 #define RC_VER_FILE_DESCRIPTION "KiCad PCB Calculator " KICAD_WIN32_RC_PRODVER_STR
 #define RC_VER_INTERNALNAME "_pcb_calculator"
-#define RC_VER_ORIGINALFILENAME "_pcb_calculator.kiface"
+#define RC_VER_ORIGINALFILENAME "_pcb_calculator.dll"
 #include "kiwin32-dll.rc"

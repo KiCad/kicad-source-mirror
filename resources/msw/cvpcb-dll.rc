@@ -1,5 +1,5 @@
 #define RC_VER_FILE_DESCRIPTION "KiCad Dynamic Link Library " KICAD_WIN32_RC_PRODVER_STR
 #define RC_VER_INTERNALNAME "_cvpcb"
-#define RC_VER_ORIGINALFILENAME "_cvpcb.kiface"
+#define RC_VER_ORIGINALFILENAME "_cvpcb.dll"
 
 #include "kiwin32-dll.rc"
