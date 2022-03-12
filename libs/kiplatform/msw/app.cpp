@@ -54,6 +54,13 @@ bool KIPLATFORM::APP::Init()
     WerSetFlags( WER_FAULT_REPORTING_ALWAYS_SHOW_UI );
 #endif
 
+    // remove CWD from the dll search paths
+    // just the smallest of security tweaks as we do load DLLs on demand
+    SetDllDirectory( wxT( "" ) );
+
+    // Moves the CWD to the end of the search list for spawning processes
+    SetSearchPathMode( BASE_SEARCH_PATH_ENABLE_SAFE_SEARCHMODE | BASE_SEARCH_PATH_PERMANENT );
+
     return true;
 }
 
