@@ -61,7 +61,7 @@ public:
 
     void Save( const std::string& aFilename );
     void Clear();
-    void Log( EVENT_TYPE evt, const VECTOR2I& pos, const ITEM* item = nullptr );
+    void Log( EVENT_TYPE evt, const VECTOR2I& pos = VECTOR2I(), const ITEM* item = nullptr );
 
     const std::vector<EVENT_ENTRY>& GetEvents()
     {
