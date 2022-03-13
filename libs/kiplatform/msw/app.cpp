@@ -139,5 +139,5 @@ void KIPLATFORM::APP::ForceTimerMessagesToBeCreatedIfNecessary()
 
 void KIPLATFORM::APP::AddDynamicLibrarySearchPath( const wxString& aPath )
 {
-    SetDllDirectoryA( aPath.c_str() );
+    SetDllDirectory( aPath.c_str() );
 }
