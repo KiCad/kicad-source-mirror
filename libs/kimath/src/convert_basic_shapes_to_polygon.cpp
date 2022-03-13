@@ -536,6 +536,17 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aStart
                             const wxPoint& aMid, const wxPoint& aEnd, int aWidth,
                             int aError, ERROR_LOC aErrorLoc )
 {
+    SEG startToEnd( aStart, aEnd );
+    int distanceToMid = startToEnd.Distance( aMid );
+
+    if( distanceToMid <= 1 )
+    {
+        // Not an arc but essentially a straight line with a small error
+        TransformOvalToPolygon( aCornerBuffer, aStart, aEnd, aWidth + distanceToMid, aError,
+                                aErrorLoc );
+        return;
+    }
+
     SHAPE_ARC        arc( aStart, aMid, aEnd, aWidth );
     // Currentlye have currently 2 algos:
     // the first approximates the thick arc from its outlines
