@@ -28,7 +28,10 @@
 #include <strsafe.h>
 #include <config.h>
 #include <VersionHelpers.h>
+
+#if defined( _MSC_VER )
 #include <werapi.h>
+#endif
 
 
 bool KIPLATFORM::APP::Init()
@@ -46,8 +49,10 @@ bool KIPLATFORM::APP::Init()
     SetErrorMode( SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX );
 #endif
 
+#if defined( _MSC_VER )
     // ensure the WER crash report dialog always appears
     WerSetFlags( WER_FAULT_REPORTING_ALWAYS_SHOW_UI );
+#endif
 
     // remove CWD from the dll search paths
     // just the smallest of security tweaks as we do load DLLs on demand
