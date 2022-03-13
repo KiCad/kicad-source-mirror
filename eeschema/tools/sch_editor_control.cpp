@@ -1476,8 +1476,13 @@ void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_SYMBOL* aSymbol, SCH_SCREEN* aP
     }
     else
     {
-        // Pasted from notepad or an older instance of eeschema.
-        // Use the values in the fields instead
+        // Some legacy versions saved value fields escaped.  While we still do in the symbol
+        // editor, we don't anymore in the schematic, so be sure to unescape them.
+        SCH_FIELD* valueField = aSymbol->GetField( VALUE_FIELD );
+        valueField->SetText( UnescapeString( valueField->GetText() ) );
+
+        // Pasted from notepad or an older instance of eeschema.  Use the values in the fields
+        // instead.
         reference = aSymbol->GetField( REFERENCE_FIELD )->GetText();
         value = aSymbol->GetField( VALUE_FIELD )->GetText();
         footprint = aSymbol->GetField( FOOTPRINT_FIELD )->GetText();
