@@ -81,7 +81,8 @@ private:
      * @param aSeg1 is the reference
      * @param aSeg2 is the candidate, and after merging, the removed segment
      */
-    bool mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2 );
+    bool mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2,
+                                 const std::vector<BOARD_CONNECTED_ITEM*>& aSeg1Items );
 
     /**
      * @return true if a track end position is a node, i.e. a end connected
