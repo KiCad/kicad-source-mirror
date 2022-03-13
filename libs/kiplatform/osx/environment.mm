@@ -100,3 +100,9 @@ bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& 
 {
     return false;
 }
+
+
+bool KIPLATFORM::ENV::VerifyFileSignature( const wxString& aPath )
+{
+    return true;
+}

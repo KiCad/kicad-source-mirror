@@ -159,6 +159,11 @@ option( KICAD_USE_3DCONNEXION
     "Build KiCad with support for 3Dconnexion devices (Currently only for Mac/MSW)"
     OFF )
 
+cmake_dependent_option( KICAD_WIN32_VERIFY_CODESIGN
+    "When enabled, verifies the code signing signature of certain DLLs loaded during runtime."
+    OFF "WIN32"
+    OFF )
+
 if( KICAD_USE_3DCONNEXION )
     if( WIN32 )
         add_definitions( -DKICAD_USE_3DCONNEXION )
@@ -188,6 +193,10 @@ endif()
 
 if( KICAD_GAL_PROFILE )
     add_definitions( -DKICAD_GAL_PROFILE )
+endif()
+
+if( KICAD_WIN32_VERIFY_CODESIGN )
+    add_definitions( -DKICAD_WIN32_VERIFY_CODESIGN )
 endif()
 
 # Ensure DEBUG is defined for all platforms in Debug builds

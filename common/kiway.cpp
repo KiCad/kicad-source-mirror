@@ -34,6 +34,7 @@
 #include <core/arraydim.h>
 #include <id.h>
 #include <kiplatform/app.h>
+#include <kiplatform/environment.h>
 #include <settings/settings_manager.h>
 #include <tool/action_manager.h>
 #include <logging.h>
@@ -230,6 +231,15 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
                 KIPLATFORM::APP::AddDynamicLibrarySearchPath( myPath.GetPath() );
             }
         }
+
+#ifdef KICAD_WIN32_VERIFY_CODESIGN
+        bool codeSignOk = KIPLATFORM::ENV::VerifyFileSignature( dname );
+        if( !codeSignOk )
+        {
+            msg.Printf( _( "Failed to verify kiface library '%s' signature." ), dname );
+            THROW_IO_ERROR( msg );
+        }
+#endif
 
         wxDynamicLibrary dso;
 
