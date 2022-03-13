@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2021 KiCad Developers.
+ * Copyright (C) 2004-2022 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,12 +70,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "clearance";
+        return wxT( "clearance" );
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests copper item clearance";
+        return wxT( "Tests copper item clearance" );
     }
 
     virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
@@ -149,7 +149,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
         }
     }
 
-    reportAux( "Worst clearance : %d nm", m_largestClearance );
+    reportAux( wxT( "Worst clearance : %d nm" ), m_largestClearance );
 
     // This is the number of tests between 2 calls to the progress bar
     size_t delta = 50;
@@ -203,7 +203,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
     forEachGeometryItem( itemTypes, LSET::AllCuMask(), countItems );
     forEachGeometryItem( itemTypes, LSET::AllCuMask(), addToCopperTree );
 
-    reportAux( "Testing %d copper items and %d zones...", count, m_zones.size() );
+    reportAux( wxT( "Testing %d copper items and %d zones..." ), count, m_zones.size() );
 
     if( !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
     {
@@ -511,7 +511,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
     const int delta = 100;
     int       ii = 0;
 
-    reportAux( "Testing %d tracks & vias...", m_board->Tracks().size() );
+    reportAux( wxT( "Testing %d tracks & vias..." ), m_board->Tracks().size() );
 
     std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, int> checkedPairs;
 
@@ -776,7 +776,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
     for( FOOTPRINT* footprint : m_board->Footprints() )
         count += footprint->Pads().size();
 
-    reportAux( "Testing %d pads...", count );
+    reportAux( wxT( "Testing %d pads..." ), count );
 
     int ii = 0;
     std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, int> checkedPairs;

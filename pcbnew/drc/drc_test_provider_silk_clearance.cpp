@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers.
+ * Copyright (C) 2004-2022 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,12 +60,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "silk_clearance";
+        return wxT( "silk_clearance" );
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests for overlapping silkscreen features.";
+        return wxT( "Tests for overlapping silkscreen features." );
     }
 
     virtual int GetNumPhases() const override
@@ -89,7 +89,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK ) )
     {
-        reportAux( "Overlapping silk violations ignored.  Tests not run." );
+        reportAux( wxT( "Overlapping silk violations ignored.  Tests not run." ) );
         return true;    // continue with other tests
     }
 
@@ -101,7 +101,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
     if( m_drcEngine->QueryWorstConstraint( SILK_CLEARANCE_CONSTRAINT, worstClearanceConstraint ) )
         m_largestClearance = worstClearanceConstraint.m_Value.Min();
 
-    reportAux( "Worst clearance : %d nm", m_largestClearance );
+    reportAux( wxT( "Worst clearance : %d nm" ), m_largestClearance );
 
     if( !reportPhase( _( "Checking silkscreen for overlapping items..." ) ) )
         return false;   // DRC cancelled
@@ -157,7 +157,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                          LSET::FrontMask() | LSET::BackMask() | LSET( 2, Edge_Cuts, Margin ),
                          addToTargetTree );
 
-    reportAux( _("Testing %d silkscreen features against %d board items."),
+    reportAux( wxT( "Testing %d silkscreen features against %d board items." ),
                silkTree.size(),
                targetTree.size() );
 
