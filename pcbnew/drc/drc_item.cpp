@@ -309,7 +309,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_FOOTPRINT_TYPE_MISMATCH:  return std::make_shared<DRC_ITEM>( footprintTypeMismatch );
     case DRCE_PAD_TH_WITH_NO_HOLE:     return std::make_shared<DRC_ITEM>( footprintTHPadhasNoHole );
     default:
-        wxFAIL_MSG( "Unknown DRC error code" );
+        wxFAIL_MSG( wxT( "Unknown DRC error code" ) );
         return nullptr;
     }
 }
@@ -333,6 +333,6 @@ wxString DRC_ITEM::GetViolatingRuleDesc() const
     if( m_violatingRule )
         return wxString::Format( _( "Rule: %s" ), m_violatingRule->m_Name );
     else
-        return _("Local override" );
+        return _( "Local override" );
 }
 

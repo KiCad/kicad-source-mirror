@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers.
+ * Copyright (C) 2004-2022 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,12 +60,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "LVS";
+        return wxT( "LVS" );
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Performs layout-vs-schematics integity check";
+        return wxT( "Performs layout-vs-schematics integity check" );
     }
 
     virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
@@ -222,7 +222,7 @@ bool DRC_TEST_PROVIDER_LVS::Run()
 
         if( !netlist )
         {
-            reportAux( _("No netlist provided, skipping LVS.") );
+            reportAux( wxT( "No netlist provided, skipping LVS." ) );
             return true;
         }
 

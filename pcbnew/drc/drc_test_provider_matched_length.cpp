@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers.
+ * Copyright (C) 2004-2022 KiCad Developers.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -59,12 +59,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "length";
+        return wxT( "length" );
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests matched track lengths.";
+        return wxT( "Tests matched track lengths." );
     }
 
     virtual int GetNumPhases() const override
@@ -345,15 +345,15 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                            return a.netname < b.netname;
                        } );
 
-            reportAux( wxString::Format( "Length-constrained traces for rule '%s':",
+            reportAux( wxString::Format( wxT( "Length-constrained traces for rule '%s':" ),
                                          it.first->m_Name ) );
 
             for( auto& ent : matchedConnections )
             {
-                reportAux(wxString::Format( " - net: %s, from: %s, to: %s, "
-                                            "%d matching items, "
-                                            "total: %s (tracks: %s, vias: %s, pad-to-die: %s), "
-                                            "vias: %d",
+                reportAux(wxString::Format( wxT( " - net: %s, from: %s, to: %s, "
+                                                 "%d matching items, "
+                                                 "total: %s (tracks: %s, vias: %s, pad-to-die: %s), "
+                                                 "vias: %d" ),
                                             ent.netname,
                                             ent.from,
                                             ent.to,

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers.
+ * Copyright (C) 2004-2022 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,12 +60,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "miscellaneous";
+        return wxT( "miscellaneous" );
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Misc checks (board outline, missing textvars)";
+        return wxT( "Misc checks (board outline, missing textvars)" );
     }
 
     virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
@@ -126,6 +126,19 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
 
 void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
 {
+    // This is the number of tests between 2 calls to the progress bar
+    const int delta = 2000;
+
+    int       ii = 0;
+    int       items = 0;
+
+    auto countItems =
+            [&]( BOARD_ITEM* item ) -> bool
+            {
+                ++items;
+                return true;
+            };
+
     LSET disabledLayers = m_board->GetEnabledLayers().flip();
 
     // Perform the test only for copper layers
@@ -134,6 +147,12 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
     auto checkDisabledLayers =
             [&]( BOARD_ITEM* item ) -> bool
             {
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_DISABLED_LAYER_ITEM ) )
+                    return false;
+
+                if( !reportProgress( ii++, items, delta ) )
+                    return false;
+
                 PCB_LAYER_ID badLayer = UNDEFINED_LAYER;
 
                 if( item->Type() == PCB_PAD_T )
@@ -192,32 +211,52 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
                 return true;
             };
 
+    forEachGeometryItem( s_allBasicItems, LSET::AllLayersMask(), countItems );
     forEachGeometryItem( s_allBasicItems, LSET::AllLayersMask(), checkDisabledLayers );
 }
 
 
 void DRC_TEST_PROVIDER_MISC::testTextVars()
 {
-    auto checkUnresolvedTextVar =
-            [&]( EDA_ITEM* item ) -> bool
+    // This is the number of tests between 2 calls to the progress bar
+    const int delta = 2000;
+
+    int       ii = 0;
+    int       items = 0;
+
+    static const std::vector<KICAD_T> itemTypes = {
+        PCB_TEXT_T, PCB_FP_TEXT_T,
+        PCB_DIMENSION_T
+    };
+
+    forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
+            [&]( BOARD_ITEM* item ) -> bool
+            {
+                ++items;
+                return true;
+            } );
+
+    forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
+            [&]( BOARD_ITEM* item ) -> bool
             {
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
                     return false;
 
-                EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( item );
+                if( !reportProgress( ii++, items, delta ) )
+                    return false;
+
+                BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
+                EDA_TEXT*   text = dynamic_cast<EDA_TEXT*>( boardItem );
 
                 if( text && text->GetShownText().Matches( wxT( "*${*}*" ) ) )
                 {
                     std::shared_ptr<DRC_ITEM>drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
                     drcItem->SetItems( item );
 
-                    reportViolation( drcItem, item->GetPosition() );
+                    reportViolation( drcItem, boardItem->GetPosition() );
                 }
                 return true;
-            };
-
-    forEachGeometryItem( { PCB_FP_TEXT_T, PCB_TEXT_T }, LSET::AllLayersMask(),
-                         checkUnresolvedTextVar );
+            } );
 
     DS_PROXY_VIEW_ITEM* drawingSheet = m_drcEngine->GetDrawingSheet();
     DS_DRAW_ITEM_LIST   drawItems;
@@ -226,11 +265,11 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
         return;
 
     drawItems.SetMilsToIUfactor( IU_PER_MILS );
-    drawItems.SetPageNumber( "1" );
+    drawItems.SetPageNumber( wxT( "1" ) );
     drawItems.SetSheetCount( 1 );
-    drawItems.SetFileName( "dummyFilename" );
-    drawItems.SetSheetName( "dummySheet" );
-    drawItems.SetSheetLayer( "dummyLayer" );
+    drawItems.SetFileName( wxT( "dummyFilename" ) );
+    drawItems.SetSheetName( wxT( "dummySheet" ) );
+    drawItems.SetSheetLayer( wxT( "dummyLayer" ) );
     drawItems.SetProject( m_board->GetProject() );
     drawItems.BuildDrawItemsList( drawingSheet->GetPageInfo(), drawingSheet->GetTitleBlock() );
 

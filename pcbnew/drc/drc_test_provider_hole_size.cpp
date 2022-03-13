@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers.
+ * Copyright (C) 2004-2022 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,12 +52,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return "hole_size";
+        return wxT( "hole_size" );
     };
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests sizes of drilled holes (via/pad drills)";
+        return wxT( "Tests sizes of drilled holes (via/pad drills)" );
     }
 
     virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
@@ -106,23 +106,18 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
                 return false;   // DRC cancelled
         }
 
-        std::vector<PCB_VIA*> vias;
-
         for( PCB_TRACK* track : m_drcEngine->GetBoard()->Tracks() )
         {
             if( track->Type() == PCB_VIA_T )
-                vias.push_back( static_cast<PCB_VIA*>( track ) );
-        }
+            {
+                bool exceedMicro = m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_DRILL_OUT_OF_RANGE );
+                bool exceedStd = m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE );
 
-        for( PCB_VIA* via : vias )
-        {
-            bool exceedMicro = m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_DRILL_OUT_OF_RANGE );
-            bool exceedStd = m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE );
+                if( exceedMicro && exceedStd )
+                    break;
 
-            if( exceedMicro && exceedStd )
-                break;
-
-            checkVia( via, exceedMicro, exceedStd );
+                checkVia( static_cast<PCB_VIA*>( track ), exceedMicro, exceedStd );
+            }
         }
     }
 
