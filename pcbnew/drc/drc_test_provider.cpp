@@ -68,7 +68,7 @@ void DRC_TEST_PROVIDER::Init()
 
 
 const wxString DRC_TEST_PROVIDER::GetName() const { return wxT( "<no name test>" ); }
-const wxString DRC_TEST_PROVIDER::GetDescription() const { return ""; }
+const wxString DRC_TEST_PROVIDER::GetDescription() const { return wxEmptyString; }
 
 
 void DRC_TEST_PROVIDER::reportViolation( std::shared_ptr<DRC_ITEM>& item,
