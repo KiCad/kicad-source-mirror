@@ -270,6 +270,7 @@ void TRACKS_CLEANER::deleteTracksInPads()
 void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegments,
                               bool aDeleteDuplicateSegments, bool aMergeSegments )
 {
+    KICAD_T   types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, PCB_ZONE_T };
     DRC_RTREE rtree;
 
     for( PCB_TRACK* track : m_brd->Tracks() )
@@ -410,12 +411,17 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
             // merge collinear segments:
             for( PCB_TRACK* segment : temp_segments )
             {
-                if( segment->Type() != PCB_TRACE_T )    // one can merge only track collinear segments, not vias.
+                // one can merge only collinear segments, not vias or arcs.
+                if( segment->Type() != PCB_TRACE_T )
                     continue;
 
-                if( segment->HasFlag( IS_DELETED ) )  // already taken in account
+                if( segment->HasFlag( IS_DELETED ) )  // already taken into account
                     continue;
 
+                std::vector<BOARD_CONNECTED_ITEM*> connectedItems =
+                                m_brd->GetConnectivity()->GetConnectedItems( segment, types );
+
+                // for each end of the segment:
                 for( CN_ITEM* citem : connectivity->ItemEntry( segment ).GetItems() )
                 {
                     // Do not merge an end which has different width tracks attached -- it's a
@@ -428,25 +434,34 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
                         if( !connected->Valid() )
                             continue;
 
-                        BOARD_CONNECTED_ITEM* candidateItem = connected->Parent();
+                        BOARD_CONNECTED_ITEM* candidate = connected->Parent();
 
-                        if( candidateItem->Type() == PCB_TRACE_T && !candidateItem->HasFlag( IS_DELETED ) )
+                        if( candidate->Type() == PCB_TRACE_T && !candidate->HasFlag( IS_DELETED ) )
                         {
-                            PCB_TRACK* candidateSegment = static_cast<PCB_TRACK*>( candidateItem );
+                            PCB_TRACK* candidateSegment = static_cast<PCB_TRACK*>( candidate );
 
                             if( candidateSegment->GetWidth() == segment->GetWidth() )
+                            {
                                 sameWidthCandidates.push_back( candidateSegment );
+                            }
                             else
+                            {
                                 differentWidthCandidates.push_back( candidateSegment );
+                                break;
+                            }
                         }
                     }
 
-                    if( differentWidthCandidates.size() == 0 )
+                    if( !differentWidthCandidates.empty() )
+                        continue;
+
+                    for( PCB_TRACK* candidate : sameWidthCandidates )
                     {
-                        for( PCB_TRACK* candidate : sameWidthCandidates )
+                        if( segment->ApproxCollinear( *candidate )
+                                && mergeCollinearSegments( segment, candidate, connectedItems ) )
                         {
-                            if( segment->ApproxCollinear( *candidate ) )
-                                merged |= mergeCollinearSegments( segment, candidate );
+                            merged = true;
+                            break;
                         }
                     }
                 }
@@ -459,27 +474,29 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
 }
 
 
-bool TRACKS_CLEANER::mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2 )
+bool TRACKS_CLEANER::mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2,
+                                             const std::vector<BOARD_CONNECTED_ITEM*>& aSeg1Items )
 {
-    KICAD_T items[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, PCB_ZONE_T };
+    static KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, PCB_ZONE_T };
 
     if( aSeg1->IsLocked() || aSeg2->IsLocked() )
         return false;
 
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_brd->GetConnectivity();
 
-    std::vector<BOARD_CONNECTED_ITEM*> tracks = connectivity->GetConnectedItems( aSeg1, items );
-    std::vector<BOARD_CONNECTED_ITEM*> tracks2 = connectivity->GetConnectedItems( aSeg2, items );
+    std::vector<BOARD_CONNECTED_ITEM*> tracks = aSeg1Items;
+    std::vector<BOARD_CONNECTED_ITEM*> tracks2 = connectivity->GetConnectedItems( aSeg2, types );
 
     std::move( tracks2.begin(), tracks2.end(), std::back_inserter( tracks ) );
     std::sort( tracks.begin(), tracks.end() );
     tracks.erase( std::unique( tracks.begin(), tracks.end() ), tracks.end() );
 
-    tracks.erase(
-            std::remove_if( tracks.begin(), tracks.end(), [ aSeg1, aSeg2 ]( BOARD_CONNECTED_ITEM* aTest )
-            {
-                return ( aTest == aSeg1 ) || ( aTest == aSeg2 );
-            } ), tracks.end() );
+    tracks.erase( std::remove_if( tracks.begin(), tracks.end(),
+                                  [ aSeg1, aSeg2 ]( BOARD_CONNECTED_ITEM* aTest )
+                                  {
+                                      return ( aTest == aSeg1 ) || ( aTest == aSeg2 );
+                                  } ),
+                  tracks.end() );
 
     std::set<VECTOR2I> pts;
 
