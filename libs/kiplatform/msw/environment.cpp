@@ -31,6 +31,10 @@
 #include <shlwapi.h>
 #include <winhttp.h>
 
+#include <Softpub.h>
+#include <wincrypt.h>
+#include <wintrust.h>
+
 
 void KIPLATFORM::ENV::Init()
 {
@@ -257,4 +261,39 @@ bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& 
     }
 
     return success;
+}
+
+
+bool KIPLATFORM::ENV::VerifyFileSignature( const wxString& aPath )
+{
+    WINTRUST_FILE_INFO fileData;
+    memset( &fileData, 0, sizeof( fileData ) );
+    fileData.cbStruct = sizeof( WINTRUST_FILE_INFO );
+    fileData.pcwszFilePath = aPath.wc_str();
+
+    // verifies entire certificate chain
+    GUID policy = WINTRUST_ACTION_GENERIC_VERIFY_V2;
+
+    WINTRUST_DATA trustData;
+    memset( &trustData, 0, sizeof( trustData ) );
+
+    trustData.cbStruct = sizeof( trustData );
+    trustData.dwUIChoice = WTD_UI_NONE;
+    // revocation checking incurs latency penalities due to need for online queries
+    trustData.fdwRevocationChecks = WTD_REVOKE_NONE;
+    trustData.dwUnionChoice = WTD_CHOICE_FILE;
+    trustData.dwStateAction = WTD_STATEACTION_VERIFY;
+    trustData.pFile = &fileData;
+
+
+    bool verified = false;
+    LONG status = WinVerifyTrust( NULL, &policy, &trustData );
+
+    verified = ( status == ERROR_SUCCESS );
+
+    // Cleanup/release (yes its weird looking)
+    trustData.dwStateAction = WTD_STATEACTION_CLOSE;
+    WinVerifyTrust( NULL, &policy, &trustData );
+
+    return verified;
 }

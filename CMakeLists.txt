@@ -156,6 +156,12 @@ option( KICAD_STEP_EXPORT_LIB
     "Build and use kicad2step as a library, meant for debugging"
     OFF )
 
+cmake_dependent_option( KICAD_WIN32_VERIFY_CODESIGN
+    "When enabled, verifies the code signing signature of certain DLLs loaded during runtime."
+    OFF "WIN32"
+    OFF )
+endif()
+
 # Global setting: exports are explicit
 set( CMAKE_CXX_VISIBILITY_PRESET "hidden" )
 set( CMAKE_VISIBILITY_INLINES_HIDDEN ON )
@@ -175,6 +181,10 @@ endif()
 
 if( KICAD_GAL_PROFILE )
     add_definitions( -DKICAD_GAL_PROFILE )
+endif()
+
+if( KICAD_WIN32_VERIFY_CODESIGN )
+    add_definitions( -DKICAD_WIN32_VERIFY_CODESIGN )
 endif()
 
 # Ensure DEBUG is defined for all platforms in Debug builds

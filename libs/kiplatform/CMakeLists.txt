@@ -30,6 +30,7 @@ elseif( WIN32 )
     set( PLATFORM_LIBS
         "Shlwapi"
         "winhttp"
+        "wintrust"
         )
 elseif( UNIX )
     set( PLATFORM_SRCS

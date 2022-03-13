@@ -88,5 +88,13 @@ namespace KIPLATFORM
          * @return True if successful fetched proxy info
          */
         bool GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& aCfg );
+
+        /**
+         * Validates the code signing signature of a given file
+         * This is most likely only ever going to be applicable to Windows
+         *
+         * @return True if file signature passes
+         */
+        bool VerifyFileSignature( const wxString& aPath );
     }
 }
