@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 16:51-0800\n"
-"PO-Revision-Date: 2022-03-08 00:49+0000\n"
+"PO-Revision-Date: 2022-03-14 15:56+0000\n"
 "Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "v6/es_MX/>\n"
@@ -15178,9 +15178,8 @@ msgid "Library changes are unsaved"
 msgstr "Los cambios en la biblioteca no se han guardado"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:247
-#, fuzzy
 msgid "Symbol library loading was cancelled by user."
-msgstr "La librería de símbolos '%s' ya existe."
+msgstr "La carga de la biblioteca de símbolos fue cancelada por el usuario."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:594
 #: eeschema/tools/sch_edit_tool.cpp:117
