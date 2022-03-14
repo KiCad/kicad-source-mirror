@@ -722,11 +722,9 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
 void BOARD_ADAPTER::addSolidAreasShapes( const ZONE* aZone, CONTAINER_2D_BASE* aContainer,
                                          PCB_LAYER_ID aLayerId )
 {
-    // Copy the polys list because we have to simplify it
-    SHAPE_POLY_SET polyList = SHAPE_POLY_SET( *aZone->GetFilledPolysList( aLayerId ) );
-
     // This convert the poly in outline and holes
-    ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aZone );
+    ConvertPolygonToTriangles( *aZone->GetFilledPolysList( aLayerId ), *aContainer,
+                               m_biuTo3Dunits, *aZone );
 }
 
 

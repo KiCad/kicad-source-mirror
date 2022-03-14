@@ -452,7 +452,7 @@ bool calcIsInsideArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CO
     // Collisions include touching, so we need to deflate outline by enough to exclude it.
     // This is particularly important for detecting copper fills as they will be exactly
     // touching along the entire exclusion border.
-    SHAPE_POLY_SET areaOutline = *aArea->Outline();
+    SHAPE_POLY_SET areaOutline = aArea->Outline()->CloneDropTriangulation();
     areaOutline.Deflate( board->GetDesignSettings().GetDRCEpsilon(), 0,
                          SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS );
 
@@ -498,7 +498,7 @@ bool calcIsInsideArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CO
 
         if( ( aArea->GetLayerSet() & LSET::FrontMask() ).any() )
         {
-            SHAPE_POLY_SET courtyard = footprint->GetPolyCourtyard( F_CrtYd );
+            const SHAPE_POLY_SET& courtyard = footprint->GetPolyCourtyard( F_CrtYd );
 
             if( courtyard.OutlineCount() == 0 )
             {
@@ -515,7 +515,7 @@ bool calcIsInsideArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CO
 
         if( ( aArea->GetLayerSet() & LSET::BackMask() ).any() )
         {
-            SHAPE_POLY_SET courtyard = footprint->GetPolyCourtyard( B_CrtYd );
+            const SHAPE_POLY_SET& courtyard = footprint->GetPolyCourtyard( B_CrtYd );
 
             if( courtyard.OutlineCount() == 0 )
             {

@@ -1060,7 +1060,7 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
 
     // Processing of arc shapes in zones is not yet supported because Clipper can't do boolean
     // operations on them.  The poly outline must be converted to segments first.
-    SHAPE_POLY_SET flattened = *m_Poly;
+    SHAPE_POLY_SET flattened = m_Poly->CloneDropTriangulation();
     flattened.ClearArcs();
 
     if( GetIsRuleArea() )
@@ -1132,22 +1132,19 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
 
     for( ZONE* zone : interactingZones )
     {
-        SHAPE_POLY_SET flattened_outline = *zone->Outline();
+        SHAPE_POLY_SET flattened_outline = zone->Outline()->CloneDropTriangulation();
         flattened_outline.ClearArcs();
         aSmoothedPoly.BooleanAdd( flattened_outline, SHAPE_POLY_SET::PM_FAST );
     }
 
     if( aBoardOutline )
-    {
-        SHAPE_POLY_SET poly = *aBoardOutline;
-        aSmoothedPoly.BooleanIntersection( poly, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-    }
+        aSmoothedPoly.BooleanIntersection( *aBoardOutline, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
     smooth( aSmoothedPoly );
 
     if( aSmoothedPolyWithApron )
     {
-        SHAPE_POLY_SET poly = *maxExtents;
+        SHAPE_POLY_SET poly = maxExtents->CloneDropTriangulation();
         poly.Inflate( m_ZoneMinThickness, 64 );
         *aSmoothedPolyWithApron = aSmoothedPoly;
         aSmoothedPolyWithApron->BooleanIntersection( poly, SHAPE_POLY_SET::PM_FAST );

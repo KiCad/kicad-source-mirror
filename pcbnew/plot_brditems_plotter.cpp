@@ -1013,7 +1013,7 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
                     // ( for the future or to show a non expected shape )
                     // This must be simplified and fractured to prevent overlapping polygons
                     // from generating invalid Gerber files
-                    SHAPE_POLY_SET tmpPoly = SHAPE_POLY_SET( aShape->GetPolyShape() );
+                    SHAPE_POLY_SET tmpPoly = aShape->GetPolyShape().CloneDropTriangulation();
                     tmpPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
                     FILL_T fill = aShape->IsFilled() ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL;
 

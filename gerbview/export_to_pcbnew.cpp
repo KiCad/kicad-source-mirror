@@ -476,7 +476,7 @@ void GBR_TO_PCB_EXPORTER::writePcbHeader( const int* aLayerLookUpTable )
 void GBR_TO_PCB_EXPORTER::writePcbPolygon( const SHAPE_POLY_SET& aPolys, int aLayer,
                                            const VECTOR2I& aOffset )
 {
-    SHAPE_POLY_SET polys = aPolys;
+    SHAPE_POLY_SET polys = aPolys.CloneDropTriangulation();
 
     // Cleanup the polygon
     polys.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
@@ -523,7 +523,7 @@ void GBR_TO_PCB_EXPORTER::writePcbPolygon( const SHAPE_POLY_SET& aPolys, int aLa
 
 void GBR_TO_PCB_EXPORTER::writePcbZoneItem( const GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
-    SHAPE_POLY_SET polys = aGbrItem->m_Polygon;
+    SHAPE_POLY_SET polys = aGbrItem->m_Polygon.CloneDropTriangulation();
     polys.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
     if( polys.OutlineCount() == 0 )

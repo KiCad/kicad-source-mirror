@@ -536,6 +536,8 @@ public:
     /// @copydoc SHAPE::Clone()
     SHAPE* Clone() const override;
 
+    SHAPE_POLY_SET CloneDropTriangulation() const;
+
     ///< Creates a new empty polygon in the set and returns its index
     int NewOutline();
 
@@ -1366,6 +1368,10 @@ public:
     static const SHAPE_POLY_SET BuildPolysetFromOrientedPaths( const std::vector<SHAPE_LINE_CHAIN>& aPaths, bool aReverseOrientation = false, bool aEvenOdd = false );
 
 private:
+    enum DROP_TRIANGULATION_FLAG { SINGLETON };
+
+    SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther, DROP_TRIANGULATION_FLAG );
+
     void fractureSingle( POLYGON& paths );
     void unfractureSingle ( POLYGON& path );
     void importTree( ClipperLib::PolyTree*               tree,

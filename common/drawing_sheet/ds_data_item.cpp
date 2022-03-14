@@ -417,6 +417,7 @@ void DS_DATA_ITEM_POLYGONS::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX:
 
         // Transfer all outlines (basic polygons)
         SHAPE_POLY_SET& polygons = poly_shape->GetPolygons();
+
         for( int kk = 0; kk < GetPolyCount(); kk++ )
         {
             // Create new outline

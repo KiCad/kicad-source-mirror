@@ -169,7 +169,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                         for( ii = 0; ii < outlineCount; ++ii )
                             holeCount += outlineGlyph->HoleCount( ii );
 
-                        SHAPE_POLY_SET poly = *outlineGlyph;
+                        SHAPE_POLY_SET poly = outlineGlyph->CloneDropTriangulation();
                         poly.Deflate( constraint.Value().Min() / 2, 16 );
                         poly.Simplify( SHAPE_POLY_SET::PM_FAST );
 

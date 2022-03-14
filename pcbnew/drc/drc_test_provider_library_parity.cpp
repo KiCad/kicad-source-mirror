@@ -294,11 +294,17 @@ bool zonesNeedUpdate( const FP_ZONE* a, const FP_ZONE* b )
 
     TEST( a->Outline()->TotalVertices(), b->Outline()->TotalVertices() );
 
+    // The footprint's zone will be in board position, so we must translate & rotate the library
+    // footprint's zone to match.
+    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( a->GetParentFootprint() );
+    const SHAPE_POLY_SET& aPoly = *a->Outline();
+    SHAPE_POLY_SET        bPoly = b->Outline()->CloneDropTriangulation();
+
+    bPoly.Rotate( parentFootprint->GetOrientation() );
+    bPoly.Move( parentFootprint->GetPosition() );
+
     for( int ii = 0; ii < a->Outline()->TotalVertices(); ++ii )
-    {
-        TEST( a->Outline()->CVertex( ii ) - a->GetParent()->GetPosition(),
-              b->Outline()->CVertex( ii ) - b->GetParent()->GetPosition() );
-    }
+        TEST( aPoly.CVertex( ii ), bPoly.CVertex( ii ) );
 
     return false;
 }

@@ -485,45 +485,51 @@ bool HYPERLYNX_EXPORTER::writeNetObjects( const std::vector<BOARD_ITEM*>& aObjec
             for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
             {
                 const wxString layerName   = m_board->GetLayerName( layer );
-                SHAPE_POLY_SET filledShape = *zone->GetFilledPolysList( layer );
+                SHAPE_POLY_SET fill = zone->GetFilledPolysList( layer )->CloneDropTriangulation();
 
-                filledShape.Simplify( SHAPE_POLY_SET::PM_FAST );
+                fill.Simplify( SHAPE_POLY_SET::PM_FAST );
 
-                for( int i = 0; i < filledShape.OutlineCount(); i++ )
+                for( int i = 0; i < fill.OutlineCount(); i++ )
                 {
-                    const SHAPE_LINE_CHAIN& outl = filledShape.COutline( i );
+                    const SHAPE_LINE_CHAIN& outl = fill.COutline( i );
 
                     auto p0 = outl.CPoint( 0 );
                     m_out->Print( 1, "{POLYGON T=POUR L=\"%s\" ID=%d X=%.10f Y=%.10f\n",
-                            (const char*) layerName.c_str(), m_polyId, iu2hyp( p0.x ),
-                            iu2hyp( p0.y ) );
+                                  (const char*) layerName.c_str(),
+                                  m_polyId,
+                                  iu2hyp( p0.x ),
+                                  iu2hyp( p0.y ) );
 
                     for( int v = 0; v < outl.PointCount(); v++ )
                     {
-                        m_out->Print( 2, "(LINE X=%.10f Y=%.10f)\n", iu2hyp( outl.CPoint( v ).x ),
-                                iu2hyp( outl.CPoint( v ).y ) );
+                        m_out->Print( 2, "(LINE X=%.10f Y=%.10f)\n",
+                                      iu2hyp( outl.CPoint( v ).x ),
+                                      iu2hyp( outl.CPoint( v ).y ) );
                     }
 
                     m_out->Print( 2, "(LINE X=%.10f Y=%.10f)\n", iu2hyp( p0.x ), iu2hyp( p0.y ) );
                     m_out->Print( 1, "}\n" );
 
-                    for( int h = 0; h < filledShape.HoleCount( i ); h++ )
+                    for( int h = 0; h < fill.HoleCount( i ); h++ )
                     {
-                        const SHAPE_LINE_CHAIN& holeShape = filledShape.CHole( i, h );
+                        const SHAPE_LINE_CHAIN& holeShape = fill.CHole( i, h );
                         VECTOR2I                ph0       = holeShape.CPoint( 0 );
 
-                        m_out->Print( 1, "{POLYVOID ID=%d X=%.10f Y=%.10f\n", m_polyId,
-                                iu2hyp( ph0.x ), iu2hyp( ph0.y ) );
+                        m_out->Print( 1, "{POLYVOID ID=%d X=%.10f Y=%.10f\n",
+                                      m_polyId,
+                                      iu2hyp( ph0.x ),
+                                      iu2hyp( ph0.y ) );
 
                         for( int v = 0; v < holeShape.PointCount(); v++ )
                         {
                             m_out->Print( 2, "(LINE X=%.10f Y=%.10f)\n",
-                                    iu2hyp( holeShape.CPoint( v ).x ),
-                                    iu2hyp( holeShape.CPoint( v ).y ) );
+                                          iu2hyp( holeShape.CPoint( v ).x ),
+                                          iu2hyp( holeShape.CPoint( v ).y ) );
                         }
 
                         m_out->Print( 2, "(LINE X=%.10f Y=%.10f)\n",
-                                iu2hyp( ph0.x ), iu2hyp( ph0.y ) );
+                                      iu2hyp( ph0.x ),
+                                      iu2hyp( ph0.y ) );
                         m_out->Print( 1, "}\n" );
                     }
 

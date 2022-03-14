@@ -64,6 +64,6 @@ private:
 };
 
 
-void ConvertPolygonToTriangles( SHAPE_POLY_SET& aPolyList, CONTAINER_2D_BASE& aDstContainer,
+void ConvertPolygonToTriangles( const SHAPE_POLY_SET& aPolyList, CONTAINER_2D_BASE& aDstContainer,
                                 float aBiuTo3dUnitsScale, const BOARD_ITEM& aBoardItem );
 #endif // _TRIANGLE_2D_H_

@@ -921,7 +921,7 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID a
                     // Processing of arc shapes in zones is not yet supported because Clipper
                     // can't do boolean operations on them.  The poly outline must be converted to
                     // segments first.
-                    SHAPE_POLY_SET outline = *aKnockout->Outline();
+                    SHAPE_POLY_SET outline = aKnockout->Outline()->CloneDropTriangulation();
                     outline.ClearArcs();
 
                     aRawFill.BooleanSubtract( outline, SHAPE_POLY_SET::PM_FAST );
@@ -1034,7 +1034,7 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     // Create a temporary zone that we can hit-test spoke-ends against.  It's only temporary
     // because the "real" subtract-clearance-holes has to be done after the spokes are added.
     static const bool USE_BBOX_CACHES = true;
-    SHAPE_POLY_SET testAreas = aFillPolys;
+    SHAPE_POLY_SET testAreas = aFillPolys.CloneDropTriangulation();
     testAreas.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
     DUMP_POLYS_TO_COPPER_LAYER( testAreas, In4_Cu, wxT( "minus-clearance-holes" ) );
 
@@ -1395,7 +1395,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
     int linethickness = thickness - aZone->GetMinThickness();
     int gridsize = thickness + aZone->GetHatchGap();
 
-    SHAPE_POLY_SET filledPolys = aFillPolys;
+    SHAPE_POLY_SET filledPolys = aFillPolys.CloneDropTriangulation();
     // Use a area that contains the rotated bbox by orientation, and after rotate the result
     // by -orientation.
     if( !aZone->GetHatchOrientation().IsZero() )
@@ -1517,12 +1517,12 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
 
     // The fill has already been deflated to ensure GetMinThickness() so we just have to
     // account for anything beyond that.
-    SHAPE_POLY_SET deflatedFilledPolys = aFillPolys;
+    SHAPE_POLY_SET deflatedFilledPolys = aFillPolys.CloneDropTriangulation();
     deflatedFilledPolys.Deflate( outline_margin - aZone->GetMinThickness(), 16 );
     holes.BooleanIntersection( deflatedFilledPolys, SHAPE_POLY_SET::PM_FAST );
     DUMP_POLYS_TO_COPPER_LAYER( holes, In11_Cu, wxT( "fill-clipped-hatch-holes" ) );
 
-    SHAPE_POLY_SET deflatedOutline = *aZone->Outline();
+    SHAPE_POLY_SET deflatedOutline = aZone->Outline()->CloneDropTriangulation();
     deflatedOutline.Deflate( outline_margin, 16 );
     holes.BooleanIntersection( deflatedOutline, SHAPE_POLY_SET::PM_FAST );
     DUMP_POLYS_TO_COPPER_LAYER( holes, In12_Cu, wxT( "outline-clipped-hatch-holes" ) );

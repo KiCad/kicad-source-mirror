@@ -1696,7 +1696,7 @@ void GERBER_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aS
     if( aData )
         gbr_metadata = *static_cast<GBR_METADATA*>( aData );
 
-    SHAPE_POLY_SET polyshape = *aPolygons;
+    SHAPE_POLY_SET polyshape = aPolygons->CloneDropTriangulation();
 
     if( aTraceMode != FILLED )
     {

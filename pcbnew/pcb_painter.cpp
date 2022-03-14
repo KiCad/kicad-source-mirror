@@ -546,7 +546,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 
             if( fp )
             {
-                SHAPE_POLY_SET convex = fp->GetBoundingHull();
+                const SHAPE_POLY_SET& convex = fp->GetBoundingHull();
 
                 m_gal->DrawPolyline( convex.COutline( 0 ) );
             }
@@ -1953,7 +1953,7 @@ void PCB_PAINTER::draw( const FOOTPRINT* aFootprint, int aLayer )
         m_gal->SetIsStroke( false );
         m_gal->SetFillColor( color );
 
-        SHAPE_POLY_SET poly = aFootprint->GetBoundingHull();
+        const SHAPE_POLY_SET& poly = aFootprint->GetBoundingHull();
         m_gal->DrawPolygon( poly );
     }
 }

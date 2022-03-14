@@ -516,7 +516,7 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAY
 {
     int            epsilon = m_board->GetDesignSettings().GetDRCEpsilon();
     int            clearance = aConstraint.GetValue().Min();
-    SHAPE_POLY_SET fill = *aZone->GetFilledPolysList( aLayer );
+    SHAPE_POLY_SET fill = aZone->GetFilledPolysList( aLayer )->CloneDropTriangulation();
 
     if( aConstraint.GetSeverity() == RPT_SEVERITY_IGNORE || clearance - epsilon <= 0 )
         return;

@@ -125,6 +125,7 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
                     {
                         PCB_LAYER_ID    layer = copperLayers[i];
                         SHAPE_POLY_SET& poly = layerPolys[i];
+                        SHAPE_POLY_SET  fill;
 
                         forEachGeometryItem( s_allBasicItems, LSET().set( layer ),
                                 [&]( BOARD_ITEM* item ) -> bool
@@ -135,11 +136,11 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
 
                                         if( !zone->GetIsRuleArea() )
                                         {
-                                            SHAPE_POLY_SET layerPoly = *zone->GetFill( layer );
-                                            layerPoly.Unfracture( SHAPE_POLY_SET::PM_FAST );
+                                            fill = zone->GetFill( layer )->CloneDropTriangulation();
+                                            fill.Unfracture( SHAPE_POLY_SET::PM_FAST );
 
-                                            for( int jj = 0; jj < layerPoly.OutlineCount(); ++jj )
-                                                poly.AddOutline( layerPoly.Outline( jj ) );
+                                            for( int jj = 0; jj < fill.OutlineCount(); ++jj )
+                                                poly.AddOutline( fill.Outline( jj ) );
 
                                             // Report progress on board zones only.  Everything
                                             // else is in the noise.

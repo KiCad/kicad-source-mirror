@@ -614,7 +614,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             if( !aLayerMask[layer] )
                 continue;
 
-            SHAPE_POLY_SET mainArea = *zone->GetFilledPolysList( layer );
+            SHAPE_POLY_SET mainArea = zone->GetFilledPolysList( layer )->CloneDropTriangulation();
             SHAPE_POLY_SET islands;
 
             for( int i = mainArea.OutlineCount() - 1; i >= 0; i-- )

@@ -108,6 +108,16 @@ SHAPE_POLY_SET::SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther ) :
 }
 
 
+SHAPE_POLY_SET::SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther, DROP_TRIANGULATION_FLAG ) :
+    SHAPE( aOther ),
+    m_polys( aOther.m_polys )
+{
+    m_triangulationValid = false;
+    m_hash = MD5_HASH();
+    m_triangulatedPolys.clear();
+}
+
+
 SHAPE_POLY_SET::~SHAPE_POLY_SET()
 {
 }
@@ -116,6 +126,12 @@ SHAPE_POLY_SET::~SHAPE_POLY_SET()
 SHAPE* SHAPE_POLY_SET::Clone() const
 {
     return new SHAPE_POLY_SET( *this );
+}
+
+
+SHAPE_POLY_SET SHAPE_POLY_SET::CloneDropTriangulation() const
+{
+    return SHAPE_POLY_SET( *this, DROP_TRIANGULATION_FLAG::SINGLETON );
 }
 
 

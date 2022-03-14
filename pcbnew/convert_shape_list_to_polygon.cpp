@@ -244,9 +244,9 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
 
         case SHAPE_T::POLY:
             {
-                const SHAPE_POLY_SET poly = graphic->GetPolyShape();
-                EDA_ANGLE            orientation = ANGLE_0;
-                VECTOR2I             offset = VECTOR2I( 0, 0 );
+                const SHAPE_POLY_SET& poly = graphic->GetPolyShape();
+                EDA_ANGLE             orientation = ANGLE_0;
+                VECTOR2I              offset = VECTOR2I( 0, 0 );
 
                 if( graphic->GetParentFootprint() )
                 {
@@ -946,7 +946,7 @@ bool isCopperOutside( const FOOTPRINT* aMod, SHAPE_POLY_SET& aShape )
 
     for( PAD* pad : aMod->Pads() )
     {
-        SHAPE_POLY_SET poly = aShape;
+        SHAPE_POLY_SET poly = aShape.CloneDropTriangulation();
 
         poly.BooleanIntersection( *pad->GetEffectivePolygon(), SHAPE_POLY_SET::PM_FAST );
 

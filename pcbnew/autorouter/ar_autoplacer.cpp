@@ -145,7 +145,7 @@ bool AR_AUTOPLACER::fillMatrix()
     VECTOR2I coord_orgin = m_matrix.GetBrdCoordOrigin(); // Board coordinate of matruix cell (0,0)
 
     // Create a single board outline:
-    SHAPE_POLY_SET brd_shape = m_boardShape;
+    SHAPE_POLY_SET brd_shape = m_boardShape.CloneDropTriangulation();
     brd_shape.Fracture( SHAPE_POLY_SET::PM_FAST );
     const SHAPE_LINE_CHAIN& outline = brd_shape.Outline(0);
     const BOX2I& rect = outline.BBox();
@@ -800,7 +800,7 @@ void AR_AUTOPLACER::drawPlacementRoutingMatrix( )
     m_overlay->SetIsFill( true );
     m_overlay->SetIsStroke( false );
 
-    SHAPE_POLY_SET freeArea = m_topFreeArea;
+    SHAPE_POLY_SET freeArea = m_topFreeArea.CloneDropTriangulation();
     freeArea.Fracture( SHAPE_POLY_SET::PM_FAST );
 
     // Draw the free polygon areas, top side:
