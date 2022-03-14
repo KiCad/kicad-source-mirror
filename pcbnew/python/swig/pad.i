@@ -35,7 +35,7 @@
     # define it for compatibility
     def AddPrimitive(self, *args):
         if len(args) == 2:
-            return self.AddPrimitivePoly(*args)
+            return self.AddPrimitivePoly(*args, True)
         elif len(args) == 3:
             if type(args[1] in [wxPoint,wxSize]):
                 return self.AddPrimitiveSegment(*args)
