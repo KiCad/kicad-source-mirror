@@ -209,6 +209,7 @@ BOOST_AUTO_TEST_CASE( Rotate )
 
                 if( schItem != nullptr )
                 {
+                    schItem->ClearFieldsAutoplaced();
                     // Only rotating pins around the center of parent sheet works.
                     schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
                     schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
@@ -287,6 +288,7 @@ BOOST_AUTO_TEST_CASE( MirrorHorizontally )
 
                         if( schItem != nullptr )
                         {
+                            schItem->ClearFieldsAutoplaced();
                             schItem->MirrorHorizontally( aRef.x );
                             schItem->MirrorHorizontally( aRef.x );
                         }
@@ -330,6 +332,7 @@ BOOST_AUTO_TEST_CASE( MirrorVertically )
 
                         if( schItem != nullptr )
                         {
+                            schItem->ClearFieldsAutoplaced();
                             schItem->MirrorVertically( aRef.y );
                             schItem->MirrorVertically( aRef.y );
                         }
