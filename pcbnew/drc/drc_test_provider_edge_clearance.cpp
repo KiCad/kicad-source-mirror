@@ -81,7 +81,8 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
                                                         DRC_CONSTRAINT_T aConstraintType,
                                                         PCB_DRC_CODE aErrorCode )
 {
-    const SHAPE* edgeShape = edge->GetEffectiveShape( Edge_Cuts ).get();
+    const std::shared_ptr<SHAPE>& shape = edge->GetEffectiveShape( Edge_Cuts );
+    const SHAPE*                  edgeShape = shape.get();
 
     if( edge->Type() == PCB_PAD_T )
         edgeShape = static_cast<PAD*>( edge )->GetEffectiveHoleShape();
