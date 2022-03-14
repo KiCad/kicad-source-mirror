@@ -23,6 +23,7 @@
 
 #include <common.h>
 #include <pcb_shape.h>
+#include <footprint.h>
 #include <geometry/seg.h>
 #include <geometry/shape_segment.h>
 #include <drc/drc_engine.h>
@@ -36,6 +37,7 @@
     edge.
     Errors generated:
     - DRCE_EDGE_CLEARANCE
+    - DRCE_SILK_EDGE_CLEARANCE
 
     TODO:
     - separate holes to edge check
@@ -79,7 +81,10 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
                                                         DRC_CONSTRAINT_T aConstraintType,
                                                         PCB_DRC_CODE aErrorCode )
 {
-    const std::shared_ptr<SHAPE>& edgeShape = edge->GetEffectiveShape( Edge_Cuts );
+    const SHAPE* edgeShape = edge->GetEffectiveShape( Edge_Cuts ).get();
+
+    if( edge->Type() == PCB_PAD_T )
+        edgeShape = static_cast<PAD*>( edge )->GetEffectiveHoleShape();
 
     auto     constraint = m_drcEngine->EvalRules( aConstraintType, edge, item, UNDEFINED_LAYER );
     int      minClearance = constraint.GetValue().Min();
@@ -88,7 +93,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
 
     if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && minClearance >= 0 )
     {
-        if( itemShape->Collide( edgeShape.get(), minClearance, &actual, &pos ) )
+        if( itemShape->Collide( edgeShape, minClearance, &actual, &pos ) )
         {
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( aErrorCode );
 
@@ -122,7 +127,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
         if( !reportPhase( _( "Checking copper to board edge clearances..." ) ) )
             return false;    // DRC cancelled
     }
-    else if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_CLEARANCE ) )
+    else if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_EDGE_CLEARANCE ) )
     {
         if( !reportPhase( _( "Checking silk to board edge clearances..." ) ) )
             return false;    // DRC cancelled
@@ -204,6 +209,15 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
         }
     }
 
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+        {
+            if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
+                edgesTree.Insert( pad, Edge_Cuts, m_largestClearance );
+        }
+    }
+
     // This is the number of tests between 2 calls to the progress bar
     const int delta = 100;
     int       count = 0;
@@ -220,7 +234,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
             [&]( BOARD_ITEM *item ) -> bool
             {
                 bool testCopper = !m_drcEngine->IsErrorLimitExceeded( DRCE_EDGE_CLEARANCE );
-                bool testSilk = !m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_CLEARANCE );
+                bool testSilk = !m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_EDGE_CLEARANCE );
 
                 if( !testCopper && !testSilk )
                     return false;    // We're done
@@ -260,7 +274,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                                 {
                                     return testAgainstEdge( item, itemShape.get(), edge,
                                                             SILK_CLEARANCE_CONSTRAINT,
-                                                            DRCE_SILK_CLEARANCE );
+                                                            DRCE_SILK_EDGE_CLEARANCE );
                                 },
                                 m_largestClearance ) )
                         {

@@ -85,6 +85,7 @@ enum PCB_DRC_CODE {
 
     DRCE_SILK_CLEARANCE,                 // silkscreen clipped by mask (potentially leaving it
                                          //   over pads, exposed copper, etc.)
+    DRCE_SILK_EDGE_CLEARANCE,
     DRCE_TEXT_HEIGHT,
     DRCE_TEXT_THICKNESS,
     DRCE_OVERLAPPING_SILK,               // silk to silk clearance error
@@ -186,6 +187,7 @@ private:
     static DRC_ITEM assertionFailure;
     static DRC_ITEM copperSliver;
     static DRC_ITEM silkClearance;
+    static DRC_ITEM silkEdgeClearance;
     static DRC_ITEM solderMaskBridge;
     static DRC_ITEM silkOverlaps;
     static DRC_ITEM textHeightOutOfRange;

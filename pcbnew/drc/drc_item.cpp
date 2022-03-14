@@ -204,6 +204,10 @@ DRC_ITEM DRC_ITEM::silkClearance( DRCE_SILK_CLEARANCE,
         _( "Silkscreen clipped by solder mask" ),
         wxT( "silk_over_copper" ) );
 
+DRC_ITEM DRC_ITEM::silkEdgeClearance( DRCE_SILK_EDGE_CLEARANCE,
+        _( "Silkscreen clipped by board edge" ),
+        wxT( "silk_edge_clearance" ) );
+
 DRC_ITEM DRC_ITEM::silkOverlaps( DRCE_OVERLAPPING_SILK,
         _( "Silkscreen overlap" ),
         wxT( "silk_overlap" ) );
@@ -286,6 +290,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::heading_readability,
             DRC_ITEM::silkOverlaps,
             DRC_ITEM::silkClearance,
+            DRC_ITEM::silkEdgeClearance,
             DRC_ITEM::textHeightOutOfRange,
             DRC_ITEM::textThicknessOutOfRange,
 
@@ -349,6 +354,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_COPPER_SLIVER:            return std::make_shared<DRC_ITEM>( copperSliver );
     case DRCE_OVERLAPPING_SILK:         return std::make_shared<DRC_ITEM>( silkOverlaps );
     case DRCE_SILK_CLEARANCE:           return std::make_shared<DRC_ITEM>( silkClearance );
+    case DRCE_SILK_EDGE_CLEARANCE:      return std::make_shared<DRC_ITEM>( silkEdgeClearance );
     case DRCE_SOLDERMASK_BRIDGE:        return std::make_shared<DRC_ITEM>( solderMaskBridge );
     case DRCE_TEXT_HEIGHT:              return std::make_shared<DRC_ITEM>( textHeightOutOfRange );
     case DRCE_TEXT_THICKNESS:           return std::make_shared<DRC_ITEM>( textThicknessOutOfRange );

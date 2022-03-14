@@ -38,6 +38,7 @@
 #include <geometry/shape.h>
 #include <geometry/shape_segment.h>
 #include <math/vector2d.h>
+#include "geometry/shape_null.h"
 
 /**
  * Implement an R-tree for fast spatial and layer indexing of connectable items.
@@ -129,6 +130,9 @@ public:
 
         for( SHAPE* subshape : subshapes )
         {
+            if( dynamic_cast<SHAPE_NULL*>( subshape ) )
+                continue;
+
             BOX2I bbox = subshape->BBox();
 
             bbox.Inflate( aWorstClearance );
