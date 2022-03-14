@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,8 @@
 #include <tracks_cleaner.h>
 #include <drc/drc_item.h>
 #include <tools/zone_filler_tool.h>
+#include <reporter.h>
+#include <dialogs/wx_html_report_panel_base.h>
 
 DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParentFrame ) :
         DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE( aParentFrame ),
@@ -37,6 +39,7 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
         m_firstRun( true )
 {
     auto cfg = m_parentFrame->GetPcbNewSettings();
+    m_reporter = new WX_TEXT_CTRL_REPORTER( m_tcReport );
 
     m_cleanViasOpt->SetValue( cfg->m_Cleanup.cleanup_vias );
     m_mergeSegmOpt->SetValue( cfg->m_Cleanup.merge_segments );
@@ -50,7 +53,7 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
 
     m_changesTreeModel->SetSeverities( RPT_SEVERITY_ACTION );
 
-    SetupStandardButtons( { { wxID_OK, _( "Update PCB" ) } } );
+    setupOKButtonLabel();
 
     m_sdbSizer->SetSizeHints( this );
 
@@ -73,30 +76,44 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::~DIALOG_CLEANUP_TRACKS_AND_VIAS()
 }
 
 
+void DIALOG_CLEANUP_TRACKS_AND_VIAS::setupOKButtonLabel()
+{
+    if( m_firstRun )
+        SetupStandardButtons( { { wxID_OK, _( "Build Changes" ) } } );
+    else
+        SetupStandardButtons( { { wxID_OK, _( "Update PCB" ) } } );
+}
+
+
 void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnCheckBox( wxCommandEvent& anEvent )
 {
-    doCleanup( true );
+    m_firstRun = true;
+    setupOKButtonLabel();
+    m_tcReport->Clear();
 }
 
 
 bool DIALOG_CLEANUP_TRACKS_AND_VIAS::TransferDataToWindow()
 {
-    doCleanup( true );
-
     return true;
 }
 
 
 bool DIALOG_CLEANUP_TRACKS_AND_VIAS::TransferDataFromWindow()
 {
-    doCleanup( false );
+    bool dryRun = m_firstRun;
 
-    return true;
+    doCleanup( dryRun );
+
+    return !dryRun;
 }
 
 
 void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
 {
+    m_tcReport->Clear();
+    wxSafeYield();      // Timeslice to update UI
+
     wxBusyCursor busy;
     BOARD_COMMIT commit( m_parentFrame );
     TRACKS_CLEANER cleaner( m_parentFrame->GetBoard(), commit );
@@ -118,8 +135,9 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
         RC_ITEMS_PROVIDER* provider = new VECTOR_CLEANUP_ITEMS_PROVIDER( &m_items );
         m_changesTreeModel->SetProvider( provider );
 
+        m_reporter->Report( _( "Check zones..." ) );
         m_parentFrame->GetToolManager()->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( this );
-        wxSafeYield();  // Timeslice to close zone progress reporter
+        wxSafeYield();      // Timeslice to close zone progress reporter
 
         m_changesTreeModel->SetProvider( nullptr );
         m_items.clear();
@@ -127,14 +145,20 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
     }
 
     // Old model has to be refreshed, GAL normally does not keep updating it
+    m_reporter->Report( _( "Rebuild connectivity..." ) );
     m_parentFrame->Compile_Ratsnest( false );
+
+    m_reporter->Report( _( "Check items..." ) );
 
     cleaner.CleanupBoard( aDryRun, &m_items, m_cleanShortCircuitOpt->GetValue(),
                                              m_cleanViasOpt->GetValue(),
                                              m_mergeSegmOpt->GetValue(),
                                              m_deleteUnconnectedOpt->GetValue(),
                                              m_deleteTracksInPadsOpt->GetValue(),
-                                             m_deleteDanglingViasOpt->GetValue() );
+                                             m_deleteDanglingViasOpt->GetValue(),
+                                             m_reporter );
+
+    m_reporter->Report( _( "Items checked..." ) );
 
     if( aDryRun )
     {
@@ -147,6 +171,9 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
         commit.Push( _( "Board cleanup" ) );
         m_parentFrame->GetCanvas()->Refresh( true );
     }
+
+    m_reporter->Report( _( "Finished..." ) );
+    setupOKButtonLabel();
 }
 
 

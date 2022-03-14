@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,7 @@
 
 
 class PCB_EDIT_FRAME;
+class WX_TEXT_CTRL_REPORTER;
 
 
 class DIALOG_CLEANUP_TRACKS_AND_VIAS: public DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE
@@ -40,6 +41,7 @@ public:
 
 private:
     void doCleanup( bool aDryRun );
+    void setupOKButtonLabel();
 
     void OnCheckBox( wxCommandEvent& anEvent ) override;
     void OnSelectItem( wxDataViewEvent& event ) override;
@@ -53,6 +55,7 @@ private:
     bool             m_firstRun;
 
     std::vector<std::shared_ptr<CLEANUP_ITEM> > m_items;
+    WX_TEXT_CTRL_REPORTER* m_reporter;
 };
 
 #endif // DIALOG_CLEANUP_TRACKS_AND_VIAS_H_

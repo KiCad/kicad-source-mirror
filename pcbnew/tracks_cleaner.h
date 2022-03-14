@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
 
 class BOARD_COMMIT;
 class CLEANUP_ITEM;
+class REPORTER;
 
 
 // Helper class used to clean tracks and vias
@@ -39,6 +40,8 @@ public:
 
     /**
      * the cleanup function.
+     * @param aDryRun = true to build changes list, false to modify the board
+     * @param aItemsList = list of modified items
      * @param aCleanVias = true to remove superimposed vias
      * @param aRemoveMisConnected = true to remove segments connecting 2 different nets
      *                              (short circuits)
@@ -46,10 +49,12 @@ public:
      * @param aDeleteUnconnected = true to remove dangling tracks
      * @param aDeleteTracksinPad = true to remove tracks fully inside pads
      * @param aDeleteDanglingVias = true to remove a via that is only connected to a single layer
+     * @param aReporter is a REPORTER to print activity and info
      */
     void CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLEANUP_ITEM> >* aItemsList,
                        bool aCleanVias, bool aRemoveMisConnected, bool aMergeSegments,
-                       bool aDeleteUnconnected, bool aDeleteTracksinPad, bool aDeleteDanglingVias );
+                       bool aDeleteUnconnected, bool aDeleteTracksinPad, bool aDeleteDanglingVias,
+                       REPORTER* aReporter = nullptr );
 
 private:
     /*
@@ -98,6 +103,7 @@ private:
     BOARD_COMMIT&                               m_commit;       // caller owns
     bool                                        m_dryRun;
     std::vector<std::shared_ptr<CLEANUP_ITEM>>* m_itemsList;    // caller owns
+    REPORTER*                                   m_reporter;
 };
 
 

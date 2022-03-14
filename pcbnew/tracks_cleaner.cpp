@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,8 @@ TRACKS_CLEANER::TRACKS_CLEANER( BOARD* aPcb, BOARD_COMMIT& aCommit ) :
         m_brd( aPcb ),
         m_commit( aCommit ),
         m_dryRun( true ),
-        m_itemsList( nullptr )
+        m_itemsList( nullptr ),
+        m_reporter( nullptr )
 {
 }
 
@@ -51,25 +52,51 @@ TRACKS_CLEANER::TRACKS_CLEANER( BOARD* aPcb, BOARD_COMMIT& aCommit ) :
  */
 void TRACKS_CLEANER::CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLEANUP_ITEM> >* aItemsList,
                                    bool aRemoveMisConnected, bool aCleanVias, bool aMergeSegments,
-                                   bool aDeleteUnconnected, bool aDeleteTracksinPad, bool aDeleteDanglingVias )
+                                   bool aDeleteUnconnected, bool aDeleteTracksinPad, bool aDeleteDanglingVias,
+                                   REPORTER* aReporter )
 {
+    m_reporter = aReporter;
     bool has_deleted = false;
 
     m_dryRun = aDryRun;
     m_itemsList = aItemsList;
 
-    cleanup( aCleanVias, aMergeSegments || aRemoveMisConnected, aMergeSegments, aMergeSegments );
+    if( m_reporter )
+        m_reporter->Report( _( "Clean vias and tracks" ) );
+
+    bool removeNullSegments = aMergeSegments || aRemoveMisConnected;
+    cleanup( aCleanVias, removeNullSegments, aMergeSegments /* dup segments*/, aMergeSegments );
+
+    if( m_reporter )
+        m_reporter->Report( _( "Merge collinear tracks" ) );
+
+     cleanup( false, false, true, aMergeSegments );
 
     if( aRemoveMisConnected )
+    {
+        if( m_reporter )
+            m_reporter->Report( _( "Remove misconnected" ) );
+
         removeShortingTrackSegments();
+    }
 
     if( aDeleteTracksinPad )
+    {
+        if( m_reporter )
+            m_reporter->Report( _( "Delete tracks in pads" ) );
+
         deleteTracksInPads();
+    }
 
     has_deleted = deleteDanglingTracks( aDeleteUnconnected, aDeleteDanglingVias );
 
     if( has_deleted && aMergeSegments )
+    {
+        if( m_reporter )
+            m_reporter->Report( _( "Merge segments" ) );
+
         cleanup( false, false, false, true );
+    }
 }
 
 
@@ -401,7 +428,6 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
         {
             merged = false;
             m_brd->BuildConnectivity();
-
             auto connectivity = m_brd->GetConnectivity()->GetConnectivityAlgo();
 
             // Keep a duplicate deque to all deleting in the primary

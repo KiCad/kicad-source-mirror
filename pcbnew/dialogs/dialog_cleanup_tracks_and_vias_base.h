@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,6 +18,7 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
+#include <wx/textctrl.h>
 #include <wx/stattext.h>
 #include <wx/dataview.h>
 #include <wx/button.h>
@@ -40,13 +41,15 @@ class DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_mergeSegmOpt;
 		wxCheckBox* m_deleteUnconnectedOpt;
 		wxCheckBox* m_deleteTracksInPadsOpt;
+		wxTextCtrl* m_tcReport;
 		wxStaticText* staticChangesLabel;
 		wxDataViewCtrl* m_changesDataView;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
+		virtual void onInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnCheckBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelectItem( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnLeftDClickItem( wxMouseEvent& event ) { event.Skip(); }
@@ -55,6 +58,7 @@ class DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Cleanup Tracks and Vias"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE();
 
 };
