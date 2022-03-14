@@ -221,6 +221,11 @@ bool SCH_LABEL_BASE::IsType( const KICAD_T aScanTypes[] ) const
 
     wxCHECK_MSG( Schematic(), false, wxT( "No parent SCHEMATIC set for SCH_LABEL!" ) );
 
+    // Ensure m_connected_items for Schematic()->CurrentSheet() exists.
+    // Can be not the case when "this" is living in clipboard
+    if( m_connected_items.find( Schematic()->CurrentSheet() ) == m_connected_items.end() )
+        return false;
+
     const SCH_ITEM_SET& item_set = m_connected_items.at( Schematic()->CurrentSheet() );
 
     for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
