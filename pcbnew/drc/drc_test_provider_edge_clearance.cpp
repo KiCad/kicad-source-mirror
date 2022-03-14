@@ -73,6 +73,9 @@ public:
 private:
     bool testAgainstEdge( BOARD_ITEM* item, SHAPE* itemShape, BOARD_ITEM* other,
                           DRC_CONSTRAINT_T aConstraintType, PCB_DRC_CODE aErrorCode );
+
+private:
+    std::vector<PAD*> m_castellatedPads;
 };
 
 
@@ -96,6 +99,16 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
     {
         if( itemShape->Collide( edgeShape, minClearance, &actual, &pos ) )
         {
+            if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
+            {
+                // Edge collisions are allowed inside the holes of castellated pads
+                for( PAD* castellatedPad : m_castellatedPads )
+                {
+                    if( castellatedPad->GetEffectiveHoleShape()->Collide( pos ) )
+                        return true;
+                }
+            }
+
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( aErrorCode );
 
             // Only report clearance info if there is any; otherwise it's just a straight collision
@@ -140,6 +153,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     }
 
     m_board = m_drcEngine->GetBoard();
+    m_castellatedPads.clear();
 
     DRC_CONSTRAINT worstClearanceConstraint;
 
@@ -216,6 +230,9 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
         {
             if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
                 edgesTree.Insert( pad, Edge_Cuts, m_largestClearance );
+
+            if( pad->GetProperty() == PAD_PROP::CASTELLATED )
+                m_castellatedPads.push_back( pad );
         }
     }
 
