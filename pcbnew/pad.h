@@ -336,7 +336,6 @@ public:
      */
     void SetOrientation( const EDA_ANGLE& aAngle );
 
-
     /**
      * Return the rotation angle of the pad.
      */

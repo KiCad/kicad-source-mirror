@@ -231,6 +231,12 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                 if( isInvisibleText( item ) )
                     return true;     // Continue with other items
 
+                if( item->Type() == PCB_PAD_T
+                        && static_cast<PAD*>( item )->GetProperty() == PAD_PROP::CASTELLATED )
+                {
+                    return true;
+                }
+
                 const std::shared_ptr<SHAPE>& itemShape = item->GetEffectiveShape();
 
                 for( PCB_LAYER_ID testLayer : { Edge_Cuts, Margin } )
