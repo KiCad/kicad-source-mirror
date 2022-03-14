@@ -241,12 +241,19 @@ COLOR4D SCH_LINE::GetLineColor() const
     {
         m_lastResolvedColor = m_stroke.GetColor();
     }
-    else if( IsConnectable() && !IsConnectivityDirty() )
+    else if( IsConnectable() )
     {
-        NETCLASSPTR netclass = NetClass();
+        if( !IsConnectivityDirty() )
+        {
+            NETCLASSPTR netclass = NetClass();
 
-        if( netclass )
-            m_lastResolvedColor = netclass->GetSchematicColor();
+            if( netclass )
+                m_lastResolvedColor = netclass->GetSchematicColor();
+        }
+    }
+    else
+    {
+        m_lastResolvedColor = COLOR4D::UNSPECIFIED;
     }
 
     return m_lastResolvedColor;
@@ -292,12 +299,19 @@ PLOT_DASH_TYPE SCH_LINE::GetEffectiveLineStyle() const
     {
         m_lastResolvedLineStyle = m_stroke.GetPlotStyle();
     }
-    else if( IsConnectable() && !IsConnectivityDirty() )
+    else if( IsConnectable() )
     {
-        NETCLASSPTR netclass = NetClass();
+        if( !IsConnectivityDirty() )
+        {
+            NETCLASSPTR netclass = NetClass();
 
-        if( netclass )
-            m_lastResolvedLineStyle = static_cast<PLOT_DASH_TYPE>( netclass->GetLineStyle() );
+            if( netclass )
+                m_lastResolvedLineStyle = static_cast<PLOT_DASH_TYPE>( netclass->GetLineStyle() );
+        }
+    }
+    else
+    {
+        m_lastResolvedLineStyle = PLOT_DASH_TYPE::DASH;
     }
 
     return m_lastResolvedLineStyle;
