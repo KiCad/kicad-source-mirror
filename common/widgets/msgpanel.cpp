@@ -63,7 +63,7 @@ EDA_MSG_PANEL::~EDA_MSG_PANEL()
 int EDA_MSG_PANEL::GetRequiredHeight( wxWindow* aWindow )
 {
     wxSize     fontSizeInPixels;
-    wxScreenDC dc;
+    wxWindowDC dc( aWindow );
 
     dc.SetFont( KIUI::GetControlFont( aWindow ) );
     dc.GetTextExtent( wxT( "W" ), &fontSizeInPixels.x, &fontSizeInPixels.y );
