@@ -47,6 +47,10 @@ target_include_directories( scripting_kiface PRIVATE
     ${Boost_INCLUDE_DIR}
 )
 
+if( MSVC )
+    target_sources( scripting_kiface PRIVATE ${CMAKE_SOURCE_DIR}/resources/msw/kipython-dll.rc )
+endif()
+
 target_link_libraries( scripting_kiface
     scripting
     )
