@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 16:51-0800\n"
-"PO-Revision-Date: 2022-02-16 22:56+0000\n"
+"PO-Revision-Date: 2022-03-17 08:54+0000\n"
 "Last-Translator: Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v6/tr/>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -4974,7 +4974,7 @@ msgstr "A. ipek baskı"
 
 #: common/layer_id.cpp:71
 msgid "F.Silkscreen"
-msgstr "Ö.İpek Baskı"
+msgstr "Ö.İpek baskı"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
@@ -8534,20 +8534,20 @@ msgstr "Filtreler"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:82
 msgid "Filter other symbol fields by name:"
-msgstr ""
+msgstr "Diğer sembol alanlarını ada göre filtreleyin:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:94
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
 msgid "Filter items by parent reference designator:"
-msgstr ""
+msgstr "Öğeleri üst referans tanımlayıcısına göre filtreleyin:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:102
 msgid "Filter items by parent symbol library id:"
-msgstr ""
+msgstr "Öğeleri üst simge kitaplığı kimliğine göre filtreleyin:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:108
 msgid "Filter items by parent symbol type:"
-msgstr ""
+msgstr "Öğeleri üst simge türüne göre filtreleyin:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
 msgid "Non-power symbols"
@@ -8560,7 +8560,7 @@ msgstr "Güç sembolleri"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:123
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:51
 msgid "Filter items by net:"
-msgstr ""
+msgstr "Öğeleri ağalara göre filtreleyin:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:135
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:84
@@ -8593,19 +8593,19 @@ msgstr "Aşağı"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
 #: include/base_units.h:48
 msgid "-- leave unchanged --"
-msgstr ""
+msgstr "-- değiştirilmemiş bırak --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:229
 msgid "H Align (fields only):"
-msgstr ""
+msgstr "Y Hizala (yalnızca alanlar):"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:245
 msgid "Visible (fields only)"
-msgstr ""
+msgstr "Görünür (yalnızca alanlar)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:251
 msgid "V Align (fields only):"
-msgstr ""
+msgstr "D Hizala (yalnızca alanlar):"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:291
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:25
@@ -8639,7 +8639,7 @@ msgstr "Birleşim rengi:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:110
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:95
 msgid "Edit Text and Graphic Properties"
-msgstr ""
+msgstr "Metin ve Grafik Özelliklerini Düzenle"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:31
 msgid "symbol"
@@ -8652,17 +8652,20 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Boş sembol kitaplığı tablosu yazılırken hata oluştu.\n"
+"\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
-msgstr ""
+msgstr "Lütfen bir sembol kitaplığı tablo dosyası seçin."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:82
 #: pcbnew/footprint_libraries_utils.cpp:256
 #, c-format
 msgid "File '%s' not found."
-msgstr ""
+msgstr "'%s' dosyası bulunamadı."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
 #, c-format
@@ -8671,11 +8674,15 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"'%s' geçerli bir sembol kitaplığı tablosu değil.\n"
+"\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:115
 #, c-format
 msgid "Cannot copy global symbol library table file '%s' to '%s'."
 msgstr ""
+"Global sembol kitaplığı tablo dosyası '%s', '%s' dosyasına kopyalanamıyor."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:132
 #, c-format
@@ -8699,12 +8706,13 @@ msgstr "Renk:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
 msgid "Set diameter to 0 to use schematic junction dot size."
-msgstr ""
+msgstr "Şematik bağlantı nokta boyutunu kullanmak için çapı 0'a ayarlayın."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:80
 msgid "Set color to transparent to use Schematic Editor colors."
 msgstr ""
+"Şematik Düzenleyici renklerini kullanmak için rengi saydam olarak ayarlayın."
 
 #: eeschema/dialogs/dialog_junction_props_base.h:59
 msgid "Junction Properties"
@@ -8753,12 +8761,12 @@ msgstr "Doğrultu"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:73
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:50
 msgid "Number Text Size"
-msgstr ""
+msgstr "Numara Metin boyutu"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:74
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:51
 msgid "Name Text Size"
-msgstr ""
+msgstr "Ad Metin Boyutu"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:76
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:53
@@ -8783,7 +8791,7 @@ msgstr "Y Konumu"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:92
 #: eeschema/dialogs/dialog_lib_text_properties.cpp:56
 msgid "Read Only"
-msgstr ""
+msgstr "Salt Okunur"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:777
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1207
@@ -8792,7 +8800,7 @@ msgstr "Değişiklikler kaydedilsin mi?"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:86
 msgid "Group by name"
-msgstr ""
+msgstr "Ada göre grupla"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
 msgid "Pin numbers:"
@@ -8844,10 +8852,12 @@ msgid ""
 "The symbol name in library and also the default\n"
 "symbol value when loaded in the schematic."
 msgstr ""
+"Kitaplıktaki sembol adı ve ayrıca varsayılan\n"
+"şemaya yüklendiğinde sembol değeri."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:42
 msgid "Derive from existing symbol:"
-msgstr ""
+msgstr "Varolan simgeden türet:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:46
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:68
@@ -8861,10 +8871,14 @@ msgid ""
 "This was previously known as an alias.  Do not select\n"
 "an existing symbol to create a new root symbol."
 msgstr ""
+"Geçerli kitaplıkta sembolü üst simge olarak seçin.\n"
+"\n"
+"Bu daha önce takma ad olarak biliniyordu.  Seçme\n"
+"yeni bir kök sembolü oluşturmak için varolan bir simge."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:51
 msgid "Default reference designator:"
-msgstr ""
+msgstr "Varsayılan başvuru belirteci:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:55
 msgid "U"
@@ -8872,7 +8886,7 @@ msgstr "U"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:58
 msgid "Number of units per package:"
-msgstr ""
+msgstr "Paket başına birim sayısı:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:71
 msgid "Units are not interchangeable"
@@ -8887,11 +8901,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:76
 msgid "Create symbol with alternate body style (De Morgan)"
-msgstr ""
+msgstr "Alternatif gövde stiliyle sembol oluşturun (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:79
 msgid "Create symbol as power symbol"
-msgstr ""
+msgstr "Güç sembolü olarak sembol oluştur"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:82
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
@@ -8906,19 +8920,19 @@ msgstr "Karta ekleme"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:103
 msgid "Pin name position offset:"
-msgstr ""
+msgstr "Bacak adı konumu uzaklığı:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:120
 msgid "Show pin number text"
-msgstr ""
+msgstr "Pin numarası metnini göster"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:124
 msgid "Show pin name text"
-msgstr ""
+msgstr "Pin adı metnini göster"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:128
 msgid "Pin name inside"
-msgstr ""
+msgstr "Pin adı içinde"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.h:74
 msgid "New Symbol"
@@ -8931,15 +8945,15 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:43
 msgid "Do not fill"
-msgstr ""
+msgstr "Doldurma"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:43
 msgid "Fill with body outline color"
-msgstr ""
+msgstr "Gövde anahat rengiyle doldur"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:43
 msgid "Fill with body background color"
-msgstr ""
+msgstr "Gövde arka plan rengiyle doldur"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:45
 msgid "Fill Style"
@@ -8948,7 +8962,7 @@ msgstr "Dolgu Stili"
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:49
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:167
 msgid "Common to all &units in symbol"
-msgstr ""
+msgstr "Simgedeki tüm &birimler için ortak"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:52
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:170
@@ -9149,13 +9163,15 @@ msgstr "Birden fazla ünite içeren bir sembol için birimlerin sayısını giri
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:199
 msgid "All units are interchangeable"
-msgstr ""
+msgstr "Tüm birimler değiştirilebilir"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:200
 msgid ""
 "Check this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
+"Tüm sembol birimleri aynı olduğunda bu seçeneği işaretleyin, ancak\n"
+"pin numaraları için."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:214
 msgid "Pin Text Options"
@@ -9309,7 +9325,7 @@ msgstr "Tüm birimler için ortak"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:192
 msgid "Common to all body styles"
-msgstr ""
+msgstr "Tüm gövde stillerine ortak"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.h:81
 msgid "Text Item Properties"
@@ -10178,7 +10194,7 @@ msgstr "Sözdizimi yardımı"
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:100
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:34
 msgid "Show syntax help window"
-msgstr ""
+msgstr "Sözdizimi yardım penceresini göster"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:66
 msgid "Connection type:"
@@ -11378,11 +11394,11 @@ msgstr "Sembolleri Yeniden Eşle"
 
 #: eeschema/dialogs/dialog_text_and_label_properties.cpp:105
 msgid "Global Label Properties"
-msgstr ""
+msgstr "Genel Etiket Özellikleri"
 
 #: eeschema/dialogs/dialog_text_and_label_properties.cpp:106
 msgid "Hierarchical Label Properties"
-msgstr ""
+msgstr "Hiyerarşik Etiket Özellikleri"
 
 #: eeschema/dialogs/dialog_text_and_label_properties.cpp:107
 msgid "Label Properties"
@@ -11390,7 +11406,7 @@ msgstr "Etiket Özellikleri"
 
 #: eeschema/dialogs/dialog_text_and_label_properties.cpp:108
 msgid "Hierarchical Sheet Pin Properties"
-msgstr ""
+msgstr "Hiyerarşik Sayfa Pin Özellikleri"
 
 #: eeschema/dialogs/dialog_text_and_label_properties.cpp:109
 #: eeschema/dialogs/dialog_text_and_label_properties_base.h:73
@@ -11410,7 +11426,7 @@ msgstr "Etiket:"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:28
 msgid "Enter the text to be used within the schematic"
-msgstr ""
+msgstr "Şematik içinde kullanılacak metni girin"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:82
 msgid "Text Size:"
