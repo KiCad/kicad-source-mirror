@@ -166,13 +166,24 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
 
                 LSET layers = item->GetLayerSet();
 
-                // Special-case pad holes which pierce all the copper layers
+                // Special-case holes and edge-cuts which pierce all physical layers
                 if( item->Type() == PCB_PAD_T )
                 {
                     PAD* pad = static_cast<PAD*>( item );
 
                     if( pad->GetDrillSizeX() > 0 && pad->GetDrillSizeY() > 0 )
-                        layers |= LSET::AllCuMask();
+                        layers |= LSET::PhysicalLayersMask();
+                }
+                else if( item->Type() == PCB_VIA_T )
+                {
+                    PCB_VIA* via = static_cast<PCB_VIA*>( item );
+
+                    if( via->GetDrill() > 0 )
+                        layers |= LSET::PhysicalLayersMask();
+                }
+                else if( item->IsOnLayer( Edge_Cuts ) )
+                {
+                    layers |= LSET::PhysicalLayersMask();
                 }
 
                 for( PCB_LAYER_ID layer : layers.Seq() )
@@ -244,28 +255,12 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
             LSET::AllCuMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
-                PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item );
-                ZONE*      zone = dynamic_cast<ZONE*>( item );
+                ZONE* zone = dynamic_cast<ZONE*>( item );
 
-                if( shape )
-                {
-                    switch( shape->GetShape() )
-                    {
-                    case SHAPE_T::POLY:
-                    case SHAPE_T::BEZIER:
-                    case SHAPE_T::ARC:
-                        if( IsCopperLayer( shape->GetLayer() ) )
-                            count++;
+                if( zone && zone->GetIsRuleArea() )
+                    return true;    // Continue with other items
 
-                        break;
-
-                    default:
-                        break;
-                    }
-                }
-
-                if( zone )
-                    count += ( item->GetLayerSet() & LSET::AllCuMask() ).count();
+                count += ( item->GetLayerSet() & LSET::AllCuMask() ).count();
 
                 return true;
             } );
@@ -274,6 +269,12 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
             LSET::AllCuMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
+                PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item );
+                ZONE*      zone = dynamic_cast<ZONE*>( item );
+
+                if( zone && zone->GetIsRuleArea() )
+                    return true;    // Continue with other items
+
                 for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
                 {
                     if( IsCopperLayer( layer ) )
@@ -281,8 +282,6 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
                         if( !reportProgress( ii++, count, delta ) )
                             return false;
 
-                        PCB_SHAPE*     shape = dynamic_cast<PCB_SHAPE*>( item );
-                        ZONE*          zone = dynamic_cast<ZONE*>( item );
                         DRC_CONSTRAINT c = m_drcEngine->EvalRules( MECHANICAL_CLEARANCE_CONSTRAINT,
                                                                    item, nullptr, layer );
 
