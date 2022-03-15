@@ -8,16 +8,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 16:51-0800\n"
-"PO-Revision-Date: 2021-10-22 19:22+0000\n"
-"Last-Translator: CJ van der Hoeven <KeesEnJoa@gmail.com>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"PO-Revision-Date: 2022-03-17 08:54+0000\n"
+"Last-Translator: Bas Wijnen <wijnen@debian.org>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v6/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -663,9 +662,8 @@ msgid "Show silkscreen layers"
 msgstr "Toon silkscreen lagen"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
-#, fuzzy
 msgid "Clip silkscreen at solder mask edges"
-msgstr "Clip silkscreen op via annulus"
+msgstr "Snijd silkscreen af op grens van soldeermasker"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:37
 msgid "Clip silkscreen at via annuli"
@@ -688,9 +686,8 @@ msgid "User Layers (not shown in realistic mode)"
 msgstr "Gebruikerslagen (niet weergegeven in realistische modus)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:58
-#, fuzzy
 msgid "Show comment and drawing layers"
-msgstr "Toon commentaren en tekeningenlagen"
+msgstr "Toon commentaar- en tekeningenlagen"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:61
 msgid "Show ECO layers"
@@ -743,7 +740,6 @@ msgid "Camera Options"
 msgstr "Camera-opties"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:115
-#, fuzzy
 msgid "Rotation increment:"
 msgstr "Rotatietoename:"
 
@@ -3078,6 +3074,8 @@ msgstr "Aktie script toepassen"
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
 msgstr ""
+"(Deze workaround verbetert sommige problemen met het schalen van GTK HiDPI "
+"lettertypes.)"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -3500,7 +3498,7 @@ msgstr "Netclass-naam al in gebruik."
 
 #: common/dialogs/panel_setup_netclasses.cpp:510
 msgid "Minimum copper clearance"
-msgstr "Minimale koper afstand"
+msgstr "Minimale vrije afstand rondom koper"
 
 #: common/dialogs/panel_setup_netclasses.cpp:511
 msgid "Minimum track width"
@@ -3561,7 +3559,7 @@ msgstr "Net Klasse"
 #: pcbnew/tools/board_inspection_tool.cpp:603
 #: pcbnew/tools/board_inspection_tool.cpp:628
 msgid "Clearance"
-msgstr "Afstand"
+msgstr "Vrije afstand"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:43
 #: pcb_calculator/pcb_calculator_frame.cpp:89
@@ -10013,7 +10011,7 @@ msgstr "Print schema"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:333
 msgid "An error occurred attempting to print the schematic."
-msgstr "Fout bij het het printen van het schema."
+msgstr "Fout bij het printen van het schema."
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:358
 #, c-format
@@ -12257,9 +12255,8 @@ msgstr "Verwijder items"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
-#, fuzzy
 msgid "Cancel Table Update"
-msgstr "Doorlaatgatdiameter:"
+msgstr "Update van tabel afbreken"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
@@ -13654,9 +13651,8 @@ msgid "Cannot open file '%s'."
 msgstr "Kan het bestand '%s' niet openen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:314
-#, fuzzy
 msgid "Storage file not fully parsed "
-msgstr "Bestand niet volledig gelezen (er zijn nog %d bytes over)."
+msgstr "Bestand niet volledig gelezen "
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:476
 msgid "Compile mask not currently supported."
@@ -18603,19 +18599,16 @@ msgid "Metadata"
 msgstr "Metadata"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:215
-#, fuzzy
 msgid "Package identifier: "
-msgstr "Pakket identificatie: %s\n"
+msgstr "Pakket-identificatie: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:216
-#, fuzzy
 msgid "License: "
-msgstr "Licentie"
+msgstr "Licentie: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:230
-#, fuzzy
 msgid "Tags: "
-msgstr "Tags: %s\n"
+msgstr "Tags: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:258
 msgid "Author"
@@ -18680,9 +18673,8 @@ msgid "Install Size"
 msgstr "Pagina grootte"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:85
-#, fuzzy
 msgid "Compatible"
-msgstr "Compatibiliteit modus:"
+msgstr "Passend"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:103
 msgid "Show all versions"
@@ -18823,9 +18815,8 @@ msgid "Aborting package installation."
 msgstr "Installatie wordt afgebroken."
 
 #: kicad/pcm/pcm_task_manager.cpp:254
-#, fuzzy
 msgid "Extracted package\n"
-msgstr "Pakket '%s' uitpakken."
+msgstr "Pakket uitgepakt\n"
 
 #: kicad/pcm/pcm_task_manager.cpp:298
 #, c-format
@@ -19772,7 +19763,6 @@ msgstr ""
 "* ___R3 = Z <sub> uit </sub> \\ * A - R2___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB  \n"
@@ -19782,13 +19772,13 @@ msgid ""
 "\n"
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 msgstr ""
-"## Gesplitste verzwakker\n"
-"### Demping is 6dB\n"
-"___Z<sub>in</sub> ___ gewenste ingangs-impedantie in &#x2126;<br>\n"
-"___Z<sub>out</sub> ___ gewenste uitgangs-impedantie in &#x2126;<br>\n"
-"___Z<sub>in</sub> = Z<sub>uit</sub> ___\n"
+"### Gesplitste verzwakker\n"
+"Demping is 6dB\n"
+"___Z<sub>in</sub> ___ gewenste ingangs-impedantie in &#x2126;\n"
+"___Z<sub>out</sub> ___ gewenste uitgangs-impedantie in &#x2126;\n"
+"___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>uit</sub> / 3 ___\n"
+"___R1 = R2 = R3 = Z<sub>0</sub> / 3 ___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
 #, fuzzy
@@ -19927,7 +19917,7 @@ msgstr "Lijndikte"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
 msgid "Min clearance"
-msgstr "Min klaring"
+msgstr "Min vrije afstand"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
 msgid "Via: (diam - drill)"
@@ -20261,9 +20251,8 @@ msgstr ""
 "Verwijder een item uit de huidige lijst met beschikbare toezichthouders"
 
 #: pcb_calculator/calculator_panels/panel_track_width.cpp:61
-#, fuzzy
 msgid "Temperature rise"
-msgstr "Temperatuurstijging:"
+msgstr "Temperatuurstijging"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:31
 #, fuzzy
@@ -20505,11 +20494,11 @@ msgstr "Diameter van pad rondom via (ringvormige ring)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
 msgid "Clearance hole diameter:"
-msgstr "Doorlaatgatdiameter:"
+msgstr "Vrije gatdiameter:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:87
 msgid "Diameter of clearance hole in ground plane(s)"
-msgstr "Diameter van doorlaatgat in grondvlak (ken)"
+msgstr "Diameter van vrij gat in grondvlak(ken)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:99
 msgid "Z0:"
@@ -20562,8 +20551,9 @@ msgid ""
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "Waarschuwing:\n"
-"Diameter van het gat >= Vrije gegeven diameter van gat.\n"
-"Sommige parameters konden niet uitgerekend worden binnen de koper zone."
+"Diameter van de pad rond de via >= Vrije diameter van gat.\n"
+"Sommige parameters konden niet uitgerekend worden voor een via in een "
+"koperzone."
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:260
 msgid "Thermal resistance:"
@@ -21976,6 +21966,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:596
 msgid "Selected options resulted in errors! Change them and try again."
 msgstr ""
+"Er zijn fouten opgetreden door de geselecteerde opties! Pas ze aan en "
+"probeer het opnieuw."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:603
 #, fuzzy, c-format
@@ -22003,9 +21995,9 @@ msgid "Reannotate anyway?"
 msgstr "Toch herannoteren?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "Dubbele items %s%s\n"
+msgstr "Dubbele items van type %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
 msgid "Aborted: too many errors"
@@ -22715,12 +22707,13 @@ msgstr "Elektrische eigenschappen"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:186
 msgid "Clearance:"
-msgstr "Afstand:"
+msgstr "Vrije afstand:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:188
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
 msgstr ""
-"Koper clearance voor deze zone (zet op 0 en gebruik net-klasse clearance)"
+"Vrije afstand voor koper voor deze zone (zet op 0 om de vrije afstand van de "
+"net-klasse te gebruiken)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:199
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
@@ -22766,7 +22759,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:234
 msgid "Clearance between pads in the same net and filled areas."
-msgstr "Ruimte tussen pads in hetzelfde net en gevulde gebieden."
+msgstr "Vrije afstand tussen pads in hetzelfde net en gevulde gebieden."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:242
 msgid "Thermal spoke width:"
@@ -23111,6 +23104,8 @@ msgid ""
 "This can conflict with reference designators in the schematic that have not "
 "yet been synchronized with the board."
 msgstr ""
+"Dit kan conflicteren met referentie-aanduidingen in het schema die nog niet "
+"zijn gesynchroniseerd met het bord."
 
 #: pcbnew/dialogs/dialog_create_array_base.h:127
 msgid "Create Array"
@@ -23429,7 +23424,7 @@ msgstr "Klaar.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:462
 msgid "Run clearance resolution tool..."
-msgstr "Start clearance-resolutie tool..."
+msgstr "Start gereedschap om problemen met vrije afstand op te lossen..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:489
 msgid "Open the Board Setup... dialog"
@@ -23692,7 +23687,7 @@ msgstr "STEP-bestanden"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:210
 msgid "Non-unity scaled models:"
-msgstr ""
+msgstr "Modellen met een schaal anders dan 1:"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:212
 msgid ""
@@ -24229,7 +24224,7 @@ msgstr "Uitsluiten van stuklijst"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:213
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:582
 msgid "Clearances"
-msgstr "Afstand"
+msgstr "Vrije afstanden"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:315
 msgid "Set values to 0 to use Board Setup values."
@@ -24241,8 +24236,8 @@ msgstr "Stel waarden in op 0 om Board Setup-waarden te gebruiken."
 msgid ""
 "Positive clearance means area bigger than the pad (usual for mask clearance)."
 msgstr ""
-"Positieve speling betekent een gebied dat groter is dan de pad (gebruikelijk "
-"voor maskerruimte)."
+"Positieve vrije afstand betekent een gebied dat groter is dan de pad ("
+"gebruikelijk voor maskerruimte)."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:323
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:223
@@ -24251,14 +24246,14 @@ msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
 msgstr ""
-"Negatieve speling betekent een gebied dat kleiner is dan de pad "
-"(gebruikelijk voor speling van de pasta)."
+"Negatieve vrije afstand betekent een gebied dat kleiner is dan de pad ("
+"gebruikelijk voor pastaruimte)."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:333
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:233
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:603
 msgid "Pad clearance:"
-msgstr "Pad klaring:"
+msgstr "Vrije afstand voor pad:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:335
 msgid ""
@@ -24266,16 +24261,17 @@ msgid ""
 "If 0, the Netclass values are used\n"
 "This value can be superseded by a pad local value."
 msgstr ""
-"Dit is de lokale net ruimte voor alle pads van deze footprint\n"
-"Als 0, de Netclass waarden worden gebruikt\n"
-"Deze waarde kan worden overruled door een lokale pad waarde."
+"Dit is de vrije afstand binnen het lokale net voor alle pads van deze "
+"footprint\n"
+"Bij 0 worden de Netclass-waarden gebruikt\n"
+"Een lokale pad-waarde heeft voorrang op deze waarde."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:346
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:246
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:616
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:54
 msgid "Solder mask clearance:"
-msgstr "Soldeermasker ruimte:"
+msgstr "Vrije afstand voor soldeermasker:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:348
 msgid ""
@@ -24284,17 +24280,17 @@ msgid ""
 "This value can be superseded by a pad local value.\n"
 "If 0, the global value is used."
 msgstr ""
-"Dit is de lokale speling tussen de pads en het soldeermasker voor deze "
+"Dit is de lokale vrije ruimte tussen de pads en het soldeermasker voor deze "
 "footprint.\n"
-"Deze waarde kan worden vervangen door een lokale padwaarde.\n"
-"Indien 0, wordt de globale waarde gebruikt."
+"Een lokale padwaarde heeft voorrang op deze waarde.\n"
+"Bij 0 wordt de globale waarde gebruikt."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:359
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:259
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:629
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:93
 msgid "Solder paste absolute clearance:"
-msgstr "Soldeerpasta absolute speling:"
+msgstr "Absolute vrije afstand voor soldeerpasta:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:361
 msgid ""
@@ -24305,11 +24301,11 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"Dit is de plaatselijke speling tussen de pads en de soldeerpasta voor deze "
+"Dit is de lokale vrije afstand tussen de pads en de soldeerpasta voor deze "
 "footprint.\n"
-"Deze waarde kan worden vervangen door lokale waarden van een pad.\n"
-"De uiteindelijke klaringswaarde is de som van deze waarde en de verhouding "
-"tussen klaring.\n"
+"Een lokale waarde van een pad heeft voorrang op deze waarde.\n"
+"De uiteindelijke vrije afstand is de som van deze waarde en de relatieve "
+"vrije afstand.\n"
 "Een negatieve waarde betekent een kleinere maskergrootte dan de padgrootte."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:372
@@ -24317,7 +24313,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:642
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:108
 msgid "Solder paste relative clearance:"
-msgstr "Soldeerpasta relatieve speling:"
+msgstr "Relatieve vrije afstand voor soldeerpasta:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:374
 msgid ""
@@ -24328,12 +24324,13 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"Dit is de verhouding van de lokale klaring in procenten tussen de pads en de "
-"soldeerpasta voor deze footprint.\n"
-"Een waarde van 10 betekent dat de speling 10 procent van de padgrootte is.\n"
-"Deze waarde kan worden vervangen door een lokale padwaarde.\n"
-"De uiteindelijke klaringswaarde is de som van deze waarde en de "
-"klaringwaarde.\n"
+"Dit is de verhouding van de lokale vrije afstand in procenten tussen de pads "
+"en de soldeerpasta voor deze footprint.\n"
+"Een waarde van 10 betekent dat de vrije ruimte 10 procent van de padgrootte "
+"is.\n"
+"Een lokale padwaarde heeft voorrang op deze waarde.\n"
+"De uiteindelijke vrije afstand is de som van deze waarde en de vrije afstand."
+"\n"
 "Een negatieve waarde betekent een kleinere maskergrootte dan de padgrootte."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:388
@@ -24353,8 +24350,8 @@ msgid ""
 "Note: solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
 msgstr ""
-"Opmerking: spelingen van soldeerpasta (absoluut en relatief) worden "
-"toegevoegd om de uiteindelijke speling te bepalen."
+"Opmerking: vrij afstanden voor soldeerpasta (absoluut en relatief) worden "
+"opgeteld om de totale vrije afstand te bepalen."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:400
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:300
@@ -24382,7 +24379,7 @@ msgstr "Thermal relief"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:319
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:769
 msgid "Clearance Overrides and Settings"
-msgstr "Clearance vrijgave en instellingen"
+msgstr "Voorrangswaarden en instellingen voor vrije afstanden"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:438
 msgid ""
@@ -24429,10 +24426,10 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Dit is de lokale netto-vrije ruimte voor alle blokken van deze footprint.\n"
-"Indien 0, worden de Netclass-waarden gebruikt.\n"
-"Deze waarde kan per pad worden overschreven in de Local\n"
-"Het tabblad Clearance and Settings van Pad Properties."
+"Dit is de lokale vrije net-afstand voor alle pads van deze footprint.\n"
+"Bij 0 worden de Netclass-waarden gebruikt.\n"
+"Een waarde in het tabblad Lokale voorrangswaarden en instellingen\n"
+"voor vrije ruimte bij de pad-eigenschappen heeft voorrang op deze waarde."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:248
 msgid ""
@@ -24442,11 +24439,11 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Dit is de lokale speling tussen de pads en het soldeermasker voor\n"
-"deze voetafdruk.\n"
-"Indien 0, wordt de globale waarde gebruikt.\n"
-"Deze waarde kan per pad worden overschreven in de Local\n"
-"Het tabblad Clearance and Settings van Pad Properties."
+"Dit is de lokale vrije afstand tussen de pads en het soldeermasker voor\n"
+"deze footprint.\n"
+"Bij 0 wordt de globale waarde gebruikt.\n"
+"De waarde in het tabblad Lokale vrije afstand en instellingen\n"
+"van de Pad-eigenschappen heeft voorrang op deze waarde."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:261
 msgid ""
@@ -24458,13 +24455,13 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Dit is de plaatselijke speling tussen de pads en de soldeerpasta voor\n"
-"deze voetafdruk.\n"
-"De uiteindelijke klaringswaarde is de som van deze waarde en de verhouding "
-"tussen klaring.\n"
+"Dit is de lokale vrije afstand tussen de pads en de soldeerpasta voor\n"
+"deze footprint.\n"
+"De uiteindelijke vrije afstand is de som van deze waarde en de relatieve "
+"vrije afstand.\n"
 "Een negatieve waarde betekent een kleinere maskergrootte dan de padgrootte.\n"
-"Deze waarde kan per pad worden overschreven in de Local\n"
-"Het tabblad Clearance and Settings van Pad Properties."
+"De waarde in het tabblad Lokale vrije afstand en instellingen\n"
+"van de Pad-eigenschappen heeft voorrang op deze waarde."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:274
 msgid ""
@@ -24476,15 +24473,15 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Dit is de verhouding van de lokale speling in procenten tussen de remblokken "
-"en de\n"
+"Dit is de lokale vrije afstand in procenten tussen de pads en de\n"
 "soldeerpasta voor deze footprint.\n"
-"Een waarde van 10 betekent dat de speling 10 procent van de padgrootte is.\n"
-"De uiteindelijke klaringswaarde is de som van deze waarde en de "
-"klaringwaarde.\n"
+"Een waarde van 10 betekent dat de vrije afstand 10 procent van de padgrootte "
+"is.\n"
+"De uiteindelijke vrije afstand is de som van deze waarde en de vrije afstand."
+"\n"
 "Een negatieve waarde betekent een kleinere maskergrootte dan de padgrootte.\n"
-"Deze waarde kan per pad worden overschreven in de Local\n"
-"Het tabblad Clearance and Settings van Pad Properties."
+"De waarde in het tabblad Lokale vrije afstand en instellingen\n"
+"van de Pad-eigenschappen heeft voorrang op deze waarde."
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:144
 msgid "All footprint generator scripts were loaded"
@@ -25561,9 +25558,9 @@ msgid "Line width may not be 0 for unfilled shapes."
 msgstr "Lijnbreedte mag niet 0 zijn voor niet-gevulde vormen."
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Corner %d"
-msgstr "Hoeken"
+msgstr "Hoek %d"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:334
 msgid "Polygon must have at least 3 corners"
@@ -25595,9 +25592,8 @@ msgid "Pad Properties"
 msgstr "Pad Voorkeuren"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:175
-#, fuzzy
 msgid "Default Pad Properties for Add Pad Tool"
-msgstr "Standaard pad-eigenschappen ..."
+msgstr "Standaard pad-eigenschappen voor gereedschap om pads toe te voegen"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:493
 #, c-format
@@ -25698,23 +25694,23 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1270
 msgid "Warning: Negative local clearance values will have no effect."
 msgstr ""
-"Waarschuwing: negatieve waarden voor lokale klaring hebben geen effect."
+"Waarschuwing: negatieve waarden voor lokale vrije afstand hebben geen effect."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1287
 msgid ""
 "Warning: Negative solder mask clearances larger than some shape primitives. "
 "Results may be surprising."
 msgstr ""
-"Waarschuwing: Negatieve soldermask clearance is groter dan sommige shapes. "
-"Dat kan verrassingen opleveren."
+"Waarschuwing: Negatieve vrije afstand voor het soldeermasker is groter dan "
+"sommige vormen. Dit kan verrassingen opleveren."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1296
 msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
 msgstr ""
-"Waarschuwing: Negatieve soldeermaskerafstand groter dan pad. Er wordt geen "
-"soldeermasker gegenereerd."
+"Waarschuwing: Negatieve vrije afstand voor het soldeermasker is groter dan "
+"een pad. Er wordt geen soldeermasker gegenereerd."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1315
 msgid ""
@@ -26113,16 +26109,16 @@ msgid ""
 "This is the local net clearance for this pad.\n"
 "If 0, the footprint local value or the Netclass value is used."
 msgstr ""
-"Dit is de lokale netto-vrije ruimte voor deze pad.\n"
-"Indien 0, wordt de lokale footprint-waarde of de Netclass-waarde gebruikt."
+"Dit is de lokale vrije net-afstand voor deze pad.\n"
+"Bij 0 wordt de lokale footprint-waarde of de Netclass-waarde gebruikt."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:618
 msgid ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
 msgstr ""
-"Dit is de lokale speling tussen deze pad en het soldeermasker.\n"
-"Indien 0, wordt de lokale voetafdrukwaarde of de globale waarde gebruikt."
+"Dit is de lokale vrije afstand tussen deze pad en het soldeermasker.\n"
+"Bij 0 wordt de lokale footprintwaarde of de globale waarde gebruikt."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:631
 msgid ""
@@ -26132,10 +26128,10 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"Dit is de lokale speling tussen deze pad en de soldeerpasta.\n"
-"Indien 0, wordt de footprintwaarde of de globale waarde gebruikt.\n"
-"De uiteindelijke klaringswaarde is de som van deze waarde en de verhouding "
-"tussen klaring.\n"
+"Dit is de lokale vrije afstand tussen deze pad en de soldeerpasta.\n"
+"Bij 0 wordt de footprintwaarde of de globale waarde gebruikt.\n"
+"De uiteindelijke vrije afstand is de som van deze waarde en de relatieve "
+"vrije afstand.\n"
 "Een negatieve waarde betekent een kleinere maskergrootte dan de padgrootte."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:644
@@ -26147,12 +26143,13 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"Dit is de verhouding van de lokale speling in procenten tussen deze pad en "
-"de soldeerpasta.\n"
-"Een waarde van 10 betekent dat de speling 10 procent van de padgrootte is.\n"
-"Indien 0, wordt de footprintwaarde of de globale waarde gebruikt.\n"
-"De uiteindelijke klaringswaarde is de som van deze waarde en de "
-"klaringwaarde.\n"
+"Dit is de lokale vrije afstand in procenten tussen deze pad en de "
+"soldeerpasta.\n"
+"Een waarde van 10 betekent dat de vrije afstand 10 procent van de padgrootte "
+"is.\n"
+"Bij 0 wordt de footprintwaarde of de globale waarde gebruikt.\n"
+"De uiteindelijke vrije afstand is de som van deze waarde en de vrije afstand."
+"\n"
 "Een negatieve waarde betekent een kleinere maskergrootte dan de padgrootte."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:711
@@ -26326,9 +26323,8 @@ msgid "Plot Edge.Cuts on all layers"
 msgstr "Plot Edge.Cuts op alle lagen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
-#, fuzzy
 msgid "Plot the contents of the PCB edge layer on all layers"
-msgstr "Teken de inhoud van de PCB-randlaag niet op andere lagen."
+msgstr "Teken de inhoud van de board-randlaag op alle lagen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 #, fuzzy
@@ -26566,8 +26562,8 @@ msgstr ""
 "breedte.\n"
 "Deze breedtecorrectie is bedoeld om de breedte van de sporen te compenseren, "
 "evenals fouten in de grootte van de pads en vias.\n"
-"De redelijke correctiewaarde voor de breedte moet in een bereik liggen van "
-"[- (MinTrackWidth-1), + (MinClearanceValue-1)]."
+"De redelijke correctiewaarde voor de breedte moet in een bereik liggen van [-"
+" (MinTrackBreedte-1), + (MinVrijeAfstand-1)]."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:323
 msgid "Force A4 output"
@@ -27027,9 +27023,8 @@ msgid "Real drill"
 msgstr "Echte boor"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:21
-#, fuzzy
 msgid "Select Manufacturer"
-msgstr "Selecteer Laag:"
+msgstr "Selecteer Fabrikant"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:25
 #, fuzzy, c-format
@@ -27037,9 +27032,9 @@ msgid "from %s"
 msgstr "[van %s]"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:29
-#, fuzzy, c-format
+#, c-format
 msgid "Details: %s"
-msgstr "Details"
+msgstr "Details: %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:33
 #, fuzzy
@@ -27048,15 +27043,15 @@ msgstr "Opslaan van huidige project"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:37
 msgid "Sends production files to manufacturer from KiCad"
-msgstr ""
+msgstr "Verstuurt productiebestanden vanuit KiCad naar producent"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:41
 msgid "Produce PCB"
-msgstr ""
+msgstr "Produceer PCB"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.h:44
 msgid "Send PCB for production"
-msgstr ""
+msgstr "Verstuur PCB voor productie"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:51
 msgid "Change Pads on Current Footprint"
@@ -27487,16 +27482,17 @@ msgstr "Toon pad <geen net> indicator"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:57
 msgid "Clearance Outlines"
-msgstr "Opruimingsoverzicht"
+msgstr "Contouren rondom vrije afstand"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show when routing"
 msgstr "Tonen bij het plaatsen van tracks"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing w/ via clearance at end"
-msgstr "Toon met via klaring aan het einde"
+msgstr ""
+"Toon bij het plaatsen van tracks, met de vrije afstand voor via's aan het "
+"eind"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show when routing and editing"
@@ -27508,17 +27504,20 @@ msgstr "Altijd laten zien"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:61
 msgid "Track && Via Clearances"
-msgstr "Clearance voor Tracks en Vias"
+msgstr "Vrije afstand voor Tracks en Vias"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:63
 msgid ""
 "Show clearance outlines around tracks, and optionally the via clearance "
 "around the end of the track while routing."
 msgstr ""
+"Toon tijdens het plaatsen van tracks de contouren van de vrije afstand "
+"rondom tracks, en mogelijk de vrije afstand voor via's rondom het einde van "
+"de track."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
 msgid "Show pad clearance"
-msgstr "Pad ruimte weergeven"
+msgstr "Vrije afstand voor pads weergeven"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
 #, fuzzy
@@ -27965,7 +27964,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:191
 msgid "Minimum clearance:"
-msgstr "Minimale vrije ruimte:"
+msgstr "Minimale vrije afstand:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:196
 msgid ""
@@ -27973,9 +27972,9 @@ msgid ""
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
 msgstr ""
-"De minimum clearance tussen koper-items die niet aan hetzelfde net zijn "
-"gekoppeld.  Indien ingevuld dan is dit een absoluut minimum die niet kan "
-"worden verkleind door net-klassen, custom rules of andere instellingen."
+"De minimum vrije afstand tussen koper-items die niet aan hetzelfde net zijn "
+"gekoppeld.  Indien ingevuld dan is dit een absoluut minimum dat niet kan "
+"worden verkleind door net-klassen, custom regels of andere instellingen."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:207
 msgid "Minimum track width:"
@@ -28018,7 +28017,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
 msgid "Copper to hole clearance:"
-msgstr "Clearance tussen koper en boor-gat:"
+msgstr "Vrije afstand tussen koper en boor-gat:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:261
 msgid ""
@@ -28026,13 +28025,13 @@ msgid ""
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
 msgstr ""
-"De minimum clearance tussen een boor-gat en een niet-gerelateerd koper-"
+"De minimum vrije afstand tussen een boor-gat en een niet-gerelateerd koper-"
 "item.  Indien ingevuld dan is dit het absolute minimum dat niet kan worden "
-"verkleind door custom rules of andere instellingen."
+"verkleind door custom regels of andere instellingen."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
 msgid "Copper to edge clearance:"
-msgstr "Clearance tussen koper en board-zijkant:"
+msgstr "Vrije afstand tussen koper en board-zijkant:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:277
 msgid ""
@@ -28040,9 +28039,9 @@ msgid ""
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
 msgstr ""
-"De minimum clearance tussen de zijkant van het board, en koper items.  "
+"De minimum vrije afstand tussen de zijkant van het board, en koper items.  "
 "Indien ingevuld dan is dit het absolute minimum dat niet kan worden "
-"verkleind door custom rules of andere instellingen."
+"verkleind door custom regels of andere instellingen."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:297
 msgid "Holes"
@@ -28063,7 +28062,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:329
 msgid "Hole to hole clearance:"
-msgstr "Speling gat tot gat:"
+msgstr "Vrije afstand van gat tot gat:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:334
 msgid ""
@@ -28071,9 +28070,9 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
-"De minimum cearance tussen twee boor-gaten.  Indien ingevuld dan is dit het "
-"absolute minimum dat niet kan worden verkleind door custom rules, of andere "
-"instellingen. (Niet van toepassing op gefreesde gaten.)"
+"De minimum vrije afstand tussen twee boor-gaten.  Indien ingevuld dan is dit "
+"het absolute minimum dat niet kan worden verkleind door custom regels, of "
+"andere instellingen. (Niet van toepassing op gefreesde gaten.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:354
 msgid "uVias"
@@ -28111,7 +28110,7 @@ msgstr "Zeefdruk"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:427
 msgid "Minimum item clearance:"
-msgstr "Minimale opruiming van artikelen:"
+msgstr "Minimale vrije afstand tussen items:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:432
 msgid ""
@@ -28119,9 +28118,9 @@ msgid ""
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
-"Minimum clearance tussen 2 items op dezelfde silkscreen laag.  Indien "
+"Minimum vrije afstand tussen 2 items op dezelfde silkscreen-laag.  Indien "
 "ingevuld dan kan dat de leesbaarheid verbeteren. (Niet van toepassing op "
-"meervoudige shapes binnen een footprint.)"
+"meervoudige vormen binnen een footprint.)"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:431
 msgid "Use the Physical Stackup page to change the number of copper layers."
@@ -28719,12 +28718,11 @@ msgid "User9"
 msgstr "Gebruiker9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board manufacturer's recommendations for solder mask clearance and "
 "minimum web width."
 msgstr ""
-"Gebruik de aanbeveling van uw PCB-fabrikant voor de clearance van het "
+"Gebruik de aanbeveling van uw PCB-fabrikant voor de vrije afstand van het "
 "soldeermasker en de minimale brugbreedte."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
@@ -28737,17 +28735,16 @@ msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
-"Globale speling tussen pads en het soldeermasker.\n"
-"Deze waarde kan worden vervangen door lokale waarden voor een footprint of "
-"een pad."
+"Globale vrije afstand tussen pads en het soldeermasker.\n"
+"Lokale waarden voor een footprint of een pad hebben voorrang op deze waarde."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:61
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
 msgstr ""
-"Positieve speling betekent een gebied dat groter is dan de pad (gebruikelijk "
-"voor soldeermaskerafstand)."
+"Positieve vrije afstand betekent een gebied dat groter is dan de pad ("
+"gebruikelijk voor vrije afstand van soldeermaskers)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
 msgid "Solder mask minimum web width:"
@@ -28780,19 +28777,19 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value ratio."
 msgstr ""
-"Globale speling tussen pads en de soldeerpasta.\n"
-"Deze waarde kan worden vervangen door lokale waarden voor een footprint of "
-"een pad.\n"
-"De uiteindelijke klaringswaarde is de som van deze waarde en de verhouding "
-"tussen klaring."
+"Globale vrije afstand tussen pads en de soldeerpasta.\n"
+"Lokale waarden voor een footprint of een pad hebben voorrang op deze waarde."
+"\n"
+"De uiteindelijke vrije afstand is de som van deze waarde en de relatieve "
+"vrije afstand."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:100
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste "
 "clearance)."
 msgstr ""
-"Negatieve speling betekent een gebied dat kleiner is dan de pad "
-"(gebruikelijk voor soldeerpasta)."
+"Negatieve vrije afstand betekent een gebied dat kleiner is dan de pad ("
+"gebruikelijk voor vrije afstand van soldeerpasta)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:110
 msgid ""
@@ -28801,24 +28798,24 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value."
 msgstr ""
-"Globale klaringsverhouding in procenten tussen pads en de soldeerpasta.\n"
-"Een waarde van 10 betekent dat de speling 10 procent van de padgrootte is.\n"
-"Deze waarde kan worden vervangen door lokale waarden voor een footprint of "
-"een pad.\n"
-"De uiteindelijke klaringswaarde is de som van deze waarde en de "
-"klaringwaarde."
+"Globale vrije afstand in procenten tussen pads en de soldeerpasta.\n"
+"Een waarde van 10 betekent dat de vrije afstand 10 procent van de padgrootte "
+"is.\n"
+"Lokale waarden voor een footprint of een pad hebben voorrang op deze waarde."
+"\n"
+"De uiteindelijke vrije afstand is de som van deze waarde en de vrije afstand."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:115
 msgid "Additional clearance as a percentage of the pad size."
-msgstr "Extra clearance als percentage van de pad-afmeting."
+msgstr "Extra vrije afstand als percentage van de pad-afmeting."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:129
 msgid ""
 "Note: Solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
 msgstr ""
-"Opmerking: Speling van soldeerpasta (absoluut en relatief) wordt toegevoegd "
-"om de uiteindelijke speling te bepalen."
+"Opmerking: Vrije afstand van soldeerpasta (absoluut en relatief) wordt "
+"opgeteld om de uiteindelijke vrije afstand te bepalen."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:93
 msgid "Cancel Changes?"
@@ -29189,7 +29186,7 @@ msgstr "Tessellating koperzones ..."
 #: pcbnew/drc/drc_engine.cpp:794 pcbnew/drc/drc_engine.cpp:809
 #, c-format
 msgid "Local override on %s; clearance: %s."
-msgstr "Lokale overschrijving op %s; klaring: %s."
+msgstr "Lokale overschrijving op %s; vrije afstand: %s."
 
 #: pcbnew/drc/drc_engine.cpp:825
 msgid "board minimum"
@@ -29198,7 +29195,7 @@ msgstr "Board minimum"
 #: pcbnew/drc/drc_engine.cpp:828
 #, c-format
 msgid "Board minimum clearance: %s."
-msgstr "Minimum clearance van het board: %s."
+msgstr "Minimum vrije afstand van het board: %s."
 
 #: pcbnew/drc/drc_engine.cpp:837
 msgid "board minimum hole"
@@ -29207,12 +29204,12 @@ msgstr "Board minimum gat"
 #: pcbnew/drc/drc_engine.cpp:840
 #, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr "Board minimum gat clearance: %s."
+msgstr "Board minimum vrije afstand voor gaten: %s."
 
 #: pcbnew/drc/drc_engine.cpp:867
 #, c-format
 msgid "Checking %s clearance: %s."
-msgstr "Controleren %s clearance: %s."
+msgstr "Controleren %s vrije afstand: %s."
 
 #: pcbnew/drc/drc_engine.cpp:879 pcbnew/drc/drc_engine.cpp:880
 #: pcbnew/drc/drc_engine.cpp:881 pcbnew/tools/board_inspection_tool.cpp:647
@@ -29260,7 +29257,7 @@ msgstr "Controleert %s."
 #: pcbnew/drc/drc_engine.cpp:931
 msgid "Board and netclass clearances apply only between copper items."
 msgstr ""
-"Speling voor plaat- en netklasse is alleen van toepassing tussen koperen "
+"Vrije afstand voor plaat- en netklasse wordt alleen gebruikt tussen koperen "
 "items."
 
 #: pcbnew/drc/drc_engine.cpp:977
@@ -29316,7 +29313,7 @@ msgstr "Aan voorwaarde niet voldaan; regel genegeerd."
 #: pcbnew/drc/drc_engine.cpp:1115 pcbnew/drc/drc_engine.cpp:1126
 #, c-format
 msgid "Local clearance on %s; clearance: %s."
-msgstr "Lokale inklaring op %s; klaring: %s."
+msgstr "Lokale vrije afstand op %s; vrije afstand: %s."
 
 #: pcbnew/drc/drc_item.cpp:43
 msgid "Electrical"
@@ -29352,7 +29349,7 @@ msgstr "Text (of dimensie) op Edge.Cuts laag"
 
 #: pcbnew/drc/drc_item.cpp:66
 msgid "Clearance violation"
-msgstr "Opruimingsovertreding"
+msgstr "Overschrijding van vrije afstand"
 
 #: pcbnew/drc/drc_item.cpp:70
 msgid "Tracks crossing"
@@ -29360,7 +29357,7 @@ msgstr "Sporen kruisen"
 
 #: pcbnew/drc/drc_item.cpp:74
 msgid "Board edge clearance violation"
-msgstr "Overtreding van de randvrijheid van het bord"
+msgstr "Overschrijding van de vrije afstand naar de rand van het board"
 
 #: pcbnew/drc/drc_item.cpp:78
 msgid "Copper areas intersect"
@@ -29380,7 +29377,7 @@ msgstr "Track heeft een niet-verbonden einde"
 
 #: pcbnew/drc/drc_item.cpp:94
 msgid "Hole clearance violation"
-msgstr "Overtreding van de opening"
+msgstr "Overschrijding van de vrije afstand om een gat"
 
 #: pcbnew/drc/drc_item.cpp:98
 msgid "Drilled holes too close together"
@@ -29491,11 +29488,8 @@ msgid "Footprint type doesn't match footprint pads"
 msgstr "Footprint type komt niet overeen met footprint pads"
 
 #: pcbnew/drc/drc_item.cpp:210
-#, fuzzy
 msgid "Through hole pad has no hole"
-msgstr ""
-"Waarschuwing: Through-hole-pad heeft geen boor-gat (boordiameter ingesteld "
-"op 0)."
+msgstr "Doorgaand pad heeft geen boor-gat"
 
 #: pcbnew/drc/drc_item.cpp:334
 #, c-format
@@ -29641,15 +29635,15 @@ msgstr "Koperen voorwerpen verzamelen ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:210
 msgid "Checking track & via clearances..."
-msgstr "Track & via spelingen controleren ..."
+msgstr "Vrije afstanden van tracks en via's controleren..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:217
 msgid "Checking hole clearances..."
-msgstr "Controleer Pad clearances..."
+msgstr "Vrije afstanden van Pads controleren..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:225
 msgid "Checking pad clearances..."
-msgstr "De afstand tussen de blokken controleren ..."
+msgstr "De vrije afstand tussen de pads controleren ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:233
 msgid "Checking pads..."
@@ -29657,7 +29651,7 @@ msgstr "Controleer pad's..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:241
 msgid "Checking copper zone clearances..."
-msgstr "Afstanden van koperzones controleren ..."
+msgstr "Vrije afstanden van koperzones controleren ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:248
 msgid "Checking zones..."
@@ -29679,7 +29673,7 @@ msgstr "Zones controleren ..."
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:160
 #, c-format
 msgid "(%s clearance %s; actual %s)"
-msgstr "(%s goedkeuring %s; werkelijk %s)"
+msgstr "(%s vrije afstand %s; werkelijk %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:654
 #, c-format
@@ -29728,11 +29722,11 @@ msgstr "Bewaarplekken en beperkingen controleren ..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:123
 msgid "Checking copper to board edge clearances..."
-msgstr "Controleer koper naar zijkant clearances..."
+msgstr "Vrije afstand van koper naar board-rand controleren..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:128
 msgid "Checking silk to board edge clearances..."
-msgstr "Controleer silkscreen naar zijkant clearances..."
+msgstr "Vrije afstand van silkscreen naar board-rand controleren..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:77
 msgid "Checking pad holes..."
@@ -29762,7 +29756,7 @@ msgstr "(%s max. Breedte %s; werkelijk %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:124
 msgid "Checking hole to hole clearances..."
-msgstr "De spelingen van gat tot gat controleren ..."
+msgstr "Vrije afstand tussen gaten controleren..."
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:313
 #, c-format
@@ -30070,15 +30064,15 @@ msgid ""
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"Als de zones op dit bord opnieuw worden gevuld, wordt de instelling voor "
-"koper-zijkant clearance gebruikt (zie Board-instellingen > Ontwerpregels > "
-"beperkingen).\n"
+"Als de zones op dit bord opnieuw worden gevuld, wordt de instelling voor de "
+"vrije ruimte van koper naar board-rand gebruikt (zie Board-instellingen > "
+"Ontwerpregels > Beperkingen).\n"
 "Dit kan resulteren in verschillende vullingen van eerdere Kicad-versies die "
-"de lijn-diktes van de boardgrens op de Edge Cuts-laag gebruikten."
+"de lijn-diktes van de board-rand op de Edge Cuts-laag gebruikten."
 
 #: pcbnew/files.cpp:548
 msgid "Edge Clearance Warning"
-msgstr "Waarschuwing voor randontruiming"
+msgstr "Waarschuwing over vrije afstand tot rand"
 
 #: pcbnew/files.cpp:579
 #, c-format
@@ -30244,7 +30238,7 @@ msgstr "pad %s"
 
 #: pcbnew/footprint.cpp:2390 pcbnew/pad.cpp:1733 pcbnew/zone.cpp:1456
 msgid "Clearance Override"
-msgstr "Clearance voorkeur"
+msgstr "Vrije afstand"
 
 #: pcbnew/footprint.cpp:2393 pcbnew/pad.cpp:1710
 msgid "Solderpaste Margin Override"
@@ -31413,7 +31407,7 @@ msgstr "Boor-gat X / Y"
 #: pcbnew/router/router_tool.cpp:2141 pcbnew/zone.cpp:640
 #, c-format
 msgid "Min Clearance: %s"
-msgstr "Min. Clearance : %s"
+msgstr "Min. vrije afstand: %s"
 
 #: pcbnew/pad.cpp:985 pcbnew/pcb_track.cpp:717 pcbnew/pcb_track.cpp:753
 #: pcbnew/pcb_track.cpp:759 pcbnew/router/router_tool.cpp:2129
@@ -31453,14 +31447,14 @@ msgid "Through hole pad %s of %s"
 msgstr "Doorgaand pad %s van %s"
 
 #: pcbnew/pad.cpp:1194
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s %s of %s on %s"
-msgstr "Pad %s van %s op %s"
+msgstr "Pad %s %s van %s op %s"
 
 #: pcbnew/pad.cpp:1208
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s %s of %s"
-msgstr "Doorgaand pad %s van %s"
+msgstr "Doorgaand pad %s %s van %s"
 
 #: pcbnew/pad.cpp:1650
 msgid "Edge connector"
@@ -32247,9 +32241,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "De CADSTAR pad definitie '%s' heeft import-fouten: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
-msgstr "Kan geen pdf-viewer vinden voor '%s'."
+msgstr "Kan pad-index '%d' niet vinden in footprint '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1291
 #, c-format
@@ -33319,7 +33313,8 @@ msgstr "Afgestemd: scheef "
 
 #: pcbnew/router/pns_router.cpp:212
 msgid "Diff pair gap is less than board minimum clearance."
-msgstr "Tussenruimte differentieel paar kleiner dan minimum clearance (%s)."
+msgstr ""
+"Tussenruimte van differentieelpaar is kleiner dan minimum vrije afstand (%s)."
 
 #: pcbnew/router/pns_router.cpp:232
 msgid "Cannot start routing from a non-plated hole."
@@ -33582,9 +33577,8 @@ msgstr ""
 "Constraints."
 
 #: pcbnew/router/router_tool.cpp:987
-#, fuzzy
 msgid "Blind/buried via need 2 different layers."
-msgstr "Verander geen pads met afwijkende lagen"
+msgstr "Blinde/begraven via heeft twee verschillende lagen nodig."
 
 #: pcbnew/router/router_tool.cpp:1065
 msgid "Tracks on Copper layers only."
@@ -33647,7 +33641,7 @@ msgstr "mate"
 
 #: pcbnew/router/router_tool.cpp:2117
 msgid "90-degree rounded"
-msgstr ""
+msgstr "90 graden (afgerond)"
 
 #: pcbnew/router/router_tool.cpp:2122
 #, fuzzy
@@ -33886,19 +33880,19 @@ msgstr "Ontgrendelen"
 
 #: pcbnew/tools/board_editor_control.cpp:1393
 msgid "Zones have insufficient overlap for merging."
-msgstr ""
+msgstr "De zones overlappen onvoldoende om te kunnen worden samengevoegd."
 
 #: pcbnew/tools/board_editor_control.cpp:1439
 msgid "Some zone netcodes did not match and were not merged."
-msgstr ""
+msgstr "Sommige zones hebben ongelijke netcodes en zijn niet samengevoegd."
 
 #: pcbnew/tools/board_editor_control.cpp:1445
 msgid "Some zone priorities did not match and were not merged."
-msgstr ""
+msgstr "Sommige zones hebben ongelijke prioriteit en zijn niet samengevoegd."
 
 #: pcbnew/tools/board_editor_control.cpp:1451
 msgid "Some zones were rule areas and were not merged."
-msgstr ""
+msgstr "Sommige zones zijn regelgebieden en zijn niet samengevoegd."
 
 #: pcbnew/tools/board_editor_control.cpp:1457
 #, fuzzy
@@ -33907,7 +33901,7 @@ msgstr "Regel-laag '%s' komt niet overeen; regel genegeerd."
 
 #: pcbnew/tools/board_editor_control.cpp:1463
 msgid "Some zones did not intersect and were not merged."
-msgstr ""
+msgstr "Sommige zones hebben geen overlap en zijn niet samengevoegd."
 
 #: pcbnew/tools/board_editor_control.cpp:1529
 msgid "Duplicate zone"
@@ -33934,31 +33928,31 @@ msgstr "Rapport onvolledig: kon geen ontwerpregels opstellen.  "
 #: pcbnew/tools/board_inspection_tool.cpp:619
 #, c-format
 msgid "Resolved clearance: %s."
-msgstr "Opgeloste clearance: %s."
+msgstr "Opgeloste vrije afstand: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:186
 #: pcbnew/tools/board_inspection_tool.cpp:305
 msgid "Clearance Report"
-msgstr "Clearance rapport"
+msgstr "Rapport over vrije afstand"
 
 #: pcbnew/tools/board_inspection_tool.cpp:198
 #: pcbnew/tools/board_inspection_tool.cpp:605
 msgid "Edge clearance resolution for:"
-msgstr "Buitenrand clearance resolutie voor:"
+msgstr "Vrije afstand tot board-rand resolutie voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:235
 #: pcbnew/tools/board_inspection_tool.cpp:459
 msgid "Clearance resolution for:"
-msgstr "Clearance resolutie voor:"
+msgstr "Vrije afstand resolutie voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:264
 msgid "Select two items for a clearance resolution report."
-msgstr "Selecteer twee items voor een clearance resolutie-rapport."
+msgstr "Selecteer twee items voor resolutie-rapport over de vrije afstand."
 
 #: pcbnew/tools/board_inspection_tool.cpp:279
 #: pcbnew/tools/board_inspection_tool.cpp:292
 msgid "Cannot generate clearance report on empty group."
-msgstr "Kan geen clearance-rapport genereren voor een lege groep."
+msgstr "Kan geen rapport genereren voor de vrije afstand van een lege groep."
 
 #: pcbnew/tools/board_inspection_tool.cpp:383
 msgid "Zone connection resolution for:"
@@ -33983,34 +33977,34 @@ msgstr "Overschreven door %s; thermal relief: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:414
 #, c-format
 msgid "Zone clearance: %s."
-msgstr "Zone clearance: %s."
+msgstr "Vrije afstand voor gebieden: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:423
 #, c-format
 msgid "Overridden by larger thermal relief from %s;clearance: %s."
-msgstr "Overschreven door groter thermal relief van %s; clearance: %s."
+msgstr "Groter thermal relief van %s heeft voorrang; vrije afstand: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:434
 #: pcbnew/tools/board_inspection_tool.cpp:444
 #, c-format
 msgid "Clearance: %s."
-msgstr "Clearance: %s."
+msgstr "Vrije afstand: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:469
 msgid "Items belong to the same net. Clearance is 0."
-msgstr "Items behoren tot hetzelfde net. Clearance is 0."
+msgstr "Items behoren tot hetzelfde net. Vrije afstand is 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:498
 msgid "Silkscreen clearance resolution for:"
-msgstr "Silkscreen clearance resolutie voor:"
+msgstr "Vrije afstand voor silkscreen resolutie voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:528
 msgid "Courtyard clearance resolution for:"
-msgstr "Buitenmaat clearance resolutie voor:"
+msgstr "Vrije afstand voor binnenplaats resolutie voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:566
 msgid "Hole clearance resolution for:"
-msgstr "Boorgat clearance resolutie voor:"
+msgstr "Vrije afstand voor boorgat resolutie voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:629
 msgid "Items share no relevant layers:"
@@ -35587,13 +35581,13 @@ msgstr "Toont board statistieken"
 
 #: pcbnew/tools/pcb_actions.cpp:1100
 msgid "Clearance Resolution..."
-msgstr "Clearance resolutie ..."
+msgstr "Vrije afstand resolutie..."
 
 #: pcbnew/tools/pcb_actions.cpp:1101
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
 msgstr ""
-"Toon clearance resolutie voor de actieve laag tussen twee geselecteerde "
+"Toon vrije afstand resolutie voor de actieve laag tussen twee geselecteerde "
 "objecten"
 
 #: pcbnew/tools/pcb_actions.cpp:1106
