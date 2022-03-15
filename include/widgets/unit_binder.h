@@ -195,6 +195,7 @@ public:
     }
 
 protected:
+    void onClick( wxMouseEvent& aEvent );
 
     void onSetFocus( wxFocusEvent& aEvent );
     void onKillFocus( wxFocusEvent& aEvent );

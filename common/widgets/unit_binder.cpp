@@ -74,6 +74,8 @@ UNIT_BINDER::UNIT_BINDER( EDA_BASE_FRAME* aParent, wxStaticText* aLabel, wxWindo
                           nullptr, this );
     m_valueCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ),
                           nullptr, this );
+    m_valueCtrl->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( UNIT_BINDER::onClick ), nullptr,
+                          this );
     Connect( DELAY_FOCUS, wxCommandEventHandler( UNIT_BINDER::delayedFocusHandler ), nullptr,
              this );
 
@@ -130,21 +132,48 @@ void UNIT_BINDER::onUnitsChanged( wxCommandEvent& aEvent )
 }
 
 
+void UNIT_BINDER::onClick( wxMouseEvent& aEvent )
+{
+    wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
+
+    if( textEntry && ( textEntry->GetValue() == INDETERMINATE_ACTION
+                    || textEntry->GetValue() == INDETERMINATE_STATE ) )
+    {
+        // These are tokens, not strings, so do a select all
+        textEntry->SelectAll();
+    }
+    else
+    {
+        aEvent.Skip();
+    }
+}
+
+
 void UNIT_BINDER::onSetFocus( wxFocusEvent& aEvent )
 {
     wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
 
-    if( m_allowEval && textEntry )
+    if( textEntry )
     {
-        wxString oldStr = m_eval.OriginalText();
-
-        if( oldStr.length() && oldStr != textEntry->GetValue() )
+        if( m_allowEval )
         {
-            textEntry->SetValue( oldStr );
-            textEntry->SetSelection( m_selStart, m_selEnd );
+            wxString oldStr = m_eval.OriginalText();
+
+            if( oldStr.length() && oldStr != textEntry->GetValue() )
+            {
+                textEntry->SetValue( oldStr );
+                textEntry->SetSelection( m_selStart, m_selEnd );
+            }
+
+            m_needsEval = true;
         }
 
-        m_needsEval = true;
+        if( textEntry->GetValue() == INDETERMINATE_ACTION
+                || textEntry->GetValue() == INDETERMINATE_STATE )
+        {
+            // These are tokens, not strings, so do a select all
+            textEntry->SelectAll();
+        }
     }
 
     aEvent.Skip();
