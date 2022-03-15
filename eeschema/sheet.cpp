@@ -261,10 +261,11 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
         {
             if( !symLibTableFn.Exists() || !symLibTableFn.IsFileReadable() )
             {
-                msg.Printf( _( "The project library table '%s' does not exist or cannot "
-                               "be read.  This may result in broken symbol links for the "
-                               "schematic.  Do you wish to continue?" ),
-                            fileName.GetFullPath() );
+                msg = _( "The schematic to be imported appears to have been created as part of "
+                         "a different project.  This can result in symbol library links which "
+                         "are missing from or clash with symbol library links in the global "
+                         "symbol and/or current project symbol library table.\n\n"
+                         "Do you wish to continue?" );
                 wxMessageDialog msgDlg4( this, msg, _( "Continue Load Schematic" ),
                                          wxOK | wxCANCEL | wxCANCEL_DEFAULT |
                                          wxCENTER | wxICON_QUESTION );
