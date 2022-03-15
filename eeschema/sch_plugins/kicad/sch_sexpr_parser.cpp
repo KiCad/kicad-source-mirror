@@ -1041,6 +1041,21 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
          */
         arc->SetStart( endPoint );
         arc->SetEnd( startPoint );
+
+        // Like previously, 180 degrees arcs that create issues are just modified
+        // to be < 180 degrees to do not break some other functions ( Draw, Plot, HitTest)
+        EDA_ANGLE arc_start, arc_end, arc_angle;
+        arc->CalcArcAngles( arc_start, arc_end );
+        arc_angle = arc_end - arc_start;
+
+        if( arc_angle == ANGLE_180 )
+        {
+            arc->SetStart( startPoint );
+            arc->SetEnd( endPoint );
+            VECTOR2I new_center = CalcArcCenter( arc->GetStart(), arc->GetEnd(),
+                                  EDA_ANGLE( 179.5, DEGREES_T ) );
+            arc->SetCenter( new_center );
+        }
     }
     else
     {
