@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-15 19:10+0100\n"
-"PO-Revision-Date: 2022-03-15 19:11+0100\n"
+"PO-Revision-Date: 2022-03-15 20:20+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -3284,7 +3284,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:267
 msgid "Maximum backups to keep:"
-msgstr "N° max di backup da tenere:"
+msgstr "N° max backup da tenere:"
 
 #: common/dialogs/panel_common_settings_base.cpp:269
 msgid "How many backup files total to keep (set to 0 for no limit)"
