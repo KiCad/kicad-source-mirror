@@ -264,7 +264,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
                 msg.Printf( _( "The project library table '%s' does not exist or cannot "
                                "be read.  This may result in broken symbol links for the "
                                "schematic.  Do you wish to continue?" ),
-                            fileName.GetFullPath() );
+                            symLibTableFn.GetFullPath() );
                 wxMessageDialog msgDlg4( this, msg, _( "Continue Load Schematic" ),
                                          wxOK | wxCANCEL | wxCANCEL_DEFAULT |
                                          wxCENTER | wxICON_QUESTION );
