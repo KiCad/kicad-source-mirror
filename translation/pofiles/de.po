@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 16:51-0800\n"
-"PO-Revision-Date: 2022-03-13 03:55+0000\n"
+"PO-Revision-Date: 2022-03-17 08:54+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -11750,8 +11750,7 @@ msgstr "Schaltplan aktualisieren"
 msgid ""
 "Re-link footprints to schematic symbols based on their reference designators"
 msgstr ""
-"Neuverknüpfen von Footprints zu Schaltplansymbolen basierend auf deren "
-"Referenzbezeichnern"
+"Footprints und Schaltplansymbole anhand der Referenzbezeichner neu verknüpfen"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:33
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:28
@@ -27525,7 +27524,7 @@ msgstr "Ungenutzte Pads entfernen"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 msgid "Delete footprints with no symbols"
-msgstr "Alle Footprints ohne Schaltplansymbole entfernen"
+msgstr "Footprints entfernen, wenn ihnen kein Schaltplansymbol zugeordnet ist"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:33
 msgid ""
@@ -27537,7 +27536,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:37
 msgid "Replace footprints with those specified in the schematic"
-msgstr "Alle Footprints mit denen im Schaltplan spezifizierten austauschen"
+msgstr "Footprints durch die im Schaltplan angegebenen ersetzen"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
 msgid ""
