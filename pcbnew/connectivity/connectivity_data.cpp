@@ -416,20 +416,23 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
                     }
                     else if( CN_ZONE_LAYER* zoneLayer = dynamic_cast<CN_ZONE_LAYER*>( connected ) )
                     {
-                        ZONE*                   zone = static_cast<ZONE*>( zoneLayer->Parent() );
-                        int                     islandIdx = zoneLayer->SubpolyIndex();
-                        const SHAPE_POLY_SET&   fill = zone->GetFilledPolysList( layer );
-                        const SHAPE_LINE_CHAIN& island = fill.COutline( islandIdx );
-                        std::shared_ptr<SHAPE>  flashing = pad->GetEffectiveShape();
+                        ZONE* zone = static_cast<ZONE*>( zoneLayer->Parent() );
+                        int   islandIdx = zoneLayer->SubpolyIndex();
 
-                        for( const VECTOR2I& pt : island.CPoints() )
+                        if( zone->IsFilled() )
                         {
-                            if( !flashing->Collide( pt ) )
-                                return true;
+                            const auto& fill = zone->GetFilledPolysList( layer );
+                            const auto& padOutline = pad->GetEffectivePolygon()->Outline( 0 );
+
+                            for( const VECTOR2I& pt : fill.COutline( islandIdx ).CPoints() )
+                            {
+                                if( !padOutline.PointInside( pt ) )
+                                    return true;
+                            }
                         }
 
-                        // If the entire island is inside the pad's flashing then the pad won't
-                        // *actually* connect to anything *else* so don't consider it connected.
+                        // If the zone isn't filled, or the entire island is inside the pad's
+                        // flashing then the pad won't _actually_ connect to anything else.
                         return false;
                     }
                 }
@@ -447,20 +450,23 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
                     }
                     else if( CN_ZONE_LAYER* zoneLayer = dynamic_cast<CN_ZONE_LAYER*>( connected ) )
                     {
-                        ZONE*                   zone = static_cast<ZONE*>( zoneLayer->Parent() );
-                        int                     islandIdx = zoneLayer->SubpolyIndex();
-                        const SHAPE_POLY_SET&   fill = zone->GetFilledPolysList( layer );
-                        const SHAPE_LINE_CHAIN& island = fill.COutline( islandIdx );
-                        SHAPE_CIRCLE            flashing( via->GetCenter(), via->GetWidth() / 2 );
+                        ZONE* zone = static_cast<ZONE*>( zoneLayer->Parent() );
+                        int   islandIdx = zoneLayer->SubpolyIndex();
 
-                        for( const VECTOR2I& pt : island.CPoints() )
+                        if( zone->IsFilled() )
                         {
-                            if( !flashing.SHAPE::Collide( pt ) )
-                                return true;
+                            const auto&  fill = zone->GetFilledPolysList( layer );
+                            SHAPE_CIRCLE viaCircle( via->GetCenter(), via->GetWidth() / 2 );
+
+                            for( const VECTOR2I& pt : fill.COutline( islandIdx ).CPoints() )
+                            {
+                                if( !viaCircle.SHAPE::Collide( pt ) )
+                                    return true;
+                            }
                         }
 
-                        // If the entire island is inside the via's flashing then the via won't
-                        // *actually* connect to anything *else* so don't consider it connected.
+                        // If the zone isn't filled, or the entire island is inside the pad's
+                        // flashing then the pad won't _actually_ connect to anything else.
                         return false;
                     }
                 }
