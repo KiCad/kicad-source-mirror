@@ -1249,8 +1249,8 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
             warning_msgs.Add( _( "Warning: Pad size is less than zero." ) );
     }
 
-    // Test hole size against pad size
-    if( m_dummyPad->IsOnCopperLayer() )
+    // Test hole against pad shape
+    if( m_dummyPad->IsOnCopperLayer() && m_dummyPad->GetDrillSize().x > 0 )
     {
         LSET           lset = m_dummyPad->GetLayerSet() & LSET::AllCuMask();
         PCB_LAYER_ID   layer = lset.Seq().at( 0 );
@@ -1260,19 +1260,23 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         m_dummyPad->TransformShapeWithClearanceToPolygon( padOutline, layer, 0, maxError,
                                                           ERROR_LOC::ERROR_INSIDE );
 
-        const SHAPE_SEGMENT* drillShape = m_dummyPad->GetEffectiveHoleShape();
-        const SEG            drillSeg   = drillShape->GetSeg();
-        SHAPE_POLY_SET       drillOutline;
-
-        TransformOvalToPolygon( drillOutline, drillSeg.A, drillSeg.B,
-                                drillShape->GetWidth(), maxError, ERROR_LOC::ERROR_INSIDE );
-
-        drillOutline.BooleanSubtract( padOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
-
-        if( drillOutline.BBox().GetWidth() > 0 || drillOutline.BBox().GetHeight() > 0 )
+        if( !padOutline.Collide( m_dummyPad->GetPosition() ) )
         {
-            warning_msgs.Add( _( "Warning: Pad drill will leave no copper or drill shape and "
-                                 "pad shape do not overlap." ) );
+            warning_msgs.Add( _( "Warning: Pad hole not inside pad shape." ) );
+        }
+        else if( m_dummyPad->GetAttribute() == PAD_ATTRIB::PTH )
+        {
+            const SHAPE_SEGMENT* drillShape = m_dummyPad->GetEffectiveHoleShape();
+            const SEG            drillSeg   = drillShape->GetSeg();
+            SHAPE_POLY_SET       drillOutline;
+
+            TransformOvalToPolygon( drillOutline, drillSeg.A, drillSeg.B,
+                                    drillShape->GetWidth(), maxError, ERROR_LOC::ERROR_INSIDE );
+
+            padOutline.BooleanSubtract( drillOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+
+            if( padOutline.IsEmpty() )
+                warning_msgs.Add( _( "Warning: Pad hole will leave no copper." ) );
         }
     }
 

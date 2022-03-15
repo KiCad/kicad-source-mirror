@@ -21,20 +21,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <geometry/shape_segment.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
+#include <board_design_settings.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider_clearance_base.h>
-
+#include "convert_basic_shapes_to_polygon.h"
 
 /*
     Drilled hole size test. scans vias/through-hole pads and checks for min drill sizes
     Errors generated:
     - DRCE_DRILL_OUT_OF_RANGE
     - DRCE_MICROVIA_DRILL_OUT_OF_RANGE
+    - DRCE_PADSTACK
 */
 
 class DRC_TEST_PROVIDER_HOLE_SIZE : public DRC_TEST_PROVIDER
@@ -61,8 +64,9 @@ public:
     }
 
 private:
-    void checkVia( PCB_VIA* via, bool aExceedMicro, bool aExceedStd );
-    void checkPad( PAD* aPad );
+    void checkViaHole( PCB_VIA* via, bool aExceedMicro, bool aExceedStd );
+    void checkPadHole( PAD* aPad );
+    void checkPadStack( PAD* aPad );
 };
 
 
@@ -75,15 +79,19 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
 
         for( FOOTPRINT* footprint : m_drcEngine->GetBoard()->Footprints() )
         {
-            if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE ) )
+            if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE )
+                    && m_drcEngine->IsErrorLimitExceeded( DRCE_PADSTACK ) )
+            {
                 break;
+            }
 
             for( PAD* pad : footprint->Pads() )
             {
-                if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE ) )
-                    break;
+                if( !m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE ) )
+                    checkPadHole( pad );
 
-                checkPad( pad );
+                if( !m_drcEngine->IsErrorLimitExceeded( DRCE_PADSTACK ) )
+                    checkPadStack( pad );
             }
         }
     }
@@ -112,7 +120,7 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
                 if( exceedMicro && exceedStd )
                     break;
 
-                checkVia( static_cast<PCB_VIA*>( track ), exceedMicro, exceedStd );
+                checkViaHole( static_cast<PCB_VIA*>( track ), exceedMicro, exceedStd );
             }
         }
     }
@@ -122,8 +130,54 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
     return !m_drcEngine->IsCancelled();
 }
 
+void DRC_TEST_PROVIDER_HOLE_SIZE::checkPadStack( PAD* aPad )
+{
+    if( aPad->GetAttribute() == PAD_ATTRIB::PTH )
+    {
+        if( !aPad->IsOnCopperLayer() )
+        {
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_PADSTACK );
+            m_msg.Printf( _( " (PTH pad has no copper layers)" ) );
 
-void DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( PAD* aPad )
+            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+            drcItem->SetItems( aPad );
+
+            reportViolation( drcItem, aPad->GetPosition(), UNDEFINED_LAYER );
+        }
+        else
+        {
+            LSET           lset = aPad->GetLayerSet() & LSET::AllCuMask();
+            PCB_LAYER_ID   layer = lset.Seq().at( 0 );
+            int            maxError = m_drcEngine->GetBoard()->GetDesignSettings().m_MaxError;
+            SHAPE_POLY_SET padOutline;
+
+            aPad->TransformShapeWithClearanceToPolygon( padOutline, layer, 0, maxError,
+                                                        ERROR_LOC::ERROR_INSIDE );
+
+            const SHAPE_SEGMENT* drillShape = aPad->GetEffectiveHoleShape();
+            const SEG            drillSeg   = drillShape->GetSeg();
+            SHAPE_POLY_SET       drillOutline;
+
+            TransformOvalToPolygon( drillOutline, drillSeg.A, drillSeg.B,
+                                    drillShape->GetWidth(), maxError, ERROR_LOC::ERROR_INSIDE );
+
+            padOutline.BooleanSubtract( drillOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+
+            if( padOutline.IsEmpty() )
+            {
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_PADSTACK );
+                m_msg.Printf( _( " (PTH pad's hole leaves no copper)" ) );
+
+                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+                drcItem->SetItems( aPad );
+
+                reportViolation( drcItem, aPad->GetPosition(), UNDEFINED_LAYER );
+            }
+        }
+    }
+}
+
+void DRC_TEST_PROVIDER_HOLE_SIZE::checkPadHole( PAD* aPad )
 {
     int holeMinor = std::min( aPad->GetDrillSize().x, aPad->GetDrillSize().y );
     int holeMajor = std::max( aPad->GetDrillSize().x, aPad->GetDrillSize().y );
@@ -180,7 +234,7 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( PAD* aPad )
 }
 
 
-void DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( PCB_VIA* via, bool aExceedMicro, bool aExceedStd )
+void DRC_TEST_PROVIDER_HOLE_SIZE::checkViaHole( PCB_VIA* via, bool aExceedMicro, bool aExceedStd )
 {
     int errorCode;
 
