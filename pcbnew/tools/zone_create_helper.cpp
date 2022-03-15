@@ -202,7 +202,6 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
         case ZONE_MODE::SIMILAR:
         {
             BOARD_COMMIT commit( &m_tool );
-            BOARD*       board = m_tool.getModel<BOARD>();
 
             aZone->HatchBorder();
 
