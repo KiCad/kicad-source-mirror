@@ -1,0 +1,4 @@
+#define RC_VER_FILE_DESCRIPTION "KiCad Python Interface " KICAD_WIN32_RC_PRODVER_STR
+#define RC_VER_INTERNALNAME "_kipython"
+#define RC_VER_ORIGINALFILENAME "_kipython.dll"
+#include "kiwin32-dll.rc"
