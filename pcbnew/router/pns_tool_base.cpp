@@ -235,7 +235,9 @@ void TOOL_BASE::highlightNet( bool aEnabled, int aNetcode )
         m_startHighlight = false;
     }
 
-    getView()->UpdateAllLayersColor();
+    // At best this messes up blind/buried via colors.  But net highlighting isn't done with
+    // layers, so I'm not sure why it's here to start with.
+    // getView()->UpdateAllLayersColor();
 }
 
 

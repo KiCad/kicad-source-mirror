@@ -155,7 +155,7 @@ wxString LayerName( int aLayer )
     case LAYER_PADS_TH:                 return _( "Through-hole pads" );
     case LAYER_TRACKS:                  return _( "Tracks" );
     case LAYER_VIA_THROUGH:             return _( "Through vias" );
-    case LAYER_VIA_BBLIND:              return _( "Bl/Buried vias" );
+    case LAYER_VIA_BBLIND:              return _( "Blind/Buried vias" );
     case LAYER_VIA_MICROVIA:            return _( "Micro-vias" );
     case LAYER_VIA_HOLES:               return _( "Via holes" );
     case LAYER_VIA_HOLEWALLS:           return _( "Via hole walls" );

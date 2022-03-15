@@ -807,85 +807,91 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
         return;
     }
-    else if( aLayer == LAYER_VIA_HOLEWALLS )
-    {
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-        m_gal->SetStrokeColor( color );
-        m_gal->SetLineWidth( m_holePlatingThickness );
 
-        m_gal->DrawCircle( center, ( getDrillSize( aVia ) + m_holePlatingThickness ) / 2.0 );
+    bool outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayViaFill;
 
-        return;
-    }
-
-    bool outline_mode = pcbconfig()
-                        && !pcbconfig()->m_Display.m_DisplayViaFill
-                        && aLayer != LAYER_LOCKED_ITEM_SHADOW;
+    m_gal->SetStrokeColor( color );
+    m_gal->SetFillColor( color );
+    m_gal->SetIsStroke( true );
+    m_gal->SetIsFill( false );
 
     if( outline_mode )
-    {
-        m_gal->SetIsStroke( true );
-        m_gal->SetIsFill( false );
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-        m_gal->SetStrokeColor( color );
-    }
-    else
-    {
-        m_gal->SetIsFill( true );
-        m_gal->SetIsStroke( false );
-        m_gal->SetFillColor( color );
-    }
 
-    if( aLayer == LAYER_VIA_HOLES )
+    if( aLayer == LAYER_VIA_HOLEWALLS )
     {
+        double radius = ( getDrillSize( aVia ) / 2.0 ) + m_holePlatingThickness;
+
+        if( !outline_mode )
+        {
+            m_gal->SetLineWidth( m_holePlatingThickness );
+            radius -= m_holePlatingThickness / 2.0;
+        }
+
+        m_gal->DrawCircle( center, radius );
+    }
+    else if( aLayer == LAYER_VIA_HOLES )
+    {
+        m_gal->SetIsStroke( false );
+        m_gal->SetIsFill( true );
         m_gal->DrawCircle( center, getDrillSize( aVia ) / 2.0 );
     }
     else if( aLayer == LAYER_VIA_THROUGH || m_pcbSettings.m_DrawIndividualViaLayers )
     {
-        m_gal->DrawCircle( center, aVia->GetWidth() / 2.0 );
+        int    annular_width = ( aVia->GetWidth() - getDrillSize( aVia ) ) / 2.0;
+        double radius = aVia->GetWidth() / 2.0;
+
+        if( !outline_mode )
+        {
+            m_gal->SetLineWidth( annular_width );
+            radius -= annular_width / 2.0;
+        }
+
+        m_gal->DrawCircle( center, radius );
     }
     else if( aLayer == LAYER_VIA_BBLIND || aLayer == LAYER_VIA_MICROVIA )
     {
+        int    annular_width = ( aVia->GetWidth() - getDrillSize( aVia ) ) / 2.0;
+        double radius = aVia->GetWidth() / 2.0;
+
         // Outer circles of blind/buried and micro-vias are drawn in a special way to indicate the
         // top and bottom layers
         PCB_LAYER_ID layerTop, layerBottom;
         aVia->LayerPair( &layerTop, &layerBottom );
 
-        double radius =  aVia->GetWidth() / 2.0;
-
         if( !outline_mode )
-            m_gal->SetLineWidth( ( aVia->GetWidth() - aVia->GetDrillValue() ) / 2.0 );
+        {
+            m_gal->SetIsStroke( false );
+            m_gal->SetIsFill( true );
+        }
 
-        m_gal->DrawArc( center, radius, EDA_ANGLE( -60, DEGREES_T ), EDA_ANGLE( 60, DEGREES_T ) );
-        m_gal->DrawArc( center, radius, EDA_ANGLE( 120, DEGREES_T ), EDA_ANGLE( 240, DEGREES_T ) );
-
-        if( outline_mode )
-            m_gal->SetStrokeColor( m_pcbSettings.GetColor( aVia, layerTop ) );
-        else
-            m_gal->SetFillColor( m_pcbSettings.GetColor( aVia, layerTop ) );
-
+        m_gal->SetStrokeColor( m_pcbSettings.GetColor( aVia, layerTop ) );
+        m_gal->SetFillColor( m_pcbSettings.GetColor( aVia, layerTop ) );
         m_gal->DrawArc( center, radius, EDA_ANGLE( 240, DEGREES_T ), EDA_ANGLE( 300, DEGREES_T ) );
 
-        if( outline_mode )
-            m_gal->SetStrokeColor( m_pcbSettings.GetColor( aVia, layerBottom ) );
-        else
-            m_gal->SetFillColor( m_pcbSettings.GetColor( aVia, layerBottom ) );
-
+        m_gal->SetStrokeColor( m_pcbSettings.GetColor( aVia, layerBottom ) );
+        m_gal->SetFillColor( m_pcbSettings.GetColor( aVia, layerBottom ) );
         m_gal->DrawArc( center, radius, EDA_ANGLE( 60, DEGREES_T ), EDA_ANGLE( 120, DEGREES_T ) );
-    }
 
-    if( aLayer == LAYER_LOCKED_ITEM_SHADOW )    // draw a ring around the via
-    {
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
         m_gal->SetStrokeColor( color );
+        m_gal->SetFillColor( color );
+        m_gal->SetIsStroke( true );
+        m_gal->SetIsFill( false );
 
+        if( !outline_mode )
+        {
+            m_gal->SetLineWidth( annular_width );
+            radius -= annular_width / 2.0;
+        }
+
+        m_gal->DrawCircle( center, radius );
+    }
+    else if( aLayer == LAYER_LOCKED_ITEM_SHADOW )    // draw a ring around the via
+    {
         int ring_width = aVia->GetWidth() * 0.2;
         m_gal->SetLineWidth( ring_width );
 
         m_gal->DrawCircle( center, ( aVia->GetWidth() + ring_width ) / 2.0 );
-        return;
     }
 
     // Clearance lines
