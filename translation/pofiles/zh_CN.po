@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 16:51-0800\n"
-"PO-Revision-Date: 2022-03-13 03:55+0000\n"
-"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
+"PO-Revision-Date: 2022-03-17 08:54+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v6/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -3510,7 +3510,7 @@ msgstr "微孔外径"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:47
 msgid "uVia Hole"
-msgstr "U 形辅助孔"
+msgstr "微形辅助孔"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:48
 msgid "DP Width"
@@ -17393,7 +17393,7 @@ msgstr "RS274X: 命令 \"IR\" 旋转值不允许"
 
 #: gerbview/rs274x.cpp:649
 msgid "RS274X: Command KNOCKOUT ignored by GerbView"
-msgstr "RS274X: GerbView 命令 KNOCKOUT 被忽略"
+msgstr "RS274X: GerbView 命令反相被忽略"
 
 #: gerbview/toolbars_gerber.cpp:127
 msgid "Highlight items belonging to this component"
