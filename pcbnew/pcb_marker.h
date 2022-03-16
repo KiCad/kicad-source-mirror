@@ -84,7 +84,8 @@ public:
 
     GAL_LAYER_ID GetColorLayer() const;
 
-    std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer ) const override;
+    std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer,
+            FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 

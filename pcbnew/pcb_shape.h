@@ -94,7 +94,8 @@ public:
     /**
      * Make a set of SHAPE objects representing the PCB_SHAPE.  Caller owns the objects.
      */
-    std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
+    std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
+            FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 

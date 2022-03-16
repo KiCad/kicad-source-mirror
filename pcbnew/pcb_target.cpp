@@ -113,7 +113,7 @@ const EDA_RECT PCB_TARGET::GetBoundingBox() const
 }
 
 
-std::shared_ptr<SHAPE> PCB_TARGET::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+std::shared_ptr<SHAPE> PCB_TARGET::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
     return std::make_shared<SHAPE_CIRCLE>( m_pos, m_size / 2 );
 }

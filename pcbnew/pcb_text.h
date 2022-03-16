@@ -135,7 +135,8 @@ public:
                                                bool aIgnoreLineWidth = false ) const override;
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
-    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
+    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
+            FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 

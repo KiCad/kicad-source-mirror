@@ -146,6 +146,17 @@ enum PCB_LAYER_ID: int
 
 #define MAX_CU_LAYERS       (B_Cu - F_Cu + 1)
 
+/**
+ * Enum used during connectivity building to ensure we do not query connectivity while building
+ * the database
+ */
+enum class FLASHING
+{
+    DEFAULT,                // Flashing follows connectivity
+    ALWAYS_FLASHED,         // Always flashed for connectivity
+    NEVER_FLASHED,          // Never flashed for connectivity
+};
+
 /// Dedicated layers for net names used in Pcbnew
 enum NETNAMES_LAYER_ID: int
 {

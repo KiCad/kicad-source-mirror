@@ -798,7 +798,33 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
 
     for( PCB_LAYER_ID layer : commonLayers.Seq() )
     {
-        if( parentA->GetEffectiveShape( layer )->Collide( parentB->GetEffectiveShape( layer ).get() ) )
+        FLASHING flashingA = FLASHING::NEVER_FLASHED;
+        FLASHING flashingB = FLASHING::NEVER_FLASHED;
+
+        if( const PAD* pad = dyn_cast<const PAD*>( parentA ) )
+        {
+            if( !pad->GetRemoveUnconnected() || ( ( layer == F_Cu || layer == B_Cu ) && pad->GetKeepTopBottom() ) )
+                flashingA = FLASHING::ALWAYS_FLASHED;
+        }
+        else if( const PCB_VIA* via = dyn_cast<const PCB_VIA*>( parentA ) )
+        {
+            if( !via->GetRemoveUnconnected() || ( ( layer == F_Cu || layer == B_Cu ) && via->GetKeepTopBottom() ) )
+                flashingA = FLASHING::ALWAYS_FLASHED;
+        }
+
+        if( const PAD* pad = dyn_cast<const PAD*>( parentB ) )
+        {
+            if( !pad->GetRemoveUnconnected() || ( ( layer == F_Cu || layer == B_Cu ) && pad->GetKeepTopBottom() ) )
+                flashingB = FLASHING::ALWAYS_FLASHED;
+        }
+        else if( const PCB_VIA* via = dyn_cast<const PCB_VIA*>( parentB ) )
+        {
+            if( !via->GetRemoveUnconnected() || ( ( layer == F_Cu || layer == B_Cu ) && via->GetKeepTopBottom() ) )
+                flashingB = FLASHING::ALWAYS_FLASHED;
+        }
+
+        if( parentA->GetEffectiveShape( layer, flashingA )->Collide(
+                parentB->GetEffectiveShape( layer, flashingB ).get() ) )
         {
             m_item->Connect( aCandidate );
             aCandidate->Connect( m_item );
