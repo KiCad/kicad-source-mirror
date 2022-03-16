@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2007-2022 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2007-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,6 +56,14 @@ bool PCB_EDIT_FRAME::ImportSpecctraSession( const wxString& fullFileName )
     // clear the lists
     // todo: use undo/redo feature
     ClearUndoRedoList();
+
+    // Remove existing tracks from view. They will be readded later after loading
+    // new tracks.
+    if( GetCanvas() )    // clear view:
+    {
+        for( PCB_TRACK* track : GetBoard()->Tracks() )
+            GetCanvas()->GetView()->Remove( track );
+    }
 
     SPECCTRA_DB     db;
     LOCALE_IO       toggle;
@@ -157,7 +165,7 @@ static wxPoint mapPt( const POINT& aPoint, UNIT_RES* aResolution )
 }
 
 
-PCB_TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode )
+PCB_TRACK* SPECCTRA_DB::makeTRACK( WIRE* wire, PATH* aPath, int aPointIndex, int aNetcode )
 {
     int layerNdx = findLayerName( aPath->layer_id );
 
@@ -175,11 +183,19 @@ PCB_TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode )
     track->SetWidth( scale( aPath->aperture_width, m_routeResolution ) );
     track->SetNetCode( aNetcode );
 
+    // a track can be locked.
+    // However specctra as 4 types, none is exactly the same as our locked option
+    // wire->wire_type = T_fix, T_route, T_normal or T_protect
+    // fix and protect could be used as lock option
+    // but protect is returned for all tracks having initially the route or protect property
+    if( wire->wire_type == T_fix )
+        track->SetLocked( true );
+
     return track;
 }
 
 
-PCB_VIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNetCode,
+PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& aPoint, int aNetCode,
                                int aViaDrillDefault )
 {
     PCB_VIA* via = 0;
@@ -311,6 +327,15 @@ PCB_VIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNe
     wxASSERT( via );
 
     via->SetNetCode( aNetCode );
+
+    // a via can be locked.
+    // However specctra as 4 types, none is exactly the same as our locked option
+    // aVia->via_type = T_fix, T_route, T_normal or T_protect
+    // fix and protect could be used as lock option
+    // but protect is returned for all tracks having initially the route or protect property
+    if( aVia->via_type == T_fix )
+        via->SetLocked( true );
+
     return via;
 }
 
@@ -331,12 +356,31 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
     if( !m_session->route->library )
         THROW_IO_ERROR( _("Session file is missing the \"library_out\" section") );
 
-    // delete all the old tracks and vias
-    aBoard->Tracks().clear();
+    // delete all the old tracks and vias but save locked tracks/vias
+    // they will be re-added later
+    std::vector<PCB_TRACK*> locked;
+
+    while( !aBoard->Tracks().empty() )
+    {
+        PCB_TRACK* track = aBoard->Tracks().back();
+        aBoard->Tracks().pop_back();
+
+        if( track->IsLocked() )
+            locked.push_back( track );
+        else
+            delete track;
+    }
 
     aBoard->DeleteMARKERs();
 
     buildLayerMaps( aBoard );
+
+    // Add locked tracks: because they are exported as Fix tracks, they are not
+    // in .ses file.
+    for( PCB_TRACK* track: locked )
+    {
+        aBoard->Add( track );
+    }
 
     if( m_session->placement )
     {
@@ -452,10 +496,9 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
             {
                 PATH*   path = (PATH*) wire->shape;
 
-                for( unsigned pt=0;  pt<path->points.size()-1;  ++pt )
+                for( unsigned pt=0; pt < path->points.size()-1; ++pt )
                 {
-                    PCB_TRACK* track = makeTRACK( path, pt, netoutCode );
-                    track->SetLocked( wire->wire_type == T_protect );
+                    PCB_TRACK* track = makeTRACK( wire, path, pt, netoutCode );
                     aBoard->Add( track );
                 }
             }
@@ -507,9 +550,9 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 
             int via_drill_default = netclass->GetViaDrill();
 
-            for( unsigned v=0;  v<wire_via->vertexes.size();  ++v )
+            for( unsigned v = 0; v < wire_via->vertexes.size(); ++v )
             {
-                PCB_VIA* via = makeVIA( padstack, wire_via->vertexes[v], netCode,
+                PCB_VIA* via = makeVIA( wire_via, padstack, wire_via->vertexes[v], netCode,
                                         via_drill_default );
                 aBoard->Add( via );
             }

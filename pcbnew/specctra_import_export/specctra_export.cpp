@@ -1695,7 +1695,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 wiring->wires.push_back( wire );
                 wire->net_id = netname;
 
-                wire->wire_type = T_protect;    // @todo, this should be configurable
+                if( track->IsLocked() )
+                    wire->wire_type = T_fix;    // tracks with fix property are not returnned in .ses files
+                else
+                    wire->wire_type = T_route;  // could be T_protect
 
                 int kiLayer  = track->GetLayer();
                 int pcbLayer = m_kicadLayer2pcb[kiLayer];
@@ -1754,7 +1757,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
             dsnVia->net_id = TO_UTF8( net->GetNetname() );
 
-            dsnVia->via_type = T_protect;     // @todo, this should be configurable
+            if( via->IsLocked() )
+                dsnVia->via_type = T_fix;    // vias with fix property are not returnned in .ses files
+            else
+                dsnVia->via_type = T_route;  // could be T_protect
         }
     }
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2007-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3962,13 +3962,13 @@ private:
     /**
      * Create a #TRACK form the #PATH and #BOARD info.
      */
-    PCB_TRACK* makeTRACK( PATH* aPath, int aPointIndex, int aNetcode );
+    PCB_TRACK* makeTRACK( WIRE* wire, PATH* aPath, int aPointIndex, int aNetcode );
 
     /**
      * Instantiate a KiCad #VIA on the heap and initializes it with internal
      * values consistent with the given #PADSTACK, #POINT, and netcode.
      */
-    PCB_VIA* makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNetCode,
+    PCB_VIA* makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& aPoint, int aNetCode,
                       int aViaDrillDefault );
 
     //-----</FromSESSION>----------------------------------------------------
