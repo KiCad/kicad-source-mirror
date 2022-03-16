@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 16:51-0800\n"
-"PO-Revision-Date: 2022-03-16 10:29+0000\n"
+"PO-Revision-Date: 2022-03-17 02:47+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -742,7 +742,7 @@ msgstr "显示模型边框"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:28
 msgid "Show copper and tech layers thickness (very slow)"
-msgstr "显示铜和技术层厚度（非常慢）"
+msgstr "显示铜层和技术层厚度 (非常慢)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:31
 msgid "Highlight items on rollover"
@@ -3484,7 +3484,7 @@ msgstr "微孔外径"
 #: common/dialogs/panel_setup_netclasses_base.cpp:47
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:233
 msgid "uVia Hole"
-msgstr "U 形辅助孔"
+msgstr "微形辅助孔"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:48
 msgid "DP Width"
@@ -18007,7 +18007,7 @@ msgstr "RS274X: 命令 \"IR\" 旋转值不允许"
 
 #: gerbview/rs274x.cpp:649
 msgid "RS274X: Command KNOCKOUT ignored by GerbView"
-msgstr "RS274X: GerbView 命令阴文(反相)被忽略"
+msgstr "RS274X: GerbView 命令反相被忽略"
 
 #: gerbview/toolbars_gerber.cpp:129
 msgid "Highlight items belonging to this component"
@@ -22745,11 +22745,11 @@ msgstr "约束解析报告"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:202
 msgid "Teardrop on Vias/Pads Properties"
-msgstr "过孔/焊盘上泪滴属性"
+msgstr "过孔/焊盘上的泪滴属性"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:206
 msgid "Teardrop on Tracks Properties"
-msgstr "导线上泪滴属性"
+msgstr "布线上的泪滴属性"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:210
 msgid "Teardrop Properties"
@@ -22847,7 +22847,7 @@ msgstr "完全填充"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:131
 msgid "Outline hatch pitch:"
-msgstr ""
+msgstr "轮廓 hatch 间距："
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:157
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:89
@@ -23015,13 +23015,13 @@ msgstr "小于此的孤铜将被移除"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:398
 msgid "Export Settings to Other Similar Zones"
-msgstr "导出设置到其他类似区域"
+msgstr "将设置导出到其他类似区域"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:399
 msgid ""
 "Export this zone setup (excluding layer and net selection) to other similar "
 "copper zones (teardrops or usual copper zones)."
-msgstr "导出该区域设置 (除层和网络选择) 到其他相似铜区域（泪滴或通常的铜区域）。"
+msgstr "将该区域设置 (不包括层和网络选择) 输出到其他类似的铜区 (泪滴或普通铜区)。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:142
 msgid "Copper Zone Properties"
@@ -24395,10 +24395,10 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"这是焊盘和此封装的锡膏之间的局部间隙。\n"
-"该值可以被一个焊盘局部值代替。\n"
-"最终间隙值是此值与间隙值比率的总和。\n"
-"负值表示比焊盘尺寸更小的版膜开口尺寸。"
+"这是此封装的焊盘和焊膏之间的局部间隙。\n"
+"此值可由焊盘局部值替代。\n"
+"最终的间距值是该值与间距值比率之和。\n"
+"负值表示阻焊尺寸小于焊盘尺寸。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:314
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:285
@@ -24408,7 +24408,7 @@ msgid "Solder paste relative clearance:"
 msgstr "焊膏相对间隙："
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:316
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -24419,11 +24419,11 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"这是作为此封装焊盘宽和高度的百分比应用的局部间隙比。\n"
-"值为 10 表示水平间隙值为焊盘宽度的 10% o，垂直间隙值为焊盘高度的 10% o。\n"
-"这个值可被焊盘局部值所取代。\n"
-"最终间隙值是该值与绝对间隙值的总和。\n"
-"负值意味着比焊盘尺寸更小的版膜开口尺寸。"
+"这是以此封装的焊盘宽度和高度的百分比形式应用的局部间隙比率。\n"
+"值为 10 表示水平间距值是焊盘宽度的 10%，垂直间距值是焊盘高度的 10%。\n"
+"该值可由焊盘局部值替代。\n"
+"最终间距值是该值与绝对间距值之和。\n"
+"负值表示阻焊尺寸小于焊盘尺寸。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:339
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:310
@@ -24545,15 +24545,13 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"这是焊盘和此封装的焊膏之间\n"
-"的局部间隙。\n"
-"最终间隙值是该值与间隙值比之和。\n"
-"负值表示比焊盘尺寸小的版膜开口尺寸。\n"
-"可以在“焊盘属性”的“局部间隙和设置”选项卡中\n"
-"逐个焊盘覆写此值。"
+"这是此封装的焊盘和焊膏之间的局部间隙。\n"
+"最终的间距值是该值与间距值比率之和。\n"
+"负值表示阻焊尺寸小于焊盘尺寸。\n"
+"可以在焊盘属性的局部间隙和设置选项卡中逐个焊盘覆盖此值。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:287
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -24565,11 +24563,11 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
-"这是作为此封装焊盘宽度和高度百分比应用的局部间隙比。\n"
-"值为 10 表示水平间隙值是焊盘宽度的 10% o，垂直间隙值是焊盘高度的 10% o。\n"
-"最终间隙值是此值和绝对间隙值之和。\n"
-"负值表示比焊盘尺寸更小的版膜开口尺寸。\n"
-"可以在“焊盘属性”的“局部间隙和设置”选项卡中逐个焊盘覆写此值。"
+"这是以此布线的焊盘宽度和高度的百分比形式应用的局部间隙比率。\n"
+"值为 10 表示水平间距值是焊盘宽度的 10%，垂直间距值是焊盘高度的 10%。\n"
+"最终间距值是该值与绝对间距值之和。\n"
+"负值表示模板阻焊尺寸小于焊盘尺寸。\n"
+"可以在焊盘属性的局部间隙和设置选项卡中逐个焊盘覆盖此值。"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:144
 msgid "All footprint generator scripts were loaded"
@@ -25125,7 +25123,7 @@ msgstr "过孔外径"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:232
 msgid "uVia Diameter"
-msgstr "uVia 外径"
+msgstr "微孔外径"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:39
 msgid "Filter Items"
@@ -26219,7 +26217,7 @@ msgstr "来自父级封装"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:716
 msgid "Zone knockout:"
-msgstr "敷铜阴文(反相)："
+msgstr "区域反相："
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
 msgid "Pad shape"
@@ -27391,7 +27389,7 @@ msgstr "布线与过孔属性"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:53
 msgid "Track and Via Dimensions"
-msgstr "导线和过孔尺寸"
+msgstr "布线和过孔标注"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:147
 msgid "Set Unused Pad Properties"
@@ -29812,11 +29810,11 @@ msgstr "电路板边缘间隙违规"
 
 #: pcbnew/drc/drc_item.cpp:80
 msgid "Copper zones intersect"
-msgstr "铜区交叉"
+msgstr "敷铜区交叉"
 
 #: pcbnew/drc/drc_item.cpp:84
 msgid "Isolated copper fill"
-msgstr "孤立的铜填充"
+msgstr "隔离铜填充"
 
 #: pcbnew/drc/drc_item.cpp:88
 msgid "Thermal relief connection to zone incomplete"
@@ -33968,7 +33966,7 @@ msgstr "过孔网络类值"
 #: pcbnew/router/router_tool.cpp:247 pcbnew/tools/drawing_tool.cpp:116
 #, c-format
 msgid "Via %s, hole %s"
-msgstr "过孔 %s，孔 %s"
+msgstr "过孔 %s，通孔 %s"
 
 #: pcbnew/router/router_tool.cpp:251 pcbnew/tools/drawing_tool.cpp:122
 #, c-format
@@ -34916,7 +34914,7 @@ msgstr "特殊工具"
 #: pcbnew/tools/edit_tool.cpp:342
 #, c-format
 msgid "Unable to resize arc tracks of %s or greater."
-msgstr "无法将圆弧导线大小调整 %s 或更多。"
+msgstr "无法调整 %s 或更大的弧形布线的尺寸。"
 
 #: pcbnew/tools/edit_tool.cpp:673
 msgid "Drag Arc Track"
@@ -37326,7 +37324,7 @@ msgstr "规则区域"
 
 #: pcbnew/zone.cpp:524
 msgid "Teardrop Area"
-msgstr "泪滴区域"
+msgstr "泪滴面积"
 
 #: pcbnew/zone.cpp:526
 msgid "Copper Zone"
