@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,10 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_junction.cpp
- */
-
 #include <sch_draw_panel.h>
 #include <trigo.h>
 #include <common.h>
@@ -38,7 +34,6 @@
 #include <sch_connection.h>
 #include <schematic.h>
 #include <settings/color_settings.h>
-#include <advanced_config.h>
 #include <connection_graph.h>
 
 
@@ -90,14 +85,19 @@ SHAPE_CIRCLE SCH_JUNCTION::getEffectiveShape() const
     else
         m_lastResolvedDiameter = Mils2iu( DEFAULT_JUNCTION_DIAM );
 
-    if( m_lastResolvedDiameter != 1 )  // Diameter 1 means users doesn't want to draw junction dots
+    if( m_lastResolvedDiameter != 1 )  // Diameter 1 means user doesn't want to draw junctions
     {
+        // If we know what we're connected to, then enforce a minimum size of 170% of the
+        // connected wire width:
         if( !IsConnectivityDirty() )
         {
             NETCLASSPTR netclass = NetClass();
 
             if( netclass )
-                m_lastResolvedDiameter = std::max( m_lastResolvedDiameter, KiROUND( netclass->GetWireWidth() * 1.7 ) );
+            {
+                m_lastResolvedDiameter = std::max( m_lastResolvedDiameter,
+                                                   KiROUND( netclass->GetWireWidth() * 1.7 ) );
+            }
         }
     }
 
@@ -213,11 +213,9 @@ bool SCH_JUNCTION::HitTest( const EDA_RECT& aRect, bool aContained, int aAccurac
 
     if( aContained )
     {
-        EDA_RECT selRect = aRect;
+        EDA_RECT selRect( aRect );
 
-        selRect.Inflate( aAccuracy );
-
-        return selRect.Contains( GetBoundingBox() );
+        return selRect.Inflate( aAccuracy ).Contains( GetBoundingBox() );
     }
     else
     {
@@ -240,8 +238,8 @@ void SCH_JUNCTION::Plot( PLOTTER* aPlotter, bool aBackground ) const
     if( aBackground )
         return;
 
-    auto*   settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
-    COLOR4D color = GetJunctionColor();
+    RENDER_SETTINGS* settings = aPlotter->RenderSettings();
+    COLOR4D          color = GetJunctionColor();
 
     if( color == COLOR4D::UNSPECIFIED )
         color = settings->GetLayerColor( GetLayer() );
@@ -266,7 +264,7 @@ bool SCH_JUNCTION::operator <( const SCH_ITEM& aItem ) const
     if( GetLayer() != aItem.GetLayer() )
         return GetLayer() < aItem.GetLayer();
 
-    auto junction = static_cast<const SCH_JUNCTION*>( &aItem );
+    const SCH_JUNCTION* junction = static_cast<const SCH_JUNCTION*>( &aItem );
 
     if( GetPosition().x != junction->GetPosition().x )
         return GetPosition().x < junction->GetPosition().x;

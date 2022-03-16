@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _SCH_JUNCTION_H_
-#define _SCH_JUNCTION_H_
+#ifndef SCH_JUNCTION_H
+#define SCH_JUNCTION_H
 
 
 #include <sch_item.h>
@@ -88,9 +88,8 @@ public:
 
     bool CanConnect( const SCH_ITEM* aItem ) const override
     {
-        return ( aItem->Type() == SCH_LINE_T &&
-                ( aItem->GetLayer() == LAYER_WIRE || aItem->GetLayer() == LAYER_BUS ) ) ||
-                aItem->Type() == SCH_SYMBOL_T;
+        return aItem->IsConnectable() && ( aItem->Type() == SCH_LINE_T
+                                        || aItem->Type() == SCH_SYMBOL_T );
     }
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override
@@ -133,16 +132,17 @@ private:
 
     SHAPE_CIRCLE getEffectiveShape() const;
 
-    VECTOR2I m_pos;              ///< Position of the junction.
-    int m_diameter;             ///< Diameter of the junction.  Zero is user default.
-    COLOR4D m_color;            ///< Color of the junction.  #COLOR4D::UNSPECIFIED is user default.
+private:
+    VECTOR2I         m_pos;
+    int              m_diameter;   ///< Zero is user default.
+    COLOR4D          m_color;      ///< #COLOR4D::UNSPECIFIED is user default.
 
-    // If real-time connectivity gets disabled (due to being too slow on a particular
-    // design), we can no longer rely on getting the NetClass to find netclass-specific
-    // linestyles, linewidths and colors.
-    mutable int              m_lastResolvedDiameter;
-    mutable COLOR4D          m_lastResolvedColor;
+    // If real-time connectivity gets disabled (due to being too slow on a particular design),
+    // we can no longer rely on getting the NetClass to find netclass-specific linestyles,
+    // linewidths and colors.
+    mutable int      m_lastResolvedDiameter;
+    mutable COLOR4D  m_lastResolvedColor;
 };
 
 
-#endif    // _SCH_JUNCTION_H_
+#endif    // SCH_JUNCTION_H
