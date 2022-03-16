@@ -15,16 +15,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 16:51-0800\n"
-"PO-Revision-Date: 2022-03-01 09:55+0000\n"
+"PO-Revision-Date: 2022-03-18 19:51+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11.1-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -747,9 +747,8 @@ msgid "Show model bounding boxes"
 msgstr "모델 경계 상자 표시"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:28
-#, fuzzy
 msgid "Show copper and tech layers thickness (very slow)"
-msgstr "구리 두께 표시"
+msgstr "구리 및 기술 레이어 두께 표시(매우 느림)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:31
 msgid "Highlight items on rollover"
@@ -2083,7 +2082,7 @@ msgstr "페이지"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:67
 msgid "Current Grid"
-msgstr "현재 그리드"
+msgstr "전류 그리드"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:83
 msgid "User Defined Grid"
@@ -3102,7 +3101,7 @@ msgstr "프로젝트 자동 백업"
 #: common/dialogs/panel_common_settings_base.cpp:278
 msgid ""
 "Automatically create backup archives of the current project when saving files"
-msgstr "파일 저장 시 현재 프로젝트의 백업 아카이브 자동 생성"
+msgstr "파일 저장 시 현재 프로젝트의 백업 보관 자동 생성"
 
 #: common/dialogs/panel_common_settings_base.cpp:282
 msgid "Create backups when auto save occurs"
@@ -5622,11 +5621,11 @@ msgstr ""
 
 #: common/project/project_archiver.cpp:52 kicad/pcm/pcm_task_manager.cpp:267
 msgid "Could not open archive file."
-msgstr "아카이브 파일을 열 수 없음."
+msgstr "보관된 파일을 열 수 없음."
 
 #: common/project/project_archiver.cpp:61 kicad/pcm/pcm_task_manager.cpp:275
 msgid "Invalid archive file format."
-msgstr "잘못된 아카이브 파일 형식."
+msgstr "잘못된 보관 파일 형식."
 
 #: common/project/project_archiver.cpp:72
 #, c-format
@@ -5671,17 +5670,17 @@ msgstr "파일 '%s'의 생성에 실패하였습니다."
 #: common/project/project_archiver.cpp:205
 #, c-format
 msgid "Archived file '%s'."
-msgstr "'%s' 보관 파일."
+msgstr "'%s' 보관된 파일."
 
 #: common/project/project_archiver.cpp:215
 #, c-format
 msgid "Failed to archive file '%s'."
-msgstr "'%s' 파일을 백업하지 못함."
+msgstr "'%s' 파일을 보관하지 못함."
 
 #: common/project/project_archiver.cpp:241
 #, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
-msgstr "Zip 아카이브 '%s'이(가) 생성되었습니다 (%s 비압축, %s 압축)."
+msgstr "Zip 보관 '%s'이 생성됨 (%s 비압축, %s 압축)."
 
 #: common/rc_item.cpp:362
 msgid "Excluded warning: "
@@ -6737,11 +6736,11 @@ msgstr "알티움 회로도 파일"
 
 #: common/wildcards_and_files_ext.cpp:264
 msgid "CADSTAR Schematic Archive files"
-msgstr "CADSTAR 회로도 아카이브 파일"
+msgstr "CADSTAR 회로도 보관 파일"
 
 #: common/wildcards_and_files_ext.cpp:270
 msgid "CADSTAR Archive files"
-msgstr "CADSTAR 아카이브 파일"
+msgstr "CADSTAR 보관 파일"
 
 #: common/wildcards_and_files_ext.cpp:276
 msgid "Eagle XML schematic files"
@@ -6774,7 +6773,7 @@ msgstr "Eagle 버전 6.x XML PCB 파일"
 
 #: common/wildcards_and_files_ext.cpp:318
 msgid "CADSTAR PCB Archive files"
-msgstr "CADSTAR PCB 아카이브 파일"
+msgstr "CADSTAR PCB 보관 파일"
 
 #: common/wildcards_and_files_ext.cpp:323
 msgid "P-Cad 200x ASCII PCB files"
@@ -10867,7 +10866,7 @@ msgstr "소스 2"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:268
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:244
 msgid "V"
-msgstr "브이"
+msgstr "V"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:109
@@ -11014,7 +11013,7 @@ msgstr "(선택사항; 기본값 0)"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:408
 #: eeschema/sim/spice_simulator.cpp:64
 msgid "Transient"
-msgstr "과도적"
+msgstr "과도현상"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:413
 msgid "Spice directives:"
@@ -11504,7 +11503,7 @@ msgstr "전압"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:920
 #: eeschema/sim/sim_plot_panel.cpp:367 eeschema/sim/sim_plot_panel.cpp:440
 msgid "Current"
-msgstr "현재"
+msgstr "전류"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:922
 msgid "Source Type"
@@ -15470,9 +15469,8 @@ msgid "Library changes are unsaved"
 msgstr "라이브러리 변경점 저장되지 않음"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:247
-#, fuzzy
 msgid "Symbol library loading was cancelled by user."
-msgstr "심볼 라이브러리 '%s'이(가) 이미 존재합니다."
+msgstr "사용자가 심볼 라이브러리 로드를 취소했습니다."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:591
 #: eeschema/tools/sch_edit_tool.cpp:118
@@ -18253,11 +18251,11 @@ msgstr "거버 작업 파일과, 연관된 거버 플롯 파일을 엽니다"
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Open Zip Archive File..."
-msgstr "Zip 아카이브 파일 열기..."
+msgstr "Zip 보관 파일 열기..."
 
 #: gerbview/tools/gerbview_actions.cpp:64
 msgid "Open a zipped archive (Gerber and Drill) file"
-msgstr "압축된 아카이브 (거버와 드릴) 파일 열기"
+msgstr "압축된 보관 (거버와 드릴) 파일 열기"
 
 #: gerbview/tools/gerbview_actions.cpp:69
 msgid "Show Layers Manager"
@@ -18629,7 +18627,7 @@ msgstr "프로젝트 회로도 편집"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:120
 msgid "Edit global and/or project schematic symbol libraries"
-msgstr "전역 및/또는 프로젝트 회로도 심볼 라이브러리 편집"
+msgstr "전역 프로젝트 회로도 심볼 라이브러리 편집"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:124
 msgid "Edit the project PCB design"
@@ -18637,7 +18635,7 @@ msgstr "프로젝트의 PCB 디자인 편집"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:128
 msgid "Edit global and/or project PCB footprint libraries"
-msgstr "전역 및/또는 프로젝트 PCB 풋프린트 라이브러리 편집"
+msgstr "전역 프로젝트 PCB 풋프린트 라이브러리 편집"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:132
 msgid "Preview Gerber files"
@@ -18649,13 +18647,13 @@ msgstr "비트맵 이미지를 회로도 심볼 또는 PCB 풋프린트로 변�
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:140
 msgid "Show tools for calculating resistance, current capacity, etc."
-msgstr "저항과 전류 용량 등을 계산하기 위한 도구를 표시합니다."
+msgstr "저항과 전류 용량 등을 계산하기 위한 도구."
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:144
 msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
-msgstr "회로도와 PCB 디자인에서 사용되는 시트 경계선과 제목 블록 편집"
+msgstr "회로도와 PCB 디자인에서 사용되는 시트와 제목 블록 편집"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:149
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
@@ -18728,7 +18726,7 @@ msgstr ""
 
 #: kicad/import_project.cpp:229
 msgid "Import CADSTAR Archive Project Files"
-msgstr "CADSTAR 아카이브 프로젝트 파일 가져오기"
+msgstr "CADSTAR 보관 프로젝트 파일 가져오기"
 
 #: kicad/import_project.cpp:237
 msgid "Import Eagle Project Files"
@@ -18787,7 +18785,7 @@ msgstr "CADSTAR 프로젝트..."
 
 #: kicad/menubar.cpp:103
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
-msgstr "CADSTAR 아카이브 회로도와 PCB 가져오기 (*.csa, *.cpa)"
+msgstr "CADSTAR 보관 회로도와 PCB 가져오기 (*.csa, *.cpa)"
 
 #: kicad/menubar.cpp:107
 msgid "EAGLE Project..."
@@ -18803,15 +18801,15 @@ msgstr "프로젝트 보관 (&A)..."
 
 #: kicad/menubar.cpp:116
 msgid "Archive all needed project files into zip archive"
-msgstr "필요한 모든 프로젝트 파일을 zip 아카이브에 보관합니다"
+msgstr "필요한 모든 프로젝트 파일을 zip으로 보관"
 
 #: kicad/menubar.cpp:120
 msgid "&Unarchive Project..."
-msgstr "프로젝트 보관 취소 (&U)..."
+msgstr "프로젝트 압축 해제 (&U)..."
 
 #: kicad/menubar.cpp:121 kicad/menubar.cpp:227
 msgid "Unarchive project files from zip archive"
-msgstr "zip 아카이브에서 프로젝트 파일 압축 해제"
+msgstr "zip 보관 프로젝트 파일 압축 해제"
 
 #: kicad/menubar.cpp:136
 msgid "Browse Project Files"
@@ -18831,7 +18829,7 @@ msgstr "텍스트 편집기에서 로컬 파일 편집"
 
 #: kicad/menubar.cpp:223
 msgid "Archive all project files"
-msgstr "모든 프로젝트 파일 압축"
+msgstr "모든 프로젝트 파일 보관"
 
 #: kicad/menubar.cpp:236
 msgid "Reveal project folder in Finder"
@@ -18956,9 +18954,9 @@ msgid "Aborting remaining tasks."
 msgstr "남은 작업을 중단합니다."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "Downloaded %lld/%lld kB"
-msgstr "%lld/%lld Kb 다운로드됨"
+msgstr "%lld/%lld kB 다운로드됨"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
 msgid "Download Progress"
@@ -19092,9 +19090,9 @@ msgid "Error loading installed packages list: %s"
 msgstr "설치한 패키지 리스트를 불러오는 중 오류가 발생하였습니다: %s"
 
 #: kicad/pcm/pcm.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "Downloading %lld/%lld kB"
-msgstr "%lld/%lld Kb 다운로드 중"
+msgstr "%lld/%lld kB 다운로드 중"
 
 #: kicad/pcm/pcm.cpp:231
 msgid "Download is too large."
@@ -19174,9 +19172,9 @@ msgid ""
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
 msgstr ""
-"패키지 %s에 대한 다운로드된 아카이브 해시가 레포지토리 항목과 일치하지 않습니"
-"다. 이는 이 패키지에 문제가 있음을 나타낼 수 있으며, 문제가 지속되면 레포지토"
-"리 관리자에게 문의하세요."
+"패키지 %s에 대한 다운로드된 보관 해시가 저장소 항목과 일치하지 않습니다. "
+"이는 이 패키지에 문제가 있음을 나타낼 수 있으며, 문제가 지속되면 저장소 "
+"관리자에게 문의하세요."
 
 #: kicad/pcm/pcm_task_manager.cpp:97
 #, c-format
@@ -19186,7 +19184,7 @@ msgstr "'%s' 패키지를 추출하는 중입니다."
 #: kicad/pcm/pcm_task_manager.cpp:112
 #, c-format
 msgid "Removing downloaded archive '%s'."
-msgstr "다운로드한 아카이브 '%s'를 삭제합니다."
+msgstr "다운로드한 보관문서 '%s'를 삭제합니다."
 
 #: kicad/pcm/pcm_task_manager.cpp:150
 #, c-format
@@ -19223,11 +19221,11 @@ msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:307
 msgid "Archive does not contain a valid metadata.json file"
-msgstr "아카이브에 유효한 metadata.json 파일이 존재하지 않습니다"
+msgstr "보관문서에 유효한 metadata.json 파일이 존재하지 않습니다"
 
 #: kicad/pcm/pcm_task_manager.cpp:315
 msgid "Archive metadata must have a single version defined"
-msgstr "아카이브 메타데이터는 하나의 버전이 정의되어 있어야 합니다"
+msgstr "보관문서 메타데이터는 하나의 버전이 정의되어 있어야 합니다"
 
 #: kicad/pcm/pcm_task_manager.cpp:327
 #, c-format
@@ -22957,19 +22955,16 @@ msgid "Constraints Resolution Report"
 msgstr "제약 해결 보고서"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:202
-#, fuzzy
 msgid "Teardrop on Vias/Pads Properties"
-msgstr "영역의 패드에 있는 눈물방울"
+msgstr "비아/패드 속성의 눈물방울"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:206
-#, fuzzy
 msgid "Teardrop on Tracks Properties"
-msgstr "영역의 패드에 있는 눈물방울"
+msgstr "트랙 속성의 눈물 방울"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:210
-#, fuzzy
 msgid "Teardrop Properties"
-msgstr "그룹 속성"
+msgstr "눈물 방울 속성"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:404
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:167
@@ -22985,7 +22980,7 @@ msgstr "모깍기 반경:"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:553
 msgid "Thermal spoke width cannot be smaller than the minimum width."
-msgstr "써멀 스포크 너비는 최소 너비보다 작을 수 없습니다."
+msgstr "단열 살 너비는 최소 너비보다 작을 수 없습니다."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:582
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:266
@@ -23118,7 +23113,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:235 pcbnew/zone.cpp:1345
 msgid "Thermal reliefs"
-msgstr "써멀"
+msgstr "단열판"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:235
 msgid "Reliefs for PTH"
@@ -23233,18 +23228,15 @@ msgid "Isolated islands smaller than this will be removed"
 msgstr "이 값보다 작은 고립 영역은 삭제됩니다"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:398
-#, fuzzy
 msgid "Export Settings to Other Similar Zones"
-msgstr "다른 영역으로 설정 내보내기"
+msgstr "다른 유사한 영역으로 설정 내보내기"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:399
-#, fuzzy
 msgid ""
 "Export this zone setup (excluding layer and net selection) to other similar "
 "copper zones (teardrops or usual copper zones)."
-msgstr ""
-"이 영역 구성을 모든 다른 구리 영역에 대해 내보내기합니다 (선택한 레이어와 네"
-"트를 제외)."
+msgstr "이 영역 설정(레이어 및 네트 선택 제외)을 다른 유사한 구리 영역(눈물 방울 "
+"또는 일반 구리 영역)으로 내보냅니다."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:142
 msgid "Copper Zone Properties"
@@ -24622,7 +24614,6 @@ msgid "Solder paste absolute clearance:"
 msgstr "솔더 페이스트의 절대 클리어런스:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:303
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder paste for this "
 "footprint.\n"
@@ -24631,10 +24622,10 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"이 값은 해당 풋프린트의 패드와 솔더 페이스트 간의 지역 클리어런스 값을 나타냅"
-"니다.\n"
+"이 값은 해당 풋프린트의 패드와 솔더 페이스트 간의 지역 유격 값을 나타냅니다."
+"\n"
 "이 값은 패드의 지역 값으로 대체될 수 있습니다.\n"
-"최종 클리어런스 값은 이 값과 클리어런스 값의 비율의 합으로 결정됩니다.\n"
+"최종 유격 값은 이 값과 유격 값의 비율의 합으로 결정됩니다.\n"
 "값이 음수일 경우, 패드 크기보다 마스크 크기가 작음을 의미합니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:314
@@ -24645,7 +24636,7 @@ msgid "Solder paste relative clearance:"
 msgstr "솔더 페이스트의 상대 클리어런스:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -24656,11 +24647,12 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"이 값은 해당 풋프린트의 패드와 솔더 페이스트 간의 지역 클리어런스 값을 백분율"
-"로 나타냅니다.\n"
-"값이 10일 경우, 클리어런스 값은 패드 크기의 10 퍼센트라는 의미입니다.\n"
-"이 값은 패드의 지역 값으로 대체될 수 있습니다.\n"
-"최종 클리어런스 값은 이 값과 클리어런스 값의 합으로 결정됩니다.\n"
+"이것은 이 풋프린트에 대한 패드 너비와 높이의 백분율로 적용된 로컬 유격 "
+"비율입니다.\n"
+"값이 10이면 수평 유격 값이 패드 너비의 10% o 이고 수직 유격 값이 패드 높이의 "
+"10% o 임을 의미합니다.\n"
+"이 값은 패드 로컬 값으로 대체될 수 있습니다.\n"
+"최종 유격 값은 이 값과 절대 유격 값의 합입니다.\n"
 "값이 음수일 경우, 패드 크기보다 마스크 크기가 작음을 의미합니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:339
@@ -24779,7 +24771,6 @@ msgstr ""
 "패드 단위로 재정의될 수 있습니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:274
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder paste for\n"
 "this footprint.\n"
@@ -24790,14 +24781,14 @@ msgid ""
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
 "이 값은 해당 풋프린트의 패드와 솔더 페이스트 간 \n"
-"지역 클리어런스 값을 나타냅니다.\n"
-"최종 클리어런스 값은 이 값과 클리어런스 값의 비율의 합으로 결정됩니다.\n"
+"지역 유격 값을 나타냅니다.\n"
+"최종 유격 값은 이 값과 유격 값의 비율의 합으로 결정됩니다.\n"
 "값이 음수일 경우, 패드 크기보다 마스크 크기가 작음을 의미합니다.\n"
-"이 값은 패드 속성에 위치한 지역 클리어런스와 설정 탭에서\n"
-"패드 단위로 재정의될 수 있습니다."
+"이 값은 패드 설정에 위치한 지역 유격과 설정 탭에서\n"
+"패드 별로 재정의할 수 있습니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:287
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -24809,13 +24800,13 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
-"이 값은 해당 풋프린트의 패드와 솔더 페이스트 간의\n"
-"지역 클리어런스 값을 백분율로 나타냅니다.\n"
-"값이 10일 경우, 클리어런스 값은 패드 크기의 10 퍼센트라는 의미입니다.\n"
-"최종 클리어런스 값은 이 값과 클리어런스 값의 합으로 결정됩니다.\n"
+"이것은 이 풋프린트에 대한 패드 너비와 높이의 백분율로 적용된 로컬 클리어런스 "
+"비율입니다.\n"
+"값이 10이면 수평 유격 값이 패드 너비의 10% o 이고 수직 클리어런스 값이 패드 "
+"높이의 10% o 임을 의미합니다.\n"
+"최종 유격 값은 이 값과 절대 유격 값의 합입니다.\n"
 "값이 음수일 경우, 패드 크기보다 마스크 크기가 작음을 의미합니다.\n"
-"이 값은 패드 속성에 위치한 지역 클리어런스와 설정 탭에서\n"
-"패드 단위로 재정의될 수 있습니다."
+"이 값은 패드 속성의 로컬 유격 및 설정 탭에서 패드별로 재정의할 수 있습니다."
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:144
 msgid "All footprint generator scripts were loaded"
@@ -25371,9 +25362,8 @@ msgid "Via Diameter"
 msgstr "비아 직경"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:232
-#, fuzzy
 msgid "uVia Diameter"
-msgstr "비아 직경"
+msgstr "마이크로비아 직경"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:39
 msgid "Filter Items"
@@ -26388,9 +26378,9 @@ msgstr ""
 "지역 기준은 상위 풋프린트에 대한 기준입니다\n"
 "전역 기준은 전체 기판에 대한 기준입니다\n"
 "테스트 포인트 패드는 거버 파일에서 테스트 포인트를 지정할 때 유용합니다\n"
-"히트싱크 패드는 서멀 패드를 지정합니다\n"
-"카스텔레이티드는 기판 단의 단면에 위치한 카스텔레이티드 스루홀 패드를 지정합"
-"니다\n"
+"방열 패드는 단열 패드를 지정합니다\n"
+"카스텔레이티드는 기판 가장자리의 단면에 위치한 성곽형 스루홀 패드를 "
+"지정합니다\n"
 "이러한 속성들은 거버 X2 파일에 지정되어 있습니다."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1659
@@ -27674,9 +27664,8 @@ msgid "Track & Via Properties"
 msgstr "배선과 비아 속성"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:53
-#, fuzzy
 msgid "Track and Via Dimensions"
-msgstr "사전 정의된 배선 및 비아 치수:"
+msgstr "배선 및 비아 치수"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:147
 msgid "Set Unused Pad Properties"
@@ -30035,14 +30024,12 @@ msgid "Board edge clearance violation"
 msgstr "기판 모서리 클리어런스 위반"
 
 #: pcbnew/drc/drc_item.cpp:80
-#, fuzzy
 msgid "Copper zones intersect"
 msgstr "구리 영역 교차"
 
 #: pcbnew/drc/drc_item.cpp:84
-#, fuzzy
 msgid "Isolated copper fill"
-msgstr "구리 충전물 금지"
+msgstr "절연 구리 채우기"
 
 #: pcbnew/drc/drc_item.cpp:88
 msgid "Thermal relief connection to zone incomplete"
@@ -34285,9 +34272,9 @@ msgid "Via netclass values"
 msgstr "비아 네트클래스 값"
 
 #: pcbnew/router/router_tool.cpp:247 pcbnew/tools/drawing_tool.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Via %s, hole %s"
-msgstr "비아 %s on %s"
+msgstr "비아 %s, 홀 %s"
 
 #: pcbnew/router/router_tool.cpp:251 pcbnew/tools/drawing_tool.cpp:122
 #, c-format
@@ -34942,7 +34929,7 @@ msgstr "구역 클리어런스: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:442
 #, c-format
 msgid "Overridden by larger thermal relief from %s;clearance: %s."
-msgstr "%s(으)로부터 더 큰 단열판 재정의; 클리어런스: %s."
+msgstr "%s로 더 큰 단열판으로 재정의 됨; 유격: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:452
 #: pcbnew/tools/board_inspection_tool.cpp:462
@@ -35241,9 +35228,9 @@ msgid "Special Tools"
 msgstr "특수 도구"
 
 #: pcbnew/tools/edit_tool.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to resize arc tracks of %s or greater."
-msgstr "호 배선을 %.1f도 이상 크기 변환할 수 없습니다."
+msgstr "%s 이상의 호 배선의 크기를 조정할 수 없습니다."
 
 #: pcbnew/tools/edit_tool.cpp:673
 msgid "Drag Arc Track"
@@ -37654,9 +37641,8 @@ msgid "Rule Area"
 msgstr "규칙 영역"
 
 #: pcbnew/zone.cpp:524
-#, fuzzy
 msgid "Teardrop Area"
-msgstr "%d 눈물방울 생성됨"
+msgstr "눈물 방울 지역"
 
 #: pcbnew/zone.cpp:526
 msgid "Copper Zone"
