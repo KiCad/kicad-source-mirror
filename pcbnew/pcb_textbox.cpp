@@ -295,10 +295,10 @@ void PCB_TEXTBOX::SwapData( BOARD_ITEM* aImage )
 }
 
 
-std::shared_ptr<SHAPE> PCB_TEXTBOX::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+std::shared_ptr<SHAPE> PCB_TEXTBOX::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
     if( PCB_SHAPE::GetStroke().GetWidth() >= 0 )
-        return PCB_SHAPE::GetEffectiveShape( aLayer );
+        return PCB_SHAPE::GetEffectiveShape( aLayer, aFlash );
     else
         return GetEffectiveTextShape();
 }

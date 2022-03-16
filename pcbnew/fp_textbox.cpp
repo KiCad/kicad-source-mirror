@@ -323,7 +323,7 @@ wxString FP_TEXTBOX::GetShownText( int aDepth ) const
 }
 
 
-std::shared_ptr<SHAPE> FP_TEXTBOX::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+std::shared_ptr<SHAPE> FP_TEXTBOX::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
     return GetEffectiveTextShape();
 }

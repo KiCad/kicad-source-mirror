@@ -169,7 +169,8 @@ public:
                                                    int aError, ERROR_LOC aErrorLoc ) const;
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
-    std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
+    std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
+            FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
     wxString GetClass() const override
     {

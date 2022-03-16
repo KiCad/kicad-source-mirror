@@ -2100,7 +2100,7 @@ double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 }
 
 
-std::shared_ptr<SHAPE> FOOTPRINT::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+std::shared_ptr<SHAPE> FOOTPRINT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
 
@@ -2112,12 +2112,12 @@ std::shared_ptr<SHAPE> FOOTPRINT::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
     // We'll go with (2) for now....
 
     for( PAD* pad : Pads() )
-        shape->AddShape( pad->GetEffectiveShape( aLayer )->Clone() );
+        shape->AddShape( pad->GetEffectiveShape( aLayer, aFlash )->Clone() );
 
     for( BOARD_ITEM* item : GraphicalItems() )
     {
         if( item->Type() == PCB_FP_SHAPE_T )
-            shape->AddShape( item->GetEffectiveShape( aLayer )->Clone() );
+            shape->AddShape( item->GetEffectiveShape( aLayer, aFlash )->Clone() );
     }
 
     return shape;

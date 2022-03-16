@@ -176,7 +176,7 @@ void PCB_MARKER::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 }
 
 
-std::shared_ptr<SHAPE> PCB_MARKER::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+std::shared_ptr<SHAPE> PCB_MARKER::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
     // Markers do not participate in the board geometry space, and therefore have no
     // effectiven shape.

@@ -84,7 +84,8 @@ public:
     // Virtual function
     const EDA_RECT GetBoundingBox() const override;
 
-    std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer ) const override;
+    std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer,
+            FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 

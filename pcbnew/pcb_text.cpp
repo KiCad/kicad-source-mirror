@@ -233,7 +233,7 @@ void PCB_TEXT::SwapData( BOARD_ITEM* aImage )
 }
 
 
-std::shared_ptr<SHAPE> PCB_TEXT::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+std::shared_ptr<SHAPE> PCB_TEXT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
     return GetEffectiveTextShape();
 }

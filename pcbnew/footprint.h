@@ -700,7 +700,8 @@ public:
      */
     void BuildPolyCourtyards( OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr );
 
-    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
+    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
+            FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
     virtual void SwapData( BOARD_ITEM* aImage ) override;
 

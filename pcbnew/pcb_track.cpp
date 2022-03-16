@@ -1060,15 +1060,16 @@ bool PCB_TRACK::cmp_tracks::operator() ( const PCB_TRACK* a, const PCB_TRACK* b 
 }
 
 
-std::shared_ptr<SHAPE> PCB_TRACK::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+std::shared_ptr<SHAPE> PCB_TRACK::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
     return std::make_shared<SHAPE_SEGMENT>( m_Start, m_End, m_Width );
 }
 
 
-std::shared_ptr<SHAPE> PCB_VIA::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+std::shared_ptr<SHAPE> PCB_VIA::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
-    if( FlashLayer( aLayer ) )
+    if( aFlash == FLASHING::ALWAYS_FLASHED
+            || ( aFlash == FLASHING::DEFAULT && FlashLayer( aLayer ) ) )
     {
         return std::make_shared<SHAPE_CIRCLE>( m_Start, m_Width / 2 );
     }
@@ -1084,7 +1085,7 @@ std::shared_ptr<SHAPE> PCB_VIA::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 }
 
 
-std::shared_ptr<SHAPE> PCB_ARC::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+std::shared_ptr<SHAPE> PCB_ARC::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
     return std::make_shared<SHAPE_ARC>( GetStart(), GetMid(), GetEnd(), GetWidth() );
 }

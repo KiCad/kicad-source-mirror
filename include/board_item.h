@@ -134,7 +134,8 @@ public:
      * @param aLayer in case of items spanning multiple layers, only the shapes belonging to aLayer
      *               will be returned. Pass UNDEFINED_LAYER to return shapes for all layers.
      */
-    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const;
+    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
+            FLASHING aFlash = FLASHING::DEFAULT ) const;
 
     BOARD_ITEM_CONTAINER* GetParent() const { return (BOARD_ITEM_CONTAINER*) m_parent; }
 
