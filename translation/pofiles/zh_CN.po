@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 16:51-0800\n"
-"PO-Revision-Date: 2022-03-13 03:57+0000\n"
-"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
+"PO-Revision-Date: 2022-03-16 10:29+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -18007,7 +18007,7 @@ msgstr "RS274X: 命令 \"IR\" 旋转值不允许"
 
 #: gerbview/rs274x.cpp:649
 msgid "RS274X: Command KNOCKOUT ignored by GerbView"
-msgstr "RS274X: GerbView 命令 KNOCKOUT 被忽略"
+msgstr "RS274X: GerbView 命令阴文(反相)被忽略"
 
 #: gerbview/toolbars_gerber.cpp:129
 msgid "Highlight items belonging to this component"
@@ -26219,7 +26219,7 @@ msgstr "来自父级封装"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:716
 msgid "Zone knockout:"
-msgstr "区域挖空："
+msgstr "敷铜阴文(反相)："
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
 msgid "Pad shape"
