@@ -190,6 +190,11 @@ public:
         return m_items;
     }
 
+    const std::deque<EDA_ITEM*>& Items() const
+    {
+        return m_items;
+    }
+
     template<class T>
     T* FirstOfKind() const
     {

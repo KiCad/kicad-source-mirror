@@ -90,7 +90,10 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
         return false;
 
     if( !m_shape->IsNew() )
-        m_frame->SaveCopyInUndoList( m_frame->GetScreen(), m_shape, UNDO_REDO::CHANGED, false );
+    {
+        m_frame->SaveCopyInUndoList( m_frame->GetScreen(), m_shape, UNDO_REDO::CHANGED, false,
+                                     false );
+    }
 
     STROKE_PARAMS stroke = m_shape->GetStroke();
 

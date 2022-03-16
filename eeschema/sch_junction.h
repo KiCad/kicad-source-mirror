@@ -107,12 +107,12 @@ public:
     int GetEffectiveDiameter() const;
 
     int GetDiameter() const { return m_diameter; }
-    void SetDiameter( int aDiameter ) { m_diameter = aDiameter; }
+    void SetDiameter( int aDiameter );
 
     COLOR4D GetJunctionColor() const;
 
     COLOR4D GetColor() const { return m_color; }
-    void SetColor( const COLOR4D& aColor ) { m_color = aColor; }
+    void SetColor( const COLOR4D& aColor );
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;

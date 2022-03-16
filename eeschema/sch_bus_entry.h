@@ -71,15 +71,17 @@ public:
     wxSize GetSize() const { return m_size; }
     void SetSize( const wxSize& aSize ) { m_size = aSize; }
 
-    void SetPenWidth( int aWidth ) { m_stroke.SetWidth( aWidth ); }
+    void SetPenWidth( int aWidth );
 
     virtual bool HasLineStroke() const override { return true; }
     virtual STROKE_PARAMS GetStroke() const override { return m_stroke; }
     virtual void SetStroke( const STROKE_PARAMS& aStroke ) override { m_stroke = aStroke; }
 
     PLOT_DASH_TYPE GetLineStyle() const;
+    void SetLineStyle( PLOT_DASH_TYPE aStyle );
 
     COLOR4D GetBusEntryColor() const;
+    void SetBusEntryColor( const COLOR4D& aColor );
 
     void SwapData( SCH_ITEM* aItem ) override;
 

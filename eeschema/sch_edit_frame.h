@@ -687,9 +687,10 @@ public:
      * @param aItemToCopy is the schematic item modified by the command to undo.
      * @param aTypeCommand is the command type (see enum UNDO_REDO).
      * @param aAppend set to true to add the item to the previous undo list.
+     * @param aDirtyConnectivity set to true if the change can affect connectivity.
      */
     void SaveCopyInUndoList( SCH_SCREEN* aScreen, SCH_ITEM* aItemToCopy, UNDO_REDO aTypeCommand,
-                             bool aAppend );
+                             bool aAppend, bool aDirtyConnectivity = true );
 
     /**
      * Create a new entry in undo list of commands.
@@ -697,9 +698,10 @@ public:
      * @param aItemsList is the list of items modified by the command to undo/
      * @param aTypeCommand is the command type (see enum UNDO_REDO).
      * @param aAppend set to true to add the item to the previous undo list.
+     * @param aDirtyConnectivity set to true if the change can affect connectivity.
      */
     void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UNDO_REDO aTypeCommand,
-                             bool aAppend );
+                             bool aAppend, bool aDirtyConnectivity = true );
 
     /**
      * Restore an undo or redo command to put data pointed by \a aList in the previous state.

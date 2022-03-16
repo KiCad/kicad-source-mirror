@@ -48,7 +48,7 @@
 #include <eeschema_settings.h>
 #include <dialogs/dialog_label_properties.h>
 #include <dialogs/dialog_text_properties.h>
-#include <dialogs/dialog_line_wire_bus_properties.h>
+#include <dialogs/dialog_wire_bus_properties.h>
 #include <dialogs/dialog_junction_props.h>
 #include <dialogs/dialog_sheet_pin_properties.h>
 #include <string_utils.h>
@@ -814,7 +814,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                     std::deque<SCH_ITEM*> strokeItems;
                     strokeItems.push_back( previewItem );
 
-                    DIALOG_LINE_WIRE_BUS_PROPERTIES dlg( m_frame, strokeItems );
+                    DIALOG_WIRE_BUS_PROPERTIES dlg( m_frame, strokeItems );
 
                     if( dlg.ShowModal() == wxID_OK )
                     {

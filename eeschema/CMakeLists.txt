@@ -79,8 +79,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_lib_text_properties_base.cpp
     dialogs/dialog_lib_textbox_properties.cpp
     dialogs/dialog_lib_textbox_properties_base.cpp
-    dialogs/dialog_line_wire_bus_properties.cpp
-    dialogs/dialog_line_wire_bus_properties_base.cpp
+    dialogs/dialog_line_properties.cpp
+    dialogs/dialog_line_properties_base.cpp
     dialogs/dialog_migrate_buses.cpp
     dialogs/dialog_migrate_buses_base.cpp
     dialogs/dialog_netlist.cpp
@@ -116,6 +116,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_update_from_pcb_base.cpp
     dialogs/dialog_update_symbol_fields.cpp
     dialogs/dialog_update_symbol_fields_base.cpp
+    dialogs/dialog_wire_bus_properties.cpp
+    dialogs/dialog_wire_bus_properties_base.cpp
     dialogs/panel_eeschema_color_settings.cpp
     dialogs/panel_eeschema_display_options.cpp
     dialogs/panel_eeschema_display_options_base.cpp

@@ -124,17 +124,3 @@ void EE_SELECTION::GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
         aSelectionPath.AppendMultiUnitSymbol( aRefList, symbol, aIncludePowerSymbols );
     }
 }
-
-
-bool EE_SELECTION::AllItemsHaveLineStroke() const
-{
-    for( const EDA_ITEM* item : m_items )
-    {
-        const SCH_ITEM* schItem = dynamic_cast<const SCH_ITEM*>( item );
-
-        if( !schItem || !schItem->HasLineStroke() )
-            return false;
-    }
-
-    return true;
-}

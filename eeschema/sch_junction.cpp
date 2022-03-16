@@ -173,6 +173,13 @@ void SCH_JUNCTION::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
+void SCH_JUNCTION::SetDiameter( int aDiameter )
+{
+    m_diameter = aDiameter;
+    m_lastResolvedDiameter = aDiameter;
+}
+
+
 COLOR4D SCH_JUNCTION::GetJunctionColor() const
 {
     if( m_color != COLOR4D::UNSPECIFIED )
@@ -188,6 +195,13 @@ COLOR4D SCH_JUNCTION::GetJunctionColor() const
     }
 
     return m_lastResolvedColor;
+}
+
+
+void SCH_JUNCTION::SetColor( const COLOR4D& aColor )
+{
+    m_color = aColor;
+    m_lastResolvedColor = aColor;
 }
 
 

@@ -250,7 +250,8 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
     SCH_TEXT*     sch_text = dynamic_cast<SCH_TEXT*>( aItem );
     SCH_JUNCTION* junction = dynamic_cast<SCH_JUNCTION*>( aItem );
 
-    m_parent->SaveCopyInUndoList( aSheetPath.LastScreen(), aItem, UNDO_REDO::CHANGED, m_appendUndo );
+    m_parent->SaveCopyInUndoList( aSheetPath.LastScreen(), aItem, UNDO_REDO::CHANGED, m_appendUndo,
+                                  false );
     m_appendUndo = true;
 
     if( eda_text )

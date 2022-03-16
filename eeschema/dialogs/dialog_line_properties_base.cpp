@@ -7,15 +7,15 @@
 
 #include "widgets/color_swatch.h"
 
-#include "dialog_line_wire_bus_properties_base.h"
+#include "dialog_line_properties_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE, DIALOG_SHIM )
-	EVT_BUTTON( wxID_APPLY, DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE::_wxFB_resetDefaults )
+BEGIN_EVENT_TABLE( DIALOG_LINE_PROPERTIES_BASE, DIALOG_SHIM )
+	EVT_BUTTON( wxID_APPLY, DIALOG_LINE_PROPERTIES_BASE::_wxFB_resetDefaults )
 END_EVENT_TABLE()
 
-DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE::DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_LINE_PROPERTIES_BASE::DIALOG_LINE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -73,7 +73,7 @@ DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE::DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE( wxWi
 
 	mainSizer->Add( fgSizerGeneral, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 10 );
 
-	m_helpLabel1 = new wxStaticText( this, wxID_ANY, _("Set width to 0 to use Netclass line widths."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_helpLabel1 = new wxStaticText( this, wxID_ANY, _("Set width to 0 to use Schematic default line width."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_helpLabel1->Wrap( 333 );
 	mainSizer->Add( m_helpLabel1, 0, wxRIGHT|wxLEFT, 10 );
 
@@ -103,6 +103,6 @@ DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE::DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE( wxWi
 	this->Centre( wxBOTH );
 }
 
-DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE::~DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE()
+DIALOG_LINE_PROPERTIES_BASE::~DIALOG_LINE_PROPERTIES_BASE()
 {
 }

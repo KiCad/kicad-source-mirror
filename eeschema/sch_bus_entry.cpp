@@ -191,6 +191,20 @@ COLOR4D SCH_BUS_ENTRY_BASE::GetBusEntryColor() const
 }
 
 
+void SCH_BUS_ENTRY_BASE::SetPenWidth( int aWidth )
+{
+    m_stroke.SetWidth( aWidth );
+    m_lastResolvedWidth = aWidth;
+}
+
+
+void SCH_BUS_ENTRY_BASE::SetBusEntryColor( const COLOR4D& aColor )
+{
+    m_stroke.SetColor( aColor );
+    m_lastResolvedColor = aColor;
+}
+
+
 PLOT_DASH_TYPE SCH_BUS_ENTRY_BASE::GetLineStyle() const
 {
     if( m_stroke.GetPlotStyle() != PLOT_DASH_TYPE::DEFAULT )
@@ -206,6 +220,13 @@ PLOT_DASH_TYPE SCH_BUS_ENTRY_BASE::GetLineStyle() const
     }
 
     return m_lastResolvedLineStyle;
+}
+
+
+void SCH_BUS_ENTRY_BASE::SetLineStyle( PLOT_DASH_TYPE aStyle )
+{
+    m_stroke.SetPlotStyle( aStyle );
+    m_lastResolvedLineStyle = aStyle;
 }
 
 

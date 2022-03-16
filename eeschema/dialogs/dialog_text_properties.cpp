@@ -333,7 +333,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     if( m_currentItem->GetEditFlags() == 0 )
     {
         m_frame->SaveCopyInUndoList( m_frame->GetScreen(), m_currentItem, UNDO_REDO::CHANGED,
-                                     false );
+                                     false, false );
     }
 
     m_frame->GetCanvas()->Refresh();

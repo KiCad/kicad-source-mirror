@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Seth Hillbrand <hillbrand@ucdavis.edu>
- * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
  */
 
 #include <sch_line.h>
-#include <dialog_line_wire_bus_properties.h>
+#include <dialog_line_properties.h>
 #include <dialogs/dialog_color_picker.h>
 #include <settings/settings_manager.h>
 #include <sch_edit_frame.h>
@@ -31,11 +31,11 @@
 #include <widgets/color_swatch.h>
 
 
-DIALOG_LINE_WIRE_BUS_PROPERTIES::DIALOG_LINE_WIRE_BUS_PROPERTIES( SCH_EDIT_FRAME* aParent,
-                                                                  std::deque<SCH_ITEM*>& aItems ) :
-        DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE( aParent ),
+DIALOG_LINE_PROPERTIES::DIALOG_LINE_PROPERTIES( SCH_EDIT_FRAME* aParent,
+                                                std::deque<SCH_LINE*>& aLines ) :
+        DIALOG_LINE_PROPERTIES_BASE( aParent ),
         m_frame( aParent ),
-        m_strokeItems( aItems ),
+        m_lines( aLines ),
         m_width( aParent, m_staticTextWidth, m_lineWidth, m_staticWidthUnits, true )
 {
     m_colorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
@@ -57,12 +57,12 @@ DIALOG_LINE_WIRE_BUS_PROPERTIES::DIALOG_LINE_WIRE_BUS_PROPERTIES( SCH_EDIT_FRAME
 }
 
 
-bool DIALOG_LINE_WIRE_BUS_PROPERTIES::TransferDataToWindow()
+bool DIALOG_LINE_PROPERTIES::TransferDataToWindow()
 {
-    SCH_ITEM* first_stroke_item = m_strokeItems.front();
+    SCH_LINE* first_stroke_item = m_lines.front();
 
-    if( std::all_of( m_strokeItems.begin() + 1, m_strokeItems.end(),
-            [&]( const SCH_ITEM* r )
+    if( std::all_of( m_lines.begin() + 1, m_lines.end(),
+            [&]( const SCH_LINE* r )
             {
                 return r->GetPenWidth() == first_stroke_item->GetPenWidth();
             } ) )
@@ -74,8 +74,8 @@ bool DIALOG_LINE_WIRE_BUS_PROPERTIES::TransferDataToWindow()
         m_width.SetValue( INDETERMINATE_ACTION );
     }
 
-    if( std::all_of( m_strokeItems.begin() + 1, m_strokeItems.end(),
-            [&]( const SCH_ITEM* r )
+    if( std::all_of( m_lines.begin() + 1, m_lines.end(),
+            [&]( const SCH_LINE* r )
             {
                 return r->GetStroke().GetColor() == first_stroke_item->GetStroke().GetColor();
             } ) )
@@ -87,8 +87,8 @@ bool DIALOG_LINE_WIRE_BUS_PROPERTIES::TransferDataToWindow()
         m_colorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
     }
 
-    if( std::all_of( m_strokeItems.begin() + 1, m_strokeItems.end(),
-            [&]( const SCH_ITEM* r )
+    if( std::all_of( m_lines.begin() + 1, m_lines.end(),
+            [&]( const SCH_LINE* r )
             {
                 return r->GetStroke().GetPlotStyle() == first_stroke_item->GetStroke().GetPlotStyle();
             } ) )
@@ -112,7 +112,7 @@ bool DIALOG_LINE_WIRE_BUS_PROPERTIES::TransferDataToWindow()
 }
 
 
-void DIALOG_LINE_WIRE_BUS_PROPERTIES::resetDefaults( wxCommandEvent& event )
+void DIALOG_LINE_PROPERTIES::resetDefaults( wxCommandEvent& event )
 {
     m_width.SetValue( 0 );
     m_colorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
@@ -123,35 +123,31 @@ void DIALOG_LINE_WIRE_BUS_PROPERTIES::resetDefaults( wxCommandEvent& event )
 }
 
 
-bool DIALOG_LINE_WIRE_BUS_PROPERTIES::TransferDataFromWindow()
+bool DIALOG_LINE_PROPERTIES::TransferDataFromWindow()
 {
     PICKED_ITEMS_LIST pickedItems;
-    STROKE_PARAMS stroke;
 
-    for( SCH_ITEM* strokeItem : m_strokeItems )
-        pickedItems.PushItem( ITEM_PICKER( m_frame->GetScreen(), strokeItem, UNDO_REDO::CHANGED ) );
+    for( SCH_LINE* line : m_lines )
+        pickedItems.PushItem( ITEM_PICKER( m_frame->GetScreen(), line, UNDO_REDO::CHANGED ) );
 
-    m_frame->SaveCopyInUndoList( pickedItems, UNDO_REDO::CHANGED, false );
+    m_frame->SaveCopyInUndoList( pickedItems, UNDO_REDO::CHANGED, false, false );
 
-    for( SCH_ITEM* strokeItem : m_strokeItems )
+    for( SCH_LINE* line : m_lines )
     {
-        stroke = strokeItem->GetStroke();
-
         if( !m_width.IsIndeterminate() )
-            stroke.SetWidth( m_width.GetValue() );
+            line->SetLineWidth( m_width.GetValue() );
 
         auto it = lineTypeNames.begin();
         std::advance( it, m_typeCombo->GetSelection() );
 
         if( it == lineTypeNames.end() )
-            stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+            line->SetLineStyle( PLOT_DASH_TYPE::DEFAULT );
         else
-            stroke.SetPlotStyle( it->first );
+            line->SetLineStyle( it->first );
 
-        stroke.SetColor( m_colorSwatch->GetSwatchColor() );
+        line->SetLineColor( m_colorSwatch->GetSwatchColor() );
 
-        strokeItem->SetStroke( stroke );
-        m_frame->UpdateItem( strokeItem, false, true );
+        m_frame->UpdateItem( line, false, true );
     }
 
     m_frame->GetCanvas()->Refresh();

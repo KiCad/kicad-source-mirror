@@ -97,7 +97,7 @@ bool DIALOG_JUNCTION_PROPS::TransferDataFromWindow()
     for( SCH_JUNCTION* junction : m_junctions )
         pickedItems.PushItem( ITEM_PICKER( m_frame->GetScreen(), junction, UNDO_REDO::CHANGED ) );
 
-    m_frame->SaveCopyInUndoList( pickedItems, UNDO_REDO::CHANGED, false );
+    m_frame->SaveCopyInUndoList( pickedItems, UNDO_REDO::CHANGED, false, false );
 
     for( SCH_JUNCTION* junction : m_junctions )
     {

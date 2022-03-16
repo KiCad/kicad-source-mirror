@@ -103,17 +103,16 @@ void SCH_EDIT_FRAME::StartNewUndo()
 }
 
 
-void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN*    aScreen,
-                                         SCH_ITEM*      aItem,
-                                         UNDO_REDO      aCommandType,
-                                         bool           aAppend )
+void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN* aScreen, SCH_ITEM* aItem,
+                                         UNDO_REDO aCommandType, bool aAppend,
+                                         bool aDirtyConnectivity )
 {
     PICKED_ITEMS_LIST* commandToUndo = nullptr;
 
     wxCHECK( aItem, /* void */ );
 
-    // Connectivity may change
-    aItem->SetConnectivityDirty();
+    if( aDirtyConnectivity )
+        aItem->SetConnectivityDirty();
 
     PICKED_ITEMS_LIST* lastUndo = PopCommandFromUndoList();
 
@@ -168,8 +167,8 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN*    aScreen,
 
 
 void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
-                                         UNDO_REDO                aTypeCommand,
-                                         bool                     aAppend )
+                                         UNDO_REDO aTypeCommand, bool aAppend,
+                                         bool aDirtyConnectivity )
 {
     PICKED_ITEMS_LIST* commandToUndo = nullptr;
 
@@ -209,8 +208,8 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
         if( !sch_item )
             continue;
 
-        // Connectivity may change
-        sch_item->SetConnectivityDirty();
+        if( aDirtyConnectivity )
+            sch_item->SetConnectivityDirty();
 
         UNDO_REDO command = commandToUndo->GetPickedItemStatus( ii );
 

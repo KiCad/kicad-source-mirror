@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Seth Hillbrand <hillbrand@ucdavis.edu>
- * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,10 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_LINE_WIRE_BUS_PROPERTIES_H
-#define DIALOG_LINE_WIRE_BUS_PROPERTIES_H
+#ifndef DIALOG_LINE_PROPERTIES_H
+#define DIALOG_LINE_PROPERTIES_H
 
-#include <dialog_line_wire_bus_properties_base.h>
+#include <dialog_line_properties_base.h>
 #include <widgets/unit_binder.h>
 
 
@@ -33,21 +33,21 @@ class SCH_EDIT_FRAME;
 class SCH_LINE;
 
 
-class DIALOG_LINE_WIRE_BUS_PROPERTIES : public DIALOG_LINE_WIRE_BUS_PROPERTIES_BASE
+class DIALOG_LINE_PROPERTIES : public DIALOG_LINE_PROPERTIES_BASE
 {
 public:
-    DIALOG_LINE_WIRE_BUS_PROPERTIES( SCH_EDIT_FRAME* aParent, std::deque<SCH_ITEM*>& aItems );
+    DIALOG_LINE_PROPERTIES( SCH_EDIT_FRAME* aParent, std::deque<SCH_LINE*>& aLines );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
 private:
     SCH_EDIT_FRAME*       m_frame;
-    std::deque<SCH_ITEM*> m_strokeItems;
+    std::deque<SCH_LINE*> m_lines;
 
     UNIT_BINDER           m_width;
 
     void resetDefaults( wxCommandEvent& event ) override;
 };
 
-#endif // DIALOG_LINE_WIRE_BUS_PROPERTIES_H
+#endif // DIALOG_LINE_PROPERTIES_H

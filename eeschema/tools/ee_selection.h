@@ -76,13 +76,6 @@ public:
     void GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
                               const SCH_SHEET_PATH& aSelectionPath,
                               bool aIncludePowerSymbols = true );
-
-    /**
-     * Checks if all items in the selection support line strokes
-     *
-     * @return True if all items support line strokes
-     */
-    bool AllItemsHaveLineStroke() const;
 };
 
 #endif  //  EE_SELECTION_H

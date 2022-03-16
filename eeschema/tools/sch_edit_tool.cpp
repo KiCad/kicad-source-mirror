@@ -56,7 +56,8 @@
 #include <wx/gdicmn.h>
 #include <dialogs/dialog_change_symbols.h>
 #include <dialogs/dialog_image_editor.h>
-#include <dialogs/dialog_line_wire_bus_properties.h>
+#include <dialogs/dialog_line_properties.h>
+#include <dialogs/dialog_wire_bus_properties.h>
 #include <dialogs/dialog_symbol_properties.h>
 #include <dialogs/dialog_sheet_pin_properties.h>
 #include <dialogs/dialog_field_properties.h>
@@ -263,10 +264,37 @@ bool SCH_EDIT_TOOL::Init()
 
                 case SCH_LINE_T:
                 case SCH_BUS_WIRE_ENTRY_T:
-                    return eeSelection->AllItemsHaveLineStroke();
-
                 case SCH_JUNCTION_T:
-                    return eeSelection->AreAllItemsIdentical();
+                    if( std::all_of( aSel.Items().begin(), aSel.Items().end(),
+                            [&]( const EDA_ITEM* item )
+                            {
+                                return item->Type() == SCH_LINE_T
+                                        && static_cast<const SCH_LINE*>( item )->IsGraphicLine();
+                            } ) )
+                    {
+                        return true;
+                    }
+                    else if( std::all_of( aSel.Items().begin(), aSel.Items().end(),
+                            [&]( const EDA_ITEM* item )
+                            {
+                                return item->Type() == SCH_JUNCTION_T;
+                            } ) )
+                    {
+                        return true;
+                    }
+                    else if( std::all_of( aSel.Items().begin(), aSel.Items().end(),
+                            [&]( const EDA_ITEM* item )
+                            {
+                                const SCH_ITEM* schItem = dynamic_cast<const SCH_ITEM*>( item );
+
+                                return ( schItem->HasLineStroke() && schItem->IsConnectable() )
+                                        || item->Type() == SCH_JUNCTION_T;
+                            } ) )
+                    {
+                        return true;
+                    }
+
+                    return false;
 
                 default:
                     return false;
@@ -1259,7 +1287,7 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
         SCH_ITEM* sch_item = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
 
         if( !moving && !sch_item->IsNew() )
-            saveCopyInUndoList( sch_item, UNDO_REDO::CHANGED, ii > 0 );
+            saveCopyInUndoList( sch_item, UNDO_REDO::CHANGED, ii > 0, false );
 
         if( sch_item->IsType( EE_COLLECTOR::FieldOwners ) )
             sch_item->AutoplaceFields( m_frame->GetScreen(), /* aManual */ true );
@@ -1370,15 +1398,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     {
     case SCH_LINE_T:
     case SCH_BUS_WIRE_ENTRY_T:
-        if( !selection.AllItemsHaveLineStroke() )
-            return 0;
-
-        break;
-
     case SCH_JUNCTION_T:
-        if( !selection.AreAllItemsIdentical() )
-            return 0;
-
         break;
 
     default:
@@ -1556,7 +1576,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         {
             // save old image in undo list if not already in edit
             if( bitmap->GetEditFlags() == 0 )
-                saveCopyInUndoList( bitmap, UNDO_REDO::CHANGED );
+                saveCopyInUndoList( bitmap, UNDO_REDO::CHANGED, false, false );
 
             dlg.TransferToImage( bitmap->GetImage() );
 
@@ -1570,50 +1590,73 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_LINE_T:
     case SCH_BUS_WIRE_ENTRY_T:
-    {
-        std::deque<SCH_ITEM*> strokeItems;
-
-        for( EDA_ITEM* selItem : selection.Items() )
-        {
-            SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( selItem );
-
-            if( schItem && schItem->HasLineStroke() )
-                strokeItems.push_back( schItem );
-            else
-                return 0;
-        }
-
-        DIALOG_LINE_WIRE_BUS_PROPERTIES dlg( m_frame, strokeItems );
-
-        if( dlg.ShowModal() == wxID_OK )
-        {
-            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
-            m_frame->OnModify();
-        }
-    }
-    break;
-
     case SCH_JUNCTION_T:
-    {
-        std::deque<SCH_JUNCTION*> junctions;
-
-        for( EDA_ITEM* selItem : selection.Items() )
+        if( std::all_of( selection.Items().begin(), selection.Items().end(),
+                [&]( const EDA_ITEM* item )
+                {
+                    return item->Type() == SCH_LINE_T
+                            && static_cast<const SCH_LINE*>( item )->IsGraphicLine();
+                } ) )
         {
-            SCH_JUNCTION* junction = dynamic_cast<SCH_JUNCTION*>( selItem );
+            std::deque<SCH_LINE*> lines;
 
-            wxCHECK( junction, 0 );
+            for( EDA_ITEM* selItem : selection.Items() )
+                lines.push_back( static_cast<SCH_LINE*>( selItem ) );
 
-            junctions.push_back( junction );
+            DIALOG_LINE_PROPERTIES dlg( m_frame, lines );
+
+            if( dlg.ShowModal() == wxID_OK )
+            {
+                m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+                m_frame->OnModify();
+            }
+        }
+        else if( std::all_of( selection.Items().begin(), selection.Items().end(),
+                [&]( const EDA_ITEM* item )
+                {
+                    return item->Type() == SCH_JUNCTION_T;
+                } ) )
+        {
+            std::deque<SCH_JUNCTION*> junctions;
+
+            for( EDA_ITEM* selItem : selection.Items() )
+                junctions.push_back( static_cast<SCH_JUNCTION*>( selItem ) );
+
+            DIALOG_JUNCTION_PROPS dlg( m_frame, junctions );
+
+            if( dlg.ShowModal() == wxID_OK )
+            {
+                m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+                m_frame->OnModify();
+            }
+        }
+        else if( std::all_of( selection.Items().begin(), selection.Items().end(),
+                [&]( const EDA_ITEM* item )
+                {
+                    const SCH_ITEM* schItem = dynamic_cast<const SCH_ITEM*>( item );
+
+                    return ( schItem->HasLineStroke() && schItem->IsConnectable() )
+                            || item->Type() == SCH_JUNCTION_T;
+                } ) )
+        {
+            std::deque<SCH_ITEM*> items;
+
+            for( EDA_ITEM* selItem : selection.Items() )
+                items.push_back( static_cast<SCH_ITEM*>( selItem ) );
+
+            DIALOG_WIRE_BUS_PROPERTIES dlg( m_frame, items );
+
+            if( dlg.ShowModal() == wxID_OK )
+            {
+                m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+                m_frame->OnModify();
+            }
+        }
+        else
+        {
+            return 0;
         }
 
-        DIALOG_JUNCTION_PROPS dlg( m_frame, junctions );
-
-        if( dlg.ShowModal() == wxID_OK )
-        {
-            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
-            m_frame->OnModify();
-        }
-    }
         break;
 
     case SCH_MARKER_T:        // These items have no properties to edit

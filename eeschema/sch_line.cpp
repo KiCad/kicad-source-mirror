@@ -215,6 +215,7 @@ double SCH_LINE::GetLength() const
 void SCH_LINE::SetLineColor( const COLOR4D& aColor )
 {
     m_stroke.SetColor( aColor );
+    m_lastResolvedColor = GetLineColor();
 }
 
 
@@ -281,6 +282,8 @@ void SCH_LINE::SetLineStyle( const PLOT_DASH_TYPE aStyle )
         m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
     else
         m_stroke.SetPlotStyle( aStyle );
+
+    m_lastResolvedLineStyle = GetLineStyle();
 }
 
 
@@ -321,6 +324,7 @@ PLOT_DASH_TYPE SCH_LINE::GetEffectiveLineStyle() const
 void SCH_LINE::SetLineWidth( const int aSize )
 {
     m_stroke.SetWidth( aSize );
+    m_lastResolvedWidth = GetPenWidth();
 }
 
 
