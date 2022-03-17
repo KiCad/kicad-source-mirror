@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2022 KiCad Developers.
+ * Copyright (C) 2004-2020 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,12 +57,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return wxT( "silk_to_mask" );
+        return "silk_to_mask";
     };
 
     virtual const wxString GetDescription() const override
     {
-        return wxT( "Tests for silkscreen being clipped by solder mask" );
+        return "Tests for silkscreen being clipped by solder mask";
     }
 
     virtual int GetNumPhases() const override
@@ -85,7 +85,7 @@ bool DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
 
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE ) )
     {
-        reportAux( wxT( "Silkscreen clipping violations ignored. Tests not run." ) );
+        reportAux( "Silkscreen clipping violations ignored. Tests not run." );
         return true;    // continue with other tests
     }
 
@@ -95,7 +95,7 @@ bool DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
     if( m_drcEngine->QueryWorstConstraint( SILK_CLEARANCE_CONSTRAINT, worstClearanceConstraint ) )
         m_largestClearance = worstClearanceConstraint.m_Value.Min();
 
-    reportAux( wxT( "Worst clearance : %d nm" ), m_largestClearance );
+    reportAux( "Worst clearance : %d nm", m_largestClearance );
 
     if( !reportPhase( _( "Checking silkscreen for potential soldermask clipping..." ) ) )
         return false;   // DRC cancelled

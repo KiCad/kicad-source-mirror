@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2022 KiCad Developers.
+ * Copyright (C) 2004-2020 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,12 +56,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return wxT( "connectivity" );
+        return "connectivity";
     };
 
     virtual const wxString GetDescription() const override
     {
-        return wxT( "Tests board connectivity" );
+        return "Tests board connectivity";
     }
 
     virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;

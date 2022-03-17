@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2022 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -154,7 +154,7 @@ void DRC_RULES_PARSER::Parse( std::vector<DRC_RULE*>& aRules, REPORTER* aReporte
 
         default:
             msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
-                        wxT( "rule or version" ) );
+                        "'rule', 'version'" );
             reportError( msg );
             parseUnknown();
         }
@@ -231,7 +231,7 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
 
         default:
             msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
-                        wxT( "constraint, condition, or disallow" ) );
+                           "constraint, condition or disallow" );
             reportError( msg );
             parseUnknown();
         }
@@ -255,10 +255,9 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     if( (int) token == DSN_RIGHT || token == T_EOF )
     {
         msg.Printf( _( "Missing constraint type.|  Expected %s." ),
-                    wxT( "clearance, hole_clearance, edge_clearance, hole, hole_to_hole, "
-                         "courtyard_clearance, silk_clearance, track_width, annular_width, "
-                         "via_diameter, disallow, length, skew, via_count, diff_pair_gap, or "
-                         "diff_pair_uncoupled" ) );
+                    "clearance, hole_clearance, edge_clearance, hole, hole_to_hole, "
+                    "courtyard_clearance, silk_clearance, track_width, annular_width, via_diameter, "
+                    "disallow, length, skew, via_count, diff_pair_gap or diff_pair_uncoupled" );
         reportError( msg );
         return;
     }
@@ -284,10 +283,9 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_diff_pair_uncoupled:       c.m_Type = DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT;   break;
     default:
         msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
-                    wxT( "clearance, hole_clearance, edge_clearance, hole_size, hole_to_hole, "
-                         "courtyard_clearance, silk_clearance, track_width, annular_width, "
-                         "via_diameter, disallow, length, skew, diff_pair_gap, or "
-                         "diff_pair_uncoupled" ) );
+                    "clearance, hole_clearance, edge_clearance, hole_size, hole_to_hole, "
+                    "courtyard_clearance, silk_clearance, track_width, annular_width, via_diameter, "
+                    "disallow, length, skew, diff_pair_gap or diff_pair_uncoupled." );
         reportError( msg );
     }
 
@@ -323,8 +321,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
             default:
                 msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
-                            wxT( "track, via, micro_via, buried_via, pad, zone, text, graphic, "
-                                 "hole, or footprint." ) );
+                            "track, via, micro_via, buried_via, pad, zone, text, graphic, hole "
+                            "or footprint." );
                 reportError( msg );
                 break;
             }
@@ -413,7 +411,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
         default:
             msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
                         FromUTF8(),
-                        wxT( "min, max, or opt" ) );
+                        "min, max or opt" );
             reportError( msg );
             parseUnknown();
         }

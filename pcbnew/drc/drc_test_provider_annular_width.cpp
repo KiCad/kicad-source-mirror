@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2022 KiCad Developers.
+ * Copyright (C) 2004-2020 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,12 +54,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return wxT( "annular_width" );
+        return "annular_width";
     };
 
     virtual const wxString GetDescription() const override
     {
-        return wxT( "Tests pad/via annular rings" );
+        return "Tests pad/via annular rings";
     }
 
     virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
@@ -72,7 +72,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
 {
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_ANNULAR_WIDTH ) )
     {
-        reportAux( wxT( "Annular width violations ignored. Skipping check." ) );
+        reportAux( "Annular width violations ignored. Skipping check." );
         return true;    // continue with other tests
     }
 
@@ -80,7 +80,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
 
     if( !m_drcEngine->HasRulesForConstraintType( ANNULAR_WIDTH_CONSTRAINT ) )
     {
-        reportAux( wxT( "No annular width constraints found. Tests not run." ) );
+        reportAux( "No annular width constraints found. Tests not run." );
         return true;    // continue with other tests
     }
 
@@ -152,10 +152,10 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
     for( PCB_TRACK* item : board->Tracks() )
     {
         if( !reportProgress( ii++, board->Tracks().size(), delta ) )
-            return false;   // DRC cancelled
+            break;
 
         if( !checkAnnularWidth( item ) )
-            break;
+            return false;   // DRC cancelled
     }
 
     reportRuleStatistics();

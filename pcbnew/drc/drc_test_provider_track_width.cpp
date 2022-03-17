@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2022 KiCad Developers.
+ * Copyright (C) 2004-2020 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,12 +50,12 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return wxT( "width" );
+        return "width";
     };
 
     virtual const wxString GetDescription() const override
     {
-        return wxT( "Tests track widths" );
+        return "Tests track widths";
     }
 
     virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
@@ -70,13 +70,13 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
 
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_TRACK_WIDTH ) )
     {
-        reportAux( wxT( "Track width violations ignored. Tests not run." ) );
+        reportAux( "Track width violations ignored. Tests not run." );
         return true;        // continue with other tests
     }
 
     if( !m_drcEngine->HasRulesForConstraintType( TRACK_WIDTH_CONSTRAINT ) )
     {
-        reportAux( wxT( "No track width constraints found. Tests not run." ) );
+        reportAux( "No track width constraints found. Tests not run." );
         return true;        // continue with other tests
     }
 
