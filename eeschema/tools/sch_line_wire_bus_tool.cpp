@@ -163,7 +163,8 @@ private:
 
 
 SCH_LINE_WIRE_BUS_TOOL::SCH_LINE_WIRE_BUS_TOOL() :
-    EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawingLineWireBus" )
+    EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawingLineWireBus" ),
+    m_inDrawingTool( false )
 {
     m_busUnfold = {};
     m_wires.reserve( 16 );
@@ -278,6 +279,11 @@ bool SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( const SELECTION& aSelection
 
 int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
 {
+    if( m_inDrawingTool )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
+
     DRAW_SEGMENT_EVENT_PARAMS* params = aEvent.Parameter<DRAW_SEGMENT_EVENT_PARAMS*>();
 
     std::string tool = aEvent.GetCommandStr().get();
@@ -300,6 +306,11 @@ int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
 
 int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 {
+    if( m_inDrawingTool )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
+
     wxString* netPtr = aEvent.Parameter<wxString*>();
     wxString  net;
     SCH_LINE* segment = nullptr;
@@ -591,6 +602,8 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
         //
         if( evt->IsCancelInteractive() )
         {
+            m_frame->GetInfoBar()->Dismiss();
+
             if( segment || m_busUnfold.in_progress )
             {
                 cleanup();

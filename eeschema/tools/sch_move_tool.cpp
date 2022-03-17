@@ -719,6 +719,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         //
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
+            if( evt->IsCancelInteractive() )
+                m_frame->GetInfoBar()->Dismiss();
+
             if( m_moveInProgress )
             {
                 if( evt->IsActivate() )
