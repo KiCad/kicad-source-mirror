@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 16:51-0800\n"
-"PO-Revision-Date: 2022-03-13 03:57+0000\n"
+"PO-Revision-Date: 2022-03-18 19:51+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -14781,6 +14781,8 @@ msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
 msgstr ""
+"L'identificador de biblioteca de la referència de símbol d'esquemàtic '%s' "
+"és invàlid. No s'ha pogut enllaçar el símbol de biblioteca."
 
 #: eeschema/sch_screen.cpp:676
 #, c-format
@@ -14788,6 +14790,8 @@ msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
 "Unable to link library symbol."
 msgstr ""
+"No s'ha trobat la biblioteca de símbols '%s' i no hi ha una biblioteca de "
+"reserva disponible. No s'ha pogut enllaçar el símbol de biblioteca."
 
 #: eeschema/sch_screen.cpp:695
 #, c-format
@@ -14797,7 +14801,7 @@ msgstr "Error d'E/S %s al resoldre el símbol de biblioteca %s"
 #: eeschema/sch_screen.cpp:715
 #, c-format
 msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
-msgstr ""
+msgstr "Recorrent al cau per definir el símbol '%s:%s' enllaç '%s'."
 
 #: eeschema/sch_screen.cpp:747
 #, c-format
@@ -14870,7 +14874,6 @@ msgid "Graphic Text"
 msgstr "Text gràfic"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -15045,8 +15048,8 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
-"samp></td>\n"
+"        <td> &nbsp;<br><samp>~{overbar}</samp><br> "
+"&nbsp;<br><samp>~{CLK}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
 "samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
@@ -15071,8 +15074,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> del símbol "
+"<i>refdes</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -15087,9 +15090,9 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definició de Bus</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
-"        <th>Resultant Nets</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
+"        <th>Xarxes resultants</th>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
@@ -15139,9 +15142,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -15189,14 +15192,12 @@ msgid "The field cannot contain %s character(s)."
 msgstr ""
 
 #: eeschema/sch_validators.cpp:138
-#, fuzzy
 msgid "The name of the field cannot be empty."
-msgstr "El camp %s no pot estar buit."
+msgstr "El nom del camp no pot estar buit."
 
 #: eeschema/sch_validators.cpp:140
-#, fuzzy
 msgid "The value of the field cannot be empty."
-msgstr "El valor de la variable d'entorn no pot estar buit."
+msgstr "El valor del camp no pot estar buit."
 
 #: eeschema/sch_validators.cpp:151
 msgid "carriage return"
@@ -15261,23 +15262,20 @@ msgid ""
 msgstr ""
 
 #: eeschema/sheet.cpp:150
-#, fuzzy
 msgid "Schematic Load Error"
-msgstr "Editor d'esquemàtics"
+msgstr "Error en carregar l'esquemàtic"
 
 #: eeschema/sheet.cpp:153
-#, fuzzy
 msgid "Use partial schematic"
-msgstr "Utilitza tot l'&esquemàtic"
+msgstr "Utilitza un esquemàtic parcialment"
 
 #: eeschema/sheet.cpp:206
 msgid "Continue Load"
 msgstr ""
 
 #: eeschema/sheet.cpp:207
-#, fuzzy
 msgid "Cancel Load"
-msgstr "Cancel·la"
+msgstr "Cancel·la la càrrega"
 
 #: eeschema/sheet.cpp:224
 msgid ""
@@ -15288,9 +15286,8 @@ msgstr ""
 
 #: eeschema/sheet.cpp:227 eeschema/sheet.cpp:268 eeschema/sheet.cpp:317
 #: eeschema/sheet.cpp:378
-#, fuzzy
 msgid "Continue Load Schematic"
-msgstr "Carrega l'esquemàtic"
+msgstr "Continua la càrrega de l'esquemàtic"
 
 #: eeschema/sheet.cpp:264
 #, c-format
@@ -15330,14 +15327,12 @@ msgid "Do not show this message again."
 msgstr "No tornis a mostrar aquest missatge."
 
 #: eeschema/sheet.cpp:571
-#, fuzzy
 msgid "Create New Sheet"
-msgstr "Creació d'un projecte nou"
+msgstr "Crea una nova fulla"
 
 #: eeschema/sheet.cpp:572
-#, fuzzy
 msgid "Discard New Sheet"
-msgstr "Sense canvis"
+msgstr "Descarta la nova fulla"
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
@@ -15377,14 +15372,12 @@ msgid "Tune component values"
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:177
-#, fuzzy
 msgid "Sim Parameters"
-msgstr "Paràmetres"
+msgstr "Paràmetres de Sim"
 
 #: eeschema/sim/sim_plot_frame.cpp:178
-#, fuzzy
 msgid "Simulation parameters and settings"
-msgstr "Ajusts de la simulació"
+msgstr "Ajustaments i paràmetres de la simulació"
 
 #: eeschema/sim/sim_plot_frame.cpp:358 eeschema/sim/sim_plot_frame_base.h:126
 msgid "Spice Simulator"
@@ -15420,19 +15413,16 @@ msgid "Open simulation workbook"
 msgstr "Obre el llibre de treball de la simulació"
 
 #: eeschema/sim/sim_plot_frame.cpp:1190
-#, fuzzy
 msgid "Save Simulation Workbook As"
-msgstr "Desa el llibre de treball de la simulació"
+msgstr "Desa el llibre de treball de la simulació com a"
 
 #: eeschema/sim/sim_plot_frame.cpp:1206
-#, fuzzy
 msgid "Save Plot as Image"
-msgstr "Desa el ploteig com a una imatge"
+msgstr "Desa el plotejat com a una imatge"
 
 #: eeschema/sim/sim_plot_frame.cpp:1223
-#, fuzzy
 msgid "Save Plot Data"
-msgstr "Desa les dades del ploteig"
+msgstr "Desa les dades del plotejat"
 
 #: eeschema/sim/sim_plot_frame.cpp:1519
 #, fuzzy
@@ -25170,13 +25160,14 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"Aquesta és la ràtio, en percentatge, de marge de seguretat local entre els "
-"pads i la pasta de soldadura per aquesta empremta.\n"
-"Un valor de 10 significa que el valor del marge de seguretat és el 10 per "
-"cent de la mida del pad.\n"
+"Aquesta és la ràtio, en percentatge, de marge local de l'amplada i l'alçada "
+"del pad per aquesta empremta.\n"
+"Un valor de 10 significa que el valor del marge horitzontal és el 10% de "
+"l'amplada del pad, i el valor del marge vertical és el 10% de l'alçada del "
+"pad.\n"
 "Aquest valor pot ser substituït pels valors locals del pad.\n"
-"El valor final del marge de seguretat és la suma d'aquest valor i el valor "
-"del marge de seguretat.\n"
+"El valor final del marge és la suma d'aquest valor i el valor del marge "
+"absolut.\n"
 "Un valor negatiu equival a una mida de màscara més petita que la mida del "
 "pad."
 
@@ -25326,17 +25317,17 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
-"Aquesta és la ràtio, percentatge, de marge de seguretat local entre els "
-"pads\n"
-"i la pasta de soldadura per a aquesta empremta.\n"
-"Un valor de 10 significa que el valor del marge de seguretat és el 10 per "
-"cent de la mida del pad.\n"
-"El valor final del marge de seguretat és la suma d'aquest valor i el valor "
-"del marge de seguretat.\n"
+"Aquesta és la ràtio, en percentatge, de marge local de l'amplada i l'alçada "
+"del pad per aquesta empremta.\n"
+"Un valor de 10 significa que el valor del marge horitzontal és el 10% de "
+"l'amplada del pad, i el valor del marge vertical és el 10% de l'alçada del "
+"pad.\n"
+"El valor final del marge és la suma d'aquest valor i el valor del marge "
+"absolut.\n"
 "Un valor negatiu equival a una mida de màscara més petita que la mida del "
 "pad.\n"
-"Aquest valor pot ser anul·lat individualment en cada pad a\n"
-"la seva pestanya local de marges i ajustaments de les propietats del pad."
+"Aquest valor pot ser substituït pad a pad a la pestanya Marges locals i "
+"ajustaments de les propietats del pad."
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:144
 msgid "All footprint generator scripts were loaded"
