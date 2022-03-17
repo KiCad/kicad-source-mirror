@@ -133,11 +133,10 @@ private:
     void computeBreakPoint( const std::pair<SCH_LINE*, SCH_LINE*>& aSegments, wxPoint& aPosition );
 
 private:
-    /// Data related to bus unfolding tool.
-    BUS_UNFOLDING_T         m_busUnfold;
+    bool                    m_inDrawingTool;   // Reentrancy guard
 
-    /// Storage for the line segments while drawing
-    std::vector<SCH_LINE*>   m_wires;
+    BUS_UNFOLDING_T         m_busUnfold;
+    std::vector<SCH_LINE*>  m_wires;           // Lines being drawn
 };
 
 #endif /* SCH_LINE_WIRE_BUS_TOOL_H */

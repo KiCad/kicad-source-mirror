@@ -192,6 +192,8 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() )
         {
+            m_frame->GetInfoBar()->Dismiss();
+
             if( symbol )
             {
                 cleanup();
@@ -430,6 +432,8 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() )
         {
+            m_frame->GetInfoBar()->Dismiss();
+
             if( image )
             {
                 cleanup();
@@ -1071,6 +1075,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() )
         {
+            m_frame->GetInfoBar()->Dismiss();
+
             if( item )
             {
                 cleanup();
@@ -1304,6 +1310,8 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() )
         {
+            m_frame->GetInfoBar()->Dismiss();
+
             if( sheet )
             {
                 cleanup();

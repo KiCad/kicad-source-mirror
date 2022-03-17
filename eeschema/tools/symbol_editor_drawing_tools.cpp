@@ -133,6 +133,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() )
         {
+            m_frame->GetInfoBar()->Dismiss();
+
             if( item )
             {
                 cleanup();
