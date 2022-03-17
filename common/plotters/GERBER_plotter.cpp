@@ -843,16 +843,6 @@ void GERBER_PLOTTER::plotArc( const SHAPE_ARC& aArc, bool aPlotInRegion )
     VECTOR2I  start( aArc.GetP0() );
     VECTOR2I  end( aArc.GetP1() );
     VECTOR2I  center( aArc.GetCenter() );
-    EDA_ANGLE startAngle = aArc.GetStartAngle();
-    EDA_ANGLE endAngle = aArc.GetEndAngle();
-
-    if( startAngle > endAngle )
-    {
-        if( endAngle < ANGLE_0 )
-            endAngle.Normalize();
-        else
-            startAngle = startAngle.Normalize() - ANGLE_360;
-    }
 
     if( !aPlotInRegion )
         MoveTo( start);
@@ -860,14 +850,18 @@ void GERBER_PLOTTER::plotArc( const SHAPE_ARC& aArc, bool aPlotInRegion )
         LineTo( start );
 
     VECTOR2D devEnd = userToDeviceCoordinates( end );
-    VECTOR2D devCenter = userToDeviceCoordinates( center ) - userToDeviceCoordinates( start );
+    VECTOR2D devCenter = userToDeviceCoordinates( center - start );
+
+    // We need to know if the arc is CW or CCW in device coordinates, so build this arc.
+    SHAPE_ARC deviceArc( userToDeviceCoordinates( start ),
+                         userToDeviceCoordinates( aArc.GetArcMid() ), devEnd, 0 );
 
     fprintf( m_outputFile, "G75*\n" );        // Multiquadrant (360 degrees) mode
 
-    if( startAngle > endAngle )
-        fprintf( m_outputFile, "G03*\n" );    // Active circular interpolation, CCW
-    else
+    if( deviceArc.IsClockwise() )
         fprintf( m_outputFile, "G02*\n" );    // Active circular interpolation, CW
+    else
+        fprintf( m_outputFile, "G03*\n" );    // Active circular interpolation, CCW
 
     fprintf( m_outputFile, "X%dY%dI%dJ%dD01*\n",
              KiROUND( devEnd.x ), KiROUND( devEnd.y ),
