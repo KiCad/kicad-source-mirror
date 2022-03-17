@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 16:51-0800\n"
-"PO-Revision-Date: 2022-03-17 08:54+0000\n"
+"PO-Revision-Date: 2022-03-18 15:59+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v6/ca/>\n"
 "Language: ca\n"
@@ -14217,6 +14217,8 @@ msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
 msgstr ""
+"L'identificador de biblioteca de la referència de símbol d'esquemàtic '%s' "
+"és invàlid. No s'ha pogut enllaçar el símbol de biblioteca."
 
 #: eeschema/sch_screen.cpp:676
 #, c-format
@@ -14224,6 +14226,8 @@ msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
 "Unable to link library symbol."
 msgstr ""
+"No s'ha trobat la biblioteca de símbols '%s' i no hi ha una biblioteca de "
+"reserva disponible. No s'ha pogut enllaçar el símbol de biblioteca."
 
 #: eeschema/sch_screen.cpp:695
 #, c-format
@@ -14233,7 +14237,7 @@ msgstr "Error d'E/S %s al resoldre el símbol de biblioteca %s"
 #: eeschema/sch_screen.cpp:715
 #, c-format
 msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
-msgstr ""
+msgstr "Recorrent al cau per definir el símbol '%s:%s' enllaç '%s'."
 
 #: eeschema/sch_screen.cpp:747
 #, c-format
@@ -14659,14 +14663,12 @@ msgid "The field cannot contain %s character(s)."
 msgstr ""
 
 #: eeschema/sch_validators.cpp:138
-#, fuzzy
 msgid "The name of the field cannot be empty."
-msgstr "El camp %s no pot estar buit."
+msgstr "El nom del camp no pot estar buit."
 
 #: eeschema/sch_validators.cpp:140
-#, fuzzy
 msgid "The value of the field cannot be empty."
-msgstr "El valor de la variable d'entorn no pot estar buit."
+msgstr "El valor del camp no pot estar buit."
 
 #: eeschema/sch_validators.cpp:151
 msgid "carriage return"
@@ -14731,23 +14733,20 @@ msgid ""
 msgstr ""
 
 #: eeschema/sheet.cpp:150
-#, fuzzy
 msgid "Schematic Load Error"
-msgstr "Editor d'esquemàtics"
+msgstr "Error en carregar l'esquemàtic"
 
 #: eeschema/sheet.cpp:153
-#, fuzzy
 msgid "Use partial schematic"
-msgstr "Utilitza tot l'&esquemàtic"
+msgstr "Utilitza un esquemàtic parcialment"
 
 #: eeschema/sheet.cpp:206
 msgid "Continue Load"
 msgstr ""
 
 #: eeschema/sheet.cpp:207
-#, fuzzy
 msgid "Cancel Load"
-msgstr "Cancel·la"
+msgstr "Cancel·la la càrrega"
 
 #: eeschema/sheet.cpp:224
 msgid ""
@@ -14758,9 +14757,8 @@ msgstr ""
 
 #: eeschema/sheet.cpp:227 eeschema/sheet.cpp:268 eeschema/sheet.cpp:317
 #: eeschema/sheet.cpp:378
-#, fuzzy
 msgid "Continue Load Schematic"
-msgstr "Carrega l'esquemàtic"
+msgstr "Continua la càrrega de l'esquemàtic"
 
 #: eeschema/sheet.cpp:264
 #, c-format
@@ -14800,14 +14798,12 @@ msgid "Do not show this message again."
 msgstr "No tornis a mostrar aquest missatge."
 
 #: eeschema/sheet.cpp:571
-#, fuzzy
 msgid "Create New Sheet"
-msgstr "Creació d'un projecte nou"
+msgstr "Crea una nova fulla"
 
 #: eeschema/sheet.cpp:572
-#, fuzzy
 msgid "Discard New Sheet"
-msgstr "Sense canvis"
+msgstr "Descarta la nova fulla"
 
 #: eeschema/sim/sim_panel_base.cpp:92
 msgid ""
@@ -14847,14 +14843,12 @@ msgid "Tune component values"
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:177
-#, fuzzy
 msgid "Sim Parameters"
-msgstr "Paràmetres"
+msgstr "Paràmetres de Sim"
 
 #: eeschema/sim/sim_plot_frame.cpp:178
-#, fuzzy
 msgid "Simulation parameters and settings"
-msgstr "Ajusts de la simulació"
+msgstr "Ajustaments i paràmetres de la simulació"
 
 #: eeschema/sim/sim_plot_frame.cpp:358 eeschema/sim/sim_plot_frame_base.h:127
 msgid "Spice Simulator"
@@ -14890,19 +14884,16 @@ msgid "Open simulation workbook"
 msgstr "Obre el llibre de treball de la simulació"
 
 #: eeschema/sim/sim_plot_frame.cpp:1186
-#, fuzzy
 msgid "Save Simulation Workbook As"
-msgstr "Desa el llibre de treball de la simulació"
+msgstr "Desa el llibre de treball de la simulació com a"
 
 #: eeschema/sim/sim_plot_frame.cpp:1202
-#, fuzzy
 msgid "Save Plot as Image"
-msgstr "Desa el ploteig com a una imatge"
+msgstr "Desa el plotejat com a una imatge"
 
 #: eeschema/sim/sim_plot_frame.cpp:1219
-#, fuzzy
 msgid "Save Plot Data"
-msgstr "Desa les dades del ploteig"
+msgstr "Desa les dades del plotejat"
 
 #: eeschema/sim/sim_plot_frame.cpp:1515
 #, fuzzy
