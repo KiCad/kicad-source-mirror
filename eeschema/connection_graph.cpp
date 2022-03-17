@@ -730,7 +730,8 @@ void CONNECTION_GRAPH::buildItemSubGraphs()
                             SCH_CONNECTION* conn = aItem->GetOrInitConnection( sheet, this );
                             bool unique = !( aItem->GetFlags() & CANDIDATE );
 
-                            aItem->SetFlags( CANDIDATE );
+                            if( conn && !conn->SubgraphCode() )
+                                aItem->SetFlags( CANDIDATE );
 
                             return ( unique && conn && ( conn->SubgraphCode() == 0 ) );
                         };
