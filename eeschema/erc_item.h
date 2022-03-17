@@ -72,6 +72,7 @@ private:
     static ERC_ITEM heading_misc;
 
     static ERC_ITEM duplicateSheetName;
+    static ERC_ITEM endpointOffGrid;
     static ERC_ITEM pinNotConnected;
     static ERC_ITEM pinNotDriven;
     static ERC_ITEM powerpinNotDriven;

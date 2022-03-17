@@ -46,6 +46,10 @@ ERC_ITEM ERC_ITEM::duplicateSheetName( ERCE_DUPLICATE_SHEET_NAME,
         _( "Duplicate sheet names within a given sheet" ),
         wxT( "duplicate_sheet_names" ) );
 
+ERC_ITEM ERC_ITEM::endpointOffGrid( ERCE_ENDPOINT_OFF_GRID,
+        _( "Symbol pin or wire end off grid" ),
+        wxT( "endpoint_off_grid" ) );
+
 ERC_ITEM ERC_ITEM::pinNotConnected( ERCE_PIN_NOT_CONNECTED,
         _( "Pin not connected" ),
         wxT( "pin_not_connected" ) );
@@ -196,6 +200,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     switch( aErrorCode )
     {
     case ERCE_DUPLICATE_SHEET_NAME:    return std::make_shared<ERC_ITEM>( duplicateSheetName );
+    case ERCE_ENDPOINT_OFF_GRID:       return std::make_shared<ERC_ITEM>( endpointOffGrid );
     case ERCE_PIN_NOT_CONNECTED:       return std::make_shared<ERC_ITEM>( pinNotConnected );
     case ERCE_PIN_NOT_DRIVEN:          return std::make_shared<ERC_ITEM>( pinNotDriven );
     case ERCE_POWERPIN_NOT_DRIVEN:     return std::make_shared<ERC_ITEM>( powerpinNotDriven );

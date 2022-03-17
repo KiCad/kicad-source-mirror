@@ -34,6 +34,8 @@
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <sch_textbox.h>
+#include <sch_line.h>
+#include <sch_pin.h>
 #include <schematic.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
@@ -705,10 +707,7 @@ int ERC_TESTER::TestLibSymbolIssues()
 
         for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
-            SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
-
-            wxCHECK2( symbol, continue );
-
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
             LIB_SYMBOL* libSymbolInSchematic = symbol->GetLibSymbolRef().get();
 
             wxCHECK2( libSymbolInSchematic, continue );
@@ -768,6 +767,78 @@ int ERC_TESTER::TestLibSymbolIssues()
                 ercItem->SetErrorMessage( msg );
 
                 markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+            }
+        }
+
+        for( SCH_MARKER* marker : markers )
+        {
+            screen->Append( marker );
+            err_count += 1;
+        }
+    }
+
+    return err_count;
+}
+
+
+int ERC_TESTER::TestOffGridEndpoints( int aGridSize )
+{
+    // The minimal grid size allowed to place a pin is 25 mils
+    // the best grid size is 50 mils, but 25 mils is still usable
+    // this is because all symbols are using a 50 mils grid to place pins, and therefore
+    // the wires must be on the 50 mils grid
+    // So raise an error if a pin is not on a 25 mil (or bigger: 50 mil or 100 mil) grid
+    const int min_grid_size = Mils2iu( 25 );
+    const int clamped_grid_size = ( aGridSize < min_grid_size ) ? min_grid_size : aGridSize;
+
+    SCH_SCREENS screens( m_schematic->Root() );
+    int         err_count = 0;
+
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
+    {
+        std::vector<SCH_MARKER*> markers;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            if( item->Type() == SCH_LINE_T && item->IsConnectable() )
+            {
+                SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+                if( ( line->GetStartPoint().x % clamped_grid_size ) != 0
+                        || ( line->GetStartPoint().y % clamped_grid_size) != 0 )
+                {
+                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_ENDPOINT_OFF_GRID );
+                    ercItem->SetItems( line );
+
+                    markers.emplace_back( new SCH_MARKER( ercItem, line->GetStartPoint() ) );
+                }
+                else if( ( line->GetEndPoint().x % clamped_grid_size ) != 0
+                            || ( line->GetEndPoint().y % clamped_grid_size) != 0 )
+                {
+                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_ENDPOINT_OFF_GRID );
+                    ercItem->SetItems( line );
+
+                    markers.emplace_back( new SCH_MARKER( ercItem, line->GetEndPoint() ) );
+                }
+            }
+            else if( item->Type() == SCH_SYMBOL_T )
+            {
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+                for( SCH_PIN* pin : symbol->GetPins( nullptr ) )
+                {
+                    VECTOR2I pinPos = pin->GetTransformedPosition();
+
+                    if( ( pinPos.x % clamped_grid_size ) != 0
+                            || ( pinPos.y % clamped_grid_size) != 0 )
+                    {
+                        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_ENDPOINT_OFF_GRID );
+                        ercItem->SetItems( pin );
+
+                        markers.emplace_back( new SCH_MARKER( ercItem, pinPos ) );
+                        break;
+                    }
+                }
             }
         }
 

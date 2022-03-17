@@ -888,7 +888,7 @@ std::vector<SCH_PIN*> SCH_SYMBOL::GetPins( const SCH_SHEET_PATH* aSheet ) const
 
     int unit = GetUnitSelection( aSheet );
 
-    for( const auto& p : m_pins )
+    for( const std::unique_ptr<SCH_PIN>& p : m_pins )
     {
         if( unit && p->GetLibPin()->GetUnit() && ( p->GetLibPin()->GetUnit() != unit ) )
             continue;

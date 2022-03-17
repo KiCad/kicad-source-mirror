@@ -495,6 +495,12 @@ void DIALOG_ERC::testErc()
         tester.TestLibSymbolIssues();
     }
 
+    if( settings.IsTestEnabled( ERCE_ENDPOINT_OFF_GRID ) )
+    {
+        AdvancePhase( _( "Checking for off grid pins and wires..." ) );
+        tester.TestOffGridEndpoints( m_parent->GetCanvas()->GetView()->GetGAL()->GetGridSize().x );
+    }
+
     m_parent->ResolveERCExclusions();
 
     // Display diags:

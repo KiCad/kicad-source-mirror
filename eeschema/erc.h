@@ -128,6 +128,12 @@ public:
      */
     int TestLibSymbolIssues();
 
+    /**
+     * Test pins and wire ends for being off grid.
+     * @return the error count
+     */
+    int TestOffGridEndpoints( int aGridSize );
+
 private:
 
     SCHEMATIC* m_schematic;

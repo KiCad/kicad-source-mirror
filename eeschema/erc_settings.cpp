@@ -94,6 +94,7 @@ ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
 
     // Error is the default setting so set non-error priorities here.
     m_Severities[ERCE_UNSPECIFIED]             = RPT_SEVERITY_UNDEFINED;
+    m_Severities[ERCE_ENDPOINT_OFF_GRID]       = RPT_SEVERITY_WARNING;
     m_Severities[ERCE_PIN_TO_PIN_WARNING]      = RPT_SEVERITY_WARNING;
     m_Severities[ERCE_SIMILAR_LABELS]          = RPT_SEVERITY_WARNING;
     m_Severities[ERCE_GLOBLABEL]               = RPT_SEVERITY_WARNING;

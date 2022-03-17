@@ -38,6 +38,7 @@ enum ERCE_T
     ERCE_UNSPECIFIED = 0,
     ERCE_FIRST,
     ERCE_DUPLICATE_SHEET_NAME = ERCE_FIRST,  ///< Duplicate sheet names within a given sheet.
+    ERCE_ENDPOINT_OFF_GRID,       ///< Pin or wire-end off grid.
     ERCE_PIN_NOT_CONNECTED,       ///< Pin not connected and not no connect symbol.
     ERCE_PIN_NOT_DRIVEN,          ///< Pin connected to some others pins but no pin to drive it.
                                   ///< pins to drive it can be output, passive, 3sttae, I/O
