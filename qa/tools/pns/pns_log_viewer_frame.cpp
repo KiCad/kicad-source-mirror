@@ -244,6 +244,13 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
 
                 break;
             }
+            case SH_SEGMENT:
+            {
+                auto seg = static_cast<SHAPE_SEGMENT*>( sh );
+                m_overlay->Line( seg->GetSeg().A, seg->GetSeg().B );
+                
+                break;
+            }
             case SH_RECT:
             {
                 auto rect = static_cast<SHAPE_RECT*>( sh );
