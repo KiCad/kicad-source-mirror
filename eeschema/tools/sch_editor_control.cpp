@@ -1490,19 +1490,16 @@ void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_SYMBOL* aSymbol, SCH_SCREEN* aP
     }
 
     if( aForceKeepAnnotations && !reference.IsEmpty() )
-    {
         aSymbol->SetRef( &aPastePath, reference );
-        aSymbol->SetValue( &aPastePath, value );
-        aSymbol->SetFootprint( &aPastePath, footprint );
-    }
     else
-    {
         aSymbol->ClearAnnotation( &aPastePath );
-    }
 
-    // We might clear annotations but always leave the original unit number from the paste
+    // We might clear annotations but always leave the original unit number, value and footprint
+    // from the paste
     aSymbol->SetUnitSelection( &aPastePath, unit );
     aSymbol->SetUnit( unit );
+    aSymbol->SetValue( &aPastePath, value );
+    aSymbol->SetFootprint( &aPastePath, footprint );
 }
 
 
