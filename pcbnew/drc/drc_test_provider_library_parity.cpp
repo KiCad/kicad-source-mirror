@@ -199,8 +199,12 @@ bool shapesNeedUpdate( const FP_SHAPE* a, const FP_SHAPE* b )
     case SHAPE_T::ARC:
         TEST( a->GetStart0(), b->GetStart0() );
         TEST( a->GetEnd0(), b->GetEnd0() );
-        TEST( a->GetCenter0(), b->GetCenter0() );
-        TEST_D( a->GetArcAngle().AsDegrees(), b->GetArcAngle().AsDegrees() );
+
+        // Arc center is calculated and so may have round-off errors when parents are
+        // differentially rotated.
+        if( ( a->GetCenter0() - b->GetCenter0() ).EuclideanNorm() > Millimeter2iu( 0.0001 ) )
+            return true;
+
         break;
 
     case SHAPE_T::BEZIER:
