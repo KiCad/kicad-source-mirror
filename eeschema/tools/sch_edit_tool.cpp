@@ -1392,9 +1392,9 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    EDA_ITEM* item = selection.Front();
+    EDA_ITEM* curr_item = selection.Front();
 
-    switch( item->Type() )
+    switch( curr_item->Type() )
     {
     case SCH_LINE_T:
     case SCH_BUS_WIRE_ENTRY_T:
@@ -1408,11 +1408,11 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         break;
     }
 
-    switch( item->Type() )
+    switch( curr_item->Type() )
     {
     case SCH_SYMBOL_T:
     {
-        SCH_SYMBOL*              symbol = static_cast<SCH_SYMBOL*>( item );
+        SCH_SYMBOL*              symbol = static_cast<SCH_SYMBOL*>( curr_item );
         DIALOG_SYMBOL_PROPERTIES symbolPropsDialog( m_frame, symbol );
 
         // This dialog itself subsequently can invoke a KIWAY_PLAYER as a quasimodal
@@ -1464,7 +1464,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_SHEET_T:
     {
-        SCH_SHEET*     sheet = static_cast<SCH_SHEET*>( item );
+        SCH_SHEET*     sheet = static_cast<SCH_SHEET*>( curr_item );
         bool           doClearAnnotation;
         bool           doRefresh = false;
 
@@ -1502,7 +1502,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_SHEET_PIN_T:
     {
-        SCH_SHEET_PIN*              pin = static_cast<SCH_SHEET_PIN*>( item );
+        SCH_SHEET_PIN*              pin = static_cast<SCH_SHEET_PIN*>( curr_item );
         DIALOG_SHEET_PIN_PROPERTIES dlg( m_frame, pin );
 
         // QuasiModal required for help dialog
@@ -1517,7 +1517,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     case SCH_TEXT_T:
     case SCH_TEXTBOX_T:
     {
-        DIALOG_TEXT_PROPERTIES dlg( m_frame, static_cast<SCH_ITEM*>( item ) );
+        DIALOG_TEXT_PROPERTIES dlg( m_frame, static_cast<SCH_ITEM*>( curr_item ) );
 
         // Must be quasi modal for syntax help
         if( dlg.ShowQuasiModal() == wxID_OK )
@@ -1533,7 +1533,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     case SCH_HIER_LABEL_T:
     case SCH_DIRECTIVE_LABEL_T:
     {
-        DIALOG_LABEL_PROPERTIES dlg( m_frame, static_cast<SCH_LABEL_BASE*>( item ) );
+        DIALOG_LABEL_PROPERTIES dlg( m_frame, static_cast<SCH_LABEL_BASE*>( curr_item ) );
 
         // Must be quasi modal for syntax help
         if( dlg.ShowQuasiModal() == wxID_OK )
@@ -1546,7 +1546,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_FIELD_T:
     {
-        SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
+        SCH_FIELD* field = static_cast<SCH_FIELD*>( curr_item );
 
         editFieldText( field );
 
@@ -1557,7 +1557,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_SHAPE_T:
     {
-        DIALOG_SHAPE_PROPERTIES dlg( m_frame, static_cast<SCH_SHAPE*>( item ) );
+        DIALOG_SHAPE_PROPERTIES dlg( m_frame, static_cast<SCH_SHAPE*>( curr_item ) );
 
         if( dlg.ShowModal() == wxID_OK )
         {
@@ -1569,7 +1569,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_BITMAP_T:
     {
-        SCH_BITMAP*         bitmap = static_cast<SCH_BITMAP*>( item );
+        SCH_BITMAP*         bitmap = static_cast<SCH_BITMAP*>( curr_item );
         DIALOG_IMAGE_EDITOR dlg( m_frame, bitmap->GetImage() );
 
         if( dlg.ShowModal() == wxID_OK )
@@ -1664,10 +1664,10 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         break;
 
     default:                // Unexpected item
-        wxFAIL_MSG( wxString( "Cannot edit schematic item type " ) + item->GetClass() );
+        wxFAIL_MSG( wxString( "Cannot edit schematic item type " ) + curr_item->GetClass() );
     }
 
-    updateItem( item, true );
+    updateItem( curr_item, true );
 
     if( clearSelection )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
