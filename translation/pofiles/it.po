@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:52-0700\n"
-"PO-Revision-Date: 2022-03-15 20:36+0100\n"
+"PO-Revision-Date: 2022-03-18 21:34+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -36741,40 +36741,21 @@ msgid "The KiCad Developers"
 msgstr "Gli sviluppatori di KiCad"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
 msgid "Gerber file"
 msgstr "File Gerber"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:26
-#, fuzzy
 msgid "Excellon drill file"
-msgstr "Genera file forature Excellon2"
+msgstr "File forature Excellon"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
-#, fuzzy
 msgid "KiCad Project"
-msgstr "File progetto KiCad"
+msgstr "Progetto KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:12
-#, fuzzy
 msgid "KiCad Schematic"
-msgstr "Schema non-KiCad..."
+msgstr "Schema KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:27
-#, fuzzy
 msgid "KiCad Printed Circuit Board"
-msgstr "File di circuiti stampati KiCad"
-
-#~ msgid "No netlist provided, skipping LVS."
-#~ msgstr "Nessuna netlist fornita, salto LVS."
-
-#, c-format
-#~ msgid "Testing %d silkscreen features against %d board items."
-#~ msgstr ""
-#~ "Verifica %d caratteristiche serigrafia rispetto a %d elementi scheda."
-
-#~ msgid "kicad"
-#~ msgstr "kicad"
-
-#~ msgid "pcbcalculator"
-#~ msgstr "pcbcalculator"
+msgstr "Circuito stampato KiCad"
