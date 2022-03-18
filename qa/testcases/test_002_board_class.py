@@ -17,7 +17,7 @@ NEW_NAME = 'My_Fancy_Layer_Name'
 class TestBoardClass(unittest.TestCase):
 
     def setUp(self):
-        self.pcb = LoadBoard("data/complex_hierarchy.kicad_pcb")
+        self.pcb = LoadBoard("data/pcbnew/complex_hierarchy.kicad_pcb")
         self.TITLE="Test Board"
         self.COMMENT1="For load/save test"
         self.FILENAME=tempfile.mktemp()+".kicad_pcb"
@@ -122,7 +122,7 @@ class TestBoardClass(unittest.TestCase):
         self.assertEqual(pcb.GetLayerID(B_CU), b_cu_id)
 
     def test_footprint_properties(self):
-        pcb = LoadBoard("data/custom_fields.kicad_pcb")
+        pcb = LoadBoard("data/pcbnew/custom_fields.kicad_pcb")
         footprint = pcb.FindFootprintByReference('J1')
         expected_properties = {
             'Sheet file': 'custom_fields.kicad_sch',

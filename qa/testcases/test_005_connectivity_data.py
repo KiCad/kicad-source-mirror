@@ -10,7 +10,7 @@ class TestConnectivity(unittest.TestCase):
 
     def setUp(self):
         """Setup shared attributes."""
-        self.pcb = pcbnew.LoadBoard("data/complex_hierarchy.kicad_pcb")
+        self.pcb = pcbnew.LoadBoard("data/pcbnew/complex_hierarchy.kicad_pcb")
         self.connectivity = self.pcb.GetConnectivity()
         self.nets = self.pcb.GetNetsByName()
 

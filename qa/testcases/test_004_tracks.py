@@ -4,7 +4,7 @@ import pcbnew
 class TestTracks(unittest.TestCase):
 
     def setUp(self):
-        self.pcb = pcbnew.LoadBoard("data/tracks_arcs_vias.kicad_pcb")
+        self.pcb = pcbnew.LoadBoard("data/pcbnew/tracks_arcs_vias.kicad_pcb")
 
     def test_tracks(self):
         tracks = [t for t in self.pcb.Tracks() if t.GetClass() == 'PCB_TRACK']

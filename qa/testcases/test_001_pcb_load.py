@@ -6,7 +6,7 @@ import pdb
 class TestPCBLoad(unittest.TestCase):
 
     def setUp(self):
-        self.pcb = pcbnew.LoadBoard("data/complex_hierarchy.kicad_pcb")
+        self.pcb = pcbnew.LoadBoard("data/pcbnew/complex_hierarchy.kicad_pcb")
 
     def test_pcb_load(self):
         self.assertNotEqual(self.pcb,None)

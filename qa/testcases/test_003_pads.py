@@ -4,7 +4,7 @@ import pcbnew
 class TestPads(unittest.TestCase):
 
     def setUp(self):
-        self.pcb = pcbnew.LoadBoard("data/custom_pads.kicad_pcb")
+        self.pcb = pcbnew.LoadBoard("data/pcbnew/custom_pads.kicad_pcb")
 
     def test_custom_pads_outline(self):
         custom_pad1 = self.pcb.FindFootprintByReference("SB1").Pads()[0]
