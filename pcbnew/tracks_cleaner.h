@@ -98,12 +98,17 @@ private:
 
     void removeItems( std::set<BOARD_ITEM*>& aItems );
 
+    const std::vector<BOARD_CONNECTED_ITEM*>& getConnectedItems( PCB_TRACK* aTrack );
+
 private:
     BOARD*                                      m_brd;
     BOARD_COMMIT&                               m_commit;       // caller owns
     bool                                        m_dryRun;
     std::vector<std::shared_ptr<CLEANUP_ITEM>>* m_itemsList;    // caller owns
     REPORTER*                                   m_reporter;
+
+    // Cache connections.  O(n^2) is awful, but it beats O(2n^3).
+    std::map<PCB_TRACK*, std::vector<BOARD_CONNECTED_ITEM*>> m_connectedItemsCache;
 };
 
 

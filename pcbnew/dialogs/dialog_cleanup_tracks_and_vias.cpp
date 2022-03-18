@@ -131,24 +131,20 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
 
     if( m_firstRun )
     {
-        m_items.push_back( std::make_shared<CLEANUP_ITEM>( CLEANUP_CHECKING_ZONE_FILLS ) );
-        RC_ITEMS_PROVIDER* provider = new VECTOR_CLEANUP_ITEMS_PROVIDER( &m_items );
-        m_changesTreeModel->SetProvider( provider );
-
         m_reporter->Report( _( "Check zones..." ) );
+        wxSafeYield();      // Timeslice to update UI
         m_parentFrame->GetToolManager()->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( this );
         wxSafeYield();      // Timeslice to close zone progress reporter
-
-        m_changesTreeModel->SetProvider( nullptr );
-        m_items.clear();
         m_firstRun = false;
     }
 
     // Old model has to be refreshed, GAL normally does not keep updating it
     m_reporter->Report( _( "Rebuild connectivity..." ) );
+    wxSafeYield();      // Timeslice to update UI
     m_parentFrame->Compile_Ratsnest( false );
 
     m_reporter->Report( _( "Check items..." ) );
+    wxSafeYield();      // Timeslice to update UI
 
     cleaner.CleanupBoard( aDryRun, &m_items, m_cleanShortCircuitOpt->GetValue(),
                                              m_cleanViasOpt->GetValue(),
@@ -159,6 +155,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
                                              m_reporter );
 
     m_reporter->Report( _( "Items checked..." ) );
+    wxSafeYield();      // Timeslice to update UI
 
     if( aDryRun )
     {

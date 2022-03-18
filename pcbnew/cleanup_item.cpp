@@ -43,21 +43,20 @@ wxString CLEANUP_ITEM::GetErrorText( int aCode, bool aTranslate ) const
     switch( aCode )
     {
     // For cleanup tracks and vias:
-    case CLEANUP_CHECKING_ZONE_FILLS:   msg = _HKI( "Checking zone fills..." );             break;
-    case CLEANUP_SHORTING_TRACK:        msg = _HKI( "Remove track shorting two nets" );     break;
-    case CLEANUP_SHORTING_VIA:          msg = _HKI( "Remove via shorting two nets" );       break;
-    case CLEANUP_REDUNDANT_VIA:         msg = _HKI( "Remove redundant via" );               break;
-    case CLEANUP_DUPLICATE_TRACK:       msg = _HKI( "Remove duplicate track" );             break;
-    case CLEANUP_MERGE_TRACKS:          msg = _HKI( "Merge co-linear tracks" );             break;
-    case CLEANUP_DANGLING_TRACK:        msg = _HKI( "Remove track not connected at both ends" );       break;
-    case CLEANUP_DANGLING_VIA:          msg = _HKI( "Remove via connected on fewer than two layers" ); break;
-    case CLEANUP_ZERO_LENGTH_TRACK:     msg = _HKI( "Remove zero-length track" );           break;
-    case CLEANUP_TRACK_IN_PAD:          msg = _HKI( "Remove track inside pad" );            break;
+    case CLEANUP_SHORTING_TRACK:    msg = _HKI( "Remove track shorting two nets" );          break;
+    case CLEANUP_SHORTING_VIA:      msg = _HKI( "Remove via shorting two nets" );            break;
+    case CLEANUP_REDUNDANT_VIA:     msg = _HKI( "Remove redundant via" );                    break;
+    case CLEANUP_DUPLICATE_TRACK:   msg = _HKI( "Remove duplicate track" );                  break;
+    case CLEANUP_MERGE_TRACKS:      msg = _HKI( "Merge co-linear tracks" );                  break;
+    case CLEANUP_DANGLING_TRACK:    msg = _HKI( "Remove track not connected at both ends" ); break;
+    case CLEANUP_DANGLING_VIA:      msg = _HKI( "Remove via connected on fewer than two layers" ); break;
+    case CLEANUP_ZERO_LENGTH_TRACK: msg = _HKI( "Remove zero-length track" );                break;
+    case CLEANUP_TRACK_IN_PAD:      msg = _HKI( "Remove track inside pad" );                 break;
 
     // For cleanup graphics:
-    case CLEANUP_NULL_GRAPHIC:          msg = _HKI( "Remove zero-size graphic" );           break;
-    case CLEANUP_DUPLICATE_GRAPHIC:     msg = _HKI( "Remove duplicated graphic" );          break;
-    case CLEANUP_LINES_TO_RECT:         msg = _HKI( "Convert lines to rectangle" );         break;
+    case CLEANUP_NULL_GRAPHIC:      msg = _HKI( "Remove zero-size graphic" );                break;
+    case CLEANUP_DUPLICATE_GRAPHIC: msg = _HKI( "Remove duplicated graphic" );               break;
+    case CLEANUP_LINES_TO_RECT:     msg = _HKI( "Convert lines to rectangle" );              break;
 
     default:
         wxFAIL_MSG( wxT( "Missing cleanup item description" ) );
