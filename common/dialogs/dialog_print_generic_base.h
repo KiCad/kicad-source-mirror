@@ -57,6 +57,7 @@ class DIALOG_PRINT_GENERIC_BASE : public DIALOG_SHIM
 		wxRadioButton* m_scaleFit;
 		wxRadioButton* m_scaleCustom;
 		wxTextCtrl* m_scaleCustomText;
+		wxStaticText* m_infoText;
 		wxStaticLine* m_staticline1;
 		wxButton* m_buttonOption;
 		wxStdDialogButtonSizer* m_sdbSizer1;

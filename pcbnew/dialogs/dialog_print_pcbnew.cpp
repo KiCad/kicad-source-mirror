@@ -48,6 +48,17 @@ public:
     ~DIALOG_PRINT_PCBNEW() {}
 
 private:
+    enum
+    {
+        ID_SELECT_FIRST = 4100,
+        ID_SELECT_FAB_LAYERS = ID_SELECT_FIRST,
+        ID_SELECT_COPPER_LAYERS,
+        ID_DESELECT_COPPER_LAYERS,
+        ID_SELECT_ALL_LAYERS,
+        ID_DESELECT_ALL_LAYERS,
+        ID_SELECT_LAST
+    };
+
     PCBNEW_PRINTOUT_SETTINGS* settings() const
     {
         wxASSERT( dynamic_cast<PCBNEW_PRINTOUT_SETTINGS*>( m_settings ) );
@@ -59,21 +70,10 @@ private:
     void createExtraOptions();
     void createLeftPanel();
 
-    void onSelectAllClick( wxCommandEvent& event );
-    void onDeselectAllClick( wxCommandEvent& event );
-
     void onUseThemeClicked( wxCommandEvent& event );
     void onPagePerLayerClicked( wxCommandEvent& event );
     void onColorModeClicked( wxCommandEvent& event );
-
-    ///< (Un)check all items in a checklist box.
-    void setListBoxValue( wxCheckListBox* aList, bool aValue );
-
-    ///< Check whether a layer is enabled in a listbox.
-    bool isLayerEnabled( unsigned int aLayer ) const;
-
-    ///< Enable/disable layer in a listbox.
-    void enableLayer( unsigned int aLayer, bool aValue );
+    void onPopUpLayers( wxCommandEvent& event );
 
     ///< Update layerset basing on the selected layers.
     int setLayerSetFromList();
@@ -87,23 +87,18 @@ private:
     }
 
     PCB_BASE_EDIT_FRAME* m_parent;
+    LSEQ                 m_layerList;                // List to hold CheckListBox layer numbers
+    wxMenu*              m_popMenu;
 
-    // List of existing board layers in wxCheckListBox, with the board layers id:
-    std::pair<wxCheckListBox*, int> m_layers[PCB_LAYER_ID_COUNT];
-
-    // Extra widgets
-    wxCheckListBox* m_listTechLayers;
-    wxCheckListBox* m_listCopperLayers;
-    wxButton*       m_buttonSelectAll;
-    wxButton*       m_buttonDeselectAll;
-    wxCheckBox*     m_checkboxMirror;
-    wxChoice*       m_drillMarksChoice;
-    wxCheckBox*     m_checkboxPagePerLayer;
-    wxCheckBox*     m_checkboxEdgesOnAllPages;
-    wxCheckBox*     m_checkAsItems;
-    wxCheckBox*     m_checkBackground;
-    wxCheckBox*     m_checkUseTheme;
-    wxChoice*       m_colorTheme;
+    wxCheckListBox*      m_layerCheckListBox;
+    wxCheckBox*          m_checkboxMirror;
+    wxChoice*            m_drillMarksChoice;
+    wxCheckBox*          m_checkboxPagePerLayer;
+    wxCheckBox*          m_checkboxEdgesOnAllPages;
+    wxCheckBox*          m_checkAsItems;
+    wxCheckBox*          m_checkBackground;
+    wxCheckBox*          m_checkUseTheme;
+    wxChoice*            m_colorTheme;
 };
 
 
@@ -116,6 +111,14 @@ DIALOG_PRINT_PCBNEW::DIALOG_PRINT_PCBNEW( PCB_BASE_EDIT_FRAME* aParent,
 
     createExtraOptions();
     createLeftPanel();
+
+    m_infoText->SetFont( KIUI::GetInfoFont( this ) );
+    m_infoText->SetLabel( _( "Right-click for layer selection commands." ) );
+    m_infoText->Show( true );
+
+    m_popMenu->Bind( wxEVT_COMMAND_MENU_SELECTED,
+                     wxCommandEventHandler( DIALOG_PRINT_PCBNEW::onPopUpLayers ), this,
+                     ID_SELECT_FIRST, ID_SELECT_LAST );
 
     m_outputMode->Bind( wxEVT_COMMAND_CHOICE_SELECTED, &DIALOG_PRINT_PCBNEW::onColorModeClicked,
                         this );
@@ -130,23 +133,18 @@ bool DIALOG_PRINT_PCBNEW::TransferDataToWindow()
     BOARD* board = m_parent->GetBoard();
 
     // Create layer list
-    for( LSEQ seq = board->GetEnabledLayers().UIOrder(); seq; ++seq )
+    // Could devote a PlotOrder() function in place of UIOrder().
+    m_layerList = board->GetEnabledLayers().UIOrder();
+
+    // Populate the check list box by all enabled layers names
+    for( LSEQ seq = m_layerList;  seq;  ++seq )
     {
         PCB_LAYER_ID layer = *seq;
-        int checkIndex;
 
-        if( IsCopperLayer( layer ) )
-        {
-            checkIndex = m_listCopperLayers->Append( board->GetLayerName( layer ) );
-            m_layers[layer] = std::make_pair( m_listCopperLayers, checkIndex );
-        }
-        else
-        {
-            checkIndex = m_listTechLayers->Append( board->GetLayerName( layer ) );
-            m_layers[layer] = std::make_pair( m_listTechLayers, checkIndex );
-        }
+        int checkIndex = m_layerCheckListBox->Append( board->GetLayerName( layer ) );
 
-        m_layers[layer].first->Check( checkIndex, settings()->m_LayerSet.test( layer ) );
+        if( settings()->m_LayerSet.test( layer ) )
+            m_layerCheckListBox->Check( checkIndex );
     }
 
     m_checkboxMirror->SetValue( settings()->m_Mirror );
@@ -268,67 +266,37 @@ void DIALOG_PRINT_PCBNEW::createExtraOptions()
 
 void DIALOG_PRINT_PCBNEW::createLeftPanel()
 {
-    wxStaticBox* box = new wxStaticBox( this, wxID_ANY, _( "Included Layers" ) );
+    wxStaticBox* box = new wxStaticBox( this, wxID_ANY, _( "Include Layers" ) );
     wxStaticBoxSizer* sbLayersSizer = new wxStaticBoxSizer( box, wxVERTICAL );
 
-    // Copper layer list
-    auto copperLabel = new wxStaticText( sbLayersSizer->GetStaticBox(), wxID_ANY,
-                                         _( "Copper layers:" ) );
-    m_listCopperLayers = new wxCheckListBox( sbLayersSizer->GetStaticBox(), wxID_ANY );
+   	m_layerCheckListBox = new wxCheckListBox( sbLayersSizer->GetStaticBox(), wxID_ANY );
+   	m_layerCheckListBox->SetMinSize( wxSize( 180, -1 ) );
 
-    wxBoxSizer* sizerLeft = new wxBoxSizer( wxVERTICAL );
-    sizerLeft->Add( copperLabel, 0, wxRIGHT, 5 );
-    sizerLeft->Add( m_listCopperLayers, 1, wxEXPAND | wxBOTTOM | wxRIGHT, 5 );
-
-    // Technical layer list
-    auto technicalLabel = new wxStaticText( sbLayersSizer->GetStaticBox(), wxID_ANY,
-                                            _( "Technical layers:" ) );
-    m_listTechLayers = new wxCheckListBox( sbLayersSizer->GetStaticBox(), wxID_ANY );
-
-    wxBoxSizer* sizerRight = new wxBoxSizer( wxVERTICAL );
-    sizerRight->Add( technicalLabel, 0, wxLEFT, 5 );
-    sizerRight->Add( m_listTechLayers, 1, wxEXPAND | wxBOTTOM | wxLEFT, 5 );
-
-    // Layer list layout
-    wxBoxSizer* bLayerListsSizer = new wxBoxSizer( wxHORIZONTAL );
-    bLayerListsSizer->Add( sizerLeft, 1, wxEXPAND, 5 );
-    bLayerListsSizer->Add( sizerRight, 1, wxEXPAND, 5 );
-
-    // Select/Unselect all buttons
-    m_buttonSelectAll = new wxButton( sbLayersSizer->GetStaticBox(), wxID_ANY, _( "Select all" ) );
-    m_buttonDeselectAll = new wxButton( sbLayersSizer->GetStaticBox(), wxID_ANY,
-                                        _( "Deselect all" ) );
-
-    m_buttonSelectAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-                                wxCommandEventHandler( DIALOG_PRINT_PCBNEW::onSelectAllClick ),
-                                nullptr, this );
-    m_buttonDeselectAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-                                  wxCommandEventHandler( DIALOG_PRINT_PCBNEW::onDeselectAllClick ),
-                                  nullptr, this );
-
-    wxBoxSizer* buttonSizer = new wxBoxSizer( wxHORIZONTAL );
-    buttonSizer->Add( m_buttonSelectAll, 1, wxRIGHT | wxTOP | wxBOTTOM, 5 );
-    buttonSizer->Add( m_buttonDeselectAll, 1, wxLEFT | wxTOP | wxBOTTOM, 5 );
-
-    // Static box sizer layout
-    sbLayersSizer->Add( bLayerListsSizer, 1, wxRIGHT | wxEXPAND, 5 );
-    sbLayersSizer->Add( buttonSizer, 0, wxRIGHT | wxEXPAND, 5 );
+    sbLayersSizer->Add( m_layerCheckListBox, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
     getMainSizer()->Insert( 0, sbLayersSizer, 1, wxEXPAND | wxALL, 5 );
-}
 
+    m_popMenu = new wxMenu();
+   	m_popMenu->Append( new wxMenuItem( m_popMenu, ID_SELECT_FAB_LAYERS,
+   	                                   _( "Select Fab Layers" ), wxEmptyString ) );
 
-void DIALOG_PRINT_PCBNEW::onSelectAllClick( wxCommandEvent& event )
-{
-    setListBoxValue( m_listCopperLayers, true );
-    setListBoxValue( m_listTechLayers, true );
-}
+   	m_popMenu->Append( new wxMenuItem( m_popMenu, ID_SELECT_COPPER_LAYERS,
+   	                                   _( "Select all Copper Layers" ), wxEmptyString ) );
 
+   	m_popMenu->Append( new wxMenuItem( m_popMenu, ID_DESELECT_COPPER_LAYERS,
+   	                                   _( "Deselect all Copper Layers" ), wxEmptyString ) );
 
-void DIALOG_PRINT_PCBNEW::onDeselectAllClick( wxCommandEvent& event )
-{
-    setListBoxValue( m_listCopperLayers, false );
-    setListBoxValue( m_listTechLayers, false );
+   	m_popMenu->Append( new wxMenuItem( m_popMenu, ID_SELECT_ALL_LAYERS,
+   	                                   _( "Select all Layers" ), wxEmptyString ) );
+
+   	m_popMenu->Append( new wxMenuItem( m_popMenu, ID_DESELECT_ALL_LAYERS,
+   	                                   _( "Deselect all Layers" ), wxEmptyString ) );
+
+    this->Bind( wxEVT_RIGHT_DOWN,
+                [&]( wxMouseEvent& aEvent )
+                {
+                    this->PopupMenu( m_popMenu, aEvent.GetPosition() );
+                } );
 }
 
 
@@ -365,30 +333,55 @@ void DIALOG_PRINT_PCBNEW::onColorModeClicked( wxCommandEvent& event )
 }
 
 
-void DIALOG_PRINT_PCBNEW::setListBoxValue( wxCheckListBox* aList, bool aValue )
+// Select or deselect groups of layers in the layers list:
+void DIALOG_PRINT_PCBNEW::onPopUpLayers( wxCommandEvent& event )
 {
-    for( unsigned int i = 0; i < aList->GetCount(); ++i )
-        aList->Check( i, aValue );
-}
+    // Build a list of layers for usual fabrication: copper layers + tech layers without courtyard
+    LSET fab_layer_set = ( LSET::AllCuMask() | LSET::AllTechMask() ) & ~LSET( 2, B_CrtYd, F_CrtYd );
 
+    switch( event.GetId() )
+    {
+    case ID_SELECT_FAB_LAYERS: // Select layers usually needed to build a board
+        for( unsigned i = 0; i < m_layerList.size(); i++ )
+        {
+            LSET layermask( m_layerList[ i ] );
 
-bool DIALOG_PRINT_PCBNEW::isLayerEnabled( unsigned int aLayer ) const
-{
-    wxCHECK( aLayer < arrayDim( m_layers ), false );
-    const auto& layerInfo = m_layers[aLayer];
+            if( ( layermask & fab_layer_set ).any() )
+                m_layerCheckListBox->Check( i, true );
+            else
+                m_layerCheckListBox->Check( i, false );
+        }
+        break;
 
-    if( layerInfo.first )
-        return layerInfo.first->IsChecked( layerInfo.second );
+    case ID_SELECT_COPPER_LAYERS:
+        for( unsigned i = 0; i < m_layerList.size(); i++ )
+        {
+            if( IsCopperLayer( m_layerList[i] ) )
+                m_layerCheckListBox->Check( i, true );
+        }
+        break;
 
-    return false;
-}
+    case ID_DESELECT_COPPER_LAYERS:
+        for( unsigned i = 0; i < m_layerList.size(); i++ )
+        {
+            if( IsCopperLayer( m_layerList[i] ) )
+                m_layerCheckListBox->Check( i, false );
+        }
+        break;
 
+    case ID_SELECT_ALL_LAYERS:
+        for( unsigned i = 0; i < m_layerList.size(); i++ )
+            m_layerCheckListBox->Check( i, true );
+        break;
 
-void DIALOG_PRINT_PCBNEW::enableLayer( unsigned int aLayer, bool aValue )
-{
-    wxCHECK( aLayer < arrayDim( m_layers ), /* void */ );
-    const auto& layerInfo = m_layers[aLayer];
-    layerInfo.first->Check( layerInfo.second, aValue );
+    case ID_DESELECT_ALL_LAYERS:
+        for( unsigned i = 0; i < m_layerList.size(); i++ )
+            m_layerCheckListBox->Check( i, false );
+        break;
+
+    default:
+        break;
+    }
 }
 
 
@@ -398,12 +391,12 @@ int DIALOG_PRINT_PCBNEW::setLayerSetFromList()
     int& pageCount = settings()->m_pageCount;
     pageCount = 0;
 
-    for( unsigned int layer = 0; layer < arrayDim( m_layers ); ++layer )
+    for( unsigned i = 0; i < m_layerList.size(); i++ )
     {
-        if( isLayerEnabled( layer ) )
+        if( m_layerCheckListBox->IsChecked( i ) )
         {
             ++pageCount;
-            settings()->m_LayerSet.set( layer );
+            settings()->m_LayerSet.set( m_layerList[i] );
         }
     }
 

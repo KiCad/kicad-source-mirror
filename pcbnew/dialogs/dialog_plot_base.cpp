@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -57,7 +57,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_layerCheckListBox = new wxCheckListBox( m_LayersSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_layerCheckListBoxChoices, 0 );
 	m_layerCheckListBox->SetMinSize( wxSize( 150,-1 ) );
 
-	m_LayersSizer->Add( m_layerCheckListBox, 1, wxALL|wxEXPAND, 5 );
+	m_LayersSizer->Add( m_layerCheckListBox, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 
 	bmiddleSizer->Add( m_LayersSizer, 1, wxALL|wxEXPAND, 3 );

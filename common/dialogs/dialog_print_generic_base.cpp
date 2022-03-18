@@ -90,8 +90,20 @@ DIALOG_PRINT_GENERIC_BASE::DIALOG_PRINT_GENERIC_BASE( wxWindow* parent, wxWindow
 
 	bMainSizer->Add( m_bUpperSizer, 1, wxEXPAND|wxALL, 5 );
 
+	wxBoxSizer* bSizer6;
+	bSizer6 = new wxBoxSizer( wxVERTICAL );
+
+	m_infoText = new wxStaticText( this, wxID_ANY, _("Info text"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_infoText->Wrap( -1 );
+	m_infoText->Hide();
+
+	bSizer6->Add( m_infoText, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	bMainSizer->Add( bSizer6, 0, wxEXPAND|wxLEFT, 10 );
+
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bMainSizer->Add( m_staticline1, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
