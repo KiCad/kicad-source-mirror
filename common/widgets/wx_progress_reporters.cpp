@@ -83,11 +83,6 @@ bool WX_PROGRESS_REPORTER::updateUI()
         Fit();
     }
 
-    Raise();
-
-    if( IsFocusable() )
-        SetFocus();
-
     bool diag = wxProgressDialog::Update( cur, message );
 
     return diag;
