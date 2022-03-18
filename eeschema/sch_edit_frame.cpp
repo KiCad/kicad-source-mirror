@@ -963,13 +963,51 @@ void SCH_EDIT_FRAME::UpdateHierarchyNavigator( bool aForceUpdate )
 
 void SCH_EDIT_FRAME::ShowFindReplaceDialog( bool aReplace )
 {
+    wxString findString;
+
+    EE_SELECTION& selection = m_toolManager->GetTool<EE_SELECTION_TOOL>()->GetSelection();
+
+    if( selection.Size() == 1 )
+    {
+        EDA_ITEM* front = selection.Front();
+
+        switch( front->Type() )
+        {
+        case SCH_SYMBOL_T:
+            findString = static_cast<SCH_SYMBOL*>( front )->GetValue( &GetCurrentSheet(), true );
+            break;
+
+        case SCH_FIELD_T:
+            findString = static_cast<SCH_FIELD*>( front )->GetShownText();
+            break;
+
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIER_LABEL_T:
+        case SCH_SHEET_PIN_T:
+            findString = static_cast<SCH_LABEL_BASE*>( front )->GetShownText();
+            break;
+
+        case SCH_TEXT_T:
+            findString = static_cast<SCH_TEXT*>( front )->GetShownText();
+
+            if( findString.Contains( wxT( "\n" ) ) )
+                findString = findString.Before( '\n' );
+
+            break;
+
+        default:
+            break;
+        }
+    }
+
     if( m_findReplaceDialog )
         m_findReplaceDialog->Destroy();
 
     m_findReplaceDialog= new DIALOG_SCH_FIND( this, m_findReplaceData, wxDefaultPosition,
                                               wxDefaultSize, aReplace ? wxFR_REPLACEDIALOG : 0 );
 
-    m_findReplaceDialog->SetFindEntries( m_findStringHistoryList );
+    m_findReplaceDialog->SetFindEntries( m_findStringHistoryList, findString );
     m_findReplaceDialog->SetReplaceEntries( m_replaceStringHistoryList );
     m_findReplaceDialog->Show( true );
 }

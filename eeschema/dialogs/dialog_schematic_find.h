@@ -51,7 +51,7 @@ public:
                      const wxPoint& aPosition = wxDefaultPosition,
                      const wxSize& aSize = wxDefaultSize, int aStyle = 0 );
 
-    void SetFindEntries( const wxArrayString& aEntries );
+    void SetFindEntries( const wxArrayString& aEntries, const wxString& aFindString );
     wxArrayString GetFindEntries() const;
 
     void SetReplaceEntries( const wxArrayString& aEntries );

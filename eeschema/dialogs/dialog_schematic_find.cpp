@@ -292,7 +292,7 @@ wxArrayString DIALOG_SCH_FIND::GetFindEntries() const
 }
 
 
-void DIALOG_SCH_FIND::SetFindEntries( const wxArrayString& aEntries )
+void DIALOG_SCH_FIND::SetFindEntries( const wxArrayString& aEntries, const wxString& aFindString )
 {
     m_comboFind->Append( aEntries );
 
@@ -302,7 +302,12 @@ void DIALOG_SCH_FIND::SetFindEntries( const wxArrayString& aEntries )
         m_comboFind->Delete( 9 );
     }
 
-    if( m_comboFind->GetCount() )
+    if( !aFindString.IsEmpty() )
+    {
+        m_comboFind->SetValue( aFindString );
+        m_comboFind->SelectAll();
+    }
+    else if( m_comboFind->GetCount() )
     {
         m_comboFind->SetSelection( 0 );
         m_comboFind->SelectAll();
