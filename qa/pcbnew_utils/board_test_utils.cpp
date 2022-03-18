@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "board_test_utils.h"
+#include <pcbnew_utils/board_test_utils.h>
 
 #include <wx/filename.h>
 #include <board.h>

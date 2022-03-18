@@ -22,7 +22,7 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
-#include <qa/pcbnew/board_test_utils.h>
+#include <pcbnew_utils/board_test_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <boost/filesystem.hpp>
 #include <board.h>

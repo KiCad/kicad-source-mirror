@@ -24,11 +24,10 @@ set( QA_PCBNEW_SRCS
     test_module.cpp
 
     # Shared between programs, but dependent on the BIU
-    ${CMAKE_SOURCE_DIR}/qa/common/test_format_units.cpp
-    ${CMAKE_SOURCE_DIR}/qa/common/test_array_options.cpp
+    ${CMAKE_SOURCE_DIR}/qa/unittests/common/test_format_units.cpp
+    ${CMAKE_SOURCE_DIR}/qa/unittests/common/test_array_options.cpp
 
     # testing utility routines
-    board_test_utils.cpp
     drc/drc_test_utils.cpp
 
     # test compilation units (start test_)

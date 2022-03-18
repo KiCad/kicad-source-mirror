@@ -33,7 +33,7 @@
 #include <drc/drc_item.h>
 #include <widgets/ui_common.h>
 
-#include "../board_test_utils.h"
+#include <pcbnew_utils/board_test_utils.h>
 
 
 struct COURTYARD_TEST_FIXTURE

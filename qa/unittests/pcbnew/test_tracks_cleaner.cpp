@@ -22,7 +22,7 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
-#include <qa/pcbnew/board_test_utils.h>
+#include <pcbnew_utils/board_test_utils.h>
 #include <board.h>
 #include <board_commit.h>
 #include <board_design_settings.h>

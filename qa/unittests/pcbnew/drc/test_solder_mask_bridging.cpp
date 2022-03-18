@@ -22,7 +22,7 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
-#include <qa/pcbnew/board_test_utils.h>
+#include <pcbnew_utils/board_test_utils.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <pcb_marker.h>
@@ -41,23 +41,20 @@ struct DRC_REGRESSION_TEST_FIXTURE
 };
 
 
-BOOST_FIXTURE_TEST_CASE( DRCCustomRuleSeverityTest, DRC_REGRESSION_TEST_FIXTURE )
+BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_REGRESSION_TEST_FIXTURE )
 {
-    // This board has two edge-connectors.  There is a custom DRC rule which conditionally
-    // applies to one of them and sets the edge-clearance severity to "ignore".  It should
-    // therefore only generate edge-clearance violations for the other edge connector.
-
-    KI_TEST::LoadBoard( m_settingsManager, "severities", m_board );
+    wxString brd_name( wxT( "solder_mask_bridge_test" ) );
+    KI_TEST::LoadBoard( m_settingsManager, brd_name, m_board );
     KI_TEST::FillZones( m_board.get() );
 
     std::vector<DRC_ITEM>  violations;
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
-    // Disable DRC tests not handled in this testcase
-    // These DRC tests are not useful and do not work because they need a footprint library
-    // associated to the board
+    // Disable some DRC tests not useful in this testcase (and time consuming)
     bds.m_DRCSeverities[ DRCE_LIB_FOOTPRINT_ISSUES ] = SEVERITY::RPT_SEVERITY_IGNORE;
     bds.m_DRCSeverities[ DRCE_LIB_FOOTPRINT_MISMATCH ] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[ DRCE_COPPER_SLIVER ] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[ DRCE_STARVED_THERMAL ] = SEVERITY::RPT_SEVERITY_IGNORE;
 
     bds.m_DRCEngine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, PCB_LAYER_ID aLayer )
@@ -70,14 +67,16 @@ BOOST_FIXTURE_TEST_CASE( DRCCustomRuleSeverityTest, DRC_REGRESSION_TEST_FIXTURE 
 
     bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
 
-    if( violations.size() == 8 )
+    const int expected_err_cnt = 5;
+
+    if( violations.size() == expected_err_cnt )
     {
         BOOST_CHECK_EQUAL( 1, 1 );  // quiet "did not check any assertions" warning
-        BOOST_TEST_MESSAGE( "Custom rule severity test passed" );
+        BOOST_TEST_MESSAGE( "DRC solder mask bridge test passed" );
     }
     else
     {
-        BOOST_CHECK_EQUAL( violations.size(), 8 );
+        BOOST_CHECK_EQUAL( violations.size(), expected_err_cnt );
 
         std::map<KIID, EDA_ITEM*> itemMap;
         m_board->FillItemMap( itemMap );
@@ -85,6 +84,6 @@ BOOST_FIXTURE_TEST_CASE( DRCCustomRuleSeverityTest, DRC_REGRESSION_TEST_FIXTURE 
         for( const DRC_ITEM& item : violations )
             BOOST_TEST_MESSAGE( item.ShowReport( EDA_UNITS::INCHES, RPT_SEVERITY_ERROR, itemMap ) );
 
-        BOOST_ERROR( "Custom rule severity test failed" );
+        BOOST_ERROR( wxString::Format( "DRC solder mask bridge test failed board <%s>", brd_name ) );
     }
 }

@@ -31,6 +31,7 @@ set( QA_PCBNEW_UTILS_SRCS
 
     ${CMAKE_CURRENT_SOURCE_DIR}/board_construction_utils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/board_file_utils.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/board_test_utils.cpp
 )
 
 add_library( qa_pcbnew_utils STATIC ${QA_PCBNEW_UTILS_SRCS} )

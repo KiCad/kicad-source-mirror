@@ -48,8 +48,8 @@ set( QA_EESCHEMA_SRCS
     test_sch_biu.cpp
 
     # Shared between programs, but dependent on the BIU
-    ${CMAKE_SOURCE_DIR}/qa/common/test_format_units.cpp
-    ${CMAKE_SOURCE_DIR}/qa/common/test_array_options.cpp
+    ${CMAKE_SOURCE_DIR}/qa/unittests/common/test_format_units.cpp
+    ${CMAKE_SOURCE_DIR}/qa/unittests/common/test_array_options.cpp
 
     sch_plugins/altium/test_altium_parser_sch.cpp
 

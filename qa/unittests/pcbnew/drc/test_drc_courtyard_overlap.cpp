@@ -33,7 +33,7 @@
 #include <drc/drc_engine.h>
 #include <widgets/ui_common.h>
 
-#include "../board_test_utils.h"
+#include <pcbnew_utils/board_test_utils.h>
 #include "drc_test_utils.h"
 
 /**

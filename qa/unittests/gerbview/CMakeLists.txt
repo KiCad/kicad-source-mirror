@@ -25,7 +25,7 @@ set( QA_GERBVIEW_SRCS
     test_module.cpp
 
     # Shared between programs, but dependent on the BIU
-    ${CMAKE_SOURCE_DIR}/qa/common/test_format_units.cpp
+    ${CMAKE_SOURCE_DIR}/qa/unittests/common/test_format_units.cpp
 )
 
 add_executable( qa_gerbview
