@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-07 16:51-0800\n"
+"POT-Creation-Date: 2022-03-18 12:52-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2917,6 +2917,10 @@ msgstr "Drawing Sheet Editor"
 
 msgid "Gestures"
 msgstr "Gestures"
+
+#, c-format
+msgid "Failed to verify kiface library '%s' signature."
+msgstr "Failed to verify kiface library '%s' signature."
 
 #, c-format
 msgid "Failed to load kiface library '%s'."
@@ -21179,9 +21183,6 @@ msgstr "No pad found for pin %s in schematic."
 msgid "Checking PCB to schematic parity..."
 msgstr "Checking PCB to schematic parity..."
 
-msgid "No netlist provided, skipping LVS."
-msgstr "No netlist provided, skipping LVS."
-
 #, c-format
 msgid "(%s min length: %s; actual: %s)"
 msgstr "(%s min length: %s; actual: %s)"
@@ -21222,10 +21223,6 @@ msgstr "Checking text variables..."
 
 msgid "Checking silkscreen for overlapping items..."
 msgstr "Checking silkscreen for overlapping items..."
-
-#, c-format
-msgid "Testing %d silkscreen features against %d board items."
-msgstr "Testing %d silkscreen features against %d board items."
 
 msgid "Checking silkscreen for potential soldermask clipping..."
 msgstr "Checking silkscreen for potential soldermask clipping..."
@@ -26558,6 +26555,13 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "No netlist provided, skipping LVS."
+#~ msgstr "No netlist provided, skipping LVS."
+
+#, c-format
+#~ msgid "Testing %d silkscreen features against %d board items."
+#~ msgstr "Testing %d silkscreen features against %d board items."
 
 #~ msgid "Corner Count"
 #~ msgstr "Corner Count"

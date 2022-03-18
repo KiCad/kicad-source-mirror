@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-15 19:10+0100\n"
+"POT-Creation-Date: 2022-03-18 12:52-0700\n"
 "PO-Revision-Date: 2022-03-15 20:36+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
@@ -1264,13 +1264,13 @@ msgid "DPI"
 msgstr "DPI"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:343
-#: eeschema/tools/sch_drawing_tools.cpp:493
+#: eeschema/tools/sch_drawing_tools.cpp:497
 #: pagelayout_editor/pl_editor_frame.cpp:853
 msgid "Choose Image"
 msgstr "Scegli immagine"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:344
-#: eeschema/tools/sch_drawing_tools.cpp:494
+#: eeschema/tools/sch_drawing_tools.cpp:498
 #: pagelayout_editor/pl_editor_frame.cpp:854
 msgid "Image Files"
 msgstr "File immagine"
@@ -2057,7 +2057,7 @@ msgstr "Variabili ambiente"
 #: pcbnew/dialogs/dialog_net_inspector.cpp:78
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:448
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:38 pcbnew/zone.cpp:621
-#: pcbnew/zone.cpp:1454
+#: pcbnew/zone.cpp:1456
 msgid "Name"
 msgstr "Nome"
 
@@ -3487,7 +3487,7 @@ msgstr "Zoom"
 #: pcbnew/widgets/appearance_controls.cpp:700
 #: pcbnew/widgets/appearance_controls.cpp:742
 #: pcbnew/widgets/appearance_controls.cpp:2370
-#: pcbnew/widgets/appearance_controls.cpp:2389 pcbnew/zone.cpp:1442
+#: pcbnew/widgets/appearance_controls.cpp:2389 pcbnew/zone.cpp:1444
 msgid "None"
 msgstr "No"
 
@@ -3566,7 +3566,7 @@ msgstr "Reimposta ai valori trackpad predefiniti"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:406
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:306
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:715 pcbnew/zone.cpp:625
-#: pcbnew/zone.cpp:1444
+#: pcbnew/zone.cpp:1446
 msgid "Solid"
 msgstr "Pieno"
 
@@ -6934,6 +6934,7 @@ msgid "DXF Files"
 msgstr "File DXF"
 
 #: common/wildcards_and_files_ext.cpp:515
+#: resources/linux/mime/kicad-gerbers.xml.in:21
 msgid "Gerber job file"
 msgstr "File di lavoro Gerber"
 
@@ -7510,7 +7511,7 @@ msgstr "Elementi duplicati %s%s\n"
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Valori differenti per %s%d%s (%s) e %s%d%s (%s)"
 
-#: eeschema/connection_graph.cpp:2309 eeschema/connection_graph.cpp:2340
+#: eeschema/connection_graph.cpp:2310 eeschema/connection_graph.cpp:2341
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -7518,7 +7519,7 @@ msgstr ""
 "Sia %s che %s sono collegati agli stessi elementi; nella netlist verrà usata "
 "%s"
 
-#: eeschema/connection_graph.cpp:2566
+#: eeschema/connection_graph.cpp:2567
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
@@ -7526,13 +7527,13 @@ msgstr ""
 "La connessione %s è collegata graficamente al bus %s ma non è membro di quel "
 "bus"
 
-#: eeschema/connection_graph.cpp:3007
+#: eeschema/connection_graph.cpp:3008
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "Al pin foglio %s manca la corrispondente etichetta gerarchica nel foglio"
 
-#: eeschema/connection_graph.cpp:3024
+#: eeschema/connection_graph.cpp:3025
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -16758,39 +16759,40 @@ msgstr "Selezion&a tutto\tA"
 msgid "&Expand Selection\tE"
 msgstr "&Espandi selezione\tE"
 
-#: eeschema/tools/sch_drawing_tools.cpp:216
+#: eeschema/tools/sch_drawing_tools.cpp:218
 msgid "Press <ESC> to cancel symbol creation."
 msgstr "Premere <ESC> per annullare la creazione del simbolo."
 
-#: eeschema/tools/sch_drawing_tools.cpp:460
+#: eeschema/tools/sch_drawing_tools.cpp:464
 msgid "Press <ESC> to cancel image creation."
 msgstr "Premere <ESC> per annullare la creazione dell'immagine."
 
-#: eeschema/tools/sch_drawing_tools.cpp:521
+#: eeschema/tools/sch_drawing_tools.cpp:525
 #: pagelayout_editor/pl_editor_frame.cpp:865
 #: pagelayout_editor/pl_editor_frame.cpp:873
 #, c-format
 msgid "Could not load image from '%s'."
 msgstr "Impossibile caricare immagine da '%s'."
 
-#: eeschema/tools/sch_drawing_tools.cpp:650
-#: eeschema/tools/sch_drawing_tools.cpp:1155
+#: eeschema/tools/sch_drawing_tools.cpp:654
+#: eeschema/tools/sch_drawing_tools.cpp:1169
 msgid "No new hierarchical labels found."
 msgstr "Nessuna nuova etichetta gerarchica trovata."
 
-#: eeschema/tools/sch_drawing_tools.cpp:734
+#: eeschema/tools/sch_drawing_tools.cpp:738
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr "La posizione della giunzione non contiene fili o pin collegabili."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1087
+#: eeschema/tools/sch_drawing_tools.cpp:1101
+#: eeschema/tools/symbol_editor_drawing_tools.cpp:159
 msgid "Press <ESC> to cancel item creation."
 msgstr "Premere <ESC> per annullare la creazione dell'elemento."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1143
+#: eeschema/tools/sch_drawing_tools.cpp:1157
 msgid "Click over a sheet."
 msgstr "Clic sopra un foglio."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1314
+#: eeschema/tools/sch_drawing_tools.cpp:1336
 msgid "Press <ESC> to cancel sheet creation."
 msgstr "Premere <ESC> per annullare la creazione del foglio."
 
@@ -16871,7 +16873,7 @@ msgstr "Assegna netclass"
 msgid "Select netclass:"
 msgstr "Seleziona netclass:"
 
-#: eeschema/tools/sch_editor_control.cpp:1734
+#: eeschema/tools/sch_editor_control.cpp:1731
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -16882,21 +16884,21 @@ msgstr ""
 "è stato abbandonato dato che la destinazione ha già il foglio o uno dei suoi "
 "sottofogli come genitore."
 
-#: eeschema/tools/sch_editor_control.cpp:2257
+#: eeschema/tools/sch_editor_control.cpp:2254
 #: pcbnew/tools/board_editor_control.cpp:630
 #: pcbnew/tools/footprint_editor_control.cpp:574
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d ID duplicati rimpiazzati.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2264
+#: eeschema/tools/sch_editor_control.cpp:2261
 #: pcbnew/tools/board_editor_control.cpp:645
 #: pcbnew/tools/footprint_editor_control.cpp:589
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d potenziali problemi riparati."
 
-#: eeschema/tools/sch_editor_control.cpp:2271
+#: eeschema/tools/sch_editor_control.cpp:2268
 #: pcbnew/drc/drc_rule_parser.cpp:164
 msgid "No errors found."
 msgstr "Nessun errore."
@@ -16909,16 +16911,16 @@ msgstr "Nessun bus selezionato"
 msgid "Bus has no members"
 msgstr "Il bus non ha membri"
 
-#: eeschema/tools/sch_line_wire_bus_tool.cpp:608
+#: eeschema/tools/sch_line_wire_bus_tool.cpp:621
 msgid "Press <ESC> to cancel drawing."
 msgstr "Premere <ESC> per annullare la creazione del disegno."
 
-#: eeschema/tools/sch_move_tool.cpp:395
+#: eeschema/tools/sch_move_tool.cpp:398
 msgid "Press <ESC> to cancel drag."
 msgstr "Premere <ESC> per annullare il trascinamento."
 
-#: eeschema/tools/sch_move_tool.cpp:397
-#: pagelayout_editor/tools/pl_edit_tool.cpp:214
+#: eeschema/tools/sch_move_tool.cpp:400
+#: pagelayout_editor/tools/pl_edit_tool.cpp:217
 msgid "Press <ESC> to cancel move."
 msgstr "Premere <ESC> per annullare lo spostamento."
 
@@ -19624,7 +19626,7 @@ msgstr ""
 "Mostra il riquadro iscrizioni in modalità modifica:\n"
 "i segnaposto dei testi vengono visualizzati come elementi ${parolachiave}."
 
-#: pagelayout_editor/tools/pl_edit_tool.cpp:505
+#: pagelayout_editor/tools/pl_edit_tool.cpp:508
 msgid "Error writing objects to clipboard"
 msgstr "Errore in scrittura degli oggetti negli appunti"
 
@@ -22628,11 +22630,11 @@ msgstr ""
 "Tipo connessione piazzola predefinita a zona.\n"
 "Può essere superata dalle impostazioni piazzola locali"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:221 pcbnew/zone.cpp:1443
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:221 pcbnew/zone.cpp:1445
 msgid "Thermal reliefs"
 msgstr "Supporti termici"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:221 pcbnew/zone.cpp:1445
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:221 pcbnew/zone.cpp:1447
 msgid "Reliefs for PTH"
 msgstr "Supporti per passanti"
 
@@ -29379,18 +29381,18 @@ msgid "ERROR in expression."
 msgstr "Errore nell'espressione."
 
 #: pcbnew/drc/drc_rule_condition.cpp:100 pcbnew/drc/drc_rule_parser.cpp:60
-#: pcbnew/drc/drc_rule_parser.cpp:436
+#: pcbnew/drc/drc_rule_parser.cpp:438
 #, c-format
 msgid "ERROR: <a href='%d:%d'>%s</a>%s"
 msgstr "ERRORE: <a href='%d:%d'>%s</a>%s"
 
-#: pcbnew/drc/drc_rule_parser.cpp:67 pcbnew/drc/drc_rule_parser.cpp:443
+#: pcbnew/drc/drc_rule_parser.cpp:67 pcbnew/drc/drc_rule_parser.cpp:445
 #, c-format
 msgid "ERROR: %s%s"
 msgstr "ERRORE: %s%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:102 pcbnew/drc/drc_rule_parser.cpp:184
-#: pcbnew/drc/drc_rule_parser.cpp:341
+#: pcbnew/drc/drc_rule_parser.cpp:343
 msgid "Missing '('."
 msgstr "\"(\" mancante."
 
@@ -29408,20 +29410,20 @@ msgid "Unrecognized item '%s'.| Expected version number."
 msgstr "Elemento '%s' non riconosciuto.| Era previsto numero di versione."
 
 #: pcbnew/drc/drc_rule_parser.cpp:139 pcbnew/drc/drc_rule_parser.cpp:217
-#: pcbnew/drc/drc_rule_parser.cpp:361 pcbnew/drc/drc_rule_parser.cpp:381
-#: pcbnew/drc/drc_rule_parser.cpp:401 pcbnew/drc/drc_rule_parser.cpp:498
+#: pcbnew/drc/drc_rule_parser.cpp:363 pcbnew/drc/drc_rule_parser.cpp:383
+#: pcbnew/drc/drc_rule_parser.cpp:403 pcbnew/drc/drc_rule_parser.cpp:500
 #, c-format
 msgid "Unrecognized item '%s'."
 msgstr "Elemento '%s' non riconosciuto."
 
 #: pcbnew/drc/drc_rule_parser.cpp:152 pcbnew/drc/drc_rule_parser.cpp:229
-#: pcbnew/drc/drc_rule_parser.cpp:408
+#: pcbnew/drc/drc_rule_parser.cpp:410
 msgid "Incomplete statement."
 msgstr "Comando incompleto."
 
 #: pcbnew/drc/drc_rule_parser.cpp:156 pcbnew/drc/drc_rule_parser.cpp:233
-#: pcbnew/drc/drc_rule_parser.cpp:285 pcbnew/drc/drc_rule_parser.cpp:323
-#: pcbnew/drc/drc_rule_parser.cpp:412
+#: pcbnew/drc/drc_rule_parser.cpp:286 pcbnew/drc/drc_rule_parser.cpp:325
+#: pcbnew/drc/drc_rule_parser.cpp:414
 #, c-format
 msgid "Unrecognized item '%s'.| Expected %s."
 msgstr "Elemento \"%s\" non riconosciuto.| Era previsto %s."
@@ -29440,8 +29442,8 @@ msgid "Unrecognized item '%s'.| Expected quoted expression."
 msgstr ""
 "Elemento \"%s\" non riconosciuto.| Era prevista espressione virgolettata."
 
-#: pcbnew/drc/drc_rule_parser.cpp:241 pcbnew/drc/drc_rule_parser.cpp:319
-#: pcbnew/drc/drc_rule_parser.cpp:332 pcbnew/drc/drc_rule_parser.cpp:421
+#: pcbnew/drc/drc_rule_parser.cpp:241 pcbnew/drc/drc_rule_parser.cpp:321
+#: pcbnew/drc/drc_rule_parser.cpp:334 pcbnew/drc/drc_rule_parser.cpp:423
 msgid "Missing ')'."
 msgstr "\")\" mancante."
 
@@ -29450,28 +29452,28 @@ msgstr "\")\" mancante."
 msgid "Missing constraint type.|  Expected %s."
 msgstr "Tipo vincolo mancante.|  Era atteso %s."
 
-#: pcbnew/drc/drc_rule_parser.cpp:294
+#: pcbnew/drc/drc_rule_parser.cpp:296
 #, c-format
 msgid "Rule already has a '%s' constraint."
 msgstr "La regola ha già un vincolo '%s'."
 
-#: pcbnew/drc/drc_rule_parser.cpp:352
+#: pcbnew/drc/drc_rule_parser.cpp:354
 msgid "Missing min value."
 msgstr "Valore minimo mancante."
 
-#: pcbnew/drc/drc_rule_parser.cpp:372
+#: pcbnew/drc/drc_rule_parser.cpp:374
 msgid "Missing max value."
 msgstr "Valore massimo mancante."
 
-#: pcbnew/drc/drc_rule_parser.cpp:392
+#: pcbnew/drc/drc_rule_parser.cpp:394
 msgid "Missing opt value."
 msgstr "Valore opz. mancante."
 
-#: pcbnew/drc/drc_rule_parser.cpp:465
+#: pcbnew/drc/drc_rule_parser.cpp:467
 msgid "Missing layer name or type."
 msgstr "Nome o tipo strato mancante."
 
-#: pcbnew/drc/drc_rule_parser.cpp:491
+#: pcbnew/drc/drc_rule_parser.cpp:493
 #, c-format
 msgid "Unrecognized layer '%s'."
 msgstr "Strati non riconosciuto \"%s\"."
@@ -29565,22 +29567,22 @@ msgstr "Verifica sovrapposizione ingombri impronte..."
 msgid "DPs evaluated:"
 msgstr "CD elaborate:"
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:460
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:463
 #, c-format
 msgid "(%s maximum uncoupled length: %s; actual: %s)"
 msgstr "(%s lunghezza non accoppiata max: %s; corrente: %s)"
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:494
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:497
 #, c-format
 msgid "minimum gap: %s; "
 msgstr "spazio minimo: %s; "
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:498
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:501
 #, c-format
 msgid "maximum gap: %s; "
 msgstr "spazio massimo: %s "
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:501
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:504
 #, c-format
 msgid "actual: %s)"
 msgstr "corrente: %s)"
@@ -29609,15 +29611,15 @@ msgstr "Verifica fori via..."
 msgid "Checking micro-via holes..."
 msgstr "Controllo fori micro-via..."
 
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:167
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:232
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:162
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:227
 #: pcbnew/drc/drc_test_provider_track_width.cpp:134
 #, c-format
 msgid "(%s min width %s; actual %s)"
 msgstr "(%s larg. min %s; effettivo %s)"
 
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:174
-#: pcbnew/drc/drc_test_provider_hole_size.cpp:239
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:169
+#: pcbnew/drc/drc_test_provider_hole_size.cpp:234
 #: pcbnew/drc/drc_test_provider_track_width.cpp:141
 #, c-format
 msgid "(%s max width %s; actual %s)"
@@ -29662,10 +29664,6 @@ msgstr "Nessuna piazzola trovata per il pin %s nello schema."
 msgid "Checking PCB to schematic parity..."
 msgstr "Verifica parità C.S. rispetto allo schema..."
 
-#: pcbnew/drc/drc_test_provider_lvs.cpp:225
-msgid "No netlist provided, skipping LVS."
-msgstr "Nessuna netlist fornita, salto LVS."
-
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:120
 #, c-format
 msgid "(%s min length: %s; actual: %s)"
@@ -29699,31 +29697,26 @@ msgstr "<senza vincoli>"
 msgid "(no edges found on Edge.Cuts layer)"
 msgstr "(nessun bordo trovato sullo strato Edge.Cuts)"
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:184
+#: pcbnew/drc/drc_test_provider_misc.cpp:203
 #, c-format
 msgid "(layer %s)"
 msgstr "(strato %s)"
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:261
+#: pcbnew/drc/drc_test_provider_misc.cpp:300
 msgid "Checking board outline..."
 msgstr "Verifica contorni scheda..."
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:269
+#: pcbnew/drc/drc_test_provider_misc.cpp:308
 msgid "Checking disabled layers..."
 msgstr "Verifica strati disabilitati..."
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:277
+#: pcbnew/drc/drc_test_provider_misc.cpp:316
 msgid "Checking text variables..."
 msgstr "Verifica variabili testo..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:106
 msgid "Checking silkscreen for overlapping items..."
 msgstr "Verifica serigrafia elementi sovrapposti..."
-
-#: pcbnew/drc/drc_test_provider_silk_clearance.cpp:160
-#, c-format
-msgid "Testing %d silkscreen features against %d board items."
-msgstr "Verifica %d caratteristiche serigrafia rispetto a %d elementi scheda."
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:100
 msgid "Checking silkscreen for potential soldermask clipping..."
@@ -30108,7 +30101,7 @@ msgstr "Era atteso il tipo \"Altro\" invece impostato a \"%s\""
 msgid "(pad \"%s\")"
 msgstr "(piazzola \"%s\")"
 
-#: pcbnew/footprint.cpp:2390 pcbnew/pad.cpp:1733 pcbnew/zone.cpp:1456
+#: pcbnew/footprint.cpp:2390 pcbnew/pad.cpp:1733 pcbnew/zone.cpp:1458
 msgid "Clearance Override"
 msgstr "Scavalcamento distanze"
 
@@ -30120,11 +30113,11 @@ msgstr "Scavalcamento margine pastasalda"
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Scavalcamento rapporto margine pastasalda"
 
-#: pcbnew/footprint.cpp:2400 pcbnew/pad.cpp:1715 pcbnew/zone.cpp:1467
+#: pcbnew/footprint.cpp:2400 pcbnew/pad.cpp:1715 pcbnew/zone.cpp:1469
 msgid "Thermal Relief Width"
 msgstr "Larghezza supporti termici"
 
-#: pcbnew/footprint.cpp:2404 pcbnew/pad.cpp:1718 pcbnew/zone.cpp:1464
+#: pcbnew/footprint.cpp:2404 pcbnew/pad.cpp:1718 pcbnew/zone.cpp:1466
 msgid "Thermal Relief Gap"
 msgstr "Vuoto supporti termici"
 
@@ -31484,8 +31477,8 @@ msgstr "Esporta progetto in Hyperlynx"
 
 #: pcbnew/pcb_expr_evaluator.cpp:95 pcbnew/pcb_expr_evaluator.cpp:255
 #: pcbnew/pcb_expr_evaluator.cpp:321 pcbnew/pcb_expr_evaluator.cpp:387
-#: pcbnew/pcb_expr_evaluator.cpp:606 pcbnew/pcb_expr_evaluator.cpp:708
-#: pcbnew/pcb_expr_evaluator.cpp:816
+#: pcbnew/pcb_expr_evaluator.cpp:607 pcbnew/pcb_expr_evaluator.cpp:709
+#: pcbnew/pcb_expr_evaluator.cpp:817
 #, c-format
 msgid "Missing argument to '%s'"
 msgstr "Argomento mancante a \"%s\""
@@ -31495,19 +31488,19 @@ msgstr "Argomento mancante a \"%s\""
 msgid "Unrecognized layer '%s'"
 msgstr "Strato non riconosciuto \"%s\""
 
-#: pcbnew/pcb_expr_evaluator.cpp:489
+#: pcbnew/pcb_expr_evaluator.cpp:490
 msgid "Footprint's courtyard is not a single, closed shape."
 msgstr "L'ingombro impronta non è una singola forma chiusa."
 
-#: pcbnew/pcb_expr_evaluator.cpp:502
+#: pcbnew/pcb_expr_evaluator.cpp:503
 msgid "Footprint has no front courtyard."
 msgstr "L'impronta non ha un ingombro fronte"
 
-#: pcbnew/pcb_expr_evaluator.cpp:519
+#: pcbnew/pcb_expr_evaluator.cpp:520
 msgid "Footprint has no back courtyard."
 msgstr "L'impronta non ha un ingombro retro"
 
-#: pcbnew/pcb_expr_evaluator.cpp:1145
+#: pcbnew/pcb_expr_evaluator.cpp:1146
 msgid "must be mm, in, or mil"
 msgstr "deve essere mm, in o mil"
 
@@ -36556,7 +36549,7 @@ msgstr "No impronte"
 msgid "Restrictions"
 msgstr "Restrizioni"
 
-#: pcbnew/zone.cpp:595 pcbnew/zone.cpp:1450
+#: pcbnew/zone.cpp:595 pcbnew/zone.cpp:1452
 msgid "Priority"
 msgstr "Priorità"
 
@@ -36597,15 +36590,15 @@ msgstr "Area regole su %s"
 msgid "Zone %s on %s"
 msgstr "Zona %s su %s"
 
-#: pcbnew/zone.cpp:1441
+#: pcbnew/zone.cpp:1443
 msgid "Inherited"
 msgstr "Ereditato"
 
-#: pcbnew/zone.cpp:1459
+#: pcbnew/zone.cpp:1461
 msgid "Min Width"
 msgstr "Larghezza min"
 
-#: pcbnew/zone.cpp:1462
+#: pcbnew/zone.cpp:1464
 msgid "Pad Connections"
 msgstr "Connessioni piazzole"
 
@@ -36637,11 +36630,6 @@ msgstr "Esecuzione riempimento poligoni..."
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] caricamento fallito: riga in ingresso troppo lunga\n"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
-msgid "bitmap2component"
-msgstr "bitmap2component"
-
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "Convertitore immagini KiCad"
@@ -36650,10 +36638,9 @@ msgstr "Convertitore immagini KiCad"
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Crea un componente da una bitmap per l'uso con KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+msgid "bitmap2component"
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
@@ -36667,10 +36654,9 @@ msgstr "Strumento di disegno elettrico"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editor di schemi elettrici indipendente di KiCad"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -36680,9 +36666,9 @@ msgstr "Visualizzatore file Gerber"
 msgid "View Gerber files"
 msgstr "Visualizza file Gerber"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
-msgid "kicad"
-msgstr "kicad"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -36697,10 +36683,6 @@ msgstr "Suite EDA"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite per la progettazione di schemi elettrici e circuiti stampati"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
-msgid "pcbcalculator"
-msgstr "pcbcalculator"
-
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "Calcolatrice per C.S. KiCad"
@@ -36708,11 +36690,6 @@ msgstr "Calcolatrice per C.S. KiCad"
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
 msgstr "Calcolatrice per vari calcoli relativi ai circuiti elettrici"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
@@ -36725,6 +36702,10 @@ msgstr "Progettazione C.S."
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Editor di C.S. autonomo di KiCad"
+
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+msgid "pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -36758,3 +36739,42 @@ msgstr "Editor di C.S. KiCad"
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:85
 msgid "The KiCad Developers"
 msgstr "Gli sviluppatori di KiCad"
+
+#: resources/linux/mime/kicad-gerbers.xml.in:5
+#, fuzzy
+msgid "Gerber file"
+msgstr "File Gerber"
+
+#: resources/linux/mime/kicad-gerbers.xml.in:26
+#, fuzzy
+msgid "Excellon drill file"
+msgstr "Genera file forature Excellon2"
+
+#: resources/linux/mime/kicad-kicad.xml.in:5
+#, fuzzy
+msgid "KiCad Project"
+msgstr "File progetto KiCad"
+
+#: resources/linux/mime/kicad-kicad.xml.in:12
+#, fuzzy
+msgid "KiCad Schematic"
+msgstr "Schema non-KiCad..."
+
+#: resources/linux/mime/kicad-kicad.xml.in:27
+#, fuzzy
+msgid "KiCad Printed Circuit Board"
+msgstr "File di circuiti stampati KiCad"
+
+#~ msgid "No netlist provided, skipping LVS."
+#~ msgstr "Nessuna netlist fornita, salto LVS."
+
+#, c-format
+#~ msgid "Testing %d silkscreen features against %d board items."
+#~ msgstr ""
+#~ "Verifica %d caratteristiche serigrafia rispetto a %d elementi scheda."
+
+#~ msgid "kicad"
+#~ msgstr "kicad"
+
+#~ msgid "pcbcalculator"
+#~ msgstr "pcbcalculator"
