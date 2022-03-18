@@ -297,6 +297,12 @@ void DIALOG_PRINT_PCBNEW::createLeftPanel()
                 {
                     this->PopupMenu( m_popMenu, aEvent.GetPosition() );
                 } );
+
+    m_layerCheckListBox->Bind( wxEVT_RIGHT_DOWN,
+                [&]( wxMouseEvent& aEvent )
+                {
+                    this->PopupMenu( m_popMenu, aEvent.GetPosition() );
+                } );
 }
 
 
