@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-17 19:42+0100\n"
+"POT-Creation-Date: 2022-03-18 12:53-0700\n"
 "PO-Revision-Date: 2022-03-17 19:55+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -2659,7 +2659,7 @@ msgstr "Collage Spécial"
 
 #: common/dialogs/dialog_print_generic.cpp:45
 #: common/dialogs/dialog_print_generic.cpp:247
-#: common/dialogs/dialog_print_generic_base.h:78 common/tool/actions.cpp:102
+#: common/dialogs/dialog_print_generic_base.h:79 common/tool/actions.cpp:102
 #: eeschema/dialogs/dialog_print_using_printer.cpp:144
 #: eeschema/dialogs/dialog_print_using_printer_base.h:61
 msgid "Print"
@@ -2799,7 +2799,12 @@ msgstr "Personnalisé:"
 msgid "Set X scale adjust for exact scale plotting"
 msgstr "Ajuster échelle X pour traçage à l'échelle exacte"
 
-#: common/dialogs/dialog_print_generic_base.cpp:99
+#: common/dialogs/dialog_print_generic_base.cpp:96
+#, fuzzy
+msgid "Info text"
+msgstr "Chercher texte"
+
+#: common/dialogs/dialog_print_generic_base.cpp:111
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
 msgid "Page Setup..."
 msgstr "Options Page..."
@@ -3700,7 +3705,7 @@ msgid "Info:"
 msgstr "Info:"
 
 #: common/dialogs/wx_html_report_panel.cpp:368
-#: eeschema/dialogs/dialog_erc.cpp:849 pcbnew/dialogs/dialog_drc.cpp:776
+#: eeschema/dialogs/dialog_erc.cpp:855 pcbnew/dialogs/dialog_drc.cpp:776
 msgid "Save Report to File"
 msgstr "Sauver Fichier Rapport sous"
 
@@ -5729,7 +5734,7 @@ msgstr "Extraction fichier '%s'."
 msgid "Error extracting file!"
 msgstr "Erreur en extrayant le fichier!"
 
-#: common/project/project_archiver.cpp:159 eeschema/dialogs/dialog_erc.cpp:873
+#: common/project/project_archiver.cpp:159 eeschema/dialogs/dialog_erc.cpp:879
 #: eeschema/dialogs/dialog_plot_schematic.cpp:513
 #: eeschema/dialogs/dialog_plot_schematic.cpp:684
 #: eeschema/dialogs/dialog_plot_schematic.cpp:834
@@ -8638,101 +8643,106 @@ msgstr "Vérification des pins type non connecté pour connexions..."
 msgid "Checking for library symbol issues..."
 msgstr "Vérification des problèmes de symbole de librairies..."
 
-#: eeschema/dialogs/dialog_erc.cpp:572 pcbnew/dialogs/dialog_drc.cpp:489
+#: eeschema/dialogs/dialog_erc.cpp:500
+#, fuzzy
+msgid "Checking for off grid pins and wires..."
+msgstr "Vérification des empreintes du PCB contre librairies..."
+
+#: eeschema/dialogs/dialog_erc.cpp:578 pcbnew/dialogs/dialog_drc.cpp:489
 msgid "errors"
 msgstr "erreurs"
 
-#: eeschema/dialogs/dialog_erc.cpp:573 pcbnew/dialogs/dialog_drc.cpp:490
+#: eeschema/dialogs/dialog_erc.cpp:579 pcbnew/dialogs/dialog_drc.cpp:490
 msgid "warnings"
 msgstr "avertissements"
 
-#: eeschema/dialogs/dialog_erc.cpp:574 pcbnew/dialogs/dialog_drc.cpp:491
+#: eeschema/dialogs/dialog_erc.cpp:580 pcbnew/dialogs/dialog_drc.cpp:491
 msgid "appropriate"
 msgstr "approprié"
 
-#: eeschema/dialogs/dialog_erc.cpp:579 pcbnew/dialogs/dialog_drc.cpp:496
+#: eeschema/dialogs/dialog_erc.cpp:585 pcbnew/dialogs/dialog_drc.cpp:496
 msgid "Remove exclusion for this violation"
 msgstr "Supprimer l’exclusion pour cette violation"
 
-#: eeschema/dialogs/dialog_erc.cpp:580 pcbnew/dialogs/dialog_drc.cpp:497
+#: eeschema/dialogs/dialog_erc.cpp:586 pcbnew/dialogs/dialog_drc.cpp:497
 #, c-format
 msgid "It will be placed back in the %s list"
 msgstr "Il sera remis dans la liste des %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:584 pcbnew/dialogs/dialog_drc.cpp:508
+#: eeschema/dialogs/dialog_erc.cpp:590 pcbnew/dialogs/dialog_drc.cpp:508
 msgid "Exclude this violation"
 msgstr "Exclure cette violation"
 
-#: eeschema/dialogs/dialog_erc.cpp:585 pcbnew/dialogs/dialog_drc.cpp:509
+#: eeschema/dialogs/dialog_erc.cpp:591 pcbnew/dialogs/dialog_drc.cpp:509
 #, c-format
 msgid "It will be excluded from the %s list"
 msgstr "Il sera exclu de la liste %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:597 pcbnew/dialogs/dialog_drc.cpp:529
+#: eeschema/dialogs/dialog_erc.cpp:603 pcbnew/dialogs/dialog_drc.cpp:529
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
 msgstr "Changer la gravité en Erreur pour toutes les violations '%s'"
 
-#: eeschema/dialogs/dialog_erc.cpp:599 eeschema/dialogs/dialog_erc.cpp:605
+#: eeschema/dialogs/dialog_erc.cpp:605 eeschema/dialogs/dialog_erc.cpp:611
 #: pcbnew/dialogs/dialog_drc.cpp:531 pcbnew/dialogs/dialog_drc.cpp:538
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr ""
 "Les sévérités de violation peuvent également être modifiées dans le dialogue "
 "\"Option de C.I.\""
 
-#: eeschema/dialogs/dialog_erc.cpp:603 pcbnew/dialogs/dialog_drc.cpp:536
+#: eeschema/dialogs/dialog_erc.cpp:609 pcbnew/dialogs/dialog_drc.cpp:536
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
 msgstr "Changer la gravité en Warning pour toutes les violations '%s'"
 
-#: eeschema/dialogs/dialog_erc.cpp:608 pcbnew/dialogs/dialog_drc.cpp:542
+#: eeschema/dialogs/dialog_erc.cpp:614 pcbnew/dialogs/dialog_drc.cpp:542
 #, c-format
 msgid "Ignore all '%s' violations"
 msgstr "Ignorer toutes les violations '%s'"
 
-#: eeschema/dialogs/dialog_erc.cpp:609 pcbnew/dialogs/dialog_drc.cpp:544
+#: eeschema/dialogs/dialog_erc.cpp:615 pcbnew/dialogs/dialog_drc.cpp:544
 msgid "Violations will not be checked or reported"
 msgstr "Les violations ne seront pas vérifiées ou signalées"
 
-#: eeschema/dialogs/dialog_erc.cpp:616
+#: eeschema/dialogs/dialog_erc.cpp:622
 msgid "Edit pin-to-pin conflict map..."
 msgstr "Editer la carte des conflits de pins..."
 
-#: eeschema/dialogs/dialog_erc.cpp:620 pcbnew/dialogs/dialog_drc.cpp:549
+#: eeschema/dialogs/dialog_erc.cpp:626 pcbnew/dialogs/dialog_drc.cpp:549
 msgid "Edit violation severities..."
 msgstr "Modifier les sévérités de violation..."
 
-#: eeschema/dialogs/dialog_erc.cpp:621 eeschema/dialogs/dialog_erc.cpp:791
+#: eeschema/dialogs/dialog_erc.cpp:627 eeschema/dialogs/dialog_erc.cpp:797
 msgid "Open the Schematic Setup... dialog"
 msgstr "Ouvrir le Dialogue Configuration Schématique"
 
-#: eeschema/dialogs/dialog_erc.cpp:713
+#: eeschema/dialogs/dialog_erc.cpp:719
 #: eeschema/dialogs/dialog_schematic_setup.cpp:76
 msgid "Pin Conflicts Map"
 msgstr "Carte des Conflits de Pins"
 
-#: eeschema/dialogs/dialog_erc.cpp:717 eeschema/dialogs/dialog_erc.cpp:796
+#: eeschema/dialogs/dialog_erc.cpp:723 eeschema/dialogs/dialog_erc.cpp:802
 #: eeschema/dialogs/dialog_schematic_setup.cpp:75
 #: pcbnew/dialogs/dialog_board_setup.cpp:112 pcbnew/dialogs/dialog_drc.cpp:708
 #: pcbnew/dialogs/dialog_drc.cpp:730
 msgid "Violation Severity"
 msgstr "Gravité de la Violation"
 
-#: eeschema/dialogs/dialog_erc.cpp:791 pcbnew/dialogs/dialog_drc.cpp:725
+#: eeschema/dialogs/dialog_erc.cpp:797 pcbnew/dialogs/dialog_drc.cpp:725
 msgid "Edit ignored violations..."
 msgstr "Éditer les violations ignorées..."
 
-#: eeschema/dialogs/dialog_erc.cpp:868 pcbnew/dialogs/dialog_gendrill.cpp:484
+#: eeschema/dialogs/dialog_erc.cpp:874 pcbnew/dialogs/dialog_gendrill.cpp:484
 #, c-format
 msgid "Report file '%s' created."
 msgstr "Fichier rapport '%s' créé."
 
-#: eeschema/dialogs/dialog_erc.cpp:886
+#: eeschema/dialogs/dialog_erc.cpp:892
 #, c-format
 msgid "ERC report (%s, Encoding UTF8)\n"
 msgstr "Rapport ERC (%s, Encodage UTF8)\n"
 
-#: eeschema/dialogs/dialog_erc.cpp:901
+#: eeschema/dialogs/dialog_erc.cpp:907
 #, c-format
 msgid ""
 "\n"
@@ -8741,7 +8751,7 @@ msgstr ""
 "\n"
 "***** Feuille %s\n"
 
-#: eeschema/dialogs/dialog_erc.cpp:925
+#: eeschema/dialogs/dialog_erc.cpp:931
 #, c-format
 msgid ""
 "\n"
@@ -10499,12 +10509,12 @@ msgid "Print in &black and white only"
 msgstr "Imprimer en &noir et blanc seulement"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:32
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:211
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:209
 msgid "Print background color"
 msgstr "Tracer la couleur de fond"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:35
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:216
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:214
 msgid "Use a different color theme for printing:"
 msgstr "Utiliser un thème de couleur différent pour l’impression :"
 
@@ -13072,88 +13082,88 @@ msgstr "Erreur lors du chargement de feuille de dessin."
 msgid "Error loading the symbol library table '%s'."
 msgstr "Erreur lors du chargement de la table des librairies de symboles '%s'."
 
-#: eeschema/erc.cpp:60 eeschema/erc.cpp:77
+#: eeschema/erc.cpp:62 eeschema/erc.cpp:79
 msgid "Input Pin"
 msgstr "Pin en Entrée"
 
-#: eeschema/erc.cpp:61 eeschema/erc.cpp:78
+#: eeschema/erc.cpp:63 eeschema/erc.cpp:80
 msgid "Output Pin"
 msgstr "Pin en Sortie"
 
-#: eeschema/erc.cpp:62 eeschema/erc.cpp:79
+#: eeschema/erc.cpp:64 eeschema/erc.cpp:81
 msgid "Bidirectional Pin"
 msgstr "Pin Bidirectionnelle"
 
-#: eeschema/erc.cpp:63 eeschema/erc.cpp:80
+#: eeschema/erc.cpp:65 eeschema/erc.cpp:82
 msgid "Tri-State Pin"
 msgstr "Pin 3 états"
 
-#: eeschema/erc.cpp:64 eeschema/erc.cpp:81
+#: eeschema/erc.cpp:66 eeschema/erc.cpp:83
 msgid "Passive Pin"
 msgstr "Pin Passive"
 
-#: eeschema/erc.cpp:65 eeschema/erc.cpp:82
+#: eeschema/erc.cpp:67 eeschema/erc.cpp:84
 msgid "Free Pin"
 msgstr "Pin Libre"
 
-#: eeschema/erc.cpp:66 eeschema/erc.cpp:83
+#: eeschema/erc.cpp:68 eeschema/erc.cpp:85
 msgid "Unspecified Pin"
 msgstr "Pin non Spécifiée"
 
-#: eeschema/erc.cpp:67 eeschema/erc.cpp:84
+#: eeschema/erc.cpp:69 eeschema/erc.cpp:86
 msgid "Power Input Pin"
 msgstr "Pin Power Input"
 
-#: eeschema/erc.cpp:68 eeschema/erc.cpp:85
+#: eeschema/erc.cpp:70 eeschema/erc.cpp:87
 msgid "Power Output Pin"
 msgstr "Pin Power Output"
 
-#: eeschema/erc.cpp:69 eeschema/erc.cpp:86
+#: eeschema/erc.cpp:71 eeschema/erc.cpp:88
 msgid "Open Collector"
 msgstr "Collecteur Ouvert"
 
-#: eeschema/erc.cpp:70 eeschema/erc.cpp:87
+#: eeschema/erc.cpp:72 eeschema/erc.cpp:89
 msgid "Open Emitter"
 msgstr "Émetteur Ouvert"
 
-#: eeschema/erc.cpp:71 eeschema/erc.cpp:88
+#: eeschema/erc.cpp:73 eeschema/erc.cpp:90
 msgid "No Connection"
 msgstr "Pas de Connexion"
 
-#: eeschema/erc.cpp:281
+#: eeschema/erc.cpp:283
 msgid "Unresolved text variable in drawing sheet."
 msgstr "Variable texte non résolue dans la feuille de dessin."
 
-#: eeschema/erc.cpp:312
+#: eeschema/erc.cpp:314
 #, c-format
 msgid "Bus alias %s has conflicting definitions on %s and %s"
 msgstr "L’alias de bus %s a des définitions en conflit sur %s et %s"
 
-#: eeschema/erc.cpp:382
+#: eeschema/erc.cpp:384
 #, c-format
 msgid "Different footprints assigned to %s and %s"
 msgstr "Empreintes différentes assignées à %s et %s"
 
-#: eeschema/erc.cpp:431
+#: eeschema/erc.cpp:433
 msgid "Pins with \"no connection\" type are connected"
 msgstr "Pins avec un indicateur \"pas de connexion\" sont connectées"
 
-#: eeschema/erc.cpp:545
+#: eeschema/erc.cpp:547
 #, c-format
 msgid "Pins of type %s and %s are connected"
 msgstr "Les pins de type %s et %s sont connectées"
 
-#: eeschema/erc.cpp:616
+#: eeschema/erc.cpp:618
 #, c-format
 msgid "Pin %s is connected to both %s and %s"
 msgstr "Pin %s est  connectée à la fois à %s et %s"
 
-#: eeschema/erc.cpp:723 pcbnew/drc/drc_test_provider_library_parity.cpp:468
+#: eeschema/erc.cpp:722 pcbnew/drc/drc_test_provider_library_parity.cpp:468
 #, c-format
 msgid "The current configuration does not include the library '%s'."
 msgstr "La configuration actuelle n'inclut pas la librairie '%s'."
 
-#: eeschema/erc.cpp:734 pcbnew/drc/drc_test_provider_library_parity.cpp:482
+#: eeschema/erc.cpp:733 pcbnew/drc/drc_test_provider_library_parity.cpp:482
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
 msgstr "La librairie '%s' n’est pas activée dans la configuration actuelle."
@@ -13172,114 +13182,118 @@ msgid "Duplicate sheet names within a given sheet"
 msgstr "Nom de feuille en double dans une feuille donnée"
 
 #: eeschema/erc_item.cpp:50
+msgid "Symbol pin or wire end off grid"
+msgstr ""
+
+#: eeschema/erc_item.cpp:54
 msgid "Pin not connected"
 msgstr "Pin non connectée"
 
-#: eeschema/erc_item.cpp:54
+#: eeschema/erc_item.cpp:58
 msgid "Input pin not driven by any Output pins"
 msgstr ""
 "Pin en entrée connectée à d'autres pins, mais aucune pin en sortie pour la "
 "piloter"
 
-#: eeschema/erc_item.cpp:58
+#: eeschema/erc_item.cpp:62
 msgid "Input Power pin not driven by any Output Power pins"
 msgstr ""
 "Pin entrée de puissance connectée à d'autres pins, mais aucune pin en sortie "
 "de puissance pour la piloter"
 
-#: eeschema/erc_item.cpp:62 eeschema/erc_item.cpp:66
+#: eeschema/erc_item.cpp:66 eeschema/erc_item.cpp:70
 msgid "Conflict problem between pins"
 msgstr "Problème de conflit entre pins"
 
-#: eeschema/erc_item.cpp:70
+#: eeschema/erc_item.cpp:74
 msgid "Mismatch between hierarchical labels and sheet pins"
 msgstr "Non coincidence entre labels de hiérarchie et pins de hiérarchie"
 
-#: eeschema/erc_item.cpp:74
+#: eeschema/erc_item.cpp:78
 msgid "A pin with a \"no connection\" flag is connected"
 msgstr "Une pin avec un indicateur \"pas de connexion\" est connectée"
 
-#: eeschema/erc_item.cpp:78
+#: eeschema/erc_item.cpp:82
 msgid "Unconnected \"no connection\" flag"
 msgstr "Indicateur  \"Pas de connexion\" flottant"
 
-#: eeschema/erc_item.cpp:82
+#: eeschema/erc_item.cpp:86
 msgid "Label not connected to anything"
 msgstr "Label non connecté à quoi que ce soit"
 
-#: eeschema/erc_item.cpp:86
+#: eeschema/erc_item.cpp:90
 msgid "Global label not connected anywhere else in the schematic"
 msgstr "Label global connecté à aucun autre élément dans la schématique"
 
-#: eeschema/erc_item.cpp:90
+#: eeschema/erc_item.cpp:94
 msgid "Labels are similar (lower/upper case difference only)"
 msgstr "Labels semblables (différence minuscules/majuscules uniquement)"
 
-#: eeschema/erc_item.cpp:94
+#: eeschema/erc_item.cpp:98
 msgid "Different footprint assigned in another unit of the symbol"
 msgstr "Empreinte différente assignée dans une autre unité du même symbole"
 
-#: eeschema/erc_item.cpp:98
+#: eeschema/erc_item.cpp:102
 msgid "Different net assigned to a shared pin in another unit of the symbol"
 msgstr ""
 "Net différent assigné à une pin partagée d'une autre unité du même symbole"
 
-#: eeschema/erc_item.cpp:102
+#: eeschema/erc_item.cpp:106
 msgid "Conflict between bus alias definitions across schematic sheets"
 msgstr ""
 "Conflit dans les définitions d’alias de bus entre les feuilles schématiques"
 
-#: eeschema/erc_item.cpp:106
+#: eeschema/erc_item.cpp:110
 msgid "More than one name given to this bus or net"
 msgstr "Plus d’un nom donné à ce bus ou équipotentielle"
 
-#: eeschema/erc_item.cpp:110
+#: eeschema/erc_item.cpp:114
 msgid "Net is graphically connected to a bus but not a bus member"
 msgstr ""
 "Le label est graphiquement connecté à un bus, mais n'est pas un membre de bus"
 
-#: eeschema/erc_item.cpp:114
+#: eeschema/erc_item.cpp:118
 msgid "Label attached to bus item does not describe a bus"
 msgstr "L’étiquette attachée à l’élément de bus ne décrit pas un bus"
 
-#: eeschema/erc_item.cpp:118
+#: eeschema/erc_item.cpp:122
 msgid "Buses are graphically connected but share no bus members"
 msgstr ""
 "Les bus sont graphiquement connectés mais ne partagent aucun membre de bus"
 
-#: eeschema/erc_item.cpp:122
+#: eeschema/erc_item.cpp:126
 msgid "Invalid connection between bus and net items"
 msgstr "Connexion non valide entre le bus et éléments de net"
 
-#: eeschema/erc_item.cpp:126 pcbnew/drc/drc_item.cpp:188
+#: eeschema/erc_item.cpp:130 pcbnew/drc/drc_item.cpp:188
 msgid "Unresolved text variable"
 msgstr "Variable texte non résolue"
 
-#: eeschema/erc_item.cpp:130
+#: eeschema/erc_item.cpp:134
 msgid "Wires not connected to anything"
 msgstr "Fils non reliés à quoi que ce soit"
 
-#: eeschema/erc_item.cpp:134
+#: eeschema/erc_item.cpp:138
 msgid "Library symbol issue"
 msgstr "Problème de librairie de symbole"
 
-#: eeschema/erc_item.cpp:138
+#: eeschema/erc_item.cpp:142
 msgid "Symbol is not annotated"
 msgstr "Symbole non numéroté"
 
-#: eeschema/erc_item.cpp:142
+#: eeschema/erc_item.cpp:146
 msgid "Symbol has more units than are defined"
 msgstr "Le symbole a plus d’unités que ce qui est défini"
 
-#: eeschema/erc_item.cpp:146
+#: eeschema/erc_item.cpp:150
 msgid "Units of same symbol have different values"
 msgstr "Les unités d’un même symbole ont des valeurs différentes"
 
-#: eeschema/erc_item.cpp:150
+#: eeschema/erc_item.cpp:154
 msgid "Duplicate reference designators"
 msgstr "Références schématiques dupliquées"
 
-#: eeschema/erc_item.cpp:154
+#: eeschema/erc_item.cpp:158
 msgid "Bus Entry needed"
 msgstr "Entrée de Bus nécessaire"
 
@@ -17920,22 +17934,19 @@ msgstr "Sélection Couche"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:171
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:94
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:248
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:246
 msgid "Print mirrored"
 msgstr "Tracé en miroir"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:180
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:271
 msgid "Included Layers"
 msgstr "Couches Incluses"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:194
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:298
 msgid "Select all"
 msgstr "Tout sélectionner"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:196
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:300
 msgid "Deselect all"
 msgstr "Désélectionner tout"
 
@@ -22196,7 +22207,6 @@ msgstr "Personnalisé..."
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:20
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:49
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:502
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:276
 msgid "Copper layers:"
 msgstr "Couches cuivre:"
 
@@ -22425,59 +22435,55 @@ msgstr "Désignation"
 msgid "Supplier and ref"
 msgstr "Fournisseur et réf"
 
-#: pcbnew/cleanup_item.cpp:46 pcbnew/zone_filler.cpp:97
-msgid "Checking zone fills..."
-msgstr "Verification du remplissage de zones..."
-
-#: pcbnew/cleanup_item.cpp:47
+#: pcbnew/cleanup_item.cpp:46
 msgid "Remove track shorting two nets"
 msgstr "Suppression pistes court-circuitant deux nets"
 
-#: pcbnew/cleanup_item.cpp:48
+#: pcbnew/cleanup_item.cpp:47
 msgid "Remove via shorting two nets"
 msgstr "Suppression via court-circuitant deux nets"
 
-#: pcbnew/cleanup_item.cpp:49
+#: pcbnew/cleanup_item.cpp:48
 msgid "Remove redundant via"
 msgstr "Supprime via redondante"
 
-#: pcbnew/cleanup_item.cpp:50
+#: pcbnew/cleanup_item.cpp:49
 msgid "Remove duplicate track"
 msgstr "Supprime piste dupliquée"
 
-#: pcbnew/cleanup_item.cpp:51
+#: pcbnew/cleanup_item.cpp:50
 msgid "Merge co-linear tracks"
 msgstr "Fusionner les pistes co_linéaires"
 
-#: pcbnew/cleanup_item.cpp:52
+#: pcbnew/cleanup_item.cpp:51
 msgid "Remove track not connected at both ends"
 msgstr "Supprimer la piste non connectée aux deux extrémités"
 
-#: pcbnew/cleanup_item.cpp:53
+#: pcbnew/cleanup_item.cpp:52
 msgid "Remove via connected on fewer than two layers"
 msgstr "Supprimer via connecté sur moins que deux couches"
 
-#: pcbnew/cleanup_item.cpp:54
+#: pcbnew/cleanup_item.cpp:53
 msgid "Remove zero-length track"
 msgstr "Supprimer les pistes de longueur nulle"
 
-#: pcbnew/cleanup_item.cpp:55
+#: pcbnew/cleanup_item.cpp:54
 msgid "Remove track inside pad"
 msgstr "Suppression pistes dans pads"
 
-#: pcbnew/cleanup_item.cpp:58
+#: pcbnew/cleanup_item.cpp:57
 msgid "Remove zero-size graphic"
 msgstr "Supprimer les éléments graphiques de longueur nulle"
 
-#: pcbnew/cleanup_item.cpp:59
+#: pcbnew/cleanup_item.cpp:58
 msgid "Remove duplicated graphic"
 msgstr "Supprimer les éléments graphiques dupliqués"
 
-#: pcbnew/cleanup_item.cpp:60
+#: pcbnew/cleanup_item.cpp:59
 msgid "Convert lines to rectangle"
 msgstr "Convertir les lignes en rectangle"
 
-#: pcbnew/cleanup_item.cpp:64
+#: pcbnew/cleanup_item.cpp:63
 msgid "Unknown cleanup action"
 msgstr "Action de nettoyage inconnue"
 
@@ -23312,27 +23318,27 @@ msgstr "Nettoyer Éléments Graphiques"
 msgid "Build Changes"
 msgstr "Génération des changements"
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:138
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:134
 msgid "Check zones..."
 msgstr "Vérification des zones..."
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:148
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:142
 msgid "Rebuild connectivity..."
 msgstr "Reconstruction de la connectivité..."
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:151
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:146
 msgid "Check items..."
 msgstr "Vérification des éléments..."
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:161
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:157
 msgid "Items checked..."
 msgstr "Eléments vérifiés."
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:171
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:168
 msgid "Board cleanup"
 msgstr "Nettoyage du circuit imprimé"
 
-#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:175
+#: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:172
 msgid "Finished..."
 msgstr "Fini..."
 
@@ -24649,7 +24655,6 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:63
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:511
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:285
 msgid "Technical layers:"
 msgstr "Couches Techniques:"
 
@@ -24682,12 +24687,12 @@ msgid "Print the layer(s) horizontally mirrored"
 msgstr "Imprimer le(s) couche(s) en miroir horizontal"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:99
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:254
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:252
 msgid "Print one page per layer"
 msgstr "Imprimer une page par couche"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:105
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:260
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:258
 msgid "Print board edges on all pages"
 msgstr "Imprimer les contours du PCB sur toutes les pages"
 
@@ -27137,6 +27142,7 @@ msgid "Plot format:"
 msgstr "Format du tracé:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:269
 msgid "Include Layers"
 msgstr "Couches Incluses"
 
@@ -27193,7 +27199,7 @@ msgstr ""
 "les fichiers de tracé"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:113
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:234
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:232
 msgid "Drill marks:"
 msgstr "Marques de perçage:"
 
@@ -27466,22 +27472,27 @@ msgid "(%d known DRC violations; %d exclusions)"
 msgstr "(DRC: %d violations connues; %d exclusions)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:432
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:281
 msgid "Select Fab Layers"
 msgstr "Sélection Couches pour Fabrication"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:436
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:284
 msgid "Select all Copper Layers"
 msgstr "Sélection Toutes Couches Cuivre"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:440
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:287
 msgid "Deselect all Copper Layers"
 msgstr "Désélection Toutes Couches Cuivre"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:444
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:290
 msgid "Select all Layers"
 msgstr "Sélection Toutes Couches"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:448
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:293
 msgid "Deselect all Layers"
 msgstr "Désélection Toutes Couches"
 
@@ -27827,19 +27838,23 @@ msgstr ""
 msgid "Position Relative To Reference Item"
 msgstr "Position Relative à l'Elément de Référence"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:207
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:116
+msgid "Right-click for layer selection commands."
+msgstr ""
+
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:205
 msgid "Print according to objects tab of appearance manager"
 msgstr "Imprimer selon l’onglet objets du gestionnaire d’apparence"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:235
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:233
 msgid "No drill mark"
 msgstr "Pas de marque"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:236
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:234
 msgid "Small mark"
 msgstr "Petite marque"
 
-#: pcbnew/dialogs/dialog_print_pcbnew.cpp:237
+#: pcbnew/dialogs/dialog_print_pcbnew.cpp:235
 msgid "Real drill"
 msgstr "Perçage réel"
 
@@ -37763,23 +37778,23 @@ msgstr "Remplissage %d Zones"
 msgid "Auto-fill Zone(s)"
 msgstr "Remplissage automatique Zone(s)"
 
-#: pcbnew/tracks_cleaner.cpp:65
+#: pcbnew/tracks_cleaner.cpp:66
 msgid "Clean vias and tracks"
 msgstr "Nettoyer pistes et vias"
 
-#: pcbnew/tracks_cleaner.cpp:71
+#: pcbnew/tracks_cleaner.cpp:75
 msgid "Merge collinear tracks"
 msgstr "Fusionner les pistes colinéaires"
 
-#: pcbnew/tracks_cleaner.cpp:78
+#: pcbnew/tracks_cleaner.cpp:85
 msgid "Remove misconnected"
 msgstr "Suppression incorrectement connectés"
 
-#: pcbnew/tracks_cleaner.cpp:86
+#: pcbnew/tracks_cleaner.cpp:96
 msgid "Delete tracks in pads"
 msgstr "Effacement pistes dans pads"
 
-#: pcbnew/tracks_cleaner.cpp:96
+#: pcbnew/tracks_cleaner.cpp:109
 msgid "Merge segments"
 msgstr "Fusion des segments"
 
@@ -38537,6 +38552,10 @@ msgstr "Largeur Min"
 msgid "Pad Connections"
 msgstr "Connexions des Pads"
 
+#: pcbnew/zone_filler.cpp:97
+msgid "Checking zone fills..."
+msgstr "Verification du remplissage de zones..."
+
 #: pcbnew/zone_filler.cpp:98
 msgid "Building zone fills..."
 msgstr "Construction du remplissage de zones..."
@@ -38581,11 +38600,6 @@ msgstr "freins thermiques pour pads traversants"
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
-msgid "bitmap2component"
-msgstr "bitmap2component"
-
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -38596,10 +38610,9 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+msgid "bitmap2component"
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
@@ -38613,10 +38626,9 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -38626,9 +38638,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
-msgid "kicad"
-msgstr "kicad"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -38643,10 +38655,6 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
-msgid "pcbcalculator"
-msgstr "pcbcalculator"
-
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -38654,11 +38662,6 @@ msgstr "Calculateur pour PCB KiCad"
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
@@ -38671,6 +38674,10 @@ msgstr "Éditeur de circuit imprimé"
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
+
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+msgid "pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -38724,6 +38731,12 @@ msgstr "Schématique KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Fichier Circuit Imprimé KiCad"
+
+#~ msgid "kicad"
+#~ msgstr "kicad"
+
+#~ msgid "pcbcalculator"
+#~ msgstr "pcbcalculator"
 
 #~ msgid "Bl/Buried vias"
 #~ msgstr "Vias Enterrées"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-07 16:51-0800\n"
+"POT-Creation-Date: 2022-03-18 12:53-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1657,6 +1657,9 @@ msgstr "Custom:"
 msgid "Set X scale adjust for exact scale plotting"
 msgstr "Set X scale adjust for exact scale plotting"
 
+msgid "Info text"
+msgstr "Info text"
+
 msgid "Page Setup..."
 msgstr "Page Setup…"
 
@@ -2960,6 +2963,10 @@ msgid "Gestures"
 msgstr "Gestures"
 
 #, c-format
+msgid "Failed to verify kiface library '%s' signature."
+msgstr "Failed to verify kiface library '%s' signature."
+
+#, c-format
 msgid "Failed to load kiface library '%s'."
 msgstr "Failed to load kiface library '%s'."
 
@@ -3330,8 +3337,8 @@ msgstr "Tracks"
 msgid "Through vias"
 msgstr "Through vias"
 
-msgid "Bl/Buried vias"
-msgstr "Bl/Buried vias"
+msgid "Blind/Buried vias"
+msgstr "Blind/Buried vias"
 
 msgid "Micro-vias"
 msgstr "Micro-vias"
@@ -3371,6 +3378,9 @@ msgstr "DRC marker shadows"
 
 msgid "Grid axes"
 msgstr "Grid axes"
+
+msgid "Locked item shadow"
+msgstr "Locked item shadow"
 
 msgid "Illegal character found in logical library name"
 msgstr "Illegal character found in logical library name"
@@ -5694,6 +5704,9 @@ msgstr "Checking no connect pins for connections..."
 msgid "Checking for library symbol issues..."
 msgstr "Checking for library symbol issues..."
 
+msgid "Checking for off grid pins and wires..."
+msgstr "Checking for off grid pins and wires..."
+
 msgid "errors"
 msgstr "errors"
 
@@ -6432,11 +6445,11 @@ msgstr "Private to symbol editor"
 msgid "Text Box Properties"
 msgstr "Text Box Properties"
 
-msgid "Set width to 0 to use Netclass line widths."
-msgstr "Set width to 0 to use Netclass line widths."
+msgid "Set width to 0 to use Schematic default line width."
+msgstr "Set width to 0 to use Schematic default line width."
 
-msgid "Line, Wire & Bus Properties"
-msgstr "Line, Wire & Bus Properties"
+msgid "Line Properties"
+msgstr "Line Properties"
 
 msgid "Conflicting Labels"
 msgstr "Conflicting Labels"
@@ -8047,6 +8060,15 @@ msgstr "Reset fields if empty in parent symbol"
 msgid "Update Symbol Fields"
 msgstr "Update Symbol Fields"
 
+msgid "Wire/bus width:"
+msgstr "Wire/bus width:"
+
+msgid "Set width to 0 to use Netclass wire/bus widths."
+msgstr "Set width to 0 to use Netclass wire/bus widths."
+
+msgid "Wire & Bus Properties"
+msgstr "Wire & Bus Properties"
+
 msgid ""
 "Some items have the same color as the background\n"
 "and they will not be seen on the screen.  Are you\n"
@@ -8649,6 +8671,9 @@ msgstr "Miscellaneous"
 
 msgid "Duplicate sheet names within a given sheet"
 msgstr "Duplicate sheet names within a given sheet"
+
+msgid "Symbol pin or wire end off grid"
+msgstr "Symbol pin or wire end off grid"
 
 msgid "Pin not connected"
 msgstr "Pin not connected"
@@ -10362,13 +10387,20 @@ msgstr ""
 msgid "Continue Load Schematic"
 msgstr "Continue Load Schematic"
 
-#, c-format
 msgid ""
-"The project library table '%s' does not exist or cannot be read.  This may "
-"result in broken symbol links for the schematic.  Do you wish to continue?"
+"The schematic to be imported appears to have been created as part of a "
+"different project.  This can result in symbol library links which are "
+"missing from or clash with symbol library links in the global symbol and/or "
+"current project symbol library table.\n"
+"\n"
+"Do you wish to continue?"
 msgstr ""
-"The project library table '%s' does not exist or cannot be read.  This may "
-"result in broken symbol links for the schematic.  Do you wish to continue?"
+"The schematic to be imported appears to have been created as part of a "
+"different project.  This can result in symbol library links which are "
+"missing from or clash with symbol library links in the global symbol and/or "
+"current project symbol library table.\n"
+"\n"
+"Do you wish to continue?"
 
 msgid ""
 "There are library names in the loaded schematic that are missing from the "
@@ -15449,9 +15481,6 @@ msgstr "Designation"
 msgid "Supplier and ref"
 msgstr "Supplier and ref"
 
-msgid "Checking zone fills..."
-msgstr "Checking zone fills…"
-
 msgid "Remove track shorting two nets"
 msgstr "Remove track shorting two nets"
 
@@ -16113,8 +16142,26 @@ msgstr "Changes To Be Applied:"
 msgid "Cleanup Graphics"
 msgstr "Cleanup Graphics"
 
+msgid "Build Changes"
+msgstr "Build Changes"
+
+msgid "Check zones..."
+msgstr "Check zones..."
+
+msgid "Rebuild connectivity..."
+msgstr "Rebuild connectivity..."
+
+msgid "Check items..."
+msgstr "Check items..."
+
+msgid "Items checked..."
+msgstr "Items checked..."
+
 msgid "Board cleanup"
 msgstr "Board cleanup"
+
+msgid "Finished..."
+msgstr "Finished..."
 
 msgid "Delete &tracks connecting different nets"
 msgstr "Delete &tracks connecting different nets"
@@ -17195,6 +17242,9 @@ msgstr "Search other text items"
 
 msgid "Search DRC markers"
 msgstr "Search DRC markers"
+
+msgid "Search net names"
+msgstr "Search net names"
 
 msgid "Find Previous"
 msgstr "Find Previous"
@@ -18359,12 +18409,11 @@ msgstr "%s and %s"
 msgid "Warning: Pad size is less than zero."
 msgstr "Warning: Pad size is less than zero."
 
-msgid ""
-"Warning: Pad drill will leave no copper or drill shape and pad shape do not "
-"overlap."
-msgstr ""
-"Warning: Pad drill will leave no copper or drill shape and pad shape do not "
-"overlap."
+msgid "Warning: Pad hole not inside pad shape."
+msgstr "Warning: Pad hole not inside pad shape."
+
+msgid "Warning: Pad hole will leave no copper."
+msgstr "Warning: Pad hole will leave no copper."
 
 msgid "Warning: Negative local clearance values will have no effect."
 msgstr "Warning: Negative local clearance values will have no effect."
@@ -19358,6 +19407,9 @@ msgstr ""
 msgid "Position Relative To Reference Item"
 msgstr "Position Relative To Reference Item"
 
+msgid "Right-click for layer selection commands."
+msgstr "Right-click for layer selection commands."
+
 msgid "Print according to objects tab of appearance manager"
 msgstr "Print according to objects tab of appearance manager"
 
@@ -19520,6 +19572,9 @@ msgstr "Change text properties"
 
 msgid "Enter the text placed on selected layer."
 msgstr "Enter the text placed on selected layer."
+
+msgid "Knockout"
+msgstr "Knockout"
 
 msgid "Keep text upright"
 msgstr "Keep text upright"
@@ -21548,6 +21603,9 @@ msgstr "Solder mask aperture bridges items with different nets"
 msgid "Silkscreen clipped by solder mask"
 msgstr "Silkscreen clipped by solder mask"
 
+msgid "Silkscreen clipped by board edge"
+msgstr "Silkscreen clipped by board edge"
+
 msgid "Silkscreen overlap"
 msgstr "Silkscreen overlap"
 
@@ -21762,6 +21820,12 @@ msgstr "Checking via holes..."
 msgid "Checking micro-via holes..."
 msgstr "Checking micro-via holes..."
 
+msgid " (PTH pad has no copper layers)"
+msgstr " (PTH pad has no copper layers)"
+
+msgid " (PTH pad's hole leaves no copper)"
+msgstr " (PTH pad's hole leaves no copper)"
+
 #, c-format
 msgid "(%s min width %s; actual %s)"
 msgstr "(%s min width %s; actual %s)"
@@ -21787,6 +21851,14 @@ msgid "Checking board footprints against library..."
 msgstr "Checking board footprints against library..."
 
 #, c-format
+msgid "Footprint '%s' not found in library '%s'."
+msgstr "Footprint '%s' not found in library '%s'."
+
+#, c-format
+msgid "Footprint '%s' does not match copy in library '%s'."
+msgstr "Footprint '%s' does not match copy in library '%s'."
+
+#, c-format
 msgid "(%s min length: %s; actual: %s)"
 msgstr "(%s min length: %s; actual: %s)"
 
@@ -21807,6 +21879,9 @@ msgstr "Gathering length-constrained connections..."
 
 msgid "<unconstrained>"
 msgstr "<unconstrained>"
+
+msgid "Checking length constraints..."
+msgstr "Checking length constraints..."
 
 msgid "Gathering items..."
 msgstr "Gathering items..."
@@ -21855,15 +21930,8 @@ msgstr "No pad found for pin %s in schematic."
 msgid "Checking PCB to schematic parity..."
 msgstr "Checking PCB to schematic parity..."
 
-msgid "No netlist provided, skipping schematic parity tests."
-msgstr "No netlist provided, skipping schematic parity tests."
-
 msgid "Checking silkscreen for overlapping items..."
 msgstr "Checking silkscreen for overlapping items..."
-
-#, c-format
-msgid "Testing %d silkscreen features against %d board items."
-msgstr "Testing %d silkscreen features against %d board items."
 
 msgid "Running sliver detection on copper layers..."
 msgstr "Running sliver detection on copper layers..."
@@ -26791,6 +26859,21 @@ msgstr "Refill %d Zones"
 msgid "Auto-fill Zone(s)"
 msgstr "Auto-fill Zone(s)"
 
+msgid "Clean vias and tracks"
+msgstr "Clean vias and tracks"
+
+msgid "Merge collinear tracks"
+msgstr "Merge collinear tracks"
+
+msgid "Remove misconnected"
+msgstr "Remove misconnected"
+
+msgid "Delete tracks in pads"
+msgstr "Delete tracks in pads"
+
+msgid "Merge segments"
+msgstr "Merge segments"
+
 msgid "Incomplete undo/redo operation: some items not found"
 msgstr "Incomplete undo/redo operation: some items not found"
 
@@ -26874,6 +26957,12 @@ msgstr "DRC violations which have been individually excluded"
 
 msgid "Show footprint and text origins as a cross"
 msgstr "Show footprint and text origins as a cross"
+
+msgid "Shadow on Locked Items"
+msgstr "Shadow on Locked Items"
+
+msgid "Show a shadow marker on locked items"
+msgstr "Show a shadow marker on locked items"
 
 msgid "Show drawing sheet borders and title block"
 msgstr "Show drawing sheet borders and title block"
@@ -27325,6 +27414,9 @@ msgstr "Min Width"
 msgid "Pad Connections"
 msgstr "Pad Connections"
 
+msgid "Checking zone fills..."
+msgstr "Checking zone fills…"
+
 msgid "Building zone fills..."
 msgstr "Building zone fills..."
 
@@ -27456,6 +27548,39 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Bl/Buried vias"
+#~ msgstr "Bl/Buried vias"
+
+#~ msgid "Set width to 0 to use Netclass line widths."
+#~ msgstr "Set width to 0 to use Netclass line widths."
+
+#~ msgid "Line, Wire & Bus Properties"
+#~ msgstr "Line, Wire & Bus Properties"
+
+#, c-format
+#~ msgid ""
+#~ "The project library table '%s' does not exist or cannot be read.  This "
+#~ "may result in broken symbol links for the schematic.  Do you wish to "
+#~ "continue?"
+#~ msgstr ""
+#~ "The project library table '%s' does not exist or cannot be read.  This "
+#~ "may result in broken symbol links for the schematic.  Do you wish to "
+#~ "continue?"
+
+#~ msgid ""
+#~ "Warning: Pad drill will leave no copper or drill shape and pad shape do "
+#~ "not overlap."
+#~ msgstr ""
+#~ "Warning: Pad drill will leave no copper or drill shape and pad shape do "
+#~ "not overlap."
+
+#~ msgid "No netlist provided, skipping schematic parity tests."
+#~ msgstr "No netlist provided, skipping schematic parity tests."
+
+#, c-format
+#~ msgid "Testing %d silkscreen features against %d board items."
+#~ msgstr "Testing %d silkscreen features against %d board items."
 
 #~ msgid "Show copper thickness"
 #~ msgstr "Show copper thickness"
