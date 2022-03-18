@@ -19,36 +19,18 @@
 # or you may write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
-include(KiCadQABuildUtils)
 
-if( KICAD_TEST_XML_OUTPUT )
-    # To do this, you will need xmlrunner
-    set( PY_TEST_ARGS --xml=${CMAKE_CURRENT_BINARY_DIR}/python.xunit-results )
+# add_subdirectory( libeval_compiler )
+
+if( KICAD_DRC_PROTO )
+    add_subdirectory( drc_proto )
 endif()
 
-# Test that runs the QA tests through scripting
-add_test( NAME qa_python
-    COMMAND ${PYTHON_EXECUTABLE} test.py ${PY_TEST_ARGS}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-
-set_property( TEST qa_python
-    PROPERTY ENVIRONMENT "PYTHONPATH=${CMAKE_BINARY_DIR}/pcbnew${PYTHON_QA_PATH}"
-)
-
-# Shared QA helper libraries
-add_subdirectory( qa_utils )
-add_subdirectory( pcbnew_utils )
-
-# Unit tests
-add_subdirectory( common )
-add_subdirectory( gerbview )
-add_subdirectory( eeschema )
-add_subdirectory( libs )
-add_subdirectory( pcbnew )
-add_subdirectory( unittests )
-
 # Utility/debugging/profiling programs
-add_subdirectory( tools )
+add_subdirectory( common_tools )
+add_subdirectory( pcbnew_tools )
+
+if( KICAD_BUILD_PNS_DEBUG_TOOL )
+    add_subdirectory( pns )
+endif()
 
