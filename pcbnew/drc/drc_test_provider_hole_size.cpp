@@ -30,7 +30,6 @@
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider_clearance_base.h>
-#include "convert_basic_shapes_to_polygon.h"
 
 /*
     Drilled hole size test. scans vias/through-hole pads and checks for min drill sizes
@@ -66,7 +65,6 @@ public:
 private:
     void checkViaHole( PCB_VIA* via, bool aExceedMicro, bool aExceedStd );
     void checkPadHole( PAD* aPad );
-    void checkPadStack( PAD* aPad );
 };
 
 
@@ -79,21 +77,30 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
 
         for( FOOTPRINT* footprint : m_drcEngine->GetBoard()->Footprints() )
         {
-            if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE )
-                    && m_drcEngine->IsErrorLimitExceeded( DRCE_PADSTACK ) )
-            {
-                break;
-            }
-
             for( PAD* pad : footprint->Pads() )
             {
                 if( !m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE ) )
                     checkPadHole( pad );
-
-                if( !m_drcEngine->IsErrorLimitExceeded( DRCE_PADSTACK ) )
-                    checkPadStack( pad );
             }
         }
+    }
+
+    for( FOOTPRINT* footprint : m_drcEngine->GetBoard()->Footprints() )
+    {
+        footprint->CheckPads(
+                [&]( const PAD* pad, int errorCode, const wxString& msg )
+                {
+                    if( m_drcEngine->IsErrorLimitExceeded( errorCode ) )
+                        return;
+
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( errorCode );
+
+                    if( !msg.IsEmpty() )
+                        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+
+                    drcItem->SetItems( pad );
+                    reportViolation( drcItem, pad->GetPosition(), UNDEFINED_LAYER );
+                } );
     }
 
     if( !m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_DRILL_OUT_OF_RANGE )
@@ -128,53 +135,6 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
     reportRuleStatistics();
 
     return !m_drcEngine->IsCancelled();
-}
-
-void DRC_TEST_PROVIDER_HOLE_SIZE::checkPadStack( PAD* aPad )
-{
-    if( aPad->GetAttribute() == PAD_ATTRIB::PTH )
-    {
-        if( !aPad->IsOnCopperLayer() )
-        {
-            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_PADSTACK );
-            m_msg.Printf( _( " (PTH pad has no copper layers)" ) );
-
-            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
-            drcItem->SetItems( aPad );
-
-            reportViolation( drcItem, aPad->GetPosition(), UNDEFINED_LAYER );
-        }
-        else
-        {
-            LSET           lset = aPad->GetLayerSet() & LSET::AllCuMask();
-            PCB_LAYER_ID   layer = lset.Seq().at( 0 );
-            int            maxError = m_drcEngine->GetBoard()->GetDesignSettings().m_MaxError;
-            SHAPE_POLY_SET padOutline;
-
-            aPad->TransformShapeWithClearanceToPolygon( padOutline, layer, 0, maxError,
-                                                        ERROR_LOC::ERROR_INSIDE );
-
-            const SHAPE_SEGMENT* drillShape = aPad->GetEffectiveHoleShape();
-            const SEG            drillSeg   = drillShape->GetSeg();
-            SHAPE_POLY_SET       drillOutline;
-
-            TransformOvalToPolygon( drillOutline, drillSeg.A, drillSeg.B,
-                                    drillShape->GetWidth(), maxError, ERROR_LOC::ERROR_INSIDE );
-
-            padOutline.BooleanSubtract( drillOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
-
-            if( padOutline.IsEmpty() )
-            {
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_PADSTACK );
-                m_msg.Printf( _( " (PTH pad's hole leaves no copper)" ) );
-
-                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
-                drcItem->SetItems( aPad );
-
-                reportViolation( drcItem, aPad->GetPosition(), UNDEFINED_LAYER );
-            }
-        }
-    }
 }
 
 void DRC_TEST_PROVIDER_HOLE_SIZE::checkPadHole( PAD* aPad )

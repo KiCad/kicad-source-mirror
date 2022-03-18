@@ -339,27 +339,24 @@ public:
     /**
      * Test if footprint attributes for type (SMD/Through hole/Other) match the expected
      * type based on the pads in the footprint.
-     * Footprints with plated through-hole pads should usually be marked through hole even if they also
-     * have SMD because they might not be auto-placed.  Exceptions to this might be shielded connectors
-     * Otherwise, footprints with SMD pads should be marked SMD
+     * Footprints with plated through-hole pads should usually be marked through hole even if they
+     * also have SMD because they might not be auto-placed.  Exceptions to this might be shielded
+     * connectors.  Otherwise, footprints with SMD pads should be marked SMD.
      * Footprints with no connecting pads should be marked "Other"
      *
      * @param aErrorHandler callback to handle the error messages generated
      */
-    void CheckFootprintAttributes( const std::function<void( const wxString& msg )>* aErrorHandler );
+    void CheckFootprintAttributes( const std::function<void( const wxString& )>& aErrorHandler );
 
     /**
-     * Test if footprint attributes for type (SMD/Through hole/Other) match the expected
-     * type based on the pads in the footprint.
-     * Footprints with plated through-hole pads should usually be marked through hole even if they also
-     * have SMD because they might not be auto-placed.  Exceptions to this might be shielded connectors
-     * Otherwise, footprints with SMD pads should be marked SMD
-     * Footprints with no connecting pads should be marked "Other"
+     * Run DRC checks on footprint's pads.
      *
      * @param aErrorHandler callback to handle the error messages generated
      */
-    void CheckFootprintTHPadNoHoles( const std::function<void( const wxString& msg, const VECTOR2I& position )>*
-                                     aErrorHandler );
+    void CheckPads( const std::function<void( const PAD*, int, const wxString& )>& aErrorHandler );
+
+    void CheckOverlappingPads( const std::function<void( const PAD*, const PAD*,
+                                                         const VECTOR2I& )>& aErrorHandler );
 
     /**
      * Generate pads shapes on layer \a aLayer as polygons and adds these polygons to

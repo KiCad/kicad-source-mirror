@@ -26,6 +26,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <footprint.h>
+#include <pad.h>
 #include <pcb_marker.h>
 #include <drc/drc_item.h>
 #include <footprint_edit_frame.h>
@@ -101,12 +102,15 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
         return;
     }
 
-    OUTLINE_ERROR_HANDLER errorHandler =
-            [&]( const wxString& aMsg, BOARD_ITEM* aItemA, BOARD_ITEM* aItemB, const VECTOR2I& aPt )
+    auto errorHandler =
+            [&]( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB, int aErrorCode,
+                 const wxString& aMsg, const VECTOR2I& aPt )
             {
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MALFORMED_COURTYARD );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( aErrorCode );
 
-                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + aMsg );
+                if( !aMsg.IsEmpty() )
+                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + aMsg );
+
                 drcItem->SetItems( aItemA, aItemB );
 
                 PCB_MARKER* marker = new PCB_MARKER( drcItem, aPt );
@@ -114,37 +118,32 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
                 m_frame->GetCanvas()->GetView()->Add( marker );
             };
 
-    footprint->BuildPolyCourtyards( &errorHandler );
-
-
-    const std::function<void( const wxString& msg )> typeWarning =
-            [&]( const wxString& aMsg )
+    OUTLINE_ERROR_HANDLER outlineErrorHandler =
+            [&]( const wxString& aMsg, BOARD_ITEM* aItemA, BOARD_ITEM* aItemB, const VECTOR2I& aPt )
             {
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_FOOTPRINT_TYPE_MISMATCH );
-
-                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + aMsg );
-                drcItem->SetItems( footprint );
-
-                PCB_MARKER* marker = new PCB_MARKER( drcItem, wxPoint( 0, 0 ) );
-                board->Add( marker );
-                m_frame->GetCanvas()->GetView()->Add( marker );
+                errorHandler( aItemA, aItemB, DRCE_MALFORMED_COURTYARD, aMsg, aPt );
             };
 
-    const std::function<void( const wxString& msg, const VECTOR2I& position )> tstHoleInTHPad =
-            [&]( const wxString& aMsg, const VECTOR2I& aPosition )
+    footprint->BuildPolyCourtyards( &outlineErrorHandler );
+
+    footprint->CheckFootprintAttributes(
+            [&]( const wxString& msg )
             {
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_PAD_TH_WITH_NO_HOLE );
+                errorHandler( footprint, nullptr, DRCE_FOOTPRINT_TYPE_MISMATCH, msg, { 0, 0 } );
+            } );
 
-                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + aMsg );
-                drcItem->SetItems( footprint );
+    footprint->CheckPads(
+            [&]( const PAD* aPad, int aErrorCode, const wxString& aMsg )
+            {
+                errorHandler( aPad, nullptr, aErrorCode, aMsg, aPad->GetPosition() );
+            } );
 
-                PCB_MARKER* marker = new PCB_MARKER( drcItem, aPosition );
-                board->Add( marker );
-                m_frame->GetCanvas()->GetView()->Add( marker );
-            };
+    footprint->CheckOverlappingPads(
+            [&]( const PAD* aPadA, const PAD* aPadB, const VECTOR2I& aPosition )
+            {
+                errorHandler( aPadA, aPadB, DRCE_OVERLAPPING_PADS, wxEmptyString, aPosition );
+            } );
 
-    footprint->CheckFootprintAttributes( &typeWarning );
-    footprint->CheckFootprintTHPadNoHoles( &tstHoleInTHPad );
     m_checksRun = true;
 
     SetMarkersProvider( new DRC_ITEMS_PROVIDER( board, MARKER_BASE::MARKER_DRC ) );
@@ -178,7 +177,7 @@ void DIALOG_FOOTPRINT_CHECKER::OnSelectItem( wxDataViewEvent& aEvent )
 
     if( node && item )
     {
-        PCB_LAYER_ID             principalLayer = item->GetLayer();
+        PCB_LAYER_ID             principalLayer = item->GetLayerSet().Seq()[0];
         LSET                     violationLayers;
         std::shared_ptr<RC_ITEM> rc_item = node->m_RcItem;
 

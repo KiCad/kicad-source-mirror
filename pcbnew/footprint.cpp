@@ -45,9 +45,12 @@
 #include <view/view.h>
 #include <geometry/shape_null.h>
 #include <i18n_utility.h>
+#include <drc/drc_item.h>
+#include <geometry/shape_segment.h>
 #include <convert_shape_list_to_polygon.h>
 #include <geometry/convex_hull.h>
 #include "fp_textbox.h"
+#include "convert_basic_shapes_to_polygon.h"
 
 FOOTPRINT::FOOTPRINT( BOARD* parent ) :
         BOARD_ITEM_CONTAINER((BOARD_ITEM*) parent, PCB_FOOTPRINT_T ),
@@ -2179,11 +2182,10 @@ void FOOTPRINT::BuildPolyCourtyards( OUTLINE_ERROR_HANDLER* aErrorHandler )
 }
 
 
-void FOOTPRINT::CheckFootprintAttributes( const std::function<void( const wxString& msg )>* aErrorHandler )
+void FOOTPRINT::CheckFootprintAttributes( const std::function<void( const wxString& )>& aErrorHandler )
 {
-
-    int      likelyAttr = GetLikelyAttribute();
-    int      setAttr = ( GetAttributes() & ( FP_SMD | FP_THROUGH_HOLE ) );
+    int likelyAttr = GetLikelyAttribute();
+    int setAttr = ( GetAttributes() & ( FP_SMD | FP_THROUGH_HOLE ) );
 
     // This is only valid if the footprint doesn't have FP_SMD and FP_THROUGH_HOLE set
     // Which is, unfortunately, possible in theory but not in the UI (I think)
@@ -2206,29 +2208,94 @@ void FOOTPRINT::CheckFootprintAttributes( const std::function<void( const wxStri
 
         msg = wxT( "(" ) + msg + wxT( ")" );
 
-        (*aErrorHandler)( msg );
+        (aErrorHandler)( msg );
     }
 }
 
-void FOOTPRINT::CheckFootprintTHPadNoHoles(
-        const std::function<void( const wxString& msg, const VECTOR2I& position )>* aErrorHandler )
+
+void FOOTPRINT::CheckPads( const std::function<void( const PAD*, int,
+                                                     const wxString& )>& aErrorHandler )
 {
     if( aErrorHandler == nullptr )
         return;
 
-    for( const PAD* pad: Pads() )
+    for( PAD* pad: Pads() )
     {
-
-        if( pad->GetAttribute() != PAD_ATTRIB::PTH
-            && pad->GetAttribute() != PAD_ATTRIB::NPTH )
-            continue;
-
-        if( pad->GetDrillSizeX() < 1 || pad->GetDrillSizeY() < 1 )
+        if( pad->GetAttribute() == PAD_ATTRIB::PTH ||  pad->GetAttribute() == PAD_ATTRIB::NPTH )
         {
-            wxString msg;
-            msg.Printf( _( "(pad \"%s\")" ), pad->GetNumber() );
+            if( pad->GetDrillSizeX() < 1 || pad->GetDrillSizeY() < 1 )
+                (aErrorHandler)( pad, DRCE_PAD_TH_WITH_NO_HOLE, wxEmptyString );
+        }
 
-            (*aErrorHandler)( msg, pad->GetPosition() );
+        if( pad->GetAttribute() == PAD_ATTRIB::PTH )
+        {
+            if( !pad->IsOnCopperLayer() )
+            {
+                (aErrorHandler)( pad, DRCE_PADSTACK, _( "(PTH pad has no copper layers)" ) );
+            }
+            else
+            {
+                LSET           lset = pad->GetLayerSet() & LSET::AllCuMask();
+                PCB_LAYER_ID   layer = lset.Seq().at( 0 );
+                SHAPE_POLY_SET padOutline;
+
+                pad->TransformShapeWithClearanceToPolygon( padOutline, layer, 0, ARC_HIGH_DEF,
+                                                           ERROR_LOC::ERROR_INSIDE );
+
+                const SHAPE_SEGMENT* drillShape = pad->GetEffectiveHoleShape();
+                const SEG            drillSeg   = drillShape->GetSeg();
+                SHAPE_POLY_SET       drillOutline;
+
+                TransformOvalToPolygon( drillOutline, drillSeg.A, drillSeg.B,
+                                        drillShape->GetWidth(), ARC_HIGH_DEF,
+                                        ERROR_LOC::ERROR_INSIDE );
+
+                padOutline.BooleanSubtract( drillOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+
+                if( padOutline.IsEmpty() )
+                {
+                    (aErrorHandler)( pad, DRCE_PADSTACK, _( "(PTH pad's hole leaves no copper)" ) );
+                }
+            }
+        }
+    }
+}
+
+
+void FOOTPRINT::CheckOverlappingPads( const std::function<void( const PAD*, const PAD*,
+                                                                const VECTOR2I& )>& aErrorHandler )
+{
+    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, int> checkedPairs;
+
+    for( PAD* pad : Pads() )
+    {
+        for( PAD* other : Pads() )
+        {
+            if( other == pad || pad->SameLogicalPadAs( other ) )
+                continue;
+
+            // store canonical order so we don't collide in both directions
+            // (a:b and b:a)
+            if( static_cast<void*>( pad ) > static_cast<void*>( other ) )
+                std::swap( pad, other );
+
+            if( checkedPairs.count( { pad, other } ) )
+            {
+                continue;
+            }
+            else
+            {
+                checkedPairs[ { pad, other } ] = 1;
+            }
+
+            VECTOR2I pos;
+            SHAPE*   padShape = pad->GetEffectiveShape().get();
+            SHAPE*   otherShape = other->GetEffectiveShape().get();
+
+            if( padShape->Collide( otherShape, 0, nullptr, &pos ) )
+            {
+                (aErrorHandler)( pad, other, pos );
+            }
         }
     }
 }

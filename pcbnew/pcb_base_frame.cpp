@@ -335,7 +335,7 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
         SHAPE_POLY_SET itemPoly, clippedPoly;
 
         if( aLayer == UNDEFINED_LAYER )
-            aLayer = aItem->GetLayer();
+            aLayer = aItem->GetLayerSet().Seq()[0];
 
         switch( aItem->Type() )
         {
