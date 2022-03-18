@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-07 16:51-0800\n"
-"PO-Revision-Date: 2022-03-08 00:49+0000\n"
+"PO-Revision-Date: 2022-03-18 19:51+0000\n"
 "Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -742,9 +742,8 @@ msgid "Show model bounding boxes"
 msgstr "Mostrar cajas de delimitación de los modelos"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:28
-#, fuzzy
 msgid "Show copper and tech layers thickness (very slow)"
-msgstr "Mostrar grosor del cobre"
+msgstr "Mostrar grosor de las capas de cobre y tecnología (muy lento)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:31
 msgid "Highlight items on rollover"
@@ -3455,9 +3454,8 @@ msgstr "Raya-punto"
 
 #: common/dialogs/panel_setup_netclasses.cpp:97 common/eda_shape.cpp:1626
 #: include/stroke_params.h:74
-#, fuzzy
 msgid "Dash-Dot-Dot"
-msgstr "Raya-punto"
+msgstr "Guión-Punto-Punto"
 
 #: common/dialogs/panel_setup_netclasses.cpp:442
 msgid "Netclass must have a name."
@@ -4168,9 +4166,8 @@ msgstr "Gráficos"
 #: common/eda_item.cpp:373 eeschema/lib_textbox.cpp:367
 #: eeschema/sch_textbox.cpp:370 pcbnew/fp_textbox.cpp:206
 #: pcbnew/pcb_textbox.cpp:184
-#, fuzzy
 msgid "Text Box"
-msgstr "Texto trasero"
+msgstr "Caja de texto"
 
 #: common/eda_item.cpp:323 common/eda_item.cpp:324 common/eda_item.cpp:325
 #: common/eda_item.cpp:326 common/eda_item.cpp:332 common/eda_item.cpp:333
@@ -4244,9 +4241,8 @@ msgstr "Etiqueta de red"
 
 #: common/eda_item.cpp:353 eeschema/sch_label.cpp:750
 #: eeschema/sch_label.cpp:1063
-#, fuzzy
 msgid "Directive Label"
-msgstr "Etiqueta de red"
+msgstr "Etiqueta directiva"
 
 #: common/eda_item.cpp:354 eeschema/sch_label.cpp:751
 msgid "Global Label"
@@ -4747,9 +4743,9 @@ msgid "Default Font"
 msgstr "Fuente por defecto"
 
 #: common/font/fontconfig.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading font '%s'."
-msgstr "Error al cargar la placa '%s'."
+msgstr "Error al cargar la fuente '%s'."
 
 #: common/font/fontconfig.cpp:120
 #, c-format
@@ -5254,14 +5250,12 @@ msgid "Symbol fields"
 msgstr "Campos del símbolo"
 
 #: common/layer_id.cpp:117
-#, fuzzy
 msgid "Sheet references"
-msgstr "&Guardar Preferencias"
+msgstr "Referencias de la hoja"
 
 #: common/layer_id.cpp:118
-#, fuzzy
 msgid "Net class references"
-msgstr "Preferencias de color"
+msgstr "Referencias de clase de red"
 
 #: common/layer_id.cpp:119
 msgid "Symbol body outlines"
@@ -5277,9 +5271,8 @@ msgid "Schematic text && graphics"
 msgstr "Texto de esquema y gráficos"
 
 #: common/layer_id.cpp:122
-#, fuzzy
 msgid "Schematic text && graphics backgrounds"
-msgstr "Texto de esquema y gráficos"
+msgstr "Texto de esquema && fondos gráficos"
 
 #: common/layer_id.cpp:123
 msgid "Pins"
@@ -5323,9 +5316,8 @@ msgid "ERC errors"
 msgstr "Errores de ERC"
 
 #: common/layer_id.cpp:133
-#, fuzzy
 msgid "ERC exclusions"
-msgstr "Exclusiones DRC"
+msgstr "Exclusiones ERC"
 
 #: common/layer_id.cpp:134 common/layer_id.cpp:171
 #: pcbnew/widgets/appearance_controls.cpp:354
@@ -5753,9 +5745,8 @@ msgid "Excluded warning: "
 msgstr "Escala: "
 
 #: common/rc_item.cpp:364
-#, fuzzy
 msgid "Excluded error: "
-msgstr "Excluido "
+msgstr "Error excluido: "
 
 #: common/rc_item.cpp:368
 msgid "Warning: "
@@ -6290,9 +6281,8 @@ msgid "Cycle inactive layers between normal, dimmed, and hidden"
 msgstr "Alternar capas inactivas entre normal, atenuada y oculta"
 
 #: common/tool/actions.cpp:549
-#, fuzzy
 msgid "Draw Bounding Boxes"
-msgstr "Caja envolvente"
+msgstr "Dibujar cajas delimitadoras"
 
 #: common/tool/actions.cpp:554
 msgid "Select item(s)"
@@ -6828,9 +6818,8 @@ msgid "Eagle XML files"
 msgstr "Archivos XML de Eagle"
 
 #: common/wildcards_and_files_ext.cpp:288
-#, fuzzy
 msgid "OrcadPCB2 netlist files"
-msgstr "Archivos de redes de KiCad"
+msgstr "Archivos de lista de redes OrcadPCB2"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "KiCad netlist files"
@@ -6886,9 +6875,8 @@ msgid "Legacy footprint library files"
 msgstr "Archivos de huellas obsoletos"
 
 #: common/wildcards_and_files_ext.cpp:375
-#, fuzzy
 msgid "Altium PCB footprint library files"
-msgstr "Archivos de librería de huellas de Geda PCB"
+msgstr "Archivos de la biblioteca de huellas de PCB de Altium"
 
 #: common/wildcards_and_files_ext.cpp:381
 msgid "Eagle ver. 6.x XML library files"
@@ -8675,9 +8663,8 @@ msgid "Violation Severity"
 msgstr "Severidad de la infracción"
 
 #: eeschema/dialogs/dialog_erc.cpp:791 pcbnew/dialogs/dialog_drc.cpp:725
-#, fuzzy
 msgid "Edit ignored violations..."
-msgstr "Editar opciones de la línea..."
+msgstr "Editar las violaciones ignoradas..."
 
 #: eeschema/dialogs/dialog_erc.cpp:868 pcbnew/dialogs/dialog_gendrill.cpp:484
 #, c-format
@@ -8723,9 +8710,9 @@ msgid "Violations (%d)"
 msgstr "Infracciones (%d)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored Tests (%d)"
-msgstr "Elementos no conectados (%d)"
+msgstr "Pruebas ignoradas (%d)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:139
 #: pcbnew/dialogs/dialog_drc_base.cpp:183
@@ -8789,9 +8776,8 @@ msgstr "(%s)"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:170
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:108
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:83
-#, fuzzy
 msgid "Font:"
-msgstr "Tamaño de fuente:"
+msgstr "Fuente:"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:101
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:173
@@ -8810,15 +8796,13 @@ msgstr "Fuente de KiCad"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:116
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:85
-#, fuzzy
 msgid "Horizontal text"
-msgstr "Horizontal izquierda"
+msgstr "Texto horizontal"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:121
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:90
-#, fuzzy
 msgid "Vertical text"
-msgstr "Vertical"
+msgstr "Texto vertical"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:146
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:115
@@ -8832,7 +8816,6 @@ msgstr "Alineación izquierda"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:120
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:104
 #: eeschema/dialogs/dialog_text_properties_base.cpp:104
-#, fuzzy
 msgid "Align horizontal center"
 msgstr "Alinear al centro horizontal"
 
@@ -8856,7 +8839,6 @@ msgstr "Alineación superior"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:140
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:119
 #: eeschema/dialogs/dialog_text_properties_base.cpp:119
-#, fuzzy
 msgid "Align vertical center"
 msgstr "Alinear al centro vertical"
 
@@ -9032,9 +9014,8 @@ msgstr "Estilo de línea:"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:219
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:90
 #: eeschema/dialogs/dialog_text_properties_base.cpp:213
-#, fuzzy
 msgid "Fill color:"
-msgstr "Color de línea:"
+msgstr "Color de relleno:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:363
 msgid "Junction size:"
@@ -9134,9 +9115,8 @@ msgid "Junction Properties"
 msgstr "Propiedades de la unión"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:93
-#, fuzzy
 msgid "Pin length:"
-msgstr "Longitud de &pin:"
+msgstr "Longitud de pin:"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:98
 msgid "Global Label Properties"
@@ -9152,23 +9132,20 @@ msgid "Label Properties"
 msgstr "Propiedades de la etiqueta"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:101
-#, fuzzy
 msgid "Directive Label Properties"
-msgstr "Propiedades de la etiqueta jerárquica"
+msgstr "Propiedades de la etiqueta directiva"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:102
 msgid "Hierarchical Sheet Pin Properties"
 msgstr "Propiedades de pin de hoja jerárquica"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:378
-#, fuzzy
 msgid "Label can not be empty."
-msgstr "El nombre de red no puede estar vacío."
+msgstr "La etiqueta no puede estar vacía."
 
 #: eeschema/dialogs/dialog_label_properties.cpp:558
-#, fuzzy
 msgid "The first field is mandatory."
-msgstr "Los primeros %d campos son obligatorios."
+msgstr "El primer campo es obligatorio."
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:29
 #: eeschema/dialogs/dialog_label_properties_base.cpp:38
@@ -9342,9 +9319,8 @@ msgid "Passive"
 msgstr "Pasivo"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:161
-#, fuzzy
 msgid "Dot"
-msgstr "Puntos"
+msgstr "Punto"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:167
 msgid "Diamond"
@@ -9462,9 +9438,8 @@ msgid "Pin count:"
 msgstr "Número de pines:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:133
-#, fuzzy
 msgid "Duplicate pins:"
-msgstr "Duplicados:"
+msgstr "Pines duplicados:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:74
 msgid "Pin Table"
@@ -9580,9 +9555,8 @@ msgstr "Nuevo símbolo"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:161
 #: eeschema/dialogs/dialog_text_properties_base.cpp:158
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:150
-#, fuzzy
 msgid "Border"
-msgstr "Orden"
+msgstr "Borde"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:38
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:117
@@ -9591,11 +9565,10 @@ msgid "Border width:"
 msgstr "Ancho del contorno:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:52
-#, fuzzy
 msgid "Set border width to 0 to use Schematic default symbol line width."
 msgstr ""
-"Establezca el ancho a 0 para utilizar el ancho de las líneas de la clase de "
-"red."
+"Establezca el ancho del borde a 0 para utilizar el ancho de línea del "
+"símbolo por defecto de Schematic."
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:60
 msgid "Fill Style"
@@ -9614,9 +9587,8 @@ msgid "Fill with body background color"
 msgstr "Rellenar con el color del fondo"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:76
-#, fuzzy
 msgid "Fill with:"
-msgstr "Typo de relleno:"
+msgstr "Rellenar con:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:91
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:168
@@ -9859,9 +9831,8 @@ msgstr "Propiedades del símbolo de librería"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties.cpp:217
 #: eeschema/dialogs/dialog_text_properties.cpp:354
-#, fuzzy
 msgid "Text can not be empty."
-msgstr "El nombre de red no puede estar vacío."
+msgstr "El texto no puede estar vacío."
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:201
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:64
@@ -9882,9 +9853,8 @@ msgstr "Editar con el Editor de símbolos"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.h:106
 #: eeschema/dialogs/dialog_text_properties.cpp:54
 #: pcbnew/dialogs/dialog_textbox_properties_base.h:103
-#, fuzzy
 msgid "Text Box Properties"
-msgstr "Propiedades del texto"
+msgstr "Propiedades de la caja de texto"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:76
 msgid "Set width to 0 to use Netclass line widths."
@@ -10744,18 +10714,16 @@ msgid "Filled shape"
 msgstr "Forma rellena"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:110
-#, fuzzy
 msgid "Set line width to 0 to use Schematic Editor line widths."
 msgstr ""
-"Establezca el ancho a 0 para utilizar el ancho de las líneas de la clase de "
-"red."
+"Establecer el ancho de línea a 0 para utilizar el ancho de línea del Editor "
+"de Esquemas."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:114
-#, fuzzy
 msgid "Set line color to transparent to use Schematic Editor colors."
 msgstr ""
-"Establezca el color como transparente para utilizar los colores del Editor "
-"de Esquemas."
+"Establecer el color de línea a transparente para utilizar los colores del "
+"Editor de Esquemas."
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:62
 #, c-format
@@ -11256,9 +11224,8 @@ msgid "Subcircuit"
 msgstr "Subcircuito"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:85
-#, fuzzy
 msgid "Code Model"
-msgstr "Mover Todos los Módulos"
+msgstr "Código Modelo"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:497
 msgid ""
@@ -11290,49 +11257,40 @@ msgid "For a JFET, pin order is drain, gate, source"
 msgstr "Para un JFET, el orden de los pines es drenaje, puerta, fuente"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:803
-#, fuzzy
 msgid "Invalid Impedance value"
-msgstr "Valor de propiedad inválido"
+msgstr "Valor de impedancia inválido"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:818
-#, fuzzy
 msgid "Invalid delay value"
-msgstr "Valor de propiedad inválido"
+msgstr "Valor de retraso inválido"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:833
-#, fuzzy
 msgid "Invalid frequency value"
-msgstr "Valor de propiedad inválido"
+msgstr "Valor de frecuencia inválido"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:845
-#, fuzzy
 msgid "Invalid length in wavelength value"
-msgstr "Nombre de pin alternativo inválido"
+msgstr "Longitud en el valor de la longitud de onda inválida"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:870
-#, fuzzy
 msgid "Invalid resistance value"
-msgstr "Valor de propiedad inválido"
+msgstr "Valor de resistencia inválido"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:881
-#, fuzzy
 msgid "Invalid capacitance value"
-msgstr "Valor de cadena Spice no válido"
+msgstr "Valor de capacitancia inválido"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:892
-#, fuzzy
 msgid "Invalid inductance value"
-msgstr "Valor de cadena Spice no válido"
+msgstr "Valor de inductancia inválido"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:903
-#, fuzzy
 msgid "Invalid conductance value"
-msgstr "Valor de propiedad inválido"
+msgstr "Valor de conductancia inválido"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:914
-#, fuzzy
 msgid "Invalid length value"
-msgstr "Valor de propiedad inválido"
+msgstr "Valor de longitud inválido"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1066
 #, c-format
@@ -11699,9 +11657,8 @@ msgid "Source"
 msgstr "Fuente"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:938
-#, fuzzy
 msgid "Line model"
-msgstr "Modo de impresión"
+msgstr "Modelo de línea"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:954
 #: pcb_calculator/transline_ident.cpp:149
@@ -11727,9 +11684,8 @@ msgid "Propagation delay"
 msgstr "Retardo de propagación"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:972
-#, fuzzy
 msgid "s"
-msgstr "ns"
+msgstr "s"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:976
 #: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
@@ -11738,9 +11694,8 @@ msgid "Frequency"
 msgstr "Frecuencia"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:987
-#, fuzzy
 msgid "Length in wavelength"
-msgstr "Longitud en empaquetado"
+msgstr "Longitud en longitud de onda"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1000
 msgid "Use time delay"
@@ -11751,9 +11706,8 @@ msgid "Use frequency and number of wavelength"
 msgstr "Usar frecuencia y número de longitud de onda"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1002
-#, fuzzy
 msgid "Delay / Electrical length"
-msgstr "Longitud eléctrica"
+msgstr "Retardo / Longitud eléctrica"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1010
 msgid "Lossless"
@@ -11792,9 +11746,8 @@ msgid "siemens / unit"
 msgstr "siemens / unidad"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1079
-#, fuzzy
 msgid "Extra parameters"
-msgstr "Parámetros incorrectos"
+msgstr "Parámetros adicionales"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1092
 msgid ""
@@ -11817,14 +11770,12 @@ msgstr ""
 "Cualquier otra combinación dará resultados erróneos y no debe probarse."
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1100
-#, fuzzy
 msgid "Lossy"
-msgstr "Tg Pérdida"
+msgstr "con pérdida"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1111
-#, fuzzy
 msgid "Transmission Line"
-msgstr "Tipo de línea de transmisión"
+msgstr "Línea de transmisión"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1118
 msgid "Disable symbol for simulation"
@@ -12311,28 +12262,24 @@ msgid "Show hidden fields"
 msgstr "Mostrar campos ocultos"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:52
-#, fuzzy
 msgid "Show ERC errors"
-msgstr "Errores de ERC"
+msgstr "Mostrar errores de ERC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:55
-#, fuzzy
 msgid "Show ERC warnings"
-msgstr "Avisos de ERC"
+msgstr "Mostrar advertencias de ERC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:58
-#, fuzzy
 msgid "Show ERC exclusions"
-msgstr "Exclusiones DRC"
+msgstr "Mostrar exclusiones de ERC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:61
 msgid "Show page limi&ts"
 msgstr "Mos&trar límites de página"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:69
-#, fuzzy
 msgid "Selection && Highlighting"
-msgstr "Remarcar selección"
+msgstr "Selección && Resaltado"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:71
 msgid "Draw selected text items as box"
@@ -12347,17 +12294,14 @@ msgid "Fill selected shapes"
 msgstr "Rellenar formas seleccionadas"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:86
-#, fuzzy
 msgid "Selection thickness:"
-msgstr "Grosor de línea por defecto:"
+msgstr "Espesor de selección:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:94
-#, fuzzy
 msgid "(selection color can be edited in the \"Colors\" page)"
-msgstr "(el color de resalte puede editarse en la página \"Colores\")"
+msgstr "(el color de la selección se puede editar en la página \"Colores\")"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:98
-#, fuzzy
 msgid "Highlight thickness:"
 msgstr "Grosor de resaltado:"
 
@@ -12368,9 +12312,8 @@ msgstr "Prueba cruzada"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:115
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
-#, fuzzy
 msgid "Cross-probe on selection"
-msgstr "Zoom selección"
+msgstr "Prueba cruzada sobre la selección"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:119
 msgid "Center view on cross-probed items"
@@ -12697,15 +12640,13 @@ msgstr "Líneas discontinuas"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:220
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:28
-#, fuzzy
 msgid "Dash length:"
-msgstr "Longitud de vía:"
+msgstr "Longitud del guión:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:227
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:35
-#, fuzzy
 msgid "Gap length:"
-msgstr "Longitud de vía:"
+msgstr "Longitud de la brecha:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:237
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:45
@@ -13663,9 +13604,8 @@ msgid "Converted"
 msgstr "Convertido"
 
 #: eeschema/lib_item.cpp:70
-#, fuzzy
 msgid "Private"
-msgstr "Imprimir capas"
+msgstr "Privado"
 
 #: eeschema/lib_pin.cpp:1073 pcbnew/dialogs/dialog_pad_properties_base.cpp:1467
 msgid "Pos X"
@@ -13711,9 +13651,8 @@ msgid "Graphic Text '%s'"
 msgstr "Texto gráfico '%s'"
 
 #: eeschema/lib_textbox.cpp:299 eeschema/sch_textbox.cpp:316
-#, fuzzy
 msgid "Graphic Text Box"
-msgstr "Texto gráfico"
+msgstr "Caja de texto gráfico"
 
 #: eeschema/lib_textbox.cpp:369 eeschema/sch_label.cpp:764
 #: eeschema/sch_text.cpp:448 eeschema/sch_textbox.cpp:372
@@ -14126,9 +14065,8 @@ msgstr "Atrás a la hoja seleccionada previamente"
 
 #: eeschema/sch_field.cpp:848 eeschema/sch_label.cpp:191
 #: eeschema/sch_label.cpp:1076
-#, fuzzy
 msgid "Sheet References"
-msgstr "Referencias entre hojas"
+msgstr "Referencias de la hoja"
 
 #: eeschema/sch_io_mgr.cpp:35 pcbnew/io_mgr.cpp:42
 #, c-format
@@ -15756,9 +15694,8 @@ msgid "Library changes are unsaved"
 msgstr "Los cambios en la biblioteca no se han guardado"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:247
-#, fuzzy
 msgid "Symbol library loading was cancelled by user."
-msgstr "La librería de símbolos '%s' ya existe."
+msgstr "La carga de la biblioteca de símbolos fue cancelada por el usuario."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:591
 #: eeschema/tools/sch_edit_tool.cpp:118
@@ -16574,14 +16511,12 @@ msgstr "Añadir un elemento de texto"
 
 #: eeschema/tools/ee_actions.cpp:230 eeschema/tools/ee_actions.cpp:345
 #: pcbnew/tools/pcb_actions.cpp:128
-#, fuzzy
 msgid "Add Text Box"
-msgstr "Añadir texto"
+msgstr "Añadir cuadro de texto"
 
 #: eeschema/tools/ee_actions.cpp:230
-#, fuzzy
 msgid "Add a text box item"
-msgstr "Añadir un elemento de texto"
+msgstr "Añadir un elemento de cuadro de texto"
 
 #: eeschema/tools/ee_actions.cpp:235 eeschema/tools/ee_actions.cpp:759
 msgid "Add Lines"
@@ -16676,14 +16611,12 @@ msgid "Add a net label"
 msgstr "Añadir una etiqueta de red"
 
 #: eeschema/tools/ee_actions.cpp:306
-#, fuzzy
 msgid "Add Net Class Directive"
-msgstr "Clase de red"
+msgstr "Agregar directiva de clase de red"
 
 #: eeschema/tools/ee_actions.cpp:306
-#, fuzzy
 msgid "Add a net class directive label"
-msgstr "Añadir una etiqueta de red"
+msgstr "Añadir una etiqueta de directiva de clase de red"
 
 #: eeschema/tools/ee_actions.cpp:312
 msgid "Add Hierarchical Label"
@@ -16722,9 +16655,8 @@ msgid "Add text"
 msgstr "Añadir texto"
 
 #: eeschema/tools/ee_actions.cpp:345
-#, fuzzy
 msgid "Add a text box"
-msgstr "Añadir un elemento de texto"
+msgstr "Añadir un cuadro de texto"
 
 #: eeschema/tools/ee_actions.cpp:350 pagelayout_editor/tools/pl_actions.cpp:49
 msgid "Add Rectangle"
@@ -16919,14 +16851,12 @@ msgid "Change existing item to a label"
 msgstr "Cambiar el elemento existente a una etiqueta"
 
 #: eeschema/tools/ee_actions.cpp:488
-#, fuzzy
 msgid "Change to Directive Label"
-msgstr "Cambiar a etiqueta jerárquica"
+msgstr "Cambiar a etiqueta de directiva"
 
 #: eeschema/tools/ee_actions.cpp:488
-#, fuzzy
 msgid "Change existing item to a directive label"
-msgstr "Cambiar el elemento existente a una etiqueta"
+msgstr "Cambiar el elemento existente a una etiqueta de directiva"
 
 #: eeschema/tools/ee_actions.cpp:493
 msgid "Change to Hierarchical Label"
@@ -17164,14 +17094,12 @@ msgid "Generate a bill of materials for the current schematic"
 msgstr "Generar una lista de materiales para el esquema actual"
 
 #: eeschema/tools/ee_actions.cpp:656
-#, fuzzy
 msgid "Select on PCB"
-msgstr "Seleccionar elementos en PCB"
+msgstr "Seleccionar en PCB"
 
 #: eeschema/tools/ee_actions.cpp:657
-#, fuzzy
 msgid "Select corresponding items in PCB editor"
-msgstr "Resaltar elementos correspondientes en el editor de placas"
+msgstr "Seleccionar los elementos correspondientes en el editor de PCB"
 
 #: eeschema/tools/ee_actions.cpp:662
 msgid "Show Hidden Pins"
@@ -17190,9 +17118,8 @@ msgid "Toggle display of hidden text fields"
 msgstr "Alternar la visualización de campos de texto ocultos"
 
 #: eeschema/tools/ee_actions.cpp:671
-#, fuzzy
 msgid "Show ERC Warnings"
-msgstr "Advertencias de DRC"
+msgstr "Mostrar advertencias de ERC"
 
 #: eeschema/tools/ee_actions.cpp:671
 #, fuzzy
@@ -25056,7 +24983,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:298
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:269
 msgid "Allow bridged solder mask apertures between pads"
-msgstr ""
+msgstr "Permitir aperturas entre pads de máscara de soldadura en puente"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:272
@@ -25101,12 +25028,15 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"Esta es la proporción en % del margen local entre los pads y la pasta para "
-"esta huella.\n"
-"Un valor de 10 significa que el margen en un 10% del tamaño del pad.\n"
-"Este valor puede ser sustituido por el valor local del pad.\n"
-"El valor final del margen es la suma de este valor y el valor del margen.\n"
-"Un valor negativo significa un tamaño de máscara menor que el del pad."
+"Esta es la proporción aplicada como porcentaje de separación local entre el "
+"ancho y la altura del pad de esta huella.\n"
+"Un valor de 10 significa que la separación horizontal es el 10% del ancho "
+"del pad y la separación vertical es el 10% de la altura del pad.\n"
+"Este valor puede ser sustituido por un valor local del pad.\n"
+"La separación final es la suma de este valor y el valor de separación "
+"absoluta.\n"
+"Un valor negativo significa un tamaño de apertura de plantilla menor que el "
+"del pad."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:339
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:310
@@ -25257,13 +25187,16 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
-"Esta es la proporción en porcentaje del margen local entre los pads y\n"
-"la pasta de soldadura para esta huella.\n"
-"Un valor de 10 significa que el margen en un 10% del tamaño del pad.\n"
-"El valor final del margen es la suma de este valor y el valor del margen.\n"
-"Un valor negativo significa un tamaño de máscara menor que el del pad.\n"
-"Este valor puede ser sustituido individualmente por cada pad en\n"
-"la pestaña de márgenes y ajustes locales de las propiedades del pad."
+"Esta es la proporción aplicada como porcentaje de separación local entre el "
+"ancho y la altura del pad de esta huella.\n"
+"Un valor de 10 significa que la separación horizontal es el 10% del ancho "
+"del pad y la separación vertical es el 10% de la altura del pad.\n"
+"La separación final es la suma de este valor y el valor de separación "
+"absoluta.\n"
+"Un valor negativo significa un tamaño de apertura de plantilla menor que el "
+"del pad.\n"
+"Este valor puede ser sobreescrito pad por pad en la pestaña de Separación "
+"Local y Configuración de Propiedades del Pad."
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:144
 msgid "All footprint generator scripts were loaded"
@@ -28204,9 +28137,8 @@ msgid "Track & Via Properties"
 msgstr "Propiedades de pistas y vías"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:53
-#, fuzzy
 msgid "Track and Via Dimensions"
-msgstr "Pistas y vías:"
+msgstr "Dimensiones de pistas y vías"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:147
 msgid "Set Unused Pad Properties"
@@ -29595,6 +29527,8 @@ msgstr "Margen de la máscara de soldadura:"
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
 msgid "Allow bridged solder mask apertures between pads within footprints"
 msgstr ""
+"Permitir aperturas de máscara de soldadura en puente entre los pads dentro "
+"de las huellas"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:98
 #, fuzzy
@@ -30423,11 +30357,11 @@ msgstr "Comprobando la condición de regla \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:878 pcbnew/drc/drc_engine.cpp:1300
 msgid "Assertion passed."
-msgstr ""
+msgstr "Afirmación aprobada."
 
 #: pcbnew/drc/drc_engine.cpp:880 pcbnew/drc/drc_engine.cpp:1304
 msgid "--> Assertion failed. <--"
-msgstr ""
+msgstr "--> Aserción fallida. <--"
 
 #: pcbnew/drc/drc_engine.cpp:899
 #, c-format
@@ -30636,7 +30570,7 @@ msgstr "Área restringida para zonas de cobre"
 
 #: pcbnew/drc/drc_item.cpp:88
 msgid "Thermal relief connection to zone incomplete"
-msgstr ""
+msgstr "Conexión de alivio térmico a la zona incompleta"
 
 #: pcbnew/drc/drc_item.cpp:92
 msgid "Via is not connected or connected on only one layer"
@@ -30748,6 +30682,7 @@ msgstr "Capa Cu"
 #: pcbnew/drc/drc_item.cpp:200
 msgid "Solder mask aperture bridges items with different nets"
 msgstr ""
+"La apertura de la máscara de soldadura une elementos con redes diferentes"
 
 #: pcbnew/drc/drc_item.cpp:204
 msgid "Silkscreen clipped by solder mask"
@@ -31094,6 +31029,8 @@ msgstr "(%s mínimo %s; real %s)"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:412
 msgid "No project loaded, skipping library parity tests."
 msgstr ""
+"No se ha cargado ningún proyecto, saltándose las pruebas de paridad de la "
+"biblioteca."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:416
 #, fuzzy
@@ -31226,11 +31163,15 @@ msgstr "restricciones de configuración de placa"
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:536
 msgid "Front solder mask aperture bridges items with different nets"
 msgstr ""
+"La apertura de la máscara de soldadura frontal une elementos con diferentes "
+"redes"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:452
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:541
 msgid "Rear solder mask aperture bridges items with different nets"
 msgstr ""
+"La apertura de la máscara de soldadura trasera une elementos con diferentes "
+"redes"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:644
 #, fuzzy
@@ -31264,7 +31205,7 @@ msgstr "(%s ancho máximo %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:216
 msgid "(TrueType font characters with insufficient stroke weight)"
-msgstr ""
+msgstr "(Caracteres de fuente TrueType con un peso de trazo insuficiente)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:233
 #, fuzzy, c-format
@@ -33108,6 +33049,8 @@ msgstr "La huella no tiene un patio trasero."
 #, c-format
 msgid "Missing rule-area identifier argument (A, B, or rule-area name) to %s."
 msgstr ""
+"Falta el argumento del identificador del área de la regla (A, B, o el nombre "
+"del área de la regla) a %s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:712
 #, c-format
@@ -33375,7 +33318,7 @@ msgstr "Registro de tipo desconocido: '%d'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:873
 msgid "Loading extended primitive information data..."
-msgstr ""
+msgstr "Cargando datos de información primitiva extendida..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:894
 msgid "Loading board data..."
@@ -35234,12 +35177,12 @@ msgstr "Un cable_via hace referencia a una pila de pad faltante '%s'."
 #: pcbnew/teardrop/dialog_teardrop.cpp:221
 #, c-format
 msgid "%d Teardrops created"
-msgstr ""
+msgstr "%d Lágrimas creadas"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:235
 #, c-format
 msgid "%d Teardrops removed."
-msgstr ""
+msgstr "%d Lágrimas eliminadas."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:34
 #, fuzzy
@@ -35276,7 +35219,7 @@ msgstr "Alto del texto"
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:151
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:220
 msgid "percent of d"
-msgstr ""
+msgstr "por ciento de d"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:86
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:155
@@ -35291,12 +35234,14 @@ msgid ""
 "Max pad/via size to track width ratio to create a teardrop.\n"
 "100 always creates a teardrop."
 msgstr ""
+"Relación máxima entre el tamaño de pad/vía y pista para crear una lágrima.\n"
+"100 siempre crea una lágrima."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:96
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:165
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:234
 msgid "percent of H/d"
-msgstr ""
+msgstr "por ciento de H/d"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:103
 #, fuzzy
@@ -35320,7 +35265,7 @@ msgstr "Relación de radios redondos"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:263
 msgid "Add teardrops to round shapes only "
-msgstr ""
+msgstr "Añadir lágrimas solo a las formas redondas "
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:267
 #, fuzzy
@@ -35329,7 +35274,7 @@ msgstr "Sin marca de taladro"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:269
 msgid "Add teardrops to not driiled pads, like SMD"
-msgstr ""
+msgstr "Agregar lágrimas a los pads no perforadas, como SMD"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:273
 msgid "Track to track"
@@ -35337,7 +35282,7 @@ msgstr "Pista a pista"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:275
 msgid "Add teardrops to two connected tracks of different widths"
-msgstr ""
+msgstr "Agregar lágrimas a dos pistas conectadas de diferentes anchos"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:285
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:291
@@ -35355,11 +35300,11 @@ msgstr "Curva"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:287
 msgid "Style for round shapes"
-msgstr ""
+msgstr "Estilo para formas redondas"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:293
 msgid "Style for rect shapes"
-msgstr ""
+msgstr "Estilo para formas rectas"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:299
 #, fuzzy
@@ -35376,16 +35321,21 @@ msgid ""
 "Allows a teardrop to spread over 2 tracks if the first track segment is too "
 "short"
 msgstr ""
+"Permitir que una lágrima se extienda a lo largo de 2 pistas si el segmento "
+"de la primer pista es demasiado corto"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:318
 msgid "Teardrop on pads in zones"
-msgstr ""
+msgstr "Lágrimas en los pads en zonas"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:319
 msgid ""
 "Pads inside a  copper zone outline of same net have no teardrop.\n"
 "Check this option to allow teardrop for these pads."
 msgstr ""
+"Los pads dentro del contorno de una  zona de cobre de la misma red no tienen "
+"lágrimas. \n"
+"Marque esta opción para permitir lágrimas para estos pads."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:326
 #, fuzzy
@@ -35394,7 +35344,7 @@ msgstr "Curva Bézier, %d puntos"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:328
 msgid "Number of segments to build a teardrop with curved shape"
-msgstr ""
+msgstr "Número de segmentos para construir una lágrima con forma curva"
 
 #: pcbnew/teardrop/dialog_teardrop_base.h:108
 #, fuzzy
@@ -35653,7 +35603,7 @@ msgstr "Recuento mínimo de radios térmicos: %d."
 
 #: pcbnew/tools/board_inspection_tool.cpp:429
 msgid "Items are not connected.  No thermal spokes will be generated."
-msgstr ""
+msgstr "Los elementos no están conectados.  No se generarán radios térmicos."
 
 #: pcbnew/tools/board_inspection_tool.cpp:434
 #, c-format
@@ -35699,7 +35649,7 @@ msgstr "Resolución de margen de borde para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:635
 msgid "No 'mechanical_clearance' constraints defined."
-msgstr ""
+msgstr "No se han definido restricciones 'mechanical_clearance'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:662
 #, fuzzy
@@ -35708,7 +35658,7 @@ msgstr "Resolución de margen de orificios para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:674
 msgid "No 'mechanical_hole_clearance' constraints defined."
-msgstr ""
+msgstr "No se ha definido ninguna restricción 'mechanical_hole_clearance'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:728
 msgid "Select an item for a constraints resolution report."
@@ -35798,7 +35748,7 @@ msgstr "Acciones"
 
 #: pcbnew/tools/board_inspection_tool.cpp:856
 msgid "Assertions for:"
-msgstr ""
+msgstr "Afirmaciones para:"
 
 #: pcbnew/tools/convert_tool.cpp:77
 msgid "Create from Selection"
@@ -35972,9 +35922,9 @@ msgid "Special Tools"
 msgstr "Herramientas especiales"
 
 #: pcbnew/tools/edit_tool.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to resize arc tracks of %s or greater."
-msgstr "No se pueden redimensionar pistas de arco de %.1f grados o más."
+msgstr "No se pueden redimensionar pistas de arco de %s o más."
 
 #: pcbnew/tools/edit_tool.cpp:673
 msgid "Drag Arc Track"
@@ -36028,6 +35978,7 @@ msgstr "Cambiar lado / Voltear"
 #: pcbnew/tools/edit_tool.cpp:1859
 msgid "Reference designator hidden (it is required and can not be deleted)."
 msgstr ""
+"Designador de referencia oculto (es obligatorio y no se puede eliminar)."
 
 #: pcbnew/tools/edit_tool.cpp:1863
 #, fuzzy
