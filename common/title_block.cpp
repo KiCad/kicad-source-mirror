@@ -94,8 +94,13 @@ bool TITLE_BLOCK::TextVarResolver( wxString* aToken, const PROJECT* aProject ) c
 
     if( aToken->IsSameAs( wxT( "ISSUE_DATE" ) ) )
     {
-        *aToken = GetDate();
-        tokenUpdated = true;
+        wxString ret = GetDate();
+
+        if( !ret.empty() )
+        {
+            *aToken = ret;
+            tokenUpdated = true;
+        }
     }
     else if( aToken->IsSameAs( wxT( "CURRENT_DATE" ) ) )
     {
@@ -111,18 +116,33 @@ bool TITLE_BLOCK::TextVarResolver( wxString* aToken, const PROJECT* aProject ) c
     }
     else if( aToken->IsSameAs( wxT( "REVISION" ) ) )
     {
-        *aToken = GetRevision();
-        tokenUpdated = true;
+        wxString ret = GetRevision();
+
+        if( !ret.empty() )
+        {
+            *aToken = ret;
+            tokenUpdated = true;
+        }
     }
     else if( aToken->IsSameAs( wxT( "TITLE" ) ) )
     {
-        *aToken = GetTitle();
-        tokenUpdated = true;
+        wxString ret = GetTitle();
+
+        if( !ret.empty() )
+        {
+            *aToken = ret;
+            tokenUpdated = true;
+        }
     }
     else if( aToken->IsSameAs( wxT( "COMPANY" ) ) )
     {
-        *aToken = GetCompany();
-        tokenUpdated = true;
+        wxString ret = GetCompany();
+
+        if( !ret.empty() )
+        {
+            *aToken = ret;
+            tokenUpdated = true;
+        }
     }
     else if( aToken->Left( aToken->Len() - 1 ).IsSameAs( wxT( "COMMENT" ) ) )
     {
@@ -139,8 +159,13 @@ bool TITLE_BLOCK::TextVarResolver( wxString* aToken, const PROJECT* aProject ) c
         case '7':
         case '8':
         case '9':
-            *aToken = GetComment( c - '1' );
-            tokenUpdated = true;
+            wxString ret = GetComment( c - '1' );
+
+            if( !ret.empty() )
+            {
+                *aToken = ret;
+                tokenUpdated = true;
+            }
         }
     }
 
