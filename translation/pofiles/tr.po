@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:53-0700\n"
-"PO-Revision-Date: 2022-03-18 19:51+0000\n"
+"PO-Revision-Date: 2022-03-21 12:12+0000\n"
 "Last-Translator: Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -9533,7 +9533,7 @@ msgstr "Simgedeki tüm &birimler için ortak"
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:100
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:170
 msgid "Common to all body &styles (De Morgan)"
-msgstr ""
+msgstr "Tüm gövde ve stiller için ortak (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.h:81
 msgid "Drawing Properties"
@@ -9560,7 +9560,7 @@ msgstr "Sembolden fazladan birimler silinsin mi?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:286
 msgid "Delete alternate body style (De Morgan) from symbol?"
-msgstr ""
+msgstr "Sembolden alternatif gövde stili (De Morgan) silinsin mi?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:314
 #, c-format
@@ -9625,7 +9625,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
 msgid "Has alternate body style (De Morgan)"
-msgstr ""
+msgstr "Alternatif vücut stiline sahiptir (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:169
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
@@ -9697,7 +9697,7 @@ msgstr "Pozisyon kayması:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:242
 msgid "Margin between the pin name position and the symbol body."
-msgstr ""
+msgstr "Pin adı konumu ile sembol gövdesi arasındaki kenar boşluğu."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:249
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:133
@@ -9822,16 +9822,22 @@ msgid ""
 "This schematic has one or more buses with more than one label.\n"
 "This was allowed in previous KiCad versions but is no longer permitted."
 msgstr ""
+"Bu şematik, birden fazla etikete sahip bir veya daha fazla veriyoluna "
+"sahiptir.\n"
+"Buna önceki KiCad sürümlerinde izin verildi, ancak artık izin "
+"verilmemektedir."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:23
 msgid ""
 "Please select a new name for each of the buses below.\n"
 "A name has been suggested for you based on the labels attached to the bus."
 msgstr ""
+"Lütfen aşağıdaki Veri Yollarının her biri için yeni bir ad seçin.\n"
+"Veri Yolları ile iliştirilmiş etiketlere göre sizin için bir ad önerildi."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:32
 msgid "Proposed new name:"
-msgstr ""
+msgstr "Önerilen yeni ad:"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:45
 msgid "Accept Name"
@@ -9848,19 +9854,19 @@ msgstr "Ağ Listesini Dışa Aktar"
 
 #: eeschema/dialogs/dialog_netlist.cpp:298
 msgid "Simulator requires a fully annotated schematic."
-msgstr ""
+msgstr "Simülatör tamamen numaralandırılmış bir şema gerektirir."
 
 #: eeschema/dialogs/dialog_netlist.cpp:324
 msgid "Reformat passive symbol values"
-msgstr ""
+msgstr "Pasif sembol değerlerini yeniden biçimlendir"
 
 #: eeschema/dialogs/dialog_netlist.cpp:325
 msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
-msgstr ""
+msgstr "Pasif sembol değerlerini yeniden biçimlendir örneğin 1M -> 1Meg"
 
 #: eeschema/dialogs/dialog_netlist.cpp:330
 msgid "External simulator command:"
-msgstr ""
+msgstr "Harici simülatör komutu:"
 
 #: eeschema/dialogs/dialog_netlist.cpp:331
 msgid ""
@@ -9868,10 +9874,13 @@ msgid ""
 "Usually <path to spice binary> %I\n"
 "%I will be replaced by the actual spice netlist name"
 msgstr ""
+"Spice çalıştırmak için komut satırını girin\n"
+"Genellikle <spice yolu > %I\n"
+"%I spice netlist adı ile değiştirilecek"
 
 #: eeschema/dialogs/dialog_netlist.cpp:345
 msgid "Create Netlist and Run Simulator Command"
-msgstr ""
+msgstr "Ağlistesi Oluştur ve Simülatörü Çalıştır Komutu"
 
 #: eeschema/dialogs/dialog_netlist.cpp:396
 msgid "Netlist command:"
@@ -9879,7 +9888,7 @@ msgstr "Ağ listesi komutu:"
 
 #: eeschema/dialogs/dialog_netlist.cpp:439
 msgid "Save Netlist File"
-msgstr ""
+msgstr "Ağlistesi Dosyasını Kaydet"
 
 #: eeschema/dialogs/dialog_netlist.cpp:472
 #, c-format
@@ -9889,19 +9898,19 @@ msgstr "%s Dışa Aktar"
 #: eeschema/dialogs/dialog_netlist.cpp:501
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
 msgid "Exporting netlist requires a fully annotated schematic."
-msgstr ""
+msgstr "Ağlistesi vermek için tam numaralandırılmış bir şema gerekir."
 
 #: eeschema/dialogs/dialog_netlist.cpp:627
 msgid "This plugin already exists."
-msgstr ""
+msgstr "Bu eklenti zaten var."
 
 #: eeschema/dialogs/dialog_netlist.cpp:660
 msgid "You must provide a netlist generator command string"
-msgstr ""
+msgstr "Bir ağlistesi oluşturucu komut dizesi sağlamalısınız"
 
 #: eeschema/dialogs/dialog_netlist.cpp:666
 msgid "You must provide a netlist generator title"
-msgstr ""
+msgstr "Bir netlist oluşturucu başlığı sağlamalısınız"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:39
 msgid "Add Generator..."
@@ -9922,7 +9931,7 @@ msgstr "İsim:"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:90
 msgid "Command line to run the generator:"
-msgstr ""
+msgstr "Oluşturucuyu çalıştırmak için komut satırı:"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:105
 msgid "Browse Generators..."
@@ -9930,12 +9939,13 @@ msgstr "Oluşturuculara Göz At..."
 
 #: eeschema/dialogs/dialog_netlist_base.h:107
 msgid "Script Generator Properties"
-msgstr ""
+msgstr "Komut Dosyası Oluşturucu Özellikleri"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:51
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:226
+#, fuzzy
 msgid "Alternate Pin Name"
-msgstr ""
+msgstr "Alternatif Pin Adı"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:150
 msgid "Synchronized pins edit mode, and this pin is new"
@@ -10056,11 +10066,11 @@ msgstr "Bacak Özellikleri"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:109
 msgid "Plot All Pages"
-msgstr ""
+msgstr "Tüm Sayfaları Çiz"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:110
 msgid "Plot Current Page"
-msgstr ""
+msgstr "Geçerli Sayfayı Çiz"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:211
 #: pcbnew/dialogs/dialog_export_svg.cpp:204
@@ -10068,7 +10078,7 @@ msgstr ""
 #: pcbnew/exporters/gen_footprints_placefile.cpp:204
 #: pcbnew/exporters/gen_footprints_placefile.cpp:562
 msgid "Select Output Directory"
-msgstr ""
+msgstr "Çıktı Dizini Seç"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:228
 #: pcbnew/dialogs/dialog_gendrill.cpp:305 pcbnew/dialogs/dialog_plot.cpp:390
@@ -10086,7 +10096,7 @@ msgstr ""
 #: pcbnew/exporters/gen_footprints_placefile.cpp:212
 #: pcbnew/exporters/gen_footprints_placefile.cpp:222
 msgid "Plot Output Directory"
-msgstr ""
+msgstr "Çizim Çıktı Dizini"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:273
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:59
@@ -10211,6 +10221,8 @@ msgid ""
 "Target directory for plot files. Can be absolute or relative to the "
 "schematic main file location."
 msgstr ""
+"Çizim dosyaları için hedef dizin. Şematik ana dosya konumuna göre mutlak "
+"veya göreli olabilir."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
@@ -10255,7 +10267,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
-msgstr ""
+msgstr "Siyah ve beyaz"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:82
 msgid "Plot background color"
@@ -10263,7 +10275,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:83
 msgid "Plot the background color if the output format supports it"
-msgstr ""
+msgstr "Çıktı formatı destekliyorsa arka plan rengini çizin"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:87
 msgid "Color theme:"
@@ -10271,19 +10283,21 @@ msgstr "Renk teması:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:94
 msgid "Select the color theme to use for plotting"
-msgstr ""
+msgstr "Çizim için kullanılacak renk temasını seçin"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:98
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:107
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:186
 msgid "Default line width:"
-msgstr ""
+msgstr "Varsayılan çizgi genişliği:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:103
 msgid ""
 "Selection of the default pen thickness used to draw items, when their "
 "thickness is set to 0."
 msgstr ""
+"Kalınlıkları 0 olarak ayarlandığında, öğeleri çizmek için kullanılan "
+"varsayılan kalem kalınlığının seçimi."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:119
 #: pcbnew/dialogs/dialog_plot_base.cpp:254
@@ -10316,7 +10330,7 @@ msgstr "Kalem genişliği:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:85
 msgid "Plot Schematic Options"
-msgstr ""
+msgstr "Şematik Çizme Seçenekleri"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:321
 msgid "Print Schematic"
@@ -10324,16 +10338,16 @@ msgstr "Şemayı Yazdır"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:328
 msgid "An error occurred attempting to print the schematic."
-msgstr ""
+msgstr "Şema yazdırılmaya çalışılırken bir hata oluştu."
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:353
 #, c-format
 msgid "Print page %d"
-msgstr ""
+msgstr "Sayfayı yazdır %d"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
 msgid "Print sheet &reference and title block"
-msgstr ""
+msgstr "Sayfa &referans ve başlık bloğunu yazdır"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:24
 msgid "Print (or not) the Frame references."
@@ -25903,7 +25917,7 @@ msgstr "Katmanları Dahil Et"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
 msgid "Plot border and title block"
-msgstr ""
+msgstr "Kenarlık ve başlık bloğunu çizme"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:80
 msgid "Plot footprint values"
