@@ -2274,27 +2274,29 @@ void FOOTPRINT::CheckOverlappingPads( const std::function<void( const PAD*, cons
             if( other == pad || pad->SameLogicalPadAs( other ) )
                 continue;
 
-            // store canonical order so we don't collide in both directions
-            // (a:b and b:a)
-            if( static_cast<void*>( pad ) > static_cast<void*>( other ) )
-                std::swap( pad, other );
+            // store canonical order so we don't collide in both directions (a:b and b:a)
+            PAD* a = pad;
+            PAD* b = other;
 
-            if( checkedPairs.count( { pad, other } ) )
+            if( static_cast<void*>( a ) > static_cast<void*>( b ) )
+                std::swap( a, b );
+
+            if( checkedPairs.count( { a, b } ) )
             {
                 continue;
             }
             else
             {
-                checkedPairs[ { pad, other } ] = 1;
-            }
+                checkedPairs[ { a, b } ] = 1;
 
-            VECTOR2I pos;
-            SHAPE*   padShape = pad->GetEffectiveShape().get();
-            SHAPE*   otherShape = other->GetEffectiveShape().get();
+                VECTOR2I pos;
+                SHAPE*   padShape = pad->GetEffectiveShape().get();
+                SHAPE*   otherShape = other->GetEffectiveShape().get();
 
-            if( padShape->Collide( otherShape, 0, nullptr, &pos ) )
-            {
-                (aErrorHandler)( pad, other, pos );
+                if( padShape->Collide( otherShape, 0, nullptr, &pos ) )
+                {
+                    (aErrorHandler)( pad, other, pos );
+                }
             }
         }
     }
