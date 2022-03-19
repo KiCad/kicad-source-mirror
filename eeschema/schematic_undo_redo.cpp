@@ -324,6 +324,31 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             {
             case UNDO_REDO::CHANGED:
                 item->SwapData( alt_item );
+
+                // Special cases for items which have instance data
+                if( item->GetParent() && item->GetParent()->Type() == SCH_SYMBOL_T
+                        && item->Type() == SCH_FIELD_T )
+                {
+                    SCH_FIELD*  field = static_cast<SCH_FIELD*>( item );
+                    SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item->GetParent() );
+
+                    if( field->GetId() == REFERENCE_FIELD )
+                    {
+                        symbol->SetRef( m_schematic->GetSheets().FindSheetForScreen( screen ),
+                                        field->GetText() );
+                    }
+                    else if( field->GetId() == VALUE_FIELD )
+                    {
+                        symbol->SetValue( m_schematic->GetSheets().FindSheetForScreen( screen ),
+                                          field->GetText() );
+                    }
+                    else if( field->GetId() == FOOTPRINT_FIELD )
+                    {
+                        symbol->SetFootprint( m_schematic->GetSheets().FindSheetForScreen( screen ),
+                                              field->GetText() );
+                    }
+                }
+
                 break;
 
             case UNDO_REDO::EXCHANGE_T:
