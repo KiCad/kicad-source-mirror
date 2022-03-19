@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:52-0700\n"
-"PO-Revision-Date: 2022-03-14 15:56+0000\n"
+"PO-Revision-Date: 2022-03-21 22:49+0000\n"
 "Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "v6/es_MX/>\n"
@@ -4815,9 +4815,9 @@ msgid "Gestures"
 msgstr "Gestos"
 
 #: common/kiway.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "No ha podido cargarse la librería kiface '%s'."
+msgstr "Fallo al verificar la biblioteca kiface '%s' firma."
 
 #: common/kiway.cpp:267
 #, c-format
