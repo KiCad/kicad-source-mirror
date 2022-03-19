@@ -4,16 +4,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:52-0700\n"
-"PO-Revision-Date: 2021-12-17 00:56+0000\n"
+"PO-Revision-Date: 2022-03-21 22:49+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
-"Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
-"th/>\n"
+"Language-Team: Thai <https://hosted.weblate.org/projects/kicad/v6/th/>\n"
 "Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.10\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -4704,9 +4703,9 @@ msgid "Gestures"
 msgstr "ท่าทาง"
 
 #: common/kiway.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "ล้มเหลว การอ่านไลบรารี kiface ชื่อ '%s'"
+msgstr "เกิดล้มเหลวในการตรวจสอบลายเซ็นต์ไลบรารี kiface ชื่อ '%s'"
 
 #: common/kiway.cpp:267
 #, c-format
@@ -12004,15 +12003,13 @@ msgstr "เซลส์ว่างเปล่าจะทำให้แถว
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:543
-#, fuzzy
 msgid "Remove Invalid Cells"
-msgstr "เอาชิ้นส่วนออก"
+msgstr "นำเซลส์ไม่สมบูรณ์ออก"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
-#, fuzzy
 msgid "Cancel Table Update"
-msgstr "ระยะห่างรูเจาะ:"
+msgstr "ยกเลิกการปรับปรุงตาราง"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
@@ -14831,9 +14828,8 @@ msgid "Library changes are unsaved"
 msgstr "การเปลี่ยนแปลงไลบรารีไม่ได้บันทึกไว้"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:247
-#, fuzzy
 msgid "Symbol library loading was cancelled by user."
-msgstr "ไลบรารีสัญลักษณ์ '%s' มีอยู่แล้ว"
+msgstr "ยกเลิกการอ่านไลบรารีสัญลักษณ์โดยผู้ใช้"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:594
 #: eeschema/tools/sch_edit_tool.cpp:117
@@ -17400,9 +17396,8 @@ msgstr ""
 "ดังนั้นขนาดของบางชิ้นส่วนจึงไม่ถูกกำหนด"
 
 #: gerbview/rs274d.cpp:414
-#, fuzzy
 msgid "Invalid Code Number"
-msgstr "หมายเลขขาไม่ถูกต้อง"
+msgstr "เลขรหัสไม่ถูกต้อง"
 
 #: gerbview/rs274d.cpp:622
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
@@ -20329,7 +20324,6 @@ msgstr ""
 "คุณต้องการออกและละทิ้งการเปลี่ยนแปลงหรือไม่?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -20361,18 +20355,18 @@ msgstr ""
 "\n"
 "ค่าควบคุมจะแสดงเป็นอักษรตัวหนา\n"
 "\n"
-"การคำนวณใช้ได้กับกระแสสูงสุด 35 A (ภายนอก) หรือ 17.5 A (ภายใน) อุณหภูมิเพิ่มขึ้นสูงสุด 100 "
-"ºC และความกว้างลายทองแดงสูงสุด 400 มิล(10 มม.)\n"
+"การคำนวณใช้ได้กับกระแสสูงสุด 35 A (ภายนอก) หรือ 17.5 A (ภายใน) "
+"อุณหภูมิเพิ่มขึ้นสูงสุด 100 ºC และความกว้างลายทองแดงสูงสุด 400 มิล(10 มม.)\n"
 "\n"
 "สูตรจาก IPC 2221 คือ \n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>\n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>\n"
 "โดยที่: \n"
 "___I___คือ กระแสสูงสุดหน่วย A \n"
 "___&Delta;T___คือ อุณหภูมิเพิ่มขึ้นเหนือสภาพแวดล้อมใน &deg;C \n"
 "___W___คือ ความกว้างความหนา หน่วยเป็น มิล (1/1000นิ้ว) \n"
 "___H___คือ ความหนา(สูง) หน่วยเป็น มิล \n"
-"___K___คือ 0.024 สำหรับลายทองแดงภายในหรือ 0.048 สำหรับลายทองแดงด้านนอก  \n"
+"___K___คือ 0.024 สำหรับลายทองแดงภายในหรือ 0.048 สำหรับลายทองแดงด้านนอก\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -21509,7 +21503,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:596
 msgid "Selected options resulted in errors! Change them and try again."
-msgstr ""
+msgstr "ทางเลือกทำให้เกิดข้อผิดพลาด เปลี่ยนเหล่านั้นและลองอีกครั้ง"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:603
 #, c-format
@@ -21537,9 +21531,9 @@ msgid "Reannotate anyway?"
 msgstr "ทำอธิบายประกอบซ้ำ?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "ชิ้นส่วนซ้ำ %s%s\n"
+msgstr "ชิ้นส่วนซ้ำของ %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
 msgid "Aborted: too many errors"
@@ -24912,7 +24906,7 @@ msgstr "ตัวตรวจสอบเน็ต"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:83
 msgid "Load and Test Netlist"
-msgstr ""
+msgstr "อ่านและทดสอบรายชื่อเน็ต"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:125
 msgid "Select Netlist"
@@ -25010,9 +25004,9 @@ msgid "Line width may not be 0 for unfilled shapes."
 msgstr "ความกว้างของเส้นต้องไม่ 0 สำหรับรูปร่างที่ยังไม่ได้เติม"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Corner %d"
-msgstr "รัศมีมุม:"
+msgstr "มุม %d"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:334
 msgid "Polygon must have at least 3 corners"
@@ -25106,9 +25100,8 @@ msgid "corners count %d"
 msgstr "จํานวนมุม %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:739
-#, fuzzy
 msgid "Unknown primitive"
-msgstr "เปลี่ยนแปลงวัตถุดั้งเดิม"
+msgstr "ไม่รู้จักวัตถุดั่งเดิม"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:919
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
