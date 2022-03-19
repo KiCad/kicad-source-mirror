@@ -64,7 +64,7 @@ bool DIALOG_WIRE_BUS_PROPERTIES::TransferDataToWindow()
 {
     STROKE_PARAMS stroke;
     COLOR4D       color;
-    int           dotSize;
+    int           dotSize = -1;     // set value to "not found"
 
     for( SCH_ITEM* item : m_items )
     {
@@ -140,7 +140,14 @@ bool DIALOG_WIRE_BUS_PROPERTIES::TransferDataToWindow()
                         || static_cast<const SCH_JUNCTION*>( item )->GetDiameter() == dotSize;
             } ) )
     {
-        m_junctionSize.SetValue( dotSize );
+        if( dotSize >=0 )
+            m_junctionSize.SetValue( dotSize );
+        else
+        {
+            // No junction found in selected items: disable m_junctionSize
+            m_junctionSize.Enable( false );
+            m_junctionSize.SetValue( INDETERMINATE_ACTION );
+        }
     }
     else
     {

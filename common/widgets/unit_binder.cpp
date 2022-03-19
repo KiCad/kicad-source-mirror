@@ -142,10 +142,9 @@ void UNIT_BINDER::onClick( wxMouseEvent& aEvent )
         // These are tokens, not strings, so do a select all
         textEntry->SelectAll();
     }
-    else
-    {
-        aEvent.Skip();
-    }
+
+    // Needed at least on Windows to avoid hanging
+    aEvent.Skip();
 }
 
 
