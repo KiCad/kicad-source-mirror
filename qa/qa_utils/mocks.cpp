@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,6 @@
 #include <board.h>
 #include <fp_lib_table.h>
 #include <footprint_viewer_frame.h>
-#include <footprint_wizard_frame.h>
 #include <footprint.h>
 #include <tools/pcb_actions.h>
 #include <tools/zone_filler_tool.h>
@@ -43,7 +42,8 @@
 FP_LIB_TABLE GFootprintTable;
 
 
-DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aParent ) : DIALOG_FIND_BASE( aParent )
+DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aParent ) :
+        DIALOG_FIND_BASE( aParent )
 {
     // these members are initialized to avoid warnings about non initialized vars
     m_frame = aParent;

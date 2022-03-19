@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Marco Mattila <marcom99@gmail.com>
  * Copyright (C) 2006 Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
- * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,6 +41,8 @@ class DIALOG_FIND : public DIALOG_FIND_BASE
 {
 public:
     DIALOG_FIND( PCB_BASE_FRAME* aParent );
+
+    void Preload( const wxString& aFindString );
 
     /**
      * Return the currently found item or nullptr in the case of no items found.

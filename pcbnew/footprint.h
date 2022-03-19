@@ -349,12 +349,18 @@ public:
     void CheckFootprintAttributes( const std::function<void( const wxString& )>& aErrorHandler );
 
     /**
-     * Run DRC checks on footprint's pads.
+     * Run non-board-specific DRC checks on footprint's pads.  These are the checks supported by
+     * both the PCB DRC and the Footprint Editor Footprint Checker.
      *
      * @param aErrorHandler callback to handle the error messages generated
      */
     void CheckPads( const std::function<void( const PAD*, int, const wxString& )>& aErrorHandler );
 
+    /**
+     * Check for overlapping, different-numbered pads.
+     *
+     * @param aErrorHandler callback to handle the error messages generated
+     */
     void CheckOverlappingPads( const std::function<void( const PAD*, const PAD*,
                                                          const VECTOR2I& )>& aErrorHandler );
 

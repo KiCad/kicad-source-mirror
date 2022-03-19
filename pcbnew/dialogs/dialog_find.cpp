@@ -96,6 +96,16 @@ DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME *aFrame ) :
 }
 
 
+void DIALOG_FIND::Preload( const wxString& aFindString )
+{
+    if( !aFindString.IsEmpty() )
+    {
+        m_searchCombo->SetValue( aFindString );
+        m_searchCombo->SelectAll();
+    }
+}
+
+
 void DIALOG_FIND::onTextEnter( wxCommandEvent& aEvent )
 {
     search( true );

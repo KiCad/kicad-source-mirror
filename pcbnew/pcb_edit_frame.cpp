@@ -1455,6 +1455,39 @@ void PCB_EDIT_FRAME::ShowFindDialog()
                                               m_toolManager->GetTool<PCB_SELECTION_TOOL>(), _1 ) );
     }
 
+    wxString findString;
+
+    PCB_SELECTION& selection = m_toolManager->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
+
+    if( selection.Size() == 1 )
+    {
+        EDA_ITEM* front = selection.Front();
+
+        switch( front->Type() )
+        {
+        case PCB_FOOTPRINT_T:
+            findString = static_cast<FOOTPRINT*>( front )->GetValue();
+            break;
+
+        case PCB_FP_TEXT_T:
+            findString = static_cast<FP_TEXT*>( front )->GetShownText();
+            break;
+
+        case PCB_TEXT_T:
+            findString = static_cast<PCB_TEXT*>( front )->GetShownText();
+
+            if( findString.Contains( wxT( "\n" ) ) )
+                findString = findString.Before( '\n' );
+
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    m_findDialog->Preload( findString );
+
     m_findDialog->Show( true );
 }
 
@@ -1462,11 +1495,7 @@ void PCB_EDIT_FRAME::ShowFindDialog()
 void PCB_EDIT_FRAME::FindNext()
 {
     if( !m_findDialog )
-    {
-        m_findDialog = new DIALOG_FIND( this );
-        m_findDialog->SetCallback( std::bind( &PCB_SELECTION_TOOL::FindItem,
-                                              m_toolManager->GetTool<PCB_SELECTION_TOOL>(), _1 ) );
-    }
+        ShowFindDialog();
 
     m_findDialog->FindNext();
 }
