@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:53-0700\n"
-"PO-Revision-Date: 2022-03-13 03:57+0000\n"
+"PO-Revision-Date: 2022-03-21 12:12+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2777,9 +2777,8 @@ msgid "Set X scale adjust for exact scale plotting"
 msgstr "Dostosuj skalę w osi X dla dokładnej skali rysowania"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
-#, fuzzy
 msgid "Info text"
-msgstr "Wyszujuje tekst"
+msgstr "Tekst informacyjny"
 
 #: common/dialogs/dialog_print_generic_base.cpp:111
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
@@ -4902,9 +4901,9 @@ msgid "Gestures"
 msgstr "Gesty"
 
 #: common/kiway.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "Nie można załadować biblioteki KIFACE '%s'."
+msgstr "Nie można zweryfikować podpisu biblioteki KIFACE '%s'."
 
 #: common/kiway.cpp:268
 #, c-format
@@ -5422,9 +5421,8 @@ msgid "Through vias"
 msgstr "Przelotki na wylot"
 
 #: common/layer_id.cpp:158
-#, fuzzy
 msgid "Blind/Buried vias"
-msgstr "Przelotka ślepa/zagrzebana"
+msgstr "Przelotki ślepe/zagrzebane"
 
 #: common/layer_id.cpp:159
 msgid "Micro-vias"
@@ -5482,9 +5480,8 @@ msgid "Grid axes"
 msgstr "Osie siatki"
 
 #: common/layer_id.cpp:179
-#, fuzzy
 msgid "Locked item shadow"
-msgstr "Zablokowane elementy"
+msgstr "Wyszarzaj zablokowane elementy"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
@@ -8594,9 +8591,8 @@ msgid "Checking for library symbol issues..."
 msgstr "Sprawdzam problemy z symbolami bibliotecznymi..."
 
 #: eeschema/dialogs/dialog_erc.cpp:500
-#, fuzzy
 msgid "Checking for off grid pins and wires..."
-msgstr "Porównywanie footprintów na płytce z ich źródłami w bibliotece..."
+msgstr "Sprawdzanie czy piny lub połączenia nie znajdują się poza siatką..."
 
 #: eeschema/dialogs/dialog_erc.cpp:578 pcbnew/dialogs/dialog_drc.cpp:489
 msgid "errors"
@@ -9866,15 +9862,12 @@ msgid "Text Box Properties"
 msgstr "Właściwości bloku tekstu"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:76
-#, fuzzy
 msgid "Set width to 0 to use Schematic default line width."
-msgstr ""
-"Ustaw szerokość ramki na 0, aby użyć domyślnej szerokości linii symbolu."
+msgstr "Ustaw szerokość na 0, aby użyć domyślnej szerokości linii."
 
 #: eeschema/dialogs/dialog_line_properties_base.h:67
-#, fuzzy
 msgid "Line Properties"
-msgstr "Właściwości pinu"
+msgstr "Właściwości linii"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:104
 msgid "Conflicting Labels"
@@ -12221,20 +12214,16 @@ msgid "Update Symbol Fields"
 msgstr "Aktualizacja pól symbolu"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:31
-#, fuzzy
 msgid "Wire/bus width:"
-msgstr "Szerokość linii:"
+msgstr "Szerokość połączenia/magistrali:"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:90
-#, fuzzy
 msgid "Set width to 0 to use Netclass wire/bus widths."
-msgstr ""
-"Ustaw szerokość na 0, aby użyć szerokości linii pochodzącej z klasy sieci."
+msgstr "Ustaw na 0, aby użyć szerokości linii pochodzącej z klasy sieci."
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:70
-#, fuzzy
 msgid "Wire & Bus Properties"
-msgstr "Właściwości linii, połączeń i magistral"
+msgstr "Właściwości połączeń i magistral"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:142
 msgid ""
@@ -13106,7 +13095,7 @@ msgstr "Zdublowane nazwy arkuszy w podanym akruszu"
 
 #: eeschema/erc_item.cpp:50
 msgid "Symbol pin or wire end off grid"
-msgstr ""
+msgstr "Koniec pinu lub połączenia poza siatką"
 
 #: eeschema/erc_item.cpp:54
 msgid "Pin not connected"
@@ -15325,6 +15314,12 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Wygląda na to, że importowany schemat został utworzony jako część innego "
+"projektu.  Może to skutkować brakiem lub kolizją łączy z bibliotekami "
+"symboli w globalnej tabeli bibliotek symboli i/lub projektowej tabeli "
+"bibliotek symboli.\n"
+"\n"
+"Czy chcesz kontynuować?"
 
 #: eeschema/sheet.cpp:314
 msgid ""
@@ -23188,37 +23183,32 @@ msgid "Cleanup Graphics"
 msgstr "Oczyść grafikę"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:82
-#, fuzzy
 msgid "Build Changes"
-msgstr "Anuluj zmiany"
+msgstr "Przetwórz Zmiany"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:134
-#, fuzzy
 msgid "Check zones..."
-msgstr "Sprawdzam wypełnione strefy..."
+msgstr "Sprawdzanie stref..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:142
 msgid "Rebuild connectivity..."
-msgstr ""
+msgstr "Odtwarzanie połączeń..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:146
-#, fuzzy
 msgid "Check items..."
-msgstr "Sprawdzanie pinów..."
+msgstr "Sprawdzanie elementów..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:157
-#, fuzzy
 msgid "Items checked..."
-msgstr "Element zablokowany."
+msgstr "Sprawdzono elementy..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:168
 msgid "Board cleanup"
 msgstr "Oczyszczanie obwodu drukowanego"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:172
-#, fuzzy
 msgid "Finished..."
-msgstr "Zakończone"
+msgstr "Zakończone..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:25
 msgid "Delete &tracks connecting different nets"
@@ -24742,9 +24732,8 @@ msgid "Search DRC markers"
 msgstr "Wyszukaj w znacznikach DRC"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:78
-#, fuzzy
 msgid "Search net names"
-msgstr "Nazwy arkusza"
+msgstr "Wyszukaj nazwy sieci"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:96
 msgid "Find Previous"
@@ -25003,8 +24992,8 @@ msgid ""
 msgstr ""
 "Jest to lokalny stosunek wyrażony w procentach pomiędzy polami lutowniczymi "
 "a maską pasty lutowniczej dla danego footprintu.\n"
-"Wartość 10 oznacza, że szerokość prześwitu to 10% szerokości pola "
-"lutowniczego jak i 10% jego wysokości.\n"
+"Wartość 10 oznacza, że szerokość prześwitu to 10 procent szerokości pola "
+"lutowniczego jak i 10 procent jego wysokości.\n"
 "Wartość ta może zostać zastąpiona przez lokalną wartość z ustawień pól "
 "lutowniczych.\n"
 "Ostateczny rozmiar prześwitu jest sumą tej wartości i rozmiaru prześwitu.\n"
@@ -25162,11 +25151,11 @@ msgid ""
 msgstr ""
 "Jest to lokalny prześwit wyrażony w procentach pomiędzy polami lutowniczymi "
 "a maską pasty lutowniczej dla danego footprintu.\n"
-"Wartość 10 oznacza, że prześwit to 10% procent szerokości pola lutowniczego, "
-"jak i 10% jego wysokości.\n"
+"Wartość 10 oznacza, że prześwit to 10 procent szerokości pola lutowniczego, "
+"jak i 10 procent jego wysokości.\n"
 "Ostateczny rozmiar prześwitu jest sumą tej wartości i rozmiaru prześwitu.\n"
-"Wartość ujemna oznacza, że maska jest mniejsza niż rozmiar pola "
-"lutowniczego.\n"
+"Wartość ujemna oznacza, że maska jest mniejsza niż rozmiar pola lutowniczego."
+"\n"
 "Wartość ta może zostać zastąpiona dla poszczególnych pól lutowniczych przez "
 "Lokalne ustawienia prześwitu dla pól lutowniczych."
 
@@ -26386,14 +26375,14 @@ msgid "Warning: Pad size is less than zero."
 msgstr "Ostrzeżenie: Rozmiar pola jest mniejszy niż zero."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1265
-#, fuzzy
 msgid "Warning: Pad hole not inside pad shape."
-msgstr "Ostrzeżenie: Rozmiar pola jest mniejszy niż zero."
+msgstr "Ostrzeżenie: Otwór nie jest granicach pola lutowniczego."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1279
-#, fuzzy
 msgid "Warning: Pad hole will leave no copper."
-msgstr "Ostrzeżenie: Rozmiar pola jest mniejszy niż zero."
+msgstr ""
+"Ostrzeżenie: Otwór jest zbyt duży i nie pozostawi wystarczającego pola "
+"miedzi."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1284
 msgid "Warning: Negative local clearance values will have no effect."
@@ -27711,6 +27700,8 @@ msgstr "Pozycja względna wobec elementu referencyjnego"
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:116
 msgid "Right-click for layer selection commands."
 msgstr ""
+"Kliknij prawym klawiszem myszy by otworzyć menu z poleceniami dotyczącymi "
+"warstw."
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:205
 msgid "Print according to objects tab of appearance manager"
@@ -27934,9 +27925,8 @@ msgid "Enter the text placed on selected layer."
 msgstr "Wpisz tekst jaki umieścić na wybranej warstwie."
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:100
-#, fuzzy
 msgid "Knockout"
-msgstr "Strefa bezkonkurencyjna:"
+msgstr "Strefa bezkonkurencyjna"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:104
 msgid "Keep text upright"
@@ -30640,9 +30630,8 @@ msgid "Silkscreen clipped by solder mask"
 msgstr "Warstwa opisowa przycięta przez soldermaskę"
 
 #: pcbnew/drc/drc_item.cpp:208
-#, fuzzy
 msgid "Silkscreen clipped by board edge"
-msgstr "Warstwa opisowa przycięta przez soldermaskę"
+msgstr "Warstwa opisowa przycięta przez obrys płytki"
 
 #: pcbnew/drc/drc_item.cpp:212
 msgid "Silkscreen overlap"
@@ -30956,13 +30945,12 @@ msgid "Checking micro-via holes..."
 msgstr "Sprawdzenie otworów w mikroprzelotkach..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:140
-#, fuzzy
 msgid " (PTH pad has no copper layers)"
-msgstr "Ostrzeżenie: Pole lutownicze SMD nie posiada zewnętrznych warstw."
+msgstr " (pole z otworem na wylot nie znajduje się na warstwach miedzi)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:169
 msgid " (PTH pad's hole leaves no copper)"
-msgstr ""
+msgstr " (pole z otworem na wylot na warstwach miedzi)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:215
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:283
@@ -31000,14 +30988,14 @@ msgid "Checking board footprints against library..."
 msgstr "Porównywanie footprintów na płytce z ich źródłami w bibliotece..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:518
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in library '%s'."
-msgstr "Footprint nie został znaleziony w bibliotekach"
+msgstr "Footprint '%s' nie został znaleziony w bibliotece '%s'."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' does not match copy in library '%s'."
-msgstr "Footprint nie odpowiada jego kopii w bibliotece"
+msgstr "Footprint '%s' nie odpowiada jego kopii w bibliotece '%s'."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:115
 #, c-format
@@ -31040,9 +31028,8 @@ msgid "<unconstrained>"
 msgstr "<nieograniczona>"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:346
-#, fuzzy
 msgid "Checking length constraints..."
-msgstr "Sprawdzenie połączeń poszczególnych sieci..."
+msgstr "Sprawdzenie ograniczeń długości..."
 
 #: pcbnew/drc/drc_test_provider_mechanical_clearance.cpp:143
 msgid "Gathering items..."
@@ -37609,29 +37596,24 @@ msgid "Auto-fill Zone(s)"
 msgstr "Wypełnij automatycznie strefę(-y)"
 
 #: pcbnew/tracks_cleaner.cpp:66
-#, fuzzy
 msgid "Clean vias and tracks"
-msgstr "Pokaż na polach i ścieżkach"
+msgstr "Oczyść ścieżki i przelotki"
 
 #: pcbnew/tracks_cleaner.cpp:75
-#, fuzzy
 msgid "Merge collinear tracks"
 msgstr "Połącz współliniowe ścieżki"
 
 #: pcbnew/tracks_cleaner.cpp:85
-#, fuzzy
 msgid "Remove misconnected"
-msgstr "Nie podłączony"
+msgstr "Usuń błędnie połączone"
 
 #: pcbnew/tracks_cleaner.cpp:96
-#, fuzzy
 msgid "Delete tracks in pads"
 msgstr "Usuń ścieżki w polach"
 
 #: pcbnew/tracks_cleaner.cpp:109
-#, fuzzy
 msgid "Merge segments"
-msgstr "Wygładzaj przeciągane segenty"
+msgstr "Połącz segmenty"
 
 #: pcbnew/undo_redo.cpp:553
 msgid "Incomplete undo/redo operation: some items not found"
@@ -37747,13 +37729,12 @@ msgid "Show footprint and text origins as a cross"
 msgstr "Pokaż punkty bazowe footprintu i opisy w postaci krzyżyka"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
-#, fuzzy
 msgid "Shadow on Locked Items"
-msgstr "Pomiń zablokowane elementy"
+msgstr "Wyszarzaj zablokowane elementy"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show a shadow marker on locked items"
-msgstr ""
+msgstr "Pokaż wyszarzenie na zablokowanych elementach"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "Show drawing sheet borders and title block"
