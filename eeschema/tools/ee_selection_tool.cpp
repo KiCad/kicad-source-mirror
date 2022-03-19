@@ -1066,7 +1066,12 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
             rect.Collide( poss, collector.m_Threshold, &dist );
         }
 
-        if( dist < closestDist )
+        if( dist == closestDist )
+        {
+            if( item->GetParent() == closest )
+                closest = item;
+        }
+        else if( dist < closestDist )
         {
             closestDist = dist;
             closest = item;

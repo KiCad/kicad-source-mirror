@@ -890,6 +890,12 @@ bool SCH_FIELD::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 
     rect.Inflate( aAccuracy );
 
+    if( GetParent() && GetParent()->Type() == SCH_GLOBAL_LABEL_T )
+    {
+        SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( GetParent() );
+        rect.Offset( label->GetSchematicTextOffset( nullptr ) );
+    }
+
     return rect.Contains( aPosition );
 }
 
@@ -903,6 +909,12 @@ bool SCH_FIELD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
     EDA_RECT rect = aRect;
 
     rect.Inflate( aAccuracy );
+
+    if( GetParent() && GetParent()->Type() == SCH_GLOBAL_LABEL_T )
+    {
+        SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( GetParent() );
+        rect.Offset( label->GetSchematicTextOffset( nullptr ) );
+    }
 
     if( aContained )
         return rect.Contains( GetBoundingBox() );

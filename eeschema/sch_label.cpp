@@ -606,15 +606,21 @@ const EDA_RECT SCH_LABEL_BASE::GetBodyBoundingBox() const
 
 const EDA_RECT SCH_LABEL_BASE::GetBoundingBox() const
 {
-    // build the bounding box of the entire net class flag, including both the symbol and the
-    // net class reference text
+    // build the bounding box of the entire label, including its fields
 
     EDA_RECT box( GetBodyBoundingBox() );
 
     for( const SCH_FIELD& field : m_fields )
     {
         if( field.IsVisible() )
-            box.Merge( field.GetBoundingBox() );
+        {
+            EDA_RECT fieldBBox = field.GetBoundingBox();
+
+            if( Type() == SCH_GLOBAL_LABEL_T )
+                fieldBBox.Offset( GetSchematicTextOffset( nullptr ) );
+
+            box.Merge( fieldBBox );
+        }
     }
 
     box.Normalize();
@@ -635,11 +641,14 @@ bool SCH_LABEL_BASE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
     {
         if( field.IsVisible() )
         {
-            bbox = field.GetBoundingBox();
-            bbox.Inflate( aAccuracy );
+            EDA_RECT fieldBBox = field.GetBoundingBox();
+            fieldBBox.Inflate( aAccuracy );
 
-            if( bbox.Contains( aPosition ) )
-                return bbox.Contains( aPosition );
+            if( Type() == SCH_GLOBAL_LABEL_T )
+                fieldBBox.Offset( GetSchematicTextOffset( nullptr ) );
+
+            if( fieldBBox.Contains( aPosition ) )
+                return true;
         }
     }
 
@@ -664,8 +673,16 @@ bool SCH_LABEL_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccur
 
         for( const SCH_FIELD& field : m_fields )
         {
-            if( field.IsVisible() && rect.Intersects( field.GetBoundingBox() ) )
-                return true;
+            if( field.IsVisible() )
+            {
+                EDA_RECT fieldBBox = field.GetBoundingBox();
+
+                if( Type() == SCH_GLOBAL_LABEL_T )
+                    fieldBBox.Offset( GetSchematicTextOffset( nullptr ) );
+
+                if( rect.Intersects( fieldBBox ) )
+                    return true;
+            }
         }
 
         return false;
