@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:53-0700\n"
-"PO-Revision-Date: 2022-03-08 00:49+0000\n"
+"PO-Revision-Date: 2022-03-21 12:12+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -721,9 +721,8 @@ msgid "Show model bounding boxes"
 msgstr "แสดงกรอบนอกโมเดล"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:28
-#, fuzzy
 msgid "Show copper and tech layers thickness (very slow)"
-msgstr "แสดงความหนาทองแดง"
+msgstr "แสดงความหนาเลเยอร์ทองแดงและเลเยอร์เทคนิค(ช้ามาก)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:31
 msgid "Highlight items on rollover"
@@ -2729,9 +2728,8 @@ msgid "Set X scale adjust for exact scale plotting"
 msgstr "ตั้งค่าอัตรา X สำหรับมาตราส่วนการพล็อตที่แน่นอน"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
-#, fuzzy
 msgid "Info text"
-msgstr "ค้นหาข้อความ"
+msgstr "ข้อความ"
 
 #: common/dialogs/dialog_print_generic_base.cpp:111
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
@@ -4806,9 +4804,9 @@ msgid "Gestures"
 msgstr "ท่าทาง"
 
 #: common/kiway.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "ล้มเหลว การอ่านไลบรารี kiface ชื่อ '%s'"
+msgstr "เกิดล้มเหลวในการตรวจสอบลายเซ็นต์ไลบรารี kiface ชื่อ '%s'"
 
 #: common/kiway.cpp:268
 #, c-format
@@ -5324,7 +5322,6 @@ msgid "Through vias"
 msgstr "เวียเจาะทะลุ"
 
 #: common/layer_id.cpp:158
-#, fuzzy
 msgid "Blind/Buried vias"
 msgstr "เวียชนิด บอด/ฝัง"
 
@@ -5384,9 +5381,8 @@ msgid "Grid axes"
 msgstr "แกนกริด"
 
 #: common/layer_id.cpp:179
-#, fuzzy
 msgid "Locked item shadow"
-msgstr "ชิ้นส่วนที่ถูกล็อก"
+msgstr "เงาชิ้นส่วนที่ถูกล็อก"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
@@ -8435,9 +8431,8 @@ msgid "Checking for library symbol issues..."
 msgstr "ตรวจสอบไลบรารีสัญลักษณ์…"
 
 #: eeschema/dialogs/dialog_erc.cpp:500
-#, fuzzy
 msgid "Checking for off grid pins and wires..."
-msgstr "ตรวจสอบฟุ้ทพรินท์…"
+msgstr "ตรวจสอบขาอุปกรณ์และเส้นลวดอยู่นอกกริด..."
 
 #: eeschema/dialogs/dialog_erc.cpp:578 pcbnew/dialogs/dialog_drc.cpp:489
 msgid "errors"
@@ -9693,14 +9688,12 @@ msgid "Text Box Properties"
 msgstr "คุณสมบัติกล่องข้อความ"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:76
-#, fuzzy
 msgid "Set width to 0 to use Schematic default line width."
-msgstr "ตั้งความกว้างขอบเขตเป็น 0 เพื่อใช้ค่าปริยายของขนาดเส้นตรงของวงจร"
+msgstr "ตั้งค่าความกว้างเป็น 0 เพื่อใช้ค่าปริยายของขนาดเส้นตรงของวงจร"
 
 #: eeschema/dialogs/dialog_line_properties_base.h:67
-#, fuzzy
 msgid "Line Properties"
-msgstr "คุณสมบัติขา"
+msgstr "คุณสมบัติเส้นตรง"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:104
 msgid "Conflicting Labels"
@@ -11077,34 +11070,28 @@ msgid "Invalid frequency value"
 msgstr "ค่าความถี่ไม่ถูกต้อง"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:845
-#, fuzzy
 msgid "Invalid length in wavelength value"
-msgstr "ชื่อขาสำรองไม่ถูกต้อง"
+msgstr "ค่าความยาวคลื่นไม่ถูกต้อง"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:870
-#, fuzzy
 msgid "Invalid resistance value"
-msgstr "ค่าคุณสมบัติไม่ถูกต้อง"
+msgstr "ค่าความต้านทานไม่ถูกต้อง"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:881
-#, fuzzy
 msgid "Invalid capacitance value"
-msgstr "สตริงค่าสไปส์ไม่ถูกต้อง"
+msgstr "ค่าตัวเก็บประจุไม่ถูกต้อง"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:892
-#, fuzzy
 msgid "Invalid inductance value"
-msgstr "สตริงค่าสไปส์ไม่ถูกต้อง"
+msgstr "ค่าตัวเหนี่ยวนำไม่ถูกต้อง"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:903
-#, fuzzy
 msgid "Invalid conductance value"
-msgstr "ค่าคุณสมบัติไม่ถูกต้อง"
+msgstr "ค่าความนำไฟฟ้าไม่ถูกต้อง"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:914
-#, fuzzy
 msgid "Invalid length value"
-msgstr "ค่าคุณสมบัติไม่ถูกต้อง"
+msgstr "ค่าความยาวไม่ถูกต้อง"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1066
 #, c-format
@@ -11465,9 +11452,8 @@ msgid "Source"
 msgstr "แหล่งกำเนิด"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:938
-#, fuzzy
 msgid "Line model"
-msgstr "สีเส้นตรง:"
+msgstr "โมเดลเส้นตรง"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:954
 #: pcb_calculator/transline_ident.cpp:149
@@ -11490,12 +11476,11 @@ msgstr "โอห์ม"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:965
 msgid "Propagation delay"
-msgstr ""
+msgstr "ค่าหน่วงเวลา"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:972
-#, fuzzy
 msgid "s"
-msgstr "ns"
+msgstr "s"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:976
 #: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
@@ -11504,66 +11489,60 @@ msgid "Frequency"
 msgstr "ความถี่"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:987
-#, fuzzy
 msgid "Length in wavelength"
-msgstr "ความยาวในแพ็คเกจ"
+msgstr "ความยาวในความยาวคลื่น"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1000
-#, fuzzy
 msgid "Use time delay"
-msgstr "หน่วงเวลา:"
+msgstr "ใช้ค่าเวลาหน่วง"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1000
 msgid "Use frequency and number of wavelength"
-msgstr ""
+msgstr "ใช้ค่าความถี่และจำนวนนับของความยาวคลื่น"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1002
-#, fuzzy
 msgid "Delay / Electrical length"
-msgstr "ความยาวทางไฟฟ้า"
+msgstr "ความหน่วง/ความยาวทางไฟฟ้า"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1010
 msgid "Lossless"
-msgstr ""
+msgstr "ไม่สูญเสีย"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1024
 msgid "Resistance per unit length"
-msgstr ""
+msgstr "ค่าความต้านทานต่อหน่วยความยาว"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1031
 msgid "ohm / unit"
-msgstr ""
+msgstr "โอห์ม/หน่วย"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1035
-#, fuzzy
 msgid "Inductance per unit length"
-msgstr "ความยาวของตัวนำ:"
+msgstr "ค่าความเหนี่ยวนำต่อหน่วยความยาว"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1042
 msgid "henry / unit"
-msgstr ""
+msgstr "เฮ็นรี่/หน่วย"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1046
 msgid "Capacitance per unit length"
-msgstr ""
+msgstr "ค่าความเก็บประจุต่อหน่วยความยาว"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1053
 msgid "farad / unit"
-msgstr ""
+msgstr "ฟารัด/หน่วย"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1057
-#, fuzzy
 msgid "Conductance per unit length"
-msgstr "ความยาวของตัวนำ:"
+msgstr "ความเหนี่ยวนำต่อหน่วยความยาว"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1064
 msgid "siemens / unit"
-msgstr ""
+msgstr "ซีเมน/หน่วย"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1079
-#, fuzzy
 msgid "Extra parameters"
-msgstr "พารามิเตอร์ไม่ถูกต้อง"
+msgstr "พารามิเตอร์เพิ่มเติม"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1092
 msgid ""
@@ -11578,14 +11557,12 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1100
-#, fuzzy
 msgid "Lossy"
-msgstr "การสูญเสีย Tg"
+msgstr "การสูญเสีย"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1111
-#, fuzzy
 msgid "Transmission Line"
-msgstr "ประเภทสายส่ง"
+msgstr "สายส่งสัญญาณ"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1118
 msgid "Disable symbol for simulation"
@@ -12010,19 +11987,16 @@ msgid "Update Symbol Fields"
 msgstr "ปรับปรุงช่องสัญลักษณ์"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:31
-#, fuzzy
 msgid "Wire/bus width:"
-msgstr "ความกว้างเส้น:"
+msgstr "ความกว้างเส้นลวด/บัส:"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:90
-#, fuzzy
 msgid "Set width to 0 to use Netclass wire/bus widths."
-msgstr "ตั้งความกว้างเป็น 0 เพื่อใช้ขนาดเส้นจากเน็ตคลาส"
+msgstr "ตั้งความกว้างเป็น 0 เพื่อใช้ขนาดเส้นลวด/ขนาดบัสจากเน็ตคลาส"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:70
-#, fuzzy
 msgid "Wire & Bus Properties"
-msgstr "คุณสมบัติเส้นตรง,เส้นลวดและบัส"
+msgstr "คุณสมบัติเส้นลวดและบัส"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:142
 msgid ""
@@ -12054,9 +12028,8 @@ msgid "Appearance"
 msgstr "ภาพปรากฏ"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:33
-#, fuzzy
 msgid "Default font:"
-msgstr "หน่วยปริยาย:"
+msgstr "ฟ้อนต์ปริยาย:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:46
 msgid "S&how hidden pins"
@@ -12067,28 +12040,24 @@ msgid "Show hidden fields"
 msgstr "แสดงช่องที่ซ่อน"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:52
-#, fuzzy
 msgid "Show ERC errors"
-msgstr "ผิดพลาด ERC"
+msgstr "แสดงผิดพลาด ERC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:55
-#, fuzzy
 msgid "Show ERC warnings"
-msgstr "ระวัง ERC"
+msgstr "แสดงการเตือน ERC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:58
-#, fuzzy
 msgid "Show ERC exclusions"
-msgstr "ยกเว้น DRC"
+msgstr "แสดงข้อยกเว้น DRC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:61
 msgid "Show page limi&ts"
 msgstr "แสดงข้อจำกัดหน้า(&t)"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:69
-#, fuzzy
 msgid "Selection && Highlighting"
-msgstr "เน้นสีการเลือก"
+msgstr "การเลือก && การเน้นสี"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:71
 msgid "Draw selected text items as box"
@@ -12103,19 +12072,16 @@ msgid "Fill selected shapes"
 msgstr "วาดทึบเต็มรูปร่าง"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:86
-#, fuzzy
 msgid "Selection thickness:"
-msgstr "ความหนาเส้นตรงปริยาย:"
+msgstr "ความหนาการเลือก:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:94
-#, fuzzy
 msgid "(selection color can be edited in the \"Colors\" page)"
-msgstr "(เน้นสีสามารถแก้ได้ในหน้า \"Colors\")"
+msgstr "(สีของการเลือกสามารถแก้ไขในหน้า \"สี\")"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:98
-#, fuzzy
 msgid "Highlight thickness:"
-msgstr "เน้นสีความหนา(&H):"
+msgstr "เน้นสีความหนา:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:113
 #: pcbnew/dialogs/panel_display_options_base.cpp:74
@@ -12124,9 +12090,8 @@ msgstr "ครอส-โพรบ"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:115
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
-#, fuzzy
 msgid "Cross-probe on selection"
-msgstr "ครอส-โพรบ"
+msgstr "ครอส-โพรบบนการเลือก"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:119
 msgid "Center view on cross-probed items"
@@ -12437,26 +12402,23 @@ msgstr "]"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:213
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:21
-#, fuzzy
 msgid "Dashed Lines"
-msgstr "เพิ่มเส้นตรง"
+msgstr "เส้นประ"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:220
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:28
-#, fuzzy
 msgid "Dash length:"
-msgstr "ความยาวเวีย:"
+msgstr "ความยาวจุดประ:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:227
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:35
-#, fuzzy
 msgid "Gap length:"
-msgstr "ความยาวเวีย:"
+msgstr "ขนาดช่องว่าง:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:237
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:45
 msgid "Dash and dot lengths are ratios of the line width."
-msgstr ""
+msgstr "ความยาวเส้นประและจุดเป็นสัดส่วนของความกว้างเส้นตรง"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:169
 msgid "No error or warning"
@@ -12496,6 +12458,8 @@ msgid ""
 "Set to 0 to allow symbols to inherit their line widths from\n"
 "their parent Schematic"
 msgstr ""
+"ตั้งค่าเป็น 0 เพื่อยอมให้สัญลักษณ์สืบทอดขนาดความกว้างเส้นตรงจาก\n"
+"วงจรผู้ปกครอง"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:55
 msgid "D&efault pin length:"
@@ -12554,15 +12518,13 @@ msgstr "เซลส์ว่างเปล่าจะทำให้แถว
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:550
-#, fuzzy
 msgid "Remove Invalid Cells"
-msgstr "เอาชิ้นส่วนออก"
+msgstr "นำเซลส์ไม่สมบูรณ์ออก"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:551
-#, fuzzy
 msgid "Cancel Table Update"
-msgstr "ระยะห่างรูเจาะ:"
+msgstr "ยกเลิกการปรับปรุงตาราง"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
@@ -12885,7 +12847,7 @@ msgstr "ชื่อชีตซ้ำกัน"
 
 #: eeschema/erc_item.cpp:50
 msgid "Symbol pin or wire end off grid"
-msgstr ""
+msgstr "ขาของสัญลักษณ์หรือเส้นลวดสิ้นสุดนอกกริด"
 
 #: eeschema/erc_item.cpp:54
 msgid "Pin not connected"
@@ -13382,9 +13344,8 @@ msgid "Converted"
 msgstr "แปลงแล้ว"
 
 #: eeschema/lib_item.cpp:70
-#, fuzzy
 msgid "Private"
-msgstr "สร้างเลเยอร์"
+msgstr "ส่วนตัว"
 
 #: eeschema/lib_pin.cpp:1073 pcbnew/dialogs/dialog_pad_properties_base.cpp:1467
 msgid "Pos X"
@@ -13430,9 +13391,8 @@ msgid "Graphic Text '%s'"
 msgstr "ข้อความกราฟิก '%s'"
 
 #: eeschema/lib_textbox.cpp:299 eeschema/sch_textbox.cpp:316
-#, fuzzy
 msgid "Graphic Text Box"
-msgstr "ข้อความกราฟิก"
+msgstr "กรอบข้อความกราฟิก"
 
 #: eeschema/lib_textbox.cpp:369 eeschema/sch_label.cpp:772
 #: eeschema/sch_text.cpp:448 eeschema/sch_textbox.cpp:372
@@ -13832,7 +13792,6 @@ msgstr "กลับไปที่วงจรที่เลือกก่อ
 
 #: eeschema/sch_field.cpp:848 eeschema/sch_label.cpp:191
 #: eeschema/sch_label.cpp:1084
-#, fuzzy
 msgid "Sheet References"
 msgstr "อ้างอิงระหว่างชีต"
 
@@ -15406,9 +15365,8 @@ msgid "Library changes are unsaved"
 msgstr "การเปลี่ยนแปลงไลบรารีไม่ได้บันทึกไว้"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:247
-#, fuzzy
 msgid "Symbol library loading was cancelled by user."
-msgstr "ไลบรารีสัญลักษณ์ '%s' มีอยู่แล้ว"
+msgstr "ยกเลิกการอ่านไลบรารีสัญลักษณ์โดยผู้ใช้"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:591
 #: eeschema/tools/sch_edit_tool.cpp:119
@@ -16204,14 +16162,12 @@ msgstr "เพิ่มชิ้นส่วนข้อความ"
 
 #: eeschema/tools/ee_actions.cpp:230 eeschema/tools/ee_actions.cpp:345
 #: pcbnew/tools/pcb_actions.cpp:128
-#, fuzzy
 msgid "Add Text Box"
-msgstr "เพิ่มข้อความ"
+msgstr "เพิ่มกล่องข้อความ"
 
 #: eeschema/tools/ee_actions.cpp:230
-#, fuzzy
 msgid "Add a text box item"
-msgstr "เพิ่มชิ้นส่วนข้อความ"
+msgstr "เพิ่มชิ้นส่วนกล่องข้อความ"
 
 #: eeschema/tools/ee_actions.cpp:235 eeschema/tools/ee_actions.cpp:759
 msgid "Add Lines"
@@ -16306,14 +16262,12 @@ msgid "Add a net label"
 msgstr "เพิ่มป้ายชื่อเน็ต"
 
 #: eeschema/tools/ee_actions.cpp:306
-#, fuzzy
 msgid "Add Net Class Directive"
-msgstr "เน็ตคลาส"
+msgstr "เพิ่มคำสั่งเน็ตคลาส"
 
 #: eeschema/tools/ee_actions.cpp:306
-#, fuzzy
 msgid "Add a net class directive label"
-msgstr "เพิ่มป้ายชื่อเน็ต"
+msgstr "เพิ่มป้ายชื่อคำสั่งเน็ตคลาส"
 
 #: eeschema/tools/ee_actions.cpp:312
 msgid "Add Hierarchical Label"
@@ -16352,9 +16306,8 @@ msgid "Add text"
 msgstr "เพิ่มข้อความ"
 
 #: eeschema/tools/ee_actions.cpp:345
-#, fuzzy
 msgid "Add a text box"
-msgstr "เพิ่มชิ้นส่วนข้อความ"
+msgstr "เพิ่มกล่องข้อความ"
 
 #: eeschema/tools/ee_actions.cpp:350 pagelayout_editor/tools/pl_actions.cpp:49
 msgid "Add Rectangle"
@@ -16546,14 +16499,12 @@ msgid "Change existing item to a label"
 msgstr "เปลี่ยนสิ่งที่มีอยู่เป็นป้ายชื่อ"
 
 #: eeschema/tools/ee_actions.cpp:488
-#, fuzzy
 msgid "Change to Directive Label"
-msgstr "เปลี่ยนเป็นป้ายกำกับลำดับขั้น"
+msgstr "เปลี่ยนเป็นป้ายคำสั่ง"
 
 #: eeschema/tools/ee_actions.cpp:488
-#, fuzzy
 msgid "Change existing item to a directive label"
-msgstr "เปลี่ยนสิ่งที่มีอยู่เป็นป้ายชื่อ"
+msgstr "เปลี่ยนสิ่งที่มีอยู่เป็นป้ายคำสั่ง"
 
 #: eeschema/tools/ee_actions.cpp:493
 msgid "Change to Hierarchical Label"
@@ -16782,14 +16733,12 @@ msgid "Generate a bill of materials for the current schematic"
 msgstr "สร้างรายการวัสดุสำหรับวงจรปัจจุบัน"
 
 #: eeschema/tools/ee_actions.cpp:656
-#, fuzzy
 msgid "Select on PCB"
-msgstr "ไม่เลือกใดๆ"
+msgstr "เลือกบนพีซีบี"
 
 #: eeschema/tools/ee_actions.cpp:657
-#, fuzzy
 msgid "Select corresponding items in PCB editor"
-msgstr "เน้นสีชิ้นส่วนที่เกี่ยวข้องในตัวแก้ไขพีซีบี"
+msgstr "เลือกชิ้นส่วนที่สอดคล้องกันในตัวแก้ไขพีซีบี"
 
 #: eeschema/tools/ee_actions.cpp:662
 msgid "Show Hidden Pins"
@@ -16808,34 +16757,28 @@ msgid "Toggle display of hidden text fields"
 msgstr "สลับเปิดปิดการแสดงช่องข้อความที่ซ่อน"
 
 #: eeschema/tools/ee_actions.cpp:671
-#, fuzzy
 msgid "Show ERC Warnings"
-msgstr "คําเตือน DRC"
+msgstr "แสดงคําเตือน ERC"
 
 #: eeschema/tools/ee_actions.cpp:671
-#, fuzzy
 msgid "Show markers for electrical rules checker warnings"
-msgstr "ดำเนินการตรวจสอบกฎไฟฟ้า"
+msgstr "แสดงมาร์กเกอร์การเตือนสำหรับกฎตรวจสอบทางไฟฟ้า"
 
 #: eeschema/tools/ee_actions.cpp:675
-#, fuzzy
 msgid "Show ERC Errors"
-msgstr "แสดงข้อผิดพลาดของปลั๊กอิน"
+msgstr "แสดงข้อผิดพลาด ERC"
 
 #: eeschema/tools/ee_actions.cpp:675
-#, fuzzy
 msgid "Show markers for electrical rules checker errors"
-msgstr "ดำเนินการตรวจสอบกฎไฟฟ้า"
+msgstr "แสดงมาร์กเกอร์ข้อผิดพลาดสำหรับกฎตรวจสอบ"
 
 #: eeschema/tools/ee_actions.cpp:679
-#, fuzzy
 msgid "Show ERC Exclusions"
-msgstr "การยกเว้น DRC"
+msgstr "แสดงข้อยกเว้น ERC"
 
 #: eeschema/tools/ee_actions.cpp:680
-#, fuzzy
 msgid "Show markers for excluded electrical rules checker violations"
-msgstr "ดำเนินการตรวจสอบกฎไฟฟ้า"
+msgstr "แสดงมาร์กเกอร์สำหรับยกเว้นตรวจสอบการละเมิดกฎทางไฟฟ้า"
 
 #: eeschema/tools/ee_actions.cpp:684
 msgid "Force H/V Wires and Buses"
@@ -17311,51 +17254,47 @@ msgstr " X "
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "10A Log"
-msgstr ""
+msgstr "10A Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15A Log"
-msgstr ""
+msgstr "15A Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15A Log S"
-msgstr ""
+msgstr "15A Log S"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "10C Rev Log"
-msgstr ""
+msgstr "10C Rev Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15C Rev Log"
-msgstr ""
+msgstr "15C Rev Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15C Rev Log S"
-msgstr ""
+msgstr "15C Rev Log S"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "0B Lin"
-msgstr ""
+msgstr "0B Lin"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
-#, fuzzy
 msgid "4B S-Curve"
-msgstr "เส้นโค้ง"
+msgstr "4B S-Curve"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
-#, fuzzy
 msgid "5B S-Curve"
-msgstr "เส้นโค้ง"
+msgstr "5B S-Curve"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
-#, fuzzy
 msgid "Switch"
-msgstr "สลับหน่วย"
+msgstr "สลับ"
 
 #: eeschema/widgets/tuner_slider_base.cpp:70
-#, fuzzy
 msgid "Characteristic Curve"
-msgstr "คุณลักษณะอิมพีแดนซ์"
+msgstr "คุณลักษณะเส้นโค้ง"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -17765,18 +17704,14 @@ msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr "<b>ไม่มีเลเยอร์ที่ใช้ได้</b> ใน GerbView เพื่อโหลดไฟล์"
 
 #: gerbview/files.cpp:43
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Not loaded:</b> <i>%s</i>"
-msgstr ""
-"\n"
-"<b>ไม่โหลด:</b> <i>%s</i>"
+msgstr "<b>ไม่โหลด:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Memory was exhausted reading:</b> <i>%s</i>"
-msgstr ""
-"\n"
-"<b>หน่วยความจำหมด การอ่าน:</b> <i>%s</i>"
+msgstr "<b>หน่วยความจำหมดระหว่างการอ่าน:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:87
 msgid "Zip files"
@@ -17787,9 +17722,8 @@ msgid "Job files"
 msgstr "ไฟล์งาน"
 
 #: gerbview/files.cpp:181
-#, fuzzy
 msgid "Open Autodetected File(s)"
-msgstr "เปิดไฟล์เกอร์เบอร์"
+msgstr "เปิดไฟล์ตรวจพบอัตโนมัติ"
 
 #: gerbview/files.cpp:201
 msgid "Gerber files (.g* .lgr .pho)"
@@ -17861,9 +17795,8 @@ msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
 msgstr "<b>ไม่สามารถโหลดไฟล์งานเกอร์เบอร์เป็นไฟล์พล็อต</b> <i>%s</i>"
 
 #: gerbview/files.cpp:300
-#, fuzzy
 msgid "Loading files..."
-msgstr "กําลังโหลดกฎ..."
+msgstr "กำลังอ่านไฟล์..."
 
 #: gerbview/files.cpp:303 gerbview/files.cpp:310
 #, c-format
@@ -17876,24 +17809,24 @@ msgid "Zip file '%s' cannot be opened."
 msgstr "ไฟล์ Zip '%s' ไม่สามารถเปิดได้"
 
 #: gerbview/files.cpp:479
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (gerber job file)."
-msgstr "ข้ามไฟล์ '%s' (ไฟล์งานเกอร์เบอร์)\n"
+msgstr "ข้ามไฟล์ '%s' (ไฟล์งานเกอร์เบอร์)"
 
 #: gerbview/files.cpp:524
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>"
-msgstr "<b>ไม่สามารถสร้างไฟล์ชั่วคราว '%s'. </b>\n"
+msgstr "<b>ไม่สามารถสร้างไฟล์ชั่วคราว '%s'. </b>"
 
 #: gerbview/files.cpp:549
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (unknown type)."
-msgstr "ข้ามไฟล์ '%s' (ไม่ทราบประเภท)\n"
+msgstr "ข้ามไฟล์ '%s' (ไม่ทราบประเภท)"
 
 #: gerbview/files.cpp:586
-#, fuzzy, c-format
+#, c-format
 msgid "<b>unzipped file %s read error</b>"
-msgstr "<b>แตกไฟล์ %s มีข้อผิดพลาดในการอ่าน</b>\n"
+msgstr "<b>แตกไฟล์ %s มีข้อผิดพลาดในการอ่าน</b>"
 
 #: gerbview/files.cpp:634
 msgid "Open Zip File"
@@ -17930,14 +17863,12 @@ msgid "Position"
 msgstr "ตำแหน่ง"
 
 #: gerbview/gerber_draw_item.cpp:695
-#, fuzzy
 msgid "Start"
-msgstr "เริ่ม X"
+msgstr "เริ่ม"
 
 #: gerbview/gerber_draw_item.cpp:698
-#, fuzzy
 msgid "End"
-msgstr "สิ้นสุด X"
+msgstr "สิ้นสุด"
 
 #: gerbview/gerber_draw_item.cpp:709
 msgid "Clear"
@@ -18035,9 +17966,8 @@ msgid "Gerber Viewer"
 msgstr "โปรแกรมดูเกอร์เบอร์"
 
 #: gerbview/gerbview_frame.cpp:589
-#, fuzzy
 msgid "Drawing layer not in use"
-msgstr "เลเยอร์เขียนแบบ %d ไม่ใช้งาน"
+msgstr "เลเยอร์เขียนแบบไม่ใช้งาน"
 
 #: gerbview/gerbview_frame.cpp:606
 msgid "(with X2 attributes)"
@@ -18102,9 +18032,8 @@ msgstr ""
 "ดังนั้นขนาดของบางชิ้นส่วนจึงไม่ถูกกำหนด"
 
 #: gerbview/rs274d.cpp:413
-#, fuzzy
 msgid "Invalid Code Number"
-msgstr "หมายเลขขาไม่ถูกต้อง"
+msgstr "เลขรหัสไม่ถูกต้อง"
 
 #: gerbview/rs274d.cpp:621
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
@@ -18153,31 +18082,28 @@ msgid "<No selection>"
 msgstr "<ไม่มีการเลือก>"
 
 #: gerbview/tools/gerbview_actions.cpp:39
-#, fuzzy
 msgid "Open Autodetected File(s)..."
-msgstr "เปิดไฟล์พล็อตเกอร์เบอร์…"
+msgstr "เปิดไฟล์ตรวจพบอัตโนมัติ..."
 
 #: gerbview/tools/gerbview_actions.cpp:40
 msgid "Open Autodetected file(s) on a new layer."
-msgstr ""
+msgstr "เปิดไฟล์ตรวจพบอัตโนมัติไปเลเยอร์ใหม่"
 
 #: gerbview/tools/gerbview_actions.cpp:45
 msgid "Open Gerber Plot File(s)..."
 msgstr "เปิดไฟล์พล็อตเกอร์เบอร์…"
 
 #: gerbview/tools/gerbview_actions.cpp:46
-#, fuzzy
 msgid "Open Gerber plot file(s) on a new layer."
-msgstr "เปิดไฟล์พล็อตเกอร์เบอร์…"
+msgstr "เปิดไฟล์พล็อตเกอร์เบอร์ไปบนเลเยอร์ใหม่"
 
 #: gerbview/tools/gerbview_actions.cpp:51
 msgid "Open Excellon Drill File(s)..."
 msgstr "เปิดไฟล์เจาะ Excellon..."
 
 #: gerbview/tools/gerbview_actions.cpp:52
-#, fuzzy
 msgid "Open Excellon drill file(s) on a new layer."
-msgstr "เปิดไฟล์เจาะ Excellon..."
+msgstr "เปิดไฟล์เจาะเอ็กซิลอนไปบนเลเยอร์ใหม่"
 
 #: gerbview/tools/gerbview_actions.cpp:57
 msgid "Open Gerber Job File..."
@@ -18448,17 +18374,15 @@ msgstr "เรียงลําดับเลเยอร์ถ้าโหม
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:141
 msgid "Sort Layers by File Extension"
-msgstr ""
+msgstr "จัดเรียงเลเยอร์โดยใช้นามสกุลไฟล์"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:146
-#, fuzzy
 msgid "Move Current Layer Up"
-msgstr "ล้างเลเยอร์ปัจจุบัน..."
+msgstr "ย้ายเลเยอร์ปัจจุบันขึ้นบน"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:148
-#, fuzzy
 msgid "Move Current Layer Down"
-msgstr "เลเยอร์ปัจจุบันเท่านั้น"
+msgstr "ย้ายเลเยอร์ปัจจุบันลงล่าง"
 
 #: gerbview/widgets/layer_widget.cpp:130
 msgid "Change Layer Color for"
@@ -18819,14 +18743,12 @@ msgid "Uninstall"
 msgstr "ถอนการติดตั้ง"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:130
-#, fuzzy
 msgid "Apply Pending Changes"
 msgstr "นำการเปลี่ยนแปลงไปใช้"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:131
-#, fuzzy
 msgid "Discard Pending Changes"
-msgstr "ล้างทิ้งการแก้ไข"
+msgstr "ล้างทิ้งการเปลี่ยนแปลง"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:166
 msgid ""
@@ -18891,7 +18813,7 @@ msgid "Aborting remaining tasks."
 msgstr "กําลังยกเลิกงานที่เหลืออยู่"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "Downloaded %lld/%lld kB"
 msgstr "ดาวน์โหลดแล้ว %lld/%lld Kb"
 
@@ -18916,14 +18838,12 @@ msgid "Applying Package Changes"
 msgstr "กําลังนําการเปลี่ยนแพคเกจไปใช้"
 
 #: kicad/pcm/dialogs/panel_package.cpp:97
-#, fuzzy
 msgid "Install Pending"
-msgstr "ขนาดติดตั้ง"
+msgstr "การติดตั้งคงค้าง"
 
 #: kicad/pcm/dialogs/panel_package.cpp:101
-#, fuzzy
 msgid "Uninstall Pending"
-msgstr "ถอนการติดตั้ง"
+msgstr "การถอนติดตั้งคงค้าง"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:212
 msgid "Metadata"
@@ -19028,9 +18948,9 @@ msgid "Error loading installed packages list: %s"
 msgstr "เกิดข้อผิดพลาดโหลดรายการแพ็คเกจ:%s"
 
 #: kicad/pcm/pcm.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "Downloading %lld/%lld kB"
-msgstr "กําลังดาวน์โหลด %lld/%lld Kb"
+msgstr "กําลังดาวน์โหลด %lld/%lld kB"
 
 #: kicad/pcm/pcm.cpp:231
 msgid "Download is too large."
@@ -20991,18 +20911,16 @@ msgid "PCB Calculator"
 msgstr "เครื่องคิดเลขพีซีบี"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:76
-#, fuzzy
 msgid "General system design"
-msgstr "ตัวเลือกทั่วไป"
+msgstr "การออกแบบระบบทั่วไป"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:79
 msgid "Regulators"
 msgstr "เรกูเลเตอร์"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:81
-#, fuzzy
 msgid "Power, current and isolation"
-msgstr "การละเมิดระยะห่างรูเจาะ"
+msgstr "กำลัง,กระแสและการแยก"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:84
 msgid "Electrical Spacing"
@@ -21010,20 +20928,19 @@ msgstr "ระยะห่างทางไฟฟ้า"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:90
 msgid "High speed"
-msgstr ""
+msgstr "ความเร็วสูง"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:94
 msgid "RF Attenuators"
 msgstr "ตัวลดทอนสัญญาณ RF"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:96
-#, fuzzy
 msgid "Transmission Lines"
-msgstr "ประเภทสายส่ง"
+msgstr "สายส่งสัญญาณ"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:98
 msgid "Memo"
-msgstr ""
+msgstr "บันทึก"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:101
 msgid "E-Series"
@@ -21059,7 +20976,6 @@ msgstr ""
 "คุณต้องการออกและละทิ้งการเปลี่ยนแปลงหรือไม่?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -21091,18 +21007,18 @@ msgstr ""
 "\n"
 "ค่าควบคุมจะแสดงเป็นอักษรตัวหนา\n"
 "\n"
-"การคำนวณใช้ได้กับกระแสสูงสุด 35 A (ภายนอก) หรือ 17.5 A (ภายใน) อุณหภูมิเพิ่มขึ้นสูงสุด 100 "
-"ºC และความกว้างลายทองแดงสูงสุด 400 มิล(10 มม.)\n"
+"การคำนวณใช้ได้กับกระแสสูงสุด 35 A (ภายนอก) หรือ 17.5 A (ภายใน) "
+"อุณหภูมิเพิ่มขึ้นสูงสุด 100 ºC และความกว้างลายทองแดงสูงสุด 400 มิล(10 มม.)\n"
 "\n"
 "สูตรจาก IPC 2221 คือ \n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>\n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>\n"
 "โดยที่: \n"
 "___I___คือ กระแสสูงสุดหน่วย A \n"
 "___&Delta;T___คือ อุณหภูมิเพิ่มขึ้นเหนือสภาพแวดล้อมใน &deg;C \n"
 "___W___คือ ความกว้างความหนา หน่วยเป็น มิล (1/1000นิ้ว) \n"
 "___H___คือ ความหนา(สูง) หน่วยเป็น มิล \n"
-"___K___คือ 0.024 สำหรับลายทองแดงภายในหรือ 0.048 สำหรับลายทองแดงด้านนอก  \n"
+"___K___คือ 0.024 สำหรับลายทองแดงภายในหรือ 0.048 สำหรับลายทองแดงด้านนอก\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -21900,24 +21816,23 @@ msgstr "เหลือง"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:78
 msgid "FR4 natural"
-msgstr ""
+msgstr "FR4 ธรรมชาติ"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:79
 msgid "PTFE natural"
-msgstr ""
+msgstr "PTFE ธรรมชาติ"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:80
-#, fuzzy
 msgid "Polyimide"
-msgstr "เส้นหลายเหลี่ยม"
+msgstr "Polyimide"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:81
 msgid "Phenolic natural"
-msgstr ""
+msgstr "Phenolic ธรรมชาติ"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:82
 msgid "Aluminum"
-msgstr ""
+msgstr "อลูมิเนียม"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:53
 msgid "Not specified"
@@ -22000,9 +21915,8 @@ msgid "Unknown cleanup action"
 msgstr "การล้างที่ไม่รู้จัก"
 
 #: pcbnew/connectivity/connectivity_data.cpp:101
-#, fuzzy
 msgid "Updating nets..."
-msgstr "กำลังปรับปรุงเน็ต"
+msgstr "กำลังปรับปรุงเน็ต..."
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:379
 #: pcbnew/convert_shape_list_to_polygon.cpp:531
@@ -22256,7 +22170,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:596
 msgid "Selected options resulted in errors! Change them and try again."
-msgstr ""
+msgstr "ทางเลือกทำให้เกิดข้อผิดพลาด เปลี่ยนเหล่านั้นและลองอีกครั้ง"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:603
 #, c-format
@@ -22284,9 +22198,9 @@ msgid "Reannotate anyway?"
 msgstr "ทำอธิบายประกอบซ้ำ?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "ชิ้นส่วนซ้ำ %s%s\n"
+msgstr "ชิ้นส่วนซ้ำของ %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:807
 msgid "Aborted: too many errors"
@@ -22545,7 +22459,6 @@ msgid "Defaults"
 msgstr "ค่าปริยาย"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:104
-#, fuzzy
 msgid "Fomatting"
 msgstr "การจัดรูปแบบ"
 
@@ -22818,37 +22731,32 @@ msgid "Cleanup Graphics"
 msgstr "ล้างกราฟิก"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:82
-#, fuzzy
 msgid "Build Changes"
-msgstr "ย้อนกลับเปลี่ยนแปลง"
+msgstr "สร้างการเปลี่ยนแปลง"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:134
-#, fuzzy
 msgid "Check zones..."
-msgstr "กำลังตรวจสอบโซน..."
+msgstr "ตรวจสอบโซน..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:142
 msgid "Rebuild connectivity..."
-msgstr ""
+msgstr "สร้างการเชื่อมต่อใหม่..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:146
-#, fuzzy
 msgid "Check items..."
-msgstr "ตรวจสอบขา…"
+msgstr "ตรวจสอบรายการ…"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:157
-#, fuzzy
 msgid "Items checked..."
-msgstr "ชิ้นส่วนถูกล็อค"
+msgstr "ชิ้นส่วนถูกตรวจแล้ว..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:168
 msgid "Board cleanup"
 msgstr "ล้างบอร์ด"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:172
-#, fuzzy
 msgid "Finished..."
-msgstr "ให้สำเร็จเส้นลวด"
+msgstr "สำเร็จแล้ว..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:25
 msgid "Delete &tracks connecting different nets"
@@ -22905,19 +22813,16 @@ msgid "Constraints Resolution Report"
 msgstr "รายงานการแก้ไขข้อจำกัด"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:202
-#, fuzzy
 msgid "Teardrop on Vias/Pads Properties"
-msgstr "คุณสมบัติแทร็กและเวีย"
+msgstr "คุณสมบัติหยดน้ำบนเวีย/แทร็ก"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:206
-#, fuzzy
 msgid "Teardrop on Tracks Properties"
-msgstr "ตั้งคุณสมบัติแทร็กและเวีย"
+msgstr "คุณสมบัติหยดน้ำบนแทร็ก"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:210
-#, fuzzy
 msgid "Teardrop Properties"
-msgstr "คุณสมบัติกลุ่ม"
+msgstr "คุณสมบัติหยดน้ำ"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:404
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:167
@@ -23010,9 +22915,8 @@ msgstr "แรเงาทั้งหมด"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:143
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:131
-#, fuzzy
 msgid "Outline hatch pitch:"
-msgstr "ปรับเรียบเค้าโครง:"
+msgstr "ระยะเส้นโครงร่าง:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:157
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:89
@@ -23179,16 +23083,16 @@ msgid "Isolated islands smaller than this will be removed"
 msgstr "เกาะแยกที่มีขนาดเล็กกว่านี้จะถูกลบออก"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:398
-#, fuzzy
 msgid "Export Settings to Other Similar Zones"
-msgstr "ส่งออกการตั้งค่าไปยังโซนอื่น"
+msgstr "ส่งออกการตั้งค่าไปยังโซนที่คล้ายคลึงอื่นๆ"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:399
-#, fuzzy
 msgid ""
 "Export this zone setup (excluding layer and net selection) to other similar "
 "copper zones (teardrops or usual copper zones)."
-msgstr "ส่งออกการตั้งค่าโซนนี้ (ยกเว้นการเลือกเลเยอร์และเน็ต) ไปยังโซนทองแดงอื่นๆ"
+msgstr ""
+"ส่งออกการตั้งค่าโซนนี้ (ยกเว้นการเลือกเลเยอร์และเน็ต) "
+"ไปยังโซนทองแดงที่คล้ายคลึงอื่นๆ (หยดน้ำหรือโซนทองแดงปกติ)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:142
 msgid "Copper Zone Properties"
@@ -23424,13 +23328,12 @@ msgid "Create Array"
 msgstr "สร้างอาร์เรย์"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:223
-#, fuzzy
 msgid ""
 "This item was on a non-existing layer.\n"
 "It has been moved to the first defined layer."
 msgstr ""
-"ชิ้นส่วนนี้อยู่ในเลเยอร์ที่ไม่มี หรือเลเยอร์ถูกห้าม\n"
-"มันถูกย้ายไปเลเยอร์แรกที่ยอมแล้ว"
+"ชิ้นส่วนนี้อยู่ในเลเยอร์ที่ไม่มี\n"
+"มันถูกย้ายไปเลเยอร์แรกที่กำหนดไว้แล้ว"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:310
 msgid "Change dimension properties"
@@ -23719,14 +23622,14 @@ msgid "-------- DRC cancelled by user.<br><br>"
 msgstr "-------- DRC ถูกยกเลิกโดยผู้ใช้<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:501
-#, fuzzy, c-format
+#, c-format
 msgid "Remove all exclusions for violations of rule '%s'"
-msgstr "เอาข้อยกเว้นออกสำหรับการละเมิดนี้"
+msgstr "นำข้อยกเว้นออกทั้งหมดสำหรับการละเมิดของกฏ '%s'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:513
-#, fuzzy, c-format
+#, c-format
 msgid "Exclude all violations of rule '%s'"
-msgstr "ไม่รวมการละเมิดนี้"
+msgstr "ยกเว้นทั้งหมดการละเมิดของกฎ '%s'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:522
 msgid "Run clearance resolution tool..."
@@ -23778,24 +23681,24 @@ msgid "Test for parity between PCB and schematic"
 msgstr "ทดสอบความเท่าเทียมกันระหว่างพีซีบีและวงจร"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "Violations (%s)"
-msgstr "การละเมิด (%d)"
+msgstr "การละเมิด (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid "Unconnected Items (%s)"
-msgstr "ชิ้นส่วนที่ไม่เชื่อมต่อ (%d)"
+msgstr "ชิ้นส่วนที่ไม่เชื่อมต่อ (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic Parity (%s)"
-msgstr "เท่าเทียมกับวงจร (%d)"
+msgstr "เท่าเทียมกับวงจร (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored Tests (%s)"
-msgstr "ชิ้นส่วนที่ไม่เชื่อมต่อ (%d)"
+msgstr "ละเลยการทดสอบ (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.h:106 pcbnew/tools/pcb_actions.cpp:235
 msgid "Design Rules Checker"
@@ -23869,28 +23772,26 @@ msgstr ""
 "หรือผู้ใช้ทำการเปลี่ยนแปลงฟุ้ทพรินท์ไลบรารีและต้องการส่กลับไปยังพีซีบี"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Updated footprint %s (%s)"
-msgstr "ปรับปรุงฟุ้ทพรินท์ที่เลือก"
+msgstr "ปรับปรุงฟุ้ทพรินท์ %s (%s)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Changed footprint %s from '%s' to '%s'"
 msgstr "เปลี่ยนฟุ้ทพรินท์ %s จาก '%s' เป็น '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:375
-#, fuzzy
 msgid "*** library footprint not found ***"
-msgstr "*** ไม่พบฟุ้ทพรินท์ ***"
+msgstr "*** ไม่พบฟุ้ทพรินท์ไลบรารี ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:395
-#, fuzzy
 msgid ": (no changes)"
-msgstr "ย้อนกลับเปลี่ยนแปลง"
+msgstr ":(ไม่มีการเปลี่ยนแปลง)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:400
 msgid ": OK"
-msgstr ""
+msgstr ": ตกลง"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
 msgid "Update all footprints on board"
@@ -24343,9 +24244,8 @@ msgid "Search DRC markers"
 msgstr "ค้นหาเครื่องหมาย DRC"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:78
-#, fuzzy
 msgid "Search net names"
-msgstr "ชื่อกระดาษ"
+msgstr "ค้นหาชื่อเน็ต"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:96
 msgid "Find Previous"
@@ -24370,14 +24270,14 @@ msgid "3D Models"
 msgstr "โมเดล 3 มิติ"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:274
-#, fuzzy
 msgid ""
 "Locked footprints cannot be freely moved and oriented on the canvas and can "
 "only be selected when the 'Locked items' checkbox is enabled in the "
 "selection filter."
 msgstr ""
-"ฟุ้ทพรินท์ถูกล็อค: ไม่สามารถเคลื่อนย้ายได้อย่างอิสระและวางบนแนวผืนผ้าใบ "
-"และสามารถเลือกได้เฉพาะเมื่อเปิดใช้งานช่องกาเครื่องหมาย 'ชิ้นส่วนที่ถูกล็อค' ในตัวกรองการเลือก"
+"ฟุ้ทพรินท์ถูกล็อค ไม่สามารถเคลื่อนย้ายได้อย่างอิสระและวางบนแนวผืนผ้าใบ "
+"และสามารถเลือกได้เฉพาะเมื่อเปิดใช้งานช่องกาเครื่องหมาย 'ชิ้นส่วนที่ถูกล็อค' "
+"ในตัวกรองการเลือก"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:360
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:387
@@ -24486,12 +24386,12 @@ msgstr "แยกออกจาก BOM"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:206
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:210
 msgid "Exempt from courtyard requirement"
-msgstr ""
+msgstr "ยกเว้นจากข้อกำหนดของลานสนาม"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:207
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:211
 msgid "Will not generate \"missing courtyard\" DRC violations"
-msgstr ""
+msgstr "จะไม่สร้างการละเมิด DRC ข้อ \"ลานสนามหายไป\""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:223
 msgid "Update Footprint from Library..."
@@ -24536,9 +24436,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:256
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:608
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:54
-#, fuzzy
 msgid "Solder mask expansion:"
-msgstr "โซลเดอร์มาสค์ด้านบน:"
+msgstr "การขยายโซลเดอร์มาสค์:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:287
 msgid ""
@@ -24554,7 +24453,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:298
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:269
 msgid "Allow bridged solder mask apertures between pads"
-msgstr ""
+msgstr "อนุญาตให้เปิดช่องหน้ากากประสานระหว่างแพ็ด"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:272
@@ -24680,9 +24579,8 @@ msgid "Footprint name:"
 msgstr "ชื่อฟุ้ทพรินท์:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:135
-#, fuzzy
 msgid "Private Layers"
-msgstr "สร้างเลเยอร์"
+msgstr "เลเยอร์ส่วนตัว"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:188
 msgid "Component type:"
@@ -25193,14 +25091,12 @@ msgid "Delete Items"
 msgstr "ลบชิ้นส่วน"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:139
-#, fuzzy
 msgid "Other text items"
-msgstr "ชิ้นส่วนอื่นๆ"
+msgstr "ชิ้นส่วนข้อความอื่นๆ"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:140
-#, fuzzy
 msgid "Graphic items"
-msgstr "ชิ้นส่วนกราฟิกบนพีซีบี"
+msgstr "ชิ้นส่วนกราฟิก"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:255
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
@@ -25311,9 +25207,8 @@ msgid "Via Diameter"
 msgstr "เส้นผ่าศูนย์กลางเวีย"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:232
-#, fuzzy
 msgid "uVia Diameter"
-msgstr "เส้นผ่าศูนย์กลางเวีย"
+msgstr "เส้นผ่าศูนย์กลางไมโครเวีย"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:39
 msgid "Filter Items"
@@ -25460,31 +25355,27 @@ msgstr "ยกเลิกการเลือกทั้งหมด"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:49
 msgid "Board layers and physical stackup"
-msgstr ""
+msgstr "เลเยอร์ของบอร์ดและการทับซ้อนทางกายภาพ"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:52
 msgid "Solder mask/paste defaults"
 msgstr "ค่าปริยายของโซลเดอร์ มาสก์/เพสต์"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:55
-#, fuzzy
 msgid "Text && graphics default properties"
-msgstr "คุณสมบัติปริยายของข้อความและกราฟิก"
+msgstr "คุณสมบัติปริยายของข้อความ && กราฟิก"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
-#, fuzzy
 msgid "Text && graphics formatting"
-msgstr "ข้อความและกราฟิก"
+msgstr "กำหนดรูปแบบสำหรับข้อความ && กราฟิก"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
-#, fuzzy
 msgid "Design rule constraints"
-msgstr "กฎการออกแบบ"
+msgstr "ข้อจํากัดของกฎการออกแบบ"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:64
-#, fuzzy
 msgid "Predefined track && via dimensions"
-msgstr "ขนาดแทร็กและเวียที่กำหนดขนาดไว้ล่วงหน้า"
+msgstr "ขนาดแทร็ก && เวียที่กำหนดขนาดไว้ล่วงหน้า"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:243
 #: pcbnew/dialogs/dialog_imported_layers.cpp:251
@@ -25735,7 +25626,7 @@ msgstr "ตัวตรวจสอบเน็ต"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:81
 msgid "Load and Test Netlist"
-msgstr ""
+msgstr "อ่านและทดสอบรายชื่อเน็ต"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:123
 msgid "Select Netlist"
@@ -25833,9 +25724,9 @@ msgid "Line width may not be 0 for unfilled shapes."
 msgstr "ความกว้างของเส้นต้องไม่ 0 สำหรับรูปร่างที่ยังไม่ได้เติม"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid "Corner %d"
-msgstr "รัศมีมุม:"
+msgstr "มุม %d"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:341
 msgid "Polygon must have at least 3 corners"
@@ -25929,9 +25820,8 @@ msgid "corners count %d"
 msgstr "จํานวนมุม %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:740
-#, fuzzy
 msgid "Unknown primitive"
-msgstr "เปลี่ยนแปลงวัตถุดั้งเดิม"
+msgstr "ไม่รู้จักวัตถุดั่งเดิม"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:929
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
@@ -25959,14 +25849,12 @@ msgid "Warning: Pad size is less than zero."
 msgstr "คําเตือน: ขนาดแพ็ดเล็กกว่าศูนย์"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1265
-#, fuzzy
 msgid "Warning: Pad hole not inside pad shape."
-msgstr "คําเตือน: ขนาดแพ็ดเล็กกว่าศูนย์"
+msgstr "คําเตือน: รูเจาะไม่อยู่ภายในรูปร่างแพ็ด"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1279
-#, fuzzy
 msgid "Warning: Pad hole will leave no copper."
-msgstr "คําเตือน: ขนาดแพ็ดเล็กกว่าศูนย์"
+msgstr "คําเตือน: รูเจาะแพ็ดจะทำให้ไม่มีทองแดงเหลือ"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1284
 msgid "Warning: Negative local clearance values will have no effect."
@@ -26355,7 +26243,6 @@ msgid "Castellated pad (through hole only)"
 msgstr "แพ็ดคาสเทลเลต (ผ่านรูเจาะทะลุเท่านั้น)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:582
-#, fuzzy
 msgid "Clearance Overrides"
 msgstr "การทับค่าระยะห่าง"
 
@@ -26417,17 +26304,15 @@ msgstr "จากฟุ้ทพรินท์ต้นกำเนิด"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:716
 msgid "Zone knockout:"
-msgstr ""
+msgstr "โซนที่ตัดออก:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
-#, fuzzy
 msgid "Pad shape"
-msgstr "รูปร่างแพ็ด:"
+msgstr "รูปร่างแพ็ด"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
-#, fuzzy
 msgid "Pad convex hull"
-msgstr "ใช้แพ็ดแบบนูนท้องเรือ"
+msgstr "แพ็ดแบบนูนท้องเรือ"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:733
 #, fuzzy
