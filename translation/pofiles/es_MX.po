@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:53-0700\n"
-"PO-Revision-Date: 2022-03-18 19:51+0000\n"
+"PO-Revision-Date: 2022-03-21 12:12+0000\n"
 "Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -2789,9 +2789,8 @@ msgid "Set X scale adjust for exact scale plotting"
 msgstr "Ajuster escala X para trazado a escala precisa"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
-#, fuzzy
 msgid "Info text"
-msgstr "Buscar texto"
+msgstr "Texto informativo"
 
 #: common/dialogs/dialog_print_generic_base.cpp:111
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
@@ -4917,9 +4916,9 @@ msgid "Gestures"
 msgstr "Gestos"
 
 #: common/kiway.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "No ha podido cargarse la librería kiface '%s'."
+msgstr "Fallo al verificar la biblioteca kiface '%s' firma."
 
 #: common/kiway.cpp:268
 #, c-format
@@ -5437,9 +5436,8 @@ msgid "Through vias"
 msgstr "Vías pasantes"
 
 #: common/layer_id.cpp:158
-#, fuzzy
 msgid "Blind/Buried vias"
-msgstr "Vía ciega/enterrada"
+msgstr "Vías ciegas/enterradas"
 
 #: common/layer_id.cpp:159
 msgid "Micro-vias"
@@ -5498,9 +5496,8 @@ msgid "Grid axes"
 msgstr "Ejes de la cuadrícula"
 
 #: common/layer_id.cpp:179
-#, fuzzy
 msgid "Locked item shadow"
-msgstr "Elementos bloqueados"
+msgstr "Sombra de elemento bloqueado"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
@@ -8603,9 +8600,8 @@ msgid "Checking for library symbol issues..."
 msgstr "Comprobando problemas con los símbolos de la biblioteca..."
 
 #: eeschema/dialogs/dialog_erc.cpp:500
-#, fuzzy
 msgid "Checking for off grid pins and wires..."
-msgstr "Comprobando huellas..."
+msgstr "Comprobando si hay pines y cables fuera de la red..."
 
 #: eeschema/dialogs/dialog_erc.cpp:578 pcbnew/dialogs/dialog_drc.cpp:489
 msgid "errors"
@@ -13141,7 +13137,7 @@ msgstr "Nombres de hoja duplicados dentro de una hoja dada"
 
 #: eeschema/erc_item.cpp:50
 msgid "Symbol pin or wire end off grid"
-msgstr ""
+msgstr "Símbolo de pin o extremo del cable fuera de la rejilla"
 
 #: eeschema/erc_item.cpp:54
 msgid "Pin not connected"
@@ -15360,6 +15356,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"El esquema a importar parece haber sido creado como parte de un proyecto "
+"diferente.  Esto puede dar lugar a enlaces de bibliotecas de símbolos que "
+"falten o choquen con los enlaces de bibliotecas de símbolos de la tabla de "
+"símbolos global y/o de la tabla de bibliotecas de símbolos del proyecto "
+"actual.\n"
+"\n"
+"¿Desea continuar?"
 
 #: eeschema/sheet.cpp:314
 msgid ""
@@ -23285,9 +23288,8 @@ msgid "Check zones..."
 msgstr "Comprobando zonas..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:142
-#, fuzzy
 msgid "Rebuild connectivity..."
-msgstr "Reconstruir conexiones"
+msgstr "Reconstruir la conectividad..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:146
 #, fuzzy
@@ -23304,9 +23306,8 @@ msgid "Board cleanup"
 msgstr "Optimización de placa"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:172
-#, fuzzy
 msgid "Finished..."
-msgstr "Finalizado"
+msgstr "Finalizado..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:25
 msgid "Delete &tracks connecting different nets"
@@ -27837,7 +27838,7 @@ msgstr "Posición relativa al elemento de referencia"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:116
 msgid "Right-click for layer selection commands."
-msgstr ""
+msgstr "Haga clic derecho para los comandos de selección de capas."
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:205
 msgid "Print according to objects tab of appearance manager"
@@ -31103,13 +31104,12 @@ msgid "Checking micro-via holes..."
 msgstr "Comprobando orificios de micro-vías..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:140
-#, fuzzy
 msgid " (PTH pad has no copper layers)"
-msgstr "Advertencia: el pad SMD no tiene capas externas."
+msgstr " (el pad PTH no tiene capas de cobre)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:169
 msgid " (PTH pad's hole leaves no copper)"
-msgstr ""
+msgstr " (El orificio del pad PTH no deja cobre)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:215
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:283
@@ -31151,14 +31151,14 @@ msgid "Checking board footprints against library..."
 msgstr "Comprobando huellas..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:518
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in library '%s'."
-msgstr "Huella no encontrada en la lista de cambios"
+msgstr "Huella '%s' no encontrada en la biblioteca '%s'."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' does not match copy in library '%s'."
-msgstr "El tipo de huella no coincide con los pads de la huella"
+msgstr "La huella '%s' no coincide con la copia en la biblioteca '%s'."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:115
 #, c-format
@@ -37998,7 +37998,7 @@ msgstr "Omitir elementos bloqueados"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show a shadow marker on locked items"
-msgstr ""
+msgstr "Mostrar un marcador de sombra en los elementos bloqueados"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "Show drawing sheet borders and title block"
