@@ -798,7 +798,7 @@ int ERC_TESTER::TestOffGridEndpoints( int aGridSize )
     {
         std::vector<SCH_MARKER*> markers;
 
-        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        for( SCH_ITEM* item : screen->Items() )
         {
             if( item->Type() == SCH_LINE_T && item->IsConnectable() )
             {
