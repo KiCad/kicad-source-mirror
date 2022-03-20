@@ -487,6 +487,21 @@ void EDA_TEXT::AddRenderCacheGlyph( const SHAPE_POLY_SET& aPoly )
 }
 
 
+wxString EDA_TEXT::ShortenedText() const
+{
+    wxString tmp = GetText();
+
+    tmp.Replace( wxT( "\n" ), wxT( " " ) );
+    tmp.Replace( wxT( "\r" ), wxT( " " ) );
+    tmp.Replace( wxT( "\t" ), wxT( " " ) );
+
+    if( tmp.Length() > 54 )
+        tmp = tmp.Left( 52 ) + wxT( "..." );
+
+    return tmp;
+}
+
+
 wxString EDA_TEXT::ShortenedShownText() const
 {
     wxString tmp = GetShownText();

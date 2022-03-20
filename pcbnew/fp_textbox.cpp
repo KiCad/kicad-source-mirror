@@ -213,8 +213,16 @@ void FP_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     aList.emplace_back( _( "Angle" ), wxString::Format( "%g", GetTextAngle().AsDegrees() ) );
 
     aList.emplace_back( _( "Thickness" ), MessageTextFromValue( units, GetTextThickness() ) );
-    aList.emplace_back( _( "Width" ), MessageTextFromValue( units, GetTextWidth() ) );
-    aList.emplace_back( _( "Height" ), MessageTextFromValue( units, GetTextHeight() ) );
+    aList.emplace_back( _( "Text Width" ), MessageTextFromValue( units, GetTextWidth() ) );
+    aList.emplace_back( _( "Text Height" ), MessageTextFromValue( units, GetTextHeight() ) );
+
+    wxString msg = MessageTextFromValue( units, std::abs( GetEnd().x - GetStart().x ) );
+    aList.emplace_back( _( "Box Width" ), msg );
+
+    msg = MessageTextFromValue( units, std::abs( GetEnd().y - GetStart().y ) );
+    aList.emplace_back( _( "Box Height" ), msg );
+
+    m_stroke.GetMsgPanelInfo( units, aList );
 }
 
 

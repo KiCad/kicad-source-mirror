@@ -93,45 +93,6 @@ EDA_ITEM* SCH_LINE::Clone() const
 }
 
 
-/*
- * Conversion between PLOT_DASH_TYPE values and style names displayed
- */
-const std::map<PLOT_DASH_TYPE, const char*> lineStyleNames{
-    { PLOT_DASH_TYPE::SOLID, "solid" },
-    { PLOT_DASH_TYPE::DASH, "dashed" },
-    { PLOT_DASH_TYPE::DASHDOT, "dash_dot" },
-    { PLOT_DASH_TYPE::DOT, "dotted" },
-};
-
-
-const char* SCH_LINE::GetLineStyleName( PLOT_DASH_TYPE aStyle )
-{
-    auto resultIt = lineStyleNames.find( aStyle );
-
-    //legacy behavior is to default to dash if there is no name
-    return resultIt == lineStyleNames.end() ? lineStyleNames.find( PLOT_DASH_TYPE::DASH )->second :
-                                              resultIt->second;
-}
-
-
-PLOT_DASH_TYPE SCH_LINE::GetLineStyleByName( const wxString& aStyleName )
-{
-    PLOT_DASH_TYPE id = PLOT_DASH_TYPE::DEFAULT; // Default style id
-
-    //find the name by value
-    auto resultIt = std::find_if( lineStyleNames.begin(), lineStyleNames.end(),
-                                  [aStyleName]( const auto& it )
-                                  {
-                                      return it.second == aStyleName;
-                                  } );
-
-    if( resultIt != lineStyleNames.end() )
-        id = resultIt->first;
-
-    return id;
-}
-
-
 void SCH_LINE::Move( const VECTOR2I& aOffset )
 {
     if( aOffset != VECTOR2I( 0, 0 ) )
@@ -926,12 +887,12 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
     aList.emplace_back( _( "Line Type" ), msg );
 
-    if( GetLineStyle() != GetEffectiveLineStyle() )
-        msg = _( "from netclass" );
-    else
-        msg = GetLineStyleName( GetLineStyle() );
+    PLOT_DASH_TYPE lineStyle = GetLineStyle();
 
-    aList.emplace_back( _( "Line Style" ), msg );
+    if( GetEffectiveLineStyle() != lineStyle )
+        aList.emplace_back( _( "Line Style" ), _( "from netclass" ) );
+    else
+        m_stroke.GetMsgPanelInfo( aFrame->GetUserUnits(), aList, true, false );
 
     SCH_CONNECTION* conn = nullptr;
 

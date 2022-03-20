@@ -74,9 +74,6 @@ private:
     ///< Update item's points with edit points.
     void updateItem() const;
 
-    ///< Apply the last changes to the edited item.
-    void finishItem();
-
     /**
      * Validate a polygon and displays a popup warning if invalid.
      *

@@ -628,7 +628,7 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
         break;
     }
 
-    aList.emplace_back( _( "Line width" ), MessageTextFromValue( units, GetWidth() ) );
+    m_stroke.GetMsgPanelInfo( units, aList );
 }
 
 

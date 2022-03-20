@@ -363,15 +363,24 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
 
 void LIB_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
+    EDA_UNITS units = aFrame->GetUserUnits();
+
     // Don't use GetShownText() here; we want to show the user the variable references
-    aList.emplace_back( _( "Text Box" ), UnescapeString( GetText() ) );
+    aList.emplace_back( _( "Text Box" ), UnescapeString( ShortenedText() ) );
 
     wxString textStyle[] = { _( "Normal" ), _( "Italic" ), _( "Bold" ), _( "Bold Italic" ) };
     int style = IsBold() && IsItalic() ? 3 : IsBold() ? 2 : IsItalic() ? 1 : 0;
     aList.emplace_back( _( "Style" ), textStyle[style] );
 
-    aList.emplace_back( _( "Text Size" ), MessageTextFromValue( aFrame->GetUserUnits(),
-                                                                GetTextWidth() ) );
+    aList.emplace_back( _( "Text Size" ), MessageTextFromValue( units, GetTextWidth() ) );
+
+    wxString msg = MessageTextFromValue( units, std::abs( GetEnd().x - GetStart().x ) );
+    aList.emplace_back( _( "Box Width" ), msg );
+
+    msg = MessageTextFromValue( units, std::abs( GetEnd().y - GetStart().y ) );
+    aList.emplace_back( _( "Box Height" ), msg );
+
+    m_stroke.GetMsgPanelInfo( units, aList );
 }
 
 

@@ -28,6 +28,7 @@
 #include <geometry/geometry_utils.h>
 #include <stroke_params.h>
 #include <trigo.h>
+#include <widgets/msgpanel.h>
 
 using namespace STROKEPARAMS_T;
 
@@ -173,7 +174,7 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, PLOT_DASH_TYPE aLineStyle, int 
 }
 
 
-static wxString getLineStyleToken( PLOT_DASH_TYPE aStyle )
+wxString STROKE_PARAMS::GetLineStyleToken( PLOT_DASH_TYPE aStyle )
 {
     wxString token;
 
@@ -191,6 +192,32 @@ static wxString getLineStyleToken( PLOT_DASH_TYPE aStyle )
 }
 
 
+void STROKE_PARAMS::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList,
+                                     bool aIncludeStyle, bool aIncludeWidth )
+{
+    if( aIncludeStyle )
+    {
+        wxString lineStyle = _( "Default" );
+
+        for( const std::pair<const PLOT_DASH_TYPE, lineTypeStruct>& typeEntry : lineTypeNames )
+        {
+            if( typeEntry.first == GetPlotStyle() )
+            {
+                lineStyle = typeEntry.second.name;
+                break;
+            }
+        }
+
+        aList.emplace_back( _( "Line Style" ), lineStyle );
+    }
+
+    if( aIncludeWidth )
+    {
+        aList.emplace_back( _( "Line Width" ), MessageTextFromValue( aUnits, GetWidth() ) );
+    }
+}
+
+
 void STROKE_PARAMS::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel ) const
 {
     wxASSERT( aFormatter != nullptr );
@@ -199,13 +226,13 @@ void STROKE_PARAMS::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel ) const
     {
         aFormatter->Print( aNestLevel, "(stroke (width %s) (type %s))",
                            FormatInternalUnits(GetWidth() ).c_str(),
-                           TO_UTF8( getLineStyleToken( GetPlotStyle() ) ) );
+                           TO_UTF8( GetLineStyleToken( GetPlotStyle() ) ) );
     }
     else
     {
         aFormatter->Print( aNestLevel, "(stroke (width %s) (type %s) (color %d %d %d %s))",
                            FormatInternalUnits(GetWidth() ).c_str(),
-                           TO_UTF8( getLineStyleToken( GetPlotStyle() ) ),
+                           TO_UTF8( GetLineStyleToken( GetPlotStyle() ) ),
                            KiROUND( GetColor().r * 255.0 ),
                            KiROUND( GetColor().g * 255.0 ),
                            KiROUND( GetColor().b * 255.0 ),
@@ -293,3 +320,5 @@ double STROKE_PARAMS_PARSER::parseDouble( const char* aText )
 
     return val;
 }
+
+

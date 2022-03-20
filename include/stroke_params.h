@@ -32,6 +32,7 @@
 #include <stroke_params_lexer.h>
 
 class STROKE_PARAMS_LEXER;
+class MSG_PANEL_ITEM;
 
 namespace KIGFX
 {
@@ -111,7 +112,12 @@ public:
 
     void Format( OUTPUTFORMATTER* out, int nestLevel ) const;
 
+    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList,
+                          bool aIncludeStyle = true, bool aIncludeWidth = true );
+
     // Helper functions
+
+    static wxString GetLineStyleToken( PLOT_DASH_TYPE aStyle );
 
     static void Stroke( const SHAPE* aShape, PLOT_DASH_TYPE aLineStyle, int aWidth,
                         const KIGFX::RENDER_SETTINGS* aRenderSettings,

@@ -353,6 +353,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
         {
             symbol->SetPosition( cursorPos );
             m_view->Update( symbol );
+            m_frame->SetMsgPanel( symbol );
         }
         else if( symbol && evt->IsAction( &ACTIONS::doDelete ) )
         {
@@ -575,6 +576,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             m_view->ClearPreview();
             m_view->AddToPreview( image->Clone() );
             m_view->RecacheAllItems();  // Bitmaps are cached in Opengl
+            m_frame->SetMsgPanel( image );
         }
         else if( image && evt->IsAction( &ACTIONS::doDelete ) )
         {
@@ -780,6 +782,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
             previewItem->SetPosition( (wxPoint)cursorPos );
             m_view->ClearPreview();
             m_view->AddToPreview( previewItem->Clone() );
+            m_frame->SetMsgPanel( previewItem );
         }
         else if( evt->Category() == TC_COMMAND )
         {
@@ -1083,6 +1086,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                                      {
                                          m_view->AddToPreview( aChild->Clone() );
                                      } );
+                m_frame->SetMsgPanel( item );
             };
 
     auto cleanup =
@@ -1462,6 +1466,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             item->CalcEdit( (wxPoint) cursorPos );
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
+            m_frame->SetMsgPanel( item );
         }
         else if( evt->IsDblClick( BUT_LEFT ) && !item )
         {
@@ -1650,6 +1655,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             sizeSheet( sheet, cursorPos );
             m_view->ClearPreview();
             m_view->AddToPreview( sheet->Clone() );
+            m_frame->SetMsgPanel( sheet );
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {

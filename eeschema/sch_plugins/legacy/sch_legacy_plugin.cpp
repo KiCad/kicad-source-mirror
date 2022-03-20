@@ -804,8 +804,15 @@ SCH_LINE* SCH_LEGACY_PLUGIN::loadWire( LINE_READER& aReader )
         else if( buf == T_STYLE )
         {
             parseUnquotedString( buf, aReader, line, &line );
-            PLOT_DASH_TYPE style = SCH_LINE::GetLineStyleByName( buf );
-            wire->SetLineStyle( style );
+
+            if( buf == wxT( "solid" ) )
+                wire->SetLineStyle( PLOT_DASH_TYPE::SOLID );
+            else if( buf == wxT( "dashed" ) )
+                wire->SetLineStyle( PLOT_DASH_TYPE::DASH );
+            else if( buf == wxT( "dash_dot" ) )
+                wire->SetLineStyle( PLOT_DASH_TYPE::DASHDOT );
+            else if( buf == wxT( "dotted" ) )
+                wire->SetLineStyle( PLOT_DASH_TYPE::DOT );
         }
         else    // should be the color parameter.
         {
@@ -1854,7 +1861,7 @@ void SCH_LEGACY_PLUGIN::saveLine( SCH_LINE* aLine )
 
         if( aLine->GetLineStyle() != aLine->GetDefaultStyle() )
             m_out->Print( 0, " %s %s", T_STYLE,
-                          SCH_LINE::GetLineStyleName( aLine->GetLineStyle() ) );
+                          TO_UTF8( STROKE_PARAMS::GetLineStyleToken( aLine->GetLineStyle() ) ) );
 
         if( aLine->GetLineColor() != COLOR4D::UNSPECIFIED )
             m_out->Print( 0, " %s",

@@ -743,7 +743,9 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     m_controls->SetAutoPan( false );
     m_controls->CaptureCursor( false );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
-    m_frame->SetMsgPanel( board() );
+
+    if( selection().Empty() )
+        m_frame->SetMsgPanel( board() );
 
     return 0;
 }
@@ -1195,7 +1197,9 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
     m_view->Remove( &preview );
-    m_frame->SetMsgPanel( board() );
+
+    if( selection().Empty() )
+        m_frame->SetMsgPanel( board() );
 
     return 0;
 }
@@ -1788,7 +1792,9 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
 
     m_view->Remove( &twoPointAsst );
     m_view->Remove( &preview );
-    m_frame->SetMsgPanel( board() );
+
+    if( selection().Empty() )
+        m_frame->SetMsgPanel( board() );
 
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     m_controls->SetAutoPan( false );
@@ -2064,7 +2070,9 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
     preview.Remove( graphic );
     m_view->Remove( &arcAsst );
     m_view->Remove( &preview );
-    m_frame->SetMsgPanel( board() );
+
+    if( selection().Empty() )
+        m_frame->SetMsgPanel( board() );
 
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     m_controls->SetAutoPan( false );

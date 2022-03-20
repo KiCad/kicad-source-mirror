@@ -650,8 +650,6 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     if( m_editPoints )
     {
         getView()->Remove( m_editPoints.get() );
-
-        finishItem();
         m_editPoints.reset();
     }
 
@@ -1598,17 +1596,8 @@ void PCB_POINT_EDITOR::updateItem() const
     }
 
     getView()->Update( item );
-}
 
-
-void PCB_POINT_EDITOR::finishItem()
-{
-    auto item = m_editPoints->GetParent();
-
-    if( !item )
-        return;
-
-    // TODO Refill edited zones when KiCad supports auto re-fill
+    frame()->SetMsgPanel( item );
 }
 
 
