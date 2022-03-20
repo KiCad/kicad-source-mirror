@@ -6,16 +6,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:53-0700\n"
-"PO-Revision-Date: 2022-02-16 02:33+0000\n"
+"PO-Revision-Date: 2022-03-21 12:11+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4876,9 +4876,9 @@ msgid "Gestures"
 msgstr "ジェスチャー"
 
 #: common/kiway.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "kiface ライブラリー '%s' のロードに失敗しました。"
+msgstr "kiface ライブラリー '%s' の署名の検証に失敗しました。"
 
 #: common/kiway.cpp:268
 #, c-format
@@ -15636,9 +15636,8 @@ msgid "Library changes are unsaved"
 msgstr "ライブラリーの変更は保存されていません"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:247
-#, fuzzy
 msgid "Symbol library loading was cancelled by user."
-msgstr "シンボル ライブラリー '%s' は既に存在します。"
+msgstr "シンボル ライブラリーの読み込みはユーザーによってキャンセルされました。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:591
 #: eeschema/tools/sch_edit_tool.cpp:119
@@ -18381,7 +18380,6 @@ msgstr ""
 "そのため、いくつかのアイテム・サイズは未定義です"
 
 #: gerbview/rs274d.cpp:413
-#, fuzzy
 msgid "Invalid Code Number"
 msgstr "不正なコードナンバー"
 
@@ -26283,9 +26281,8 @@ msgid "corners count %d"
 msgstr "角の数 %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:740
-#, fuzzy
 msgid "Unknown primitive"
-msgstr "基本要素を変換"
+msgstr "未知のプリミティブ"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:929
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
@@ -33100,9 +33097,8 @@ msgstr ""
 "Eco1_User レイヤーに移動しました。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1543
-#, fuzzy
 msgid "Loading dimension drawings..."
-msgstr "Unicode文字列をロードしています..."
+msgstr "寸法図をロードしています..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1564
 #: pcbnew/plugins/altium/altium_pcb.cpp:1571
@@ -35208,19 +35204,16 @@ msgid "Zones have insufficient overlap for merging."
 msgstr "ゾーンの重なりが不十分なため、マージできません。"
 
 #: pcbnew/tools/board_editor_control.cpp:1439
-#, fuzzy
 msgid "Some zone netcodes did not match and were not merged."
-msgstr "いくつかのアイテムは DRC に失敗して変更されていません。"
+msgstr "一部のゾーンのネットコードが一致せず、マージされませんでした。"
 
 #: pcbnew/tools/board_editor_control.cpp:1445
-#, fuzzy
 msgid "Some zone priorities did not match and were not merged."
-msgstr "いくつかのアイテムは DRC に失敗して変更されていません。"
+msgstr "一部のゾーンの優先順位が一致せず、マージされませんでした。"
 
 #: pcbnew/tools/board_editor_control.cpp:1451
-#, fuzzy
 msgid "Some zones were rule areas and were not merged."
-msgstr "いくつかのアイテムは DRC に失敗して変更されていません。"
+msgstr "一部のゾーンはルールエリアであり、マージされませんでした。"
 
 #: pcbnew/tools/board_editor_control.cpp:1457
 #, fuzzy
