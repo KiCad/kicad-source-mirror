@@ -72,6 +72,7 @@
 
 BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
     EVT_UPDATE_UI( ID_ON_GRID_SELECT, EDA_DRAW_FRAME::OnUpdateSelectGrid )
+    EVT_UPDATE_UI( ID_ON_ZOOM_SELECT, EDA_DRAW_FRAME::OnUpdateSelectZoom )
 
     EVT_ACTIVATE( EDA_DRAW_FRAME::onActivate )
 END_EVENT_TABLE()
@@ -368,6 +369,37 @@ void EDA_DRAW_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
         m_gridSelectBox->SetSelection( idx );
 }
 
+
+
+void EDA_DRAW_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
+{
+    // No need to update the grid select box if it doesn't exist or the grid setting change
+    // was made using the select box.
+    if( m_zoomSelectBox == nullptr )
+        return;
+
+    double zoom = GetCanvas()->GetGAL()->GetZoomFactor();
+    const std::vector<double>& zoomList = config()->m_Window.zoom_factors;
+    int curr_selection = m_zoomSelectBox->GetSelection();
+    int new_selection = 0;      // select zoom auto
+    double last_approx = 1e9;   // large value to start calculation
+
+    // Search for the nearest available value to the current zoom setting, and select it
+    for( size_t jj = 0; jj < zoomList.size(); ++jj )
+    {
+        double rel_error = std::fabs( zoomList[jj] - zoom ) / zoom;
+
+        if( rel_error < last_approx )
+        {
+            last_approx = rel_error;
+            // zoom IDs in m_zoomSelectBox start with 1 (leaving 0 for auto-zoom choice)
+            new_selection = jj+1;
+        }
+    }
+
+    if( curr_selection != new_selection )
+        m_zoomSelectBox->SetSelection( new_selection );
+}
 
 void EDA_DRAW_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
 {

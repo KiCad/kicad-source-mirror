@@ -236,9 +236,14 @@ public:
     void UpdateGridSelectBox();
 
     /**
-     * Update the checked item in the grid combobox.
+     * Update the checked item in the grid wxchoice.
      */
     void OnUpdateSelectGrid( wxUpdateUIEvent& aEvent );
+
+    /**
+     * Update the checked item in the zoom wxchoice.
+     */
+    void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
 
     /**
      * Rebuild the grid combobox to respond to any changes in the GUI (units, user
