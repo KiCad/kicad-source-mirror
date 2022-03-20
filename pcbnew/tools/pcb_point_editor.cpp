@@ -1493,6 +1493,8 @@ void PCB_POINT_EDITOR::updateItem() const
     }
 
     getView()->Update( item );
+
+    frame()->SetMsgPanel( item );
 }
 
 
