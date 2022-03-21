@@ -24,7 +24,10 @@
 #ifndef KICAD_WX_GRID_H
 #define KICAD_WX_GRID_H
 
+#include <wx/event.h>
 #include <wx/grid.h>
+#include <wx/version.h>
+
 
 class WX_GRID : public wxGrid
 {
@@ -118,6 +121,10 @@ protected:
 
     void onGridColMove( wxGridEvent& aEvent );
     void onGridCellSelect( wxGridEvent& aEvent );
+
+#if wxCHECK_VERSION( 3, 1, 0 )
+    void onDPIChanged(wxDPIChangedEvent& event);
+#endif
 
     bool m_weOwnTable;
 };
