@@ -36791,7 +36791,7 @@ msgstr "合并共线布线"
 
 #: pcbnew/tracks_cleaner.cpp:85
 msgid "Remove misconnected"
-msgstr "删除错误连接的"
+msgstr "删除错误连接"
 
 #: pcbnew/tracks_cleaner.cpp:96
 msgid "Delete tracks in pads"
