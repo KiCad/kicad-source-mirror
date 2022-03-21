@@ -36,7 +36,6 @@
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
-#include <wx/valnum.h>
 #include <math/util.h>      // for KiROUND
 #include <scintilla_tricks.h>
 #include "macros.h"
@@ -358,7 +357,15 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
         m_edaText->SetTextThickness( maxPenWidth );
     }
 
+    EDA_ANGLE delta = m_orientation.GetAngleValue() - m_edaText->GetTextAngle();
+
+    if( m_fpTextBox )
+        m_fpTextBox->Rotate( m_fpTextBox->GetPosition(), delta );
+    else if( m_pcbTextBox )
+        m_pcbTextBox->Rotate( m_pcbTextBox->GetPosition(), delta );
+
     m_edaText->SetTextAngle( m_orientation.GetAngleValue() );
+
     m_edaText->SetBold( m_bold->IsChecked() );
     m_edaText->SetItalic( m_italic->IsChecked() );
 
