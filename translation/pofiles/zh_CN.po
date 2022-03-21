@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:53-0700\n"
-"PO-Revision-Date: 2022-03-21 05:58+0000\n"
+"PO-Revision-Date: 2022-03-21 12:12+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -36919,7 +36919,7 @@ msgstr "锁定项目上的阴影"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show a shadow marker on locked items"
-msgstr "在锁定项目上显示阴影标记"
+msgstr "在锁定的项目上显示阴影标记"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "Show drawing sheet borders and title block"
@@ -37428,7 +37428,7 @@ msgstr "允许选中锁定项目"
 #: pcbnew/widgets/panel_selection_filter.cpp:193
 #: pcbnew/widgets/panel_selection_filter_base.cpp:57
 msgid "Rule Areas"
-msgstr "规则区域"
+msgstr "规则敷铜"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:194
 #: pcbnew/widgets/panel_selection_filter_base.cpp:61
@@ -37442,7 +37442,7 @@ msgstr "其他项目"
 
 #: pcbnew/zone.cpp:523
 msgid "Rule Area"
-msgstr "规则区域"
+msgstr "规则敷铜"
 
 #: pcbnew/zone.cpp:525
 msgid "Teardrop Area"
@@ -37499,7 +37499,7 @@ msgstr "填充模式"
 
 #: pcbnew/zone.cpp:609
 msgid "Filled Area"
-msgstr "填充区域"
+msgstr "填充敷铜"
 
 #: pcbnew/zone.cpp:625
 msgid "HatchBorder Lines"
@@ -37512,7 +37512,7 @@ msgstr "拐角数"
 #: pcbnew/zone.cpp:787
 #, c-format
 msgid "Rule Area Cutout on %s"
-msgstr "%s 上的规则区域挖空"
+msgstr "%s 上的规则敷铜挖空"
 
 #: pcbnew/zone.cpp:789
 #, c-format
@@ -37522,7 +37522,7 @@ msgstr "%s 上的敷铜挖空"
 #: pcbnew/zone.cpp:794
 #, c-format
 msgid "Rule Area on %s"
-msgstr "%s 上的规则区域"
+msgstr "%s 上的规则敷铜"
 
 #: pcbnew/zone.cpp:796
 #, c-format
@@ -37567,7 +37567,7 @@ msgstr "重新填充"
 
 #: pcbnew/zone_filler.cpp:438
 msgid "Continue without Refill"
-msgstr "取消区域"
+msgstr "取消敷铜"
 
 #: pcbnew/zones.h:62
 msgid "inherited"
