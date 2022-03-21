@@ -1133,6 +1133,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
         if( localA > global || localB > global )
         {
+            constraint.SetParentRule( nullptr );
             constraint.SetName( m_msg );
             constraint.m_Value.SetMin( clearance );
             return constraint;
