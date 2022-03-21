@@ -24610,15 +24610,13 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"这是此封装的焊盘和焊膏之间的\n"
-"局部间隙。\n"
+"这是此封装的焊盘和焊膏之间的局部间隙。\n"
 "最终的间距值是该值与间距值比率之和。\n"
-"负值表示版膜开口尺寸小于焊盘尺寸。\n"
-"可以在焊盘属性的局部间隙和设置选项卡中\n"
-"逐个焊盘覆盖此值。"
+"负值表示阻焊尺寸小于焊盘尺寸。\n"
+"可以在焊盘属性的局部间隙和设置选项卡中逐个焊盘覆盖此值。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:287
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -24631,7 +24629,7 @@ msgid ""
 "and Settings tab of Pad Properties."
 msgstr ""
 "这是以此布线的焊盘宽度和高度的百分比形式应用的局部间隙比率。\n"
-"值为 10 表示水平间距值是焊盘宽度的 10% o，垂直间距值是焊盘高度的 10% o。\n"
+"值为 10 表示水平间距值是焊盘宽度的 10%，垂直间距值是焊盘高度的 10%。\n"
 "最终间距值是该值与绝对间距值之和。\n"
 "负值表示模板阻焊尺寸小于焊盘尺寸。\n"
 "可以在焊盘属性的局部间隙和设置选项卡中逐个焊盘覆盖此值。"
@@ -25481,7 +25479,7 @@ msgstr "移动 Y："
 msgid ""
 "Invalid movement values.  Movement would place selection outside of the "
 "maximum board area."
-msgstr "无效移动值。 移动会将所选内容置于最大板区域之外。"
+msgstr "无效移动值。 移动会将所选内容置于最大板敷铜之外。"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around center of selection"
@@ -26286,7 +26284,7 @@ msgstr "来自父级封装"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:716
 msgid "Zone knockout:"
-msgstr "区域反相："
+msgstr "敷铜反相："
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
 msgid "Pad shape"
@@ -26578,11 +26576,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:216
 msgid "Subtract soldermask from silkscreen"
-msgstr "剔除开窗区域中的丝印"
+msgstr "剔除开窗敷铜中的丝印"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
 msgid "Remove silkscreen from areas without soldermask"
-msgstr "在没有阻焊的区域移除丝印"
+msgstr "在没有阻焊的敷铜移除丝印"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 msgid "Coordinate format:"
@@ -26981,9 +26979,8 @@ msgid ""
 "When enabled, the entire portion of the track that is visible on the screen "
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
-msgstr ""
-"启用后，当一段线路被拖动时，屏幕上可见的整个导线部分将被优化和重排路径。禁用"
-"后，将只优化被拖动部分附近的区域。"
+msgstr "启用后，当一段线路被拖动时，屏幕上可见的整个导线部分将被优化和重排路径。禁用"
+"后，将只优化被拖动部分附近的敷铜。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:72
 msgid "Use mouse path to set track posture"
@@ -27171,13 +27168,13 @@ msgstr "层："
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:44
 msgid "Area name:"
-msgstr "区域名称："
+msgstr "敷铜名称："
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:46
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:54
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:136
 msgid "A unique name for this rule area for use in DRC rules"
-msgstr "此规则区域的唯一名称，用于 DRC 规则"
+msgstr "此规则敷铜的唯一名称，用于 DRC 规则"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:69
 msgid "Basic rules:"
@@ -27189,7 +27186,7 @@ msgstr "禁止布线"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:74
 msgid "Prevent tracks from routing into this area"
-msgstr "防止导线被布入这个区域"
+msgstr "防止导线被布入这个敷铜"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:78
 msgid "Keep out vias"
@@ -27197,7 +27194,7 @@ msgstr "禁止过孔"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:79
 msgid "Prevent vias from being placed in this area"
-msgstr "防止过孔被放置在这个区域"
+msgstr "防止过孔被放置在这个敷铜"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:83
 msgid "Keep out pads"
@@ -27205,7 +27202,7 @@ msgstr "禁止焊盘"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:84
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr "如果焊盘与该区域重叠，则会引发 DRC 错误"
+msgstr "如果焊盘与该敷铜重叠，则会引发 DRC 错误"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:88
 msgid "Keep out copper fill"
@@ -27213,7 +27210,7 @@ msgstr "禁止敷铜"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:89
 msgid "Zones will not fill copper into this area"
-msgstr "敷铜时不会将铜填充到该区域以内"
+msgstr "敷铜时不会将铜填充到该敷铜以内"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:93
 msgid "Keep out footprints"
@@ -27221,7 +27218,7 @@ msgstr "禁止封装"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:94
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
-msgstr "如果封装外框与该区域重叠，则引发 DRC 错误"
+msgstr "如果封装外框与该敷铜重叠，则引发 DRC 错误"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:116
 msgid "Constrain outline to H, V and 45 deg"
@@ -27229,11 +27226,11 @@ msgstr "限制轮廓线方向水平，垂直或 45 度"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:117
 msgid "Draw the area using horizontal, vertical and 45 degree lines only"
-msgstr "仅用水平、垂直或 45 度线绘制该区域"
+msgstr "仅用水平、垂直或 45 度线绘制该敷铜"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:71
 msgid "Rule Area Properties"
-msgstr "规则区域属性"
+msgstr "规则敷铜属性"
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:49
 msgid "Move items on:"
