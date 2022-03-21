@@ -27305,7 +27305,7 @@ msgstr "输入要放在所选层上的文字。"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:100
 msgid "Knockout"
-msgstr "脱模"
+msgstr "阴文 (反相)"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:104
 msgid "Keep text upright"
@@ -27683,7 +27683,7 @@ msgstr "吸附到焊盘："
 #: pcbnew/dialogs/panel_edit_options_base.cpp:271
 #: pcbnew/dialogs/panel_edit_options_base.cpp:279
 msgid "Capture cursor when the mouse enters a pad area"
-msgstr "当鼠标进入焊盘区域时捕捉光标"
+msgstr "当鼠标进入焊盘敷铜时捕捉光标"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:275
 #: pcbnew/dialogs/panel_edit_options_base.cpp:289
@@ -27765,7 +27765,7 @@ msgstr "画一个轮廓来显示图框尺寸。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:380
 msgid "Auto-refill zones"
-msgstr "自动重填区域"
+msgstr "自动重填敷铜"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:382
 msgid ""
@@ -28774,7 +28774,7 @@ msgstr ""
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
-msgstr "正间隙是指比焊盘面积大的区域(通常用于焊料掩膜间隙)。"
+msgstr "正间隙是指比焊盘面积大的敷铜(通常用于焊料掩膜间隙)。"
 
 # 绿油桥宽：
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
@@ -28788,8 +28788,8 @@ msgid ""
 "This parameter is only used to plot solder mask layers.\n"
 "Leave at 0 unless you know what you are doing."
 msgstr ""
-"两个焊盘区域之间最短距离。\n"
-"如两个焊盘区域间距离小于此值，两者会在绘制过程中被合并。\n"
+"两个焊盘敷铜之间最短距离。\n"
+"如两个焊盘敷铜间距离小于此值，两者会在绘制过程中被合并。\n"
 "这个参数只用来绘制阻焊层。\n"
 "将其保留为 0，除非您知道自己在做什么。"
 
@@ -28825,7 +28825,7 @@ msgstr ""
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste "
 "clearance)."
-msgstr "负间隙是指比焊盘小的区域 (通常用于锡膏间隙)。"
+msgstr "负间隙是指比焊盘小的敷铜 (通常用于锡膏间隙)。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:118
 msgid ""
@@ -29625,7 +29625,7 @@ msgstr "网络类 '%s' (差动线对)"
 
 #: pcbnew/drc/drc_engine.cpp:447
 msgid "keepout area"
-msgstr "禁止区域"
+msgstr "禁止敷铜"
 
 #: pcbnew/drc/drc_engine.cpp:449
 #, c-format
@@ -29635,7 +29635,7 @@ msgstr "添加禁布区 '%s'"
 #: pcbnew/drc/drc_engine.cpp:699
 #, c-format
 msgid "Resolved zone connection type: %s."
-msgstr "解析区域连接类型：%s。"
+msgstr "解析敷铜连接类型：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:717
 #, c-format
@@ -29668,7 +29668,7 @@ msgstr "板最小孔间隙：%s。"
 #: pcbnew/drc/drc_engine.cpp:840
 #, c-format
 msgid "Local override on %s; zone connection: %s."
-msgstr "%s 上的本地覆盖；区域连接：%s。"
+msgstr "%s 上的本地覆盖；敷铜连接：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:856
 #, c-format
@@ -29683,7 +29683,7 @@ msgstr "%s 上的本地覆盖；防散热导线宽度：%s。"
 #: pcbnew/drc/drc_engine.cpp:881
 #, c-format
 msgid "Zone %s min thickness: %s."
-msgstr "区域 %s 最小宽度：%s。"
+msgstr "敷铜 %s 最小宽度：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:895
 #, c-format
@@ -29813,12 +29813,12 @@ msgstr "本地间隙 %s；间隙：%s。"
 #: pcbnew/drc/drc_engine.cpp:1237
 #, c-format
 msgid "Footprint %s zone connection: %s."
-msgstr "封装 %s 区域连接：%s。"
+msgstr "封装 %s 敷铜连接：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1252
 #, c-format
 msgid "Zone %s pad connection: %s."
-msgstr "区域 %s 焊盘连接：%s。"
+msgstr "敷铜 %s 焊盘连接：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1256 pcbnew/drc/drc_engine.cpp:1272
 #: pcbnew/drc/drc_engine.cpp:1288 pcbnew/zone.cpp:332 pcbnew/zone.cpp:472
@@ -29828,12 +29828,12 @@ msgstr "敷铜"
 #: pcbnew/drc/drc_engine.cpp:1268
 #, c-format
 msgid "Zone %s thermal relief gap: %s."
-msgstr "区域 %s 散热间隙：%s。"
+msgstr "敷铜 %s 散热间隙：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1284
 #, c-format
 msgid "Zone %s thermal spoke width: %s."
-msgstr "区域 %s 散热辐条宽度：%s。"
+msgstr "敷铜 %s 散热辐条宽度：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1316
 #, c-format
@@ -29898,7 +29898,7 @@ msgstr "隔离铜填充"
 
 #: pcbnew/drc/drc_item.cpp:88
 msgid "Thermal relief connection to zone incomplete"
-msgstr "与区域的花焊盘连接不完整"
+msgstr "与敷铜的花焊盘连接不完整"
 
 #: pcbnew/drc/drc_item.cpp:92
 msgid "Via is not connected or connected on only one layer"
@@ -30011,7 +30011,7 @@ msgstr "阻焊层孔径可桥接具有不同网络的项目"
 
 #: pcbnew/drc/drc_item.cpp:204
 msgid "Silkscreen clipped by solder mask"
-msgstr "与开窗区域相交的丝印"
+msgstr "与开窗敷铜相交的丝印"
 
 #: pcbnew/drc/drc_item.cpp:208
 msgid "Silkscreen clipped by board edge"
