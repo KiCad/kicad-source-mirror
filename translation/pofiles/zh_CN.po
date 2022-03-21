@@ -30015,7 +30015,7 @@ msgstr "与开窗敷铜相交的丝印"
 
 #: pcbnew/drc/drc_item.cpp:208
 msgid "Silkscreen clipped by board edge"
-msgstr "按照板边缘截取的丝印"
+msgstr "与电路板边相交的丝印"
 
 #: pcbnew/drc/drc_item.cpp:212
 msgid "Silkscreen overlap"
