@@ -30374,7 +30374,7 @@ msgstr "正在根据库检查电路板封装…"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:518
 #, c-format
 msgid "Footprint '%s' not found in library '%s'."
-msgstr "在库 “%s” 中未找到封装 \"%s\"。"
+msgstr "未找到封装 '%s' (在库 '%s' 中)。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:531
 #, c-format
