@@ -14976,11 +14976,10 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"将要导入的原理图似乎是作为不同项目的一部分而创建的。 "
-"这可能导致符号库链接在全局符号和/或当前项目符号库表中丢失或与符号库链接冲突。"
+"要导入的原理图似乎是作为其他工程的一部分创建的。这可能会导致全局符号和/或当前"
+"工程符号库表中的符号库链接丢失或与符号库链接冲突。\n"
 "\n"
-"\n"
-"你希望继续吗？"
+"你想继续吗？"
 
 #: eeschema/sheet.cpp:314
 msgid ""
@@ -16943,7 +16942,7 @@ msgid ""
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted."
 msgstr ""
 "<b>重复引脚 %s</b> %s，位置 <b>(%.3f, %.3f)</b>，与引脚 %s%s 冲突，后者位于 "
-"<b>(%.3f, %.3f)</b>, 冲突区域在转换后的单元 %c 和 %c。"
+"<b>(%.3f, %.3f)</b>, 冲突敷铜在转换后的单元 %c 和 %c。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:297
 #, c-format
@@ -16960,8 +16959,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b> in units %c and %c."
 msgstr ""
-"<b>重复引脚 %s</b> %s，位置 <b>(%s, %s)</b>，和引脚 %s%s 冲突，后者位于 "
-"<b>(%s, %s)</b>，冲突区域在单元 %c 和 %c。"
+"<b>重复引脚 %s</b> %s，位置 <b>(%s, %s)</b>，和引脚 %s%s 冲突，后者位于 <b>("
+"%s, %s)</b>，冲突敷铜在单元 %c 和 %c。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:348
 #, c-format
@@ -22520,7 +22519,7 @@ msgstr "合计"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:108
 msgid "Area:"
-msgstr "区域："
+msgstr "敷铜："
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:147
 msgid "THT:"
@@ -22624,7 +22623,7 @@ msgstr "电路板"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:699
 #: pcbnew/dialogs/dialog_board_statistics.cpp:707
 msgid "Area"
-msgstr "区域"
+msgstr "敷铜"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:754
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:39
@@ -22646,7 +22645,7 @@ msgstr "电路板尺寸"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:200
 msgid "Subtract holes from board area"
-msgstr "从电路板区域中减去过孔"
+msgstr "从电路板敷铜中减去过孔"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:203
 msgid "Exclude components with no pins"
