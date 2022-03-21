@@ -36787,7 +36787,7 @@ msgstr "清除焊盘和布线"
 
 #: pcbnew/tracks_cleaner.cpp:75
 msgid "Merge collinear tracks"
-msgstr "合并同一直线的线路"
+msgstr "合并共线布线"
 
 #: pcbnew/tracks_cleaner.cpp:85
 msgid "Remove misconnected"
