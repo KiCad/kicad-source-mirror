@@ -1219,6 +1219,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
         if( localA > global || localB > global )
         {
+            constraint.SetParentRule( nullptr );
             constraint.SetName( m_msg );
             constraint.m_Value.SetMin( clearance );
             return constraint;
@@ -1238,6 +1239,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                           EscapeHTML( footprint->GetSelectMenuText( UNITS ) ),
                                           EscapeHTML( PrintZoneConnection( local ) ) ) )
 
+                constraint.SetParentRule( nullptr );
                 constraint.SetName( _( "footprint" ) );
                 constraint.m_ZoneConnection = local;
                 return constraint;
@@ -1253,6 +1255,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                       EscapeHTML( zone->GetSelectMenuText( UNITS ) ),
                                       EscapeHTML( PrintZoneConnection( local ) ) ) )
 
+            constraint.SetParentRule( nullptr );
             constraint.SetName( _( "zone" ) );
             constraint.m_ZoneConnection = local;
             return constraint;
@@ -1269,6 +1272,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                       EscapeHTML( zone->GetSelectMenuText( UNITS ) ),
                                       EscapeHTML( REPORT_VALUE( local ) ) ) )
 
+            constraint.SetParentRule( nullptr );
             constraint.SetName( _( "zone" ) );
             constraint.m_Value.SetMin( local );
             return constraint;
@@ -1285,6 +1289,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                       EscapeHTML( zone->GetSelectMenuText( UNITS ) ),
                                       EscapeHTML( REPORT_VALUE( local ) ) ) )
 
+            constraint.SetParentRule( nullptr );
             constraint.SetName( _( "zone" ) );
             constraint.m_Value.SetMin( local );
             return constraint;
