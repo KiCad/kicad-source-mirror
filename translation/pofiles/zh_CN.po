@@ -5401,7 +5401,7 @@ msgstr "网格轴"
 
 #: common/layer_id.cpp:179
 msgid "Locked item shadow"
-msgstr "锁定项目阴影"
+msgstr "锁定的项目阴影"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
@@ -12202,7 +12202,7 @@ msgstr "从菜单中明确选择。"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:122
 #: pcbnew/dialogs/panel_edit_options_base.cpp:193
 msgid "Add item(s) to selection."
-msgstr "增加项目到选中区域。"
+msgstr "增加项目到选中敷铜。"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:114
 #: pcbnew/dialogs/panel_edit_options_base.cpp:127
@@ -14306,7 +14306,7 @@ msgstr "无效的符号转换编号 %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:430
 msgid "Floating point number with incorrect locale"
-msgstr "区域设置不正确的浮点数"
+msgstr "敷铜设置不正确的浮点数"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:440
 msgid "Invalid floating point number"
