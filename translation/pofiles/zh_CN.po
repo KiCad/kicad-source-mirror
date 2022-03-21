@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:53-0700\n"
-"PO-Revision-Date: 2022-03-21 05:57+0000\n"
+"PO-Revision-Date: 2022-03-21 05:58+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -24235,7 +24235,7 @@ msgstr "搜索 DRC 标记"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:78
 msgid "Search net names"
-msgstr "搜索网络名"
+msgstr "搜索网络名称"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:96
 msgid "Find Previous"
@@ -24473,7 +24473,7 @@ msgid "Solder paste relative clearance:"
 msgstr "焊膏相对间隙："
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:316
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -24485,7 +24485,7 @@ msgid ""
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
 "这是以此封装的焊盘宽度和高度的百分比形式应用的局部间隙比率。\n"
-"值为 10 表示水平间距值是焊盘宽度的 10% o，垂直间距值是焊盘高度的 10% o。\n"
+"值为 10 表示水平间距值是焊盘宽度的 10%，垂直间距值是焊盘高度的 10%。\n"
 "该值可由焊盘局部值替代。\n"
 "最终间距值是该值与绝对间距值之和。\n"
 "负值表示阻焊尺寸小于焊盘尺寸。"
