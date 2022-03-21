@@ -22733,7 +22733,7 @@ msgstr "检查敷铜..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:142
 msgid "Rebuild connectivity..."
-msgstr "重建连接性…"
+msgstr "重建连接..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:146
 msgid "Check items..."
