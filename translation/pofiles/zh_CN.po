@@ -22741,7 +22741,7 @@ msgstr "检查项目..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:157
 msgid "Items checked..."
-msgstr "已检查项目…"
+msgstr "已选中项目..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:168
 msgid "Board cleanup"
