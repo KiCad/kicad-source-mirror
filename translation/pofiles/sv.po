@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:53-0700\n"
-"PO-Revision-Date: 2022-03-21 12:12+0000\n"
+"PO-Revision-Date: 2022-03-21 22:49+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -1923,7 +1923,7 @@ msgstr ""
 "KiCad har körts för första gången med hjälp av den nya %sbibliotekstabellen "
 "för\n"
 "åtkomst till bibliotek. För att KiCad ska få åtkomst till %sbibliotek,\n"
-"måste du konfigurera din globala %sbibliotekstabell. Välj bland ett\n"
+"måste du konfigurera din globala bibliotekstabell för %s. Välj bland ett\n"
 "av alternativen nedan. Om du inte är säker på vilket alternativ du ska välja,"
 "\n"
 "använd standardvalet."
@@ -1931,7 +1931,7 @@ msgstr ""
 #: common/dialogs/dialog_global_lib_table_config.cpp:49
 #, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr "Kopiera standard global %s bibliotektabell (rekommenderas)"
+msgstr "Kopiera standard global bibliotektabell för %s (rekommenderas)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
@@ -1940,12 +1940,12 @@ msgid ""
 "table"
 msgstr ""
 "Välj det här alternativet om du inte är säker på att konfigurera den globala "
-"%sbibliotektabellen"
+"bibliotektabellen för %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:55
 #, c-format
 msgid "Copy custom global %s library table"
-msgstr "Kopiera anpassad global %s bibliotektabell"
+msgstr "Kopiera anpassad global bibliotektabell för %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
@@ -1958,7 +1958,7 @@ msgstr ""
 #: common/dialogs/dialog_global_lib_table_config.cpp:61
 #, c-format
 msgid "Create an empty global %s library table"
-msgstr "Skapa en tom global %s bibliotekstabell"
+msgstr "Skapa en tom global bibliotekstabell för %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
@@ -1971,7 +1971,7 @@ msgstr ""
 #: common/dialogs/dialog_global_lib_table_config.cpp:67
 #, c-format
 msgid "Select global %s library table file:"
-msgstr "Välj global %sbibliotekstabellfil:"
+msgstr "Välj global bibliotekstabellfil för %s:"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:21
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:28
@@ -5873,7 +5873,7 @@ msgstr "Inställningar för pappersstorlek och titelblockinformation"
 
 #: common/tool/actions.cpp:102
 msgid "Print..."
-msgstr "Skriv Ut..."
+msgstr "Skriv ut..."
 
 #: common/tool/actions.cpp:108
 msgid "Plot..."
@@ -10403,7 +10403,7 @@ msgstr "Skriv ut kretsschema"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:328
 msgid "An error occurred attempting to print the schematic."
-msgstr "Ett fel inträffade vid försök att skriva ut schemat."
+msgstr "Ett fel inträffade vid försök att skriva ut kretsschemat."
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:353
 #, c-format
@@ -10412,7 +10412,7 @@ msgstr "Skriv ut sida %d"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
 msgid "Print sheet &reference and title block"
-msgstr "Skriv ut ark & referens och titelblock"
+msgstr "Skriv ut ark&referens och titelblock"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:24
 msgid "Print (or not) the Frame references."
@@ -10420,7 +10420,7 @@ msgstr "Skriv ut (eller inte) ramreferenserna."
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:28
 msgid "Print in &black and white only"
-msgstr "Skriv ut endast & i svartvitt"
+msgstr "Skriv ut endast i &svartvitt"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:32
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:209
@@ -15617,7 +15617,7 @@ msgstr "Symbol..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:71
 msgid "View as PNG..."
-msgstr "Visa som PNG..."
+msgstr "Aktuell vy som PNG..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:72
 msgid "Symbol as SVG..."
@@ -16284,7 +16284,7 @@ msgstr "Simulera krets i SPICE"
 
 #: eeschema/tools/ee_actions.cpp:61
 msgid "Opens the datasheet in a browser"
-msgstr "Öppnar databladet i en webbläsare"
+msgstr "Öppna databladet i en webbläsare"
 
 #: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1190
 msgid "Create Corner"
@@ -16437,7 +16437,8 @@ msgstr ""
 "Redigeringsläge för synkroniserade stift\n"
 "När det är aktiverat sprids alla ändringar (utom pin-nummer) till andra "
 "enheter.\n"
-"Aktiverat som standard för delar med flera enheter med utbytbara enheter."
+"Aktiverat som standard för komponenter innehållande flera sinsemellan "
+"utbytbara enheter."
 
 #: eeschema/tools/ee_actions.cpp:220
 msgid "Add Pin"
@@ -16846,11 +16847,11 @@ msgstr "Redigera text- och grafikegenskaper över hela schemat"
 
 #: eeschema/tools/ee_actions.cpp:518
 msgid "Symbol Properties..."
-msgstr "Symbolegenskaper ..."
+msgstr "Symbolegenskaper..."
 
 #: eeschema/tools/ee_actions.cpp:518
 msgid "Displays symbol properties dialog"
-msgstr "Visar symbolegenskapsdialogrutan"
+msgstr "Visa dialogrutan symbolegenskaper"
 
 #: eeschema/tools/ee_actions.cpp:523
 msgid "Pin Table..."
@@ -17811,7 +17812,7 @@ msgstr "Ritningsläge"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:43
 msgid "Sketch flashed items"
-msgstr "Skiss blinkade objekt"
+msgstr "Skissa fyllda objekt"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:46
 msgid "Sketch lines"
@@ -17819,7 +17820,7 @@ msgstr "Skisslinjer"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:49
 msgid "Sketch polygons"
-msgstr "Skiss polygoner"
+msgstr "Skissa polygoner"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:58
 msgid "Full size"
@@ -18523,7 +18524,7 @@ msgstr "Föregående lager"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 msgid "Sketch Lines"
-msgstr "Skisslinjer"
+msgstr "Skissa linjer"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 msgid "Show lines in outline mode"
@@ -18531,7 +18532,7 @@ msgstr "Visa rader i konturläge"
 
 #: gerbview/tools/gerbview_actions.cpp:156
 msgid "Sketch Flashed Items"
-msgstr "Skissa blinkade objekt"
+msgstr "Skissa fyllda objekt"
 
 #: gerbview/tools/gerbview_actions.cpp:156
 msgid "Show flashed items in outline mode"
@@ -18539,7 +18540,7 @@ msgstr "Visa blinkade objekt i konturläge"
 
 #: gerbview/tools/gerbview_actions.cpp:162
 msgid "Sketch Polygons"
-msgstr "Skiss polygoner"
+msgstr "Skissa polygoner"
 
 #: gerbview/tools/gerbview_actions.cpp:162
 msgid "Show polygons in outline mode"
@@ -19881,7 +19882,7 @@ msgstr "Nytt föremål"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:233
 msgid "Print Drawing Sheet"
-msgstr "Skriv ut Ritningsblad"
+msgstr "Skriv ut ritningsblad"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:238
 msgid "An error occurred attempting to print the drawing sheet."
@@ -23074,7 +23075,7 @@ msgstr "Inget fotavtryck har valts"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:45
 msgid "Update Footprint"
-msgstr "Uppdatera Footprint"
+msgstr "Uppdatera fotavtryck"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:47
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:84
@@ -23341,14 +23342,14 @@ msgstr "Minsta tjocklek på fyllda områden."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:229
 msgid "Pad connections:"
-msgstr "Pad anslutning:"
+msgstr "Lödytans anslutningstyp:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:231
 msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local  pad settings"
 msgstr ""
-"Standard anslutningstyp mellan lödyta och zon.\n"
+"Standard anslutningstyp mellan lödyta och kopparzon.\n"
 "Denna inställning kan åsidosättas av lokala lödyte-inställningar"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:235 pcbnew/zone.cpp:1345
@@ -23609,7 +23610,7 @@ msgstr "Från startvärde"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:127
 msgid "Initial Pad Number"
-msgstr "Ursprungligt padnummer"
+msgstr "Ursprungligt lödytenummer"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:131
 msgid "Continuous (1, 2, 3...)"
@@ -23639,7 +23640,7 @@ msgstr "Pad-numreringsstart:"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:179
 #: pcbnew/dialogs/dialog_create_array_base.cpp:321
 msgid "Pad numbering skip:"
-msgstr "Hoppning av padnummerering:"
+msgstr "Stegstorlek för lödytenumrering:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:206
 #, fuzzy
@@ -23688,7 +23689,7 @@ msgstr "Numreringsalternativ"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:295
 msgid "Initial Pad Number:"
-msgstr "Ursprungligt padnummer:"
+msgstr "Ursprungligt lödytenummer:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:299
 msgid "Pad Numbering:"
@@ -24109,7 +24110,7 @@ msgstr "Designregelkontroll (DRC)"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
-msgstr "Kuddnamnen är begränsade till fyra tecken (inklusive nummer)."
+msgstr "Lödytenamnen är begränsade till fyra tecken (inklusive nummer)."
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:32
 msgid "Pad name prefix:"
@@ -24117,7 +24118,7 @@ msgstr "Padnamnsprefix:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:47
 msgid "First pad number:"
-msgstr "Första padnummer:"
+msgstr "Första lödytenummer:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.h:51
 msgid "Pad Enumeration Settings"
@@ -24171,9 +24172,9 @@ msgid ""
 "them back to the PCB."
 msgstr ""
 "Uppdatera / återställ strängar: det finns två fall som dessa beskrivningar "
-"måste täcka: användaren har åsidosatt ett fotavtryck på kretskortet och vill "
-"ta bort dem, eller användaren har gjort ändringar i bibliotekets fotavtryck "
-"och vill sprida dem tillbaka till kretskortet."
+"måste täcka: användaren har gjort ändringar i ett fotavtryck på "
+"mönsterkortet och vill ta bort dem, eller användaren har gjort ändringar i "
+"bibliotekets fotavtryck och vill överföra dem tillbaka till mönsterkortet."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:359
 #, c-format
@@ -24211,7 +24212,7 @@ msgstr "Uppdatera fotavtryck som matchar referensbeteckning:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:38
 msgid "Update footprints matching value:"
-msgstr "Uppdatera matchningsvärde för fotspår:"
+msgstr "Uppdatera fotavtryck som matchar värde:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:44
 msgid "Update footprints with library id:"
@@ -24807,7 +24808,7 @@ msgstr "Genererar inte DRC-överträdelse för saknad gårdsplan (courtyard)"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:223
 msgid "Update Footprint from Library..."
-msgstr "Uppdatera fotavtryck från biblioteket ..."
+msgstr "Uppdatera fotavtryck från biblioteket..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:226
 #: pcbnew/tools/pcb_actions.cpp:434
@@ -24950,7 +24951,7 @@ msgstr "Anslutning till kopparzoner"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:353
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:324
 msgid "Pad connection to zones:"
-msgstr "Padanslutning till zoner:"
+msgstr "Lödyteanslutning till zoner:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:357
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:328
@@ -26422,7 +26423,7 @@ msgstr "Formtyp:"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2144
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:817
 msgid "Add Primitive"
-msgstr "Lägg till Primitive"
+msgstr "Lägg till primitiv"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:36
 msgid "Pad type:"
@@ -26447,7 +26448,7 @@ msgstr "SMD-öppning"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:46
 msgid "Pad number:"
-msgstr "Pad nummer:"
+msgstr "Lödytenummer:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:83
 msgid "Do not allow position of pad relative to parent footprint to be changed"
@@ -26487,7 +26488,7 @@ msgstr "Fasad rektangel"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
 msgid "Chamfered with other corners rounded"
-msgstr "Fasad med andra hörn rundade"
+msgstr "Fasad med övriga hörn rundade"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
 msgid "Custom (circular base)"
@@ -26722,8 +26723,8 @@ msgid ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
 msgstr ""
-"Detta är det lokala avståndet mellan denna kudde och lödmasken.\n"
-"Om 0 används det lokala fotavtrycket eller det globala värdet."
+"Detta är det lokala avståndet mellan denna lödyta och lödmasken.\n"
+"Om 0 används det lokala fotavtryckets värde eller det globala värdet."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:623
 msgid ""
@@ -26762,11 +26763,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:706
 msgid "Pad connection:"
-msgstr "Pad anslutning:"
+msgstr "Lödytans anslutningstyp:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:710
 msgid "From parent footprint"
-msgstr "Från föräldrarnas fotavtryck"
+msgstr "Från fotavtryckets förälder"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:716
 #, fuzzy
@@ -27442,7 +27443,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:47
 msgid "Optimize pad connections"
-msgstr "Optimera padanslutningar"
+msgstr "Optimera lödyteanslutningar"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:48
 msgid ""
@@ -28081,7 +28082,7 @@ msgstr "Visa eller dölj nätnamn på lödytor och / eller ledare."
 #: pcbnew/dialogs/panel_display_options_base.cpp:45
 #: pcbnew/tools/pcb_actions.cpp:866
 msgid "Show pad numbers"
-msgstr "Visa padnummer"
+msgstr "Visa lödytenummer"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:49
 msgid "Show pad <no net> indicator"
@@ -30415,7 +30416,7 @@ msgstr "(%s max ringformad bredd %s; faktisk %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:71
 msgid "Checking pad, via and zone connections..."
-msgstr "Kontrollblock, via- och zonanslutningar ..."
+msgstr "Kontrollerar lödyte-, via- och zonanslutningar..."
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:155
 msgid "Checking net connections..."
@@ -31187,7 +31188,7 @@ msgstr "[Inget fotavtryck laddat]"
 
 #: pcbnew/footprint_edit_frame.cpp:931
 msgid "Updating Footprint Libraries"
-msgstr "Uppdaterar Footprint Libraries"
+msgstr "Uppdaterar fotavtrycksbibliotek"
 
 #: pcbnew/footprint_edit_frame.cpp:1220
 msgid "No footprint selected."
@@ -31246,7 +31247,7 @@ msgstr ""
 "Skrivning / modifiering av äldre bibliotek (.mod-filer) är inte tillåtet\n"
 "Spara det aktuella biblioteket i det nya .pretty-formatet\n"
 "och uppdatera din footprint lib-tabell\n"
-"för att spara ditt fotavtryck (en .kicad_mod-fil) i mappen .pretty library"
+"för att spara ditt fotavtryck (en .kicad_mod-fil) i .pretty-biblioteksmappen"
 
 #: pcbnew/footprint_libraries_utils.cpp:66
 msgid ""
@@ -31659,7 +31660,7 @@ msgstr "&Grafik..."
 
 #: pcbnew/menubar_footprint_editor.cpp:78
 msgid "View as &PNG..."
-msgstr "Visa som &PNG..."
+msgstr "Aktuell vy som &PNG..."
 
 #: pcbnew/menubar_footprint_editor.cpp:79
 msgid "Create a PNG file from the current view"
@@ -31683,11 +31684,11 @@ msgstr "Ladda ett fotavtryck från det aktuella mönsterkortet i redigeraren"
 
 #: pcbnew/menubar_footprint_editor.cpp:222
 msgid "&Insert Footprint on PCB"
-msgstr "& Sätt in fotavtryck på kretskortet"
+msgstr "&Sätt in fotavtryck på mönsterkortet"
 
 #: pcbnew/menubar_footprint_editor.cpp:223
 msgid "Insert footprint onto current board"
-msgstr "Sätt in fotavtryck på det aktuella kortet"
+msgstr "Sätt in fotavtryck på det aktuella mönsterkortet"
 
 #: pcbnew/menubar_pcb_editor.cpp:100
 msgid "Resc&ue"
@@ -32340,7 +32341,7 @@ msgstr "Kontakt"
 #: pcbnew/pad.cpp:1172
 #, c-format
 msgid "Pad %s of %s on %s"
-msgstr "Kudde %s av %s på %s"
+msgstr "Lödyta %s av %s på %s"
 
 #: pcbnew/pad.cpp:1179 pcbnew/pad.cpp:1185 pcbnew/pad.cpp:1202
 #, c-format
@@ -32379,7 +32380,7 @@ msgstr "Lödytetyp"
 
 #: pcbnew/pad.cpp:1679
 msgid "Pad Number"
-msgstr "Kuddnummer"
+msgstr "Lödytenummer"
 
 #: pcbnew/pad.cpp:1688
 msgid "Size X"
@@ -34799,11 +34800,11 @@ msgstr "Ta bort kragförstärkningar"
 
 #: pcbnew/toolbars_footprint_editor.cpp:93
 msgid "Load footprint from current board"
-msgstr "Ladda fotavtryck från nuvarande kort"
+msgstr "Ladda fotavtryck från aktuellt mönsterkort"
 
 #: pcbnew/toolbars_footprint_editor.cpp:97
 msgid "Insert footprint into current board"
-msgstr "Sätt in fotavtryck i det aktuella kortet"
+msgstr "Sätt in fotavtryck på det aktuella mönsterkortet"
 
 #: pcbnew/toolbars_footprint_editor.cpp:262 pcbnew/toolbars_pcb_editor.cpp:749
 msgid "+/- to switch"
@@ -35471,7 +35472,7 @@ msgstr ""
 
 #: pcbnew/tools/pad_tool.cpp:357 pcbnew/tools/pad_tool.cpp:454
 msgid "Renumber pads"
-msgstr "Omnummer kuddar"
+msgstr "Omnumrera lödytor"
 
 #: pcbnew/tools/pad_tool.cpp:558
 msgid "Place pad"
@@ -35822,11 +35823,11 @@ msgstr "Raderar valda objekt och kopparanslutningar"
 
 #: pcbnew/tools/pcb_actions.cpp:348
 msgid "Show Footprint Tree"
-msgstr "Visa Footprint Tree"
+msgstr "Visa biblioteksträd för fotavtryck"
 
 #: pcbnew/tools/pcb_actions.cpp:353
 msgid "Hide Footprint Tree"
-msgstr "Göm fotavtrycksträd"
+msgstr "Göm biblioteksträd för fotavtryck"
 
 #: pcbnew/tools/pcb_actions.cpp:359
 msgid "New Footprint..."
@@ -35898,7 +35899,7 @@ msgstr "Visa fönstret för fotavtryckskontroll"
 
 #: pcbnew/tools/pcb_actions.cpp:416
 msgid "Update Footprint..."
-msgstr "Uppdatera fotavtryck ..."
+msgstr "Uppdatera fotavtryck..."
 
 #: pcbnew/tools/pcb_actions.cpp:417
 msgid "Update footprint to include any changes from the library"
@@ -35906,7 +35907,7 @@ msgstr "Uppdatera fotavtryck så att alla ändringar från biblioteket inkludera
 
 #: pcbnew/tools/pcb_actions.cpp:422
 msgid "Update Footprints from Library..."
-msgstr "Uppdatera fotavtryck från biblioteket ..."
+msgstr "Uppdatera fotavtryck från biblioteket..."
 
 #: pcbnew/tools/pcb_actions.cpp:423
 msgid "Update footprints to include any changes from the library"
@@ -36058,7 +36059,7 @@ msgstr "Lägg till Pad"
 
 #: pcbnew/tools/pcb_actions.cpp:536
 msgid "Add a pad"
-msgstr "Lägg till en kudde"
+msgstr "Lägg till en lödyta"
 
 #: pcbnew/tools/pcb_actions.cpp:542
 msgid "Edit Pad as Graphic Shapes"
@@ -36079,7 +36080,7 @@ msgstr "Omgrupperar alla rörande grafiska former i den redigerade padden"
 
 #: pcbnew/tools/pcb_actions.cpp:555
 msgid "Default Pad Properties..."
-msgstr "Standardkuddegenskaper ..."
+msgstr "Standardegenskaper för lödytor..."
 
 #: pcbnew/tools/pcb_actions.cpp:556
 msgid "Edit the pad properties used when creating new pads"
@@ -36386,11 +36387,11 @@ msgstr "Visa nätinspektören"
 
 #: pcbnew/tools/pcb_actions.cpp:809
 msgid "Show Appearance Manager"
-msgstr "Visa utseende Manager"
+msgstr "Visa utseendehanteraren"
 
 #: pcbnew/tools/pcb_actions.cpp:809
 msgid "Show/hide the appearance manager"
-msgstr "Visa / dölj utseendeshanteraren"
+msgstr "Visa / dölj utseendehanteraren"
 
 #: pcbnew/tools/pcb_actions.cpp:814
 msgid "Flip Board View"
@@ -36437,7 +36438,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:841
 msgid "Sketch Tracks"
-msgstr "Skissspår"
+msgstr "Skissa ledare"
 
 #: pcbnew/tools/pcb_actions.cpp:841
 msgid "Show tracks in outline mode"
@@ -36445,7 +36446,7 @@ msgstr "Visa ledare i konturläge"
 
 #: pcbnew/tools/pcb_actions.cpp:846
 msgid "Sketch Pads"
-msgstr "Skisskuddar"
+msgstr "Skissa lödytor"
 
 #: pcbnew/tools/pcb_actions.cpp:846
 msgid "Show pads in outline mode"
@@ -36461,7 +36462,7 @@ msgstr "Visa vior i konturläge"
 
 #: pcbnew/tools/pcb_actions.cpp:856
 msgid "Sketch Graphic Items"
-msgstr "Skiss grafiska objekt"
+msgstr "Skissa grafiska objekt"
 
 #: pcbnew/tools/pcb_actions.cpp:856
 msgid "Show graphic items in outline mode"
@@ -36799,7 +36800,7 @@ msgid ""
 "entire connections"
 msgstr ""
 "Väljer en anslutning eller expanderar ett befintligt val till korsningar, "
-"kuddar eller hela anslutningar"
+"lödytor eller hela anslutningar"
 
 #: pcbnew/tools/pcb_actions.cpp:1264
 msgid "Select All Tracks in Net"
@@ -37918,7 +37919,7 @@ msgstr "Min bredd"
 
 #: pcbnew/zone.cpp:1364
 msgid "Pad Connections"
-msgstr "Pad-anslutningar"
+msgstr "Lödyteanslutningar"
 
 #: pcbnew/zone_filler.cpp:97
 msgid "Checking zone fills..."
