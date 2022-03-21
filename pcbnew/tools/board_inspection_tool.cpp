@@ -388,9 +388,11 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
     if( copperIntersection.any() && zone && pad && zone->GetNetCode() == pad->GetNetCode() )
     {
-        PCB_LAYER_ID layer = active;
+        PCB_LAYER_ID layer = UNDEFINED_LAYER;
 
-        if( !zone->IsOnLayer( active ) )
+        if( zone->IsOnLayer( active ) )
+            layer = active;
+        else if( zone->GetLayerSet().count() > 0 )
             layer = zone->GetLayerSet().Seq().front();
 
         r = m_inspectClearanceDialog->AddPage( _( "Zone" ) );

@@ -201,21 +201,25 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
     auto checkDisallow =
             [&]( BOARD_ITEM* item )
             {
-                auto constraint = m_drcEngine->EvalRules( DISALLOW_CONSTRAINT, item, nullptr,
-                                                          UNDEFINED_LAYER );
+                DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( DISALLOW_CONSTRAINT, item,
+                                                                    nullptr, UNDEFINED_LAYER );
 
                 if( constraint.m_DisallowFlags && constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
 
-                    m_msg.Printf( drcItem->GetErrorText() + wxS( " (%s)" ),
-                                  constraint.GetName() );
+                    m_msg.Printf( drcItem->GetErrorText() + wxS( " (%s)" ), constraint.GetName() );
 
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    reportViolation( drcItem, item->GetPosition(), item->GetLayerSet().Seq()[0] );
+                    PCB_LAYER_ID   layer = UNDEFINED_LAYER;
+
+                    if( item->GetLayerSet().count() )
+                        layer = item->GetLayerSet().Seq().front();
+
+                    reportViolation( drcItem, item->GetPosition(), layer );
                 }
             };
 

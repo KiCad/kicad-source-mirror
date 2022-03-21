@@ -177,9 +177,12 @@ void DIALOG_FOOTPRINT_CHECKER::OnSelectItem( wxDataViewEvent& aEvent )
 
     if( node && item )
     {
-        PCB_LAYER_ID             principalLayer = item->GetLayerSet().Seq()[0];
+        PCB_LAYER_ID             principalLayer = UNDEFINED_LAYER;
         LSET                     violationLayers;
         std::shared_ptr<RC_ITEM> rc_item = node->m_RcItem;
+
+        if( item->GetLayerSet().count() > 0 )
+            principalLayer = item->GetLayerSet().Seq().front();
 
         if( rc_item->GetErrorCode() == DRCE_MALFORMED_COURTYARD )
         {

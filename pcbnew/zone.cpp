@@ -884,7 +884,7 @@ void ZONE::HatchBorder()
     int  hatch_line_len = m_borderHatchPitch;
 
     // To have a better look, give a slope depending on the layer
-    int     layer = GetLayerSet().Seq()[0];
+    int     layer = GetFirstLayer();
     int     slope_flag = (layer & 1) ? 1 : -1;  // 1 or -1
     double  slope = 0.707106 * slope_flag;      // 45 degrees slope
     int     max_a, min_a;
