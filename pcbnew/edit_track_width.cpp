@@ -192,6 +192,9 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
             GetDesignSettings().m_TempOverrideTrackWidth = true;
         }
 
+        // Needed on Windows because the canvas loses focus after clicking on m_SelTrackWidthBox:
+        GetCanvas()->SetFocus();
+
         break;
 
     case ID_AUX_TOOLBAR_PCB_VIA_SIZE:
@@ -211,6 +214,9 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
         {
             GetDesignSettings().SetViaSizeIndex( ii );
         }
+
+        // Needed on Windows because the canvas loses focus after clicking on m_SelViaSizeBox:
+        GetCanvas()->SetFocus();
 
         break;
 

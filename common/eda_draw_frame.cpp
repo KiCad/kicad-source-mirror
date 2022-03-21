@@ -440,6 +440,9 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 
     UpdateStatusBar();
     m_canvas->Refresh();
+    // Needed on Windows because clicking on m_gridSelectBox remove the focus from m_canvas
+    // (Windows specific
+    m_canvas->SetFocus();
 }
 
 
@@ -516,6 +519,9 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
     m_toolManager->RunAction( ACTIONS::zoomPreset, true, static_cast<intptr_t>( id ) );
     UpdateStatusBar();
     m_canvas->Refresh();
+    // Needed on Windows because clicking on m_zoomSelectBox remove the focus from m_canvas
+    // (Windows specific
+    m_canvas->SetFocus();
 }
 
 
