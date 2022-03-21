@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -267,9 +267,12 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     if( !DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::TransferDataFromWindow() )
         return false;
 
-    LAYER_NUM layer = m_LayerSelectionCtrl->GetLayerSelection();
+    if( !m_item )
+        return true;
 
+    int          layer = m_LayerSelectionCtrl->GetLayerSelection();
     BOARD_COMMIT commit( m_parent );
+
     commit.Modify( m_item );
 
     if( m_flipStartEnd && m_item->GetShape() != SHAPE_T::ARC )
@@ -311,16 +314,17 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
 
         m_item->SetCenter( wxPoint( KiROUND( center.x ), KiROUND( center.y ) ) );
     }
+
     if( m_fp_item )
     {
         // We are editing a footprint; init the item coordinates relative to the footprint anchor.
         m_fp_item->SetStart0( m_fp_item->GetStart() );
         m_fp_item->SetEnd0( m_fp_item->GetEnd() );
 
-        if( m_item->GetShape() == SHAPE_T::ARC )
+        if( m_fp_item->GetShape() == SHAPE_T::ARC )
             m_fp_item->SetCenter0( m_fp_item->GetCenter() );
 
-        if( m_item->GetShape() == SHAPE_T::BEZIER )
+        if( m_fp_item->GetShape() == SHAPE_T::BEZIER )
         {
             m_fp_item->SetBezierC1_0( m_fp_item->GetBezierC1() );
             m_fp_item->SetBezierC2_0( m_fp_item->GetBezierC2() );
