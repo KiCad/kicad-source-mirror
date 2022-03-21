@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:53-0700\n"
-"PO-Revision-Date: 2022-03-21 12:12+0000\n"
+"PO-Revision-Date: 2022-03-21 22:49+0000\n"
 "Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -9883,16 +9883,14 @@ msgid "Text Box Properties"
 msgstr "Propiedades de la caja de texto"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:76
-#, fuzzy
 msgid "Set width to 0 to use Schematic default line width."
 msgstr ""
-"Establezca el ancho del borde a 0 para utilizar el ancho de línea del "
-"símbolo por defecto de Schematic."
+"Establecer el ancho a 0 para usar el ancho de línea predeterminado de "
+"Schematic."
 
 #: eeschema/dialogs/dialog_line_properties_base.h:67
-#, fuzzy
 msgid "Line Properties"
-msgstr "Propiedades de pin"
+msgstr "Propiedades de línea"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:104
 msgid "Conflicting Labels"
@@ -12249,21 +12247,17 @@ msgid "Update Symbol Fields"
 msgstr "Actualizar campos del símbolo"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:31
-#, fuzzy
 msgid "Wire/bus width:"
-msgstr "Ancho de línea:"
+msgstr "Ancho de cable/bus:"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:90
-#, fuzzy
 msgid "Set width to 0 to use Netclass wire/bus widths."
 msgstr ""
-"Establezca el ancho a 0 para utilizar el ancho de las líneas de la clase de "
-"red."
+"Establecer el ancho a 0 para utilizar los anchos de alambre/bus de Netclass."
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:70
-#, fuzzy
 msgid "Wire & Bus Properties"
-msgstr "Propiedades de línea, cable, y bus"
+msgstr "Propiedades de cable y bus"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:142
 msgid ""
@@ -17178,29 +17172,27 @@ msgid "Show ERC Warnings"
 msgstr "Mostrar advertencias de ERC"
 
 #: eeschema/tools/ee_actions.cpp:671
-#, fuzzy
 msgid "Show markers for electrical rules checker warnings"
-msgstr "Realiza un control de las reglas de eléctricas"
+msgstr ""
+"Mostrar marcadores para las advertencias del verificador de reglas eléctricas"
 
 #: eeschema/tools/ee_actions.cpp:675
-#, fuzzy
 msgid "Show ERC Errors"
-msgstr "Buscar errores de complementos"
+msgstr "Mostrar errores de ERC"
 
 #: eeschema/tools/ee_actions.cpp:675
-#, fuzzy
 msgid "Show markers for electrical rules checker errors"
-msgstr "Realiza un control de las reglas de eléctricas"
+msgstr "Mostrar marcadores de errores del verificador de reglas eléctricas"
 
 #: eeschema/tools/ee_actions.cpp:679
-#, fuzzy
 msgid "Show ERC Exclusions"
-msgstr "Exclusiones DRC"
+msgstr "Mostrar exclusiones de ERC"
 
 #: eeschema/tools/ee_actions.cpp:680
-#, fuzzy
 msgid "Show markers for excluded electrical rules checker violations"
-msgstr "Realiza un control de las reglas de eléctricas"
+msgstr ""
+"Mostrar marcadores de las violaciones del verificador de reglas eléctricas "
+"excluidas"
 
 #: eeschema/tools/ee_actions.cpp:684
 msgid "Force H/V Wires and Buses"
@@ -17720,14 +17712,12 @@ msgid "0B Lin"
 msgstr "0B Lin"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
-#, fuzzy
 msgid "4B S-Curve"
-msgstr "Curva"
+msgstr "Curva S 4B"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
-#, fuzzy
 msgid "5B S-Curve"
-msgstr "Curva"
+msgstr "Curva S 5B"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 #, fuzzy
@@ -17735,9 +17725,8 @@ msgid "Switch"
 msgstr "Cambiar unidades"
 
 #: eeschema/widgets/tuner_slider_base.cpp:70
-#, fuzzy
 msgid "Characteristic Curve"
-msgstr "Impedancia característica"
+msgstr "Curva característica"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -18170,9 +18159,8 @@ msgid "Job files"
 msgstr "Archivos de trabajo"
 
 #: gerbview/files.cpp:181
-#, fuzzy
 msgid "Open Autodetected File(s)"
-msgstr "Abrir archivo(s) Gerber"
+msgstr "Abrir archivo(s) autodetectado(s)"
 
 #: gerbview/files.cpp:201
 msgid "Gerber files (.g* .lgr .pho)"
@@ -18247,9 +18235,8 @@ msgstr ""
 "trazado</b> <i>%s</i>"
 
 #: gerbview/files.cpp:300
-#, fuzzy
 msgid "Loading files..."
-msgstr "Cargando reglas..."
+msgstr "Cargando archivos..."
 
 #: gerbview/files.cpp:303 gerbview/files.cpp:310
 #, c-format
@@ -18316,14 +18303,12 @@ msgid "Position"
 msgstr "Posición"
 
 #: gerbview/gerber_draw_item.cpp:695
-#, fuzzy
 msgid "Start"
-msgstr "Inicio X"
+msgstr "Inicio"
 
 #: gerbview/gerber_draw_item.cpp:698
-#, fuzzy
 msgid "End"
-msgstr "Final X"
+msgstr "Final"
 
 #: gerbview/gerber_draw_item.cpp:709
 msgid "Clear"
@@ -18421,9 +18406,8 @@ msgid "Gerber Viewer"
 msgstr "Visor Gerber"
 
 #: gerbview/gerbview_frame.cpp:589
-#, fuzzy
 msgid "Drawing layer not in use"
-msgstr "La capa de dibujo %d no está en uso"
+msgstr "Capa de dibujo no utilizada"
 
 #: gerbview/gerbview_frame.cpp:606
 msgid "(with X2 attributes)"
@@ -18541,9 +18525,8 @@ msgid "<No selection>"
 msgstr "<Sin selección>"
 
 #: gerbview/tools/gerbview_actions.cpp:39
-#, fuzzy
 msgid "Open Autodetected File(s)..."
-msgstr "Abrir archivo(s) de trazado Gerber..."
+msgstr "Abrir archivo(s) autodetectado(s)..."
 
 #: gerbview/tools/gerbview_actions.cpp:40
 msgid "Open Autodetected file(s) on a new layer."
@@ -18554,18 +18537,16 @@ msgid "Open Gerber Plot File(s)..."
 msgstr "Abrir archivo(s) de trazado Gerber..."
 
 #: gerbview/tools/gerbview_actions.cpp:46
-#, fuzzy
 msgid "Open Gerber plot file(s) on a new layer."
-msgstr "Abrir archivo(s) de trazado Gerber..."
+msgstr "Abrir los archivos de trazado Gerber en una nueva capa."
 
 #: gerbview/tools/gerbview_actions.cpp:51
 msgid "Open Excellon Drill File(s)..."
 msgstr "Abrir archivo(s) de taladros Excellon..."
 
 #: gerbview/tools/gerbview_actions.cpp:52
-#, fuzzy
 msgid "Open Excellon drill file(s) on a new layer."
-msgstr "Abrir archivo(s) de taladros Excellon..."
+msgstr "Abra los archivos de perforación de Excellon en una nueva capa."
 
 #: gerbview/tools/gerbview_actions.cpp:57
 msgid "Open Gerber Job File..."
@@ -18840,14 +18821,12 @@ msgid "Sort Layers by File Extension"
 msgstr "Ordenar las capas por extensión de archivo"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:146
-#, fuzzy
 msgid "Move Current Layer Up"
-msgstr "Oscurecer capa activa"
+msgstr "Mover la capa actual hacia arriba"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:148
-#, fuzzy
 msgid "Move Current Layer Down"
-msgstr "Solo la capa actual"
+msgstr "Mover la capa actual hacia abajo"
 
 #: gerbview/widgets/layer_widget.cpp:130
 msgid "Change Layer Color for"
@@ -19223,14 +19202,12 @@ msgid "Uninstall"
 msgstr "Desinstalar"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:130
-#, fuzzy
 msgid "Apply Pending Changes"
-msgstr "Aplicar cambios"
+msgstr "Aplicar los cambios pendientes"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:131
-#, fuzzy
 msgid "Discard Pending Changes"
-msgstr "Descartar cambios"
+msgstr "Descartar cambios pendientes"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:166
 msgid ""
@@ -19297,9 +19274,9 @@ msgid "Aborting remaining tasks."
 msgstr "Abortando las tareas restantes."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "Downloaded %lld/%lld kB"
-msgstr "Descargado %lld/%lld Kb"
+msgstr "Descargado %lld/%lld kB"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
 msgid "Download Progress"
@@ -19322,14 +19299,12 @@ msgid "Applying Package Changes"
 msgstr "Aplicando cambios de paquetes"
 
 #: kicad/pcm/dialogs/panel_package.cpp:97
-#, fuzzy
 msgid "Install Pending"
-msgstr "Tamaño de instalación"
+msgstr "Instalación pendiente"
 
 #: kicad/pcm/dialogs/panel_package.cpp:101
-#, fuzzy
 msgid "Uninstall Pending"
-msgstr "Desinstalar"
+msgstr "Desinstalación pendiente"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:212
 msgid "Metadata"
@@ -19435,9 +19410,9 @@ msgid "Error loading installed packages list: %s"
 msgstr "Error al cargar la lista de paquetes: %s"
 
 #: kicad/pcm/pcm.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "Downloading %lld/%lld kB"
-msgstr "Descargando %lld/%lld Kb"
+msgstr "Descargando %lld/%lld kB"
 
 #: kicad/pcm/pcm.cpp:231
 msgid "Download is too large."
@@ -21429,18 +21404,16 @@ msgid "PCB Calculator"
 msgstr "Calculadora de placas"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:76
-#, fuzzy
 msgid "General system design"
-msgstr "Opciones generales"
+msgstr "Diseño general del sistema"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:79
 msgid "Regulators"
 msgstr "Reguladores"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:81
-#, fuzzy
 msgid "Power, current and isolation"
-msgstr "Infracción de margen de orificio"
+msgstr "Potencia, corriente y aislamiento"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:84
 msgid "Electrical Spacing"
@@ -21455,9 +21428,8 @@ msgid "RF Attenuators"
 msgstr "Atenuadores RF"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:96
-#, fuzzy
 msgid "Transmission Lines"
-msgstr "Tipo de línea de transmisión"
+msgstr "Líneas de transmisión"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:98
 msgid "Memo"
@@ -22357,9 +22329,8 @@ msgid "PTFE natural"
 msgstr "PTFE natural"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:80
-#, fuzzy
 msgid "Polyimide"
-msgstr "Polilínea"
+msgstr "Poliimida"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:81
 msgid "Phenolic natural"
@@ -23004,7 +22975,6 @@ msgid "Defaults"
 msgstr "Defecto"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:104
-#, fuzzy
 msgid "Fomatting"
 msgstr "Formato"
 
@@ -23278,28 +23248,24 @@ msgid "Cleanup Graphics"
 msgstr "Limpiar gráficos"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:82
-#, fuzzy
 msgid "Build Changes"
-msgstr "Deshacer cambios"
+msgstr "Construir cambios"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:134
-#, fuzzy
 msgid "Check zones..."
-msgstr "Comprobando zonas..."
+msgstr "Comprobar zonas..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:142
 msgid "Rebuild connectivity..."
 msgstr "Reconstruir la conectividad..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:146
-#, fuzzy
 msgid "Check items..."
-msgstr "Comprobando pines..."
+msgstr "Comprobar elementos..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:157
-#, fuzzy
 msgid "Items checked..."
-msgstr "Elemento bloqueado."
+msgstr "Elementos comprobados..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:168
 msgid "Board cleanup"
@@ -23367,19 +23333,16 @@ msgid "Constraints Resolution Report"
 msgstr "Informe de Resolución de Requerimientos"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:202
-#, fuzzy
 msgid "Teardrop on Vias/Pads Properties"
-msgstr "Propiedades de pistas y vías"
+msgstr "Propiedades de lágrima en las vías/pads"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:206
-#, fuzzy
 msgid "Teardrop on Tracks Properties"
-msgstr "Ajustar propiedades de pista y vía"
+msgstr "Propiedades de lágrima en pistas"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:210
-#, fuzzy
 msgid "Teardrop Properties"
-msgstr "Propiedades del grupo"
+msgstr "Propiedades de lágrima"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:404
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:167
@@ -23647,18 +23610,17 @@ msgid "Isolated islands smaller than this will be removed"
 msgstr "Se eliminarán las islas aisladas más pequeñas que este valor"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:398
-#, fuzzy
 msgid "Export Settings to Other Similar Zones"
-msgstr "Exportar ajustes a otras zonas"
+msgstr "Exportar la configuración a otras zonas similares"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:399
-#, fuzzy
 msgid ""
 "Export this zone setup (excluding layer and net selection) to other similar "
 "copper zones (teardrops or usual copper zones)."
 msgstr ""
-"Exporta los ajustes seleccionados en esta zona (exceptuando la capa y la "
-"red) a las demás zonas de cobre."
+"Exportar configuración de esta zona (excluyendo la selección de capas y "
+"redes) a otras zonas de cobre similares (lágrimas o zonas de cobre "
+"habituales)."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:142
 msgid "Copper Zone Properties"
@@ -23902,13 +23864,12 @@ msgid "Create Array"
 msgstr "Crear matriz"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:223
-#, fuzzy
 msgid ""
 "This item was on a non-existing layer.\n"
 "It has been moved to the first defined layer."
 msgstr ""
-"Este elemento se encontraba en una capa no permitida o inexistente.\n"
-"Se ha movido a la primera capa permitida."
+"Este elemento estaba en una capa inexistente.\n"
+"Se ha movido a la primera capa definida."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:310
 msgid "Change dimension properties"
@@ -24368,19 +24329,17 @@ msgid "Updated footprint %s (%s)"
 msgstr "Actualizar la(s) huella(s) %s (%s)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Changed footprint %s from '%s' to '%s'"
-msgstr "Cambiar huella %s de '%s' a '%s'"
+msgstr "Huella %s cambiada de '%s' a '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:375
-#, fuzzy
 msgid "*** library footprint not found ***"
-msgstr "*** no se ha encontrado la huella ***"
+msgstr "*** biblioteca de la huella no encontrada ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:395
-#, fuzzy
 msgid ": (no changes)"
-msgstr "Deshacer cambios"
+msgstr ": (sin cambios)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:400
 msgid ": OK"
@@ -24849,9 +24808,8 @@ msgid "Search DRC markers"
 msgstr "Buscar marcadores DRC"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:78
-#, fuzzy
 msgid "Search net names"
-msgstr "Nombres de hoja"
+msgstr "Buscar nombres de redes"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:96
 msgid "Find Previous"
@@ -24876,15 +24834,14 @@ msgid "3D Models"
 msgstr "Modelos 3D"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:274
-#, fuzzy
 msgid ""
 "Locked footprints cannot be freely moved and oriented on the canvas and can "
 "only be selected when the 'Locked items' checkbox is enabled in the "
 "selection filter."
 msgstr ""
-"La huella está bloqueada: no puede ser movida u orientada en el lienzo y "
-"solo puede ser seleccionada cuando la opción 'Elementos bloqueados' está "
-"habilitada en el filtro de selección."
+"Las huellas bloqueadas no pueden moverse y orientarse libremente en el "
+"lienzo y sólo pueden seleccionarse cuando la casilla 'Elementos bloqueados' "
+"está activada en el filtro de selección."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:360
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:387
@@ -25043,9 +25000,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:256
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:608
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:54
-#, fuzzy
 msgid "Solder mask expansion:"
-msgstr "Opciones máscara de soldadura:"
+msgstr "Expansión de la máscara de soldadura:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:287
 msgid ""
@@ -25072,7 +25028,6 @@ msgid "Solder paste absolute clearance:"
 msgstr "Margen absoluto de la pasta de soldadura:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:303
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder paste for this "
 "footprint.\n"
@@ -25084,8 +25039,8 @@ msgstr ""
 "Este es el margen local entre los pads y la pasta de soldadura para esta "
 "huella.\n"
 "Este valor puede ser sustituido por el valor local del pad.\n"
-"El valor final del margen es la suma de este valor y la proporción de "
-"margen.\n"
+"El valor final del margen es la suma de este valor y la proporción de margen."
+"\n"
 "Un valor negativo significa un tamaño de máscara menor que el del pad."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:314
@@ -25196,9 +25151,8 @@ msgid "Footprint name:"
 msgstr "Nombre de huella:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:135
-#, fuzzy
 msgid "Private Layers"
-msgstr "Imprimir capas"
+msgstr "Capas privadas"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:188
 msgid "Component type:"
@@ -25730,14 +25684,12 @@ msgid "Delete Items"
 msgstr "Borrar elementos"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:139
-#, fuzzy
 msgid "Other text items"
-msgstr "Otros elementos"
+msgstr "Otros elementos de texto"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:140
-#, fuzzy
 msgid "Graphic items"
-msgstr "Elementos gráficos de la placa"
+msgstr "Elementos gráficos"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:255
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
@@ -25848,9 +25800,8 @@ msgid "Via Diameter"
 msgstr "Diámetro de vía"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:232
-#, fuzzy
 msgid "uVia Diameter"
-msgstr "Diámetro de vía"
+msgstr "Diámetro de la uVía"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:39
 msgid "Filter Items"
@@ -25996,31 +25947,26 @@ msgid "Deselect All"
 msgstr "Deseleccionar todo"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:49
-#, fuzzy
 msgid "Board layers and physical stackup"
-msgstr "Actualizar Apilado Físico"
+msgstr "Capas de placa y apilamiento físico"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:52
 msgid "Solder mask/paste defaults"
 msgstr "Ajustes por defecto de máscara y pasta de soldadura"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:55
-#, fuzzy
 msgid "Text && graphics default properties"
 msgstr "Propiedades por defecto de texto y gráficos"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
-#, fuzzy
 msgid "Text && graphics formatting"
-msgstr "Texto y gráficos"
+msgstr "Formato de texto y gráficos"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
-#, fuzzy
 msgid "Design rule constraints"
-msgstr "Reglas de diseño"
+msgstr "Restricciones de las reglas de diseño"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:64
-#, fuzzy
 msgid "Predefined track && via dimensions"
 msgstr "Dimensiones por defecto de pistas y vías"
 
@@ -26504,14 +26450,12 @@ msgid "Warning: Pad size is less than zero."
 msgstr "Advertencia: el tamaño del pad es menor a cero."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1265
-#, fuzzy
 msgid "Warning: Pad hole not inside pad shape."
-msgstr "Advertencia: el tamaño del pad es menor a cero."
+msgstr "Advertencia: El orificio del pad no está dentro del pad."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1279
-#, fuzzy
 msgid "Warning: Pad hole will leave no copper."
-msgstr "Advertencia: el tamaño del pad es menor a cero."
+msgstr "Advertencia: El agujero del pad no dejará cobre."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1284
 msgid "Warning: Negative local clearance values will have no effect."
@@ -26920,7 +26864,6 @@ msgid "Castellated pad (through hole only)"
 msgstr "Pad castellado (solo orificio pasante)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:582
-#, fuzzy
 msgid "Clearance Overrides"
 msgstr "Remplazo de margen"
 
