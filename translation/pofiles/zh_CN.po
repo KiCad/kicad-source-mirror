@@ -36783,7 +36783,7 @@ msgstr "自动重填敷铜"
 
 #: pcbnew/tracks_cleaner.cpp:66
 msgid "Clean vias and tracks"
-msgstr "清除过孔和线路"
+msgstr "清除焊盘和布线"
 
 #: pcbnew/tracks_cleaner.cpp:75
 msgid "Merge collinear tracks"
