@@ -215,9 +215,9 @@ BOOST_FIXTURE_TEST_CASE( RegressionZoneFillTests, ZONE_FILL_TEST_FIXTURE )
             if( violations.empty() )
             {
                 BOOST_CHECK_EQUAL( 1, 1 );  // quiet "did not check any assertions" warning
-                BOOST_TEST_MESSAGE( wxString::Format( "Zone fill regression: %s, V%d algo passed",
+                BOOST_TEST_MESSAGE( (const char*)(wxString::Format( "Zone fill regression: %s, V%d algo passed",
                                                       relPath,
-                                                      fillVersion ) );
+                                                      fillVersion ).utf8_str()) );
             }
             else
             {
@@ -230,9 +230,9 @@ BOOST_FIXTURE_TEST_CASE( RegressionZoneFillTests, ZONE_FILL_TEST_FIXTURE )
                                                          itemMap ) );
                 }
 
-                BOOST_ERROR( wxString::Format( "Zone fill regression: %s, V%d algo failed",
+                BOOST_ERROR( (const char*) (wxString::Format( "Zone fill regression: %s, V%d algo failed",
                                                relPath,
-                                               fillVersion ) );
+                                               fillVersion ).utf8_str()) );
             }
         }
     }
