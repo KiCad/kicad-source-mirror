@@ -36795,7 +36795,7 @@ msgstr "删除错误连接"
 
 #: pcbnew/tracks_cleaner.cpp:96
 msgid "Delete tracks in pads"
-msgstr "删除焊盘内线路"
+msgstr "删除焊盘内的布线"
 
 #: pcbnew/tracks_cleaner.cpp:109
 msgid "Merge segments"
