@@ -401,7 +401,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
                 LSET layersList = getActiveLayers( it );
                 violationLayers &= layersList;
 
-                if( principalLayer <= UNDEFINED_LAYER )
+                if( principalLayer <= UNDEFINED_LAYER && layersList.count() )
                     principalLayer = layersList.Seq().front();
             }
         }
