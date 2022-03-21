@@ -40,6 +40,11 @@ WX_GRID::WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxS
 
     // Make sure the GUI font scales properly on GTK
     SetDefaultCellFont( KIUI::GetControlFont( this ) );
+
+#if wxCHECK_VERSION( 3, 1, 0 )
+    Connect( wxEVT_DPI_CHANGED, wxDPIChangedEventHandler( WX_GRID::onDPIChanged ), nullptr, this );
+#endif
+
 }
 
 
@@ -47,8 +52,24 @@ WX_GRID::~WX_GRID()
 {
     if( m_weOwnTable )
         DestroyTable( GetTable() );
+
+#if wxCHECK_VERSION( 3, 1, 0 )
+    Disconnect( wxEVT_DPI_CHANGED, wxDPIChangedEventHandler( WX_GRID::onDPIChanged ), nullptr, this );
+#endif
+
 }
 
+
+#if wxCHECK_VERSION( 3, 1, 0 )
+void WX_GRID::onDPIChanged(wxDPIChangedEvent& aEvt)
+{
+    /// This terrible hack is a way to avoid the incredibly disruptive resizing of grids that happens on Macs
+    /// when moving a window between monitors of different DPIs.
+#ifndef __WXMAC__
+    aEvt.Skip();
+#endif
+}
+#endif
 
 void WX_GRID::SetColLabelSize( int aHeight )
 {
