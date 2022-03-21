@@ -22749,7 +22749,7 @@ msgstr "清理电路板"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:172
 msgid "Finished..."
-msgstr "已完成…"
+msgstr "完成..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:25
 msgid "Delete &tracks connecting different nets"
@@ -22945,7 +22945,7 @@ msgstr "最小宽度："
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:215
 msgid "Minimum thickness of filled areas."
-msgstr "填充区域最小厚度。"
+msgstr "填充敷铜最小厚度。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:229
 msgid "Pad connections:"
@@ -22979,7 +22979,7 @@ msgstr "敷铜的填充区和由散热式镂空辐条连接的焊盘间保持清
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:248
 msgid "Clearance between pads in the same net and filled areas."
-msgstr "在同一网中的垫片和填充区域之间进行间隙处理。"
+msgstr "在同一网中的焊盘和填充敷铜之间进行间隙处理。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:256
 msgid "Thermal spoke width:"
@@ -23065,7 +23065,7 @@ msgstr "选择如何处理未连接的孤铜"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:360
 msgid "Below area limit"
-msgstr "低于区域限制"
+msgstr "低于敷铜限制"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:366
 msgid "Minimum island size:"
@@ -23077,14 +23077,13 @@ msgstr "小于此的孤铜将被移除"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:398
 msgid "Export Settings to Other Similar Zones"
-msgstr "将设置导出到其他类似区域"
+msgstr "将设置导出到其他类似敷铜"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:399
 msgid ""
 "Export this zone setup (excluding layer and net selection) to other similar "
 "copper zones (teardrops or usual copper zones)."
-msgstr ""
-"将该区域设置 (不包括层和网络选择) 输出到其他类似的铜区 (泪滴或普通铜区)。"
+msgstr "将该敷铜设置 (不包括层和网络选择) 输出到其他类似的铜区 (泪滴或普通铜区)。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:142
 msgid "Copper Zone Properties"
@@ -24047,7 +24046,7 @@ msgstr "当前图框尺寸"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Board area only"
-msgstr "仅电路板区域"
+msgstr "仅电路板敷铜"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:90
 msgid "SVG Page Size"
