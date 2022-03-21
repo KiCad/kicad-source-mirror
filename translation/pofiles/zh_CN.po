@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:53-0700\n"
 "PO-Revision-Date: 2022-03-21 12:12+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -8423,7 +8423,7 @@ msgstr "正在检查库符号问题..."
 
 #: eeschema/dialogs/dialog_erc.cpp:500
 msgid "Checking for off grid pins and wires..."
-msgstr "检查偏离栅格的引脚与走线"
+msgstr "检查偏离栅格的引脚与走线…"
 
 #: eeschema/dialogs/dialog_erc.cpp:578 pcbnew/dialogs/dialog_drc.cpp:489
 msgid "errors"
@@ -24473,7 +24473,7 @@ msgid "Solder paste relative clearance:"
 msgstr "焊膏相对间隙："
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:316
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -24485,7 +24485,7 @@ msgid ""
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
 "这是以此封装的焊盘宽度和高度的百分比形式应用的局部间隙比率。\n"
-"值为 10 表示水平间距值是焊盘宽度的 10%，垂直间距值是焊盘高度的 10%。\n"
+"值为 10 表示水平间距值是焊盘宽度的 10% o，垂直间距值是焊盘高度的 10% o。\n"
 "该值可由焊盘局部值替代。\n"
 "最终间距值是该值与绝对间距值之和。\n"
 "负值表示阻焊尺寸小于焊盘尺寸。"
@@ -24610,13 +24610,15 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"这是此封装的焊盘和焊膏之间的局部间隙。\n"
+"这是此封装的焊盘和焊膏之间的\n"
+"局部间隙。\n"
 "最终的间距值是该值与间距值比率之和。\n"
 "负值表示阻焊尺寸小于焊盘尺寸。\n"
-"可以在焊盘属性的局部间隙和设置选项卡中逐个焊盘覆盖此值。"
+"可以在焊盘属性的局部间隙和设置选项卡中\n"
+"逐个焊盘覆盖此值。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:287
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -24629,7 +24631,7 @@ msgid ""
 "and Settings tab of Pad Properties."
 msgstr ""
 "这是以此布线的焊盘宽度和高度的百分比形式应用的局部间隙比率。\n"
-"值为 10 表示水平间距值是焊盘宽度的 10%，垂直间距值是焊盘高度的 10%。\n"
+"值为 10 表示水平间距值是焊盘宽度的 10% o，垂直间距值是焊盘高度的 10% o。\n"
 "最终间距值是该值与绝对间距值之和。\n"
 "负值表示模板阻焊尺寸小于焊盘尺寸。\n"
 "可以在焊盘属性的局部间隙和设置选项卡中逐个焊盘覆盖此值。"
