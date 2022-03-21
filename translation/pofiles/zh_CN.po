@@ -36915,7 +36915,7 @@ msgstr "在封装和文字中央显示一个小十字"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Shadow on Locked Items"
-msgstr "锁定项阴影"
+msgstr "锁定项目上的阴影"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show a shadow marker on locked items"
