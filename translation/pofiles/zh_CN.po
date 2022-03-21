@@ -30411,7 +30411,7 @@ msgstr "< 无约束 >"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:346
 msgid "Checking length constraints..."
-msgstr "正在检查长度限制..."
+msgstr "正在检查长度约束..."
 
 #: pcbnew/drc/drc_test_provider_mechanical_clearance.cpp:143
 msgid "Gathering items..."
@@ -30783,11 +30783,11 @@ msgstr "保存工程专用封装库表时出错。"
 
 #: pcbnew/files.cpp:966
 msgid "Converting zone fills"
-msgstr "转换区域填充"
+msgstr "转换敷铜填充"
 
 #: pcbnew/files.cpp:970
 msgid "Convert Zone(s)"
-msgstr "转换区域"
+msgstr "转换敷铜"
 
 #: pcbnew/files.cpp:1007 pcbnew/files.cpp:1144
 #: pcbnew/footprint_libraries_utils.cpp:366
@@ -32627,7 +32627,7 @@ msgstr "载入规则中..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1860
 msgid "Loading board regions..."
-msgstr "正载入板区域..."
+msgstr "正载入板敷铜..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1882
 msgid "Loading zones..."
@@ -32820,9 +32820,8 @@ msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
-msgstr ""
-"库元件 '%s' 中的 CADSTAR 区域 '%s' 没有一个 KiCad 等价物。该区域既不是过孔也"
-"不是布线禁止区。该区域没有被导入。"
+msgstr "库元件 '%s' 中的 CADSTAR 敷铜 '%s' 没有一个 KiCad "
+"等价物。该敷铜既不是过孔也不是布线禁止区。该敷铜没有被导入。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:986
 #, c-format
@@ -32901,16 +32900,15 @@ msgid ""
 "The CADSTAR area '%s' is marked as a placement area in CADSTAR. Placement "
 "areas are not supported in KiCad. Only the supported elements for the area "
 "were imported."
-msgstr ""
-"CADSTAR 区域 '%s' 在 CADSTAR 中标记为放置区域。KiCad 中不支持放置区域。仅导入"
-"了该区域支持的元素。"
+msgstr "CADSTAR 敷铜 '%s' 在 CADSTAR 中标记为放置敷铜。KiCad "
+"中不支持放置敷铜。仅导入了该敷铜支持的元素。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1625
 #, c-format
 msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
 "are not supported."
-msgstr "CADSTAR 区域 '%s' 没有 KiCad 等效项。不支持纯放置区域。"
+msgstr "CADSTAR 敷铜 '%s' 没有 KiCad 等效项。不支持纯放置敷铜。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1652
 #, c-format
@@ -33401,8 +33399,8 @@ msgid ""
 "The legacy zone fill strategy is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
 msgstr ""
-"不再支持旧式区域填充策略。\n"
-"是否将区域转换为平滑的多边形填充？"
+"不再支持旧式敷铜填充策略。\n"
+"是否将敷铜转换为平滑的多边形填充？"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2178
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5480
@@ -33513,8 +33511,8 @@ msgid ""
 "The segment zone fill mode is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
 msgstr ""
-"不再支持线段区域填充模式。\n"
-"是否将区域转换为光滑的多边形填充？"
+"不再支持线段敷铜填充模式。\n"
+"是否将敷铜转换为光滑的多边形填充？"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:174
 #, c-format
@@ -33649,7 +33647,7 @@ msgid ""
 "Convert zones to smoothed polygon fills?"
 msgstr ""
 "不再支持旧的线段填充模式。\n"
-"是否将区域转换为光滑的多边形填充？"
+"是否将敷铜转换为光滑的多边形填充？"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2507
 #, c-format
@@ -33903,11 +33901,11 @@ msgstr "无法从非镀通孔开始布线。"
 #: pcbnew/router/pns_router.cpp:243
 #, c-format
 msgid "Rule area '%s' disallows tracks."
-msgstr "规则区域 '%s' 不允许布线。"
+msgstr "规则敷铜 '%s' 不允许布线。"
 
 #: pcbnew/router/pns_router.cpp:248
 msgid "Rule area disallows tracks."
-msgstr "规则区域不允许布线。"
+msgstr "规则敷铜不允许布线。"
 
 #: pcbnew/router/pns_router.cpp:257
 msgid "Cannot start routing from a text item."
@@ -33923,7 +33921,7 @@ msgstr "布线起点违反 DRC。"
 
 #: pcbnew/router/pns_router.cpp:316
 msgid "Cannot start a differential pair in the middle of nowhere."
-msgstr "无法在空白区域开始差分对布线。"
+msgstr "无法在空白敷铜开始差分对布线。"
 
 #: pcbnew/router/router_tool.cpp:91
 msgid "Finish Track"
@@ -34435,14 +34433,14 @@ msgstr "允许泪滴散布在2 根导线上，如果第一个导线段太短"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:318
 msgid "Teardrop on pads in zones"
-msgstr "区域内焊盘泪滴"
+msgstr "敷铜内焊盘泪滴"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:319
 msgid ""
 "Pads inside a  copper zone outline of same net have no teardrop.\n"
 "Check this option to allow teardrop for these pads."
 msgstr ""
-"同一网络覆铜区域轮廓内的焊盘没有泪滴。\n"
+"同一网络覆铜敷铜轮廓内的焊盘没有泪滴。\n"
 "选中此选项允许这些焊盘使用泪滴。"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:326
@@ -35172,11 +35170,11 @@ msgstr "从所选内容创建敷铜区"
 
 #: pcbnew/tools/pcb_actions.cpp:58
 msgid "Create Rule Area from Selection"
-msgstr "从所选内容创建规则区域"
+msgstr "从所选内容创建规则敷铜"
 
 #: pcbnew/tools/pcb_actions.cpp:58
 msgid "Creates a rule area from the selection"
-msgstr "从所选内容创建规则区域"
+msgstr "从所选内容创建规则敷铜"
 
 #: pcbnew/tools/pcb_actions.cpp:63
 msgid "Create Lines from Selection"
@@ -35308,11 +35306,11 @@ msgstr "添加独立的过孔"
 
 #: pcbnew/tools/pcb_actions.cpp:177
 msgid "Add Rule Area"
-msgstr "添加规则区域"
+msgstr "添加规则敷铜"
 
 #: pcbnew/tools/pcb_actions.cpp:177
 msgid "Add a rule area (keepout)"
-msgstr "添加规则区域（禁布区）"
+msgstr "添加规则敷铜（禁布区）"
 
 #: pcbnew/tools/pcb_actions.cpp:183
 msgid "Add a Zone Cutout"
@@ -35320,7 +35318,7 @@ msgstr "添加挖空敷铜"
 
 #: pcbnew/tools/pcb_actions.cpp:183
 msgid "Add a cutout area of an existing zone"
-msgstr "添加敷铜挖空区域"
+msgstr "添加挖空敷铜"
 
 #: pcbnew/tools/pcb_actions.cpp:189
 msgid "Add a Similar Zone"
@@ -36525,7 +36523,7 @@ msgstr "放置板外封装"
 
 #: pcbnew/tools/pcb_actions.cpp:1328
 msgid "Performs automatic placement of components outside board area"
-msgstr "在板区域外执行元件的自动放置"
+msgstr "在板敷铜外执行元件的自动放置"
 
 #: pcbnew/tools/pcb_actions.cpp:1336
 msgid "Route Single Track"
@@ -36781,7 +36779,7 @@ msgstr "重新填充 %d 敷铜"
 
 #: pcbnew/tools/zone_filler_tool.cpp:250
 msgid "Auto-fill Zone(s)"
-msgstr "自动重填区域"
+msgstr "自动重填敷铜"
 
 #: pcbnew/tracks_cleaner.cpp:66
 msgid "Clean vias and tracks"
