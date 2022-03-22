@@ -36,9 +36,9 @@
 #include <base_units.h>     // for IU_PER_MILS
 
 /// Min and max page sizes for clamping, in mils.
-#define MIN_PAGE_SIZE_MILS           100
-#define MAX_PAGE_SIZE_PCBNEW_MILS  48000
-#define MAX_PAGE_SIZE_MILS        120000
+#define MIN_PAGE_SIZE_MILS          100
+#define MAX_PAGE_SIZE_PCBNEW_MILS   48000
+#define MAX_PAGE_SIZE_EESCHEMA_MILS 120000
 
 
 /**

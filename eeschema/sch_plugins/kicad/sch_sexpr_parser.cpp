@@ -1569,15 +1569,15 @@ void SCH_SEXPR_PARSER::parsePAGE_INFO( PAGE_INFO& aPageInfo )
         // Perform some controls to avoid crashes if the size is edited by hands
         if( width < MIN_PAGE_SIZE_MILS )
             width = MIN_PAGE_SIZE_MILS;
-        else if( width > MAX_PAGE_SIZE_MILS )
-            width = MAX_PAGE_SIZE_MILS;
+        else if( width > MAX_PAGE_SIZE_EESCHEMA_MILS )
+            width = MAX_PAGE_SIZE_EESCHEMA_MILS;
 
         int height = Mm2mils( parseDouble( "height" ) ); // height stored in mm so we convert to mils
 
         if( height < MIN_PAGE_SIZE_MILS )
             height = MIN_PAGE_SIZE_MILS;
-        else if( height > MAX_PAGE_SIZE_MILS )
-            height = MAX_PAGE_SIZE_MILS;
+        else if( height > MAX_PAGE_SIZE_EESCHEMA_MILS )
+            height = MAX_PAGE_SIZE_EESCHEMA_MILS;
 
         aPageInfo.SetWidthMils( width );
         aPageInfo.SetHeightMils( height );
