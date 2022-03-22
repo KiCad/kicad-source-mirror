@@ -2144,19 +2144,19 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
                     {
                         pad->SetDrillSize( wxSize( elem.sizeAndShape->slotsize, elem.holesize ) );
                     }
-                    else
+                    else if( normalizedSlotrotation == 90. || normalizedSlotrotation == 270. )
                     {
-                        if( normalizedSlotrotation != 90. && normalizedSlotrotation != 270. )
-                        {
-                            wxLogWarning( _( "Footprint %s pad %s has a hole-rotation of %f "
-                                             "degrees. KiCad only supports 90 degree rotations." ),
-                                          footprint->GetReference(),
-                                          elem.name,
-                                          normalizedSlotrotation );
-                        }
-
                         pad->SetDrillSize( wxSize( elem.holesize, elem.sizeAndShape->slotsize ) );
                     }
+                    else
+                    {
+                        wxLogWarning( _( "Footprint %s pad %s has a hole-rotation of %f "
+                                         "degrees. KiCad only supports 90 degree rotations." ),
+                                      footprint->GetReference(),
+                                      elem.name,
+                                      normalizedSlotrotation );
+                    }
+
                 }
                 break;
 
@@ -2218,6 +2218,14 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
                         footprint->GetReference(),
                         elem.name );
             break;
+        }
+
+        if( pad->GetAttribute() == PAD_ATTRIB::NPTH && pad->GetDrillSizeX() )
+        {
+            // KiCad likes NPTH pads to be the same size & shape as their holes
+            pad->SetShape( pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE ? PAD_SHAPE::CIRCLE
+                                                                          : PAD_SHAPE::OVAL );
+            pad->SetSize( pad->GetDrillSize() );
         }
 
         switch( elem.layer )
@@ -2629,7 +2637,7 @@ void ALTIUM_PCB::ParseWideStrings6Data( const CFB::CompoundFileReader&  aReader,
         m_progressReporter->Report( _( "Loading unicode strings..." ) );
 
     ALTIUM_PARSER reader( aReader, aEntry );
-    
+
     m_unicodeStrings = reader.ReadWideStringTable();
 
     if( reader.GetRemainingBytes() != 0 )
