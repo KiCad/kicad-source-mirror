@@ -1765,25 +1765,25 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
         else
             delta.y = m_trapDelta.GetValue();
 
-        if( delta.x < 0 && delta.x <= -aPad->GetSize().y )
+        if( delta.x < 0 && delta.x < -aPad->GetSize().y )
         {
             delta.x = -aPad->GetSize().y + 2;
             error = true;
         }
 
-        if( delta.x > 0 && delta.x >= aPad->GetSize().y )
+        if( delta.x > 0 && delta.x > aPad->GetSize().y )
         {
             delta.x = aPad->GetSize().y - 2;
             error = true;
         }
 
-        if( delta.y < 0 && delta.y <= -aPad->GetSize().x )
+        if( delta.y < 0 && delta.y < -aPad->GetSize().x )
         {
             delta.y = -aPad->GetSize().x + 2;
             error = true;
         }
 
-        if( delta.y > 0 && delta.y >= aPad->GetSize().x )
+        if( delta.y > 0 && delta.y > aPad->GetSize().x )
         {
             delta.y = aPad->GetSize().x - 2;
             error = true;
