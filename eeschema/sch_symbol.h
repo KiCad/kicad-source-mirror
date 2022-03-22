@@ -353,7 +353,7 @@ public:
      *
      * @param aFieldName is the name of the field
      */
-    wxString GetFieldText( const wxString& aFieldName, SCH_EDIT_FRAME* aFrame ) const;
+    wxString GetFieldText( const wxString& aFieldName ) const;
 
     /**
      * Populate a std::vector with SCH_FIELDs.

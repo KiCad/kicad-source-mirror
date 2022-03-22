@@ -209,8 +209,7 @@ public:
         for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
         {
             SCH_SYMBOL* symbol = m_symbolsList[ i ].GetSymbol();
-            m_dataStore[ symbol->m_Uuid ][ aFieldName ] = symbol->GetFieldText( aFieldName,
-                                                                                m_frame );
+            m_dataStore[ symbol->m_Uuid ][ aFieldName ] = symbol->GetFieldText( aFieldName );
         }
     }
 

@@ -1117,10 +1117,10 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
 
                     switch( j - i )
                     {
-                    case 0: bezier->SetStart( pos ); break;
+                    case 0: bezier->SetStart( pos );    break;
                     case 1: bezier->SetBezierC1( pos ); break;
                     case 2: bezier->SetBezierC2( pos ); break;
-                    case 3: bezier->SetEnd( pos ); break;
+                    case 3: bezier->SetEnd( pos );      break;
                     default: break; // Can't get here but silence warnings
                     }
                 }
@@ -2342,16 +2342,30 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
 
         SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
         SCH_FIELD*  field = nullptr;
+        wxString    upperName = elem.name.Upper();
 
-        if( elem.name.Upper() == "COMMENT" )
+        if( upperName == "COMMENT" )
+        {
             field = symbol->GetField( VALUE_FIELD );
+        }
         else
         {
             int      fieldIdx = symbol->GetFieldCount();
             wxString fieldName = elem.name.Upper();
 
-            if( fieldName == "VALUE" )
+            if( fieldName.IsEmpty() )
+            {
+                int disambiguate = 1;
+
+                do
+                {
+                    fieldName = wxString::Format( "ALTIUM_UNNAMED_%d", disambiguate++ );
+                } while( !symbol->GetFieldText( fieldName ).IsEmpty() );
+            }
+            else if( fieldName == "VALUE" )
+            {
                 fieldName = "ALTIUM_VALUE";
+            }
 
             field = symbol->AddField( SCH_FIELD( VECTOR2I(), fieldIdx, symbol, fieldName ) );
         }

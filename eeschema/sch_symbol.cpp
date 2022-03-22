@@ -708,7 +708,7 @@ SCH_FIELD* SCH_SYMBOL::GetFieldById( int aFieldId )
 }
 
 
-wxString SCH_SYMBOL::GetFieldText( const wxString& aFieldName, SCH_EDIT_FRAME* aFrame ) const
+wxString SCH_SYMBOL::GetFieldText( const wxString& aFieldName ) const
 {
     for( const SCH_FIELD& field : m_fields )
     {
