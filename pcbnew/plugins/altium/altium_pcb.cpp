@@ -2463,23 +2463,23 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
 
                 slotRotation.Normalize();
 
-                if( slotRotation == ANGLE_0 || slotRotation == ANGLE_180 )
+                if( slotRotation.IsHorizontal() )
                 {
                     pad->SetDrillSize( wxSize( aElem.sizeAndShape->slotsize, aElem.holesize ) );
                 }
-                else
+                else if( slotRotation.IsVertical() )
                 {
-                    if( slotRotation != ANGLE_90 && slotRotation != ANGLE_270 )
-                    {
-                        wxLogWarning( _( "Footprint %s pad %s has a hole-rotation of %f "
-                                         "degrees. KiCad only supports 90 degree rotations." ),
-                                      aFootprint->GetReference(),
-                                      aElem.name,
-                                      slotRotation.AsDegrees() );
-                    }
-
                     pad->SetDrillSize( wxSize( aElem.holesize, aElem.sizeAndShape->slotsize ) );
                 }
+                else
+                {
+                    wxLogWarning( _( "Footprint %s pad %s has a hole-rotation of %f degrees. "
+                                     "KiCad only supports 90 degree rotations." ),
+                                  aFootprint->GetReference(),
+                                  aElem.name,
+                                  slotRotation.AsDegrees() );
+                }
+
                 break;
             }
 
@@ -2497,9 +2497,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
         }
 
         if( aElem.sizeAndShape )
-        {
             pad->SetOffset( aElem.sizeAndShape->holeoffset[0] );
-        }
     }
 
     if( aElem.padmode != ALTIUM_PAD_MODE::SIMPLE )
@@ -2530,6 +2528,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
         {
             pad->SetShape( PAD_SHAPE::OVAL );
         }
+
         break;
 
     case ALTIUM_PAD_SHAPE::OCTAGONAL:
@@ -2543,6 +2542,14 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
         wxLogError( _( "Footprint %s pad %s uses an unknown pad-shape." ),
                     aFootprint->GetReference(), aElem.name );
         break;
+    }
+
+    if( pad->GetAttribute() == PAD_ATTRIB::NPTH && pad->GetDrillSizeX() )
+    {
+        // KiCad likes NPTH pads to be the same size & shape as their holes
+        pad->SetShape( pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE ? PAD_SHAPE::CIRCLE
+                                                                      : PAD_SHAPE::OVAL );
+        pad->SetSize( pad->GetDrillSize() );
     }
 
     switch( aElem.layer )
