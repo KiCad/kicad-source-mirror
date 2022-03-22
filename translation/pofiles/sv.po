@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:53-0700\n"
-"PO-Revision-Date: 2022-03-22 05:02+0000\n"
+"PO-Revision-Date: 2022-03-22 18:24+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -9377,7 +9377,7 @@ msgstr "Gruppera efter namn"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:105
 msgid "Pin numbers:"
-msgstr "PIN-nummer:"
+msgstr "Stiftnummer:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:109
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:123
@@ -9718,7 +9718,7 @@ msgstr "Fäst textalternativ"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:216
 msgid "Show pin number"
-msgstr "Visa PIN-nummer"
+msgstr "Visa stiftnummer"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:218
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:178
@@ -10077,7 +10077,7 @@ msgstr "Pinkod:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:66
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
-msgstr "Pin-nummer: 1 till 4 ASCII-bokstäver och / eller siffror"
+msgstr "Stiftnummer: 1 till 4 ASCII-bokstäver och / eller siffror"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:73
 msgid "&X position:"
@@ -11913,7 +11913,7 @@ msgstr "Fäst text"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:176
 msgid "Show pin numbers"
-msgstr "Visa PIN-nummer"
+msgstr "Visa stiftnummer"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:182
 msgid "Show pin names"
@@ -16437,7 +16437,7 @@ msgid ""
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
 "Redigeringsläge för synkroniserade stift\n"
-"När det är aktiverat sprids alla ändringar (utom pin-nummer) till andra "
+"När det är aktiverat sprids alla ändringar (utom stiftnummer) till andra "
 "enheter.\n"
 "Aktiverat som standard för komponenter innehållande flera sinsemellan "
 "utbytbara enheter."
