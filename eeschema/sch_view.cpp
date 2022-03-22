@@ -50,7 +50,7 @@ SCH_VIEW::SCH_VIEW( bool aIsDynamic, SCH_BASE_FRAME* aFrame ) :
     // Set m_boundary to define the max working area size. The default value is acceptable for
     // Pcbnew and Gerbview, but too large for Eeschema due to very different internal units.
     // A full size = 3 * MAX_PAGE_SIZE_MILS size allows a wide margin around the drawing-sheet.
-    double max_size = Mils2iu( MAX_PAGE_SIZE_MILS ) * 3.0;
+    double max_size = Mils2iu( MAX_PAGE_SIZE_EESCHEMA_MILS ) * 3.0;
     m_boundary.SetOrigin( -max_size/4, -max_size/4 );
     m_boundary.SetSize( max_size, max_size );
 }

@@ -92,12 +92,6 @@ VECTOR2D PLOTTER::userToDeviceCoordinates( const VECTOR2I& aCoordinate )
 {
     VECTOR2I pos = aCoordinate - m_plotOffset;
 
-    // Don't allow overflows; they can cause rendering failures in some file viewers
-    // (such as Acrobat)
-    int clampSize = MAX_PAGE_SIZE_MILS * m_IUsPerDecimil * 10 / 2;
-    pos.x = std::max( -clampSize, std::min( pos.x, clampSize ) );
-    pos.y = std::max( -clampSize, std::min( pos.y, clampSize ) );
-
     double x = pos.x * m_plotScale;
     double y = ( m_paperSize.y - pos.y * m_plotScale );
 
