@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:52-0700\n"
-"PO-Revision-Date: 2022-03-21 22:49+0000\n"
+"PO-Revision-Date: 2022-03-22 05:02+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -7114,8 +7114,8 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
-"Fotavtryckstilldelningar från schemats nätlista- och "
-"symbolfotavtrycksassociationsfil (.cmp) är motstridiga.\n"
+"Fotavtryckstilldelningar från kretsschemats nätlista och symbol-fotavtrycks "
+"associationsfil (.cmp) är motstridiga.\n"
 "\n"
 "Vänligen välj tilldelning."
 
@@ -9460,7 +9460,7 @@ msgstr "Migrera bussar"
 #: eeschema/dialogs/dialog_netlist.cpp:261
 #: eeschema/dialogs/dialog_netlist_base.h:69
 msgid "Export Netlist"
-msgstr "Exportera Netlist"
+msgstr "Exportera nätlista"
 
 #: eeschema/dialogs/dialog_netlist.cpp:302
 msgid "Simulator requires a fully annotated schematic."
@@ -9468,11 +9468,13 @@ msgstr "Simulatorn kräver ett fullständigt annoterat schema."
 
 #: eeschema/dialogs/dialog_netlist.cpp:328
 msgid "Reformat passive symbol values"
-msgstr "Omformatera passiva symbolvärden"
+msgstr "Omformatera värden för passiva symboler"
 
 #: eeschema/dialogs/dialog_netlist.cpp:329
 msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
-msgstr "Omformatera passiva symbolvärden, t.ex. 1M -> 1Meg"
+msgstr ""
+"Omformatera värden tillhörande symboler för passiva komponenter, t.ex. 1M -> "
+"1Meg"
 
 #: eeschema/dialogs/dialog_netlist.cpp:334
 msgid "External simulator command:"
@@ -9490,7 +9492,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_netlist.cpp:349
 msgid "Create Netlist and Run Simulator Command"
-msgstr "Skapa Netlist och kör Simulator Command"
+msgstr "Skapa nätlista och kör simulatorkommando"
 
 #: eeschema/dialogs/dialog_netlist.cpp:400
 msgid "Netlist command:"
@@ -9689,7 +9691,7 @@ msgstr "Plotta alla sidor"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:112
 msgid "Plot Current Page"
-msgstr "Plot Aktuell sida"
+msgstr "Plotta aktuell sida"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:215
 #: pcbnew/dialogs/dialog_export_svg.cpp:207
@@ -9893,7 +9895,7 @@ msgstr "Svartvitt"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:82
 msgid "Plot background color"
-msgstr "Plot bakgrundsfärg"
+msgstr "Plotta bakgrundsfärg"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:83
 msgid "Plot the background color if the output format supports it"
@@ -9969,7 +9971,7 @@ msgstr "Skriv ut sida %d"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
 msgid "Print sheet &reference and title block"
-msgstr "Skriv ut ark&referens och titelblock"
+msgstr "Skriv ut arkets &referensram och titelblock"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:24
 msgid "Print (or not) the Frame references."
@@ -13093,7 +13095,7 @@ msgstr ""
 
 #: eeschema/menubar.cpp:109
 msgid "Footprint Assignments..."
-msgstr "Fotavtryckstilldelninar..."
+msgstr "Fotavtryckstilldelningar..."
 
 #: eeschema/menubar.cpp:115 eeschema/symbol_editor/menubar_symbol_editor.cpp:68
 #: pcbnew/dialogs/dialog_export_step.cpp:122
@@ -13109,7 +13111,7 @@ msgstr "Ritning till urklipp"
 #: eeschema/menubar.cpp:118 pcbnew/menubar_pcb_editor.cpp:110
 #: pcbnew/pcb_edit_frame.cpp:200
 msgid "Netlist..."
-msgstr "Netlist ..."
+msgstr "Nätlista..."
 
 #: eeschema/menubar.cpp:182
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:123
@@ -14885,7 +14887,7 @@ msgstr "Ställa in komponentvärde"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:75
 msgid "Show SPICE Netlist..."
-msgstr "Visa SPICE Netlist ..."
+msgstr "Visa SPICE-nätlista..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:75
 msgid "Shows current simulation's netlist. Useful for debugging SPICE errors."
@@ -15609,9 +15611,9 @@ msgid ""
 "Cannot fetch PCB netlist because eeschema is opened in stand-alone mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
-"Det går inte att hämta PCB-netlista eftersom eeschema öppnas i fristående "
-"läge.\n"
-"Du måste starta KiCad-projektledaren och skapa ett projekt."
+"Det går inte att hämta mönsterkortets nätlista eftersom "
+"kretsschemaredigeraren öppnats i fristående läge.\n"
+"Du måste starta KiCad-projekthanteraren och skapa ett projekt."
 
 #: eeschema/tools/backannotate.cpp:164
 #, c-format
@@ -16410,11 +16412,11 @@ msgstr "Öppna mönsterkort i mönsterkortsredigeraren"
 
 #: eeschema/tools/ee_actions.cpp:626
 msgid "Export Netlist..."
-msgstr "Exportera Netlist ..."
+msgstr "Exportera nätlista..."
 
 #: eeschema/tools/ee_actions.cpp:626
 msgid "Export file containing netlist in one of several formats"
-msgstr "Exportera fil som innehåller netlista i ett av flera format"
+msgstr "Exportera fil som innehåller nätlista i ett av flera format"
 
 #: eeschema/tools/ee_actions.cpp:631
 msgid "Generate BOM..."
@@ -33562,7 +33564,7 @@ msgstr "Specctra DSN-fil"
 
 #: pcbnew/tools/board_editor_control.cpp:469
 msgid "Export Board Netlist"
-msgstr "Exportera kortets nätlista"
+msgstr "Exportera mönsterkortets nätlista"
 
 #: pcbnew/tools/board_editor_control.cpp:470
 msgid "KiCad board netlist files"
@@ -34743,7 +34745,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:576
 msgid "Import Netlist..."
-msgstr "Importera Nätlista..."
+msgstr "Importera nätlista..."
 
 #: pcbnew/tools/pcb_actions.cpp:576
 msgid "Read netlist and update board connectivity"
@@ -34799,11 +34801,11 @@ msgstr "Skapa rapport över alla fotavtryck från aktuellt mönsterkort"
 
 #: pcbnew/tools/pcb_actions.cpp:613
 msgid "IPC-D-356 Netlist File..."
-msgstr "IPC-D-356 Netlist-fil ..."
+msgstr "IPC-D-356 nätlistefil ..."
 
 #: pcbnew/tools/pcb_actions.cpp:613
 msgid "Generate IPC-D-356 netlist file"
-msgstr "Skapa IPC-D-356 netlist-fil"
+msgstr "Skapa IPC-D-356 nätlistefil"
 
 #: pcbnew/tools/pcb_actions.cpp:618
 msgid "BOM..."
