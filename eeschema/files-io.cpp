@@ -632,6 +632,10 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
+    // Don't leave dangling pointers to previously-opened document.
+    m_toolManager->GetTool<EE_SELECTION_TOOL>()->ClearSelection();
+    ClearUndoRedoList();
+
     if( setProject )
     {
         Schematic().SetProject( nullptr );
@@ -664,8 +668,6 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
         wxLogError( _( "Unexpected file extension: '%s'." ), fn.GetExt() );
         return;
     }
-
-    m_toolManager->GetTool<EE_SELECTION_TOOL>()->ClearSelection();
 
     importFile( dlg.GetPath(), pluginType );
 
