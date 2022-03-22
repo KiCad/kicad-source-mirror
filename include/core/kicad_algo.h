@@ -176,6 +176,16 @@ void delete_if( _Container& __c, _Function&& __f )
 }
 
 
+/**
+ * @brief Integral version of std::signbit that works all compilers.
+ */
+template <typename T, std::enable_if_t<std::is_integral<T>::value, int> = 0>
+bool signbit( T v )
+{
+    return v < 0;
+}
+
+
 } // namespace alg
 
 #endif /* INCLUDE_CORE_KICAD_ALGO_H_ */

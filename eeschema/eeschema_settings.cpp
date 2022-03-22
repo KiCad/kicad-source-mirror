@@ -164,8 +164,8 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<wxString>( "drawing.field_names",
             &m_Drawing.field_names, "" ) );
 
-    m_params.emplace_back( new PARAM<bool>( "drawing.hv_lines_only",
-            &m_Drawing.hv_lines_only, true ) );
+    m_params.emplace_back( new PARAM<int>( "drawing.line_mode", &m_Drawing.line_mode,
+                                           LINE_MODE::LINE_MODE_90 ) );
 
     m_params.emplace_back( new PARAM<bool>( "drawing.auto_start_wires",
             &m_Drawing.auto_start_wires, true ) );
@@ -471,7 +471,7 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<int>(  aCfg, "RepeatStepY",          "drawing.default_repeat_offset_y" );
     ret &= fromLegacy<int>(  aCfg, "DefaultWireWidth",     "drawing.default_wire_thickness" );
     ret &= fromLegacyString( aCfg, "FieldNames",           "drawing.field_names" );
-    ret &= fromLegacy<bool>( aCfg, "HorizVertLinesOnly",   "drawing.hv_lines_only" );
+    ret &= fromLegacy<bool>( aCfg, "HorizVertLinesOnly",   "drawing.line_mode" );
     ret &= fromLegacy<int>(  aCfg, "RepeatLabelIncrement", "drawing.repeat_label_increment" );
 
     ret &= fromLegacy<bool>( aCfg, "DragActionIsMove",     "input.drag_is_move" );

@@ -194,8 +194,15 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( ACTIONS::milsUnits,           ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::millimetersUnits,    ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,   ACTION_TOOLBAR::TOGGLE );
+
+    m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( EE_ACTIONS::toggleHiddenPins, ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( EE_ACTIONS::toggleForceHV,    ACTION_TOOLBAR::TOGGLE );
+
+    m_optionsToolBar->AddScaledSeparator( this );
+    m_optionsToolBar->Add( EE_ACTIONS::lineModeFree,     ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( EE_ACTIONS::lineMode90,       ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( EE_ACTIONS::lineMode45,       ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( EE_ACTIONS::lineMode135,      ACTION_TOOLBAR::TOGGLE );
 
     if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
         m_optionsToolBar->Add( ACTIONS::toggleBoundingBoxes,    ACTION_TOOLBAR::TOGGLE );

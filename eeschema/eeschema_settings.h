@@ -30,6 +30,17 @@
 using KIGFX::COLOR4D;
 
 
+enum LINE_MODE
+{
+    LINE_MODE_FREE          = 0,
+    LINE_MODE_90            = 1,
+    LINE_MODE_45            = 2,
+    LINE_MODE_135           = 3,
+
+    LINE_MODE_COUNT,
+};
+
+
 class EESCHEMA_SETTINGS : public APP_SETTINGS_BASE
 {
 public:
@@ -103,7 +114,7 @@ public:
         COLOR4D  default_sheet_border_color;
         COLOR4D  default_sheet_background_color;
         wxString field_names;
-        bool     hv_lines_only;
+        int      line_mode;
         int      repeat_label_increment;
         bool     intersheets_ref_show;
         bool     intersheets_ref_own_page;

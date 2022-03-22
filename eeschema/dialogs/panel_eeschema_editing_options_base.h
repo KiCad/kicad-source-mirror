@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-133-g388db8e4)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -13,14 +13,15 @@
 #include "widgets/color_swatch.h"
 #include "widgets/resettable_panel.h"
 #include <wx/string.h>
-#include <wx/checkbox.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/choice.h>
+#include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
-#include <wx/stattext.h>
 #include <wx/statline.h>
 #include <wx/panel.h>
 #include <wx/simplebook.h>
@@ -37,7 +38,8 @@ class PANEL_EESCHEMA_EDITING_OPTIONS_BASE : public RESETTABLE_PANEL
 	private:
 
 	protected:
-		wxCheckBox* m_checkHVOrientation;
+		wxStaticText* m_staticText24;
+		wxChoice* m_choiceLineMode;
 		wxCheckBox* m_mouseDragIsDrag;
 		wxCheckBox* m_cbAutoStartWires;
 		wxStaticText* m_borderColorLabel;
@@ -83,6 +85,7 @@ class PANEL_EESCHEMA_EDITING_OPTIONS_BASE : public RESETTABLE_PANEL
 	public:
 
 		PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_EESCHEMA_EDITING_OPTIONS_BASE();
 
 };

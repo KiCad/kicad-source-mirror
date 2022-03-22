@@ -96,6 +96,8 @@ public:
     static TOOL_ACTION drawArc;
     static TOOL_ACTION drawLines;
     static TOOL_ACTION placeImage;
+    static TOOL_ACTION undoLastSegment;
+    static TOOL_ACTION switchSegmentPosture;
     static TOOL_ACTION finishLineWireOrBus;
     static TOOL_ACTION finishWire;
     static TOOL_ACTION finishBus;
@@ -211,12 +213,18 @@ public:
     static TOOL_ACTION showElectricalTypes;
     static TOOL_ACTION showSymbolTree;
     static TOOL_ACTION hideSymbolTree;
-    static TOOL_ACTION toggleForceHV;
     static TOOL_ACTION drawSheetOnClipboard;
     static TOOL_ACTION exportSymbolView;
     static TOOL_ACTION exportSymbolAsSVG;
     static TOOL_ACTION showPythonConsole;
     static TOOL_ACTION repairSchematic;
+
+    // Line modes
+    static TOOL_ACTION lineModeFree;
+    static TOOL_ACTION lineMode90;
+    static TOOL_ACTION lineMode45;
+    static TOOL_ACTION lineMode135;
+    static TOOL_ACTION lineModeNext;
 
     // SPICE
     static TOOL_ACTION runSimulation;

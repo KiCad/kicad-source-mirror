@@ -679,10 +679,30 @@ TOOL_ACTION EE_ACTIONS::toggleERCExclusions( "eeschema.EditorControl.showERCExcl
         _( "Show ERC Exclusions" ),
         _( "Show markers for excluded electrical rules checker violations" ) );
 
-TOOL_ACTION EE_ACTIONS::toggleForceHV( "eeschema.EditorControl.forceHVLines",
+TOOL_ACTION EE_ACTIONS::lineModeFree( "eeschema.EditorControl.lineModeFree",
         AS_GLOBAL, 0, "",
-        _( "Force H/V Wires and Buses" ), _( "Switch H & V only mode for new wires and buses" ),
-        BITMAPS::lines90 );
+        _( "Line Mode for Wires and Buses" ), _( "Lines drawn at any angle" ),
+        BITMAPS::unknown, AF_NONE, (void*) LINE_MODE::LINE_MODE_FREE );
+
+TOOL_ACTION EE_ACTIONS::lineMode90( "eeschema.EditorControl.lineModeOrthonal",
+        AS_GLOBAL, 0, "",
+        _( "Line Mode for Wires and Buses" ), _( "Lines drawn horizontally and vertically" ),
+        BITMAPS::lines90, AF_NONE, (void*) LINE_MODE::LINE_MODE_90);
+
+TOOL_ACTION EE_ACTIONS::lineMode45( "eeschema.EditorControl.lineMode45",
+        AS_GLOBAL, 0, "",
+        _( "Line Mode for Wires and Buses" ), _( "Lines drawn horizontally and vertically, with a 45 degree angle end" ),
+        BITMAPS::unknown, AF_NONE, (void*) LINE_MODE::LINE_MODE_45);
+
+TOOL_ACTION EE_ACTIONS::lineMode135( "eeschema.EditorControl.lineMode135",
+        AS_GLOBAL, 0, "",
+        _( "Line Mode for Wires and Buses" ), _( "Lines drawn horizontally and vertically, with a 45 degree angle start" ),
+        BITMAPS::unknown, AF_NONE, (void*) LINE_MODE::LINE_MODE_135);
+
+TOOL_ACTION EE_ACTIONS::lineModeNext( "eeschema.EditorControl.lineModeNext",
+        AS_GLOBAL, MD_SHIFT + WXK_SPACE, "",
+        _( "Line Mode for Wires and Buses" ), _( "Switch to next line mode" ),
+        BITMAPS::unknown );
 
 TOOL_ACTION EE_ACTIONS::repairSchematic( "eeschema.EditorControl.repairSchematic",
         AS_GLOBAL, 0, "",
@@ -758,6 +778,18 @@ TOOL_ACTION EE_ACTIONS::drawLines( "eeschema.InteractiveDrawingLineWireBus.drawL
         'I', LEGACY_HK_NAME( "Add Graphic PolyLine" ),
         _( "Add Lines" ), _( "Add connected graphic lines" ),
         BITMAPS::add_dashed_line, AF_ACTIVATE, (void*) &drawLinesActionParam );
+
+TOOL_ACTION EE_ACTIONS::undoLastSegment( "eeschema.InteractiveDrawingLineWireBus.undoLastSegment",
+        AS_GLOBAL,
+        WXK_BACK, "",
+        _( "Undo Last Segment" ),  _( "Walks the current line back one segment." ),
+        BITMAPS::undo );
+
+TOOL_ACTION EE_ACTIONS::switchSegmentPosture( "eeschema.InteractiveDrawingLineWireBus.switchPosture",
+        AS_GLOBAL,
+        '/', "",
+        _( "Switch Segment Posture" ), _( "Switches posture of the current segment." ),
+        BITMAPS::change_entry_orient, AF_NONE );
 
 TOOL_ACTION EE_ACTIONS::finishLineWireOrBus( "eeschema.InteractiveDrawingLineWireBus.finish",
         AS_GLOBAL,

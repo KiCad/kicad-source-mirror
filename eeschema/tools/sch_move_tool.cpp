@@ -386,7 +386,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             // values and if the signbit is set in the result, that means that one value
             // had the sign bit set and one did not, hence the result is negative.
             // We need to avoid std::signbit<int> as it is not supported by MSVC because reasons
-            if( ( m_moveOffset.x ^ ( m_moveOffset + delta ).x ) < 0 )
+            if( alg::signbit( m_moveOffset.x ) != alg::signbit( ( m_moveOffset + delta ).x ) )
             {
                 splitMoves.emplace_back( VECTOR2I( -1 * m_moveOffset.x, 0 ) );
                 splitMoves.emplace_back( VECTOR2I( delta.x + m_moveOffset.x, 0 ) );
@@ -394,7 +394,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             else
                 splitMoves.emplace_back( VECTOR2I( delta.x, 0 ) );
 
-            if( ( m_moveOffset.y ^ ( m_moveOffset + delta ).y ) < 0 )
+            if( alg::signbit( m_moveOffset.y ) != alg::signbit( ( m_moveOffset + delta ).y ) )
             {
                 splitMoves.emplace_back( VECTOR2I( 0, -1 * m_moveOffset.y ) );
                 splitMoves.emplace_back( VECTOR2I( 0, delta.y + m_moveOffset.y ) );
@@ -428,7 +428,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                             item->Type() == SCH_LINE_T ? static_cast<SCH_LINE*>( item ) : nullptr;
 
                     //Only partially selected drag lines in orthogonal line mode need special handling
-                    if( m_isDrag && cfg->m_Drawing.hv_lines_only && line
+                    if( m_isDrag && cfg->m_Drawing.line_mode != LINE_MODE::LINE_MODE_FREE && line
                         && ( line->HasFlag( STARTPOINT ) != line->HasFlag( ENDPOINT ) ) )
                     {
                         // If the move is not the same angle as this move,  then we need to do something

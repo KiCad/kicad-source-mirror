@@ -61,7 +61,6 @@
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
-#include <tool/editor_conditions.h>
 #include <tool/picker_tool.h>
 #include <tool/selection.h>
 #include <tool/tool_dispatcher.h>
@@ -73,6 +72,7 @@
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_drawing_tools.h>
 #include <tools/sch_edit_tool.h>
+#include <tools/sch_editor_conditions.h>
 #include <tools/sch_editor_control.h>
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/sch_move_tool.h>
@@ -386,7 +386,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     SCH_BASE_FRAME::setupUIConditions();
 
     ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
-    EDITOR_CONDITIONS cond( this );
+    SCH_EDITOR_CONDITIONS cond( this );
 
     wxASSERT( mgr );
 
@@ -410,6 +410,11 @@ void SCH_EDIT_FRAME::setupUIConditions()
                         CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
     mgr->SetConditions( ACTIONS::inchesUnits,         CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
     mgr->SetConditions( ACTIONS::milsUnits,           CHECK( cond.Units( EDA_UNITS::MILS ) ) );
+
+    mgr->SetConditions( EE_ACTIONS::lineModeFree,     CHECK( cond.LineMode( LINE_MODE::LINE_MODE_FREE ) ) );
+    mgr->SetConditions( EE_ACTIONS::lineMode90,       CHECK( cond.LineMode( LINE_MODE::LINE_MODE_90 ) ) );
+    mgr->SetConditions( EE_ACTIONS::lineMode45,       CHECK( cond.LineMode( LINE_MODE::LINE_MODE_45 ) ) );
+    mgr->SetConditions( EE_ACTIONS::lineMode135,      CHECK( cond.LineMode( LINE_MODE::LINE_MODE_135 ) ) );
 
     mgr->SetConditions( ACTIONS::cut,                 ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::copy,                ENABLE( hasElements ) );
@@ -469,13 +474,6 @@ void SCH_EDIT_FRAME::setupUIConditions()
                 return cfg && cfg->m_Appearance.show_erc_exclusions;
             };
 
-    auto forceHVCond =
-            [this]( const SELECTION& )
-            {
-                EESCHEMA_SETTINGS* cfg = eeconfig();
-                return cfg && cfg->m_Drawing.hv_lines_only;
-            };
-
     auto remapSymbolsCondition =
             [&]( const SELECTION& aSel )
             {
@@ -498,7 +496,6 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::toggleERCErrors,     CHECK( showERCErrorsCond ) );
     mgr->SetConditions( EE_ACTIONS::toggleERCWarnings,   CHECK( showERCWarningsCond ) );
     mgr->SetConditions( EE_ACTIONS::toggleERCExclusions, CHECK( showERCExclusionsCond ) );
-    mgr->SetConditions( EE_ACTIONS::toggleForceHV,       CHECK( forceHVCond ) );
     mgr->SetConditions( ACTIONS::toggleBoundingBoxes,    CHECK( cond.BoundingBoxes() ) );
 
 

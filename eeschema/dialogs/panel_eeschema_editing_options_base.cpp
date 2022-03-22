@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-133-g388db8e4)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,9 +20,15 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	wxStaticBoxSizer* sbSizerEditOpt;
 	sbSizerEditOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Editing") ), wxVERTICAL );
 
-	m_checkHVOrientation = new wxCheckBox( sbSizerEditOpt->GetStaticBox(), wxID_ANY, _("Constrain buses and wires to H or V"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkHVOrientation->SetValue(true);
-	sbSizerEditOpt->Add( m_checkHVOrientation, 0, wxRIGHT|wxLEFT, 5 );
+	m_staticText24 = new wxStaticText( sbSizerEditOpt->GetStaticBox(), wxID_ANY, _("Line Drawing Mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText24->Wrap( -1 );
+	sbSizerEditOpt->Add( m_staticText24, 0, wxALL, 5 );
+
+	wxString m_choiceLineModeChoices[] = { _("Free Angle"), _("90 deg Angle"), _("45 deg Angle"), _("135 deg Angle") };
+	int m_choiceLineModeNChoices = sizeof( m_choiceLineModeChoices ) / sizeof( wxString );
+	m_choiceLineMode = new wxChoice( sbSizerEditOpt->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceLineModeNChoices, m_choiceLineModeChoices, 0 );
+	m_choiceLineMode->SetSelection( 1 );
+	sbSizerEditOpt->Add( m_choiceLineMode, 0, wxALL, 5 );
 
 	m_mouseDragIsDrag = new wxCheckBox( sbSizerEditOpt->GetStaticBox(), wxID_ANY, _("Mouse drag performs Drag (G) operation"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_mouseDragIsDrag->SetToolTip( _("If unchecked, mouse drag will perform move (M) operation") );

@@ -63,7 +63,7 @@ void PANEL_EESCHEMA_EDITING_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* aC
     m_backgroundColorSwatch->SetSwatchBackground( schematicBackground );
     m_backgroundColorSwatch->SetSwatchColor( aCfg->m_Drawing.default_sheet_background_color, false );
 
-    m_checkHVOrientation->SetValue( aCfg->m_Drawing.hv_lines_only );
+    m_choiceLineMode->SetSelection( aCfg->m_Drawing.line_mode );
     m_footprintPreview->SetValue( aCfg->m_Appearance.footprint_preview );
     m_navigatorStaysOpen->SetValue( aCfg->m_Appearance.navigator_stays_open );
 
@@ -101,7 +101,7 @@ bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataFromWindow()
     cfg->m_Drawing.default_repeat_offset_y = Iu2Mils( (int) m_vPitch.GetValue() );
     cfg->m_Drawing.repeat_label_increment = m_spinLabelRepeatStep->GetValue();
 
-    cfg->m_Drawing.hv_lines_only = m_checkHVOrientation->GetValue();
+    cfg->m_Drawing.line_mode = m_choiceLineMode->GetSelection();
     cfg->m_Appearance.footprint_preview = m_footprintPreview->GetValue();
     cfg->m_Appearance.navigator_stays_open = m_navigatorStaysOpen->GetValue();
 

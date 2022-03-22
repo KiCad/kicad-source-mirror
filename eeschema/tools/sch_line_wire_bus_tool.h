@@ -130,8 +130,10 @@ private:
      *                  break point to compute.
      * @param aPosition A reference to a wxPoint object containing the coordinates of the
      *                  position used to calculate the line break point.
+     * @param mode      LINE_MODE specifying the way to break the line
      */
-    void computeBreakPoint( const std::pair<SCH_LINE*, SCH_LINE*>& aSegments, VECTOR2I& aPosition );
+    void computeBreakPoint( const std::pair<SCH_LINE*, SCH_LINE*>& aSegments, VECTOR2I& aPosition,
+                            LINE_MODE mode );
 
 private:
     bool                    m_inDrawingTool;   // Reentrancy guard
