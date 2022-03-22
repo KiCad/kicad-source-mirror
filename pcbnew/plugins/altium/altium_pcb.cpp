@@ -2486,10 +2486,12 @@ void ALTIUM_PCB::ParseVias6Data( const CFB::CompoundFileReader& aReader,
         else if( ( !start_layer_outside ) && ( !end_layer_outside ) )
         {
             via->SetViaType( VIATYPE::BLIND_BURIED );
+            m_board->GetDesignSettings().m_BlindBuriedViaAllowed = true;
         }
         else
         {
             via->SetViaType( VIATYPE::MICROVIA ); // TODO: always a microvia?
+            m_board->GetDesignSettings().m_MicroViasAllowed = true;
         }
 
         PCB_LAYER_ID start_klayer = GetKicadLayer( elem.layer_start );
