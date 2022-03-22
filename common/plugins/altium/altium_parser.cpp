@@ -252,24 +252,14 @@ std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties()
 
 int32_t ALTIUM_PARSER::ConvertToKicadUnit( const double aValue )
 {
-    constexpr double int_limit = ( std::numeric_limits<int>::max() - 1 ) / 2.54;
+    constexpr double int_limit = ( std::numeric_limits<int>::max() - 10 ) / 2.54;
 
     int32_t iu = KiROUND( Clamp<double>( -int_limit, aValue, int_limit ) * 2.54 );
 
-    // Altium stores metric units up to 0.001mm (1000nm) in accuracy. This code fixes rounding
-    // errors. Because imperial units > 0.01mil are always even, this workaround should never
-    // trigger for them.
-    switch( iu % 1000 )
-    {
-    case 1:
-    case -999:
-        return iu - 1;
-    case 999:
-    case -1:
-        return iu + 1;
-    default:
-        return iu;
-    }
+    // Altium's internal precision is 0.1uinch.  KiCad's is 1nm.  Round to nearest 10nm to clean
+    // up most rounding errors.  This allows lossless conversion of increments of 0.05mils and
+    // 0.01um.
+    return KiROUND( (double) iu / 10.0 ) * 10;
 }
 
 
