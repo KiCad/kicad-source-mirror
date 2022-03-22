@@ -420,7 +420,7 @@ void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& 
         corners.push_back( ROUNDED_CORNER( size.x + aDeltaY, size.y - aDeltaX ) );
         corners.push_back( ROUNDED_CORNER( -size.x - aDeltaY, size.y + aDeltaX ) );
 
-        if( aDeltaY == size.x || aDeltaX == size.y )
+        if( std::abs( aDeltaY ) == std::abs( size.x ) || std::abs( aDeltaX ) == std::abs( size.y ) )
             CornerListRemoveDuplicates( corners );
     }
 
