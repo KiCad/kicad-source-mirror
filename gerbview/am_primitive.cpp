@@ -817,7 +817,6 @@ SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* a
                                                        const VECTOR2I&         aShapePos )
 {
     SHAPE_POLY_SET holeBuffer;
-    bool hasHole = false;
 
     m_shape.RemoveAllContours();
 
@@ -839,18 +838,17 @@ SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* a
             {
                 m_shape.BooleanSubtract( holeBuffer, SHAPE_POLY_SET::PM_FAST );
                 holeBuffer.RemoveAllContours();
-                hasHole = true;
-            }
+             }
         }
     }
 
     // Merge and cleanup basic shape polygons
     m_shape.Simplify( SHAPE_POLY_SET::PM_FAST );
 
-    // If a hole is defined inside a polygon, we must fracture the polygon
-    // to be able to drawn it (i.e link holes by overlapping edges)
-    if( hasHole )
-        m_shape.Fracture( SHAPE_POLY_SET::PM_FAST );
+    // A hole can be is defined inside a polygon, or the polygons themselve can create
+    // a hole when merged, so we must fracture the polygon to be able to drawn it
+    // (i.e link holes by overlapping edges)
+    m_shape.Fracture( SHAPE_POLY_SET::PM_FAST );
 
     m_boundingBox = EDA_RECT( VECTOR2I( 0, 0 ), VECTOR2I( 1, 1 ) );
 
