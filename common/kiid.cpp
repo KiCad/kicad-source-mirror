@@ -25,6 +25,7 @@
 
 #include <kiid.h>
 
+#include <boost/uuid/detail/random_provider.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/functional/hash.hpp>
@@ -40,8 +41,22 @@
 // boost:mt19937 is not thread-safe
 static std::mutex                                           rng_mutex;
 
-// Create only once, as seeding is *very* expensive
+// We use a little helper class to ensure our static rng object is seeded
+// with a random seed on startup before it's passed to the uuid generator object
+class GENERATOR_INIT_HELPER
+{
+public:
+    GENERATOR_INIT_HELPER( boost::mt19937& aRng )
+    {
+        boost::uuids::detail::random_provider seeder;
+        aRng.seed( seeder );
+    }
+};
+
+// Static rng and generators are used because the overhead of constant seeding is expensive
+// We break out the rng separately from the generator because we want to control seeding in cases like unit tests
 static boost::mt19937                                       rng;
+static GENERATOR_INIT_HELPER                                initHelper( rng );
 static boost::uuids::basic_random_generator<boost::mt19937> randomGenerator( rng );
 
 // These don't have the same performance penalty, but we might as well be consistent
