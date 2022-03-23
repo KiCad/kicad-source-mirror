@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:52-0700\n"
-"PO-Revision-Date: 2022-03-18 15:59+0000\n"
+"PO-Revision-Date: 2022-03-23 22:38+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v6/ca/>\n"
 "Language: ca\n"
@@ -10838,7 +10838,7 @@ msgstr "Ajusts de la simulació"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:80
 msgid "Diode"
-msgstr "Diode"
+msgstr "Díode"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:81
 msgid "BJT"
@@ -21138,7 +21138,6 @@ msgstr "Diàmetre intern (conductor)"
 
 #: pcb_calculator/transline_ident.cpp:285
 #: pcb_calculator/transline_ident.cpp:406
-#, fuzzy
 msgid "Dout"
 msgstr "Dout"
 
@@ -30313,13 +30312,13 @@ msgstr ""
 "No s'ha pogut canviar el nom al fitxer temporal '%s'."
 
 #: pcbnew/files.cpp:1154
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board copied to:\n"
 "%s"
 msgstr ""
 "S'ha copiat la placa a:\n"
-"«%s»"
+"%s"
 
 #: pcbnew/footprint.cpp:944
 msgid "Last Change"
@@ -30405,7 +30404,7 @@ msgstr ""
 #: pcbnew/footprint.cpp:2143
 #, c-format
 msgid "(pad \"%s\")"
-msgstr ""
+msgstr "(pad \"%s\")"
 
 #: pcbnew/footprint.cpp:2390 pcbnew/pad.cpp:1733 pcbnew/zone.cpp:1458
 msgid "Clearance Override"
