@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:52-0700\n"
-"PO-Revision-Date: 2022-03-22 18:24+0000\n"
+"PO-Revision-Date: 2022-03-23 22:38+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -3654,7 +3654,7 @@ msgstr "Ignorera"
 
 #: common/dialogs/panel_setup_severities.cpp:114
 msgid "From Pin Conflicts Map"
-msgstr "Från stiftkonfliktsmap"
+msgstr "Från stiftkonfliktskarta"
 
 #: common/dialogs/panel_text_variables.cpp:118
 #: common/dialogs/panel_text_variables.cpp:146
@@ -7404,12 +7404,12 @@ msgstr "Nät %s är grafiskt anslutet till buss %s men ingår inte i den bussen"
 #: eeschema/connection_graph.cpp:3008
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
-msgstr "Bladstift %s har ingen matchande hierarkisk etikett inuti bladet"
+msgstr "Arkstift %s har ingen matchande hierarkisk etikett inuti bladet"
 
 #: eeschema/connection_graph.cpp:3025
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
-msgstr "Bladstift %s har ingen matchande hierarkisk etikett inuti bladet"
+msgstr "Hierarkisk etikett %s har inget matchande arkstift i föräldra-arket"
 
 #: eeschema/cross-probing.cpp:260 pcbnew/cross-probing.cpp:172
 #, c-format
@@ -9231,7 +9231,7 @@ msgid ""
 "for pin numbers."
 msgstr ""
 "Markera detta alternativ när alla symbolenheter är identiska förutom\n"
-"för stiftnummet."
+"gällande stiftnummer."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:214
 msgid "Pin Text Options"
@@ -9264,9 +9264,9 @@ msgid ""
 "Check this option to have pin names inside the body and pin number outside.\n"
 "If not checked pins names and pins numbers are outside."
 msgstr ""
-"Markera det här alternativet för att ha stiftnamn inuti kroppen och "
+"Markera det här alternativet för att ha stiftnamn inuti symbolkroppen och "
 "stiftnummer utanför.\n"
-"Om inte markerade stift namn och stift nummer är utanför."
+"Om inte markerat är både stiftnamn och stiftnummer är utanför."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:240
 msgid "Position offset:"
@@ -9615,8 +9615,8 @@ msgid ""
 "difficult to connect to in the schematic.\n"
 "Do you want to continue?"
 msgstr ""
-"Denna stift finns inte på ett %d mils rutnät som kommer att göra det\n"
-"svårt att ansluta till i schemat.\n"
+"Detta stift är inte placerat på ett %d mils rutnät, vilket\n"
+"kommer att göra det svårt att ansluta till i schemat.\n"
 "Vill du fortsätta?"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:32
@@ -10118,11 +10118,11 @@ msgstr "Formateringsinställningar"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:51
 msgid "Field name templates"
-msgstr "Fältnamnmallar"
+msgstr "Fältnamnsmallar"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "Pin conflict map"
-msgstr "Fäst konfliktkarta"
+msgstr "Stiftkonfliktskarta"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:64
@@ -10216,7 +10216,7 @@ msgstr "Formatering"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:68
 #: eeschema/eeschema_config.cpp:72
 msgid "Field Name Templates"
-msgstr "Fältnamnmallar"
+msgstr "Fältnamnsmallar"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:70
 msgid "Electrical Rules"
@@ -10801,25 +10801,27 @@ msgid ""
 "Check the symbol and use \"Alternate node sequence\" to reorder the pins, if "
 "necessary"
 msgstr ""
-"Symbol PIN-numrering matchar inte alltid den önskade SPICE-pin-ordningen\n"
+"Symbolernas stiftnumrering matchar inte alltid den önskade SPICE-pin-"
+"ordningen\n"
 "Kontrollera symbolen och använd \"Alternativ nodsekvens\" för att ordna om "
 "stiften, om det behövs"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:459
 msgid "For a Diode, pin order is anode, cathode"
-msgstr "För en diod är stiftordning anod, katod"
+msgstr "För en diod är stiftordningen anod, katod"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:463
 msgid "For a BJT, pin order is collector, base, emitter, substrate (optional)"
-msgstr "För en BJT är stiftordning samlare, bas, emitter, substrat (valfritt)"
+msgstr ""
+"För en BJT är stiftordningen kollektor, bas, emitter, substrat (valfritt)"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:467
 msgid "For a MOSFET, pin order is drain, gate, source"
-msgstr "För en MOSFET är stiftens ordning avlopp, grind, källa"
+msgstr "För en MOSFET är stiftens ordning drain, gate, source"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:471
 msgid "For a JFET, pin order is drain, gate, source"
-msgstr "För en JFET är stiftens ordning avlopp, grind, källa"
+msgstr "För en JFET är stiftens ordning drain, gate, source"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:804
 #, c-format
@@ -11402,7 +11404,7 @@ msgstr "Basstiftets namn"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:291
 msgid "Alternate Pin Assignments"
-msgstr "Alternativa stiftuppgifter"
+msgstr "Alternativa stifttilldelningar"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:432
@@ -11555,7 +11557,7 @@ msgstr "Etikettegenskaper"
 
 #: eeschema/dialogs/dialog_text_and_label_properties.cpp:108
 msgid "Hierarchical Sheet Pin Properties"
-msgstr "Hierarkiska stiftegenskaper"
+msgstr "Hierarkiska arks stiftegenskaper"
 
 #: eeschema/dialogs/dialog_text_and_label_properties.cpp:109
 #: eeschema/dialogs/dialog_text_and_label_properties_base.h:73
@@ -11802,8 +11804,8 @@ msgid ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
 msgstr ""
-"När det är aktiverat kan du starta ledningar genom att klicka på okopplade "
-"stift även när trådverktyget inte är aktivt"
+"När aktiverat, kan du starta ledningar genom att klicka på okopplade stift "
+"även när trådverktyget inte är aktivt"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:41
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
@@ -11949,7 +11951,7 @@ msgstr "Globala mallar för fältnamn:"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:42
 msgid "Project field name templates:"
-msgstr "Projektfältnamnmallar:"
+msgstr "Projektfältnamnsmallar:"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:78
 msgid "Untitled Field"
@@ -11957,7 +11959,7 @@ msgstr "Namnlöst fält"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:23
 msgid "Field name templates:"
-msgstr "Fältnamnmallar:"
+msgstr "Fältnamnsmallar:"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:45
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:40
@@ -12005,13 +12007,11 @@ msgstr "Standardtextstorlek:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
 msgid "Text offset ratio:"
-msgstr "Textförskjutningsförhållande:"
+msgstr "Proportionellt textavstånd:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 msgid "Percentage of the text size to offset text above or below wire or bus"
-msgstr ""
-"Procent av textstorleken för att kompensera texten ovanför eller under tråd "
-"eller buss"
+msgstr "Avstånd mellan text och tråd eller buss i procent av textstorleken"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
 msgid "Global label size:"
@@ -12020,12 +12020,11 @@ msgstr "Storlek för globala etiketter:"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 msgid "Percentage of the text size to use as space around a global label"
 msgstr ""
-"Procentsats av textstorleken för användning som utrymme runt en global "
-"etikett"
+"Utrymme runt texten i en global etikett, angivet i procent av textstorleken"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:118
 msgid "Pin symbol size:"
-msgstr "Stift symbolstorlek:"
+msgstr "Stiftsymbolens storlek:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:136
 #: eeschema/erc_item.cpp:41
@@ -12471,7 +12470,7 @@ msgstr "Olika fotavtryck som tilldelats %s och %s"
 
 #: eeschema/erc.cpp:419
 msgid "Pins with \"no connection\" type are connected"
-msgstr "Stift med \"ingen anslutning\" -typ är anslutna"
+msgstr "Stift med typ \"ingen anslutning\" är anslutna"
 
 #: eeschema/erc.cpp:533
 #, c-format
@@ -12481,7 +12480,7 @@ msgstr "Stift av typ %s och %s är anslutna"
 #: eeschema/erc.cpp:604
 #, c-format
 msgid "Pin %s is connected to both %s and %s"
-msgstr "Stift %s är ansluten till både %s och %s"
+msgstr "Stift %s är anslutet till både %s och %s"
 
 #: eeschema/erc.cpp:711
 #, c-format
@@ -12512,11 +12511,13 @@ msgstr "Stiftet är inte anslutet"
 
 #: eeschema/erc_item.cpp:54
 msgid "Input pin not driven by any Output pins"
-msgstr "Ingångsstiftet drivs inte av några utgångsstift"
+msgstr "Ingångsstiftet drivs inte av något utgångsstift"
 
 #: eeschema/erc_item.cpp:58
 msgid "Input Power pin not driven by any Output Power pins"
-msgstr "Ingångseffektstift som inte drivs av några utgångsstift"
+msgstr ""
+"Strömförsörjnings-ingångsstift drivs inte av något strömförsörjnings-"
+"utgångsstift"
 
 #: eeschema/erc_item.cpp:62 eeschema/erc_item.cpp:66
 msgid "Conflict problem between pins"
@@ -12524,11 +12525,11 @@ msgstr "Konfliktproblem mellan stift"
 
 #: eeschema/erc_item.cpp:70
 msgid "Mismatch between hierarchical labels and sheet pins"
-msgstr "Ojämnhet mellan hierarkiska etiketter och arkstift"
+msgstr "Hierarkiska etiketter och arkstift överensstämmer inte"
 
 #: eeschema/erc_item.cpp:74
 msgid "A pin with a \"no connection\" flag is connected"
-msgstr "En stift med en \"ingen anslutning\" -flagga är ansluten"
+msgstr "Ett stift flaggat med \"ingen anslutning\" är anslutet"
 
 #: eeschema/erc_item.cpp:78
 msgid "Unconnected \"no connection\" flag"
@@ -12552,7 +12553,8 @@ msgstr "Olika fotavtryck tilldelade i en annan symbolenhet"
 
 #: eeschema/erc_item.cpp:98
 msgid "Different net assigned to a shared pin in another unit of the symbol"
-msgstr "Olika nät tilldelade en delad stift i en annan enhet av symbolen"
+msgstr ""
+"Ett delat stift har tilldelats ett annat nät i en annan enhet i symbolen"
 
 #: eeschema/erc_item.cpp:102
 msgid "Conflict between bus alias definitions across schematic sheets"
@@ -15675,7 +15677,9 @@ msgstr "Byt %s stift %s nätetikett från '%s' till '%s'."
 #: eeschema/tools/backannotate.cpp:557
 #, c-format
 msgid "Net %s cannot be changed to %s because it is driven by a power pin."
-msgstr "Nät %s kunde inte ändras till %s eftersom det drivs av ett kraftstift."
+msgstr ""
+"Nät %s kunde inte ändras till %s eftersom det drivs av ett "
+"strömförsörjningsstift."
 
 #: eeschema/tools/backannotate.cpp:566
 #, c-format
@@ -16647,7 +16651,8 @@ msgstr ""
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
-"Info: <b>Gömt kraftstift %s</b> %s på plats <b>(%s, %s)</b> av konverterad."
+"Info: <b>Gömt strömförsörjningsstift %s</b> %s på plats <b>(%s, %s)</b> av "
+"konverterad."
 
 #: eeschema/tools/ee_inspection_tool.cpp:357
 #, c-format
@@ -16655,26 +16660,29 @@ msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of converted."
 msgstr ""
-"Info: <b>Gömt kraftstift %s</b> %s på plats <b>(%s, %s)</b> i enhet %c av "
-"konverterad."
+"Info: <b>Gömt strömförsörjningsstift %s</b> %s på plats <b>(%s, %s)</b> i "
+"enhet %c av konverterad."
 
 #: eeschema/tools/ee_inspection_tool.cpp:370
 #, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr "Info: <b>Gömt kraftstift %s</b> %s på plats <b>(%s, %s)</b>."
+msgstr ""
+"Info: <b>Gömt strömförsörjningsstift %s</b> %s på plats <b>(%s, %s)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:378
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
-"Info: <b>Gömt kraftstift %s</b> %s på plats <b>(%s, %s)</b> i enhet %c."
+"Info: <b>Gömt strömförsörjningsstift %s</b> %s på plats <b>(%s, %s)</b> i "
+"enhet %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:389
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
-"(Dolda kraftstift kommer att tilldela sina stiftnamn till alla anslutna nät.)"
+"(Dolda strömförsörjningsstift kommer att tilldela sina stiftnamn till alla "
+"anslutna nät.)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:402
 #, c-format
@@ -16748,7 +16756,7 @@ msgstr "Inga nya hierarkiska etiketter hittades."
 #: eeschema/tools/sch_drawing_tools.cpp:738
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr ""
-"Korsningsplatsen innehåller inga anslutningsbara ledningar och/eller stift."
+"Korsningspunkten innehåller inga anslutningsbara ledningar och/eller stift."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1101
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:159
@@ -16924,7 +16932,7 @@ msgstr "Symbolen härrör inte från en annan symbol."
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
 #, c-format
 msgid "This position is already occupied by another pin, in unit %d."
-msgstr "Denna position är redan upptagen av en annan stift, i enhet %d."
+msgstr "Denna position är redan upptagen av ett annat stift, i enhet %d."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:240
 msgid "Place Pin Anyway"
@@ -20042,8 +20050,8 @@ msgid ""
 msgstr ""
 "Typ av regulator.\n"
 "Det finns två typer:\n"
-"- regulatorer som har en särskild avkänningsstift för spänningsreglering.\n"
-"- 3 plintar."
+"- regulatorer som har ett särskilt avkänningsstift för spänningsreglering.\n"
+"- 3 anslutningar."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:33
 msgid "Standard Type"
@@ -20077,7 +20085,7 @@ msgstr "Iadj:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:145
 msgid "For 3 terminal regulators only, the  Adjust pin current."
-msgstr "Endast för tre terminalregulatorer, justera stiftströmmen."
+msgstr "Endast för treterminalsregulatorer:  Strömmen i avkänningsstiftet."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:152
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:68
@@ -20507,7 +20515,7 @@ msgstr "Volt"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:52
 msgid "Separate sense pin"
-msgstr "Separat sinnestift"
+msgstr "Separat avkänningsstift"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:52
 msgid "3 terminals regulator"
@@ -29555,7 +29563,7 @@ msgstr "Fotavtryck saknas %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:143
 msgid "No corresponding pin found in schematic."
-msgstr "Ingen motsvarande stift hittades i schemat."
+msgstr "Inget motsvarande stift hittades i schemat."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:152
 #, c-format
