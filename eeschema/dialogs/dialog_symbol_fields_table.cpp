@@ -208,8 +208,17 @@ public:
         for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
         {
             SCH_SYMBOL* symbol = m_symbolsList[ i ].GetSymbol();
-            m_dataStore[ symbol->m_Uuid ][ aFieldName ] = symbol->GetFieldText( aFieldName,
-                                                                                m_frame );
+
+            wxCHECK( symbol && ( symbol->GetInstanceReferences().size() != 0 ), /* void */ );
+
+            wxString val = symbol->GetFieldText( aFieldName, m_frame );
+
+            if( aFieldName == wxT( "Value" ) )
+                val = symbol->GetInstanceReferences()[0].m_Value;
+            else if( aFieldName == wxT( "Footprint" ) )
+                val = symbol->GetInstanceReferences()[0].m_Footprint;
+
+            m_dataStore[ symbol->m_Uuid ][ aFieldName ] = val;
         }
     }
 
