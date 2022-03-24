@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:52-0700\n"
-"PO-Revision-Date: 2022-03-23 22:38+0000\n"
+"PO-Revision-Date: 2022-03-25 21:11+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -2401,7 +2401,7 @@ msgstr "Förhandsgranska Papper"
 
 #: common/dialogs/dialog_page_settings.cpp:105
 msgid "Preview Title Block Data"
-msgstr "Förhandsgranska Uppgifter i Titelblock"
+msgstr "Förhandsgranska uppgifter i namnruta"
 
 #: common/dialogs/dialog_page_settings.cpp:109
 #: common/dialogs/dialog_page_settings_base.h:145
@@ -2415,7 +2415,7 @@ msgstr "Papper"
 
 #: common/dialogs/dialog_page_settings.cpp:111
 msgid "Title Block"
-msgstr "Titelblock"
+msgstr "Namnruta"
 
 #: common/dialogs/dialog_page_settings.cpp:474
 #, c-format
@@ -2584,7 +2584,7 @@ msgstr "Fil:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:172
 msgid "Title Block Parameters"
-msgstr "Titelblockparametrar"
+msgstr "Parametrar för namnruta"
 
 #: common/dialogs/dialog_page_settings_base.cpp:182
 #, c-format
@@ -2801,7 +2801,7 @@ msgstr "Svartvitt"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 msgid "Print border and title block"
-msgstr "Skriv ut ram och titelblock"
+msgstr "Skriv ut ram och namnruta"
 
 #: common/dialogs/dialog_print_generic_base.cpp:43
 msgid "Print Frame references."
@@ -3617,11 +3617,11 @@ msgstr "Nätnamnsfilter:"
 #: common/dialogs/panel_setup_netclasses_base.cpp:140
 #: pcbnew/widgets/appearance_controls.cpp:896
 msgid "Show All Nets"
-msgstr "Visa Alla Nät"
+msgstr "Visa alla nät"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:146
 msgid "Apply Filters"
-msgstr "Applicera Filter"
+msgstr "Applicera filter"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:159
 msgid "Assign Net Class"
@@ -3633,11 +3633,11 @@ msgstr "Ny nätklass:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:181
 msgid "Assign To All Listed Nets"
-msgstr "Tilldela till alla Listade Nät"
+msgstr "Tilldela till alla listade nät"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:187
 msgid "Assign To Selected Nets"
-msgstr "Tilldela Valda Nät"
+msgstr "Tilldela till valda nät"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:214
 #: pcbnew/board_connected_item.cpp:176
@@ -3667,7 +3667,7 @@ msgstr "Variabelnamn"
 
 #: common/dialogs/panel_text_variables_base.cpp:38
 msgid "Text Substitution"
-msgstr "Textutbyte"
+msgstr "Textersättning"
 
 #: common/dialogs/wx_html_report_panel.cpp:192
 #: common/dialogs/wx_html_report_panel.cpp:213
@@ -5174,7 +5174,7 @@ msgstr "Namn på bladfiler"
 #: common/layer_id.cpp:126
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:58
 msgid "Sheet pins"
-msgstr "Bladstift"
+msgstr "Arkstift"
 
 #: common/layer_id.cpp:127
 msgid "No-connect symbols"
@@ -5413,12 +5413,12 @@ msgstr "Saknade enheter för '%s'| (%s)"
 #: common/libeval_compiler/libeval_compiler.cpp:1126
 #, c-format
 msgid "Type mismatch between '%s' and %lf"
-msgstr "Typfel mellan '%s' och %lf"
+msgstr "Typkonflikt mellan '%s' och %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1132
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr "Typfel mellan %lf och '%s'"
+msgstr "Typkonflikt mellan %lf och '%s'"
 
 #: common/pgm_base.cpp:169
 msgid "No default editor found, you must choose one."
@@ -5716,7 +5716,7 @@ msgstr "Sidinställningar..."
 
 #: common/tool/actions.cpp:96
 msgid "Settings for paper size and title block info"
-msgstr "Inställningar för pappersstorlek och titelblockinformation"
+msgstr "Inställningar för pappersstorlek och information i namnruta"
 
 #: common/tool/actions.cpp:102
 msgid "Print..."
@@ -8048,7 +8048,7 @@ msgstr "Uppdatera Fält"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:133
 msgid "Remove fields if not in new symbol"
-msgstr "Ta bort fält om inte i ny symbol"
+msgstr "Ta bort fält om de saknas i den nya symbolen"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:134
 msgid "Reset fields if empty in new symbol"
@@ -8563,11 +8563,11 @@ msgstr "Andra symbolfält"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
 msgid "Wires && wire labels"
-msgstr "Ledningar & & etiketter"
+msgstr "Ledningar && ledningsetiketter"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:40
 msgid "Buses && bus labels"
-msgstr "Bussar & buss etiketter"
+msgstr "Bussar && buss etiketter"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
 msgid "Sheet titles"
@@ -8597,7 +8597,7 @@ msgstr "Filtrera objekt efter överordnad referensbeteckning:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:102
 msgid "Filter items by parent symbol library id:"
-msgstr "Filtrera objekt efter överordnad symbolbiblioteks-id:"
+msgstr "Filtrera objekt efter överordnat symbolbiblioteks-id:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:108
 msgid "Filter items by parent symbol type:"
@@ -9887,7 +9887,7 @@ msgstr "Plotta ritningsbladet"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
 msgid "Plot the drawing sheet border and title block"
-msgstr "Plotta ritningsbladets ram och titelblock"
+msgstr "Plotta ritningsbladets ram och namnruta"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
@@ -9971,7 +9971,7 @@ msgstr "Skriv ut sida %d"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
 msgid "Print sheet &reference and title block"
-msgstr "Skriv ut arkets &referensram och titelblock"
+msgstr "Skriv ut arkets &referensram och namnruta"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:24
 msgid "Print (or not) the Frame references."
@@ -11662,8 +11662,8 @@ msgid ""
 "Update footprint associations of symbols whose footprints have been replaced "
 "with different footprints in PCB."
 msgstr ""
-"Uppdatera fotspårassociationer av symboler vars fotavtryck har ersatts med "
-"olika fotavtryck i PCB."
+"Uppdatera fotavtrycksassociationer för symboler vars fotavtryck har ersatts "
+"med andra fotavtryck i mönsterkortet."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
@@ -12104,7 +12104,7 @@ msgstr "Skapa fel"
 
 #: eeschema/dialogs/panel_setup_pinmap_base.cpp:24
 msgid "Pin to Pin Connections"
-msgstr "Fäst-till-stift-anslutningar"
+msgstr "Stift-till-stift-anslutningar"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:22
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings_base.cpp:18
@@ -12416,7 +12416,7 @@ msgstr "Utgångsstift"
 
 #: eeschema/erc.cpp:61 eeschema/erc.cpp:78
 msgid "Bidirectional Pin"
-msgstr "Dubbelriktad stift"
+msgstr "Dubbelriktat stift"
 
 #: eeschema/erc.cpp:62 eeschema/erc.cpp:79
 msgid "Tri-State Pin"
@@ -12424,7 +12424,7 @@ msgstr "Tretillståndsutgång"
 
 #: eeschema/erc.cpp:63 eeschema/erc.cpp:80
 msgid "Passive Pin"
-msgstr "Passiv stift"
+msgstr "Passivt stift"
 
 #: eeschema/erc.cpp:64 eeschema/erc.cpp:81
 msgid "Free Pin"
@@ -12432,7 +12432,7 @@ msgstr "Fritt sitft"
 
 #: eeschema/erc.cpp:65 eeschema/erc.cpp:82
 msgid "Unspecified Pin"
-msgstr "Ospecificerad stift"
+msgstr "Ospecificerat stift"
 
 #: eeschema/erc.cpp:66 eeschema/erc.cpp:83
 msgid "Power Input Pin"
@@ -12440,15 +12440,15 @@ msgstr "Strömingångsstift"
 
 #: eeschema/erc.cpp:67 eeschema/erc.cpp:84
 msgid "Power Output Pin"
-msgstr "Stift för uteffekt"
+msgstr "Strömförsörjningsutgång"
 
 #: eeschema/erc.cpp:68 eeschema/erc.cpp:85
 msgid "Open Collector"
-msgstr "Öppna samlare"
+msgstr "Öppen kollektor"
 
 #: eeschema/erc.cpp:69 eeschema/erc.cpp:86
 msgid "Open Emitter"
-msgstr "Öppna sändaren"
+msgstr "Öppen emitter"
 
 #: eeschema/erc.cpp:70 eeschema/erc.cpp:87
 msgid "No Connection"
@@ -12466,7 +12466,7 @@ msgstr "Bussalias %s har motstridiga definitioner på %s och %s"
 #: eeschema/erc.cpp:370
 #, c-format
 msgid "Different footprints assigned to %s and %s"
-msgstr "Olika fotavtryck som tilldelats %s och %s"
+msgstr "%s och %s har tilldelats olika fotavtryck"
 
 #: eeschema/erc.cpp:419
 msgid "Pins with \"no connection\" type are connected"
@@ -12503,7 +12503,7 @@ msgstr "Diverse"
 
 #: eeschema/erc_item.cpp:46
 msgid "Duplicate sheet names within a given sheet"
-msgstr "Duplicera arknamn inom ett visst ark"
+msgstr "Duplikat av arknamn inom ett visst ark"
 
 #: eeschema/erc_item.cpp:50
 msgid "Pin not connected"
@@ -12521,7 +12521,7 @@ msgstr ""
 
 #: eeschema/erc_item.cpp:62 eeschema/erc_item.cpp:66
 msgid "Conflict problem between pins"
-msgstr "Konfliktproblem mellan stift"
+msgstr "Konflikt mellan stift"
 
 #: eeschema/erc_item.cpp:70
 msgid "Mismatch between hierarchical labels and sheet pins"
@@ -12533,7 +12533,7 @@ msgstr "Ett stift flaggat med \"ingen anslutning\" är anslutet"
 
 #: eeschema/erc_item.cpp:78
 msgid "Unconnected \"no connection\" flag"
-msgstr "Oansluten \"ingen anslutning\" -flagga"
+msgstr "Oansluten \"ingen anslutning\"-flagga"
 
 #: eeschema/erc_item.cpp:82
 msgid "Label not connected to anything"
@@ -12545,16 +12545,17 @@ msgstr "Global etikett inte ansluten någon annanstans i schemat"
 
 #: eeschema/erc_item.cpp:90
 msgid "Labels are similar (lower/upper case difference only)"
-msgstr "Etiketterna liknar varandra (endast små och stora bokstäver)"
+msgstr "Etiketterna liknar varandra (endast små och stora bokstäver skiljer)"
 
 #: eeschema/erc_item.cpp:94
 msgid "Different footprint assigned in another unit of the symbol"
-msgstr "Olika fotavtryck tilldelade i en annan symbolenhet"
+msgstr ""
+"Ett annat fotavtryck har tilldelats i en annan enhet tillhörande samma symbol"
 
 #: eeschema/erc_item.cpp:98
 msgid "Different net assigned to a shared pin in another unit of the symbol"
 msgstr ""
-"Ett delat stift har tilldelats ett annat nät i en annan enhet i symbolen"
+"Ett delat stift har tilldelats ett annat nät i en av symbolens andra enheter"
 
 #: eeschema/erc_item.cpp:102
 msgid "Conflict between bus alias definitions across schematic sheets"
@@ -12562,15 +12563,15 @@ msgstr "Konflikt mellan bussaliasdefinitioner mellan kretsschema-ark"
 
 #: eeschema/erc_item.cpp:106
 msgid "More than one name given to this bus or net"
-msgstr "Mer än ett namn till den här bussen eller nätet"
+msgstr "Bussen eller nätet har tilldelats mer än ett namn"
 
 #: eeschema/erc_item.cpp:110
 msgid "Net is graphically connected to a bus but not a bus member"
-msgstr "Net är grafiskt anslutet till en buss men inte en bussmedlem"
+msgstr "Nät är grafiskt anslutet till en buss men tillhör inte den bussen"
 
 #: eeschema/erc_item.cpp:114
 msgid "Label attached to bus item does not describe a bus"
-msgstr "Etiketten som är fäst vid bussföremålet beskriver inte en buss"
+msgstr "Etiketten som är fäst vid bussobjektet beskriver inte en buss"
 
 #: eeschema/erc_item.cpp:118
 msgid "Buses are graphically connected but share no bus members"
@@ -12578,7 +12579,7 @@ msgstr "Bussar är grafiskt anslutna men delar inga bussmedlemmar"
 
 #: eeschema/erc_item.cpp:122
 msgid "Invalid connection between bus and net items"
-msgstr "Ogiltig anslutning mellan buss- och nätartiklar"
+msgstr "Ogiltig anslutning mellan buss- och nätobjekt"
 
 #: eeschema/erc_item.cpp:126 pcbnew/drc/drc_item.cpp:174
 msgid "Unresolved text variable"
@@ -12590,7 +12591,7 @@ msgstr "Ledningar som inte är anslutna till någonting"
 
 #: eeschema/erc_item.cpp:134
 msgid "Library symbol issue"
-msgstr "Bibliotekssymbolproblem"
+msgstr "Problem med bibliotekssymbol"
 
 #: eeschema/erc_item.cpp:138
 msgid "Symbol is not annotated"
@@ -12602,7 +12603,7 @@ msgstr "Symbolen har fler enheter än som är definierade"
 
 #: eeschema/erc_item.cpp:146
 msgid "Units of same symbol have different values"
-msgstr "Enheter av samma symbol har olika värden"
+msgstr "Enheter tillhörande samma symbol har olika värden"
 
 #: eeschema/erc_item.cpp:150
 msgid "Duplicate reference designators"
@@ -12610,7 +12611,7 @@ msgstr "Dubbla referensbeteckningar"
 
 #: eeschema/erc_item.cpp:154
 msgid "Bus Entry needed"
-msgstr "Bussresa behövs"
+msgstr "Bussanslutning behövs"
 
 #: eeschema/fields_grid_table.cpp:135 eeschema/files-io.cpp:818
 #: eeschema/tools/sch_editor_control.cpp:101
@@ -13172,7 +13173,7 @@ msgstr "Slutförd."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:186
 msgid "Error: duplicate sheet names. Continue?"
-msgstr "Fel: duplicera arknamn. Fortsätta?"
+msgstr "Fel: duplikat av arknamn. Fortsätta?"
 
 #: eeschema/picksymbol.cpp:144 pcbnew/load_select_footprint.cpp:255
 msgid "Recently Used"
@@ -13216,7 +13217,7 @@ msgstr "Öppen samlare"
 
 #: eeschema/pin_type.cpp:61
 msgid "Open emitter"
-msgstr "Öppna sändaren"
+msgstr "Öppen emitter"
 
 #: eeschema/pin_type.cpp:62
 msgid "Unconnected"
@@ -14013,15 +14014,15 @@ msgstr "Ogiltig sidtyp"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1688
 msgid "Invalid title block comment number"
-msgstr "Ogiltigt kommentarsnummer på titelblock"
+msgstr "Ogiltigt kommentarsnummer i namnruta"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1785
 msgid "Invalid sheet pin name"
-msgstr "Ogiltigt namn på bladstift"
+msgstr "Ogiltigt namn på arkstift"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1793
 msgid "Empty sheet pin name"
-msgstr "Tomt namn på bladstift"
+msgstr "Tomt namn på arkstift"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2234
 msgid "Invalid symbol library name"
@@ -14175,7 +14176,7 @@ msgstr "(Borttaget objekt)"
 #: eeschema/sch_sheet_pin.cpp:333
 #, c-format
 msgid "Hierarchical Sheet Pin %s"
-msgstr "Hierarkiskt bladstift %s"
+msgstr "Hierarkiskt arkstift %s"
 
 #: eeschema/sch_symbol.cpp:1387
 msgid "Power symbol"
@@ -15859,8 +15860,8 @@ msgid ""
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
 "Redigeringsläge för synkroniserade stift\n"
-"När det är aktiverat sprids alla ändringar (utom stiftnummer) till andra "
-"enheter.\n"
+"När det är aktiverat fortplantas alla ändringar (utom stiftnummer) till "
+"andra enheter.\n"
 "Aktiverat som standard för komponenter innehållande flera sinsemellan "
 "utbytbara enheter."
 
@@ -16134,7 +16135,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:425
 msgid "Change Symbols..."
-msgstr "Ändra symboler ..."
+msgstr "Ändra symboler..."
 
 #: eeschema/tools/ee_actions.cpp:426
 msgid "Assign different symbols from the library"
@@ -16781,7 +16782,7 @@ msgstr "ingen symbol vald"
 
 #: eeschema/tools/sch_edit_tool.cpp:109
 msgid "symbol is not multi-unit"
-msgstr "symbolen är inte flera enheter"
+msgstr "symbolen innehåller inte flera enheter"
 
 #: eeschema/tools/sch_edit_tool.cpp:891
 msgid "Label value cannot go below zero"
@@ -17989,7 +17990,7 @@ msgstr "Visa rutorna (x, y)"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:101
 msgid "Show drawing sheet border and title block"
-msgstr "Visa ritningsbladsram och -titelblock"
+msgstr "Visa ritningsarksram och namnruta"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:103
 msgid "PCB Background"
@@ -18153,8 +18154,8 @@ msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
 msgstr ""
-"Redigera ramar och titelblock på ritningsark som används för kretsscheman "
-"och mönsterkortsdesign"
+"Redigera ramar och namnrutor på ritningsark som används för kretsscheman och "
+"mönsterkortsdesign"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:150
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
@@ -18989,7 +18990,7 @@ msgstr "Beräkna komponentvärden, ledarbredder etc."
 
 #: kicad/tools/kicad_manager_actions.cpp:110
 msgid "Edit drawing sheet borders and title block"
-msgstr "Ändra ritningsbladets ram och titelblock"
+msgstr "Ändra ritningsbladets ram och namnruta"
 
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Run Plugin and Content Manager"
@@ -19571,30 +19572,30 @@ msgstr "Inställningar för förhandsgranskning av sida ..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Edit preview data for page size and title block"
-msgstr "Redigera förhandsgranskningsdata för sidstorlek och titelblock"
+msgstr "Redigera förhandsgranskningsdata för sidstorlek och namnruta"
 
 #: pagelayout_editor/tools/pl_actions.cpp:92
 msgid "Show title block in preview mode"
-msgstr "Visa titelblock i förhandsgranskningsläge"
+msgstr "Visa namnruta i förhandsgranskningsläge"
 
 #: pagelayout_editor/tools/pl_actions.cpp:93
 msgid ""
 "Show title block in preview mode:\n"
 "text placeholders will be replaced with preview data."
 msgstr ""
-"Visa titelblock i förhandsgranskningsläge:\n"
+"Visa namnruta i förhandsgranskningsläge:\n"
 "textplatshållare kommer att ersättas med förhandsgranskningsdata."
 
 #: pagelayout_editor/tools/pl_actions.cpp:99
 msgid "Show title block in edit mode"
-msgstr "Visa titelblock i redigeringsläge"
+msgstr "Visa namnruta i redigeringsläge"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
 msgid ""
 "Show title block in edit mode:\n"
 "text placeholders are shown as ${keyword} tokens."
 msgstr ""
-"Visa titelblock i redigeringsläge:\n"
+"Visa namnruta i redigeringsläge:\n"
 "textplatshållare visas som $ {keyword} tokens."
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:508
@@ -23698,7 +23699,7 @@ msgstr "Exportera som svarta element på en vit bakgrund"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
-msgstr "Sida med ram och titelblock"
+msgstr "Sida med ram och namnruta"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Current page size"
@@ -26137,7 +26138,7 @@ msgstr "Inkludera lager"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
 msgid "Plot border and title block"
-msgstr "Ram och titelblock för plot"
+msgstr "Ram och namnruta för plot"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:80
 msgid "Plot footprint values"
@@ -35885,7 +35886,7 @@ msgstr "Visa origo (ankare) för fotavtryck och text som ett kors"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show drawing sheet borders and title block"
-msgstr "Visa ritningsbladets ram och titelblock"
+msgstr "Visa ritningsbladets ram och namnruta"
 
 #: pcbnew/widgets/appearance_controls.cpp:376
 msgid "No Layers"
