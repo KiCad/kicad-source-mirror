@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -598,9 +598,9 @@ public:
             };
 
             STYLE ArrowStyle;  ///< Subnode="ARROWSTYLE"
-            long  UpperAngle;  ///< token="ARROWANGLEA"
-            long  LowerAngle;  ///< token="ARROWANGLEB"
-            long  ArrowLength; ///< The length of the angled lines that make up the arrow head
+            long  UpperAngle = 0;  ///< token="ARROWANGLEA"
+            long  LowerAngle = 0;  ///< token="ARROWANGLEB"
+            long  ArrowLength = 0; ///< The length of the angled lines that make up the arrow head
 
             void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };

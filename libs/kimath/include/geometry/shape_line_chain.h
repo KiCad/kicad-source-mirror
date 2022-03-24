@@ -111,6 +111,15 @@ public:
         ///< used by the refining code (e.g. hull handling stuff in the P&S) to reject false
         ///< intersection points.
         bool valid;
+
+        INTERSECTION() :
+            index_our( -1 ),
+            index_their( -1 ),
+            is_corner_our( false ),
+            is_corner_their( false ),
+            valid( false )
+        {
+        }
     };
 
 

@@ -1875,6 +1875,8 @@ void PCB_SELECTION_TOOL::FindItem( BOARD_ITEM* aItem )
                     //Let's refocus because there is an algortihm to avoid dialogs in there.
                     m_frame->FocusOnLocation( aItem->GetCenter() );
                 }
+
+                delete screenRect;
             }
         }
         // Inform other potentially interested tools

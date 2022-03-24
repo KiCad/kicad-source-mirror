@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -42,7 +42,7 @@ struct VIA_HANDLE
     bool        valid = false;
     VECTOR2I    pos;
     LAYER_RANGE layers;
-    int         net;
+    int         net = -1;
 };
 
 class VIA : public ITEM

@@ -91,7 +91,8 @@ GR_TEXT_V_ALIGN_T EDA_TEXT::MapVertJustify( int aVertJustify )
 
 EDA_TEXT::EDA_TEXT( const wxString& text ) :
         m_text( text ),
-        m_bounding_box_cache_valid( false )
+        m_bounding_box_cache_valid( false ),
+        m_bounding_box_cache_line( -1 )
 {
     int sz = Mils2iu( DEFAULT_SIZE_TEXT );
     SetTextSize( wxSize( sz, sz ) );
