@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -438,7 +438,10 @@ void GERBER_JOBFILE_WRITER::addJSONFilesAttributes()
 
             default:
                 skip_file = true;
-                m_reporter->Report( wxT( "Unexpected layer id in job file" ), RPT_SEVERITY_ERROR );
+
+                if( m_reporter )
+                    m_reporter->Report( wxT( "Unexpected layer id in job file" ), RPT_SEVERITY_ERROR );
+
                 break;
             }
         }
@@ -587,7 +590,7 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
     // Ensure brd_stackup is up to date (i.e. no change made by SynchronizeWithBoard() )
     bool uptodate = not brd_stackup.SynchronizeWithBoard( &m_pcb->GetDesignSettings() );
 
-    if( !uptodate && m_pcb->GetDesignSettings().m_HasStackup )
+    if( m_reporter && !uptodate && m_pcb->GetDesignSettings().m_HasStackup )
         m_reporter->Report( _( "Board stackup settings not up to date." ), RPT_SEVERITY_ERROR );
 
     PCB_LAYER_ID last_copper_layer = F_Cu;
