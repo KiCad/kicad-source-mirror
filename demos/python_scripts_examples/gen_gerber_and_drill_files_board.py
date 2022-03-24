@@ -133,7 +133,7 @@ drlwriter.SetMapFileFormat( PLOT_FORMAT_PDF )
 
 mirror = False
 minimalHeader = False
-offset = wxPoint(0,0)
+offset = VECTOR2I(0,0)
 # False to generate 2 separate drill files (one for plated holes, one for non plated holes)
 # True to generate only one drill file
 mergeNPTH = False
@@ -160,4 +160,3 @@ if gen_job_file == True:
     print( 'create job file %s ' % fromUTF8Text( job_fn ) )
 
     jobfile_writer.CreateJobFile( job_fn )
-
