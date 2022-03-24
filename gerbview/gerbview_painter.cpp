@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -76,8 +76,8 @@ void GERBVIEW_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
     }
 
     // Draw layers specific to Gerbview:
-    // LAYER_DCODES, LAYER_NEGATIVE_OBJECTS, LAYER_GERBVIEW_GRID,
-    // LAYER_GERBVIEW_AXES, LAYER_GERBVIEW_BACKGROUND, LAYER_GERBVIEW_DRAWINGSHEET,
+    // LAYER_DCODES, LAYER_NEGATIVE_OBJECTS, LAYER_GERBVIEW_GRID, LAYER_GERBVIEW_AXES,
+    // LAYER_GERBVIEW_BACKGROUND, LAYER_GERBVIEW_DRAWINGSHEET, LAYER_GERBVIEW_PAGE_LIMITS
     for( int i = LAYER_DCODES; i < GERBVIEW_LAYER_ID_END; i++ )
         m_layerColors[i] = aSettings->GetColor( i );
 

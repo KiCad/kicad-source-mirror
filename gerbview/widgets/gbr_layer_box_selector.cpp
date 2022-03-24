@@ -42,7 +42,7 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
             continue;
 
         // Don't show unused layers
-        if ( images.GetGbrImage(layerid) == nullptr )
+        if ( images.GetGbrImage( layerid ) == nullptr )
             continue;
 
         // Prepare Bitmap
@@ -58,15 +58,19 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
     // (such as in cases where the font size is very large). So we select
     // the first item, get the size of the control and make that the minimum size,
     // then remove the selection (which was the initial state).
-    SetSelection( 0 );
+    if( GetCount() )
+    {
+        SetSelection( 0 );
 
-    SetMinSize( wxSize( -1, -1 ) );
-    wxSize bestSize = GetBestSize();
+        SetMinSize( wxSize( -1, -1 ) );
+        wxSize bestSize = GetBestSize();
 
-    bestSize.x = GetBestSize().x + BM_SIZE + 10;
-    SetMinSize( bestSize );
+        bestSize.x = GetBestSize().x + BM_SIZE + 10;
+        SetMinSize( bestSize );
 
-    SetSelection( wxNOT_FOUND );
+        SetSelection( wxNOT_FOUND );
+    }
+
     Thaw();
 }
 

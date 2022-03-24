@@ -811,6 +811,7 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     migrateLegacyColor( "Color4DViaMicroEx",         LAYER_VIA_MICROVIA );
     migrateLegacyColor( "Color4DViaThruEx",          LAYER_VIA_THROUGH );
     migrateLegacyColor( "Color4DWorksheet",          LAYER_DRAWINGSHEET );
+    migrateLegacyColor( "Color4DGrid",               LAYER_PAGE_LIMITS );
 
     Pgm().GetSettingsManager().SaveColorSettings( cs, "board" );
 

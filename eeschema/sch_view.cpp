@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2018 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -102,7 +102,7 @@ void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
     m_drawingSheet->SetSheetCount( aScreen->GetPageCount() );
     m_drawingSheet->SetFileName( TO_UTF8( aScreen->GetFileName() ) );
     m_drawingSheet->SetColorLayer( LAYER_SCHEMATIC_DRAWINGSHEET );
-    m_drawingSheet->SetPageBorderColorLayer( LAYER_SCHEMATIC_GRID );
+    m_drawingSheet->SetPageBorderColorLayer( LAYER_SCHEMATIC_PAGE_LIMITS );
     m_drawingSheet->SetIsFirstPage( aScreen->GetVirtualPageNumber() == 1 );
 
     if( m_frame && m_frame->IsType( FRAME_SCH ) )

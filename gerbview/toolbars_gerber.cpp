@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -78,9 +78,11 @@ void GERBVIEW_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddScaledSeparator( this );
 
     if( !m_SelLayerBox )
+    {
         m_SelLayerBox = new GBR_LAYER_BOX_SELECTOR( m_mainToolBar,
                                                     ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
                                                     wxDefaultPosition, wxDefaultSize, 0, nullptr );
+    }
 
     m_SelLayerBox->Resync();
     m_mainToolBar->AddControl( m_SelLayerBox );
@@ -503,7 +505,10 @@ void GERBVIEW_FRAME::OnUpdateSelectDCode( wxUpdateUIEvent& aEvent )
 
 void GERBVIEW_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
 {
-    if( m_SelLayerBox->GetSelection() != GetActiveLayer() )
-        m_SelLayerBox->SetSelection( GetActiveLayer() );
+    if( m_SelLayerBox->GetCount() )
+    {
+        if( m_SelLayerBox->GetSelection() != GetActiveLayer() )
+            m_SelLayerBox->SetSelection( GetActiveLayer() );
+    }
 }
 

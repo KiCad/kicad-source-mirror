@@ -2,6 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2020 CERN
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -44,7 +45,7 @@ DS_PROXY_VIEW_ITEM::DS_PROXY_VIEW_ITEM( int aMils2IUscalefactor, const PAGE_INFO
         m_isFirstPage( false ),
         m_project( aProject ),
         m_colorLayer( LAYER_DRAWINGSHEET ),
-        m_pageBorderColorLayer( LAYER_GRID )
+        m_pageBorderColorLayer( LAYER_PAGE_LIMITS )
 {
 }
 

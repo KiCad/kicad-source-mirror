@@ -141,6 +141,7 @@ wxString LayerName( int aLayer )
     case LAYER_HIDDEN:                  return _( "Hidden items" );
     case LAYER_SELECTION_SHADOWS:       return _( "Selection highlight" );
     case LAYER_SCHEMATIC_DRAWINGSHEET:  return _( "Drawing sheet" );
+    case LAYER_SCHEMATIC_PAGE_LIMITS:   return _( "Page limits" );
 
     // GAL_LAYER_ID
 
@@ -170,6 +171,7 @@ wxString LayerName( int aLayer )
     case LAYER_MARKER_SHADOWS:          return _( "DRC marker shadows" );
     case LAYER_ANCHOR:                  return _( "Anchors" );
     case LAYER_DRAWINGSHEET:            return _( "Drawing sheet" );
+    case LAYER_PAGE_LIMITS:             return _( "Page limits" );
     case LAYER_CURSOR:                  return _( "Cursor" );
     case LAYER_AUX_ITEMS:               return _( "Helper items" );
     case LAYER_GRID:                    return _( "Grid" );

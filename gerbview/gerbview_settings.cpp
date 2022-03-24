@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -153,6 +153,7 @@ bool GERBVIEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     migrateLegacyColor( "GridColorEx",             LAYER_GERBVIEW_GRID );
     migrateLegacyColor( "NegativeObjectsColorEx",  LAYER_NEGATIVE_OBJECTS );
     migrateLegacyColor( "WorksheetColorEx",        LAYER_GERBVIEW_DRAWINGSHEET );
+    migrateLegacyColor( "GridColorEx",             LAYER_GERBVIEW_PAGE_LIMITS );
 
     wxString key;
 

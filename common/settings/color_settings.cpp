@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,7 +30,7 @@
 
 
 ///! Update the schema version whenever a migration is required
-const int colorsSchemaVersion = 3;
+const int colorsSchemaVersion = 4;
 
 
 COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) :
@@ -100,12 +100,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     CLR( "schematic.pin_name",          LAYER_PINNAM                 );
     CLR( "schematic.pin_number",        LAYER_PINNUM                 );
     CLR( "schematic.reference",         LAYER_REFERENCEPART          );
-    // Macs look better with a lighter shadow
-#ifdef __WXMAC__
     CLR( "schematic.shadow",            LAYER_SELECTION_SHADOWS      );
-#else
-    CLR( "schematic.shadow",            LAYER_SELECTION_SHADOWS      );
-#endif
     CLR( "schematic.sheet",             LAYER_SHEET                  );
     CLR( "schematic.sheet_background",  LAYER_SHEET_BACKGROUND       );
     CLR( "schematic.sheet_filename",    LAYER_SHEETFILENAME          );
@@ -115,6 +110,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     CLR( "schematic.value",             LAYER_VALUEPART              );
     CLR( "schematic.wire",              LAYER_WIRE                   );
     CLR( "schematic.worksheet",         LAYER_SCHEMATIC_DRAWINGSHEET );
+    CLR( "schematic.page_limits",       LAYER_SCHEMATIC_PAGE_LIMITS  );
 
     CLR( "gerbview.axes",               LAYER_GERBVIEW_AXES          );
     CLR( "gerbview.background",         LAYER_GERBVIEW_BACKGROUND    );
@@ -122,6 +118,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     CLR( "gerbview.grid",               LAYER_GERBVIEW_GRID          );
     CLR( "gerbview.negative_objects",   LAYER_NEGATIVE_OBJECTS       );
     CLR( "gerbview.worksheet",          LAYER_GERBVIEW_DRAWINGSHEET  );
+    CLR( "gerbview.page_limits",        LAYER_GERBVIEW_PAGE_LIMITS   );
 
     for( int i = 0, id = GERBVIEW_LAYER_ID_START;
          id < GERBER_DRAWLAYERS_COUNT + GERBVIEW_LAYER_ID_START; ++i, ++id )
@@ -151,7 +148,8 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     CLR( "board.via_hole",                 LAYER_VIA_HOLES          );
     CLR( "board.via_micro",                LAYER_VIA_MICROVIA       );
     CLR( "board.via_through",              LAYER_VIA_THROUGH        );
-    CLR( "board.worksheet",                LAYER_DRAWINGSHEET   );
+    CLR( "board.worksheet",                LAYER_DRAWINGSHEET       );
+    CLR( "board.page_limits",              LAYER_PAGE_LIMITS        );
 
     CLR( "board.copper.f",      F_Cu    );
     CLR( "board.copper.in1",    In1_Cu  );
@@ -254,6 +252,18 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
                     if( OPT<COLOR4D> optval = Get<COLOR4D>( path ) )
                         Set( path, optval->WithAlpha( 1.0 ) );
                 }
+
+                return true;
+            } );
+
+    registerMigration( 3, 4,
+            [&]()
+            {
+                if( OPT<COLOR4D> optval = Get<COLOR4D>( "board.grid" ) )
+                    Set( "board.page_limits",  optval.get() );
+
+                if( OPT<COLOR4D> optval = Get<COLOR4D>( "schematic.grid" ) )
+                    Set( "schematic.page_limits", optval.get() );
 
                 return true;
             } );

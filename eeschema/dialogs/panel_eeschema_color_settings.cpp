@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -249,6 +249,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
     m_drawingSheet = new DS_PROXY_VIEW_ITEM( (int) IU_PER_MILS, m_page, nullptr, m_titleBlock );
     m_drawingSheet->SetColorLayer( LAYER_SCHEMATIC_DRAWINGSHEET );
+    m_drawingSheet->SetPageBorderColorLayer( LAYER_SCHEMATIC_PAGE_LIMITS );
     view->Add( m_drawingSheet );
 
     // TODO: It would be nice to parse a schematic file here.

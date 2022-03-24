@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -69,14 +69,16 @@ static const std::map<int, COLOR4D> s_defaultTheme =
             { LAYER_SHEETNAME,              CSS_COLOR( 0,   100, 100, 1 ) },
             { LAYER_VALUEPART,              CSS_COLOR( 0,   100, 100, 1 ) },
             { LAYER_WIRE,                   CSS_COLOR( 0,   150, 0,   1 ) },
-            { LAYER_SCHEMATIC_DRAWINGSHEET, CSS_COLOR( 132, 0, 0, 1 ) },
+            { LAYER_SCHEMATIC_DRAWINGSHEET, CSS_COLOR( 132, 0,   0,   1 ) },
+            { LAYER_SCHEMATIC_PAGE_LIMITS,  CSS_COLOR( 181, 181, 181, 1 ) },
 
             { LAYER_GERBVIEW_AXES,          CSS_COLOR( 0,   0,   132, 1 ) },
             { LAYER_GERBVIEW_BACKGROUND,    CSS_COLOR( 0,   0,   0,   1 ) },
             { LAYER_DCODES,                 CSS_COLOR( 255, 255, 255, 1 ) },
             { LAYER_GERBVIEW_GRID,          CSS_COLOR( 132, 132, 132, 1 ) },
             { LAYER_NEGATIVE_OBJECTS,       CSS_COLOR( 132, 132, 132, 1 ) },
-            { LAYER_GERBVIEW_DRAWINGSHEET,  CSS_COLOR( 0, 0, 132, 1 ) },
+            { LAYER_GERBVIEW_DRAWINGSHEET,  CSS_COLOR(   0,   0, 132, 1 ) },
+            { LAYER_GERBVIEW_PAGE_LIMITS,   CSS_COLOR( 132, 132, 132, 1 ) },
 
             { LAYER_ANCHOR,                 CSS_COLOR( 255, 38,  226, 1 ) },
             { LAYER_LOCKED_ITEM_SHADOW,     CSS_COLOR( 255, 38,  226, 0.5 ) },
@@ -100,6 +102,7 @@ static const std::map<int, COLOR4D> s_defaultTheme =
             { LAYER_VIA_HOLES,              CSS_COLOR( 227, 183, 46, 1 ) },
             { LAYER_VIA_MICROVIA,           CSS_COLOR( 0,   132, 132, 1 ) },
             { LAYER_DRAWINGSHEET,           CSS_COLOR( 200, 114, 171, 1 ) },
+            { LAYER_PAGE_LIMITS,            CSS_COLOR( 132, 132, 132, 1 ) },
 
             { F_Cu,                         CSS_COLOR( 200, 52,  52,  1 ) },
             { In1_Cu,                       CSS_COLOR( 127, 200, 127, 1 ) },
@@ -225,7 +228,8 @@ static const std::map<int, COLOR4D> s_classicTheme =
             { LAYER_DCODES,                 COLOR4D( WHITE ) },
             { LAYER_GERBVIEW_GRID,          COLOR4D( MAGENTA ) },
             { LAYER_NEGATIVE_OBJECTS,       COLOR4D( DARKGRAY ) },
-            { LAYER_GERBVIEW_DRAWINGSHEET,  COLOR4D( RED ) },
+            { LAYER_GERBVIEW_DRAWINGSHEET,  COLOR4D( DARKRED ) },
+            { LAYER_GERBVIEW_PAGE_LIMITS,   COLOR4D( MAGENTA ) },
 
             { LAYER_ANCHOR,                 COLOR4D( BLUE ) },
             { LAYER_LOCKED_ITEM_SHADOW,     COLOR4D( BLUE ) },
@@ -249,6 +253,7 @@ static const std::map<int, COLOR4D> s_classicTheme =
             { LAYER_VIA_HOLES,              COLOR4D( 0.5, 0.4, 0, 0.8 ) },
             { LAYER_VIA_MICROVIA,           COLOR4D( CYAN ) },
             { LAYER_DRAWINGSHEET,           COLOR4D( DARKRED ) },
+            { LAYER_PAGE_LIMITS,            COLOR4D( DARKGRAY) },
 
             { F_Cu,                         COLOR4D( RED ) },
             { In1_Cu,                       COLOR4D( YELLOW ) },

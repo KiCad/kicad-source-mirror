@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -402,6 +402,7 @@ PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( wxWindow* aParent, BOA
     }
 
     m_validLayers.push_back( LAYER_LOCKED_ITEM_SHADOW );
+    m_validLayers.push_back( LAYER_PAGE_LIMITS );
 
     // NOTE: Main board layers are added by createSwatches()
 
@@ -503,6 +504,7 @@ void PANEL_PCBNEW_COLOR_SETTINGS::createPreviewItems()
                                                                m_titleBlock );
     drawingSheet->SetIsFirstPage( true );
     drawingSheet->SetColorLayer( LAYER_DRAWINGSHEET );
+    drawingSheet->SetPageBorderColorLayer( LAYER_PAGE_LIMITS );
     m_preview->SetDrawingSheet( drawingSheet );
 
     zoomFitPreview();

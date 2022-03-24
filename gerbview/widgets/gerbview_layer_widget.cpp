@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,7 +86,7 @@ void GERBER_LAYER_WIDGET::ReFillRender()
     // is changed before appending to the LAYER_WIDGET.  This is an automatic variable
     // not a static variable, change the color & state after copying from code to renderRows
     // on the stack.
-    LAYER_WIDGET::ROW renderRows[6] = {
+    LAYER_WIDGET::ROW renderRows[7] = {
 
 #define RR  LAYER_WIDGET::ROW   // Render Row abbreviation to reduce source width
 
@@ -99,6 +99,8 @@ void GERBER_LAYER_WIDGET::ReFillRender()
             _( "Show the (x,y) grid dots" ) ),
         RR( _( "Drawing Sheet" ),    LAYER_GERBVIEW_DRAWINGSHEET, DARKRED,
             _( "Show drawing sheet border and title block") ),
+        RR( _( "Page Limits" ),      LAYER_GERBVIEW_PAGE_LIMITS,  WHITE,
+            _( "Show drawing sheet page limits" ) ),
         RR( _( "Background" ),       LAYER_GERBVIEW_BACKGROUND,   BLACK,
             _( "PCB Background" ), true, false )
     };

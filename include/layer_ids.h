@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2007-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -244,6 +244,9 @@ enum GAL_LAYER_ID: int
     LAYER_DRAWINGSHEET_PAGE1,      ///< for drawingsheetEditor previewing
     LAYER_DRAWINGSHEET_PAGEn,      ///< for drawingsheetEditor previewing
 
+    LAYER_PAGE_LIMITS,             ///< color for drawing the page extents (visibility stored in
+                                   ///<   PCBNEW_SETTINGS::m_ShowPageLimits)
+
     /// Virtual layers for stacking zones and tracks on a given copper layer
     LAYER_ZONE_START,
     LAYER_ZONE_END = LAYER_ZONE_START + PCB_LAYER_ID_COUNT,
@@ -368,6 +371,7 @@ enum SCH_LAYER_ID: int
     LAYER_HIDDEN,
     LAYER_SELECTION_SHADOWS,
     LAYER_SCHEMATIC_DRAWINGSHEET,
+    LAYER_SCHEMATIC_PAGE_LIMITS,
     LAYER_BUS_JUNCTION,
     LAYER_SCHEMATIC_AUX_ITEMS,
     LAYER_SCHEMATIC_ANCHOR,
@@ -402,6 +406,7 @@ enum GERBVIEW_LAYER_ID: int
     LAYER_GERBVIEW_AXES,
     LAYER_GERBVIEW_BACKGROUND,
     LAYER_GERBVIEW_DRAWINGSHEET,
+    LAYER_GERBVIEW_PAGE_LIMITS,
 
     GERBVIEW_LAYER_ID_END
 };

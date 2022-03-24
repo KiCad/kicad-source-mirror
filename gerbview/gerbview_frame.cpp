@@ -337,6 +337,8 @@ void GERBVIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     SetElementVisibility( LAYER_GERBVIEW_DRAWINGSHEET,
                           cfg->m_Appearance.show_border_and_titleblock );
+    SetElementVisibility( LAYER_GERBVIEW_PAGE_LIMITS,
+                          cfg->m_Display.m_DisplayPageLimits );
 
     PAGE_INFO pageInfo( wxT( "GERBER" ) );
     pageInfo.SetType( cfg->m_Appearance.page_type );
@@ -439,6 +441,11 @@ void GERBVIEW_FRAME::SetElementVisibility( int aLayerID, bool aNewState )
 
     case LAYER_GERBVIEW_GRID:
         SetGridVisibility( aNewState );
+        break;
+
+    case LAYER_GERBVIEW_PAGE_LIMITS:
+        gvconfig()->m_Display.m_DisplayPageLimits = aNewState;
+        SetPageSettings( GetPageSettings() );
         break;
 
     default:
@@ -646,6 +653,7 @@ bool GERBVIEW_FRAME::IsElementVisible( int aLayerID ) const
     case LAYER_NEGATIVE_OBJECTS:      return gvconfig()->m_Appearance.show_negative_objects;
     case LAYER_GERBVIEW_GRID:         return IsGridVisible();
     case LAYER_GERBVIEW_DRAWINGSHEET: return gvconfig()->m_Appearance.show_border_and_titleblock;
+    case LAYER_GERBVIEW_PAGE_LIMITS:  return gvconfig()->m_Display.m_DisplayPageLimits;
     case LAYER_GERBVIEW_BACKGROUND:   return true;
 
     default:
@@ -703,6 +711,7 @@ COLOR4D GERBVIEW_FRAME::GetVisibleElementColor( int aLayerID )
     case LAYER_NEGATIVE_OBJECTS:
     case LAYER_DCODES:
     case LAYER_GERBVIEW_DRAWINGSHEET:
+    case LAYER_GERBVIEW_PAGE_LIMITS:
     case LAYER_GERBVIEW_BACKGROUND:
         color = settings->GetColor( aLayerID );
         break;
@@ -731,35 +740,25 @@ void GERBVIEW_FRAME::SetVisibleElementColor( int aLayerID, const COLOR4D& aColor
 {
     COLOR_SETTINGS* settings = Pgm().GetSettingsManager().GetColorSettings();
 
+    settings->SetColor( aLayerID, aColor );
+
     switch( aLayerID )
     {
-    case LAYER_NEGATIVE_OBJECTS:
-    case LAYER_DCODES:
-        settings->SetColor( aLayerID, aColor );
-        break;
-
     case LAYER_GERBVIEW_DRAWINGSHEET:
-        settings->SetColor( LAYER_GERBVIEW_DRAWINGSHEET, aColor );
-
-        // LAYER_DRAWINGSHEET color is also used to draw the drawing-sheet
-        // FIX ME: why LAYER_DRAWINGSHEET must be set, although LAYER_GERBVIEW_DRAWINGSHEET
-        // is used to initialize the drawing-sheet color layer.
-        settings->SetColor( LAYER_DRAWINGSHEET, aColor );
+    case LAYER_GERBVIEW_PAGE_LIMITS:
+        SetPageSettings( GetPageSettings() );
         break;
 
     case LAYER_GERBVIEW_GRID:
         SetGridColor( aColor );
-        settings->SetColor( aLayerID, aColor );
         break;
 
     case LAYER_GERBVIEW_BACKGROUND:
         SetDrawBgColor( aColor );
-        settings->SetColor( aLayerID, aColor );
         break;
 
     default:
-        wxFAIL_MSG( wxString::Format( wxT( "GERBVIEW_FRAME::SetVisibleElementColor(): bad arg %d" ),
-                                       aLayerID ) );
+        break;
     }
 }
 
@@ -826,6 +825,7 @@ void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
     }
 
     drawingSheet->SetColorLayer( LAYER_GERBVIEW_DRAWINGSHEET );
+    drawingSheet->SetPageBorderColorLayer( LAYER_GERBVIEW_PAGE_LIMITS );
 
     // Draw panel takes ownership of the drawing-sheet
     drawPanel->SetDrawingSheet( drawingSheet );
@@ -1020,23 +1020,17 @@ void GERBVIEW_FRAME::setupUIConditions()
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
-    mgr->SetConditions( ACTIONS::zoomTool,
-                        CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
-    mgr->SetConditions( ACTIONS::selectionTool,
-                        CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
-    mgr->SetConditions( ACTIONS::measureTool,
-                        CHECK( cond.CurrentTool( ACTIONS::measureTool ) ) );
+    mgr->SetConditions( ACTIONS::zoomTool,      CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
+    mgr->SetConditions( ACTIONS::selectionTool, CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    mgr->SetConditions( ACTIONS::measureTool,   CHECK( cond.CurrentTool( ACTIONS::measureTool ) ) );
 
-    mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
-    mgr->SetConditions( ACTIONS::togglePolarCoords,   CHECK( cond.PolarCoordinates() ) );
-    mgr->SetConditions( ACTIONS::toggleCursorStyle,   CHECK( cond.FullscreenCursor() ) );
+    mgr->SetConditions( ACTIONS::toggleGrid,        CHECK( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::togglePolarCoords, CHECK( cond.PolarCoordinates() ) );
+    mgr->SetConditions( ACTIONS::toggleCursorStyle, CHECK( cond.FullscreenCursor() ) );
 
-    mgr->SetConditions( ACTIONS::millimetersUnits,
-                        CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
-    mgr->SetConditions( ACTIONS::inchesUnits,
-                        CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
-    mgr->SetConditions( ACTIONS::milsUnits,
-                        CHECK( cond.Units( EDA_UNITS::MILS ) ) );
+    mgr->SetConditions( ACTIONS::millimetersUnits,  CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
+    mgr->SetConditions( ACTIONS::inchesUnits,       CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
+    mgr->SetConditions( ACTIONS::milsUnits,         CHECK( cond.Units( EDA_UNITS::MILS ) ) );
 
     auto flashedDisplayOutlinesCond =
         [this] ( const SELECTION& )
@@ -1092,8 +1086,7 @@ void GERBVIEW_FRAME::setupUIConditions()
             return m_show_layer_manager_tools;
         };
 
-    mgr->SetConditions( GERBVIEW_ACTIONS::flashedDisplayOutlines,
-                        CHECK( flashedDisplayOutlinesCond ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::flashedDisplayOutlines,  CHECK( flashedDisplayOutlinesCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::linesDisplayOutlines,    CHECK( linesFillCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::polygonsDisplayOutlines, CHECK( polygonsFilledCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::negativeObjectDisplay,   CHECK( negativeObjectsCond ) );
@@ -1101,8 +1094,7 @@ void GERBVIEW_FRAME::setupUIConditions()
     mgr->SetConditions( GERBVIEW_ACTIONS::toggleDiffMode,          CHECK( diffModeCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::flipGerberView,          CHECK( flipGerberCond ) );
     mgr->SetConditions( ACTIONS::highContrastMode,                 CHECK( highContrastModeCond ) );
-    mgr->SetConditions( GERBVIEW_ACTIONS::toggleLayerManager,
-                        CHECK( layersManagerShownCondition ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::toggleLayerManager,      CHECK( layersManagerShownCondition ) );
 
 #undef CHECK
 #undef ENABLE
