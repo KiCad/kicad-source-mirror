@@ -133,7 +133,7 @@
     (solder_mask_margin 0.05) (thermal_bridge_angle 45) (tstamp 1009eeb8-4be8-49ff-871d-1e30079ffe54))
   (pad "39" smd rect (at -2.835 1.835 180) (size 1.33 1.33) (layers "F.Cu" "F.Paste" "F.Mask")
     (solder_mask_margin 0.05) (thermal_bridge_angle 45) (tstamp f21e0d2f-30e3-44a7-b089-f9815487c7f8))
-  (pad "39" smd rect (at -1.000003 0) (size 1.33 1.33) (layers "F.Cu" "F.Paste" "F.Mask")
+  (pad "39" smd rect (at -1.000000 0) (size 1.33 1.33) (layers "F.Cu" "F.Paste" "F.Mask")
     (solder_mask_margin 0.05) (thermal_bridge_angle 45) (tstamp 047aa3bb-6884-4df5-83ed-7ea551b329b1))
   (pad "39" smd rect (at -1 -1.835) (size 1.33 1.33) (layers "F.Cu" "F.Paste" "F.Mask")
     (solder_mask_margin 0.05) (thermal_bridge_angle 45) (tstamp c35a9928-3453-4c10-b581-c909a87ff023))

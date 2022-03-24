@@ -838,7 +838,7 @@ SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* a
             {
                 m_shape.BooleanSubtract( holeBuffer, SHAPE_POLY_SET::PM_FAST );
                 holeBuffer.RemoveAllContours();
-             }
+            }
         }
     }
 

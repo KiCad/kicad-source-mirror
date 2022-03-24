@@ -10,7 +10,7 @@
       (effects (font (size 1.27 1.27) (thickness 0.15)))
     (tstamp 784b6458-3ae8-48f4-9482-731714d7927e)
   )
-  (fp_text user "Mask Exp" (at -19.746 7.238164 unlocked) (layer "Dwgs.User")
+  (fp_text user "Mask Exp" (at -19.746 7.238160 unlocked) (layer "Dwgs.User")
       (effects (font (size 1.524 1.524) (thickness 0.254)) (justify left bottom))
     (tstamp 1b0f55f9-5fa5-489c-9db2-e63c29ecdd31)
   )

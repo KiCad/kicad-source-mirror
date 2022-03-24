@@ -49,34 +49,36 @@ struct ALTIUM_TO_KICAD_UNIT_CASE
 
 /**
  * A list of valid internal unit conversation factors
+ * Rem: altium to kicad importer rounds cordinates to the near 10 nm value when
+ * converting altium values in 0.01 mil to pcbnew units (1 nm)
  */
 static const std::vector<ALTIUM_TO_KICAD_UNIT_CASE> altium_to_kicad_unit = {
     // Some simple values
     { 0, 0 },
-    { 1, 3 },
-    { 2, 5 },
-    { 3, 8 },
-    { 10, 25 },
-    { 20, 51 },
-    { 30, 76 },
+    { 1, 0 },
+    { 2, 10 },
+    { 3, 10 },
+    { 10, 30 },
+    { 20, 50 },
+    { 30, 80 },
     // Edge Cases
-    { 845466002, 2147483645 },
-    { -845466002, -2147483645 },
+    { 845466002, 2147483640 },
+    { -845466002, -2147483640 },
     // Clamp bigger values
-    { 845466003, 2147483646 },
-    { -845466003, -2147483646 },
-    { 1000000000, 2147483646 },
-    { -1000000000, -2147483646 },
-    // imperial rounded units as input
-    { 100, 254 },
-    { 200, 508 },
-    { 300, 762 },
-    { 400, 1016 },
+    { 845466003, 2147483640 },
+    { -845466003, -2147483640 },
+    { 1000000000, 2147483640 },
+    { -1000000000, -2147483640 },
+    // imperial rounded units as input (rounded to the near 10 nm value)
+    { 100, 250 },
+    { 200, 510 },
+    { 300, 760 },
+    { 400, 1020 },
     { 500, 1270 },
-    { 600, 1524 },
-    { 700, 1778 },
-    { 800, 2032 },
-    { 900, 2286 },
+    { 600, 1520 },
+    { 700, 1780 },
+    { 800, 2030 },
+    { 900, 2290 },
     { 1000, 2540 },
     // metric rounded units as input
     { 394, 1000 },
@@ -158,12 +160,12 @@ static const std::vector<READ_KICAD_UNIT_CASE> read_kicad_unit_property = {
     // Decimal Places
     { "0.1mil", 2540 },
     { "-0.1mil", -2540 },
-    { "0.01mil", 254 },
-    { "-0.01mil", -254 },
-    { "0.001mil", 25 },
-    { "-0.001mil", -25 },
-    { "0.0001mil", 3 },
-    { "-0.0001mil", -3 },
+    { "0.01mil", 250 },
+    { "-0.01mil", -250 },
+    { "0.001mil", 30 },
+    { "-0.001mil", -30 },
+    { "0.0001mil", 0 },
+    { "-0.0001mil", 0 },
     { "0.00001mil", 0 },
     { "-0.00001mil", -0 },
     // Big Numbers
@@ -175,18 +177,18 @@ static const std::vector<READ_KICAD_UNIT_CASE> read_kicad_unit_property = {
     { "-1000mil", -25400000 },
     { "10000mil", 254000000 },
     { "-10000mil", -254000000 },
-    // Edge Cases
-    { "84546.6002mil", 2147483645 },
-    { "-84546.6002mil", -2147483645 },
-    // Clamp bigger values
-    { "84546.6003mil", 2147483646 },
-    { "-84546.6003mil", -2147483646 },
-    { "100000mil", 2147483646 },
-    { "-100000mil", -2147483646 },
-    { "1000000mil", 2147483646 },
-    { "-1000000mil", -2147483646 },
-    { "10000000mil", 2147483646 },
-    { "-10000000mil", -2147483646 },
+    // Edge Cases, values are rounded to the near available 10nm
+    { "84546.6002mil", 2147483640 },
+    { "-84546.6002mil", -2147483640 },
+    // Clamp bigger values, values are rounded to the near available 10nm
+    { "84546.6003mil", 2147483640 },
+    { "-84546.6003mil", -2147483640 },
+    { "100000mil", 2147483640 },
+    { "-100000mil", -2147483640 },
+    { "1000000mil", 2147483640 },
+    { "-1000000mil", -2147483640 },
+    { "10000000mil", 2147483640 },
+    { "-10000000mil", -2147483640 },
     // Incorrect suffix
     { "100", 0 },
     { "100mils", 0 },
