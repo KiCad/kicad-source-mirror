@@ -88,10 +88,10 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataToWindow()
 
     bool enblConvOptStyle = symbol && symbol->HasConversion();
 
-    // if a symbol contains no graphic items, symbol->HasConversion() returns false.
-    // but when creating a new symbol, with DeMorgan option set, the ApplyToAllConversions
-    // must be enabled even if symbol->HasConversion() returns false in order to be able
-    // to create graphic items shared by all body styles
+    // If a symbol contains no conversion-specific pins or graphic items, symbol->HasConversion()
+    // will return false.
+    // But when creating a new symbol, with DeMorgan option set, the ApplyToAllConversions
+    // must be enabled in order to be able to create graphic items shared by all body styles.
     if( m_frame->GetShowDeMorgan() )
         enblConvOptStyle = true;
 
