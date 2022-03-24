@@ -174,7 +174,13 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_SelNumberOfUnits->SetValue( m_libEntry->GetUnitCount() );
     m_OptionPartsInterchangeable->SetValue( !m_libEntry->UnitsLocked() ||
                                             m_libEntry->GetUnitCount() == 1 );
-    m_AsConvertButt->SetValue( m_libEntry->HasConversion() );
+
+    // If a symbol contains no conversion-specific pins or graphic items, symbol->HasConversion()
+    // will return false.  But when editing a symbol with DeMorgan option set, we don't want to
+    // keep turning it off just because there aren't any conversion-specific items yet, so we force
+    // it to on if the parent frame has it enabled.
+    m_AsConvertButt->SetValue( m_Parent->GetShowDeMorgan() );
+
     m_OptionPower->SetValue( m_libEntry->IsPower() );
     m_excludeFromBomCheckBox->SetValue( !m_libEntry->GetIncludeInBom() );
     m_excludeFromBoardCheckBox->SetValue( !m_libEntry->GetIncludeOnBoard() );
@@ -367,6 +373,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
     m_libEntry->LockUnits( m_libEntry->GetUnitCount() > 1 &&
                            !m_OptionPartsInterchangeable->GetValue() );
     m_libEntry->SetConversion( m_AsConvertButt->GetValue() );
+    m_Parent->SetShowDeMorgan( m_AsConvertButt->GetValue() );
 
     if( m_OptionPower->GetValue() )
         m_libEntry->SetPower();
