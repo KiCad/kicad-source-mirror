@@ -203,7 +203,7 @@ wxString PATHS::GetStockSymbolsPath()
 {
     wxString path;
 
-    path = GetStockDataPath() + wxT( "/symbols" );
+    path = GetStockEDALibraryPath() + wxT( "/symbols" );
 
     return path;
 }
@@ -213,7 +213,7 @@ wxString PATHS::GetStockFootprintsPath()
 {
     wxString path;
 
-    path = GetStockDataPath() + wxT( "/footprints" );
+    path = GetStockEDALibraryPath() + wxT( "/footprints" );
 
     return path;
 }
@@ -223,7 +223,7 @@ wxString PATHS::GetStock3dmodelsPath()
 {
     wxString path;
 
-    path = GetStockDataPath() + wxT( "/3dmodels" );
+    path = GetStockEDALibraryPath() + wxT( "/3dmodels" );
 
     return path;
 }
@@ -243,7 +243,7 @@ wxString PATHS::GetStockTemplatesPath()
 {
     wxString path;
 
-    path = GetStockDataPath() + wxT( "/template" );
+    path = GetStockEDALibraryPath() + wxT( "/template" );
 
     return path;
 }
