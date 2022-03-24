@@ -142,7 +142,12 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
 
         CalcArcAngles( t1, t2 );
 
-        if( aTransform.MapAngles( &t1, &t2 ) != ( ( t1 - t2 ).Normalize180() > ANGLE_0 ) )
+        // N.B. The order of evaluation is critical here as MapAngles will modify t1, t2
+        // and the Normalize routine depends on these modifications for the correct output
+        bool transformed = aTransform.MapAngles( &t1, &t2 );
+        bool transformed2 = ( ( t1 - t2 ).Normalize180() > ANGLE_0 );
+
+        if( transformed  != transformed2 )
             std::swap( start, end );
     }
 
