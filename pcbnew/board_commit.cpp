@@ -165,14 +165,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     std::vector<BOARD_ITEM*> bulkRemovedItems;
     std::vector<BOARD_ITEM*> itemsChanged;
 
-    wxCHECK( frame, /* void */ );
-
     if( Empty() )
         return;
 
     if( m_isBoardEditor
-            && !( aCommitFlags & ZONE_FILL_OP )
-            && frame->GetPcbNewSettings()->m_AutoRefillZones )
+      && !( aCommitFlags & ZONE_FILL_OP )
+      && ( frame && frame->GetPcbNewSettings()->m_AutoRefillZones ) )
     {
         autofillZones = true;
 

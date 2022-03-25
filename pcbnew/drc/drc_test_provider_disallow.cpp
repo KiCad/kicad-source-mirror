@@ -237,8 +237,6 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                     if( zone && zone->GetIsRuleArea() )
                         return true;
 
-                    wxCHECK( pad, false );
-
                     item->ClearFlags( HOLE_PROXY );     // Just in case
 
                     checkDisallow( item );
@@ -247,9 +245,9 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
 
                     switch( item->Type() )
                     {
-                    case PCB_VIA_T: hasHole = true;                     break;
-                    case PCB_PAD_T: hasHole = pad->GetDrillSizeX() > 0; break;
-                    default:        hasHole = false;                    break;
+                    case PCB_VIA_T: hasHole = true;                            break;
+                    case PCB_PAD_T: hasHole = pad && pad->GetDrillSizeX() > 0; break;
+                    default:        hasHole = false;                           break;
                     }
 
                     if( hasHole )
