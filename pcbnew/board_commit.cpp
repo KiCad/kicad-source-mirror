@@ -108,6 +108,8 @@ COMMIT& BOARD_COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag
 
 void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item )
 {
+    wxCHECK( item, /* void */ );
+
     if( item->Type() == PCB_FOOTPRINT_T )
     {
         static_cast<FOOTPRINT*>( item )->RunOnChildren(
@@ -162,6 +164,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     std::vector<BOARD_ITEM*> bulkAddedItems;
     std::vector<BOARD_ITEM*> bulkRemovedItems;
     std::vector<BOARD_ITEM*> itemsChanged;
+
+    wxCHECK( frame, /* void */ );
 
     if( Empty() )
         return;

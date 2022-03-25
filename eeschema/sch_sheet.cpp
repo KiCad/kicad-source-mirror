@@ -1253,6 +1253,9 @@ int SCH_SHEET::ComparePageNum( const wxString& aPageNumberA, const wxString& aPa
     // If not numeric, then sort as strings using natural sort
     int result = StrNumCmp( aPageNumberA, aPageNumberB );
 
+    // Divide by zero bad.
+    wxCHECK( result != 0, 0 );
+
     result = result / std::abs( result );
 
     return result;

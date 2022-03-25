@@ -287,6 +287,8 @@ bool SCH_EDIT_TOOL::Init()
                             {
                                 const SCH_ITEM* schItem = dynamic_cast<const SCH_ITEM*>( item );
 
+                                wxCHECK( schItem, false );
+
                                 return ( schItem->HasLineStroke() && schItem->IsConnectable() )
                                         || item->Type() == SCH_JUNCTION_T;
                             } ) )
@@ -1635,6 +1637,8 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
                 {
                     const SCH_ITEM* schItem = dynamic_cast<const SCH_ITEM*>( item );
 
+                    wxCHECK( schItem, false );
+
                     return ( schItem->HasLineStroke() && schItem->IsConnectable() )
                             || item->Type() == SCH_JUNCTION_T;
                 } ) )
@@ -1727,6 +1731,8 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             case SCH_DIRECTIVE_LABEL_T: newtext = new SCH_DIRECTIVE_LABEL( position );  break;
             default:    UNIMPLEMENTED_FOR( wxString::Format( "%d.", convertTo ) );      break;
             }
+
+            wxCHECK2( newtext, continue );
 
             // Copy the old text item settings to the new one.  Justifications are not copied
             // because they are not used in labels.  Justifications will be set to default value

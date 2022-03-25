@@ -92,7 +92,8 @@ GR_TEXT_V_ALIGN_T EDA_TEXT::MapVertJustify( int aVertJustify )
 EDA_TEXT::EDA_TEXT( const wxString& text ) :
         m_text( text ),
         m_bounding_box_cache_valid( false ),
-        m_bounding_box_cache_line( -1 )
+        m_bounding_box_cache_line( -1 ),
+        m_bounding_box_cache_inverted( false )
 {
     int sz = Mils2iu( DEFAULT_SIZE_TEXT );
     SetTextSize( wxSize( sz, sz ) );
@@ -122,6 +123,8 @@ EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText )
 
     m_bounding_box_cache_valid = aText.m_bounding_box_cache_valid;
     m_bounding_box_cache = aText.m_bounding_box_cache;
+    m_bounding_box_cache_line = aText.m_bounding_box_cache_line;
+    m_bounding_box_cache_inverted = aText.m_bounding_box_cache_inverted;
 }
 
 

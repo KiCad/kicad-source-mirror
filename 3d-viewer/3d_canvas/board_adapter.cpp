@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,6 +82,7 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
         m_IsPreviewer( false ),
         m_board( nullptr ),
         m_3dModelManager( nullptr ),
+        m_renderSettings( nullptr ),
         m_colors( nullptr ),
         m_layerZcoordTop(),
         m_layerZcoordBottom()

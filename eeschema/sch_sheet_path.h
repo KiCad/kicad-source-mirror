@@ -44,7 +44,7 @@ struct SYMBOL_INSTANCE_REFERENCE
 
     // Things that can be annotated:
     wxString  m_Reference;
-    int       m_Unit;
+    int       m_Unit = 1;
 
     // Things that can be back-annotated:
     wxString  m_Value;

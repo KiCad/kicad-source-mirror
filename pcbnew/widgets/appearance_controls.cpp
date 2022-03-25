@@ -2659,8 +2659,9 @@ void APPEARANCE_CONTROLS::onViewportChanged( wxCommandEvent& aEvent )
     {
         VIEWPORT* viewport = static_cast<VIEWPORT*>( m_cbViewports->GetClientData( index ) );
 
-        if( viewport )
-            doApplyViewport( *viewport );
+        wxCHECK( viewport, /* void */ );
+
+        doApplyViewport( *viewport );
 
         if( !viewport->name.IsEmpty() )
         {

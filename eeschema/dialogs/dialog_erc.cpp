@@ -198,7 +198,7 @@ void DIALOG_ERC::updateDisplayedCounts()
 
     wxString msg;
 
-    if( m_ercRun )
+    if( m_ercRun && m_markerProvider && m_ignoredList )
     {
         msg.sprintf( m_violationsTitleTemplate, m_markerProvider->GetCount() );
         m_notebook->SetPageText( 0, msg );

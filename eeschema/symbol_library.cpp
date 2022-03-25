@@ -62,6 +62,7 @@ SYMBOL_LIB::SYMBOL_LIB( SCH_LIB_TYPE aType, const wxString& aFileName,
 
     m_plugin.reset( SCH_IO_MGR::FindPlugin( m_pluginType ) );
     m_properties = std::make_unique<PROPERTIES>();
+    m_mod_hash = 0;
 }
 
 

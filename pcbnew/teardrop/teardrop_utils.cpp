@@ -435,7 +435,8 @@ bool TEARDROP_MANAGER::ComputePointsOnPadVia( TEARDROP_PARAMETERS* aCurrParams,
     }
     else    // Only PADS can have a not round shape
     {
-        wxASSERT( pad );
+        wxCHECK( pad, false );
+
         force_clip_shape = true;
 
         preferred_height = aViaPad.m_Width * aCurrParams->m_HeightRatio;

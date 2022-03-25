@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2012, 2022 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ enum LAYER_TYPE_T
 struct TLAYER
 {
     PCB_LAYER_ID  KiCadLayer;
-    LAYER_TYPE_T  layerType;
+    LAYER_TYPE_T  layerType = LAYER_TYPE_SIGNAL;
     wxString      netNameRef;
 };
 

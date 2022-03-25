@@ -1014,6 +1014,9 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( std::shared_ptr<SYMBOL_BUFF
             for( auto entry : derivedSymbols )
             {
                 std::shared_ptr<SYMBOL_BUFFER> symbol = GetBuffer( entry );
+
+                wxCHECK2( symbol, continue );
+
                 LIB_SYMBOL* derivedSymbol = new LIB_SYMBOL( *symbol->GetSymbol() );
                 derivedSymbol->SetParent( parentSymbol );
                 result = aLibTable->SaveSymbol( m_libName, derivedSymbol );
@@ -1165,6 +1168,9 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( std::shared_ptr<SYMBOL_BUFF
             for( auto entry : derivedSymbols )
             {
                 std::shared_ptr<SYMBOL_BUFFER> symbol = GetBuffer( entry );
+
+                wxCHECK2( symbol, continue );
+
                 LIB_SYMBOL* derivedSymbol = new LIB_SYMBOL( *symbol->GetSymbol() );
                 derivedSymbol->SetParent( parentSymbol );
 

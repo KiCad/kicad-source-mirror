@@ -287,6 +287,8 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
                 BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
                 EDA_TEXT*   text = dynamic_cast<EDA_TEXT*>( boardItem );
 
+                wxCHECK( boardItem, false );
+
                 if( text && text->GetShownText().Matches( wxT( "*${*}*" ) ) )
                 {
                     std::shared_ptr<DRC_ITEM>drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
@@ -294,6 +296,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
 
                     reportViolation( drcItem, boardItem->GetPosition(), boardItem->GetLayer() );
                 }
+
                 return true;
             } );
 

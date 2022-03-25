@@ -237,6 +237,8 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                     if( zone && zone->GetIsRuleArea() )
                         return true;
 
+                    wxCHECK( pad, false );
+
                     item->ClearFlags( HOLE_PROXY );     // Just in case
 
                     checkDisallow( item );
@@ -256,6 +258,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                         {
                             checkDisallow( item );
                         }
+
                         item->ClearFlags( HOLE_PROXY );
                     }
                 }

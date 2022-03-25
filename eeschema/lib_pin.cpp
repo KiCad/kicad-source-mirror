@@ -207,6 +207,8 @@ void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, 
 
     LIB_SYMBOL* part = GetParent();
 
+    wxCHECK( part && opts, /* void */ );
+
     /* Calculate pin orient taking in account the symbol orientation. */
     int orient = PinDrawOrient( aTransform );
 

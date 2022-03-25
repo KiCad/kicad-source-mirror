@@ -1059,6 +1059,8 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
 
     SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( aText );
 
+    wxCHECK( label, /* void */ );
+
     m_out->Print( aNestLevel, "(%s %s",
                   getTextTypeToken( aText->Type() ),
                   m_out->Quotew( aText->GetText() ).c_str() );

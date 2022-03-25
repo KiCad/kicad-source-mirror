@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -441,7 +441,17 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
         while( !itemPoly.IsEmpty() )
         {
             focusPt = (wxPoint) itemPoly.BBox().Centre();
-            itemPoly.Deflate( step, 4, SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS );
+
+            try
+            {
+                itemPoly.Deflate( step, 4, SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS );
+            }
+            catch( const ClipperLib::clipperException& exc )
+            {
+                // This may be overkill and could be an assertion but we are more likely to find
+                // any clipper errors this way.
+                wxLogError( wxT( "Clipper library exception '%s' occurred." ), exc.what() );
+            }
         }
 
         FocusOnLocation( focusPt );
