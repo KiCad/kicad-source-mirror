@@ -650,6 +650,7 @@ GLuint OPENGL_RENDER_LIST::generate_top_or_bot_seg_ends(
 
             glDrawArrays( GL_TRIANGLES, 0, aTriangleContainer->GetVertexSize() );
 
+            glBindTexture( GL_TEXTURE_2D, 0 );
             glDisable( GL_TEXTURE_2D );
             glDisable( GL_ALPHA_TEST );
             glDisable( GL_BLEND );
