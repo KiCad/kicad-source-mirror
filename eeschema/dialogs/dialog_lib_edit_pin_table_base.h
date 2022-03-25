@@ -13,12 +13,14 @@
 class WX_GRID;
 
 #include "dialog_shim.h"
+#include <wx/string.h>
+#include <wx/stattext.h>
+#include <wx/gdicmn.h>
+#include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/string.h>
-#include <wx/font.h>
+#include <wx/sizer.h>
 #include <wx/grid.h>
-#include <wx/gdicmn.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -26,8 +28,6 @@ class WX_GRID;
 #include <wx/button.h>
 #include <wx/statline.h>
 #include <wx/checkbox.h>
-#include <wx/stattext.h>
-#include <wx/sizer.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -41,6 +41,10 @@ class DIALOG_LIB_EDIT_PIN_TABLE_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
+		wxStaticText* m_staticTextPinNumbers;
+		wxStaticText* m_pin_numbers_summary;
+		wxStaticText* m_staticTextPinCount;
+		wxStaticText* m_pin_count;
 		WX_GRID* m_grid;
 		wxBitmapButton* m_addButton;
 		wxBitmapButton* m_deleteButton;
@@ -48,10 +52,6 @@ class DIALOG_LIB_EDIT_PIN_TABLE_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbGroup;
 		wxBitmapButton* m_refreshButton;
 		wxStaticLine* m_staticline2;
-		wxStaticText* m_staticTextPinNumbers;
-		wxStaticText* m_pin_numbers_summary;
-		wxStaticText* m_staticTextPinCount;
-		wxStaticText* m_pin_count;
 		wxStaticText* m_staticTextDuplicatePins;
 		wxStaticText* m_duplicate_pins;
 		wxStdDialogButtonSizer* m_Buttons;

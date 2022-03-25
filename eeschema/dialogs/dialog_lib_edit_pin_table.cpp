@@ -38,7 +38,10 @@
 #include <wx/tokenzr.h>
 #include <string_utils.h>
 
-#define UNITS_ALL "ALL"
+#define UNITS_ALL _( "ALL" )
+#define DEMORGAN_ALL _( "ALL" )
+#define DEMORGAN_STD _( "Standard" )
+#define DEMORGAN_ALT _( "Alternate" )
 
 class PIN_TABLE_DATA_MODEL : public wxGridTableBase
 {
@@ -85,6 +88,7 @@ public:
         case COL_POSY:         return _( "Y Position" );
         case COL_VISIBLE:      return _( "Visible" );
         case COL_UNIT:         return _( "Unit" );
+        case COL_DEMORGAN:     return _( "De Morgan" );
         default:               wxFAIL; return wxEmptyString;
         }
     }
@@ -112,7 +116,9 @@ public:
 
             switch( aCol )
             {
-            case COL_PIN_COUNT: val << pins.size(); break;
+            case COL_PIN_COUNT:
+                val << pins.size();
+                break;
             case COL_NUMBER:
                 val = pin->GetNumber();
                 break;
@@ -152,6 +158,20 @@ public:
                     val = LIB_SYMBOL::SubReference( pin->GetUnit(), false );
                 else
                     val = UNITS_ALL;
+                break;
+            case COL_DEMORGAN:
+                switch( pin->GetConvert() )
+                {
+                case LIB_ITEM::LIB_CONVERT::BASE:
+                    val = DEMORGAN_STD;
+                    break;
+                case LIB_ITEM::LIB_CONVERT::DEMORGAN:
+                    val = DEMORGAN_ALT;
+                    break;
+                default:
+                    val = DEMORGAN_ALL;
+                    break;
+                }
                 break;
             default:
                 wxFAIL;
@@ -234,7 +254,7 @@ public:
 
             while( i < pins.size() )
             {
-                auto pin = pins.back();
+                LIB_PIN* pin = pins.back();
                 m_pinTable->RemovePin( pin );
                 pins.pop_back();
             }
@@ -310,7 +330,7 @@ public:
                 }
                 else
                 {
-                    for( auto i = 1; i <= pin->GetParent()->GetUnitCount(); i++ )
+                    for( int i = 1; i <= pin->GetParent()->GetUnitCount(); i++ )
                     {
                         if( aValue == LIB_SYMBOL::SubReference( i, false ) )
                         {
@@ -320,6 +340,16 @@ public:
                     }
                 }
                 break;
+
+            case COL_DEMORGAN:
+                if( aValue == DEMORGAN_STD )
+                    pin->SetConvert( 1 );
+                else if( aValue == DEMORGAN_ALT )
+                    pin->SetConvert( 2 );
+                else
+                    pin->SetConvert( 0 );
+                break;
+
             default:
                 wxFAIL;
                 break;
@@ -382,6 +412,7 @@ public:
             res = cmp( ValueFromString( units, lhStr ), ValueFromString( units, rhStr ) );
             break;
         case COL_VISIBLE:
+        case COL_DEMORGAN:
         default:
             res = cmp( StrNumCmp( lhStr, rhStr ), 0 );
             break;
@@ -396,7 +427,7 @@ public:
         {
             // Commit any pending in-place edits before the row gets moved out from under
             // the editor.
-            if( auto grid = dynamic_cast<WX_GRID*>( GetView() ) )
+            if( WX_GRID* grid = dynamic_cast<WX_GRID*>( GetView() ) )
                 grid->CommitPendingChanges( true );
 
             wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, 0, m_rows.size() );
@@ -554,7 +585,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
     // Show/hide columns according to the user's preference
-    auto cfg = parent->GetSettings();
+    SYMBOL_EDITOR_SETTINGS* cfg = parent->GetSettings();
     m_columnsShown = cfg->m_PinTableVisibleColumns;
 
     m_grid->ShowHideColumns( m_columnsShown );
@@ -590,15 +621,21 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
 
     attr = new wxGridCellAttr;
     wxArrayString unitNames;
-    unitNames.push_back( _("ALL") );
+    unitNames.push_back( UNITS_ALL );
 
-    for( auto i = 1; i <= aSymbol->GetUnitCount(); i++ )
-    {
+    for( int i = 1; i <= aSymbol->GetUnitCount(); i++ )
         unitNames.push_back( LIB_SYMBOL::SubReference( i, false ) );
-    }
 
     attr->SetEditor( new GRID_CELL_COMBOBOX( unitNames ) );
     m_grid->SetColAttr( COL_UNIT, attr );
+
+    attr = new wxGridCellAttr;
+    wxArrayString demorganNames;
+    demorganNames.push_back( DEMORGAN_ALL );
+    demorganNames.push_back( DEMORGAN_STD );
+    demorganNames.push_back( DEMORGAN_ALT );
+    attr->SetEditor( new GRID_CELL_COMBOBOX( demorganNames ) );
+    m_grid->SetColAttr( COL_DEMORGAN, attr );
 
     attr = new wxGridCellAttr;
     attr->SetRenderer( new wxGridCellBoolRenderer() );
@@ -645,7 +682,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
 
 DIALOG_LIB_EDIT_PIN_TABLE::~DIALOG_LIB_EDIT_PIN_TABLE()
 {
-    auto cfg = m_editFrame->GetSettings();
+    SYMBOL_EDITOR_SETTINGS* cfg = m_editFrame->GetSettings();
     cfg->m_PinTableVisibleColumns = m_grid->GetShownColumns().ToStdString();
 
     // Disconnect Events
@@ -660,7 +697,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::~DIALOG_LIB_EDIT_PIN_TABLE()
 
     // This is our copy of the pins.  If they were transferred to the part on an OK, then
     // m_pins will already be empty.
-    for( auto pin : m_pins )
+    for( LIB_PIN* pin : m_pins )
         delete pin;
 }
 
@@ -674,13 +711,14 @@ bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataToWindow()
     m_dataModel->RebuildRows( m_pins, m_cbGroup->GetValue() );
 
     if( m_part->IsMulti() )
-    {
         m_grid->ShowCol( COL_UNIT );
-    }
     else
-    {
         m_grid->HideCol( COL_UNIT );
-    }
+
+    if( m_editFrame->GetShowDeMorgan() )
+        m_grid->ShowCol( COL_DEMORGAN );
+    else
+        m_grid->HideCol( COL_DEMORGAN );
 
     if( m_cbGroup->GetValue() )
         m_grid->ShowCol( COL_PIN_COUNT );
@@ -801,7 +839,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnDeleteRow( wxCommandEvent& event )
 
     LIB_PINS removedRow = m_dataModel->RemoveRow( curRow );
 
-    for( auto pin : removedRow )
+    for( LIB_PIN* pin : removedRow )
         m_pins.erase( std::find( m_pins.begin(), m_pins.end(), pin ) );
 
     curRow = std::min( curRow, m_grid->GetNumberRows() - 1 );
@@ -890,7 +928,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::adjustGridColumns()
 
 void DIALOG_LIB_EDIT_PIN_TABLE::OnSize( wxSizeEvent& event )
 {
-    auto new_size = event.GetSize();
+    wxSize new_size = event.GetSize();
 
     if( m_initialized && m_size != new_size )
     {
