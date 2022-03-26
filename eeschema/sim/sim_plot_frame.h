@@ -70,7 +70,6 @@ public:
     ~SIM_PLOT_FRAME();
 
     void StartSimulation( const wxString& aSimCommand = wxEmptyString );
-    void StopSimulation();
 
     /**
      * Create a new plot panel for a given simulation type and adds it to the main notebook.
@@ -178,11 +177,6 @@ private:
      * @param aPlotName is the full plot title (e.g. I(Net-C1-Pad1)).
      */
     void removePlot( const wxString& aPlotName );
-
-    /**
-     * Reload the current schematic for the netlist exporter.
-     */
-    void updateNetlistExporter();
 
     /**
      * Update plot in a particular SIM_PLOT_PANEL. If the panel does not contain
@@ -339,7 +333,7 @@ private:
     wxToolBarToolBase* m_toolSettings;
 
     SCH_EDIT_FRAME* m_schematicFrame;
-    std::unique_ptr<NETLIST_EXPORTER_PSPICE_SIM> m_exporter;
+    std::shared_ptr<NETLIST_EXPORTER_PSPICE_SIM> m_exporter;
     std::shared_ptr<SPICE_SIMULATOR> m_simulator;
     SIM_THREAD_REPORTER* m_reporter;
 

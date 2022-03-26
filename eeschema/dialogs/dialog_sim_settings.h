@@ -39,7 +39,8 @@ class SPICE_SIMULATOR_SETTINGS;
 class DIALOG_SIM_SETTINGS : public DIALOG_SIM_SETTINGS_BASE
 {
 public:
-    DIALOG_SIM_SETTINGS( wxWindow* aParent, std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& aSettings );
+    DIALOG_SIM_SETTINGS( wxWindow* aParent, std::shared_ptr<NETLIST_EXPORTER_PSPICE_SIM> aExporter,
+                         std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& aSettings );
 
     const wxString& GetSimCommand() const
     {
@@ -61,10 +62,6 @@ public:
         return m_netlistOpts;
     }
 
-    void SetNetlistExporter( NETLIST_EXPORTER_PSPICE_SIM* aExporter )
-    {
-        m_exporter = aExporter;
-    }
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
@@ -181,7 +178,7 @@ private:
 
     wxString m_simCommand;
     int m_netlistOpts;
-    NETLIST_EXPORTER_PSPICE_SIM* m_exporter;
+    std::shared_ptr<NETLIST_EXPORTER_PSPICE_SIM> m_exporter;
     std::shared_ptr<SPICE_SIMULATOR_SETTINGS> m_settings;
     SPICE_VALIDATOR m_spiceValidator;
     SPICE_VALIDATOR m_spiceEmptyValidator;

@@ -57,9 +57,10 @@ static wxString getStringSelection( const wxChoice* aCtrl )
 
 
 DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent,
+                                          std::shared_ptr<NETLIST_EXPORTER_PSPICE_SIM> aExporter,
                                           std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& aSettings ) :
         DIALOG_SIM_SETTINGS_BASE( aParent ),
-        m_exporter( nullptr ),
+        m_exporter( aExporter ),
         m_settings( aSettings ),
         m_spiceEmptyValidator( true )
 {

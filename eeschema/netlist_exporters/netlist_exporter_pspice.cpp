@@ -318,6 +318,7 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
     std::set<wxString> refNames;       // Set of reference names, to check for duplication
 
     m_netMap.clear();
+    m_spiceItems.clear();
 
     int         refNet = 0;
     const char* refNetString = "0";

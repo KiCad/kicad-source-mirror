@@ -157,7 +157,7 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // instead of being behind the dialog frame (as it does)
     m_settingsDlg = nullptr;
 
-    updateNetlistExporter();
+    m_exporter.reset( new NETLIST_EXPORTER_PSPICE_SIM( &m_schematicFrame->Schematic() ) );
 
     Bind( EVT_SIM_UPDATE, &SIM_PLOT_FRAME::onSimUpdate, this );
     Bind( EVT_SIM_REPORT, &SIM_PLOT_FRAME::onSimReport, this );
@@ -459,10 +459,9 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
     STRING_FORMATTER formatter;
 
     if( !m_settingsDlg )
-        m_settingsDlg = new DIALOG_SIM_SETTINGS( this, m_simulator->Settings() );
+        m_settingsDlg = new DIALOG_SIM_SETTINGS( this, m_exporter, m_simulator->Settings() );
 
     m_simConsole->Clear();
-    updateNetlistExporter();
 
     if( aSimCommand.IsEmpty() )
         m_exporter->SetSimCommand( getCurrentSimCommand() );
@@ -487,12 +486,6 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
     }
     else
         DisplayErrorMessage( this, _( "Another simulation is already running." ) );
-}
-
-
-void SIM_PLOT_FRAME::StopSimulation()
-{
-    m_simulator->Stop();
 }
 
 
@@ -705,15 +698,6 @@ void SIM_PLOT_FRAME::removePlot( const wxString& aPlotName )
     updateSignalList();
     wxCommandEvent dummy;
     onCursorUpdate( dummy );
-}
-
-
-void SIM_PLOT_FRAME::updateNetlistExporter()
-{
-    m_exporter.reset( new NETLIST_EXPORTER_PSPICE_SIM( &m_schematicFrame->Schematic() ) );
-
-    if( m_settingsDlg )
-        m_settingsDlg->SetNetlistExporter( m_exporter.get() );
 }
 
 
@@ -1457,7 +1441,7 @@ void SIM_PLOT_FRAME::onWorkbookClrModified( wxCommandEvent& event )
 void SIM_PLOT_FRAME::onSimulate( wxCommandEvent& event )
 {
     if( m_simulator->IsRunning() )
-        StopSimulation();
+        m_simulator->Stop();
     else
         StartSimulation();
 }
@@ -1468,10 +1452,7 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
     SIM_PANEL_BASE* plotPanelWindow = getCurrentPlotWindow();
 
     if( !m_settingsDlg )
-        m_settingsDlg = new DIALOG_SIM_SETTINGS( this, m_simulator->Settings() );
-
-    // Initial processing is required to e.g. display a list of power sources
-    updateNetlistExporter();
+        m_settingsDlg = new DIALOG_SIM_SETTINGS( this, m_exporter, m_simulator->Settings() );
 
     if( !m_exporter->ProcessNetlist( NET_ALL_FLAGS ) )
     {
@@ -1805,7 +1786,7 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
 void SIM_PLOT_FRAME::onSimUpdate( wxCommandEvent& aEvent )
 {
     if( m_simulator->IsRunning() )
-        StopSimulation();
+        m_simulator->Stop();
 
     if( GetCurrentPlot() != m_lastSimPlot )
     {
