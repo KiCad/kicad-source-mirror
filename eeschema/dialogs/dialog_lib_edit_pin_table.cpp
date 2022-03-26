@@ -44,6 +44,38 @@
 #define DEMORGAN_STD _( "Standard" )
 #define DEMORGAN_ALT _( "Alternate" )
 
+
+void getSelectedArea( WX_GRID* aGrid, int* aRowStart, int* aRowCount )
+{
+    wxGridCellCoordsArray topLeft  = aGrid->GetSelectionBlockTopLeft();
+    wxGridCellCoordsArray botRight = aGrid->GetSelectionBlockBottomRight();
+
+    wxArrayInt  cols = aGrid->GetSelectedCols();
+    wxArrayInt  rows = aGrid->GetSelectedRows();
+
+    if( topLeft.Count() && botRight.Count() )
+    {
+        *aRowStart = topLeft[0].GetRow();
+        *aRowCount = botRight[0].GetRow() - *aRowStart + 1;
+    }
+    else if( cols.Count() )
+    {
+        *aRowStart = 0;
+        *aRowCount = aGrid->GetNumberRows();
+    }
+    else if( rows.Count() )
+    {
+        *aRowStart = rows[0];
+        *aRowCount = rows.Count();
+    }
+    else
+    {
+        *aRowStart = aGrid->GetGridCursorRow();
+        *aRowCount = *aRowStart >= 0 ? 1 : 0;
+    }
+}
+
+
 class PIN_TABLE_DATA_MODEL : public wxGridTableBase
 {
 public:
@@ -438,20 +470,41 @@ public:
         return res;
     }
 
-    void RebuildRows( const LIB_PINS& aPins, bool groupByName )
+    void RebuildRows( const LIB_PINS& aPins, bool groupByName, bool groupBySelection )
     {
-        if ( GetView() )
+        WX_GRID* grid = dynamic_cast<WX_GRID*>( GetView() );
+
+        if( grid )
         {
+            if( groupBySelection )
+            {
+                for( LIB_PIN* pin : aPins )
+                    pin->ClearTempFlags();
+
+                int firstSelectedRow;
+                int selectedRowCount;
+
+                getSelectedArea( grid, &firstSelectedRow, &selectedRowCount );
+
+                for( int ii = 0; ii < selectedRowCount; ++ii )
+                {
+                    for( LIB_PIN* pin : m_rows[ firstSelectedRow + ii ] )
+                        pin->SetFlags( TEMP_SELECTED );
+                }
+            }
+
             // Commit any pending in-place edits before the row gets moved out from under
             // the editor.
-            if( WX_GRID* grid = dynamic_cast<WX_GRID*>( GetView() ) )
-                grid->CommitPendingChanges( true );
+            grid->CommitPendingChanges( true );
 
             wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, 0, m_rows.size() );
             GetView()->ProcessTableMessage( msg );
         }
 
         m_rows.clear();
+
+        if( groupBySelection )
+            m_rows.emplace_back( LIB_PINS() );
 
         for( LIB_PIN* pin : aPins )
         {
@@ -461,6 +514,8 @@ public:
 
                 if( groupByName )
                     rowIndex = findRow( m_rows, pin->GetName() );
+                else if( groupBySelection && pin->GetFlags() & TEMP_SELECTED )
+                    rowIndex = 0;
 
                 if( rowIndex < 0 )
                 {
@@ -484,12 +539,16 @@ public:
         for( LIB_PINS& row : m_rows )
             SortPins( row );
 
-        SortRows( sortCol, ascending );
+        if( !groupBySelection )
+            SortRows( sortCol, ascending );
 
         if ( GetView() )
         {
             wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_rows.size() );
             GetView()->ProcessTableMessage( msg );
+
+            if( groupBySelection )
+                GetView()->SelectRow( 0 );
         }
     }
 
@@ -747,7 +806,7 @@ bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataToWindow()
     for( LIB_PIN* pin = m_part->GetNextPin( nullptr ); pin; pin = m_part->GetNextPin( pin ) )
         m_pins.push_back( new LIB_PIN( *pin ) );
 
-    m_dataModel->RebuildRows( m_pins, m_cbGroup->GetValue() );
+    m_dataModel->RebuildRows( m_pins, m_cbGroup->GetValue(), false );
 
     if( m_part->IsMulti() )
         m_grid->ShowCol( COL_UNIT );
@@ -758,11 +817,6 @@ bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataToWindow()
         m_grid->ShowCol( COL_DEMORGAN );
     else
         m_grid->HideCol( COL_DEMORGAN );
-
-    if( m_cbGroup->GetValue() )
-        m_grid->ShowCol( COL_PIN_COUNT );
-    else
-        m_grid->HideCol( COL_PIN_COUNT );
 
     updateSummary();
 
@@ -909,21 +963,30 @@ bool DIALOG_LIB_EDIT_PIN_TABLE::IsDisplayGrouped()
 }
 
 
+void DIALOG_LIB_EDIT_PIN_TABLE::OnGroupSelected( wxCommandEvent& event )
+{
+    m_cbGroup->SetValue( false );
+
+    m_dataModel->RebuildRows( m_pins, false, true );
+
+    m_grid->ShowCol( COL_PIN_COUNT );
+    m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
+    adjustGridColumns();
+}
+
+
 void DIALOG_LIB_EDIT_PIN_TABLE::OnRebuildRows( wxCommandEvent&  )
 {
     if( !m_grid->CommitPendingChanges() )
         return;
 
-    m_dataModel->RebuildRows( m_pins, m_cbGroup->GetValue() );
+    m_dataModel->RebuildRows( m_pins, m_cbGroup->GetValue(), false );
 
     if( m_cbGroup->GetValue() )
     {
         m_grid->ShowCol( COL_PIN_COUNT );
         m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-    }
-    else
-    {
-        m_grid->HideCol( COL_PIN_COUNT );
     }
 
     adjustGridColumns();
@@ -1016,6 +1079,14 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnUpdateUI( wxUpdateUIEvent& event )
         if( !m_grid->IsCellEditControlShown() )
             adjustGridColumns();
     }
+
+    int firstSelectedRow;
+    int selectedRowCount;
+
+    getSelectedArea( m_grid, &firstSelectedRow, &selectedRowCount );
+
+    if( selectedRowCount > 1 != m_groupSelected->IsEnabled() )
+        m_groupSelected->Enable( selectedRowCount > 1 );
 }
 
 

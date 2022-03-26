@@ -53,6 +53,7 @@ class DIALOG_LIB_EDIT_PIN_TABLE_BASE : public DIALOG_SHIM
 		wxBitmapButton* m_deleteButton;
 		BITMAP_BUTTON* m_divider1;
 		wxCheckBox* m_cbGroup;
+		wxButton* m_groupSelected;
 		wxBitmapButton* m_refreshButton;
 		BITMAP_BUTTON* m_divider2;
 		wxCheckBox* m_cbFilterByUnit;
@@ -69,6 +70,7 @@ class DIALOG_LIB_EDIT_PIN_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnAddRow( wxCommandEvent& event ) = 0;
 		virtual void OnDeleteRow( wxCommandEvent& event ) = 0;
 		virtual void OnRebuildRows( wxCommandEvent& event ) = 0;
+		virtual void OnGroupSelected( wxCommandEvent& event ) = 0;
 		virtual void OnFilterCheckBox( wxCommandEvent& event ) = 0;
 		virtual void OnFilterChoice( wxCommandEvent& event ) = 0;
 		virtual void OnCancel( wxCommandEvent& event ) = 0;
