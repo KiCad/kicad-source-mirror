@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:52-0700\n"
-"PO-Revision-Date: 2022-03-17 08:54+0000\n"
+"PO-Revision-Date: 2022-03-27 22:10+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -4850,14 +4850,15 @@ msgid "Gestures"
 msgstr "Gesten"
 
 #: common/kiway.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "Konnte die kiface-Bibliothek \"%s\" nicht laden."
+msgstr ""
+"Die Signatur der kiface-Bibliothek \"%s\" konnte nicht bestätigt werden."
 
 #: common/kiway.cpp:267
 #, c-format
 msgid "Failed to load kiface library '%s'."
-msgstr "Konnte die kiface-Bibliothek \"%s\" nicht laden."
+msgstr "Die kiface-Bibliothek \"%s\" konnte nicht geladen werden."
 
 #: common/kiway.cpp:275
 #, c-format
