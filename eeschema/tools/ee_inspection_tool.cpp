@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,24 +39,9 @@
 #include <eda_doc.h>
 #include <sch_marker.h>
 #include <project.h>
-#include <dialogs/dialog_display_html_text_base.h>
+#include <dialogs/html_message_box.h>
 #include <dialogs/dialog_erc.h>
 #include <math/util.h>      // for KiROUND
-
-
-class DIALOG_DISPLAY_HTML_TEXT : public DIALOG_DISPLAY_HTML_TEXT_BASE
-{
-public:
-    DIALOG_DISPLAY_HTML_TEXT( wxWindow* aParent, wxWindowID aId, const wxString& aTitle,
-                              const wxPoint& aPos, const wxSize& aSize, long aStyle = 0 ) :
-        DIALOG_DISPLAY_HTML_TEXT_BASE( aParent, aId, aTitle, aPos, aSize, aStyle )
-    { }
-
-    ~DIALOG_DISPLAY_HTML_TEXT()
-    { }
-
-    void SetPage( const wxString& message ) { m_htmlWindow->SetPage( message ); }
-};
 
 
 EE_INSPECTION_TOOL::EE_INSPECTION_TOOL() :
@@ -259,7 +244,7 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
 
         if( symbol->HasConversion() && next->GetConvert() )
         {
-            if( symbol->GetUnitCount() <= 1 )
+            if( pin->GetUnit() == 0 || next->GetUnit() == 0 )
             {
                 msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b>"
                                " conflicts with pin %s%s at location <b>(%.3f, %.3f)</b>"
@@ -286,13 +271,13 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
                             pinName,
                             MessageTextFromValue( units, pin->GetPosition().x ),
                             MessageTextFromValue( units, -pin->GetPosition().y ),
-                            'A' + next->GetUnit() - 1,
-                            'A' + pin->GetUnit() - 1 );
+                            symbol->GetUnitReference( next->GetUnit() ),
+                            symbol->GetUnitReference( pin->GetUnit() ) );
             }
         }
         else
         {
-            if( symbol->GetUnitCount() <= 1 )
+            if( pin->GetUnit() == 0 || next->GetUnit() == 0 )
             {
                 msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b>"
                                " conflicts with pin %s%s at location <b>(%s, %s)</b>." ),
@@ -318,8 +303,8 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
                             pinName,
                             MessageTextFromValue( units, pin->GetPosition().x ),
                             MessageTextFromValue( units, -pin->GetPosition().y ),
-                            'A' + next->GetUnit() - 1,
-                            'A' + pin->GetUnit() - 1 );
+                            symbol->GetUnitReference( next->GetUnit() ),
+                            symbol->GetUnitReference( pin->GetUnit() ) );
             }
         }
 
@@ -450,16 +435,12 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
     }
     else
     {
-        wxString outmsg;
+        HTML_MESSAGE_BOX dlg( m_frame, _( "Symbol Warnings" ) );
 
         for( const wxString& single_msg : messages )
-            outmsg += single_msg;
+            dlg.AddHTML_Text( single_msg );
 
-        DIALOG_DISPLAY_HTML_TEXT error_display( m_frame, wxID_ANY, _( "Symbol Warnings" ),
-                                                wxDefaultPosition, wxSize( 700, 350 ) );
-
-        error_display.SetPage( outmsg );
-        error_display.ShowModal();
+        dlg.ShowModal();
     }
 
     return 0;
