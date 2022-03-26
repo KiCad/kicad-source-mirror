@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_combobox.h>
 #include <widgets/wx_grid.h>
+#include <widgets/bitmap_button.h>
 #include <settings/settings_manager.h>
 #include <wx/tokenzr.h>
 #include <string_utils.h>
@@ -48,6 +49,7 @@ class PIN_TABLE_DATA_MODEL : public wxGridTableBase
 public:
     PIN_TABLE_DATA_MODEL( SYMBOL_EDIT_FRAME* aFrame, DIALOG_LIB_EDIT_PIN_TABLE* aPinTable ) :
             m_frame( aFrame ),
+            m_unitFilter( -1 ),
             m_edited( false ),
             m_pinTable( aPinTable )
     {
@@ -67,6 +69,7 @@ public:
         aEvent.Skip();
     }
 
+    void SetUnitFilter( int aFilter ) { m_unitFilter = aFilter; }
 
     int GetNumberRows() override { return (int) m_rows.size(); }
     int GetNumberCols() override { return COL_COUNT; }
@@ -119,46 +122,60 @@ public:
             case COL_PIN_COUNT:
                 val << pins.size();
                 break;
+
             case COL_NUMBER:
                 val = pin->GetNumber();
                 break;
+
             case COL_NAME:
                 val = pin->GetName();
                 break;
+
             case COL_TYPE:
                 val = PinTypeNames()[static_cast<int>( pin->GetType() )];
                 break;
+
             case COL_SHAPE:
                 val = PinShapeNames()[static_cast<int>( pin->GetShape() )];
                 break;
+
             case COL_ORIENTATION:
                 if( PinOrientationIndex( pin->GetOrientation() ) >= 0 )
                     val = PinOrientationNames()[ PinOrientationIndex( pin->GetOrientation() ) ];
+
                 break;
+
             case COL_NUMBER_SIZE:
                 val = StringFromValue( aUserUnits, pin->GetNumberTextSize(), true );
                 break;
+
             case COL_NAME_SIZE:
                 val = StringFromValue( aUserUnits, pin->GetNameTextSize(), true );
                 break;
+
             case COL_LENGTH:
                 val = StringFromValue( aUserUnits, pin->GetLength(), true );
                 break;
+
             case COL_POSX:
                 val = StringFromValue( aUserUnits, pin->GetPosition().x, true );
                 break;
+
             case COL_POSY:
                 val = StringFromValue( aUserUnits, pin->GetPosition().y, true );
                 break;
+
             case COL_VISIBLE:
                 val = StringFromBool( pin->IsVisible() );
                 break;
+
             case COL_UNIT:
                 if( pin->GetUnit() )
                     val = LIB_SYMBOL::SubReference( pin->GetUnit(), false );
                 else
                     val = UNITS_ALL;
                 break;
+
             case COL_DEMORGAN:
                 switch( pin->GetConvert() )
                 {
@@ -173,6 +190,7 @@ public:
                     break;
                 }
                 break;
+
             default:
                 wxFAIL;
                 break;
@@ -271,9 +289,8 @@ public:
             {
             case COL_NUMBER:
                 if( !m_pinTable->IsDisplayGrouped() )
-                {
                     pin->SetNumber( aValue );
-                }
+
                 break;
 
             case COL_NAME:
@@ -438,18 +455,21 @@ public:
 
         for( LIB_PIN* pin : aPins )
         {
-            int      rowIndex = -1;
-
-            if( groupByName )
-                rowIndex = findRow( m_rows, pin->GetName() );
-
-            if( rowIndex < 0 )
+            if( m_unitFilter == -1 || pin->GetUnit() == 0 || pin->GetUnit() == m_unitFilter )
             {
-                m_rows.emplace_back( LIB_PINS() );
-                rowIndex = m_rows.size() - 1;
-            }
+                int rowIndex = -1;
 
-            m_rows[ rowIndex ].push_back( pin );
+                if( groupByName )
+                    rowIndex = findRow( m_rows, pin->GetName() );
+
+                if( rowIndex < 0 )
+                {
+                    m_rows.emplace_back( LIB_PINS() );
+                    rowIndex = m_rows.size() - 1;
+                }
+
+                m_rows[ rowIndex ].push_back( pin );
+            }
         }
 
         int sortCol = 0;
@@ -545,8 +565,8 @@ private:
         }
         else
         {
-            wxFAIL_MSG( wxString::Format( "string '%s' can't be converted to boolean "
-                                          "correctly, it will have been perceived as FALSE",
+            wxFAIL_MSG( wxString::Format( "string '%s' can't be converted to boolean correctly, "
+                                          "it will have been perceived as FALSE",
                                           aValue ) );
             return false;
         }
@@ -559,6 +579,7 @@ private:
     // data model is a 2D vector.  If we're in the single pin case, each row's LIB_PINS
     // contains only a single pin.
     std::vector<LIB_PINS> m_rows;
+    int                   m_unitFilter;     // 0 to show pins for all units
 
     bool                  m_edited;
 
@@ -659,8 +680,26 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     m_deleteButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
     m_refreshButton->SetBitmap( KiBitmap( BITMAPS::small_refresh ) );
 
+    m_divider1->SetIsSeparator();
+    m_divider2->SetIsSeparator();
+
     GetSizer()->SetSizeHints(this);
     Centre();
+
+    if( aSymbol->IsMulti() )
+    {
+        m_unitFilter->Append( UNITS_ALL );
+
+        for( int ii = 0; ii < aSymbol->GetUnitCount(); ++ii )
+            m_unitFilter->Append( aSymbol->GetUnitReference( ii + 1 ) );
+
+        m_unitFilter->SetSelection( -1 );
+    }
+    else
+    {
+        m_cbFilterByUnit->Show( false );
+        m_unitFilter->Show( false );
+    }
 
     SetupStandardButtons();
 
@@ -887,8 +926,32 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnRebuildRows( wxCommandEvent&  )
         m_grid->HideCol( COL_PIN_COUNT );
     }
 
-
     adjustGridColumns();
+}
+
+
+void DIALOG_LIB_EDIT_PIN_TABLE::OnFilterCheckBox( wxCommandEvent& event )
+{
+    if( event.IsChecked() )
+    {
+        m_dataModel->SetUnitFilter( m_unitFilter->GetSelection() );
+    }
+    else
+    {
+        m_dataModel->SetUnitFilter( -1 );
+        m_unitFilter->SetSelection( -1 );
+    }
+
+    OnRebuildRows( event );
+}
+
+
+void DIALOG_LIB_EDIT_PIN_TABLE::OnFilterChoice( wxCommandEvent& event )
+{
+    m_cbFilterByUnit->SetValue( true );
+    m_dataModel->SetUnitFilter( m_unitFilter->GetSelection() );
+
+    OnRebuildRows( event );
 }
 
 
@@ -1018,10 +1081,8 @@ void DIALOG_LIB_EDIT_PIN_TABLE::updateSummary()
     }
 
     m_pin_numbers_summary->SetLabel( pinNumbers.GetSummary() );
-
-    wxString count;
-    count << m_pins.size();
-    m_pin_count->SetLabel( count );
-
+    m_pin_count->SetLabel( wxString::Format( wxT( "%lu" ), m_pins.size() ) );
     m_duplicate_pins->SetLabel( pinNumbers.GetDuplicates() );
+
+    Layout();
 }

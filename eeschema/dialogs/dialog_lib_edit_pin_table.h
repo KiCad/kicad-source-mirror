@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,6 +66,8 @@ public:
     void OnSize( wxSizeEvent& event ) override;
     void OnCellEdited( wxGridEvent& event ) override;
     void OnRebuildRows( wxCommandEvent& event ) override;
+    void OnFilterCheckBox( wxCommandEvent& event ) override;
+    void OnFilterChoice( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnCancel( wxCommandEvent& event ) override;
     void OnClose( wxCloseEvent& event ) override;
