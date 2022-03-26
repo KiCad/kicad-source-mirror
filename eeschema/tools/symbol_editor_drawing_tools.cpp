@@ -116,7 +116,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     {
         m_toolMgr->PrimeTool( aEvent.Position() );
     }
-    else if( !aEvent.IsReactivate() && isText )
+    else if( !aEvent.IsReactivate() )
     {
         m_toolMgr->PrimeTool( { 0, 0 } );
         ignorePrimePosition = true;
