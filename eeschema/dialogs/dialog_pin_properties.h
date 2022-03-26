@@ -65,10 +65,10 @@ public:
     void OnDeleteAlternate( wxCommandEvent& event ) override;
     void OnSize( wxSizeEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
-    void onUpdateUIInfo( wxUpdateUIEvent& event ) override;
 
 protected:
     void adjustGridColumns();
+    wxString getSyncPinsMessage();
 
 private:
     SYMBOL_EDIT_FRAME*  m_frame;

@@ -7,6 +7,7 @@
 
 #include "pin_shape_combobox.h"
 #include "pin_type_combobox.h"
+#include "widgets/infobar.h"
 #include "widgets/wx_grid.h"
 #include "wx/bmpcbox.h"
 
@@ -21,27 +22,12 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* mainSizer;
 	mainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_bSizerInfo = new wxBoxSizer( wxHORIZONTAL );
+	m_infoBar = new WX_INFOBAR( this );
+	m_infoBar->SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
+	m_infoBar->SetEffectDuration( 500 );
+	m_infoBar->Hide();
 
-	m_bitmapInfo = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_INFORMATION, wxART_CMN_DIALOG ), wxDefaultPosition, wxDefaultSize, 0 );
-	m_bSizerInfo->Add( m_bitmapInfo, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-	wxBoxSizer* bSizerTexts;
-	bSizerTexts = new wxBoxSizer( wxVERTICAL );
-
-	m_textInfoUpper = new wxStaticText( this, wxID_ANY, _("info"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textInfoUpper->Wrap( -1 );
-	bSizerTexts->Add( m_textInfoUpper, 0, wxRIGHT|wxLEFT, 5 );
-
-	m_textInfoLower = new wxStaticText( this, wxID_ANY, _("info"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textInfoLower->Wrap( -1 );
-	bSizerTexts->Add( m_textInfoLower, 0, wxRIGHT|wxLEFT, 5 );
-
-
-	m_bSizerInfo->Add( bSizerTexts, 1, wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	mainSizer->Add( m_bSizerInfo, 0, wxEXPAND, 5 );
+	mainSizer->Add( m_infoBar, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bUpperSizer;
 	bUpperSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -156,7 +142,7 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bLeftSizer->Add( gbSizer1, 1, wxEXPAND, 5 );
 
 
-	bUpperSizer->Add( bLeftSizer, 1, wxEXPAND|wxALL, 10 );
+	bUpperSizer->Add( bLeftSizer, 1, wxEXPAND|wxALL, 15 );
 
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
@@ -190,10 +176,10 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bRightSizer->Add( m_panelShowPin, 1, wxEXPAND|wxLEFT, 5 );
 
 
-	bUpperSizer->Add( bRightSizer, 1, wxEXPAND|wxALL, 10 );
+	bUpperSizer->Add( bRightSizer, 1, wxEXPAND|wxALL, 15 );
 
 
-	mainSizer->Add( bUpperSizer, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	mainSizer->Add( bUpperSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bLowerSizer;
 	bLowerSizer = new wxBoxSizer( wxVERTICAL );
@@ -266,7 +252,7 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bLowerSizer->Add( m_alternatesTurndown, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	mainSizer->Add( bLowerSizer, 1, wxEXPAND|wxLEFT, 5 );
+	mainSizer->Add( bLowerSizer, 1, wxEXPAND|wxLEFT, 10 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -290,9 +276,6 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	// Connect Events
 	this->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnSize ) );
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnUpdateUI ) );
-	m_bitmapInfo->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PIN_PROPERTIES_BASE::onUpdateUIInfo ), NULL, this );
-	m_textInfoUpper->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PIN_PROPERTIES_BASE::onUpdateUIInfo ), NULL, this );
-	m_textInfoLower->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PIN_PROPERTIES_BASE::onUpdateUIInfo ), NULL, this );
 	m_textPinName->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
 	m_textPinNumber->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
 	m_pinLengthCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
@@ -314,9 +297,6 @@ DIALOG_PIN_PROPERTIES_BASE::~DIALOG_PIN_PROPERTIES_BASE()
 	// Disconnect Events
 	this->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnSize ) );
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnUpdateUI ) );
-	m_bitmapInfo->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PIN_PROPERTIES_BASE::onUpdateUIInfo ), NULL, this );
-	m_textInfoUpper->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PIN_PROPERTIES_BASE::onUpdateUIInfo ), NULL, this );
-	m_textInfoLower->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PIN_PROPERTIES_BASE::onUpdateUIInfo ), NULL, this );
 	m_textPinName->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
 	m_textPinNumber->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
 	m_pinLengthCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );

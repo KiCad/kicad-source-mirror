@@ -33,6 +33,7 @@
 #include <widgets/wx_grid.h>
 #include <grid_tricks.h>
 #include <widgets/grid_icon_text_helpers.h>
+#include <wx/hyperlink.h>
 
 class ALT_PIN_DATA_MODEL : public wxGridTableBase, public std::vector<LIB_PIN::ALT>
 {
@@ -140,24 +141,6 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
     m_dummyPin->SetParent( m_dummyParent );
     m_dummyParent->SetShowPinNames( true );
     m_dummyParent->SetShowPinNumbers( true );
-
-    m_bSizerInfo->Show( m_frame->m_SyncPinEdit );
-
-    if( m_frame->m_SyncPinEdit )
-    {
-        if( aPin->IsNew() )
-        {
-            m_textInfoUpper->SetLabel( _( "Synchronized pins edit mode, and this pin is new" ) );
-            m_textInfoLower->SetLabel( _( "Similar pins will be automatically added to other units, "
-                                          "if this pin is not common to all units" ) );
-        }
-        else
-        {
-            m_textInfoUpper->SetLabel( _( "Synchronized pins edit mode" ) );
-            m_textInfoLower->SetLabel( _( "Similar pins at the same location will be edited. "
-                                          "Pin number of other pins will be not modified" ) );
-        }
-    }
 
     COLOR4D bgColor = parent->GetRenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
     m_panelShowPin->SetBackgroundColour( bgColor.ToColour() );
@@ -272,27 +255,45 @@ bool DIALOG_PIN_PROPERTIES::TransferDataToWindow()
     m_textPinNumber->SetValue( m_pin->GetNumber() );
     m_numberSize.SetValue( m_pin->GetNumberTextSize() );
     m_pinLength.SetValue( m_pin->GetLength() );
+    m_checkApplyToAllParts->Enable( m_pin->GetParent()->IsMulti() );
     m_checkApplyToAllParts->SetValue( m_pin->GetUnit() == 0 );
     m_checkApplyToAllConversions->SetValue( m_pin->GetConvert() == 0 );
     m_checkShow->SetValue( m_pin->IsVisible() );
 
     m_dummyPin->SetVisible( m_pin->IsVisible() );
 
-    bool hasMultiUnit    = m_pin->GetParent()->GetUnitCount() > 1;
+    wxString commonUnitsToolTip;
 
-    m_checkApplyToAllParts->Enable( hasMultiUnit );
+    if( m_frame->m_SyncPinEdit )
+    {
+        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( m_infoBar, wxID_ANY,
+                                                       _( "Exit sync pins mode" ),
+                                                       wxEmptyString );
 
-    wxString toolTip;
+        button->Bind( wxEVT_COMMAND_HYPERLINK,
+                      std::function<void( wxHyperlinkEvent& aEvent )>(
+                      [&]( wxHyperlinkEvent& aEvent )
+                      {
+                          m_frame->m_SyncPinEdit = false;
+                          m_infoBar->Dismiss();
+                      } ) );
 
-    if( !hasMultiUnit )
-        toolTip = _( "This symbol only has one unit. This control has no effect." );
-    else if( m_frame->m_SyncPinEdit )
-        toolTip = _( "Synchronized pin edit mode is enabled.\n"
-                     "Similar pins will be edited, regardless this option." );
+        m_infoBar->RemoveAllButtons();
+        m_infoBar->AddButton( button );
+        m_infoBar->ShowMessage( getSyncPinsMessage() );
+
+        commonUnitsToolTip = _( "Synchronized pins mode is enabled.\n"
+                                "Similar pins will be edited regardless of this option." );
+    }
     else
-        toolTip = _( "If checked, this pin will exist in all units." );
+    {
+        commonUnitsToolTip = _( "If checked, this pin will exist in all units." );
+    }
 
-    m_checkApplyToAllParts->SetToolTip( toolTip );
+    if( !m_pin->GetParent()->IsMulti() )
+        commonUnitsToolTip = _( "This symbol only has one unit. This control has no effect." );
+
+    m_checkApplyToAllParts->SetToolTip( commonUnitsToolTip );
 
     for( const std::pair<const wxString, LIB_PIN::ALT>& alt : m_pin->GetAlternates() )
         m_alternatesDataModel->AppendRow( alt.second );
@@ -416,7 +417,21 @@ void DIALOG_PIN_PROPERTIES::OnPropertiesChange( wxCommandEvent& event )
     m_dummyPin->SetShape( m_choiceStyle->GetPinShapeSelection() );
     m_dummyPin->SetVisible( m_checkShow->GetValue() );
 
+    if( event.GetEventObject() == m_checkApplyToAllParts && m_frame->m_SyncPinEdit )
+        m_infoBar->ShowMessage( getSyncPinsMessage() );
+
     m_panelShowPin->Refresh();
+}
+
+
+wxString DIALOG_PIN_PROPERTIES::getSyncPinsMessage()
+{
+    if( m_checkApplyToAllParts->GetValue() )
+        return _( "Synchronized Pins Mode." );
+    else if( m_pin->IsNew() )
+        return _( "Synchronized Pins Mode.  New pin will be added to all units." );
+    else
+        return _( "Synchronized Pins Mode.  Matching pins in other units will be updated." );
 }
 
 
@@ -509,11 +524,4 @@ void DIALOG_PIN_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         m_delayedFocusRow = -1;
         m_delayedFocusColumn = -1;
     }
-}
-
-
-void DIALOG_PIN_PROPERTIES::onUpdateUIInfo( wxUpdateUIEvent& event )
-{
-    // Disable Info texts for pins common to all units
-    event.Enable( m_checkApplyToAllParts->GetValue() == 0 );
 }

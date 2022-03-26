@@ -205,8 +205,8 @@ TOOL_ACTION EE_ACTIONS::exportSymbolAsSVG( "eeschema.SymbolLibraryControl.export
 
 TOOL_ACTION EE_ACTIONS::toggleSyncedPinsMode( "eeschema.SymbolLibraryControl.toggleSyncedPinsMode",
         AS_GLOBAL, 0, "",
-        _( "Synchronized Pins Edit Mode" ),
-        _( "Synchronized Pins Edit Mode\n"
+        _( "Synchronized Pins Mode" ),
+        _( "Synchronized Pins Mode\n"
            "When enabled propagates all changes (except pin numbers) to other units.\n"
            "Enabled by default for multiunit parts with interchangeable units." ),
         BITMAPS::pin2pin );
