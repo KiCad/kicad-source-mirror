@@ -6,16 +6,16 @@ msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:52-0700\n"
-"PO-Revision-Date: 2021-12-12 21:48+0000\n"
+"PO-Revision-Date: 2022-03-27 22:10+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
-"master-source/nb_NO/>\n"
+"v6/nb_NO/>\n"
 "Language: no\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #, fuzzy
@@ -266,7 +266,7 @@ msgstr "&Innstillinger"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
 msgid "Reload board"
-msgstr "Last ombord på nytt"
+msgstr "Last inn kretskort på nytt"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:60
 msgid "Copy 3D image to clipboard"
@@ -1094,7 +1094,7 @@ msgstr "Forhåndsvis"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:221
 msgid "Reload board and 3D models"
-msgstr "Last ombord og 3D-modeller på nytt"
+msgstr "Last inn kretskort og 3D-modeller på nytt"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:159 common/base_units.cpp:435
 #: common/dialogs/dialog_grid_settings_base.cpp:41
@@ -28663,7 +28663,7 @@ msgstr "Adhes_Front"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:605
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:617
 msgid "On-board, non-copper"
-msgstr "Ombord, ikke-kobber"
+msgstr "På kretskortet, ikke-kobber"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:82
 #, fuzzy
