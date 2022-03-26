@@ -168,6 +168,26 @@ public:
 
     void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& offset ) override;
 
+    /**
+     * @brief autoRotateOnPlacement
+     * @return Returns true if the label rotation will be automatically set on the placement
+     */
+    bool AutoRotateOnPlacement() const;
+
+    /**
+     * @brief setAutoRotateOnPlacement
+     * @param autoRotate If set to true when the label is placed in the connection to a
+     * pin/net the direction will be automatically set according to the positioning of the net/pin
+     */
+    void SetAutoRotateOnPlacement( bool autoRotate = true );
+
+    /**
+     * @brief AutoRotateOnPlacementSupported
+     * @return true if the automated rotation of the label is supported after the placement
+     * At the moment it is supported for global and hierarchial labels
+     */
+    virtual bool AutoRotateOnPlacementSupported() const = 0;
+
 protected:
     std::vector<SCH_FIELD>  m_fields;
 
@@ -175,6 +195,7 @@ protected:
 
     CONNECTION_TYPE         m_connectionType;
     bool                    m_isDangling;
+    bool                    m_autoRotateOnPlacement = false;
 };
 
 
@@ -216,6 +237,8 @@ public:
     {
         return m_isDangling && GetPosition() == aPos;
     }
+
+    bool AutoRotateOnPlacementSupported() const override { return false; }
 
 private:
     bool doIsConnected( const VECTOR2I& aPosition ) const override
@@ -264,6 +287,8 @@ public:
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     bool IsConnectable() const override { return true; }
+
+    bool AutoRotateOnPlacementSupported() const override { return false; }
 
 private:
     int       m_pinLength;
@@ -324,6 +349,8 @@ public:
         return m_isDangling && GetPosition() == aPos;
     }
 
+    bool AutoRotateOnPlacementSupported() const override { return true; }
+
 private:
     bool doIsConnected( const VECTOR2I& aPosition ) const override
     {
@@ -378,6 +405,8 @@ public:
     {
         return m_isDangling && GetPosition() == aPos;
     }
+
+    bool AutoRotateOnPlacementSupported() const override { return true; }
 
 private:
     bool doIsConnected( const VECTOR2I& aPosition ) const override

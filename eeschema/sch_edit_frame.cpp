@@ -1349,13 +1349,43 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
     {
         std::vector<VECTOR2I> pts = aItem->GetConnectionPoints();
 
+        bool connected = true;
         for( auto i = pts.begin(); i != pts.end(); i++ )
         {
             for( auto j = i + 1; j != pts.end(); j++ )
                 TrimWire( *i, *j );
 
             if( aScreen->IsExplicitJunctionNeeded( *i ) )
+            {
                 AddJunction( aScreen, *i, true, false );
+                connected = true;
+            }
+        }
+
+        if( connected )
+        {
+            static KICAD_T autoRotatableLabelTypes[] = { SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T };
+            if( aItem->IsType( autoRotatableLabelTypes ) )
+            {
+                auto label = static_cast<SCH_LABEL_BASE*>( aItem );
+                if( label->AutoRotateOnPlacement() )
+                {
+                    auto textSpin = aScreen->GetLabelOrientationForPoint(
+                            label->GetPosition(), label->GetTextSpinStyle(), &GetCurrentSheet() );
+                    if( textSpin != label->GetTextSpinStyle() )
+                    {
+                        label->SetTextSpinStyle( textSpin );
+                        for( SCH_ITEM* item : aScreen->Items().OfType( SCH_GLOBAL_LABEL_T ) )
+                        {
+                            SCH_LABEL_BASE *otherLabel = static_cast<SCH_LABEL_BASE *>( item );
+                            if ( otherLabel != label && otherLabel->GetText()  == label->GetText() )
+                            {
+                                otherLabel->AutoplaceFields( aScreen, false );
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         TestDanglingEnds();

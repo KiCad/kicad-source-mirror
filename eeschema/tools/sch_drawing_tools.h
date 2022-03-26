@@ -99,6 +99,7 @@ private:
     STROKE_PARAMS              m_lastStroke;
     STROKE_PARAMS              m_lastTextboxStroke;
     wxString                   m_mruPath;
+    bool                       m_lastAutoLabelRotateOnPlacement;
 
     ///< Re-entrancy guards
     bool                       m_inPlaceSymbol;

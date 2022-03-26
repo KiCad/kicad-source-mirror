@@ -80,6 +80,7 @@ SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         m_inPlaceImage( false ),
         m_inSingleClickPlace( false ),
         m_inTwoClickPlace( false ),
+        m_lastAutoLabelRotateOnPlacement( false ),
         m_inDrawSheet( false )
 {
 }
@@ -934,6 +935,7 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
     case LAYER_HIERLABEL:
         labelItem = new SCH_HIERLABEL( aPosition );
         labelItem->SetShape( m_lastGlobalLabelShape );
+        labelItem->SetAutoRotateOnPlacement( m_lastAutoLabelRotateOnPlacement );
         textItem = labelItem;
         break;
 
@@ -941,6 +943,7 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
         labelItem = new SCH_GLOBALLABEL( aPosition );
         labelItem->SetShape( m_lastGlobalLabelShape );
         labelItem->GetFields()[0].SetVisible( settings.m_IntersheetRefsShow );
+        labelItem->SetAutoRotateOnPlacement( m_lastAutoLabelRotateOnPlacement );
         textItem = labelItem;
         break;
 
@@ -1002,9 +1005,14 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
     m_lastTextOrientation = textItem->GetTextSpinStyle();
 
     if( aType == LAYER_GLOBLABEL || aType == LAYER_HIERLABEL )
+    {
         m_lastGlobalLabelShape = labelItem->GetShape();
+        m_lastAutoLabelRotateOnPlacement = labelItem->AutoRotateOnPlacement();
+    }
     else if( aType == LAYER_NETCLASS_REFS )
+    {
         m_lastNetClassFlagShape = labelItem->GetShape();
+    }
 
     return textItem;
 }

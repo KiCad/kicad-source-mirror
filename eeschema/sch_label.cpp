@@ -885,6 +885,15 @@ void SCH_LABEL_BASE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aO
         field.Print( aSettings, aOffset );
 }
 
+bool SCH_LABEL_BASE::AutoRotateOnPlacement() const
+{
+    return m_autoRotateOnPlacement;
+}
+
+void SCH_LABEL_BASE::SetAutoRotateOnPlacement( bool autoRotate )
+{
+    m_autoRotateOnPlacement = autoRotate;
+}
 
 SCH_LABEL::SCH_LABEL( const VECTOR2I& pos, const wxString& text ) :
         SCH_LABEL_BASE( pos, text, SCH_LABEL_T )

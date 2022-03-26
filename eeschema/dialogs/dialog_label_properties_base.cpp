@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -82,7 +82,6 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 	m_grid->SetColSize( 12, 48 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
-	m_grid->SetColLabelSize( 22 );
 	m_grid->SetColLabelValue( 0, _("Name") );
 	m_grid->SetColLabelValue( 1, _("Value") );
 	m_grid->SetColLabelValue( 2, _("Show") );
@@ -230,6 +229,9 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 
 	m_spin3 = new BITMAP_BUTTON( formatting->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	formattingSizer->Add( m_spin3, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_autoRotate = new wxCheckBox( formatting->GetStaticBox(), wxID_ANY, _("Auto"), wxDefaultPosition, wxDefaultSize, 0 );
+	formattingSizer->Add( m_autoRotate, 0, wxALL, 5 );
 
 	m_separator3 = new BITMAP_BUTTON( formatting->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_separator3->Enable( false );

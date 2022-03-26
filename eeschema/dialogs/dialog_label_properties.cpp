@@ -310,6 +310,16 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
     case TEXT_SPIN_STYLE::BOTTOM: m_spin3->Check( true ); break;
     }
 
+    if( m_currentLabel->AutoRotateOnPlacementSupported() )
+    {
+        m_autoRotate->Show();
+        m_autoRotate->SetValue( m_currentLabel->AutoRotateOnPlacement() );
+    }
+    else
+    {
+        m_autoRotate->Hide();
+    }
+
     return true;
 }
 
@@ -508,6 +518,11 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
         selectedSpinStyle = TEXT_SPIN_STYLE::UP;
     else if( m_spin3->IsChecked() )
         selectedSpinStyle = TEXT_SPIN_STYLE::BOTTOM;
+
+    if( m_currentLabel->AutoRotateOnPlacementSupported() )
+        m_currentLabel->SetAutoRotateOnPlacement( m_autoRotate->IsChecked() );
+    else
+        m_currentLabel->SetAutoRotateOnPlacement( false );
 
     if( m_currentLabel->GetTextSpinStyle() != selectedSpinStyle )
         m_currentLabel->SetTextSpinStyle( selectedSpinStyle );

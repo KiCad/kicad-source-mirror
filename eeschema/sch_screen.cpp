@@ -450,6 +450,223 @@ bool SCH_SCREEN::IsExplicitJunctionNeeded( const VECTOR2I& aPosition ) const
     return isJunction && !hasBusEntry && !hasExplicitJunction;
 }
 
+TEXT_SPIN_STYLE SCH_SCREEN::GetLabelOrientationForPoint( const VECTOR2I&       aPosition,
+                                                         TEXT_SPIN_STYLE       aDefaultOrientation,
+                                                         const SCH_SHEET_PATH* aSheet ) const
+{
+    auto ret = aDefaultOrientation;
+    for( SCH_ITEM* item : Items().Overlapping( aPosition ) )
+    {
+        if( item->GetEditFlags() & STRUCT_DELETED )
+            continue;
+
+        switch( item->Type() )
+        {
+        case SCH_BUS_WIRE_ENTRY_T:
+        {
+            auto busEntry = static_cast<const SCH_BUS_WIRE_ENTRY*>( item );
+            if( busEntry->m_connected_bus_item )
+            {
+                // bus connected, take the bus direction into consideration ony if it is
+                // vertical or horizontal
+                auto bus = static_cast<const SCH_LINE*>( busEntry->m_connected_bus_item );
+                if( bus->Angle().AsDegrees() == 90.0 )
+                {
+                    // bus is vertical -> label shall be horizontal and
+                    // shall be placed to the side where the bus entry is
+                    if( aPosition.x < bus->GetPosition().x )
+                        ret = TEXT_SPIN_STYLE::LEFT;
+                    else if( aPosition.x > bus->GetPosition().x )
+                        ret = TEXT_SPIN_STYLE::RIGHT;
+                }
+                else if( bus->Angle().AsDegrees() == 0.0 )
+                {
+                    // bus is horizontal -> label shall be vertical and
+                    // shall be placed to the side where the bus entry is
+                    if( aPosition.y < bus->GetPosition().y )
+                        ret = TEXT_SPIN_STYLE::UP;
+                    else if( aPosition.y > bus->GetPosition().y )
+                        ret = TEXT_SPIN_STYLE::BOTTOM;
+                }
+            }
+        }
+        break;
+
+        case SCH_LINE_T:
+        {
+            auto line = static_cast<const SCH_LINE*>( item );
+            // line angles goes between -90 and 90 degrees, but normalize
+            auto angle = line->Angle().Normalize90().AsDegrees();
+
+            if( -45 < angle && angle <= 45 )
+            {
+                if( line->GetStartPoint().x <= line->GetEndPoint().x )
+                {
+                    ret = line->GetEndPoint() == aPosition ? TEXT_SPIN_STYLE::RIGHT
+                                                           : TEXT_SPIN_STYLE::LEFT;
+                }
+                else
+                {
+                    ret = line->GetEndPoint() == aPosition ? TEXT_SPIN_STYLE::LEFT
+                                                           : TEXT_SPIN_STYLE::RIGHT;
+                }
+            }
+            else
+            {
+                if( line->GetStartPoint().y <= line->GetEndPoint().y )
+                {
+                    ret = line->GetEndPoint() == aPosition ? TEXT_SPIN_STYLE::BOTTOM
+                                                           : TEXT_SPIN_STYLE::UP;
+                }
+                else
+                {
+                    ret = line->GetEndPoint() == aPosition ? TEXT_SPIN_STYLE::UP
+                                                           : TEXT_SPIN_STYLE::BOTTOM;
+                }
+            }
+        }
+        break;
+
+        case SCH_SYMBOL_T:
+        {
+            auto symbol = static_cast<SCH_SYMBOL*>( item );
+            auto pins = symbol->GetPins( aSheet );
+            for( auto pin : pins )
+            {
+                if( pin->GetPosition() == aPosition )
+                {
+                    if( pin->GetOrientation() == PIN_RIGHT )
+                    {
+                        ret = TEXT_SPIN_STYLE::LEFT;
+                    }
+                    else if( pin->GetOrientation() == PIN_LEFT )
+                    {
+                        ret = TEXT_SPIN_STYLE::RIGHT;
+                    }
+                    else if( pin->GetOrientation() == PIN_UP )
+                    {
+                        ret = TEXT_SPIN_STYLE::BOTTOM;
+                    }
+                    else if( pin->GetOrientation() == PIN_DOWN )
+                    {
+                        ret = TEXT_SPIN_STYLE::UP;
+                    }
+
+                    switch( static_cast<SYMBOL_ORIENTATION_T>(
+                            symbol->GetOrientation() & ( ~( SYM_MIRROR_X | SYM_MIRROR_Y ) ) ) )
+                    {
+                    case SYM_ROTATE_CLOCKWISE:
+                    case SYM_ORIENT_90:
+                        if( ret == TEXT_SPIN_STYLE::UP )
+                            ret = TEXT_SPIN_STYLE::LEFT;
+                        else if( ret == TEXT_SPIN_STYLE::BOTTOM )
+                            ret = TEXT_SPIN_STYLE::RIGHT;
+                        else if( ret == TEXT_SPIN_STYLE::LEFT )
+                            ret = TEXT_SPIN_STYLE::BOTTOM;
+                        else if( ret == TEXT_SPIN_STYLE::RIGHT )
+                            ret = TEXT_SPIN_STYLE::UP;
+
+                        if( symbol->GetOrientation() & SYM_MIRROR_X )
+                        {
+                            if( ret == TEXT_SPIN_STYLE::UP )
+                                ret = TEXT_SPIN_STYLE::BOTTOM;
+                            else if( ret == TEXT_SPIN_STYLE::BOTTOM )
+                                ret = TEXT_SPIN_STYLE::UP;
+                        }
+
+                        if( symbol->GetOrientation() & SYM_MIRROR_Y )
+                        {
+                            if( ret == TEXT_SPIN_STYLE::LEFT )
+                                ret = TEXT_SPIN_STYLE::RIGHT;
+                            else if( ret == TEXT_SPIN_STYLE::RIGHT )
+                                ret = TEXT_SPIN_STYLE::LEFT;
+                        }
+                        break;
+                    case SYM_ROTATE_COUNTERCLOCKWISE:
+                    case SYM_ORIENT_270:
+                        if( ret == TEXT_SPIN_STYLE::UP )
+                            ret = TEXT_SPIN_STYLE::RIGHT;
+                        else if( ret == TEXT_SPIN_STYLE::BOTTOM )
+                            ret = TEXT_SPIN_STYLE::LEFT;
+                        else if( ret == TEXT_SPIN_STYLE::LEFT )
+                            ret = TEXT_SPIN_STYLE::UP;
+                        else if( ret == TEXT_SPIN_STYLE::RIGHT )
+                            ret = TEXT_SPIN_STYLE::BOTTOM;
+
+                        if( symbol->GetOrientation() & SYM_MIRROR_X )
+                        {
+                            if( ret == TEXT_SPIN_STYLE::UP )
+                                ret = TEXT_SPIN_STYLE::BOTTOM;
+                            else if( ret == TEXT_SPIN_STYLE::BOTTOM )
+                                ret = TEXT_SPIN_STYLE::UP;
+                        }
+
+                        if( symbol->GetOrientation() & SYM_MIRROR_Y )
+                        {
+                            if( ret == TEXT_SPIN_STYLE::LEFT )
+                                ret = TEXT_SPIN_STYLE::RIGHT;
+                            else if( ret == TEXT_SPIN_STYLE::RIGHT )
+                                ret = TEXT_SPIN_STYLE::LEFT;
+                        }
+                        break;
+                    case SYM_ORIENT_180:
+                        if( ret == TEXT_SPIN_STYLE::UP )
+                            ret = TEXT_SPIN_STYLE::BOTTOM;
+                        else if( ret == TEXT_SPIN_STYLE::BOTTOM )
+                            ret = TEXT_SPIN_STYLE::UP;
+                        else if( ret == TEXT_SPIN_STYLE::LEFT )
+                            ret = TEXT_SPIN_STYLE::RIGHT;
+                        else if( ret == TEXT_SPIN_STYLE::RIGHT )
+                            ret = TEXT_SPIN_STYLE::LEFT;
+
+                        if( symbol->GetOrientation() & SYM_MIRROR_X )
+                        {
+                            if( ret == TEXT_SPIN_STYLE::UP )
+                                ret = TEXT_SPIN_STYLE::BOTTOM;
+                            else if( ret == TEXT_SPIN_STYLE::BOTTOM )
+                                ret = TEXT_SPIN_STYLE::UP;
+                        }
+
+                        if( symbol->GetOrientation() & SYM_MIRROR_Y )
+                        {
+                            if( ret == TEXT_SPIN_STYLE::LEFT )
+                                ret = TEXT_SPIN_STYLE::RIGHT;
+                            else if( ret == TEXT_SPIN_STYLE::RIGHT )
+                                ret = TEXT_SPIN_STYLE::LEFT;
+                        }
+                        break;
+                    case SYM_ORIENT_0:
+                    case SYM_NORMAL:
+                    default:
+                        if( symbol->GetOrientation() & SYM_MIRROR_X )
+                        {
+                            if( ret == TEXT_SPIN_STYLE::UP )
+                                ret = TEXT_SPIN_STYLE::BOTTOM;
+                            else if( ret == TEXT_SPIN_STYLE::BOTTOM )
+                                ret = TEXT_SPIN_STYLE::UP;
+                        }
+
+                        if( symbol->GetOrientation() & SYM_MIRROR_Y )
+                        {
+                            if( ret == TEXT_SPIN_STYLE::LEFT )
+                                ret = TEXT_SPIN_STYLE::RIGHT;
+                            else if( ret == TEXT_SPIN_STYLE::RIGHT )
+                                ret = TEXT_SPIN_STYLE::LEFT;
+                        }
+                        break;
+                    }
+
+                    break;
+                }
+            }
+        }
+        break;
+        default: break;
+        }
+    }
+    return ret;
+}
+
 
 bool SCH_SCREEN::IsExplicitJunctionAllowed( const VECTOR2I& aPosition ) const
 {
