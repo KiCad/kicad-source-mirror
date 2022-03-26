@@ -260,7 +260,7 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
     SetupStandardButtons( { { wxID_OK,     _( "Export Netlist" ) },
                             { wxID_CANCEL, _( "Close" )          } } );
 
-    for( int ii = 0; m_PanelNetType[ii] && ii < 4 + CUSTOMPANEL_COUNTMAX; ++ii )
+    for( int ii = 0; (ii < 4 + CUSTOMPANEL_COUNTMAX) && m_PanelNetType[ii]; ++ii )
     {
         if( m_PanelNetType[ii]->GetPageNetFmtName() == settings.m_NetFormatName )
         {

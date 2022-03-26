@@ -127,9 +127,9 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
     footprint->BuildPolyCourtyards( &outlineErrorHandler );
 
     footprint->CheckFootprintAttributes(
-            [&]( const wxString& msg )
+            [&]( const wxString& aMsg )
             {
-                errorHandler( footprint, nullptr, DRCE_FOOTPRINT_TYPE_MISMATCH, msg, { 0, 0 } );
+                errorHandler( footprint, nullptr, DRCE_FOOTPRINT_TYPE_MISMATCH, aMsg, { 0, 0 } );
             } );
 
     footprint->CheckPads(

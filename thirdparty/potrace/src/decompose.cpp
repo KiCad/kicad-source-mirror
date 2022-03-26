@@ -293,7 +293,7 @@ static path_t* findpath( potrace_bitmap_t* bm, int x0, int y0, int sign, int tur
         /* move to next point */
         x   += dirx;
         y   += diry;
-        area += x * diry;
+        area += uint64_t( x ) * uint64_t( diry );
 
         /* path complete? */
         if( x == x0 && y == y0 )
