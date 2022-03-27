@@ -375,11 +375,18 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
         color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
 
         if( aDrawingShadows )
-            color = color.WithAlpha( 0.15 );
+        {
+            if( aItem->IsSelected() )
+                color = m_schSettings.GetLayerColor( LAYER_SELECTION_SHADOWS );
+            else
+                color = color.WithAlpha( 0.15 );
+        }
         else if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_SHEET_BACKGROUND )
+        {
             color = color.WithAlpha( 0.2 );
+        }
     }
-    else if( aItem->IsSelected() )
+    else if( aItem->IsSelected() && aDrawingShadows )
     {
         if( aDrawingShadows )
             color = m_schSettings.GetLayerColor( LAYER_SELECTION_SHADOWS );
