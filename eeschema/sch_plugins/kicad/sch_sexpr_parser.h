@@ -195,6 +195,7 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
     SCH_NO_CONNECT* parseNoConnect();
     SCH_BUS_WIRE_ENTRY* parseBusEntry();
     SCH_LINE* parseLine();
+    SCH_SHAPE* parseSchPolyLine();
     SCH_SHAPE* parseSchArc();
     SCH_SHAPE* parseSchCircle();
     SCH_SHAPE* parseSchRectangle();

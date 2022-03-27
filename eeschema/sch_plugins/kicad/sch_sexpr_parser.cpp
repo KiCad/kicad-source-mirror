@@ -2289,6 +2289,35 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
             break;
 
         case T_polyline:
+        {
+            // polyline keyword is used in eeschema both for SCH_SHAPE and SCH_LINE items.
+            // In symbols it describes a polygon, having n corners and can be filled
+            // In schematic it describes a line (with no fill descr), but could be extended to a
+            // polygon (for instance when importing files) because the schematic handles all SCH_SHAPE.
+            // parseSchPolyLine() returns always a SCH_SHAPE, io convert it to a simple SCH_LINE
+            // For compatibility reasons, keep SCH_SHAPE for a polygon and convert to SCH_LINE
+            // when the item has only 2 corners, similar to a SCH_LINE
+            SCH_SHAPE* poly = parseSchPolyLine();
+
+            if( poly->GetPointCount() > 2 )
+                screen->Append( poly );
+            else
+            {
+                // For SCH_SHAPE having only 2 points, this is a "old" SCH_LINE entity.
+                // So convert the SCH_SHAPE to a simple SCH_LINE
+                SCH_LINE* line = new SCH_LINE( VECTOR2I(), LAYER_NOTES );
+                SHAPE_LINE_CHAIN& outline = poly->GetPolyShape().Outline(0);
+                line->SetStartPoint( outline.CPoint(0) );
+                line->SetEndPoint( outline.CPoint(1) );
+                line->SetStroke( poly->GetStroke() );
+
+                screen->Append( line );
+
+                delete poly;
+            }
+        }
+            break;
+
         case T_bus:
         case T_wire:
             screen->Append( parseLine() );
@@ -2919,8 +2948,72 @@ SCH_BUS_WIRE_ENTRY* SCH_SEXPR_PARSER::parseBusEntry()
 }
 
 
+SCH_SHAPE* SCH_SEXPR_PARSER::parseSchPolyLine()
+{
+    T             token;
+    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
+    FILL_PARAMS   fill;
+    int           layer = LAYER_NOTES;
+
+    std::unique_ptr<SCH_SHAPE> polyline = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY, layer );
+
+    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_pts:
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                if( token != T_xy )
+                    Expecting( "xy" );
+
+                polyline->AddPoint( parseXY() );
+
+                NeedRIGHT();
+            }
+            break;
+
+        case T_stroke:
+            parseStroke( stroke );
+            polyline->SetStroke( stroke );
+            break;
+
+        case T_fill:
+            parseFill( fill );
+            polyline->SetFillMode( fill.m_FillType );
+            polyline->SetFillColor( fill.m_Color );
+            break;
+
+        case T_uuid:
+            NeedSYMBOL();
+            const_cast<KIID&>( polyline->m_Uuid ) = parseKIID();
+            NeedRIGHT();
+            break;
+
+        default:
+            Expecting( "pts, uuid, stroke, or fill" );
+        }
+    }
+
+    return polyline.release();
+}
+
+
 SCH_LINE* SCH_SEXPR_PARSER::parseLine()
 {
+    // Note: T_polyline is deprecated in this code: it is now handled by
+    // parseSchPolyLine() that can handle true polygons, and not only one segment.
+
     T             token;
     STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     int           layer;
