@@ -1057,9 +1057,8 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
 {
     wxCHECK_RET( aText != nullptr && m_out != nullptr, "" );
 
+    // Note: label is nullptr SCH_TEXT, but not for SCH_LABEL_XXX,
     SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( aText );
-
-    wxCHECK( label, /* void */ );
 
     m_out->Print( aNestLevel, "(%s %s",
                   getTextTypeToken( aText->Type() ),
@@ -1079,7 +1078,8 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
             || aText->Type() == SCH_HIER_LABEL_T
             || aText->Type() == SCH_DIRECTIVE_LABEL_T )
     {
-        m_out->Print( 0, " (shape %s)", getSheetPinShapeToken( label->GetShape() ) );
+        if( label )     // Should be always the case
+            m_out->Print( 0, " (shape %s)", getSheetPinShapeToken( label->GetShape() ) );
 
         // The angle of the text is always 0 or 90 degrees for readibility reasons,
         // but the item itself can have more rotation (-90 and 180 deg)
