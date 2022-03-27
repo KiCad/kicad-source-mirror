@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -599,7 +599,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             &m_TextUpright[ LAYER_CLASS_SILK ], true ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "defaults.copper_line_width",
-            &m_LineThickness[LAYER_CLASS_COPPER], Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ),
+            &m_LineThickness[LAYER_CLASS_COPPER], Millimeter2iu( DEFAULT_COPPER_LINE_WIDTH ),
             Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ), MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "defaults.copper_text_size_v",
@@ -621,7 +621,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             &m_TextUpright[LAYER_CLASS_COPPER], true ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "defaults.board_outline_line_width",
-            &m_LineThickness[LAYER_CLASS_EDGES], Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ),
+            &m_LineThickness[LAYER_CLASS_EDGES], Millimeter2iu( DEFAULT_EDGE_WIDTH ),
             Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ), MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "defaults.courtyard_line_width",

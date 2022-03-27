@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -193,7 +193,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.edge_line_width",
             &m_DesignSettings.m_LineThickness[ LAYER_CLASS_EDGES ],
-            Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+            Millimeter2iu( DEFAULT_EDGE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
             MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.courtyard_line_width",
@@ -223,7 +223,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.others_line_width",
            &m_DesignSettings.m_LineThickness[ LAYER_CLASS_OTHERS ],
-           Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+           Millimeter2iu( DEFAULT_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
            MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.others_text_size_h",
