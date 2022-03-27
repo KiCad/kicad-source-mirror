@@ -39,9 +39,7 @@ using namespace std::placeholders;
 #include <board_commit.h>
 #include <status_popup.h>
 #include <pcb_edit_frame.h>
-#include <pcb_textbox.h>
 #include <fp_shape.h>
-#include <fp_textbox.h>
 #include <pcb_dimension.h>
 #include <pad.h>
 #include <zone.h>
