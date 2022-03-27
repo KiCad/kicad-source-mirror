@@ -30511,19 +30511,19 @@ msgid "Board minimum hole clearance: %s."
 msgstr "Margen de orificio mínimo de placa: %s."
 
 #: pcbnew/drc/drc_engine.cpp:840
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; zone connection: %s."
-msgstr "Sustitución local en %s; margen: %s."
+msgstr "Reemplazo local en %s; conexión de zona: %s."
 
 #: pcbnew/drc/drc_engine.cpp:856
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; thermal relief gap: %s."
-msgstr "Remplazado por %s; alivio térmico: %s."
+msgstr "Reemplazo local en %s; brecha de alivio térmico: %s."
 
 #: pcbnew/drc/drc_engine.cpp:872
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; thermal spoke width: %s."
-msgstr "Sustitución local en %s; margen: %s."
+msgstr "Reemplazo local en %s; ancho de radio térmico: %s."
 
 #: pcbnew/drc/drc_engine.cpp:881
 #, c-format
@@ -30631,9 +30631,8 @@ msgid "Unconditional rule applied."
 msgstr "Regla incondicional aplicada."
 
 #: pcbnew/drc/drc_engine.cpp:1109
-#, fuzzy
 msgid "Unconditional rule applied; overrides previous constraints."
-msgstr "Regla aplicada; sustituye requerimientos previos."
+msgstr "Regla incondicional aplicada; reemplaza las restricciones anteriores."
 
 #: pcbnew/drc/drc_engine.cpp:1124 pcbnew/drc/drc_engine.cpp:1354
 #: pcbnew/drc/drc_engine.cpp:1349
@@ -30645,11 +30644,9 @@ msgstr "Comprobando la condición de regla \"%s\"."
 msgid "Constraint applied."
 msgstr "Requerimiento aplicado."
 
-#: pcbnew/drc/drc_engine.cpp:1138 pcbnew/drc/drc_engine.cpp:1359
-#: pcbnew/drc/drc_engine.cpp:1354
-#, fuzzy
+#: pcbnew/drc/drc_engine.cpp:1138 pcbnew/drc/drc_engine.cpp:1354
 msgid "Rule applied."
-msgstr "Regla incondicional aplicada."
+msgstr "Regla aplicada."
 
 #: pcbnew/drc/drc_engine.cpp:1143
 msgid "Rule applied; overrides previous constraints."
@@ -30706,7 +30703,6 @@ msgid "Electrical"
 msgstr "Eléctrico"
 
 #: pcbnew/drc/drc_item.cpp:45
-#, fuzzy
 msgid "Design for Manufacturing"
 msgstr "Diseño para fabricación"
 
@@ -30719,9 +30715,8 @@ msgid "Signal Integrity"
 msgstr "Integridad de señal"
 
 #: pcbnew/drc/drc_item.cpp:48
-#, fuzzy
 msgid "Readability"
-msgstr "Leer Netlist"
+msgstr "Legibilidad"
 
 #: pcbnew/drc/drc_item.cpp:52
 msgid "Missing connection between items"
@@ -30752,14 +30747,12 @@ msgid "Board edge clearance violation"
 msgstr "Infracción de margen de borde de placa"
 
 #: pcbnew/drc/drc_item.cpp:80
-#, fuzzy
 msgid "Copper zones intersect"
-msgstr "Áreas de cobre superpuestas"
+msgstr "Las zonas de cobre se intersectan"
 
 #: pcbnew/drc/drc_item.cpp:84
-#, fuzzy
 msgid "Isolated copper fill"
-msgstr "Área restringida para zonas de cobre"
+msgstr "Relleno de cobre aislado"
 
 #: pcbnew/drc/drc_item.cpp:88
 msgid "Thermal relief connection to zone incomplete"
@@ -30854,23 +30847,20 @@ msgid "Pad net doesn't match schematic"
 msgstr "La red del pad no coincide con el esquema"
 
 #: pcbnew/drc/drc_item.cpp:180
-#, fuzzy
 msgid "Footprint not found in libraries"
-msgstr "Huella no encontrada en la lista de cambios"
+msgstr "La huella no se encuentra en las bibliotecas"
 
 #: pcbnew/drc/drc_item.cpp:184
-#, fuzzy
 msgid "Footprint doesn't match copy in library"
-msgstr "El tipo de huella no coincide con los pads de la huella"
+msgstr "La huella no coincide con la copia en la biblioteca"
 
 #: pcbnew/drc/drc_item.cpp:192
 msgid "Assertion failure"
 msgstr "Error de aserción"
 
 #: pcbnew/drc/drc_item.cpp:196
-#, fuzzy
 msgid "Copper sliver"
-msgstr "Capa Cu"
+msgstr "Astilla de cobre"
 
 #: pcbnew/drc/drc_item.cpp:200
 msgid "Solder mask aperture bridges items with different nets"
@@ -30882,23 +30872,20 @@ msgid "Silkscreen clipped by solder mask"
 msgstr "Serigrafía recortada por la máscara del soldadura"
 
 #: pcbnew/drc/drc_item.cpp:208
-#, fuzzy
 msgid "Silkscreen clipped by board edge"
-msgstr "Serigrafía recortada por la máscara del soldadura"
+msgstr "Serigrafía recortada por el borde de la placa"
 
 #: pcbnew/drc/drc_item.cpp:212
 msgid "Silkscreen overlap"
 msgstr "Solapamiento de serigrafía"
 
 #: pcbnew/drc/drc_item.cpp:216
-#, fuzzy
 msgid "Text height out of range"
-msgstr "Longitud de pista fuera del rango"
+msgstr "Altura del texto fuera de rango"
 
 #: pcbnew/drc/drc_item.cpp:220
-#, fuzzy
 msgid "Text thickness out of range"
-msgstr "Longitud de pista fuera del rango"
+msgstr "Grosor del texto fuera de rango"
 
 #: pcbnew/drc/drc_item.cpp:224
 msgid "Trace length out of range"
@@ -31035,9 +31022,8 @@ msgid "Expecting number."
 msgstr "Esperando número."
 
 #: pcbnew/drc/drc_rule_parser.cpp:424
-#, fuzzy
 msgid "Missing assertion expression."
-msgstr "Expresión de condición faltante."
+msgstr "Falta la expresión de aserción."
 
 #: pcbnew/drc/drc_rule_parser.cpp:461
 msgid "Missing min value."
@@ -31061,9 +31047,8 @@ msgid "Unrecognized layer '%s'."
 msgstr "Capa '%s' desconocida."
 
 #: pcbnew/drc/drc_rule_parser.cpp:624
-#, fuzzy
 msgid "Missing severity name."
-msgstr "Falta el número de versión."
+msgstr "Falta el nombre de la gravedad."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:83
 msgid "Checking via annular rings..."
@@ -31242,14 +31227,12 @@ msgstr ""
 "biblioteca."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:426
-#, fuzzy
 msgid "Loading footprint library table..."
-msgstr "Error al cargar la tabla de librerías de huellas."
+msgstr "Cargando la tabla de la biblioteca de huellas..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:436
-#, fuzzy
 msgid "Checking board footprints against library..."
-msgstr "Comprobando huellas..."
+msgstr "Comprobando las huellas de la placa con la biblioteca..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:518
 #, c-format
@@ -31291,19 +31274,16 @@ msgid "<unconstrained>"
 msgstr "<no limitado>"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:346
-#, fuzzy
 msgid "Checking length constraints..."
-msgstr "Comprobando conexiones de redes..."
+msgstr "Comprobando restricciones de longitud..."
 
 #: pcbnew/drc/drc_test_provider_mechanical_clearance.cpp:143
-#, fuzzy
 msgid "Gathering items..."
-msgstr "Recolectando elementos de cobre..."
+msgstr "Reuniendo elementos..."
 
 #: pcbnew/drc/drc_test_provider_mechanical_clearance.cpp:201
-#, fuzzy
 msgid "Checking mechanical clearances..."
-msgstr "Comprobando márgenes de orificios..."
+msgstr "Comprobación de las holguras mecánicas..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:112
 msgid "(no edges found on Edge.Cuts layer)"
@@ -31327,9 +31307,8 @@ msgid "Checking text variables..."
 msgstr "Comprobando variables de texto..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:366
-#, fuzzy
 msgid "Checking assertions..."
-msgstr "Comprobando pines..."
+msgstr "Comprobando aserciones..."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:115
 #, c-format
@@ -31368,9 +31347,8 @@ msgid "Running sliver detection on copper layers..."
 msgstr "Ejecutando detección de astillas en capas de cobre..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:55
-#, fuzzy
 msgid "board setup solder mask min width"
-msgstr "restricciones de configuración de placa"
+msgstr "configuración de la placa anchura mínima de la máscara de soldadura"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:450
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:539
@@ -31387,48 +31365,45 @@ msgstr ""
 "redes"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:650
-#, fuzzy
 msgid "Building solder mask..."
-msgstr "Construyendo relleno de zonas..."
+msgstr "Construyendo máscara de soldadura..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:658
-#, fuzzy
 msgid "Checking solder mask to silk clearance..."
-msgstr "Comprobando márgenes entre orificio y orificio..."
+msgstr ""
+"Comprobando el espacio entre la máscara de soldadura y la serigrafía..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:663
-#, fuzzy
 msgid "Checking solder mask web integrity..."
-msgstr "Comprobando anchos de pistas..."
+msgstr "Comprobando la integridad de la máscara de soldadura..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:88
-#, fuzzy
 msgid "Checking text dimensions..."
-msgstr "Comprobando variables de texto..."
+msgstr "Comprobando las dimensiones del texto..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min height %s; actual %s)"
-msgstr "(%s ancho mínimo %s; real %s)"
+msgstr "(%s altura mínima %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:125
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max height %s; actual %s)"
-msgstr "(%s ancho máximo %s; real %s)"
+msgstr "(%s altura máxima %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:209
 msgid "(TrueType font characters with insufficient stroke weight)"
 msgstr "(Caracteres de fuente TrueType con un peso de trazo insuficiente)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min thickness %s; actual %s)"
-msgstr "(%s ancho mínimo %s; real %s)"
+msgstr "(%s grosor mínimo %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max thickness %s; actual %s)"
-msgstr "(%s ancho máximo %s; real %s)"
+msgstr "(%s grosor máximo %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:78
 msgid "Checking track widths..."
@@ -31449,14 +31424,13 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s diámetro máximo %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:81
-#, fuzzy
 msgid "Checking thermal reliefs..."
-msgstr "Comprobando variables de texto..."
+msgstr "Comprobando alivios térmicos..."
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min spoke count %d; actual %d)"
-msgstr "(%s cantidad máxima %d; real %d)"
+msgstr "(%s cantidad mínima de radios %d; real %d)"
 
 #: pcbnew/edit_zone_helpers.cpp:84 pcbnew/edit_zone_helpers.cpp:106
 msgid "Modify zone properties"
@@ -31694,9 +31668,8 @@ msgid "Converting zone fills"
 msgstr "Comprobando relleno de zonas"
 
 #: pcbnew/files.cpp:970
-#, fuzzy
 msgid "Convert Zone(s)"
-msgstr "Convertir a zona"
+msgstr "Convertir Zona(s)"
 
 #: pcbnew/files.cpp:1007 pcbnew/files.cpp:1144
 #: pcbnew/footprint_libraries_utils.cpp:366
@@ -32504,14 +32477,12 @@ msgid "Auto-Place Footprints"
 msgstr "Emplazamiento automático de huellas"
 
 #: pcbnew/menubar_pcb_editor.cpp:411
-#, fuzzy
 msgid "Add Teardrops"
-msgstr "Añadir directriz"
+msgstr "Añadir lágrimas"
 
 #: pcbnew/menubar_pcb_editor.cpp:413
-#, fuzzy
 msgid "Remove Teardrops"
-msgstr "Eliminar componente"
+msgstr "Eliminar lágrimas"
 
 #: pcbnew/menubar_pcb_editor.cpp:435
 msgid "External Plugins"
@@ -33120,14 +33091,12 @@ msgid "Soldermask Margin Override"
 msgstr "Remplazo de margen de la máscara de soldadura"
 
 #: pcbnew/pad.cpp:1711 pcbnew/zone.cpp:1369
-#, fuzzy
 msgid "Thermal Relief Spoke Width"
-msgstr "Ancho del alivio térmico"
+msgstr "Ancho de radios de alivio térmico"
 
 #: pcbnew/pad.cpp:1714
-#, fuzzy
 msgid "Thermal Relief Spoke Angle"
-msgstr "Espacio del alivio térmico"
+msgstr "Ángulo de radios de alivio térmico"
 
 #: pcbnew/pad.cpp:1717 pcbnew/zone.cpp:1366
 msgid "Thermal Relief Gap"
@@ -33319,9 +33288,8 @@ msgid "Violation"
 msgstr "Infracción"
 
 #: pcbnew/pcb_marker.cpp:143
-#, fuzzy
 msgid "Severity"
-msgstr "Revertir"
+msgstr "Gravedad"
 
 #: pcbnew/pcb_marker.cpp:191
 #, c-format
@@ -33505,15 +33473,14 @@ msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr ""
 "El flujo Pads6 tiene una longitud inesperada para el subregistro 6: %d."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:327
 #: pcbnew/plugins/altium/altium_pcb.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Altium layer (%d) has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
 msgstr ""
-"Se ha encontrado un arco en una capa de Altium (%d) sin un equivalente de "
-"KiCad. Se ha movido a la capa de KiCad Eco1_User."
+"La capa de Altium (%d) no tiene equivalente en KiCad. Se ha movido a la capa "
+"de KiCad Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:364
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:324
@@ -34516,13 +34483,12 @@ msgstr "%d no es un número de capas válido"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2175
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5481
-#, fuzzy
 msgid ""
 "The legacy zone fill strategy is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
 msgstr ""
-"El antiguo modo de relleno por segmentos ya no está soportado.\n"
-"¿Convertir la zona a relleno por polígonos?"
+"La estrategia de relleno de zonas heredada ya no es compatible.\n"
+"Convertir zonas a rellenos de polígonos suavizados?"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2178
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5480
@@ -34539,17 +34505,17 @@ msgstr ""
 "posición %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3514
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: %s\n"
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"ID de huella inválido en el\n"
-"archivo: '%s'\n"
+"ID de huella inválido en\n"
+"archivo: %s\n"
 "línea: %d\n"
-"posición: %d."
+"desplazamiento: %d."
 
 # Pendiente de contexto
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3867
@@ -34580,7 +34546,7 @@ msgstr ""
 "línea: %d posición: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5104
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: %s\n"
@@ -34588,9 +34554,9 @@ msgid ""
 "offset: %d."
 msgstr ""
 "ID de red inválido en\n"
-"archivo: '%s'\n"
+"archivo: %s\n"
 "línea: %d\n"
-"posición: %d."
+"desplazamiento: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5183
 #, c-format
@@ -34606,7 +34572,7 @@ msgstr ""
 "posición: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5278
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: %s\n"
@@ -34614,12 +34580,12 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID de red no válido en\n"
-"archivo: '%s'\n"
+"archivo: %s\n"
 "línea: %d\n"
-"posición: %d"
+"desplazamiento: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5386
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: %s;\n"
@@ -34627,18 +34593,17 @@ msgid ""
 "offset: %d."
 msgstr ""
 "ID de red inválido en\n"
-" archivo: '%s';\n"
+"archivo: %s;\n"
 "línea: %d\n"
-"posición: %d."
+"desplazamiento: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5521
-#, fuzzy
 msgid ""
 "The segment zone fill mode is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
 msgstr ""
-"El antiguo modo de relleno por segmentos ya no está soportado.\n"
-"¿Convertir la zona a relleno por polígonos?"
+"El modo de relleno de zona de segmento ya no es compatible.\n"
+"¿Convertir zonas en rellenos de polígonos suavizados?"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:174
 #, c-format
@@ -34656,9 +34621,8 @@ msgid "Cannot rename temporary file '%s' to '%s'"
 msgstr "No se puede renombrar el archivo temporal '%s' a '%s'"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:343
-#, fuzzy
 msgid "Internal Group Data Error"
-msgstr "La estructura interna de datos de grupo está corrupta"
+msgstr "Error de datos internos del grupo"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:344
 #, c-format
@@ -34772,13 +34736,12 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "ZSmoothing incorrecto para CZONE_CONTAINER \"%s\""
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2467
-#, fuzzy
 msgid ""
 "The legacy segment fill mode is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
 msgstr ""
-"El antiguo modo de relleno por segmentos ya no está soportado.\n"
-"¿Convertir la zona a relleno por polígonos?"
+"El modo de relleno de segmentos heredado ya no es compatible.\n"
+"¿Convertir zonas en rellenos de polígonos suavizados?"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2507
 #, c-format
@@ -35203,9 +35166,9 @@ msgid "Via netclass values"
 msgstr "Valores de vía de clase de red"
 
 #: pcbnew/router/router_tool.cpp:247 pcbnew/tools/drawing_tool.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Via %s, hole %s"
-msgstr "Vía %s en %s"
+msgstr "Vía %s, agujero %s"
 
 #: pcbnew/router/router_tool.cpp:251 pcbnew/tools/drawing_tool.cpp:122
 #, c-format
@@ -35455,9 +35418,8 @@ msgid "%d Teardrops removed."
 msgstr "%d Lágrimas eliminadas."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:34
-#, fuzzy
 msgid "Round shapes"
-msgstr "Forma sólida"
+msgstr "Formas redondas"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:48
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:117
@@ -35474,16 +35436,14 @@ msgstr "Altura máxima"
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:66
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:135
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:204
-#, fuzzy
 msgid "Best length"
-msgstr "Long. red"
+msgstr "Mejor longitud"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:74
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:143
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:212
-#, fuzzy
 msgid "Best height"
-msgstr "Alto del texto"
+msgstr "Mejor altura"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:82
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:151
@@ -35514,33 +35474,28 @@ msgid "percent of H/d"
 msgstr "por ciento de H/d"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:103
-#, fuzzy
 msgid "Rect shapes"
-msgstr "Rellenar formas seleccionadas"
+msgstr "Formas rectas"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:256
-#, fuzzy
 msgid "Vias and PTH pads"
-msgstr "Vias en máscara"
+msgstr "Vias y pads PTH"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:258
-#, fuzzy
 msgid "Add teardrops to vias and pads with holes"
-msgstr "eliminar vías en pads through hole"
+msgstr "Añadir lágrimas a vías y pads con agujeros"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:262
-#, fuzzy
 msgid "Round pads only"
-msgstr "Relación de radios redondos"
+msgstr "Sólo pads redondos"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:263
 msgid "Add teardrops to round shapes only "
 msgstr "Añadir lágrimas solo a las formas redondas "
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:267
-#, fuzzy
 msgid "Not drilled pads"
-msgstr "Sin marca de taladro"
+msgstr "Pads no perforados"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:269
 msgid "Add teardrops to not driiled pads, like SMD"
@@ -35557,16 +35512,14 @@ msgstr "Agregar lágrimas a dos pistas conectadas de diferentes anchos"
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:285
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:291
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:297
-#, fuzzy
 msgid "Straight lines"
-msgstr "Línea Stripline"
+msgstr "Líneas rectas"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:285
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:291
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:297
-#, fuzzy
 msgid "Curved"
-msgstr "Curva"
+msgstr "Curvado"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:287
 msgid "Style for round shapes"
@@ -35577,14 +35530,12 @@ msgid "Style for rect shapes"
 msgstr "Estilo para formas rectas"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:299
-#, fuzzy
 msgid "Style for tracks"
-msgstr "Mostrar en pistas"
+msgstr "Estilo para las pistas"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:312
-#, fuzzy
 msgid "Allows use two tracks"
-msgstr "Orificio cerca de pista"
+msgstr "Permite utilizar dos pistas"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:314
 msgid ""
@@ -35608,28 +35559,24 @@ msgstr ""
 "Marque esta opción para permitir lágrimas para estos pads."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:326
-#, fuzzy
 msgid "Curve points"
-msgstr "Curva Bézier, %d puntos"
+msgstr "Puntos de la curva"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:328
 msgid "Number of segments to build a teardrop with curved shape"
 msgstr "Número de segmentos para construir una lágrima con forma curva"
 
 #: pcbnew/teardrop/dialog_teardrop_base.h:108
-#, fuzzy
 msgid "Teardrop Settings"
-msgstr "Opciones de cuadrícula"
+msgstr "Configuración de lágrima"
 
 #: pcbnew/teardrop/teardrop.cpp:222
-#, fuzzy
 msgid "Add teardrops"
-msgstr "Añadir directriz"
+msgstr "Añadir lágrimas"
 
 #: pcbnew/teardrop/teardrop.cpp:427
-#, fuzzy
 msgid "Remove teardrops"
-msgstr "Eliminar elementos"
+msgstr "Eliminar lágrimas"
 
 #: pcbnew/toolbars_footprint_editor.cpp:93
 msgid "Load footprint from current board"
@@ -35866,11 +35813,10 @@ msgstr "No se puede generar un informe de margen en un grupo vacío."
 msgid "Zone connection resolution for:"
 msgstr "Resolución de conexión de zona para:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:408
 #: pcbnew/tools/board_inspection_tool.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal relief gap: %s."
-msgstr "Alivio térmico de zona: %s."
+msgstr "Brecha de alivio térmico resuelta: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:415
 #: pcbnew/tools/board_inspection_tool.cpp:413
@@ -35935,22 +35881,18 @@ msgstr "Resolución de margen de orificios para:"
 msgid "Mechanical"
 msgstr "NPTH, mecánico"
 
-#: pcbnew/tools/board_inspection_tool.cpp:625
 #: pcbnew/tools/board_inspection_tool.cpp:623
-#, fuzzy
 msgid "Mechanical clearance resolution for:"
-msgstr "Resolución de margen de borde para:"
+msgstr "Resolución juego mecánico para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:637
 #: pcbnew/tools/board_inspection_tool.cpp:635
 msgid "No 'mechanical_clearance' constraints defined."
 msgstr "No se han definido restricciones 'mechanical_clearance'."
 
-#: pcbnew/tools/board_inspection_tool.cpp:664
 #: pcbnew/tools/board_inspection_tool.cpp:662
-#, fuzzy
 msgid "Mechanical hole clearance resolution for:"
-msgstr "Resolución de margen de orificios para:"
+msgstr "Resolución de la holgura de los agujeros mecánicos para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:676
 #: pcbnew/tools/board_inspection_tool.cpp:674
@@ -36058,11 +36000,9 @@ msgstr "Elemento <b>no permitido</b> en la ubicación actual."
 msgid "Item allowed at current location."
 msgstr "Elemento permitido en la ubicación actual."
 
-#: pcbnew/tools/board_inspection_tool.cpp:857
 #: pcbnew/tools/board_inspection_tool.cpp:855
-#, fuzzy
 msgid "Assertions"
-msgstr "Acciones"
+msgstr "Afirmaciones"
 
 #: pcbnew/tools/board_inspection_tool.cpp:858
 #: pcbnew/tools/board_inspection_tool.cpp:856
@@ -36175,9 +36115,8 @@ msgid "Draw a line segment"
 msgstr "Dibujar un segmento de línea"
 
 #: pcbnew/tools/drawing_tool.cpp:391
-#, fuzzy
 msgid "Draw a text box"
-msgstr "Dibujar una línea"
+msgstr "Dibujar un cuadro de texto"
 
 #: pcbnew/tools/drawing_tool.cpp:391 pcbnew/tools/pcb_actions.cpp:93
 msgid "Draw a rectangle"
@@ -36302,9 +36241,8 @@ msgstr ""
 "Designador de referencia oculto (es obligatorio y no se puede eliminar)."
 
 #: pcbnew/tools/edit_tool.cpp:1863
-#, fuzzy
 msgid "Value hidden (it is required and can not be deleted)."
-msgstr "El nombre %s está reservado, y no puede utilizarse aquí."
+msgstr "Valor oculto (es obligatorio y no se puede eliminar)."
 
 #: pcbnew/tools/edit_tool.cpp:2099
 msgid "Move exact"
@@ -36483,9 +36421,8 @@ msgid "Add a board stackup table on a graphic layer"
 msgstr "Añadir una tabla de apilado de placa en una capa gráfica"
 
 #: pcbnew/tools/pcb_actions.cpp:128
-#, fuzzy
 msgid "Add a wrapped text item"
-msgstr "Añadir un elemento de texto"
+msgstr "Añadir un elemento de texto envuelto"
 
 #: pcbnew/tools/pcb_actions.cpp:134
 msgid "Add Aligned Dimension"
@@ -36504,14 +36441,12 @@ msgid "Add a center dimension"
 msgstr "Añadir una dimensión central"
 
 #: pcbnew/tools/pcb_actions.cpp:144
-#, fuzzy
 msgid "Add Radial Dimension"
-msgstr "Añadir dimensión"
+msgstr "Añadir dimensión radial"
 
 #: pcbnew/tools/pcb_actions.cpp:144
-#, fuzzy
 msgid "Add a radial dimension"
-msgstr "Añadir una dimensión directriz"
+msgstr "Añadir una dimensión radial"
 
 #: pcbnew/tools/pcb_actions.cpp:149
 msgid "Add Orthogonal Dimension"
@@ -38060,17 +37995,14 @@ msgid "Refill %d Zones"
 msgstr "Rellenar %d zonas"
 
 #: pcbnew/tools/zone_filler_tool.cpp:250
-#, fuzzy
 msgid "Auto-fill Zone(s)"
-msgstr "Rellenar zona(s)"
+msgstr "Autocompletar zona(s)"
 
 #: pcbnew/tracks_cleaner.cpp:66
-#, fuzzy
 msgid "Clean vias and tracks"
-msgstr "Mostrar en pads y pistas"
+msgstr "Limpieza de vías y pistas"
 
 #: pcbnew/tracks_cleaner.cpp:75
-#, fuzzy
 msgid "Merge collinear tracks"
 msgstr "Unir pistas colineares"
 
@@ -38080,9 +38012,8 @@ msgid "Remove misconnected"
 msgstr "Sin conectar"
 
 #: pcbnew/tracks_cleaner.cpp:96
-#, fuzzy
 msgid "Delete tracks in pads"
-msgstr "Eliminar pistas completamente dentro de pads"
+msgstr "Borrar pistas en los pads"
 
 #: pcbnew/tracks_cleaner.cpp:109
 msgid "Merge segments"
@@ -38204,9 +38135,8 @@ msgid "Show footprint and text origins as a cross"
 msgstr "Mostrar el origen de huellas y textos como una cruz"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
-#, fuzzy
 msgid "Shadow on Locked Items"
-msgstr "Omitir elementos bloqueados"
+msgstr "Sombra en elementos bloqueados"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show a shadow marker on locked items"
@@ -38672,22 +38602,22 @@ msgstr "Nombre de red:"
 #: pcbnew/widgets/appearance_controls.cpp:2676
 #, fuzzy
 msgid "Save Viewport"
-msgstr "Guardar informe"
+msgstr "Guardar Viewport"
 
 #: pcbnew/widgets/appearance_controls.cpp:2714
 #, fuzzy
 msgid "Viewports"
-msgstr "Informe"
+msgstr "Viewports"
 
 #: pcbnew/widgets/appearance_controls.cpp:2723
 #, fuzzy
 msgid "Delete Viewport"
-msgstr "Eliminar vía"
+msgstr "Eliminar Viewport"
 
 #: pcbnew/widgets/appearance_controls.cpp:2724
 #, fuzzy
 msgid "Select viewport:"
-msgstr "Seleccionar ajuste por defecto:"
+msgstr "Seleccionar viewport:"
 
 #: pcbnew/widgets/appearance_controls.cpp:3160
 msgid "Open Preferences"
@@ -38754,9 +38684,8 @@ msgid "Rule Area"
 msgstr "Área de Reglas"
 
 #: pcbnew/zone.cpp:525
-#, fuzzy
 msgid "Teardrop Area"
-msgstr "Opciones de cuadrícula"
+msgstr "Área de lágrima"
 
 #: pcbnew/zone.cpp:527
 msgid "Copper Zone"
@@ -38844,9 +38773,8 @@ msgid "Inherited"
 msgstr "Heredado"
 
 #: pcbnew/zone.cpp:1347
-#, fuzzy
 msgid "Thermal reliefs for PTH"
-msgstr "Alivios térmicos"
+msgstr "Alivios térmicos para PTH"
 
 #: pcbnew/zone.cpp:1361
 msgid "Min Width"
@@ -38881,29 +38809,24 @@ msgid "Continue without Refill"
 msgstr "Continuar sin rellenar"
 
 #: pcbnew/zones.h:62
-#, fuzzy
 msgid "inherited"
-msgstr "Heredado"
+msgstr "heredado"
 
 #: pcbnew/zones.h:63
-#, fuzzy
 msgid "none"
-msgstr "<ninguno>"
+msgstr "ninguno"
 
 #: pcbnew/zones.h:64
-#, fuzzy
 msgid "thermal reliefs"
 msgstr "Alivios térmicos"
 
 #: pcbnew/zones.h:65
-#, fuzzy
 msgid "solid"
-msgstr "Sólida"
+msgstr "sólido"
 
 #: pcbnew/zones.h:66
-#, fuzzy
 msgid "thermal reliefs for PTH"
-msgstr "Alivios térmicos"
+msgstr "Alivios térmicos para PTH"
 
 #: plugins/3d/vrml/vrml.cpp:228
 msgid "[INFO] load failed: input line too long\n"
