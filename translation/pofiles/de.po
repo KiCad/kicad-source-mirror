@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:52-0700\n"
-"PO-Revision-Date: 2022-03-27 22:10+0000\n"
+"PO-Revision-Date: 2022-03-28 17:50+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -20547,7 +20547,7 @@ msgstr "Physikalische Parameter"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:297
 msgid "Analyze"
-msgstr "Analysiere"
+msgstr "Analysieren"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:300
 msgid "Synthesize"
