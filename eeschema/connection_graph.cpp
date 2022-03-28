@@ -761,7 +761,6 @@ void CONNECTION_GRAPH::buildItemSubGraphs()
                             return ( unique && conn && ( conn->SubgraphCode() == 0 ) );
                         };
 
-
                 std::copy_if( item->ConnectedItems( sheet ).begin(),
                               item->ConnectedItems( sheet ).end(),
                               std::back_inserter( memberlist ), get_items );
@@ -780,10 +779,16 @@ void CONNECTION_GRAPH::buildItemSubGraphs()
                         connected_conn->SetSubgraphCode( subgraph->m_code );
                         m_item_to_subgraph_map[connected_item] = subgraph;
                         subgraph->AddItem( connected_item );
-                        SCH_ITEM_SET citemset = connected_item->ConnectedItems( sheet );
+                        SCH_ITEM_SET& citemset = connected_item->ConnectedItems( sheet );
 
-                        std::copy_if( citemset.begin(), citemset.end(),
-                                      std::back_inserter( memberlist ), get_items );
+                        for( SCH_ITEM* citem : citemset )
+                        {
+                            if( citem->HasFlag( CANDIDATE ) )
+                                continue;
+
+                            if( get_items( citem ) )
+                                memberlist.push_back( citem );
+                        }
                     }
                 }
 
@@ -1358,7 +1363,12 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             m_bus_alias_cache[ alias->GetName() ] = alias;
     }
 
+    PROF_TIMER sub_graph( "buildItemSubGraphs" );
     buildItemSubGraphs();
+
+    if( wxLog::IsAllowedTraceMask( ConnProfileMask ) )
+        sub_graph.Show();
+
 
     /**
      * TODO(JE): Net codes are non-deterministic.  Fortunately, they are also not really used for
@@ -1371,7 +1381,11 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     generateInvisiblePinSubGraphs();
 
+    PROF_TIMER proc_sub_graph( "ProcessSubGraphs" );
     processSubGraphs();
+
+    if( wxLog::IsAllowedTraceMask( ConnProfileMask ) )
+        proc_sub_graph.Show();
 
     // Absorbed subgraphs should no longer be considered
     alg::delete_if( m_driver_subgraphs, [&]( const CONNECTION_SUBGRAPH* candidate ) -> bool
