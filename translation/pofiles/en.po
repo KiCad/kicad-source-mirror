@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-22 11:35-0700\n"
+"POT-Creation-Date: 2022-03-28 11:12-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -3301,6 +3301,9 @@ msgstr "Selection highlight"
 msgid "Drawing sheet"
 msgstr "Drawing sheet"
 
+msgid "Page limits"
+msgstr "Page limits"
+
 msgid "Footprints front"
 msgstr "Footprints front"
 
@@ -6119,6 +6122,15 @@ msgstr "Diamond"
 msgid "Formatting"
 msgstr "Formatting"
 
+msgid "ALL"
+msgstr "ALL"
+
+msgid "Standard"
+msgstr "Standard"
+
+msgid "Alternate"
+msgstr "Alternate"
+
 msgid "Count"
 msgstr "Count"
 
@@ -6137,17 +6149,14 @@ msgstr "Number Text Size"
 msgid "Name Text Size"
 msgstr "Name Text Size"
 
-msgid "ALL"
-msgstr "ALL"
+msgid "De Morgan"
+msgstr "De Morgan"
 
 msgid "Read Only"
 msgstr "Read Only"
 
 msgid "Save changes?"
 msgstr "Save changes?"
-
-msgid "Group by name"
-msgstr "Group by name"
 
 msgid "Pin numbers:"
 msgstr "Pin numbers:"
@@ -6160,6 +6169,15 @@ msgstr "Pin count:"
 
 msgid "Duplicate pins:"
 msgstr "Duplicate pins:"
+
+msgid "Group by name"
+msgstr "Group by name"
+
+msgid "Group Selected"
+msgstr "Group Selected"
+
+msgid "Filter by unit:"
+msgstr "Filter by unit:"
 
 msgid "Pin Table"
 msgstr "Pin Table"
@@ -6553,41 +6571,24 @@ msgstr "Script Generator Properties"
 msgid "Alternate Pin Name"
 msgstr "Alternate Pin Name"
 
-msgid "Synchronized pins edit mode, and this pin is new"
-msgstr "Synchronized pins edit mode, and this pin is new"
-
-msgid ""
-"Similar pins will be automatically added to other units, if this pin is not "
-"common to all units"
-msgstr ""
-"Similar pins will be automatically added to other units, if this pin is not "
-"common to all units"
-
-msgid "Synchronized pins edit mode"
-msgstr "Synchronized pins edit mode"
-
-msgid ""
-"Similar pins at the same location will be edited. Pin number of other pins "
-"will be not modified"
-msgstr ""
-"Similar pins at the same location will be edited. Pin number of other pins "
-"will be not modified"
-
 msgid "Alternate pin assignments are not available for De Morgan symbols."
 msgstr "Alternate pin assignments are not available for De Morgan symbols."
 
-msgid "This symbol only has one unit. This control has no effect."
-msgstr "This symbol only has one unit. This control has no effect."
+msgid "Exit sync pins mode"
+msgstr "Exit sync pins mode"
 
 msgid ""
-"Synchronized pin edit mode is enabled.\n"
-"Similar pins will be edited, regardless this option."
+"Synchronized pins mode is enabled.\n"
+"Similar pins will be edited regardless of this option."
 msgstr ""
-"Synchronized pin edit mode is enabled.\n"
-"Similar pins will be edited, regardless this option."
+"Synchronized pins mode is enabled.\n"
+"Similar pins will be edited regardless of this option."
 
 msgid "If checked, this pin will exist in all units."
 msgstr "If checked, this pin will exist in all units."
+
+msgid "This symbol only has one unit. This control has no effect."
+msgstr "This symbol only has one unit. This control has no effect."
 
 msgid "Alternate pin definitions must have a name."
 msgstr "Alternate pin definitions must have a name."
@@ -6602,8 +6603,14 @@ msgstr ""
 "difficult to connect to in the schematic.\n"
 "Do you want to continue?"
 
-msgid "info"
-msgstr "info"
+msgid "Synchronized Pins Mode."
+msgstr "Synchronized Pins Mode."
+
+msgid "Synchronized Pins Mode.  New pin will be added to all units."
+msgstr "Synchronized Pins Mode.  New pin will be added to all units."
+
+msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
+msgstr "Synchronized Pins Mode.  Matching pins in other units will be updated."
 
 msgid "Pin &name:"
 msgstr "Pin &name:"
@@ -9194,6 +9201,9 @@ msgstr "Choose Symbol (%d items loaded)"
 msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr "No alternate body style found for symbol '%s' in library '%s'."
 
+msgid "none"
+msgstr "none"
+
 msgid "Free"
 msgstr "Free"
 
@@ -11289,15 +11299,15 @@ msgstr "Export Symbol as SVG…"
 msgid "Create SVG file from the current symbol"
 msgstr "Create SVG file from the current symbol"
 
-msgid "Synchronized Pins Edit Mode"
-msgstr "Synchronized Pins Edit Mode"
+msgid "Synchronized Pins Mode"
+msgstr "Synchronized Pins Mode"
 
 msgid ""
-"Synchronized Pins Edit Mode\n"
+"Synchronized Pins Mode\n"
 "When enabled propagates all changes (except pin numbers) to other units.\n"
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
-"Synchronized Pins Edit Mode\n"
+"Synchronized Pins Mode\n"
 "When enabled propagates all changes (except pin numbers) to other units.\n"
 "Enabled by default for multiunit parts with interchangeable units."
 
@@ -12896,6 +12906,9 @@ msgstr "Show the (x,y) grid dots"
 
 msgid "Show drawing sheet border and title block"
 msgstr "Show drawing sheet border and title block"
+
+msgid "Show drawing sheet page limits"
+msgstr "Show drawing sheet page limits"
 
 msgid "PCB Background"
 msgstr "PCB Background"
@@ -27453,9 +27466,6 @@ msgstr "Continue without Refill"
 msgid "inherited"
 msgstr "inherited"
 
-msgid "none"
-msgstr "none"
-
 msgid "thermal reliefs"
 msgstr "thermal reliefs"
 
@@ -27566,6 +27576,48 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Synchronized pins edit mode, and this pin is new"
+#~ msgstr "Synchronized pins edit mode, and this pin is new"
+
+#~ msgid ""
+#~ "Similar pins will be automatically added to other units, if this pin is "
+#~ "not common to all units"
+#~ msgstr ""
+#~ "Similar pins will be automatically added to other units, if this pin is "
+#~ "not common to all units"
+
+#~ msgid "Synchronized pins edit mode"
+#~ msgstr "Synchronized pins edit mode"
+
+#~ msgid ""
+#~ "Similar pins at the same location will be edited. Pin number of other "
+#~ "pins will be not modified"
+#~ msgstr ""
+#~ "Similar pins at the same location will be edited. Pin number of other "
+#~ "pins will be not modified"
+
+#~ msgid ""
+#~ "Synchronized pin edit mode is enabled.\n"
+#~ "Similar pins will be edited, regardless this option."
+#~ msgstr ""
+#~ "Synchronized pin edit mode is enabled.\n"
+#~ "Similar pins will be edited, regardless this option."
+
+#~ msgid "info"
+#~ msgstr "info"
+
+#~ msgid "Synchronized Pins Edit Mode"
+#~ msgstr "Synchronized Pins Edit Mode"
+
+#~ msgid ""
+#~ "Synchronized Pins Edit Mode\n"
+#~ "When enabled propagates all changes (except pin numbers) to other units.\n"
+#~ "Enabled by default for multiunit parts with interchangeable units."
+#~ msgstr ""
+#~ "Synchronized Pins Edit Mode\n"
+#~ "When enabled propagates all changes (except pin numbers) to other units.\n"
+#~ "Enabled by default for multiunit parts with interchangeable units."
 
 #~ msgid ""
 #~ "There are library names in the loaded schematic that are missing from the "
@@ -39381,9 +39433,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Tight"
 #~ msgstr "Tight"
-
-#~ msgid "Standard"
-#~ msgstr "Standard"
 
 #~ msgid "Loose"
 #~ msgstr "Loose"

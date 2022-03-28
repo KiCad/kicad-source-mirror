@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-22 11:35-0700\n"
+"POT-Creation-Date: 2022-03-28 11:12-0700\n"
 "PO-Revision-Date: 2022-03-08 00:49+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
@@ -44,21 +44,21 @@ msgstr ""
 msgid "All Files"
 msgstr "Kaikki tiedostot"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:301
+#: 3d-viewer/3d_canvas/board_adapter.cpp:302
 #, fuzzy
 msgid "Build board outline"
 msgstr "Rakenna piirilevyn ääriviivat"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:506
+#: 3d-viewer/3d_canvas/board_adapter.cpp:507
 msgid "Create layers"
 msgstr "Luo tasoja"
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:655
+#: 3d-viewer/3d_canvas/board_adapter.cpp:656
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:101
 msgid "No footprint loaded."
 msgstr "Ei jalanjälkeä ladattu."
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:671
+#: 3d-viewer/3d_canvas/board_adapter.cpp:672
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
@@ -66,7 +66,7 @@ msgstr ""
 "Jalanjäljen ääriviivat ovat epämuodostuneet. Suorita Footprint Checker "
 "tehdäksesi täydellisen analyysin."
 
-#: 3d-viewer/3d_canvas/board_adapter.cpp:680
+#: 3d-viewer/3d_canvas/board_adapter.cpp:681
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
 "Piirilevyn ääriviiva puuttuu tai on epämuodostunut. Suorita DRC täydellistä "
@@ -167,7 +167,7 @@ msgstr "Latausaika %.3f s"
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:427
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:265
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:276
-#: eeschema/symbol_library.cpp:485 pcbnew/plugins/eagle/eagle_plugin.cpp:363
+#: eeschema/symbol_library.cpp:486 pcbnew/plugins/eagle/eagle_plugin.cpp:363
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2271
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:441
@@ -212,7 +212,7 @@ msgstr "Vie nykyinen näkymä JPEG-muodossa ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61 common/eda_base_frame.cpp:1045
 #: common/hotkey_store.cpp:76 common/tool/actions.cpp:572
-#: pcbnew/footprint_viewer_frame.cpp:954 pcbnew/pcb_base_frame.cpp:637
+#: pcbnew/footprint_viewer_frame.cpp:954 pcbnew/pcb_base_frame.cpp:647
 msgid "3D Viewer"
 msgstr "3D-katselin"
 
@@ -1423,7 +1423,7 @@ msgstr "Kysymys"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1280
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1293
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1315
-#: eeschema/dialogs/dialog_sim_settings.cpp:281
+#: eeschema/dialogs/dialog_sim_settings.cpp:282
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:146
 #: eeschema/files-io.cpp:432 eeschema/sheet.cpp:571
 #: eeschema/symbol_editor/symbol_editor.cpp:580
@@ -1431,7 +1431,7 @@ msgstr "Kysymys"
 #: eeschema/symbol_editor/symbol_editor.cpp:1181
 #: pcbnew/dialogs/dialog_export_vrml.cpp:181
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:337 pcbnew/pcb_marker.cpp:144
-#: pcbnew/plugins/kicad/pcb_parser.cpp:932
+#: pcbnew/plugins/kicad/pcb_parser.cpp:936
 msgid "Warning"
 msgstr "Varoitus"
 
@@ -1489,7 +1489,7 @@ msgstr "Palauta"
 #: eeschema/dialogs/dialog_erc.cpp:355
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:168
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:66
-#: pcbnew/dialogs/dialog_drc.cpp:270 pcbnew/plugins/kicad/pcb_parser.cpp:935
+#: pcbnew/dialogs/dialog_drc.cpp:270 pcbnew/plugins/kicad/pcb_parser.cpp:939
 #: pcbnew/router/router_tool.cpp:523
 msgid "Cancel"
 msgstr "Peru"
@@ -1894,15 +1894,15 @@ msgstr "Ympäristömuuttujat"
 #: common/dialogs/dialog_configure_paths_base.cpp:39
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:80
 #: eeschema/dialogs/dialog_label_properties_base.cpp:83
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:77
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:49
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:115
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:89
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:56
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:50
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:694
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:704
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:52
 #: eeschema/dialogs/panel_sym_lib_table.cpp:299
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:43
-#: eeschema/fields_grid_table.cpp:255 eeschema/lib_pin.cpp:1057
+#: eeschema/fields_grid_table.cpp:255 eeschema/lib_pin.cpp:1059
 #: eeschema/sch_pin.cpp:212 eeschema/sch_symbol.cpp:1398
 #: eeschema/sch_symbol.cpp:1438 eeschema/symbol_editor/symbol_editor.cpp:1221
 #: eeschema/symbol_viewer_frame.cpp:364
@@ -2413,7 +2413,7 @@ msgstr "esimerkkitekstiä"
 
 #: common/dialogs/dialog_page_settings_base.cpp:45
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:213
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:126
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:112
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:299
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:340
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:136
@@ -2688,7 +2688,7 @@ msgstr "Tulostuksen esikatselu"
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:65
 #: eeschema/sim/sim_plot_frame_base.cpp:49 kicad/pcm/dialogs/dialog_pcm.cpp:129
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:72
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:115
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:111
 #: pcbnew/dialogs/dialog_board_statistics.cpp:137
 #: pcbnew/dialogs/dialog_drc.cpp:99 pcbnew/dialogs/dialog_drc.cpp:290
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:161
@@ -3733,7 +3733,7 @@ msgstr "Näytä:"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:34
 #: eeschema/dialogs/dialog_erc_base.cpp:121 eeschema/lib_item.cpp:54
-#: eeschema/sch_pin.cpp:197 pcbnew/dialogs/dialog_board_reannotate.cpp:88
+#: eeschema/sch_pin.cpp:197 pcbnew/dialogs/dialog_board_reannotate.cpp:84
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:174
 #: pcbnew/dialogs/dialog_drc_base.cpp:165
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:36
@@ -3792,7 +3792,7 @@ msgstr "Piirroslehteä '%s' ei luettu kokonaan."
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_item.cpp:318
 #: common/eda_item.cpp:320 common/eda_item.cpp:350 common/eda_item.cpp:372
-#: common/eda_text.cpp:1009 eeschema/dialogs/panel_setup_formatting_base.cpp:47
+#: common/eda_text.cpp:1013 eeschema/dialogs/panel_setup_formatting_base.cpp:47
 #: eeschema/lib_field.cpp:471 eeschema/lib_text.cpp:364 eeschema/lib_text.h:55
 #: eeschema/sch_field.cpp:690
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:40
@@ -3878,7 +3878,7 @@ msgstr "Kommentti"
 msgid "Text '%s'"
 msgstr "Teksti \"%s\""
 
-#: common/drawing_sheet/ds_draw_item.cpp:387 eeschema/lib_shape.cpp:391
+#: common/drawing_sheet/ds_draw_item.cpp:387 eeschema/lib_shape.cpp:396
 #: eeschema/sch_shape.cpp:348
 #, c-format
 msgid "Rectangle, width %s height %s"
@@ -3890,6 +3890,7 @@ msgid "Line, length %s"
 msgstr "Viiva, pituus %s"
 
 #: common/drawing_sheet/ds_draw_item.cpp:474
+#: gerbview/widgets/gerbview_layer_widget.cpp:102
 msgid "Page Limits"
 msgstr "Sivurajat"
 
@@ -4173,7 +4174,7 @@ msgstr "Uusi kirjasto"
 msgid "Screen"
 msgstr "Kuvaruutu"
 
-#: common/eda_item.cpp:315 eeschema/dialogs/dialog_symbol_fields_table.cpp:960
+#: common/eda_item.cpp:315 eeschema/dialogs/dialog_symbol_fields_table.cpp:970
 #: eeschema/sch_symbol.cpp:1426 pcbnew/build_BOM_from_board.cpp:112
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:116
 #: pcbnew/fp_text.cpp:274 pcbnew/load_select_footprint.cpp:372
@@ -4285,7 +4286,7 @@ msgstr "Globaali nimiö"
 msgid "Hierarchical Label"
 msgstr "Hierarkinen nimiö"
 
-#: common/eda_item.cpp:356 eeschema/dialogs/dialog_symbol_fields_table.cpp:686
+#: common/eda_item.cpp:356 eeschema/dialogs/dialog_symbol_fields_table.cpp:696
 #: eeschema/lib_field.cpp:468 eeschema/lib_field.h:79
 #: eeschema/sch_label.cpp:193
 msgid "Field"
@@ -4384,9 +4385,9 @@ msgid "Curve"
 msgstr "Mutka"
 
 #: common/eda_shape.cpp:592 common/eda_shape.cpp:617
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:83
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:55
-#: eeschema/dialogs/dialog_spice_model_base.cpp:1068 eeschema/lib_pin.cpp:1065
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:121
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
+#: eeschema/dialogs/dialog_spice_model_base.cpp:1068 eeschema/lib_pin.cpp:1067
 #: eeschema/sch_pin.cpp:219
 msgid "Length"
 msgstr "Pituus"
@@ -4395,7 +4396,7 @@ msgstr "Pituus"
 msgid "Points"
 msgstr "Pisteet"
 
-#: common/eda_shape.cpp:606 common/eda_text.cpp:1027
+#: common/eda_shape.cpp:606 common/eda_text.cpp:1031
 #: eeschema/sch_bitmap.cpp:207 pcbnew/dialogs/dialog_board_statistics.cpp:695
 #: pcbnew/dialogs/dialog_board_statistics.cpp:705
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
@@ -4409,7 +4410,7 @@ msgstr "Pisteet"
 msgid "Width"
 msgstr "Leveys"
 
-#: common/eda_shape.cpp:609 common/eda_text.cpp:1031
+#: common/eda_shape.cpp:609 common/eda_text.cpp:1035
 #: eeschema/sch_bitmap.cpp:208 pcbnew/dialogs/dialog_board_statistics.cpp:697
 #: pcbnew/dialogs/dialog_board_statistics.cpp:706
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
@@ -4459,7 +4460,7 @@ msgstr "Loppu Y"
 msgid "Line Width"
 msgstr "Viivan paksuus"
 
-#: common/eda_text.cpp:767 eeschema/lib_textbox.cpp:371
+#: common/eda_text.cpp:771 eeschema/lib_textbox.cpp:371
 #: eeschema/sch_label.cpp:789 eeschema/sch_text.cpp:448
 #: eeschema/sch_textbox.cpp:374 eeschema/symbol_editor/symbol_editor.cpp:1239
 #: gerbview/gerber_file_image.cpp:350 gerbview/gerber_file_image.cpp:354
@@ -4470,7 +4471,7 @@ msgstr "Viivan paksuus"
 msgid "Normal"
 msgstr "Tavallinen"
 
-#: common/eda_text.cpp:768 common/eda_text.cpp:1016
+#: common/eda_text.cpp:772 common/eda_text.cpp:1020
 #: eeschema/dialogs/dialog_field_properties_base.cpp:136
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:229
 #: eeschema/dialogs/dialog_label_properties_base.cpp:88
@@ -4495,7 +4496,7 @@ msgstr "Tavallinen"
 msgid "Italic"
 msgstr "Kursiivi"
 
-#: common/eda_text.cpp:769 common/eda_text.cpp:1019
+#: common/eda_text.cpp:773 common/eda_text.cpp:1023
 #: eeschema/dialogs/dialog_field_properties_base.cpp:131
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:207
 #: eeschema/dialogs/dialog_label_properties_base.cpp:89
@@ -4514,11 +4515,11 @@ msgstr "Kursiivi"
 msgid "Bold"
 msgstr "Lihavoitu"
 
-#: common/eda_text.cpp:770
+#: common/eda_text.cpp:774
 msgid "Bold+Italic"
 msgstr "Lihavoitu+Kursiivi"
 
-#: common/eda_text.cpp:999
+#: common/eda_text.cpp:1003
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:217
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:257
 #: eeschema/fields_grid_table.cpp:184 eeschema/fields_grid_table.cpp:469
@@ -4528,7 +4529,7 @@ msgstr "Lihavoitu+Kursiivi"
 msgid "Left"
 msgstr "Vasemmalle"
 
-#: common/eda_text.cpp:1000 common/eda_text.cpp:1004
+#: common/eda_text.cpp:1004 common/eda_text.cpp:1008
 #: common/tool/actions.cpp:326 common/widgets/mathplot.cpp:1665
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:257
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
@@ -4544,7 +4545,7 @@ msgstr "Vasemmalle"
 msgid "Center"
 msgstr "Keskiö"
 
-#: common/eda_text.cpp:1001
+#: common/eda_text.cpp:1005
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:217
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:257
 #: eeschema/fields_grid_table.cpp:186 eeschema/fields_grid_table.cpp:471
@@ -4554,7 +4555,7 @@ msgstr "Keskiö"
 msgid "Right"
 msgstr "Oikealle"
 
-#: common/eda_text.cpp:1003
+#: common/eda_text.cpp:1007
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
 #: eeschema/fields_grid_table.cpp:176 eeschema/fields_grid_table.cpp:479
 #: eeschema/fields_grid_table.cpp:589 eeschema/lib_field.cpp:491
@@ -4562,7 +4563,7 @@ msgstr "Oikealle"
 msgid "Top"
 msgstr "Ylä"
 
-#: common/eda_text.cpp:1005
+#: common/eda_text.cpp:1009
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
 #: eeschema/fields_grid_table.cpp:178 eeschema/fields_grid_table.cpp:481
 #: eeschema/fields_grid_table.cpp:593 eeschema/lib_field.cpp:493
@@ -4570,7 +4571,7 @@ msgstr "Ylä"
 msgid "Bottom"
 msgstr "Ala"
 
-#: common/eda_text.cpp:1012
+#: common/eda_text.cpp:1016
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:57
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:57
@@ -4579,14 +4580,14 @@ msgstr "Ala"
 msgid "Thickness"
 msgstr "Paksuus"
 
-#: common/eda_text.cpp:1021 pcbnew/microwave/microwave_polygon.cpp:128
+#: common/eda_text.cpp:1025 pcbnew/microwave/microwave_polygon.cpp:128
 msgid "Mirrored"
 msgstr "Peilattu"
 
-#: common/eda_text.cpp:1024
+#: common/eda_text.cpp:1028
 #: eeschema/dialogs/dialog_field_properties_base.cpp:85
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:86
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:58
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:124
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:98
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:44
 #: eeschema/lib_field.cpp:473 eeschema/sch_field.cpp:692
 #: eeschema/sch_pin.cpp:217
@@ -4595,11 +4596,11 @@ msgstr "Peilattu"
 msgid "Visible"
 msgstr "Näkyvä"
 
-#: common/eda_text.cpp:1036
+#: common/eda_text.cpp:1040
 msgid "Horizontal Justification"
 msgstr "Vaakatasaus"
 
-#: common/eda_text.cpp:1040
+#: common/eda_text.cpp:1044
 msgid "Vertical Justification"
 msgstr "Pystytasaus"
 
@@ -4861,7 +4862,7 @@ msgstr "Liitä leikepöydän solut matriisiin nykyisessä solussa"
 
 #: common/grid_tricks.cpp:284 common/tool/actions.cpp:191
 #: kicad/project_tree_pane.cpp:773 pcbnew/dialogs/panel_setup_rules.cpp:115
-#: pcbnew/plugins/kicad/pcb_parser.cpp:935 pcbnew/tools/edit_tool.cpp:2005
+#: pcbnew/plugins/kicad/pcb_parser.cpp:939 pcbnew/tools/edit_tool.cpp:2005
 msgid "Delete"
 msgstr "Poista"
 
@@ -5223,7 +5224,7 @@ msgstr "Käyttäjä.8"
 msgid "User.9"
 msgstr "Käyttäjä.9"
 
-#: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:935
+#: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:939
 msgid "Rescue"
 msgstr "Pelastaa"
 
@@ -5360,16 +5361,16 @@ msgstr "ERC-virhe"
 msgid "ERC exclusions"
 msgstr "DRC poissulkemiset"
 
-#: common/layer_id.cpp:134 common/layer_id.cpp:171
+#: common/layer_id.cpp:134 common/layer_id.cpp:172
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Anchors"
 msgstr "Kiinnepisteet"
 
-#: common/layer_id.cpp:135 common/layer_id.cpp:174
+#: common/layer_id.cpp:135 common/layer_id.cpp:176
 msgid "Helper items"
 msgstr "Helper-tuotteet"
 
-#: common/layer_id.cpp:136 common/layer_id.cpp:175 common/tool/grid_menu.cpp:64
+#: common/layer_id.cpp:136 common/layer_id.cpp:177 common/tool/grid_menu.cpp:64
 #: gerbview/widgets/gerbview_layer_widget.cpp:98
 #: pcbnew/widgets/appearance_controls.cpp:357
 msgid "Grid"
@@ -5379,12 +5380,12 @@ msgstr "Ruudukko"
 msgid "Axes"
 msgstr "Akselit"
 
-#: common/layer_id.cpp:138 common/layer_id.cpp:177
-#: gerbview/widgets/gerbview_layer_widget.cpp:102
+#: common/layer_id.cpp:138 common/layer_id.cpp:179
+#: gerbview/widgets/gerbview_layer_widget.cpp:104
 msgid "Background"
 msgstr "Tausta"
 
-#: common/layer_id.cpp:139 common/layer_id.cpp:173
+#: common/layer_id.cpp:139 common/layer_id.cpp:175
 msgid "Cursor"
 msgstr "Kohdistin"
 
@@ -5396,24 +5397,29 @@ msgstr "Korostetut kohteet"
 msgid "Hidden items"
 msgstr "Piilotetut kohteet"
 
-#: common/layer_id.cpp:142 common/layer_id.cpp:178
+#: common/layer_id.cpp:142 common/layer_id.cpp:180
 msgid "Selection highlight"
 msgstr "Valinnan kohokohta"
 
-#: common/layer_id.cpp:143 common/layer_id.cpp:172
+#: common/layer_id.cpp:143 common/layer_id.cpp:173
 msgid "Drawing sheet"
 msgstr "Piirustusarkki"
 
-#: common/layer_id.cpp:147
+#: common/layer_id.cpp:144 common/layer_id.cpp:174
+#, fuzzy
+msgid "Page limits"
+msgstr "Sivurajat"
+
+#: common/layer_id.cpp:148
 #, fuzzy
 msgid "Footprints front"
 msgstr "Jalanjäljet edessä"
 
-#: common/layer_id.cpp:148
+#: common/layer_id.cpp:149
 msgid "Footprints back"
 msgstr "Jalanjäljet takana"
 
-#: common/layer_id.cpp:149
+#: common/layer_id.cpp:150
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:64
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:100
@@ -5422,39 +5428,39 @@ msgstr "Jalanjäljet takana"
 msgid "Values"
 msgstr "Arvot"
 
-#: common/layer_id.cpp:150
+#: common/layer_id.cpp:151
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:27
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:53
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:28
 msgid "Reference designators"
 msgstr "Viitenimet"
 
-#: common/layer_id.cpp:151
+#: common/layer_id.cpp:152
 #, fuzzy
 msgid "Footprint text"
 msgstr "Jalanjälkiteksti"
 
-#: common/layer_id.cpp:152
+#: common/layer_id.cpp:153
 #, fuzzy
 msgid "Hidden text"
 msgstr "Piilotettu teksti"
 
-#: common/layer_id.cpp:153
+#: common/layer_id.cpp:154
 #, fuzzy
 msgid "SMD pads front"
 msgstr "SMD-anturat, etu"
 
-#: common/layer_id.cpp:154
+#: common/layer_id.cpp:155
 #, fuzzy
 msgid "SMD pads back"
 msgstr "SMD-anturat, taka"
 
-#: common/layer_id.cpp:155
+#: common/layer_id.cpp:156
 #, fuzzy
 msgid "Through-hole pads"
 msgstr "Läpireikäiset tyynyt"
 
-#: common/layer_id.cpp:156
+#: common/layer_id.cpp:157
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:52
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:27
@@ -5465,74 +5471,74 @@ msgstr "Läpireikäiset tyynyt"
 msgid "Tracks"
 msgstr "Reittini"
 
-#: common/layer_id.cpp:157
+#: common/layer_id.cpp:158
 msgid "Through vias"
 msgstr "Läpiviennit"
 
-#: common/layer_id.cpp:158
+#: common/layer_id.cpp:159
 #, fuzzy
 msgid "Blind/Buried vias"
 msgstr "Piiloläpivienti"
 
-#: common/layer_id.cpp:159
+#: common/layer_id.cpp:160
 msgid "Micro-vias"
 msgstr "Mikroläpiviennit"
 
-#: common/layer_id.cpp:160
+#: common/layer_id.cpp:161
 msgid "Via holes"
 msgstr "Läpivientien reiät"
 
-#: common/layer_id.cpp:161
+#: common/layer_id.cpp:162
 msgid "Via hole walls"
 msgstr "Läpivientien reikien seinämät"
 
-#: common/layer_id.cpp:162
+#: common/layer_id.cpp:163
 msgid "Plated holes"
 msgstr "Päällystetyt reiät"
 
-#: common/layer_id.cpp:163
+#: common/layer_id.cpp:164
 msgid "Plated hole walls"
 msgstr "Päällystettyjen reikien seinämät"
 
-#: common/layer_id.cpp:164
+#: common/layer_id.cpp:165
 #, fuzzy
 msgid "Non-plated holes"
 msgstr "Päällystämättömät reiät"
 
-#: common/layer_id.cpp:165 pcbnew/dialogs/panel_edit_options_base.cpp:318
+#: common/layer_id.cpp:166 pcbnew/dialogs/panel_edit_options_base.cpp:318
 #: pcbnew/widgets/appearance_controls.cpp:349
 #: pcbnew/widgets/appearance_controls.cpp:694
 #: pcbnew/widgets/appearance_controls.cpp:2367
 msgid "Ratsnest"
 msgstr "Kytkentärisukko"
 
-#: common/layer_id.cpp:166
+#: common/layer_id.cpp:167
 #, fuzzy
 msgid "No-connects"
 msgstr "Liittämättömät"
 
-#: common/layer_id.cpp:167
+#: common/layer_id.cpp:168
 msgid "DRC warnings"
 msgstr "DRC-varoitukset"
 
-#: common/layer_id.cpp:168
+#: common/layer_id.cpp:169
 msgid "DRC errors"
 msgstr "DRC-virheet"
 
-#: common/layer_id.cpp:169
+#: common/layer_id.cpp:170
 msgid "DRC exclusions"
 msgstr "DRC poissulkemiset"
 
-#: common/layer_id.cpp:170
+#: common/layer_id.cpp:171
 msgid "DRC marker shadows"
 msgstr "DRC merkkivarjot"
 
-#: common/layer_id.cpp:176
+#: common/layer_id.cpp:178
 #, fuzzy
 msgid "Grid axes"
 msgstr "Ruudukkoakselit"
 
-#: common/layer_id.cpp:179
+#: common/layer_id.cpp:181
 #, fuzzy
 msgid "Locked item shadow"
 msgstr "Lukitut kohteet"
@@ -5542,8 +5548,8 @@ msgid "Illegal character found in logical library name"
 msgstr "Looginen kirjaston nimi löytyy laitonta merkkiä"
 
 #: common/lib_tree_model.cpp:139
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:87
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:59
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:125
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
 #: eeschema/lib_item.cpp:58 eeschema/sch_pin.cpp:201
 #: eeschema/symbol_editor/symbol_editor.cpp:1234
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:67
@@ -5659,12 +5665,12 @@ msgstr ""
 "Ominaisuuslistan lopusta puuttuu nollatavu. Tuotu data saattaa olla "
 "virheellistä tai puutteellista."
 
-#: common/plugins/altium/altium_parser.cpp:323
+#: common/plugins/altium/altium_parser.cpp:313
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
 msgstr "Yksikkö '%s' ei pääty 'mil'."
 
-#: common/plugins/altium/altium_parser.cpp:331
+#: common/plugins/altium/altium_parser.cpp:321
 #, c-format
 msgid "Cannot convert '%s' to double."
 msgstr "'%s' ei voida muuntaa double:ksi."
@@ -5834,16 +5840,16 @@ msgstr "Viivan pituus ylitetty"
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "OUTPUTSTREAM_OUTPUTFORMATTER-kirjoitusvirhe"
 
-#: common/settings/color_settings.cpp:338
+#: common/settings/color_settings.cpp:348
 msgid "(Footprints)"
 msgstr "(Jalanjäljet)"
 
-#: common/settings/color_settings.cpp:390
+#: common/settings/color_settings.cpp:400
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings.cpp:78
 msgid "KiCad Default"
 msgstr "KiCad-oletus"
 
-#: common/settings/color_settings.cpp:395
+#: common/settings/color_settings.cpp:405
 msgid "KiCad Classic"
 msgstr "KiCad Classic"
 
@@ -6728,8 +6734,8 @@ msgid "<create net>"
 msgstr "<luo verkko>"
 
 #: common/widgets/net_selector.cpp:84
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:649
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:692
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:656
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:699
 msgid "Filter:"
 msgstr "Suodatin:"
 
@@ -7303,7 +7309,7 @@ msgstr "Käytettävissä olevat ympäristömuuttujat suhteellisille poluille:"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:57
 #: eeschema/dialogs/dialog_rescue_each.cpp:134
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:51
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:959
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:969
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:53
 #: eeschema/dialogs/panel_sym_lib_table.cpp:300
 #: eeschema/fields_grid_table.cpp:256 eeschema/sch_symbol.cpp:1390
@@ -9285,7 +9291,7 @@ msgstr "Kentät"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:85
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:58
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:52
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:687
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:697
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:54
 #: eeschema/fields_grid_table.cpp:257
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:54
@@ -9325,12 +9331,12 @@ msgid "Text Size"
 msgstr "Tekstin koko"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:91
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:80
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:52
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:118
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:92
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:64
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:58
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:60
-#: eeschema/fields_grid_table.cpp:263 eeschema/lib_pin.cpp:1068
+#: eeschema/fields_grid_table.cpp:263 eeschema/lib_pin.cpp:1070
 #: eeschema/sch_pin.cpp:222
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
@@ -9340,8 +9346,8 @@ msgid "Orientation"
 msgstr "Asento"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:92
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:84
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:56
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:122
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:96
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:65
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:59
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:61
@@ -9350,8 +9356,8 @@ msgid "X Position"
 msgstr "X-sijainti"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:93
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:85
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:57
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:123
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:97
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:66
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:60
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:62
@@ -9435,53 +9441,69 @@ msgstr ""
 msgid "Formatting"
 msgstr "Muotoilu"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:75
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:47
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:42
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:43
+msgid "ALL"
+msgstr ""
+
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:44
+msgid "Standard"
+msgstr "Standardi"
+
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:45
+#, fuzzy
+msgid "Alternate"
+msgstr "Vaihtoehtoinen PIN-nimi"
+
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:113
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:87
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:38
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:231
 msgid "Count"
 msgstr "Laske"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:76
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:48
-#: eeschema/dialogs/dialog_symbol_properties.cpp:145 eeschema/lib_pin.cpp:1058
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:114
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:88
+#: eeschema/dialogs/dialog_symbol_properties.cpp:145 eeschema/lib_pin.cpp:1060
 #: eeschema/sch_pin.cpp:213
 msgid "Number"
 msgstr "Numero"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:78
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:50
-#: eeschema/dialogs/dialog_pin_properties.cpp:52
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:227
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:116
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:90
+#: eeschema/dialogs/dialog_pin_properties.cpp:53
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:213
 #: eeschema/dialogs/dialog_symbol_properties.cpp:148
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:266
 msgid "Electrical Type"
 msgstr "Sähköinen tyyppi"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:79
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:51
-#: eeschema/dialogs/dialog_pin_properties.cpp:53
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:228
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:117
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:91
+#: eeschema/dialogs/dialog_pin_properties.cpp:54
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:214
 #: eeschema/dialogs/dialog_symbol_properties.cpp:149
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:267
 msgid "Graphic Style"
 msgstr "Graafinen tyyli"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:81
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:53
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:119
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:93
 msgid "Number Text Size"
 msgstr "Numero Tekstin koko"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:82
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:54
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:120
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:94
 msgid "Name Text Size"
 msgstr "Nimen tekstin koko"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:593
-msgid "ALL"
-msgstr ""
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:100
+#, fuzzy
+msgid "De Morgan"
+msgstr "DeMorgan Standard"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:633
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:768
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:55
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:94
 #: eeschema/dialogs/dialog_lib_text_properties.cpp:102
@@ -9489,22 +9511,18 @@ msgstr ""
 msgid "Read Only"
 msgstr "[Lue ainoastaan]"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:936
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1209
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1108
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1219
 msgid "Save changes?"
 msgstr "Tallenna muutokset?"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:90
-msgid "Group by name"
-msgstr "Ryhmittele nimen mukaan"
-
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:105
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:25
 msgid "Pin numbers:"
 msgstr "PIN-numerot:"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:109
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:123
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:137
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:29
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:40
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:51
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:146
 #: pcbnew/dialogs/dialog_create_array_base.cpp:74
 #: pcbnew/dialogs/dialog_create_array_base.cpp:85
@@ -9538,17 +9556,31 @@ msgstr "PIN-numerot:"
 msgid "0"
 msgstr "0"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:119
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:36
 #, fuzzy
 msgid "Pin count:"
 msgstr "verkkolukumäärä ="
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:133
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:47
 #, fuzzy
 msgid "Duplicate pins:"
 msgstr "Kaksoiskappaleet:"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:74
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:136
+msgid "Group by name"
+msgstr "Ryhmittele nimen mukaan"
+
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:139
+#, fuzzy
+msgid "Group Selected"
+msgstr "Pisterasterin valinta"
+
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:150
+#, fuzzy
+msgid "Filter by unit:"
+msgstr "Suodata tappi määrän mukaan"
+
+#: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:81
 msgid "Pin Table"
 msgstr "Flipperi"
 
@@ -9707,12 +9739,12 @@ msgid "Private to Symbol Editor"
 msgstr "Muokkaa Symbol Editorilla"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:97
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:167
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:153
 msgid "Common to all &units in symbol"
 msgstr "Yhteinen kaikille symboleissa oleville yksiköille"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:100
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:170
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:156
 #, fuzzy
 msgid "Common to all body &styles (De Morgan)"
 msgstr "Yhteinen kaikille vartaloille ja tyyleille (DeMorgan)"
@@ -9721,55 +9753,55 @@ msgstr "Yhteinen kaikille vartaloille ja tyyleille (DeMorgan)"
 msgid "Drawing Properties"
 msgstr "Piirroksen ominaisuudet"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:231
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:237
 #: eeschema/dialogs/dialog_symbol_properties.cpp:575
 msgid "References must start with a letter."
 msgstr "Viitteiden on aloitettava kirjaimella."
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:251
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:257
 #: eeschema/dialogs/dialog_sheet_properties.cpp:195
 #: eeschema/dialogs/dialog_symbol_properties.cpp:592
 msgid "Fields must have a name."
 msgstr "Kentillä on oltava nimi."
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:268
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:274
 msgid "Aliased symbol must have a parent selected"
 msgstr "Alias-symbolista on valittava vanhempi"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:280
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:286
 msgid "Delete extra units from symbol?"
 msgstr "Poistetaanko ylimääräiset yksiköt symbolista?"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:286
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:292
 #, fuzzy
 msgid "Delete alternate body style (De Morgan) from symbol?"
 msgstr ""
 "Poista vaihtoehtoinen kehon tyyli (DeMorgan) piirtää kohteita symbolista?"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:314
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:320
 #, c-format
 msgid "The name '%s' conflicts with an existing entry in the library '%s'."
 msgstr ""
 "Nimi %s on ristiriidassa olemassa olevan kirjastossa olevan merkinnän %s "
 "kanssa."
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:430
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:437
 #, c-format
 msgid "The name '%s' is already in use."
 msgstr "Nimi %s on jo käytössä."
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:514
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:521
 #: eeschema/dialogs/dialog_sheet_properties.cpp:734
 #: eeschema/dialogs/dialog_symbol_properties.cpp:904
 #, c-format
 msgid "The first %d fields are mandatory."
 msgstr "Ensimmäiset %d kentät ovat pakollisia."
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:649
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:656
 msgid "Add Footprint Filter"
 msgstr "Lisää liitoskuvasuodatin"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:692
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:699
 msgid "Edit Footprint Filter"
 msgstr "Muokkaa jalanjälkisuodatinta"
 
@@ -9890,11 +9922,11 @@ msgid "Margin between the pin name position and the symbol body."
 msgstr "Marginaali pinnin nimen ja symbolin rungon välissä."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:249
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:133
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:137
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:141
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:145
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:149
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:119
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:123
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:127
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:131
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:135
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:124
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:74
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:85
@@ -10133,66 +10165,46 @@ msgstr "Selaa generaattoreita ..."
 msgid "Script Generator Properties"
 msgstr "Komentosarjageneraattorin ominaisuudet"
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:51
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:226
+#: eeschema/dialogs/dialog_pin_properties.cpp:52
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:212
 msgid "Alternate Pin Name"
 msgstr "Vaihtoehtoinen PIN-nimi"
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:150
-#, fuzzy
-msgid "Synchronized pins edit mode, and this pin is new"
-msgstr "Synkronoitu nastojen muokkaustila"
-
-#: eeschema/dialogs/dialog_pin_properties.cpp:151
-msgid ""
-"Similar pins will be automatically added to other units, if this pin is not "
-"common to all units"
-msgstr ""
-"Vastaavat pinnit lisätään muihin yksiköihin, jos tämä pinni ei ole jaettu "
-"yksikköjen välillä"
-
-#: eeschema/dialogs/dialog_pin_properties.cpp:156
-#, fuzzy
-msgid "Synchronized pins edit mode"
-msgstr "Synkronoitu nastojen muokkaustila"
-
-#: eeschema/dialogs/dialog_pin_properties.cpp:157
-msgid ""
-"Similar pins at the same location will be edited. Pin number of other pins "
-"will be not modified"
-msgstr ""
-"Vastaavia pinnejä samassa paikassa muutetaan. Muiden pinnien numeroita ei "
-"muuteta"
-
-#: eeschema/dialogs/dialog_pin_properties.cpp:210
+#: eeschema/dialogs/dialog_pin_properties.cpp:193
 #: eeschema/dialogs/dialog_symbol_properties.cpp:340
 #, fuzzy
 msgid "Alternate pin assignments are not available for De Morgan symbols."
 msgstr ""
 "Vaihtoehtoisia nastojen määrityksiä ei ole saatavana DeMorgan-komponenteille."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:288
-msgid "This symbol only has one unit. This control has no effect."
-msgstr ""
-"Tällä symbolilla on vain yksi yksikkö. Tällä asetuksella ei ole vaikutusta."
+#: eeschema/dialogs/dialog_pin_properties.cpp:270
+#, fuzzy
+msgid "Exit sync pins mode"
+msgstr "Muokkaa lehteä"
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:290
+#: eeschema/dialogs/dialog_pin_properties.cpp:285
+#, fuzzy
 msgid ""
-"Synchronized pin edit mode is enabled.\n"
-"Similar pins will be edited, regardless this option."
+"Synchronized pins mode is enabled.\n"
+"Similar pins will be edited regardless of this option."
 msgstr ""
 "Synkronoitu pinnien muokkaustila on käytössä.\n"
 "Vastaavia pinnejä muutetaan riippumatta tästä valinnasta."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:293
+#: eeschema/dialogs/dialog_pin_properties.cpp:290
 msgid "If checked, this pin will exist in all units."
 msgstr "Jos valittu, tämä pinni esiintyy kaikissa yksiköissä."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:314
+#: eeschema/dialogs/dialog_pin_properties.cpp:294
+msgid "This symbol only has one unit. This control has no effect."
+msgstr ""
+"Tällä symbolilla on vain yksi yksikkö. Tällä asetuksella ei ole vaikutusta."
+
+#: eeschema/dialogs/dialog_pin_properties.cpp:315
 msgid "Alternate pin definitions must have a name."
 msgstr "Vaihtoehtoisilla pin-määrityksillä on oltava nimi."
 
-#: eeschema/dialogs/dialog_pin_properties.cpp:334
+#: eeschema/dialogs/dialog_pin_properties.cpp:335
 #, c-format
 msgid ""
 "This pin is not on a %d mils grid which will make it\n"
@@ -10203,69 +10215,77 @@ msgstr ""
 "vaikea liittää kaavioon.\n"
 "Haluatko jatkaa?"
 
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:32
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:36
-msgid "info"
-msgstr "info"
+#: eeschema/dialogs/dialog_pin_properties.cpp:430
+#, fuzzy
+msgid "Synchronized Pins Mode."
+msgstr "Synkronoitu nastojen muokkaustila"
 
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:57
+#: eeschema/dialogs/dialog_pin_properties.cpp:432
+msgid "Synchronized Pins Mode.  New pin will be added to all units."
+msgstr ""
+
+#: eeschema/dialogs/dialog_pin_properties.cpp:434
+msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
+msgstr ""
+
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:43
 msgid "Pin &name:"
 msgstr "Nastan &nimi:"
 
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:64
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:50
 msgid "Pin num&ber:"
 msgstr "Pin koodi:"
 
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:66
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:52
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
 msgstr "Nastan numero: Yhdestä neljään ASCII-kirjaimia ja/tai numeroita"
 
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:73
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:59
 msgid "&X position:"
 msgstr "& X-sijainti:"
 
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:82
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:68
 msgid "&Y position:"
 msgstr "& Y-sijainti:"
 
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:89
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:75
 msgid "&Pin length:"
 msgstr "& Tapin pituus:"
 
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:96
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:82
 msgid "N&ame text size:"
 msgstr "Nimitekstin korkeus:"
 
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:103
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:89
 msgid "Number text si&ze:"
 msgstr "Numeroteksti si & ze:"
 
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:110
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:96
 msgid "Electrical type:"
 msgstr "Sähkötyyppi:"
 
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:112
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:98
 msgid "Used by the ERC."
 msgstr "ERC:n käyttämä."
 
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:119
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:105
 msgid "Graphic style:"
 msgstr "Graafinen tyyli:"
 
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:176
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:162
 msgid "&Visible"
 msgstr "&Näkyvä"
 
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:183
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:169
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:192
 msgid "Preview:"
 msgstr "Esikatselu:"
 
-#: eeschema/dialogs/dialog_pin_properties_base.cpp:201
+#: eeschema/dialogs/dialog_pin_properties_base.cpp:187
 msgid "Alternate pin definitions"
 msgstr "Vaihtoehtoiset pin-määritykset"
 
-#: eeschema/dialogs/dialog_pin_properties_base.h:107
+#: eeschema/dialogs/dialog_pin_properties_base.h:104
 msgid "Pin Properties"
 msgstr "Nastan ominaisuudet"
 
@@ -10608,7 +10628,7 @@ msgid "Action Taken"
 msgstr "Toimet"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:130
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:958
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:968
 #: eeschema/sch_symbol.cpp:1388 eeschema/sch_symbol.cpp:1435
 #: pcbnew/footprint.cpp:2571 pcbnew/fp_text.cpp:266
 msgid "Reference"
@@ -10990,8 +11010,8 @@ msgid "Hierarchical path: "
 msgstr "Hierarkinen polku: "
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:115
-#: eeschema/lib_field.cpp:475 eeschema/lib_pin.cpp:1060
-#: eeschema/lib_pin.cpp:1062 eeschema/lib_text.cpp:366
+#: eeschema/lib_field.cpp:475 eeschema/lib_pin.cpp:1062
+#: eeschema/lib_pin.cpp:1064 eeschema/lib_text.cpp:366
 #: eeschema/lib_textbox.cpp:373 eeschema/sch_field.cpp:694
 #: eeschema/sch_label.cpp:791 eeschema/sch_pin.cpp:215
 #: eeschema/sch_text.cpp:450 eeschema/sch_textbox.cpp:376
@@ -11022,20 +11042,20 @@ msgstr "Arkin ominaisuudet"
 msgid "Add signal by name:"
 msgstr "Lisää signaali nimen mukaan:"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:113
+#: eeschema/dialogs/dialog_sim_settings.cpp:114
 #, fuzzy
 msgid "You need to select DC source"
 msgstr "Sinun on valittava DC-lähde (pyyhkäise 1)"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:217
+#: eeschema/dialogs/dialog_sim_settings.cpp:218
 msgid "Source 1 and Source 2 must be different"
 msgstr "Lähteen 1 ja lähteen 2 on oltava erilaisia"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:281
+#: eeschema/dialogs/dialog_sim_settings.cpp:282
 msgid "No valid simulation is configured."
 msgstr "Simulaatiota ei ole määritetty."
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:284
+#: eeschema/dialogs/dialog_sim_settings.cpp:285
 msgid ""
 "A valid simulation can be configured by selecting a simulation tab, setting "
 "the simulation parameters and clicking the OK button with the tab selected."
@@ -11043,17 +11063,17 @@ msgstr ""
 "Voit määritellä simulaation valitsemalla simulaatiovälilehden, asettamalla "
 "simulaation parametrit ja klikkaamalla OK, kun välilehti on valittuna."
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:288
+#: eeschema/dialogs/dialog_sim_settings.cpp:289
 #, fuzzy
 msgid "Exit Without Valid Simulation"
 msgstr "Käynnistä &simulaattori"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:289
+#: eeschema/dialogs/dialog_sim_settings.cpp:290
 #, fuzzy
 msgid "Configure Valid Simulation"
 msgstr "Sulje simulointi"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:587
+#: eeschema/dialogs/dialog_sim_settings.cpp:588
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:146
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:155
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:166
@@ -11063,12 +11083,12 @@ msgstr "Sulje simulointi"
 msgid "Volts"
 msgstr "Volttia"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:588
+#: eeschema/dialogs/dialog_sim_settings.cpp:589
 #, fuzzy
 msgid "Amperes"
 msgstr "hyppylanka"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:589
+#: eeschema/dialogs/dialog_sim_settings.cpp:590
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:66
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:77
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:115
@@ -11961,37 +11981,37 @@ msgid "Show datasheet in browser"
 msgstr "Näytä tietolomake selaimessa"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:129
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1042
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1052
 msgid "The Reference column cannot be hidden."
 msgstr "Viitesaraketta ei voi piilottaa."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:224
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:234
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:244
 msgid "Qty"
 msgstr "Määrä"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:689
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:699
 msgid "Group By"
 msgstr "Group by"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:961
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:971
 #: eeschema/symbol_editor/symbol_editor.cpp:1251
 msgid "Datasheet"
 msgstr "Datalehti"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:983
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:993
 msgid "New field name:"
 msgstr "Uusi kentän nimi:"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:983
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:993
 msgid "Add Field"
 msgstr "Lisää kenttä"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:992
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1002
 msgid "Field must have a name."
 msgstr "Kentällä on oltava nimi."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1000
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1010
 #: eeschema/dialogs/dialog_symbol_properties.cpp:832
 #, fuzzy, c-format
 msgid "Field name '%s' already in use."
@@ -12395,11 +12415,11 @@ msgid "(symbol editor only)"
 msgstr "(vain symbolieditori)"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:244
-#: pcbnew/dialogs/panel_pcbnew_color_settings.cpp:481
+#: pcbnew/dialogs/panel_pcbnew_color_settings.cpp:482
 msgid "Color Preview"
 msgstr "Värien esikatselu"
 
-#: eeschema/dialogs/panel_eeschema_color_settings.cpp:429
+#: eeschema/dialogs/panel_eeschema_color_settings.cpp:430
 msgid "/path/to/sheet"
 msgstr "/ polku / sivulle"
 
@@ -12954,7 +12974,7 @@ msgstr "Kirjaston lempinimen virhe"
 msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "Useat kirjastot eivät voi jakaa samaa lempinimeä ('%s')."
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:459 eeschema/symbol_library.cpp:528
+#: eeschema/dialogs/panel_sym_lib_table.cpp:459 eeschema/symbol_library.cpp:529
 #, c-format
 msgid "Symbol library '%s' failed to load."
 msgstr "Symbolikirjaston \"%s\" lataaminen epäonnistui."
@@ -13726,7 +13746,7 @@ msgstr "Juuri"
 msgid "(page %s)"
 msgstr "(sivu %s)"
 
-#: eeschema/lib_field.cpp:473 eeschema/lib_pin.cpp:1062
+#: eeschema/lib_field.cpp:473 eeschema/lib_pin.cpp:1064
 #: eeschema/sch_field.cpp:692 eeschema/sch_pin.cpp:217
 #: gerbview/gerber_draw_item.cpp:713 gerbview/gerber_draw_item.cpp:714
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
@@ -13739,7 +13759,7 @@ msgstr "(sivu %s)"
 msgid "Yes"
 msgstr "Kyllä"
 
-#: eeschema/lib_field.cpp:473 eeschema/lib_pin.cpp:1062
+#: eeschema/lib_field.cpp:473 eeschema/lib_pin.cpp:1064
 #: eeschema/sch_field.cpp:692 eeschema/sch_pin.cpp:217
 #: gerbview/gerber_draw_item.cpp:713 gerbview/gerber_draw_item.cpp:714
 #: pcbnew/fp_text.cpp:286 pcbnew/fp_text.cpp:291 pcbnew/fp_textbox.cpp:212
@@ -13761,7 +13781,7 @@ msgstr "Vaakatasaus"
 msgid "V Justification"
 msgstr "Pystytasaus"
 
-#: eeschema/lib_item.cpp:51 eeschema/lib_pin.cpp:1059
+#: eeschema/lib_item.cpp:51 eeschema/lib_pin.cpp:1061
 #: eeschema/sch_label.cpp:787 eeschema/sch_pin.cpp:194 eeschema/sch_pin.cpp:214
 #: eeschema/symbol_editor/symbol_editor.cpp:1248
 #: gerbview/gerber_draw_item.cpp:652
@@ -13791,40 +13811,40 @@ msgstr "Muunnettu"
 msgid "Private"
 msgstr "Luo tasoja"
 
-#: eeschema/lib_pin.cpp:1073 pcbnew/dialogs/dialog_pad_properties_base.cpp:1467
+#: eeschema/lib_pin.cpp:1075 pcbnew/dialogs/dialog_pad_properties_base.cpp:1467
 msgid "Pos X"
 msgstr "Asema X"
 
-#: eeschema/lib_pin.cpp:1074 pcbnew/dialogs/dialog_pad_properties_base.cpp:1468
+#: eeschema/lib_pin.cpp:1076 pcbnew/dialogs/dialog_pad_properties_base.cpp:1468
 msgid "Pos Y"
 msgstr "Asento Y"
 
-#: eeschema/lib_pin.cpp:1223
+#: eeschema/lib_pin.cpp:1225
 #, c-format
 msgid "Pin %s [%s, %s, %s]"
 msgstr "Tappi %s [%s, %s, %s]"
 
-#: eeschema/lib_pin.cpp:1231
+#: eeschema/lib_pin.cpp:1233
 #, c-format
 msgid "Pin %s [%s, %s]"
 msgstr "Tappi %s [%s, %s]"
 
-#: eeschema/lib_shape.cpp:383 eeschema/sch_shape.cpp:340
+#: eeschema/lib_shape.cpp:388 eeschema/sch_shape.cpp:340
 #, c-format
 msgid "Arc, radius %s"
 msgstr "Kaari, säde %s"
 
-#: eeschema/lib_shape.cpp:387 eeschema/sch_shape.cpp:344
+#: eeschema/lib_shape.cpp:392 eeschema/sch_shape.cpp:344
 #, c-format
 msgid "Circle, radius %s"
 msgstr "Ympyrä, säde %s"
 
-#: eeschema/lib_shape.cpp:396 eeschema/sch_shape.cpp:353
+#: eeschema/lib_shape.cpp:401 eeschema/sch_shape.cpp:353
 #, c-format
 msgid "Polyline, %d points"
 msgstr "Polyline, %d pistettä"
 
-#: eeschema/lib_shape.cpp:400 eeschema/sch_shape.cpp:357
+#: eeschema/lib_shape.cpp:405 eeschema/sch_shape.cpp:357
 #, c-format
 msgid "Bezier Curve, %d points"
 msgstr "Bezier-käyrä, %d pistettä"
@@ -13965,7 +13985,7 @@ msgstr "&Asetukset"
 msgid "Could not find library file %s."
 msgstr "Kirjastotiedostoa %s ei löydy."
 
-#: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:360
+#: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:361
 msgid ""
 "Multiple symbols have the same reference designator.\n"
 "Annotation must be corrected before simulating."
@@ -14005,6 +14025,10 @@ msgstr "Valitse symboli (%d kohdetta ladattu)"
 msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr ""
 "Kirjaimessa \"%s\" ei löydy vaihtoehtoista rungon tyyliä symbolille \"%s\"."
+
+#: eeschema/pin_numbers.cpp:126 pcbnew/zones.h:63
+msgid "none"
+msgstr "ei mitään"
 
 #: eeschema/pin_type.cpp:56
 msgid "Free"
@@ -14182,7 +14206,7 @@ msgstr "Kytkentäkaavioeditori"
 msgid "New schematic file is unsaved"
 msgstr "Uusi kaaviokuva on tallentamaton"
 
-#: eeschema/sch_edit_frame.cpp:731 eeschema/sim/sim_plot_frame.cpp:1634
+#: eeschema/sch_edit_frame.cpp:731 eeschema/sim/sim_plot_frame.cpp:1615
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:517
 #: eeschema/symbol_editor/symbol_editor.cpp:1154
 #: pagelayout_editor/pl_editor_frame.cpp:374
@@ -14762,7 +14786,7 @@ msgstr "'%s' ei löydy tuodusta kirjastosta."
 msgid "Library file '%s' not found."
 msgstr "Kirjastotiedostoa \"%s\" ei löydy."
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_lib_plugin_cache.cpp:498
+#: eeschema/sch_plugins/kicad/sch_sexpr_lib_plugin_cache.cpp:502
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:1795
 #, c-format
 msgid "library %s does not contain a symbol named %s"
@@ -14831,18 +14855,18 @@ msgid "Invalid pin names definition"
 msgstr "Levyn ulkoreunan määrittely"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:739
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1844
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1871
 #, fuzzy
 msgid "Invalid property name"
 msgstr "Virheellinen signaalin nimi"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:747
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1852
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1879
 msgid "Empty property name"
 msgstr "Tyhjä piirteen nimi"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:756
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1860
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1887
 #, fuzzy
 msgid "Invalid property value"
 msgstr "Virheellinen Spice-arvosarja"
@@ -14863,47 +14887,47 @@ msgid "Invalid alternate pin name"
 msgstr "Vaihtoehtoinen PIN-nimi"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1575
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1630
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1635
 #, fuzzy
 msgid "Invalid text string"
 msgstr "Virheellinen Spice-arvosarja"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1692
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1719
 #, fuzzy
 msgid "Invalid page type"
 msgstr "Läpiviennin minimihalkaisija"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1819
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1846
 msgid "Invalid title block comment number"
 msgstr "Virheellinen otsikkolohkon kommenttinumero"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1916
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1943
 #, fuzzy
 msgid "Invalid sheet pin name"
 msgstr "Virheellinen signaalin nimi"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1924
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1951
 #, fuzzy
 msgid "Empty sheet pin name"
 msgstr "Tuo lehtinastoja"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2389
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2445
 #, fuzzy
 msgid "Invalid symbol library name"
 msgstr "Virheellinen symbolikirjaston tunniste"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2409
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2465
 #, fuzzy
 msgid "Invalid symbol library ID"
 msgstr "Virheellinen symbolikirjaston tunniste"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1342
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1348
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2098
 #, fuzzy, c-format
 msgid "Symbol library '%s' already exists."
 msgstr "Kirjasto %s on jo olemassa."
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1368
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1374
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2124
 #, c-format
 msgid "Symbol library '%s' cannot be deleted."
@@ -15618,58 +15642,58 @@ msgstr "Simulaatioparametrit ja -asetukset"
 msgid "Spice Simulator"
 msgstr "Spice Simulator"
 
-#: eeschema/sim/sim_plot_frame.cpp:475 eeschema/sim/sim_plot_frame.cpp:1478
+#: eeschema/sim/sim_plot_frame.cpp:474 eeschema/sim/sim_plot_frame.cpp:1459
 msgid "There were errors during netlist export, aborted."
 msgstr "Netlist-viennissä oli virheitä, keskeytetty."
 
-#: eeschema/sim/sim_plot_frame.cpp:489 eeschema/sim/sim_plot_frame.cpp:1831
+#: eeschema/sim/sim_plot_frame.cpp:488 eeschema/sim/sim_plot_frame.cpp:1812
 #, fuzzy
 msgid "Another simulation is already running."
 msgstr "GerbView on jo käynnissä, jatketaanko?"
 
-#: eeschema/sim/sim_plot_frame.cpp:522
+#: eeschema/sim/sim_plot_frame.cpp:515
 #, c-format
 msgid "Plot%u - "
 msgstr "Juoni %u - "
 
-#: eeschema/sim/sim_plot_frame.cpp:644
+#: eeschema/sim/sim_plot_frame.cpp:637
 msgid "Error: simulation type not defined!\n"
 msgstr "Virhe: simulointityyppiä ei ole määritelty!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:650
+#: eeschema/sim/sim_plot_frame.cpp:643
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "Virhe: simulointityyppi ei tue piirtämistä!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:841 eeschema/sim/sim_plot_frame.cpp:1673
+#: eeschema/sim/sim_plot_frame.cpp:825 eeschema/sim/sim_plot_frame.cpp:1654
 msgid "Signal"
 msgstr "Signaali"
 
-#: eeschema/sim/sim_plot_frame.cpp:1119
+#: eeschema/sim/sim_plot_frame.cpp:1103
 msgid "noname"
 msgstr "ei nimeä"
 
-#: eeschema/sim/sim_plot_frame.cpp:1168
+#: eeschema/sim/sim_plot_frame.cpp:1152
 msgid "Open simulation workbook"
 msgstr "Avaa simulointityökirja"
 
-#: eeschema/sim/sim_plot_frame.cpp:1197
+#: eeschema/sim/sim_plot_frame.cpp:1181
 #, fuzzy
 msgid "Save Simulation Workbook As"
 msgstr "Tallenna simulointityökirja"
 
-#: eeschema/sim/sim_plot_frame.cpp:1213
+#: eeschema/sim/sim_plot_frame.cpp:1197
 msgid "Save Plot as Image"
 msgstr "Tallenna tontti kuvana"
 
-#: eeschema/sim/sim_plot_frame.cpp:1230
+#: eeschema/sim/sim_plot_frame.cpp:1214
 msgid "Save Plot Data"
 msgstr "Tallenna tonttitiedot"
 
-#: eeschema/sim/sim_plot_frame.cpp:1526
+#: eeschema/sim/sim_plot_frame.cpp:1507
 msgid "You need to run plot-providing simulation first."
 msgstr "Sinun on ensin suoritettava juoni-antava simulointi."
 
-#: eeschema/sim/sim_plot_frame.cpp:1771
+#: eeschema/sim/sim_plot_frame.cpp:1752
 msgid ""
 "\n"
 "\n"
@@ -15681,19 +15705,19 @@ msgstr ""
 "Simulaation tulokset:\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:1850
+#: eeschema/sim/sim_plot_frame.cpp:1831
 msgid "Hide Signal"
 msgstr "Piilota signaali"
 
-#: eeschema/sim/sim_plot_frame.cpp:1850
+#: eeschema/sim/sim_plot_frame.cpp:1831
 msgid "Erase the signal from plot screen"
 msgstr "Poista signaali kuvaajanäytöltä"
 
-#: eeschema/sim/sim_plot_frame.cpp:1856
+#: eeschema/sim/sim_plot_frame.cpp:1837
 msgid "Hide Cursor"
 msgstr "Piilota kohdistin"
 
-#: eeschema/sim/sim_plot_frame.cpp:1858
+#: eeschema/sim/sim_plot_frame.cpp:1839
 msgid "Show Cursor"
 msgstr "Näytä kohdistin"
 
@@ -15897,7 +15921,7 @@ msgstr "Symbolieditori"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:135
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:942
-#: eeschema/symbol_library.cpp:467 eeschema/symbol_tree_model_adapter.cpp:66
+#: eeschema/symbol_library.cpp:468 eeschema/symbol_tree_model_adapter.cpp:66
 msgid "Loading Symbol Libraries"
 msgstr "Ladataan symbolikirjastoja"
 
@@ -16277,8 +16301,8 @@ msgid "Parent"
 msgstr "Vanhempi"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1237
-#: pcbnew/plugins/kicad/pcb_parser.cpp:5483
-#: pcbnew/plugins/kicad/pcb_parser.cpp:5523
+#: pcbnew/plugins/kicad/pcb_parser.cpp:5487
+#: pcbnew/plugins/kicad/pcb_parser.cpp:5527
 msgid "Convert"
 msgstr "Muunna"
 
@@ -16367,7 +16391,7 @@ msgstr "Virhe ladattaessa symbolia %s kirjastosta %s."
 msgid "Cannot enumerate library '%s'."
 msgstr "Ei pystytä listaamaan kirjastoa '%s'."
 
-#: eeschema/symbol_editor/symbol_library_manager.cpp:1040
+#: eeschema/symbol_editor/symbol_library_manager.cpp:1043
 #, fuzzy, c-format
 msgid "Error saving symbol %s to library '%s'."
 msgstr "Virhe ladattaessa symbolia %s kirjastosta %s."
@@ -16378,7 +16402,7 @@ msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
 msgstr "Kirjaston lempinimi \"%s\" on jo symbolikirjastoluettelon rivillä %d"
 
-#: eeschema/symbol_library.cpp:550 eeschema/symbol_tree_model_adapter.cpp:152
+#: eeschema/symbol_library.cpp:551 eeschema/symbol_tree_model_adapter.cpp:152
 #, c-format
 msgid "Error loading symbol library '%s'."
 msgstr "Virhe ladattaessa symbolikirjastoa '%s'."
@@ -16690,12 +16714,14 @@ msgid "Create SVG file from the current symbol"
 msgstr "Luo SVG-tiedosto nykyisestä symbolista"
 
 #: eeschema/tools/ee_actions.cpp:208
-msgid "Synchronized Pins Edit Mode"
+#, fuzzy
+msgid "Synchronized Pins Mode"
 msgstr "Synkronoitu nastojen muokkaustila"
 
 #: eeschema/tools/ee_actions.cpp:209
+#, fuzzy
 msgid ""
-"Synchronized Pins Edit Mode\n"
+"Synchronized Pins Mode\n"
 "When enabled propagates all changes (except pin numbers) to other units.\n"
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
@@ -17529,7 +17555,7 @@ msgstr "Tallenna nykyinen kaaviolehti nimellä..."
 msgid "Save a copy of the current sheet to another location or name"
 msgstr "Tallenna kopio nykyisestä asiakirjasta toiseen sijaintiin"
 
-#: eeschema/tools/ee_inspection_tool.cpp:264
+#: eeschema/tools/ee_inspection_tool.cpp:249
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -17538,7 +17564,7 @@ msgstr ""
 "<b>Nastan kaksoiskappale%s</b> %s sijainnissa <b>(%.3f, %.3f)</b> on "
 "ristiriidassa nastan %s%s kanssa muunnoksen sijainnissa <b>(%.3f, %.3f)</b>."
 
-#: eeschema/tools/ee_inspection_tool.cpp:278
+#: eeschema/tools/ee_inspection_tool.cpp:263
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -17548,7 +17574,7 @@ msgstr ""
 "ristiriidassa nastan %s%s kanssa sijainnissa <b> ( %.3f, %.3f) </b> "
 "muunnettuina yksikköinä %c ja %c."
 
-#: eeschema/tools/ee_inspection_tool.cpp:297
+#: eeschema/tools/ee_inspection_tool.cpp:282
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
@@ -17557,7 +17583,7 @@ msgstr ""
 "<b>Nastakaksoiskappale %s</b> %s sijainnissa <b>(%s, %s)</b> on "
 "ristiriidassa nastan %s%s kanssa sijainnissa <b>(%s, %s)</b>."
 
-#: eeschema/tools/ee_inspection_tool.cpp:310
+#: eeschema/tools/ee_inspection_tool.cpp:295
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
@@ -17567,7 +17593,7 @@ msgstr ""
 "ristiriidassa nastan %s%s kanssa sijainnissa <b>(%s, %s)</b> yksikköissä %c "
 "ja %c."
 
-#: eeschema/tools/ee_inspection_tool.cpp:348
+#: eeschema/tools/ee_inspection_tool.cpp:333
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
@@ -17575,7 +17601,7 @@ msgstr ""
 "Info: <b>Piilotettu virtapinni %s</b> %s sijainnista <b>(%s, %s)</b> "
 "muunnetusta."
 
-#: eeschema/tools/ee_inspection_tool.cpp:357
+#: eeschema/tools/ee_inspection_tool.cpp:342
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
@@ -17584,33 +17610,33 @@ msgstr ""
 "<b>Piilotettu virtapinni %s</b> %s sijainnissa <b>(%s, %s)</b> muunnetun "
 "yksikössä %c."
 
-#: eeschema/tools/ee_inspection_tool.cpp:370
+#: eeschema/tools/ee_inspection_tool.cpp:355
 #, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr "<b>Piilotettu virtapinni %s </b> %s sijainnissa <b>(%s, %s)</b>."
 
-#: eeschema/tools/ee_inspection_tool.cpp:378
+#: eeschema/tools/ee_inspection_tool.cpp:363
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
 "<b>Piilotettu virtapinni %s</b> %s sijainnissa <b>(%s, %s)</b> yksikössä %c."
 
-#: eeschema/tools/ee_inspection_tool.cpp:389
+#: eeschema/tools/ee_inspection_tool.cpp:374
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
 "(Piilotetut virtaliittimet ajavat neulanimensä kaikkiin kytkettyihin "
 "verkkoihin.)"
 
-#: eeschema/tools/ee_inspection_tool.cpp:402
+#: eeschema/tools/ee_inspection_tool.cpp:387
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
 "<b>Pinni %s</b> %s ei sovi ruudukon rasteriin sijainnissa <b>(%s, %s)</b> "
 "muunnetusta."
 
-#: eeschema/tools/ee_inspection_tool.cpp:411
+#: eeschema/tools/ee_inspection_tool.cpp:396
 #, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
@@ -17619,40 +17645,40 @@ msgstr ""
 "<b>Pinni %s</b> %s ei sovi ruudukon rasteriin sijainnissa <b>(%.3s, %.3s)</"
 "b> muunnetun yksikössä %c."
 
-#: eeschema/tools/ee_inspection_tool.cpp:424
+#: eeschema/tools/ee_inspection_tool.cpp:409
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr ""
 "<b>Pinni %s</b> %s ei sovi ruudukon rasteriin sijainnissa <b>(%s, %s)</b>."
 
-#: eeschema/tools/ee_inspection_tool.cpp:432
+#: eeschema/tools/ee_inspection_tool.cpp:417
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
 "<b>Pinni %s</b> %s ei sovi ruudukon rasteriin sijainnissa <b>(%s, %s)</b> "
 "yksikössä %c."
 
-#: eeschema/tools/ee_inspection_tool.cpp:449
+#: eeschema/tools/ee_inspection_tool.cpp:434
 msgid "No symbol issues found."
 msgstr "Symboleissa ei havaittu ongelmia."
 
-#: eeschema/tools/ee_inspection_tool.cpp:458
+#: eeschema/tools/ee_inspection_tool.cpp:438
 msgid "Symbol Warnings"
 msgstr "Symbolivaroitukset"
 
-#: eeschema/tools/ee_inspection_tool.cpp:526
+#: eeschema/tools/ee_inspection_tool.cpp:507
 #, fuzzy
 msgid "No datasheet defined."
 msgstr "Läpiviennin reiän kokoa ei ole määritelty."
 
 #: eeschema/tools/ee_selection_tool.cpp:1625
 #: pagelayout_editor/tools/pl_selection_tool.cpp:623
-#: pcbnew/tools/pcb_selection_tool.cpp:2228
+#: pcbnew/tools/pcb_selection_tool.cpp:2230
 msgid "Select &All\tA"
 msgstr "Valitse & Kaikki A"
 
 #: eeschema/tools/ee_selection_tool.cpp:1628
-#: pcbnew/tools/pcb_selection_tool.cpp:2231
+#: pcbnew/tools/pcb_selection_tool.cpp:2233
 msgid "&Expand Selection\tE"
 msgstr "& Laajenna valinta E"
 
@@ -17705,32 +17731,32 @@ msgstr "ei symbolia valittu"
 msgid "symbol is not multi-unit"
 msgstr "symboli ei ole moniyksikkö"
 
-#: eeschema/tools/sch_edit_tool.cpp:966
+#: eeschema/tools/sch_edit_tool.cpp:968
 msgid "Label value cannot go below zero"
 msgstr "Arvo ei voi olla nollaa pienempi"
 
-#: eeschema/tools/sch_edit_tool.cpp:1198 eeschema/tools/sch_edit_tool.cpp:1200
+#: eeschema/tools/sch_edit_tool.cpp:1200 eeschema/tools/sch_edit_tool.cpp:1202
 #: eeschema/tools/symbol_editor_edit_tool.cpp:536
 #, c-format
 msgid "Edit %s Field"
 msgstr "Muokkaa %s kenttää"
 
-#: eeschema/tools/sch_edit_tool.cpp:1202
+#: eeschema/tools/sch_edit_tool.cpp:1204
 #: eeschema/tools/symbol_editor_edit_tool.cpp:538
 #, fuzzy, c-format
 msgid "Edit '%s' Field"
 msgstr "Muokkaa %s kenttää"
 
-#: eeschema/tools/sch_edit_tool.cpp:1830
+#: eeschema/tools/sch_edit_tool.cpp:1836
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "Haluatko poistaa viittaamattomat nastat tältä taulukolta?"
 
-#: eeschema/tools/sch_edit_tool.cpp:1890
+#: eeschema/tools/sch_edit_tool.cpp:1896
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "Syötä arkin polun sivunumero %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1893
+#: eeschema/tools/sch_edit_tool.cpp:1899
 #, fuzzy
 msgid "Edit Sheet Page Number"
 msgstr "Muokkaa sivunumeroa"
@@ -18543,8 +18569,8 @@ msgstr "Peilaa"
 msgid "AB axis"
 msgstr "AB-akseli"
 
-#: gerbview/gerber_draw_item.cpp:731 gerbview/toolbars_gerber.cpp:140
-#: gerbview/toolbars_gerber.cpp:143
+#: gerbview/gerber_draw_item.cpp:731 gerbview/toolbars_gerber.cpp:142
+#: gerbview/toolbars_gerber.cpp:145
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:25
 msgid "Net:"
 msgstr "Kytkentäverkko:"
@@ -18559,8 +18585,8 @@ msgstr "CMP: %s Pad: %s"
 msgid "Cmp: %s  Pad: %s  Fct %s"
 msgstr "CCMP: %s Pad: %s Fct %s"
 
-#: gerbview/gerber_draw_item.cpp:759 gerbview/toolbars_gerber.cpp:127
-#: gerbview/toolbars_gerber.cpp:130
+#: gerbview/gerber_draw_item.cpp:759 gerbview/toolbars_gerber.cpp:129
+#: gerbview/toolbars_gerber.cpp:132
 msgid "Cmp:"
 msgstr "CMP:"
 
@@ -18615,26 +18641,26 @@ msgstr "Tyhjennä viimeisimmät työtiedostot"
 msgid "KiCad Gerber Viewer"
 msgstr "KiCad Gerber-katseluohjelma"
 
-#: gerbview/gerbview_frame.cpp:584 gerbview/gerbview_frame.cpp:608
+#: gerbview/gerbview_frame.cpp:591 gerbview/gerbview_frame.cpp:615
 #: gerbview/menubar.cpp:147 kicad/tools/kicad_manager_actions.cpp:93
 msgid "Gerber Viewer"
 msgstr "Gerber-katseluohjelma"
 
-#: gerbview/gerbview_frame.cpp:589
+#: gerbview/gerbview_frame.cpp:596
 #, fuzzy
 msgid "Drawing layer not in use"
 msgstr "Piirtokerros %d ei ole käytössä"
 
-#: gerbview/gerbview_frame.cpp:606
+#: gerbview/gerbview_frame.cpp:613
 msgid "(with X2 attributes)"
 msgstr "(X2-määritteillä)"
 
-#: gerbview/gerbview_frame.cpp:615
+#: gerbview/gerbview_frame.cpp:622
 #, c-format
 msgid "Image name: \"%s\"  Layer name: \"%s\""
 msgstr "Kuvan nimi: \"%s\" Tason nimi: \"%s\""
 
-#: gerbview/gerbview_frame.cpp:631
+#: gerbview/gerbview_frame.cpp:638
 msgid "X2 attr"
 msgstr "X2 vetovoima"
 
@@ -18715,27 +18741,27 @@ msgstr "RS274X: Komennon \"IR\" kiertoarvo ei ole sallittu"
 msgid "RS274X: Command KNOCKOUT ignored by GerbView"
 msgstr "GerbView ei huomioi RS274X-komentoa KNOCKOUT"
 
-#: gerbview/toolbars_gerber.cpp:129
+#: gerbview/toolbars_gerber.cpp:131
 msgid "Highlight items belonging to this component"
 msgstr "Korosta tähän komponenttiin kuuluvat tuotteet"
 
-#: gerbview/toolbars_gerber.cpp:142
+#: gerbview/toolbars_gerber.cpp:144
 msgid "Highlight items belonging to this net"
 msgstr "Korosta tähän verkkoon kuuluvat tuotteet"
 
-#: gerbview/toolbars_gerber.cpp:156 gerbview/toolbars_gerber.cpp:159
+#: gerbview/toolbars_gerber.cpp:158 gerbview/toolbars_gerber.cpp:161
 msgid "Attr:"
 msgstr "Attr:"
 
-#: gerbview/toolbars_gerber.cpp:158
+#: gerbview/toolbars_gerber.cpp:160
 msgid "Highlight items with this aperture attribute"
 msgstr "Korosta kohteet tällä aukon määritteellä"
 
-#: gerbview/toolbars_gerber.cpp:172 gerbview/toolbars_gerber.cpp:174
+#: gerbview/toolbars_gerber.cpp:174 gerbview/toolbars_gerber.cpp:176
 msgid "DCode:"
 msgstr "DCode:"
 
-#: gerbview/toolbars_gerber.cpp:288
+#: gerbview/toolbars_gerber.cpp:290
 msgid "<No selection>"
 msgstr "<Ei valintaa>"
 
@@ -18815,7 +18841,7 @@ msgid "Export data as a KiCad PCB file"
 msgstr "Vie tiedot KiCad-piirilevytiedostona"
 
 #: gerbview/tools/gerbview_actions.cpp:93
-#: gerbview/widgets/gerbview_layer_widget.cpp:151
+#: gerbview/widgets/gerbview_layer_widget.cpp:153
 msgid "Clear Current Layer..."
 msgstr "Tyhjennä nykyinen taso ..."
 
@@ -19007,42 +19033,47 @@ msgid "Show drawing sheet border and title block"
 msgstr "Näytä kaavioarkin reunus ja otsikkolohko"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:103
+#, fuzzy
+msgid "Show drawing sheet page limits"
+msgstr "Näytä sivun reunat"
+
+#: gerbview/widgets/gerbview_layer_widget.cpp:105
 msgid "PCB Background"
 msgstr "PCB-tausta"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:122
+#: gerbview/widgets/gerbview_layer_widget.cpp:124
 #: pcbnew/widgets/appearance_controls.cpp:1717
 msgid "Show All Layers"
 msgstr "Näytä kaikki kerrokset"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:126
+#: gerbview/widgets/gerbview_layer_widget.cpp:128
 #: pcbnew/widgets/appearance_controls.cpp:1704
 msgid "Hide All Layers But Active"
 msgstr "Piilota kaikki paitsi aktiivinen kerros"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:130
+#: gerbview/widgets/gerbview_layer_widget.cpp:132
 msgid "Always Hide All Layers But Active"
 msgstr "Piilota aina kaikki kerrokset, mutta aktiiviset"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:133
+#: gerbview/widgets/gerbview_layer_widget.cpp:135
 #: pcbnew/widgets/appearance_controls.cpp:1720
 msgid "Hide All Layers"
 msgstr "Piilota kaikki kerrokset"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:138
+#: gerbview/widgets/gerbview_layer_widget.cpp:140
 msgid "Sort Layers if X2 Mode"
 msgstr "Lajittele tasot, jos X2-tila"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:141
+#: gerbview/widgets/gerbview_layer_widget.cpp:143
 msgid "Sort Layers by File Extension"
 msgstr ""
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:146
+#: gerbview/widgets/gerbview_layer_widget.cpp:148
 #, fuzzy
 msgid "Move Current Layer Up"
 msgstr "Tyhjennä nykyinen taso ..."
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:148
+#: gerbview/widgets/gerbview_layer_widget.cpp:150
 #, fuzzy
 msgid "Move Current Layer Down"
 msgstr "Vain nykyinen kerros"
@@ -22772,43 +22803,43 @@ msgstr "%s nastaa %s ei löytynyt"
 msgid "Selecting all from sheet \"%s\""
 msgstr "Kaikkien valinta taulukosta \"%s\""
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:89
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:85
 msgid "Only front"
 msgstr "Vain edessä"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:90
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:86
 msgid "Only back"
 msgstr "Vain takaisin"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:91
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:87
 msgid "Only selected"
 msgstr "Vain valittu"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:97
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:93
 msgid "Empty"
 msgstr "Tyhjä"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:98
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:94
 msgid "Invalid"
 msgstr "Virheellinen"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:99
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:95
 msgid "Excluded"
 msgstr "Ohita"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:114
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:110
 msgid "Reannotate PCB"
 msgstr "Merkitse PCB uudelleen"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:285
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:277
 msgid "No PCB to reannotate!"
 msgstr "Ei piirikorttia selitteiden uudelleenmerkitsemiseksi!"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:297
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:289
 msgid "PCB successfully reannotated"
 msgstr "Piirilevyn selitteet onnistuneesti merkitty uudelleen"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:298
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:290
 msgid ""
 "PCB annotation changes should be synchronized with schematic using the "
 "\"Update Schematic from PCB\" tool."
@@ -22816,7 +22847,7 @@ msgstr ""
 "Piirikortin selitemuutokset tulisi synkronisoida kytkentäkaavion kanssa "
 "käyttäen \"Päivitä kytkentäkaavio piirikortilta\" työkalua."
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:313
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:305
 #, c-format
 msgid ""
 "\n"
@@ -22825,7 +22856,7 @@ msgstr ""
 "\n"
 "%s jalanjäljet merkitään uudelleen."
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:318
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:310
 #, c-format
 msgid ""
 "\n"
@@ -22834,7 +22865,7 @@ msgstr ""
 "\n"
 "Viitetyyppejä %s ei merkitä."
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:323
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:315
 msgid ""
 "\n"
 "Locked footprints will not be annotated"
@@ -22842,7 +22873,7 @@ msgstr ""
 "\n"
 "Lukittuja jalanjälkiä ei merkitä"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:327
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:319
 #, c-format
 msgid ""
 "\n"
@@ -22851,7 +22882,7 @@ msgstr ""
 "\n"
 "Etujalanjäljet alkavat %s"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:336
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:328
 #, c-format
 msgid ""
 "\n"
@@ -22860,11 +22891,11 @@ msgstr ""
 "\n"
 "Takana olevat jalanjäljet alkavat %s."
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:337
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:329
 msgid "the last front footprint + 1"
 msgstr "viimeinen etujalanjälki + 1"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:345
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:337
 #, c-format
 msgid ""
 "\n"
@@ -22873,7 +22904,7 @@ msgstr ""
 "\n"
 "Etumerkinnät poistetaan etuosasta, jotka alkavat kirjaimella %s."
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:351
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:343
 #, c-format
 msgid ""
 "\n"
@@ -22882,7 +22913,7 @@ msgstr ""
 "\n"
 "Etujalanjäljissä on etuliite ”%s”."
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:361
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:353
 #, c-format
 msgid ""
 "\n"
@@ -22891,7 +22922,7 @@ msgstr ""
 "\n"
 "Takaosan jalanjäljet, joiden alussa on %s, etuliite poistetaan."
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:367
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:359
 #, c-format
 msgid ""
 "\n"
@@ -22900,7 +22931,7 @@ msgstr ""
 "\n"
 "Takana oleviin jalanjälkiin lisätään etuliite ”%s”."
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:375
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:367
 #, c-format
 msgid ""
 "\n"
@@ -22910,15 +22941,15 @@ msgstr ""
 "\n"
 "Ennen lajittelua %s, jonka koordinaatit pyöristetään ruudukkoon %s, %s."
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:377
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:369
 msgid "footprint location"
 msgstr "jalanjäljen sijainti"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:378
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:370
 msgid "reference designator location"
 msgstr "viitetunnuksen sijainti"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:520
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:510
 #, c-format
 msgid ""
 "\n"
@@ -22931,7 +22962,7 @@ msgstr ""
 "Viitetunnuksia on %i tyyppiä\n"
 "*********************************** ***** ********\n"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:534
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:524
 #, c-format
 msgid ""
 "\n"
@@ -22942,7 +22973,7 @@ msgstr ""
 "Poistetaan: %s uudelleenkirjoittamisesta\n"
 "\n"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:537
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:527
 msgid ""
 "\n"
 "    Change Array\n"
@@ -22952,11 +22983,11 @@ msgstr ""
 "    Vaihda taulukkoa\n"
 "***********************\n"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:545
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:535
 msgid " will be ignored"
 msgstr " ohitetaan"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:559
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:549
 msgid ""
 "\n"
 "No footprints"
@@ -22964,7 +22995,7 @@ msgstr ""
 "\n"
 "Ei jalanjälkiä"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:565
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:555
 #, c-format
 msgid ""
 "\n"
@@ -22973,15 +23004,15 @@ msgstr ""
 "\n"
 "*********** Lajittele %s ***********"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:566
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:556
 msgid "Footprint Coordinates"
 msgstr "Jalanjäljen koordinaatit"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:567
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:557
 msgid "Reference Designator Coordinates"
 msgstr "Viitetunnuskoordinaatit"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:569
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:559
 #, c-format
 msgid ""
 "\n"
@@ -22990,7 +23021,7 @@ msgstr ""
 "\n"
 "Lajittelukoodi %d"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:573
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:563
 #, fuzzy, c-format
 msgid ""
 "\n"
@@ -22999,11 +23030,11 @@ msgstr ""
 "\n"
 "%d %s Uuid: [%s], X, Y: %s, pyöristetty X, Y, %s"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:596
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:586
 msgid "Selected options resulted in errors! Change them and try again."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:603
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:593
 #, fuzzy, c-format
 msgid ""
 "\n"
@@ -23016,7 +23047,7 @@ msgstr ""
 "Suosittele DRC: n suorittamista tarkistamalla 'Test footprints against "
 "schematic'.\n"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:610
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:600
 #, c-format
 msgid ""
 "\n"
@@ -23025,20 +23056,20 @@ msgstr ""
 "\n"
 "Viitteet: %s Jalanjälki: %s: %s kohdassa %s piirilevyllä."
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:618
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:608
 msgid "Reannotate anyway?"
 msgstr "Merkitkö uudelleen?"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:802
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:790
 #, fuzzy, c-format
 msgid "Duplicate instances of %s"
 msgstr "Useita kohteita %s %s\n"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:807
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:796
 msgid "Aborted: too many errors"
 msgstr "Keskeytetty: liian paljon virheitä"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:861
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:850
 msgid ""
 "\n"
 "\n"
@@ -23048,7 +23079,7 @@ msgstr ""
 "\n"
 "Etujalanjäljet"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:862
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:851
 msgid ""
 "\n"
 "\n"
@@ -23058,7 +23089,7 @@ msgstr ""
 "\n"
 "Takana jalanjäljet"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:927
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:916
 msgid "Footprint not found in changelist"
 msgstr "Jalanjälkeä ei löydy muutosluettelosta"
 
@@ -31466,19 +31497,19 @@ msgstr "(reunoja ei löydy Edge.Cuts-kerroksesta)"
 msgid "(layer %s)"
 msgstr "(kerros %s)"
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:342
+#: pcbnew/drc/drc_test_provider_misc.cpp:345
 msgid "Checking board outline..."
 msgstr "Tarkistetaan piirilevyn ääriviivoja ..."
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:350
+#: pcbnew/drc/drc_test_provider_misc.cpp:353
 msgid "Checking disabled layers..."
 msgstr "Tarkistetaan käytöstä poistettuja tasoja ..."
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:358
+#: pcbnew/drc/drc_test_provider_misc.cpp:361
 msgid "Checking text variables..."
 msgstr "Tarkistetaan tekstimuuttujia ..."
 
-#: pcbnew/drc/drc_test_provider_misc.cpp:366
+#: pcbnew/drc/drc_test_provider_misc.cpp:369
 #, fuzzy
 msgid "Checking assertions..."
 msgstr "Tarkastetaan nastoja ..."
@@ -31721,7 +31752,7 @@ msgstr "Luotiin tiedosto '%s'."
 msgid "Created Gerber job file '%s'."
 msgstr "Luo Gerber-työtiedosto \"%s\""
 
-#: pcbnew/exporters/gerber_jobfile_writer.cpp:591
+#: pcbnew/exporters/gerber_jobfile_writer.cpp:594
 msgid "Board stackup settings not up to date."
 msgstr "Piirilevyn kerrospinon asetukset eivät ole ajantasalla."
 
@@ -33850,7 +33881,7 @@ msgstr "Ei-kuparinen antura %s käyttää tuntematonta anturamuotoa."
 msgid "Loading vias..."
 msgstr "Lataa läpiviennit…"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2845
+#: pcbnew/plugins/altium/altium_pcb.cpp:2847
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
@@ -33858,28 +33889,28 @@ msgstr ""
 "Läpivienti tasolta %d tasolle %d käyttää ei-kuparista tasoa. Tämä ei ole "
 "tuettu."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2864
+#: pcbnew/plugins/altium/altium_pcb.cpp:2866
 #, fuzzy
 msgid "Loading tracks..."
 msgstr "Lataa…"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3032
+#: pcbnew/plugins/altium/altium_pcb.cpp:3034
 #, fuzzy
 msgid "Loading unicode strings..."
 msgstr "Lataa…"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3046
+#: pcbnew/plugins/altium/altium_pcb.cpp:3048
 #, fuzzy
 msgid "Loading text..."
 msgstr "Lataa…"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3075
-#: pcbnew/plugins/altium/altium_pcb.cpp:3088
+#: pcbnew/plugins/altium/altium_pcb.cpp:3077
+#: pcbnew/plugins/altium/altium_pcb.cpp:3090
 #, fuzzy, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "Ohita viivakoodi Altium-kerroksessa %d, koska sitä ei tueta juuri nyt."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3237
+#: pcbnew/plugins/altium/altium_pcb.cpp:3239
 #, fuzzy
 msgid "Loading rectangles..."
 msgstr "Ladataan Gerber-tiedostoja ..."
@@ -34493,8 +34524,8 @@ msgid "Library '%s' has no footprint '%s'."
 msgstr "kirjastolla \"%s\" ei ole poistettavaa jalanjälkeä \"%s\""
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:347
-#: pcbnew/plugins/kicad/pcb_parser.cpp:739
-#: pcbnew/plugins/kicad/pcb_parser.cpp:911
+#: pcbnew/plugins/kicad/pcb_parser.cpp:743
+#: pcbnew/plugins/kicad/pcb_parser.cpp:915
 #, fuzzy, c-format
 msgid "Unknown token '%s'"
 msgstr "Tuntematon tunnus \"%s\""
@@ -34559,7 +34590,7 @@ msgstr ""
 msgid "Cannot interpret date code %d"
 msgstr "Ei voida tulkita päivämääräkoodia %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:925
+#: pcbnew/plugins/kicad/pcb_parser.cpp:929
 msgid ""
 "Items found on undefined layers.  Do you wish to\n"
 "rescue them to the User.Comments layer?"
@@ -34567,28 +34598,28 @@ msgstr ""
 "Määrittelemättömistä tasoista löytyvät kohteet. Haluatko\n"
 "pelastaa heidät User.Comments-tasolle?"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:927
+#: pcbnew/plugins/kicad/pcb_parser.cpp:931
 msgid "Undefined layers:"
 msgstr "Määrittelemättömät tasot:"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:1187
+#: pcbnew/plugins/kicad/pcb_parser.cpp:1191
 #, c-format
 msgid "Page type '%s' is not valid."
 msgstr "Sivutyyppi '%s' ei kelpaa."
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:1743
+#: pcbnew/plugins/kicad/pcb_parser.cpp:1747
 #, fuzzy, c-format
 msgid "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
 msgstr ""
 "Kerros \"%s\" tiedostossa \"%s\" rivillä %d ei ole kiinteässä kerroksessa"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:1780
+#: pcbnew/plugins/kicad/pcb_parser.cpp:1784
 #, c-format
 msgid "%d is not a valid layer count"
 msgstr "%d ei ole kelvollinen tasojen määrä"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:2175
-#: pcbnew/plugins/kicad/pcb_parser.cpp:5481
+#: pcbnew/plugins/kicad/pcb_parser.cpp:2179
+#: pcbnew/plugins/kicad/pcb_parser.cpp:5485
 #, fuzzy
 msgid ""
 "The legacy zone fill strategy is no longer supported.\n"
@@ -34597,19 +34628,19 @@ msgstr ""
 "Vanhaa segmentin täyttötilaa ei enää tueta.\n"
 "Muunna vyöhykkeet monikulmion täytteiksi?"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:2178
-#: pcbnew/plugins/kicad/pcb_parser.cpp:5480
-#: pcbnew/plugins/kicad/pcb_parser.cpp:5520
+#: pcbnew/plugins/kicad/pcb_parser.cpp:2182
+#: pcbnew/plugins/kicad/pcb_parser.cpp:5484
+#: pcbnew/plugins/kicad/pcb_parser.cpp:5524
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2469
 msgid "Legacy Zone Warning"
 msgstr "Vanhan alueen varoitus"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:2449
+#: pcbnew/plugins/kicad/pcb_parser.cpp:2453
 #, fuzzy, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "Kopioi NETCLASS-nimi \"%s\" tiedostossa \"%s\" rivillä %d, offset %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:3514
+#: pcbnew/plugins/kicad/pcb_parser.cpp:3518
 #, fuzzy, c-format
 msgid ""
 "Invalid footprint ID in\n"
@@ -34622,12 +34653,12 @@ msgstr ""
 "rivi: %d\n"
 "offset: %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:3867
+#: pcbnew/plugins/kicad/pcb_parser.cpp:3871
 #, c-format
 msgid "Cannot handle footprint text type %s"
 msgstr "Ei voi käsitellä jalanjälkitekstityyppiä %s"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4647
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4651
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -34638,7 +34669,7 @@ msgstr ""
 "tiedosto: %s\n"
 "rivi: %d offset: %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4666
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4670
 #, c-format
 msgid ""
 "Net name doesn't match ID in\n"
@@ -34649,7 +34680,7 @@ msgstr ""
 "tiedosto: %s\n"
 "rivi: %d offset: %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:5104
+#: pcbnew/plugins/kicad/pcb_parser.cpp:5108
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -34662,7 +34693,7 @@ msgstr ""
 "rivi: %d\n"
 "offset: %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:5183
+#: pcbnew/plugins/kicad/pcb_parser.cpp:5187
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -34675,7 +34706,7 @@ msgstr ""
 "rivi: %d\n"
 "offset: %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:5278
+#: pcbnew/plugins/kicad/pcb_parser.cpp:5282
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -34688,7 +34719,7 @@ msgstr ""
 "rivi: %d\n"
 "offset: %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:5386
+#: pcbnew/plugins/kicad/pcb_parser.cpp:5390
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -34701,7 +34732,7 @@ msgstr ""
 "rivi: %d\n"
 "offset: %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:5521
+#: pcbnew/plugins/kicad/pcb_parser.cpp:5525
 #, fuzzy
 msgid ""
 "The segment zone fill mode is no longer supported.\n"
@@ -38001,23 +38032,23 @@ msgstr "Valitut kohteet"
 msgid "Footprint Name"
 msgstr "Jalanjäljen nimi"
 
-#: pcbnew/tools/pcb_point_editor.cpp:125
+#: pcbnew/tools/pcb_point_editor.cpp:123
 msgid "Self-intersecting polygons are not allowed."
 msgstr "Itse leikkaavat polygonit eivät ole sallittuja."
 
-#: pcbnew/tools/pcb_point_editor.cpp:613
+#: pcbnew/tools/pcb_point_editor.cpp:611
 msgid "Drag a corner"
 msgstr "Vedä kulmaa"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2196
+#: pcbnew/tools/pcb_point_editor.cpp:2194
 msgid "Add a zone corner"
 msgstr "Lisää vyöhykekulma"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2233
+#: pcbnew/tools/pcb_point_editor.cpp:2231
 msgid "Split segment"
 msgstr "Jaettu segmentti"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2304
+#: pcbnew/tools/pcb_point_editor.cpp:2302
 msgid "Remove a zone/polygon corner"
 msgstr "Poista vyöhyke / monikulmion kulma"
 
@@ -38727,36 +38758,36 @@ msgstr "Tallenna esiasetus ..."
 msgid "Delete viewport..."
 msgstr "Poista esiasetus ..."
 
-#: pcbnew/widgets/appearance_controls.cpp:2676
+#: pcbnew/widgets/appearance_controls.cpp:2677
 #, fuzzy
 msgid "Viewport name:"
 msgstr "Kytkentäverkon nimi:"
 
-#: pcbnew/widgets/appearance_controls.cpp:2676
+#: pcbnew/widgets/appearance_controls.cpp:2677
 #, fuzzy
 msgid "Save Viewport"
 msgstr "Tallenna raporttitiedosto"
 
-#: pcbnew/widgets/appearance_controls.cpp:2714
+#: pcbnew/widgets/appearance_controls.cpp:2715
 #, fuzzy
 msgid "Viewports"
 msgstr "Raportoi"
 
-#: pcbnew/widgets/appearance_controls.cpp:2723
+#: pcbnew/widgets/appearance_controls.cpp:2724
 #, fuzzy
 msgid "Delete Viewport"
 msgstr "Poista läpivienti"
 
-#: pcbnew/widgets/appearance_controls.cpp:2724
+#: pcbnew/widgets/appearance_controls.cpp:2725
 #, fuzzy
 msgid "Select viewport:"
 msgstr "Valitse esiasetus:"
 
-#: pcbnew/widgets/appearance_controls.cpp:3160
+#: pcbnew/widgets/appearance_controls.cpp:3161
 msgid "Open Preferences"
 msgstr "Avaa asetukset"
 
-#: pcbnew/widgets/appearance_controls.cpp:3174
+#: pcbnew/widgets/appearance_controls.cpp:3175
 msgid ""
 "The current color theme is read-only.  Create a new theme in Preferences to "
 "enable color editing."
@@ -38951,10 +38982,6 @@ msgstr "Jatka ilman täyttöä"
 msgid "inherited"
 msgstr "Peritty"
 
-#: pcbnew/zones.h:63
-msgid "none"
-msgstr "ei mitään"
-
 #: pcbnew/zones.h:64
 #, fuzzy
 msgid "thermal reliefs"
@@ -39116,6 +39143,31 @@ msgstr "KiCad-kytkentäkaavio"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad-piirilevy"
+
+#, fuzzy
+#~ msgid "Synchronized pins edit mode, and this pin is new"
+#~ msgstr "Synkronoitu nastojen muokkaustila"
+
+#~ msgid ""
+#~ "Similar pins will be automatically added to other units, if this pin is "
+#~ "not common to all units"
+#~ msgstr ""
+#~ "Vastaavat pinnit lisätään muihin yksiköihin, jos tämä pinni ei ole jaettu "
+#~ "yksikköjen välillä"
+
+#, fuzzy
+#~ msgid "Synchronized pins edit mode"
+#~ msgstr "Synkronoitu nastojen muokkaustila"
+
+#~ msgid ""
+#~ "Similar pins at the same location will be edited. Pin number of other "
+#~ "pins will be not modified"
+#~ msgstr ""
+#~ "Vastaavia pinnejä samassa paikassa muutetaan. Muiden pinnien numeroita ei "
+#~ "muuteta"
+
+#~ msgid "info"
+#~ msgstr "info"
 
 #, fuzzy, c-format
 #~ msgid "(pad \"%s\")"
@@ -41978,9 +42030,6 @@ msgstr "KiCad-piirilevy"
 
 #~ msgid "Tight"
 #~ msgstr "Tiukka"
-
-#~ msgid "Standard"
-#~ msgstr "Standardi"
 
 #~ msgid "Loose"
 #~ msgstr "Löysä"
@@ -46432,10 +46481,6 @@ msgstr "KiCad-piirilevy"
 #~ msgstr "Lisää uusi mukautettu kenttä"
 
 #, fuzzy
-#~ msgid "Edit Spice model"
-#~ msgstr "Muokkaa lehteä"
-
-#, fuzzy
 #~ msgid "Horizontal Align:"
 #~ msgstr "vaakasuorassa"
 
@@ -50389,9 +50434,6 @@ msgstr "KiCad-piirilevy"
 
 #~ msgid "Doc File "
 #~ msgstr "Dokumenttitiedosto"
-
-#~ msgid "Grid Select"
-#~ msgstr "Pisterasterin valinta"
 
 #~ msgid "&List Current Keys"
 #~ msgstr "&Luetteloi nykyiset näppäimet"
