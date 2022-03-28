@@ -25,7 +25,6 @@
 
 #include <kiid.h>
 
-#include <boost/uuid/detail/random_provider.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/functional/hash.hpp>
