@@ -42,7 +42,11 @@ static std::mutex                                           rng_mutex;
 
 // Static rng and generators are used because the overhead of constant seeding is expensive
 // We break out the rng separately from the generator because we want to control seeding in cases like unit tests
+#if BOOST_VERSION >= 106700
 static boost::uuids::detail::random_provider                seeder; // required to ensure the rng has a random initial seed
+#else
+static boost::uuids::detail::seed_rng                       seeder; // required to ensure the rng has a random initial seed
+#endif
 static boost::mt19937                                       rng( seeder );
 static boost::uuids::basic_random_generator<boost::mt19937> randomGenerator( rng );
 
