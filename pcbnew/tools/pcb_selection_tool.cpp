@@ -1622,11 +1622,8 @@ int PCB_SELECTION_TOOL::selectSheetContents( const TOOL_EVENT& aEvent )
 
 int PCB_SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
 {
-    if( !selectCursor( true ) )
-        return 0;
-
     // this function currently only supports footprints since they are only on one sheet.
-    auto item = m_selection.Front();
+    EDA_ITEM* item = m_selection.Front();
 
     if( !item )
         return 0;
