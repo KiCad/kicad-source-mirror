@@ -375,10 +375,11 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                 return IsSymbolEditable() && !IsSymbolAlias();
             };
 
-    auto libModifiedCondition =
+    auto symbolModifiedCondition =
             [this]( const SELECTION& sel )
             {
-                return m_libMgr->HasModifications();
+                return m_libMgr->IsSymbolModified( GetTargetLibId().GetLibItemName(),
+                                                   GetTargetLibId().GetLibNickname() );
             };
 
     auto libSelectedCondition =
@@ -408,7 +409,7 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::undo,              ENABLE( haveSymbolCond && cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo,              ENABLE( haveSymbolCond && cond.RedoAvailable() ) );
-    mgr->SetConditions( ACTIONS::revert,            ENABLE( haveSymbolCond && libModifiedCondition ) );
+    mgr->SetConditions( ACTIONS::revert,            ENABLE( symbolModifiedCondition ) );
 
     mgr->SetConditions( ACTIONS::toggleGrid,        CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::toggleCursorStyle, CHECK( cond.FullscreenCursor() ) );
