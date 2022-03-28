@@ -400,6 +400,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
+
     auto setCursor =
             [&]()
             {
@@ -1324,26 +1325,23 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
+    SCH_SHAPE* item = nullptr;
+    bool       isTextBox = aEvent.IsAction( &EE_ACTIONS::drawTextBox );
+    SHAPE_T    type = aEvent.Parameter<SHAPE_T>();
+
     if( m_inDrawShape )
         return 0;
-    else
-        m_inDrawShape = true;
 
-    bool    isTextBox = aEvent.IsAction( &EE_ACTIONS::drawTextBox );
-    SHAPE_T type = aEvent.Parameter<SHAPE_T>();
+    REENTRANCY_GUARD guard( &m_inDrawShape );
 
     // We might be running as the same shape in another co-routine.  Make sure that one
     // gets whacked.
     m_toolMgr->DeactivateTool();
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    getViewControls()->ShowCursor( true );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
-    Activate();
-
-    SCH_SHAPE* item = nullptr;
 
     auto setCursor =
             [&]()
@@ -1360,12 +1358,15 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 item = nullptr;
             };
 
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    getViewControls()->ShowCursor( true );
+    // Set initial cursor
+    setCursor();
+
     // Prime the pump
     if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
-
-    // Set initial cursor
-    setCursor();
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -1493,7 +1494,6 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     getViewControls()->SetAutoPan( false );
     getViewControls()->CaptureCursor( false );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
-    m_inDrawShape = false;
     return 0;
 }
 
