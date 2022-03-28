@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-18 12:52-0700\n"
-"PO-Revision-Date: 2022-03-25 21:11+0000\n"
+"PO-Revision-Date: 2022-03-28 17:50+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -4789,9 +4789,9 @@ msgid "Gestures"
 msgstr "Gester"
 
 #: common/kiway.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "Fel vid inläsning av kiface-biblioteket '%s'."
+msgstr "Kunde inte verifiera signatur för kiface-biblioteket '%s'."
 
 #: common/kiway.cpp:267
 #, c-format
@@ -12649,9 +12649,8 @@ msgid "Loading Schematic"
 msgstr "Laddar schema"
 
 #: eeschema/files-io.cpp:230
-#, fuzzy
 msgid "Schematic file changes are unsaved"
-msgstr "Kretsschemafilen har osparade ändringar"
+msgstr "Kretsschemat innehåller ändringar som ännu inte sparats till fil"
 
 #: eeschema/files-io.cpp:267
 msgid ""
@@ -13069,7 +13068,6 @@ msgid "Open Recent"
 msgstr "Öppna senaste"
 
 #: eeschema/menubar.cpp:93
-#, fuzzy
 msgid "Insert Schematic Sheet Content..."
 msgstr "Lägg till innehåll från kretsschema-ark..."
 
@@ -13372,9 +13370,8 @@ msgid "KiCad Schematic Editor"
 msgstr "KiCads kretsschemaredigerare"
 
 #: eeschema/sch_edit_frame.cpp:302
-#, fuzzy
 msgid "New schematic file is unsaved"
-msgstr "Ny kretsschemafil har osparat innehåll"
+msgstr "Nytt kretsschema har innehåll som ännu inte sparats till fil"
 
 #: eeschema/sch_edit_frame.cpp:683 eeschema/sim/sim_plot_frame.cpp:1623
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:520
@@ -15073,9 +15070,8 @@ msgid "Library changes are unsaved"
 msgstr "Biblioteksändringar sparas inte"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:247
-#, fuzzy
 msgid "Symbol library loading was cancelled by user."
-msgstr "Biblioteket '%s' finns redan."
+msgstr "Inläsning av symbolbibliotek avbröts av användaren."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:594
 #: eeschema/tools/sch_edit_tool.cpp:117
@@ -19302,7 +19298,7 @@ msgstr "Slutposition"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:319
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1333
 msgid "Rotation:"
-msgstr "Rotation:"
+msgstr "Vridning:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:326
 msgid "Bitmap DPI:"
@@ -20086,7 +20082,7 @@ msgstr "Iadj:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:145
 msgid "For 3 terminal regulators only, the  Adjust pin current."
-msgstr "Endast för treterminalsregulatorer:  Strömmen i avkänningsstiftet."
+msgstr "Endast för treterminalsregulatorer:  Strömstyrkan i avkänningsstiftet."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:152
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:68
@@ -20095,7 +20091,7 @@ msgstr "uA"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:185
 msgid "Regulator"
-msgstr "Tillsynsmyndigheter"
+msgstr "Spänningsregulator"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:192
 msgid "Regulators data file:"
@@ -20124,14 +20120,14 @@ msgstr "Lägg till regulator"
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:219
 msgid "Enter a new item to the current list of available regulators"
 msgstr ""
-"Ange ett nytt objekt i den aktuella listan över tillgängliga "
-"tillsynsmyndigheter"
+"Lägg till ett nytt objekt i den aktuella listan över tillgängliga "
+"spänningsregulatorer"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:224
 msgid "Remove an item from the current list of available regulators"
 msgstr ""
 "Ta bort ett objekt från den aktuella listan över tillgängliga "
-"tillsynsmyndigheter"
+"spänningsregulatorer"
 
 #: pcb_calculator/calculator_panels/panel_track_width.cpp:61
 msgid "Temperature rise"
@@ -20520,7 +20516,7 @@ msgstr "Separat avkänningsstift"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:52
 msgid "3 terminals regulator"
-msgstr "3 terminaler regulator"
+msgstr "3-terminals regulator"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.h:59
 msgid "Regulator Parameters"
@@ -20596,7 +20592,7 @@ msgstr "PCB-kalkylator"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:77
 msgid "Regulators"
-msgstr "Tillsynsmyndigheter"
+msgstr "Spänningsregulatorer"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:79
 msgid "RF Attenuators"
@@ -22888,9 +22884,8 @@ msgid "Pad numbering skip:"
 msgstr "Stegstorlek för lödytenumrering:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:206
-#, fuzzy
 msgid "Grid Array"
-msgstr "Grid Array"
+msgstr "Rutnät"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:216
 msgid "Horizontal center:"
@@ -27306,7 +27301,6 @@ msgid "Show when routing"
 msgstr "Visa när du drar ledare"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing w/ via clearance at end"
 msgstr "Visa under ledardragning med utrymme för via i slutet"
 
@@ -27493,9 +27487,8 @@ msgid ""
 msgstr "Dra den närmaste fogen i spåret utan att begränsa spårvinkeln."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:365
-#, fuzzy
 msgid "Limit actions to 45 degrees from start"
-msgstr "Begränsa actions till 45 grader från start"
+msgstr "Begränsa åtgärder till 45 grader från start"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:376
 msgid "Draw an outline to show the sheet size."
@@ -33687,7 +33680,6 @@ msgstr "Tar reda på avstånd till mönsterkortets kant för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:235
 #: pcbnew/tools/board_inspection_tool.cpp:459
-#, fuzzy
 msgid "Clearance resolution for:"
 msgstr "Tar reda på isolationsavstånd för:"
 
@@ -33701,7 +33693,6 @@ msgid "Cannot generate clearance report on empty group."
 msgstr "Det går inte att generera godkännanderapport för tom grupp."
 
 #: pcbnew/tools/board_inspection_tool.cpp:383
-#, fuzzy
 msgid "Zone connection resolution for:"
 msgstr "Tar reda på zonanslutning för:"
 
@@ -34905,11 +34896,10 @@ msgid "Lock or unlock selected items"
 msgstr "Lås eller lås upp valda objekt"
 
 #: pcbnew/tools/pcb_actions.cpp:684
-#, fuzzy
 msgid ""
 "Limit actions to horizontal, vertical, or 45 degrees from the starting point"
 msgstr ""
-"Begränsa vinklar till horisontellt, vertikalt, eller 45 grader från "
+"Begränsa åtgärder till horisontellt, vertikalt, eller 45 graders vinkel från "
 "startpunkten"
 
 #: pcbnew/tools/pcb_actions.cpp:689
@@ -35880,7 +35870,6 @@ msgid "DRC violations which have been individually excluded"
 msgstr "DRC-kränkningar som har uteslutits individuellt"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
-#, fuzzy
 msgid "Show footprint and text origins as a cross"
 msgstr "Visa origo (ankare) för fotavtryck och text som ett kors"
 
@@ -36434,9 +36423,9 @@ msgid "HatchBorder Lines"
 msgstr "Rutnäts kantlinjer"
 
 #: pcbnew/zone.cpp:855
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area Cutout on %s"
-msgstr "Rule Area Cutout on %s"
+msgstr "Urtag i regelyta på %s"
 
 #: pcbnew/zone.cpp:857
 #, c-format
