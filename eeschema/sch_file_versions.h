@@ -43,7 +43,8 @@
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20211014   // Arc formatting.
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220101   // Class flags.
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220102   // Fonts.
-#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220126   // Text boxes.
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220126   // Text boxes.
+#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220328   // Text box start/end -> at/size.
 
 
 /**
@@ -75,4 +76,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20220103  // Label fields
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20220104  // Fonts
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20220124  // netclass_flag -> directive_label
-#define SEXPR_SCHEMATIC_FILE_VERSION 20220126  // Text boxes
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20220126  // Text boxes
+#define SEXPR_SCHEMATIC_FILE_VERSION 20220328  // Text box start/end -> at/size

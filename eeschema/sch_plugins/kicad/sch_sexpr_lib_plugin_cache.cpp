@@ -473,11 +473,15 @@ void SCH_SEXPR_PLUGIN_CACHE::saveTextBox( LIB_TEXTBOX* aTextBox, OUTPUTFORMATTER
                       aTextBox->IsPrivate() ? " private" : "",
                       aFormatter.Quotew( aTextBox->GetText() ).c_str() );
 
-    aFormatter.Print( aNestLevel + 1, "(start %s %s) (end %s %s)\n",
-                      FormatInternalUnits( aTextBox->GetStart().x ).c_str(),
-                      FormatInternalUnits( aTextBox->GetStart().y ).c_str(),
-                      FormatInternalUnits( aTextBox->GetEnd().x ).c_str(),
-                      FormatInternalUnits( aTextBox->GetEnd().y ).c_str() );
+    VECTOR2I pos = aTextBox->GetStart();
+    VECTOR2I size = aTextBox->GetEnd() - pos;
+
+    aFormatter.Print( aNestLevel + 1, "(at %s %s %s) (size %s %s)\n",
+                      FormatInternalUnits( pos.x ).c_str(),
+                      FormatInternalUnits( pos.y ).c_str(),
+                      FormatAngle( aTextBox->GetTextAngle() ).c_str(),
+                      FormatInternalUnits( size.x ).c_str(),
+                      FormatInternalUnits( size.y ).c_str() );
 
     aTextBox->GetStroke().Format( &aFormatter, aNestLevel + 1 );
     aFormatter.Print( 0, "\n" );

@@ -1613,6 +1613,11 @@ LIB_TEXTBOX* SCH_SEXPR_PARSER::parseTextBox()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a text box." ) );
 
     T             token;
+    VECTOR2I      pos;
+    VECTOR2I      end;
+    VECTOR2I      size;
+    bool          foundEnd = false;
+    bool          foundSize = false;
     STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS   fill;
     std::unique_ptr<LIB_TEXTBOX> textBox = std::make_unique<LIB_TEXTBOX>( nullptr );
@@ -1642,13 +1647,26 @@ LIB_TEXTBOX* SCH_SEXPR_PARSER::parseTextBox()
 
         switch( token )
         {
-        case T_start:
-            textBox->SetPosition( parseXY() );
+        case T_start:       // Legacy token during 6.99 development; fails to handle angle
+            pos = parseXY();
             NeedRIGHT();
             break;
 
-        case T_end:
-            textBox->SetEnd( parseXY() );
+        case T_end:         // Legacy token during 6.99 development; fails to handle angle
+            end = parseXY();
+            foundEnd = true;
+            NeedRIGHT();
+            break;
+
+        case T_at:
+            pos = parseXY();
+            textBox->SetTextAngle( EDA_ANGLE( parseDouble( "textbox angle" ), DEGREES_T ) );
+            NeedRIGHT();
+            break;
+
+        case T_size:
+            size = parseXY();
+            foundSize = true;
             NeedRIGHT();
             break;
 
@@ -1668,9 +1686,18 @@ LIB_TEXTBOX* SCH_SEXPR_PARSER::parseTextBox()
             break;
 
         default:
-            Expecting( "start, end, stroke, fill or effects" );
+            Expecting( "at, size, stroke, fill or effects" );
         }
     }
+
+    textBox->SetPosition( pos );
+
+    if( foundEnd )
+        textBox->SetEnd( end );
+    else if( foundSize )
+        textBox->SetEnd( pos + size );
+    else
+        Expecting( "size" );
 
     return textBox.release();
 }
@@ -3516,6 +3543,11 @@ SCH_TEXTBOX* SCH_SEXPR_PARSER::parseSchTextBox()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a text box." ) );
 
     T             token;
+    VECTOR2I      pos;
+    VECTOR2I      end;
+    VECTOR2I      size;
+    bool          foundEnd = false;
+    bool          foundSize = false;
     STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS   fill;
     std::unique_ptr<SCH_TEXTBOX> textBox = std::make_unique<SCH_TEXTBOX>();
@@ -3533,13 +3565,26 @@ SCH_TEXTBOX* SCH_SEXPR_PARSER::parseSchTextBox()
 
         switch( token )
         {
-        case T_start:
-            textBox->SetPosition( parseXY() );
+        case T_start:       // Legacy token during 6.99 development; fails to handle angle
+            pos = parseXY();
             NeedRIGHT();
             break;
 
-        case T_end:
-            textBox->SetEnd( parseXY() );
+        case T_end:         // Legacy token during 6.99 development; fails to handle angle
+            end = parseXY();
+            foundEnd = true;
+            NeedRIGHT();
+            break;
+
+        case T_at:
+            pos = parseXY();
+            textBox->SetTextAngle( EDA_ANGLE( parseDouble( "textbox angle" ), DEGREES_T ) );
+            NeedRIGHT();
+            break;
+
+        case T_size:
+            size = parseXY();
+            foundSize = true;
             NeedRIGHT();
             break;
 
@@ -3565,9 +3610,18 @@ SCH_TEXTBOX* SCH_SEXPR_PARSER::parseSchTextBox()
             break;
 
         default:
-            Expecting( "start, end, stroke, fill or uuid" );
+            Expecting( "at, size, stroke, fill, effects or uuid" );
         }
     }
+
+    textBox->SetPosition( pos );
+
+    if( foundEnd )
+        textBox->SetEnd( end );
+    else if( foundSize )
+        textBox->SetEnd( pos + size );
+    else
+        Expecting( "size" );
 
     return textBox.release();
 }

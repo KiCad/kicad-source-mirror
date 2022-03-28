@@ -1134,11 +1134,15 @@ void SCH_SEXPR_PLUGIN::saveTextBox( SCH_TEXTBOX* aTextBox, int aNestLevel )
     m_out->Print( aNestLevel, "(text_box %s\n",
                   m_out->Quotew( aTextBox->GetText() ).c_str() );
 
-    m_out->Print( aNestLevel + 1, "(start %s %s) (end %s %s)\n",
-                  FormatInternalUnits( aTextBox->GetStart().x ).c_str(),
-                  FormatInternalUnits( aTextBox->GetStart().y ).c_str(),
-                  FormatInternalUnits( aTextBox->GetEnd().x ).c_str(),
-                  FormatInternalUnits( aTextBox->GetEnd().y ).c_str() );
+    VECTOR2I pos = aTextBox->GetStart();
+    VECTOR2I size = aTextBox->GetEnd() - pos;
+
+    m_out->Print( aNestLevel + 1, "(at %s %s %s) (size %s %s)\n",
+                  FormatInternalUnits( pos.x ).c_str(),
+                  FormatInternalUnits( pos.y ).c_str(),
+                  FormatAngle( aTextBox->GetTextAngle() ).c_str(),
+                  FormatInternalUnits( size.x ).c_str(),
+                  FormatInternalUnits( size.y ).c_str() );
 
     aTextBox->GetStroke().Format( m_out, aNestLevel + 1 );
     m_out->Print( 0, "\n" );
