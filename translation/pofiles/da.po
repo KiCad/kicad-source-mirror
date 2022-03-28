@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-18 12:52-0700\n"
+"POT-Creation-Date: 2022-03-28 11:13-0700\n"
 "PO-Revision-Date: 2021-08-20 19:52+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/kicad/master-"
@@ -1073,7 +1073,7 @@ msgstr "Z:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:66
 #: gerbview/gerber_draw_item.cpp:726 pcbnew/footprint.cpp:979
-#: pcbnew/pad.cpp:953
+#: pcbnew/pad.cpp:972
 msgid "Rotation"
 msgstr "Rotation"
 
@@ -3430,7 +3430,7 @@ msgstr "Zoom"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:943
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:715
-#: pcbnew/dialogs/dialog_plot_base.cpp:117 pcbnew/pad.cpp:1663
+#: pcbnew/dialogs/dialog_plot_base.cpp:117 pcbnew/pad.cpp:1682
 #: pcbnew/widgets/appearance_controls.cpp:700
 #: pcbnew/widgets/appearance_controls.cpp:742
 #: pcbnew/widgets/appearance_controls.cpp:2370
@@ -3616,7 +3616,7 @@ msgid "The default net class is required."
 msgstr "Standardnetklassen er påkrævet."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:41
-#: common/dialogs/panel_setup_netclasses_base.cpp:215 pcbnew/pad.cpp:905
+#: common/dialogs/panel_setup_netclasses_base.cpp:215 pcbnew/pad.cpp:924
 #: pcbnew/pcb_track.cpp:770 pcbnew/zone.cpp:591
 msgid "Net Class"
 msgstr "Nettoklasse"
@@ -3736,7 +3736,7 @@ msgstr "Tildel til valgte net"
 #: common/dialogs/panel_setup_netclasses_base.cpp:214
 #: pcbnew/board_connected_item.cpp:176
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
-#: pcbnew/dialogs/dialog_net_inspector.cpp:77 pcbnew/pad.cpp:903
+#: pcbnew/dialogs/dialog_net_inspector.cpp:77 pcbnew/pad.cpp:922
 #: pcbnew/pcb_track.cpp:768 pcbnew/zone.cpp:589
 msgid "Net"
 msgstr "Net"
@@ -3891,7 +3891,7 @@ msgstr "Linje"
 #: common/drawing_sheet/ds_data_item.cpp:372
 #: common/drawing_sheet/ds_draw_item.cpp:118 common/eda_shape.cpp:602
 #: common/eda_shape.cpp:1632
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43 pcbnew/pad.cpp:1655
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43 pcbnew/pad.cpp:1674
 msgid "Rectangle"
 msgstr "Rektangel"
 
@@ -4139,12 +4139,12 @@ msgstr "Skærm"
 #: eeschema/sch_symbol.cpp:1423
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:117
 #: pcbnew/fp_text.cpp:279 pcbnew/load_select_footprint.cpp:372
-#: pcbnew/pad.cpp:890
+#: pcbnew/pad.cpp:909
 msgid "Footprint"
 msgstr "Fodaftryk"
 
 #: common/eda_item.cpp:316 pcbnew/dialogs/dialog_board_statistics.cpp:510
-#: pcbnew/pad.cpp:893
+#: pcbnew/pad.cpp:912
 msgid "Pad"
 msgstr "Pude"
 
@@ -4272,7 +4272,7 @@ msgstr "Gerber Layout"
 msgid "Draw Item"
 msgstr "Tegn element"
 
-#: common/eda_shape.cpp:61 pcbnew/pad.cpp:1143
+#: common/eda_shape.cpp:61 pcbnew/pad.cpp:1162
 msgid "Rect"
 msgstr "Ret"
 
@@ -4287,8 +4287,8 @@ msgstr "Bue"
 #: common/eda_shape.cpp:63 common/eda_shape.cpp:571 common/eda_shape.cpp:1634
 #: gerbview/gerber_draw_item.cpp:237
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43
-#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:138 pcbnew/pad.cpp:1141
-#: pcbnew/pad.cpp:1654
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:138 pcbnew/pad.cpp:1160
+#: pcbnew/pad.cpp:1673
 msgid "Circle"
 msgstr "Cirkel"
 
@@ -4307,7 +4307,7 @@ msgstr "Polygon"
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:232
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:120
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:44
-#: pcbnew/microwave/microwave_polygon.cpp:130 pcbnew/pad.cpp:1679
+#: pcbnew/microwave/microwave_polygon.cpp:130 pcbnew/pad.cpp:1698
 #: pcbnew/pcb_target.cpp:159 pcbnew/pcb_target.cpp:207
 msgid "Shape"
 msgstr "Figur"
@@ -4345,10 +4345,10 @@ msgstr "Punkter"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:54
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:42
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:155
-#: pcbnew/fp_text.cpp:305 pcbnew/fp_text_grid_table.cpp:105 pcbnew/pad.cpp:940
+#: pcbnew/fp_text.cpp:305 pcbnew/fp_text_grid_table.cpp:105 pcbnew/pad.cpp:959
 #: pcbnew/pcb_target.cpp:158 pcbnew/pcb_target.cpp:204 pcbnew/pcb_text.cpp:127
-#: pcbnew/pcb_track.cpp:681 pcbnew/pcb_track.cpp:1131 pcbnew/pcb_track.cpp:1148
-#: pcbnew/pcb_track.cpp:1167
+#: pcbnew/pcb_track.cpp:681 pcbnew/pcb_track.cpp:1132 pcbnew/pcb_track.cpp:1149
+#: pcbnew/pcb_track.cpp:1168
 msgid "Width"
 msgstr "Bredde"
 
@@ -4357,7 +4357,7 @@ msgstr "Bredde"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:706
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:55
-#: pcbnew/fp_text.cpp:308 pcbnew/fp_text_grid_table.cpp:106 pcbnew/pad.cpp:941
+#: pcbnew/fp_text.cpp:308 pcbnew/fp_text_grid_table.cpp:106 pcbnew/pad.cpp:960
 #: pcbnew/pcb_dimension.cpp:718 pcbnew/pcb_text.cpp:128
 msgid "Height"
 msgstr "Højde"
@@ -4399,13 +4399,13 @@ msgstr "Start lag"
 msgid "Start Y"
 msgstr "Start lag"
 
-#: common/eda_shape.cpp:1652 pcbnew/pcb_shape.cpp:264 pcbnew/pcb_track.cpp:1139
-#: pcbnew/pcb_track.cpp:1156
+#: common/eda_shape.cpp:1652 pcbnew/pcb_shape.cpp:264 pcbnew/pcb_track.cpp:1140
+#: pcbnew/pcb_track.cpp:1157
 msgid "End X"
 msgstr "Afslut X"
 
-#: common/eda_shape.cpp:1654 pcbnew/pcb_shape.cpp:266 pcbnew/pcb_track.cpp:1141
-#: pcbnew/pcb_track.cpp:1158
+#: common/eda_shape.cpp:1654 pcbnew/pcb_shape.cpp:266 pcbnew/pcb_track.cpp:1142
+#: pcbnew/pcb_track.cpp:1159
 msgid "End Y"
 msgstr "Afslut Y"
 
@@ -5642,8 +5642,8 @@ msgid "Invalid size %lld: too large"
 msgstr "Ugyldig størrelse %ll d: for stor"
 
 #: common/plugins/eagle/eagle_parser.cpp:281
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:369
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:385
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:373
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:389
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Ugyldig lysbue med radius %f og vinkel %f"
@@ -8955,7 +8955,7 @@ msgstr "Grafisk stil"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:156
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
 #: pcbnew/footprint.cpp:2387 pcbnew/fp_text_grid_table.cpp:110
-#: pcbnew/pad.cpp:1689
+#: pcbnew/pad.cpp:1708
 msgid "Orientation"
 msgstr "Orientering"
 
@@ -9579,7 +9579,7 @@ msgstr "Nyt mærke"
 #: eeschema/dialogs/dialog_migrate_buses.cpp:104
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:86
 #: pcbnew/dialogs/dialog_find_base.cpp:120 pcbnew/fp_text.cpp:289
-#: pcbnew/pad.cpp:908 pcbnew/pcb_dimension.cpp:351 pcbnew/pcb_group.cpp:339
+#: pcbnew/pad.cpp:927 pcbnew/pcb_dimension.cpp:351 pcbnew/pcb_group.cpp:339
 #: pcbnew/pcb_shape.cpp:155 pcbnew/pcb_text.cpp:118 pcbnew/pcb_track.cpp:787
 #: pcbnew/zone.cpp:601
 msgid "Status"
@@ -10901,7 +10901,7 @@ msgstr "Krydderidirektiver:"
 msgid "Load directives from schematic"
 msgstr "Indlæs direktiver fra skematisk"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:429 pcbnew/pad.cpp:1660
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:429 pcbnew/pad.cpp:1679
 msgid "Custom"
 msgstr "Brugerdefinerede"
 
@@ -14431,7 +14431,7 @@ msgstr "Filnavn"
 msgid "Hierarchical Sheet %s"
 msgstr "Hierarkisk ark %s"
 
-#: eeschema/sch_sheet_path.cpp:57 include/board_item.h:335
+#: eeschema/sch_sheet_path.cpp:57 include/board_item.h:336
 msgid "(Deleted Item)"
 msgstr "(Slettet vare)"
 
@@ -15707,7 +15707,7 @@ msgstr "Ikke defineret!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1228
 #: eeschema/symbol_viewer_frame.cpp:367 pcbnew/fp_shape.cpp:421
-#: pcbnew/fp_text.cpp:501 pcbnew/pad.cpp:1736
+#: pcbnew/fp_text.cpp:501 pcbnew/pad.cpp:1755
 msgid "Parent"
 msgstr "Forælder"
 
@@ -17441,10 +17441,10 @@ msgstr "Vælg lag: %s"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:54
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:47
 #: pcbnew/footprint.cpp:2378 pcbnew/footprint.cpp:2381 pcbnew/fp_text.cpp:294
-#: pcbnew/fp_text_grid_table.cpp:109 pcbnew/pad.cpp:912
+#: pcbnew/fp_text_grid_table.cpp:109 pcbnew/pad.cpp:931
 #: pcbnew/pcb_dimension.cpp:353 pcbnew/pcb_dimension.cpp:1087
 #: pcbnew/pcb_shape.cpp:159 pcbnew/pcb_target.cpp:155 pcbnew/pcb_text.cpp:120
-#: pcbnew/pcb_track.cpp:679 pcbnew/pcb_track.cpp:738 pcbnew/pcb_track.cpp:1172
+#: pcbnew/pcb_track.cpp:679 pcbnew/pcb_track.cpp:738 pcbnew/pcb_track.cpp:1173
 #: pcbnew/tools/board_inspection_tool.cpp:238
 #: pcbnew/tools/board_inspection_tool.cpp:385
 #: pcbnew/tools/board_inspection_tool.cpp:461
@@ -21585,13 +21585,13 @@ msgstr "og andre"
 msgid "no layers"
 msgstr "ingen lag"
 
-#: pcbnew/board_item.cpp:232 pcbnew/pcb_track.cpp:1133
-#: pcbnew/pcb_track.cpp:1150
+#: pcbnew/board_item.cpp:232 pcbnew/pcb_track.cpp:1134
+#: pcbnew/pcb_track.cpp:1151
 msgid "Position X"
 msgstr "Position X"
 
-#: pcbnew/board_item.cpp:234 pcbnew/pcb_track.cpp:1136
-#: pcbnew/pcb_track.cpp:1153
+#: pcbnew/board_item.cpp:234 pcbnew/pcb_track.cpp:1137
+#: pcbnew/pcb_track.cpp:1154
 msgid "Position Y"
 msgstr "Position Y"
 
@@ -21603,7 +21603,7 @@ msgstr "Position Y"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:101
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:80
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:46
-#: pcbnew/footprint.cpp:963 pcbnew/fp_text.cpp:289 pcbnew/pad.cpp:908
+#: pcbnew/footprint.cpp:963 pcbnew/fp_text.cpp:289 pcbnew/pad.cpp:927
 #: pcbnew/pcb_dimension.cpp:351 pcbnew/pcb_group.cpp:339
 #: pcbnew/pcb_shape.cpp:155 pcbnew/pcb_text.cpp:118 pcbnew/pcb_track.cpp:787
 #: pcbnew/zone.cpp:601
@@ -22749,11 +22749,11 @@ msgstr "???"
 msgid "N/A"
 msgstr "N/A"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:508 pcbnew/pad.cpp:1157
+#: pcbnew/dialogs/dialog_board_statistics.cpp:508 pcbnew/pad.cpp:1176
 msgid "PTH"
 msgstr "PTH"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:508 pcbnew/pad.cpp:1160
+#: pcbnew/dialogs/dialog_board_statistics.cpp:508 pcbnew/pad.cpp:1179
 msgid "NPTH"
 msgstr "NPTH"
 
@@ -24548,8 +24548,8 @@ msgstr "Gennem hul"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/footprint.cpp:704
-#: pcbnew/footprint_libraries_utils.cpp:1149 pcbnew/pad.cpp:1158
-#: pcbnew/pad.cpp:1649
+#: pcbnew/footprint_libraries_utils.cpp:1149 pcbnew/pad.cpp:1177
+#: pcbnew/pad.cpp:1668
 msgid "SMD"
 msgstr "SMD"
 
@@ -25483,23 +25483,23 @@ msgstr "Rektangelegenskaber"
 msgid "Line Segment Properties"
 msgstr "Egenskaber for linjesegment"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:339
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:343
 msgid "Modify drawing properties"
 msgstr "Rediger tegneegenskaber"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:364
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:368
 msgid "The arc angle cannot be zero."
 msgstr "Buevinklen kan ikke være nul."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:394
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:398
 msgid "The radius cannot be zero."
 msgstr "Radius kan ikke være nul."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:400
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:404
 msgid "The rectangle cannot be empty."
 msgstr "Rektanglet kan ikke være tomt."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:415
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:419
 msgid "Error List"
 msgstr "Fejlliste"
 
@@ -26200,7 +26200,7 @@ msgstr "Tilføj Primitive"
 msgid "Pad type:"
 msgstr "Pad type:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1648
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1667
 msgid "Through-hole"
 msgstr "Gennem hul"
 
@@ -26208,8 +26208,8 @@ msgstr "Gennem hul"
 msgid "Edge Connector"
 msgstr "Edge Connector"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1180
-#: pcbnew/pad.cpp:1203
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1199
+#: pcbnew/pad.cpp:1222
 msgid "NPTH, Mechanical"
 msgstr "NPTH, Mekanisk"
 
@@ -26235,8 +26235,8 @@ msgid "Circular"
 msgstr "Cirkulær"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:370 pcbnew/pad.cpp:1142
-#: pcbnew/pad.cpp:1656
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:370 pcbnew/pad.cpp:1161
+#: pcbnew/pad.cpp:1675
 msgid "Oval"
 msgstr "Oval"
 
@@ -26248,11 +26248,11 @@ msgstr "Rektangulær"
 msgid "Trapezoidal"
 msgstr "Trapesformet"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1658
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1677
 msgid "Rounded rectangle"
 msgstr "Afrundet rektangel"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1659
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1678
 msgid "Chamfered rectangle"
 msgstr "Affaset rektangel"
 
@@ -26450,23 +26450,23 @@ msgstr ""
 "Castellated specificerer castellated gennem hulpuder på en plankant\n"
 "Disse egenskaber er specificeret i Gerber X2-filer."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1664
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1683
 msgid "BGA pad"
 msgstr "BGA-pude"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1666
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1685
 msgid "Fiducial, local to footprint"
 msgstr "Fiducial, lokal til fodaftryk"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1665
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1684
 msgid "Fiducial, global to board"
 msgstr "Fiducial, global til bord"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1667
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1686
 msgid "Test point pad"
 msgstr "Testpude"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1668
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1687
 msgid "Heatsink pad"
 msgstr "Kølelegeme pad"
 
@@ -27712,17 +27712,17 @@ msgid "Via type:"
 msgstr "Via type:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
-#: pcbnew/pcb_track.cpp:1111
+#: pcbnew/pcb_track.cpp:1112
 msgid "Through"
 msgstr "igennem"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
-#: pcbnew/pcb_track.cpp:1113
+#: pcbnew/pcb_track.cpp:1114
 msgid "Micro"
 msgstr "Micro"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
-#: pcbnew/pcb_track.cpp:1112
+#: pcbnew/pcb_track.cpp:1113
 msgid "Blind/buried"
 msgstr "Blind / begravet"
 
@@ -29461,7 +29461,7 @@ msgstr "7"
 msgid "Size"
 msgstr "Størrelse"
 
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:99 pcbnew/pad.cpp:965
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:99 pcbnew/pad.cpp:984
 #: pcbnew/tools/board_inspection_tool.cpp:564
 #, fuzzy
 msgid "Hole"
@@ -30358,7 +30358,7 @@ msgstr "Opret fil %s\n"
 msgid "Created Gerber job file '%s'."
 msgstr "Opret Gerber jobfil \"%s\""
 
-#: pcbnew/exporters/gerber_jobfile_writer.cpp:591
+#: pcbnew/exporters/gerber_jobfile_writer.cpp:594
 #, fuzzy
 msgid "Board stackup settings not up to date."
 msgstr ""
@@ -30609,27 +30609,27 @@ msgstr ""
 msgid "(pad \"%s\")"
 msgstr "pude %s"
 
-#: pcbnew/footprint.cpp:2390 pcbnew/pad.cpp:1733 pcbnew/zone.cpp:1458
+#: pcbnew/footprint.cpp:2390 pcbnew/pad.cpp:1752 pcbnew/zone.cpp:1458
 #, fuzzy
 msgid "Clearance Override"
 msgstr "Clearance konturer"
 
-#: pcbnew/footprint.cpp:2393 pcbnew/pad.cpp:1710
+#: pcbnew/footprint.cpp:2393 pcbnew/pad.cpp:1729
 #, fuzzy
 msgid "Solderpaste Margin Override"
 msgstr "Lokal loddepasta Margin"
 
-#: pcbnew/footprint.cpp:2397 pcbnew/pad.cpp:1713
+#: pcbnew/footprint.cpp:2397 pcbnew/pad.cpp:1732
 #, fuzzy
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Lokal loddepasta margenforhold"
 
-#: pcbnew/footprint.cpp:2400 pcbnew/pad.cpp:1715 pcbnew/zone.cpp:1469
+#: pcbnew/footprint.cpp:2400 pcbnew/pad.cpp:1734 pcbnew/zone.cpp:1469
 #, fuzzy
 msgid "Thermal Relief Width"
 msgstr "Bredde på termisk aflastning"
 
-#: pcbnew/footprint.cpp:2404 pcbnew/pad.cpp:1718 pcbnew/zone.cpp:1466
+#: pcbnew/footprint.cpp:2404 pcbnew/pad.cpp:1737 pcbnew/zone.cpp:1466
 #, fuzzy
 msgid "Thermal Relief Gap"
 msgstr "Termisk lindring"
@@ -31739,167 +31739,167 @@ msgstr ""
 "fil: \"%s\"\n"
 "linje: %d"
 
-#: pcbnew/pad.cpp:721 pcbnew/pad.cpp:836 pcbnew/pad.cpp:856 pcbnew/pad.cpp:875
+#: pcbnew/pad.cpp:740 pcbnew/pad.cpp:855 pcbnew/pad.cpp:875 pcbnew/pad.cpp:894
 msgid "pad"
 msgstr "pad"
 
-#: pcbnew/pad.cpp:829 pcbnew/pad.cpp:850 pcbnew/pad.cpp:869
+#: pcbnew/pad.cpp:848 pcbnew/pad.cpp:869 pcbnew/pad.cpp:888
 msgid "parent footprint"
 msgstr "forældres fodaftryk"
 
-#: pcbnew/pad.cpp:896 pcbnew/pad.cpp:1685
+#: pcbnew/pad.cpp:915 pcbnew/pad.cpp:1704
 msgid "Pin Name"
 msgstr "Pin-navn"
 
-#: pcbnew/pad.cpp:899 pcbnew/pad.cpp:1687
+#: pcbnew/pad.cpp:918 pcbnew/pad.cpp:1706
 #, fuzzy
 msgid "Pin Type"
 msgstr "Plugin-type"
 
-#: pcbnew/pad.cpp:923
+#: pcbnew/pad.cpp:942
 msgid "BGA"
 msgstr "BGA"
 
-#: pcbnew/pad.cpp:924
+#: pcbnew/pad.cpp:943
 msgid "Fiducial global"
 msgstr "Fiducial global"
 
-#: pcbnew/pad.cpp:925
+#: pcbnew/pad.cpp:944
 msgid "Fiducial local"
 msgstr "Fiducial lokal"
 
-#: pcbnew/pad.cpp:926
+#: pcbnew/pad.cpp:945
 msgid "Test point"
 msgstr "Testpunkt"
 
-#: pcbnew/pad.cpp:927
+#: pcbnew/pad.cpp:946
 msgid "Heat sink"
 msgstr "Kølelegeme"
 
-#: pcbnew/pad.cpp:928
+#: pcbnew/pad.cpp:947
 msgid "Castellated"
 msgstr "Castelleret"
 
-#: pcbnew/pad.cpp:936 pcbnew/pcb_track.cpp:742 pcbnew/pcb_track.cpp:1168
+#: pcbnew/pad.cpp:955 pcbnew/pcb_track.cpp:742 pcbnew/pcb_track.cpp:1169
 msgid "Diameter"
 msgstr "Diameter"
 
-#: pcbnew/pad.cpp:958
+#: pcbnew/pad.cpp:977
 msgid "Length in Package"
 msgstr "Længde i pakke"
 
-#: pcbnew/pad.cpp:971
+#: pcbnew/pad.cpp:990
 #, fuzzy
 msgid "Hole X / Y"
 msgstr "Bor X / Y"
 
-#: pcbnew/pad.cpp:983 pcbnew/pcb_track.cpp:715 pcbnew/pcb_track.cpp:751
+#: pcbnew/pad.cpp:1002 pcbnew/pcb_track.cpp:715 pcbnew/pcb_track.cpp:751
 #: pcbnew/router/router_tool.cpp:2141 pcbnew/zone.cpp:640
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "Min. Frihøjde: %s"
 
-#: pcbnew/pad.cpp:985 pcbnew/pcb_track.cpp:717 pcbnew/pcb_track.cpp:753
+#: pcbnew/pad.cpp:1004 pcbnew/pcb_track.cpp:717 pcbnew/pcb_track.cpp:753
 #: pcbnew/pcb_track.cpp:759 pcbnew/router/router_tool.cpp:2129
 #: pcbnew/router/router_tool.cpp:2143 pcbnew/zone.cpp:642
 #, c-format
 msgid "(from %s)"
 msgstr "(fra %s)"
 
-#: pcbnew/pad.cpp:1144
+#: pcbnew/pad.cpp:1163
 msgid "Trap"
 msgstr "Fælde"
 
-#: pcbnew/pad.cpp:1145
+#: pcbnew/pad.cpp:1164
 msgid "Roundrect"
 msgstr "Roundrect"
 
-#: pcbnew/pad.cpp:1146
+#: pcbnew/pad.cpp:1165
 msgid "Chamferedrect"
 msgstr "Affasningsretning"
 
-#: pcbnew/pad.cpp:1147
+#: pcbnew/pad.cpp:1166
 msgid "CustomShape"
 msgstr "CustomShape"
 
-#: pcbnew/pad.cpp:1159
+#: pcbnew/pad.cpp:1178
 msgid "Conn"
 msgstr "Conn"
 
-#: pcbnew/pad.cpp:1172
+#: pcbnew/pad.cpp:1191
 #, c-format
 msgid "Pad %s of %s on %s"
 msgstr "Pad %s af %s på %s"
 
-#: pcbnew/pad.cpp:1179 pcbnew/pad.cpp:1185 pcbnew/pad.cpp:1202
+#: pcbnew/pad.cpp:1198 pcbnew/pad.cpp:1204 pcbnew/pad.cpp:1221
 #, fuzzy, c-format
 msgid "Through hole pad %s of %s"
 msgstr "Gennemgående hulpuder"
 
-#: pcbnew/pad.cpp:1194
+#: pcbnew/pad.cpp:1213
 #, fuzzy, c-format
 msgid "Pad %s %s of %s on %s"
 msgstr "Pad %s af %s på %s"
 
-#: pcbnew/pad.cpp:1208
+#: pcbnew/pad.cpp:1227
 #, fuzzy, c-format
 msgid "Through hole pad %s %s of %s"
 msgstr "Gennemgående hulpuder"
 
-#: pcbnew/pad.cpp:1650
+#: pcbnew/pad.cpp:1669
 msgid "Edge connector"
 msgstr "Kantstik"
 
-#: pcbnew/pad.cpp:1651
+#: pcbnew/pad.cpp:1670
 msgid "NPTH, mechanical"
 msgstr "NPTH, mekanisk"
 
-#: pcbnew/pad.cpp:1657
+#: pcbnew/pad.cpp:1676
 msgid "Trapezoid"
 msgstr "Trapesformet"
 
-#: pcbnew/pad.cpp:1669
+#: pcbnew/pad.cpp:1688
 msgid "Castellated pad"
 msgstr "Castelleret pude"
 
-#: pcbnew/pad.cpp:1675
+#: pcbnew/pad.cpp:1694
 msgid "Pad Type"
 msgstr "Pad type"
 
-#: pcbnew/pad.cpp:1683
+#: pcbnew/pad.cpp:1702
 msgid "Pad Number"
 msgstr "Pad nummer"
 
-#: pcbnew/pad.cpp:1692
+#: pcbnew/pad.cpp:1711
 msgid "Size X"
 msgstr "Størrelse X"
 
-#: pcbnew/pad.cpp:1695
+#: pcbnew/pad.cpp:1714
 msgid "Size Y"
 msgstr "Størrelse Y"
 
-#: pcbnew/pad.cpp:1698
+#: pcbnew/pad.cpp:1717
 msgid "Hole Size X"
 msgstr "Hulstørrelse X"
 
-#: pcbnew/pad.cpp:1701
+#: pcbnew/pad.cpp:1720
 msgid "Hole Size Y"
 msgstr "Hulstørrelse Y"
 
-#: pcbnew/pad.cpp:1704 pcbnew/pcb_track.cpp:705
+#: pcbnew/pad.cpp:1723 pcbnew/pcb_track.cpp:705
 msgid "Pad To Die Length"
 msgstr "Pude til dø længde"
 
-#: pcbnew/pad.cpp:1707
+#: pcbnew/pad.cpp:1726
 #, fuzzy
 msgid "Soldermask Margin Override"
 msgstr "Lokal loddemaskemargin"
 
-#: pcbnew/pad.cpp:1721
+#: pcbnew/pad.cpp:1740
 msgid "Fabrication Property"
 msgstr "Fabrikationsejendom"
 
-#: pcbnew/pad.cpp:1724
+#: pcbnew/pad.cpp:1743
 msgid "Round Radius Ratio"
 msgstr "Round Radius Ratio"
 
@@ -32131,7 +32131,7 @@ msgstr "Blind / Begravet Via"
 msgid "Through Via"
 msgstr "Gennem Via"
 
-#: pcbnew/pcb_track.cpp:746 pcbnew/pcb_track.cpp:1170
+#: pcbnew/pcb_track.cpp:746 pcbnew/pcb_track.cpp:1171
 msgid "Drill"
 msgstr "Bore"
 
@@ -32154,23 +32154,23 @@ msgstr "Spor %s på %s, længde %s"
 msgid "Track %s on %s, length %s"
 msgstr "Spor %s på %s, længde %s"
 
-#: pcbnew/pcb_track.cpp:1134 pcbnew/pcb_track.cpp:1151
+#: pcbnew/pcb_track.cpp:1135 pcbnew/pcb_track.cpp:1152
 msgid "Origin X"
 msgstr "Oprindelse X"
 
-#: pcbnew/pcb_track.cpp:1137 pcbnew/pcb_track.cpp:1154
+#: pcbnew/pcb_track.cpp:1138 pcbnew/pcb_track.cpp:1155
 msgid "Origin Y"
 msgstr "Oprindelse Y"
 
-#: pcbnew/pcb_track.cpp:1173
+#: pcbnew/pcb_track.cpp:1174
 msgid "Layer Top"
 msgstr "Layer Top"
 
-#: pcbnew/pcb_track.cpp:1175
+#: pcbnew/pcb_track.cpp:1176
 msgid "Layer Bottom"
 msgstr "Lagbund"
 
-#: pcbnew/pcb_track.cpp:1177
+#: pcbnew/pcb_track.cpp:1178
 msgid "Via Type"
 msgstr "Via Type"
 
@@ -34077,7 +34077,7 @@ msgstr "Symbolet med værdien \"%s\" har tom reference-id."
 msgid "Multiple symbols have identical reference IDs of '%s'."
 msgstr "Flere symboler har identiske reference-id'er på \"%s\"."
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:70
+#: pcbnew/specctra_import_export/specctra_import.cpp:78
 msgid ""
 "Board may be corrupted, do not save it.\n"
 " Fix problem and try again"
@@ -34085,53 +34085,53 @@ msgstr ""
 "Board kan være beskadiget, gem det ikke.\n"
 " Løs problemet, og prøv igen"
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:93
+#: pcbnew/specctra_import_export/specctra_import.cpp:101
 msgid "Session file imported and merged OK."
 msgstr "Sessionsfil importeret og flettet OK."
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:166
+#: pcbnew/specctra_import_export/specctra_import.cpp:174
 #, fuzzy, c-format
 msgid "Session file uses invalid layer id '%s'."
 msgstr "Sessionsfil bruger ugyldigt lag-id \"%s\""
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:217
+#: pcbnew/specctra_import_export/specctra_import.cpp:233
 msgid "Session via padstack has no shapes"
 msgstr "Session via padstack har ingen former"
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:226
+#: pcbnew/specctra_import_export/specctra_import.cpp:242
 #, fuzzy, c-format
 msgid "Unsupported via shape: %s."
 msgstr "Ikke understøttet via form: %s"
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:246
-#: pcbnew/specctra_import_export/specctra_import.cpp:271
+#: pcbnew/specctra_import_export/specctra_import.cpp:262
+#: pcbnew/specctra_import_export/specctra_import.cpp:287
 #, c-format
 msgid "Unsupported via shape: %s"
 msgstr "Ikke understøttet via form: %s"
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:280
+#: pcbnew/specctra_import_export/specctra_import.cpp:296
 #, c-format
 msgid "Session file uses invalid layer id \"%s\""
 msgstr "Sessionsfil bruger ugyldigt lag-id \"%s\""
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:326
+#: pcbnew/specctra_import_export/specctra_import.cpp:351
 msgid "Session file is missing the \"session\" section"
 msgstr "Sessionsfilen mangler sektionen \"session\""
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:329
+#: pcbnew/specctra_import_export/specctra_import.cpp:354
 msgid "Session file is missing the \"routes\" section"
 msgstr "Sessionsfilen mangler sektionen \"ruter\""
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:332
+#: pcbnew/specctra_import_export/specctra_import.cpp:357
 msgid "Session file is missing the \"library_out\" section"
 msgstr "Sessionsfilen mangler sektionen \"bibliotek_out\""
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:359
+#: pcbnew/specctra_import_export/specctra_import.cpp:403
 #, c-format
 msgid "Reference '%s' not found."
 msgstr "Reference '%s' blev ikke fundet."
 
-#: pcbnew/specctra_import_export/specctra_import.cpp:501
+#: pcbnew/specctra_import_export/specctra_import.cpp:545
 #, fuzzy, c-format
 msgid "A wire_via refers to missing padstack '%s'."
 msgstr "En wire_via henviser til en manglende padstack \"%s\""
