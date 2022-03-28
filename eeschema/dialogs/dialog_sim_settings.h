@@ -39,7 +39,7 @@ class SPICE_SIMULATOR_SETTINGS;
 class DIALOG_SIM_SETTINGS : public DIALOG_SIM_SETTINGS_BASE
 {
 public:
-    DIALOG_SIM_SETTINGS( wxWindow* aParent, std::shared_ptr<NGSPICE_CIRCUIT_MODEL> aExporter,
+    DIALOG_SIM_SETTINGS( wxWindow* aParent, std::shared_ptr<NGSPICE_CIRCUIT_MODEL> aCircuitModel,
                          std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& aSettings );
 
     const wxString& GetSimCommand() const
@@ -178,7 +178,7 @@ private:
 
     wxString m_simCommand;
     int m_netlistOpts;
-    std::shared_ptr<NGSPICE_CIRCUIT_MODEL> m_exporter;
+    std::shared_ptr<NGSPICE_CIRCUIT_MODEL> m_circuitModel;
     std::shared_ptr<SPICE_SIMULATOR_SETTINGS> m_settings;
     SPICE_VALIDATOR m_spiceValidator;
     SPICE_VALIDATOR m_spiceEmptyValidator;

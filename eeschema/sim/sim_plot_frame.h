@@ -248,7 +248,7 @@ private:
     wxString getCurrentSimCommand() const
     {
         if( getCurrentPlotWindow() == nullptr )
-            return m_exporter->GetSheetSimCommand();
+            return m_circuitModel->GetSheetSimCommand();
         else
             return m_workbook->GetSimCommand( getCurrentPlotWindow() );
     }
@@ -333,7 +333,7 @@ private:
     wxToolBarToolBase* m_toolSettings;
 
     SCH_EDIT_FRAME* m_schematicFrame;
-    std::shared_ptr<NGSPICE_CIRCUIT_MODEL> m_exporter;
+    std::shared_ptr<NGSPICE_CIRCUIT_MODEL> m_circuitModel;
     std::shared_ptr<SPICE_SIMULATOR> m_simulator;
     SIM_THREAD_REPORTER* m_reporter;
 

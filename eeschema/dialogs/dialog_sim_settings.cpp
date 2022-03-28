@@ -57,10 +57,10 @@ static wxString getStringSelection( const wxChoice* aCtrl )
 
 
 DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent,
-                                          std::shared_ptr<NGSPICE_CIRCUIT_MODEL> aExporter,
+                                          std::shared_ptr<NGSPICE_CIRCUIT_MODEL> aCircuitModel,
                                           std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& aSettings ) :
         DIALOG_SIM_SETTINGS_BASE( aParent ),
-        m_exporter( aExporter ),
+        m_circuitModel( aCircuitModel ),
         m_settings( aSettings ),
         m_spiceEmptyValidator( true )
 {
@@ -133,7 +133,7 @@ wxString DIALOG_SIM_SETTINGS::evaluateDCControls( wxChoice* aDcSource, wxTextCtr
     {
         // pick device name from exporter when something different than temperature is selected
         if( dcSource.Cmp( "TEMP" ) )
-            dcSource = m_exporter->GetSpiceDevice( dcSource );
+            dcSource = m_circuitModel->GetSpiceDevice( dcSource );
 
         return wxString::Format( "%s %s %s %s", dcSource,
                                  SPICE_VALUE( aDcStart->GetValue() ).ToSpiceString(),
@@ -224,7 +224,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
     }
     else if( page == m_pgNoise )        // Noise analysis
     {
-        const std::map<wxString, int>& netMap = m_exporter->GetNetIndexMap();
+        const std::map<wxString, int>& netMap = m_circuitModel->GetNetIndexMap();
 
         if( empty( m_noiseMeas ) || empty( m_noiseSrc ) || empty( m_noisePointsNumber )
                 || empty( m_noiseFreqStart ) || empty( m_noiseFreqStop ) )
@@ -237,7 +237,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         if( !empty( m_noiseRef ) )
             ref = wxString::Format( ", %d", netMap.at( m_noiseRef->GetValue() ) );
 
-        wxString noiseSource = m_exporter->GetSpiceDevice( m_noiseSrc->GetValue() );
+        wxString noiseSource = m_circuitModel->GetSpiceDevice( m_noiseSrc->GetValue() );
 
         // Add voltage source prefix if needed
         if( noiseSource[0] != 'v' && noiseSource[0] != 'V' )
@@ -370,7 +370,7 @@ int DIALOG_SIM_SETTINGS::ShowModal()
     for( auto c : cmbNet )
         c.first->Clear();
 
-    for( const auto& net : m_exporter->GetNetIndexMap() )
+    for( const auto& net : m_circuitModel->GetNetIndexMap() )
     {
         for( auto c : cmbNet )
             c.first->Append( net.first );
@@ -401,7 +401,7 @@ void DIALOG_SIM_SETTINGS::updateDCSources( wxChar aType, wxChoice* aSource )
 
     if( aType != 'T' )
     {
-        for( const auto& item : m_exporter->GetSpiceItems() )
+        for( const auto& item : m_circuitModel->GetSpiceItems() )
         {
             if( item.m_primitive == aType && !item.m_refName.IsEmpty() )
                 sourcesList.insert( item.m_refName );
@@ -464,7 +464,7 @@ bool DIALOG_SIM_SETTINGS::parseCommand( const wxString& aCommand )
             SPICE_DC_PARAMS src1, src2;
             src2.m_vincrement = SPICE_VALUE( -1 );
 
-            if( !m_exporter->ParseDCCommand( aCommand, &src1, &src2 ) )
+            if( !m_circuitModel->ParseDCCommand( aCommand, &src1, &src2 ) )
                 return false;
 
             m_simPages->SetSelection( m_simPages->FindPage( m_pgDC ) );
@@ -601,8 +601,8 @@ void DIALOG_SIM_SETTINGS::updateDCUnits( wxChar aType, wxChoice* aSource,
 
 void DIALOG_SIM_SETTINGS::loadDirectives()
 {
-    if( m_exporter )
-        m_customTxt->SetValue( m_exporter->GetSheetSimCommand() );
+    if( m_circuitModel )
+        m_customTxt->SetValue( m_circuitModel->GetSheetSimCommand() );
 }
 
 

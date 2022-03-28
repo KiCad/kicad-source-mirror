@@ -33,7 +33,7 @@ class NGSPICE_CIRCUIT_MODEL;
 class DIALOG_SIGNAL_LIST : public DIALOG_SIGNAL_LIST_BASE
 {
 public:
-    DIALOG_SIGNAL_LIST( SIM_PLOT_FRAME* aParent, NGSPICE_CIRCUIT_MODEL* aExporter );
+    DIALOG_SIGNAL_LIST( SIM_PLOT_FRAME* aParent, NGSPICE_CIRCUIT_MODEL* aCircuitModel );
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
@@ -48,7 +48,7 @@ private:
     bool addSignalToPlotFrame( const wxString& aPlotName );
 
     SIM_PLOT_FRAME* m_plotFrame;
-    NGSPICE_CIRCUIT_MODEL* m_exporter;
+    NGSPICE_CIRCUIT_MODEL* m_circuitModel;
 };
 
 #endif /* DIALOG_SIGNAL_LIST_H */

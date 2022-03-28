@@ -32,10 +32,10 @@
 
 
 DIALOG_SIGNAL_LIST::DIALOG_SIGNAL_LIST( SIM_PLOT_FRAME* aParent,
-                                        NGSPICE_CIRCUIT_MODEL* aExporter ) :
+                                        NGSPICE_CIRCUIT_MODEL* aCircuitModel ) :
     DIALOG_SIGNAL_LIST_BASE( aParent ),
     m_plotFrame( aParent ),
-    m_exporter( aExporter )
+    m_circuitModel( aCircuitModel )
 {
 
 }
@@ -56,10 +56,10 @@ bool DIALOG_SIGNAL_LIST::TransferDataToWindow()
 {
     // Create a list of possible signals
     /// @todo it could include separated mag & phase for AC analysis
-    if( m_exporter )
+    if( m_circuitModel )
     {
         // Voltage list
-        for( const auto& net : m_exporter->GetNetIndexMap() )
+        for( const auto& net : m_circuitModel->GetNetIndexMap() )
         {
             // netnames are escaped (can contain "{slash}" for '/') Unscape them:
             wxString netname = UnescapeString( net.first );
@@ -68,11 +68,11 @@ bool DIALOG_SIGNAL_LIST::TransferDataToWindow()
                 m_signals->Append( wxString::Format( "V(%s)", netname ) );
         }
 
-        auto simType = m_exporter->GetSimType();
+        auto simType = m_circuitModel->GetSimType();
 
         if( simType == ST_TRANSIENT || simType == ST_DC )
         {
-            for( const auto& item : m_exporter->GetSpiceItems() )
+            for( const auto& item : m_circuitModel->GetSpiceItems() )
             {
                 // Add all possible currents for the primitive
                 for( const auto& current :
