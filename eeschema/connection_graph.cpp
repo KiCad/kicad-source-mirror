@@ -600,114 +600,140 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
         // Pre-scan to see if we have a bus at this location
         SCH_LINE* busLine = aSheet.LastScreen()->GetBus( it.first );
 
-        for( auto primary_it = connection_vec.begin(); primary_it != connection_vec.end(); primary_it++ )
+        // We don't want to spin up a new thread for fewer than 4 items (overhead costs)
+        size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
+                ( connection_vec.size() + 3 ) / 4 );
+
+        std::atomic<size_t> nextItem( 0 );
+        std::mutex update_mutex;
+        std::vector<std::future<size_t>> returns( parallelThreadCount );
+
+        auto update_lambda = [&]() -> size_t
         {
-            SCH_ITEM* connected_item = *primary_it;
-
-            // Bus entries are special: they can have connection points in the
-            // middle of a wire segment, because the junction algo doesn't split
-            // the segment in two where you place a bus entry.  This means that
-            // bus entries that don't land on the end of a line segment need to
-            // have "virtual" connection points to the segments they graphically
-            // touch.
-            if( connected_item->Type() == SCH_BUS_WIRE_ENTRY_T )
+            for( size_t ii = nextItem++; ii < connection_vec.size(); ii = nextItem++ )
             {
-                // If this location only has the connection point of the bus
-                // entry itself, this means that either the bus entry is not
-                // connected to anything graphically, or that it is connected to
-                // a segment at some point other than at one of the endpoints.
-                if( connection_vec.size() == 1 )
-                {
-                    if( busLine )
-                    {
-                        auto bus_entry = static_cast<SCH_BUS_WIRE_ENTRY*>( connected_item );
-                        bus_entry->m_connected_bus_item = busLine;
-                    }
-                }
-            }
-
-            // Bus-to-bus entries are treated just like bus wires
-            else if( connected_item->Type() == SCH_BUS_BUS_ENTRY_T )
-            {
-                if( connection_vec.size() < 2 )
-                {
-                    if( busLine )
-                    {
-                        auto bus_entry = static_cast<SCH_BUS_BUS_ENTRY*>( connected_item );
-
-                        if( it.first == bus_entry->GetPosition() )
-                            bus_entry->m_connected_bus_items[0] = busLine;
-                        else
-                            bus_entry->m_connected_bus_items[1] = busLine;
-
-                        bus_entry->AddConnectionTo( aSheet, busLine );
-                        busLine->AddConnectionTo( aSheet, bus_entry );
-                    }
-                }
-            }
-
-            // Change junctions to be on bus junction layer if they are touching a bus
-            else if( connected_item->Type() == SCH_JUNCTION_T )
-            {
-                connected_item->SetLayer( busLine ? LAYER_BUS_JUNCTION : LAYER_JUNCTION );
-            }
-
-            SCH_ITEM_SET& connected_set = connected_item->ConnectedItems( aSheet );
-            connected_set.reserve( connection_vec.size() );
-
-            for( SCH_ITEM* test_item : connection_vec )
-            {
-                bool      bus_connection_ok = true;
-
-                if( test_item == connected_item )
-                    continue;
-
-                // Set up the link between the bus entry net and the bus
+                SCH_ITEM* connected_item = connection_vec[ii];
+                // Bus entries are special: they can have connection points in the
+                // middle of a wire segment, because the junction algo doesn't split
+                // the segment in two where you place a bus entry.  This means that
+                // bus entries that don't land on the end of a line segment need to
+                // have "virtual" connection points to the segments they graphically
+                // touch.
                 if( connected_item->Type() == SCH_BUS_WIRE_ENTRY_T )
                 {
-                    if( test_item->GetLayer() == LAYER_BUS )
+                    // If this location only has the connection point of the bus
+                    // entry itself, this means that either the bus entry is not
+                    // connected to anything graphically, or that it is connected to
+                    // a segment at some point other than at one of the endpoints.
+                    if( connection_vec.size() == 1 )
                     {
-                        auto bus_entry = static_cast<SCH_BUS_WIRE_ENTRY*>( connected_item );
-                        bus_entry->m_connected_bus_item = test_item;
+                        if( busLine )
+                        {
+                            auto bus_entry = static_cast<SCH_BUS_WIRE_ENTRY*>( connected_item );
+                            bus_entry->m_connected_bus_item = busLine;
+                        }
                     }
                 }
 
-                // Bus entries only connect to bus lines on the end that is touching a bus line.
-                // If the user has overlapped another net line with the endpoint of the bus entry
-                // where the entry connects to a bus, we don't want to short-circuit it.
+                // Bus-to-bus entries are treated just like bus wires
+                else if( connected_item->Type() == SCH_BUS_BUS_ENTRY_T )
+                {
+                    if( connection_vec.size() < 2 )
+                    {
+                        if( busLine )
+                        {
+                            auto bus_entry = static_cast<SCH_BUS_BUS_ENTRY*>( connected_item );
+
+                            if( it.first == bus_entry->GetPosition() )
+                                bus_entry->m_connected_bus_items[0] = busLine;
+                            else
+                                bus_entry->m_connected_bus_items[1] = busLine;
+
+                            std::lock_guard<std::mutex> lock( update_mutex );
+                            bus_entry->AddConnectionTo( aSheet, busLine );
+                            busLine->AddConnectionTo( aSheet, bus_entry );
+                        }
+                    }
+                }
+
+                // Change junctions to be on bus junction layer if they are touching a bus
+                else if( connected_item->Type() == SCH_JUNCTION_T )
+                {
+                    connected_item->SetLayer( busLine ? LAYER_BUS_JUNCTION : LAYER_JUNCTION );
+                }
+
+                SCH_ITEM_SET& connected_set = connected_item->ConnectedItems( aSheet );
+                connected_set.reserve( connection_vec.size() );
+
+                for( SCH_ITEM* test_item : connection_vec )
+                {
+                    bool      bus_connection_ok = true;
+
+                    if( test_item == connected_item )
+                        continue;
+
+                    // Set up the link between the bus entry net and the bus
+                    if( connected_item->Type() == SCH_BUS_WIRE_ENTRY_T )
+                    {
+                        if( test_item->GetLayer() == LAYER_BUS )
+                        {
+                            auto bus_entry = static_cast<SCH_BUS_WIRE_ENTRY*>( connected_item );
+                            bus_entry->m_connected_bus_item = test_item;
+                        }
+                    }
+
+                    // Bus entries only connect to bus lines on the end that is touching a bus line.
+                    // If the user has overlapped another net line with the endpoint of the bus entry
+                    // where the entry connects to a bus, we don't want to short-circuit it.
+                    if( connected_item->Type() == SCH_BUS_WIRE_ENTRY_T )
+                    {
+                        bus_connection_ok = !busLine || test_item->GetLayer() == LAYER_BUS;
+                    }
+                    else if( test_item->Type() == SCH_BUS_WIRE_ENTRY_T )
+                    {
+                        bus_connection_ok = !busLine || connected_item->GetLayer() == LAYER_BUS;
+                    }
+
+                    if( connected_item->ConnectionPropagatesTo( test_item ) &&
+                        test_item->ConnectionPropagatesTo( connected_item ) &&
+                        bus_connection_ok )
+                    {
+                        connected_set.push_back( test_item );
+                    }
+                }
+
+                // If we got this far and did not find a connected bus item for a bus entry,
+                // we should do a manual scan in case there is a bus item on this connection
+                // point but we didn't pick it up earlier because there is *also* a net item here.
                 if( connected_item->Type() == SCH_BUS_WIRE_ENTRY_T )
                 {
-                    bus_connection_ok = !busLine || test_item->GetLayer() == LAYER_BUS;
-                }
-                else if( test_item->Type() == SCH_BUS_WIRE_ENTRY_T )
-                {
-                    bus_connection_ok = !busLine || connected_item->GetLayer() == LAYER_BUS;
-                }
+                    auto bus_entry = static_cast<SCH_BUS_WIRE_ENTRY*>( connected_item );
 
-                if( connected_item->ConnectionPropagatesTo( test_item ) &&
-                    test_item->ConnectionPropagatesTo( connected_item ) &&
-                    bus_connection_ok )
-                {
-                    connected_set.push_back( test_item );
+                    if( !bus_entry->m_connected_bus_item )
+                    {
+                        SCH_SCREEN* screen = aSheet.LastScreen();
+                        SCH_LINE*   bus = screen->GetBus( it.first );
+
+                        if( bus )
+                            bus_entry->m_connected_bus_item = bus;
+                    }
                 }
             }
 
-            // If we got this far and did not find a connected bus item for a bus entry,
-            // we should do a manual scan in case there is a bus item on this connection
-            // point but we didn't pick it up earlier because there is *also* a net item here.
-            if( connected_item->Type() == SCH_BUS_WIRE_ENTRY_T )
-            {
-                auto bus_entry = static_cast<SCH_BUS_WIRE_ENTRY*>( connected_item );
+            return 1;
+        };
 
-                if( !bus_entry->m_connected_bus_item )
-                {
-                    SCH_SCREEN* screen = aSheet.LastScreen();
-                    SCH_LINE*   bus = screen->GetBus( it.first );
 
-                    if( bus )
-                        bus_entry->m_connected_bus_item = bus;
-                }
-            }
+        if( parallelThreadCount == 1 )
+            update_lambda();
+        else
+        {
+            for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+                returns[ii] = std::async( std::launch::async, update_lambda );
+
+            // Finalize the threads
+            for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+                returns[ii].wait();
         }
     }
 }
