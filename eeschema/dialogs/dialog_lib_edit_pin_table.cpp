@@ -489,7 +489,7 @@ public:
                 for( int ii = 0; ii < selectedRowCount; ++ii )
                 {
                     for( LIB_PIN* pin : m_rows[ firstSelectedRow + ii ] )
-                        pin->SetFlags( TEMP_SELECTED );
+                        pin->SetFlags( CANDIDATE );
                 }
             }
 
@@ -514,7 +514,7 @@ public:
 
                 if( groupByName )
                     rowIndex = findRow( m_rows, pin->GetName() );
-                else if( groupBySelection && pin->GetFlags() & TEMP_SELECTED )
+                else if( groupBySelection && pin->GetFlags() & CANDIDATE )
                     rowIndex = 0;
 
                 if( rowIndex < 0 )
