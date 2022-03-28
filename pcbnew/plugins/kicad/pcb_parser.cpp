@@ -408,6 +408,10 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
     wxCHECK_RET( CurTok() == T_effects,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as EDA_TEXT." ) );
 
+    // These are not written out if center/center, so we have to make sure we start that way.
+    aText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+    aText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+
     // In version 20210606 the notation for overbars was changed from `~...~` to `~{...}`.
     // We need to convert the old syntax to the new one.
     if( m_requiredVersion < 20210606 )
