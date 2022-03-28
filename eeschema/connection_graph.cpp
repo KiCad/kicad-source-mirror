@@ -652,12 +652,15 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                 connected_item->SetLayer( busLine ? LAYER_BUS_JUNCTION : LAYER_JUNCTION );
             }
 
-            for( auto test_it = primary_it + 1; test_it != connection_vec.end(); test_it++ )
+            SCH_ITEM_SET& connected_set = connected_item->ConnectedItems( aSheet );
+            connected_set.reserve( connection_vec.size() );
+
+            for( SCH_ITEM* test_item : connection_vec )
             {
                 bool      bus_connection_ok = true;
-                SCH_ITEM* test_item         = *test_it;
 
-                wxASSERT( test_item != connected_item );
+                if( test_item == connected_item )
+                    continue;
 
                 // Set up the link between the bus entry net and the bus
                 if( connected_item->Type() == SCH_BUS_WIRE_ENTRY_T )
@@ -685,8 +688,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                     test_item->ConnectionPropagatesTo( connected_item ) &&
                     bus_connection_ok )
                 {
-                    connected_item->AddConnectionTo( aSheet, test_item );
-                    test_item->AddConnectionTo( aSheet, connected_item );
+                    connected_set.push_back( test_item );
                 }
             }
 
