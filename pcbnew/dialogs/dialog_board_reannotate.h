@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Brian Piccioni brian@documenteddesigns.com
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Brian Piccioni <brian@documenteddesigns.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -23,8 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_BOARD_REANNOTATE_H_
-#define DIALOG_BOARD_REANNOTATE_H_
+#ifndef DIALOG_BOARD_REANNOTATE_H
+#define DIALOG_BOARD_REANNOTATE_H
 
 #include <board.h>
 #include <footprint.h>
@@ -60,9 +60,9 @@ enum ActionCode
     Exclude
 };
 
-enum AnnotationChoice
+enum AnnotationScope
 {
-    AnnotateAll,
+    AnnotateAll = 0,
     AnnotateFront,
     AnnotateBack,
     AnnotateSelected
@@ -115,7 +115,7 @@ private:
             m_Left_Up
     };
 
-    std::vector<wxRadioButton*> AnnotateWhat = {
+    std::vector<wxRadioButton*> m_scopeRadioButtons = {
             m_AnnotateAll,
             m_AnnotateFront,
             m_AnnotateBack,
@@ -200,7 +200,7 @@ private:
 
     int m_sortCode;
     int m_gridIndex;
-    int m_annotationChoice;
+    int m_annotationScope;
     int m_severity;
 
     double m_sortGridx;
@@ -215,4 +215,4 @@ private:
     APP_SETTINGS_BASE* m_Config;
 };
 
-#endif /* DIALOG_BOARD_REANNOTATECLASSES_H_ */
+#endif /* DIALOG_BOARD_REANNOTATE_H */
