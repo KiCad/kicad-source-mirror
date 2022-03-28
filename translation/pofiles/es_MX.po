@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-28 11:12-0700\n"
-"PO-Revision-Date: 2022-03-21 22:49+0000\n"
+"PO-Revision-Date: 2022-04-03 20:07+0000\n"
 "Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -5370,7 +5370,6 @@ msgid "Drawing sheet"
 msgstr "Hoja de dibujo"
 
 #: common/layer_id.cpp:144 common/layer_id.cpp:174
-#, fuzzy
 msgid "Page limits"
 msgstr "Límites de página"
 
@@ -9480,14 +9479,12 @@ msgid "Group by name"
 msgstr "Agrupar por nombre"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:139
-#, fuzzy
 msgid "Group Selected"
-msgstr "Seleccionar cuadrícula"
+msgstr "Grupo seleccionado"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:150
-#, fuzzy
 msgid "Filter by unit:"
-msgstr "Filtrar por número de pines"
+msgstr "Filtrar por unidad:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:81
 msgid "Pin Table"
@@ -10112,17 +10109,19 @@ msgstr ""
 "¿Quiere continuar?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:430
-#, fuzzy
 msgid "Synchronized Pins Mode."
-msgstr "Modo de edición de pines sincronizado"
+msgstr "Modo de pines sincronizados."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:432
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
 msgstr ""
+"Modo de pines sincronizados.  Se añadirá un nuevo pin a todas las unidades."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
 msgstr ""
+"Modo de pines sincronizados.  Los pines coincidentes en otras unidades serán "
+"actualizados."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:43
 msgid "Pin &name:"
@@ -13718,15 +13717,13 @@ msgstr "Cursiva negrita"
 
 #: eeschema/lib_textbox.cpp:378 eeschema/sch_textbox.cpp:381
 #: pcbnew/fp_textbox.cpp:220 pcbnew/pcb_textbox.cpp:221
-#, fuzzy
 msgid "Box Width"
-msgstr "Ancho del texto"
+msgstr "Ancho de caja"
 
 #: eeschema/lib_textbox.cpp:381 eeschema/sch_textbox.cpp:384
 #: pcbnew/fp_textbox.cpp:223 pcbnew/pcb_textbox.cpp:224
-#, fuzzy
 msgid "Box Height"
-msgstr "Alto del texto"
+msgstr "Altura de caja"
 
 #: eeschema/libarch.cpp:101
 #, c-format
@@ -15357,7 +15354,6 @@ msgid "Cancel Load"
 msgstr "Cancelar la carga"
 
 #: eeschema/sheet.cpp:225
-#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -15365,9 +15361,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Hay nombres de biblioteca en el esquema cargado que faltan en la tabla de "
-"librerías del proyecto. Esto puede provocar enlaces a la librería de "
-"símbolos inválidos para el esquema cargado. ¿Desea continuar?"
+"Hay nombres de bibliotecas en el esquema seleccionado que faltan en la tabla "
+"de bibliotecas del proyecto actual.  Esto puede resultar en referencias de "
+"biblioteca de símbolos rotas para el esquema cargado.\n"
+"\n"
+"¿Desea continuar?"
 
 #: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
 #: eeschema/sheet.cpp:380
@@ -15392,7 +15390,6 @@ msgstr ""
 "¿Desea continuar?"
 
 #: eeschema/sheet.cpp:315
-#, fuzzy
 msgid ""
 "There are symbol library names in the selected schematic that are missing "
 "from the selected schematic project library table.  This may result in "
@@ -15400,12 +15397,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Hay nombres de librerías en el esquema cargado que faltan en la tabla de "
-"librerías del proyecto cargado. Esto puede provocar enlaces de símbolos "
-"inválidos para el esquema. ¿Desea continuar?"
+"Hay nombres de bibliotecas de símbolos en el esquema seleccionado que faltan "
+"en la tabla de bibliotecas del proyecto del esquema seleccionado.  Esto "
+"puede resultar en referencias de bibliotecas de símbolos rotas.\n"
+"\n"
+"¿Desea continuar?"
 
 #: eeschema/sheet.cpp:376
-#, fuzzy
 msgid ""
 "A duplicate library name that references a different library exists in the "
 "current library table.  This conflict cannot be resolved and may result in "
@@ -15413,10 +15411,12 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Existe un nombre de librería duplicado, que hace referencia a una librería "
-"diferente, en la tabla de librerías activa. Este conflicto no se puede "
-"resolver y puede dar como resultado enlaces de librería de símbolos "
-"inválidos para el esquema. ¿Desea continuar?"
+"Existe un nombre de biblioteca duplicado que hace referencia a una "
+"biblioteca diferente en la tabla de bibliotecas actual.  Este conflicto no "
+"puede resolverse y puede resultar en referencias a bibliotecas de símbolos "
+"rotas.\n"
+"\n"
+"¿Desea continuar?"
 
 #: eeschema/sheet.cpp:564
 #, c-format
@@ -15505,9 +15505,8 @@ msgid "There were errors during netlist export, aborted."
 msgstr "Ha habido errores al exportar la lista de redes, cancelado."
 
 #: eeschema/sim/sim_plot_frame.cpp:488 eeschema/sim/sim_plot_frame.cpp:1812
-#, fuzzy
 msgid "Another simulation is already running."
-msgstr "El editor de diseño de página ya está abierto. ¿Continuar?"
+msgstr "Otra simulación está en marcha."
 
 #: eeschema/sim/sim_plot_frame.cpp:515
 #, c-format
@@ -23495,9 +23494,8 @@ msgstr "Rayado completo"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:143
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:131
-#, fuzzy
 msgid "Outline hatch pitch:"
-msgstr "Grosor de contorno:"
+msgstr "Paso del rayado en el contorno:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:157
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:89
@@ -26991,17 +26989,17 @@ msgid "From parent footprint"
 msgstr "Como la huella madre"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:716
+#, fuzzy
 msgid "Zone knockout:"
-msgstr ""
+msgstr "Zona knockout:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
 msgid "Pad shape"
 msgstr "Forma del pad"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
-#, fuzzy
 msgid "Pad convex hull"
-msgstr "Utilizar pad convexo"
+msgstr "Envolvente convexa del pad"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:733
 #, fuzzy
@@ -28066,8 +28064,9 @@ msgid "Enter the text placed on selected layer."
 msgstr "Introduzca el texto colocado en la capa seleccionada."
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:100
+#, fuzzy
 msgid "Knockout"
-msgstr ""
+msgstr "Knockout"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:104
 msgid "Keep text upright"
@@ -30814,7 +30813,7 @@ msgstr "El pad de agujero pasante no tiene un agujero"
 
 #: pcbnew/drc/drc_item.cpp:252
 msgid "Pads with different numbers overlap"
-msgstr ""
+msgstr "Los pads con números diferentes se superponen"
 
 #: pcbnew/drc/drc_item.cpp:397
 #, c-format
@@ -31680,14 +31679,12 @@ msgid "Expected \"Other\" type but set to \"%s\""
 msgstr "Se esperaba el tipo \"Otro\" pero se ha puesto \"%s\""
 
 #: pcbnew/footprint.cpp:2234
-#, fuzzy
 msgid "(PTH pad has no copper layers)"
-msgstr " (el pad PTH no tiene capas de cobre)"
+msgstr "(el pad PTH no tiene capas de cobre)"
 
 #: pcbnew/footprint.cpp:2257
-#, fuzzy
 msgid "(PTH pad's hole leaves no copper)"
-msgstr " (El orificio del pad PTH no deja cobre)"
+msgstr "(El orificio del pad PTH no deja cobre)"
 
 #: pcbnew/footprint.cpp:2578 pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1358
 msgid "Clearance Override"
@@ -37796,9 +37793,8 @@ msgid "Merge collinear tracks"
 msgstr "Unir pistas colineares"
 
 #: pcbnew/tracks_cleaner.cpp:85
-#, fuzzy
 msgid "Remove misconnected"
-msgstr "Sin conectar"
+msgstr "Eliminar malconectados"
 
 #: pcbnew/tracks_cleaner.cpp:96
 msgid "Delete tracks in pads"
@@ -38369,44 +38365,36 @@ msgstr "Seleccionar ajuste por defecto:"
 
 #: pcbnew/widgets/appearance_controls.cpp:2620
 #: pcbnew/widgets/appearance_controls_base.cpp:182
-#, fuzzy
 msgid "Viewports (Alt+Tab):"
-msgstr "Preajustes (Ctrl+Tab):"
+msgstr "Vistas (Alt+Tab):"
 
 #: pcbnew/widgets/appearance_controls.cpp:2628
-#, fuzzy
 msgid "Save viewport..."
-msgstr "Guardar ajuste por defecto..."
+msgstr "Guardar vista..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2629
-#, fuzzy
 msgid "Delete viewport..."
-msgstr "Eliminar ajuste por defecto..."
+msgstr "Eliminar vista..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2677
-#, fuzzy
 msgid "Viewport name:"
-msgstr "Nombre de red:"
+msgstr "Nombre de vista:"
 
 #: pcbnew/widgets/appearance_controls.cpp:2677
-#, fuzzy
 msgid "Save Viewport"
-msgstr "Guardar Viewport"
+msgstr "Guardar vista"
 
 #: pcbnew/widgets/appearance_controls.cpp:2715
-#, fuzzy
 msgid "Viewports"
-msgstr "Viewports"
+msgstr "Vistas"
 
 #: pcbnew/widgets/appearance_controls.cpp:2724
-#, fuzzy
 msgid "Delete Viewport"
-msgstr "Eliminar Viewport"
+msgstr "Eliminar vista"
 
 #: pcbnew/widgets/appearance_controls.cpp:2725
-#, fuzzy
 msgid "Select viewport:"
-msgstr "Seleccionar viewport:"
+msgstr "Seleccione vista:"
 
 #: pcbnew/widgets/appearance_controls.cpp:3161
 msgid "Open Preferences"
