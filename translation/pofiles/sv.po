@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-28 11:12-0700\n"
-"PO-Revision-Date: 2022-03-22 18:24+0000\n"
+"PO-Revision-Date: 2022-04-03 20:07+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2337,11 +2337,11 @@ msgstr "Användaranpassad"
 
 #: common/dialogs/dialog_page_settings.cpp:103
 msgid "Preview Settings"
-msgstr "Förhandsgranska Inställningar"
+msgstr "Förhandsgranska inställningar"
 
 #: common/dialogs/dialog_page_settings.cpp:104
 msgid "Preview Paper"
-msgstr "Förhandsgranska Papper"
+msgstr "Förhandsgranska papper"
 
 #: common/dialogs/dialog_page_settings.cpp:105
 msgid "Preview Title Block Data"
@@ -10704,12 +10704,13 @@ msgstr "Fylld form"
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:110
 msgid "Set line width to 0 to use Schematic Editor line widths."
 msgstr ""
-"Sätt bredden till 0 för att använda schemaredigerarens förinställda "
+"Sätt bredden till 0 för att använda kretsschemaredigerarens förinställda "
 "linjebredd."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:114
 msgid "Set line color to transparent to use Schematic Editor colors."
-msgstr "Välj transparent linjefärg för att använda schemaredigerarens färger."
+msgstr ""
+"Välj transparent linjefärg för att använda kretsschemaredigerarens färger."
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:62
 #, c-format
@@ -12128,7 +12129,7 @@ msgstr "Textegenskaper"
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:42
 #: pcbnew/dialogs/dialog_netlist.cpp:77 pcbnew/dialogs/dialog_update_pcb.cpp:49
 msgid "Changes To Be Applied"
-msgstr "Ändringar som ska tillämpas"
+msgstr "Ändringar att verkställa"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:64
 msgid "Update Schematic"
@@ -13997,7 +13998,7 @@ msgid ""
 msgstr ""
 "Det går inte att uppdatera mönsterkortet eftersom kretsschemaredigeraren är "
 "öppnad i fristående läge. För att skapa/uppdatera mönsterkort från "
-"kretsschema, starta Kicad-skalet och skapa ett projekt."
+"kretsschema, starta Kicad-projekthanteraren och skapa ett projekt."
 
 #: eeschema/sch_edit_frame.cpp:1063
 msgid "New Schematic"
@@ -17155,7 +17156,7 @@ msgstr "Lämna arket"
 
 #: eeschema/tools/ee_actions.cpp:709
 msgid "Display the parent sheet in the schematic editor"
-msgstr "Visa det överordnat arket i kretsschemaredigeraren"
+msgstr "Visa det överordnade arket i kretsschemaredigeraren"
 
 #: eeschema/tools/ee_actions.cpp:714
 msgid "Hierarchy Navigator"
@@ -19116,7 +19117,7 @@ msgstr "Avinstallera"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:130
 msgid "Apply Pending Changes"
-msgstr "Tillämpa ändringar"
+msgstr "Verkställ ändringar"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:131
 msgid "Discard Pending Changes"
@@ -19143,7 +19144,7 @@ msgstr "Välj paketfil"
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:121
 #, c-format
 msgid "Pending (%d)"
-msgstr "Anhängig (%d)"
+msgstr "Förestående (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:376
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:62
@@ -19209,15 +19210,15 @@ msgstr "Detaljer"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 msgid "Applying Package Changes"
-msgstr "Tillämpar paketändringar"
+msgstr "Verkställer paketändringar"
 
 #: kicad/pcm/dialogs/panel_package.cpp:97
 msgid "Install Pending"
-msgstr "Installera väntande"
+msgstr "Kommer att installeras"
 
 #: kicad/pcm/dialogs/panel_package.cpp:101
 msgid "Uninstall Pending"
-msgstr "Avinstallera väntande"
+msgstr "Kommer att avinstalleras"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:212
 msgid "Metadata"
@@ -19685,7 +19686,7 @@ msgstr "Stäng det aktuella projektet"
 
 #: kicad/tools/kicad_manager_actions.cpp:69
 msgid "Edit schematic"
-msgstr "Redigera schema"
+msgstr "Redigera kretsschema"
 
 #: kicad/tools/kicad_manager_actions.cpp:75
 msgid "Edit schematic symbols"
@@ -19710,7 +19711,7 @@ msgstr "Bildkonverterare"
 #: kicad/tools/kicad_manager_actions.cpp:99
 msgid "Convert bitmap images to schematic or PCB components"
 msgstr ""
-"Konvertera bitmappsbilder till kretsschemasymboler eller komponentfotatryck "
+"Konvertera bitmappsbilder till kretsschemasymboler eller komponentfotavtryck "
 "för mönsterkort"
 
 #: kicad/tools/kicad_manager_actions.cpp:104
@@ -19821,7 +19822,7 @@ msgstr "Fel!"
 
 #: kicad/tools/kicad_manager_control.cpp:640
 msgid "Create (or open) a project to edit a schematic."
-msgstr "Skapa (eller öppna) ett projekt för att redigera ett schema."
+msgstr "Skapa (eller öppna) ett projekt för att redigera ett kretsschema."
 
 #: kicad/tools/kicad_manager_control.cpp:646
 msgid "Create (or open) a project to edit a pcb."
@@ -20483,7 +20484,7 @@ msgstr "Formel"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:33
 msgid "Note: Values are minimal values"
-msgstr "Obs! Värdena är minimala värden"
+msgstr "Obs! Värdena är minimivärden"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:57
 msgid "Class 1"
@@ -20511,11 +20512,11 @@ msgstr "Klass 6"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:73
 msgid "Lines width"
-msgstr "Linjebredd"
+msgstr "Ledarbredd"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
 msgid "Min clearance"
-msgstr "Min klarering"
+msgstr "Min isolationsavstånd"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
 msgid "Via: (diam - drill)"
@@ -20572,7 +20573,7 @@ msgstr "Uppdatera värden"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:47
 msgid "Note: Values are minimal values (from IPC 2221)"
-msgstr "Obs: Värdena är minimala värden (från IPC 2221)"
+msgstr "Obs: Värdena är minimivärden (från IPC 2221)"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:72
 msgid "B1"
@@ -20849,7 +20850,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_track_width.cpp:61
 msgid "Temperature rise"
-msgstr "Temperaturökning"
+msgstr "Temperaturstegring"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:31
 msgid "Current (I):"
@@ -20858,7 +20859,7 @@ msgstr "Ström (I):"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:42
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:167
 msgid "Temperature rise:"
-msgstr "Temperatur ökning:"
+msgstr "Temperaturstegring:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:49
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:176
@@ -20891,7 +20892,7 @@ msgstr "Ledarbredd (W):"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:117
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:215
 msgid "Trace thickness (H):"
-msgstr "Spårtjocklek (H):"
+msgstr "Ledartjocklek (H):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:138
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:236
@@ -20937,7 +20938,7 @@ msgstr "Mikrostrip-ledning"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Coplanar wave guide"
-msgstr "Coplanar vågguide"
+msgstr "Koplanär vågledare"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Coplanar wave guide w/ ground plane"
@@ -20995,7 +20996,9 @@ msgstr "Rho:"
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:89
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:126
 msgid "Specific resistance in ohms * meters"
-msgstr "Specifikt motstånd i ohm * meter"
+msgstr ""
+"Pläteringsmaterialets elektriska resistivitet (specifika motstånd) i ohm * "
+"meter"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:108
 msgid "H:"
@@ -21073,7 +21076,7 @@ msgstr "Via-längd för genomgående vior är mönsterkortets tjocklek"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:71
 msgid "Via pad diameter:"
-msgstr "Via dyndiameter:"
+msgstr "Viats kragdiameter:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:73
 msgid "Diameter of pad surrounding via (annular ring)"
@@ -21081,11 +21084,13 @@ msgstr "Diameter på kopparytan som omger en via (krage)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
 msgid "Clearance hole diameter:"
-msgstr "Hålets diameter:"
+msgstr "Isolationshålets diameter:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:87
 msgid "Diameter of clearance hole in ground plane(s)"
-msgstr "Frihålets diameter i markplan"
+msgstr ""
+"Isolationshålets diameter i kopparzon, när viat inte är anslutet till "
+"kopparzonen"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:99
 msgid "Z0:"
@@ -21093,19 +21098,19 @@ msgstr "Z0:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:101
 msgid "Characteristic impedance of conductor"
-msgstr "Karakteristisk impedans av ledare"
+msgstr "Ledarens karakteristiska impedans"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:113
 msgid "Applied current:"
-msgstr "Tillämpad ström:"
+msgstr "Genomfluten ström:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:124
 msgid "Plating resistivity:"
-msgstr "Pläteringsmotstånd:"
+msgstr "Pläteringens resistivitet:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:146
 msgid "Substrate relative permittivity:"
-msgstr "Substratets relativa permittivitet:"
+msgstr "Substratets permittivitetstal:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:148
 msgid "Relative dielectric constant (epsilon r)"
@@ -21113,15 +21118,15 @@ msgstr "Relativ dielektrisk konstant (epsilon r)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:169
 msgid "Maximum acceptable rise in temperature"
-msgstr "Maximal acceptabel temperaturökning"
+msgstr "Maximal acceptabel temperaturstegring"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:180
 msgid "Pulse rise time:"
-msgstr "Pulsstigningstid:"
+msgstr "Pulsstigtid:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:182
 msgid "Pulse rise time to calculate reactance"
-msgstr "Pulsstigningstid för att beräkna reaktans"
+msgstr "Pulsstigtid för att beräkna reaktans"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:189
 msgid "ns"
@@ -21138,7 +21143,7 @@ msgid ""
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "Varning:\n"
-"Via dyndiameter> = Diameter för frigångshål.\n"
+"Viats kragdiameter >= Diameter för frigångshål i kopparzon.\n"
 "Vissa parametrar kan inte beräknas för en via inuti en kopparzon."
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:260
@@ -21159,7 +21164,7 @@ msgstr "Uppskattad ampacitet:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:276
 msgid "Based on temperature rise"
-msgstr "Baserat på temperaturökning"
+msgstr "Baserat på temperaturstegring"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:288
 msgid "Capacitance:"
@@ -21175,11 +21180,13 @@ msgstr "pikofarad"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:302
 msgid "Rise time degradation:"
-msgstr "Ökad tid nedbrytning:"
+msgstr "Stigtidsförsämring:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:304
 msgid "Rise time degradation for given Z0 and calculated capacitance"
-msgstr "Ökad tid nedbrytning för given Z0 och beräknad kapacitans"
+msgstr ""
+"Förlängning av signalens stigtid för given impedans Z0 och beräknad "
+"kapacitans"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:312
 msgid "ps"
@@ -21315,7 +21322,7 @@ msgstr "Effekt, ström och isolering"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:84
 msgid "Electrical Spacing"
-msgstr "Elektriskt avstånd"
+msgstr "Elektriskt isolationsavstånd"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:90
 msgid "High speed"
@@ -21340,11 +21347,11 @@ msgstr "E-serien"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:103
 msgid "Color Code"
-msgstr "Färg kod"
+msgstr "Färgkoder"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:105
 msgid "Board Classes"
-msgstr "Kortklasser"
+msgstr "Mönsterkortsklasser"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:254
 msgid "Write Data Failed"
@@ -21425,7 +21432,7 @@ msgstr "Specifik motstånd"
 
 #: pcb_calculator/transline_ident.cpp:92
 msgid "Substrate relative permittivity (dielectric constant)"
-msgstr "Substratets relativa permittivitet (dielektrisk konstant)"
+msgstr "Substratets permittivitetstal (dielektrisk konstant)"
 
 #: pcb_calculator/transline_ident.cpp:96
 msgid "Dielectric loss (dissipation factor)"
@@ -21494,7 +21501,7 @@ msgstr "Substratets höjd"
 #: pcb_calculator/transline_ident.cpp:126
 #: pcb_calculator/transline_ident.cpp:314
 msgid "Height of box top"
-msgstr "Lådtoppens höjd"
+msgstr "Kapslingens (apparatlåda/skärmbox) höjd över transmissionslinjen"
 
 #: pcb_calculator/transline_ident.cpp:129
 #: pcb_calculator/transline_ident.cpp:168
@@ -21502,7 +21509,7 @@ msgstr "Lådtoppens höjd"
 #: pcb_calculator/transline_ident.cpp:316
 #: pcb_calculator/transline_ident.cpp:361
 msgid "Strip thickness"
-msgstr "Spårtjocklek"
+msgstr "Ledartjocklek"
 
 #: pcb_calculator/transline_ident.cpp:131
 #: pcb_calculator/transline_ident.cpp:318
@@ -21512,7 +21519,7 @@ msgstr "Grovhet"
 #: pcb_calculator/transline_ident.cpp:132
 #: pcb_calculator/transline_ident.cpp:319
 msgid "Conductor roughness"
-msgstr "Ledarens grovhet"
+msgstr "Ledarens ytojämnhet"
 
 #: pcb_calculator/transline_ident.cpp:135
 msgid "substrate"
@@ -21550,7 +21557,7 @@ msgstr "Relativ permeabilitet (mu) för ledare"
 #: pcb_calculator/transline_ident.cpp:327
 #: pcb_calculator/transline_ident.cpp:368
 msgid "Line width"
-msgstr "Linjebredd"
+msgstr "Ledarbredd"
 
 #: pcb_calculator/transline_ident.cpp:146
 #: pcb_calculator/transline_ident.cpp:180
@@ -21617,7 +21624,7 @@ msgstr "Vågledarens längd"
 #: pcb_calculator/transline_ident.cpp:282
 #: pcb_calculator/transline_ident.cpp:403
 msgid "Din"
-msgstr "Dån"
+msgstr "Din"
 
 #: pcb_calculator/transline_ident.cpp:283
 #: pcb_calculator/transline_ident.cpp:404
@@ -21684,7 +21691,7 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:358
 msgid "Distance between strip and top metal"
-msgstr "Avstånd mellan ledare och toppmetall"
+msgstr "Avstånd mellan ledare och övre metall"
 
 #: pcb_calculator/transline_ident.cpp:390
 msgid "Twists"
@@ -21700,7 +21707,7 @@ msgstr "omgivning"
 
 #: pcb_calculator/transline_ident.cpp:400
 msgid "Relative permittivity of environment"
-msgstr "Relativ permittivitet för omgivning"
+msgstr "Permittivitetstal för omgivning"
 
 #: pcb_calculator/transline_ident.cpp:409
 msgid "Cable length"
@@ -23145,7 +23152,7 @@ msgstr "Ta bort överflödig grafik"
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:35
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:72
 msgid "Changes To Be Applied:"
-msgstr "Ändringar som ska tillämpas:"
+msgstr "Ändringar att verkställa:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.h:53
 msgid "Cleanup Graphics"
@@ -26120,7 +26127,7 @@ msgstr "Netlist-filen finns inte."
 #: pcbnew/dialogs/dialog_netlist.cpp:156
 #: pcbnew/dialogs/dialog_update_pcb.cpp:134
 msgid "Changes Applied to PCB"
-msgstr "Ändringar tillämpade på PCB"
+msgstr "Ändringar verkställda på mönsterkortet"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:224
 #, c-format
@@ -27957,7 +27964,7 @@ msgstr "Fördefinierade bredder:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:117
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:25
 msgid "Track width:"
-msgstr "Spårtjocklek:"
+msgstr "Ledarbredd:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:131
 msgid "Use net class widths"
@@ -29980,7 +29987,9 @@ msgstr "Kontrollerar %s."
 
 #: pcbnew/drc/drc_engine.cpp:986
 msgid "Board and netclass clearances apply only between copper items."
-msgstr "Avstånd från kartong och nätklass gäller endast mellan kopparföremål."
+msgstr ""
+"Isolationsavstånd från mönsterkortsinställningar och nätklasser gäller "
+"endast mellan kopparföremål."
 
 #: pcbnew/drc/drc_engine.cpp:1034
 msgid "Keepout constraint not met."
@@ -30159,7 +30168,7 @@ msgstr "Borrade hål på samma position"
 
 #: pcbnew/drc/drc_item.cpp:112
 msgid "Track width"
-msgstr "Spårtjocklek"
+msgstr "Ledarbredd"
 
 #: pcbnew/drc/drc_item.cpp:116
 msgid "Annular width"
@@ -32507,8 +32516,8 @@ msgid ""
 "order to create or update PCBs from schematics, you must launch the KiCad "
 "project manager and create a project."
 msgstr ""
-"Kunde inte uppdatera kretskortet eftersom mönsterkortsredigeraren är öppnad "
-"i fristående läge. För att skapa eller uppdatera mönsterkort från "
+"Kunde inte uppdatera mönsterkortet eftersom mönsterkortsredigeraren är "
+"öppnad i fristående läge. För att skapa eller uppdatera mönsterkort från "
 "kretsschema måste du starta KiCads projekthanterare och skapa ett projekt."
 
 #: pcbnew/pcb_edit_frame.cpp:1608
