@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,7 +94,10 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList,
     {
         fn =  wxExpandEnvVars( equfile );
 
-        tmp = search.FindValidPath( fn.GetFullPath() );
+        if( fn.IsAbsolute() || fn.FileExists() )
+            tmp = fn.GetFullPath();
+        else
+            tmp = search.FindValidPath( fn.GetFullPath() );
 
         if( !tmp )
         {
@@ -102,8 +105,7 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList,
 
             if( aErrorMessages )
             {
-                error_msg.Printf( _( "Equivalence file '%s' could not be found in the "
-                                     "default search paths." ),
+                error_msg.Printf( _( "Equivalence file '%s' could not be found." ),
                                   fn.GetFullName() );
 
                 if( ! aErrorMessages->IsEmpty() )
