@@ -36,6 +36,7 @@
 #include <calculator_panels/panel_attenuators.h>
 #include <calculator_panels/panel_board_class.h>
 #include <calculator_panels/panel_cable_size.h>
+#include <calculator_panels/panel_corrosion.h>
 #include <calculator_panels/panel_color_code.h>
 #include <calculator_panels/panel_electrical_spacing.h>
 #include <calculator_panels/panel_eserie.h>
@@ -114,6 +115,8 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                    _( "Color Code" ) );
     AddCalculator( new PANEL_BOARD_CLASS( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
                    _("Board Classes") );
+    AddCalculator( new PANEL_CORROSION( m_treebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL ),
+                   _( "Galvanic corrosion" ) );
 
     LoadSettings( config() );
 
