@@ -26,7 +26,7 @@
 #include <sch_edit_frame.h>
 #include <sch_shape.h>
 #include <dialog_shape_properties.h>
-
+#include <settings/color_settings.h>
 
 DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_SHAPE* aShape ) :
     DIALOG_SHAPE_PROPERTIES_BASE( aParent ),
@@ -49,6 +49,9 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     m_lineStyleCombo->Append( DEFAULT_STYLE );
 
     m_fillColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+
+    if( m_frame->GetColorSettings()->GetOverrideSchItemColors() )
+        m_infoBar->ShowMessage( _( "Note: individual item colors overridden in Preferences." ) );
 
     // Required under wxGTK if we want to dismiss the dialog with the ESC key
     SetFocus();

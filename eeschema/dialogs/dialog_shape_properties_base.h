@@ -11,14 +11,16 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class COLOR_SWATCH;
+class WX_INFOBAR;
 
 #include "dialog_shim.h"
-#include <wx/string.h>
-#include <wx/stattext.h>
+#include <wx/infobar.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/string.h>
+#include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
@@ -38,6 +40,7 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
+		WX_INFOBAR* m_infoBar;
 		wxStaticText* m_lineWidthLabel;
 		wxTextCtrl* m_lineWidthCtrl;
 		wxStaticText* m_lineWidthUnits;

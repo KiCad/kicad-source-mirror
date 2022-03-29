@@ -11,15 +11,17 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class WX_GRID;
+class WX_INFOBAR;
 
 #include "widgets/color_swatch.h"
 #include "dialog_shim.h"
+#include <wx/infobar.h>
+#include <wx/gdicmn.h>
+#include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
-#include <wx/font.h>
 #include <wx/grid.h>
-#include <wx/gdicmn.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -43,6 +45,7 @@ class DIALOG_SHEET_PROPERTIES_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
+		WX_INFOBAR* m_infoBar;
 		wxBoxSizer* m_longForm;
 		WX_GRID* m_grid;
 		wxBitmapButton* m_bpAdd;

@@ -27,6 +27,7 @@
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
 #include <base_units.h>
+#include <settings/color_settings.h>
 #include <tool/tool_manager.h>
 #include <general.h>
 #include <sch_textbox.h>
@@ -61,7 +62,10 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
         m_borderStyleCombo->Append( DEFAULT_STYLE );
 
         m_fillColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
-    }
+
+        if( m_frame->GetColorSettings()->GetOverrideSchItemColors() )
+            m_infoBar->ShowMessage( _( "Note: individual item colors overridden in Preferences." ) );
+        }
     else
     {
         m_spin1->Show( false );

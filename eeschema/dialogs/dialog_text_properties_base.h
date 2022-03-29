@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -13,14 +13,16 @@
 class BITMAP_BUTTON;
 class COLOR_SWATCH;
 class FONT_CHOICE;
+class WX_INFOBAR;
 
 #include "dialog_shim.h"
-#include <wx/string.h>
-#include <wx/stattext.h>
+#include <wx/infobar.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/string.h>
+#include <wx/stattext.h>
 #include <wx/stc/stc.h>
 #include <wx/choice.h>
 #include <wx/bmpbuttn.h>
@@ -53,6 +55,7 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 			wxID_SIZE = 1000
 		};
 
+		WX_INFOBAR* m_infoBar;
 		wxGridBagSizer* m_textEntrySizer;
 		wxStaticText* m_textLabel;
 		wxStyledTextCtrl* m_textCtrl;
@@ -91,7 +94,7 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 
-		// Virtual event handlers, override them in your derived class
+		// Virtual event handlers, overide them in your derived class
 		virtual void onMultiLineTCLostFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnFormattingHelp( wxHyperlinkEvent& event ) { event.Skip(); }
 		virtual void onBorderChecked( wxCommandEvent& event ) { event.Skip(); }
@@ -101,7 +104,6 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-
 		~DIALOG_TEXT_PROPERTIES_BASE();
 
 };

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -8,6 +8,7 @@
 #include "widgets/bitmap_button.h"
 #include "widgets/color_swatch.h"
 #include "widgets/font_choice.h"
+#include "widgets/infobar.h"
 
 #include "dialog_text_properties_base.h"
 
@@ -19,6 +20,13 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
+
+	m_infoBar = new WX_INFOBAR( this );
+	m_infoBar->SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
+	m_infoBar->SetEffectDuration( 500 );
+	m_infoBar->Hide();
+
+	bMainSizer->Add( m_infoBar, 0, wxEXPAND|wxBOTTOM, 5 );
 
 	m_textEntrySizer = new wxGridBagSizer( 3, 3 );
 	m_textEntrySizer->SetFlexibleDirection( wxBOTH );
@@ -38,7 +46,6 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_textCtrl->SetViewWhiteSpace( false );
 	m_textCtrl->SetMarginWidth( 2, 0 );
 	m_textCtrl->SetIndentationGuides( false );
-	m_textCtrl->SetReadOnly( false );
 	m_textCtrl->SetMarginWidth( 1, 0 );
 	m_textCtrl->SetMarginWidth( 0, 0 );
 	m_textCtrl->MarkerDefine( wxSTC_MARKNUM_FOLDER, wxSTC_MARK_BOXPLUS );

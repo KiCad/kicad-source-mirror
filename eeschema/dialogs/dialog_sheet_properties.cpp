@@ -72,6 +72,9 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
         m_grid->ShowHideColumns( m_shownColumns );
     }
 
+    if( m_frame->GetColorSettings()->GetOverrideSchItemColors() )
+        m_infoBar->ShowMessage( _( "Note: individual item colors overridden in Preferences." ) );
+
     wxToolTip::Enable( true );
     SetupStandardButtons();
 
