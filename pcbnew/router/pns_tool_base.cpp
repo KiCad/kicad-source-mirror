@@ -277,7 +277,8 @@ bool TOOL_BASE::checkSnap( ITEM *aItem )
 void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )
 {
     int      tl = getView()->GetTopLayer();
-    VECTOR2I cp = controls()->GetCursorPosition( !aEvent.Modifier( MD_SHIFT ) );
+    VECTOR2I cp = aEvent.IsPrime() ? aEvent.Position()
+                                   : controls()->GetCursorPosition( !aEvent.Modifier( MD_SHIFT ) );
     VECTOR2I p;
     GAL*     gal = m_toolMgr->GetView()->GetGAL();
 
