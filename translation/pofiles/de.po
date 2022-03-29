@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-28 11:12-0700\n"
-"PO-Revision-Date: 2022-03-17 10:46+0000\n"
+"PO-Revision-Date: 2022-04-03 20:07+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4228,7 +4228,7 @@ msgstr "Zone"
 
 #: common/eda_item.cpp:329 pcbnew/pcb_track.cpp:745
 msgid "Track"
-msgstr "Spur"
+msgstr "Leiterbahn"
 
 #: common/eda_item.cpp:330 pcbnew/dialogs/dialog_board_statistics.cpp:510
 #: pcbnew/pcb_track.cpp:802
@@ -5977,7 +5977,7 @@ msgstr "Letzte Bearbeitung wiederholen"
 #: common/tool/actions.cpp:153
 msgid "Cut selected item(s) to clipboard"
 msgstr ""
-"Schneidet die ausgewählten Elemente aus und kopiert sie in die Zwischenablage"
+"Schneidet die ausgewählten Elemente aus und legt sie in der Zwischenablage ab"
 
 #: common/tool/actions.cpp:159
 msgid "Copy selected item(s) to clipboard"
@@ -36540,7 +36540,7 @@ msgstr "Mit Referenz kopieren"
 #: pcbnew/tools/pcb_actions.cpp:277
 msgid "Copy selected item(s) to clipboard with a specified starting point"
 msgstr ""
-"Ausgewählte Elemente in die Zwischenablage mit einem angegebenen Startpunkt "
+"Ausgewählte Elemente mit einem angegebenen Startpunkt in die Zwischenablage "
 "kopieren"
 
 #: pcbnew/tools/pcb_actions.cpp:283
@@ -37302,7 +37302,7 @@ msgstr "Anzeige wechseln zwischen ausgefüllten Flächen und nur deren Konturen"
 
 #: pcbnew/tools/pcb_actions.cpp:901
 msgid "Switch to Component (F.Cu) layer"
-msgstr "Wechsel zur Bauteillage (F.Cu)"
+msgstr "Wechsel zur oberen Kupferlage bzw. Bestückungsseite (F.Cu)"
 
 #: pcbnew/tools/pcb_actions.cpp:907
 msgid "Switch to Inner layer 1"
@@ -37426,15 +37426,15 @@ msgstr "Wechsel zur Innenlage 30"
 
 #: pcbnew/tools/pcb_actions.cpp:1063
 msgid "Switch to Copper (B.Cu) layer"
-msgstr "Wechsel zur Kupferlage (B.Cu)"
+msgstr "Wechsel zur unteren Kupferlage bzw. Lötseite (B.Cu)"
 
 #: pcbnew/tools/pcb_actions.cpp:1069
 msgid "Switch to Next Layer"
-msgstr "Springe zur nächsten Lage"
+msgstr "Wechsel zur nächsten Lage"
 
 #: pcbnew/tools/pcb_actions.cpp:1075
 msgid "Switch to Previous Layer"
-msgstr "Springe zur vorherigen Lage"
+msgstr "Wechsel zur vorherigen Lage"
 
 #: pcbnew/tools/pcb_actions.cpp:1081
 msgid "Toggle Layer"
@@ -37528,7 +37528,7 @@ msgstr "Unten ausrichten"
 
 #: pcbnew/tools/pcb_actions.cpp:1147
 msgid "Aligns selected items to the bottom edge"
-msgstr "Ausgewählte Elemente an der Unterkante zuweisen"
+msgstr "Ausgewählte Elemente an der Unterkante ausrichten"
 
 #: pcbnew/tools/pcb_actions.cpp:1152
 msgid "Align to Left"
@@ -37552,7 +37552,7 @@ msgstr "Vertikal zur Mitte ausrichten"
 
 #: pcbnew/tools/pcb_actions.cpp:1162
 msgid "Aligns selected items to the vertical center"
-msgstr "Richtet ausgewählte Elemente an der vertikalen Mitte aus"
+msgstr "Ausgewählte Elemente an der vertikalen Mitte ausrichten"
 
 #: pcbnew/tools/pcb_actions.cpp:1167
 msgid "Align to Horizontal Center"
@@ -37560,7 +37560,7 @@ msgstr "Horizontal zur Mitte ausrichten"
 
 #: pcbnew/tools/pcb_actions.cpp:1167
 msgid "Aligns selected items to the horizontal center"
-msgstr "Richtet ausgewählte Elemente an der horizontalen Mitte aus"
+msgstr "Ausgewählte Elemente an der horizontalen Mitte ausrichten"
 
 #: pcbnew/tools/pcb_actions.cpp:1172
 msgid "Distribute Horizontally"
@@ -37568,7 +37568,7 @@ msgstr "Horizontal verteilen"
 
 #: pcbnew/tools/pcb_actions.cpp:1172
 msgid "Distributes selected items along the horizontal axis"
-msgstr "Ausgewählte Element an einer horizontalen Linie verteilen"
+msgstr "Ausgewählte Elemente entlang der horizontalen Achse verteilen"
 
 #: pcbnew/tools/pcb_actions.cpp:1177
 msgid "Distribute Vertically"
@@ -37576,7 +37576,7 @@ msgstr "Vertikal verteilen"
 
 #: pcbnew/tools/pcb_actions.cpp:1177
 msgid "Distributes selected items along the vertical axis"
-msgstr "Ausgewählte Element an einer vertikalen Linie verteilen"
+msgstr "Ausgewählte Elemente entlang der vertikalen Achse verteilen"
 
 #: pcbnew/tools/pcb_actions.cpp:1214
 msgid "Position Relative To..."
@@ -37585,7 +37585,7 @@ msgstr "Relativ zu Bezugspunkt positionieren..."
 #: pcbnew/tools/pcb_actions.cpp:1215
 msgid "Positions the selected item(s) by an exact amount relative to another"
 msgstr ""
-"Die ausgewählten Elemente um einen exakten Betrag relativ zu einem anderen "
+"Ausgewählte Elemente um einen exakten Betrag relativ zu einem anderen "
 "Element positionieren"
 
 #: pcbnew/tools/pcb_actions.cpp:1252
