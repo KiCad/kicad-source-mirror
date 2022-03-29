@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-28 11:12-0700\n"
-"PO-Revision-Date: 2022-03-18 19:51+0000\n"
+"PO-Revision-Date: 2022-04-03 20:07+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -9495,9 +9495,8 @@ msgid "Group Selected"
 msgstr "Selecció de la quadrícula"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:150
-#, fuzzy
 msgid "Filter by unit:"
-msgstr "Filtra pel nombre de pins"
+msgstr "Filtra per unitat:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:81
 msgid "Pin Table"
@@ -10121,9 +10120,8 @@ msgstr ""
 "Vols continuar?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:430
-#, fuzzy
 msgid "Synchronized Pins Mode."
-msgstr "Mode d'edició de pins sincronitzat"
+msgstr "Mode de pins sincronitzats."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:432
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
@@ -15480,9 +15478,8 @@ msgid "There were errors during netlist export, aborted."
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:488 eeschema/sim/sim_plot_frame.cpp:1812
-#, fuzzy
 msgid "Another simulation is already running."
-msgstr "pl_editor ja està executant-se. Voleu continuar?"
+msgstr "Hi ha una altra simulació en marxa."
 
 #: eeschema/sim/sim_plot_frame.cpp:515
 #, c-format
@@ -31611,14 +31608,12 @@ msgid "Expected \"Other\" type but set to \"%s\""
 msgstr ""
 
 #: pcbnew/footprint.cpp:2234
-#, fuzzy
 msgid "(PTH pad has no copper layers)"
-msgstr "Alerta: un pad SMD no té cap capes externes."
+msgstr "(El pad PTH no té cap capes coure)"
 
 #: pcbnew/footprint.cpp:2257
-#, fuzzy
 msgid "(PTH pad's hole leaves no copper)"
-msgstr "Alerta: un pad SMD no té cap capes externes."
+msgstr "(El forat del pad PTH no deixa coure)"
 
 #: pcbnew/footprint.cpp:2578 pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1358
 msgid "Clearance Override"
