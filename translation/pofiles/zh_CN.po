@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-28 11:12-0700\n"
-"PO-Revision-Date: 2022-03-21 12:12+0000\n"
+"PO-Revision-Date: 2022-04-03 20:07+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -5275,7 +5275,6 @@ msgid "Drawing sheet"
 msgstr "图纸"
 
 #: common/layer_id.cpp:144 common/layer_id.cpp:174
-#, fuzzy
 msgid "Page limits"
 msgstr "图框限制"
 
@@ -9172,7 +9171,6 @@ msgid "Standard"
 msgstr "标准"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:45
-#, fuzzy
 msgid "Alternate"
 msgstr "备用引脚号"
 
@@ -9220,7 +9218,6 @@ msgstr "名称文本尺寸"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:100
-#, fuzzy
 msgid "De Morgan"
 msgstr "德摩根标准"
 
@@ -9289,14 +9286,12 @@ msgid "Group by name"
 msgstr "按名称分组"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:139
-#, fuzzy
 msgid "Group Selected"
-msgstr "未选择总线"
+msgstr "选中的组"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:150
-#, fuzzy
 msgid "Filter by unit:"
-msgstr "按引脚计数筛选"
+msgstr "按单元筛选："
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:81
 msgid "Pin Table"
@@ -9865,10 +9860,9 @@ msgstr "备用引脚分配对德摩根符号不可用。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:270
 msgid "Exit sync pins mode"
-msgstr ""
+msgstr "退出“同步引脚”模式"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:285
-#, fuzzy
 msgid ""
 "Synchronized pins mode is enabled.\n"
 "Similar pins will be edited regardless of this option."
@@ -9900,17 +9894,16 @@ msgstr ""
 "你想继续吗？"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:430
-#, fuzzy
 msgid "Synchronized Pins Mode."
-msgstr "同步引脚编辑模式"
+msgstr "同步引脚编辑模式。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:432
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
-msgstr ""
+msgstr "同步引脚模式。  新引脚将被添加至所有单元。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
-msgstr ""
+msgstr "同步引脚模式。  其他单元内匹配的引脚将被更新。"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:43
 msgid "Pin &name:"
@@ -13414,15 +13407,13 @@ msgstr "加粗斜体"
 
 #: eeschema/lib_textbox.cpp:378 eeschema/sch_textbox.cpp:381
 #: pcbnew/fp_textbox.cpp:220 pcbnew/pcb_textbox.cpp:221
-#, fuzzy
 msgid "Box Width"
-msgstr "文本宽度"
+msgstr "框宽度"
 
 #: eeschema/lib_textbox.cpp:381 eeschema/sch_textbox.cpp:384
 #: pcbnew/fp_textbox.cpp:223 pcbnew/pcb_textbox.cpp:224
-#, fuzzy
 msgid "Box Height"
-msgstr "文本高度"
+msgstr "框高度"
 
 #: eeschema/libarch.cpp:101
 #, c-format
@@ -14987,7 +14978,6 @@ msgid "Cancel Load"
 msgstr "取消加载"
 
 #: eeschema/sheet.cpp:225
-#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -14995,8 +14985,10 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"加载的原理图中缺少项目库表中的库名称。 这可能会导致加载的原理图的符号库链接断"
-"开。 是否要继续？"
+"当前项目库表中缺少选定原理图中的某些库名称。这可能会导致加载的原理图的符号库"
+"链接断开。 \n"
+"\n"
+"是否要继续？"
 
 #: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
 #: eeschema/sheet.cpp:380
@@ -15004,7 +14996,6 @@ msgid "Continue Load Schematic"
 msgstr "继续加载原理图"
 
 #: eeschema/sheet.cpp:266
-#, fuzzy
 msgid ""
 "The selected file was created as part of a different project.  Linking the "
 "file to this project may result in missing or incorrect symbol library "
@@ -15012,13 +15003,12 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"要导入的原理图似乎是作为其他工程的一部分创建的。这可能会导致全局符号和/或当前"
-"工程符号库表中的符号库链接丢失或与符号库链接冲突。\n"
+"所选文件是作为不同工程的一部分创建的。将文件链接到此项目可能会导致丢失或错误"
+"的符号库引用。\n"
 "\n"
 "你想继续吗？"
 
 #: eeschema/sheet.cpp:315
-#, fuzzy
 msgid ""
 "There are symbol library names in the selected schematic that are missing "
 "from the selected schematic project library table.  This may result in "
@@ -15026,11 +15016,12 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"加载的原理图中缺少加载的原理图项目库中的库名称。 这可能会导致原理图的符号库链"
-"接断开。 是否要继续？"
+"所选原理图项目库表中缺少选定原理图中的某些符号库名称。   "
+"这可能会导致符号库链接断开。\n"
+"\n"
+" 是否要继续？"
 
 #: eeschema/sheet.cpp:376
-#, fuzzy
 msgid ""
 "A duplicate library name that references a different library exists in the "
 "current library table.  This conflict cannot be resolved and may result in "
@@ -15038,8 +15029,10 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"引用其他库的重复库名称存在于当前库表中。 无法解决此冲突,并可能导致原理图的符"
-"号库链接断开。 是否要继续？"
+"当前库表中存在引用不同库的重复库名。无法解决此冲突，并可能导致符号库链接断开"
+"。 \n"
+"\n"
+"是否要继续？"
 
 #: eeschema/sheet.cpp:564
 #, c-format
@@ -15126,9 +15119,8 @@ msgid "There were errors during netlist export, aborted."
 msgstr "在网表导出过程中出现错误，中止。"
 
 #: eeschema/sim/sim_plot_frame.cpp:488 eeschema/sim/sim_plot_frame.cpp:1812
-#, fuzzy
 msgid "Another simulation is already running."
-msgstr "pl_editor 正在运行, 是否打开新窗口运行?"
+msgstr "另一个仿真已经在运行。"
 
 #: eeschema/sim/sim_plot_frame.cpp:515
 #, c-format
@@ -16169,20 +16161,18 @@ msgid "Create SVG file from the current symbol"
 msgstr "从当前符号创建 SVG 文件"
 
 #: eeschema/tools/ee_actions.cpp:208
-#, fuzzy
 msgid "Synchronized Pins Mode"
-msgstr "同步引脚编辑模式"
+msgstr "同步引脚模式"
 
 #: eeschema/tools/ee_actions.cpp:209
-#, fuzzy
 msgid ""
 "Synchronized Pins Mode\n"
 "When enabled propagates all changes (except pin numbers) to other units.\n"
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
-"同步引脚编辑模式\n"
+"同步引脚模式\n"
 "启用后将所有变更（引脚编号除外）传播到其他单元。\n"
-"默认情况下启用具有可互换单元的多单元元件。"
+"对于有可互换单元的多单元部件默认启用。"
 
 #: eeschema/tools/ee_actions.cpp:220
 msgid "Add Pin"
@@ -18391,9 +18381,8 @@ msgid "Show drawing sheet border and title block"
 msgstr "显示图纸边框和工程图明细表"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:103
-#, fuzzy
 msgid "Show drawing sheet page limits"
-msgstr "显示图框限制"
+msgstr "显示图纸页限制"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:105
 msgid "PCB Background"
@@ -30124,7 +30113,7 @@ msgstr "通孔焊盘没有孔"
 
 #: pcbnew/drc/drc_item.cpp:252
 msgid "Pads with different numbers overlap"
-msgstr ""
+msgstr "不同编号的焊盘重叠"
 
 #: pcbnew/drc/drc_item.cpp:397
 #, c-format
@@ -30968,14 +30957,12 @@ msgid "Expected \"Other\" type but set to \"%s\""
 msgstr "预期的类型为“其他”, 但被设为“%s”"
 
 #: pcbnew/footprint.cpp:2234
-#, fuzzy
 msgid "(PTH pad has no copper layers)"
-msgstr " (金属化焊盘没有铜层)"
+msgstr "(金属化焊盘没有铜层)"
 
 #: pcbnew/footprint.cpp:2257
-#, fuzzy
 msgid "(PTH pad's hole leaves no copper)"
-msgstr " (金属化焊盘的孔没留下铜)"
+msgstr "(金属化焊盘的孔没留下铜)"
 
 #: pcbnew/footprint.cpp:2578 pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1358
 msgid "Clearance Override"
