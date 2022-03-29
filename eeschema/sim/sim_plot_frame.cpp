@@ -1778,16 +1778,25 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
         }
     }
 
+    m_lastSimPlot = plotPanelWindow;
     m_simFinished = true;
 }
 
 
 void SIM_PLOT_FRAME::onSimUpdate( wxCommandEvent& aEvent )
 {
+    static bool updateInProgress = false;
+
+    // skip update when events are triggered too often and previous call didn't end yet
+    if( updateInProgress )
+        return;
+
+    updateInProgress = true;
+
     if( m_simulator->IsRunning() )
         m_simulator->Stop();
 
-    if( GetCurrentPlot() != m_lastSimPlot )
+    if( getCurrentPlotWindow() != m_lastSimPlot )
     {
         // We need to rerun simulation, as the simulator currently stores
         // results for another plot
@@ -1810,6 +1819,7 @@ void SIM_PLOT_FRAME::onSimUpdate( wxCommandEvent& aEvent )
         else
             DisplayErrorMessage( this, _( "Another simulation is already running." ) );
     }
+    updateInProgress = false;
 }
 
 

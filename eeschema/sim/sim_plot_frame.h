@@ -367,7 +367,7 @@ private:
     };
 
     ///< Panel that was used as the most recent one for simulations
-    SIM_PLOT_PANEL* m_lastSimPlot;
+    SIM_PANEL_BASE* m_lastSimPlot;
 
     ///< imagelists used to add a small colored icon to signal names
     ///< and cursors name, the same color as the corresponding signal traces
