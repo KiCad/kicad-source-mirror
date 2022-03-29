@@ -1301,8 +1301,8 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
         if( aItem->HasFlag( ENDPOINT ) )
             line->MoveEnd( aDelta );
 
-    }
         break;
+    }
 
     case SCH_PIN_T:
     case SCH_FIELD_T:
@@ -1326,13 +1326,16 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
 
         break;
     }
+
     case SCH_SHEET_PIN_T:
     {
         SCH_SHEET_PIN* pin = (SCH_SHEET_PIN*) aItem;
+
         pin->SetStoredPos( pin->GetStoredPos() + aDelta );
         pin->ConstrainOnEdge( pin->GetStoredPos() );
         break;
     }
+
     case SCH_LABEL_T:
     case SCH_DIRECTIVE_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
@@ -1353,6 +1356,7 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
 
         break;
     }
+
     default:
         static_cast<SCH_ITEM*>( aItem )->Move( aDelta );
         break;
@@ -1368,6 +1372,17 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
     EE_GRID_HELPER grid( m_toolMgr);
     EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::MovableItems );
     bool append_undo = false;
+
+    auto doMoveItem =
+            [&]( EDA_ITEM* item, const VECTOR2I& delta )
+            {
+                saveCopyInUndoList( item, UNDO_REDO::CHANGED, append_undo );
+                append_undo = true;
+
+                moveItem( item, delta );
+                item->ClearFlags( IS_MOVING );
+                updateItem( item, true );
+            };
 
     for( SCH_ITEM* it : m_frame->GetScreen()->Items() )
     {
@@ -1412,12 +1427,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
                         if( dragItem->GetParent() && dragItem->GetParent()->IsSelected() )
                             continue;
 
-                        saveCopyInUndoList( dragItem, UNDO_REDO::CHANGED, append_undo );
-                        append_undo = true;
-
-                        moveItem( dragItem, gridpt );
-                        dragItem->ClearFlags( IS_MOVING );
-                        updateItem( dragItem, true );
+                        doMoveItem( dragItem, gridpt );
                     }
                 }
             }
@@ -1427,13 +1437,49 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
             VECTOR2I gridpt = grid.AlignGrid( item->GetPosition() ) - item->GetPosition();
 
             if( gridpt != VECTOR2I( 0, 0 ) )
-            {
-                saveCopyInUndoList( item, UNDO_REDO::CHANGED, append_undo );
-                append_undo = true;
+                doMoveItem( item, gridpt );
+        }
+        else if( item->Type() == SCH_SHEET_T )
+        {
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+            VECTOR2I   topRight = sheet->GetPosition();
+            VECTOR2I   bottomRight = topRight + sheet->GetSize();
+            VECTOR2I   tl_gridpt = grid.AlignGrid( topRight ) - topRight;
+            VECTOR2I   br_gridpt = grid.AlignGrid( bottomRight ) - bottomRight;
 
-                moveItem( item, gridpt );
-                updateItem( item, true );
-                item->ClearFlags( IS_MOVING );
+            if( tl_gridpt != VECTOR2I( 0, 0 ) || br_gridpt != VECTOR2I( 0, 0 ) )
+            {
+                doMoveItem( sheet, tl_gridpt );
+
+                VECTOR2I newSize = (VECTOR2I) sheet->GetSize() - tl_gridpt + br_gridpt;
+                sheet->SetSize( wxSize( newSize.x, newSize.y ) );
+                updateItem( sheet, true );
+
+                for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                {
+                    VECTOR2I gridpt;
+
+                    if( pin->GetSide() == SHEET_SIDE::TOP || pin->GetSide() == SHEET_SIDE::LEFT )
+                        gridpt = tl_gridpt;
+                    else
+                        gridpt = br_gridpt;
+
+                    if( gridpt != VECTOR2I( 0, 0 ) )
+                    {
+                        EDA_ITEMS drag_items;
+                        getConnectedDragItems( pin, pin->GetConnectionPoints()[0], drag_items );
+
+                        doMoveItem( pin, gridpt );
+
+                        for( EDA_ITEM* dragItem : drag_items )
+                        {
+                            if( dragItem->GetParent() && dragItem->GetParent()->IsSelected() )
+                                continue;
+
+                            doMoveItem( dragItem, gridpt );
+                        }
+                    }
+                }
             }
         }
         else
@@ -1469,12 +1515,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
                     if( dragItem->GetParent() && dragItem->GetParent()->IsSelected() )
                         continue;
 
-                    saveCopyInUndoList( dragItem, UNDO_REDO::CHANGED, append_undo );
-                    append_undo = true;
-
-                    moveItem( dragItem, most_common );
-                    dragItem->ClearFlags( IS_MOVING );
-                    updateItem( dragItem, true );
+                    doMoveItem( dragItem, most_common );
                 }
             }
         }
