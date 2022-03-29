@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-28 11:12-0700\n"
-"PO-Revision-Date: 2022-03-22 18:24+0000\n"
+"PO-Revision-Date: 2022-04-03 20:07+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -5392,7 +5392,6 @@ msgid "Drawing sheet"
 msgstr "Folha do desenho"
 
 #: common/layer_id.cpp:144 common/layer_id.cpp:174
-#, fuzzy
 msgid "Page limits"
 msgstr "Limites da página"
 
@@ -9387,9 +9386,8 @@ msgid "Standard"
 msgstr "Padrão"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:45
-#, fuzzy
 msgid "Alternate"
-msgstr "Nome alternativo do pino"
+msgstr "Alternar"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:113
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:87
@@ -9435,9 +9433,8 @@ msgstr "Tamanho do nome do texto"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:100
-#, fuzzy
 msgid "De Morgan"
-msgstr "De Morgan padrão"
+msgstr "De Morgan"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:768
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:55
@@ -9504,14 +9501,12 @@ msgid "Group by name"
 msgstr "Agrupe por nome"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:139
-#, fuzzy
 msgid "Group Selected"
-msgstr "Nenhum barramento foi selecionado"
+msgstr "Grupo selecionado"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:150
-#, fuzzy
 msgid "Filter by unit:"
-msgstr "Filtre pela contagem dos pinos"
+msgstr "Filtrar por unidade:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:81
 msgid "Pin Table"
@@ -10097,15 +10092,14 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:270
 msgid "Exit sync pins mode"
-msgstr ""
+msgstr "Encerrar o modo de sincronismo de pinos"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:285
-#, fuzzy
 msgid ""
 "Synchronized pins mode is enabled.\n"
 "Similar pins will be edited regardless of this option."
 msgstr ""
-"O modo de edição do pino sincronizado está ativado.\n"
+"O modo de sincronização de pino está ativado.\n"
 "Os pinos semelhantes serão editados independentemente desta opção."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:290
@@ -10133,17 +10127,20 @@ msgstr ""
 "Deseja continuar?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:430
-#, fuzzy
 msgid "Synchronized Pins Mode."
-msgstr "Modo de edição dos pinos sincronizado"
+msgstr "Modo de sincronização de pinos."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:432
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
 msgstr ""
+"Modo de sincronização de pinos.  Um novo pino será adicionado em todas as "
+"unidades."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
 msgstr ""
+"Modo de sincronização de pinos.  Os pinos coincidentes nas outras unidades "
+"serão atualizados."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:43
 msgid "Pin &name:"
@@ -13750,15 +13747,13 @@ msgstr "Itálico Negrito"
 
 #: eeschema/lib_textbox.cpp:378 eeschema/sch_textbox.cpp:381
 #: pcbnew/fp_textbox.cpp:220 pcbnew/pcb_textbox.cpp:221
-#, fuzzy
 msgid "Box Width"
-msgstr "Largura do texto"
+msgstr "Largura da caixa"
 
 #: eeschema/lib_textbox.cpp:381 eeschema/sch_textbox.cpp:384
 #: pcbnew/fp_textbox.cpp:223 pcbnew/pcb_textbox.cpp:224
-#, fuzzy
 msgid "Box Height"
-msgstr "Altura do texto"
+msgstr "Altura da caixa"
 
 #: eeschema/libarch.cpp:101
 #, c-format
@@ -15393,7 +15388,6 @@ msgid "Cancel Load"
 msgstr "Cancele o carregamento"
 
 #: eeschema/sheet.cpp:225
-#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -15403,7 +15397,9 @@ msgid ""
 msgstr ""
 "Há nomes das bibliotecas que foram carregadas no esquema que não existem na "
 "tabela da biblioteca do projeto.  Isso pode resultar em links quebrados dos "
-"símbolos da biblioteca para o esquema que for carregado.  Deseja continuar?"
+"símbolos da biblioteca para o esquema que for carregado.\n"
+"\n"
+"Deseja continuar?"
 
 #: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
 #: eeschema/sheet.cpp:380
@@ -15411,7 +15407,6 @@ msgid "Continue Load Schematic"
 msgstr "Continue a carregar o esquema"
 
 #: eeschema/sheet.cpp:266
-#, fuzzy
 msgid ""
 "The selected file was created as part of a different project.  Linking the "
 "file to this project may result in missing or incorrect symbol library "
@@ -15419,15 +15414,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"O esquema que será importado parece ter sido criado como parte de um projeto "
-"diferente.  Isso pode resultar na falta de conexões com os símbolos da "
-"biblioteca ou colidem com as conexões com os símbolos globais na tabela da "
-"biblioteca e/ou na tabela da biblioteca dos símbolos do projeto atual.\n"
+"O arquivo selecionado foi criado como parte de um projeto diferente.  Ao "
+"vincular o arquivo a este projeto isso pode resultar em referências ausentes "
+"ou incorretas da biblioteca dos símbolos.\n"
 "\n"
-"Deseja continuar?"
+"Você deseja continuar?"
 
 #: eeschema/sheet.cpp:315
-#, fuzzy
 msgid ""
 "There are symbol library names in the selected schematic that are missing "
 "from the selected schematic project library table.  This may result in "
@@ -15437,10 +15430,11 @@ msgid ""
 msgstr ""
 "Há nomes de biblioteca que foram carregadas no esquema e que não existem na "
 "tabela da biblioteca do projeto.  Isso pode resultar em links quebrados dos "
-"símbolos da biblioteca para o esquema.  Deseja continuar?"
+"símbolos da biblioteca para o esquema.\n"
+"\n"
+"Deseja continuar?"
 
 #: eeschema/sheet.cpp:376
-#, fuzzy
 msgid ""
 "A duplicate library name that references a different library exists in the "
 "current library table.  This conflict cannot be resolved and may result in "
@@ -15450,8 +15444,9 @@ msgid ""
 msgstr ""
 "Existe um nome duplicado da biblioteca que faz referência a tabela de uma "
 "biblioteca diferente da atual.  Este conflito não pode ser resolvido e pode "
-"resultar em links quebrados dos símbolos da biblioteca no esquema.  Deseja "
-"continuar?"
+"resultar em links quebrados dos símbolos da biblioteca no esquema.\n"
+"\n"
+"Deseja continuar?"
 
 #: eeschema/sheet.cpp:564
 #, c-format
@@ -15542,9 +15537,8 @@ msgid "There were errors during netlist export, aborted."
 msgstr "Houveram erros durante a exportação da netlist, abortado."
 
 #: eeschema/sim/sim_plot_frame.cpp:488 eeschema/sim/sim_plot_frame.cpp:1812
-#, fuzzy
 msgid "Another simulation is already running."
-msgstr "pl_editor já está executando. Continuar?"
+msgstr "Outra simulação já está em andamento."
 
 #: eeschema/sim/sim_plot_frame.cpp:515
 #, c-format
@@ -16609,21 +16603,19 @@ msgid "Create SVG file from the current symbol"
 msgstr "Cria um arquivo SVG a partir do símbolo atual"
 
 #: eeschema/tools/ee_actions.cpp:208
-#, fuzzy
 msgid "Synchronized Pins Mode"
-msgstr "Modo de edição dos pinos sincronizado"
+msgstr "Modo de sincronização de pinos"
 
 #: eeschema/tools/ee_actions.cpp:209
-#, fuzzy
 msgid ""
 "Synchronized Pins Mode\n"
 "When enabled propagates all changes (except pin numbers) to other units.\n"
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
-"Modo de edição dos pinos sincronizados\n"
+"Modo de sincronização de pinos\n"
 "Quando ativado, propaga todas as alterações (exceto os números dos pinos) "
 "para outras unidades.\n"
-"Ativado por padrão para peças de várias unidades e com unidades "
+"É ativado por padrão para peças de várias unidades e com unidades "
 "intercambiáveis."
 
 #: eeschema/tools/ee_actions.cpp:220
@@ -18866,9 +18858,8 @@ msgid "Show drawing sheet border and title block"
 msgstr "Mostra a borda da folha de desenho e do bloco de título"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:103
-#, fuzzy
 msgid "Show drawing sheet page limits"
-msgstr "Exiba os limites da folha"
+msgstr "Exiba os limites da página de desenho"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:105
 msgid "PCB Background"
@@ -30834,7 +30825,7 @@ msgstr "A ilha do furo passante não tem furo"
 
 #: pcbnew/drc/drc_item.cpp:252
 msgid "Pads with different numbers overlap"
-msgstr ""
+msgstr "Ilhas com números diferentes se sobrepõem"
 
 #: pcbnew/drc/drc_item.cpp:397
 #, c-format
@@ -31698,14 +31689,12 @@ msgid "Expected \"Other\" type but set to \"%s\""
 msgstr "Tipo \"Outro\" esperado, mas, foi definido para \"%s\""
 
 #: pcbnew/footprint.cpp:2234
-#, fuzzy
 msgid "(PTH pad has no copper layers)"
-msgstr " (A ilha PTH não possui camadas de cobre)"
+msgstr "(A ilha PTH não possui camadas de cobre)"
 
 #: pcbnew/footprint.cpp:2257
-#, fuzzy
 msgid "(PTH pad's hole leaves no copper)"
-msgstr " (O furo da ilha PTH não deixa nenhum cobre)"
+msgstr "(O furo da ilha PTH não deixa nenhum cobre)"
 
 #: pcbnew/footprint.cpp:2578 pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1358
 msgid "Clearance Override"
