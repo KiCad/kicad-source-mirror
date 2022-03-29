@@ -76,8 +76,12 @@ void DIALOG_PNS_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
     m_settings.SetOptimizeEntireDraggedTrack( m_optimizeEntireDraggedTrack->GetValue() );
     m_settings.SetAutoPosture( m_autoPosture->GetValue() );
     m_settings.SetFixAllSegments( m_fixAllSegments->GetValue() );
-    m_settings.SetAllowDRCViolations( m_violateDrc->GetValue() );
-    m_settings.SetFreeAngleMode( m_freeAngleMode->GetValue() );
+
+    if( m_violateDrc->IsEnabled() )
+        m_settings.SetAllowDRCViolations( m_violateDrc->GetValue() );
+
+    if( m_freeAngleMode->IsEnabled() )
+        m_settings.SetFreeAngleMode( m_freeAngleMode->GetValue() );
 
     aEvent.Skip();      // ends returning wxID_OK (default behavior)
 }
