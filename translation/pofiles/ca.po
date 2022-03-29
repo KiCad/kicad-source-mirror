@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-28 11:13-0700\n"
-"PO-Revision-Date: 2022-03-23 22:38+0000\n"
+"PO-Revision-Date: 2022-04-08 00:06+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v6/ca/>\n"
 "Language: ca\n"
@@ -30442,9 +30442,8 @@ msgid "Inner layers"
 msgstr "Sense capes"
 
 #: pcbnew/footprint_edit_frame.cpp:239 pcbnew/pcb_edit_frame.cpp:280
-#, fuzzy
 msgid "Selection Filter"
-msgstr "Selecciona un fitxer"
+msgstr "Filtre de selecció"
 
 #: pcbnew/footprint_edit_frame.cpp:295
 #, fuzzy
