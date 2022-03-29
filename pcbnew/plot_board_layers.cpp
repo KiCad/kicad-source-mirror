@@ -30,6 +30,7 @@
 
 
 #include <eda_item.h>
+#include <layer_ids.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_segment.h>
 #include <pcb_base_frame.h>
@@ -65,6 +66,16 @@ static void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMa
                                  const PCB_PLOT_PARAMS& aPlotOpt, int aMinThickness );
 
 
+void PlotBoardLayers( BOARD* aBoard, PLOTTER* aPlotter, const LSEQ& aLayers,
+                      const PCB_PLOT_PARAMS& aPlotOptions )
+{
+    wxCHECK( aBoard && aPlotter && aLayers.size(), /* void */ );
+
+    for( LSEQ seq = aLayers; seq; ++seq )
+        PlotOneBoardLayer( aBoard, aPlotter, *seq, aPlotOptions );
+}
+
+
 void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
                         const PCB_PLOT_PARAMS& aPlotOpt )
 {
@@ -78,9 +89,6 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
     // Specify that the contents of the "Edges Pcb" layer are to be plotted in addition to the
     // contents of the currently specified layer.
     LSET    layer_mask( aLayer );
-
-    if( !aPlotOpt.GetExcludeEdgeLayer() )
-        layer_mask.set( Edge_Cuts );
 
     if( IsCopperLayer( aLayer ) )
     {
@@ -104,6 +112,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
         case B_Mask:
         case F_Mask:
             plotOpt.SetSkipPlotNPTH_Pads( false );
+
             // Disable plot pad holes
             plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
 
@@ -128,6 +137,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
         case B_Paste:
         case F_Paste:
             plotOpt.SetSkipPlotNPTH_Pads( false );
+
             // Disable plot pad holes
             plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
 
@@ -304,9 +314,9 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
             // Store these parameters that can be modified to plot inflated/deflated pads shape
             PAD_SHAPE padShape = pad->GetShape();
-            VECTOR2I    padSize = pad->GetSize();
+            VECTOR2I  padSize = pad->GetSize();
             VECTOR2I  padDelta = pad->GetDelta(); // has meaning only for trapezoidal pads
-            double      padCornerRadius = pad->GetRoundRectCornerRadius();
+            double    padCornerRadius = pad->GetRoundRectCornerRadius();
 
             // Don't draw a 0 sized pad.
             // Note: a custom pad can have its pad anchor with size = 0
@@ -645,74 +655,6 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 }
 
 
-// Seems like we want to plot from back to front?
-static const PCB_LAYER_ID plot_seq[] = {
-
-    User_9,
-    User_8,
-    User_7,
-    User_6,
-    User_5,
-    User_4,
-    User_3,
-    User_2,
-    User_1,
-    B_Adhes,
-    F_Adhes,
-    B_Paste,
-    F_Paste,
-    B_SilkS,
-    B_Mask,
-    F_Mask,
-    Dwgs_User,
-    Cmts_User,
-    Eco1_User,
-    Eco2_User,
-    Edge_Cuts,
-    Margin,
-
-    F_CrtYd,        // CrtYd & Body are footprint only
-    B_CrtYd,
-    F_Fab,
-    B_Fab,
-
-    B_Cu,
-    In30_Cu,
-    In29_Cu,
-    In28_Cu,
-    In27_Cu,
-    In26_Cu,
-    In25_Cu,
-    In24_Cu,
-    In23_Cu,
-    In22_Cu,
-    In21_Cu,
-    In20_Cu,
-    In19_Cu,
-    In18_Cu,
-    In17_Cu,
-    In16_Cu,
-    In15_Cu,
-    In14_Cu,
-    In13_Cu,
-    In12_Cu,
-    In11_Cu,
-    In10_Cu,
-    In9_Cu,
-    In8_Cu,
-    In7_Cu,
-    In6_Cu,
-    In5_Cu,
-    In4_Cu,
-    In3_Cu,
-    In2_Cu,
-    In1_Cu,
-    F_Cu,
-
-    F_SilkS,
-};
-
-
 /**
  * Plot outlines of copper layer.
  */
@@ -724,7 +666,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     SHAPE_POLY_SET outlines;
 
-    for( LSEQ seq = aLayerMask.Seq( plot_seq, arrayDim( plot_seq ) );  seq;  ++seq )
+    for( LSEQ seq = aLayerMask.Seq( aLayerMask.SeqStackupBottom2Top() );  seq;  ++seq )
     {
         PCB_LAYER_ID layer = *seq;
 
@@ -752,8 +694,9 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         // Plot pad holes
         if( aPlotOpt.GetDrillMarksType() != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
         {
-            int smallDrill = (aPlotOpt.GetDrillMarksType() == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE)
-                                  ? Millimeter2iu( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize ) : INT_MAX;
+            int smallDrill = ( aPlotOpt.GetDrillMarksType() == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE )
+                             ? Millimeter2iu( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize ) :
+                             INT_MAX;
 
             for( FOOTPRINT* footprint : aBoard->Footprints() )
             {
@@ -838,7 +781,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     // We remove 1nm as we expand both sides of the shapes, so allowing for a strictly greater
     // than or equal comparison in the shape separation (boolean add)
-    int inflate = aMinThickness/2 - 1;
+    int inflate = aMinThickness / 2 - 1;
 
     BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
     itemplotter.SetLayerSet( aLayerMask );
@@ -882,6 +825,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     // add shapes with their exact mask layer size in initialPolys
                     item->TransformShapeWithClearanceToPolygon( initialPolys, layer, 0, maxError,
                                                                 ERROR_OUTSIDE );
+
                     // add shapes inflated by aMinThickness/2 in areas
                     item->TransformShapeWithClearanceToPolygon( areas, layer, inflate, maxError,
                                                                 ERROR_OUTSIDE );
@@ -907,6 +851,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             // add shapes with their exact mask layer size in initialPolys
             via->TransformShapeWithClearanceToPolygon( initialPolys, layer, clearance, maxError,
                                                        ERROR_OUTSIDE );
+
             // add shapes inflated by aMinThickness/2 in areas
             via->TransformShapeWithClearanceToPolygon( areas, layer, clearance + inflate, maxError,
                                                        ERROR_OUTSIDE );

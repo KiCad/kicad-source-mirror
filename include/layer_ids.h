@@ -731,6 +731,8 @@ public:
      */
     LSEQ Seq( const PCB_LAYER_ID* aWishListSequence, unsigned aCount ) const;
 
+    LSEQ Seq( const LSEQ& aSequence ) const;
+
     /**
      * Return a LSEQ from this LSET in ascending PCB_LAYER_ID order.  Each LSEQ
      * element will be in the same sequence as in PCB_LAYER_ID and only present

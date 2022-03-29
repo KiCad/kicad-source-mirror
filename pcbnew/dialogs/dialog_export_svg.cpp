@@ -218,7 +218,8 @@ void DIALOG_EXPORT_SVG::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
         boardFilePath = wxPathOnly( boardFilePath );
 
         if( !dirName.MakeRelativeTo( boardFilePath ) )
-            wxMessageBox( _( "Cannot make path relative (target volume different from board file volume)!" ),
+            wxMessageBox( _( "Cannot make path relative (target volume different from board "
+                             "file volume)!" ),
                           _( "Plot Output Directory" ), wxOK | wxICON_ERROR );
     }
 
@@ -360,10 +361,7 @@ bool DIALOG_EXPORT_SVG::CreateSVGFile( const wxString& aFullFileName )
     if( plotter )
     {
         plotter->SetColorMode( !m_printBW );
-
-        for( LSEQ seq = m_printMaskLayer.SeqStackupBottom2Top();  seq;  ++seq )
-            PlotOneBoardLayer( m_board, plotter, *seq, plot_opts );
-
+        PlotBoardLayers( m_board, plotter, m_printMaskLayer.SeqStackupBottom2Top(), plot_opts );
         plotter->EndPlot();
     }
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -144,6 +144,17 @@ private:
 
 PLOTTER* StartPlotBoard( BOARD* aBoard, const PCB_PLOT_PARAMS* aPlotOpts, int aLayer,
                          const wxString& aFullFileName, const wxString& aSheetDesc );
+
+/**
+ * Plot a sequence of board layer IDs.
+ *
+ * @param aBoard is the board to plot.
+ * @param aPlotter is the plotter to use.
+ * @param aLayerSequence is the sequence of layer IDs to plot.
+ * @param aPlotOptions are the plot options (files, sketch). Has meaning for some formats only.
+ */
+void PlotBoardLayers( BOARD* aBoard, PLOTTER* aPlotter, const LSEQ& aLayerSequence,
+                      const PCB_PLOT_PARAMS& aPlotOptions );
 
 /**
  * Plot one copper or technical layer.

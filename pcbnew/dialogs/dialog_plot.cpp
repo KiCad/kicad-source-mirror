@@ -415,8 +415,6 @@ PLOT_FORMAT DIALOG_PLOT::getPlotFormat()
 }
 
 
-// Enable or disable widgets according to the plot format selected
-// and clear also some optional values
 void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
 {
     // this option exist only in DXF format:
@@ -745,6 +743,7 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // Get a list of copper layers that aren't being used by inverting enabled layers.
     LSET disabledCopperLayers = LSET::AllCuMask() & ~m_parent->GetBoard()->GetEnabledLayers();
+
     // Enable all of the disabled copper layers.
     // If someone enables more copper layers they will be selected by default.
     selectedLayers = selectedLayers | disabledCopperLayers;
@@ -871,6 +870,14 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
     for( LSEQ seq = m_plotOpts.GetLayerSelection().UIOrder();  seq;  ++seq )
     {
+        LSEQ plotSequence;
+
+        // Base layer always gets plotted first.
+        plotSequence.push_back( *seq );
+
+        if( ( *seq != Edge_Cuts ) && !m_plotOpts.GetExcludeEdgeLayer() )
+            plotSequence.push_back( Edge_Cuts );
+
         PCB_LAYER_ID layer = *seq;
 
         // All copper layers that are disabled are actually selected
@@ -896,14 +903,15 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
         LOCALE_IO toggle;
 
-        PLOTTER* plotter = StartPlotBoard( board, &m_plotOpts, layer, fn.GetFullPath(), wxEmptyString );
+        PLOTTER* plotter = StartPlotBoard( board, &m_plotOpts, layer, fn.GetFullPath(),
+                                           wxEmptyString );
 
         // Print diags in messages box:
         wxString msg;
 
         if( plotter )
         {
-            PlotOneBoardLayer( board, plotter, layer, m_plotOpts );
+            PlotBoardLayers( board, plotter, plotSequence, m_plotOpts );
             plotter->EndPlot();
             delete plotter->RenderSettings();
             delete plotter;
@@ -924,6 +932,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     {
         // Pick the basename from the board file
         wxFileName fn( boardFilename );
+
         // Build gerber job file from basename
         BuildPlotFileName( &fn, outputDir.GetPath(), wxT( "job" ), GerberJobFileExtension );
         jobfile_writer.CreateJobFile( fn.GetFullPath() );
