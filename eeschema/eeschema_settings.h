@@ -161,6 +161,7 @@ public:
 
     struct PANEL_ANNOTATE
     {
+        bool automatic;
         int scope;
         int options;
         int method;

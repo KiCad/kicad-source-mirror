@@ -1019,6 +1019,7 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
     book->AddPage( new wxPanel( book ), _( "Schematic Editor" ) );
     book->AddSubPage( CREATE_PANEL( PANEL_SCH_DISP_OPTIONS ), _( "Display Options" ) );
     book->AddSubPage( CREATE_PANEL( PANEL_SCH_EDIT_OPTIONS ), _( "Editing Options" ) );
+    book->AddSubPage( CREATE_PANEL( PANEL_SCH_ANNO_OPTIONS ), _( "Annotation Options" ) );
     book->AddSubPage( CREATE_PANEL( PANEL_SCH_COLORS ), _( "Colors" ) );
     book->AddSubPage( CREATE_PANEL( PANEL_SCH_FIELD_NAME_TEMPLATES ), _( "Field Name Templates" ) );
 

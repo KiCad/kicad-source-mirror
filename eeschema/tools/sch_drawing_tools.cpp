@@ -269,6 +269,19 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             }
             else
             {
+                EESCHEMA_SETTINGS::PANEL_ANNOTATE& annotate         = m_frame->eeconfig()->m_AnnotatePanel;
+                SCHEMATIC_SETTINGS&                projSettings     = m_frame->Schematic().Settings();
+                int                                annotateStartNum = projSettings.m_AnnotateStartNum;
+
+                if( annotate.automatic )
+                {
+                    NULL_REPORTER reporter;
+                    m_frame->AnnotateSymbols( ANNOTATE_SELECTION,
+                                              (ANNOTATE_ORDER_T) annotate.sort_order,
+                                              (ANNOTATE_ALGO_T) annotate.method, annotateStartNum,
+                                              false, false, reporter, true );
+                }
+
                 if( m_frame->eeconfig()->m_AutoplaceFields.enable )
                     symbol->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
 
@@ -306,6 +319,10 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                         nextSymbol = static_cast<SCH_SYMBOL*>( symbol->Duplicate() );
                         nextSymbol->SetUnit( new_unit );
                         nextSymbol->SetUnitSelection( new_unit );
+
+                        // Start new annotation sequence at first unit
+                        if( new_unit == 1 )
+                            nextSymbol->ClearAnnotation( nullptr, false );
 
                         addSymbol( nextSymbol );
                     }

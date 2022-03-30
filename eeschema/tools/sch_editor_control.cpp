@@ -1638,6 +1638,9 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     SCH_SHEET          tempSheet;
     SCH_SCREEN*        tempScreen = new SCH_SCREEN( &m_frame->Schematic() );
 
+    EESCHEMA_SETTINGS::PANEL_ANNOTATE& annotate = m_frame->eeconfig()->m_AnnotatePanel;
+    int annotateStartNum = m_frame->Schematic().Settings().m_AnnotateStartNum;
+
     // Screen object on heap is owned by the sheet.
     tempSheet.SetScreen( tempScreen );
 
@@ -1656,7 +1659,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     // Save loaded screen instances to m_clipboardSheetInstances
     setClipboardInstances( tempScreen );
 
-    PASTE_MODE pasteMode = PASTE_MODE::REMOVE_ANNOTATIONS;
+    PASTE_MODE pasteMode =
+            annotate.automatic ? PASTE_MODE::RESPECT_OPTIONS : PASTE_MODE::REMOVE_ANNOTATIONS;
 
     if( aEvent.IsAction( &ACTIONS::pasteSpecial ) )
     {
@@ -1666,7 +1670,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             return 0;
     }
 
-    bool forceKeepAnnotations = pasteMode != PASTE_MODE::REMOVE_ANNOTATIONS;
+    bool forceKeepAnnotations = pasteMode == PASTE_MODE::KEEP_ANNOTATIONS;
 
     // SCH_SEXP_PLUGIN added the items to the paste screen, but not to the view or anything
     // else.  Pull them back out to start with.
@@ -1955,6 +1959,39 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( EE_ACTIONS::addItemsToSel, true, &loadedItems );
 
     EE_SELECTION& selection = selTool->GetSelection();
+
+    // We should have a new selection of only the pasted symbols with their annotations cleared
+    if( pasteMode == PASTE_MODE::RESPECT_OPTIONS )
+    {
+        NULL_REPORTER reporter;
+
+        // Annotate the symbols on the current sheet with the selection
+        m_frame->AnnotateSymbols( ANNOTATE_SELECTION, (ANNOTATE_ORDER_T) annotate.sort_order,
+                                  (ANNOTATE_ALGO_T) annotate.method, annotateStartNum, false, false,
+                                  reporter, true );
+
+
+        // Annotate all the sheets we've copied and pasted
+        SCH_SHEET_PATH originalSheet = m_frame->GetCurrentSheet();
+
+        for( SCH_SHEET_PATH& instance : pasteInstances )
+        {
+            for( SCH_SHEET_PATH& pastedSheet : pastedSheets[instance] )
+            {
+                m_frame->SetCurrentSheet( pastedSheet );
+                m_frame->GetCurrentSheet().UpdateAllScreenReferences();
+                m_frame->SetSheetNumberAndCount();
+                m_frame->AnnotateSymbols( ANNOTATE_CURRENT_SHEET,
+                                          (ANNOTATE_ORDER_T) annotate.sort_order,
+                                          (ANNOTATE_ALGO_T) annotate.method, annotateStartNum,
+                                          false, false, reporter, true );
+            }
+        }
+
+        m_frame->SetCurrentSheet( originalSheet );
+        m_frame->GetCurrentSheet().UpdateAllScreenReferences();
+        m_frame->SetSheetNumberAndCount();
+    }
 
     if( !selection.Empty() )
     {

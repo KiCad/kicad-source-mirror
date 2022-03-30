@@ -203,6 +203,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "selection.select_pin_selects_symbol",
             &m_Selection.select_pin_selects_symbol, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "annotation.automatic",
+            &m_AnnotatePanel.automatic, true ) );
+
     m_params.emplace_back( new PARAM<int>( "annotation.method",
             &m_AnnotatePanel.method, 0, 0, 2 ) );
 

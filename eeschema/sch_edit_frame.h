@@ -384,13 +384,16 @@ public:
      *                          used to handle annotation in complex hierarchies.
      * @param aReporter A sink for error messages.  Use NULL_REPORTER if you don't need errors.
      *
+     * @param appendUndo True if the annotation operation should be added to an existing undo,
+     *                   false if it should be separately undo-able.
+     *
      * When the sheet number is used in annotation, each sheet annotation starts from sheet
      * number * 100.  In other words the first sheet uses 100 to 199, the second sheet uses
      * 200 to 299, and so on.
      */
     void AnnotateSymbols( ANNOTATE_SCOPE_T aAnnotateScope, ANNOTATE_ORDER_T aSortOption,
                           ANNOTATE_ALGO_T aAlgoOption, int aStartNumber, bool aResetAnnotation,
-                          bool aRepairTimestamps, REPORTER& aReporter );
+                          bool aRepairTimestamps, REPORTER& aReporter, bool appendUndo = false );
 
     /**
      * Check for annotation errors.

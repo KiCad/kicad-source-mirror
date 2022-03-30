@@ -972,6 +972,22 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     m_frame->AddToScreen( newItem, m_frame->GetScreen() );
     m_frame->SaveCopyInUndoList( m_frame->GetScreen(), newItem, UNDO_REDO::NEWITEM, false );
 
+    if( newItem->Type() == SCH_SYMBOL_T )
+    {
+        EESCHEMA_SETTINGS::PANEL_ANNOTATE& annotate = m_frame->eeconfig()->m_AnnotatePanel;
+        SCHEMATIC_SETTINGS&                projSettings = m_frame->Schematic().Settings();
+        int                                annotateStartNum = projSettings.m_AnnotateStartNum;
+
+        if( annotate.automatic )
+        {
+            static_cast<SCH_SYMBOL*>( newItem )->ClearAnnotation( nullptr, false );
+            NULL_REPORTER reporter;
+            m_frame->AnnotateSymbols( ANNOTATE_SELECTION, (ANNOTATE_ORDER_T) annotate.sort_order,
+                                      (ANNOTATE_ALGO_T) annotate.method, annotateStartNum, false,
+                                      false, reporter, true );
+        }
+    }
+
     // Symbols need to be handled by the move tool.  The move tool will handle schematic
     // cleanup routines
     if( performDrag )

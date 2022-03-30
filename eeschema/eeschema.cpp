@@ -53,6 +53,7 @@
 #include <panel_eeschema_color_settings.h>
 #include <panel_sym_color_settings.h>
 #include <panel_eeschema_editing_options.h>
+#include <panel_eeschema_annotation_options.h>
 #include <panel_sym_editing_options.h>
 #include <dialogs/panel_gal_display_options.h>
 #include <panel_eeschema_display_options.h>
@@ -247,6 +248,13 @@ static struct IFACE : public KIFACE_BASE
             }
 
             return new PANEL_EESCHEMA_EDITING_OPTIONS( aParent, unitsProvider );
+        }
+
+        case PANEL_SCH_ANNO_OPTIONS:
+        {
+            EDA_BASE_FRAME* schSettingsProvider = aKiway->Player( FRAME_SCH, false );
+
+            return new PANEL_EESCHEMA_ANNOTATION_OPTIONS( aParent, schSettingsProvider );
         }
 
         case PANEL_SCH_COLORS:

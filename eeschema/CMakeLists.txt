@@ -121,6 +121,8 @@ set( EESCHEMA_DLGS
     dialogs/panel_eeschema_color_settings.cpp
     dialogs/panel_eeschema_display_options.cpp
     dialogs/panel_eeschema_display_options_base.cpp
+    dialogs/panel_eeschema_annotation_options.cpp
+    dialogs/panel_eeschema_annotation_options_base.cpp
     dialogs/panel_eeschema_editing_options.cpp
     dialogs/panel_eeschema_editing_options_base.cpp
     dialogs/panel_setup_formatting.cpp

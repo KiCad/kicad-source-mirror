@@ -134,7 +134,8 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
                                       int               aStartNumber,
                                       bool              aResetAnnotation,
                                       bool              aRepairTimestamps,
-                                      REPORTER&         aReporter )
+                                      REPORTER&         aReporter,
+                                      bool              appendUndo )
 {
     EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
     EE_SELECTION&      selection = selTool->RequestSelection();
@@ -143,7 +144,6 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
     SCH_SCREENS        screens( Schematic().Root() );
     SCH_SHEET_LIST     sheets = Schematic().GetSheets();
     SCH_SHEET_PATH     currentSheet = GetCurrentSheet();
-    bool               appendUndo = false;
 
     // Map of locked symbols
     SCH_MULTI_UNIT_REFERENCE_MAP lockedSymbols;
