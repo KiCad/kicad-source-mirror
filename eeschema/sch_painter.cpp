@@ -1021,7 +1021,6 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer )
 
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
-    m_gal->SetLineWidth( borderWidth );
 
     if( aLayer == LAYER_SELECTION_SHADOWS )
     {
@@ -1032,6 +1031,7 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer )
         {
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );
+            m_gal->SetLineWidth( borderWidth );
 
             m_gal->DrawRectangle( mapCoords( aTextBox->GetPosition() ),
                                   mapCoords( aTextBox->GetEnd() ) );
@@ -1040,6 +1040,7 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer )
         {
             m_gal->SetIsStroke( true );
             m_gal->SetIsFill( false );
+            m_gal->SetLineWidth( borderWidth );
 
             m_gal->DrawRectangle( mapCoords( aTextBox->GetPosition() ),
                                   mapCoords( aTextBox->GetEnd() ) );
@@ -1052,6 +1053,7 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer )
         {
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );
+            m_gal->SetLineWidth( borderWidth );
 
             m_gal->DrawRectangle( mapCoords( aTextBox->GetPosition() ),
                                   mapCoords( aTextBox->GetEnd() ) );
@@ -1063,8 +1065,6 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer )
 
         if( borderWidth > 0 )
         {
-            m_gal->SetLineWidth( borderWidth );
-
             if( !m_schSettings.m_OverrideItemColors && !aTextBox->IsBrightened()
                     && aTextBox->GetStroke().GetColor() != COLOR4D::UNSPECIFIED )
             {
@@ -1073,6 +1073,7 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer )
 
             m_gal->SetIsFill( false );
             m_gal->SetIsStroke( true );
+            m_gal->SetLineWidth( borderWidth );
 
             if( borderStyle <= PLOT_DASH_TYPE::FIRST_TYPE || drawingShadows )
             {
@@ -1939,7 +1940,6 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
 
     m_gal->SetFillColor( color );
     m_gal->SetStrokeColor( color );
-    m_gal->SetLineWidth( borderWidth );
 
     if( aLayer == LAYER_SELECTION_SHADOWS )
     {
@@ -1950,6 +1950,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
         {
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );
+            m_gal->SetLineWidth( borderWidth );
 
             m_gal->DrawRectangle( aTextBox->GetPosition(), aTextBox->GetEnd() );
         }
@@ -1957,6 +1958,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
         {
             m_gal->SetIsStroke( true );
             m_gal->SetIsFill( false );
+            m_gal->SetLineWidth( borderWidth );
 
             m_gal->DrawRectangle( aTextBox->GetPosition(), aTextBox->GetEnd() );
             drawText();
@@ -1968,6 +1970,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
         {
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );
+            m_gal->SetLineWidth( borderWidth );
 
             m_gal->DrawRectangle( aTextBox->GetPosition(), aTextBox->GetEnd() );
         }
@@ -1976,7 +1979,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
     {
         drawText();
 
-        if( aTextBox->GetPenWidth() > 0 )
+        if( borderWidth > 0 )
         {
             if( !m_schSettings.m_OverrideItemColors && !aTextBox->IsBrightened()
                     && aTextBox->GetStroke().GetColor() != COLOR4D::UNSPECIFIED )
@@ -1986,6 +1989,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
 
             m_gal->SetIsFill( false );
             m_gal->SetIsStroke( true );
+            m_gal->SetLineWidth( borderWidth );
 
             if( borderStyle <= PLOT_DASH_TYPE::FIRST_TYPE || drawingShadows )
             {
