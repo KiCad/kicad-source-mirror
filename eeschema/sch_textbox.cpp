@@ -340,7 +340,11 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground ) const
     {
         penWidth = std::max( penWidth, settings->GetMinPenWidth() );
 
-        aPlotter->SetColor( color );
+        if( aPlotter->GetColorMode() && GetStroke().GetColor() != COLOR4D::UNSPECIFIED )
+            aPlotter->SetColor( GetStroke().GetColor() );
+        else
+            aPlotter->SetColor( color );
+
         aPlotter->Rect( m_start, m_end, FILL_T::NO_FILL, penWidth );
     }
 

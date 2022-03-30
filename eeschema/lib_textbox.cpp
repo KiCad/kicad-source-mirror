@@ -327,7 +327,11 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
 
     if( penWidth > 0 )
     {
-        aPlotter->SetColor( color );
+        if( aPlotter->GetColorMode() && GetStroke().GetColor() != COLOR4D::UNSPECIFIED )
+            aPlotter->SetColor( GetStroke().GetColor() );
+        else
+            aPlotter->SetColor( color );
+
         aPlotter->Rect( start, end, FILL_T::NO_FILL, penWidth );
     }
 

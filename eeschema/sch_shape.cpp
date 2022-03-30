@@ -101,13 +101,11 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground ) const
             cornerList.push_back( pt );
     }
 
-    if( GetStroke().GetColor() == COLOR4D::UNSPECIFIED )
-        aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_NOTES ) );
-    else
-        aPlotter->SetColor( GetStroke().GetColor() );
-
     if( aBackground )
     {
+        if( !aPlotter->GetColorMode() )
+            return;
+
         if( m_fill == FILL_T::FILLED_WITH_COLOR && GetFillColor() != COLOR4D::UNSPECIFIED )
         {
             aPlotter->SetColor( GetFillColor() );
@@ -141,6 +139,11 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground ) const
     }
     else /* if( aForeground ) */
     {
+        if( aPlotter->GetColorMode() && GetStroke().GetColor() != COLOR4D::UNSPECIFIED )
+            aPlotter->SetColor( GetStroke().GetColor() );
+        else
+            aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_NOTES ) );
+
         aPlotter->SetCurrentLineWidth( pen_size );
         aPlotter->SetDash( GetEffectiveLineStyle() );
 
