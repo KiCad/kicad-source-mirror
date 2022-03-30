@@ -774,6 +774,7 @@ void EE_POINT_EDITOR::updateParentItem() const
             }
         }
 
+        textbox->ClearRenderCache();
         break;
     }
 
@@ -923,6 +924,7 @@ void EE_POINT_EDITOR::updateParentItem() const
             }
         }
 
+        textBox->ClearRenderCache();
         break;
     }
 
