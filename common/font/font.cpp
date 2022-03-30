@@ -118,7 +118,7 @@ void FONT::getLinePositions( const wxString& aText, const VECTOR2I& aPosition,
         aExtents.push_back( bBox );
 
         if( i == 0 )
-            height += ( aAttrs.m_Size.y * 1.21 );   // 1.21 is a fudge to match 6.0 positioning
+            height += ( aAttrs.m_Size.y * 1.17 );   // 1.17 is a fudge to match 6.0 positioning
         else
             height += interline;
     }
