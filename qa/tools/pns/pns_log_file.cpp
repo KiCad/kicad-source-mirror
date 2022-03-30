@@ -32,7 +32,7 @@
 #include <pcbnew/plugins/kicad/pcb_plugin.h>
 #include <pcbnew/drc/drc_engine.h>
 
-#include <console_log.h>
+#include <../../unittests/common/console_log.h>
 
 BOARD_CONNECTED_ITEM* PNS_LOG_FILE::ItemById( const PNS_LOG_FILE::EVENT_ENTRY& evt )
 {

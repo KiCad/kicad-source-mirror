@@ -29,39 +29,39 @@ add_definitions(-DBOOST_TEST_DYN_LINK -DPCBNEW -DTEST_APP_GUI)
 
 
 add_executable( test_pns
-    ../../pcbnew/drc/drc_rule.cpp
-    ../../pcbnew/drc/drc_rule_condition.cpp
-    ../../pcbnew/drc/drc_rule_parser.cpp
-    ../../pcbnew/drc/drc_test_provider.cpp
-    ../../pcbnew/drc/drc_test_provider_copper_clearance.cpp
-    ../../pcbnew/drc/drc_test_provider_hole_to_hole.cpp
-    ../../pcbnew/drc/drc_test_provider_edge_clearance.cpp
-    ../../pcbnew/drc/drc_test_provider_hole_size.cpp
-    ../../pcbnew/drc/drc_test_provider_disallow.cpp
-    ../../pcbnew/drc/drc_test_provider_track_width.cpp
-    ../../pcbnew/drc/drc_test_provider_annular_width.cpp
-    ../../pcbnew/drc/drc_test_provider_connectivity.cpp
-    ../../pcbnew/drc/drc_test_provider_courtyard_clearance.cpp
-    ../../pcbnew/drc/drc_test_provider_via_diameter.cpp
-    ../../pcbnew/drc/drc_test_provider_schematic_parity.cpp
-    ../../pcbnew/drc/drc_test_provider_misc.cpp
-    ../../pcbnew/drc/drc_test_provider_solder_mask.cpp
-    ../../pcbnew/drc/drc_test_provider_silk_clearance.cpp
-    ../../pcbnew/drc/drc_test_provider_matched_length.cpp
-    ../../pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp
-    ../../pcbnew/drc/drc_engine.cpp
-    ../../pcbnew/drc/drc_item.cpp
+    ../../../pcbnew/drc/drc_rule.cpp
+    ../../../pcbnew/drc/drc_rule_condition.cpp
+    ../../../pcbnew/drc/drc_rule_parser.cpp
+    ../../../pcbnew/drc/drc_test_provider.cpp
+    ../../../pcbnew/drc/drc_test_provider_copper_clearance.cpp
+    ../../../pcbnew/drc/drc_test_provider_hole_to_hole.cpp
+    ../../../pcbnew/drc/drc_test_provider_edge_clearance.cpp
+    ../../../pcbnew/drc/drc_test_provider_hole_size.cpp
+    ../../../pcbnew/drc/drc_test_provider_disallow.cpp
+    ../../../pcbnew/drc/drc_test_provider_track_width.cpp
+    ../../../pcbnew/drc/drc_test_provider_annular_width.cpp
+    ../../../pcbnew/drc/drc_test_provider_connectivity.cpp
+    ../../../pcbnew/drc/drc_test_provider_courtyard_clearance.cpp
+    ../../../pcbnew/drc/drc_test_provider_via_diameter.cpp
+    ../../../pcbnew/drc/drc_test_provider_schematic_parity.cpp
+    ../../../pcbnew/drc/drc_test_provider_misc.cpp
+    ../../../pcbnew/drc/drc_test_provider_solder_mask.cpp
+    ../../../pcbnew/drc/drc_test_provider_silk_clearance.cpp
+    ../../../pcbnew/drc/drc_test_provider_matched_length.cpp
+    ../../../pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp
+    ../../../pcbnew/drc/drc_engine.cpp
+    ../../../pcbnew/drc/drc_item.cpp
     pns_log_file.cpp
     pns_log_player.cpp
     pns_test_debug_decorator.cpp
     pns_log_viewer_frame.cpp
     pns_log_viewer_frame_base.cpp
     label_manager.cpp
-    ../qa_utils/pcb_test_frame.cpp
-    ../qa_utils/test_app_main.cpp
-    ../qa_utils/utility_program.cpp
-    ../qa_utils/mocks.cpp
-    ../../common/base_units.cpp
+    ../../qa_utils/pcb_test_frame.cpp
+    ../../qa_utils/test_app_main.cpp
+    ../../qa_utils/utility_program.cpp
+    ../../qa_utils/mocks.cpp
+    ../../../common/base_units.cpp
     playground.cpp
     main.cpp
   )
