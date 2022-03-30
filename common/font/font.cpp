@@ -197,7 +197,8 @@ VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* a
 {
     VECTOR2I nextPosition = aPosition;
 
-    if( aNode ) {
+    if( aNode )
+    {
         TEXT_STYLE_FLAGS textStyle = aTextStyle;
 
         if( !aNode->is_root() )
@@ -444,39 +445,36 @@ void FONT::LinebreakText( wxString& aText, int aColumnWidth, const VECTOR2I& aSi
 
     for( size_t ii = 0; ii < textLines.Count(); ++ii )
     {
-        int lineWidth = 0;
+        bool virginLine = true;
+        int  lineWidth = 0;
         std::vector<std::pair<wxString, int>> words;
 
         wordbreakMarkup( &words, textLines[ii], aSize, textStyle );
 
         for( size_t jj = 0; jj < words.size(); /* advance in loop */ )
         {
-            if( lineWidth == 0
-                    || lineWidth + spaceWidth + words[jj].second < aColumnWidth - aThickness )
+            if( virginLine )
             {
-                if( lineWidth > 0 )
-                {
-                    aText += " ";
-                    lineWidth += spaceWidth;
-                }
+                // First word is always placed, even when wider than columnWidth.
+                aText += words[jj].first;
+                lineWidth += words[jj].second;
+                jj++;
+
+                virginLine = false;
             }
-            else if( lineWidth > 0 )
+            else if( lineWidth + spaceWidth + words[jj].second < aColumnWidth - aThickness )
             {
-                aText += '\n';
-                lineWidth = 0;
-                continue;
+                aText += " " + words[jj].first;
+                lineWidth += spaceWidth + words[jj].second;
+                jj++;
             }
             else
             {
-                // TODO: Would we want to further split the words into characters when it doesn't fit
-                // in the column width? For now just return the full word even if it doesn't fit
-                // to avoid an infinite loop.
+                aText += '\n';
+
+                lineWidth = 0;
+                virginLine = true;
             }
-
-            aText += words[jj].first;
-            lineWidth += words[jj].second;
-
-            jj++;
         }
 
         // Add the newlines back onto the string
