@@ -60,22 +60,42 @@ int PCB_TEXTBOX::GetTextMargin() const
 
 std::vector<VECTOR2I> PCB_TEXTBOX::GetAnchorAndOppositeCorner() const
 {
-    EDA_ANGLE epsilon( 1.0, DEGREES_T );    // Yeah, it's a pretty coarse epsilon, but anything
-                                            // under 45° will work for our purposes.
-
     std::vector<VECTOR2I> pts;
     std::vector<VECTOR2I> corners = GetCorners();
+    EDA_ANGLE             textAngle( GetDrawRotation() );
 
-    EDA_ANGLE textAngle = GetDrawRotation().Normalize();
-    EDA_ANGLE toCorner1 = EDA_ANGLE( corners[1] - corners[0] ).Normalize();
-    EDA_ANGLE fromCorner1 = ( toCorner1 + ANGLE_180 ).Normalize();
+    textAngle.Normalize();
 
     pts.emplace_back( corners[0] );
 
-    if( std::abs( toCorner1 - textAngle ) < epsilon || std::abs( fromCorner1 - textAngle ) < epsilon )
-        pts.emplace_back( corners[1] );
+    if( textAngle < ANGLE_90 )
+    {
+        if( corners[1].y <= corners[0].y )
+            pts.emplace_back( corners[1] );
+        else
+            pts.emplace_back( corners[3] );
+    }
+    else if( textAngle < ANGLE_180 )
+    {
+        if( corners[1].x <= corners[0].x )
+            pts.emplace_back( corners[1] );
+        else
+            pts.emplace_back( corners[3] );
+    }
+    else if( textAngle < ANGLE_270 )
+    {
+        if( corners[1].y >= corners[0].y )
+            pts.emplace_back( corners[1] );
+        else
+            pts.emplace_back( corners[3] );
+    }
     else
-        pts.emplace_back( corners[3] );
+    {
+        if( corners[1].x >= corners[0].x )
+            pts.emplace_back( corners[1] );
+        else
+            pts.emplace_back( corners[3] );
+    }
 
     return pts;
 }

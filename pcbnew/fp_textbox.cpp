@@ -78,20 +78,40 @@ std::vector<VECTOR2I> FP_TEXTBOX::GetAnchorAndOppositeCorner() const
 {
     std::vector<VECTOR2I> pts;
     std::vector<VECTOR2I> corners = GetCorners();
+    EDA_ANGLE             textAngle( GetDrawRotation() );
 
-    EDA_ANGLE toCorner1( corners[0] - corners[1] );
-    EDA_ANGLE toCorner3( corners[0] - corners[3] );
-    EDA_ANGLE textAngle( GetDrawRotation() );
-    toCorner1.Normalize();
-    toCorner3.Normalize();
     textAngle.Normalize();
 
     pts.emplace_back( corners[0] );
 
-    if( std::abs( toCorner1 - textAngle ) < std::abs( toCorner3 - textAngle ) )
-        pts.emplace_back( corners[1] );
+    if( textAngle < ANGLE_90 )
+    {
+        if( corners[1].y <= corners[0].y )
+            pts.emplace_back( corners[1] );
+        else
+            pts.emplace_back( corners[3] );
+    }
+    else if( textAngle < ANGLE_180 )
+    {
+        if( corners[1].x <= corners[0].x )
+            pts.emplace_back( corners[1] );
+        else
+            pts.emplace_back( corners[3] );
+    }
+    else if( textAngle < ANGLE_270 )
+    {
+        if( corners[1].y >= corners[0].y )
+            pts.emplace_back( corners[1] );
+        else
+            pts.emplace_back( corners[3] );
+    }
     else
-        pts.emplace_back( corners[3] );
+    {
+        if( corners[1].x >= corners[0].x )
+            pts.emplace_back( corners[1] );
+        else
+            pts.emplace_back( corners[3] );
+    }
 
     return pts;
 }
