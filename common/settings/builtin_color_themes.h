@@ -190,7 +190,7 @@ static const std::map<int, COLOR4D> s_classicTheme =
             { LAYER_SCHEMATIC_CURSOR,       COLOR4D( BLACK ) },
             { LAYER_ERC_ERR,                COLOR4D( PURERED ).WithAlpha( 0.8 ) },
             { LAYER_ERC_WARN,               COLOR4D( PUREGREEN ).WithAlpha( 0.8 ) },
-            { LAYER_DRC_EXCLUSION,          COLOR4D( LIGHTGRAY ) },
+            { LAYER_ERC_EXCLUSION,          COLOR4D( LIGHTGRAY ) },
             { LAYER_FIELDS,                 COLOR4D( MAGENTA ) },
             { LAYER_SCHEMATIC_GRID,         COLOR4D( DARKGRAY ) },
             { LAYER_SCHEMATIC_GRID_AXES,    COLOR4D( BLUE ) },
