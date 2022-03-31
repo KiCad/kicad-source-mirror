@@ -30,6 +30,7 @@
 #include <sch_line.h>
 #include <sch_junction.h>
 #include <sch_sheet.h>
+#include <sch_sheet_pin.h>
 #include <schematic.h>
 #include <advanced_config.h>
 #include <tool/tool_manager.h>
@@ -412,6 +413,12 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
             if( m_setBgColor->GetValue() )
                 sheet->SetBackgroundColor( m_bgColorSwatch->GetSwatchColor() );
         }
+
+        if( m_sheetPins->GetValue() )
+        {
+            for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                processItem( aSheetPath, pin );
+        }
     }
     else if( aItem->Type() == SCH_JUNCTION_T )
     {
@@ -438,8 +445,6 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
     else if( m_globalLabels->GetValue() && aItem->Type() == SCH_GLOBAL_LABEL_T )
         processItem( aSheetPath, aItem );
     else if( m_hierLabels->GetValue() && aItem->Type() == SCH_HIER_LABEL_T )
-        processItem( aSheetPath, aItem );
-    else if( m_sheetPins->GetValue() && aItem->Type() == SCH_SHEET_PIN_T )
         processItem( aSheetPath, aItem );
     else if( m_schTextAndGraphics->GetValue() && aItem->IsType( schTextAndGraphics ) )
         processItem( aSheetPath, aItem );
