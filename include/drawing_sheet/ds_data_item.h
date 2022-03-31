@@ -341,6 +341,7 @@ public:
     bool                m_Bold;
     KIFONT::FONT*       m_Font;
     VECTOR2D            m_TextSize;
+    KIGFX::COLOR4D      m_TextColor;
     VECTOR2D            m_BoundingBoxSize;      // When not null, this is the max size of the
                                                 // full text.  The text size will be modified
                                                 // to keep the full text inside this bound.

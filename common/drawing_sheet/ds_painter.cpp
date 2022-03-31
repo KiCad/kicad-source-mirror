@@ -80,6 +80,14 @@ COLOR4D DS_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
 
         if( item->IsSelected() )
             return m_selectedColor;
+
+        if( item->Type() == WSG_TEXT_T )
+        {
+            COLOR4D color = static_cast<const DS_DRAW_ITEM_TEXT*>( item )->GetTextColor();
+
+            if( color != COLOR4D::UNSPECIFIED )
+                return color;
+        }
     }
 
     return m_normalColor;

@@ -27,6 +27,7 @@
 #include <scintilla_tricks.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
+#include <widgets/color_swatch.h>
 #include <tool/tool_manager.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_data_item.h>
@@ -73,8 +74,6 @@ PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
 
     m_staticTextSizeInfo->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
-    m_separator1->SetIsSeparator();
-
     m_bold->SetIsCheckButton();
     m_bold->SetBitmap( KiBitmap( BITMAPS::text_bold ) );
     m_italic->SetIsCheckButton();
@@ -99,6 +98,10 @@ PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
     m_vAlignBottom->SetBitmap( KiBitmap( BITMAPS::text_valign_bottom ) );
 
     m_separator4->SetIsSeparator();
+
+    m_textColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+    m_textColorSwatch->SetSwatchBackground( aParent->GetDrawBgColor() );
+
     m_buttonOK->SetDefault();
 
     // ensure sizers are up to date
@@ -257,6 +260,8 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
 
         m_bold->Check( item->m_Bold );
         m_italic->Check( item->m_Italic );
+
+        m_textColorSwatch->SetSwatchColor( item->m_TextColor, false );
 
         for( BITMAP_BUTTON* btn : { m_alignLeft, m_alignCenter, m_alignRight } )
             btn->Check( false );
@@ -487,6 +492,7 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( DS_DATA_ITEM* aItem )
 
         item->m_Bold = m_bold->IsChecked();
         item->m_Italic = m_italic->IsChecked();
+        item->m_TextColor = m_textColorSwatch->GetSwatchColor();
 
         if( m_alignLeft->IsChecked() )
             item->m_Hjustify = GR_TEXT_H_ALIGN_LEFT;

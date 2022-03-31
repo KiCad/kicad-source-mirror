@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,8 @@
 
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
+#include <widgets/color_swatch.h>
+#include <settings/color_settings.h>
 #include <sch_edit_frame.h>
 #include <base_units.h>
 #include <sch_validators.h>
@@ -45,14 +47,16 @@
 
 DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_LABEL_BASE* aLabel ) :
         DIALOG_LABEL_PROPERTIES_BASE( aParent ),
+        m_Parent( aParent ),
+        m_currentLabel( aLabel ),
         m_activeTextEntry( nullptr ),
         m_netNameValidator( true ),
         m_fields( nullptr ),
         m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, false ),
         m_helpWindow( nullptr )
 {
-    m_Parent = aParent;
-    m_currentLabel = aLabel;
+    COLOR_SETTINGS* colorSettings = m_Parent->GetColorSettings();
+    COLOR4D         schematicBackground = colorSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 
     m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_grid, m_currentLabel );
     m_width = 100;  // Will be later set to a better value
@@ -141,6 +145,9 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
     m_spin3->SetIsCheckButton();
 
     m_separator3->SetIsSeparator();
+
+    m_textColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+    m_textColorSwatch->SetSwatchBackground( schematicBackground );
 
     // Show/hide relevant controls
     if( m_currentLabel->Type() == SCH_GLOBAL_LABEL_T || m_currentLabel->Type() == SCH_HIER_LABEL_T )
@@ -288,6 +295,7 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
 
     m_bold->Check( m_currentLabel->IsBold() );
     m_italic->Check( m_currentLabel->IsItalic() );
+    m_textColorSwatch->SetSwatchColor( m_currentLabel->GetTextColor(), false );
 
     switch( m_currentLabel->GetTextSpinStyle() )
     {
@@ -452,6 +460,8 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
     }
 
     m_currentLabel->SetItalic( m_italic->IsChecked() );
+
+    m_currentLabel->SetTextColor( m_textColorSwatch->GetSwatchColor() );
 
     TEXT_SPIN_STYLE selectedSpinStyle= TEXT_SPIN_STYLE::LEFT;
 

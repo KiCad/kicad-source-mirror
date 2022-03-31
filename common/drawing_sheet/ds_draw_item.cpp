@@ -160,7 +160,12 @@ void DS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
 void DS_DRAW_ITEM_TEXT::PrintWsItem( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
-    Print( aSettings, aOffset, aSettings->GetLayerColor( LAYER_DRAWINGSHEET ), FILLED );
+    COLOR4D color = GetTextColor();
+
+    if( color == COLOR4D::UNSPECIFIED )
+        color = aSettings->GetLayerColor( LAYER_DRAWINGSHEET );
+
+    Print( aSettings, aOffset, color, FILLED );
 }
 
 

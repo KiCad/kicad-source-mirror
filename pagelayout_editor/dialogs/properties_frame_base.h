@@ -11,6 +11,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class BITMAP_BUTTON;
+class COLOR_SWATCH;
 class FONT_CHOICE;
 
 #include <wx/string.h>
@@ -27,13 +28,13 @@ class FONT_CHOICE;
 #include <wx/sizer.h>
 #include <wx/stc/stc.h>
 #include <wx/bmpbuttn.h>
+#include <wx/panel.h>
 #include <wx/textctrl.h>
 #include <wx/gbsizer.h>
 #include <wx/combobox.h>
 #include <wx/statbox.h>
 #include <wx/scrolwin.h>
 #include <wx/notebook.h>
-#include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -53,7 +54,6 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxChoice* m_choicePageOpt;
 		wxBoxSizer* m_SizerTextOptions;
 		wxStyledTextCtrl* m_stcText;
-		BITMAP_BUTTON* m_separator1;
 		BITMAP_BUTTON* m_bold;
 		BITMAP_BUTTON* m_italic;
 		BITMAP_BUTTON* m_separator2;
@@ -65,6 +65,8 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		BITMAP_BUTTON* m_vAlignMiddle;
 		BITMAP_BUTTON* m_vAlignBottom;
 		BITMAP_BUTTON* m_separator4;
+		wxPanel* m_panelBorderColor1;
+		COLOR_SWATCH* m_textColorSwatch;
 		wxStaticText* m_fontLabel;
 		FONT_CHOICE* m_fontCtrl;
 		wxStaticText* m_staticTextTsizeX;

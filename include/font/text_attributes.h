@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Ola Rinta-Koski
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -25,6 +25,7 @@
 #include <wx/log.h>
 #include <cmath>
 #include <math/vector2d.h>
+#include <gal/color4d.h>
 #include "../../libs/kimath/include/geometry/eda_angle.h"
 
 class EDA_TEXT;
@@ -71,6 +72,7 @@ public:
     bool              m_Italic = false;
     bool              m_Bold = false;
     bool              m_Underlined = false;
+    KIGFX::COLOR4D    m_Color = KIGFX::COLOR4D::UNSPECIFIED;
     bool              m_Visible = true;
     bool              m_Mirrored = false;
     bool              m_Multiline = true;

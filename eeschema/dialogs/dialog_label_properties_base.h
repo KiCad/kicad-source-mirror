@@ -11,6 +11,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class BITMAP_BUTTON;
+class COLOR_SWATCH;
 class FONT_CHOICE;
 class WX_GRID;
 
@@ -34,6 +35,7 @@ class WX_GRID;
 #include <wx/statbox.h>
 #include <wx/radiobut.h>
 #include <wx/choice.h>
+#include <wx/panel.h>
 #include <wx/gbsizer.h>
 #include <wx/dialog.h>
 
@@ -49,8 +51,7 @@ class DIALOG_LABEL_PROPERTIES_BASE : public DIALOG_SHIM
 	protected:
 		enum
 		{
-			wxID_VALUESINGLE = 1000,
-			wxID_SIZE
+			wxID_VALUESINGLE = 1000
 		};
 
 		wxFlexGridSizer* m_textEntrySizer;
@@ -88,6 +89,9 @@ class DIALOG_LABEL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_textSizeLabel;
 		wxTextCtrl* m_textSizeCtrl;
 		wxStaticText* m_textSizeUnits;
+		wxStaticText* m_textColorLabel;
+		wxPanel* m_panelBorderColor1;
+		COLOR_SWATCH* m_textColorSwatch;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;

@@ -202,6 +202,9 @@ public:
     void SetTextHeight( int aHeight );
     int GetTextHeight() const                   { return m_attributes.m_Size.y; }
 
+    void SetTextColor( const COLOR4D& aColor )  { m_attributes.m_Color = aColor; }
+    COLOR4D GetTextColor() const                { return m_attributes.m_Color; }
+
     void SetTextPos( const VECTOR2I& aPoint );
     const VECTOR2I& GetTextPos() const          { return m_pos; }
 

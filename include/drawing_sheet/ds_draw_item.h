@@ -303,7 +303,8 @@ class DS_DRAW_ITEM_TEXT : public DS_DRAW_ITEM_BASE, public EDA_TEXT
 public:
     DS_DRAW_ITEM_TEXT( DS_DATA_ITEM* aPeer, int aIndex, const wxString& aText, const VECTOR2I& aPos,
                        const VECTOR2I& aSize, int aPenWidth, KIFONT::FONT* aFont,
-                       bool aItalic = false, bool aBold = false ) :
+                       bool aItalic = false, bool aBold = false,
+                       const KIGFX::COLOR4D& aColor = KIGFX::COLOR4D::UNSPECIFIED ) :
             DS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_TEXT_T),
             EDA_TEXT( aText )
     {
@@ -313,6 +314,7 @@ public:
         SetFont( aFont );
         SetItalic( aItalic );
         SetBold( aBold );
+        SetTextColor( aColor );
     }
 
     virtual wxString GetClass() const override { return wxT( "DS_DRAW_ITEM_TEXT" ); }

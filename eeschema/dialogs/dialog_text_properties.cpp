@@ -26,6 +26,7 @@
 #include <sch_edit_frame.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
+#include <widgets/color_swatch.h>
 #include <base_units.h>
 #include <settings/color_settings.h>
 #include <tool/tool_manager.h>
@@ -37,7 +38,6 @@
 #include <string_utils.h>
 #include <scintilla_tricks.h>
 #include <dialog_text_properties.h>
-#include <widgets/color_swatch.h>
 
 
 DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITEM* aTextItem ) :
@@ -50,11 +50,15 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
         m_scintillaTricks( nullptr ),
         m_helpWindow( nullptr )
 {
+    COLOR_SETTINGS* colorSettings = m_frame->GetColorSettings();
+    COLOR4D         schematicBackground = colorSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+
     if( aTextItem->Type() == SCH_TEXTBOX_T )
     {
         SetTitle( _( "Text Box Properties" ) );
 
         m_borderColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+        m_borderColorSwatch->SetSwatchBackground( schematicBackground );
 
         for( const std::pair<const PLOT_DASH_TYPE, lineTypeStruct>& typeEntry : lineTypeNames )
             m_borderStyleCombo->Append( typeEntry.second.name, KiBitmap( typeEntry.second.bitmap ) );
@@ -62,6 +66,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
         m_borderStyleCombo->Append( DEFAULT_STYLE );
 
         m_fillColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+        m_fillColorSwatch->SetSwatchBackground( schematicBackground );
 
         if( m_frame->GetColorSettings()->GetOverrideSchItemColors() )
             m_infoBar->ShowMessage( _( "Note: individual item colors overridden in Preferences." ) );
@@ -91,6 +96,9 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
             } );
 
     m_textEntrySizer->AddGrowableRow( 0 );
+
+    m_textColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+    m_textColorSwatch->SetSwatchBackground( schematicBackground );
 
     SetInitialFocus( m_textCtrl );
 
@@ -155,6 +163,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 
     m_fontCtrl->SetFontSelection( m_currentText->GetFont() );
     m_textSize.SetValue( m_currentText->GetTextWidth() );
+    m_textColorSwatch->SetSwatchColor( m_currentText->GetTextColor(), false );
 
     m_bold->Check( m_currentText->IsBold() );
     m_italic->Check( m_currentText->IsItalic() );
@@ -384,6 +393,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     }
 
     m_currentText->SetItalic( m_italic->IsChecked() );
+    m_currentText->SetTextColor( m_textColorSwatch->GetSwatchColor() );
 
     if( m_currentItem->Type() == SCH_TEXT_T )
     {
@@ -459,7 +469,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
         textBox->SetStroke( stroke );
 
-        textBox->SetFillMode( m_filledCtrl->GetValue() ? FILL_T::FILLED_WITH_COLOR : FILL_T::NO_FILL );
+        textBox->SetFillMode( m_filledCtrl->GetValue() ? FILL_T::FILLED_WITH_COLOR
+                                                       : FILL_T::NO_FILL );
         textBox->SetFillColor( m_fillColorSwatch->GetSwatchColor() );
     }
 

@@ -528,6 +528,7 @@ DS_DATA_ITEM_TEXT::DS_DATA_ITEM_TEXT( const wxString& aTextBase ) :
     m_Italic = false;
     m_Bold = false;
     m_Font = nullptr;
+    m_TextColor = COLOR4D::UNSPECIFIED;
     m_Orient = 0.0;
     m_LineWidth = 0.0;      // 0 means use default value
 }
@@ -585,7 +586,7 @@ void DS_DATA_ITEM_TEXT::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
             continue;
 
         text = new DS_DRAW_ITEM_TEXT( this, j, m_FullText, GetStartPosUi( j ), textsize, pensize,
-                                      m_Font, m_Italic, m_Bold );
+                                      m_Font, m_Italic, m_Bold, m_TextColor );
         text->SetFlags( itemFlags[ j ] );
         m_drawItems.push_back( text );
 
@@ -694,7 +695,7 @@ void DS_DATA_ITEM_TEXT::SetConstrainedTextSize()
         size_micron.x = KiROUND( m_ConstrainedTextSize.x * FSCALE );
         size_micron.y = KiROUND( m_ConstrainedTextSize.y * FSCALE );
         DS_DRAW_ITEM_TEXT dummy( this, 0, m_FullText, VECTOR2I( 0, 0 ), size_micron, linewidth,
-                                 m_Font, m_Italic, m_Bold );
+                                 m_Font, m_Italic, m_Bold, m_TextColor );
         dummy.SetMultilineAllowed( true );
         dummy.SetHorizJustify( m_Hjustify ) ;
         dummy.SetVertJustify( m_Vjustify );

@@ -33,8 +33,8 @@ class WX_INFOBAR;
 #include <wx/sizer.h>
 #include <wx/hyperlink.h>
 #include <wx/textctrl.h>
-#include <wx/checkbox.h>
 #include <wx/panel.h>
+#include <wx/checkbox.h>
 #include <wx/bmpcbox.h>
 #include <wx/gbsizer.h>
 #include <wx/statline.h>
@@ -50,11 +50,6 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		enum
-		{
-			wxID_SIZE = 1000
-		};
-
 		WX_INFOBAR* m_infoBar;
 		wxGridBagSizer* m_textEntrySizer;
 		wxStaticText* m_textLabel;
@@ -76,6 +71,9 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_textSizeLabel;
 		wxTextCtrl* m_textSizeCtrl;
 		wxStaticText* m_textSizeUnits;
+		wxStaticText* m_textColorLabel;
+		wxPanel* m_panelBorderColor1;
+		COLOR_SWATCH* m_textColorSwatch;
 		wxCheckBox* m_borderCheckbox;
 		wxStaticText* m_borderWidthLabel;
 		wxTextCtrl* m_borderWidthCtrl;

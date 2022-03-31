@@ -94,6 +94,7 @@ protected:
     KIFONT::FONT*     m_font;
     bool              m_isItalic;
     bool              m_isBold;
+    KIGFX::COLOR4D    m_color;
     VECTOR2I          m_position;
     int               m_size;
     bool              m_isVertical;

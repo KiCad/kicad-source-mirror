@@ -25,6 +25,8 @@
 
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
+#include <widgets/color_swatch.h>
+#include <settings/color_settings.h>
 #include <bitmaps.h>
 #include <kiway.h>
 #include <confirm.h>
@@ -54,6 +56,9 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
     m_firstFocus( true ),
     m_scintillaTricks( nullptr )
 {
+    COLOR_SETTINGS* colorSettings = aParent->GetColorSettings();
+    COLOR4D         schematicBackground = colorSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+
     wxASSERT( aTextItem );
 
     SetTitle( aTitle );
@@ -71,6 +76,9 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
                 wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
             } );
     m_StyledTextCtrl->SetEOLMode( wxSTC_EOL_LF );   // Normalize EOL across platforms
+
+    m_textColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+    m_textColorSwatch->SetSwatchBackground( schematicBackground );
 
     m_separator1->SetIsSeparator();
 
@@ -120,6 +128,7 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
     m_text = aTextItem->GetText();
     m_isItalic = aTextItem->IsItalic();
     m_isBold = aTextItem->IsBold();
+    m_color = aTextItem->GetTextColor();
     m_position = aTextItem->GetTextPos();
     m_size = aTextItem->GetTextWidth();
     m_isVertical = aTextItem->GetTextAngle().IsVertical();
@@ -307,6 +316,8 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataToWindow()
     m_italic->Check( m_isItalic );
     m_bold->Check( m_isBold );
 
+    m_textColorSwatch->SetSwatchColor( m_color, false );
+
     switch ( m_horizontalJustification )
     {
     case GR_TEXT_H_ALIGN_LEFT:   m_hAlignLeft->Check( true );   break;
@@ -374,6 +385,7 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataFromWindow()
 
     m_isBold = m_bold->IsChecked();
     m_isItalic = m_italic->IsChecked();
+    m_color = m_textColorSwatch->GetSwatchColor();
 
     if( m_hAlignLeft->IsChecked() )
         m_horizontalJustification = GR_TEXT_H_ALIGN_LEFT;
@@ -404,6 +416,7 @@ void DIALOG_FIELD_PROPERTIES::updateText( EDA_TEXT* aText )
     aText->SetTextAngle( m_isVertical ? ANGLE_VERTICAL : ANGLE_HORIZONTAL );
     aText->SetItalic( m_isItalic );
     aText->SetBold( m_isBold );
+    aText->SetTextColor( m_color );
 }
 
 

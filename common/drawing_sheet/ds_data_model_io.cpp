@@ -272,6 +272,15 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const
         if( aItem->m_Italic )
             m_out->Print( 0, " italic" );
 
+        if( aItem->m_TextColor != COLOR4D::UNSPECIFIED )
+        {
+            m_out->Print( 0, " (color %d %d %d %s)",
+                          KiROUND( aItem->m_TextColor.r * 255.0 ),
+                          KiROUND( aItem->m_TextColor.g * 255.0 ),
+                          KiROUND( aItem->m_TextColor.b * 255.0 ),
+                          Double2Str( aItem->m_TextColor.a ).c_str() );
+        }
+
         m_out->Print( 0, ")" );
     }
 

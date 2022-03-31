@@ -357,6 +357,8 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
 
             if( aLayer == LAYER_NOTES_BACKGROUND )
                 color = textBox->GetFillColor();
+            else
+                color = textBox->GetTextColor();
         }
         else if( aItem->Type() == LIB_TEXTBOX_T )
         {
@@ -364,6 +366,12 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
 
             if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND )
                 color = textBox->GetFillColor();
+            else
+                color = textBox->GetTextColor();
+        }
+        else if( const EDA_TEXT* otherTextItem = dynamic_cast<const EDA_TEXT*>( aItem ) )
+        {
+            color = otherTextItem->GetTextColor();
         }
     }
 

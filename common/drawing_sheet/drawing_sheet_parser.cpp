@@ -700,6 +700,8 @@ void DRAWING_SHEET_PARSER::parseText( DS_DATA_ITEM_TEXT* aItem )
         {
             wxString faceName;
 
+            aItem->m_TextColor = COLOR4D::UNSPECIFIED;
+
             for( token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
             {
                 switch( token )
@@ -724,6 +726,14 @@ void DRAWING_SHEET_PARSER::parseText( DS_DATA_ITEM_TEXT* aItem )
                 case T_size:
                     aItem->m_TextSize.x = parseDouble();
                     aItem->m_TextSize.y = parseDouble();
+                    NeedRIGHT();
+                    break;
+
+                case T_color:
+                    aItem->m_TextColor.r = parseInt( 0, 255 ) / 255.0;
+                    aItem->m_TextColor.g = parseInt( 0, 255 ) / 255.0;
+                    aItem->m_TextColor.b = parseInt( 0, 255 ) / 255.0;
+                    aItem->m_TextColor.a = Clamp( parseDouble(), 0.0, 1.0 );
                     NeedRIGHT();
                     break;
 
@@ -803,7 +813,7 @@ void DRAWING_SHEET_PARSER::parseCoordinate( POINT_COORD& aCoord)
         case T_lbcorner: aCoord.m_Anchor = LB_CORNER; break;
         case T_rbcorner: aCoord.m_Anchor = RB_CORNER; break;
         case T_rtcorner: aCoord.m_Anchor = RT_CORNER; break;
-        default:         Unexpected( CurText() ); break;
+        default:         Unexpected( CurText() );     break;
         }
     }
 }

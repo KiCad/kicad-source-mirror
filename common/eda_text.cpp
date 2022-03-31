@@ -838,6 +838,15 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
     if( IsItalic() )
         aFormatter->Print( 0, " italic" );
 
+    if( GetTextColor() != COLOR4D::UNSPECIFIED )
+    {
+        aFormatter->Print( 0, " (color %d %d %d %s)",
+                           KiROUND( GetTextColor().r * 255.0 ),
+                           KiROUND( GetTextColor().g * 255.0 ),
+                           KiROUND( GetTextColor().b * 255.0 ),
+                           Double2Str( GetTextColor().a ).c_str() );
+    }
+
     aFormatter->Print( 0, ")"); // (font
 
     if( IsMirrored() || GetHorizJustify() != GR_TEXT_H_ALIGN_CENTER

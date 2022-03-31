@@ -6,6 +6,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/bitmap_button.h"
+#include "widgets/color_swatch.h"
 #include "widgets/font_choice.h"
 
 #include "properties_frame_base.h"
@@ -87,11 +88,6 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* formattingSizer;
 	formattingSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_separator1 = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
-	m_separator1->Enable( false );
-
-	formattingSizer->Add( m_separator1, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
 	m_bold = new BITMAP_BUTTON( m_swItemProperties, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_bold->SetToolTip( _("Bold") );
 
@@ -135,8 +131,21 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	formattingSizer->Add( m_separator4, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
+	m_panelBorderColor1 = new wxPanel( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer22;
+	bSizer22 = new wxBoxSizer( wxVERTICAL );
 
-	gbSizer11->Add( formattingSizer, wxGBPosition( 0, 0 ), wxGBSpan( 1, 3 ), wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	m_textColorSwatch = new COLOR_SWATCH( m_panelBorderColor1, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer22->Add( m_textColorSwatch, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+
+
+	m_panelBorderColor1->SetSizer( bSizer22 );
+	m_panelBorderColor1->Layout();
+	bSizer22->Fit( m_panelBorderColor1 );
+	formattingSizer->Add( m_panelBorderColor1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+
+	gbSizer11->Add( formattingSizer, wxGBPosition( 0, 0 ), wxGBSpan( 1, 4 ), wxTOP|wxBOTTOM|wxEXPAND, 5 );
 
 	m_fontLabel = new wxStaticText( m_swItemProperties, wxID_ANY, _("Font:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fontLabel->Wrap( -1 );

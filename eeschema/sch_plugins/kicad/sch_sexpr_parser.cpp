@@ -551,6 +551,7 @@ void SCH_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSynta
 
     T        token;
     wxString faceName;
+    COLOR4D  color = COLOR4D::UNSPECIFIED;
 
     // Various text objects (text boxes, schematic text, etc.) all have their own defaults,
     // but the file format default is {center,center} so we have to set that before parsing.
@@ -599,6 +600,15 @@ void SCH_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSynta
 
                 case T_italic:
                     aText->SetItalic( true );
+                    break;
+
+                case T_color:
+                    color.r = parseInt( "red" ) / 255.0;
+                    color.g = parseInt( "green" ) / 255.0;
+                    color.b = parseInt( "blue" ) / 255.0;
+                    color.a = Clamp( parseDouble( "alpha" ), 0.0, 1.0 );
+                    aText->SetTextColor( color );
+                    NeedRIGHT();
                     break;
 
                 case T_line_spacing:
