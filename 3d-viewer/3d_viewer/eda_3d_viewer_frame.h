@@ -120,6 +120,8 @@ public:
 protected:
     void setupUIConditions() override;
 
+    void handleIconizeEvent( wxIconizeEvent& aEvent ) override;
+
 private:
     /// Called when user press the File->Exit
     void Exit3DFrame( wxCommandEvent& event );

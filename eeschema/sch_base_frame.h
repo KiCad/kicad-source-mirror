@@ -58,6 +58,10 @@ class SYMBOL_LIB_TABLE;
 class EESCHEMA_SETTINGS;
 class SYMBOL_EDITOR_SETTINGS;
 
+#if defined( KICAD_USE_3DCONNEXION )
+class NL_SCHEMATIC_PLUGIN;
+#endif
+
 /**
  * Load symbol from symbol library table.
  *
@@ -241,7 +245,13 @@ public:
 
     COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const override;
 
+    void ActivateGalCanvas() override;
+
 protected:
+    void handleActivateEvent( wxActivateEvent& aEvent ) override;
+
+    void handleIconizeEvent( wxIconizeEvent& aEvent ) override;
+
     /**
      * Save Symbol Library Tables to disk.
      *
@@ -254,6 +264,11 @@ protected:
     /// These are only used by symbol_editor.  Eeschema should be using the one inside
     /// the SCHEMATIC.
     SCHEMATIC_SETTINGS  m_base_frame_defaults;
+
+private:
+#if defined( KICAD_USE_3DCONNEXION )
+    std::unique_ptr<NL_SCHEMATIC_PLUGIN> m_spaceMouse;
+#endif
 };
 
 #endif // SCH_BASE_FRAME_H_

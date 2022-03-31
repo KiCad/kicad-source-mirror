@@ -392,6 +392,8 @@ protected:
 
     void handleActivateEvent( wxActivateEvent& aEvent ) override;
 
+    void handleIconizeEvent( wxIconizeEvent& aEvent ) override;
+
     /**
      * Attempts to load \a aFootprintId from the footprint library table.
      *

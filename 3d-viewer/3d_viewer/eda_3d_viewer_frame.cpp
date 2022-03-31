@@ -255,6 +255,19 @@ void EDA_3D_VIEWER_FRAME::setupUIConditions()
 }
 
 
+void EDA_3D_VIEWER_FRAME::handleIconizeEvent( wxIconizeEvent& aEvent )
+{
+    KIWAY_PLAYER::handleIconizeEvent( aEvent );
+
+#if defined( KICAD_USE_3DCONNEXION )
+    if( m_spaceMouse != nullptr && aEvent.IsIconized() )
+    {
+        m_spaceMouse->SetFocus( false );
+    }
+#endif
+}
+
+
 void EDA_3D_VIEWER_FRAME::ReloadRequest()
 {
     // This will schedule a request to load later

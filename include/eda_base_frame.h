@@ -606,6 +606,15 @@ protected:
      */
     void onAutoSaveTimer( wxTimerEvent& aEvent );
 
+
+    /**
+     * Handle a window iconize event.
+     * 
+     * @param aEvent is the data for the event.
+     */
+    virtual void handleIconizeEvent( wxIconizeEvent& aEvent ) {}
+    void         onIconize( wxIconizeEvent& aEvent );
+
     /**
      * Return the auto save status of the application.
      *

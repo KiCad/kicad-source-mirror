@@ -435,6 +435,13 @@ if( KICAD_SPICE )
         )
 endif()
 
+if( KICAD_USE_3DCONNEXION )
+    message( STATUS "Including 3Dconnexion SpaceMouse navigation support in eeschema" )
+    add_subdirectory( ./navlib )
+    target_link_libraries( eeschema_kiface PRIVATE eeschema_navlib)
+endif()
+
+
 set_target_properties( eeschema_kiface PROPERTIES
     # Decorate OUTPUT_NAME with PREFIX and SUFFIX, creating something like
     # _eeschema.so, _eeschema.dll, or _eeschema.kiface

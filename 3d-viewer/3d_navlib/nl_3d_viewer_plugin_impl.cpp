@@ -44,35 +44,6 @@
  */
 const wxChar* NL_3D_VIEWER_PLUGIN_IMPL::m_logTrace = wxT( "KI_TRACE_NL_3D_VIEWER_PLUGIN" );
 
-/**
- * Template to compare two floating point values for equality within a required epsilon.
- *
- * @param aFirst value to compare.
- * @param aSecond value to compare.
- * @param aEpsilon allowed error.
- * @return true if the values considered equal within the specified epsilon, otherwise false.
- */
-template <class T>
-bool equals( T aFirst, T aSecond, T aEpsilon = static_cast<T>( FLT_EPSILON ) )
-{
-    T diff = fabs( aFirst - aSecond );
-
-    if( diff < aEpsilon )
-    {
-        return true;
-    }
-
-    aFirst = fabs( aFirst );
-    aSecond = fabs( aSecond );
-    T largest = aFirst > aSecond ? aFirst : aSecond;
-
-    if( diff <= largest * aEpsilon )
-    {
-        return true;
-    }
-
-    return false;
-}
 
 /**
  * Template to compare two glm::mat<T> values for equality within a required epsilon.
@@ -245,13 +216,13 @@ void NL_3D_VIEWER_PLUGIN_IMPL::exportCommandsAndImages()
                                                    streamBuffer->GetBufferSize() ),
                                       0 );
 
-                wxLogTrace( m_logTrace, "Adding image for : %s", name );
+                wxLogTrace( m_logTrace, wxT( "Adding image for : %s" ), name );
                 vImages.push_back( std::move( tdxImage ) );
             }
         }
 
-        wxLogTrace( m_logTrace, "Inserting command: %s,  description: %s,  in category:  %s", name,
-                    description, iter->first );
+        wxLogTrace( m_logTrace, wxT( "Inserting command: %s,  description: %s,  in category:  %s" ),
+                    name, description, iter->first );
 
         iter->second->push_back(
                 CCommand( std::move( name ), std::move( label ), std::move( description ) ) );
@@ -681,7 +652,7 @@ long NL_3D_VIEWER_PLUGIN_IMPL::GetFrontView( navlib::matrix_t& matrix ) const
 long NL_3D_VIEWER_PLUGIN_IMPL::GetCoordinateSystem( navlib::matrix_t& matrix ) const
 {
     // Use the right-handed coordinate system X-right, Z-up, Y-in (row vectors)
-    matrix = { 1, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1 };
+    matrix = { 1, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0, 0, 0, 0, 0, 1 };
     return 0;
 }
 

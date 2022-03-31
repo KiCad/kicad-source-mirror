@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 3Dconnexion
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022 3Dconnexion
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,11 +18,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "nl_pcbnew_plugin_impl.h"
+#include "nl_schematic_plugin_impl.h"
 
 // KiCAD includes
-#include <board.h>
-#include <pcb_base_frame.h>
+#include <sch_base_frame.h>
 #include <bitmaps.h>
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
@@ -44,48 +43,63 @@
 
 
 /**
- * Flag to enable the NL_PCBNEW_PLUGIN debug tracing.
+ * Flag to enable the NL_SCHEMATIC_PLUGIN debug tracing.
  *
- * Use "KI_TRACE_NL_PCBNEW_PLUGIN" to enable.
+ * Use "KI_TRACE_NL_SCHEMATIC_PLUGIN" to enable.
  *
  * @ingroup trace_env_vars
  */
-const wxChar* NL_PCBNEW_PLUGIN_IMPL::m_logTrace = wxT( "KI_TRACE_NL_PCBNEW_PLUGIN" );
+const wxChar* NL_SCHEMATIC_PLUGIN_IMPL::m_logTrace = wxT( "KI_TRACE_NL_SCHEMATIC_PLUGIN" );
 
 
-NL_PCBNEW_PLUGIN_IMPL::NL_PCBNEW_PLUGIN_IMPL( PCB_DRAW_PANEL_GAL* aViewport ) :
-        CNavigation3D( false, false ), m_viewport2D( aViewport ), m_isMoving( false )
+NL_SCHEMATIC_PLUGIN_IMPL::NL_SCHEMATIC_PLUGIN_IMPL() :
+        CNavigation3D( false, false ), m_viewport2D( nullptr ), m_isMoving( false )
 {
-    m_view = m_viewport2D->GetView();
-    m_viewportWidth = m_view->GetBoundary().GetWidth();
-
-    PutProfileHint( "KiCAD PCB" );
-
-    // Use the default settings for the connexion to the 3DMouse navigation
-    // They are use a single-threaded threading model and row vectors.
-    EnableNavigation( true );
-
-    // Use the SpaceMouse internal timing source for the frame rate.
-    PutFrameTimingSource( TimingSource::SpaceMouse );
-
-    exportCommandsAndImages();
+    PutProfileHint( "KiCAD Eeschema" );
 }
 
 
-NL_PCBNEW_PLUGIN_IMPL::~NL_PCBNEW_PLUGIN_IMPL()
+NL_SCHEMATIC_PLUGIN_IMPL::~NL_SCHEMATIC_PLUGIN_IMPL()
 {
     EnableNavigation( false );
 }
 
 
-void NL_PCBNEW_PLUGIN_IMPL::SetFocus( bool aFocus )
+void NL_SCHEMATIC_PLUGIN_IMPL::SetCanvas( EDA_DRAW_PANEL_GAL* aViewport )
 {
-    wxLogTrace( m_logTrace, wxT( "NL_PCBNEW_PLUGIN_IMPL::SetFocus %d" ), aFocus );
+    bool init = m_viewport2D == nullptr;
+
+    m_viewport2D = aViewport;
+
+    if( m_viewport2D != nullptr )
+    {
+        m_view = static_cast<KIGFX::SCH_VIEW*>( m_viewport2D->GetView() );
+        m_viewportWidth = m_view->GetBoundary().GetWidth();
+
+        if( init )
+        {
+            // Use the default settings for the connexion to the 3DMouse navigation
+            // They are use a single-threaded threading model and row vectors.
+            EnableNavigation( true );
+
+            // Use the SpaceMouse internal timing source for the frame rate.
+            PutFrameTimingSource( TimingSource::SpaceMouse );
+
+            exportCommandsAndImages();
+        }
+    }
+}
+
+
+void NL_SCHEMATIC_PLUGIN_IMPL::SetFocus( bool aFocus )
+{
+    wxLogTrace( m_logTrace, wxT( "NL_SCHEMATIC_PLUGIN_IMPL::SetFocus %d" ), aFocus );
     NAV_3D::Write( navlib::focus_k, aFocus );
 }
 
 // temporary store for the command categories
 typedef std::map<std::string, TDx::CCommandTreeNode*> CATEGORY_STORE;
+
 
 /**
  * Add a category to the store.
@@ -127,9 +141,9 @@ static CATEGORY_STORE::iterator add_category( std::string     aCategoryPath,
 }
 
 
-void NL_PCBNEW_PLUGIN_IMPL::exportCommandsAndImages()
+void NL_SCHEMATIC_PLUGIN_IMPL::exportCommandsAndImages()
 {
-    wxLogTrace( m_logTrace, wxT( "NL_PCBNEW_PLUGIN_IMPL::exportCommandsAndImages" ) );
+    wxLogTrace( m_logTrace, wxT( "NL_SCHEMATIC_PLUGIN_IMPL::exportCommandsAndImages" ) );
 
     std::list<TOOL_ACTION*> actions = ACTION_MANAGER::GetActionList();
 
@@ -142,7 +156,7 @@ void NL_PCBNEW_PLUGIN_IMPL::exportCommandsAndImages()
     using TDx::SpaceMouse::CCommandSet;
 
     // The root action set node
-    CCommandSet commandSet( "PCB_DRAW_PANEL_GAL", "PCB Viewer" );
+    CCommandSet commandSet( "SCHEMATIC_EDITOR", "Schematic Editor" );
 
     // Activate the command set
     NAV_3D::PutActiveCommands( commandSet.GetId() );
@@ -221,7 +235,7 @@ void NL_PCBNEW_PLUGIN_IMPL::exportCommandsAndImages()
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::GetCameraMatrix( navlib::matrix_t& matrix ) const
+long NL_SCHEMATIC_PLUGIN_IMPL::GetCameraMatrix( navlib::matrix_t& matrix ) const
 {
     if( m_view == nullptr )
     {
@@ -237,13 +251,13 @@ long NL_PCBNEW_PLUGIN_IMPL::GetCameraMatrix( navlib::matrix_t& matrix ) const
     double z = x * y;
 
     // Note: the connexion has been configured as row vectors, the coordinate system is defined in
-    // NL_PCBNEW_PLUGIN_IMPL::GetCoordinateSystem and the front view in NL_PCBNEW_PLUGIN_IMPL::GetFrontView.
+    // NL_SCHEMATIC_PLUGIN_IMPL::GetCoordinateSystem and the front view in NL_SCHEMATIC_PLUGIN_IMPL::GetFrontView.
     matrix = { x, 0, 0, 0, 0, y, 0, 0, 0, 0, z, 0, m_viewPosition.x, m_viewPosition.y, 0, 1 };
     return 0;
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::GetPointerPosition( navlib::point_t& position ) const
+long NL_SCHEMATIC_PLUGIN_IMPL::GetPointerPosition( navlib::point_t& position ) const
 {
     if( m_view == nullptr )
     {
@@ -260,7 +274,7 @@ long NL_PCBNEW_PLUGIN_IMPL::GetPointerPosition( navlib::point_t& position ) cons
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::GetViewExtents( navlib::box_t& extents ) const
+long NL_SCHEMATIC_PLUGIN_IMPL::GetViewExtents( navlib::box_t& extents ) const
 {
     if( m_view == nullptr )
     {
@@ -282,7 +296,7 @@ long NL_PCBNEW_PLUGIN_IMPL::GetViewExtents( navlib::box_t& extents ) const
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::GetIsViewPerspective( navlib::bool_t& perspective ) const
+long NL_SCHEMATIC_PLUGIN_IMPL::GetIsViewPerspective( navlib::bool_t& perspective ) const
 {
     perspective = false;
 
@@ -290,7 +304,7 @@ long NL_PCBNEW_PLUGIN_IMPL::GetIsViewPerspective( navlib::bool_t& perspective ) 
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::SetCameraMatrix( const navlib::matrix_t& matrix )
+long NL_SCHEMATIC_PLUGIN_IMPL::SetCameraMatrix( const navlib::matrix_t& matrix )
 {
     if( m_view == nullptr )
     {
@@ -317,7 +331,7 @@ long NL_PCBNEW_PLUGIN_IMPL::SetCameraMatrix( const navlib::matrix_t& matrix )
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::SetViewExtents( const navlib::box_t& extents )
+long NL_SCHEMATIC_PLUGIN_IMPL::SetViewExtents( const navlib::box_t& extents )
 {
     if( m_view == nullptr )
     {
@@ -346,26 +360,26 @@ long NL_PCBNEW_PLUGIN_IMPL::SetViewExtents( const navlib::box_t& extents )
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::SetViewFOV( double fov )
+long NL_SCHEMATIC_PLUGIN_IMPL::SetViewFOV( double fov )
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::SetViewFrustum( const navlib::frustum_t& frustum )
+long NL_SCHEMATIC_PLUGIN_IMPL::SetViewFrustum( const navlib::frustum_t& frustum )
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::GetModelExtents( navlib::box_t& extents ) const
+long NL_SCHEMATIC_PLUGIN_IMPL::GetModelExtents( navlib::box_t& extents ) const
 {
     if( m_view == nullptr )
     {
         return navlib::make_result_code( navlib::navlib_errc::no_data_available );
     }
 
-    BOX2I box = static_cast<PCB_BASE_FRAME*>( m_viewport2D->GetParent() )->GetDocumentExtents();
+    BOX2I box = static_cast<SCH_BASE_FRAME*>( m_viewport2D->GetParent() )->GetDocumentExtents();
     box.Normalize();
 
     double half_depth = 0.1 / m_viewport2D->GetGAL()->GetWorldScale();
@@ -386,7 +400,7 @@ long NL_PCBNEW_PLUGIN_IMPL::GetModelExtents( navlib::box_t& extents ) const
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::GetCoordinateSystem( navlib::matrix_t& matrix ) const
+long NL_SCHEMATIC_PLUGIN_IMPL::GetCoordinateSystem( navlib::matrix_t& matrix ) const
 {
     // The coordinate system is defined as x to the right, y down and z into the screen.
     matrix = { 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1 };
@@ -394,28 +408,28 @@ long NL_PCBNEW_PLUGIN_IMPL::GetCoordinateSystem( navlib::matrix_t& matrix ) cons
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::GetFrontView( navlib::matrix_t& matrix ) const
+long NL_SCHEMATIC_PLUGIN_IMPL::GetFrontView( navlib::matrix_t& matrix ) const
 {
     matrix = { 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1 };
     return 0;
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::GetIsSelectionEmpty( navlib::bool_t& empty ) const
+long NL_SCHEMATIC_PLUGIN_IMPL::GetIsSelectionEmpty( navlib::bool_t& empty ) const
 {
     empty = true;
     return 0;
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::GetIsViewRotatable( navlib::bool_t& isRotatable ) const
+long NL_SCHEMATIC_PLUGIN_IMPL::GetIsViewRotatable( navlib::bool_t& isRotatable ) const
 {
     isRotatable = false;
     return 0;
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
+long NL_SCHEMATIC_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
 {
     if( commandId.empty() )
     {
@@ -445,7 +459,7 @@ long NL_PCBNEW_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
 
         if( parent->IsEnabled() )
         {
-            TOOL_MANAGER* tool_manager = static_cast<PCB_BASE_FRAME*>( parent )->GetToolManager();
+            TOOL_MANAGER* tool_manager = static_cast<SCH_BASE_FRAME*>( parent )->GetToolManager();
 
             // Get the selection to use to test if the action is enabled
             SELECTION& sel = tool_manager->GetToolHolder()->GetCurrentSelection();
@@ -473,13 +487,13 @@ long NL_PCBNEW_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::SetSettingsChanged( long change )
+long NL_SCHEMATIC_PLUGIN_IMPL::SetSettingsChanged( long change )
 {
     return 0;
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::SetMotionFlag( bool value )
+long NL_SCHEMATIC_PLUGIN_IMPL::SetMotionFlag( bool value )
 {
     m_isMoving = value;
 
@@ -487,7 +501,7 @@ long NL_PCBNEW_PLUGIN_IMPL::SetMotionFlag( bool value )
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::SetTransaction( long value )
+long NL_SCHEMATIC_PLUGIN_IMPL::SetTransaction( long value )
 {
     if( value == 0L )
     {
@@ -498,97 +512,97 @@ long NL_PCBNEW_PLUGIN_IMPL::SetTransaction( long value )
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::GetViewFOV( double& fov ) const
+long NL_SCHEMATIC_PLUGIN_IMPL::GetViewFOV( double& fov ) const
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::GetViewFrustum( navlib::frustum_t& frustum ) const
+long NL_SCHEMATIC_PLUGIN_IMPL::GetViewFrustum( navlib::frustum_t& frustum ) const
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::GetSelectionExtents( navlib::box_t& extents ) const
+long NL_SCHEMATIC_PLUGIN_IMPL::GetSelectionExtents( navlib::box_t& extents ) const
 {
     return navlib::make_result_code( navlib::navlib_errc::no_data_available );
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::GetSelectionTransform( navlib::matrix_t& transform ) const
+long NL_SCHEMATIC_PLUGIN_IMPL::GetSelectionTransform( navlib::matrix_t& transform ) const
 {
     return navlib::make_result_code( navlib::navlib_errc::no_data_available );
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::SetSelectionTransform( const navlib::matrix_t& matrix )
+long NL_SCHEMATIC_PLUGIN_IMPL::SetSelectionTransform( const navlib::matrix_t& matrix )
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::GetPivotPosition( navlib::point_t& position ) const
+long NL_SCHEMATIC_PLUGIN_IMPL::GetPivotPosition( navlib::point_t& position ) const
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::IsUserPivot( navlib::bool_t& userPivot ) const
+long NL_SCHEMATIC_PLUGIN_IMPL::IsUserPivot( navlib::bool_t& userPivot ) const
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::SetPivotPosition( const navlib::point_t& position )
+long NL_SCHEMATIC_PLUGIN_IMPL::SetPivotPosition( const navlib::point_t& position )
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::GetPivotVisible( navlib::bool_t& visible ) const
+long NL_SCHEMATIC_PLUGIN_IMPL::GetPivotVisible( navlib::bool_t& visible ) const
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::SetPivotVisible( bool visible )
+long NL_SCHEMATIC_PLUGIN_IMPL::SetPivotVisible( bool visible )
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::GetHitLookAt( navlib::point_t& position ) const
+long NL_SCHEMATIC_PLUGIN_IMPL::GetHitLookAt( navlib::point_t& position ) const
 {
     return navlib::make_result_code( navlib::navlib_errc::no_data_available );
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::SetHitAperture( double aperture )
+long NL_SCHEMATIC_PLUGIN_IMPL::SetHitAperture( double aperture )
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::SetHitDirection( const navlib::vector_t& direction )
+long NL_SCHEMATIC_PLUGIN_IMPL::SetHitDirection( const navlib::vector_t& direction )
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::SetHitLookFrom( const navlib::point_t& eye )
+long NL_SCHEMATIC_PLUGIN_IMPL::SetHitLookFrom( const navlib::point_t& eye )
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::SetHitSelectionOnly( bool onlySelection )
+long NL_SCHEMATIC_PLUGIN_IMPL::SetHitSelectionOnly( bool onlySelection )
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }
 
 
-long NL_PCBNEW_PLUGIN_IMPL::SetCameraTarget( const navlib::point_t& position )
+long NL_SCHEMATIC_PLUGIN_IMPL::SetCameraTarget( const navlib::point_t& position )
 {
     return navlib::make_result_code( navlib::navlib_errc::invalid_operation );
 }

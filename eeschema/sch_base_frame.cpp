@@ -42,6 +42,9 @@
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
 
+#if defined( KICAD_USE_3DCONNEXION )
+#include <navlib/nl_schematic_plugin.h>
+#endif
 
 LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
                              SYMBOL_LIB* aCacheLib, wxWindow* aParent, bool aShowErrorMsg )
@@ -81,8 +84,9 @@ LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
 SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindowType,
                                 const wxString& aTitle, const wxPoint& aPosition,
                                 const wxSize& aSize, long aStyle, const wxString& aFrameName ) :
-    EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition, aSize, aStyle, aFrameName ),
-    m_base_frame_defaults( nullptr, "base_Frame_defaults" )
+        EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition, aSize, aStyle,
+                        aFrameName ),
+        m_base_frame_defaults( nullptr, "base_Frame_defaults" )
 {
     createCanvas();
 
@@ -300,6 +304,28 @@ void SCH_BASE_FRAME::createCanvas()
 }
 
 
+void SCH_BASE_FRAME::ActivateGalCanvas()
+{
+    EDA_DRAW_FRAME::ActivateGalCanvas();
+
+#if defined( KICAD_USE_3DCONNEXION )
+    try
+    {
+        if( !m_spaceMouse )
+        {
+            m_spaceMouse = std::make_unique<NL_SCHEMATIC_PLUGIN>();
+        }
+
+        m_spaceMouse->SetCanvas( GetCanvas() );
+    }
+    catch( const std::system_error& e )
+    {
+        wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
+    }
+#endif
+}
+
+
 void SCH_BASE_FRAME::UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete, bool aUpdateRtree )
 {
     EDA_ITEM* parent = aItem->GetParent();
@@ -471,3 +497,28 @@ COLOR4D SCH_BASE_FRAME::GetDrawBgColor() const
     return GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 }
 
+
+void SCH_BASE_FRAME::handleActivateEvent( wxActivateEvent& aEvent )
+{
+    EDA_DRAW_FRAME::handleActivateEvent( aEvent );
+
+#if defined( KICAD_USE_3DCONNEXION )
+    if( m_spaceMouse )
+    {
+        m_spaceMouse->SetFocus( aEvent.GetActive() );
+    }
+#endif
+}
+
+
+void SCH_BASE_FRAME::handleIconizeEvent( wxIconizeEvent& aEvent )
+{
+    EDA_DRAW_FRAME::handleIconizeEvent( aEvent );
+
+#if defined( KICAD_USE_3DCONNEXION )
+    if( m_spaceMouse && aEvent.IsIconized() )
+    {
+        m_spaceMouse->SetFocus( false );
+    }
+#endif
+}

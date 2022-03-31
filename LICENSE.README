@@ -8,6 +8,8 @@ KiCad EDA suite by the KiCad project or any third party, e.g. Linux distributor.
 
 You are free to use the *sources* under the terms of their respective licenses.
 
+Licensed under Apache License, Version 2.0
+ - portions of code in libs/kimath/include/math/util.h
 Licensed under BOOSTv1:
 - libcontext [https://github.com/boostorg/context] in thirdparty/libcontext
 - clipper in thirdparty/clipper

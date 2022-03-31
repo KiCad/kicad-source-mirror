@@ -573,6 +573,28 @@ const int LexicographicalCompare( const VECTOR2<T>& aA, const VECTOR2<T>& aB )
 }
 
 
+/**
+ * Template to compare two VECTOR2<T> values for equality within a required epsilon.
+ *
+ * @param aFirst value to compare.
+ * @param aSecond value to compare.
+ * @param aEpsilon allowed error.
+ * @return true if the values considered equal within the specified epsilon, otherwise false.
+ */
+template <class T>
+typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
+equals( VECTOR2<T> const& aFirst, VECTOR2<T> const& aSecond,
+        T aEpsilon = std::numeric_limits<T>::epsilon() )
+{
+    if( !equals( aFirst.x, aSecond.x, aEpsilon ) )
+    {
+        return false;
+    }
+
+    return equals( aFirst.y, aSecond.y, aEpsilon );
+}
+
+
 template <class T>
 std::ostream& operator<<( std::ostream& aStream, const VECTOR2<T>& aVector )
 {

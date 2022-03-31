@@ -119,6 +119,19 @@ void PCB_BASE_FRAME::handleActivateEvent( wxActivateEvent& aEvent )
 }
 
 
+void PCB_BASE_FRAME::handleIconizeEvent( wxIconizeEvent& aEvent )
+{
+    EDA_DRAW_FRAME::handleIconizeEvent( aEvent );
+
+#if defined( KICAD_USE_3DCONNEXION )
+    if( m_spaceMouse != nullptr && aEvent.IsIconized() )
+    {
+        m_spaceMouse->SetFocus( false );
+    }
+#endif
+}
+
+
 EDA_3D_VIEWER_FRAME* PCB_BASE_FRAME::Get3DViewerFrame()
 {
     wxWindow* frame = FindWindowByName( QUALIFIED_VIEWER3D_FRAMENAME( this ) );

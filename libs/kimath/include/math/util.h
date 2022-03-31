@@ -7,6 +7,11 @@
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
+ * The equals() method to compare two floating point values adapted from
+ * AlmostEqualRelativeAndAbs() on 
+ * https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
+ * (C) Bruce Dawson subject to the Apache 2.0 license.
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -32,6 +37,7 @@
 #include <cstdint>
 #include <limits>
 #include <typeinfo>
+#include <type_traits>
 
 /**
  * Helper to avoid directly including wx/log.h for the templated functions in kimath
@@ -112,5 +118,38 @@ int rescale( int aNumerator, int aValue, int aDenominator );
 
 template <>
 int64_t rescale( int64_t aNumerator, int64_t aValue, int64_t aDenominator );
+
+
+/**
+ * Template to compare two floating point values for equality within a required epsilon.
+ *
+ * @param aFirst value to compare.
+ * @param aSecond value to compare.
+ * @param aEpsilon allowed error.
+ * @return true if the values considered equal within the specified epsilon, otherwise false.
+ */
+template <class T>
+typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
+equals( T aFirst, T aSecond, T aEpsilon = std::numeric_limits<T>::epsilon() )
+{
+    T diff = fabs( aFirst - aSecond );
+
+    if( diff < aEpsilon )
+    {
+        return true;
+    }
+
+    aFirst = fabs( aFirst );
+    aSecond = fabs( aSecond );
+    T largest = aFirst > aSecond ? aFirst : aSecond;
+
+    if( diff <= largest * aEpsilon )
+    {
+        return true;
+    }
+
+    return false;
+}
+
 
 #endif // UTIL_H

@@ -107,6 +107,7 @@ BEGIN_EVENT_TABLE( EDA_BASE_FRAME, wxFrame )
     EVT_MAXIMIZE( EDA_BASE_FRAME::OnMaximize )
 
     EVT_SYS_COLOUR_CHANGED( EDA_BASE_FRAME::onSystemColorChange )
+    EVT_ICONIZE( EDA_BASE_FRAME::onIconize )
 END_EVENT_TABLE()
 
 
@@ -1321,6 +1322,16 @@ void EDA_BASE_FRAME::onSystemColorChange( wxSysColourChangedEvent& aEvent )
     HandleSystemColorChange();
 
     // Skip the change event to ensure the rest of the window controls get it
+    aEvent.Skip();
+}
+
+
+void EDA_BASE_FRAME::onIconize( wxIconizeEvent& aEvent )
+{
+    // Call the handler
+    handleIconizeEvent( aEvent );
+
+    // Skip the event.
     aEvent.Skip();
 }
 
