@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-28 11:13-0700\n"
-"PO-Revision-Date: 2022-03-28 17:50+0000\n"
+"PO-Revision-Date: 2022-04-08 00:06+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -4113,7 +4113,7 @@ msgstr "Zone"
 
 #: common/eda_item.cpp:322 pcbnew/pcb_track.cpp:674
 msgid "Track"
-msgstr "Spur"
+msgstr "Leiterbahn"
 
 #: common/eda_item.cpp:323 pcbnew/dialogs/dialog_board_statistics.cpp:510
 #: pcbnew/pcb_track.cpp:731
@@ -5828,7 +5828,7 @@ msgstr "Letzte Bearbeitung wiederholen"
 #: common/tool/actions.cpp:153
 msgid "Cut selected item(s) to clipboard"
 msgstr ""
-"Schneidet die ausgewählten Elemente aus und kopiert sie in die Zwischenablage"
+"Schneidet die ausgewählten Elemente aus und legt sie in der Zwischenablage ab"
 
 #: common/tool/actions.cpp:159
 msgid "Copy selected item(s) to clipboard"
@@ -6845,7 +6845,7 @@ msgstr "Textdateien"
 
 #: common/wildcards_and_files_ext.cpp:461
 msgid "Legacy footprint export files"
-msgstr "Alte Footprint Exportdateien"
+msgstr "Ältere Footprint-Exportdateien"
 
 #: common/wildcards_and_files_ext.cpp:467
 msgid "Electrical rule check file"
@@ -12382,8 +12382,8 @@ msgid ""
 "Select one or more rows containing libraries in Legacy format (*.lib) to "
 "save as current KiCad format (*.kicad_sym)."
 msgstr ""
-"Wählen Sie eine oder mehrere Zeilen mit Bibliotheken im alten Format (*.lib) "
-"aus, die im aktuellen Format (*.kicad_sym) gespeichert werden sollen."
+"Wählen Sie eine oder mehrere Zeilen mit Bibliotheken im veralteten Format (*."
+"lib) aus, die im aktuellen Format (*.kicad_sym) gespeichert werden sollen."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:741
 #, c-format
@@ -12391,8 +12391,8 @@ msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
 msgstr ""
-"'%s' im aktuellen KiCad-Format (*.kicad_sym) speichern und alten Eintrag in "
-"der Tabelle ersetzen?"
+"'%s' im aktuellen KiCad-Format (*.kicad_sym) speichern und veralteten "
+"Eintrag in der Tabelle ersetzen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:747
 #, c-format
@@ -12400,8 +12400,8 @@ msgid ""
 "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
 "replace legacy entries in table?"
 msgstr ""
-"%d alte Bibliotheken im aktuellen KiCad-Format (*.kicad_sym) speichern und "
-"alte Einträge in der Tabelle ersetzen?"
+"%d veraltete Bibliotheken im aktuellen KiCad-Format (*.kicad_sym) speichern "
+"und veraltete Einträge in der Tabelle ersetzen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:775
 #: pcbnew/dialogs/dialog_export_step.cpp:350
@@ -16127,7 +16127,7 @@ msgstr "Pinnamengröße übertragen"
 
 #: eeschema/tools/ee_actions.cpp:267
 msgid "Copy pin name size to other pins in symbol"
-msgstr "Pinnamengröße zu anderen Pins im Symbol kopieren"
+msgstr "Größe des Pinnamens zu anderen Pins im Symbol kopieren"
 
 #: eeschema/tools/ee_actions.cpp:272
 msgid "Push Pin Number Size"
@@ -16135,7 +16135,7 @@ msgstr "Pinnummerngröße übertragen"
 
 #: eeschema/tools/ee_actions.cpp:272
 msgid "Copy pin number size to other pins in symbol"
-msgstr "Pinnummerngröße zu anderen Pins im Symbol kopieren"
+msgstr "Größe der Pinnummer zu anderen Pins im Symbol kopieren"
 
 #: eeschema/tools/ee_actions.cpp:281
 msgid "Add Symbol"
@@ -16227,7 +16227,7 @@ msgstr "Bild hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:350
 msgid "Add bitmap image"
-msgstr "Bitmap Grafik hinzufügen"
+msgstr "Rastergrafik hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:355
 msgid "Finish Sheet"
@@ -22739,7 +22739,7 @@ msgstr "Automatisch generierte Netznamen verbergen"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:62
 msgid "Sort nets by pad count"
-msgstr "Sortiere Netze nach Anzahl"
+msgstr "Netze nach Pad-Anzahl sortieren"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:95
 msgid "Zone name:"
@@ -35043,7 +35043,7 @@ msgstr "Mit Referenz kopieren"
 #: pcbnew/tools/pcb_actions.cpp:267
 msgid "Copy selected item(s) to clipboard with a specified starting point"
 msgstr ""
-"Ausgewählte Elemente in die Zwischenablage mit einem angegebenen Startpunkt "
+"Ausgewählte Elemente mit einem angegebenen Startpunkt in die Zwischenablage "
 "kopieren"
 
 #: pcbnew/tools/pcb_actions.cpp:273
@@ -35805,7 +35805,7 @@ msgstr "Anzeige wechseln zwischen ausgefüllten Flächen und nur deren Konturen"
 
 #: pcbnew/tools/pcb_actions.cpp:891
 msgid "Switch to Component (F.Cu) layer"
-msgstr "Wechsel zur Bauteillage (F.Cu)"
+msgstr "Wechsel zur oberen Kupferlage bzw. Bestückungsseite (F.Cu)"
 
 #: pcbnew/tools/pcb_actions.cpp:897
 msgid "Switch to Inner layer 1"
@@ -35929,15 +35929,15 @@ msgstr "Wechsel zur Innenlage 30"
 
 #: pcbnew/tools/pcb_actions.cpp:1053
 msgid "Switch to Copper (B.Cu) layer"
-msgstr "Wechsel zur Kupferlage (B.Cu)"
+msgstr "Wechsel zur unteren Kupferlage bzw. Lötseite (B.Cu)"
 
 #: pcbnew/tools/pcb_actions.cpp:1059
 msgid "Switch to Next Layer"
-msgstr "Springe zur nächsten Lage"
+msgstr "Wechsel zur nächsten Lage"
 
 #: pcbnew/tools/pcb_actions.cpp:1065
 msgid "Switch to Previous Layer"
-msgstr "Springe zur vorherigen Lage"
+msgstr "Wechsel zur vorherigen Lage"
 
 #: pcbnew/tools/pcb_actions.cpp:1071
 msgid "Toggle Layer"
@@ -36031,7 +36031,7 @@ msgstr "Unten ausrichten"
 
 #: pcbnew/tools/pcb_actions.cpp:1137
 msgid "Aligns selected items to the bottom edge"
-msgstr "Ausgewählte Elemente an der Unterkante zuweisen"
+msgstr "Ausgewählte Elemente an der Unterkante ausrichten"
 
 #: pcbnew/tools/pcb_actions.cpp:1142
 msgid "Align to Left"
@@ -36055,7 +36055,7 @@ msgstr "Vertikal zur Mitte ausrichten"
 
 #: pcbnew/tools/pcb_actions.cpp:1152
 msgid "Aligns selected items to the vertical center"
-msgstr "Richtet ausgewählte Elemente an der vertikalen Mitte aus"
+msgstr "Ausgewählte Elemente an der vertikalen Mitte ausrichten"
 
 #: pcbnew/tools/pcb_actions.cpp:1157
 msgid "Align to Horizontal Center"
@@ -36063,7 +36063,7 @@ msgstr "Horizontal zur Mitte ausrichten"
 
 #: pcbnew/tools/pcb_actions.cpp:1157
 msgid "Aligns selected items to the horizontal center"
-msgstr "Richtet ausgewählte Elemente an der horizontalen Mitte aus"
+msgstr "Ausgewählte Elemente an der horizontalen Mitte ausrichten"
 
 #: pcbnew/tools/pcb_actions.cpp:1162
 msgid "Distribute Horizontally"
@@ -36071,7 +36071,7 @@ msgstr "Horizontal verteilen"
 
 #: pcbnew/tools/pcb_actions.cpp:1162
 msgid "Distributes selected items along the horizontal axis"
-msgstr "Ausgewählte Element an einer horizontalen Linie verteilen"
+msgstr "Ausgewählte Elemente entlang der horizontalen Achse verteilen"
 
 #: pcbnew/tools/pcb_actions.cpp:1167
 msgid "Distribute Vertically"
@@ -36079,7 +36079,7 @@ msgstr "Vertikal verteilen"
 
 #: pcbnew/tools/pcb_actions.cpp:1167
 msgid "Distributes selected items along the vertical axis"
-msgstr "Ausgewählte Element an einer vertikalen Linie verteilen"
+msgstr "Ausgewählte Elemente entlang der vertikalen Achse verteilen"
 
 #: pcbnew/tools/pcb_actions.cpp:1204
 msgid "Position Relative To..."
@@ -36088,7 +36088,7 @@ msgstr "Relativ zu Bezugspunkt positionieren..."
 #: pcbnew/tools/pcb_actions.cpp:1205
 msgid "Positions the selected item(s) by an exact amount relative to another"
 msgstr ""
-"Die ausgewählten Elemente um einen exakten Betrag relativ zu einem anderen "
+"Ausgewählte Elemente um einen exakten Betrag relativ zu einem anderen "
 "Element positionieren"
 
 #: pcbnew/tools/pcb_actions.cpp:1242
