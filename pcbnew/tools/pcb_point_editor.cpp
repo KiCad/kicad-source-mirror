@@ -1631,25 +1631,47 @@ void PCB_POINT_EDITOR::updatePoints()
     if( !item )
         return;
 
-    if( item->Type() == PCB_TEXTBOX_T || item->Type() == PCB_FP_TEXTBOX_T )
-    {
-        const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( item );
-
-        // We can't currently handle TEXTBOXes that have been turned into SHAPE_T::POLYs due
-        // to non-cardinal rotations
-        if( shape->GetShape() != SHAPE_T::RECT )
-        {
-            m_editPoints.reset();
-            return;
-        }
-    }
-
     switch( item->Type() )
     {
-    case PCB_SHAPE_T:
-    case PCB_FP_SHAPE_T:
     case PCB_TEXTBOX_T:
     case PCB_FP_TEXTBOX_T:
+    {
+        const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( item );
+        int              target = shape->GetShape() == SHAPE_T::RECT ? 4 : 0;
+
+        // Careful; textbox shape is mutable between cardinal and non-cardinal rotations...
+        if( int( m_editPoints->PointsSize() ) != target )
+        {
+            getView()->Remove( m_editPoints.get() );
+            m_editedPoint = nullptr;
+
+            m_editPoints = makePoints( item );
+
+            if( m_editPoints )
+                getView()->Add( m_editPoints.get() );
+
+            break;
+        }
+
+        if( shape->GetShape() == SHAPE_T::RECT )
+        {
+            m_editPoints->Point( RECT_TOP_LEFT ).SetPosition( shape->GetStart() );
+            m_editPoints->Point( RECT_TOP_RIGHT ).SetPosition( shape->GetEnd().x,
+                                                               shape->GetStart().y );
+            m_editPoints->Point( RECT_BOT_RIGHT ).SetPosition( shape->GetEnd() );
+            m_editPoints->Point( RECT_BOT_LEFT ).SetPosition( shape->GetStart().x,
+                                                              shape->GetEnd().y );
+        }
+        else if( shape->GetShape() == SHAPE_T::POLY )
+        {
+            // Not currently editable while rotated.
+        }
+
+        break;
+    }
+
+    case PCB_SHAPE_T:
+    case PCB_FP_SHAPE_T:
     {
         const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( item );
 

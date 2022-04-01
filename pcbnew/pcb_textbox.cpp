@@ -251,6 +251,16 @@ void PCB_TEXTBOX::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
     PCB_SHAPE::Rotate( aRotCentre, aAngle );
     SetTextAngle( GetTextAngle() + aAngle );
+
+    if( GetTextAngle().IsCardinal() && GetShape() != SHAPE_T::RECT )
+    {
+        std::vector<VECTOR2I> corners = GetCorners();
+        VECTOR2I              diag = corners[2] - corners[0];
+
+        SetShape( SHAPE_T::RECT );
+        SetStart( corners[0] );
+        SetEnd( VECTOR2I( corners[0].x + abs( diag.x ), corners[0].y + abs( diag.y ) ) );
+    }
 }
 
 
