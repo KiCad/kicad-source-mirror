@@ -725,28 +725,37 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
         int      radius = GetRadius();
         int      dist = KiROUND( EuclideanNorm( relPos ) );
 
-        if( abs( radius - dist ) <= maxdist )
+        if( IsFilled() )
         {
-            EDA_ANGLE startAngle;
-            EDA_ANGLE endAngle;
-            CalcArcAngles( startAngle, endAngle );
-
-            if( m_upsideDownCoords && ( startAngle - endAngle ).Normalize180() > ANGLE_0 )
-                std::swap( startAngle, endAngle );
-
-            EDA_ANGLE relPosAngle( relPos );
-
-            startAngle.Normalize();
-            endAngle.Normalize();
-            relPosAngle.Normalize();
-
-            if( endAngle > startAngle )
-                return relPosAngle >= startAngle && relPosAngle <= endAngle;
-            else
-                return relPosAngle >= startAngle || relPosAngle <= endAngle;
+            // Check distance from arc center
+            if( dist > radius + maxdist )
+                return false;
+        }
+        else
+        {
+            // Check distance from arc circumference
+            if( abs( radius - dist ) > maxdist )
+                return false;
         }
 
-        return false;
+        // Finally, check to see if it's within arc's swept angle.
+        EDA_ANGLE startAngle;
+        EDA_ANGLE endAngle;
+        CalcArcAngles( startAngle, endAngle );
+
+        if( m_upsideDownCoords && ( startAngle - endAngle ).Normalize180() > ANGLE_0 )
+            std::swap( startAngle, endAngle );
+
+        EDA_ANGLE relPosAngle( relPos );
+
+        startAngle.Normalize();
+        endAngle.Normalize();
+        relPosAngle.Normalize();
+
+        if( endAngle > startAngle )
+            return relPosAngle >= startAngle && relPosAngle <= endAngle;
+        else
+            return relPosAngle >= startAngle || relPosAngle <= endAngle;
     }
 
     case SHAPE_T::BEZIER:
@@ -808,7 +817,6 @@ bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
     arect.Normalize();
     arect.Inflate( aAccuracy );
 
-    EDA_RECT arcRect;
     EDA_RECT bb = getBoundingBox();
 
     switch( m_shape )
@@ -822,14 +830,10 @@ bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
         else
         {
             // If the rectangle does not intersect the bounding box, this is a much quicker test
-            if( !aRect.Intersects( bb ) )
-            {
+            if( !arect.Intersects( bb ) )
                 return false;
-            }
             else
-            {
                 return arect.IntersectsCircleEdge( getCenter(), GetRadius(), GetWidth() );
-            }
         }
 
     case SHAPE_T::ARC:
@@ -841,14 +845,19 @@ bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
         // Test if the rect crosses the arc
         else
         {
-            arcRect = bb.Common( arect );
+            if( !arect.Intersects( bb ) )
+                return false;
 
-            /* All following tests must pass:
-             * 1. Rectangle must intersect arc BoundingBox
-             * 2. Rectangle must cross the outside of the arc
-             */
-            return arcRect.Intersects( arect ) &&
-                   arcRect.IntersectsCircleEdge( getCenter(), GetRadius(), GetWidth() );
+            if( IsFilled() )
+            {
+                return ( arect.Intersects( getCenter(), GetStart() )
+                      || arect.Intersects( getCenter(), GetEnd() )
+                      || arect.IntersectsCircleEdge( getCenter(), GetRadius(), GetWidth() ) );
+            }
+            else
+            {
+                return arect.IntersectsCircleEdge( getCenter(), GetRadius(), GetWidth() );
+            }
         }
 
     case SHAPE_T::RECT:
@@ -1013,6 +1022,15 @@ std::vector<VECTOR2I> EDA_SHAPE::GetRectCorners() const
 
 void EDA_SHAPE::computeArcBBox( EDA_RECT& aBBox ) const
 {
+    // Start, end, and each inflection point the arc crosses will enclose the entire arc.
+    // Only include the center when filled; it's not necessarily inside the BB of an unfilled
+    // arc with a small included angle.
+    aBBox.SetOrigin( m_start );
+    aBBox.Merge( m_end );
+
+    if( IsFilled() )
+        aBBox.Merge( m_arcCenter );
+
     int       radius = GetRadius();
     EDA_ANGLE t1, t2;
 
@@ -1023,12 +1041,6 @@ void EDA_SHAPE::computeArcBBox( EDA_RECT& aBBox ) const
 
     t1.Normalize();
     t2.Normalize();
-
-    // Start, end, and each inflection point the arc crosses will enclose the entire arc
-    // Do not include the center, which is not necessarily inside the BB of an arc with a
-    // small included angle
-    aBBox.SetOrigin( m_start );
-    aBBox.Merge( m_end );
 
     if( t2 > t1 )
     {
