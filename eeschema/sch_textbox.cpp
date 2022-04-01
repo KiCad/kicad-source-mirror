@@ -193,11 +193,12 @@ void SCH_TEXTBOX::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
 {
     wxDC*    DC = aSettings->GetPrintDC();
     int      penWidth = GetPenWidth();
+    bool     blackAndWhiteMode = GetGRForceBlackPenState();
     VECTOR2I pt1 = GetStart();
     VECTOR2I pt2 = GetEnd();
     COLOR4D  color;
 
-    if( GetFillMode() == FILL_T::FILLED_WITH_COLOR )
+    if( GetFillMode() == FILL_T::FILLED_WITH_COLOR && !blackAndWhiteMode )
         GRFilledRect( DC, pt1, pt2, 0, GetFillColor(), GetFillColor() );
 
     if( penWidth > 0 )

@@ -194,6 +194,7 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
         return;
 
     bool forceNoFill = static_cast<bool>( aData );
+    bool blackAndWhiteMode = GetGRForceBlackPenState();
     int  penWidth = GetEffectivePenWidth( aSettings );
 
     wxDC*    DC = aSettings->GetPrintDC();
@@ -201,7 +202,7 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
     VECTOR2I pt2 = aTransform.TransformCoordinate( m_end ) + aOffset;
     COLOR4D  color = aSettings->GetLayerColor( LAYER_DEVICE );
 
-    if( !forceNoFill && GetFillMode() == FILL_T::FILLED_WITH_COLOR )
+    if( !forceNoFill && GetFillMode() == FILL_T::FILLED_WITH_COLOR && !blackAndWhiteMode )
         GRFilledRect( DC, pt1, pt2, penWidth, color, GetFillColor() );
 
     if( GetStroke().GetColor() != COLOR4D::UNSPECIFIED )
