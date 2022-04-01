@@ -34,6 +34,7 @@
 #define UTIL_H
 
 #include <config.h>
+#include <cmath>
 #include <cstdint>
 #include <limits>
 #include <typeinfo>
@@ -129,18 +130,18 @@ int64_t rescale( int64_t aNumerator, int64_t aValue, int64_t aDenominator );
  * @return true if the values considered equal within the specified epsilon, otherwise false.
  */
 template <class T>
-typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
+typename std::enable_if<std::is_floating_point<T>::value, bool>::type
 equals( T aFirst, T aSecond, T aEpsilon = std::numeric_limits<T>::epsilon() )
 {
-    T diff = fabs( aFirst - aSecond );
+    T diff = std::abs( aFirst - aSecond );
 
     if( diff < aEpsilon )
     {
         return true;
     }
 
-    aFirst = fabs( aFirst );
-    aSecond = fabs( aSecond );
+    aFirst = std::abs( aFirst );
+    aSecond = std::abs( aSecond );
     T largest = aFirst > aSecond ? aFirst : aSecond;
 
     if( diff <= largest * aEpsilon )
