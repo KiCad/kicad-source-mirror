@@ -154,17 +154,21 @@ protected:
             SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
             wxASSERT( editFrame );
 
-            if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
+            if( editFrame )
             {
-                editFrame->SaveCopyInUndoList( editFrame->GetScreen(),
-                                               static_cast<SCH_ITEM*>( aItem->GetParent() ),
-                                               UNDO_REDO::CHANGED, aAppend, aDirtyConnectivity );
-            }
-            else
-            {
-                editFrame->SaveCopyInUndoList( editFrame->GetScreen(),
-                                               static_cast<SCH_ITEM*>( aItem ), aType, aAppend,
-                                               aDirtyConnectivity );
+                if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
+                {
+                    editFrame->SaveCopyInUndoList( editFrame->GetScreen(),
+                                                   static_cast<SCH_ITEM*>( aItem->GetParent() ),
+                                                   UNDO_REDO::CHANGED, aAppend,
+                                                   aDirtyConnectivity );
+                }
+                else
+                {
+                    editFrame->SaveCopyInUndoList( editFrame->GetScreen(),
+                                                   static_cast<SCH_ITEM*>( aItem ), aType,
+                                                   aAppend, aDirtyConnectivity );
+                }
             }
         }
 

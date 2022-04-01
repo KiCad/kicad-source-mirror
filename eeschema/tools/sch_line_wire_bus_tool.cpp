@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -885,14 +885,11 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
                 segment->SetEndPoint( cursorPos );
 
                 // Find new bend point for current mode
-                if( segment )
-                {
-                    if( twoSegments && m_wires.size() >= 2 )
-                        computeBreakPoint( { m_wires[m_wires.size() - 2], segment }, cursorPos,
-                                           currentMode );
-                    else
-                        segment->SetEndPoint( cursorPos );
-                }
+                if( twoSegments && m_wires.size() >= 2 )
+                    computeBreakPoint( { m_wires[m_wires.size() - 2], segment }, cursorPos,
+                                       currentMode );
+                else
+                    segment->SetEndPoint( cursorPos );
 
                 for( SCH_LINE* wire : m_wires )
                 {

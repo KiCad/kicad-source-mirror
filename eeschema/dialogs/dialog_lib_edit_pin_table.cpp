@@ -1085,7 +1085,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnUpdateUI( wxUpdateUIEvent& event )
 
     getSelectedArea( m_grid, &firstSelectedRow, &selectedRowCount );
 
-    if( selectedRowCount > 1 != m_groupSelected->IsEnabled() )
+    if( ( selectedRowCount > 1 ) != m_groupSelected->IsEnabled() )
         m_groupSelected->Enable( selectedRowCount > 1 );
 }
 
