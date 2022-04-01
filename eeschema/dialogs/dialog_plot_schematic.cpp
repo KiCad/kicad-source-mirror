@@ -1250,7 +1250,15 @@ wxString DIALOG_PLOT_SCHEMATIC::getOutputPath()
                    wxStandardPaths::Get().GetDocumentsDir() );
 
     // Build the absolute path of current output directory to preselect it in the file browser.
-    wxString path = ExpandEnvVarSubstitutions( m_outputDirectoryName->GetValue(), &Prj() );
+    std::function<bool( wxString* )> textResolver =
+    [&]( wxString* token ) -> bool
+    {
+        return m_parent->Schematic().ResolveTextVar( token, 0 );
+    };
+
+    wxString path = m_outputDirectoryName->GetValue();
+    path = ExpandTextVars( path, &textResolver, nullptr, &Prj() );
+    path = ExpandEnvVarSubstitutions( path, &Prj() );
 
     fn.SetPath( path );
 

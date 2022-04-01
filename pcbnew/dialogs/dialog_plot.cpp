@@ -815,7 +815,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
     wxString path = m_plotOpts.GetOutputDirectory();
     path = ExpandTextVars( path, &textResolver, nullptr, board->GetProject() );
-    path = ExpandEnvVarSubstitutions( path, nullptr );
+    path = ExpandEnvVarSubstitutions( path, board->GetProject() );
 
     wxFileName outputDir = wxFileName::DirName( path );
     wxString   boardFilename = m_parent->GetBoard()->GetFileName();
