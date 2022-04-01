@@ -86,7 +86,7 @@ private:
 };
 
 
-namespace SIM_VALUE_PARSER
+namespace SIM_VALUE_GRAMMAR
 {
     using namespace tao::pegtl;
 
@@ -100,7 +100,6 @@ namespace SIM_VALUE_PARSER
     wxString allowedIntChars;
 
 
-    struct spaces : plus<space> {};
     struct digits : plus<tao::pegtl::digit> {}; // For some reason it fails on just "digit".
 
     struct sign : one<'+', '-'> {};
@@ -165,43 +164,9 @@ namespace SIM_VALUE_PARSER
     struct numberGrammar : must<opt<number<ValueType, Notation>>, eof> {};
 
 
-    template <typename Rule>
-    struct numberSelector : std::false_type {};
-
-    template <> struct numberSelector<significand<SIM_VALUE_BASE::TYPE::INT>> : std::true_type {};
-    template <> struct numberSelector<significand<SIM_VALUE_BASE::TYPE::FLOAT>> : std::true_type {};
-    template <> struct numberSelector<intPart> : std::true_type {};
-    template <> struct numberSelector<fracPart> : std::true_type {};
-    template <> struct numberSelector<exponent> : std::true_type {};
-    template <> struct numberSelector<metricSuffix<SIM_VALUE_BASE::TYPE::INT, NOTATION::SI>>
-        : std::true_type {};
-    template <> struct numberSelector<metricSuffix<SIM_VALUE_BASE::TYPE::INT, NOTATION::SPICE>>
-        : std::true_type {};
-    template <> struct numberSelector<metricSuffix<SIM_VALUE_BASE::TYPE::FLOAT, NOTATION::SI>>
-        : std::true_type {};
-    template <> struct numberSelector<metricSuffix<SIM_VALUE_BASE::TYPE::FLOAT, NOTATION::SPICE>>
-        : std::true_type {};
-
-    struct PARSE_RESULT
-    {
-        bool isEmpty = true;
-        std::string significand;
-        OPT<long> intPart;
-        OPT<long> fracPart;
-        OPT<long> exponent;
-        OPT<long> metricSuffixExponent;
-    };
-
     bool IsValid( const wxString& aString,
                   SIM_VALUE_BASE::TYPE aValueType = SIM_VALUE_BASE::TYPE::FLOAT,
                   NOTATION aNotation = NOTATION::SI );
-    PARSE_RESULT Parse( const wxString& aString,
-                        SIM_VALUE_BASE::TYPE aValueType = SIM_VALUE_BASE::TYPE::FLOAT,
-                        NOTATION aNotation = NOTATION::SI );
-
-    long MetricSuffixToExponent( std::string aMetricSuffix, NOTATION aNotation = NOTATION::SI );
-    wxString ExponentToMetricSuffix( double aExponent, long& aReductionExponent,
-                                     NOTATION aNotation = NOTATION::SI );
 }
 
 #endif // SIM_VALUE_H

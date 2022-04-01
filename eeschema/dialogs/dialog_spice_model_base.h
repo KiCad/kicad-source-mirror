@@ -12,19 +12,22 @@
 class WX_GRID;
 
 #include <wx/string.h>
-#include <wx/stattext.h>
+#include <wx/radiobut.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/button.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/button.h>
+#include <wx/stattext.h>
+#include <wx/combobox.h>
+#include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
-#include <wx/checkbox.h>
 #include <wx/choice.h>
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/manager.h>
@@ -49,12 +52,13 @@ class DIALOG_SPICE_MODEL_BASE : public wxDialog
 	protected:
 		wxNotebook* m_notebook;
 		wxPanel* m_modelPanel;
-		wxStaticText* m_staticText122;
-		wxTextCtrl* m_modelName;
-		wxButton* m_browseButton;
-		wxStaticText* m_staticText124;
-		wxStaticText* m_staticText125;
-		wxCheckBox* m_checkBox2;
+		wxRadioButton* m_useInstanceModelRadioButton;
+		wxRadioButton* m_useLibraryModelRadioButton;
+		wxTextCtrl* m_libraryFilenameInput;
+		wxBitmapButton* m_browseButton;
+		wxStaticText* m_modelNameLabel;
+		wxComboBox* m_modelNameCombobox;
+		wxCheckBox* m_overrideCheckbox;
 		wxNotebook* m_notebook4;
 		wxPanel* m_parametersPanel;
 		wxStaticText* m_staticText127;
@@ -74,9 +78,19 @@ class DIALOG_SPICE_MODEL_BASE : public wxDialog
 		wxButton* m_sdbSizer1Cancel;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void onRadioButton( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onLibraryFilenameInputUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onBrowseButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onBrowseButtonUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onModelNameCombobox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onModelNameComboboxUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onOverrideCheckbox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onOverrideCheckboxUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onDeviceTypeChoice( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onDeviceTypeChoiceUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onTypeChoice( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onPropertyChanged( wxPropertyGridEvent& event ) { event.Skip(); }
+		virtual void onTypeChoiceUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onParamGridChanged( wxPropertyGridEvent& event ) { event.Skip(); }
 		virtual void onPinAssignmentsGridCellChange( wxGridEvent& event ) { event.Skip(); }
 		virtual void onPinAssignmentsGridSize( wxSizeEvent& event ) { event.Skip(); }
 

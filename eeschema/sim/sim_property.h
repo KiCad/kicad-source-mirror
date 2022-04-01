@@ -25,14 +25,14 @@
 #ifndef SIM_PROPERTY_H
 #define SIM_PROPERTY_H
 
-#include <sim/sim_value.h>
+#include <sim/sim_model.h>
 #include <wx/propgrid/props.h>
 
 
 class SIM_VALIDATOR : public wxValidator
 {
 public:
-    SIM_VALIDATOR( SIM_VALUE_BASE::TYPE aValueType, SIM_VALUE_PARSER::NOTATION aNotation );
+    SIM_VALIDATOR( SIM_VALUE_BASE::TYPE aValueType, SIM_VALUE_GRAMMAR::NOTATION aNotation );
     SIM_VALIDATOR( const SIM_VALIDATOR& aValidator ) = default;
 
     wxObject* Clone() const override;
@@ -51,7 +51,7 @@ private:
     void onMouse( wxMouseEvent& aEvent );
 
     SIM_VALUE_BASE::TYPE       m_valueType;
-    SIM_VALUE_PARSER::NOTATION m_notation;
+    SIM_VALUE_GRAMMAR::NOTATION m_notation;
     wxString                   m_prevText;
     long                       m_prevInsertionPoint;
     
@@ -62,19 +62,28 @@ private:
 class SIM_PROPERTY : public wxStringProperty
 {
 public:
-    SIM_PROPERTY( const wxString& aLabel, const wxString& aName, SIM_VALUE_BASE& aValue,
+    // We pass shared_ptrs because we need to make sure they are destroyed only after the last time
+    // SIM_PROPERTY uses them.
+    SIM_PROPERTY( const wxString& aLabel, const wxString& aName,
+                  std::shared_ptr<SIM_LIBRARY> aLibrary,
+                  std::shared_ptr<SIM_MODEL> aModel,
+                  int aParamIndex,
                   SIM_VALUE_BASE::TYPE aValueType = SIM_VALUE_BASE::TYPE::FLOAT,
-                  SIM_VALUE_PARSER::NOTATION aNotation = SIM_VALUE_PARSER::NOTATION::SI );
+                  SIM_VALUE_GRAMMAR::NOTATION aNotation = SIM_VALUE_GRAMMAR::NOTATION::SI );
 
     wxValidator* DoGetValidator() const override;
 
     bool StringToValue( wxVariant& aVariant, const wxString& aText, int aArgFlags = 0 )
         const override;
 
+    const SIM_MODEL::PARAM& GetParam() const { return m_model->GetParam( m_paramIndex ); }
+
 protected:
-    SIM_VALUE_BASE::TYPE       m_valueType;
-    SIM_VALUE_PARSER::NOTATION m_notation;
-    SIM_VALUE_BASE&            m_value;
+    SIM_VALUE_BASE::TYPE         m_valueType;
+    SIM_VALUE_GRAMMAR::NOTATION  m_notation;
+    std::shared_ptr<SIM_LIBRARY> m_library;
+    std::shared_ptr<SIM_MODEL>   m_model;
+    int                          m_paramIndex;
 };
 
 #endif // SIM_PROPERTY_H

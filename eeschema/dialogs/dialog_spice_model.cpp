@@ -24,10 +24,12 @@
 
 #include <dialog_spice_model.h>
 #include <sim/sim_property.h>
+#include <sim/sim_library_spice.h>
 #include <widgets/wx_grid.h>
 #include <kiplatform/ui.h>
 #include <confirm.h>
 #include <locale_io.h>
+#include <wx/filedlg.h>
 
 using TYPE = SIM_VALUE_BASE::TYPE;
 using CATEGORY = SIM_MODEL::PARAM::CATEGORY;
@@ -42,26 +44,18 @@ DIALOG_SPICE_MODEL<T>::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbo
     : DIALOG_SPICE_MODEL_BASE( aParent ),
       m_symbol( aSymbol ),
       m_fields( aFields ),
+      m_library( std::make_shared<SIM_LIBRARY_SPICE>() ),
+      m_prevModel( nullptr ),
       m_firstCategory( nullptr )
 {
     try
     {
-        SIM_MODEL::TYPE typeFromFields = SIM_MODEL::ReadTypeFromFields( aFields );
-
         for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
         {
-            if( type == typeFromFields )
-            {
-                m_models.push_back( SIM_MODEL::Create( type, m_symbol.GetAllPins().size(),
-                                                       &aFields ) );
-                m_curModelType = type;
-            }
-            else
-                m_models.push_back( SIM_MODEL::Create( type, m_symbol.GetAllPins().size() ) );
+            m_models.push_back( SIM_MODEL::Create( type, m_symbol.GetAllPins().size() ) );
 
             SIM_MODEL::DEVICE_TYPE deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
-
-            // By default choose the first model type of each device type.
+            
             if( !m_curModelTypeOfDeviceType.count( deviceType ) )
                 m_curModelTypeOfDeviceType[deviceType] = type;
         }
@@ -115,29 +109,39 @@ DIALOG_SPICE_MODEL<T>::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbo
 
 
 template <typename T>
-bool DIALOG_SPICE_MODEL<T>::TransferDataFromWindow()
-{
-    if( !DIALOG_SPICE_MODEL_BASE::TransferDataFromWindow() )
-        return false;
-
-    getCurModel().WriteFields( m_fields );
-
-    return true;
-}
-
-
-template <typename T>
 bool DIALOG_SPICE_MODEL<T>::TransferDataToWindow()
 {
-    try
+    wxString libraryFilename = SIM_MODEL::GetFieldValue( &m_fields, LIBRARY_FIELD );
+
+    if( !libraryFilename.IsEmpty() )
     {
-        m_models.at( static_cast<int>( SIM_MODEL::ReadTypeFromFields( m_fields ) ) )
-            = SIM_MODEL::Create( m_symbol.GetAllPins().size(), m_fields );
+        // The model is sourced from a library, optionally with instance overrides.
+        loadLibrary( libraryFilename );
+
+        // Must be set before curModel() is used since the latter checks the combobox value.
+        m_modelNameCombobox->SetStringSelection( SIM_MODEL::GetFieldValue( &m_fields, NAME_FIELD ) );
+
+        curModel().ReadDataFields( m_symbol.GetAllPins().size(), &m_fields );
+
+        m_overrideCheckbox->SetValue( curModel().HasNonPrincipalOverrides() );
     }
-    catch( KI_PARAM_ERROR& e )
+    else
     {
-        DisplayErrorMessage( this, e.What() );
-        return DIALOG_SPICE_MODEL_BASE::TransferDataToWindow();
+        // The model is sourced from the instance.
+        SIM_MODEL::TYPE type = SIM_MODEL::ReadTypeFromFields( m_fields );
+
+        try
+        {
+            m_models.at( static_cast<int>( SIM_MODEL::ReadTypeFromFields( m_fields ) ) )
+                = SIM_MODEL::Create( m_symbol.GetAllPins().size(), m_fields );
+        }
+        catch( KI_PARAM_ERROR& e )
+        {
+            DisplayErrorMessage( this, e.What() );
+            return DIALOG_SPICE_MODEL_BASE::TransferDataToWindow();
+        }
+
+        m_curModelType = type;
     }
 
     updateWidgets();
@@ -147,93 +151,144 @@ bool DIALOG_SPICE_MODEL<T>::TransferDataToWindow()
 
 
 template <typename T>
+bool DIALOG_SPICE_MODEL<T>::TransferDataFromWindow()
+{
+    if( !DIALOG_SPICE_MODEL_BASE::TransferDataFromWindow() )
+        return false;
+
+    if( m_useLibraryModelRadioButton->GetValue() )
+    {
+        SIM_MODEL::SetFieldValue( m_fields, NAME_FIELD, m_modelNameCombobox->GetValue() );
+        SIM_MODEL::SetFieldValue( m_fields, LIBRARY_FIELD, m_library->GetFilename() );
+    }
+
+    curModel().WriteFields( m_fields );
+
+    return true;
+}
+
+
+template <typename T>
 void DIALOG_SPICE_MODEL<T>::updateWidgets()
 {
     updateModelParamsTab();
     updateModelCodeTab();
     updatePinAssignmentsTab();
+
+    m_prevModel = &curModel();
 }
 
 
 template <typename T>
 void DIALOG_SPICE_MODEL<T>::updateModelParamsTab()
 {
-    SIM_MODEL::DEVICE_TYPE deviceType = SIM_MODEL::TypeInfo( m_curModelType ).deviceType;
-
-    m_deviceTypeChoice->SetSelection( static_cast<int>( deviceType ) );
-    
-    m_typeChoice->Clear();
-
-    for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
+    if( &curModel() != m_prevModel )
     {
-        if( SIM_MODEL::TypeInfo( type ).deviceType == deviceType )
+        SIM_MODEL::DEVICE_TYPE deviceType = SIM_MODEL::TypeInfo( curModel().GetType() ).deviceType;
+        m_deviceTypeChoice->SetSelection( static_cast<int>( deviceType ) );
+        
+        m_typeChoice->Clear();
+
+        for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
         {
-            wxString description = SIM_MODEL::TypeInfo( type ).description;
+            if( SIM_MODEL::TypeInfo( type ).deviceType == deviceType )
+            {
+                wxString description = SIM_MODEL::TypeInfo( type ).description;
 
-            if( !description.IsEmpty() )
-                m_typeChoice->Append( description );
+                if( !description.IsEmpty() )
+                    m_typeChoice->Append( description );
 
-            if( type == m_curModelType )
-                m_typeChoice->SetSelection( m_typeChoice->GetCount() - 1 );
+                if( type == curModel().GetType() )
+                    m_typeChoice->SetSelection( m_typeChoice->GetCount() - 1 );
+            }
         }
+
+
+        // This wxPropertyGridManager column and header stuff has to be here because it segfaults in
+        // the constructor.
+
+        m_paramGridMgr->SetColumnCount( static_cast<int>( PARAM_COLUMN::END_ ) );
+
+        m_paramGridMgr->SetColumnTitle( static_cast<int>( PARAM_COLUMN::UNIT ), "Unit" );
+        m_paramGridMgr->SetColumnTitle( static_cast<int>( PARAM_COLUMN::DEFAULT ), "Default" );
+        m_paramGridMgr->SetColumnTitle( static_cast<int>( PARAM_COLUMN::TYPE ), "Type" );
+
+        m_paramGridMgr->ShowHeader();
+
+
+        m_paramGrid->Clear();
+
+        m_firstCategory = m_paramGrid->Append( new wxPropertyCategory( "DC" ) );
+        m_paramGrid->HideProperty( "DC" );
+
+        m_paramGrid->Append( new wxPropertyCategory( "Temperature" ) );
+        m_paramGrid->HideProperty( "Temperature" );
+
+        m_paramGrid->Append( new wxPropertyCategory( "Noise" ) );
+        m_paramGrid->HideProperty( "Noise" );
+
+        m_paramGrid->Append( new wxPropertyCategory( "Distributed Quantities" ) );
+        m_paramGrid->HideProperty( "Distributed Quantities" );
+
+        m_paramGrid->Append( new wxPropertyCategory( "Geometry" ) );
+        m_paramGrid->HideProperty( "Geometry" );
+
+        m_paramGrid->Append( new wxPropertyCategory( "Limiting Values" ) );
+        m_paramGrid->HideProperty( "Limiting Values" );
+
+        m_paramGrid->Append( new wxPropertyCategory( "Advanced" ) );
+        m_paramGrid->HideProperty( "Advanced" );
+
+        m_paramGrid->Append( new wxPropertyCategory( "Flags" ) );
+        m_paramGrid->HideProperty( "Flags" );
+
+        for( int i = 0; i < curModel().GetParamCount(); ++i )
+            addParamPropertyIfRelevant( i );
+
+        m_paramGrid->CollapseAll();
     }
 
+    // Either enable all properties or disable all except the principal ones.
+    for( wxPropertyGridIterator it = m_paramGrid->GetIterator(); !it.AtEnd(); ++it )
+    {
+        SIM_PROPERTY* prop = dynamic_cast<SIM_PROPERTY*>( *it );
 
-    // This wxPropertyGridManager stuff has to be here because it segfaults in the constructor.
+        if( !prop ) // Not all properties are SIM_PROPERTY yet. TODO.
+            continue;
 
-    m_paramGridMgr->SetColumnCount( static_cast<int>( PARAM_COLUMN::END_ ) );
+        // Model values other than the currently edited value may have changed. Update them.
+        // This feature is called "autofill" and present only in certain models. Don't do it for
+        // models that don't have it for performance reasons.
+        if( curModel().HasAutofill() )
+            prop->SetValueFromString( prop->GetParam().value->ToString() );
 
-    m_paramGridMgr->SetColumnTitle( static_cast<int>( PARAM_COLUMN::UNIT ), "Unit" );
-    m_paramGridMgr->SetColumnTitle( static_cast<int>( PARAM_COLUMN::DEFAULT ), "Default" );
-    m_paramGridMgr->SetColumnTitle( static_cast<int>( PARAM_COLUMN::TYPE ), "Type" );
-
-    m_paramGridMgr->ShowHeader();
-
-
-    m_paramGrid->Clear();
-
-    m_firstCategory = m_paramGrid->Append( new wxPropertyCategory( "DC" ) );
-    m_paramGrid->HideProperty( "DC" );
-
-    m_paramGrid->Append( new wxPropertyCategory( "Temperature" ) );
-    m_paramGrid->HideProperty( "Temperature" );
-
-    m_paramGrid->Append( new wxPropertyCategory( "Noise" ) );
-    m_paramGrid->HideProperty( "Noise" );
-
-    m_paramGrid->Append( new wxPropertyCategory( "Distributed Quantities" ) );
-    m_paramGrid->HideProperty( "Distributed Quantities" );
-
-    m_paramGrid->Append( new wxPropertyCategory( "Geometry" ) );
-    m_paramGrid->HideProperty( "Geometry" );
-
-    m_paramGrid->Append( new wxPropertyCategory( "Limiting Values" ) );
-    m_paramGrid->HideProperty( "Limiting Values" );
-
-    m_paramGrid->Append( new wxPropertyCategory( "Advanced" ) );
-    m_paramGrid->HideProperty( "Advanced" );
-
-    m_paramGrid->Append( new wxPropertyCategory( "Flags" ) );
-    m_paramGrid->HideProperty( "Flags" );
-
-    for( const SIM_MODEL::PARAM& param : getCurModel().Params() )
-        addParamPropertyIfRelevant( param );
-
-    m_paramGrid->CollapseAll();
+        // Most of the values are disabled when the override checkbox is unchecked.
+        prop->Enable( m_useInstanceModelRadioButton->GetValue()
+            || prop->GetParam().info.category == CATEGORY::PRINCIPAL
+            || m_overrideCheckbox->GetValue() );
+    }
 }
 
 
 template <typename T>
 void DIALOG_SPICE_MODEL<T>::updateModelCodeTab()
 {
+    wxString modelName = m_modelNameCombobox->GetStringSelection();
+
+    if( m_useInstanceModelRadioButton->GetValue() || modelName.IsEmpty() )
+        modelName = m_fields.at( REFERENCE_FIELD ).GetText();
+
+    m_codePreview->SetText( curModel().GenerateSpicePreview( modelName ) );
 }
 
 
 template <typename T>
 void DIALOG_SPICE_MODEL<T>::updatePinAssignmentsTab()
 {
-    m_pinAssignmentsGrid->ClearRows();
+    if( &curModel() == m_prevModel )
+        return;
 
+    m_pinAssignmentsGrid->ClearRows();
     std::vector<SCH_PIN*> pinList = m_symbol.GetAllPins();
 
     m_pinAssignmentsGrid->AppendRows( static_cast<int>( pinList.size() ) );
@@ -254,9 +309,9 @@ void DIALOG_SPICE_MODEL<T>::updatePinAssignmentsTab()
                                             "Not Connected" );
     }
 
-    for( unsigned int i = 0; i < getCurModel().Pins().size(); ++i )
+    for( int i = 0; i < curModel().GetPinCount(); ++i )
     {
-        int symbolPinNumber = getCurModel().Pins().at( i ).symbolPinNumber;
+        int symbolPinNumber = curModel().GetPin( i ).symbolPinNumber;
 
         if( symbolPinNumber == SIM_MODEL::PIN::NOT_CONNECTED )
             continue;
@@ -282,9 +337,9 @@ void DIALOG_SPICE_MODEL<T>::updatePinAssignmentsGridEditors()
     wxString modelPinChoicesString = "";
     bool isFirst = true;
 
-    for( unsigned int i = 0; i < getCurModel().Pins().size(); ++i )
+    for( int i = 0; i < curModel().GetPinCount(); ++i )
     {
-        const SIM_MODEL::PIN& modelPin = getCurModel().Pins().at( i );
+        const SIM_MODEL::PIN& modelPin = curModel().GetPin( i );
         int modelPinNumber = static_cast<int>( i + 1 );
 
         if( modelPin.symbolPinNumber != SIM_MODEL::PIN::NOT_CONNECTED )
@@ -329,62 +384,78 @@ void DIALOG_SPICE_MODEL<T>::updatePinAssignmentsGridEditors()
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::addParamPropertyIfRelevant( const SIM_MODEL::PARAM& aParam )
+void DIALOG_SPICE_MODEL<T>::loadLibrary( const wxString& aFilePath )
 {
-    if( aParam.info.dir == SIM_MODEL::PARAM::DIR::OUT )
+    m_library->ReadFile( aFilePath );
+    m_libraryFilenameInput->SetValue( aFilePath );
+
+    m_libraryModels.clear();
+    for( const SIM_MODEL& baseModel : m_library->GetModels() )
+        m_libraryModels.push_back( SIM_MODEL::Create( baseModel ) );
+
+    m_modelNameCombobox->Clear();
+    for( const wxString& name : m_library->GetModelNames() )
+        m_modelNameCombobox->Append( name );
+
+    m_useLibraryModelRadioButton->SetValue( true );
+}
+
+
+template <typename T>
+void DIALOG_SPICE_MODEL<T>::addParamPropertyIfRelevant( int aParamIndex )
+{
+    if( curModel().GetParam( aParamIndex ).info.dir == SIM_MODEL::PARAM::DIR::OUT )
         return;
 
-    switch( aParam.info.category )
+    switch( curModel().GetParam( aParamIndex ).info.category )
     {
     case CATEGORY::DC:
         m_paramGrid->HideProperty( "DC", false );
-        m_paramGrid->AppendIn( "DC", newParamProperty( aParam ) );
+        m_paramGrid->AppendIn( "DC", newParamProperty( aParamIndex ) );
         break;
 
     case CATEGORY::CAPACITANCE:
         m_paramGrid->HideProperty( "Capacitance", false );
-        m_paramGrid->AppendIn( "Capacitance", newParamProperty( aParam ) );
+        m_paramGrid->AppendIn( "Capacitance", newParamProperty( aParamIndex ) );
         break;
 
     case CATEGORY::TEMPERATURE:
         m_paramGrid->HideProperty( "Temperature", false );
-        m_paramGrid->AppendIn( "Temperature", newParamProperty( aParam ) );
+        m_paramGrid->AppendIn( "Temperature", newParamProperty( aParamIndex ) );
         break;
 
     case CATEGORY::NOISE:
         m_paramGrid->HideProperty( "Noise", false );
-        m_paramGrid->AppendIn( "Noise", newParamProperty( aParam ) );
+        m_paramGrid->AppendIn( "Noise", newParamProperty( aParamIndex ) );
         break;
 
     case CATEGORY::DISTRIBUTED_QUANTITIES:
         m_paramGrid->HideProperty( "Distributed Quantities", false );
-        m_paramGrid->AppendIn( "Distributed Quantities", newParamProperty( aParam ) );
+        m_paramGrid->AppendIn( "Distributed Quantities", newParamProperty( aParamIndex ) );
         break;
 
     case CATEGORY::GEOMETRY:
         m_paramGrid->HideProperty( "Geometry", false );
-        m_paramGrid->AppendIn( "Geometry", newParamProperty( aParam ) );
+        m_paramGrid->AppendIn( "Geometry", newParamProperty( aParamIndex ) );
         break;
 
     case CATEGORY::LIMITING_VALUES:
         m_paramGrid->HideProperty( "Limiting Values", false );
-        m_paramGrid->AppendIn( "Limiting Values", newParamProperty( aParam ) );
+        m_paramGrid->AppendIn( "Limiting Values", newParamProperty( aParamIndex ) );
         break;
 
     case CATEGORY::ADVANCED:
         m_paramGrid->HideProperty( "Advanced", false );
-        m_paramGrid->AppendIn( "Advanced", newParamProperty( aParam ) );
+        m_paramGrid->AppendIn( "Advanced", newParamProperty( aParamIndex ) );
         break;
 
     case CATEGORY::FLAGS:
         m_paramGrid->HideProperty( "Flags", false );
-        m_paramGrid->AppendIn( "Flags", newParamProperty( aParam ) );
+        m_paramGrid->AppendIn( "Flags", newParamProperty( aParamIndex ) );
         break;
 
     default:
-        //m_paramGrid->AppendIn( nullptr, newParamProperty( aParam ) );
-        m_paramGrid->Insert( m_firstCategory, newParamProperty( aParam ) );
-        //m_paramGrid->Append( newParamProperty( aParam ) );
+        m_paramGrid->Insert( m_firstCategory, newParamProperty( aParamIndex ) );
         break;
 
     case CATEGORY::INITIAL_CONDITIONS:
@@ -394,46 +465,47 @@ void DIALOG_SPICE_MODEL<T>::addParamPropertyIfRelevant( const SIM_MODEL::PARAM& 
 }
 
 template <typename T>
-wxPGProperty* DIALOG_SPICE_MODEL<T>::newParamProperty( const SIM_MODEL::PARAM& aParam ) const
+wxPGProperty* DIALOG_SPICE_MODEL<T>::newParamProperty( int aParamIndex ) const
 {
+    const SIM_MODEL::PARAM& param = curModel().GetParam( aParamIndex );
     wxString paramDescription = wxString::Format( "%s (%s)",
-                                                  aParam.info.description,
-                                                  aParam.info.name );
+                                                  param.info.description,
+                                                  param.info.name );
     wxPGProperty* prop = nullptr;
 
-    switch( aParam.info.type )
+    switch( param.info.type )
     {
     case TYPE::INT:
-        prop = new SIM_PROPERTY( paramDescription,aParam.info.name, *aParam.value,
-                                 SIM_VALUE_BASE::TYPE::INT );
+        prop = new SIM_PROPERTY( paramDescription, param.info.name, m_library, curModelSharedPtr(),
+                                 aParamIndex, SIM_VALUE_BASE::TYPE::INT );
         break;
 
     case TYPE::FLOAT:
-        prop = new SIM_PROPERTY( paramDescription,aParam.info.name, *aParam.value,
-                                 SIM_VALUE_BASE::TYPE::FLOAT );
+        prop = new SIM_PROPERTY( paramDescription, param.info.name, m_library, curModelSharedPtr(),
+                                 aParamIndex, SIM_VALUE_BASE::TYPE::FLOAT );
         break;
 
     case TYPE::BOOL:
-        prop = new wxBoolProperty( paramDescription, aParam.info.name );
+        prop = new wxBoolProperty( paramDescription, param.info.name );
         prop->SetAttribute( wxPG_BOOL_USE_CHECKBOX, true );
         break;
 
     default:
-        prop = new wxStringProperty( paramDescription, aParam.info.name );
+        prop = new wxStringProperty( paramDescription, param.info.name );
         break;
     }
 
-    prop->SetAttribute( wxPG_ATTR_UNITS, aParam.info.unit );
+    prop->SetAttribute( wxPG_ATTR_UNITS, param.info.unit );
 
     // Legacy due to the way we extracted the parameters from Ngspice.
-    if( aParam.isOtherVariant )
-        prop->SetCell( 3, aParam.info.defaultValueOfOtherVariant );
+    if( param.isOtherVariant )
+        prop->SetCell( 3, param.info.defaultValueOfOtherVariant );
     else
-        prop->SetCell( 3, aParam.info.defaultValue );
+        prop->SetCell( 3, param.info.defaultValue );
 
     wxString typeStr;
 
-    switch( aParam.info.type )
+    switch( param.info.type )
     {
     case TYPE::BOOL:           typeStr = wxString( "Bool"           ); break;
     case TYPE::INT:            typeStr = wxString( "Int"            ); break;
@@ -448,14 +520,34 @@ wxPGProperty* DIALOG_SPICE_MODEL<T>::newParamProperty( const SIM_MODEL::PARAM& a
 
     prop->SetCell( static_cast<int>( PARAM_COLUMN::TYPE ), typeStr );
 
+    if( m_useLibraryModelRadioButton->GetValue()
+        && !m_overrideCheckbox->GetValue()
+        && param.info.category != SIM_MODEL::PARAM::CATEGORY::PRINCIPAL )
+    {
+        prop->Enable( false );
+    }
+
     return prop;
 }
 
 
 template <typename T>
-SIM_MODEL& DIALOG_SPICE_MODEL<T>::getCurModel() const
+SIM_MODEL& DIALOG_SPICE_MODEL<T>::curModel() const
 {
-    return *m_models.at( static_cast<int>( m_curModelType ) );
+    return *curModelSharedPtr();
+}
+
+
+template <typename T>
+std::shared_ptr<SIM_MODEL> DIALOG_SPICE_MODEL<T>::curModelSharedPtr() const
+{
+    if( m_useLibraryModelRadioButton->GetValue()
+        && m_modelNameCombobox->GetSelection() != wxNOT_FOUND )
+    {
+        return m_libraryModels.at( m_modelNameCombobox->GetSelection() );
+    }
+    else
+        return m_models.at( static_cast<int>( m_curModelType ) );
 }
 
 
@@ -480,7 +572,7 @@ wxString DIALOG_SPICE_MODEL<T>::getSymbolPinString( int symbolPinNumber ) const
 template <typename T>
 wxString DIALOG_SPICE_MODEL<T>::getModelPinString( int modelPinNumber ) const
 {
-    const wxString& pinName = getCurModel().Pins().at( modelPinNumber - 1 ).name;
+    const wxString& pinName = curModel().GetPin( modelPinNumber - 1 ).name;
 
     LOCALE_IO toggle;
 
@@ -506,6 +598,39 @@ int DIALOG_SPICE_MODEL<T>::getModelPinNumber( const wxString& aModelPinString ) 
     aModelPinString.Mid( 0, length ).ToCLong( &result );
 
     return static_cast<int>( result );
+}
+
+
+template <typename T>
+void DIALOG_SPICE_MODEL<T>::onRadioButton( wxCommandEvent& aEvent )
+{
+    updateWidgets();
+}
+
+
+template <typename T>
+void DIALOG_SPICE_MODEL<T>::onBrowseButtonClick( wxCommandEvent& aEvent )
+{
+    wxFileDialog dlg( this, _( "Browse Models" ) );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    loadLibrary( dlg.GetPath() );
+}
+
+
+template <typename T>
+void DIALOG_SPICE_MODEL<T>::onModelNameCombobox( wxCommandEvent& aEvent )
+{
+    updateWidgets();
+}
+
+
+template <typename T>
+void DIALOG_SPICE_MODEL<T>::onOverrideCheckbox( wxCommandEvent& aEvent )
+{
+    updateWidgets();
 }
 
 
@@ -544,6 +669,13 @@ void DIALOG_SPICE_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
 
 
 template <typename T>
+void DIALOG_SPICE_MODEL<T>::onParamGridChanged( wxPropertyGridEvent& aEvent )
+{
+    updateWidgets();
+}
+
+
+template <typename T>
 void DIALOG_SPICE_MODEL<T>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent )
 {
     int symbolPinNumber = aEvent.GetRow() + 1;
@@ -552,11 +684,10 @@ void DIALOG_SPICE_MODEL<T>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent 
             m_pinAssignmentsGrid->GetCellValue( aEvent.GetRow(), aEvent.GetCol() ) );
 
     if( oldModelPinNumber != SIM_MODEL::PIN::NOT_CONNECTED )
-        getCurModel().Pins().at( oldModelPinNumber - 1 ).symbolPinNumber =
-                SIM_MODEL::PIN::NOT_CONNECTED;
+        curModel().SetPinSymbolPinNumber( oldModelPinNumber - 1, SIM_MODEL::PIN::NOT_CONNECTED );
 
     if( modelPinNumber != SIM_MODEL::PIN::NOT_CONNECTED )
-        getCurModel().Pins().at( modelPinNumber - 1 ).symbolPinNumber = symbolPinNumber;
+        curModel().SetPinSymbolPinNumber( modelPinNumber - 1, symbolPinNumber );
 
     updatePinAssignmentsGridEditors();
 
@@ -574,6 +705,48 @@ void DIALOG_SPICE_MODEL<T>::onPinAssignmentsGridSize( wxSizeEvent& aEvent )
     m_pinAssignmentsGrid->SetColSize( static_cast<int>( PIN_COLUMN::SYMBOL ), gridWidth / 2 );
 
     aEvent.Skip();
+}
+
+
+template <typename T>
+void DIALOG_SPICE_MODEL<T>::onLibraryFilenameInputUpdate( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( m_useLibraryModelRadioButton->GetValue() );
+}
+
+
+template <typename T>
+void DIALOG_SPICE_MODEL<T>::onBrowseButtonUpdate( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( m_useLibraryModelRadioButton->GetValue() );
+}
+
+
+template <typename T>
+void DIALOG_SPICE_MODEL<T>::onModelNameComboboxUpdate( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( m_useLibraryModelRadioButton->GetValue() );
+}
+
+
+template <typename T>
+void DIALOG_SPICE_MODEL<T>::onOverrideCheckboxUpdate( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( m_useLibraryModelRadioButton->GetValue() );
+}
+
+
+template <typename T>
+void DIALOG_SPICE_MODEL<T>::onDeviceTypeChoiceUpdate( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( m_useInstanceModelRadioButton->GetValue() );
+}
+
+
+template <typename T>
+void DIALOG_SPICE_MODEL<T>::onTypeChoiceUpdate( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( m_useInstanceModelRadioButton->GetValue() );
 }
 
 

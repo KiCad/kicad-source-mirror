@@ -71,13 +71,56 @@
     }
 
 
+namespace SIM_VALUE_PARSER
+{
+    using namespace SIM_VALUE_GRAMMAR;
+
+    template <typename Rule>
+    struct numberSelector : std::false_type {};
+
+    template <> struct numberSelector<SIM_VALUE_GRAMMAR::significand<SIM_VALUE_BASE::TYPE::INT>>
+        : std::true_type {};
+    template <> struct numberSelector<SIM_VALUE_GRAMMAR::significand<SIM_VALUE_BASE::TYPE::FLOAT>>
+        : std::true_type {};
+    template <> struct numberSelector<intPart> : std::true_type {};
+    template <> struct numberSelector<fracPart> : std::true_type {};
+    template <> struct numberSelector<exponent> : std::true_type {};
+    template <> struct numberSelector<metricSuffix<SIM_VALUE_BASE::TYPE::INT, NOTATION::SI>>
+        : std::true_type {};
+    template <> struct numberSelector<metricSuffix<SIM_VALUE_BASE::TYPE::INT, NOTATION::SPICE>>
+        : std::true_type {};
+    template <> struct numberSelector<metricSuffix<SIM_VALUE_BASE::TYPE::FLOAT, NOTATION::SI>>
+        : std::true_type {};
+    template <> struct numberSelector<metricSuffix<SIM_VALUE_BASE::TYPE::FLOAT, NOTATION::SPICE>>
+        : std::true_type {};
+
+    struct PARSE_RESULT
+    {
+        bool isEmpty = true;
+        std::string significand;
+        OPT<long> intPart;
+        OPT<long> fracPart;
+        OPT<long> exponent;
+        OPT<long> metricSuffixExponent;
+    };
+
+    PARSE_RESULT Parse( const wxString& aString,
+                        SIM_VALUE_BASE::TYPE aValueType = SIM_VALUE_BASE::TYPE::FLOAT,
+                        NOTATION aNotation = NOTATION::SI );
+
+    long MetricSuffixToExponent( std::string aMetricSuffix, NOTATION aNotation = NOTATION::SI );
+    wxString ExponentToMetricSuffix( double aExponent, long& aReductionExponent,
+                                     NOTATION aNotation = NOTATION::SI );
+}
+
+
 template <SIM_VALUE_BASE::TYPE ValueType, SIM_VALUE_PARSER::NOTATION Notation>
 static inline void doIsValid( tao::pegtl::string_input<>& aIn )
 {
     tao::pegtl::parse<SIM_VALUE_PARSER::numberGrammar<ValueType, Notation>>( aIn );
 }
 
-bool SIM_VALUE_PARSER::IsValid( const wxString& aString,
+bool SIM_VALUE_GRAMMAR::IsValid( const wxString& aString,
                                 SIM_VALUE_BASE::TYPE aValueType,
                                 NOTATION aNotation )
 {
@@ -163,7 +206,9 @@ SIM_VALUE_PARSER::PARSE_RESULT SIM_VALUE_PARSER::Parse( const wxString& aString,
     try
     {
         for( const auto& node : root->children )
+        {
             CALL_INSTANCE( aValueType, aNotation, handleNodeForParse, *node, result );
+        }
     }
     catch( std::invalid_argument& e )
     {
@@ -482,14 +527,19 @@ wxString SIM_VALUE<long>::ToString() const
 
     if( m_value.has_value() )
     {
-        double exponent = std::log10( *m_value );
-        long reductionExponent = 0;
+        long value = *m_value;
+        long exponent = 0;
 
-        wxString metricSuffix = SIM_VALUE_PARSER::ExponentToMetricSuffix( exponent,
-                                                                          reductionExponent );
-        long reducedValue = *m_value / static_cast<long>( std::pow( 10, reductionExponent ) );
+        while( value % 1000 == 0 )
+        {
+            exponent += 3;
+            value /= 1000;
+        }
 
-        return wxString::Format( "%d%s", reducedValue, metricSuffix );
+        long dummy = 0;
+        wxString metricSuffix = SIM_VALUE_PARSER::ExponentToMetricSuffix(
+                static_cast<double>( exponent ), dummy );
+        return wxString::Format( "%d%s", value, metricSuffix );
     }
 
     return "";

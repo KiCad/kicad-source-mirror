@@ -22,16 +22,35 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SIM_MODEL_SUBCIRCUIT_H
-#define SIM_MODEL_SUBCIRCUIT_H
+#ifndef SIM_LIBRARY_H
+#define SIM_LIBRARY_H
 
 #include <sim/sim_model.h>
 
 
-class SIM_MODEL_SUBCIRCUIT : public SIM_MODEL
+class SIM_LIBRARY
 {
 public:
-    SIM_MODEL_SUBCIRCUIT( TYPE aType );
+    virtual ~SIM_LIBRARY() = default;
+    SIM_LIBRARY() = default;
+
+    virtual bool ReadFile( const wxString& aFilename ) = 0;
+    virtual void WriteFile( const wxString& aFilename ) = 0;
+
+    std::vector<std::reference_wrapper<SIM_MODEL>> GetModels();
+    const std::vector<wxString>& GetModelNames() { return m_modelNames; }
+
+    wxString GetFilename() const { return m_filename; }
+    wxString GetErrorMessage() const { return m_errorMessage; }
+    
+protected:
+    std::vector<std::unique_ptr<SIM_MODEL>> m_models;
+    std::vector<wxString> m_modelNames;
+
+    wxString m_filename;
+    wxString m_errorMessage;
 };
 
-#endif // SIM_MODEL_SUBCIRCUIT_H
+
+
+#endif // SIM_LIBRARY_H

@@ -148,6 +148,7 @@ LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary ) :
         catch( ... )
         {
             wxFAIL_MSG( "Failed to clone LIB_ITEM." );
+            return;
         }
     }
 

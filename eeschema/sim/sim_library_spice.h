@@ -22,16 +22,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SIM_MODEL_SUBCIRCUIT_H
-#define SIM_MODEL_SUBCIRCUIT_H
+#ifndef SIM_LIBRARY_SPICE_H
+#define SIM_LIBRARY_SPICE_H
 
-#include <sim/sim_model.h>
+#include <sim/sim_library.h>
 
 
-class SIM_MODEL_SUBCIRCUIT : public SIM_MODEL
+class SIM_LIBRARY_SPICE : public SIM_LIBRARY
 {
+    // We'll make SIM_LIBRARY have no subclasses probably.
+
 public:
-    SIM_MODEL_SUBCIRCUIT( TYPE aType );
+    bool ReadFile( const wxString& aFilename ) override;
+    void WriteFile( const wxString& aFilename ) override;
 };
 
-#endif // SIM_MODEL_SUBCIRCUIT_H
+#endif // SIM_LIBRARY_SPICE_H

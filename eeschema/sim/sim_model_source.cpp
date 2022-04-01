@@ -27,21 +27,38 @@
 using PARAM = SIM_MODEL::PARAM;
 
 
-template SIM_MODEL_SOURCE::SIM_MODEL_SOURCE( TYPE aType, int symbolPinCount,
-                                             const std::vector<void>* aFields );
-template SIM_MODEL_SOURCE::SIM_MODEL_SOURCE( TYPE aType, int symbolPinCount,
-                                             const std::vector<SCH_FIELD>* aFields );
-template SIM_MODEL_SOURCE::SIM_MODEL_SOURCE( TYPE aType, int symbolPinCount,
-                                             const std::vector<LIB_FIELD>* aFields );
-
-template <typename T>
-SIM_MODEL_SOURCE::SIM_MODEL_SOURCE( TYPE aType, int symbolPinCount, const std::vector<T>* aFields ) 
+SIM_MODEL_SOURCE::SIM_MODEL_SOURCE( TYPE aType )
     : SIM_MODEL( aType )
 {
     for( const PARAM::INFO& paramInfo : makeParams( aType ) )
-        Params().emplace_back( paramInfo );
+        AddParam( paramInfo );
+}
 
-    ReadDataFields( symbolPinCount, aFields );
+
+wxString SIM_MODEL_SOURCE::GenerateSpiceIncludeLine( const wxString& aLibraryFilename ) const
+{
+    return "";
+}
+
+
+wxString SIM_MODEL_SOURCE::GenerateSpiceModelLine( const wxString& aModelName ) const
+{
+    return "";
+}
+
+
+wxString SIM_MODEL_SOURCE::GenerateSpiceItemLine( const wxString& aRefName,
+                                                  const wxString& aModelName,
+                                                  const std::vector<wxString>& aPinNetNames ) const
+{
+    wxString argList = "";
+
+    for( int i = 0; i < GetParamCount(); ++i )
+        argList << GetParam( i ).value->ToString() << " ";
+
+    wxString model = wxString::Format( GetSpiceInfo().inlineTypeString + "( %s)", argList );
+
+    return SIM_MODEL::GenerateSpiceItemLine( aRefName, model, aPinNetNames );
 }
 
 
@@ -122,9 +139,31 @@ const std::vector<PARAM::INFO>& SIM_MODEL_SOURCE::makeParams( TYPE aType )
 }
 
 
-void SIM_MODEL_SOURCE::WriteCode( wxString& aCode )
+bool SIM_MODEL_SOURCE::SetParamValue( int aParamIndex, const wxString& aValue )
 {
-    // TODO
+    // Sources are special. All preceding parameter values must be filled. If they are not, fill
+    // them out automatically. If a value is nulled, delete everything after it.
+    if( aValue.IsEmpty() )
+    {
+        for( int i = aParamIndex; i < GetParamCount(); ++i )
+            SIM_MODEL::SetParamValue( i, "" );
+    }
+    else
+    {
+        for( int i = 0; i < aParamIndex; ++i )
+        {
+            if( GetParam( i ).value->ToString().IsEmpty() )
+                SIM_MODEL::SetParamValue( i, "0" );
+        }
+    }
+
+    return SIM_MODEL::SetParamValue( aParamIndex, aValue );
+}
+
+
+std::vector<wxString> SIM_MODEL_SOURCE::getPinNames() const
+{
+    return { "+", "-" };
 }
 
 

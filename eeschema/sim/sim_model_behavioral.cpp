@@ -23,18 +23,10 @@
  */
 
 #include <sim/sim_model_behavioral.h>
+#include <locale_io.h>
 
 
-template SIM_MODEL_BEHAVIORAL::SIM_MODEL_BEHAVIORAL( TYPE aType, int symbolPinCount,
-                                                     const std::vector<void>* aFields );
-template SIM_MODEL_BEHAVIORAL::SIM_MODEL_BEHAVIORAL( TYPE aType, int symbolPinCount,
-                                                     const std::vector<SCH_FIELD>* aFields );
-template SIM_MODEL_BEHAVIORAL::SIM_MODEL_BEHAVIORAL( TYPE aType, int symbolPinCount,
-                                                     const std::vector<LIB_FIELD>* aFields );
-
-template <typename T>
-SIM_MODEL_BEHAVIORAL::SIM_MODEL_BEHAVIORAL( TYPE aType, int symbolPinCount,
-                                            const std::vector<T>* aFields )
+SIM_MODEL_BEHAVIORAL::SIM_MODEL_BEHAVIORAL( TYPE aType )
     : SIM_MODEL( aType )
 {
     static PARAM::INFO resistor  = makeParamInfo( "r", "Expression for resistance",  "ohm" );
@@ -45,22 +37,62 @@ SIM_MODEL_BEHAVIORAL::SIM_MODEL_BEHAVIORAL( TYPE aType, int symbolPinCount,
 
     switch( aType )
     {
-    case TYPE::RESISTOR_BEHAVIORAL:  Params().emplace_back( resistor  ); break;
-    case TYPE::CAPACITOR_BEHAVIORAL: Params().emplace_back( capacitor ); break;
-    case TYPE::INDUCTOR_BEHAVIORAL:  Params().emplace_back( inductor  ); break;
-    case TYPE::VSOURCE_BEHAVIORAL:   Params().emplace_back( vsource   ); break;
-    case TYPE::ISOURCE_BEHAVIORAL:   Params().emplace_back( isource   ); break;
+    case TYPE::RESISTOR_BEHAVIORAL:  AddParam( resistor  ); break;
+    case TYPE::CAPACITOR_BEHAVIORAL: AddParam( capacitor ); break;
+    case TYPE::INDUCTOR_BEHAVIORAL:  AddParam( inductor  ); break;
+    case TYPE::VSOURCE_BEHAVIORAL:   AddParam( vsource   ); break;
+    case TYPE::ISOURCE_BEHAVIORAL:   AddParam( isource   ); break;
     default:
         wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_IDEAL" );
     }
-
-    ReadDataFields( symbolPinCount, aFields );
 }
 
 
-void SIM_MODEL_BEHAVIORAL::WriteCode( wxString& aCode )
+wxString SIM_MODEL_BEHAVIORAL::GenerateSpiceIncludeLine( const wxString& aLibraryFilename ) const
 {
-    // TODO
+    return "";
+}
+
+
+wxString SIM_MODEL_BEHAVIORAL::GenerateSpiceModelLine( const wxString& aModelName ) const
+{
+    return "";
+}
+
+
+wxString SIM_MODEL_BEHAVIORAL::GenerateSpiceItemLine( const wxString& aRefName,
+                                                      const wxString& aModelName,
+                                                      const std::vector<wxString>& aPinNetNames ) const
+{
+    LOCALE_IO toggle;
+
+    switch( GetType() )
+    {
+    case TYPE::RESISTOR_BEHAVIORAL:
+    case TYPE::CAPACITOR_BEHAVIORAL:
+    case TYPE::INDUCTOR_BEHAVIORAL:
+        return SIM_MODEL::GenerateSpiceItemLine( aRefName,
+                                                 GetParam( 0 ).value->ToString(),
+                                                 aPinNetNames );
+
+    case TYPE::VSOURCE_BEHAVIORAL:
+        return SIM_MODEL::GenerateSpiceItemLine( aRefName,
+                wxString::Format( "V=%s", GetParam( 0 ).value->ToString() ), aPinNetNames );
+
+    case TYPE::ISOURCE_BEHAVIORAL:
+        return SIM_MODEL::GenerateSpiceItemLine( aRefName,
+                wxString::Format( "I=%s", GetParam( 0 ).value->ToString() ), aPinNetNames );
+
+    default:
+        wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_BEHAVIORAL" );
+        return "";
+    }
+}
+
+
+std::vector<wxString> SIM_MODEL_BEHAVIORAL::getPinNames() const
+{
+    return { "+", "-" };
 }
 
 

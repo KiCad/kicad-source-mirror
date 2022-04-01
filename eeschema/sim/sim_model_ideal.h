@@ -31,13 +31,16 @@
 class SIM_MODEL_IDEAL : public SIM_MODEL
 {
 public:
-    template <typename T = void>
-    SIM_MODEL_IDEAL( TYPE aType, int symbolPinCount, const std::vector<T>* aFields = nullptr );
+    SIM_MODEL_IDEAL( TYPE aType );
 
-    void WriteCode( wxString& aCode ) override;
+    wxString GenerateSpiceIncludeLine( const wxString& aLibraryFilename ) const override;
+    wxString GenerateSpiceModelLine( const wxString& aModelName ) const override;
+    wxString GenerateSpiceItemLine( const wxString& aRefName,
+                                    const wxString& aModelName,
+                                    const std::vector<wxString>& aPinNetNames ) const override;
 
 private:
-    std::vector<wxString> getPinNames() override;
+    std::vector<wxString> getPinNames() const override;
 
     static PARAM::INFO makeParamInfo( wxString aName, wxString aDescription, wxString aUnit );
 };

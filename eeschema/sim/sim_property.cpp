@@ -38,7 +38,7 @@ wxEND_EVENT_TABLE()
 
 
 SIM_VALIDATOR::SIM_VALIDATOR( SIM_VALUE_BASE::TYPE aValueType,
-                              SIM_VALUE_PARSER::NOTATION aNotation )
+                              SIM_VALUE_GRAMMAR::NOTATION aNotation )
     : wxValidator(),
       m_valueType( aValueType ),
       m_notation( aNotation )
@@ -85,7 +85,7 @@ bool SIM_VALIDATOR::TransferFromWindow()
 
 bool SIM_VALIDATOR::isValid( const wxString& aString )
 {
-    return SIM_VALUE_PARSER::IsValid( aString, m_valueType, m_notation );
+    return SIM_VALUE_GRAMMAR::IsValid( aString, m_valueType, m_notation );
 }
 
 
@@ -151,14 +151,19 @@ void SIM_VALIDATOR::onMouse( wxMouseEvent& aEvent )
 
 
 SIM_PROPERTY::SIM_PROPERTY( const wxString& aLabel, const wxString& aName,
-                            SIM_VALUE_BASE& aValue,
+                            std::shared_ptr<SIM_LIBRARY> aLibrary,
+                            std::shared_ptr<SIM_MODEL> aModel,
+                            int aParamIndex,
                             SIM_VALUE_BASE::TYPE aValueType,
-                            SIM_VALUE_PARSER::NOTATION aNotation )
-    : wxStringProperty( aLabel, aName, aValue.ToString() ),
+                            SIM_VALUE_GRAMMAR::NOTATION aNotation )
+    : wxStringProperty( aLabel, aName ),
       m_valueType( aValueType ),
       m_notation( aNotation ),
-      m_value( aValue )
+      m_library( aLibrary ),
+      m_model( aModel ),
+      m_paramIndex( aParamIndex )
 {
+    SetValueFromString( GetParam().value->ToString() );
 }
 
 
@@ -172,7 +177,19 @@ bool SIM_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aText, in
 {
     try
     {
-        m_value.FromString( aText );
+        wxString paramValueStr = m_model->GetBaseParam( m_paramIndex ).value->ToString();
+
+        // TODO: Don't use string comparison.
+        if( m_model->GetBaseModel() && ( aText.IsEmpty() || aText == paramValueStr ) )
+        {
+            m_model->SetParamValue( m_paramIndex, "" ); // Nullify.
+            aVariant = paramValueStr; // Use the inherited value (if it exists) if null.
+        }
+        else
+        {
+            m_model->SetParamValue( m_paramIndex, aText );
+            aVariant = GetParam().value->ToString();
+        }
     }
     catch( KI_PARAM_ERROR& e )
     {
@@ -180,6 +197,5 @@ bool SIM_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aText, in
         return false;
     }
 
-    aVariant = m_value.ToString();
     return true;
 }

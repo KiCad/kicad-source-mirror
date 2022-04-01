@@ -31,12 +31,17 @@
 class SIM_MODEL_BEHAVIORAL : public SIM_MODEL
 {
 public:
-    template <typename T = void>
-    SIM_MODEL_BEHAVIORAL( TYPE aType, int symbolPinCount, const std::vector<T>* aFields = nullptr );
+    SIM_MODEL_BEHAVIORAL( TYPE aType );
 
-    void WriteCode( wxString& aCode ) override;
+    wxString GenerateSpiceIncludeLine( const wxString& aLibraryFilename ) const override;
+    wxString GenerateSpiceModelLine( const wxString& aModelName ) const override;
+    wxString GenerateSpiceItemLine( const wxString& aRefName,
+                                    const wxString& aModelName,
+                                    const std::vector<wxString>& aPinNetNames ) const override;
 
 private:
+    std::vector<wxString> getPinNames() const override;
+
     static PARAM::INFO makeParamInfo( wxString name, wxString description, wxString unit );
 };
 

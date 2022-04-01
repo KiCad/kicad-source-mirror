@@ -30,6 +30,7 @@
 #include <scintilla_tricks.h>
 
 #include <sim/sim_model.h>
+#include <sim/sim_library.h>
 #include <sch_symbol.h>
 
 // Some probable wxWidgets bugs encountered when writing this class:
@@ -41,43 +42,67 @@ template <typename T>
 class DIALOG_SPICE_MODEL : public DIALOG_SPICE_MODEL_BASE
 {
 public:
+    static constexpr auto LIBRARY_FIELD = "Model_Library";
+    static constexpr auto NAME_FIELD = "Model_Name";
+
     enum class PARAM_COLUMN : int { DESCRIPTION, VALUE, UNIT, DEFAULT, TYPE, END_ };
     enum class PIN_COLUMN : int { SYMBOL, MODEL };
 
     DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol, std::vector<T>& aSchFields );
 
 private:
-    bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
 
     void updateWidgets();
     void updateModelParamsTab();
     void updateModelCodeTab();
     void updatePinAssignmentsTab();
     void updatePinAssignmentsGridEditors();
-    
-    void addParamPropertyIfRelevant( const SIM_MODEL::PARAM& aParam );
-    wxPGProperty* newParamProperty( const SIM_MODEL::PARAM& aParam ) const;
 
-    SIM_MODEL& getCurModel() const;
+    void loadLibrary( const wxString& aFilePath );
+    
+    void addParamPropertyIfRelevant( int aParamIndex );
+    wxPGProperty* newParamProperty( int aParamIndex ) const;
+
+    SIM_MODEL& curModel() const;
+    std::shared_ptr<SIM_MODEL> curModelSharedPtr() const;
+
     wxString getSymbolPinString( int aSymbolPinNumber ) const;
     wxString getModelPinString( int aModelPinNumber ) const;
     int getModelPinNumber( const wxString& aModelPinString ) const;
 
+    void onRadioButton( wxCommandEvent& aEvent ) override;
+    void onBrowseButtonClick( wxCommandEvent& aEvent ) override;
+    void onModelNameCombobox( wxCommandEvent& aEvent ) override;
+    void onOverrideCheckbox( wxCommandEvent& aEvent ) override;
     void onDeviceTypeChoice( wxCommandEvent& aEvent ) override;
     void onTypeChoice( wxCommandEvent& aEvent ) override;
+    void onParamGridChanged( wxPropertyGridEvent& aEvent ) override;
     void onPinAssignmentsGridCellChange( wxGridEvent& aEvent ) override;
     void onPinAssignmentsGridSize( wxSizeEvent& aEvent ) override;
+
+    void onLibraryFilenameInputUpdate( wxUpdateUIEvent& aEvent ) override;
+    void onBrowseButtonUpdate( wxUpdateUIEvent& aEvent ) override;
+    void onModelNameComboboxUpdate( wxUpdateUIEvent& aEvent ) override;
+    void onOverrideCheckboxUpdate( wxUpdateUIEvent& aEvent ) override;
+    void onDeviceTypeChoiceUpdate( wxUpdateUIEvent& aEvent ) override;
+    void onTypeChoiceUpdate( wxUpdateUIEvent& aEvent ) override;
 
     virtual void onSelectionChange( wxPropertyGridEvent& aEvent );
     //void onPropertyChanged( wxPropertyGridEvent& aEvent ) override;
 
+
     SCH_SYMBOL& m_symbol;
     std::vector<T>& m_fields;
 
-    std::vector<std::unique_ptr<SIM_MODEL>> m_models;
+    std::vector<std::shared_ptr<SIM_MODEL>> m_models;
     std::map<SIM_MODEL::DEVICE_TYPE, SIM_MODEL::TYPE> m_curModelTypeOfDeviceType;
     SIM_MODEL::TYPE m_curModelType = SIM_MODEL::TYPE::NONE;
+
+    std::shared_ptr<SIM_LIBRARY> m_library;
+    std::vector<std::shared_ptr<SIM_MODEL>> m_libraryModels;
+    const SIM_MODEL* m_prevModel;
 
     wxPGProperty* m_firstCategory; // Used to add principal parameters to root (any better ideas?)
     std::unique_ptr<SCINTILLA_TRICKS> m_scintillaTricks;

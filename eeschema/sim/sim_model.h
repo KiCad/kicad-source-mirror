@@ -25,13 +25,38 @@
 #ifndef SIM_MODEL_H
 #define SIM_MODEL_H
 
+#include <sim/spice_grammar.h>
 #include <enum_vector.h>
 #include <sch_field.h>
 #include <lib_field.h>
-#include <sim/sim_value.h>
 #include <wx/string.h>
 #include <map>
 #include <stdexcept>
+
+class SIM_LIBRARY;
+
+
+namespace SIM_MODEL_GRAMMAR
+{
+    using namespace SPICE_GRAMMAR;
+
+
+    struct pinNumber : sor<digits, one<'X'>> {};
+    struct pinSequence : seq<opt<pinNumber,
+                                 star<sep,
+                                      pinNumber>>> {};
+
+    struct pinSequenceGrammar : must<opt<sep>,
+                                     pinSequence,
+                                     opt<sep>,
+                                     eof> {};
+
+    template <NOTATION Notation>
+    struct paramValuePairsGrammar : must<opt<sep>,
+                                         paramValuePairs<Notation>,
+                                         opt<sep>,
+                                         eof> {};
+}
 
 
 class SIM_MODEL
@@ -39,8 +64,7 @@ class SIM_MODEL
 public:
     static constexpr auto DEVICE_TYPE_FIELD = "Model_Device";
     static constexpr auto TYPE_FIELD = "Model_Type";
-    static constexpr auto FILE_FIELD = "Model_File";
-    static constexpr auto PIN_SEQUENCE_FIELD = "Model_Pin_Sequence";
+    static constexpr auto PINS_FIELD = "Model_Pins";
     static constexpr auto PARAMS_FIELD = "Model_Params";
 
 
@@ -238,6 +262,17 @@ public:
     };
 
 
+    struct SPICE_INFO
+    {
+        wxString itemType;
+        wxString typeString = "";
+        wxString inlineTypeString = "";
+        int level = 0;
+        bool hasExpression = false;
+        wxString version = "";
+    };
+
+
     struct PIN
     {
         static constexpr auto NOT_CONNECTED = 0;
@@ -278,41 +313,52 @@ public:
         {
             wxString name;
             unsigned int id = 0; // Legacy.
-            DIR dir;
+            DIR dir = DIR::INOUT;
             SIM_VALUE_BASE::TYPE type;
             FLAGS flags = {}; // Legacy
-            wxString unit;
-            CATEGORY category;
+            wxString unit = "";
+            CATEGORY category = CATEGORY::PRINCIPAL;
             wxString defaultValue = "";
             wxString defaultValueOfOtherVariant = ""; // Legacy.
-            wxString description;
+            wxString description = "";
         };
 
         std::unique_ptr<SIM_VALUE_BASE> value;
         const INFO& info;
         bool isOtherVariant = false; // Legacy.
         
-        PARAM( const INFO& aInfo ) :
-            value( SIM_VALUE_BASE::Create( aInfo.type ) ),
-            info( aInfo )
+        PARAM( const INFO& aInfo, bool aIsOtherVariant = false )
+            : value( SIM_VALUE_BASE::Create( aInfo.type ) ),
+              info( aInfo ),
+              isOtherVariant( aIsOtherVariant )
         {}
     };
 
 
     static DEVICE_INFO DeviceTypeInfo( DEVICE_TYPE aDeviceType );
     static INFO TypeInfo( TYPE aType );
+    static SPICE_INFO SpiceInfo( TYPE aType );
+
+
+    static TYPE ReadTypeFromSpiceCode( const std::string& aSpiceCode );
 
     template <typename T>
     static TYPE ReadTypeFromFields( const std::vector<T>& aFields );
 
 
-    template <typename T>
-    static std::unique_ptr<SIM_MODEL> Create( int symbolPinCount, const std::vector<T>& aFields );
+    static std::unique_ptr<SIM_MODEL> Create( TYPE aType, int aSymbolPinCount = 0 );
+    static std::unique_ptr<SIM_MODEL> Create( const std::string& aSpiceCode );
+    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL& aBaseModel );
 
-    template <typename T = void>
-    static std::unique_ptr<SIM_MODEL> Create( TYPE aType,
-                                              int symbolPinCount,
-                                              const std::vector<T>* aFields = nullptr );
+    template <typename T>
+    static std::unique_ptr<SIM_MODEL> Create( int aSymbolPinCount, const std::vector<T>& aFields );
+
+    template <typename T>
+    static wxString GetFieldValue( const std::vector<T>* aFields, const wxString& aFieldName );
+
+    template <typename T>
+    static void SetFieldValue( std::vector<T>& aFields, const wxString& aFieldName,
+                               const wxString& aValue );
 
 
     // Move semantics.
@@ -321,17 +367,17 @@ public:
     SIM_MODEL() = delete;
     SIM_MODEL( const SIM_MODEL& aOther ) = delete;
     SIM_MODEL( SIM_MODEL&& aOther ) = default;
-    SIM_MODEL& operator=(SIM_MODEL&& aOther ) = default;
+    SIM_MODEL& operator=(SIM_MODEL&& aOther ) = delete;
 
-    SIM_MODEL( TYPE aType );
 
+    virtual bool ReadSpiceCode( const std::string& aSpiceCode );
 
     template <typename T>
-    void ReadDataFields( int symbolPinCount, const std::vector<T>* aFields );
+    void ReadDataFields( int aSymbolPinCount, const std::vector<T>* aFields );
 
     // C++ doesn't allow virtual template methods, so we do this:
-    virtual void ReadDataSchFields( int symbolPinCount, const std::vector<SCH_FIELD>* aFields );
-    virtual void ReadDataLibFields( int symbolPinCount, const std::vector<LIB_FIELD>* aFields );
+    virtual void ReadDataSchFields( int aSymbolPinCount, const std::vector<SCH_FIELD>* aFields );
+    virtual void ReadDataLibFields( int aSymbolPinCount, const std::vector<LIB_FIELD>* aFields );
 
 
     template <typename T>
@@ -341,46 +387,83 @@ public:
     virtual void WriteDataSchFields( std::vector<SCH_FIELD>& aFields );
     virtual void WriteDataLibFields( std::vector<LIB_FIELD>& aFields );
 
-    virtual void WriteCode( wxString& aCode ) = 0;
+
+    virtual wxString GenerateSpiceIncludeLine( const wxString& aLibraryFilename ) const;
+    virtual wxString GenerateSpiceModelLine( const wxString& aModelName ) const;
+
+    virtual SPICE_INFO GetSpiceInfo() const;
+
+    wxString GenerateSpiceItemLine( const wxString& aRefName, const wxString& aModelName ) const;
+    virtual wxString GenerateSpiceItemLine( const wxString& aRefName,
+                                            const wxString& aModelName,
+                                            const std::vector<wxString>& aPinNetNames ) const;
+
+    virtual wxString GenerateSpicePreview( const wxString& aModelName ) const;
 
 
-    TYPE GetType() { return m_type; }
+    void AddParam( const PARAM::INFO& aInfo, bool aIsOtherVariant = false );
 
-    virtual wxString GetFile() { return m_file; }
-    virtual void SetFile( const wxString& aFile ) { m_file = aFile; }
+    TYPE GetType() const { return m_type; }
 
-    std::vector<PIN>& Pins() { return m_pins; }
-    std::vector<PARAM>& Params() { return m_params; }
+    const SIM_MODEL* GetBaseModel() const { return m_baseModel; }
+    void SetBaseModel( const SIM_MODEL& aBaseModel ) { m_baseModel = &aBaseModel; }
 
+    int GetPinCount() const { return static_cast<int>( m_pins.size() ); }
+    const PIN& GetPin( int aIndex ) const { return m_pins.at( aIndex ); }
+
+    void SetPinSymbolPinNumber( int aIndex, int aSymbolPinNumber )
+    {
+        m_pins.at( aIndex ).symbolPinNumber = aSymbolPinNumber;
+    }
+
+
+    int GetParamCount() const { return static_cast<int>( m_params.size() ); }
+    const PARAM& GetParam( int aParamIndex ) const; // Return base parameter unless it's overridden.
+    const PARAM& GetUnderlyingParam( int aParamIndex ) const; // Return the actual parameter.
+    const PARAM& GetBaseParam( int aParamIndex ) const; // Always return base parameter if it exists.
+    virtual bool SetParamValue( int aParamIndex, const wxString& aValue );
+
+    bool HasOverrides() const;
+    bool HasNonPrincipalOverrides() const;
+
+    // Can modifying a model parameter also modify other parameters?
+    virtual bool HasAutofill() const { return false; }
+
+protected:
+    SIM_MODEL( TYPE aType );
 
 private:
-    TYPE m_type;
-    wxString m_file;
+    static std::unique_ptr<SIM_MODEL> create( TYPE aType );
+    static TYPE readTypeFromSpiceTypeString( const std::string& aTypeString );
+
+    wxString m_spiceCode;
+    const SIM_MODEL* m_baseModel;
+
+    const TYPE m_type;
     std::vector<PIN> m_pins;
     std::vector<PARAM> m_params;
 
 
     template <typename T>
-    void doReadDataFields( int symbolPinCount, const std::vector<T>* aFields );
+    void doReadDataFields( int aSymbolPinCount, const std::vector<T>* aFields );
 
     template <typename T>
     void doWriteFields( std::vector<T>& aFields );
 
 
-    template <typename T>
-    static wxString getFieldValue( const std::vector<T>* aFields, const wxString& aFieldName );
+    virtual std::vector<wxString> getPinNames() const { return {}; }
 
-    template <typename T>
-    static void setFieldValue( std::vector<T>& aFields, const wxString& aFieldName,
-                               const wxString& aValue );
+    wxString generateDeviceTypeField() const;
+    wxString generateTypeField() const;
 
-    virtual std::vector<wxString> getPinNames() { return {}; }
+    wxString generatePinsField() const;
+    void parsePinsField( int aSymbolPinCount, const wxString& aPinsField );
 
-    wxString generatePinSequence();
-    void parsePinSequence( int symbolPinCount, const wxString& aPinSequence );
+    
+    wxString generateParamsField( const wxString& aPairSeparator ) const;
+    void parseParamsField( const wxString& aParamsField );
 
-    virtual wxString generateParamValuePairs();
-    virtual void parseParamValuePairs( const wxString& aParamValuePairs );
+    virtual bool setParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue );
 };
 
 #endif // SIM_MODEL_H

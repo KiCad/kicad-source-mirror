@@ -31,10 +31,7 @@
 class SIM_MODEL_CODEMODEL : public SIM_MODEL
 {
 public:
-    template <typename T = void>
-    SIM_MODEL_CODEMODEL( TYPE aType, int symbolPinCount, const std::vector<T>* aFields = nullptr );
-
-    void WriteCode( wxString& aCode ) override;
+    SIM_MODEL_CODEMODEL( TYPE aType );
 };
 
 #endif // SIM_MODEL_CODEMODEL_H

@@ -27,16 +27,7 @@
 using PARAM = SIM_MODEL::PARAM;
 
 
-template SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType, int symbolPinCount,
-                                           const std::vector<void>* aFields );
-template SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType, int symbolPinCount,
-                                           const std::vector<SCH_FIELD>* aFields );
-template SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType, int symbolPinCount,
-                                           const std::vector<LIB_FIELD>* aFields );
-
-template <typename T>
-SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType, int symbolPinCount,
-                                  const std::vector<T>* aFields )
+SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType )
     : SIM_MODEL( aType )
 {
     static PARAM::INFO resistor  = makeParamInfo( "r", "Resistance",  "ohm" );
@@ -45,24 +36,37 @@ SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType, int symbolPinCount,
 
     switch( aType )
     {
-    case TYPE::RESISTOR_IDEAL:  Params().emplace_back( resistor  ); break;
-    case TYPE::CAPACITOR_IDEAL: Params().emplace_back( capacitor ); break;
-    case TYPE::INDUCTOR_IDEAL:  Params().emplace_back( inductor  ); break;
+    case TYPE::RESISTOR_IDEAL:  AddParam( resistor  ); break;
+    case TYPE::CAPACITOR_IDEAL: AddParam( capacitor ); break;
+    case TYPE::INDUCTOR_IDEAL:  AddParam( inductor  ); break;
     default:
         wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_IDEAL" );
     }
-
-    ReadDataFields( symbolPinCount, aFields );
 }
 
 
-void SIM_MODEL_IDEAL::WriteCode( wxString& aCode )
+wxString SIM_MODEL_IDEAL::GenerateSpiceIncludeLine( const wxString& aLibraryFilename ) const
 {
-    // TODO
+    return "";
 }
 
 
-std::vector<wxString> SIM_MODEL_IDEAL::getPinNames()
+wxString SIM_MODEL_IDEAL::GenerateSpiceModelLine( const wxString& aModelName ) const
+{
+    return "";
+}
+
+
+wxString SIM_MODEL_IDEAL::GenerateSpiceItemLine( const wxString& aRefName,
+                                                 const wxString& aModelName,
+                                                 const std::vector<wxString>& aPinNetNames ) const
+{
+    return SIM_MODEL::GenerateSpiceItemLine( aRefName, GetParam( 0 ).value->ToString(),
+                                             aPinNetNames );
+}
+
+
+std::vector<wxString> SIM_MODEL_IDEAL::getPinNames() const
 {
     return { "+", "-" };
 }

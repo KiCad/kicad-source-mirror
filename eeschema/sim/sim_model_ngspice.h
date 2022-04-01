@@ -32,15 +32,12 @@
 class SIM_MODEL_NGSPICE : public SIM_MODEL
 {
 public:
-    template <typename T = void>
-    SIM_MODEL_NGSPICE( TYPE aType, int symbolPinCount, const std::vector<T>* aFields = nullptr );
-
-    void WriteCode( wxString& aCode ) override;
+    SIM_MODEL_NGSPICE( TYPE aType );
 
 private:
-    std::vector<wxString> getPinNames() override;
+    std::vector<wxString> getPinNames() const override;
 
-    NGSPICE::MODEL_TYPE getModelType();
+    NGSPICE::MODEL_TYPE getModelType() const;
     bool getIsOtherVariant();
 };
 

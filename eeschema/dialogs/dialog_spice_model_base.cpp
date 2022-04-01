@@ -24,31 +24,38 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	bSizer9 = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizer4;
-	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( m_modelPanel, wxID_ANY, wxT("Properties") ), wxVERTICAL );
+	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( m_modelPanel, wxID_ANY, wxT("Source") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer15;
-	fgSizer15 = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgSizer15->AddGrowableCol( 1 );
+	fgSizer15 = new wxFlexGridSizer( 0, 4, 0, 0 );
+	fgSizer15->AddGrowableCol( 2 );
 	fgSizer15->SetFlexibleDirection( wxBOTH );
 	fgSizer15->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticText122 = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, wxT("Model Name:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText122->Wrap( -1 );
-	fgSizer15->Add( m_staticText122, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_useInstanceModelRadioButton = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, wxT("Instance"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	fgSizer15->Add( m_useInstanceModelRadioButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_modelName = new wxTextCtrl( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer15->Add( m_modelName, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	m_useLibraryModelRadioButton = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, wxT("Library:"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer15->Add( m_useLibraryModelRadioButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_browseButton = new wxButton( sbSizer4->GetStaticBox(), wxID_ANY, wxT("Browse..."), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer15->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_libraryFilenameInput = new wxTextCtrl( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer15->Add( m_libraryFilenameInput, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
-	m_staticText124 = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, wxT("Location:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText124->Wrap( -1 );
-	fgSizer15->Add( m_staticText124, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_browseButton = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	fgSizer15->Add( m_browseButton, 0, wxALL, 5 );
 
-	m_staticText125 = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, wxT("etc/kicad-sim/diodes.lib"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText125->Wrap( -1 );
-	fgSizer15->Add( m_staticText125, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	fgSizer15->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_modelNameLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, wxT("Model:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_modelNameLabel->Wrap( -1 );
+	fgSizer15->Add( m_modelNameLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+
+	m_modelNameCombobox = new wxComboBox( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	fgSizer15->Add( m_modelNameCombobox, 0, wxALL|wxEXPAND, 5 );
+
+	m_overrideCheckbox = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, wxT("Override"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer15->Add( m_overrideCheckbox, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	sbSizer4->Add( fgSizer15, 1, wxEXPAND, 5 );
@@ -58,9 +65,6 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	wxStaticBoxSizer* sbSizer5;
 	sbSizer5 = new wxStaticBoxSizer( new wxStaticBox( m_modelPanel, wxID_ANY, wxT("Model") ), wxVERTICAL );
-
-	m_checkBox2 = new wxCheckBox( sbSizer5->GetStaticBox(), wxID_ANY, wxT("Change parameters for this symbol"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer5->Add( m_checkBox2, 0, wxALL, 5 );
 
 	m_notebook4 = new wxNotebook( sbSizer5->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_parametersPanel = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -226,9 +230,20 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	this->Centre( wxBOTH );
 
 	// Connect Events
+	m_useInstanceModelRadioButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onRadioButton ), NULL, this );
+	m_useLibraryModelRadioButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onRadioButton ), NULL, this );
+	m_libraryFilenameInput->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SPICE_MODEL_BASE::onLibraryFilenameInputUpdate ), NULL, this );
+	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onBrowseButtonClick ), NULL, this );
+	m_browseButton->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SPICE_MODEL_BASE::onBrowseButtonUpdate ), NULL, this );
+	m_modelNameCombobox->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onModelNameCombobox ), NULL, this );
+	m_modelNameCombobox->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SPICE_MODEL_BASE::onModelNameComboboxUpdate ), NULL, this );
+	m_overrideCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onOverrideCheckbox ), NULL, this );
+	m_overrideCheckbox->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SPICE_MODEL_BASE::onOverrideCheckboxUpdate ), NULL, this );
 	m_deviceTypeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onDeviceTypeChoice ), NULL, this );
+	m_deviceTypeChoice->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SPICE_MODEL_BASE::onDeviceTypeChoiceUpdate ), NULL, this );
 	m_typeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onTypeChoice ), NULL, this );
-	m_paramGridMgr->Connect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( DIALOG_SPICE_MODEL_BASE::onPropertyChanged ), NULL, this );
+	m_typeChoice->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SPICE_MODEL_BASE::onTypeChoiceUpdate ), NULL, this );
+	m_paramGridMgr->Connect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( DIALOG_SPICE_MODEL_BASE::onParamGridChanged ), NULL, this );
 	m_pinAssignmentsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_SPICE_MODEL_BASE::onPinAssignmentsGridCellChange ), NULL, this );
 	m_pinAssignmentsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SPICE_MODEL_BASE::onPinAssignmentsGridSize ), NULL, this );
 }
@@ -236,9 +251,20 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 DIALOG_SPICE_MODEL_BASE::~DIALOG_SPICE_MODEL_BASE()
 {
 	// Disconnect Events
+	m_useInstanceModelRadioButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onRadioButton ), NULL, this );
+	m_useLibraryModelRadioButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onRadioButton ), NULL, this );
+	m_libraryFilenameInput->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SPICE_MODEL_BASE::onLibraryFilenameInputUpdate ), NULL, this );
+	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onBrowseButtonClick ), NULL, this );
+	m_browseButton->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SPICE_MODEL_BASE::onBrowseButtonUpdate ), NULL, this );
+	m_modelNameCombobox->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onModelNameCombobox ), NULL, this );
+	m_modelNameCombobox->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SPICE_MODEL_BASE::onModelNameComboboxUpdate ), NULL, this );
+	m_overrideCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onOverrideCheckbox ), NULL, this );
+	m_overrideCheckbox->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SPICE_MODEL_BASE::onOverrideCheckboxUpdate ), NULL, this );
 	m_deviceTypeChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onDeviceTypeChoice ), NULL, this );
+	m_deviceTypeChoice->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SPICE_MODEL_BASE::onDeviceTypeChoiceUpdate ), NULL, this );
 	m_typeChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onTypeChoice ), NULL, this );
-	m_paramGridMgr->Disconnect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( DIALOG_SPICE_MODEL_BASE::onPropertyChanged ), NULL, this );
+	m_typeChoice->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SPICE_MODEL_BASE::onTypeChoiceUpdate ), NULL, this );
+	m_paramGridMgr->Disconnect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( DIALOG_SPICE_MODEL_BASE::onParamGridChanged ), NULL, this );
 	m_pinAssignmentsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_SPICE_MODEL_BASE::onPinAssignmentsGridCellChange ), NULL, this );
 	m_pinAssignmentsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SPICE_MODEL_BASE::onPinAssignmentsGridSize ), NULL, this );
 

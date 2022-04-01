@@ -23,25 +23,49 @@
  */
 
 #include <sim/sim_model_rawspice.h>
+#include <pegtl.hpp>
+#include <pegtl/contrib/parse_tree.hpp>
 
 
-template SIM_MODEL_RAWSPICE::SIM_MODEL_RAWSPICE( TYPE aType, int symbolPinCount,
-                                                 const std::vector<void>* aFields );
-template SIM_MODEL_RAWSPICE::SIM_MODEL_RAWSPICE( TYPE aType, int symbolPinCount,
-                                                 const std::vector<SCH_FIELD>* aFields );
-template SIM_MODEL_RAWSPICE::SIM_MODEL_RAWSPICE( TYPE aType, int symbolPinCount,
-                                                 const std::vector<LIB_FIELD>* aFields );
-
-template <typename T>
-SIM_MODEL_RAWSPICE::SIM_MODEL_RAWSPICE( TYPE aType, int symbolPinCount, 
-                                        const std::vector<T>* aFields )
+SIM_MODEL_RAWSPICE::SIM_MODEL_RAWSPICE( TYPE aType )
     : SIM_MODEL( aType )
 {
-    ReadDataFields( symbolPinCount, aFields );
 }
 
 
-void SIM_MODEL_RAWSPICE::WriteCode( wxString& aCode )
+bool SIM_MODEL_RAWSPICE::setParamFromSpiceCode( const wxString& aParamName,
+                                                const wxString& aParamValue )
 {
-    // TODO
+    int i = 0;
+
+    for(; i < GetParamCount(); ++i )
+    {
+        if( GetParam( i ).info.name == aParamName.Lower() )
+            break;
+    }
+
+
+    if( i == GetParamCount() )
+    {
+        // No parameter with this name found. Create a new one.
+        std::unique_ptr<PARAM::INFO> paramInfo = std::make_unique<PARAM::INFO>();
+
+        paramInfo->name = aParamName.Lower();
+        paramInfo->type = SIM_VALUE_BASE::TYPE::STRING;
+        m_paramInfos.push_back( std::move( paramInfo ) );
+
+        AddParam( *m_paramInfos.back() );
+    }
+
+    try
+    {
+        GetParam( i ).value->FromString( wxString( aParamValue ) );
+    }
+    catch( KI_PARAM_ERROR& e )
+    {
+        // Shouldn't happen since it's TYPE::STRING.
+        return false;
+    }
+
+    return true;
 }

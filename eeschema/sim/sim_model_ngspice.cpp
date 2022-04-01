@@ -27,49 +27,26 @@
 using TYPE = SIM_MODEL::TYPE;
 
 
-template SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType, int symbolPinCount,
-                                               const std::vector<void>* aFields );
-template SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType, int symbolPinCount,
-                                               const std::vector<SCH_FIELD>* aFields );
-template SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType, int symbolPinCount,
-                                               const std::vector<LIB_FIELD>* aFields );
-
-template <typename T>
-SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType, int symbolPinCount,
-                                      const std::vector<T>* aFields )
+SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType )
     : SIM_MODEL( aType )
 {
     const NGSPICE::MODEL_INFO& modelInfo = NGSPICE::ModelInfo( getModelType() );
 
     for( const SIM_MODEL::PARAM::INFO& paramInfo : modelInfo.modelParams )
-    {
-        Params().emplace_back( paramInfo );
-        Params().back().isOtherVariant = getIsOtherVariant();
-    }
+        AddParam( paramInfo, getIsOtherVariant() );
 
     for( const SIM_MODEL::PARAM::INFO& paramInfo : modelInfo.instanceParams )
-    {
-        Params().emplace_back( paramInfo );
-        Params().back().isOtherVariant = getIsOtherVariant();
-    }
-
-    ReadDataFields( symbolPinCount, aFields );
+        AddParam( paramInfo, getIsOtherVariant() );
 }
 
 
-void SIM_MODEL_NGSPICE::WriteCode( wxString& aCode )
-{
-    // TODO
-}
-
-
-std::vector<wxString> SIM_MODEL_NGSPICE::getPinNames()
+std::vector<wxString> SIM_MODEL_NGSPICE::getPinNames() const
 {
     return NGSPICE::ModelInfo( getModelType() ).pinNames;
 }
 
 
-NGSPICE::MODEL_TYPE SIM_MODEL_NGSPICE::getModelType()
+NGSPICE::MODEL_TYPE SIM_MODEL_NGSPICE::getModelType() const
 {
     switch( GetType() )
     {
