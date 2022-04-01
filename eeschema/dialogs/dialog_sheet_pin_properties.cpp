@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <widgets/bitmap_button.h>
+#include <widgets/color_swatch.h>
+#include <widgets/font_choice.h>
+#include <settings/color_settings.h>
 #include <sch_edit_frame.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
@@ -29,16 +33,6 @@
 #include <dialog_sheet_pin_properties.h>
 #include <dialogs/html_message_box.h>
 #include <string_utils.h>
-
-
-static wxString sheetPinTypes[] =
-{
-    _( "Input" ),
-    _( "Output" ),
-    _( "Bidirectional" ),
-    _( "Tri-state" ),
-    _( "Passive" )
-};
 
 
 DIALOG_SHEET_PIN_PROPERTIES::DIALOG_SHEET_PIN_PROPERTIES( SCH_EDIT_FRAME* parent,
@@ -49,10 +43,21 @@ DIALOG_SHEET_PIN_PROPERTIES::DIALOG_SHEET_PIN_PROPERTIES( SCH_EDIT_FRAME* parent
         m_textSize( parent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits ),
         m_helpWindow( nullptr )
 {
-    for( const wxString& sheetPinType : sheetPinTypes )
-        m_choiceConnectionType->Append( sheetPinType );
+    COLOR_SETTINGS* colorSettings = m_frame->GetColorSettings();
+    COLOR4D         schematicBackground = colorSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 
-    m_choiceConnectionType->SetSelection( 0 );
+    m_separator1->SetIsSeparator();
+
+    m_bold->SetIsCheckButton();
+    m_bold->SetBitmap( KiBitmap( BITMAPS::text_bold ) );
+    m_italic->SetIsCheckButton();
+    m_italic->SetBitmap( KiBitmap( BITMAPS::text_italic ) );
+
+    m_separator2->SetIsSeparator();
+
+    m_textColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+    m_textColorSwatch->SetSwatchBackground( schematicBackground );
+
     SetInitialFocus( m_comboName );
     SetupStandardButtons();
 
@@ -100,10 +105,26 @@ bool DIALOG_SHEET_PIN_PROPERTIES::TransferDataToWindow()
 
     m_comboName->SetValue( UnescapeString( m_sheetPin->GetText() ) );
     m_comboName->SelectAll();
+    m_fontCtrl->SetFontSelection( m_sheetPin->GetFont() );
+
+    m_bold->Check( m_sheetPin->IsBold() );
+    m_italic->Check( m_sheetPin->IsItalic() );
+
     // Currently, eeschema uses only the text width as text size
     // (only the text width is saved in files), and expects text width = text height
     m_textSize.SetValue( m_sheetPin->GetTextWidth() );
-    m_choiceConnectionType->SetSelection( static_cast<int>( m_sheetPin->GetShape() ) );
+
+    m_textColorSwatch->SetSwatchColor( m_sheetPin->GetTextColor(), false );
+
+    switch( m_sheetPin->GetShape() )
+    {
+    case LABEL_FLAG_SHAPE::L_INPUT:       m_input->SetValue( true );         break;
+    case LABEL_FLAG_SHAPE::L_OUTPUT:      m_output->SetValue( true );        break;
+    case LABEL_FLAG_SHAPE::L_BIDI:        m_bidirectional->SetValue( true ); break;
+    case LABEL_FLAG_SHAPE::L_TRISTATE:    m_triState->SetValue( true );      break;
+    case LABEL_FLAG_SHAPE::L_UNSPECIFIED: m_passive->SetValue( true );       break;
+    default: wxFAIL_MSG( wxT( "Unknown sheet pin shape" ) );                 break;
+    }
 
     return true;
 }
@@ -118,12 +139,45 @@ bool DIALOG_SHEET_PIN_PROPERTIES::TransferDataFromWindow()
     }
 
     m_sheetPin->SetText( EscapeString( m_comboName->GetValue(), CTX_NETNAME ) );
+
+    if( m_fontCtrl->HaveFontSelection() )
+    {
+        m_sheetPin->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(),
+                                                           m_italic->IsChecked() ) );
+    }
+
+    if( m_bold->IsChecked() != m_sheetPin->IsBold() )
+    {
+        if( m_bold->IsChecked() )
+        {
+            m_sheetPin->SetBold( true );
+            m_sheetPin->SetTextThickness( GetPenSizeForBold( m_sheetPin->GetTextWidth() ) );
+        }
+        else
+        {
+            m_sheetPin->SetBold( false );
+            m_sheetPin->SetTextThickness( 0 ); // Use default pen width
+        }
+    }
+
+    m_sheetPin->SetItalic( m_italic->IsChecked() );
+
     // Currently, eeschema uses only the text width as text size,
     // and expects text width = text height
     m_sheetPin->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
 
-    auto shape = static_cast<LABEL_FLAG_SHAPE>( m_choiceConnectionType->GetCurrentSelection() );
-    m_sheetPin->SetShape( shape );
+    m_sheetPin->SetTextColor( m_textColorSwatch->GetSwatchColor() );
+
+    if( m_input->GetValue() )
+        m_sheetPin->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
+    else if( m_output->GetValue() )
+        m_sheetPin->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );
+    else if( m_bidirectional->GetValue() )
+        m_sheetPin->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
+    else if( m_triState->GetValue() )
+        m_sheetPin->SetShape( LABEL_FLAG_SHAPE::L_TRISTATE );
+    else if( m_passive->GetValue() )
+        m_sheetPin->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
 
     m_frame->UpdateItem( m_sheetPin, false, true );
     m_frame->GetCanvas()->Refresh();
@@ -151,11 +205,20 @@ void DIALOG_SHEET_PIN_PROPERTIES::onComboBox( wxCommandEvent& aEvent )
 
     for( SCH_ITEM* item : screen->Items().OfType( SCH_HIER_LABEL_T ) )
     {
-        auto hierLabelItem = static_cast<SCH_HIERLABEL*>( item );
+        SCH_HIERLABEL* hierLabelItem = static_cast<SCH_HIERLABEL*>( item );
 
         if( m_comboName->GetValue().CmpNoCase( hierLabelItem->GetText() ) == 0 )
         {
-            m_choiceConnectionType->SetSelection( static_cast<int>( hierLabelItem->GetShape() ) );
+            switch( hierLabelItem->GetShape() )
+            {
+            case LABEL_FLAG_SHAPE::L_INPUT:       m_input->SetValue( true );         break;
+            case LABEL_FLAG_SHAPE::L_OUTPUT:      m_output->SetValue( true );        break;
+            case LABEL_FLAG_SHAPE::L_BIDI:        m_bidirectional->SetValue( true ); break;
+            case LABEL_FLAG_SHAPE::L_TRISTATE:    m_triState->SetValue( true );      break;
+            case LABEL_FLAG_SHAPE::L_UNSPECIFIED: m_passive->SetValue( true );       break;
+            default: wxFAIL_MSG( wxT( "Unknown sheet pin shape" ) );                 break;
+            }
+
             break;
         }
     }
