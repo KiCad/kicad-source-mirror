@@ -136,12 +136,20 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
                     {
                     case PCB_SHAPE_T:
                     case PCB_FP_SHAPE_T:
-                        switch( static_cast<PCB_SHAPE*>( item )->GetShape() )
+                    {
+                        PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+
+                        switch( shape->GetShape() )
                         {
                         case SHAPE_T::SEGMENT:
                         case SHAPE_T::RECT:
                         case SHAPE_T::CIRCLE:
                         case SHAPE_T::ARC:
+                            if( shape->GetStart() == shape->GetEnd() )
+                                aCollector.Remove( item );
+
+                            break;
+
                         case SHAPE_T::POLY:
                             break;
 
@@ -150,7 +158,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
                         }
 
                         break;
-
+                    }
                     case PCB_TRACE_T:
                     case PCB_ARC_T:
                         break;
@@ -182,12 +190,15 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 
     bool isFootprint = m_frame->IsType( FRAME_FOOTPRINT_EDITOR );
 
-    if( FP_SHAPE* graphic = dynamic_cast<FP_SHAPE*>( selection.Front() ) )
-        parentFootprint = graphic->GetParentFootprint();
-    else if( FP_ZONE* zone = dynamic_cast<FP_ZONE*>( selection.Front() ) )
-        parentFootprint = static_cast<FOOTPRINT*>( zone->GetParent() );
-    else
-        wxFAIL_MSG( wxT( "Unimplemented footprint parent in CONVERT_TOOL::CreatePolys" ) );
+    if( isFootprint )
+    {
+        if( FP_SHAPE* graphic = dynamic_cast<FP_SHAPE*>( selection.Front() ) )
+            parentFootprint = graphic->GetParentFootprint();
+        else if( FP_ZONE* zone = dynamic_cast<FP_ZONE*>( selection.Front() ) )
+            parentFootprint = static_cast<FOOTPRINT*>( zone->GetParent() );
+        else
+            wxFAIL_MSG( wxT( "Unimplemented footprint parent in CONVERT_TOOL::CreatePolys" ) );
+    }
 
     BOARD_COMMIT commit( m_frame );
 
