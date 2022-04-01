@@ -256,10 +256,14 @@ int SYMBOL_EDITOR_CONTROL::DuplicateSymbol( const TOOL_EVENT& aEvent )
     {
         SYMBOL_EDIT_FRAME* editFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
         LIB_ID             sel = editFrame->GetTargetLibId();
+        // DuplicateSymbol() is called to duplicate a symbol, or to paste a previously
+        // saved symbol in clipboard
+        bool               isPasteAction = aEvent.IsAction( &EE_ACTIONS::pasteSymbol );
         wxString           msg;
 
-        if( !sel.IsValid() )
+        if( !sel.IsValid() && !isPasteAction )
         {
+            // When duplicating a symbol, a source symbol must exists.
             msg.Printf( _( "No symbol selected" ) );
             m_frame->ShowInfoBarError( msg );
             return 0;
@@ -274,7 +278,7 @@ int SYMBOL_EDITOR_CONTROL::DuplicateSymbol( const TOOL_EVENT& aEvent )
             return 0;
         }
 
-        editFrame->DuplicateSymbol( aEvent.IsAction( &EE_ACTIONS::pasteSymbol ) );
+        editFrame->DuplicateSymbol( isPasteAction );
     }
 
     return 0;
