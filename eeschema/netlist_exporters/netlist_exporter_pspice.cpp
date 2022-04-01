@@ -241,12 +241,12 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_FIELD aField, SCH_S
         wxString value = aSymbol->GetField( VALUE_FIELD )->GetShownText();
 
         // Is it a passive component?
-        if( aCtl & NET_ADJUST_PASSIVE_VALS && ( prim == 'C' || prim == 'L' || prim == 'R' ) )
+        if( ( aCtl & NET_ADJUST_PASSIVE_VALS ) && ( prim == 'C' || prim == 'L' || prim == 'R' ) )
         {
             // Regular expression to match common formats used for passive parts description
             // (e.g. 100k, 2k3, 1 uF)
             wxRegEx passiveVal(
-                    "^([0-9\\. ]+)([fFpPnNuUmMkKgGtT]|M(e|E)(g|G))?([fFhH]|ohm)?([-1-9 ]*)$" );
+                    wxT( "^([0-9\\. ]+)([fFpPnNuUmMkKgGtTμµ𝛍𝜇𝝁 ]|M(e|E)(g|G))?([fFhHΩΩ𝛀𝛺𝝮]|ohm)?([-1-9 ]*)$" ) );
 
             if( passiveVal.Matches( value ) )
             {
