@@ -28,6 +28,7 @@
 #include <dialog_shim.h>
 #include <dialogs/panel_common_settings.h>
 #include <dialogs/panel_mouse_settings.h>
+#include <dialogs/panel_data_collection.h>
 #include <eda_dde.h>
 #include <filehistory.h>
 #include <id.h>
@@ -993,6 +994,10 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
     book->AddPage( new PANEL_COMMON_SETTINGS( &dlg, book ), _( "Common" ) );
     book->AddPage( new PANEL_MOUSE_SETTINGS( &dlg, book ), _( "Mouse and Touchpad" ) );
     book->AddPage( hotkeysPanel, _( "Hotkeys" ) );
+
+#ifdef KICAD_USE_SENTRY
+    book->AddPage( new PANEL_DATA_COLLECTION( &dlg, book ), _( "Data Collection" ) );
+#endif
 
 #define CREATE_PANEL( key ) kiface->CreateWindow( book, key, &Kiway() )
 

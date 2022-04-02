@@ -38,6 +38,7 @@
 #include <wx/stdpaths.h>
 #include <wx/sysopt.h>
 #include <wx/filedlg.h>
+#include <wx/ffile.h>
 #include <wx/tooltip.h>
 
 #include <advanced_config.h>
@@ -59,6 +60,12 @@
 #include <trace_helpers.h>
 #include <paths.h>
 
+#ifdef KICAD_USE_SENTRY
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <sentry.h>
+#include <kicad_build_version.h>
+#endif
 
 /**
  * Current list of languages supported by KiCad.
@@ -127,6 +134,10 @@ PGM_BASE::~PGM_BASE()
 
 void PGM_BASE::Destroy()
 {
+#ifdef KICAD_USE_SENTRY
+    sentry_close();
+#endif
+
     // unlike a normal destructor, this is designed to be called more than once safely:
     delete m_locale;
     m_locale = nullptr;
@@ -204,8 +215,146 @@ const wxString PGM_BASE::AskUserForPreferredEditor( const wxString& aDefaultEdit
 }
 
 
+#ifdef KICAD_USE_SENTRY
+bool PGM_BASE::IsSentryOptedIn()
+{
+    return m_sentry_optin_fn.Exists();
+}
+
+
+void PGM_BASE::SetSentryOptIn( bool aOptIn )
+{
+    if( aOptIn )
+    {
+        if( !m_sentry_uid_fn.Exists() )
+        {
+            sentryCreateUid();
+        }
+
+        if( !m_sentry_optin_fn.Exists() )
+        {
+            wxFFile sentryInitFile( m_sentry_optin_fn.GetFullPath(), "w" );
+            sentryInitFile.Write( "" );
+            sentryInitFile.Close();
+        }
+    }
+    else
+    {
+        if( m_sentry_optin_fn.Exists() )
+        {
+            wxRemoveFile( m_sentry_optin_fn.GetFullPath() );
+            sentry_close();
+        }
+    }
+}
+
+
+wxString PGM_BASE::sentryCreateUid()
+{
+    boost::uuids::uuid uuid = boost::uuids::random_generator()();
+    wxString           userGuid = boost::uuids::to_string( uuid );
+
+    wxFFile sentryInitFile( m_sentry_uid_fn.GetFullPath(), "w" );
+    sentryInitFile.Write( userGuid );
+    sentryInitFile.Close();
+
+    return userGuid;
+}
+
+
+void PGM_BASE::ResetSentryId()
+{
+    sentryCreateUid();
+}
+
+
+void PGM_BASE::sentryInit()
+{
+    m_sentry_optin_fn = wxFileName( PATHS::GetUserCachePath(), "sentry-opt-in" );
+    m_sentry_uid_fn = wxFileName( PATHS::GetUserCachePath(), "sentry-uid" );
+
+    if( IsSentryOptedIn() )
+    {
+        wxString userGuid;
+
+        wxFFile sentryInitFile( m_sentry_uid_fn.GetFullPath() );
+        sentryInitFile.ReadAll( &userGuid );
+        sentryInitFile.Close();
+
+        if( userGuid.IsEmpty() || userGuid.length() != 36 )
+        {
+            userGuid = sentryCreateUid();
+        }
+
+        sentry_options_t* options = sentry_options_new();
+
+        sentry_options_set_dsn(
+                options,
+                "https://463925e689c34632b5172436ffb76de5@sentry-relay.kicad.org/6266565" );
+
+        wxFileName tmp;
+        tmp.AssignDir( PATHS::GetUserCachePath() );
+        tmp.AppendDir( "sentry" );
+
+        sentry_options_set_database_pathw( options, tmp.GetPathWithSep().wc_str() );
+        sentry_options_set_symbolize_stacktraces( options, true );
+        sentry_options_set_auto_session_tracking( options, false );
+
+#if !KICAD_IS_NIGHTLY
+        sentry_options_set_release( options, KICAD_SEMANTIC_VERSION );
+#else
+        sentry_options_set_release( options, KICAD_MAJOR_MINOR_VERSION );
+#endif
+
+        sentry_init( options );
+
+        sentry_value_t user = sentry_value_new_object();
+        sentry_value_set_by_key( user, "id", sentry_value_new_string( userGuid.c_str() ) );
+        sentry_set_user( user );
+
+        sentry_set_tag( "kicad.version", KICAD_VERSION_FULL );
+    }
+}
+
+
+void PGM_BASE::sentryPrompt()
+{
+    if( !m_settings_manager->GetCommonSettings()->m_DoNotShowAgain.data_collection_prompt )
+    {
+        wxMessageDialog optIn = wxMessageDialog(
+                nullptr,
+                _( "KiCad can anonymously report crashes and special event "
+                   "data to developers in order to aid identifying critical bugs "
+                   "across the user base more effectively and help profile "
+                   "functionality to guide improvements. \n"
+                   "If you choose to voluntarily participate, KiCad will automatically "
+                   "handle sending said reports when crashes or events occur. \n"
+                   "Your design files such as schematic or PCB are not shared in this process." ),
+                _( "Data collection opt in request" ), wxYES_NO | wxCENTRE );
+
+        int result = optIn.ShowModal();
+
+        if( result == wxID_YES )
+        {
+            SetSentryOptIn( true );
+            sentryInit();
+        }
+        else
+        {
+            SetSentryOptIn( false );
+        }
+
+        m_settings_manager->GetCommonSettings()->m_DoNotShowAgain.data_collection_prompt = true;
+    }
+}
+#endif
+
+
 bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit )
 {
+#ifdef KICAD_USE_SENTRY
+    sentryInit();
+#endif
     wxString pgm_name;
 
     /// Should never happen but boost unit_test isn't playing nicely in some cases
@@ -213,6 +362,10 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit )
         pgm_name = wxT( "kicad" );
     else
         pgm_name = wxFileName( App().argv[0] ).GetName().Lower();
+
+#ifdef KICAD_USE_SENTRY
+    sentry_set_tag( "kicad.app", pgm_name.c_str() );
+#endif
 
     wxInitAllImageHandlers();
 
@@ -284,6 +437,10 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit )
     WarnUserIfOperatingSystemUnsupported();
 
     loadCommonSettings();
+
+#ifdef KICAD_USE_SENTRY
+    sentryPrompt();
+#endif
 
     ReadPdfBrowserInfos();      // needs GetCommonSettings()
 

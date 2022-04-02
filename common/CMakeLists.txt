@@ -204,6 +204,12 @@ set( COMMON_DLG_SRCS
     dialogs/wx_html_report_panel_base.cpp
     )
 
+if( KICAD_USE_SENTRY )
+    list( APPEND COMMON_DLG_SRCS
+    dialogs/panel_data_collection.cpp
+    dialogs/panel_data_collection_base.cpp )
+endif()
+
 set( COMMON_WIDGET_SRCS
     widgets/app_progress_dialog.cpp
     widgets/bitmap_button.cpp
@@ -505,6 +511,11 @@ target_link_libraries( common
    	${HarfBuzz_LIBRARIES}
 	${Fontconfig_LIBRARIES}
     )
+
+if( KICAD_USE_SENTRY )
+    target_link_libraries( common
+        sentry )
+endif()
 
 target_include_directories( common
     PUBLIC

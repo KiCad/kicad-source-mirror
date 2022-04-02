@@ -318,6 +318,9 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "do_not_show_again.scaled_3d_models_warning",
             &m_DoNotShowAgain.scaled_3d_models_warning, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "do_not_show_again.data_collection_prompt",
+            &m_DoNotShowAgain.data_collection_prompt, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "session.remember_open_files",
             &m_Session.remember_open_files, false ) );
 

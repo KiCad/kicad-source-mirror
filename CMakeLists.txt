@@ -164,6 +164,10 @@ cmake_dependent_option( KICAD_WIN32_VERIFY_CODESIGN
     OFF "WIN32"
     OFF )
 
+option( KICAD_USE_SENTRY
+    "Build KiCad with support for sentry app metrics"
+    OFF )
+
 if( KICAD_USE_3DCONNEXION )
     if( WIN32 )
         add_definitions( -DKICAD_USE_3DCONNEXION )
@@ -941,6 +945,12 @@ if( APPLE )
             file( REMOVE_RECURSE ${KICAD_BIN}/${OSX_BUNDLE_MAIN} )
         " COMPONENT Runtime
         )
+endif()
+
+
+if( KICAD_USE_SENTRY )
+    add_subdirectory( thirdparty/sentry-native )
+    add_definitions( -DKICAD_USE_SENTRY )
 endif()
 
 #================================================

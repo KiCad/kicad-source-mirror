@@ -125,6 +125,7 @@ public:
         bool zone_fill_warning;
         bool env_var_overwrite_warning;
         bool scaled_3d_models_warning;
+        bool data_collection_prompt;
     };
 
     struct NETCLASS_PANEL
