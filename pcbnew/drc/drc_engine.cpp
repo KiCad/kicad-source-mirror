@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -895,10 +895,15 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 REPORT( wxString::Format( _( "Checking assertion \"%s\"." ),
                                           EscapeHTML( c->constraint.m_Test->GetExpression() ) ) )
 
-                if( c->constraint.m_Test->EvaluateFor( a, b, aLayer, aReporter ) )
+                if( c->constraint.m_Test->EvaluateFor( a, b, c->constraint.m_Type, aLayer,
+                                                       aReporter ) )
+                {
                     REPORT( _( "Assertion passed." ) )
+                }
                 else
+                {
                     REPORT( EscapeHTML( _( "--> Assertion failed. <--" ) ) )
+                }
             };
 
     auto processConstraint =
@@ -1125,7 +1130,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                                   EscapeHTML( c->condition->GetExpression() ) ) )
                     }
 
-                    if( c->condition->EvaluateFor( a, b, aLayer, aReporter ) )
+                    if( c->condition->EvaluateFor( a, b, c->constraint.m_Type, aLayer, aReporter ) )
                     {
                         if( aReporter )
                         {
@@ -1321,7 +1326,8 @@ void DRC_ENGINE::ProcessAssertions( const BOARD_ITEM* a,
                 REPORT( wxString::Format( _( "Checking rule assertion \"%s\"." ),
                                           EscapeHTML( c->constraint.m_Test->GetExpression() ) ) )
 
-                if( c->constraint.m_Test->EvaluateFor( a, nullptr, a->GetLayer(), aReporter ) )
+                if( c->constraint.m_Test->EvaluateFor( a, nullptr, c->constraint.m_Type,
+                                                       a->GetLayer(), aReporter ) )
                 {
                     REPORT( _( "Assertion passed." ) )
                 }
@@ -1354,7 +1360,8 @@ void DRC_ENGINE::ProcessAssertions( const BOARD_ITEM* a,
                     REPORT( wxString::Format( _( "Checking rule condition \"%s\"." ),
                                               EscapeHTML( c->condition->GetExpression() ) ) )
 
-                    if( c->condition->EvaluateFor( a, nullptr, a->GetLayer(), aReporter ) )
+                    if( c->condition->EvaluateFor( a, nullptr, c->constraint.m_Type,
+                                                   a->GetLayer(), aReporter ) )
                     {
                         REPORT( _( "Rule applied." ) )
                         testAssertion( c );

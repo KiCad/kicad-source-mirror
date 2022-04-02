@@ -784,20 +784,27 @@ static void isCoupledDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
     aCtx->Push( result );
 
     result->SetDeferredEval(
-            [a, b]() -> double
+            [a, b, context]() -> double
             {
                 NETINFO_ITEM* netinfo = a ? a->GetNet() : nullptr;
-                wxString      coupledNet;
-                wxString      dummy;
 
-                if( netinfo
-                        && DRC_ENGINE::MatchDpSuffix( netinfo->GetNetname(), coupledNet, dummy )
-                        && ( !b || b->GetNetname() == coupledNet ) )
+                if( !netinfo )
+                    return 0.0;
+
+                wxString coupledNet;
+                wxString dummy;
+
+                if( !DRC_ENGINE::MatchDpSuffix( netinfo->GetNetname(), coupledNet, dummy ) )
+                    return 0.0;
+
+                if( context->GetConstraint() == DRC_CONSTRAINT_T::LENGTH_CONSTRAINT
+                        || context->GetConstraint() == DRC_CONSTRAINT_T::SKEW_CONSTRAINT )
                 {
+                    // DRC engine evaluates these singly, so we won't have a B item
                     return 1.0;
                 }
 
-                return 0.0;
+                return b && b->GetNetname() == coupledNet;
             } );
 }
 
@@ -1227,12 +1234,12 @@ PCB_EXPR_EVALUATOR::~PCB_EXPR_EVALUATOR()
 bool PCB_EXPR_EVALUATOR::Evaluate( const wxString& aExpr )
 {
     PCB_EXPR_UCODE   ucode;
-    PCB_EXPR_CONTEXT preflightContext( F_Cu );
+    PCB_EXPR_CONTEXT preflightContext( NULL_CONSTRAINT, F_Cu );
 
     if( !m_compiler.Compile( aExpr.ToUTF8().data(), &ucode, &preflightContext ) )
         return false;
 
-    PCB_EXPR_CONTEXT evaluationContext( F_Cu );
+    PCB_EXPR_CONTEXT evaluationContext( NULL_CONSTRAINT, F_Cu );
     LIBEVAL::VALUE*  result = ucode.Run( &evaluationContext );
 
     if( result->GetType() == LIBEVAL::VT_NUMERIC )

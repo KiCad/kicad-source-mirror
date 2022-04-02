@@ -333,7 +333,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
             }
             else
             {
-                ent.from = ent.to = _("<unconstrained>");
+                ent.from = ent.to = _( "<unconstrained>" );
             }
 
             m_report.Add( ent );
