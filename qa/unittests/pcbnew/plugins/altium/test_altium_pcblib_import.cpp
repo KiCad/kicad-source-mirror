@@ -65,7 +65,7 @@ BOOST_FIXTURE_TEST_SUITE( AltiumPcbLibImport, ALTIUM_PCBLIB_IMPORT_FIXTURE )
 BOOST_AUTO_TEST_CASE( AltiumPcbLibImport )
 {
     std::vector<std::pair<wxString, wxString>> tests = {
-        { "TracksTest.PcbLib", "TracksTest.pretty" },
+        { "Tracks.PcbLib", "Tracks.pretty" },
         { "Espressif ESP32-WROOM-32.PcbLib", "Espressif ESP32-WROOM-32.pretty" }
     };
 

@@ -2193,7 +2193,8 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItem( const AARC6& aElem, const int aPrimiti
     if( aElem.is_polygonoutline || aElem.subpolyindex != ALTIUM_POLYGON_NONE )
         return;
 
-    if( aElem.is_keepout || IsAltiumLayerAPlane( aElem.layer ) )
+    if( aElem.is_keepout || aElem.layer == ALTIUM_LAYER::KEEP_OUT_LAYER
+        || IsAltiumLayerAPlane( aElem.layer ) )
     {
         // This is not the actual board item. We can use it to create the polygon for the region
         PCB_SHAPE shape( nullptr );
@@ -2234,7 +2235,8 @@ void ALTIUM_PCB::ConvertArcs6ToFootprintItem( FOOTPRINT* aFootprint, const AARC6
     if( aElem.is_polygonoutline || aElem.subpolyindex != ALTIUM_POLYGON_NONE )
         return;
 
-    if( aElem.is_keepout || IsAltiumLayerAPlane( aElem.layer ) )
+    if( aElem.is_keepout || aElem.layer == ALTIUM_LAYER::KEEP_OUT_LAYER
+        || IsAltiumLayerAPlane( aElem.layer ) )
     {
         // This is not the actual board item. We can use it to create the polygon for the region
         PCB_SHAPE shape( nullptr );
@@ -2893,7 +2895,8 @@ void ALTIUM_PCB::ConvertTracks6ToBoardItem( const ATRACK6& aElem, const int aPri
     if( aElem.is_polygonoutline || aElem.subpolyindex != ALTIUM_POLYGON_NONE )
         return;
 
-    if( aElem.is_keepout || IsAltiumLayerAPlane( aElem.layer ) )
+    if( aElem.is_keepout || aElem.layer == ALTIUM_LAYER::KEEP_OUT_LAYER
+        || IsAltiumLayerAPlane( aElem.layer ) )
     {
         // This is not the actual board item. We can use it to create the polygon for the region
         PCB_SHAPE shape( nullptr, SHAPE_T::SEGMENT );
@@ -2937,7 +2940,8 @@ void ALTIUM_PCB::ConvertTracks6ToFootprintItem( FOOTPRINT* aFootprint, const ATR
     if( aElem.is_polygonoutline || aElem.subpolyindex != ALTIUM_POLYGON_NONE )
         return;
 
-    if( aElem.is_keepout || IsAltiumLayerAPlane( aElem.layer ) )
+    if( aElem.is_keepout || aElem.layer == ALTIUM_LAYER::KEEP_OUT_LAYER
+        || IsAltiumLayerAPlane( aElem.layer ) )
     {
         // This is not the actual board item. We can use it to create the polygon for the region
         PCB_SHAPE shape( nullptr, SHAPE_T::SEGMENT );
@@ -3263,7 +3267,8 @@ void ALTIUM_PCB::ParseFills6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
 
 void ALTIUM_PCB::ConvertFills6ToBoardItem( const AFILL6& aElem )
 {
-    if( aElem.is_keepout || aElem.net != ALTIUM_NET_UNCONNECTED )
+    if( aElem.is_keepout || aElem.layer == ALTIUM_LAYER::KEEP_OUT_LAYER
+        || aElem.net != ALTIUM_NET_UNCONNECTED )
     {
         ConvertFills6ToBoardItemWithNet( aElem );
     }
@@ -3278,7 +3283,8 @@ void ALTIUM_PCB::ConvertFills6ToBoardItem( const AFILL6& aElem )
 void ALTIUM_PCB::ConvertFills6ToFootprintItem( FOOTPRINT* aFootprint, const AFILL6& aElem,
                                                const bool aIsBoardImport )
 {
-    if( aElem.is_keepout ) // TODO: what about plane layers?
+    if( aElem.is_keepout
+        || aElem.layer == ALTIUM_LAYER::KEEP_OUT_LAYER ) // TODO: what about plane layers?
     {
         // This is not the actual board item. We can use it to create the polygon for the region
         PCB_SHAPE shape( nullptr, SHAPE_T::RECT );
@@ -3339,7 +3345,7 @@ void ALTIUM_PCB::ConvertFills6ToBoardItemWithNet( const AFILL6& aElem )
     zone->SetLocalClearance( 0 );
     zone->SetPadConnection( ZONE_CONNECTION::FULL );
 
-    if( aElem.is_keepout )
+    if( aElem.is_keepout || aElem.layer == ALTIUM_LAYER::KEEP_OUT_LAYER )
     {
         zone->SetIsRuleArea( true );
 
