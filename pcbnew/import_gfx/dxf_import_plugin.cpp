@@ -118,7 +118,15 @@ DXF_IMPORT_PLUGIN::~DXF_IMPORT_PLUGIN()
 
 bool DXF_IMPORT_PLUGIN::Load( const wxString& aFileName )
 {
-    return ImportDxfFile( aFileName );
+    try
+    {
+        return ImportDxfFile( aFileName );
+    }
+    catch( const std::bad_alloc& )
+    {
+        reportMsg( _( "Memory was exhausted trying to load the DXF, it may be too large." ) );
+        return false;
+    }
 }
 
 
