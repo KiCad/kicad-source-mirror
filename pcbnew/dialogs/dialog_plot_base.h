@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -66,6 +66,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextDir;
 		wxTextCtrl* m_outputDirectoryName;
 		wxBitmapButton* m_browseButton;
+		wxBoxSizer* bmiddleSizer;
 		wxStaticBoxSizer* m_LayersSizer;
 		wxCheckListBox* m_layerCheckListBox;
 		wxBoxSizer* m_PlotOptionsSizer;
@@ -73,7 +74,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_plotModuleValueOpt;
 		wxCheckBox* m_plotModuleRefOpt;
 		wxCheckBox* m_plotInvisibleText;
-		wxCheckBox* m_includeEdgeLayerOpt;
 		wxCheckBox* m_sketchPadsOnFabLayers;
 		wxCheckBox* m_plotNoViaOnMaskOpt;
 		wxCheckBox* m_useAuxOriginCheckBox;
@@ -131,7 +131,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1Cancel;
 		wxMenu* m_popMenu;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnRightClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void SetPlotFormat( wxCommandEvent& event ) { event.Skip(); }
@@ -149,6 +149,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_PLOT_BASE();
 
 		void DIALOG_PLOT_BASEOnContextMenu( wxMouseEvent &event )

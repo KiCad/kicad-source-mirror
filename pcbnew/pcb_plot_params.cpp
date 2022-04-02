@@ -101,7 +101,6 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
 
     // we used 0.1mils for SVG step before, but nm precision is more accurate, so we use nm
     m_svgPrecision               = SVG_PRECISION_DEFAULT;
-    m_excludeEdgeLayer           = true;
     m_plotFrameRef               = false;
     m_plotViaOnMaskLayer         = false;
     m_plotMode                   = FILLED;
@@ -177,6 +176,9 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     aFormatter->Print( aNestLevel+1, "(layerselection 0x%s)\n",
                        m_layerSelection.FmtHex().c_str() );
 
+    aFormatter->Print( aNestLevel+1, "(plot_on_all_layers_selection 0x%s)\n",
+                       m_plotOnAllLayersSelection.FmtHex().c_str() );
+
     aFormatter->Print( aNestLevel+1, "(disableapertmacros %s)\n",
                        printBool( m_gerberDisableApertMacros ) );
 
@@ -203,7 +205,6 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     // SVG options
     aFormatter->Print( aNestLevel+1, "(svgprecision %d)\n", m_svgPrecision );
 
-    aFormatter->Print( aNestLevel+1, "(excludeedgelayer %s)\n", printBool( m_excludeEdgeLayer ) );
     aFormatter->Print( aNestLevel+1, "(plotframeref %s)\n", printBool( m_plotFrameRef ) );
     aFormatter->Print( aNestLevel+1, "(viasonmask %s)\n", printBool( m_plotViaOnMaskLayer ) );
     aFormatter->Print( aNestLevel+1, "(mode %d)\n", GetPlotMode() == SKETCH ? 2 : 1 );
@@ -255,6 +256,9 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
     if( m_layerSelection != aPcbPlotParams.m_layerSelection )
         return false;
 
+    if( m_plotOnAllLayersSelection != aPcbPlotParams.m_plotOnAllLayersSelection )
+        return false;
+
     if( m_useGerberProtelExtensions != aPcbPlotParams.m_useGerberProtelExtensions )
         return false;
 
@@ -277,9 +281,6 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
         return false;
 
     if( m_dashedLineGapRatio != aPcbPlotParams.m_dashedLineGapRatio )
-        return false;
-
-    if( m_excludeEdgeLayer != aPcbPlotParams.m_excludeEdgeLayer )
         return false;
 
     if( m_plotFrameRef != aPcbPlotParams.m_plotFrameRef )
@@ -440,6 +441,26 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             break;
         }
 
+        case T_plot_on_all_layers_selection:
+        {
+            token = NeedSYMBOLorNUMBER();
+
+            const std::string& cur = CurStr();
+
+            if( cur.find_first_of( "0x" ) == 0 )
+            {
+                // skip the leading 2 0x bytes.
+                aPcbPlotParams->m_plotOnAllLayersSelection.ParseHex( cur.c_str() + 2,
+                                                                     cur.size() - 2 );
+            }
+            else
+            {
+                Expecting( "hex plot_on_all_layers_selection" );
+            }
+
+            break;
+        }
+
         case T_disableapertmacros:
             aPcbPlotParams->m_gerberDisableApertMacros = parseBool();
             break;
@@ -486,7 +507,9 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             break;
 
         case T_excludeedgelayer:
-            aPcbPlotParams->m_excludeEdgeLayer = parseBool();
+            if( !parseBool() )
+                aPcbPlotParams->m_plotOnAllLayersSelection.set( Edge_Cuts );
+
             break;
 
         case T_plotframeref:

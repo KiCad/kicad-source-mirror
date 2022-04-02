@@ -21,6 +21,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/bmpbuttn.h>
+#include <wx/clntdata.h>
+#include <wx/rearrangectrl.h>
 
 #include <kiface_base.h>
 #include <plotters/plotter.h>
@@ -49,17 +52,101 @@
 #include <wx/dirdlg.h>
 
 
+LSET DIALOG_PLOT::m_lastLayerSet;
+LSEQ DIALOG_PLOT::m_lastPlotOnAllLayersOrder;
+
+
+/**
+ * A helper wxWidgets control client data object to store layer IDs.
+ */
+class PCB_LAYER_ID_CLIENT_DATA : public wxClientData
+{
+public:
+    PCB_LAYER_ID_CLIENT_DATA() : m_id( UNDEFINED_LAYER ) { }
+    PCB_LAYER_ID_CLIENT_DATA( PCB_LAYER_ID aId ) : m_id( aId ) { }
+
+    void SetData( PCB_LAYER_ID aId ) { m_id = aId; }
+
+    PCB_LAYER_ID GetData() const { return m_id; }
+
+private:
+    PCB_LAYER_ID m_id;
+};
+
 
 DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
-    DIALOG_PLOT_BASE( aParent ), m_parent( aParent ),
+    DIALOG_PLOT_BASE( aParent ),
+    m_parent( aParent ),
     m_defaultPenSize( aParent, m_hpglPenLabel, m_hpglPenCtrl, m_hpglPenUnits ),
     m_trackWidthCorrection( aParent, m_widthAdjustLabel, m_widthAdjustCtrl, m_widthAdjustUnits )
 {
+    BOARD* board = m_parent->GetBoard();
+
     SetName( DLG_WINDOW_NAME );
     m_plotOpts = aParent->GetPlotSettings();
     m_DRCWarningTemplate = m_DRCExclusionsWarning->GetLabel();
 
     m_messagesPanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
+
+    int order = 0;
+    LSET plotOnAllLayersSelection = m_plotOpts.GetPlotOnAllLayersSelection();
+    wxArrayInt plotAllLayersOrder;
+    wxArrayString plotAllLayersChoices;
+
+    for( LSEQ seq = board->GetEnabledLayers().SeqStackupBottom2Top(); seq; ++seq )
+    {
+        PCB_LAYER_ID id = *seq;
+
+        plotAllLayersChoices.Add( board->GetLayerName( id ) );
+
+        size_t size = plotOnAllLayersSelection.size();
+
+        if( ( static_cast<size_t>( id ) <= size ) && plotOnAllLayersSelection.test( id ) )
+            plotAllLayersOrder.push_back( order );
+        else
+            plotAllLayersOrder.push_back( ~order );
+
+        order += 1;
+    }
+
+	wxStaticBoxSizer* sbSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY,
+                                                                       _("Plot on All Layers") ),
+                                                      wxVERTICAL );
+
+	m_plotAllLayersList = new wxRearrangeList( sbSizer->GetStaticBox(), wxID_ANY,
+                                               wxDefaultPosition, wxDefaultSize,
+                                               plotAllLayersOrder, plotAllLayersChoices, 0 );
+
+    int index = 0;
+
+    for( LSEQ seq = board->GetEnabledLayers().SeqStackupBottom2Top(); seq; ++seq )
+    {
+        m_plotAllLayersList->SetClientObject( index, new PCB_LAYER_ID_CLIENT_DATA( *seq ) );
+        index += 1;
+    }
+
+	sbSizer->Add( m_plotAllLayersList, 1, wxALL | wxEXPAND, 5 );
+
+	wxBoxSizer* bButtonSizer;
+	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_bpMoveUp = new wxBitmapButton( sbSizer->GetStaticBox(), wxID_ANY, wxNullBitmap,
+                                     wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW | 0 );
+	m_bpMoveUp->SetToolTip( _( "Move current selection up" ) );
+    m_bpMoveUp->SetBitmap( KiBitmap( BITMAPS::small_up ) );
+
+	bButtonSizer->Add( m_bpMoveUp, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
+    bButtonSizer->AddStretchSpacer();
+
+	m_bpMoveDown = new wxBitmapButton( sbSizer->GetStaticBox(), wxID_ANY, wxNullBitmap,
+                                       wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW | 0 );
+	m_bpMoveDown->SetToolTip( _( "Move current selection down" ) );
+    m_bpMoveDown->SetBitmap( KiBitmap( BITMAPS::small_down ) );
+
+	bButtonSizer->Add( m_bpMoveDown, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
+
+    sbSizer->Add( bButtonSizer, 0, wxALL | wxEXPAND, 5 );
+	bmiddleSizer->Insert( 1, sbSizer, 1, wxALL | wxEXPAND, 3 );
 
     init_Dialog();
 
@@ -69,6 +156,16 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
+
+    m_bpMoveUp->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_PLOT::onPlotAllListMoveUp, this );
+    m_bpMoveDown->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_PLOT::onPlotAllListMoveDown, this );
+}
+
+
+DIALOG_PLOT::~DIALOG_PLOT()
+{
+    m_bpMoveDown->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_PLOT::onPlotAllListMoveDown, this );
+    m_bpMoveUp->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_PLOT::onPlotAllListMoveUp, this );
 }
 
 
@@ -130,7 +227,7 @@ void DIALOG_PLOT::init_Dialog()
     // Could devote a PlotOrder() function in place of UIOrder().
     m_layerList = board->GetEnabledLayers().UIOrder();
 
-    // Populate the check list box by all enabled layers names
+    // Populate the check list box by all enabled layers names.
     for( LSEQ seq = m_layerList;  seq;  ++seq )
     {
         PCB_LAYER_ID layer = *seq;
@@ -163,9 +260,6 @@ void DIALOG_PLOT::init_Dialog()
 
     // SVG precision and units for coordinates
     m_svgPrecsision->SetValue( m_plotOpts.GetSvgPrecision() );
-
-    // Option for excluding contents of "Edges Pcb" layer
-    m_includeEdgeLayerOpt->SetValue( !m_plotOpts.GetExcludeEdgeLayer() );
 
     // Option to exclude pads from silkscreen layers
     m_sketchPadsOnFabLayers->SetValue( m_plotOpts.GetSketchPadsOnFabLayers() );
@@ -447,7 +541,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_useAuxOriginCheckBox->Enable( false );
         m_useAuxOriginCheckBox->SetValue( false );
         m_defaultPenSize.Enable( false );
-        m_includeEdgeLayerOpt->Enable( true );
         m_scaleOpt->Enable( false );
         m_scaleOpt->SetSelection( 1 );
         m_fineAdjustXCtrl->Enable( false );
@@ -475,7 +568,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_useAuxOriginCheckBox->Enable( false );
         m_useAuxOriginCheckBox->SetValue( false );
         m_defaultPenSize.Enable( false );
-        m_includeEdgeLayerOpt->Enable( true );
         m_scaleOpt->Enable( true );
         m_fineAdjustXCtrl->Enable( true );
         m_fineAdjustYCtrl->Enable( true );
@@ -499,7 +591,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_plotMirrorOpt->SetValue( false );
         m_useAuxOriginCheckBox->Enable( true );
         m_defaultPenSize.Enable( false );
-        m_includeEdgeLayerOpt->Enable( true );
         m_scaleOpt->Enable( false );
         m_scaleOpt->SetSelection( 1 );
         m_fineAdjustXCtrl->Enable( false );
@@ -524,7 +615,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_useAuxOriginCheckBox->Enable( false );
         m_useAuxOriginCheckBox->SetValue( false );
         m_defaultPenSize.Enable( true );
-        m_includeEdgeLayerOpt->Enable( true );
         m_scaleOpt->Enable( true );
         m_fineAdjustXCtrl->Enable( false );
         m_fineAdjustYCtrl->Enable( false );
@@ -548,7 +638,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_plotMirrorOpt->SetValue( false );
         m_useAuxOriginCheckBox->Enable( true );
         m_defaultPenSize.Enable( false );
-        m_includeEdgeLayerOpt->Enable( true );
         m_scaleOpt->Enable( false );
         m_scaleOpt->SetSelection( 1 );
         m_fineAdjustXCtrl->Enable( false );
@@ -625,7 +714,6 @@ void DIALOG_PLOT::applyPlotSettings()
     int             sel;
     PCB_PLOT_PARAMS tempOptions;
 
-    tempOptions.SetExcludeEdgeLayer( !m_includeEdgeLayerOpt->GetValue() );
     tempOptions.SetSubtractMaskFromSilk( m_subtractMaskFromSilk->GetValue() );
     tempOptions.SetPlotFrameRef( m_plotSheetRef->GetValue() );
     tempOptions.SetSketchPadsOnFabLayers( m_sketchPadsOnFabLayers->GetValue() );
@@ -744,6 +832,26 @@ void DIALOG_PLOT::applyPlotSettings()
     // Get a list of copper layers that aren't being used by inverting enabled layers.
     LSET disabledCopperLayers = LSET::AllCuMask() & ~m_parent->GetBoard()->GetEnabledLayers();
 
+    LSET plotOnAllLayers;
+
+    // Add selected layers from plot on all layers list in order set by user.
+    wxArrayInt plotOnAllLayersSelections;
+
+    m_plotAllLayersList->GetCheckedItems( plotOnAllLayersSelections );
+
+    size_t count = plotOnAllLayersSelections.GetCount();
+
+    for( size_t i = 0; i < count; i++ )
+    {
+        int index = plotOnAllLayersSelections.Item( i );
+        wxClientData* tmp = m_plotAllLayersList->GetClientObject( index );
+        PCB_LAYER_ID_CLIENT_DATA* layerId = dynamic_cast<PCB_LAYER_ID_CLIENT_DATA*>( tmp );
+
+        plotOnAllLayers.set( layerId->GetData() );
+    }
+
+    tempOptions.SetPlotOnAllLayersSelection( plotOnAllLayers );
+
     // Enable all of the disabled copper layers.
     // If someone enables more copper layers they will be selected by default.
     selectedLayers = selectedLayers | disabledCopperLayers;
@@ -853,8 +961,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     wxString file_ext( GetDefaultPlotExtension( m_plotOpts.GetFormat() ) );
 
     // Test for a reasonable scale value
-    // XXX could this actually happen? isn't it constrained in the apply
-    // function?
+    // XXX could this actually happen? isn't it constrained in the apply function?
     if( m_plotOpts.GetScale() < PLOT_MIN_SCALE )
         DisplayInfoMessage( this, _( "Warning: Scale option set to a very small value" ) );
 
@@ -875,8 +982,29 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         // Base layer always gets plotted first.
         plotSequence.push_back( *seq );
 
-        if( ( *seq != Edge_Cuts ) && !m_plotOpts.GetExcludeEdgeLayer() )
-            plotSequence.push_back( Edge_Cuts );
+        // Add selected layers from plot on all layers list in order set by user.
+        wxArrayInt plotOnAllLayers;
+
+        if( m_plotAllLayersList->GetCheckedItems( plotOnAllLayers ) )
+        {
+            size_t count = plotOnAllLayers.GetCount();
+
+            for( size_t i = 0; i < count; i++ )
+            {
+                int index = plotOnAllLayers.Item( i );
+                wxClientData* tmp = m_plotAllLayersList->GetClientObject( index );
+                PCB_LAYER_ID_CLIENT_DATA* layerId = dynamic_cast<PCB_LAYER_ID_CLIENT_DATA*>( tmp );
+
+                wxCHECK2( layerId, continue );
+
+                // Don't plot the same layer more than once;
+                if( find( plotSequence.begin(), plotSequence.end(), layerId->GetData() ) !=
+                    plotSequence.end() )
+                    continue;
+
+                plotSequence.push_back( layerId->GetData() );
+            }
+        }
 
         PCB_LAYER_ID layer = *seq;
 
@@ -954,7 +1082,7 @@ void DIALOG_PLOT::onRunDRC( wxCommandEvent& event )
         // (low probability, but can happen)
         drcTool->DestroyDRCDialog();
 
-        // Open a new drc dialod, with the right parent frame, and in Modal Mode
+        // Open a new drc dialog, with the right parent frame, and in Modal Mode
         drcTool->ShowDRCDialog( this );
 
         // Update DRC warnings on return to this dialog
@@ -975,3 +1103,18 @@ void DIALOG_PLOT::onBoardSetup( wxHyperlinkEvent& aEvent )
         reInitDialog();
     }
 }
+
+
+void DIALOG_PLOT::onPlotAllListMoveUp( wxCommandEvent& aEvent )
+{
+    if( m_plotAllLayersList->CanMoveCurrentUp() )
+        m_plotAllLayersList->MoveCurrentUp();
+}
+
+
+void DIALOG_PLOT::onPlotAllListMoveDown( wxCommandEvent& aEvent )
+{
+    if( m_plotAllLayersList->CanMoveCurrentDown() )
+        m_plotAllLayersList->MoveCurrentDown();
+}
+

@@ -33,6 +33,10 @@
 // the plot dialog window name, used by wxWidgets
 #define DLG_WINDOW_NAME wxT( "plot_dialog-window" )
 
+class wxRearrangeList;
+class wxBitmapButton;
+
+
 /**
  * A dialog to set the plot options and create plot files in various formats.
  */
@@ -40,6 +44,8 @@ class DIALOG_PLOT : public DIALOG_PLOT_BASE
 {
 public:
     DIALOG_PLOT( PCB_EDIT_FRAME* parent );
+
+    virtual ~DIALOG_PLOT();
 
 private:
     // Event called functions
@@ -54,6 +60,9 @@ private:
     void        OnGerberX2Checked( wxCommandEvent& event ) override;
     void        onRunDRC( wxCommandEvent& event ) override;
     void        onBoardSetup( wxHyperlinkEvent& aEvent ) override;
+
+    void        onPlotAllListMoveUp( wxCommandEvent& aEvent );
+    void        onPlotAllListMoveDown( wxCommandEvent& aEvent );
 
     // other functions
     void        init_Dialog();      // main initialization
@@ -85,4 +94,14 @@ private:
     wxString            m_DRCWarningTemplate;
 
     PCB_PLOT_PARAMS     m_plotOpts;
+
+    wxRearrangeList*    m_plotAllLayersList;
+    wxBitmapButton*     m_bpMoveUp;
+    wxBitmapButton*     m_bpMoveDown;
+
+    /// The plot layer set that last time the dialog was opened.
+    static LSET         m_lastLayerSet;
+
+    /// The plot on all layers ordering the last time the dialog was opened.
+    static LSEQ         m_lastPlotOnAllLayersOrder;
 };

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -48,7 +48,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	m_MainSizer->Add( bupperSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	wxBoxSizer* bmiddleSizer;
 	bmiddleSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_LayersSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Include Layers") ), wxHORIZONTAL );
@@ -57,7 +56,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_layerCheckListBox = new wxCheckListBox( m_LayersSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_layerCheckListBoxChoices, 0 );
 	m_layerCheckListBox->SetMinSize( wxSize( 150,-1 ) );
 
-	m_LayersSizer->Add( m_layerCheckListBox, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
+	m_LayersSizer->Add( m_layerCheckListBox, 1, wxALL|wxEXPAND, 5 );
 
 
 	bmiddleSizer->Add( m_LayersSizer, 1, wxALL|wxEXPAND, 3 );
@@ -90,11 +89,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	gbSizer1->Add( m_plotInvisibleText, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_includeEdgeLayerOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot Edge.Cuts on all layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_includeEdgeLayerOpt->SetToolTip( _("Plot the contents of the PCB edge layer on all layers") );
-
-	gbSizer1->Add( m_includeEdgeLayerOpt, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
 	m_sketchPadsOnFabLayers = new wxCheckBox( sbOptionsSizer->GetStaticBox(), ID_ALLOW_PRINT_PAD_ON_SILKSCREEN, _("Sketch pads on fabrication layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_sketchPadsOnFabLayers->SetToolTip( _("Include pad outlines on F.Fab and B.Fab layers when plotting") );
 
@@ -103,7 +97,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_plotNoViaOnMaskOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Do not tent vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotNoViaOnMaskOpt->SetToolTip( _("Remove soldermask on vias") );
 
-	gbSizer1->Add( m_plotNoViaOnMaskOpt, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_plotNoViaOnMaskOpt, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 
 	m_useAuxOriginCheckBox = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Use drill/place file origin"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_useAuxOriginCheckBox->SetToolTip( _("Use the drill/place file origin as the coordinate origin for plotted files") );
@@ -141,13 +135,13 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	gbSizer1->Add( m_plotModeOpt, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxEXPAND|wxLEFT, 5 );
 
 	m_plotMirrorOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), ID_MIROR_OPT, _("Mirrored plot"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_plotMirrorOpt, wxGBPosition( 4, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
+	gbSizer1->Add( m_plotMirrorOpt, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_plotPSNegativeOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Negative plot"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_plotPSNegativeOpt, wxGBPosition( 5, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
+	gbSizer1->Add( m_plotPSNegativeOpt, wxGBPosition( 4, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 
 	m_zoneFillCheck = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Check zone fills before plotting"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_zoneFillCheck, wxGBPosition( 6, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 30 );
+	gbSizer1->Add( m_zoneFillCheck, wxGBPosition( 6, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	gbSizer1->AddGrowableCol( 0 );
@@ -183,7 +177,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_boardSetup = new wxHyperlinkCtrl( this, wxID_ANY, _("Board setup"), wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
 	m_boardSetup->SetToolTip( _("File > Board Setup...") );
 
-	bSizerSecondLine->Add( m_boardSetup, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
+	bSizerSecondLine->Add( m_boardSetup, 0, wxLEFT|wxRIGHT|wxTOP, 2 );
 
 
 	bSizerWarningText->Add( bSizerSecondLine, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );

@@ -3,7 +3,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,13 +25,14 @@
 
 #include <pcb_plot_params_lexer.h>
 
+
+class wxString;
 class PCB_PLOT_PARAMS;
 class LINE_READER;
 
 
 /**
- * PCB_PLOT_PARAMS_PARSER
- * is the parser class for PCB_PLOT_PARAMS.
+ * The parser for PCB_PLOT_PARAMS.
  */
 class PCB_PLOT_PARAMS_PARSER : public PCB_PLOT_PARAMS_LEXER
 {
@@ -47,25 +48,25 @@ private:
     bool parseBool();
 
     /**
-     * Function parseInt
-     * parses an integer and constrains it between two values.
+     * Parse an integer and constrains it between two values.
+     *
      * @param aMin is the smallest return value.
      * @param aMax is the largest return value.
-     * @return int - the parsed integer.
+     * @return the parsed integer.
      */
     int parseInt( int aMin, int aMax );
 
     /**
-     * Function parseDouble
-     * parses a double
-     * @return double - the parsed double.
+     * Parse a double precision floating point number.
+     *
+     * @return the parsed double.
      */
     double parseDouble();
 
     /**
-     * Function skipCurrent
-     * Skip the current token level, i.e
-     * search for the RIGHT parenthesis which closes the current description
+     * Skip the current token level.
+     *
+     * Search for the RIGHT parenthesis which closes the current description.
      */
     void skipCurrent();
 };
