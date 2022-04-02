@@ -247,6 +247,13 @@ void PCB_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
 }
 
 
+void PCB_TEXTBOX::Move( const VECTOR2I& aMoveVector )
+{
+    PCB_SHAPE::Move( aMoveVector );
+    EDA_TEXT::Offset( aMoveVector );
+}
+
+
 void PCB_TEXTBOX::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
     PCB_SHAPE::Rotate( aRotCentre, aAngle );

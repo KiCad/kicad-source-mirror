@@ -178,6 +178,13 @@ bool FP_TEXTBOX::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy 
 }
 
 
+void FP_TEXTBOX::Move( const VECTOR2I& aMoveVector )
+{
+    FP_SHAPE::Move( aMoveVector );
+    EDA_TEXT::Offset( aMoveVector );
+}
+
+
 void FP_TEXTBOX::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
     FP_SHAPE::Rotate( aRotCentre, aAngle );

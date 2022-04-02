@@ -79,6 +79,8 @@ public:
 
     std::vector<VECTOR2I> GetAnchorAndOppositeCorner() const;
 
+    void Move( const VECTOR2I& aMoveVector ) override;
+
     /// Rotate text, in footprint editor
     /// (for instance in footprint rotation transform)
     void Rotate( const VECTOR2I& aOffset, const EDA_ANGLE& aAngle ) override;
