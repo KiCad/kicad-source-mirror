@@ -189,6 +189,14 @@ public:
         return m_items;
     }
 
+    /**
+     * Empties out the imported shapes list
+     */
+    void ClearItems()
+    {
+        m_items.clear();
+    }
+
     ///< Default line thickness (in mm)
     static constexpr unsigned int DEFAULT_LINE_WIDTH_DFX = 1;
 
