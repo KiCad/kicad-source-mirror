@@ -246,158 +246,185 @@ void CheckFootprint( const FOOTPRINT* expected, const FOOTPRINT* fp )
 
 void CheckFpPad( const PAD* expected, const PAD* pad )
 {
-    CHECK_ENUM_CLASS_EQUAL( expected->Type(), pad->Type() );
+    BOOST_TEST_CONTEXT( "Assert PAD with KIID=" << expected->m_Uuid.AsString() )
+    {
+        CHECK_ENUM_CLASS_EQUAL( expected->Type(), pad->Type() );
 
-    BOOST_CHECK_EQUAL( expected->GetNumber(), pad->GetNumber() );
-    CHECK_ENUM_CLASS_EQUAL( expected->GetAttribute(), pad->GetAttribute() );
-    CHECK_ENUM_CLASS_EQUAL( expected->GetProperty(), pad->GetProperty() );
-    CHECK_ENUM_CLASS_EQUAL( expected->GetShape(), pad->GetShape() );
+        BOOST_CHECK_EQUAL( expected->GetNumber(), pad->GetNumber() );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetAttribute(), pad->GetAttribute() );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetProperty(), pad->GetProperty() );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetShape(), pad->GetShape() );
 
-    BOOST_CHECK_EQUAL( expected->IsLocked(), pad->IsLocked() );
+        BOOST_CHECK_EQUAL( expected->IsLocked(), pad->IsLocked() );
 
-    BOOST_CHECK_EQUAL( expected->GetPosition(), pad->GetPosition() );
-    BOOST_CHECK_EQUAL( expected->GetSize(), pad->GetSize() );
-    BOOST_CHECK_EQUAL( expected->GetOrientation(), pad->GetOrientation() );
-    BOOST_CHECK_EQUAL( expected->GetDelta(), pad->GetDelta() );
-    BOOST_CHECK_EQUAL( expected->GetOffset(), pad->GetOffset() );
-    BOOST_CHECK_EQUAL( expected->GetDrillSize(), pad->GetDrillSize() );
-    CHECK_ENUM_CLASS_EQUAL( expected->GetDrillShape(), pad->GetDrillShape() );
+        BOOST_CHECK_EQUAL( expected->GetPosition(), pad->GetPosition() );
+        BOOST_CHECK_EQUAL( expected->GetSize(), pad->GetSize() );
+        BOOST_CHECK_EQUAL( expected->GetOrientation(), pad->GetOrientation() );
+        BOOST_CHECK_EQUAL( expected->GetDelta(), pad->GetDelta() );
+        BOOST_CHECK_EQUAL( expected->GetOffset(), pad->GetOffset() );
+        BOOST_CHECK_EQUAL( expected->GetDrillSize(), pad->GetDrillSize() );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetDrillShape(), pad->GetDrillShape() );
 
-    BOOST_CHECK_EQUAL( expected->GetLayerSet(), pad->GetLayerSet() );
+        BOOST_CHECK_EQUAL( expected->GetLayerSet(), pad->GetLayerSet() );
 
-    BOOST_CHECK_EQUAL( expected->GetNetCode(), pad->GetNetCode() );
-    BOOST_CHECK_EQUAL( expected->GetPinFunction(), pad->GetPinFunction() );
-    BOOST_CHECK_EQUAL( expected->GetPinType(), pad->GetPinType() );
-    BOOST_CHECK_EQUAL( expected->GetPadToDieLength(), pad->GetPadToDieLength() );
-    BOOST_CHECK_EQUAL( expected->GetLocalSolderMaskMargin(), pad->GetLocalSolderMaskMargin() );
-    BOOST_CHECK_EQUAL( expected->GetLocalSolderPasteMargin(), pad->GetLocalSolderPasteMargin() );
-    BOOST_CHECK_EQUAL( expected->GetLocalSolderPasteMarginRatio(),
-                       pad->GetLocalSolderPasteMarginRatio() );
-    BOOST_CHECK_EQUAL( expected->GetLocalClearance(), pad->GetLocalClearance() );
-    CHECK_ENUM_CLASS_EQUAL( expected->GetZoneConnection(), pad->GetZoneConnection() );
-    BOOST_CHECK_EQUAL( expected->GetThermalSpokeWidth(), pad->GetThermalSpokeWidth() );
-    BOOST_CHECK_EQUAL( expected->GetThermalSpokeAngle(), pad->GetThermalSpokeAngle() );
-    BOOST_CHECK_EQUAL( expected->GetThermalGap(), pad->GetThermalGap() );
-    BOOST_CHECK_EQUAL( expected->GetRoundRectRadiusRatio(), pad->GetRoundRectRadiusRatio() );
-    BOOST_CHECK_EQUAL( expected->GetChamferRectRatio(), pad->GetChamferRectRatio() );
-    BOOST_CHECK_EQUAL( expected->GetChamferPositions(), pad->GetChamferPositions() );
-    BOOST_CHECK_EQUAL( expected->GetRemoveUnconnected(), pad->GetRemoveUnconnected() );
-    BOOST_CHECK_EQUAL( expected->GetKeepTopBottom(), pad->GetKeepTopBottom() );
+        BOOST_CHECK_EQUAL( expected->GetNetCode(), pad->GetNetCode() );
+        BOOST_CHECK_EQUAL( expected->GetPinFunction(), pad->GetPinFunction() );
+        BOOST_CHECK_EQUAL( expected->GetPinType(), pad->GetPinType() );
+        BOOST_CHECK_EQUAL( expected->GetPadToDieLength(), pad->GetPadToDieLength() );
+        BOOST_CHECK_EQUAL( expected->GetLocalSolderMaskMargin(), pad->GetLocalSolderMaskMargin() );
+        BOOST_CHECK_EQUAL( expected->GetLocalSolderPasteMargin(),
+                           pad->GetLocalSolderPasteMargin() );
+        BOOST_CHECK_EQUAL( expected->GetLocalSolderPasteMarginRatio(),
+                           pad->GetLocalSolderPasteMarginRatio() );
+        BOOST_CHECK_EQUAL( expected->GetLocalClearance(), pad->GetLocalClearance() );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetZoneConnection(), pad->GetZoneConnection() );
+        BOOST_CHECK_EQUAL( expected->GetThermalSpokeWidth(), pad->GetThermalSpokeWidth() );
+        BOOST_CHECK_EQUAL( expected->GetThermalSpokeAngle(), pad->GetThermalSpokeAngle() );
+        BOOST_CHECK_EQUAL( expected->GetThermalGap(), pad->GetThermalGap() );
+        BOOST_CHECK_EQUAL( expected->GetRoundRectRadiusRatio(), pad->GetRoundRectRadiusRatio() );
+        BOOST_CHECK_EQUAL( expected->GetChamferRectRatio(), pad->GetChamferRectRatio() );
+        BOOST_CHECK_EQUAL( expected->GetChamferPositions(), pad->GetChamferPositions() );
+        BOOST_CHECK_EQUAL( expected->GetRemoveUnconnected(), pad->GetRemoveUnconnected() );
+        BOOST_CHECK_EQUAL( expected->GetKeepTopBottom(), pad->GetKeepTopBottom() );
 
-    // TODO: check complex pad shapes
-    CHECK_ENUM_CLASS_EQUAL( expected->GetAnchorPadShape(), pad->GetAnchorPadShape() );
-    CHECK_ENUM_CLASS_EQUAL( expected->GetCustomShapeInZoneOpt(), pad->GetCustomShapeInZoneOpt() );
+        // TODO: check complex pad shapes
+        CHECK_ENUM_CLASS_EQUAL( expected->GetAnchorPadShape(), pad->GetAnchorPadShape() );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetCustomShapeInZoneOpt(),
+                                pad->GetCustomShapeInZoneOpt() );
+    }
 }
 
 
 void CheckFpText( const FP_TEXT* expected, const FP_TEXT* text )
 {
-    CHECK_ENUM_CLASS_EQUAL( expected->Type(), text->Type() );
+    BOOST_TEST_CONTEXT( "Assert FP_TEXT with KIID=" << expected->m_Uuid.AsString() )
+    {
+        CHECK_ENUM_CLASS_EQUAL( expected->Type(), text->Type() );
 
-    CHECK_ENUM_CLASS_EQUAL( expected->GetType(), text->GetType() );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetType(), text->GetType() );
 
-    BOOST_CHECK_EQUAL( expected->IsLocked(), text->IsLocked() );
+        BOOST_CHECK_EQUAL( expected->IsLocked(), text->IsLocked() );
 
-    BOOST_CHECK_EQUAL( expected->GetText(), text->GetText() );
-    BOOST_CHECK_EQUAL( expected->GetPosition(), text->GetPosition() );
-    BOOST_CHECK_EQUAL( expected->GetTextAngle(), text->GetTextAngle() );
-    BOOST_CHECK_EQUAL( expected->IsKeepUpright(), text->IsKeepUpright() );
+        BOOST_CHECK_EQUAL( expected->GetText(), text->GetText() );
+        BOOST_CHECK_EQUAL( expected->GetPosition(), text->GetPosition() );
+        BOOST_CHECK_EQUAL( expected->GetTextAngle(), text->GetTextAngle() );
+        BOOST_CHECK_EQUAL( expected->IsKeepUpright(), text->IsKeepUpright() );
 
-    BOOST_CHECK_EQUAL( expected->GetLayerSet(), text->GetLayerSet() );
-    BOOST_CHECK_EQUAL( expected->IsVisible(), text->IsVisible() );
+        BOOST_CHECK_EQUAL( expected->GetLayerSet(), text->GetLayerSet() );
+        BOOST_CHECK_EQUAL( expected->IsVisible(), text->IsVisible() );
 
-    BOOST_CHECK_EQUAL( expected->GetTextSize(), text->GetTextSize() );
-    BOOST_CHECK_EQUAL( expected->GetLineSpacing(), text->GetLineSpacing() );
-    BOOST_CHECK_EQUAL( expected->GetTextThickness(), text->GetTextThickness() );
-    BOOST_CHECK_EQUAL( expected->IsBold(), text->IsBold() );
-    BOOST_CHECK_EQUAL( expected->IsItalic(), text->IsItalic() );
-    BOOST_CHECK_EQUAL( expected->GetHorizJustify(), text->GetHorizJustify() );
-    BOOST_CHECK_EQUAL( expected->GetVertJustify(), text->GetVertJustify() );
-    BOOST_CHECK_EQUAL( expected->IsMirrored(), text->IsMirrored() );
-    BOOST_CHECK_EQUAL( expected->GetFontName(), text->GetFontName() ); // TODO: bold/italic setting?
+        BOOST_CHECK_EQUAL( expected->GetTextSize(), text->GetTextSize() );
+        BOOST_CHECK_EQUAL( expected->GetLineSpacing(), text->GetLineSpacing() );
+        BOOST_CHECK_EQUAL( expected->GetTextThickness(), text->GetTextThickness() );
+        BOOST_CHECK_EQUAL( expected->IsBold(), text->IsBold() );
+        BOOST_CHECK_EQUAL( expected->IsItalic(), text->IsItalic() );
+        BOOST_CHECK_EQUAL( expected->GetHorizJustify(), text->GetHorizJustify() );
+        BOOST_CHECK_EQUAL( expected->GetVertJustify(), text->GetVertJustify() );
+        BOOST_CHECK_EQUAL( expected->IsMirrored(), text->IsMirrored() );
+        BOOST_CHECK_EQUAL( expected->GetFontName(),
+                           text->GetFontName() ); // TODO: bold/italic setting?
 
-    // TODO: render cache?
+        // TODO: render cache?
+    }
 }
 
 
 void CheckFpShape( const FP_SHAPE* expected, const FP_SHAPE* shape )
 {
-    CHECK_ENUM_CLASS_EQUAL( expected->Type(), shape->Type() );
+    BOOST_TEST_CONTEXT( "Assert FP_SHAPE with KIID=" << expected->m_Uuid.AsString() )
+    {
+        CHECK_ENUM_CLASS_EQUAL( expected->Type(), shape->Type() );
 
-    CHECK_ENUM_CLASS_EQUAL( expected->GetShape(), shape->GetShape() );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetShape(), shape->GetShape() );
 
-    BOOST_CHECK_EQUAL( expected->IsLocked(), shape->IsLocked() );
+        BOOST_CHECK_EQUAL( expected->IsLocked(), shape->IsLocked() );
 
-    BOOST_CHECK_EQUAL( expected->GetCenter(), shape->GetCenter() );
-    BOOST_CHECK_EQUAL( expected->GetStart(), shape->GetStart() );
-    BOOST_CHECK_EQUAL( expected->GetEnd(), shape->GetEnd() );
-    BOOST_CHECK_EQUAL( expected->GetPosition(), shape->GetPosition() );
-    BOOST_CHECK_EQUAL( expected->GetBezierC1(), shape->GetBezierC1() );
-    BOOST_CHECK_EQUAL( expected->GetBezierC2(), shape->GetBezierC2() );
+        BOOST_CHECK_EQUAL( expected->GetStart(), shape->GetStart() );
+        BOOST_CHECK_EQUAL( expected->GetEnd(), shape->GetEnd() );
+        if( expected->GetShape() == SHAPE_T::ARC )
+        {
+            // center and position might differ as they are calculated from start/mid/end -> compare mid instead
+            BOOST_CHECK_EQUAL( expected->GetArcMid(), shape->GetArcMid() );
+        }
+        else
+        {
+            BOOST_CHECK_EQUAL( expected->GetCenter(), shape->GetCenter() );
+            BOOST_CHECK_EQUAL( expected->GetPosition(), shape->GetPosition() );
+        }
+        BOOST_CHECK_EQUAL( expected->GetBezierC1(), shape->GetBezierC1() );
+        BOOST_CHECK_EQUAL( expected->GetBezierC2(), shape->GetBezierC2() );
 
-    CheckShapePolySet( &expected->GetPolyShape(), &shape->GetPolyShape() );
+        CheckShapePolySet( &expected->GetPolyShape(), &shape->GetPolyShape() );
 
-    BOOST_CHECK_EQUAL( expected->GetLayerSet(), shape->GetLayerSet() );
+        BOOST_CHECK_EQUAL( expected->GetLayerSet(), shape->GetLayerSet() );
 
-    BOOST_CHECK_EQUAL( expected->GetStroke().GetWidth(), shape->GetStroke().GetWidth() );
-    CHECK_ENUM_CLASS_EQUAL( expected->GetStroke().GetPlotStyle(),
-                            shape->GetStroke().GetPlotStyle() );
-    CHECK_ENUM_CLASS_EQUAL( expected->GetFillMode(), shape->GetFillMode() );
+        BOOST_CHECK_EQUAL( expected->GetStroke().GetWidth(), shape->GetStroke().GetWidth() );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetStroke().GetPlotStyle(),
+                                shape->GetStroke().GetPlotStyle() );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetFillMode(), shape->GetFillMode() );
+    }
 }
 
 
 void CheckFpZone( const FP_ZONE* expected, const FP_ZONE* zone )
 {
-    CHECK_ENUM_CLASS_EQUAL( expected->Type(), zone->Type() );
+    BOOST_TEST_CONTEXT( "Assert FP_ZONE with KIID=" << expected->m_Uuid.AsString() )
+    {
+        CHECK_ENUM_CLASS_EQUAL( expected->Type(), zone->Type() );
 
-    BOOST_CHECK_EQUAL( expected->IsLocked(), zone->IsLocked() );
+        BOOST_CHECK_EQUAL( expected->IsLocked(), zone->IsLocked() );
 
-    BOOST_CHECK_EQUAL( expected->GetNetCode(), zone->GetNetCode() );
-    BOOST_CHECK_EQUAL( expected->GetAssignedPriority(), zone->GetAssignedPriority() );
-    CHECK_ENUM_CLASS_EQUAL( expected->GetPadConnection(), zone->GetPadConnection() );
-    BOOST_CHECK_EQUAL( expected->GetLocalClearance(), zone->GetLocalClearance() );
-    BOOST_CHECK_EQUAL( expected->GetMinThickness(), zone->GetMinThickness() );
+        BOOST_CHECK_EQUAL( expected->GetNetCode(), zone->GetNetCode() );
+        BOOST_CHECK_EQUAL( expected->GetAssignedPriority(), zone->GetAssignedPriority() );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetPadConnection(), zone->GetPadConnection() );
+        BOOST_CHECK_EQUAL( expected->GetLocalClearance(), zone->GetLocalClearance() );
+        BOOST_CHECK_EQUAL( expected->GetMinThickness(), zone->GetMinThickness() );
 
-    BOOST_CHECK_EQUAL( expected->GetLayerSet(), zone->GetLayerSet() );
+        BOOST_CHECK_EQUAL( expected->GetLayerSet(), zone->GetLayerSet() );
 
-    BOOST_CHECK_EQUAL( expected->IsFilled(), zone->IsFilled() );
-    CHECK_ENUM_CLASS_EQUAL( expected->GetFillMode(), zone->GetFillMode() );
-    BOOST_CHECK_EQUAL( expected->GetHatchThickness(), zone->GetHatchThickness() );
-    BOOST_CHECK_EQUAL( expected->GetHatchGap(), zone->GetHatchGap() );
-    BOOST_CHECK_EQUAL( expected->GetHatchOrientation(), zone->GetHatchOrientation() );
-    BOOST_CHECK_EQUAL( expected->GetHatchSmoothingLevel(), zone->GetHatchSmoothingLevel() );
-    BOOST_CHECK_EQUAL( expected->GetHatchSmoothingValue(), zone->GetHatchSmoothingValue() );
-    BOOST_CHECK_EQUAL( expected->GetHatchBorderAlgorithm(), zone->GetHatchBorderAlgorithm() );
-    BOOST_CHECK_EQUAL( expected->GetHatchHoleMinArea(), zone->GetHatchHoleMinArea() );
-    BOOST_CHECK_EQUAL( expected->GetThermalReliefGap(), zone->GetThermalReliefGap() );
-    BOOST_CHECK_EQUAL( expected->GetThermalReliefSpokeWidth(), zone->GetThermalReliefSpokeWidth() );
-    BOOST_CHECK_EQUAL( expected->GetCornerSmoothingType(), zone->GetCornerSmoothingType() );
-    BOOST_CHECK_EQUAL( expected->GetCornerRadius(), zone->GetCornerRadius() );
-    CHECK_ENUM_CLASS_EQUAL( expected->GetIslandRemovalMode(), zone->GetIslandRemovalMode() );
-    BOOST_CHECK_EQUAL( expected->GetMinIslandArea(), zone->GetMinIslandArea() );
+        BOOST_CHECK_EQUAL( expected->IsFilled(), zone->IsFilled() );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetFillMode(), zone->GetFillMode() );
+        BOOST_CHECK_EQUAL( expected->GetHatchThickness(), zone->GetHatchThickness() );
+        BOOST_CHECK_EQUAL( expected->GetHatchGap(), zone->GetHatchGap() );
+        BOOST_CHECK_EQUAL( expected->GetHatchOrientation(), zone->GetHatchOrientation() );
+        BOOST_CHECK_EQUAL( expected->GetHatchSmoothingLevel(), zone->GetHatchSmoothingLevel() );
+        BOOST_CHECK_EQUAL( expected->GetHatchSmoothingValue(), zone->GetHatchSmoothingValue() );
+        BOOST_CHECK_EQUAL( expected->GetHatchBorderAlgorithm(), zone->GetHatchBorderAlgorithm() );
+        BOOST_CHECK_EQUAL( expected->GetHatchHoleMinArea(), zone->GetHatchHoleMinArea() );
+        BOOST_CHECK_EQUAL( expected->GetThermalReliefGap(), zone->GetThermalReliefGap() );
+        BOOST_CHECK_EQUAL( expected->GetThermalReliefSpokeWidth(),
+                           zone->GetThermalReliefSpokeWidth() );
+        BOOST_CHECK_EQUAL( expected->GetCornerSmoothingType(), zone->GetCornerSmoothingType() );
+        BOOST_CHECK_EQUAL( expected->GetCornerRadius(), zone->GetCornerRadius() );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetIslandRemovalMode(), zone->GetIslandRemovalMode() );
+        BOOST_CHECK_EQUAL( expected->GetMinIslandArea(), zone->GetMinIslandArea() );
 
-    BOOST_CHECK_EQUAL( expected->GetIsRuleArea(), zone->GetIsRuleArea() );
-    BOOST_CHECK_EQUAL( expected->GetDoNotAllowCopperPour(), zone->GetDoNotAllowCopperPour() );
-    BOOST_CHECK_EQUAL( expected->GetDoNotAllowVias(), zone->GetDoNotAllowVias() );
-    BOOST_CHECK_EQUAL( expected->GetDoNotAllowTracks(), zone->GetDoNotAllowTracks() );
-    BOOST_CHECK_EQUAL( expected->GetDoNotAllowPads(), zone->GetDoNotAllowPads() );
-    BOOST_CHECK_EQUAL( expected->GetDoNotAllowFootprints(), zone->GetDoNotAllowFootprints() );
+        BOOST_CHECK_EQUAL( expected->GetIsRuleArea(), zone->GetIsRuleArea() );
+        BOOST_CHECK_EQUAL( expected->GetDoNotAllowCopperPour(), zone->GetDoNotAllowCopperPour() );
+        BOOST_CHECK_EQUAL( expected->GetDoNotAllowVias(), zone->GetDoNotAllowVias() );
+        BOOST_CHECK_EQUAL( expected->GetDoNotAllowTracks(), zone->GetDoNotAllowTracks() );
+        BOOST_CHECK_EQUAL( expected->GetDoNotAllowPads(), zone->GetDoNotAllowPads() );
+        BOOST_CHECK_EQUAL( expected->GetDoNotAllowFootprints(), zone->GetDoNotAllowFootprints() );
 
-    BOOST_CHECK_EQUAL( expected->GetZoneName(), zone->GetZoneName() );
-    CHECK_ENUM_CLASS_EQUAL( expected->GetTeardropAreaType(), zone->GetTeardropAreaType() );
-    BOOST_CHECK_EQUAL( expected->GetZoneName(), zone->GetZoneName() );
+        BOOST_CHECK_EQUAL( expected->GetZoneName(), zone->GetZoneName() );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetTeardropAreaType(), zone->GetTeardropAreaType() );
+        BOOST_CHECK_EQUAL( expected->GetZoneName(), zone->GetZoneName() );
 
-    CheckShapePolySet( expected->Outline(), zone->Outline() );
-    // TODO: filled zones
+        CheckShapePolySet( expected->Outline(), zone->Outline() );
+        // TODO: filled zones
+    }
 }
 
 
 void CheckShapePolySet( const SHAPE_POLY_SET* expected, const SHAPE_POLY_SET* polyset )
 {
-    BOOST_CHECK_EQUAL( expected->OutlineCount(), polyset->OutlineCount() );
-    BOOST_CHECK_EQUAL( expected->TotalVertices(), polyset->TotalVertices() );
+    BOOST_TEST_CONTEXT( "Assert SHAPE_POLY_SET" )
+    {
+        BOOST_CHECK_EQUAL( expected->OutlineCount(), polyset->OutlineCount() );
+        BOOST_CHECK_EQUAL( expected->TotalVertices(), polyset->TotalVertices() );
 
-    // TODO: check all outlines and holes
+        // TODO: check all outlines and holes
+    }
 }
 
 } // namespace KI_TEST

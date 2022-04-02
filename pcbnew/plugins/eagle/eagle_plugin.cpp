@@ -1847,6 +1847,8 @@ void EAGLE_PLUGIN::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
     else if( aFootprint->GetLayer() == B_Cu && m_rules->psBottom != EPAD::UNDEF )
         shape = m_rules->psBottom;
 
+    pad->SetKeepTopBottom( false ); // TODO: correct? This seems to be KiCad default on import
+
     pad->SetDrillSize( wxSize( eagleDrillz, eagleDrillz ) );
     pad->SetLayerSet( LSET::AllCuMask() );
 
@@ -2107,9 +2109,6 @@ void EAGLE_PLUGIN::packageRectangle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) c
 
         dwg->SetPolyPoints( pts );
 
-        dwg->SetStart0( start );
-        dwg->SetEnd0( end );
-
         if( r.rot )
             dwg->Rotate( dwg->GetCenter(), EDA_ANGLE( r.rot->degrees, DEGREES_T ) );
     }
@@ -2212,8 +2211,6 @@ void EAGLE_PLUGIN::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
         dwg->SetLayer( layer );
 
         dwg->SetPolyPoints( pts );
-        dwg->SetStart0( *pts.begin() );
-        dwg->SetEnd0( pts.back() );
         dwg->SetDrawCoord();
         dwg->GetPolyShape().Inflate( p.width.ToPcbUnits() / 2, 32,
                                      SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS );
@@ -2321,6 +2318,8 @@ void EAGLE_PLUGIN::packageHole( FOOTPRINT* aFootprint, wxXmlNode* aTree, bool aC
     PAD* pad = new PAD( aFootprint );
     aFootprint->Add( pad );
 
+    pad->SetKeepTopBottom( false ); // TODO: correct? This seems to be KiCad default on import
+
     pad->SetShape( PAD_SHAPE::CIRCLE );
     pad->SetAttribute( PAD_ATTRIB::NPTH );
 
@@ -2363,6 +2362,8 @@ void EAGLE_PLUGIN::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     PAD* pad = new PAD( aFootprint );
     aFootprint->Add( pad );
     transferPad( e, pad );
+
+    pad->SetKeepTopBottom( false ); // TODO: correct? This seems to be KiCad default on import
 
     pad->SetShape( PAD_SHAPE::RECT );
     pad->SetAttribute( PAD_ATTRIB::SMD );

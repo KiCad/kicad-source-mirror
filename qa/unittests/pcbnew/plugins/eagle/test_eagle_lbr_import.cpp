@@ -22,15 +22,15 @@
  */
 
 /**
- * @file test_altium_pcblib_import.cpp
- * Test suite for import of *.PcbLib libraries
+ * @file test_eagle_lbr_import.cpp
+ * Test suite for import of *.lbr libraries
  */
 
 #include <pcbnew_utils/board_test_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
-#include <pcbnew/plugins/altium/altium_designer_plugin.h>
+#include <pcbnew/plugins/eagle/eagle_plugin.h>
 #include <pcbnew/plugins/kicad/pcb_plugin.h>
 
 #include <footprint.h>
@@ -40,68 +40,67 @@
 #include <zone.h>
 
 
-struct ALTIUM_PCBLIB_IMPORT_FIXTURE
+struct EAGLE_LBR_IMPORT_FIXTURE
 {
-    ALTIUM_PCBLIB_IMPORT_FIXTURE() {}
+    EAGLE_LBR_IMPORT_FIXTURE() {}
 
-    ALTIUM_DESIGNER_PLUGIN altiumPlugin;
-    PCB_PLUGIN             kicadPlugin;
+    EAGLE_PLUGIN eaglePlugin;
+    PCB_PLUGIN   kicadPlugin;
 };
 
 
 /**
  * Declares the struct as the Boost test fixture.
  */
-BOOST_FIXTURE_TEST_SUITE( AltiumPcbLibImport, ALTIUM_PCBLIB_IMPORT_FIXTURE )
+BOOST_FIXTURE_TEST_SUITE( EagleLbrLibImport, EAGLE_LBR_IMPORT_FIXTURE )
 
 
 /**
- * Compare all footprints declared in a *.PcbLib file with their KiCad reference footprint
+ * Compare all footprints declared in a *.lbr file with their KiCad reference footprint
  */
-BOOST_AUTO_TEST_CASE( AltiumPcbLibImport )
+BOOST_AUTO_TEST_CASE( EagleLbrLibImport )
 {
     // clang-format off
     std::vector<std::pair<wxString, wxString>> tests = {
-        { "Tracks.v5.PcbLib", "Tracks.pretty" },
-        { "Tracks.v6.PcbLib", "Tracks.pretty" },
-        { "Espressif ESP32-WROOM-32.PcbLib", "Espressif ESP32-WROOM-32.pretty" }
+        { "SparkFun-GPS.lbr", "SparkFun-GPS.pretty" }
     };
     // clang-format on
 
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/altium/pcblib/";
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/eagle/lbr/";
 
     for( const std::pair<wxString, wxString>& libName : tests )
     {
-        wxString altiumLibraryPath = dataPath + libName.first;
+        wxString eagleLibraryPath = dataPath + libName.first;
         wxString kicadLibraryPath = dataPath + libName.second;
 
-        wxArrayString altiumFootprintNames;
+        wxArrayString eagleFootprintNames;
         wxArrayString kicadFootprintNames;
 
-        altiumPlugin.FootprintEnumerate( altiumFootprintNames, altiumLibraryPath, true, nullptr );
+        eaglePlugin.FootprintEnumerate( eagleFootprintNames, eagleLibraryPath, true, nullptr );
         kicadPlugin.FootprintEnumerate( kicadFootprintNames, kicadLibraryPath, true, nullptr );
 
-        BOOST_CHECK_EQUAL( altiumFootprintNames.GetCount(), kicadFootprintNames.GetCount() );
+        BOOST_CHECK_EQUAL( eagleFootprintNames.GetCount(), kicadFootprintNames.GetCount() );
 
-        for( size_t i = 0; i < altiumFootprintNames.GetCount(); i++ )
+        for( size_t i = 0; i < eagleFootprintNames.GetCount(); i++ )
         {
-            wxString footprintName = altiumFootprintNames[i];
+            wxString footprintName = eagleFootprintNames[i];
 
             BOOST_TEST_CONTEXT( wxString::Format( wxT( "Import '%s' from '%s'" ), footprintName,
                                                   libName.first ) )
             {
-                FOOTPRINT* altiumFp = altiumPlugin.FootprintLoad( altiumLibraryPath, footprintName,
-                                                                  false, nullptr );
-                BOOST_CHECK( altiumFp );
+                FOOTPRINT* eagleFp = eaglePlugin.FootprintLoad( eagleLibraryPath, footprintName,
+                                                                false, nullptr );
+                BOOST_CHECK( eagleFp );
 
-                BOOST_CHECK_EQUAL( wxT( "REF**" ), altiumFp->GetReference() );
-                BOOST_CHECK_EQUAL( footprintName, altiumFp->GetValue() );
+                // TODO: import does not replace variables
+                //BOOST_CHECK_EQUAL( wxT( "REF**" ), eagleFp->GetReference() );
+                //BOOST_CHECK_EQUAL( footprintName, eagleFp->GetValue() );
 
                 FOOTPRINT* kicadFp =
                         kicadPlugin.FootprintLoad( kicadLibraryPath, footprintName, true, nullptr );
                 BOOST_CHECK( kicadFp );
 
-                KI_TEST::CheckFootprint( kicadFp, altiumFp );
+                KI_TEST::CheckFootprint( kicadFp, eagleFp );
             }
         }
     }

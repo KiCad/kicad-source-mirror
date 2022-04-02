@@ -1,0 +1,3311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE eagle SYSTEM "eagle.dtd">
+<eagle version="9.6.2">
+<drawing>
+<settings>
+<setting alwaysvectorfont="no"/>
+<setting keepoldvectorfont="yes"/>
+<setting verticaltext="up"/>
+</settings>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<layers>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
+<layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="yes"/>
+<layer number="21" name="tPlace" color="16" fill="1" visible="yes" active="yes"/>
+<layer number="22" name="bPlace" color="14" fill="1" visible="yes" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
+<layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
+<layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
+<layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
+<layer number="33" name="tFinish" color="6" fill="3" visible="no" active="yes"/>
+<layer number="34" name="bFinish" color="6" fill="6" visible="no" active="yes"/>
+<layer number="35" name="tGlue" color="7" fill="4" visible="no" active="yes"/>
+<layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
+<layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="yes"/>
+<layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
+<layer number="45" name="Holes" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
+<layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
+<layer number="50" name="dxf" color="7" fill="1" visible="no" active="yes"/>
+<layer number="51" name="tDocu" color="6" fill="1" visible="yes" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
+<layer number="91" name="Nets" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="92" name="Busses" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="93" name="Pins" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="94" name="Symbols" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="95" name="Names" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="96" name="Values" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="2" name="Route2" color="63" fill="3" visible="no" active="no"/>
+<layer number="15" name="Route15" color="23" fill="6" visible="no" active="no"/>
+<layer number="3" name="Route3" color="4" fill="3" visible="no" active="no"/>
+<layer number="4" name="Route4" color="1" fill="4" visible="no" active="no"/>
+<layer number="5" name="Route5" color="4" fill="4" visible="no" active="no"/>
+<layer number="6" name="Route6" color="1" fill="8" visible="no" active="no"/>
+<layer number="7" name="Route7" color="4" fill="8" visible="no" active="no"/>
+<layer number="8" name="Route8" color="1" fill="2" visible="no" active="no"/>
+<layer number="9" name="Route9" color="4" fill="2" visible="no" active="no"/>
+<layer number="10" name="Route10" color="1" fill="7" visible="no" active="no"/>
+<layer number="11" name="Route11" color="4" fill="7" visible="no" active="no"/>
+<layer number="12" name="Route12" color="1" fill="5" visible="no" active="no"/>
+<layer number="13" name="Route13" color="4" fill="5" visible="no" active="no"/>
+<layer number="14" name="Route14" color="1" fill="6" visible="no" active="no"/>
+<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
+<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
+<layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
+<layer number="57" name="tCAD" color="7" fill="1" visible="no" active="no"/>
+<layer number="59" name="tCarbon" color="7" fill="1" visible="no" active="no"/>
+<layer number="60" name="bCarbon" color="7" fill="1" visible="no" active="no"/>
+<layer number="88" name="SimResults" color="9" fill="1" visible="yes" active="yes"/>
+<layer number="89" name="SimProbes" color="9" fill="1" visible="yes" active="yes"/>
+<layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
+<layer number="97" name="Info" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="98" name="Guide" color="6" fill="1" visible="yes" active="yes"/>
+<layer number="99" name="SpiceOrder" color="7" fill="1" visible="no" active="no"/>
+<layer number="100" name="Muster" color="7" fill="1" visible="no" active="no"/>
+<layer number="101" name="Patch_Top" color="12" fill="4" visible="no" active="no"/>
+<layer number="102" name="Vscore" color="7" fill="1" visible="no" active="no"/>
+<layer number="103" name="tMap" color="7" fill="1" visible="no" active="no"/>
+<layer number="104" name="Name" color="16" fill="1" visible="no" active="no"/>
+<layer number="105" name="tPlate" color="7" fill="1" visible="no" active="no"/>
+<layer number="106" name="bPlate" color="7" fill="1" visible="no" active="no"/>
+<layer number="107" name="Crop" color="7" fill="1" visible="no" active="no"/>
+<layer number="108" name="tplace-old" color="10" fill="1" visible="no" active="no"/>
+<layer number="109" name="ref-old" color="11" fill="1" visible="no" active="no"/>
+<layer number="110" name="fp0" color="7" fill="1" visible="no" active="no"/>
+<layer number="111" name="LPC17xx" color="7" fill="1" visible="no" active="no"/>
+<layer number="112" name="tSilk" color="7" fill="1" visible="no" active="no"/>
+<layer number="113" name="IDFDebug" color="4" fill="1" visible="no" active="no"/>
+<layer number="114" name="Badge_Outline" color="7" fill="1" visible="no" active="no"/>
+<layer number="115" name="ReferenceISLANDS" color="7" fill="1" visible="no" active="no"/>
+<layer number="116" name="Patch_BOT" color="9" fill="4" visible="no" active="no"/>
+<layer number="117" name="PM_Ref" color="7" fill="1" visible="no" active="no"/>
+<layer number="118" name="Rect_Pads" color="7" fill="1" visible="no" active="no"/>
+<layer number="119" name="PF_Ref" color="7" fill="1" visible="no" active="no"/>
+<layer number="120" name="WFL_Ref" color="7" fill="1" visible="no" active="no"/>
+<layer number="121" name="_tsilk" color="7" fill="1" visible="no" active="no"/>
+<layer number="122" name="_bsilk" color="7" fill="1" visible="no" active="no"/>
+<layer number="123" name="tTestmark" color="7" fill="1" visible="no" active="no"/>
+<layer number="124" name="bTestmark" color="7" fill="1" visible="no" active="no"/>
+<layer number="125" name="_tNames" color="7" fill="1" visible="no" active="no"/>
+<layer number="126" name="_bNames" color="7" fill="1" visible="no" active="no"/>
+<layer number="127" name="_tValues" color="7" fill="1" visible="no" active="no"/>
+<layer number="128" name="_bValues" color="7" fill="1" visible="no" active="no"/>
+<layer number="129" name="Mask" color="7" fill="1" visible="no" active="no"/>
+<layer number="131" name="tAdjust" color="7" fill="1" visible="no" active="no"/>
+<layer number="132" name="bAdjust" color="7" fill="1" visible="no" active="no"/>
+<layer number="144" name="Drill_legend" color="7" fill="1" visible="no" active="no"/>
+<layer number="150" name="Notes" color="7" fill="1" visible="no" active="no"/>
+<layer number="151" name="HeatSink" color="7" fill="1" visible="no" active="no"/>
+<layer number="152" name="_bDocu" color="7" fill="1" visible="no" active="no"/>
+<layer number="153" name="FabDoc1" color="7" fill="1" visible="no" active="no"/>
+<layer number="154" name="FabDoc2" color="7" fill="1" visible="no" active="no"/>
+<layer number="155" name="FabDoc3" color="7" fill="1" visible="no" active="no"/>
+<layer number="199" name="Contour" color="7" fill="1" visible="no" active="no"/>
+<layer number="200" name="200bmp" color="1" fill="10" visible="no" active="no"/>
+<layer number="201" name="201bmp" color="2" fill="10" visible="no" active="no"/>
+<layer number="202" name="202bmp" color="3" fill="10" visible="no" active="no"/>
+<layer number="203" name="203bmp" color="4" fill="10" visible="no" active="no"/>
+<layer number="204" name="204bmp" color="5" fill="10" visible="no" active="no"/>
+<layer number="205" name="205bmp" color="6" fill="10" visible="no" active="no"/>
+<layer number="206" name="206bmp" color="7" fill="10" visible="no" active="no"/>
+<layer number="207" name="207bmp" color="8" fill="10" visible="no" active="no"/>
+<layer number="208" name="208bmp" color="9" fill="10" visible="no" active="no"/>
+<layer number="209" name="209bmp" color="7" fill="1" visible="no" active="no"/>
+<layer number="210" name="210bmp" color="7" fill="1" visible="no" active="no"/>
+<layer number="211" name="211bmp" color="7" fill="1" visible="no" active="no"/>
+<layer number="212" name="212bmp" color="7" fill="1" visible="no" active="no"/>
+<layer number="213" name="213bmp" color="7" fill="1" visible="no" active="no"/>
+<layer number="214" name="214bmp" color="7" fill="1" visible="no" active="no"/>
+<layer number="215" name="215bmp" color="7" fill="1" visible="no" active="no"/>
+<layer number="216" name="216bmp" color="7" fill="1" visible="no" active="no"/>
+<layer number="217" name="217bmp" color="18" fill="1" visible="no" active="no"/>
+<layer number="218" name="218bmp" color="19" fill="1" visible="no" active="no"/>
+<layer number="219" name="219bmp" color="20" fill="1" visible="no" active="no"/>
+<layer number="220" name="220bmp" color="21" fill="1" visible="no" active="no"/>
+<layer number="221" name="221bmp" color="22" fill="1" visible="no" active="no"/>
+<layer number="222" name="222bmp" color="23" fill="1" visible="no" active="no"/>
+<layer number="223" name="223bmp" color="24" fill="1" visible="no" active="no"/>
+<layer number="224" name="224bmp" color="25" fill="1" visible="no" active="no"/>
+<layer number="225" name="225bmp" color="7" fill="1" visible="no" active="no"/>
+<layer number="226" name="226bmp" color="7" fill="1" visible="no" active="no"/>
+<layer number="227" name="227bmp" color="7" fill="1" visible="no" active="no"/>
+<layer number="228" name="228bmp" color="7" fill="1" visible="no" active="no"/>
+<layer number="229" name="229bmp" color="7" fill="1" visible="no" active="no"/>
+<layer number="230" name="230bmp" color="7" fill="1" visible="no" active="no"/>
+<layer number="231" name="231bmp" color="7" fill="1" visible="no" active="no"/>
+<layer number="232" name="Eagle3D_PG2" color="7" fill="1" visible="no" active="no"/>
+<layer number="233" name="Eagle3D_PG3" color="7" fill="1" visible="no" active="no"/>
+<layer number="248" name="Housing" color="7" fill="1" visible="no" active="no"/>
+<layer number="249" name="Edge" color="7" fill="1" visible="no" active="no"/>
+<layer number="250" name="Descript" color="3" fill="1" visible="no" active="no"/>
+<layer number="251" name="SMDround" color="12" fill="11" visible="no" active="no"/>
+<layer number="254" name="cooling" color="7" fill="1" visible="no" active="no"/>
+<layer number="255" name="routoute" color="7" fill="1" visible="no" active="no"/>
+</layers>
+<library>
+<description>&lt;h3&gt;SparkFun GPS, Antennas&lt;/h3&gt;
+This library contains GPS modules, GPS antennas, etc. 
+&lt;br&gt;
+&lt;br&gt;
+We've spent an enormous amount of time creating and checking these footprints and parts, but it is &lt;b&gt; the end user's responsibility&lt;/b&gt; to ensure correctness and suitablity for a given componet or application. 
+&lt;br&gt;
+&lt;br&gt;If you enjoy using this library, please buy one of our products at &lt;a href=" www.sparkfun.com"&gt;SparkFun.com&lt;/a&gt;.
+&lt;br&gt;
+&lt;br&gt;
+&lt;b&gt;Licensing:&lt;/b&gt; Creative Commons ShareAlike 4.0 International - https://creativecommons.org/licenses/by-sa/4.0/ 
+&lt;br&gt;
+&lt;br&gt;
+You are welcome to use this library for commercial purposes. For attribution, we ask that when you begin to sell your device using our footprint, you email us with a link to the product being sold. We want bragging rights that we helped (in a very small part) to create your 8th world wonder. We would like the opportunity to feature your device on our homepage.</description>
+<packages>
+<package name="ANT-GPS-2X8MM">
+<description>&lt;h3&gt;GPS Chip Antenna - 2.0 x 8.0 x 1.5 mm&lt;/h3&gt;
+&lt;p&gt;2.0 x 8.0 x 1.5 mm package&lt;/p&gt;
+&lt;p&gt;Package used for Chant Sincere Co. 922D03E15X11113 GPS Antenna&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.sparkfun.com/datasheets/GPS/GPS-ChipAntenna.pdf"&gt;Example Datasheet&lt;/a&gt;&lt;/p&gt;</description>
+<wire x1="-4" y1="1" x2="-4" y2="-1" width="0.127" layer="51"/>
+<wire x1="-4" y1="-1" x2="4" y2="-1" width="0.127" layer="51"/>
+<wire x1="4" y1="-1" x2="4" y2="1" width="0.127" layer="51"/>
+<wire x1="4" y1="1" x2="-4" y2="1" width="0.127" layer="51"/>
+<wire x1="-3" y1="1.1" x2="3" y2="1.1" width="0.2032" layer="21"/>
+<wire x1="3" y1="-1.1" x2="-3" y2="-1.1" width="0.2032" layer="21"/>
+<circle x="-3" y="0.6" radius="0.254" width="0" layer="21"/>
+<smd name="SIG" x="-4" y="0" dx="1" dy="2" layer="1"/>
+<smd name="NC" x="4" y="0" dx="1" dy="2" layer="1"/>
+<text x="0" y="0" size="0.6096" layer="51" font="vector" align="center">152111</text>
+<text x="0" y="-1.243" size="0.6096" layer="27" font="vector" ratio="20" align="top-center">&gt;VALUE</text>
+<text x="0" y="1.243" size="0.6096" layer="25" font="vector" ratio="20" align="bottom-center">&gt;NAME</text>
+<wire x1="-4.7" y1="1" x2="-4.7" y2="-1" width="0.2032" layer="21"/>
+</package>
+<package name="ANT-GPS-2X7MM">
+<description>&lt;h3&gt;GPS Chip Antenna - 7.0 x 2.0 x 0.8 mm&lt;/h3&gt;
+&lt;p&gt;7.0 x 2.0 x 0.8 mm package&lt;/p&gt;
+&lt;p&gt;Package used for Johanson 1575AT43A40 GPS Antenna&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.sparkfun.com/datasheets/GPS/JTI_Antenna-1575AT43A40_2006-09.pdf"&gt;Example Datasheet&lt;/a&gt;&lt;/p&gt;</description>
+<wire x1="-2.7" y1="1.1" x2="2.7" y2="1.1" width="0.2032" layer="21"/>
+<wire x1="-2.7" y1="-1.1" x2="2.7" y2="-1.1" width="0.2032" layer="21"/>
+<wire x1="-2.6" y1="0.3" x2="-2.6" y2="-0.3" width="0.2032" layer="21"/>
+<wire x1="-2.6" y1="-0.3" x2="-1.6" y2="-0.3" width="0.2032" layer="21"/>
+<wire x1="-1.6" y1="-0.3" x2="-1.6" y2="0.3" width="0.2032" layer="21"/>
+<wire x1="-1.6" y1="0.3" x2="-2.6" y2="0.3" width="0.2032" layer="21"/>
+<wire x1="-3.5" y1="1" x2="3.5" y2="1" width="0.127" layer="51"/>
+<wire x1="3.5" y1="1" x2="3.5" y2="-1" width="0.127" layer="51"/>
+<wire x1="3.5" y1="-1" x2="-3.5" y2="-1" width="0.127" layer="51"/>
+<wire x1="-3.5" y1="-1" x2="-3.5" y2="1" width="0.127" layer="51"/>
+<smd name="NC" x="3.4" y="0" dx="2" dy="0.75" layer="1" rot="R90"/>
+<smd name="1" x="-3.4" y="0" dx="2" dy="0.75" layer="1" rot="R90"/>
+<text x="0" y="1.243" size="0.6096" layer="25" font="vector" ratio="20" align="bottom-center">&gt;NAME</text>
+<text x="0" y="-1.243" size="0.6096" layer="27" font="vector" ratio="20" align="top-center">&gt;VALUE</text>
+<wire x1="-4.1" y1="1" x2="-4.1" y2="-1" width="0.2032" layer="21"/>
+</package>
+<package name="COPERNICUS">
+<description>&lt;h3&gt;Trimble Copernicus and Copernicus II GPS Receiver&lt;/h3&gt;
+&lt;p&gt;&lt;a href="http://cdn.sparkfun.com/datasheets/Sensors/GPS/63530-10_Rev-B_Manual_Copernicus-II.pdf"&gt;Datasheet&lt;/a&gt;&lt;/p&gt;</description>
+<wire x1="-9" y1="9.7" x2="-9.7" y2="9.7" width="0.2032" layer="21"/>
+<wire x1="9.1" y1="-9.7" x2="9.7" y2="-9.7" width="0.2032" layer="21"/>
+<wire x1="9.7" y1="9.7" x2="9.1" y2="9.7" width="0.2032" layer="21"/>
+<wire x1="-9.7" y1="9.7" x2="-9.7" y2="-9.7" width="0.2032" layer="21"/>
+<wire x1="-9.7" y1="-9.7" x2="-8.9" y2="-9.7" width="0.2032" layer="21"/>
+<wire x1="-9.5" y1="9.5" x2="9.5" y2="9.5" width="0.127" layer="51"/>
+<wire x1="-9.5" y1="9.5" x2="-9.5" y2="-9.5" width="0.127" layer="51"/>
+<wire x1="9.5" y1="9.5" x2="9.5" y2="-9.5" width="0.127" layer="51"/>
+<wire x1="-9.5" y1="-9.5" x2="9.5" y2="-9.5" width="0.127" layer="51"/>
+<circle x="-8.2" y="-6.8" radius="0.457" width="0.2032" layer="21"/>
+<smd name="28" x="-8.2" y="9.2" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="26" x="-5.66" y="9.2" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="25" x="-4.39" y="9.2" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="24" x="-3.12" y="9.2" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="23" x="-1.85" y="9.2" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="22" x="-0.58" y="9.2" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="21" x="0.69" y="9.2" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="20" x="1.96" y="9.2" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="19" x="3.23" y="9.2" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="18" x="4.5" y="9.2" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="17" x="5.77" y="9.2" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="16" x="7.04" y="9.2" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="15" x="8.31" y="9.2" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="1" x="-8.2" y="-9.1642" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="2" x="-6.93" y="-9.1642" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="3" x="-5.66" y="-9.1642" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="4" x="-4.39" y="-9.1642" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="5" x="-3.12" y="-9.1642" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="6" x="-1.85" y="-9.1642" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="7" x="-0.58" y="-9.1642" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="8" x="0.69" y="-9.1642" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="9" x="1.96" y="-9.1642" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="10" x="3.23" y="-9.1642" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="11" x="4.5" y="-9.1642" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="12" x="5.77" y="-9.1642" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="13" x="7.04" y="-9.1642" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="14" x="8.31" y="-9.1642" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<smd name="27" x="-6.93" y="9.2" dx="0.762" dy="1.651" layer="1" rot="R180" cream="no"/>
+<polygon width="0.0254" layer="31">
+<vertex x="-8.581" y="8.3872"/>
+<vertex x="-8.581" y="9.5302"/>
+<vertex x="-8.6826" y="9.5302"/>
+<vertex x="-8.6826" y="10.1398"/>
+<vertex x="-7.7174" y="10.1398"/>
+<vertex x="-7.7174" y="9.5302"/>
+<vertex x="-7.819" y="9.5302"/>
+<vertex x="-7.819" y="8.3872"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="-7.311" y="8.3872"/>
+<vertex x="-7.311" y="9.5302"/>
+<vertex x="-7.4126" y="9.5302"/>
+<vertex x="-7.4126" y="10.1398"/>
+<vertex x="-6.4474" y="10.1398"/>
+<vertex x="-6.4474" y="9.5302"/>
+<vertex x="-6.549" y="9.5302"/>
+<vertex x="-6.549" y="8.3872"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="-6.041" y="8.3872"/>
+<vertex x="-6.041" y="9.5302"/>
+<vertex x="-6.1426" y="9.5302"/>
+<vertex x="-6.1426" y="10.1398"/>
+<vertex x="-5.1774" y="10.1398"/>
+<vertex x="-5.1774" y="9.5302"/>
+<vertex x="-5.279" y="9.5302"/>
+<vertex x="-5.279" y="8.3872"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="-4.771" y="8.3872"/>
+<vertex x="-4.771" y="9.5302"/>
+<vertex x="-4.8726" y="9.5302"/>
+<vertex x="-4.8726" y="10.1398"/>
+<vertex x="-3.9074" y="10.1398"/>
+<vertex x="-3.9074" y="9.5302"/>
+<vertex x="-4.009" y="9.5302"/>
+<vertex x="-4.009" y="8.3872"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="-3.501" y="8.3872"/>
+<vertex x="-3.501" y="9.5302"/>
+<vertex x="-3.6026" y="9.5302"/>
+<vertex x="-3.6026" y="10.1398"/>
+<vertex x="-2.6374" y="10.1398"/>
+<vertex x="-2.6374" y="9.5302"/>
+<vertex x="-2.739" y="9.5302"/>
+<vertex x="-2.739" y="8.3872"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="-2.231" y="8.3872"/>
+<vertex x="-2.231" y="9.5302"/>
+<vertex x="-2.3326" y="9.5302"/>
+<vertex x="-2.3326" y="10.1398"/>
+<vertex x="-1.3674" y="10.1398"/>
+<vertex x="-1.3674" y="9.5302"/>
+<vertex x="-1.469" y="9.5302"/>
+<vertex x="-1.469" y="8.3872"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="-0.961" y="8.3872"/>
+<vertex x="-0.961" y="9.5302"/>
+<vertex x="-1.0626" y="9.5302"/>
+<vertex x="-1.0626" y="10.1398"/>
+<vertex x="-0.0974" y="10.1398"/>
+<vertex x="-0.0974" y="9.5302"/>
+<vertex x="-0.199" y="9.5302"/>
+<vertex x="-0.199" y="8.3872"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="0.309" y="8.3872"/>
+<vertex x="0.309" y="9.5302"/>
+<vertex x="0.2074" y="9.5302"/>
+<vertex x="0.2074" y="10.1398"/>
+<vertex x="1.1726" y="10.1398"/>
+<vertex x="1.1726" y="9.5302"/>
+<vertex x="1.071" y="9.5302"/>
+<vertex x="1.071" y="8.3872"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="1.579" y="8.3872"/>
+<vertex x="1.579" y="9.5302"/>
+<vertex x="1.4774" y="9.5302"/>
+<vertex x="1.4774" y="10.1398"/>
+<vertex x="2.4426" y="10.1398"/>
+<vertex x="2.4426" y="9.5302"/>
+<vertex x="2.341" y="9.5302"/>
+<vertex x="2.341" y="8.3872"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="2.849" y="8.3872"/>
+<vertex x="2.849" y="9.5302"/>
+<vertex x="2.7474" y="9.5302"/>
+<vertex x="2.7474" y="10.1398"/>
+<vertex x="3.7126" y="10.1398"/>
+<vertex x="3.7126" y="9.5302"/>
+<vertex x="3.611" y="9.5302"/>
+<vertex x="3.611" y="8.3872"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="4.119" y="8.3872"/>
+<vertex x="4.119" y="9.5302"/>
+<vertex x="4.0174" y="9.5302"/>
+<vertex x="4.0174" y="10.1398"/>
+<vertex x="4.9826" y="10.1398"/>
+<vertex x="4.9826" y="9.5302"/>
+<vertex x="4.881" y="9.5302"/>
+<vertex x="4.881" y="8.3872"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="5.389" y="8.3872"/>
+<vertex x="5.389" y="9.5302"/>
+<vertex x="5.2874" y="9.5302"/>
+<vertex x="5.2874" y="10.1398"/>
+<vertex x="6.2526" y="10.1398"/>
+<vertex x="6.2526" y="9.5302"/>
+<vertex x="6.151" y="9.5302"/>
+<vertex x="6.151" y="8.3872"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="6.659" y="8.3872"/>
+<vertex x="6.659" y="9.5302"/>
+<vertex x="6.5574" y="9.5302"/>
+<vertex x="6.5574" y="10.1398"/>
+<vertex x="7.5226" y="10.1398"/>
+<vertex x="7.5226" y="9.5302"/>
+<vertex x="7.421" y="9.5302"/>
+<vertex x="7.421" y="8.3872"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="7.929" y="8.3872"/>
+<vertex x="7.929" y="9.5302"/>
+<vertex x="7.8274" y="9.5302"/>
+<vertex x="7.8274" y="10.1398"/>
+<vertex x="8.7926" y="10.1398"/>
+<vertex x="8.7926" y="9.5302"/>
+<vertex x="8.691" y="9.5302"/>
+<vertex x="8.691" y="8.3872"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="-7.819" y="-8.3514"/>
+<vertex x="-7.819" y="-9.4944"/>
+<vertex x="-7.7174" y="-9.4944"/>
+<vertex x="-7.7174" y="-10.104"/>
+<vertex x="-8.6826" y="-10.104"/>
+<vertex x="-8.6826" y="-9.4944"/>
+<vertex x="-8.581" y="-9.4944"/>
+<vertex x="-8.581" y="-8.3514"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="-6.549" y="-8.3514"/>
+<vertex x="-6.549" y="-9.4944"/>
+<vertex x="-6.4474" y="-9.4944"/>
+<vertex x="-6.4474" y="-10.104"/>
+<vertex x="-7.4126" y="-10.104"/>
+<vertex x="-7.4126" y="-9.4944"/>
+<vertex x="-7.311" y="-9.4944"/>
+<vertex x="-7.311" y="-8.3514"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="-5.279" y="-8.3514"/>
+<vertex x="-5.279" y="-9.4944"/>
+<vertex x="-5.1774" y="-9.4944"/>
+<vertex x="-5.1774" y="-10.104"/>
+<vertex x="-6.1426" y="-10.104"/>
+<vertex x="-6.1426" y="-9.4944"/>
+<vertex x="-6.041" y="-9.4944"/>
+<vertex x="-6.041" y="-8.3514"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="-4.009" y="-8.3514"/>
+<vertex x="-4.009" y="-9.4944"/>
+<vertex x="-3.9074" y="-9.4944"/>
+<vertex x="-3.9074" y="-10.104"/>
+<vertex x="-4.8726" y="-10.104"/>
+<vertex x="-4.8726" y="-9.4944"/>
+<vertex x="-4.771" y="-9.4944"/>
+<vertex x="-4.771" y="-8.3514"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="-2.739" y="-8.3514"/>
+<vertex x="-2.739" y="-9.4944"/>
+<vertex x="-2.6374" y="-9.4944"/>
+<vertex x="-2.6374" y="-10.104"/>
+<vertex x="-3.6026" y="-10.104"/>
+<vertex x="-3.6026" y="-9.4944"/>
+<vertex x="-3.501" y="-9.4944"/>
+<vertex x="-3.501" y="-8.3514"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="-1.469" y="-8.3514"/>
+<vertex x="-1.469" y="-9.4944"/>
+<vertex x="-1.3674" y="-9.4944"/>
+<vertex x="-1.3674" y="-10.104"/>
+<vertex x="-2.3326" y="-10.104"/>
+<vertex x="-2.3326" y="-9.4944"/>
+<vertex x="-2.231" y="-9.4944"/>
+<vertex x="-2.231" y="-8.3514"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="-0.199" y="-8.3514"/>
+<vertex x="-0.199" y="-9.4944"/>
+<vertex x="-0.0974" y="-9.4944"/>
+<vertex x="-0.0974" y="-10.104"/>
+<vertex x="-1.0626" y="-10.104"/>
+<vertex x="-1.0626" y="-9.4944"/>
+<vertex x="-0.961" y="-9.4944"/>
+<vertex x="-0.961" y="-8.3514"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="1.071" y="-8.3514"/>
+<vertex x="1.071" y="-9.4944"/>
+<vertex x="1.1726" y="-9.4944"/>
+<vertex x="1.1726" y="-10.104"/>
+<vertex x="0.2074" y="-10.104"/>
+<vertex x="0.2074" y="-9.4944"/>
+<vertex x="0.309" y="-9.4944"/>
+<vertex x="0.309" y="-8.3514"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="2.341" y="-8.3514"/>
+<vertex x="2.341" y="-9.4944"/>
+<vertex x="2.4426" y="-9.4944"/>
+<vertex x="2.4426" y="-10.104"/>
+<vertex x="1.4774" y="-10.104"/>
+<vertex x="1.4774" y="-9.4944"/>
+<vertex x="1.579" y="-9.4944"/>
+<vertex x="1.579" y="-8.3514"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="3.611" y="-8.3514"/>
+<vertex x="3.611" y="-9.4944"/>
+<vertex x="3.7126" y="-9.4944"/>
+<vertex x="3.7126" y="-10.104"/>
+<vertex x="2.7474" y="-10.104"/>
+<vertex x="2.7474" y="-9.4944"/>
+<vertex x="2.849" y="-9.4944"/>
+<vertex x="2.849" y="-8.3514"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="4.881" y="-8.3514"/>
+<vertex x="4.881" y="-9.4944"/>
+<vertex x="4.9826" y="-9.4944"/>
+<vertex x="4.9826" y="-10.104"/>
+<vertex x="4.0174" y="-10.104"/>
+<vertex x="4.0174" y="-9.4944"/>
+<vertex x="4.119" y="-9.4944"/>
+<vertex x="4.119" y="-8.3514"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="6.151" y="-8.3514"/>
+<vertex x="6.151" y="-9.4944"/>
+<vertex x="6.2526" y="-9.4944"/>
+<vertex x="6.2526" y="-10.104"/>
+<vertex x="5.2874" y="-10.104"/>
+<vertex x="5.2874" y="-9.4944"/>
+<vertex x="5.389" y="-9.4944"/>
+<vertex x="5.389" y="-8.3514"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="7.421" y="-8.3514"/>
+<vertex x="7.421" y="-9.4944"/>
+<vertex x="7.5226" y="-9.4944"/>
+<vertex x="7.5226" y="-10.104"/>
+<vertex x="6.5574" y="-10.104"/>
+<vertex x="6.5574" y="-9.4944"/>
+<vertex x="6.659" y="-9.4944"/>
+<vertex x="6.659" y="-8.3514"/>
+</polygon>
+<polygon width="0.0254" layer="31">
+<vertex x="8.691" y="-8.3514"/>
+<vertex x="8.691" y="-9.4944"/>
+<vertex x="8.7926" y="-9.4944"/>
+<vertex x="8.7926" y="-10.104"/>
+<vertex x="7.8274" y="-10.104"/>
+<vertex x="7.8274" y="-9.4944"/>
+<vertex x="7.929" y="-9.4944"/>
+<vertex x="7.929" y="-8.3514"/>
+</polygon>
+<text x="0" y="1" size="0.6096" layer="25" font="vector" ratio="20" align="bottom-center">&gt;NAME</text>
+<text x="0" y="-1" size="0.6096" layer="27" font="vector" ratio="20" align="top-center">&gt;VALUE</text>
+<circle x="-10.273" y="-9.3" radius="0.457" width="0" layer="21"/>
+<wire x1="9.7" y1="9.7" x2="9.7" y2="-9.7" width="0.2032" layer="21"/>
+</package>
+<package name="JST-6PIN-1MM">
+<description>&lt;h3&gt;6-Pin Vertical JST Connector&lt;/h3&gt;
+&lt;p&gt;&lt;ul&gt;&lt;li&gt;1.0mm pitch&lt;/li&gt;
+&lt;li&gt;JST-SH type&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;
+&lt;p&gt;Common interface for SparkFun GPS modules.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://www.sparkfun.com/datasheets/GPS/EM406-SMDConnector-eSH.pdf"&gt;Datasheet&lt;/a&gt;&lt;/p&gt;</description>
+<wire x1="-2.5" y1="-1.598" x2="2.58" y2="-1.598" width="0.2032" layer="21"/>
+<wire x1="3.342" y1="1.577" x2="4.104" y2="1.577" width="0.2032" layer="21"/>
+<wire x1="4.104" y1="1.577" x2="4.104" y2="0.688" width="0.2032" layer="21"/>
+<circle x="-3.262" y="2.212" radius="0.1047" width="0.4064" layer="21"/>
+<smd name="P$1" x="-3.8" y="-0.775" dx="1.2" dy="1.8" layer="1"/>
+<smd name="P$2" x="3.8" y="-0.775" dx="1.2" dy="1.8" layer="1"/>
+<smd name="1" x="-2.5" y="1.45" dx="0.6" dy="1.55" layer="1"/>
+<smd name="2" x="-1.5" y="1.45" dx="0.6" dy="1.55" layer="1"/>
+<smd name="3" x="-0.5" y="1.45" dx="0.6" dy="1.55" layer="1"/>
+<smd name="4" x="0.5" y="1.45" dx="0.6" dy="1.55" layer="1"/>
+<smd name="5" x="1.5" y="1.45" dx="0.6" dy="1.55" layer="1"/>
+<smd name="6" x="2.5" y="1.45" dx="0.6" dy="1.55" layer="1"/>
+<text x="-4.659" y="0.18" size="0.6096" layer="25" font="vector" ratio="20" rot="R90" align="bottom-center">&gt;NAME</text>
+<text x="4.739" y="0.18" size="0.6096" layer="27" font="vector" ratio="20" rot="R90" align="top-center">&gt;VALUE</text>
+<wire x1="-4" y1="-1.471" x2="4" y2="-1.471" width="0.127" layer="51"/>
+<wire x1="4" y1="-1.471" x2="4" y2="1.471" width="0.127" layer="51"/>
+<wire x1="4" y1="1.471" x2="-4" y2="1.471" width="0.127" layer="51"/>
+<wire x1="-4" y1="1.471" x2="-4" y2="-1.471" width="0.127" layer="51"/>
+<wire x1="-4.104" y1="1.577" x2="-4.104" y2="0.688" width="0.2032" layer="21"/>
+<wire x1="-3.342" y1="1.577" x2="-4.104" y2="1.577" width="0.2032" layer="21"/>
+</package>
+<package name="EM-506_OUTLINE">
+<description>&lt;h3&gt;EM-406 and EM-506 module dimensions&lt;/h3&gt;
+&lt;p&gt;The EM-506 is a GPS receiver module with on-board voltage regulation and patch antenna built-in.&lt;/p&gt;
+&lt;p&gt;30 x 30 x 10.7 mm&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.sparkfun.com/products/12751"&gt;Product Link&lt;/a&gt;&lt;/p&gt;</description>
+<text x="0.24" y="0.24" size="0.6096" layer="25" font="vector" ratio="20" align="bottom-center">&gt;NAME</text>
+<text x="0" y="-1.27" size="0.6096" layer="27" font="vector" ratio="20" align="top-center">&gt;VALUE</text>
+<wire x1="-15.127" y1="-15.127" x2="-15.127" y2="15.127" width="0.2032" layer="21"/>
+<wire x1="-15.127" y1="15.127" x2="15.127" y2="15.127" width="0.2032" layer="21"/>
+<wire x1="15" y1="15" x2="15" y2="-15" width="0.127" layer="51"/>
+<wire x1="15.127" y1="-15.127" x2="4" y2="-15.127" width="0.2032" layer="21"/>
+<wire x1="4" y1="-15.127" x2="-4" y2="-15.127" width="0.2032" layer="21"/>
+<wire x1="-4" y1="-15.127" x2="-15.127" y2="-15.127" width="0.2032" layer="21"/>
+<wire x1="-15" y1="-15" x2="-15" y2="15" width="0.127" layer="51"/>
+<wire x1="-15" y1="15" x2="15" y2="15" width="0.127" layer="51"/>
+<wire x1="15.127" y1="15.127" x2="15.127" y2="-15.127" width="0.2032" layer="21"/>
+<wire x1="15" y1="-15" x2="-15" y2="-15" width="0.127" layer="51"/>
+<wire x1="-4" y1="-15.127" x2="-4" y2="-12" width="0.2032" layer="21"/>
+<wire x1="-4" y1="-12" x2="4" y2="-12" width="0.2032" layer="21"/>
+<wire x1="4" y1="-15.127" x2="4" y2="-12" width="0.2032" layer="21"/>
+</package>
+<package name="VENUS638FLPX">
+<description>&lt;h3&gt;Skytraq Venus638FLPX GPS Receiver - 44-pin 10 x 10 mm QFN&lt;/h3&gt;
+&lt;p&gt;Venus638FLPx  is  a  high  performance,  low  cost,  single chip GPS receiver.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://cdn.sparkfun.com/datasheets/Sensors/GPS/Venus638FLPx.pdf"&gt;Datasheet&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.sparkfun.com/products/10919"&gt;SparkFun Product Link&lt;/a&gt;&lt;/p&gt;</description>
+<wire x1="5" y1="5" x2="-5" y2="5" width="0.127" layer="51"/>
+<wire x1="-5" y1="5" x2="-5" y2="-5" width="0.127" layer="51"/>
+<wire x1="-5" y1="-5" x2="5" y2="-5" width="0.127" layer="51"/>
+<wire x1="5" y1="-5" x2="5" y2="5" width="0.127" layer="51"/>
+<wire x1="-5.1" y1="4.5" x2="-5.1" y2="5.1" width="0.2032" layer="21"/>
+<wire x1="-5.1" y1="5.1" x2="-4.5" y2="5.1" width="0.2032" layer="21"/>
+<wire x1="5.1" y1="4.5" x2="5.1" y2="5.1" width="0.2032" layer="21"/>
+<wire x1="5.1" y1="5.1" x2="4.5" y2="5.1" width="0.2032" layer="21"/>
+<wire x1="-5.1" y1="-4.5" x2="-5.1" y2="-5.1" width="0.2032" layer="21"/>
+<wire x1="-5.1" y1="-5.1" x2="-4.5" y2="-5.1" width="0.2032" layer="21"/>
+<wire x1="5.1" y1="-5.1" x2="5.1" y2="-4.5" width="0.2032" layer="21"/>
+<wire x1="5.1" y1="-5.1" x2="4.5" y2="-5.1" width="0.2032" layer="21"/>
+<circle x="-5.461" y="5.461" radius="0.381" width="0" layer="21"/>
+<smd name="28" x="4.9" y="0" dx="1" dy="0.36" layer="1"/>
+<smd name="29" x="4.9" y="0.8" dx="1" dy="0.36" layer="1"/>
+<smd name="30" x="4.9" y="1.6" dx="1" dy="0.36" layer="1"/>
+<smd name="31" x="4.9" y="2.4" dx="1" dy="0.36" layer="1"/>
+<smd name="32" x="4.9" y="3.2" dx="1" dy="0.36" layer="1"/>
+<smd name="33" x="4.9" y="4" dx="1" dy="0.36" layer="1"/>
+<smd name="23" x="4.9" y="-4" dx="1" dy="0.36" layer="1"/>
+<smd name="24" x="4.9" y="-3.2" dx="1" dy="0.36" layer="1"/>
+<smd name="25" x="4.9" y="-2.4" dx="1" dy="0.36" layer="1"/>
+<smd name="26" x="4.9" y="-1.6" dx="1" dy="0.36" layer="1"/>
+<smd name="27" x="4.9" y="-0.8" dx="1" dy="0.36" layer="1"/>
+<smd name="39" x="0" y="4.9" dx="1" dy="0.36" layer="1" rot="R90"/>
+<smd name="40" x="-0.8" y="4.9" dx="1" dy="0.36" layer="1" rot="R90"/>
+<smd name="41" x="-1.6" y="4.9" dx="1" dy="0.36" layer="1" rot="R90"/>
+<smd name="42" x="-2.4" y="4.9" dx="1" dy="0.36" layer="1" rot="R90"/>
+<smd name="43" x="-3.2" y="4.9" dx="1" dy="0.36" layer="1" rot="R90"/>
+<smd name="44" x="-4" y="4.9" dx="1" dy="0.36" layer="1" rot="R90"/>
+<smd name="34" x="4" y="4.9" dx="1" dy="0.36" layer="1" rot="R90"/>
+<smd name="35" x="3.2" y="4.9" dx="1" dy="0.36" layer="1" rot="R90"/>
+<smd name="36" x="2.4" y="4.9" dx="1" dy="0.36" layer="1" rot="R90"/>
+<smd name="37" x="1.6" y="4.9" dx="1" dy="0.36" layer="1" rot="R90"/>
+<smd name="38" x="0.8" y="4.9" dx="1" dy="0.36" layer="1" rot="R90"/>
+<smd name="6" x="-4.9" y="0" dx="1" dy="0.36" layer="1" rot="R180"/>
+<smd name="7" x="-4.9" y="-0.8" dx="1" dy="0.36" layer="1" rot="R180"/>
+<smd name="8" x="-4.9" y="-1.6" dx="1" dy="0.36" layer="1" rot="R180"/>
+<smd name="9" x="-4.9" y="-2.4" dx="1" dy="0.36" layer="1" rot="R180"/>
+<smd name="10" x="-4.9" y="-3.2" dx="1" dy="0.36" layer="1" rot="R180"/>
+<smd name="11" x="-4.9" y="-4" dx="1" dy="0.36" layer="1" rot="R180"/>
+<smd name="1" x="-4.9" y="4" dx="1" dy="0.36" layer="1" rot="R180"/>
+<smd name="2" x="-4.9" y="3.2" dx="1" dy="0.36" layer="1" rot="R180"/>
+<smd name="3" x="-4.9" y="2.4" dx="1" dy="0.36" layer="1" rot="R180"/>
+<smd name="4" x="-4.9" y="1.6" dx="1" dy="0.36" layer="1" rot="R180"/>
+<smd name="5" x="-4.9" y="0.8" dx="1" dy="0.36" layer="1" rot="R180"/>
+<smd name="17" x="0" y="-4.9" dx="1" dy="0.36" layer="1" rot="R270"/>
+<smd name="18" x="0.8" y="-4.9" dx="1" dy="0.36" layer="1" rot="R270"/>
+<smd name="19" x="1.6" y="-4.9" dx="1" dy="0.36" layer="1" rot="R270"/>
+<smd name="20" x="2.4" y="-4.9" dx="1" dy="0.36" layer="1" rot="R270"/>
+<smd name="21" x="3.2" y="-4.9" dx="1" dy="0.36" layer="1" rot="R270"/>
+<smd name="22" x="4" y="-4.9" dx="1" dy="0.36" layer="1" rot="R270"/>
+<smd name="12" x="-4" y="-4.9" dx="1" dy="0.36" layer="1" rot="R270"/>
+<smd name="13" x="-3.2" y="-4.9" dx="1" dy="0.36" layer="1" rot="R270"/>
+<smd name="14" x="-2.4" y="-4.9" dx="1" dy="0.36" layer="1" rot="R270"/>
+<smd name="15" x="-1.6" y="-4.9" dx="1" dy="0.36" layer="1" rot="R270"/>
+<smd name="16" x="-0.8" y="-4.9" dx="1" dy="0.36" layer="1" rot="R270"/>
+<smd name="45" x="-3" y="3" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="46" x="-3" y="1.5" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="47" x="-3" y="0" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="48" x="-3" y="-1.5" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="49" x="-3" y="-3" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="50" x="-1.5" y="3" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="51" x="-1.5" y="1.5" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="52" x="-1.5" y="0" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="53" x="-1.5" y="-1.5" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="54" x="-1.5" y="-3" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="55" x="0" y="3" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="56" x="0" y="1.5" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="57" x="0" y="0" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="58" x="0" y="-1.5" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="59" x="0" y="-3" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="60" x="1.5" y="3" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="61" x="1.5" y="1.5" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="62" x="1.5" y="0" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="63" x="1.5" y="-1.5" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="64" x="1.5" y="-3" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="65" x="3" y="3" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="66" x="3" y="1.5" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="67" x="3" y="0" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="68" x="3" y="-1.5" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<smd name="69" x="3" y="-3" dx="0.6" dy="0.6" layer="1" roundness="100"/>
+<text x="0" y="5.588" size="0.6096" layer="25" font="vector" ratio="20" align="bottom-center">&gt;NAME</text>
+<text x="0" y="-5.588" size="0.6096" layer="27" font="vector" ratio="20" align="top-center">&gt;VALUE</text>
+</package>
+<package name="GP3906-TLP">
+<description>&lt;h3&gt;GP3906-TLP PoT GPS Module&lt;/h3&gt;
+&lt;p&gt;The GP3906-TLP is a POT (Patch on Top) GPS module which is special designed for ultra low power consumption purpose environment. It is a GPS receiver providing a solution that high position and speed accuracy performances as well as high sensitivity and tracking capabilities in urban conditions. The GPS chipsets inside the module are designed by MediaTek Inc., which is the world's leading digital media solution provider and largest fab-less IC company in Taiwan. The module can support up to 66 channels. The GPS solution enables small form factor devices. They deliver major advancements in GPS performances, accuracy, integration, computing power and flexibility. They are designed to simplify the embedded system integration process.&lt;/p&gt;
+
+&lt;p&gt;Features:
+&lt;ul&gt;&lt;li&gt;Based on MediaTek Single Chip Architecture (MT3339).&lt;/li&gt;
+&lt;li&gt;ARM7 based application processor&lt;/li&gt;
+&lt;li&gt;High sensitivity: -165dBm tracking&lt;/li&gt;
+&lt;li&gt;L1 frequency, C/A code&lt;/li&gt;
+&lt;li&gt;Channels: 66 acquisition, 22 simultaneous tracking&lt;/li&gt;
+&lt;li&gt;Low power consumption: 26mA @ acquisition, 20mA @ tracking&lt;/li&gt;
+&lt;li&gt;Cold/Warm/Hot start time: &lt;35/&lt;33/&lt;1 seconds&lt;/li&gt;
+&lt;li&gt;Maximum update rate up to 10Hz&lt;/li&gt;
+&lt;li&gt;GPS data interface: TTL level serial port&lt;/li&gt;
+&lt;li&gt;Support NMEA 0183 standard V3.01 and backward compliance&lt;/li&gt;
+&lt;li&gt;Support SBAS – WAAS, EGNOS, GAGAN and MSAS&lt;/li&gt;
+&lt;li&gt;Dimension：16mm x 16mm x 6.7mm&lt;/li&gt;
+&lt;li&gt;RoHS compliant&lt;/li&gt;
+&lt;li&gt;Advanced software features&lt;/li&gt;
+&lt;ul&gt;&lt;li&gt;AlwaysLocate TM advanced location awareness technology&lt;/li&gt;
+&lt;li&gt;EPO TM orbit prediction&lt;/li&gt;
+&lt;li&gt;Supports logger function (LOCUS)&lt;/li&gt;&lt;/ul&gt;&lt;/ul&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://cdn.sparkfun.com/assets/learn_tutorials/4/6/8/GP3906-TLP_DataSheet_Rev_A01.pdf"&gt;Datasheet&lt;/a&gt;&lt;/p&gt;</description>
+<wire x1="8" y1="8" x2="8" y2="-8" width="0.127" layer="51"/>
+<wire x1="8" y1="-8" x2="-8" y2="-8" width="0.127" layer="51"/>
+<wire x1="-8" y1="-8" x2="-8" y2="8" width="0.127" layer="51"/>
+<wire x1="-8" y1="8" x2="8" y2="8" width="0.127" layer="51"/>
+<circle x="-0.7" y="0" radius="1.2" width="0.127" layer="51"/>
+<hole x="-0.7" y="0" drill="4"/>
+<circle x="0" y="-7.5" radius="0.2" width="0.127" layer="51"/>
+<circle x="-4" y="7.5" radius="0.2" width="0.127" layer="51"/>
+<circle x="4" y="7.5" radius="0.2" width="0.127" layer="51"/>
+<polygon width="0.127" layer="51">
+<vertex x="8" y="-7.15"/>
+<vertex x="7" y="-7.15"/>
+<vertex x="7" y="-6.35"/>
+<vertex x="8" y="-6.35"/>
+<vertex x="8" y="-6.4" curve="90"/>
+<vertex x="7.7" y="-6.75" curve="90"/>
+<vertex x="8" y="-7.1"/>
+</polygon>
+<polygon width="0.127" layer="51">
+<vertex x="8" y="-5.65"/>
+<vertex x="7" y="-5.65"/>
+<vertex x="7" y="-4.85"/>
+<vertex x="8" y="-4.85"/>
+<vertex x="8" y="-4.9" curve="90"/>
+<vertex x="7.7" y="-5.25" curve="90"/>
+<vertex x="8" y="-5.6"/>
+</polygon>
+<polygon width="0.127" layer="51">
+<vertex x="8" y="-4.15"/>
+<vertex x="7" y="-4.15"/>
+<vertex x="7" y="-3.35"/>
+<vertex x="8" y="-3.35"/>
+<vertex x="8" y="-3.4" curve="90"/>
+<vertex x="7.7" y="-3.75" curve="90"/>
+<vertex x="8" y="-4.1"/>
+</polygon>
+<polygon width="0.127" layer="51">
+<vertex x="8" y="-2.65"/>
+<vertex x="7" y="-2.65"/>
+<vertex x="7" y="-1.85"/>
+<vertex x="8" y="-1.85"/>
+<vertex x="8" y="-1.9" curve="90"/>
+<vertex x="7.7" y="-2.25" curve="90"/>
+<vertex x="8" y="-2.6"/>
+</polygon>
+<polygon width="0.127" layer="51">
+<vertex x="8" y="-1.15"/>
+<vertex x="7" y="-1.15"/>
+<vertex x="7" y="-0.35"/>
+<vertex x="8" y="-0.35"/>
+<vertex x="8" y="-0.4" curve="90"/>
+<vertex x="7.7" y="-0.75" curve="90"/>
+<vertex x="8" y="-1.1"/>
+</polygon>
+<polygon width="0.127" layer="51">
+<vertex x="8" y="0.35"/>
+<vertex x="7" y="0.35"/>
+<vertex x="7" y="1.15"/>
+<vertex x="8" y="1.15"/>
+<vertex x="8" y="1.1" curve="90"/>
+<vertex x="7.7" y="0.75" curve="90"/>
+<vertex x="8" y="0.4"/>
+</polygon>
+<polygon width="0.127" layer="51">
+<vertex x="8" y="1.85"/>
+<vertex x="7" y="1.85"/>
+<vertex x="7" y="2.65"/>
+<vertex x="8" y="2.65"/>
+<vertex x="8" y="2.6" curve="90"/>
+<vertex x="7.7" y="2.25" curve="90"/>
+<vertex x="8" y="1.9"/>
+</polygon>
+<polygon width="0.127" layer="51">
+<vertex x="8" y="3.35"/>
+<vertex x="7" y="3.35"/>
+<vertex x="7" y="4.15"/>
+<vertex x="8" y="4.15"/>
+<vertex x="8" y="4.1" curve="90"/>
+<vertex x="7.7" y="3.75" curve="90"/>
+<vertex x="8" y="3.4"/>
+</polygon>
+<polygon width="0.127" layer="51">
+<vertex x="8" y="4.85"/>
+<vertex x="7" y="4.85"/>
+<vertex x="7" y="5.65"/>
+<vertex x="8" y="5.65"/>
+<vertex x="8" y="5.6" curve="90"/>
+<vertex x="7.7" y="5.25" curve="90"/>
+<vertex x="8" y="4.9"/>
+</polygon>
+<polygon width="0.127" layer="51">
+<vertex x="8" y="6.35"/>
+<vertex x="7" y="6.35"/>
+<vertex x="7" y="7.15"/>
+<vertex x="8" y="7.15"/>
+<vertex x="8" y="7.1" curve="90"/>
+<vertex x="7.7" y="6.75" curve="90"/>
+<vertex x="8" y="6.4"/>
+</polygon>
+<polygon width="0.127" layer="51">
+<vertex x="-8" y="7.15"/>
+<vertex x="-7" y="7.15"/>
+<vertex x="-7" y="6.35"/>
+<vertex x="-8" y="6.35"/>
+<vertex x="-8" y="6.4" curve="90"/>
+<vertex x="-7.7" y="6.75" curve="90"/>
+<vertex x="-8" y="7.1"/>
+</polygon>
+<polygon width="0.127" layer="51">
+<vertex x="-8" y="5.65"/>
+<vertex x="-7" y="5.65"/>
+<vertex x="-7" y="4.85"/>
+<vertex x="-8" y="4.85"/>
+<vertex x="-8" y="4.9" curve="90"/>
+<vertex x="-7.7" y="5.25" curve="90"/>
+<vertex x="-8" y="5.6"/>
+</polygon>
+<polygon width="0.127" layer="51">
+<vertex x="-8" y="4.15"/>
+<vertex x="-7" y="4.15"/>
+<vertex x="-7" y="3.35"/>
+<vertex x="-8" y="3.35"/>
+<vertex x="-8" y="3.4" curve="90"/>
+<vertex x="-7.7" y="3.75" curve="90"/>
+<vertex x="-8" y="4.1"/>
+</polygon>
+<polygon width="0.127" layer="51">
+<vertex x="-8" y="2.65"/>
+<vertex x="-7" y="2.65"/>
+<vertex x="-7" y="1.85"/>
+<vertex x="-8" y="1.85"/>
+<vertex x="-8" y="1.9" curve="90"/>
+<vertex x="-7.7" y="2.25" curve="90"/>
+<vertex x="-8" y="2.6"/>
+</polygon>
+<polygon width="0.127" layer="51">
+<vertex x="-8" y="1.15"/>
+<vertex x="-7" y="1.15"/>
+<vertex x="-7" y="0.35"/>
+<vertex x="-8" y="0.35"/>
+<vertex x="-8" y="0.4" curve="90"/>
+<vertex x="-7.7" y="0.75" curve="90"/>
+<vertex x="-8" y="1.1"/>
+</polygon>
+<polygon width="0.127" layer="51">
+<vertex x="-8" y="-0.35"/>
+<vertex x="-7" y="-0.35"/>
+<vertex x="-7" y="-1.15"/>
+<vertex x="-8" y="-1.15"/>
+<vertex x="-8" y="-1.1" curve="90"/>
+<vertex x="-7.7" y="-0.75" curve="90"/>
+<vertex x="-8" y="-0.4"/>
+</polygon>
+<polygon width="0.127" layer="51">
+<vertex x="-8" y="-1.85"/>
+<vertex x="-7" y="-1.85"/>
+<vertex x="-7" y="-2.65"/>
+<vertex x="-8" y="-2.65"/>
+<vertex x="-8" y="-2.6" curve="90"/>
+<vertex x="-7.7" y="-2.25" curve="90"/>
+<vertex x="-8" y="-1.9"/>
+</polygon>
+<polygon width="0.127" layer="51">
+<vertex x="-8" y="-3.35"/>
+<vertex x="-7" y="-3.35"/>
+<vertex x="-7" y="-4.15"/>
+<vertex x="-8" y="-4.15"/>
+<vertex x="-8" y="-4.1" curve="90"/>
+<vertex x="-7.7" y="-3.75" curve="90"/>
+<vertex x="-8" y="-3.4"/>
+</polygon>
+<polygon width="0.127" layer="51">
+<vertex x="-8" y="-4.85"/>
+<vertex x="-7" y="-4.85"/>
+<vertex x="-7" y="-5.65"/>
+<vertex x="-8" y="-5.65"/>
+<vertex x="-8" y="-5.6" curve="90"/>
+<vertex x="-7.7" y="-5.25" curve="90"/>
+<vertex x="-8" y="-4.9"/>
+</polygon>
+<polygon width="0.127" layer="51">
+<vertex x="-8" y="-6.35"/>
+<vertex x="-7" y="-6.35"/>
+<vertex x="-7" y="-7.15"/>
+<vertex x="-8" y="-7.15"/>
+<vertex x="-8" y="-7.1" curve="90"/>
+<vertex x="-7.7" y="-6.75" curve="90"/>
+<vertex x="-8" y="-6.4"/>
+</polygon>
+<smd name="20" x="-8" y="-6.75" dx="2" dy="1" layer="1" cream="no"/>
+<smd name="19" x="-8" y="-5.25" dx="2" dy="1" layer="1" cream="no"/>
+<smd name="18" x="-8" y="-3.75" dx="2" dy="1" layer="1" cream="no"/>
+<smd name="17" x="-8" y="-2.25" dx="2" dy="1" layer="1" cream="no"/>
+<smd name="16" x="-8" y="-0.75" dx="2" dy="1" layer="1" cream="no"/>
+<smd name="15" x="-8" y="0.75" dx="2" dy="1" layer="1" cream="no"/>
+<smd name="14" x="-8" y="2.25" dx="2" dy="1" layer="1" cream="no"/>
+<smd name="13" x="-8" y="3.75" dx="2" dy="1" layer="1" cream="no"/>
+<smd name="12" x="-8" y="5.25" dx="2" dy="1" layer="1" cream="no"/>
+<smd name="11" x="-8" y="6.75" dx="2" dy="1" layer="1" cream="no"/>
+<smd name="10" x="8" y="6.75" dx="2" dy="1" layer="1" rot="R180" cream="no"/>
+<smd name="9" x="8" y="5.25" dx="2" dy="1" layer="1" rot="R180" cream="no"/>
+<smd name="8" x="8" y="3.75" dx="2" dy="1" layer="1" rot="R180" cream="no"/>
+<smd name="7" x="8" y="2.25" dx="2" dy="1" layer="1" rot="R180" cream="no"/>
+<smd name="6" x="8" y="0.75" dx="2" dy="1" layer="1" rot="R180" cream="no"/>
+<smd name="5" x="8" y="-0.75" dx="2" dy="1" layer="1" rot="R180" cream="no"/>
+<smd name="4" x="8" y="-2.25" dx="2" dy="1" layer="1" rot="R180" cream="no"/>
+<smd name="3" x="8" y="-3.75" dx="2" dy="1" layer="1" rot="R180" cream="no"/>
+<smd name="2" x="8" y="-5.25" dx="2" dy="1" layer="1" rot="R180" cream="no"/>
+<smd name="1" x="8" y="-6.75" dx="2" dy="1" layer="1" rot="R180" cream="no"/>
+<wire x1="8" y1="-8" x2="-8" y2="-8" width="0.2032" layer="21"/>
+<wire x1="-8" y1="8" x2="8" y2="8" width="0.2032" layer="21"/>
+<wire x1="8" y1="7.45" x2="8" y2="-7.45" width="0.127" layer="21"/>
+<wire x1="-8" y1="8" x2="-8" y2="7.45" width="0.2032" layer="21"/>
+<wire x1="8" y1="8" x2="8" y2="7.45" width="0.2032" layer="21"/>
+<wire x1="-8" y1="-8" x2="-8" y2="-7.45" width="0.2032" layer="21"/>
+<wire x1="8" y1="-8" x2="8" y2="-7.45" width="0.2032" layer="21"/>
+<circle x="8.509" y="-8.508" radius="0.5" width="0" layer="21"/>
+<text x="-7.62" y="8.382" size="0.6096" layer="25" font="vector" ratio="20">&gt;Name</text>
+<text x="-7.62" y="-8.382" size="0.6096" layer="27" font="vector" ratio="20" align="top-left">&gt;Value</text>
+<circle x="5.08" y="-3.809" radius="0.5" width="0" layer="21"/>
+<rectangle x1="-9.15" y1="-1.4" x2="-6.85" y2="-0.1" layer="31"/>
+<rectangle x1="-9.15" y1="0.1" x2="-6.85" y2="1.4" layer="31"/>
+<rectangle x1="-9.15" y1="1.6" x2="-6.85" y2="2.9" layer="31"/>
+<rectangle x1="-9.15" y1="3.1" x2="-6.85" y2="4.4" layer="31"/>
+<rectangle x1="-9.15" y1="4.6" x2="-6.85" y2="5.9" layer="31"/>
+<rectangle x1="-9.15" y1="6.1" x2="-6.85" y2="7.4" layer="31"/>
+<rectangle x1="-9.15" y1="-2.9" x2="-6.85" y2="-1.6" layer="31"/>
+<rectangle x1="-9.15" y1="-4.4" x2="-6.85" y2="-3.1" layer="31"/>
+<rectangle x1="-9.15" y1="-5.9" x2="-6.85" y2="-4.6" layer="31"/>
+<rectangle x1="-9.15" y1="-7.4" x2="-6.85" y2="-6.1" layer="31"/>
+<rectangle x1="6.85" y1="-7.4" x2="9.15" y2="-6.1" layer="31" rot="R180"/>
+<rectangle x1="6.85" y1="-5.9" x2="9.15" y2="-4.6" layer="31" rot="R180"/>
+<rectangle x1="6.85" y1="-4.4" x2="9.15" y2="-3.1" layer="31" rot="R180"/>
+<rectangle x1="6.85" y1="-2.9" x2="9.15" y2="-1.6" layer="31" rot="R180"/>
+<rectangle x1="6.85" y1="-1.4" x2="9.15" y2="-0.1" layer="31" rot="R180"/>
+<rectangle x1="6.85" y1="0.1" x2="9.15" y2="1.4" layer="31" rot="R180"/>
+<rectangle x1="6.85" y1="1.6" x2="9.15" y2="2.9" layer="31" rot="R180"/>
+<rectangle x1="6.85" y1="3.1" x2="9.15" y2="4.4" layer="31" rot="R180"/>
+<rectangle x1="6.85" y1="4.6" x2="9.15" y2="5.9" layer="31" rot="R180"/>
+<rectangle x1="6.85" y1="6.1" x2="9.15" y2="7.4" layer="31" rot="R180"/>
+</package>
+<package name="TITAN_X1_GPS">
+<circle x="-7.031" y="5.488" radius="0.2286" width="0.4572" layer="21"/>
+<wire x1="-6.25" y1="-6.25" x2="6.25" y2="-6.25" width="0.127" layer="51"/>
+<wire x1="6.25" y1="-6.25" x2="6.25" y2="6.25" width="0.127" layer="51"/>
+<wire x1="6.25" y1="6.25" x2="-6.25" y2="6.25" width="0.127" layer="51"/>
+<wire x1="-6.25" y1="6.25" x2="-6.25" y2="-6.25" width="0.127" layer="51"/>
+<smd name="1" x="-6.25" y="3" dx="2" dy="0.6" layer="1"/>
+<smd name="2" x="-6.25" y="1.8" dx="2" dy="0.6" layer="1"/>
+<smd name="3" x="-6.25" y="0.6" dx="2" dy="0.6" layer="1"/>
+<smd name="4" x="-6.25" y="-0.6" dx="2" dy="0.6" layer="1"/>
+<smd name="5" x="-6.25" y="-1.8" dx="2" dy="0.6" layer="1"/>
+<smd name="6" x="-6.25" y="-3" dx="2" dy="0.6" layer="1"/>
+<smd name="7" x="-3.6" y="-6.25" dx="2" dy="0.6" layer="1" rot="R90"/>
+<smd name="8" x="-2.4" y="-6.25" dx="2" dy="0.6" layer="1" rot="R90"/>
+<smd name="9" x="-1.2" y="-6.25" dx="2" dy="0.6" layer="1" rot="R90"/>
+<smd name="10" x="1.2" y="-6.25" dx="2" dy="0.6" layer="1" rot="R90"/>
+<smd name="11" x="2.4" y="-6.25" dx="2" dy="0.6" layer="1" rot="R90"/>
+<smd name="12" x="3.6" y="-6.25" dx="2" dy="0.6" layer="1" rot="R90"/>
+<smd name="13" x="6.25" y="-3" dx="2" dy="0.6" layer="1"/>
+<smd name="14" x="6.25" y="-1.8" dx="2" dy="0.6" layer="1"/>
+<smd name="15" x="6.25" y="-0.6" dx="2" dy="0.6" layer="1"/>
+<smd name="16" x="6.25" y="0.6" dx="2" dy="0.6" layer="1"/>
+<smd name="17" x="6.25" y="1.8" dx="2" dy="0.6" layer="1"/>
+<smd name="18" x="6.25" y="3" dx="2" dy="0.6" layer="1"/>
+<smd name="19" x="3.6" y="6.25" dx="2" dy="0.6" layer="1" rot="R270"/>
+<smd name="20" x="2.4" y="6.25" dx="2" dy="0.6" layer="1" rot="R270"/>
+<smd name="21" x="1.2" y="6.25" dx="2" dy="0.6" layer="1" rot="R270"/>
+<smd name="22" x="-1.2" y="6.25" dx="2" dy="0.6" layer="1" rot="R270"/>
+<smd name="23" x="-2.4" y="6.25" dx="2" dy="0.6" layer="1" rot="R270"/>
+<smd name="24" x="-3.6" y="6.25" dx="2" dy="0.6" layer="1" rot="R270"/>
+<text x="-4.6" y="2.9" size="1.27" layer="51" ratio="15">1</text>
+<circle x="-4.8" y="4.7" radius="0.4" width="0.0762" layer="51"/>
+<circle x="-4.8" y="4.7" radius="0.22360625" width="0.0762" layer="51"/>
+<wire x1="-6.3" y1="6.2" x2="-4.2" y2="6.2" width="0.2032" layer="21"/>
+<wire x1="-6.3" y1="6.2" x2="-6.3" y2="3.6" width="0.2032" layer="21"/>
+<wire x1="6.3" y1="3.6" x2="6.3" y2="6.2" width="0.2032" layer="21"/>
+<wire x1="-6.3" y1="-3.6" x2="-6.3" y2="-6.2" width="0.2032" layer="21"/>
+<wire x1="4.2" y1="6.2" x2="6.3" y2="6.2" width="0.2032" layer="21"/>
+<wire x1="-6.3" y1="-6.2" x2="-4.2" y2="-6.2" width="0.2032" layer="21"/>
+<wire x1="-0.6" y1="-6.2" x2="0.6" y2="-6.2" width="0.2032" layer="21"/>
+<wire x1="-0.6" y1="6.2" x2="0.6" y2="6.2" width="0.2032" layer="21"/>
+<text x="-2.54" y="1.27" size="0.762" layer="25" ratio="15">&gt;Name</text>
+<text x="-2.54" y="0" size="0.762" layer="27" ratio="15">&gt;Value</text>
+<wire x1="-5" y1="5" x2="5" y2="5" width="0.0762" layer="39"/>
+<wire x1="5" y1="5" x2="5" y2="-5" width="0.0762" layer="39"/>
+<wire x1="5" y1="-5" x2="-5" y2="-5" width="0.0762" layer="39"/>
+<wire x1="-5" y1="-5" x2="-5" y2="5" width="0.0762" layer="39"/>
+<wire x1="4.191" y1="-6.223" x2="5.08" y2="-6.223" width="0.2032" layer="21"/>
+<wire x1="5.08" y1="-6.223" x2="6.223" y2="-5.08" width="0.2032" layer="21"/>
+<wire x1="6.223" y1="-5.08" x2="6.223" y2="-3.556" width="0.2032" layer="21"/>
+</package>
+<package name="UBLOX_ZOE_M8-0-10">
+<description>&lt;h3&gt;UBLOX ZOE-M8Q-0-10&lt;/h3&gt;
+&lt;p&gt;The ZOE-M8G and ZOE-M8Q are u-blox’s super small, highly integrated GNSS SiP (System in Package) modules
+based on the high performing u-blox M8 concurrent positioning engine. The ultra-miniature form factor integrates
+a complete GNSS receiver including SAW filter, LNA and TCXO. The ZOE-M8Q is
+the 3 V variant.&lt;/p&gt; 
+
+&lt;p&gt;&lt;b&gt;Phyical Characteristics&lt;/b&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;LGA&lt;/li&gt;
+&lt;li&gt;51 Pins&lt;/li&gt;
+&lt;li&gt;4.5mm X 4.5mm X 1mm&lt;/li&gt;
+&lt;li&gt;51 Pins&lt;/li&gt;
+&lt;/ul&gt;</description>
+<wire x1="-2.246" y1="-2.246" x2="2.254" y2="-2.246" width="0.05" layer="51"/>
+<wire x1="2.254" y1="-2.246" x2="2.254" y2="2.254" width="0.05" layer="51"/>
+<wire x1="2.254" y1="2.254" x2="-2.246" y2="2.254" width="0.05" layer="51"/>
+<wire x1="-2.246" y1="2.254" x2="-2.246" y2="-2.246" width="0.05" layer="51"/>
+<circle x="-2.738" y="2.754" radius="0.254" width="0" layer="21"/>
+<text x="-2.246" y="3.135" size="1" layer="25">&gt;NAME</text>
+<text x="-2.373" y="-3.865" size="1" layer="27">&gt;VALUE</text>
+<smd name="1" x="-1.996" y="2.004" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="3" x="-0.996" y="2.004" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="4" x="-0.496" y="2.004" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="5" x="0.004" y="2.004" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="6" x="0.504" y="2.004" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="7" x="1.004" y="2.004" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="8" x="1.504" y="2.004" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="9" x="2.004" y="2.004" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<wire x1="-1.746" y1="-2.346" x2="1.754" y2="-2.346" width="0.1" layer="21"/>
+<wire x1="2.354" y1="-1.746" x2="2.354" y2="1.754" width="0.1" layer="21"/>
+<wire x1="-2.346" y1="-1.746" x2="-2.346" y2="1.754" width="0.1" layer="21"/>
+<wire x1="-1.746" y1="2.354" x2="1.754" y2="2.354" width="0.1" layer="21"/>
+<smd name="2" x="-1.496" y="2.004" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="10" x="2.004" y="1.504" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="11" x="2.004" y="1.004" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="12" x="2.004" y="0.504" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="13" x="2.004" y="0.004" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="14" x="2.004" y="-0.496" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="15" x="2.004" y="-0.996" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="16" x="2.004" y="-1.496" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="17" x="2.004" y="-1.996" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="18" x="1.504" y="-1.996" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="19" x="1.004" y="-1.996" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="20" x="0.504" y="-1.996" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="21" x="0.004" y="-1.996" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="22" x="-0.496" y="-1.996" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="23" x="-0.996" y="-1.996" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="24" x="-1.496" y="-1.996" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="25" x="-1.996" y="-1.996" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="26" x="-1.996" y="-1.496" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="27" x="-1.996" y="-0.996" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="28" x="-1.996" y="-0.496" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="29" x="-1.996" y="0.004" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="30" x="-1.996" y="0.504" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="31" x="-1.996" y="1.004" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="32" x="-1.996" y="1.504" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="33" x="-0.996" y="1.004" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="34" x="-0.496" y="1.004" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="35" x="0.004" y="1.004" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="36" x="0.504" y="1.004" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="37" x="1.004" y="1.004" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="38" x="1.004" y="0.004" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="39" x="1.004" y="-0.496" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="40" x="1.004" y="-0.996" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="41" x="0.504" y="-0.996" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="42" x="0.004" y="-0.996" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="43" x="-0.496" y="-0.996" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="44" x="-0.996" y="-0.996" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="45" x="-0.996" y="-0.496" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="46" x="-0.996" y="0.004" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="47" x="-0.996" y="0.504" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="48" x="-0.496" y="0.504" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="49" x="0.504" y="0.504" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="50" x="0.504" y="-0.496" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<smd name="51" x="-0.496" y="-0.496" dx="0.25" dy="0.25" layer="1" roundness="100" stop="no"/>
+<circle x="-1.9965" y="-1.9941" radius="0.15" width="0" layer="29"/>
+<circle x="-1.4965" y="-1.9941" radius="0.15" width="0" layer="29"/>
+<circle x="-0.9965" y="-1.9941" radius="0.15" width="0" layer="29"/>
+<circle x="-0.4965" y="-1.9941" radius="0.15" width="0" layer="29"/>
+<circle x="0.0035" y="-1.9941" radius="0.15" width="0" layer="29"/>
+<circle x="0.5035" y="-1.9941" radius="0.15" width="0" layer="29"/>
+<circle x="1.0035" y="-1.9941" radius="0.15" width="0" layer="29"/>
+<circle x="1.5035" y="-1.9941" radius="0.15" width="0" layer="29"/>
+<circle x="2.0035" y="-1.9941" radius="0.15" width="0" layer="29"/>
+<circle x="-1.9965" y="2.0059" radius="0.15" width="0" layer="29"/>
+<circle x="-1.4965" y="2.0059" radius="0.15" width="0" layer="29"/>
+<circle x="-0.9965" y="2.0059" radius="0.15" width="0" layer="29"/>
+<circle x="-0.4965" y="2.0059" radius="0.15" width="0" layer="29"/>
+<circle x="0.0035" y="2.0059" radius="0.15" width="0" layer="29"/>
+<circle x="0.5035" y="2.0059" radius="0.15" width="0" layer="29"/>
+<circle x="1.0035" y="2.0059" radius="0.15" width="0" layer="29"/>
+<circle x="1.5035" y="2.0059" radius="0.15" width="0" layer="29"/>
+<circle x="2.0035" y="2.0059" radius="0.15" width="0" layer="29"/>
+<circle x="-1.9982" y="-1.4961" radius="0.15" width="0" layer="29"/>
+<circle x="-1.9982" y="-0.9961" radius="0.15" width="0" layer="29"/>
+<circle x="-1.9982" y="-0.4961" radius="0.15" width="0" layer="29"/>
+<circle x="-1.9982" y="0.0039" radius="0.15" width="0" layer="29"/>
+<circle x="-1.9982" y="0.5039" radius="0.15" width="0" layer="29"/>
+<circle x="-1.9982" y="1.0039" radius="0.15" width="0" layer="29"/>
+<circle x="-1.9982" y="1.5039" radius="0.15" width="0" layer="29"/>
+<circle x="2.0035" y="-1.4978" radius="0.15" width="0" layer="29"/>
+<circle x="2.0035" y="-0.9978" radius="0.15" width="0" layer="29"/>
+<circle x="2.0035" y="-0.4978" radius="0.15" width="0" layer="29"/>
+<circle x="2.0035" y="0.0022" radius="0.15" width="0" layer="29"/>
+<circle x="2.0035" y="0.5022" radius="0.15" width="0" layer="29"/>
+<circle x="2.0035" y="1.0022" radius="0.15" width="0" layer="29"/>
+<circle x="2.0035" y="1.5022" radius="0.15" width="0" layer="29"/>
+<circle x="1.0052" y="1.0038" radius="0.15" width="0" layer="29"/>
+<circle x="0.5052" y="1.0038" radius="0.15" width="0" layer="29"/>
+<circle x="0.0052" y="1.0038" radius="0.15" width="0" layer="29"/>
+<circle x="-0.4948" y="1.0038" radius="0.15" width="0" layer="29"/>
+<circle x="-0.9948" y="1.0038" radius="0.15" width="0" layer="29"/>
+<circle x="1.0032" y="-0.9982" radius="0.15" width="0" layer="29"/>
+<circle x="0.5024" y="-0.9966" radius="0.15" width="0" layer="29"/>
+<circle x="0.0027" y="-0.9972" radius="0.15" width="0" layer="29"/>
+<circle x="-0.4964" y="-0.9972" radius="0.15" width="0" layer="29"/>
+<circle x="-0.9973" y="-0.9973" radius="0.15" width="0" layer="29"/>
+<circle x="-0.9952" y="-0.498" radius="0.15" width="0" layer="29"/>
+<circle x="-0.4951" y="-0.4989" radius="0.15" width="0" layer="29"/>
+<circle x="0.5039" y="-0.4989" radius="0.15" width="0" layer="29"/>
+<circle x="1.002" y="-0.4999" radius="0.15" width="0" layer="29"/>
+<circle x="1.0018" y="0.0029" radius="0.15" width="0" layer="29"/>
+<circle x="-0.9983" y="0.0042" radius="0.15" width="0" layer="29"/>
+<circle x="0.501" y="0.5051" radius="0.15" width="0" layer="29"/>
+<circle x="-0.499" y="0.5035" radius="0.15" width="0" layer="29"/>
+<circle x="-0.9973" y="0.5051" radius="0.15" width="0" layer="29"/>
+<wire x1="2.413" y1="-2.413" x2="2.413" y2="2.413" width="0.0508" layer="39"/>
+<wire x1="2.413" y1="2.413" x2="-2.413" y2="2.413" width="0.0508" layer="39"/>
+<wire x1="-2.413" y1="2.413" x2="-2.413" y2="-2.413" width="0.0508" layer="39"/>
+<wire x1="-2.413" y1="-2.413" x2="2.413" y2="-2.413" width="0.0508" layer="39"/>
+</package>
+<package name="SAM-M8Q">
+<description>&lt;h3&gt;SAM-M8Q-0-10&lt;/h3&gt;
+Physcial Characteristics
+&lt;ul&gt;
+&lt;li&gt;15x15x6.3mm&lt;/li&gt;
+&lt;li&gt;Module is a Chip Antenna/GPS Unit combined&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+<wire x1="7.75" y1="7.75" x2="7.75" y2="-7.75" width="0.127" layer="51"/>
+<wire x1="7.75" y1="-7.75" x2="-7.75" y2="-7.75" width="0.127" layer="51"/>
+<wire x1="-7.75" y1="-7.75" x2="-7.75" y2="7.75" width="0.127" layer="51"/>
+<wire x1="-7.75" y1="7.75" x2="7.75" y2="7.75" width="0.127" layer="51"/>
+<text x="-7.75" y="8.25" size="0.508" layer="25">&gt;Name</text>
+<text x="-7.75" y="-8.75" size="0.508" layer="27">&gt;Value</text>
+<wire x1="6.2" y1="8" x2="8" y2="8" width="0.1778" layer="21"/>
+<wire x1="8" y1="8" x2="8" y2="6.2" width="0.1778" layer="21"/>
+<wire x1="8" y1="-6.2" x2="8" y2="-8" width="0.1778" layer="21"/>
+<wire x1="8" y1="-8" x2="6.2" y2="-8" width="0.1778" layer="21"/>
+<wire x1="-6.2" y1="-8" x2="-8" y2="-8" width="0.1778" layer="21"/>
+<wire x1="-8" y1="-8" x2="-8" y2="-6.2" width="0.1778" layer="21"/>
+<wire x1="-8" y1="6.2" x2="-8" y2="8" width="0.1778" layer="21"/>
+<wire x1="-8" y1="8" x2="-6.2" y2="8" width="0.1778" layer="21"/>
+<smd name="1" x="-7.125" y="3.8" dx="2.75" dy="1.6" layer="1" rot="R180"/>
+<rectangle x1="-7.65" y1="3.05" x2="-5.85" y2="4.55" layer="51"/>
+<smd name="2" x="-7.125" y="1.9" dx="2.75" dy="1.6" layer="1" rot="R180"/>
+<rectangle x1="-7.65" y1="1.15" x2="-5.85" y2="2.65" layer="51"/>
+<smd name="3" x="-7.125" y="0" dx="2.75" dy="1.6" layer="1" rot="R180"/>
+<rectangle x1="-7.65" y1="-0.75" x2="-5.85" y2="0.75" layer="51"/>
+<smd name="4" x="-7.125" y="-1.9" dx="2.75" dy="1.6" layer="1" rot="R180"/>
+<rectangle x1="-7.65" y1="-2.65" x2="-5.85" y2="-1.15" layer="51"/>
+<smd name="5" x="-7.125" y="-3.8" dx="2.75" dy="1.6" layer="1" rot="R180"/>
+<rectangle x1="-7.65" y1="-4.55" x2="-5.85" y2="-3.05" layer="51"/>
+<smd name="6" x="-3.8" y="-7.125" dx="2.75" dy="1.6" layer="1" rot="R90"/>
+<rectangle x1="-4.55" y1="-7.65" x2="-3.05" y2="-5.85" layer="51"/>
+<smd name="7" x="-1.9" y="-7.125" dx="2.75" dy="1.6" layer="1" rot="R90"/>
+<rectangle x1="-2.65" y1="-7.65" x2="-1.15" y2="-5.85" layer="51"/>
+<smd name="8" x="0" y="-7.125" dx="2.75" dy="1.6" layer="1" rot="R90"/>
+<rectangle x1="-0.75" y1="-7.65" x2="0.75" y2="-5.85" layer="51"/>
+<smd name="9" x="1.9" y="-7.125" dx="2.75" dy="1.6" layer="1" rot="R90"/>
+<rectangle x1="1.15" y1="-7.65" x2="2.65" y2="-5.85" layer="51"/>
+<smd name="10" x="3.8" y="-7.125" dx="2.75" dy="1.6" layer="1" rot="R90"/>
+<rectangle x1="3.05" y1="-7.65" x2="4.55" y2="-5.85" layer="51"/>
+<smd name="11" x="7.125" y="-3.8" dx="2.75" dy="1.6" layer="1"/>
+<rectangle x1="5.85" y1="-4.55" x2="7.65" y2="-3.05" layer="51"/>
+<smd name="12" x="7.125" y="-1.9" dx="2.75" dy="1.6" layer="1"/>
+<rectangle x1="5.85" y1="-2.65" x2="7.65" y2="-1.15" layer="51"/>
+<smd name="13" x="7.125" y="0" dx="2.75" dy="1.6" layer="1"/>
+<rectangle x1="5.85" y1="-0.75" x2="7.65" y2="0.75" layer="51"/>
+<smd name="14" x="7.125" y="1.9" dx="2.75" dy="1.6" layer="1"/>
+<rectangle x1="5.85" y1="1.15" x2="7.65" y2="2.65" layer="51"/>
+<smd name="15" x="7.125" y="3.8" dx="2.75" dy="1.6" layer="1"/>
+<rectangle x1="5.85" y1="3.05" x2="7.65" y2="4.55" layer="51"/>
+<smd name="16" x="3.8" y="7.125" dx="2.75" dy="1.6" layer="1" rot="R270"/>
+<rectangle x1="3.05" y1="5.85" x2="4.55" y2="7.65" layer="51"/>
+<smd name="17" x="1.9" y="7.125" dx="2.75" dy="1.6" layer="1" rot="R270"/>
+<rectangle x1="1.15" y1="5.85" x2="2.65" y2="7.65" layer="51"/>
+<smd name="18" x="0" y="7.125" dx="2.75" dy="1.6" layer="1" rot="R270"/>
+<rectangle x1="-0.75" y1="5.85" x2="0.75" y2="7.65" layer="51"/>
+<smd name="19" x="-1.9" y="7.125" dx="2.75" dy="1.6" layer="1" rot="R270"/>
+<rectangle x1="-2.65" y1="5.85" x2="-1.15" y2="7.65" layer="51"/>
+<smd name="20" x="-3.8" y="7.125" dx="2.75" dy="1.6" layer="1" rot="R270"/>
+<rectangle x1="-4.55" y1="5.85" x2="-3.05" y2="7.65" layer="51"/>
+<rectangle x1="-5.08" y1="-5.08" x2="5.08" y2="5.08" layer="39"/>
+<rectangle x1="-5.08" y1="-5.08" x2="5.08" y2="5.08" layer="40"/>
+<circle x="-8.89" y="7.62" radius="0.40160625" width="0" layer="21"/>
+</package>
+<package name="W3011">
+<smd name="3" x="-1.6" y="0" dx="0.8" dy="1.6" layer="1"/>
+<smd name="2" x="1.6" y="-0.475" dx="0.8" dy="0.65" layer="1"/>
+<smd name="1" x="1.6" y="0.475" dx="0.8" dy="0.65" layer="1"/>
+<wire x1="-2" y1="-1.2" x2="-2" y2="3.05" width="0.05" layer="51"/>
+<wire x1="-2" y1="3.05" x2="2" y2="3.05" width="0.05" layer="51"/>
+<wire x1="2" y1="3.05" x2="2" y2="-1.2" width="0.05" layer="51"/>
+<wire x1="2" y1="-1.2" x2="-2" y2="-1.2" width="0.05" layer="51"/>
+<rectangle x1="-2" y1="-1.25" x2="2" y2="3.05" layer="42"/>
+<wire x1="-1.6" y1="0.8" x2="1.6" y2="0.8" width="0.05" layer="51"/>
+<wire x1="1.6" y1="0.8" x2="1.6" y2="-0.8" width="0.05" layer="51"/>
+<wire x1="1.6" y1="-0.8" x2="-1.6" y2="-0.8" width="0.05" layer="51"/>
+<wire x1="-1.6" y1="-0.8" x2="-1.6" y2="0.8" width="0.05" layer="51"/>
+<wire x1="-0.9" y1="0.8" x2="0.9" y2="0.8" width="0.1524" layer="21"/>
+<wire x1="-0.9" y1="-0.8" x2="0.9" y2="-0.8" width="0.1524" layer="21"/>
+<text x="0" y="1.4" size="0.2" layer="25" font="vector" align="center">&gt;Name</text>
+<text x="0" y="1" size="0.2" layer="27" font="vector" align="center">&gt;Value</text>
+<text x="0" y="0" size="0.2" layer="51" font="vector" align="center">Reversible
+Antenna</text>
+<rectangle x1="-2" y1="1" x2="2" y2="3" layer="41"/>
+<rectangle x1="-1" y1="-1" x2="1" y2="1" layer="41"/>
+<rectangle x1="-2" y1="-1.2" x2="2" y2="-1" layer="41"/>
+</package>
+<package name="TE_PUCK">
+<circle x="0" y="0" radius="8" width="0.05" layer="51"/>
+<smd name="1" x="-1.2" y="-7.03" dx="2.4" dy="2.4" layer="1"/>
+<smd name="3" x="6.4432" y="3.72" dx="2.5" dy="2.5" layer="1" rot="R300"/>
+<smd name="2" x="-6.4432" y="3.72" dx="2.5" dy="2.5" layer="1" rot="R60"/>
+<smd name="S" x="1.75" y="-7.28" dx="1.4" dy="1.74" layer="1"/>
+<circle x="0" y="0" radius="14" width="0.05" layer="39"/>
+<text x="0" y="0.635" size="0.508" layer="25" font="vector" align="center">&gt;Name</text>
+<text x="0" y="-1.27" size="0.508" layer="27" font="vector" align="center">&gt;Value</text>
+<wire x1="-5.8" y1="5.5" x2="5.8" y2="5.5" width="0.2032" layer="21" curve="-93.807969"/>
+<wire x1="7.7" y1="2.3" x2="3" y2="-7.4" width="0.2032" layer="21" curve="-86.010171"/>
+<wire x1="-2.9" y1="-7.4" x2="-7.7" y2="2.3" width="0.2032" layer="21" curve="-86.13748"/>
+</package>
+<package name="MOLEX_GNSS_CUBE">
+<smd name="NC2" x="-3.905" y="5.06" dx="1.6" dy="3.2" layer="1" rot="R90"/>
+<smd name="NC3" x="3.905" y="5.06" dx="1.6" dy="3.2" layer="1" rot="R90"/>
+<smd name="NC1" x="-3.905" y="-5.06" dx="1.6" dy="3.2" layer="1" rot="R90"/>
+<wire x1="-5.86" y1="5.86" x2="5.86" y2="5.86" width="0.05" layer="51"/>
+<wire x1="5.86" y1="5.86" x2="5.86" y2="-5.86" width="0.05" layer="51"/>
+<wire x1="5.86" y1="-5.86" x2="-5.86" y2="-5.86" width="0.05" layer="51"/>
+<wire x1="-5.86" y1="-5.86" x2="-5.86" y2="5.86" width="0.05" layer="51"/>
+<smd name="GND" x="3.545" y="-5.2" dx="1.3" dy="1.32" layer="1" rot="R180"/>
+<smd name="FEED" x="5.33" y="-3.4" dx="1.3" dy="1.61" layer="1" rot="R270"/>
+<rectangle x1="3.295" y1="-7.5" x2="3.795" y2="-5" layer="51"/>
+<rectangle x1="4.125" y1="-4.45" x2="4.5" y2="-2.35" layer="41"/>
+<wire x1="-5.842" y1="-5.842" x2="-5.842" y2="5.842" width="0.1524" layer="21"/>
+<wire x1="-1.905" y1="5.842" x2="1.905" y2="5.842" width="0.1524" layer="21"/>
+<wire x1="5.842" y1="5.842" x2="5.842" y2="-2.413" width="0.1524" layer="21"/>
+<wire x1="5.842" y1="-4.445" x2="5.842" y2="-5.842" width="0.1524" layer="21"/>
+<wire x1="5.842" y1="-5.842" x2="4.572" y2="-5.842" width="0.1524" layer="21"/>
+<wire x1="2.54" y1="-5.842" x2="-1.905" y2="-5.842" width="0.1524" layer="21"/>
+<text x="0" y="2.54" size="0.508" layer="25" font="vector" align="center">&gt;Name</text>
+<text x="0" y="0.889" size="0.508" layer="27" font="vector" align="center">&gt;Value</text>
+<rectangle x1="5.0125" y1="-3.5875" x2="5.3875" y2="-1.4875" layer="41" rot="R90"/>
+<rectangle x1="5.0125" y1="-5.2875" x2="5.3875" y2="-3.1875" layer="41" rot="R90"/>
+<rectangle x1="3.3625" y1="-5.3875" x2="3.7375" y2="-3.2875" layer="41" rot="R90"/>
+<rectangle x1="4.225" y1="-6.95" x2="4.6" y2="-4.5" layer="41"/>
+<rectangle x1="3.795" y1="-6.95" x2="4.2375" y2="-5.975" layer="41"/>
+<rectangle x1="2.845" y1="-6.95" x2="3.2875" y2="-5.625" layer="41"/>
+<wire x1="3.1" y1="-5.9" x2="3.1" y2="-6.94" width="0.05" layer="41"/>
+<rectangle x1="2.5" y1="-6.95" x2="2.875" y2="-4.5" layer="41" rot="R180"/>
+<rectangle x1="3.14" y1="-4" x2="4.14" y2="4.05" layer="21"/>
+<rectangle x1="-4.75" y1="3.14" x2="3.14" y2="4.05" layer="21"/>
+<rectangle x1="-4.75" y1="2.3" x2="-3.75" y2="3.14" layer="21"/>
+<rectangle x1="-3.61" y1="-3.61" x2="1.64" y2="1.64" layer="21"/>
+</package>
+<package name="MOLEX_GNSS_CHIP">
+<wire x1="-1.6" y1="0.8" x2="1.6" y2="0.8" width="0.05" layer="51"/>
+<wire x1="1.6" y1="0.8" x2="1.6" y2="-0.8" width="0.05" layer="51"/>
+<wire x1="1.6" y1="-0.8" x2="-1.6" y2="-0.8" width="0.05" layer="51"/>
+<wire x1="-1.6" y1="-0.8" x2="-1.6" y2="0.8" width="0.05" layer="51"/>
+<smd name="2" x="-1.45" y="-0.55" dx="1.1" dy="0.5" layer="1"/>
+<smd name="3" x="-1.45" y="0.55" dx="1.1" dy="0.5" layer="1"/>
+<smd name="FEED" x="1.45" y="0.55" dx="1.1" dy="0.5" layer="1"/>
+<smd name="1" x="1.45" y="-0.55" dx="1.1" dy="0.5" layer="1"/>
+<wire x1="-2" y1="6" x2="2" y2="6" width="0.05" layer="51"/>
+<wire x1="2" y1="6" x2="2" y2="-1" width="0.05" layer="51"/>
+<wire x1="2" y1="-1" x2="-2" y2="-1" width="0.05" layer="51"/>
+<wire x1="-2" y1="-1" x2="-2" y2="6" width="0.05" layer="51"/>
+<wire x1="-0.6" y1="0.8" x2="0.6" y2="0.8" width="0.1524" layer="21"/>
+<wire x1="-0.6" y1="-0.8" x2="0.6" y2="-0.8" width="0.1524" layer="21"/>
+<wire x1="-1.6" y1="0.1" x2="-1.6" y2="-0.1" width="0.1524" layer="21"/>
+<wire x1="1.6" y1="0.1" x2="1.6" y2="-0.1" width="0.1524" layer="21"/>
+<text x="0" y="0" size="0.2" layer="51" font="vector" align="center">Reversible
+Antenna</text>
+<text x="0" y="1.651" size="0.2" layer="25" font="vector" align="center">&gt;Name</text>
+<text x="0" y="1.27" size="0.2" layer="27" font="vector" align="center">&gt;Value</text>
+<rectangle x1="-2" y1="-1" x2="2" y2="6" layer="42"/>
+<rectangle x1="-2" y1="1" x2="2" y2="6" layer="41"/>
+<rectangle x1="-0.8" y1="-1" x2="0.8" y2="1" layer="41"/>
+<rectangle x1="-2" y1="-0.2" x2="2" y2="0.2" layer="41"/>
+</package>
+<package name="W3062A">
+<wire x1="-3.5" y1="0.78" x2="3.5" y2="0.78" width="0.05" layer="51"/>
+<wire x1="3.5" y1="0.78" x2="3.5" y2="-0.78" width="0.05" layer="51"/>
+<wire x1="3.5" y1="-0.78" x2="-3.5" y2="-0.78" width="0.05" layer="51"/>
+<wire x1="-3.5" y1="-0.78" x2="-3.5" y2="0.78" width="0.05" layer="51"/>
+<smd name="GND" x="-3" y="0" dx="1.25" dy="1.61" layer="1"/>
+<smd name="FEED" x="3" y="0" dx="1.25" dy="1.61" layer="1"/>
+<rectangle x1="-3.5" y1="-0.68" x2="-2.5" y2="0.68" layer="51"/>
+<rectangle x1="2.49" y1="-0.68" x2="3.49" y2="0.68" layer="51"/>
+<rectangle x1="-3.9" y1="-2.625" x2="3.9" y2="2.625" layer="42"/>
+<wire x1="-2" y1="0.8" x2="2" y2="0.8" width="0.1524" layer="21"/>
+<wire x1="-2" y1="-0.8" x2="2" y2="-0.8" width="0.1524" layer="21"/>
+<text x="0" y="2" size="0.2" layer="25" font="vector" align="center">&gt;Name</text>
+<text x="0" y="1.4" size="0.2" layer="27" font="vector" align="center">&gt;Value</text>
+<text x="0" y="0" size="0.2" layer="51" font="vector" align="center">Reversible
+Antenna</text>
+<wire x1="-3.9" y1="2.6" x2="3.9" y2="2.6" width="0.05" layer="51"/>
+<wire x1="3.9" y1="2.6" x2="3.9" y2="-2.6" width="0.05" layer="51"/>
+<wire x1="3.9" y1="-2.6" x2="-3.9" y2="-2.6" width="0.05" layer="51"/>
+<wire x1="-3.9" y1="-2.6" x2="-3.9" y2="2.6" width="0.05" layer="51"/>
+<rectangle x1="3.5" y1="-0.8" x2="3.9" y2="-0.6" layer="41"/>
+<rectangle x1="3.5" y1="0.6" x2="3.9" y2="0.8" layer="41"/>
+<rectangle x1="-3.9" y1="0.8" x2="3.9" y2="2.6" layer="41"/>
+<rectangle x1="-3.9" y1="-2.6" x2="3.9" y2="-0.8" layer="41"/>
+<rectangle x1="-3.9" y1="-0.8" x2="-3.5" y2="-0.6" layer="41"/>
+<rectangle x1="-3.9" y1="0.6" x2="-3.5" y2="0.8" layer="41"/>
+<rectangle x1="-2.3" y1="-0.8" x2="2.3" y2="0.8" layer="41"/>
+</package>
+<package name="MLOEX_GNSS_MOLDED">
+<wire x1="-1.5" y1="-2.5" x2="-1.5" y2="2.5" width="0.05" layer="51"/>
+<wire x1="-1.5" y1="2.5" x2="1.5" y2="2.5" width="0.05" layer="51"/>
+<wire x1="1.5" y1="2.5" x2="1.5" y2="-2.5" width="0.05" layer="51"/>
+<wire x1="1.5" y1="-2.5" x2="-1.5" y2="-2.5" width="0.05" layer="51"/>
+<smd name="1" x="-0.97" y="-1.95" dx="1.54" dy="1.54" layer="1"/>
+<smd name="FEED" x="0.97" y="-1.95" dx="1.54" dy="1.54" layer="1"/>
+<smd name="3" x="0.97" y="1.95" dx="1.54" dy="1.54" layer="1"/>
+<smd name="2" x="-0.97" y="1.95" dx="1.54" dy="1.54" layer="1"/>
+<rectangle x1="-2.64" y1="-3.735" x2="2.64" y2="3.735" layer="42"/>
+<wire x1="-1.5" y1="0.9" x2="-1.5" y2="-0.9" width="0.1524" layer="21"/>
+<wire x1="1.5" y1="0.9" x2="1.5" y2="0.5" width="0.1524" layer="21"/>
+<wire x1="1.5" y1="0.5" x2="1.5" y2="-0.4" width="0.1524" layer="21"/>
+<wire x1="1.5" y1="-0.4" x2="1.5" y2="-0.9" width="0.1524" layer="21"/>
+<wire x1="1.6" y1="0.5" x2="1.9" y2="0.5" width="0.1524" layer="21"/>
+<wire x1="1.9" y1="0.5" x2="1.9" y2="-0.4" width="0.1524" layer="21"/>
+<wire x1="1.9" y1="-0.4" x2="1.5" y2="-0.4" width="0.1524" layer="21"/>
+<wire x1="1.5" y1="0.5" x2="1.1" y2="0.5" width="0.1524" layer="21"/>
+<wire x1="1.1" y1="0.5" x2="1.1" y2="-0.4" width="0.1524" layer="21"/>
+<wire x1="1.1" y1="-0.4" x2="1.5" y2="-0.4" width="0.1524" layer="21"/>
+<text x="-1.27" y="-1.27" size="0.2" layer="25" font="vector" align="center">&gt;tName</text>
+<text x="-1.27" y="-1.651" size="0.2" layer="27" font="vector" align="center">&gt;tValue</text>
+<text x="0" y="0.381" size="0.2" layer="25" font="vector" align="center">&gt;Name</text>
+<text x="0" y="0" size="0.2" layer="27" font="vector" align="center">&gt;Value</text>
+<wire x1="-2.6" y1="3.7" x2="2.6" y2="3.7" width="0.05" layer="51"/>
+<wire x1="2.6" y1="3.7" x2="2.6" y2="-3.7" width="0.05" layer="51"/>
+<wire x1="2.6" y1="-3.7" x2="-2.6" y2="-3.7" width="0.05" layer="51"/>
+<wire x1="-2.6" y1="-3.7" x2="-2.6" y2="3.7" width="0.05" layer="51"/>
+<rectangle x1="-2.64" y1="-1.2" x2="2.64" y2="3.735" layer="41"/>
+<rectangle x1="-2.64" y1="-3.735" x2="0.2" y2="-1.2" layer="41"/>
+<rectangle x1="0.2" y1="-3.735" x2="2.64" y2="-2.7" layer="41"/>
+</package>
+<package name="ZED-F9P">
+<wire x1="11" y1="8.5" x2="11" y2="-8.5" width="0.127" layer="51"/>
+<wire x1="11" y1="-8.5" x2="-11" y2="-8.5" width="0.127" layer="51"/>
+<wire x1="-11" y1="-8.5" x2="-11" y2="8.5" width="0.127" layer="51"/>
+<wire x1="-11" y1="8.5" x2="11" y2="8.5" width="0.127" layer="51"/>
+<text x="-11" y="9" size="0.508" layer="25">&gt;Name</text>
+<text x="-11" y="-9.5" size="0.508" layer="27">&gt;Value</text>
+<circle x="-11.6" y="-8.5" radius="0.14141875" width="0" layer="21"/>
+<wire x1="8.8" y1="8.75" x2="11.25" y2="8.75" width="0.1778" layer="21"/>
+<wire x1="11.25" y1="8.75" x2="11.25" y2="6.8" width="0.1778" layer="21"/>
+<wire x1="11.25" y1="-6.8" x2="11.25" y2="-8.75" width="0.1778" layer="21"/>
+<wire x1="11.25" y1="-8.75" x2="8.8" y2="-8.75" width="0.1778" layer="21"/>
+<wire x1="-8.8" y1="-8.75" x2="-11.25" y2="-8.75" width="0.1778" layer="21"/>
+<wire x1="-11.25" y1="-8.75" x2="-11.25" y2="-6.8" width="0.1778" layer="21"/>
+<wire x1="-11.25" y1="6.8" x2="-11.25" y2="8.75" width="0.1778" layer="21"/>
+<wire x1="-11.25" y1="8.75" x2="-8.8" y2="8.75" width="0.1778" layer="21"/>
+<smd name="1" x="-7.15" y="-7.45" dx="1.52" dy="0.85" layer="1" rot="R90"/>
+<rectangle x1="-7.55" y1="-8.2" x2="-6.75" y2="-6.7" layer="51"/>
+<smd name="2" x="-6.05" y="-7.45" dx="1.52" dy="0.85" layer="1" rot="R90"/>
+<rectangle x1="-6.45" y1="-8.2" x2="-5.65" y2="-6.7" layer="51"/>
+<smd name="3" x="-4.95" y="-7.45" dx="1.52" dy="0.85" layer="1" rot="R90"/>
+<rectangle x1="-5.35" y1="-8.2" x2="-4.55" y2="-6.7" layer="51"/>
+<smd name="4" x="-3.85" y="-7.45" dx="1.52" dy="0.85" layer="1" rot="R90"/>
+<rectangle x1="-4.25" y1="-8.2" x2="-3.45" y2="-6.7" layer="51"/>
+<smd name="5" x="-2.75" y="-7.45" dx="1.52" dy="0.85" layer="1" rot="R90"/>
+<rectangle x1="-3.15" y1="-8.2" x2="-2.35" y2="-6.7" layer="51"/>
+<smd name="6" x="-1.65" y="-7.45" dx="1.52" dy="0.85" layer="1" rot="R90"/>
+<rectangle x1="-2.05" y1="-8.2" x2="-1.25" y2="-6.7" layer="51"/>
+<smd name="7" x="-0.55" y="-7.45" dx="1.52" dy="0.85" layer="1" rot="R90"/>
+<rectangle x1="-0.95" y1="-8.2" x2="-0.15" y2="-6.7" layer="51"/>
+<smd name="8" x="0.55" y="-7.45" dx="1.52" dy="0.85" layer="1" rot="R90"/>
+<rectangle x1="0.15" y1="-8.2" x2="0.95" y2="-6.7" layer="51"/>
+<smd name="9" x="1.65" y="-7.45" dx="1.52" dy="0.85" layer="1" rot="R90"/>
+<rectangle x1="1.25" y1="-8.2" x2="2.05" y2="-6.7" layer="51"/>
+<smd name="10" x="2.75" y="-7.45" dx="1.52" dy="0.85" layer="1" rot="R90"/>
+<rectangle x1="2.35" y1="-8.2" x2="3.15" y2="-6.7" layer="51"/>
+<smd name="11" x="3.85" y="-7.45" dx="1.52" dy="0.85" layer="1" rot="R90"/>
+<rectangle x1="3.45" y1="-8.2" x2="4.25" y2="-6.7" layer="51"/>
+<smd name="12" x="4.95" y="-7.45" dx="1.52" dy="0.85" layer="1" rot="R90"/>
+<rectangle x1="4.55" y1="-8.2" x2="5.35" y2="-6.7" layer="51"/>
+<smd name="13" x="6.05" y="-7.45" dx="1.52" dy="0.85" layer="1" rot="R90"/>
+<rectangle x1="5.65" y1="-8.2" x2="6.45" y2="-6.7" layer="51"/>
+<smd name="14" x="7.15" y="-7.45" dx="1.52" dy="0.85" layer="1" rot="R90"/>
+<rectangle x1="6.75" y1="-8.2" x2="7.55" y2="-6.7" layer="51"/>
+<smd name="15" x="9.95" y="-6.6" dx="1.52" dy="0.85" layer="1"/>
+<rectangle x1="9.2" y1="-7" x2="10.7" y2="-6.2" layer="51"/>
+<smd name="16" x="9.95" y="-5.5" dx="1.52" dy="0.85" layer="1"/>
+<rectangle x1="9.2" y1="-5.9" x2="10.7" y2="-5.1" layer="51"/>
+<smd name="17" x="9.95" y="-4.4" dx="1.52" dy="0.85" layer="1"/>
+<rectangle x1="9.2" y1="-4.8" x2="10.7" y2="-4" layer="51"/>
+<smd name="18" x="9.95" y="-3.3" dx="1.52" dy="0.85" layer="1"/>
+<rectangle x1="9.2" y1="-3.7" x2="10.7" y2="-2.9" layer="51"/>
+<smd name="19" x="9.95" y="-2.2" dx="1.52" dy="0.85" layer="1"/>
+<rectangle x1="9.2" y1="-2.6" x2="10.7" y2="-1.8" layer="51"/>
+<smd name="20" x="9.95" y="-1.1" dx="1.52" dy="0.85" layer="1"/>
+<rectangle x1="9.2" y1="-1.5" x2="10.7" y2="-0.7" layer="51"/>
+<smd name="21" x="9.95" y="0" dx="1.52" dy="0.85" layer="1"/>
+<rectangle x1="9.2" y1="-0.4" x2="10.7" y2="0.4" layer="51"/>
+<smd name="22" x="9.95" y="1.1" dx="1.52" dy="0.85" layer="1"/>
+<rectangle x1="9.2" y1="0.7" x2="10.7" y2="1.5" layer="51"/>
+<smd name="23" x="9.95" y="2.2" dx="1.52" dy="0.85" layer="1"/>
+<rectangle x1="9.2" y1="1.8" x2="10.7" y2="2.6" layer="51"/>
+<smd name="24" x="9.95" y="3.3" dx="1.52" dy="0.85" layer="1"/>
+<rectangle x1="9.2" y1="2.9" x2="10.7" y2="3.7" layer="51"/>
+<smd name="25" x="9.95" y="4.4" dx="1.52" dy="0.85" layer="1"/>
+<rectangle x1="9.2" y1="4" x2="10.7" y2="4.8" layer="51"/>
+<smd name="26" x="9.95" y="5.5" dx="1.52" dy="0.85" layer="1"/>
+<rectangle x1="9.2" y1="5.1" x2="10.7" y2="5.9" layer="51"/>
+<smd name="27" x="9.95" y="6.6" dx="1.52" dy="0.85" layer="1"/>
+<rectangle x1="9.2" y1="6.2" x2="10.7" y2="7" layer="51"/>
+<smd name="28" x="7.15" y="7.45" dx="1.52" dy="0.85" layer="1" rot="R270"/>
+<rectangle x1="6.75" y1="6.7" x2="7.55" y2="8.2" layer="51"/>
+<smd name="29" x="6.05" y="7.45" dx="1.52" dy="0.85" layer="1" rot="R270"/>
+<rectangle x1="5.65" y1="6.7" x2="6.45" y2="8.2" layer="51"/>
+<smd name="30" x="4.95" y="7.45" dx="1.52" dy="0.85" layer="1" rot="R270"/>
+<rectangle x1="4.55" y1="6.7" x2="5.35" y2="8.2" layer="51"/>
+<smd name="31" x="3.85" y="7.45" dx="1.52" dy="0.85" layer="1" rot="R270"/>
+<rectangle x1="3.45" y1="6.7" x2="4.25" y2="8.2" layer="51"/>
+<smd name="32" x="2.75" y="7.45" dx="1.52" dy="0.85" layer="1" rot="R270"/>
+<rectangle x1="2.35" y1="6.7" x2="3.15" y2="8.2" layer="51"/>
+<smd name="33" x="1.65" y="7.45" dx="1.52" dy="0.85" layer="1" rot="R270"/>
+<rectangle x1="1.25" y1="6.7" x2="2.05" y2="8.2" layer="51"/>
+<smd name="34" x="0.55" y="7.45" dx="1.52" dy="0.85" layer="1" rot="R270"/>
+<rectangle x1="0.15" y1="6.7" x2="0.95" y2="8.2" layer="51"/>
+<smd name="35" x="-0.55" y="7.45" dx="1.52" dy="0.85" layer="1" rot="R270"/>
+<rectangle x1="-0.95" y1="6.7" x2="-0.15" y2="8.2" layer="51"/>
+<smd name="36" x="-1.65" y="7.45" dx="1.52" dy="0.85" layer="1" rot="R270"/>
+<rectangle x1="-2.05" y1="6.7" x2="-1.25" y2="8.2" layer="51"/>
+<smd name="37" x="-2.75" y="7.45" dx="1.52" dy="0.85" layer="1" rot="R270"/>
+<rectangle x1="-3.15" y1="6.7" x2="-2.35" y2="8.2" layer="51"/>
+<smd name="38" x="-3.85" y="7.45" dx="1.52" dy="0.85" layer="1" rot="R270"/>
+<rectangle x1="-4.25" y1="6.7" x2="-3.45" y2="8.2" layer="51"/>
+<smd name="39" x="-4.95" y="7.45" dx="1.52" dy="0.85" layer="1" rot="R270"/>
+<rectangle x1="-5.35" y1="6.7" x2="-4.55" y2="8.2" layer="51"/>
+<smd name="40" x="-6.05" y="7.45" dx="1.52" dy="0.85" layer="1" rot="R270"/>
+<rectangle x1="-6.45" y1="6.7" x2="-5.65" y2="8.2" layer="51"/>
+<smd name="41" x="-7.15" y="7.45" dx="1.52" dy="0.85" layer="1" rot="R270"/>
+<rectangle x1="-7.55" y1="6.7" x2="-6.75" y2="8.2" layer="51"/>
+<smd name="42" x="-9.95" y="6.6" dx="1.52" dy="0.85" layer="1" rot="R180"/>
+<rectangle x1="-10.7" y1="6.2" x2="-9.2" y2="7" layer="51"/>
+<smd name="43" x="-9.95" y="5.5" dx="1.52" dy="0.85" layer="1" rot="R180"/>
+<rectangle x1="-10.7" y1="5.1" x2="-9.2" y2="5.9" layer="51"/>
+<smd name="44" x="-9.95" y="4.4" dx="1.52" dy="0.85" layer="1" rot="R180"/>
+<rectangle x1="-10.7" y1="4" x2="-9.2" y2="4.8" layer="51"/>
+<smd name="45" x="-9.95" y="3.3" dx="1.52" dy="0.85" layer="1" rot="R180"/>
+<rectangle x1="-10.7" y1="2.9" x2="-9.2" y2="3.7" layer="51"/>
+<smd name="46" x="-9.95" y="2.2" dx="1.52" dy="0.85" layer="1" rot="R180"/>
+<rectangle x1="-10.7" y1="1.8" x2="-9.2" y2="2.6" layer="51"/>
+<smd name="47" x="-9.95" y="1.1" dx="1.52" dy="0.85" layer="1" rot="R180"/>
+<rectangle x1="-10.7" y1="0.7" x2="-9.2" y2="1.5" layer="51"/>
+<smd name="48" x="-9.95" y="0" dx="1.52" dy="0.85" layer="1" rot="R180"/>
+<rectangle x1="-10.7" y1="-0.4" x2="-9.2" y2="0.4" layer="51"/>
+<smd name="49" x="-9.95" y="-1.1" dx="1.52" dy="0.85" layer="1" rot="R180"/>
+<rectangle x1="-10.7" y1="-1.5" x2="-9.2" y2="-0.7" layer="51"/>
+<smd name="50" x="-9.95" y="-2.2" dx="1.52" dy="0.85" layer="1" rot="R180"/>
+<rectangle x1="-10.7" y1="-2.6" x2="-9.2" y2="-1.8" layer="51"/>
+<smd name="51" x="-9.95" y="-3.3" dx="1.52" dy="0.85" layer="1" rot="R180"/>
+<rectangle x1="-10.7" y1="-3.7" x2="-9.2" y2="-2.9" layer="51"/>
+<smd name="52" x="-9.95" y="-4.4" dx="1.52" dy="0.85" layer="1" rot="R180"/>
+<rectangle x1="-10.7" y1="-4.8" x2="-9.2" y2="-4" layer="51"/>
+<smd name="53" x="-9.95" y="-5.5" dx="1.52" dy="0.85" layer="1" rot="R180"/>
+<rectangle x1="-10.7" y1="-5.9" x2="-9.2" y2="-5.1" layer="51"/>
+<smd name="54" x="-9.95" y="-6.6" dx="1.52" dy="0.85" layer="1" rot="R180"/>
+<rectangle x1="-10.7" y1="-7" x2="-9.2" y2="-6.2" layer="51"/>
+<smd name="55" x="-1.05" y="-1.05" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="56" x="-3.15" y="-1.05" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="57" x="-5.25" y="-1.05" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="58" x="-7.35" y="-1.05" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="59" x="-1.05" y="-3.1" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="60" x="-3.15" y="-3.1" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="61" x="-5.25" y="-3.1" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="62" x="-7.35" y="-3.1" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="63" x="-1.05" y="-5.15" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="64" x="-3.15" y="-5.15" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="65" x="-5.25" y="-5.15" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="66" x="-7.35" y="-5.15" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="67" x="-1.05" y="5.15" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="68" x="-3.15" y="5.15" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="69" x="-5.25" y="5.15" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="70" x="-7.35" y="5.15" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="71" x="-1.05" y="3.1" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="72" x="-3.15" y="3.1" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="73" x="-5.25" y="3.1" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="74" x="-7.35" y="3.1" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="75" x="-1.05" y="1.05" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="76" x="-3.15" y="1.05" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="77" x="-5.25" y="1.05" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="78" x="-7.35" y="1.05" dx="1.1" dy="1.1" layer="1" cream="no"/>
+<smd name="79" x="1.05" y="1.05" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="80" x="3.15" y="1.05" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="81" x="5.25" y="1.05" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="82" x="7.35" y="1.05" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="83" x="1.05" y="3.1" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="84" x="3.15" y="3.1" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="85" x="5.25" y="3.1" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="86" x="7.35" y="3.1" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="87" x="1.05" y="5.15" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="88" x="3.15" y="5.15" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="89" x="5.25" y="5.15" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="90" x="7.35" y="5.15" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="91" x="1.05" y="-5.15" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="92" x="3.15" y="-5.15" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="93" x="5.25" y="-5.15" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="94" x="7.35" y="-5.15" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="95" x="1.05" y="-3.1" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="96" x="3.15" y="-3.1" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="97" x="5.25" y="-3.1" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="98" x="7.35" y="-3.1" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="99" x="1.05" y="-1.05" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="100" x="3.15" y="-1.05" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="101" x="5.25" y="-1.05" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<smd name="102" x="7.35" y="-1.05" dx="1.1" dy="1.1" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-1.5" y1="0.6" x2="-0.6" y2="1.5" layer="31"/>
+<rectangle x1="-3.6" y1="0.6" x2="-2.7" y2="1.5" layer="31"/>
+<rectangle x1="-5.7" y1="0.6" x2="-4.8" y2="1.5" layer="31"/>
+<rectangle x1="-7.8" y1="0.6" x2="-6.9" y2="1.5" layer="31"/>
+<rectangle x1="-1.5" y1="2.65" x2="-0.6" y2="3.55" layer="31"/>
+<rectangle x1="-3.6" y1="2.65" x2="-2.7" y2="3.55" layer="31"/>
+<rectangle x1="-5.7" y1="2.65" x2="-4.8" y2="3.55" layer="31"/>
+<rectangle x1="-7.8" y1="2.65" x2="-6.9" y2="3.55" layer="31"/>
+<rectangle x1="-1.5" y1="4.7" x2="-0.6" y2="5.6" layer="31"/>
+<rectangle x1="-3.6" y1="4.7" x2="-2.7" y2="5.6" layer="31"/>
+<rectangle x1="-5.7" y1="4.7" x2="-4.8" y2="5.6" layer="31"/>
+<rectangle x1="-7.8" y1="4.7" x2="-6.9" y2="5.6" layer="31"/>
+<rectangle x1="-1.5" y1="-5.6" x2="-0.6" y2="-4.7" layer="31"/>
+<rectangle x1="-3.6" y1="-5.6" x2="-2.7" y2="-4.7" layer="31"/>
+<rectangle x1="-5.7" y1="-5.6" x2="-4.8" y2="-4.7" layer="31"/>
+<rectangle x1="-7.8" y1="-5.6" x2="-6.9" y2="-4.7" layer="31"/>
+<rectangle x1="-1.5" y1="-3.55" x2="-0.6" y2="-2.65" layer="31"/>
+<rectangle x1="-3.6" y1="-3.55" x2="-2.7" y2="-2.65" layer="31"/>
+<rectangle x1="-5.7" y1="-3.55" x2="-4.8" y2="-2.65" layer="31"/>
+<rectangle x1="-7.8" y1="-3.55" x2="-6.9" y2="-2.65" layer="31"/>
+<rectangle x1="-1.5" y1="-1.5" x2="-0.6" y2="-0.6" layer="31"/>
+<rectangle x1="-3.6" y1="-1.5" x2="-2.7" y2="-0.6" layer="31"/>
+<rectangle x1="-5.7" y1="-1.5" x2="-4.8" y2="-0.6" layer="31"/>
+<rectangle x1="-7.8" y1="-1.5" x2="-6.9" y2="-0.6" layer="31"/>
+<rectangle x1="6.9" y1="0.6" x2="7.8" y2="1.5" layer="31"/>
+<rectangle x1="4.8" y1="0.6" x2="5.7" y2="1.5" layer="31"/>
+<rectangle x1="2.7" y1="0.6" x2="3.6" y2="1.5" layer="31"/>
+<rectangle x1="0.6" y1="0.6" x2="1.5" y2="1.5" layer="31"/>
+<rectangle x1="6.9" y1="2.65" x2="7.8" y2="3.55" layer="31"/>
+<rectangle x1="4.8" y1="2.65" x2="5.7" y2="3.55" layer="31"/>
+<rectangle x1="2.7" y1="2.65" x2="3.6" y2="3.55" layer="31"/>
+<rectangle x1="0.6" y1="2.65" x2="1.5" y2="3.55" layer="31"/>
+<rectangle x1="6.9" y1="4.7" x2="7.8" y2="5.6" layer="31"/>
+<rectangle x1="4.8" y1="4.7" x2="5.7" y2="5.6" layer="31"/>
+<rectangle x1="2.7" y1="4.7" x2="3.6" y2="5.6" layer="31"/>
+<rectangle x1="0.6" y1="4.7" x2="1.5" y2="5.6" layer="31"/>
+<rectangle x1="6.9" y1="-5.6" x2="7.8" y2="-4.7" layer="31"/>
+<rectangle x1="4.8" y1="-5.6" x2="5.7" y2="-4.7" layer="31"/>
+<rectangle x1="2.7" y1="-5.6" x2="3.6" y2="-4.7" layer="31"/>
+<rectangle x1="0.6" y1="-5.6" x2="1.5" y2="-4.7" layer="31"/>
+<rectangle x1="6.9" y1="-3.55" x2="7.8" y2="-2.65" layer="31"/>
+<rectangle x1="4.8" y1="-3.55" x2="5.7" y2="-2.65" layer="31"/>
+<rectangle x1="2.7" y1="-3.55" x2="3.6" y2="-2.65" layer="31"/>
+<rectangle x1="0.6" y1="-3.55" x2="1.5" y2="-2.65" layer="31"/>
+<rectangle x1="6.9" y1="-1.5" x2="7.8" y2="-0.6" layer="31"/>
+<rectangle x1="4.8" y1="-1.5" x2="5.7" y2="-0.6" layer="31"/>
+<rectangle x1="2.7" y1="-1.5" x2="3.6" y2="-0.6" layer="31"/>
+<rectangle x1="0.6" y1="-1.5" x2="1.5" y2="-0.6" layer="31"/>
+</package>
+<package name="NEO-M8P">
+<wire x1="6.1" y1="8" x2="6.1" y2="-8" width="0.127" layer="51"/>
+<wire x1="6.1" y1="-8" x2="-6.1" y2="-8" width="0.127" layer="51"/>
+<wire x1="-6.1" y1="-8" x2="-6.1" y2="8" width="0.127" layer="51"/>
+<wire x1="-6.1" y1="8" x2="6.1" y2="8" width="0.127" layer="51"/>
+<text x="-6.1" y="8.5" size="0.508" layer="25">&gt;Name</text>
+<text x="-6.1" y="-9" size="0.508" layer="27">&gt;Value</text>
+<circle x="6.7" y="-8" radius="0.14141875" width="0" layer="21"/>
+<wire x1="4.88" y1="8.25" x2="6.35" y2="8.25" width="0.1778" layer="21"/>
+<wire x1="6.35" y1="8.25" x2="6.35" y2="6.4" width="0.1778" layer="21"/>
+<wire x1="6.35" y1="-6.4" x2="6.35" y2="-8.25" width="0.1778" layer="21"/>
+<wire x1="6.35" y1="-8.25" x2="4.88" y2="-8.25" width="0.1778" layer="21"/>
+<wire x1="-4.88" y1="-8.25" x2="-6.35" y2="-8.25" width="0.1778" layer="21"/>
+<wire x1="-6.35" y1="-8.25" x2="-6.35" y2="-6.4" width="0.1778" layer="21"/>
+<wire x1="-6.35" y1="6.4" x2="-6.35" y2="8.25" width="0.1778" layer="21"/>
+<wire x1="-6.35" y1="8.25" x2="-4.88" y2="8.25" width="0.1778" layer="21"/>
+<smd name="1" x="6" y="-7" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="-7.4" x2="6.1" y2="-6.6" layer="51"/>
+<smd name="2" x="6" y="-5.9" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="-6.3" x2="6.1" y2="-5.5" layer="51"/>
+<smd name="3" x="6" y="-4.8" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="-5.2" x2="6.1" y2="-4.4" layer="51"/>
+<smd name="4" x="6" y="-3.7" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="-4.1" x2="6.1" y2="-3.3" layer="51"/>
+<smd name="5" x="6" y="-2.6" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="-3" x2="6.1" y2="-2.2" layer="51"/>
+<smd name="6" x="6" y="-1.5" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="-1.9" x2="6.1" y2="-1.1" layer="51"/>
+<smd name="7" x="6" y="-0.4" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="-0.8" x2="6.1" y2="0" layer="51"/>
+<smd name="8" x="6" y="2.6" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="2.2" x2="6.1" y2="3" layer="51"/>
+<smd name="9" x="6" y="3.7" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="3.3" x2="6.1" y2="4.1" layer="51"/>
+<smd name="10" x="6" y="4.8" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="4.4" x2="6.1" y2="5.2" layer="51"/>
+<smd name="11" x="6" y="5.9" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="5.5" x2="6.1" y2="6.3" layer="51"/>
+<smd name="12" x="6" y="7" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="6.6" x2="6.1" y2="7.4" layer="51"/>
+<smd name="13" x="-6" y="7" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="6.6" x2="-5.2" y2="7.4" layer="51"/>
+<smd name="14" x="-6" y="5.9" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="5.5" x2="-5.2" y2="6.3" layer="51"/>
+<smd name="15" x="-6" y="4.8" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="4.4" x2="-5.2" y2="5.2" layer="51"/>
+<smd name="16" x="-6" y="3.7" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="3.3" x2="-5.2" y2="4.1" layer="51"/>
+<smd name="17" x="-6" y="2.6" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="2.2" x2="-5.2" y2="3" layer="51"/>
+<smd name="18" x="-6" y="-0.4" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="-0.8" x2="-5.2" y2="0" layer="51"/>
+<smd name="19" x="-6" y="-1.5" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="-1.9" x2="-5.2" y2="-1.1" layer="51"/>
+<smd name="20" x="-6" y="-2.6" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="-3" x2="-5.2" y2="-2.2" layer="51"/>
+<smd name="21" x="-6" y="-3.7" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="-4.1" x2="-5.2" y2="-3.3" layer="51"/>
+<smd name="22" x="-6" y="-4.8" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="-5.2" x2="-5.2" y2="-4.4" layer="51"/>
+<smd name="23" x="-6" y="-5.9" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="-6.3" x2="-5.2" y2="-5.5" layer="51"/>
+<smd name="24" x="-6" y="-7" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="-7.4" x2="-5.2" y2="-6.6" layer="51"/>
+<rectangle x1="6.1" y1="-7.4" x2="7.3" y2="-6.6" layer="31"/>
+<rectangle x1="5.2" y1="-7.3" x2="6.1" y2="-6.7" layer="31"/>
+<rectangle x1="6.1" y1="-6.3" x2="7.3" y2="-5.5" layer="31"/>
+<rectangle x1="5.2" y1="-6.2" x2="6.1" y2="-5.6" layer="31"/>
+<rectangle x1="6.1" y1="-5.2" x2="7.3" y2="-4.4" layer="31"/>
+<rectangle x1="5.2" y1="-5.1" x2="6.1" y2="-4.5" layer="31"/>
+<rectangle x1="6.1" y1="-4.1" x2="7.3" y2="-3.3" layer="31"/>
+<rectangle x1="5.2" y1="-4" x2="6.1" y2="-3.4" layer="31"/>
+<rectangle x1="6.1" y1="-3" x2="7.3" y2="-2.2" layer="31"/>
+<rectangle x1="5.2" y1="-2.9" x2="6.1" y2="-2.3" layer="31"/>
+<rectangle x1="6.1" y1="-1.9" x2="7.3" y2="-1.1" layer="31"/>
+<rectangle x1="5.2" y1="-1.8" x2="6.1" y2="-1.2" layer="31"/>
+<rectangle x1="6.1" y1="-0.8" x2="7.3" y2="0" layer="31"/>
+<rectangle x1="5.2" y1="-0.7" x2="6.1" y2="-0.1" layer="31"/>
+<rectangle x1="6.1" y1="2.2" x2="7.3" y2="3" layer="31"/>
+<rectangle x1="5.2" y1="2.3" x2="6.1" y2="2.9" layer="31"/>
+<rectangle x1="6.1" y1="3.3" x2="7.3" y2="4.1" layer="31"/>
+<rectangle x1="5.2" y1="3.4" x2="6.1" y2="4" layer="31"/>
+<rectangle x1="6.1" y1="4.4" x2="7.3" y2="5.2" layer="31"/>
+<rectangle x1="5.2" y1="4.5" x2="6.1" y2="5.1" layer="31"/>
+<rectangle x1="6.1" y1="5.5" x2="7.3" y2="6.3" layer="31"/>
+<rectangle x1="5.2" y1="5.6" x2="6.1" y2="6.2" layer="31"/>
+<rectangle x1="6.1" y1="6.6" x2="7.3" y2="7.4" layer="31"/>
+<rectangle x1="5.2" y1="6.7" x2="6.1" y2="7.3" layer="31"/>
+<rectangle x1="-7.3" y1="-0.8" x2="-6.1" y2="0" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="-0.7" x2="-5.2" y2="-0.1" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="-1.9" x2="-6.1" y2="-1.1" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="-1.8" x2="-5.2" y2="-1.2" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="-3" x2="-6.1" y2="-2.2" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="-2.9" x2="-5.2" y2="-2.3" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="-4.1" x2="-6.1" y2="-3.3" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="-4" x2="-5.2" y2="-3.4" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="-5.2" x2="-6.1" y2="-4.4" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="-5.1" x2="-5.2" y2="-4.5" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="-6.3" x2="-6.1" y2="-5.5" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="-6.2" x2="-5.2" y2="-5.6" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="-7.4" x2="-6.1" y2="-6.6" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="-7.3" x2="-5.2" y2="-6.7" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="6.6" x2="-6.1" y2="7.4" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="6.7" x2="-5.2" y2="7.3" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="5.5" x2="-6.1" y2="6.3" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="5.6" x2="-5.2" y2="6.2" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="4.4" x2="-6.1" y2="5.2" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="4.5" x2="-5.2" y2="5.1" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="3.3" x2="-6.1" y2="4.1" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="3.4" x2="-5.2" y2="4" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="2.2" x2="-6.1" y2="3" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="2.3" x2="-5.2" y2="2.9" layer="31" rot="R180"/>
+</package>
+<package name="NEO-M9N/M8T/M8U/D9S">
+<description>&lt;h3&gt;u-blox NEO-M9N/M8T/M8U/D9S Module&lt;/h3&gt;
+
+&lt;h4&gt;Mechanical Specifications&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;Overall: 12.2mm x 16.0mm&lt;/li&gt;
+&lt;li&gt;Pad Pitch: 1.1mm&lt;/li&gt;
+&lt;li&gt;Pad Width: .8mm &lt;/li&gt;
+&lt;li&gt;Pad Length: .9mm&lt;/li&gt;
+&lt;li&gt;Number of Pins: 24&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+<wire x1="6.1" y1="8" x2="6.1" y2="-8" width="0.127" layer="51"/>
+<wire x1="6.1" y1="-8" x2="-6.1" y2="-8" width="0.127" layer="51"/>
+<wire x1="-6.1" y1="-8" x2="-6.1" y2="8" width="0.127" layer="51"/>
+<wire x1="-6.1" y1="8" x2="6.1" y2="8" width="0.127" layer="51"/>
+<text x="-6.1" y="8.5" size="0.508" layer="25">&gt;Name</text>
+<text x="-6.1" y="-9" size="0.508" layer="27">&gt;Value</text>
+<wire x1="4.88" y1="8.25" x2="6.35" y2="8.25" width="0.1778" layer="21"/>
+<wire x1="6.35" y1="8.25" x2="6.35" y2="6.4" width="0.1778" layer="21"/>
+<wire x1="6.35" y1="-6.4" x2="6.35" y2="-8.25" width="0.1778" layer="21"/>
+<wire x1="6.35" y1="-8.25" x2="4.88" y2="-8.25" width="0.1778" layer="21"/>
+<wire x1="-4.88" y1="-8.25" x2="-6.35" y2="-8.25" width="0.1778" layer="21"/>
+<wire x1="-6.35" y1="-8.25" x2="-6.35" y2="-6.4" width="0.1778" layer="21"/>
+<wire x1="-6.35" y1="6.4" x2="-6.35" y2="8.25" width="0.1778" layer="21"/>
+<wire x1="-6.35" y1="8.25" x2="-4.88" y2="8.25" width="0.1778" layer="21"/>
+<smd name="1" x="6" y="-7" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="-7.4" x2="6.1" y2="-6.6" layer="51"/>
+<smd name="2" x="6" y="-5.9" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="-6.3" x2="6.1" y2="-5.5" layer="51"/>
+<smd name="3" x="6" y="-4.8" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="-5.2" x2="6.1" y2="-4.4" layer="51"/>
+<smd name="4" x="6" y="-3.7" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="-4.1" x2="6.1" y2="-3.3" layer="51"/>
+<smd name="5" x="6" y="-2.6" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="-3" x2="6.1" y2="-2.2" layer="51"/>
+<smd name="6" x="6" y="-1.5" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="-1.9" x2="6.1" y2="-1.1" layer="51"/>
+<smd name="7" x="6" y="-0.4" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="-0.8" x2="6.1" y2="0" layer="51"/>
+<smd name="8" x="6" y="2.6" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="2.2" x2="6.1" y2="3" layer="51"/>
+<smd name="9" x="6" y="3.7" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="3.3" x2="6.1" y2="4.1" layer="51"/>
+<smd name="10" x="6" y="4.8" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="4.4" x2="6.1" y2="5.2" layer="51"/>
+<smd name="11" x="6" y="5.9" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="5.5" x2="6.1" y2="6.3" layer="51"/>
+<smd name="12" x="6" y="7" dx="1.8" dy="0.8" layer="1" cream="no"/>
+<rectangle x1="5.2" y1="6.6" x2="6.1" y2="7.4" layer="51"/>
+<smd name="13" x="-6" y="7" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="6.6" x2="-5.2" y2="7.4" layer="51"/>
+<smd name="14" x="-6" y="5.9" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="5.5" x2="-5.2" y2="6.3" layer="51"/>
+<smd name="15" x="-6" y="4.8" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="4.4" x2="-5.2" y2="5.2" layer="51"/>
+<smd name="16" x="-6" y="3.7" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="3.3" x2="-5.2" y2="4.1" layer="51"/>
+<smd name="17" x="-6" y="2.6" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="2.2" x2="-5.2" y2="3" layer="51"/>
+<smd name="18" x="-6" y="-0.4" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="-0.8" x2="-5.2" y2="0" layer="51"/>
+<smd name="19" x="-6" y="-1.5" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="-1.9" x2="-5.2" y2="-1.1" layer="51"/>
+<smd name="20" x="-6" y="-2.6" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="-3" x2="-5.2" y2="-2.2" layer="51"/>
+<smd name="21" x="-6" y="-3.7" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="-4.1" x2="-5.2" y2="-3.3" layer="51"/>
+<smd name="22" x="-6" y="-4.8" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="-5.2" x2="-5.2" y2="-4.4" layer="51"/>
+<smd name="23" x="-6" y="-5.9" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="-6.3" x2="-5.2" y2="-5.5" layer="51"/>
+<smd name="24" x="-6" y="-7" dx="1.8" dy="0.8" layer="1" rot="R180" cream="no"/>
+<rectangle x1="-6.1" y1="-7.4" x2="-5.2" y2="-6.6" layer="51"/>
+<rectangle x1="6.1" y1="-7.4" x2="7.3" y2="-6.6" layer="31"/>
+<rectangle x1="5.2" y1="-7.3" x2="6.1" y2="-6.7" layer="31"/>
+<rectangle x1="6.1" y1="-6.3" x2="7.3" y2="-5.5" layer="31"/>
+<rectangle x1="5.2" y1="-6.2" x2="6.1" y2="-5.6" layer="31"/>
+<rectangle x1="6.1" y1="-5.2" x2="7.3" y2="-4.4" layer="31"/>
+<rectangle x1="5.2" y1="-5.1" x2="6.1" y2="-4.5" layer="31"/>
+<rectangle x1="6.1" y1="-4.1" x2="7.3" y2="-3.3" layer="31"/>
+<rectangle x1="5.2" y1="-4" x2="6.1" y2="-3.4" layer="31"/>
+<rectangle x1="6.1" y1="-3" x2="7.3" y2="-2.2" layer="31"/>
+<rectangle x1="5.2" y1="-2.9" x2="6.1" y2="-2.3" layer="31"/>
+<rectangle x1="6.1" y1="-1.9" x2="7.3" y2="-1.1" layer="31"/>
+<rectangle x1="5.2" y1="-1.8" x2="6.1" y2="-1.2" layer="31"/>
+<rectangle x1="6.1" y1="-0.8" x2="7.3" y2="0" layer="31"/>
+<rectangle x1="5.2" y1="-0.7" x2="6.1" y2="-0.1" layer="31"/>
+<rectangle x1="6.1" y1="2.2" x2="7.3" y2="3" layer="31"/>
+<rectangle x1="5.2" y1="2.3" x2="6.1" y2="2.9" layer="31"/>
+<rectangle x1="6.1" y1="3.3" x2="7.3" y2="4.1" layer="31"/>
+<rectangle x1="5.2" y1="3.4" x2="6.1" y2="4" layer="31"/>
+<rectangle x1="6.1" y1="4.4" x2="7.3" y2="5.2" layer="31"/>
+<rectangle x1="5.2" y1="4.5" x2="6.1" y2="5.1" layer="31"/>
+<rectangle x1="6.1" y1="5.5" x2="7.3" y2="6.3" layer="31"/>
+<rectangle x1="5.2" y1="5.6" x2="6.1" y2="6.2" layer="31"/>
+<rectangle x1="6.1" y1="6.6" x2="7.3" y2="7.4" layer="31"/>
+<rectangle x1="5.2" y1="6.7" x2="6.1" y2="7.3" layer="31"/>
+<rectangle x1="-7.3" y1="-0.8" x2="-6.1" y2="0" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="-0.7" x2="-5.2" y2="-0.1" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="-1.9" x2="-6.1" y2="-1.1" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="-1.8" x2="-5.2" y2="-1.2" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="-3" x2="-6.1" y2="-2.2" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="-2.9" x2="-5.2" y2="-2.3" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="-4.1" x2="-6.1" y2="-3.3" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="-4" x2="-5.2" y2="-3.4" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="-5.2" x2="-6.1" y2="-4.4" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="-5.1" x2="-5.2" y2="-4.5" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="-6.3" x2="-6.1" y2="-5.5" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="-6.2" x2="-5.2" y2="-5.6" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="-7.4" x2="-6.1" y2="-6.6" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="-7.3" x2="-5.2" y2="-6.7" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="6.6" x2="-6.1" y2="7.4" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="6.7" x2="-5.2" y2="7.3" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="5.5" x2="-6.1" y2="6.3" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="5.6" x2="-5.2" y2="6.2" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="4.4" x2="-6.1" y2="5.2" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="4.5" x2="-5.2" y2="5.1" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="3.3" x2="-6.1" y2="4.1" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="3.4" x2="-5.2" y2="4" layer="31" rot="R180"/>
+<rectangle x1="-7.3" y1="2.2" x2="-6.1" y2="3" layer="31" rot="R180"/>
+<rectangle x1="-6.1" y1="2.3" x2="-5.2" y2="2.9" layer="31" rot="R180"/>
+<circle x="6.858" y="-8.763" radius="0.4064" width="0" layer="21"/>
+</package>
+<package name="UBLOX_ZED_F9R">
+<description>&lt;h3&gt;u-blox ZED-F9K ADR&lt;/h3&gt;
+&lt;p&gt;GPS Unit with Real Time Kinematics (RTK) and internal IMU = &lt;b&gt;Automotive Dead Reckoning&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;b&gt;Mechanical Specification &lt;/b&gt;
+&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Physical Module: 22mm x 17mm&lt;/li&gt;
+&lt;li&gt;Peripheral Pad Size: .8mm x 1.5mm &lt;/li&gt;
+&lt;li&gt;Peripheral Pad Pitch: 1.1mm&lt;/li&gt;
+&lt;li&gt;Total Peripheral Pins: 54&lt;/li&gt;
+&lt;li&gt;Internal Pad Size: 1.1mm&lt;/li&gt;
+&lt;li&gt;Internal Pad Pitch: 2.1mm &lt;/li&gt;
+&lt;li&gt;Total Internal Pins: 48 (All Ground)&lt;/li&gt;
+&lt;/ul&gt;</description>
+<smd name="P1" x="-7.112" y="-7.62" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P2" x="-6.012" y="-7.62" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P3" x="-4.912" y="-7.62" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P4" x="-3.812" y="-7.62" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P5" x="-2.712" y="-7.62" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P6" x="-1.612" y="-7.62" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P7" x="-0.512" y="-7.62" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P8" x="0.588" y="-7.62" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P9" x="1.688" y="-7.62" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P10" x="2.788" y="-7.62" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P11" x="3.888" y="-7.62" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P12" x="4.988" y="-7.62" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P13" x="6.088" y="-7.62" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P14" x="7.188" y="-7.62" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P41" x="-7.112" y="7.33" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P40" x="-6.012" y="7.33" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P39" x="-4.912" y="7.33" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P38" x="-3.812" y="7.33" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P37" x="-2.712" y="7.33" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P36" x="-1.612" y="7.33" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P35" x="-0.512" y="7.33" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P34" x="0.588" y="7.33" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P33" x="1.688" y="7.33" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P32" x="2.788" y="7.33" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P31" x="3.888" y="7.33" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P30" x="4.988" y="7.33" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P29" x="6.088" y="7.33" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P28" x="7.188" y="7.33" dx="0.8" dy="1.5" layer="1"/>
+<smd name="P15" x="9.988" y="-6.77" dx="0.8" dy="1.5" layer="1" rot="R90"/>
+<smd name="P16" x="9.988" y="-5.67" dx="0.8" dy="1.5" layer="1" rot="R90"/>
+<smd name="P17" x="9.988" y="-4.57" dx="0.8" dy="1.5" layer="1" rot="R90"/>
+<smd name="P18" x="9.988" y="-3.47" dx="0.8" dy="1.5" layer="1" rot="R90"/>
+<smd name="P19" x="9.988" y="-2.37" dx="0.8" dy="1.5" layer="1" rot="R90"/>
+<smd name="P20" x="9.988" y="-1.27" dx="0.8" dy="1.5" layer="1" rot="R90"/>
+<smd name="P21" x="9.988" y="-0.17" dx="0.8" dy="1.5" layer="1" rot="R90"/>
+<smd name="P22" x="9.988" y="0.93" dx="0.8" dy="1.5" layer="1" rot="R90"/>
+<smd name="P23" x="9.988" y="2.03" dx="0.8" dy="1.5" layer="1" rot="R90"/>
+<smd name="P24" x="9.988" y="3.13" dx="0.8" dy="1.5" layer="1" rot="R90"/>
+<smd name="P25" x="9.988" y="4.23" dx="0.8" dy="1.5" layer="1" rot="R90"/>
+<smd name="P26" x="9.988" y="5.33" dx="0.8" dy="1.5" layer="1" rot="R90"/>
+<smd name="P27" x="9.988" y="6.43" dx="0.8" dy="1.5" layer="1" rot="R90"/>
+<smd name="P42" x="-9.912" y="6.43" dx="0.8" dy="1.5" layer="1" rot="R270"/>
+<smd name="P43" x="-9.912" y="5.33" dx="0.8" dy="1.5" layer="1" rot="R270"/>
+<smd name="P44" x="-9.912" y="4.23" dx="0.8" dy="1.5" layer="1" rot="R270"/>
+<smd name="P45" x="-9.912" y="3.13" dx="0.8" dy="1.5" layer="1" rot="R270"/>
+<smd name="P46" x="-9.912" y="2.03" dx="0.8" dy="1.5" layer="1" rot="R270"/>
+<smd name="P47" x="-9.912" y="0.93" dx="0.8" dy="1.5" layer="1" rot="R270"/>
+<smd name="P48" x="-9.912" y="-0.17" dx="0.8" dy="1.5" layer="1" rot="R270"/>
+<smd name="P49" x="-9.912" y="-1.27" dx="0.8" dy="1.5" layer="1" rot="R270"/>
+<smd name="P50" x="-9.912" y="-2.37" dx="0.8" dy="1.5" layer="1" rot="R270"/>
+<smd name="P51" x="-9.912" y="-3.47" dx="0.8" dy="1.5" layer="1" rot="R270"/>
+<smd name="P52" x="-9.912" y="-4.57" dx="0.8" dy="1.5" layer="1" rot="R270"/>
+<smd name="P53" x="-9.912" y="-5.67" dx="0.8" dy="1.5" layer="1" rot="R270"/>
+<smd name="P54" x="-9.912" y="-6.77" dx="0.8" dy="1.5" layer="1" rot="R270"/>
+<smd name="G1" x="-7.312" y="-5.37" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G2" x="-5.212" y="-5.37" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G3" x="-3.112" y="-5.37" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G4" x="-1.012" y="-5.37" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G5" x="1.088" y="-5.37" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G6" x="3.188" y="-5.37" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G7" x="5.288" y="-5.37" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G8" x="7.388" y="-5.37" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G9" x="7.388" y="-3.27" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G10" x="5.288" y="-3.27" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G11" x="3.188" y="-3.27" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G12" x="1.088" y="-3.27" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G13" x="-1.012" y="-3.27" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G14" x="-3.112" y="-3.27" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G15" x="-5.212" y="-3.27" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G16" x="-7.312" y="-3.27" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G17" x="-7.312" y="-1.17" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G18" x="-5.212" y="-1.17" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G19" x="-3.112" y="-1.17" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G20" x="-1.012" y="-1.17" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G21" x="1.088" y="-1.17" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G22" x="3.188" y="-1.17" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G23" x="5.288" y="-1.17" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G24" x="7.388" y="-1.17" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G25" x="7.388" y="0.93" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G26" x="5.288" y="0.93" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G27" x="3.188" y="0.93" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G28" x="1.088" y="0.93" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G29" x="-1.012" y="0.93" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G30" x="-3.112" y="0.93" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G31" x="-5.212" y="0.93" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G32" x="-7.312" y="0.93" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G33" x="-7.312" y="3.03" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G34" x="-5.212" y="3.03" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G35" x="-3.112" y="3.03" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G36" x="-1.012" y="3.03" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G37" x="1.088" y="3.03" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G38" x="3.188" y="3.03" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G39" x="5.288" y="3.03" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G40" x="7.388" y="3.03" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G41" x="7.388" y="5.13" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G42" x="5.288" y="5.13" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G43" x="3.188" y="5.13" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G44" x="1.088" y="5.13" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G45" x="-1.012" y="5.13" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G46" x="-3.112" y="5.13" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G47" x="-5.212" y="5.13" dx="1.1" dy="1.1" layer="1"/>
+<smd name="G48" x="-7.312" y="5.13" dx="1.1" dy="1.1" layer="1"/>
+<wire x1="-10.962" y1="-8.62" x2="11.038" y2="-8.62" width="0.2032" layer="51"/>
+<wire x1="11.038" y1="-8.62" x2="11.038" y2="8.38" width="0.2032" layer="51"/>
+<wire x1="11.038" y1="8.38" x2="-10.962" y2="8.38" width="0.2032" layer="51"/>
+<wire x1="-10.962" y1="8.38" x2="-10.962" y2="-8.62" width="0.2032" layer="51"/>
+<circle x="-8.362" y="-9.37" radius="0.5" width="0" layer="21"/>
+<text x="-2.112" y="9.38" size="0.762" layer="25">&gt;NAME</text>
+<text x="-2.112" y="-10.62" size="0.762" layer="27">&gt;VALUE</text>
+<wire x1="-10.962" y1="-8.636" x2="-7.874" y2="-8.636" width="0.2032" layer="21"/>
+<wire x1="7.874" y1="-8.636" x2="11.038" y2="-8.636" width="0.2032" layer="21"/>
+<wire x1="11.038" y1="-8.636" x2="11.038" y2="-7.366" width="0.2032" layer="21"/>
+<wire x1="-10.962" y1="-8.636" x2="-10.962" y2="-7.366" width="0.2032" layer="21"/>
+<wire x1="-10.962" y1="6.858" x2="-10.962" y2="8.382" width="0.2032" layer="21"/>
+<wire x1="-10.962" y1="8.382" x2="-7.874" y2="8.382" width="0.2032" layer="21"/>
+<wire x1="8.128" y1="8.382" x2="11.038" y2="8.382" width="0.2032" layer="21"/>
+<wire x1="11.038" y1="8.382" x2="11.038" y2="7.112" width="0.2032" layer="21"/>
+<rectangle x1="-8.382" y1="-8.382" x2="-7.874" y2="-7.62" layer="51"/>
+</package>
+</packages>
+<symbols>
+<symbol name="ANTENNA">
+<description>&lt;h3&gt;Antenna&lt;/h3&gt;</description>
+<wire x1="0" y1="2.54" x2="0" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="5.08" x2="2.54" y2="5.08" width="0.254" layer="94"/>
+<wire x1="0" y1="2.54" x2="2.54" y2="5.08" width="0.254" layer="94"/>
+<wire x1="0" y1="2.54" x2="-2.54" y2="5.08" width="0.254" layer="94"/>
+<text x="0.508" y="0" size="1.778" layer="95" font="vector">&gt;NAME</text>
+<text x="0.508" y="-2.54" size="1.778" layer="96" font="vector">&gt;VALUE</text>
+<pin name="SIGNAL" x="0" y="-5.08" visible="off" length="short" rot="R90"/>
+</symbol>
+<symbol name="COPERNICUS">
+<wire x1="-17.78" y1="17.78" x2="20.32" y2="17.78" width="0.254" layer="94"/>
+<wire x1="20.32" y1="17.78" x2="20.32" y2="-20.32" width="0.254" layer="94"/>
+<wire x1="20.32" y1="-20.32" x2="-17.78" y2="-20.32" width="0.254" layer="94"/>
+<wire x1="-17.78" y1="-20.32" x2="-17.78" y2="17.78" width="0.254" layer="94"/>
+<text x="-17.78" y="18.034" size="1.778" layer="95" font="vector">&gt;NAME</text>
+<text x="-17.78" y="-20.574" size="1.778" layer="96" font="vector" align="top-left">&gt;VALUE</text>
+<pin name="BOOT" x="-22.86" y="-7.62" length="middle"/>
+<pin name="SHORT" x="-22.86" y="-2.54" length="middle"/>
+<pin name="GND@4" x="-22.86" y="-15.24" length="middle"/>
+<pin name="GND@5" x="-22.86" y="-17.78" length="middle"/>
+<pin name="RFIN" x="-22.86" y="10.16" length="middle"/>
+<pin name="GND@3" x="-22.86" y="7.62" length="middle"/>
+<pin name="LNA" x="-22.86" y="5.08" length="middle"/>
+<pin name="GND@6" x="25.4" y="-17.78" length="middle" rot="R180"/>
+<pin name="XSTANDBY" x="25.4" y="-15.24" length="middle" rot="R180"/>
+<pin name="RESERVED3" x="25.4" y="-12.7" length="middle" rot="R180"/>
+<pin name="RESERVED4" x="25.4" y="-10.16" length="middle" rot="R180"/>
+<pin name="PPS" x="25.4" y="-7.62" length="middle" rot="R180"/>
+<pin name="RXD-A" x="25.4" y="-2.54" length="middle" rot="R180"/>
+<pin name="RESERVED5" x="25.4" y="0" length="middle" rot="R180"/>
+<pin name="TXD-A" x="25.4" y="2.54" length="middle" rot="R180"/>
+<pin name="TXD-B" x="25.4" y="5.08" length="middle" rot="R180"/>
+<pin name="RESERVED6" x="25.4" y="7.62" length="middle" rot="R180"/>
+<pin name="RESERVED7" x="25.4" y="10.16" length="middle" rot="R180"/>
+<pin name="GND@7" x="25.4" y="12.7" length="middle" rot="R180"/>
+<pin name="GND@8" x="25.4" y="15.24" length="middle" rot="R180"/>
+<pin name="GND@1" x="-22.86" y="15.24" length="middle"/>
+<pin name="GND@2" x="-22.86" y="12.7" length="middle"/>
+<pin name="RESERVED1" x="-22.86" y="2.54" length="middle"/>
+<pin name="OPEN" x="-22.86" y="0" length="middle"/>
+<pin name="RESERVED2" x="-22.86" y="-5.08" length="middle"/>
+<pin name="XRESET" x="-22.86" y="-10.16" length="middle"/>
+<pin name="RXD-B" x="25.4" y="-5.08" length="middle" rot="R180"/>
+<pin name="VCC" x="-22.86" y="-12.7" length="middle"/>
+</symbol>
+<symbol name="EM-506">
+<description>&lt;h3&gt;EM-506 High Performance GPS Module&lt;/h3&gt;
+&lt;p&gt;EM-506 GPS module features high sensitivity, low power and ultra small form factor. This GPS module is powered by SiRF Star IV, it can provide you with superior sensitivity and performance even in urban canyon and dense foliage environment. With SiRF CGEE (Client Generated Extended Ephemeris) technology, it predicts satellite positions for up to 3 days and delivers CGEE-start time of less than 15 seconds under most conditions, without any network assistance. Besides, MicroPower Mode allows GPS module to stay in a hot-start condition nearly continuously while consuming very little power.&lt;/p&gt;
+&lt;p&gt;Product Features:
+&lt;ul&gt;&lt;li&gt;SiRF Star IV high performance GPS Chipset&lt;/li&gt;
+&lt;li&gt;Very high sensitivity (Tracking Sensitivity: -163 dBm)&lt;/li&gt;
+&lt;li&gt;Extremely fast TTFF (Time To First Fix) at low signal level&lt;/li&gt;
+&lt;li&gt;Support UART interface.&lt;/li&gt;
+&lt;li&gt;Built-in LNA(with in CHIP)&lt;/li&gt;
+&lt;li&gt;Compact size (30.0mm x 30.0 mm x 10.7mm) suitable for space-sensitive application&lt;/li&gt;
+&lt;li&gt;Support NMEA 0183 V3.0 (GGA, GSA, GSV, RMC, VTG, GLL, ZDA) &lt;/li&gt;
+&lt;li&gt;Support OSP protocol&lt;/li&gt;
+&lt;li&gt;Support SBAS (WASS, EGNOS, MSAS, GAGAN)&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</description>
+<pin name="VIN" x="-10.16" y="5.08" length="short"/>
+<pin name="RX" x="-10.16" y="2.54" length="short"/>
+<pin name="TX" x="-10.16" y="0" length="short"/>
+<pin name="DIRECTIVE" x="-10.16" y="-2.54" length="short"/>
+<pin name="GND@1" x="-10.16" y="-5.08" length="short"/>
+<pin name="GND@5" x="-10.16" y="-7.62" length="short"/>
+<wire x1="-7.62" y1="7.62" x2="-7.62" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="-7.62" y1="-10.16" x2="7.62" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="7.62" y1="-10.16" x2="7.62" y2="7.62" width="0.254" layer="94"/>
+<wire x1="7.62" y1="7.62" x2="-7.62" y2="7.62" width="0.254" layer="94"/>
+<text x="-7.62" y="7.874" size="1.778" layer="95" font="vector">&gt;NAME</text>
+<text x="-7.62" y="-10.414" size="1.778" layer="96" font="vector" align="top-left">&gt;VALUE</text>
+</symbol>
+<symbol name="EM506_OUTLINE">
+<wire x1="0" y1="0" x2="0" y2="5.08" width="0.254" layer="94"/>
+<wire x1="0" y1="5.08" x2="10.16" y2="5.08" width="0.254" layer="94"/>
+<wire x1="10.16" y1="5.08" x2="10.16" y2="0" width="0.254" layer="94"/>
+<wire x1="10.16" y1="0" x2="0" y2="0" width="0.254" layer="94"/>
+<text x="1.27" y="1.778" size="1.778" layer="94">EM406</text>
+<text x="0" y="5.334" size="1.778" layer="95" font="vector">&gt;NAME</text>
+<text x="0" y="-0.254" size="1.778" layer="96" font="vector" align="top-left">&gt;VALUE</text>
+</symbol>
+<symbol name="GP-735T">
+<description>&lt;h3&gt;GP-735 - Easy-to-use, Ultra-high performance, GPS Smart Antenna Module&lt;/h3&gt;
+
+&lt;p&gt;ADH-tech GP-735 is a slim, ultra-high performance, easy to use GPS smart antenna module designed with u-blox’s latest 7th generation single chip. This feature rich GPS module not only shortens the design efforts but also provides powerful functions. The compact design allows fast adoption and high yield production. The power control feature is very convenient to turn on/off power just via GPIO control pin. It’s  especially useful to turn off power as the GPS function is not needed in the host applications.&lt;/p&gt;
+
+&lt;p&gt;Features
+&lt;ul&gt;&lt;li&gt;Easy adoption with best performance&lt;/li&gt;
+&lt;li&gt;Built-in narrow patch antenna for dimension demanding application&lt;/li&gt;
+&lt;li&gt;Models of I-PEX RF connector option available for using external antenna&lt;/li&gt;
+&lt;li&gt;Built-in backup power pin for faster position fix&lt;/li&gt;
+&lt;li&gt;UART-TTL interface support&lt;/li&gt;
+&lt;li&gt;Minimum RF and EMI efforts&lt;/li&gt;
+&lt;li&gt;Fully implementation of ultra-high performance u-blox 7 single chip architecture&lt;/li&gt;
+&lt;li&gt;High tracking sensitivity of -162dBm!&lt;/li&gt;
+&lt;li&gt;Low power consumption of 37mA for average tracking&lt;/li&gt;
+&lt;li&gt;Hardware power saving control pin allowing power on/off GPS via GPIO&lt;/li&gt;
+&lt;li&gt;Windows location sensor support&lt;/li&gt;
+&lt;li&gt;A-GPS support&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://cdn.sparkfun.com/datasheets/GPS/GP-735T-150203.pdf"&gt;Datasheet&lt;/a&gt;&lt;/p&gt;</description>
+<pin name="VCC" x="-10.16" y="5.08" length="short"/>
+<pin name="RX" x="-10.16" y="0" length="short"/>
+<pin name="TX" x="-10.16" y="2.54" length="short"/>
+<pin name="V_BAT" x="-10.16" y="-2.54" length="short"/>
+<pin name="PWR_CTRL" x="-10.16" y="-5.08" length="short"/>
+<pin name="GND" x="-10.16" y="-7.62" length="short"/>
+<wire x1="-7.62" y1="7.62" x2="-7.62" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="-7.62" y1="-10.16" x2="7.62" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="7.62" y1="-10.16" x2="7.62" y2="7.62" width="0.254" layer="94"/>
+<wire x1="7.62" y1="7.62" x2="-7.62" y2="7.62" width="0.254" layer="94"/>
+<text x="-7.62" y="7.874" size="1.778" layer="95" font="vector">&gt;NAME</text>
+<text x="-7.62" y="-10.414" size="1.778" layer="96" font="vector" align="top-left">&gt;VALUE</text>
+</symbol>
+<symbol name="VENUS638FLPX-L">
+<description>&lt;h3&gt;Venus638FLPX-L GPS Receiver&lt;/h3&gt;
+
+&lt;p&gt;Venus638FLPx is a high performance, low cost, single
+chip GPS receiver targeting mobile consumer and cellular
+handset applications. It offers very low power
+consumption, high sensitivity, and best in class signal
+acquisition and time-to-first-fix performance.&lt;/p&gt;</description>
+<wire x1="-12.7" y1="-48.26" x2="12.7" y2="-48.26" width="0.254" layer="94"/>
+<wire x1="12.7" y1="-48.26" x2="12.7" y2="40.64" width="0.254" layer="94"/>
+<wire x1="12.7" y1="40.64" x2="-12.7" y2="40.64" width="0.254" layer="94"/>
+<wire x1="-12.7" y1="40.64" x2="-12.7" y2="-48.26" width="0.254" layer="94"/>
+<pin name="LED/GPIO0" x="-15.24" y="-17.78" length="short"/>
+<pin name="TXD0" x="-15.24" y="12.7" length="short"/>
+<pin name="RXD0" x="-15.24" y="15.24" length="short"/>
+<pin name="PPS" x="-15.24" y="-20.32" length="short"/>
+<pin name="CLK" x="-15.24" y="-12.7" length="short"/>
+<pin name="CSN" x="-15.24" y="-10.16" length="short"/>
+<pin name="MISO" x="-15.24" y="-7.62" length="short"/>
+<pin name="MOSI" x="-15.24" y="-5.08" length="short"/>
+<pin name="GND@10" x="-15.24" y="-30.48" length="short"/>
+<pin name="GND@11" x="-15.24" y="-33.02" length="short"/>
+<pin name="GND@19" x="-15.24" y="-38.1" length="short"/>
+<pin name="GND@15" x="-15.24" y="-35.56" length="short"/>
+<pin name="GNDRF@21" x="15.24" y="-15.24" length="short" rot="R180"/>
+<pin name="GNDRF@22" x="15.24" y="-17.78" length="short" rot="R180"/>
+<pin name="GNDRF@24" x="15.24" y="-20.32" length="short" rot="R180"/>
+<pin name="GNDRF@25" x="15.24" y="-22.86" length="short" rot="R180"/>
+<pin name="GNDRF@27" x="15.24" y="-25.4" length="short" rot="R180"/>
+<pin name="GNDRF@28" x="15.24" y="-27.94" length="short" rot="R180"/>
+<pin name="GNDRF@29" x="15.24" y="-30.48" length="short" rot="R180"/>
+<pin name="GNDRF@31" x="15.24" y="-33.02" length="short" rot="R180"/>
+<pin name="GNDRF@33" x="15.24" y="-35.56" length="short" rot="R180"/>
+<pin name="RTC" x="-15.24" y="-25.4" length="short"/>
+<pin name="BTSEL" x="-15.24" y="20.32" length="short"/>
+<pin name="RSTN" x="-15.24" y="27.94" length="short"/>
+<pin name="RFIN" x="15.24" y="38.1" length="short" rot="R180"/>
+<pin name="VCC" x="-15.24" y="35.56" length="short"/>
+<pin name="VBAT" x="-15.24" y="22.86" length="short"/>
+<pin name="GPIO1" x="15.24" y="33.02" length="short" rot="R180"/>
+<pin name="REGEN" x="-15.24" y="30.48" length="short"/>
+<pin name="GPIO2" x="15.24" y="30.48" length="short" rot="R180"/>
+<pin name="GPIO20" x="15.24" y="7.62" length="short" rot="R180"/>
+<pin name="PIO12" x="15.24" y="15.24" length="short" rot="R180"/>
+<pin name="PIO14" x="15.24" y="12.7" length="short" rot="R180"/>
+<pin name="GPIO24" x="15.24" y="0" length="short" rot="R180"/>
+<pin name="SDA" x="-15.24" y="2.54" length="short"/>
+<pin name="SCL" x="-15.24" y="0" length="short"/>
+<pin name="GPIO4" x="15.24" y="25.4" length="short" rot="R180"/>
+<pin name="GPIO3" x="15.24" y="27.94" length="short" rot="R180"/>
+<pin name="GND@49" x="-15.24" y="-40.64" length="short"/>
+<pin name="PIO5" x="15.24" y="22.86" length="short" rot="R180"/>
+<pin name="PIO11" x="15.24" y="17.78" length="short" rot="R180"/>
+<pin name="RXD1" x="-15.24" y="10.16" length="short"/>
+<pin name="GPIO25" x="15.24" y="-2.54" length="short" rot="R180"/>
+<pin name="GPIO30" x="15.24" y="-10.16" length="short" rot="R180"/>
+<pin name="PIO15" x="15.24" y="10.16" length="short" rot="R180"/>
+<pin name="TXD1" x="-15.24" y="7.62" length="short"/>
+<pin name="VCC@58" x="-15.24" y="38.1" length="short"/>
+<pin name="GPIO28" x="15.24" y="-5.08" length="short" rot="R180"/>
+<pin name="GND@60" x="-15.24" y="-43.18" length="short"/>
+<pin name="GNDRF@61" x="15.24" y="-38.1" length="short" rot="R180"/>
+<pin name="GNDRF@62" x="15.24" y="-40.64" length="short" rot="R180"/>
+<pin name="GPIO6" x="15.24" y="20.32" length="short" rot="R180"/>
+<pin name="GND@64" x="-15.24" y="-45.72" length="short"/>
+<pin name="GNDRF@65" x="15.24" y="-43.18" length="short" rot="R180"/>
+<pin name="GNDRF@69" x="15.24" y="-45.72" length="short" rot="R180"/>
+<pin name="GPIO22" x="15.24" y="5.08" length="short" rot="R180"/>
+<pin name="GPIO23" x="15.24" y="2.54" length="short" rot="R180"/>
+<pin name="GPIO29" x="15.24" y="-7.62" length="short" rot="R180"/>
+<text x="-12.7" y="40.894" size="1.778" layer="95" font="vector">&gt;NAME</text>
+<text x="-12.7" y="-48.514" size="1.778" layer="96" font="vector" align="top-left">&gt;VALUE</text>
+</symbol>
+<symbol name="GP3906-TLP">
+<description>&lt;h3&gt;GP3906-TLP PoT GPS Module&lt;/h3&gt;
+&lt;p&gt;The GP3906-TLP is a POT (Patch on Top) GPS module which is special designed for ultra low power consumption purpose environment. It is a GPS receiver providing a solution that high position and speed accuracy performances as well as high sensitivity and tracking capabilities in urban conditions. The GPS chipsets inside the module are designed by MediaTek Inc., which is the world's leading digital media solution provider and largest fab-less IC company in Taiwan. The module can support up to 66 channels. The GPS solution enables small form factor devices. They deliver major advancements in GPS performances, accuracy, integration, computing power and flexibility. They are designed to simplify the embedded system integration process.&lt;/p&gt;
+
+&lt;p&gt;Features:
+&lt;ul&gt;&lt;li&gt;Based on MediaTek Single Chip Architecture (MT3339).&lt;/li&gt;
+&lt;li&gt;ARM7 based application processor&lt;/li&gt;
+&lt;li&gt;High sensitivity: -165dBm tracking&lt;/li&gt;
+&lt;li&gt;L1 frequency, C/A code&lt;/li&gt;
+&lt;li&gt;Channels: 66 acquisition, 22 simultaneous tracking&lt;/li&gt;
+&lt;li&gt;Low power consumption: 26mA @ acquisition, 20mA @ tracking&lt;/li&gt;
+&lt;li&gt;Cold/Warm/Hot start time: &lt;35/&lt;33/&lt;1 seconds&lt;/li&gt;
+&lt;li&gt;Maximum update rate up to 10Hz&lt;/li&gt;
+&lt;li&gt;GPS data interface: TTL level serial port&lt;/li&gt;
+&lt;li&gt;Support NMEA 0183 standard V3.01 and backward compliance&lt;/li&gt;
+&lt;li&gt;Support SBAS – WAAS, EGNOS, GAGAN and MSAS&lt;/li&gt;
+&lt;li&gt;Dimension：16mm x 16mm x 6.7mm&lt;/li&gt;
+&lt;li&gt;RoHS compliant&lt;/li&gt;
+&lt;li&gt;Advanced software features&lt;/li&gt;
+&lt;ul&gt;&lt;li&gt;AlwaysLocate TM advanced location awareness technology&lt;/li&gt;
+&lt;li&gt;EPO TM orbit prediction&lt;/li&gt;
+&lt;li&gt;Supports logger function (LOCUS)&lt;/li&gt;&lt;/ul&gt;&lt;/ul&gt;&lt;/p&gt;</description>
+<pin name="GND" x="-12.7" y="-7.62" length="short"/>
+<pin name="1PPS" x="-12.7" y="-5.08" length="short"/>
+<pin name="RESET" x="-12.7" y="5.08" length="short"/>
+<pin name="3D_FIX" x="-12.7" y="-2.54" length="short"/>
+<pin name="TX" x="-12.7" y="2.54" length="short"/>
+<pin name="RX" x="-12.7" y="0" length="short"/>
+<pin name="VBACKUP" x="-12.7" y="7.62" length="short"/>
+<pin name="DC_IN" x="-12.7" y="10.16" length="short"/>
+<wire x1="-10.16" y1="-10.16" x2="-10.16" y2="12.7" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="12.7" x2="7.62" y2="12.7" width="0.254" layer="94"/>
+<wire x1="7.62" y1="12.7" x2="7.62" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="7.62" y1="-10.16" x2="-10.16" y2="-10.16" width="0.254" layer="94"/>
+<text x="6.858" y="1.27" size="1.778" layer="94" rot="R90" align="bottom-center">GP3906-TLP
+GPS</text>
+<text x="-10.16" y="12.954" size="1.778" layer="95" font="vector">&gt;Name</text>
+<text x="-10.16" y="-10.414" size="1.778" layer="96" font="vector" align="top-left">&gt;Value</text>
+</symbol>
+<symbol name="TITAN_X1_GPS">
+<wire x1="-15.24" y1="-20.32" x2="-15.24" y2="20.32" width="0.254" layer="94"/>
+<wire x1="-15.24" y1="20.32" x2="12.7" y2="20.32" width="0.254" layer="94"/>
+<wire x1="12.7" y1="20.32" x2="12.7" y2="-20.32" width="0.254" layer="94"/>
+<wire x1="12.7" y1="-20.32" x2="-15.24" y2="-20.32" width="0.254" layer="94"/>
+<pin name="1PPS" x="15.24" y="2.54" length="short" rot="R180"/>
+<pin name="BACKUP" x="-17.78" y="5.08" length="short"/>
+<pin name="CLK" x="15.24" y="-12.7" length="short" rot="R180"/>
+<pin name="CS" x="15.24" y="-10.16" length="short" rot="R180"/>
+<pin name="EX_ANT" x="-17.78" y="12.7" length="short"/>
+<pin name="GND" x="-17.78" y="-17.78" length="short"/>
+<pin name="SCL" x="15.24" y="10.16" length="short" rot="R180"/>
+<pin name="SDA" x="15.24" y="12.7" length="short" rot="R180"/>
+<pin name="INT" x="15.24" y="5.08" length="short" rot="R180"/>
+<pin name="MISO" x="15.24" y="-17.78" length="short" rot="R180"/>
+<pin name="MOSI" x="15.24" y="-15.24" length="short" rot="R180"/>
+<pin name="!RESET" x="15.24" y="17.78" length="short" rot="R180"/>
+<pin name="RX" x="15.24" y="-2.54" length="short" rot="R180"/>
+<pin name="TX" x="15.24" y="-5.08" length="short" rot="R180"/>
+<pin name="VCC" x="-17.78" y="17.78" length="short"/>
+<pin name="WAKE_UP" x="-17.78" y="0" length="short"/>
+<text x="-15.24" y="20.574" size="1.778" layer="95" font="vector">&gt;Name</text>
+<text x="-15.24" y="-23.114" size="1.778" layer="96" font="vector">&gt;Value</text>
+</symbol>
+<symbol name="U-BLOX_ZOE-M8-0-10">
+<description>&lt;h3&gt;UBLOX ZOE-M8-0-10&lt;/h3&gt;
+
+&lt;p&gt;The ZOE-M8G and ZOE-M8Q are u-blox’s super small, highly integrated GNSS SiP (System in Package) modules
+based on the high performing u-blox M8 concurrent positioning engine. The ultra-miniature form factor integrates
+a complete GNSS receiver including SAW filter, LNA and TCXO. ZOE-M8Q is
+the 3 V variant.&lt;/p&gt;</description>
+<wire x1="-15.24" y1="25.4" x2="-15.24" y2="-22.86" width="0.254" layer="94"/>
+<wire x1="-15.24" y1="-22.86" x2="15.24" y2="-22.86" width="0.254" layer="94"/>
+<wire x1="15.24" y1="-22.86" x2="15.24" y2="25.4" width="0.254" layer="94"/>
+<wire x1="15.24" y1="25.4" x2="-15.24" y2="25.4" width="0.254" layer="94"/>
+<pin name="VCC" x="-17.78" y="22.86" visible="pin" length="short" direction="pwr"/>
+<pin name="GND" x="-17.78" y="-20.32" visible="pin" length="short" direction="pwr"/>
+<pin name="SDA/CS" x="17.78" y="22.86" visible="pin" length="short" rot="R180"/>
+<pin name="SCL/CLK" x="17.78" y="20.32" visible="pin" length="short" rot="R180"/>
+<pin name="D_SEL" x="17.78" y="12.7" visible="pin" length="short" rot="R180"/>
+<pin name="RXD/MOSI" x="17.78" y="17.78" visible="pin" length="short" rot="R180"/>
+<pin name="TXD/MISO" x="17.78" y="15.24" visible="pin" length="short" rot="R180"/>
+<pin name="RTC_0" x="17.78" y="7.62" visible="pin" length="short" rot="R180"/>
+<pin name="RTC_1" x="17.78" y="5.08" visible="pin" length="short" rot="R180"/>
+<pin name="TIMEPULSE" x="17.78" y="-5.08" visible="pin" length="short" rot="R180"/>
+<pin name="!SAFEBOOT" x="17.78" y="-7.62" visible="pin" length="short" rot="R180"/>
+<pin name="LNA_EN" x="17.78" y="-10.16" visible="pin" length="short" rot="R180"/>
+<pin name="P1015" x="17.78" y="-2.54" visible="pin" length="short" rot="R180"/>
+<pin name="P1014" x="17.78" y="0" visible="pin" length="short" rot="R180"/>
+<pin name="PI013/!EXTINT" x="17.78" y="2.54" visible="pin" length="short" rot="R180"/>
+<pin name="!RESET" x="17.78" y="-12.7" visible="pin" length="short" rot="R180"/>
+<pin name="SQI_G" x="17.78" y="-15.24" visible="pin" length="short" rot="R180"/>
+<text x="-15.24" y="27.94" size="2.54" layer="95">&gt;NAME</text>
+<text x="-15.24" y="-27.94" size="2.54" layer="96">&gt;Value</text>
+<pin name="RF_IN" x="-17.78" y="5.08" visible="pin" length="short"/>
+<pin name="V_CORE" x="-17.78" y="17.78" visible="pin" length="short" direction="pwr"/>
+<pin name="V_DCDC_OUT" x="-17.78" y="15.24" visible="pin" length="short" direction="pwr"/>
+<pin name="V_BCKP" x="-17.78" y="20.32" visible="pin" length="short" direction="pwr"/>
+<pin name="SQI_O" x="17.78" y="-17.78" visible="pin" length="short" direction="nc" rot="R180"/>
+<pin name="NC" x="17.78" y="-20.32" visible="pin" length="short" direction="nc" rot="R180"/>
+</symbol>
+<symbol name="SAM-M8Q">
+<wire x1="10.16" y1="15.24" x2="10.16" y2="-15.24" width="0.254" layer="94"/>
+<wire x1="10.16" y1="-15.24" x2="-10.16" y2="-15.24" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-15.24" x2="-10.16" y2="15.24" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="15.24" x2="10.16" y2="15.24" width="0.254" layer="94"/>
+<pin name="GND" x="-12.7" y="-12.7" length="short"/>
+<pin name="VCC" x="-12.7" y="12.7" length="short"/>
+<pin name="!RST" x="12.7" y="12.7" length="short" rot="R180"/>
+<pin name="INT" x="12.7" y="10.16" length="short" rot="R180"/>
+<pin name="SDA" x="12.7" y="5.08" length="short" rot="R180"/>
+<pin name="SCL" x="12.7" y="2.54" length="short" rot="R180"/>
+<pin name="TX" x="12.7" y="-2.54" length="short" rot="R180"/>
+<pin name="RX" x="12.7" y="-5.08" length="short" rot="R180"/>
+<pin name="!SAFEBOOT" x="12.7" y="-10.16" length="short" rot="R180"/>
+<pin name="TPULSE" x="12.7" y="-12.7" length="short" rot="R180"/>
+<pin name="V_BCKP" x="-12.7" y="5.08" length="short"/>
+<pin name="VCC_IO" x="-12.7" y="10.16" length="short"/>
+<text x="-10.16" y="15.748" size="1.778" layer="95">&gt;Name</text>
+<text x="-10.16" y="-17.78" size="1.778" layer="96">&gt;Value</text>
+</symbol>
+<symbol name="ANTENNA-GROUNDED">
+<description>&lt;h3&gt;Antenna (with ground termination)&lt;/h3&gt;</description>
+<wire x1="0" y1="-2.54" x2="0" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="0" x2="2.54" y2="0" width="0.254" layer="94"/>
+<wire x1="0" y1="-2.54" x2="2.54" y2="0" width="0.254" layer="94"/>
+<wire x1="0" y1="-2.54" x2="-2.54" y2="0" width="0.254" layer="94"/>
+<wire x1="2.54" y1="-5.08" x2="2.54" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="1.27" y1="-5.08" x2="2.54" y2="-5.08" width="0.254" layer="94"/>
+<circle x="0" y="-5.08" radius="1.1359" width="0.254" layer="94"/>
+<text x="3.048" y="-5.08" size="1.778" layer="95" font="vector">&gt;NAME</text>
+<text x="3.048" y="-7.366" size="1.778" layer="96" font="vector">&gt;VALUE</text>
+<pin name="GND" x="2.54" y="-10.16" visible="off" length="short" rot="R90"/>
+<pin name="SIGNAL" x="0" y="-10.16" visible="off" length="short" rot="R90"/>
+</symbol>
+<symbol name="ZED-F9P">
+<wire x1="15.24" y1="25.4" x2="15.24" y2="-25.4" width="0.254" layer="94"/>
+<wire x1="15.24" y1="-25.4" x2="-15.24" y2="-25.4" width="0.254" layer="94"/>
+<wire x1="-15.24" y1="-25.4" x2="-15.24" y2="25.4" width="0.254" layer="94"/>
+<wire x1="-15.24" y1="25.4" x2="15.24" y2="25.4" width="0.254" layer="94"/>
+<pin name="GND" x="-17.78" y="-22.86" length="short"/>
+<pin name="VCC" x="-17.78" y="22.86" length="short"/>
+<pin name="!RESET!" x="17.78" y="22.86" length="short" rot="R180"/>
+<pin name="TX/MISO" x="17.78" y="7.62" length="short" rot="R180"/>
+<pin name="RX/MOSI" x="17.78" y="5.08" length="short" rot="R180"/>
+<pin name="SDA/!CS!" x="17.78" y="17.78" length="short" rot="R180"/>
+<pin name="SCL/CLK" x="17.78" y="15.24" length="short" rot="R180"/>
+<pin name="TX_READY" x="17.78" y="12.7" length="short" rot="R180"/>
+<pin name="D_SEL" x="17.78" y="2.54" length="short" rot="R180"/>
+<pin name="!SAFEBOOT!" x="17.78" y="-22.86" length="short" rot="R180"/>
+<pin name="EXTINT" x="17.78" y="20.32" length="short" rot="R180"/>
+<pin name="TIMEPULSE" x="17.78" y="-17.78" length="short" rot="R180"/>
+<pin name="RF_IN" x="-17.78" y="15.24" length="short"/>
+<pin name="ANT_DETECT" x="-17.78" y="10.16" length="short"/>
+<pin name="ANT_OFF" x="-17.78" y="7.62" length="short"/>
+<pin name="!ANT_SHORT!" x="-17.78" y="5.08" length="short"/>
+<pin name="V_RF" x="-17.78" y="12.7" length="short"/>
+<pin name="GEO_STAT" x="17.78" y="-15.24" length="short" rot="R180"/>
+<pin name="RTK_STAT" x="17.78" y="-12.7" length="short" rot="R180"/>
+<pin name="V_BKCP" x="-17.78" y="20.32" length="short"/>
+<pin name="V_USB" x="-17.78" y="0" length="short"/>
+<pin name="USB_D-" x="-17.78" y="-5.08" length="short"/>
+<pin name="USB_D+" x="-17.78" y="-2.54" length="short"/>
+<text x="-15.24" y="25.908" size="1.778" layer="95">&gt;Name</text>
+<text x="-15.24" y="-27.94" size="1.778" layer="96">&gt;Value</text>
+<pin name="TX2" x="17.78" y="-2.54" length="short" rot="R180"/>
+<pin name="RX2" x="17.78" y="-5.08" length="short" rot="R180"/>
+</symbol>
+<symbol name="NEO-M8P">
+<wire x1="15.24" y1="17.78" x2="15.24" y2="-20.32" width="0.254" layer="94"/>
+<wire x1="15.24" y1="-20.32" x2="-12.7" y2="-20.32" width="0.254" layer="94"/>
+<wire x1="-12.7" y1="-20.32" x2="-12.7" y2="17.78" width="0.254" layer="94"/>
+<wire x1="-12.7" y1="17.78" x2="15.24" y2="17.78" width="0.254" layer="94"/>
+<pin name="GND" x="-15.24" y="-17.78" length="short"/>
+<pin name="VCC" x="-15.24" y="15.24" length="short"/>
+<pin name="!RST" x="17.78" y="15.24" length="short" rot="R180"/>
+<pin name="INT" x="17.78" y="12.7" length="short" rot="R180"/>
+<pin name="SDA/SPI_!CS!" x="17.78" y="10.16" length="short" rot="R180"/>
+<pin name="SCL/SPI_CLK" x="17.78" y="7.62" length="short" rot="R180"/>
+<pin name="TX/SPI_MISO" x="17.78" y="2.54" length="short" rot="R180"/>
+<pin name="RX/SPI_MOSI" x="17.78" y="0" length="short" rot="R180"/>
+<pin name="LNA_EN" x="-15.24" y="2.54" length="short"/>
+<pin name="RTK_STAT" x="17.78" y="-7.62" length="short" rot="R180"/>
+<pin name="GEO_STAT" x="17.78" y="-10.16" length="short" rot="R180"/>
+<pin name="V_BKCP" x="-15.24" y="12.7" length="short"/>
+<pin name="RF_IN" x="-15.24" y="7.62" length="short"/>
+<pin name="VCC_RF" x="-15.24" y="5.08" length="short"/>
+<pin name="VDD_USB" x="-15.24" y="-5.08" length="short"/>
+<pin name="USB_D+" x="-15.24" y="-7.62" length="short"/>
+<pin name="USB_D-" x="-15.24" y="-10.16" length="short"/>
+<pin name="TIMEPULSE" x="17.78" y="-12.7" length="short" rot="R180"/>
+<pin name="D_SEL" x="17.78" y="-2.54" length="short" rot="R180"/>
+<pin name="!SAFEBOOT!" x="17.78" y="-17.78" length="short" rot="R180"/>
+<text x="-12.7" y="18.288" size="1.778" layer="95">&gt;Name</text>
+<text x="-12.7" y="-22.86" size="1.778" layer="96">&gt;Value</text>
+</symbol>
+<symbol name="NEO-M9N">
+<description>&lt;h3&gt;u-blox NEO-M9N GPS Module&lt;/h3&gt;</description>
+<wire x1="15.24" y1="17.78" x2="15.24" y2="-20.32" width="0.254" layer="94"/>
+<wire x1="15.24" y1="-20.32" x2="-12.7" y2="-20.32" width="0.254" layer="94"/>
+<wire x1="-12.7" y1="-20.32" x2="-12.7" y2="17.78" width="0.254" layer="94"/>
+<wire x1="-12.7" y1="17.78" x2="15.24" y2="17.78" width="0.254" layer="94"/>
+<pin name="GND" x="-15.24" y="-17.78" length="short"/>
+<pin name="VCC" x="-15.24" y="15.24" length="short"/>
+<pin name="!RST" x="17.78" y="15.24" length="short" rot="R180"/>
+<pin name="EXT_INT" x="17.78" y="12.7" length="short" rot="R180"/>
+<pin name="SDA/SPI_!CS!" x="17.78" y="10.16" length="short" rot="R180"/>
+<pin name="SCL/SPI_CLK" x="17.78" y="7.62" length="short" rot="R180"/>
+<pin name="TX/SPI_MISO" x="17.78" y="2.54" length="short" rot="R180"/>
+<pin name="RX/SPI_MOSI" x="17.78" y="0" length="short" rot="R180"/>
+<pin name="LNA_EN" x="-15.24" y="0" length="short"/>
+<pin name="V_BKCP" x="-15.24" y="12.7" length="short"/>
+<pin name="RF_IN" x="-15.24" y="5.08" length="short"/>
+<pin name="VCC_RF" x="-15.24" y="2.54" length="short"/>
+<pin name="VDD_USB" x="-15.24" y="-5.08" length="short"/>
+<pin name="USB_D+" x="-15.24" y="-7.62" length="short"/>
+<pin name="USB_D-" x="-15.24" y="-10.16" length="short"/>
+<pin name="TIMEPULSE" x="17.78" y="-12.7" length="short" rot="R180"/>
+<pin name="D_SEL" x="17.78" y="-2.54" length="short" rot="R180"/>
+<pin name="!SAFEBOOT!" x="17.78" y="-15.24" length="short" rot="R180"/>
+<text x="-12.7" y="18.288" size="1.778" layer="95">&gt;Name</text>
+<text x="-12.7" y="-22.86" size="1.778" layer="96">&gt;Value</text>
+<pin name="RESERVED" x="17.78" y="-17.78" length="short" direction="nc" rot="R180"/>
+</symbol>
+<symbol name="NEO-M8T">
+<description>&lt;h3&gt;u-blox NEO-M9N GPS Module&lt;/h3&gt;</description>
+<wire x1="15.24" y1="17.78" x2="15.24" y2="-20.32" width="0.254" layer="94"/>
+<wire x1="15.24" y1="-20.32" x2="-12.7" y2="-20.32" width="0.254" layer="94"/>
+<wire x1="-12.7" y1="-20.32" x2="-12.7" y2="17.78" width="0.254" layer="94"/>
+<wire x1="-12.7" y1="17.78" x2="15.24" y2="17.78" width="0.254" layer="94"/>
+<pin name="GND" x="-15.24" y="-17.78" length="short"/>
+<pin name="VCC" x="-15.24" y="15.24" length="short"/>
+<pin name="!RST" x="17.78" y="15.24" length="short" rot="R180"/>
+<pin name="EXTINT0" x="17.78" y="12.7" length="short" rot="R180"/>
+<pin name="SDA/SPI_!CS!" x="17.78" y="7.62" length="short" rot="R180"/>
+<pin name="SCL/SPI_CLK" x="17.78" y="5.08" length="short" rot="R180"/>
+<pin name="TX/SPI_MISO" x="17.78" y="2.54" length="short" rot="R180"/>
+<pin name="RX/SPI_MOSI" x="17.78" y="0" length="short" rot="R180"/>
+<pin name="LNA_EN" x="-15.24" y="0" length="short"/>
+<pin name="V_BKCP" x="-15.24" y="12.7" length="short"/>
+<pin name="RF_IN" x="-15.24" y="5.08" length="short"/>
+<pin name="VCC_RF" x="-15.24" y="2.54" length="short"/>
+<pin name="VDD_USB" x="-15.24" y="-5.08" length="short"/>
+<pin name="USB_D+" x="-15.24" y="-7.62" length="short"/>
+<pin name="USB_D-" x="-15.24" y="-10.16" length="short"/>
+<pin name="TIMEPULSE" x="17.78" y="-12.7" length="short" rot="R180"/>
+<pin name="D_SEL" x="17.78" y="-2.54" length="short" rot="R180"/>
+<pin name="TP2/!SAFEBOOT!" x="17.78" y="-15.24" length="short" rot="R180"/>
+<text x="-12.7" y="18.288" size="1.778" layer="95">&gt;Name</text>
+<text x="-12.7" y="-22.86" size="1.778" layer="96">&gt;Value</text>
+<pin name="RESERVED" x="17.78" y="-17.78" length="short" direction="nc" rot="R180"/>
+<pin name="EXTINT1" x="17.78" y="10.16" length="short" rot="R180"/>
+</symbol>
+<symbol name="NEO-M8U">
+<description>&lt;h3&gt;u-blox NEO-M9N GPS Module&lt;/h3&gt;</description>
+<wire x1="15.24" y1="17.78" x2="15.24" y2="-20.32" width="0.254" layer="94"/>
+<wire x1="15.24" y1="-20.32" x2="-12.7" y2="-20.32" width="0.254" layer="94"/>
+<wire x1="-12.7" y1="-20.32" x2="-12.7" y2="17.78" width="0.254" layer="94"/>
+<wire x1="-12.7" y1="17.78" x2="15.24" y2="17.78" width="0.254" layer="94"/>
+<pin name="GND" x="-15.24" y="-17.78" length="short"/>
+<pin name="VCC" x="-15.24" y="15.24" length="short"/>
+<pin name="!RST" x="17.78" y="15.24" length="short" rot="R180"/>
+<pin name="EXT_INT" x="17.78" y="12.7" length="short" rot="R180"/>
+<pin name="SDA/SPI_!CS!" x="17.78" y="10.16" length="short" rot="R180"/>
+<pin name="SCL/SPI_CLK" x="17.78" y="7.62" length="short" rot="R180"/>
+<pin name="TX/SPI_MISO" x="17.78" y="2.54" length="short" rot="R180"/>
+<pin name="RX/SPI_MOSI" x="17.78" y="0" length="short" rot="R180"/>
+<pin name="LNA_EN" x="-15.24" y="0" length="short"/>
+<pin name="V_BKCP" x="-15.24" y="12.7" length="short"/>
+<pin name="RF_IN" x="-15.24" y="5.08" length="short"/>
+<pin name="VCC_RF" x="-15.24" y="2.54" length="short"/>
+<pin name="VDD_USB" x="-15.24" y="-5.08" length="short"/>
+<pin name="USB_D+" x="-15.24" y="-7.62" length="short"/>
+<pin name="USB_D-" x="-15.24" y="-10.16" length="short"/>
+<pin name="TIMEPULSE" x="17.78" y="-12.7" length="short" rot="R180"/>
+<pin name="D_SEL" x="17.78" y="-2.54" length="short" rot="R180"/>
+<pin name="!SAFEBOOT!" x="17.78" y="-15.24" length="short" rot="R180"/>
+<text x="-12.7" y="18.288" size="1.778" layer="95">&gt;Name</text>
+<text x="-12.7" y="-22.86" size="1.778" layer="96">&gt;Value</text>
+<pin name="RESERVED" x="17.78" y="-17.78" length="short" direction="nc" rot="R180"/>
+</symbol>
+<symbol name="ZED-F9R">
+<wire x1="15.24" y1="25.4" x2="15.24" y2="-25.4" width="0.254" layer="94"/>
+<wire x1="15.24" y1="-25.4" x2="-15.24" y2="-25.4" width="0.254" layer="94"/>
+<wire x1="-15.24" y1="-25.4" x2="-15.24" y2="25.4" width="0.254" layer="94"/>
+<wire x1="-15.24" y1="25.4" x2="15.24" y2="25.4" width="0.254" layer="94"/>
+<pin name="GND" x="-17.78" y="-22.86" length="short" direction="pwr"/>
+<pin name="VCC" x="-17.78" y="22.86" length="short" direction="pwr"/>
+<pin name="!RESET!" x="17.78" y="22.86" length="short" rot="R180"/>
+<pin name="TX/MISO" x="17.78" y="7.62" length="short" rot="R180"/>
+<pin name="RX/MOSI" x="17.78" y="5.08" length="short" rot="R180"/>
+<pin name="SDA/!CS!" x="17.78" y="17.78" length="short" rot="R180"/>
+<pin name="SCL/CLK" x="17.78" y="15.24" length="short" rot="R180"/>
+<pin name="TX_READY" x="17.78" y="12.7" length="short" rot="R180"/>
+<pin name="D_SEL" x="17.78" y="2.54" length="short" rot="R180"/>
+<pin name="!SAFEBOOT!" x="17.78" y="-17.78" length="short" direction="in" rot="R180"/>
+<pin name="EXTINT" x="17.78" y="20.32" length="short" rot="R180"/>
+<pin name="TIMEPULSE" x="17.78" y="-15.24" length="short" direction="out" rot="R180"/>
+<pin name="RF_IN" x="-17.78" y="15.24" length="short" direction="in"/>
+<pin name="ANT_DETECT" x="-17.78" y="10.16" length="short" direction="in"/>
+<pin name="ANT_OFF" x="-17.78" y="7.62" length="short" direction="out"/>
+<pin name="!ANT_SHORT!" x="-17.78" y="5.08" length="short" direction="out"/>
+<pin name="V_RF" x="-17.78" y="12.7" length="short" direction="out"/>
+<pin name="RTK_STAT" x="17.78" y="-12.7" length="short" direction="out" rot="R180"/>
+<pin name="V_BKCP" x="-17.78" y="20.32" length="short" direction="pwr"/>
+<pin name="V_USB" x="-17.78" y="0" length="short" direction="pwr"/>
+<pin name="USB_D-" x="-17.78" y="-5.08" length="short"/>
+<pin name="USB_D+" x="-17.78" y="-2.54" length="short"/>
+<text x="-15.24" y="25.908" size="1.778" layer="95">&gt;Name</text>
+<text x="-15.24" y="-27.94" size="1.778" layer="96">&gt;Value</text>
+<pin name="TX2" x="17.78" y="-2.54" length="short" direction="out" rot="R180"/>
+<pin name="RX2" x="17.78" y="-5.08" length="short" direction="in" rot="R180"/>
+<pin name="WHEEL_TKS" x="-17.78" y="-12.7" length="short" direction="in"/>
+<pin name="DIR" x="-17.78" y="-15.24" length="short" direction="in"/>
+<pin name="RSVD" x="17.78" y="-22.86" length="short" direction="nc" rot="R180"/>
+<pin name="GEO_FENCE_STAT" x="17.78" y="-10.16" length="short" direction="out" rot="R180"/>
+</symbol>
+<symbol name="NEO-D9S">
+<description>&lt;h3&gt;u-blox NEO-D9S correction receiver&lt;/h3&gt;</description>
+<wire x1="12.7" y1="17.78" x2="12.7" y2="-20.32" width="0.254" layer="94"/>
+<wire x1="12.7" y1="-20.32" x2="-12.7" y2="-20.32" width="0.254" layer="94"/>
+<wire x1="-12.7" y1="-20.32" x2="-12.7" y2="17.78" width="0.254" layer="94"/>
+<wire x1="-12.7" y1="17.78" x2="12.7" y2="17.78" width="0.254" layer="94"/>
+<pin name="GND" x="-15.24" y="-17.78" length="short" direction="pwr"/>
+<pin name="VCC" x="-15.24" y="15.24" length="short" direction="pwr"/>
+<pin name="!RESET!" x="15.24" y="15.24" length="short" direction="in" rot="R180"/>
+<pin name="EXT_INT" x="15.24" y="12.7" length="short" direction="in" rot="R180"/>
+<pin name="SDA/!CS!" x="15.24" y="7.62" length="short" rot="R180"/>
+<pin name="SCL/SCK" x="15.24" y="5.08" length="short" rot="R180"/>
+<pin name="TXD1/POCI" x="15.24" y="-7.62" length="short" direction="out" rot="R180"/>
+<pin name="RXD1/PICO" x="15.24" y="-10.16" length="short" direction="in" rot="R180"/>
+<pin name="ANT_OFF" x="-15.24" y="0" length="short" direction="out"/>
+<pin name="V_BKCP" x="-15.24" y="12.7" length="short" direction="pwr"/>
+<pin name="RF_IN" x="-15.24" y="7.62" length="short" direction="in"/>
+<pin name="VCC_RF" x="-15.24" y="5.08" length="short" direction="out"/>
+<pin name="V_USB" x="-15.24" y="-10.16" length="short" direction="pwr"/>
+<pin name="USB_D+" x="-15.24" y="-12.7" length="short"/>
+<pin name="USB_D-" x="-15.24" y="-15.24" length="short"/>
+<pin name="D_SEL" x="15.24" y="-15.24" length="short" direction="in" rot="R180"/>
+<pin name="!SAFEBOOT!" x="15.24" y="-17.78" length="short" direction="in" rot="R180"/>
+<text x="-12.7" y="17.78" size="1.778" layer="95">&gt;Name</text>
+<text x="-12.7" y="-22.86" size="1.778" layer="96">&gt;Value</text>
+<pin name="TXD2" x="15.24" y="0" length="short" direction="out" rot="R180"/>
+<pin name="RXD2" x="15.24" y="-2.54" length="short" direction="in" rot="R180"/>
+<pin name="ANT_DETECT" x="-15.24" y="-2.54" length="short" direction="in"/>
+<pin name="!ANT_SHORT!" x="-15.24" y="-5.08" length="short" direction="out"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="ANTENNA">
+<description>&lt;h3&gt;Single-ended Antennae&lt;/h3&gt;
+&lt;p&gt;1.575GHz antennae with just one terminal. These are all chip antennae.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;1575MHz (GPS) Antennae&lt;/b&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;b&gt;ANT-GPS-2X7MM&lt;/b&gt; - 2.0 x 7.0 mm chip antenna. (&lt;a href="https://www.sparkfun.com/products/9131"&gt;SparkFun Product&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;ANT-GPS-2X8MM&lt;/b&gt; - 2.0 x 8.0 mm chip antenna. (&lt;a href="https://www.sparkfun.com/products/8418"&gt;SparkFun Product&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;</description>
+<gates>
+<gate name="G$1" symbol="ANTENNA" x="0" y="0"/>
+</gates>
+<devices>
+<device name="GPS-2X8MM" package="ANT-GPS-2X8MM">
+<connects>
+<connect gate="G$1" pin="SIGNAL" pad="SIG"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="GPS-08510"/>
+<attribute name="SF_ID" value="GPS-08418"/>
+<attribute name="VALUE" value="1.575GHz"/>
+</technology>
+</technologies>
+</device>
+<device name="GPS-2X7MM" package="ANT-GPS-2X7MM">
+<connects>
+<connect gate="G$1" pin="SIGNAL" pad="1"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="ANT-09087"/>
+<attribute name="SF_ID" value="GPS-09131"/>
+<attribute name="VALUE" value="1.575GHz"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="COPERNICUS" prefix="IC">
+<description>&lt;h3&gt;Trimble Copernicus II GPS Receiver&lt;/h3&gt;
+&lt;p&gt;The Trimble Copernicus II delivers proven performance and Trimble quality for a new generation of position-enabled products. It features the TrimCore™ navigation software for extremely fast startup times and high performance in foliage canopy and urban canyon environments.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;SparkFun Products&lt;/b&gt;
+&lt;ul&gt;&lt;li&gt;&lt;a href="https://www.sparkfun.com/products/10922"&gt;GPS Module - Copernicus II (12 Channel)&lt;/a&gt; (GPS-10922)&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.sparkfun.com/products/11858"&gt;SparkFun GPS Module - Copernicus II DIP (12 Channel)&lt;/a&gt; (GPS-11858)&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;</description>
+<gates>
+<gate name="G$2" symbol="COPERNICUS" x="-17.78" y="17.78"/>
+</gates>
+<devices>
+<device name="SMD" package="COPERNICUS">
+<connects>
+<connect gate="G$2" pin="BOOT" pad="10"/>
+<connect gate="G$2" pin="GND@1" pad="1"/>
+<connect gate="G$2" pin="GND@2" pad="2"/>
+<connect gate="G$2" pin="GND@3" pad="4"/>
+<connect gate="G$2" pin="GND@4" pad="13"/>
+<connect gate="G$2" pin="GND@5" pad="14"/>
+<connect gate="G$2" pin="GND@6" pad="15"/>
+<connect gate="G$2" pin="GND@7" pad="27"/>
+<connect gate="G$2" pin="GND@8" pad="28"/>
+<connect gate="G$2" pin="LNA" pad="5"/>
+<connect gate="G$2" pin="OPEN" pad="7"/>
+<connect gate="G$2" pin="PPS" pad="19"/>
+<connect gate="G$2" pin="RESERVED1" pad="6"/>
+<connect gate="G$2" pin="RESERVED2" pad="9"/>
+<connect gate="G$2" pin="RESERVED3" pad="17"/>
+<connect gate="G$2" pin="RESERVED4" pad="18"/>
+<connect gate="G$2" pin="RESERVED5" pad="22"/>
+<connect gate="G$2" pin="RESERVED6" pad="25"/>
+<connect gate="G$2" pin="RESERVED7" pad="26"/>
+<connect gate="G$2" pin="RFIN" pad="3"/>
+<connect gate="G$2" pin="RXD-A" pad="21"/>
+<connect gate="G$2" pin="RXD-B" pad="20"/>
+<connect gate="G$2" pin="SHORT" pad="8"/>
+<connect gate="G$2" pin="TXD-A" pad="23"/>
+<connect gate="G$2" pin="TXD-B" pad="24"/>
+<connect gate="G$2" pin="VCC" pad="12"/>
+<connect gate="G$2" pin="XRESET" pad="11"/>
+<connect gate="G$2" pin="XSTANDBY" pad="16"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="GPS-10735"/>
+<attribute name="SF_ID" value="GPS-10922"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="EM-506" prefix="J">
+<description>&lt;h3&gt;USGlobalSat EM-506 High Performance GPS Module&lt;/h3&gt;
+&lt;p&gt;EM-506 GPS module features high sensitivity, low power and ultra small form factor. This GPS module is powered by SiRF Star IV, it can provide you with superior sensitivity and performance even in urban canyon and dense foliage environment. With SiRF CGEE (Client Generated Extended Ephemeris) technology, it predicts satellite positions for up to 3 days and delivers CGEE-start time of less than 15 seconds under most conditions, without any network assistance. Besides, MicroPower Mode allows GPS module to stay in a hot-start condition nearly continuously while consuming very little power.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;SparkFun Products&lt;/b&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.sparkfun.com/products/12751"&gt;GPS Receiver - EM-506 (48 Channel)&lt;/a&gt; (GPS-12751)&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;</description>
+<gates>
+<gate name="G$1" symbol="EM-506" x="0" y="0"/>
+</gates>
+<devices>
+<device name="-VERTICAL" package="JST-6PIN-1MM">
+<connects>
+<connect gate="G$1" pin="DIRECTIVE" pad="6"/>
+<connect gate="G$1" pin="GND@1" pad="1"/>
+<connect gate="G$1" pin="GND@5" pad="5"/>
+<connect gate="G$1" pin="RX" pad="3"/>
+<connect gate="G$1" pin="TX" pad="4"/>
+<connect gate="G$1" pin="VIN" pad="2"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="CONN-08249"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="EM-506_OUTLINE">
+<description>&lt;h3&gt;EM-506 High Performance GPS Module&lt;/h3&gt;
+&lt;p&gt;EM-506 GPS module features high sensitivity, low power and ultra small form factor. This GPS module is powered by SiRF Star IV, it can provide you with superior sensitivity and performance even in urban canyon and dense foliage environment. With SiRF CGEE (Client Generated Extended Ephemeris) technology, it predicts satellite positions for up to 3 days and delivers CGEE-start time of less than 15 seconds under most conditions, without any network assistance. Besides, MicroPower Mode allows GPS module to stay in a hot-start condition nearly continuously while consuming very little power.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;SparkFun Products&lt;/b&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.sparkfun.com/products/12751"&gt;GPS Receiver - EM-506 (48 Channel)&lt;/a&gt; (GPS-12751)&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;</description>
+<gates>
+<gate name="G$1" symbol="EM506_OUTLINE" x="-5.08" y="-2.54"/>
+</gates>
+<devices>
+<device name="" package="EM-506_OUTLINE">
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="GPS-11958"/>
+<attribute name="SF_ID" value="GPS-12751"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="GP-735T" prefix="J">
+<description>&lt;h3&gt;ADH-tech GP-735 - Easy-to-use, Ultra-high performance, GPS Smart Antenna Module&lt;/h3&gt;
+
+&lt;p&gt;ADH-tech GP-735 is a slim, ultra-high performance, easy to use GPS smart antenna module designed with u-blox’s latest 7th generation single chip. This feature rich GPS module not only shortens the design efforts but also provides powerful functions. The compact design allows fast adoption and high yield production. The power control feature is very convenient to turn on/off power just via GPIO control pin. It’s  especially useful to turn off power as the GPS function is not needed in the host applications.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://cdn.sparkfun.com/datasheets/GPS/GP-735T-150203.pdf"&gt;Datasheet&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;b&gt;SparkFun Products&lt;/b&gt;
+&lt;ul&gt;&lt;li&gt;&lt;a href="https://www.sparkfun.com/products/13670"&gt;GPS Receiver - GP-735 (56 Channel)&lt;/a&gt; (GPS-13670)&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</description>
+<gates>
+<gate name="G$1" symbol="GP-735T" x="0" y="0"/>
+</gates>
+<devices>
+<device name="-VERTICAL" package="JST-6PIN-1MM">
+<connects>
+<connect gate="G$1" pin="GND" pad="1"/>
+<connect gate="G$1" pin="PWR_CTRL" pad="6"/>
+<connect gate="G$1" pin="RX" pad="4"/>
+<connect gate="G$1" pin="TX" pad="3"/>
+<connect gate="G$1" pin="VCC" pad="2"/>
+<connect gate="G$1" pin="V_BAT" pad="5"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="CONN-08249"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="VENUS638FLPX-L" prefix="U">
+<description>&lt;h3&gt;Venus638FLPX-L GPS Receiver&lt;/h3&gt;
+
+Venus638FLPx is a high performance, low cost, single chip GPS receiver targeting mobile consumer and cellular handset applications. It offers very low power consumption, high sensitivity, and best in class signal acquisition and time-to-first-fix performance.&lt;p&gt;
+Venus638FLPx contains all the necessary components of a complete GPS receiver, includes 1.2dB cascaded system NF RF front-end, GPS baseband signal processor, 0.5ppm TCXO, 32.768kHz RTC crystal, RTC LDO regulator, and passive components. It requires very low external component count and takes up only 100mm2 PCB footprint.&lt;p&gt;
+Dedicated massive-correlator signal parameter search engine within the baseband enables rapid search of all the available satellites and acquisition of very weak signal. An advanced track engine allows weak signal tracking and positioning in harsh environments such as urban canyons and under deep foliage. The self-contained architecture keeps GPS processing off the host and allows integration into applications with very little resource.&lt;/p&gt;
+&lt;h4&gt;SparkFun Products&lt;/h4&gt;
+&lt;ul&gt;&lt;li&gt;&lt;a href="https://www.sparkfun.com/products/10919"&gt;GPS Module - Venus638FLPx-L 20Hz (14 Channel)&lt;/a&gt; (GPS-10919)&lt;/li&gt;
+&lt;/ul&gt;</description>
+<gates>
+<gate name="G$1" symbol="VENUS638FLPX-L" x="0" y="15.24"/>
+</gates>
+<devices>
+<device name="" package="VENUS638FLPX">
+<connects>
+<connect gate="G$1" pin="BTSEL" pad="9"/>
+<connect gate="G$1" pin="CLK" pad="41"/>
+<connect gate="G$1" pin="CSN" pad="43"/>
+<connect gate="G$1" pin="GND@10" pad="10"/>
+<connect gate="G$1" pin="GND@11" pad="11"/>
+<connect gate="G$1" pin="GND@15" pad="15"/>
+<connect gate="G$1" pin="GND@19" pad="19"/>
+<connect gate="G$1" pin="GND@49" pad="49"/>
+<connect gate="G$1" pin="GND@60" pad="60"/>
+<connect gate="G$1" pin="GND@64" pad="64"/>
+<connect gate="G$1" pin="GNDRF@21" pad="21"/>
+<connect gate="G$1" pin="GNDRF@22" pad="22"/>
+<connect gate="G$1" pin="GNDRF@24" pad="24"/>
+<connect gate="G$1" pin="GNDRF@25" pad="25"/>
+<connect gate="G$1" pin="GNDRF@27" pad="27"/>
+<connect gate="G$1" pin="GNDRF@28" pad="28"/>
+<connect gate="G$1" pin="GNDRF@29" pad="29"/>
+<connect gate="G$1" pin="GNDRF@31" pad="31"/>
+<connect gate="G$1" pin="GNDRF@33" pad="33"/>
+<connect gate="G$1" pin="GNDRF@61" pad="61"/>
+<connect gate="G$1" pin="GNDRF@62" pad="62"/>
+<connect gate="G$1" pin="GNDRF@65" pad="65"/>
+<connect gate="G$1" pin="GNDRF@69" pad="69"/>
+<connect gate="G$1" pin="GPIO1" pad="6"/>
+<connect gate="G$1" pin="GPIO2" pad="5"/>
+<connect gate="G$1" pin="GPIO20" pad="14"/>
+<connect gate="G$1" pin="GPIO22" pad="12"/>
+<connect gate="G$1" pin="GPIO23" pad="13"/>
+<connect gate="G$1" pin="GPIO24" pad="8"/>
+<connect gate="G$1" pin="GPIO25" pad="53"/>
+<connect gate="G$1" pin="GPIO28" pad="59"/>
+<connect gate="G$1" pin="GPIO29" pad="16"/>
+<connect gate="G$1" pin="GPIO3" pad="48"/>
+<connect gate="G$1" pin="GPIO30" pad="54"/>
+<connect gate="G$1" pin="GPIO4" pad="47"/>
+<connect gate="G$1" pin="GPIO6" pad="63"/>
+<connect gate="G$1" pin="LED/GPIO0" pad="7"/>
+<connect gate="G$1" pin="MISO" pad="39"/>
+<connect gate="G$1" pin="MOSI" pad="38"/>
+<connect gate="G$1" pin="PIO11" pad="51"/>
+<connect gate="G$1" pin="PIO12" pad="4"/>
+<connect gate="G$1" pin="PIO14" pad="37"/>
+<connect gate="G$1" pin="PIO15" pad="55"/>
+<connect gate="G$1" pin="PIO5" pad="50"/>
+<connect gate="G$1" pin="PPS" pad="40"/>
+<connect gate="G$1" pin="REGEN" pad="36"/>
+<connect gate="G$1" pin="RFIN" pad="32"/>
+<connect gate="G$1" pin="RSTN" pad="1"/>
+<connect gate="G$1" pin="RTC" pad="17"/>
+<connect gate="G$1" pin="RXD0" pad="42"/>
+<connect gate="G$1" pin="RXD1" pad="52"/>
+<connect gate="G$1" pin="SCL" pad="46"/>
+<connect gate="G$1" pin="SDA" pad="45"/>
+<connect gate="G$1" pin="TXD0" pad="44"/>
+<connect gate="G$1" pin="TXD1" pad="57"/>
+<connect gate="G$1" pin="VBAT" pad="18"/>
+<connect gate="G$1" pin="VCC" pad="2"/>
+<connect gate="G$1" pin="VCC@58" pad="58"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="IC-10734"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="GP3906-TLP" prefix="U">
+<description>&lt;h3&gt;GP3906-TLP PoT GPS Module&lt;/h3&gt;
+&lt;p&gt;The GP3906-TLP is a POT (Patch on Top) GPS module which is special designed for ultra low power consumption purpose environment. It is a GPS receiver providing a solution that high position and speed accuracy performances as well as high sensitivity and tracking capabilities in urban conditions. The GPS chipsets inside the module are designed by MediaTek Inc., which is the world's leading digital media solution provider and largest fab-less IC company in Taiwan. The module can support up to 66 channels. The GPS solution enables small form factor devices. They deliver major advancements in GPS performances, accuracy, integration, computing power and flexibility. They are designed to simplify the embedded system integration process.&lt;/p&gt;
+
+&lt;p&gt;Features:
+&lt;ul&gt;&lt;li&gt;Based on MediaTek Single Chip Architecture (MT3339).&lt;/li&gt;
+&lt;li&gt;ARM7 based application processor&lt;/li&gt;
+&lt;li&gt;High sensitivity: -165dBm tracking&lt;/li&gt;
+&lt;li&gt;L1 frequency, C/A code&lt;/li&gt;
+&lt;li&gt;Channels: 66 acquisition, 22 simultaneous tracking&lt;/li&gt;
+&lt;li&gt;Low power consumption: 26mA @ acquisition, 20mA @ tracking&lt;/li&gt;
+&lt;li&gt;Cold/Warm/Hot start time: &lt;35/&lt;33/&lt;1 seconds&lt;/li&gt;
+&lt;li&gt;Maximum update rate up to 10Hz&lt;/li&gt;
+&lt;li&gt;GPS data interface: TTL level serial port&lt;/li&gt;
+&lt;li&gt;Support NMEA 0183 standard V3.01 and backward compliance&lt;/li&gt;
+&lt;li&gt;Support SBAS – WAAS, EGNOS, GAGAN and MSAS&lt;/li&gt;
+&lt;li&gt;Dimension：16mm x 16mm x 6.7mm&lt;/li&gt;
+&lt;li&gt;RoHS compliant&lt;/li&gt;
+&lt;li&gt;Advanced software features&lt;/li&gt;
+&lt;ul&gt;&lt;li&gt;AlwaysLocate TM advanced location awareness technology&lt;/li&gt;
+&lt;li&gt;EPO TM orbit prediction&lt;/li&gt;
+&lt;li&gt;Supports logger function (LOCUS)&lt;/li&gt;&lt;/ul&gt;&lt;/ul&gt;&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;SparkFun Products&lt;/b&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.sparkfun.com/products/13750"&gt;SparkFun GPS Logger Shield&lt;/a&gt; &lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;</description>
+<gates>
+<gate name="G$1" symbol="GP3906-TLP" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="GP3906-TLP">
+<connects>
+<connect gate="G$1" pin="1PPS" pad="12"/>
+<connect gate="G$1" pin="3D_FIX" pad="5"/>
+<connect gate="G$1" pin="DC_IN" pad="1"/>
+<connect gate="G$1" pin="GND" pad="3 8 11 20"/>
+<connect gate="G$1" pin="RESET" pad="13"/>
+<connect gate="G$1" pin="RX" pad="10"/>
+<connect gate="G$1" pin="TX" pad="9"/>
+<connect gate="G$1" pin="VBACKUP" pad="4"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="GPS-13174"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="TITAN_X1_GPS" prefix="U">
+<description>Titan X1 GPS</description>
+<gates>
+<gate name="U1" symbol="TITAN_X1_GPS" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="TITAN_X1_GPS">
+<connects>
+<connect gate="U1" pin="!RESET" pad="22"/>
+<connect gate="U1" pin="1PPS" pad="21"/>
+<connect gate="U1" pin="BACKUP" pad="8"/>
+<connect gate="U1" pin="CLK" pad="18"/>
+<connect gate="U1" pin="CS" pad="23"/>
+<connect gate="U1" pin="EX_ANT" pad="2"/>
+<connect gate="U1" pin="GND" pad="1 3 4 5 6 9 10 11 24"/>
+<connect gate="U1" pin="INT" pad="16"/>
+<connect gate="U1" pin="MISO" pad="15"/>
+<connect gate="U1" pin="MOSI" pad="17"/>
+<connect gate="U1" pin="RX" pad="20"/>
+<connect gate="U1" pin="SCL" pad="14"/>
+<connect gate="U1" pin="SDA" pad="13"/>
+<connect gate="U1" pin="TX" pad="19"/>
+<connect gate="U1" pin="VCC" pad="7"/>
+<connect gate="U1" pin="WAKE_UP" pad="12"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="GPS-13693" constant="no"/>
+<attribute name="VALUE" value="Titan X1 GPS" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="U-BLOX_ZOE_M8Q-0-10" prefix="U">
+<description>&lt;h3&gt;UBLOX ZOE-M8Q-0-10&lt;/h3&gt;
+&lt;p&gt;u-blox ZOE-M8 standard precision GNSS SiP (System in Package) modules feature the high performance u-blox M8
+GNSS engine. ZOE-M8’s ultra-miniature form factor integrates a complete GNSS receiver including SAW filter, LNA
+and TCXO.&lt;/p&gt;
+&lt;p&gt;Handles  all &lt;b&gt;GNSS systems&lt;/b&gt;  and can simulatenously use up to three of them, with accuracy ranging from 2.5m to 4m.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;GPS&lt;/li&gt;
+&lt;li&gt;GLONASS&lt;/li&gt;
+&lt;li&gt;BeiDou&lt;/li&gt;
+&lt;li&gt;Galileo&lt;/li&gt;
+&lt;/ul&gt;
+
+This can be corrected with the &lt;b&gt;SBAS&lt;/b&gt; or &lt;b&gt;QZSS &lt;/b&gt; augmentation systems.</description>
+<gates>
+<gate name="G$1" symbol="U-BLOX_ZOE-M8-0-10" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="UBLOX_ZOE_M8-0-10">
+<connects>
+<connect gate="G$1" pin="!RESET" pad="20"/>
+<connect gate="G$1" pin="!SAFEBOOT" pad="34"/>
+<connect gate="G$1" pin="D_SEL" pad="48"/>
+<connect gate="G$1" pin="GND" pad="1 3 5 7 8 9 10 11 12 17 23 37 38 39 40 41 44 49" route="any"/>
+<connect gate="G$1" pin="LNA_EN" pad="35"/>
+<connect gate="G$1" pin="NC" pad="6 13 14 15 28 42 51"/>
+<connect gate="G$1" pin="P1014" pad="50"/>
+<connect gate="G$1" pin="P1015" pad="36"/>
+<connect gate="G$1" pin="PI013/!EXTINT" pad="43"/>
+<connect gate="G$1" pin="RF_IN" pad="4"/>
+<connect gate="G$1" pin="RTC_0" pad="18"/>
+<connect gate="G$1" pin="RTC_1" pad="19"/>
+<connect gate="G$1" pin="RXD/MOSI" pad="22"/>
+<connect gate="G$1" pin="SCL/CLK" pad="32"/>
+<connect gate="G$1" pin="SDA/CS" pad="2"/>
+<connect gate="G$1" pin="SQI_G" pad="29 31 46 47"/>
+<connect gate="G$1" pin="SQI_O" pad="30 45"/>
+<connect gate="G$1" pin="TIMEPULSE" pad="33"/>
+<connect gate="G$1" pin="TXD/MISO" pad="21"/>
+<connect gate="G$1" pin="VCC" pad="24 25"/>
+<connect gate="G$1" pin="V_BCKP" pad="16"/>
+<connect gate="G$1" pin="V_CORE" pad="27"/>
+<connect gate="G$1" pin="V_DCDC_OUT" pad="26"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="IC-14251" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="U-BLOX_SAM_M8Q-0-10" prefix="U">
+<description>&lt;h3&gt;u-blox SAM-M8Q&lt;/h3&gt;
+&lt;p&gt;The u-blox concurrent SAM-M8Q GNSS patch antenna module benefits from the exceptional performance of the
+u-blox M8 multi-GNSS engine. The SAM-M8Q module offers high sensitivity and minimal acquisition times in an
+ultra compact form factor.&lt;/p&gt;
+&lt;p&gt;The SAM-M8Q module utilizes concurrent reception of up to three GNSS systems (GPS/Galileo and GLONASS),
+recognizes multiple constellations simultaneously and provides outstanding positioning accuracy in scenarios
+where urban canyon or weak signals are involved. For even better and faster positioning improvement, the
+SAM-M8Q supports augmentation of QZSS, GAGAN and IMES together with WAAS, EGNOS, MSAS. The
+SAM-M8Q also supports message integrity protection, geofencing, and spoofing detection with configurable
+interface settings to easily fit to customer applications.&lt;/p&gt;</description>
+<gates>
+<gate name="U1" symbol="SAM-M8Q" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="SAM-M8Q">
+<connects>
+<connect gate="U1" pin="!RST" pad="18"/>
+<connect gate="U1" pin="!SAFEBOOT" pad="8"/>
+<connect gate="U1" pin="GND" pad="1 4 5 6 10 11 15 16 20"/>
+<connect gate="U1" pin="INT" pad="19"/>
+<connect gate="U1" pin="RX" pad="14"/>
+<connect gate="U1" pin="SCL" pad="12"/>
+<connect gate="U1" pin="SDA" pad="9"/>
+<connect gate="U1" pin="TPULSE" pad="7"/>
+<connect gate="U1" pin="TX" pad="13"/>
+<connect gate="U1" pin="VCC" pad="17"/>
+<connect gate="U1" pin="VCC_IO" pad="2"/>
+<connect gate="U1" pin="V_BCKP" pad="3"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="IC-14070" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="GPS_CHIP_ANTENNA" prefix="Y">
+<gates>
+<gate name="G$1" symbol="ANTENNA-GROUNDED" x="0" y="5.08"/>
+</gates>
+<devices>
+<device name="W3011" package="W3011">
+<connects>
+<connect gate="G$1" pin="GND" pad="2 3"/>
+<connect gate="G$1" pin="SIGNAL" pad="1"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="ANT-14304" constant="no"/>
+</technology>
+</technologies>
+</device>
+<device name="PUCK" package="TE_PUCK">
+<connects>
+<connect gate="G$1" pin="GND" pad="1 2 3"/>
+<connect gate="G$1" pin="SIGNAL" pad="S"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="ANT-14308" constant="no"/>
+</technology>
+</technologies>
+</device>
+<device name="CUBE" package="MOLEX_GNSS_CUBE">
+<connects>
+<connect gate="G$1" pin="GND" pad="GND"/>
+<connect gate="G$1" pin="SIGNAL" pad="FEED"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="ANT-14307" constant="no"/>
+</technology>
+</technologies>
+</device>
+<device name="2042830001" package="MOLEX_GNSS_CHIP">
+<connects>
+<connect gate="G$1" pin="GND" pad="1 2 3"/>
+<connect gate="G$1" pin="SIGNAL" pad="FEED"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="ANT-14306" constant="no"/>
+</technology>
+</technologies>
+</device>
+<device name="W3062A" package="W3062A">
+<connects>
+<connect gate="G$1" pin="GND" pad="GND"/>
+<connect gate="G$1" pin="SIGNAL" pad="FEED"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="ANT-14305" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="GPS_CHIP_ANTENNA_NOGND" prefix="Y">
+<gates>
+<gate name="G$1" symbol="ANTENNA" x="0" y="0"/>
+</gates>
+<devices>
+<device name="MOLDED" package="MLOEX_GNSS_MOLDED">
+<connects>
+<connect gate="G$1" pin="SIGNAL" pad="FEED"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="ANT-14303" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="U-BLOX_ZED-F9P" prefix="U">
+<gates>
+<gate name="U1" symbol="ZED-F9P" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="ZED-F9P">
+<connects>
+<connect gate="U1" pin="!ANT_SHORT!" pad="6"/>
+<connect gate="U1" pin="!RESET!" pad="49"/>
+<connect gate="U1" pin="!SAFEBOOT!" pad="50"/>
+<connect gate="U1" pin="ANT_DETECT" pad="4"/>
+<connect gate="U1" pin="ANT_OFF" pad="5"/>
+<connect gate="U1" pin="D_SEL" pad="47"/>
+<connect gate="U1" pin="EXTINT" pad="51"/>
+<connect gate="U1" pin="GEO_STAT" pad="19"/>
+<connect gate="U1" pin="GND" pad="1 3 12 14 32 37 41 48 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102"/>
+<connect gate="U1" pin="RF_IN" pad="2"/>
+<connect gate="U1" pin="RTK_STAT" pad="20"/>
+<connect gate="U1" pin="RX/MOSI" pad="43"/>
+<connect gate="U1" pin="RX2" pad="26"/>
+<connect gate="U1" pin="SCL/CLK" pad="45"/>
+<connect gate="U1" pin="SDA/!CS!" pad="44"/>
+<connect gate="U1" pin="TIMEPULSE" pad="53"/>
+<connect gate="U1" pin="TX/MISO" pad="42"/>
+<connect gate="U1" pin="TX2" pad="27"/>
+<connect gate="U1" pin="TX_READY" pad="46"/>
+<connect gate="U1" pin="USB_D+" pad="40"/>
+<connect gate="U1" pin="USB_D-" pad="39"/>
+<connect gate="U1" pin="VCC" pad="33 34"/>
+<connect gate="U1" pin="V_BKCP" pad="36"/>
+<connect gate="U1" pin="V_RF" pad="7"/>
+<connect gate="U1" pin="V_USB" pad="38"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="IC-14209" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="U-BLOX_NEO-M8P" prefix="U">
+<description>&lt;h3&gt;U-blox NEO-M8P&lt;/h3&gt;
+&lt;p&gt;The NEO-M8P module combines the high performance u-blox
+M8 positioning engine with u-blox’s Real Time Kinematic
+(RTK) technology. The NEO-M8P provides cm-level GNSS
+performance designed to meet the needs of unmanned vehicles and other machine control applications requiring high
+precision guidance.&lt;/p&gt;</description>
+<gates>
+<gate name="U1" symbol="NEO-M8P" x="0" y="0"/>
+</gates>
+<devices>
+<device name="M8P" package="NEO-M8P">
+<connects>
+<connect gate="U1" pin="!RST" pad="8"/>
+<connect gate="U1" pin="!SAFEBOOT!" pad="1"/>
+<connect gate="U1" pin="D_SEL" pad="2"/>
+<connect gate="U1" pin="GEO_STAT" pad="16"/>
+<connect gate="U1" pin="GND" pad="10 12 13 24"/>
+<connect gate="U1" pin="INT" pad="4"/>
+<connect gate="U1" pin="LNA_EN" pad="14"/>
+<connect gate="U1" pin="RF_IN" pad="11"/>
+<connect gate="U1" pin="RTK_STAT" pad="15"/>
+<connect gate="U1" pin="RX/SPI_MOSI" pad="21"/>
+<connect gate="U1" pin="SCL/SPI_CLK" pad="19"/>
+<connect gate="U1" pin="SDA/SPI_!CS!" pad="18"/>
+<connect gate="U1" pin="TIMEPULSE" pad="3"/>
+<connect gate="U1" pin="TX/SPI_MISO" pad="20"/>
+<connect gate="U1" pin="USB_D+" pad="6"/>
+<connect gate="U1" pin="USB_D-" pad="5"/>
+<connect gate="U1" pin="VCC" pad="23"/>
+<connect gate="U1" pin="VCC_RF" pad="9"/>
+<connect gate="U1" pin="VDD_USB" pad="7"/>
+<connect gate="U1" pin="V_BKCP" pad="22"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="IC-14069" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="U-BLOX_NEO-M9N" prefix="U">
+<description>&lt;h3&gt;u-blox NEO-M9N GPS Module&lt;/h3&gt;
+
+&lt;p&gt;The NEO-M9N module is built on the robust u-blox M9 GNSS chip, which provides exceptional
+sensitivity and acquisition times for all L1 GNSS systems. The u-blox M9 standard precision GNSS
+platform, which delivers meter-level accuracy, succeeds the well-known u-blox M8 product range.
+The receiver also provides higher navigation rate and improved security features compared to
+previous u-blox GNSS generations.
+The NEO-M9N module is available in the NEO form factor LLC package&lt;/p&gt;</description>
+<gates>
+<gate name="G$1" symbol="NEO-M9N" x="0" y="2.54"/>
+</gates>
+<devices>
+<device name="" package="NEO-M9N/M8T/M8U/D9S">
+<connects>
+<connect gate="G$1" pin="!RST" pad="8"/>
+<connect gate="G$1" pin="!SAFEBOOT!" pad="1"/>
+<connect gate="G$1" pin="D_SEL" pad="2"/>
+<connect gate="G$1" pin="EXT_INT" pad="4"/>
+<connect gate="G$1" pin="GND" pad="10 12 13 24"/>
+<connect gate="G$1" pin="LNA_EN" pad="14"/>
+<connect gate="G$1" pin="RESERVED" pad="15 16 17"/>
+<connect gate="G$1" pin="RF_IN" pad="11"/>
+<connect gate="G$1" pin="RX/SPI_MOSI" pad="21"/>
+<connect gate="G$1" pin="SCL/SPI_CLK" pad="19"/>
+<connect gate="G$1" pin="SDA/SPI_!CS!" pad="18"/>
+<connect gate="G$1" pin="TIMEPULSE" pad="3"/>
+<connect gate="G$1" pin="TX/SPI_MISO" pad="20"/>
+<connect gate="G$1" pin="USB_D+" pad="6"/>
+<connect gate="G$1" pin="USB_D-" pad="5"/>
+<connect gate="G$1" pin="VCC" pad="23"/>
+<connect gate="G$1" pin="VCC_RF" pad="9"/>
+<connect gate="G$1" pin="VDD_USB" pad="7"/>
+<connect gate="G$1" pin="V_BKCP" pad="22"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="IC-14651" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="U-BLOX_NEO-M8T">
+<description>&lt;h3&gt;u-blox NEO-M8T&lt;/h3&gt;
+&lt;p&gt;The NEO-M8T and LEA-M8T concurrent GNSS modules deliver high integrity, precision timing in demanding applicationsworld-wide. Support for BeiDou, GLONASS and Galileo constellations enables compliance with national requirements.
+Enhanced sensitivity and concurrent constellation reception
+extend coverage and integrity to challenging signal environments. Survey-in and fixed-position navigation reduce timing jitter, even at low signal levels, and enable synchronization to
+be maintained with as few as one single satellite in view. Support for low duty cycle operation reduces power consumption for battery-powered applications.
+&lt;/p&gt;
+&lt;p&gt;
+u-blox timing products include timing integrity measures
+with Receiver Autonomous Integrity Monitoring (RAIM) and
+continuous phase uncertainty estimation. They feature high
+dynamic range radios with both analog and digital interference
+mitigation, supporting applications in wireless communications equipment.
+&lt;/p&gt;
+&lt;p&gt;
+The M8T timing modules are delivered in u-blox’s established
+LEA and NEO form-factors with standard pin-out, allowing
+ready migration from previous product generations.
+u-blox timing products can make use of u-blox AssistNow or
+industry-standard aiding data. This reduces the time-to-firstfix and delivers exceptional acquisition sensitivity, even on
+first installation before precise location, time or frequency are
+known.
+&lt;/p&gt;</description>
+<gates>
+<gate name="G$1" symbol="NEO-M8T" x="-2.54" y="0"/>
+</gates>
+<devices>
+<device name="" package="NEO-M9N/M8T/M8U/D9S">
+<connects>
+<connect gate="G$1" pin="!RST" pad="8"/>
+<connect gate="G$1" pin="D_SEL" pad="2"/>
+<connect gate="G$1" pin="EXTINT0" pad="4"/>
+<connect gate="G$1" pin="EXTINT1" pad="15"/>
+<connect gate="G$1" pin="GND" pad="10 12 13 24"/>
+<connect gate="G$1" pin="LNA_EN" pad="14"/>
+<connect gate="G$1" pin="RESERVED" pad="16 17"/>
+<connect gate="G$1" pin="RF_IN" pad="11"/>
+<connect gate="G$1" pin="RX/SPI_MOSI" pad="21"/>
+<connect gate="G$1" pin="SCL/SPI_CLK" pad="19"/>
+<connect gate="G$1" pin="SDA/SPI_!CS!" pad="18"/>
+<connect gate="G$1" pin="TIMEPULSE" pad="3"/>
+<connect gate="G$1" pin="TP2/!SAFEBOOT!" pad="1"/>
+<connect gate="G$1" pin="TX/SPI_MISO" pad="20"/>
+<connect gate="G$1" pin="USB_D+" pad="6"/>
+<connect gate="G$1" pin="USB_D-" pad="5"/>
+<connect gate="G$1" pin="VCC" pad="23"/>
+<connect gate="G$1" pin="VCC_RF" pad="9"/>
+<connect gate="G$1" pin="VDD_USB" pad="7"/>
+<connect gate="G$1" pin="V_BKCP" pad="22"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="IC-14839" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="U-BLOX_NEO-M8U" prefix="U">
+<description>&lt;h3&gt;u-blox NEO-M8U&lt;/h3&gt;
+&lt;p&gt;
+The NEO-M8U module introduces u-blox’s Untethered Dead Reckoning (UDR) technology, which provides continuous navigation without requiring speed information from the vehicle. This innovative technology brings the benefits of dead reckoning to installations previously restricted to using GNSS alone, and significantly reduces the cost of installation for after-market dead reckoning applications.
+&lt;/p&gt;
+&lt;p&gt;
+The strength of UDR is particularly apparent under poor signal conditions, where it brings continuous positioning in urban environments, even to devices with antennas installed within the vehicle. Useful positioning performance is also available during complete signal loss, for example in parking garages and short tunnels. With UDR, positioning starts as soon as power is applied to the module, before the first GNSS fix is available.
+&lt;/p&gt;
+&lt;p&gt;
+The NEO-M8U may be installed in any position within the vehicle without configuration. In addition to its freedom from any electrical connection to the vehicle, the on-board accelerometer and gyroscope sensors result in a fully self-contained solution, perfect for rapid product development with reliable and consistent performance.
+&lt;/p&gt;</description>
+<gates>
+<gate name="G$1" symbol="NEO-M8U" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="NEO-M9N/M8T/M8U/D9S">
+<connects>
+<connect gate="G$1" pin="!RST" pad="8"/>
+<connect gate="G$1" pin="!SAFEBOOT!" pad="1"/>
+<connect gate="G$1" pin="D_SEL" pad="2"/>
+<connect gate="G$1" pin="EXT_INT" pad="4"/>
+<connect gate="G$1" pin="GND" pad="10 12 13 24"/>
+<connect gate="G$1" pin="LNA_EN" pad="14"/>
+<connect gate="G$1" pin="RESERVED" pad="15 16 17"/>
+<connect gate="G$1" pin="RF_IN" pad="11"/>
+<connect gate="G$1" pin="RX/SPI_MOSI" pad="21"/>
+<connect gate="G$1" pin="SCL/SPI_CLK" pad="19"/>
+<connect gate="G$1" pin="SDA/SPI_!CS!" pad="18"/>
+<connect gate="G$1" pin="TIMEPULSE" pad="3"/>
+<connect gate="G$1" pin="TX/SPI_MISO" pad="20"/>
+<connect gate="G$1" pin="USB_D+" pad="6"/>
+<connect gate="G$1" pin="USB_D-" pad="5"/>
+<connect gate="G$1" pin="VCC" pad="23"/>
+<connect gate="G$1" pin="VCC_RF" pad="9"/>
+<connect gate="G$1" pin="VDD_USB" pad="7"/>
+<connect gate="G$1" pin="V_BKCP" pad="22"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="IC-14850" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="U-BLOX_ZED_F9R" prefix="U">
+<description>&lt;h3&gt;u-blox ZED-F9K ADR&lt;/h3&gt;
+&lt;p&gt;GPS Unit with Real Time Kinematics (RTK) and internal IMU = &lt;b&gt;Automotive Dead Reckoning&lt;/b&gt;&lt;/p&gt;</description>
+<gates>
+<gate name="G$1" symbol="ZED-F9R" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="UBLOX_ZED_F9R">
+<connects>
+<connect gate="G$1" pin="!ANT_SHORT!" pad="P6"/>
+<connect gate="G$1" pin="!RESET!" pad="P49"/>
+<connect gate="G$1" pin="!SAFEBOOT!" pad="P50"/>
+<connect gate="G$1" pin="ANT_DETECT" pad="P4"/>
+<connect gate="G$1" pin="ANT_OFF" pad="P5"/>
+<connect gate="G$1" pin="DIR" pad="P23"/>
+<connect gate="G$1" pin="D_SEL" pad="P47"/>
+<connect gate="G$1" pin="EXTINT" pad="P51"/>
+<connect gate="G$1" pin="GEO_FENCE_STAT" pad="P19"/>
+<connect gate="G$1" pin="GND" pad="G1 G2 G3 G4 G5 G6 G7 G8 G9 G10 G11 G12 G13 G14 G15 G16 G17 G18 G19 G20 G21 G22 G23 G24 G25 G26 G27 G28 G29 G30 G31 G32 G33 G34 G35 G36 G37 G38 G39 G40 G41 G42 G43 G44 G45 G46 G47 G48 P1 P3 P12 P14 P32 P37 P41 P48"/>
+<connect gate="G$1" pin="RF_IN" pad="P2"/>
+<connect gate="G$1" pin="RSVD" pad="P8 P9 P10 P11 P13 P15 P16 P17 P18 P21 P24 P25 P28 P29 P30 P31 P35 P52 P54"/>
+<connect gate="G$1" pin="RTK_STAT" pad="P20"/>
+<connect gate="G$1" pin="RX/MOSI" pad="P43"/>
+<connect gate="G$1" pin="RX2" pad="P26"/>
+<connect gate="G$1" pin="SCL/CLK" pad="P45"/>
+<connect gate="G$1" pin="SDA/!CS!" pad="P44"/>
+<connect gate="G$1" pin="TIMEPULSE" pad="P53"/>
+<connect gate="G$1" pin="TX/MISO" pad="P42"/>
+<connect gate="G$1" pin="TX2" pad="P27"/>
+<connect gate="G$1" pin="TX_READY" pad="P46"/>
+<connect gate="G$1" pin="USB_D+" pad="P40"/>
+<connect gate="G$1" pin="USB_D-" pad="P39"/>
+<connect gate="G$1" pin="VCC" pad="P33 P34"/>
+<connect gate="G$1" pin="V_BKCP" pad="P36"/>
+<connect gate="G$1" pin="V_RF" pad="P7"/>
+<connect gate="G$1" pin="V_USB" pad="P38"/>
+<connect gate="G$1" pin="WHEEL_TKS" pad="P22"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="IC-14716" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="U-BLOX_NEO-D9S" prefix="U">
+<description>&lt;h3&gt;u-blox NEO-D9S&lt;/h3&gt;
+&lt;p&gt;
+The NEO-D9S can receive the data stream of a GNSS correction service, broadcast via satellite L band and compliant to the specification the product is designed for. Integrated with a high precision GNSS receiver, such as from the u-blox F9 platform, it enables the positioning system to reach down to centimeter-level accuracy.
+&lt;/p&gt;</description>
+<gates>
+<gate name="U1" symbol="NEO-D9S" x="0" y="0"/>
+</gates>
+<devices>
+<device name="-00B" package="NEO-M9N/M8T/M8U/D9S">
+<connects>
+<connect gate="U1" pin="!ANT_SHORT!" pad="16"/>
+<connect gate="U1" pin="!RESET!" pad="8"/>
+<connect gate="U1" pin="!SAFEBOOT!" pad="1"/>
+<connect gate="U1" pin="ANT_DETECT" pad="15"/>
+<connect gate="U1" pin="ANT_OFF" pad="14"/>
+<connect gate="U1" pin="D_SEL" pad="2"/>
+<connect gate="U1" pin="EXT_INT" pad="17"/>
+<connect gate="U1" pin="GND" pad="10 12 13 24"/>
+<connect gate="U1" pin="RF_IN" pad="11"/>
+<connect gate="U1" pin="RXD1/PICO" pad="21"/>
+<connect gate="U1" pin="RXD2" pad="4"/>
+<connect gate="U1" pin="SCL/SCK" pad="19"/>
+<connect gate="U1" pin="SDA/!CS!" pad="18"/>
+<connect gate="U1" pin="TXD1/POCI" pad="20"/>
+<connect gate="U1" pin="TXD2" pad="3"/>
+<connect gate="U1" pin="USB_D+" pad="6"/>
+<connect gate="U1" pin="USB_D-" pad="5"/>
+<connect gate="U1" pin="VCC" pad="23"/>
+<connect gate="U1" pin="VCC_RF" pad="9"/>
+<connect gate="U1" pin="V_BKCP" pad="22"/>
+<connect gate="U1" pin="V_USB" pad="7"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="IC-16579" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
+</drawing>
+<compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
+</compatibility>
+</eagle>
