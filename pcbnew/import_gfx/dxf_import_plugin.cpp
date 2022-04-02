@@ -124,6 +124,12 @@ bool DXF_IMPORT_PLUGIN::Load( const wxString& aFileName )
     }
     catch( const std::bad_alloc& )
     {
+        m_layers.clear();
+        m_blocks.clear();
+        m_styles.clear();
+
+        m_internalImporter.ClearShapes();
+
         reportMsg( _( "Memory was exhausted trying to load the DXF, it may be too large." ) );
         return false;
     }

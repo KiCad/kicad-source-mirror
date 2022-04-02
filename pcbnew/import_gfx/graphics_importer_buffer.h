@@ -355,6 +355,11 @@ public:
         return m_shapes;
     }
 
+    void ClearShapes()
+    {
+        m_shapes.clear();
+    }
+
     void PostprocessNestedPolygons();
 
 protected:
