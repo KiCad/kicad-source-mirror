@@ -258,10 +258,9 @@ vector<double> NGSPICE::GetPhasePlot( const string& aName, int aMaxLen )
 bool NGSPICE::Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel )
 {
     NGSPICE_CIRCUIT_MODEL* model = dynamic_cast<NGSPICE_CIRCUIT_MODEL*>( aModel.get() );
-    wxASSERT( model != nullptr );
     STRING_FORMATTER formatter;
 
-    if( model->GetNetlist( &formatter ) )
+    if( model && model->GetNetlist( &formatter ) )
     {
         SIMULATOR::Attach( aModel );
 
