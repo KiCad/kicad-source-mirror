@@ -27,7 +27,7 @@
 
 #include <layer_ids.h>
 #include <pcbnew/pcb_expr_evaluator.h>
-
+#include <drc/drc_rule.h>
 #include <pcbnew/board.h>
 #include <pcbnew/pcb_track.h>
 
@@ -91,7 +91,8 @@ static bool testEvalExpr( const wxString& expr, LIBEVAL::VALUE expectedResult,
 {
     PCB_EXPR_COMPILER compiler;
     PCB_EXPR_UCODE    ucode;
-    PCB_EXPR_CONTEXT  context, preflightContext;
+    PCB_EXPR_CONTEXT  context( NULL_CONSTRAINT, UNDEFINED_LAYER );
+    PCB_EXPR_CONTEXT  preflightContext( NULL_CONSTRAINT, UNDEFINED_LAYER );
     bool              ok = true;
 
     context.SetItems( itemA, itemB );

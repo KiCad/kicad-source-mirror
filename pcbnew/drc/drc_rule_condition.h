@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,8 +38,8 @@ public:
     DRC_RULE_CONDITION( const wxString& aExpression = "" );
     ~DRC_RULE_CONDITION();
 
-    bool EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB, PCB_LAYER_ID aLayer,
-                      REPORTER* aReporter = nullptr );
+    bool EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB, int aConstraint,
+                      PCB_LAYER_ID aLayer, REPORTER* aReporter = nullptr );
 
     bool Compile( REPORTER* aReporter, int aSourceLine = 0, int aSourceOffset = 0 );
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ DRC_RULE_CONDITION::~DRC_RULE_CONDITION()
 
 
 bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB,
-                                      PCB_LAYER_ID aLayer, REPORTER* aReporter )
+                                      int aConstraint, PCB_LAYER_ID aLayer, REPORTER* aReporter )
 {
     if( GetExpression().IsEmpty() )
         return true;
@@ -54,7 +54,7 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
         return false;
     }
 
-    PCB_EXPR_CONTEXT ctx( aLayer );
+    PCB_EXPR_CONTEXT ctx( aConstraint, aLayer );
 
     if( aReporter )
     {
@@ -109,7 +109,7 @@ bool DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, int aSou
 
     m_ucode = std::make_unique<PCB_EXPR_UCODE>();
 
-    PCB_EXPR_CONTEXT preflightContext( F_Cu );
+    PCB_EXPR_CONTEXT preflightContext( 0, F_Cu );
 
     bool ok = compiler.Compile( GetExpression().ToUTF8().data(), m_ucode.get(), &preflightContext );
     return ok;

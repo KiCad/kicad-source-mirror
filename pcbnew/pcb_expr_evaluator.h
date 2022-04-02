@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,7 +52,8 @@ public:
 class PCB_EXPR_CONTEXT : public LIBEVAL::CONTEXT
 {
 public:
-    PCB_EXPR_CONTEXT( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) :
+    PCB_EXPR_CONTEXT( int aConstraint, PCB_LAYER_ID aLayer ) :
+            m_constraint( aConstraint ),
             m_layer( aLayer )
     {
         m_items[0] = nullptr;
@@ -67,17 +68,12 @@ public:
 
     BOARD* GetBoard() const;
 
-    BOARD_ITEM* GetItem( int index ) const
-    {
-        return m_items[index];
-    }
-
-    PCB_LAYER_ID GetLayer() const
-    {
-        return m_layer;
-    }
+    int GetConstraint() const              { return m_constraint; }
+    BOARD_ITEM* GetItem( int index ) const { return m_items[index]; }
+    PCB_LAYER_ID GetLayer() const          { return m_layer; }
 
 private:
+    int          m_constraint;
     BOARD_ITEM*  m_items[2];
     PCB_LAYER_ID m_layer;
 };
