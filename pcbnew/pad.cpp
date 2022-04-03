@@ -755,6 +755,32 @@ int PAD::GetLocalClearance( wxString* aSource ) const
 }
 
 
+int PAD::GetOwnClearance( PCB_LAYER_ID aLayer, wxString* aSource ) const
+{
+    DRC_CONSTRAINT c;
+
+    if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
+    {
+        BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
+
+        if( GetAttribute() == PAD_ATTRIB::NPTH )
+            c = bds.m_DRCEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, this, nullptr, aLayer );
+        else
+            c = bds.m_DRCEngine->EvalRules( CLEARANCE_CONSTRAINT, this, nullptr, aLayer );
+    }
+
+    if( c.Value().HasMin() )
+    {
+        if( aSource )
+            *aSource = c.GetName();
+
+        return c.Value().Min();
+    }
+
+    return 0;
+}
+
+
 int PAD::GetSolderMaskExpansion() const
 {
     // The pad inherits the margin only to calculate a default shape,

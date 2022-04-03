@@ -397,6 +397,8 @@ public:
     double GetLocalSolderPasteMarginRatio() const { return m_localSolderPasteMarginRatio; }
     void SetLocalSolderPasteMarginRatio( double aRatio ) { m_localSolderPasteMarginRatio = aRatio; }
 
+    int GetOwnClearance( PCB_LAYER_ID aLayer, wxString* aSource = nullptr ) const override;
+
     /**
      * Convert the pad shape to a closed polygon. Circles and arcs are approximated by segments.
      *
