@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-28 11:12-0700\n"
-"PO-Revision-Date: 2022-04-03 20:07+0000\n"
+"PO-Revision-Date: 2022-04-04 20:53+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -9307,10 +9307,9 @@ msgstr "Formatering"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:42
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:43
 msgid "ALL"
-msgstr ""
+msgstr "ALLA"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:44
-#, fuzzy
 msgid "Standard"
 msgstr "Standard"
 
@@ -9432,14 +9431,12 @@ msgid "Group by name"
 msgstr "Gruppera efter namn"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:139
-#, fuzzy
 msgid "Group Selected"
-msgstr "Ingen buss vald"
+msgstr "Grupp vald"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:150
-#, fuzzy
 msgid "Filter by unit:"
-msgstr "Filtrera efter antal stift"
+msgstr "Filtrera efter enhet:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:81
 msgid "Pin Table"
@@ -9592,9 +9589,8 @@ msgstr "Fyllningstyp:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:91
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:168
-#, fuzzy
 msgid "Private to Symbol Editor"
-msgstr "Redigera med Symbol Editor"
+msgstr "Privat för Symbolredigeraren"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:97
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:153
@@ -10021,18 +10017,16 @@ msgstr ""
 "Alternativa stifttilldelningar är inte tillgängliga för De Morgan-symboler."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:270
-#, fuzzy
 msgid "Exit sync pins mode"
-msgstr "Ändra segment"
+msgstr "Gå ur läge för synkroniserade stift"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:285
-#, fuzzy
 msgid ""
 "Synchronized pins mode is enabled.\n"
 "Similar pins will be edited regardless of this option."
 msgstr ""
-"Synkroniserat pin-redigeringsläge är aktiverat.\n"
-"Liknande pins kommer modifieras utan hänsyn till denna inställning."
+"Redigeringsläge för synkroniserade stift är aktiverat.\n"
+"Lika stift kommer modifieras utan hänsyn till denna inställning."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:290
 msgid "If checked, this pin will exist in all units."
@@ -10064,11 +10058,13 @@ msgstr "Redigeringsläge för synkroniserade stift"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:432
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
-msgstr ""
+msgstr "Läge för synkroniserade stift.  Nya stift läggs till i alla enheter."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
 msgstr ""
+"Läge för synkroniserade stift.  Matchande stift i andra enheter kommer att "
+"uppdateras."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:43
 msgid "Pin &name:"
@@ -11210,7 +11206,7 @@ msgstr "Underkrets"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:85
 msgid "Code Model"
-msgstr ""
+msgstr "Kodmodell"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:497
 msgid ""
@@ -13640,15 +13636,13 @@ msgstr "Fet kursiv"
 
 #: eeschema/lib_textbox.cpp:378 eeschema/sch_textbox.cpp:381
 #: pcbnew/fp_textbox.cpp:220 pcbnew/pcb_textbox.cpp:221
-#, fuzzy
 msgid "Box Width"
-msgstr "Textbredd"
+msgstr "Textrutans bredd"
 
 #: eeschema/lib_textbox.cpp:381 eeschema/sch_textbox.cpp:384
 #: pcbnew/fp_textbox.cpp:223 pcbnew/pcb_textbox.cpp:224
-#, fuzzy
 msgid "Box Height"
-msgstr "Texthöjd"
+msgstr "Textrutans höjd"
 
 #: eeschema/libarch.cpp:101
 #, c-format
@@ -15260,7 +15254,6 @@ msgid "Cancel Load"
 msgstr "Avbryt belastning"
 
 #: eeschema/sheet.cpp:225
-#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -15268,9 +15261,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Det finns biblioteksnamn i den laddade kretsschemat som saknas i "
-"projektbibliotektabellen. Detta kan resultera i brutna "
-"symbolbibliotekslänkar för den laddade schemat. Vill du fortsätta?"
+"Det finns biblioteksnamn i det valda kretsschemat som saknas i den nuvarande "
+"projektbibliotekstabellen.  Detta kan resultera i brutna "
+"symbolbibliotekslänkar för det laddade schemat. \n"
+"\n"
+"Vill du fortsätta?"
 
 #: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
 #: eeschema/sheet.cpp:380
@@ -15285,9 +15280,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Den valda filen skapades som del av ett annat projekt.  Länkning av filen "
+"till detta projekt kan orsaka saknade eller inkorrekta "
+"symbolbiblioteksreferenser.\n"
+"\n"
+"Vill du fortsätta?"
 
 #: eeschema/sheet.cpp:315
-#, fuzzy
 msgid ""
 "There are symbol library names in the selected schematic that are missing "
 "from the selected schematic project library table.  This may result in "
@@ -15295,12 +15294,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Det finns biblioteksnamn i det laddade kretsschemat som saknas i den laddade "
-"projektbibliotekstabellen för kretsschemat. Detta kan resultera i brutna "
-"symbolbibliotekslänkar för kretsschemat. Vill du fortsätta?"
+"Det finns symbolbiblioteksnamn i det valda kretsschemat som saknas i den "
+"valda projektbibliotekstabellen för kretsschemat.  Detta kan resultera i "
+"brutna symbolbibliotekslänkar.\n"
+"\n"
+"Vill du fortsätta?"
 
 #: eeschema/sheet.cpp:376
-#, fuzzy
 msgid ""
 "A duplicate library name that references a different library exists in the "
 "current library table.  This conflict cannot be resolved and may result in "
@@ -15309,8 +15309,10 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "Ett duplicerat biblioteksnamn som refererar till ett annat bibliotek finns i "
-"den aktuella bibliotektabellen. Denna konflikt kan inte lösas och kan leda "
-"till brutna symbolbibliotekslänkar för schemat. Vill du fortsätta?"
+"den aktuella bibliotektabellen.  Denna konflikt kan inte lösas och kan leda "
+"till brutna symbolbibliotekslänkar.\n"
+"\n"
+"Vill du fortsätta?"
 
 #: eeschema/sheet.cpp:564
 #, c-format
@@ -15397,9 +15399,8 @@ msgid "There were errors during netlist export, aborted."
 msgstr "Det uppstod fel vid export av netlista, avbröts."
 
 #: eeschema/sim/sim_plot_frame.cpp:488 eeschema/sim/sim_plot_frame.cpp:1812
-#, fuzzy
 msgid "Another simulation is already running."
-msgstr "GerbView körs redan. Fortsätt?"
+msgstr "En annan simulation körs redan."
 
 #: eeschema/sim/sim_plot_frame.cpp:515
 #, c-format
@@ -16462,7 +16463,6 @@ msgid "Synchronized Pins Mode"
 msgstr "Redigeringsläge för synkroniserade stift"
 
 #: eeschema/tools/ee_actions.cpp:209
-#, fuzzy
 msgid ""
 "Synchronized Pins Mode\n"
 "When enabled propagates all changes (except pin numbers) to other units.\n"
@@ -18702,9 +18702,8 @@ msgid "Show drawing sheet border and title block"
 msgstr "Visa ritningsarksram och namnruta"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:103
-#, fuzzy
 msgid "Show drawing sheet page limits"
-msgstr "Visa sidgränser"
+msgstr "Visa ritningsarkets sidgränser"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:105
 msgid "PCB Background"
@@ -23161,7 +23160,7 @@ msgstr "Städa upp grafik"
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:82
 #, fuzzy
 msgid "Build Changes"
-msgstr "Ångra Ändringar"
+msgstr "Bygg ändringar"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:134
 msgid "Check zones..."
@@ -30305,7 +30304,7 @@ msgstr "Hålmonterings-lödyta har inget hål"
 
 #: pcbnew/drc/drc_item.cpp:252
 msgid "Pads with different numbers overlap"
-msgstr ""
+msgstr "Lödytor med olika nummer överlappar"
 
 #: pcbnew/drc/drc_item.cpp:397
 #, c-format
@@ -31162,14 +31161,12 @@ msgid "Expected \"Other\" type but set to \"%s\""
 msgstr "Väntade \"Other\"-typ men var \"%s\""
 
 #: pcbnew/footprint.cpp:2234
-#, fuzzy
 msgid "(PTH pad has no copper layers)"
-msgstr "Varning: SMD-lödytan har inga yttre lager."
+msgstr "(Hålmonteringshål har inga kopparlager)"
 
 #: pcbnew/footprint.cpp:2257
-#, fuzzy
 msgid "(PTH pad's hole leaves no copper)"
-msgstr "Varning: SMD-lödytan har inga yttre lager."
+msgstr "(Hålmonteringslödytans hål lämnar ingen koppar kvar)"
 
 #: pcbnew/footprint.cpp:2578 pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1358
 #, fuzzy
