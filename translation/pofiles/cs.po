@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-28 11:13-0700\n"
-"PO-Revision-Date: 2022-03-08 00:49+0000\n"
-"Last-Translator: Radek K <radek.kzn@gmail.com>\n"
+"PO-Revision-Date: 2022-04-08 00:06+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -25198,9 +25198,8 @@ msgstr ""
 "odpovídají jejich aktuálním odkazům."
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:54
-#, fuzzy
 msgid "Replace footprints with those specified in netlist"
-msgstr "Smazat všechna přiřazení pouzder"
+msgstr "Nahrazení pouzder s těmi uvedenými v netlistu"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:57
 msgid "Delete footprints with no components in netlist"
@@ -26238,12 +26237,11 @@ msgid "Use KiCad font to plot text"
 msgstr "Použít písmo KiCadu pro vykreslení textu"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
-#, fuzzy
 msgid ""
 "Check to use KiCad stroke font\n"
 "Uncheck to plot single-line ASCII texts as editable text (using DXF font)"
 msgstr ""
-"Zaškrtněte pro použití Pcbnew kreslených fontů\n"
+"Zaškrtněte pro použití KiCad kreslených fontů\n"
 "Zrušte zaškrtnutí pro vykreslení jednořádkových textů ASCII jako "
 "upravitelného textu (pomocí písma DXF)"
 
@@ -26550,9 +26548,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:77
-#, fuzzy
 msgid "Fix all segments on click"
-msgstr "Uložit všechny listy schématu"
+msgstr "Opravit všechny segmenty na kliknutí"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:78
 msgid ""
@@ -28664,9 +28661,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:275
-#, fuzzy
 msgid "No via hole size defined."
-msgstr "Nedefinované vrtání prokovu."
+msgstr "Nedefinována velikost díry prokovu."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:290
 msgid "No differential pair gap defined."
@@ -28906,7 +28902,6 @@ msgid "Schematic Parity"
 msgstr "Pole schématu"
 
 #: pcbnew/drc/drc_item.cpp:46
-#, fuzzy
 msgid "Signal Integrity"
 msgstr "Integrita signálu"
 
@@ -31466,7 +31461,7 @@ msgstr "Načítání řetězců Unicode..."
 #: pcbnew/plugins/altium/altium_pcb.cpp:1358
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
-msgstr ""
+msgstr "Rozměr typu %d je ignorován (nepodporováno)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1400
 msgid "No 3D-models will be imported."
@@ -31519,7 +31514,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:1782
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
-msgstr ""
+msgstr "Polygonový tvar typu %d je ignorován (nepodporované)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1796
 msgid "Loading zone fills..."
@@ -31554,12 +31549,12 @@ msgstr "Načítání plošek..."
 #: pcbnew/plugins/altium/altium_pcb.cpp:2109
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
-msgstr ""
+msgstr "Pouzdro %s ploška %s není označen jako vícevrstvý, ale je TH ploška."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2129
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
-msgstr ""
+msgstr "Pouzdro %s ploška %s má čtvercovou díru (nepodporované)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2151
 #, c-format
@@ -31567,11 +31562,13 @@ msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
+"Pouzdro %s má díru v plošce %s otočené %f stupňů. KiCad podporuje pouze 90 "
+"stupňů rotaci."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2165
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr ""
+msgstr "Pouzdro %s ploška %s používá díru neznámého druhu %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2183
 #, c-format
@@ -31655,7 +31652,7 @@ msgstr "Načítání textu..."
 #: pcbnew/plugins/altium/altium_pcb.cpp:2652
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
-msgstr ""
+msgstr "Ignoruji čárový kód na Altium vrstvě %d (ještě není podporováno)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2740
 #, c-format
@@ -32832,7 +32829,7 @@ msgstr "Nelze spustit routování uvnitř zakázané oblasti nebo obrysu desky."
 
 #: pcbnew/router/pns_router.cpp:306 pcbnew/router/pns_router.cpp:362
 msgid "The routing start point violates DRC."
-msgstr ""
+msgstr "Počáteční bod tažení porušuje DRC."
 
 #: pcbnew/router/pns_router.cpp:314
 #, fuzzy
@@ -33886,12 +33883,12 @@ msgstr "Umístit plošku"
 #: pcbnew/tools/pad_tool.cpp:594
 #, c-format
 msgid "Pad Edit Mode.  Press %s again to exit."
-msgstr ""
+msgstr "Režim úprav plošky.  Opětovným stiskem %s ukončíte."
 
 #: pcbnew/tools/pad_tool.cpp:599
 #, c-format
 msgid "Pad Edit Mode.  Press %s to exit."
-msgstr ""
+msgstr "Režim úprav plošky.  Stiskněte %s pro ukončení."
 
 #: pcbnew/tools/pad_tool.cpp:690
 msgid "Edit pad shapes"
