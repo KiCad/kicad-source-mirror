@@ -238,7 +238,7 @@ bool PAD::FlashLayer( int aLayer ) const
     if( aLayer != UNDEFINED_LAYER && !IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) ) )
         return false;
 
-    if( GetAttribute() == PAD_ATTRIB::NPTH )
+    if( GetAttribute() == PAD_ATTRIB::NPTH && IsCopperLayer( aLayer ) )
     {
         if( GetShape() == PAD_SHAPE::CIRCLE && GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
         {
@@ -1380,15 +1380,6 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
             return HIDE;
 
         return ( double ) Millimeter2iu( 5 ) / divisor;
-    }
-
-    if( aLayer == LAYER_PADS_TH
-            && GetShape() != PAD_SHAPE::CUSTOM
-            && GetSizeX() <= GetDrillSizeX()
-            && GetSizeY() <= GetDrillSizeY() )
-    {
-        // Don't tweak the drawing code with a degenerate pad
-        return HIDE;
     }
 
     // Passed all tests; show.
