@@ -2092,6 +2092,27 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
     if( aZone->GetAssignedPriority() > 0 )
         m_out->Print( aNestLevel+1, "(priority %d)\n", aZone->GetAssignedPriority() );
 
+// Disable teardrop keyword in file only temporarily (WIP) to avoid file format change
+#if 0
+    if( aZone->IsTeardropArea() )
+    {
+        const char* td_type;
+
+        switch( aZone->GetTeardropAreaType() )
+        {
+        case TEARDROP_TYPE::TD_VIAPAD:          // a teardrop on a via or pad
+            td_type = "padvia";
+            break;
+
+        default:
+        case TEARDROP_TYPE::TD_TRACKEND:        // a teardrop on a track end
+            td_type = "track_end";
+            break;
+        }
+
+        m_out->Print( aNestLevel+1, "(attr (teardrop (type %s)))\n", td_type );
+    }
+#endif
     m_out->Print( aNestLevel+1, "(connect_pads" );
 
     switch( aZone->GetPadConnection() )

@@ -5856,7 +5856,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
             NextTok();
             zone->SetZoneName( FromUTF8() );
 
-            // TODO: remove this hack and replace it when a suitable token is added
+            // TODO: remove this hack in next future, now keywords are added for teadrop attribute
             // If a zone name starts by "$teardrop_", set its teardrop property flag
             if( zone->GetZoneName().StartsWith( "$teardrop_p" ) )
                 zone->SetTeardropAreaType( TEARDROP_TYPE::TD_VIAPAD );
@@ -5866,9 +5866,58 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
             NeedRIGHT();
             break;
 
+        case T_attr:
+            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+
+                switch( token )
+                {
+                case T_teardrop:
+                    token = NextTok();
+
+                    // Expected teardrop data (type padvia) or (type track_end)
+                    if( token == T_LEFT )
+                    {
+                        token = NextTok();
+
+                        if( token == T_type )
+                        {
+                            token = NextTok();
+
+                            if( token == T_padvia )
+                            {
+                                zone->SetTeardropAreaType( TEARDROP_TYPE::TD_VIAPAD );
+                                NeedRIGHT();
+                            }
+                            else if( token == T_track_end )
+                            {
+                                zone->SetTeardropAreaType( TEARDROP_TYPE::TD_TRACKEND );
+                                NeedRIGHT();
+                            }
+                            else
+                                Expecting( "padvia or track_end" );
+
+                            NeedRIGHT();
+                        }
+                        else
+                            Expecting( "type" );
+                    }
+                    else
+                        Expecting( "(" );
+
+                    break;
+
+                default:
+                    Expecting( "teardrop" );
+                }
+            }
+            break;
+
         default:
             Expecting( "net, layer/layers, tstamp, hatch, priority, connect_pads, min_thickness, "
-                       "fill, polygon, filled_polygon, fill_segments, or name" );
+                       "fill, polygon, filled_polygon, fill_segments, attr, or name" );
         }
     }
 

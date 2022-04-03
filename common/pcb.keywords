@@ -215,6 +215,7 @@ pad_prop_fiducial_glob
 pad_prop_castellated
 pad_prop_testpoint
 pad_prop_heatsink
+padvia
 private_layers
 property
 page
@@ -272,6 +273,7 @@ tags
 target
 title
 title_block
+teardrop
 tedit
 text_frame
 text_position_mode
@@ -287,6 +289,7 @@ top_left
 top_right
 trace_width
 tracks
+track_end
 trace_min
 trace_clearance
 trapezoid
