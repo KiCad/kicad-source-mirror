@@ -54,6 +54,9 @@
 
 #include <exporter_vrml.h>
 
+// The max error (in mm) to approximate arcs to segments:
+#define ERR_APPROX_MAX_MM 0.005
+
 
 EXPORTER_PCB_VRML::EXPORTER_PCB_VRML() :
         m_OutputPCB( nullptr )
@@ -619,9 +622,6 @@ void EXPORTER_PCB_VRML::ExportVrmlBoard()
 }
 
 
-static const double err_approx_max = 0.005;
-
-
 void EXPORTER_PCB_VRML::ExportVrmlViaHoles()
 {
     PCB_LAYER_ID top_layer, bottom_layer;
@@ -651,13 +651,18 @@ void EXPORTER_PCB_VRML::ExportVrmlViaHoles()
         // Set the optimal number of segments to approximate a circle.
         // SetArcParams needs a count max, and the minimal and maximal length
         // of segments
+        double max_error = ERR_APPROX_MAX_MM;
+
+        if( m_UseInlineModelsInBrdfile )
+            max_error /= 2.54;      // The board is exported with a size reduced by 2.54
+
         int nsides = GetArcToSegmentCount( via->GetDrillValue(),
-                                           Millimeter2iu( err_approx_max ), 360.0 );
+                                           Millimeter2iu( max_error ), 360.0 );
         double minSegLength = M_PI * 2.0 * hole_radius / nsides;
         double maxSegLength = minSegLength*2.0;
 
         m_holes.SetArcParams( nsides*2, minSegLength, maxSegLength );
-        m_plated_holes.SetArcParams( nsides, minSegLength, maxSegLength );
+        m_plated_holes.SetArcParams( nsides*2, minSegLength, maxSegLength );
 
         m_holes.AddCircle( x, -y, hole_radius, true, true );
         m_plated_holes.AddCircle( x, -y, hole_radius, true, false );
@@ -679,13 +684,18 @@ void EXPORTER_PCB_VRML::ExportVrmlPadHole( PAD* aPad )
     // Export the hole on the edge layer
     if( hole_drill > 0 )
     {
+        double max_error = ERR_APPROX_MAX_MM;
+
+        if( m_UseInlineModelsInBrdfile )
+            max_error /= 2.54;      // The board is exported with a size reduced by 2.54
+
         int nsides = GetArcToSegmentCount( hole_drill,
-                                           Millimeter2iu( err_approx_max ), 360.0 );
+                                           Millimeter2iu( max_error ), 360.0 );
         double minSegLength = M_PI * hole_drill / nsides;
         double maxSegLength = minSegLength*2.0;
 
         m_holes.SetArcParams( nsides*2, minSegLength, maxSegLength );
-        m_plated_holes.SetArcParams( nsides, minSegLength, maxSegLength );
+        m_plated_holes.SetArcParams( nsides*2, minSegLength, maxSegLength );
 
         bool pth = false;
 
