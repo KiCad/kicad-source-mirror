@@ -219,6 +219,9 @@ bool PAD::FlashLayer( int aLayer ) const
     if( aLayer != UNDEFINED_LAYER && !IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) ) )
         return false;
 
+    if( aLayer == UNDEFINED_LAYER )
+        return true;
+
     if( GetAttribute() == PAD_ATTRIB::NPTH && IsCopperLayer( aLayer ) )
     {
         if( GetShape() == PAD_SHAPE::CIRCLE && GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
