@@ -527,7 +527,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
     }
 
     BOX2I bbox = m_effectiveShape->BBox();
-    m_effectiveBoundingBox = EDA_RECT( bbox.GetPosition(), VECTOR2I( bbox.GetWidth(), bbox.GetHeight() ) );
+    m_effectiveBoundingBox = EDA_RECT( bbox );
 
     // Hole shape
     VECTOR2I half_size = m_drill / 2;
@@ -539,7 +539,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
     m_effectiveHoleShape = std::make_shared<SHAPE_SEGMENT>( m_pos - half_len, m_pos + half_len,
                                                             half_width * 2 );
     bbox = m_effectiveHoleShape->BBox();
-    m_effectiveBoundingBox.Merge( EDA_RECT( bbox.GetPosition(), VECTOR2I( bbox.GetWidth(), bbox.GetHeight() ) ) );
+    m_effectiveBoundingBox.Merge( EDA_RECT( bbox ) );
 
     // All done
     m_shapesDirty = false;

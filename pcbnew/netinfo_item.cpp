@@ -145,7 +145,7 @@ const EDA_RECT NETINFO_ITEM::GetBoundingBox() const
     auto              connectivity = GetBoard()->GetConnectivity();
 
     std::vector<BOARD_CONNECTED_ITEM*> items = connectivity->GetNetItems( m_netCode, types );
-    EDA_RECT                           bbox = EDA_RECT( wxPoint( 0, 0 ), wxPoint( 0, 0 ) );
+    EDA_RECT                           bbox = EDA_RECT( VECTOR2I( 0, 0 ), VECTOR2I( 0, 0 ) );
 
     if( items.size() >= 1 )
     {
