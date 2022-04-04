@@ -428,9 +428,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aItem
                         int                  size = hole->GetWidth();
 
                         // Note: drill size represents finish size, which means the actual hole
-                        // size is the plating thickness larger.
+                        // size is 2x the plating thickness larger.
                         if( pad->GetAttribute() == PAD_ATTRIB::PTH )
-                            size += m_board->GetDesignSettings().GetHolePlatingThickness();
+                            size += 2 * m_board->GetDesignSettings().GetHolePlatingThickness();
 
                         itemShape = std::make_shared<SHAPE_SEGMENT>( hole->GetSeg(), size );
                     }
