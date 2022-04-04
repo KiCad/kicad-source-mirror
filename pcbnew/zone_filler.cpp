@@ -570,7 +570,7 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
             EDA_RECT padBBox = pad->GetBoundingBox();
             padBBox.Inflate( m_worstClearance );
 
-            if( !pad->IsOnLayer( aLayer ) || !padBBox.Intersects( aZone->GetCachedBoundingBox() ) )
+            if( !padBBox.Intersects( aZone->GetCachedBoundingBox() ) )
                 continue;
 
             if( pad->GetNetCode() != aZone->GetNetCode() || pad->GetNetCode() <= 0 )
@@ -669,15 +669,17 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
             [&]( PAD* aPad )
             {
                 int  gap = 0;
+                bool hasHole = aPad->GetDrillSize().x > 0;
                 bool flashLayer = aPad->FlashLayer( aLayer );
+                bool platedHole = hasHole && aPad->GetAttribute() == PAD_ATTRIB::PTH;
 
-                if( flashLayer || aPad->GetDrillSize().x > 0 )
+                if( flashLayer || platedHole )
                     gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aPad, aLayer );
 
                 if( flashLayer )
                     addKnockout( aPad, aLayer, gap + extra_margin, aHoles );
 
-                if( aPad->GetDrillSize().x > 0 )
+                if( hasHole )
                 {
                     gap = std::max( gap, evalRulesForItems( HOLE_CLEARANCE_CONSTRAINT, aZone,
                                                             aPad, aLayer ) );
