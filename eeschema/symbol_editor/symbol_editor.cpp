@@ -318,7 +318,7 @@ bool SYMBOL_EDIT_FRAME::LoadSymbolFromCurrentLib( const wxString& aAliasName, in
         return false;
 
     // Enable synchronized pin edit mode for symbols with interchangeable units
-    m_SyncPinEdit = !GetCurSymbol()->UnitsLocked();
+    m_SyncPinEdit = GetCurSymbol()->IsMulti() && !GetCurSymbol()->UnitsLocked();
 
     ClearUndoRedoList();
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
