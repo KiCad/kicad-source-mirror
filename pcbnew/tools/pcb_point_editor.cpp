@@ -40,7 +40,9 @@ using namespace std::placeholders;
 #include <status_popup.h>
 #include <pcb_edit_frame.h>
 #include <fp_shape.h>
+#include <fp_textbox.h>
 #include <pcb_dimension.h>
+#include <pcb_textbox.h>
 #include <pad.h>
 #include <zone.h>
 #include <connectivity/connectivity_data.h>
@@ -1226,8 +1228,14 @@ void PCB_POINT_EDITOR::updateItem() const
         }
 
         // Update relative coordinates for footprint shapes
-        if( FP_SHAPE* fpShape = dyn_cast<FP_SHAPE*>( item ) )
+        if( FP_SHAPE* fpShape = dynamic_cast<FP_SHAPE*>( item ) )
             fpShape->SetLocalCoord();
+
+        // Nuke outline font render caches
+        if( PCB_TEXTBOX* textBox = dynamic_cast<PCB_TEXTBOX*>( item ) )
+            textBox->ClearRenderCache();
+        else if( FP_TEXTBOX* fpTextBox = dynamic_cast<FP_TEXTBOX*>( item ) )
+            fpTextBox->ClearRenderCache();
 
         break;
     }
