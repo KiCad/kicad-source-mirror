@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-28 11:13-0700\n"
 "PO-Revision-Date: 2022-04-08 00:07+0000\n"
-"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
+"Last-Translator: Tian Yunhao <t123yh@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v6/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -22886,7 +22886,7 @@ msgstr "显示设计规则。"
 
 #: pcbnew/dialogs/dialog_drc.cpp:261
 msgid "-------- DRC cancelled by user.<br><br>"
-msgstr "-------- 用户取消的 DRC。<br><br>"
+msgstr "-------- DRC 已被用户取消。<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:263
 msgid "Done.<br><br>"
