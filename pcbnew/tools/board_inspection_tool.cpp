@@ -556,9 +556,9 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             layer = active;
         else if( hasHole( b ) && a->IsOnLayer( active ) && IsCopperLayer( active ) )
             layer = active;
-        else if( hasHole( a ) && IsCopperLayer( b->GetLayer() ) )
+        else if( hasHole( a ) && b->IsOnCopperLayer() )
             layer = b->GetLayer();
-        else if( hasHole( b ) && IsCopperLayer( a->GetLayer() ) )
+        else if( hasHole( b ) && b->IsOnCopperLayer() )
             layer = a->GetLayer();
 
         if( layer >= 0 )
