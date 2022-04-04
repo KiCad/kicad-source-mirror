@@ -665,7 +665,7 @@ void EXPORTER_PCB_VRML::ExportVrmlViaHoles()
         double maxSegLength = minSegLength*2.0;
 
         m_holes.SetArcParams( nsides*2, minSegLength, maxSegLength );
-        m_plated_holes.SetArcParams( nsides, minSegLength, maxSegLength );
+        m_plated_holes.SetArcParams( nsides*2, minSegLength, maxSegLength );
 
         m_holes.AddCircle( x, -y, hole_radius, true, true );
         m_plated_holes.AddCircle( x, -y, hole_radius, true, false );
@@ -698,7 +698,7 @@ void EXPORTER_PCB_VRML::ExportVrmlPadHole( PAD* aPad )
         double maxSegLength = minSegLength*2.0;
 
         m_holes.SetArcParams( nsides*2, minSegLength, maxSegLength );
-        m_plated_holes.SetArcParams( nsides, minSegLength, maxSegLength );
+        m_plated_holes.SetArcParams( nsides*2, minSegLength, maxSegLength );
 
         bool pth = false;
 
