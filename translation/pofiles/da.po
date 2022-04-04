@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-28 11:12-0700\n"
+"POT-Creation-Date: 2022-04-04 13:55-0700\n"
 "PO-Revision-Date: 2021-08-20 19:52+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/kicad/master-"
@@ -190,9 +190,9 @@ msgstr "Eksporter aktuel visning som PNG ..."
 msgid "Export Current View as JPEG..."
 msgstr "Eksporter aktuel visning som JPEG ..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:61 common/eda_base_frame.cpp:1045
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:61 common/eda_base_frame.cpp:1051
 #: common/hotkey_store.cpp:76 common/tool/actions.cpp:572
-#: pcbnew/footprint_viewer_frame.cpp:954 pcbnew/pcb_base_frame.cpp:647
+#: pcbnew/footprint_viewer_frame.cpp:954 pcbnew/pcb_base_frame.cpp:660
 msgid "3D Viewer"
 msgstr "3D-fremviser"
 
@@ -280,12 +280,12 @@ msgstr "Gengiv den aktuelle visning ved hjælp af Raytracing"
 msgid "KiCad 3D Viewer"
 msgstr "3D-fremviser"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:512
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:525
 msgid "3D Image File Name"
 msgstr "3D-billedfilnavn"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:533
-#: common/eda_base_frame.cpp:1111 common/eda_base_frame.cpp:1116
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:546
+#: common/eda_base_frame.cpp:1117 common/eda_base_frame.cpp:1122
 #: pcbnew/plugins/altium/altium_pcb.cpp:1659
 #, fuzzy, c-format
 msgid "Insufficient permissions to save file '%s'."
@@ -293,7 +293,7 @@ msgstr ""
 "Der kræves ikke tilstrækkelige tilladelser til at gemme filen\n"
 "%s"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:534 common/confirm.cpp:130
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:547 common/confirm.cpp:130
 #: common/confirm.cpp:296 common/dialogs/panel_setup_severities.cpp:43
 #: eeschema/files-io.cpp:843 eeschema/files-io.cpp:910
 #: kicad/import_project.cpp:127 kicad/import_project.cpp:154
@@ -304,11 +304,11 @@ msgstr ""
 msgid "Error"
 msgstr "Fejl"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:567
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:580
 msgid "Failed to copy image to clipboard"
 msgstr "Kunne ikke kopiere billedet til udklipsholderen"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:578
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:591
 msgid "Can't save file"
 msgstr "Filen kan ikke gemmes"
 
@@ -983,8 +983,8 @@ msgstr "Skalér"
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:74
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:119
 #: common/dialogs/dialog_grid_settings_base.cpp:34
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:238
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:291
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:247
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:300
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:73
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:114
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:33
@@ -1006,8 +1006,8 @@ msgstr "X:"
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:84
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:129
 #: common/dialogs/dialog_grid_settings_base.cpp:45
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:249
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:302
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:258
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:311
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:88
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:125
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:44
@@ -1038,7 +1038,7 @@ msgstr "Z:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:66
 #: gerbview/gerber_draw_item.cpp:706 pcbnew/footprint.cpp:996
-#: pcbnew/pad.cpp:952
+#: pcbnew/pad.cpp:981
 msgid "Rotation"
 msgstr "Rotation"
 
@@ -1067,43 +1067,43 @@ msgstr "Genindlæs print og 3D modeller"
 #: common/dialogs/dialog_grid_settings_base.cpp:98
 #: common/dialogs/dialog_grid_settings_base.cpp:109
 #: common/eda_draw_frame.cpp:597
-#: eeschema/dialogs/dialog_field_properties_base.cpp:195
-#: eeschema/dialogs/dialog_field_properties_base.cpp:206
-#: eeschema/dialogs/dialog_field_properties_base.cpp:217
-#: eeschema/dialogs/dialog_label_properties_base.cpp:244
+#: eeschema/dialogs/dialog_field_properties_base.cpp:199
+#: eeschema/dialogs/dialog_field_properties_base.cpp:233
+#: eeschema/dialogs/dialog_field_properties_base.cpp:244
+#: eeschema/dialogs/dialog_label_properties_base.cpp:248
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:45
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:164
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:154
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:174
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:107
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:143
-#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:62
-#: eeschema/dialogs/dialog_text_properties_base.cpp:154
-#: eeschema/dialogs/dialog_text_properties_base.cpp:171
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:127
+#: eeschema/dialogs/dialog_text_properties_base.cpp:164
+#: eeschema/dialogs/dialog_text_properties_base.cpp:204
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:27
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:40
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:54
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:100
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:114
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:158
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:169
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:182
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:195
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:245
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:256
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:298
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:309
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:351
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:417
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:430
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:474
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:488
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:502
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:516
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:551
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:565
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:579
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:593
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:167
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:178
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:191
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:204
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:254
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:265
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:307
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:318
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:360
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:426
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:439
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:483
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:497
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:511
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:525
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:560
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:574
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:588
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:602
 #: pagelayout_editor/pl_editor_frame.cpp:724
 #: pcb_calculator/widgets/unit_selector.cpp:34
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
@@ -1144,8 +1144,8 @@ msgstr "Genindlæs print og 3D modeller"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:630
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:748
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:759
-#: pcbnew/dialogs/dialog_plot_base.cpp:263
-#: pcbnew/dialogs/dialog_plot_base.cpp:316
+#: pcbnew/dialogs/dialog_plot_base.cpp:257
+#: pcbnew/dialogs/dialog_plot_base.cpp:310
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:74
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:91
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:140
@@ -1185,13 +1185,13 @@ msgid "DPI"
 msgstr "DPI"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:343
-#: eeschema/tools/sch_drawing_tools.cpp:503
+#: eeschema/tools/sch_drawing_tools.cpp:504
 #: pagelayout_editor/pl_editor_frame.cpp:831
 msgid "Choose Image"
 msgstr "Vælg billede"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:344
-#: eeschema/tools/sch_drawing_tools.cpp:504
+#: eeschema/tools/sch_drawing_tools.cpp:505
 #: pagelayout_editor/pl_editor_frame.cpp:832
 msgid "Image Files"
 msgstr "Billed filer"
@@ -1451,9 +1451,9 @@ msgstr "Spørgsmål"
 
 #: common/confirm.cpp:129 common/confirm.cpp:284
 #: common/dialogs/panel_setup_severities.cpp:43
-#: eeschema/dialogs/dialog_plot_schematic.cpp:1280
-#: eeschema/dialogs/dialog_plot_schematic.cpp:1293
-#: eeschema/dialogs/dialog_plot_schematic.cpp:1315
+#: eeschema/dialogs/dialog_plot_schematic.cpp:1288
+#: eeschema/dialogs/dialog_plot_schematic.cpp:1301
+#: eeschema/dialogs/dialog_plot_schematic.cpp:1323
 #: eeschema/dialogs/dialog_sim_settings.cpp:282
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:146
 #: eeschema/files-io.cpp:432 eeschema/sheet.cpp:571
@@ -1770,7 +1770,7 @@ msgid "&Save"
 msgstr "Gem"
 
 #: common/dialog_shim.cpp:664 common/dialog_shim.cpp:665
-#: common/eda_base_frame.cpp:463
+#: common/eda_base_frame.cpp:465
 msgid "&Help"
 msgstr "&Hjælp"
 
@@ -1929,11 +1929,11 @@ msgstr "miljøvariabler"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:39
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:80
-#: eeschema/dialogs/dialog_label_properties_base.cpp:83
+#: eeschema/dialogs/dialog_label_properties_base.cpp:84
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:115
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:89
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:56
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:50
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:58
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:704
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:52
 #: eeschema/dialogs/panel_sym_lib_table.cpp:299
@@ -2123,8 +2123,8 @@ msgstr "Gitteroprindelse"
 #: common/dialogs/dialog_grid_settings_base.cpp:78
 #: eeschema/dialogs/dialog_erc_base.cpp:67
 #: eeschema/dialogs/dialog_erc_base.cpp:107
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:129
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:185
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:135
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:191
 #: pcbnew/dialogs/dialog_drc_base.cpp:85 pcbnew/dialogs/dialog_drc_base.cpp:151
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:120
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:152
@@ -2482,7 +2482,7 @@ msgstr "Brugerdefineret papirhøjde."
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:322
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:370
 #: eeschema/dialogs/dialog_line_properties_base.cpp:38
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:34
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:42
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1075
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:38
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:83
@@ -2554,7 +2554,7 @@ msgstr "enhed"
 #: common/dialogs/dialog_page_settings_base.cpp:88
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:164
 #: eeschema/dialogs/dialog_line_properties_base.cpp:31
-#: eeschema/dialogs/dialog_text_properties_base.cpp:161
+#: eeschema/dialogs/dialog_text_properties_base.cpp:194
 #: pcbnew/dialogs/dialog_board_statistics.cpp:104
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:272
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:25
@@ -2736,7 +2736,7 @@ msgstr "Print udkast"
 #: pcbnew/dialogs/dialog_find_base.cpp:102
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:50
 #: pcbnew/dialogs/dialog_gendrill.cpp:77 pcbnew/dialogs/dialog_netlist.cpp:82
-#: pcbnew/dialogs/dialog_plot.cpp:68 pcbnew/dialogs/dialog_update_pcb.cpp:60
+#: pcbnew/dialogs/dialog_plot.cpp:155 pcbnew/dialogs/dialog_update_pcb.cpp:60
 #: pcbnew/exporters/gen_footprints_placefile.cpp:66
 msgid "Close"
 msgstr "Luk"
@@ -2824,7 +2824,7 @@ msgid "Print Frame references."
 msgstr "Udskriv rammehenvisninger."
 
 #: common/dialogs/dialog_print_generic_base.cpp:58
-#: pcbnew/dialogs/dialog_plot_base.cpp:127
+#: pcbnew/dialogs/dialog_plot_base.cpp:121
 msgid "1:1"
 msgstr "1: 1"
 
@@ -3253,6 +3253,32 @@ msgstr ""
 msgid "MB"
 msgstr "MB"
 
+#: common/dialogs/panel_data_collection_base.cpp:20
+msgid ""
+"KiCad can anonymously report crashes and special event data to developers in "
+"order to aid identifying critical bugs across the user base more effectively "
+"and help profile functionality to guide improvements.\n"
+"\n"
+"To link automatic reports from the same KiCad install, a unique identifier "
+"is generated that is completely random, it is only used for the purposes of "
+"crash reporting. No personally identifiable information (PII) including IP "
+"address is stored or connected to this identifier. You may reset this id at "
+"anytime with the button provided.\n"
+"\n"
+"If you choose to voluntarily participate, KiCad will automatically handle "
+"sending said reports when crashes or events occur. Your design files such as "
+"schematic or PCB are not shared in this process."
+msgstr ""
+
+#: common/dialogs/panel_data_collection_base.cpp:27
+msgid "I agree to provide anonymous reports"
+msgstr ""
+
+#: common/dialogs/panel_data_collection_base.cpp:30
+#, fuzzy
+msgid "Reset Unique Id"
+msgstr "Nulstil og ubrugt"
+
 #: common/dialogs/panel_hotkeys_editor.cpp:84
 msgid "Type filter text"
 msgstr "Skriv filtertekst"
@@ -3290,7 +3316,7 @@ msgid "Cmd"
 msgstr "Cmd"
 
 #: common/dialogs/panel_mouse_settings.cpp:48
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:170
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:176
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:42
 #: pcbnew/dialogs/panel_edit_options_base.cpp:218
 msgid "Option"
@@ -3407,7 +3433,7 @@ msgstr "Zoom"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:953
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:710
-#: pcbnew/dialogs/dialog_plot_base.cpp:117 pcbnew/pad.cpp:1659
+#: pcbnew/dialogs/dialog_plot_base.cpp:111 pcbnew/pad.cpp:1679
 #: pcbnew/widgets/appearance_controls.cpp:702
 #: pcbnew/widgets/appearance_controls.cpp:744
 #: pcbnew/widgets/appearance_controls.cpp:2370
@@ -3444,8 +3470,8 @@ msgid "Ctrl"
 msgstr "Ctrl"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:183
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:106
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:154
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:112
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:160
 #: pcbnew/dialogs/panel_edit_options_base.cpp:117
 #: pcbnew/dialogs/panel_edit_options_base.cpp:188
 msgid "Shift"
@@ -3491,7 +3517,7 @@ msgstr "Nulstil til _standarder"
 msgid "Reset to Trackpad Defaults"
 msgstr "Nulstil til _standarder"
 
-#: common/dialogs/panel_setup_netclasses.cpp:89 common/eda_shape.cpp:1622
+#: common/dialogs/panel_setup_netclasses.cpp:89 common/eda_shape.cpp:1634
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:342
 #: include/stroke_params.h:71 pcbnew/dialogs/dialog_copper_zones_base.cpp:235
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:357
@@ -3501,25 +3527,25 @@ msgstr "Nulstil til _standarder"
 msgid "Solid"
 msgstr "Massiv"
 
-#: common/dialogs/panel_setup_netclasses.cpp:91 common/eda_shape.cpp:1623
+#: common/dialogs/panel_setup_netclasses.cpp:91 common/eda_shape.cpp:1635
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:342
 #: include/stroke_params.h:72
 msgid "Dashed"
 msgstr "Stiplet"
 
-#: common/dialogs/panel_setup_netclasses.cpp:93 common/eda_shape.cpp:1624
+#: common/dialogs/panel_setup_netclasses.cpp:93 common/eda_shape.cpp:1636
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:342
 #: include/stroke_params.h:73
 msgid "Dotted"
 msgstr "Prikket"
 
-#: common/dialogs/panel_setup_netclasses.cpp:95 common/eda_shape.cpp:1625
+#: common/dialogs/panel_setup_netclasses.cpp:95 common/eda_shape.cpp:1637
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:342
 #: include/stroke_params.h:74
 msgid "Dash-Dot"
 msgstr "Streg-prik"
 
-#: common/dialogs/panel_setup_netclasses.cpp:97 common/eda_shape.cpp:1626
+#: common/dialogs/panel_setup_netclasses.cpp:97 common/eda_shape.cpp:1638
 #: include/stroke_params.h:75
 #, fuzzy
 msgid "Dash-Dot-Dot"
@@ -3599,7 +3625,7 @@ msgstr "Standardnetklassen er påkrævet."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:41
 #: common/dialogs/panel_setup_netclasses_base.cpp:215
-#: eeschema/sch_field.cpp:846 eeschema/sch_label.cpp:192 pcbnew/pad.cpp:904
+#: eeschema/sch_field.cpp:846 eeschema/sch_label.cpp:192 pcbnew/pad.cpp:933
 #: pcbnew/pcb_track.cpp:841 pcbnew/zone.cpp:566
 msgid "Net Class"
 msgstr "Nettoklasse"
@@ -3662,10 +3688,10 @@ msgstr "Bustykkelse"
 msgid "Line Style"
 msgstr "Linjetype"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:59 common/eda_shape.cpp:1621
-#: common/pgm_base.cpp:74 common/stroke_params.cpp:200
+#: common/dialogs/panel_setup_netclasses_base.cpp:59 common/eda_shape.cpp:1633
+#: common/pgm_base.cpp:81 common/stroke_params.cpp:200
 #: common/widgets/footprint_select_widget.cpp:142
-#: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:69
+#: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:70
 #: eeschema/dialogs/dialog_junction_props.cpp:43
 #: eeschema/dialogs/dialog_line_properties.cpp:53
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:56
@@ -3721,7 +3747,7 @@ msgstr "Tildel til valgte net"
 #: common/dialogs/panel_setup_netclasses_base.cpp:214
 #: pcbnew/board_connected_item.cpp:176
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
-#: pcbnew/dialogs/dialog_net_inspector.cpp:78 pcbnew/pad.cpp:902
+#: pcbnew/dialogs/dialog_net_inspector.cpp:78 pcbnew/pad.cpp:931
 #: pcbnew/pcb_track.cpp:839 pcbnew/zone.cpp:564
 msgid "Net"
 msgstr "Net"
@@ -3834,17 +3860,17 @@ msgstr "Kunne ikke bruge OpenGL, falder tilbage til softwaregengivelse"
 msgid "Could not use OpenGL"
 msgstr "Kunne ikke bruge OpenGL"
 
-#: common/drawing_sheet/drawing_sheet_parser.cpp:915
+#: common/drawing_sheet/drawing_sheet_parser.cpp:925
 #, fuzzy, c-format
 msgid "Drawing sheet '%s' not found."
 msgstr "Skematisk fil \"%s\" blev ikke fundet."
 
-#: common/drawing_sheet/drawing_sheet_parser.cpp:925
+#: common/drawing_sheet/drawing_sheet_parser.cpp:935
 #, fuzzy, c-format
 msgid "Drawing sheet '%s' could not be opened."
 msgstr "Skematisk fil \"%s\" blev ikke fundet."
 
-#: common/drawing_sheet/drawing_sheet_parser.cpp:938
+#: common/drawing_sheet/drawing_sheet_parser.cpp:948
 #, fuzzy, c-format
 msgid "Drawing sheet '%s' was not fully read."
 msgstr "Filen \"%s\" blev ikke læst fuldt ud"
@@ -3852,7 +3878,7 @@ msgstr "Filen \"%s\" blev ikke læst fuldt ud"
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_item.cpp:318
 #: common/eda_item.cpp:320 common/eda_item.cpp:350 common/eda_item.cpp:372
-#: common/eda_text.cpp:1013 eeschema/dialogs/panel_setup_formatting_base.cpp:47
+#: common/eda_text.cpp:1022 eeschema/dialogs/panel_setup_formatting_base.cpp:47
 #: eeschema/lib_field.cpp:471 eeschema/lib_text.cpp:364 eeschema/lib_text.h:55
 #: eeschema/sch_field.cpp:690
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:40
@@ -3875,21 +3901,21 @@ msgstr "Linje"
 
 #: common/drawing_sheet/ds_data_item.cpp:372
 #: common/drawing_sheet/ds_draw_item.cpp:118 common/eda_shape.cpp:603
-#: common/eda_shape.cpp:1615
-#: eeschema/dialogs/dialog_label_properties_base.cpp:170
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1651
+#: common/eda_shape.cpp:1627
+#: eeschema/dialogs/dialog_label_properties_base.cpp:171
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1671
 msgid "Rectangle"
 msgstr "Rektangel"
 
 #: common/drawing_sheet/ds_data_item.cpp:373
 #: common/drawing_sheet/ds_draw_item.cpp:126
-#: common/drawing_sheet/ds_draw_item.cpp:291
+#: common/drawing_sheet/ds_draw_item.cpp:296
 msgid "Imported Shape"
 msgstr "Importeret form"
 
 #: common/drawing_sheet/ds_data_item.cpp:374
 #: common/drawing_sheet/ds_draw_item.cpp:130
-#: common/drawing_sheet/ds_draw_item.cpp:468 common/eda_item.cpp:379
+#: common/drawing_sheet/ds_draw_item.cpp:473 common/eda_item.cpp:379
 #: eeschema/sch_bitmap.h:129
 msgid "Image"
 msgstr "Billede"
@@ -3933,23 +3959,23 @@ msgstr "Gentag positionsforøgelse"
 msgid "Comment"
 msgstr "Kommentar"
 
-#: common/drawing_sheet/ds_draw_item.cpp:187
+#: common/drawing_sheet/ds_draw_item.cpp:192
 #, c-format
 msgid "Text '%s'"
 msgstr "Tekst '%s'"
 
-#: common/drawing_sheet/ds_draw_item.cpp:387 eeschema/lib_shape.cpp:396
-#: eeschema/sch_shape.cpp:348
+#: common/drawing_sheet/ds_draw_item.cpp:392 eeschema/lib_shape.cpp:396
+#: eeschema/sch_shape.cpp:351
 #, c-format
 msgid "Rectangle, width %s height %s"
 msgstr "Rektangel, bredde %s højde %s"
 
-#: common/drawing_sheet/ds_draw_item.cpp:420
+#: common/drawing_sheet/ds_draw_item.cpp:425
 #, c-format
 msgid "Line, length %s"
 msgstr "Linie, længde %s"
 
-#: common/drawing_sheet/ds_draw_item.cpp:474
+#: common/drawing_sheet/ds_draw_item.cpp:479
 #: gerbview/widgets/gerbview_layer_widget.cpp:102
 msgid "Page Limits"
 msgstr "Sidegrænser"
@@ -3996,95 +4022,100 @@ msgstr "Ikke-afsluttet afgrænset streng"
 msgid "String delimiter must be a single character of ', \", or $"
 msgstr "Strengafgrænser skal have et enkelt tegn på ', \"eller $"
 
-#: common/eda_base_frame.cpp:460
+#: common/eda_base_frame.cpp:462
 msgid "&About KiCad"
 msgstr "& Om KiCad"
 
-#: common/eda_base_frame.cpp:940
+#: common/eda_base_frame.cpp:942
 #, fuzzy, c-format
 msgid "File '%s' was not found."
 msgstr "Filen \"%s\" blev ikke fundet."
 
-#: common/eda_base_frame.cpp:983
+#: common/eda_base_frame.cpp:985
 msgid "Preferences"
 msgstr "Præferencer"
 
-#: common/eda_base_frame.cpp:992 common/hotkey_store.cpp:71
+#: common/eda_base_frame.cpp:994 common/hotkey_store.cpp:71
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
 msgid "Common"
 msgstr "almindelige"
 
-#: common/eda_base_frame.cpp:993
+#: common/eda_base_frame.cpp:995
 msgid "Mouse and Touchpad"
 msgstr "Mus og touchpad"
 
-#: common/eda_base_frame.cpp:994
+#: common/eda_base_frame.cpp:996
 msgid "Hotkeys"
 msgstr "Genvejstaster"
 
-#: common/eda_base_frame.cpp:1005 common/tool/actions.cpp:582
+#: common/eda_base_frame.cpp:999
+#, fuzzy
+msgid "Data Collection"
+msgstr "Padforbindelser"
+
+#: common/eda_base_frame.cpp:1011 common/tool/actions.cpp:582
 #: eeschema/symbol_editor/symbol_editor.cpp:163
 #: kicad/tools/kicad_manager_actions.cpp:75
 msgid "Symbol Editor"
 msgstr "Symbol Editor"
 
-#: common/eda_base_frame.cpp:1006 common/eda_base_frame.cpp:1014
-#: common/eda_base_frame.cpp:1027 common/eda_base_frame.cpp:1036
-#: common/eda_base_frame.cpp:1059 common/eda_base_frame.cpp:1070
+#: common/eda_base_frame.cpp:1012 common/eda_base_frame.cpp:1020
+#: common/eda_base_frame.cpp:1033 common/eda_base_frame.cpp:1042
+#: common/eda_base_frame.cpp:1065 common/eda_base_frame.cpp:1076
 msgid "Display Options"
 msgstr "Visningsindstillinger"
 
-#: common/eda_base_frame.cpp:1007 common/eda_base_frame.cpp:1015
-#: common/eda_base_frame.cpp:1028 common/eda_base_frame.cpp:1037
+#: common/eda_base_frame.cpp:1013 common/eda_base_frame.cpp:1021
+#: common/eda_base_frame.cpp:1034 common/eda_base_frame.cpp:1043
 #: pcbnew/dialogs/panel_edit_options_base.cpp:24
 msgid "Editing Options"
 msgstr "Redigeringsmuligheder"
 
-#: common/eda_base_frame.cpp:1008 common/eda_base_frame.cpp:1016
-#: common/eda_base_frame.cpp:1029 common/eda_base_frame.cpp:1038
-#: common/eda_base_frame.cpp:1049 common/eda_base_frame.cpp:1071
+#: common/eda_base_frame.cpp:1014 common/eda_base_frame.cpp:1022
+#: common/eda_base_frame.cpp:1035 common/eda_base_frame.cpp:1044
+#: common/eda_base_frame.cpp:1055 common/eda_base_frame.cpp:1077
 msgid "Colors"
 msgstr "Farver"
 
-#: common/eda_base_frame.cpp:1013 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:130 eeschema/sch_edit_frame.cpp:1400
+#: common/eda_base_frame.cpp:1019 common/hotkey_store.cpp:73
+#: eeschema/menubar.cpp:130 eeschema/sch_edit_frame.cpp:1397
 #: kicad/tools/kicad_manager_actions.cpp:69
 #, fuzzy
 msgid "Schematic Editor"
 msgstr "Skift til skematisk editor"
 
-#: common/eda_base_frame.cpp:1017
+#: common/eda_base_frame.cpp:1023
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
 msgid "Field Name Templates"
 msgstr "Feltnavnskabeloner"
 
-#: common/eda_base_frame.cpp:1026 common/tool/actions.cpp:592
+#: common/eda_base_frame.cpp:1032 common/tool/actions.cpp:592
 #: kicad/tools/kicad_manager_actions.cpp:87 pcbnew/footprint_edit_frame.cpp:878
 #: pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
 msgstr "Footprint Editor"
 
-#: common/eda_base_frame.cpp:1030
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:456
+#: common/eda_base_frame.cpp:1036
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:465
 msgid "Default Values"
 msgstr "Standardværdier"
 
-#: common/eda_base_frame.cpp:1035 common/hotkey_store.cpp:74
+#: common/eda_base_frame.cpp:1041 common/hotkey_store.cpp:74
 #: kicad/tools/kicad_manager_actions.cpp:81 pcbnew/menubar_pcb_editor.cpp:184
 #: pcbnew/pcb_edit_frame.cpp:178 pcbnew/pcb_edit_frame.cpp:1391
 #, fuzzy
 msgid "PCB Editor"
 msgstr "Skift til PCB Editor"
 
-#: common/eda_base_frame.cpp:1039
+#: common/eda_base_frame.cpp:1045
 msgid "Action Plugins"
 msgstr "Handlings-plugins"
 
-#: common/eda_base_frame.cpp:1040
+#: common/eda_base_frame.cpp:1046
 msgid "Origins & Axes"
 msgstr "Oprindelser & akser"
 
-#: common/eda_base_frame.cpp:1046
+#: common/eda_base_frame.cpp:1052
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:272
 #: eeschema/dialogs/dialog_schematic_setup.cpp:70
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:118
@@ -4097,40 +4128,40 @@ msgstr "Oprindelser & akser"
 msgid "General"
 msgstr "Generelt"
 
-#: common/eda_base_frame.cpp:1047
+#: common/eda_base_frame.cpp:1053
 #, fuzzy
 msgid "Realtime Renderer"
 msgstr "Afslør i Finder"
 
-#: common/eda_base_frame.cpp:1048
+#: common/eda_base_frame.cpp:1054
 #, fuzzy
 msgid "Raytracing Renderer"
 msgstr "Raytracing gengivelsesindstillinger"
 
-#: common/eda_base_frame.cpp:1058
+#: common/eda_base_frame.cpp:1064
 msgid "GerbView"
 msgstr "GerbView"
 
-#: common/eda_base_frame.cpp:1060
+#: common/eda_base_frame.cpp:1066
 #, fuzzy
 msgid "Excellon Options"
 msgstr "Plugin-indstillinger"
 
-#: common/eda_base_frame.cpp:1069 common/hotkey_store.cpp:75
+#: common/eda_base_frame.cpp:1075 common/hotkey_store.cpp:75
 #: kicad/tools/kicad_manager_actions.cpp:110 pagelayout_editor/menubar.cpp:86
 #: pagelayout_editor/pl_editor_frame.cpp:543
 #, fuzzy
 msgid "Drawing Sheet Editor"
 msgstr "Arbejdsark"
 
-#: common/eda_base_frame.cpp:1106
+#: common/eda_base_frame.cpp:1112
 #, fuzzy, c-format
 msgid "Insufficient permissions to folder '%s'."
 msgstr ""
 "Der kræves ikke tilstrækkelige tilladelser til at gemme filen\n"
 "%s"
 
-#: common/eda_base_frame.cpp:1148
+#: common/eda_base_frame.cpp:1154
 #, fuzzy, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -4145,7 +4176,7 @@ msgstr ""
 "det blev ikke gemt ordentligt. Ønsker du at gendanne de sidst gemte "
 "redigeringer, du har foretaget?"
 
-#: common/eda_base_frame.cpp:1164
+#: common/eda_base_frame.cpp:1170
 msgid "The auto save file could not be renamed to the board file name."
 msgstr "Filen til automatisk gemning kunne ikke omdøbes til filens filnavn."
 
@@ -4170,7 +4201,7 @@ msgstr "Ukendt MIME-type for doc-fil \"%s\""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:54
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:104
-#: pcbnew/dialogs/dialog_plot_base.cpp:358
+#: pcbnew/dialogs/dialog_plot_base.cpp:352
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:89
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:52
 msgid "Inches"
@@ -4203,8 +4234,8 @@ msgstr "tommer"
 #: common/eda_draw_frame.cpp:596
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:110
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:228
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:239
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:234
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:245
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:62
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:114
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:125
@@ -4243,12 +4274,12 @@ msgstr "Skærm"
 #: eeschema/sch_symbol.cpp:1426 pcbnew/build_BOM_from_board.cpp:112
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:116
 #: pcbnew/fp_text.cpp:274 pcbnew/load_select_footprint.cpp:372
-#: pcbnew/pad.cpp:889
+#: pcbnew/pad.cpp:918
 msgid "Footprint"
 msgstr "Fodaftryk"
 
 #: common/eda_item.cpp:316 pcbnew/dialogs/dialog_board_statistics.cpp:510
-#: pcbnew/pad.cpp:892
+#: pcbnew/pad.cpp:921
 msgid "Pad"
 msgstr "Pude"
 
@@ -4258,9 +4289,9 @@ msgid "Graphic"
 msgstr "Grafik"
 
 #: common/eda_item.cpp:319 common/eda_item.cpp:321 common/eda_item.cpp:351
-#: common/eda_item.cpp:373 eeschema/lib_textbox.cpp:369
-#: eeschema/sch_textbox.cpp:372 pcbnew/fp_textbox.cpp:206
-#: pcbnew/pcb_textbox.cpp:207
+#: common/eda_item.cpp:373 eeschema/lib_textbox.cpp:374
+#: eeschema/sch_textbox.cpp:377 pcbnew/fp_textbox.cpp:233
+#: pcbnew/pcb_textbox.cpp:227
 #, fuzzy
 msgid "Text Box"
 msgstr "Tekst pos X"
@@ -4393,11 +4424,11 @@ msgstr "Gerber Layout"
 msgid "Draw Item"
 msgstr "Tegn element"
 
-#: common/eda_shape.cpp:62 pcbnew/pad.cpp:1143
+#: common/eda_shape.cpp:62 pcbnew/pad.cpp:1172
 msgid "Rect"
 msgstr "Ret"
 
-#: common/eda_shape.cpp:63 common/eda_shape.cpp:579 common/eda_shape.cpp:1616
+#: common/eda_shape.cpp:63 common/eda_shape.cpp:579 common/eda_shape.cpp:1628
 #: gerbview/gerber_draw_item.cpp:212
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:114
 #: pcbnew/dialogs/dialog_pad_properties.cpp:716
@@ -4405,12 +4436,12 @@ msgstr "Ret"
 msgid "Arc"
 msgstr "Bue"
 
-#: common/eda_shape.cpp:64 common/eda_shape.cpp:572 common/eda_shape.cpp:1617
-#: eeschema/dialogs/dialog_label_properties_base.cpp:164
+#: common/eda_shape.cpp:64 common/eda_shape.cpp:572 common/eda_shape.cpp:1629
+#: eeschema/dialogs/dialog_label_properties_base.cpp:165
 #: gerbview/gerber_draw_item.cpp:213
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45
-#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:138 pcbnew/pad.cpp:1141
-#: pcbnew/pad.cpp:1650
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:138 pcbnew/pad.cpp:1170
+#: pcbnew/pad.cpp:1670
 msgid "Circle"
 msgstr "Cirkel"
 
@@ -4418,18 +4449,19 @@ msgstr "Cirkel"
 msgid "Bezier Curve"
 msgstr "&Bezierkurve"
 
-#: common/eda_shape.cpp:66 common/eda_shape.cpp:596 common/eda_shape.cpp:1618
+#: common/eda_shape.cpp:66 common/eda_shape.cpp:596 common/eda_shape.cpp:1630
 #: pcbnew/dialogs/dialog_pad_properties.cpp:734
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2141
 msgid "Polygon"
 msgstr "Polygon"
 
-#: common/eda_shape.cpp:567 common/eda_shape.cpp:1630
-#: eeschema/dialogs/dialog_label_properties_base.cpp:144
+#: common/eda_shape.cpp:567 common/eda_shape.cpp:1642
+#: eeschema/dialogs/dialog_label_properties_base.cpp:145
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:232
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:120
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:44
-#: pcbnew/microwave/microwave_polygon.cpp:130 pcbnew/pad.cpp:1675
+#: pcbnew/microwave/microwave_polygon.cpp:130 pcbnew/pad.cpp:1695
 #: pcbnew/pcb_target.cpp:159 pcbnew/pcb_target.cpp:207
 msgid "Shape"
 msgstr "Figur"
@@ -4441,7 +4473,7 @@ msgid "Radius"
 msgstr "Radius"
 
 #: common/eda_shape.cpp:582 common/eda_shape.cpp:622 pcbnew/fp_text.cpp:294
-#: pcbnew/fp_textbox.cpp:213 pcbnew/pcb_text.cpp:142 pcbnew/pcb_textbox.cpp:214
+#: pcbnew/fp_textbox.cpp:240 pcbnew/pcb_text.cpp:142 pcbnew/pcb_textbox.cpp:234
 msgid "Angle"
 msgstr "Vinkel"
 
@@ -4461,31 +4493,31 @@ msgstr "Længde"
 msgid "Points"
 msgstr "Punkter"
 
-#: common/eda_shape.cpp:606 common/eda_text.cpp:1031
+#: common/eda_shape.cpp:606 common/eda_text.cpp:1040
 #: eeschema/sch_bitmap.cpp:207 pcbnew/dialogs/dialog_board_statistics.cpp:695
 #: pcbnew/dialogs/dialog_board_statistics.cpp:705
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:42
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:155
-#: pcbnew/fp_text.cpp:300 pcbnew/fp_text_grid_table.cpp:100 pcbnew/pad.cpp:939
+#: pcbnew/fp_text.cpp:300 pcbnew/fp_text_grid_table.cpp:100 pcbnew/pad.cpp:968
 #: pcbnew/pcb_target.cpp:158 pcbnew/pcb_target.cpp:204 pcbnew/pcb_text.cpp:145
 #: pcbnew/pcb_track.cpp:752 pcbnew/pcb_track.cpp:1191 pcbnew/pcb_track.cpp:1208
 #: pcbnew/pcb_track.cpp:1227
 msgid "Width"
 msgstr "Bredde"
 
-#: common/eda_shape.cpp:609 common/eda_text.cpp:1035
+#: common/eda_shape.cpp:609 common/eda_text.cpp:1044
 #: eeschema/sch_bitmap.cpp:208 pcbnew/dialogs/dialog_board_statistics.cpp:697
 #: pcbnew/dialogs/dialog_board_statistics.cpp:706
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:56
-#: pcbnew/fp_text.cpp:303 pcbnew/fp_text_grid_table.cpp:101 pcbnew/pad.cpp:940
+#: pcbnew/fp_text.cpp:303 pcbnew/fp_text_grid_table.cpp:101 pcbnew/pad.cpp:969
 #: pcbnew/pcb_dimension.cpp:698 pcbnew/pcb_text.cpp:146
 msgid "Height"
 msgstr "Højde"
 
-#: common/eda_shape.cpp:614 common/eda_shape.cpp:1614
+#: common/eda_shape.cpp:614 common/eda_shape.cpp:1626
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:82
 #: pcbnew/dialogs/dialog_pad_properties.cpp:704
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2137
@@ -4496,40 +4528,40 @@ msgstr "Segment"
 msgid "Unrecognized"
 msgstr "Ukendt"
 
-#: common/eda_shape.cpp:1619
+#: common/eda_shape.cpp:1631
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:100
 #: pcbnew/dialogs/dialog_pad_properties.cpp:710
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2139
 msgid "Bezier"
 msgstr "Bezier"
 
-#: common/eda_shape.cpp:1632
+#: common/eda_shape.cpp:1644
 #, fuzzy
 msgid "Start X"
 msgstr "Start lag"
 
-#: common/eda_shape.cpp:1634
+#: common/eda_shape.cpp:1646
 #, fuzzy
 msgid "Start Y"
 msgstr "Start lag"
 
-#: common/eda_shape.cpp:1636 pcbnew/pcb_track.cpp:1199
+#: common/eda_shape.cpp:1648 pcbnew/pcb_track.cpp:1199
 #: pcbnew/pcb_track.cpp:1216
 msgid "End X"
 msgstr "Afslut X"
 
-#: common/eda_shape.cpp:1638 pcbnew/pcb_track.cpp:1201
+#: common/eda_shape.cpp:1650 pcbnew/pcb_track.cpp:1201
 #: pcbnew/pcb_track.cpp:1218
 msgid "End Y"
 msgstr "Afslut Y"
 
-#: common/eda_shape.cpp:1641 common/stroke_params.cpp:216
+#: common/eda_shape.cpp:1653 common/stroke_params.cpp:216
 msgid "Line Width"
 msgstr "Linjebredde"
 
-#: common/eda_text.cpp:771 eeschema/lib_textbox.cpp:371
+#: common/eda_text.cpp:771 eeschema/lib_textbox.cpp:376
 #: eeschema/sch_label.cpp:789 eeschema/sch_text.cpp:448
-#: eeschema/sch_textbox.cpp:374 eeschema/symbol_editor/symbol_editor.cpp:1239
+#: eeschema/sch_textbox.cpp:379 eeschema/symbol_editor/symbol_editor.cpp:1239
 #: gerbview/gerber_file_image.cpp:350 gerbview/gerber_file_image.cpp:354
 #: gerbview/gerber_file_image.cpp:357
 #: pcbnew/microwave/microwave_polygon.cpp:128
@@ -4538,21 +4570,22 @@ msgstr "Linjebredde"
 msgid "Normal"
 msgstr "Normal"
 
-#: common/eda_text.cpp:772 common/eda_text.cpp:1020
-#: eeschema/dialogs/dialog_field_properties_base.cpp:136
+#: common/eda_text.cpp:772 common/eda_text.cpp:1029
+#: eeschema/dialogs/dialog_field_properties_base.cpp:137
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:229
-#: eeschema/dialogs/dialog_label_properties_base.cpp:88
-#: eeschema/dialogs/dialog_label_properties_base.cpp:208
+#: eeschema/dialogs/dialog_label_properties_base.cpp:89
+#: eeschema/dialogs/dialog_label_properties_base.cpp:209
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:61
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:105
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:89
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:55
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:105
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:63
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
-#: eeschema/dialogs/dialog_text_properties_base.cpp:89
-#: eeschema/fields_grid_table.cpp:260 eeschema/lib_textbox.cpp:371
+#: eeschema/dialogs/dialog_text_properties_base.cpp:96
+#: eeschema/fields_grid_table.cpp:260 eeschema/lib_textbox.cpp:376
 #: eeschema/sch_label.cpp:789 eeschema/sch_text.cpp:448
-#: eeschema/sch_textbox.cpp:374
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:101
+#: eeschema/sch_textbox.cpp:379
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:97
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:58
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:58
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:288
@@ -4563,21 +4596,22 @@ msgstr "Normal"
 msgid "Italic"
 msgstr "Kursiv"
 
-#: common/eda_text.cpp:773 common/eda_text.cpp:1023
-#: eeschema/dialogs/dialog_field_properties_base.cpp:131
+#: common/eda_text.cpp:773 common/eda_text.cpp:1032
+#: eeschema/dialogs/dialog_field_properties_base.cpp:132
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:207
-#: eeschema/dialogs/dialog_label_properties_base.cpp:89
-#: eeschema/dialogs/dialog_label_properties_base.cpp:203
+#: eeschema/dialogs/dialog_label_properties_base.cpp:90
+#: eeschema/dialogs/dialog_label_properties_base.cpp:204
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:100
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:84
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:56
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:100
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:64
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:58
-#: eeschema/dialogs/dialog_text_properties_base.cpp:84
-#: eeschema/fields_grid_table.cpp:261 eeschema/lib_textbox.cpp:371
+#: eeschema/dialogs/dialog_text_properties_base.cpp:91
+#: eeschema/fields_grid_table.cpp:261 eeschema/lib_textbox.cpp:376
 #: eeschema/sch_label.cpp:789 eeschema/sch_text.cpp:448
-#: eeschema/sch_textbox.cpp:374
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:96
+#: eeschema/sch_textbox.cpp:379
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:92
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:186
 msgid "Bold"
 msgstr "Fed"
@@ -4586,7 +4620,7 @@ msgstr "Fed"
 msgid "Bold+Italic"
 msgstr "Fed + Kursiv"
 
-#: common/eda_text.cpp:1003
+#: common/eda_text.cpp:1012
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:217
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:257
 #: eeschema/fields_grid_table.cpp:184 eeschema/fields_grid_table.cpp:469
@@ -4596,7 +4630,7 @@ msgstr "Fed + Kursiv"
 msgid "Left"
 msgstr "Venstre"
 
-#: common/eda_text.cpp:1004 common/eda_text.cpp:1008
+#: common/eda_text.cpp:1013 common/eda_text.cpp:1017
 #: common/tool/actions.cpp:326 common/widgets/mathplot.cpp:1665
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:257
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
@@ -4612,7 +4646,7 @@ msgstr "Venstre"
 msgid "Center"
 msgstr "Centrum"
 
-#: common/eda_text.cpp:1005
+#: common/eda_text.cpp:1014
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:217
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:257
 #: eeschema/fields_grid_table.cpp:186 eeschema/fields_grid_table.cpp:471
@@ -4622,7 +4656,7 @@ msgstr "Centrum"
 msgid "Right"
 msgstr "Højre"
 
-#: common/eda_text.cpp:1007
+#: common/eda_text.cpp:1016
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
 #: eeschema/fields_grid_table.cpp:176 eeschema/fields_grid_table.cpp:479
 #: eeschema/fields_grid_table.cpp:589 eeschema/lib_field.cpp:491
@@ -4630,7 +4664,7 @@ msgstr "Højre"
 msgid "Top"
 msgstr "Øverst"
 
-#: common/eda_text.cpp:1009
+#: common/eda_text.cpp:1018
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
 #: eeschema/fields_grid_table.cpp:178 eeschema/fields_grid_table.cpp:481
 #: eeschema/fields_grid_table.cpp:593 eeschema/lib_field.cpp:493
@@ -4638,21 +4672,21 @@ msgstr "Øverst"
 msgid "Bottom"
 msgstr "Bunden"
 
-#: common/eda_text.cpp:1016
+#: common/eda_text.cpp:1025
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:57
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:57
 #: pcbnew/fp_text.cpp:297 pcbnew/fp_text_grid_table.cpp:102
-#: pcbnew/fp_textbox.cpp:215 pcbnew/pcb_text.cpp:144
+#: pcbnew/fp_textbox.cpp:242 pcbnew/pcb_text.cpp:144
 msgid "Thickness"
 msgstr "Tykkelse"
 
-#: common/eda_text.cpp:1025 pcbnew/microwave/microwave_polygon.cpp:128
+#: common/eda_text.cpp:1034 pcbnew/microwave/microwave_polygon.cpp:128
 msgid "Mirrored"
 msgstr "Spejlet"
 
-#: common/eda_text.cpp:1028
-#: eeschema/dialogs/dialog_field_properties_base.cpp:85
+#: common/eda_text.cpp:1037
+#: eeschema/dialogs/dialog_field_properties_base.cpp:86
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:124
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:98
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:44
@@ -4663,11 +4697,11 @@ msgstr "Spejlet"
 msgid "Visible"
 msgstr "Synlig"
 
-#: common/eda_text.cpp:1040
+#: common/eda_text.cpp:1049
 msgid "Horizontal Justification"
 msgstr "Horisontal begrundelse"
 
-#: common/eda_text.cpp:1044
+#: common/eda_text.cpp:1053
 msgid "Vertical Justification"
 msgstr "Vertikal begrundelse"
 
@@ -4831,12 +4865,13 @@ msgid "Problems writing configuration file"
 msgstr "Problemer med at skrive konfigurationsfilen"
 
 #: common/font/font.cpp:96 common/widgets/font_choice.cpp:47
-#: eeschema/dialogs/dialog_field_properties_base.cpp:101
-#: eeschema/dialogs/dialog_label_properties_base.cpp:188
+#: eeschema/dialogs/dialog_field_properties_base.cpp:102
+#: eeschema/dialogs/dialog_label_properties_base.cpp:189
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:70
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:69
-#: eeschema/dialogs/dialog_text_properties_base.cpp:69
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:145
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:85
+#: eeschema/dialogs/dialog_text_properties_base.cpp:76
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:154
 #, fuzzy
 msgid "Default Font"
 msgstr "Standard enheder:"
@@ -5684,30 +5719,44 @@ msgstr ""
 msgid "Type mismatch between %lf and '%s'"
 msgstr ""
 
-#: common/pgm_base.cpp:170
+#: common/pgm_base.cpp:181
 #, fuzzy
 msgid "No default editor found, you must choose one."
 msgstr "Ingen standardeditor fundet, du skal vælge den"
 
-#: common/pgm_base.cpp:190 common/pgm_base.cpp:192
+#: common/pgm_base.cpp:201 common/pgm_base.cpp:203
 #, fuzzy
 msgid "Executable file"
 msgstr "Eksekverbare filer ("
 
-#: common/pgm_base.cpp:202
+#: common/pgm_base.cpp:213
 msgid "Select Preferred Editor"
 msgstr "Vælg Preferred Editor"
 
-#: common/pgm_base.cpp:222
+#: common/pgm_base.cpp:326
+msgid ""
+"KiCad can anonymously report crashes and special event data to developers in "
+"order to aid identifying critical bugs across the user base more effectively "
+"and help profile functionality to guide improvements. \n"
+"If you choose to voluntarily participate, KiCad will automatically handle "
+"sending said reports when crashes or events occur. \n"
+"Your design files such as schematic or PCB are not shared in this process."
+msgstr ""
+
+#: common/pgm_base.cpp:333
+msgid "Data collection opt in request"
+msgstr ""
+
+#: common/pgm_base.cpp:375
 #, fuzzy
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "Navn på miljøvariabel kan ikke være tomt."
 
-#: common/pgm_base.cpp:433
+#: common/pgm_base.cpp:590
 msgid "This language is not supported by the operating system."
 msgstr "Dette sprog understøttes ikke af operativsystemet."
 
-#: common/pgm_base.cpp:484 common/pgm_base.cpp:522
+#: common/pgm_base.cpp:641 common/pgm_base.cpp:679
 msgid "The KiCad language file for this language is not installed."
 msgstr "KiCad-sprogfilen for dette sprog er ikke installeret."
 
@@ -5802,7 +5851,7 @@ msgstr "Ugyldig størrelse %ll d: for stor"
 msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Ugyldig lysbue med radius %f og vinkel %f"
 
-#: common/project.cpp:310 common/project.cpp:315 pcbnew/pcb_base_frame.cpp:179
+#: common/project.cpp:310 common/project.cpp:315 pcbnew/pcb_base_frame.cpp:192
 #, fuzzy
 msgid "Error loading project footprint library table."
 msgstr ""
@@ -5841,9 +5890,9 @@ msgstr "Fejl ved udpakning af fil!\n"
 #: pcbnew/build_BOM_from_board.cpp:103
 #: pcbnew/dialogs/dialog_board_statistics.cpp:680
 #: pcbnew/dialogs/dialog_drc.cpp:800 pcbnew/dialogs/dialog_export_idf.cpp:223
-#: pcbnew/dialogs/dialog_export_svg.cpp:304
+#: pcbnew/dialogs/dialog_export_svg.cpp:305
 #: pcbnew/dialogs/dialog_export_vrml.cpp:265
-#: pcbnew/dialogs/dialog_gendrill.cpp:479 pcbnew/dialogs/dialog_plot.cpp:916
+#: pcbnew/dialogs/dialog_gendrill.cpp:479 pcbnew/dialogs/dialog_plot.cpp:1052
 #: pcbnew/exporters/export_footprint_associations.cpp:83
 #: pcbnew/exporters/export_gencad.cpp:257
 #: pcbnew/exporters/gen_footprints_placefile.cpp:308
@@ -5909,16 +5958,16 @@ msgstr "Linjelængde overskredet"
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "OUTPUTSTREAM_OUTPUTFORMATTER skrivefejl"
 
-#: common/settings/color_settings.cpp:348
+#: common/settings/color_settings.cpp:349
 msgid "(Footprints)"
 msgstr "(Fodspor)"
 
-#: common/settings/color_settings.cpp:400
+#: common/settings/color_settings.cpp:401
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings.cpp:78
 msgid "KiCad Default"
 msgstr "KiCad Standard"
 
-#: common/settings/color_settings.cpp:405
+#: common/settings/color_settings.cpp:406
 msgid "KiCad Classic"
 msgstr "KiCad Classic"
 
@@ -6018,7 +6067,7 @@ msgstr "Udskriv…"
 msgid "Plot..."
 msgstr "Grund..."
 
-#: common/tool/actions.cpp:108 pcbnew/dialogs/dialog_plot.cpp:66
+#: common/tool/actions.cpp:108 pcbnew/dialogs/dialog_plot.cpp:153
 #: pcbnew/dialogs/dialog_plot_base.h:151
 msgid "Plot"
 msgstr "Beskrivelse"
@@ -6353,7 +6402,7 @@ msgstr "Brug mils"
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:102
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:54
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:104
-#: pcbnew/dialogs/dialog_plot_base.cpp:358
+#: pcbnew/dialogs/dialog_plot_base.cpp:352
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:89
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:53
 msgid "Millimeters"
@@ -6515,7 +6564,7 @@ msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr "Åbn \"Kom godt i gang i KiCad\" -guiden for begyndere"
 
 #: common/tool/actions.cpp:636
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:34
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:35
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:187
 msgid "Help"
 msgstr "Hjælp"
@@ -7151,26 +7200,26 @@ msgstr "JPEG-fil"
 msgid "Hotkey file"
 msgstr "Genvejstasteliste"
 
-#: cvpcb/auto_associate.cpp:105
+#: cvpcb/auto_associate.cpp:108
 #, fuzzy, c-format
-msgid "Equivalence file '%s' could not be found in the default search paths."
+msgid "Equivalence file '%s' could not be found."
 msgstr "Ækvivalensfilen \"%s\" kunne ikke findes i standardsøgestierne."
 
-#: cvpcb/auto_associate.cpp:126
+#: cvpcb/auto_associate.cpp:128
 #, fuzzy, c-format
 msgid "Error opening equivalence file '%s'."
 msgstr "Fejl ved åbning af ækvivalensfil \"%s\"."
 
-#: cvpcb/auto_associate.cpp:178
+#: cvpcb/auto_associate.cpp:180
 msgid "Equivalence File Load Error"
 msgstr "Fejl ved indlæsning af ækvivalensfil"
 
-#: cvpcb/auto_associate.cpp:185
+#: cvpcb/auto_associate.cpp:187
 #, c-format
 msgid "%lu footprint/symbol equivalences found."
 msgstr "%lu fodaftryk / symbolækvivalenter fundet."
 
-#: cvpcb/auto_associate.cpp:261
+#: cvpcb/auto_associate.cpp:263
 #, c-format
 msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
@@ -7179,7 +7228,7 @@ msgstr ""
 "Komponent %s: fodaftryk %s ikke fundet i nogen af projektets "
 "fodaftrykbiblioteker."
 
-#: cvpcb/auto_associate.cpp:306
+#: cvpcb/auto_associate.cpp:308
 msgid "CvPcb Warning"
 msgstr "CvPcb Advarsel"
 
@@ -7343,7 +7392,7 @@ msgstr "Symbol Footprint Association-filer (.equ)"
 #: eeschema/dialogs/dialog_bus_manager.cpp:74
 #: eeschema/dialogs/dialog_bus_manager.cpp:108
 #: eeschema/dialogs/dialog_spice_model_base.cpp:652
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1042
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1043
 #: pcbnew/footprint_libraries_utils.cpp:531
 msgid "Add"
 msgstr "Tilføj"
@@ -7374,10 +7423,10 @@ msgid "Available environment variables for relative paths:"
 msgstr "Tilgængelige miljøvariabler for relative stier:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:81
-#: eeschema/dialogs/dialog_label_properties_base.cpp:84
+#: eeschema/dialogs/dialog_label_properties_base.cpp:85
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:57
 #: eeschema/dialogs/dialog_rescue_each.cpp:134
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:51
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:59
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:969
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:53
 #: eeschema/dialogs/panel_sym_lib_table.cpp:300
@@ -7700,26 +7749,26 @@ msgstr "Flere varer %s %s\n"
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Forskellige værdier for %s %d %s (%s) og %s %d %s (%s)"
 
-#: eeschema/connection_graph.cpp:2333 eeschema/connection_graph.cpp:2364
+#: eeschema/connection_graph.cpp:2375 eeschema/connection_graph.cpp:2406
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr ""
 "Både %s og %s er knyttet til de samme emner; %s vil blive brugt i netlisten"
 
-#: eeschema/connection_graph.cpp:2590
+#: eeschema/connection_graph.cpp:2632
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr ""
 "Net %s er grafisk forbundet med bus %s, men er ikke medlem af denne bus"
 
-#: eeschema/connection_graph.cpp:3031
+#: eeschema/connection_graph.cpp:3073
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Arkstiften %s har ingen matchende hierarkisk etiket inde i arket"
 
-#: eeschema/connection_graph.cpp:3048
+#: eeschema/connection_graph.cpp:3090
 #, fuzzy, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "Arkstiften %s har ingen matchende hierarkisk etiket inde i arket"
@@ -8533,7 +8582,7 @@ msgstr "Anbring sekventielt alle enheder på symbolet."
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:398
 #: eeschema/dialogs/dialog_choose_symbol.cpp:457
-#: eeschema/generate_alias_info.cpp:81 eeschema/sch_base_frame.cpp:70
+#: eeschema/generate_alias_info.cpp:81 eeschema/sch_base_frame.cpp:73
 #: eeschema/symbol_editor/symbol_editor.cpp:310
 #: eeschema/widgets/symbol_preview_widget.cpp:181
 #, fuzzy, c-format
@@ -8549,7 +8598,7 @@ msgid "Invalid footprint specified"
 msgstr "Ugyldigt fodaftryk er angivet"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:516
-#: eeschema/tools/symbol_editor_control.cpp:263
+#: eeschema/tools/symbol_editor_control.cpp:267
 msgid "No symbol selected"
 msgstr "Intet symbol valgt"
 
@@ -8868,46 +8917,47 @@ msgstr "Slet markør"
 msgid "Electrical Rules Checker"
 msgstr "Elektriske regler Checker"
 
-#: eeschema/dialogs/dialog_field_properties.cpp:179
+#: eeschema/dialogs/dialog_field_properties.cpp:188
 #, fuzzy
 msgid "Power symbol value field text cannot be changed."
 msgstr "(Tekst til feltsymbolets værdi kan ikke ændres.)"
 
-#: eeschema/dialogs/dialog_field_properties.cpp:342
+#: eeschema/dialogs/dialog_field_properties.cpp:353
 msgid "Illegal reference designator value!"
 msgstr "Ulovlig referencebetegnelsesværdi!"
 
-#: eeschema/dialogs/dialog_field_properties.cpp:350
+#: eeschema/dialogs/dialog_field_properties.cpp:361
 msgid "Value may not be empty."
 msgstr "Værdien er muligvis ikke tom."
 
-#: eeschema/dialogs/dialog_field_properties.cpp:471
+#: eeschema/dialogs/dialog_field_properties.cpp:484
 #, fuzzy
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
 msgstr "Viser dialogboksen med elementegenskaber"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:31
+#: eeschema/dialogs/dialog_field_properties_base.cpp:32
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:31
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:27
-#: eeschema/dialogs/dialog_text_properties_base.cpp:27
+#: eeschema/dialogs/dialog_text_properties_base.cpp:35
 #: pcbnew/dialogs/dialog_text_properties.cpp:93
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:26
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:26
 msgid "Text:"
 msgstr "Tekst:"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:75
+#: eeschema/dialogs/dialog_field_properties_base.cpp:76
 #, c-format
 msgid "(%s)"
 msgstr ""
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:97
+#: eeschema/dialogs/dialog_field_properties_base.cpp:98
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:169
-#: eeschema/dialogs/dialog_label_properties_base.cpp:184
+#: eeschema/dialogs/dialog_label_properties_base.cpp:185
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:66
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:65
-#: eeschema/dialogs/dialog_text_properties_base.cpp:65
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:141
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:81
+#: eeschema/dialogs/dialog_text_properties_base.cpp:72
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:150
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:218
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:170
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:111
@@ -8915,14 +8965,15 @@ msgstr ""
 msgid "Font:"
 msgstr ""
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:101
+#: eeschema/dialogs/dialog_field_properties_base.cpp:102
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:173
-#: eeschema/dialogs/dialog_label_properties_base.cpp:188
+#: eeschema/dialogs/dialog_label_properties_base.cpp:189
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:70
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:69
-#: eeschema/dialogs/dialog_text_properties_base.cpp:69
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:85
+#: eeschema/dialogs/dialog_text_properties_base.cpp:76
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:37
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:145
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:154
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:222
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:174
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:115
@@ -8931,81 +8982,93 @@ msgstr ""
 msgid "KiCad Font"
 msgstr "Afslut KiCad"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:116
+#: eeschema/dialogs/dialog_field_properties_base.cpp:117
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:85
 #, fuzzy
 msgid "Horizontal text"
 msgstr "Vandret til venstre"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:121
+#: eeschema/dialogs/dialog_field_properties_base.cpp:122
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:90
 #, fuzzy
 msgid "Vertical text"
 msgstr "Vertikalt"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:146
+#: eeschema/dialogs/dialog_field_properties_base.cpp:147
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:115
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:99
-#: eeschema/dialogs/dialog_text_properties_base.cpp:99
+#: eeschema/dialogs/dialog_text_properties_base.cpp:106
 #: eeschema/sch_label.cpp:800 eeschema/sch_text.cpp:459
 #, fuzzy
 msgid "Align left"
 msgstr "Juster til venstre"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:151
+#: eeschema/dialogs/dialog_field_properties_base.cpp:152
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:120
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:104
-#: eeschema/dialogs/dialog_text_properties_base.cpp:104
+#: eeschema/dialogs/dialog_text_properties_base.cpp:111
 #, fuzzy
 msgid "Align horizontal center"
 msgstr "Juster til vandret center"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:156
+#: eeschema/dialogs/dialog_field_properties_base.cpp:157
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:125
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:109
-#: eeschema/dialogs/dialog_text_properties_base.cpp:109
+#: eeschema/dialogs/dialog_text_properties_base.cpp:116
 #: eeschema/sch_label.cpp:798 eeschema/sch_text.cpp:457
 #, fuzzy
 msgid "Align right"
 msgstr "Juster til højre"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:166
+#: eeschema/dialogs/dialog_field_properties_base.cpp:167
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:135
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:124
-#: eeschema/dialogs/dialog_text_properties_base.cpp:124
+#: eeschema/dialogs/dialog_text_properties_base.cpp:131
 #: eeschema/sch_label.cpp:801 eeschema/sch_text.cpp:460
 #, fuzzy
 msgid "Align top"
 msgstr "Juster til toppen"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:171
+#: eeschema/dialogs/dialog_field_properties_base.cpp:172
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:140
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:119
-#: eeschema/dialogs/dialog_text_properties_base.cpp:119
+#: eeschema/dialogs/dialog_text_properties_base.cpp:126
 #, fuzzy
 msgid "Align vertical center"
 msgstr "Juster til lodret center"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:176
+#: eeschema/dialogs/dialog_field_properties_base.cpp:177
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:145
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:114
-#: eeschema/dialogs/dialog_text_properties_base.cpp:114
+#: eeschema/dialogs/dialog_text_properties_base.cpp:121
 #: eeschema/sch_label.cpp:799 eeschema/sch_text.cpp:458
 #, fuzzy
 msgid "Align bottom"
 msgstr "Juster til bunden"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:188
+#: eeschema/dialogs/dialog_field_properties_base.cpp:189
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:191
-#: eeschema/dialogs/dialog_label_properties_base.cpp:237
+#: eeschema/dialogs/dialog_label_properties_base.cpp:238
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:157
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:147
-#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
-#: eeschema/dialogs/dialog_text_properties_base.cpp:147
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:117
+#: eeschema/dialogs/dialog_text_properties_base.cpp:154
 msgid "Text size:"
 msgstr "Tekststørrelse:"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:199
+#: eeschema/dialogs/dialog_field_properties_base.cpp:203
+#: eeschema/dialogs/dialog_junction_props_base.cpp:38
+#: eeschema/dialogs/dialog_label_properties_base.cpp:252
+#: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:178
+#: eeschema/dialogs/dialog_line_properties_base.cpp:44
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:131
+#: eeschema/dialogs/dialog_text_properties_base.cpp:168
+#: eeschema/dialogs/dialog_text_properties_base.cpp:208
+#: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:44
+msgid "Color:"
+msgstr "Farve:"
+
+#: eeschema/dialogs/dialog_field_properties_base.cpp:226
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:288
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:204
@@ -9013,26 +9076,26 @@ msgstr "Tekststørrelse:"
 msgid "Position X:"
 msgstr "Position X:"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:210
+#: eeschema/dialogs/dialog_field_properties_base.cpp:237
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:314
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:217
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:181
 msgid "Position Y:"
 msgstr "Position Y:"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:221
+#: eeschema/dialogs/dialog_field_properties_base.cpp:248
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:171
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:242
 msgid "Common to all units"
 msgstr "Fælles for alle enheder"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:224
+#: eeschema/dialogs/dialog_field_properties_base.cpp:251
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:174
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:245
 msgid "Common to all body styles"
 msgstr "Fælles for alle kropsstilarter"
 
-#: eeschema/dialogs/dialog_field_properties_base.h:95
+#: eeschema/dialogs/dialog_field_properties_base.h:100
 #: eeschema/dialogs/dialog_lib_text_properties_base.h:85
 msgid "Text Item Properties"
 msgstr "Egenskaber for tekstelement"
@@ -9140,8 +9203,8 @@ msgid "V Align (fields only):"
 msgstr "V Justering (kun felter):"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:315
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:27
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:344
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:35
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:353
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:161
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1267
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1508
@@ -9149,20 +9212,20 @@ msgid "Line width:"
 msgstr "Liniebredde:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:329
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:40
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:48
 msgid "Line color:"
 msgstr "Liniefarve:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:338
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:60
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:68
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:172
 msgid "Line style:"
 msgstr "Linjetypografi:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:354
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:219
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:90
-#: eeschema/dialogs/dialog_text_properties_base.cpp:213
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:98
+#: eeschema/dialogs/dialog_text_properties_base.cpp:246
 #, fuzzy
 msgid "Fill color:"
 msgstr "Liniefarve:"
@@ -9239,14 +9302,6 @@ msgstr ""
 msgid "Diameter:"
 msgstr "Diameter:"
 
-#: eeschema/dialogs/dialog_junction_props_base.cpp:38
-#: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:178
-#: eeschema/dialogs/dialog_line_properties_base.cpp:44
-#: eeschema/dialogs/dialog_text_properties_base.cpp:175
-#: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:44
-msgid "Color:"
-msgstr "Farve:"
-
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
 #, fuzzy
 msgid "Set diameter to 0 to use schematic junction dot size."
@@ -9262,79 +9317,79 @@ msgstr ""
 msgid "Junction Properties"
 msgstr "Junction Properties"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:93
+#: eeschema/dialogs/dialog_label_properties.cpp:97
 #, fuzzy
 msgid "Pin length:"
 msgstr "& Pin længde:"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:98
+#: eeschema/dialogs/dialog_label_properties.cpp:102
 msgid "Global Label Properties"
 msgstr "Globale etiketegenskaber"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:99
+#: eeschema/dialogs/dialog_label_properties.cpp:103
 msgid "Hierarchical Label Properties"
 msgstr "Hierarkiske etiketegenskaber"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:100
-#: eeschema/dialogs/dialog_label_properties_base.h:108
+#: eeschema/dialogs/dialog_label_properties.cpp:104
+#: eeschema/dialogs/dialog_label_properties_base.h:112
 msgid "Label Properties"
 msgstr "Mærkegenskaber"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:101
+#: eeschema/dialogs/dialog_label_properties.cpp:105
 #, fuzzy
 msgid "Directive Label Properties"
 msgstr "Hierarkiske etiketegenskaber"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:102
+#: eeschema/dialogs/dialog_label_properties.cpp:106
 msgid "Hierarchical Sheet Pin Properties"
 msgstr "Hierarkiske egenskaber for arknål"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:378
+#: eeschema/dialogs/dialog_label_properties.cpp:386
 #, fuzzy
 msgid "Label can not be empty."
 msgstr "Netnavnet kan ikke være tomt."
 
-#: eeschema/dialogs/dialog_label_properties.cpp:558
+#: eeschema/dialogs/dialog_label_properties.cpp:568
 #, fuzzy
 msgid "The first field is mandatory."
 msgstr "De første %d felter er obligatoriske."
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:29
-#: eeschema/dialogs/dialog_label_properties_base.cpp:38
+#: eeschema/dialogs/dialog_label_properties_base.cpp:30
+#: eeschema/dialogs/dialog_label_properties_base.cpp:39
 msgid "Label:"
 msgstr "Etikette:"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:31
+#: eeschema/dialogs/dialog_label_properties_base.cpp:32
 msgid "Enter the text to be used within the schematic"
 msgstr "Indtast teksten, der skal bruges, i skematisk"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:48
+#: eeschema/dialogs/dialog_label_properties_base.cpp:49
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:139
-#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:38
-#: eeschema/dialogs/dialog_text_properties_base.cpp:139
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
+#: eeschema/dialogs/dialog_text_properties_base.cpp:146
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:33
 msgid "Syntax help"
 msgstr "Syntaks hjælp"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:49
+#: eeschema/dialogs/dialog_label_properties_base.cpp:50
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:140
-#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:39
-#: eeschema/dialogs/dialog_text_properties_base.cpp:140
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:43
+#: eeschema/dialogs/dialog_text_properties_base.cpp:147
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:34
 #, fuzzy
 msgid "Show syntax help window"
 msgstr "Vis konsolvindue"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:57
+#: eeschema/dialogs/dialog_label_properties_base.cpp:58
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:30
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:24
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:32
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:27
 msgid "Fields"
 msgstr "Felter"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:85
+#: eeschema/dialogs/dialog_label_properties_base.cpp:86
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:58
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:52
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:60
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:697
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:54
 #: eeschema/fields_grid_table.cpp:257
@@ -9347,141 +9402,143 @@ msgstr "Felter"
 msgid "Show"
 msgstr "Vis"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:86
+#: eeschema/dialogs/dialog_label_properties_base.cpp:87
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:59
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:53
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:61
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:55
 #: eeschema/fields_grid_table.cpp:258
 msgid "H Align"
 msgstr "H Juster"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:87
+#: eeschema/dialogs/dialog_label_properties_base.cpp:88
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:60
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:54
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:56
 #: eeschema/fields_grid_table.cpp:259
 msgid "V Align"
 msgstr "V Juster"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:90
+#: eeschema/dialogs/dialog_label_properties_base.cpp:91
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:57
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:65
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
 #: eeschema/fields_grid_table.cpp:262 eeschema/lib_field.cpp:477
-#: eeschema/lib_text.cpp:368 eeschema/lib_textbox.cpp:375
+#: eeschema/lib_text.cpp:368 eeschema/lib_textbox.cpp:380
 #: eeschema/sch_field.cpp:696 eeschema/sch_label.cpp:793
-#: eeschema/sch_text.cpp:452 eeschema/sch_textbox.cpp:378
+#: eeschema/sch_text.cpp:452 eeschema/sch_textbox.cpp:383
 msgid "Text Size"
 msgstr "Tekststørrelse"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:91
+#: eeschema/dialogs/dialog_label_properties_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:118
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:92
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:64
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:58
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:66
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:60
 #: eeschema/fields_grid_table.cpp:263 eeschema/lib_pin.cpp:1070
 #: eeschema/sch_pin.cpp:222
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
 #: pcbnew/footprint.cpp:2575 pcbnew/fp_text_grid_table.cpp:105
-#: pcbnew/pad.cpp:1685
+#: pcbnew/pad.cpp:1705
 msgid "Orientation"
 msgstr "Orientering"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:92
+#: eeschema/dialogs/dialog_label_properties_base.cpp:93
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:122
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:96
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:65
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:59
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:61
 #: eeschema/fields_grid_table.cpp:264
 msgid "X Position"
 msgstr "X Position"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:93
+#: eeschema/dialogs/dialog_label_properties_base.cpp:94
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:123
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:97
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:66
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:60
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:62
 #: eeschema/fields_grid_table.cpp:265
 msgid "Y Position"
 msgstr "Y Position"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:113
+#: eeschema/dialogs/dialog_label_properties_base.cpp:114
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:85
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:80
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:88
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:83
 msgid "Add field"
 msgstr "Tilføj felt"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:118
+#: eeschema/dialogs/dialog_label_properties_base.cpp:119
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:90
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:85
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:93
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:88
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:115
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:111
 msgid "Move up"
 msgstr "Flyt op"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:123
+#: eeschema/dialogs/dialog_label_properties_base.cpp:124
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:95
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:90
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:98
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:93
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:120
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:116
 msgid "Move down"
 msgstr "Flyt ned"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:131
+#: eeschema/dialogs/dialog_label_properties_base.cpp:132
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:103
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:98
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:106
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:101
 msgid "Delete field"
 msgstr "Slet felt"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:146
-#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:36 eeschema/pin_type.cpp:51
-#: eeschema/sch_label.cpp:144
+#: eeschema/dialogs/dialog_label_properties_base.cpp:147
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
+#: eeschema/pin_type.cpp:51 eeschema/sch_label.cpp:144
 msgid "Input"
 msgstr "Input"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:149
-#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:37 eeschema/pin_type.cpp:52
-#: eeschema/sch_label.cpp:145
+#: eeschema/dialogs/dialog_label_properties_base.cpp:150
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:58
+#: eeschema/pin_type.cpp:52 eeschema/sch_label.cpp:145
 msgid "Output"
 msgstr "Resultat"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:152
-#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:38 eeschema/pin_type.cpp:53
-#: eeschema/sch_label.cpp:146
+#: eeschema/dialogs/dialog_label_properties_base.cpp:153
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:61
+#: eeschema/pin_type.cpp:53 eeschema/sch_label.cpp:146
 msgid "Bidirectional"
 msgstr "Tovejs"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:155
-#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:39 eeschema/pin_type.cpp:54
+#: eeschema/dialogs/dialog_label_properties_base.cpp:156
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:64
+#: eeschema/pin_type.cpp:54
 msgid "Tri-state"
 msgstr "Tri-state"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:158
-#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:40
+#: eeschema/dialogs/dialog_label_properties_base.cpp:159
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
 #: eeschema/dialogs/dialog_spice_model_base.cpp:199 eeschema/pin_type.cpp:55
 #: eeschema/sch_label.cpp:148
 msgid "Passive"
 msgstr "Passiv"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:161
+#: eeschema/dialogs/dialog_label_properties_base.cpp:162
 #, fuzzy
 msgid "Dot"
 msgstr "Prikker"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:167
+#: eeschema/dialogs/dialog_label_properties_base.cpp:168
 msgid "Diamond"
 msgstr ""
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:177
+#: eeschema/dialogs/dialog_label_properties_base.cpp:178
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:74
 msgid "Formatting"
 msgstr "Formatering"
 
@@ -9648,8 +9705,8 @@ msgstr "Udledes af eksisterende symbol:"
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:46
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:205
 #: eeschema/dialogs/dialog_line_properties_base.cpp:68
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:64
-#: eeschema/dialogs/dialog_text_properties_base.cpp:202
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:72
+#: eeschema/dialogs/dialog_text_properties_base.cpp:235
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:68
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:176
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:207
@@ -9741,14 +9798,14 @@ msgstr "Nyt symbol"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:32
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:161
-#: eeschema/dialogs/dialog_text_properties_base.cpp:158
+#: eeschema/dialogs/dialog_text_properties_base.cpp:191
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:150
 #, fuzzy
 msgid "Border"
 msgstr "Rækkefølge"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:38
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:117
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:125
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:192
 msgid "Border width:"
 msgstr "Kantbredde:"
@@ -9806,7 +9863,7 @@ msgid "References must start with a letter."
 msgstr "Henvisninger skal starte med et bogstav."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:257
-#: eeschema/dialogs/dialog_sheet_properties.cpp:195
+#: eeschema/dialogs/dialog_sheet_properties.cpp:198
 #: eeschema/dialogs/dialog_symbol_properties.cpp:592
 msgid "Fields must have a name."
 msgstr "Felter skal have et navn."
@@ -9835,7 +9892,7 @@ msgid "The name '%s' is already in use."
 msgstr "Navnet '%s' er allerede i brug."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:521
-#: eeschema/dialogs/dialog_sheet_properties.cpp:734
+#: eeschema/dialogs/dialog_sheet_properties.cpp:737
 #: eeschema/dialogs/dialog_symbol_properties.cpp:904
 #, c-format
 msgid "The first %d fields are mandatory."
@@ -9971,7 +10028,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:127
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:131
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:135
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:124
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:132
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:74
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:85
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:106
@@ -10021,20 +10078,20 @@ msgid "Library Symbol Properties"
 msgstr "Biblioteksegenskaber"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties.cpp:218
-#: eeschema/dialogs/dialog_text_properties.cpp:355
+#: eeschema/dialogs/dialog_text_properties.cpp:368
 #, fuzzy
 msgid "Text can not be empty."
 msgstr "Netnavnet kan ikke være tomt."
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:201
 #: eeschema/dialogs/dialog_line_properties_base.cpp:64
-#: eeschema/dialogs/dialog_text_properties_base.cpp:198
+#: eeschema/dialogs/dialog_text_properties_base.cpp:231
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:64
 msgid "Style:"
 msgstr "Stil:"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:213
-#: eeschema/dialogs/dialog_text_properties_base.cpp:207
+#: eeschema/dialogs/dialog_text_properties_base.cpp:240
 #, fuzzy
 msgid "Background fill"
 msgstr "Baggrundsfyld:"
@@ -10045,7 +10102,7 @@ msgid "Private to symbol editor"
 msgstr "Rediger med Symbol Editor"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.h:106
-#: eeschema/dialogs/dialog_text_properties.cpp:54
+#: eeschema/dialogs/dialog_text_properties.cpp:58
 #: pcbnew/dialogs/dialog_textbox_properties_base.h:103
 #, fuzzy
 msgid "Text Box Properties"
@@ -10072,9 +10129,9 @@ msgstr "Nyt mærke"
 #: eeschema/dialogs/dialog_migrate_buses.cpp:106
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:86
 #: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/fp_text.cpp:284
-#: pcbnew/fp_textbox.cpp:209 pcbnew/pad.cpp:907 pcbnew/pcb_dimension.cpp:335
+#: pcbnew/fp_textbox.cpp:236 pcbnew/pad.cpp:936 pcbnew/pcb_dimension.cpp:335
 #: pcbnew/pcb_group.cpp:339 pcbnew/pcb_shape.cpp:207 pcbnew/pcb_text.cpp:136
-#: pcbnew/pcb_textbox.cpp:210 pcbnew/pcb_track.cpp:858 pcbnew/zone.cpp:577
+#: pcbnew/pcb_textbox.cpp:230 pcbnew/pcb_track.cpp:858 pcbnew/zone.cpp:577
 msgid "Status"
 msgstr "Status"
 
@@ -10191,7 +10248,7 @@ msgid "Remove Generator"
 msgstr "Fjern generatoren"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:83
-#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:28
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:32
 #: eeschema/symbol_editor/symbol_editor.cpp:645
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:27
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
@@ -10338,14 +10395,14 @@ msgstr "Plot aktuel side"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:211
 #: pcbnew/dialogs/dialog_export_svg.cpp:204
-#: pcbnew/dialogs/dialog_gendrill.cpp:296 pcbnew/dialogs/dialog_plot.cpp:373
+#: pcbnew/dialogs/dialog_gendrill.cpp:296 pcbnew/dialogs/dialog_plot.cpp:467
 #: pcbnew/exporters/gen_footprints_placefile.cpp:204
 #: pcbnew/exporters/gen_footprints_placefile.cpp:562
 msgid "Select Output Directory"
 msgstr "Vælg Output Directory"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:228
-#: pcbnew/dialogs/dialog_gendrill.cpp:305 pcbnew/dialogs/dialog_plot.cpp:390
+#: pcbnew/dialogs/dialog_gendrill.cpp:305 pcbnew/dialogs/dialog_plot.cpp:484
 #, fuzzy, c-format
 msgid ""
 "Do you want to use a path relative to\n"
@@ -10356,9 +10413,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:230
 #: pcbnew/dialogs/dialog_export_svg.cpp:211
-#: pcbnew/dialogs/dialog_export_svg.cpp:222
+#: pcbnew/dialogs/dialog_export_svg.cpp:223
 #: pcbnew/dialogs/dialog_gendrill.cpp:307
-#: pcbnew/dialogs/dialog_gendrill.cpp:315 pcbnew/dialogs/dialog_plot.cpp:392
+#: pcbnew/dialogs/dialog_gendrill.cpp:315 pcbnew/dialogs/dialog_plot.cpp:486
 #: pcbnew/exporters/gen_footprints_placefile.cpp:212
 #: pcbnew/exporters/gen_footprints_placefile.cpp:222
 msgid "Plot Output Directory"
@@ -10423,7 +10480,7 @@ msgid "E"
 msgstr "Ø"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:428
-#: eeschema/sch_edit_frame.cpp:1046
+#: eeschema/sch_edit_frame.cpp:1043
 msgid "Schematic"
 msgstr "Skematisk"
 
@@ -10436,7 +10493,7 @@ msgstr "Kunne ikke skrive plotfiler til mappen \"%s\"."
 #: eeschema/dialogs/dialog_plot_schematic.cpp:679
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1028
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1160
-#: pcbnew/dialogs/dialog_plot.cpp:911
+#: pcbnew/dialogs/dialog_plot.cpp:1047
 #, fuzzy, c-format
 msgid "Plotted to '%s'."
 msgstr "Kunne ikke indlæse \"%s\""
@@ -10445,7 +10502,7 @@ msgstr "Kunne ikke indlæse \"%s\""
 #: eeschema/dialogs/dialog_plot_schematic.cpp:695
 #: eeschema/dialogs/dialog_plot_schematic.cpp:870
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1046
-#: kicad/pcm/pcm_task_manager.cpp:447 pcbnew/dialogs/dialog_plot.cpp:932
+#: kicad/pcm/pcm_task_manager.cpp:447 pcbnew/dialogs/dialog_plot.cpp:1069
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:153
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:124
 msgid "Done."
@@ -10465,13 +10522,13 @@ msgstr ""
 msgid "Falling back to user path '%s'."
 msgstr ""
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:1266
-#: eeschema/dialogs/dialog_plot_schematic.cpp:1304
+#: eeschema/dialogs/dialog_plot_schematic.cpp:1274
+#: eeschema/dialogs/dialog_plot_schematic.cpp:1312
 #, fuzzy, c-format
 msgid "Cannot normalize path '%s%s'."
 msgstr "Kan ikke åbne filen '%s'"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:1291
+#: eeschema/dialogs/dialog_plot_schematic.cpp:1299
 #, fuzzy
 msgid "No project or path defined for the current schematic."
 msgstr "Generer en stykliste til det aktuelle skema"
@@ -10569,7 +10626,7 @@ msgstr ""
 "tykkelse er indstillet til 0."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:119
-#: pcbnew/dialogs/dialog_plot_base.cpp:254
+#: pcbnew/dialogs/dialog_plot_base.cpp:248
 msgid "HPGL Options"
 msgstr "HPGL-indstillinger"
 
@@ -10860,7 +10917,7 @@ msgid "Electrical Rules"
 msgstr "Elektriske regler"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:78
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1034
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1035
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/footprint_libraries_utils.cpp:523
 msgid "Project"
@@ -10893,80 +10950,83 @@ msgstr ""
 "Fejl ved import af indstillinger fra projekt:\n"
 "Projektfil %s kunne ikke indlæses"
 
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:81
+#: eeschema/dialogs/dialog_shape_properties.cpp:54
+#: eeschema/dialogs/dialog_sheet_properties.cpp:76
+#: eeschema/dialogs/dialog_text_properties.cpp:72
+#, fuzzy
+msgid "Note: individual item colors overridden in Preferences."
+msgstr "Bemærk: Varefarver tilsidesættes i det aktuelle farvetema."
+
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:89
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:158
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1284
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1519
 msgid "Filled shape"
 msgstr "Fyldt form"
 
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:110
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:118
 #, fuzzy
 msgid "Set line width to 0 to use Schematic Editor line widths."
 msgstr "Skift til skematisk editor"
 
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:114
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:122
 #, fuzzy
 msgid "Set line color to transparent to use Schematic Editor colors."
 msgstr "Nulstil alle farver i dette tema til KiCad-standardindstillingerne"
 
-#: eeschema/dialogs/dialog_shape_properties_base.h:62
+#: eeschema/dialogs/dialog_shape_properties_base.h:65
 #, fuzzy, c-format
 msgid "%s Properties"
 msgstr "Egenskaber"
 
-#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:66
-msgid "Connection type:"
-msgstr "Forbindelsestype:"
-
-#: eeschema/dialogs/dialog_sheet_pin_properties_base.h:62
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.h:86
 msgid "Sheet Pin Properties"
 msgstr "Arkstiftegenskaber"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:250
+#: eeschema/dialogs/dialog_sheet_properties.cpp:253
 msgid "A sheet must have a valid file name."
 msgstr "Et ark skal have et gyldigt filnavn."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:260
+#: eeschema/dialogs/dialog_sheet_properties.cpp:263
 msgid "Sheet file must have a '.kicad_sch' extension."
 msgstr "Arkfilen skal have en '.kicad_sch' udvidelse."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:294
+#: eeschema/dialogs/dialog_sheet_properties.cpp:297
 #, fuzzy
 msgid "Use relative path for sheet file?"
 msgstr "Brug en relativ sti?"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:295
+#: eeschema/dialogs/dialog_sheet_properties.cpp:298
 #, fuzzy
 msgid "Sheet File Path"
 msgstr "Arkfil"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:298
+#: eeschema/dialogs/dialog_sheet_properties.cpp:301
 msgid ""
 "Using relative hierarchical sheet file name paths improves schematic "
 "portability across systems and platforms.  Using absolute paths can result "
 "in portability issues."
 msgstr ""
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:302
+#: eeschema/dialogs/dialog_sheet_properties.cpp:305
 #, fuzzy
 msgid "Use Relative Path"
 msgstr "Brug en relativ sti?"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:303
+#: eeschema/dialogs/dialog_sheet_properties.cpp:306
 #, fuzzy
 msgid "Use Absolute Path"
 msgstr "Absolut"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:334
+#: eeschema/dialogs/dialog_sheet_properties.cpp:337
 msgid "Untitled Sheet"
 msgstr "Untitled Sheet"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:360
+#: eeschema/dialogs/dialog_sheet_properties.cpp:363
 msgid "Note: item colors are overridden in the current color theme."
 msgstr "Bemærk: Varefarver tilsidesættes i det aktuelle farvetema."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:362
+#: eeschema/dialogs/dialog_sheet_properties.cpp:365
 #, c-format
 msgid ""
 "To see individual item colors uncheck '%s'\n"
@@ -10975,16 +11035,16 @@ msgstr ""
 "Fjern markeringen af '%s' for at se individuelle varefarver.\n"
 "i Indstillinger> Eeschema> Farver."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:408
+#: eeschema/dialogs/dialog_sheet_properties.cpp:411
 #, fuzzy, c-format
 msgid "The file '%s' does not appear to be a valid schematic file."
 msgstr "Filen \"%s\" ser ikke ud til at være en gyldig skematisk fil."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:410
+#: eeschema/dialogs/dialog_sheet_properties.cpp:413
 msgid "Invalid Schematic File"
 msgstr "Ugyldig skematisk fil"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:430
+#: eeschema/dialogs/dialog_sheet_properties.cpp:433
 #, c-format
 msgid ""
 "Cannot normalize new sheet schematic file path:\n"
@@ -10993,80 +11053,80 @@ msgid ""
 "'%s'."
 msgstr ""
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:473
+#: eeschema/dialogs/dialog_sheet_properties.cpp:476
 #: kicad/tools/kicad_manager_control.cpp:566
 #, fuzzy, c-format
 msgid "'%s' already exists."
 msgstr "\"%s\" findes allerede."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:476
+#: eeschema/dialogs/dialog_sheet_properties.cpp:479
 #, fuzzy, c-format
 msgid "Link '%s' to this file?"
 msgstr "Vil du linke \"%s\" til denne fil?"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:516
+#: eeschema/dialogs/dialog_sheet_properties.cpp:519
 #, fuzzy, c-format
 msgid "Change '%s' link from '%s' to '%s'?"
 msgstr "Skift %s værdi fra '%s' til '%s'."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:521
-#: eeschema/dialogs/dialog_sheet_properties.cpp:537
+#: eeschema/dialogs/dialog_sheet_properties.cpp:524
+#: eeschema/dialogs/dialog_sheet_properties.cpp:540
 msgid "This action cannot be undone."
 msgstr "Handlingen kan ikke fortrydes."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:533
+#: eeschema/dialogs/dialog_sheet_properties.cpp:536
 #, fuzzy, c-format
 msgid "Create new file '%s' with contents of '%s'?"
 msgstr "Oprette en ny fil \"%s\" med indholdet af \"%s\"?"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:570
+#: eeschema/dialogs/dialog_sheet_properties.cpp:573
 #, fuzzy, c-format
 msgid "Error occurred saving schematic file '%s'."
 msgstr "Der opstod en fejl under lagring af skematisk fil \"%s\"."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:574
+#: eeschema/dialogs/dialog_sheet_properties.cpp:577
 #, fuzzy, c-format
 msgid "Failed to save schematic '%s'"
 msgstr "Kunne ikke gemme skematisk \"%s\""
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:668
+#: eeschema/dialogs/dialog_sheet_properties.cpp:671
 msgid "A sheet must have a name."
 msgstr "Et ark skal have et navn."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:676
+#: eeschema/dialogs/dialog_sheet_properties.cpp:679
 msgid "A sheet must have a file specified."
 msgstr "Et ark skal have en fil angivet."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:842
+#: eeschema/dialogs/dialog_sheet_properties.cpp:845
 msgid "Hierarchical path: "
 msgstr "Hierarkisk sti: "
 
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:115
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:123
 #: eeschema/lib_field.cpp:475 eeschema/lib_pin.cpp:1062
 #: eeschema/lib_pin.cpp:1064 eeschema/lib_text.cpp:366
-#: eeschema/lib_textbox.cpp:373 eeschema/sch_field.cpp:694
+#: eeschema/lib_textbox.cpp:378 eeschema/sch_field.cpp:694
 #: eeschema/sch_label.cpp:791 eeschema/sch_pin.cpp:215
-#: eeschema/sch_text.cpp:450 eeschema/sch_textbox.cpp:376
+#: eeschema/sch_text.cpp:450 eeschema/sch_textbox.cpp:381
 msgid "Style"
 msgstr "Stil"
 
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:131
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:139
 msgid "Border color:"
 msgstr "Kantfarve:"
 
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:144
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:152
 msgid "Background fill:"
 msgstr "Baggrundsfyld:"
 
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:165
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:173
 msgid "Page number:"
 msgstr "Side nummer:"
 
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:184
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:192
 msgid "Hierarchical path:"
 msgstr "Hierarkisk sti:"
 
-#: eeschema/dialogs/dialog_sheet_properties_base.h:79
+#: eeschema/dialogs/dialog_sheet_properties_base.h:82
 msgid "Sheet Properties"
 msgstr "Arkegenskaber"
 
@@ -11349,7 +11409,7 @@ msgstr "Krydderidirektiver:"
 msgid "Load directives from schematic"
 msgstr "Indlæs direktiver fra skematisk"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:429 pcbnew/pad.cpp:1656
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:429 pcbnew/pad.cpp:1676
 msgid "Custom"
 msgstr "Brugerdefinerede"
 
@@ -12339,7 +12399,7 @@ msgstr "Nogle af projektfilerne kunne ikke sikkerhedskopieres."
 msgid "Remap Symbols"
 msgstr "Remap-symboler"
 
-#: eeschema/dialogs/dialog_text_properties_base.h:103
+#: eeschema/dialogs/dialog_text_properties_base.h:104
 #: pcbnew/dialogs/dialog_text_properties.cpp:104
 #: pcbnew/dialogs/dialog_text_properties_base.h:110
 msgid "Text Properties"
@@ -12560,23 +12620,41 @@ msgstr "Fremhæv net, når de er fremhævet i PCB-editoren"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
 #, fuzzy
-msgid "Constrain buses and wires to H or V"
-msgstr "& Begræns busser og ledninger til H- og V-retning"
+msgid "Line Drawing Mode:"
+msgstr "Tegningstilstand"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
+#, fuzzy
+msgid "Free Angle"
+msgstr "vinkel"
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
+msgid "90 deg Angle"
+msgstr ""
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
+#, fuzzy
+msgid "45 deg Angle"
+msgstr "45 grader"
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
+msgid "135 deg Angle"
+msgstr ""
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 #, fuzzy
 msgid "Mouse drag performs Drag (G) operation"
 msgstr "Musetræk udfører træk (G) -handling"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:28
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:34
 msgid "If unchecked, mouse drag will perform move (M) operation"
 msgstr "Hvis det ikke er markeret, udfører museknap flytning (M)"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:32
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:38
 msgid "Automatically start wires on unconnected pins"
 msgstr "Start ledninger automatisk på ikke-tilsluttede stifter"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:39
 msgid ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
@@ -12584,29 +12662,29 @@ msgstr ""
 "Når det er aktiveret, kan du starte ledninger ved at klikke på ikke-"
 "tilsluttede ben, selv når ledningsværktøjet ikke er aktivt"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:41
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:47
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
 msgid "Defaults for New Objects"
 msgstr "Standardindstillinger for nye objekter"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:46
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:52
 msgid "Sheet border:"
 msgstr "Arkgrænse:"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:55
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:61
 msgid "Sheet background:"
 msgstr "Ark baggrund:"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:71
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:77
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:184
 msgid "Selection"
 msgstr "Valg"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:73
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:79
 msgid "Clicking on a pin selects the symbol"
 msgstr "Ved at klikke på en nål vælges symbolet"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:74
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:80
 msgid ""
 "In schematic editor:\n"
 "If enabled, clicking on a pin select the parent symbol.\n"
@@ -12618,14 +12696,14 @@ msgstr ""
 "Hvis det er deaktiveret, skal du kun klikke på en nål ved at klikke på en "
 "nål."
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:84
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:132
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:90
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:138
 #: pcbnew/dialogs/panel_edit_options_base.cpp:81
 #: pcbnew/dialogs/panel_edit_options_base.cpp:152
 msgid "Left Click Mouse Commands"
 msgstr "Venstreklik på musekommandoer"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:86
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:92
 #: pcbnew/dialogs/panel_edit_options_base.cpp:83
 #, fuzzy
 msgid ""
@@ -12635,43 +12713,43 @@ msgstr ""
 "Venstre klik (og træk) handlinger afhænger af 3 ændringstaster:\n"
 "Alt, Skift og Ctrl."
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:98
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:104
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:152
 #: pcbnew/dialogs/panel_edit_options_base.cpp:107
 #: pcbnew/dialogs/panel_edit_options_base.cpp:178
 #, fuzzy
 msgid "Long Click"
 msgstr "Klik"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:102
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:150
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:174
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:108
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:156
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:180
 #: pcbnew/dialogs/panel_edit_options_base.cpp:112
 #: pcbnew/dialogs/panel_edit_options_base.cpp:183
 #: pcbnew/dialogs/panel_edit_options_base.cpp:223
 msgid "Clarify selection from menu."
 msgstr "Præciser valget fra menuen."
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:110
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:116
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:164
 #: pcbnew/dialogs/panel_edit_options_base.cpp:122
 #: pcbnew/dialogs/panel_edit_options_base.cpp:193
 msgid "Add item(s) to selection."
 msgstr "Føj element (er) til markeringen."
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:114
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:120
 #: pcbnew/dialogs/panel_edit_options_base.cpp:127
 msgid "Ctrl+Shift"
 msgstr "Ctrl + Skift"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:118
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:166
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:124
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:172
 #: pcbnew/dialogs/panel_edit_options_base.cpp:132
 #: pcbnew/dialogs/panel_edit_options_base.cpp:203
 msgid "Remove item(s) from selection."
 msgstr "Fjern element (er) fra markeringen."
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:134
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:140
 #: pcbnew/dialogs/panel_edit_options_base.cpp:154
 #, fuzzy
 msgid ""
@@ -12681,54 +12759,54 @@ msgstr ""
 "Venstre klik (og træk) handlinger afhænger af 3 ændringstaster:\n"
 "Alt, Skift og Cmd."
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:168
 #: pcbnew/dialogs/panel_edit_options_base.cpp:198
 msgid "Shift+Cmd"
 msgstr "Skift + Cmd"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:196
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:202
 msgid "Symbol Field Automatic Placement"
 msgstr "Symbolfelt automatisk placering"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:198
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
 msgid "A&utomatically place symbol fields"
 msgstr "A & placer symbolfelter utomatisk"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:201
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:207
 msgid "A&llow field autoplace to change justification"
 msgstr "A & llow-felt autoplace for at ændre begrundelsen"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:210
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
 msgstr "Al & måder justerer autoplacerede felter til 50 mil-nettet"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:211
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:217
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:98
 msgid "Repeated Items"
 msgstr "Gentagne genstande"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:221
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:227
 msgid "&Horizontal pitch:"
 msgstr "& Vandret tonehøjde:"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:232
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:238
 msgid "&Vertical pitch:"
 msgstr "& Lodret tonehøjde:"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:243
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:249
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:120
 msgid "Label increment:"
 msgstr "Etiketforøgelse:"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:260
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:266
 msgid "Dialog Preferences"
 msgstr "Dialogindstillinger"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:262
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:268
 msgid "Show footprint previews in Symbol Chooser"
 msgstr "Vis forhåndsvisning af fodaftryk i Symbolvælger"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:265
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:271
 msgid "Keep hierarchy navigator open"
 msgstr "Hold hierarki-navigator åben"
 
@@ -12811,7 +12889,7 @@ msgid "Smallest"
 msgstr "Mindste"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:145
-#: pcbnew/dialogs/dialog_plot_base.cpp:117
+#: pcbnew/dialogs/dialog_plot_base.cpp:111
 msgid "Small"
 msgstr "Little"
 
@@ -13041,7 +13119,7 @@ msgid "One of the nicknames will need to be changed after adding this library."
 msgstr "Et af kaldenavnene skal ændres efter tilføjelse af dette bibliotek."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:529
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1041
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1042
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:916
 #: pcbnew/footprint_libraries_utils.cpp:530
 msgid "Skip"
@@ -13123,9 +13201,9 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1075
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1088
-#: eeschema/sch_base_frame.cpp:218 eeschema/sch_base_frame.cpp:235
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1430
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1482
+#: eeschema/sch_base_frame.cpp:222 eeschema/sch_base_frame.cpp:239
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1431
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1483
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1112
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1125
 msgid "File Save Error"
@@ -13790,8 +13868,8 @@ msgstr "(side %s)"
 #: eeschema/sch_field.cpp:692 eeschema/sch_pin.cpp:217
 #: gerbview/gerber_draw_item.cpp:713 gerbview/gerber_draw_item.cpp:714
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
-#: pcbnew/fp_text.cpp:286 pcbnew/fp_text.cpp:291 pcbnew/fp_textbox.cpp:212
-#: pcbnew/pcb_text.cpp:140 pcbnew/pcb_textbox.cpp:213
+#: pcbnew/fp_text.cpp:286 pcbnew/fp_text.cpp:291 pcbnew/fp_textbox.cpp:239
+#: pcbnew/pcb_text.cpp:140 pcbnew/pcb_textbox.cpp:233
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:470
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:504
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:512
@@ -13802,8 +13880,8 @@ msgstr "Ja"
 #: eeschema/lib_field.cpp:473 eeschema/lib_pin.cpp:1064
 #: eeschema/sch_field.cpp:692 eeschema/sch_pin.cpp:217
 #: gerbview/gerber_draw_item.cpp:713 gerbview/gerber_draw_item.cpp:714
-#: pcbnew/fp_text.cpp:286 pcbnew/fp_text.cpp:291 pcbnew/fp_textbox.cpp:212
-#: pcbnew/pcb_text.cpp:140 pcbnew/pcb_textbox.cpp:213
+#: pcbnew/fp_text.cpp:286 pcbnew/fp_text.cpp:291 pcbnew/fp_textbox.cpp:239
+#: pcbnew/pcb_text.cpp:140 pcbnew/pcb_textbox.cpp:233
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:470
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:504
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:512
@@ -13828,7 +13906,7 @@ msgstr "Begrundelse:"
 #: eeschema/symbol_editor/symbol_editor.cpp:1248
 #: gerbview/gerber_draw_item.cpp:652
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:37
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:28
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:78
 #: pcbnew/fp_text.cpp:281 pcbnew/pcb_marker.cpp:141 pcbnew/pcb_shape.cpp:204
 #: pcbnew/pcb_track.cpp:744 pcbnew/pcb_track.cpp:805
@@ -13871,22 +13949,22 @@ msgstr "Pin %s [%s, %s, %s]"
 msgid "Pin %s [%s, %s]"
 msgstr "Pin %s [%s, %s]"
 
-#: eeschema/lib_shape.cpp:388 eeschema/sch_shape.cpp:340
+#: eeschema/lib_shape.cpp:388 eeschema/sch_shape.cpp:343
 #, c-format
 msgid "Arc, radius %s"
 msgstr "Bue, radius %s"
 
-#: eeschema/lib_shape.cpp:392 eeschema/sch_shape.cpp:344
+#: eeschema/lib_shape.cpp:392 eeschema/sch_shape.cpp:347
 #, c-format
 msgid "Circle, radius %s"
 msgstr "Cirkel, radius %s"
 
-#: eeschema/lib_shape.cpp:401 eeschema/sch_shape.cpp:353
+#: eeschema/lib_shape.cpp:401 eeschema/sch_shape.cpp:356
 #, c-format
 msgid "Polyline, %d points"
 msgstr "Polyline, %d point"
 
-#: eeschema/lib_shape.cpp:405 eeschema/sch_shape.cpp:357
+#: eeschema/lib_shape.cpp:405 eeschema/sch_shape.cpp:360
 #, fuzzy, c-format
 msgid "Bezier Curve, %d points"
 msgstr "&Bezierkurve"
@@ -13896,24 +13974,24 @@ msgstr "&Bezierkurve"
 msgid "Graphic Text '%s'"
 msgstr "Grafisk tekst '%s'"
 
-#: eeschema/lib_textbox.cpp:299 eeschema/sch_textbox.cpp:316
+#: eeschema/lib_textbox.cpp:300 eeschema/sch_textbox.cpp:317
 #, fuzzy
 msgid "Graphic Text Box"
 msgstr "Grafisk tekst"
 
-#: eeschema/lib_textbox.cpp:371 eeschema/sch_label.cpp:789
-#: eeschema/sch_text.cpp:448 eeschema/sch_textbox.cpp:374
+#: eeschema/lib_textbox.cpp:376 eeschema/sch_label.cpp:789
+#: eeschema/sch_text.cpp:448 eeschema/sch_textbox.cpp:379
 msgid "Bold Italic"
 msgstr "Fed kursiv"
 
-#: eeschema/lib_textbox.cpp:378 eeschema/sch_textbox.cpp:381
-#: pcbnew/fp_textbox.cpp:220 pcbnew/pcb_textbox.cpp:221
+#: eeschema/lib_textbox.cpp:383 eeschema/sch_textbox.cpp:386
+#: pcbnew/fp_textbox.cpp:247 pcbnew/pcb_textbox.cpp:241
 #, fuzzy
 msgid "Box Width"
 msgstr "Tekstbredde"
 
-#: eeschema/lib_textbox.cpp:381 eeschema/sch_textbox.cpp:384
-#: pcbnew/fp_textbox.cpp:223 pcbnew/pcb_textbox.cpp:224
+#: eeschema/lib_textbox.cpp:386 eeschema/sch_textbox.cpp:389
+#: pcbnew/fp_textbox.cpp:250 pcbnew/pcb_textbox.cpp:244
 #, fuzzy
 msgid "Box Height"
 msgstr "Teksthøjde"
@@ -14182,7 +14260,7 @@ msgid "Error occurred saving project specific symbol library table."
 msgstr ""
 "Der opstod en fejl under lagring af projektspecifikt symbolbibliotekstabel."
 
-#: eeschema/sch_base_frame.cpp:217
+#: eeschema/sch_base_frame.cpp:221
 #, c-format
 msgid ""
 "Error saving global symbol library table:\n"
@@ -14191,7 +14269,7 @@ msgstr ""
 "Fejl ved lagring af tabel med globale symbolbiblioteker:\n"
 "%s"
 
-#: eeschema/sch_base_frame.cpp:233
+#: eeschema/sch_base_frame.cpp:237
 #, c-format
 msgid ""
 "Error saving project-specific symbol library table:\n"
@@ -14252,8 +14330,8 @@ msgstr "Skift til skematisk editor"
 msgid "New schematic file is unsaved"
 msgstr "Ny skematisk fil er ikke gemt"
 
-#: eeschema/sch_edit_frame.cpp:731 eeschema/sim/sim_plot_frame.cpp:1615
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:517
+#: eeschema/sch_edit_frame.cpp:728 eeschema/sim/sim_plot_frame.cpp:1614
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:518
 #: eeschema/symbol_editor/symbol_editor.cpp:1154
 #: pagelayout_editor/pl_editor_frame.cpp:374
 #: pcbnew/footprint_edit_frame.cpp:658 pcbnew/footprint_edit_frame.cpp:698
@@ -14262,7 +14340,7 @@ msgstr "Ny skematisk fil er ikke gemt"
 msgid "Save changes to '%s' before closing?"
 msgstr "Gem ændringer til '%s' før lukning?"
 
-#: eeschema/sch_edit_frame.cpp:906
+#: eeschema/sch_edit_frame.cpp:903
 #, fuzzy
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
@@ -14273,46 +14351,46 @@ msgstr ""
 "tilstand. For at oprette / opdatere PCB'er fra skemaer skal du starte Kicad-"
 "shell og oprette et projekt."
 
-#: eeschema/sch_edit_frame.cpp:1063
+#: eeschema/sch_edit_frame.cpp:1060
 msgid "New Schematic"
 msgstr "Ny skematisk"
 
-#: eeschema/sch_edit_frame.cpp:1075
+#: eeschema/sch_edit_frame.cpp:1072
 #, fuzzy, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Skematisk fil \"%s\" findes allerede."
 
-#: eeschema/sch_edit_frame.cpp:1096
+#: eeschema/sch_edit_frame.cpp:1093
 msgid "Open Schematic"
 msgstr "Åbn skematisk"
 
-#: eeschema/sch_edit_frame.cpp:1159
+#: eeschema/sch_edit_frame.cpp:1156
 #, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr ""
 "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
-#: eeschema/sch_edit_frame.cpp:1178
+#: eeschema/sch_edit_frame.cpp:1175
 msgid "Could not open CvPcb"
 msgstr "Kunne ikke åbne CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1390 eeschema/sim/sim_plot_frame.cpp:353
+#: eeschema/sch_edit_frame.cpp:1387 eeschema/sim/sim_plot_frame.cpp:354
 #: kicad/kicad_manager_frame.cpp:645 pcbnew/footprint_edit_frame.cpp:862
 #: pcbnew/pcb_edit_frame.cpp:1386
 msgid "[Read Only]"
 msgstr "[Læs kun]"
 
-#: eeschema/sch_edit_frame.cpp:1393 eeschema/sim/sim_plot_frame.cpp:356
+#: eeschema/sch_edit_frame.cpp:1390 eeschema/sim/sim_plot_frame.cpp:357
 #: pcbnew/footprint_edit_frame.cpp:871 pcbnew/pcb_edit_frame.cpp:1389
 msgid "[Unsaved]"
 msgstr "[Ikke gemt]"
 
-#: eeschema/sch_edit_frame.cpp:1397
+#: eeschema/sch_edit_frame.cpp:1394
 #, fuzzy
 msgid "[no schematic loaded]"
 msgstr "Skematisk gemt"
 
-#: eeschema/sch_edit_frame.cpp:1614
+#: eeschema/sch_edit_frame.cpp:1611
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Fremhævet net: %s"
@@ -14807,7 +14885,7 @@ msgstr ""
 "men har ingen figur defineret."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:3068
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:3069
 #, fuzzy, c-format
 msgid "Unable to read file '%s'."
 msgstr "Kunne ikke læse filen \"%s\""
@@ -14918,75 +14996,75 @@ msgstr ""
 msgid "Missing floating point number"
 msgstr "Manglende versionsnummer."
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:717
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:727
 #, fuzzy
 msgid "Invalid pin names definition"
 msgstr "Board's perimeter definition"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:739
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1871
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:749
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1881
 #, fuzzy
 msgid "Invalid property name"
 msgstr "Ugyldigt signalnavn"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:747
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1879
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:757
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1889
 #, fuzzy
 msgid "Empty property name"
 msgstr "Indtast fodaftryk navn:"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:756
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1887
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:766
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1897
 #, fuzzy
 msgid "Invalid property value"
 msgstr "Ugyldig Spice-værdistreng"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1324
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1334
 #, fuzzy
 msgid "Invalid pin name"
 msgstr "Ugyldigt signalnavn"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1362
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1372
 #, fuzzy
 msgid "Invalid pin number"
 msgstr "Ugyldigt signalnavn"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1399
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1409
 #, fuzzy
 msgid "Invalid alternate pin name"
 msgstr "Alternativt pin-navn"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1575
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1635
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1585
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1645
 #, fuzzy
 msgid "Invalid text string"
 msgstr "Ugyldig Spice-værdistreng"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1719
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1729
 #, fuzzy
 msgid "Invalid page type"
 msgstr "Ugyldigt signalnavn"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1846
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1856
 msgid "Invalid title block comment number"
 msgstr ""
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1943
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1953
 #, fuzzy
 msgid "Invalid sheet pin name"
 msgstr "Ugyldigt signalnavn"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1951
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1961
 #, fuzzy
 msgid "Empty sheet pin name"
 msgstr "Arknavne"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2445
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2455
 #, fuzzy
 msgid "Invalid symbol library name"
 msgstr "Ugyldig symbolbiblioteksidentifikator"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2465
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2475
 #, fuzzy
 msgid "Invalid symbol library ID"
 msgstr "Ugyldig symbolbiblioteksidentifikator"
@@ -15715,62 +15793,62 @@ msgstr "Parametre"
 msgid "Simulation parameters and settings"
 msgstr "Simuleringsindstillinger"
 
-#: eeschema/sim/sim_plot_frame.cpp:358 eeschema/sim/sim_plot_frame_base.h:126
+#: eeschema/sim/sim_plot_frame.cpp:359 eeschema/sim/sim_plot_frame_base.h:126
 msgid "Spice Simulator"
 msgstr "Spice Simulator"
 
-#: eeschema/sim/sim_plot_frame.cpp:474 eeschema/sim/sim_plot_frame.cpp:1459
+#: eeschema/sim/sim_plot_frame.cpp:474 eeschema/sim/sim_plot_frame.cpp:1458
 msgid "There were errors during netlist export, aborted."
 msgstr "Der var fejl under netlisteksporten, afbrudt."
 
-#: eeschema/sim/sim_plot_frame.cpp:488 eeschema/sim/sim_plot_frame.cpp:1812
+#: eeschema/sim/sim_plot_frame.cpp:487 eeschema/sim/sim_plot_frame.cpp:1820
 #, fuzzy
 msgid "Another simulation is already running."
 msgstr "%s kører allerede. Blive ved?"
 
-#: eeschema/sim/sim_plot_frame.cpp:515
+#: eeschema/sim/sim_plot_frame.cpp:514
 #, c-format
 msgid "Plot%u - "
 msgstr "Plot %u - "
 
-#: eeschema/sim/sim_plot_frame.cpp:637
+#: eeschema/sim/sim_plot_frame.cpp:636
 msgid "Error: simulation type not defined!\n"
 msgstr "Fejl: simulationstype ikke defineret!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:643
+#: eeschema/sim/sim_plot_frame.cpp:642
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "Fejl: simulationstype understøtter ikke tegning!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:825 eeschema/sim/sim_plot_frame.cpp:1654
+#: eeschema/sim/sim_plot_frame.cpp:824 eeschema/sim/sim_plot_frame.cpp:1653
 msgid "Signal"
 msgstr "Signal"
 
-#: eeschema/sim/sim_plot_frame.cpp:1103
+#: eeschema/sim/sim_plot_frame.cpp:1102
 msgid "noname"
 msgstr "intet navn"
 
-#: eeschema/sim/sim_plot_frame.cpp:1152
+#: eeschema/sim/sim_plot_frame.cpp:1151
 msgid "Open simulation workbook"
 msgstr "Åbn simulation-projektmappe"
 
-#: eeschema/sim/sim_plot_frame.cpp:1181
+#: eeschema/sim/sim_plot_frame.cpp:1180
 #, fuzzy
 msgid "Save Simulation Workbook As"
 msgstr "Gem simuleringsarbejdsbog"
 
-#: eeschema/sim/sim_plot_frame.cpp:1197
+#: eeschema/sim/sim_plot_frame.cpp:1196
 msgid "Save Plot as Image"
 msgstr "Gem plot som billede"
 
-#: eeschema/sim/sim_plot_frame.cpp:1214
+#: eeschema/sim/sim_plot_frame.cpp:1213
 msgid "Save Plot Data"
 msgstr "Gem plotdata"
 
-#: eeschema/sim/sim_plot_frame.cpp:1507
+#: eeschema/sim/sim_plot_frame.cpp:1506
 msgid "You need to run plot-providing simulation first."
 msgstr "Du skal først køre plot-tilvejebringende simulering."
 
-#: eeschema/sim/sim_plot_frame.cpp:1752
+#: eeschema/sim/sim_plot_frame.cpp:1751
 msgid ""
 "\n"
 "\n"
@@ -15782,19 +15860,19 @@ msgstr ""
 "Simuleringsresultater:\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:1831
+#: eeschema/sim/sim_plot_frame.cpp:1840
 msgid "Hide Signal"
 msgstr "Skjul signal"
 
-#: eeschema/sim/sim_plot_frame.cpp:1831
+#: eeschema/sim/sim_plot_frame.cpp:1840
 msgid "Erase the signal from plot screen"
 msgstr "Slet signalet fra plotskærmen"
 
-#: eeschema/sim/sim_plot_frame.cpp:1837
+#: eeschema/sim/sim_plot_frame.cpp:1846
 msgid "Hide Cursor"
 msgstr "Skjul markør"
 
-#: eeschema/sim/sim_plot_frame.cpp:1839
+#: eeschema/sim/sim_plot_frame.cpp:1848
 msgid "Show Cursor"
 msgstr "Vis markør"
 
@@ -15999,7 +16077,7 @@ msgid "KiCad Symbol Editor"
 msgstr "Symbol Editor"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:135
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:942
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:943
 #: eeschema/symbol_library.cpp:468 eeschema/symbol_tree_model_adapter.cpp:66
 msgid "Loading Symbol Libraries"
 msgstr "Indlæser symbolbiblioteker"
@@ -16018,23 +16096,23 @@ msgstr "Biblioteksændringer er ikke gemt"
 msgid "Symbol library loading was cancelled by user."
 msgstr "Bibliotek %s findes allerede."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:591
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:592
 #: eeschema/tools/sch_edit_tool.cpp:119
 #, c-format
 msgid "Unit %s"
 msgstr "Enhed %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:748
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:749
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
 msgstr "Redigeringssymbol %s fra skematisk. Lagring opdaterer kun skematisk."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:757
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:758
 msgid "Manage symbol libraries"
 msgstr "Administrer symbolbiblioteker"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:768
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:769
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
@@ -16042,22 +16120,22 @@ msgstr ""
 "Symboler i ældre biblioteker kan ikke redigeres. Brug Manage Symbol "
 "Libraries til at migrere til det aktuelle format."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:778
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:779
 #, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr "Symbol %s er afledt af %s. Symbolgrafik kan ikke redigeres."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:782
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:783
 #, c-format
 msgid "Open %s"
 msgstr "Åbn %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:853
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:854
 #, fuzzy, c-format
 msgid "Library '%s' already exists."
 msgstr "Bibliotek %s findes allerede."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:861
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:862
 #, fuzzy, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
@@ -16066,47 +16144,47 @@ msgstr ""
 "Kunne ikke oprette biblioteksfilen '%s'.\n"
 "Tjek skrivetilladelse."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:871
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:872
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:213
 msgid "Could not open the library file."
 msgstr "Kunne ikke åbne biblioteksfilen."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:948
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:949
 #, fuzzy, c-format
 msgid "Loading library '%s'..."
 msgstr "Indlæser bibliotek \"%s\""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1022
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1023
 #: pcbnew/footprint_libraries_utils.cpp:511
 msgid "Add the library to the global library table?"
 msgstr "Vil du føje biblioteket til den globale biblioteketabel?"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1023
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1024
 #: pcbnew/footprint_libraries_utils.cpp:512
 msgid "Add To Global Library Table"
 msgstr "Føj til den globale biblioteketabel"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1033
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1034
 #: pcbnew/footprint_libraries_utils.cpp:522
 msgid "Global"
 msgstr "Global"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1036
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1037
 #: pcbnew/footprint_libraries_utils.cpp:525
 msgid "Choose the Library Table to add the library to:"
 msgstr "Vælg biblioteketabellen for at føje biblioteket til:"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1037
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1038
 #: pcbnew/footprint_libraries_utils.cpp:526
 msgid "Add To Library Table"
 msgstr "Føj til biblioteketabel"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1069
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1070
 #, fuzzy, c-format
 msgid "Failed to save backup to '%s'."
 msgstr "Kunne ikke gemme sikkerhedskopien til \"%s\""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1226
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1227
 #: eeschema/symbol_viewer_frame.cpp:391
 #, c-format
 msgid ""
@@ -16116,12 +16194,12 @@ msgstr ""
 "Den aktuelle konfiguration inkluderer ikke biblioteket '%s'.\n"
 "Brug Manage Symbol Libraries til at redigere konfigurationen."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1229
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1230
 #: eeschema/symbol_viewer_frame.cpp:394
 msgid "Library not found in symbol library table."
 msgstr "Biblioteket blev ikke fundet i symbolbiblioteketabellen."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1237
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1238
 #: eeschema/symbol_viewer_frame.cpp:398
 #, c-format
 msgid ""
@@ -16131,13 +16209,13 @@ msgstr ""
 "Biblioteket '%s' er ikke aktiveret i den aktuelle konfiguration.\n"
 "Brug Manage Symbol Libraries til at redigere konfigurationen."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1240
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1241
 #: eeschema/symbol_viewer_frame.cpp:401
 msgid "Symbol library not enabled."
 msgstr "Symbolbiblioteket ikke aktiveret."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1427
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1479
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1428
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1480
 #, fuzzy
 msgid "Error saving global library table."
 msgstr ""
@@ -16145,8 +16223,8 @@ msgstr ""
 "\n"
 "%s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1428
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1480
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1429
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1481
 #, fuzzy
 msgid "Error saving project library table."
 msgstr ""
@@ -16248,7 +16326,7 @@ msgid "Overwrite"
 msgstr "Overskriv"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:556
-#: eeschema/tools/symbol_editor_control.cpp:514
+#: eeschema/tools/symbol_editor_control.cpp:518
 msgid "No schematic currently open."
 msgstr "Der er i øjeblikket ingen skemaer åben."
 
@@ -16256,7 +16334,7 @@ msgstr "Der er i øjeblikket ingen skemaer åben."
 #: eeschema/symbol_editor/symbol_editor.cpp:1176
 #: eeschema/tools/symbol_editor_control.cpp:170
 #: eeschema/tools/symbol_editor_control.cpp:240
-#: eeschema/tools/symbol_editor_control.cpp:272
+#: eeschema/tools/symbol_editor_control.cpp:276
 #, fuzzy, c-format
 msgid "Symbol library '%s' is not writable."
 msgstr "Symbolbiblioteket '%s' kan ikke skrives."
@@ -16371,7 +16449,7 @@ msgstr "Ikke defineret!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1228
 #: eeschema/symbol_viewer_frame.cpp:365 pcbnew/fp_shape.cpp:423
-#: pcbnew/fp_text.cpp:501 pcbnew/fp_textbox.cpp:399 pcbnew/pad.cpp:1735
+#: pcbnew/fp_text.cpp:501 pcbnew/fp_textbox.cpp:426 pcbnew/pad.cpp:1755
 msgid "Parent"
 msgstr "Forælder"
 
@@ -16852,11 +16930,11 @@ msgstr "Tilføj tekst"
 msgid "Add a text box item"
 msgstr "Tilføj et tekstelement"
 
-#: eeschema/tools/ee_actions.cpp:235 eeschema/tools/ee_actions.cpp:759
+#: eeschema/tools/ee_actions.cpp:235 eeschema/tools/ee_actions.cpp:779
 msgid "Add Lines"
 msgstr "Tilføj linjer"
 
-#: eeschema/tools/ee_actions.cpp:235 eeschema/tools/ee_actions.cpp:759
+#: eeschema/tools/ee_actions.cpp:235 eeschema/tools/ee_actions.cpp:779
 msgid "Add connected graphic lines"
 msgstr "Tilføj tilsluttede grafiske linjer"
 
@@ -17493,161 +17571,204 @@ msgstr "DRC-undtagelser"
 msgid "Show markers for excluded electrical rules checker violations"
 msgstr "Udfør elektriske regler"
 
-#: eeschema/tools/ee_actions.cpp:684
-msgid "Force H/V Wires and Buses"
+#: eeschema/tools/ee_actions.cpp:684 eeschema/tools/ee_actions.cpp:689
+#: eeschema/tools/ee_actions.cpp:694 eeschema/tools/ee_actions.cpp:699
+#: eeschema/tools/ee_actions.cpp:704
+#, fuzzy
+msgid "Line Mode for Wires and Buses"
 msgstr "Tving H / V ledninger og busser"
 
 #: eeschema/tools/ee_actions.cpp:684
-msgid "Switch H & V only mode for new wires and buses"
-msgstr "Skift kun H & V-tilstand til nye ledninger og busser"
+msgid "Lines drawn at any angle"
+msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:689
+#, fuzzy
+msgid "Lines drawn horizontally and vertically"
+msgstr "Vandret, så lodret"
+
+#: eeschema/tools/ee_actions.cpp:694
+#, fuzzy
+msgid "Lines drawn horizontally and vertically, with a 45 degree angle end"
+msgstr "L & efterlign grafiske linjer til H, V og 45 grader"
+
+#: eeschema/tools/ee_actions.cpp:699
+#, fuzzy
+msgid "Lines drawn horizontally and vertically, with a 45 degree angle start"
+msgstr "L & efterlign grafiske linjer til H, V og 45 grader"
+
+#: eeschema/tools/ee_actions.cpp:704
+#, fuzzy
+msgid "Switch to next line mode"
+msgstr "Skift til Next Grid"
+
+#: eeschema/tools/ee_actions.cpp:709
 #, fuzzy
 msgid "Repair Schematic"
 msgstr "Udskriv skematisk"
 
-#: eeschema/tools/ee_actions.cpp:690
+#: eeschema/tools/ee_actions.cpp:710
 #, fuzzy
 msgid "Run various diagnostics and attempt to repair schematic"
 msgstr "Kør forskellige diagnoser og forsøg at reparere kortet"
 
-#: eeschema/tools/ee_actions.cpp:696 pcbnew/tools/pcb_actions.cpp:804
+#: eeschema/tools/ee_actions.cpp:716 pcbnew/tools/pcb_actions.cpp:804
 msgid "Scripting Console"
 msgstr "Scripting-konsol"
 
-#: eeschema/tools/ee_actions.cpp:696 pcbnew/tools/pcb_actions.cpp:804
+#: eeschema/tools/ee_actions.cpp:716 pcbnew/tools/pcb_actions.cpp:804
 msgid "Show the Python scripting console"
 msgstr "Vis Python-scripting-konsollen"
 
-#: eeschema/tools/ee_actions.cpp:703
+#: eeschema/tools/ee_actions.cpp:723
 msgid "Enter Sheet"
 msgstr "Indtast ark"
 
-#: eeschema/tools/ee_actions.cpp:703
+#: eeschema/tools/ee_actions.cpp:723
 #, fuzzy
 msgid "Display the selected sheet's contents in the schematic editor"
 msgstr "Vis det valgte arks indhold i Eeschema-vinduet"
 
-#: eeschema/tools/ee_actions.cpp:709
+#: eeschema/tools/ee_actions.cpp:729
 msgid "Leave Sheet"
 msgstr "Forlad ark"
 
-#: eeschema/tools/ee_actions.cpp:709
+#: eeschema/tools/ee_actions.cpp:729
 #, fuzzy
 msgid "Display the parent sheet in the schematic editor"
 msgstr "Vis overordnet ark i Eeschema-vinduet"
 
-#: eeschema/tools/ee_actions.cpp:714
+#: eeschema/tools/ee_actions.cpp:734
 msgid "Hierarchy Navigator"
 msgstr "Hierarki Navigator"
 
-#: eeschema/tools/ee_actions.cpp:714
+#: eeschema/tools/ee_actions.cpp:734
 msgid "Show schematic sheet hierarchy"
 msgstr "Vis skematisk arkhierarki"
 
-#: eeschema/tools/ee_actions.cpp:719
+#: eeschema/tools/ee_actions.cpp:739
 msgid "Navigate to page"
 msgstr "Naviger til side"
 
-#: eeschema/tools/ee_actions.cpp:726
+#: eeschema/tools/ee_actions.cpp:746
 msgid "Add Junctions to Selection where needed"
 msgstr "Føj vejkryds til valg, hvor det er nødvendigt"
 
-#: eeschema/tools/ee_actions.cpp:739
+#: eeschema/tools/ee_actions.cpp:759
 msgid "Add Wire"
 msgstr "Tilføj ledning"
 
-#: eeschema/tools/ee_actions.cpp:739
+#: eeschema/tools/ee_actions.cpp:759
 msgid "Add a wire"
 msgstr "Tilføj en ledning"
 
-#: eeschema/tools/ee_actions.cpp:746
+#: eeschema/tools/ee_actions.cpp:766
 msgid "Add Bus"
 msgstr "Tilføj Bus"
 
-#: eeschema/tools/ee_actions.cpp:746
+#: eeschema/tools/ee_actions.cpp:766
 msgid "Add a bus"
 msgstr "Tilføj en bus"
 
-#: eeschema/tools/ee_actions.cpp:752
+#: eeschema/tools/ee_actions.cpp:772
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:76
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:133
 msgid "Unfold from Bus"
 msgstr "Fold ud fra bus"
 
-#: eeschema/tools/ee_actions.cpp:752
+#: eeschema/tools/ee_actions.cpp:772
 msgid "Break a wire out of a bus"
 msgstr "Bryt en ledning ud af en bus"
 
-#: eeschema/tools/ee_actions.cpp:765
+#: eeschema/tools/ee_actions.cpp:785 pcbnew/tools/pcb_actions.cpp:1409
+#, fuzzy
+msgid "Undo Last Segment"
+msgstr "Fortryd det sidste segment"
+
+#: eeschema/tools/ee_actions.cpp:785
+#, fuzzy
+msgid "Walks the current line back one segment."
+msgstr "Gør det aktuelle lag mere gennemsigtigt"
+
+#: eeschema/tools/ee_actions.cpp:791
+#, fuzzy
+msgid "Switch Segment Posture"
+msgstr "Skift lysbueholdning"
+
+#: eeschema/tools/ee_actions.cpp:791
+#, fuzzy
+msgid "Switches posture of the current segment."
+msgstr "Skifter kropsholdning af det aktuelt dirigerede spor."
+
+#: eeschema/tools/ee_actions.cpp:797
 msgid "Finish Wire or Bus"
 msgstr "Afslut ledning eller bus"
 
-#: eeschema/tools/ee_actions.cpp:765
+#: eeschema/tools/ee_actions.cpp:797
 msgid "Complete drawing at current segment"
 msgstr "Komplet tegning i det aktuelle segment"
 
-#: eeschema/tools/ee_actions.cpp:770
+#: eeschema/tools/ee_actions.cpp:802
 msgid "Finish Wire"
 msgstr "Afslut ledningen"
 
-#: eeschema/tools/ee_actions.cpp:770
+#: eeschema/tools/ee_actions.cpp:802
 msgid "Complete wire with current segment"
 msgstr "Komplet ledning med aktuelt segment"
 
-#: eeschema/tools/ee_actions.cpp:775
+#: eeschema/tools/ee_actions.cpp:807
 msgid "Finish Bus"
 msgstr "Afslut bus"
 
-#: eeschema/tools/ee_actions.cpp:775
+#: eeschema/tools/ee_actions.cpp:807
 msgid "Complete bus with current segment"
 msgstr "Komplet bus med nuværende segment"
 
-#: eeschema/tools/ee_actions.cpp:780
+#: eeschema/tools/ee_actions.cpp:812
 msgid "Finish Lines"
 msgstr "Afslut linjer"
 
-#: eeschema/tools/ee_actions.cpp:780
+#: eeschema/tools/ee_actions.cpp:812
 msgid "Complete connected lines with current segment"
 msgstr "Komplette tilsluttede linjer med det aktuelle segment"
 
-#: eeschema/tools/ee_actions.cpp:789 pagelayout_editor/tools/pl_actions.cpp:68
+#: eeschema/tools/ee_actions.cpp:821 pagelayout_editor/tools/pl_actions.cpp:68
 #: pcbnew/dialogs/panel_edit_options_base.cpp:341
 #: pcbnew/tools/pcb_actions.cpp:265
 msgid "Move"
 msgstr "Flyt"
 
-#: eeschema/tools/ee_actions.cpp:789 pagelayout_editor/tools/pl_actions.cpp:68
+#: eeschema/tools/ee_actions.cpp:821 pagelayout_editor/tools/pl_actions.cpp:68
 #: pcbnew/tools/pcb_actions.cpp:265
 msgid "Moves the selected item(s)"
 msgstr "Flytter det (de) valgte element (er)"
 
-#: eeschema/tools/ee_actions.cpp:794 pcbnew/tools/edit_tool.cpp:1077
+#: eeschema/tools/ee_actions.cpp:826 pcbnew/tools/edit_tool.cpp:1077
 msgid "Drag"
 msgstr "Træk"
 
-#: eeschema/tools/ee_actions.cpp:794
+#: eeschema/tools/ee_actions.cpp:826
 msgid "Drags the selected item(s)"
 msgstr "Trækker det eller de valgte emner"
 
-#: eeschema/tools/ee_actions.cpp:798
+#: eeschema/tools/ee_actions.cpp:830
 msgid "Move Activate"
 msgstr "Flyt Aktivér"
 
-#: eeschema/tools/ee_actions.cpp:802
+#: eeschema/tools/ee_actions.cpp:834
 msgid "Symbol Move Activate"
 msgstr "Symbol Flyt Aktivér"
 
-#: eeschema/tools/ee_actions.cpp:806
+#: eeschema/tools/ee_actions.cpp:838
 msgid "Align Elements to Grid"
 msgstr "Juster elementer til gitter"
 
-#: eeschema/tools/ee_actions.cpp:812
+#: eeschema/tools/ee_actions.cpp:844
 #, fuzzy
 msgid "Save Current Sheet Copy As..."
 msgstr "Gem kopi som ..."
 
-#: eeschema/tools/ee_actions.cpp:812
+#: eeschema/tools/ee_actions.cpp:844
 #, fuzzy
 msgid "Save a copy of the current sheet to another location or name"
 msgstr "Gem en kopi af det aktuelle dokument et andet sted"
@@ -17770,14 +17891,14 @@ msgstr "Symbolbiblioteker"
 msgid "No datasheet defined."
 msgstr "Ingen via drill defineret."
 
-#: eeschema/tools/ee_selection_tool.cpp:1625
+#: eeschema/tools/ee_selection_tool.cpp:1637
 #: pagelayout_editor/tools/pl_selection_tool.cpp:623
-#: pcbnew/tools/pcb_selection_tool.cpp:2230
+#: pcbnew/tools/pcb_selection_tool.cpp:2227
 msgid "Select &All\tA"
 msgstr "Vælg & Alle A"
 
-#: eeschema/tools/ee_selection_tool.cpp:1628
-#: pcbnew/tools/pcb_selection_tool.cpp:2233
+#: eeschema/tools/ee_selection_tool.cpp:1640
+#: pcbnew/tools/pcb_selection_tool.cpp:2230
 msgid "&Expand Selection\tE"
 msgstr "& Udvid valg E"
 
@@ -17785,32 +17906,32 @@ msgstr "& Udvid valg E"
 msgid "Press <ESC> to cancel symbol creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:470
+#: eeschema/tools/sch_drawing_tools.cpp:471
 msgid "Press <ESC> to cancel image creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:531
+#: eeschema/tools/sch_drawing_tools.cpp:532
 #: pagelayout_editor/pl_editor_frame.cpp:843
 #: pagelayout_editor/pl_editor_frame.cpp:851
 #, fuzzy, c-format
 msgid "Could not load image from '%s'."
 msgstr "Kunne ikke indlæse billedet fra \"%s\""
 
-#: eeschema/tools/sch_drawing_tools.cpp:661
-#: eeschema/tools/sch_drawing_tools.cpp:1230
+#: eeschema/tools/sch_drawing_tools.cpp:662
+#: eeschema/tools/sch_drawing_tools.cpp:1231
 msgid "No new hierarchical labels found."
 msgstr "Ingen nye hierarkiske etiketter fundet."
 
-#: eeschema/tools/sch_drawing_tools.cpp:745
+#: eeschema/tools/sch_drawing_tools.cpp:746
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1158
+#: eeschema/tools/sch_drawing_tools.cpp:1159
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:163
 msgid "Press <ESC> to cancel item creation."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1218
+#: eeschema/tools/sch_drawing_tools.cpp:1219
 msgid "Click over a sheet."
 msgstr "Klik over et ark."
 
@@ -17908,21 +18029,21 @@ msgstr ""
 "blev droppet, fordi destinationen allerede har arket eller et af dets "
 "underark som forælder."
 
-#: eeschema/tools/sch_editor_control.cpp:2246
+#: eeschema/tools/sch_editor_control.cpp:2270
 #: pcbnew/tools/board_editor_control.cpp:630
 #: pcbnew/tools/footprint_editor_control.cpp:576
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d duplikerede id'er udskiftet.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2253
+#: eeschema/tools/sch_editor_control.cpp:2277
 #: pcbnew/tools/board_editor_control.cpp:645
 #: pcbnew/tools/footprint_editor_control.cpp:591
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d potentielle problemer repareret."
 
-#: eeschema/tools/sch_editor_control.cpp:2260
+#: eeschema/tools/sch_editor_control.cpp:2284
 #: pcbnew/drc/drc_rule_parser.cpp:165
 msgid "No errors found."
 msgstr "Ingen fejl fundet."
@@ -17935,15 +18056,15 @@ msgstr "Ingen bus valgt"
 msgid "Bus has no members"
 msgstr "Bus har ingen medlemmer"
 
-#: eeschema/tools/sch_line_wire_bus_tool.cpp:621
+#: eeschema/tools/sch_line_wire_bus_tool.cpp:698
 msgid "Press <ESC> to cancel drawing."
 msgstr ""
 
-#: eeschema/tools/sch_move_tool.cpp:733
+#: eeschema/tools/sch_move_tool.cpp:747
 msgid "Press <ESC> to cancel drag."
 msgstr ""
 
-#: eeschema/tools/sch_move_tool.cpp:735
+#: eeschema/tools/sch_move_tool.cpp:749
 #: pagelayout_editor/tools/pl_edit_tool.cpp:217
 msgid "Press <ESC> to cancel move."
 msgstr ""
@@ -17953,21 +18074,21 @@ msgstr ""
 msgid "No symbol library selected."
 msgstr "Intet symbol valgt"
 
-#: eeschema/tools/symbol_editor_control.cpp:393
-#: eeschema/tools/symbol_editor_control.cpp:433
+#: eeschema/tools/symbol_editor_control.cpp:397
+#: eeschema/tools/symbol_editor_control.cpp:437
 msgid "No symbol to export"
 msgstr "Intet symbol at eksportere"
 
-#: eeschema/tools/symbol_editor_control.cpp:404
+#: eeschema/tools/symbol_editor_control.cpp:408
 msgid "Image File Name"
 msgstr "Billedfilnavn"
 
-#: eeschema/tools/symbol_editor_control.cpp:415
+#: eeschema/tools/symbol_editor_control.cpp:419
 #, fuzzy, c-format
 msgid "Can't save file '%s'."
 msgstr "Kan ikke gemme filen \"%s\"."
 
-#: eeschema/tools/symbol_editor_control.cpp:443
+#: eeschema/tools/symbol_editor_control.cpp:447
 #, fuzzy
 msgid "SVG File Name"
 msgstr "Filnavn"
@@ -18221,10 +18342,10 @@ msgstr "Vælg lag: %s"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:53
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:47
 #: pcbnew/footprint.cpp:2566 pcbnew/footprint.cpp:2569 pcbnew/fp_text.cpp:289
-#: pcbnew/fp_text_grid_table.cpp:104 pcbnew/fp_textbox.cpp:211
-#: pcbnew/pad.cpp:911 pcbnew/pcb_dimension.cpp:337
+#: pcbnew/fp_text_grid_table.cpp:104 pcbnew/fp_textbox.cpp:238
+#: pcbnew/pad.cpp:940 pcbnew/pcb_dimension.cpp:337
 #: pcbnew/pcb_dimension.cpp:1058 pcbnew/pcb_shape.cpp:211
-#: pcbnew/pcb_target.cpp:155 pcbnew/pcb_text.cpp:138 pcbnew/pcb_textbox.cpp:212
+#: pcbnew/pcb_target.cpp:155 pcbnew/pcb_text.cpp:138 pcbnew/pcb_textbox.cpp:232
 #: pcbnew/pcb_track.cpp:750 pcbnew/pcb_track.cpp:809 pcbnew/pcb_track.cpp:1232
 #: pcbnew/tools/board_inspection_tool.cpp:188
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:227
@@ -18633,7 +18754,7 @@ msgid "Graphic Layer"
 msgstr "Grafisk lag"
 
 #: gerbview/gerber_draw_item.cpp:690
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:230
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:239
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:105
 msgid "Position"
 msgstr "Position"
@@ -18657,7 +18778,7 @@ msgid "Polarity"
 msgstr "Polaritet"
 
 #: gerbview/gerber_draw_item.cpp:715 pcbnew/fp_text.cpp:291
-#: pcbnew/fp_textbox.cpp:212 pcbnew/pcb_text.cpp:140 pcbnew/pcb_textbox.cpp:213
+#: pcbnew/fp_textbox.cpp:239 pcbnew/pcb_text.cpp:140 pcbnew/pcb_textbox.cpp:233
 #: pcbnew/tools/edit_tool.cpp:1661 pcbnew/tools/pcb_actions.cpp:320
 msgid "Mirror"
 msgstr "Spejl"
@@ -20341,31 +20462,31 @@ msgstr "Oprindelse"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:265
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:318
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:274
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:327
 msgid "Upper Right"
 msgstr "Øverst til højre"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:266
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:319
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:275
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:328
 msgid "Upper Left"
 msgstr "Øverst til venstre"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:264
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:267
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:320
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:273
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:276
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:329
 msgid "Lower Right"
 msgstr "Nederst til højre"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:268
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:317
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:321
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:277
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:326
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:330
 msgid "Lower Left"
 msgstr "Nederst til venstre"
 
@@ -20395,190 +20516,190 @@ msgstr "Der opstod en fejl under forsøg på at udskrive skematisk."
 msgid "Printing"
 msgstr "Udskrivning"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:570
+#: pagelayout_editor/dialogs/properties_frame.cpp:576
 #, fuzzy
 msgid "Predefined Keywords"
 msgstr "Foruddefinerede bredder:"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:573
+#: pagelayout_editor/dialogs/properties_frame.cpp:579
 msgid "Texts can include keywords."
 msgstr ""
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:574
+#: pagelayout_editor/dialogs/properties_frame.cpp:580
 msgid "Keyword notation is ${keyword}"
 msgstr ""
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:575
+#: pagelayout_editor/dialogs/properties_frame.cpp:581
 msgid "Each keyword is replaced by its value"
 msgstr ""
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:576
+#: pagelayout_editor/dialogs/properties_frame.cpp:582
 msgid "These build-in keywords are always available:"
 msgstr ""
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:580
+#: pagelayout_editor/dialogs/properties_frame.cpp:586
 #, fuzzy
 msgid "(sheet number)"
 msgstr "Arknummer: %d"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:581
+#: pagelayout_editor/dialogs/properties_frame.cpp:587
 #, fuzzy
 msgid "(sheet count)"
 msgstr "Gentag optælling:"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:587
+#: pagelayout_editor/dialogs/properties_frame.cpp:593
 #, fuzzy
 msgid "(paper size)"
 msgstr "Brugerdefineret papirstørrelse:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:37
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "Show on all pages"
 msgstr "Vis på alle sider"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:37
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "First page only"
 msgstr "Kun første side"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:37
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "Subsequent pages only"
 msgstr "Kun efterfølgende sider"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:151
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:464
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:160
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:473
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:189
 msgid "Text width:"
 msgstr "Tekstbredde:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:162
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:478
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:171
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:487
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:208
 msgid "Text height:"
 msgstr "Teksthøjde:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:173
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:182
 #, fuzzy
 msgid "Max width:"
 msgstr "Maximum bredde:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:175
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:188
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:184
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:197
 msgid "Set to 0 to disable this constraint"
 msgstr "Sæt til 0 for at deaktivere denne begrænsning"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:186
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:195
 #, fuzzy
 msgid "Max height:"
 msgstr "Maximum højde:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:216
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:225
 msgid "Set to 0 to use default values"
 msgstr "Indstil til 0 for at bruge standardværdier"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:223
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:232
 msgid "Comment:"
 msgstr "Kommentar:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:260
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:313
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:269
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:322
 msgid "From:"
 msgstr "Fra:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:283
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:292
 msgid "End Position"
 msgstr "Slutposition"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:355
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:364
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1354
 msgid "Rotation:"
 msgstr "Rotation:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:362
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:371
 msgid "Bitmap DPI:"
 msgstr "Bitmap DPI:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:378
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:387
 #, fuzzy
 msgid "Repeat Parameters"
 msgstr "Regulatorparametre"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:386
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:395
 #: pcbnew/dialogs/dialog_create_array_base.cpp:263
 msgid "Count:"
 msgstr "Tælle:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:396
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:405
 #, fuzzy
 msgid "Step text:"
 msgstr "Trintekst:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:401
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:410
 msgid "Number of characters or digits to step text by for each repeat."
 msgstr ""
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:408
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:417
 #, fuzzy
 msgid "Step X:"
 msgstr "Trin Y:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:413
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:422
 msgid "Distance on the X axis to step for each repeat."
 msgstr ""
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:421
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:430
 #, fuzzy
 msgid "Step Y:"
 msgstr "Trin Y:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:426
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:435
 msgid "Distance to step on Y axis for each repeat."
 msgstr ""
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:440
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:600
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:449
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:609
 msgid "Apply"
 msgstr "Anvend"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:449
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:458
 msgid "Item Properties"
 msgstr "Elementegenskaber"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:492
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:501
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:387
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:138
 msgid "Line thickness:"
 msgstr "Linjetykkelse:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:506
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:515
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:226
 msgid "Text thickness:"
 msgstr "Teksttykkelse:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:526
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:535
 msgid "Set to Default"
 msgstr "Indstil til standard"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:533
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:542
 msgid "Page Margins"
 msgstr "Sidemargener"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:541
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:550
 msgid "Left:"
 msgstr "Venstre:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:555
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:564
 msgid "Right:"
 msgstr "Højre:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:569
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:578
 msgid "Top:"
 msgstr "Top:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:583
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:592
 msgid "Bottom:"
 msgstr "Bund:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:612
-#: pcbnew/dialogs/dialog_plot_base.cpp:68
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:621
+#: pcbnew/dialogs/dialog_plot_base.cpp:67
 msgid "General Options"
 msgstr "Generelle valgmuligheder"
 
@@ -22424,9 +22545,9 @@ msgstr "Position Y"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:84
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:73
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:46
-#: pcbnew/footprint.cpp:980 pcbnew/fp_text.cpp:284 pcbnew/fp_textbox.cpp:209
-#: pcbnew/pad.cpp:907 pcbnew/pcb_dimension.cpp:335 pcbnew/pcb_group.cpp:339
-#: pcbnew/pcb_shape.cpp:207 pcbnew/pcb_text.cpp:136 pcbnew/pcb_textbox.cpp:210
+#: pcbnew/footprint.cpp:980 pcbnew/fp_text.cpp:284 pcbnew/fp_textbox.cpp:236
+#: pcbnew/pad.cpp:936 pcbnew/pcb_dimension.cpp:335 pcbnew/pcb_group.cpp:339
+#: pcbnew/pcb_shape.cpp:207 pcbnew/pcb_text.cpp:136 pcbnew/pcb_textbox.cpp:230
 #: pcbnew/pcb_track.cpp:858 pcbnew/zone.cpp:577
 msgid "Locked"
 msgstr "Låst"
@@ -23443,7 +23564,8 @@ msgstr "Fysisk Stackup"
 msgid "Board Finish"
 msgstr "Board Finish"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:100 pcbnew/dialogs/dialog_plot.cpp:963
+#: pcbnew/dialogs/dialog_board_setup.cpp:100
+#: pcbnew/dialogs/dialog_plot.cpp:1100
 msgid "Solder Mask/Paste"
 msgstr "Loddemaske / indsæt"
 
@@ -23597,11 +23719,11 @@ msgstr "???"
 msgid "N/A"
 msgstr "N/A"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:508 pcbnew/pad.cpp:1157
+#: pcbnew/dialogs/dialog_board_statistics.cpp:508 pcbnew/pad.cpp:1186
 msgid "PTH"
 msgstr "PTH"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:508 pcbnew/pad.cpp:1160
+#: pcbnew/dialogs/dialog_board_statistics.cpp:508 pcbnew/pad.cpp:1189
 msgid "NPTH"
 msgstr "NPTH"
 
@@ -24469,7 +24591,7 @@ msgstr "Tekst der skal udskrives efter dimensionens værdi"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:166
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:124
-#: pcbnew/dialogs/dialog_plot_base.cpp:374
+#: pcbnew/dialogs/dialog_plot_base.cpp:368
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
 msgid "Precision:"
 msgstr "Præcision:"
@@ -25067,14 +25189,14 @@ msgid ""
 msgstr ""
 "Kan ikke gøre sti relativ (målvolumen er forskellig fra kortfilvolumen)!"
 
-#: pcbnew/dialogs/dialog_export_svg.cpp:272 pcbnew/dialogs/dialog_plot.cpp:819
+#: pcbnew/dialogs/dialog_export_svg.cpp:273 pcbnew/dialogs/dialog_plot.cpp:926
 #: pcbnew/exporters/gen_footprints_placefile.cpp:290
 #: pcbnew/exporters/gen_footprints_placefile.cpp:398
 #, fuzzy, c-format
 msgid "Could not write plot files to folder '%s'."
 msgstr "Kunne ikke skrive plotfiler til mappen \"%s\"."
 
-#: pcbnew/dialogs/dialog_export_svg.cpp:299
+#: pcbnew/dialogs/dialog_export_svg.cpp:300
 #, fuzzy, c-format
 msgid "Exported '%s'."
 msgstr "Eksporteret \"%s\"."
@@ -25416,8 +25538,8 @@ msgstr "Gennem hul"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:185
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/footprint.cpp:704
-#: pcbnew/footprint_libraries_utils.cpp:1148 pcbnew/pad.cpp:1158
-#: pcbnew/pad.cpp:1645
+#: pcbnew/footprint_libraries_utils.cpp:1148 pcbnew/pad.cpp:1187
+#: pcbnew/pad.cpp:1665
 msgid "SMD"
 msgstr "SMD"
 
@@ -25840,7 +25962,7 @@ msgid "Include board edge layer"
 msgstr "Inkluder bordkantlag"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:83
-#: pcbnew/dialogs/dialog_plot_base.cpp:108
+#: pcbnew/dialogs/dialog_plot_base.cpp:102
 msgid "Use drill/place file origin"
 msgstr "Brug bor / sted fil oprindelse"
 
@@ -26231,21 +26353,21 @@ msgstr "Linjetykkelse"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:270
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:124
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:45
-#: pcbnew/fp_textbox.cpp:216 pcbnew/pcb_textbox.cpp:217
+#: pcbnew/fp_textbox.cpp:243 pcbnew/pcb_textbox.cpp:237
 msgid "Text Width"
 msgstr "Tekstbredde"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:276
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:125
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:46
-#: pcbnew/fp_textbox.cpp:217 pcbnew/pcb_textbox.cpp:218
+#: pcbnew/fp_textbox.cpp:244 pcbnew/pcb_textbox.cpp:238
 msgid "Text Height"
 msgstr "Teksthøjde"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:282
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:126
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:47
-#: pcbnew/pcb_textbox.cpp:216
+#: pcbnew/pcb_textbox.cpp:236
 msgid "Text Thickness"
 msgstr "Teksttykkelse"
 
@@ -26319,7 +26441,7 @@ msgid "Set Track and Via Properties"
 msgstr "Indstil spor og via egenskaber"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:30
-#: pcbnew/drc/drc_engine.cpp:1243
+#: pcbnew/drc/drc_engine.cpp:1248
 msgid "footprint"
 msgstr "fodspor"
 
@@ -27115,7 +27237,7 @@ msgstr "Tilføj Primitive"
 msgid "Pad type:"
 msgstr "Pad type:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1644
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1664
 msgid "Through-hole"
 msgstr "Gennem hul"
 
@@ -27123,8 +27245,8 @@ msgstr "Gennem hul"
 msgid "Edge Connector"
 msgstr "Edge Connector"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1180
-#: pcbnew/pad.cpp:1203
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1209
+#: pcbnew/pad.cpp:1232
 msgid "NPTH, Mechanical"
 msgstr "NPTH, Mekanisk"
 
@@ -27150,8 +27272,8 @@ msgid "Circular"
 msgstr "Cirkulær"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:370 pcbnew/pad.cpp:1142
-#: pcbnew/pad.cpp:1652
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:370 pcbnew/pad.cpp:1171
+#: pcbnew/pad.cpp:1672
 msgid "Oval"
 msgstr "Oval"
 
@@ -27163,11 +27285,11 @@ msgstr "Rektangulær"
 msgid "Trapezoidal"
 msgstr "Trapesformet"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1654
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1674
 msgid "Rounded rectangle"
 msgstr "Afrundet rektangel"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1655
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1675
 msgid "Chamfered rectangle"
 msgstr "Affaset rektangel"
 
@@ -27361,23 +27483,23 @@ msgstr ""
 "Castellated specificerer castellated gennem hulpuder på en plankant\n"
 "Disse egenskaber er specificeret i Gerber X2-filer."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1660
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1680
 msgid "BGA pad"
 msgstr "BGA-pude"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1662
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1682
 msgid "Fiducial, local to footprint"
 msgstr "Fiducial, lokal til fodaftryk"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1661
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1681
 msgid "Fiducial, global to board"
 msgstr "Fiducial, global til bord"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1663
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1683
 msgid "Test point pad"
 msgstr "Testpude"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1664
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1684
 msgid "Heatsink pad"
 msgstr "Kølelegeme pad"
 
@@ -27555,23 +27677,38 @@ msgstr "Pad tilpasset form Geometri Transform"
 msgid "Basic Shape Polygon"
 msgstr "Grundlæggende form polygon"
 
-#: pcbnew/dialogs/dialog_plot.cpp:67
+#: pcbnew/dialogs/dialog_plot.cpp:113
+#, fuzzy
+msgid "Plot on All Layers"
+msgstr "Plot alle sider"
+
+#: pcbnew/dialogs/dialog_plot.cpp:135
+#, fuzzy
+msgid "Move current selection up"
+msgstr "Ryd aktuelt lag ..."
+
+#: pcbnew/dialogs/dialog_plot.cpp:143
+#, fuzzy
+msgid "Move current selection down"
+msgstr "Kun nuværende lag"
+
+#: pcbnew/dialogs/dialog_plot.cpp:154
 msgid "Generate Drill Files..."
 msgstr "Generer borefiler ..."
 
-#: pcbnew/dialogs/dialog_plot.cpp:671
+#: pcbnew/dialogs/dialog_plot.cpp:757
 msgid "HPGL pen size constrained."
 msgstr "HPGL-penstørrelse begrænset."
 
-#: pcbnew/dialogs/dialog_plot.cpp:689
+#: pcbnew/dialogs/dialog_plot.cpp:775
 msgid "X scale constrained."
 msgstr "X-skala begrænset."
 
-#: pcbnew/dialogs/dialog_plot.cpp:701
+#: pcbnew/dialogs/dialog_plot.cpp:787
 msgid "Y scale constrained."
 msgstr "Y-skala begrænset."
 
-#: pcbnew/dialogs/dialog_plot.cpp:717
+#: pcbnew/dialogs/dialog_plot.cpp:803
 #, fuzzy, c-format
 msgid ""
 "Width correction constrained.  The width correction value must be in the "
@@ -27580,15 +27717,15 @@ msgstr ""
 "Breddekorrektion begrænset. Den rimelige breddekorrektionsværdi skal være i "
 "et område på [%s; %s] (%s) for aktuelle designregler."
 
-#: pcbnew/dialogs/dialog_plot.cpp:794
+#: pcbnew/dialogs/dialog_plot.cpp:901
 msgid "No layer selected, Nothing to plot"
 msgstr "Intet lag valgt, Intet at plotte"
 
-#: pcbnew/dialogs/dialog_plot.cpp:860
+#: pcbnew/dialogs/dialog_plot.cpp:966
 msgid "Warning: Scale option set to a very small value"
 msgstr "Advarsel: Skalemulighed indstillet til en meget lille værdi"
 
-#: pcbnew/dialogs/dialog_plot.cpp:863
+#: pcbnew/dialogs/dialog_plot.cpp:969
 msgid "Warning: Scale option set to a very large value"
 msgstr "Advarsel: Skalemulighed indstillet til en meget stor værdi"
 
@@ -27596,126 +27733,116 @@ msgstr "Advarsel: Skalemulighed indstillet til en meget stor værdi"
 msgid "Plot format:"
 msgstr "Plotformat:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:54
+#: pcbnew/dialogs/dialog_plot_base.cpp:53
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:269
 #, fuzzy
 msgid "Include Layers"
 msgstr "Medtag lag"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:75
+#: pcbnew/dialogs/dialog_plot_base.cpp:74
 msgid "Plot border and title block"
 msgstr "Plotgrænse og titelblok"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:80
+#: pcbnew/dialogs/dialog_plot_base.cpp:79
 msgid "Plot footprint values"
 msgstr "Plot fodaftryk værdier"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:84
+#: pcbnew/dialogs/dialog_plot_base.cpp:83
 msgid "Plot reference designators"
 msgstr "Plotreferenceudpegere"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:88
+#: pcbnew/dialogs/dialog_plot_base.cpp:87
 msgid "Force plotting of invisible values / refs"
 msgstr "Tving planlægning af usynlige værdier / refs"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:89
+#: pcbnew/dialogs/dialog_plot_base.cpp:88
 msgid "Force plot invisible footprint values and reference designators"
 msgstr "Tvinge plot usynlige fodaftrykværdier og referencebetegnere"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:93
-#, fuzzy
-msgid "Plot Edge.Cuts on all layers"
-msgstr "Skitsepuder på fantastiske lag"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:94
-#, fuzzy
-msgid "Plot the contents of the PCB edge layer on all layers"
-msgstr "Plot ikke indholdet af PCB-kantlaget på andre lag."
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:98
+#: pcbnew/dialogs/dialog_plot_base.cpp:92
 #, fuzzy
 msgid "Sketch pads on fabrication layers"
 msgstr "Skitsepuder på fantastiske lag"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:99
+#: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
 msgstr "Medtag padkonturer på F.Fab- og B.Fab-lag, når du planlægger"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:103
+#: pcbnew/dialogs/dialog_plot_base.cpp:97
 msgid "Do not tent vias"
 msgstr "Telt ikke vias"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:104
+#: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Remove soldermask on vias"
 msgstr "Fjern loddemask på vias"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:109
+#: pcbnew/dialogs/dialog_plot_base.cpp:103
 msgid ""
 "Use the drill/place file origin as the coordinate origin for plotted files"
 msgstr ""
 "Brug bor / sted fil-oprindelse som koordinat-oprindelse for plottede filer"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:113
+#: pcbnew/dialogs/dialog_plot_base.cpp:107
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:232
 msgid "Drill marks:"
 msgstr "Boremærker:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:117
+#: pcbnew/dialogs/dialog_plot_base.cpp:111
 msgid "Actual size"
 msgstr "Aktuel størrelse"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:123
+#: pcbnew/dialogs/dialog_plot_base.cpp:117
 msgid "Scaling:"
 msgstr "Skalering:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:127
+#: pcbnew/dialogs/dialog_plot_base.cpp:121
 msgid "Auto"
 msgstr "Auto"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:127
+#: pcbnew/dialogs/dialog_plot_base.cpp:121
 msgid "3:2"
 msgstr "3: 2"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:127
+#: pcbnew/dialogs/dialog_plot_base.cpp:121
 msgid "2:1"
 msgstr "2: 1"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:127
+#: pcbnew/dialogs/dialog_plot_base.cpp:121
 msgid "3:1"
 msgstr "3: 1"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:133
+#: pcbnew/dialogs/dialog_plot_base.cpp:127
 msgid "Plot mode:"
 msgstr "Plot-tilstand:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:137
+#: pcbnew/dialogs/dialog_plot_base.cpp:131
 msgid "Filled"
 msgstr "Udfyldt"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:137
+#: pcbnew/dialogs/dialog_plot_base.cpp:131
 msgid "Sketch"
 msgstr "Skitse"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:143
+#: pcbnew/dialogs/dialog_plot_base.cpp:137
 msgid "Mirrored plot"
 msgstr "Spejlet plot"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:146
+#: pcbnew/dialogs/dialog_plot_base.cpp:140
 msgid "Negative plot"
 msgstr "Negativ plot"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:149
+#: pcbnew/dialogs/dialog_plot_base.cpp:143
 msgid "Check zone fills before plotting"
 msgstr "Kontroller zoneudfyldning inden planlægning"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:169
+#: pcbnew/dialogs/dialog_plot_base.cpp:163
 #, fuzzy
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
 msgstr ""
 "Global loddemaske min bredde og / eller margen er ikke indstillet til 0. De "
 "fleste bordhuse"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:173
+#: pcbnew/dialogs/dialog_plot_base.cpp:167
 #, fuzzy
 msgid ""
 "Most board manufacturers expect 0 and use their own constraints for solder "
@@ -27723,24 +27850,24 @@ msgid ""
 msgstr ""
 "forvent 0 og brug deres begrænsninger, især til lodde maske min bredde."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:183
+#: pcbnew/dialogs/dialog_plot_base.cpp:177
 msgid "Board setup"
 msgstr "Board opsætning"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:184
+#: pcbnew/dialogs/dialog_plot_base.cpp:178
 #, fuzzy
 msgid "File > Board Setup..."
 msgstr "Opsætning af kort ..."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:197
+#: pcbnew/dialogs/dialog_plot_base.cpp:191
 msgid "Gerber Options"
 msgstr "Gerber-muligheder"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:204
+#: pcbnew/dialogs/dialog_plot_base.cpp:198
 msgid "Use Protel filename extensions"
 msgstr "Brug Protel-filnavneudvidelser"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:205
+#: pcbnew/dialogs/dialog_plot_base.cpp:199
 msgid ""
 "Use Protel Gerber extensions (.GBL, .GTL, etc...)\n"
 "No longer recommended. The official extension is .gbr"
@@ -27748,11 +27875,11 @@ msgstr ""
 "Brug Protel Gerber-udvidelser (.GBL, .GTL osv ...)\n"
 "Anbefales ikke længere. Den officielle udvidelse er .gbr"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:210
+#: pcbnew/dialogs/dialog_plot_base.cpp:204
 msgid "Generate Gerber job file"
 msgstr "Generer Gerber-jobfil"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:212
+#: pcbnew/dialogs/dialog_plot_base.cpp:206
 msgid ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
@@ -27760,31 +27887,31 @@ msgstr ""
 "Generer en Gerber-jobfil, der indeholder info om tavlen,\n"
 "og listen over genererede Gerber-plotfiler"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:216
+#: pcbnew/dialogs/dialog_plot_base.cpp:210
 msgid "Subtract soldermask from silkscreen"
 msgstr "Træk loddemaske fra silketryk"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:217
+#: pcbnew/dialogs/dialog_plot_base.cpp:211
 msgid "Remove silkscreen from areas without soldermask"
 msgstr "Fjern silketryk fra områder uden loddemaske"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:221
+#: pcbnew/dialogs/dialog_plot_base.cpp:215
 msgid "Coordinate format:"
 msgstr "Koordinatformat:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:225
+#: pcbnew/dialogs/dialog_plot_base.cpp:219
 msgid "4.5, unit mm"
 msgstr "4,5, enhed mm"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:225
+#: pcbnew/dialogs/dialog_plot_base.cpp:219
 msgid "4.6, unit mm"
 msgstr "4,6, enhed mm"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:231
+#: pcbnew/dialogs/dialog_plot_base.cpp:225
 msgid "Use extended X2 format (recommended)"
 msgstr "Brug udvidet X2-format (anbefales)"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:232
+#: pcbnew/dialogs/dialog_plot_base.cpp:226
 msgid ""
 "Use X2 Gerber file format.\n"
 "Include  mainly X2 attributes in Gerber headers.\n"
@@ -27796,11 +27923,11 @@ msgstr ""
 "Hvis det ikke er markeret, skal du bruge X1-format.\n"
 "I X1-format er disse attributter inkluderet som kommentarer i filer."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:236
+#: pcbnew/dialogs/dialog_plot_base.cpp:230
 msgid "Include netlist attributes"
 msgstr "Inkluder netlist-attributter"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:237
+#: pcbnew/dialogs/dialog_plot_base.cpp:231
 #, fuzzy
 msgid ""
 "Include netlist metadata and aperture attributes in Gerber files.\n"
@@ -27811,12 +27938,12 @@ msgstr ""
 "I X1-format er de kommentarer.\n"
 "Bruges til at kontrollere forbindelse i CAM-værktøjer og Gerber-seere."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:241
+#: pcbnew/dialogs/dialog_plot_base.cpp:235
 #, fuzzy
 msgid "Disable aperture macros (not recommended)"
 msgstr "Deaktiver blændemakroer (anbefales ikke)"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:242
+#: pcbnew/dialogs/dialog_plot_base.cpp:236
 msgid ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
@@ -27824,37 +27951,37 @@ msgstr ""
 "Deaktiver blændemakroer i Gerber-filer\n"
 "Brug * kun * til ødelagte Gerber-seere."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:256
+#: pcbnew/dialogs/dialog_plot_base.cpp:250
 msgid "Default pen size:"
 msgstr "Standard pen størrelse:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:273
+#: pcbnew/dialogs/dialog_plot_base.cpp:267
 msgid "Postscript Options"
 msgstr "Indstillinger for efterskrift"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:283
+#: pcbnew/dialogs/dialog_plot_base.cpp:277
 msgid "X scale factor:"
 msgstr "X skaleringsfaktor:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:288
+#: pcbnew/dialogs/dialog_plot_base.cpp:282
 msgid "Set global X scale adjust for exact scale PostScript output."
 msgstr ""
 "Indstil global X-skalajustering til nøjagtig skala af PostScript-output."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:295
+#: pcbnew/dialogs/dialog_plot_base.cpp:289
 msgid "Y scale factor:"
 msgstr "Y-skaleringsfaktor:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:300
+#: pcbnew/dialogs/dialog_plot_base.cpp:294
 msgid "Set global Y scale adjust for exact scale PostScript output."
 msgstr ""
 "Indstil global Y-skalajustering til nøjagtig skala af PostScript-output."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:307
+#: pcbnew/dialogs/dialog_plot_base.cpp:301
 msgid "Track width correction:"
 msgstr "Korrektion af sporvidde:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:312
+#: pcbnew/dialogs/dialog_plot_base.cpp:306
 msgid ""
 "Set global width correction for exact width PostScript output.\n"
 "These width correction is intended to compensate tracks width and also pads "
@@ -27868,30 +27995,30 @@ msgstr ""
 "Den rimelige breddekorrektionsværdi skal være i området [- "
 "(MinTrackWidth-1), + (MinClearanceValue-1)]."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:323
+#: pcbnew/dialogs/dialog_plot_base.cpp:317
 msgid "Force A4 output"
 msgstr "Tving A4-output"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:329
+#: pcbnew/dialogs/dialog_plot_base.cpp:323
 msgid "DXF Options"
 msgstr "DXF-indstillinger"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:334
+#: pcbnew/dialogs/dialog_plot_base.cpp:328
 msgid "Plot graphic items using their contours"
 msgstr "Plot grafiske genstande ved hjælp af deres konturer"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:336
+#: pcbnew/dialogs/dialog_plot_base.cpp:330
 msgid "Uncheck to plot graphic items using their center lines"
 msgstr ""
 "Fjern markeringen for at plotte grafiske emner ved hjælp af deres "
 "centerlinjer"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:340
+#: pcbnew/dialogs/dialog_plot_base.cpp:334
 #, fuzzy
 msgid "Use KiCad font to plot text"
 msgstr "Brug Pcbnew skrifttype til at plotte tekster"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:341
+#: pcbnew/dialogs/dialog_plot_base.cpp:335
 #, fuzzy
 msgid ""
 "Check to use KiCad stroke font\n"
@@ -27901,19 +28028,19 @@ msgstr ""
 "Fjern markeringen for at tegne online ASCII-tekster som redigerbar tekst "
 "(ved hjælp af DXF-skrifttype)"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:354
+#: pcbnew/dialogs/dialog_plot_base.cpp:348
 msgid "Export units:"
 msgstr "Eksport enheder:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:362
+#: pcbnew/dialogs/dialog_plot_base.cpp:356
 msgid "The units to use for the exported DXF file"
 msgstr "Enhederne, der skal bruges til den eksporterede DXF-fil"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:372
+#: pcbnew/dialogs/dialog_plot_base.cpp:366
 msgid "SVG Options"
 msgstr "SVG-indstillinger"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:379
+#: pcbnew/dialogs/dialog_plot_base.cpp:373
 #, fuzzy
 msgid ""
 "This number defines how many digits are exported that are below 1 mm.\n"
@@ -27926,36 +28053,36 @@ msgstr ""
 "Brugerenheden er 10 ^ - <N> mm eller 10 ^ - <N> tomme.\n"
 "Vælg 6, hvis du ikke er sikker."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:405
+#: pcbnew/dialogs/dialog_plot_base.cpp:399
 msgid "Run DRC..."
 msgstr "Kør DRC ..."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:408
+#: pcbnew/dialogs/dialog_plot_base.cpp:402
 #, c-format
 msgid "(%d known DRC violations; %d exclusions)"
 msgstr "(%d kendte DRC-overtrædelser; %d udelukkelser)"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:432
+#: pcbnew/dialogs/dialog_plot_base.cpp:426
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:281
 msgid "Select Fab Layers"
 msgstr "Vælg Fab-lag"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:436
+#: pcbnew/dialogs/dialog_plot_base.cpp:430
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:284
 msgid "Select all Copper Layers"
 msgstr "Vælg alle kobberlag"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:440
+#: pcbnew/dialogs/dialog_plot_base.cpp:434
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:287
 msgid "Deselect all Copper Layers"
 msgstr "Fravælg alle kobberlag"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:444
+#: pcbnew/dialogs/dialog_plot_base.cpp:438
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:290
 msgid "Select all Layers"
 msgstr "Vælg alle lag"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:448
+#: pcbnew/dialogs/dialog_plot_base.cpp:442
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:293
 msgid "Deselect all Layers"
 msgstr "Fravælg alle lag"
@@ -30478,12 +30605,12 @@ msgstr "Foruddefineret spor og via dimensioner:"
 msgid "7"
 msgstr "7"
 
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:98 pcbnew/pad.cpp:935
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:98 pcbnew/pad.cpp:964
 #: pcbnew/pcb_track.cpp:813 pcbnew/pcb_track.cpp:1228
 msgid "Diameter"
 msgstr "Diameter"
 
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:99 pcbnew/pad.cpp:964
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:99 pcbnew/pad.cpp:993
 #: pcbnew/pcb_track.cpp:817 pcbnew/pcb_track.cpp:1230
 #: pcbnew/tools/board_inspection_tool.cpp:566
 #, fuzzy
@@ -30616,159 +30743,159 @@ msgstr "Linjetykkelse:"
 msgid "Checking assertion \"%s\"."
 msgstr "Kontrollerer regelbetingelse \"%s\"."
 
-#: pcbnew/drc/drc_engine.cpp:899 pcbnew/drc/drc_engine.cpp:1326
+#: pcbnew/drc/drc_engine.cpp:901 pcbnew/drc/drc_engine.cpp:1332
 msgid "Assertion passed."
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:901 pcbnew/drc/drc_engine.cpp:1330
+#: pcbnew/drc/drc_engine.cpp:905 pcbnew/drc/drc_engine.cpp:1336
 msgid "--> Assertion failed. <--"
 msgstr ""
 
-#: pcbnew/drc/drc_engine.cpp:920
+#: pcbnew/drc/drc_engine.cpp:925
 #, fuzzy, c-format
 msgid "Checking %s clearance: %s."
 msgstr "Kontrol %s; clearance: %s."
 
-#: pcbnew/drc/drc_engine.cpp:934 pcbnew/drc/drc_engine.cpp:935
-#: pcbnew/drc/drc_engine.cpp:936 pcbnew/tools/board_inspection_tool.cpp:699
+#: pcbnew/drc/drc_engine.cpp:939 pcbnew/drc/drc_engine.cpp:940
+#: pcbnew/drc/drc_engine.cpp:941 pcbnew/tools/board_inspection_tool.cpp:699
 #: pcbnew/tools/board_inspection_tool.cpp:708
 #: pcbnew/tools/board_inspection_tool.cpp:717
 #: pcbnew/tools/board_inspection_tool.cpp:822
 msgid "undefined"
 msgstr "udefineret"
 
-#: pcbnew/drc/drc_engine.cpp:945
+#: pcbnew/drc/drc_engine.cpp:950
 #, fuzzy
 msgid "track width"
 msgstr "Sporvidde"
 
-#: pcbnew/drc/drc_engine.cpp:946
+#: pcbnew/drc/drc_engine.cpp:951
 #, fuzzy
 msgid "annular width"
 msgstr "Ringformet bredde"
 
-#: pcbnew/drc/drc_engine.cpp:947
+#: pcbnew/drc/drc_engine.cpp:952
 #, fuzzy
 msgid "via diameter"
 msgstr "Via diameter"
 
-#: pcbnew/drc/drc_engine.cpp:948
+#: pcbnew/drc/drc_engine.cpp:953
 #, fuzzy
 msgid "constraint"
 msgstr "Ingen begrænsning"
 
-#: pcbnew/drc/drc_engine.cpp:951
+#: pcbnew/drc/drc_engine.cpp:956
 #, fuzzy, c-format
 msgid "Checking %s %s: %s."
 msgstr "Kontrol %s."
 
-#: pcbnew/drc/drc_engine.cpp:967
+#: pcbnew/drc/drc_engine.cpp:972
 #, fuzzy, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
 msgstr "Tilslut %s ben %s fra %s til %s igen."
 
-#: pcbnew/drc/drc_engine.cpp:978 pcbnew/drc/drc_engine.cpp:1339
+#: pcbnew/drc/drc_engine.cpp:983 pcbnew/drc/drc_engine.cpp:1345
 #, c-format
 msgid "Checking %s."
 msgstr "Kontrol %s."
 
-#: pcbnew/drc/drc_engine.cpp:986
+#: pcbnew/drc/drc_engine.cpp:991
 msgid "Board and netclass clearances apply only between copper items."
 msgstr "Afstand til bord og netklasse gælder kun mellem kobberartikler."
 
-#: pcbnew/drc/drc_engine.cpp:1034
+#: pcbnew/drc/drc_engine.cpp:1039
 msgid "Keepout constraint not met."
 msgstr "Keepout-begrænsning ikke opfyldt."
 
-#: pcbnew/drc/drc_engine.cpp:1036
+#: pcbnew/drc/drc_engine.cpp:1041
 msgid "Disallow constraint not met."
 msgstr "Tillad begrænsning ikke opfyldt."
 
-#: pcbnew/drc/drc_engine.cpp:1058
+#: pcbnew/drc/drc_engine.cpp:1063
 msgid "Keepout layer(s) not matched."
 msgstr "Keep (e) lag (er) matchede ikke."
 
-#: pcbnew/drc/drc_engine.cpp:1062 pcbnew/drc/drc_engine.cpp:1083
-#: pcbnew/drc/drc_engine.cpp:1343
+#: pcbnew/drc/drc_engine.cpp:1067 pcbnew/drc/drc_engine.cpp:1088
+#: pcbnew/drc/drc_engine.cpp:1349
 #, fuzzy, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
 msgstr "Regellaget \"%s\" matchede ikke."
 
-#: pcbnew/drc/drc_engine.cpp:1067 pcbnew/drc/drc_engine.cpp:1088
+#: pcbnew/drc/drc_engine.cpp:1072 pcbnew/drc/drc_engine.cpp:1093
 #, fuzzy
 msgid "Rule layer not matched; rule ignored."
 msgstr "Regellag matcher ikke."
 
-#: pcbnew/drc/drc_engine.cpp:1100
+#: pcbnew/drc/drc_engine.cpp:1105
 msgid "Unconditional constraint applied."
 msgstr "Ubetinget begrænsning anvendt."
 
-#: pcbnew/drc/drc_engine.cpp:1104 pcbnew/drc/drc_engine.cpp:1349
+#: pcbnew/drc/drc_engine.cpp:1109 pcbnew/drc/drc_engine.cpp:1355
 msgid "Unconditional rule applied."
 msgstr "Ubetinget regel anvendt."
 
-#: pcbnew/drc/drc_engine.cpp:1109
+#: pcbnew/drc/drc_engine.cpp:1114
 #, fuzzy
 msgid "Unconditional rule applied; overrides previous constraints."
 msgstr "Regel anvendt tilsidesætter tidligere begrænsninger."
 
-#: pcbnew/drc/drc_engine.cpp:1124 pcbnew/drc/drc_engine.cpp:1354
+#: pcbnew/drc/drc_engine.cpp:1129 pcbnew/drc/drc_engine.cpp:1360
 #, fuzzy, c-format
 msgid "Checking rule condition \"%s\"."
 msgstr "Kontrollerer regelbetingelse \"%s\"."
 
-#: pcbnew/drc/drc_engine.cpp:1134
+#: pcbnew/drc/drc_engine.cpp:1139
 msgid "Constraint applied."
 msgstr "Begrænsning anvendt."
 
-#: pcbnew/drc/drc_engine.cpp:1138 pcbnew/drc/drc_engine.cpp:1359
+#: pcbnew/drc/drc_engine.cpp:1143 pcbnew/drc/drc_engine.cpp:1366
 #, fuzzy
 msgid "Rule applied."
 msgstr "Ubetinget regel anvendt."
 
-#: pcbnew/drc/drc_engine.cpp:1143
+#: pcbnew/drc/drc_engine.cpp:1148
 msgid "Rule applied; overrides previous constraints."
 msgstr "Regel anvendt tilsidesætter tidligere begrænsninger."
 
-#: pcbnew/drc/drc_engine.cpp:1169
+#: pcbnew/drc/drc_engine.cpp:1174
 msgid "Membership not satisfied; constraint ignored."
 msgstr "Medlemskab ikke opfyldt begrænsning ignoreret."
 
-#: pcbnew/drc/drc_engine.cpp:1170 pcbnew/drc/drc_engine.cpp:1364
+#: pcbnew/drc/drc_engine.cpp:1175 pcbnew/drc/drc_engine.cpp:1371
 msgid "Condition not satisfied; rule ignored."
 msgstr "Betingelse ikke opfyldt; regel ignoreret."
 
-#: pcbnew/drc/drc_engine.cpp:1201 pcbnew/drc/drc_engine.cpp:1212
+#: pcbnew/drc/drc_engine.cpp:1206 pcbnew/drc/drc_engine.cpp:1217
 #, c-format
 msgid "Local clearance on %s; clearance: %s."
 msgstr "Lokal godkendelse den %s; clearance: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1238
+#: pcbnew/drc/drc_engine.cpp:1243
 #, fuzzy, c-format
 msgid "Footprint %s zone connection: %s."
 msgstr "Padforbindelser:"
 
-#: pcbnew/drc/drc_engine.cpp:1254
+#: pcbnew/drc/drc_engine.cpp:1259
 #, fuzzy, c-format
 msgid "Zone %s pad connection: %s."
 msgstr "Zone forbindelsestype: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1259 pcbnew/drc/drc_engine.cpp:1276
-#: pcbnew/drc/drc_engine.cpp:1293 pcbnew/zone.cpp:332 pcbnew/zone.cpp:472
+#: pcbnew/drc/drc_engine.cpp:1264 pcbnew/drc/drc_engine.cpp:1281
+#: pcbnew/drc/drc_engine.cpp:1298 pcbnew/zone.cpp:332 pcbnew/zone.cpp:472
 msgid "zone"
 msgstr "zone"
 
-#: pcbnew/drc/drc_engine.cpp:1271
+#: pcbnew/drc/drc_engine.cpp:1276
 #, fuzzy, c-format
 msgid "Zone %s thermal relief gap: %s."
 msgstr "Zone termisk aflastning: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1288
+#: pcbnew/drc/drc_engine.cpp:1293
 #, fuzzy, c-format
 msgid "Zone %s thermal spoke width: %s."
 msgstr "Termisk egerbredde:"
 
-#: pcbnew/drc/drc_engine.cpp:1321
+#: pcbnew/drc/drc_engine.cpp:1326
 #, fuzzy, c-format
 msgid "Checking rule assertion \"%s\"."
 msgstr "Kontrollerer regelbetingelse \"%s\"."
@@ -31201,13 +31328,13 @@ msgstr "Kontrol af zoneudfyldning ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:309
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:357
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:443
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:489
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:683
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:715
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:737
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:762
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1003
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:456
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:502
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:696
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:728
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:750
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:775
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1016
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:210
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:239
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:117
@@ -31224,7 +31351,7 @@ msgstr "Kontrol af zoneudfyldning ..."
 msgid "(%s clearance %s; actual %s)"
 msgstr "(%s clearance %s; faktisk %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:658
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:671
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(net %s og %s)"
@@ -31562,17 +31689,17 @@ msgid "They have been exported as oval pads."
 msgstr ""
 
 #: pcbnew/exporters/export_hyperlynx.cpp:308
-#: pcbnew/exporters/export_vrml.cpp:577
+#: pcbnew/exporters/export_vrml.cpp:581
 #: pcbnew/specctra_import_export/specctra_export.cpp:134
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr "Board skitse er misdannet. Kør DRC for en komplet analyse."
 
 #: pcbnew/exporters/export_idf.cpp:636 pcbnew/exporters/export_idf.cpp:645
-#: pcbnew/exporters/export_idf.cpp:653 pcbnew/exporters/export_vrml.cpp:1040
+#: pcbnew/exporters/export_idf.cpp:653 pcbnew/exporters/export_vrml.cpp:1057
 msgid "IDF Export Failed:\n"
 msgstr "IDF-eksport mislykkedes:\n"
 
-#: pcbnew/exporters/export_vrml.cpp:606
+#: pcbnew/exporters/export_vrml.cpp:610
 msgid "VRML Export Failed: Could not add holes to contours."
 msgstr "VRML-eksport mislykkedes: Kunne ikke tilføje huller til konturer."
 
@@ -31917,17 +32044,17 @@ msgstr "Fejl: pad har intet lag"
 msgid "(PTH pad's hole leaves no copper)"
 msgstr "Fejl: pad har intet lag"
 
-#: pcbnew/footprint.cpp:2578 pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1358
+#: pcbnew/footprint.cpp:2578 pcbnew/pad.cpp:1752 pcbnew/zone.cpp:1358
 #, fuzzy
 msgid "Clearance Override"
 msgstr "Clearance konturer"
 
-#: pcbnew/footprint.cpp:2581 pcbnew/pad.cpp:1706
+#: pcbnew/footprint.cpp:2581 pcbnew/pad.cpp:1726
 #, fuzzy
 msgid "Solderpaste Margin Override"
 msgstr "Lokal loddepasta Margin"
 
-#: pcbnew/footprint.cpp:2585 pcbnew/pad.cpp:1709
+#: pcbnew/footprint.cpp:2585 pcbnew/pad.cpp:1729
 #, fuzzy
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Lokal loddepasta margenforhold"
@@ -32282,7 +32409,7 @@ msgstr "Værdi '%s' af %s"
 msgid "Footprint Text '%s' of %s"
 msgstr "Footprint Text '%s' af %s"
 
-#: pcbnew/fp_textbox.cpp:231
+#: pcbnew/fp_textbox.cpp:258
 #, fuzzy, c-format
 msgid "Footprint Text Box of %s"
 msgstr "Footprint Text '%s' af %s"
@@ -32392,11 +32519,15 @@ msgstr "Standard enheder:"
 msgid "Import Vector Graphics File"
 msgstr "Importer vektorgrafikfil"
 
-#: pcbnew/import_gfx/dxf_import_plugin.cpp:1366
+#: pcbnew/import_gfx/dxf_import_plugin.cpp:133
+msgid "Memory was exhausted trying to load the DXF, it may be too large."
+msgstr ""
+
+#: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
 msgstr ""
 
-#: pcbnew/import_gfx/dxf_import_plugin.cpp:1373
+#: pcbnew/import_gfx/dxf_import_plugin.cpp:1387
 msgid "Invalid Bezier curve created"
 msgstr ""
 
@@ -33057,178 +33188,178 @@ msgstr ""
 "fil: \"%s\"\n"
 "linje: %d"
 
-#: pcbnew/pad.cpp:752 pcbnew/pad.cpp:856 pcbnew/pad.cpp:865 pcbnew/pad.cpp:874
+#: pcbnew/pad.cpp:755 pcbnew/pad.cpp:885 pcbnew/pad.cpp:894 pcbnew/pad.cpp:903
 msgid "pad"
 msgstr "pad"
 
-#: pcbnew/pad.cpp:895 pcbnew/pad.cpp:1681
+#: pcbnew/pad.cpp:924 pcbnew/pad.cpp:1701
 msgid "Pin Name"
 msgstr "Pin-navn"
 
-#: pcbnew/pad.cpp:898 pcbnew/pad.cpp:1683
+#: pcbnew/pad.cpp:927 pcbnew/pad.cpp:1703
 #, fuzzy
 msgid "Pin Type"
 msgstr "Plugin-type"
 
-#: pcbnew/pad.cpp:922
+#: pcbnew/pad.cpp:951
 msgid "BGA"
 msgstr "BGA"
 
-#: pcbnew/pad.cpp:923
+#: pcbnew/pad.cpp:952
 msgid "Fiducial global"
 msgstr "Fiducial global"
 
-#: pcbnew/pad.cpp:924
+#: pcbnew/pad.cpp:953
 msgid "Fiducial local"
 msgstr "Fiducial lokal"
 
-#: pcbnew/pad.cpp:925
+#: pcbnew/pad.cpp:954
 msgid "Test point"
 msgstr "Testpunkt"
 
-#: pcbnew/pad.cpp:926
+#: pcbnew/pad.cpp:955
 msgid "Heat sink"
 msgstr "Kølelegeme"
 
-#: pcbnew/pad.cpp:927
+#: pcbnew/pad.cpp:956
 msgid "Castellated"
 msgstr "Castelleret"
 
-#: pcbnew/pad.cpp:957
+#: pcbnew/pad.cpp:986
 msgid "Length in Package"
 msgstr "Længde i pakke"
 
-#: pcbnew/pad.cpp:970
+#: pcbnew/pad.cpp:999
 #, fuzzy
 msgid "Hole X / Y"
 msgstr "Bor X / Y"
 
-#: pcbnew/pad.cpp:982 pcbnew/pcb_track.cpp:786 pcbnew/pcb_track.cpp:822
+#: pcbnew/pad.cpp:1011 pcbnew/pcb_track.cpp:786 pcbnew/pcb_track.cpp:822
 #: pcbnew/router/router_tool.cpp:2143 pcbnew/zone.cpp:616
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "Min. Frihøjde: %s"
 
-#: pcbnew/pad.cpp:984 pcbnew/pcb_track.cpp:788 pcbnew/pcb_track.cpp:824
+#: pcbnew/pad.cpp:1013 pcbnew/pcb_track.cpp:788 pcbnew/pcb_track.cpp:824
 #: pcbnew/pcb_track.cpp:830 pcbnew/router/router_tool.cpp:2131
 #: pcbnew/router/router_tool.cpp:2145 pcbnew/zone.cpp:618
 #, c-format
 msgid "(from %s)"
 msgstr "(fra %s)"
 
-#: pcbnew/pad.cpp:1144
+#: pcbnew/pad.cpp:1173
 msgid "Trap"
 msgstr "Fælde"
 
-#: pcbnew/pad.cpp:1145
+#: pcbnew/pad.cpp:1174
 msgid "Roundrect"
 msgstr "Roundrect"
 
-#: pcbnew/pad.cpp:1146
+#: pcbnew/pad.cpp:1175
 msgid "Chamferedrect"
 msgstr "Affasningsretning"
 
-#: pcbnew/pad.cpp:1147
+#: pcbnew/pad.cpp:1176
 msgid "CustomShape"
 msgstr "CustomShape"
 
-#: pcbnew/pad.cpp:1159
+#: pcbnew/pad.cpp:1188
 msgid "Conn"
 msgstr "Conn"
 
-#: pcbnew/pad.cpp:1172
+#: pcbnew/pad.cpp:1201
 #, c-format
 msgid "Pad %s of %s on %s"
 msgstr "Pad %s af %s på %s"
 
-#: pcbnew/pad.cpp:1179 pcbnew/pad.cpp:1185 pcbnew/pad.cpp:1202
+#: pcbnew/pad.cpp:1208 pcbnew/pad.cpp:1214 pcbnew/pad.cpp:1231
 #, fuzzy, c-format
 msgid "Through hole pad %s of %s"
 msgstr "Gennemgående hulpuder"
 
-#: pcbnew/pad.cpp:1194
+#: pcbnew/pad.cpp:1223
 #, fuzzy, c-format
 msgid "Pad %s %s of %s on %s"
 msgstr "Pad %s af %s på %s"
 
-#: pcbnew/pad.cpp:1208
+#: pcbnew/pad.cpp:1237
 #, fuzzy, c-format
 msgid "Through hole pad %s %s of %s"
 msgstr "Gennemgående hulpuder"
 
-#: pcbnew/pad.cpp:1646
+#: pcbnew/pad.cpp:1666
 msgid "Edge connector"
 msgstr "Kantstik"
 
-#: pcbnew/pad.cpp:1647
+#: pcbnew/pad.cpp:1667
 msgid "NPTH, mechanical"
 msgstr "NPTH, mekanisk"
 
-#: pcbnew/pad.cpp:1653
+#: pcbnew/pad.cpp:1673
 msgid "Trapezoid"
 msgstr "Trapesformet"
 
-#: pcbnew/pad.cpp:1665
+#: pcbnew/pad.cpp:1685
 msgid "Castellated pad"
 msgstr "Castelleret pude"
 
-#: pcbnew/pad.cpp:1671
+#: pcbnew/pad.cpp:1691
 msgid "Pad Type"
 msgstr "Pad type"
 
-#: pcbnew/pad.cpp:1679
+#: pcbnew/pad.cpp:1699
 msgid "Pad Number"
 msgstr "Pad nummer"
 
-#: pcbnew/pad.cpp:1688
+#: pcbnew/pad.cpp:1708
 msgid "Size X"
 msgstr "Størrelse X"
 
-#: pcbnew/pad.cpp:1691
+#: pcbnew/pad.cpp:1711
 msgid "Size Y"
 msgstr "Størrelse Y"
 
-#: pcbnew/pad.cpp:1694
+#: pcbnew/pad.cpp:1714
 msgid "Hole Size X"
 msgstr "Hulstørrelse X"
 
-#: pcbnew/pad.cpp:1697
+#: pcbnew/pad.cpp:1717
 msgid "Hole Size Y"
 msgstr "Hulstørrelse Y"
 
-#: pcbnew/pad.cpp:1700 pcbnew/pcb_track.cpp:776
+#: pcbnew/pad.cpp:1720 pcbnew/pcb_track.cpp:776
 msgid "Pad To Die Length"
 msgstr "Pude til dø længde"
 
-#: pcbnew/pad.cpp:1703
+#: pcbnew/pad.cpp:1723
 #, fuzzy
 msgid "Soldermask Margin Override"
 msgstr "Lokal loddemaskemargin"
 
-#: pcbnew/pad.cpp:1711 pcbnew/zone.cpp:1369
+#: pcbnew/pad.cpp:1731 pcbnew/zone.cpp:1369
 #, fuzzy
 msgid "Thermal Relief Spoke Width"
 msgstr "Bredde på termisk aflastning"
 
-#: pcbnew/pad.cpp:1714
+#: pcbnew/pad.cpp:1734
 #, fuzzy
 msgid "Thermal Relief Spoke Angle"
 msgstr "Termisk lindring"
 
-#: pcbnew/pad.cpp:1717 pcbnew/zone.cpp:1366
+#: pcbnew/pad.cpp:1737 pcbnew/zone.cpp:1366
 #, fuzzy
 msgid "Thermal Relief Gap"
 msgstr "Termisk lindring"
 
-#: pcbnew/pad.cpp:1720
+#: pcbnew/pad.cpp:1740
 msgid "Fabrication Property"
 msgstr "Fabrikationsejendom"
 
-#: pcbnew/pad.cpp:1723
+#: pcbnew/pad.cpp:1743
 msgid "Round Radius Ratio"
 msgstr "Round Radius Ratio"
 
-#: pcbnew/pcb_base_frame.cpp:174
+#: pcbnew/pcb_base_frame.cpp:187
 #, fuzzy
 msgid "Error loading project footprint libraries."
 msgstr "Fejl ved indlæsning af projektfodsporbiblioteker"
@@ -33367,17 +33498,17 @@ msgstr ""
 msgid "Missing group name argument to %s."
 msgstr "Manglende argument til '%s'"
 
-#: pcbnew/pcb_expr_evaluator.cpp:819
+#: pcbnew/pcb_expr_evaluator.cpp:826
 #, fuzzy, c-format
 msgid "Missing diff-pair name argument to %s."
 msgstr "Manglende argument til '%s'"
 
-#: pcbnew/pcb_expr_evaluator.cpp:870
+#: pcbnew/pcb_expr_evaluator.cpp:877
 #, fuzzy, c-format
 msgid "Missing field name argument to %s."
 msgstr "Manglende argument til '%s'"
 
-#: pcbnew/pcb_expr_evaluator.cpp:1189
+#: pcbnew/pcb_expr_evaluator.cpp:1196
 msgid "must be mm, in, or mil"
 msgstr "skal være mm, in eller mil"
 
@@ -33435,7 +33566,7 @@ msgstr "PCB-tekst"
 msgid "PCB Text '%s' on %s"
 msgstr "PCB-tekst '%s' på %s"
 
-#: pcbnew/pcb_textbox.cpp:282
+#: pcbnew/pcb_textbox.cpp:319
 #, fuzzy, c-format
 msgid "PCB Text Box on %s"
 msgstr "PCB-tekst '%s' på %s"
@@ -33732,23 +33863,23 @@ msgstr "Bygningszone fylder ..."
 msgid "Loading arcs..."
 msgstr "Indlæser…"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2342
+#: pcbnew/plugins/altium/altium_pcb.cpp:2344
 #, fuzzy
 msgid "Loading pads..."
 msgstr "Indlæser…"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2428
+#: pcbnew/plugins/altium/altium_pcb.cpp:2430
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2449
+#: pcbnew/plugins/altium/altium_pcb.cpp:2451
 #, fuzzy, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
 "Pad '%s' af Footprint %s har et firkantet hul. KiCad støtter ikke dette endnu"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2476
+#: pcbnew/plugins/altium/altium_pcb.cpp:2478
 #, fuzzy, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
@@ -33757,25 +33888,25 @@ msgstr ""
 "Pad '%s' af Footprint %s har en hulrotation på %f grad. KiCad understøtter "
 "kun 90 graders vinkler"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2488
+#: pcbnew/plugins/altium/altium_pcb.cpp:2490
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2505
+#: pcbnew/plugins/altium/altium_pcb.cpp:2507
 #, fuzzy, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
 "Pad '%s' af Footprint %s bruger en kompleks pad-stack (type %d), som endnu "
 "ikke understøttes"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2542
+#: pcbnew/plugins/altium/altium_pcb.cpp:2544
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2600
-#: pcbnew/plugins/altium/altium_pcb.cpp:2621
+#: pcbnew/plugins/altium/altium_pcb.cpp:2602
+#: pcbnew/plugins/altium/altium_pcb.cpp:2623
 #, fuzzy, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -33784,62 +33915,62 @@ msgstr ""
 "Ikke-kobberpude på Altium-lag %d har ingen KiCad-ækvivalent. Sæt det på "
 "Eco1_User i stedet"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2641
+#: pcbnew/plugins/altium/altium_pcb.cpp:2643
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2647
+#: pcbnew/plugins/altium/altium_pcb.cpp:2649
 #, fuzzy, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "Ikke-kobberpude '%s' har et hul. Dette skal ikke ske"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2652
+#: pcbnew/plugins/altium/altium_pcb.cpp:2654
 #, fuzzy, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 "Ikke-kobberpude '%s' bruger en kompleks padstabel (slags %d). Dette skal "
 "ikke ske"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2794
+#: pcbnew/plugins/altium/altium_pcb.cpp:2796
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2804
+#: pcbnew/plugins/altium/altium_pcb.cpp:2806
 #, fuzzy
 msgid "Loading vias..."
 msgstr "Indlæser…"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2847
+#: pcbnew/plugins/altium/altium_pcb.cpp:2849
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2866
+#: pcbnew/plugins/altium/altium_pcb.cpp:2868
 #, fuzzy
 msgid "Loading tracks..."
 msgstr "Indlæser…"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3034
+#: pcbnew/plugins/altium/altium_pcb.cpp:3038
 #, fuzzy
 msgid "Loading unicode strings..."
 msgstr "Indlæser…"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3048
+#: pcbnew/plugins/altium/altium_pcb.cpp:3052
 #, fuzzy
 msgid "Loading text..."
 msgstr "Indlæser…"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3077
-#: pcbnew/plugins/altium/altium_pcb.cpp:3090
+#: pcbnew/plugins/altium/altium_pcb.cpp:3081
+#: pcbnew/plugins/altium/altium_pcb.cpp:3094
 #, fuzzy, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr ""
 "Ignorer stregkode på Altium-laget %d, fordi det ikke understøttes lige nu."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3239
+#: pcbnew/plugins/altium/altium_pcb.cpp:3243
 #, fuzzy
 msgid "Loading rectangles..."
 msgstr "Indlæser Gerber-filer ..."
@@ -34261,7 +34392,7 @@ msgid "No '%s' package in library '%s'."
 msgstr "Ingen \"%s\" pakke i biblioteket \"%s\""
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1407
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2200
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2199
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorerer en polygon, da Eagle-laget '%s' (%d) ikke blev kortlagt"
@@ -34271,17 +34402,17 @@ msgstr "Ignorerer en polygon, da Eagle-laget '%s' (%d) ikke blev kortlagt"
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorerer en ledning, da Eagle-laget '%s' (%d) ikke var kortlagt"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1939
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1941
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorerer en tekst, da Eagle-laget '%s' (%d) ikke var kortlagt"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2084
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2086
 #, fuzzy, c-format
 msgid "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorerer en rektange, da Eagle-laget '%s' (%d) ikke var kortlagt"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2277
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2274
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorerer en cirkel, da Eagle-laget '%s' (%d) ikke var kortlagt"
@@ -36057,19 +36188,19 @@ msgstr ""
 msgid "Create from Selection"
 msgstr "Fjern fra markering"
 
-#: pcbnew/tools/convert_tool.cpp:215
+#: pcbnew/tools/convert_tool.cpp:226
 msgid "Convert shapes to polygon"
 msgstr "Konverter figurer til polygon"
 
-#: pcbnew/tools/convert_tool.cpp:261
+#: pcbnew/tools/convert_tool.cpp:272
 msgid "Convert shapes to zone"
 msgstr "Konverter figurer til zone"
 
-#: pcbnew/tools/convert_tool.cpp:770
+#: pcbnew/tools/convert_tool.cpp:781
 msgid "Convert polygons to lines"
 msgstr "Konverter polygoner til linjer"
 
-#: pcbnew/tools/convert_tool.cpp:858
+#: pcbnew/tools/convert_tool.cpp:869
 msgid "Create arc from line segment"
 msgstr "Opret bue fra linjesegment"
 
@@ -37921,11 +38052,6 @@ msgstr "Tune skævhed af et differentieret par"
 
 #: pcbnew/tools/pcb_actions.cpp:1409
 #, fuzzy
-msgid "Undo Last Segment"
-msgstr "Fortryd det sidste segment"
-
-#: pcbnew/tools/pcb_actions.cpp:1409
-#, fuzzy
 msgid "Walks the current track back one segment."
 msgstr "Gør det aktuelle lag mere gennemsigtigt"
 
@@ -37979,23 +38105,23 @@ msgstr "Valgte emner"
 msgid "Footprint Name"
 msgstr "Footprint navn"
 
-#: pcbnew/tools/pcb_point_editor.cpp:123
+#: pcbnew/tools/pcb_point_editor.cpp:125
 msgid "Self-intersecting polygons are not allowed."
 msgstr "Selvkrydsende polygoner er ikke tilladt."
 
-#: pcbnew/tools/pcb_point_editor.cpp:611
+#: pcbnew/tools/pcb_point_editor.cpp:613
 msgid "Drag a corner"
 msgstr "Træk et hjørne"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2194
+#: pcbnew/tools/pcb_point_editor.cpp:2224
 msgid "Add a zone corner"
 msgstr "Tilføj et zonehjørne"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2231
+#: pcbnew/tools/pcb_point_editor.cpp:2261
 msgid "Split segment"
 msgstr "Split segment"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2302
+#: pcbnew/tools/pcb_point_editor.cpp:2332
 msgid "Remove a zone/polygon corner"
 msgstr "Fjern et zone / polygonhjørne"
 
@@ -39083,6 +39209,24 @@ msgstr "Rediger skematisk"
 #, fuzzy
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad-printkortfiler"
+
+#~ msgid "Connection type:"
+#~ msgstr "Forbindelsestype:"
+
+#, fuzzy
+#~ msgid "Constrain buses and wires to H or V"
+#~ msgstr "& Begræns busser og ledninger til H- og V-retning"
+
+#~ msgid "Switch H & V only mode for new wires and buses"
+#~ msgstr "Skift kun H & V-tilstand til nye ledninger og busser"
+
+#, fuzzy
+#~ msgid "Plot Edge.Cuts on all layers"
+#~ msgstr "Skitsepuder på fantastiske lag"
+
+#, fuzzy
+#~ msgid "Plot the contents of the PCB edge layer on all layers"
+#~ msgstr "Plot ikke indholdet af PCB-kantlaget på andre lag."
 
 #, fuzzy
 #~ msgid "Synchronized pins edit mode, and this pin is new"
@@ -41803,9 +41947,6 @@ msgstr "KiCad-printkortfiler"
 
 #~ msgid "Automatically routed tracks"
 #~ msgstr "Automatisk dirigerede spor"
-
-#~ msgid "Reset &Unused"
-#~ msgstr "Nulstil og ubrugt"
 
 #~ msgid "&Keep pads at first and last layers"
 #~ msgstr "& Opbevar elektroder i første og sidste lag"

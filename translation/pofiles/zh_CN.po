@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-28 11:12-0700\n"
+"POT-Creation-Date: 2022-04-04 13:55-0700\n"
 "PO-Revision-Date: 2022-04-04 20:53+0000\n"
 "Last-Translator: Tian Yunhao <t123yh@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -200,9 +200,9 @@ msgstr "导出当前视图为 PNG..."
 msgid "Export Current View as JPEG..."
 msgstr "导出当前视图为 JPEG..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:61 common/eda_base_frame.cpp:1045
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:61 common/eda_base_frame.cpp:1051
 #: common/hotkey_store.cpp:76 common/tool/actions.cpp:572
-#: pcbnew/footprint_viewer_frame.cpp:954 pcbnew/pcb_base_frame.cpp:647
+#: pcbnew/footprint_viewer_frame.cpp:954 pcbnew/pcb_base_frame.cpp:660
 msgid "3D Viewer"
 msgstr "3D 查看器"
 
@@ -289,18 +289,18 @@ msgstr "使用光线追踪渲染当前视图"
 msgid "KiCad 3D Viewer"
 msgstr "KiCad 3D 查看器"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:512
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:525
 msgid "3D Image File Name"
 msgstr "3D 图像文件名称"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:533
-#: common/eda_base_frame.cpp:1111 common/eda_base_frame.cpp:1116
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:546
+#: common/eda_base_frame.cpp:1117 common/eda_base_frame.cpp:1122
 #: pcbnew/plugins/altium/altium_pcb.cpp:1659
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
 msgstr "无足够权限保存文件 '%s'。"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:534 common/confirm.cpp:130
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:547 common/confirm.cpp:130
 #: common/confirm.cpp:296 common/dialogs/panel_setup_severities.cpp:43
 #: eeschema/files-io.cpp:843 eeschema/files-io.cpp:910
 #: kicad/import_project.cpp:127 kicad/import_project.cpp:154
@@ -311,11 +311,11 @@ msgstr "无足够权限保存文件 '%s'。"
 msgid "Error"
 msgstr "错误"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:567
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:580
 msgid "Failed to copy image to clipboard"
 msgstr "无法将图像复制到剪贴板"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:578
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:591
 msgid "Can't save file"
 msgstr "无法保存文件"
 
@@ -929,8 +929,8 @@ msgstr "比例"
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:74
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:119
 #: common/dialogs/dialog_grid_settings_base.cpp:34
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:238
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:291
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:247
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:300
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:73
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:114
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:33
@@ -952,8 +952,8 @@ msgstr "X："
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:84
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:129
 #: common/dialogs/dialog_grid_settings_base.cpp:45
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:249
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:302
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:258
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:311
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:88
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:125
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:44
@@ -984,7 +984,7 @@ msgstr "Z："
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:66
 #: gerbview/gerber_draw_item.cpp:706 pcbnew/footprint.cpp:996
-#: pcbnew/pad.cpp:952
+#: pcbnew/pad.cpp:981
 msgid "Rotation"
 msgstr "旋转"
 
@@ -1013,43 +1013,43 @@ msgstr "重新加载电路板和 3D 模型"
 #: common/dialogs/dialog_grid_settings_base.cpp:98
 #: common/dialogs/dialog_grid_settings_base.cpp:109
 #: common/eda_draw_frame.cpp:597
-#: eeschema/dialogs/dialog_field_properties_base.cpp:195
-#: eeschema/dialogs/dialog_field_properties_base.cpp:206
-#: eeschema/dialogs/dialog_field_properties_base.cpp:217
-#: eeschema/dialogs/dialog_label_properties_base.cpp:244
+#: eeschema/dialogs/dialog_field_properties_base.cpp:199
+#: eeschema/dialogs/dialog_field_properties_base.cpp:233
+#: eeschema/dialogs/dialog_field_properties_base.cpp:244
+#: eeschema/dialogs/dialog_label_properties_base.cpp:248
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:45
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:164
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:154
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:174
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:107
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:143
-#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:62
-#: eeschema/dialogs/dialog_text_properties_base.cpp:154
-#: eeschema/dialogs/dialog_text_properties_base.cpp:171
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:127
+#: eeschema/dialogs/dialog_text_properties_base.cpp:164
+#: eeschema/dialogs/dialog_text_properties_base.cpp:204
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:27
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:40
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:54
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:100
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:114
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:158
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:169
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:182
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:195
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:245
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:256
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:298
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:309
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:351
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:417
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:430
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:474
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:488
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:502
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:516
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:551
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:565
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:579
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:593
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:167
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:178
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:191
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:204
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:254
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:265
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:307
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:318
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:360
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:426
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:439
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:483
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:497
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:511
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:525
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:560
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:574
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:588
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:602
 #: pagelayout_editor/pl_editor_frame.cpp:724
 #: pcb_calculator/widgets/unit_selector.cpp:34
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
@@ -1090,8 +1090,8 @@ msgstr "重新加载电路板和 3D 模型"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:630
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:748
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:759
-#: pcbnew/dialogs/dialog_plot_base.cpp:263
-#: pcbnew/dialogs/dialog_plot_base.cpp:316
+#: pcbnew/dialogs/dialog_plot_base.cpp:257
+#: pcbnew/dialogs/dialog_plot_base.cpp:310
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:74
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:91
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:140
@@ -1131,13 +1131,13 @@ msgid "DPI"
 msgstr "DPI"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:343
-#: eeschema/tools/sch_drawing_tools.cpp:503
+#: eeschema/tools/sch_drawing_tools.cpp:504
 #: pagelayout_editor/pl_editor_frame.cpp:831
 msgid "Choose Image"
 msgstr "选择图片"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:344
-#: eeschema/tools/sch_drawing_tools.cpp:504
+#: eeschema/tools/sch_drawing_tools.cpp:505
 #: pagelayout_editor/pl_editor_frame.cpp:832
 msgid "Image Files"
 msgstr "图片文件"
@@ -1389,9 +1389,9 @@ msgstr "问题"
 
 #: common/confirm.cpp:129 common/confirm.cpp:284
 #: common/dialogs/panel_setup_severities.cpp:43
-#: eeschema/dialogs/dialog_plot_schematic.cpp:1280
-#: eeschema/dialogs/dialog_plot_schematic.cpp:1293
-#: eeschema/dialogs/dialog_plot_schematic.cpp:1315
+#: eeschema/dialogs/dialog_plot_schematic.cpp:1288
+#: eeschema/dialogs/dialog_plot_schematic.cpp:1301
+#: eeschema/dialogs/dialog_plot_schematic.cpp:1323
 #: eeschema/dialogs/dialog_sim_settings.cpp:282
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:146
 #: eeschema/files-io.cpp:432 eeschema/sheet.cpp:571
@@ -1697,7 +1697,7 @@ msgid "&Save"
 msgstr "保存 (&S)"
 
 #: common/dialog_shim.cpp:664 common/dialog_shim.cpp:665
-#: common/eda_base_frame.cpp:463
+#: common/eda_base_frame.cpp:465
 msgid "&Help"
 msgstr "帮助 (&H)"
 
@@ -1857,11 +1857,11 @@ msgstr "环境变量"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:39
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:80
-#: eeschema/dialogs/dialog_label_properties_base.cpp:83
+#: eeschema/dialogs/dialog_label_properties_base.cpp:84
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:115
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:89
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:56
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:50
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:58
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:704
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:52
 #: eeschema/dialogs/panel_sym_lib_table.cpp:299
@@ -2044,8 +2044,8 @@ msgstr "网格原点"
 #: common/dialogs/dialog_grid_settings_base.cpp:78
 #: eeschema/dialogs/dialog_erc_base.cpp:67
 #: eeschema/dialogs/dialog_erc_base.cpp:107
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:129
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:185
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:135
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:191
 #: pcbnew/dialogs/dialog_drc_base.cpp:85 pcbnew/dialogs/dialog_drc_base.cpp:151
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:120
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:152
@@ -2393,7 +2393,7 @@ msgstr "自定义图框高度。"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:322
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:370
 #: eeschema/dialogs/dialog_line_properties_base.cpp:38
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:34
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:42
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1075
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:38
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:83
@@ -2465,7 +2465,7 @@ msgstr "单位"
 #: common/dialogs/dialog_page_settings_base.cpp:88
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:164
 #: eeschema/dialogs/dialog_line_properties_base.cpp:31
-#: eeschema/dialogs/dialog_text_properties_base.cpp:161
+#: eeschema/dialogs/dialog_text_properties_base.cpp:194
 #: pcbnew/dialogs/dialog_board_statistics.cpp:104
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:272
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:25
@@ -2643,7 +2643,7 @@ msgstr "打印预览"
 #: pcbnew/dialogs/dialog_find_base.cpp:102
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:50
 #: pcbnew/dialogs/dialog_gendrill.cpp:77 pcbnew/dialogs/dialog_netlist.cpp:82
-#: pcbnew/dialogs/dialog_plot.cpp:68 pcbnew/dialogs/dialog_update_pcb.cpp:60
+#: pcbnew/dialogs/dialog_plot.cpp:155 pcbnew/dialogs/dialog_update_pcb.cpp:60
 #: pcbnew/exporters/gen_footprints_placefile.cpp:66
 msgid "Close"
 msgstr "关闭"
@@ -2731,7 +2731,7 @@ msgid "Print Frame references."
 msgstr "打印图框参考。"
 
 #: common/dialogs/dialog_print_generic_base.cpp:58
-#: pcbnew/dialogs/dialog_plot_base.cpp:127
+#: pcbnew/dialogs/dialog_plot_base.cpp:121
 msgid "1:1"
 msgstr "1:1"
 
@@ -3137,6 +3137,32 @@ msgstr "如果备份文件的总大小超过此限制，旧备份将被删除(�
 msgid "MB"
 msgstr "MB"
 
+#: common/dialogs/panel_data_collection_base.cpp:20
+msgid ""
+"KiCad can anonymously report crashes and special event data to developers in "
+"order to aid identifying critical bugs across the user base more effectively "
+"and help profile functionality to guide improvements.\n"
+"\n"
+"To link automatic reports from the same KiCad install, a unique identifier "
+"is generated that is completely random, it is only used for the purposes of "
+"crash reporting. No personally identifiable information (PII) including IP "
+"address is stored or connected to this identifier. You may reset this id at "
+"anytime with the button provided.\n"
+"\n"
+"If you choose to voluntarily participate, KiCad will automatically handle "
+"sending said reports when crashes or events occur. Your design files such as "
+"schematic or PCB are not shared in this process."
+msgstr ""
+
+#: common/dialogs/panel_data_collection_base.cpp:27
+msgid "I agree to provide anonymous reports"
+msgstr ""
+
+#: common/dialogs/panel_data_collection_base.cpp:30
+#, fuzzy
+msgid "Reset Unique Id"
+msgstr "重置未使用的内容 (&U)"
+
 #: common/dialogs/panel_hotkeys_editor.cpp:84
 msgid "Type filter text"
 msgstr "输入筛选文字"
@@ -3172,7 +3198,7 @@ msgid "Cmd"
 msgstr "Cmd"
 
 #: common/dialogs/panel_mouse_settings.cpp:48
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:170
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:176
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:42
 #: pcbnew/dialogs/panel_edit_options_base.cpp:218
 msgid "Option"
@@ -3283,7 +3309,7 @@ msgstr "缩放"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:953
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:710
-#: pcbnew/dialogs/dialog_plot_base.cpp:117 pcbnew/pad.cpp:1659
+#: pcbnew/dialogs/dialog_plot_base.cpp:111 pcbnew/pad.cpp:1679
 #: pcbnew/widgets/appearance_controls.cpp:702
 #: pcbnew/widgets/appearance_controls.cpp:744
 #: pcbnew/widgets/appearance_controls.cpp:2370
@@ -3317,8 +3343,8 @@ msgid "Ctrl"
 msgstr "Ctrl"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:183
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:106
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:154
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:112
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:160
 #: pcbnew/dialogs/panel_edit_options_base.cpp:117
 #: pcbnew/dialogs/panel_edit_options_base.cpp:188
 msgid "Shift"
@@ -3357,7 +3383,7 @@ msgstr "重置为鼠标默认值"
 msgid "Reset to Trackpad Defaults"
 msgstr "重置为触控板默认值"
 
-#: common/dialogs/panel_setup_netclasses.cpp:89 common/eda_shape.cpp:1622
+#: common/dialogs/panel_setup_netclasses.cpp:89 common/eda_shape.cpp:1634
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:342
 #: include/stroke_params.h:71 pcbnew/dialogs/dialog_copper_zones_base.cpp:235
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:357
@@ -3367,25 +3393,25 @@ msgstr "重置为触控板默认值"
 msgid "Solid"
 msgstr "实心"
 
-#: common/dialogs/panel_setup_netclasses.cpp:91 common/eda_shape.cpp:1623
+#: common/dialogs/panel_setup_netclasses.cpp:91 common/eda_shape.cpp:1635
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:342
 #: include/stroke_params.h:72
 msgid "Dashed"
 msgstr "虚线"
 
-#: common/dialogs/panel_setup_netclasses.cpp:93 common/eda_shape.cpp:1624
+#: common/dialogs/panel_setup_netclasses.cpp:93 common/eda_shape.cpp:1636
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:342
 #: include/stroke_params.h:73
 msgid "Dotted"
 msgstr "点线"
 
-#: common/dialogs/panel_setup_netclasses.cpp:95 common/eda_shape.cpp:1625
+#: common/dialogs/panel_setup_netclasses.cpp:95 common/eda_shape.cpp:1637
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:342
 #: include/stroke_params.h:74
 msgid "Dash-Dot"
 msgstr "点划线"
 
-#: common/dialogs/panel_setup_netclasses.cpp:97 common/eda_shape.cpp:1626
+#: common/dialogs/panel_setup_netclasses.cpp:97 common/eda_shape.cpp:1638
 #: include/stroke_params.h:75
 msgid "Dash-Dot-Dot"
 msgstr "双点划线"
@@ -3452,7 +3478,7 @@ msgstr "默认的网络类是必需的。"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:41
 #: common/dialogs/panel_setup_netclasses_base.cpp:215
-#: eeschema/sch_field.cpp:846 eeschema/sch_label.cpp:192 pcbnew/pad.cpp:904
+#: eeschema/sch_field.cpp:846 eeschema/sch_label.cpp:192 pcbnew/pad.cpp:933
 #: pcbnew/pcb_track.cpp:841 pcbnew/zone.cpp:566
 msgid "Net Class"
 msgstr "网络类"
@@ -3513,10 +3539,10 @@ msgstr "总线粗细"
 msgid "Line Style"
 msgstr "线型"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:59 common/eda_shape.cpp:1621
-#: common/pgm_base.cpp:74 common/stroke_params.cpp:200
+#: common/dialogs/panel_setup_netclasses_base.cpp:59 common/eda_shape.cpp:1633
+#: common/pgm_base.cpp:81 common/stroke_params.cpp:200
 #: common/widgets/footprint_select_widget.cpp:142
-#: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:69
+#: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:70
 #: eeschema/dialogs/dialog_junction_props.cpp:43
 #: eeschema/dialogs/dialog_line_properties.cpp:53
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:56
@@ -3570,7 +3596,7 @@ msgstr "关联到选择的网络"
 #: common/dialogs/panel_setup_netclasses_base.cpp:214
 #: pcbnew/board_connected_item.cpp:176
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
-#: pcbnew/dialogs/dialog_net_inspector.cpp:78 pcbnew/pad.cpp:902
+#: pcbnew/dialogs/dialog_net_inspector.cpp:78 pcbnew/pad.cpp:931
 #: pcbnew/pcb_track.cpp:839 pcbnew/zone.cpp:564
 msgid "Net"
 msgstr "网络"
@@ -3683,17 +3709,17 @@ msgstr "无法使用 OpenGL，回退到软件渲染"
 msgid "Could not use OpenGL"
 msgstr "无法使用 OpenGL"
 
-#: common/drawing_sheet/drawing_sheet_parser.cpp:915
+#: common/drawing_sheet/drawing_sheet_parser.cpp:925
 #, c-format
 msgid "Drawing sheet '%s' not found."
 msgstr "未找到图纸 \"%s\"。"
 
-#: common/drawing_sheet/drawing_sheet_parser.cpp:925
+#: common/drawing_sheet/drawing_sheet_parser.cpp:935
 #, c-format
 msgid "Drawing sheet '%s' could not be opened."
 msgstr "无法打开图纸 \"%s\"。"
 
-#: common/drawing_sheet/drawing_sheet_parser.cpp:938
+#: common/drawing_sheet/drawing_sheet_parser.cpp:948
 #, c-format
 msgid "Drawing sheet '%s' was not fully read."
 msgstr "图纸 '%s' 没有被完全读取。"
@@ -3701,7 +3727,7 @@ msgstr "图纸 '%s' 没有被完全读取。"
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_item.cpp:318
 #: common/eda_item.cpp:320 common/eda_item.cpp:350 common/eda_item.cpp:372
-#: common/eda_text.cpp:1013 eeschema/dialogs/panel_setup_formatting_base.cpp:47
+#: common/eda_text.cpp:1022 eeschema/dialogs/panel_setup_formatting_base.cpp:47
 #: eeschema/lib_field.cpp:471 eeschema/lib_text.cpp:364 eeschema/lib_text.h:55
 #: eeschema/sch_field.cpp:690
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:40
@@ -3724,21 +3750,21 @@ msgstr "线"
 
 #: common/drawing_sheet/ds_data_item.cpp:372
 #: common/drawing_sheet/ds_draw_item.cpp:118 common/eda_shape.cpp:603
-#: common/eda_shape.cpp:1615
-#: eeschema/dialogs/dialog_label_properties_base.cpp:170
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1651
+#: common/eda_shape.cpp:1627
+#: eeschema/dialogs/dialog_label_properties_base.cpp:171
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1671
 msgid "Rectangle"
 msgstr "矩形"
 
 #: common/drawing_sheet/ds_data_item.cpp:373
 #: common/drawing_sheet/ds_draw_item.cpp:126
-#: common/drawing_sheet/ds_draw_item.cpp:291
+#: common/drawing_sheet/ds_draw_item.cpp:296
 msgid "Imported Shape"
 msgstr "导入的形状"
 
 #: common/drawing_sheet/ds_data_item.cpp:374
 #: common/drawing_sheet/ds_draw_item.cpp:130
-#: common/drawing_sheet/ds_draw_item.cpp:468 common/eda_item.cpp:379
+#: common/drawing_sheet/ds_draw_item.cpp:473 common/eda_item.cpp:379
 #: eeschema/sch_bitmap.h:129
 msgid "Image"
 msgstr "图片"
@@ -3781,23 +3807,23 @@ msgstr "重复位置增量"
 msgid "Comment"
 msgstr "注释"
 
-#: common/drawing_sheet/ds_draw_item.cpp:187
+#: common/drawing_sheet/ds_draw_item.cpp:192
 #, c-format
 msgid "Text '%s'"
 msgstr "文本 '%s'"
 
-#: common/drawing_sheet/ds_draw_item.cpp:387 eeschema/lib_shape.cpp:396
-#: eeschema/sch_shape.cpp:348
+#: common/drawing_sheet/ds_draw_item.cpp:392 eeschema/lib_shape.cpp:396
+#: eeschema/sch_shape.cpp:351
 #, c-format
 msgid "Rectangle, width %s height %s"
 msgstr "矩形，宽度 %s 高度 %s"
 
-#: common/drawing_sheet/ds_draw_item.cpp:420
+#: common/drawing_sheet/ds_draw_item.cpp:425
 #, c-format
 msgid "Line, length %s"
 msgstr "线，长度 %s"
 
-#: common/drawing_sheet/ds_draw_item.cpp:474
+#: common/drawing_sheet/ds_draw_item.cpp:479
 #: gerbview/widgets/gerbview_layer_widget.cpp:102
 msgid "Page Limits"
 msgstr "图框限制"
@@ -3844,93 +3870,98 @@ msgstr "无结尾的分隔字符串"
 msgid "String delimiter must be a single character of ', \", or $"
 msgstr "字符串分割符号必须为 ' , \" , $ 之一的单字符"
 
-#: common/eda_base_frame.cpp:460
+#: common/eda_base_frame.cpp:462
 msgid "&About KiCad"
 msgstr "关于 KiCad (&A)"
 
-#: common/eda_base_frame.cpp:940
+#: common/eda_base_frame.cpp:942
 #, c-format
 msgid "File '%s' was not found."
 msgstr "没有找到文件 \"%s\"。"
 
-#: common/eda_base_frame.cpp:983
+#: common/eda_base_frame.cpp:985
 msgid "Preferences"
 msgstr "偏好设置"
 
-#: common/eda_base_frame.cpp:992 common/hotkey_store.cpp:71
+#: common/eda_base_frame.cpp:994 common/hotkey_store.cpp:71
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
 msgid "Common"
 msgstr "常规"
 
-#: common/eda_base_frame.cpp:993
+#: common/eda_base_frame.cpp:995
 msgid "Mouse and Touchpad"
 msgstr "鼠标和触摸板"
 
-#: common/eda_base_frame.cpp:994
+#: common/eda_base_frame.cpp:996
 msgid "Hotkeys"
 msgstr "快捷键"
 
-#: common/eda_base_frame.cpp:1005 common/tool/actions.cpp:582
+#: common/eda_base_frame.cpp:999
+#, fuzzy
+msgid "Data Collection"
+msgstr "焊盘连接"
+
+#: common/eda_base_frame.cpp:1011 common/tool/actions.cpp:582
 #: eeschema/symbol_editor/symbol_editor.cpp:163
 #: kicad/tools/kicad_manager_actions.cpp:75
 msgid "Symbol Editor"
 msgstr "符号编辑器"
 
-#: common/eda_base_frame.cpp:1006 common/eda_base_frame.cpp:1014
-#: common/eda_base_frame.cpp:1027 common/eda_base_frame.cpp:1036
-#: common/eda_base_frame.cpp:1059 common/eda_base_frame.cpp:1070
+#: common/eda_base_frame.cpp:1012 common/eda_base_frame.cpp:1020
+#: common/eda_base_frame.cpp:1033 common/eda_base_frame.cpp:1042
+#: common/eda_base_frame.cpp:1065 common/eda_base_frame.cpp:1076
 msgid "Display Options"
 msgstr "显示选项"
 
-#: common/eda_base_frame.cpp:1007 common/eda_base_frame.cpp:1015
-#: common/eda_base_frame.cpp:1028 common/eda_base_frame.cpp:1037
+#: common/eda_base_frame.cpp:1013 common/eda_base_frame.cpp:1021
+#: common/eda_base_frame.cpp:1034 common/eda_base_frame.cpp:1043
 #: pcbnew/dialogs/panel_edit_options_base.cpp:24
 msgid "Editing Options"
 msgstr "编辑选项"
 
-#: common/eda_base_frame.cpp:1008 common/eda_base_frame.cpp:1016
-#: common/eda_base_frame.cpp:1029 common/eda_base_frame.cpp:1038
-#: common/eda_base_frame.cpp:1049 common/eda_base_frame.cpp:1071
+#: common/eda_base_frame.cpp:1014 common/eda_base_frame.cpp:1022
+#: common/eda_base_frame.cpp:1035 common/eda_base_frame.cpp:1044
+#: common/eda_base_frame.cpp:1055 common/eda_base_frame.cpp:1077
 msgid "Colors"
 msgstr "颜色"
 
-#: common/eda_base_frame.cpp:1013 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:130 eeschema/sch_edit_frame.cpp:1400
+#: common/eda_base_frame.cpp:1019 common/hotkey_store.cpp:73
+#: eeschema/menubar.cpp:130 eeschema/sch_edit_frame.cpp:1397
 #: kicad/tools/kicad_manager_actions.cpp:69
 msgid "Schematic Editor"
 msgstr "原理图编辑器"
 
-#: common/eda_base_frame.cpp:1017
+#: common/eda_base_frame.cpp:1023
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
 msgid "Field Name Templates"
 msgstr "字段名称模板"
 
-#: common/eda_base_frame.cpp:1026 common/tool/actions.cpp:592
+#: common/eda_base_frame.cpp:1032 common/tool/actions.cpp:592
 #: kicad/tools/kicad_manager_actions.cpp:87 pcbnew/footprint_edit_frame.cpp:878
 #: pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
 msgstr "封装编辑器"
 
-#: common/eda_base_frame.cpp:1030
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:456
+#: common/eda_base_frame.cpp:1036
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:465
 msgid "Default Values"
 msgstr "默认值"
 
-#: common/eda_base_frame.cpp:1035 common/hotkey_store.cpp:74
+#: common/eda_base_frame.cpp:1041 common/hotkey_store.cpp:74
 #: kicad/tools/kicad_manager_actions.cpp:81 pcbnew/menubar_pcb_editor.cpp:184
 #: pcbnew/pcb_edit_frame.cpp:178 pcbnew/pcb_edit_frame.cpp:1391
 msgid "PCB Editor"
 msgstr "PCB 编辑器"
 
-#: common/eda_base_frame.cpp:1039
+#: common/eda_base_frame.cpp:1045
 msgid "Action Plugins"
 msgstr "操作插件"
 
-#: common/eda_base_frame.cpp:1040
+#: common/eda_base_frame.cpp:1046
 msgid "Origins & Axes"
 msgstr "原点和轴"
 
-#: common/eda_base_frame.cpp:1046
+#: common/eda_base_frame.cpp:1052
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:272
 #: eeschema/dialogs/dialog_schematic_setup.cpp:70
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:118
@@ -3943,34 +3974,34 @@ msgstr "原点和轴"
 msgid "General"
 msgstr "常规"
 
-#: common/eda_base_frame.cpp:1047
+#: common/eda_base_frame.cpp:1053
 msgid "Realtime Renderer"
 msgstr "实时渲染器"
 
-#: common/eda_base_frame.cpp:1048
+#: common/eda_base_frame.cpp:1054
 msgid "Raytracing Renderer"
 msgstr "光线追踪渲染器"
 
-#: common/eda_base_frame.cpp:1058
+#: common/eda_base_frame.cpp:1064
 msgid "GerbView"
 msgstr "GerbView"
 
-#: common/eda_base_frame.cpp:1060
+#: common/eda_base_frame.cpp:1066
 msgid "Excellon Options"
 msgstr "Excellon 选项"
 
-#: common/eda_base_frame.cpp:1069 common/hotkey_store.cpp:75
+#: common/eda_base_frame.cpp:1075 common/hotkey_store.cpp:75
 #: kicad/tools/kicad_manager_actions.cpp:110 pagelayout_editor/menubar.cpp:86
 #: pagelayout_editor/pl_editor_frame.cpp:543
 msgid "Drawing Sheet Editor"
 msgstr "图纸编辑器"
 
-#: common/eda_base_frame.cpp:1106
+#: common/eda_base_frame.cpp:1112
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
 msgstr "对文件夹 '%s' 的权限不足。"
 
-#: common/eda_base_frame.cpp:1148
+#: common/eda_base_frame.cpp:1154
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -3984,7 +4015,7 @@ msgstr ""
 "似乎上次你正在编辑文件%s\n"
 "它未被正确保存。是否要恢复上次所做的已保存的编辑？"
 
-#: common/eda_base_frame.cpp:1164
+#: common/eda_base_frame.cpp:1170
 msgid "The auto save file could not be renamed to the board file name."
 msgstr "自动保存文件不能重命名为电路板文件名称。"
 
@@ -4008,7 +4039,7 @@ msgstr "文档文件 \"%s\" 的 MIME 类型未知"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:54
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:104
-#: pcbnew/dialogs/dialog_plot_base.cpp:358
+#: pcbnew/dialogs/dialog_plot_base.cpp:352
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:89
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:52
 msgid "Inches"
@@ -4040,8 +4071,8 @@ msgstr "英寸"
 #: common/eda_draw_frame.cpp:596
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:110
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:228
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:239
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:234
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:245
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:62
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:114
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:125
@@ -4080,12 +4111,12 @@ msgstr "屏幕"
 #: eeschema/sch_symbol.cpp:1426 pcbnew/build_BOM_from_board.cpp:112
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:116
 #: pcbnew/fp_text.cpp:274 pcbnew/load_select_footprint.cpp:372
-#: pcbnew/pad.cpp:889
+#: pcbnew/pad.cpp:918
 msgid "Footprint"
 msgstr "封装"
 
 #: common/eda_item.cpp:316 pcbnew/dialogs/dialog_board_statistics.cpp:510
-#: pcbnew/pad.cpp:892
+#: pcbnew/pad.cpp:921
 msgid "Pad"
 msgstr "焊盘"
 
@@ -4094,9 +4125,9 @@ msgid "Graphic"
 msgstr "图形"
 
 #: common/eda_item.cpp:319 common/eda_item.cpp:321 common/eda_item.cpp:351
-#: common/eda_item.cpp:373 eeschema/lib_textbox.cpp:369
-#: eeschema/sch_textbox.cpp:372 pcbnew/fp_textbox.cpp:206
-#: pcbnew/pcb_textbox.cpp:207
+#: common/eda_item.cpp:373 eeschema/lib_textbox.cpp:374
+#: eeschema/sch_textbox.cpp:377 pcbnew/fp_textbox.cpp:233
+#: pcbnew/pcb_textbox.cpp:227
 msgid "Text Box"
 msgstr "文本框"
 
@@ -4225,11 +4256,11 @@ msgstr "Gerber 布局"
 msgid "Draw Item"
 msgstr "绘制项目"
 
-#: common/eda_shape.cpp:62 pcbnew/pad.cpp:1143
+#: common/eda_shape.cpp:62 pcbnew/pad.cpp:1172
 msgid "Rect"
 msgstr "矩形"
 
-#: common/eda_shape.cpp:63 common/eda_shape.cpp:579 common/eda_shape.cpp:1616
+#: common/eda_shape.cpp:63 common/eda_shape.cpp:579 common/eda_shape.cpp:1628
 #: gerbview/gerber_draw_item.cpp:212
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:114
 #: pcbnew/dialogs/dialog_pad_properties.cpp:716
@@ -4237,12 +4268,12 @@ msgstr "矩形"
 msgid "Arc"
 msgstr "弧"
 
-#: common/eda_shape.cpp:64 common/eda_shape.cpp:572 common/eda_shape.cpp:1617
-#: eeschema/dialogs/dialog_label_properties_base.cpp:164
+#: common/eda_shape.cpp:64 common/eda_shape.cpp:572 common/eda_shape.cpp:1629
+#: eeschema/dialogs/dialog_label_properties_base.cpp:165
 #: gerbview/gerber_draw_item.cpp:213
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45
-#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:138 pcbnew/pad.cpp:1141
-#: pcbnew/pad.cpp:1650
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:138 pcbnew/pad.cpp:1170
+#: pcbnew/pad.cpp:1670
 msgid "Circle"
 msgstr "圆形"
 
@@ -4250,18 +4281,19 @@ msgstr "圆形"
 msgid "Bezier Curve"
 msgstr "贝塞尔曲线"
 
-#: common/eda_shape.cpp:66 common/eda_shape.cpp:596 common/eda_shape.cpp:1618
+#: common/eda_shape.cpp:66 common/eda_shape.cpp:596 common/eda_shape.cpp:1630
 #: pcbnew/dialogs/dialog_pad_properties.cpp:734
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2141
 msgid "Polygon"
 msgstr "多边形"
 
-#: common/eda_shape.cpp:567 common/eda_shape.cpp:1630
-#: eeschema/dialogs/dialog_label_properties_base.cpp:144
+#: common/eda_shape.cpp:567 common/eda_shape.cpp:1642
+#: eeschema/dialogs/dialog_label_properties_base.cpp:145
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:232
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:120
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:44
-#: pcbnew/microwave/microwave_polygon.cpp:130 pcbnew/pad.cpp:1675
+#: pcbnew/microwave/microwave_polygon.cpp:130 pcbnew/pad.cpp:1695
 #: pcbnew/pcb_target.cpp:159 pcbnew/pcb_target.cpp:207
 msgid "Shape"
 msgstr "形状"
@@ -4273,7 +4305,7 @@ msgid "Radius"
 msgstr "半径"
 
 #: common/eda_shape.cpp:582 common/eda_shape.cpp:622 pcbnew/fp_text.cpp:294
-#: pcbnew/fp_textbox.cpp:213 pcbnew/pcb_text.cpp:142 pcbnew/pcb_textbox.cpp:214
+#: pcbnew/fp_textbox.cpp:240 pcbnew/pcb_text.cpp:142 pcbnew/pcb_textbox.cpp:234
 msgid "Angle"
 msgstr "角度"
 
@@ -4293,31 +4325,31 @@ msgstr "长度"
 msgid "Points"
 msgstr "点"
 
-#: common/eda_shape.cpp:606 common/eda_text.cpp:1031
+#: common/eda_shape.cpp:606 common/eda_text.cpp:1040
 #: eeschema/sch_bitmap.cpp:207 pcbnew/dialogs/dialog_board_statistics.cpp:695
 #: pcbnew/dialogs/dialog_board_statistics.cpp:705
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:42
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:155
-#: pcbnew/fp_text.cpp:300 pcbnew/fp_text_grid_table.cpp:100 pcbnew/pad.cpp:939
+#: pcbnew/fp_text.cpp:300 pcbnew/fp_text_grid_table.cpp:100 pcbnew/pad.cpp:968
 #: pcbnew/pcb_target.cpp:158 pcbnew/pcb_target.cpp:204 pcbnew/pcb_text.cpp:145
 #: pcbnew/pcb_track.cpp:752 pcbnew/pcb_track.cpp:1191 pcbnew/pcb_track.cpp:1208
 #: pcbnew/pcb_track.cpp:1227
 msgid "Width"
 msgstr "宽度"
 
-#: common/eda_shape.cpp:609 common/eda_text.cpp:1035
+#: common/eda_shape.cpp:609 common/eda_text.cpp:1044
 #: eeschema/sch_bitmap.cpp:208 pcbnew/dialogs/dialog_board_statistics.cpp:697
 #: pcbnew/dialogs/dialog_board_statistics.cpp:706
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:56
-#: pcbnew/fp_text.cpp:303 pcbnew/fp_text_grid_table.cpp:101 pcbnew/pad.cpp:940
+#: pcbnew/fp_text.cpp:303 pcbnew/fp_text_grid_table.cpp:101 pcbnew/pad.cpp:969
 #: pcbnew/pcb_dimension.cpp:698 pcbnew/pcb_text.cpp:146
 msgid "Height"
 msgstr "高度"
 
-#: common/eda_shape.cpp:614 common/eda_shape.cpp:1614
+#: common/eda_shape.cpp:614 common/eda_shape.cpp:1626
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:82
 #: pcbnew/dialogs/dialog_pad_properties.cpp:704
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2137
@@ -4328,38 +4360,38 @@ msgstr "线段"
 msgid "Unrecognized"
 msgstr "无法识别"
 
-#: common/eda_shape.cpp:1619
+#: common/eda_shape.cpp:1631
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:100
 #: pcbnew/dialogs/dialog_pad_properties.cpp:710
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2139
 msgid "Bezier"
 msgstr "贝塞尔曲线"
 
-#: common/eda_shape.cpp:1632
+#: common/eda_shape.cpp:1644
 msgid "Start X"
 msgstr "起点 X"
 
-#: common/eda_shape.cpp:1634
+#: common/eda_shape.cpp:1646
 msgid "Start Y"
 msgstr "起点 Y"
 
-#: common/eda_shape.cpp:1636 pcbnew/pcb_track.cpp:1199
+#: common/eda_shape.cpp:1648 pcbnew/pcb_track.cpp:1199
 #: pcbnew/pcb_track.cpp:1216
 msgid "End X"
 msgstr "结束点 X"
 
-#: common/eda_shape.cpp:1638 pcbnew/pcb_track.cpp:1201
+#: common/eda_shape.cpp:1650 pcbnew/pcb_track.cpp:1201
 #: pcbnew/pcb_track.cpp:1218
 msgid "End Y"
 msgstr "结束点 Y"
 
-#: common/eda_shape.cpp:1641 common/stroke_params.cpp:216
+#: common/eda_shape.cpp:1653 common/stroke_params.cpp:216
 msgid "Line Width"
 msgstr "线宽"
 
-#: common/eda_text.cpp:771 eeschema/lib_textbox.cpp:371
+#: common/eda_text.cpp:771 eeschema/lib_textbox.cpp:376
 #: eeschema/sch_label.cpp:789 eeschema/sch_text.cpp:448
-#: eeschema/sch_textbox.cpp:374 eeschema/symbol_editor/symbol_editor.cpp:1239
+#: eeschema/sch_textbox.cpp:379 eeschema/symbol_editor/symbol_editor.cpp:1239
 #: gerbview/gerber_file_image.cpp:350 gerbview/gerber_file_image.cpp:354
 #: gerbview/gerber_file_image.cpp:357
 #: pcbnew/microwave/microwave_polygon.cpp:128
@@ -4368,21 +4400,22 @@ msgstr "线宽"
 msgid "Normal"
 msgstr "正常"
 
-#: common/eda_text.cpp:772 common/eda_text.cpp:1020
-#: eeschema/dialogs/dialog_field_properties_base.cpp:136
+#: common/eda_text.cpp:772 common/eda_text.cpp:1029
+#: eeschema/dialogs/dialog_field_properties_base.cpp:137
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:229
-#: eeschema/dialogs/dialog_label_properties_base.cpp:88
-#: eeschema/dialogs/dialog_label_properties_base.cpp:208
+#: eeschema/dialogs/dialog_label_properties_base.cpp:89
+#: eeschema/dialogs/dialog_label_properties_base.cpp:209
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:61
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:105
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:89
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:55
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:105
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:63
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
-#: eeschema/dialogs/dialog_text_properties_base.cpp:89
-#: eeschema/fields_grid_table.cpp:260 eeschema/lib_textbox.cpp:371
+#: eeschema/dialogs/dialog_text_properties_base.cpp:96
+#: eeschema/fields_grid_table.cpp:260 eeschema/lib_textbox.cpp:376
 #: eeschema/sch_label.cpp:789 eeschema/sch_text.cpp:448
-#: eeschema/sch_textbox.cpp:374
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:101
+#: eeschema/sch_textbox.cpp:379
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:97
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:58
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:58
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:288
@@ -4393,21 +4426,22 @@ msgstr "正常"
 msgid "Italic"
 msgstr "斜体"
 
-#: common/eda_text.cpp:773 common/eda_text.cpp:1023
-#: eeschema/dialogs/dialog_field_properties_base.cpp:131
+#: common/eda_text.cpp:773 common/eda_text.cpp:1032
+#: eeschema/dialogs/dialog_field_properties_base.cpp:132
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:207
-#: eeschema/dialogs/dialog_label_properties_base.cpp:89
-#: eeschema/dialogs/dialog_label_properties_base.cpp:203
+#: eeschema/dialogs/dialog_label_properties_base.cpp:90
+#: eeschema/dialogs/dialog_label_properties_base.cpp:204
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:100
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:84
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:56
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:100
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:64
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:58
-#: eeschema/dialogs/dialog_text_properties_base.cpp:84
-#: eeschema/fields_grid_table.cpp:261 eeschema/lib_textbox.cpp:371
+#: eeschema/dialogs/dialog_text_properties_base.cpp:91
+#: eeschema/fields_grid_table.cpp:261 eeschema/lib_textbox.cpp:376
 #: eeschema/sch_label.cpp:789 eeschema/sch_text.cpp:448
-#: eeschema/sch_textbox.cpp:374
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:96
+#: eeschema/sch_textbox.cpp:379
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:92
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:186
 msgid "Bold"
 msgstr "粗体"
@@ -4416,7 +4450,7 @@ msgstr "粗体"
 msgid "Bold+Italic"
 msgstr "粗体+斜体"
 
-#: common/eda_text.cpp:1003
+#: common/eda_text.cpp:1012
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:217
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:257
 #: eeschema/fields_grid_table.cpp:184 eeschema/fields_grid_table.cpp:469
@@ -4426,7 +4460,7 @@ msgstr "粗体+斜体"
 msgid "Left"
 msgstr "向左"
 
-#: common/eda_text.cpp:1004 common/eda_text.cpp:1008
+#: common/eda_text.cpp:1013 common/eda_text.cpp:1017
 #: common/tool/actions.cpp:326 common/widgets/mathplot.cpp:1665
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:257
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
@@ -4442,7 +4476,7 @@ msgstr "向左"
 msgid "Center"
 msgstr "居中"
 
-#: common/eda_text.cpp:1005
+#: common/eda_text.cpp:1014
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:217
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:257
 #: eeschema/fields_grid_table.cpp:186 eeschema/fields_grid_table.cpp:471
@@ -4452,7 +4486,7 @@ msgstr "居中"
 msgid "Right"
 msgstr "向右"
 
-#: common/eda_text.cpp:1007
+#: common/eda_text.cpp:1016
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
 #: eeschema/fields_grid_table.cpp:176 eeschema/fields_grid_table.cpp:479
 #: eeschema/fields_grid_table.cpp:589 eeschema/lib_field.cpp:491
@@ -4460,7 +4494,7 @@ msgstr "向右"
 msgid "Top"
 msgstr "上对齐"
 
-#: common/eda_text.cpp:1009
+#: common/eda_text.cpp:1018
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
 #: eeschema/fields_grid_table.cpp:178 eeschema/fields_grid_table.cpp:481
 #: eeschema/fields_grid_table.cpp:593 eeschema/lib_field.cpp:493
@@ -4468,21 +4502,21 @@ msgstr "上对齐"
 msgid "Bottom"
 msgstr "向下对齐"
 
-#: common/eda_text.cpp:1016
+#: common/eda_text.cpp:1025
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:57
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:57
 #: pcbnew/fp_text.cpp:297 pcbnew/fp_text_grid_table.cpp:102
-#: pcbnew/fp_textbox.cpp:215 pcbnew/pcb_text.cpp:144
+#: pcbnew/fp_textbox.cpp:242 pcbnew/pcb_text.cpp:144
 msgid "Thickness"
 msgstr "厚度"
 
-#: common/eda_text.cpp:1025 pcbnew/microwave/microwave_polygon.cpp:128
+#: common/eda_text.cpp:1034 pcbnew/microwave/microwave_polygon.cpp:128
 msgid "Mirrored"
 msgstr "镜像"
 
-#: common/eda_text.cpp:1028
-#: eeschema/dialogs/dialog_field_properties_base.cpp:85
+#: common/eda_text.cpp:1037
+#: eeschema/dialogs/dialog_field_properties_base.cpp:86
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:124
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:98
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:44
@@ -4493,11 +4527,11 @@ msgstr "镜像"
 msgid "Visible"
 msgstr "可见"
 
-#: common/eda_text.cpp:1040
+#: common/eda_text.cpp:1049
 msgid "Horizontal Justification"
 msgstr "水平对齐"
 
-#: common/eda_text.cpp:1044
+#: common/eda_text.cpp:1053
 msgid "Vertical Justification"
 msgstr "垂直对齐"
 
@@ -4645,12 +4679,13 @@ msgid "Problems writing configuration file"
 msgstr "写入配置文件时出错"
 
 #: common/font/font.cpp:96 common/widgets/font_choice.cpp:47
-#: eeschema/dialogs/dialog_field_properties_base.cpp:101
-#: eeschema/dialogs/dialog_label_properties_base.cpp:188
+#: eeschema/dialogs/dialog_field_properties_base.cpp:102
+#: eeschema/dialogs/dialog_label_properties_base.cpp:189
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:70
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:69
-#: eeschema/dialogs/dialog_text_properties_base.cpp:69
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:145
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:85
+#: eeschema/dialogs/dialog_text_properties_base.cpp:76
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:154
 msgid "Default Font"
 msgstr "默认字体"
 
@@ -5474,27 +5509,41 @@ msgstr "'%s' 和 %lf 的类型不匹配"
 msgid "Type mismatch between %lf and '%s'"
 msgstr "%lf 和 '%s'的类型不匹配"
 
-#: common/pgm_base.cpp:170
+#: common/pgm_base.cpp:181
 msgid "No default editor found, you must choose one."
 msgstr "未找到默认编辑器，你必须先选择一个。"
 
-#: common/pgm_base.cpp:190 common/pgm_base.cpp:192
+#: common/pgm_base.cpp:201 common/pgm_base.cpp:203
 msgid "Executable file"
 msgstr "可执行文件"
 
-#: common/pgm_base.cpp:202
+#: common/pgm_base.cpp:213
 msgid "Select Preferred Editor"
 msgstr "选择首选编辑器"
 
-#: common/pgm_base.cpp:222
+#: common/pgm_base.cpp:326
+msgid ""
+"KiCad can anonymously report crashes and special event data to developers in "
+"order to aid identifying critical bugs across the user base more effectively "
+"and help profile functionality to guide improvements. \n"
+"If you choose to voluntarily participate, KiCad will automatically handle "
+"sending said reports when crashes or events occur. \n"
+"Your design files such as schematic or PCB are not shared in this process."
+msgstr ""
+
+#: common/pgm_base.cpp:333
+msgid "Data collection opt in request"
+msgstr ""
+
+#: common/pgm_base.cpp:375
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "环境变量 HOME 为空。无法继续。"
 
-#: common/pgm_base.cpp:433
+#: common/pgm_base.cpp:590
 msgid "This language is not supported by the operating system."
 msgstr "操作系统不支持此语言。"
 
-#: common/pgm_base.cpp:484 common/pgm_base.cpp:522
+#: common/pgm_base.cpp:641 common/pgm_base.cpp:679
 msgid "The KiCad language file for this language is not installed."
 msgstr "未安装此语言的 KiCad 语言文件。"
 
@@ -5587,7 +5636,7 @@ msgstr "无效的大小 %lld: 太大"
 msgid "Invalid Arc with radius %f and angle %f"
 msgstr "半径为 %f 且角度为 %f 的无效圆弧"
 
-#: common/project.cpp:310 common/project.cpp:315 pcbnew/pcb_base_frame.cpp:179
+#: common/project.cpp:310 common/project.cpp:315 pcbnew/pcb_base_frame.cpp:192
 msgid "Error loading project footprint library table."
 msgstr "加载工程封装库表时出错。"
 
@@ -5621,9 +5670,9 @@ msgstr "解压文件时出错！"
 #: pcbnew/build_BOM_from_board.cpp:103
 #: pcbnew/dialogs/dialog_board_statistics.cpp:680
 #: pcbnew/dialogs/dialog_drc.cpp:800 pcbnew/dialogs/dialog_export_idf.cpp:223
-#: pcbnew/dialogs/dialog_export_svg.cpp:304
+#: pcbnew/dialogs/dialog_export_svg.cpp:305
 #: pcbnew/dialogs/dialog_export_vrml.cpp:265
-#: pcbnew/dialogs/dialog_gendrill.cpp:479 pcbnew/dialogs/dialog_plot.cpp:916
+#: pcbnew/dialogs/dialog_gendrill.cpp:479 pcbnew/dialogs/dialog_plot.cpp:1052
 #: pcbnew/exporters/export_footprint_associations.cpp:83
 #: pcbnew/exporters/export_gencad.cpp:257
 #: pcbnew/exporters/gen_footprints_placefile.cpp:308
@@ -5687,16 +5736,16 @@ msgstr "超出了最大行长度"
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "OUTPUTSTREAM_OUTPUTFORMATTER 写入错误"
 
-#: common/settings/color_settings.cpp:348
+#: common/settings/color_settings.cpp:349
 msgid "(Footprints)"
 msgstr "(封装)"
 
-#: common/settings/color_settings.cpp:400
+#: common/settings/color_settings.cpp:401
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings.cpp:78
 msgid "KiCad Default"
 msgstr "KiCad 默认"
 
-#: common/settings/color_settings.cpp:405
+#: common/settings/color_settings.cpp:406
 msgid "KiCad Classic"
 msgstr "KiCad 经典版"
 
@@ -5796,7 +5845,7 @@ msgstr "打印..."
 msgid "Plot..."
 msgstr "绘制..."
 
-#: common/tool/actions.cpp:108 pcbnew/dialogs/dialog_plot.cpp:66
+#: common/tool/actions.cpp:108 pcbnew/dialogs/dialog_plot.cpp:153
 #: pcbnew/dialogs/dialog_plot_base.h:151
 msgid "Plot"
 msgstr "绘制"
@@ -6128,7 +6177,7 @@ msgstr "使用 mil 作为单位"
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:102
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:54
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:104
-#: pcbnew/dialogs/dialog_plot_base.cpp:358
+#: pcbnew/dialogs/dialog_plot_base.cpp:352
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:89
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:53
 msgid "Millimeters"
@@ -6286,7 +6335,7 @@ msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr "打开“KiCad 入门”手册"
 
 #: common/tool/actions.cpp:636
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:34
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:35
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:187
 msgid "Help"
 msgstr "帮助"
@@ -6910,33 +6959,33 @@ msgstr "JPEG 文件"
 msgid "Hotkey file"
 msgstr "快捷键文件"
 
-#: cvpcb/auto_associate.cpp:105
-#, c-format
-msgid "Equivalence file '%s' could not be found in the default search paths."
+#: cvpcb/auto_associate.cpp:108
+#, fuzzy, c-format
+msgid "Equivalence file '%s' could not be found."
 msgstr "默认路径中无法找到等价文件 \"%s\"。"
 
-#: cvpcb/auto_associate.cpp:126
+#: cvpcb/auto_associate.cpp:128
 #, c-format
 msgid "Error opening equivalence file '%s'."
 msgstr "打开等效文件 \"%s\" 时出现错误。"
 
-#: cvpcb/auto_associate.cpp:178
+#: cvpcb/auto_associate.cpp:180
 msgid "Equivalence File Load Error"
 msgstr "等效文件载入错误"
 
-#: cvpcb/auto_associate.cpp:185
+#: cvpcb/auto_associate.cpp:187
 #, c-format
 msgid "%lu footprint/symbol equivalences found."
 msgstr "找到了 %lu 个封装/符号等价。"
 
-#: cvpcb/auto_associate.cpp:261
+#: cvpcb/auto_associate.cpp:263
 #, c-format
 msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
 "libraries."
 msgstr "元件 %s： 没有在任何工程封装库中找到封装 %s 。"
 
-#: cvpcb/auto_associate.cpp:306
+#: cvpcb/auto_associate.cpp:308
 msgid "CvPcb Warning"
 msgstr "CvPcb 警告"
 
@@ -7091,7 +7140,7 @@ msgstr "符号封装关联文件（.equ）"
 #: eeschema/dialogs/dialog_bus_manager.cpp:74
 #: eeschema/dialogs/dialog_bus_manager.cpp:108
 #: eeschema/dialogs/dialog_spice_model_base.cpp:652
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1042
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1043
 #: pcbnew/footprint_libraries_utils.cpp:531
 msgid "Add"
 msgstr "添加"
@@ -7122,10 +7171,10 @@ msgid "Available environment variables for relative paths:"
 msgstr "可选的相对路径环境变量："
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:81
-#: eeschema/dialogs/dialog_label_properties_base.cpp:84
+#: eeschema/dialogs/dialog_label_properties_base.cpp:85
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:57
 #: eeschema/dialogs/dialog_rescue_each.cpp:134
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:51
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:59
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:969
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:53
 #: eeschema/dialogs/panel_sym_lib_table.cpp:300
@@ -7439,24 +7488,24 @@ msgstr "重复项目 %s%s\n"
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "不同的值：%s%d%s (%s) 和 %s%d%s (%s)"
 
-#: eeschema/connection_graph.cpp:2333 eeschema/connection_graph.cpp:2364
+#: eeschema/connection_graph.cpp:2375 eeschema/connection_graph.cpp:2406
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr "%s 和 %s 都连接到同一根导线上；选择 %s 作为用于网络列表的标签"
 
-#: eeschema/connection_graph.cpp:2590
+#: eeschema/connection_graph.cpp:2632
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "网络 %s 以图形方式连接到总线 %s，但不是总线的成员"
 
-#: eeschema/connection_graph.cpp:3031
+#: eeschema/connection_graph.cpp:3073
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "图框引脚 %s 在图框内没有匹配的分层标签"
 
-#: eeschema/connection_graph.cpp:3048
+#: eeschema/connection_graph.cpp:3090
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "层次标签 %s 在父图框内没有匹配的图框引脚"
@@ -8237,7 +8286,7 @@ msgstr "按顺序放置符号的所有单元。"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:398
 #: eeschema/dialogs/dialog_choose_symbol.cpp:457
-#: eeschema/generate_alias_info.cpp:81 eeschema/sch_base_frame.cpp:70
+#: eeschema/generate_alias_info.cpp:81 eeschema/sch_base_frame.cpp:73
 #: eeschema/symbol_editor/symbol_editor.cpp:310
 #: eeschema/widgets/symbol_preview_widget.cpp:181
 #, c-format
@@ -8253,7 +8302,7 @@ msgid "Invalid footprint specified"
 msgstr "指定的封装无效"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:516
-#: eeschema/tools/symbol_editor_control.cpp:263
+#: eeschema/tools/symbol_editor_control.cpp:267
 msgid "No symbol selected"
 msgstr "没有选择符号"
 
@@ -8568,44 +8617,45 @@ msgstr "删除标记"
 msgid "Electrical Rules Checker"
 msgstr "电气规则检查 (ERC)"
 
-#: eeschema/dialogs/dialog_field_properties.cpp:179
+#: eeschema/dialogs/dialog_field_properties.cpp:188
 msgid "Power symbol value field text cannot be changed."
 msgstr "不能更改电源符号值字段文本。"
 
-#: eeschema/dialogs/dialog_field_properties.cpp:342
+#: eeschema/dialogs/dialog_field_properties.cpp:353
 msgid "Illegal reference designator value!"
 msgstr "非法位号值！"
 
-#: eeschema/dialogs/dialog_field_properties.cpp:350
+#: eeschema/dialogs/dialog_field_properties.cpp:361
 msgid "Value may not be empty."
 msgstr "值不能是空的。"
 
-#: eeschema/dialogs/dialog_field_properties.cpp:471
+#: eeschema/dialogs/dialog_field_properties.cpp:484
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
 msgstr "图纸文件名只能在图纸属性对话框中修改。"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:31
+#: eeschema/dialogs/dialog_field_properties_base.cpp:32
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:31
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:27
-#: eeschema/dialogs/dialog_text_properties_base.cpp:27
+#: eeschema/dialogs/dialog_text_properties_base.cpp:35
 #: pcbnew/dialogs/dialog_text_properties.cpp:93
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:26
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:26
 msgid "Text:"
 msgstr "文本："
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:75
+#: eeschema/dialogs/dialog_field_properties_base.cpp:76
 #, c-format
 msgid "(%s)"
 msgstr "(%s)"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:97
+#: eeschema/dialogs/dialog_field_properties_base.cpp:98
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:169
-#: eeschema/dialogs/dialog_label_properties_base.cpp:184
+#: eeschema/dialogs/dialog_label_properties_base.cpp:185
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:66
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:65
-#: eeschema/dialogs/dialog_text_properties_base.cpp:65
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:141
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:81
+#: eeschema/dialogs/dialog_text_properties_base.cpp:72
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:150
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:218
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:170
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:111
@@ -8613,14 +8663,15 @@ msgstr "(%s)"
 msgid "Font:"
 msgstr "字体："
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:101
+#: eeschema/dialogs/dialog_field_properties_base.cpp:102
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:173
-#: eeschema/dialogs/dialog_label_properties_base.cpp:188
+#: eeschema/dialogs/dialog_label_properties_base.cpp:189
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:70
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:69
-#: eeschema/dialogs/dialog_text_properties_base.cpp:69
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:85
+#: eeschema/dialogs/dialog_text_properties_base.cpp:76
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:37
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:145
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:154
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:222
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:174
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:115
@@ -8628,73 +8679,85 @@ msgstr "字体："
 msgid "KiCad Font"
 msgstr "KiCad 字体"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:116
+#: eeschema/dialogs/dialog_field_properties_base.cpp:117
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:85
 msgid "Horizontal text"
 msgstr "水平文本"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:121
+#: eeschema/dialogs/dialog_field_properties_base.cpp:122
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:90
 msgid "Vertical text"
 msgstr "垂直文本"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:146
+#: eeschema/dialogs/dialog_field_properties_base.cpp:147
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:115
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:99
-#: eeschema/dialogs/dialog_text_properties_base.cpp:99
+#: eeschema/dialogs/dialog_text_properties_base.cpp:106
 #: eeschema/sch_label.cpp:800 eeschema/sch_text.cpp:459
 msgid "Align left"
 msgstr "左对齐"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:151
+#: eeschema/dialogs/dialog_field_properties_base.cpp:152
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:120
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:104
-#: eeschema/dialogs/dialog_text_properties_base.cpp:104
+#: eeschema/dialogs/dialog_text_properties_base.cpp:111
 msgid "Align horizontal center"
 msgstr "水平居中对齐"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:156
+#: eeschema/dialogs/dialog_field_properties_base.cpp:157
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:125
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:109
-#: eeschema/dialogs/dialog_text_properties_base.cpp:109
+#: eeschema/dialogs/dialog_text_properties_base.cpp:116
 #: eeschema/sch_label.cpp:798 eeschema/sch_text.cpp:457
 msgid "Align right"
 msgstr "右对齐"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:166
+#: eeschema/dialogs/dialog_field_properties_base.cpp:167
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:135
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:124
-#: eeschema/dialogs/dialog_text_properties_base.cpp:124
+#: eeschema/dialogs/dialog_text_properties_base.cpp:131
 #: eeschema/sch_label.cpp:801 eeschema/sch_text.cpp:460
 msgid "Align top"
 msgstr "顶部对齐"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:171
+#: eeschema/dialogs/dialog_field_properties_base.cpp:172
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:140
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:119
-#: eeschema/dialogs/dialog_text_properties_base.cpp:119
+#: eeschema/dialogs/dialog_text_properties_base.cpp:126
 msgid "Align vertical center"
 msgstr "垂直居中对齐"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:176
+#: eeschema/dialogs/dialog_field_properties_base.cpp:177
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:145
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:114
-#: eeschema/dialogs/dialog_text_properties_base.cpp:114
+#: eeschema/dialogs/dialog_text_properties_base.cpp:121
 #: eeschema/sch_label.cpp:799 eeschema/sch_text.cpp:458
 msgid "Align bottom"
 msgstr "底部对齐"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:188
+#: eeschema/dialogs/dialog_field_properties_base.cpp:189
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:191
-#: eeschema/dialogs/dialog_label_properties_base.cpp:237
+#: eeschema/dialogs/dialog_label_properties_base.cpp:238
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:157
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:147
-#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
-#: eeschema/dialogs/dialog_text_properties_base.cpp:147
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:117
+#: eeschema/dialogs/dialog_text_properties_base.cpp:154
 msgid "Text size:"
 msgstr "文本尺寸："
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:199
+#: eeschema/dialogs/dialog_field_properties_base.cpp:203
+#: eeschema/dialogs/dialog_junction_props_base.cpp:38
+#: eeschema/dialogs/dialog_label_properties_base.cpp:252
+#: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:178
+#: eeschema/dialogs/dialog_line_properties_base.cpp:44
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:131
+#: eeschema/dialogs/dialog_text_properties_base.cpp:168
+#: eeschema/dialogs/dialog_text_properties_base.cpp:208
+#: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:44
+msgid "Color:"
+msgstr "颜色："
+
+#: eeschema/dialogs/dialog_field_properties_base.cpp:226
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:288
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:204
@@ -8702,26 +8765,26 @@ msgstr "文本尺寸："
 msgid "Position X:"
 msgstr "位置 X："
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:210
+#: eeschema/dialogs/dialog_field_properties_base.cpp:237
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:314
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:217
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:181
 msgid "Position Y:"
 msgstr "位置 Y："
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:221
+#: eeschema/dialogs/dialog_field_properties_base.cpp:248
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:171
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:242
 msgid "Common to all units"
 msgstr "适用于所有单元"
 
-#: eeschema/dialogs/dialog_field_properties_base.cpp:224
+#: eeschema/dialogs/dialog_field_properties_base.cpp:251
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:174
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:245
 msgid "Common to all body styles"
 msgstr "适用于所有主体样式"
 
-#: eeschema/dialogs/dialog_field_properties_base.h:95
+#: eeschema/dialogs/dialog_field_properties_base.h:100
 #: eeschema/dialogs/dialog_lib_text_properties_base.h:85
 msgid "Text Item Properties"
 msgstr "文本项属性"
@@ -8825,8 +8888,8 @@ msgid "V Align (fields only):"
 msgstr "垂直对齐 (仅限字段)："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:315
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:27
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:344
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:35
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:353
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:161
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1267
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1508
@@ -8834,20 +8897,20 @@ msgid "Line width:"
 msgstr "线宽："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:329
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:40
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:48
 msgid "Line color:"
 msgstr "线条颜色："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:338
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:60
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:68
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:172
 msgid "Line style:"
 msgstr "线条样式："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:354
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:219
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:90
-#: eeschema/dialogs/dialog_text_properties_base.cpp:213
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:98
+#: eeschema/dialogs/dialog_text_properties_base.cpp:246
 msgid "Fill color:"
 msgstr "填充颜色："
 
@@ -8922,14 +8985,6 @@ msgstr ""
 msgid "Diameter:"
 msgstr "直径："
 
-#: eeschema/dialogs/dialog_junction_props_base.cpp:38
-#: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:178
-#: eeschema/dialogs/dialog_line_properties_base.cpp:44
-#: eeschema/dialogs/dialog_text_properties_base.cpp:175
-#: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:44
-msgid "Color:"
-msgstr "颜色："
-
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
 msgid "Set diameter to 0 to use schematic junction dot size."
 msgstr "将直径设为 0 以使用原理图连接点大小。"
@@ -8944,74 +8999,74 @@ msgstr "将颜色设为透明以使用原理图编辑器颜色。"
 msgid "Junction Properties"
 msgstr "结点属性"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:93
+#: eeschema/dialogs/dialog_label_properties.cpp:97
 msgid "Pin length:"
 msgstr "引脚长度："
 
-#: eeschema/dialogs/dialog_label_properties.cpp:98
+#: eeschema/dialogs/dialog_label_properties.cpp:102
 msgid "Global Label Properties"
 msgstr "全局标签属性"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:99
+#: eeschema/dialogs/dialog_label_properties.cpp:103
 msgid "Hierarchical Label Properties"
 msgstr "原理图层次标签属性"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:100
-#: eeschema/dialogs/dialog_label_properties_base.h:108
+#: eeschema/dialogs/dialog_label_properties.cpp:104
+#: eeschema/dialogs/dialog_label_properties_base.h:112
 msgid "Label Properties"
 msgstr "标签属性"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:101
+#: eeschema/dialogs/dialog_label_properties.cpp:105
 msgid "Directive Label Properties"
 msgstr "指令标签属性"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:102
+#: eeschema/dialogs/dialog_label_properties.cpp:106
 msgid "Hierarchical Sheet Pin Properties"
 msgstr "层次分页引脚属性"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:378
+#: eeschema/dialogs/dialog_label_properties.cpp:386
 msgid "Label can not be empty."
 msgstr "标签不能为空。"
 
-#: eeschema/dialogs/dialog_label_properties.cpp:558
+#: eeschema/dialogs/dialog_label_properties.cpp:568
 msgid "The first field is mandatory."
 msgstr "首字段必填。"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:29
-#: eeschema/dialogs/dialog_label_properties_base.cpp:38
+#: eeschema/dialogs/dialog_label_properties_base.cpp:30
+#: eeschema/dialogs/dialog_label_properties_base.cpp:39
 msgid "Label:"
 msgstr "标签："
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:31
+#: eeschema/dialogs/dialog_label_properties_base.cpp:32
 msgid "Enter the text to be used within the schematic"
 msgstr "输入文本将在原理图中使用"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:48
+#: eeschema/dialogs/dialog_label_properties_base.cpp:49
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:139
-#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:38
-#: eeschema/dialogs/dialog_text_properties_base.cpp:139
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
+#: eeschema/dialogs/dialog_text_properties_base.cpp:146
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:33
 msgid "Syntax help"
 msgstr "语法帮助"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:49
+#: eeschema/dialogs/dialog_label_properties_base.cpp:50
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:140
-#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:39
-#: eeschema/dialogs/dialog_text_properties_base.cpp:140
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:43
+#: eeschema/dialogs/dialog_text_properties_base.cpp:147
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:34
 msgid "Show syntax help window"
 msgstr "显示语法帮助窗口"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:57
+#: eeschema/dialogs/dialog_label_properties_base.cpp:58
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:30
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:24
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:32
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:27
 msgid "Fields"
 msgstr "字段"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:85
+#: eeschema/dialogs/dialog_label_properties_base.cpp:86
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:58
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:52
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:60
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:697
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:54
 #: eeschema/fields_grid_table.cpp:257
@@ -9024,140 +9079,142 @@ msgstr "字段"
 msgid "Show"
 msgstr "显示"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:86
+#: eeschema/dialogs/dialog_label_properties_base.cpp:87
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:59
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:53
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:61
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:55
 #: eeschema/fields_grid_table.cpp:258
 msgid "H Align"
 msgstr "水平排列"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:87
+#: eeschema/dialogs/dialog_label_properties_base.cpp:88
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:60
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:54
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:56
 #: eeschema/fields_grid_table.cpp:259
 msgid "V Align"
 msgstr "垂直排列"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:90
+#: eeschema/dialogs/dialog_label_properties_base.cpp:91
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:57
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:65
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
 #: eeschema/fields_grid_table.cpp:262 eeschema/lib_field.cpp:477
-#: eeschema/lib_text.cpp:368 eeschema/lib_textbox.cpp:375
+#: eeschema/lib_text.cpp:368 eeschema/lib_textbox.cpp:380
 #: eeschema/sch_field.cpp:696 eeschema/sch_label.cpp:793
-#: eeschema/sch_text.cpp:452 eeschema/sch_textbox.cpp:378
+#: eeschema/sch_text.cpp:452 eeschema/sch_textbox.cpp:383
 msgid "Text Size"
 msgstr "文本大小"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:91
+#: eeschema/dialogs/dialog_label_properties_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:118
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:92
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:64
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:58
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:66
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:60
 #: eeschema/fields_grid_table.cpp:263 eeschema/lib_pin.cpp:1070
 #: eeschema/sch_pin.cpp:222
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
 #: pcbnew/footprint.cpp:2575 pcbnew/fp_text_grid_table.cpp:105
-#: pcbnew/pad.cpp:1685
+#: pcbnew/pad.cpp:1705
 msgid "Orientation"
 msgstr "方向"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:92
+#: eeschema/dialogs/dialog_label_properties_base.cpp:93
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:122
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:96
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:65
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:59
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:61
 #: eeschema/fields_grid_table.cpp:264
 msgid "X Position"
 msgstr "X 坐标"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:93
+#: eeschema/dialogs/dialog_label_properties_base.cpp:94
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:123
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:97
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:66
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:60
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:62
 #: eeschema/fields_grid_table.cpp:265
 msgid "Y Position"
 msgstr "Y 坐标"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:113
+#: eeschema/dialogs/dialog_label_properties_base.cpp:114
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:85
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:80
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:88
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:83
 msgid "Add field"
 msgstr "添加字段"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:118
+#: eeschema/dialogs/dialog_label_properties_base.cpp:119
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:90
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:85
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:93
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:88
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:115
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:111
 msgid "Move up"
 msgstr "上移"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:123
+#: eeschema/dialogs/dialog_label_properties_base.cpp:124
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:95
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:90
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:98
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:93
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:120
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:116
 msgid "Move down"
 msgstr "下移"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:131
+#: eeschema/dialogs/dialog_label_properties_base.cpp:132
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:103
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:98
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:106
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:101
 msgid "Delete field"
 msgstr "删除字段"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:146
-#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:36 eeschema/pin_type.cpp:51
-#: eeschema/sch_label.cpp:144
+#: eeschema/dialogs/dialog_label_properties_base.cpp:147
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
+#: eeschema/pin_type.cpp:51 eeschema/sch_label.cpp:144
 msgid "Input"
 msgstr "输入"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:149
-#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:37 eeschema/pin_type.cpp:52
-#: eeschema/sch_label.cpp:145
+#: eeschema/dialogs/dialog_label_properties_base.cpp:150
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:58
+#: eeschema/pin_type.cpp:52 eeschema/sch_label.cpp:145
 msgid "Output"
 msgstr "输出"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:152
-#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:38 eeschema/pin_type.cpp:53
-#: eeschema/sch_label.cpp:146
+#: eeschema/dialogs/dialog_label_properties_base.cpp:153
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:61
+#: eeschema/pin_type.cpp:53 eeschema/sch_label.cpp:146
 msgid "Bidirectional"
 msgstr "双向"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:155
-#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:39 eeschema/pin_type.cpp:54
+#: eeschema/dialogs/dialog_label_properties_base.cpp:156
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:64
+#: eeschema/pin_type.cpp:54
 msgid "Tri-state"
 msgstr "三态"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:158
-#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:40
+#: eeschema/dialogs/dialog_label_properties_base.cpp:159
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
 #: eeschema/dialogs/dialog_spice_model_base.cpp:199 eeschema/pin_type.cpp:55
 #: eeschema/sch_label.cpp:148
 msgid "Passive"
 msgstr "无源"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:161
+#: eeschema/dialogs/dialog_label_properties_base.cpp:162
 msgid "Dot"
 msgstr "点"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:167
+#: eeschema/dialogs/dialog_label_properties_base.cpp:168
 msgid "Diamond"
 msgstr "菱形"
 
-#: eeschema/dialogs/dialog_label_properties_base.cpp:177
+#: eeschema/dialogs/dialog_label_properties_base.cpp:178
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:74
 msgid "Formatting"
 msgstr "格式化"
 
@@ -9317,8 +9374,8 @@ msgstr "从现有符号派生："
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:46
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:205
 #: eeschema/dialogs/dialog_line_properties_base.cpp:68
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:64
-#: eeschema/dialogs/dialog_text_properties_base.cpp:202
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:72
+#: eeschema/dialogs/dialog_text_properties_base.cpp:235
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:68
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:176
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:207
@@ -9404,13 +9461,13 @@ msgstr "新建符号"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:32
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:161
-#: eeschema/dialogs/dialog_text_properties_base.cpp:158
+#: eeschema/dialogs/dialog_text_properties_base.cpp:191
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:150
 msgid "Border"
 msgstr "边界"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:38
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:117
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:125
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:192
 msgid "Border width:"
 msgstr "边框宽度："
@@ -9464,7 +9521,7 @@ msgid "References must start with a letter."
 msgstr "位号必须以字母开头。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:257
-#: eeschema/dialogs/dialog_sheet_properties.cpp:195
+#: eeschema/dialogs/dialog_sheet_properties.cpp:198
 #: eeschema/dialogs/dialog_symbol_properties.cpp:592
 msgid "Fields must have a name."
 msgstr "字段必须要有名称。"
@@ -9492,7 +9549,7 @@ msgid "The name '%s' is already in use."
 msgstr "名称 '%s' 已经在使用中。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:521
-#: eeschema/dialogs/dialog_sheet_properties.cpp:734
+#: eeschema/dialogs/dialog_sheet_properties.cpp:737
 #: eeschema/dialogs/dialog_symbol_properties.cpp:904
 #, c-format
 msgid "The first %d fields are mandatory."
@@ -9622,7 +9679,7 @@ msgstr "符号主体与引脚名称之间的距离。"
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:127
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:131
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:135
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:124
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:132
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:74
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:85
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:106
@@ -9671,19 +9728,19 @@ msgid "Library Symbol Properties"
 msgstr "库符号属性"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties.cpp:218
-#: eeschema/dialogs/dialog_text_properties.cpp:355
+#: eeschema/dialogs/dialog_text_properties.cpp:368
 msgid "Text can not be empty."
 msgstr "文本不能为空。"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:201
 #: eeschema/dialogs/dialog_line_properties_base.cpp:64
-#: eeschema/dialogs/dialog_text_properties_base.cpp:198
+#: eeschema/dialogs/dialog_text_properties_base.cpp:231
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:64
 msgid "Style:"
 msgstr "样式："
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:213
-#: eeschema/dialogs/dialog_text_properties_base.cpp:207
+#: eeschema/dialogs/dialog_text_properties_base.cpp:240
 msgid "Background fill"
 msgstr "背景填充"
 
@@ -9692,7 +9749,7 @@ msgid "Private to symbol editor"
 msgstr "对符号编辑器私密"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.h:106
-#: eeschema/dialogs/dialog_text_properties.cpp:54
+#: eeschema/dialogs/dialog_text_properties.cpp:58
 #: pcbnew/dialogs/dialog_textbox_properties_base.h:103
 msgid "Text Box Properties"
 msgstr "文本框属性"
@@ -9716,9 +9773,9 @@ msgstr "新的标签"
 #: eeschema/dialogs/dialog_migrate_buses.cpp:106
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:86
 #: pcbnew/dialogs/dialog_find_base.cpp:118 pcbnew/fp_text.cpp:284
-#: pcbnew/fp_textbox.cpp:209 pcbnew/pad.cpp:907 pcbnew/pcb_dimension.cpp:335
+#: pcbnew/fp_textbox.cpp:236 pcbnew/pad.cpp:936 pcbnew/pcb_dimension.cpp:335
 #: pcbnew/pcb_group.cpp:339 pcbnew/pcb_shape.cpp:207 pcbnew/pcb_text.cpp:136
-#: pcbnew/pcb_textbox.cpp:210 pcbnew/pcb_track.cpp:858 pcbnew/zone.cpp:577
+#: pcbnew/pcb_textbox.cpp:230 pcbnew/pcb_track.cpp:858 pcbnew/zone.cpp:577
 msgid "Status"
 msgstr "状态"
 
@@ -9828,7 +9885,7 @@ msgid "Remove Generator"
 msgstr "移除生成器"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:83
-#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:28
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:32
 #: eeschema/symbol_editor/symbol_editor.cpp:645
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:27
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
@@ -9976,14 +10033,14 @@ msgstr "绘制当前页"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:211
 #: pcbnew/dialogs/dialog_export_svg.cpp:204
-#: pcbnew/dialogs/dialog_gendrill.cpp:296 pcbnew/dialogs/dialog_plot.cpp:373
+#: pcbnew/dialogs/dialog_gendrill.cpp:296 pcbnew/dialogs/dialog_plot.cpp:467
 #: pcbnew/exporters/gen_footprints_placefile.cpp:204
 #: pcbnew/exporters/gen_footprints_placefile.cpp:562
 msgid "Select Output Directory"
 msgstr "选择输出目录"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:228
-#: pcbnew/dialogs/dialog_gendrill.cpp:305 pcbnew/dialogs/dialog_plot.cpp:390
+#: pcbnew/dialogs/dialog_gendrill.cpp:305 pcbnew/dialogs/dialog_plot.cpp:484
 #, c-format
 msgid ""
 "Do you want to use a path relative to\n"
@@ -9994,9 +10051,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:230
 #: pcbnew/dialogs/dialog_export_svg.cpp:211
-#: pcbnew/dialogs/dialog_export_svg.cpp:222
+#: pcbnew/dialogs/dialog_export_svg.cpp:223
 #: pcbnew/dialogs/dialog_gendrill.cpp:307
-#: pcbnew/dialogs/dialog_gendrill.cpp:315 pcbnew/dialogs/dialog_plot.cpp:392
+#: pcbnew/dialogs/dialog_gendrill.cpp:315 pcbnew/dialogs/dialog_plot.cpp:486
 #: pcbnew/exporters/gen_footprints_placefile.cpp:212
 #: pcbnew/exporters/gen_footprints_placefile.cpp:222
 msgid "Plot Output Directory"
@@ -10061,7 +10118,7 @@ msgid "E"
 msgstr "E"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:428
-#: eeschema/sch_edit_frame.cpp:1046
+#: eeschema/sch_edit_frame.cpp:1043
 msgid "Schematic"
 msgstr "原理图"
 
@@ -10074,7 +10131,7 @@ msgstr "无法写入绘制文件到文件夹 \"%s\"。"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:679
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1028
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1160
-#: pcbnew/dialogs/dialog_plot.cpp:911
+#: pcbnew/dialogs/dialog_plot.cpp:1047
 #, c-format
 msgid "Plotted to '%s'."
 msgstr "已绘制到 '%s'。"
@@ -10083,7 +10140,7 @@ msgstr "已绘制到 '%s'。"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:695
 #: eeschema/dialogs/dialog_plot_schematic.cpp:870
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1046
-#: kicad/pcm/pcm_task_manager.cpp:447 pcbnew/dialogs/dialog_plot.cpp:932
+#: kicad/pcm/pcm_task_manager.cpp:447 pcbnew/dialogs/dialog_plot.cpp:1069
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:153
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:124
 msgid "Done."
@@ -10103,13 +10160,13 @@ msgstr "完成"
 msgid "Falling back to user path '%s'."
 msgstr "退回到用户路径 '%s'。"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:1266
-#: eeschema/dialogs/dialog_plot_schematic.cpp:1304
+#: eeschema/dialogs/dialog_plot_schematic.cpp:1274
+#: eeschema/dialogs/dialog_plot_schematic.cpp:1312
 #, c-format
 msgid "Cannot normalize path '%s%s'."
 msgstr "无法正常化路径 '%s%s'。"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:1291
+#: eeschema/dialogs/dialog_plot_schematic.cpp:1299
 msgid "No project or path defined for the current schematic."
 msgstr "没有为当前原理图未定义工程或路径。"
 
@@ -10200,7 +10257,7 @@ msgid ""
 msgstr "当线粗细设置为 0 时,将选择默认的画笔粗细用来绘制项。"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:119
-#: pcbnew/dialogs/dialog_plot_base.cpp:254
+#: pcbnew/dialogs/dialog_plot_base.cpp:248
 msgid "HPGL Options"
 msgstr "HPGL 选项"
 
@@ -10487,7 +10544,7 @@ msgid "Electrical Rules"
 msgstr "电气规则"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:78
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1034
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1035
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/footprint_libraries_utils.cpp:523
 msgid "Project"
@@ -10519,51 +10576,54 @@ msgstr ""
 "从项目导入设置时出错：\n"
 "无法加载工程文件 %s。"
 
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:81
+#: eeschema/dialogs/dialog_shape_properties.cpp:54
+#: eeschema/dialogs/dialog_sheet_properties.cpp:76
+#: eeschema/dialogs/dialog_text_properties.cpp:72
+#, fuzzy
+msgid "Note: individual item colors overridden in Preferences."
+msgstr "注意：项目配色在当前配色主题中被覆盖。"
+
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:89
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:158
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1284
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1519
 msgid "Filled shape"
 msgstr "填充形状"
 
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:110
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:118
 msgid "Set line width to 0 to use Schematic Editor line widths."
 msgstr "将行宽设为 0 以使用原理图编辑器行宽。"
 
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:114
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:122
 msgid "Set line color to transparent to use Schematic Editor colors."
 msgstr "将行颜色设为透明以使用原理图编辑器颜色。"
 
-#: eeschema/dialogs/dialog_shape_properties_base.h:62
+#: eeschema/dialogs/dialog_shape_properties_base.h:65
 #, c-format
 msgid "%s Properties"
 msgstr "%s 属性"
 
-#: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:66
-msgid "Connection type:"
-msgstr "连接类型："
-
-#: eeschema/dialogs/dialog_sheet_pin_properties_base.h:62
+#: eeschema/dialogs/dialog_sheet_pin_properties_base.h:86
 msgid "Sheet Pin Properties"
 msgstr "图框引脚属性"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:250
+#: eeschema/dialogs/dialog_sheet_properties.cpp:253
 msgid "A sheet must have a valid file name."
 msgstr "图框必须具有有效的文件名。"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:260
+#: eeschema/dialogs/dialog_sheet_properties.cpp:263
 msgid "Sheet file must have a '.kicad_sch' extension."
 msgstr "图框文件必须具有 '.kicad_sch' 扩展名。"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:294
+#: eeschema/dialogs/dialog_sheet_properties.cpp:297
 msgid "Use relative path for sheet file?"
 msgstr "是否对图框文件使用相对路径？"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:295
+#: eeschema/dialogs/dialog_sheet_properties.cpp:298
 msgid "Sheet File Path"
 msgstr "图框文件路径"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:298
+#: eeschema/dialogs/dialog_sheet_properties.cpp:301
 msgid ""
 "Using relative hierarchical sheet file name paths improves schematic "
 "portability across systems and platforms.  Using absolute paths can result "
@@ -10572,23 +10632,23 @@ msgstr ""
 "使用相对分层的图框文件名路径改善原理图跨系统和平台的可移植性。使用绝对路径可"
 "能会导致可移植性问题。"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:302
+#: eeschema/dialogs/dialog_sheet_properties.cpp:305
 msgid "Use Relative Path"
 msgstr "使用相对路径"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:303
+#: eeschema/dialogs/dialog_sheet_properties.cpp:306
 msgid "Use Absolute Path"
 msgstr "使用绝对路径"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:334
+#: eeschema/dialogs/dialog_sheet_properties.cpp:337
 msgid "Untitled Sheet"
 msgstr "无标题图框"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:360
+#: eeschema/dialogs/dialog_sheet_properties.cpp:363
 msgid "Note: item colors are overridden in the current color theme."
 msgstr "注意：项目配色在当前配色主题中被覆盖。"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:362
+#: eeschema/dialogs/dialog_sheet_properties.cpp:365
 #, c-format
 msgid ""
 "To see individual item colors uncheck '%s'\n"
@@ -10597,16 +10657,16 @@ msgstr ""
 "要查看各个项目的颜色，请取消选中 \"%s\"\n"
 "在偏好设置 > Eeschema > 颜色中。"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:408
+#: eeschema/dialogs/dialog_sheet_properties.cpp:411
 #, c-format
 msgid "The file '%s' does not appear to be a valid schematic file."
 msgstr "文件 '%s' 似乎不是有效的原理图文件."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:410
+#: eeschema/dialogs/dialog_sheet_properties.cpp:413
 msgid "Invalid Schematic File"
 msgstr "无效的原理图文件"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:430
+#: eeschema/dialogs/dialog_sheet_properties.cpp:433
 #, c-format
 msgid ""
 "Cannot normalize new sheet schematic file path:\n"
@@ -10619,80 +10679,80 @@ msgstr ""
 "来正常化新图框原理图文件路径:\n"
 "'%s'。"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:473
+#: eeschema/dialogs/dialog_sheet_properties.cpp:476
 #: kicad/tools/kicad_manager_control.cpp:566
 #, c-format
 msgid "'%s' already exists."
 msgstr "'%s' 已经存在。"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:476
+#: eeschema/dialogs/dialog_sheet_properties.cpp:479
 #, c-format
 msgid "Link '%s' to this file?"
 msgstr "链接 '%s' 到这个文件？"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:516
+#: eeschema/dialogs/dialog_sheet_properties.cpp:519
 #, c-format
 msgid "Change '%s' link from '%s' to '%s'?"
 msgstr "要将“%s”的链接从“%s”更换为“%s”吗？"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:521
-#: eeschema/dialogs/dialog_sheet_properties.cpp:537
+#: eeschema/dialogs/dialog_sheet_properties.cpp:524
+#: eeschema/dialogs/dialog_sheet_properties.cpp:540
 msgid "This action cannot be undone."
 msgstr "此操作无法撤销。"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:533
+#: eeschema/dialogs/dialog_sheet_properties.cpp:536
 #, c-format
 msgid "Create new file '%s' with contents of '%s'?"
 msgstr "创建包含 '%s' 内容的新文件 '%s'？"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:570
+#: eeschema/dialogs/dialog_sheet_properties.cpp:573
 #, c-format
 msgid "Error occurred saving schematic file '%s'."
 msgstr "保存原理图文件 '%s' 发生错误。"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:574
+#: eeschema/dialogs/dialog_sheet_properties.cpp:577
 #, c-format
 msgid "Failed to save schematic '%s'"
 msgstr "未能保存原理图 '%s'"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:668
+#: eeschema/dialogs/dialog_sheet_properties.cpp:671
 msgid "A sheet must have a name."
 msgstr "图框必须要有一个名称。"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:676
+#: eeschema/dialogs/dialog_sheet_properties.cpp:679
 msgid "A sheet must have a file specified."
 msgstr "图框必须具有指定的文件。"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:842
+#: eeschema/dialogs/dialog_sheet_properties.cpp:845
 msgid "Hierarchical path: "
 msgstr "分层路径： "
 
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:115
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:123
 #: eeschema/lib_field.cpp:475 eeschema/lib_pin.cpp:1062
 #: eeschema/lib_pin.cpp:1064 eeschema/lib_text.cpp:366
-#: eeschema/lib_textbox.cpp:373 eeschema/sch_field.cpp:694
+#: eeschema/lib_textbox.cpp:378 eeschema/sch_field.cpp:694
 #: eeschema/sch_label.cpp:791 eeschema/sch_pin.cpp:215
-#: eeschema/sch_text.cpp:450 eeschema/sch_textbox.cpp:376
+#: eeschema/sch_text.cpp:450 eeschema/sch_textbox.cpp:381
 msgid "Style"
 msgstr "样式"
 
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:131
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:139
 msgid "Border color:"
 msgstr "边框颜色："
 
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:144
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:152
 msgid "Background fill:"
 msgstr "背景背景填充："
 
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:165
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:173
 msgid "Page number:"
 msgstr "图框编号："
 
-#: eeschema/dialogs/dialog_sheet_properties_base.cpp:184
+#: eeschema/dialogs/dialog_sheet_properties_base.cpp:192
 msgid "Hierarchical path:"
 msgstr "分层路径："
 
-#: eeschema/dialogs/dialog_sheet_properties_base.h:79
+#: eeschema/dialogs/dialog_sheet_properties_base.h:82
 msgid "Sheet Properties"
 msgstr "图框属性"
 
@@ -10965,7 +11025,7 @@ msgstr "Spice 指令："
 msgid "Load directives from schematic"
 msgstr "从原理图加载命令"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:429 pcbnew/pad.cpp:1656
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:429 pcbnew/pad.cpp:1676
 msgid "Custom"
 msgstr "自定义"
 
@@ -11922,7 +11982,7 @@ msgstr "某些项目文件无法备份。"
 msgid "Remap Symbols"
 msgstr "重新映射符号"
 
-#: eeschema/dialogs/dialog_text_properties_base.h:103
+#: eeschema/dialogs/dialog_text_properties_base.h:104
 #: pcbnew/dialogs/dialog_text_properties.cpp:104
 #: pcbnew/dialogs/dialog_text_properties_base.h:110
 msgid "Text Properties"
@@ -12121,51 +12181,70 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "当网络在 PCB 编辑器中高亮显示时，将其高亮显示"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
-msgid "Constrain buses and wires to H or V"
-msgstr "限制总线及导线为 H 或 V"
+#, fuzzy
+msgid "Line Drawing Mode:"
+msgstr "绘图模式"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
+#, fuzzy
+msgid "Free Angle"
+msgstr "自由角度"
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
+msgid "90 deg Angle"
+msgstr ""
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
+#, fuzzy
+msgid "45 deg Angle"
+msgstr "45 度"
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
+msgid "135 deg Angle"
+msgstr ""
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 msgid "Mouse drag performs Drag (G) operation"
 msgstr "鼠标拖动执行拖动 (G) 操作"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:28
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:34
 msgid "If unchecked, mouse drag will perform move (M) operation"
 msgstr "如果未选中，鼠标拖动将执行移动 (M) 操作"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:32
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:38
 msgid "Automatically start wires on unconnected pins"
 msgstr "在未连接的引脚上自动开始导线"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:39
 msgid ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
 msgstr ""
 "启用后，即使导线工具未处于活动状态，也可以通过单击未连接的接点来开始布线"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:41
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:47
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
 msgid "Defaults for New Objects"
 msgstr "新对象的默认值"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:46
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:52
 msgid "Sheet border:"
 msgstr "图框边框："
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:55
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:61
 msgid "Sheet background:"
 msgstr "图框背景："
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:71
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:77
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:184
 msgid "Selection"
 msgstr "选择"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:73
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:79
 msgid "Clicking on a pin selects the symbol"
 msgstr "单击引脚将选择符号"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:74
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:80
 msgid ""
 "In schematic editor:\n"
 "If enabled, clicking on a pin select the parent symbol.\n"
@@ -12175,14 +12254,14 @@ msgstr ""
 "如果启用，则单击引脚选择父级符号。\n"
 "如果禁用，则单击引脚仅选择引脚。"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:84
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:132
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:90
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:138
 #: pcbnew/dialogs/panel_edit_options_base.cpp:81
 #: pcbnew/dialogs/panel_edit_options_base.cpp:152
 msgid "Left Click Mouse Commands"
 msgstr "鼠标左键命令"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:86
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:92
 #: pcbnew/dialogs/panel_edit_options_base.cpp:83
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
@@ -12191,42 +12270,42 @@ msgstr ""
 "左键单击（和拖动）操作取决于 2 个修饰键：\n"
 "Shift 和 Ctrl。"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:98
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:104
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:152
 #: pcbnew/dialogs/panel_edit_options_base.cpp:107
 #: pcbnew/dialogs/panel_edit_options_base.cpp:178
 msgid "Long Click"
 msgstr "长按"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:102
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:150
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:174
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:108
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:156
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:180
 #: pcbnew/dialogs/panel_edit_options_base.cpp:112
 #: pcbnew/dialogs/panel_edit_options_base.cpp:183
 #: pcbnew/dialogs/panel_edit_options_base.cpp:223
 msgid "Clarify selection from menu."
 msgstr "从菜单中明确选择。"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:110
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:116
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:164
 #: pcbnew/dialogs/panel_edit_options_base.cpp:122
 #: pcbnew/dialogs/panel_edit_options_base.cpp:193
 msgid "Add item(s) to selection."
 msgstr "增加项目到选中敷铜。"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:114
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:120
 #: pcbnew/dialogs/panel_edit_options_base.cpp:127
 msgid "Ctrl+Shift"
 msgstr "Ctrl+Shift"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:118
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:166
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:124
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:172
 #: pcbnew/dialogs/panel_edit_options_base.cpp:132
 #: pcbnew/dialogs/panel_edit_options_base.cpp:203
 msgid "Remove item(s) from selection."
 msgstr "从选区删除项目。"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:134
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:140
 #: pcbnew/dialogs/panel_edit_options_base.cpp:154
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
@@ -12235,54 +12314,54 @@ msgstr ""
 "左键单击（和拖动）操作取决于 3 个修饰键：\n"
 "Option、Shift 和 Cmd。"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:168
 #: pcbnew/dialogs/panel_edit_options_base.cpp:198
 msgid "Shift+Cmd"
 msgstr "Shift+Cmd"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:196
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:202
 msgid "Symbol Field Automatic Placement"
 msgstr "符号字段自动放置"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:198
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
 msgid "A&utomatically place symbol fields"
 msgstr "自动放置符号字段 (&U)"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:201
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:207
 msgid "A&llow field autoplace to change justification"
 msgstr "允许字段自动对齐放置 (&L)"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:210
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
 msgstr "自动放置字段对齐到 50mil 网格 (&W)"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:211
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:217
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:98
 msgid "Repeated Items"
 msgstr "重复项"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:221
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:227
 msgid "&Horizontal pitch:"
 msgstr "水平间距 (&H)："
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:232
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:238
 msgid "&Vertical pitch:"
 msgstr "垂直间距 (&P)："
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:243
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:249
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:120
 msgid "Label increment:"
 msgstr "标签增量："
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:260
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:266
 msgid "Dialog Preferences"
 msgstr "对话框偏好设置"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:262
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:268
 msgid "Show footprint previews in Symbol Chooser"
 msgstr "在符号选择器中显示封装预览"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:265
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:271
 msgid "Keep hierarchy navigator open"
 msgstr "保持层次结构导航器打开"
 
@@ -12359,7 +12438,7 @@ msgid "Smallest"
 msgstr "最小"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:145
-#: pcbnew/dialogs/dialog_plot_base.cpp:117
+#: pcbnew/dialogs/dialog_plot_base.cpp:111
 msgid "Small"
 msgstr "小"
 
@@ -12578,7 +12657,7 @@ msgid "One of the nicknames will need to be changed after adding this library."
 msgstr "在添加此库后需要更改其中一个库昵称。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:529
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1041
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1042
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:916
 #: pcbnew/footprint_libraries_utils.cpp:530
 msgid "Skip"
@@ -12654,9 +12733,9 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1075
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1088
-#: eeschema/sch_base_frame.cpp:218 eeschema/sch_base_frame.cpp:235
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1430
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1482
+#: eeschema/sch_base_frame.cpp:222 eeschema/sch_base_frame.cpp:239
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1431
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1483
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1112
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1125
 msgid "File Save Error"
@@ -13293,8 +13372,8 @@ msgstr "(页 %s)"
 #: eeschema/sch_field.cpp:692 eeschema/sch_pin.cpp:217
 #: gerbview/gerber_draw_item.cpp:713 gerbview/gerber_draw_item.cpp:714
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
-#: pcbnew/fp_text.cpp:286 pcbnew/fp_text.cpp:291 pcbnew/fp_textbox.cpp:212
-#: pcbnew/pcb_text.cpp:140 pcbnew/pcb_textbox.cpp:213
+#: pcbnew/fp_text.cpp:286 pcbnew/fp_text.cpp:291 pcbnew/fp_textbox.cpp:239
+#: pcbnew/pcb_text.cpp:140 pcbnew/pcb_textbox.cpp:233
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:470
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:504
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:512
@@ -13305,8 +13384,8 @@ msgstr "是"
 #: eeschema/lib_field.cpp:473 eeschema/lib_pin.cpp:1064
 #: eeschema/sch_field.cpp:692 eeschema/sch_pin.cpp:217
 #: gerbview/gerber_draw_item.cpp:713 gerbview/gerber_draw_item.cpp:714
-#: pcbnew/fp_text.cpp:286 pcbnew/fp_text.cpp:291 pcbnew/fp_textbox.cpp:212
-#: pcbnew/pcb_text.cpp:140 pcbnew/pcb_textbox.cpp:213
+#: pcbnew/fp_text.cpp:286 pcbnew/fp_text.cpp:291 pcbnew/fp_textbox.cpp:239
+#: pcbnew/pcb_text.cpp:140 pcbnew/pcb_textbox.cpp:233
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:470
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:504
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:512
@@ -13329,7 +13408,7 @@ msgstr "竖直对齐"
 #: eeschema/symbol_editor/symbol_editor.cpp:1248
 #: gerbview/gerber_draw_item.cpp:652
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:37
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:28
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:78
 #: pcbnew/fp_text.cpp:281 pcbnew/pcb_marker.cpp:141 pcbnew/pcb_shape.cpp:204
 #: pcbnew/pcb_track.cpp:744 pcbnew/pcb_track.cpp:805
@@ -13371,22 +13450,22 @@ msgstr "引脚 %s [%s, %s, %s]"
 msgid "Pin %s [%s, %s]"
 msgstr "引脚 %s [%s, %s]"
 
-#: eeschema/lib_shape.cpp:388 eeschema/sch_shape.cpp:340
+#: eeschema/lib_shape.cpp:388 eeschema/sch_shape.cpp:343
 #, c-format
 msgid "Arc, radius %s"
 msgstr "弧形，半径 %s"
 
-#: eeschema/lib_shape.cpp:392 eeschema/sch_shape.cpp:344
+#: eeschema/lib_shape.cpp:392 eeschema/sch_shape.cpp:347
 #, c-format
 msgid "Circle, radius %s"
 msgstr "圆形，半径 %s"
 
-#: eeschema/lib_shape.cpp:401 eeschema/sch_shape.cpp:353
+#: eeschema/lib_shape.cpp:401 eeschema/sch_shape.cpp:356
 #, c-format
 msgid "Polyline, %d points"
 msgstr "多段线，%d 点"
 
-#: eeschema/lib_shape.cpp:405 eeschema/sch_shape.cpp:357
+#: eeschema/lib_shape.cpp:405 eeschema/sch_shape.cpp:360
 #, c-format
 msgid "Bezier Curve, %d points"
 msgstr "贝塞尔曲线，%d 点"
@@ -13396,22 +13475,22 @@ msgstr "贝塞尔曲线，%d 点"
 msgid "Graphic Text '%s'"
 msgstr "图形文本 '%s'"
 
-#: eeschema/lib_textbox.cpp:299 eeschema/sch_textbox.cpp:316
+#: eeschema/lib_textbox.cpp:300 eeschema/sch_textbox.cpp:317
 msgid "Graphic Text Box"
 msgstr "图形文本框"
 
-#: eeschema/lib_textbox.cpp:371 eeschema/sch_label.cpp:789
-#: eeschema/sch_text.cpp:448 eeschema/sch_textbox.cpp:374
+#: eeschema/lib_textbox.cpp:376 eeschema/sch_label.cpp:789
+#: eeschema/sch_text.cpp:448 eeschema/sch_textbox.cpp:379
 msgid "Bold Italic"
 msgstr "加粗斜体"
 
-#: eeschema/lib_textbox.cpp:378 eeschema/sch_textbox.cpp:381
-#: pcbnew/fp_textbox.cpp:220 pcbnew/pcb_textbox.cpp:221
+#: eeschema/lib_textbox.cpp:383 eeschema/sch_textbox.cpp:386
+#: pcbnew/fp_textbox.cpp:247 pcbnew/pcb_textbox.cpp:241
 msgid "Box Width"
 msgstr "框宽度"
 
-#: eeschema/lib_textbox.cpp:381 eeschema/sch_textbox.cpp:384
-#: pcbnew/fp_textbox.cpp:223 pcbnew/pcb_textbox.cpp:224
+#: eeschema/lib_textbox.cpp:386 eeschema/sch_textbox.cpp:389
+#: pcbnew/fp_textbox.cpp:250 pcbnew/pcb_textbox.cpp:244
 msgid "Box Height"
 msgstr "框高度"
 
@@ -13668,7 +13747,7 @@ msgstr "无法保存恢复库 %s。"
 msgid "Error occurred saving project specific symbol library table."
 msgstr "保存项目特定的符号库表时出错。"
 
-#: eeschema/sch_base_frame.cpp:217
+#: eeschema/sch_base_frame.cpp:221
 #, c-format
 msgid ""
 "Error saving global symbol library table:\n"
@@ -13677,7 +13756,7 @@ msgstr ""
 "保存全局符号库表时出错：\n"
 "%s"
 
-#: eeschema/sch_base_frame.cpp:233
+#: eeschema/sch_base_frame.cpp:237
 #, c-format
 msgid ""
 "Error saving project-specific symbol library table:\n"
@@ -13737,8 +13816,8 @@ msgstr "KiCad 原理图编辑器"
 msgid "New schematic file is unsaved"
 msgstr "新原理图文件未保存"
 
-#: eeschema/sch_edit_frame.cpp:731 eeschema/sim/sim_plot_frame.cpp:1615
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:517
+#: eeschema/sch_edit_frame.cpp:728 eeschema/sim/sim_plot_frame.cpp:1614
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:518
 #: eeschema/symbol_editor/symbol_editor.cpp:1154
 #: pagelayout_editor/pl_editor_frame.cpp:374
 #: pcbnew/footprint_edit_frame.cpp:658 pcbnew/footprint_edit_frame.cpp:698
@@ -13747,7 +13826,7 @@ msgstr "新原理图文件未保存"
 msgid "Save changes to '%s' before closing?"
 msgstr "是否在关闭前将变更保存到 '%s'？"
 
-#: eeschema/sch_edit_frame.cpp:906
+#: eeschema/sch_edit_frame.cpp:903
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
@@ -13756,43 +13835,43 @@ msgstr ""
 "无法更新 PCB，因为原理图编辑器在独立模式下打开。为了从原理图创建/更新 PCB，请"
 "启动 KiCad Shell 并创建一个项目。"
 
-#: eeschema/sch_edit_frame.cpp:1063
+#: eeschema/sch_edit_frame.cpp:1060
 msgid "New Schematic"
 msgstr "新建原理图"
 
-#: eeschema/sch_edit_frame.cpp:1075
+#: eeschema/sch_edit_frame.cpp:1072
 #, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "原理图文件 \"%s\" 已经存在。"
 
-#: eeschema/sch_edit_frame.cpp:1096
+#: eeschema/sch_edit_frame.cpp:1093
 msgid "Open Schematic"
 msgstr "打开原理图"
 
-#: eeschema/sch_edit_frame.cpp:1159
+#: eeschema/sch_edit_frame.cpp:1156
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "分配封装需要一张完整批注的原理图。"
 
-#: eeschema/sch_edit_frame.cpp:1178
+#: eeschema/sch_edit_frame.cpp:1175
 msgid "Could not open CvPcb"
 msgstr "不能打开 CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1390 eeschema/sim/sim_plot_frame.cpp:353
+#: eeschema/sch_edit_frame.cpp:1387 eeschema/sim/sim_plot_frame.cpp:354
 #: kicad/kicad_manager_frame.cpp:645 pcbnew/footprint_edit_frame.cpp:862
 #: pcbnew/pcb_edit_frame.cpp:1386
 msgid "[Read Only]"
 msgstr "[只读]"
 
-#: eeschema/sch_edit_frame.cpp:1393 eeschema/sim/sim_plot_frame.cpp:356
+#: eeschema/sch_edit_frame.cpp:1390 eeschema/sim/sim_plot_frame.cpp:357
 #: pcbnew/footprint_edit_frame.cpp:871 pcbnew/pcb_edit_frame.cpp:1389
 msgid "[Unsaved]"
 msgstr "[未保存]"
 
-#: eeschema/sch_edit_frame.cpp:1397
+#: eeschema/sch_edit_frame.cpp:1394
 msgid "[no schematic loaded]"
 msgstr "[没有加载原理图]"
 
-#: eeschema/sch_edit_frame.cpp:1614
+#: eeschema/sch_edit_frame.cpp:1611
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "高亮网络：%s"
@@ -14258,7 +14337,7 @@ msgid ""
 msgstr "CADSTAR 原理图可能已损坏：块 %s 引用子图框，但没有定义图。"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:3068
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:3069
 #, c-format
 msgid "Unable to read file '%s'."
 msgstr "无法读取文件 \"%s\"。"
@@ -14340,63 +14419,63 @@ msgstr "无效的浮点数"
 msgid "Missing floating point number"
 msgstr "缺失的浮点数"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:717
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:727
 msgid "Invalid pin names definition"
 msgstr "无效的引脚名定义"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:739
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1871
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:749
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1881
 msgid "Invalid property name"
 msgstr "无效的属性名称"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:747
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1879
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:757
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1889
 msgid "Empty property name"
 msgstr "空的属性名"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:756
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1887
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:766
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1897
 msgid "Invalid property value"
 msgstr "无效的属性值"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1324
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1334
 msgid "Invalid pin name"
 msgstr "无效的引脚名称"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1362
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1372
 msgid "Invalid pin number"
 msgstr "无效的引脚编号"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1399
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1409
 msgid "Invalid alternate pin name"
 msgstr "无效的备选引脚名"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1575
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1635
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1585
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1645
 msgid "Invalid text string"
 msgstr "无效的文本字符串"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1719
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1729
 msgid "Invalid page type"
 msgstr "无效的页面类型"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1846
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1856
 msgid "Invalid title block comment number"
 msgstr "无效的标题栏注释号"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1943
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1953
 msgid "Invalid sheet pin name"
 msgstr "无效的图框引脚名"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1951
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1961
 msgid "Empty sheet pin name"
 msgstr "空的图框引脚名"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2445
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2455
 msgid "Invalid symbol library name"
 msgstr "无效的符号库名"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2465
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2475
 msgid "Invalid symbol library ID"
 msgstr "无效的符号库 ID"
 
@@ -15016,8 +15095,8 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"所选原理图项目库表中缺少选定原理图中的某些符号库名称。   "
-"这可能会导致符号库链接断开。\n"
+"所选原理图项目库表中缺少选定原理图中的某些符号库名称。   这可能会导致符号库链"
+"接断开。\n"
 "\n"
 " 是否要继续？"
 
@@ -15029,8 +15108,8 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"当前库表中存在引用不同库的重复库名。无法解决此冲突，并可能导致符号库链接断开"
-"。 \n"
+"当前库表中存在引用不同库的重复库名。无法解决此冲突，并可能导致符号库链接断"
+"开。 \n"
 "\n"
 "是否要继续？"
 
@@ -15110,60 +15189,60 @@ msgstr "仿真参数"
 msgid "Simulation parameters and settings"
 msgstr "仿真参数和设置"
 
-#: eeschema/sim/sim_plot_frame.cpp:358 eeschema/sim/sim_plot_frame_base.h:126
+#: eeschema/sim/sim_plot_frame.cpp:359 eeschema/sim/sim_plot_frame_base.h:126
 msgid "Spice Simulator"
 msgstr "Spice 仿真器"
 
-#: eeschema/sim/sim_plot_frame.cpp:474 eeschema/sim/sim_plot_frame.cpp:1459
+#: eeschema/sim/sim_plot_frame.cpp:474 eeschema/sim/sim_plot_frame.cpp:1458
 msgid "There were errors during netlist export, aborted."
 msgstr "在网表导出过程中出现错误，中止。"
 
-#: eeschema/sim/sim_plot_frame.cpp:488 eeschema/sim/sim_plot_frame.cpp:1812
+#: eeschema/sim/sim_plot_frame.cpp:487 eeschema/sim/sim_plot_frame.cpp:1820
 msgid "Another simulation is already running."
 msgstr "另一个仿真已经在运行。"
 
-#: eeschema/sim/sim_plot_frame.cpp:515
+#: eeschema/sim/sim_plot_frame.cpp:514
 #, c-format
 msgid "Plot%u - "
 msgstr "绘制 %u - "
 
-#: eeschema/sim/sim_plot_frame.cpp:637
+#: eeschema/sim/sim_plot_frame.cpp:636
 msgid "Error: simulation type not defined!\n"
 msgstr "错误：未定义仿真类型！\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:643
+#: eeschema/sim/sim_plot_frame.cpp:642
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "错误：仿真类型不支持绘制！\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:825 eeschema/sim/sim_plot_frame.cpp:1654
+#: eeschema/sim/sim_plot_frame.cpp:824 eeschema/sim/sim_plot_frame.cpp:1653
 msgid "Signal"
 msgstr "信号"
 
-#: eeschema/sim/sim_plot_frame.cpp:1103
+#: eeschema/sim/sim_plot_frame.cpp:1102
 msgid "noname"
 msgstr "无名称"
 
-#: eeschema/sim/sim_plot_frame.cpp:1152
+#: eeschema/sim/sim_plot_frame.cpp:1151
 msgid "Open simulation workbook"
 msgstr "打开仿真工作簿"
 
-#: eeschema/sim/sim_plot_frame.cpp:1181
+#: eeschema/sim/sim_plot_frame.cpp:1180
 msgid "Save Simulation Workbook As"
 msgstr "将仿真工作簿保存为"
 
-#: eeschema/sim/sim_plot_frame.cpp:1197
+#: eeschema/sim/sim_plot_frame.cpp:1196
 msgid "Save Plot as Image"
 msgstr "另存绘制为图片"
 
-#: eeschema/sim/sim_plot_frame.cpp:1214
+#: eeschema/sim/sim_plot_frame.cpp:1213
 msgid "Save Plot Data"
 msgstr "保存绘制数据"
 
-#: eeschema/sim/sim_plot_frame.cpp:1507
+#: eeschema/sim/sim_plot_frame.cpp:1506
 msgid "You need to run plot-providing simulation first."
 msgstr "您需要先运行绘制提供仿真。"
 
-#: eeschema/sim/sim_plot_frame.cpp:1752
+#: eeschema/sim/sim_plot_frame.cpp:1751
 msgid ""
 "\n"
 "\n"
@@ -15175,19 +15254,19 @@ msgstr ""
 "仿真结果：\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:1831
+#: eeschema/sim/sim_plot_frame.cpp:1840
 msgid "Hide Signal"
 msgstr "隐藏信号"
 
-#: eeschema/sim/sim_plot_frame.cpp:1831
+#: eeschema/sim/sim_plot_frame.cpp:1840
 msgid "Erase the signal from plot screen"
 msgstr "擦除绘制屏幕上的信号"
 
-#: eeschema/sim/sim_plot_frame.cpp:1837
+#: eeschema/sim/sim_plot_frame.cpp:1846
 msgid "Hide Cursor"
 msgstr "隐藏光标"
 
-#: eeschema/sim/sim_plot_frame.cpp:1839
+#: eeschema/sim/sim_plot_frame.cpp:1848
 msgid "Show Cursor"
 msgstr "显示光标"
 
@@ -15383,7 +15462,7 @@ msgid "KiCad Symbol Editor"
 msgstr "KiCad 符号编辑器"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:135
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:942
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:943
 #: eeschema/symbol_library.cpp:468 eeschema/symbol_tree_model_adapter.cpp:66
 msgid "Loading Symbol Libraries"
 msgstr "加载符号库"
@@ -15401,44 +15480,44 @@ msgstr "库变更未保存"
 msgid "Symbol library loading was cancelled by user."
 msgstr "用户取消了符号库加载。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:591
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:592
 #: eeschema/tools/sch_edit_tool.cpp:119
 #, c-format
 msgid "Unit %s"
 msgstr "单元 %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:748
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:749
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
 msgstr "从原理图编辑符号 %s。  保存将仅更新原理图。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:757
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:758
 msgid "Manage symbol libraries"
 msgstr "管理符号库"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:768
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:769
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
 msgstr "旧版库中的符号不可编辑。使用“管理符号库”迁移到当前格式。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:778
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:779
 #, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr "符号%s源自%s。符号图形将不可编辑。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:782
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:783
 #, c-format
 msgid "Open %s"
 msgstr "打开 %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:853
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:854
 #, c-format
 msgid "Library '%s' already exists."
 msgstr "库 \"%s\" 已经存在。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:861
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:862
 #, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
@@ -15447,47 +15526,47 @@ msgstr ""
 "无法创建库文件 \"%s\"。\n"
 "请确保您有写入权限，然后重试。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:871
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:872
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:213
 msgid "Could not open the library file."
 msgstr "无法打开库文件。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:948
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:949
 #, c-format
 msgid "Loading library '%s'..."
 msgstr "正在加载库 '%s'…"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1022
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1023
 #: pcbnew/footprint_libraries_utils.cpp:511
 msgid "Add the library to the global library table?"
 msgstr "是否将库添加到全局库表？"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1023
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1024
 #: pcbnew/footprint_libraries_utils.cpp:512
 msgid "Add To Global Library Table"
 msgstr "添加到全局库表"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1033
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1034
 #: pcbnew/footprint_libraries_utils.cpp:522
 msgid "Global"
 msgstr "全局"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1036
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1037
 #: pcbnew/footprint_libraries_utils.cpp:525
 msgid "Choose the Library Table to add the library to:"
 msgstr "选择库表添加到以下库："
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1037
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1038
 #: pcbnew/footprint_libraries_utils.cpp:526
 msgid "Add To Library Table"
 msgstr "添加到库表"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1069
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1070
 #, c-format
 msgid "Failed to save backup to '%s'."
 msgstr "未能将备份保存到 \"%s\"。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1226
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1227
 #: eeschema/symbol_viewer_frame.cpp:391
 #, c-format
 msgid ""
@@ -15497,12 +15576,12 @@ msgstr ""
 "当前配置不包括符号库'%s'。\n"
 "使用管理符号库来编辑配置。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1229
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1230
 #: eeschema/symbol_viewer_frame.cpp:394
 msgid "Library not found in symbol library table."
 msgstr "在符号库表中找不到库。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1237
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1238
 #: eeschema/symbol_viewer_frame.cpp:398
 #, c-format
 msgid ""
@@ -15512,18 +15591,18 @@ msgstr ""
 "当前配置未启用库 '%s'。\n"
 "使用管理符号库来编辑配置。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1240
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1241
 #: eeschema/symbol_viewer_frame.cpp:401
 msgid "Symbol library not enabled."
 msgstr "符号库未启用。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1427
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1479
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1428
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1480
 msgid "Error saving global library table."
 msgstr "保存全局库表时发生错误。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1428
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1480
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1429
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1481
 msgid "Error saving project library table."
 msgstr "保存工程库表时出错。"
 
@@ -15627,7 +15706,7 @@ msgid "Overwrite"
 msgstr "覆盖"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:556
-#: eeschema/tools/symbol_editor_control.cpp:514
+#: eeschema/tools/symbol_editor_control.cpp:518
 msgid "No schematic currently open."
 msgstr "当前没有打开原理图。"
 
@@ -15635,7 +15714,7 @@ msgstr "当前没有打开原理图。"
 #: eeschema/symbol_editor/symbol_editor.cpp:1176
 #: eeschema/tools/symbol_editor_control.cpp:170
 #: eeschema/tools/symbol_editor_control.cpp:240
-#: eeschema/tools/symbol_editor_control.cpp:272
+#: eeschema/tools/symbol_editor_control.cpp:276
 #, c-format
 msgid "Symbol library '%s' is not writable."
 msgstr "符号库 '%s' 不可写入。"
@@ -15750,7 +15829,7 @@ msgstr "未定义！"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1228
 #: eeschema/symbol_viewer_frame.cpp:365 pcbnew/fp_shape.cpp:423
-#: pcbnew/fp_text.cpp:501 pcbnew/fp_textbox.cpp:399 pcbnew/pad.cpp:1735
+#: pcbnew/fp_text.cpp:501 pcbnew/fp_textbox.cpp:426 pcbnew/pad.cpp:1755
 msgid "Parent"
 msgstr "父级"
 
@@ -16201,11 +16280,11 @@ msgstr "添加文本框"
 msgid "Add a text box item"
 msgstr "添加文本框项目"
 
-#: eeschema/tools/ee_actions.cpp:235 eeschema/tools/ee_actions.cpp:759
+#: eeschema/tools/ee_actions.cpp:235 eeschema/tools/ee_actions.cpp:779
 msgid "Add Lines"
 msgstr "添加线"
 
-#: eeschema/tools/ee_actions.cpp:235 eeschema/tools/ee_actions.cpp:759
+#: eeschema/tools/ee_actions.cpp:235 eeschema/tools/ee_actions.cpp:779
 msgid "Add connected graphic lines"
 msgstr "添加连接的图形线"
 
@@ -16812,156 +16891,198 @@ msgstr "显示 ERC 排除"
 msgid "Show markers for excluded electrical rules checker violations"
 msgstr "显示排除的电气规则检查违规的记号"
 
-#: eeschema/tools/ee_actions.cpp:684
-msgid "Force H/V Wires and Buses"
+#: eeschema/tools/ee_actions.cpp:684 eeschema/tools/ee_actions.cpp:689
+#: eeschema/tools/ee_actions.cpp:694 eeschema/tools/ee_actions.cpp:699
+#: eeschema/tools/ee_actions.cpp:704
+#, fuzzy
+msgid "Line Mode for Wires and Buses"
 msgstr "强制水平或垂直绘制连线和总线"
 
 #: eeschema/tools/ee_actions.cpp:684
-msgid "Switch H & V only mode for new wires and buses"
-msgstr "切换连线和总线正交模式"
+msgid "Lines drawn at any angle"
+msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:689
+#, fuzzy
+msgid "Lines drawn horizontally and vertically"
+msgstr "水平，然后垂直"
+
+#: eeschema/tools/ee_actions.cpp:694
+#, fuzzy
+msgid "Lines drawn horizontally and vertically, with a 45 degree angle end"
+msgstr "仅用水平、垂直或 45 度线绘制该敷铜"
+
+#: eeschema/tools/ee_actions.cpp:699
+#, fuzzy
+msgid "Lines drawn horizontally and vertically, with a 45 degree angle start"
+msgstr "将动作从起始点算起的角度限制在水平、垂直或 45 度"
+
+#: eeschema/tools/ee_actions.cpp:704
+#, fuzzy
+msgid "Switch to next line mode"
+msgstr "切换到下一个网格"
+
+#: eeschema/tools/ee_actions.cpp:709
 msgid "Repair Schematic"
 msgstr "修复原理图"
 
-#: eeschema/tools/ee_actions.cpp:690
+#: eeschema/tools/ee_actions.cpp:710
 msgid "Run various diagnostics and attempt to repair schematic"
 msgstr "运行各种诊断程序并尝试修复原理图"
 
-#: eeschema/tools/ee_actions.cpp:696 pcbnew/tools/pcb_actions.cpp:804
+#: eeschema/tools/ee_actions.cpp:716 pcbnew/tools/pcb_actions.cpp:804
 msgid "Scripting Console"
 msgstr "脚本控制台"
 
-#: eeschema/tools/ee_actions.cpp:696 pcbnew/tools/pcb_actions.cpp:804
+#: eeschema/tools/ee_actions.cpp:716 pcbnew/tools/pcb_actions.cpp:804
 msgid "Show the Python scripting console"
 msgstr "显示 Python 脚本控制台"
 
-#: eeschema/tools/ee_actions.cpp:703
+#: eeschema/tools/ee_actions.cpp:723
 msgid "Enter Sheet"
 msgstr "进入分页"
 
-#: eeschema/tools/ee_actions.cpp:703
+#: eeschema/tools/ee_actions.cpp:723
 msgid "Display the selected sheet's contents in the schematic editor"
 msgstr "在原理图编辑器中显示所选图框的内容"
 
-#: eeschema/tools/ee_actions.cpp:709
+#: eeschema/tools/ee_actions.cpp:729
 msgid "Leave Sheet"
 msgstr "离开分页"
 
-#: eeschema/tools/ee_actions.cpp:709
+#: eeschema/tools/ee_actions.cpp:729
 msgid "Display the parent sheet in the schematic editor"
 msgstr "在原理图编辑器中显示父级图框"
 
-#: eeschema/tools/ee_actions.cpp:714
+#: eeschema/tools/ee_actions.cpp:734
 msgid "Hierarchy Navigator"
 msgstr "分层导航器"
 
-#: eeschema/tools/ee_actions.cpp:714
+#: eeschema/tools/ee_actions.cpp:734
 msgid "Show schematic sheet hierarchy"
 msgstr "显示原理图的层次结构"
 
-#: eeschema/tools/ee_actions.cpp:719
+#: eeschema/tools/ee_actions.cpp:739
 msgid "Navigate to page"
 msgstr "导航到页面"
 
-#: eeschema/tools/ee_actions.cpp:726
+#: eeschema/tools/ee_actions.cpp:746
 msgid "Add Junctions to Selection where needed"
 msgstr "根据需要将结点添加到选择"
 
-#: eeschema/tools/ee_actions.cpp:739
+#: eeschema/tools/ee_actions.cpp:759
 msgid "Add Wire"
 msgstr "添加连线"
 
-#: eeschema/tools/ee_actions.cpp:739
+#: eeschema/tools/ee_actions.cpp:759
 msgid "Add a wire"
 msgstr "添加连线"
 
-#: eeschema/tools/ee_actions.cpp:746
+#: eeschema/tools/ee_actions.cpp:766
 msgid "Add Bus"
 msgstr "添加总线"
 
-#: eeschema/tools/ee_actions.cpp:746
+#: eeschema/tools/ee_actions.cpp:766
 msgid "Add a bus"
 msgstr "添加总线"
 
-#: eeschema/tools/ee_actions.cpp:752
+#: eeschema/tools/ee_actions.cpp:772
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:76
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:133
 msgid "Unfold from Bus"
 msgstr "从总线上展开"
 
-#: eeschema/tools/ee_actions.cpp:752
+#: eeschema/tools/ee_actions.cpp:772
 msgid "Break a wire out of a bus"
 msgstr "断开总线上的连线"
 
-#: eeschema/tools/ee_actions.cpp:765
+#: eeschema/tools/ee_actions.cpp:785 pcbnew/tools/pcb_actions.cpp:1409
+msgid "Undo Last Segment"
+msgstr "撤消上一段"
+
+#: eeschema/tools/ee_actions.cpp:785
+#, fuzzy
+msgid "Walks the current line back one segment."
+msgstr "将当前布线往回走一段。"
+
+#: eeschema/tools/ee_actions.cpp:791
+#, fuzzy
+msgid "Switch Segment Posture"
+msgstr "切换圆弧形态"
+
+#: eeschema/tools/ee_actions.cpp:791
+#, fuzzy
+msgid "Switches posture of the current segment."
+msgstr "切换当前交互式布线的形态。"
+
+#: eeschema/tools/ee_actions.cpp:797
 msgid "Finish Wire or Bus"
 msgstr "结束导线或总线"
 
-#: eeschema/tools/ee_actions.cpp:765
+#: eeschema/tools/ee_actions.cpp:797
 msgid "Complete drawing at current segment"
 msgstr "在当前线段处结束绘制"
 
-#: eeschema/tools/ee_actions.cpp:770
+#: eeschema/tools/ee_actions.cpp:802
 msgid "Finish Wire"
 msgstr "结束连线"
 
-#: eeschema/tools/ee_actions.cpp:770
+#: eeschema/tools/ee_actions.cpp:802
 msgid "Complete wire with current segment"
 msgstr "结束连线并保留当前连线线段"
 
-#: eeschema/tools/ee_actions.cpp:775
+#: eeschema/tools/ee_actions.cpp:807
 msgid "Finish Bus"
 msgstr "结束总线"
 
-#: eeschema/tools/ee_actions.cpp:775
+#: eeschema/tools/ee_actions.cpp:807
 msgid "Complete bus with current segment"
 msgstr "结束总线并保留当前总线线段"
 
-#: eeschema/tools/ee_actions.cpp:780
+#: eeschema/tools/ee_actions.cpp:812
 msgid "Finish Lines"
 msgstr "完成线"
 
-#: eeschema/tools/ee_actions.cpp:780
+#: eeschema/tools/ee_actions.cpp:812
 msgid "Complete connected lines with current segment"
 msgstr "完成与当前段的连接线"
 
-#: eeschema/tools/ee_actions.cpp:789 pagelayout_editor/tools/pl_actions.cpp:68
+#: eeschema/tools/ee_actions.cpp:821 pagelayout_editor/tools/pl_actions.cpp:68
 #: pcbnew/dialogs/panel_edit_options_base.cpp:341
 #: pcbnew/tools/pcb_actions.cpp:265
 msgid "Move"
 msgstr "移动"
 
-#: eeschema/tools/ee_actions.cpp:789 pagelayout_editor/tools/pl_actions.cpp:68
+#: eeschema/tools/ee_actions.cpp:821 pagelayout_editor/tools/pl_actions.cpp:68
 #: pcbnew/tools/pcb_actions.cpp:265
 msgid "Moves the selected item(s)"
 msgstr "移动选择项"
 
-#: eeschema/tools/ee_actions.cpp:794 pcbnew/tools/edit_tool.cpp:1077
+#: eeschema/tools/ee_actions.cpp:826 pcbnew/tools/edit_tool.cpp:1077
 msgid "Drag"
 msgstr "拖动"
 
-#: eeschema/tools/ee_actions.cpp:794
+#: eeschema/tools/ee_actions.cpp:826
 msgid "Drags the selected item(s)"
 msgstr "拖动所选项目"
 
-#: eeschema/tools/ee_actions.cpp:798
+#: eeschema/tools/ee_actions.cpp:830
 msgid "Move Activate"
 msgstr "移动激活"
 
-#: eeschema/tools/ee_actions.cpp:802
+#: eeschema/tools/ee_actions.cpp:834
 msgid "Symbol Move Activate"
 msgstr "符号移动激活"
 
-#: eeschema/tools/ee_actions.cpp:806
+#: eeschema/tools/ee_actions.cpp:838
 msgid "Align Elements to Grid"
 msgstr "将元素与网格对齐"
 
-#: eeschema/tools/ee_actions.cpp:812
+#: eeschema/tools/ee_actions.cpp:844
 msgid "Save Current Sheet Copy As..."
 msgstr "将当前图纸副本另存为..."
 
-#: eeschema/tools/ee_actions.cpp:812
+#: eeschema/tools/ee_actions.cpp:844
 msgid "Save a copy of the current sheet to another location or name"
 msgstr "将当前图纸的副本保存到其他位置或以另一个名称进行保存"
 
@@ -17069,14 +17190,14 @@ msgstr "符号警告"
 msgid "No datasheet defined."
 msgstr "未定义数据表。"
 
-#: eeschema/tools/ee_selection_tool.cpp:1625
+#: eeschema/tools/ee_selection_tool.cpp:1637
 #: pagelayout_editor/tools/pl_selection_tool.cpp:623
-#: pcbnew/tools/pcb_selection_tool.cpp:2230
+#: pcbnew/tools/pcb_selection_tool.cpp:2227
 msgid "Select &All\tA"
 msgstr "全选 (&A)\tA"
 
-#: eeschema/tools/ee_selection_tool.cpp:1628
-#: pcbnew/tools/pcb_selection_tool.cpp:2233
+#: eeschema/tools/ee_selection_tool.cpp:1640
+#: pcbnew/tools/pcb_selection_tool.cpp:2230
 msgid "&Expand Selection\tE"
 msgstr "展开选定内容 (&E)\tE"
 
@@ -17084,32 +17205,32 @@ msgstr "展开选定内容 (&E)\tE"
 msgid "Press <ESC> to cancel symbol creation."
 msgstr "按 <ESC> 键取消符号创建。"
 
-#: eeschema/tools/sch_drawing_tools.cpp:470
+#: eeschema/tools/sch_drawing_tools.cpp:471
 msgid "Press <ESC> to cancel image creation."
 msgstr "按 <ESC> 取消图片创建。"
 
-#: eeschema/tools/sch_drawing_tools.cpp:531
+#: eeschema/tools/sch_drawing_tools.cpp:532
 #: pagelayout_editor/pl_editor_frame.cpp:843
 #: pagelayout_editor/pl_editor_frame.cpp:851
 #, c-format
 msgid "Could not load image from '%s'."
 msgstr "无法从 \"%s\" 加载图片。"
 
-#: eeschema/tools/sch_drawing_tools.cpp:661
-#: eeschema/tools/sch_drawing_tools.cpp:1230
+#: eeschema/tools/sch_drawing_tools.cpp:662
+#: eeschema/tools/sch_drawing_tools.cpp:1231
 msgid "No new hierarchical labels found."
 msgstr "没有找到新的层次标签。"
 
-#: eeschema/tools/sch_drawing_tools.cpp:745
+#: eeschema/tools/sch_drawing_tools.cpp:746
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr "结点位置不包含可连接的电线和/或引脚。"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1158
+#: eeschema/tools/sch_drawing_tools.cpp:1159
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:163
 msgid "Press <ESC> to cancel item creation."
 msgstr "按下 <ESC> 取消项目创建。"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1218
+#: eeschema/tools/sch_drawing_tools.cpp:1219
 msgid "Click over a sheet."
 msgstr "单击图框。"
 
@@ -17204,21 +17325,21 @@ msgstr ""
 "粘贴的图框 \"%s\"\n"
 "被丢弃, 因为目标已有该图框或其子图框之一作为父级。"
 
-#: eeschema/tools/sch_editor_control.cpp:2246
+#: eeschema/tools/sch_editor_control.cpp:2270
 #: pcbnew/tools/board_editor_control.cpp:630
 #: pcbnew/tools/footprint_editor_control.cpp:576
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "已替换 %d 个重复 ID。\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2253
+#: eeschema/tools/sch_editor_control.cpp:2277
 #: pcbnew/tools/board_editor_control.cpp:645
 #: pcbnew/tools/footprint_editor_control.cpp:591
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "已修复 %d 个潜在问题。"
 
-#: eeschema/tools/sch_editor_control.cpp:2260
+#: eeschema/tools/sch_editor_control.cpp:2284
 #: pcbnew/drc/drc_rule_parser.cpp:165
 msgid "No errors found."
 msgstr "未发现错误。"
@@ -17231,15 +17352,15 @@ msgstr "未选择总线"
 msgid "Bus has no members"
 msgstr "总线没有成员"
 
-#: eeschema/tools/sch_line_wire_bus_tool.cpp:621
+#: eeschema/tools/sch_line_wire_bus_tool.cpp:698
 msgid "Press <ESC> to cancel drawing."
 msgstr "按下 <ESC> 取消绘图。"
 
-#: eeschema/tools/sch_move_tool.cpp:733
+#: eeschema/tools/sch_move_tool.cpp:747
 msgid "Press <ESC> to cancel drag."
 msgstr "按下 <ESC> 取消拖动。"
 
-#: eeschema/tools/sch_move_tool.cpp:735
+#: eeschema/tools/sch_move_tool.cpp:749
 #: pagelayout_editor/tools/pl_edit_tool.cpp:217
 msgid "Press <ESC> to cancel move."
 msgstr "按下 <ESC> 取消移动。"
@@ -17248,21 +17369,21 @@ msgstr "按下 <ESC> 取消移动。"
 msgid "No symbol library selected."
 msgstr "未选中符号库。"
 
-#: eeschema/tools/symbol_editor_control.cpp:393
-#: eeschema/tools/symbol_editor_control.cpp:433
+#: eeschema/tools/symbol_editor_control.cpp:397
+#: eeschema/tools/symbol_editor_control.cpp:437
 msgid "No symbol to export"
 msgstr "没有要导出的符号"
 
-#: eeschema/tools/symbol_editor_control.cpp:404
+#: eeschema/tools/symbol_editor_control.cpp:408
 msgid "Image File Name"
 msgstr "图像文件名称"
 
-#: eeschema/tools/symbol_editor_control.cpp:415
+#: eeschema/tools/symbol_editor_control.cpp:419
 #, c-format
 msgid "Can't save file '%s'."
 msgstr "无法保存文件 \"%s\"。"
 
-#: eeschema/tools/symbol_editor_control.cpp:443
+#: eeschema/tools/symbol_editor_control.cpp:447
 msgid "SVG File Name"
 msgstr "SVG 文件名称"
 
@@ -17502,10 +17623,10 @@ msgstr "选择层： %s"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:53
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:47
 #: pcbnew/footprint.cpp:2566 pcbnew/footprint.cpp:2569 pcbnew/fp_text.cpp:289
-#: pcbnew/fp_text_grid_table.cpp:104 pcbnew/fp_textbox.cpp:211
-#: pcbnew/pad.cpp:911 pcbnew/pcb_dimension.cpp:337
+#: pcbnew/fp_text_grid_table.cpp:104 pcbnew/fp_textbox.cpp:238
+#: pcbnew/pad.cpp:940 pcbnew/pcb_dimension.cpp:337
 #: pcbnew/pcb_dimension.cpp:1058 pcbnew/pcb_shape.cpp:211
-#: pcbnew/pcb_target.cpp:155 pcbnew/pcb_text.cpp:138 pcbnew/pcb_textbox.cpp:212
+#: pcbnew/pcb_target.cpp:155 pcbnew/pcb_text.cpp:138 pcbnew/pcb_textbox.cpp:232
 #: pcbnew/pcb_track.cpp:750 pcbnew/pcb_track.cpp:809 pcbnew/pcb_track.cpp:1232
 #: pcbnew/tools/board_inspection_tool.cpp:188
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:227
@@ -17892,7 +18013,7 @@ msgid "Graphic Layer"
 msgstr "绘图层"
 
 #: gerbview/gerber_draw_item.cpp:690
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:230
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:239
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:105
 msgid "Position"
 msgstr "坐标"
@@ -17914,7 +18035,7 @@ msgid "Polarity"
 msgstr "极性"
 
 #: gerbview/gerber_draw_item.cpp:715 pcbnew/fp_text.cpp:291
-#: pcbnew/fp_textbox.cpp:212 pcbnew/pcb_text.cpp:140 pcbnew/pcb_textbox.cpp:213
+#: pcbnew/fp_textbox.cpp:239 pcbnew/pcb_text.cpp:140 pcbnew/pcb_textbox.cpp:233
 #: pcbnew/tools/edit_tool.cpp:1661 pcbnew/tools/pcb_actions.cpp:320
 msgid "Mirror"
 msgstr "镜像"
@@ -19530,31 +19651,31 @@ msgstr "原点"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:265
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:318
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:274
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:327
 msgid "Upper Right"
 msgstr "右上"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:266
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:319
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:275
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:328
 msgid "Upper Left"
 msgstr "左上"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:264
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:267
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:320
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:273
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:276
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:329
 msgid "Lower Right"
 msgstr "右下"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:268
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:317
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:321
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:277
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:326
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:330
 msgid "Lower Left"
 msgstr "左下"
 
@@ -19582,180 +19703,180 @@ msgstr "尝试打印图纸时出现错误。"
 msgid "Printing"
 msgstr "打印"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:570
+#: pagelayout_editor/dialogs/properties_frame.cpp:576
 msgid "Predefined Keywords"
 msgstr "预定义关键字"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:573
+#: pagelayout_editor/dialogs/properties_frame.cpp:579
 msgid "Texts can include keywords."
 msgstr "文本可以包含关键字。"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:574
+#: pagelayout_editor/dialogs/properties_frame.cpp:580
 msgid "Keyword notation is ${keyword}"
 msgstr "关键字符号为 ${keyword}"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:575
+#: pagelayout_editor/dialogs/properties_frame.cpp:581
 msgid "Each keyword is replaced by its value"
 msgstr "每个关键字被其值替换"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:576
+#: pagelayout_editor/dialogs/properties_frame.cpp:582
 msgid "These build-in keywords are always available:"
 msgstr "这些内置的关键字总是可用的："
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:580
+#: pagelayout_editor/dialogs/properties_frame.cpp:586
 msgid "(sheet number)"
 msgstr "(图框编号)"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:581
+#: pagelayout_editor/dialogs/properties_frame.cpp:587
 msgid "(sheet count)"
 msgstr "(图框计数)"
 
-#: pagelayout_editor/dialogs/properties_frame.cpp:587
+#: pagelayout_editor/dialogs/properties_frame.cpp:593
 msgid "(paper size)"
 msgstr "(纸张尺寸)"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:37
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "Show on all pages"
 msgstr "显示在所有图框"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:37
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "First page only"
 msgstr "仅第一页"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:37
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "Subsequent pages only"
 msgstr "仅后续图框"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:151
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:464
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:160
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:473
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:189
 msgid "Text width:"
 msgstr "文本宽度："
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:162
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:478
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:171
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:487
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:208
 msgid "Text height:"
 msgstr "文本高度："
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:173
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:182
 msgid "Max width:"
 msgstr "最大宽度："
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:175
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:188
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:184
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:197
 msgid "Set to 0 to disable this constraint"
 msgstr "设置为 0 可禁用此约束"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:186
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:195
 msgid "Max height:"
 msgstr "最大高度："
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:216
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:225
 msgid "Set to 0 to use default values"
 msgstr "设置为 0 以使用默认值"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:223
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:232
 msgid "Comment:"
 msgstr "注释："
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:260
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:313
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:269
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:322
 msgid "From:"
 msgstr "从："
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:283
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:292
 msgid "End Position"
 msgstr "端位置"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:355
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:364
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1354
 msgid "Rotation:"
 msgstr "旋转："
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:362
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:371
 msgid "Bitmap DPI:"
 msgstr "位图 DPI："
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:378
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:387
 msgid "Repeat Parameters"
 msgstr "重复参数"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:386
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:395
 #: pcbnew/dialogs/dialog_create_array_base.cpp:263
 msgid "Count:"
 msgstr "个数："
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:396
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:405
 msgid "Step text:"
 msgstr "步骤文本："
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:401
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:410
 msgid "Number of characters or digits to step text by for each repeat."
 msgstr "每次重复时要按其步进文本的字符数或位数。"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:408
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:417
 msgid "Step X:"
 msgstr "步骤 X:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:413
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:422
 msgid "Distance on the X axis to step for each repeat."
 msgstr "X 轴上每次重复步长的距离。"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:421
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:430
 msgid "Step Y:"
 msgstr "步距 Y："
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:426
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:435
 msgid "Distance to step on Y axis for each repeat."
 msgstr "每次重复在 Y 轴上步长的距离。"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:440
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:600
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:449
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:609
 msgid "Apply"
 msgstr "应用"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:449
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:458
 msgid "Item Properties"
 msgstr "项目属性"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:492
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:501
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:387
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:138
 msgid "Line thickness:"
 msgstr "线粗细："
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:506
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:515
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:226
 msgid "Text thickness:"
 msgstr "文本线粗细："
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:526
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:535
 msgid "Set to Default"
 msgstr "设置为默认"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:533
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:542
 msgid "Page Margins"
 msgstr "页边距"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:541
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:550
 msgid "Left:"
 msgstr "左："
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:555
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:564
 msgid "Right:"
 msgstr "右:"
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:569
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:578
 msgid "Top:"
 msgstr "上："
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:583
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:592
 msgid "Bottom:"
 msgstr "下："
 
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:612
-#: pcbnew/dialogs/dialog_plot_base.cpp:68
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:621
+#: pcbnew/dialogs/dialog_plot_base.cpp:67
 msgid "General Options"
 msgstr "常规选项"
 
@@ -21495,9 +21616,9 @@ msgstr "位置 Y"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:84
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:73
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:46
-#: pcbnew/footprint.cpp:980 pcbnew/fp_text.cpp:284 pcbnew/fp_textbox.cpp:209
-#: pcbnew/pad.cpp:907 pcbnew/pcb_dimension.cpp:335 pcbnew/pcb_group.cpp:339
-#: pcbnew/pcb_shape.cpp:207 pcbnew/pcb_text.cpp:136 pcbnew/pcb_textbox.cpp:210
+#: pcbnew/footprint.cpp:980 pcbnew/fp_text.cpp:284 pcbnew/fp_textbox.cpp:236
+#: pcbnew/pad.cpp:936 pcbnew/pcb_dimension.cpp:335 pcbnew/pcb_group.cpp:339
+#: pcbnew/pcb_shape.cpp:207 pcbnew/pcb_text.cpp:136 pcbnew/pcb_textbox.cpp:230
 #: pcbnew/pcb_track.cpp:858 pcbnew/zone.cpp:577
 msgid "Locked"
 msgstr "锁定"
@@ -22490,7 +22611,8 @@ msgstr "物理压层"
 msgid "Board Finish"
 msgstr "电路板后处理"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:100 pcbnew/dialogs/dialog_plot.cpp:963
+#: pcbnew/dialogs/dialog_board_setup.cpp:100
+#: pcbnew/dialogs/dialog_plot.cpp:1100
 msgid "Solder Mask/Paste"
 msgstr "阻焊/锡膏"
 
@@ -22639,11 +22761,11 @@ msgstr "???"
 msgid "N/A"
 msgstr "N/A"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:508 pcbnew/pad.cpp:1157
+#: pcbnew/dialogs/dialog_board_statistics.cpp:508 pcbnew/pad.cpp:1186
 msgid "PTH"
 msgstr "金属化 (PTH)"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:508 pcbnew/pad.cpp:1160
+#: pcbnew/dialogs/dialog_board_statistics.cpp:508 pcbnew/pad.cpp:1189
 msgid "NPTH"
 msgstr "非金属化 (NPTH)"
 
@@ -23477,7 +23599,7 @@ msgstr "要在标注值之后打印的文本"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:166
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:124
-#: pcbnew/dialogs/dialog_plot_base.cpp:374
+#: pcbnew/dialogs/dialog_plot_base.cpp:368
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
 msgid "Precision:"
 msgstr "精度："
@@ -24055,14 +24177,14 @@ msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
 msgstr "无法使用相对路径（目标卷与电路板文件卷不同）！"
 
-#: pcbnew/dialogs/dialog_export_svg.cpp:272 pcbnew/dialogs/dialog_plot.cpp:819
+#: pcbnew/dialogs/dialog_export_svg.cpp:273 pcbnew/dialogs/dialog_plot.cpp:926
 #: pcbnew/exporters/gen_footprints_placefile.cpp:290
 #: pcbnew/exporters/gen_footprints_placefile.cpp:398
 #, c-format
 msgid "Could not write plot files to folder '%s'."
 msgstr "无法将绘制文件写入文件夹 \"%s\"。"
 
-#: pcbnew/dialogs/dialog_export_svg.cpp:299
+#: pcbnew/dialogs/dialog_export_svg.cpp:300
 #, c-format
 msgid "Exported '%s'."
 msgstr "已导出 \"%s\"。"
@@ -24398,8 +24520,8 @@ msgstr "通孔"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:185
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/footprint.cpp:704
-#: pcbnew/footprint_libraries_utils.cpp:1148 pcbnew/pad.cpp:1158
-#: pcbnew/pad.cpp:1645
+#: pcbnew/footprint_libraries_utils.cpp:1148 pcbnew/pad.cpp:1187
+#: pcbnew/pad.cpp:1665
 msgid "SMD"
 msgstr "贴片"
 
@@ -24796,7 +24918,7 @@ msgid "Include board edge layer"
 msgstr "包括电路板边缘层"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:83
-#: pcbnew/dialogs/dialog_plot_base.cpp:108
+#: pcbnew/dialogs/dialog_plot_base.cpp:102
 msgid "Use drill/place file origin"
 msgstr "使用钻孔/放置文件原点"
 
@@ -25177,21 +25299,21 @@ msgstr "线粗细"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:270
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:124
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:45
-#: pcbnew/fp_textbox.cpp:216 pcbnew/pcb_textbox.cpp:217
+#: pcbnew/fp_textbox.cpp:243 pcbnew/pcb_textbox.cpp:237
 msgid "Text Width"
 msgstr "文本宽度"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:276
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:125
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:46
-#: pcbnew/fp_textbox.cpp:217 pcbnew/pcb_textbox.cpp:218
+#: pcbnew/fp_textbox.cpp:244 pcbnew/pcb_textbox.cpp:238
 msgid "Text Height"
 msgstr "文本高度"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:282
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:126
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:47
-#: pcbnew/pcb_textbox.cpp:216
+#: pcbnew/pcb_textbox.cpp:236
 msgid "Text Thickness"
 msgstr "文本粗细"
 
@@ -25264,7 +25386,7 @@ msgid "Set Track and Via Properties"
 msgstr "设置布线和过孔属性"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:30
-#: pcbnew/drc/drc_engine.cpp:1243
+#: pcbnew/drc/drc_engine.cpp:1248
 msgid "footprint"
 msgstr "封装"
 
@@ -26010,7 +26132,7 @@ msgstr "添加图元"
 msgid "Pad type:"
 msgstr "焊盘类型："
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1644
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1664
 msgid "Through-hole"
 msgstr "通孔"
 
@@ -26018,8 +26140,8 @@ msgstr "通孔"
 msgid "Edge Connector"
 msgstr "板边连接器"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1180
-#: pcbnew/pad.cpp:1203
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1209
+#: pcbnew/pad.cpp:1232
 msgid "NPTH, Mechanical"
 msgstr "非金属化孔，机械的"
 
@@ -26045,8 +26167,8 @@ msgid "Circular"
 msgstr "圆形"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:370 pcbnew/pad.cpp:1142
-#: pcbnew/pad.cpp:1652
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:370 pcbnew/pad.cpp:1171
+#: pcbnew/pad.cpp:1672
 msgid "Oval"
 msgstr "椭圆"
 
@@ -26058,11 +26180,11 @@ msgstr "矩形"
 msgid "Trapezoidal"
 msgstr "梯形"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1654
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1674
 msgid "Rounded rectangle"
 msgstr "圆角矩形"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1655
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1675
 msgid "Chamfered rectangle"
 msgstr "倒角矩形"
 
@@ -26255,23 +26377,23 @@ msgstr ""
 "蜂窝状指定板边缘上蜂窝状的过孔焊盘\n"
 "此属性在 Gerber X2 文件中指定。"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1660
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1680
 msgid "BGA pad"
 msgstr "BGA 焊盘"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1662
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1682
 msgid "Fiducial, local to footprint"
 msgstr "基准，局部到封装"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1661
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1681
 msgid "Fiducial, global to board"
 msgstr "基准，全局到板"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1663
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1683
 msgid "Test point pad"
 msgstr "测试点焊盘"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1664
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1684
 msgid "Heatsink pad"
 msgstr "散热焊盘"
 
@@ -26439,38 +26561,53 @@ msgstr "焊盘自定义形状几何变换"
 msgid "Basic Shape Polygon"
 msgstr "基本形状多边形"
 
-#: pcbnew/dialogs/dialog_plot.cpp:67
+#: pcbnew/dialogs/dialog_plot.cpp:113
+#, fuzzy
+msgid "Plot on All Layers"
+msgstr "绘制所有页"
+
+#: pcbnew/dialogs/dialog_plot.cpp:135
+#, fuzzy
+msgid "Move current selection up"
+msgstr "将当前层上移"
+
+#: pcbnew/dialogs/dialog_plot.cpp:143
+#, fuzzy
+msgid "Move current selection down"
+msgstr "将当前层下移"
+
+#: pcbnew/dialogs/dialog_plot.cpp:154
 msgid "Generate Drill Files..."
 msgstr "生成钻孔文件..."
 
-#: pcbnew/dialogs/dialog_plot.cpp:671
+#: pcbnew/dialogs/dialog_plot.cpp:757
 msgid "HPGL pen size constrained."
 msgstr "HPGL 画笔尺寸限制。"
 
-#: pcbnew/dialogs/dialog_plot.cpp:689
+#: pcbnew/dialogs/dialog_plot.cpp:775
 msgid "X scale constrained."
 msgstr "X 比例限制。"
 
-#: pcbnew/dialogs/dialog_plot.cpp:701
+#: pcbnew/dialogs/dialog_plot.cpp:787
 msgid "Y scale constrained."
 msgstr "Y 比例限制。"
 
-#: pcbnew/dialogs/dialog_plot.cpp:717
+#: pcbnew/dialogs/dialog_plot.cpp:803
 #, c-format
 msgid ""
 "Width correction constrained.  The width correction value must be in the "
 "range of [%s; %s] for the current design rules."
 msgstr "已限制宽度校正。目前设计规则的宽度修正值必须在范围 [%s; %s] 内。"
 
-#: pcbnew/dialogs/dialog_plot.cpp:794
+#: pcbnew/dialogs/dialog_plot.cpp:901
 msgid "No layer selected, Nothing to plot"
 msgstr "没有图层选择，没有绘制"
 
-#: pcbnew/dialogs/dialog_plot.cpp:860
+#: pcbnew/dialogs/dialog_plot.cpp:966
 msgid "Warning: Scale option set to a very small value"
 msgstr "警告：缩放选项设置为一个很小的值"
 
-#: pcbnew/dialogs/dialog_plot.cpp:863
+#: pcbnew/dialogs/dialog_plot.cpp:969
 msgid "Warning: Scale option set to a very large value"
 msgstr "警告：缩放选项设置为一个非常大的值"
 
@@ -26478,140 +26615,132 @@ msgstr "警告：缩放选项设置为一个非常大的值"
 msgid "Plot format:"
 msgstr "绘制格式："
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:54
+#: pcbnew/dialogs/dialog_plot_base.cpp:53
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:269
 msgid "Include Layers"
 msgstr "包含图层"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:75
+#: pcbnew/dialogs/dialog_plot_base.cpp:74
 msgid "Plot border and title block"
 msgstr "绘制边框和标题栏"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:80
+#: pcbnew/dialogs/dialog_plot_base.cpp:79
 msgid "Plot footprint values"
 msgstr "绘制封装值"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:84
+#: pcbnew/dialogs/dialog_plot_base.cpp:83
 msgid "Plot reference designators"
 msgstr "绘制位号"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:88
+#: pcbnew/dialogs/dialog_plot_base.cpp:87
 msgid "Force plotting of invisible values / refs"
 msgstr "强制绘制隐藏的值或参考"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:89
+#: pcbnew/dialogs/dialog_plot_base.cpp:88
 msgid "Force plot invisible footprint values and reference designators"
 msgstr "强制绘制隐藏的值或位号"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:93
-msgid "Plot Edge.Cuts on all layers"
-msgstr "在所有层上绘制 Edge.Cuts 层"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:94
-msgid "Plot the contents of the PCB edge layer on all layers"
-msgstr "在所有层上绘制 PCB 边缘层的内容"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:98
+#: pcbnew/dialogs/dialog_plot_base.cpp:92
 msgid "Sketch pads on fabrication layers"
 msgstr "制造层上的焊盘草图"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:99
+#: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
 msgstr "绘图时在 F.Fab 和 B.Fab 层上包括焊盘轮廓"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:103
+#: pcbnew/dialogs/dialog_plot_base.cpp:97
 msgid "Do not tent vias"
 msgstr "不允许过孔盖油"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:104
+#: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Remove soldermask on vias"
 msgstr "移除过孔上的阻焊"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:109
+#: pcbnew/dialogs/dialog_plot_base.cpp:103
 msgid ""
 "Use the drill/place file origin as the coordinate origin for plotted files"
 msgstr "使用钻取/放置文件原点作为绘制文件的坐标原点"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:113
+#: pcbnew/dialogs/dialog_plot_base.cpp:107
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:232
 msgid "Drill marks:"
 msgstr "钻孔标记："
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:117
+#: pcbnew/dialogs/dialog_plot_base.cpp:111
 msgid "Actual size"
 msgstr "实际尺寸"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:123
+#: pcbnew/dialogs/dialog_plot_base.cpp:117
 msgid "Scaling:"
 msgstr "缩放比例："
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:127
+#: pcbnew/dialogs/dialog_plot_base.cpp:121
 msgid "Auto"
 msgstr "自动"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:127
+#: pcbnew/dialogs/dialog_plot_base.cpp:121
 msgid "3:2"
 msgstr "3:2"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:127
+#: pcbnew/dialogs/dialog_plot_base.cpp:121
 msgid "2:1"
 msgstr "2:1"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:127
+#: pcbnew/dialogs/dialog_plot_base.cpp:121
 msgid "3:1"
 msgstr "3:1"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:133
+#: pcbnew/dialogs/dialog_plot_base.cpp:127
 msgid "Plot mode:"
 msgstr "绘制模式："
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:137
+#: pcbnew/dialogs/dialog_plot_base.cpp:131
 msgid "Filled"
 msgstr "填充"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:137
+#: pcbnew/dialogs/dialog_plot_base.cpp:131
 msgid "Sketch"
 msgstr "草图"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:143
+#: pcbnew/dialogs/dialog_plot_base.cpp:137
 msgid "Mirrored plot"
 msgstr "镜像绘制"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:146
+#: pcbnew/dialogs/dialog_plot_base.cpp:140
 msgid "Negative plot"
 msgstr "负片绘制"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:149
+#: pcbnew/dialogs/dialog_plot_base.cpp:143
 msgid "Check zone fills before plotting"
 msgstr "在绘制之前检查敷铜填充"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:169
+#: pcbnew/dialogs/dialog_plot_base.cpp:163
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
 msgstr "全局阻焊层最小宽度和/或边距未设置为 0。 "
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:173
+#: pcbnew/dialogs/dialog_plot_base.cpp:167
 msgid ""
 "Most board manufacturers expect 0 and use their own constraints for solder "
 "mask minimum width."
 msgstr "大多数电路板制造商期望 0 并使用自己的阻焊层最小宽度约束。"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:183
+#: pcbnew/dialogs/dialog_plot_base.cpp:177
 msgid "Board setup"
 msgstr "电路板设置"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:184
+#: pcbnew/dialogs/dialog_plot_base.cpp:178
 msgid "File > Board Setup..."
 msgstr "文件 > 板设置..."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:197
+#: pcbnew/dialogs/dialog_plot_base.cpp:191
 msgid "Gerber Options"
 msgstr "Gerber 选项"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:204
+#: pcbnew/dialogs/dialog_plot_base.cpp:198
 msgid "Use Protel filename extensions"
 msgstr "使用 Protel 文件扩展名"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:205
+#: pcbnew/dialogs/dialog_plot_base.cpp:199
 msgid ""
 "Use Protel Gerber extensions (.GBL, .GTL, etc...)\n"
 "No longer recommended. The official extension is .gbr"
@@ -26619,11 +26748,11 @@ msgstr ""
 "使用 Protel Gerber 扩展 (.GBL，.GTL等...）\n"
 "不再推荐, 官方扩展名是 .gbr"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:210
+#: pcbnew/dialogs/dialog_plot_base.cpp:204
 msgid "Generate Gerber job file"
 msgstr "生成 Gerber 工作文件"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:212
+#: pcbnew/dialogs/dialog_plot_base.cpp:206
 msgid ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
@@ -26631,31 +26760,31 @@ msgstr ""
 "生成一个 Gerber 工作文件，其中包含有关该板的信息，\n"
 "和生成的 Gerber 绘制文件列表"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:216
+#: pcbnew/dialogs/dialog_plot_base.cpp:210
 msgid "Subtract soldermask from silkscreen"
 msgstr "剔除开窗敷铜中的丝印"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:217
+#: pcbnew/dialogs/dialog_plot_base.cpp:211
 msgid "Remove silkscreen from areas without soldermask"
 msgstr "在没有阻焊的敷铜移除丝印"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:221
+#: pcbnew/dialogs/dialog_plot_base.cpp:215
 msgid "Coordinate format:"
 msgstr "坐标格式："
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:225
+#: pcbnew/dialogs/dialog_plot_base.cpp:219
 msgid "4.5, unit mm"
 msgstr "4.5，单位 mm"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:225
+#: pcbnew/dialogs/dialog_plot_base.cpp:219
 msgid "4.6, unit mm"
 msgstr "4.6，单位 mm"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:231
+#: pcbnew/dialogs/dialog_plot_base.cpp:225
 msgid "Use extended X2 format (recommended)"
 msgstr "使用扩展的 X2 格式 (推荐)"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:232
+#: pcbnew/dialogs/dialog_plot_base.cpp:226
 msgid ""
 "Use X2 Gerber file format.\n"
 "Include  mainly X2 attributes in Gerber headers.\n"
@@ -26667,11 +26796,11 @@ msgstr ""
 "如果未选中，则使用 X1 格式。\n"
 "在 X1 格式中，这些属性作为注释包含在文件中。"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:236
+#: pcbnew/dialogs/dialog_plot_base.cpp:230
 msgid "Include netlist attributes"
 msgstr "包括网络属性"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:237
+#: pcbnew/dialogs/dialog_plot_base.cpp:231
 msgid ""
 "Include netlist metadata and aperture attributes in Gerber files.\n"
 "They are comments in the X1 format.\n"
@@ -26681,11 +26810,11 @@ msgstr ""
 "在 X1 格式中它们是注释。\n"
 "用于在 CAM 工具和 Gerber 查看器中检查连接性。"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:241
+#: pcbnew/dialogs/dialog_plot_base.cpp:235
 msgid "Disable aperture macros (not recommended)"
 msgstr "禁用光圈（Aperture）宏 (不推荐)"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:242
+#: pcbnew/dialogs/dialog_plot_base.cpp:236
 msgid ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
@@ -26693,35 +26822,35 @@ msgstr ""
 "禁用 Gerber 文件中的 Aperture 宏\n"
 "仅对有问题的 Gerber 查看器使用。"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:256
+#: pcbnew/dialogs/dialog_plot_base.cpp:250
 msgid "Default pen size:"
 msgstr "默认画笔尺寸："
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:273
+#: pcbnew/dialogs/dialog_plot_base.cpp:267
 msgid "Postscript Options"
 msgstr "Postscript 选项"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:283
+#: pcbnew/dialogs/dialog_plot_base.cpp:277
 msgid "X scale factor:"
 msgstr "X 比例因子："
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:288
+#: pcbnew/dialogs/dialog_plot_base.cpp:282
 msgid "Set global X scale adjust for exact scale PostScript output."
 msgstr "将全局 X 比例调整设置为精确缩放 PostScript 输出。"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:295
+#: pcbnew/dialogs/dialog_plot_base.cpp:289
 msgid "Y scale factor:"
 msgstr "Y 比例因子："
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:300
+#: pcbnew/dialogs/dialog_plot_base.cpp:294
 msgid "Set global Y scale adjust for exact scale PostScript output."
 msgstr "将全局 Y 比例调整设置为精确缩放 PostScript 输出。"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:307
+#: pcbnew/dialogs/dialog_plot_base.cpp:301
 msgid "Track width correction:"
 msgstr "布线宽度修正："
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:312
+#: pcbnew/dialogs/dialog_plot_base.cpp:306
 msgid ""
 "Set global width correction for exact width PostScript output.\n"
 "These width correction is intended to compensate tracks width and also pads "
@@ -26733,27 +26862,27 @@ msgstr ""
 "这些宽度校正旨在补偿布线宽度以及焊盘和通孔尺寸误差。\n"
 "合理的宽度校正值必须在 [-(最小布线宽度 - 1),+(最小间隙值 - 1)] 范围内。"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:323
+#: pcbnew/dialogs/dialog_plot_base.cpp:317
 msgid "Force A4 output"
 msgstr "强制 A4 输出"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:329
+#: pcbnew/dialogs/dialog_plot_base.cpp:323
 msgid "DXF Options"
 msgstr "DXF 选项"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:334
+#: pcbnew/dialogs/dialog_plot_base.cpp:328
 msgid "Plot graphic items using their contours"
 msgstr "使用轮廓绘制图形项目"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:336
+#: pcbnew/dialogs/dialog_plot_base.cpp:330
 msgid "Uncheck to plot graphic items using their center lines"
 msgstr "取消选中以使用图形项目的中心线绘制图形项"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:340
+#: pcbnew/dialogs/dialog_plot_base.cpp:334
 msgid "Use KiCad font to plot text"
 msgstr "使用 KiCad 字体绘制文本"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:341
+#: pcbnew/dialogs/dialog_plot_base.cpp:335
 msgid ""
 "Check to use KiCad stroke font\n"
 "Uncheck to plot single-line ASCII texts as editable text (using DXF font)"
@@ -26761,19 +26890,19 @@ msgstr ""
 "勾选来使用 KiCad 笔画字体\n"
 "取消选中将单列 ASCII 文本绘制为可编辑文本(使用 DXF 字体)"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:354
+#: pcbnew/dialogs/dialog_plot_base.cpp:348
 msgid "Export units:"
 msgstr "导出单位："
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:362
+#: pcbnew/dialogs/dialog_plot_base.cpp:356
 msgid "The units to use for the exported DXF file"
 msgstr "用于导出的 DXF 文件的单位"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:372
+#: pcbnew/dialogs/dialog_plot_base.cpp:366
 msgid "SVG Options"
 msgstr "SVG 选项"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:379
+#: pcbnew/dialogs/dialog_plot_base.cpp:373
 msgid ""
 "This number defines how many digits are exported that are below 1 mm.\n"
 "User unit is 10^-<N> mm\n"
@@ -26783,36 +26912,36 @@ msgstr ""
 "用户单位为 10^-<N> 毫米\n"
 "如果您不确定，请选择 4。"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:405
+#: pcbnew/dialogs/dialog_plot_base.cpp:399
 msgid "Run DRC..."
 msgstr "运行 DRC..."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:408
+#: pcbnew/dialogs/dialog_plot_base.cpp:402
 #, c-format
 msgid "(%d known DRC violations; %d exclusions)"
 msgstr "（%d 个已知的 DRC 违规；%d 个排除）"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:432
+#: pcbnew/dialogs/dialog_plot_base.cpp:426
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:281
 msgid "Select Fab Layers"
 msgstr "选择制造层"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:436
+#: pcbnew/dialogs/dialog_plot_base.cpp:430
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:284
 msgid "Select all Copper Layers"
 msgstr "全选所有铜层"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:440
+#: pcbnew/dialogs/dialog_plot_base.cpp:434
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:287
 msgid "Deselect all Copper Layers"
 msgstr "取消选择铜层"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:444
+#: pcbnew/dialogs/dialog_plot_base.cpp:438
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:290
 msgid "Select all Layers"
 msgstr "全选所有层"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:448
+#: pcbnew/dialogs/dialog_plot_base.cpp:442
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:293
 msgid "Deselect all Layers"
 msgstr "取消全选所有层"
@@ -29614,12 +29743,12 @@ msgstr "预定义布线和过孔尺寸："
 msgid "7"
 msgstr "7"
 
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:98 pcbnew/pad.cpp:935
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:98 pcbnew/pad.cpp:964
 #: pcbnew/pcb_track.cpp:813 pcbnew/pcb_track.cpp:1228
 msgid "Diameter"
 msgstr "直径"
 
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:99 pcbnew/pad.cpp:964
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:99 pcbnew/pad.cpp:993
 #: pcbnew/pcb_track.cpp:817 pcbnew/pcb_track.cpp:1230
 #: pcbnew/tools/board_inspection_tool.cpp:566
 msgid "Hole"
@@ -29744,152 +29873,152 @@ msgstr "敷铜 %s 最小宽度：%s。"
 msgid "Checking assertion \"%s\"."
 msgstr "检查断言 \"%s\"。"
 
-#: pcbnew/drc/drc_engine.cpp:899 pcbnew/drc/drc_engine.cpp:1326
+#: pcbnew/drc/drc_engine.cpp:901 pcbnew/drc/drc_engine.cpp:1332
 msgid "Assertion passed."
 msgstr "断言通过。"
 
-#: pcbnew/drc/drc_engine.cpp:901 pcbnew/drc/drc_engine.cpp:1330
+#: pcbnew/drc/drc_engine.cpp:905 pcbnew/drc/drc_engine.cpp:1336
 msgid "--> Assertion failed. <--"
 msgstr "---> 断言失败。<--"
 
-#: pcbnew/drc/drc_engine.cpp:920
+#: pcbnew/drc/drc_engine.cpp:925
 #, c-format
 msgid "Checking %s clearance: %s."
 msgstr "正检查 %s间隙%s。"
 
-#: pcbnew/drc/drc_engine.cpp:934 pcbnew/drc/drc_engine.cpp:935
-#: pcbnew/drc/drc_engine.cpp:936 pcbnew/tools/board_inspection_tool.cpp:699
+#: pcbnew/drc/drc_engine.cpp:939 pcbnew/drc/drc_engine.cpp:940
+#: pcbnew/drc/drc_engine.cpp:941 pcbnew/tools/board_inspection_tool.cpp:699
 #: pcbnew/tools/board_inspection_tool.cpp:708
 #: pcbnew/tools/board_inspection_tool.cpp:717
 #: pcbnew/tools/board_inspection_tool.cpp:822
 msgid "undefined"
 msgstr "未定义"
 
-#: pcbnew/drc/drc_engine.cpp:945
+#: pcbnew/drc/drc_engine.cpp:950
 msgid "track width"
 msgstr "导线宽度"
 
-#: pcbnew/drc/drc_engine.cpp:946
+#: pcbnew/drc/drc_engine.cpp:951
 msgid "annular width"
 msgstr "环形宽度"
 
-#: pcbnew/drc/drc_engine.cpp:947
+#: pcbnew/drc/drc_engine.cpp:952
 msgid "via diameter"
 msgstr "过孔直径"
 
-#: pcbnew/drc/drc_engine.cpp:948
+#: pcbnew/drc/drc_engine.cpp:953
 msgid "constraint"
 msgstr "约束"
 
-#: pcbnew/drc/drc_engine.cpp:951
+#: pcbnew/drc/drc_engine.cpp:956
 #, c-format
 msgid "Checking %s %s: %s."
 msgstr "正检查 %s %s: %s。"
 
-#: pcbnew/drc/drc_engine.cpp:967
+#: pcbnew/drc/drc_engine.cpp:972
 #, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
 msgstr "正检查 %s：最小 %s；最优 %s；最大 %s。"
 
-#: pcbnew/drc/drc_engine.cpp:978 pcbnew/drc/drc_engine.cpp:1339
+#: pcbnew/drc/drc_engine.cpp:983 pcbnew/drc/drc_engine.cpp:1345
 #, c-format
 msgid "Checking %s."
 msgstr "检查 %s。"
 
-#: pcbnew/drc/drc_engine.cpp:986
+#: pcbnew/drc/drc_engine.cpp:991
 msgid "Board and netclass clearances apply only between copper items."
 msgstr "电路板和网类间隙仅适用于铜项目之间。"
 
-#: pcbnew/drc/drc_engine.cpp:1034
+#: pcbnew/drc/drc_engine.cpp:1039
 msgid "Keepout constraint not met."
 msgstr "不满足禁止约束。"
 
-#: pcbnew/drc/drc_engine.cpp:1036
+#: pcbnew/drc/drc_engine.cpp:1041
 msgid "Disallow constraint not met."
 msgstr "未满足不允许约束。"
 
-#: pcbnew/drc/drc_engine.cpp:1058
+#: pcbnew/drc/drc_engine.cpp:1063
 msgid "Keepout layer(s) not matched."
 msgstr "禁布层不匹配。"
 
-#: pcbnew/drc/drc_engine.cpp:1062 pcbnew/drc/drc_engine.cpp:1083
-#: pcbnew/drc/drc_engine.cpp:1343
+#: pcbnew/drc/drc_engine.cpp:1067 pcbnew/drc/drc_engine.cpp:1088
+#: pcbnew/drc/drc_engine.cpp:1349
 #, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
 msgstr "规则层 \"%s\" 不匹配；已忽略规则。"
 
-#: pcbnew/drc/drc_engine.cpp:1067 pcbnew/drc/drc_engine.cpp:1088
+#: pcbnew/drc/drc_engine.cpp:1072 pcbnew/drc/drc_engine.cpp:1093
 msgid "Rule layer not matched; rule ignored."
 msgstr "规则层不匹配；已忽略规则。"
 
-#: pcbnew/drc/drc_engine.cpp:1100
+#: pcbnew/drc/drc_engine.cpp:1105
 msgid "Unconditional constraint applied."
 msgstr "已应用无条件约束。"
 
-#: pcbnew/drc/drc_engine.cpp:1104 pcbnew/drc/drc_engine.cpp:1349
+#: pcbnew/drc/drc_engine.cpp:1109 pcbnew/drc/drc_engine.cpp:1355
 msgid "Unconditional rule applied."
 msgstr "应用无条件规则。"
 
-#: pcbnew/drc/drc_engine.cpp:1109
+#: pcbnew/drc/drc_engine.cpp:1114
 msgid "Unconditional rule applied; overrides previous constraints."
 msgstr "应用无条件的规则；覆盖以前的约束。"
 
-#: pcbnew/drc/drc_engine.cpp:1124 pcbnew/drc/drc_engine.cpp:1354
+#: pcbnew/drc/drc_engine.cpp:1129 pcbnew/drc/drc_engine.cpp:1360
 #, c-format
 msgid "Checking rule condition \"%s\"."
 msgstr "检查规则条件 \"%s\"。"
 
-#: pcbnew/drc/drc_engine.cpp:1134
+#: pcbnew/drc/drc_engine.cpp:1139
 msgid "Constraint applied."
 msgstr "已应用约束。"
 
-#: pcbnew/drc/drc_engine.cpp:1138 pcbnew/drc/drc_engine.cpp:1359
+#: pcbnew/drc/drc_engine.cpp:1143 pcbnew/drc/drc_engine.cpp:1366
 msgid "Rule applied."
 msgstr "应用规则。"
 
-#: pcbnew/drc/drc_engine.cpp:1143
+#: pcbnew/drc/drc_engine.cpp:1148
 msgid "Rule applied; overrides previous constraints."
 msgstr "已应用规则；覆盖以前的约束。"
 
-#: pcbnew/drc/drc_engine.cpp:1169
+#: pcbnew/drc/drc_engine.cpp:1174
 msgid "Membership not satisfied; constraint ignored."
 msgstr "未满足成员资格；忽略约束。"
 
-#: pcbnew/drc/drc_engine.cpp:1170 pcbnew/drc/drc_engine.cpp:1364
+#: pcbnew/drc/drc_engine.cpp:1175 pcbnew/drc/drc_engine.cpp:1371
 msgid "Condition not satisfied; rule ignored."
 msgstr "条件不满足；忽略规则。"
 
-#: pcbnew/drc/drc_engine.cpp:1201 pcbnew/drc/drc_engine.cpp:1212
+#: pcbnew/drc/drc_engine.cpp:1206 pcbnew/drc/drc_engine.cpp:1217
 #, c-format
 msgid "Local clearance on %s; clearance: %s."
 msgstr "本地间隙 %s；间隙：%s。"
 
-#: pcbnew/drc/drc_engine.cpp:1238
+#: pcbnew/drc/drc_engine.cpp:1243
 #, c-format
 msgid "Footprint %s zone connection: %s."
 msgstr "封装 %s 敷铜连接：%s。"
 
-#: pcbnew/drc/drc_engine.cpp:1254
+#: pcbnew/drc/drc_engine.cpp:1259
 #, c-format
 msgid "Zone %s pad connection: %s."
 msgstr "敷铜 %s 焊盘连接：%s。"
 
-#: pcbnew/drc/drc_engine.cpp:1259 pcbnew/drc/drc_engine.cpp:1276
-#: pcbnew/drc/drc_engine.cpp:1293 pcbnew/zone.cpp:332 pcbnew/zone.cpp:472
+#: pcbnew/drc/drc_engine.cpp:1264 pcbnew/drc/drc_engine.cpp:1281
+#: pcbnew/drc/drc_engine.cpp:1298 pcbnew/zone.cpp:332 pcbnew/zone.cpp:472
 msgid "zone"
 msgstr "敷铜"
 
-#: pcbnew/drc/drc_engine.cpp:1271
+#: pcbnew/drc/drc_engine.cpp:1276
 #, c-format
 msgid "Zone %s thermal relief gap: %s."
 msgstr "敷铜 %s 散热间隙：%s。"
 
-#: pcbnew/drc/drc_engine.cpp:1288
+#: pcbnew/drc/drc_engine.cpp:1293
 #, c-format
 msgid "Zone %s thermal spoke width: %s."
 msgstr "敷铜 %s 散热辐条宽度：%s。"
 
-#: pcbnew/drc/drc_engine.cpp:1321
+#: pcbnew/drc/drc_engine.cpp:1326
 #, c-format
 msgid "Checking rule assertion \"%s\"."
 msgstr "检查规则判断 \"%s\"。"
@@ -30298,13 +30427,13 @@ msgstr "正在检查敷铜..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:309
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:357
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:443
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:489
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:683
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:715
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:737
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:762
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1003
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:456
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:502
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:696
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:728
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:750
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:775
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1016
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:210
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:239
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:117
@@ -30321,7 +30450,7 @@ msgstr "正在检查敷铜..."
 msgid "(%s clearance %s; actual %s)"
 msgstr "(%s 间隙 %s; 实际 %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:658
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:671
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(网络 %s 和 %s)"
@@ -30637,17 +30766,17 @@ msgid "They have been exported as oval pads."
 msgstr "它们已被导出为椭圆焊盘。"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:308
-#: pcbnew/exporters/export_vrml.cpp:577
+#: pcbnew/exporters/export_vrml.cpp:581
 #: pcbnew/specctra_import_export/specctra_export.cpp:134
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr "PCB 轮廓异常，请运行 DRC 来进行全面分析。"
 
 #: pcbnew/exporters/export_idf.cpp:636 pcbnew/exporters/export_idf.cpp:645
-#: pcbnew/exporters/export_idf.cpp:653 pcbnew/exporters/export_vrml.cpp:1040
+#: pcbnew/exporters/export_idf.cpp:653 pcbnew/exporters/export_vrml.cpp:1057
 msgid "IDF Export Failed:\n"
 msgstr "IDF 导出失败：\n"
 
-#: pcbnew/exporters/export_vrml.cpp:606
+#: pcbnew/exporters/export_vrml.cpp:610
 msgid "VRML Export Failed: Could not add holes to contours."
 msgstr "VRML 导出失败：轮廓上不能添加孔。"
 
@@ -30964,15 +31093,15 @@ msgstr "(金属化焊盘没有铜层)"
 msgid "(PTH pad's hole leaves no copper)"
 msgstr "(金属化焊盘的孔没留下铜)"
 
-#: pcbnew/footprint.cpp:2578 pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1358
+#: pcbnew/footprint.cpp:2578 pcbnew/pad.cpp:1752 pcbnew/zone.cpp:1358
 msgid "Clearance Override"
 msgstr "间隙覆盖"
 
-#: pcbnew/footprint.cpp:2581 pcbnew/pad.cpp:1706
+#: pcbnew/footprint.cpp:2581 pcbnew/pad.cpp:1726
 msgid "Solderpaste Margin Override"
 msgstr "焊锡膏边缘覆盖"
 
-#: pcbnew/footprint.cpp:2585 pcbnew/pad.cpp:1709
+#: pcbnew/footprint.cpp:2585 pcbnew/pad.cpp:1729
 msgid "Solderpaste Margin Ratio Override"
 msgstr "焊锡膏边缘率覆盖"
 
@@ -31314,7 +31443,7 @@ msgstr "值 '%s' (%s)"
 msgid "Footprint Text '%s' of %s"
 msgstr "封装文本 '%s' (%s)"
 
-#: pcbnew/fp_textbox.cpp:231
+#: pcbnew/fp_textbox.cpp:258
 #, c-format
 msgid "Footprint Text Box of %s"
 msgstr "%s 的封装文本框"
@@ -31421,11 +31550,15 @@ msgstr "默认计量单位："
 msgid "Import Vector Graphics File"
 msgstr "导入矢量图形文件"
 
-#: pcbnew/import_gfx/dxf_import_plugin.cpp:1366
+#: pcbnew/import_gfx/dxf_import_plugin.cpp:133
+msgid "Memory was exhausted trying to load the DXF, it may be too large."
+msgstr ""
+
+#: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
 msgstr "遇到了无效的花键定义"
 
-#: pcbnew/import_gfx/dxf_import_plugin.cpp:1373
+#: pcbnew/import_gfx/dxf_import_plugin.cpp:1387
 msgid "Invalid Bezier curve created"
 msgstr "创建了无效的贝塞尔曲线"
 
@@ -32065,173 +32198,173 @@ msgstr ""
 "文件：\"%s\"\n"
 "行：%d"
 
-#: pcbnew/pad.cpp:752 pcbnew/pad.cpp:856 pcbnew/pad.cpp:865 pcbnew/pad.cpp:874
+#: pcbnew/pad.cpp:755 pcbnew/pad.cpp:885 pcbnew/pad.cpp:894 pcbnew/pad.cpp:903
 msgid "pad"
 msgstr "焊盘"
 
-#: pcbnew/pad.cpp:895 pcbnew/pad.cpp:1681
+#: pcbnew/pad.cpp:924 pcbnew/pad.cpp:1701
 msgid "Pin Name"
 msgstr "引脚名称"
 
-#: pcbnew/pad.cpp:898 pcbnew/pad.cpp:1683
+#: pcbnew/pad.cpp:927 pcbnew/pad.cpp:1703
 msgid "Pin Type"
 msgstr "引脚类型"
 
-#: pcbnew/pad.cpp:922
+#: pcbnew/pad.cpp:951
 msgid "BGA"
 msgstr "BGA"
 
-#: pcbnew/pad.cpp:923
+#: pcbnew/pad.cpp:952
 msgid "Fiducial global"
 msgstr "基准全局"
 
-#: pcbnew/pad.cpp:924
+#: pcbnew/pad.cpp:953
 msgid "Fiducial local"
 msgstr "基准本地"
 
-#: pcbnew/pad.cpp:925
+#: pcbnew/pad.cpp:954
 msgid "Test point"
 msgstr "测试点"
 
-#: pcbnew/pad.cpp:926
+#: pcbnew/pad.cpp:955
 msgid "Heat sink"
 msgstr "散热片"
 
-#: pcbnew/pad.cpp:927
+#: pcbnew/pad.cpp:956
 msgid "Castellated"
 msgstr "邮票孔"
 
-#: pcbnew/pad.cpp:957
+#: pcbnew/pad.cpp:986
 msgid "Length in Package"
 msgstr "封装长度"
 
-#: pcbnew/pad.cpp:970
+#: pcbnew/pad.cpp:999
 msgid "Hole X / Y"
 msgstr "孔 X / Y"
 
-#: pcbnew/pad.cpp:982 pcbnew/pcb_track.cpp:786 pcbnew/pcb_track.cpp:822
+#: pcbnew/pad.cpp:1011 pcbnew/pcb_track.cpp:786 pcbnew/pcb_track.cpp:822
 #: pcbnew/router/router_tool.cpp:2143 pcbnew/zone.cpp:616
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "最小间距：%s"
 
-#: pcbnew/pad.cpp:984 pcbnew/pcb_track.cpp:788 pcbnew/pcb_track.cpp:824
+#: pcbnew/pad.cpp:1013 pcbnew/pcb_track.cpp:788 pcbnew/pcb_track.cpp:824
 #: pcbnew/pcb_track.cpp:830 pcbnew/router/router_tool.cpp:2131
 #: pcbnew/router/router_tool.cpp:2145 pcbnew/zone.cpp:618
 #, c-format
 msgid "(from %s)"
 msgstr "(从 %s)"
 
-#: pcbnew/pad.cpp:1144
+#: pcbnew/pad.cpp:1173
 msgid "Trap"
 msgstr "凹槽"
 
-#: pcbnew/pad.cpp:1145
+#: pcbnew/pad.cpp:1174
 msgid "Roundrect"
 msgstr "圆角矩形"
 
-#: pcbnew/pad.cpp:1146
+#: pcbnew/pad.cpp:1175
 msgid "Chamferedrect"
 msgstr "倒角"
 
-#: pcbnew/pad.cpp:1147
+#: pcbnew/pad.cpp:1176
 msgid "CustomShape"
 msgstr "自定义形状"
 
-#: pcbnew/pad.cpp:1159
+#: pcbnew/pad.cpp:1188
 msgid "Conn"
 msgstr "连接器"
 
-#: pcbnew/pad.cpp:1172
+#: pcbnew/pad.cpp:1201
 #, c-format
 msgid "Pad %s of %s on %s"
 msgstr "焊盘　%s (%s) - %s"
 
-#: pcbnew/pad.cpp:1179 pcbnew/pad.cpp:1185 pcbnew/pad.cpp:1202
+#: pcbnew/pad.cpp:1208 pcbnew/pad.cpp:1214 pcbnew/pad.cpp:1231
 #, c-format
 msgid "Through hole pad %s of %s"
 msgstr "%s 的通孔焊盘 %s"
 
-#: pcbnew/pad.cpp:1194
+#: pcbnew/pad.cpp:1223
 #, c-format
 msgid "Pad %s %s of %s on %s"
 msgstr "%s 上 %s 的焊盘 %s %s"
 
-#: pcbnew/pad.cpp:1208
+#: pcbnew/pad.cpp:1237
 #, c-format
 msgid "Through hole pad %s %s of %s"
 msgstr "%s 的通孔焊盘 %s %s"
 
-#: pcbnew/pad.cpp:1646
+#: pcbnew/pad.cpp:1666
 msgid "Edge connector"
 msgstr "板边连接器"
 
-#: pcbnew/pad.cpp:1647
+#: pcbnew/pad.cpp:1667
 msgid "NPTH, mechanical"
 msgstr "非金属化孔，机械的"
 
-#: pcbnew/pad.cpp:1653
+#: pcbnew/pad.cpp:1673
 msgid "Trapezoid"
 msgstr "梯形"
 
-#: pcbnew/pad.cpp:1665
+#: pcbnew/pad.cpp:1685
 msgid "Castellated pad"
 msgstr "邮票孔"
 
-#: pcbnew/pad.cpp:1671
+#: pcbnew/pad.cpp:1691
 msgid "Pad Type"
 msgstr "焊盘类型"
 
-#: pcbnew/pad.cpp:1679
+#: pcbnew/pad.cpp:1699
 msgid "Pad Number"
 msgstr "焊盘编号"
 
-#: pcbnew/pad.cpp:1688
+#: pcbnew/pad.cpp:1708
 msgid "Size X"
 msgstr "X 尺寸"
 
-#: pcbnew/pad.cpp:1691
+#: pcbnew/pad.cpp:1711
 msgid "Size Y"
 msgstr "Y 尺寸"
 
-#: pcbnew/pad.cpp:1694
+#: pcbnew/pad.cpp:1714
 msgid "Hole Size X"
 msgstr "钻孔尺寸 X"
 
-#: pcbnew/pad.cpp:1697
+#: pcbnew/pad.cpp:1717
 msgid "Hole Size Y"
 msgstr "钻孔尺寸 Y"
 
 # Die 裸芯片
-#: pcbnew/pad.cpp:1700 pcbnew/pcb_track.cpp:776
+#: pcbnew/pad.cpp:1720 pcbnew/pcb_track.cpp:776
 msgid "Pad To Die Length"
 msgstr "焊盘到裸芯片长度"
 
-#: pcbnew/pad.cpp:1703
+#: pcbnew/pad.cpp:1723
 msgid "Soldermask Margin Override"
 msgstr "阻焊层边界覆盖"
 
-#: pcbnew/pad.cpp:1711 pcbnew/zone.cpp:1369
+#: pcbnew/pad.cpp:1731 pcbnew/zone.cpp:1369
 msgid "Thermal Relief Spoke Width"
 msgstr "防散热辐条宽度"
 
-#: pcbnew/pad.cpp:1714
+#: pcbnew/pad.cpp:1734
 msgid "Thermal Relief Spoke Angle"
 msgstr "防散热辐条角度"
 
-#: pcbnew/pad.cpp:1717 pcbnew/zone.cpp:1366
+#: pcbnew/pad.cpp:1737 pcbnew/zone.cpp:1366
 msgid "Thermal Relief Gap"
 msgstr "防散热 (花焊盘) 间距"
 
-#: pcbnew/pad.cpp:1720
+#: pcbnew/pad.cpp:1740
 msgid "Fabrication Property"
 msgstr "制造属性"
 
-#: pcbnew/pad.cpp:1723
+#: pcbnew/pad.cpp:1743
 msgid "Round Radius Ratio"
 msgstr "圆半径比"
 
-#: pcbnew/pcb_base_frame.cpp:174
+#: pcbnew/pcb_base_frame.cpp:187
 msgid "Error loading project footprint libraries."
 msgstr "加载工程封装库时出错。"
 
@@ -32361,17 +32494,17 @@ msgstr "缺少规则区标识符参数（A、B 或规则区名称）到 %s。"
 msgid "Missing group name argument to %s."
 msgstr "缺少 %s 的组名参数。"
 
-#: pcbnew/pcb_expr_evaluator.cpp:819
+#: pcbnew/pcb_expr_evaluator.cpp:826
 #, c-format
 msgid "Missing diff-pair name argument to %s."
 msgstr "缺少 %s 的差分对名参数。"
 
-#: pcbnew/pcb_expr_evaluator.cpp:870
+#: pcbnew/pcb_expr_evaluator.cpp:877
 #, c-format
 msgid "Missing field name argument to %s."
 msgstr "缺少 %s 的字段名参数。"
 
-#: pcbnew/pcb_expr_evaluator.cpp:1189
+#: pcbnew/pcb_expr_evaluator.cpp:1196
 msgid "must be mm, in, or mil"
 msgstr "单位必须为 mm、in 或 mil"
 
@@ -32427,7 +32560,7 @@ msgstr "PCB 文本"
 msgid "PCB Text '%s' on %s"
 msgstr "电路板上的文本 \"%s\" (%s)"
 
-#: pcbnew/pcb_textbox.cpp:282
+#: pcbnew/pcb_textbox.cpp:319
 #, c-format
 msgid "PCB Text Box on %s"
 msgstr "%s 上的 PCB 文本"
@@ -32700,44 +32833,44 @@ msgstr "载入敷铜文件中..."
 msgid "Loading arcs..."
 msgstr "载入弧中..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2342
+#: pcbnew/plugins/altium/altium_pcb.cpp:2344
 msgid "Loading pads..."
 msgstr "载入焊盘中..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2428
+#: pcbnew/plugins/altium/altium_pcb.cpp:2430
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr "封装 %s 焊盘 %s 未被标记为多层，但它是 TH 焊盘。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2449
+#: pcbnew/plugins/altium/altium_pcb.cpp:2451
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "封装 %s 焊盘 %s 有一个方孔。(KiCad 目前还不支持此功能)。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2476
+#: pcbnew/plugins/altium/altium_pcb.cpp:2478
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr "封装 %s 焊盘 %s 有 %f 度的孔旋转。KiCad 仅支持 90 度角旋转。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2488
+#: pcbnew/plugins/altium/altium_pcb.cpp:2490
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "封装 %s 焊盘 %s 有一个未知类型 %d 的孔。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2505
+#: pcbnew/plugins/altium/altium_pcb.cpp:2507
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr "封装 %s 的焊盘 %s 使用了复杂的焊盘压层，尚不支持"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2542
+#: pcbnew/plugins/altium/altium_pcb.cpp:2544
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "封装 %s 焊盘 %s 使用未知的焊盘形状。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2600
-#: pcbnew/plugins/altium/altium_pcb.cpp:2621
+#: pcbnew/plugins/altium/altium_pcb.cpp:2602
+#: pcbnew/plugins/altium/altium_pcb.cpp:2623
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -32746,55 +32879,55 @@ msgstr ""
 "非铜焊盘 %s ，发现于Altium 层 (%d)，没有 KiCad 等效项。它已被移动至 Kicad "
 "Eco1_User 层。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2641
+#: pcbnew/plugins/altium/altium_pcb.cpp:2643
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr "非铜焊盘 %s 被连接到了某个网络，KiCad 不支持这种行为。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2647
+#: pcbnew/plugins/altium/altium_pcb.cpp:2649
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "非铜焊盘 %s有一个孔，KiCad 不支持这种情况。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2652
+#: pcbnew/plugins/altium/altium_pcb.cpp:2654
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr "非铜焊盘“%s”使用复杂的焊盘压层，尚不支持。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2794
+#: pcbnew/plugins/altium/altium_pcb.cpp:2796
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "非铜焊盘“%s”使用了未知的焊盘形状。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2804
+#: pcbnew/plugins/altium/altium_pcb.cpp:2806
 msgid "Loading vias..."
 msgstr "载入过孔中..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2847
+#: pcbnew/plugins/altium/altium_pcb.cpp:2849
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr "来自层 %d <-> %d 的过孔使用非铜层，KiCad 不支持这种情况。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2866
+#: pcbnew/plugins/altium/altium_pcb.cpp:2868
 msgid "Loading tracks..."
 msgstr "载入布线中..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3034
+#: pcbnew/plugins/altium/altium_pcb.cpp:3038
 msgid "Loading unicode strings..."
 msgstr "正在加载 unicode 字符串……"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3048
+#: pcbnew/plugins/altium/altium_pcb.cpp:3052
 msgid "Loading text..."
 msgstr "载入文本中..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3077
-#: pcbnew/plugins/altium/altium_pcb.cpp:3090
+#: pcbnew/plugins/altium/altium_pcb.cpp:3081
+#: pcbnew/plugins/altium/altium_pcb.cpp:3094
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "忽略了 Altium 层 %d 上的条形码 (尚不支持)。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3239
+#: pcbnew/plugins/altium/altium_pcb.cpp:3243
 msgid "Loading rectangles..."
 msgstr "载入矩形中..."
 
@@ -33191,7 +33324,7 @@ msgid "No '%s' package in library '%s'."
 msgstr "库 '%s' 中没有 '%s' 包。"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1407
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2200
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2199
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr "忽略多边形，因为 Eagle 图层 '%s' (%d) 未映射"
@@ -33201,17 +33334,17 @@ msgstr "忽略多边形，因为 Eagle 图层 '%s' (%d) 未映射"
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr "忽略导线，因为 Eagle 图层 '%s' (%d) 未映射"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1939
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1941
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
 msgstr "忽略文本，因为 Eagle 图层 '%s' (%d) 未映射"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2084
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2086
 #, c-format
 msgid "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped"
 msgstr "忽略矩形，因为 Eagle 图层 '%s' (%d) 未映射"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2277
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2274
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr "忽略一个圆，因为 Eagle 图层 '%s' (%d) 未映射"
@@ -34897,19 +35030,19 @@ msgstr "断言："
 msgid "Create from Selection"
 msgstr "从选区创建"
 
-#: pcbnew/tools/convert_tool.cpp:215
+#: pcbnew/tools/convert_tool.cpp:226
 msgid "Convert shapes to polygon"
 msgstr "将形状转换为多边形"
 
-#: pcbnew/tools/convert_tool.cpp:261
+#: pcbnew/tools/convert_tool.cpp:272
 msgid "Convert shapes to zone"
 msgstr "将形状转换为敷铜"
 
-#: pcbnew/tools/convert_tool.cpp:770
+#: pcbnew/tools/convert_tool.cpp:781
 msgid "Convert polygons to lines"
 msgstr "将多边形转换为线"
 
-#: pcbnew/tools/convert_tool.cpp:858
+#: pcbnew/tools/convert_tool.cpp:869
 msgid "Create arc from line segment"
 msgstr "从线段创建圆弧"
 
@@ -36665,10 +36798,6 @@ msgid "Tune skew of a differential pair"
 msgstr "调整差分对布线偏移"
 
 #: pcbnew/tools/pcb_actions.cpp:1409
-msgid "Undo Last Segment"
-msgstr "撤消上一段"
-
-#: pcbnew/tools/pcb_actions.cpp:1409
 msgid "Walks the current track back one segment."
 msgstr "将当前布线往回走一段。"
 
@@ -36723,23 +36852,23 @@ msgstr "选中项"
 msgid "Footprint Name"
 msgstr "封装名称"
 
-#: pcbnew/tools/pcb_point_editor.cpp:123
+#: pcbnew/tools/pcb_point_editor.cpp:125
 msgid "Self-intersecting polygons are not allowed."
 msgstr "不允许自相交多边形。"
 
-#: pcbnew/tools/pcb_point_editor.cpp:611
+#: pcbnew/tools/pcb_point_editor.cpp:613
 msgid "Drag a corner"
 msgstr "拖动拐角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2194
+#: pcbnew/tools/pcb_point_editor.cpp:2224
 msgid "Add a zone corner"
 msgstr "添加敷铜拐角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2231
+#: pcbnew/tools/pcb_point_editor.cpp:2261
 msgid "Split segment"
 msgstr "分割线段"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2302
+#: pcbnew/tools/pcb_point_editor.cpp:2332
 msgid "Remove a zone/polygon corner"
 msgstr "删除敷铜或多边形的拐角"
 
@@ -37771,6 +37900,21 @@ msgstr "KiCad 原理图"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad 印刷电路板"
+
+#~ msgid "Connection type:"
+#~ msgstr "连接类型："
+
+#~ msgid "Constrain buses and wires to H or V"
+#~ msgstr "限制总线及导线为 H 或 V"
+
+#~ msgid "Switch H & V only mode for new wires and buses"
+#~ msgstr "切换连线和总线正交模式"
+
+#~ msgid "Plot Edge.Cuts on all layers"
+#~ msgstr "在所有层上绘制 Edge.Cuts 层"
+
+#~ msgid "Plot the contents of the PCB edge layer on all layers"
+#~ msgstr "在所有层上绘制 PCB 边缘层的内容"
 
 #~ msgid "Synchronized pins edit mode, and this pin is new"
 #~ msgstr "已同步引脚编辑模式，此引脚是新的"
@@ -40478,9 +40622,6 @@ msgstr "KiCad 印刷电路板"
 
 #~ msgid "Automatically routed tracks"
 #~ msgstr "自动布线"
-
-#~ msgid "Reset &Unused"
-#~ msgstr "重置未使用的内容 (&U)"
 
 #~ msgid "&Keep pads at first and last layers"
 #~ msgstr "在第一层和最后一层保留焊盘 (&K)"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-28 11:12-0700\n"
+"POT-Creation-Date: 2022-04-04 13:55-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1948,6 +1948,41 @@ msgstr ""
 msgid "MB"
 msgstr "MB"
 
+msgid ""
+"KiCad can anonymously report crashes and special event data to developers in "
+"order to aid identifying critical bugs across the user base more effectively "
+"and help profile functionality to guide improvements.\n"
+"\n"
+"To link automatic reports from the same KiCad install, a unique identifier "
+"is generated that is completely random, it is only used for the purposes of "
+"crash reporting. No personally identifiable information (PII) including IP "
+"address is stored or connected to this identifier. You may reset this id at "
+"anytime with the button provided.\n"
+"\n"
+"If you choose to voluntarily participate, KiCad will automatically handle "
+"sending said reports when crashes or events occur. Your design files such as "
+"schematic or PCB are not shared in this process."
+msgstr ""
+"KiCad can anonymously report crashes and special event data to developers in "
+"order to aid identifying critical bugs across the user base more effectively "
+"and help profile functionality to guide improvements.\n"
+"\n"
+"To link automatic reports from the same KiCad install, a unique identifier "
+"is generated that is completely random, it is only used for the purposes of "
+"crash reporting. No personally identifiable information (PII) including IP "
+"address is stored or connected to this identifier. You may reset this id at "
+"anytime with the button provided.\n"
+"\n"
+"If you choose to voluntarily participate, KiCad will automatically handle "
+"sending said reports when crashes or events occur. Your design files such as "
+"schematic or PCB are not shared in this process."
+
+msgid "I agree to provide anonymous reports"
+msgstr "I agree to provide anonymous reports"
+
+msgid "Reset Unique Id"
+msgstr "Reset Unique Id"
+
 msgid "Type filter text"
 msgstr "Type filter text"
 
@@ -2407,6 +2442,9 @@ msgstr "Mouse and Touchpad"
 
 msgid "Hotkeys"
 msgstr "Hotkeys"
+
+msgid "Data Collection"
+msgstr "Data Collection"
 
 msgid "Symbol Editor"
 msgstr "Symbol Editor"
@@ -3433,6 +3471,24 @@ msgstr "Executable file"
 
 msgid "Select Preferred Editor"
 msgstr "Select Preferred Editor"
+
+msgid ""
+"KiCad can anonymously report crashes and special event data to developers in "
+"order to aid identifying critical bugs across the user base more effectively "
+"and help profile functionality to guide improvements. \n"
+"If you choose to voluntarily participate, KiCad will automatically handle "
+"sending said reports when crashes or events occur. \n"
+"Your design files such as schematic or PCB are not shared in this process."
+msgstr ""
+"KiCad can anonymously report crashes and special event data to developers in "
+"order to aid identifying critical bugs across the user base more effectively "
+"and help profile functionality to guide improvements. \n"
+"If you choose to voluntarily participate, KiCad will automatically handle "
+"sending said reports when crashes or events occur. \n"
+"Your design files such as schematic or PCB are not shared in this process."
+
+msgid "Data collection opt in request"
+msgstr "Data collection opt in request"
 
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "Environment variable HOME is empty.  Unable to continue."
@@ -4466,8 +4522,8 @@ msgid "Hotkey file"
 msgstr "Hotkey file"
 
 #, c-format
-msgid "Equivalence file '%s' could not be found in the default search paths."
-msgstr "Equivalence file '%s' could not be found in the default search paths."
+msgid "Equivalence file '%s' could not be found."
+msgstr "Equivalence file '%s' could not be found."
 
 #, c-format
 msgid "Error opening equivalence file '%s'."
@@ -5865,6 +5921,9 @@ msgstr "Align bottom"
 msgid "Text size:"
 msgstr "Text size:"
 
+msgid "Color:"
+msgstr "Color:"
+
 msgid "Position X:"
 msgstr "Position X:"
 
@@ -6013,9 +6072,6 @@ msgstr ""
 
 msgid "Diameter:"
 msgstr "Diameter:"
-
-msgid "Color:"
-msgstr "Color:"
 
 msgid "Set diameter to 0 to use schematic junction dot size."
 msgstr "Set diameter to 0 to use schematic junction dot size."
@@ -7032,6 +7088,9 @@ msgstr ""
 "Error importing settings from project:\n"
 "Project file %s could not be loaded."
 
+msgid "Note: individual item colors overridden in Preferences."
+msgstr "Note: individual item colors overridden in Preferences."
+
 msgid "Filled shape"
 msgstr "Filled shape"
 
@@ -7044,9 +7103,6 @@ msgstr "Set line color to transparent to use Schematic Editor colors."
 #, c-format
 msgid "%s Properties"
 msgstr "%s Properties"
-
-msgid "Connection type:"
-msgstr "Connection type:"
 
 msgid "Sheet Pin Properties"
 msgstr "Sheet Pin Properties"
@@ -8154,8 +8210,20 @@ msgstr "Highlight cross-probed nets"
 msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "Highlight nets when they are highlighted in the PCB editor"
 
-msgid "Constrain buses and wires to H or V"
-msgstr "Constrain buses and wires to H or V"
+msgid "Line Drawing Mode:"
+msgstr "Line Drawing Mode:"
+
+msgid "Free Angle"
+msgstr "Free Angle"
+
+msgid "90 deg Angle"
+msgstr "90 deg Angle"
+
+msgid "45 deg Angle"
+msgstr "45 deg Angle"
+
+msgid "135 deg Angle"
+msgstr "135 deg Angle"
 
 msgid "Mouse drag performs Drag (G) operation"
 msgstr "Mouse drag performs Drag (G) operation"
@@ -11789,11 +11857,23 @@ msgstr "Show ERC Exclusions"
 msgid "Show markers for excluded electrical rules checker violations"
 msgstr "Show markers for excluded electrical rules checker violations"
 
-msgid "Force H/V Wires and Buses"
-msgstr "Force H/V Wires and Buses"
+msgid "Line Mode for Wires and Buses"
+msgstr "Line Mode for Wires and Buses"
 
-msgid "Switch H & V only mode for new wires and buses"
-msgstr "Switch H & V only mode for new wires and buses"
+msgid "Lines drawn at any angle"
+msgstr "Lines drawn at any angle"
+
+msgid "Lines drawn horizontally and vertically"
+msgstr "Lines drawn horizontally and vertically"
+
+msgid "Lines drawn horizontally and vertically, with a 45 degree angle end"
+msgstr "Lines drawn horizontally and vertically, with a 45 degree angle end"
+
+msgid "Lines drawn horizontally and vertically, with a 45 degree angle start"
+msgstr "Lines drawn horizontally and vertically, with a 45 degree angle start"
+
+msgid "Switch to next line mode"
+msgstr "Switch to next line mode"
 
 msgid "Repair Schematic"
 msgstr "Repair Schematic"
@@ -11848,6 +11928,18 @@ msgstr "Unfold from Bus"
 
 msgid "Break a wire out of a bus"
 msgstr "Break a wire out of a bus"
+
+msgid "Undo Last Segment"
+msgstr "Undo Last Segment"
+
+msgid "Walks the current line back one segment."
+msgstr "Walks the current line back one segment."
+
+msgid "Switch Segment Posture"
+msgstr "Switch Segment Posture"
+
+msgid "Switches posture of the current segment."
+msgstr "Switches posture of the current segment."
 
 msgid "Finish Wire or Bus"
 msgstr "Finish Wire or Bus"
@@ -18878,6 +18970,15 @@ msgstr "Pad Custom Shape Geometry Transform"
 msgid "Basic Shape Polygon"
 msgstr "Basic Shape Polygon"
 
+msgid "Plot on All Layers"
+msgstr "Plot on All Layers"
+
+msgid "Move current selection up"
+msgstr "Move current selection up"
+
+msgid "Move current selection down"
+msgstr "Move current selection down"
+
 msgid "Generate Drill Files..."
 msgstr "Generate Drill Files…"
 
@@ -18927,12 +19028,6 @@ msgstr "Force plotting of invisible values / refs"
 
 msgid "Force plot invisible footprint values and reference designators"
 msgstr "Force plot invisible footprint values and reference designators"
-
-msgid "Plot Edge.Cuts on all layers"
-msgstr "Plot Edge.Cuts on all layers"
-
-msgid "Plot the contents of the PCB edge layer on all layers"
-msgstr "Plot the contents of the PCB edge layer on all layers"
 
 msgid "Sketch pads on fabrication layers"
 msgstr "Sketch pads on fabrication layers"
@@ -22655,6 +22750,9 @@ msgstr "Default units:"
 
 msgid "Import Vector Graphics File"
 msgstr "Import Vector Graphics File"
+
+msgid "Memory was exhausted trying to load the DXF, it may be too large."
+msgstr "Memory was exhausted trying to load the DXF, it may be too large."
 
 msgid "Invalid spline definition encountered"
 msgstr "Invalid spline definition encountered"
@@ -26757,9 +26855,6 @@ msgstr "Tune length of a differential pair"
 msgid "Tune skew of a differential pair"
 msgstr "Tune skew of a differential pair"
 
-msgid "Undo Last Segment"
-msgstr "Undo Last Segment"
-
 msgid "Walks the current track back one segment."
 msgstr "Walks the current track back one segment."
 
@@ -27576,6 +27671,30 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#, c-format
+#~ msgid ""
+#~ "Equivalence file '%s' could not be found in the default search paths."
+#~ msgstr ""
+#~ "Equivalence file '%s' could not be found in the default search paths."
+
+#~ msgid "Connection type:"
+#~ msgstr "Connection type:"
+
+#~ msgid "Constrain buses and wires to H or V"
+#~ msgstr "Constrain buses and wires to H or V"
+
+#~ msgid "Force H/V Wires and Buses"
+#~ msgstr "Force H/V Wires and Buses"
+
+#~ msgid "Switch H & V only mode for new wires and buses"
+#~ msgstr "Switch H & V only mode for new wires and buses"
+
+#~ msgid "Plot Edge.Cuts on all layers"
+#~ msgstr "Plot Edge.Cuts on all layers"
+
+#~ msgid "Plot the contents of the PCB edge layer on all layers"
+#~ msgstr "Plot the contents of the PCB edge layer on all layers"
 
 #~ msgid "Synchronized pins edit mode, and this pin is new"
 #~ msgstr "Synchronized pins edit mode, and this pin is new"
