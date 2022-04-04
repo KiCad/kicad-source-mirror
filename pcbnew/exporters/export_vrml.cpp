@@ -54,6 +54,10 @@
 
 #include <exporter_vrml.h>
 
+// The max error (in mm) to approximate arcs to segments:
+#define ERR_APPROX_MAX_MM 0.005
+
+
 
 EXPORTER_PCB_VRML::EXPORTER_PCB_VRML() :
         m_OutputPCB( nullptr )
@@ -619,8 +623,6 @@ void EXPORTER_PCB_VRML::ExportVrmlBoard()
 }
 
 
-static const double err_approx_max = 0.005;
-
 
 void EXPORTER_PCB_VRML::ExportVrmlViaHoles()
 {
@@ -651,8 +653,14 @@ void EXPORTER_PCB_VRML::ExportVrmlViaHoles()
         // Set the optimal number of segments to approximate a circle.
         // SetArcParams needs a count max, and the minimal and maximal length
         // of segments
-        int nsides = GetArcToSegmentCount( via->GetDrillValue(), Millimeter2iu( err_approx_max ),
+        double max_error = ERR_APPROX_MAX_MM;
+
+        if( m_UseInlineModelsInBrdfile )
+            max_error /= 2.54;      // The board is exported with a size reduced by 2.54
+
+        int nsides = GetArcToSegmentCount( via->GetDrillValue(), Millimeter2iu( max_error ),
                                            FULL_CIRCLE );
+
         double minSegLength = M_PI * 2.0 * hole_radius / nsides;
         double maxSegLength = minSegLength*2.0;
 
@@ -679,7 +687,12 @@ void EXPORTER_PCB_VRML::ExportVrmlPadHole( PAD* aPad )
     // Export the hole on the edge layer
     if( hole_drill > 0 )
     {
-        int nsides = GetArcToSegmentCount( hole_drill, Millimeter2iu( err_approx_max ),
+        double max_error = ERR_APPROX_MAX_MM;
+
+        if( m_UseInlineModelsInBrdfile )
+            max_error /= 2.54;      // The board is exported with a size reduced by 2.54
+
+        int nsides = GetArcToSegmentCount( hole_drill, Millimeter2iu( max_error ),
                                            FULL_CIRCLE );
         double minSegLength = M_PI * hole_drill / nsides;
         double maxSegLength = minSegLength*2.0;
@@ -984,6 +997,10 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
     model3d.m_UseRelPathIn3DModelFilename = aUseRelativePaths;
     model3d.m_Cache3Dmodels = Prj().Get3DCacheManager();
 
+    // When 3D models are separate files, for historical reasons the VRML unit
+    // is expected to be 0.1 inch (2.54mm) instead of 1mm, so we adjust the m_BoardToVrmlScale
+    // to match the VRML scale of these external files.
+    // Otherwise we use 1mm as VRML unit
     if( model3d.m_UseInlineModelsInBrdfile )
     {
         model3d.m_BoardToVrmlScale = MM_PER_IU / 2.54;
