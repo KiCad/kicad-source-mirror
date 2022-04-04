@@ -193,8 +193,8 @@ void EXPORTER_PCB_VRML::ExportVrmlSolderMask()
         outlines = m_pcbOutlines;
         m_Pcb->ConvertBrdLayerToPolygonalContours( pcb_layer, holes );
 
-        outlines.BooleanSubtract( holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-        outlines.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        outlines.BooleanSubtract( holes, SHAPE_POLY_SET::PM_FAST );
+        outlines.Fracture( SHAPE_POLY_SET::PM_FAST );
         ExportVrmlPolygonSet( vrmllayer, outlines );
 
         pcb_layer = B_Mask;
@@ -225,7 +225,7 @@ void EXPORTER_PCB_VRML::ExportStandardLayers()
 
         outlines.RemoveAllContours();
         m_Pcb->ConvertBrdLayerToPolygonalContours( pcb_layer[lcnt], outlines );
-        outlines.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        outlines.Fracture( SHAPE_POLY_SET::PM_FAST );
 
         ExportVrmlPolygonSet( vrmllayer[lcnt], outlines );
     }
