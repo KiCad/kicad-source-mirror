@@ -397,16 +397,36 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
     if( !testClearance && !testHoles )
         return;
 
-    DRC_RTREE*     zoneTree = m_board->m_CopperZoneRTrees[ aZone ].get();
-    EDA_RECT       itemBBox = aItem->GetBoundingBox();
-    DRC_CONSTRAINT constraint;
-    int            clearance = -1;
-    int            actual;
-    VECTOR2I       pos;
+    DRC_RTREE*       zoneTree = m_board->m_CopperZoneRTrees[ aZone ].get();
+    EDA_RECT         itemBBox = aItem->GetBoundingBox();
+    DRC_CONSTRAINT   constraint;
+    DRC_CONSTRAINT_T constraintType = CLEARANCE_CONSTRAINT;
+    int              clearance = -1;
+    int              actual;
+    VECTOR2I         pos;
+    PAD*             pad = nullptr;
+    bool             flashed = false;
+    bool             hasHole = false;
+    bool             platedHole = false;
+
+    if( aItem->Type() == PCB_PAD_T )
+    {
+        pad = static_cast<PAD*>( aItem );
+        flashed = pad->FlashLayer( aLayer );
+        hasHole = pad->GetDrillSize().x > 0 || pad->GetDrillSize().y > 0;
+
+        if( !flashed && !hasHole )
+            return;
+
+        platedHole = hasHole && pad->GetAttribute() == PAD_ATTRIB::PTH;
+    }
 
     if( zoneTree && testClearance )
     {
-        constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, aItem, aZone, aLayer );
+        if( pad && !flashed && hasHole && !platedHole )
+            constraintType = HOLE_CLEARANCE_CONSTRAINT;
+
+        constraint = m_drcEngine->EvalRules( constraintType, aItem, aZone, aLayer );
         clearance = constraint.GetValue().Min();
     }
 
@@ -414,29 +434,22 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
     {
         std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape( aLayer );
 
-        if( aItem->Type() == PCB_PAD_T )
+        if( pad && !flashed && hasHole )
         {
-            PAD* pad = static_cast<PAD*>( aItem );
+            const SHAPE_SEGMENT* hole = pad->GetEffectiveHoleShape();
+            int                  size = hole->GetWidth();
 
-            if( !pad->FlashLayer( aLayer ) )
-            {
-                if( pad->GetDrillSize().x == 0 && pad->GetDrillSize().y == 0 )
-                    return;
+            // Note: drill size represents finish size, which means the actual hole size is
+            // 2x the plating thickness larger.
+            if( platedHole )
+                size += 2 * m_board->GetDesignSettings().GetHolePlatingThickness();
 
-                const SHAPE_SEGMENT* hole = pad->GetEffectiveHoleShape();
-                int                  size = hole->GetWidth();
-
-                // Note: drill size represents finish size, which means the actual hole
-                // size is the plating thickness larger.
-                if( pad->GetAttribute() == PAD_ATTRIB::PTH )
-                    size += m_board->GetDesignSettings().GetHolePlatingThickness();
-
-                itemShape = std::make_shared<SHAPE_SEGMENT>( hole->GetSeg(), size );
-            }
+            itemShape = std::make_shared<SHAPE_SEGMENT>( hole->GetSeg(), size );
         }
 
         if( zoneTree && zoneTree->QueryColliding( itemBBox, itemShape.get(), aLayer,
-                                      std::max( 0, clearance - m_drcEpsilon ), &actual, &pos ) )
+                                                  std::max( 0, clearance - m_drcEpsilon ),
+                                                  &actual, &pos ) )
         {
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
 
