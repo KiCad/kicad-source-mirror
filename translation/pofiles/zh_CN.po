@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-28 11:12-0700\n"
-"PO-Revision-Date: 2022-04-03 20:07+0000\n"
-"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
+"PO-Revision-Date: 2022-04-04 20:53+0000\n"
+"Last-Translator: Tian Yunhao <t123yh@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -23661,7 +23661,7 @@ msgstr "显示设计规则。"
 
 #: pcbnew/dialogs/dialog_drc.cpp:282
 msgid "-------- DRC cancelled by user.<br><br>"
-msgstr "-------- 用户取消的 DRC。<br><br>"
+msgstr "-------- DRC 已被用户取消。<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:501
 #, c-format
