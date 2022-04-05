@@ -1304,6 +1304,8 @@ void PCB_EDIT_FRAME::ShowChangedLanguage()
 
     m_appearancePanel->OnLanguageChanged();
     m_selectionFilterPanel->OnLanguageChanged();
+
+    UpdateTitle();
 }
 
 

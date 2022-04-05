@@ -810,6 +810,8 @@ void FOOTPRINT_EDIT_FRAME::ShowChangedLanguage()
     lm_pane_info.Show( lm_shown );
     tree_pane_info.Show( tree_shown );
     m_auimgr.Update();
+
+    UpdateTitle();
 }
 
 

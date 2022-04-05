@@ -1143,6 +1143,14 @@ void SYMBOL_EDIT_FRAME::ShowChangedLanguage()
 
     // status bar
     UpdateMsgPanel();
+
+    if( GetRenderSettings()->m_ShowPinsElectricalType )
+    {
+        GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+        GetCanvas()->Refresh();
+    }
+
+    updateTitle();
 }
 
 

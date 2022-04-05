@@ -1410,10 +1410,10 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
             c = getRenderColor( aPin, LAYER_HIDDEN, drawingShadows );
     }
 
-    float insideOffset  = textOffset                     - thickness[INSIDE]  / 2.0;
-    float outsideOffset = 2 * Mils2iu( PIN_TEXT_MARGIN ) - thickness[OUTSIDE] / 2.0;
-    float aboveOffset   = Mils2iu( PIN_TEXT_MARGIN )     + ( thickness[ABOVE] + penWidth ) / 2.0;
-    float belowOffset   = Mils2iu( PIN_TEXT_MARGIN )     + ( thickness[BELOW] + penWidth ) / 2.0;
+    float insideOffset  = textOffset                                     - thickness[INSIDE]  / 2.0;
+    float outsideOffset = Mils2iu( PIN_TEXT_MARGIN ) + TARGET_PIN_RADIUS - thickness[OUTSIDE] / 2.0;
+    float aboveOffset   = Mils2iu( PIN_TEXT_MARGIN ) + penWidth / 2.0    + thickness[ABOVE]   / 2.0;
+    float belowOffset   = Mils2iu( PIN_TEXT_MARGIN ) + penWidth / 2.0    + thickness[BELOW]   / 2.0;
 
     if( isDangling )
         outsideOffset += TARGET_PIN_RADIUS / 2.0;

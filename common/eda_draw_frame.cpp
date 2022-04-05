@@ -753,7 +753,7 @@ void EDA_DRAW_FRAME::SetMsgPanel( EDA_ITEM* aItem )
 
 void EDA_DRAW_FRAME::UpdateMsgPanel()
 {
-    GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
+    GetToolManager()->ProcessEvent( EVENTS::SelectedItemsModified );
 }
 
 
