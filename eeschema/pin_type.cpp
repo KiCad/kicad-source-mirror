@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@
 #include <core/arraydim.h>
 #include <lib_pin.h>
 #include <pin_type.h>
+#include "pgm_base.h"
 
 
 // These are true singletons so it's OK for them to be globals.
@@ -46,8 +47,8 @@ struct pinTypeStruct
     BITMAPS  bitmap;
 };
 
-// clang-format off
-const std::map<ELECTRICAL_PINTYPE, struct pinTypeStruct> pinTypes = {
+
+std::map<ELECTRICAL_PINTYPE, struct pinTypeStruct> g_pinTypes = {
     { ELECTRICAL_PINTYPE::PT_INPUT,        { _( "Input" ),          BITMAPS::pintype_input } },
     { ELECTRICAL_PINTYPE::PT_OUTPUT,       { _( "Output" ),         BITMAPS::pintype_output } },
     { ELECTRICAL_PINTYPE::PT_BIDI,         { _( "Bidirectional" ),  BITMAPS::pintype_bidi } },
@@ -61,7 +62,9 @@ const std::map<ELECTRICAL_PINTYPE, struct pinTypeStruct> pinTypes = {
     { ELECTRICAL_PINTYPE::PT_OPENEMITTER,  { _( "Open emitter" ),   BITMAPS::pintype_openemit } },
     { ELECTRICAL_PINTYPE::PT_NC,           { _( "Unconnected" ),    BITMAPS::pintype_noconnect } },
 };
-// clang-format on
+
+
+int g_pinTypesLanguage = wxLANGUAGE_UNKNOWN;
 
 
 struct pinShapeStruct
@@ -236,9 +239,27 @@ const std::vector<BITMAPS>& PinOrientationIcons()
 
 wxString ElectricalPinTypeGetText( ELECTRICAL_PINTYPE aType )
 {
-    auto findIt = pinTypes.find( aType );
+    if( g_pinTypesLanguage != Pgm().GetSelectedLanguageIdentifier() )
+    {
+        g_pinTypes[ELECTRICAL_PINTYPE::PT_INPUT].name =         _( "Input" );
+        g_pinTypes[ELECTRICAL_PINTYPE::PT_OUTPUT].name =        _( "Output" );
+        g_pinTypes[ELECTRICAL_PINTYPE::PT_BIDI].name =          _( "Bidirectional" );
+        g_pinTypes[ELECTRICAL_PINTYPE::PT_TRISTATE].name =      _( "Tri-state" );
+        g_pinTypes[ELECTRICAL_PINTYPE::PT_PASSIVE].name =       _( "Passive" );
+        g_pinTypes[ELECTRICAL_PINTYPE::PT_NIC].name =           _( "Free" );
+        g_pinTypes[ELECTRICAL_PINTYPE::PT_UNSPECIFIED].name =   _( "Unspecified" );
+        g_pinTypes[ELECTRICAL_PINTYPE::PT_POWER_IN].name =      _( "Power input" );
+        g_pinTypes[ELECTRICAL_PINTYPE::PT_POWER_OUT].name =     _( "Power output" );
+        g_pinTypes[ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR].name = _( "Open collector" );
+        g_pinTypes[ELECTRICAL_PINTYPE::PT_OPENEMITTER].name =   _( "Open emitter" );
+        g_pinTypes[ELECTRICAL_PINTYPE::PT_NC].name =            _( "Unconnected" );
 
-    wxCHECK_MSG( findIt != pinTypes.end(), wxT( "???" ), "Could not find pin type in lookup map" );
+        g_pinTypesLanguage = Pgm().GetSelectedLanguageIdentifier();
+    }
+
+    auto findIt = g_pinTypes.find( aType );
+
+    wxCHECK_MSG( findIt != g_pinTypes.end(), wxT( "???" ), wxT( "Pin type not found!" ) );
 
     return findIt->second.name;
 }
@@ -246,7 +267,7 @@ wxString ElectricalPinTypeGetText( ELECTRICAL_PINTYPE aType )
 
 BITMAPS ElectricalPinTypeGetBitmap( ELECTRICAL_PINTYPE aType )
 {
-    auto findIt = pinTypes.find( aType );
+    auto findIt = g_pinTypes.find( aType );
 
     wxCHECK_MSG( findIt != pinTypes.end(), BITMAPS::INVALID_BITMAP,
                  wxT( "Could not find pin type in lookup map" ) );
