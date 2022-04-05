@@ -135,7 +135,7 @@ bool DIALOG_LINE_PROPERTIES::TransferDataFromWindow()
     for( SCH_LINE* line : m_lines )
     {
         if( !m_width.IsIndeterminate() )
-            line->SetLineWidth( m_width.GetValue() );
+            line->SetLineWidth( std::max( (long long int) 0, m_width.GetValue() ) );
 
         auto it = lineTypeNames.begin();
         std::advance( it, m_typeCombo->GetSelection() );

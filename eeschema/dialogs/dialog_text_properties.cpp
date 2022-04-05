@@ -458,14 +458,9 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         STROKE_PARAMS stroke = textBox->GetStroke();
 
         if( m_borderCheckbox->GetValue() )
-        {
-            if( !m_borderWidth.IsIndeterminate() )
-                stroke.SetWidth( m_borderWidth.GetValue() );
-        }
+            stroke.SetWidth( std::max( (long long int) 0, m_borderWidth.GetValue() ) );
         else
-        {
             stroke.SetWidth( -1 );
-        }
 
         auto it = lineTypeNames.begin();
         std::advance( it, m_borderStyleCombo->GetSelection() );

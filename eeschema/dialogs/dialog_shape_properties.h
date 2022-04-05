@@ -42,9 +42,13 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
+    void onBorderChecked( wxCommandEvent& aEvent) override;
+    void onFillChecked( wxCommandEvent& aEvent ) override;
+
+private:
     SCH_EDIT_FRAME* m_frame;
     SCH_SHAPE*      m_shape;
-    UNIT_BINDER     m_lineWidth;
+    UNIT_BINDER     m_borderWidth;
 };
 
 #endif // DIALOG_SHAPE_PROPERTIES_H

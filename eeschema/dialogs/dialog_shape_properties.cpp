@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,21 +32,21 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     DIALOG_SHAPE_PROPERTIES_BASE( aParent ),
     m_frame( aParent ),
     m_shape( aShape ),
-    m_lineWidth( aParent, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits, true )
+    m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits, true )
 {
     SetTitle( wxString::Format( GetTitle(), aShape->ShowShape() ) );
 
     m_helpLabel1->SetFont( KIUI::GetInfoFont( this ).Italic() );
     m_helpLabel2->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
-    SetInitialFocus( m_lineWidthCtrl );
+    SetInitialFocus( m_borderWidthCtrl );
 
-    m_lineColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+    m_borderColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
     for( const std::pair<const PLOT_DASH_TYPE, lineTypeStruct>& typeEntry : lineTypeNames )
-        m_lineStyleCombo->Append( typeEntry.second.name, KiBitmap( typeEntry.second.bitmap ) );
+        m_borderStyleCombo->Append( typeEntry.second.name, KiBitmap( typeEntry.second.bitmap ) );
 
-    m_lineStyleCombo->Append( DEFAULT_STYLE );
+    m_borderStyleCombo->Append( DEFAULT_STYLE );
 
     m_fillColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
@@ -68,15 +68,30 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    m_lineWidth.SetValue( m_shape->GetWidth() );
-    m_lineColorSwatch->SetSwatchColor( m_shape->GetStroke().GetColor(), false );
+    if( m_shape->GetWidth() >= 0 )
+    {
+        m_borderCheckbox->SetValue( true );
+        m_borderWidth.SetValue( m_shape->GetWidth() );
+    }
+    else
+    {
+        m_borderCheckbox->SetValue( false );
+
+        m_borderWidth.Enable( false );
+        m_borderColorLabel->Enable( false );
+        m_borderColorSwatch->Enable( false );
+        m_borderStyleLabel->Enable( false );
+        m_borderStyleCombo->Enable( false );
+    }
+
+    m_borderColorSwatch->SetSwatchColor( m_shape->GetStroke().GetColor(), false );
 
     int style = static_cast<int>( m_shape->GetStroke().GetPlotStyle() );
 
     if( style == -1 )
-        m_lineStyleCombo->SetStringSelection( DEFAULT_STYLE );
+        m_borderStyleCombo->SetStringSelection( DEFAULT_STYLE );
     else if( style < (int) lineTypeNames.size() )
-        m_lineStyleCombo->SetSelection( style );
+        m_borderStyleCombo->SetSelection( style );
     else
         wxFAIL_MSG( "Line type not found in the type lookup map" );
 
@@ -84,6 +99,30 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
     m_fillColorSwatch->SetSwatchColor( m_shape->GetFillColor(), false );
 
     return true;
+}
+
+
+void DIALOG_SHAPE_PROPERTIES::onBorderChecked( wxCommandEvent& event )
+{
+    bool border = m_borderCheckbox->GetValue();
+
+    if( border && m_borderWidth.GetValue() < 0 )
+        m_borderWidth.SetValue( Mils2iu( m_frame->eeconfig()->m_Drawing.default_line_thickness ) );
+
+    m_borderWidth.Enable( border );
+    m_borderColorLabel->Enable( border );
+    m_borderColorSwatch->Enable( border );
+    m_borderStyleLabel->Enable( border );
+    m_borderStyleCombo->Enable( border );
+}
+
+
+void DIALOG_SHAPE_PROPERTIES::onFillChecked( wxCommandEvent& aEvent )
+{
+    bool fill = m_filledCtrl->GetValue();
+
+    m_fillColorLabel->Enable( fill );
+    m_fillColorSwatch->Enable( fill );
 }
 
 
@@ -100,18 +139,20 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
 
     STROKE_PARAMS stroke = m_shape->GetStroke();
 
-    if( !m_lineWidth.IsIndeterminate() )
-        stroke.SetWidth( m_lineWidth.GetValue() );
+    if( m_borderCheckbox->GetValue() )
+        stroke.SetWidth( std::max( (long long int) 0, m_borderWidth.GetValue() ) );
+    else
+        stroke.SetWidth( -1 );
 
     auto it = lineTypeNames.begin();
-    std::advance( it, m_lineStyleCombo->GetSelection() );
+    std::advance( it, m_borderStyleCombo->GetSelection() );
 
     if( it == lineTypeNames.end() )
         stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
     else
         stroke.SetPlotStyle( it->first );
 
-    stroke.SetColor( m_lineColorSwatch->GetSwatchColor() );
+    stroke.SetColor( m_borderColorSwatch->GetSwatchColor() );
 
     m_shape->SetStroke( stroke );
 

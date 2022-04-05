@@ -184,7 +184,7 @@ bool DIALOG_WIRE_BUS_PROPERTIES::TransferDataFromWindow()
         {
             if( !m_wireWidth.IsIndeterminate() )
             {
-                int width = m_wireWidth.GetValue();
+                int width = std::max( (long long int) 0, m_wireWidth.GetValue() );
 
                 if( item->Type() == SCH_LINE_T )
                     static_cast<SCH_LINE*>( item )->SetLineWidth( width );

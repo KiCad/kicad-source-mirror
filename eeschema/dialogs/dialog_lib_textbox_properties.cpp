@@ -128,10 +128,21 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataToWindow()
     m_bold->Check( m_currentText->IsBold() );
     m_italic->Check( m_currentText->IsItalic() );
 
-    m_borderCheckbox->SetValue( m_currentText->GetWidth() >= 0 );
-
     if( m_currentText->GetWidth() >= 0 )
+    {
+        m_borderCheckbox->SetValue( true );
         m_borderWidth.SetValue( m_currentText->GetWidth() );
+    }
+    else
+    {
+        m_borderCheckbox->SetValue( false );
+
+        m_borderWidth.Enable( false );
+        m_borderColorLabel->Enable( false );
+        m_borderColorSwatch->Enable( false );
+        m_borderStyleLabel->Enable( false );
+        m_borderStyleCombo->Enable( false );
+    }
 
     m_borderColorSwatch->SetSwatchColor( m_currentText->GetStroke().GetColor(), false );
 
@@ -143,12 +154,6 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataToWindow()
         m_borderStyleCombo->SetSelection( style );
     else
         wxFAIL_MSG( "Line type not found in the type lookup map" );
-
-    m_borderWidth.Enable( m_currentText->GetWidth() >= 0 );
-    m_borderColorLabel->Enable( m_currentText->GetWidth() >= 0 );
-    m_borderColorSwatch->Enable( m_currentText->GetWidth() >= 0 );
-    m_borderStyleLabel->Enable( m_currentText->GetWidth() >= 0 );
-    m_borderStyleCombo->Enable( m_currentText->GetWidth() >= 0 );
 
     m_filledCtrl->SetValue( m_currentText->IsFilled() );
     m_fillColorSwatch->SetSwatchColor( m_currentText->GetFillColor(), false );
@@ -196,10 +201,6 @@ void DIALOG_LIB_TEXTBOX_PROPERTIES::onSpinButton( wxCommandEvent& aEvent )
 bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataFromWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )
-        return false;
-
-    // Don't allow text to disappear; it can be difficult to correct if you can't select it
-    if( !m_textSize.Validate( 0.01, 1000.0, EDA_UNITS::MILLIMETRES ) )
         return false;
 
     wxString text = m_textCtrl->GetValue();
@@ -274,14 +275,9 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataFromWindow()
     STROKE_PARAMS stroke = m_currentText->GetStroke();
 
     if( m_borderCheckbox->GetValue() )
-    {
-        if( !m_borderWidth.IsIndeterminate() )
-            stroke.SetWidth( m_borderWidth.GetValue() );
-    }
+        stroke.SetWidth( std::max( (long long int) 0, m_borderWidth.GetValue() ) );
     else
-    {
         stroke.SetWidth( -1 );
-    }
 
     auto it = lineTypeNames.begin();
     std::advance( it, m_borderStyleCombo->GetSelection() );

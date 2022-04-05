@@ -108,7 +108,10 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
         if( m_fill == FILL_T::FILLED_WITH_COLOR && GetFillColor() != COLOR4D::UNSPECIFIED )
         {
-            aPlotter->SetColor( GetFillColor() );
+            if( GetFillColor() != COLOR4D::UNSPECIFIED )
+                aPlotter->SetColor( GetFillColor() );
+            else
+                aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_NOTES ) );
 
             switch( GetShape() )
             {
@@ -244,7 +247,10 @@ void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
 
     if( GetFillMode() == FILL_T::FILLED_WITH_COLOR )
     {
-        color = GetFillColor();
+        if( GetFillColor() == COLOR4D::UNSPECIFIED )
+            color = aSettings->GetLayerColor( LAYER_NOTES );
+        else
+            color = GetFillColor();
 
         switch( GetShape() )
         {

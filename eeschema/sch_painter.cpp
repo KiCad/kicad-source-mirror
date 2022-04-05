@@ -341,6 +341,9 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
                 color = shape->GetStroke().GetColor();
             else if( aLayer == LAYER_NOTES_BACKGROUND )
                 color = shape->GetFillColor();
+
+            if( color == COLOR4D::UNSPECIFIED )
+                color = m_schSettings.GetLayerColor( LAYER_NOTES );
         }
         else if( aItem->Type() == LIB_SHAPE_T )
         {
@@ -1760,7 +1763,7 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer )
         {
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );
-            m_gal->SetFillColor( aShape->GetFillColor() );
+            m_gal->SetFillColor( color );
 
             drawShape( aShape );
         }
