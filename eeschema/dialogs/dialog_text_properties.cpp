@@ -366,7 +366,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     if( m_currentItem->Type() == SCH_TEXTBOX_T )
     {
         // Textboxes have a defined extent and so are allowed to be empty
-        m_currentText->SetText( wxEmptyString );
+        m_currentText->SetText( text );
     }
     else if( !text.IsEmpty() )
     {
