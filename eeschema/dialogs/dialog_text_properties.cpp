@@ -354,17 +354,27 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     // convert any text variable cross-references to their UUIDs
     text = m_frame->Schematic().ConvertRefsToKIIDs( m_textCtrl->GetValue() );
 
-    if( !text.IsEmpty() )
-    {
 #ifdef __WXMAC__
-        // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting
-        text.Replace( "\r", "\n" );
+    // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting
+    text.Replace( "\r", "\n" );
+#elif defined( __WINDOWS__ )
+    // On Windows, a new line is coded as \r\n.  We use only \n in kicad files and in
+    // drawing routines so strip the \r char.
+    text.Replace( "\r", "" );
 #endif
 
+    if( m_currentItem->Type() == SCH_TEXTBOX_T )
+    {
+        // Textboxes have a defined extent and so are allowed to be empty
+        m_currentText->SetText( wxEmptyString );
+    }
+    else if( !text.IsEmpty() )
+    {
         m_currentText->SetText( text );
     }
-    else if( !m_currentItem->IsNew() )
+    else
     {
+        // Other text items do not have defined extents, and so will disappear if empty
         DisplayError( this, _( "Text can not be empty." ) );
         return false;
     }

@@ -204,20 +204,16 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataFromWindow()
 
     wxString text = m_textCtrl->GetValue();
 
-    if( !text.IsEmpty() )
-    {
 #ifdef __WXMAC__
-        // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting
-        text.Replace( "\r", "\n" );
+    // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting
+    text.Replace( "\r", "\n" );
+#elif defined( __WINDOWS__ )
+    // On Windows, a new line is coded as \r\n.  We use only \n in kicad files and in
+    // drawing routines so strip the \r char.
+    text.Replace( "\r", "" );
 #endif
 
-        m_currentText->SetText( text );
-    }
-    else if( !m_currentText->IsNew() )
-    {
-        DisplayError( this, _( "Text can not be empty." ) );
-        return false;
-    }
+    m_currentText->SetText( text );
 
     if( m_currentText->GetTextWidth() != m_textSize.GetValue() )
         m_currentText->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );

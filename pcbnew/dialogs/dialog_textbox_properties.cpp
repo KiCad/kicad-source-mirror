@@ -313,23 +313,20 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
     if( !pushCommit )
         m_item->SetFlags( IN_EDIT );
 
-    // Set the new text content
-    if( !m_MultiLineText->GetValue().IsEmpty() )
-    {
-        BOARD*   board = m_frame->GetBoard();
-        wxString txt = board->ConvertCrossReferencesToKIIDs( m_MultiLineText->GetValue() );
+    BOARD*   board = m_frame->GetBoard();
+    wxString txt = board->ConvertCrossReferencesToKIIDs( m_MultiLineText->GetValue() );
 
 #ifdef __WXMAC__
-        // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting.
-        // Replace it now.
-        txt.Replace( "\r", "\n" );
+    // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting.
+    // Replace it now.
+    txt.Replace( "\r", "\n" );
 #elif defined( __WINDOWS__ )
-        // On Windows, a new line is coded as \r\n.  We use only \n in kicad files and in
-        // drawing routines so strip the \r char.
-        txt.Replace( "\r", "" );
+    // On Windows, a new line is coded as \r\n.  We use only \n in kicad files and in
+    // drawing routines so strip the \r char.
+    txt.Replace( "\r", "" );
 #endif
-        m_edaText->SetText( EscapeString( txt, CTX_QUOTED_STR ) );
-    }
+
+    m_edaText->SetText( EscapeString( txt, CTX_QUOTED_STR ) );
 
     m_item->SetLocked( m_cbLocked->GetValue() );
 
