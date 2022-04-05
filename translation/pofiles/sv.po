@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-28 11:13-0700\n"
-"PO-Revision-Date: 2022-03-28 17:50+0000\n"
+"PO-Revision-Date: 2022-04-08 00:07+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -2393,11 +2393,11 @@ msgstr "Användaranpassad"
 
 #: common/dialogs/dialog_page_settings.cpp:103
 msgid "Preview Settings"
-msgstr "Förhandsgranska Inställningar"
+msgstr "Förhandsgranska inställningar"
 
 #: common/dialogs/dialog_page_settings.cpp:104
 msgid "Preview Paper"
-msgstr "Förhandsgranska Papper"
+msgstr "Förhandsgranska papper"
 
 #: common/dialogs/dialog_page_settings.cpp:105
 msgid "Preview Title Block Data"
@@ -4277,7 +4277,7 @@ msgstr "Okänd"
 #: pcb_calculator/transline_ident.cpp:327
 #: pcb_calculator/transline_ident.cpp:368
 msgid "Line width"
-msgstr "Linjebredd"
+msgstr "Ledarbredd"
 
 #: common/eda_shape.cpp:1636
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:100
@@ -7161,10 +7161,10 @@ msgid ""
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
-"Några av de tilldelade fotspåren är äldre poster utan biblioteksnamn. Vill "
-"du att Kicad ska försöka konvertera dem till det nya obligatoriska LIB_ID-"
-"formatet? (Svarar du nej rensas dessa tilldelningar och du måste tilldela "
-"dem manuellt.)"
+"Några av de tilldelade fotavtrycken är äldre poster utan biblioteksnamn. "
+"Vill du att Kicad ska försöka konvertera dem till det nya obligatoriska "
+"LIB_ID-formatet? (Svarar du nej raderas dessa tilldelningar och du måste "
+"tilldela dem manuellt.)"
 
 #: cvpcb/readwrite_dlgs.cpp:148
 #, c-format
@@ -9302,9 +9302,9 @@ msgid ""
 "Footprints names can used wildcards like sm* to allow all footprints names "
 "starting by sm."
 msgstr ""
-"En lista med fotspårnamn som kan användas för denna symbol.\n"
-"Footprints-namn kan användas med jokertecken som sm * för att tillåta alla "
-"footprints-namn som börjar med sm."
+"En lista av fotavtrycksnamn som kan användas för denna symbol.\n"
+"Jokertecken kan användas, som t.ex. sm* för att tillåta alla fotavtrycksnamn "
+"som börjar med sm."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:293
 msgid "Add footprint filter"
@@ -11623,7 +11623,7 @@ msgstr "Fet och kursiv"
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:42
 #: pcbnew/dialogs/dialog_netlist.cpp:77 pcbnew/dialogs/dialog_update_pcb.cpp:49
 msgid "Changes To Be Applied"
-msgstr "Ändringar som ska tillämpas"
+msgstr "Ändringar att verkställa"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:66
 msgid "Update Schematic"
@@ -11634,7 +11634,7 @@ msgstr "Uppdatera Kretsschemat"
 msgid ""
 "Re-link footprints to schematic symbols based on their reference designators"
 msgstr ""
-"Länka fotspår på nytt till schematiska symboler baserat på deras "
+"Länka om fotavtryck till kretsschemasymboler baserat på deras "
 "referensbeteckning"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:33
@@ -13392,7 +13392,7 @@ msgid ""
 msgstr ""
 "Det går inte att uppdatera mönsterkortet eftersom kretsschemaredigeraren är "
 "öppnad i fristående läge. För att skapa/uppdatera mönsterkort från "
-"kretsschema, starta Kicad-skalet och skapa ett projekt."
+"kretsschema, starta Kicad-projekthanteraren och skapa ett projekt."
 
 #: eeschema/sch_edit_frame.cpp:977
 msgid "New Schematic"
@@ -15623,7 +15623,7 @@ msgstr "Fotavtryck '%s' har ingen tilldelad symbol."
 #: eeschema/tools/backannotate.cpp:196
 #, c-format
 msgid "Footprints '%s' and '%s' linked to same symbol."
-msgstr "Fotspår '%s' och '%s' länkade till samma symbol."
+msgstr "Fotavtryck '%s' och '%s' länkade till samma symbol."
 
 #: eeschema/tools/backannotate.cpp:261
 #, c-format
@@ -16328,7 +16328,7 @@ msgstr "Redigera länkar mellan kretsschema- och bibliotekssymboler"
 
 #: eeschema/tools/ee_actions.cpp:572
 msgid "Assign Footprints..."
-msgstr "Tilldela Fotspår..."
+msgstr "Tilldela fotavtryck..."
 
 #: eeschema/tools/ee_actions.cpp:572
 msgid "Run footprint assignment tool"
@@ -16490,7 +16490,7 @@ msgstr "Lämna arket"
 
 #: eeschema/tools/ee_actions.cpp:675
 msgid "Display the parent sheet in the schematic editor"
-msgstr "Visa det överordnat arket i kretsschemaredigeraren"
+msgstr "Visa det överordnade arket i kretsschemaredigeraren"
 
 #: eeschema/tools/ee_actions.cpp:680
 msgid "Hierarchy Navigator"
@@ -16982,8 +16982,8 @@ msgid ""
 "Exported board does not have enough copper layers to handle selected inner "
 "layers"
 msgstr ""
-"Exporterat kort har inte tillräckligt med kopparlager för att hantera "
-"utvalda inre lager"
+"Exporterat mönsterkort har inte tillräckligt många kopparlager för att "
+"hantera valda inre lager"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:32
 msgid "Layer selection:"
@@ -18407,7 +18407,7 @@ msgstr "Välj paketfil"
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:121
 #, c-format
 msgid "Pending (%d)"
-msgstr "Anhängig (%d)"
+msgstr "Förestående (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:382
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:62
@@ -18473,7 +18473,7 @@ msgstr "Detaljer"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 msgid "Applying Package Changes"
-msgstr "Tillämpar paketändringar"
+msgstr "Verkställer paketändringar"
 
 #: kicad/pcm/dialogs/panel_package.cpp:97
 msgid "Pending install"
@@ -18610,7 +18610,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Kunde inte läsa repository:\n"
+"Kan inte tolka repository:\n"
 "\n"
 "%s"
 
@@ -18633,7 +18633,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Kunde inte läsa pakets metadata:\n"
+"Kan inte tolka pakets metadata:\n"
 "\n"
 "%s"
 
@@ -18714,7 +18714,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Kunde inte läsa pakets metadata:\n"
+"Kan inte tolka pakets metadata:\n"
 "\n"
 "%s"
 
@@ -18949,7 +18949,7 @@ msgstr "Stäng det aktuella projektet"
 
 #: kicad/tools/kicad_manager_actions.cpp:69
 msgid "Edit schematic"
-msgstr "Redigera schema"
+msgstr "Redigera kretsschema"
 
 #: kicad/tools/kicad_manager_actions.cpp:75
 msgid "Edit schematic symbols"
@@ -18974,7 +18974,7 @@ msgstr "Bildkonverterare"
 #: kicad/tools/kicad_manager_actions.cpp:99
 msgid "Convert bitmap images to schematic or PCB components"
 msgstr ""
-"Konvertera bitmappsbilder till kretsschemasymboler eller komponentfotatryck "
+"Konvertera bitmappsbilder till kretsschemasymboler eller komponentfotavtryck "
 "för mönsterkort"
 
 #: kicad/tools/kicad_manager_actions.cpp:104
@@ -19085,7 +19085,7 @@ msgstr "Fel!"
 
 #: kicad/tools/kicad_manager_control.cpp:643
 msgid "Create (or open) a project to edit a schematic."
-msgstr "Skapa (eller öppna) ett projekt för att redigera ett schema."
+msgstr "Skapa (eller öppna) ett projekt för att redigera ett kretsschema."
 
 #: kicad/tools/kicad_manager_control.cpp:649
 msgid "Create (or open) a project to edit a pcb."
@@ -19766,7 +19766,7 @@ msgstr "Formel"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:33
 msgid "Note: Values are minimal values"
-msgstr "Obs! Värdena är minimala värden"
+msgstr "Obs! Värdena är minimivärden"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:57
 msgid "Class 1"
@@ -19794,11 +19794,11 @@ msgstr "Klass 6"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:73
 msgid "Lines width"
-msgstr "Linjebredd"
+msgstr "Ledarbredd"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
 msgid "Min clearance"
-msgstr "Min klarering"
+msgstr "Min isolationsavstånd"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
 msgid "Via: (diam - drill)"
@@ -19855,7 +19855,7 @@ msgstr "Uppdatera värden"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:47
 msgid "Note: Values are minimal values (from IPC 2221)"
-msgstr "Obs: Värdena är minimala värden (från IPC 2221)"
+msgstr "Obs: Värdena är minimivärden (från IPC 2221)"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:72
 msgid "B1"
@@ -20132,7 +20132,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_track_width.cpp:61
 msgid "Temperature rise"
-msgstr "Temperaturökning"
+msgstr "Temperaturstegring"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:31
 msgid "Current (I):"
@@ -20141,7 +20141,7 @@ msgstr "Ström (I):"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:42
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:167
 msgid "Temperature rise:"
-msgstr "Temperatur ökning:"
+msgstr "Temperaturstegring:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:49
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:176
@@ -20164,7 +20164,7 @@ msgstr "ohmmeter"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:95
 msgid "External Layer Traces"
-msgstr "Externa lagerspår"
+msgstr "Ledare på yttre lager"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:201
@@ -20174,7 +20174,7 @@ msgstr "Ledarbredd (W):"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:117
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:215
 msgid "Trace thickness (H):"
-msgstr "Spårtjocklek (H):"
+msgstr "Ledartjocklek (H):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:138
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:236
@@ -20219,7 +20219,7 @@ msgstr "W"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:193
 msgid "Internal Layer Traces"
-msgstr "Interna lager spår"
+msgstr "Ledare på inre lager"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Microstrip Line"
@@ -20227,7 +20227,7 @@ msgstr "Mikrostrip-ledning"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Coplanar wave guide"
-msgstr "Coplanar vågguide"
+msgstr "Koplanär vågledare"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Coplanar wave guide w/ ground plane"
@@ -20285,7 +20285,9 @@ msgstr "Rho:"
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:89
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:126
 msgid "Specific resistance in ohms * meters"
-msgstr "Specifikt motstånd i ohm * meter"
+msgstr ""
+"Pläteringsmaterialets elektriska resistivitet (specifika motstånd) i ohm * "
+"meter"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:108
 msgid "H:"
@@ -20363,7 +20365,7 @@ msgstr "Via-längd för genomgående vior är mönsterkortets tjocklek"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:71
 msgid "Via pad diameter:"
-msgstr "Via dyndiameter:"
+msgstr "Viats kragdiameter:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:73
 msgid "Diameter of pad surrounding via (annular ring)"
@@ -20371,11 +20373,13 @@ msgstr "Diameter på kopparytan som omger en via (krage)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
 msgid "Clearance hole diameter:"
-msgstr "Hålets diameter:"
+msgstr "Isolationshålets diameter:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:87
 msgid "Diameter of clearance hole in ground plane(s)"
-msgstr "Frihålets diameter i markplan"
+msgstr ""
+"Isolationshålets diameter i kopparzon, när viat inte är anslutet till "
+"kopparzonen"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:99
 msgid "Z0:"
@@ -20383,19 +20387,19 @@ msgstr "Z0:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:101
 msgid "Characteristic impedance of conductor"
-msgstr "Karakteristisk impedans av ledare"
+msgstr "Ledarens karakteristiska impedans"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:113
 msgid "Applied current:"
-msgstr "Tillämpad ström:"
+msgstr "Genomfluten ström:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:124
 msgid "Plating resistivity:"
-msgstr "Pläteringsmotstånd:"
+msgstr "Pläteringens resistivitet:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:146
 msgid "Substrate relative permittivity:"
-msgstr "Substratets relativa permittivitet:"
+msgstr "Substratets permittivitetstal:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:148
 msgid "Relative dielectric constant (epsilon r)"
@@ -20403,15 +20407,15 @@ msgstr "Relativ dielektrisk konstant (epsilon r)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:169
 msgid "Maximum acceptable rise in temperature"
-msgstr "Maximal acceptabel temperaturökning"
+msgstr "Maximal acceptabel temperaturstegring"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:180
 msgid "Pulse rise time:"
-msgstr "Pulsstigningstid:"
+msgstr "Pulsstigtid:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:182
 msgid "Pulse rise time to calculate reactance"
-msgstr "Pulsstigningstid för att beräkna reaktans"
+msgstr "Pulsstigtid för att beräkna reaktans"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:189
 msgid "ns"
@@ -20428,7 +20432,7 @@ msgid ""
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "Varning:\n"
-"Via dyndiameter> = Diameter för frigångshål.\n"
+"Viats kragdiameter >= Diameter för frigångshål i kopparzon.\n"
 "Vissa parametrar kan inte beräknas för en via inuti en kopparzon."
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:260
@@ -20449,7 +20453,7 @@ msgstr "Uppskattad ampacitet:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:276
 msgid "Based on temperature rise"
-msgstr "Baserat på temperaturökning"
+msgstr "Baserat på temperaturstegring"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:288
 msgid "Capacitance:"
@@ -20465,11 +20469,13 @@ msgstr "pikofarad"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:302
 msgid "Rise time degradation:"
-msgstr "Ökad tid nedbrytning:"
+msgstr "Stigtidsförsämring:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:304
 msgid "Rise time degradation for given Z0 and calculated capacitance"
-msgstr "Ökad tid nedbrytning för given Z0 och beräknad kapacitans"
+msgstr ""
+"Förlängning av signalens stigtid för given impedans Z0 och beräknad "
+"kapacitans"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:312
 msgid "ps"
@@ -20605,7 +20611,7 @@ msgstr "E-serien"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:83
 msgid "Color Code"
-msgstr "Färg kod"
+msgstr "Färgkoder"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:85
 msgid "TransLine "
@@ -20613,11 +20619,11 @@ msgstr "TransLedn "
 
 #: pcb_calculator/pcb_calculator_frame.cpp:91
 msgid "Electrical Spacing"
-msgstr "Elektriskt avstånd"
+msgstr "Elektriskt isolationsavstånd"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:93
 msgid "Board Classes"
-msgstr "Kortklasser"
+msgstr "Mönsterkortsklasser"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:242
 msgid "Write Data Failed"
@@ -20698,7 +20704,7 @@ msgstr "Specifik motstånd"
 
 #: pcb_calculator/transline_ident.cpp:92
 msgid "Substrate relative permittivity (dielectric constant)"
-msgstr "Substratets relativa permittivitet (dielektrisk konstant)"
+msgstr "Substratets permittivitetstal (dielektrisk konstant)"
 
 #: pcb_calculator/transline_ident.cpp:96
 msgid "Dielectric loss (dissipation factor)"
@@ -20767,7 +20773,7 @@ msgstr "Substratets höjd"
 #: pcb_calculator/transline_ident.cpp:126
 #: pcb_calculator/transline_ident.cpp:314
 msgid "Height of box top"
-msgstr "Lådtoppens höjd"
+msgstr "Kapslingens (apparatlåda/skärmbox) höjd över transmissionslinjen"
 
 #: pcb_calculator/transline_ident.cpp:129
 #: pcb_calculator/transline_ident.cpp:168
@@ -20775,7 +20781,7 @@ msgstr "Lådtoppens höjd"
 #: pcb_calculator/transline_ident.cpp:316
 #: pcb_calculator/transline_ident.cpp:361
 msgid "Strip thickness"
-msgstr "Spårtjocklek"
+msgstr "Ledartjocklek"
 
 #: pcb_calculator/transline_ident.cpp:131
 #: pcb_calculator/transline_ident.cpp:318
@@ -20785,7 +20791,7 @@ msgstr "Grovhet"
 #: pcb_calculator/transline_ident.cpp:132
 #: pcb_calculator/transline_ident.cpp:319
 msgid "Conductor roughness"
-msgstr "Ledarens grovhet"
+msgstr "Ledarens ytojämnhet"
 
 #: pcb_calculator/transline_ident.cpp:135
 msgid "substrate"
@@ -20892,7 +20898,7 @@ msgstr "Vågledarens längd"
 #: pcb_calculator/transline_ident.cpp:282
 #: pcb_calculator/transline_ident.cpp:403
 msgid "Din"
-msgstr "Dån"
+msgstr "Din"
 
 #: pcb_calculator/transline_ident.cpp:283
 #: pcb_calculator/transline_ident.cpp:404
@@ -20959,7 +20965,7 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:358
 msgid "Distance between strip and top metal"
-msgstr "Avstånd mellan ledare och toppmetall"
+msgstr "Avstånd mellan ledare och övre metall"
 
 #: pcb_calculator/transline_ident.cpp:390
 msgid "Twists"
@@ -20975,7 +20981,7 @@ msgstr "omgivning"
 
 #: pcb_calculator/transline_ident.cpp:400
 msgid "Relative permittivity of environment"
-msgstr "Relativ permittivitet för omgivning"
+msgstr "Permittivitetstal för omgivning"
 
 #: pcb_calculator/transline_ident.cpp:409
 msgid "Cable length"
@@ -21045,7 +21051,7 @@ msgstr "Placera komponenterna automatiskt"
 
 #: pcbnew/board.cpp:92
 msgid "This is the default net class."
-msgstr "Detta är standard nettoklassen."
+msgstr "Detta är standardnätklassen."
 
 #: pcbnew/board.cpp:800
 msgid "PCB"
@@ -21076,7 +21082,7 @@ msgstr "Vior"
 
 #: pcbnew/board.cpp:1178 pcbnew/pcb_draw_panel_gal.cpp:479
 msgid "Track Segments"
-msgstr "Spårsegment"
+msgstr "Ledarsegment"
 
 #: pcbnew/board.cpp:1179 pcbnew/pcb_draw_panel_gal.cpp:480
 #: pcbnew/widgets/appearance_controls.cpp:980
@@ -21530,7 +21536,7 @@ msgstr "Kontrollerar zonfyllningar ..."
 
 #: pcbnew/cleanup_item.cpp:47
 msgid "Remove track shorting two nets"
-msgstr "Ta bort spåret som kortsluter två nät"
+msgstr "Ta bort ledare som kortsluter två nät"
 
 #: pcbnew/cleanup_item.cpp:48
 msgid "Remove via shorting two nets"
@@ -21542,15 +21548,15 @@ msgstr "Ta bort överflödig via"
 
 #: pcbnew/cleanup_item.cpp:50
 msgid "Remove duplicate track"
-msgstr "Ta bort dubbla spår"
+msgstr "Ta bort dubbla ledare"
 
 #: pcbnew/cleanup_item.cpp:51
 msgid "Merge co-linear tracks"
-msgstr "& Slå samman linjära spår"
+msgstr "Slå samman kolinjära ledare"
 
 #: pcbnew/cleanup_item.cpp:52
 msgid "Remove track not connected at both ends"
-msgstr "Ta bort spåret som inte är anslutet i båda ändar"
+msgstr "Ta bort ledare som inte är ansluten i någondera ändan"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove via connected on fewer than two layers"
@@ -21558,7 +21564,7 @@ msgstr "Ta bort via ansluten på färre än två lager"
 
 #: pcbnew/cleanup_item.cpp:54
 msgid "Remove zero-length track"
-msgstr "Ta bort nollängdsspåret"
+msgstr "Ta bort ledare med längd noll"
 
 #: pcbnew/cleanup_item.cpp:55
 msgid "Remove track inside pad"
@@ -21702,7 +21708,7 @@ msgid ""
 "Front footprints starting with '%s' will have the prefix removed."
 msgstr ""
 "\n"
-"De främre fotspåren som börjar med '%s' tar bort prefixet."
+"För framsidans fotavtryck som börjar med '%s' tas prefixet bort."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:351
 #, c-format
@@ -22251,7 +22257,7 @@ msgstr "Rund"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:483
 msgid "Slot"
-msgstr "Spår"
+msgstr "Urfräsning"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:486
 msgid "???"
@@ -22391,7 +22397,7 @@ msgstr "Ta bort överflödig grafik"
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:35
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:57
 msgid "Changes To Be Applied:"
-msgstr "Ändringar som ska tillämpas:"
+msgstr "Ändringar att verkställa:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.h:53
 msgid "Cleanup Graphics"
@@ -22410,7 +22416,7 @@ msgid ""
 "remove track segments connecting nodes belonging to different nets (short "
 "circuit)"
 msgstr ""
-"ta bort spårsegment som ansluter noder som tillhör olika nät (kortslutning)"
+"ta bort ledarsegment som ansluter noder tillhörande olika nät (kortslutning)"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
 msgid "&Delete redundant vias"
@@ -22426,11 +22432,11 @@ msgstr "Ta bort vior anslutna på endast ett lager"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
 msgid "&Merge co-linear tracks"
-msgstr "& Slå samman linjära spår"
+msgstr "Slå sa&mman kolinjära ledare"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:36
 msgid "merge aligned track segments, and remove null segments"
-msgstr "slå ihop inriktade spårsegment och ta bort nollsegment"
+msgstr "slå ihop ledarsegment med samma riktning och ta bort nollsegment"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:40
 msgid "Delete tracks unconnected at one end"
@@ -23314,11 +23320,11 @@ msgid ""
 "If unselected, only the first DRC violation will be reported for each track "
 "connection."
 msgstr ""
-"Om valt kommer alla DRC-överträdelser för spår att rapporteras. Detta kan "
-"vara långsamt för komplicerade mönster.\n"
+"Om valt kommer alla DRC-överträdelser för ledare att rapporteras. Detta kan "
+"vara långsamt för komplicerade mönsterkort.\n"
 "\n"
-"Om det inte är markerat kommer endast den första DRC-överträdelsen att "
-"rapporteras för varje spåranslutning."
+"Om det inte är markerat kommer endast den första DRC-överträdelsen för varje "
+"ledaranslutning att rapporteras."
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
@@ -23747,7 +23753,7 @@ msgstr "*.wrl"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:31
 msgid "Footprint 3D model path:"
-msgstr "Fotspår 3D-modellväg:"
+msgstr "Sökväg för fotavtryckets 3D-modell:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:46
 msgid "Coordinate origin options:"
@@ -23818,7 +23824,7 @@ msgstr "Inkludera & ritningar"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:42
 msgid "Include &tracks"
-msgstr "Inkludera & spår"
+msgstr "Inkludera &ledare"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:45
 msgid "Include &board outline layer"
@@ -24254,7 +24260,7 @@ msgstr "Otvungen"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:106
 msgid "Footprint name:"
-msgstr "Fotavtryck namn:"
+msgstr "Fotavtrycksnamn:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:175
 msgid "Component type:"
@@ -24346,7 +24352,7 @@ msgstr "Inte laddningsbara python-skript:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:84
 msgid "Show Trace"
-msgstr "Visa spår"
+msgstr "Visa ledare"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:98
 msgid "Update Python Modules"
@@ -24745,11 +24751,11 @@ msgstr "Olåsta fotavtryck"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:70
 msgid "Locked tracks"
-msgstr "Låsta spår"
+msgstr "Låsta ledare"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:73
 msgid "Unlocked tracks"
-msgstr "Olåsta spår"
+msgstr "Olåsta ledare"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:84
 msgid "All layers"
@@ -24786,9 +24792,8 @@ msgstr "Kopparlager"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:216
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:135
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:57
-#, fuzzy
 msgid "Edge Cuts"
-msgstr "Edge Cuts"
+msgstr "Kantsnitt"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:217
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:136
@@ -24889,11 +24894,11 @@ msgstr "Filtrera objekt"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:57
 msgid "Filter items by net class:"
-msgstr "Filtrera objekt efter nettoklass:"
+msgstr "Filtrera objekt efter nätklass:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:132
 msgid "Set to net class values:"
-msgstr "Ställ in nettoklassvärden:"
+msgstr "Ställ in nätklassvärden:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:77
 msgid "Set Track and Via Properties"
@@ -25045,7 +25050,7 @@ msgstr "Designregler"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
 msgid "Predefined track and via dimensions"
-msgstr "Fördefinierat spår och via mått"
+msgstr "Fördefinierade mått för ledare och vior"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
 msgid "Solder mask/paste defaults"
@@ -25316,7 +25321,7 @@ msgstr "Netlist-filen finns inte."
 #: pcbnew/dialogs/dialog_netlist.cpp:158
 #: pcbnew/dialogs/dialog_update_pcb.cpp:138
 msgid "Changes Applied to PCB"
-msgstr "Ändringar tillämpade på PCB"
+msgstr "Ändringar verkställda på mönsterkortet"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:226
 #, c-format
@@ -26498,19 +26503,19 @@ msgstr "g"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:36
 msgid "Trace gap:"
-msgstr "Spårgap:"
+msgstr "Isolationsavstånd ledare:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:47
 msgid "Via gap:"
-msgstr "Via-gap:"
+msgstr "Viors isolationsavstånd:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
 msgid "Via gap same as trace gap"
-msgstr "Via gap samma som spårgap"
+msgstr "Isolationsavstånd för via samma som för ledare"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:60
 msgid "Differential Pair Dimensions"
-msgstr "Differentiella parmått"
+msgstr "Mått för differentiellt par"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:79
 msgid "Single Track Length Tuning"
@@ -26602,7 +26607,7 @@ msgstr "DRC-överträdelse: markera hinder"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:35
 msgid "DRC violation: shove tracks and vias"
-msgstr "DRC-överträdelse: knuffa spår och vior"
+msgstr "DRC-överträdelse: knuffa ledare och vior"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:36
 msgid "DRC violation: walk around obstacles"
@@ -26649,12 +26654,12 @@ msgid ""
 "When enabled, the router tries to move colliding traces behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
 msgstr ""
-"När aktiverad, försöker routern att flytta kolliderande spår bakom fasta "
+"När aktiverad, försöker routern att flytta kolliderande ledare bakom fasta "
 "hinder (t.ex. lödytor) istället för att \"reflektera\" tillbaka kollisionen"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:42
 msgid "Remove redundant tracks"
-msgstr "Ta bort överflödiga spår"
+msgstr "Ta bort överflödiga ledare"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:43
 msgid ""
@@ -26663,10 +26668,10 @@ msgid ""
 "Loop removal works locally (only between the start and end of the currently "
 "routed trace)."
 msgstr ""
-"Tar bort slingor under routing (t.ex. om det nya spåret säkerställer samma "
-"anslutning som ett redan existerande, tas det gamla spåret bort).\n"
-"Loop-borttagning fungerar lokalt (endast mellan början och slutet av det för "
-"närvarande dirigerade spåret)."
+"Tar bort slingor under ledardragning (t.ex. om den nya ledaren säkerställer "
+"samma anslutning som en redan existerande, tas den gamla ledaren bort).\n"
+"Slingborttagning fungerar lokalt (endast mellan början och slutet av den för "
+"närvarande dragna ledaren)."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:47
 msgid "Optimize pad connections"
@@ -26678,7 +26683,7 @@ msgid ""
 "avoiding acute angles and jagged breakout traces."
 msgstr ""
 "När aktiverad, försöker routern bryta ut lödytor/vior på ett snyggt sätt och "
-"undvika spetsiga vinklar och trappstegsformade spår."
+"undvika spetsiga vinklar och trappstegsformade ledare."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:52
 msgid "Smooth dragged segments"
@@ -26706,7 +26711,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:62
 msgid "Suggest track finish"
-msgstr "Föreslå spårets slut"
+msgstr "Föreslå ledarens avslutning"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
 msgid "Optimize entire track being dragged"
@@ -26724,14 +26729,14 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:72
 msgid "Use mouse path to set track posture"
-msgstr "Använd musvägen för att ställa in spårställning"
+msgstr "Använd musvägen för att ställa in ledarställning"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:73
 msgid ""
 "When enabled, the posture of tracks will be guided by how the mouse is moved "
 "from the starting location"
 msgstr ""
-"När det är aktiverat styrs spårets hållning av hur musen flyttas från "
+"När det är aktiverat styrs ledarens ställning av hur musen flyttas från "
 "startplatsen"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:77
@@ -26744,13 +26749,13 @@ msgid ""
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
 msgstr ""
-"När det är aktiverat kommer alla spårsegment att fixeras på plats upp till "
-"markörens plats. När den är inaktiverad förblir det sista segmentet (närmast "
-"markören) fritt och följer markören."
+"När det är aktiverat kommer alla ledarsegment att fixeras på plats fram till "
+"markörens position. När den är inaktiverad förblir det sista segmentet ("
+"närmast markören) fritt och följer markören."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:61
 msgid "Interactive Router Settings"
-msgstr "Interaktiva routerinställningar"
+msgstr "Inställningar för interaktiv router"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:165
 msgid "Reset to the current distance from the reference position."
@@ -27008,7 +27013,6 @@ msgid "Footprint Reference Properties"
 msgstr "Egenskaper för fotavtrycks referens"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:83
-#, fuzzy
 msgid "Footprint Value Properties"
 msgstr "Egenskaper för fotavtrycks värde"
 
@@ -27123,11 +27127,11 @@ msgstr "Fördefinierade bredder:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:117
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:25
 msgid "Track width:"
-msgstr "Spårtjocklek:"
+msgstr "Ledarbredd:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:131
 msgid "Use net class widths"
-msgstr "Använd nettoklassbredder"
+msgstr "Använd nätklassbredder"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:192
 msgid "Pre-defined sizes:"
@@ -27144,7 +27148,7 @@ msgstr "Via-hål:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:230
 msgid "Use net class sizes"
-msgstr "Använd nettoklassstorlekar"
+msgstr "Använd nätklasstorlekar"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 msgid "Via type:"
@@ -27270,11 +27274,11 @@ msgstr "Visa på lödytor"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Show on tracks"
-msgstr "Visa på spår"
+msgstr "Visa på ledare"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Show on pads and tracks"
-msgstr "Visa på kuddar och spår"
+msgstr "Visa på lödytor och ledare"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:39
 msgid "Net Names"
@@ -27322,8 +27326,8 @@ msgid ""
 "Show clearance outlines around tracks, and optionally the via clearance "
 "around the end of the track while routing."
 msgstr ""
-"Visa spårmarginalens kontur kring spår, och (om så önskas) via-marginalens "
-"kontur kring spårets ände under spårdragning."
+"Visa isolationsavstånd som kontur kring ledare, och (om så önskas) "
+"isolationsavstånd för via som kontur kring ledarens ända under ledardragning."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
 msgid "Show pad clearance"
@@ -27360,11 +27364,11 @@ msgstr "Magnetisk grafik"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:41
 msgid "Flip board items L/R (default is T/B)"
-msgstr "Vändkortkort L / R (standard är T / B)"
+msgstr "Vänd mönsterkortsobjekt Höger/Vänster (standard är Ovan/Under)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:53
 msgid "Step for &rotate commands:"
-msgstr "Steg för &rotate kommandon:"
+msgstr "Steg för kommandot &rotera:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:58
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
@@ -27393,7 +27397,7 @@ msgstr "Välj objekt."
 #: pcbnew/dialogs/panel_edit_options_base.cpp:142
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
 msgid "Highlight net (for pads or tracks)."
-msgstr "Markera nät (för lödytor eller spår)."
+msgstr "Markera nät (för lödytor eller ledare)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:243
 #: pcbnew/dialogs/panel_edit_options_base.cpp:363
@@ -27415,21 +27419,21 @@ msgstr "Fäst till lödytor:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:271
 #: pcbnew/dialogs/panel_edit_options_base.cpp:279
 msgid "Capture cursor when the mouse enters a pad area"
-msgstr "Fånga markören när musen kommer in i ett padområde"
+msgstr "Fånga markören när musen kommer in i en lödyta"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:275
 #: pcbnew/dialogs/panel_edit_options_base.cpp:289
 msgid "When creating tracks"
-msgstr "När du skapar spår"
+msgstr "När du skapar ledare"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:283
 msgid "Snap to tracks:"
-msgstr "Fäst på spår:"
+msgstr "Fäst till ledare:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:285
 #: pcbnew/dialogs/panel_edit_options_base.cpp:293
 msgid "Capture cursor when the mouse approaches a track"
-msgstr "Fånga markören när musen närmar sig ett spår"
+msgstr "Fånga markören när musen närmar sig en ledare"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:297
 msgid "Snap to graphics:"
@@ -27451,7 +27455,7 @@ msgstr "Visa nätlinjer med bågformade linjer"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:330
 msgid "Track Editing"
-msgstr "Spårredigering"
+msgstr "Ledarredigering"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:332
 msgid "Mouse drag track behavior:"
@@ -27460,11 +27464,11 @@ msgstr "Musens beteende vid dragning av ledare:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:334
 msgid ""
 "Choose the action to perform when dragging a track segment with the mouse"
-msgstr "Välj den åtgärd som ska utföras när du drar ett spårsegment med musen"
+msgstr "Välj den åtgärd som ska utföras när du drar ett ledarsegment med musen"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:342
 msgid "Moves the track segment without moving connected tracks"
-msgstr "Flyttar spårsegmentet utan att flytta anslutna spår"
+msgstr "Flyttar ledarsegmentet utan att flytta anslutna ledare"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:346
 #: pcbnew/tools/pcb_actions.cpp:1401
@@ -27474,7 +27478,7 @@ msgstr "Dra (45 graders läge)"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:347
 #: pcbnew/tools/pcb_actions.cpp:1402
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
-msgstr "Drar ledarsegmentet medan anslutna spår behålls i 45 grader."
+msgstr "Drar ledarsegmentet medan anslutna ledare behålls i 45 grader."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:351
 #: pcbnew/tools/pcb_actions.cpp:1408
@@ -27485,7 +27489,7 @@ msgstr "Dra (fri vinkel)"
 #: pcbnew/tools/pcb_actions.cpp:1409
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
-msgstr "Dra den närmaste fogen i spåret utan att begränsa spårvinkeln."
+msgstr "Dra den närmaste fogen i ledaren utan att begränsa ledarvinkeln."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:365
 msgid "Limit actions to 45 degrees from start"
@@ -27527,7 +27531,8 @@ msgstr "Standardtextobjekt för nya fotavtryck:"
 msgid ""
 "Note: a blank reference designator or value will use the footprint name."
 msgstr ""
-"Obs: en tom referensbeteckning eller värde använder fotavtryckets namn."
+"Obs: En tom referensbeteckning eller ett tomt värde kommer att använda "
+"fotavtryckets namn."
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:101
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
@@ -27715,7 +27720,6 @@ msgid "Zone fill strategy"
 msgstr "Zonfyllningsstrategi"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:111
-#, fuzzy
 msgid "Mimic legacy behavior"
 msgstr "Efterlikna tidigare versioners (legacy) beteende"
 
@@ -28923,7 +28927,7 @@ msgstr "Glipa"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:157
 msgid "Via Gap"
-msgstr "Via-gap"
+msgstr "Viors isolationsavstånd"
 
 #: pcbnew/drc/drc_engine.cpp:143 pcbnew/drc/drc_engine.cpp:217
 msgid "board setup constraints"
@@ -29044,7 +29048,9 @@ msgstr "Kontrollerar %s."
 
 #: pcbnew/drc/drc_engine.cpp:931
 msgid "Board and netclass clearances apply only between copper items."
-msgstr "Avstånd från kartong och nätklass gäller endast mellan kopparföremål."
+msgstr ""
+"Isolationsavstånd från mönsterkortsinställningar och nätklasser gäller "
+"endast mellan kopparföremål."
 
 #: pcbnew/drc/drc_engine.cpp:977
 msgid "Keepout constraint not met."
@@ -29176,7 +29182,7 @@ msgstr "Borrade hål på samma position"
 
 #: pcbnew/drc/drc_item.cpp:106
 msgid "Track width"
-msgstr "Spårtjocklek"
+msgstr "Ledarbredd"
 
 #: pcbnew/drc/drc_item.cpp:110
 msgid "Annular width"
@@ -30729,7 +30735,7 @@ msgstr "Lägg till mikrovågsspole"
 
 #: pcbnew/microwave/microwave_inductor.cpp:372
 msgid "Length of Trace:"
-msgstr "Spårets längd:"
+msgstr "Ledarens längd:"
 
 #: pcbnew/microwave/microwave_inductor.cpp:383
 msgid "Requested length < minimum length"
@@ -31041,31 +31047,27 @@ msgstr ""
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:118
 msgid "Cannot parse time stamp in symbol section of netlist."
-msgstr "Det går inte att analysera tidsstämpel i symbolavsnittet i netlistan."
+msgstr "Kan inte tolka tidsstämpel i nätlistans symbolavsnitt."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:128
 msgid "Cannot parse footprint name in symbol section of netlist."
-msgstr ""
-"Det går inte att analysera fotavtrycksnamnet i symbolavsnittet i netlistan."
+msgstr "Kan inte tolka fotavtrycksnamnet i nätlistans symbolavsnitt."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:142
 msgid "Cannot parse reference designator in symbol section of netlist."
-msgstr ""
-"Det går inte att analysera referensbeteckningen i symbolavsnittet i netlist."
+msgstr "Kan inte tolka referensbeteckningen i nätlistans symbolavsnitt."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:152
 msgid "Cannot parse value in symbol section of netlist."
-msgstr "Det går inte att analysera värdet i symbolsektionen i netlistan."
+msgstr "Kan inte tolka värdet i nätlistans symbolavsnitt."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:189
 msgid "Cannot parse pin name in symbol net section of netlist."
-msgstr ""
-"Det går inte att analysera stiftnamnet i symbolnettavsnittet i netlistan."
+msgstr "Kan inte tolka stiftnamnet i nätlistans avsnitt för symbolnät."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:198
 msgid "Cannot parse net name in symbol net section of netlist."
-msgstr ""
-"Det går inte att analysera nätnamnet i symbolnettavsnittet i netlistan."
+msgstr "Kan inte tolka nätnamnet i nätlistans avsnitt för symbolnät."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:246
 #, c-format
@@ -31347,8 +31349,8 @@ msgid ""
 "order to create or update PCBs from schematics, you must launch the KiCad "
 "project manager and create a project."
 msgstr ""
-"Kunde inte uppdatera kretskortet eftersom mönsterkortsredigeraren är öppnad "
-"i fristående läge. För att skapa eller uppdatera mönsterkort från "
+"Kunde inte uppdatera mönsterkortet eftersom mönsterkortsredigeraren är "
+"öppnad i fristående läge. För att skapa eller uppdatera mönsterkort från "
 "kretsschema måste du starta KiCads projekthanterare och skapa ett projekt."
 
 #: pcbnew/pcb_edit_frame.cpp:1530
@@ -31524,12 +31526,12 @@ msgstr "NetCode"
 #: pcbnew/pcb_track.cpp:905
 #, c-format
 msgid "Track (arc) %s on %s, length %s"
-msgstr "Spår (båge) %s på %s, längd %s"
+msgstr "Ledare (båge) %s på %s, längd %s"
 
 #: pcbnew/pcb_track.cpp:906
 #, c-format
 msgid "Track %s on %s, length %s"
-msgstr "Spår %s på %s, längd %s"
+msgstr "Ledare %s på %s, längd %s"
 
 #: pcbnew/pcb_track.cpp:1135 pcbnew/pcb_track.cpp:1152
 msgid "Origin X"
@@ -31620,12 +31622,12 @@ msgstr "Öppning avbruten av användare."
 #: pcbnew/plugins/altium/altium_pcb.cpp:490
 #, c-format
 msgid "'%s' was not parsed correctly."
-msgstr "'%s' lästes inte korrekt."
+msgstr "'%s' tolkades inte korrekt."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:498
 #, c-format
 msgid "'%s' was not fully parsed."
-msgstr "'%s' lästes inte helt."
+msgstr "'%s' tolkades inte fullständigt."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:533
 #, c-format
@@ -31839,7 +31841,7 @@ msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2521
 msgid "Loading tracks..."
-msgstr "Läser in spår..."
+msgstr "Läser in ledare..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2568
 #, c-format
@@ -31847,7 +31849,7 @@ msgid ""
 "Track keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"Spår-spärrzon hittad på ett Altium-lager (%d) som inte har någon "
+"Ledarspärrzon hittad på ett Altium-lager (%d) som inte har någon "
 "motsvarighet i KiCad. Den har flyttats till KiCad-lagret Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2586
@@ -31856,8 +31858,8 @@ msgid ""
 "Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Spår hittat på ett Altium-lager (%d) som inte har någon motsvarighet i "
-"KiCad. Det har flyttats till KiCad-lagret Eco1_User."
+"Ledare hittad på ett Altium-lager (%d) som inte har någon motsvarighet i "
+"KiCad. Den har flyttats till KiCad-lagret Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2627
 msgid "Loading unicode strings..."
@@ -32757,7 +32759,7 @@ msgstr "Biblioteket hittades inte"
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2531
 #, c-format
 msgid "Footprint file name '%s' is not valid."
-msgstr "Fotavtrycksfilnamn '%s' är inte giltigt."
+msgstr "Fotavtryckets filnamn '%s' är inte giltigt."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2537
 #, c-format
@@ -32894,11 +32896,11 @@ msgstr "Undantag för guiden för pythons fotavtryck"
 
 #: pcbnew/router/length_tuner_tool.cpp:46
 msgid "New Track"
-msgstr "Nytt spår"
+msgstr "Ny ledare"
 
 #: pcbnew/router/length_tuner_tool.cpp:46
 msgid "Starts laying a new track."
-msgstr "Börjar lägga ett nytt spår."
+msgstr "Börjar dra en ny ledare."
 
 #: pcbnew/router/length_tuner_tool.cpp:51
 msgid "End Track"
@@ -32969,7 +32971,7 @@ msgstr "Det går inte att hitta en lämplig startpunkt för kopplat nät \"%s\".
 #: pcbnew/router/pns_dp_meander_placer.cpp:76
 #: pcbnew/router/pns_meander_placer.cpp:64
 msgid "Please select a track whose length you want to tune."
-msgstr "Vänligen välj ett spår vars längd du vill ställa in."
+msgstr "Vänligen välj en ledare vars längd du vill anpassa."
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:90
 msgid ""
@@ -33037,7 +33039,7 @@ msgstr "Interaktiv router"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:54
 msgid "Please select a differential pair trace you want to tune."
-msgstr "Välj en differentiell parspårning som du vill ställa in."
+msgstr "Välj ett differentiellt ledarpar som du vill anpassa."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:70
 msgid ""
@@ -33072,11 +33074,11 @@ msgstr "Kan inte dra ledare från ett icke-pläterat hål."
 #: pcbnew/router/pns_router.cpp:243
 #, c-format
 msgid "Rule area '%s' disallows tracks."
-msgstr "Regelområde '%s' tillåter inte spår."
+msgstr "Regelområde '%s' tillåter inte ledare."
 
 #: pcbnew/router/pns_router.cpp:248
 msgid "Rule area disallows tracks."
-msgstr "Regelområdet tillåter inte spår."
+msgstr "Regelområdet tillåter inte ledare."
 
 #: pcbnew/router/pns_router.cpp:255
 msgid "Cannot start routing from a text item."
@@ -33096,15 +33098,15 @@ msgstr "Kan inte starta ett differentiellt par mitt i ingenstans."
 
 #: pcbnew/router/router_tool.cpp:91
 msgid "Finish Track"
-msgstr "Slutför spår"
+msgstr "Avsluta ledare"
 
 #: pcbnew/router/router_tool.cpp:91
 msgid "Stops laying the current track."
-msgstr "Slutar lägga det aktuella spåret."
+msgstr "Avslutar dragning av den aktuella ledaren."
 
 #: pcbnew/router/router_tool.cpp:97
 msgid "Auto-finish Track"
-msgstr "Auto-avsluta spår"
+msgstr "Auto-avsluta ledare"
 
 #: pcbnew/router/router_tool.cpp:97
 msgid "Automatically finishes laying the current track."
@@ -33112,7 +33114,7 @@ msgstr "Färdigställer automatiskt den aktuella ledaren."
 
 #: pcbnew/router/router_tool.cpp:102
 msgid "Place Through Via"
-msgstr "Placera genom Via"
+msgstr "Placera genomgående via"
 
 #: pcbnew/router/router_tool.cpp:103
 msgid "Adds a through-hole via at the end of currently routed track."
@@ -33135,11 +33137,11 @@ msgstr "Placera Microvia"
 
 #: pcbnew/router/router_tool.cpp:116
 msgid "Adds a microvia at the end of currently routed track."
-msgstr "Lägger till en mikrovia i slutet av det nu dirigerade spåret."
+msgstr "Lägger till en mikrovia i slutet av den för närvarande dragna ledaren."
 
 #: pcbnew/router/router_tool.cpp:123
 msgid "Select Layer and Place Through Via..."
-msgstr "Välj lager och placera genom ..."
+msgstr "Välj lager och placera genomgående via..."
 
 #: pcbnew/router/router_tool.cpp:124
 msgid ""
@@ -33182,19 +33184,19 @@ msgstr "Visar en dialogruta för att ändra ledarbredd och via-storlek."
 
 #: pcbnew/router/router_tool.cpp:156
 msgid "Switch Track Posture"
-msgstr "Byt spårställning"
+msgstr "Växla ledarställning"
 
 #: pcbnew/router/router_tool.cpp:157
 msgid "Switches posture of the currently routed track."
-msgstr "Byt ställning för det nuvarande dirigerade spåret."
+msgstr "Växla ställning för den för närvarande dragna ledaren."
 
 #: pcbnew/router/router_tool.cpp:163
 msgid "Track Corner Mode"
-msgstr "Spårhörnsläge"
+msgstr "Ledarhörnsläge"
 
 #: pcbnew/router/router_tool.cpp:164
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
-msgstr "Byter mellan skarpa/avrundade och 45°/90° hörn under spårdragning."
+msgstr "Växlar mellan skarpa/avrundade och 45°/90° hörn under ledardragning."
 
 #: pcbnew/router/router_tool.cpp:186
 msgid "Select Track/Via Width"
@@ -33202,15 +33204,17 @@ msgstr "Välj ledar-/via-bredd"
 
 #: pcbnew/router/router_tool.cpp:205
 msgid "Use Starting Track Width"
-msgstr "Använd startspårets bredd"
+msgstr "Använd ledarbredd från startpunkt"
 
 #: pcbnew/router/router_tool.cpp:206
 msgid "Route using the width of the starting track."
-msgstr "Rutt med bredden på startspåret."
+msgstr ""
+"Dra ny ledare med samma bredd som den befintliga ledare där den nya "
+"ledardragningen börjar."
 
 #: pcbnew/router/router_tool.cpp:210 pcbnew/router/router_tool.cpp:331
 msgid "Use Net Class Values"
-msgstr "Använd nettoklassvärden"
+msgstr "Använd nätklassvärden"
 
 #: pcbnew/router/router_tool.cpp:211
 msgid "Use track and via sizes from the net class"
@@ -33227,16 +33231,16 @@ msgstr "Ange anpassade ledar- och via-storlekar"
 
 #: pcbnew/router/router_tool.cpp:227
 msgid "Track netclass width"
-msgstr "Spåra nätklassens bredd"
+msgstr "Ledarbredd enligt nätklass"
 
 #: pcbnew/router/router_tool.cpp:229
 #, c-format
 msgid "Track %s"
-msgstr "Spår %s"
+msgstr "Ledare %s"
 
 #: pcbnew/router/router_tool.cpp:243
 msgid "Via netclass values"
-msgstr "Via nätklassvärden"
+msgstr "Vior enligt nätklassvärden"
 
 #: pcbnew/router/router_tool.cpp:247 pcbnew/tools/drawing_tool.cpp:113
 #, c-format
@@ -33250,15 +33254,15 @@ msgstr "Via %s"
 
 #: pcbnew/router/router_tool.cpp:315
 msgid "Select Differential Pair Dimensions"
-msgstr "Välj Differentialpar dimensioner"
+msgstr "Välj mått för differentiellt par"
 
 #: pcbnew/router/router_tool.cpp:332
 msgid "Use differential pair dimensions from the net class"
-msgstr "Använd differentierade parmått från nätklassen"
+msgstr "Använd mått för differentiellt par från nätklassen"
 
 #: pcbnew/router/router_tool.cpp:337
 msgid "Specify custom differential pair dimensions"
-msgstr "Ange anpassade mått för differentiella par"
+msgstr "Ange anpassade mått för differentiellt par"
 
 #: pcbnew/router/router_tool.cpp:354
 #, c-format
@@ -33291,7 +33295,7 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:523
 msgid "Save router log"
-msgstr "Spara spårdragar-logg"
+msgstr "Spara logg för ledardraningsverktyg"
 
 #: pcbnew/router/router_tool.cpp:523
 msgid ""
@@ -33338,7 +33342,7 @@ msgstr "Dra ändå"
 
 #: pcbnew/router/router_tool.cpp:2018 pcbnew/tools/pcb_actions.cpp:1394
 msgid "Break Track"
-msgstr "Kapa bana"
+msgstr "Kapa ledare"
 
 #: pcbnew/router/router_tool.cpp:2091
 #, c-format
@@ -33348,7 +33352,7 @@ msgstr "Drar differentialpar: %s"
 #: pcbnew/router/router_tool.cpp:2091
 #, c-format
 msgid "Routing Track: %s"
-msgstr "Drar spår: %s"
+msgstr "Drar ledare: %s"
 
 #: pcbnew/router/router_tool.cpp:2097
 #, c-format
@@ -33521,12 +33525,12 @@ msgstr ""
 
 #: pcbnew/toolbars_pcb_editor.cpp:649
 msgid "Track: use netclass width"
-msgstr "Spår: använd nätklassbredd"
+msgstr "Ledare: använd nätklassbredd"
 
 #: pcbnew/toolbars_pcb_editor.cpp:655
 #, c-format
 msgid "Track: %s (%s)"
-msgstr "Spår: %s (%s)"
+msgstr "Ledare: %s (%s)"
 
 #: pcbnew/toolbars_pcb_editor.cpp:664 pcbnew/toolbars_pcb_editor.cpp:732
 msgid "Edit Pre-defined Sizes..."
@@ -33891,7 +33895,7 @@ msgstr "Kortets totala dimensioner: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:448
 msgid "Min track/spacing: "
-msgstr "Minsta spår/avstånd: "
+msgstr "Minsta ledarbredd/isolationsavstånd: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:458
 msgid "Copper Finish: "
@@ -34025,7 +34029,7 @@ msgstr "Ange filéradie:"
 #: pcbnew/tools/edit_tool.cpp:1190 pcbnew/tools/edit_tool.cpp:1352
 #: pcbnew/tools/pcb_actions.cpp:319
 msgid "Fillet Tracks"
-msgstr "Filéspår"
+msgstr "Ledaravrundning"
 
 #: pcbnew/tools/edit_tool.cpp:1200
 msgid ""
@@ -34037,11 +34041,11 @@ msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:1359
 msgid "Unable to fillet the selected track segments."
-msgstr "Det går inte att filetera de valda spårsegmenten."
+msgstr "Det går inte att runda av de valda ledarsegmenten."
 
 #: pcbnew/tools/edit_tool.cpp:1361
 msgid "Some of the track segments could not be filleted."
-msgstr "Vissa av spårsegmenten kunde inte fyllas i."
+msgstr "Vissa av ledarsegmenten kunde inte rundas av."
 
 #: pcbnew/tools/edit_tool.cpp:1506
 msgid "Rotate"
@@ -34442,11 +34446,11 @@ msgstr "Uppdaterar valda ledar- och via-storlekar"
 
 #: pcbnew/tools/pcb_actions.cpp:319
 msgid "Adds arcs tangent to the selected straight track segments"
-msgstr "Lägger till bågar som tangerar de valda rakspårssegmenten"
+msgstr "Lägger till bågar som tangerar de valda raka ledarsegmenten"
 
 #: pcbnew/tools/pcb_actions.cpp:324
 msgid "Delete Full Track"
-msgstr "Ta bort hela spåret"
+msgstr "Ta bort hela ledaren"
 
 #: pcbnew/tools/pcb_actions.cpp:324
 msgid "Deletes selected item(s) and copper connections"
@@ -35025,7 +35029,7 @@ msgstr "Visa / dölj utseendehanteraren"
 
 #: pcbnew/tools/pcb_actions.cpp:804
 msgid "Flip Board View"
-msgstr "Vänd kortvisning"
+msgstr "Spegelvänd visning av mönsterkort"
 
 #: pcbnew/tools/pcb_actions.cpp:804
 msgid "View board from the opposite side"
@@ -35445,9 +35449,8 @@ msgid "Deselect All Tracks in Net"
 msgstr "Avmarkera alla ledare i nätet"
 
 #: pcbnew/tools/pcb_actions.cpp:1254
-#, fuzzy
 msgid "Deselects all tracks & vias belonging to the same net."
-msgstr "Avmarkerar alla ledare och vior som tillhör samma nät."
+msgstr "Tar bort alla ledare och vior som tillhör samma nät från val."
 
 #: pcbnew/tools/pcb_actions.cpp:1259
 msgid "Selects all footprints and tracks in the schematic sheet"
@@ -35511,7 +35514,7 @@ msgstr "Utför automatisk placering av valda komponenter"
 
 #: pcbnew/tools/pcb_actions.cpp:1308
 msgid "Place Off-Board Footprints"
-msgstr "Placera fotspår utanför mönsterkortet"
+msgstr "Placera fotavtryck utanför mönsterkortet"
 
 #: pcbnew/tools/pcb_actions.cpp:1309
 msgid "Performs automatic placement of components outside board area"
@@ -35519,7 +35522,7 @@ msgstr "Utför automatisk placering av komponenter utanför kartongområdet"
 
 #: pcbnew/tools/pcb_actions.cpp:1317
 msgid "Route Single Track"
-msgstr "Rutt enstaka spår"
+msgstr "Dra enkel ledare"
 
 #: pcbnew/tools/pcb_actions.cpp:1317
 msgid "Route tracks"
@@ -35527,7 +35530,7 @@ msgstr "Dra ledare"
 
 #: pcbnew/tools/pcb_actions.cpp:1324
 msgid "Route Differential Pair"
-msgstr "Ruttdifferentialpar"
+msgstr "Dra differentiellt par"
 
 #: pcbnew/tools/pcb_actions.cpp:1324
 msgid "Route differential pairs"
@@ -35535,7 +35538,7 @@ msgstr "Dra differentialpar"
 
 #: pcbnew/tools/pcb_actions.cpp:1330
 msgid "Interactive Router Settings..."
-msgstr "Interaktiva routerinställningar ..."
+msgstr "Inställningar för interaktiv router..."
 
 #: pcbnew/tools/pcb_actions.cpp:1330
 msgid "Open Interactive Router settings"
@@ -35543,7 +35546,7 @@ msgstr "Öppna Interactive Router-inställningar"
 
 #: pcbnew/tools/pcb_actions.cpp:1335
 msgid "Differential Pair Dimensions..."
-msgstr "Differentiella parmått..."
+msgstr "Mått för differentiellt par..."
 
 #: pcbnew/tools/pcb_actions.cpp:1335
 msgid "Open Differential Pair Dimension settings"
@@ -35591,7 +35594,7 @@ msgstr "Ändra aktivt lagerpar för routing"
 
 #: pcbnew/tools/pcb_actions.cpp:1367
 msgid "Tune length of a single track"
-msgstr "Ställ in längden på ett enskilt spår"
+msgstr "Anpassa längden för en enskild ledare"
 
 #: pcbnew/tools/pcb_actions.cpp:1374
 msgid "Tune length of a differential pair"
@@ -35613,7 +35616,7 @@ msgstr "Går tillbaka med den aktuella ledaren ett segment."
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
 msgstr ""
-"Delar upp spårsegmentet i två segment som är anslutna vid markörpositionen."
+"Delar upp ledarsegmentet i två segment som är anslutna vid markörpositionen."
 
 #: pcbnew/tools/pcb_actions.cpp:1419
 msgid "Length Tuning Settings..."
@@ -35768,7 +35771,7 @@ msgstr "Ofullständig ångra / göra om: vissa objekt hittades inte"
 
 #: pcbnew/widgets/appearance_controls.cpp:335
 msgid "Show tracks"
-msgstr "Visa spår"
+msgstr "Visa ledare"
 
 #: pcbnew/widgets/appearance_controls.cpp:336
 msgid "Show all vias"
@@ -35784,7 +35787,7 @@ msgstr "Visa kopparzoner"
 
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Footprints Front"
-msgstr "Fotspår fram"
+msgstr "Framsidans fotavtryck"
 
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Show footprints that are on board's front"
@@ -35893,7 +35896,7 @@ msgstr "Alla kopparlager"
 
 #: pcbnew/widgets/appearance_controls.cpp:383
 msgid "Inner Copper Layers"
-msgstr "Inre koppar lager"
+msgstr "Inre kopparlager"
 
 #: pcbnew/widgets/appearance_controls.cpp:386
 msgid "Front Layers"
@@ -35901,7 +35904,7 @@ msgstr "Främre lager"
 
 #: pcbnew/widgets/appearance_controls.cpp:389
 msgid "Front Assembly View"
-msgstr "Frontmonteringsvy"
+msgstr "Främre monteringsvy"
 
 #: pcbnew/widgets/appearance_controls.cpp:392
 msgid "Back Layers"
@@ -35957,7 +35960,7 @@ msgstr "Inaktiva lager kommer gömmas"
 #: pcbnew/widgets/appearance_controls.cpp:637
 #: pcbnew/widgets/appearance_controls.cpp:1682
 msgid "Flip board view"
-msgstr "Vänd visningen av mönsterkortet"
+msgstr "Spegelvänd visningen av mönsterkortet"
 
 #: pcbnew/widgets/appearance_controls.cpp:659
 #: pcbnew/widgets/appearance_controls.cpp:2352
@@ -36048,9 +36051,9 @@ msgstr "Välj ledare och vior i %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:891
 #: pcbnew/widgets/appearance_controls.cpp:2300
-#, fuzzy, c-format
+#, c-format
 msgid "Unselect Tracks and Vias in %s"
-msgstr "Avmarkera ledare och vior i %s"
+msgstr "Ta bort ledare och vior i %s från val"
 
 #: pcbnew/widgets/appearance_controls.cpp:898
 msgid "Hide All Other Nets"
@@ -36384,7 +36387,7 @@ msgstr "Inga vior"
 
 #: pcbnew/zone.cpp:571
 msgid "No tracks"
-msgstr "Inga spår"
+msgstr "Inga ledare"
 
 #: pcbnew/zone.cpp:574
 msgid "No pads"
