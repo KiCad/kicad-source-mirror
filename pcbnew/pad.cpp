@@ -258,9 +258,6 @@ bool PAD::FlashLayer( int aLayer ) const
         }
     }
 
-    if( aLayer == UNDEFINED_LAYER )
-        return true;
-
     if( LSET::FrontBoardTechMask().test( aLayer ) )
         aLayer = F_Cu;
     else if( LSET::BackBoardTechMask().test( aLayer ) )
