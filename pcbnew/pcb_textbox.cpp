@@ -263,10 +263,21 @@ void PCB_TEXTBOX::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
     {
         std::vector<VECTOR2I> corners = GetCorners();
         VECTOR2I              diag = corners[2] - corners[0];
+        EDA_ANGLE             angle = GetTextAngle();
 
         SetShape( SHAPE_T::RECT );
         SetStart( corners[0] );
-        SetEnd( VECTOR2I( corners[0].x + abs( diag.x ), corners[0].y + abs( diag.y ) ) );
+
+        angle.Normalize();
+
+        if( angle == ANGLE_90 )
+            SetEnd( VECTOR2I( corners[0].x + abs( diag.x ), corners[0].y - abs( diag.y ) ) );
+        else if( angle == ANGLE_180 )
+            SetEnd( VECTOR2I( corners[0].x - abs( diag.x ), corners[0].y - abs( diag.y ) ) );
+        else if( angle == ANGLE_270 )
+            SetEnd( VECTOR2I( corners[0].x - abs( diag.x ), corners[0].y + abs( diag.y ) ) );
+        else
+            SetEnd( VECTOR2I( corners[0].x + abs( diag.x ), corners[0].y + abs( diag.y ) ) );
     }
 }
 
