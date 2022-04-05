@@ -413,6 +413,16 @@ target_link_libraries( eeschema_kiface_objects
 # declare the dependency
 add_dependencies( eeschema_kiface_objects common )
 
+if( KICAD_USE_3DCONNEXION )
+    message( STATUS "Including 3Dconnexion SpaceMouse navigation support in eeschema" )
+    add_subdirectory( ./navlib )
+
+    target_link_libraries( eeschema_kiface_objects PUBLIC eeschema_navlib)
+
+    add_dependencies( eeschema_kiface_objects eeschema_navlib )
+endif()
+
+
 add_library( eeschema_kiface MODULE
     eeschema.cpp
     )
@@ -434,13 +444,6 @@ if( KICAD_SPICE )
             ${NGSPICE_LIBRARY}
         )
 endif()
-
-if( KICAD_USE_3DCONNEXION )
-    message( STATUS "Including 3Dconnexion SpaceMouse navigation support in eeschema" )
-    add_subdirectory( ./navlib )
-    target_link_libraries( eeschema_kiface PRIVATE eeschema_navlib)
-endif()
-
 
 set_target_properties( eeschema_kiface PROPERTIES
     # Decorate OUTPUT_NAME with PREFIX and SUFFIX, creating something like
