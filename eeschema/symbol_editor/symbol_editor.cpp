@@ -489,10 +489,6 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol()
             new_symbol.LockUnits( false );
 
         new_symbol.SetConversion( dlg.GetAlternateBodyStyle() );
-
-        // must be called after loadSymbol, that calls SetShowDeMorgan, but
-        // because the symbol is empty,it looks like it has no alternate body
-        SetShowDeMorgan( dlg.GetAlternateBodyStyle() );
     }
     else
     {
@@ -540,6 +536,10 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol()
     m_libMgr->UpdateSymbol( &new_symbol, lib );
     SyncLibraries( false );
     LoadSymbol( name, lib, 1 );
+
+    // must be called after loadSymbol, that calls SetShowDeMorgan, but
+    // because the symbol is empty,it looks like it has no alternate body
+    SetShowDeMorgan( dlg.GetAlternateBodyStyle() );
 }
 
 
