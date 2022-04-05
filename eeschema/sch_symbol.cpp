@@ -193,6 +193,7 @@ SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
 
 void SCH_SYMBOL::Init( const VECTOR2I& pos )
 {
+    m_layer   = LAYER_DEVICE;
     m_pos     = pos;
     m_unit    = 1;  // In multi unit chip - which unit to draw.
     m_convert = LIB_ITEM::LIB_CONVERT::BASE;  // De Morgan Handling
