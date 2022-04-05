@@ -110,7 +110,6 @@ if modulename in sys.modules:
 bool SCRIPTING::scriptingSetup()
 {
 #if defined( __WINDOWS__ )
-
   #ifdef _MSC_VER
     // Under vcpkg/msvc, we need to explicitly set the python home or else it'll start consuming
     // system python registry keys and the like instead of the Python distributed with KiCad.
@@ -126,6 +125,14 @@ bool SCRIPTING::scriptingSetup()
     // MUST be called before Py_Initialize so it will to create valid default lib paths
     if( !wxGetEnv( wxT( "KICAD_USE_EXTERNAL_PYTHONHOME" ), nullptr ) )
     {
+        // Global config flag to ignore PYTHONPATH & PYTHONHOME
+        Py_IgnoreEnvironmentFlag = 1;
+
+        // Extra insurance to ignore PYTHONPATH and PYTHONHOME
+        wxSetEnv( wxT( "PYTHONPATH" ), wxEmptyString );
+        wxSetEnv( wxT( "PYTHONHOME" ), wxEmptyString );
+
+        // Now initialize Python Home via capi
         Py_SetPythonHome( pyHome.GetFullPath().c_str() );
     }
   #else
