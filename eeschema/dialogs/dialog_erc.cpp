@@ -396,7 +396,7 @@ void DIALOG_ERC::testErc()
             || settings.IsTestEnabled( ERCE_POWERPIN_NOT_DRIVEN )
             || settings.IsTestEnabled( ERCE_PIN_NOT_DRIVEN ) )
     {
-        tester.TestPinToPin();
+         tester.TestPinToPin();
     }
 
     // Test similar labels (i;e. labels which are identical when
