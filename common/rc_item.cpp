@@ -485,9 +485,6 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
         return;
     }
 
-    if( !m_rcItemsProvider )
-        return;
-
     int  lastGood = -1;
     bool itemDeleted = false;
 
@@ -497,6 +494,9 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
         wxSafeYield();
         m_view->Freeze();
     }
+
+    if( !m_rcItemsProvider )
+        return;
 
     for( int i = m_rcItemsProvider->GetCount( m_severities ) - 1; i >= 0; --i )
     {
