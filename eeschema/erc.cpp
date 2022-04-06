@@ -466,10 +466,6 @@ int ERC_TESTER::TestPinToPin()
             }
         }
 
-        // Single-pin nets are handled elsewhere
-        if( pins.size() < 2 )
-            continue;
-
         std::set<std::pair<SCH_PIN*, SCH_PIN*>> tested;
 
         SCH_PIN* needsDriver = nullptr;
