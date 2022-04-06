@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-04 13:55-0700\n"
-"PO-Revision-Date: 2022-04-03 20:07+0000\n"
+"PO-Revision-Date: 2022-04-08 00:11+0000\n"
 "Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -428,7 +428,7 @@ msgstr "Cuadrícula 3D 5 mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:176
 msgid "3D Grid 2.5mm"
-msgstr "Cuadrícula 3D 2,5 mm"
+msgstr "Cuadrícula 3D 2.5 mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:181
 msgid "3D Grid 1mm"
@@ -3217,15 +3217,29 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad puede informar de forma anónima a los desarrolladores sobre fallos y "
+"datos de eventos especiales para ayudar a identificar errores críticos en la "
+"base de usuarios de forma más eficaz y ayudar a perfilar la funcionalidad "
+"para orientar las mejoras.\n"
+"\n"
+"Para vincular los informes automáticos de la misma instalación de KiCad, se "
+"genera un identificador único que es completamente aleatorio y que sólo se "
+"utiliza para informar de los fallos. Ninguna información personal "
+"identificable (PII), incluyendo la dirección IP, es almacenada o conectada a "
+"este identificador. Puede restablecer este identificador en cualquier "
+"momento con el botón proporcionado.\n"
+"\n"
+"Si decide participar voluntariamente, KiCad se encargará automáticamente de "
+"enviar dichos informes cuando se produzcan fallos o eventos. Sus archivos de "
+"diseño, como el esquema o la PCB, no se comparten en este proceso."
 
 #: common/dialogs/panel_data_collection_base.cpp:27
 msgid "I agree to provide anonymous reports"
-msgstr ""
+msgstr "Estoy de acuerdo en proporcionar informes anónimos"
 
 #: common/dialogs/panel_data_collection_base.cpp:30
-#, fuzzy
 msgid "Reset Unique Id"
-msgstr "Reiniciar vista"
+msgstr "Restablecer Id. único"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:84
 msgid "Type filter text"
@@ -3973,9 +3987,8 @@ msgid "Hotkeys"
 msgstr "Atajos"
 
 #: common/eda_base_frame.cpp:999
-#, fuzzy
 msgid "Data Collection"
-msgstr "Conexiones de pads"
+msgstr "Recopilación de datos"
 
 #: common/eda_base_frame.cpp:1011 common/tool/actions.cpp:582
 #: eeschema/symbol_editor/symbol_editor.cpp:163
@@ -5626,10 +5639,18 @@ msgid ""
 "sending said reports when crashes or events occur. \n"
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad puede informar de forma anónima a los desarrolladores sobre fallos y "
+"eventos especiales con el fin de ayudar a identificar errores críticos en la "
+"base de usuarios de forma más eficaz y ayudar a perfilar la funcionalidad "
+"para orientar las mejoras.\n"
+"Si decide participar voluntariamente, KiCad se encargará de enviar "
+"automáticamente dichos informes cuando se produzcan fallos o eventos.\n"
+"Sus archivos de diseño, como el esquema o la PCB, no se comparten en este "
+"proceso."
 
 #: common/pgm_base.cpp:333
 msgid "Data collection opt in request"
-msgstr ""
+msgstr "Solicitud de recopilación de datos"
 
 #: common/pgm_base.cpp:375
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -7071,11 +7092,9 @@ msgid "Hotkey file"
 msgstr "Archivo de atajos de teclado"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr ""
-"No se puede encontrar el archivo de equivalencia '%s' en las rutas por "
-"defecto."
+msgstr "No se ha encontrado el archivo de equivalencia '%s'."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -9419,9 +9438,8 @@ msgid "Standard"
 msgstr "Standard"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:45
-#, fuzzy
 msgid "Alternate"
-msgstr "Nombre de pin alternativo"
+msgstr "Alternativo"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:113
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:87
@@ -9467,9 +9485,8 @@ msgstr "Tamaño de texto del nombre"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:100
-#, fuzzy
 msgid "De Morgan"
-msgstr "Estándar de DeMorgan"
+msgstr "De Morgan"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:768
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:55
@@ -9695,9 +9712,8 @@ msgstr "Rellenar con:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:91
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:168
-#, fuzzy
 msgid "Private to Symbol Editor"
-msgstr "Editar con el Editor de símbolos"
+msgstr "Privado para el Editor de Símbolos"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:97
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:153
@@ -9950,9 +9966,8 @@ msgid "Background fill"
 msgstr "Relleno de fondo"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:239
-#, fuzzy
 msgid "Private to symbol editor"
-msgstr "Editar con el Editor de símbolos"
+msgstr "Privado para el editor de símbolos"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.h:106
 #: eeschema/dialogs/dialog_text_properties.cpp:58
@@ -10129,17 +10144,15 @@ msgstr ""
 "símbolos DeMorgan."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:270
-#, fuzzy
 msgid "Exit sync pins mode"
-msgstr "Editar modelo Spice"
+msgstr "Salir del modo de sincronización de pines"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:285
-#, fuzzy
 msgid ""
 "Synchronized pins mode is enabled.\n"
 "Similar pins will be edited regardless of this option."
 msgstr ""
-"El modo de edición de pin sincronizado está habilitado.\n"
+"El modo de pines sincronizados está activado.\n"
 "Pines similares van a ser editados, independientemente de esta opción."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:290
@@ -10805,10 +10818,10 @@ msgstr ""
 #: eeschema/dialogs/dialog_shape_properties.cpp:54
 #: eeschema/dialogs/dialog_sheet_properties.cpp:76
 #: eeschema/dialogs/dialog_text_properties.cpp:72
-#, fuzzy
 msgid "Note: individual item colors overridden in Preferences."
 msgstr ""
-"Nota: los colores de los elementos se ignoran en el tema de color actual."
+"Nota: los colores de los elementos individuales se sobrescriben en "
+"Preferencias."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:89
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:158
@@ -12447,27 +12460,24 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "Resaltar redes cuando estén resaltadas en el editor de PCB"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
-#, fuzzy
 msgid "Line Drawing Mode:"
-msgstr "Modo dibujo"
+msgstr "Modo de dibujo de líneas:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "Free Angle"
 msgstr "Ángulo libre"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "90 deg Angle"
-msgstr ""
+msgstr "Ángulo de 90 grados"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "45 deg Angle"
-msgstr "45 grados"
+msgstr "Ángulo de 45 grados"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "135 deg Angle"
-msgstr ""
+msgstr "Ángulo de 135 grados"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 msgid "Mouse drag performs Drag (G) operation"
@@ -15453,7 +15463,6 @@ msgid "Continue Load Schematic"
 msgstr "Continuar carga de esquema"
 
 #: eeschema/sheet.cpp:266
-#, fuzzy
 msgid ""
 "The selected file was created as part of a different project.  Linking the "
 "file to this project may result in missing or incorrect symbol library "
@@ -15461,11 +15470,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"El esquema a importar parece haber sido creado como parte de un proyecto "
-"diferente.  Esto puede dar lugar a enlaces de bibliotecas de símbolos que "
-"falten o choquen con los enlaces de bibliotecas de símbolos de la tabla de "
-"símbolos global y/o de la tabla de bibliotecas de símbolos del proyecto "
-"actual.\n"
+"El archivo seleccionado se creó como parte de un proyecto diferente.  "
+"Vincular el archivo a este proyecto puede dar lugar a referencias de "
+"biblioteca de símbolos faltantes o incorrectas.\n"
 "\n"
 "¿Desea continuar?"
 
@@ -16649,22 +16656,19 @@ msgid "Create SVG file from the current symbol"
 msgstr "Crear un archivo SVG a partir del símbolo activo"
 
 #: eeschema/tools/ee_actions.cpp:208
-#, fuzzy
 msgid "Synchronized Pins Mode"
-msgstr "Modo de edición de pines sincronizado"
+msgstr "Modo de Pines Sincronizados"
 
 #: eeschema/tools/ee_actions.cpp:209
-#, fuzzy
 msgid ""
 "Synchronized Pins Mode\n"
 "When enabled propagates all changes (except pin numbers) to other units.\n"
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
-"Modo de edición sincronizada de pines\n"
-"Cuando está habilitado, propaga todos cambios (excepto por el número de pin) "
-"a otras unidades.\n"
-"Habilitado por defecto para todos los componentes con varias unidades "
-"intercambiables."
+"Modo de Pines Sincronizados\n"
+"Cuando está habilitado, propaga todos cambios (excepto los números de pin) a "
+"otras unidades.\n"
+"Habilitado por defecto para partes multi-unidad con unidades intercambiables."
 
 #: eeschema/tools/ee_actions.cpp:220
 msgid "Add Pin"
@@ -17322,34 +17326,32 @@ msgstr ""
 #: eeschema/tools/ee_actions.cpp:684 eeschema/tools/ee_actions.cpp:689
 #: eeschema/tools/ee_actions.cpp:694 eeschema/tools/ee_actions.cpp:699
 #: eeschema/tools/ee_actions.cpp:704
-#, fuzzy
 msgid "Line Mode for Wires and Buses"
-msgstr "Forzar cables y buses horizontales o verticales"
+msgstr "Modo de línea para cables y buses"
 
 #: eeschema/tools/ee_actions.cpp:684
 msgid "Lines drawn at any angle"
-msgstr ""
+msgstr "Líneas dibujadas en cualquier ángulo"
 
 #: eeschema/tools/ee_actions.cpp:689
-#, fuzzy
 msgid "Lines drawn horizontally and vertically"
-msgstr "Horizontal, luego vertical"
+msgstr "Líneas dibujadas horizontalmente y verticalmente"
 
 #: eeschema/tools/ee_actions.cpp:694
-#, fuzzy
 msgid "Lines drawn horizontally and vertically, with a 45 degree angle end"
 msgstr ""
-"Dibujar el área usando solo líneas horizontales, verticales y de 45 grados"
+"Líneas dibujadas horizontalmente y verticalmente, con un ángulo final de 45 "
+"grados"
 
 #: eeschema/tools/ee_actions.cpp:699
-#, fuzzy
 msgid "Lines drawn horizontally and vertically, with a 45 degree angle start"
-msgstr "Limitar acciones a horizontal, vertical, o 45° desde el punto inicial"
+msgstr ""
+"Líneas dibujadas horizontalmente y verticalmente, con un ángulo inicial de "
+"45 grados"
 
 #: eeschema/tools/ee_actions.cpp:704
-#, fuzzy
 msgid "Switch to next line mode"
-msgstr "Cambiar a siguiente cuadrícula"
+msgstr "Cambiar al siguiente modo de línea"
 
 #: eeschema/tools/ee_actions.cpp:709
 msgid "Repair Schematic"
@@ -17431,19 +17433,16 @@ msgid "Undo Last Segment"
 msgstr "Deshacer el último segmento"
 
 #: eeschema/tools/ee_actions.cpp:785
-#, fuzzy
 msgid "Walks the current line back one segment."
-msgstr "Recorre la pista actual un segmento hacia atrás."
+msgstr "Recorre la línea actual un segmento hacia atrás."
 
 #: eeschema/tools/ee_actions.cpp:791
-#, fuzzy
 msgid "Switch Segment Posture"
-msgstr "Alternar posición de arco"
+msgstr "Cambiar la postura del segmento"
 
 #: eeschema/tools/ee_actions.cpp:791
-#, fuzzy
 msgid "Switches posture of the current segment."
-msgstr "Cambia la posición de la pista activa."
+msgstr "Cambia la postura del segmento actual."
 
 #: eeschema/tools/ee_actions.cpp:797
 msgid "Finish Wire or Bus"
@@ -18958,9 +18957,8 @@ msgid "Show drawing sheet border and title block"
 msgstr "Mostrar el marco y bloque de título de la hoja de dibujo"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:103
-#, fuzzy
 msgid "Show drawing sheet page limits"
-msgstr "Mostrar límites de hoja"
+msgstr "Mostrar los límites de la página de la hoja de dibujo"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:105
 msgid "PCB Background"
@@ -25243,10 +25241,11 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"Esta es la proporción aplicada como porcentaje de separación local entre el "
-"ancho y la altura del pad de esta huella.\n"
-"Un valor de 10 significa que la separación horizontal es el 10% del ancho "
-"del pad y la separación vertical es el 10% de la altura del pad.\n"
+"Esta es la proporción de separación local aplicada como porcentaje entre el "
+"ancho y la altura del pad para esta huella.\n"
+"Un valor de 10 significa que el valor de la separación horizontal es el 10% "
+"del ancho del pad y el valor de la separación vertical es el 10% de la "
+"altura del pad.\n"
 "Este valor puede ser sustituido por un valor local del pad.\n"
 "La separación final es la suma de este valor y el valor de separación "
 "absoluta.\n"
@@ -25370,7 +25369,6 @@ msgstr ""
 "la pestaña de márgenes y ajustes locales de las propiedades del pad."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:274
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder paste for\n"
 "this footprint.\n"
@@ -25380,13 +25378,14 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Este es el margen local entre los pads y la pasta de soldadura para\n"
+"Este es la separación local entre los pads y la pasta de soldadura para\n"
 "esta huella.\n"
-"El valor final del margen es la suma de este valor y la proporción de "
-"margen.\n"
-"Un valor negativo significa un tamaño de máscara menor que el del pad.\n"
-"Este valor puede ser sustituido individualmente por cada pad en\n"
-"la pestaña de márgenes y ajustes locales de las propiedades del pad."
+"El valor final la separación es la suma de este valor y el valor de la "
+"proporción de la separación.\n"
+"Un valor negativo significa un tamaño de apertura de plantilla menor que el "
+"del pad.\n"
+"Este valor puede ser remplazado pad por pad en\n"
+"la pestaña de Márgenes prioritarios y ajustes de las Propiedades del Pad."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:287
 #, fuzzy, c-format
@@ -25401,16 +25400,17 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
-"Esta es la proporción aplicada como porcentaje de separación local entre el "
-"ancho y la altura del pad de esta huella.\n"
-"Un valor de 10 significa que la separación horizontal es el 10% del ancho "
-"del pad y la separación vertical es el 10% de la altura del pad.\n"
+"Esta es la proporción de separación local aplicada como porcentaje entre el "
+"ancho y la altura del pad para esta huella.\n"
+"Un valor de 10 significa que el valor de la separación horizontal es el 10% "
+"del ancho del pad y el valor de la separación vertical es el 10% de la "
+"altura del pad.\n"
 "La separación final es la suma de este valor y el valor de separación "
 "absoluta.\n"
 "Un valor negativo significa un tamaño de apertura de plantilla menor que el "
 "del pad.\n"
-"Este valor puede ser sobreescrito pad por pad en la pestaña de Separación "
-"Local y Configuración de Propiedades del Pad."
+"Este valor puede ser reemplazado pad por pad en la pestaña de Márgenes "
+"prioritarios y ajustes de las Propiedades del Pad."
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:144
 msgid "All footprint generator scripts were loaded"
@@ -27113,9 +27113,8 @@ msgid "From parent footprint"
 msgstr "Como la huella madre"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:716
-#, fuzzy
 msgid "Zone knockout:"
-msgstr "Zona knockout:"
+msgstr "Zona de knockout:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
 msgid "Pad shape"
@@ -27126,9 +27125,8 @@ msgid "Pad convex hull"
 msgstr "Envolvente convexa del pad"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:733
-#, fuzzy
 msgid "Thermal Relief Overrides"
-msgstr "Ancho del alivio térmico"
+msgstr "Sobreescritura de alivio térmico"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:741
 msgid "Relief gap:"
@@ -27215,19 +27213,16 @@ msgid "Basic Shape Polygon"
 msgstr "Polígono de forma básica"
 
 #: pcbnew/dialogs/dialog_plot.cpp:113
-#, fuzzy
 msgid "Plot on All Layers"
-msgstr "Imprimir todas las páginas"
+msgstr "Trazar en todas las capas"
 
 #: pcbnew/dialogs/dialog_plot.cpp:135
-#, fuzzy
 msgid "Move current selection up"
-msgstr "Guarda la hoja actual con otro nombre"
+msgstr "Mover la selección actual hacia arriba"
 
 #: pcbnew/dialogs/dialog_plot.cpp:143
-#, fuzzy
 msgid "Move current selection down"
-msgstr "Mover la capa actual hacia abajo"
+msgstr "Mover la selección actual hacia abajo"
 
 #: pcbnew/dialogs/dialog_plot.cpp:154
 msgid "Generate Drill Files..."
@@ -30570,9 +30565,9 @@ msgid "Zone %s min thickness: %s."
 msgstr "Ancho mínimo de la zona %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:895
-#, fuzzy, c-format
+#, c-format
 msgid "Checking assertion \"%s\"."
-msgstr "Comprobando la condición de regla \"%s\"."
+msgstr "Comprobando la aserción \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:901 pcbnew/drc/drc_engine.cpp:1332
 msgid "Assertion passed."
@@ -30721,9 +30716,9 @@ msgid "Zone %s thermal spoke width: %s."
 msgstr "Ancho del alivio térmico de zona %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1326
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule assertion \"%s\"."
-msgstr "Comprobando la condición de regla \"%s\"."
+msgstr "Comprobando la aserción de regla \"%s\"."
 
 #: pcbnew/drc/drc_item.cpp:44
 msgid "Electrical"
@@ -32289,6 +32284,7 @@ msgstr "Importar archivo de gráficos vectoriales"
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:133
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
 msgstr ""
+"La memoria se agotó al intentar cargar el DXF, puede ser demasiado grande."
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
