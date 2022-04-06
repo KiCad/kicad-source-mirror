@@ -37,6 +37,8 @@ SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString
         m_te( aScintilla ),
         m_braces( aBraces ),
         m_lastCaretPos( -1 ),
+        m_lastSelStart( -1 ),
+        m_lastSelEnd( -1 ),
         m_suppressAutocomplete( false ),
         m_singleLine( aSingleLine ),
         m_returnCallback( aReturnCallback )
@@ -337,10 +339,14 @@ void SCINTILLA_TRICKS::onScintillaUpdateUI( wxStyledTextEvent& aEvent )
 
     // Has the caret changed position?
     int caretPos = m_te->GetCurrentPos();
+    int selStart = m_te->GetSelectionStart();
+    int selEnd = m_te->GetSelectionEnd();
 
-    if( m_lastCaretPos != caretPos )
+    if( m_lastCaretPos != caretPos || m_lastSelStart != selStart || m_lastSelEnd != selEnd )
     {
         m_lastCaretPos = caretPos;
+        m_lastSelStart = selStart;
+        m_lastSelEnd = selEnd;
         int bracePos1 = -1;
         int bracePos2 = -1;
 
