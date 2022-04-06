@@ -23,6 +23,7 @@ class COLOR_SWATCH;
 #include <wx/sizer.h>
 #include <wx/panel.h>
 #include <wx/bmpcbox.h>
+#include <wx/gbsizer.h>
 #include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>

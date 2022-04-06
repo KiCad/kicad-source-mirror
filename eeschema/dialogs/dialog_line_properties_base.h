@@ -23,6 +23,7 @@ class COLOR_SWATCH;
 #include <wx/sizer.h>
 #include <wx/panel.h>
 #include <wx/bmpcbox.h>
+#include <wx/gbsizer.h>
 #include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -46,7 +47,7 @@ class DIALOG_LINE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_lineWidth;
 		wxStaticText* m_staticWidthUnits;
 		wxStaticText* m_staticTextColor;
-		wxPanel* m_panel1;
+		wxPanel* m_panel11;
 		COLOR_SWATCH* m_colorSwatch;
 		wxStaticText* m_staticTextStyle;
 		wxBitmapComboBox* m_typeCombo;

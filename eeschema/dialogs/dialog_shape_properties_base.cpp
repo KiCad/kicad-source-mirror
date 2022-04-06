@@ -114,21 +114,21 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 
 	m_textEntrySizer->AddGrowableCol( 3 );
 
-	mainSizer->Add( m_textEntrySizer, 0, wxEXPAND|wxALL, 15 );
+	mainSizer->Add( m_textEntrySizer, 0, wxEXPAND|wxALL, 10 );
 
 	wxBoxSizer* bSizer12;
 	bSizer12 = new wxBoxSizer( wxVERTICAL );
 
-	m_helpLabel1 = new wxStaticText( this, wxID_ANY, _("Set border width to 0 to use Schematic Editor default line width."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_helpLabel1 = new wxStaticText( this, wxID_ANY, _("Set border width to 0 to use schematic's default line width."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_helpLabel1->Wrap( -1 );
 	bSizer12->Add( m_helpLabel1, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 10 );
 
-	m_helpLabel2 = new wxStaticText( this, wxID_ANY, _("Set colors to transparent to use Schematic Editor colors."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_helpLabel2 = new wxStaticText( this, wxID_ANY, _("Clear colors to use Schematic Editor colors."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_helpLabel2->Wrap( -1 );
 	bSizer12->Add( m_helpLabel2, 0, wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 
-	mainSizer->Add( bSizer12, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	mainSizer->Add( bSizer12, 0, wxEXPAND, 5 );
 
 	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	mainSizer->Add( m_staticline, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );

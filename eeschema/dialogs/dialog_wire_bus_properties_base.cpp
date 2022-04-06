@@ -22,28 +22,29 @@ DIALOG_WIRE_BUS_PROPERTIES_BASE::DIALOG_WIRE_BUS_PROPERTIES_BASE( wxWindow* pare
 	wxBoxSizer* mainSizer;
 	mainSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxFlexGridSizer* fgSizerGeneral;
-	fgSizerGeneral = new wxFlexGridSizer( 0, 3, 3, 0 );
-	fgSizerGeneral->AddGrowableCol( 1 );
-	fgSizerGeneral->SetFlexibleDirection( wxBOTH );
-	fgSizerGeneral->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 3, 0 );
+	gbSizer1->SetFlexibleDirection( wxBOTH );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_staticTextWidth = new wxStaticText( this, wxID_ANY, _("Wire/bus width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextWidth->Wrap( -1 );
-	fgSizerGeneral->Add( m_staticTextWidth, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
+	gbSizer1->Add( m_staticTextWidth, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_lineWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
-	fgSizerGeneral->Add( m_lineWidth, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 3 );
+	m_lineWidth->SetMinSize( wxSize( 146,-1 ) );
+
+	gbSizer1->Add( m_lineWidth, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticWidthUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticWidthUnits->Wrap( -1 );
 	m_staticWidthUnits->SetMinSize( wxSize( 40,-1 ) );
 
-	fgSizerGeneral->Add( m_staticWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
+	gbSizer1->Add( m_staticWidthUnits, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
 
 	m_staticTextColor = new wxStaticText( this, wxID_ANY, _("Color:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextColor->Wrap( -1 );
-	fgSizerGeneral->Add( m_staticTextColor, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	gbSizer1->Add( m_staticTextColor, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
 
 	m_panel1 = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer2;
@@ -56,56 +57,43 @@ DIALOG_WIRE_BUS_PROPERTIES_BASE::DIALOG_WIRE_BUS_PROPERTIES_BASE( wxWindow* pare
 	m_panel1->SetSizer( bSizer2 );
 	m_panel1->Layout();
 	bSizer2->Fit( m_panel1 );
-	fgSizerGeneral->Add( m_panel1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 2 );
-
-
-	fgSizerGeneral->Add( 0, 0, 1, wxEXPAND, 5 );
+	gbSizer1->Add( m_panel1, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_staticTextStyle = new wxStaticText( this, wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextStyle->Wrap( -1 );
-	fgSizerGeneral->Add( m_staticTextStyle, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	gbSizer1->Add( m_staticTextStyle, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_typeCombo = new wxBitmapComboBox( this, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
 	m_typeCombo->SetMinSize( wxSize( 240,-1 ) );
 
-	fgSizerGeneral->Add( m_typeCombo, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 3 );
-
-
-	fgSizerGeneral->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	fgSizerGeneral->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
-
-
-	fgSizerGeneral->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	fgSizerGeneral->Add( 0, 0, 1, wxEXPAND, 5 );
+	gbSizer1->Add( m_typeCombo, wxGBPosition( 1, 1 ), wxGBSpan( 1, 4 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_dotSizeLabel = new wxStaticText( this, wxID_ANY, _("Junction size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_dotSizeLabel->Wrap( -1 );
-	fgSizerGeneral->Add( m_dotSizeLabel, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_dotSizeLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_dotSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerGeneral->Add( m_dotSizeCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_dotSizeCtrl->SetMinSize( wxSize( 146,-1 ) );
+
+	gbSizer1->Add( m_dotSizeCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_dotSizeUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_dotSizeUnits->Wrap( -1 );
-	fgSizerGeneral->Add( m_dotSizeUnits, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 3 );
+	gbSizer1->Add( m_dotSizeUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
 
 
-	mainSizer->Add( fgSizerGeneral, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 10 );
+	mainSizer->Add( gbSizer1, 1, wxEXPAND|wxALL, 10 );
 
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxVERTICAL );
 
-	m_helpLabel1 = new wxStaticText( this, wxID_ANY, _("Set width to 0 to use Netclass wire/bus widths."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_helpLabel1 = new wxStaticText( this, wxID_ANY, _("Set width to 0 to use netclass's wire/bus widths."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_helpLabel1->Wrap( -1 );
-	bSizer3->Add( m_helpLabel1, 0, wxRIGHT|wxLEFT, 10 );
+	bSizer3->Add( m_helpLabel1, 0, wxTOP|wxRIGHT|wxLEFT, 10 );
 
-	m_helpLabel2 = new wxStaticText( this, wxID_ANY, _("Set color to transparent to use Schematic Editor colors."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_helpLabel2 = new wxStaticText( this, wxID_ANY, _("Clear color to use Schematic Editor colors."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_helpLabel2->Wrap( -1 );
-	bSizer3->Add( m_helpLabel2, 0, wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+	bSizer3->Add( m_helpLabel2, 0, wxRIGHT|wxLEFT, 10 );
 
 
 	mainSizer->Add( bSizer3, 0, wxEXPAND|wxTOP, 5 );
