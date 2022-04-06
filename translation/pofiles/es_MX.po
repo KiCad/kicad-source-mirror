@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-28 11:13-0700\n"
-"PO-Revision-Date: 2022-03-21 22:49+0000\n"
+"PO-Revision-Date: 2022-04-08 00:07+0000\n"
 "Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "v6/es_MX/>\n"
@@ -457,7 +457,7 @@ msgstr "Cuadrícula 3D 5 mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:176
 msgid "3D Grid 2.5mm"
-msgstr "Cuadrícula 3D 2,5 mm"
+msgstr "Cuadrícula 3D 2.5 mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:181
 msgid "3D Grid 1mm"
