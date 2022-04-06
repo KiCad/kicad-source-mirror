@@ -89,6 +89,27 @@ void LIB_SHAPE::MoveTo( const VECTOR2I& aPosition )
 }
 
 
+void LIB_SHAPE::Normalize()
+{
+    if( GetShape() == SHAPE_T::RECT )
+    {
+        VECTOR2I size = GetEnd() - GetPosition();
+
+        if( size.y < 0 )
+        {
+            SetStartY( GetStartY() + size.y );
+            SetEndY( GetStartY() - size.y );
+        }
+
+        if( size.x < 0 )
+        {
+            SetStartX( GetStartX() + size.x );
+            SetEndX( GetStartX() - size.x );
+        }
+    }
+}
+
+
 void LIB_SHAPE::MirrorHorizontal( const VECTOR2I& aCenter )
 {
     flip( aCenter, true );

@@ -85,6 +85,8 @@ public:
 
     void Move( const VECTOR2I& aOffset ) override;
 
+    void Normalize();
+
     void MirrorHorizontally( int aCenter ) override;
     void MirrorVertically( int aCenter ) override;
     void Rotate( const VECTOR2I& aCenter ) override;

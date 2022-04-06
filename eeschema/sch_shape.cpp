@@ -69,6 +69,27 @@ void SCH_SHAPE::Move( const VECTOR2I& aOffset )
 }
 
 
+void SCH_SHAPE::Normalize()
+{
+    if( GetShape() == SHAPE_T::RECT )
+    {
+        VECTOR2I size = GetEnd() - GetPosition();
+
+        if( size.y < 0 )
+        {
+            SetStartY( GetStartY() + size.y );
+            SetEndY( GetStartY() - size.y );
+        }
+
+        if( size.x < 0 )
+        {
+            SetStartX( GetStartX() + size.x );
+            SetEndX( GetStartX() - size.x );
+        }
+    }
+}
+
+
 void SCH_SHAPE::MirrorHorizontally( int aCenter )
 {
     flip( VECTOR2I( aCenter, 0 ), true );

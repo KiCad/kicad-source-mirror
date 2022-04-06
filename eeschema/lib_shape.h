@@ -79,6 +79,8 @@ public:
 
     VECTOR2I GetCenter() const { return getCenter(); }
 
+    void Normalize();
+
     void MirrorHorizontal( const VECTOR2I& aCenter ) override;
     void MirrorVertical( const VECTOR2I& aCenter ) override;
     void Rotate( const VECTOR2I& aCenter, bool aRotateCCW = true ) override;

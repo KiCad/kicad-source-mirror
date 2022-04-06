@@ -103,15 +103,10 @@ public:
 
             case SHAPE_T::RECT:
             {
-                // point editor works only with rectangles having width and height > 0
-                // Some symbols can have rectangles with width or height < 0
-                // So normalize the size:
-                BOX2I dummy;
-                dummy.SetOrigin( mapCoords( shape->GetPosition() ) );
-                dummy.SetEnd( mapCoords( shape->GetEnd() ) );
-                dummy.Normalize();
-                VECTOR2I topLeft = dummy.GetPosition();
-                VECTOR2I botRight = dummy.GetEnd();
+                shape->Normalize();
+
+                VECTOR2I topLeft = mapCoords( shape->GetPosition() );
+                VECTOR2I botRight = mapCoords( shape->GetEnd() );
 
                 points->AddPoint( topLeft );
                 points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
@@ -151,15 +146,10 @@ public:
         {
             LIB_TEXTBOX* textBox = static_cast<LIB_TEXTBOX*>( aItem );
 
-            // point editor works only with rectangles having width and height > 0
-            // Some symbols can have rectangles with width or height < 0
-            // So normalize the size:
-            BOX2I dummy;
-            dummy.SetOrigin( mapCoords( textBox->GetPosition() ) );
-            dummy.SetEnd( mapCoords( textBox->GetEnd() ) );
-            dummy.Normalize();
-            VECTOR2I topLeft = dummy.GetPosition();
-            VECTOR2I botRight = dummy.GetEnd();
+            textBox->Normalize();
+
+            VECTOR2I topLeft = mapCoords( textBox->GetPosition() );
+            VECTOR2I botRight = mapCoords( textBox->GetEnd() );
 
             points->AddPoint( topLeft );
             points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
@@ -197,15 +187,10 @@ public:
 
             case SHAPE_T::RECT:
             {
-                // point editor works only with rectangles having width and height > 0
-                // Some symbols can have rectangles with width or height < 0
-                // So normalize the size:
-                BOX2I dummy;
-                dummy.SetOrigin( shape->GetPosition() );
-                dummy.SetEnd( shape->GetEnd() );
-                dummy.Normalize();
-                VECTOR2I topLeft = dummy.GetPosition();
-                VECTOR2I botRight = dummy.GetEnd();
+                shape->Normalize();
+
+                VECTOR2I topLeft = shape->GetPosition();
+                VECTOR2I botRight = shape->GetEnd();
 
                 points->AddPoint( topLeft );
                 points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
@@ -245,15 +230,10 @@ public:
         {
             SCH_TEXTBOX* textBox = static_cast<SCH_TEXTBOX*>( aItem );
 
-            // point editor works only with rectangles having width and height > 0
-            // Some symbols can have rectangles with width or height < 0
-            // So normalize the size:
-            BOX2I dummy;
-            dummy.SetOrigin( textBox->GetPosition() );
-            dummy.SetEnd( textBox->GetEnd() );
-            dummy.Normalize();
-            VECTOR2I topLeft = dummy.GetPosition();
-            VECTOR2I botRight = dummy.GetEnd();
+            textBox->Normalize();
+
+            VECTOR2I topLeft = textBox->GetPosition();
+            VECTOR2I botRight = textBox->GetEnd();
 
             points->AddPoint( topLeft );
             points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
