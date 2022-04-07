@@ -453,9 +453,13 @@ int ERC_TESTER::TestPinToPin()
     {
         std::vector<SCH_PIN*> pins;
         std::unordered_map<EDA_ITEM*, SCH_SCREEN*> pinToScreenMap;
+        bool has_noconnect = false;
 
         for( CONNECTION_SUBGRAPH* subgraph: net.second )
         {
+            if( subgraph->m_no_connect )
+                has_noconnect = true;
+
             for( EDA_ITEM* item : subgraph->m_items )
             {
                 if( item->Type() == SCH_PIN_T )
@@ -552,7 +556,7 @@ int ERC_TESTER::TestPinToPin()
             }
         }
 
-        if( needsDriver && !hasDriver )
+        if( needsDriver && !hasDriver && !has_noconnect )
         {
             int err_code = ispowerNet ? ERCE_POWERPIN_NOT_DRIVEN : ERCE_PIN_NOT_DRIVEN;
 
