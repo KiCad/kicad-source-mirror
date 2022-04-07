@@ -27,6 +27,7 @@ pcbnew/pcb_plot_params_keywords.cpp
 pcbnew/pcb_plot_params_lexer.h
 Makefile
 CMakeCache.txt
+.cache/
 auto_renamed_to_cpp
 Testing
 version.h
@@ -100,6 +101,7 @@ __pycache__
 .vs/
 .editorconfig
 CMakeSettings.json
+.vscode/
 
 # Sublime Text
 *.sublime-*
