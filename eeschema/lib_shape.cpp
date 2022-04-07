@@ -95,7 +95,7 @@ void LIB_SHAPE::Normalize()
     {
         VECTOR2I size = GetEnd() - GetPosition();
 
-        if( size.y < 0 )
+        if( size.y > 0 )
         {
             SetStartY( GetStartY() + size.y );
             SetEndY( GetStartY() - size.y );

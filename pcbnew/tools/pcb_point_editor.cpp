@@ -816,9 +816,6 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, const VECTOR
 /**
  * Update the coordinates of 4 corners of a rectangle, according to pad constraints and the
  * moved corner
- * @param aEditedPointIndex is the corner id
- * @param aMinWidth is the minimal width constraint
- * @param aMinHeight is the minimal height constraint
  * @param aTopLeft [in/out] is the RECT_TOPLEFT to constraint
  * @param aTopRight [in/out] is the RECT_TOPRIGHT to constraint
  * @param aBotLeft [in/out] is the RECT_BOTLEFT to constraint
@@ -826,91 +823,104 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, const VECTOR
  * @param aHole the location of the pad's hole
  * @param aHoleSize the pad's hole size (or {0,0} if it has no hole)
  */
-static void pinEditedCorner( int aEditedPointIndex, int aMinWidth, int aMinHeight,
-                             VECTOR2I& aTopLeft, VECTOR2I& aTopRight, VECTOR2I& aBotLeft,
-                             VECTOR2I& aBotRight, VECTOR2I& aHole, VECTOR2I& aHoleSize )
+void PCB_POINT_EDITOR::pinEditedCorner( VECTOR2I& aTopLeft, VECTOR2I& aTopRight,
+                                        VECTOR2I& aBotLeft, VECTOR2I& aBotRight,
+                                        const VECTOR2I& aHole, const VECTOR2I& aHoleSize ) const
 {
-    switch( aEditedPointIndex )
+    int minWidth = Mils2iu( 1 );
+    int minHeight = Mils2iu( 1 );
+
+    if( isModified( m_editPoints->Point( RECT_TOP_LEFT ) ) )
     {
-    case RECT_TOP_LEFT:
         if( aHoleSize.x )
         {
             // pin edited point to the top/left of the hole
-            aTopLeft.x = std::min( aTopLeft.x, aHole.x - aHoleSize.x / 2 - aMinWidth );
-            aTopLeft.y = std::min( aTopLeft.y, aHole.y - aHoleSize.y / 2 - aMinHeight );
+            aTopLeft.x = std::min( aTopLeft.x, aHole.x - aHoleSize.x / 2 - minWidth );
+            aTopLeft.y = std::min( aTopLeft.y, aHole.y - aHoleSize.y / 2 - minHeight );
         }
         else
         {
             // pin edited point within opposite corner
-            aTopLeft.x = std::min( aTopLeft.x, aBotRight.x - aMinWidth );
-            aTopLeft.y = std::min( aTopLeft.y, aBotRight.y - aMinHeight );
+            aTopLeft.x = std::min( aTopLeft.x, aBotRight.x - minWidth );
+            aTopLeft.y = std::min( aTopLeft.y, aBotRight.y - minHeight );
         }
 
         // push edited point edges to adjacent corners
         aTopRight.y = aTopLeft.y;
         aBotLeft.x = aTopLeft.x;
-
-        break;
-
-    case RECT_TOP_RIGHT:
+    }
+    else if( isModified( m_editPoints->Point( RECT_TOP_RIGHT ) ) )
+    {
         if( aHoleSize.x )
         {
             // pin edited point to the top/right of the hole
-            aTopRight.x = std::max( aTopRight.x, aHole.x + aHoleSize.x / 2 + aMinWidth );
-            aTopRight.y = std::min( aTopRight.y, aHole.y - aHoleSize.y / 2 - aMinHeight );
+            aTopRight.x = std::max( aTopRight.x, aHole.x + aHoleSize.x / 2 + minWidth );
+            aTopRight.y = std::min( aTopRight.y, aHole.y - aHoleSize.y / 2 - minHeight );
         }
         else
         {
             // pin edited point within opposite corner
-            aTopRight.x = std::max( aTopRight.x, aBotLeft.x + aMinWidth );
-            aTopRight.y = std::min( aTopRight.y, aBotLeft.y - aMinHeight );
+            aTopRight.x = std::max( aTopRight.x, aBotLeft.x + minWidth );
+            aTopRight.y = std::min( aTopRight.y, aBotLeft.y - minHeight );
         }
 
         // push edited point edges to adjacent corners
         aTopLeft.y = aTopRight.y;
         aBotRight.x = aTopRight.x;
-
-        break;
-
-    case RECT_BOT_LEFT:
+    }
+    else if( isModified( m_editPoints->Point( RECT_BOT_LEFT ) ) )
+    {
         if( aHoleSize.x )
         {
             // pin edited point to the bottom/left of the hole
-            aBotLeft.x = std::min( aBotLeft.x, aHole.x - aHoleSize.x / 2 - aMinWidth );
-            aBotLeft.y = std::max( aBotLeft.y, aHole.y + aHoleSize.y / 2 + aMinHeight );
+            aBotLeft.x = std::min( aBotLeft.x, aHole.x - aHoleSize.x / 2 - minWidth );
+            aBotLeft.y = std::max( aBotLeft.y, aHole.y + aHoleSize.y / 2 + minHeight );
         }
         else
         {
             // pin edited point within opposite corner
-            aBotLeft.x = std::min( aBotLeft.x, aTopRight.x - aMinWidth );
-            aBotLeft.y = std::max( aBotLeft.y, aTopRight.y + aMinHeight );
+            aBotLeft.x = std::min( aBotLeft.x, aTopRight.x - minWidth );
+            aBotLeft.y = std::max( aBotLeft.y, aTopRight.y + minHeight );
         }
 
         // push edited point edges to adjacent corners
         aBotRight.y = aBotLeft.y;
         aTopLeft.x = aBotLeft.x;
-
-        break;
-
-    case RECT_BOT_RIGHT:
+    }
+    else if( isModified( m_editPoints->Point( RECT_BOT_RIGHT ) ) )
+    {
         if( aHoleSize.x )
         {
             // pin edited point to the bottom/right of the hole
-            aBotRight.x = std::max( aBotRight.x, aHole.x + aHoleSize.x / 2 + aMinWidth );
-            aBotRight.y = std::max( aBotRight.y, aHole.y + aHoleSize.y / 2 + aMinHeight );
+            aBotRight.x = std::max( aBotRight.x, aHole.x + aHoleSize.x / 2 + minWidth );
+            aBotRight.y = std::max( aBotRight.y, aHole.y + aHoleSize.y / 2 + minHeight );
         }
         else
         {
             // pin edited point within opposite corner
-            aBotRight.x = std::max( aBotRight.x, aTopLeft.x + aMinWidth );
-            aBotRight.y = std::max( aBotRight.y, aTopLeft.y + aMinHeight );
+            aBotRight.x = std::max( aBotRight.x, aTopLeft.x + minWidth );
+            aBotRight.y = std::max( aBotRight.y, aTopLeft.y + minHeight );
         }
 
         // push edited point edges to adjacent corners
         aBotLeft.y = aBotRight.y;
         aTopRight.x = aBotRight.x;
-
-        break;
+    }
+    else if( isModified( m_editPoints->Line( RECT_TOP ) ) )
+    {
+        aTopLeft.y = std::min( aTopLeft.y, aBotRight.y - minHeight );
+    }
+    else if( isModified( m_editPoints->Line( RECT_LEFT ) ) )
+    {
+        aTopLeft.x = std::min( aTopLeft.x, aBotRight.x - minWidth );
+    }
+    else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
+    {
+        aBotRight.y = std::max( aBotRight.y, aTopLeft.y + minHeight );
+    }
+    else if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
+    {
+        aBotRight.x = std::max( aBotRight.x, aTopLeft.x + minWidth );
     }
 }
 
@@ -1089,39 +1099,36 @@ void PCB_POINT_EDITOR::updateItem() const
 
         case SHAPE_T::RECT:
         {
-            if( isModified( m_editPoints->Point( RECT_TOP_LEFT ) ) )
+            VECTOR2I topLeft = m_editPoints->Point( RECT_TOP_LEFT ).GetPosition();
+            VECTOR2I topRight = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition();
+            VECTOR2I botLeft = m_editPoints->Point( RECT_BOT_LEFT ).GetPosition();
+            VECTOR2I botRight = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition();
+
+            pinEditedCorner( topLeft, topRight, botLeft, botRight );
+
+            if( isModified( m_editPoints->Point( RECT_TOP_LEFT ) )
+                    || isModified( m_editPoints->Point( RECT_TOP_RIGHT ) )
+                    || isModified( m_editPoints->Point( RECT_BOT_RIGHT ) )
+                    || isModified( m_editPoints->Point( RECT_BOT_LEFT ) ) )
             {
-                shape->SetStart( m_editPoints->Point( RECT_TOP_LEFT ).GetPosition() );
-            }
-            else if( isModified( m_editPoints->Point( RECT_TOP_RIGHT ) ) )
-            {
-                shape->SetStartY( m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().y );
-                shape->SetEndX( m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().x );
-            }
-            else if( isModified( m_editPoints->Point( RECT_BOT_RIGHT ) ) )
-            {
-                shape->SetEnd( m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition() );
-            }
-            else if( isModified( m_editPoints->Point( RECT_BOT_LEFT ) ) )
-            {
-                shape->SetStartX( m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().x );
-                shape->SetEndY( m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().y );
+                shape->SetPosition( topLeft );
+                shape->SetEnd( botRight );
             }
             else if( isModified( m_editPoints->Line( RECT_TOP ) ) )
             {
-                shape->SetStartY( m_editPoints->Point( RECT_TOP_LEFT ).GetPosition().y );
+                shape->SetStartY( topLeft.y );
             }
             else if( isModified( m_editPoints->Line( RECT_LEFT ) ) )
             {
-                shape->SetStartX( m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().x );
+                shape->SetStartX( topLeft.x );
             }
             else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
             {
-                shape->SetEndY( m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition().y );
+                shape->SetEndY( botRight.y );
             }
             else if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
             {
-                shape->SetEndX( m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().x );
+                shape->SetEndX( botRight.x );
             }
 
             for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
@@ -1268,8 +1275,7 @@ void PCB_POINT_EDITOR::updateItem() const
             VECTOR2I holeCenter = pad->GetPosition();
             VECTOR2I holeSize = pad->GetDrillSize();
 
-            pinEditedCorner( getEditedPointIndex(), Mils2iu( 1 ), Mils2iu( 1 ), topLeft, topRight,
-                             botLeft, botRight, holeCenter, holeSize );
+            pinEditedCorner( topLeft, topRight, botLeft, botRight, holeCenter, holeSize );
 
             if( ( pad->GetOffset().x || pad->GetOffset().y )
                     || ( pad->GetDrillSize().x && pad->GetDrillSize().y ) )
