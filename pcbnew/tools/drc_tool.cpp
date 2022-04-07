@@ -192,7 +192,7 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones
             m_drcDialog->SetFootprintTestsRun();
     }
 
-    commit.Push( _( "DRC" ), SKIP_UNDO );
+    commit.Push( _( "DRC" ), SKIP_UNDO | SKIP_SET_DIRTY );
 
     m_drcRunning = false;
 
