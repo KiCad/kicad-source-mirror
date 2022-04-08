@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 jean-pierre.charras
- * Copyright (C) 2011-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -261,8 +261,12 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos )
         matrix.Translate( pos.x, pos.y );
         matrix.Scale( GetScalingFactor(), GetScalingFactor() );
         aDC->SetTransformMatrix( matrix );
+    #if !wxCHECK_VERSION( 3, 1, 6 )
         clipAreaPos.x = pos.x;
         clipAreaPos.y = pos.y;
+    #else
+        clipAreaPos.x =  clipAreaPos.y = 0;
+    #endif
         pos.x = pos.y = 0;
     }
     else
