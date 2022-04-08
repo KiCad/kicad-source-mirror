@@ -168,6 +168,7 @@ SVG_PLOTTER::SVG_PLOTTER()
     m_fillMode        = FILL_T::NO_FILL; // or FILLED_SHAPE or FILLED_WITH_BG_BODYCOLOR
     m_pen_rgb_color   = 0;          // current color value (black)
     m_brush_rgb_color = 0;          // current color value (black)
+    m_brush_alpha     = 1.0;
     m_dashed          = PLOT_DASH_TYPE::SOLID;
     m_useInch         = false;      // millimeters are always the svg unit
     m_precision       = 4;          // default: 4 digits in mantissa.
@@ -233,10 +234,14 @@ void SVG_PLOTTER::setSVGPlotStyle( bool aIsGroup, const std::string& aExtraStyle
 
     switch( m_fillMode )
     {
-    case FILL_T::NO_FILL:                  fputs( "fill-opacity:0.0; ", m_outputFile ); break;
-    case FILL_T::FILLED_SHAPE:             fputs( "fill-opacity:1.0; ", m_outputFile ); break;
+    case FILL_T::NO_FILL:
+        fputs( "fill-opacity:0.0; ", m_outputFile );
+        break;
+    case FILL_T::FILLED_SHAPE:
     case FILL_T::FILLED_WITH_BG_BODYCOLOR:
-    case FILL_T::FILLED_WITH_COLOR:        fputs( "fill-opacity:0.6; ", m_outputFile ); break;
+    case FILL_T::FILLED_WITH_COLOR:
+        fprintf( m_outputFile, "fill-opacity:%.*f; ", m_precision, m_brush_alpha );
+        break;
     }
 
     double pen_w = userToDeviceSize( GetCurrentLineWidth() );
@@ -342,7 +347,7 @@ void SVG_PLOTTER::EndBlock( void* aData )
 }
 
 
-void SVG_PLOTTER::emitSetRGBColor( double r, double g, double b )
+void SVG_PLOTTER::emitSetRGBColor( double r, double g, double b, double a )
 {
     int red     = (int) ( 255.0 * r );
     int green   = (int) ( 255.0 * g );
@@ -356,6 +361,7 @@ void SVG_PLOTTER::emitSetRGBColor( double r, double g, double b )
 
         // Currently, use the same color for brush and pen (i.e. to draw and fill a contour).
         m_brush_rgb_color = rgb_color;
+        m_brush_alpha = a;
     }
 }
 
@@ -746,7 +752,7 @@ bool SVG_PLOTTER::StartPlot()
     double opacity = 1.0;      // 0.0 (transparent to 1.0 (solid)
     fprintf( m_outputFile,
              "<g style=\"fill:#%6.6lX; fill-opacity:%.*f;stroke:#%6.6lX; stroke-opacity:%.*f;\n",
-             m_brush_rgb_color, m_precision, opacity, m_pen_rgb_color, m_precision, opacity );
+             m_brush_rgb_color, m_precision, m_brush_alpha, m_pen_rgb_color, m_precision, opacity );
 
     // output the pen cap and line joint
     fputs( "stroke-linecap:round; stroke-linejoin:round;\"\n", m_outputFile );

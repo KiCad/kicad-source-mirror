@@ -64,9 +64,9 @@ void PSLIKE_PLOTTER::SetColor( const COLOR4D& color )
     if( m_colorMode )
     {
         if( m_negativeMode )
-            emitSetRGBColor( 1 - color.r, 1 - color.g, 1 - color.b );
+            emitSetRGBColor( 1 - color.r, 1 - color.g, 1 - color.b, color.a );
         else
-            emitSetRGBColor( color.r, color.g, color.b );
+            emitSetRGBColor( color.r, color.g, color.b, color.a );
     }
     else
     {
@@ -80,9 +80,9 @@ void PSLIKE_PLOTTER::SetColor( const COLOR4D& color )
             k = 0;
 
         if( m_negativeMode )
-            emitSetRGBColor( 1 - k, 1 - k, 1 - k );
+            emitSetRGBColor( 1 - k, 1 - k, 1 - k, 1.0 );
         else
-            emitSetRGBColor( k, k, k );
+            emitSetRGBColor( k, k, k, 1.0 );
     }
 }
 
@@ -527,9 +527,20 @@ void PS_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 }
 
 
-void PS_PLOTTER::emitSetRGBColor( double r, double g, double b )
+void PS_PLOTTER::emitSetRGBColor( double r, double g, double b, double a )
 {
     wxASSERT( m_outputFile );
+
+    // Postscript treats all colors as opaque, so the best we can do with alpha is generate
+    // an appropriate blended color assuming white paper.  (It's possible that a halftone would
+    // work better on *some* drivers, but most drivers are known to still treat halftones as
+    // opaque and remove any colors underneath them.)
+    if( a < 1.0 )
+    {
+        r = ( r * a ) + ( 1 - a );
+        g = ( g * a ) + ( 1 - a );
+        b = ( b * a ) + ( 1 - a );
+    }
 
     // XXX why %.3g ? shouldn't %g suffice? who cares...
     fprintf( m_outputFile, "%.3g %.3g %.3g setrgbcolor\n", r, g, b );

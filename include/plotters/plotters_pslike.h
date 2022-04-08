@@ -131,7 +131,7 @@ protected:
     virtual std::string encodeStringForPlotter( const wxString& aUnicode );
 
     /// Virtual primitive for emitting the setrgbcolor operator
-    virtual void emitSetRGBColor( double r, double g, double b ) = 0;
+    virtual void emitSetRGBColor( double r, double g, double b, double a ) = 0;
 
     /// Height of the postscript font (from the AFM)
     static const double postscriptTextAscent; // = 0.718;
@@ -232,7 +232,7 @@ public:
                        void*                       aData = nullptr ) override;
 
 protected:
-    virtual void emitSetRGBColor( double r, double g, double b ) override;
+    virtual void emitSetRGBColor( double r, double g, double b, double a ) override;
 };
 
 
@@ -373,7 +373,7 @@ protected:
      * engines. Also arcs are filled as pies but only the arc is stroked so
      * it would be difficult to handle anyway.
      */
-    virtual void emitSetRGBColor( double r, double g, double b ) override;
+    virtual void emitSetRGBColor( double r, double g, double b, double a ) override;
 
     /**
      * Allocate a new handle in the table of the PDF object. The
@@ -521,7 +521,7 @@ protected:
      * Initialize m_pen_rgb_color from reduced values r, g ,b
      * ( reduced values are 0.0 to 1.0 )
      */
-    virtual void emitSetRGBColor( double r, double g, double b ) override;
+    virtual void emitSetRGBColor( double r, double g, double b, double a ) override;
 
     /**
      * Output the string which define pen and brush color, shape, transparency
@@ -544,6 +544,7 @@ protected:
                                         // (written in hex to svg files)
     long           m_brush_rgb_color;   // same as m_pen_rgb_color, used to fill
                                         // some contours.
+    double         m_brush_alpha;
     bool           m_graphics_changed;  // true if a pen/brush parameter is modified
                                         // color, pen size, fill mode ...
                                         // the new SVG stype must be output on file

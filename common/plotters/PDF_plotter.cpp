@@ -159,9 +159,19 @@ void PDF_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 }
 
 
-void PDF_PLOTTER::emitSetRGBColor( double r, double g, double b )
+void PDF_PLOTTER::emitSetRGBColor( double r, double g, double b, double a )
 {
     wxASSERT( workFile );
+
+    // PDF treats all colors as opaque, so the best we can do with alpha is generate an
+    // appropriate blended color assuming white paper.
+    if( a < 1.0 )
+    {
+        r = ( r * a ) + ( 1 - a );
+        g = ( g * a ) + ( 1 - a );
+        b = ( b * a ) + ( 1 - a );
+    }
+
     fprintf( workFile, "%g %g %g rg %g %g %g RG\n", r, g, b, r, g, b );
 }
 
