@@ -1086,16 +1086,16 @@ void EDA_SHAPE::SetPolyPoints( const std::vector<VECTOR2I>& aPoints )
 std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapes( bool aEdgeOnly ) const
 {
     std::vector<SHAPE*> effectiveShapes;
+    int                 width = GetEffectiveWidth();
 
     switch( m_shape )
     {
     case SHAPE_T::ARC:
-        effectiveShapes.emplace_back( new SHAPE_ARC( m_arcCenter, m_start, GetArcAngle(),
-                                                     GetWidth() ) );
+        effectiveShapes.emplace_back( new SHAPE_ARC( m_arcCenter, m_start, GetArcAngle(), width ) );
         break;
 
     case SHAPE_T::SEGMENT:
-        effectiveShapes.emplace_back( new SHAPE_SEGMENT( m_start, m_end, GetWidth() ) );
+        effectiveShapes.emplace_back( new SHAPE_SEGMENT( m_start, m_end, width ) );
         break;
 
     case SHAPE_T::RECT:
@@ -1105,12 +1105,12 @@ std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapes( bool aEdgeOnly ) const
         if( IsFilled() && !aEdgeOnly )
             effectiveShapes.emplace_back( new SHAPE_SIMPLE( pts ) );
 
-        if( GetWidth() > 0 || !IsFilled() || aEdgeOnly )
+        if( width > 0 || !IsFilled() || aEdgeOnly )
         {
-            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[0], pts[1], GetWidth() ) );
-            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[1], pts[2], GetWidth() ) );
-            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[2], pts[3], GetWidth() ) );
-            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[3], pts[0], GetWidth() ) );
+            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[0], pts[1], width ) );
+            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[1], pts[2], width ) );
+            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[2], pts[3], width ) );
+            effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[3], pts[0], width ) );
         }
     }
         break;
@@ -1120,21 +1120,21 @@ std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapes( bool aEdgeOnly ) const
         if( IsFilled() && !aEdgeOnly )
             effectiveShapes.emplace_back( new SHAPE_CIRCLE( getCenter(), GetRadius() ) );
 
-        if( GetWidth() > 0 || !IsFilled() || aEdgeOnly )
-            effectiveShapes.emplace_back( new SHAPE_ARC( getCenter(), GetEnd(), ANGLE_360 ) );
+        if( width > 0 || !IsFilled() || aEdgeOnly )
+            effectiveShapes.emplace_back( new SHAPE_ARC( getCenter(), GetEnd(), ANGLE_360, width ) );
 
         break;
     }
 
     case SHAPE_T::BEZIER:
     {
-        std::vector<VECTOR2I> bezierPoints = buildBezierToSegmentsPointsList( GetWidth() );
+        std::vector<VECTOR2I> bezierPoints = buildBezierToSegmentsPointsList( width );
         VECTOR2I              start_pt = bezierPoints[0];
 
         for( unsigned int jj = 1; jj < bezierPoints.size(); jj++ )
         {
             VECTOR2I end_pt = bezierPoints[jj];
-            effectiveShapes.emplace_back( new SHAPE_SEGMENT( start_pt, end_pt, GetWidth() ) );
+            effectiveShapes.emplace_back( new SHAPE_SEGMENT( start_pt, end_pt, width ) );
             start_pt = end_pt;
         }
 
@@ -1154,10 +1154,10 @@ std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapes( bool aEdgeOnly ) const
         if( IsFilled() && !aEdgeOnly )
             effectiveShapes.emplace_back( new SHAPE_SIMPLE( l ) );
 
-        if( GetWidth() > 0 || !IsFilled() || aEdgeOnly )
+        if( width > 0 || !IsFilled() || aEdgeOnly )
         {
             for( int i = 0; i < l.SegmentCount(); i++ )
-                effectiveShapes.emplace_back( new SHAPE_SEGMENT( l.Segment( i ), GetWidth() ) );
+                effectiveShapes.emplace_back( new SHAPE_SEGMENT( l.Segment( i ), width ) );
         }
     }
         break;
@@ -1194,7 +1194,7 @@ bool EDA_SHAPE::IsPolyShapeValid() const
     if( GetPolyShape().OutlineCount() == 0 )
         return false;
 
-    const SHAPE_LINE_CHAIN& outline = ( (SHAPE_POLY_SET&)GetPolyShape() ).Outline( 0 );
+    const SHAPE_LINE_CHAIN& outline = static_cast<const SHAPE_POLY_SET&>( GetPolyShape() ).Outline( 0 );
 
     return outline.PointCount() > 2;
 }

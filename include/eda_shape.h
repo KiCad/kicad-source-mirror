@@ -104,9 +104,10 @@ public:
 
     void SetWidth( int aWidth )                { m_stroke.SetWidth( aWidth ); }
     int GetWidth() const                       { return m_stroke.GetWidth(); }
+    virtual int GetEffectiveWidth() const      { return GetWidth(); }
 
-    void SetShape( SHAPE_T aShape )         { m_shape = aShape; }
-    SHAPE_T GetShape() const                { return m_shape; }
+    void SetShape( SHAPE_T aShape )            { m_shape = aShape; }
+    SHAPE_T GetShape() const                   { return m_shape; }
 
     /**
      * Return the starting point of the graphic.

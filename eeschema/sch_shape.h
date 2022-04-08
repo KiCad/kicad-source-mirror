@@ -58,6 +58,8 @@ public:
 
     int GetPenWidth() const override;
 
+    int GetEffectiveWidth() const override            { return GetPenWidth(); }
+
     bool HasLineStroke() const override               { return true; }
     STROKE_PARAMS GetStroke() const override          { return m_stroke; }
     void SetStroke( const STROKE_PARAMS& aStroke ) override;
@@ -77,9 +79,9 @@ public:
 
     VECTOR2I GetCenter() const { return getCenter(); }
 
-    void BeginEdit( const VECTOR2I& aStartPoint ) { beginEdit( aStartPoint ); }
-    bool ContinueEdit( const VECTOR2I& aPosition ) { return continueEdit( aPosition ); }
-    void CalcEdit( const VECTOR2I& aPosition ) { calcEdit( aPosition ); }
+    void BeginEdit( const VECTOR2I& aStartPoint )     { beginEdit( aStartPoint ); }
+    bool ContinueEdit( const VECTOR2I& aPosition )    { return continueEdit( aPosition ); }
+    void CalcEdit( const VECTOR2I& aPosition )        { calcEdit( aPosition ); }
     void EndEdit()                                    { endEdit(); }
     void SetEditState( int aState )                   { setEditState( aState ); }
 

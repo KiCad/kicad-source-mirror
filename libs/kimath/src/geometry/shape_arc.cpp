@@ -369,7 +369,7 @@ bool SHAPE_ARC::IsClockwise() const
 bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
                          VECTOR2I* aLocation ) const
 {
-    int minDist = aClearance + m_width / 2;
+    int minDist = aClearance + std::max( m_width / 2, 1 );
     auto bbox = BBox( minDist );
 
     // Fast check using bounding box:
