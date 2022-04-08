@@ -2541,6 +2541,51 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
             NeedRIGHT();
             break;
 
+        case T_default_instance:
+        {
+            SYMBOL_INSTANCE_REFERENCE defaultInstance;
+
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                switch( token )
+                {
+                case T_reference:
+                    NeedSYMBOL();
+                    defaultInstance.m_Reference = FromUTF8();
+                    NeedRIGHT();
+                    break;
+
+                case T_unit:
+                    defaultInstance.m_Unit = parseInt( "symbol unit" );
+                    NeedRIGHT();
+                    break;
+
+                case T_value:
+                    NeedSYMBOL();
+                    defaultInstance.m_Value = FromUTF8();
+                    NeedRIGHT();
+                    break;
+
+                case T_footprint:
+                    NeedSYMBOL();
+                    defaultInstance.m_Footprint = FromUTF8();
+                    NeedRIGHT();
+                    break;
+
+                default:
+                    Expecting( "path, unit, value or footprint" );
+                }
+            }
+
+            symbol->SetDefaultInstance( defaultInstance );
+            break;
+        }
+
         case T_property:
             // The field parent symbol must be set and its orientation must be set before
             // the field positions are set.

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -794,6 +794,18 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
         }
     }
 
+    if( m_cbMakeDefaultInstance->IsChecked() )
+    {
+        SYMBOL_INSTANCE_REFERENCE defaultInstance;
+
+        defaultInstance.m_Unit = unit_selection;
+        defaultInstance.m_Reference = m_fields->at( REFERENCE_FIELD ).GetText();
+        defaultInstance.m_Value = m_fields->at( VALUE_FIELD ).GetText();
+        defaultInstance.m_Footprint = m_fields->at( FOOTPRINT_FIELD ).GetText();
+
+        m_symbol->SetDefaultInstance( defaultInstance );
+    }
+
     currentScreen->Append( m_symbol );
     GetParent()->TestDanglingEnds();
     GetParent()->UpdateItem( m_symbol, false, true );
@@ -1017,7 +1029,8 @@ void DIALOG_SYMBOL_PROPERTIES::OnPinTableCellEdited( wxGridEvent& aEvent )
 {
     int row = aEvent.GetRow();
 
-    if( m_pinGrid->GetCellValue( row, COL_ALT_NAME ) == m_dataModel->GetValue( row, COL_BASE_NAME ) )
+    if( m_pinGrid->GetCellValue( row, COL_ALT_NAME ) ==
+        m_dataModel->GetValue( row, COL_BASE_NAME ) )
         m_dataModel->SetValue( row, COL_ALT_NAME, wxEmptyString );
 
     // These are just to get the cells refreshed

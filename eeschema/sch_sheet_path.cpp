@@ -115,6 +115,19 @@ SCH_SHEET_PATH& SCH_SHEET_PATH::operator=( const SCH_SHEET_PATH& aOther )
 }
 
 
+SCH_SHEET_PATH SCH_SHEET_PATH::operator+( const SCH_SHEET_PATH& aOther )
+{
+    SCH_SHEET_PATH retv = *this;
+
+    size_t size = aOther.size();
+
+    for( size_t i = 0; i < size; i++ )
+        retv.push_back( aOther.at( i ) );
+
+    return retv;
+}
+
+
 void SCH_SHEET_PATH::initFromOther( const SCH_SHEET_PATH& aOther )
 {
     m_sheets            = aOther.m_sheets;
@@ -193,8 +206,16 @@ bool SCH_SHEET_PATH::IsContainedWithin( const SCH_SHEET_PATH& aSheetPathToTest )
     for( size_t i = 0; i < aSheetPathToTest.size(); ++i )
     {
         if( at( i )->m_Uuid != aSheetPathToTest.at( i )->m_Uuid )
+        {
+            wxLogTrace( traceSchSheetPaths, "Sheet path '%s' is not within path '%s'.",
+                        aSheetPathToTest.Path().AsString(), Path().AsString() );
+
             return false;
+        }
     }
+
+    wxLogTrace( traceSchSheetPaths, "Sheet path '%s' is within path '%s'.",
+                aSheetPathToTest.Path().AsString(), Path().AsString() );
 
     return true;
 }
@@ -370,6 +391,19 @@ void SCH_SHEET_PATH::AppendMultiUnitSymbol( SCH_MULTI_UNIT_REFERENCE_MAP& aRefLi
             return;
 
         aRefList[reference_str].AddItem( schReference );
+    }
+}
+
+
+void SCH_SHEET_PATH::SetSymbolInstancesToDefault()
+{
+    for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        wxCHECK2( symbol, continue );
+
+        symbol->SetInstanceToDefault( *this );
     }
 }
 

@@ -685,9 +685,9 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
         m_out->Print( 0, ")" );
     }
 
-    int unit = ( aSymbol->GetInstanceReferences().size() == 0 ) ?
-               aSymbol->GetUnit() :
-               aSymbol->GetInstanceReferences()[0].m_Unit;
+    // The symbol unit is always set to the default instance regardless of the sheet instance
+    // to prevent file churn.
+    int unit = aSymbol->GetDefaultInstance().m_Unit;
 
     m_out->Print( 0, " (unit %d)", unit );
 
@@ -706,6 +706,13 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
 
     m_out->Print( aNestLevel + 1, "(uuid %s)\n", TO_UTF8( aSymbol->m_Uuid.AsString() ) );
 
+    m_out->Print( aNestLevel + 1,
+                  "(default_instance (reference %s) (unit %d) (value %s) (footprint %s))\n",
+                  m_out->Quotew( aSymbol->GetDefaultInstance().m_Reference ).c_str(),
+                  aSymbol->GetDefaultInstance().m_Unit,
+                  m_out->Quotew( aSymbol->GetDefaultInstance().m_Value ).c_str(),
+                  m_out->Quotew( aSymbol->GetDefaultInstance().m_Footprint ).c_str() );
+
     m_nextFreeFieldId = MANDATORY_FIELDS;
 
     for( SCH_FIELD& field : aSymbol->GetFields() )
@@ -713,26 +720,19 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
         int id = field.GetId();
         wxString value = field.GetText();
 
-        // The instance fields are always set to the first sheet instance of the project to
-        // schematic file changes when switching sheet instances with the current project
-        // schematic.  It does not solve the problem for schematics shared between projects.
+        // The instance fields are always set to the default instance regardless of the
+        // sheet instance to prevent file churn.
         if( id == REFERENCE_FIELD )
         {
-            field.SetText( ( aSymbol->GetInstanceReferences().size() == 0 ) ?
-                           value :
-                           aSymbol->GetInstanceReferences()[0].m_Reference );
+            field.SetText( aSymbol->GetDefaultInstance().m_Reference );
         }
         else if( id == VALUE_FIELD )
         {
-            field.SetText( ( aSymbol->GetInstanceReferences().size() == 0 ) ?
-                           value :
-                           aSymbol->GetInstanceReferences()[0].m_Value );
+            field.SetText( aSymbol->GetDefaultInstance().m_Value );
         }
         else if( id == FOOTPRINT_FIELD )
         {
-            field.SetText( ( aSymbol->GetInstanceReferences().size() == 0 ) ?
-                           value :
-                           aSymbol->GetInstanceReferences()[0].m_Footprint );
+            field.SetText( aSymbol->GetDefaultInstance().m_Footprint );
         }
 
         try

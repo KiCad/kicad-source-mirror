@@ -52,6 +52,7 @@ std::string toUTFTildaText( const wxString& txt )
         if( (unsigned char) *it <= ' ' )
             *it = '~';
     }
+
     return ret;
 }
 
@@ -103,13 +104,14 @@ SCH_SYMBOL::SCH_SYMBOL() :
 
 
 SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId,
-                        const SCH_SHEET_PATH* aSheet, int unit, int convert, const VECTOR2I& pos ) :
+                        const SCH_SHEET_PATH* aSheet, int aUnit, int aConvert,
+                        const VECTOR2I& aPosition ) :
     SCH_ITEM( nullptr, SCH_SYMBOL_T )
 {
-    Init( pos );
+    Init( aPosition );
 
-    m_unit      = unit;
-    m_convert   = convert;
+    m_unit      = aUnit;
+    m_convert   = aConvert;
     m_lib_id    = aLibId;
 
     std::unique_ptr< LIB_SYMBOL > part;
@@ -127,6 +129,12 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId,
                   true    /* reset other fields */ );
 
     m_prefix = UTIL::GetRefDesPrefix( m_part->GetReferenceField().GetText() );
+
+    // Set initial default symbol instance data from library symbol and initial unit.
+    m_defaultInstance.m_Reference = m_prefix;
+    m_defaultInstance.m_Unit = aUnit;
+    m_defaultInstance.m_Value = m_part->GetValueField().GetText();
+    m_defaultInstance.m_Footprint = m_part->GetFootprintField().GetText();
 
     if( aSheet )
     {
@@ -146,8 +154,8 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId,
 
 
 SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const SCH_SHEET_PATH* aSheet,
-                        const PICKED_SYMBOL& aSel, const VECTOR2I& pos ) :
-    SCH_SYMBOL( aSymbol, aSel.LibId, aSheet, aSel.Unit, aSel.Convert, pos )
+                        const PICKED_SYMBOL& aSel, const VECTOR2I& aPosition ) :
+    SCH_SYMBOL( aSymbol, aSel.LibId, aSheet, aSel.Unit, aSel.Convert, aPosition )
 {
     // Set any fields that were modified as part of the symbol selection
     for( const std::pair<int, wxString>& i : aSel.Fields )
@@ -188,6 +196,7 @@ SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
 
     m_fieldsAutoplaced = aSymbol.m_fieldsAutoplaced;
     m_schLibSymbolName = aSymbol.m_schLibSymbolName;
+    m_defaultInstance = aSymbol.m_defaultInstance;
 }
 
 
@@ -215,6 +224,7 @@ void SCH_SYMBOL::Init( const VECTOR2I& pos )
     }
 
     m_prefix = wxString( wxT( "U" ) );
+    m_defaultInstance.m_Reference = m_prefix;
     m_isInNetlist = true;
     m_inBom = true;
     m_onBoard = true;
@@ -935,6 +945,7 @@ void SCH_SYMBOL::SwapData( SCH_ITEM* aItem )
 
     std::swap( m_instanceReferences, symbol->m_instanceReferences );
     std::swap( m_schLibSymbolName, symbol->m_schLibSymbolName );
+    std::swap( m_defaultInstance, symbol->m_defaultInstance );
 }
 
 
@@ -1108,8 +1119,8 @@ bool SCH_SYMBOL::ReplaceInstanceSheetPath( const KIID_PATH& aOldSheetPath,
     }
 
     wxLogTrace( traceSchSheetPaths,
-            "Could not find sheet path %s\n  to replace with sheet path %s\n  for symbol %s.",
-            aOldSheetPath.AsString(), aNewSheetPath.AsString(), m_Uuid.AsString() );
+                "Could not find sheet path %s\n  to replace with sheet path %s\n  for symbol %s.",
+                aOldSheetPath.AsString(), aNewSheetPath.AsString(), m_Uuid.AsString() );
 
     return false;
 }
@@ -1780,6 +1791,7 @@ SCH_SYMBOL& SCH_SYMBOL::operator=( const SCH_ITEM& aItem )
         m_transform = c->m_transform;
 
         m_instanceReferences = c->m_instanceReferences;
+        m_defaultInstance = c->m_defaultInstance;
 
         m_fields    = c->m_fields;    // std::vector's assignment operator
 
@@ -1922,4 +1934,26 @@ bool SCH_SYMBOL::IsPointClickableAnchor( const VECTOR2I& aPos ) const
     }
 
     return false;
+}
+
+
+void SCH_SYMBOL::SetInstanceToDefault( const SCH_SHEET_PATH& aInstance )
+{
+    KIID_PATH path = aInstance.Path();
+
+    for( SYMBOL_INSTANCE_REFERENCE& instance: m_instanceReferences )
+    {
+        if( instance.m_Path == path )
+        {
+            instance.m_Reference = m_defaultInstance.m_Reference;
+            instance.m_Unit = m_defaultInstance.m_Unit;
+            instance.m_Value = m_defaultInstance.m_Value;
+            instance.m_Footprint = m_defaultInstance.m_Footprint;
+            return;
+        }
+    }
+
+    // It's a new instance so add it.
+    AddHierarchicalReference( path, m_defaultInstance.m_Reference, m_defaultInstance.m_Unit,
+                              m_defaultInstance.m_Value, m_defaultInstance.m_Footprint );
 }

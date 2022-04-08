@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -137,7 +137,12 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	m_cbAlternateSymbol = new wxCheckBox( sbGeneralProps->GetStaticBox(), wxID_ANY, _("Alternate symbol (De Morgan)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbAlternateSymbol->SetToolTip( _("Use the alternate shape of this symbol.\nFor gates, this is the \"De Morgan\" conversion") );
 
-	gbSizer1->Add( m_cbAlternateSymbol, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	gbSizer1->Add( m_cbAlternateSymbol, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+
+	m_cbMakeDefaultInstance = new wxCheckBox( sbGeneralProps->GetStaticBox(), wxID_ANY, _("Default for all sheet instances"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbMakeDefaultInstance->SetToolTip( _("Check to make the unit and reference, value, and\nfootprint fields the default for all sheet instances\nof this symbol") );
+
+	gbSizer1->Add( m_cbMakeDefaultInstance, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_orientationLabel = new wxStaticText( sbGeneralProps->GetStaticBox(), wxID_ANY, _("Angle:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_orientationLabel->Wrap( -1 );

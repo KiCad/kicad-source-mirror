@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -134,6 +134,8 @@ public:
 
     SCH_SHEET_PATH& operator=( const SCH_SHEET_PATH& aOther );
 
+    SCH_SHEET_PATH operator+( const SCH_SHEET_PATH& aOther );
+
     ~SCH_SHEET_PATH() = default;
 
     /// Forwarded method from std::vector
@@ -215,8 +217,8 @@ public:
     int Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const;
 
     /**
-     * Compare sheets by their page number. If the actual page number is equal, use virtual page numbers
-     * to compare.
+     * Compare sheets by their page number. If the actual page number is equal, use virtual page
+     * numbers to compare.
      *
      * @return -1 if aSheetPathToTest is greater than this (should appear later in the sort order)
      *          0 if aSheetPathToTest is equal to this
@@ -335,6 +337,11 @@ public:
      */
     void GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
                               bool aIncludePowerSymbols = true ) const;
+
+    /**
+     * Set all of the symbol instances in this sheet instance to the default symbol instance data.
+     */
+    void SetSymbolInstancesToDefault();
 
     /**
      * Test the SCH_SHEET_PATH file names to check adding the sheet stored in the file

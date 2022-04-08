@@ -372,13 +372,26 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     m_sheet->SetBorderColor( m_borderSwatch->GetSwatchColor() );
     m_sheet->SetBackgroundColor( m_backgroundSwatch->GetSwatchColor() );
 
-    SCH_SHEET_LIST hierarchy = m_frame->Schematic().GetFullHierarchy();
     SCH_SHEET_PATH instance = m_frame->GetCurrentSheet();
 
     instance.push_back( m_sheet );
 
     if( m_sheet->IsNew() )
+    {
         m_sheet->AddInstance( instance );
+
+        if( filename_changed )
+        {
+            // Set the symbol instance data to the default for all new sheets and sub-sheets.
+            SCH_SHEET_LIST newInstances( m_sheet );
+
+            for( SCH_SHEET_PATH& newInstance : newInstances )
+            {
+                instance = m_frame->GetCurrentSheet() + newInstance;
+                instance.SetSymbolInstancesToDefault();
+            }
+        }
+    }
 
     m_sheet->SetPageNumber( instance, m_pageNumberTextCtrl->GetValue() );
 
@@ -448,7 +461,6 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
     bool renameFile = false;
     bool loadFromFile = false;
     bool clearAnnotation = false;
-    bool restoreSheet = false;
     bool isExistingSheet = false;
     SCH_SCREEN* useScreen = nullptr;
     SCH_SCREEN* oldScreen = nullptr;
@@ -533,7 +545,8 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
             {
                 if( m_sheet->GetScreenCount() > 1 )
                 {
-                    if( !IsOK( this, wxString::Format( _( "Create new file '%s' with contents of '%s'?" ),
+                    if( !IsOK( this, wxString::Format( _( "Create new file '%s' with contents "
+                                                          "of '%s'?" ),
                                                        sheetFileName.GetFullName(),
                                                        m_sheet->GetFileName() )
                                      + wxT( "\n\n" )
@@ -604,18 +617,16 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
 
         // No need to check for valid library IDs if we are using an existing screen.
         if( m_frame->CheckSheetForRecursion( tmpSheet.get(), &currentSheet ) )
-        {
-            if( restoreSheet )
-                currentSheet.LastScreen()->Append( m_sheet );
-
             return false;
-        }
 
         // It's safe to set the sheet screen now.
         m_sheet->SetScreen( useScreen );
+        // currentSheet.LastScreen()->Append( m_sheet );
     }
     else if( loadFromFile )
     {
+        bool restoreSheet = false;
+
         if( isExistingSheet )
         {
             // Temporarily remove the sheet from the current schematic page so that recursion
@@ -642,8 +653,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
         if( restoreSheet )
             currentSheet.LastScreen()->Append( m_sheet );
 
-        // The full hiearchy needs to be reloaded because any sub-sheet that occurred on
-        // file load will have new SCH_SHEET object pointers.
+        // The full hierarchy needs to be reloaded because due to the addition of a new sheet.
         fullHierarchy = m_frame->Schematic().GetFullHierarchy();
         fullHierarchy.UpdateSheetInstances( sheetInstances );
     }

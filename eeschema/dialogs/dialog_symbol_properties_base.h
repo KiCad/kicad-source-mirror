@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -56,6 +56,7 @@ class DIALOG_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_unitLabel;
 		wxChoice* m_unitChoice;
 		wxCheckBox* m_cbAlternateSymbol;
+		wxCheckBox* m_cbMakeDefaultInstance;
 		wxStaticText* m_orientationLabel;
 		wxChoice* m_orientationCtrl;
 		wxStaticText* m_mirrorLabel;
