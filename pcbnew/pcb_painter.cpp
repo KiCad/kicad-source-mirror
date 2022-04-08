@@ -563,8 +563,8 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
 {
     VECTOR2I start( aTrack->GetStart() );
     VECTOR2I end( aTrack->GetEnd() );
-    int      width = aTrack->GetWidth();
-    COLOR4D  color = m_pcbSettings.GetColor( aTrack, aLayer );
+    int      track_width = aTrack->GetWidth();
+    COLOR4D  color       = m_pcbSettings.GetColor( aTrack, aLayer );
 
     if( IsNetnameLayer( aLayer ) )
     {
@@ -588,11 +588,13 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
         ClipLine( &clipBox, visibleSeg.A.x, visibleSeg.A.y, visibleSeg.B.x, visibleSeg.B.y );
 
         // Check if the track is long enough to have a netname displayed
-        if( visibleSeg.Length() < 6 * width )
+        int seg_minlenght = track_width * 6;    // min lenght of the visible segment to draw the net name
+
+        if( visibleSeg.Length() < seg_minlenght )
             return;
 
         const     wxString& netName = UnescapeString( aTrack->GetShortNetname() );
-        double    textSize = width;
+        double    textSize = track_width;
         double    penWidth = textSize / 12.0;
         VECTOR2D  textPosition = ( visibleSeg.A + visibleSeg.B ) / 2.0;  // center of the track
         EDA_ANGLE textOrientation;
@@ -600,7 +602,7 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
         // If the last position is still on the track, and it's some reasonable distance inside
         // the viewport then don't move the netname; just use the last position.
         if( visibleSeg.Distance( aTrack->m_LastNetnamePosition ) < penWidth
-                && clipBox.Inflate( -width * 6 ).Contains( aTrack->m_LastNetnamePosition ) )
+                && clipBox.Inflate( -seg_minlenght ).Contains( aTrack->m_LastNetnamePosition ) )
         {
             textPosition = aTrack->m_LastNetnamePosition;
         }
@@ -651,9 +653,9 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
 
         if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
-            width = width * 1.5;
+            track_width = track_width * 1.5;
 
-        m_gal->DrawSegment( start, end, width );
+        m_gal->DrawSegment( start, end, track_width );
     }
 
     // Clearance lines
@@ -666,7 +668,7 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
         m_gal->SetStrokeColor( color );
-        m_gal->DrawSegment( start, end, width + clearance * 2 );
+        m_gal->DrawSegment( start, end, track_width + clearance * 2 );
     }
 }
 
