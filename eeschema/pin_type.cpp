@@ -269,7 +269,7 @@ BITMAPS ElectricalPinTypeGetBitmap( ELECTRICAL_PINTYPE aType )
 {
     auto findIt = g_pinTypes.find( aType );
 
-    wxCHECK_MSG( findIt != pinTypes.end(), BITMAPS::INVALID_BITMAP,
+    wxCHECK_MSG( findIt != g_pinTypes.end(), BITMAPS::INVALID_BITMAP,
                  wxT( "Could not find pin type in lookup map" ) );
 
     return findIt->second.bitmap;

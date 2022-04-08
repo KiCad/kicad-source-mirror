@@ -115,6 +115,9 @@ public:
     void SetViolatingTest( DRC_TEST_PROVIDER *aProvider ) { m_violatingTest = aProvider; }
     DRC_TEST_PROVIDER* GetViolatingTest() const { return m_violatingTest; }
 
+    KIID GetAuxItem2ID() const override;
+    KIID GetAuxItem3ID() const override;
+
 private:
     DRC_ITEM( int aErrorCode = 0, const wxString& aTitle = "", const wxString& aSettingsKey = "" )
     {

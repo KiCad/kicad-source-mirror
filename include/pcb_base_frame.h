@@ -218,6 +218,7 @@ public:
     EDA_ITEM* GetItem( const KIID& aId ) const override;
 
     void FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
+    void FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
 
     // General
     virtual void ReCreateOptToolbar() override { }

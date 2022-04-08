@@ -117,10 +117,12 @@ public:
         m_ids.push_back( dItem );
     }
 
-    KIID GetMainItemID() const { return m_ids.size() > 0 ? m_ids[0] : niluuid; }
-    KIID GetAuxItemID() const { return m_ids.size() > 1 ? m_ids[1] : niluuid;; }
-    KIID GetAuxItem2ID() const { return m_ids.size() > 2 ? m_ids[2] : niluuid;; }
-    KIID GetAuxItem3ID() const { return m_ids.size() > 3 ? m_ids[3] : niluuid;; }
+    virtual KIID GetMainItemID() const { return m_ids.size() > 0 ? m_ids[0] : niluuid; }
+    virtual KIID GetAuxItemID() const { return m_ids.size() > 1 ? m_ids[1] : niluuid; }
+    virtual KIID GetAuxItem2ID() const { return m_ids.size() > 2 ? m_ids[2] : niluuid; }
+    virtual KIID GetAuxItem3ID() const { return m_ids.size() > 3 ? m_ids[3] : niluuid; }
+
+    std::vector<KIID> GetIDs() const { return m_ids; }
 
     void SetParent( MARKER_BASE* aMarker ) { m_parent = aMarker; }
     MARKER_BASE* GetParent() const { return m_parent; }

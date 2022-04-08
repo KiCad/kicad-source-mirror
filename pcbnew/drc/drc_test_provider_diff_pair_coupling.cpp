@@ -467,11 +467,17 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
 
-                for( BOARD_CONNECTED_ITEM* offendingTrack : it.second.itemsP )
-                    drce->AddItem( offendingTrack );
+                auto pit = it.second.itemsP.begin();
+                auto nit = it.second.itemsN.begin();
 
-                for( BOARD_CONNECTED_ITEM* offendingTrack : it.second.itemsN )
-                    drce->AddItem( offendingTrack );
+                drce->AddItem( *pit );
+                drce->AddItem( *nit );
+
+                for( pit++; pit != it.second.itemsP.end(); pit++ )
+                    drce->AddItem( *pit );
+
+                for( nit++; nit != it.second.itemsN.end(); nit++ )
+                    drce->AddItem( *nit );
 
                 uncoupledViolation = true;
 

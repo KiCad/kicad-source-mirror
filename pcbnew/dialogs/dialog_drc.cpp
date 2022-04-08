@@ -396,7 +396,23 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
         if( board->GetVisibleLayers().test( principalLayer ) )
             m_frame->SetActiveLayer( principalLayer );
 
-        if( m_centerMarkerOnIdle )
+        if( rc_item->GetErrorCode() == DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG )
+        {
+            PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item );
+            int        net = track->GetNetCode();
+            std::vector<BOARD_ITEM*> segs;
+
+            for( const KIID& id : rc_item->GetIDs() )
+            {
+                PCB_TRACK*  candidate = dynamic_cast<PCB_TRACK*>( board->GetItem( id ) );
+
+                if( candidate && candidate->GetNetCode() == net )
+                    segs.push_back( candidate );
+            }
+
+            m_frame->FocusOnItems( segs, principalLayer );
+        }
+        else if( m_centerMarkerOnIdle )
         {
             // we already came from a cross-probe of the marker in the document; don't go
             // around in circles
