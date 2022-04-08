@@ -250,227 +250,251 @@ EDA_ITEM* PCB_BASE_FRAME::GetItem( const KIID& aId ) const
 
 void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
 {
-    static KIID lastBrightenedItemID( niluuid );
+    std::vector<BOARD_ITEM*> items;
+
+    if( aItem )
+        items.push_back( aItem );
+
+    FocusOnItems( items, aLayer );
+}
+
+
+void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID aLayer )
+{
+    static std::vector<KIID> lastBrightenedItemIDs;
 
     BOARD_ITEM* lastItem = nullptr;
 
-    /// @todo The Boost entropy exception does not exist prior to 1.67. Once the minimum Boost
-    ///       version is raise to 1.67 or greater, this version check can be removed.
-#if BOOST_VERSION >= 106700
-    try
+    for( KIID lastBrightenedItemID : lastBrightenedItemIDs )
     {
+        /// @todo The Boost entropy exception does not exist prior to 1.67. Once the minimum Boost
+        ///       version is raise to 1.67 or greater, this version check can be removed.
+    #if BOOST_VERSION >= 106700
+        try
+        {
+            lastItem = GetBoard()->GetItem( lastBrightenedItemID );
+        }
+        catch( const boost::uuids::entropy_error& )
+        {
+            wxLogError( wxT( "A Boost UUID entropy exception was thrown in %s:%s." ),
+                        __FILE__, __FUNCTION__ );
+        }
+    #else
         lastItem = GetBoard()->GetItem( lastBrightenedItemID );
-    }
-    catch( const boost::uuids::entropy_error& )
-    {
-        wxLogError( wxT( "A Boost UUID entropy exception was thrown in %s:%s." ),
-                    __FILE__, __FUNCTION__ );
-    }
-#else
-    lastItem = GetBoard()->GetItem( lastBrightenedItemID );
-#endif
+    #endif
 
-    if( lastItem && lastItem != aItem && lastItem != DELETED_BOARD_ITEM::GetInstance() )
-    {
-        lastItem->ClearBrightened();
-
-        if( lastItem->Type() == PCB_FOOTPRINT_T )
+        if( lastItem && lastItem != DELETED_BOARD_ITEM::GetInstance() )
         {
-            static_cast<FOOTPRINT*>( lastItem )->RunOnChildren(
-                    [&]( BOARD_ITEM* child )
-                    {
-                        child->ClearBrightened();
-                    } );
-        }
-        else if( lastItem->Type() == PCB_GROUP_T )
-        {
-            static_cast<PCB_GROUP*>( lastItem )->RunOnChildren(
-                    [&]( BOARD_ITEM* child )
-                    {
-                        child->ClearBrightened();
-                    } );
-        }
+            lastItem->ClearBrightened();
 
-        GetCanvas()->GetView()->Update( lastItem );
-        lastBrightenedItemID = niluuid;
-        GetCanvas()->Refresh();
-    }
-
-    if( aItem && aItem != DELETED_BOARD_ITEM::GetInstance() )
-    {
-        aItem->SetBrightened();
-
-        if( aItem->Type() == PCB_FOOTPRINT_T )
-        {
-            static_cast<FOOTPRINT*>( aItem )->RunOnChildren(
-                    [&]( BOARD_ITEM* child )
-                    {
-                        child->SetBrightened();
-                    });
-        }
-        else if( aItem->Type() == PCB_GROUP_T )
-        {
-            static_cast<PCB_GROUP*>( aItem )->RunOnChildren(
-                    [&]( BOARD_ITEM* child )
-                    {
-                        child->SetBrightened();
-                    });
-        }
-
-        GetCanvas()->GetView()->Update( aItem );
-        lastBrightenedItemID = aItem->m_Uuid;
-
-        // Focus on the object's location.  Prefer a visible part of the object to its anchor
-        // in order to keep from scrolling around.
-
-        VECTOR2I       focusPt = aItem->GetFocusPosition();
-        KIGFX::VIEW*   view = GetCanvas()->GetView();
-        SHAPE_POLY_SET viewportPoly( view->GetViewport() );
-
-        for( wxWindow* dialog : findDialogs() )
-        {
-            wxPoint        dialogPos = GetCanvas()->ScreenToClient( dialog->GetScreenPosition() );
-            SHAPE_POLY_SET dialogPoly( BOX2D( view->ToWorld( dialogPos, true ),
-                                              view->ToWorld( dialog->GetSize(), false ) ) );
-
-            try
+            if( lastItem->Type() == PCB_FOOTPRINT_T )
             {
-                viewportPoly.BooleanSubtract( dialogPoly, SHAPE_POLY_SET::PM_FAST );
+                static_cast<FOOTPRINT*>( lastItem )->RunOnChildren(
+                        [&]( BOARD_ITEM* child )
+                        {
+                            child->ClearBrightened();
+                        } );
             }
-            catch( const ClipperLib::clipperException& exc )
+            else if( lastItem->Type() == PCB_GROUP_T )
             {
-                // This may be overkill and could be an assertion but we are more likely to find
-                // any clipper errors this way.
-                wxLogError( wxT( "Clipper library exception '%s' occurred." ), exc.what() );
-            }
-        }
-
-        SHAPE_POLY_SET itemPoly, clippedPoly;
-
-        if( aLayer == UNDEFINED_LAYER )
-            aLayer = aItem->GetLayerSet().Seq()[0];
-
-        switch( aItem->Type() )
-        {
-        case PCB_FOOTPRINT_T:
-            try
-            {
-                itemPoly = static_cast<FOOTPRINT*>( aItem )->GetBoundingHull();
-            }
-            catch( const ClipperLib::clipperException& exc )
-            {
-                // This may be overkill and could be an assertion but we are more likely to find
-                // any clipper errors this way.
-                wxLogError( wxT( "Clipper library exception '%s' occurred." ), exc.what() );
+                static_cast<PCB_GROUP*>( lastItem )->RunOnChildren(
+                        [&]( BOARD_ITEM* child )
+                        {
+                            child->ClearBrightened();
+                        } );
             }
 
-            break;
-
-        case PCB_PAD_T:
-        case PCB_MARKER_T:
-        case PCB_VIA_T:
-            FocusOnLocation( focusPt );
+            GetCanvas()->GetView()->Update( lastItem );
+            lastBrightenedItemID = niluuid;
             GetCanvas()->Refresh();
-            return;
-
-        case PCB_SHAPE_T:
-        case PCB_TEXT_T:
-        case PCB_TEXTBOX_T:
-        case PCB_FP_TEXT_T:
-        case PCB_FP_TEXTBOX_T:
-        case PCB_FP_SHAPE_T:
-        case PCB_FP_ZONE_T:
-        case PCB_TRACE_T:
-        case PCB_ARC_T:
-        case PCB_DIM_ALIGNED_T:
-        case PCB_DIM_LEADER_T:
-        case PCB_DIM_CENTER_T:
-        case PCB_DIM_RADIAL_T:
-        case PCB_DIM_ORTHOGONAL_T:
-        case PCB_FP_DIM_ALIGNED_T:
-        case PCB_FP_DIM_LEADER_T:
-        case PCB_FP_DIM_CENTER_T:
-        case PCB_FP_DIM_RADIAL_T:
-        case PCB_FP_DIM_ORTHOGONAL_T:
-            aItem->TransformShapeWithClearanceToPolygon( itemPoly, aLayer, 0, Millimeter2iu( 0.1 ),
-                                                         ERROR_INSIDE );
-            break;
-
-        case PCB_ZONE_T:
-        {
-            ZONE* zone = static_cast<ZONE*>( aItem );
-            #if 0
-            // Using the filled area shapes to find a Focus point can give good results, but
-            // unfortunately the calculations are highly time consuming, even for not very
-            // large areas (can be easily a few minutes for large areas).
-            // so we used only the zone outline that usually do not have too many vertices.
-            zone->TransformShapeWithClearanceToPolygon( itemPoly, aLayer, 0, Millimeter2iu( 0.1 ),
-                                                        ERROR_INSIDE );
-
-            if( itemPoly.IsEmpty() )
-                itemPoly = *zone->Outline();
-            #else
-            // much faster calculation time when using only the zone outlines
-            itemPoly = *zone->Outline();
-            #endif
-
-            break;
         }
+    }
 
-        default:
-        {
-            BOX2I item_bbox = aItem->GetBoundingBox();
-            itemPoly.NewOutline();
-            itemPoly.Append( item_bbox.GetOrigin() );
-            itemPoly.Append( item_bbox.GetOrigin() + VECTOR2I( item_bbox.GetWidth(), 0 ) );
-            itemPoly.Append( item_bbox.GetOrigin() + VECTOR2I( 0, item_bbox.GetHeight() ) );
-            itemPoly.Append( item_bbox.GetOrigin() + VECTOR2I( item_bbox.GetWidth(),
-                                                               item_bbox.GetHeight() ) );
-            break;
-        }
-        }
+    lastBrightenedItemIDs.clear();
+
+    if( aItems.empty() )
+        return;
+
+    VECTOR2I       focusPt;
+    KIGFX::VIEW*   view = GetCanvas()->GetView();
+    SHAPE_POLY_SET viewportPoly( view->GetViewport() );
+
+    for( wxWindow* dialog : findDialogs() )
+    {
+        wxPoint dialogPos = GetCanvas()->ScreenToClient( dialog->GetScreenPosition() );
+        SHAPE_POLY_SET dialogPoly( BOX2D( view->ToWorld( dialogPos, true ),
+                                          view->ToWorld( dialog->GetSize(), false ) ) );
 
         try
         {
-            clippedPoly.BooleanIntersection( itemPoly, viewportPoly, SHAPE_POLY_SET::PM_FAST );
+            viewportPoly.BooleanSubtract( dialogPoly, SHAPE_POLY_SET::PM_FAST );
         }
         catch( const ClipperLib::clipperException& exc )
         {
-            // This may be overkill and could be an assertion but we are more likely to find
-            // any clipper errors this way.
+            // This may be overkill and could be an assertion but we are more likely to
+            // find any clipper errors this way.
             wxLogError( wxT( "Clipper library exception '%s' occurred." ), exc.what() );
         }
+    }
 
-        if( !clippedPoly.IsEmpty() )
-            itemPoly = clippedPoly;
+    SHAPE_POLY_SET itemPoly, clippedPoly;
 
-        /*
-         * Perform a step-wise deflate to find the visual-center-of-mass
-         */
-
-        BOX2I bbox = itemPoly.BBox();
-        int   step = std::min( bbox.GetWidth(), bbox.GetHeight() ) / 10;
-
-        while( !itemPoly.IsEmpty() )
+    for( BOARD_ITEM* item : aItems )
+    {
+        if( item && item != DELETED_BOARD_ITEM::GetInstance() )
         {
-            focusPt = (wxPoint) itemPoly.BBox().Centre();
+            item->SetBrightened();
+
+            if( item->Type() == PCB_FOOTPRINT_T )
+            {
+                static_cast<FOOTPRINT*>( item )->RunOnChildren(
+                        [&]( BOARD_ITEM* child )
+                        {
+                            child->SetBrightened();
+                        });
+            }
+            else if( item->Type() == PCB_GROUP_T )
+            {
+                static_cast<PCB_GROUP*>( item )->RunOnChildren(
+                        [&]( BOARD_ITEM* child )
+                        {
+                            child->SetBrightened();
+                        });
+            }
+
+            GetCanvas()->GetView()->Update( item );
+            lastBrightenedItemIDs.push_back( item->m_Uuid );
+
+            // Focus on the object's location.  Prefer a visible part of the object to its anchor
+            // in order to keep from scrolling around.
+
+            focusPt = item->GetPosition();
+
+            if( aLayer == UNDEFINED_LAYER )
+                aLayer = item->GetLayerSet().Seq()[0];
+
+            switch( item->Type() )
+            {
+            case PCB_FOOTPRINT_T:
+                try
+                {
+                    itemPoly = static_cast<FOOTPRINT*>( item )->GetBoundingHull();
+                }
+                catch( const ClipperLib::clipperException& exc )
+                {
+                    // This may be overkill and could be an assertion but we are more likely to
+                    // find any clipper errors this way.
+                    wxLogError( wxT( "Clipper library exception '%s' occurred." ), exc.what() );
+                }
+
+                break;
+
+            case PCB_PAD_T:
+            case PCB_MARKER_T:
+            case PCB_VIA_T:
+                FocusOnLocation( item->GetFocusPosition() );
+                GetCanvas()->Refresh();
+                return;
+
+            case PCB_SHAPE_T:
+            case PCB_TEXT_T:
+            case PCB_TEXTBOX_T:
+            case PCB_FP_TEXT_T:
+            case PCB_FP_TEXTBOX_T:
+            case PCB_FP_SHAPE_T:
+            case PCB_FP_ZONE_T:
+            case PCB_TRACE_T:
+            case PCB_ARC_T:
+            case PCB_DIM_ALIGNED_T:
+            case PCB_DIM_LEADER_T:
+            case PCB_DIM_CENTER_T:
+            case PCB_DIM_RADIAL_T:
+            case PCB_DIM_ORTHOGONAL_T:
+            case PCB_FP_DIM_ALIGNED_T:
+            case PCB_FP_DIM_LEADER_T:
+            case PCB_FP_DIM_CENTER_T:
+            case PCB_FP_DIM_RADIAL_T:
+            case PCB_FP_DIM_ORTHOGONAL_T:
+                item->TransformShapeWithClearanceToPolygon( itemPoly, aLayer, 0,
+                                                            Millimeter2iu( 0.1 ), ERROR_INSIDE );
+                break;
+
+            case PCB_ZONE_T:
+            {
+                ZONE* zone = static_cast<ZONE*>( item );
+                #if 0
+                // Using the filled area shapes to find a Focus point can give good results, but
+                // unfortunately the calculations are highly time consuming, even for not very
+                // large areas (can be easily a few minutes for large areas).
+                // so we used only the zone outline that usually do not have too many vertices.
+                zone->TransformShapeWithClearanceToPolygon( itemPoly, aLayer, 0,
+                                                            Millimeter2iu( 0.1 ), ERROR_INSIDE );
+
+                if( itemPoly.IsEmpty() )
+                    itemPoly = *zone->Outline();
+                #else
+                // much faster calculation time when using only the zone outlines
+                itemPoly = *zone->Outline();
+                #endif
+
+                break;
+            }
+
+            default:
+            {
+                BOX2I item_bbox = item->GetBoundingBox();
+                itemPoly.NewOutline();
+                itemPoly.Append( item_bbox.GetOrigin() );
+                itemPoly.Append( item_bbox.GetOrigin() + VECTOR2I( item_bbox.GetWidth(), 0 ) );
+                itemPoly.Append( item_bbox.GetOrigin() + VECTOR2I( 0, item_bbox.GetHeight() ) );
+                itemPoly.Append( item_bbox.GetOrigin() + VECTOR2I( item_bbox.GetWidth(),
+                                                                   item_bbox.GetHeight() ) );
+                break;
+            }
+            }
 
             try
             {
-                itemPoly.Deflate( step, 4, SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS );
+                clippedPoly.BooleanIntersection( itemPoly, viewportPoly, SHAPE_POLY_SET::PM_FAST );
             }
             catch( const ClipperLib::clipperException& exc )
             {
-                // This may be overkill and could be an assertion but we are more likely to find
-                // any clipper errors this way.
+                // This may be overkill and could be an assertion but we are more likely to
+                // find any clipper errors this way.
                 wxLogError( wxT( "Clipper library exception '%s' occurred." ), exc.what() );
             }
+
+            if( !clippedPoly.IsEmpty() )
+                itemPoly = clippedPoly;
         }
-
-        FocusOnLocation( focusPt );
-
-        GetCanvas()->Refresh();
     }
+
+    /*
+     * Perform a step-wise deflate to find the visual-center-of-mass
+     */
+
+    BOX2I    bbox = itemPoly.BBox();
+    int      step = std::min( bbox.GetWidth(), bbox.GetHeight() ) / 10;
+
+    while( !itemPoly.IsEmpty() )
+    {
+        focusPt = (wxPoint) itemPoly.BBox().Centre();
+
+        try
+        {
+            itemPoly.Deflate( step, 4, SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS );
+        }
+        catch( const ClipperLib::clipperException& exc )
+        {
+            // This may be overkill and could be an assertion but we are more likely to
+            // find any clipper errors this way.
+            wxLogError( wxT( "Clipper library exception '%s' occurred." ), exc.what() );
+        }
+    }
+
+    FocusOnLocation( focusPt );
+
+    GetCanvas()->Refresh();
 }
 
 

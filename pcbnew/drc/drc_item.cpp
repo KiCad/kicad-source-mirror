@@ -391,6 +391,30 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( const wxString& aErrorKey )
 }
 
 
+KIID DRC_ITEM::GetAuxItem2ID() const
+{
+    if( m_errorCode == DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG )
+    {
+        // we have lots of segments, but it's enough to show the first P and the first N
+        return niluuid;
+    }
+
+    return m_ids.size() > 2 ? m_ids[2] : niluuid;
+}
+
+
+KIID DRC_ITEM::GetAuxItem3ID() const
+{
+    if( m_errorCode == DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG )
+    {
+        // we have lots of segments, but it's enough to show the first P and the first N
+        return niluuid;
+    }
+
+    return m_ids.size() > 3 ? m_ids[3] : niluuid;
+}
+
+
 wxString DRC_ITEM::GetViolatingRuleDesc() const
 {
     if( m_violatingRule )
