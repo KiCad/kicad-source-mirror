@@ -583,10 +583,10 @@ static const std::vector<ARC_PT_COLLIDE_CASE> arc_pt_collide_cases = {
     { " 270deg, 5 cl, -45 deg, 5 pos", { { 0, 0 }, { 100, 0 },  270.0 }, 5, { 75, -74 }, false, -1 },
     { " 270deg, 5 cl, 45  deg, 5 neg", { { 0, 0 }, { 100, 0 },  270.0 }, 5, { 67, 68 }, true, 5 },
     { " 270deg, 5 cl, -45 deg, 5 neg", { { 0, 0 }, { 100, 0 },  270.0 }, 5, { 67, -68 }, false, -1 },
-    { " 270deg, 4 cl, 0   deg pos", { { 0, 0 }, { 100, 0 },  270.0 }, 4, { 105, 0 }, false, -1 },
-    { " 270deg, 4 cl, 90  deg pos", { { 0, 0 }, { 100, 0 },  270.0 }, 4, { 0, 105 }, false, -1 },
-    { " 270deg, 4 cl, 180 deg pos", { { 0, 0 }, { 100, 0 },  270.0 }, 4, { -105, 0 }, false, -1 },
-    { " 270deg, 4 cl, 270 deg pos", { { 0, 0 }, { 100, 0 },  270.0 }, 4, { 0, -105 }, false, -1 },
+    { " 270deg, 4 cl, 0   deg pos", { { 0, 0 }, { 100, 0 },  270.0 }, 4, { 106, 0 }, false, -1 },
+    { " 270deg, 4 cl, 90  deg pos", { { 0, 0 }, { 100, 0 },  270.0 }, 4, { 0, 106 }, false, -1 },
+    { " 270deg, 4 cl, 180 deg pos", { { 0, 0 }, { 100, 0 },  270.0 }, 4, { -106, 0 }, false, -1 },
+    { " 270deg, 4 cl, 270 deg pos", { { 0, 0 }, { 100, 0 },  270.0 }, 4, { 0, -106 }, false, -1 },
     { "  90deg, 0 cl,   0 deg    ", { { 0, 0 }, { 71, -71 },  90.0 }, 0, { 71, -71 }, true, 0 },
     { "  90deg, 0 cl,  45 deg    ", { { 0, 0 }, { 71, -71 },  90.0 }, 0, { 100, 0 }, true, 0 },
     { "  90deg, 0 cl,  90 deg    ", { { 0, 0 }, { 71, -71 },  90.0 }, 0, { 71, 71 }, true, 0 },
@@ -609,13 +609,16 @@ BOOST_AUTO_TEST_CASE( CollidePt )
             SHAPE_ARC arc( c.m_geom.m_center_point, c.m_geom.m_start_point,
                            EDA_ANGLE( c.m_geom.m_center_angle, DEGREES_T ) );
 
-            // Test a zero width arc (distance should equal the clearance)
-            BOOST_TEST_CONTEXT( "Test Clearance" )
+            if( c.m_arc_clearance > 0 )
             {
-                int dist = -1;
-                BOOST_CHECK_EQUAL( arc.Collide( c.m_point, c.m_arc_clearance, &dist ),
-                                   c.m_exp_result );
-                BOOST_CHECK_EQUAL( dist, c.m_exp_distance );
+                // Test a zero width arc (distance should equal the clearance)
+                BOOST_TEST_CONTEXT( "Test Clearance" )
+                {
+                    int dist = -1;
+                    BOOST_CHECK_EQUAL( arc.Collide( c.m_point, c.m_arc_clearance, &dist ),
+                                       c.m_exp_result );
+                    BOOST_CHECK_EQUAL( dist, c.m_exp_distance );
+                }
             }
 
             // Test by changing the width of the arc (distance should equal zero)
