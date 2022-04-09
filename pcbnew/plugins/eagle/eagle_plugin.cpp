@@ -662,7 +662,7 @@ void EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
             // these function provide their own protection against non enabled layers:
             if( layer >= 0 && layer < PCB_LAYER_ID_COUNT )    // layer should be valid
             {
-                m_board->SetLayerName( layer, FROM_UTF8( it->name.c_str() ) );
+                m_board->SetLayerName( layer, it->name );
                 m_board->SetLayerType( layer, LT_SIGNAL );
             }
 
@@ -749,7 +749,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
                 pcbtxt->SetLayer( layer );
                 wxString kicadText = interpret_text( t.text );
-                pcbtxt->SetText( FROM_UTF8( kicadText.c_str() ) );
+                pcbtxt->SetText( kicadText );
                 pcbtxt->SetTextPos( VECTOR2I( kicad_x( t.x ), kicad_y( t.y ) ) );
 
                 double ratio = t.ratio ? *t.ratio : 8;     // DTD says 8 is default
@@ -1166,8 +1166,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
         if( it == m_templates.end() )
         {
             wxString emsg = wxString::Format( _( "No '%s' package in library '%s'." ),
-                                              FROM_UTF8( e.package.c_str() ),
-                                              FROM_UTF8( e.library.c_str() ) );
+                                              e.package, e.library );
             THROW_IO_ERROR( emsg );
         }
 
@@ -1225,7 +1224,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
             reference.Append( "0" );
 
         footprint->SetReference( reference );
-        footprint->SetValue( FROM_UTF8( e.value.c_str() ) );
+        footprint->SetValue( e.value );
 
         if( !e.smashed )
         {
@@ -1568,7 +1567,7 @@ void EAGLE_PLUGIN::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, FP_TE
 
         if( a.value )
         {
-            aFPText->SetText( FROM_UTF8( a.value->c_str() ) );
+            aFPText->SetText( *a.value );
         }
 
         if( a.x && a.y )    // OPT
@@ -1731,7 +1730,7 @@ FOOTPRINT* EAGLE_PLUGIN::makeFootprint( wxXmlNode* aPackage, const wxString& aPk
         const wxString& itemName = packageItem->GetName();
 
         if( itemName == wxT( "description" ) )
-            m->SetDescription( FROM_UTF8( packageItem->GetNodeContent().c_str() ) );
+            m->SetDescription( packageItem->GetNodeContent() );
         else if( itemName == wxT( "wire" ) )
             packageWire( m.get(), packageItem );
         else if( itemName == wxT( "pad" ) )
@@ -1957,7 +1956,7 @@ void EAGLE_PLUGIN::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
         aFootprint->Add( txt );
     }
 
-    txt->SetText( FROM_UTF8( t.text.c_str() ) );
+    txt->SetText( t.text );
 
     VECTOR2I pos( kicad_x( t.x ), kicad_y( t.y ) );
 
@@ -2428,7 +2427,7 @@ void EAGLE_PLUGIN::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 
 void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const
 {
-    aPad->SetNumber( FROM_UTF8( aEaglePad.name.c_str() ) );
+    aPad->SetNumber( aEaglePad.name );
 
     // pad's "Position" is not relative to the footprint's,
     // whereas Pos0 is relative to the footprint's but is the unrotated coordinate.
@@ -3135,7 +3134,7 @@ void EAGLE_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxS
     // the library.
 
     for( FOOTPRINT_MAP::const_iterator it = m_templates.begin(); it != m_templates.end(); ++it )
-        aFootprintNames.Add( FROM_UTF8( it->first.c_str() ) );
+        aFootprintNames.Add( it->first );
 
     if( !errorMsg.IsEmpty() && !aBestEfforts )
         THROW_IO_ERROR( errorMsg );
