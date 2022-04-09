@@ -142,8 +142,10 @@ private:
     LSET        m_layerMask;
 };
 
+
 PLOTTER* StartPlotBoard( BOARD* aBoard, const PCB_PLOT_PARAMS* aPlotOpts, int aLayer,
-                         const wxString& aFullFileName, const wxString& aSheetDesc );
+                         const wxString& aFullFileName, const wxString& aSheetName,
+                         const wxString& aSheetPath );
 
 /**
  * Plot a sequence of board layer IDs.

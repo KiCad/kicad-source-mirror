@@ -1031,8 +1031,10 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
         LOCALE_IO toggle;
 
+        //@todo allow controlling the sheet name and path that will be displayed in the title block
+        // Leave blank for now
         PLOTTER* plotter = StartPlotBoard( board, &m_plotOpts, layer, fn.GetFullPath(),
-                                           wxEmptyString );
+                                           wxEmptyString, wxEmptyString );
 
         // Print diags in messages box:
         wxString msg;

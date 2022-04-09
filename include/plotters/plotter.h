@@ -620,8 +620,9 @@ class TITLE_BLOCK;
 
 void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BLOCK& aTitleBlock,
                        const PAGE_INFO& aPageInfo, const wxString& aSheetNumber, int aSheetCount,
-                       const wxString& aSheetDesc, const wxString& aFilename,
-                       COLOR4D aColor = COLOR4D::UNSPECIFIED, bool aIsFirstPage = true );
+                       const wxString& aSheetName, const wxString& aSheetPath,
+                       const wxString& aFilename, COLOR4D aColor = COLOR4D::UNSPECIFIED,
+                       bool aIsFirstPage = true );
 
 /** Returns the default plot extension for a format
   */

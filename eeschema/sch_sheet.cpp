@@ -222,6 +222,7 @@ void SCH_SHEET::GetContextualTextVars( wxArrayString* aVars ) const
 
     aVars->push_back( wxT( "#" ) );
     aVars->push_back( wxT( "##" ) );
+    aVars->push_back( wxT( "SHEETPATH" ) );
     m_screen->GetTitleBlock().GetContextualTextVars( aVars );
 }
 
@@ -270,6 +271,11 @@ bool SCH_SHEET::ResolveTextVar( wxString* token, int aDepth ) const
     {
         SCH_SHEET_LIST sheetList = Schematic()->GetSheets();
         *token = wxString::Format( wxT( "%d" ), (int) sheetList.size() );
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "SHEETPATH" ) ) )
+    {
+        *token = Schematic()->CurrentSheet().PathHumanReadable();
         return true;
     }
 

@@ -76,8 +76,12 @@ public:
      * @param aSuffix is a string added to the base filename (derived from
      *                the board filename) to identify the plot file.
      * @param aFormat is the plot file format identifier.
+     * @param aSheetName is the text to be displayed in the title block that replaces ${SHEETNAME}
+     * @param aSheetPath is the text to be displayed in the title block that replaces ${SHEETPATH}
      */
-    bool OpenPlotfile( const wxString& aSuffix, PLOT_FORMAT aFormat, const wxString& aSheetDesc );
+    bool OpenPlotfile( const wxString& aSuffix, PLOT_FORMAT aFormat,
+                       const wxString& aSheetName = wxEmptyString,
+                       const wxString& aSheetPath = wxEmptyString );
 
     /**
      * Plot a single layer on the current plotfile m_plotLayer is the layer to plot.

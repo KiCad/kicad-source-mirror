@@ -1088,7 +1088,8 @@ static void ConfigureHPGLPenSizes( HPGL_PLOTTER *aPlotter, const PCB_PLOT_PARAMS
  * @return the plotter object if OK, NULL if the file is not created (or has a problem).
  */
 PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aLayer,
-                         const wxString& aFullFileName, const wxString& aSheetDesc )
+                         const wxString& aFullFileName, const wxString& aSheetName,
+                         const wxString& aSheetPath )
 {
     // Create the plotter driver and set the few plotter specific options
     PLOTTER*    plotter = nullptr;
@@ -1176,7 +1177,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
         if( aPlotOpts->GetPlotFrameRef() )
         {
             PlotDrawingSheet( plotter, aBoard->GetProject(), aBoard->GetTitleBlock(),
-                              aBoard->GetPageSettings(), wxT( "1" ), 1, aSheetDesc,
+                              aBoard->GetPageSettings(), wxT( "1" ), 1, aSheetName, aSheetPath,
                               aBoard->GetFileName() );
 
             if( aPlotOpts->GetMirror() )

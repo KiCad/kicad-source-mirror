@@ -568,9 +568,12 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetDXF( const wxString&  aFileName,
 
     if( aPlotFrameRef )
     {
+        wxString sheetName = m_parent->GetCurrentSheet().Last()->GetName();
+        wxString sheetPath = m_parent->GetCurrentSheet().PathHumanReadable();
+
         PlotDrawingSheet( plotter, &m_parent->Prj(), m_parent->GetTitleBlock(), pageInfo,
                           aScreen->GetPageNumber(), aScreen->GetPageCount(),
-                          m_parent->GetScreenDesc(), aScreen->GetFileName(),
+                          sheetName, sheetPath, aScreen->GetFileName(),
                           plotter->GetColorMode() ?
                           plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET ) :
                           COLOR4D::BLACK, aScreen->GetVirtualPageNumber() == 1 );
@@ -756,9 +759,12 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetHpgl( const wxString&   aFileName,
 
     if( aPlotFrameRef )
     {
+        wxString sheetName = m_parent->GetCurrentSheet().Last()->GetName();
+        wxString sheetPath = m_parent->GetCurrentSheet().PathHumanReadable();
+
         PlotDrawingSheet( plotter, &m_parent->Prj(), m_parent->GetTitleBlock(), aPageInfo,
-                          aScreen->GetPageNumber(), aScreen->GetPageCount(),
-                          m_parent->GetScreenDesc(), aScreen->GetFileName(), COLOR4D::BLACK,
+                          aScreen->GetPageNumber(), aScreen->GetPageCount(), sheetName, sheetPath,
+                          aScreen->GetFileName(), COLOR4D::BLACK,
                           aScreen->GetVirtualPageNumber() == 1 );
     }
 
@@ -904,9 +910,12 @@ void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScr
         if( aPlotter->GetColorMode() )
             color = aPlotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET );
 
+        wxString sheetName = m_parent->GetCurrentSheet().Last()->GetName();
+        wxString sheetPath = m_parent->GetCurrentSheet().PathHumanReadable();
+
         PlotDrawingSheet( aPlotter, &aScreen->Schematic()->Prj(), m_parent->GetTitleBlock(),
                           m_parent->GetPageSettings(), aScreen->GetPageNumber(),
-                          aScreen->GetPageCount(), m_parent->GetScreenDesc(),
+                          aScreen->GetPageCount(), sheetName, sheetPath,
                           aScreen->GetFileName(), color, aScreen->GetVirtualPageNumber() == 1 );
     }
 
@@ -1089,9 +1098,12 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
 
     if( aPlotFrameRef )
     {
+        wxString sheetName = m_parent->GetCurrentSheet().Last()->GetName();
+        wxString sheetPath = m_parent->GetCurrentSheet().PathHumanReadable();
+
         PlotDrawingSheet( plotter, &aScreen->Schematic()->Prj(), m_parent->GetTitleBlock(),
                           aPageInfo, aScreen->GetPageNumber(), aScreen->GetPageCount(),
-                          m_parent->GetScreenDesc(), aScreen->GetFileName(),
+                          sheetName, sheetPath, aScreen->GetFileName(),
                           plotter->GetColorMode() ?
                           plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET ) :
                           COLOR4D::BLACK, aScreen->GetVirtualPageNumber() == 1 );
@@ -1219,9 +1231,12 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( const wxString&  aFileName,
 
     if( aPlotFrameRef )
     {
+        wxString sheetName = m_parent->GetCurrentSheet().Last()->GetName();
+        wxString sheetPath = m_parent->GetCurrentSheet().PathHumanReadable();
+
         PlotDrawingSheet( plotter, &aScreen->Schematic()->Prj(), m_parent->GetTitleBlock(),
                           pageInfo, aScreen->GetPageNumber(), aScreen->GetPageCount(),
-                          m_parent->GetScreenDesc(), aScreen->GetFileName(),
+                          sheetName, sheetPath, aScreen->GetFileName(),
                           plotter->GetColorMode() ?
                           plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET ) :
                           COLOR4D::BLACK, aScreen->GetVirtualPageNumber() == 1 );

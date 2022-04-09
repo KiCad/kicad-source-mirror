@@ -134,9 +134,14 @@ bool SCHEMATIC::ResolveTextVar( wxString* token, int aDepth ) const
             *token = wxString::Format( "%i", Root().CountSheets() );
             return true;
         }
-        else if( token->IsSameAs( wxT( "SHEETNAME" ) ) )
+        else if( token->IsSameAs( wxT( "SHEETPATH" ) ) )
         {
             *token = CurrentSheet().PathHumanReadable();
+            return true;
+        }
+        else if( token->IsSameAs( wxT( "SHEETNAME" ) ) )
+        {
+            *token = CurrentSheet().Last()->GetName();
             return true;
         }
         else if( token->IsSameAs( wxT( "FILENAME" ) ) )

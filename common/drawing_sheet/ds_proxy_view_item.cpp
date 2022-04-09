@@ -74,6 +74,7 @@ void DS_PROXY_VIEW_ITEM::buildDrawList( VIEW* aView, DS_DRAW_ITEM_LIST* aDrawLis
     RENDER_SETTINGS* settings = aView->GetPainter()->GetSettings();
     wxString         fileName( m_fileName.c_str(), wxConvUTF8 );
     wxString         sheetName( m_sheetName.c_str(), wxConvUTF8 );
+    wxString         sheetPath( m_sheetPath.c_str(), wxConvUTF8 );
 
     aDrawList->SetDefaultPenSize( (int) settings->GetDrawingSheetLineWidth() );
     // Adjust the scaling factor: drawing sheet item coordinates and sizes are stored in mils,
@@ -84,6 +85,7 @@ void DS_PROXY_VIEW_ITEM::buildDrawList( VIEW* aView, DS_DRAW_ITEM_LIST* aDrawLis
     aDrawList->SetSheetCount( m_sheetCount );
     aDrawList->SetFileName( fileName );
     aDrawList->SetSheetName( sheetName );
+    aDrawList->SetSheetPath( sheetPath );
     aDrawList->SetProject( m_project );
 
     aDrawList->BuildDrawItemsList( *m_pageInfo, *m_titleBlock );

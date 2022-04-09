@@ -36,6 +36,7 @@
 #include <sch_screen.h>
 #include <schematic.h>
 #include <sch_base_frame.h>
+#include <sch_edit_frame.h>
 
 #include "sch_view.h"
 
@@ -106,9 +107,18 @@ void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
     m_drawingSheet->SetIsFirstPage( aScreen->GetVirtualPageNumber() == 1 );
 
     if( m_frame && m_frame->IsType( FRAME_SCH ) )
-        m_drawingSheet->SetSheetName( TO_UTF8( m_frame->GetScreenDesc() ) );
+    {
+        SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+        wxString        sheetName = editFrame->GetCurrentSheet().Last()->GetName();
+        wxString        sheetPath = editFrame->GetCurrentSheet().PathHumanReadable();
+        m_drawingSheet->SetSheetName( TO_UTF8( sheetName ) );
+        m_drawingSheet->SetSheetPath( TO_UTF8( sheetPath ) );
+    }
     else
+    {
         m_drawingSheet->SetSheetName( "" );
+        m_drawingSheet->SetSheetPath( "" );
+    }
 
     ResizeSheetWorkingArea( aScreen );
 

@@ -100,6 +100,7 @@ void DS_DRAW_ITEM_LIST::GetTextVars( wxArrayString* aVars )
     aVars->push_back( wxT( "#" ) );
     aVars->push_back( wxT( "##" ) );
     aVars->push_back( wxT( "SHEETNAME" ) );
+    aVars->push_back( wxT( "SHEETPATH" ) );
     aVars->push_back( wxT( "FILENAME" ) );
     aVars->push_back( wxT( "PAPER" ) );
     aVars->push_back( wxT( "LAYER" ) );
@@ -139,7 +140,12 @@ wxString DS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                 }
                 else if( token->IsSameAs( wxT( "SHEETNAME" ) ) )
                 {
-                    *token = m_sheetFullName;
+                    *token = m_sheetName;
+                    tokenUpdated = true;
+                }
+                else if( token->IsSameAs( wxT( "SHEETPATH" ) ) )
+                {
+                    *token = m_sheetPath;
                     tokenUpdated = true;
                 }
                 else if( token->IsSameAs( wxT( "FILENAME" ) ) )

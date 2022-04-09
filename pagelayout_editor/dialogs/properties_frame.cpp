@@ -593,6 +593,7 @@ void PROPERTIES_FRAME::onHelp( wxCommandEvent& aEvent )
     message << "PAPER " << _( "(paper size)" ) << "\n";
     message << "REVISION\n";
     message << "SHEETNAME\n";
+    message << "SHEETPATH\n";
     message << "TITLE\n";
 
     dlg.ListSet( message );

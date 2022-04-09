@@ -425,7 +425,7 @@ void PLOT_CONTROLLER::ClosePlot()
 
 
 bool PLOT_CONTROLLER::OpenPlotfile( const wxString& aSuffix, PLOT_FORMAT aFormat,
-                                    const wxString& aSheetDesc )
+                                    const wxString& aSheetName, const wxString& aSheetPath )
 {
     LOCALE_IO toggle;
 
@@ -472,7 +472,7 @@ bool PLOT_CONTROLLER::OpenPlotfile( const wxString& aSuffix, PLOT_FORMAT aFormat
         BuildPlotFileName( &m_plotFile, outputDir.GetPath(), aSuffix, fileExt );
 
         m_plotter = StartPlotBoard( m_board, &GetPlotOptions(), ToLAYER_ID( GetLayer() ),
-                                    m_plotFile.GetFullPath(), aSheetDesc );
+                                    m_plotFile.GetFullPath(), aSheetName, aSheetPath );
     }
 
     return ( m_plotter != nullptr );

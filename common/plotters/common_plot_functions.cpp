@@ -59,7 +59,8 @@ wxString GetDefaultPlotExtension( PLOT_FORMAT aFormat )
 
 void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BLOCK& aTitleBlock,
                        const PAGE_INFO& aPageInfo, const wxString& aSheetNumber, int aSheetCount,
-                       const wxString& aSheetDesc, const wxString& aFilename, COLOR4D aColor,
+                       const wxString& aSheetName, const wxString& aSheetPath,
+                       const wxString& aFilename, COLOR4D aColor,
                        bool aIsFirstPage )
 {
     /* Note: Page sizes values are given in mils
@@ -83,7 +84,8 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
     drawList.SetPageNumber( aSheetNumber );
     drawList.SetSheetCount( aSheetCount );
     drawList.SetFileName( fn.GetFullName() );   // Print only the short filename
-    drawList.SetSheetName( aSheetDesc );
+    drawList.SetSheetName( aSheetName );
+    drawList.SetSheetPath( aSheetPath );
     drawList.SetProject( aProject );
     drawList.SetIsFirstPage( aIsFirstPage );
 

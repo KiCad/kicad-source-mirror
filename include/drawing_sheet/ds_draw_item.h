@@ -428,7 +428,15 @@ public:
      */
     void SetSheetName( const wxString& aSheetName )
     {
-        m_sheetFullName = aSheetName;
+        m_sheetName = aSheetName;
+    }
+
+    /**
+     * Set the sheet path to draw/plot
+     */
+    void SetSheetPath( const wxString& aSheetPath )
+    {
+        m_sheetPath = aSheetPath;
     }
 
     /**
@@ -526,7 +534,8 @@ public:
      *   SetSheetNumber( aSheetNumber );
      *   SetSheetCount( aSheetCount );
      *   SetFileName( aFileName );
-     *   SetSheetName( aFullSheetName );
+     *   SetSheetName( aSheetName );
+     *   SetSheetPath( aSheetPath );
      *
      * @param aPageInfo The PAGE_INFO, for page size, margins...
      * @param aTitleBlock The sheet title block, for basic inscriptions.
@@ -579,7 +588,8 @@ protected:
     const TITLE_BLOCK* m_titleBlock;      // for basic inscriptions
     const wxString*    m_paperFormat;     // for basic inscriptions
     wxString           m_fileName;        // for basic inscriptions
-    wxString           m_sheetFullName;   // for basic inscriptions
+    wxString           m_sheetName;       // for basic inscriptions
+    wxString           m_sheetPath;       // for basic inscriptions
     wxString           m_pageNumber;      ///< The actual page number displayed in the title block.
     const wxString*    m_sheetLayer;      // for basic inscriptions
     const PROJECT*     m_project;         // for project-based variable substitutions

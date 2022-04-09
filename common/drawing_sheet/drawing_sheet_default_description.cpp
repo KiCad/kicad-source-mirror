@@ -144,7 +144,7 @@ extern const char defaultDrawingSheet[] =
     "(tbtext \"Title: ${TITLE}\" (name \"\") (pos 109 10.7) (font (size 2 2) bold italic))\n"
     "(tbtext \"File: ${FILENAME}\" (name \"\") (pos 109 14.3))\n"
     "(line (name \"\") (start 110 18.5) (end 2 18.5))\n"
-    "(tbtext \"Sheet: ${SHEETNAME}\" (name \"\") (pos 109 17))\n"
+    "(tbtext \"Sheet: ${SHEETPATH}\" (name \"\") (pos 109 17))\n"
     "(tbtext \"${COMPANY}\" (name \"\") (pos 109 20) (font bold) (comment \"Company name\"))\n"
     "(tbtext \"${COMMENT1}\" (name \"\") (pos 109 23) (comment \"Comment 0\"))\n"
     "(tbtext \"${COMMENT2}\" (name \"\") (pos 109 26) (comment \"Comment 1\"))\n"

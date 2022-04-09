@@ -167,7 +167,7 @@ wxString convertLegacyVariableRefs( const wxString& aTextbase )
             case 'N': msg += wxT( "${##}" );            break;
             case 'F': msg += wxT( "${FILENAME}" );      break;
             case 'L': msg += wxT( "${LAYER}" );         break;
-            case 'P': msg += wxT( "${SHEETNAME}" );     break;
+            case 'P': msg += wxT( "${SHEETPATH}" );     break;
             case 'Y': msg += wxT( "${COMPANY}" );       break;
             case 'T': msg += wxT( "${TITLE}" );         break;
             case 'C':

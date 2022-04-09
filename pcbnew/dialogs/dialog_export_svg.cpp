@@ -355,8 +355,11 @@ bool DIALOG_EXPORT_SVG::CreateSVGFile( const wxString& aFullFileName )
 
     LOCALE_IO    toggle;
 
+    //@todo allow controlling the sheet name and path that will be displayed in the title block
+    // Leave blank for now
     SVG_PLOTTER* plotter = (SVG_PLOTTER*) StartPlotBoard( m_board, &plot_opts, UNDEFINED_LAYER,
-                                                          aFullFileName, wxEmptyString );
+                                                          aFullFileName, wxEmptyString,
+                                                          wxEmptyString );
 
     if( plotter )
     {
