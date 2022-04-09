@@ -736,7 +736,7 @@ include_directories( SYSTEM ${PIXMAN_INCLUDE_DIR} )
 
 #
 # Find Boost headers, required.
-find_package( Boost 1.59.0 REQUIRED )
+find_package( Boost 1.71.0 REQUIRED )
 include_directories( SYSTEM ${Boost_INCLUDE_DIR} )
 
 #
