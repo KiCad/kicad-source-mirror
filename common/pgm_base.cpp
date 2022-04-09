@@ -60,6 +60,8 @@
 #include <trace_helpers.h>
 #include <paths.h>
 
+#include <kiplatform/policy.h>
+
 #ifdef KICAD_USE_SENTRY
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/uuid_generators.hpp>
@@ -218,6 +220,13 @@ const wxString PGM_BASE::AskUserForPreferredEditor( const wxString& aDefaultEdit
 #ifdef KICAD_USE_SENTRY
 bool PGM_BASE::IsSentryOptedIn()
 {
+    KIPLATFORM::POLICY::STATE policyState =
+            KIPLATFORM::POLICY::GetPolicyState( wxT( "DataCollection" ) );
+    if( policyState != KIPLATFORM::POLICY::STATE::NOT_CONFIGURED )
+    {
+        return policyState == KIPLATFORM::POLICY::STATE::ENABLED;
+    }
+
     return m_sentry_optin_fn.Exists();
 }
 
@@ -319,7 +328,11 @@ void PGM_BASE::sentryInit()
 
 void PGM_BASE::sentryPrompt()
 {
-    if( !m_settings_manager->GetCommonSettings()->m_DoNotShowAgain.data_collection_prompt )
+    KIPLATFORM::POLICY::STATE policyState =
+            KIPLATFORM::POLICY::GetPolicyState( wxT( "DataCollection" ) );
+
+    if( policyState == KIPLATFORM::POLICY::STATE::NOT_CONFIGURED
+        && !m_settings_manager->GetCommonSettings()->m_DoNotShowAgain.data_collection_prompt )
     {
         wxMessageDialog optIn = wxMessageDialog(
                 nullptr,

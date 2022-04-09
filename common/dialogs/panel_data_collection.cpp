@@ -34,6 +34,8 @@
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 
+#include <kiplatform/policy.h>
+
 PANEL_DATA_COLLECTION::PANEL_DATA_COLLECTION( PAGED_DIALOG* aDialog, wxWindow* aParent ) :
         PANEL_DATA_COLLECTION_BASE( aParent ), m_dialog( aDialog )
 {
@@ -43,6 +45,13 @@ PANEL_DATA_COLLECTION::PANEL_DATA_COLLECTION( PAGED_DIALOG* aDialog, wxWindow* a
 bool PANEL_DATA_COLLECTION::TransferDataToWindow()
 {
     applySettingsToPanel();
+
+    KIPLATFORM::POLICY::STATE policyState =
+            KIPLATFORM::POLICY::GetPolicyState( "DataCollection" );
+    if( policyState != KIPLATFORM::POLICY::STATE::NOT_CONFIGURED )
+    {
+        Disable();
+    }
 
     return true;
 }

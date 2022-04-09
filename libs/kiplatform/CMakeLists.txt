@@ -11,6 +11,7 @@ if( APPLE )
     set( PLATFORM_SRCS
         osx/app.mm
         osx/environment.mm
+        osx/policy.mm
         osx/ui.mm
         )
 
@@ -24,6 +25,7 @@ elseif( WIN32 )
     set( PLATFORM_SRCS
         msw/app.cpp
         msw/environment.cpp
+        msw/policy.cpp
         msw/ui.cpp
         )
 
@@ -36,6 +38,7 @@ elseif( UNIX )
     set( PLATFORM_SRCS
         gtk/app.cpp
         gtk/environment.cpp
+        gtk/policy.cpp
         gtk/ui.cpp
         )
 
