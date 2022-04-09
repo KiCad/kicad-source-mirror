@@ -214,15 +214,20 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags ) const
     if( m_me == aRhs.m_me )
         return 0;
 
-    int retv = m_name.Cmp( aRhs.m_name );
+    int retv = 0;
 
-    if( retv )
-        return retv;
+    if( ( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::ERC ) == 0 )
+    {
+        retv = m_name.Cmp( aRhs.m_name );
 
-    retv = m_libId.compare( aRhs.m_libId );
+        if( retv )
+            return retv;
 
-    if( retv )
-        return retv;
+        retv = m_libId.compare( aRhs.m_libId );
+
+        if( retv )
+            return retv;
+    }
 
     if( m_parent.lock() < aRhs.m_parent.lock() )
         return -1;
@@ -258,8 +263,15 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags ) const
         {
             const LIB_FIELD* lhsField = static_cast<const LIB_FIELD*>( lhsItem );
 
-            if( lhsField->IsMandatory() )
+            if( lhsField->GetId() == VALUE_FIELD )
+            {
+                if( ( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::ERC ) == 0 || IsPower() )
+                    retv = lhsItem->compare( *rhsItem, aCompareFlags );
+            }
+            else if( lhsField->IsMandatory() )
+            {
                 retv = lhsItem->compare( *rhsItem, aCompareFlags );
+            }
         }
         else
         {
