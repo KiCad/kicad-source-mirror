@@ -1341,7 +1341,7 @@ void PCB_EDIT_FRAME::SetLastPath( LAST_PATH_TYPE aType, const wxString& aLastPat
 }
 
 
-void PCB_EDIT_FRAME::OnModify( )
+void PCB_EDIT_FRAME::OnModify()
 {
     PCB_BASE_FRAME::OnModify();
 
@@ -1709,12 +1709,12 @@ void PCB_EDIT_FRAME::PythonSyncEnvironmentVariables()
 
     // Set the environment variables for python scripts
     // note: the string will be encoded UTF8 for python env
-    for( auto& var : vars )
+    for( const std::pair<const wxString, ENV_VAR_ITEM>& var : vars )
         UpdatePythonEnvVar( var.first, var.second.GetValue() );
 
     // Because the env vars can be modified by the python scripts (rewritten in UTF8),
     // regenerate them (in Unicode) for our normal environment
-    for( auto& var : vars )
+    for( const std::pair<const wxString, ENV_VAR_ITEM>& var : vars )
         wxSetEnv( var.first, var.second.GetValue() );
 }
 
@@ -1813,14 +1813,16 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     GetAppearancePanel()->OnColorThemeChanged();
 
-    auto* painter = static_cast<KIGFX::PCB_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
-    auto* renderSettings = painter->GetSettings();
+    KIGFX::PCB_VIEW*            view = GetCanvas()->GetView();
+    KIGFX::PCB_PAINTER*         painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
+
     renderSettings->LoadDisplayOptions( GetDisplayOptions() );
+
     SetElementVisibility( LAYER_NO_CONNECTS, Settings().m_Display.m_PadNoConnects );
     SetElementVisibility( LAYER_RATSNEST, Settings().m_Display.m_ShowGlobalRatsnest );
 
-    auto cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
-    GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
+    GetGalDisplayOptions().ReadWindowSettings( Settings().m_Window );
 
     // Netclass definitions could have changed, either by us or by Eeschema, so we need to
     // recompile the implicit rules
