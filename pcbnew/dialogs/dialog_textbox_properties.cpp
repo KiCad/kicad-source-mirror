@@ -192,7 +192,8 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataToWindow()
 
     m_mirrored->Check( m_edaText->IsMirrored() );
 
-    m_orientation.SetAngleValue( m_edaText->GetTextAngle() );
+    EDA_ANGLE orientation = m_edaText->GetTextAngle();
+    m_orientation.SetAngleValue( orientation.Normalize180() );
 
     STROKE_PARAMS stroke;
 
@@ -354,14 +355,14 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
         m_edaText->SetTextThickness( maxPenWidth );
     }
 
-    EDA_ANGLE delta = m_orientation.GetAngleValue() - m_edaText->GetTextAngle();
+    EDA_ANGLE delta = m_orientation.GetAngleValue().Normalize() - m_edaText->GetTextAngle();
 
     if( m_fpTextBox )
         m_fpTextBox->Rotate( m_fpTextBox->GetPosition(), delta );
     else if( m_pcbTextBox )
         m_pcbTextBox->Rotate( m_pcbTextBox->GetPosition(), delta );
 
-    m_edaText->SetTextAngle( m_orientation.GetAngleValue() );
+    m_edaText->SetTextAngle( m_orientation.GetAngleValue().Normalize() );
 
     m_edaText->SetBold( m_bold->IsChecked() );
     m_edaText->SetItalic( m_italic->IsChecked() );

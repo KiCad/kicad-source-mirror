@@ -286,7 +286,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 
     m_mirrored->Check( m_edaText->IsMirrored() );
 
-    m_orientation.SetAngleValue( m_edaText->GetTextAngle() );
+    EDA_ANGLE orientation = m_edaText->GetTextAngle();
+    m_orientation.SetAngleValue( orientation.Normalize180() );
 
     return DIALOG_TEXT_PROPERTIES_BASE::TransferDataToWindow();
 }
@@ -421,7 +422,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         m_edaText->SetTextThickness( maxPenWidth );
     }
 
-    m_edaText->SetTextAngle( m_orientation.GetAngleValue() );
+    m_edaText->SetTextAngle( m_orientation.GetAngleValue().Normalize() );
 
     m_edaText->SetVisible( m_Visible->GetValue() );
 
