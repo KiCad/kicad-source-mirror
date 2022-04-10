@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-04 13:55-0700\n"
-"PO-Revision-Date: 2022-04-08 00:11+0000\n"
+"PO-Revision-Date: 2022-04-11 16:38+0000\n"
 "Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -35822,9 +35822,8 @@ msgid "Hole clearance resolution for:"
 msgstr "Resolución de margen de orificios para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:616
-#, fuzzy
 msgid "Mechanical"
-msgstr "NPTH, mecánico"
+msgstr "Mecánico"
 
 #: pcbnew/tools/board_inspection_tool.cpp:625
 msgid "Mechanical clearance resolution for:"
