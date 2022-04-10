@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-04 13:55-0700\n"
-"PO-Revision-Date: 2022-04-08 00:11+0000\n"
+"PO-Revision-Date: 2022-04-11 16:38+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -1282,7 +1282,7 @@ msgstr "PostScript (.ps fil)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr "Ritningsblad (.kicad_wks fil)"
+msgstr "Ritningsark (.kicad_wks fil)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
@@ -2378,7 +2378,7 @@ msgstr "Landskap"
 
 #: common/dialogs/dialog_page_settings.cpp:792
 msgid "Select Drawing Sheet File"
-msgstr "Välj Ritningsbladsfil"
+msgstr "Välj Ritningsarksfil"
 
 #: common/dialogs/dialog_page_settings_base.cpp:36
 msgid "dummy text"
@@ -2523,7 +2523,7 @@ msgstr "Exportera till andra ark"
 #: gerbview/widgets/gerbview_layer_widget.cpp:100
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "Drawing Sheet"
-msgstr "Ritningsblad"
+msgstr "Ritningsark"
 
 #: common/dialogs/dialog_page_settings_base.cpp:153 eeschema/sch_field.cpp:251
 #: pcbnew/dialogs/dialog_export_step_base.cpp:22
@@ -3782,17 +3782,17 @@ msgstr "Kunde inte använda OpenGL"
 #: common/drawing_sheet/drawing_sheet_parser.cpp:925
 #, c-format
 msgid "Drawing sheet '%s' not found."
-msgstr "Ritningsblad '%s' hittades inte."
+msgstr "Ritningsark '%s' hittades inte."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:935
 #, c-format
 msgid "Drawing sheet '%s' could not be opened."
-msgstr "Ritningsblad '%s' kunde inte öppnas."
+msgstr "Ritningsark '%s' kunde inte öppnas."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:948
 #, c-format
 msgid "Drawing sheet '%s' was not fully read."
-msgstr "Ritningsblad '%s' lästes inte in fullständigt."
+msgstr "Ritningsark '%s' lästes inte in fullständigt."
 
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_item.cpp:318
@@ -3842,7 +3842,7 @@ msgstr "Bild"
 #: common/drawing_sheet/ds_data_model_io.cpp:93
 #: common/drawing_sheet/ds_data_model_io.cpp:122
 msgid "Error writing drawing sheet file"
-msgstr "Fel vid skrivning av ritningsbladsfil"
+msgstr "Fel vid skrivning av ritningsarksfil"
 
 #: common/drawing_sheet/ds_draw_item.cpp:136
 msgid "First Page Only"
@@ -5262,11 +5262,11 @@ msgstr "Hierarkiska etiketter"
 
 #: common/layer_id.cpp:112
 msgid "Pin numbers"
-msgstr "Bennummer"
+msgstr "Stiftnummer"
 
 #: common/layer_id.cpp:113
 msgid "Pin names"
-msgstr "Bennamn"
+msgstr "Stiftnamn"
 
 #: common/layer_id.cpp:114
 msgid "Symbol references"
@@ -5281,12 +5281,10 @@ msgid "Symbol fields"
 msgstr "Symbolfält"
 
 #: common/layer_id.cpp:117
-#, fuzzy
 msgid "Sheet references"
-msgstr "Arkreferenser"
+msgstr "Ritningsarksreferenser"
 
 #: common/layer_id.cpp:118
-#, fuzzy
 msgid "Net class references"
 msgstr "Nätklassreferenser"
 
@@ -5313,23 +5311,23 @@ msgstr "Stift"
 
 #: common/layer_id.cpp:124
 msgid "Sheet borders"
-msgstr "Bladkanter"
+msgstr "Arkkontur"
 
 #: common/layer_id.cpp:125
 msgid "Sheet backgrounds"
-msgstr "Bladbakgrunder"
+msgstr "Arkbakgrunder"
 
 #: common/layer_id.cpp:126
 msgid "Sheet names"
-msgstr "Bladnamn"
+msgstr "Arknamn"
 
 #: common/layer_id.cpp:127
 msgid "Sheet fields"
-msgstr "Bladfält"
+msgstr "Arkfält"
 
 #: common/layer_id.cpp:128
 msgid "Sheet file names"
-msgstr "Namn på bladfiler"
+msgstr "Namn på arkfiler"
 
 #: common/layer_id.cpp:129
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
@@ -5359,7 +5357,7 @@ msgstr "Ankare"
 
 #: common/layer_id.cpp:135 common/layer_id.cpp:176
 msgid "Helper items"
-msgstr "Hjälpartiklar"
+msgstr "Hjälpelement"
 
 #: common/layer_id.cpp:136 common/layer_id.cpp:177 common/tool/grid_menu.cpp:64
 #: gerbview/widgets/gerbview_layer_widget.cpp:98
@@ -5386,7 +5384,7 @@ msgstr "Markerade objekt"
 
 #: common/layer_id.cpp:141
 msgid "Hidden items"
-msgstr "Dolda föremål"
+msgstr "Dolda objekt"
 
 #: common/layer_id.cpp:142 common/layer_id.cpp:180
 msgid "Selection highlight"
@@ -5394,12 +5392,11 @@ msgstr "Markering"
 
 #: common/layer_id.cpp:143 common/layer_id.cpp:173
 msgid "Drawing sheet"
-msgstr "Ritningsblad"
+msgstr "Ritningsarkets ram och namnruta"
 
 #: common/layer_id.cpp:144 common/layer_id.cpp:174
-#, fuzzy
 msgid "Page limits"
-msgstr "Sidgränser"
+msgstr "Ritningspapprets kontur"
 
 #: common/layer_id.cpp:148
 msgid "Footprints front"
@@ -5521,7 +5518,7 @@ msgstr "Rutnätsaxlar"
 
 #: common/layer_id.cpp:181
 msgid "Locked item shadow"
-msgstr "Låsta föremåls skuggning"
+msgstr "Låsta objekts skuggning"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
@@ -6944,7 +6941,7 @@ msgstr "Geda PCB-fotavtryck biblioteksfiler"
 
 #: common/wildcards_and_files_ext.cpp:393
 msgid "Drawing sheet files"
-msgstr "Ritningsbladsfiler"
+msgstr "Ritningsarksfiler"
 
 #: common/wildcards_and_files_ext.cpp:401
 msgid "KiCad symbol footprint link files"
@@ -8593,7 +8590,7 @@ msgstr "Klart.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:437
 msgid "Checking sheet names..."
-msgstr "Kontrollerar bladnamn..."
+msgstr "Kontrollerar arknamn..."
 
 #: eeschema/dialogs/dialog_erc.cpp:443
 msgid "Checking bus conflicts..."
@@ -8857,15 +8854,14 @@ msgstr "Vertikal text"
 #: eeschema/dialogs/dialog_text_properties_base.cpp:106
 #: eeschema/sch_label.cpp:800 eeschema/sch_text.cpp:459
 msgid "Align left"
-msgstr "Justera åt vänster"
+msgstr "Vänsterjusterat"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:152
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:120
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:104
 #: eeschema/dialogs/dialog_text_properties_base.cpp:111
-#, fuzzy
 msgid "Align horizontal center"
-msgstr "Justera mot horisontellt centrum"
+msgstr "Horisontellt centrerat"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:157
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:125
@@ -8873,7 +8869,7 @@ msgstr "Justera mot horisontellt centrum"
 #: eeschema/dialogs/dialog_text_properties_base.cpp:116
 #: eeschema/sch_label.cpp:798 eeschema/sch_text.cpp:457
 msgid "Align right"
-msgstr "Justera åt höger"
+msgstr "Högerjusterat"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:167
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:135
@@ -8881,15 +8877,14 @@ msgstr "Justera åt höger"
 #: eeschema/dialogs/dialog_text_properties_base.cpp:131
 #: eeschema/sch_label.cpp:801 eeschema/sch_text.cpp:460
 msgid "Align top"
-msgstr "Justera uppåt"
+msgstr "Vertikal justering längst upp"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:172
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:140
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:119
 #: eeschema/dialogs/dialog_text_properties_base.cpp:126
-#, fuzzy
 msgid "Align vertical center"
-msgstr "Justera mot vertikalt centrum"
+msgstr "Vertikalt centrerat"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:177
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:145
@@ -8897,7 +8892,7 @@ msgstr "Justera mot vertikalt centrum"
 #: eeschema/dialogs/dialog_text_properties_base.cpp:121
 #: eeschema/sch_label.cpp:799 eeschema/sch_text.cpp:458
 msgid "Align bottom"
-msgstr "Justera nedåt"
+msgstr "Vertikal justering längst ned"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:189
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:191
@@ -10403,11 +10398,11 @@ msgstr "Sidstorlek:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:65
 msgid "Plot drawing sheet"
-msgstr "Plotta ritningsbladet"
+msgstr "Plotta ritningsarket"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
 msgid "Plot the drawing sheet border and title block"
-msgstr "Plotta ritningsbladets ram och namnruta"
+msgstr "Plotta ritningsarkets ram och namnruta"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
@@ -13057,7 +13052,7 @@ msgstr ""
 
 #: eeschema/eeschema_config.cpp:77 pcbnew/pcbnew_config.cpp:55
 msgid "Error loading drawing sheet."
-msgstr "Fel vid inläsning av ritningsblad."
+msgstr "Fel vid inläsning av ritningsark."
 
 #: eeschema/eeschema_config.cpp:246 eeschema/sheet.cpp:286
 #, c-format
@@ -13114,7 +13109,7 @@ msgstr "Ingen förbindelse"
 
 #: eeschema/erc.cpp:283
 msgid "Unresolved text variable in drawing sheet."
-msgstr "Oupplöst textvariabel i ritningsbladet."
+msgstr "Oupplöst textvariabel i ritningsarket."
 
 #: eeschema/erc.cpp:314
 #, c-format
@@ -14388,7 +14383,7 @@ msgstr "Rektangelns ägare (%d) hittades inte."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1494
 #, c-format
 msgid "Sheet entry's owner (%d) not found."
-msgstr "Bladfältets ägare (%d) hittades inte."
+msgstr "Arkfältets ägare (%d) hittades inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1740
 msgid "Power Port has unknown style, use bar instead."
@@ -14423,7 +14418,7 @@ msgstr "Fil hittades inte %s."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2189
 #, c-format
 msgid "Sheetname's owner (%d) not found."
-msgstr "Bladnamnets ägare (%d) hittades inte."
+msgstr "Arknamnets ägare (%d) hittades inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2212
 #, c-format
@@ -15240,7 +15235,7 @@ msgstr "Fotavtryckfältet får inte innehålla %s tecken."
 #: eeschema/sch_validators.cpp:114
 #, c-format
 msgid "The datasheet field cannot contain %s character(s)."
-msgstr "Databladfältet kan inte innehålla %s tecken."
+msgstr "Databladsfältet kan inte innehålla %s tecken."
 
 #: eeschema/sch_validators.cpp:118
 #, c-format
@@ -19855,7 +19850,7 @@ msgstr "Beräkna komponentvärden, ledarbredder etc."
 
 #: kicad/tools/kicad_manager_actions.cpp:110
 msgid "Edit drawing sheet borders and title block"
-msgstr "Ändra ritningsbladets ram och namnruta"
+msgstr "Ändra ritningsarkets ram och namnruta"
 
 #: kicad/tools/kicad_manager_actions.cpp:116
 msgid "Run Plugin and Content Manager"
@@ -20054,11 +20049,11 @@ msgstr "Nytt föremål"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:233
 msgid "Print Drawing Sheet"
-msgstr "Skriv ut ritningsblad"
+msgstr "Skriv ut ritningsark"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:238
 msgid "An error occurred attempting to print the drawing sheet."
-msgstr "Ett fel inträffade under ett försök att skriva ut ritningsbladet."
+msgstr "Ett fel inträffade under ett försök att skriva ut ritningsarket."
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:239
 msgid "Printing"
@@ -20243,11 +20238,11 @@ msgstr "Allmäna inställningar"
 
 #: pagelayout_editor/files.cpp:57
 msgid "Drawing Sheet File"
-msgstr "Ritningsbladsfil"
+msgstr "Ritningsarksfil"
 
 #: pagelayout_editor/files.cpp:63 pagelayout_editor/files.cpp:107
 msgid "The current drawing sheet has been modified. Save changes?"
-msgstr "Det aktuella ritningsbladet har modifierats. Spara ändringar?"
+msgstr "Det aktuella ritningsarket har modifierats. Spara ändringar?"
 
 #: pagelayout_editor/files.cpp:79
 #, c-format
@@ -20256,7 +20251,7 @@ msgstr "Filen %s laddad"
 
 #: pagelayout_editor/files.cpp:129
 msgid "Append Existing Drawing Sheet"
-msgstr "Lägg till befintligt ritningsblad"
+msgstr "Lägg till befintligt ritningsark"
 
 #: pagelayout_editor/files.cpp:140 pagelayout_editor/files.cpp:165
 #, c-format
@@ -20288,7 +20283,7 @@ msgstr "Spara som"
 
 #: pagelayout_editor/files.cpp:243
 msgid "Error reading drawing sheet"
-msgstr "Fel under läsning av ritningsbladet"
+msgstr "Fel vid inläsning av ritningsarket"
 
 #: pagelayout_editor/files.cpp:265
 msgid "Layout file is read only."
@@ -20317,7 +20312,7 @@ msgstr "Fel Init Skrivarinfo"
 
 #: pagelayout_editor/pl_editor_frame.cpp:541
 msgid "[no drawing sheet loaded]"
-msgstr "[inget ritningsblad laddat]"
+msgstr "[inget ritningsark laddat]"
 
 #: pagelayout_editor/pl_editor_frame.cpp:749
 #, c-format
@@ -20326,7 +20321,7 @@ msgstr "koord origo: %s"
 
 #: pagelayout_editor/pl_editor_frame.cpp:889
 msgid "New drawing sheet file is unsaved"
-msgstr "Ny ritningsbladsfil är inte sparad"
+msgstr "Ny ritningsarksfil är inte sparad"
 
 #: pagelayout_editor/pl_editor_frame.cpp:893
 msgid "Drawing sheet changes are unsaved"
@@ -20398,11 +20393,11 @@ msgstr "Lägg till en bitmappsbild"
 
 #: pagelayout_editor/tools/pl_actions.cpp:73
 msgid "Append Existing Drawing Sheet..."
-msgstr "Lägg till befintligt ritningsblad..."
+msgstr "Lägg till befintligt ritningsark..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:74
 msgid "Append an existing drawing sheet file to current file"
-msgstr "Lägg till en befintlig ritningsbladsfil till den aktuella filen"
+msgstr "Lägg till en befintlig ritningsarksfil till den aktuella filen"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show Design Inspector"
@@ -20410,7 +20405,7 @@ msgstr "Visa designinspektör"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show the list of items in the drawing sheet"
-msgstr "Visa listan av objekt i ritningsbladet"
+msgstr "Visa listan av objekt i ritningsarket"
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Page Preview Settings..."
@@ -21437,7 +21432,7 @@ msgstr ""
 #: pcb_calculator/pcb_calculator_frame.cpp:49
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB Calculator"
-msgstr "PCB-kalkylator"
+msgstr "KiCad Beräkningsverktyg"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:76
 msgid "General system design"
@@ -28477,7 +28472,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:123
 msgid "Internal Layers"
-msgstr "Interna lager"
+msgstr "Inre kopparlager"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:337
 msgid ""
@@ -36919,15 +36914,15 @@ msgstr "Justera mot vertikalt centrum"
 
 #: pcbnew/tools/pcb_actions.cpp:1162
 msgid "Aligns selected items to the vertical center"
-msgstr "Justerar markerade objekt till den vertikala mitten"
+msgstr "Justerar markerade objekt vertikalt centrerat"
 
 #: pcbnew/tools/pcb_actions.cpp:1167
 msgid "Align to Horizontal Center"
-msgstr "Rikta in mot Horisontellt centrum"
+msgstr "Placera objekt horisontellt centrerat"
 
 #: pcbnew/tools/pcb_actions.cpp:1167
 msgid "Aligns selected items to the horizontal center"
-msgstr "Justerar valda objekt till det horisontella mitten"
+msgstr "Justerar valda objekt horisontellt centrerat"
 
 #: pcbnew/tools/pcb_actions.cpp:1172
 msgid "Distribute Horizontally"
@@ -37446,7 +37441,7 @@ msgstr "Visa en skuggad markör på låsta objekt"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "Show drawing sheet borders and title block"
-msgstr "Visa ritningsbladets ram och namnruta"
+msgstr "Visa ritningsarkets ram och namnruta"
 
 #: pcbnew/widgets/appearance_controls.cpp:377
 msgid "No Layers"
@@ -38171,7 +38166,7 @@ msgstr "Svit av verktyg för schema- och kretskortsdesign"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
-msgstr "KiCad PCB-kalkylator"
+msgstr "KiCad Beräkningsverktyg"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
