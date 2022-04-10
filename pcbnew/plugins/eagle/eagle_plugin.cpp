@@ -90,7 +90,8 @@ using namespace std;
 static int parseEagle( const wxString& aDistance )
 {
     ECOORD::EAGLE_UNIT unit = ( aDistance.npos != aDistance.find( "mil" ) )
-        ? ECOORD::EAGLE_UNIT::EU_MIL : ECOORD::EAGLE_UNIT::EU_MM;
+                                    ? ECOORD::EAGLE_UNIT::EU_MIL
+                                    : ECOORD::EAGLE_UNIT::EU_MM;
 
     ECOORD coord( aDistance, unit );
 
@@ -123,12 +124,12 @@ static wxString interpret_text( const wxString& aText )
     wxString text;
     bool sectionOpen = false;
 
-    for ( wxString::size_type i = 0; i < aText.size(); i++ )
+    for( wxString::size_type i = 0; i < aText.size(); i++ )
     {
         // Interpret escaped characters
-        if ( aText[ i ] == '\\' )
+        if( aText[ i ] == '\\' )
         {
-            if ( i + 1 != aText.size() )
+            if( i + 1 != aText.size() )
                 text.Append( aText[ i + 1 ] );
 
             i++;
@@ -143,9 +144,9 @@ static wxString interpret_text( const wxString& aText )
             continue;
         }
 
-        if ( aText[ i ] == '!' )
+        if( aText[ i ] == '!' )
         {
-            if ( sectionOpen )
+            if( sectionOpen )
             {
                 text.Append( '~' );
                 sectionOpen = false;
@@ -163,6 +164,7 @@ static wxString interpret_text( const wxString& aText )
             {
                 text.Append( aText[ i ] );
             }
+
             continue;
         }
 
