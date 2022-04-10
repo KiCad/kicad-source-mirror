@@ -1016,17 +1016,29 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
 
+    /* -------------------------------------------------------------------------------------
+     * Knockout thermal reliefs.
+     */
+
     knockoutThermalReliefs( aZone, aLayer, aFillPolys, thermalConnectionPads, noConnectionPads );
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In2_Cu, wxT( "minus-thermal-reliefs" ) );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
 
+    /* -------------------------------------------------------------------------------------
+     * Knockout electrical clearances.
+     */
+
     buildCopperItemClearances( aZone, aLayer, noConnectionPads, clearanceHoles );
     DUMP_POLYS_TO_COPPER_LAYER( clearanceHoles, In3_Cu, wxT( "clearance-holes" ) );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
+
+    /* -------------------------------------------------------------------------------------
+     * Add thermal relief spokes.
+     */
 
     buildThermalSpokes( aZone, aLayer, thermalConnectionPads, thermalSpokes );
 
@@ -1104,16 +1116,35 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     aFillPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In8_Cu, wxT( "after-spoke-trimming" ) );
 
-    // Prune features that don't meet minimum-width criteria
+    /* -------------------------------------------------------------------------------------
+     * Prune features that don't meet minimum-width criteria
+     */
+
     if( half_min_width - epsilon > epsilon )
         aFillPolys.Deflate( half_min_width - epsilon, numSegs, cornerStrategy );
+
+    // Min-thickness is the web thickness.  On the other hand, a blob min-thickness by
+    // min-thickness is not useful.  Since there's no obvious definition of web vs. blob, we
+    // arbitrarily choose "at least 2X the area".
+    double minArea = (double) aZone->GetMinThickness() * aZone->GetMinThickness() * 2;
+
+    for( int ii = aFillPolys.OutlineCount() - 1; ii >= 0; ii-- )
+    {
+        std::vector<SHAPE_LINE_CHAIN>& island = aFillPolys.Polygon( ii );
+
+        if( island.empty() || island.front().Area() < minArea )
+            aFillPolys.DeletePolygon( ii );
+    }
 
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In9_Cu, wxT( "deflated" ) );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
 
-    // Now remove the non filled areas due to the hatch pattern
+    /* -------------------------------------------------------------------------------------
+     * Process the hatch pattern (note that we do this while deflated)
+     */
+
     if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
     {
         if( !addHatchFillTypeOnZone( aZone, aLayer, aDebugLayer, aFillPolys ) )
@@ -1123,20 +1154,29 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     if( m_progressReporter && m_progressReporter->IsCancelled() )
         return false;
 
-    // Re-inflate after pruning of areas that don't meet minimum-width criteria
+    /* -------------------------------------------------------------------------------------
+     * Finish minimum-width pruning by re-inflating
+     */
+
     if( half_min_width - epsilon > epsilon )
         aFillPolys.Inflate( half_min_width - epsilon, numSegs, cornerStrategy );
 
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In15_Cu, wxT( "after-reinflating" ) );
 
-    // Ensure additive changes (thermal stubs and particularly inflating acute corners) do not
-    // add copper outside the zone boundary or inside the clearance holes
+    /* -------------------------------------------------------------------------------------
+     * Ensure additive changes (thermal stubs and particularly inflating acute corners) do not
+     * add copper outside the zone boundary or inside the clearance holes
+     */
+
     aFillPolys.BooleanIntersection( aMaxExtents, SHAPE_POLY_SET::PM_FAST );
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In16_Cu, wxT( "after-trim-to-outline" ) );
     aFillPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In17_Cu, wxT( "after-trim-to-clearance-holes" ) );
 
-    // Lastly give any same-net but higher-priority zones control over their own area.
+    /* -------------------------------------------------------------------------------------
+     * Lastly give any same-net but higher-priority zones control over their own area.
+     */
+
     subtractHigherPriorityZones( aZone, aLayer, aFillPolys );
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In18_Cu, wxT( "minus-higher-priority-zones" ) );
 
