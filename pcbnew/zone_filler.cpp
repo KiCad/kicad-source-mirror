@@ -1125,14 +1125,13 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
 
     // Min-thickness is the web thickness.  On the other hand, a blob min-thickness by
     // min-thickness is not useful.  Since there's no obvious definition of web vs. blob, we
-    // arbitrarily choose "at least 2X the area".
-    double minArea = (double) aZone->GetMinThickness() * aZone->GetMinThickness() * 2;
-
+    // arbitrarily choose "at least 1/2 min-thickness on one axis".
     for( int ii = aFillPolys.OutlineCount() - 1; ii >= 0; ii-- )
     {
         std::vector<SHAPE_LINE_CHAIN>& island = aFillPolys.Polygon( ii );
+        EDA_RECT                       islandExtents = island.front().BBox();
 
-        if( island.empty() || island.front().Area() < minArea )
+        if( islandExtents.GetSizeMax() < half_min_width )
             aFillPolys.DeletePolygon( ii );
     }
 
