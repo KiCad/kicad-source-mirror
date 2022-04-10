@@ -6,15 +6,16 @@
 # ZbeeGin <zbeegin@op.pl>, 2020, 2021.
 # Дмитрий Дёмин <dmitrodem@gmail.com>, 2021.
 # dsa-t <dudesuchamazing@gmail.com>, 2022.
+# Andrey Fedorushkov <andrf@mail.ru>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-04 13:55-0700\n"
-"PO-Revision-Date: 2022-03-21 12:12+0000\n"
-"Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"PO-Revision-Date: 2022-04-11 16:38+0000\n"
+"Last-Translator: Andrey Fedorushkov <andrf@mail.ru>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -750,9 +751,8 @@ msgid "Show model bounding boxes"
 msgstr "Показать габариты моделей"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:28
-#, fuzzy
 msgid "Show copper and tech layers thickness (very slow)"
-msgstr "Показать толщину меди"
+msgstr "Показать толщину медных и технических слоев (очень медленно)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:31
 msgid "Highlight items on rollover"
@@ -2801,9 +2801,8 @@ msgid "Set X scale adjust for exact scale plotting"
 msgstr "Установка точного масштаба по оси X"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
-#, fuzzy
 msgid "Info text"
-msgstr "Найти текст"
+msgstr "Информация"
 
 #: common/dialogs/dialog_print_generic_base.cpp:111
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
@@ -3229,13 +3228,13 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_data_collection_base.cpp:27
+#, fuzzy
 msgid "I agree to provide anonymous reports"
-msgstr ""
+msgstr "Я согласен предоставлять анонимные отчеты"
 
 #: common/dialogs/panel_data_collection_base.cpp:30
-#, fuzzy
 msgid "Reset Unique Id"
-msgstr "Сбросить неиспользуемые"
+msgstr "Сбросить уникальный Id"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:84
 msgid "Type filter text"
@@ -3986,9 +3985,8 @@ msgid "Hotkeys"
 msgstr "Горячие клавиши"
 
 #: common/eda_base_frame.cpp:999
-#, fuzzy
 msgid "Data Collection"
-msgstr "Подкл. к конт.пл."
+msgstr "Информация"
 
 #: common/eda_base_frame.cpp:1011 common/tool/actions.cpp:582
 #: eeschema/symbol_editor/symbol_editor.cpp:163
@@ -5537,9 +5535,8 @@ msgid "Grid axes"
 msgstr "Оси сетки"
 
 #: common/layer_id.cpp:181
-#, fuzzy
 msgid "Locked item shadow"
-msgstr "Заблокированные"
+msgstr "Заблокированные элементы"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
@@ -7075,9 +7072,9 @@ msgid "Hotkey file"
 msgstr "Файл горячих клавиш"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "Файл эквивалентности '%s' не найден в путях поиска по умолчанию."
+msgstr "Файл соответсвий '%s' не найден."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -8635,9 +8632,8 @@ msgid "Checking for library symbol issues..."
 msgstr "Проверка на наличие проблем с библиотеками..."
 
 #: eeschema/dialogs/dialog_erc.cpp:500
-#, fuzzy
 msgid "Checking for off grid pins and wires..."
-msgstr "Проверка посад.мест..."
+msgstr "Проверка выводов и связей вне сетки..."
 
 #: eeschema/dialogs/dialog_erc.cpp:578 pcbnew/dialogs/dialog_drc.cpp:489
 msgid "errors"
@@ -9446,9 +9442,8 @@ msgstr "Размер имени"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:100
-#, fuzzy
 msgid "De Morgan"
-msgstr "Нормальное начертание"
+msgstr "Начертание по Д.Моргану"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:768
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:55
@@ -9515,14 +9510,12 @@ msgid "Group by name"
 msgstr "Группировать по имени"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:139
-#, fuzzy
 msgid "Group Selected"
-msgstr "Шина не выделена"
+msgstr "Группировать выбранные"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:150
-#, fuzzy
 msgid "Filter by unit:"
-msgstr "Фильтровать по количеству выводов"
+msgstr "Фильтровать по части:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:81
 msgid "Pin Table"
@@ -9933,14 +9926,12 @@ msgid "Text Box Properties"
 msgstr "Свойства надписи"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:76
-#, fuzzy
 msgid "Set width to 0 to use Schematic default line width."
-msgstr "Установите 0 для использования значения по умолчанию."
+msgstr "Установите ширину в 0 для использования ширины линии по умолчанию."
 
 #: eeschema/dialogs/dialog_line_properties_base.h:67
-#, fuzzy
 msgid "Line Properties"
-msgstr "Свойства вывода"
+msgstr "Свойства линии"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:104
 msgid "Conflicting Labels"
@@ -10099,7 +10090,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:270
 msgid "Exit sync pins mode"
-msgstr ""
+msgstr "Выход из режима синхронного редактирования выводов"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:285
 #, fuzzy
@@ -10134,17 +10125,20 @@ msgstr ""
 "Желаете продолжить?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:430
-#, fuzzy
 msgid "Synchronized Pins Mode."
-msgstr "Режим синхронного редактирования выводов"
+msgstr "Режим синхронного редактирования выводов."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:432
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
 msgstr ""
+"Режим синхронного редактирования выводов. Новые выводы будут добавлены во "
+"все части."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
 msgstr ""
+"Режим синхронного редактирования выводов. Совпадающие выводы в других частях "
+"будут обновлены."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:43
 msgid "Pin &name:"
@@ -12258,19 +12252,17 @@ msgid "Update Symbol Fields"
 msgstr "Обновление полей символов"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:31
-#, fuzzy
 msgid "Wire/bus width:"
-msgstr "Ширина линии:"
+msgstr "Ширина проводника/шины:"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:90
-#, fuzzy
 msgid "Set width to 0 to use Netclass wire/bus widths."
-msgstr "Установите 0 для использования ширины из класса цепей."
+msgstr ""
+"Установите в 0 для использования ширины проводника/шины из класса цепей."
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:70
-#, fuzzy
 msgid "Wire & Bus Properties"
-msgstr "Свойства линий, проводников и шин"
+msgstr "Свойства проводников и шин"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:142
 msgid ""
@@ -12346,17 +12338,14 @@ msgid "Fill selected shapes"
 msgstr "Заполнять выделенные фигуры"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:86
-#, fuzzy
 msgid "Selection thickness:"
 msgstr "Толщина выделения:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:94
-#, fuzzy
 msgid "(selection color can be edited in the \"Colors\" page)"
-msgstr "(цвет подсветки можно установить на вкладке \"Цвета\")"
+msgstr "(цвет подсветки выделенного можно установить на вкладке \"Цвета\")"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:98
-#, fuzzy
 msgid "Highlight thickness:"
 msgstr "Толщина подсветки:"
 
@@ -12390,9 +12379,8 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "Подсвечивать проводник в схеме при подсветке цепи на плате"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
-#, fuzzy
 msgid "Line Drawing Mode:"
-msgstr "Режим отображения"
+msgstr "Режим рисования линий:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 #, fuzzy
@@ -12401,16 +12389,15 @@ msgstr "Свободный угол"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "90 deg Angle"
-msgstr ""
+msgstr "Угол 90°"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "45 deg Angle"
-msgstr "45°"
+msgstr "Угол 45°"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "135 deg Angle"
-msgstr ""
+msgstr "Угол 135°"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 msgid "Mouse drag performs Drag (G) operation"
@@ -12720,7 +12707,7 @@ msgstr "Интервал:"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:237
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:45
 msgid "Dash and dot lengths are ratios of the line width."
-msgstr ""
+msgstr "Длина штрихов и пунктиров относительно толщины линии."
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:169
 msgid "No error or warning"
@@ -12760,6 +12747,8 @@ msgid ""
 "Set to 0 to allow symbols to inherit their line widths from\n"
 "their parent Schematic"
 msgstr ""
+"Установите в 0 для наследования толщины линий\n"
+"из родительской схемы"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:55
 msgid "D&efault pin length:"
@@ -13154,7 +13143,7 @@ msgstr "Лист имеет дочерние листы с одинаковым�
 
 #: eeschema/erc_item.cpp:50
 msgid "Symbol pin or wire end off grid"
-msgstr ""
+msgstr "Вывод или проводник заканчивается вне сетки"
 
 #: eeschema/erc_item.cpp:54
 msgid "Pin not connected"
@@ -14130,7 +14119,6 @@ msgstr "Назад к предыдущему листу"
 
 #: eeschema/sch_field.cpp:848 eeschema/sch_label.cpp:191
 #: eeschema/sch_label.cpp:1101
-#, fuzzy
 msgid "Sheet References"
 msgstr "Обозначения листов"
 
@@ -17202,7 +17190,7 @@ msgstr "Проводники и шины ортогонально"
 
 #: eeschema/tools/ee_actions.cpp:684
 msgid "Lines drawn at any angle"
-msgstr ""
+msgstr "Линии под любым углом"
 
 #: eeschema/tools/ee_actions.cpp:689
 #, fuzzy
@@ -21468,7 +21456,7 @@ msgstr "Тип линии передачи"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:98
 msgid "Memo"
-msgstr ""
+msgstr "Заметки"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:101
 msgid "E-Series"
@@ -22360,12 +22348,14 @@ msgid "Yellow"
 msgstr "Жёлтый"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:78
+#, fuzzy
 msgid "FR4 natural"
-msgstr ""
+msgstr "FR4"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:79
+#, fuzzy
 msgid "PTFE natural"
-msgstr ""
+msgstr "PTFE"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:80
 #, fuzzy
@@ -22374,11 +22364,11 @@ msgstr "Ломаная"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:81
 msgid "Phenolic natural"
-msgstr ""
+msgstr "Фенол"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:82
 msgid "Aluminum"
-msgstr ""
+msgstr "Алюминий"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:53
 msgid "Not specified"
@@ -23306,7 +23296,7 @@ msgstr "Проверка зон..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:142
 msgid "Rebuild connectivity..."
-msgstr ""
+msgstr "Перестроение связей..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:146
 #, fuzzy
@@ -24393,7 +24383,7 @@ msgstr ": (нет изменений)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:400
 msgid ": OK"
-msgstr ""
+msgstr ":все в норме"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
 msgid "Update all footprints on board"
@@ -25064,8 +25054,9 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:298
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:269
+#, fuzzy
 msgid "Allow bridged solder mask apertures between pads"
-msgstr ""
+msgstr "Разрешить мостики паяльной маски между конт.площадками"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:272
@@ -26987,8 +26978,9 @@ msgid "From parent footprint"
 msgstr "Из родительского посад.места"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:716
+#, fuzzy
 msgid "Zone knockout:"
-msgstr ""
+msgstr "Зона перекрытия:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
 #, fuzzy
@@ -27833,8 +27825,9 @@ msgid "Position Relative To Reference Item"
 msgstr "Переместить относительно другого элемента"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:116
+#, fuzzy
 msgid "Right-click for layer selection commands."
-msgstr ""
+msgstr "Правый клик для команды выбора слоя."
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:205
 msgid "Print according to objects tab of appearance manager"
@@ -28058,8 +28051,9 @@ msgid "Enter the text placed on selected layer."
 msgstr "Введите текст, который нужно разместить на выбранном слое."
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:100
+#, fuzzy
 msgid "Knockout"
-msgstr ""
+msgstr "Перекрытие"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:104
 msgid "Keep text upright"
@@ -29606,8 +29600,11 @@ msgid "Solder mask to copper clearance:"
 msgstr "Зазор паяльной маски:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
+#, fuzzy
 msgid "Allow bridged solder mask apertures between pads within footprints"
 msgstr ""
+"Разрешить мостики паяльной маски между конт.площадками внутри посадочного "
+"места"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:98
 msgid "Tent vias"
@@ -30259,8 +30256,9 @@ msgid "board setup constraints"
 msgstr "заданные ограничения платы"
 
 #: pcbnew/drc/drc_engine.cpp:181
+#, fuzzy
 msgid "default"
-msgstr ""
+msgstr "по умолчанию"
 
 #: pcbnew/drc/drc_engine.cpp:187
 msgid "board setup constraints silk"
@@ -30362,12 +30360,14 @@ msgid "Checking assertion \"%s\"."
 msgstr "Проверка условия правила \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:901 pcbnew/drc/drc_engine.cpp:1332
+#, fuzzy
 msgid "Assertion passed."
-msgstr ""
+msgstr "Ограничений проверено."
 
 #: pcbnew/drc/drc_engine.cpp:905 pcbnew/drc/drc_engine.cpp:1336
+#, fuzzy
 msgid "--> Assertion failed. <--"
-msgstr ""
+msgstr "--> Оганичений не пройдено. <--"
 
 #: pcbnew/drc/drc_engine.cpp:925
 #, c-format
@@ -30574,8 +30574,9 @@ msgid "Isolated copper fill"
 msgstr "Запретить заполнение медью"
 
 #: pcbnew/drc/drc_item.cpp:88
+#, fuzzy
 msgid "Thermal relief connection to zone incomplete"
-msgstr ""
+msgstr "Не йдалось подключить терморазгрузку к зоне"
 
 #: pcbnew/drc/drc_item.cpp:92
 msgid "Via is not connected or connected on only one layer"
@@ -30741,8 +30742,9 @@ msgid "Through hole pad has no hole"
 msgstr "Конт.пл. со сквозным отв. не имеет отв."
 
 #: pcbnew/drc/drc_item.cpp:252
+#, fuzzy
 msgid "Pads with different numbers overlap"
-msgstr ""
+msgstr "Перекрытие с  другой конт.площадкой"
 
 #: pcbnew/drc/drc_item.cpp:397
 #, c-format
@@ -31167,8 +31169,9 @@ msgid "Checking silkscreen for overlapping items..."
 msgstr "Проверка шёлкографии на наличие перекрывающихся элементов..."
 
 #: pcbnew/drc/drc_test_provider_sliver_checker.cpp:83
+#, fuzzy
 msgid "Running sliver detection on copper layers..."
-msgstr ""
+msgstr "Проверка разрывов на медных слоях..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:55
 #, fuzzy
@@ -31216,8 +31219,9 @@ msgid "(%s max height %s; actual %s)"
 msgstr "(%s макс. ширина %s; текущая %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:209
+#, fuzzy
 msgid "(TrueType font characters with insufficient stroke weight)"
-msgstr ""
+msgstr "(символы шрифта TrueType с недостаточной толщиной штриха)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:226
 #, fuzzy, c-format
@@ -32088,8 +32092,11 @@ msgid "Import Vector Graphics File"
 msgstr "Импорт файла векторной графики"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:133
+#, fuzzy
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
 msgstr ""
+"Память была исчерпана при попытке загрузить DXF, возможно, он слишком "
+"большой."
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
@@ -33041,9 +33048,10 @@ msgid "Footprint has no back courtyard."
 msgstr "Посад.место не имеет области установки снизу."
 
 #: pcbnew/pcb_expr_evaluator.cpp:608
-#, c-format
+#, c-format, fuzzy
 msgid "Missing rule-area identifier argument (A, B, or rule-area name) to %s."
 msgstr ""
+"Отсутствует аргумент идентификатора правила (A, B или имя правила) в %s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:711
 #, fuzzy, c-format
@@ -33304,8 +33312,9 @@ msgid "Record of unknown type: '%d'."
 msgstr "неизвестный тип конт.пл.: %d"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:875
+#, fuzzy
 msgid "Loading extended primitive information data..."
-msgstr ""
+msgstr "Загрузка расширенных данных о примитивах..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:896
 msgid "Loading board data..."
@@ -35133,14 +35142,14 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "wire_via ссылается на несуществующую стопку конт.пл. '%s'."
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:221
-#, c-format
+#, c-format, fuzzy
 msgid "%d Teardrops created"
-msgstr ""
+msgstr "%d создано переходов"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:235
-#, c-format
+#, c-format, fuzzy
 msgid "%d Teardrops removed."
-msgstr ""
+msgstr "%d удалено переходов."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:34
 #, fuzzy
@@ -35178,8 +35187,9 @@ msgstr "Высота текста"
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:82
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:151
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:220
+#, fuzzy
 msgid "percent of d"
-msgstr ""
+msgstr "процентов от d"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:86
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:155
@@ -35191,16 +35201,21 @@ msgstr "Макс. высота:"
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:88
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:157
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:226
+#, fuzzy
 msgid ""
 "Max pad/via size to track width ratio to create a teardrop.\n"
 "100 always creates a teardrop."
 msgstr ""
+"Максимальное отношение размера конт.площадки/перех.отв. к ширине дорожки для "
+"создания перехода.\n"
+"100 всегда создает переход."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:96
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:165
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:234
+#, fuzzy
 msgid "percent of H/d"
-msgstr ""
+msgstr "процент от H/d"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:103
 #, fuzzy
@@ -35208,12 +35223,16 @@ msgid "Rect shapes"
 msgstr "Заполнять выделенные фигуры"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:256
+#, fuzzy
 msgid "Vias and PTH pads"
-msgstr ""
+msgstr "Перех.отверстий и металлизированных конт.площадок"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:258
+#, fuzzy
 msgid "Add teardrops to vias and pads with holes"
 msgstr ""
+"Добавление каплевидных переходов к перех.отверстиям и конт.площадкам с "
+"отверстиями"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:262
 #, fuzzy
@@ -35221,8 +35240,9 @@ msgid "Round pads only"
 msgstr "Относительный радиус скругления"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:263
+#, fuzzy
 msgid "Add teardrops to round shapes only "
-msgstr ""
+msgstr "Добавление каплевидных переходов только к круглым фигурам "
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:267
 #, fuzzy
@@ -35230,8 +35250,11 @@ msgid "Not drilled pads"
 msgstr "Не метить сверла"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:269
+#, fuzzy
 msgid "Add teardrops to not driiled pads, like SMD"
 msgstr ""
+"Добавление каплевидных переходов к конт.площадкам без отверстий, например, "
+"SMD"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:273
 #, fuzzy
@@ -35239,8 +35262,9 @@ msgid "Track to track"
 msgstr "Дорожки:"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:275
+#, fuzzy
 msgid "Add teardrops to two connected tracks of different widths"
-msgstr ""
+msgstr "Добавление каплевидных переходов к двум дорожкам разной ширины"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:285
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:291
@@ -35257,12 +35281,14 @@ msgid "Curved"
 msgstr "Кривая"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:287
+#, fuzzy
 msgid "Style for round shapes"
-msgstr ""
+msgstr "Стиль для круглых форм"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:293
+#, fuzzy
 msgid "Style for rect shapes"
-msgstr ""
+msgstr "Стиль для прямоугольных форм"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:299
 #, fuzzy
@@ -35281,14 +35307,20 @@ msgid ""
 msgstr ""
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:318
+#, fuzzy
 msgid "Teardrop on pads in zones"
-msgstr ""
+msgstr "Каплевидных переходы к конт.площадкам внутри зон"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:319
+#, fuzzy
 msgid ""
 "Pads inside a  copper zone outline of same net have no teardrop.\n"
 "Check this option to allow teardrop for these pads."
 msgstr ""
+"Конт.площадки внутри медной зоны той же цепи не имеют каплевидных переходов."
+"\n"
+"Установите этот параметр, чтобы разрешить каплевилные переходы для таких "
+"площадок."
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:326
 #, fuzzy
@@ -35296,8 +35328,9 @@ msgid "Curve points"
 msgstr "Кривая Безье, %d точек"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:328
+#, fuzzy
 msgid "Number of segments to build a teardrop with curved shape"
-msgstr ""
+msgstr "Количество сегментов для построения каплевидного перехода"
 
 #: pcbnew/teardrop/dialog_teardrop_base.h:108
 #, fuzzy
@@ -35554,8 +35587,9 @@ msgid "Minimum thermal spoke count: %d."
 msgstr "Мин. кол-во мостиков терморазгрузки:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:431
+#, fuzzy
 msgid "Items are not connected.  No thermal spokes will be generated."
-msgstr ""
+msgstr "Элементы не соединены.  Терморазгрузка не будет создана."
 
 #: pcbnew/tools/board_inspection_tool.cpp:436
 #, c-format
@@ -35601,8 +35635,9 @@ msgid "Mechanical clearance resolution for:"
 msgstr "Разрешённый зазор у края платы для:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:637
+#, fuzzy
 msgid "No 'mechanical_clearance' constraints defined."
-msgstr ""
+msgstr "Ограничения 'mechanical_clearance' не определены."
 
 #: pcbnew/tools/board_inspection_tool.cpp:664
 #, fuzzy
@@ -35610,8 +35645,9 @@ msgid "Mechanical hole clearance resolution for:"
 msgstr "Разрешённый зазор между отверстиями:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:676
+#, fuzzy
 msgid "No 'mechanical_hole_clearance' constraints defined."
-msgstr ""
+msgstr "Ограничения 'mechanical_hole_clearance' не определены."
 
 #: pcbnew/tools/board_inspection_tool.cpp:730
 msgid "Select an item for a constraints resolution report."
@@ -35699,8 +35735,9 @@ msgid "Assertions"
 msgstr "Действия"
 
 #: pcbnew/tools/board_inspection_tool.cpp:858
+#, fuzzy
 msgid "Assertions for:"
-msgstr ""
+msgstr "Ограничения для:"
 
 #: pcbnew/tools/convert_tool.cpp:77
 msgid "Create from Selection"
@@ -35927,8 +35964,9 @@ msgid "Change Side / Flip"
 msgstr "Сменить сторону/перевернуть"
 
 #: pcbnew/tools/edit_tool.cpp:1859
+#, fuzzy
 msgid "Reference designator hidden (it is required and can not be deleted)."
-msgstr ""
+msgstr "Обозначение скрыто (оно обязательно и не может быть удалено)."
 
 #: pcbnew/tools/edit_tool.cpp:1863
 #, fuzzy
@@ -37810,8 +37848,9 @@ msgid "Shadow on Locked Items"
 msgstr "Пропустить заблокированные элементы"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
+#, fuzzy
 msgid "Show a shadow marker on locked items"
-msgstr ""
+msgstr "Показывать теневой маркер на заблокированных элементах"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "Show drawing sheet borders and title block"
