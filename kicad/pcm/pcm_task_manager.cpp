@@ -95,7 +95,8 @@ void PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wx
                 else
                 {
                     m_reporter->Report( wxString::Format( _( "Extracting package '%s'." ),
-                                                          aPackage.identifier ) );
+                                                          aPackage.identifier ),
+                                        RPT_SEVERITY_INFO );
 
                     if( extract( file_path.GetFullPath(), aPackage.identifier, true ) )
                     {
@@ -110,7 +111,8 @@ void PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wx
                 }
 
                 m_reporter->Report( wxString::Format( _( "Removing downloaded archive '%s'." ),
-                                                      file_path.GetFullName() ) );
+                                                      file_path.GetFullName() ),
+                                    RPT_SEVERITY_INFO );
                 wxRemoveFile( file_path.GetFullPath() );
             };
 
@@ -147,7 +149,8 @@ int PCM_TASK_MANAGER::downloadFile( const wxString& aFilePath, const wxString& u
     curl.SetFollowRedirects( true );
     curl.SetTransferCallback( callback, 250000L );
 
-    m_reporter->Report( wxString::Format( _( "Downloading package url: '%s'" ), url ) );
+    m_reporter->Report( wxString::Format( _( "Downloading package url: '%s'" ), url ),
+                        RPT_SEVERITY_INFO );
 
     int code = curl.Perform();
 
@@ -247,7 +250,7 @@ bool PCM_TASK_MANAGER::extract( const wxString& aFilePath, const wxString& aPack
 
     if( m_reporter->IsCancelled() )
     {
-        m_reporter->Report( _( "Aborting package installation." ) );
+        m_reporter->Report( _( "Aborting package installation." ), RPT_SEVERITY_INFO );
         return false;
     }
 
@@ -357,7 +360,8 @@ void PCM_TASK_MANAGER::deletePackageDirectories( const wxString& aPackageId )
 
         if( d.DirExists() )
         {
-            m_reporter->Report( wxString::Format( _( "Removing directory %s" ), d.GetPath() ) );
+            m_reporter->Report( wxString::Format( _( "Removing directory %s" ), d.GetPath() ),
+                                RPT_SEVERITY_INFO );
 
             if( !d.Rmdir( wxPATH_RMDIR_RECURSIVE ) )
             {
@@ -378,8 +382,8 @@ void PCM_TASK_MANAGER::Uninstall( const PCM_PACKAGE& aPackage )
 
         m_pcm->MarkUninstalled( aPackage );
 
-        m_reporter->Report( wxString::Format( _( "Package %s uninstalled" ),
-                                              aPackage.identifier ) );
+        m_reporter->Report( wxString::Format( _( "Package %s uninstalled" ), aPackage.identifier ),
+                            RPT_SEVERITY_INFO );
     };
 
     m_install_queue.push( task );
@@ -444,7 +448,7 @@ void PCM_TASK_MANAGER::RunQueue( wxWindow* aParent )
                 } while( ( !m_install_queue.empty() || !download_complete )
                          && !m_reporter->IsCancelled() );
 
-                m_reporter->Report( _( "Done." ) );
+                m_reporter->Report( _( "Done." ), RPT_SEVERITY_INFO );
 
                 m_reporter->SetFinished();
             } );
