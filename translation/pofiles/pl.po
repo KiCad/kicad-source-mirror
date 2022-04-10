@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-04 13:55-0700\n"
-"PO-Revision-Date: 2022-04-03 20:07+0000\n"
+"PO-Revision-Date: 2022-04-11 16:38+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3204,15 +3204,30 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are not shared in this process."
 msgstr ""
+"Program KiCad może anonimowo zgłaszać awarie i dane o zdarzeniach "
+"programistom, aby skuteczniej identyfikować krytyczne błędy u użytkowników i "
+"pomagać w usprawnianiu funkcji.\n"
+"\n"
+"Aby połączyć automatyczne raporty pochodzące z tej samej instalacji programu "
+"KiCad, generowany jest unikalny identyfikator, który jest całkowicie losowy "
+"i używany jest tylko do celów raportowania o awariach. Żadne informacje "
+"umożliwiające identyfikację osoby (PII), w tym adres IP, nie są "
+"przechowywane ani łączone z tym identyfikatorem. Można zresetować ten "
+"identyfikator w dowolnym momencie za pomocą dostarczonego przycisku "
+"funkcyjnego.\n"
+"\n"
+"Jeśli użytkownik zdecyduj się na dobrowolny udział, KiCad automatycznie "
+"będzie wysyłał wspomniane raporty w przypadku awarii lub zdarzeń. Pliki "
+"projektowe użytkownika, takie jak schemat lub PCB, nie będą udostępniane w "
+"tym procesie."
 
 #: common/dialogs/panel_data_collection_base.cpp:27
 msgid "I agree to provide anonymous reports"
-msgstr ""
+msgstr "Zgadzam się na przesyłanie anonimowych raportów"
 
 #: common/dialogs/panel_data_collection_base.cpp:30
-#, fuzzy
 msgid "Reset Unique Id"
-msgstr "Zresetuj nieużywane"
+msgstr "Zresetuj identyfikator instalacji"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:84
 msgid "Type filter text"
@@ -3958,9 +3973,8 @@ msgid "Hotkeys"
 msgstr "Skróty klawiszowe"
 
 #: common/eda_base_frame.cpp:999
-#, fuzzy
 msgid "Data Collection"
-msgstr "Połączenia pól lutowniczych"
+msgstr "Zbieranie danych"
 
 #: common/eda_base_frame.cpp:1011 common/tool/actions.cpp:582
 #: eeschema/symbol_editor/symbol_editor.cpp:163
@@ -5610,10 +5624,16 @@ msgid ""
 "sending said reports when crashes or events occur. \n"
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
+"Program KiCad może anonimowo zgłaszać awarie i dane o zdarzeniach "
+"programistom, aby skuteczniej identyfikować krytyczne błędy u użytkowników i "
+"pomagać w usprawnianiu funkcji.\n"
+"Jeśli użytkownik zgodzi się na takie działanie, program KiCad będzie "
+"automatycznie wysyłał raporty gdy wystąpią awarie lub zdarzenia. \n"
+"Pliki projektów użytkownika, takie jak schematy lub PCB nie będą przesyłane."
 
 #: common/pgm_base.cpp:333
 msgid "Data collection opt in request"
-msgstr ""
+msgstr "Zbieranie danych wyłącznie na żądanie"
 
 #: common/pgm_base.cpp:375
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -7054,11 +7074,9 @@ msgid "Hotkey file"
 msgstr "Plik z listą skrótów klawiszowych"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr ""
-"Nie można odnaleźć pliku automatycznego przydzielania '%s' w żadnej z "
-"domyślnych ścieżek."
+msgstr "Nie można odnaleźć pliku automatycznego przydzielania '%s'."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -10781,9 +10799,9 @@ msgstr ""
 #: eeschema/dialogs/dialog_shape_properties.cpp:54
 #: eeschema/dialogs/dialog_sheet_properties.cpp:76
 #: eeschema/dialogs/dialog_text_properties.cpp:72
-#, fuzzy
 msgid "Note: individual item colors overridden in Preferences."
-msgstr "Informacja: kolory elementów są zastąpione przez bieżący motyw."
+msgstr ""
+"Informacja: kolory poszczególnych elementów są zastępowane w Ustawieniach."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:89
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:158
@@ -12409,27 +12427,24 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "Podświetlaj sieci jeśli są one podświetlone w edytorze PCB"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
-#, fuzzy
 msgid "Line Drawing Mode:"
-msgstr "Tryb rysowania"
+msgstr "Tryb rysowania linii:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "Free Angle"
-msgstr "Kąt dowolny"
+msgstr "Dowolny kąt"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "90 deg Angle"
-msgstr ""
+msgstr "Tylko pod kątem prostym"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "45 deg Angle"
-msgstr "Kąt 45 stopni"
+msgstr "Pod kątem 45 stopni"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "135 deg Angle"
-msgstr ""
+msgstr "Pod kątem 135 stopni"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 msgid "Mouse drag performs Drag (G) operation"
@@ -17270,36 +17285,31 @@ msgstr ""
 #: eeschema/tools/ee_actions.cpp:684 eeschema/tools/ee_actions.cpp:689
 #: eeschema/tools/ee_actions.cpp:694 eeschema/tools/ee_actions.cpp:699
 #: eeschema/tools/ee_actions.cpp:704
-#, fuzzy
 msgid "Line Mode for Wires and Buses"
-msgstr "Wymuś rysowanie połączeń i magistral tylko pod kątem prostym"
+msgstr "Tryb rysowania linii dla połączeń i magistral"
 
 #: eeschema/tools/ee_actions.cpp:684
 msgid "Lines drawn at any angle"
-msgstr ""
+msgstr "Linie można rysować pod dowolnym kątem"
 
 #: eeschema/tools/ee_actions.cpp:689
-#, fuzzy
 msgid "Lines drawn horizontally and vertically"
-msgstr "Najpierw poziomo, potem pionowo"
+msgstr "Linie można rysować wyłącznie poziomo i pionowo"
 
 #: eeschema/tools/ee_actions.cpp:694
-#, fuzzy
 msgid "Lines drawn horizontally and vertically, with a 45 degree angle end"
 msgstr ""
-"Rysuj obszar wymuszając kierunek poziomy, pionowy lub pod kątem 45 stopni"
+"Linie można rysować tylko poziomo, pionowo lub kończyć pod kątem 45 stopni"
 
 #: eeschema/tools/ee_actions.cpp:699
-#, fuzzy
 msgid "Lines drawn horizontally and vertically, with a 45 degree angle start"
 msgstr ""
-"Ogranicz akcje w kierunku pionowym, poziomym lub kąta 45 stopni wobec punktu "
-"początkowego"
+"Linie można rysować tylko poziomo, pionowo lub rozpoczynać pod kątem 45 "
+"stopni"
 
 #: eeschema/tools/ee_actions.cpp:704
-#, fuzzy
 msgid "Switch to next line mode"
-msgstr "Przełącz na następny rozmiar siatki"
+msgstr "Przełącz na następny tryb rysowania linii"
 
 #: eeschema/tools/ee_actions.cpp:709
 msgid "Repair Schematic"
@@ -17381,19 +17391,16 @@ msgid "Undo Last Segment"
 msgstr "Cofnij ostatni segment"
 
 #: eeschema/tools/ee_actions.cpp:785
-#, fuzzy
 msgid "Walks the current line back one segment."
-msgstr "Cofa bieżącą ścieżkę o jeden segment."
+msgstr "Cofa bieżącą linię o jeden segment."
 
 #: eeschema/tools/ee_actions.cpp:791
-#, fuzzy
 msgid "Switch Segment Posture"
-msgstr "Zmień kierunek łuku"
+msgstr "Zmień kierunek łamania linii"
 
 #: eeschema/tools/ee_actions.cpp:791
-#, fuzzy
 msgid "Switches posture of the current segment."
-msgstr "Zmienia sposób załamania bieżąco prowadzonej ścieżki."
+msgstr "Zmienia sposób łamania ostatniego segmentu bieżąco prowadzonej linii."
 
 #: eeschema/tools/ee_actions.cpp:797
 msgid "Finish Wire or Bus"
@@ -27140,19 +27147,16 @@ msgid "Basic Shape Polygon"
 msgstr "Strefa z podstawowych kształtów"
 
 #: pcbnew/dialogs/dialog_plot.cpp:113
-#, fuzzy
 msgid "Plot on All Layers"
-msgstr "Rysuj wszystkie strony"
+msgstr "Rysuj na wszystkich warstwach"
 
 #: pcbnew/dialogs/dialog_plot.cpp:135
-#, fuzzy
 msgid "Move current selection up"
-msgstr "Przesuń bieżącą warstwę w górę"
+msgstr "Przesuń bieżące zaznaczenie w górę"
 
 #: pcbnew/dialogs/dialog_plot.cpp:143
-#, fuzzy
 msgid "Move current selection down"
-msgstr "Przesuń bieżącą warstwę w dół"
+msgstr "Przesuń bieżące zaznaczenie w dół"
 
 #: pcbnew/dialogs/dialog_plot.cpp:154
 msgid "Generate Drill Files..."
@@ -32197,6 +32201,8 @@ msgstr "Import pliku z grafiką wektorową"
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:133
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
 msgstr ""
+"Zabrakło pamięci podczas próby załadowania pliku DXF, który może być zbyt "
+"duży."
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
