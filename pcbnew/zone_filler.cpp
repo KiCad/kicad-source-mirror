@@ -1188,6 +1188,19 @@ bool ZONE_FILLER::computeRawFilledArea( const ZONE* aZone,
     if( half_min_width - epsilon > epsilon )
         aRawPolys.Deflate( half_min_width - epsilon, numSegs, cornerStrategy );
 
+    // Min-thickness is the web thickness.  On the other hand, a blob min-thickness by
+    // min-thickness is not useful.  Since there's no obvious definition of web vs. blob, we
+    // arbitrarily choose "at least 2X the area".
+    double minArea = (double) aZone->GetMinThickness() * aZone->GetMinThickness() * 2;
+
+    for( int ii = aFillPolys.OutlineCount() - 1; ii >= 0; ii-- )
+    {
+        std::vector<SHAPE_LINE_CHAIN>& island = aFillPolys.Polygon( ii );
+
+        if( island.empty() || island.front().Area() < minArea )
+            aFillPolys.DeletePolygon( ii );
+    }
+
     DUMP_POLYS_TO_COPPER_LAYER( aRawPolys, In9_Cu, wxT( "deflated" ) );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
