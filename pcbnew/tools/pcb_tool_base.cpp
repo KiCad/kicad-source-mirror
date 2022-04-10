@@ -52,6 +52,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
     controls()->ShowCursor( true );
+    controls()->ForceCursorPosition( false );
     // do not capture or auto-pan until we start placing an item
 
     PCB_GRID_HELPER grid( m_toolMgr, frame()->GetMagneticItemsSettings() );
@@ -120,6 +121,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
                     controls()->SetAutoPan( false );
                     controls()->CaptureCursor( false );
                     controls()->ShowCursor( true );
+                    controls()->ForceCursorPosition( false );
                 };
 
         if( evt->IsCancelInteractive() )
@@ -266,6 +268,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     controls()->SetAutoPan( false );
     controls()->CaptureCursor( false );
+    controls()->ForceCursorPosition( false );
 }
 
 

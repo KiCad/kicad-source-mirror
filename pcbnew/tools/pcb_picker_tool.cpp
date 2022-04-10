@@ -123,7 +123,9 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 break;
             }
             else
+            {
                 setControls();
+            }
         }
 
         else if( evt->IsMotion() )
@@ -152,7 +154,9 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         }
 
         else
+        {
             evt->SetPassEvent();
+        }
     }
 
     if( m_finalizeHandler )

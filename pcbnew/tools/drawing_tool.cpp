@@ -548,6 +548,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
     m_controls->ShowCursor( true );
+    m_controls->ForceCursorPosition( false );
     // do not capture or auto-pan until we start placing some text
     // Set initial cursor
     setCursor();
@@ -742,6 +743,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
     m_controls->SetAutoPan( false );
     m_controls->CaptureCursor( false );
+    m_controls->ForceCursorPosition( false );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
     if( selection().Empty() )
@@ -795,6 +797,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             {
                 m_controls->SetAutoPan( false );
                 m_controls->CaptureCursor( false );
+                m_controls->ForceCursorPosition( false );
 
                 preview.Clear();
                 m_view->Update( &preview );
@@ -818,6 +821,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
     m_controls->ShowCursor( true );
+    m_controls->ForceCursorPosition( false );
     // Set initial cursor
     setCursor();
 
@@ -1362,6 +1366,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     m_view->Remove( &preview );
 
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    m_controls->ForceCursorPosition( false );
 
     m_frame->PopTool( tool );
 
@@ -1400,6 +1405,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
     m_controls->ShowCursor( true );
     m_controls->SetAutoPan( true );
     m_controls->CaptureCursor( false );
+    m_controls->ForceCursorPosition( false );
     // Set initial cursor
     setCursor();
 
@@ -1446,6 +1452,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
     }
 
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    m_controls->ForceCursorPosition( false );
 
     return 0;
 }
@@ -1541,6 +1548,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
             };
 
     m_controls->ShowCursor( true );
+    m_controls->ForceCursorPosition( false );
     // Set initial cursor
     setCursor();
 
@@ -1861,6 +1869,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
             };
 
     m_controls->ShowCursor( true );
+    m_controls->ForceCursorPosition( false );
     // Set initial cursor
     setCursor();
 
@@ -2189,6 +2198,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
     m_controls->ShowCursor( true );
+    m_controls->ForceCursorPosition( false );
     // Set initial cursor
     setCursor();
 

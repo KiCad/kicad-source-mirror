@@ -752,6 +752,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     // Must be done after Activate() so that it gets set into the correct context
     controls->ShowCursor( true );
     controls->SetAutoPan( true );
+    controls->ForceCursorPosition( false );
 
     if( aPickReference && !pickReferencePoint( _( "Select reference point for move..." ), "", "",
                                                pickedReferencePoint ) )

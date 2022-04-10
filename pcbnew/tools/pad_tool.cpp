@@ -328,6 +328,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
     getViewControls()->ShowCursor( true );
+    getViewControls()->ForceCursorPosition( false );
     // Set initial cursor
     setCursor();
 
@@ -478,6 +479,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
     statusPopup.Hide();
     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    getViewControls()->ForceCursorPosition( false );
     return 0;
 }
 

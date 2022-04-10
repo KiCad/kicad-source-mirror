@@ -219,6 +219,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
                 view.SetVisible( &ruler, false );
                 controls.SetAutoPan( false );
                 controls.CaptureCursor( false );
+                controls.ForceCursorPosition( false );
                 originSet = false;
             };
 
@@ -227,6 +228,8 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
     controls.ShowCursor( true );
     controls.SetAutoPan( false );
     controls.CaptureCursor( false );
+    controls.ForceCursorPosition( false );
+
     // Set initial cursor
     setCursor();
 
@@ -236,7 +239,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( view.GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
         const VECTOR2I cursorPos = grid.BestSnapAnchor( controls.GetMousePosition(), nullptr );
-        controls.ForceCursorPosition(true, cursorPos );
+        controls.ForceCursorPosition( true, cursorPos );
 
         if( evt->IsCancelInteractive() )
         {
@@ -339,6 +342,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     controls.SetAutoPan( false );
     controls.CaptureCursor( false );
+    controls.ForceCursorPosition( false );
     return 0;
 }
 
