@@ -158,7 +158,6 @@ wxImage BITMAP_STORE::getImage( BITMAPS aBitmapId, int aHeight )
 
     wxMemoryInputStream is( data, count );
     wxImage image( is, wxBITMAP_TYPE_PNG );
-    wxBitmap bitmap( image );
 
     return image;
 }
