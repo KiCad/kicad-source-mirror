@@ -59,6 +59,11 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ):
         m_book->SetSelection( 0 );
     }
 
+    int hk1 = ACTIONS::gridFast1.GetHotKey();
+    int hk2 = ACTIONS::gridFast2.GetHotKey();
+    m_grid1HotKey->SetLabel( wxString::Format( wxT( "(%s)" ), KeyNameFromKeyCode( hk1 ) ) );
+    m_grid2HotKey->SetLabel( wxString::Format( wxT( "(%s)" ), KeyNameFromKeyCode( hk2 ) ) );
+
     SetupStandardButtons();
     SetInitialFocus( m_GridOriginXCtrl );
 
@@ -151,11 +156,6 @@ bool DIALOG_GRID_SETTINGS::TransferDataToWindow()
 
     m_grid1Ctrl->SetSelection( gridCfg.fast_grid_1 );
     m_grid2Ctrl->SetSelection( gridCfg.fast_grid_2 );
-
-    int hk1 = ACTIONS::gridFast1.GetHotKey();
-    int hk2 = ACTIONS::gridFast2.GetHotKey();
-    m_grid1HotKey->SetLabel( wxString::Format( wxT( "(%s)" ), KeyNameFromKeyCode( hk1 ) ) );
-    m_grid2HotKey->SetLabel( wxString::Format( wxT( "(%s)" ), KeyNameFromKeyCode( hk2 ) ) );
 
     return wxDialog::TransferDataToWindow();
 }

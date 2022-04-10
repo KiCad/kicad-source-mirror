@@ -141,7 +141,7 @@ DIALOG_GRID_SETTINGS_BASE::DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindow
 
 	m_grid1HotKey = new wxStaticText( sbFastSwitchSizer->GetStaticBox(), wxID_ANY, _("(hotkey)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_grid1HotKey->Wrap( -1 );
-	fgSizer3->Add( m_grid1HotKey, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer3->Add( m_grid1HotKey, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_staticTextGrid2 = new wxStaticText( sbFastSwitchSizer->GetStaticBox(), wxID_ANY, _("Grid 2:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextGrid2->Wrap( -1 );
@@ -156,7 +156,7 @@ DIALOG_GRID_SETTINGS_BASE::DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindow
 
 	m_grid2HotKey = new wxStaticText( sbFastSwitchSizer->GetStaticBox(), wxID_ANY, _("(hotkey)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_grid2HotKey->Wrap( -1 );
-	fgSizer3->Add( m_grid2HotKey, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer3->Add( m_grid2HotKey, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
 	sbFastSwitchSizer->Add( fgSizer3, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
