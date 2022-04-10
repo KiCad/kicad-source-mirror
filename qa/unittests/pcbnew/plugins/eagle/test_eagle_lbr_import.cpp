@@ -92,9 +92,8 @@ BOOST_AUTO_TEST_CASE( EagleLbrLibImport )
                                                                 false, nullptr );
                 BOOST_CHECK( eagleFp );
 
-                // TODO: import does not replace variables
-                //BOOST_CHECK_EQUAL( wxT( "REF**" ), eagleFp->GetReference() );
-                //BOOST_CHECK_EQUAL( footprintName, eagleFp->GetValue() );
+                BOOST_CHECK_EQUAL( wxT( "REF**" ), eagleFp->GetReference() );
+                BOOST_CHECK_EQUAL( footprintName, eagleFp->GetValue() );
 
                 FOOTPRINT* kicadFp = kicadPlugin.FootprintLoad( kicadLibraryPath, footprintName,
                                                                 true, nullptr );

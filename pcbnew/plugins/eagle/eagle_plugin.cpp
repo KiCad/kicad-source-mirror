@@ -121,6 +121,24 @@ static wxString makeKey( const wxString& aFirst, const wxString& aSecond )
 /// interpret special characters in Eagle text and converts them to KiCAD notation
 static wxString interpret_text( const wxString& aText )
 {
+    wxString token = aText.Upper();
+
+    if     ( token == wxT( ">NAME" ) )             return wxT( "${REFERENCE}" );
+    else if( token == wxT( ">VALUE" ) )            return wxT( "${VALUE}" );
+    else if( token == wxT( ">PART" ) )             return wxT( "${REFERENCE}" );
+    else if( token == wxT( ">GATE" ) )             return wxT( "${UNIT}" );
+    else if( token == wxT( ">MODULE" ) )           return wxT( "${FOOTPRINT_NAME}" );
+    else if( token == wxT( ">SHEETNR" ) )          return wxT( "${#}" );
+    else if( token == wxT( ">SHEETS" ) )           return wxT( "${##}" );
+    else if( token == wxT( ">SHEET" ) )            return wxT( "${#}/${##}" );
+    else if( token == wxT( ">SHEETNR_TOTAL" ) )    return wxT( "${#}" );
+    else if( token == wxT( ">SHEETS_TOTAL" ) )     return wxT( "${##}" );
+    else if( token == wxT( ">SHEET_TOTAL" ) )      return wxT( "${#}/${##}" );
+    else if( token == wxT( ">ASSEMBLY_VARIANT" ) ) return wxT( "${ASSEMBLY_VARIANT}" );
+    else if( token == wxT( ">DRAWING_NAME" ) )     return wxT( "${TITLE}" );
+    else if( token == wxT( ">LAST_DATE_TIME" ) )   return wxT( "${ISSUE_DATE}" );
+    else if( token == wxT( ">PLOT_DATE_TIME" ) )   return wxT( "${CURRENT_DATE}" );
+
     wxString text;
     bool sectionOpen = false;
 
@@ -1079,10 +1097,10 @@ void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
 
         wxString key = aLibName ? makeKey( *aLibName, pack_ref ) : pack_ref;
 
-        FOOTPRINT* m = makeFootprint( package, pack_ref );
+        FOOTPRINT* footprint = makeFootprint( package, pack_ref );
 
         // add the templating FOOTPRINT to the FOOTPRINT template factory "m_templates"
-        std::pair<FOOTPRINT_MAP::iterator, bool> r = m_templates.insert( {key, m} );
+        std::pair<FOOTPRINT_MAP::iterator, bool> r = m_templates.insert( { key, footprint} );
 
         if( !r.second /* && !( m_props && m_props->Value( "ignore_duplicates" ) ) */ )
         {
@@ -1945,33 +1963,41 @@ void EAGLE_PLUGIN::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
         return;
     }
 
-    FP_TEXT* txt;
+    FP_TEXT* textItem;
 
-    if( t.text.MakeUpper() == wxT( ">NAME" ) )
-        txt = &aFootprint->Reference();
-    else if( t.text.MakeUpper() == wxT( ">VALUE" ) )
-        txt = &aFootprint->Value();
+    if( t.text.Upper() == wxT( ">NAME" ) && aFootprint->GetReference().IsEmpty() )
+    {
+        textItem = &aFootprint->Reference();
+
+        textItem->SetText( wxT( "REF**" ) );
+    }
+    else if( t.text.Upper() == wxT( ">VALUE" ) && aFootprint->GetValue().IsEmpty() )
+    {
+        textItem = &aFootprint->Value();
+
+        textItem->SetText( aFootprint->GetFPID().GetLibItemName() );
+    }
     else
     {
         // FIXME: graphical text items are rotated for some reason.
-        txt = new FP_TEXT( aFootprint );
-        aFootprint->Add( txt );
-    }
+        textItem = new FP_TEXT( aFootprint );
+        aFootprint->Add( textItem );
 
-    txt->SetText( t.text );
+        textItem->SetText( interpret_text( t.text ) );
+    }
 
     VECTOR2I pos( kicad_x( t.x ), kicad_y( t.y ) );
 
-    txt->SetTextPos( pos );
-    txt->SetPos0( pos - aFootprint->GetPosition() );
+    textItem->SetTextPos( pos );
+    textItem->SetPos0( pos - aFootprint->GetPosition() );
 
-    txt->SetLayer( layer );
+    textItem->SetLayer( layer );
 
     double ratio = t.ratio ? *t.ratio : 8;  // DTD says 8 is default
-    int textThickness = KiROUND( t.size.ToPcbUnits() * ratio / 100 );
+    int    textThickness = KiROUND( t.size.ToPcbUnits() * ratio / 100 );
 
-    txt->SetTextThickness( textThickness );
-    txt->SetTextSize( kicad_fontz( t.size, textThickness ) );
+    textItem->SetTextThickness( textThickness );
+    textItem->SetTextSize( kicad_fontz( t.size, textThickness ) );
 
     int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;  // bottom-left is eagle default
 
@@ -1981,13 +2007,13 @@ void EAGLE_PLUGIN::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     if( t.rot )
     {
         int sign = t.rot->mirror ? -1 : 1;
-        txt->SetMirrored( t.rot->mirror );
+        textItem->SetMirrored( t.rot->mirror );
 
         double degrees = t.rot->degrees;
 
         if( degrees == 90 || t.rot->spin )
         {
-            txt->SetTextAngle( EDA_ANGLE( sign * degrees, DEGREES_T ) );
+            textItem->SetTextAngle( EDA_ANGLE( sign * degrees, DEGREES_T ) );
         }
         else if( degrees == 180 )
         {
@@ -1996,55 +2022,55 @@ void EAGLE_PLUGIN::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
         else if( degrees == 270 )
         {
             align = ETEXT::TOP_RIGHT;
-            txt->SetTextAngle( EDA_ANGLE( sign * 90, DEGREES_T ) );
+            textItem->SetTextAngle( EDA_ANGLE( sign * 90, DEGREES_T ) );
         }
     }
 
     switch( align )
     {
     case ETEXT::CENTER:
-        txt->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-        txt->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        textItem->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
         break;
 
     case ETEXT::CENTER_LEFT:
-        txt->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-        txt->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        textItem->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
         break;
 
     case ETEXT::CENTER_RIGHT:
-        txt->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-        txt->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        textItem->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
         break;
 
     case ETEXT::TOP_CENTER:
-        txt->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-        txt->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        textItem->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
         break;
 
     case ETEXT::TOP_LEFT:
-        txt->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-        txt->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        textItem->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
         break;
 
     case ETEXT::TOP_RIGHT:
-        txt->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-        txt->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        textItem->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
         break;
 
     case ETEXT::BOTTOM_CENTER:
-        txt->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-        txt->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        textItem->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
         break;
 
     case ETEXT::BOTTOM_LEFT:
-        txt->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-        txt->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        textItem->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
         break;
 
     case ETEXT::BOTTOM_RIGHT:
-        txt->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-        txt->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        textItem->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
         break;
     }
 }
