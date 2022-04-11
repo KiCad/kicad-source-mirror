@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-28 11:13-0700\n"
+"POT-Creation-Date: 2022-04-11 09:39-0700\n"
 "PO-Revision-Date: 2022-03-21 22:49+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/v6/th/>\n"
@@ -45,41 +45,41 @@ msgstr "ขาดเค้าโครงบอร์ดหรือบิดเ
 msgid "Create tracks and vias"
 msgstr "สร้างแทร็กและเวีย"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:683
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:682
 msgid "Create zones"
 msgstr "สร้างโซน"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:752
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:751
 msgid "Simplifying copper layers polygons"
 msgstr "กำลังทำรูปหลายเหลี่ยมในเลเยอร์ทองแดงให้ง่าย"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:761
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:760
 msgid "Simplifying polygons on F_Cu"
 msgstr "กำลังทำรูปหลายเหลี่ยมบนF_Cuให้ง่าย"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:772
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:771
 msgid "Simplifying polygons on B_Cu"
 msgstr "กำลังทำรูปหลายเหลี่ยมบนB_Cuให้ง่าย"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:802
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:801
 #, c-format
 msgid "Simplifying %d copper layers"
 msgstr "กำลังทำ %d รูปหลายเหลี่ยมในเลเยอร์ทองแดงให้ง่าย"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:841
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:840
 msgid "Simplify holes contours"
 msgstr "ทำเส้นรอบโฮลให้ง่าย"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:870
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:869
 msgid "Build Tech layers"
 msgstr "สร้างเทคเลเยอร์"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:904
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:903
 #, c-format
 msgid "Build Tech layer %d"
 msgstr "สร้างเลเยอร์เทคนิค %d"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1049
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1048
 msgid "Build BVH for holes and vias"
 msgstr "สร้าง BVH สำหรับโฮลและเวีย"
 
@@ -103,36 +103,36 @@ msgstr "เน็ต %s เน็ตคลาส %s ชื่อแพ็ด %s"
 msgid "Net %s\tNetClass %s"
 msgstr "เน็ต %s เน็ตคลาส %s"
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:449
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:464
 msgid "Load OpenGL: board"
 msgstr "อ่าน OpenGL: บอร์ด"
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:482
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:497
 msgid "Load OpenGL: holes and vias"
 msgstr "อ่าน OpenGL: โฮลและเวีย"
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:548
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:563
 msgid "Load OpenGL: layers"
 msgstr "อ่าน OpenGL: เลเยอร์"
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:561
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:576
 #, c-format
 msgid "Load OpenGL layer %d"
 msgstr "อ่านเลเยอร์ OpenGL %d"
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:648
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:670
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:790
 #: pcbnew/plugins/altium/altium_pcb.cpp:1372
 msgid "Loading 3D models..."
 msgstr "กำลังอ่านโมเดล3มิติ…"
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:658
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:680
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:942
 #, c-format
 msgid "Reload time %.3f s"
 msgstr "เวลาอ่านอีกครั้ง %.3f s"
 
-#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:911
+#: 3d-viewer/3d_rendering/opengl/create_scene.cpp:933
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:427
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:688
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:771
@@ -182,7 +182,7 @@ msgstr "ส่งออกมุมมองนี้เป็น JPEG…"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:236 common/hotkey_store.cpp:76
 #: common/tool/actions.cpp:567 pcbnew/footprint_viewer_frame.cpp:950
-#: pcbnew/pcb_base_frame.cpp:554
+#: pcbnew/pcb_base_frame.cpp:608
 msgid "3D Viewer"
 msgstr "โปรแกรมดู3มิติ"
 
@@ -293,7 +293,7 @@ msgstr "ตัวเรนเดอร์ชนิดเรย์เทรสซ
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:240
 #: eeschema/eeschema_config.cpp:70 eeschema/eeschema_config.cpp:247
 #: pagelayout_editor/pl_editor_frame.cpp:490
-#: pcbnew/footprint_edit_frame.cpp:1002 pcbnew/pcbnew_config.cpp:59
+#: pcbnew/footprint_edit_frame.cpp:1004 pcbnew/pcbnew_config.cpp:59
 msgid "Colors"
 msgstr "สี"
 
@@ -310,7 +310,7 @@ msgstr "ไม่มีสิทธิเพียงพอเพื่อบั
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:685 common/confirm.cpp:130
 #: common/confirm.cpp:296 common/dialogs/panel_setup_severities.cpp:43
-#: eeschema/files-io.cpp:841 eeschema/files-io.cpp:908
+#: eeschema/files-io.cpp:843 eeschema/files-io.cpp:910
 #: kicad/import_project.cpp:127 kicad/import_project.cpp:154
 #: kicad/import_project.cpp:173 kicad/kicad.cpp:171
 #: kicad/tools/kicad_manager_control.cpp:183
@@ -998,7 +998,7 @@ msgstr "Z:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:66
 #: gerbview/gerber_draw_item.cpp:726 pcbnew/footprint.cpp:979
-#: pcbnew/pad.cpp:972
+#: pcbnew/pad.cpp:970
 msgid "Rotation"
 msgstr "การหมุน"
 
@@ -1454,12 +1454,12 @@ msgstr "คำถาม"
 
 #: common/confirm.cpp:129 common/confirm.cpp:284
 #: common/dialogs/panel_setup_severities.cpp:43
-#: eeschema/dialogs/dialog_plot_schematic.cpp:1284
-#: eeschema/dialogs/dialog_plot_schematic.cpp:1297
-#: eeschema/dialogs/dialog_plot_schematic.cpp:1319
+#: eeschema/dialogs/dialog_plot_schematic.cpp:1292
+#: eeschema/dialogs/dialog_plot_schematic.cpp:1305
+#: eeschema/dialogs/dialog_plot_schematic.cpp:1327
 #: eeschema/dialogs/dialog_sim_settings.cpp:281
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:168
-#: eeschema/files-io.cpp:432 eeschema/sheet.cpp:568
+#: eeschema/files-io.cpp:432 eeschema/sheet.cpp:571
 #: eeschema/symbol_editor/symbol_editor.cpp:580
 #: eeschema/symbol_editor/symbol_editor.cpp:783
 #: eeschema/symbol_editor/symbol_editor.cpp:1181
@@ -1900,7 +1900,7 @@ msgstr "ตัวแปรสภาพแวดล้อม"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:46
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:56
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:50
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:694
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:703
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:53
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:43
 #: eeschema/dialogs/panel_sym_lib_table.cpp:299
@@ -2654,7 +2654,7 @@ msgid "Print Preview"
 msgstr "พริวิวก่อนพิมพ์"
 
 #: common/dialogs/dialog_print_generic.cpp:49 common/hotkey_store.cpp:55
-#: common/tool/action_menu.cpp:208 common/tool/action_menu.cpp:213
+#: common/tool/action_menu.cpp:207 common/tool/action_menu.cpp:212
 #: eeschema/dialogs/dialog_annotate.cpp:93 eeschema/dialogs/dialog_bom.cpp:135
 #: eeschema/dialogs/dialog_change_symbols.cpp:156
 #: eeschema/dialogs/dialog_erc.cpp:79 eeschema/dialogs/dialog_erc.cpp:325
@@ -2666,7 +2666,7 @@ msgstr "พริวิวก่อนพิมพ์"
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:67
 #: eeschema/sim/sim_plot_frame_base.cpp:49 kicad/pcm/dialogs/dialog_pcm.cpp:132
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:72
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:115
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:111
 #: pcbnew/dialogs/dialog_board_statistics.cpp:137
 #: pcbnew/dialogs/dialog_drc.cpp:87 pcbnew/dialogs/dialog_drc.cpp:269
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:160
@@ -3288,7 +3288,7 @@ msgstr "ขยาย"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:943
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:715
-#: pcbnew/dialogs/dialog_plot_base.cpp:117 pcbnew/pad.cpp:1682
+#: pcbnew/dialogs/dialog_plot_base.cpp:117 pcbnew/pad.cpp:1680
 #: pcbnew/widgets/appearance_controls.cpp:700
 #: pcbnew/widgets/appearance_controls.cpp:742
 #: pcbnew/widgets/appearance_controls.cpp:2370
@@ -3452,7 +3452,7 @@ msgid "The default net class is required."
 msgstr "ต้องกำหนดปริยายของเน็ตคลาส"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:41
-#: common/dialogs/panel_setup_netclasses_base.cpp:215 pcbnew/pad.cpp:924
+#: common/dialogs/panel_setup_netclasses_base.cpp:215 pcbnew/pad.cpp:922
 #: pcbnew/pcb_track.cpp:770 pcbnew/zone.cpp:591
 msgid "Net Class"
 msgstr "เน็ตคลาส"
@@ -3514,12 +3514,12 @@ msgstr "สไตล์เส้น"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:59 common/eda_shape.cpp:1638
 #: common/pgm_base.cpp:73 common/widgets/footprint_select_widget.cpp:142
-#: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:66
+#: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:67
 #: eeschema/dialogs/dialog_junction_props.cpp:36
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:52
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:63
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:145
-#: eeschema/tools/sch_editor_control.cpp:1120
+#: eeschema/tools/sch_editor_control.cpp:1121
 msgid "Default"
 msgstr "ค่าปริยาย"
 
@@ -3568,7 +3568,7 @@ msgstr "กำหนดเข้ากับเน็ตที่เลือก
 #: common/dialogs/panel_setup_netclasses_base.cpp:214
 #: pcbnew/board_connected_item.cpp:176
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
-#: pcbnew/dialogs/dialog_net_inspector.cpp:77 pcbnew/pad.cpp:922
+#: pcbnew/dialogs/dialog_net_inspector.cpp:77 pcbnew/pad.cpp:920
 #: pcbnew/pcb_track.cpp:768 pcbnew/zone.cpp:589
 msgid "Net"
 msgstr "เน็ท"
@@ -3615,7 +3615,7 @@ msgid "Info:"
 msgstr "ข้อมูล:"
 
 #: common/dialogs/wx_html_report_panel.cpp:368
-#: eeschema/dialogs/dialog_erc.cpp:758 pcbnew/dialogs/dialog_drc.cpp:647
+#: eeschema/dialogs/dialog_erc.cpp:758 pcbnew/dialogs/dialog_drc.cpp:663
 msgid "Save Report to File"
 msgstr "บันทึกรายงานลงไฟล์"
 
@@ -3641,7 +3641,7 @@ msgstr "แสดง:"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:34
 #: eeschema/dialogs/dialog_erc_base.cpp:68 eeschema/lib_item.cpp:50
-#: eeschema/sch_pin.cpp:197 pcbnew/dialogs/dialog_board_reannotate.cpp:88
+#: eeschema/sch_pin.cpp:197 pcbnew/dialogs/dialog_board_reannotate.cpp:84
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:174
 #: pcbnew/dialogs/dialog_drc_base.cpp:151
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:36
@@ -3712,7 +3712,7 @@ msgstr "ข้อความ"
 
 #: common/drawing_sheet/ds_data_item.cpp:371
 #: common/drawing_sheet/ds_draw_item.cpp:114 common/eda_item.cpp:340
-#: common/eda_shape.cpp:60 eeschema/pin_type.cpp:76
+#: common/eda_shape.cpp:60 eeschema/pin_type.cpp:79
 #: gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:137
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
@@ -3723,7 +3723,7 @@ msgstr "เส้นตรง"
 #: common/drawing_sheet/ds_data_item.cpp:372
 #: common/drawing_sheet/ds_draw_item.cpp:118 common/eda_shape.cpp:602
 #: common/eda_shape.cpp:1632
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43 pcbnew/pad.cpp:1674
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43 pcbnew/pad.cpp:1672
 msgid "Rectangle"
 msgstr "สี่เหลี่ยม"
 
@@ -3961,16 +3961,16 @@ msgstr "ไลบรารีใหม่"
 msgid "Screen"
 msgstr "จอภาพ"
 
-#: common/eda_item.cpp:315 eeschema/dialogs/dialog_symbol_fields_table.cpp:960
+#: common/eda_item.cpp:315 eeschema/dialogs/dialog_symbol_fields_table.cpp:969
 #: eeschema/sch_symbol.cpp:1423
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:117
 #: pcbnew/fp_text.cpp:279 pcbnew/load_select_footprint.cpp:372
-#: pcbnew/pad.cpp:909
+#: pcbnew/pad.cpp:907
 msgid "Footprint"
 msgstr "ฟุ้ทพรินท์"
 
 #: common/eda_item.cpp:316 pcbnew/dialogs/dialog_board_statistics.cpp:510
-#: pcbnew/pad.cpp:912
+#: pcbnew/pad.cpp:910
 msgid "Pad"
 msgstr "แพ็ด"
 
@@ -4054,7 +4054,7 @@ msgstr "ป้ายชื่อส่วนกลาง"
 msgid "Hierarchical Label"
 msgstr "ป้ายชื่อลำดับขั้น"
 
-#: common/eda_item.cpp:346 eeschema/dialogs/dialog_symbol_fields_table.cpp:686
+#: common/eda_item.cpp:346 eeschema/dialogs/dialog_symbol_fields_table.cpp:695
 #: eeschema/lib_field.cpp:457 eeschema/lib_field.h:79
 msgid "Field"
 msgstr "ช่อง"
@@ -4095,7 +4095,7 @@ msgstr "เลเอาท์เกอร์เบอร์"
 msgid "Draw Item"
 msgstr "วาดชิ้นส่วน"
 
-#: common/eda_shape.cpp:61 pcbnew/pad.cpp:1162
+#: common/eda_shape.cpp:61 pcbnew/pad.cpp:1160
 msgid "Rect"
 msgstr "Rect"
 
@@ -4110,8 +4110,8 @@ msgstr "โค้ง"
 #: common/eda_shape.cpp:63 common/eda_shape.cpp:571 common/eda_shape.cpp:1634
 #: gerbview/gerber_draw_item.cpp:237
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43
-#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:138 pcbnew/pad.cpp:1160
-#: pcbnew/pad.cpp:1673
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:138 pcbnew/pad.cpp:1158
+#: pcbnew/pad.cpp:1671
 msgid "Circle"
 msgstr "วงกลม"
 
@@ -4130,7 +4130,7 @@ msgstr "รูปหลายเหลี่ยม"
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:232
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:120
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:44
-#: pcbnew/microwave/microwave_polygon.cpp:130 pcbnew/pad.cpp:1698
+#: pcbnew/microwave/microwave_polygon.cpp:130 pcbnew/pad.cpp:1696
 #: pcbnew/pcb_target.cpp:159 pcbnew/pcb_target.cpp:207
 msgid "Shape"
 msgstr "รูปร่าง"
@@ -4168,7 +4168,7 @@ msgstr "คะแนน"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:54
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:42
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:155
-#: pcbnew/fp_text.cpp:305 pcbnew/fp_text_grid_table.cpp:105 pcbnew/pad.cpp:959
+#: pcbnew/fp_text.cpp:305 pcbnew/fp_text_grid_table.cpp:105 pcbnew/pad.cpp:957
 #: pcbnew/pcb_target.cpp:158 pcbnew/pcb_target.cpp:204 pcbnew/pcb_text.cpp:127
 #: pcbnew/pcb_track.cpp:681 pcbnew/pcb_track.cpp:1132 pcbnew/pcb_track.cpp:1149
 #: pcbnew/pcb_track.cpp:1168
@@ -4180,7 +4180,7 @@ msgstr "ความหนา"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:706
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:55
-#: pcbnew/fp_text.cpp:308 pcbnew/fp_text_grid_table.cpp:106 pcbnew/pad.cpp:960
+#: pcbnew/fp_text.cpp:308 pcbnew/fp_text_grid_table.cpp:106 pcbnew/pad.cpp:958
 #: pcbnew/pcb_dimension.cpp:718 pcbnew/pcb_text.cpp:128
 msgid "Height"
 msgstr "ความสูง"
@@ -4287,7 +4287,7 @@ msgstr "หนา+เอียง"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:147
 #: eeschema/fields_grid_table.cpp:158 eeschema/fields_grid_table.cpp:407
 #: eeschema/fields_grid_table.cpp:519 eeschema/lib_field.cpp:471
-#: eeschema/lib_text.cpp:358 eeschema/pin_type.cpp:125
+#: eeschema/lib_text.cpp:358 eeschema/pin_type.cpp:128
 #: eeschema/sch_field.cpp:594
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:89
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:315
@@ -4323,7 +4323,7 @@ msgstr "กลาง"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:147
 #: eeschema/fields_grid_table.cpp:160 eeschema/fields_grid_table.cpp:409
 #: eeschema/fields_grid_table.cpp:523 eeschema/lib_field.cpp:473
-#: eeschema/lib_text.cpp:360 eeschema/pin_type.cpp:124
+#: eeschema/lib_text.cpp:360 eeschema/pin_type.cpp:127
 #: eeschema/sch_field.cpp:596
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:89
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:315
@@ -4671,7 +4671,7 @@ msgstr "ละเลยการเข้าหากริด"
 msgid "Ignore Other Snaps"
 msgstr "ละเลยการเข้าหาอื่นๆ"
 
-#: common/hotkey_store.cpp:57 common/tool/action_menu.cpp:227
+#: common/hotkey_store.cpp:57 common/tool/action_menu.cpp:226
 #: common/tool/actions.cpp:114
 msgid "Quit"
 msgstr "ออก"
@@ -4688,7 +4688,7 @@ msgstr "เครื่องมือแก้ไขวงจร"
 
 #: common/hotkey_store.cpp:74 kicad/tools/kicad_manager_actions.cpp:81
 #: pcbnew/menubar_pcb_editor.cpp:184 pcbnew/pcb_edit_frame.cpp:178
-#: pcbnew/pcb_edit_frame.cpp:1342 pcbnew/pcbnew_config.cpp:56
+#: pcbnew/pcb_edit_frame.cpp:1344 pcbnew/pcbnew_config.cpp:56
 msgid "PCB Editor"
 msgstr "เครื่องมือแก้ไขพีซีบอร์ด"
 
@@ -5466,7 +5466,7 @@ msgstr "ผิดพลาด การแตกไฟล์!"
 #: gerbview/export_to_pcbnew.cpp:68 pagelayout_editor/files.cpp:212
 #: pcbnew/build_BOM_from_board.cpp:103
 #: pcbnew/dialogs/dialog_board_statistics.cpp:680
-#: pcbnew/dialogs/dialog_drc.cpp:671 pcbnew/dialogs/dialog_export_idf.cpp:223
+#: pcbnew/dialogs/dialog_drc.cpp:687 pcbnew/dialogs/dialog_export_idf.cpp:223
 #: pcbnew/dialogs/dialog_export_svg.cpp:307
 #: pcbnew/dialogs/dialog_export_vrml.cpp:264
 #: pcbnew/dialogs/dialog_gendrill.cpp:481 pcbnew/dialogs/dialog_plot.cpp:924
@@ -5546,12 +5546,12 @@ msgstr "KiCad ดั่งเดิม"
 msgid "Field%d"
 msgstr "ช่อง%d"
 
-#: common/tool/action_menu.cpp:209 common/tool/action_menu.cpp:214
+#: common/tool/action_menu.cpp:208 common/tool/action_menu.cpp:213
 #, c-format
 msgid "Close %s"
 msgstr "ปิด %s"
 
-#: common/tool/action_menu.cpp:228
+#: common/tool/action_menu.cpp:227
 #, c-format
 msgid "Quit %s"
 msgstr "ออก %s"
@@ -6076,7 +6076,7 @@ msgid "Browse footprint libraries"
 msgstr "บราวซ์ไลบรารีฟุ้ทพรินท์"
 
 #: common/tool/actions.cpp:587 kicad/tools/kicad_manager_actions.cpp:87
-#: pcbnew/footprint_edit_frame.cpp:878 pcbnew/footprint_edit_frame.cpp:999
+#: pcbnew/footprint_edit_frame.cpp:880 pcbnew/footprint_edit_frame.cpp:1001
 #: pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
 msgstr "เครื่องมือแก้ไขฟุ้ทพรินท์"
@@ -6414,8 +6414,8 @@ msgid "<create net>"
 msgstr "<สร้างเน็ต>"
 
 #: common/widgets/net_selector.cpp:84
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:651
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:694
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:658
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:701
 msgid "Filter:"
 msgstr "กรอง:"
 
@@ -6749,33 +6749,33 @@ msgstr "ไฟล์ Jpeg"
 msgid "Hotkey file"
 msgstr "ไฟล์คีย์ร้อน"
 
-#: cvpcb/auto_associate.cpp:105
-#, c-format
-msgid "Equivalence file '%s' could not be found in the default search paths."
+#: cvpcb/auto_associate.cpp:108
+#, fuzzy, c-format
+msgid "Equivalence file '%s' could not be found."
 msgstr "ไฟล์เท่าเทียม '%s' หาไม่พบ ในเส้นทางค้นหาปริยาย"
 
-#: cvpcb/auto_associate.cpp:126
+#: cvpcb/auto_associate.cpp:128
 #, c-format
 msgid "Error opening equivalence file '%s'."
 msgstr "เปิดไฟล์เท่าเทียม '%s' ผิดพลาด"
 
-#: cvpcb/auto_associate.cpp:178
+#: cvpcb/auto_associate.cpp:180
 msgid "Equivalence File Load Error"
 msgstr "ผิดพลาด อ่านไฟล์เท่าเทียม"
 
-#: cvpcb/auto_associate.cpp:185
+#: cvpcb/auto_associate.cpp:187
 #, c-format
 msgid "%lu footprint/symbol equivalences found."
 msgstr "%lu ฟุ้ทพรินท์/สัญลักษณ์ ค้นพบ"
 
-#: cvpcb/auto_associate.cpp:261
+#: cvpcb/auto_associate.cpp:263
 #, c-format
 msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
 "libraries."
 msgstr "อุปกรณ์ %s:ฟุ้ทพรินท์ %s ไม่พบในไลบรารีฟุ้ทพรินท์ของโครงการ"
 
-#: cvpcb/auto_associate.cpp:306
+#: cvpcb/auto_associate.cpp:308
 msgid "CvPcb Warning"
 msgstr "คำเตือนจาก CvPcb"
 
@@ -6887,7 +6887,7 @@ msgstr "ไม่มีชื่อไลบรารีพีซีบีฟุ
 msgid "Configuration Error"
 msgstr "การปรับแต่งผิดพลาด"
 
-#: cvpcb/cvpcb_mainframe.cpp:819 pcbnew/footprint_edit_frame.cpp:903
+#: cvpcb/cvpcb_mainframe.cpp:819 pcbnew/footprint_edit_frame.cpp:905
 #: pcbnew/load_select_footprint.cpp:224
 msgid "Loading Footprint Libraries"
 msgstr "กำลังอ่านไลบรารีฟุ้ทพรินท์"
@@ -6930,7 +6930,7 @@ msgstr "ไฟล์สัมพันธ์ระหว่างสัญลั
 #: eeschema/dialogs/dialog_bus_manager.cpp:74
 #: eeschema/dialogs/dialog_bus_manager.cpp:108
 #: eeschema/dialogs/dialog_spice_model_base.cpp:652
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1045
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1046
 #: pcbnew/footprint_libraries_utils.cpp:531
 msgid "Add"
 msgstr "บวก"
@@ -6964,7 +6964,7 @@ msgstr "ตัวแปรสภาพแวดล้อมที่มีอย
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:57
 #: eeschema/dialogs/dialog_rescue_each.cpp:136
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:51
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:959
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:968
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:54
 #: eeschema/dialogs/panel_sym_lib_table.cpp:300
 #: eeschema/fields_grid_table.cpp:212 eeschema/sch_symbol.cpp:1387
@@ -6974,7 +6974,7 @@ msgstr "ตัวแปรสภาพแวดล้อมที่มีอย
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:43
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:64
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:54
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:449 pcbnew/footprint.cpp:2385
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:449 pcbnew/footprint.cpp:2365
 #: pcbnew/footprint_wizard_frame.cpp:330 pcbnew/fp_text.cpp:271
 #: pcbnew/fp_text_grid_table.cpp:124 pcbnew/pcb_dimension.cpp:311
 msgid "Value"
@@ -7280,24 +7280,24 @@ msgstr "ชิ้นส่วนซ้ำ %s%s\n"
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "ค่าที่แตกต่างกันสําหรับ %s%d%s (%s) และ %s%d%s (%s)"
 
-#: eeschema/connection_graph.cpp:2310 eeschema/connection_graph.cpp:2341
+#: eeschema/connection_graph.cpp:2352 eeschema/connection_graph.cpp:2383
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr "ทั้ง %s และ %s ติดเข้ากับชิ้นส่วนเดียวกัน; %s จะถูกใช้ในรายการเน็ต"
 
-#: eeschema/connection_graph.cpp:2567
+#: eeschema/connection_graph.cpp:2609
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "เน็ต %s เชื่อมต่อกับบัสแบบกราฟิก %s แต่ไม่ได้เป็นสมาชิกของบัส"
 
-#: eeschema/connection_graph.cpp:3008
+#: eeschema/connection_graph.cpp:3050
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "ชีตพิน %s ไม่มีป้ายชื่อลำดับขั้นที่ตรงกันภายในแผ่นวงจร"
 
-#: eeschema/connection_graph.cpp:3025
+#: eeschema/connection_graph.cpp:3067
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "ป้ายชื่อตามลำดับขั้น %s ไม่มีชีตพินที่ตรงกันในแผ่นวงจรต้นกำเนิด"
@@ -8116,7 +8116,7 @@ msgid "Invalid footprint specified"
 msgstr "ระบุฟุ้ทพรินท์ไม่ถูกต้อง"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:516
-#: eeschema/tools/symbol_editor_control.cpp:263
+#: eeschema/tools/symbol_editor_control.cpp:267
 msgid "No symbol selected"
 msgstr "ไม่ได้เลือกสัญลักษณ์"
 
@@ -8218,7 +8218,7 @@ msgstr "วงจรยังทำอธิบายประกอบไม่
 msgid "Delete exclusions too?"
 msgstr "ลบข้อยกเว้นด้วย?"
 
-#: eeschema/dialogs/dialog_erc.cpp:210 pcbnew/dialogs/dialog_drc.cpp:921
+#: eeschema/dialogs/dialog_erc.cpp:210 pcbnew/dialogs/dialog_drc.cpp:937
 #: pcbnew/dialogs/dialog_drc_base.cpp:195
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:82
 msgid "Delete All Markers"
@@ -8281,57 +8281,57 @@ msgstr "ตรวจสอบขาที่ไม่เชื่อมต่อ
 msgid "Checking for library symbol issues..."
 msgstr "ตรวจสอบไลบรารีสัญลักษณ์…"
 
-#: eeschema/dialogs/dialog_erc.cpp:502 pcbnew/dialogs/dialog_drc.cpp:443
+#: eeschema/dialogs/dialog_erc.cpp:502 pcbnew/dialogs/dialog_drc.cpp:459
 msgid "errors"
 msgstr "ผิดพลาด"
 
-#: eeschema/dialogs/dialog_erc.cpp:503 pcbnew/dialogs/dialog_drc.cpp:444
+#: eeschema/dialogs/dialog_erc.cpp:503 pcbnew/dialogs/dialog_drc.cpp:460
 msgid "warnings"
 msgstr "ระวัง"
 
-#: eeschema/dialogs/dialog_erc.cpp:504 pcbnew/dialogs/dialog_drc.cpp:445
+#: eeschema/dialogs/dialog_erc.cpp:504 pcbnew/dialogs/dialog_drc.cpp:461
 msgid "appropriate"
 msgstr "เหมาะสม"
 
-#: eeschema/dialogs/dialog_erc.cpp:509 pcbnew/dialogs/dialog_drc.cpp:450
+#: eeschema/dialogs/dialog_erc.cpp:509 pcbnew/dialogs/dialog_drc.cpp:466
 msgid "Remove exclusion for this violation"
 msgstr "เอาข้อยกเว้นออกสำหรับการละเมิดนี้"
 
-#: eeschema/dialogs/dialog_erc.cpp:510 pcbnew/dialogs/dialog_drc.cpp:451
+#: eeschema/dialogs/dialog_erc.cpp:510 pcbnew/dialogs/dialog_drc.cpp:467
 #, c-format
 msgid "It will be placed back in the %s list"
 msgstr "จะนำกลับไปใส่ในรายการ %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:514 pcbnew/dialogs/dialog_drc.cpp:455
+#: eeschema/dialogs/dialog_erc.cpp:514 pcbnew/dialogs/dialog_drc.cpp:471
 msgid "Exclude this violation"
 msgstr "ไม่รวมการละเมิดนี้"
 
-#: eeschema/dialogs/dialog_erc.cpp:515 pcbnew/dialogs/dialog_drc.cpp:456
+#: eeschema/dialogs/dialog_erc.cpp:515 pcbnew/dialogs/dialog_drc.cpp:472
 #, c-format
 msgid "It will be excluded from the %s list"
 msgstr "จะไม่รวมในรายการ %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:527 pcbnew/dialogs/dialog_drc.cpp:469
+#: eeschema/dialogs/dialog_erc.cpp:527 pcbnew/dialogs/dialog_drc.cpp:485
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
 msgstr "เปลี่ยนระดับเป็นผิดพลาด สำหรับการละเมิด '%s' ทั้งหมด"
 
 #: eeschema/dialogs/dialog_erc.cpp:529 eeschema/dialogs/dialog_erc.cpp:535
-#: pcbnew/dialogs/dialog_drc.cpp:471 pcbnew/dialogs/dialog_drc.cpp:478
+#: pcbnew/dialogs/dialog_drc.cpp:487 pcbnew/dialogs/dialog_drc.cpp:494
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr "ระดับการละเมิดสามารถแก้ไขในกรอบสนทนาตั้งค่าบอร์ด(Board Setup)"
 
-#: eeschema/dialogs/dialog_erc.cpp:533 pcbnew/dialogs/dialog_drc.cpp:476
+#: eeschema/dialogs/dialog_erc.cpp:533 pcbnew/dialogs/dialog_drc.cpp:492
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
 msgstr "เปลี่ยนระดับเป็นระวังสำหรับการละเมิด '%s' ทั้งหมด"
 
-#: eeschema/dialogs/dialog_erc.cpp:538 pcbnew/dialogs/dialog_drc.cpp:482
+#: eeschema/dialogs/dialog_erc.cpp:538 pcbnew/dialogs/dialog_drc.cpp:498
 #, c-format
 msgid "Ignore all '%s' violations"
 msgstr "เพิกเชยการละเมิด '%s' ทั้งหมด"
 
-#: eeschema/dialogs/dialog_erc.cpp:539 pcbnew/dialogs/dialog_drc.cpp:484
+#: eeschema/dialogs/dialog_erc.cpp:539 pcbnew/dialogs/dialog_drc.cpp:500
 msgid "Violations will not be checked or reported"
 msgstr "การละเมิดจะไม่ถูกตรวจหรือไม่รายงาน"
 
@@ -8339,7 +8339,7 @@ msgstr "การละเมิดจะไม่ถูกตรวจหรื
 msgid "Edit pin-to-pin conflict map..."
 msgstr "แก้ไขข้อขัดแย้ง ขาถึงขา…"
 
-#: eeschema/dialogs/dialog_erc.cpp:550 pcbnew/dialogs/dialog_drc.cpp:489
+#: eeschema/dialogs/dialog_erc.cpp:550 pcbnew/dialogs/dialog_drc.cpp:505
 msgid "Edit violation severities..."
 msgstr "แก้ไขระดับการละเมิด…"
 
@@ -8354,7 +8354,7 @@ msgstr "แผนที่ขัดแย้งของขา"
 
 #: eeschema/dialogs/dialog_erc.cpp:647
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
-#: pcbnew/dialogs/dialog_board_setup.cpp:109 pcbnew/dialogs/dialog_drc.cpp:594
+#: pcbnew/dialogs/dialog_board_setup.cpp:109 pcbnew/dialogs/dialog_drc.cpp:610
 msgid "Violation Severity"
 msgstr "ระดับการละเมิด"
 
@@ -8509,12 +8509,12 @@ msgid "Text size:"
 msgstr "ขนาดข้อความ:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:193
-#: eeschema/pin_type.cpp:126
+#: eeschema/pin_type.cpp:129
 msgid "Up"
 msgstr "ขึ้น"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:193
-#: eeschema/pin_type.cpp:127
+#: eeschema/pin_type.cpp:130
 msgid "Down"
 msgstr "ลง"
 
@@ -8681,8 +8681,8 @@ msgstr "สไตล์ของกราฟิก"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:156
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
-#: pcbnew/footprint.cpp:2387 pcbnew/fp_text_grid_table.cpp:110
-#: pcbnew/pad.cpp:1708
+#: pcbnew/footprint.cpp:2367 pcbnew/fp_text_grid_table.cpp:110
+#: pcbnew/pad.cpp:1706
 msgid "Orientation"
 msgstr "ทิศทางจัดเรียง"
 
@@ -8722,7 +8722,7 @@ msgid "Read Only"
 msgstr "อ่านเท่านั้น"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:777
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1207
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1216
 msgid "Save changes?"
 msgstr "บันทึการเปลี่ยนแปลง?"
 
@@ -8904,51 +8904,51 @@ msgstr "ใช้สไตล์ร่วมกันทุกตัว(&s)(เ�
 msgid "Drawing Properties"
 msgstr "คุณสมบัติเขียนแบบ"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:233
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:239
 #: eeschema/dialogs/dialog_symbol_properties.cpp:557
 msgid "References must start with a letter."
 msgstr "อักษรอ้างอิงต้องเริ่มต้นด้วยตัวอักษร"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:253
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:259
 #: eeschema/dialogs/dialog_sheet_properties.cpp:195
 #: eeschema/dialogs/dialog_symbol_properties.cpp:574
 msgid "Fields must have a name."
 msgstr "ช่องจะต้องมีชื่อ"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:270
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:276
 msgid "Aliased symbol must have a parent selected"
 msgstr "สัญลักษณ์แฝงต้องมีต้นกำเนิดเลือกไว้"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:282
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:288
 msgid "Delete extra units from symbol?"
 msgstr "ลบหน่วยที่เกินออกจากสัญลักษณ์?"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:288
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:294
 msgid "Delete alternate body style (De Morgan) from symbol?"
 msgstr "ลบรูปร่างชนิดทางเลือก(เดอมอแกน) จากสัญลักษณ์?"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:316
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:322
 #, c-format
 msgid "The name '%s' conflicts with an existing entry in the library '%s'."
 msgstr "ชื่อ '%s' ขัดแย้งกับทางเข้าที่มีอยู่ในไลบรารี '%s'"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:432
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:439
 #, c-format
 msgid "The name '%s' is already in use."
 msgstr "ชื่อ '%s' ถูกใช้แล้ว"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:516
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:523
 #: eeschema/dialogs/dialog_sheet_properties.cpp:734
 #: eeschema/dialogs/dialog_symbol_properties.cpp:885
 #, c-format
 msgid "The first %d fields are mandatory."
 msgstr "ฟิลด์แรก %d เป็นฟิลด์บังคับ"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:651
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:658
 msgid "Add Footprint Filter"
 msgstr "ใส่ตัวกรองฟุ้ทพรินท์"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:694
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:701
 msgid "Edit Footprint Filter"
 msgstr "แก้ไขตัวกรองฟุ้ทพรินท์"
 
@@ -8960,7 +8960,7 @@ msgstr "ช่อง"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:58
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:52
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:687
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:696
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:55
 #: eeschema/fields_grid_table.cpp:213
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:53
@@ -9286,7 +9286,7 @@ msgstr "ป้ายชื่อใหม่"
 #: eeschema/dialogs/dialog_migrate_buses.cpp:104
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:86
 #: pcbnew/dialogs/dialog_find_base.cpp:120 pcbnew/fp_text.cpp:289
-#: pcbnew/pad.cpp:927 pcbnew/pcb_dimension.cpp:351 pcbnew/pcb_group.cpp:339
+#: pcbnew/pad.cpp:925 pcbnew/pcb_dimension.cpp:351 pcbnew/pcb_group.cpp:339
 #: pcbnew/pcb_shape.cpp:155 pcbnew/pcb_text.cpp:118 pcbnew/pcb_track.cpp:787
 #: pcbnew/zone.cpp:601
 msgid "Status"
@@ -9682,13 +9682,13 @@ msgstr "เสร็จแล้ว"
 msgid "Falling back to user path '%s'."
 msgstr "ย้อนกลับไปใช้พาธของผู้ใช้ '%s'"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:1270
-#: eeschema/dialogs/dialog_plot_schematic.cpp:1308
+#: eeschema/dialogs/dialog_plot_schematic.cpp:1278
+#: eeschema/dialogs/dialog_plot_schematic.cpp:1316
 #, c-format
 msgid "Cannot normalize path '%s%s'."
 msgstr "ไม่สามารถปรับพาธ '%s%s'"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:1295
+#: eeschema/dialogs/dialog_plot_schematic.cpp:1303
 msgid "No project or path defined for the current schematic."
 msgstr "ไมมีโครงการหรือพาธกำหนดไว้สำหรับวงจรปัจจุบัน"
 
@@ -9875,9 +9875,9 @@ msgid "Action Taken"
 msgstr "รับคำสั่ง"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:132
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:958
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:967
 #: eeschema/sch_symbol.cpp:1385 eeschema/sch_symbol.cpp:1432
-#: pcbnew/footprint.cpp:2383 pcbnew/fp_text.cpp:271
+#: pcbnew/footprint.cpp:2363 pcbnew/fp_text.cpp:271
 msgid "Reference"
 msgstr "อ้างอิง"
 
@@ -10076,7 +10076,7 @@ msgid "Electrical Rules"
 msgstr "กฎทางไฟฟ้า"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:74
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1037
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1038
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/footprint_libraries_utils.cpp:523
 msgid "Project"
@@ -10110,32 +10110,32 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:36
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:133
-#: eeschema/pin_type.cpp:51 eeschema/sch_text.cpp:580
+#: eeschema/pin_type.cpp:52 eeschema/pin_type.cpp:244 eeschema/sch_text.cpp:580
 msgid "Input"
 msgstr "ใส่เข้า"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:37
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:133
-#: eeschema/pin_type.cpp:52 eeschema/sch_text.cpp:581
+#: eeschema/pin_type.cpp:53 eeschema/pin_type.cpp:245 eeschema/sch_text.cpp:581
 msgid "Output"
 msgstr "ส่งออก"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:38
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:133
-#: eeschema/pin_type.cpp:53 eeschema/sch_text.cpp:582
+#: eeschema/pin_type.cpp:54 eeschema/pin_type.cpp:246 eeschema/sch_text.cpp:582
 msgid "Bidirectional"
 msgstr "สองทิศทาง"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:39
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:133
-#: eeschema/pin_type.cpp:54
+#: eeschema/pin_type.cpp:55 eeschema/pin_type.cpp:247
 msgid "Tri-state"
 msgstr "สามสถานะ"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:40
 #: eeschema/dialogs/dialog_spice_model_base.cpp:199
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:133
-#: eeschema/pin_type.cpp:55 eeschema/sch_text.cpp:584
+#: eeschema/pin_type.cpp:56 eeschema/pin_type.cpp:248 eeschema/sch_text.cpp:584
 msgid "Passive"
 msgstr "แพสซีฟ"
 
@@ -10580,7 +10580,7 @@ msgstr "คำสั่งสไปส์:"
 msgid "Load directives from schematic"
 msgstr "อ่านคำสั่งจากวงจร"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:429 pcbnew/pad.cpp:1679
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:429 pcbnew/pad.cpp:1677
 msgid "Custom"
 msgstr "กำหนดเอง"
 
@@ -11060,37 +11060,37 @@ msgid "Show datasheet in browser"
 msgstr "แสดงดาต้าชีตในบราวเซอร์"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:128
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1042
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1051
 msgid "The Reference column cannot be hidden."
 msgstr "ไม่สามารถซ่อนคอลัมน์อ้างอิง"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:224
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:234
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:233
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:243
 msgid "Qty"
 msgstr "จำนวน"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:689
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:698
 msgid "Group By"
 msgstr "จับกลุ่มโดย"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:961
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:970
 #: eeschema/symbol_editor/symbol_editor.cpp:1251
 msgid "Datasheet"
 msgstr "ดาต้าชีต"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:983
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:992
 msgid "New field name:"
 msgstr "ชื่อช่องใหม่:"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:983
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:992
 msgid "Add Field"
 msgstr "เพิ่มช่อง"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:992
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1001
 msgid "Field must have a name."
 msgstr "ช่องต้องมีชื่อ"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1000
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1009
 #: eeschema/dialogs/dialog_symbol_properties.cpp:814
 #, c-format
 msgid "Field name '%s' already in use."
@@ -12054,7 +12054,7 @@ msgid "One of the nicknames will need to be changed after adding this library."
 msgstr "ชื่อเล่นจะต้องแก้ไข หลังจากเพิ่มเข้าในไลบรารีนี้"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:529
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1044
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1045
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:909
 #: pcbnew/footprint_libraries_utils.cpp:530
 msgid "Skip"
@@ -12132,8 +12132,8 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1075
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1088
 #: eeschema/sch_base_frame.cpp:218 eeschema/sch_base_frame.cpp:235
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1422
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1474
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1431
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1483
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1105
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1118
 msgid "File Save Error"
@@ -12203,14 +12203,14 @@ msgstr ""
 
 #: eeschema/eeschema_config.cpp:68 eeschema/eeschema_config.cpp:245
 #: gerbview/gerbview_frame.cpp:1061 pagelayout_editor/pl_editor_frame.cpp:488
-#: pcbnew/footprint_edit_frame.cpp:1000 pcbnew/pcbnew_config.cpp:57
+#: pcbnew/footprint_edit_frame.cpp:1002 pcbnew/pcbnew_config.cpp:57
 msgid "Display Options"
 msgstr "ทางเลือกแสดงผล"
 
 #: eeschema/eeschema_config.cpp:69 eeschema/eeschema_config.cpp:246
 #: gerbview/gerbview_frame.cpp:1062
 #: pcbnew/dialogs/panel_edit_options_base.cpp:24
-#: pcbnew/footprint_edit_frame.cpp:1001 pcbnew/pcbnew_config.cpp:58
+#: pcbnew/footprint_edit_frame.cpp:1003 pcbnew/pcbnew_config.cpp:58
 msgid "Editing Options"
 msgstr "ทางเลือกแก้ไข"
 
@@ -12218,7 +12218,7 @@ msgstr "ทางเลือกแก้ไข"
 msgid "Error loading drawing sheet."
 msgstr "เกิดความผิดพลาดระหว่างอ่านกระดาษเขียนแบบ"
 
-#: eeschema/eeschema_config.cpp:291 eeschema/sheet.cpp:284
+#: eeschema/eeschema_config.cpp:291 eeschema/sheet.cpp:286
 #, c-format
 msgid "Error loading the symbol library table '%s'."
 msgstr "ผิดพลาดอ่านตารางไลบรารีสัญลักษณ์ '%s'"
@@ -12426,7 +12426,7 @@ msgstr "อักษรอ้างอิงมีค่าซ้ำกัน"
 msgid "Bus Entry needed"
 msgstr "ต้องมีทางเข้าบัส"
 
-#: eeschema/fields_grid_table.cpp:135 eeschema/files-io.cpp:818
+#: eeschema/fields_grid_table.cpp:135 eeschema/files-io.cpp:820
 #: eeschema/tools/sch_editor_control.cpp:101
 msgid "Schematic Files"
 msgstr "ไฟล์วงจร"
@@ -12442,7 +12442,7 @@ msgid ""
 msgstr ""
 "การสร้างโปรเจ็กต์จะเปิดใช้ความสามารถต่างๆ เช่น ตัวแปรข้อความ,เน็ตคลาสและการยกเว้น ERC"
 
-#: eeschema/files-io.cpp:129 eeschema/files-io.cpp:1183
+#: eeschema/files-io.cpp:129 eeschema/files-io.cpp:1185
 #, c-format
 msgid "Schematic '%s' is already open."
 msgstr "วงจร '%s' เปิดอยู่แล้ว"
@@ -12471,7 +12471,7 @@ msgid ""
 msgstr "ไม่สามารถโหลดวงจรได้ทั้งหมด\tเกิดข้อผิดพลาดขณะพยายามโหลดชีตแบบลำดับขั้น"
 
 #: eeschema/files-io.cpp:274 eeschema/files-io.cpp:282
-#: eeschema/files-io.cpp:1258 eeschema/sheet.cpp:162
+#: eeschema/files-io.cpp:1260 eeschema/sheet.cpp:162
 #, c-format
 msgid "Error loading schematic '%s'."
 msgstr "เกิดข้อผิดพลาดในการอ่านวงจร '%s'"
@@ -12481,7 +12481,7 @@ msgstr "เกิดข้อผิดพลาดในการอ่านว
 msgid "Memory exhausted loading schematic '%s'."
 msgstr "หน่วยความจำหมด ระหว่างอ่านวงจร ' %s'"
 
-#: eeschema/files-io.cpp:309 eeschema/files-io.cpp:1261 eeschema/sheet.cpp:165
+#: eeschema/files-io.cpp:309 eeschema/files-io.cpp:1263 eeschema/sheet.cpp:165
 #, c-format
 msgid "Failed to load '%s'."
 msgstr "โหลด '%s' ไม่สำเร็จ"
@@ -12578,12 +12578,12 @@ msgstr "รูปแบบที่รองรับทั้งหมด|"
 msgid "Import Schematic"
 msgstr "นำเข้าวงจร"
 
-#: eeschema/files-io.cpp:664
+#: eeschema/files-io.cpp:668
 #, c-format
 msgid "Unexpected file extension: '%s'."
 msgstr "นามสกุลไฟล์ที่ไม่คาดคิด: '%s'"
 
-#: eeschema/files-io.cpp:715
+#: eeschema/files-io.cpp:717
 #, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
@@ -12592,12 +12592,12 @@ msgstr ""
 "ผิดพลาดระหว่างบันทึกไฟล์วงจร '%s'\n"
 "%s"
 
-#: eeschema/files-io.cpp:720 pcbnew/files.cpp:1028
+#: eeschema/files-io.cpp:722 pcbnew/files.cpp:1028
 #, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "ล้มเหลวในการสร้างไฟล์ชั่วคราว '%s'"
 
-#: eeschema/files-io.cpp:737
+#: eeschema/files-io.cpp:739
 #, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
@@ -12606,22 +12606,22 @@ msgstr ""
 "ผิดพลาดในการบันทึกไฟล์วงจร '%s'\n"
 "ล้มเหลวในการเปลี่ยนชื่อไฟล์ชั่วคราว '%s'"
 
-#: eeschema/files-io.cpp:743 pcbnew/files.cpp:1046
+#: eeschema/files-io.cpp:745 pcbnew/files.cpp:1046
 #, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "ล้มเหลวที่จะเปลี่ยนชื่อไฟล์ชั่วคราว '%s'"
 
-#: eeschema/files-io.cpp:766 pagelayout_editor/files.cpp:185
+#: eeschema/files-io.cpp:768 pagelayout_editor/files.cpp:185
 #: pcbnew/files.cpp:1079
 #, c-format
 msgid "File '%s' saved."
 msgstr "บันทึกไฟล์ '%s' เรียบร้อย"
 
-#: eeschema/files-io.cpp:771
+#: eeschema/files-io.cpp:773
 msgid "File write operation failed."
 msgstr "การเขียนไฟล์ล้มเหลว"
 
-#: eeschema/files-io.cpp:837 eeschema/files-io.cpp:904
+#: eeschema/files-io.cpp:839 eeschema/files-io.cpp:906
 #: kicad/tools/kicad_manager_control.cpp:127
 #: kicad/tools/kicad_manager_control.cpp:224
 #, c-format
@@ -12634,15 +12634,15 @@ msgstr ""
 "\n"
 "ตรวจสอบให้แน่ใจว่าคุณมีสิทธิ์ในการเขียนแล้วลองอีกครั้ง"
 
-#: eeschema/files-io.cpp:973
+#: eeschema/files-io.cpp:975
 msgid "Saving will overwrite existing files."
 msgstr "การบันทึกจะเขียนทับไฟล์ที่มีอยู่"
 
-#: eeschema/files-io.cpp:974
+#: eeschema/files-io.cpp:976
 msgid "Save Warning"
 msgstr "บันทึกคำเตือน"
 
-#: eeschema/files-io.cpp:977
+#: eeschema/files-io.cpp:979
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
@@ -12650,23 +12650,23 @@ msgstr ""
 "ไฟล์ต่อไปนี้จะถูกเขียนทับ:\n"
 "\n"
 
-#: eeschema/files-io.cpp:978
+#: eeschema/files-io.cpp:980
 msgid "Overwrite Files"
 msgstr "เขียนทับไฟล์"
 
-#: eeschema/files-io.cpp:979
+#: eeschema/files-io.cpp:981
 msgid "Abort Project Save"
 msgstr "ยกเลิกการบันทึกโครงการ"
 
-#: eeschema/files-io.cpp:1193
+#: eeschema/files-io.cpp:1195
 msgid "Importing Schematic"
 msgstr "นำเข้าวงจร"
 
-#: eeschema/files-io.cpp:1291
+#: eeschema/files-io.cpp:1293
 msgid "The current schematic has been modified.  Save changes?"
 msgstr "วงจรปัจจุบันได้รับการแก้ไข บันทึกการเปลี่ยนแปลง?"
 
-#: eeschema/files-io.cpp:1377
+#: eeschema/files-io.cpp:1379
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -12678,7 +12678,7 @@ msgstr ""
 "มันคล้ายกับว่าครั้งล่าสุดที่คุณแก้ไขไฟล์วงจร\n"
 "ไม่ได้บันทึกอย่างถูกต้อง  คุณต้องการย้อนกลับไปใช้บันทึกครั้งก่อนหน้าหรือไม่?"
 
-#: eeschema/files-io.cpp:1388
+#: eeschema/files-io.cpp:1390
 #, c-format
 msgid ""
 "The file '%s` could not be opened.\n"
@@ -12687,23 +12687,23 @@ msgstr ""
 "ไฟล์ '%s' ไม่สามารถเปิด\n"
 "จำเป็นต้องใช้การแก้ไขด้วยตนเอง สำหรับไฟล์บันทึกอัตโนมัติ"
 
-#: eeschema/files-io.cpp:1434
+#: eeschema/files-io.cpp:1436
 msgid "The following automatically saved file(s) could not be restored\n"
 msgstr "ไฟล์บันทึกอัตโนมัติต่อไปนี้ ไม่สามารถกู้กลับคืน\n"
 
-#: eeschema/files-io.cpp:1439
+#: eeschema/files-io.cpp:1441
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr "ต้องทำการกู้คืนด้วยต้นเอง สำหรับไฟล์ด้านบน"
 
-#: eeschema/files-io.cpp:1461
+#: eeschema/files-io.cpp:1463
 msgid "The following automatically saved file(s) could not be removed\n"
 msgstr "ไฟล์บันทึกอัตโนมัติตามนี้ ไม่สามารถลบออก\n"
 
-#: eeschema/files-io.cpp:1466
+#: eeschema/files-io.cpp:1468
 msgid "Manual removal will be required for the file(s) above."
 msgstr "ต้องทำการลบไฟล์ด้านบน ด้วยตนเอง"
 
-#: eeschema/files-io.cpp:1477
+#: eeschema/files-io.cpp:1479
 #, c-format
 msgid ""
 "The automatic save master file\n"
@@ -12714,7 +12714,7 @@ msgstr ""
 "'%s'\n"
 "ไม่สามารถลบออก"
 
-#: eeschema/files-io.cpp:1485
+#: eeschema/files-io.cpp:1487
 msgid ""
 "This file must be manually removed or the auto save feature will be\n"
 "shown every time the schematic editor is launched."
@@ -12990,63 +12990,63 @@ msgstr "เลือกสัญลักษณ์ (%d สิ่งที่โ�
 msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr "ไม่พบรูปแบบอื่นสำหรับสัญลักษณ์ '%s' ในไลบรารี '%s'"
 
-#: eeschema/pin_type.cpp:56
+#: eeschema/pin_type.cpp:57 eeschema/pin_type.cpp:249
 msgid "Free"
 msgstr "ฟรี"
 
-#: eeschema/pin_type.cpp:57
+#: eeschema/pin_type.cpp:58 eeschema/pin_type.cpp:250
 msgid "Unspecified"
 msgstr "ไม่ระบุ"
 
-#: eeschema/pin_type.cpp:58
+#: eeschema/pin_type.cpp:59 eeschema/pin_type.cpp:251
 msgid "Power input"
 msgstr "พาวเวอร์ขาเข้า"
 
-#: eeschema/pin_type.cpp:59
+#: eeschema/pin_type.cpp:60 eeschema/pin_type.cpp:252
 msgid "Power output"
 msgstr "พาวเวอร์ขาออก"
 
-#: eeschema/pin_type.cpp:60
+#: eeschema/pin_type.cpp:61 eeschema/pin_type.cpp:253
 msgid "Open collector"
 msgstr "โอเพ่นคอลเลคเตอร์"
 
-#: eeschema/pin_type.cpp:61
+#: eeschema/pin_type.cpp:62 eeschema/pin_type.cpp:254
 msgid "Open emitter"
 msgstr "โอเพ่นอิมิตเตอร์"
 
-#: eeschema/pin_type.cpp:62
+#: eeschema/pin_type.cpp:63 eeschema/pin_type.cpp:255
 msgid "Unconnected"
 msgstr "ไม่เชื่อมต่อ"
 
-#: eeschema/pin_type.cpp:77
+#: eeschema/pin_type.cpp:80
 msgid "Inverted"
 msgstr "กลับด้าน"
 
-#: eeschema/pin_type.cpp:78
+#: eeschema/pin_type.cpp:81
 msgid "Clock"
 msgstr "นาฬิกา"
 
-#: eeschema/pin_type.cpp:79
+#: eeschema/pin_type.cpp:82
 msgid "Inverted clock"
 msgstr "นาฬิกากลับด้าน"
 
-#: eeschema/pin_type.cpp:80
+#: eeschema/pin_type.cpp:83
 msgid "Input low"
 msgstr "อินพุตต่ํา"
 
-#: eeschema/pin_type.cpp:81
+#: eeschema/pin_type.cpp:84
 msgid "Clock low"
 msgstr "นาฬิกาต่ำ"
 
-#: eeschema/pin_type.cpp:82
+#: eeschema/pin_type.cpp:85
 msgid "Output low"
 msgstr "เอาต์พุตต่ำ"
 
-#: eeschema/pin_type.cpp:83
+#: eeschema/pin_type.cpp:86
 msgid "Falling edge clock"
 msgstr "ขอบขาลงสัญญาณนาฬิกา"
 
-#: eeschema/pin_type.cpp:84
+#: eeschema/pin_type.cpp:87
 msgid "NonLogic"
 msgstr "ไม่ใช่ลอจิก"
 
@@ -13169,7 +13169,7 @@ msgid "New schematic file is unsaved"
 msgstr "ไม่ได้บันทึกไฟล์วงจรใหม่"
 
 #: eeschema/sch_edit_frame.cpp:683 eeschema/sim/sim_plot_frame.cpp:1623
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:520
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:521
 #: eeschema/symbol_editor/symbol_editor.cpp:1154
 #: pagelayout_editor/pl_editor_frame.cpp:381
 #: pcbnew/footprint_edit_frame.cpp:658 pcbnew/footprint_edit_frame.cpp:698
@@ -13209,13 +13209,13 @@ msgid "Could not open CvPcb"
 msgstr "ไม่สามารถเปิด CvPcb"
 
 #: eeschema/sch_edit_frame.cpp:1301 eeschema/sim/sim_plot_frame.cpp:353
-#: kicad/kicad_manager_frame.cpp:640 pcbnew/footprint_edit_frame.cpp:862
-#: pcbnew/pcb_edit_frame.cpp:1337
+#: kicad/kicad_manager_frame.cpp:640 pcbnew/footprint_edit_frame.cpp:864
+#: pcbnew/pcb_edit_frame.cpp:1339
 msgid "[Read Only]"
 msgstr "[อ่านเท่านั้น]"
 
 #: eeschema/sch_edit_frame.cpp:1304 eeschema/sim/sim_plot_frame.cpp:356
-#: pcbnew/footprint_edit_frame.cpp:871 pcbnew/pcb_edit_frame.cpp:1340
+#: pcbnew/footprint_edit_frame.cpp:873 pcbnew/pcb_edit_frame.cpp:1342
 msgid "[Unsaved]"
 msgstr "[ยังไม่ได้บันทึก]"
 
@@ -13223,7 +13223,7 @@ msgstr "[ยังไม่ได้บันทึก]"
 msgid "[no schematic loaded]"
 msgstr "[ไม่มีการโหลดวงจร]"
 
-#: eeschema/sch_edit_frame.cpp:1519
+#: eeschema/sch_edit_frame.cpp:1521
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "เน้นสีเน็ต: %s"
@@ -14421,49 +14421,58 @@ msgstr "โหลดต่อไป"
 msgid "Cancel Load"
 msgstr "ยกเลิกการโหลด"
 
-#: eeschema/sheet.cpp:224
+#: eeschema/sheet.cpp:225
+#, fuzzy
 msgid ""
-"There are library names in the loaded schematic that are missing from the "
-"project library table.  This may result in broken symbol library links for "
-"the loaded schematic.  Do you wish to continue?"
+"There are library names in the selected schematic that are missing from the "
+"current project library table.  This may result in broken symbol library "
+"references for the loaded schematic.\n"
+"\n"
+"Do you wish to continue?"
 msgstr ""
 "มีชื่อไลบรารีในวงจรที่โหลดซึ่งหายไปจากตารางไลบรารีโครงการ "
 "ซึ่งอาจส่งผลให้ลิงก์ไลบรารีสัญลักษณ์ใช้งานไม่ได้สำหรับวงจรที่โหลด คุณต้องการดำเนินการต่อหรือไม่?"
 
-#: eeschema/sheet.cpp:227 eeschema/sheet.cpp:268 eeschema/sheet.cpp:317
-#: eeschema/sheet.cpp:378
+#: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
+#: eeschema/sheet.cpp:380
 msgid "Continue Load Schematic"
 msgstr "โหลดวงจรต่อไป"
 
-#: eeschema/sheet.cpp:264
-#, c-format
+#: eeschema/sheet.cpp:266
 msgid ""
-"The project library table '%s' does not exist or cannot be read.  This may "
-"result in broken symbol links for the schematic.  Do you wish to continue?"
+"The selected file was created as part of a different project.  Linking the "
+"file to this project may result in missing or incorrect symbol library "
+"references.\n"
+"\n"
+"Do you wish to continue?"
 msgstr ""
-"ตารางไลบรารีโครงการ '%s' ไม่มีอยู่หรือไม่สามารถอ่านได้ "
-"ซึ่งอาจส่งผลให้ลิงก์สัญลักษณ์สำหรับวงจรเสียหาย คุณต้องการดำเนินการต่อหรือไม่?"
 
-#: eeschema/sheet.cpp:313
+#: eeschema/sheet.cpp:315
+#, fuzzy
 msgid ""
-"There are library names in the loaded schematic that are missing from the "
-"loaded schematic project library table.  This may result in broken symbol "
-"library links for the schematic.  Do you wish to continue?"
+"There are symbol library names in the selected schematic that are missing "
+"from the selected schematic project library table.  This may result in "
+"broken symbol library references.\n"
+"\n"
+"Do you wish to continue?"
 msgstr ""
 "มีชื่อไลบรารีในวงจตรที่โหลดซึ่งหายไปจากตารางไลบรารีโครงการ"
 "\tซึ่งอาจส่งผลให้การเชื่อมโยงไลบรารีสัญลักษณ์ที่ใช้งานไม่ได้สําหรับวงจร"
 "\tคุณต้องการดําเนินการต่อหรือไม่?"
 
-#: eeschema/sheet.cpp:374
+#: eeschema/sheet.cpp:376
+#, fuzzy
 msgid ""
 "A duplicate library name that references a different library exists in the "
 "current library table.  This conflict cannot be resolved and may result in "
-"broken symbol library links for the schematic.  Do you wish to continue?"
+"broken symbol library references.\n"
+"\n"
+"Do you wish to continue?"
 msgstr ""
 "ชื่อไลบรารีที่ซ้ำกันซึ่งอ้างอิงถึงไลบรารีอื่นมีอยู่ในตารางไลบรารีปัจจุบัน ข้อขัดแย้งนี้ไม่สามารถแก้ไขได้ "
 "และอาจส่งผลให้ลิงก์ไลบรารีสัญลักษณ์ใช้งานไม่ได้สำหรับวงจร คุณต้องการดำเนินการต่อหรือไม่?"
 
-#: eeschema/sheet.cpp:561
+#: eeschema/sheet.cpp:564
 #, c-format
 msgid ""
 "The file name '%s' can cause issues with an existing file name\n"
@@ -14482,15 +14491,15 @@ msgstr ""
 "\n"
 "คุณต้องการดำเนินการต่อหรือไม่?"
 
-#: eeschema/sheet.cpp:570
+#: eeschema/sheet.cpp:573
 msgid "Do not show this message again."
 msgstr "อย่าแสดงข้อความนี้อีก."
 
-#: eeschema/sheet.cpp:571
+#: eeschema/sheet.cpp:574
 msgid "Create New Sheet"
 msgstr "สร้างชีตใหม่"
 
-#: eeschema/sheet.cpp:572
+#: eeschema/sheet.cpp:575
 msgid "Discard New Sheet"
 msgstr "ทิ้งชีตใหม่"
 
@@ -14813,7 +14822,7 @@ msgid "KiCad Symbol Editor"
 msgstr "ตัวแก้ไขสัญลักษณ์ KiCad"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:135
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:945
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:946
 #: eeschema/symbol_library.cpp:489 eeschema/symbol_tree_model_adapter.cpp:66
 msgid "Loading Symbol Libraries"
 msgstr "กำลังโหลดไลบรารีสัญลักษณ์"
@@ -14831,45 +14840,45 @@ msgstr "การเปลี่ยนแปลงไลบรารีไม่
 msgid "Symbol library loading was cancelled by user."
 msgstr "ยกเลิกการอ่านไลบรารีสัญลักษณ์โดยผู้ใช้"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:594
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:595
 #: eeschema/tools/sch_edit_tool.cpp:117
 #, c-format
 msgid "Unit %s"
 msgstr "หน่วย %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:751
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:752
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
 msgstr "แก้ไขสัญลักษณ์ %s จากวงจร การบันทึกจะอัปเดตวงจรเท่านั้น"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:760
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:761
 msgid "Manage symbol libraries"
 msgstr "จัดการไลบรารีสัญลักษณ์"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:771
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:772
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
 msgstr ""
 "ไม่สามารถแก้ไขสัญลักษณ์ในไลบรารีดั้งเดิม  ใช้ จัดการไลบรารีสัญลักษณ์ เพื่อโยกย้ายไปยังรูปแบบปัจจุบัน"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:781
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:782
 #, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr "สัญลักษณ์ %s มาจาก %s กราฟิกสัญลักษณ์จะไม่สามารถแก้ไขได้"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:785
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:786
 #, c-format
 msgid "Open %s"
 msgstr "เปิด %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:856
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:857
 #, c-format
 msgid "Library '%s' already exists."
 msgstr "มีไลบรารี '%s' อยู่แล้ว"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:864
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:865
 #, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
@@ -14878,47 +14887,47 @@ msgstr ""
 "ไม่สามารถสร้างไฟล์ไลบรารี '%s'\n"
 "ตรวจสอบให้แน่ใจว่าคุณมีสิทธิ์ในการเขียนแล้วลองอีกครั้ง"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:874
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:875
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:213
 msgid "Could not open the library file."
 msgstr "ไม่สามารถเปิดไฟล์ไลบรารี"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:951
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:952
 #, c-format
 msgid "Loading library '%s'..."
 msgstr "กําลังโหลดไลบรารี '%s'..."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1025
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1026
 #: pcbnew/footprint_libraries_utils.cpp:511
 msgid "Add the library to the global library table?"
 msgstr "เพิ่มไลบรารีลงในตารางไลบรารีส่วนกลางหรือไม่?"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1026
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1027
 #: pcbnew/footprint_libraries_utils.cpp:512
 msgid "Add To Global Library Table"
 msgstr "เพิ่มลงในตารางไลบรารีส่วนกลาง"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1036
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1037
 #: pcbnew/footprint_libraries_utils.cpp:522
 msgid "Global"
 msgstr "ส่วนกลาง"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1039
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1040
 #: pcbnew/footprint_libraries_utils.cpp:525
 msgid "Choose the Library Table to add the library to:"
 msgstr "เลือกตารางไลบรารีเพื่อเพิ่มไลบรารีเข้าไป:"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1040
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1041
 #: pcbnew/footprint_libraries_utils.cpp:526
 msgid "Add To Library Table"
 msgstr "เพิ่มลงในตารางไลบรารี"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1072
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1073
 #, c-format
 msgid "Failed to save backup to '%s'."
 msgstr "ล้มเหลวบันทึกข้อมูลสำรองไปที่ '%s'"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1218
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1227
 #: eeschema/symbol_viewer_frame.cpp:393
 #, c-format
 msgid ""
@@ -14928,12 +14937,12 @@ msgstr ""
 "การปรับแต่งค่าปัจจุบันไม่รวมไลบรารี '%s'\n"
 "ใช้จัดการไลบรารีสัญลักษณ์เพื่อแก้ไขการปรับแต่ง"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1221
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1230
 #: eeschema/symbol_viewer_frame.cpp:396
 msgid "Library not found in symbol library table."
 msgstr "ไม่พบไลบรารีในตารางไลบรารีสัญลักษณ์"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1229
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1238
 #: eeschema/symbol_viewer_frame.cpp:400
 #, c-format
 msgid ""
@@ -14943,18 +14952,18 @@ msgstr ""
 "ไลบรารี '%s' ไม่ได้เปิดใช้งานในการปรับแต่งปัจจุบัน\n"
 "ใช้ 'จัดการไลบรารีสัญลักษณ์' เพื่อแก้ไขค่าปรับแต่ง"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1232
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1241
 #: eeschema/symbol_viewer_frame.cpp:403
 msgid "Symbol library not enabled."
 msgstr "ไม่ได้เปิดใช้งานไลบรารีสัญลักษณ์"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1419
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1471
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1428
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1480
 msgid "Error saving global library table."
 msgstr "ข้อผิดพลาดในการบันทึกตารางไลบรารีส่วนกลาง"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1472
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1429
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1481
 msgid "Error saving project library table."
 msgstr "ข้อผิดพลาดในการบันทึกตารางไลบรารีส่วนกลาง"
 
@@ -15058,7 +15067,7 @@ msgid "Overwrite"
 msgstr "เขียนทับ"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:556
-#: eeschema/tools/symbol_editor_control.cpp:513
+#: eeschema/tools/symbol_editor_control.cpp:517
 msgid "No schematic currently open."
 msgstr "ไม่มีวงจรเปิดอยู่ในขณะนี้"
 
@@ -15066,7 +15075,7 @@ msgstr "ไม่มีวงจรเปิดอยู่ในขณะนี
 #: eeschema/symbol_editor/symbol_editor.cpp:1176
 #: eeschema/tools/symbol_editor_control.cpp:170
 #: eeschema/tools/symbol_editor_control.cpp:240
-#: eeschema/tools/symbol_editor_control.cpp:272
+#: eeschema/tools/symbol_editor_control.cpp:276
 #, c-format
 msgid "Symbol library '%s' is not writable."
 msgstr "ไลบรารีสัญลักษณ์ '%s' ไม่สามารถบันทึก"
@@ -15181,7 +15190,7 @@ msgstr "ไม่ได้กําหนด!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1228
 #: eeschema/symbol_viewer_frame.cpp:367 pcbnew/fp_shape.cpp:421
-#: pcbnew/fp_text.cpp:501 pcbnew/pad.cpp:1755
+#: pcbnew/fp_text.cpp:501 pcbnew/pad.cpp:1753
 msgid "Parent"
 msgstr "ต้นกำเนิด"
 
@@ -16444,12 +16453,12 @@ msgstr "ไม่ได้กำหนดดาต้าชีต"
 
 #: eeschema/tools/ee_selection_tool.cpp:1629
 #: pagelayout_editor/tools/pl_selection_tool.cpp:623
-#: pcbnew/tools/pcb_selection_tool.cpp:1876
+#: pcbnew/tools/pcb_selection_tool.cpp:1873
 msgid "Select &All\tA"
 msgstr "เลือกทั้งหมด(&A)\tA"
 
 #: eeschema/tools/ee_selection_tool.cpp:1632
-#: pcbnew/tools/pcb_selection_tool.cpp:1879
+#: pcbnew/tools/pcb_selection_tool.cpp:1876
 msgid "&Expand Selection\tE"
 msgstr "ขยายการเลือก(&E)\tE"
 
@@ -16531,43 +16540,43 @@ msgstr "ป้อนหมายเลขหน้าสำหรับเส้
 msgid "Edit Sheet Page Number"
 msgstr "แก้ไขหมายเลขหน้าแผ่นชีต"
 
-#: eeschema/tools/sch_editor_control.cpp:529
+#: eeschema/tools/sch_editor_control.cpp:530
 msgid "Reached end of schematic."
 msgstr "ถึงจุดสิ้นสุดของวงจร"
 
-#: eeschema/tools/sch_editor_control.cpp:530
+#: eeschema/tools/sch_editor_control.cpp:531
 msgid "Reached end of sheet."
 msgstr "ถึงจุดสิ้นสุดของแผ่นชีต"
 
-#: eeschema/tools/sch_editor_control.cpp:534
+#: eeschema/tools/sch_editor_control.cpp:535
 msgid "Find again to wrap around to the start."
 msgstr "ค้นหาอีกครั้งเพื่อย้อนกลับไปเริ่มต้นใหม่"
 
-#: eeschema/tools/sch_editor_control.cpp:987
+#: eeschema/tools/sch_editor_control.cpp:988
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "ข้อผิดพลาด: พบชื่อแผ่นงานย่อยที่ซ้ำกันในแผ่นงานปัจจุบัน"
 
-#: eeschema/tools/sch_editor_control.cpp:1078
+#: eeschema/tools/sch_editor_control.cpp:1079
 msgid "Net must be labeled to assign a netclass."
 msgstr "เน็ตต้องมีป้ายกำกับเพื่อกำหนดเน็ตคลาส"
 
-#: eeschema/tools/sch_editor_control.cpp:1084
+#: eeschema/tools/sch_editor_control.cpp:1085
 msgid "Bus has no members to assign netclass to."
 msgstr "บัสไม่มีสมาชิกที่จะกำหนดเน็ตคลาส"
 
-#: eeschema/tools/sch_editor_control.cpp:1117
+#: eeschema/tools/sch_editor_control.cpp:1118
 msgid "Netclasses"
 msgstr "เน็ตคลาส"
 
-#: eeschema/tools/sch_editor_control.cpp:1130
+#: eeschema/tools/sch_editor_control.cpp:1131
 msgid "Assign Netclass"
 msgstr "กำหนดเน็ตคลาส"
 
-#: eeschema/tools/sch_editor_control.cpp:1131
+#: eeschema/tools/sch_editor_control.cpp:1132
 msgid "Select netclass:"
 msgstr "เลือกเน็ตคลาส:"
 
-#: eeschema/tools/sch_editor_control.cpp:1731
+#: eeschema/tools/sch_editor_control.cpp:1732
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -16577,21 +16586,21 @@ msgstr ""
 "แผ่นชีตที่วางสำเนา '%s'\n"
 "ถูกหลุดเนื่องจากปลายทางมีแผ่นงานหรือแผ่นงานย่อยเป็นต้นกำเนิดอยู่แล้ว"
 
-#: eeschema/tools/sch_editor_control.cpp:2254
+#: eeschema/tools/sch_editor_control.cpp:2255
 #: pcbnew/tools/board_editor_control.cpp:630
 #: pcbnew/tools/footprint_editor_control.cpp:574
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d แทนที่ไอดีซ้ำกัน\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2261
+#: eeschema/tools/sch_editor_control.cpp:2262
 #: pcbnew/tools/board_editor_control.cpp:645
 #: pcbnew/tools/footprint_editor_control.cpp:589
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d ปัญหาที่อาจเกิดขึ้นได้รับการแก้ไขแล้ว"
 
-#: eeschema/tools/sch_editor_control.cpp:2268
+#: eeschema/tools/sch_editor_control.cpp:2269
 #: pcbnew/drc/drc_rule_parser.cpp:164
 msgid "No errors found."
 msgstr "ไม่พบข้อผิดพลาด"
@@ -16621,21 +16630,21 @@ msgstr "กด <ESC> เพื่อยกเลิกการย้าย"
 msgid "No symbol library selected."
 msgstr "ไม่ได้เลือกไลบรารีสัญลักษณ์"
 
-#: eeschema/tools/symbol_editor_control.cpp:393
-#: eeschema/tools/symbol_editor_control.cpp:433
+#: eeschema/tools/symbol_editor_control.cpp:397
+#: eeschema/tools/symbol_editor_control.cpp:437
 msgid "No symbol to export"
 msgstr "ไม่มีสัญลักษณ์ที่จะส่งออก"
 
-#: eeschema/tools/symbol_editor_control.cpp:404
+#: eeschema/tools/symbol_editor_control.cpp:408
 msgid "Image File Name"
 msgstr "ชื่อไฟล์ภาพ"
 
-#: eeschema/tools/symbol_editor_control.cpp:415
+#: eeschema/tools/symbol_editor_control.cpp:419
 #, c-format
 msgid "Can't save file '%s'."
 msgstr "ไม่สามารถบันทึกไฟล์ '%s'"
 
-#: eeschema/tools/symbol_editor_control.cpp:443
+#: eeschema/tools/symbol_editor_control.cpp:447
 msgid "SVG File Name"
 msgstr "ชื่อไฟล์ SVG"
 
@@ -16833,8 +16842,8 @@ msgstr "เลือกเลเยอร์: %s"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:112
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:54
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:47
-#: pcbnew/footprint.cpp:2378 pcbnew/footprint.cpp:2381 pcbnew/fp_text.cpp:294
-#: pcbnew/fp_text_grid_table.cpp:109 pcbnew/pad.cpp:931
+#: pcbnew/footprint.cpp:2358 pcbnew/footprint.cpp:2361 pcbnew/fp_text.cpp:294
+#: pcbnew/fp_text_grid_table.cpp:109 pcbnew/pad.cpp:929
 #: pcbnew/pcb_dimension.cpp:353 pcbnew/pcb_dimension.cpp:1087
 #: pcbnew/pcb_shape.cpp:159 pcbnew/pcb_target.cpp:155 pcbnew/pcb_text.cpp:120
 #: pcbnew/pcb_track.cpp:679 pcbnew/pcb_track.cpp:738 pcbnew/pcb_track.cpp:1173
@@ -18784,8 +18793,8 @@ msgid "Application failed to load:\n"
 msgstr "ไม่สามารถโหลดแอปพลิเคชัน:\n"
 
 #: kicad/tools/kicad_manager_control.cpp:668
-#: kicad/tools/kicad_manager_control.cpp:675 pcbnew/pcb_edit_frame.cpp:1569
-#: pcbnew/pcb_edit_frame.cpp:1599
+#: kicad/tools/kicad_manager_control.cpp:675 pcbnew/pcb_edit_frame.cpp:1571
+#: pcbnew/pcb_edit_frame.cpp:1601
 msgid "KiCad Error"
 msgstr "KiCad ผิดพลาด"
 
@@ -19036,7 +19045,7 @@ msgid "Item Properties"
 msgstr "คุณสมบัติชิ้นส่วน"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:420
-#: pcbnew/footprint_edit_frame.cpp:1003
+#: pcbnew/footprint_edit_frame.cpp:1005
 msgid "Default Values"
 msgstr "ค่าปริยาย"
 
@@ -20804,7 +20813,7 @@ msgstr "ตำแหน่ง Y"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:101
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:80
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:46
-#: pcbnew/footprint.cpp:963 pcbnew/fp_text.cpp:289 pcbnew/pad.cpp:927
+#: pcbnew/footprint.cpp:963 pcbnew/fp_text.cpp:289 pcbnew/pad.cpp:925
 #: pcbnew/pcb_dimension.cpp:351 pcbnew/pcb_group.cpp:339
 #: pcbnew/pcb_shape.cpp:155 pcbnew/pcb_text.cpp:118 pcbnew/pcb_track.cpp:787
 #: pcbnew/zone.cpp:601
@@ -21274,43 +21283,43 @@ msgstr "%s ขา %s ไม่พบ"
 msgid "Selecting all from sheet \"%s\""
 msgstr "เลือกทั้งหมดจากชีต \"%s\""
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:89
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:85
 msgid "Only front"
 msgstr "ด้านหน้าเท่านั้น"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:90
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:86
 msgid "Only back"
 msgstr "ด้านหลังเท่านั้น"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:91
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:87
 msgid "Only selected"
 msgstr "เลือกเท่านั้น"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:97
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:93
 msgid "Empty"
 msgstr "ว่างเปล่า"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:98
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:94
 msgid "Invalid"
 msgstr "ไม่ถูกต้อง"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:99
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:95
 msgid "Excluded"
 msgstr "ไม่รวม"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:114
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:110
 msgid "Reannotate PCB"
 msgstr "ทำอธิบายประกอบพีซีบีอีกครั้ง"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:285
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:277
 msgid "No PCB to reannotate!"
 msgstr "ไม่มีพีซีบีทำอธิบายประกอบใหม่!"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:297
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:289
 msgid "PCB successfully reannotated"
 msgstr "ทำหมายเหตุประกอบพีซีบีเรียบร้อยแล้ว"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:298
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:290
 msgid ""
 "PCB annotation changes should be synchronized with schematic using the "
 "\"Update Schematic from PCB\" tool."
@@ -21318,7 +21327,7 @@ msgstr ""
 "การเปลี่ยนแปลงคำอธิบายประกอบพีซีบี ควรสอดคล้องกับวงจร โดยใช้เครื่องมือ \"อัปเดตวงจรจากพีซีบี"
 "\""
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:313
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:305
 #, c-format
 msgid ""
 "\n"
@@ -21327,7 +21336,7 @@ msgstr ""
 "\n"
 "%s ฟุ้ทพรินท์จะถูกทำอธิบายประกอบอีกครั้ง"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:318
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:310
 #, c-format
 msgid ""
 "\n"
@@ -21336,7 +21345,7 @@ msgstr ""
 "\n"
 "การอ้างอิงประเภทใด %s จะไม่ถูกใส่ทำอธิบายประกอบ"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:323
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:315
 msgid ""
 "\n"
 "Locked footprints will not be annotated"
@@ -21344,7 +21353,7 @@ msgstr ""
 "\n"
 "ฟุ้ทพรินท์ที่ล็อคจะไม่ใส่คําอธิบายประกอบ"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:327
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:319
 #, c-format
 msgid ""
 "\n"
@@ -21353,7 +21362,7 @@ msgstr ""
 "\n"
 "ฟุ้ทพรินท์ด้านหน้าจะเริ่มที่ %s"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:336
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:328
 #, c-format
 msgid ""
 "\n"
@@ -21362,11 +21371,11 @@ msgstr ""
 "\n"
 "ฟุ้ทพรินท์ด้านหลังจะเริ่มที่ %s"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:337
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:329
 msgid "the last front footprint + 1"
 msgstr "ฟุ้ทพรินท์ด้านหน้าสุดท้าย + 1"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:345
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:337
 #, c-format
 msgid ""
 "\n"
@@ -21375,7 +21384,7 @@ msgstr ""
 "\n"
 "ฟุ้ทพรินท์ด้านหน้าขึ้นต้นด้วย '%s' จะถูกลบคำนำหน้าออก"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:351
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:343
 #, c-format
 msgid ""
 "\n"
@@ -21384,7 +21393,7 @@ msgstr ""
 "\n"
 "ฟุ้ทพรินท์ด้านหน้าจะมี '%s' เป็นคำนำหน้า"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:361
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:353
 #, c-format
 msgid ""
 "\n"
@@ -21393,7 +21402,7 @@ msgstr ""
 "\n"
 "ฟุ้ทพรินท์ด้านหลังที่เริ่มด้วย '%s' จะลบคํานําหน้าออก"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:367
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:359
 #, c-format
 msgid ""
 "\n"
@@ -21402,7 +21411,7 @@ msgstr ""
 "\n"
 "ฟุ้ทพรินท์ด้านหลังจะมี '%s' เป็นคำนำหน้า"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:375
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:367
 #, c-format
 msgid ""
 "\n"
@@ -21412,15 +21421,15 @@ msgstr ""
 "\n"
 "ก่อนที่จะเรียงลำดับตาม %s พิกัดจะถูกปัดเศษเป็น %s, %s ตาราง"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:377
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:369
 msgid "footprint location"
 msgstr "ที่ตั้งฟุ้ทพรินท์"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:378
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:370
 msgid "reference designator location"
 msgstr "ตำแหน่งอักษรอ้างอิง"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:520
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:510
 #, c-format
 msgid ""
 "\n"
@@ -21433,7 +21442,7 @@ msgstr ""
 "มีประเภทอักษรอ้างอิงจำนวน %i ชนิด\n"
 "******************************************************** ********\n"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:534
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:524
 #, c-format
 msgid ""
 "\n"
@@ -21444,7 +21453,7 @@ msgstr ""
 "ไม่รวม: %s จากการทำซ้ำอธิบายประกอบ\n"
 "\n"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:537
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:527
 msgid ""
 "\n"
 "    Change Array\n"
@@ -21454,11 +21463,11 @@ msgstr ""
 "    เปลี่ยนอาร์เรย์\n"
 "*****************************\n"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:545
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:535
 msgid " will be ignored"
 msgstr " จะถูกละเลย"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:559
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:549
 msgid ""
 "\n"
 "No footprints"
@@ -21466,7 +21475,7 @@ msgstr ""
 "\n"
 "ไม่มีฟุ้ทพรินท์"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:565
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:555
 #, c-format
 msgid ""
 "\n"
@@ -21475,15 +21484,15 @@ msgstr ""
 "\n"
 "*********** เรียงตาม %s ***********"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:566
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:556
 msgid "Footprint Coordinates"
 msgstr "พิกัดฟุ้ทพรินท์"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:567
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:557
 msgid "Reference Designator Coordinates"
 msgstr "พิกัดอักษรอ้างอิง"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:569
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:559
 #, c-format
 msgid ""
 "\n"
@@ -21492,7 +21501,7 @@ msgstr ""
 "\n"
 "เรียงรหัส %d"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:573
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:563
 #, c-format
 msgid ""
 "\n"
@@ -21501,11 +21510,11 @@ msgstr ""
 "\n"
 "%d %s UUID: [%s], X, Y: %s, X โค้งมน, Y, %s"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:596
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:586
 msgid "Selected options resulted in errors! Change them and try again."
 msgstr "ทางเลือกทำให้เกิดข้อผิดพลาด เปลี่ยนเหล่านั้นและลองอีกครั้ง"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:603
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:593
 #, c-format
 msgid ""
 "\n"
@@ -21517,7 +21526,7 @@ msgstr ""
 "พีซีบีมีอักษรอ้างอิงว่างเปล่า %d ตัว หรือมีค่ากำหนดไม่ถูกต้อง\n"
 "แนะนำให้เรียกใช้ DRC โดยเลือก 'ทดสอบฟุ้ทพรินท์กับวงจร' อีกครั้ง\n"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:610
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:600
 #, c-format
 msgid ""
 "\n"
@@ -21526,20 +21535,20 @@ msgstr ""
 "\n"
 "RefDes: %s Footprint: %s: %s ที่ %s บนพีซีบี"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:618
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:608
 msgid "Reannotate anyway?"
 msgstr "ทำอธิบายประกอบซ้ำ?"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:802
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:790
 #, c-format
 msgid "Duplicate instances of %s"
 msgstr "ชิ้นส่วนซ้ำของ %s"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:807
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:796
 msgid "Aborted: too many errors"
 msgstr "ยกเลิก: มีข้อผิดพลาดมากเกินไป"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:861
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:850
 msgid ""
 "\n"
 "\n"
@@ -21549,7 +21558,7 @@ msgstr ""
 "\n"
 "ฟุ้ทพรินท์ด้านหน้า"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:862
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:851
 msgid ""
 "\n"
 "\n"
@@ -21559,7 +21568,7 @@ msgstr ""
 "\n"
 "ฟุ้ทพรินท์ด้านหลัง"
 
-#: pcbnew/dialogs/dialog_board_reannotate.cpp:927
+#: pcbnew/dialogs/dialog_board_reannotate.cpp:916
 msgid "Footprint not found in changelist"
 msgstr "ไม่พบฟุ้ทพรินท์ในรายการการเปลี่ยนแปลง"
 
@@ -21807,7 +21816,7 @@ msgstr "ขนาดที่กําหนดไว้ล่วงหน้า
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:108
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:54
-#: pcbnew/dialogs/dialog_drc.cpp:193 pcbnew/pcb_edit_frame.cpp:1755
+#: pcbnew/dialogs/dialog_drc.cpp:193 pcbnew/pcb_edit_frame.cpp:1757
 msgid "Custom Rules"
 msgstr "กฎที่กำหนดเอง"
 
@@ -21924,11 +21933,11 @@ msgstr "???"
 msgid "N/A"
 msgstr "ไม่มี"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:508 pcbnew/pad.cpp:1176
+#: pcbnew/dialogs/dialog_board_statistics.cpp:508 pcbnew/pad.cpp:1174
 msgid "PTH"
 msgstr "พีทีเอช"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:508 pcbnew/pad.cpp:1179
+#: pcbnew/dialogs/dialog_board_statistics.cpp:508 pcbnew/pad.cpp:1177
 msgid "NPTH"
 msgstr "ไม่พีทีเอช"
 
@@ -22916,28 +22925,28 @@ msgstr "-------- DRC ถูกยกเลิกโดยผู้ใช้<br><
 msgid "Done.<br><br>"
 msgstr "เรียบร้อย<br><br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:462
+#: pcbnew/dialogs/dialog_drc.cpp:478
 msgid "Run clearance resolution tool..."
 msgstr "เรียกใช้เครื่องมือแก้ปัญหาระยะห่าง..."
 
-#: pcbnew/dialogs/dialog_drc.cpp:489
+#: pcbnew/dialogs/dialog_drc.cpp:505
 msgid "Open the Board Setup... dialog"
 msgstr "เปิดการตั้งค่าบอร์ด... กรอบสนทนา"
 
-#: pcbnew/dialogs/dialog_drc.cpp:666
+#: pcbnew/dialogs/dialog_drc.cpp:682
 #, c-format
 msgid "Report file '%s' created<br>"
 msgstr "สร้างไฟล์รายงาน '%s' <br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:920
+#: pcbnew/dialogs/dialog_drc.cpp:936
 msgid "Do you wish to delete excluded markers as well?"
 msgstr "คุณต้องการลบเครื่องหมายที่ยกเว้นด้วยหรือไม่?"
 
-#: pcbnew/dialogs/dialog_drc.cpp:923
+#: pcbnew/dialogs/dialog_drc.cpp:939
 msgid "Delete exclusions"
 msgstr "ลบข้อยกเว้น"
 
-#: pcbnew/dialogs/dialog_drc.cpp:996
+#: pcbnew/dialogs/dialog_drc.cpp:1012
 msgid "not run"
 msgstr "ไม่ทำงาน"
 
@@ -23674,8 +23683,8 @@ msgstr "รูเจาะทะลุ"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/footprint.cpp:704
-#: pcbnew/footprint_libraries_utils.cpp:1149 pcbnew/pad.cpp:1177
-#: pcbnew/pad.cpp:1668
+#: pcbnew/footprint_libraries_utils.cpp:1149 pcbnew/pad.cpp:1175
+#: pcbnew/pad.cpp:1666
 msgid "SMD"
 msgstr "เอสเอ็มดี"
 
@@ -25252,7 +25261,7 @@ msgstr "เพิ่มดั้งเดิม"
 msgid "Pad type:"
 msgstr "ประเภทแพ็ด:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1667
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1665
 msgid "Through-hole"
 msgstr "รูเจาะทะลุ"
 
@@ -25260,8 +25269,8 @@ msgstr "รูเจาะทะลุ"
 msgid "Edge Connector"
 msgstr "ตัวเชื่อมต่อขอบบอร์ด"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1199
-#: pcbnew/pad.cpp:1222
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1197
+#: pcbnew/pad.cpp:1220
 msgid "NPTH, Mechanical"
 msgstr "NPTH, เครื่องกล"
 
@@ -25287,8 +25296,8 @@ msgid "Circular"
 msgstr "กลม"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:370 pcbnew/pad.cpp:1161
-#: pcbnew/pad.cpp:1675
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:370 pcbnew/pad.cpp:1159
+#: pcbnew/pad.cpp:1673
 msgid "Oval"
 msgstr "วงรี"
 
@@ -25300,11 +25309,11 @@ msgstr "สี่เหลี่ยม"
 msgid "Trapezoidal"
 msgstr "สี่เหลี่ยมคางหมู"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1677
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1675
 msgid "Rounded rectangle"
 msgstr "สี่เหลี่ยมผืนผ้ามุมมน"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1678
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1676
 msgid "Chamfered rectangle"
 msgstr "สี่เหลี่ยมผืนผ้าลบมุม"
 
@@ -25500,23 +25509,23 @@ msgstr ""
 "คาสเทลเลตระบุ รูเจาะทะลุชนิดคาสเทลเลตบนขอบบอร์ด\n"
 "คุณสมบัติเหล่านี้ระบุไว้ในไฟล์เกอร์เบอร์ชนิด X2"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1683
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1681
 msgid "BGA pad"
 msgstr "แพ็ด BGA"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1685
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1683
 msgid "Fiducial, local to footprint"
 msgstr "ฟิดูเชียล,เฉพาะที่ไปฟุ้ทพรินท์"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1684
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1682
 msgid "Fiducial, global to board"
 msgstr "ฟิดูเชียล,ส่วนกลางไปยังบอร์ด"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1686
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1684
 msgid "Test point pad"
 msgstr "แพ็ดจุดทดสอบ"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1687
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1685
 msgid "Heatsink pad"
 msgstr "แพ็ดระบายความร้อน"
 
@@ -28631,7 +28640,7 @@ msgstr "7"
 msgid "Size"
 msgstr "ขนาด"
 
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:99 pcbnew/pad.cpp:984
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:99 pcbnew/pad.cpp:982
 #: pcbnew/tools/board_inspection_tool.cpp:564
 msgid "Hole"
 msgstr "รูเจาะ"
@@ -29003,12 +29012,12 @@ msgstr "ชนิดฟุ้ทพรินท์ไม่ตรงกับแ
 msgid "Through hole pad has no hole"
 msgstr "แพ็ดชนิดเจาะทะลุไม่มีรูเจาะ"
 
-#: pcbnew/drc/drc_item.cpp:334
+#: pcbnew/drc/drc_item.cpp:358
 #, c-format
 msgid "Rule: %s"
 msgstr "กฎ:%s"
 
-#: pcbnew/drc/drc_item.cpp:336
+#: pcbnew/drc/drc_item.cpp:360
 msgid "Local override"
 msgstr "การทับค่าเฉพาะที่"
 
@@ -29212,17 +29221,17 @@ msgstr "DPs ประเมิน:"
 msgid "(%s maximum uncoupled length: %s; actual: %s)"
 msgstr "(%s ความยาวสูงสุดที่ไม่ได้ปะติดปะต่อกัน: %s; ค่าจริง: %s)"
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:497
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:503
 #, c-format
 msgid "minimum gap: %s; "
 msgstr "ช่องว่างต่ําสุด: %s; "
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:501
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:507
 #, c-format
 msgid "maximum gap: %s; "
 msgstr "ช่องว่างสูงสุด: %s; "
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:504
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:510
 #, c-format
 msgid "actual: %s)"
 msgstr "ค่าจริง: %s)"
@@ -29412,17 +29421,17 @@ msgid "They have been exported as oval pads."
 msgstr "ทั้งหมดส่งออกเป็นแพ็ดรูปวงรี"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:307
-#: pcbnew/exporters/export_vrml.cpp:577
+#: pcbnew/exporters/export_vrml.cpp:580
 #: pcbnew/specctra_import_export/specctra_export.cpp:134
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr "เค้าโครงบอร์ดผิดรูปแบบ สั่ง DRC สำหรับการวิเคราะห์สมบูรณ์แบบ"
 
 #: pcbnew/exporters/export_idf.cpp:640 pcbnew/exporters/export_idf.cpp:649
-#: pcbnew/exporters/export_idf.cpp:657 pcbnew/exporters/export_vrml.cpp:1040
+#: pcbnew/exporters/export_idf.cpp:657 pcbnew/exporters/export_vrml.cpp:1050
 msgid "IDF Export Failed:\n"
 msgstr "การส่งออก IDF ล้มเหลว:\n"
 
-#: pcbnew/exporters/export_vrml.cpp:606
+#: pcbnew/exporters/export_vrml.cpp:609
 msgid "VRML Export Failed: Could not add holes to contours."
 msgstr "การส่งออก VRML ล้มเหลว: ไม่สามารถเพิ่มรูให้กับเส้นขอบ"
 
@@ -29730,23 +29739,23 @@ msgstr "คาดหวังชนิด \"อื่นๆ\" แต่ตั้
 msgid "(pad \"%s\")"
 msgstr "(แพ็ด \"%s\")"
 
-#: pcbnew/footprint.cpp:2390 pcbnew/pad.cpp:1752 pcbnew/zone.cpp:1458
+#: pcbnew/footprint.cpp:2370 pcbnew/pad.cpp:1750 pcbnew/zone.cpp:1458
 msgid "Clearance Override"
 msgstr "การทับค่าระยะห่าง"
 
-#: pcbnew/footprint.cpp:2393 pcbnew/pad.cpp:1729
+#: pcbnew/footprint.cpp:2373 pcbnew/pad.cpp:1727
 msgid "Solderpaste Margin Override"
 msgstr "ทับค่าขอบโซลเดอร์เพสต์"
 
-#: pcbnew/footprint.cpp:2397 pcbnew/pad.cpp:1732
+#: pcbnew/footprint.cpp:2377 pcbnew/pad.cpp:1730
 msgid "Solderpaste Margin Ratio Override"
 msgstr "ทับค่าอัตราส่วนโซลเดอร์เพสต์"
 
-#: pcbnew/footprint.cpp:2400 pcbnew/pad.cpp:1734 pcbnew/zone.cpp:1469
+#: pcbnew/footprint.cpp:2380 pcbnew/pad.cpp:1732 pcbnew/zone.cpp:1469
 msgid "Thermal Relief Width"
 msgstr "ความกว้างของบรรเทาความร้อน"
 
-#: pcbnew/footprint.cpp:2404 pcbnew/pad.cpp:1737 pcbnew/zone.cpp:1466
+#: pcbnew/footprint.cpp:2384 pcbnew/pad.cpp:1735 pcbnew/zone.cpp:1466
 msgid "Thermal Relief Gap"
 msgstr "ช่องว่างบรรเทาความร้อน"
 
@@ -29776,24 +29785,24 @@ msgstr "การเปลี่ยนแปลงฟุ้ทพรินท์
 msgid "Editing %s from board.  Saving will update the board only."
 msgstr "แก้ไข %s จากบอร์ด  การบันทึกจะอัปเดตบอร์ดเท่านั้น"
 
-#: pcbnew/footprint_edit_frame.cpp:840
+#: pcbnew/footprint_edit_frame.cpp:842
 #, c-format
 msgid "[from %s]"
 msgstr "[จาก %s]"
 
-#: pcbnew/footprint_edit_frame.cpp:875
+#: pcbnew/footprint_edit_frame.cpp:877
 msgid "[no footprint loaded]"
 msgstr "[ไม่โหลดฟุ้ทพรินท์]"
 
-#: pcbnew/footprint_edit_frame.cpp:931
+#: pcbnew/footprint_edit_frame.cpp:933
 msgid "Updating Footprint Libraries"
 msgstr "การปรับปรุงไลบรารีฟุ้ทพรินท์"
 
-#: pcbnew/footprint_edit_frame.cpp:1228
+#: pcbnew/footprint_edit_frame.cpp:1230
 msgid "No footprint selected."
 msgstr "ไม่เลือกฟุ้ทพรินท์"
 
-#: pcbnew/footprint_edit_frame.cpp:1237
+#: pcbnew/footprint_edit_frame.cpp:1239
 msgid "Footprint Image File Name"
 msgstr "ชื่อไฟล์ภาพฟุ้ทพรินท์"
 
@@ -30193,11 +30202,15 @@ msgstr "หน่วยปริยาย:"
 msgid "Import Vector Graphics File"
 msgstr "นำเข้าไฟล์กราฟิกเวกเตอร์"
 
-#: pcbnew/import_gfx/dxf_import_plugin.cpp:1366
+#: pcbnew/import_gfx/dxf_import_plugin.cpp:133
+msgid "Memory was exhausted trying to load the DXF, it may be too large."
+msgstr ""
+
+#: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
 msgstr "พบข้อกําหนดแบบเส้นดีที่ไม่ถูกต้อง"
 
-#: pcbnew/import_gfx/dxf_import_plugin.cpp:1373
+#: pcbnew/import_gfx/dxf_import_plugin.cpp:1387
 msgid "Invalid Bezier curve created"
 msgstr "สร้างเส้นโค้งเบซิเยร์ไม่ถูกต้อง"
 
@@ -30824,164 +30837,164 @@ msgstr ""
 "ไฟล์: '%s'\n"
 "บรรทัด: %d"
 
-#: pcbnew/pad.cpp:740 pcbnew/pad.cpp:855 pcbnew/pad.cpp:875 pcbnew/pad.cpp:894
+#: pcbnew/pad.cpp:738 pcbnew/pad.cpp:853 pcbnew/pad.cpp:873 pcbnew/pad.cpp:892
 msgid "pad"
 msgstr "แพ็ด"
 
-#: pcbnew/pad.cpp:848 pcbnew/pad.cpp:869 pcbnew/pad.cpp:888
+#: pcbnew/pad.cpp:846 pcbnew/pad.cpp:867 pcbnew/pad.cpp:886
 msgid "parent footprint"
 msgstr "ฟุ้ทพรินท์ต้นกำเนิด"
 
-#: pcbnew/pad.cpp:915 pcbnew/pad.cpp:1704
+#: pcbnew/pad.cpp:913 pcbnew/pad.cpp:1702
 msgid "Pin Name"
 msgstr "ชื่อขา"
 
-#: pcbnew/pad.cpp:918 pcbnew/pad.cpp:1706
+#: pcbnew/pad.cpp:916 pcbnew/pad.cpp:1704
 msgid "Pin Type"
 msgstr "ประเภทขา"
 
-#: pcbnew/pad.cpp:942
+#: pcbnew/pad.cpp:940
 msgid "BGA"
 msgstr "BGA"
 
-#: pcbnew/pad.cpp:943
+#: pcbnew/pad.cpp:941
 msgid "Fiducial global"
 msgstr "ฟิดิคูเชียลส่วนกลาง"
 
-#: pcbnew/pad.cpp:944
+#: pcbnew/pad.cpp:942
 msgid "Fiducial local"
 msgstr "ฟิดูเชียลเฉพาะที่"
 
-#: pcbnew/pad.cpp:945
+#: pcbnew/pad.cpp:943
 msgid "Test point"
 msgstr "จุดทดสอบ"
 
-#: pcbnew/pad.cpp:946
+#: pcbnew/pad.cpp:944
 msgid "Heat sink"
 msgstr "ครีบระบายความร้อน"
 
-#: pcbnew/pad.cpp:947
+#: pcbnew/pad.cpp:945
 msgid "Castellated"
 msgstr "คาสเทลเลต"
 
-#: pcbnew/pad.cpp:955 pcbnew/pcb_track.cpp:742 pcbnew/pcb_track.cpp:1169
+#: pcbnew/pad.cpp:953 pcbnew/pcb_track.cpp:742 pcbnew/pcb_track.cpp:1169
 msgid "Diameter"
 msgstr "เส้นผ่าศูนย์กลาง"
 
-#: pcbnew/pad.cpp:977
+#: pcbnew/pad.cpp:975
 msgid "Length in Package"
 msgstr "ความยาวในแพ็คเกจ"
 
-#: pcbnew/pad.cpp:990
+#: pcbnew/pad.cpp:988
 msgid "Hole X / Y"
 msgstr "รูเจาะ X / Y"
 
-#: pcbnew/pad.cpp:1002 pcbnew/pcb_track.cpp:715 pcbnew/pcb_track.cpp:751
+#: pcbnew/pad.cpp:1000 pcbnew/pcb_track.cpp:715 pcbnew/pcb_track.cpp:751
 #: pcbnew/router/router_tool.cpp:2141 pcbnew/zone.cpp:640
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "ระยะห่างขั้นต่ํา: %s"
 
-#: pcbnew/pad.cpp:1004 pcbnew/pcb_track.cpp:717 pcbnew/pcb_track.cpp:753
+#: pcbnew/pad.cpp:1002 pcbnew/pcb_track.cpp:717 pcbnew/pcb_track.cpp:753
 #: pcbnew/pcb_track.cpp:759 pcbnew/router/router_tool.cpp:2129
 #: pcbnew/router/router_tool.cpp:2143 pcbnew/zone.cpp:642
 #, c-format
 msgid "(from %s)"
 msgstr "(จาก %s)"
 
-#: pcbnew/pad.cpp:1163
+#: pcbnew/pad.cpp:1161
 msgid "Trap"
 msgstr "กับดัก"
 
-#: pcbnew/pad.cpp:1164
+#: pcbnew/pad.cpp:1162
 msgid "Roundrect"
 msgstr "Roundrect"
 
-#: pcbnew/pad.cpp:1165
+#: pcbnew/pad.cpp:1163
 msgid "Chamferedrect"
 msgstr "Chamferedrect"
 
-#: pcbnew/pad.cpp:1166
+#: pcbnew/pad.cpp:1164
 msgid "CustomShape"
 msgstr "รูปร่างกําหนดเอง"
 
-#: pcbnew/pad.cpp:1178
+#: pcbnew/pad.cpp:1176
 msgid "Conn"
 msgstr "Conn"
 
-#: pcbnew/pad.cpp:1191
+#: pcbnew/pad.cpp:1189
 #, c-format
 msgid "Pad %s of %s on %s"
 msgstr "แพ็ด %s ของ %s บน %s"
 
-#: pcbnew/pad.cpp:1198 pcbnew/pad.cpp:1204 pcbnew/pad.cpp:1221
+#: pcbnew/pad.cpp:1196 pcbnew/pad.cpp:1202 pcbnew/pad.cpp:1219
 #, c-format
 msgid "Through hole pad %s of %s"
 msgstr "แพ็ดรูเจาะทะลุ %s ของ %s"
 
-#: pcbnew/pad.cpp:1213
+#: pcbnew/pad.cpp:1211
 #, c-format
 msgid "Pad %s %s of %s on %s"
 msgstr "แพ็ด %s %s ของ %s บน %s"
 
-#: pcbnew/pad.cpp:1227
+#: pcbnew/pad.cpp:1225
 #, c-format
 msgid "Through hole pad %s %s of %s"
 msgstr "แพ็ดรูเจาะทะลุ %s %s ของ %s"
 
-#: pcbnew/pad.cpp:1669
+#: pcbnew/pad.cpp:1667
 msgid "Edge connector"
 msgstr "คอนเน็กเตอร์ริมขอบ"
 
-#: pcbnew/pad.cpp:1670
+#: pcbnew/pad.cpp:1668
 msgid "NPTH, mechanical"
 msgstr "NPTH, แมคคานิคคัล"
 
-#: pcbnew/pad.cpp:1676
+#: pcbnew/pad.cpp:1674
 msgid "Trapezoid"
 msgstr "สี่เหลี่ยมคางหมู"
 
-#: pcbnew/pad.cpp:1688
+#: pcbnew/pad.cpp:1686
 msgid "Castellated pad"
 msgstr "แพ็ดคาสเทลเลต"
 
-#: pcbnew/pad.cpp:1694
+#: pcbnew/pad.cpp:1692
 msgid "Pad Type"
 msgstr "ประเภทแพ็ด"
 
-#: pcbnew/pad.cpp:1702
+#: pcbnew/pad.cpp:1700
 msgid "Pad Number"
 msgstr "หมายเลขแพ็ด"
 
-#: pcbnew/pad.cpp:1711
+#: pcbnew/pad.cpp:1709
 msgid "Size X"
 msgstr "ขนาด X"
 
-#: pcbnew/pad.cpp:1714
+#: pcbnew/pad.cpp:1712
 msgid "Size Y"
 msgstr "ขนาด Y"
 
-#: pcbnew/pad.cpp:1717
+#: pcbnew/pad.cpp:1715
 msgid "Hole Size X"
 msgstr "ขนาดรู X"
 
-#: pcbnew/pad.cpp:1720
+#: pcbnew/pad.cpp:1718
 msgid "Hole Size Y"
 msgstr "ขนาดรู Y"
 
-#: pcbnew/pad.cpp:1723 pcbnew/pcb_track.cpp:705
+#: pcbnew/pad.cpp:1721 pcbnew/pcb_track.cpp:705
 msgid "Pad To Die Length"
 msgstr "ความยาวจากแพ็ดไปยังชิ้นดาย"
 
-#: pcbnew/pad.cpp:1726
+#: pcbnew/pad.cpp:1724
 msgid "Soldermask Margin Override"
 msgstr "ทับค่าขอบเขตโซลเดอร์มาส์ก"
 
-#: pcbnew/pad.cpp:1740
+#: pcbnew/pad.cpp:1738
 msgid "Fabrication Property"
 msgstr "คุณสมบัติการผลิต"
 
-#: pcbnew/pad.cpp:1743
+#: pcbnew/pad.cpp:1741
 msgid "Round Radius Ratio"
 msgstr "อัตราส่วนรัศมีกลม"
 
@@ -31031,11 +31044,11 @@ msgstr "ไฟล์บอร์ดอ่านอย่างเดียวเ
 msgid "PCB file changes are unsaved"
 msgstr "การเปลี่ยนแปลงไฟล์พีซีบีไม่ได้รับการบันทึก"
 
-#: pcbnew/pcb_edit_frame.cpp:1484
+#: pcbnew/pcb_edit_frame.cpp:1486
 msgid "The schematic for this board cannot be found."
 msgstr "ไม่พบแผนวงจรสำหรับบอร์ดนี้"
 
-#: pcbnew/pcb_edit_frame.cpp:1508
+#: pcbnew/pcb_edit_frame.cpp:1510
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
@@ -31044,11 +31057,11 @@ msgstr ""
 "ไม่สามารถปรับปรุงพีซีบี เนื่องจากตัวแก้ไขพีซีบีถูกเปิดในโหมดโดดเดี่ยว ในการสร้างหรืออัปเดตพีซีบี "
 "จากวงจรคุณต้องเปิดตัวจัดการโครงการ KiCad และสร้างโปรเจ็ก"
 
-#: pcbnew/pcb_edit_frame.cpp:1530
+#: pcbnew/pcb_edit_frame.cpp:1532
 msgid "Eeschema netlist"
 msgstr "รายชื่อเน็ตของ Eeschema"
 
-#: pcbnew/pcb_edit_frame.cpp:1541
+#: pcbnew/pcb_edit_frame.cpp:1543
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
@@ -31056,31 +31069,31 @@ msgstr ""
 "ได้รับแจ้งข้อผิดพลาดระหว่างอ่านรายชื่อเน็ต   กรุณารายงานปัญหานี้แก่ทีมงาน KiCad โดยใช้เมนู "
 "ช่วยเหลือ->รายงานข้อผิดพลาด"
 
-#: pcbnew/pcb_edit_frame.cpp:1568
+#: pcbnew/pcb_edit_frame.cpp:1570
 #, c-format
 msgid "Schematic file '%s' not found."
 msgstr "ไฟล์วงจร '%s' หาไม่พบ"
 
-#: pcbnew/pcb_edit_frame.cpp:1598
+#: pcbnew/pcb_edit_frame.cpp:1600
 msgid "Eeschema failed to load."
 msgstr "Eeschema ไม่สามารถโหลด"
 
-#: pcbnew/pcb_edit_frame.cpp:1749
+#: pcbnew/pcb_edit_frame.cpp:1751
 msgid "Edit design rules"
 msgstr "แก้ไขกฏการออกแบบ"
 
-#: pcbnew/pcb_edit_frame.cpp:1761
+#: pcbnew/pcb_edit_frame.cpp:1763
 msgid "Could not compile custom design rules."
 msgstr "ไม่สามารถรวบรวมกฎการออกแบบที่กำหนดเอง"
 
-#: pcbnew/pcb_edit_frame.cpp:1796
+#: pcbnew/pcb_edit_frame.cpp:1798
 msgid "Export Hyperlynx Layout"
 msgstr "ส่งออกเค้าโครงไฮเปอร์ลินซ์"
 
 #: pcbnew/pcb_expr_evaluator.cpp:95 pcbnew/pcb_expr_evaluator.cpp:255
 #: pcbnew/pcb_expr_evaluator.cpp:321 pcbnew/pcb_expr_evaluator.cpp:387
 #: pcbnew/pcb_expr_evaluator.cpp:607 pcbnew/pcb_expr_evaluator.cpp:709
-#: pcbnew/pcb_expr_evaluator.cpp:817
+#: pcbnew/pcb_expr_evaluator.cpp:824
 #, c-format
 msgid "Missing argument to '%s'"
 msgstr "ไม่มีอาร์กิวเมนต์สำหรับ '%s'"
@@ -31102,7 +31115,7 @@ msgstr "ฟุ้ทพรินท์ไม่มีลานสนามด้
 msgid "Footprint has no back courtyard."
 msgstr "ฟุ้ทพรินท์ไม่มีลานสนามด้านหลัง"
 
-#: pcbnew/pcb_expr_evaluator.cpp:1146
+#: pcbnew/pcb_expr_evaluator.cpp:1153
 msgid "must be mm, in, or mil"
 msgstr "ต้องเป็น มม., นิ้ว, หรือ มิล."
 
@@ -31462,7 +31475,7 @@ msgstr "ฟุ้ทพรินท์ %s แพ็ด %s ไม่ได้ท�
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "ฟุ้ทพรินท์ %s แพ็ด %s มีรูเจาะเป็นสี่เหลี่ยม (ยังไม่รองรับ)"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2151
+#: pcbnew/plugins/altium/altium_pcb.cpp:2153
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
@@ -31484,7 +31497,7 @@ msgstr "ฟุ้ทพรินท์ %s แพ็ด %s ใช้แพ็ด�
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "ฟุ้ทพรินท์ %s แพ็ด %s ใช้รูปร่างแพ็ดที่ไม่รู้จัก"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2276
+#: pcbnew/plugins/altium/altium_pcb.cpp:2284
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -31493,41 +31506,41 @@ msgstr ""
 "แพ็ดที่ไม่ใช่ทองแดง %s พบในเลเยอร์ของ Altium (%d) KiCad ไม่มีเลเยอร์เทียบเท่า "
 "จะถูกย้ายไปยังเลเยอร์ Eco1_User"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2285
+#: pcbnew/plugins/altium/altium_pcb.cpp:2293
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr "แพ็ดที่ไม่ใช่ทองแดง %s เชื่อมต่อกับเน็ต ซึ่งยังไม่รองรับ"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2291
+#: pcbnew/plugins/altium/altium_pcb.cpp:2299
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "แพ็ดที่ไม่ใช่ทองแดง %s ไม่มีรูเจาะ ยังไม่รองรับ"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2296
+#: pcbnew/plugins/altium/altium_pcb.cpp:2304
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr "แพ็ดที่ไม่ใช่ทองแดง %s มีแพ็ดสแต็กที่ซับซ้อน (ยังไม่รองรับ)"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2450
+#: pcbnew/plugins/altium/altium_pcb.cpp:2458
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "แพ็ดที่ไม่ใช่ทองแดง %s ใช้รูปร่างที่ไม่รู้จัก"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2459
+#: pcbnew/plugins/altium/altium_pcb.cpp:2467
 msgid "Loading vias..."
 msgstr "กําลังโหลดเวีย..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2500
+#: pcbnew/plugins/altium/altium_pcb.cpp:2510
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr "เวียจากเลเยอร์ %d ไป %d ใช้เลเยอร์ไม่ใช่ทองแดง ยังไม่สนับสนุน"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2521
+#: pcbnew/plugins/altium/altium_pcb.cpp:2531
 msgid "Loading tracks..."
 msgstr "กำลังโหลดแทร็ก..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2568
+#: pcbnew/plugins/altium/altium_pcb.cpp:2578
 #, c-format
 msgid ""
 "Track keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
@@ -31536,7 +31549,7 @@ msgstr ""
 "ปิดกั้นแทร็กพบใน Altium เลเยอร์ (%d) KiCad ไม่มีเลเยอร์เทียบเท่า จะถูกย้ายไปยังเลเยอร์ "
 "Eco1_User"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2586
+#: pcbnew/plugins/altium/altium_pcb.cpp:2596
 #, c-format
 msgid ""
 "Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
@@ -31545,20 +31558,20 @@ msgstr ""
 "แทร็กพบในเลเยอร์ของ Altium (%d) ไม่มีเลเยอร์เทียบเท่าในคีแคด มันจะถูกย้ายไปยังเลเยอร์ "
 "Eco1_Userของคีแคดแทน"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2627
+#: pcbnew/plugins/altium/altium_pcb.cpp:2637
 msgid "Loading unicode strings..."
 msgstr "กําลังอ่านข้อความ..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2641
+#: pcbnew/plugins/altium/altium_pcb.cpp:2651
 msgid "Loading text..."
 msgstr "กําลังโหลดข้อความ..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2652
+#: pcbnew/plugins/altium/altium_pcb.cpp:2662
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "บาร์โค้ดถูกละเว้นบนเลเยอร์ Altium %d (ยังไม่รองรับ)"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2740
+#: pcbnew/plugins/altium/altium_pcb.cpp:2750
 #, c-format
 msgid ""
 "Text found on an Altium layer (%d) with no KiCad equivalent. It has been "
@@ -31567,11 +31580,11 @@ msgstr ""
 "ข้อความพบในเลเยอร์ของ Altium (%d) KiCad ไม่มีเลเยอร์เทียบเท่า จะถูกย้ายไปยังเลเยอร์ "
 "Eco1_User"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2826
+#: pcbnew/plugins/altium/altium_pcb.cpp:2836
 msgid "Loading rectangles..."
 msgstr "กําลังโหลดสี่เหลี่ยมผืนผ้า..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2846
+#: pcbnew/plugins/altium/altium_pcb.cpp:2856
 #, c-format
 msgid ""
 "Fill found on an Altium layer (%d) with no KiCad equivalent. It has been "
@@ -33458,19 +33471,19 @@ msgstr "ชิ้นส่วนที่อนุญาต ณ ตำแหน�
 msgid "Create from Selection"
 msgstr "สร้างขึ้นจากการเลือก"
 
-#: pcbnew/tools/convert_tool.cpp:215
+#: pcbnew/tools/convert_tool.cpp:226
 msgid "Convert shapes to polygon"
 msgstr "แปลงรูปเป็นหลายเหลี่ยม"
 
-#: pcbnew/tools/convert_tool.cpp:261
+#: pcbnew/tools/convert_tool.cpp:272
 msgid "Convert shapes to zone"
 msgstr "แปลงรูปร่างเป็นโซน"
 
-#: pcbnew/tools/convert_tool.cpp:769
+#: pcbnew/tools/convert_tool.cpp:780
 msgid "Convert polygons to lines"
 msgstr "แปลงรูปหลายเหลี่ยมเป็นลายเส้น"
 
-#: pcbnew/tools/convert_tool.cpp:857
+#: pcbnew/tools/convert_tool.cpp:868
 msgid "Create arc from line segment"
 msgstr "สร้างส่วนโค้งจากส่วนของเส้นตรง"
 
@@ -36209,6 +36222,15 @@ msgstr "แผนผังวงจร KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "แผ่นวงจรพิมพ์ KiCad"
+
+#, c-format
+#~ msgid ""
+#~ "The project library table '%s' does not exist or cannot be read.  This "
+#~ "may result in broken symbol links for the schematic.  Do you wish to "
+#~ "continue?"
+#~ msgstr ""
+#~ "ตารางไลบรารีโครงการ '%s' ไม่มีอยู่หรือไม่สามารถอ่านได้ "
+#~ "ซึ่งอาจส่งผลให้ลิงก์สัญลักษณ์สำหรับวงจรเสียหาย คุณต้องการดำเนินการต่อหรือไม่?"
 
 #~ msgid "No netlist provided, skipping LVS."
 #~ msgstr "ไม่มีรายชื่อเน็ต, ข้าม LVS"
