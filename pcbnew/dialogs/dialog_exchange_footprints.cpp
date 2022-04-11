@@ -440,6 +440,7 @@ void processTextItem( const FP_TEXT& aSrc, FP_TEXT& aDest,
         bool visible = aDest.IsVisible();
         aDest.SetAttributes( aSrc );
         aDest.SetVisible( visible );
+        aDest.SetPos0( aSrc.GetPos0() );
     }
 
     aDest.SetLocked( aSrc.IsLocked() );
