@@ -178,7 +178,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     unitsSubMenu->Add( ACTIONS::milsUnits,                    ACTION_MENU::CHECK );
     unitsSubMenu->Add( ACTIONS::millimetersUnits,             ACTION_MENU::CHECK );
 
-    viewMenu->Add( unitsSubMenu );
+    viewMenu->Add( unitsSubMenu, false );
 
     viewMenu->AppendSeparator();
     viewMenu->Add( GERBVIEW_ACTIONS::flashedDisplayOutlines,  ACTION_MENU::CHECK );

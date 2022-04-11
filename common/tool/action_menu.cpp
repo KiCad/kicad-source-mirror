@@ -181,9 +181,9 @@ wxMenuItem* ACTION_MENU::Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry
 }
 
 
-wxMenuItem* ACTION_MENU::Add( ACTION_MENU* aMenu )
+wxMenuItem* ACTION_MENU::Add( ACTION_MENU* aMenu, bool aClone )
 {
-    ACTION_MENU* menuCopy = aMenu->Clone();
+    ACTION_MENU* menuCopy = aClone ? aMenu->Clone() : aMenu;
     m_submenus.push_back( menuCopy );
 
     wxASSERT_MSG( !menuCopy->m_title.IsEmpty(), "Set a title for ACTION_MENU using SetTitle()" );

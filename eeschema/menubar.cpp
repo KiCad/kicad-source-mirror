@@ -107,7 +107,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                         BITMAPS::import_document );
 
     submenuImport->Add( EE_ACTIONS::importFPAssignments, ACTION_MENU::NORMAL, _( "Footprint Assignments..." ) );
-    fileMenu->Add( submenuImport );
+    fileMenu->Add( submenuImport, false );
 
 
     // Export submenu
@@ -116,7 +116,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->SetIcon( BITMAPS::export_file );
     submenuExport->Add( EE_ACTIONS::drawSheetOnClipboard, ACTION_MENU::NORMAL, _( "Drawing to Clipboard" ) );
     submenuExport->Add( EE_ACTIONS::exportNetlist,        ACTION_MENU::NORMAL, _( "Netlist..." ) );
-    fileMenu->Add( submenuExport );
+    fileMenu->Add( submenuExport, false );
 
     fileMenu->AppendSeparator();
     fileMenu->Add( EE_ACTIONS::schematicSetup );
@@ -184,7 +184,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     unitsSubMenu->Add( ACTIONS::inchesUnits,        ACTION_MENU::CHECK );
     unitsSubMenu->Add( ACTIONS::milsUnits,          ACTION_MENU::CHECK );
     unitsSubMenu->Add( ACTIONS::millimetersUnits,   ACTION_MENU::CHECK );
-    viewMenu->Add( unitsSubMenu );
+    viewMenu->Add( unitsSubMenu, false );
 
     viewMenu->Add( ACTIONS::toggleCursorStyle,      ACTION_MENU::CHECK );
 
