@@ -74,7 +74,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
         fileMenu->Add( ACTIONS::doNew );
         fileMenu->Add( ACTIONS::open );
 
-        wxMenuItem* item = fileMenu->Add( openRecentMenu );
+        wxMenuItem* item = fileMenu->Add( openRecentMenu->Clone() );
 
         // Add the file menu condition here since it needs the item ID for the submenu
         ACTION_CONDITIONS cond;
