@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-04 13:55-0700\n"
+"POT-Creation-Date: 2022-04-11 09:40-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -6073,11 +6073,11 @@ msgstr ""
 msgid "Diameter:"
 msgstr "Diameter:"
 
-msgid "Set diameter to 0 to use schematic junction dot size."
-msgstr "Set diameter to 0 to use schematic junction dot size."
+msgid "Set diameter to 0 to use schematic's junction dot size."
+msgstr "Set diameter to 0 to use schematic's junction dot size."
 
-msgid "Set color to transparent to use Schematic Editor colors."
-msgstr "Set color to transparent to use Schematic Editor colors."
+msgid "Clear color to use Schematic Editor colors."
+msgstr "Clear color to use Schematic Editor colors."
 
 msgid "Junction Properties"
 msgstr "Junction Properties"
@@ -6317,8 +6317,8 @@ msgstr "Border"
 msgid "Border width:"
 msgstr "Border width:"
 
-msgid "Set border width to 0 to use Schematic default symbol line width."
-msgstr "Set border width to 0 to use Schematic default symbol line width."
+msgid "Set border width to 0 to use schematic's default symbol line width."
+msgstr "Set border width to 0 to use schematic's default symbol line width."
 
 msgid "Fill Style"
 msgstr "Fill Style"
@@ -6501,9 +6501,6 @@ msgstr "Edit Spice Model…"
 msgid "Library Symbol Properties"
 msgstr "Library Symbol Properties"
 
-msgid "Text can not be empty."
-msgstr "Text can not be empty."
-
 msgid "Style:"
 msgstr "Style:"
 
@@ -6516,8 +6513,8 @@ msgstr "Private to symbol editor"
 msgid "Text Box Properties"
 msgstr "Text Box Properties"
 
-msgid "Set width to 0 to use Schematic default line width."
-msgstr "Set width to 0 to use Schematic default line width."
+msgid "Set width to 0 to use schematic's default line width."
+msgstr "Set width to 0 to use schematic's default line width."
 
 msgid "Line Properties"
 msgstr "Line Properties"
@@ -7094,11 +7091,11 @@ msgstr "Note: individual item colors overridden in Preferences."
 msgid "Filled shape"
 msgstr "Filled shape"
 
-msgid "Set line width to 0 to use Schematic Editor line widths."
-msgstr "Set line width to 0 to use Schematic Editor line widths."
+msgid "Set border width to 0 to use schematic's default line width."
+msgstr "Set border width to 0 to use schematic's default line width."
 
-msgid "Set line color to transparent to use Schematic Editor colors."
-msgstr "Set line color to transparent to use Schematic Editor colors."
+msgid "Clear colors to use Schematic Editor colors."
+msgstr "Clear colors to use Schematic Editor colors."
 
 #, c-format
 msgid "%s Properties"
@@ -7891,6 +7888,18 @@ msgstr ""
 "Use the alternate shape of this symbol.\n"
 "For gates, this is the “De Morgan” conversion"
 
+msgid "Default for all sheet instances"
+msgstr "Default for all sheet instances"
+
+msgid ""
+"Check to make the unit and reference, value, and\n"
+"footprint fields the default for all sheet instances\n"
+"of this symbol"
+msgstr ""
+"Check to make the unit and reference, value, and\n"
+"footprint fields the default for all sheet instances\n"
+"of this symbol"
+
 msgid "Angle:"
 msgstr "Angle:"
 
@@ -8063,6 +8072,9 @@ msgstr "Some of the project files could not be backed up."
 msgid "Remap Symbols"
 msgstr "Remap Symbols"
 
+msgid "Text can not be empty."
+msgstr "Text can not be empty."
+
 msgid "Text Properties"
 msgstr "Text Properties"
 
@@ -8123,8 +8135,8 @@ msgstr "Update Symbol Fields"
 msgid "Wire/bus width:"
 msgstr "Wire/bus width:"
 
-msgid "Set width to 0 to use Netclass wire/bus widths."
-msgstr "Set width to 0 to use Netclass wire/bus widths."
+msgid "Set width to 0 to use netclass's wire/bus widths."
+msgstr "Set width to 0 to use netclass's wire/bus widths."
 
 msgid "Wire & Bus Properties"
 msgstr "Wire & Bus Properties"
@@ -9186,6 +9198,9 @@ msgstr "Errors occurred creating symbol library %s."
 
 msgid "Open Recent"
 msgstr "Open Recent"
+
+msgid "Clear Recent Files"
+msgstr "Clear Recent Files"
 
 msgid "Insert Schematic Sheet Content..."
 msgstr "Insert Schematic Sheet Content..."
@@ -12736,11 +12751,11 @@ msgstr "This job file uses an outdated format. Please recreate it."
 msgid "Open Gerber Job File"
 msgstr "Open Gerber Job File"
 
-msgid "Open Recent Gerber File"
-msgstr "Open Recent Gerber File"
-
 msgid "Clear Recent Gerber Files"
 msgstr "Clear Recent Gerber Files"
+
+msgid "Open Recent Gerber File"
+msgstr "Open Recent Gerber File"
 
 msgid "Open Recent Drill File"
 msgstr "Open Recent Drill File"
@@ -13051,9 +13066,6 @@ msgstr "-- mixed values --"
 
 msgid "Reset all colors in this theme to the KiCad defaults"
 msgstr "Reset all colors in this theme to the KiCad defaults"
-
-msgid "Clear Recent Files"
-msgstr "Clear Recent Files"
 
 msgid "This file is already open."
 msgstr "This file is already open."
@@ -27671,6 +27683,27 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Set diameter to 0 to use schematic junction dot size."
+#~ msgstr "Set diameter to 0 to use schematic junction dot size."
+
+#~ msgid "Set color to transparent to use Schematic Editor colors."
+#~ msgstr "Set color to transparent to use Schematic Editor colors."
+
+#~ msgid "Set border width to 0 to use Schematic default symbol line width."
+#~ msgstr "Set border width to 0 to use Schematic default symbol line width."
+
+#~ msgid "Set width to 0 to use Schematic default line width."
+#~ msgstr "Set width to 0 to use Schematic default line width."
+
+#~ msgid "Set line width to 0 to use Schematic Editor line widths."
+#~ msgstr "Set line width to 0 to use Schematic Editor line widths."
+
+#~ msgid "Set line color to transparent to use Schematic Editor colors."
+#~ msgstr "Set line color to transparent to use Schematic Editor colors."
+
+#~ msgid "Set width to 0 to use Netclass wire/bus widths."
+#~ msgstr "Set width to 0 to use Netclass wire/bus widths."
 
 #, c-format
 #~ msgid ""
