@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-28 11:13-0700\n"
-"PO-Revision-Date: 2022-03-18 21:34+0100\n"
+"PO-Revision-Date: 2022-04-11 10:02+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -16381,7 +16381,7 @@ msgstr "Annota schema..."
 
 #: eeschema/tools/ee_actions.cpp:583
 msgid "Fill in schematic symbol reference designators"
-msgstr "Compila nel simbolo il designatore di riferimento"
+msgstr "Compila i riferimenti dei simboli nello schema"
 
 #: eeschema/tools/ee_actions.cpp:588
 msgid "Schematic Setup..."
