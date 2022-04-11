@@ -72,7 +72,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
         fileMenu->Add( ACTIONS::doNew );
         fileMenu->Add( ACTIONS::open );
 
-        wxMenuItem* item = fileMenu->Add( openRecentMenu->Clone() );
+        wxMenuItem* item = fileMenu->Add( openRecentMenu );
 
         // Add the file menu condition here since it needs the item ID for the submenu
         ACTION_CONDITIONS cond;
