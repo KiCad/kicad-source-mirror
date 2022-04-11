@@ -70,6 +70,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
         // Ensure the title is up to date after changing language
         openRecentMenu->SetTitle( _( "Open Recent" ) );
+        fileHistory.UpdateClearText( openRecentMenu, _( "Clear Recent Files" ) );
 
         fileMenu->Add( ACTIONS::doNew );
         fileMenu->Add( ACTIONS::open );

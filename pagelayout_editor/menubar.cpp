@@ -62,6 +62,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
 
     // Ensure the title is up to date after changing language
     openRecentMenu->SetTitle( _( "Open Recent" ) );
+    recentFiles.UpdateClearText( openRecentMenu, _( "Clear Recent Files" ) );
 
     //-- File menu -------------------------------------------------------
     //
