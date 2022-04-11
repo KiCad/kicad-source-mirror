@@ -70,7 +70,7 @@ void SYMBOL_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->Add( EE_ACTIONS::exportSymbol,      ACTION_MENU::NORMAL, _( "Symbol..." ) );
     submenuExport->Add( EE_ACTIONS::exportSymbolView,  ACTION_MENU::NORMAL, _( "View as PNG..." ) );
     submenuExport->Add( EE_ACTIONS::exportSymbolAsSVG, ACTION_MENU::NORMAL, _( "Symbol as SVG..." ) );
-    fileMenu->Add( submenuExport, false );
+    fileMenu->Add( submenuExport );
 
     fileMenu->AppendSeparator();
     fileMenu->Add( EE_ACTIONS::symbolProperties );
@@ -125,7 +125,7 @@ void SYMBOL_EDIT_FRAME::ReCreateMenuBar()
     unitsSubMenu->Add( ACTIONS::inchesUnits,      ACTION_MENU::CHECK );
     unitsSubMenu->Add( ACTIONS::milsUnits,        ACTION_MENU::CHECK );
     unitsSubMenu->Add( ACTIONS::millimetersUnits, ACTION_MENU::CHECK );
-    viewMenu->Add( unitsSubMenu, false );
+    viewMenu->Add( unitsSubMenu );
 
     viewMenu->Add( ACTIONS::toggleCursorStyle,    ACTION_MENU::CHECK );
 

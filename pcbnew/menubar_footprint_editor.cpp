@@ -68,7 +68,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     submenuImport->Add( PCB_ACTIONS::importFootprint,        ACTION_MENU::NORMAL, _( "Footprint..." ) );
     submenuImport->Add( PCB_ACTIONS::placeImportedGraphics,  ACTION_MENU::NORMAL, _( "Graphics..." ) );
 
-    fileMenu->Add( submenuImport, false );
+    fileMenu->Add( submenuImport );
 
     ACTION_MENU* submenuExport = new ACTION_MENU( false, selTool );
     submenuExport->SetTitle( _( "Export" ) );
@@ -80,7 +80,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                         ID_FPEDIT_SAVE_PNG,
                         BITMAPS::export_png );
 
-    fileMenu->Add( submenuExport, false );
+    fileMenu->Add( submenuExport );
 
     fileMenu->AppendSeparator();
     fileMenu->Add( PCB_ACTIONS::footprintProperties );
@@ -140,7 +140,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     unitsSubMenu->Add( ACTIONS::inchesUnits,                ACTION_MENU::CHECK );
     unitsSubMenu->Add( ACTIONS::milsUnits,                  ACTION_MENU::CHECK );
     unitsSubMenu->Add( ACTIONS::millimetersUnits,           ACTION_MENU::CHECK );
-    viewMenu->Add( unitsSubMenu, false );
+    viewMenu->Add( unitsSubMenu );
 
     viewMenu->Add( ACTIONS::toggleCursorStyle,              ACTION_MENU::CHECK );
 
@@ -153,7 +153,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     drawingModeSubMenu->Add( PCB_ACTIONS::padDisplayMode,   ACTION_MENU::CHECK );
     drawingModeSubMenu->Add( PCB_ACTIONS::graphicsOutlines, ACTION_MENU::CHECK );
     drawingModeSubMenu->Add( PCB_ACTIONS::textOutlines,     ACTION_MENU::CHECK );
-    viewMenu->Add( drawingModeSubMenu, false );
+    viewMenu->Add( drawingModeSubMenu );
 
     // Contrast Mode Submenu
     ACTION_MENU* contrastModeSubMenu = new ACTION_MENU( false, selTool );
@@ -163,7 +163,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     contrastModeSubMenu->Add( ACTIONS::highContrastMode,    ACTION_MENU::CHECK );
     contrastModeSubMenu->Add( PCB_ACTIONS::layerAlphaDec );
     contrastModeSubMenu->Add( PCB_ACTIONS::layerAlphaInc );
-    viewMenu->Add( contrastModeSubMenu, false );
+    viewMenu->Add( contrastModeSubMenu );
 
     viewMenu->Add( PCB_ACTIONS::flipBoard,                  ACTION_MENU::CHECK );
 

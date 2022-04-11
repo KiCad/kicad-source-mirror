@@ -119,7 +119,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     }
 
     fileMenu->AppendSeparator();
-    fileMenu->Add( submenuImport, false );
+    fileMenu->Add( submenuImport );
 
     // Export submenu
     ACTION_MENU* submenuExport = new ACTION_MENU( false, selTool );
@@ -157,7 +157,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                            "(if the library already exists it will be replaced)" ),
                         ID_MENU_EXPORT_FOOTPRINTS_TO_NEW_LIBRARY, BITMAPS::library_archive_as );
 
-    fileMenu->Add( submenuExport, false );
+    fileMenu->Add( submenuExport );
 
     // Fabrication Outputs submenu
     ACTION_MENU* submenuFabOutputs = new ACTION_MENU( false, selTool );
@@ -170,7 +170,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuFabOutputs->Add( PCB_ACTIONS::generateReportFile );
     submenuFabOutputs->Add( PCB_ACTIONS::generateD356File );
     submenuFabOutputs->Add( PCB_ACTIONS::generateBOM );
-    fileMenu->Add( submenuFabOutputs, false );
+    fileMenu->Add( submenuFabOutputs );
 
     fileMenu->AppendSeparator();
     fileMenu->Add( PCB_ACTIONS::boardSetup );
@@ -246,7 +246,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     unitsSubMenu->Add( ACTIONS::inchesUnits,          ACTION_MENU::CHECK );
     unitsSubMenu->Add( ACTIONS::milsUnits,            ACTION_MENU::CHECK );
     unitsSubMenu->Add( ACTIONS::millimetersUnits,     ACTION_MENU::CHECK );
-    viewMenu->Add( unitsSubMenu, false );
+    viewMenu->Add( unitsSubMenu );
 
     viewMenu->Add( ACTIONS::toggleCursorStyle,        ACTION_MENU::CHECK );
 
@@ -278,7 +278,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     drawingModeSubMenu->Add( PCB_ACTIONS::graphicsOutlines,    ACTION_MENU::CHECK );
     drawingModeSubMenu->Add( PCB_ACTIONS::textOutlines,        ACTION_MENU::CHECK );
 
-    viewMenu->Add( drawingModeSubMenu, false );
+    viewMenu->Add( drawingModeSubMenu );
 
     // Contrast Mode Submenu
     ACTION_MENU* contrastModeSubMenu = new ACTION_MENU( false, selTool );
@@ -288,7 +288,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     contrastModeSubMenu->Add( ACTIONS::highContrastMode,    ACTION_MENU::CHECK );
     contrastModeSubMenu->Add( PCB_ACTIONS::layerAlphaDec );
     contrastModeSubMenu->Add( PCB_ACTIONS::layerAlphaInc );
-    viewMenu->Add( contrastModeSubMenu, false );
+    viewMenu->Add( contrastModeSubMenu );
 
     viewMenu->Add( PCB_ACTIONS::flipBoard,                  ACTION_MENU::CHECK );
 
@@ -313,7 +313,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     muwaveSubmenu->Add( PCB_ACTIONS::microwaveCreateStub );
     muwaveSubmenu->Add( PCB_ACTIONS::microwaveCreateStubArc );
     muwaveSubmenu->Add( PCB_ACTIONS::microwaveCreateFunctionShape );
-    placeMenu->Add( muwaveSubmenu, false );
+    placeMenu->Add( muwaveSubmenu );
 
     placeMenu->AppendSeparator();
     placeMenu->Add( PCB_ACTIONS::drawLine );
@@ -349,7 +349,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     autoplaceSubmenu->Add( PCB_ACTIONS::autoplaceOffboardComponents );
     autoplaceSubmenu->Add( PCB_ACTIONS::autoplaceSelectedComponents );
 
-    placeMenu->Add( autoplaceSubmenu, false );
+    placeMenu->Add( autoplaceSubmenu );
 
 
     //-- Route Menu ----------------------------------------------------------
@@ -444,7 +444,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     buildActionPluginMenus( submenuActionPlugins );
 
     toolsMenu->AppendSeparator();
-    toolsMenu->Add( submenuActionPlugins, false );
+    toolsMenu->Add( submenuActionPlugins );
 
     //-- Preferences menu ----------------------------------------------------
     //

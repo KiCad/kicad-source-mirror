@@ -105,9 +105,8 @@ public:
      * handle icons.
      *
      * @param aMenu is the submenu to be added.
-     * @param aClone is whether or not the submenu should be copied from a reference submenu
      */
-    wxMenuItem* Add( ACTION_MENU* aMenu, bool aClone = true );
+    wxMenuItem* Add( ACTION_MENU* aMenu );
 
     /**
      * Add a standard close item to the menu with the accelerator key CTRL-W.

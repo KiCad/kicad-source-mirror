@@ -138,7 +138,7 @@ void EDA_3D_VIEWER_FRAME::CreateMenuBar()
     gridSubmenu->Add( EDA_3D_ACTIONS::show2_5mmGrid, ACTION_MENU::CHECK);
     gridSubmenu->Add( EDA_3D_ACTIONS::show1mmGrid,   ACTION_MENU::CHECK);
 
-    prefsMenu->Add( gridSubmenu, false );
+    prefsMenu->Add( gridSubmenu );
 
     //-- Menubar -------------------------------------------------------------
     //

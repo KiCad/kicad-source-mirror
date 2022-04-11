@@ -118,7 +118,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     unitsSubMenu->Add( ACTIONS::inchesUnits,      ACTION_MENU::CHECK );
     unitsSubMenu->Add( ACTIONS::milsUnits,        ACTION_MENU::CHECK );
     unitsSubMenu->Add( ACTIONS::millimetersUnits, ACTION_MENU::CHECK );
-    viewMenu->Add( unitsSubMenu, false );
+    viewMenu->Add( unitsSubMenu );
 
     viewMenu->Add( ACTIONS::toggleCursorStyle,   ACTION_MENU::CHECK );
 
