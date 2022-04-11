@@ -234,14 +234,33 @@ bool SYMBOL_EDIT_FRAME::saveCurrentSymbol()
 {
     if( GetCurSymbol() )
     {
-        LIB_ID libId = GetCurSymbol()->GetLibId();
-        const wxString& libName = libId.GetLibNickname();
-        const wxString& symbolName = libId.GetLibItemName();
-
-        if( m_libMgr->FlushSymbol( symbolName, libName ) )
+        if( IsSymbolFromSchematic() )
         {
-            m_libMgr->ClearSymbolModified( symbolName, libName );
-            return true;
+            SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
+
+            if( !schframe )      // happens when the schematic editor has been closed
+            {
+                DisplayErrorMessage( this, _( "No schematic currently open." ) );
+                return false;
+            }
+            else
+            {
+                schframe->SaveSymbolToSchematic( *m_symbol, m_schematicSymbolUUID );
+                GetScreen()->SetContentModified( false );
+                return true;
+            }
+        }
+        else
+        {
+            LIB_ID libId = GetCurSymbol()->GetLibId();
+            const wxString& libName = libId.GetLibNickname();
+            const wxString& symbolName = libId.GetLibItemName();
+
+            if( m_libMgr->FlushSymbol( symbolName, libName ) )
+            {
+                m_libMgr->ClearSymbolModified( symbolName, libName );
+                return true;
+            }
         }
     }
 
@@ -251,14 +270,15 @@ bool SYMBOL_EDIT_FRAME::saveCurrentSymbol()
 
 bool SYMBOL_EDIT_FRAME::LoadSymbol( const LIB_ID& aLibId, int aUnit, int aConvert )
 {
-    if( !IsSymbolFromSchematic()
-            && GetCurSymbol() && GetCurSymbol()->GetLibId() == aLibId
-            && GetUnit() == aUnit && GetConvert() == aConvert )
+    if( GetCurSymbol() && !IsSymbolFromSchematic()
+            && GetCurSymbol()->GetLibId() == aLibId
+            && GetUnit() == aUnit
+            && GetConvert() == aConvert )
     {
         return true;
     }
 
-    if( GetScreen()->IsContentModified() && GetCurSymbol() )
+    if( GetCurSymbol() && IsSymbolFromSchematic() && GetScreen()->IsContentModified() )
     {
         if( !HandleUnsavedChanges( this, _( "The current symbol has been modified.  Save changes?" ),
                                    [&]() -> bool
@@ -986,16 +1006,25 @@ void SYMBOL_EDIT_FRAME::RevertAll()
 
 void SYMBOL_EDIT_FRAME::LoadSymbol( const wxString& aAlias, const wxString& aLibrary, int aUnit )
 {
+    if( GetCurSymbol() && IsSymbolFromSchematic() && GetScreen()->IsContentModified() )
+    {
+        if( !HandleUnsavedChanges( this, _( "The current symbol has been modified.  Save changes?" ),
+                                   [&]() -> bool
+                                   {
+                                       return saveCurrentSymbol();
+                                   } ) )
+        {
+            return;
+        }
+    }
+
     LIB_SYMBOL* symbol = m_libMgr->GetBufferedSymbol( aAlias, aLibrary );
 
     if( !symbol )
     {
-        wxString msg;
-
-        msg.Printf( _( "Symbol %s not found in library '%s'." ),
-                    aAlias,
-                    aLibrary );
-        DisplayError( this, msg );
+        DisplayError( this, wxString::Format( _( "Symbol %s not found in library '%s'." ),
+                                              aAlias,
+                                              aLibrary ) );
         return;
     }
 

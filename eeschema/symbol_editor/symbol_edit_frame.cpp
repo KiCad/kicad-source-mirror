@@ -814,7 +814,9 @@ SYMBOL_LIBRARY_MANAGER& SYMBOL_EDIT_FRAME::GetLibManager()
 void SYMBOL_EDIT_FRAME::OnModify()
 {
     GetScreen()->SetContentModified();
-    storeCurrentSymbol();
+
+    if( !IsSymbolFromSchematic() )
+        storeCurrentSymbol();
 
     m_treePane->GetLibTree()->RefreshLibTree();
 
