@@ -150,7 +150,7 @@ void CONDITIONAL_MENU::Evaluate( SELECTION& aSelection )
 
             case ENTRY::MENU:
                 entry.Menu()->UpdateTitle();
-                Add( entry.Menu() );
+                Add( entry.Menu()->Clone() );
                 menu_count++;
                 break;
 

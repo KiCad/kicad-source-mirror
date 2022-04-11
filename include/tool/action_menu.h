@@ -104,7 +104,8 @@ public:
      * The difference between this function and wxMenu::AppendSubMenu() is the capability to
      * handle icons.
      *
-     * @param aMenu is the submenu to be added.
+     * @param aMenu is the submenu to be added. This should be a new instance (use Clone()) if required
+     * as the menu is destructed after use.
      */
     wxMenuItem* Add( ACTION_MENU* aMenu );
 

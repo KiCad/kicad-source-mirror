@@ -183,21 +183,20 @@ wxMenuItem* ACTION_MENU::Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry
 
 wxMenuItem* ACTION_MENU::Add( ACTION_MENU* aMenu )
 {
-    ACTION_MENU* menuCopy = aMenu->Clone();
-    m_submenus.push_back( menuCopy );
+    m_submenus.push_back( aMenu );
 
-    wxASSERT_MSG( !menuCopy->m_title.IsEmpty(), wxT( "Set a title for ACTION_MENU using SetTitle()" ) );
+    wxASSERT_MSG( !aMenu->m_title.IsEmpty(), wxT( "Set a title for ACTION_MENU using SetTitle()" ) );
 
     if( !!aMenu->m_icon )
     {
-        wxMenuItem* newItem = new wxMenuItem( this, -1, menuCopy->m_title );
+        wxMenuItem* newItem = new wxMenuItem( this, -1, aMenu->m_title );
         AddBitmapToMenuItem( newItem, KiBitmap( aMenu->m_icon ) );
-        newItem->SetSubMenu( menuCopy );
+        newItem->SetSubMenu( aMenu );
         return Append( newItem );
     }
     else
     {
-        return AppendSubMenu( menuCopy, menuCopy->m_title );
+        return AppendSubMenu( aMenu, aMenu->m_title );
     }
 }
 
