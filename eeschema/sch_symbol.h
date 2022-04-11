@@ -147,9 +147,10 @@ public:
      *       they are big.  However, this annoyed some users and we now have a preference which
      *       controls warping on move in general, so this was switched to true for symbols.
      *
-     * @return true for a symbol.
+     * @note We now use this to keep poorly-formed symbols from getting dragged off-grid.  If
+     *       the symbol contains off-grid pins we will not allow it to be moved from its anchor.
      */
-    bool IsMovableFromAnchorPoint() const override { return true; }
+    bool IsMovableFromAnchorPoint() const override;
 
     void SetLibId( const LIB_ID& aName );
 

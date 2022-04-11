@@ -251,6 +251,27 @@ void SCH_SYMBOL::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
+bool SCH_SYMBOL::IsMovableFromAnchorPoint() const
+{
+    // If a symbol's anchor is not grid-aligned to its pins then moving from the anchor is
+    // going to end up moving the symbol's pins off-grid.
+
+    // The minimal grid size allowed to place a pin is 25 mils
+    const int min_grid_size = Mils2iu( 25 );
+
+    for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
+    {
+        if( ( ( pin->GetPosition().x - m_pos.x ) % min_grid_size ) != 0 )
+            return false;
+
+        if( ( ( pin->GetPosition().y - m_pos.y ) % min_grid_size ) != 0 )
+            return false;
+    }
+
+    return true;
+}
+
+
 void SCH_SYMBOL::SetLibId( const LIB_ID& aLibId )
 {
     if( m_lib_id != aLibId )
