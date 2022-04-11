@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-11 09:39-0700\n"
-"PO-Revision-Date: 2022-04-11 16:38+0000\n"
+"PO-Revision-Date: 2022-04-13 14:13+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -14686,6 +14686,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Den valda filen skapades som del av ett annat projekt.  Länkning av filen "
+"till detta projekt kan orsaka saknade eller inkorrekta "
+"symbolbiblioteksreferenser.\n"
+"\n"
+"Vill du fortsätta?"
 
 #: eeschema/sheet.cpp:315
 #, fuzzy
@@ -30499,7 +30504,7 @@ msgstr "Importera vektorgrafikfil"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:133
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
-msgstr ""
+msgstr "Minnet blev fullt vid försök att ladda DXF; den kan vara för stor."
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
