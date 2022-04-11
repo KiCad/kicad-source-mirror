@@ -54,12 +54,14 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     if( !openRecentMenu )
     {
         openRecentMenu = new ACTION_MENU( false, selTool );
-        openRecentMenu->SetTitle( _( "Open Recent" ) );
         openRecentMenu->SetIcon( BITMAPS::recent );
 
         recentFiles.UseMenu( openRecentMenu );
         recentFiles.AddFilesToMenu();
     }
+
+    // Ensure the title is up to date after changing language
+    openRecentMenu->SetTitle( _( "Open Recent" ) );
 
     //-- File menu -------------------------------------------------------
     //

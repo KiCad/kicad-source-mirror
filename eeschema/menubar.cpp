@@ -62,12 +62,14 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
         if( !openRecentMenu )
         {
             openRecentMenu = new ACTION_MENU( false, selTool );
-            openRecentMenu->SetTitle( _( "Open Recent" ) );
             openRecentMenu->SetIcon( BITMAPS::recent );
 
             fileHistory.UseMenu( openRecentMenu );
             fileHistory.AddFilesToMenu( openRecentMenu );
         }
+
+        // Ensure the title is up to date after changing language
+        openRecentMenu->SetTitle( _( "Open Recent" ) );
 
         fileMenu->Add( ACTIONS::doNew );
         fileMenu->Add( ACTIONS::open );

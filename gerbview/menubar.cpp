@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,13 +64,16 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     if( !openRecentGbrMenu )
     {
         openRecentGbrMenu = new ACTION_MENU( false, selTool );
-        openRecentGbrMenu->SetTitle( _( "Open Recent Gerber File" ) );
         openRecentGbrMenu->SetIcon( BITMAPS::recent );
 
-        recentGbrFiles.UseMenu( openRecentGbrMenu );
         recentGbrFiles.SetClearText( _( "Clear Recent Gerber Files" ) );
+        recentGbrFiles.UseMenu( openRecentGbrMenu );
         recentGbrFiles.AddFilesToMenu();
     }
+
+    // Ensure the title is up to date after changing language
+    openRecentGbrMenu->SetTitle( _( "Open Recent Gerber File" ) );
+    recentGbrFiles.UpdateClearText( openRecentGbrMenu, _( "Clear Recent Gerber Files" ) );
 
     fileMenu->Add( GERBVIEW_ACTIONS::openAutodetected );
     fileMenu->Add( GERBVIEW_ACTIONS::openGerber );
@@ -91,6 +94,10 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
         m_drillFileHistory.AddFilesToMenu();
     }
 
+    // Ensure the title is up to date after changing language
+    openRecentGbrMenu->SetTitle( _( "Open Recent Gerber File" ) );
+    m_drillFileHistory.UpdateClearText( openRecentDrlMenu, _( "Clear Recent Drill Files" ) );
+
     fileMenu->Add( GERBVIEW_ACTIONS::openDrillFile );
     wxMenuItem* drillItem = fileMenu->Add( openRecentDrlMenu->Clone() );
     RegisterUIUpdateHandler( drillItem->GetId(), FileHistoryCond( m_drillFileHistory ) );
@@ -101,13 +108,16 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     if( !openRecentJobMenu )
     {
         openRecentJobMenu = new ACTION_MENU( false, selTool );
-        openRecentJobMenu->SetTitle( _( "Open Recent Job File" ) );
         openRecentJobMenu->SetIcon( BITMAPS::recent );
 
-        m_jobFileHistory.UseMenu( openRecentJobMenu );
         m_jobFileHistory.SetClearText( _( "Clear Recent Job Files" ) );
+        m_jobFileHistory.UseMenu( openRecentJobMenu );
         m_jobFileHistory.AddFilesToMenu();
     }
+
+    // Ensure the title is up to date after changing language
+    openRecentJobMenu->SetTitle( _( "Open Recent Job File" ) );
+    m_jobFileHistory.UpdateClearText( openRecentJobMenu, _( "Clear Recent Job Files" ) );
 
     fileMenu->Add( GERBVIEW_ACTIONS::openJobFile );
     wxMenuItem* jobItem = fileMenu->Add( openRecentJobMenu->Clone() );
@@ -119,13 +129,16 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     if( !openRecentZipMenu )
     {
         openRecentZipMenu = new ACTION_MENU( false, selTool );
-        openRecentZipMenu->SetTitle( _( "Open Recent Zip File" ) );
         openRecentZipMenu->SetIcon( BITMAPS::recent );
 
         m_zipFileHistory.UseMenu( openRecentZipMenu );
         m_zipFileHistory.SetClearText( _( "Clear Recent Zip Files" ) );
         m_zipFileHistory.AddFilesToMenu();
     }
+
+    // Ensure the title is up to date after changing language
+    openRecentZipMenu->SetTitle( _( "Open Recent Zip File" ) );
+    m_zipFileHistory.UpdateClearText( openRecentZipMenu, _( "Clear Recent Zip Files" ) );
 
     fileMenu->Add( GERBVIEW_ACTIONS::openZipFile );
     wxMenuItem* zipItem = fileMenu->Add( openRecentZipMenu->Clone() );

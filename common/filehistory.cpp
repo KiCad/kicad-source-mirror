@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Ian McInerney <Ian.S.McInerney@ieee.org>
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -162,6 +162,18 @@ void FILE_HISTORY::doAddClearItem( wxMenu* aMenu )
 
     aMenu->AppendSeparator();
     aMenu->Append( clearItem );
+}
+
+
+void FILE_HISTORY::UpdateClearText( wxMenu* aMenu, wxString aClearText )
+{
+    size_t      itemPos;
+    wxMenuItem* clearItem = aMenu->FindChildItem( m_clearId, &itemPos );
+
+    if( clearItem && itemPos > 1 )      // clearItem is the last menu, after a separator
+    {
+        clearItem->SetItemLabel( aClearText );
+    }
 }
 
 

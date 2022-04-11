@@ -62,12 +62,14 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     if( !openRecentMenu )
     {
         openRecentMenu = new ACTION_MENU( false, controlTool );
-        openRecentMenu->SetTitle( _( "Open Recent" ) );
         openRecentMenu->SetIcon( BITMAPS::recent );
 
         fileHistory.UseMenu( openRecentMenu );
         fileHistory.AddFilesToMenu();
     }
+
+    // Ensure the title is up to date after changing language
+    openRecentMenu->SetTitle( _( "Open Recent" ) );
 
     fileMenu->Add( KICAD_MANAGER_ACTIONS::newProject );
     fileMenu->Add( KICAD_MANAGER_ACTIONS::newFromTemplate );
