@@ -361,7 +361,9 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
                 const double  radius3DU = TO_3DU( circle->GetRadius() + clearance.x );
                 const SFVEC2F center3DU = TO_SFVEC2F( circle->GetCenter() );
 
-                aContainer->Add( new FILLED_CIRCLE_2D( center3DU, radius3DU, *aPad ) );
+                // Don't render zero radius circles
+                if( radius3DU != 0.0 )
+                    aContainer->Add( new FILLED_CIRCLE_2D( center3DU, radius3DU, *aPad ) );
             }
                 break;
 
