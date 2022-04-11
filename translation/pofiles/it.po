@@ -108,7 +108,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-04 13:55-0700\n"
-"PO-Revision-Date: 2022-02-19 00:33+0100\n"
+"PO-Revision-Date: 2022-04-11 13:33+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -3323,15 +3323,19 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad può segnalare in modo anonimo arresti o eventi anomali agli sviluppatori, per aiutare a identificare difetti critici che possono verificarsi a tutta la base utenti, in modo più efficace e aiutare ad individuare profili di funzionalità per guidare i miglioramenti.\n"
+"\n"
+"Per collegare i rapporti automatici dalla stessa installazione di KiCad, viene generato un identificatore univoco completamente casuale, utilizzato solo ai fini della segnalazione di arresti anomali. Nessuna informazione di identificazione personale (PII) incluso l'indirizzo IP viene memorizzata o collegata a questo identificatore. È possibile reimpostare questo ID in qualsiasi momento con il pulsante fornito.\n"
+"\n"
+"Se si sceglie di partecipare volontariamente, KiCad gestirà automaticamente l'invio di detti rapporti quando si verificano arresti o eventi anomali. I file di progettazione come schema o circuito stampato non vengono condivisi in questo processo."
 
 #: common/dialogs/panel_data_collection_base.cpp:27
 msgid "I agree to provide anonymous reports"
-msgstr ""
+msgstr "Consento l'invio di rapporti anonimi"
 
 #: common/dialogs/panel_data_collection_base.cpp:30
-#, fuzzy
 msgid "Reset Unique Id"
-msgstr "Reimposta vista"
+msgstr "Reimposta id univoco"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:84
 msgid "Type filter text"
@@ -5731,10 +5735,13 @@ msgid ""
 "sending said reports when crashes or events occur. \n"
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad può segnalare in modo anonimo arresti o eventi anomali agli sviluppatori, per aiutare a identificare i difetti critici occorrenti alla base utenti, in modo più efficace e per aiutare ad individuare i profili di utilizzo per guidarne i miglioramenti.\n"
+"Se si sceglie di partecipare volontariamente, KiCad gestirà automaticamente l'invio di detti rapporti quando si verificano arresti anomali o eventi particolari.\n"
+"I file di progettazione come schema o circuito stampato non verranno condivisi in questo processo."
 
 #: common/pgm_base.cpp:333
 msgid "Data collection opt in request"
-msgstr ""
+msgstr "Richiesta di consenso alla raccolta dati"
 
 #: common/pgm_base.cpp:375
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -10219,15 +10226,14 @@ msgstr "Assegnazioni pin alternative non disponibili per i simboli De Morgan."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:270
 msgid "Exit sync pins mode"
-msgstr ""
+msgstr "Modalità pin uscita sinc"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:285
-#, fuzzy
 msgid ""
 "Synchronized pins mode is enabled.\n"
 "Similar pins will be edited regardless of this option."
 msgstr ""
-"La modalità di modifica pin sincronizzati è abilitata.\n"
+"La modalità pin sincronizzati è abilitata.\n"
 "Pin simili verranno modificati, indipendentemente da questa opzione."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:290
@@ -10254,17 +10260,16 @@ msgstr ""
 "Continuare?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:430
-#, fuzzy
 msgid "Synchronized Pins Mode."
-msgstr "Modalità modifica pin sincronizzati"
+msgstr "Modalità pin sincronizzati."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:432
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
-msgstr ""
+msgstr "Modalità pin sincronizzati. Nuovi pin verranno aggiunti a tutte le unità."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
-msgstr ""
+msgstr "Modalità pin sincronizzati. Pin corrispontenti in altre unità verranno aggiornati."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:43
 msgid "Pin &name:"
@@ -12530,27 +12535,24 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "Evidenza collegamenti quando solo evidenziati nell'editor del C.S."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
-#, fuzzy
 msgid "Line Drawing Mode:"
-msgstr "Modalità disegno"
+msgstr "Modalità disegno linea:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "Free Angle"
 msgstr "Angolo-libero"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "90 deg Angle"
-msgstr ""
+msgstr "Angolo 90°"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "45 deg Angle"
-msgstr "45 gradi"
+msgstr "Angolo 45°"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "135 deg Angle"
-msgstr ""
+msgstr "Angolo 135°"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 msgid "Mouse drag performs Drag (G) operation"
@@ -13303,7 +13305,7 @@ msgstr "Duplica il nome del foglio all'interno di un determinato foglio"
 
 #: eeschema/erc_item.cpp:50
 msgid "Symbol pin or wire end off grid"
-msgstr ""
+msgstr "Pin simbolo o capo filo fuori griglia"
 
 #: eeschema/erc_item.cpp:54
 msgid "Pin not connected"
@@ -15386,6 +15388,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Il file selezionato è stato creato come parte di un altro progetto. Il collegamento del file a questo progetto può causare riferimenti a librerie di simboli mancanti o non corretti.\n"
+"\n"
+"Continuare ugualmente?"
 
 #: eeschema/sheet.cpp:315
 #, fuzzy
@@ -15503,7 +15508,7 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:487 eeschema/sim/sim_plot_frame.cpp:1820
 msgid "Another simulation is already running."
-msgstr ""
+msgstr "Un'altra simulazione è già in esecuzione."
 
 #: eeschema/sim/sim_plot_frame.cpp:514
 #, c-format
@@ -17105,7 +17110,7 @@ msgstr "Annota schema..."
 
 #: eeschema/tools/ee_actions.cpp:603
 msgid "Fill in schematic symbol reference designators"
-msgstr "Compila nel simbolo il designatore di riferimento"
+msgstr "Compila i riferimenti dei simboli nello schema"
 
 #: eeschema/tools/ee_actions.cpp:608
 msgid "Schematic Setup..."
@@ -17236,35 +17241,28 @@ msgstr "Mostra marcatori esclusione violazioni controllo regole elettriche"
 #: eeschema/tools/ee_actions.cpp:684 eeschema/tools/ee_actions.cpp:689
 #: eeschema/tools/ee_actions.cpp:694 eeschema/tools/ee_actions.cpp:699
 #: eeschema/tools/ee_actions.cpp:704
-#, fuzzy
 msgid "Line Mode for Wires and Buses"
-msgstr "Forza fili e bus Or./Vert."
+msgstr "Modalità linea per fili e bus"
 
 #: eeschema/tools/ee_actions.cpp:684
 msgid "Lines drawn at any angle"
-msgstr ""
+msgstr "Linee disegnate ad ogni angolo"
 
 #: eeschema/tools/ee_actions.cpp:689
-#, fuzzy
 msgid "Lines drawn horizontally and vertically"
-msgstr "Orizzontale, poi verticale"
+msgstr "Linee disegnate orizzontalmente e verticalmente"
 
 #: eeschema/tools/ee_actions.cpp:694
-#, fuzzy
 msgid "Lines drawn horizontally and vertically, with a 45 degree angle end"
-msgstr ""
-"Disegno area consentito solo orizzontalmente, verticalmente e a 45 gradi"
+msgstr "Linee disegnate orizzontalmente e verticalmente, con un angolo a 45 gradi alla fine"
 
 #: eeschema/tools/ee_actions.cpp:699
-#, fuzzy
 msgid "Lines drawn horizontally and vertically, with a 45 degree angle start"
-msgstr ""
-"Limita le azioni a orizzontale, verticale o 45 gradi dal punto di partenza"
+msgstr "Linee disegnate orizzontalmente e verticalmente, con un angolo di 45 gradi all'inizio"
 
 #: eeschema/tools/ee_actions.cpp:704
-#, fuzzy
 msgid "Switch to next line mode"
-msgstr "Passa a griglia successiva"
+msgstr "Passa alla modalità linea successiva"
 
 #: eeschema/tools/ee_actions.cpp:709
 msgid "Repair Schematic"
@@ -17350,14 +17348,12 @@ msgid "Walks the current line back one segment."
 msgstr "Passa al segmento precedente della pista corrente."
 
 #: eeschema/tools/ee_actions.cpp:791
-#, fuzzy
 msgid "Switch Segment Posture"
-msgstr "Commuta postura arco"
+msgstr "Commuta postura segmento"
 
 #: eeschema/tools/ee_actions.cpp:791
-#, fuzzy
 msgid "Switches posture of the current segment."
-msgstr "Commuta la postura della pista sbrogliata correntemente."
+msgstr "Commuta la postura del segmento corrente."
 
 #: eeschema/tools/ee_actions.cpp:797
 msgid "Finish Wire or Bus"
@@ -23314,32 +23310,28 @@ msgid "Build Changes"
 msgstr "Annulla cambiamenti"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:134
-#, fuzzy
 msgid "Check zones..."
 msgstr "Controllo zone..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:142
 msgid "Rebuild connectivity..."
-msgstr ""
+msgstr "Ricrea la connettività..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:146
-#, fuzzy
 msgid "Check items..."
-msgstr "Verifica pin..."
+msgstr "Verifica elementi..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:157
-#, fuzzy
 msgid "Items checked..."
-msgstr "Elemento bloccato."
+msgstr "Elementi controllati..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:168
 msgid "Board cleanup"
 msgstr "Pulizia scheda"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:172
-#, fuzzy
 msgid "Finished..."
-msgstr "Termina filo"
+msgstr "Finito..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:25
 msgid "Delete &tracks connecting different nets"
@@ -24867,9 +24859,8 @@ msgid "Search DRC markers"
 msgstr "Cerca marcatori DRC"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:78
-#, fuzzy
 msgid "Search net names"
-msgstr "Nomi fogli"
+msgstr "Cerca nomi net"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:96
 msgid "Find Previous"
@@ -27843,7 +27834,7 @@ msgstr "Posiziona relativa all'elemento di riferimento"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:116
 msgid "Right-click for layer selection commands."
-msgstr ""
+msgstr "Pulsante destro per i comandi di selezione strati."
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:205
 msgid "Print according to objects tab of appearance manager"
@@ -30532,7 +30523,7 @@ msgstr "Piazzola passante senza foro"
 
 #: pcbnew/drc/drc_item.cpp:252
 msgid "Pads with different numbers overlap"
-msgstr ""
+msgstr "Piazzole con numeri diversi si sovrappongono"
 
 #: pcbnew/drc/drc_item.cpp:397
 #, c-format
@@ -31872,7 +31863,7 @@ msgstr "Importa file grafico vettoriale"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:133
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
-msgstr ""
+msgstr "Memoria esaurita durante il tentativo di caricamento del DXF, potrebbe essere troppo grande."
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
@@ -33092,7 +33083,7 @@ msgstr "Tipo record sconosciuto: '%d'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:875
 msgid "Loading extended primitive information data..."
-msgstr ""
+msgstr "Caricamento dati informazioni primitiva estesa..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:896
 msgid "Loading board data..."
@@ -37611,8 +37602,9 @@ msgid "Shadow on Locked Items"
 msgstr "Salta elementi bloccati"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
+#, fuzzy
 msgid "Show a shadow marker on locked items"
-msgstr ""
+msgstr "Mostra un marcatore ombra sugli elementi bloccati"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "Show drawing sheet borders and title block"
@@ -38417,141 +38409,3 @@ msgstr "Schema KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Circuito stampato KiCad"
-
-#~ msgid "Connection type:"
-#~ msgstr "Tipo di connessione:"
-
-#~ msgid "Constrain buses and wires to H or V"
-#~ msgstr "Blocca orientamento bus e fili a O o V"
-
-#~ msgid "Switch H & V only mode for new wires and buses"
-#~ msgstr "Commuta la modalità O e V per i nuovi fili e bus"
-
-#~ msgid "Plot Edge.Cuts on all layers"
-#~ msgstr "Traccia Edge.Cuts su tutti gli strati"
-
-#~ msgid "Plot the contents of the PCB edge layer on all layers"
-#~ msgstr "Traccia lo strato bordo scheda su tutti gli strati"
-
-#~ msgid "Synchronized pins edit mode, and this pin is new"
-#~ msgstr "Modalità modifica pin sincronizzati, e questo pin è nuovo"
-
-#~ msgid ""
-#~ "Similar pins will be automatically added to other units, if this pin is "
-#~ "not common to all units"
-#~ msgstr ""
-#~ "Pin simili verranno automaticamente aggiunti ad altre unità, se questo "
-#~ "pin non è comune a tutte le unità"
-
-#~ msgid "Synchronized pins edit mode"
-#~ msgstr "Modalità modifica pin sincronizzati"
-
-#~ msgid ""
-#~ "Similar pins at the same location will be edited. Pin number of other "
-#~ "pins will be not modified"
-#~ msgstr ""
-#~ "Pin simili nella stessa posizione verranno modificati. Il numero pin "
-#~ "degli altri pin non verrà modificato"
-
-#~ msgid "info"
-#~ msgstr "info"
-
-#, c-format
-#~ msgid "(pad \"%s\")"
-#~ msgstr "(piazzola \"%s\")"
-
-#~ msgid "Bl/Buried vias"
-#~ msgstr "Via coperti/interni"
-
-#, c-format
-#~ msgid ""
-#~ "The project library table '%s' does not exist or cannot be read.  This "
-#~ "may result in broken symbol links for the schematic.  Do you wish to "
-#~ "continue?"
-#~ msgstr ""
-#~ "La tabella librerie del progetto '%s' non esiste o non è leggibile.  Ciò "
-#~ "può portare a collegamenti a simboli interrotti per lo schema.  "
-#~ "Continuare?"
-
-#~ msgid ""
-#~ "Warning: Pad drill will leave no copper or drill shape and pad shape do "
-#~ "not overlap."
-#~ msgstr ""
-#~ "Attenzione: foro piazzola più grande della dimensione della piazzola o "
-#~ "forma del foro e della piazzola che non si sovrappongono."
-
-#~ msgid "No netlist provided, skipping schematic parity tests."
-#~ msgstr "Nessuna netlist fornita, salto test parità schema."
-
-#, c-format
-#~ msgid "Testing %d silkscreen features against %d board items."
-#~ msgstr ""
-#~ "Verifica %d caratteristiche serigrafia rispetto a %d elementi scheda."
-
-#~ msgid "H align:"
-#~ msgstr "Allinea O:"
-
-#~ msgid "V align:"
-#~ msgstr "Allinea V:"
-
-#~ msgid "Via Drill"
-#~ msgstr "Foro via"
-
-#~ msgid "uVia Drill"
-#~ msgstr "Foro microvia"
-
-#~ msgid "Via drill size must be smaller than via diameter"
-#~ msgstr "La dimensione del foro via deve essere minore del diametro via"
-
-#~ msgid "Via drill:"
-#~ msgstr "Foro via:"
-
-#~ msgid "Track Width and Via Size"
-#~ msgstr "Larghezza piste e dimensioni via"
-
-#~ msgid "Copper zone net has no pads"
-#~ msgstr "Il collegamento zona rame non ha piazzole"
-
-#~ msgid "Drill"
-#~ msgstr "Foro"
-
-#, c-format
-#~ msgid "Via %s, drill %s"
-#~ msgstr "Via %s, foro %s"
-
-#, fuzzy
-#~ msgid "Zone has no connections."
-#~ msgstr "La porta %s non ha connessioni."
-
-#~ msgid "TransLine "
-#~ msgstr "TransLine "
-
-#~ msgid "Refill zones after Zone Properties dialog"
-#~ msgstr ""
-#~ "Ri-riempi le zone dopo l'apertura della finestra delle proprietà della "
-#~ "zona"
-
-#, c-format
-#~ msgid ""
-#~ "Polygon found on an Altium layer (%d) with no KiCad equivalent. It has "
-#~ "been moved to KiCad layer Eco1_User."
-#~ msgstr ""
-#~ "Poligono sullo strato Altium (%d) senza equivalente KiCad. È stato "
-#~ "spostato sullo strato KiCad Eco1_User."
-
-#, c-format
-#~ msgid ""
-#~ "Zone found on an Altium layer (%d) with no KiCad equivalent. It has been "
-#~ "moved to KiCad layer Eco1_User."
-#~ msgstr ""
-#~ "Zona sullo strato Altium (%d) senza equivalente KiCad. È stata spostata "
-#~ "sullo strato KiCad Eco1_User."
-
-#~ msgid "kicad"
-#~ msgstr "kicad"
-
-#~ msgid "pcbcalculator"
-#~ msgstr "pcbcalculator"
-
-#~ msgid "Performing polygon fills..."
-#~ msgstr "Esecuzione riempimento poligoni..."
