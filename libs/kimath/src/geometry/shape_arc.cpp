@@ -369,28 +369,28 @@ bool SHAPE_ARC::IsClockwise() const
 bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
                          VECTOR2I* aLocation ) const
 {
-    int minDist = aClearance + std::max( m_width / 2, 1 );
+    int minDist = aClearance + m_width / 2;
     auto bbox = BBox( minDist );
 
     // Fast check using bounding box:
     if( !bbox.Contains( aP ) )
         return false;
 
-    VECTOR2I center = GetCenter();
-    VECTOR2I vec = aP - center;
+    CIRCLE   fullCircle( GetCenter(), GetRadius() );
+    VECTOR2I nearestPt = fullCircle.NearestPoint( aP );
 
-    int dist = abs( vec.EuclideanNorm() - GetRadius() );
+    int dist = ( nearestPt - aP ).EuclideanNorm();
 
     // If not a 360 degree arc, need to use arc angles to decide if point collides
     if( m_start != m_end )
     {
         bool   ccw = GetCentralAngle() > ANGLE_0;
-        EDA_ANGLE vecAngle( vec );
-        EDA_ANGLE rotatedVecAngle = ( vecAngle.Normalize() - GetStartAngle() ).Normalize();
+        EDA_ANGLE angleToPt( aP - fullCircle.Center ); // Angle from center to the point
+        EDA_ANGLE rotatedPtAngle = ( angleToPt.Normalize() - GetStartAngle() ).Normalize();
         EDA_ANGLE rotatedEndAngle = ( GetEndAngle() - GetStartAngle() ).Normalize();
 
-        if( ( ccw && rotatedVecAngle > rotatedEndAngle )
-            || ( !ccw && rotatedVecAngle < rotatedEndAngle ) )
+        if( ( ccw && rotatedPtAngle > rotatedEndAngle )
+            || ( !ccw && rotatedPtAngle < rotatedEndAngle ) )
         {
             int distStartpt = ( aP - m_start ).EuclideanNorm();
             int distEndpt = ( aP - m_end ).EuclideanNorm();
