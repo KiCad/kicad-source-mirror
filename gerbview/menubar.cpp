@@ -77,7 +77,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     fileMenu->Add( GERBVIEW_ACTIONS::openAutodetected );
     fileMenu->Add( GERBVIEW_ACTIONS::openGerber );
-    wxMenuItem* gbrItem = fileMenu->Add( openRecentGbrMenu->Clone() );
+    wxMenuItem* gbrItem = fileMenu->Add( openRecentGbrMenu );
     RegisterUIUpdateHandler( gbrItem->GetId(), FileHistoryCond( recentGbrFiles) );
 
 
@@ -99,7 +99,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     m_drillFileHistory.UpdateClearText( openRecentDrlMenu, _( "Clear Recent Drill Files" ) );
 
     fileMenu->Add( GERBVIEW_ACTIONS::openDrillFile );
-    wxMenuItem* drillItem = fileMenu->Add( openRecentDrlMenu->Clone() );
+    wxMenuItem* drillItem = fileMenu->Add( openRecentDrlMenu );
     RegisterUIUpdateHandler( drillItem->GetId(), FileHistoryCond( m_drillFileHistory ) );
 
 
@@ -120,7 +120,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     m_jobFileHistory.UpdateClearText( openRecentJobMenu, _( "Clear Recent Job Files" ) );
 
     fileMenu->Add( GERBVIEW_ACTIONS::openJobFile );
-    wxMenuItem* jobItem = fileMenu->Add( openRecentJobMenu->Clone() );
+    wxMenuItem* jobItem = fileMenu->Add( openRecentJobMenu );
     RegisterUIUpdateHandler( jobItem->GetId(), FileHistoryCond( m_jobFileHistory ) );
 
 
@@ -141,7 +141,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     m_zipFileHistory.UpdateClearText( openRecentZipMenu, _( "Clear Recent Zip Files" ) );
 
     fileMenu->Add( GERBVIEW_ACTIONS::openZipFile );
-    wxMenuItem* zipItem = fileMenu->Add( openRecentZipMenu->Clone() );
+    wxMenuItem* zipItem = fileMenu->Add( openRecentZipMenu );
     RegisterUIUpdateHandler( zipItem->GetId(), FileHistoryCond( m_zipFileHistory ) );
 
 #undef FileHistoryCond

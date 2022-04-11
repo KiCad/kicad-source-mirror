@@ -81,7 +81,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 
     fileMenu->Add( KICAD_MANAGER_ACTIONS::openProject );
 
-    wxMenuItem* item = fileMenu->Add( openRecentMenu->Clone() );
+    wxMenuItem* item = fileMenu->Add( openRecentMenu );
 
     // Add the file menu condition here since it needs the item ID for the submenu
     ACTION_CONDITIONS cond;
