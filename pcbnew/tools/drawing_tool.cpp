@@ -24,6 +24,7 @@
  */
 
 #include "drawing_tool.h"
+#include "geometry/shape_rect.h"
 
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
@@ -2666,28 +2667,32 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
         void SnapItem( BOARD_ITEM *aItem ) override
         {
-            // If you place a Via on a track but not on its centerline, the current connectivity
-            // algorithm will require us to put a kink in the track when we break it (so that each
-            // of the two segments ends on the via center).
-            // That's not ideal, and is probably worse than forcing snap in this situation.
-
             m_gridHelper.SetSnap( !( m_modifiers & MD_SHIFT ) );
-            PCB_VIA*   via = static_cast<PCB_VIA*>( aItem );
-            VECTOR2I   position = via->GetPosition();
-            PCB_TRACK* track = findTrack( via );
-            PAD*       pad = findPad( via );
 
-            if( track )
+            MAGNETIC_SETTINGS* settings = m_frame->GetMagneticItemsSettings();
+            PCB_VIA*           via = static_cast<PCB_VIA*>( aItem );
+            VECTOR2I           position = via->GetPosition();
+
+            if( settings->tracks == MAGNETIC_OPTIONS::CAPTURE_ALWAYS && m_gridHelper.GetSnap() )
             {
-                SEG      trackSeg( track->GetStart(), track->GetEnd() );
-                VECTOR2I snap = m_gridHelper.AlignToSegment( position, trackSeg );
+                PCB_TRACK* track = findTrack( via );
 
-                aItem->SetPosition( snap );
+                if( track )
+                {
+                    SEG      trackSeg( track->GetStart(), track->GetEnd() );
+                    VECTOR2I snap = m_gridHelper.AlignToSegment( position, trackSeg );
+
+                    aItem->SetPosition( snap );
+                }
             }
-            else if( pad && m_gridHelper.GetSnap()
-                 && m_frame->GetMagneticItemsSettings()->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
+            else if( settings->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS && m_gridHelper.GetSnap() )
             {
-                aItem->SetPosition( pad->GetPosition() );
+                PAD* pad = findPad( via );
+
+                if( pad )
+                {
+                    aItem->SetPosition( pad->GetPosition() );
+                }
             }
         }
 
@@ -2719,27 +2724,121 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                     infobar->Dismiss();
             }
 
-            if( track )
-            {
-                if( viaPos != track->GetStart() && viaPos != track->GetEnd() )
-                {
-                    aCommit.Modify( track );
-
-                    PCB_TRACK* newTrack = dynamic_cast<PCB_TRACK*>( track->Clone() );
-                    const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
-
-                    track->SetEnd( viaPos );
-                    newTrack->SetStart( viaPos );
-                    aCommit.Add( newTrack );
-                }
-            }
-            else if( !pad )
+            if( !track && !pad )
             {
                 via->SetNetCode( findStitchedZoneNet( via ) );
                 via->SetIsFree();
             }
 
-            aCommit.Add( aItem );
+            aCommit.Add( via );
+
+            if( track )
+            {
+                VECTOR2I trackStart = track->GetStart();
+                VECTOR2I trackEnd = track->GetEnd();
+                SEG      trackSeg( trackStart, trackEnd );
+                VECTOR2I joint1;
+                VECTOR2I joint2;
+
+                auto insertChevron =
+                        [&]()
+                        {
+                            if( ( trackStart - joint1 ).SquaredEuclideanNorm()
+                                    > ( trackStart - joint2 ).SquaredEuclideanNorm() )
+                            {
+                                std::swap( joint1, joint2 );
+                            }
+
+                            aCommit.Modify( track );
+                            track->SetStart( trackStart );
+                            track->SetEnd( joint1 );
+
+                            PCB_TRACK* newTrack = dynamic_cast<PCB_TRACK*>( track->Clone() );
+                            const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
+
+                            newTrack->SetStart( joint1 );
+                            newTrack->SetEnd( viaPos );
+                            aCommit.Add( newTrack );
+
+                            newTrack = dynamic_cast<PCB_TRACK*>( track->Clone() );
+                            const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
+
+                            newTrack->SetStart( viaPos );
+                            newTrack->SetEnd( joint2 );
+                            aCommit.Add( newTrack );
+
+                            newTrack = dynamic_cast<PCB_TRACK*>( track->Clone() );
+                            const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
+
+                            newTrack->SetStart( joint2 );
+                            newTrack->SetEnd( trackEnd );
+                            aCommit.Add( newTrack );
+                        };
+
+                if( viaPos == trackStart || viaPos == trackEnd )
+                    return true;
+
+                if( trackStart.x == trackEnd.x )
+                {
+                    VECTOR2I splitPt = trackSeg.NearestPoint( viaPos );
+
+                    if( splitPt.x != viaPos.x
+                            && abs( splitPt.x - viaPos.x ) < abs( splitPt.y - trackStart.y  )
+                            && abs( splitPt.x - viaPos.x ) < abs( splitPt.y - trackEnd.y ) )
+                    {
+                        int offset = abs( splitPt.x - viaPos.x );
+
+                        joint1 = VECTOR2I( splitPt.x, splitPt.y - offset );
+                        joint2 = VECTOR2I( splitPt.x, splitPt.y + offset );
+
+                        insertChevron();
+                        return true;
+                    }
+                }
+                else if( trackStart.y == trackEnd.y )
+                {
+                    VECTOR2I splitPt = trackSeg.NearestPoint( viaPos );
+
+                    if( splitPt.y != viaPos.y
+                            && abs( trackStart.y - viaPos.y ) < abs( trackStart.x - viaPos.x )
+                            && abs( trackEnd.y - viaPos.y ) < abs( trackEnd.x - viaPos.x ) )
+                    {
+                        int offset = abs( splitPt.y - viaPos.y );
+
+                        joint1 = VECTOR2I( splitPt.x - offset, splitPt.y );
+                        joint2 = VECTOR2I( splitPt.x + offset, splitPt.y );
+
+                        insertChevron();
+                        return true;
+                    }
+                }
+                else if( abs( trackStart.y - trackEnd.y ) == abs( trackStart.x - trackEnd.x ) )
+                {
+                    SEG horiz( VECTOR2I( -INT_MAX, viaPos.y ), VECTOR2I( INT_MAX, viaPos.y ) );
+                    SEG vert( VECTOR2I( viaPos.x, -INT_MAX ), VECTOR2I( viaPos.x, INT_MAX ) );
+
+                    if( track->GetBoundingBox().Contains( viaPos ) )
+                    {
+                        joint1 = trackSeg.Intersect( horiz, true, true ).get();
+                        joint2 = trackSeg.Intersect( vert, true, true ).get();
+
+                        insertChevron();
+                        return true;
+                    }
+                }
+
+                aCommit.Modify( track );
+                track->SetStart( trackStart );
+                track->SetEnd( viaPos );
+
+                PCB_TRACK* newTrack = dynamic_cast<PCB_TRACK*>( track->Clone() );
+                const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
+
+                newTrack->SetStart( viaPos );
+                newTrack->SetEnd( trackEnd );
+                aCommit.Add( newTrack );
+            }
+
             return true;
         }
 
