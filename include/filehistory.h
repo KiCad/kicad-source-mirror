@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Ian McInerney <Ian.S.McInerney@ieee.org>
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,7 +104,7 @@ public:
     /**
      * Add the files to the specified menu
      *
-     * @aMenu is the menu to operate on.
+     * @param aMenu is the menu to operate on.
      */
     void AddFilesToMenu( wxMenu* aMenu ) override;
 
@@ -124,6 +124,15 @@ public:
     {
         m_clearText = aClearText;
     }
+
+    /**
+     * Update the text displayed on the menu item that clears the entire menu.
+     * useful after language change.
+     *
+     * @param aMenu is the menu to operate on.
+     * @param aClearText is the new text to use for the menu item
+     */
+    void UpdateClearText(  wxMenu* aMenu, wxString aClearText );
 
     /**
      * Clear all entries from the file history.
