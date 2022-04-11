@@ -1028,6 +1028,7 @@ static KICAD_T deletableItems[] =
     SCH_SHEET_T,
     SCH_SHEET_PIN_T,
     SCH_SYMBOL_T,
+    SCH_FIELD_T, // Will be hidden
     SCH_BITMAP_T,
     EOT
 };
@@ -1082,6 +1083,14 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 
                 sheet->RemovePin( pin );
             }
+        }
+        else if( sch_item->Type() == SCH_FIELD_T )
+        {
+            saveCopyInUndoList( item, UNDO_REDO::CHANGED, appendToUndo );
+            static_cast<SCH_FIELD*>( sch_item )->SetVisible( false );
+            appendToUndo = true;
+
+            updateItem( sch_item, false );
         }
         else
         {
