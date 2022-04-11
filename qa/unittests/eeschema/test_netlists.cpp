@@ -32,24 +32,9 @@
 #include <wildcards_and_files_ext.h>
 
 
-class TEST_NETLISTS_FIXTURE
+class TEST_NETLISTS_FIXTURE : public KI_TEST::SCHEMATIC_TEST_FIXTURE
 {
-public:
-    TEST_NETLISTS_FIXTURE() :
-            m_schematic( nullptr ),
-            m_manager( true )
-    {
-        m_pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD );
-    }
-
-    virtual ~TEST_NETLISTS_FIXTURE()
-    {
-        m_schematic.Reset();
-        SCH_IO_MGR::ReleasePlugin( m_pi );
-    }
-
-    void loadSchematic( const wxString& aBaseName );
-
+protected:
     wxString getNetlistFileName( bool aTest = false );
 
     void writeNetlist();
@@ -59,71 +44,7 @@ public:
     void cleanup();
 
     void doNetlistTest( const wxString& aBaseName );
-
-    ///> Schematic to load
-    SCHEMATIC m_schematic;
-
-    SCH_PLUGIN* m_pi;
-
-    SETTINGS_MANAGER m_manager;
 };
-
-
-static wxString getSchematicFile( const wxString& aBaseName )
-{
-    wxFileName fn = KI_TEST::GetEeschemaTestDataDir();
-    fn.AppendDir( "netlists" );
-    fn.AppendDir( aBaseName );
-    fn.SetName( aBaseName );
-    fn.SetExt( KiCadSchematicFileExtension );
-
-    return fn.GetFullPath();
-}
-
-
-void TEST_NETLISTS_FIXTURE::loadSchematic( const wxString& aBaseName )
-{
-    wxString fn = getSchematicFile( aBaseName );
-
-    BOOST_TEST_MESSAGE( fn );
-
-    wxFileName pro( fn );
-    pro.SetExt( ProjectFileExtension );
-
-    m_manager.LoadProject( pro.GetFullPath() );
-
-    m_manager.Prj().SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, nullptr );
-
-    m_schematic.Reset();
-    m_schematic.SetProject( &m_manager.Prj() );
-    m_schematic.SetRoot( m_pi->Load( fn, &m_schematic ) );
-
-    BOOST_REQUIRE_EQUAL( m_pi->GetError().IsEmpty(), true );
-
-    m_schematic.CurrentSheet().push_back( &m_schematic.Root() );
-
-    SCH_SCREENS screens( m_schematic.Root() );
-
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
-        screen->UpdateLocalLibSymbolLinks();
-
-    SCH_SHEET_LIST sheets = m_schematic.GetSheets();
-
-    // Restore all of the loaded symbol instances from the root sheet screen.
-    sheets.UpdateSymbolInstances( m_schematic.RootScreen()->GetSymbolInstances() );
-
-    sheets.AnnotatePowerSymbols();
-
-    // NOTE: This is required for multi-unit symbols to be correct
-    // Normally called from SCH_EDIT_FRAME::FixupJunctions() but could be refactored
-    for( SCH_SHEET_PATH& sheet : sheets )
-        sheet.UpdateAllScreenReferences();
-
-    // NOTE: SchematicCleanUp is not called; QA schematics must already be clean or else
-    // SchematicCleanUp must be freed from its UI dependencies.
-
-    m_schematic.ConnectionGraph()->Recalculate( sheets, true );
-}
 
 
 wxString TEST_NETLISTS_FIXTURE::getNetlistFileName( bool aTest )

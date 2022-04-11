@@ -24,11 +24,14 @@
 #ifndef QA_EESCHEMA_EESCHEMA_TEST_UTILS__H
 #define QA_EESCHEMA_EESCHEMA_TEST_UTILS__H
 
+
+#include <schematic.h>
+#include <settings/settings_manager.h>
+#include <sch_io_mgr.h>
 #include <wx/filename.h>
 
 namespace KI_TEST
 {
-
 /**
  * Get the configured location of Eeschema test data.
  *
@@ -38,6 +41,37 @@ namespace KI_TEST
  * @return a filename referring to the test data dir to use.
  */
 wxFileName GetEeschemaTestDataDir();
+
+/**
+ * A generic fixture for loading schematics and associated settings for qa tests
+ */
+class SCHEMATIC_TEST_FIXTURE
+{
+public:
+    SCHEMATIC_TEST_FIXTURE() : m_schematic( nullptr ), m_manager( true )
+    {
+        m_pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD );
+    }
+
+    virtual ~SCHEMATIC_TEST_FIXTURE()
+    {
+        m_schematic.Reset();
+        delete m_pi;
+    }
+
+protected:
+    void loadSchematic( const wxString& aRelativePath );
+
+    virtual wxFileName getSchematicFile( const wxString& aBaseName );
+
+    ///> Schematic to load
+    SCHEMATIC m_schematic;
+
+    SCH_PLUGIN* m_pi;
+
+    SETTINGS_MANAGER m_manager;
+};
+
 
 } // namespace KI_TEST
 

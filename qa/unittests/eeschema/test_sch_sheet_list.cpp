@@ -20,87 +20,17 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include "eeschema_test_utils.h"
 
-#include <sch_io_mgr.h>
-#include <sch_screen.h>
 #include <sch_sheet_path.h>
-#include <schematic.h>
-#include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
 
-
-class TEST_SCH_SHEET_LIST_FIXTURE
+class TEST_SCH_SHEET_LIST_FIXTURE : public KI_TEST::SCHEMATIC_TEST_FIXTURE
 {
-public:
-    TEST_SCH_SHEET_LIST_FIXTURE() :
-            m_schematic( nullptr ),
-            m_manager( true )
-    {
-        m_pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD );
-    }
-
-    virtual ~TEST_SCH_SHEET_LIST_FIXTURE()
-    {
-        m_schematic.Reset();
-        delete m_pi;
-    }
-
-    void loadSchematic( const wxString& aRelativePath );
-
-    wxFileName buildFullPath( const wxString& aRelativePath );
-
-    ///> Schematic to load
-    SCHEMATIC m_schematic;
-
-    SCH_PLUGIN* m_pi;
-
-    SETTINGS_MANAGER m_manager;
+protected:
+    wxFileName getSchematicFile( const wxString& aRelativePath ) override;
 };
 
 
-void TEST_SCH_SHEET_LIST_FIXTURE::loadSchematic( const wxString& aRelativePath )
-{
-    wxFileName fn = buildFullPath( aRelativePath );
-
-    BOOST_TEST_MESSAGE( fn.GetFullPath() );
-
-    wxFileName pro( fn );
-    pro.SetExt( ProjectFileExtension );
-
-    m_schematic.Reset();
-    m_schematic.CurrentSheet().clear();
-
-    m_manager.LoadProject( pro.GetFullPath() );
-    m_manager.Prj().SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, nullptr );
-
-    m_schematic.SetProject( &m_manager.Prj() );
-
-    m_schematic.SetRoot( m_pi->Load( fn.GetFullPath(), &m_schematic ) );
-
-    BOOST_REQUIRE_EQUAL( m_pi->GetError().IsEmpty(), true );
-
-    m_schematic.CurrentSheet().push_back( &m_schematic.Root() );
-
-    SCH_SCREENS screens( m_schematic.Root() );
-
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
-        screen->UpdateLocalLibSymbolLinks();
-
-    SCH_SHEET_LIST sheets = m_schematic.GetSheets();
-
-    // Restore all of the loaded symbol instances from the root sheet screen.
-    sheets.UpdateSymbolInstances( m_schematic.RootScreen()->GetSymbolInstances() );
-    sheets.UpdateSheetInstances( m_schematic.RootScreen()->GetSheetInstances() );
-
-    sheets.AnnotatePowerSymbols();
-
-    // NOTE: This is required for multi-unit symbols to be correct
-    // Normally called from SCH_EDIT_FRAME::FixupJunctions() but could be refactored
-    for( SCH_SHEET_PATH& sheet : sheets )
-        sheet.UpdateAllScreenReferences();
-}
-
-
-wxFileName TEST_SCH_SHEET_LIST_FIXTURE::buildFullPath( const wxString& aRelativePath )
+wxFileName TEST_SCH_SHEET_LIST_FIXTURE::getSchematicFile( const wxString& aRelativePath )
 {
     wxFileName fn = KI_TEST::GetEeschemaTestDataDir();
     fn.AppendDir( "netlists" );
@@ -174,7 +104,7 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
 
         // Save and reload
         wxString   tempName = "complex_hierarchy_shared/complex_hierarchy_modified";
-        wxFileName tempFn = buildFullPath( tempName );
+        wxFileName tempFn = getSchematicFile( tempName );
         m_pi->Save( tempFn.GetFullPath(), &m_schematic.Root(), &m_schematic );
         loadSchematic( tempName );
 

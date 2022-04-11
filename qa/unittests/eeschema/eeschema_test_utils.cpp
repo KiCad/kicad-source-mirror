@@ -30,6 +30,8 @@
 #include <eeschema/sch_screen.h>
 #include <eeschema/schematic.h>
 #include <eeschema/connection_graph.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
+#include <wildcards_and_files_ext.h>
 
 
 #ifndef QA_EESCHEMA_DATA_LOCATION
@@ -60,24 +62,39 @@ wxFileName KI_TEST::GetEeschemaTestDataDir()
 }
 
 
-std::unique_ptr<SCHEMATIC> ReadSchematicFromFile( const std::string& aFilename )
+void KI_TEST::SCHEMATIC_TEST_FIXTURE::loadSchematic( const wxString& aRelativePath )
 {
-    auto pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD );
-    std::unique_ptr<SCHEMATIC> schematic = std::make_unique<SCHEMATIC>( nullptr );
+    wxFileName fn = getSchematicFile( aRelativePath );
 
-    schematic->Reset();
-    schematic->SetRoot( pi->Load( aFilename, schematic.get() ) );
-    schematic->CurrentSheet().push_back( &schematic->Root() );
+    BOOST_TEST_MESSAGE( fn.GetFullPath() );
 
-    SCH_SCREENS screens( schematic->Root() );
+    wxFileName pro( fn );
+    pro.SetExt( ProjectFileExtension );
+
+    m_schematic.Reset();
+    m_schematic.CurrentSheet().clear();
+
+    m_manager.LoadProject( pro.GetFullPath() );
+    m_manager.Prj().SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, nullptr );
+
+    m_schematic.SetProject( &m_manager.Prj() );
+
+    m_schematic.SetRoot( m_pi->Load( fn.GetFullPath(), &m_schematic ) );
+
+    BOOST_REQUIRE_EQUAL( m_pi->GetError().IsEmpty(), true );
+
+    m_schematic.CurrentSheet().push_back( &m_schematic.Root() );
+
+    SCH_SCREENS screens( m_schematic.Root() );
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
         screen->UpdateLocalLibSymbolLinks();
 
-    SCH_SHEET_LIST sheets = schematic->GetSheets();
+    SCH_SHEET_LIST sheets = m_schematic.GetSheets();
 
     // Restore all of the loaded symbol instances from the root sheet screen.
-    sheets.UpdateSymbolInstances( schematic->RootScreen()->GetSymbolInstances() );
+    sheets.UpdateSymbolInstances( m_schematic.RootScreen()->GetSymbolInstances() );
+    sheets.UpdateSheetInstances( m_schematic.RootScreen()->GetSheetInstances() );
 
     sheets.AnnotatePowerSymbols();
 
@@ -89,7 +106,18 @@ std::unique_ptr<SCHEMATIC> ReadSchematicFromFile( const std::string& aFilename )
     // NOTE: SchematicCleanUp is not called; QA schematics must already be clean or else
     // SchematicCleanUp must be freed from its UI dependencies.
 
-    schematic->ConnectionGraph()->Recalculate( sheets, true );
-
-    return schematic;
+    m_schematic.ConnectionGraph()->Recalculate( sheets, true );
 }
+
+
+wxFileName KI_TEST::SCHEMATIC_TEST_FIXTURE::getSchematicFile( const wxString& aBaseName )
+{
+    wxFileName fn = KI_TEST::GetEeschemaTestDataDir();
+    fn.AppendDir( "netlists" );
+    fn.AppendDir( aBaseName );
+    fn.SetName( aBaseName );
+    fn.SetExt( KiCadSchematicFileExtension );
+
+    return fn;
+}
+
