@@ -210,9 +210,9 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp, DRC_RTREE& aTree 
             SEG ssp ( sp->GetStart(), sp->GetEnd() );
             SEG ssn ( sn->GetStart(), sn->GetEnd() );
 
-            // Segments that are == 1 IU in length are approximately parallel with everything and their
-            // parallel projection is < 1 IU, leading to bad distance calculations
-            if( ssp.SquaredLength() > 1 && ssn.SquaredLength() > 1 && ssp.ApproxParallel(ssn) )
+            // Segments that are ~ 1 IU in length per side are approximately parallel (tolerance is 1 IU)
+            // with everything and their parallel projection is < 1 IU, leading to bad distance calculations
+            if( ssp.SquaredLength() > 2 && ssn.SquaredLength() > 2 && ssp.ApproxParallel(ssn) )
             {
                 DIFF_PAIR_COUPLED_SEGMENTS cpair;
                 bool coupled = commonParallelProjection( ssp, ssn, cpair.coupledP, cpair.coupledN );
