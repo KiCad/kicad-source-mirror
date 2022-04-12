@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-11 09:39-0700\n"
-"PO-Revision-Date: 2022-04-08 00:06+0000\n"
+"PO-Revision-Date: 2022-04-13 14:13+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v6/ca/>\n"
 "Language: ca\n"
@@ -29383,9 +29383,8 @@ msgid "undefined"
 msgstr "No definit"
 
 #: pcbnew/drc/drc_engine.cpp:890
-#, fuzzy
 msgid "track width"
-msgstr "Amplada de pista"
+msgstr "amplada de pista"
 
 #: pcbnew/drc/drc_engine.cpp:891
 #, fuzzy
@@ -30102,9 +30101,8 @@ msgid "VRML Export Failed: Could not add holes to contours."
 msgstr ""
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:67
-#, fuzzy
 msgid "Generate Position File"
-msgstr "Genera els fitxers de posició dels components"
+msgstr "Genera un fitxer de Posició"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:319
 #: pcbnew/exporters/gen_footprints_placefile.cpp:450
@@ -30182,9 +30180,8 @@ msgid "Board stackup settings not up to date."
 msgstr ""
 
 #: pcbnew/files.cpp:144
-#, fuzzy
 msgid "All KiCad Board Files"
-msgstr "Importació d'un fitxer de placa no de Kicad"
+msgstr "Tots els fitxers de Placa de KiCad"
 
 #: pcbnew/files.cpp:185
 msgid "Open Board File"
@@ -30341,18 +30338,16 @@ msgid "Back (Flipped)"
 msgstr "Posterior (Voltejada)"
 
 #: pcbnew/footprint.cpp:966
-#, fuzzy
 msgid "autoplaced"
-msgstr "Posiciona automàticament"
+msgstr "autoposicionat"
 
 #: pcbnew/footprint.cpp:969
 msgid "not in schematic"
 msgstr "no a l'esquemàtic"
 
 #: pcbnew/footprint.cpp:972
-#, fuzzy
 msgid "exclude from pos files"
-msgstr "Ploteja els pads en la serigrafia"
+msgstr "excloure dels fitxers pos"
 
 #: pcbnew/footprint.cpp:975
 msgid "exclude from BOM"
@@ -30390,9 +30385,9 @@ msgid "<no reference designator>"
 msgstr "<sense designador de referència>"
 
 #: pcbnew/footprint.cpp:1283
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s"
-msgstr "Empremta: %s"
+msgstr "Empremta %s"
 
 #: pcbnew/footprint.cpp:2109
 #, c-format
@@ -30445,18 +30440,16 @@ msgid "KiCad Footprint Editor"
 msgstr "Editor d'empremtes KiCad"
 
 #: pcbnew/footprint_edit_frame.cpp:200 pcbnew/zone_settings.cpp:217
-#, fuzzy
 msgid "Inner layers"
-msgstr "Sense capes"
+msgstr "Capes internes"
 
 #: pcbnew/footprint_edit_frame.cpp:239 pcbnew/pcb_edit_frame.cpp:280
 msgid "Selection Filter"
 msgstr "Filtre de selecció"
 
 #: pcbnew/footprint_edit_frame.cpp:295
-#, fuzzy
 msgid "Footprint changes are unsaved"
-msgstr "S'ha desat l'empremta «%s»"
+msgstr "No s'han desat els canvis de l'empremta"
 
 #: pcbnew/footprint_edit_frame.cpp:506
 #, c-format
@@ -30486,9 +30479,8 @@ msgid "Footprint Image File Name"
 msgstr "Nom del fitxer de la imatge de l'empremta"
 
 #: pcbnew/footprint_editor_utils.cpp:220
-#, fuzzy
 msgid "Edit Zone"
-msgstr "Edita el camp"
+msgstr "Edita zona"
 
 #: pcbnew/footprint_editor_utils.cpp:294
 #, c-format
