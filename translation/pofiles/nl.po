@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-11 09:39-0700\n"
-"PO-Revision-Date: 2022-03-17 08:54+0000\n"
+"PO-Revision-Date: 2022-04-13 14:13+0000\n"
 "Last-Translator: Bas Wijnen <wijnen@debian.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v6/nl/>\n"
 "Language: nl\n"
@@ -61,7 +61,7 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
 msgid "Create tracks and vias"
-msgstr "Maak tracks en via's"
+msgstr "Maak sporen en via's"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:682
 msgid "Create zones"
@@ -3067,9 +3067,8 @@ msgid "Canvas scale:"
 msgstr "Canvas schaal:"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
-#, fuzzy
 msgid "Apply icon scaling to fonts"
-msgstr "Aktie script toepassen"
+msgstr "Pas icoonschaal toe op tekst"
 
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
@@ -3299,8 +3298,8 @@ msgid ""
 "When drawing a track or moving an item, pan when approaching the edge of the "
 "display."
 msgstr ""
-"Wanneer u een track tekent of een item verplaatst, pan dan wanneer u de rand "
-"van het scherm nadert."
+"Wanneer een spoor getekend of een item verplaatst wordt, schuift het beeld "
+"bij de rand van het scherm."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:38
 msgid "Use zoom acceleration"
@@ -5311,7 +5310,7 @@ msgstr "Doorlopende pads"
 #: pcbnew/widgets/panel_selection_filter.cpp:188
 #: pcbnew/widgets/panel_selection_filter_base.cpp:37
 msgid "Tracks"
-msgstr "Nummers"
+msgstr "Sporen"
 
 #: common/layer_id.cpp:153
 msgid "Through vias"
@@ -14744,7 +14743,6 @@ msgid "Cancel Load"
 msgstr "Annuleer het laden"
 
 #: eeschema/sheet.cpp:225
-#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -14753,8 +14751,10 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "Er zijn bibliotheeknamen in het geladen schema die ontbreken in de "
-"projectbibliotheektabel. Dit kan resulteren in verbroken links naar de "
-"symboolbibliotheek voor het geladen schema. Wilt u doorgaan?"
+"projectbibliotheektabel. Dit kan resulteren in gebroken verwijzingen naar de "
+"symboolbibliotheek voor het geladen schema.\n"
+"\n"
+"Wilt u doorgaan?"
 
 #: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
 #: eeschema/sheet.cpp:380
@@ -14771,7 +14771,6 @@ msgid ""
 msgstr ""
 
 #: eeschema/sheet.cpp:315
-#, fuzzy
 msgid ""
 "There are symbol library names in the selected schematic that are missing "
 "from the selected schematic project library table.  This may result in "
@@ -14780,11 +14779,12 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "Er zijn bibliotheeknamen in het geladen schema die ontbreken in de geladen "
-"schematische projectbibliotheektabel. Dit kan resulteren in verbroken links "
-"naar de symboolbibliotheek voor het schema. Wilt u doorgaan?"
+"schematische projectbibliotheektabel. Dit kan resulteren in gebroken "
+"verwijzingen naar de symboolbibliotheek voor het schema.\n"
+"\n"
+"Wilt u doorgaan?"
 
 #: eeschema/sheet.cpp:376
-#, fuzzy
 msgid ""
 "A duplicate library name that references a different library exists in the "
 "current library table.  This conflict cannot be resolved and may result in "
@@ -14794,8 +14794,10 @@ msgid ""
 msgstr ""
 "Er bestaat een dubbele bibliotheeknaam die verwijst naar een andere "
 "bibliotheek in de huidige bibliotheektabel. Dit conflict kan niet worden "
-"opgelost en kan resulteren in verbroken links naar de symboolbibliotheek "
-"voor het schema. Wilt u doorgaan?"
+"opgelost en kan resulteren in gebroken verwijzingen naar de "
+"symboolbibliotheek voor het schema.\n"
+"\n"
+"Wilt u doorgaan?"
 
 #: eeschema/sheet.cpp:564
 #, c-format
@@ -19749,7 +19751,6 @@ msgstr ""
 "___R1 = R2 = R3 = Z<sub>uit</sub> / 3 ___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19763,18 +19764,17 @@ msgid ""
 "___R1 = 1 / (A/Z<sub>in</sub> &minus; 1/R2)___<br>\n"
 "___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 msgstr ""
-"## Tee Demper\n"
-"__Zin__ gewenste ingangsimpedantie in & # x2126; <br>\n"
-"__Zout__ gewenste uitgangsimpedantie <br>\n"
-"__Zin = Zout__ <br> <br>\n"
+"## Pi-Demper\n"
+"___a___ is demping in dB<br>\n"
+"___Z<sub>in</sub>___ is gewenste ingangsimpedantie in &#x2126;<br>\n"
+"___Z<sub>uit</sub>___ is gewenste uitgangsimpedantie in &#x2126;<br>\n"
 "\n"
-"* __a__ verzwakking in dB\n"
-"* __L = 10 <sup> a / 20 </sup> __ (het verlies)\n"
-"* ___A = (L + 1) / (L - 1) ___ <br> <br>\n"
-"* ___R2 = 2 & radic; (L \\ * Z <sub> in </sub> \\ * Z <sub> uit </sub>) / (L "
-"- 1) ___\n"
-"* ___R1 = Z <sub> in </sub> \\ * A - R2___\n"
-"* ___R3 = Z <sub> uit </sub> \\ * A - R2___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R2 = (L&minus;1) / 2&middot;&radic;(Z<sub>in</sub> &middot; Z<sub>uit</"
+"sub> / L)___<br>\n"
+"___R1 = 1 / (A/Z<sub>in</sub> &minus; 1/R2)___<br>\n"
+"___R3 = 1 / (A/Z<sub>uit</sub> &minus; 1/R2)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
 msgid ""
@@ -19795,7 +19795,6 @@ msgstr ""
 "___R1 = R2 = R3 = Z<sub>0</sub> / 3 ___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19809,18 +19808,17 @@ msgid ""
 "___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
 "___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 msgstr ""
-"## Tee Demper\n"
-"__Zin__ gewenste ingangsimpedantie in & # x2126; <br>\n"
-"__Zout__ gewenste uitgangsimpedantie <br>\n"
-"__Zin = Zout__ <br> <br>\n"
+"### T-demper\n"
+"___a___ is demping in dB<br>\n"
+"___Z<sub>in</sub>___ is gewenste ingangsimpedantie in &#x2126;<br>\n"
+"___Z<sub>uit</sub>___ is gewenste uitgangsimpedantie in &#x2126;<br>\n"
 "\n"
-"* __a__ verzwakking in dB\n"
-"* __L = 10 <sup> a / 20 </sup> __ (het verlies)\n"
-"* ___A = (L + 1) / (L - 1) ___ <br> <br>\n"
-"* ___R2 = 2 & radic; (L \\ * Z <sub> in </sub> \\ * Z <sub> uit </sub>) / (L "
-"- 1) ___\n"
-"* ___R1 = Z <sub> in </sub> \\ * A - R2___\n"
-"* ___R3 = Z <sub> uit </sub> \\ * A - R2___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R2 = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; Z<sub>uit</sub>) "
+"/ (L&minus;1)___<br>\n"
+"___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
+"___R3 = Z<sub>uit</sub> &middot; A &minus; R2___\n"
 
 #: pcb_calculator/calculator_panels/panel_attenuators.cpp:215
 #, c-format
@@ -21221,7 +21219,7 @@ msgstr "Via's"
 
 #: pcbnew/board.cpp:1178 pcbnew/pcb_draw_panel_gal.cpp:479
 msgid "Track Segments"
-msgstr "GPX-track-segmenten"
+msgstr "Spoordelen"
 
 #: pcbnew/board.cpp:1179 pcbnew/pcb_draw_panel_gal.cpp:480
 #: pcbnew/widgets/appearance_controls.cpp:980
@@ -21687,11 +21685,11 @@ msgstr "Verwijder overtollige via"
 
 #: pcbnew/cleanup_item.cpp:50
 msgid "Remove duplicate track"
-msgstr "Verwijder dubbele track"
+msgstr "Verwijder dubbel spoor"
 
 #: pcbnew/cleanup_item.cpp:51
 msgid "Merge co-linear tracks"
-msgstr "& Co-lineaire sporen samenvoegen"
+msgstr "Co-lineaire sporen samenvoegen"
 
 #: pcbnew/cleanup_item.cpp:52
 msgid "Remove track not connected at both ends"
@@ -21707,7 +21705,7 @@ msgstr "Spoor met lengte nul verwijderen"
 
 #: pcbnew/cleanup_item.cpp:55
 msgid "Remove track inside pad"
-msgstr "Verwijder de track in de pad"
+msgstr "Verwijder spoor in een pad"
 
 #: pcbnew/cleanup_item.cpp:58
 msgid "Remove zero-size graphic"
@@ -22553,7 +22551,7 @@ msgstr "Bord opruimen"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:22
 msgid "Delete &tracks connecting different nets"
-msgstr "Verwijder & tracks die verschillende netten verbinden"
+msgstr "Verwijder &sporen die verschillende netten verbinden"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:23
 msgid ""
@@ -22565,7 +22563,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
 msgid "&Delete redundant vias"
-msgstr "& Verwijder overtollige via's"
+msgstr "Verwijder &overtollige via's"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:28
 msgid "remove vias on through hole pads and superimposed vias"
@@ -22578,7 +22576,7 @@ msgstr "Verwijder via's verbonden op slechts één laag"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
 msgid "&Merge co-linear tracks"
-msgstr "& Co-lineaire sporen samenvoegen"
+msgstr "Co-lineaire sporen samen&voegen"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:36
 msgid "merge aligned track segments, and remove null segments"
@@ -22586,24 +22584,24 @@ msgstr "Voeg gelijke sporen samen en verwijder null segmenten"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:40
 msgid "Delete tracks unconnected at one end"
-msgstr "Verwijder nummers die aan het ene uiteinde niet verbonden zijn"
+msgstr "Verwijder sporen die aan een uiteinde niet verbonden zijn"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:41
 msgid "delete tracks having at least one dangling end"
-msgstr "verwijder tracks met ten minste één bungelend uiteinde"
+msgstr "verwijder sporen met ten minste één los uiteinde"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:45
 msgid "Delete tracks fully inside pads"
-msgstr "Verwijder tracks volledig binnen pads"
+msgstr "Verwijder sporen die volledig binnen pads liggen"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:46
 msgid "Delete tracks that have both start and end positions inside of a pad"
 msgstr ""
-"Verwijder tracks die zowel een start- als een eindpositie in een pad hebben"
+"Verwijder sporen die zowel de start- als de eindpositie in een pad hebben"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.h:57
 msgid "Cleanup Tracks and Vias"
-msgstr "Opschonen van tracks en Vias"
+msgstr "Opschonen van sporen en via's"
 
 #: pcbnew/dialogs/dialog_constraints_reporter_base.h:45
 msgid "Constraints Resolution Report"
@@ -22713,7 +22711,7 @@ msgstr "Afschuining"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:82
 msgid "Fillet"
-msgstr "Filet"
+msgstr "Afronding"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:179
 msgid "Electrical Properties"
@@ -22977,7 +22975,7 @@ msgstr "Kolommen"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:101
 msgid "Stagger Type"
-msgstr "Stagger Type"
+msgstr "Verspringmethode"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:116
 msgid "Horizontal, then vertical"
@@ -23467,7 +23465,7 @@ msgstr "Vul alle zones opnieuw voordat u DRC uitvoert"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
-msgstr "Rapporteer alle fouten voor elke track"
+msgstr "Rapporteer alle fouten voor elk spoor"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:31
 msgid ""
@@ -23477,7 +23475,7 @@ msgid ""
 "If unselected, only the first DRC violation will be reported for each track "
 "connection."
 msgstr ""
-"Indien geselecteerd, worden alle DRC-overtredingen voor tracks "
+"Indien geselecteerd, worden alle DRC-overtredingen voor sporen "
 "gerapporteerd. Dit kan traag zijn voor gecompliceerde ontwerpen.\n"
 "\n"
 "Indien niet geselecteerd, wordt alleen de eerste DRC-overtreding "
@@ -23985,7 +23983,7 @@ msgstr "Inclusief & tekeningen"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:42
 msgid "Include &tracks"
-msgstr "Inclusief & tracks"
+msgstr "Inclusief &sporen"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:45
 msgid "Include &board outline layer"
@@ -24886,7 +24884,7 @@ msgstr "Footprints"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:40
 msgid "Tracks && vias"
-msgstr "Tracks en Via's"
+msgstr "Sporen && via's"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
 msgid "Markers"
@@ -24918,11 +24916,11 @@ msgstr "Voetafdrukken ontgrendeld"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:70
 msgid "Locked tracks"
-msgstr "Vergrendelde tracks"
+msgstr "Vergrendelde sporen"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:73
 msgid "Unlocked tracks"
-msgstr "Ontgrendelde nummers"
+msgstr "Niet-vergrendelde sporen"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:84
 msgid "All layers"
@@ -25069,7 +25067,7 @@ msgstr "Stel in op nettoklassewaarden:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:77
 msgid "Set Track and Via Properties"
-msgstr "Stel Track en Via-eigenschappen in"
+msgstr "Stel spoor- en via-eigenschappen in"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:30
 msgid "footprint"
@@ -25381,7 +25379,7 @@ msgstr "Via lengte"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:82
 msgid "Track Length"
-msgstr "Track lengte"
+msgstr "Spoorlengte"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:83
 msgid "Die Length"
@@ -25541,7 +25539,7 @@ msgstr "Verwijder footprints zonder componenten in netlist"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:60
 msgid "Delete tracks shorting multiple nets"
-msgstr "Verwijder nummers die meerdere netten kortsluiten"
+msgstr "Verwijder sporen die meerdere netten kortsluiten"
 
 #: pcbnew/dialogs/dialog_netlist_base.h:69
 msgid "Import Netlist"
@@ -26574,10 +26572,10 @@ msgid ""
 msgstr ""
 "Stel een globale breedtecorrectie in voor PostScript-uitvoer met een exacte "
 "breedte.\n"
-"Deze breedtecorrectie is bedoeld om de breedte van de sporen te compenseren, "
-"evenals fouten in de grootte van de pads en vias.\n"
-"De redelijke correctiewaarde voor de breedte moet in een bereik liggen van "
-"[- (MinTrackBreedte-1), + (MinVrijeAfstand-1)]."
+"Deze breedtecorrectie is bedoeld om de breedte van de sporen, evenals fouten "
+"in de grootte van de pads en via's, te compenseren.\n"
+"De redelijke correctiewaarde voor de breedte moet in een bereik liggen van [-"
+" (MinSpoorBreedte-1), + (MinVrijeAfstand-1)]."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:323
 msgid "Force A4 output"
@@ -26707,7 +26705,7 @@ msgstr "Afmetingen differentieel paar"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:79
 msgid "Single Track Length Tuning"
-msgstr "Afstemmen op enkele tracklengte"
+msgstr "Lengte van enkel spoor afstemmen"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:85
 msgid "Differential Pair Length Tuning"
@@ -26795,7 +26793,7 @@ msgstr "Overtreding DRC: markeer obstakels"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:35
 msgid "DRC violation: shove tracks and vias"
-msgstr "DRC-overtreding: tracks en via's schuiven"
+msgstr "DRC-overtreding: sporen en via's schuiven"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:36
 msgid "DRC violation: walk around obstacles"
@@ -26857,11 +26855,11 @@ msgid ""
 "Loop removal works locally (only between the start and end of the currently "
 "routed trace)."
 msgstr ""
-"Verwijdert loops tijdens het routeren (bijv. Als de nieuwe track dezelfde "
-"connectiviteit garandeert als een reeds bestaande, wordt de oude track "
-"verwijderd).\n"
-"Lusverwijdering werkt lokaal (alleen tussen het begin en het einde van de "
-"momenteel gerouteerde trace)."
+"Verwijdert lussen tijdens het plaatsen van sporen (bijv. Als het nieuwe "
+"spoor dezelfde verbinding maakt als een reeds bestaand spoor, wordt het oude "
+"spoor verwijderd).\n"
+"Lusverwijdering werkt lokaal (alleen tussen het begin en het einde van het "
+"momenteel geplaatste spoor)."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:47
 msgid "Optimize pad connections"
@@ -26897,16 +26895,16 @@ msgid ""
 "(Highlight collisions mode only) - allows one to establish a track even if "
 "is violating the DRC rules."
 msgstr ""
-"(Alleen modus voor botsingen markeren) - hiermee kan iemand een track "
-"vastleggen, zelfs als de DRC-regels worden overtreden."
+"(Alleen in modus voor botsingen markeren) - sta toe om een spoor te plaatsen "
+"in strijd met de DRC-regels."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:62
 msgid "Suggest track finish"
-msgstr "Stel track finish voor"
+msgstr "Stel spooreinde voor"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
 msgid "Optimize entire track being dragged"
-msgstr "Optimaliseer de volledige track die wordt gesleept"
+msgstr "Optimaliseer het volledige gesleepte spoor"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:68
 msgid ""
@@ -26914,21 +26912,20 @@ msgid ""
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
 msgstr ""
-"Indien aangevinkt: Heel het deel van de track dat zichtbaar is op het scherm "
-"wordt geoptimaliseerd en geplaatst wanneer een segment wordt gesleept.  "
-"Anders wordt alleen het gebied in de buurt van het gesleepte segment "
-"geoptimaliseerd."
+"Indien aangevinkt, wordt het hele deel van het spoor dat zichtbaar is op het "
+"scherm geoptimaliseerd wanneer een segment wordt gesleept.  Anders wordt "
+"alleen het gebied in de buurt van het gesleepte segment geoptimaliseerd."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:72
 msgid "Use mouse path to set track posture"
-msgstr "Gebruik het muispad om de trackhouding in te stellen"
+msgstr "Gebruik het muispad om de spoorstand in te stellen"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:73
 msgid ""
 "When enabled, the posture of tracks will be guided by how the mouse is moved "
 "from the starting location"
 msgstr ""
-"Indien ingeschakeld, wordt de houding van de tracks bepaald door hoe de muis "
+"Indien ingeschakeld, wordt de stand van de sporen bepaald door hoe de muis "
 "wordt verplaatst vanaf de startlocatie"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:77
@@ -26941,7 +26938,7 @@ msgid ""
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
 msgstr ""
-"Indien ingeschakeld, worden alle track-segmenten op hun plaats vastgezet tot "
+"Indien ingeschakeld, worden alle spoorsegmenten op hun plaats vastgezet tot "
 "aan de cursorlocatie. Indien uitgeschakeld, blijft het laatste segment (het "
 "dichtst bij de cursor) vrij en volgt het de cursor."
 
@@ -27109,11 +27106,11 @@ msgstr "Basis-regels:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
 msgid "Keep out tracks"
-msgstr "Houd sporen uit"
+msgstr "Houd sporen buiten"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:49
 msgid "Prevent tracks from routing into this area"
-msgstr "Voorkomt dat tracks in dit gebied worden geplaatst"
+msgstr "Voorkom dat sporen in dit gebied worden geplaatst"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:53
 msgid "Keep out vias"
@@ -27282,7 +27279,7 @@ msgstr "Via startlaag en eindlaag kunnen niet hetzelfde zijn"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:659
 msgid "Edit track/via properties"
-msgstr "Bewerk track / via eigenschappen"
+msgstr "Bewerk spoor- / via-eigenschappen"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:724 pcbnew/files.cpp:916
 msgid "Updating nets"
@@ -27383,7 +27380,7 @@ msgstr "Start, eind, en verbonden lagen"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:114
 msgid "Track & Via Properties"
-msgstr "Track & via eigenschappen"
+msgstr "Spoor- & via-eigenschappen"
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:58
 msgid "Via drill size must be smaller than via diameter"
@@ -27471,11 +27468,11 @@ msgstr "Weergeven op blokken"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Show on tracks"
-msgstr "Show op tracks"
+msgstr "Toon op sporen"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Show on pads and tracks"
-msgstr "Toon op pads en tracks"
+msgstr "Toon op pads en sporen"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:39
 msgid "Net Names"
@@ -27483,7 +27480,7 @@ msgstr "Netto namen"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:41
 msgid "Show or hide net names on pads and/or tracks."
-msgstr "Toon of verberg netnamen op pads en / of tracks."
+msgstr "Toon of verberg netnamen op pads en/of sporen."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:45
 #: pcbnew/tools/pcb_actions.cpp:856
@@ -27500,17 +27497,17 @@ msgstr "Contouren rondom vrije afstand"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show when routing"
-msgstr "Tonen bij het plaatsen van tracks"
+msgstr "Tonen bij het plaatsen van sporen"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show when routing w/ via clearance at end"
 msgstr ""
-"Toon bij het plaatsen van tracks, met de vrije afstand voor via's aan het "
+"Toon bij het plaatsen van sporen, met de vrije afstand voor via's aan het "
 "eind"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show when routing and editing"
-msgstr "Laat zien bij het plaatsen en bewerken van tracks"
+msgstr "Laat zien bij het plaatsen en bewerken van sporen"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show always"
@@ -27518,16 +27515,16 @@ msgstr "Altijd laten zien"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:61
 msgid "Track && Via Clearances"
-msgstr "Vrije afstand voor Tracks en Vias"
+msgstr "Vrije afstand voor sporen en via's"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:63
 msgid ""
 "Show clearance outlines around tracks, and optionally the via clearance "
 "around the end of the track while routing."
 msgstr ""
-"Toon tijdens het plaatsen van tracks de contouren van de vrije afstand "
-"rondom tracks, en mogelijk de vrije afstand voor via's rondom het einde van "
-"de track."
+"Toon tijdens het plaatsen van sporen de contouren van de vrije afstand "
+"rondom sporen, en mogelijk de vrije afstand voor via's rondom het einde van "
+"het spoor."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
 msgid "Show pad clearance"
@@ -27598,13 +27595,12 @@ msgstr "Selecteer items)."
 #: pcbnew/dialogs/panel_edit_options_base.cpp:142
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
 msgid "Highlight net (for pads or tracks)."
-msgstr "Markeer net (voor pads of tracks)."
+msgstr "Markeer net (voor pads of sporen)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:243
 #: pcbnew/dialogs/panel_edit_options_base.cpp:363
-#, fuzzy
 msgid "Graphics Editing"
-msgstr "Track bewerken"
+msgstr "Grafische elementen bewerken"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
 #, fuzzy
@@ -27627,16 +27623,16 @@ msgstr "Leg de cursor vast wanneer de muis een blokgebied binnengaat"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:275
 #: pcbnew/dialogs/panel_edit_options_base.cpp:289
 msgid "When creating tracks"
-msgstr "Als sporen creëren"
+msgstr "Bij het maken van sporen"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:283
 msgid "Snap to tracks:"
-msgstr "Naar tracks snappen:"
+msgstr "Naar sporen vastklikken:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:285
 #: pcbnew/dialogs/panel_edit_options_base.cpp:293
 msgid "Capture cursor when the mouse approaches a track"
-msgstr "Leg de cursor vast wanneer de muis een track nadert"
+msgstr "Spring naar een spoor wanneer de muis er in de buurt komt"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:297
 msgid "Snap to graphics:"
@@ -27658,7 +27654,7 @@ msgstr "Show ratsnest met gebogen lijnen"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:330
 msgid "Track Editing"
-msgstr "Track bewerken"
+msgstr "Spoor bewerken"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:332
 msgid "Mouse drag track behavior:"
@@ -27668,12 +27664,12 @@ msgstr "Gedrag van het slepen van de muis:"
 msgid ""
 "Choose the action to perform when dragging a track segment with the mouse"
 msgstr ""
-"Kies de actie die u wilt uitvoeren wanneer u een trackgedeelte met de muis "
-"sleept"
+"Kies de actie om uit te voeren wanneer een spoordeel met de muis gesleept "
+"wordt"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:342
 msgid "Moves the track segment without moving connected tracks"
-msgstr "Verplaatst het trackgedeelte zonder de verbonden tracks te verplaatsen"
+msgstr "Verplaatst het spoordeel zonder de verbonden sporen te verplaatsen"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:346
 #: pcbnew/tools/pcb_actions.cpp:1401
@@ -27684,8 +27680,8 @@ msgstr "Slepen (45 graden modus)"
 #: pcbnew/tools/pcb_actions.cpp:1402
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
 msgstr ""
-"Versleept het trackgedeelte terwijl de aangesloten tracks op 45 graden "
-"worden gehouden."
+"Versleept het spoordeel terwijl de aangesloten sporen op 45 graden worden "
+"gehouden."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:351
 #: pcbnew/tools/pcb_actions.cpp:1408
@@ -27697,8 +27693,8 @@ msgstr "Slepen (vrije hoek)"
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
 msgstr ""
-"Versleept de dichtstbijzijnde verbinding in de track zonder de trackhoek te "
-"beperken."
+"Versleept de dichtstbijzijnde verbinding in het spoor zonder beperking van "
+"de hoek."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:365
 msgid "Limit actions to 45 degrees from start"
@@ -27956,15 +27952,15 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:134
 msgid "Allow fillets outside zone outline"
-msgstr "Sta filets toe buiten de omtrek van de zone"
+msgstr "Sta afrondingen toe buiten de omtrek van de zone"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:149
 msgid "Length tuning"
-msgstr "Track lengte Tuning"
+msgstr "Lengte afstemmen"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:153
 msgid "Include stackup height in track length calculations"
-msgstr "Track lengte berekening inclusief stackup hoogte"
+msgstr "Spoorlengteberekening inclusief stackup-hoogte"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:154
 msgid ""
@@ -27972,9 +27968,9 @@ msgid ""
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
 msgstr ""
-"Indien aangevinkt, de afstand tussen koperlagen wordt meegenomen in track-"
-"lengte berekeningen voor tracks met via's.  \n"
-"Zoniet, dan wordt de stackup-hoogte voor via's genegeerd."
+"Indien aangevinkt, wordt de afstand tussen koperlagen meegenomen in "
+"spoorlengteberekeningen voor sporen met via's. Zo niet, dan wordt de stackup-"
+"hoogte voor via's genegeerd."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:191
 msgid "Minimum clearance:"
@@ -27999,7 +27995,7 @@ msgid ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"De minimum track breedte.  Indien ingevuld dan is dit het absolute minimum "
+"De minimum spoorbreedte.  Indien ingevuld dan is dit het absolute minimum "
 "dat niet kan worden verkleind door net-klassen, custom rules, of andere "
 "instellingen."
 
@@ -29367,7 +29363,7 @@ msgstr "Overschrijding van vrije afstand"
 
 #: pcbnew/drc/drc_item.cpp:70
 msgid "Tracks crossing"
-msgstr "Sporen kruisen"
+msgstr "Kruisende sporen"
 
 #: pcbnew/drc/drc_item.cpp:74
 msgid "Board edge clearance violation"
@@ -29387,7 +29383,7 @@ msgstr "Via is niet verbonden (of op slechts één laag)"
 
 #: pcbnew/drc/drc_item.cpp:90
 msgid "Track has unconnected end"
-msgstr "Track heeft een niet-verbonden einde"
+msgstr "Spoor heeft een niet-verbonden einde"
 
 #: pcbnew/drc/drc_item.cpp:94
 msgid "Hole clearance violation"
@@ -29649,7 +29645,7 @@ msgstr "Koperen voorwerpen verzamelen ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:210
 msgid "Checking track & via clearances..."
-msgstr "Vrije afstanden van tracks en via's controleren..."
+msgstr "Vrije afstanden van sporen en via's controleren..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:217
 msgid "Checking hole clearances..."
@@ -31427,7 +31423,7 @@ msgstr "(van %s)"
 
 #: pcbnew/pad.cpp:1161
 msgid "Trap"
-msgstr "Trap"
+msgstr "Trapezium"
 
 #: pcbnew/pad.cpp:1162
 msgid "Roundrect"
@@ -31756,12 +31752,12 @@ msgstr "Net-Code"
 #: pcbnew/pcb_track.cpp:905
 #, c-format
 msgid "Track (arc) %s on %s, length %s"
-msgstr "Track (boog) %s op %s, lengte %s"
+msgstr "Spoor (boog) %s op %s, lengte %s"
 
 #: pcbnew/pcb_track.cpp:906
 #, c-format
 msgid "Track %s on %s, length %s"
-msgstr "Track %s op %s, lengte %s"
+msgstr "Spoor %s op %s, lengte %s"
 
 #: pcbnew/pcb_track.cpp:1135 pcbnew/pcb_track.cpp:1152
 msgid "Origin X"
@@ -32079,7 +32075,7 @@ msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2531
 msgid "Loading tracks..."
-msgstr "Tracks laden..."
+msgstr "Sporen laden..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2578
 #, c-format
@@ -32432,9 +32428,9 @@ msgid ""
 "closed)."
 msgstr ""
 "Het CADSTAR-ontwerp bevat KOPER-elementen, die geen direct KiCad-equivalent "
-"hebben. Deze zijn geïmporteerd als een KiCad-zone als ze vol zijn of met een "
-"luik gevuld, of als een KiCad-track als de vorm een niet-gevulde omtrek was "
-"(open of gesloten)."
+"hebben. Deze zijn geïmporteerd als een KiCad-zone als ze massief of "
+"gearceerd zijn, of als een KiCad-spoor als de vorm een niet-gevulde omtrek "
+"was (open of gesloten)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2200
 #, c-format
@@ -33153,15 +33149,15 @@ msgstr "Exception op python footprint wizard-code"
 
 #: pcbnew/router/length_tuner_tool.cpp:46
 msgid "New Track"
-msgstr "Nieuwe track"
+msgstr "Nieuw spoor"
 
 #: pcbnew/router/length_tuner_tool.cpp:46
 msgid "Starts laying a new track."
-msgstr "Start met het leggen van een nieuwe track."
+msgstr "Start met het leggen van een nieuw spoor."
 
 #: pcbnew/router/length_tuner_tool.cpp:51
 msgid "End Track"
-msgstr "Track Einde"
+msgstr "Spoor beëindigen"
 
 #: pcbnew/router/length_tuner_tool.cpp:51
 msgid "Stops laying the current meander."
@@ -33201,7 +33197,7 @@ msgstr "Verlaag de meander-amplitude met één stap."
 
 #: pcbnew/router/length_tuner_tool.cpp:99
 msgid "Length Tuner"
-msgstr "Lengte tuner"
+msgstr "Lengte afstemmen"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:475
 msgid ""
@@ -33228,7 +33224,7 @@ msgstr "Kan geen geschikt startpunt vinden voor gekoppeld net \"%s\"."
 #: pcbnew/router/pns_dp_meander_placer.cpp:76
 #: pcbnew/router/pns_meander_placer.cpp:64
 msgid "Please select a track whose length you want to tune."
-msgstr "Selecteer een track waarvan u de lengte wilt afstemmen."
+msgstr "Selecteer een spoor waarvan u de lengte wilt afstemmen."
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:90
 msgid ""
@@ -33263,7 +33259,7 @@ msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:474
 msgid "existing track"
-msgstr "bestaand track"
+msgstr "bestaand spoor"
 
 #: pcbnew/router/pns_kicad_iface.cpp:488 pcbnew/router/pns_kicad_iface.cpp:501
 msgid "board minimum width"
@@ -33287,8 +33283,8 @@ msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
-"Deze zone kan niet worden verwerkt door de track layout tool.\n"
-"Controleer of het geen zichzelf snijdende veelhoek is."
+"Deze zone kan niet worden verwerkt.\n"
+"Controleer dat de omtrek zichzelf niet snijdt."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1665 pcbnew/router/router_tool.cpp:435
 msgid "Interactive Router"
@@ -33296,7 +33292,7 @@ msgstr "Interactieve router"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:54
 msgid "Please select a differential pair trace you want to tune."
-msgstr "Selecteer een differentieel paar track die u wilt afstemmen."
+msgstr "Selecteer een spoor uit een differentieel paar dat u wilt afstemmen."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:70
 msgid ""
@@ -33332,11 +33328,11 @@ msgstr "Kan routing niet starten van een boorgat zonder door-metallisering."
 #: pcbnew/router/pns_router.cpp:243
 #, c-format
 msgid "Rule area '%s' disallows tracks."
-msgstr "Rule-area '%s' staat geen tracks toe."
+msgstr "Regelgebied '%s' verbiedt sporen."
 
 #: pcbnew/router/pns_router.cpp:248
 msgid "Rule area disallows tracks."
-msgstr "Rule area verbiedt tracks."
+msgstr "Regelgebied verbiedt sporen."
 
 #: pcbnew/router/pns_router.cpp:255
 msgid "Cannot start routing from a text item."
@@ -33356,20 +33352,19 @@ msgstr "Kan geen differentieel paar starten in de middle-of-nowhere."
 
 #: pcbnew/router/router_tool.cpp:91
 msgid "Finish Track"
-msgstr "Track voltooien"
+msgstr "Spoor voltooien"
 
 #: pcbnew/router/router_tool.cpp:91
 msgid "Stops laying the current track."
-msgstr "Stopt met het leggen van de huidige track."
+msgstr "Stopt met het leggen van het huidige spoor."
 
 #: pcbnew/router/router_tool.cpp:97
 msgid "Auto-finish Track"
-msgstr "Track automatisch voltooien"
+msgstr "Spoor automatisch voltooien"
 
 #: pcbnew/router/router_tool.cpp:97
-#, fuzzy
 msgid "Automatically finishes laying the current track."
-msgstr "Voltooit automatisch het leggen van het huidige track."
+msgstr "Voltooit automatisch het leggen van het huidige spoor."
 
 #: pcbnew/router/router_tool.cpp:102
 msgid "Place Through Via"
@@ -33377,8 +33372,7 @@ msgstr "Plaats Through-Via"
 
 #: pcbnew/router/router_tool.cpp:103
 msgid "Adds a through-hole via at the end of currently routed track."
-msgstr ""
-"Voegt een Through-via aan het einde van de momenteel gerouteerde track toe."
+msgstr "Voegt een door-gat-via toe aan het einde van het huidige spoor."
 
 #: pcbnew/router/router_tool.cpp:109
 msgid "Place Blind/Buried Via"
@@ -33387,8 +33381,7 @@ msgstr "Plaats Blind / Begraven Via"
 #: pcbnew/router/router_tool.cpp:110
 msgid "Adds a blind or buried via at the end of currently routed track."
 msgstr ""
-"Voegt een blinde of begraven via toe aan het einde van de momenteel "
-"gerouteerde track."
+"Voegt een blinde of begraven via toe aan het einde van het huidige spoor."
 
 #: pcbnew/router/router_tool.cpp:116
 msgid "Place Microvia"
@@ -33396,8 +33389,7 @@ msgstr "Plaats Microvia"
 
 #: pcbnew/router/router_tool.cpp:116
 msgid "Adds a microvia at the end of currently routed track."
-msgstr ""
-"Voegt een microvia toe aan het einde van de momenteel gerouteerde track."
+msgstr "Voegt een microvia toe aan het einde van het huidige spoor."
 
 #: pcbnew/router/router_tool.cpp:123
 msgid "Select Layer and Place Through Via..."
@@ -33408,8 +33400,8 @@ msgid ""
 "Select a layer, then add a through-hole via at the end of currently routed "
 "track."
 msgstr ""
-"Selecteer een laag en voeg een through-via toe aan het einde van de "
-"momenteel gerouteerde track."
+"Selecteer een laag en voeg een door-gat-via toe aan het einde van het "
+"huidige spoor."
 
 #: pcbnew/router/router_tool.cpp:132
 msgid "Select Layer and Place Blind/Buried Via..."
@@ -33421,7 +33413,7 @@ msgid ""
 "routed track."
 msgstr ""
 "Selecteer een laag en voeg een blinde of begraven via toe aan het einde van "
-"de momenteel gerouteerde track."
+"het momenteel gerouteerde spoor."
 
 #: pcbnew/router/router_tool.cpp:141
 msgid "Select Layer and Place Micro Via..."
@@ -33431,47 +33423,47 @@ msgstr "Selecteer laag en plaats een micro-via..."
 msgid ""
 "Select a layer, then add a micro via at the end of currently routed track."
 msgstr ""
-"Selecteer een laag en voeg vervolgens een micro-via toe aan het einde van de "
-"momenteel gerouteerde track."
+"Selecteer een laag en voeg vervolgens een micro-via toe aan het einde van "
+"het nu geplaatste spoor."
 
 #: pcbnew/router/router_tool.cpp:149
 msgid "Custom Track/Via Size..."
-msgstr "Aangepast track / via afmeting..."
+msgstr "Aangepaste spoor- / via-afmeting..."
 
 #: pcbnew/router/router_tool.cpp:150
 msgid "Shows a dialog for changing the track width and via size."
 msgstr ""
-"Toont een dialoogvenster voor het wijzigen van de track-breedte en via-"
+"Toont een dialoogvenster voor het wijzigen van de spoorbreedte en via-"
 "grootte."
 
 #: pcbnew/router/router_tool.cpp:156
 msgid "Switch Track Posture"
-msgstr "Verander de houding van het track"
+msgstr "Verander de stand van het spoor"
 
 #: pcbnew/router/router_tool.cpp:157
 msgid "Switches posture of the currently routed track."
-msgstr "Verandert de houding van de momenteel gerouteerde track."
+msgstr "Verandert de stand van het huidige spoor."
 
 #: pcbnew/router/router_tool.cpp:163
 msgid "Track Corner Mode"
-msgstr "Track hoek modus"
+msgstr "Spoorhoek modus"
 
 #: pcbnew/router/router_tool.cpp:164
-#, fuzzy
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
-msgstr "Schakelt tussen scherpe en ronde hoeken bij plaatsen van tracks."
+msgstr ""
+"Schakelt tussen scherpe/ronde en 45°/90° hoeken bij plaatsen van sporen."
 
 #: pcbnew/router/router_tool.cpp:186
 msgid "Select Track/Via Width"
-msgstr "Selecteer Track/Via breedte"
+msgstr "Selecteer spoor-/via-breedte"
 
 #: pcbnew/router/router_tool.cpp:205
 msgid "Use Starting Track Width"
-msgstr "Gebruik de breedte van het start-track"
+msgstr "Gebruik de breedte van het startspoor"
 
 #: pcbnew/router/router_tool.cpp:206
 msgid "Route using the width of the starting track."
-msgstr "Route met gebruikmaking van de breedte van het start-track."
+msgstr "Gebruik de breedte van het start-spoor bij het plaatsen van sporen."
 
 #: pcbnew/router/router_tool.cpp:210 pcbnew/router/router_tool.cpp:331
 msgid "Use Net Class Values"
@@ -33479,7 +33471,7 @@ msgstr "Gebruik net-klasse waarden"
 
 #: pcbnew/router/router_tool.cpp:211
 msgid "Use track and via sizes from the net class"
-msgstr "Gebruik track en via maten uit de net-klasse"
+msgstr "Gebruik spoor- en via-maten uit de net-klasse"
 
 #: pcbnew/router/router_tool.cpp:215 pcbnew/router/router_tool.cpp:336
 #: pcbnew/tools/drawing_tool.cpp:101
@@ -33488,16 +33480,16 @@ msgstr "Gebruik aangepaste waarden ..."
 
 #: pcbnew/router/router_tool.cpp:216 pcbnew/tools/drawing_tool.cpp:102
 msgid "Specify custom track and via sizes"
-msgstr "Specificeer aangepaste track en via afmetingen"
+msgstr "Specificeer aangepaste spoor- en via-afmetingen"
 
 #: pcbnew/router/router_tool.cpp:227
 msgid "Track netclass width"
-msgstr "Track net-klasse breedte"
+msgstr "Netklasse-breedte van spoor"
 
 #: pcbnew/router/router_tool.cpp:229
 #, c-format
 msgid "Track %s"
-msgstr "Track %s"
+msgstr "Spoor %s"
 
 #: pcbnew/router/router_tool.cpp:243
 msgid "Via netclass values"
@@ -33591,7 +33583,7 @@ msgstr "Blinde/begraven via heeft twee verschillende lagen nodig."
 
 #: pcbnew/router/router_tool.cpp:1065
 msgid "Tracks on Copper layers only."
-msgstr "Tracks alleen op koper-lagen."
+msgstr "Sporen alleen op koper-lagen."
 
 #: pcbnew/router/router_tool.cpp:1503 pcbnew/router/router_tool.cpp:2016
 msgid "The selected item is locked."
@@ -33603,7 +33595,7 @@ msgstr "Hoe dan ook slepen"
 
 #: pcbnew/router/router_tool.cpp:2018 pcbnew/tools/pcb_actions.cpp:1394
 msgid "Break Track"
-msgstr "Breek track"
+msgstr "Breek spoor"
 
 #: pcbnew/router/router_tool.cpp:2091
 #, c-format
@@ -33613,7 +33605,7 @@ msgstr "Route differentieel paar: %s"
 #: pcbnew/router/router_tool.cpp:2091
 #, c-format
 msgid "Routing Track: %s"
-msgstr "Route enkele track: %s"
+msgstr "Spoor plaatsen: %s"
 
 #: pcbnew/router/router_tool.cpp:2097
 #, c-format
@@ -33622,7 +33614,7 @@ msgstr "Net-klasse: %s"
 
 #: pcbnew/router/router_tool.cpp:2101
 msgid "Routing Track"
-msgstr "Route track"
+msgstr "Spoor plaatsen"
 
 #: pcbnew/router/router_tool.cpp:2101
 msgid "(no net)"
@@ -33660,7 +33652,7 @@ msgstr "Lijnstijl"
 #: pcbnew/router/router_tool.cpp:2127
 #, c-format
 msgid "Track Width: %s"
-msgstr "Track Breedte: %s"
+msgstr "Spoorbreedte: %s"
 
 #: pcbnew/router/router_tool.cpp:2149
 msgid "Diff Pair Gap"
@@ -33777,26 +33769,26 @@ msgid ""
 "overridden by the board minimum width, or by the width of an existing track "
 "if the 'Use Existing Track Width' feature is enabled."
 msgstr ""
-"Kiest de default breedte voor nieuwe tracks. Deze breedte kan worden "
-"vervangen door het board minimum, of door de breedte van een bestaande track "
-"als 'Gebruik bestaande track breedte' aktief is."
+"Kiest de standaardbreedte voor nieuwe sporen. Deze breedte kan worden "
+"vervangen door het board minimum, of door de breedte van een bestaand spoor "
+"als 'Gebruik bestaande spoorbreedte' actief is."
 
 #: pcbnew/toolbars_pcb_editor.cpp:540
 msgid ""
 "When routing from an existing track use its width instead of the current "
 "width setting"
 msgstr ""
-"Als de routing gestart wordt op een bestaande track, gebruik dan de breedte "
-"van die start-track, en niet de huidige voorkeur breedte"
+"Als de routing gestart wordt op een bestaand spoor, gebruik dan de breedte "
+"van dat startspoor, niet de huidige voorkeurbreedte"
 
 #: pcbnew/toolbars_pcb_editor.cpp:649
 msgid "Track: use netclass width"
-msgstr "Track: gebruik netklasse breedte"
+msgstr "Spoor: gebruik netklasse-breedte"
 
 #: pcbnew/toolbars_pcb_editor.cpp:655
 #, c-format
 msgid "Track: %s (%s)"
-msgstr "Track: %s (%s)"
+msgstr "Spoor: %s (%s)"
 
 #: pcbnew/toolbars_pcb_editor.cpp:664 pcbnew/toolbars_pcb_editor.cpp:732
 msgid "Edit Pre-defined Sizes..."
@@ -34029,7 +34021,7 @@ msgstr "Beperkingen rapport"
 
 #: pcbnew/tools/board_inspection_tool.cpp:729
 msgid "Track width resolution for:"
-msgstr "Track-breedte resolutie voor:"
+msgstr "Spoorbreedte resolutie voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:739
 #, c-format
@@ -34162,7 +34154,7 @@ msgstr "Board afmetingen: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:448
 msgid "Min track/spacing: "
-msgstr "Min. Track/afstand: "
+msgstr "Min. spoor/afstand: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:458
 msgid "Copper Finish: "
@@ -34277,7 +34269,7 @@ msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:674
 msgid "Drag Arc Track"
-msgstr "Sleep boog-track"
+msgstr "Sleep boog-spoor"
 
 #: pcbnew/tools/edit_tool.cpp:757
 msgid "Select reference point for move..."
@@ -34289,16 +34281,16 @@ msgstr "Bewerk spoorbreedte / via grootte"
 
 #: pcbnew/tools/edit_tool.cpp:1186
 msgid "At least two straight track segments must be selected."
-msgstr "Er moeten minimaal twee rechte track-segmenten worden geselecteerd."
+msgstr "Er moeten minimaal twee rechte spoordelen worden geselecteerd."
 
 #: pcbnew/tools/edit_tool.cpp:1190
 msgid "Enter fillet radius:"
-msgstr "Afrondingsradius invoeren:"
+msgstr "Geef afrondingsstraal:"
 
 #: pcbnew/tools/edit_tool.cpp:1190 pcbnew/tools/edit_tool.cpp:1352
 #: pcbnew/tools/pcb_actions.cpp:319
 msgid "Fillet Tracks"
-msgstr "Filet tracks"
+msgstr "Sporen afronden"
 
 #: pcbnew/tools/edit_tool.cpp:1200
 msgid ""
@@ -34306,15 +34298,15 @@ msgid ""
 "The fillet operation was not performed."
 msgstr ""
 "Er is een straal van nul ingevoerd.\n"
-"De filet-bewerking is niet uitgevoerd."
+"De afronding is niet uitgevoerd."
 
 #: pcbnew/tools/edit_tool.cpp:1359
 msgid "Unable to fillet the selected track segments."
-msgstr "Kan de geselecteerde track-segmenten niet afronden."
+msgstr "Kan de geselecteerde spoordelen niet afronden."
 
 #: pcbnew/tools/edit_tool.cpp:1361
 msgid "Some of the track segments could not be filleted."
-msgstr "Enkele van de track-segmenten konden niet worden gefileerd."
+msgstr "Enkele van de spoordelen konden niet worden afgerond."
 
 #: pcbnew/tools/edit_tool.cpp:1506
 msgid "Rotate"
@@ -34450,11 +34442,11 @@ msgstr "Maak een boog van het lijn-segment"
 
 #: pcbnew/tools/pcb_actions.cpp:73
 msgid "Create Tracks from Selection"
-msgstr "Creëer tracks van de selectie"
+msgstr "Maak sporen vanuit de selectie"
 
 #: pcbnew/tools/pcb_actions.cpp:73
 msgid "Creates tracks from the selected graphic lines"
-msgstr "Creëer tracks van de geselecteerde lijnen"
+msgstr "Maakt sporen van de geselecteerde lijnen"
 
 #: pcbnew/tools/pcb_actions.cpp:82
 msgid "Draw Line"
@@ -34606,11 +34598,11 @@ msgstr "Verklein de lijnbreedte"
 
 #: pcbnew/tools/pcb_actions.cpp:208
 msgid "Switch Arc Posture"
-msgstr "Verander de booghouding"
+msgstr "Verander de boogstand"
 
 #: pcbnew/tools/pcb_actions.cpp:208
 msgid "Switch the arc posture"
-msgstr "Verander de booghouding"
+msgstr "Verander de boogstand"
 
 #: pcbnew/tools/pcb_actions.cpp:213
 msgid "Delete Last Point"
@@ -34713,15 +34705,15 @@ msgstr "Wijzig Spoor Breedte"
 
 #: pcbnew/tools/pcb_actions.cpp:315
 msgid "Updates selected track & via sizes"
-msgstr "Updates geselecteerde track & via afmetingen"
+msgstr "Werkt geselecteerde spoor- & via-afmetingen bij"
 
 #: pcbnew/tools/pcb_actions.cpp:319
 msgid "Adds arcs tangent to the selected straight track segments"
-msgstr "Voegt bogen toe aan de geselecteerde track-segmenten"
+msgstr "Voegt bogen toe aan de geselecteerde rechte spoordelen"
 
 #: pcbnew/tools/pcb_actions.cpp:324
 msgid "Delete Full Track"
-msgstr "Verwijder volledige track"
+msgstr "Verwijder volledig spoor"
 
 #: pcbnew/tools/pcb_actions.cpp:324
 msgid "Deletes selected item(s) and copper connections"
@@ -34850,15 +34842,15 @@ msgstr "Lagen wisselen ..."
 
 #: pcbnew/tools/pcb_actions.cpp:434
 msgid "Move tracks or drawings from one layer to another"
-msgstr "Verplaats tracks of tekeningen van de ene laag naar de andere"
+msgstr "Verplaats sporen of tekeningen van de ene laag naar de andere"
 
 #: pcbnew/tools/pcb_actions.cpp:439
 msgid "Edit Track & Via Properties..."
-msgstr "Track & Via-eigenschappen bewerken ..."
+msgstr "Spoor- & via-eigenschappen bewerken ..."
 
 #: pcbnew/tools/pcb_actions.cpp:440
 msgid "Edit track and via properties globally across board"
-msgstr "Bewerk track en via eigenschappen globaal over de hele board"
+msgstr "Bewerk spoor- en via-eigenschappen globaal over de hele board"
 
 #: pcbnew/tools/pcb_actions.cpp:446
 msgid "Edit Text and graphics properties globally across board"
@@ -34870,11 +34862,11 @@ msgstr "Globale verwijderingen ..."
 
 #: pcbnew/tools/pcb_actions.cpp:452
 msgid "Delete tracks, footprints and graphic items from board"
-msgstr "Verwijder tracks, footprints en grafische items van het board"
+msgstr "Verwijder sporen, footprints en grafische items van het board"
 
 #: pcbnew/tools/pcb_actions.cpp:457
 msgid "Cleanup Tracks & Vias..."
-msgstr "Tracks en via's opschonen ..."
+msgstr "Sporen en via's opschonen ..."
 
 #: pcbnew/tools/pcb_actions.cpp:458
 msgid "Cleanup redundant items, shorting items, etc."
@@ -35350,11 +35342,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:831
 msgid "Sketch Tracks"
-msgstr "Schets tracks"
+msgstr "Schets sporen"
 
 #: pcbnew/tools/pcb_actions.cpp:831
 msgid "Show tracks in outline mode"
-msgstr "Sporen in schets modus weergeven"
+msgstr "Sporen in omtrekmodus weergeven"
 
 #: pcbnew/tools/pcb_actions.cpp:836
 msgid "Sketch Pads"
@@ -35719,23 +35711,23 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1248
 msgid "Select All Tracks in Net"
-msgstr "Selecteer alle tracks in Net"
+msgstr "Selecteer alle sporen in Net"
 
 #: pcbnew/tools/pcb_actions.cpp:1249
 msgid "Selects all tracks & vias belonging to the same net."
-msgstr "Selecteert alle tracks en via's die tot hetzelfde net behoren."
+msgstr "Selecteert alle sporen en via's die tot hetzelfde net behoren."
 
 #: pcbnew/tools/pcb_actions.cpp:1253
 msgid "Deselect All Tracks in Net"
-msgstr "Alle tracks in Net uitschakelen"
+msgstr "Verwijder alle sporen in het net uit de selectie"
 
 #: pcbnew/tools/pcb_actions.cpp:1254
 msgid "Deselects all tracks & vias belonging to the same net."
-msgstr "Deselecteert alle tracks en via's die tot hetzelfde net behoren."
+msgstr "Deselecteert alle sporen en via's die tot hetzelfde net behoren."
 
 #: pcbnew/tools/pcb_actions.cpp:1259
 msgid "Selects all footprints and tracks in the schematic sheet"
-msgstr "Selecteert alle footprints en tracks in het schemablad"
+msgstr "Selecteert alle footprints en sporen in het schemablad"
 
 #: pcbnew/tools/pcb_actions.cpp:1264
 msgid "Items in Same Hierarchical Sheet"
@@ -35743,7 +35735,7 @@ msgstr "Items op hetzelfde hiërarchische blad"
 
 #: pcbnew/tools/pcb_actions.cpp:1265
 msgid "Selects all footprints and tracks in the same schematic sheet"
-msgstr "Selecteert alle footprints en tracks in hetzelfde schemablad"
+msgstr "Selecteert alle footprints en sporen in hetzelfde schemablad"
 
 #: pcbnew/tools/pcb_actions.cpp:1270
 msgid "Filter Selected Items..."
@@ -35803,11 +35795,11 @@ msgstr "Automatische plaatsing van componenten buiten het board"
 
 #: pcbnew/tools/pcb_actions.cpp:1317
 msgid "Route Single Track"
-msgstr "Route enkele track"
+msgstr "Plaats enkel spoor"
 
 #: pcbnew/tools/pcb_actions.cpp:1317
 msgid "Route tracks"
-msgstr "Tracks routeren"
+msgstr "Plaats sporen"
 
 #: pcbnew/tools/pcb_actions.cpp:1324
 msgid "Route Differential Pair"
@@ -35877,7 +35869,7 @@ msgstr "Verander het actieve laagpaar voor routing"
 
 #: pcbnew/tools/pcb_actions.cpp:1367
 msgid "Tune length of a single track"
-msgstr "Lengte van een enkele track afstemmen"
+msgstr "Lengte van een enkel spoor afstemmen"
 
 #: pcbnew/tools/pcb_actions.cpp:1374
 msgid "Tune length of a differential pair"
@@ -35893,14 +35885,13 @@ msgstr "Het laatste segment ongedaan maken"
 
 #: pcbnew/tools/pcb_actions.cpp:1390
 msgid "Walks the current track back one segment."
-msgstr "Zet het huidige track één stapje terug."
+msgstr "Zet het huidige spoor één stapje terug."
 
 #: pcbnew/tools/pcb_actions.cpp:1395
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
 msgstr ""
-"Splitst het tracksegment in twee segmenten die op de cursorpositie zijn "
-"verbonden."
+"Splitst het spoordeel in twee delen die op de cursorpositie zijn verbonden."
 
 #: pcbnew/tools/pcb_actions.cpp:1419
 msgid "Length Tuning Settings..."
@@ -36058,7 +36049,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:335
 msgid "Show tracks"
-msgstr "Tracks tonen"
+msgstr "Sporen tonen"
 
 #: pcbnew/widgets/appearance_controls.cpp:336
 msgid "Show all vias"
@@ -36334,13 +36325,13 @@ msgstr "Markeer %s"
 #: pcbnew/widgets/appearance_controls.cpp:2296
 #, c-format
 msgid "Select Tracks and Vias in %s"
-msgstr "Selecteer tracks en via's in %s"
+msgstr "Selecteer sporen en via's in %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:891
 #: pcbnew/widgets/appearance_controls.cpp:2300
 #, c-format
 msgid "Unselect Tracks and Vias in %s"
-msgstr "Selectie van tracks en via's in %s ongedaan maken"
+msgstr "Verwijder sporen en via's in %s uit de selectie"
 
 #: pcbnew/widgets/appearance_controls.cpp:898
 msgid "Hide All Other Nets"
@@ -36676,7 +36667,7 @@ msgstr "Geen via's"
 
 #: pcbnew/zone.cpp:571
 msgid "No tracks"
-msgstr "Geen tracks (sporen)"
+msgstr "Geen sporen"
 
 #: pcbnew/zone.cpp:574
 msgid "No pads"
