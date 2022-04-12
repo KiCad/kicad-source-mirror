@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-11 09:40-0700\n"
-"PO-Revision-Date: 2022-04-08 00:11+0000\n"
+"PO-Revision-Date: 2022-04-14 08:02+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -6974,7 +6974,7 @@ msgstr "快捷键文件"
 #: cvpcb/auto_associate.cpp:108
 #, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "无法找到等价文件 \"%s\"。"
+msgstr "找不到等价文件 \"%s\"。"
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -8996,16 +8996,14 @@ msgid "Diameter:"
 msgstr "直径："
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
-#, fuzzy
 msgid "Set diameter to 0 to use schematic's junction dot size."
-msgstr "将直径设为 0 以使用原理图连接点大小。"
+msgstr "将直径设为 0 以使用原理图连接点尺寸。"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_properties_base.cpp:81
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:94
-#, fuzzy
 msgid "Clear color to use Schematic Editor colors."
-msgstr "将颜色设为透明以使用原理图编辑器颜色。"
+msgstr "清除颜色以使用原理图编辑器颜色。"
 
 #: eeschema/dialogs/dialog_junction_props_base.h:59
 msgid "Junction Properties"
@@ -9489,7 +9487,6 @@ msgid "Border width:"
 msgstr "边框宽度："
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:52
-#, fuzzy
 msgid "Set border width to 0 to use schematic's default symbol line width."
 msgstr "将边框宽度设为 0 以使用原理图默认符号行宽。"
 
@@ -9768,7 +9765,6 @@ msgid "Text Box Properties"
 msgstr "文本框属性"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:77
-#, fuzzy
 msgid "Set width to 0 to use schematic's default line width."
 msgstr "将宽度设为 0 以使用原理图默认行宽。"
 
@@ -10604,14 +10600,12 @@ msgid "Filled shape"
 msgstr "填充形状"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:122
-#, fuzzy
 msgid "Set border width to 0 to use schematic's default line width."
-msgstr "将边框宽度设为 0 以使用原理图默认符号行宽。"
+msgstr "将边框宽度设为 0 以使用原理图默认行宽。"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:126
-#, fuzzy
 msgid "Clear colors to use Schematic Editor colors."
-msgstr "将颜色设为透明以使用原理图编辑器颜色。"
+msgstr "清除颜色以使用原理图编辑器颜色。"
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:79
 #, c-format
@@ -11762,7 +11756,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:142
 msgid "Default for all sheet instances"
-msgstr ""
+msgstr "所有图框实例的默认值"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:143
 msgid ""
@@ -11770,6 +11764,9 @@ msgid ""
 "footprint fields the default for all sheet instances\n"
 "of this symbol"
 msgstr ""
+"选中该选项使单元、引用、\n"
+"值和封装字段\n"
+"成为该符号所有图框实例的默认值"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:147
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:345
@@ -12090,7 +12087,6 @@ msgid "Wire/bus width:"
 msgstr "导线/总线宽度："
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:90
-#, fuzzy
 msgid "Set width to 0 to use netclass's wire/bus widths."
 msgstr "将宽度设为 0 以使用网络类导线/总线宽度。"
 
@@ -15097,8 +15093,8 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"当前项目库表中缺少选定原理图中的某些库名称。这可能会导致加载的原理图的符号库"
-"链接断开。 \n"
+"选定的原理图中，有一些库名称在当前项目库表中缺失。这可能导致所加载原理图的符"
+"号库引用损坏。\n"
 "\n"
 "是否要继续？"
 
@@ -15128,10 +15124,10 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"所选原理图项目库表中缺少选定原理图中的某些符号库名称。   这可能会导致符号库链"
-"接断开。\n"
+"所选原理图中的某些符号库名称在所选原理图项目库表中缺失。这可能破坏符号库引用"
+"。\n"
 "\n"
-" 是否要继续？"
+"是否要继续？"
 
 #: eeschema/sheet.cpp:376
 msgid ""
@@ -15141,8 +15137,7 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"当前库表中存在引用不同库的重复库名。无法解决此冲突，并可能导致符号库链接断"
-"开。 \n"
+"当前库表中存在引用不同库的重复库名。此冲突无法解决，并可能破坏符号库引用。\n"
 "\n"
 "是否要继续？"
 
@@ -31573,7 +31568,7 @@ msgstr "导入矢量图形文件"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:133
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
-msgstr "加载 DXF 时内存耗尽，DXF 可能太大。"
+msgstr "尝试加载 DXF 时内存耗尽，DXF 可能太大。"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
