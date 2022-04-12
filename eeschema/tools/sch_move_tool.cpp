@@ -381,11 +381,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             // zero, then the rest of the move.
             std::vector<VECTOR2I> splitMoves;
 
-            // Note, this was originally implemented as std::signbit( m_moveOffset.x ) !=
-            // std::signbit( ( m_moveOffset + delta ).x ).  The binary logic XORs both
-            // values and if the signbit is set in the result, that means that one value
-            // had the sign bit set and one did not, hence the result is negative.
-            // We need to avoid std::signbit<int> as it is not supported by MSVC because reasons
             if( alg::signbit( m_moveOffset.x ) != alg::signbit( ( m_moveOffset + delta ).x ) )
             {
                 splitMoves.emplace_back( VECTOR2I( -1 * m_moveOffset.x, 0 ) );
@@ -834,6 +829,17 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     } while( ( evt = Wait() ) ); //Should be assignment not equality test
 
+    // Create a selection of original selection, drag selected/changed items, and new
+    // bend lines for later before we clear them in the commit. We'll need these
+    // to check for new junctions needed, etc.
+    EE_SELECTION selectionCopy( selection );
+
+    for( SCH_LINE* line : m_newDragLines )
+        selectionCopy.Add( line );
+
+    for( SCH_LINE* line : m_changedDragLines )
+        selectionCopy.Add( line );
+
     // Save whatever new bend lines and changed lines survived the drag
     commitDragLines();
 
@@ -860,7 +866,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         for( EDA_ITEM* item : selection )
             updateItem( item, true );
 
-        EE_SELECTION selectionCopy( selection );
         m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
 
         // If we move items away from a junction, we _may_ want to add a junction there
