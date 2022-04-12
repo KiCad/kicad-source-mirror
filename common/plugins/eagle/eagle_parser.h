@@ -617,14 +617,14 @@ struct EATTR
 /// Eagle dimension element
 struct EDIMENSION
 {
-    ECOORD x1;
-    ECOORD y1;
-    ECOORD x2;
-    ECOORD y2;
-    ECOORD x3;
-    ECOORD y3;
-    int    layer;
-
+    ECOORD       x1;
+    ECOORD       y1;
+    ECOORD       x2;
+    ECOORD       y2;
+    ECOORD       x3;
+    ECOORD       y3;
+    opt_ecoord   textsize;
+    int          layer;
     opt_wxString dimensionType;
 
     EDIMENSION( wxXmlNode* aDimension );

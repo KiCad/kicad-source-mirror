@@ -1006,53 +1006,115 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
         }
         else if( grName == wxT( "dimension" ) )
         {
-            EDIMENSION d( gr );
+            const BOARD_DESIGN_SETTINGS& designSettings = m_board->GetDesignSettings();
+
+            EDIMENSION   d( gr );
             PCB_LAYER_ID layer = kicad_layer( d.layer );
+            VECTOR2I     pt1( kicad_x( d.x1 ), kicad_y( d.y1 ) );
+            VECTOR2I     pt2( kicad_x( d.x2 ), kicad_y( d.y2 ) );
+            VECTOR2I     pt3( kicad_x( d.x3 ), kicad_y( d.y3 ) );
+            wxSize       textSize = designSettings.GetTextSize( layer );
+            int          textThickness = designSettings.GetLineThickness( layer );
+
+            if( d.textsize )
+            {
+                double ratio = 8;     // DTD says 8 is default
+                textThickness = KiROUND( d.textsize->ToPcbUnits() * ratio / 100 );
+                textSize = kicad_fontz( *d.textsize, textThickness );
+            }
 
             if( layer != UNDEFINED_LAYER )
             {
-                const BOARD_DESIGN_SETTINGS& designSettings = m_board->GetDesignSettings();
-                PCB_DIM_ALIGNED* dimension = new PCB_DIM_ALIGNED( m_board, PCB_DIM_ALIGNED_T );
-                m_board->Add( dimension, ADD_MODE::APPEND );
-
-                if( d.dimensionType )
+                if( d.dimensionType == wxT( "angle" ) )
                 {
-                    // Eagle dimension graphic arms may have different lengths, but they look
-                    // incorrect in KiCad (the graphic is tilted). Make them even length in
-                    // such case.
-                    if( *d.dimensionType == wxT( "horizontal" ) )
+                    // Kicad doesn't (at present) support angle dimensions
+                }
+                else if( d.dimensionType == wxT( "radius" ) )
+                {
+                    // Radial dimensions added in 7.0....
+                }
+                else if( d.dimensionType == wxT( "leader" ) )
+                {
+                    PCB_DIM_LEADER* leader = new PCB_DIM_LEADER( m_board );
+                    m_board->Add( leader, ADD_MODE::APPEND );
+
+                    leader->SetLayer( layer );
+                    leader->SetPrecision( DIMENSION_PRECISION );
+
+                    leader->SetStart( (wxPoint) pt1 );
+                    leader->SetEnd( (wxPoint) pt2 );
+                    leader->Text().SetPosition( (wxPoint) pt3 );
+                    leader->Text().SetTextSize( textSize );
+                    leader->Text().SetTextThickness( textThickness );
+                    leader->SetLineThickness( designSettings.GetLineThickness( layer ) );
+                }
+                else    // horizontal, vertical, <default>, diameter
+                {
+                    PCB_DIM_ALIGNED* dimension = new PCB_DIM_ALIGNED( m_board, PCB_DIM_ALIGNED_T );
+                    m_board->Add( dimension, ADD_MODE::APPEND );
+
+                    if( d.dimensionType )
                     {
-                        int newY = ( d.y1.ToPcbUnits() + d.y2.ToPcbUnits() ) / 2;
-                        d.y1 = ECOORD( newY, ECOORD::EAGLE_UNIT::EU_NM );
-                        d.y2 = ECOORD( newY, ECOORD::EAGLE_UNIT::EU_NM );
+                        // Eagle dimension graphic arms may have different lengths, but they look
+                        // incorrect in KiCad (the graphic is tilted). Make them even length in
+                        // such case.
+                        if( *d.dimensionType == wxT( "horizontal" ) )
+                        {
+                            int newY = ( pt1.y + pt2.y ) / 2;
+                            pt1.y = newY;
+                            pt2.y = newY;
+                        }
+                        else if( *d.dimensionType == wxT( "vertical" ) )
+                        {
+                            int newX = ( pt1.x + pt2.x ) / 2;
+                            pt1.x = newX;
+                            pt2.x = newX;
+                        }
                     }
-                    else if( *d.dimensionType == wxT( "vertical" ) )
+
+                    dimension->SetLayer( layer );
+                    dimension->SetPrecision( DIMENSION_PRECISION );
+
+                    // The origin and end are assumed to always be in this order from eagle
+                    dimension->SetStart( pt1 );
+                    dimension->SetEnd( pt2 );
+                    dimension->Text().SetTextSize( textSize );
+                    dimension->Text().SetTextThickness( textThickness );
+                    dimension->SetLineThickness( designSettings.GetLineThickness( layer ) );
+                    dimension->SetUnits( EDA_UNITS::MILLIMETRES );
+
+                    // check which axis the dimension runs in
+                    // because the "height" of the dimension is perpendicular to that axis
+                    // Note the check is just if two axes are close enough to each other
+                    // Eagle appears to have some rounding errors
+                    if( abs( pt1.x - pt2.x ) < 50000 )   // 50000 nm = 0.05 mm
                     {
-                        int newX = ( d.x1.ToPcbUnits() + d.x2.ToPcbUnits() ) / 2;
-                        d.x1 = ECOORD( newX, ECOORD::EAGLE_UNIT::EU_NM );
-                        d.x2 = ECOORD( newX, ECOORD::EAGLE_UNIT::EU_NM );
+                        int offset = pt3.x - pt1.x;
+
+                        if( pt1.y > pt2.y )
+                            dimension->SetHeight( offset );
+                        else
+                            dimension->SetHeight( -offset );
+                    }
+                    else if( abs( pt1.y - pt2.y ) < 50000 )
+                    {
+                        int offset = pt3.y - pt1.y;
+
+                        if( pt1.x > pt2.x )
+                            dimension->SetHeight( -offset );
+                        else
+                            dimension->SetHeight( offset );
+                    }
+                    else
+                    {
+                        int offset = GetLineLength( (wxPoint) pt3, (wxPoint) pt1 );
+
+                        if( pt1.y > pt2.y )
+                            dimension->SetHeight( offset );
+                        else
+                            dimension->SetHeight( -offset );
                     }
                 }
-
-                dimension->SetLayer( layer );
-                dimension->SetPrecision( DIMENSION_PRECISION );
-
-                // The origin and end are assumed to always be in this order from eagle
-                dimension->SetStart( VECTOR2I( kicad_x( d.x1 ), kicad_y( d.y1 ) ) );
-                dimension->SetEnd( VECTOR2I( kicad_x( d.x2 ), kicad_y( d.y2 ) ) );
-                dimension->Text().SetTextSize( designSettings.GetTextSize( layer ) );
-                dimension->Text().SetTextThickness( designSettings.GetTextThickness( layer ) );
-                dimension->SetLineThickness( designSettings.GetLineThickness( layer ) );
-                dimension->SetUnits( EDA_UNITS::MILLIMETRES );
-
-                // check which axis the dimension runs in
-                // because the "height" of the dimension is perpendicular to that axis
-                // Note the check is just if two axes are close enough to each other
-                // Eagle appears to have some rounding errors
-                if( abs( ( d.x1 - d.x2 ).ToPcbUnits() ) < 50000 )   // 50000 nm = 0.05 mm
-                    dimension->SetHeight( kicad_x( d.x3 - d.x1 ) );
-                else
-                    dimension->SetHeight( kicad_y( d.y3 - d.y1 ) );
             }
         }
 
