@@ -1300,6 +1300,13 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
     SYMDEF_SCM symbol = Library.SymbolDefinitions.at( aSymdefID );
     int        gateNumber = getKiCadUnitNumberFromGate( aGateID );
 
+    // Ensure there are no items on this unit (e.g. if we already previously loaded the symbol from
+    // the part definition)
+    std::vector<LIB_ITEM*> drawItems = aSymbol->GetUnitDrawItems( gateNumber, 0 );
+
+    for( LIB_ITEM* item : drawItems )
+        aSymbol->RemoveDrawItem( item );
+
     for( std::pair<FIGURE_ID, FIGURE> figPair : symbol.Figures )
     {
         FIGURE fig = figPair.second;
