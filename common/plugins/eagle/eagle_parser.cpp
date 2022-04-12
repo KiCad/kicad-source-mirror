@@ -538,18 +538,20 @@ EDIMENSION::EDIMENSION( wxXmlNode* aDimension )
           y2            %Coord;        #REQUIRED
           x3            %Coord;        #REQUIRED
           y3            %Coord;        #REQUIRED
+          textsize      %Coord;
           layer         %Layer;        #REQUIRED
           dtype         %DimensionType; "parallel"
           >
     */
 
-    x1    = parseRequiredAttribute<ECOORD>( aDimension, wxT( "x1" ) );
-    y1    = parseRequiredAttribute<ECOORD>( aDimension, wxT( "y1" ) );
-    x2    = parseRequiredAttribute<ECOORD>( aDimension, wxT( "x2" ) );
-    y2    = parseRequiredAttribute<ECOORD>( aDimension, wxT( "y2" ) );
-    x3    = parseRequiredAttribute<ECOORD>( aDimension, wxT( "x3" ) );
-    y3    = parseRequiredAttribute<ECOORD>( aDimension, wxT( "y3" ) );
-    layer = parseRequiredAttribute<int>( aDimension, wxT( "layer" ) );
+    x1       = parseRequiredAttribute<ECOORD>( aDimension, wxT( "x1" ) );
+    y1       = parseRequiredAttribute<ECOORD>( aDimension, wxT( "y1" ) );
+    x2       = parseRequiredAttribute<ECOORD>( aDimension, wxT( "x2" ) );
+    y2       = parseRequiredAttribute<ECOORD>( aDimension, wxT( "y2" ) );
+    x3       = parseRequiredAttribute<ECOORD>( aDimension, wxT( "x3" ) );
+    y3       = parseRequiredAttribute<ECOORD>( aDimension, wxT( "y3" ) );
+    textsize = parseOptionalAttribute<ECOORD>( aDimension, wxT( "textsize" ) );
+    layer    = parseRequiredAttribute<int>( aDimension, wxT( "layer" ) );
     dimensionType = parseOptionalAttribute<wxString>( aDimension, wxT( "dtype" ) );
 }
 
