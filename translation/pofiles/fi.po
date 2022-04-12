@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-11 09:39-0700\n"
-"PO-Revision-Date: 2022-04-09 15:09+0000\n"
+"PO-Revision-Date: 2022-04-13 14:13+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v6/fi/>\n"
 "Language: fi\n"
@@ -6860,9 +6860,9 @@ msgid "Hotkey file"
 msgstr "Pikanäppäintiedosto"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "Vastaavuustiedostoa '%s' ei löytynyt oletushakupoluista."
+msgstr "Vastaavuustiedostoa '%s' ei löydy."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -14674,7 +14674,6 @@ msgid "Cancel Load"
 msgstr "Peruuta lataus"
 
 #: eeschema/sheet.cpp:225
-#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -14682,9 +14681,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Ladatussa kytkentäkaaviossa on kirjastojen nimiä, jotka puuttuvat "
-"projektikirjastotaulukosta. Tämä voi johtaa rikkoutuneisiin "
-"symbolikirjastolinkkeihin ladattuun kaavioon. Haluatko jatkaa?"
+"Ladatussa kaaviossa on kirjastojen nimiä, jotka puuttuvat "
+"projektikirjastotaulukosta.  Tämä voi johtaa rikkoutuneisiin "
+"symbolikirjastolinkkeihin ladattuun kaavioon. \n"
+"\n"
+"Haluatko jatkaa?"
 
 #: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
 #: eeschema/sheet.cpp:380
@@ -14699,9 +14700,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Valittu tiedosto on luotu osana toista eri projektia. Tiedoston "
+"linkittäminen tähän projektiiin saattaa aiheuttaa kadonneita tai vääriä "
+"symbolikirjaston viitteitä.\n"
+"\n"
+"Haluatko sinä jatkaa?"
 
 #: eeschema/sheet.cpp:315
-#, fuzzy
 msgid ""
 "There are symbol library names in the selected schematic that are missing "
 "from the selected schematic project library table.  This may result in "
@@ -14709,12 +14714,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Ladatussa kaaviossa on kirjastojen nimiä, jotka puuttuvat ladatusta "
-"kaavamaisesta projektikirjastotaulukosta. Tämä voi johtaa rikkinäisiin "
-"symbolikirjastolinkkeihin kaaviossa. Haluatko jatkaa?"
+"Valitussa kytkentäkaaviossa on kirjastojen nimiä, jotka puuttuvat valitusta "
+"kaaviosta projektikirjastotaulukosta.   Tämä voi johtaa rikkinäisiin "
+"symbolikirjastolinkkeihin kaaviossa.\n"
+"\n"
+"Haluatko sinä jatkaa?"
 
 #: eeschema/sheet.cpp:376
-#, fuzzy
 msgid ""
 "A duplicate library name that references a different library exists in the "
 "current library table.  This conflict cannot be resolved and may result in "
@@ -14722,9 +14728,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Nykyisessä kirjastotaulukossa on kaksoiskirjaston nimi, joka viittaa eri "
-"kirjastoon. Tätä ristiriitaa ei voida ratkaista, ja se voi johtaa "
-"rikkinäisiin symbolikirjastolinkkeihin kaaviossa. Haluatko jatkaa?"
+"Nykyisessä kirjastotaulukossa on dublikaatti kirjaston nimi, joka viittaa "
+"eri kirjastoon.  Tätä ristiriitaa ei voida ratkaista, ja se voi johtaa "
+"rikkinäisiin symbolikirjastolinkkeihin kaaviossa.\n"
+"\n"
+" Haluatko sinä jatkaa?"
 
 #: eeschema/sheet.cpp:564
 #, c-format
@@ -30710,6 +30718,7 @@ msgstr "Tuo vektorigrafiikkatiedosto"
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:133
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
 msgstr ""
+"Muisti ehtyi, yritettäessä ladata DFX-tiedostoa, se saattaa olla liian suuri."
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
