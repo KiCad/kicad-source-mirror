@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-11 09:39-0700\n"
-"PO-Revision-Date: 2022-04-08 00:07+0000\n"
+"PO-Revision-Date: 2022-04-13 14:13+0000\n"
 "Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "v6/es_MX/>\n"
@@ -6878,11 +6878,9 @@ msgid "Hotkey file"
 msgstr "Archivo de atajos de teclado"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr ""
-"No se puede encontrar el archivo de equivalencia '%s' en las rutas por "
-"defecto."
+msgstr "No se puede encontrar el archivo de equivalencia '%s'."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -14768,7 +14766,6 @@ msgid "Cancel Load"
 msgstr "Cancelar la carga"
 
 #: eeschema/sheet.cpp:225
-#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -14776,9 +14773,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Hay nombres de biblioteca en el esquema cargado que faltan en la tabla de "
-"librerías del proyecto. Esto puede provocar enlaces a la librería de "
-"símbolos inválidos para el esquema cargado. ¿Desea continuar?"
+"Hay nombres de biblioteca en el esquema seleccionado que faltan en la tabla "
+"de bibliotecas del proyecto actual.  Esto puede resultar en referencias de "
+"biblioteca de símbolos rotas para el esquema cargado.\n"
+"\n"
+"¿Desea continuar?"
 
 #: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
 #: eeschema/sheet.cpp:380
@@ -14793,9 +14792,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"El archivo seleccionado se creó como parte de un proyecto diferente.  "
+"Vincular el archivo a este proyecto puede dar lugar a referencias de "
+"biblioteca de símbolos faltantes o incorrectas.\n"
+"\n"
+"¿Desea continuar?"
 
 #: eeschema/sheet.cpp:315
-#, fuzzy
 msgid ""
 "There are symbol library names in the selected schematic that are missing "
 "from the selected schematic project library table.  This may result in "
@@ -14803,12 +14806,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Hay nombres de librerías en el esquema cargado que faltan en la tabla de "
-"librerías del proyecto cargado. Esto puede provocar enlaces de símbolos "
-"inválidos para el esquema. ¿Desea continuar?"
+"Hay nombres de bibliotecas de símbolos en el esquema seleccionado que faltan "
+"en la tabla de bibliotecas del proyecto del esquema seleccionado.  Esto "
+"puede resultar en referencias de bibliotecas de símbolos rotas.\n"
+"\n"
+"¿Desea continuar?"
 
 #: eeschema/sheet.cpp:376
-#, fuzzy
 msgid ""
 "A duplicate library name that references a different library exists in the "
 "current library table.  This conflict cannot be resolved and may result in "
@@ -14816,10 +14820,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Existe un nombre de librería duplicado, que hace referencia a una librería "
-"diferente, en la tabla de librerías activa. Este conflicto no se puede "
-"resolver y puede dar como resultado enlaces de librería de símbolos "
-"inválidos para el esquema. ¿Desea continuar?"
+"Existe un nombre de biblioteca duplicado que hace referencia a una "
+"biblioteca diferente en la tabla de bibliotecas actual.  Este conflicto no "
+"puede resolverse y puede  a referencias a bibliotecas de símbolos rotas.\n"
+"\n"
+"¿Desea continuar?"
 
 #: eeschema/sheet.cpp:564
 #, c-format
@@ -30943,6 +30948,7 @@ msgstr "Importar archivo de gráficos vectoriales"
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:133
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
 msgstr ""
+"La memoria se agotó al intentar cargar el DXF, puede ser demasiado grande."
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
