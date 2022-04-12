@@ -28,13 +28,14 @@
 #include <dialog_shim.h>
 #include <gal/dpi_scaling.h>
 #include <kiface_base.h>
+#include <kiplatform/policy.h>
 #include <kiplatform/ui.h>
 #include <pgm_base.h>
+#include <policy_keys.h>
 #include <id.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 
-#include <kiplatform/policy.h>
 
 PANEL_DATA_COLLECTION::PANEL_DATA_COLLECTION( PAGED_DIALOG* aDialog, wxWindow* aParent ) :
         PANEL_DATA_COLLECTION_BASE( aParent ), m_dialog( aDialog )
@@ -47,7 +48,7 @@ bool PANEL_DATA_COLLECTION::TransferDataToWindow()
     applySettingsToPanel();
 
     KIPLATFORM::POLICY::STATE policyState =
-            KIPLATFORM::POLICY::GetPolicyState( "DataCollection" );
+            KIPLATFORM::POLICY::GetPolicyState( POLICY_KEY_DATACOLLECTION );
     if( policyState != KIPLATFORM::POLICY::STATE::NOT_CONFIGURED )
     {
         Disable();

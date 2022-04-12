@@ -20,6 +20,8 @@
 #include <bitmaps.h>
 #include <bitmap_store.h>
 #include <kicad_manager_frame.h>
+#include <kiplatform/policy.h>
+#include <policy_keys.h>
 #include <tool/tool_manager.h>
 #include <tools/kicad_manager_actions.h>
 #include <widgets/bitmap_button.h>
@@ -58,10 +60,11 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
     helpFont.SetStyle( wxFONTSTYLE_ITALIC );
 
     auto addLauncher =
-        [&]( const TOOL_ACTION& aAction, const wxBitmap& aBitmap, const wxString& aHelpText )
+        [&]( const TOOL_ACTION& aAction, const wxBitmap& aBitmap, const wxString& aHelpText, bool enabled = true )
         {
             BITMAP_BUTTON* btn = new BITMAP_BUTTON( this, wxID_ANY );
             btn->SetBitmap( aBitmap );
+            btn->SetDisabledBitmap( wxBitmap( aBitmap.ConvertToImage().ConvertToGreyscale() ) );
             btn->SetPadding( 5 );
             btn->SetToolTip( aAction.GetDescription() );
 
@@ -109,7 +112,14 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
 
             m_toolsSizer->Add( help, wxGBPosition( row + 1, 1 ), wxGBSpan( 1, 1 ),
                                wxALIGN_TOP | wxTOP, 1 );
-        };
+
+            btn->Enable( enabled );
+            if( !enabled )
+            {
+                help->Disable();
+                label->Disable();
+            }
+    };
 
     addLauncher( KICAD_MANAGER_ACTIONS::editSchematic,
                  KiScaledBitmap( BITMAPS::icon_eeschema, this, 48, true ),
@@ -145,8 +155,9 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
                     "designs" ) );
 
     addLauncher( KICAD_MANAGER_ACTIONS::showPluginManager,
-                 KiScaledBitmap( BITMAPS::icon_pcm, this, 48, true ),
-                 _( "Manage downloadable packages from KiCad and 3rd party repositories" ) );
+                    KiScaledBitmap( BITMAPS::icon_pcm, this, 48, true ),
+                    _( "Manage downloadable packages from KiCad and 3rd party repositories" ),
+                    ( KIPLATFORM::POLICY::GetPolicyState( POLICY_KEY_PCM ) != KIPLATFORM::POLICY::STATE::DISABLED ) );
 
     Layout();
 }

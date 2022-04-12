@@ -26,8 +26,10 @@
 
 #include <bitmaps.h>
 #include <filehistory.h>
+#include <kiplatform/policy.h>
 #include <menus_helpers.h>
 #include <paths.h>
+#include <policy_keys.h>
 #include <tool/action_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_manager.h>
@@ -159,7 +161,14 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     toolsMenu->Add( KICAD_MANAGER_ACTIONS::convertImage );
     toolsMenu->Add( KICAD_MANAGER_ACTIONS::showCalculator );
     toolsMenu->Add( KICAD_MANAGER_ACTIONS::editDrawingSheet );
-    toolsMenu->Add( KICAD_MANAGER_ACTIONS::showPluginManager );
+
+    wxMenuItem* pcmMenuItem = toolsMenu->Add( KICAD_MANAGER_ACTIONS::showPluginManager );
+
+    if( KIPLATFORM::POLICY::GetPolicyState( POLICY_KEY_PCM )
+        == KIPLATFORM::POLICY::STATE::DISABLED )
+    {
+        pcmMenuItem->Enable( false );
+    }
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( _( "Edit Local File..." ),

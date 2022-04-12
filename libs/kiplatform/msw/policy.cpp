@@ -32,7 +32,7 @@ KIPLATFORM::POLICY::STATE KIPLATFORM::POLICY::GetPolicyState( const wxString& aK
     if( key.Exists() )
     {
         long value;
-        if( key.QueryValue( aKey, &value ) )
+        if( key.HasValue( aKey ) && key.QueryValue( aKey, &value ) )
         {
             if( value == 1 )
                 return POLICY::STATE::ENABLED;

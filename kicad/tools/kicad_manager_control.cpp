@@ -21,8 +21,10 @@
 #include <wildcards_and_files_ext.h>
 #include <executable_names.h>
 #include <pgm_base.h>
+#include <policy_keys.h>
 #include <kiway.h>
 #include <kicad_manager_frame.h>
+#include <kiplatform/policy.h>
 #include <confirm.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
@@ -813,6 +815,13 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
 
 int KICAD_MANAGER_CONTROL::ShowPluginManager( const TOOL_EVENT& aEvent )
 {
+    if( KIPLATFORM::POLICY::GetPolicyState( POLICY_KEY_PCM )
+        == KIPLATFORM::POLICY::STATE::DISABLED )
+    {
+        // policy disables the plugin manager
+        return 0;
+    }
+
     // For some reason, after a click or a double click the bitmap button calling
     // PCM keeps the focus althougt the focus was not set to this button.
     // This hack force removing the focus from this button

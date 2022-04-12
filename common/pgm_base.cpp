@@ -50,6 +50,7 @@
 #include <eda_draw_frame.h>
 #include <gestfich.h>
 #include <id.h>
+#include <kiplatform/policy.h>
 #include <lockfile.h>
 #include <menus_helpers.h>
 #include <pgm_base.h>
@@ -59,8 +60,7 @@
 #include <systemdirsappend.h>
 #include <trace_helpers.h>
 #include <paths.h>
-
-#include <kiplatform/policy.h>
+#include <policy_keys.h>
 
 #ifdef KICAD_USE_SENTRY
 #include <boost/uuid/uuid_io.hpp>
@@ -221,7 +221,7 @@ const wxString PGM_BASE::AskUserForPreferredEditor( const wxString& aDefaultEdit
 bool PGM_BASE::IsSentryOptedIn()
 {
     KIPLATFORM::POLICY::STATE policyState =
-            KIPLATFORM::POLICY::GetPolicyState( wxT( "DataCollection" ) );
+            KIPLATFORM::POLICY::GetPolicyState( POLICY_KEY_DATACOLLECTION );
     if( policyState != KIPLATFORM::POLICY::STATE::NOT_CONFIGURED )
     {
         return policyState == KIPLATFORM::POLICY::STATE::ENABLED;
@@ -329,7 +329,7 @@ void PGM_BASE::sentryInit()
 void PGM_BASE::sentryPrompt()
 {
     KIPLATFORM::POLICY::STATE policyState =
-            KIPLATFORM::POLICY::GetPolicyState( wxT( "DataCollection" ) );
+            KIPLATFORM::POLICY::GetPolicyState( POLICY_KEY_DATACOLLECTION );
 
     if( policyState == KIPLATFORM::POLICY::STATE::NOT_CONFIGURED
         && !m_settings_manager->GetCommonSettings()->m_DoNotShowAgain.data_collection_prompt )
