@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-11 09:40-0700\n"
-"PO-Revision-Date: 2022-04-09 15:09+0000\n"
+"PO-Revision-Date: 2022-04-14 08:02+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -9159,17 +9159,15 @@ msgid "Diameter:"
 msgstr "Halkaisija:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
-#, fuzzy
 msgid "Set diameter to 0 to use schematic's junction dot size."
 msgstr ""
-"Aseta halkaisija nollaksi käyttääksesi kytkentäkaavion solmupisteen kokoa."
+"Aseta halkaisija nollaksi käyttääksesi kytkentäkaavion risteyspisteen kokoa."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_properties_base.cpp:81
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:94
-#, fuzzy
 msgid "Clear color to use Schematic Editor colors."
-msgstr "Aseta väri läpinäkyväksi käyttääksesi kytkentäkaavioeditorin värejä."
+msgstr "Poista väri, käyttääksesi kytkentäkaavioeditorin värejä."
 
 #: eeschema/dialogs/dialog_junction_props_base.h:59
 msgid "Junction Properties"
@@ -9653,10 +9651,9 @@ msgid "Border width:"
 msgstr "Reunaviivan leveys:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:52
-#, fuzzy
 msgid "Set border width to 0 to use schematic's default symbol line width."
 msgstr ""
-"Aseta reunan leveydeksi 0 käyttääksesi Kytkentäkaavion vakio "
+"Aseta reunaleveydeksi 0 käyttääksesi Kytkentäkaavion vakio "
 "symboliviivanleveyttä."
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:60
@@ -9942,10 +9939,8 @@ msgid "Text Box Properties"
 msgstr "Tekstilaatikon Ominaisuudet"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:77
-#, fuzzy
 msgid "Set width to 0 to use schematic's default line width."
-msgstr ""
-"Aseta leveys nollaksi käyttääksesi kytkentäkaavion oletus viivanleveyttä."
+msgstr "Aseta leveys 0 käyttääksesi kytkentäkaavion oletusviivanleveyttä."
 
 #: eeschema/dialogs/dialog_line_properties_base.h:68
 msgid "Line Properties"
@@ -10793,14 +10788,11 @@ msgid "Filled shape"
 msgstr "Täytetty muoto"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:122
-#, fuzzy
 msgid "Set border width to 0 to use schematic's default line width."
 msgstr ""
-"Aseta reunan leveydeksi 0 käyttääksesi Kytkentäkaavion vakio "
-"symboliviivanleveyttä."
+"Aseta reunaleveydeksi 0 käyttääksesi kytkentäkaavion vakioviivanleveyttä."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:126
-#, fuzzy
 msgid "Clear colors to use Schematic Editor colors."
 msgstr "Aseta väri läpinäkyväksi käyttääksesi kytkentäkaavioeditorin värejä."
 
@@ -11959,7 +11951,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:142
 msgid "Default for all sheet instances"
-msgstr ""
+msgstr "Vakiona kaikille sivun prosesseille"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:143
 msgid ""
@@ -11967,6 +11959,9 @@ msgid ""
 "footprint fields the default for all sheet instances\n"
 "of this symbol"
 msgstr ""
+"Tarkista yksikkö ja viite, arvo ja\n"
+"jalanjälkikentät oletusarvoisesti kaikille lehden prosesseille\n"
+"tästä symbolista"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:147
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:345
@@ -12302,10 +12297,8 @@ msgid "Wire/bus width:"
 msgstr "Johtimen/väylän leveys:"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:90
-#, fuzzy
 msgid "Set width to 0 to use netclass's wire/bus widths."
-msgstr ""
-"Aseta leveys nollaksi käyttääksesi Netclass:in johtimen/väylän leveyksiä."
+msgstr "Aseta leveys 0 käyttääksesi verkkoluokkien johtimien/väyläleveyksiä."
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:71
 msgid "Wire & Bus Properties"
@@ -35197,7 +35190,7 @@ msgstr "Tyyli pyöreille muodoille"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:293
 msgid "Style for rect shapes"
-msgstr "Tyyli Suorakulmiomuodoille"
+msgstr "Tyyli suorakulmiomuodoille"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:299
 msgid "Style for tracks"
@@ -35354,7 +35347,7 @@ msgid "I/O Error"
 msgstr "I/O Virhe"
 
 #: pcbnew/tools/board_editor_control.cpp:573
-#, fuzzy, c-format
+#, c-format
 msgid "Orphaned net %s re-parented.\n"
 msgstr "Yksin jääneet verkot %s vanhemmat uudelleen järjestetty.\n"
 
@@ -35904,11 +35897,11 @@ msgstr "Napsauta uutta jäsentä ..."
 
 #: pcbnew/tools/pad_tool.cpp:153
 msgid "Paste Pad Properties"
-msgstr "Liitä tyynyn ominaisuudet"
+msgstr "Liitä Anturan Ominaisuudet"
 
 #: pcbnew/tools/pad_tool.cpp:268
 msgid "Push Pad Settings"
-msgstr "Push Pad -asetukset"
+msgstr "Työntöantura Asetukset"
 
 #: pcbnew/tools/pad_tool.cpp:336
 #, c-format
@@ -35916,34 +35909,34 @@ msgid ""
 "Click on pad %s%d\n"
 "Press <esc> to cancel or double-click to commit"
 msgstr ""
-"Napsauta tyynyä %s %d\n"
+"Napsauta anturaa %s %d\n"
 "Voit peruuttaa painamalla <esc> tai kaksoisnapsauttamalla"
 
 #: pcbnew/tools/pad_tool.cpp:358 pcbnew/tools/pad_tool.cpp:455
 msgid "Renumber pads"
-msgstr "Numeroi tyynyt uudelleen"
+msgstr "Numeroi anturat uudelleen"
 
 #: pcbnew/tools/pad_tool.cpp:560
 msgid "Place pad"
-msgstr "Aseta pad"
+msgstr "Aseta antura"
 
 #: pcbnew/tools/pad_tool.cpp:596
 #, c-format
 msgid "Pad Edit Mode.  Press %s again to exit."
-msgstr "Pad-muokkaustila. Poistu painamalla uudelleen %s."
+msgstr "Anturan Muokkaustila. Poistu painamalla uudelleen %s."
 
 #: pcbnew/tools/pad_tool.cpp:601
 #, c-format
 msgid "Pad Edit Mode.  Press %s to exit."
-msgstr "Pad-muokkaustila. Paina %s poistuaksesi."
+msgstr "Anturan Muokkaustila. Paina %s poistuaksesi."
 
 #: pcbnew/tools/pad_tool.cpp:692
 msgid "Edit pad shapes"
-msgstr "Muokkaa tyynyjen muotoja"
+msgstr "Muokkaa anturoiden muotoja"
 
 #: pcbnew/tools/pad_tool.cpp:825
 msgid "Recombine pads"
-msgstr "Yhdistä tyynyjä"
+msgstr "Yhdistä uudelleen anturat"
 
 #: pcbnew/tools/pcb_actions.cpp:48
 msgid "Create Polygon from Selection"
@@ -36075,11 +36068,11 @@ msgstr "Lisää kohtisuora mitta"
 
 #: pcbnew/tools/pcb_actions.cpp:154
 msgid "Add Leader"
-msgstr "Lisää Johtaja"
+msgstr "Lisää Selite"
 
 #: pcbnew/tools/pcb_actions.cpp:154
 msgid "Add a leader dimension"
-msgstr "Lisää johtajamitta"
+msgstr "Lisää selitemitat"
 
 #: pcbnew/tools/pcb_actions.cpp:165
 msgid "Add Filled Zone"
@@ -36102,7 +36095,6 @@ msgid "Add Rule Area"
 msgstr "Lisää Sääntöalue"
 
 #: pcbnew/tools/pcb_actions.cpp:177
-#, fuzzy
 msgid "Add a rule area (keepout)"
 msgstr "Lisää sääntöalue (säilytys)"
 
