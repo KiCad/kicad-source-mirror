@@ -50,7 +50,7 @@ EDA_ITEM* EE_SELECTION::GetTopLeftItem( bool onlyModules ) const
             {
                 VECTOR2I pos = aItem->GetPosition();
 
-                if( ( aCurrent == nullptr )
+                if( ( *aCurrent == nullptr )
                     || ( pos.x < aCurrentPos->x )
                     || ( pos.x == aCurrentPos->x && pos.y < aCurrentPos->y ) )
                 {
