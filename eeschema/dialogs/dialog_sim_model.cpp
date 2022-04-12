@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialog_spice_model.h>
+#include <dialog_sim_model.h>
 #include <sim/sim_property.h>
 #include <sim/sim_library_spice.h>
 #include <widgets/wx_grid.h>
@@ -31,39 +31,31 @@
 #include <locale_io.h>
 #include <wx/filedlg.h>
 
-using TYPE = SIM_VALUE_BASE::TYPE;
+using TYPE = SIM_VALUE::TYPE;
 using CATEGORY = SIM_MODEL::PARAM::CATEGORY;
 
 
-template class DIALOG_SPICE_MODEL<SCH_FIELD>;
-template class DIALOG_SPICE_MODEL<LIB_FIELD>;
+template class DIALOG_SIM_MODEL<SCH_FIELD>;
+template class DIALOG_SIM_MODEL<LIB_FIELD>;
 
 template <typename T>
-DIALOG_SPICE_MODEL<T>::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
+DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
                                            std::vector<T>& aFields )
-    : DIALOG_SPICE_MODEL_BASE( aParent ),
+    : DIALOG_SIM_MODEL_BASE( aParent ),
       m_symbol( aSymbol ),
       m_fields( aFields ),
       m_library( std::make_shared<SIM_LIBRARY_SPICE>() ),
       m_prevModel( nullptr ),
       m_firstCategory( nullptr )
 {
-    try
+    for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
-        for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
-        {
-            m_models.push_back( SIM_MODEL::Create( type, m_symbol.GetAllPins().size() ) );
+        m_models.push_back( SIM_MODEL::Create( type, m_symbol.GetAllPins().size() ) );
 
-            SIM_MODEL::DEVICE_TYPE deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
-            
-            if( !m_curModelTypeOfDeviceType.count( deviceType ) )
-                m_curModelTypeOfDeviceType[deviceType] = type;
-        }
-    }
-    catch( KI_PARAM_ERROR& e )
-    {
-        DisplayErrorMessage( this, e.What() );
-        return;
+        SIM_MODEL::DEVICE_TYPE deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
+        
+        if( !m_curModelTypeOfDeviceType.count( deviceType ) )
+            m_curModelTypeOfDeviceType[deviceType] = type;
     }
 
 
@@ -75,7 +67,7 @@ DIALOG_SPICE_MODEL<T>::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbo
 
     m_scintillaTricks = std::make_unique<SCINTILLA_TRICKS>( m_codePreview, wxT( "{}" ), false );
 
-    m_paramGridMgr->Bind( wxEVT_PG_SELECTED, &DIALOG_SPICE_MODEL::onSelectionChange, this );
+    m_paramGridMgr->Bind( wxEVT_PG_SELECTED, &DIALOG_SIM_MODEL::onSelectionChange, this );
 
     m_paramGrid->SetValidationFailureBehavior( wxPG_VFB_STAY_IN_PROPERTY
                                                | wxPG_VFB_BEEP
@@ -109,9 +101,10 @@ DIALOG_SPICE_MODEL<T>::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbo
 
 
 template <typename T>
-bool DIALOG_SPICE_MODEL<T>::TransferDataToWindow()
+bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 {
-    wxString libraryFilename = SIM_MODEL::GetFieldValue( &m_fields, LIBRARY_FIELD );
+    wxString libraryFilename = SIM_MODEL::GetFieldValue( &m_fields,
+                                                         SIM_LIBRARY_SPICE::LIBRARY_FIELD );
 
     if( !libraryFilename.IsEmpty() )
     {
@@ -119,9 +112,8 @@ bool DIALOG_SPICE_MODEL<T>::TransferDataToWindow()
         loadLibrary( libraryFilename );
 
         // Must be set before curModel() is used since the latter checks the combobox value.
-        m_modelNameCombobox->SetStringSelection( SIM_MODEL::GetFieldValue( &m_fields, NAME_FIELD ) );
-
-        curModel().ReadDataFields( m_symbol.GetAllPins().size(), &m_fields );
+        m_modelNameCombobox->SetStringSelection(
+                SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_SPICE::NAME_FIELD ) );
 
         m_overrideCheckbox->SetValue( curModel().HasNonPrincipalOverrides() );
     }
@@ -135,10 +127,10 @@ bool DIALOG_SPICE_MODEL<T>::TransferDataToWindow()
             m_models.at( static_cast<int>( SIM_MODEL::ReadTypeFromFields( m_fields ) ) )
                 = SIM_MODEL::Create( m_symbol.GetAllPins().size(), m_fields );
         }
-        catch( KI_PARAM_ERROR& e )
+        catch( const KI_PARAM_ERROR& e )
         {
             DisplayErrorMessage( this, e.What() );
-            return DIALOG_SPICE_MODEL_BASE::TransferDataToWindow();
+            return DIALOG_SIM_MODEL_BASE::TransferDataToWindow();
         }
 
         m_curModelType = type;
@@ -146,20 +138,28 @@ bool DIALOG_SPICE_MODEL<T>::TransferDataToWindow()
 
     updateWidgets();
 
-    return DIALOG_SPICE_MODEL_BASE::TransferDataToWindow();
+    return DIALOG_SIM_MODEL_BASE::TransferDataToWindow();
 }
 
 
 template <typename T>
-bool DIALOG_SPICE_MODEL<T>::TransferDataFromWindow()
+bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
 {
-    if( !DIALOG_SPICE_MODEL_BASE::TransferDataFromWindow() )
+    if( !DIALOG_SIM_MODEL_BASE::TransferDataFromWindow() )
         return false;
 
     if( m_useLibraryModelRadioButton->GetValue() )
     {
-        SIM_MODEL::SetFieldValue( m_fields, NAME_FIELD, m_modelNameCombobox->GetValue() );
-        SIM_MODEL::SetFieldValue( m_fields, LIBRARY_FIELD, m_library->GetFilename() );
+        SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_SPICE::NAME_FIELD,
+                                  m_modelNameCombobox->GetValue() );
+
+        wxString path = m_library->GetFilePath();
+        wxFileName fn( path );
+
+        if( fn.MakeRelativeTo( Prj().GetProjectPath() ) && !fn.GetFullPath().StartsWith( ".." ) )
+            path = fn.GetFullPath();
+
+        SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_SPICE::LIBRARY_FIELD, path );
     }
 
     curModel().WriteFields( m_fields );
@@ -169,7 +169,7 @@ bool DIALOG_SPICE_MODEL<T>::TransferDataFromWindow()
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::updateWidgets()
+void DIALOG_SIM_MODEL<T>::updateWidgets()
 {
     updateModelParamsTab();
     updateModelCodeTab();
@@ -180,7 +180,7 @@ void DIALOG_SPICE_MODEL<T>::updateWidgets()
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::updateModelParamsTab()
+void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
 {
     if( &curModel() != m_prevModel )
     {
@@ -271,7 +271,7 @@ void DIALOG_SPICE_MODEL<T>::updateModelParamsTab()
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::updateModelCodeTab()
+void DIALOG_SIM_MODEL<T>::updateModelCodeTab()
 {
     wxString modelName = m_modelNameCombobox->GetStringSelection();
 
@@ -283,7 +283,7 @@ void DIALOG_SPICE_MODEL<T>::updateModelCodeTab()
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::updatePinAssignmentsTab()
+void DIALOG_SIM_MODEL<T>::updatePinAssignmentsTab()
 {
     if( &curModel() == m_prevModel )
         return;
@@ -332,7 +332,7 @@ void DIALOG_SPICE_MODEL<T>::updatePinAssignmentsTab()
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::updatePinAssignmentsGridEditors()
+void DIALOG_SIM_MODEL<T>::updatePinAssignmentsGridEditors()
 {
     wxString modelPinChoicesString = "";
     bool isFirst = true;
@@ -384,14 +384,15 @@ void DIALOG_SPICE_MODEL<T>::updatePinAssignmentsGridEditors()
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::loadLibrary( const wxString& aFilePath )
+void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
 {
-    m_library->ReadFile( aFilePath );
-    m_libraryFilenameInput->SetValue( aFilePath );
+    m_library->ReadFile( Prj().AbsolutePath( aFilePath ) );
+    m_libraryPathInput->SetValue( aFilePath );
 
     m_libraryModels.clear();
     for( const SIM_MODEL& baseModel : m_library->GetModels() )
-        m_libraryModels.push_back( SIM_MODEL::Create( baseModel ) );
+        m_libraryModels.push_back( SIM_MODEL::Create( baseModel, m_symbol.GetAllPins().size(),
+                                                      m_fields ) );
 
     m_modelNameCombobox->Clear();
     for( const wxString& name : m_library->GetModelNames() )
@@ -402,7 +403,7 @@ void DIALOG_SPICE_MODEL<T>::loadLibrary( const wxString& aFilePath )
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::addParamPropertyIfRelevant( int aParamIndex )
+void DIALOG_SIM_MODEL<T>::addParamPropertyIfRelevant( int aParamIndex )
 {
     if( curModel().GetParam( aParamIndex ).info.dir == SIM_MODEL::PARAM::DIR::OUT )
         return;
@@ -465,24 +466,30 @@ void DIALOG_SPICE_MODEL<T>::addParamPropertyIfRelevant( int aParamIndex )
 }
 
 template <typename T>
-wxPGProperty* DIALOG_SPICE_MODEL<T>::newParamProperty( int aParamIndex ) const
+wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
 {
     const SIM_MODEL::PARAM& param = curModel().GetParam( aParamIndex );
-    wxString paramDescription = wxString::Format( "%s (%s)",
-                                                  param.info.description,
-                                                  param.info.name );
+    wxString paramDescription;
+
+    if( !param.info.description.IsEmpty() )
+        paramDescription = wxString::Format( "%s (%s)",
+                                             param.info.description,
+                                             param.info.name );
+    else
+        paramDescription = wxString::Format( "%s", param.info.name );
+
     wxPGProperty* prop = nullptr;
 
     switch( param.info.type )
     {
     case TYPE::INT:
         prop = new SIM_PROPERTY( paramDescription, param.info.name, m_library, curModelSharedPtr(),
-                                 aParamIndex, SIM_VALUE_BASE::TYPE::INT );
+                                 aParamIndex, SIM_VALUE::TYPE::INT );
         break;
 
     case TYPE::FLOAT:
         prop = new SIM_PROPERTY( paramDescription, param.info.name, m_library, curModelSharedPtr(),
-                                 aParamIndex, SIM_VALUE_BASE::TYPE::FLOAT );
+                                 aParamIndex, SIM_VALUE::TYPE::FLOAT );
         break;
 
     case TYPE::BOOL:
@@ -532,14 +539,14 @@ wxPGProperty* DIALOG_SPICE_MODEL<T>::newParamProperty( int aParamIndex ) const
 
 
 template <typename T>
-SIM_MODEL& DIALOG_SPICE_MODEL<T>::curModel() const
+SIM_MODEL& DIALOG_SIM_MODEL<T>::curModel() const
 {
     return *curModelSharedPtr();
 }
 
 
 template <typename T>
-std::shared_ptr<SIM_MODEL> DIALOG_SPICE_MODEL<T>::curModelSharedPtr() const
+std::shared_ptr<SIM_MODEL> DIALOG_SIM_MODEL<T>::curModelSharedPtr() const
 {
     if( m_useLibraryModelRadioButton->GetValue()
         && m_modelNameCombobox->GetSelection() != wxNOT_FOUND )
@@ -552,7 +559,7 @@ std::shared_ptr<SIM_MODEL> DIALOG_SPICE_MODEL<T>::curModelSharedPtr() const
 
 
 template <typename T>
-wxString DIALOG_SPICE_MODEL<T>::getSymbolPinString( int symbolPinNumber ) const
+wxString DIALOG_SIM_MODEL<T>::getSymbolPinString( int symbolPinNumber ) const
 {
     wxString name = "";
     SCH_PIN* symbolPin = m_symbol.GetAllPins().at( symbolPinNumber - 1 );
@@ -570,7 +577,7 @@ wxString DIALOG_SPICE_MODEL<T>::getSymbolPinString( int symbolPinNumber ) const
 
 
 template <typename T>
-wxString DIALOG_SPICE_MODEL<T>::getModelPinString( int modelPinNumber ) const
+wxString DIALOG_SIM_MODEL<T>::getModelPinString( int modelPinNumber ) const
 {
     const wxString& pinName = curModel().GetPin( modelPinNumber - 1 ).name;
 
@@ -584,7 +591,7 @@ wxString DIALOG_SPICE_MODEL<T>::getModelPinString( int modelPinNumber ) const
 
 
 template <typename T>
-int DIALOG_SPICE_MODEL<T>::getModelPinNumber( const wxString& aModelPinString ) const
+int DIALOG_SIM_MODEL<T>::getModelPinNumber( const wxString& aModelPinString ) const
 {
     if( aModelPinString == "Not Connected" )
         return SIM_MODEL::PIN::NOT_CONNECTED;
@@ -602,40 +609,46 @@ int DIALOG_SPICE_MODEL<T>::getModelPinNumber( const wxString& aModelPinString ) 
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::onRadioButton( wxCommandEvent& aEvent )
+void DIALOG_SIM_MODEL<T>::onRadioButton( wxCommandEvent& aEvent )
 {
     updateWidgets();
 }
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::onBrowseButtonClick( wxCommandEvent& aEvent )
+void DIALOG_SIM_MODEL<T>::onBrowseButtonClick( wxCommandEvent& aEvent )
 {
-    wxFileDialog dlg( this, _( "Browse Models" ) );
+    wxFileDialog dlg( this, _( "Browse Models" ), Prj().GetProjectPath() );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    loadLibrary( dlg.GetPath() );
+    wxString path = dlg.GetPath();
+    wxFileName fn( path );
+
+    if( fn.MakeRelativeTo( Prj().GetProjectPath() ) && !fn.GetFullPath().StartsWith( ".." ) )
+        path = fn.GetFullPath();
+
+    loadLibrary( path );
 }
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::onModelNameCombobox( wxCommandEvent& aEvent )
+void DIALOG_SIM_MODEL<T>::onModelNameCombobox( wxCommandEvent& aEvent )
 {
     updateWidgets();
 }
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::onOverrideCheckbox( wxCommandEvent& aEvent )
+void DIALOG_SIM_MODEL<T>::onOverrideCheckbox( wxCommandEvent& aEvent )
 {
     updateWidgets();
 }
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::onDeviceTypeChoice( wxCommandEvent& aEvent )
+void DIALOG_SIM_MODEL<T>::onDeviceTypeChoice( wxCommandEvent& aEvent )
 {
     SIM_MODEL::DEVICE_TYPE deviceType =
         static_cast<SIM_MODEL::DEVICE_TYPE>( m_deviceTypeChoice->GetSelection() );
@@ -647,7 +660,7 @@ void DIALOG_SPICE_MODEL<T>::onDeviceTypeChoice( wxCommandEvent& aEvent )
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
+void DIALOG_SIM_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
 {
     SIM_MODEL::DEVICE_TYPE deviceType =
         static_cast<SIM_MODEL::DEVICE_TYPE>( m_deviceTypeChoice->GetSelection() );
@@ -669,14 +682,14 @@ void DIALOG_SPICE_MODEL<T>::onTypeChoice( wxCommandEvent& aEvent )
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::onParamGridChanged( wxPropertyGridEvent& aEvent )
+void DIALOG_SIM_MODEL<T>::onParamGridChanged( wxPropertyGridEvent& aEvent )
 {
     updateWidgets();
 }
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent )
+void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent )
 {
     int symbolPinNumber = aEvent.GetRow() + 1;
     int oldModelPinNumber = getModelPinNumber( aEvent.GetString() );
@@ -696,7 +709,7 @@ void DIALOG_SPICE_MODEL<T>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent 
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::onPinAssignmentsGridSize( wxSizeEvent& aEvent )
+void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridSize( wxSizeEvent& aEvent )
 {
     wxGridUpdateLocker deferRepaintsTillLeavingScope( m_pinAssignmentsGrid );
 
@@ -709,49 +722,49 @@ void DIALOG_SPICE_MODEL<T>::onPinAssignmentsGridSize( wxSizeEvent& aEvent )
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::onLibraryFilenameInputUpdate( wxUpdateUIEvent& aEvent )
+void DIALOG_SIM_MODEL<T>::onLibraryFilenameInputUpdate( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( m_useLibraryModelRadioButton->GetValue() );
 }
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::onBrowseButtonUpdate( wxUpdateUIEvent& aEvent )
+void DIALOG_SIM_MODEL<T>::onBrowseButtonUpdate( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( m_useLibraryModelRadioButton->GetValue() );
 }
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::onModelNameComboboxUpdate( wxUpdateUIEvent& aEvent )
+void DIALOG_SIM_MODEL<T>::onModelNameComboboxUpdate( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( m_useLibraryModelRadioButton->GetValue() );
 }
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::onOverrideCheckboxUpdate( wxUpdateUIEvent& aEvent )
+void DIALOG_SIM_MODEL<T>::onOverrideCheckboxUpdate( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( m_useLibraryModelRadioButton->GetValue() );
 }
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::onDeviceTypeChoiceUpdate( wxUpdateUIEvent& aEvent )
+void DIALOG_SIM_MODEL<T>::onDeviceTypeChoiceUpdate( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( m_useInstanceModelRadioButton->GetValue() );
 }
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::onTypeChoiceUpdate( wxUpdateUIEvent& aEvent )
+void DIALOG_SIM_MODEL<T>::onTypeChoiceUpdate( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( m_useInstanceModelRadioButton->GetValue() );
 }
 
 
 template <typename T>
-void DIALOG_SPICE_MODEL<T>::onSelectionChange( wxPropertyGridEvent& aEvent )
+void DIALOG_SIM_MODEL<T>::onSelectionChange( wxPropertyGridEvent& aEvent )
 {
     // TODO: Activate also when the whole property grid is selected with tab key.
 

@@ -28,10 +28,10 @@
 #include <sim/sim_model.h>
 
 
-class SIM_MODEL_CODEMODEL : public SIM_MODEL
+class SIM_MODEL_XSPICE : public SIM_MODEL
 {
 public:
-    SIM_MODEL_CODEMODEL( TYPE aType );
+    SIM_MODEL_XSPICE( TYPE aType );
 };
 
 #endif // SIM_MODEL_CODEMODEL_H

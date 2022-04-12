@@ -49,8 +49,7 @@ public:
     // Custom methods
 
     bool AddTrace( SIM_PLOT_PANEL* aPlotPanel, const wxString& aTitle, const wxString& aName,
-                   int aPoints, const double* aX, const double* aY, SIM_PLOT_TYPE aType,
-                   const wxString& aParam );
+                   int aPoints, const double* aX, const double* aY, SIM_PLOT_TYPE aType );
     bool DeleteTrace( SIM_PLOT_PANEL* aPlotPanel, const wxString& aName );
     
     void SetSimCommand( SIM_PANEL_BASE* aPlotPanel, const wxString& aSimCommand )

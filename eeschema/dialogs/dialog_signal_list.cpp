@@ -55,14 +55,14 @@ bool DIALOG_SIGNAL_LIST::TransferDataFromWindow()
 bool DIALOG_SIGNAL_LIST::TransferDataToWindow()
 {
     // Create a list of possible signals
-    /// @todo it could include separated mag & phase for AC analysis
+    /// TODO: it could include separated mag & phase for AC analysis
     if( m_circuitModel )
     {
         // Voltage list
-        for( const auto& net : m_circuitModel->GetNetIndexMap() )
+        for( const auto& net : m_circuitModel->GetNets() )
         {
             // netnames are escaped (can contain "{slash}" for '/') Unscape them:
-            wxString netname = UnescapeString( net.first );
+            wxString netname = UnescapeString( net );
 
             if( netname != "GND" && netname != "0" )
                 m_signals->Append( wxString::Format( "V(%s)", netname ) );
@@ -72,14 +72,11 @@ bool DIALOG_SIGNAL_LIST::TransferDataToWindow()
 
         if( simType == ST_TRANSIENT || simType == ST_DC )
         {
-            for( const auto& item : m_circuitModel->GetSpiceItems() )
+            for( const auto& item : m_circuitModel->GetItems() )
             {
-                // Add all possible currents for the primitive
-                for( const auto& current :
-                     NGSPICE_CIRCUIT_MODEL::GetCurrents( (SPICE_PRIMITIVE) item.m_primitive ) )
-                {
-                    m_signals->Append( wxString::Format( "%s(%s)", current, item.m_refName ) );
-                }
+                // Add all possible currents for the primitive.
+                for( const auto& currentName : item.model->GenerateSpiceCurrentNames( item.refName ) )
+                    m_signals->Append( currentName );
             }
         }
     }
@@ -104,22 +101,14 @@ bool DIALOG_SIGNAL_LIST::addSignalToPlotFrame( const wxString& aPlotName )
         wxUniChar firstChar = aPlotName[0];
 
         if( firstChar == 'V' || firstChar == 'v' )
-        {
-            m_plotFrame->AddVoltagePlot( name );
-        }
+            m_plotFrame->AddVoltagePlot( aPlotName );
         else if( firstChar == 'I' || firstChar == 'i' )
-        {
-            m_plotFrame->AddCurrentPlot( name, aPlotName.BeforeFirst( '(' ) );
-        }
+            m_plotFrame->AddCurrentPlot( aPlotName );
         else
-        {
             return false;
-        }
     }
     else
-    {
         return false;
-    }
 
     return true;
 }

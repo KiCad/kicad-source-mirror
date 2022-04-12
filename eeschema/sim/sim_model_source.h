@@ -33,13 +33,13 @@ class SIM_MODEL_SOURCE : public SIM_MODEL
 public:
     SIM_MODEL_SOURCE( TYPE aType );
 
-    wxString GenerateSpiceIncludeLine( const wxString& aLibraryFilename ) const override;
     wxString GenerateSpiceModelLine( const wxString& aModelName ) const override;
     wxString GenerateSpiceItemLine( const wxString& aRefName,
                                     const wxString& aModelName,
                                     const std::vector<wxString>& aPinNetNames ) const override;
 
-    bool SetParamValue( int aParamIndex, const wxString& aValue ) override;
+    bool SetParamValue( int aParamIndex, const wxString& aValue,
+                        SIM_VALUE_GRAMMAR::NOTATION aNotation ) override;
 
     bool HasAutofill() const override { return true; }
 
@@ -48,8 +48,9 @@ private:
 
     static const std::vector<PARAM::INFO>& makeParams( TYPE aType );
 
-    static std::vector<PARAM::INFO> makePulse( wxString aPrefix, wxString aUnit );
+    static std::vector<PARAM::INFO> makeDc( wxString aPrefix, wxString aUnit );
     static std::vector<PARAM::INFO> makeSin( wxString aPrefix, wxString aUnit );
+    static std::vector<PARAM::INFO> makePulse( wxString aPrefix, wxString aUnit );
     static std::vector<PARAM::INFO> makeExp( wxString aPrefix, wxString aUnit );
     static std::vector<PARAM::INFO> makeSfam( wxString aPrefix, wxString aUnit );
     static std::vector<PARAM::INFO> makeSffm( wxString aPrefix, wxString aUnit );

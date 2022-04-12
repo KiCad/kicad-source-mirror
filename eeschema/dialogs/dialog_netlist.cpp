@@ -42,7 +42,7 @@
 #include <dialogs/dialog_netlist_base.h>
 #include <wildcards_and_files_ext.h>
 #include <invoke_sch_dialog.h>
-#include <netlist_exporters/netlist_exporter_pspice.h>
+#include <netlist_exporters/netlist_exporter_spice.h>
 #include <eeschema_settings.h>
 #include <schematic.h>
 #include <paths.h>
@@ -94,7 +94,8 @@ public:
 
     NETLIST_TYPE_ID   m_IdNetType;
     // opt to reformat passive component values (e.g. 1M -> 1Meg):
-    wxCheckBox*       m_AdjustPassiveValues;
+    wxCheckBox*       m_SaveAllVoltages;
+    wxCheckBox*       m_SaveAllCurrents;
     wxTextCtrl*       m_CommandStringCtrl;
     wxTextCtrl*       m_TitleStringCtrl;
     wxBoxSizer*       m_LeftBoxSizer;
@@ -195,7 +196,8 @@ private:
 /* Event id for notebook page buttons: */
 enum id_netlist {
     ID_CREATE_NETLIST = ID_END_EESCHEMA_ID_LIST + 1,
-    ID_USE_NETCODE_AS_NETNAME,
+    ID_SAVE_ALL_VOLTAGES,
+    ID_SAVE_ALL_CURRENTS,
     ID_RUN_SIMULATOR
 };
 
@@ -214,7 +216,8 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook* parent, const wxString& ti
     m_pageNetFmtName      = title;
     m_CommandStringCtrl   = nullptr;
     m_TitleStringCtrl     = nullptr;
-    m_AdjustPassiveValues = nullptr;
+    m_SaveAllVoltages     = nullptr;
+    m_SaveAllCurrents     = nullptr;
 
     parent->AddPage( this, title, false );
 
@@ -289,7 +292,13 @@ void NETLIST_DIALOG::OnRunExternSpiceCommand( wxCommandEvent& event )
     fn.SetExt( wxT( "cir" ) );
 
     if( settings.m_SpiceAdjustPassiveValues )
-        netlist_opt |= NET_ADJUST_PASSIVE_VALS;
+        netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_ADJUST_PASSIVE_VALS;
+
+    if( settings.m_SpiceSaveAllVoltages )
+        netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
+
+    if( settings.m_SpiceSaveAllCurrents )
+        netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
 
     // Build the command line
     wxString commandLine = simulatorCommand;
@@ -320,11 +329,18 @@ void NETLIST_DIALOG::InstallPageSpice()
 
     SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
 
-    page->m_AdjustPassiveValues = new wxCheckBox( page, ID_USE_NETCODE_AS_NETNAME,
-                                                  _( "Reformat passive symbol values" ) );
-    page->m_AdjustPassiveValues->SetToolTip( _( "Reformat passive symbol values e.g. 1M -> 1Meg" ) );
-    page->m_AdjustPassiveValues->SetValue( settings.m_SpiceAdjustPassiveValues );
-    page->m_LeftBoxSizer->Add( page->m_AdjustPassiveValues, 0, wxGROW | wxBOTTOM | wxRIGHT, 5 );
+    page->m_SaveAllVoltages = new wxCheckBox( page, ID_SAVE_ALL_VOLTAGES,
+                                              _( "Save all voltages" ) );
+    page->m_SaveAllVoltages->SetToolTip( _( "Write a directive to save all voltages (.save all)" ) );
+    page->m_SaveAllVoltages->SetValue( settings.m_SpiceSaveAllVoltages );
+    page->m_LeftBoxSizer->Add( page->m_SaveAllVoltages, 0, wxGROW | wxBOTTOM | wxRIGHT, 5 );
+
+    page->m_SaveAllCurrents = new wxCheckBox( page, ID_SAVE_ALL_CURRENTS,
+                                              _( "Save all currents" ) );
+    page->m_SaveAllCurrents->SetToolTip( _( "Write a directive to save all currents (.probe alli)" ) );
+    page->m_SaveAllCurrents->SetValue( settings.m_SpiceSaveAllCurrents );
+    page->m_RightBoxSizer->Add( page->m_SaveAllCurrents, 0, wxGROW | wxBOTTOM | wxLEFT, 5 );
+
 
     wxString simulatorCommand = settings.m_SpiceCommandString;
     wxStaticText* spice_label = new wxStaticText( page, -1, _( "External simulator command:" ) );
@@ -420,12 +436,14 @@ void NETLIST_DIALOG::OnNetlistTypeSelection( wxNotebookEvent& event )
 
 void NETLIST_DIALOG::NetlistUpdateOpt()
 {
-    bool adjust = m_PanelNetType[ PANELSPICE ]->m_AdjustPassiveValues->IsChecked();
+    bool saveAllVoltages = m_PanelNetType[ PANELSPICE ]->m_SaveAllVoltages->IsChecked();
+    bool saveAllCurrents = m_PanelNetType[ PANELSPICE ]->m_SaveAllCurrents->IsChecked();
     wxString spice_cmd_string = m_PanelNetType[ PANELSPICE ]->m_CommandStringCtrl->GetValue();
 
     SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
 
-    settings.m_SpiceAdjustPassiveValues = adjust;
+    settings.m_SpiceSaveAllVoltages     = saveAllVoltages;
+    settings.m_SpiceSaveAllCurrents     = saveAllCurrents;
     settings.m_SpiceCommandString       = spice_cmd_string;
     settings.m_NetFormatName            = m_PanelNetType[m_NoteBook->GetSelection()]->GetPageNetFmtName();
 }
@@ -454,8 +472,10 @@ bool NETLIST_DIALOG::TransferDataFromWindow()
     {
     case NET_TYPE_SPICE:
         // Set spice netlist options:
-        if( currPage->m_AdjustPassiveValues->GetValue() )
-            netlist_opt |= NET_ADJUST_PASSIVE_VALS;
+        if( currPage->m_SaveAllVoltages->GetValue() )
+            netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
+        if( currPage->m_SaveAllCurrents->GetValue() )
+            netlist_opt |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
         break;
 
     case NET_TYPE_CADSTAR:

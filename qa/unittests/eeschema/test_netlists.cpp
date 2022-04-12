@@ -20,136 +20,78 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include "eeschema_test_utils.h"
 
-#include <connection_graph.h>
-#include <netlist_exporter_kicad.h>
-#include <netlist_reader/netlist_reader.h>
-#include <netlist_reader/pcb_netlist.h>
-#include <project.h>
-#include <sch_io_mgr.h>
-#include <sch_sheet.h>
-#include <schematic.h>
-#include <settings/settings_manager.h>
-#include <wildcards_and_files_ext.h>
 
-
-class TEST_NETLISTS_FIXTURE : public KI_TEST::SCHEMATIC_TEST_FIXTURE
+class TEST_NETLIST_EXPORTER_KICAD_FIXTURE : publc TEST_NETLIST_EXPORTER_FIXTURE<NETLIST_EXPORTER_KICAD>
 {
-protected:
-    wxString getNetlistFileName( bool aTest = false );
+public:
+    void CompareNetlists() override
+    {
+        NETLIST golden;
+        NETLIST test;
 
-    void writeNetlist();
+        {
+            std::unique_ptr<NETLIST_READER> netlistReader( NETLIST_READER::GetNetlistReader(
+                                                &golden, getNetlistFileName(), wxEmptyString ) );
 
-    void compareNetlists();
+            BOOST_REQUIRE_NO_THROW( netlistReader->LoadNetlist() );
+        }
 
-    void cleanup();
+        {
+            std::unique_ptr<NETLIST_READER> netlistReader( NETLIST_READER::GetNetlistReader(
+                                                &test, getNetlistFileName( true ), wxEmptyString ) );
 
-    void doNetlistTest( const wxString& aBaseName );
+            BOOST_REQUIRE_NO_THROW( netlistReader->LoadNetlist() );
+        }
+
+        // Number of components should match
+        BOOST_REQUIRE_EQUAL( golden.GetCount(), test.GetCount() );
+
+        for( unsigned i = 0; i < golden.GetCount(); i++ )
+        {
+            COMPONENT* goldenComp = golden.GetComponent( i );
+            COMPONENT* refComp    = test.GetComponentByReference( goldenComp->GetReference() );
+
+            // Retrieval by reference
+            BOOST_REQUIRE_NE( refComp, nullptr );
+
+            // Retrieval by KIID
+            KIID_PATH path = goldenComp->GetPath();
+
+            BOOST_REQUIRE( !goldenComp->GetKIIDs().empty() );
+
+            path.push_back( goldenComp->GetKIIDs().front() );
+
+            COMPONENT* pathComp = test.GetComponentByPath( path );
+            BOOST_REQUIRE_NE( pathComp, nullptr );
+
+            // We should have found the same component
+            BOOST_REQUIRE_EQUAL( refComp->GetReference(), pathComp->GetReference() );
+
+            // And that component should have the same number of attached nets
+            BOOST_REQUIRE_EQUAL( goldenComp->GetNetCount(), refComp->GetNetCount() );
+
+            for( unsigned net = 0; net < goldenComp->GetNetCount(); net++ )
+            {
+                const COMPONENT_NET& goldenNet = goldenComp->GetNet( net );
+                const COMPONENT_NET& testNet   = refComp->GetNet( net );
+
+                // The video test has a bunch of unconnected RESERVED pins which cause duplicate
+                // auto-generated netnames.  The connectivity algo disambiguates these with "_n"
+                // suffixes, but since the algorithm is multi-threaded, which ones get which suffix
+                // is not deterministic.  So skip these.
+                if( testNet.GetPinFunction().Contains( "RESERVED" ) )
+                    continue;
+
+                // The two nets at the same index should be identical
+                BOOST_REQUIRE_EQUAL( goldenNet.GetNetName(), testNet.GetNetName() );
+                BOOST_REQUIRE_EQUAL( goldenNet.GetPinName(), testNet.GetPinName() );
+            }
+        }
+    }
 };
 
 
-wxString TEST_NETLISTS_FIXTURE::getNetlistFileName( bool aTest )
-{
-    wxFileName netFile = m_schematic.Prj().GetProjectFullName();
-
-    if( aTest )
-        netFile.SetName( netFile.GetName() + "_test" );
-
-    netFile.SetExt( NetlistFileExtension );
-
-    return netFile.GetFullPath();
-}
-
-
-void TEST_NETLISTS_FIXTURE::writeNetlist()
-{
-    auto exporter = std::make_unique<NETLIST_EXPORTER_KICAD>( &m_schematic );
-    BOOST_REQUIRE_EQUAL( exporter->WriteNetlist( getNetlistFileName( true ), 0 ), true );
-}
-
-
-void TEST_NETLISTS_FIXTURE::compareNetlists()
-{
-    NETLIST golden;
-    NETLIST test;
-
-    {
-        std::unique_ptr<NETLIST_READER> netlistReader( NETLIST_READER::GetNetlistReader(
-                                            &golden, getNetlistFileName(), wxEmptyString ) );
-
-        BOOST_REQUIRE_NO_THROW( netlistReader->LoadNetlist() );
-    }
-
-    {
-        std::unique_ptr<NETLIST_READER> netlistReader( NETLIST_READER::GetNetlistReader(
-                                            &test, getNetlistFileName( true ), wxEmptyString ) );
-
-        BOOST_REQUIRE_NO_THROW( netlistReader->LoadNetlist() );
-    }
-
-    // Number of components should match
-    BOOST_REQUIRE_EQUAL( golden.GetCount(), test.GetCount() );
-
-    for( unsigned i = 0; i < golden.GetCount(); i++ )
-    {
-        COMPONENT* goldenComp = golden.GetComponent( i );
-        COMPONENT* refComp    = test.GetComponentByReference( goldenComp->GetReference() );
-
-        // Retrieval by reference
-        BOOST_REQUIRE_NE( refComp, nullptr );
-
-        // Retrieval by KIID
-        KIID_PATH path = goldenComp->GetPath();
-
-        BOOST_REQUIRE( !goldenComp->GetKIIDs().empty() );
-
-        path.push_back( goldenComp->GetKIIDs().front() );
-
-        COMPONENT* pathComp = test.GetComponentByPath( path );
-        BOOST_REQUIRE_NE( pathComp, nullptr );
-
-        // We should have found the same component
-        BOOST_REQUIRE_EQUAL( refComp->GetReference(), pathComp->GetReference() );
-
-        // And that component should have the same number of attached nets
-        BOOST_REQUIRE_EQUAL( goldenComp->GetNetCount(), refComp->GetNetCount() );
-
-        for( unsigned net = 0; net < goldenComp->GetNetCount(); net++ )
-        {
-            const COMPONENT_NET& goldenNet = goldenComp->GetNet( net );
-            const COMPONENT_NET& testNet   = refComp->GetNet( net );
-
-            // The video test has a bunch of unconnected RESERVED pins which cause duplicate
-            // auto-generated netnames.  The connectivity algo disambiguates these with "_n"
-            // suffixes, but since the algorithm is multi-threaded, which ones get which suffix
-            // is not deterministic.  So skip these.
-            if( testNet.GetPinFunction().Contains( "RESERVED" ) )
-                continue;
-
-            // The two nets at the same index should be identical
-            BOOST_REQUIRE_EQUAL( goldenNet.GetNetName(), testNet.GetNetName() );
-            BOOST_REQUIRE_EQUAL( goldenNet.GetPinName(), testNet.GetPinName() );
-        }
-    }
-}
-
-
-void TEST_NETLISTS_FIXTURE::cleanup()
-{
-    wxRemoveFile( getNetlistFileName( true ) );
-    m_schematic.Reset();
-}
-
-
-void TEST_NETLISTS_FIXTURE::doNetlistTest( const wxString& aBaseName )
-{
-    loadSchematic( aBaseName );
-    writeNetlist();
-    compareNetlists();
-    cleanup();
-}
-
-
-BOOST_FIXTURE_TEST_SUITE( Netlists, TEST_NETLISTS_FIXTURE )
+BOOST_FIXTURE_TEST_SUITE( Netlists, TEST_NETLIST_EXPORTER_KICAD_FIXTURE )
 
 
 BOOST_AUTO_TEST_CASE( FindPlugin )

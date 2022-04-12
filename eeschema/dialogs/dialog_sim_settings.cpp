@@ -133,7 +133,7 @@ wxString DIALOG_SIM_SETTINGS::evaluateDCControls( wxChoice* aDcSource, wxTextCtr
     {
         // pick device name from exporter when something different than temperature is selected
         if( dcSource.Cmp( "TEMP" ) )
-            dcSource = m_circuitModel->GetSpiceDevice( dcSource );
+            dcSource = m_circuitModel->GetItemName( dcSource );
 
         return wxString::Format( "%s %s %s %s", dcSource,
                                  SPICE_VALUE( aDcStart->GetValue() ).ToSpiceString(),
@@ -224,7 +224,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
     }
     else if( page == m_pgNoise )        // Noise analysis
     {
-        const std::map<wxString, int>& netMap = m_circuitModel->GetNetIndexMap();
+        /*const std::map<wxString, int>& netMap = m_circuitModel->GetNetIndexMap();
 
         if( empty( m_noiseMeas ) || empty( m_noiseSrc ) || empty( m_noisePointsNumber )
                 || empty( m_noiseFreqStart ) || empty( m_noiseFreqStop ) )
@@ -248,7 +248,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
                              noiseSource, scaleToString( m_noiseScale->GetSelection() ),
                              m_noisePointsNumber->GetValue(),
                              SPICE_VALUE( m_noiseFreqStart->GetValue() ).ToSpiceString(),
-                             SPICE_VALUE( m_noiseFreqStop->GetValue() ).ToSpiceString() );
+                             SPICE_VALUE( m_noiseFreqStop->GetValue() ).ToSpiceString() );*/
     }
     else if( page == m_pgOP )           // DC operating point analysis
     {
@@ -300,8 +300,8 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
 
     updateNetlistOpts();
 
-    m_settings->SetFixPassiveVals( m_netlistOpts & NET_ADJUST_PASSIVE_VALS );
-    m_settings->SetFixIncludePaths( m_netlistOpts & NET_ADJUST_INCLUDE_PATHS );
+    m_settings->SetFixPassiveVals( m_netlistOpts & NETLIST_EXPORTER_SPICE::OPTION_ADJUST_PASSIVE_VALS );
+    m_settings->SetFixIncludePaths( m_netlistOpts & NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS );
 
     return true;
 }
@@ -368,10 +368,10 @@ int DIALOG_SIM_SETTINGS::ShowModal()
     for( auto c : cmbNet )
         c.first->Clear();
 
-    for( const auto& net : m_circuitModel->GetNetIndexMap() )
+    for( const auto& net : m_circuitModel->GetNets() )
     {
         for( auto c : cmbNet )
-            c.first->Append( net.first );
+            c.first->Append( net );
     }
 
     // Try to restore the previous selection, if possible
@@ -399,10 +399,15 @@ void DIALOG_SIM_SETTINGS::updateDCSources( wxChar aType, wxChoice* aSource )
 
     if( aType != 'T' )
     {
-        for( const auto& item : m_circuitModel->GetSpiceItems() )
+        for( const auto& item : m_circuitModel->GetItems() )
         {
-            if( item.m_primitive == aType && !item.m_refName.IsEmpty() )
-                sourcesList.insert( item.m_refName );
+            if( ( aType == 'R' && item.model->GetDeviceType() == SIM_MODEL::DEVICE_TYPE::R )
+            ||  ( aType == 'C' && item.model->GetDeviceType() == SIM_MODEL::DEVICE_TYPE::C )
+            ||  ( aType == 'L' && item.model->GetDeviceType() == SIM_MODEL::DEVICE_TYPE::L ) )
+            {
+                // TODO: VSOURCE, ISOURCE.
+                sourcesList.insert( item.refName );
+            }
         }
 
         if( aSource == m_dcSource2 && !m_dcEnable2->IsChecked() )
@@ -606,11 +611,11 @@ void DIALOG_SIM_SETTINGS::loadDirectives()
 
 void DIALOG_SIM_SETTINGS::updateNetlistOpts()
 {
-    m_netlistOpts = NET_ALL_FLAGS;
+    m_netlistOpts = NETLIST_EXPORTER_SPICE::OPTION_ALL_FLAGS;
 
     if( !m_fixPassiveVals->IsChecked() )
-        m_netlistOpts &= ~NET_ADJUST_PASSIVE_VALS;
+        m_netlistOpts &= ~NETLIST_EXPORTER_SPICE::OPTION_ADJUST_PASSIVE_VALS;
 
     if( !m_fixIncludePaths->IsChecked() )
-        m_netlistOpts &= ~NET_ADJUST_INCLUDE_PATHS;
+        m_netlistOpts &= ~NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS;
 }

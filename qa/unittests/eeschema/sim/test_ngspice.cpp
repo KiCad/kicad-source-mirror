@@ -77,6 +77,16 @@ BOOST_AUTO_TEST_CASE( Models )
             BOOST_CHECK_EQUAL( modelParamCount, 6 );
             BOOST_CHECK_EQUAL( instanceParamCount, 3 );
             break;*/
+
+        case NGSPICE::MODEL_TYPE::SWITCH:
+            BOOST_CHECK_EQUAL( modelParamCount, 7 );
+            BOOST_CHECK_EQUAL( instanceParamCount, 8 );
+            break;
+        
+        case NGSPICE::MODEL_TYPE::CSWITCH:
+            BOOST_CHECK_EQUAL( modelParamCount, 7 );
+            BOOST_CHECK_EQUAL( instanceParamCount, 7 );
+            break;
         
         case NGSPICE::MODEL_TYPE::DIODE:
             BOOST_CHECK_EQUAL( modelParamCount, 76 );
@@ -85,17 +95,17 @@ BOOST_AUTO_TEST_CASE( Models )
         
         case NGSPICE::MODEL_TYPE::BJT:
             BOOST_CHECK_EQUAL( modelParamCount, 152 );
-            BOOST_CHECK_EQUAL( instanceParamCount, 52 );
+            BOOST_CHECK_EQUAL( instanceParamCount, 53 );
             break;
         
         case NGSPICE::MODEL_TYPE::VBIC:
             BOOST_CHECK_EQUAL( modelParamCount, 117 );
-            BOOST_CHECK_EQUAL( instanceParamCount, 44 );
+            BOOST_CHECK_EQUAL( instanceParamCount, 45 );
             break;
         
         case NGSPICE::MODEL_TYPE::HICUM2:
             BOOST_CHECK_EQUAL( modelParamCount, 149 );
-            BOOST_CHECK_EQUAL( instanceParamCount, 60 );
+            BOOST_CHECK_EQUAL( instanceParamCount, 61 );
             break;
         
         case NGSPICE::MODEL_TYPE::JFET:

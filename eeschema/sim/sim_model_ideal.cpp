@@ -36,18 +36,40 @@ SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType )
 
     switch( aType )
     {
-    case TYPE::RESISTOR_IDEAL:  AddParam( resistor  ); break;
-    case TYPE::CAPACITOR_IDEAL: AddParam( capacitor ); break;
-    case TYPE::INDUCTOR_IDEAL:  AddParam( inductor  ); break;
+    case TYPE::R:  AddParam( resistor  ); break;
+    case TYPE::C: AddParam( capacitor ); break;
+    case TYPE::L:  AddParam( inductor  ); break;
     default:
         wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_IDEAL" );
     }
 }
 
 
-wxString SIM_MODEL_IDEAL::GenerateSpiceIncludeLine( const wxString& aLibraryFilename ) const
+void SIM_MODEL_IDEAL::ReadDataSchFields( int aSymbolPinCount,
+                                         const std::vector<SCH_FIELD>* aFields )
 {
-    return "";
+    if( !GetFieldValue( aFields, PARAMS_FIELD ).IsEmpty() )
+        SIM_MODEL::ReadDataSchFields( aSymbolPinCount, aFields );
+    else
+    {
+        // Inferred model.
+        ParsePinsField( aSymbolPinCount, PINS_FIELD );
+        SetParamValue( 0, GetFieldValue( aFields, VALUE_FIELD ) );
+    }
+}
+
+
+void SIM_MODEL_IDEAL::ReadDataLibFields( int aSymbolPinCount,
+                                         const std::vector<LIB_FIELD>* aFields )
+{
+    if( !GetFieldValue( aFields, PARAMS_FIELD ).IsEmpty() )
+        SIM_MODEL::ReadDataLibFields( aSymbolPinCount, aFields );
+    else
+    {
+        // Inferred model.
+        ParsePinsField( aSymbolPinCount, PINS_FIELD );
+        SetParamValue( 0, GetFieldValue( aFields, VALUE_FIELD ) );
+    }
 }
 
 
@@ -66,18 +88,12 @@ wxString SIM_MODEL_IDEAL::GenerateSpiceItemLine( const wxString& aRefName,
 }
 
 
-std::vector<wxString> SIM_MODEL_IDEAL::getPinNames() const
-{
-    return { "+", "-" };
-}
-
-
 PARAM::INFO SIM_MODEL_IDEAL::makeParamInfo( wxString aName, wxString aDescription, wxString aUnit )
 {
     SIM_MODEL::PARAM::INFO paramInfo = {};
 
     paramInfo.name = aName;
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.description = aDescription;

@@ -70,6 +70,8 @@ public:
 
     ///< @todo These should probably be moved to the "schematic.simulator" path.
     bool      m_SpiceAdjustPassiveValues;
+    bool      m_SpiceSaveAllVoltages;
+    bool      m_SpiceSaveAllCurrents;
     wxString  m_SpiceCommandString;      // A command string to run external spice
 
     TEMPLATES m_TemplateFieldNames;

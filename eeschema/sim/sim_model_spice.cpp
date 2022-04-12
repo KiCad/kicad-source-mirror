@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <sim/sim_model_rawspice.h>
+#include <sim/sim_model_spice.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 
@@ -34,7 +34,8 @@ SIM_MODEL_RAWSPICE::SIM_MODEL_RAWSPICE( TYPE aType )
 
 
 bool SIM_MODEL_RAWSPICE::setParamFromSpiceCode( const wxString& aParamName,
-                                                const wxString& aParamValue )
+                                                const wxString& aParamValue,
+                                                SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
     int i = 0;
 
@@ -51,7 +52,7 @@ bool SIM_MODEL_RAWSPICE::setParamFromSpiceCode( const wxString& aParamName,
         std::unique_ptr<PARAM::INFO> paramInfo = std::make_unique<PARAM::INFO>();
 
         paramInfo->name = aParamName.Lower();
-        paramInfo->type = SIM_VALUE_BASE::TYPE::STRING;
+        paramInfo->type = SIM_VALUE::TYPE::STRING;
         m_paramInfos.push_back( std::move( paramInfo ) );
 
         AddParam( *m_paramInfos.back() );
@@ -59,9 +60,9 @@ bool SIM_MODEL_RAWSPICE::setParamFromSpiceCode( const wxString& aParamName,
 
     try
     {
-        GetParam( i ).value->FromString( wxString( aParamValue ) );
+        GetParam( i ).value->FromString( wxString( aParamValue ), aNotation );
     }
-    catch( KI_PARAM_ERROR& e )
+    catch( const KI_PARAM_ERROR& e )
     {
         // Shouldn't happen since it's TYPE::STRING.
         return false;

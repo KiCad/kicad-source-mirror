@@ -31,23 +31,30 @@
 class SIM_LIBRARY
 {
 public:
+    static constexpr auto LIBRARY_FIELD = "Model_Library";
+    static constexpr auto NAME_FIELD = "Model_Name";
+
     virtual ~SIM_LIBRARY() = default;
     SIM_LIBRARY() = default;
 
-    virtual bool ReadFile( const wxString& aFilename ) = 0;
-    virtual void WriteFile( const wxString& aFilename ) = 0;
+    static std::unique_ptr<SIM_LIBRARY> Create( wxString aFilePath );
 
-    std::vector<std::reference_wrapper<SIM_MODEL>> GetModels();
-    const std::vector<wxString>& GetModelNames() { return m_modelNames; }
+    virtual bool ReadFile( const wxString& aFilePath ) = 0;
+    virtual void WriteFile( const wxString& aFilePath ) = 0;
 
-    wxString GetFilename() const { return m_filename; }
+    SIM_MODEL* FindModel( const wxString& aModelName ) const;
+
+    std::vector<std::reference_wrapper<SIM_MODEL>> GetModels() const;
+    const std::vector<wxString>& GetModelNames() const { return m_modelNames; }
+
+    wxString GetFilePath() const { return m_filePath; }
     wxString GetErrorMessage() const { return m_errorMessage; }
     
 protected:
     std::vector<std::unique_ptr<SIM_MODEL>> m_models;
     std::vector<wxString> m_modelNames;
 
-    wxString m_filename;
+    wxString m_filePath;
     wxString m_errorMessage;
 };
 

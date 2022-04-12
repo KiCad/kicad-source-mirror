@@ -49,7 +49,7 @@
 #include <math/vector2d.h>
 
 #ifdef KICAD_SPICE
-#include <dialog_spice_model.h>
+#include <dialog_sim_model.h>
 #endif /* KICAD_SPICE */
 
 
@@ -544,7 +544,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
 #ifdef KICAD_SPICE
     int diff = m_fields->size();
 
-    DIALOG_SPICE_MODEL dialog( this, *m_symbol, *m_fields );
+    DIALOG_SIM_MODEL dialog( this, *m_symbol, *m_fields );
 
     if( dialog.ShowModal() != wxID_OK )
         return;

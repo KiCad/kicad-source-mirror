@@ -33,40 +33,40 @@
 #define CALL_INSTANCE( ValueType, Notation, func, ... )                        \
     switch( ValueType )                                                        \
     {                                                                          \
-    case SIM_VALUE_BASE::TYPE::INT:                                            \
+    case SIM_VALUE::TYPE::INT:                                            \
         switch( Notation )                                                     \
         {                                                                      \
         case NOTATION::SI:                                                     \
-            func<SIM_VALUE_BASE::TYPE::INT, NOTATION::SI>( __VA_ARGS__ );      \
+            func<SIM_VALUE::TYPE::INT, NOTATION::SI>( __VA_ARGS__ );      \
             break;                                                             \
                                                                                \
         case NOTATION::SPICE:                                                  \
-            func<SIM_VALUE_BASE::TYPE::INT, NOTATION::SPICE>( __VA_ARGS__ );   \
+            func<SIM_VALUE::TYPE::INT, NOTATION::SPICE>( __VA_ARGS__ );   \
             break;                                                             \
         }                                                                      \
         break;                                                                 \
                                                                                \
-    case SIM_VALUE_BASE::TYPE::FLOAT:                                          \
+    case SIM_VALUE::TYPE::FLOAT:                                          \
         switch( Notation )                                                     \
         {                                                                      \
         case NOTATION::SI:                                                     \
-            func<SIM_VALUE_BASE::TYPE::FLOAT, NOTATION::SI>( __VA_ARGS__ );    \
+            func<SIM_VALUE::TYPE::FLOAT, NOTATION::SI>( __VA_ARGS__ );    \
             break;                                                             \
                                                                                \
         case NOTATION::SPICE:                                                  \
-            func<SIM_VALUE_BASE::TYPE::FLOAT, NOTATION::SPICE>( __VA_ARGS__ ); \
+            func<SIM_VALUE::TYPE::FLOAT, NOTATION::SPICE>( __VA_ARGS__ ); \
             break;                                                             \
         }                                                                      \
         break;                                                                 \
                                                                                \
-    case SIM_VALUE_BASE::TYPE::BOOL:                                           \
-    case SIM_VALUE_BASE::TYPE::COMPLEX:                                        \
-    case SIM_VALUE_BASE::TYPE::STRING:                                         \
-    case SIM_VALUE_BASE::TYPE::BOOL_VECTOR:                                    \
-    case SIM_VALUE_BASE::TYPE::INT_VECTOR:                                     \
-    case SIM_VALUE_BASE::TYPE::FLOAT_VECTOR:                                   \
-    case SIM_VALUE_BASE::TYPE::COMPLEX_VECTOR:                                 \
-        wxFAIL_MSG( "Unhandled SIM_VALUE_BASE type" );                         \
+    case SIM_VALUE::TYPE::BOOL:                                           \
+    case SIM_VALUE::TYPE::COMPLEX:                                        \
+    case SIM_VALUE::TYPE::STRING:                                         \
+    case SIM_VALUE::TYPE::BOOL_VECTOR:                                    \
+    case SIM_VALUE::TYPE::INT_VECTOR:                                     \
+    case SIM_VALUE::TYPE::FLOAT_VECTOR:                                   \
+    case SIM_VALUE::TYPE::COMPLEX_VECTOR:                                 \
+        wxFAIL_MSG( "Unhandled SIM_VALUE type" );                         \
         break;                                                                 \
     }
 
@@ -78,24 +78,27 @@ namespace SIM_VALUE_PARSER
     template <typename Rule>
     struct numberSelector : std::false_type {};
 
-    template <> struct numberSelector<SIM_VALUE_GRAMMAR::significand<SIM_VALUE_BASE::TYPE::INT>>
+    // TODO: Reorder. NOTATION should be before TYPE.
+
+    template <> struct numberSelector<SIM_VALUE_GRAMMAR::significand<SIM_VALUE::TYPE::INT>>
         : std::true_type {};
-    template <> struct numberSelector<SIM_VALUE_GRAMMAR::significand<SIM_VALUE_BASE::TYPE::FLOAT>>
+    template <> struct numberSelector<SIM_VALUE_GRAMMAR::significand<SIM_VALUE::TYPE::FLOAT>>
         : std::true_type {};
     template <> struct numberSelector<intPart> : std::true_type {};
     template <> struct numberSelector<fracPart> : std::true_type {};
     template <> struct numberSelector<exponent> : std::true_type {};
-    template <> struct numberSelector<metricSuffix<SIM_VALUE_BASE::TYPE::INT, NOTATION::SI>>
+    template <> struct numberSelector<metricSuffix<SIM_VALUE::TYPE::INT, NOTATION::SI>>
         : std::true_type {};
-    template <> struct numberSelector<metricSuffix<SIM_VALUE_BASE::TYPE::INT, NOTATION::SPICE>>
+    template <> struct numberSelector<metricSuffix<SIM_VALUE::TYPE::INT, NOTATION::SPICE>>
         : std::true_type {};
-    template <> struct numberSelector<metricSuffix<SIM_VALUE_BASE::TYPE::FLOAT, NOTATION::SI>>
+    template <> struct numberSelector<metricSuffix<SIM_VALUE::TYPE::FLOAT, NOTATION::SI>>
         : std::true_type {};
-    template <> struct numberSelector<metricSuffix<SIM_VALUE_BASE::TYPE::FLOAT, NOTATION::SPICE>>
+    template <> struct numberSelector<metricSuffix<SIM_VALUE::TYPE::FLOAT, NOTATION::SPICE>>
         : std::true_type {};
 
     struct PARSE_RESULT
     {
+        bool isOk = true;
         bool isEmpty = true;
         std::string significand;
         OPT<long> intPart;
@@ -105,8 +108,8 @@ namespace SIM_VALUE_PARSER
     };
 
     PARSE_RESULT Parse( const wxString& aString,
-                        SIM_VALUE_BASE::TYPE aValueType = SIM_VALUE_BASE::TYPE::FLOAT,
-                        NOTATION aNotation = NOTATION::SI );
+                        NOTATION aNotation = NOTATION::SI,
+                        SIM_VALUE::TYPE aValueType = SIM_VALUE::TYPE::FLOAT );
 
     long MetricSuffixToExponent( std::string aMetricSuffix, NOTATION aNotation = NOTATION::SI );
     wxString ExponentToMetricSuffix( double aExponent, long& aReductionExponent,
@@ -114,23 +117,24 @@ namespace SIM_VALUE_PARSER
 }
 
 
-template <SIM_VALUE_BASE::TYPE ValueType, SIM_VALUE_PARSER::NOTATION Notation>
+template <SIM_VALUE::TYPE ValueType, SIM_VALUE_PARSER::NOTATION Notation>
 static inline void doIsValid( tao::pegtl::string_input<>& aIn )
 {
     tao::pegtl::parse<SIM_VALUE_PARSER::numberGrammar<ValueType, Notation>>( aIn );
 }
 
+
 bool SIM_VALUE_GRAMMAR::IsValid( const wxString& aString,
-                                SIM_VALUE_BASE::TYPE aValueType,
+                                SIM_VALUE::TYPE aValueType,
                                 NOTATION aNotation )
 {
-    tao::pegtl::string_input<> in( aString, "from_input" );
+    tao::pegtl::string_input<> in( aString.ToStdString(), "from_content" );
 
     try
     {
         CALL_INSTANCE( aValueType, aNotation, doIsValid, in );
     }
-    catch( tao::pegtl::parse_error& e )
+    catch( const tao::pegtl::parse_error& e )
     {
         return false;
     }
@@ -139,7 +143,7 @@ bool SIM_VALUE_GRAMMAR::IsValid( const wxString& aString,
 }
 
 
-template <SIM_VALUE_BASE::TYPE ValueType, SIM_VALUE_PARSER::NOTATION Notation>
+template <SIM_VALUE::TYPE ValueType, SIM_VALUE_PARSER::NOTATION Notation>
 static inline std::unique_ptr<tao::pegtl::parse_tree::node> doParse(
         tao::pegtl::string_input<>& aIn )
 {
@@ -148,7 +152,8 @@ static inline std::unique_ptr<tao::pegtl::parse_tree::node> doParse(
         ( aIn );
 }
 
-template <SIM_VALUE_BASE::TYPE ValueType, SIM_VALUE_PARSER::NOTATION Notation>
+
+template <SIM_VALUE::TYPE ValueType, SIM_VALUE_PARSER::NOTATION Notation>
 static inline void handleNodeForParse( tao::pegtl::parse_tree::node& aNode,
                                        SIM_VALUE_PARSER::PARSE_RESULT& aParseResult )
 {
@@ -180,14 +185,16 @@ static inline void handleNodeForParse( tao::pegtl::parse_tree::node& aNode,
         wxFAIL_MSG( "Unhandled parse tree node" );
 }
 
+
 SIM_VALUE_PARSER::PARSE_RESULT SIM_VALUE_PARSER::Parse( const wxString& aString,
-                                                        SIM_VALUE_BASE::TYPE aValueType,
-                                                        NOTATION aNotation )
+                                                        NOTATION aNotation,
+                                                        SIM_VALUE::TYPE aValueType )
 {
     LOCALE_IO toggle;
 
-    tao::pegtl::string_input<> in( aString.ToStdString(), "from_input" );
+    tao::pegtl::string_input<> in( aString.ToStdString(), "from_content" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
+    PARSE_RESULT result;
 
     try
     {
@@ -195,13 +202,11 @@ SIM_VALUE_PARSER::PARSE_RESULT SIM_VALUE_PARSER::Parse( const wxString& aString,
     }
     catch( tao::pegtl::parse_error& e )
     {
-        throw KI_PARAM_ERROR( wxString::Format( _( "Failed to parse '%s': %s" ), aString,
-                                                e.what() ) );
+        result.isOk = false;
+        return result;
     }
 
     wxASSERT( root );
-
-    PARSE_RESULT result;
 
     try
     {
@@ -212,8 +217,8 @@ SIM_VALUE_PARSER::PARSE_RESULT SIM_VALUE_PARSER::Parse( const wxString& aString,
     }
     catch( std::invalid_argument& e )
     {
-        throw KI_PARAM_ERROR( wxString::Format( _( "Failed to parse '%s': %s" ), aString,
-                                                e.what() ) );
+        wxFAIL_MSG( wxString::Format( "Parsing simulator value failed: %s", e.what() ) );
+        result.isOk = false;
     }
 
     return result;
@@ -275,8 +280,8 @@ long SIM_VALUE_PARSER::MetricSuffixToExponent( std::string aMetricSuffix, NOTATI
         break;
     }
 
-    throw KI_PARAM_ERROR( wxString::Format( _( "Unknown simulator value suffix: \"%s\"" ),
-                          aMetricSuffix ) );
+    wxFAIL_MSG( wxString::Format( "Unknown simulator value suffix: '%s'", aMetricSuffix ) );
+    return 0;
 }
 
 
@@ -354,27 +359,27 @@ wxString SIM_VALUE_PARSER::ExponentToMetricSuffix( double aExponent, long& aRedu
 }
 
 
-std::unique_ptr<SIM_VALUE_BASE> SIM_VALUE_BASE::Create( TYPE aType, wxString aString )
+std::unique_ptr<SIM_VALUE> SIM_VALUE::Create( TYPE aType, wxString aString )
 {
-    std::unique_ptr<SIM_VALUE_BASE> value = SIM_VALUE_BASE::Create( aType );
+    std::unique_ptr<SIM_VALUE> value = SIM_VALUE::Create( aType );
     value->FromString( aString );
     return value;
 }
 
 
-std::unique_ptr<SIM_VALUE_BASE> SIM_VALUE_BASE::Create( TYPE aType )
+std::unique_ptr<SIM_VALUE> SIM_VALUE::Create( TYPE aType )
 {
     switch( aType )
     {
-    case TYPE::BOOL:           return std::make_unique<SIM_VALUE<bool>>();
-    case TYPE::INT:            return std::make_unique<SIM_VALUE<long>>();
-    case TYPE::FLOAT:          return std::make_unique<SIM_VALUE<double>>();
-    case TYPE::COMPLEX:        return std::make_unique<SIM_VALUE<std::complex<double>>>();
-    case TYPE::STRING:         return std::make_unique<SIM_VALUE<wxString>>();
-    case TYPE::BOOL_VECTOR:    return std::make_unique<SIM_VALUE<bool>>();
-    case TYPE::INT_VECTOR:     return std::make_unique<SIM_VALUE<long>>();
-    case TYPE::FLOAT_VECTOR:   return std::make_unique<SIM_VALUE<double>>();
-    case TYPE::COMPLEX_VECTOR: return std::make_unique<SIM_VALUE<std::complex<double>>>();
+    case TYPE::BOOL:           return std::make_unique<SIM_VALUE_INSTANCE<bool>>();
+    case TYPE::INT:            return std::make_unique<SIM_VALUE_INSTANCE<long>>();
+    case TYPE::FLOAT:          return std::make_unique<SIM_VALUE_INSTANCE<double>>();
+    case TYPE::COMPLEX:        return std::make_unique<SIM_VALUE_INSTANCE<std::complex<double>>>();
+    case TYPE::STRING:         return std::make_unique<SIM_VALUE_INSTANCE<wxString>>();
+    case TYPE::BOOL_VECTOR:    return std::make_unique<SIM_VALUE_INSTANCE<bool>>();
+    case TYPE::INT_VECTOR:     return std::make_unique<SIM_VALUE_INSTANCE<long>>();
+    case TYPE::FLOAT_VECTOR:   return std::make_unique<SIM_VALUE_INSTANCE<double>>();
+    case TYPE::COMPLEX_VECTOR: return std::make_unique<SIM_VALUE_INSTANCE<std::complex<double>>>();
     }
     
     wxFAIL_MSG( _( "Unknown SIM_VALUE type" ) );
@@ -382,28 +387,29 @@ std::unique_ptr<SIM_VALUE_BASE> SIM_VALUE_BASE::Create( TYPE aType )
 }
 
 
-void SIM_VALUE_BASE::operator=( const wxString& aString )
+void SIM_VALUE::operator=( const wxString& aString )
 {
     FromString( aString );
 }
 
 
 template <typename T>
-SIM_VALUE<T>::SIM_VALUE( const T& aValue ) : m_value( aValue )
+SIM_VALUE_INSTANCE<T>::SIM_VALUE_INSTANCE( const T& aValue ) : m_value( aValue )
 {
 }
 
 
 template <>
-void SIM_VALUE<bool>::FromString( const wxString& aString )
+bool SIM_VALUE_INSTANCE<bool>::FromString( const wxString& aString, NOTATION aNotation )
 {
-    SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( aString );
+    SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( aString, aNotation );
+    m_value = NULLOPT;
+
+    if( !parseResult.isOk )
+        return false;
 
     if( parseResult.isEmpty )
-    {
-        m_value = NULLOPT;
-        return;
-    }
+        return true;
 
     if( !parseResult.intPart
         || ( *parseResult.intPart != 0 && *parseResult.intPart != 1 )
@@ -411,65 +417,73 @@ void SIM_VALUE<bool>::FromString( const wxString& aString )
         || parseResult.exponent
         || parseResult.metricSuffixExponent )
     {
-        throw KI_PARAM_ERROR( wxString::Format( _( "Invalid Bool simulator value string: '%s'" ),
-                                                aString ) );
-                                                
+        return false;
     }
 
     m_value = *parseResult.intPart;
+    return true;
 }
 
 
 template <>
-void SIM_VALUE<long>::FromString( const wxString& aString )
+bool SIM_VALUE_INSTANCE<long>::FromString( const wxString& aString, NOTATION aNotation )
 {
-    SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( aString );
+    SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( aString, aNotation );
+    m_value = NULLOPT;
+
+    if( !parseResult.isOk )
+        return false;
 
     if( parseResult.isEmpty )
-    {
-        m_value = NULLOPT;
-        return;
-    }
+        return true;
 
     if( !parseResult.intPart || parseResult.fracPart )
-    {
-        throw KI_PARAM_ERROR( wxString::Format( _( "Invalid Int simulator value string: '%s'" ),
-                                                aString ) );
-    }
+        return false;
 
     long exponent = parseResult.exponent ? *parseResult.exponent : 0;
     exponent += parseResult.metricSuffixExponent ? *parseResult.metricSuffixExponent : 0;
 
     m_value = static_cast<double>( *parseResult.intPart ) * std::pow( 10, exponent );
+    return true;
 }
 
 
 template <>
-void SIM_VALUE<double>::FromString( const wxString& aString )
+bool SIM_VALUE_INSTANCE<double>::FromString( const wxString& aString, NOTATION aNotation )
 {
-    SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( aString );
+    SIM_VALUE_PARSER::PARSE_RESULT parseResult = SIM_VALUE_PARSER::Parse( aString, aNotation );
+    m_value = NULLOPT;
+
+    if( !parseResult.isOk )
+        return false;
+
+    if( parseResult.isEmpty )
+        return true;
 
     // Single dot should be allowed in fields.
     // TODO: disallow single dot in models.
-    if( parseResult.isEmpty || parseResult.significand == "." )
-    {
-        m_value = NULLOPT;
-        return;
-    }
-
-    if( parseResult.significand.empty() )
-        throw KI_PARAM_ERROR( wxString::Format( _( "Invalid Float simulator value string: '%s'" ),
-                                                aString ) );
+    if( parseResult.significand.empty() || parseResult.significand == "." )
+        return false;
 
     long exponent = parseResult.exponent ? *parseResult.exponent : 0;
     exponent += parseResult.metricSuffixExponent ? *parseResult.metricSuffixExponent : 0;
 
-    m_value = std::stod( parseResult.significand ) * std::pow( 10, exponent );
+    try
+    {
+        m_value = std::stod( parseResult.significand ) * std::pow( 10, exponent );
+    }
+    catch( const std::invalid_argument& e )
+    {
+        return false;
+    }
+
+    return true;
 }
 
 
 template <>
-void SIM_VALUE<std::complex<double>>::FromString( const wxString& aString )
+bool SIM_VALUE_INSTANCE<std::complex<double>>::FromString( const wxString& aString,
+                                                           NOTATION aNotation )
 {
     // TODO
 
@@ -481,18 +495,20 @@ void SIM_VALUE<std::complex<double>>::FromString( const wxString& aString )
         throw KI_PARAM_ERROR( _( "Invalid complex sim value string" ) );
 
     m_value = value;*/
+    return true;
 }
 
 
 template <>
-void SIM_VALUE<wxString>::FromString( const wxString& aString )
+bool SIM_VALUE_INSTANCE<wxString>::FromString( const wxString& aString, NOTATION aNotation )
 {
     m_value = aString;
+    return true;
 }
 
 
 template <typename T>
-wxString SIM_VALUE<T>::ToString() const
+wxString SIM_VALUE_INSTANCE<T>::ToString( NOTATION aNotation ) const
 {
     static_assert( std::is_same<T, std::vector<T>>::value );
 
@@ -500,7 +516,7 @@ wxString SIM_VALUE<T>::ToString() const
 
     for( auto it = m_value.cbegin(); it != m_value.cend(); it++ )
     {
-        string += SIM_VALUE<T>( *it ).ToString();
+        string += SIM_VALUE_INSTANCE<T>( *it ).ToString();
         string += ",";
     }
 
@@ -509,7 +525,7 @@ wxString SIM_VALUE<T>::ToString() const
 
 
 template <>
-wxString SIM_VALUE<bool>::ToString() const
+wxString SIM_VALUE_INSTANCE<bool>::ToString( NOTATION aNotation ) const
 {
     LOCALE_IO toggle;
 
@@ -521,7 +537,7 @@ wxString SIM_VALUE<bool>::ToString() const
 
 
 template <>
-wxString SIM_VALUE<long>::ToString() const
+wxString SIM_VALUE_INSTANCE<long>::ToString( NOTATION aNotation ) const
 {
     LOCALE_IO toggle;
 
@@ -538,7 +554,7 @@ wxString SIM_VALUE<long>::ToString() const
 
         long dummy = 0;
         wxString metricSuffix = SIM_VALUE_PARSER::ExponentToMetricSuffix(
-                static_cast<double>( exponent ), dummy );
+                static_cast<double>( exponent ), dummy, aNotation );
         return wxString::Format( "%d%s", value, metricSuffix );
     }
 
@@ -547,7 +563,7 @@ wxString SIM_VALUE<long>::ToString() const
 
 
 template <>
-wxString SIM_VALUE<double>::ToString() const
+wxString SIM_VALUE_INSTANCE<double>::ToString( NOTATION aNotation ) const
 {
     LOCALE_IO toggle;
 
@@ -568,7 +584,7 @@ wxString SIM_VALUE<double>::ToString() const
 
 
 template <>
-wxString SIM_VALUE<std::complex<double>>::ToString() const
+wxString SIM_VALUE_INSTANCE<std::complex<double>>::ToString( NOTATION aNotation ) const
 {
     LOCALE_IO toggle;
 
@@ -580,7 +596,7 @@ wxString SIM_VALUE<std::complex<double>>::ToString() const
 
 
 template <>
-wxString SIM_VALUE<wxString>::ToString() const
+wxString SIM_VALUE_INSTANCE<wxString>::ToString( NOTATION aNotation ) const
 {
     LOCALE_IO toggle;
 
@@ -592,7 +608,7 @@ wxString SIM_VALUE<wxString>::ToString() const
 
 
 template <typename T>
-wxString SIM_VALUE<T>::ToSimpleString() const
+wxString SIM_VALUE_INSTANCE<T>::ToSimpleString() const
 {
     if( m_value.has_value() )
     {
@@ -606,7 +622,7 @@ wxString SIM_VALUE<T>::ToSimpleString() const
 
 
 template <>
-wxString SIM_VALUE<std::complex<double>>::ToSimpleString() const
+wxString SIM_VALUE_INSTANCE<std::complex<double>>::ToSimpleString() const
 {
     // TODO
 
@@ -619,9 +635,9 @@ wxString SIM_VALUE<std::complex<double>>::ToSimpleString() const
 
 
 template <typename T>
-bool SIM_VALUE<T>::operator==( const SIM_VALUE_BASE& aOther ) const
+bool SIM_VALUE_INSTANCE<T>::operator==( const SIM_VALUE& aOther ) const
 {
-    const SIM_VALUE* otherNumber = dynamic_cast<const SIM_VALUE*>( &aOther );
+    const SIM_VALUE_INSTANCE* otherNumber = dynamic_cast<const SIM_VALUE_INSTANCE*>( &aOther );
 
     if( otherNumber )
         return m_value == otherNumber->m_value;

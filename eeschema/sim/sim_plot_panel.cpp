@@ -470,8 +470,7 @@ void SIM_PLOT_PANEL::UpdateTraceStyle( TRACE* trace )
 
 
 bool SIM_PLOT_PANEL::addTrace( const wxString& aTitle, const wxString& aName, int aPoints,
-                               const double* aX, const double* aY, SIM_PLOT_TYPE aType,
-                               const wxString& aParam )
+                               const double* aX, const double* aY, SIM_PLOT_TYPE aType )
 {
     TRACE* trace = nullptr;
     wxString name = aTitle;
@@ -504,7 +503,7 @@ bool SIM_PLOT_PANEL::addTrace( const wxString& aTitle, const wxString& aName, in
         }
 
         // New entry
-        trace = new TRACE( aName, aType, aParam );
+        trace = new TRACE( aName, aType );
         trace->SetTraceColour( m_colors.GenerateColor( m_traces ) );
         UpdateTraceStyle( trace );
         m_traces[name] = trace;

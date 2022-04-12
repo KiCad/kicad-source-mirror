@@ -27,9 +27,9 @@
 #include <sim/sim_model_ideal.h>
 #include <sim/sim_model_behavioral.h>
 #include <sim/sim_model_source.h>
-#include <sim/sim_model_subcircuit.h>
-#include <sim/sim_model_codemodel.h>
-#include <sim/sim_model_rawspice.h>
+#include <sim/sim_model_subckt.h>
+#include <sim/sim_model_xspice.h>
+#include <sim/sim_model_spice.h>
 #include <sim/sim_model_ngspice.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
@@ -48,29 +48,25 @@ namespace SIM_MODEL_PARSER
     template <typename Rule> struct paramValuePairsSelector : std::false_type {};
 
     template <> struct paramValuePairsSelector<param> : std::true_type {};
-    template <> struct paramValuePairsSelector<number<SIM_VALUE_BASE::TYPE::INT, NOTATION::SI>>
+    template <> struct paramValuePairsSelector<number<SIM_VALUE::TYPE::INT, NOTATION::SI>>
         : std::true_type {};
-    template <> struct paramValuePairsSelector<number<SIM_VALUE_BASE::TYPE::FLOAT, NOTATION::SI>>
+    template <> struct paramValuePairsSelector<number<SIM_VALUE::TYPE::FLOAT, NOTATION::SI>>
         : std::true_type {};
-    template <> struct paramValuePairsSelector<number<SIM_VALUE_BASE::TYPE::INT, NOTATION::SPICE>>
+    template <> struct paramValuePairsSelector<number<SIM_VALUE::TYPE::INT, NOTATION::SPICE>>
         : std::true_type {};
-    template <> struct paramValuePairsSelector<number<SIM_VALUE_BASE::TYPE::FLOAT, NOTATION::SPICE>>
+    template <> struct paramValuePairsSelector<number<SIM_VALUE::TYPE::FLOAT, NOTATION::SPICE>>
         : std::true_type {};
 
 
     template <typename Rule> struct spiceUnitSelector : std::false_type {};
 
-    template <> struct spiceUnitSelector<modelName> : std::true_type {};
     template <> struct spiceUnitSelector<dotModel> : std::true_type {};
+    template <> struct spiceUnitSelector<modelName> : std::true_type {};
     template <> struct spiceUnitSelector<dotModelType> : std::true_type {};
     template <> struct spiceUnitSelector<param> : std::true_type {};
-    template <> struct spiceUnitSelector<number<SIM_VALUE_BASE::TYPE::INT, NOTATION::SI>>
+    template <> struct spiceUnitSelector<number<SIM_VALUE::TYPE::INT, NOTATION::SPICE>>
         : std::true_type {};
-    template <> struct spiceUnitSelector<number<SIM_VALUE_BASE::TYPE::FLOAT, NOTATION::SI>>
-        : std::true_type {};
-    template <> struct spiceUnitSelector<number<SIM_VALUE_BASE::TYPE::INT, NOTATION::SPICE>>
-        : std::true_type {};
-    template <> struct spiceUnitSelector<number<SIM_VALUE_BASE::TYPE::FLOAT, NOTATION::SPICE>>
+    template <> struct spiceUnitSelector<number<SIM_VALUE::TYPE::FLOAT, NOTATION::SPICE>>
         : std::true_type {};
 
     template <> struct spiceUnitSelector<dotSubckt> : std::true_type {};
@@ -85,32 +81,32 @@ SIM_MODEL::DEVICE_INFO SIM_MODEL::DeviceTypeInfo( DEVICE_TYPE aDeviceType )
 {
     switch( aDeviceType )
     {
-    case DEVICE_TYPE::NONE:       return { "",           ""                  };
-    case DEVICE_TYPE::RESISTOR:   return { "RESISTOR",   "Resistor"          };
-    case DEVICE_TYPE::CAPACITOR:  return { "CAPACITOR",  "Capacitor"         };
-    case DEVICE_TYPE::INDUCTOR:   return { "INDUCTOR",   "Inductor"          };
-    case DEVICE_TYPE::TLINE:      return { "TLINE",      "Transmission Line" };
-    case DEVICE_TYPE::SWITCH:     return { "SWITCH",     "Switch"            };
+    case DEVICE_TYPE::NONE:      return { "",       ""                  };
+    case DEVICE_TYPE::R:         return { "R",      "Resistor"          };
+    case DEVICE_TYPE::C:         return { "C",      "Capacitor"         };
+    case DEVICE_TYPE::L:         return { "L",      "Inductor"          };
+    case DEVICE_TYPE::TLINE:     return { "TLINE",  "Transmission Line" };
+    case DEVICE_TYPE::SW:        return { "SW",     "Switch"            };
 
-    case DEVICE_TYPE::DIODE:      return { "DIODE",      "Diode"             };
-    case DEVICE_TYPE::NPN:        return { "NPN",        "NPN BJT"           };
-    case DEVICE_TYPE::PNP:        return { "PNP",        "PNP BJT"           };
+    case DEVICE_TYPE::D:         return { "D",      "Diode"             };
+    case DEVICE_TYPE::NPN:       return { "NPN",    "NPN BJT"           };
+    case DEVICE_TYPE::PNP:       return { "PNP",    "PNP BJT"           };
 
-    case DEVICE_TYPE::NJF:        return { "NJF",        "N-Channel JFET"    };
-    case DEVICE_TYPE::PJF:        return { "PJF",        "P-Channel JFET"    };
+    case DEVICE_TYPE::NJFET:     return { "NJFET",  "N-channel JFET"    };
+    case DEVICE_TYPE::PJFET:     return { "PJFET",  "P-channel JFET"    };
 
-    case DEVICE_TYPE::NMOS:       return { "NMOS",       "N-Channel MOSFET"  };
-    case DEVICE_TYPE::PMOS:       return { "PMOS",       "P-Channel MOSFET"  };
-    case DEVICE_TYPE::NMES:       return { "NMES",       "N-Channel MESFET"  };
-    case DEVICE_TYPE::PMES:       return { "PMES",       "P-Channel MESFET"  };
+    case DEVICE_TYPE::NMOS:      return { "NMOS",   "N-channel MOSFET"  };
+    case DEVICE_TYPE::PMOS:      return { "PMOS",   "P-channel MOSFET"  };
+    case DEVICE_TYPE::NMES:      return { "NMES",   "N-channel MESFET"  };
+    case DEVICE_TYPE::PMES:      return { "PMES",   "P-channel MESFET"  };
 
-    case DEVICE_TYPE::VSOURCE:    return { "VSOURCE",    "Voltage Source"    };
-    case DEVICE_TYPE::ISOURCE:    return { "ISOURCE",    "Current Source"    };
+    case DEVICE_TYPE::V:         return { "V",      "Voltage Source"    };
+    case DEVICE_TYPE::I:         return { "I",      "Current Source"    };
 
-    case DEVICE_TYPE::SUBCIRCUIT: return { "SUBCIRCUIT", "Subcircuit"        };
-    case DEVICE_TYPE::CODEMODEL:  return { "CODEMODEL",  "Code Model"        };
-    case DEVICE_TYPE::RAWSPICE:   return { "RAWSPICE",   "Raw Spice Element" };
-    case DEVICE_TYPE::_ENUM_END:  break;
+    case DEVICE_TYPE::SUBCKT:    return { "SUBCKT", "Subcircuit"        };
+    case DEVICE_TYPE::XSPICE:    return { "XSPICE", "XSPICE Code Model" };
+    case DEVICE_TYPE::SPICE:     return { "SPICE",  "Raw Spice Element" };
+    case DEVICE_TYPE::_ENUM_END: break;
     }
 
     wxFAIL;
@@ -122,127 +118,129 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
 {
     switch( aType )
     { 
-    case TYPE::NONE:                   return { DEVICE_TYPE::NONE,       "",                ""                           };
+    case TYPE::NONE:                 return { DEVICE_TYPE::NONE,   "",               ""                           };
 
-    case TYPE::RESISTOR_IDEAL:         return { DEVICE_TYPE::RESISTOR,   "IDEAL",           "Ideal"                      };
-    case TYPE::RESISTOR_ADVANCED:      return { DEVICE_TYPE::RESISTOR,   "ADVANCED",        "Advanced"                   };
-    case TYPE::RESISTOR_BEHAVIORAL:    return { DEVICE_TYPE::RESISTOR,   "BEHAVIORAL",      "Behavioral"                 };
+    case TYPE::R:                    return { DEVICE_TYPE::R,      "",               "Ideal"                      };
+    case TYPE::R_ADV:                return { DEVICE_TYPE::R,      "ADV",            "Advanced"                   };
+    case TYPE::R_BEHAVIORAL:         return { DEVICE_TYPE::R,      "=",              "Behavioral"                 };
 
-    case TYPE::CAPACITOR_IDEAL:        return { DEVICE_TYPE::CAPACITOR,  "IDEAL",           "Ideal"                      };
-    case TYPE::CAPACITOR_ADVANCED:     return { DEVICE_TYPE::CAPACITOR,  "ADVANCED",        "Advanced"                   };
-    case TYPE::CAPACITOR_BEHAVIORAL:   return { DEVICE_TYPE::CAPACITOR,  "BEHAVIORAL",      "Behavioral"                 };
+    case TYPE::C:                    return { DEVICE_TYPE::C,      "",               "Ideal"                      };
+    case TYPE::C_ADV:                return { DEVICE_TYPE::C,      "ADV",            "Advanced"                   };
+    case TYPE::C_BEHAVIORAL:         return { DEVICE_TYPE::C,      "=",              "Behavioral"                 };
 
-    case TYPE::INDUCTOR_IDEAL:         return { DEVICE_TYPE::INDUCTOR,   "IDEAL",           "Ideal"                      };
-    case TYPE::INDUCTOR_ADVANCED:      return { DEVICE_TYPE::INDUCTOR,   "ADVANCED",        "Advanced"                   };
-    case TYPE::INDUCTOR_BEHAVIORAL:    return { DEVICE_TYPE::INDUCTOR,   "BEHAVIORAL",      "Behavioral"                 };
+    case TYPE::L:                    return { DEVICE_TYPE::L,      "",               "Ideal"                      };
+    case TYPE::L_ADV:                return { DEVICE_TYPE::L,      "ADV",            "Advanced"                   };
+    case TYPE::L_BEHAVIORAL:         return { DEVICE_TYPE::L,      "=",              "Behavioral"                 };
 
-    case TYPE::TLINE_LOSSY:            return { DEVICE_TYPE::TLINE,      "LOSSY",           "Lossy"                      };
-    case TYPE::TLINE_LOSSLESS:         return { DEVICE_TYPE::TLINE,      "LOSSLESS",        "Lossless"                   };
-    case TYPE::TLINE_UNIFORM_RC:       return { DEVICE_TYPE::TLINE,      "UNIFORM_RC",      "Uniform RC"                 };
-    case TYPE::TLINE_KSPICE:           return { DEVICE_TYPE::TLINE,      "KSPICE",          "KSPICE"                     };
+    case TYPE::TLINE_LOSSY:          return { DEVICE_TYPE::TLINE,  "",               "Lossy"                      };
+    case TYPE::TLINE_LOSSLESS:       return { DEVICE_TYPE::TLINE,  "LOSSLESS",       "Lossless"                   };
+    case TYPE::TLINE_URC:            return { DEVICE_TYPE::TLINE,  "URC",            "Uniform RC"                 };
+    case TYPE::TLINE_KSPICE:         return { DEVICE_TYPE::TLINE,  "KSPICE",         "KSPICE"                     };
 
-    case TYPE::SWITCH_VCTRL:           return { DEVICE_TYPE::SWITCH,     "VCTRL",           "Voltage-controlled"         };
-    case TYPE::SWITCH_ICTRL:           return { DEVICE_TYPE::SWITCH,     "ICTRL",           "Current-controlled"         };
+    case TYPE::SW_V:                 return { DEVICE_TYPE::SW,     "V",              "Voltage-controlled"         };
+    case TYPE::SW_I:                 return { DEVICE_TYPE::SW,     "I",              "Current-controlled"         };
 
-    case TYPE::DIODE:                  return { DEVICE_TYPE::DIODE,      "",                ""                           };
+    case TYPE::D:                return { DEVICE_TYPE::D,      "",               ""                           };
     
-    case TYPE::NPN_GUMMEL_POON:        return { DEVICE_TYPE::NPN,        "GUMMEL_POON",     "Gummel-Poon"                };
-    case TYPE::PNP_GUMMEL_POON:        return { DEVICE_TYPE::PNP,        "GUMMEL_POON",     "Gummel-Poon"                };
-    case TYPE::NPN_VBIC:               return { DEVICE_TYPE::NPN,        "VBIC",            "VBIC"                       };
-    case TYPE::PNP_VBIC:               return { DEVICE_TYPE::PNP,        "VBIC",            "VBIC"                       };
+    case TYPE::NPN_GUMMELPOON:       return { DEVICE_TYPE::NPN,    "GUMMELPOON",     "Gummel-Poon"                };
+    case TYPE::PNP_GUMMELPOON:       return { DEVICE_TYPE::PNP,    "GUMMELPOON",     "Gummel-Poon"                };
+    case TYPE::NPN_VBIC:             return { DEVICE_TYPE::NPN,    "VBIC",           "VBIC"                       };
+    case TYPE::PNP_VBIC:             return { DEVICE_TYPE::PNP,    "VBIC",           "VBIC"                       };
     //case TYPE::BJT_MEXTRAM:          return {};
-    case TYPE::NPN_HICUM_L2:           return { DEVICE_TYPE::NPN,        "HICUM_L2",        "HICUM Level 2"              };
-    case TYPE::PNP_HICUM_L2:           return { DEVICE_TYPE::PNP,        "HICUM_L2",        "HICUM Level 2"              };
+    case TYPE::NPN_HICUML2:          return { DEVICE_TYPE::NPN,    "HICUML2",        "HICUM Level 2"              };
+    case TYPE::PNP_HICUML2:          return { DEVICE_TYPE::PNP,    "HICUML2",        "HICUM Level 2"              };
     //case TYPE::BJT_HICUM_L0:         return {};
 
-    case TYPE::NJF_SHICHMAN_HODGES:    return { DEVICE_TYPE::NJF,        "SHICHMAN_HODGES", "Shichman-Hodges"            };
-    case TYPE::PJF_SHICHMAN_HODGES:    return { DEVICE_TYPE::PJF,        "SHICHMAN_HODGES", "Shichman-Hodges"            };
-    case TYPE::NJF_PARKER_SKELLERN:    return { DEVICE_TYPE::NJF,        "PARKER_SKELLERN", "Parker-Skellern"            };
-    case TYPE::PJF_PARKER_SKELLERN:    return { DEVICE_TYPE::PJF,        "PARKER_SKELLERN", "Parker-Skellern"            };
+    case TYPE::NJFET_SHICHMANHODGES: return { DEVICE_TYPE::NJFET,  "SHICHMANHODGES", "Shichman-Hodges"            };
+    case TYPE::PJFET_SHICHMANHODGES: return { DEVICE_TYPE::PJFET,  "SHICHMANHODGES", "Shichman-Hodges"            };
+    case TYPE::NJFET_PARKERSKELLERN: return { DEVICE_TYPE::NJFET,  "PARKERSKELLERN", "Parker-Skellern"            };
+    case TYPE::PJFET_PARKERSKELLERN: return { DEVICE_TYPE::PJFET,  "PARKERSKELLERN", "Parker-Skellern"            };
 
-    case TYPE::NMES_STATZ:             return { DEVICE_TYPE::NMES,       "STATZ",           "Statz"                      };
-    case TYPE::PMES_STATZ:             return { DEVICE_TYPE::PMES,       "STATZ",           "Statz"                      };
-    case TYPE::NMES_YTTERDAL:          return { DEVICE_TYPE::NMES,       "YTTERDAL",        "Ytterdal"                   };
-    case TYPE::PMES_YTTERDAL:          return { DEVICE_TYPE::PMES,       "YTTERDAL",        "Ytterdal"                   };
-    case TYPE::NMES_HFET1:             return { DEVICE_TYPE::NMES,       "HFET1",           "HFET1"                      };
-    case TYPE::PMES_HFET1:             return { DEVICE_TYPE::PMES,       "HFET1",           "HFET1"                      };
-    case TYPE::PMES_HFET2:             return { DEVICE_TYPE::NMES,       "HFET2",           "HFET2"                      };
-    case TYPE::NMES_HFET2:             return { DEVICE_TYPE::PMES,       "HFET2",           "HFET2"                      };
+    case TYPE::NMES_STATZ:           return { DEVICE_TYPE::NMES,   "STATZ",          "Statz"                      };
+    case TYPE::PMES_STATZ:           return { DEVICE_TYPE::PMES,   "STATZ",          "Statz"                      };
+    case TYPE::NMES_YTTERDAL:        return { DEVICE_TYPE::NMES,   "YTTERDAL",       "Ytterdal"                   };
+    case TYPE::PMES_YTTERDAL:        return { DEVICE_TYPE::PMES,   "YTTERDAL",       "Ytterdal"                   };
+    case TYPE::NMES_HFET1:           return { DEVICE_TYPE::NMES,   "HFET1",          "HFET1"                      };
+    case TYPE::PMES_HFET1:           return { DEVICE_TYPE::PMES,   "HFET1",          "HFET1"                      };
+    case TYPE::PMES_HFET2:           return { DEVICE_TYPE::NMES,   "HFET2",          "HFET2"                      };
+    case TYPE::NMES_HFET2:           return { DEVICE_TYPE::PMES,   "HFET2",          "HFET2"                      };
 
-    case TYPE::NMOS_MOS1:              return { DEVICE_TYPE::NMOS,       "MOS1",            "Classical quadratic (MOS1)" };
-    case TYPE::PMOS_MOS1:              return { DEVICE_TYPE::PMOS,       "MOS1",            "Classical quadratic (MOS1)" };
-    case TYPE::NMOS_MOS2:              return { DEVICE_TYPE::NMOS,       "MOS2",            "Grove-Frohman (MOS2)"       };
-    case TYPE::PMOS_MOS2:              return { DEVICE_TYPE::PMOS,       "MOS2",            "Grove-Frohman (MOS2)"       };
-    case TYPE::NMOS_MOS3:              return { DEVICE_TYPE::NMOS,       "MOS3",            "MOS3"                       };
-    case TYPE::PMOS_MOS3:              return { DEVICE_TYPE::PMOS,       "MOS3",            "MOS3"                       };
-    case TYPE::NMOS_BSIM1:             return { DEVICE_TYPE::NMOS,       "BSIM1",           "BSIM1"                      };
-    case TYPE::PMOS_BSIM1:             return { DEVICE_TYPE::PMOS,       "BSIM1",           "BSIM1"                      };
-    case TYPE::NMOS_BSIM2:             return { DEVICE_TYPE::NMOS,       "BSIM2",           "BSIM2"                      };
-    case TYPE::PMOS_BSIM2:             return { DEVICE_TYPE::PMOS,       "BSIM2",           "BSIM2"                      };
-    case TYPE::NMOS_MOS6:              return { DEVICE_TYPE::NMOS,       "MOS6",            "MOS6"                       };
-    case TYPE::PMOS_MOS6:              return { DEVICE_TYPE::PMOS,       "MOS6",            "MOS6"                       };
-    case TYPE::NMOS_BSIM3:             return { DEVICE_TYPE::NMOS,       "BSIM3",           "BSIM3"                      };
-    case TYPE::PMOS_BSIM3:             return { DEVICE_TYPE::PMOS,       "BSIM3",           "BSIM3"                      };
-    case TYPE::NMOS_MOS9:              return { DEVICE_TYPE::NMOS,       "MOS9",            "MOS9"                       };
-    case TYPE::PMOS_MOS9:              return { DEVICE_TYPE::PMOS,       "MOS9",            "MOS9"                       };
-    case TYPE::NMOS_B4SOI:             return { DEVICE_TYPE::NMOS,       "B4SOI",           "BSIM4 SOI (B4SOI)"          };
-    case TYPE::PMOS_B4SOI:             return { DEVICE_TYPE::PMOS,       "B4SOI",           "BSIM4 SOI (B4SOI)"          };
-    case TYPE::NMOS_BSIM4:             return { DEVICE_TYPE::NMOS,       "BSIM4",           "BSIM4"                      };
-    case TYPE::PMOS_BSIM4:             return { DEVICE_TYPE::PMOS,       "BSIM4",           "BSIM4"                      };
+    case TYPE::NMOS_MOS1:            return { DEVICE_TYPE::NMOS,   "MOS1",           "Classical quadratic (MOS1)" };
+    case TYPE::PMOS_MOS1:            return { DEVICE_TYPE::PMOS,   "MOS1",           "Classical quadratic (MOS1)" };
+    case TYPE::NMOS_MOS2:            return { DEVICE_TYPE::NMOS,   "MOS2",           "Grove-Frohman (MOS2)"       };
+    case TYPE::PMOS_MOS2:            return { DEVICE_TYPE::PMOS,   "MOS2",           "Grove-Frohman (MOS2)"       };
+    case TYPE::NMOS_MOS3:            return { DEVICE_TYPE::NMOS,   "MOS3",           "MOS3"                       };
+    case TYPE::PMOS_MOS3:            return { DEVICE_TYPE::PMOS,   "MOS3",           "MOS3"                       };
+    case TYPE::NMOS_BSIM1:           return { DEVICE_TYPE::NMOS,   "BSIM1",          "BSIM1"                      };
+    case TYPE::PMOS_BSIM1:           return { DEVICE_TYPE::PMOS,   "BSIM1",          "BSIM1"                      };
+    case TYPE::NMOS_BSIM2:           return { DEVICE_TYPE::NMOS,   "BSIM2",          "BSIM2"                      };
+    case TYPE::PMOS_BSIM2:           return { DEVICE_TYPE::PMOS,   "BSIM2",          "BSIM2"                      };
+    case TYPE::NMOS_MOS6:            return { DEVICE_TYPE::NMOS,   "MOS6",           "MOS6"                       };
+    case TYPE::PMOS_MOS6:            return { DEVICE_TYPE::PMOS,   "MOS6",           "MOS6"                       };
+    case TYPE::NMOS_BSIM3:           return { DEVICE_TYPE::NMOS,   "BSIM3",          "BSIM3"                      };
+    case TYPE::PMOS_BSIM3:           return { DEVICE_TYPE::PMOS,   "BSIM3",          "BSIM3"                      };
+    case TYPE::NMOS_MOS9:            return { DEVICE_TYPE::NMOS,   "MOS9",           "MOS9"                       };
+    case TYPE::PMOS_MOS9:            return { DEVICE_TYPE::PMOS,   "MOS9",           "MOS9"                       };
+    case TYPE::NMOS_B4SOI:           return { DEVICE_TYPE::NMOS,   "B4SOI",          "BSIM4 SOI (B4SOI)"          };
+    case TYPE::PMOS_B4SOI:           return { DEVICE_TYPE::PMOS,   "B4SOI",          "BSIM4 SOI (B4SOI)"          };
+    case TYPE::NMOS_BSIM4:           return { DEVICE_TYPE::NMOS,   "BSIM4",          "BSIM4"                      };
+    case TYPE::PMOS_BSIM4:           return { DEVICE_TYPE::PMOS,   "BSIM4",          "BSIM4"                      };
     //case TYPE::NMOS_EKV2_6:          return {};
     //case TYPE::PMOS_EKV2_6:          return {};
     //case TYPE::NMOS_PSP:             return {};
     //case TYPE::PMOS_PSP:             return {};
-    case TYPE::NMOS_B3SOIFD:           return { DEVICE_TYPE::NMOS,       "B3SOIFD",         "B3SOIFD (BSIM3 FD-SOI)"     };
-    case TYPE::PMOS_B3SOIFD:           return { DEVICE_TYPE::PMOS,       "B3SOIFD",         "B3SOIFD (BSIM3 FD-SOI)"     };
-    case TYPE::NMOS_B3SOIDD:           return { DEVICE_TYPE::NMOS,       "B3SOIDD",         "B3SOIDD (BSIM3 SOI)"        };
-    case TYPE::PMOS_B3SOIDD:           return { DEVICE_TYPE::PMOS,       "B3SOIDD",         "B3SOIDD (BSIM3 SOI)"        };
-    case TYPE::NMOS_B3SOIPD:           return { DEVICE_TYPE::NMOS,       "B3SOIPD",         "B3SOIPD (BSIM3 PD-SOI)"     };
-    case TYPE::PMOS_B3SOIPD:           return { DEVICE_TYPE::PMOS,       "B3SOIPD",         "B3SOIPD (BSIM3 PD-SOI)"     };
+    case TYPE::NMOS_B3SOIFD:         return { DEVICE_TYPE::NMOS,   "B3SOIFD",        "B3SOIFD (BSIM3 FD-SOI)"     };
+    case TYPE::PMOS_B3SOIFD:         return { DEVICE_TYPE::PMOS,   "B3SOIFD",        "B3SOIFD (BSIM3 FD-SOI)"     };
+    case TYPE::NMOS_B3SOIDD:         return { DEVICE_TYPE::NMOS,   "B3SOIDD",        "B3SOIDD (BSIM3 SOI)"        };
+    case TYPE::PMOS_B3SOIDD:         return { DEVICE_TYPE::PMOS,   "B3SOIDD",        "B3SOIDD (BSIM3 SOI)"        };
+    case TYPE::NMOS_B3SOIPD:         return { DEVICE_TYPE::NMOS,   "B3SOIPD",        "B3SOIPD (BSIM3 PD-SOI)"     };
+    case TYPE::PMOS_B3SOIPD:         return { DEVICE_TYPE::PMOS,   "B3SOIPD",        "B3SOIPD (BSIM3 PD-SOI)"     };
     //case TYPE::NMOS_STAG:            return {};
     //case TYPE::PMOS_STAG:            return {};
-    case TYPE::NMOS_HISIM2:            return { DEVICE_TYPE::NMOS,       "HISIM2",          "HiSIM2"                     };
-    case TYPE::PMOS_HISIM2:            return { DEVICE_TYPE::PMOS,       "HISIM2",          "HiSIM2"                     };
-    case TYPE::NMOS_HISIM_HV1:         return { DEVICE_TYPE::NMOS,       "HISIM_HV1",       "HiSIM_HV1"                  };
-    case TYPE::PMOS_HISIM_HV1:         return { DEVICE_TYPE::PMOS,       "HISIM_HV1",       "HiSIM_HV1"                  };
-    case TYPE::NMOS_HISIM_HV2:         return { DEVICE_TYPE::NMOS,       "HISIM_HV2",       "HiSIM_HV2"                  };
-    case TYPE::PMOS_HISIM_HV2:         return { DEVICE_TYPE::PMOS,       "HISIM_HV2",       "HiSIM_HV2"                  };
+    case TYPE::NMOS_HISIM2:          return { DEVICE_TYPE::NMOS,   "HISIM2",         "HiSIM2"                     };
+    case TYPE::PMOS_HISIM2:          return { DEVICE_TYPE::PMOS,   "HISIM2",         "HiSIM2"                     };
+    case TYPE::NMOS_HISIMHV1:        return { DEVICE_TYPE::NMOS,   "HISIMHV1",       "HiSIM_HV1"                  };
+    case TYPE::PMOS_HISIMHV1:        return { DEVICE_TYPE::PMOS,   "HISIMHV1",       "HiSIM_HV1"                  };
+    case TYPE::NMOS_HISIMHV2:        return { DEVICE_TYPE::NMOS,   "HISIMHV2",       "HiSIM_HV2"                  };
+    case TYPE::PMOS_HISIMHV2:        return { DEVICE_TYPE::PMOS,   "HISIMHV2",       "HiSIM_HV2"                  };
 
-    case TYPE::VSOURCE_PULSE:          return { DEVICE_TYPE::VSOURCE,    "PULSE",           "Pulse"                      };
-    case TYPE::VSOURCE_SIN:            return { DEVICE_TYPE::VSOURCE,    "SINCE",           "Sine"                       };
-    case TYPE::VSOURCE_EXP:            return { DEVICE_TYPE::VSOURCE,    "EXP",             "Exponential"                };
-    case TYPE::VSOURCE_SFAM:           return { DEVICE_TYPE::VSOURCE,    "SFAM",            "Single-frequency AM"        };
-    case TYPE::VSOURCE_SFFM:           return { DEVICE_TYPE::VSOURCE,    "SFFM",            "Single-frequency FM"        };
-    case TYPE::VSOURCE_PWL:            return { DEVICE_TYPE::VSOURCE,    "PWL",             "Piecewise linear"           };
-    case TYPE::VSOURCE_WHITE_NOISE:    return { DEVICE_TYPE::VSOURCE,    "WHITE_NOISE",     "White Noise"                };
-    case TYPE::VSOURCE_PINK_NOISE:     return { DEVICE_TYPE::VSOURCE,    "PINK_NOISE",      "Pink Noise (1/f)"           };
-    case TYPE::VSOURCE_BURST_NOISE:    return { DEVICE_TYPE::VSOURCE,    "BURST_NOISE",     "Burst Noise"                };
-    case TYPE::VSOURCE_RANDOM_UNIFORM: return { DEVICE_TYPE::VSOURCE,    "RANDOM_UNIFORM",  "Random uniform"             };
-    case TYPE::VSOURCE_RANDOM_NORMAL:  return { DEVICE_TYPE::VSOURCE,    "RANDOM_NORMAL",   "Random normal"              };
-    case TYPE::VSOURCE_RANDOM_EXP:     return { DEVICE_TYPE::VSOURCE,    "RANDOM_EXP",      "Random exponential"         };
-    case TYPE::VSOURCE_RANDOM_POISSON: return { DEVICE_TYPE::VSOURCE,    "RANDOM_POISSON",  "Random Poisson"             };
-    case TYPE::VSOURCE_BEHAVIORAL:     return { DEVICE_TYPE::VSOURCE,    "BEHAVIORAL",      "Behavioral"                 };
+    case TYPE::V_DC:                 return { DEVICE_TYPE::V,      "DC",             "DC",                        };
+    case TYPE::V_SIN:                return { DEVICE_TYPE::V,      "SIN",            "Sine"                       };
+    case TYPE::V_PULSE:              return { DEVICE_TYPE::V,      "PULSE",          "Pulse"                      };
+    case TYPE::V_EXP:                return { DEVICE_TYPE::V,      "EXP",            "Exponential"                };
+    case TYPE::V_SFAM:               return { DEVICE_TYPE::V,      "SFAM",           "Single-frequency AM"        };
+    case TYPE::V_SFFM:               return { DEVICE_TYPE::V,      "SFFM",           "Single-frequency FM"        };
+    case TYPE::V_PWL:                return { DEVICE_TYPE::V,      "PWL",            "Piecewise linear"           };
+    case TYPE::V_WHITENOISE:         return { DEVICE_TYPE::V,      "WHITENOISE",     "White Noise"                };
+    case TYPE::V_PINKNOISE:          return { DEVICE_TYPE::V,      "PINKNOISE",      "Pink Noise (1/f)"           };
+    case TYPE::V_BURSTNOISE:         return { DEVICE_TYPE::V,      "BURSTNOISE",     "Burst Noise"                };
+    case TYPE::V_RANDUNIFORM:        return { DEVICE_TYPE::V,      "RANDUNIFORM",    "Random uniform"             };
+    case TYPE::V_RANDNORMAL:         return { DEVICE_TYPE::V,      "RANDNORMAL",     "Random normal"              };
+    case TYPE::V_RANDEXP:            return { DEVICE_TYPE::V,      "RANDEXP",        "Random exponential"         };
+    case TYPE::V_RANDPOISSON:        return { DEVICE_TYPE::V,      "RANDPOISSON",    "Random Poisson"             };
+    case TYPE::V_BEHAVIORAL:         return { DEVICE_TYPE::V,      "=",              "Behavioral"                 };
 
-    case TYPE::ISOURCE_PULSE:          return { DEVICE_TYPE::ISOURCE,    "PULSE",           "Pulse"                      };
-    case TYPE::ISOURCE_SIN:            return { DEVICE_TYPE::ISOURCE,    "SINCE",           "Sine"                       };
-    case TYPE::ISOURCE_EXP:            return { DEVICE_TYPE::ISOURCE,    "EXP",             "Exponential"                };
-    case TYPE::ISOURCE_SFAM:           return { DEVICE_TYPE::ISOURCE,    "SFAM",            "Single-frequency AM"        };
-    case TYPE::ISOURCE_SFFM:           return { DEVICE_TYPE::ISOURCE,    "SFFM",            "Single-frequency FM"        };
-    case TYPE::ISOURCE_PWL:            return { DEVICE_TYPE::ISOURCE,    "PWL",             "Piecewise linear"           };
-    case TYPE::ISOURCE_WHITE_NOISE:    return { DEVICE_TYPE::ISOURCE,    "WHITE_NOISE",     "White Noise"                };
-    case TYPE::ISOURCE_PINK_NOISE:     return { DEVICE_TYPE::ISOURCE,    "PINK_NOISE",      "Pink Noise (1/f)"           };
-    case TYPE::ISOURCE_BURST_NOISE:    return { DEVICE_TYPE::ISOURCE,    "BURST_NOISE",     "Burst Noise"                };
-    case TYPE::ISOURCE_RANDOM_UNIFORM: return { DEVICE_TYPE::ISOURCE,    "RANDOM_UNIFORM",  "Random uniform"             };
-    case TYPE::ISOURCE_RANDOM_NORMAL:  return { DEVICE_TYPE::ISOURCE,    "RANDOM_NORMAL",   "Random normal"              };
-    case TYPE::ISOURCE_RANDOM_EXP:     return { DEVICE_TYPE::ISOURCE,    "RANDOM_EXP",      "Random exponential"         };
-    case TYPE::ISOURCE_RANDOM_POISSON: return { DEVICE_TYPE::ISOURCE,    "RANDOM_POISSON",  "Random Poisson"             };
-    case TYPE::ISOURCE_BEHAVIORAL:     return { DEVICE_TYPE::ISOURCE,    "BEHAVIORAL",      "Behavioral"                 };
+    case TYPE::I_DC:                 return { DEVICE_TYPE::I,      "DC",             "DC",                        };
+    case TYPE::I_SIN:                return { DEVICE_TYPE::I,      "SIN",            "Sine"                       };
+    case TYPE::I_PULSE:              return { DEVICE_TYPE::I,      "PULSE",          "Pulse"                      };
+    case TYPE::I_EXP:                return { DEVICE_TYPE::I,      "EXP",            "Exponential"                };
+    case TYPE::I_SFAM:               return { DEVICE_TYPE::I,      "SFAM",           "Single-frequency AM"        };
+    case TYPE::I_SFFM:               return { DEVICE_TYPE::I,      "SFFM",           "Single-frequency FM"        };
+    case TYPE::I_PWL:                return { DEVICE_TYPE::I,      "PWL",            "Piecewise linear"           };
+    case TYPE::I_WHITENOISE:         return { DEVICE_TYPE::I,      "WHITENOISE",     "White Noise"                };
+    case TYPE::I_PINKNOISE:          return { DEVICE_TYPE::I,      "PINKNOISE",      "Pink Noise (1/f)"           };
+    case TYPE::I_BURSTNOISE:         return { DEVICE_TYPE::I,      "BURSTNOISE",     "Burst Noise"                };
+    case TYPE::I_RANDUNIFORM:        return { DEVICE_TYPE::I,      "RANDUNIFORM",    "Random uniform"             };
+    case TYPE::I_RANDNORMAL:         return { DEVICE_TYPE::I,      "RANDNORMAL",     "Random normal"              };
+    case TYPE::I_RANDEXP:            return { DEVICE_TYPE::I,      "RANDEXP",        "Random exponential"         };
+    case TYPE::I_RANDPOISSON:        return { DEVICE_TYPE::I,      "RANDPOISSON",    "Random Poisson"             };
+    case TYPE::I_BEHAVIORAL:         return { DEVICE_TYPE::I,      "=",              "Behavioral"                 };
 
-    case TYPE::SUBCIRCUIT:             return { DEVICE_TYPE::SUBCIRCUIT, "",                ""                           };
-    case TYPE::CODEMODEL:              return { DEVICE_TYPE::CODEMODEL,  "",                ""                           };
-    case TYPE::RAWSPICE:               return { DEVICE_TYPE::RAWSPICE,   "",                ""                           };
+    case TYPE::SUBCKT:               return { DEVICE_TYPE::SUBCKT, "",               ""                           };
+    case TYPE::XSPICE:               return { DEVICE_TYPE::XSPICE, "",               ""                           };
+    case TYPE::SPICE:                return { DEVICE_TYPE::SPICE,  "",               ""                           };
 
-    case TYPE::_ENUM_END:              break;
+    case TYPE::_ENUM_END:             break;
     }
 
     wxFAIL;
@@ -254,125 +252,127 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
 {
     switch( aType )
     {
-    case TYPE::RESISTOR_IDEAL:         return { "R", ""        };
-    case TYPE::RESISTOR_ADVANCED:      return { "R", "R"       };
-    case TYPE::RESISTOR_BEHAVIORAL:    return { "R", "",       "",        0,  true   };
+    case TYPE::R:                    return { "R", ""        };
+    case TYPE::R_ADV:                return { "R", "R"       };
+    case TYPE::R_BEHAVIORAL:         return { "R", "",       "",        0,  true   };
 
-    case TYPE::CAPACITOR_IDEAL:        return { "C", ""        };
-    case TYPE::CAPACITOR_ADVANCED:     return { "C", "C",      };
-    case TYPE::CAPACITOR_BEHAVIORAL:   return { "C", "",       "",        0,  true   };
+    case TYPE::C:                    return { "C", ""        };
+    case TYPE::C_ADV:                return { "C", "C",      };
+    case TYPE::C_BEHAVIORAL:         return { "C", "",       "",        0,  true   };
 
-    case TYPE::INDUCTOR_IDEAL:         return { "L", ""        };
-    case TYPE::INDUCTOR_ADVANCED:      return { "L", "L"       };
-    case TYPE::INDUCTOR_BEHAVIORAL:    return { "L", "",       "",        0,  true   };
+    case TYPE::L:                    return { "L", ""        };
+    case TYPE::L_ADV:                return { "L", "L"       };
+    case TYPE::L_BEHAVIORAL:         return { "L", "",       "",        0,  true   };
     
-    case TYPE::TLINE_LOSSY:            return { "O", "LTRA"    };
-    case TYPE::TLINE_LOSSLESS:         return { "T"  };
-    case TYPE::TLINE_UNIFORM_RC:       return { "U"  };
-    case TYPE::TLINE_KSPICE:           return { "Y"  };
+    case TYPE::TLINE_LOSSY:          return { "O", "LTRA"    };
+    case TYPE::TLINE_LOSSLESS:       return { "T"  };
+    case TYPE::TLINE_URC:            return { "U"  };
+    case TYPE::TLINE_KSPICE:         return { "Y"  };
     
-    case TYPE::SWITCH_VCTRL:           return { "S", "switch"  };
-    case TYPE::SWITCH_ICTRL:           return { "W", "cswitch" };
+    case TYPE::SW_V:                 return { "S", "switch"  };
+    case TYPE::SW_I:                 return { "W", "cswitch" };
 
-    case TYPE::DIODE:                  return { "D", "D"       };
+    case TYPE::D:                    return { "D", "D"       };
 
-    case TYPE::NPN_GUMMEL_POON:        return { "Q", "NPN",    "",        1   };
-    case TYPE::PNP_GUMMEL_POON:        return { "Q", "PNP",    "",        1   };
+    case TYPE::NPN_GUMMELPOON:       return { "Q", "NPN",    "",        1   };
+    case TYPE::PNP_GUMMELPOON:       return { "Q", "PNP",    "",        1   };
 
-    case TYPE::NPN_VBIC:               return { "Q", "NPN",    "",        4   };
-    case TYPE::PNP_VBIC:               return { "Q", "PNP",    "",        4   };
+    case TYPE::NPN_VBIC:             return { "Q", "NPN",    "",        4   };
+    case TYPE::PNP_VBIC:             return { "Q", "PNP",    "",        4   };
 
-    case TYPE::NPN_HICUM_L2:           return { "Q", "NPN",    "",        8   };
-    case TYPE::PNP_HICUM_L2:           return { "Q", "PNP",    "",        8   };
+    case TYPE::NPN_HICUML2:          return { "Q", "NPN",    "",        8   };
+    case TYPE::PNP_HICUML2:          return { "Q", "PNP",    "",        8   };
 
-    case TYPE::NJF_SHICHMAN_HODGES:    return { "M", "NJF",    "",        1   };
-    case TYPE::PJF_SHICHMAN_HODGES:    return { "M", "PJF",    "",        1   };
-    case TYPE::NJF_PARKER_SKELLERN:    return { "M", "NJF",    "",        2   };
-    case TYPE::PJF_PARKER_SKELLERN:    return { "M", "PJF",    "",        2   };
+    case TYPE::NJFET_SHICHMANHODGES: return { "M", "NJF",    "",        1   };
+    case TYPE::PJFET_SHICHMANHODGES: return { "M", "PJF",    "",        1   };
+    case TYPE::NJFET_PARKERSKELLERN: return { "M", "NJF",    "",        2   };
+    case TYPE::PJFET_PARKERSKELLERN: return { "M", "PJF",    "",        2   };
 
-    case TYPE::NMES_STATZ:             return { "Z", "NMF",    "",        1   };
-    case TYPE::PMES_STATZ:             return { "Z", "PMF",    "",        1   };
-    case TYPE::NMES_YTTERDAL:          return { "Z", "NMF",    "",        2   };
-    case TYPE::PMES_YTTERDAL:          return { "Z", "PMF",    "",        2   };
-    case TYPE::NMES_HFET1:             return { "Z", "NMF",    "",        5   };
-    case TYPE::PMES_HFET1:             return { "Z", "PMF",    "",        5   };
-    case TYPE::PMES_HFET2:             return { "Z", "NMF",    "",        6   };
-    case TYPE::NMES_HFET2:             return { "Z", "PMF",    "",        6   };
+    case TYPE::NMES_STATZ:           return { "Z", "NMF",    "",        1   };
+    case TYPE::PMES_STATZ:           return { "Z", "PMF",    "",        1   };
+    case TYPE::NMES_YTTERDAL:        return { "Z", "NMF",    "",        2   };
+    case TYPE::PMES_YTTERDAL:        return { "Z", "PMF",    "",        2   };
+    case TYPE::NMES_HFET1:           return { "Z", "NMF",    "",        5   };
+    case TYPE::PMES_HFET1:           return { "Z", "PMF",    "",        5   };
+    case TYPE::PMES_HFET2:           return { "Z", "NMF",    "",        6   };
+    case TYPE::NMES_HFET2:           return { "Z", "PMF",    "",        6   };
 
-    case TYPE::NMOS_MOS1:              return { "M", "NMOS",   "",        1   };
-    case TYPE::PMOS_MOS1:              return { "M", "PMOS",   "",        1   };
-    case TYPE::NMOS_MOS2:              return { "M", "NMOS",   "",        2   };
-    case TYPE::PMOS_MOS2:              return { "M", "PMOS",   "",        2   };
-    case TYPE::NMOS_MOS3:              return { "M", "NMOS",   "",        3   };
-    case TYPE::PMOS_MOS3:              return { "M", "PMOS",   "",        3   };
-    case TYPE::NMOS_BSIM1:             return { "M", "NMOS",   "",        4   };
-    case TYPE::PMOS_BSIM1:             return { "M", "PMOS",   "",        4   };
-    case TYPE::NMOS_BSIM2:             return { "M", "NMOS",   "",        5   };
-    case TYPE::PMOS_BSIM2:             return { "M", "PMOS",   "",        5   };
-    case TYPE::NMOS_MOS6:              return { "M", "NMOS",   "",        6   };
-    case TYPE::PMOS_MOS6:              return { "M", "PMOS",   "",        6   };
-    case TYPE::NMOS_BSIM3:             return { "M", "NMOS",   "",        8   };
-    case TYPE::PMOS_BSIM3:             return { "M", "PMOS",   "",        8   };
-    case TYPE::NMOS_MOS9:              return { "M", "NMOS",   "",        9   };
-    case TYPE::PMOS_MOS9:              return { "M", "PMOS",   "",        9   };
-    case TYPE::NMOS_B4SOI:             return { "M", "NMOS",   "",        10  };
-    case TYPE::PMOS_B4SOI:             return { "M", "PMOS",   "",        10  };
-    case TYPE::NMOS_BSIM4:             return { "M", "NMOS",   "",        14  };
-    case TYPE::PMOS_BSIM4:             return { "M", "PMOS",   "",        14  };
+    case TYPE::NMOS_MOS1:            return { "M", "NMOS",   "",        1   };
+    case TYPE::PMOS_MOS1:            return { "M", "PMOS",   "",        1   };
+    case TYPE::NMOS_MOS2:            return { "M", "NMOS",   "",        2   };
+    case TYPE::PMOS_MOS2:            return { "M", "PMOS",   "",        2   };
+    case TYPE::NMOS_MOS3:            return { "M", "NMOS",   "",        3   };
+    case TYPE::PMOS_MOS3:            return { "M", "PMOS",   "",        3   };
+    case TYPE::NMOS_BSIM1:           return { "M", "NMOS",   "",        4   };
+    case TYPE::PMOS_BSIM1:           return { "M", "PMOS",   "",        4   };
+    case TYPE::NMOS_BSIM2:           return { "M", "NMOS",   "",        5   };
+    case TYPE::PMOS_BSIM2:           return { "M", "PMOS",   "",        5   };
+    case TYPE::NMOS_MOS6:            return { "M", "NMOS",   "",        6   };
+    case TYPE::PMOS_MOS6:            return { "M", "PMOS",   "",        6   };
+    case TYPE::NMOS_BSIM3:           return { "M", "NMOS",   "",        8   };
+    case TYPE::PMOS_BSIM3:           return { "M", "PMOS",   "",        8   };
+    case TYPE::NMOS_MOS9:            return { "M", "NMOS",   "",        9   };
+    case TYPE::PMOS_MOS9:            return { "M", "PMOS",   "",        9   };
+    case TYPE::NMOS_B4SOI:           return { "M", "NMOS",   "",        10  };
+    case TYPE::PMOS_B4SOI:           return { "M", "PMOS",   "",        10  };
+    case TYPE::NMOS_BSIM4:           return { "M", "NMOS",   "",        14  };
+    case TYPE::PMOS_BSIM4:           return { "M", "PMOS",   "",        14  };
     //case TYPE::NMOS_EKV2_6:          return {};
     //case TYPE::PMOS_EKV2_6:          return {};
     //case TYPE::NMOS_PSP:             return {};
     //case TYPE::PMOS_PSP:             return {};
-    case TYPE::NMOS_B3SOIFD:           return { "M", "NMOS",   "",        55  };
-    case TYPE::PMOS_B3SOIFD:           return { "M", "PMOS",   "",        55  };
-    case TYPE::NMOS_B3SOIDD:           return { "M", "NMOS",   "",        56  };
-    case TYPE::PMOS_B3SOIDD:           return { "M", "PMOS",   "",        56  };
-    case TYPE::NMOS_B3SOIPD:           return { "M", "NMOS",   "",        57  };
-    case TYPE::PMOS_B3SOIPD:           return { "M", "PMOS",   "",        57  };
+    case TYPE::NMOS_B3SOIFD:         return { "M", "NMOS",   "",        55  };
+    case TYPE::PMOS_B3SOIFD:         return { "M", "PMOS",   "",        55  };
+    case TYPE::NMOS_B3SOIDD:         return { "M", "NMOS",   "",        56  };
+    case TYPE::PMOS_B3SOIDD:         return { "M", "PMOS",   "",        56  };
+    case TYPE::NMOS_B3SOIPD:         return { "M", "NMOS",   "",        57  };
+    case TYPE::PMOS_B3SOIPD:         return { "M", "PMOS",   "",        57  };
     //case TYPE::NMOS_STAG:            return {};
     //case TYPE::PMOS_STAG:            return {};
-    case TYPE::NMOS_HISIM2:            return { "M", "NMOS",   "",        68  };
-    case TYPE::PMOS_HISIM2:            return { "M", "PMOS",   "",        68  };
-    case TYPE::NMOS_HISIM_HV1:         return { "M", "NMOS",   "",        73, false, "1.2.4" };
-    case TYPE::PMOS_HISIM_HV1:         return { "M", "PMOS",   "",        73, false, "1.2.4" };
-    case TYPE::NMOS_HISIM_HV2:         return { "M", "NMOS",   "",        73, false, "2.2.0" };
-    case TYPE::PMOS_HISIM_HV2:         return { "M", "PMOS",   "",        73, false, "2.2.0" };
+    case TYPE::NMOS_HISIM2:          return { "M", "NMOS",   "",        68  };
+    case TYPE::PMOS_HISIM2:          return { "M", "PMOS",   "",        68  };
+    case TYPE::NMOS_HISIMHV1:        return { "M", "NMOS",   "",        73, false, "1.2.4" };
+    case TYPE::PMOS_HISIMHV1:        return { "M", "PMOS",   "",        73, false, "1.2.4" };
+    case TYPE::NMOS_HISIMHV2:        return { "M", "NMOS",   "",        73, false, "2.2.0" };
+    case TYPE::PMOS_HISIMHV2:        return { "M", "PMOS",   "",        73, false, "2.2.0" };
 
-    case TYPE::VSOURCE_PULSE:          return { "V", "",       "PULSE"    };
-    case TYPE::VSOURCE_SIN:            return { "V", "",       "SIN"      };
-    case TYPE::VSOURCE_EXP:            return { "V", "",       "EXP"      };
-    case TYPE::VSOURCE_SFAM:           return { "V", "",       "AM"       };
-    case TYPE::VSOURCE_SFFM:           return { "V", "",       "SFFM"     };
-    case TYPE::VSOURCE_PWL:            return { "V", "",       "PWL"      };
-    case TYPE::VSOURCE_WHITE_NOISE:    return { "V", "",       "TRNOISE"  };
-    case TYPE::VSOURCE_PINK_NOISE:     return { "V", "",       "TRNOISE"  };
-    case TYPE::VSOURCE_BURST_NOISE:    return { "V", "",       "TRNOISE"  };
-    case TYPE::VSOURCE_RANDOM_UNIFORM: return { "V", "",       "TRRANDOM" };
-    case TYPE::VSOURCE_RANDOM_NORMAL:  return { "V", "",       "TRRANDOM" };
-    case TYPE::VSOURCE_RANDOM_EXP:     return { "V", "",       "TRRANDOM" };
-    case TYPE::VSOURCE_RANDOM_POISSON: return { "V", "",       "TRRANDOM" };
-    case TYPE::VSOURCE_BEHAVIORAL:     return { "B"  };
+    case TYPE::V_DC:                 return { "V", ""        };
+    case TYPE::V_SIN:                return { "V", "",       "SIN"      };
+    case TYPE::V_PULSE:              return { "V", "",       "PULSE"    };
+    case TYPE::V_EXP:                return { "V", "",       "EXP"      };
+    case TYPE::V_SFAM:               return { "V", "",       "AM"       };
+    case TYPE::V_SFFM:               return { "V", "",       "SFFM"     };
+    case TYPE::V_PWL:                return { "V", "",       "PWL"      };
+    case TYPE::V_WHITENOISE:         return { "V", "",       "TRNOISE"  };
+    case TYPE::V_PINKNOISE:          return { "V", "",       "TRNOISE"  };
+    case TYPE::V_BURSTNOISE:         return { "V", "",       "TRNOISE"  };
+    case TYPE::V_RANDUNIFORM:        return { "V", "",       "TRRANDOM" };
+    case TYPE::V_RANDNORMAL:         return { "V", "",       "TRRANDOM" };
+    case TYPE::V_RANDEXP:            return { "V", "",       "TRRANDOM" };
+    case TYPE::V_RANDPOISSON:        return { "V", "",       "TRRANDOM" };
+    case TYPE::V_BEHAVIORAL:         return { "B"  };
 
-    case TYPE::ISOURCE_PULSE:          return { "V", "",       "PULSE"    };
-    case TYPE::ISOURCE_SIN:            return { "V", "",       "SIN"      };
-    case TYPE::ISOURCE_EXP:            return { "V", "",       "EXP"      };
-    case TYPE::ISOURCE_SFAM:           return { "V", "",       "AM"       };
-    case TYPE::ISOURCE_SFFM:           return { "V", "",       "SFFM"     };
-    case TYPE::ISOURCE_PWL:            return { "V", "",       "PWL"      };
-    case TYPE::ISOURCE_WHITE_NOISE:    return { "V", "",       "TRNOISE"  };
-    case TYPE::ISOURCE_PINK_NOISE:     return { "V", "",       "TRNOISE"  };
-    case TYPE::ISOURCE_BURST_NOISE:    return { "V", "",       "TRNOISE"  };
-    case TYPE::ISOURCE_RANDOM_UNIFORM: return { "V", "",       "TRRANDOM" };
-    case TYPE::ISOURCE_RANDOM_NORMAL:  return { "V", "",       "TRRANDOM" };
-    case TYPE::ISOURCE_RANDOM_EXP:     return { "V", "",       "TRRANDOM" };
-    case TYPE::ISOURCE_RANDOM_POISSON: return { "V", "",       "TRRANDOM" };
-    case TYPE::ISOURCE_BEHAVIORAL:     return { "B"  };
+    case TYPE::I_DC:                 return { "V", ""        };
+    case TYPE::I_PULSE:              return { "V", "",       "PULSE"    };
+    case TYPE::I_SIN:                return { "V", "",       "SIN"      };
+    case TYPE::I_EXP:                return { "V", "",       "EXP"      };
+    case TYPE::I_SFAM:               return { "V", "",       "AM"       };
+    case TYPE::I_SFFM:               return { "V", "",       "SFFM"     };
+    case TYPE::I_PWL:                return { "V", "",       "PWL"      };
+    case TYPE::I_WHITENOISE:         return { "V", "",       "TRNOISE"  };
+    case TYPE::I_PINKNOISE:          return { "V", "",       "TRNOISE"  };
+    case TYPE::I_BURSTNOISE:         return { "V", "",       "TRNOISE"  };
+    case TYPE::I_RANDUNIFORM:        return { "V", "",       "TRRANDOM" };
+    case TYPE::I_RANDNORMAL:         return { "V", "",       "TRRANDOM" };
+    case TYPE::I_RANDEXP:            return { "V", "",       "TRRANDOM" };
+    case TYPE::I_RANDPOISSON:        return { "V", "",       "TRRANDOM" };
+    case TYPE::I_BEHAVIORAL:         return { "B"  };
 
-    case TYPE::SUBCIRCUIT:             return { "X"  };
-    case TYPE::CODEMODEL:              return { "A"  };
+    case TYPE::SUBCKT:               return { "X"  };
+    case TYPE::XSPICE:               return { "A"  };
 
     case TYPE::NONE:
-    case TYPE::RAWSPICE:
+    case TYPE::SPICE:
         return {};
 
     case TYPE::_ENUM_END:
@@ -386,7 +386,7 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
 
 TYPE SIM_MODEL::ReadTypeFromSpiceCode( const std::string& aSpiceCode )
 {
-    tao::pegtl::string_input<> in( aSpiceCode, "from_input" );
+    tao::pegtl::string_input<> in( aSpiceCode, "from_content" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
     try
@@ -395,10 +395,10 @@ TYPE SIM_MODEL::ReadTypeFromSpiceCode( const std::string& aSpiceCode )
                                              SIM_MODEL_PARSER::spiceUnitSelector>
             ( in );
     }
-    catch( tao::pegtl::parse_error& e )
+    catch( const tao::pegtl::parse_error& e )
     {
-        throw KI_PARAM_ERROR( wxString::Format( _( "Failed to parse '%s': %s" ), aSpiceCode,
-                                                e.what() ) );
+        // TODO: Maybe announce an error somehow?
+        return TYPE::NONE;
     }
 
     wxASSERT( root );
@@ -423,7 +423,7 @@ TYPE SIM_MODEL::ReadTypeFromSpiceCode( const std::string& aSpiceCode )
             }
         }
         else if( node->is_type<SIM_MODEL_PARSER::dotSubckt>() )
-            return TYPE::SUBCIRCUIT;
+            return TYPE::SUBCKT;
         else
         {
             wxFAIL_MSG( "Unhandled parse tree node" );
@@ -444,27 +444,33 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields )
 {
     wxString typeFieldValue = GetFieldValue( &aFields, TYPE_FIELD );
     wxString deviceTypeFieldValue = GetFieldValue( &aFields, DEVICE_TYPE_FIELD );
-    bool typeFound = false;
 
-    for( TYPE type : TYPE_ITERATOR() )
+    if( !typeFieldValue.IsEmpty() )
     {
-        if( typeFieldValue == TypeInfo( type ).fieldValue )
+        for( TYPE type : TYPE_ITERATOR() )
         {
-            typeFound = true;
-
-            if( deviceTypeFieldValue == DeviceTypeInfo( TypeInfo( type ).deviceType ).fieldValue )
-                return type;
+            if( typeFieldValue == TypeInfo( type ).fieldValue )
+            {
+                if( deviceTypeFieldValue == DeviceTypeInfo( TypeInfo( type ).deviceType ).fieldValue )
+                    return type;
+            }
         }
+
+        return TYPE::NONE;
     }
 
-    // TODO: Return TYPE::NONE instead of throwing an exception.
+    // No type information. For passives we infer the model from the mandatory fields in this case.
 
-    if( !typeFound )
-        throw KI_PARAM_ERROR( wxString::Format( _( "Invalid '%s' field value: '%s'" ),
-                                                TYPE_FIELD, typeFieldValue ) );
+    wxString ref = GetFieldValue( &aFields, REFERENCE_FIELD );
 
-    throw KI_PARAM_ERROR( wxString::Format( _( "Invalid '%s' field value: '%s'" ),
-                                            DEVICE_TYPE_FIELD, deviceTypeFieldValue ) );
+    if( ref.StartsWith( "R" ) )
+        return TYPE::R;
+    else if( ref.StartsWith( "C" ) )
+        return TYPE::C;
+    else if( ref.StartsWith( "L" ) )
+        return TYPE::L;
+
+    return TYPE::NONE;
 }
 
 
@@ -485,7 +491,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::string& aSpiceCode )
     if( !model->ReadSpiceCode( aSpiceCode ) )
     {
         // Demote to raw Spice element and try again.
-        std::unique_ptr<SIM_MODEL> rawSpiceModel = create( TYPE::RAWSPICE );
+        std::unique_ptr<SIM_MODEL> rawSpiceModel = create( TYPE::SPICE );
 
         rawSpiceModel->ReadSpiceCode( aSpiceCode );
         return rawSpiceModel;
@@ -495,11 +501,22 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::string& aSpiceCode )
 }
 
 
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel )
+template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
+                                                       int aSymbolPinCount,
+                                                       const std::vector<SCH_FIELD>& aFields );
+
+template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
+                                                       int aSymbolPinCount,
+                                                       const std::vector<LIB_FIELD>& aFields );
+
+template <typename T>
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel, int aSymbolPinCount,
+                                              const std::vector<T>& aFields )
 {
     std::unique_ptr<SIM_MODEL> model = create( aBaseModel.GetType() );
 
     model->SetBaseModel( aBaseModel );
+    model->ReadDataFields( aSymbolPinCount, &aFields );
     return model;
 }
 
@@ -592,7 +609,7 @@ bool SIM_MODEL::ReadSpiceCode( const std::string& aSpiceCode )
     // The default behavior is to treat the Spice param=value pairs as the model parameters and
     // values (for many models the correspondence is not exact, so this function is overridden).
     
-    tao::pegtl::string_input<> in( aSpiceCode, "from_input" );
+    tao::pegtl::string_input<> in( aSpiceCode, "from_content" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
     
     try
@@ -609,13 +626,9 @@ bool SIM_MODEL::ReadSpiceCode( const std::string& aSpiceCode )
 
     wxASSERT( root );
 
-    std::cout << "BEGIN" << std::endl; // DEBUG TRACE
-
     for( const auto& node : root->children )
     {
-        std::cout << "node: " << node->string() << std::endl; // DEBUG TRACE
-        if( node->is_type<SIM_MODEL_PARSER::dotModel>()
-            || node->is_type<SIM_MODEL_PARSER::dotSubckt>() )
+        if( node->is_type<SIM_MODEL_PARSER::dotModel>() )
         {
             wxString paramName = "";
 
@@ -633,10 +646,13 @@ bool SIM_MODEL::ReadSpiceCode( const std::string& aSpiceCode )
                 {
                     paramName = subnode->string();
                 }
-                // TODO: Do something with number<SIM_VALUE_BASE::TYPE::INT, ...>.
+                // TODO: Do something with number<SIM_VALUE::TYPE::INT, ...>.
                 // It doesn't seem too useful?
                 else if( subnode->is_type<
-                        SIM_MODEL_PARSER::number<SIM_VALUE_BASE::TYPE::FLOAT,
+                        SIM_MODEL_PARSER::number<SIM_VALUE::TYPE::INT,
+                                                 SIM_MODEL_PARSER::NOTATION::SPICE>>()
+                    || subnode->is_type<
+                        SIM_MODEL_PARSER::number<SIM_VALUE::TYPE::FLOAT,
                                                  SIM_MODEL_PARSER::NOTATION::SPICE>>() )
                 {
                     wxASSERT( !paramName.IsEmpty() );
@@ -657,8 +673,6 @@ bool SIM_MODEL::ReadSpiceCode( const std::string& aSpiceCode )
             return false;
         }
     }
-
-    std::cout << "END" << std::endl; // DEBUG TRACE
 
     m_spiceCode = aSpiceCode;
     return true;
@@ -724,24 +738,17 @@ void SIM_MODEL::WriteDataLibFields( std::vector<LIB_FIELD>& aFields )
 }
 
 
-wxString SIM_MODEL::GenerateSpiceIncludeLine( const wxString& aLibraryFilename ) const
-{
-    LOCALE_IO toggle;
-
-    if( GetBaseModel() && !HasOverrides() )
-        return wxString::Format( ".include \"%s\"\n", aLibraryFilename );
-
-    return "";
-}
-
-
 wxString SIM_MODEL::GenerateSpiceModelLine( const wxString& aModelName ) const
 {
     LOCALE_IO toggle;
+
+    if( !HasOverrides() )
+        return "";
+
     wxString result = "";
     wxString line = "";
 
-    line << wxString::Format( ".model %s %s(\n+", aModelName, GetSpiceInfo().typeString );
+    line << wxString::Format( ".model %s %s(\n+", aModelName, GetSpiceInfo().modelType );
 
     for( int paramIndex = 0; paramIndex < GetParamCount(); ++paramIndex )
     {
@@ -751,12 +758,7 @@ wxString SIM_MODEL::GenerateSpiceModelLine( const wxString& aModelName ) const
         if( valueStr.IsEmpty() )
             continue;
         
-        wxString append = "";
-
-        append << " ";
-        append << param.info.name;
-        append << "=";
-        append << param.value->ToString();
+        wxString append = " " + param.info.name + "=" + param.value->ToString();
 
         if( line.Length() + append.Length() > 60 )
         {
@@ -772,9 +774,12 @@ wxString SIM_MODEL::GenerateSpiceModelLine( const wxString& aModelName ) const
 }
 
 
-SIM_MODEL::SPICE_INFO SIM_MODEL::GetSpiceInfo() const
+wxString SIM_MODEL::GenerateSpiceItemName( const wxString& aRefName ) const
 {
-    return SpiceInfo( GetType() );
+    if( !aRefName.IsEmpty() && aRefName.StartsWith( GetSpiceInfo().primitive ) )
+        return aRefName;
+    else
+        return GetSpiceInfo().primitive + aRefName;
 }
 
 
@@ -790,18 +795,38 @@ wxString SIM_MODEL::GenerateSpiceItemLine( const wxString& aRefName,
                                            const std::vector<wxString>& aPinNetNames ) const
 {
     wxString result = "";
+    result << GenerateSpiceItemName( aRefName ) << " ";
 
-    if( aRefName.Length() >= 1 && aRefName.StartsWith( GetSpiceInfo().itemType ) )
-        result << aRefName << " ";
-    else
-        result << GetSpiceInfo().itemType << aRefName << " ";
+    for( int i = 0; i < GetPinCount(); ++i )
+    {
+        for( int j = 0; j < ( int ) aPinNetNames.size(); ++j )
+        {
+            int symbolPinNumber = j + 1;
 
-    for( const wxString& pinNetName : aPinNetNames )
-        result << pinNetName << " ";
+            if( symbolPinNumber == GetPin( i ).symbolPinNumber )
+                result << aPinNetNames[j] << " ";
+        }
+    }
 
-    result << aModelName;
+    result << aModelName << " ";
 
+    for( int i = 0; i < GetParamCount(); ++i )
+    {
+        const PARAM& param = GetParam( i );
+
+        if( param.info.isInstanceParam )
+            result << param.info.name << "=" << param.value->ToString() << " ";
+    }
+
+    result << "\n";
     return result;
+}
+
+
+wxString SIM_MODEL::GenerateSpiceTuningLine( const wxString& aSymbol ) const
+{
+    // TODO.
+    return "";
 }
 
 
@@ -819,6 +844,85 @@ wxString SIM_MODEL::GenerateSpicePreview( const wxString& aModelName ) const
         return modelLine;
 
     return GenerateSpiceItemLine( "", aModelName );
+}
+
+
+SIM_MODEL::SPICE_INFO SIM_MODEL::GetSpiceInfo() const
+{
+    return SpiceInfo( GetType() );
+}
+
+
+std::vector<wxString> SIM_MODEL::GenerateSpiceCurrentNames( const wxString& aRefName ) const
+{
+    LOCALE_IO toggle;
+    return { wxString::Format( "I(%s)", GenerateSpiceItemName( aRefName ) ) };
+}
+
+
+bool SIM_MODEL::ParsePinsField( int aSymbolPinCount, const wxString& aPinsField )
+{
+    // Default pin sequence: model pins are the same as symbol pins.
+    // Excess model pins are set as Not Connected.
+    for( int i = 0; i < static_cast<int>( getPinNames().size() ); ++i )
+    {
+        if( i < aSymbolPinCount )
+            AddPin( { getPinNames().at( i ), i + 1 } );
+        else
+            AddPin( { getPinNames().at( i ), PIN::NOT_CONNECTED } );
+    }
+
+    if( aPinsField.IsEmpty() )
+        return true;
+
+    LOCALE_IO toggle;
+
+    tao::pegtl::string_input<> in( aPinsField.ToStdString(), "from_content" );
+    std::unique_ptr<tao::pegtl::parse_tree::node> root;
+
+    try
+    {
+        root = tao::pegtl::parse_tree::parse<SIM_MODEL_PARSER::pinSequenceGrammar,
+                                             SIM_MODEL_PARSER::pinSequenceSelector>( in );
+    }
+    catch( const tao::pegtl::parse_error& e )
+    {
+        return false;
+    }
+
+    wxASSERT( root );
+
+    if( static_cast<int>( root->children.size() ) != GetPinCount() )
+        return false;
+
+    for( unsigned int i = 0; i < root->children.size(); ++i )
+    {
+        if( root->children.at( i )->string() == "X" )
+            SetPinSymbolPinNumber( static_cast<int>( i ), PIN::NOT_CONNECTED );
+        else
+            SetPinSymbolPinNumber( static_cast<int>( i ),
+                                   std::stoi( root->children.at( i )->string() ) );
+    }
+
+    return true;
+}
+
+
+void SIM_MODEL::AddPin( const PIN& aPin )
+{
+    m_pins.push_back( aPin );
+}
+
+
+int SIM_MODEL::FindModelPinNumber( int aSymbolPinNumber )
+{
+    for( int i = 0; i < GetPinCount(); ++i )
+    {
+        if( GetPin( i ).symbolPinNumber == aSymbolPinNumber )
+            return i + 1;
+    }
+
+    return 0;
 }
 
 
@@ -852,14 +956,14 @@ const SIM_MODEL::PARAM& SIM_MODEL::GetBaseParam( int aParamIndex ) const
 }
 
 
-bool SIM_MODEL::SetParamValue( int aParamIndex, const wxString& aValue )
+bool SIM_MODEL::SetParamValue( int aParamIndex, const wxString& aValue,
+                               SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
     // Models sourced from a library are immutable.
     if( !m_spiceCode.IsEmpty() )
         return false;
 
-    m_params.at( aParamIndex ).value->FromString( aValue );
-    return true;
+    return m_params.at( aParamIndex ).value->FromString( aValue, aNotation );
 }
 
 
@@ -899,53 +1003,55 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::create( TYPE aType )
 {
     switch( aType )
     {
-    case TYPE::RESISTOR_IDEAL:
-    case TYPE::CAPACITOR_IDEAL:
-    case TYPE::INDUCTOR_IDEAL:
+    case TYPE::R:
+    case TYPE::C:
+    case TYPE::L:
         return std::make_unique<SIM_MODEL_IDEAL>( aType );
 
-    case TYPE::RESISTOR_BEHAVIORAL:
-    case TYPE::CAPACITOR_BEHAVIORAL:
-    case TYPE::INDUCTOR_BEHAVIORAL:
-    case TYPE::VSOURCE_BEHAVIORAL:
-    case TYPE::ISOURCE_BEHAVIORAL:
+    case TYPE::R_BEHAVIORAL:
+    case TYPE::C_BEHAVIORAL:
+    case TYPE::L_BEHAVIORAL:
+    case TYPE::V_BEHAVIORAL:
+    case TYPE::I_BEHAVIORAL:
         return std::make_unique<SIM_MODEL_BEHAVIORAL>( aType );
 
-    case TYPE::VSOURCE_PULSE:
-    case TYPE::ISOURCE_PULSE:
-    case TYPE::VSOURCE_SIN:
-    case TYPE::ISOURCE_SIN:
-    case TYPE::VSOURCE_EXP:
-    case TYPE::ISOURCE_EXP:
-    case TYPE::VSOURCE_SFAM:
-    case TYPE::ISOURCE_SFAM:
-    case TYPE::VSOURCE_SFFM:
-    case TYPE::ISOURCE_SFFM:
-    case TYPE::VSOURCE_PWL:
-    case TYPE::ISOURCE_PWL:
-    case TYPE::VSOURCE_WHITE_NOISE:
-    case TYPE::ISOURCE_WHITE_NOISE:
-    case TYPE::VSOURCE_PINK_NOISE:
-    case TYPE::ISOURCE_PINK_NOISE:
-    case TYPE::VSOURCE_BURST_NOISE:
-    case TYPE::ISOURCE_BURST_NOISE:
-    case TYPE::VSOURCE_RANDOM_UNIFORM:
-    case TYPE::ISOURCE_RANDOM_UNIFORM:
-    case TYPE::VSOURCE_RANDOM_NORMAL:
-    case TYPE::ISOURCE_RANDOM_NORMAL:
-    case TYPE::VSOURCE_RANDOM_EXP:
-    case TYPE::ISOURCE_RANDOM_EXP:
-    case TYPE::VSOURCE_RANDOM_POISSON:
-    case TYPE::ISOURCE_RANDOM_POISSON:
+    case TYPE::V_DC:
+    case TYPE::I_DC:
+    case TYPE::V_SIN:
+    case TYPE::I_SIN:
+    case TYPE::V_PULSE:
+    case TYPE::I_PULSE:
+    case TYPE::V_EXP:
+    case TYPE::I_EXP:
+    case TYPE::V_SFAM:
+    case TYPE::I_SFAM:
+    case TYPE::V_SFFM:
+    case TYPE::I_SFFM:
+    case TYPE::V_PWL:
+    case TYPE::I_PWL:
+    case TYPE::V_WHITENOISE:
+    case TYPE::I_WHITENOISE:
+    case TYPE::V_PINKNOISE:
+    case TYPE::I_PINKNOISE:
+    case TYPE::V_BURSTNOISE:
+    case TYPE::I_BURSTNOISE:
+    case TYPE::V_RANDUNIFORM:
+    case TYPE::I_RANDUNIFORM:
+    case TYPE::V_RANDNORMAL:
+    case TYPE::I_RANDNORMAL:
+    case TYPE::V_RANDEXP:
+    case TYPE::I_RANDEXP:
+    case TYPE::V_RANDPOISSON:
+    case TYPE::I_RANDPOISSON:
         return std::make_unique<SIM_MODEL_SOURCE>( aType );
 
-    case TYPE::SUBCIRCUIT:
-        return std::make_unique<SIM_MODEL_SUBCIRCUIT>( aType );
+    case TYPE::SUBCKT:
+        return std::make_unique<SIM_MODEL_SUBCKT>( aType );
 
-    case TYPE::CODEMODEL:
-        return std::make_unique<SIM_MODEL_CODEMODEL>( aType );
+    case TYPE::XSPICE:
+        return std::make_unique<SIM_MODEL_XSPICE>( aType );
 
-    case TYPE::RAWSPICE:
+    case TYPE::SPICE:
         return std::make_unique<SIM_MODEL_RAWSPICE>( aType );
 
     default:
@@ -958,20 +1064,20 @@ TYPE SIM_MODEL::readTypeFromSpiceTypeString( const std::string& aTypeString )
 {
     for( TYPE type : TYPE_ITERATOR() )
     {
-        if( SpiceInfo( type ).typeString == aTypeString )
+        if( SpiceInfo( type ).modelType == aTypeString )
             return type;
     }
 
-    // If the type string is not recognized, demote to raw Spice element. This way the user won't
+    // If the type string is not recognized, demote to a raw Spice element. This way the user won't
     // have an error if there is a type KiCad does not recognize.
-    return TYPE::RAWSPICE;
+    return TYPE::SPICE;
 }
 
 
 template <typename T>
 void SIM_MODEL::doReadDataFields( int aSymbolPinCount, const std::vector<T>* aFields )
 {
-    parsePinsField( aSymbolPinCount, GetFieldValue( aFields, PINS_FIELD ) );
+    ParsePinsField( aSymbolPinCount, GetFieldValue( aFields, PINS_FIELD ) );
     parseParamsField( GetFieldValue( aFields, PARAMS_FIELD ) );
 }
 
@@ -1020,55 +1126,6 @@ wxString SIM_MODEL::generatePinsField() const
 }
 
 
-void SIM_MODEL::parsePinsField( int aSymbolPinCount, const wxString& aPinsField )
-{
-    // Default pin sequence: model pins are the same as symbol pins.
-    // Excess model pins are set as Not Connected.
-    for( int i = 0; i < static_cast<int>( getPinNames().size() ); ++i )
-    {
-        if( i < aSymbolPinCount )
-            m_pins.push_back( { i + 1, getPinNames().at( i ) } );
-        else
-            m_pins.push_back( { PIN::NOT_CONNECTED, getPinNames().at( i ) } );
-    }
-
-    if( aPinsField.IsEmpty() )
-        return;
-
-    LOCALE_IO toggle;
-
-    tao::pegtl::string_input<> in( aPinsField.ToStdString(), "from_input" );
-    std::unique_ptr<tao::pegtl::parse_tree::node> root;
-
-    try
-    {
-        root = tao::pegtl::parse_tree::parse<SIM_MODEL_PARSER::pinSequenceGrammar,
-                                             SIM_MODEL_PARSER::pinSequenceSelector>( in );
-    }
-    catch( tao::pegtl::parse_error& e )
-    {
-        throw KI_PARAM_ERROR( wxString::Format( _( "Failed to parse model pin sequence: %s" ),
-                                                e.what() ) );
-    }
-
-    wxASSERT( root );
-
-    if( static_cast<int>( root->children.size() ) != GetPinCount() )
-        throw KI_PARAM_ERROR( wxString::Format(
-                              _( "The model pin sequence has a different number of values (%d) "
-                                 "than the number of model pins (%d)" ) ) );
-
-    for( unsigned int i = 0; i < root->children.size(); ++i )
-    {
-        if( root->children.at( i )->string() == "X" )
-            SetPinSymbolPinNumber( static_cast<int>( i ), PIN::NOT_CONNECTED );
-        else
-            SetPinSymbolPinNumber( static_cast<int>( i ),
-                                   std::stoi( root->children.at( i )->string() ) );
-    }
-}
-
-
 wxString SIM_MODEL::generateParamsField( const wxString& aPairSeparator ) const
 {
     bool isFirst = true;
@@ -1095,11 +1152,11 @@ wxString SIM_MODEL::generateParamsField( const wxString& aPairSeparator ) const
 }
 
 
-void SIM_MODEL::parseParamsField( const wxString& aParamsField )
+bool SIM_MODEL::parseParamsField( const wxString& aParamsField )
 {
     LOCALE_IO toggle;
     
-    tao::pegtl::string_input<> in( aParamsField.ToStdString(), "from_input" );
+    tao::pegtl::string_input<> in( aParamsField.ToStdString(), "from_content" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
     try
@@ -1111,10 +1168,9 @@ void SIM_MODEL::parseParamsField( const wxString& aParamsField )
             SIM_MODEL_PARSER::paramValuePairsSelector>
                 ( in );
     }
-    catch( tao::pegtl::parse_error& e )
+    catch( const tao::pegtl::parse_error& e )
     {
-        throw KI_PARAM_ERROR( wxString::Format( _( "Failed to parse model parameters: %s" ),
-                                                e.what() ) );
+        return false;
     }
 
     wxASSERT( root );
@@ -1125,25 +1181,28 @@ void SIM_MODEL::parseParamsField( const wxString& aParamsField )
     {
         if( node->is_type<SIM_MODEL_PARSER::param>() )
             paramName = node->string();
-        // TODO: Do something with number<SIM_VALUE_BASE::TYPE::INT, ...>.
+        // TODO: Do something with number<SIM_VALUE::TYPE::INT, ...>.
         // It doesn't seem too useful?
-        else if( node->is_type<SIM_MODEL_PARSER::number<SIM_VALUE_BASE::TYPE::FLOAT,
+        else if( node->is_type<SIM_MODEL_PARSER::number<SIM_VALUE::TYPE::FLOAT,
                                                         SIM_MODEL_PARSER::NOTATION::SI>>() )
         {
             wxASSERT( !paramName.IsEmpty() );
             // TODO: Shouldn't be named "...fromSpiceCode" here...
-            setParamFromSpiceCode( paramName, node->string() );
+            setParamFromSpiceCode( paramName, node->string(), SIM_VALUE_GRAMMAR::NOTATION::SI );
         }
         else
         {
             wxFAIL;
-            return;
+            return false;
         }
     }
+
+    return true;
 }
 
 
-bool SIM_MODEL::setParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue )
+bool SIM_MODEL::setParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
+                                       SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
     int i = 0;
 
@@ -1156,15 +1215,5 @@ bool SIM_MODEL::setParamFromSpiceCode( const wxString& aParamName, const wxStrin
     if( i == GetParamCount() )
         return false; // No parameter with this name exists.
 
-    try
-    {
-        SetParamValue( i, wxString( aParamValue ) );
-    }
-    catch( KI_PARAM_ERROR& e )
-    {
-        m_params.clear();
-        return false;
-    }
-
-    return true;
+    return SetParamValue( i, wxString( aParamValue ), aNotation );
 }

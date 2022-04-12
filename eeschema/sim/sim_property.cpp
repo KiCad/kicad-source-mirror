@@ -37,7 +37,7 @@ wxBEGIN_EVENT_TABLE( SIM_VALIDATOR, wxValidator )
 wxEND_EVENT_TABLE()
 
 
-SIM_VALIDATOR::SIM_VALIDATOR( SIM_VALUE_BASE::TYPE aValueType,
+SIM_VALIDATOR::SIM_VALIDATOR( SIM_VALUE::TYPE aValueType,
                               SIM_VALUE_GRAMMAR::NOTATION aNotation )
     : wxValidator(),
       m_valueType( aValueType ),
@@ -154,7 +154,7 @@ SIM_PROPERTY::SIM_PROPERTY( const wxString& aLabel, const wxString& aName,
                             std::shared_ptr<SIM_LIBRARY> aLibrary,
                             std::shared_ptr<SIM_MODEL> aModel,
                             int aParamIndex,
-                            SIM_VALUE_BASE::TYPE aValueType,
+                            SIM_VALUE::TYPE aValueType,
                             SIM_VALUE_GRAMMAR::NOTATION aNotation )
     : wxStringProperty( aLabel, aName ),
       m_valueType( aValueType ),
@@ -175,26 +175,23 @@ wxValidator* SIM_PROPERTY::DoGetValidator() const
 
 bool SIM_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aText, int aArgFlags ) const
 {
-    try
-    {
-        wxString paramValueStr = m_model->GetBaseParam( m_paramIndex ).value->ToString();
+    wxString paramValueStr = m_model->GetBaseParam( m_paramIndex ).value->ToString();
+    aVariant = aText;
 
-        // TODO: Don't use string comparison.
-        if( m_model->GetBaseModel() && ( aText.IsEmpty() || aText == paramValueStr ) )
-        {
-            m_model->SetParamValue( m_paramIndex, "" ); // Nullify.
-            aVariant = paramValueStr; // Use the inherited value (if it exists) if null.
-        }
-        else
-        {
-            m_model->SetParamValue( m_paramIndex, aText );
-            aVariant = GetParam().value->ToString();
-        }
-    }
-    catch( KI_PARAM_ERROR& e )
+    // TODO: Don't use string comparison.
+    if( m_model->GetBaseModel() && ( aText.IsEmpty() || aText == paramValueStr ) )
     {
-        aVariant = aText;
-        return false;
+        if( !m_model->SetParamValue( m_paramIndex, "" ) ) // Nullify.
+            return false;
+
+        aVariant = paramValueStr; // Use the inherited value (if it exists) if null.
+    }
+    else
+    {
+        if( !m_model->SetParamValue( m_paramIndex, aText ) )
+            return false;
+
+        aVariant = GetParam().value->ToString();
     }
 
     return true;

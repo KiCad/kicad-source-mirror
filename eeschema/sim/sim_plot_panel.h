@@ -94,8 +94,8 @@ private:
 class TRACE : public mpFXYVector
 {
 public:
-    TRACE( const wxString& aName, SIM_PLOT_TYPE aType, const wxString& aParam ) :
-            mpFXYVector( aName ), m_cursor( nullptr ), m_type( aType ), m_param( aParam )
+    TRACE( const wxString& aName, SIM_PLOT_TYPE aType ) :
+            mpFXYVector( aName ), m_cursor( nullptr ), m_type( aType )
     {
         SetContinuity( true );
         SetDrawOutsideMargins( false );
@@ -291,7 +291,7 @@ public:
 
 protected:
     bool addTrace( const wxString& aTitle, const wxString& aName, int aPoints, const double* aX,
-                   const double* aY, SIM_PLOT_TYPE aType, const wxString& aParam );
+                   const double* aY, SIM_PLOT_TYPE aType );
 
     bool deleteTrace( const wxString& aName );
 

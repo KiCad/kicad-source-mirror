@@ -35,7 +35,7 @@
 #include <string_utils.h>
 
 #ifdef KICAD_SPICE
-#include <dialog_spice_model.h>
+#include <dialog_sim_model.h>
 #endif /* KICAD_SPICE */
 
 #include <dialog_lib_symbol_properties.h>
@@ -609,7 +609,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
     int diff = m_fields->size();
     auto symbol = SCH_SYMBOL( *m_libEntry, m_libEntry->GetLibId(), nullptr, 0 );
 
-    DIALOG_SPICE_MODEL dialog( this, symbol, *m_fields );
+    DIALOG_SIM_MODEL dialog( this, symbol, *m_fields );
 
     if( dialog.ShowModal() != wxID_OK )
         return;

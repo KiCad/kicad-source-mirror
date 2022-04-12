@@ -189,7 +189,9 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_SYMBO
     m_changed( false ),
     m_frame ( aFrame )
 {
-    const wxString compName = aSymbol->GetField( REFERENCE_FIELD )->GetText();
+    // TODO.
+
+    /*const wxString compName = aSymbol->GetField( REFERENCE_FIELD )->GetText();
     m_name->SetLabel( compName );
     m_spiceTuningCommand = aFrame->GetExporter()->GetSpiceTuningCommand( compName );
 
@@ -206,8 +208,8 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_SYMBO
     else
     {
         // instance parameter
-        if( aSymbol->FindField( NETLIST_EXPORTER_PSPICE::GetSpiceFieldName( SF_MODEL ) ) )
-            m_fieldId = aSymbol->FindField( NETLIST_EXPORTER_PSPICE::GetSpiceFieldName( SF_MODEL ) )->GetId();
+        if( aSymbol->FindField( netlist_exporter_spice::GetSpiceFieldName( SF_MODEL ) ) )
+            m_fieldId = aSymbol->FindField( netlist_exporter_spice::GetSpiceFieldName( SF_MODEL ) )->GetId();
         else
             m_fieldId = aSymbol->GetField( VALUE_FIELD )->GetId();
 
@@ -224,7 +226,7 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_SYMBO
     updateSlider();
 
     m_simTimer.SetOwner( this );
-    Connect( wxEVT_TIMER, wxTimerEventHandler( TUNER_SLIDER::onSimTimer ), nullptr, this );
+    Connect( wxEVT_TIMER, wxTimerEventHandler( TUNER_SLIDER::onSimTimer ), nullptr, this );*/
 }
 
 

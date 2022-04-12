@@ -37,20 +37,14 @@ SIM_MODEL_BEHAVIORAL::SIM_MODEL_BEHAVIORAL( TYPE aType )
 
     switch( aType )
     {
-    case TYPE::RESISTOR_BEHAVIORAL:  AddParam( resistor  ); break;
-    case TYPE::CAPACITOR_BEHAVIORAL: AddParam( capacitor ); break;
-    case TYPE::INDUCTOR_BEHAVIORAL:  AddParam( inductor  ); break;
-    case TYPE::VSOURCE_BEHAVIORAL:   AddParam( vsource   ); break;
-    case TYPE::ISOURCE_BEHAVIORAL:   AddParam( isource   ); break;
+    case TYPE::R_BEHAVIORAL: AddParam( resistor  ); break;
+    case TYPE::C_BEHAVIORAL: AddParam( capacitor ); break;
+    case TYPE::L_BEHAVIORAL: AddParam( inductor  ); break;
+    case TYPE::V_BEHAVIORAL: AddParam( vsource   ); break;
+    case TYPE::I_BEHAVIORAL: AddParam( isource   ); break;
     default:
         wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_IDEAL" );
     }
-}
-
-
-wxString SIM_MODEL_BEHAVIORAL::GenerateSpiceIncludeLine( const wxString& aLibraryFilename ) const
-{
-    return "";
 }
 
 
@@ -68,18 +62,18 @@ wxString SIM_MODEL_BEHAVIORAL::GenerateSpiceItemLine( const wxString& aRefName,
 
     switch( GetType() )
     {
-    case TYPE::RESISTOR_BEHAVIORAL:
-    case TYPE::CAPACITOR_BEHAVIORAL:
-    case TYPE::INDUCTOR_BEHAVIORAL:
+    case TYPE::R_BEHAVIORAL:
+    case TYPE::C_BEHAVIORAL:
+    case TYPE::L_BEHAVIORAL:
         return SIM_MODEL::GenerateSpiceItemLine( aRefName,
                                                  GetParam( 0 ).value->ToString(),
                                                  aPinNetNames );
 
-    case TYPE::VSOURCE_BEHAVIORAL:
+    case TYPE::V_BEHAVIORAL:
         return SIM_MODEL::GenerateSpiceItemLine( aRefName,
                 wxString::Format( "V=%s", GetParam( 0 ).value->ToString() ), aPinNetNames );
 
-    case TYPE::ISOURCE_BEHAVIORAL:
+    case TYPE::I_BEHAVIORAL:
         return SIM_MODEL::GenerateSpiceItemLine( aRefName,
                 wxString::Format( "I=%s", GetParam( 0 ).value->ToString() ), aPinNetNames );
 
@@ -90,19 +84,13 @@ wxString SIM_MODEL_BEHAVIORAL::GenerateSpiceItemLine( const wxString& aRefName,
 }
 
 
-std::vector<wxString> SIM_MODEL_BEHAVIORAL::getPinNames() const
-{
-    return { "+", "-" };
-}
-
-
 SIM_MODEL::PARAM::INFO SIM_MODEL_BEHAVIORAL::makeParamInfo( wxString name, wxString description,
                                                             wxString unit )
 {
     SIM_MODEL::PARAM::INFO paramInfo = {};
 
     paramInfo.name = name;
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = unit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.description = description;

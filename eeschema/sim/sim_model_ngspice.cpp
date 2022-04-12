@@ -23,6 +23,7 @@
  */
 
 #include <sim/sim_model_ngspice.h>
+#include <locale_io.h>
 
 using TYPE = SIM_MODEL::TYPE;
 
@@ -40,6 +41,41 @@ SIM_MODEL_NGSPICE::SIM_MODEL_NGSPICE( TYPE aType )
 }
 
 
+std::vector<wxString> SIM_MODEL_NGSPICE::GenerateSpiceCurrentNames( const wxString& aRefName ) const
+{
+    LOCALE_IO toggle;
+
+    switch( TypeInfo( GetType() ).deviceType )
+    {
+        case DEVICE_TYPE::NPN:
+        case DEVICE_TYPE::PNP:
+            return { wxString::Format( "I(%s:c)", aRefName ),
+                     wxString::Format( "I(%s:b)", aRefName ),
+                     wxString::Format( "I(%s:e)", aRefName ) };
+
+        case DEVICE_TYPE::NJFET:
+        case DEVICE_TYPE::PJFET:
+        case DEVICE_TYPE::NMES:
+        case DEVICE_TYPE::PMES:
+        case DEVICE_TYPE::NMOS:
+        case DEVICE_TYPE::PMOS:
+            return { wxString::Format( "I(%s:d)", aRefName ),
+                     wxString::Format( "I(%s:g)", aRefName ),
+                     wxString::Format( "I(%s:s)", aRefName ) };
+
+        case DEVICE_TYPE::R:
+        case DEVICE_TYPE::C:
+        case DEVICE_TYPE::L:
+        case DEVICE_TYPE::D:
+            return SIM_MODEL::GenerateSpiceCurrentNames( aRefName );
+
+        default:
+            wxFAIL_MSG( "Unhandled model device type" );
+            return {};
+    }
+}
+
+
 std::vector<wxString> SIM_MODEL_NGSPICE::getPinNames() const
 {
     return NGSPICE::ModelInfo( getModelType() ).pinNames;
@@ -51,28 +87,28 @@ NGSPICE::MODEL_TYPE SIM_MODEL_NGSPICE::getModelType() const
     switch( GetType() )
     {
     case TYPE::NONE:                return NGSPICE::MODEL_TYPE::NONE;
-    case TYPE::RESISTOR_ADVANCED:   return NGSPICE::MODEL_TYPE::RESISTOR;
-    case TYPE::CAPACITOR_ADVANCED:  return NGSPICE::MODEL_TYPE::CAPACITOR;
-    case TYPE::INDUCTOR_ADVANCED:   return NGSPICE::MODEL_TYPE::INDUCTOR;
+    case TYPE::R_ADV:   return NGSPICE::MODEL_TYPE::RESISTOR;
+    case TYPE::C_ADV:  return NGSPICE::MODEL_TYPE::CAPACITOR;
+    case TYPE::L_ADV:   return NGSPICE::MODEL_TYPE::INDUCTOR;
     case TYPE::TLINE_LOSSY:         return NGSPICE::MODEL_TYPE::LTRA;
     case TYPE::TLINE_LOSSLESS:      return NGSPICE::MODEL_TYPE::TRANLINE;
-    case TYPE::TLINE_UNIFORM_RC:    return NGSPICE::MODEL_TYPE::URC;
+    case TYPE::TLINE_URC:    return NGSPICE::MODEL_TYPE::URC;
     //case TYPE::TLINE_KSPICE:        return NGSPICE::MODEL_TYPE::TRANSLINE;
-    case TYPE::SWITCH_VCTRL:        return NGSPICE::MODEL_TYPE::SWITCH;
-    case TYPE::SWITCH_ICTRL:        return NGSPICE::MODEL_TYPE::CSWITCH;
-    case TYPE::DIODE:               return NGSPICE::MODEL_TYPE::DIODE;
+    case TYPE::SW_V:        return NGSPICE::MODEL_TYPE::SWITCH;
+    case TYPE::SW_I:        return NGSPICE::MODEL_TYPE::CSWITCH;
+    case TYPE::D:               return NGSPICE::MODEL_TYPE::DIODE;
 
-    case TYPE::NPN_GUMMEL_POON:
-    case TYPE::PNP_GUMMEL_POON:     return NGSPICE::MODEL_TYPE::BJT;
+    case TYPE::NPN_GUMMELPOON:
+    case TYPE::PNP_GUMMELPOON:     return NGSPICE::MODEL_TYPE::BJT;
     case TYPE::NPN_VBIC:
     case TYPE::PNP_VBIC:            return NGSPICE::MODEL_TYPE::VBIC;
-    case TYPE::NPN_HICUM_L2:
-    case TYPE::PNP_HICUM_L2:        return NGSPICE::MODEL_TYPE::HICUM2;
+    case TYPE::NPN_HICUML2:
+    case TYPE::PNP_HICUML2:        return NGSPICE::MODEL_TYPE::HICUM2;
 
-    case TYPE::NJF_SHICHMAN_HODGES:
-    case TYPE::PJF_SHICHMAN_HODGES: return NGSPICE::MODEL_TYPE::JFET;
-    case TYPE::NJF_PARKER_SKELLERN:
-    case TYPE::PJF_PARKER_SKELLERN: return NGSPICE::MODEL_TYPE::JFET2;
+    case TYPE::NJFET_SHICHMANHODGES:
+    case TYPE::PJFET_SHICHMANHODGES: return NGSPICE::MODEL_TYPE::JFET;
+    case TYPE::NJFET_PARKERSKELLERN:
+    case TYPE::PJFET_PARKERSKELLERN: return NGSPICE::MODEL_TYPE::JFET2;
 
     case TYPE::NMES_STATZ:
     case TYPE::PMES_STATZ:          return NGSPICE::MODEL_TYPE::MES;
@@ -111,10 +147,10 @@ NGSPICE::MODEL_TYPE SIM_MODEL_NGSPICE::getModelType() const
     case TYPE::PMOS_B3SOIPD:        return NGSPICE::MODEL_TYPE::B3SOIPD;
     case TYPE::NMOS_HISIM2:
     case TYPE::PMOS_HISIM2:         return NGSPICE::MODEL_TYPE::HISIM2;
-    case TYPE::NMOS_HISIM_HV1:
-    case TYPE::PMOS_HISIM_HV1:      return NGSPICE::MODEL_TYPE::HISIMHV1;
-    case TYPE::NMOS_HISIM_HV2:
-    case TYPE::PMOS_HISIM_HV2:      return NGSPICE::MODEL_TYPE::HISIMHV2;
+    case TYPE::NMOS_HISIMHV1:
+    case TYPE::PMOS_HISIMHV1:      return NGSPICE::MODEL_TYPE::HISIMHV1;
+    case TYPE::NMOS_HISIMHV2:
+    case TYPE::PMOS_HISIMHV2:      return NGSPICE::MODEL_TYPE::HISIMHV2;
 
     default:
         wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_NGSPICE" );
@@ -127,11 +163,11 @@ bool SIM_MODEL_NGSPICE::getIsOtherVariant()
 {
     switch( GetType() )
     {
-    case TYPE::PNP_GUMMEL_POON:
+    case TYPE::PNP_GUMMELPOON:
     case TYPE::PNP_VBIC:
-    case TYPE::PNP_HICUM_L2:
-    case TYPE::PJF_SHICHMAN_HODGES:
-    case TYPE::PJF_PARKER_SKELLERN:
+    case TYPE::PNP_HICUML2:
+    case TYPE::PJFET_SHICHMANHODGES:
+    case TYPE::PJFET_PARKERSKELLERN:
     case TYPE::PMES_STATZ:
     case TYPE::PMES_YTTERDAL:
     case TYPE::PMES_HFET1:
@@ -150,8 +186,8 @@ bool SIM_MODEL_NGSPICE::getIsOtherVariant()
     case TYPE::PMOS_B3SOIDD:
     case TYPE::PMOS_B3SOIPD:
     case TYPE::PMOS_HISIM2:
-    case TYPE::PMOS_HISIM_HV1:
-    case TYPE::PMOS_HISIM_HV2:
+    case TYPE::PMOS_HISIMHV1:
+    case TYPE::PMOS_HISIMHV2:
         return true;
 
     default:

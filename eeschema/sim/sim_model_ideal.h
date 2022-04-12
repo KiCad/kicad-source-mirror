@@ -33,14 +33,17 @@ class SIM_MODEL_IDEAL : public SIM_MODEL
 public:
     SIM_MODEL_IDEAL( TYPE aType );
 
-    wxString GenerateSpiceIncludeLine( const wxString& aLibraryFilename ) const override;
+    void ReadDataSchFields( int aSymbolPinCount, const std::vector<SCH_FIELD>* aFields ) override;
+    void ReadDataLibFields( int aSymbolPinCount, const std::vector<LIB_FIELD>* aFields ) override;
+
     wxString GenerateSpiceModelLine( const wxString& aModelName ) const override;
     wxString GenerateSpiceItemLine( const wxString& aRefName,
                                     const wxString& aModelName,
                                     const std::vector<wxString>& aPinNetNames ) const override;
 
+
 private:
-    std::vector<wxString> getPinNames() const override;
+    std::vector<wxString> getPinNames() const override { return { "+", "-" }; }
 
     static PARAM::INFO makeParamInfo( wxString aName, wxString aDescription, wxString aUnit );
 };

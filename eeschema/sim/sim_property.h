@@ -32,7 +32,7 @@
 class SIM_VALIDATOR : public wxValidator
 {
 public:
-    SIM_VALIDATOR( SIM_VALUE_BASE::TYPE aValueType, SIM_VALUE_GRAMMAR::NOTATION aNotation );
+    SIM_VALIDATOR( SIM_VALUE::TYPE aValueType, SIM_VALUE_GRAMMAR::NOTATION aNotation );
     SIM_VALIDATOR( const SIM_VALIDATOR& aValidator ) = default;
 
     wxObject* Clone() const override;
@@ -50,7 +50,7 @@ private:
     void onChar( wxKeyEvent& aEvent );
     void onMouse( wxMouseEvent& aEvent );
 
-    SIM_VALUE_BASE::TYPE       m_valueType;
+    SIM_VALUE::TYPE       m_valueType;
     SIM_VALUE_GRAMMAR::NOTATION m_notation;
     wxString                   m_prevText;
     long                       m_prevInsertionPoint;
@@ -68,7 +68,7 @@ public:
                   std::shared_ptr<SIM_LIBRARY> aLibrary,
                   std::shared_ptr<SIM_MODEL> aModel,
                   int aParamIndex,
-                  SIM_VALUE_BASE::TYPE aValueType = SIM_VALUE_BASE::TYPE::FLOAT,
+                  SIM_VALUE::TYPE aValueType = SIM_VALUE::TYPE::FLOAT,
                   SIM_VALUE_GRAMMAR::NOTATION aNotation = SIM_VALUE_GRAMMAR::NOTATION::SI );
 
     wxValidator* DoGetValidator() const override;
@@ -79,7 +79,7 @@ public:
     const SIM_MODEL::PARAM& GetParam() const { return m_model->GetParam( m_paramIndex ); }
 
 protected:
-    SIM_VALUE_BASE::TYPE         m_valueType;
+    SIM_VALUE::TYPE         m_valueType;
     SIM_VALUE_GRAMMAR::NOTATION  m_notation;
     std::shared_ptr<SIM_LIBRARY> m_library;
     std::shared_ptr<SIM_MODEL>   m_model;

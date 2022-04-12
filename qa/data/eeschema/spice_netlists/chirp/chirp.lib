@@ -1,0 +1,19 @@
+* chirp generator by Holger Vogt
+* public domain
+* bt start time, et end time of chirp
+* bf start frequency, ef end frequency of chirp
+* code model 'sine' will not accept control value 0, so 1e-12 is used
+* r=0 will lead to repeated chirp pattern, cannot be parameterized, so
+*    has to be removed if a single shot only is required
+* to be called by 'XChirp pp 0 chirp bf=1k ef=10k bt=80m et=120m'
+.subckt chirp p m params: bf=200 ef=2k bt=30m et=100m
+* Start at t=0 with 1e-12, ramp up to t=et-bt with output et, ramp down
+*      to 1e-12 after another 5% of ramp up time (to catch output 0 again).
+*      Delay the whole pattern by bt 
+vcont cc 0 dc 1e-12 pwl ( 0 1e-12 {et - bt} {et} {(et - bt) * 1.05} 1e-12 td={bt} r=0 )
+* amplitude is set by out_low, out_high
+asine cc %vd(p m) in_sine
+.model in_sine sine(cntl_array = [ 0 {bt} {et} ]
++ freq_array=[ 0 {bf} {ef} ] out_low = -5.0
++ out_high = 5.0)
+.ends

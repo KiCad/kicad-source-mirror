@@ -27,7 +27,7 @@
 #ifndef NETLIST_EXPORTER_PSPICE_SIM_H
 #define NETLIST_EXPORTER_PSPICE_SIM_H
 
-#include <netlist_exporters/netlist_exporter_pspice.h>
+#include <netlist_exporters/netlist_exporter_spice.h>
 #include <vector>
 
 #include "sim_types.h"
@@ -44,28 +44,14 @@ struct SPICE_DC_PARAMS
 };
 
 /// Special netlist exporter flavor that allows one to override simulation commands
-class NGSPICE_CIRCUIT_MODEL : public NETLIST_EXPORTER_PSPICE, public SIMULATION_MODEL
+class NGSPICE_CIRCUIT_MODEL : public NETLIST_EXPORTER_SPICE, public SIMULATION_MODEL
 {
 public:
     NGSPICE_CIRCUIT_MODEL( SCHEMATIC_IFACE* aSchematic ) :
-            NETLIST_EXPORTER_PSPICE( aSchematic ),
-            m_options( 0 )
+            NETLIST_EXPORTER_SPICE( aSchematic )
     {
     }
     virtual ~NGSPICE_CIRCUIT_MODEL() {}
-
-    /**
-     * Return name of Spice dataset for a specific plot.
-     *
-     * @param aName is name of the measured net or device
-     * @param aType describes the type of expected plot
-     * @param aParam is an optional parameter for devices, if absent it will return current (only
-     *               for passive devices).
-     * @return Empty string if query is invalid, otherwise a plot name that
-     *         can be requested from the simulator.
-     */
-    wxString ComponentToVector( const wxString& aName, SIM_PLOT_TYPE aType,
-            const wxString& aParam = wxEmptyString ) const;
 
     /**
      * Return name of Spice dataset for a specific plot.
@@ -77,11 +63,6 @@ public:
      */
     SIM_PLOT_TYPE VectorToSignal( const std::string& aVector, wxString& aSignal ) const;
 
-    /**
-     * Return a list of currents that can be probed in a Spice primitive.
-     */
-    static const std::vector<wxString>& GetCurrents( SPICE_PRIMITIVE aPrimitive );
-
     void SetOptions( int aOptions )
     {
         m_options = aOptions;
@@ -89,7 +70,7 @@ public:
 
     bool GetNetlist( OUTPUTFORMATTER* aFormatter )
     {
-        return NGSPICE_CIRCUIT_MODEL::Format( aFormatter, m_options );
+        return NGSPICE_CIRCUIT_MODEL::GenerateNetlist( *aFormatter, m_options );
     }
 
     /**
@@ -157,11 +138,7 @@ public:
      */
     static SIM_TYPE CommandToSimType( const wxString& aCmd );
 
-protected:
-    void writeDirectives( OUTPUTFORMATTER* aFormatter, unsigned aCtl ) const override;
-
 private:
-
     ///< Custom simulation command (has priority over the schematic sheet simulation commands)
     wxString m_simCommand;
     int m_options;

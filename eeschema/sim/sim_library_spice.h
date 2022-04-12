@@ -33,8 +33,8 @@ class SIM_LIBRARY_SPICE : public SIM_LIBRARY
     // We'll make SIM_LIBRARY have no subclasses probably.
 
 public:
-    bool ReadFile( const wxString& aFilename ) override;
-    void WriteFile( const wxString& aFilename ) override;
+    bool ReadFile( const wxString& aFilePath ) override;
+    void WriteFile( const wxString& aFilePath ) override;
 };
 
 #endif // SIM_LIBRARY_SPICE_H

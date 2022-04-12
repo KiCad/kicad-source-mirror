@@ -56,7 +56,8 @@ set( QA_EESCHEMA_SRCS
 
     test_eagle_plugin.cpp
     test_lib_part.cpp
-    test_netlists.cpp
+    test_netlist_exporter_kicad.cpp
+    test_netlist_exporter_spice.cpp
     test_ee_item.cpp
     test_pin_numbers.cpp
     test_sch_pin.cpp

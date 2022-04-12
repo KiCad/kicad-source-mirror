@@ -22,10 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <sim/sim_model_codemodel.h>
+#include <sim/sim_model_xspice.h>
 
 
-SIM_MODEL_CODEMODEL::SIM_MODEL_CODEMODEL( TYPE aType )
+SIM_MODEL_XSPICE::SIM_MODEL_XSPICE( TYPE aType )
     : SIM_MODEL( aType )
 {
 }

@@ -92,7 +92,7 @@ public:
      * @param aDeviceName is the device name (e.g. R1, C1).
      * @param aParam is the current type (e.g. I, Ic, Id).
      */
-    void AddCurrentPlot( const wxString& aDeviceName, const wxString& aParam );
+    void AddCurrentPlot( const wxString& aDeviceName );
 
     /**
      * Add a tuner for a symbol.
@@ -169,7 +169,7 @@ private:
      * @param aType describes the type of plot.
      * @param aParam is the parameter for the device/net (e.g. I, Id, V).
      */
-    void addPlot( const wxString& aName, SIM_PLOT_TYPE aType, const wxString& aParam );
+    void addPlot( const wxString& aName, SIM_PLOT_TYPE aType );
 
     /**
      * Remove a plot with a specific title.
@@ -188,8 +188,7 @@ private:
      * @param aPlotPanel is the panel that should receive the update.
      * @return True if a plot was successfully added/updated.
      */
-    bool updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, const wxString& aParam,
-                     SIM_PLOT_PANEL* aPlotPanel );
+    bool updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, SIM_PLOT_PANEL* aPlotPanel );
 
     /**
      * Update the list of currently plotted signals.

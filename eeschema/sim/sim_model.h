@@ -62,6 +62,9 @@ namespace SIM_MODEL_GRAMMAR
 class SIM_MODEL
 {
 public:
+    static constexpr auto REFERENCE_FIELD = "Reference";
+    static constexpr auto VALUE_FIELD = "Value";
+
     static constexpr auto DEVICE_TYPE_FIELD = "Model_Device";
     static constexpr auto TYPE_FIELD = "Model_Type";
     static constexpr auto PINS_FIELD = "Model_Pins";
@@ -71,30 +74,31 @@ public:
     DEFINE_ENUM_CLASS_WITH_ITERATOR( DEVICE_TYPE, 
         NONE,
 
-        RESISTOR,
-        CAPACITOR,
-        INDUCTOR,
+        R,
+        C,
+        L,
         TLINE,
-        SWITCH,
+        SW,
 
-        DIODE,
+        D,
         NPN,
         PNP,
 
-        NJF,
-        PJF,
+        NJFET,
+        PJFET,
 
         NMES,
         PMES,
+
         NMOS,
         PMOS,
 
-        VSOURCE,
-        ISOURCE,
+        V,
+        I,
 
-        SUBCIRCUIT,
-        CODEMODEL,
-        RAWSPICE
+        SUBCKT,
+        XSPICE,
+        SPICE
     )
 
     struct DEVICE_INFO
@@ -107,44 +111,44 @@ public:
     DEFINE_ENUM_CLASS_WITH_ITERATOR( TYPE,
         NONE,
 
-        RESISTOR_IDEAL,
-        RESISTOR_ADVANCED,
-        RESISTOR_BEHAVIORAL,
+        R,
+        R_ADV,
+        R_BEHAVIORAL,
 
-        CAPACITOR_IDEAL,
-        CAPACITOR_ADVANCED,
-        CAPACITOR_BEHAVIORAL,
+        C,
+        C_ADV,
+        C_BEHAVIORAL,
 
-        INDUCTOR_IDEAL,
-        INDUCTOR_ADVANCED,
-        INDUCTOR_BEHAVIORAL,
+        L,
+        L_ADV,
+        L_BEHAVIORAL,
 
         TLINE_LOSSY,
         TLINE_LOSSLESS,
-        TLINE_UNIFORM_RC,
+        TLINE_URC,
         TLINE_KSPICE,
 
-        SWITCH_VCTRL,
-        SWITCH_ICTRL,
+        SW_V,
+        SW_I,
 
-        DIODE,
+        D,
 
-        NPN_GUMMEL_POON,
-        PNP_GUMMEL_POON,
+        NPN_GUMMELPOON,
+        PNP_GUMMELPOON,
         NPN_VBIC,
         PNP_VBIC,
         //NPN_MEXTRAM,
         //PNP_MEXTRAM,
-        NPN_HICUM_L2,
-        PNP_HICUM_L2,
+        NPN_HICUML2,
+        PNP_HICUML2,
         //NPN_HICUM_L0,
         //PNP_HICUM_L0,
 
-        NJF_SHICHMAN_HODGES,
-        PJF_SHICHMAN_HODGES,
+        NJFET_SHICHMANHODGES,
+        PJFET_SHICHMANHODGES,
 
-        NJF_PARKER_SKELLERN,
-        PJF_PARKER_SKELLERN,
+        NJFET_PARKERSKELLERN,
+        PJFET_PARKERSKELLERN,
 
 
         NMES_STATZ,
@@ -211,47 +215,49 @@ public:
         NMOS_HISIM2,
         PMOS_HISIM2,
 
-        NMOS_HISIM_HV1,
-        PMOS_HISIM_HV1,
+        NMOS_HISIMHV1,
+        PMOS_HISIMHV1,
 
-        NMOS_HISIM_HV2,
-        PMOS_HISIM_HV2,
-
-
-        VSOURCE_PULSE,
-        VSOURCE_SIN,
-        VSOURCE_EXP,
-        VSOURCE_SFAM,
-        VSOURCE_SFFM,
-        VSOURCE_PWL,
-        VSOURCE_WHITE_NOISE,
-        VSOURCE_PINK_NOISE,
-        VSOURCE_BURST_NOISE,
-        VSOURCE_RANDOM_UNIFORM,
-        VSOURCE_RANDOM_NORMAL,
-        VSOURCE_RANDOM_EXP,
-        VSOURCE_RANDOM_POISSON,
-        VSOURCE_BEHAVIORAL,
-
-        ISOURCE_PULSE,
-        ISOURCE_SIN,
-        ISOURCE_EXP,
-        ISOURCE_SFAM,
-        ISOURCE_SFFM,
-        ISOURCE_PWL,
-        ISOURCE_WHITE_NOISE,
-        ISOURCE_PINK_NOISE,
-        ISOURCE_BURST_NOISE,
-        ISOURCE_RANDOM_UNIFORM,
-        ISOURCE_RANDOM_NORMAL,
-        ISOURCE_RANDOM_EXP,
-        ISOURCE_RANDOM_POISSON,
-        ISOURCE_BEHAVIORAL,
+        NMOS_HISIMHV2,
+        PMOS_HISIMHV2,
 
 
-        SUBCIRCUIT,
-        CODEMODEL,
-        RAWSPICE
+        V_DC,
+        V_SIN,
+        V_PULSE,
+        V_EXP,
+        V_SFAM,
+        V_SFFM,
+        V_PWL,
+        V_WHITENOISE,
+        V_PINKNOISE,
+        V_BURSTNOISE,
+        V_RANDUNIFORM,
+        V_RANDNORMAL,
+        V_RANDEXP,
+        V_RANDPOISSON,
+        V_BEHAVIORAL,
+
+        I_DC,
+        I_SIN,
+        I_PULSE,
+        I_EXP,
+        I_SFAM,
+        I_SFFM,
+        I_PWL,
+        I_WHITENOISE,
+        I_PINKNOISE,
+        I_BURSTNOISE,
+        I_RANDUNIFORM,
+        I_RANDNORMAL,
+        I_RANDEXP,
+        I_RANDPOISSON,
+        I_BEHAVIORAL,
+
+
+        SUBCKT,
+        XSPICE,
+        SPICE
     )
 
     struct INFO
@@ -264,8 +270,8 @@ public:
 
     struct SPICE_INFO
     {
-        wxString itemType;
-        wxString typeString = "";
+        wxString primitive;
+        wxString modelType = "";
         wxString inlineTypeString = "";
         int level = 0;
         bool hasExpression = false;
@@ -277,8 +283,8 @@ public:
     {
         static constexpr auto NOT_CONNECTED = 0;
 
-        int symbolPinNumber;
         const wxString name;
+        int symbolPinNumber;
     };
 
 
@@ -314,21 +320,22 @@ public:
             wxString name;
             unsigned int id = 0; // Legacy.
             DIR dir = DIR::INOUT;
-            SIM_VALUE_BASE::TYPE type;
+            SIM_VALUE::TYPE type = SIM_VALUE::TYPE::FLOAT;
             FLAGS flags = {}; // Legacy
             wxString unit = "";
             CATEGORY category = CATEGORY::PRINCIPAL;
             wxString defaultValue = "";
             wxString defaultValueOfOtherVariant = ""; // Legacy.
             wxString description = "";
+            bool isInstanceParam = false;
         };
 
-        std::unique_ptr<SIM_VALUE_BASE> value;
+        std::unique_ptr<SIM_VALUE> value;
         const INFO& info;
         bool isOtherVariant = false; // Legacy.
         
         PARAM( const INFO& aInfo, bool aIsOtherVariant = false )
-            : value( SIM_VALUE_BASE::Create( aInfo.type ) ),
+            : value( SIM_VALUE::Create( aInfo.type ) ),
               info( aInfo ),
               isOtherVariant( aIsOtherVariant )
         {}
@@ -348,7 +355,10 @@ public:
 
     static std::unique_ptr<SIM_MODEL> Create( TYPE aType, int aSymbolPinCount = 0 );
     static std::unique_ptr<SIM_MODEL> Create( const std::string& aSpiceCode );
-    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL& aBaseModel );
+
+    template <typename T>
+    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL& aBaseModel, int aSymbolPinCount,
+                                              const std::vector<T>& aFields );
 
     template <typename T>
     static std::unique_ptr<SIM_MODEL> Create( int aSymbolPinCount, const std::vector<T>& aFields );
@@ -388,25 +398,34 @@ public:
     virtual void WriteDataLibFields( std::vector<LIB_FIELD>& aFields );
 
 
-    virtual wxString GenerateSpiceIncludeLine( const wxString& aLibraryFilename ) const;
+    virtual bool HasToIncludeSpiceLibrary() const { return GetBaseModel() && !HasOverrides(); }
+
     virtual wxString GenerateSpiceModelLine( const wxString& aModelName ) const;
 
-    virtual SPICE_INFO GetSpiceInfo() const;
-
+    virtual wxString GenerateSpiceItemName( const wxString& aRefName ) const;
     wxString GenerateSpiceItemLine( const wxString& aRefName, const wxString& aModelName ) const;
     virtual wxString GenerateSpiceItemLine( const wxString& aRefName,
                                             const wxString& aModelName,
                                             const std::vector<wxString>& aPinNetNames ) const;
 
+    virtual wxString GenerateSpiceTuningLine( const wxString& aSymbol ) const;
+
     virtual wxString GenerateSpicePreview( const wxString& aModelName ) const;
 
+    SPICE_INFO GetSpiceInfo() const;
+    virtual std::vector<wxString> GenerateSpiceCurrentNames( const wxString& aRefName ) const;
 
+    bool ParsePinsField( int aSymbolPinCount, const wxString& aPinsField );
+
+    void AddPin( const PIN& aPin );
+    int FindModelPinNumber( int aSymbolPinNumber );
     void AddParam( const PARAM::INFO& aInfo, bool aIsOtherVariant = false );
 
+    DEVICE_TYPE GetDeviceType() const { return TypeInfo( GetType() ).deviceType; }
     TYPE GetType() const { return m_type; }
 
     const SIM_MODEL* GetBaseModel() const { return m_baseModel; }
-    void SetBaseModel( const SIM_MODEL& aBaseModel ) { m_baseModel = &aBaseModel; }
+    virtual void SetBaseModel( const SIM_MODEL& aBaseModel ) { m_baseModel = &aBaseModel; }
 
     int GetPinCount() const { return static_cast<int>( m_pins.size() ); }
     const PIN& GetPin( int aIndex ) const { return m_pins.at( aIndex ); }
@@ -421,7 +440,9 @@ public:
     const PARAM& GetParam( int aParamIndex ) const; // Return base parameter unless it's overridden.
     const PARAM& GetUnderlyingParam( int aParamIndex ) const; // Return the actual parameter.
     const PARAM& GetBaseParam( int aParamIndex ) const; // Always return base parameter if it exists.
-    virtual bool SetParamValue( int aParamIndex, const wxString& aValue );
+    virtual bool SetParamValue( int aParamIndex, const wxString& aValue,
+                                SIM_VALUE_GRAMMAR::NOTATION aNotation
+                                    = SIM_VALUE_GRAMMAR::NOTATION::SI );
 
     bool HasOverrides() const;
     bool HasNonPrincipalOverrides() const;
@@ -432,16 +453,11 @@ public:
 protected:
     SIM_MODEL( TYPE aType );
 
+    wxString m_spiceCode;
+
 private:
     static std::unique_ptr<SIM_MODEL> create( TYPE aType );
     static TYPE readTypeFromSpiceTypeString( const std::string& aTypeString );
-
-    wxString m_spiceCode;
-    const SIM_MODEL* m_baseModel;
-
-    const TYPE m_type;
-    std::vector<PIN> m_pins;
-    std::vector<PARAM> m_params;
 
 
     template <typename T>
@@ -457,13 +473,22 @@ private:
     wxString generateTypeField() const;
 
     wxString generatePinsField() const;
-    void parsePinsField( int aSymbolPinCount, const wxString& aPinsField );
 
     
     wxString generateParamsField( const wxString& aPairSeparator ) const;
-    void parseParamsField( const wxString& aParamsField );
+    bool parseParamsField( const wxString& aParamsField );
 
-    virtual bool setParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue );
+    // TODO: Rename.
+    virtual bool setParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
+                                        SIM_VALUE_GRAMMAR::NOTATION aNotation
+                                            = SIM_VALUE_GRAMMAR::NOTATION::SPICE );
+
+
+    const SIM_MODEL* m_baseModel;
+
+    const TYPE m_type;
+    std::vector<PIN> m_pins;
+    std::vector<PARAM> m_params;
 };
 
 #endif // SIM_MODEL_H

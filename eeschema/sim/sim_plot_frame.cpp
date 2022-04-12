@@ -467,7 +467,10 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
     else
         m_circuitModel->SetSimCommand( aSimCommand );
 
-    m_circuitModel->SetOptions( m_settingsDlg->GetNetlistOptions() );
+    // Make .save all and .probe alli permanent for now.
+    m_circuitModel->SetOptions( m_settingsDlg->GetNetlistOptions()
+            | NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES
+            | NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS );
 
     if( !m_simulator->Attach( m_circuitModel ) )
     {
@@ -523,13 +526,13 @@ SIM_PANEL_BASE* SIM_PLOT_FRAME::NewPlotPanel( wxString aSimCommand )
 
 void SIM_PLOT_FRAME::AddVoltagePlot( const wxString& aNetName )
 {
-    addPlot( aNetName, SPT_VOLTAGE, "V" );
+    addPlot( aNetName, SPT_VOLTAGE );
 }
 
 
-void SIM_PLOT_FRAME::AddCurrentPlot( const wxString& aDeviceName, const wxString& aParam )
+void SIM_PLOT_FRAME::AddCurrentPlot( const wxString& aDeviceName )
 {
-    addPlot( aDeviceName, SPT_CURRENT, aParam );
+    addPlot( aDeviceName, SPT_CURRENT );
 }
 
 
@@ -540,12 +543,20 @@ void SIM_PLOT_FRAME::AddTuner( SCH_SYMBOL* aSymbol )
     if( !plotPanel )
         return;
 
-    // For now limit the tuner tool to RLC and code model components
-    char primitiveType = NETLIST_EXPORTER_PSPICE::GetSpiceField( SF_PRIMITIVE, aSymbol, 0 )[0];
+    SIM_MODEL::TYPE type = SIM_MODEL::ReadTypeFromFields( aSymbol->GetFields() );
+    SIM_MODEL::DEVICE_TYPE deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
 
-    if( primitiveType != SP_RESISTOR && primitiveType != SP_CAPACITOR
-        && primitiveType != SP_INDUCTOR && primitiveType != SP_CODEMODEL )
+    switch( deviceType )
+    {
+    case SIM_MODEL::DEVICE_TYPE::R:
+    case SIM_MODEL::DEVICE_TYPE::C:
+    case SIM_MODEL::DEVICE_TYPE::L:
+    case SIM_MODEL::DEVICE_TYPE::XSPICE:
+        break;
+
+    default:
         return;
+    }
 
     const wxString componentName = aSymbol->GetField( REFERENCE_FIELD )->GetText();
 
@@ -629,7 +640,7 @@ std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& SIM_PLOT_FRAME::GetSimulatorSettings(
 }
 
 
-void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType, const wxString& aParam )
+void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType )
 {
     SIM_TYPE simType = m_circuitModel->GetSimType();
 
@@ -668,14 +679,12 @@ void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType, const 
         int baseType = aType & ~( SPT_AC_MAG | SPT_AC_PHASE );
 
         // Add two plots: magnitude & phase
-        updated |= updatePlot( aName, ( SIM_PLOT_TYPE )( baseType | SPT_AC_MAG ), aParam,
-                               plotPanel );
-        updated |= updatePlot( aName, ( SIM_PLOT_TYPE )( baseType | SPT_AC_PHASE ), aParam,
-                               plotPanel );
+        updated |= updatePlot( aName, ( SIM_PLOT_TYPE )( baseType | SPT_AC_MAG ), plotPanel );
+        updated |= updatePlot( aName, ( SIM_PLOT_TYPE )( baseType | SPT_AC_PHASE ), plotPanel );
     }
     else
     {
-        updated = updatePlot( aName, aType, aParam, plotPanel );
+        updated = updatePlot( aName, aType, plotPanel );
     }
 
     if( updated )
@@ -702,13 +711,12 @@ void SIM_PLOT_FRAME::removePlot( const wxString& aPlotName )
 }
 
 
-bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, const wxString& aParam,
+bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType,
                                  SIM_PLOT_PANEL* aPlotPanel )
 {
     SIM_TYPE simType = m_circuitModel->GetSimType();
-    wxString spiceVector = m_circuitModel->ComponentToVector( aName, aType, aParam );
 
-    wxString plotTitle = wxString::Format( "%s(%s)", aParam, aName );
+    wxString plotTitle = aName;
     if( aType & SPT_AC_MAG )
         plotTitle += " (mag)";
     else if( aType & SPT_AC_PHASE )
@@ -717,7 +725,7 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, con
     if( !SIM_PANEL_BASE::IsPlottable( simType ) )
     {
         // There is no plot to be shown
-        m_simulator->Command( wxString::Format( "print %s", spiceVector ).ToStdString() );
+        m_simulator->Command( wxString::Format( "print %s", aName ).ToStdString() );
 
         return false;
     }
@@ -744,9 +752,9 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, con
                       "Cannot set both AC_PHASE and AC_MAG bits" );
 
         if( aType & SPT_AC_MAG )
-            data_y = m_simulator->GetMagPlot( (const char*) spiceVector.c_str() );
+            data_y = m_simulator->GetMagPlot( (const char*) aName.c_str() );
         else if( aType & SPT_AC_PHASE )
-            data_y = m_simulator->GetPhasePlot( (const char*) spiceVector.c_str() );
+            data_y = m_simulator->GetPhasePlot( (const char*) aName.c_str() );
         else
             wxASSERT_MSG( false, "Plot type missing AC_PHASE or AC_MAG bit" );
 
@@ -755,7 +763,7 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, con
     case ST_NOISE:
     case ST_DC:
     case ST_TRANSIENT:
-        data_y = m_simulator->GetMagPlot( (const char*) spiceVector.c_str() );
+        data_y = m_simulator->GetMagPlot( (const char*) aName.c_str() );
         break;
 
     default:
@@ -796,7 +804,7 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, con
                                            data_y.begin() + offset + inner );
 
                 m_workbook->AddTrace( aPlotPanel, name, aName, inner, sub_x.data(), sub_y.data(),
-                                      aType, aParam );
+                                      aType );
 
                 v = v + source2.m_vincrement;
                 offset += inner;
@@ -806,8 +814,7 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, con
         }
     }
 
-    m_workbook->AddTrace( aPlotPanel, plotTitle, aName, size, data_x.data(), data_y.data(), aType,
-                          aParam );
+    m_workbook->AddTrace( aPlotPanel, plotTitle, aName, size, data_x.data(), data_y.data(), aType );
 
     return true;
 }
@@ -881,7 +888,7 @@ void SIM_PLOT_FRAME::updateSignalList()
 
 void SIM_PLOT_FRAME::updateTuners()
 {
-    const auto& spiceItems = m_circuitModel->GetSpiceItems();
+    const auto& spiceItems = m_circuitModel->GetItems();
 
     for( auto it = m_tuners.begin(); it != m_tuners.end(); /* iteration inside the loop */ )
     {
@@ -889,7 +896,7 @@ void SIM_PLOT_FRAME::updateTuners()
 
         if( std::find_if( spiceItems.begin(), spiceItems.end(), [&]( const SPICE_ITEM& item )
                 {
-                    return item.m_refName == ref;
+                    return item.refName == ref;
                 }) == spiceItems.end() )
         {
             // The component does not exist anymore, remove the associated tuner
@@ -1008,7 +1015,7 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
                 return false;
             }
 
-            addPlot( name, (SIM_PLOT_TYPE) traceType, param );
+            addPlot( name, (SIM_PLOT_TYPE) traceType );
         }
     }
 
@@ -1467,7 +1474,7 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
     if( !m_settingsDlg )
         m_settingsDlg = new DIALOG_SIM_SETTINGS( this, m_circuitModel, m_simulator->Settings() );
 
-    if( !m_circuitModel->ProcessNetlist( NET_ALL_FLAGS ) )
+    if( !m_circuitModel->ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_ALL_FLAGS ) )
     {
         DisplayErrorMessage( this, _( "There were errors during netlist export, aborted." ) );
         return;
@@ -1747,7 +1754,6 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
         {
             wxString      m_name;    ///< Name of the measured net/device
             SIM_PLOT_TYPE m_type;    ///< Type of the signal
-            wxString      m_param;   ///< Name of the signal parameter
         };
 
         std::vector<struct TRACE_DESC> traceInfo;
@@ -1758,14 +1764,13 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
             struct TRACE_DESC placeholder;
             placeholder.m_name = trace.second->GetName();
             placeholder.m_type = trace.second->GetType();
-            placeholder.m_param = trace.second->GetParam();
 
             traceInfo.push_back( placeholder );
         }
 
         for( auto& trace : traceInfo )
         {
-            if( !updatePlot( trace.m_name, trace.m_type, trace.m_param, plotPanel ) )
+            if( !updatePlot( trace.m_name, trace.m_type, plotPanel ) )
                 removePlot( trace.m_name );
         }
 

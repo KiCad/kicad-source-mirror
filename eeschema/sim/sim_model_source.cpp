@@ -35,12 +35,6 @@ SIM_MODEL_SOURCE::SIM_MODEL_SOURCE( TYPE aType )
 }
 
 
-wxString SIM_MODEL_SOURCE::GenerateSpiceIncludeLine( const wxString& aLibraryFilename ) const
-{
-    return "";
-}
-
-
 wxString SIM_MODEL_SOURCE::GenerateSpiceModelLine( const wxString& aModelName ) const
 {
     return "";
@@ -64,11 +58,14 @@ wxString SIM_MODEL_SOURCE::GenerateSpiceItemLine( const wxString& aRefName,
 
 const std::vector<PARAM::INFO>& SIM_MODEL_SOURCE::makeParams( TYPE aType )
 {
-    static std::vector<PARAM::INFO> vpulse = makePulse( "v", "V" );
-    static std::vector<PARAM::INFO> ipulse = makePulse( "i", "A" );
+    static std::vector<PARAM::INFO> vdc = makeDc( "v", "V" );
+    static std::vector<PARAM::INFO> idc = makeDc( "i", "A" );
 
     static std::vector<PARAM::INFO> vsin = makeSin( "v", "V" );
     static std::vector<PARAM::INFO> isin = makeSin( "i", "A" );
+
+    static std::vector<PARAM::INFO> vpulse = makePulse( "v", "V" );
+    static std::vector<PARAM::INFO> ipulse = makePulse( "i", "A" );
 
     static std::vector<PARAM::INFO> vexp = makeExp( "v", "V" );
     static std::vector<PARAM::INFO> iexp = makeExp( "i", "A" );
@@ -105,32 +102,34 @@ const std::vector<PARAM::INFO>& SIM_MODEL_SOURCE::makeParams( TYPE aType )
 
     switch( aType )
     {
-    case TYPE::VSOURCE_PULSE:          return vpulse;
-    case TYPE::ISOURCE_PULSE:          return ipulse;
-    case TYPE::VSOURCE_SIN:            return vsin;
-    case TYPE::ISOURCE_SIN:            return isin;
-    case TYPE::VSOURCE_EXP:            return vexp;
-    case TYPE::ISOURCE_EXP:            return iexp;
-    case TYPE::VSOURCE_SFAM:           return vsfam;
-    case TYPE::ISOURCE_SFAM:           return isfam;
-    case TYPE::VSOURCE_SFFM:           return vsffm;
-    case TYPE::ISOURCE_SFFM:           return isffm;
-    case TYPE::VSOURCE_PWL:            return vpwl;
-    case TYPE::ISOURCE_PWL:            return ipwl;
-    case TYPE::VSOURCE_WHITE_NOISE:    return vwhitenoise;
-    case TYPE::ISOURCE_WHITE_NOISE:    return iwhitenoise;
-    case TYPE::VSOURCE_PINK_NOISE:     return vpinknoise;
-    case TYPE::ISOURCE_PINK_NOISE:     return ipinknoise;
-    case TYPE::VSOURCE_BURST_NOISE:    return vburstnoise;
-    case TYPE::ISOURCE_BURST_NOISE:    return iburstnoise;
-    case TYPE::VSOURCE_RANDOM_UNIFORM: return vrandomuniform;
-    case TYPE::ISOURCE_RANDOM_UNIFORM: return irandomuniform;
-    case TYPE::VSOURCE_RANDOM_NORMAL:  return vrandomnormal;
-    case TYPE::ISOURCE_RANDOM_NORMAL:  return irandomnormal;
-    case TYPE::VSOURCE_RANDOM_EXP:     return vrandomexp;
-    case TYPE::ISOURCE_RANDOM_EXP:     return irandomexp;
-    case TYPE::VSOURCE_RANDOM_POISSON: return vrandompoisson;
-    case TYPE::ISOURCE_RANDOM_POISSON: return irandompoisson;
+    case TYPE::V_DC:          return vdc;
+    case TYPE::I_DC:          return idc;
+    case TYPE::V_SIN:         return vsin;
+    case TYPE::I_SIN:         return isin;
+    case TYPE::V_PULSE:       return vpulse;
+    case TYPE::I_PULSE:       return ipulse;
+    case TYPE::V_EXP:         return vexp;
+    case TYPE::I_EXP:         return iexp;
+    case TYPE::V_SFAM:        return vsfam;
+    case TYPE::I_SFAM:        return isfam;
+    case TYPE::V_SFFM:        return vsffm;
+    case TYPE::I_SFFM:        return isffm;
+    case TYPE::V_PWL:         return vpwl;
+    case TYPE::I_PWL:         return ipwl;
+    case TYPE::V_WHITENOISE:  return vwhitenoise;
+    case TYPE::I_WHITENOISE:  return iwhitenoise;
+    case TYPE::V_PINKNOISE:   return vpinknoise;
+    case TYPE::I_PINKNOISE:   return ipinknoise;
+    case TYPE::V_BURSTNOISE:  return vburstnoise;
+    case TYPE::I_BURSTNOISE:  return iburstnoise;
+    case TYPE::V_RANDUNIFORM: return vrandomuniform;
+    case TYPE::I_RANDUNIFORM: return irandomuniform;
+    case TYPE::V_RANDNORMAL:  return vrandomnormal;
+    case TYPE::I_RANDNORMAL:  return irandomnormal;
+    case TYPE::V_RANDEXP:     return vrandomexp;
+    case TYPE::I_RANDEXP:     return irandomexp;
+    case TYPE::V_RANDPOISSON: return vrandompoisson;
+    case TYPE::I_RANDPOISSON: return irandompoisson;
     default:
         wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_SOURCE" );
         static std::vector<PARAM::INFO> empty;
@@ -139,25 +138,26 @@ const std::vector<PARAM::INFO>& SIM_MODEL_SOURCE::makeParams( TYPE aType )
 }
 
 
-bool SIM_MODEL_SOURCE::SetParamValue( int aParamIndex, const wxString& aValue )
+bool SIM_MODEL_SOURCE::SetParamValue( int aParamIndex, const wxString& aValue,
+                                      SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
     // Sources are special. All preceding parameter values must be filled. If they are not, fill
     // them out automatically. If a value is nulled, delete everything after it.
     if( aValue.IsEmpty() )
     {
         for( int i = aParamIndex; i < GetParamCount(); ++i )
-            SIM_MODEL::SetParamValue( i, "" );
+            SIM_MODEL::SetParamValue( i, "", aNotation );
     }
     else
     {
         for( int i = 0; i < aParamIndex; ++i )
         {
             if( GetParam( i ).value->ToString().IsEmpty() )
-                SIM_MODEL::SetParamValue( i, "0" );
+                SIM_MODEL::SetParamValue( i, "0", aNotation );
         }
     }
 
-    return SIM_MODEL::SetParamValue( aParamIndex, aValue );
+    return SIM_MODEL::SetParamValue( aParamIndex, aValue, aNotation );
 }
 
 
@@ -167,73 +167,17 @@ std::vector<wxString> SIM_MODEL_SOURCE::getPinNames() const
 }
 
 
-std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makePulse( wxString aPrefix, wxString aUnit )
+std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeDc( wxString aPrefix, wxString aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
 
-    paramInfo.name = aPrefix + "1";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.name = "dc";
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
-    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "";
-    paramInfo.description = "Initial value";
-    paramInfos.push_back( paramInfo );
-
-    paramInfo.name = aPrefix + "2";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
-    paramInfo.unit = aUnit;
-    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "";
-    paramInfo.description = "Initial value";
-    paramInfos.push_back( paramInfo );
-
-    paramInfo.name = "td";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
-    paramInfo.unit = "s";
-    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
-    paramInfo.description = "Delay";
-    paramInfos.push_back( paramInfo );
-
-    paramInfo.name = "tr";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
-    paramInfo.unit = "s";
-    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "tstep";
-    paramInfo.description = "Rise time";
-    paramInfos.push_back( paramInfo );
-
-    paramInfo.name = "tf";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
-    paramInfo.unit = "s";
-    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "tstep";
-    paramInfo.description = "Fall time";
-    paramInfos.push_back( paramInfo );
-
-    paramInfo.name = "pw";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
-    paramInfo.unit = "s";
-    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "tstop";
-    paramInfo.description = "Pulse width";
-    paramInfos.push_back( paramInfo );
-
-    paramInfo.name = "per";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
-    paramInfo.unit = "s";
-    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "tstop";
-    paramInfo.description = "Period";
-    paramInfos.push_back( paramInfo );
-
-    paramInfo.name = "phase";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
-    paramInfo.unit = "deg";
-    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "0";
-    paramInfo.description = "Phase";
+    paramInfo.description = "DC value";
     paramInfos.push_back( paramInfo );
 
     return paramInfos;
@@ -245,24 +189,24 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSin( wxString aPrefix, wxString a
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
 
-    paramInfo.name = aPrefix + "o";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.name = "dc";
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
     paramInfo.description = "DC offset";
     paramInfos.push_back( paramInfo );
 
-    paramInfo.name = aPrefix + "a";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.name = "ampl";
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
     paramInfo.description = "Amplitude";
     paramInfos.push_back( paramInfo );
 
-    paramInfo.name = "freq";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.name = "f";
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "Hz";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "1/tstop";
@@ -270,7 +214,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSin( wxString aPrefix, wxString a
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "td";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "s";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -278,7 +222,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSin( wxString aPrefix, wxString a
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "theta";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "1/s";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -286,9 +230,82 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSin( wxString aPrefix, wxString a
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "phase";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "deg";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.defaultValue = "0";
+    paramInfo.description = "Phase";
+    paramInfos.push_back( paramInfo );
+
+    return paramInfos;
+}
+
+
+std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makePulse( wxString aPrefix, wxString aUnit )
+{
+    std::vector<PARAM::INFO> paramInfos;
+    PARAM::INFO paramInfo;
+
+    paramInfo.name = aPrefix + "1";
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
+    paramInfo.unit = aUnit;
+    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.defaultValue = "";
+    paramInfo.description = "Initial value";
+    paramInfos.push_back( paramInfo );
+
+    paramInfo.name = aPrefix + "2";
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
+    paramInfo.unit = aUnit;
+    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.defaultValue = "";
+    paramInfo.description = "Initial value";
+    paramInfos.push_back( paramInfo );
+
+    paramInfo.name = "td";
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
+    paramInfo.unit = "s";
+    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.defaultValue = "0";
+    paramInfo.description = "Delay";
+    paramInfos.push_back( paramInfo );
+
+    paramInfo.name = "tr";
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
+    paramInfo.unit = "s";
+    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.defaultValue = "tstep";
+    paramInfo.description = "Rise time";
+    paramInfos.push_back( paramInfo );
+
+    paramInfo.name = "tf";
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
+    paramInfo.unit = "s";
+    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.defaultValue = "tstep";
+    paramInfo.description = "Fall time";
+    paramInfos.push_back( paramInfo );
+
+    paramInfo.name = "pw";
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
+    paramInfo.unit = "s";
+    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.defaultValue = "tstop";
+    paramInfo.description = "Pulse width";
+    paramInfos.push_back( paramInfo );
+
+    paramInfo.name = "per";
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
+    paramInfo.unit = "s";
+    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.defaultValue = "tstop";
+    paramInfo.description = "Period";
+    paramInfos.push_back( paramInfo );
+
+    paramInfo.name = "phase";
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
+    paramInfo.unit = "deg";
+    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
     paramInfo.description = "Phase";
     paramInfos.push_back( paramInfo );
@@ -303,7 +320,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeExp( wxString aPrefix, wxString a
     PARAM::INFO paramInfo;
 
     paramInfo.name = aPrefix + "1";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
@@ -311,7 +328,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeExp( wxString aPrefix, wxString a
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = aPrefix + "2";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
@@ -319,7 +336,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeExp( wxString aPrefix, wxString a
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "td1";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "s";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -327,7 +344,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeExp( wxString aPrefix, wxString a
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "tau1";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "s";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "tstep";
@@ -335,7 +352,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeExp( wxString aPrefix, wxString a
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "td2";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "s";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "td1+tstep";
@@ -343,7 +360,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeExp( wxString aPrefix, wxString a
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "tau2";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "s";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "tstep";
@@ -359,15 +376,15 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSfam( wxString aPrefix, wxString 
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
 
-    paramInfo.name = aPrefix + "o";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.name = "dc";
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
     paramInfo.description = "DC offset";
 
-    paramInfo.name = aPrefix + "a";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.name = "ampl";
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
@@ -375,7 +392,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSfam( wxString aPrefix, wxString 
 
     paramInfos.push_back( paramInfo );
     paramInfo.name = "mo";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
@@ -383,7 +400,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSfam( wxString aPrefix, wxString 
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "fc";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "Hz";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
@@ -391,7 +408,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSfam( wxString aPrefix, wxString 
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "mf";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "Hz";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
@@ -407,16 +424,16 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSffm( wxString aPrefix, wxString 
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
 
-    paramInfo.name = aPrefix + "o";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.name = "dc";
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
     paramInfo.description = "DC offset";
     paramInfos.push_back( paramInfo );
 
-    paramInfo.name = aPrefix + "a";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.name = "ampl";
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
@@ -424,7 +441,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSffm( wxString aPrefix, wxString 
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "fc";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "Hz";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "1/tstop";
@@ -432,7 +449,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSffm( wxString aPrefix, wxString 
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "mdi";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
@@ -440,7 +457,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSffm( wxString aPrefix, wxString 
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "fs";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "Hz";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "1/tstop";
@@ -448,7 +465,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSffm( wxString aPrefix, wxString 
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "phasec";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "deg";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -456,7 +473,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSffm( wxString aPrefix, wxString 
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "phases";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "deg";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -474,7 +491,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makePwl( wxString aPrefix, wxString a
     PARAM::INFO paramInfo;
 
     paramInfo.name = "t";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT_VECTOR;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT_VECTOR;
     paramInfo.unit = "s";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
@@ -482,7 +499,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makePwl( wxString aPrefix, wxString a
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = aPrefix;
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT_VECTOR;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT_VECTOR;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
@@ -490,7 +507,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makePwl( wxString aPrefix, wxString a
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "repeat";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::BOOL;
+    paramInfo.type = SIM_VALUE::TYPE::BOOL;
     paramInfo.unit = "";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
@@ -498,7 +515,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makePwl( wxString aPrefix, wxString a
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "td";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "s";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -514,8 +531,8 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeWhiteNoise( wxString aPrefix, wxS
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
 
-    paramInfo.name = aPrefix + "o";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.name = "dc";
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
@@ -523,7 +540,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeWhiteNoise( wxString aPrefix, wxS
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "na";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -531,7 +548,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeWhiteNoise( wxString aPrefix, wxS
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "nt";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "s";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -547,8 +564,8 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makePinkNoise( wxString aPrefix, wxSt
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
 
-    paramInfo.name = aPrefix + "o";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.name = "dc";
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
@@ -556,7 +573,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makePinkNoise( wxString aPrefix, wxSt
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "nalpha";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -564,7 +581,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makePinkNoise( wxString aPrefix, wxSt
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "namp";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -572,7 +589,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makePinkNoise( wxString aPrefix, wxSt
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "nt";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "s";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -589,7 +606,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeBurstNoise( wxString aPrefix, wxS
     PARAM::INFO paramInfo;
 
     paramInfo.name = "rtsam";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -597,7 +614,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeBurstNoise( wxString aPrefix, wxS
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "rtscapt";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "s";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -605,7 +622,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeBurstNoise( wxString aPrefix, wxS
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "rtsemt";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "s";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -613,7 +630,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeBurstNoise( wxString aPrefix, wxS
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "nt";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "s";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -630,7 +647,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomUniform( wxString aPrefix, 
     PARAM::INFO paramInfo;
 
     paramInfo.name = "min";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "-0.5";
@@ -638,7 +655,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomUniform( wxString aPrefix, 
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "max";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0.5";
@@ -646,7 +663,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomUniform( wxString aPrefix, 
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "td";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "s";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -663,7 +680,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomNormal( wxString aPrefix, w
     PARAM::INFO paramInfo;
 
     paramInfo.name = "mean";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -671,7 +688,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomNormal( wxString aPrefix, w
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "stddev";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "1";
@@ -679,7 +696,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomNormal( wxString aPrefix, w
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "td";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "s";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -696,7 +713,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomExp( wxString aPrefix, wxSt
     PARAM::INFO paramInfo;
 
     paramInfo.name = "offset";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -704,7 +721,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomExp( wxString aPrefix, wxSt
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "mean";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "1";
@@ -712,7 +729,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomExp( wxString aPrefix, wxSt
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "td";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "s";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -729,7 +746,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomPoisson( wxString aPrefix, 
     PARAM::INFO paramInfo;
 
     paramInfo.name = "offset";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
@@ -737,7 +754,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomPoisson( wxString aPrefix, 
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "lambda";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "1";
@@ -745,7 +762,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomPoisson( wxString aPrefix, 
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "td";
-    paramInfo.type = SIM_VALUE_BASE::TYPE::FLOAT;
+    paramInfo.type = SIM_VALUE::TYPE::FLOAT;
     paramInfo.unit = "s";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";

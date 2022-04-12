@@ -25,8 +25,8 @@
 #ifndef DIALOG_SPICE_MODEL_H
 #define DIALOG_SPICE_MODEL_H
 
-#include <dialog_spice_model_base.h>
-#include <netlist_exporter_pspice.h>
+#include <dialog_sim_model_base.h>
+#include <netlist_exporter_spice.h>
 #include <scintilla_tricks.h>
 
 #include <sim/sim_model.h>
@@ -39,16 +39,13 @@
 // 2. wxPropertyGridManager->ShowHeader() segfaults when called from this dialog's constructor.
 
 template <typename T>
-class DIALOG_SPICE_MODEL : public DIALOG_SPICE_MODEL_BASE
+class DIALOG_SIM_MODEL : public DIALOG_SIM_MODEL_BASE
 {
 public:
-    static constexpr auto LIBRARY_FIELD = "Model_Library";
-    static constexpr auto NAME_FIELD = "Model_Name";
-
     enum class PARAM_COLUMN : int { DESCRIPTION, VALUE, UNIT, DEFAULT, TYPE, END_ };
     enum class PIN_COLUMN : int { SYMBOL, MODEL };
 
-    DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol, std::vector<T>& aSchFields );
+    DIALOG_SIM_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol, std::vector<T>& aSchFields );
 
 private:
     bool TransferDataToWindow() override;

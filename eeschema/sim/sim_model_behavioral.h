@@ -33,14 +33,14 @@ class SIM_MODEL_BEHAVIORAL : public SIM_MODEL
 public:
     SIM_MODEL_BEHAVIORAL( TYPE aType );
 
-    wxString GenerateSpiceIncludeLine( const wxString& aLibraryFilename ) const override;
     wxString GenerateSpiceModelLine( const wxString& aModelName ) const override;
+
     wxString GenerateSpiceItemLine( const wxString& aRefName,
                                     const wxString& aModelName,
                                     const std::vector<wxString>& aPinNetNames ) const override;
 
 private:
-    std::vector<wxString> getPinNames() const override;
+    std::vector<wxString> getPinNames() const override { return { "+", "-" }; }
 
     static PARAM::INFO makeParamInfo( wxString name, wxString description, wxString unit );
 };

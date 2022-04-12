@@ -22,16 +22,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SIM_MODEL_SUBCIRCUIT_H
-#define SIM_MODEL_SUBCIRCUIT_H
+#ifndef SIM_MODEL_RAWSPICE_H
+#define SIM_MODEL_RAWSPICE_H
 
 #include <sim/sim_model.h>
 
 
-class SIM_MODEL_SUBCIRCUIT : public SIM_MODEL
+class SIM_MODEL_RAWSPICE : public SIM_MODEL
 {
 public:
-    SIM_MODEL_SUBCIRCUIT( TYPE aType );
+    SIM_MODEL_RAWSPICE( TYPE aType );
+
+    //bool ReadSpiceCode( const std::string& aSpiceCode ) override;
+
+private:
+    bool setParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
+                                SIM_VALUE_GRAMMAR::NOTATION aNotation
+                                    = SIM_VALUE_GRAMMAR::NOTATION::SPICE ) override;
+
+    std::vector<std::unique_ptr<PARAM::INFO>> m_paramInfos;
 };
 
-#endif // SIM_MODEL_SUBCIRCUIT_H
+#endif // SIM_MODEL_RAWSPICE_H

@@ -36,7 +36,7 @@
 #include <string_utils.h>
 #include <kiway.h>
 #include <kiway_player.h>
-#include <netlist_exporters/netlist_exporter_pspice.h>
+#include <netlist_exporters/netlist_exporter_spice.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <sch_edit_frame.h>
@@ -61,6 +61,7 @@
 #include <drawing_sheet/ds_proxy_undo_item.h>
 #include <dialog_update_from_pcb.h>
 #include <eda_list_dialog.h>
+#include <locale_io.h>
 
 #include <wildcards_and_files_ext.h>
 #include <sch_sheet_path.h>
@@ -741,6 +742,7 @@ static KICAD_T fieldsAndSymbols[] = { SCH_SYMBOL_T, SCH_FIELD_T, EOT };
 
 int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 {
+    LOCALE_IO toggle;
     PICKER_TOOL*    picker = m_toolMgr->GetTool<PICKER_TOOL>();
     SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
 
@@ -765,30 +767,76 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 if( !item )
                     return false;
 
-                if( item->IsType( wires ) )
+                if( item->Type() == SCH_PIN_T )
+                {
+                    SCH_PIN* pin = static_cast<SCH_PIN*>( item );
+                    SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item->GetParent() );
+                    std::vector<SCH_PIN*> pins = symbol->GetAllPins();
+
+                    int symbolPinNumber = static_cast<int>( std::distance( pins.begin(),
+                            std::find( pins.begin(), pins.end(), pin ) ) ) + 1;
+
+                    // TODO: We need to unify this library-model inheritance stuff into one
+                    // abstraction.
+                    
+                    // It might not be the best idea to have to load a file every time current is
+                    // probed either.
+
+                    std::unique_ptr<SIM_MODEL> model;
+                    std::unique_ptr<SIM_LIBRARY> library;
+
+                    SCH_FIELD* libraryField = symbol->FindField( SIM_LIBRARY::LIBRARY_FIELD );
+                    SCH_FIELD* nameField = symbol->FindField( SIM_LIBRARY::NAME_FIELD );
+
+                    if( libraryField )
+                    {
+                        wxString path = m_frame->Prj().AbsolutePath( libraryField->GetShownText() );
+                        library = SIM_LIBRARY::Create( path );
+
+                        if( !library || !nameField )
+                            return true;
+
+                        SIM_MODEL* baseModel = library->FindModel( nameField->GetShownText() );
+
+                        if( !baseModel )
+                            return true;
+
+                        model = SIM_MODEL::Create( *baseModel,
+                                                   static_cast<int>( pins.size() ),
+                                                   symbol->GetFields() );
+                    }
+                    else
+                        model = SIM_MODEL::Create( static_cast<int>( pins.size() ),
+                                                   symbol->GetFields() );
+
+                    wxString ref = symbol->GetRef( &m_frame->GetCurrentSheet() );
+                    std::vector<wxString> currentNames = model->GenerateSpiceCurrentNames( ref );
+                    
+                    if( currentNames.size() == 0 )
+                        return true;
+                    else if( currentNames.size() == 1 )
+                    {
+                        simFrame->AddCurrentPlot( currentNames.at( 0 ) );
+                        return true;
+                    }
+
+                    int modelPinNumber = model->FindModelPinNumber( symbolPinNumber );
+
+                    if( modelPinNumber > 0 )
+                    {
+                        wxString name = currentNames.at( modelPinNumber - 1 );
+                        simFrame->AddCurrentPlot( name );
+                    }
+                }
+                else if( item->IsType( wires ) )
                 {
                     if( SCH_CONNECTION* conn = static_cast<SCH_ITEM*>( item )->Connection() )
-                        simFrame->AddVoltagePlot( UnescapeString( conn->Name() ) );
-                }
-                else if( item->Type() == SCH_PIN_T )
-                {
-                    SCH_PIN*    pin = (SCH_PIN*) item;
-                    SCH_SYMBOL* symbol = (SCH_SYMBOL*) item->GetParent();
-                    wxString    ref = symbol->GetRef( &m_frame->GetCurrentSheet() );
-                    wxString    param;
-                    wxString    primitive;
+                    {
+                        wxString spiceNet = UnescapeString( conn->Name() );
+                        NETLIST_EXPORTER_SPICE::ReplaceForbiddenChars( spiceNet );
 
-                    primitive = NETLIST_EXPORTER_PSPICE::GetSpiceField( SF_PRIMITIVE, symbol, 0 );
-                    primitive.LowerCase();
-
-                    if( primitive == "c" || primitive == "l" || primitive == "r" )
-                        param = wxT( "I" );
-                    else if( primitive == "d" )
-                        param = wxT( "Id" );
-                    else
-                        param = wxString::Format( wxT( "I%s" ), pin->GetShownName().Lower() );
-
-                    simFrame->AddCurrentPlot( ref, param );
+                        simFrame->AddVoltagePlot( wxString::Format( "V(%s)", spiceNet ) );
+                    }
                 }
 
                 return true;

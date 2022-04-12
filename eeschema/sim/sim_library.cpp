@@ -23,16 +23,42 @@
  */
 
 #include <sim/sim_library.h>
+#include <sim/sim_library_spice.h>
 
 
-bool SIM_LIBRARY::ReadFile( const wxString& aFilename )
+std::unique_ptr<SIM_LIBRARY> SIM_LIBRARY::Create( wxString aFilePath )
 {
-    m_filename = aFilename;
+    std::unique_ptr<SIM_LIBRARY> library = std::make_unique<SIM_LIBRARY_SPICE>();
+    
+    if( !library->ReadFile( aFilePath ) )
+        return nullptr;
+
+    return library;
+}
+
+
+bool SIM_LIBRARY::ReadFile( const wxString& aFilePath )
+{
+    m_filePath = aFilePath;
     return true;
 }
 
 
-std::vector<std::reference_wrapper<SIM_MODEL>> SIM_LIBRARY::GetModels()
+SIM_MODEL* SIM_LIBRARY::FindModel( const wxString& aModelName ) const
+{
+    for( unsigned i = 0; i < GetModelNames().size(); ++i )
+    {
+        wxString curModelName = GetModelNames().at( i );
+
+        if( curModelName == aModelName )
+            return m_models.at( i ).get();
+    }
+
+    return nullptr;
+}
+
+
+std::vector<std::reference_wrapper<SIM_MODEL>> SIM_LIBRARY::GetModels() const
 {
     std::vector<std::reference_wrapper<SIM_MODEL>> ret;
 

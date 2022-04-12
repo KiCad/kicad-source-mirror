@@ -53,6 +53,8 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_DashedLineDashRatio( 12.0 ),
         m_DashedLineGapRatio( 3.0 ),
         m_SpiceAdjustPassiveValues( false ),
+        m_SpiceSaveAllVoltages( false ),
+        m_SpiceSaveAllCurrents( false ),
         m_NgspiceSimulatorSettings( nullptr )
 {
     EESCHEMA_SETTINGS* appSettings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
@@ -194,6 +196,12 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
     m_params.emplace_back( new PARAM<bool>( "spice_adjust_passive_values",
             &m_SpiceAdjustPassiveValues, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "spice_save_all_voltages",
+            &m_SpiceSaveAllVoltages, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "spice_save_all_currents",
+            &m_SpiceSaveAllCurrents, false ) );
 
     m_params.emplace_back( new PARAM<wxString>( "spice_external_command",
             &m_SpiceCommandString, "spice \"%I\"" ) );

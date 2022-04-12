@@ -29,48 +29,7 @@
 #include <macros.h>     // for TO_UTF8 def
 #include <wx/regex.h>
 #include <wx/tokenzr.h>
-
-wxString NGSPICE_CIRCUIT_MODEL::ComponentToVector(
-        const wxString& aName, SIM_PLOT_TYPE aType, const wxString& aParam ) const
-{
-    wxString res;
-
-    // Some of the flags should exclude mutually
-    wxASSERT( ( ( aType & SPT_VOLTAGE ) == 0 ) != ( ( aType & SPT_CURRENT ) == 0 ) );
-    wxASSERT( ( ( aType & SPT_AC_PHASE ) == 0 ) || ( ( aType & SPT_AC_MAG ) == 0 ) );
-
-    if( aType & SPT_VOLTAGE )
-    {
-        // netnames are escaped (can contain "{slash}" for '/') Unscape them:
-        wxString spicenet = UnescapeString( aName );
-
-        // Spice netlist netnames does not accept some chars, which are replaced
-        // by eeschema netlist generator.
-        // Replace these forbidden chars to find the actual spice net name
-        NETLIST_EXPORTER_PSPICE::ReplaceForbiddenChars( spicenet );
-
-        return wxString::Format( "V(%s)", spicenet );
-    }
-
-    else if( aType & SPT_CURRENT )
-    {
-        wxString device = GetSpiceDevice( aName ).Lower();
-        wxString param = aParam.Lower();
-
-        if( device.length() > 0 && device[0] == 'x' )
-        {
-            return "current probe of .subckt not yet implemented";
-        }
-        else
-        {
-            return wxString::Format( "@%s[%s]",
-                                     device,
-                                     param.IsEmpty() ? "i" : param );
-        }
-    }
-
-    return res;
-}
+#include <locale_io.h>
 
 
 SIM_PLOT_TYPE NGSPICE_CIRCUIT_MODEL::VectorToSignal(
@@ -108,47 +67,16 @@ SIM_PLOT_TYPE NGSPICE_CIRCUIT_MODEL::VectorToSignal(
 }
 
 
-const std::vector<wxString>& NGSPICE_CIRCUIT_MODEL::GetCurrents( SPICE_PRIMITIVE aPrimitive )
-{
-    static const std::vector<wxString> passive = { "I" };
-    static const std::vector<wxString> diode = { "Id" };
-    static const std::vector<wxString> bjt = { "Ib", "Ic", "Ie" };
-    static const std::vector<wxString> mos = { "Ig", "Id", "Is" };
-    static const std::vector<wxString> empty;
-
-    switch( aPrimitive )
-    {
-        case SP_RESISTOR:
-        case SP_CAPACITOR:
-        case SP_INDUCTOR:
-        case SP_VSOURCE:
-            return passive;
-
-        case SP_DIODE:
-            return diode;
-
-        case SP_BJT:
-            return bjt;
-
-        case SP_MOSFET:
-            return mos;
-
-        default:
-            return empty;
-    }
-}
-
-
 wxString NGSPICE_CIRCUIT_MODEL::GetSheetSimCommand()
 {
     wxString simCmd;
 
-    UpdateDirectives( NET_ALL_FLAGS );
+    ReadDirectives();
 
-    for( const auto& dir : GetDirectives() )
+    for( const auto& directive : GetDirectives() )
     {
-        if( IsSimCommand( dir ) )
-            simCmd += wxString::Format( "%s\r\n", dir );
+        if( IsSimCommand( directive ) )
+            simCmd += wxString::Format( "%s\r\n", directive );
     }
 
     return simCmd;
@@ -222,56 +150,4 @@ bool NGSPICE_CIRCUIT_MODEL::ParseDCCommand( const wxString& aCmd, SPICE_DC_PARAM
     }
 
     return true;
-}
-
-
-void NGSPICE_CIRCUIT_MODEL::writeDirectives( OUTPUTFORMATTER* aFormatter, unsigned aCtl ) const
-{
-    // Add a directive to obtain currents
-    //aFormatter->Print( 0, ".options savecurrents\n" );        // does not work :(
-
-    for( const auto& item : GetSpiceItems() )
-    {
-        for( const auto& current :
-                NGSPICE_CIRCUIT_MODEL::GetCurrents( (SPICE_PRIMITIVE) item.m_primitive ) )
-        {
-            if( !item.m_enabled )
-                continue;
-
-            /// @todo is it required to switch to lowercase
-            aFormatter->Print( 0, ".save %s\n",
-                    TO_UTF8( ComponentToVector( item.m_refName, SPT_CURRENT, current ) ) );
-        }
-    }
-
-    // If we print out .save directives for currents, then it needs to be done for voltages as well
-    for( const auto& netMap : GetNetIndexMap() )
-    {
-        // the "0" and the "GND" nets are automatically saved internally by ngspice.
-        // Skip them
-        wxString netname = ComponentToVector( netMap.first, SPT_VOLTAGE );
-
-        if( netname == "V(0)" || netname == "V(GND)" )
-            continue;
-
-        aFormatter->Print( 0, ".save %s\n", TO_UTF8( netname ) );
-    }
-
-    if( m_simCommand.IsEmpty() )
-    {
-        // Fallback to the default behavior and just write all directives
-        NETLIST_EXPORTER_PSPICE::writeDirectives( aFormatter, aCtl );
-    }
-    else
-    {
-        // Dump all directives but simulation commands
-        for( const auto& dir : GetDirectives() )
-        {
-            if( !IsSimCommand( dir ) )
-                aFormatter->Print( 0, "%s\n", TO_UTF8( dir ) );
-        }
-
-        // Finish with our custom simulation command
-        aFormatter->Print( 0, "%s\n", TO_UTF8( m_simCommand ) );
-    }
 }
