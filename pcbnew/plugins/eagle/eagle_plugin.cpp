@@ -692,7 +692,7 @@ void EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
 }
 
 
-#define DIMENSION_PRECISION 1 // 0.001 mm
+#define DIMENSION_PRECISION 2 // 0.01 mm
 
 
 void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
@@ -1031,7 +1031,19 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 }
                 else if( d.dimensionType == wxT( "radius" ) )
                 {
-                    // Radial dimensions added in 7.0....
+                    PCB_DIM_RADIAL* dimension = new PCB_DIM_RADIAL( m_board );
+                    m_board->Add( dimension, ADD_MODE::APPEND );
+
+                    dimension->SetLayer( layer );
+                    dimension->SetPrecision( DIMENSION_PRECISION );
+
+                    dimension->SetStart( (wxPoint) pt1 );
+                    dimension->SetEnd( (wxPoint) pt2 );
+                    dimension->Text().SetPosition( (wxPoint) pt3 );
+                    dimension->Text().SetTextSize( textSize );
+                    dimension->Text().SetTextThickness( textThickness );
+                    dimension->SetLineThickness( designSettings.GetLineThickness( layer ) );
+                    dimension->SetUnits( EDA_UNITS::MILLIMETRES );
                 }
                 else if( d.dimensionType == wxT( "leader" ) )
                 {
@@ -1046,6 +1058,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                     leader->Text().SetPosition( (wxPoint) pt3 );
                     leader->Text().SetTextSize( textSize );
                     leader->Text().SetTextThickness( textThickness );
+                    leader->SetText( wxEmptyString );
                     leader->SetLineThickness( designSettings.GetLineThickness( layer ) );
                 }
                 else    // horizontal, vertical, <default>, diameter
