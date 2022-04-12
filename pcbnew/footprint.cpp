@@ -1433,7 +1433,16 @@ void FOOTPRINT::ViewGetLayers( int aLayers[], int& aCount ) const
 double FOOTPRINT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
-        return 0.0;
+    {
+        // The locked shadow shape is shown only if the footprint itself is visible
+        if( ( m_layer == F_Cu ) && aView->IsLayerVisible( LAYER_MOD_FR ) )
+            return 0.0;
+
+        if( ( m_layer == B_Cu ) && aView->IsLayerVisible( LAYER_MOD_BK ) )
+            return 0.0;
+
+        return std::numeric_limits<double>::max();
+    }
 
     int layer = ( m_layer == F_Cu ) ? LAYER_MOD_FR :
                 ( m_layer == B_Cu ) ? LAYER_MOD_BK : LAYER_ANCHOR;
