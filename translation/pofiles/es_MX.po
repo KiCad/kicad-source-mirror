@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-11 09:40-0700\n"
-"PO-Revision-Date: 2022-04-11 16:38+0000\n"
+"PO-Revision-Date: 2022-04-14 08:02+0000\n"
 "Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -7095,7 +7095,7 @@ msgstr "Archivo de atajos de teclado"
 #: cvpcb/auto_associate.cpp:108
 #, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "No se ha encontrado el archivo de equivalencia '%s'."
+msgstr "No se puede encontrar el archivo de equivalencia '%s'."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -9191,20 +9191,15 @@ msgid "Diameter:"
 msgstr "Diámetro:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
-#, fuzzy
 msgid "Set diameter to 0 to use schematic's junction dot size."
 msgstr ""
-"Establezca el diámetro a 0 para utilizar el tamaño de punto de unión del "
-"esquema."
+"Establezca el diámetro a 0 para usar el tamaño de punto de unión del esquema."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_properties_base.cpp:81
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:94
-#, fuzzy
 msgid "Clear color to use Schematic Editor colors."
-msgstr ""
-"Establezca el color como transparente para utilizar los colores del Editor "
-"de Esquemas."
+msgstr "Limpiar color para usar los colores del Editor de esquemas."
 
 #: eeschema/dialogs/dialog_junction_props_base.h:59
 msgid "Junction Properties"
@@ -9690,11 +9685,10 @@ msgid "Border width:"
 msgstr "Ancho del contorno:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:52
-#, fuzzy
 msgid "Set border width to 0 to use schematic's default symbol line width."
 msgstr ""
-"Establezca el ancho del borde a 0 para utilizar el ancho de línea del "
-"símbolo por defecto de Schematic."
+"Establezca el ancho del borde a 0 para usar el ancho de línea del símbolo "
+"por defecto del esquema."
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:60
 msgid "Fill Style"
@@ -9978,11 +9972,10 @@ msgid "Text Box Properties"
 msgstr "Propiedades de la caja de texto"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:77
-#, fuzzy
 msgid "Set width to 0 to use schematic's default line width."
 msgstr ""
-"Establecer el ancho a 0 para usar el ancho de línea predeterminado de "
-"Schematic."
+"Establezca el ancho a 0 para usar el ancho de línea predeterminado del "
+"esquema."
 
 #: eeschema/dialogs/dialog_line_properties_base.h:68
 msgid "Line Properties"
@@ -10834,18 +10827,14 @@ msgid "Filled shape"
 msgstr "Forma rellena"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:122
-#, fuzzy
 msgid "Set border width to 0 to use schematic's default line width."
 msgstr ""
-"Establezca el ancho del borde a 0 para utilizar el ancho de línea del "
-"símbolo por defecto de Schematic."
+"Establezca el ancho del borde a 0 para usar el ancho de línea por defecto "
+"del esquema."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:126
-#, fuzzy
 msgid "Clear colors to use Schematic Editor colors."
-msgstr ""
-"Establezca el color como transparente para utilizar los colores del Editor "
-"de Esquemas."
+msgstr "Limpiar colores para usar los colores del Editor de esquemas."
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:79
 #, c-format
@@ -12007,7 +11996,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:142
 msgid "Default for all sheet instances"
-msgstr ""
+msgstr "Valor por defecto para todas las instancias de la hoja"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:143
 msgid ""
@@ -12015,6 +12004,9 @@ msgid ""
 "footprint fields the default for all sheet instances\n"
 "of this symbol"
 msgstr ""
+"Marque esta opción para hacer a los campos de unidad y referencia, valor y\n"
+"huella por defecto para todas las instancias de la hoja\n"
+"de este símbolo"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:147
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:345
@@ -12358,10 +12350,9 @@ msgid "Wire/bus width:"
 msgstr "Ancho de cable/bus:"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:90
-#, fuzzy
 msgid "Set width to 0 to use netclass's wire/bus widths."
 msgstr ""
-"Establecer el ancho a 0 para utilizar los anchos de alambre/bus de Netclass."
+"Establezca el ancho a 0 para usar los anchos de cable/bus de la clase de red."
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:71
 msgid "Wire & Bus Properties"
@@ -15477,7 +15468,7 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Hay nombres de bibliotecas en el esquema seleccionado que faltan en la tabla "
+"Hay nombres de biblioteca en el esquema seleccionado que faltan en la tabla "
 "de bibliotecas del proyecto actual.  Esto puede resultar en referencias de "
 "biblioteca de símbolos rotas para el esquema cargado.\n"
 "\n"
@@ -15526,8 +15517,7 @@ msgid ""
 msgstr ""
 "Existe un nombre de biblioteca duplicado que hace referencia a una "
 "biblioteca diferente en la tabla de bibliotecas actual.  Este conflicto no "
-"puede resolverse y puede resultar en referencias a bibliotecas de símbolos "
-"rotas.\n"
+"puede resolverse y puede  a referencias a bibliotecas de símbolos rotas.\n"
 "\n"
 "¿Desea continuar?"
 
@@ -28215,7 +28205,6 @@ msgid "Enter the text placed on selected layer."
 msgstr "Introduzca el texto colocado en la capa seleccionada."
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:100
-#, fuzzy
 msgid "Knockout"
 msgstr "Knockout"
 
