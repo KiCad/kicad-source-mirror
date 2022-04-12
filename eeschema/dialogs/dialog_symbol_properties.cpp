@@ -677,33 +677,12 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     if( entry && entry->IsPower() )
         m_fields->at( VALUE_FIELD ).SetText( m_symbol->GetLibId().GetLibItemName() );
 
-    // Push all fields to the symbol -except- for those which are TEMPLATE_FIELDNAMES
-    // with empty values.
     SCH_FIELDS& fields = m_symbol->GetFields();
 
     fields.clear();
 
     for( size_t i = 0; i < m_fields->size(); ++i )
-    {
-        SCH_FIELD& field = m_fields->at( i );
-        bool       emptyTemplateField = false;
-
-        if( i >= MANDATORY_FIELDS )
-        {
-            for( const TEMPLATE_FIELDNAME& fieldname :
-                    schematic.Settings().m_TemplateFieldNames.GetTemplateFieldNames() )
-            {
-                if( field.GetName() == fieldname.m_Name && field.GetText().IsEmpty() )
-                {
-                    emptyTemplateField = true;
-                    break;
-                }
-            }
-        }
-
-        if( !emptyTemplateField )
-            fields.push_back( field );
-    }
+        fields.push_back( m_fields->at( i ) );
 
     // Reference has a specific initialization, depending on the current active sheet
     // because for a given symbol, in a complex hierarchy, there are more than one

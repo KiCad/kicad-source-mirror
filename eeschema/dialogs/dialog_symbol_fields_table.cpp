@@ -45,7 +45,7 @@
 #include <wx/textdlg.h>
 
 #include "dialog_symbol_fields_table.h"
-
+#include "eda_list_dialog.h"
 
 #define DISPLAY_NAME_COLUMN   0
 #define SHOW_FIELD_COLUMN     1
@@ -223,6 +223,19 @@ public:
         }
     }
 
+    void RemoveColumn( int aCol )
+    {
+        wxString fieldName = m_fieldNames[ aCol ];
+
+        m_fieldNames.erase( m_fieldNames.begin() + aCol );
+
+        for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
+        {
+            SCH_SYMBOL* symbol = m_symbolsList[ i ].GetSymbol();
+            m_dataStore[ symbol->m_Uuid ].erase( fieldName );
+        }
+    }
+
     int GetNumberRows() override { return m_rows.size(); }
 
     // Columns are fieldNames + quantity column
@@ -282,7 +295,7 @@ public:
         std::vector<SCH_REFERENCE> references;
         wxString                   fieldValue;
 
-        for( const auto& ref : group.m_Refs )
+        for( const SCH_REFERENCE& ref : group.m_Refs )
         {
             if( aCol == REFERENCE_FIELD || aCol == QUANTITY_COLUMN )
             {
@@ -348,7 +361,7 @@ public:
         DATA_MODEL_ROW& rowGroup = m_rows[ aRow ];
         wxString fieldName = m_fieldNames[ aCol ];
 
-        for( const auto& ref : rowGroup.m_Refs )
+        for( const SCH_REFERENCE& ref : rowGroup.m_Refs )
             m_dataStore[ ref.GetSymbol()->m_Uuid ][ fieldName ] = aValue;
 
         m_edited = true;
@@ -611,21 +624,20 @@ public:
 
             for( const std::pair<wxString, wxString> srcData : fieldStore )
             {
+                if( srcData.first == _( "Qty" ) )
+                    continue;
+
                 const wxString& srcName = srcData.first;
                 const wxString& srcValue = srcData.second;
                 SCH_FIELD*      destField = symbol.FindField( srcName );
 
-                if( !destField && !srcValue.IsEmpty() )
+                if( !destField )
                 {
                     const VECTOR2I symbolPos = symbol.GetPosition();
                     destField = symbol.AddField( SCH_FIELD( symbolPos, -1, &symbol, srcName ) );
                 }
 
-                if( !destField )
-                {
-                    symbol.RemoveField( srcName );
-                }
-                else if( destField->GetId() == REFERENCE_FIELD )
+                if( destField->GetId() == REFERENCE_FIELD )
                 {
                     // Reference is not editable
                 }
@@ -643,6 +655,12 @@ public:
                 {
                     destField->SetText( srcValue );
                 }
+            }
+
+            for( int ii = symbol.GetFields().size() - 1; ii >= MANDATORY_FIELDS; ii-- )
+            {
+                if( fieldStore.count( symbol.GetFields()[ii].GetName() ) == 0 )
+                    symbol.GetFields().erase( symbol.GetFields().begin() + ii );
             }
         }
 
@@ -960,7 +978,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
     }
 
     // Force References to always be shown
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxCHECK( cfg, /*void*/ );
 
     cfg->m_FieldEditorPanel.fields_show["Reference"] = true;
@@ -986,7 +1004,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
 void DIALOG_SYMBOL_FIELDS_TABLE::OnAddField( wxCommandEvent& event )
 {
     // quantities column will become new field column, so it needs to be reset
-    auto attr = new wxGridCellAttr;
+    wxGridCellAttr* attr = new wxGridCellAttr;
     m_grid->SetColAttr( m_dataModel->GetColsCount() - 1, attr );
     m_grid->SetColFormatCustom( m_dataModel->GetColsCount() - 1, wxGRID_VALUE_STRING );
 
@@ -1015,7 +1033,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnAddField( wxCommandEvent& event )
 
     std::string key( fieldName.ToUTF8() );
 
-    auto cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     cfg->m_FieldEditorPanel.fields_show[key] = true;
 
     AddField( fieldName, fieldName, true, false );
@@ -1027,6 +1045,55 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnAddField( wxCommandEvent& event )
     // set up attributes on the new quantities column
     attr = new wxGridCellAttr;
     attr->SetReadOnly();
+    m_grid->SetColAttr( m_dataModel->GetColsCount() - 1, attr );
+    m_grid->SetColFormatNumber( m_dataModel->GetColsCount() - 1 );
+    m_grid->SetColSize( m_dataModel->GetColsCount() - 1, 50 );
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::OnRemoveField( wxCommandEvent& event )
+{
+    wxArrayString              headers;
+    std::vector<wxArrayString> fieldNames;
+    int                        col = -1;
+
+    headers.Add( _( "User Fields" ) );
+
+    for( int ii = MANDATORY_FIELDS; ii < m_fieldsCtrl->GetItemCount(); ++ii )
+    {
+        wxArrayString fieldName;
+        fieldName.Add( m_fieldsCtrl->GetTextValue( ii, 0 ) );
+        fieldNames.emplace_back( fieldName );
+    }
+
+    EDA_LIST_DIALOG dlg( this, _( "Delete Field" ), headers, fieldNames, wxEmptyString );
+    dlg.SetListLabel( _( "Select field:" ) );
+
+    if( dlg.ShowModal() == wxID_OK )
+    {
+        wxString fieldName = dlg.GetTextSelection();
+
+        for( int ii = 0; ii < m_dataModel->GetNumberCols(); ++ii )
+        {
+            if( fieldName == m_dataModel->GetColLabelValue( ii ) )
+                col = ii;
+        }
+    }
+
+    if( col >= 0 )
+    {
+        m_fieldsCtrl->DeleteItem( col );
+        m_dataModel->RemoveColumn( col );
+
+        wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_DELETED,
+                                m_fieldsCtrl->GetItemCount(), 1 );
+        m_grid->ProcessTableMessage( msg );
+    }
+
+    // set up attributes on the new quantities column
+    wxGridCellAttr* attr = new wxGridCellAttr;
+    attr->SetReadOnly();
+
     m_grid->SetColAttr( m_dataModel->GetColsCount() - 1, attr );
     m_grid->SetColFormatNumber( m_dataModel->GetColsCount() - 1 );
     m_grid->SetColSize( m_dataModel->GetColsCount() - 1, 50 );
