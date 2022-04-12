@@ -499,7 +499,7 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
     const BOARD* board = GetBoard();
 
     if( !board )
-        return false;
+        return true;
 
     if( !IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) ) )
         return false;
