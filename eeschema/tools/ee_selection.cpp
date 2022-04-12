@@ -39,25 +39,46 @@ EE_SELECTION::EE_SELECTION( SCH_SCREEN* aScreen ) :
 
 EDA_ITEM* EE_SELECTION::GetTopLeftItem( bool onlyModules ) const
 {
+    EDA_ITEM* topLeftConnectedItem = nullptr;
+    VECTOR2I  topLeftConnectedPos;
+
     EDA_ITEM* topLeftItem = nullptr;
     VECTOR2I  topLeftPos;
 
-    // find the leftmost (smallest x coord) and highest (smallest y with the smallest x) item
+    auto processItem =
+            []( EDA_ITEM* aItem, EDA_ITEM** aCurrent, VECTOR2I* aCurrentPos )
+            {
+                VECTOR2I pos = aItem->GetPosition();
+
+                if( ( aCurrent == nullptr )
+                    || ( pos.x < aCurrentPos->x )
+                    || ( pos.x == aCurrentPos->x && pos.y < aCurrentPos->y ) )
+                {
+                    *aCurrent = aItem;
+                    *aCurrentPos = pos;
+                }
+            };
+
+    // Find the leftmost (smallest x coord) and highest (smallest y with the smallest x) item
     // in the selection
+
     for( EDA_ITEM* item : m_items )
     {
-        VECTOR2I pos = item->GetPosition();
+        SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
+        LIB_PIN*  lib_pin = dynamic_cast<LIB_PIN*>( item );
 
-        if( ( topLeftItem == nullptr )
-            || ( pos.x < topLeftPos.x )
-            || ( topLeftPos.x == pos.x && pos.y < topLeftPos.y ) )
-        {
-            topLeftItem = item;
-            topLeftPos = pos;
-        }
+        // Prefer connection points (which should remain on grid)
+
+        if( ( sch_item && sch_item->IsConnectable() ) || lib_pin )
+            processItem( item, &topLeftConnectedItem, &topLeftConnectedPos );
+
+        processItem( item, &topLeftItem, &topLeftPos );
     }
 
-    return topLeftItem;
+    if( topLeftConnectedItem )
+        return topLeftConnectedItem;
+    else
+        return topLeftItem;
 }
 
 
