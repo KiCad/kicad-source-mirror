@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-11 09:39-0700\n"
-"PO-Revision-Date: 2022-04-13 14:13+0000\n"
+"PO-Revision-Date: 2022-04-14 08:02+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -27022,9 +27022,8 @@ msgid "Target Properties"
 msgstr "Målegenskaper"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:82
-#, fuzzy
 msgid "Footprint Reference Properties"
-msgstr "Egenskaper för fotavtrycks referens"
+msgstr "Egenskaper för fotavtrycks referensbeteckning"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:83
 msgid "Footprint Value Properties"
@@ -30037,9 +30036,8 @@ msgid "(pad \"%s\")"
 msgstr "(lödyta '%s')"
 
 #: pcbnew/footprint.cpp:2370 pcbnew/pad.cpp:1750 pcbnew/zone.cpp:1458
-#, fuzzy
 msgid "Clearance Override"
-msgstr "Åsidosätt isolationsavstånd"
+msgstr "Åsidosatt isolationsavstånd"
 
 #: pcbnew/footprint.cpp:2373 pcbnew/pad.cpp:1727
 msgid "Solderpaste Margin Override"
