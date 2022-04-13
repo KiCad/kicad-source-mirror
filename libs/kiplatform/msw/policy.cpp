@@ -28,11 +28,27 @@
 
 KIPLATFORM::POLICY::STATE KIPLATFORM::POLICY::GetPolicyState( const wxString& aKey )
 {
-    wxRegKey key( wxRegKey::HKLM, POLICY_KEY_ROOT );
-    if( key.Exists() )
+    wxRegKey* keyToUse = nullptr;
+    wxRegKey  userKey( wxRegKey::HKCU, POLICY_KEY_ROOT );
+    wxRegKey  compKey( wxRegKey::HKLM, POLICY_KEY_ROOT );
+
+    // we have user level policies take precedence over computer level policies
+    if( userKey.Exists() && userKey.HasValue( aKey ) )
+    {
+        keyToUse = &userKey;
+    }
+    else
+    {
+        if( compKey.Exists() && compKey.HasValue( aKey ) )
+        {
+            keyToUse = &compKey;
+        }
+    }
+
+    if( keyToUse != nullptr )
     {
         long value;
-        if( key.HasValue( aKey ) && key.QueryValue( aKey, &value ) )
+        if( keyToUse->QueryValue( aKey, &value ) )
         {
             if( value == 1 )
                 return POLICY::STATE::ENABLED;
