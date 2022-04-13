@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-11 09:40-0700\n"
-"PO-Revision-Date: 2022-04-11 16:38+0000\n"
+"PO-Revision-Date: 2022-04-14 08:02+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -9147,7 +9147,7 @@ msgstr "Diameter:"
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
 #, fuzzy
 msgid "Set diameter to 0 to use schematic's junction dot size."
-msgstr "Sätt diametern till 0 för att använda schemats knutpunktsstorlek."
+msgstr "Sätt diametern till 0 för att använda kretsschemats knutpunktsstorlek."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_properties_base.cpp:81
@@ -10780,16 +10780,14 @@ msgid "Filled shape"
 msgstr "Fylld form"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:122
-#, fuzzy
 msgid "Set border width to 0 to use schematic's default line width."
 msgstr ""
 "Sätt kantlinjebredden till 0 för att använda kretsschemats förinställda "
-"linjebredd för symboler."
+"linjebredd."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:126
-#, fuzzy
 msgid "Clear colors to use Schematic Editor colors."
-msgstr "Välj transparent färg för att använda kretsschemaredigerarens färger."
+msgstr "Välj transparent för att använda kretsschemaredigerarens färger."
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:79
 #, c-format
@@ -11947,14 +11945,18 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:142
 msgid "Default for all sheet instances"
-msgstr ""
+msgstr "Förinställning för alla instanser på arket"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:143
+#, fuzzy
 msgid ""
 "Check to make the unit and reference, value, and\n"
 "footprint fields the default for all sheet instances\n"
 "of this symbol"
 msgstr ""
+"Markera för att göra fälten för enhet, referens, värde och\n"
+"fotavtryck till förinställning för alla instanser av denna\n"
+"symbol på kretsschemaark"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:147
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:345
@@ -12382,9 +12384,8 @@ msgid "Selection thickness:"
 msgstr "Linjebredd för val:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:94
-#, fuzzy
 msgid "(selection color can be edited in the \"Colors\" page)"
-msgstr "(markeringsfärg kan redigeras på sidan \"Färger\")"
+msgstr "(markeringens färg kan redigeras på sidan \"Färger\")"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:98
 #, fuzzy
@@ -27977,9 +27978,8 @@ msgid "Target Properties"
 msgstr "Målegenskaper"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:84
-#, fuzzy
 msgid "Footprint Reference Properties"
-msgstr "Egenskaper för fotavtrycks referens"
+msgstr "Egenskaper för fotavtrycks referensbeteckning"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:85
 msgid "Footprint Value Properties"
@@ -31326,9 +31326,8 @@ msgid "(PTH pad's hole leaves no copper)"
 msgstr "(Hålmonteringslödytans hål lämnar ingen koppar kvar)"
 
 #: pcbnew/footprint.cpp:2578 pcbnew/pad.cpp:1749 pcbnew/zone.cpp:1358
-#, fuzzy
 msgid "Clearance Override"
-msgstr "Åsidosätt isolationsavstånd"
+msgstr "Åsidosatt isolationsavstånd"
 
 #: pcbnew/footprint.cpp:2581 pcbnew/pad.cpp:1723
 msgid "Solderpaste Margin Override"
