@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,13 +61,12 @@ public:
 
 private:
     PCB_EDIT_FRAME* m_parent;
-    // The last preference for STEP Origin:
-    STEP_ORG_OPT m_STEP_org_opt;
-    bool   m_noVirtual;     // remember last preference for No Virtual Component
-    int    m_OrgUnits;      // remember last units for User Origin
-    double m_XOrg;          // remember last User Origin X value
-    double m_YOrg;          // remember last User Origin Y value
-    wxString m_boardPath;   // path to the exported board file
+    STEP_ORG_OPT    m_STEP_org_opt;  // The last preference for STEP Origin:
+    bool            m_noVirtual;     // remember last preference for No Virtual Component
+    int             m_OrgUnits;      // remember last units for User Origin
+    double          m_XOrg;          // remember last User Origin X value
+    double          m_YOrg;          // remember last User Origin Y value
+    wxString        m_boardPath;     // path to the exported board file
 
 protected:
     void onUpdateUnits( wxUpdateUIEvent& aEvent ) override;
@@ -152,7 +151,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
 
     SetFocus();
 
-    auto cfg = m_parent->GetPcbNewSettings();
+    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
 
     m_STEP_org_opt = static_cast<STEP_ORG_OPT>( cfg->m_ExportStep.origin_mode );
 
@@ -185,9 +184,9 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     wxString bad_scales;
     size_t   bad_count = 0;
 
-    for( auto& fp : aParent->GetBoard()->Footprints() )
+    for( FOOTPRINT* fp : aParent->GetBoard()->Footprints() )
     {
-        for( auto& model : fp->Models() )
+        for( const FP_3DMODEL& model : fp->Models() )
         {
 
             if( model.m_Scale.x != 1.0 ||
@@ -220,6 +219,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
         if( msgDlg.DoNotShowAgain() )
             Pgm().GetCommonSettings()->m_DoNotShowAgain.scaled_3d_models_warning = true;
     }
+
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
 }
@@ -229,7 +229,7 @@ DIALOG_EXPORT_STEP::~DIALOG_EXPORT_STEP()
 {
     GetOriginOption(); // Update m_STEP_org_opt member.
 
-    auto cfg = m_parent->GetPcbNewSettings();
+    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
 
     cfg->m_ExportStep.origin_mode = static_cast<int>( m_STEP_org_opt );
     cfg->m_ExportStep.origin_units = m_STEP_OrgUnitChoice->GetSelection();
@@ -309,20 +309,14 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 {
     m_parent->SetLastPath( LAST_PATH_STEP, m_filePickerSTEP->GetPath() );
 
-    double tolerance = 0.01;   // default value in mm
+    double tolerance;   // default value in mm
 
     switch( m_tolerance->GetSelection() )
     {
-    case 0:         // small
-        tolerance = 0.001;
-        break;
-
+    case 0:  tolerance = 0.001; break;
     default:
-    case 1: break;  // Normal
-
-    case 2:         // large
-        tolerance = 0.1;
-        break;
+    case 1:  tolerance = 0.01;  break;
+    case 2:  tolerance = 0.1;   break;
     }
 
     SHAPE_POLY_SET outline;
@@ -451,7 +445,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     wxExecute( cmdK2S, wxEXEC_ASYNC  | wxEXEC_SHOW_CONSOLE );
 
-    #else
+#else
 
     KICAD2MCAD_PRMS params;
     params.m_filename = m_boardPath;
@@ -506,7 +500,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     KICAD2STEP converter( params );
     converter.Run();
-    #endif
+#endif
 
     aEvent.Skip(); // Close the dialog
 }
