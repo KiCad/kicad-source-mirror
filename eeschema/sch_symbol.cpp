@@ -1067,7 +1067,7 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
 }
 
 
-void SCH_SYMBOL::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath )
+void SCH_SYMBOL::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath, bool aResetPrefix )
 {
     // Build a reference with no annotation, i.e. a reference ending with a single '?'
     wxString defRef = UTIL::GetRefDesUnannotated( m_prefix );
@@ -1079,13 +1079,23 @@ void SCH_SYMBOL::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath )
         for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
         {
             if( instance.m_Path == path )
-                instance.m_Reference = defRef;
+            {
+                if( instance.m_Reference.IsEmpty() || aResetPrefix )
+                    instance.m_Reference = UTIL::GetRefDesUnannotated( m_prefix );
+                else
+                    instance.m_Reference = UTIL::GetRefDesUnannotated( instance.m_Reference );
+            }
         }
     }
     else
     {
         for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
-            instance.m_Reference = defRef;
+        {
+            if( instance.m_Reference.IsEmpty() || aResetPrefix)
+                instance.m_Reference = UTIL::GetRefDesUnannotated( m_prefix );
+            else
+                instance.m_Reference = UTIL::GetRefDesUnannotated( instance.m_Reference );
+        }
     }
 
     for( std::unique_ptr<SCH_PIN>& pin : m_pins )
@@ -1095,7 +1105,12 @@ void SCH_SYMBOL::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath )
     // When a clear annotation is made, the calling function must call a
     // UpdateAllScreenReferences for the active sheet.
     // But this call cannot made here.
-    m_fields[REFERENCE_FIELD].SetText( defRef ); //for drawing.
+    wxString currentReference = m_fields[REFERENCE_FIELD].GetText();
+
+    if( currentReference.IsEmpty() || aResetPrefix )
+        m_fields[REFERENCE_FIELD].SetText( UTIL::GetRefDesUnannotated( m_prefix ) );
+    else
+        m_fields[REFERENCE_FIELD].SetText( UTIL::GetRefDesUnannotated( currentReference ) );
 }
 
 

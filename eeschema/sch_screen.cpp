@@ -988,14 +988,14 @@ size_t SCH_SCREEN::CountConnectedItems( const VECTOR2I& aPos, bool aTestJunction
 }
 
 
-void SCH_SCREEN::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
+void SCH_SCREEN::ClearAnnotation( SCH_SHEET_PATH* aSheetPath, bool aResetPrefix )
 {
 
     for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
     {
         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
-        symbol->ClearAnnotation( aSheetPath );
+        symbol->ClearAnnotation( aSheetPath, aResetPrefix );
     }
 }
 
@@ -1301,7 +1301,7 @@ void SCH_SCREENS::ClearAnnotationOfNewSheetPaths( SCH_SHEET_LIST& aInitialSheetP
             // Otherwise ClearAnnotation do nothing, because the F1 field is used as
             // reference default value and takes the latest displayed value
             curr_screen->EnsureAlternateReferencesExist();
-            curr_screen->ClearAnnotation( &sheetpath );
+            curr_screen->ClearAnnotation( &sheetpath, false );
         }
     }
 }

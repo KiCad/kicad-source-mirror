@@ -379,8 +379,10 @@ public:
      *
      * @param[in] aSheetPath The sheet path of the symbol annotation to clear.  If NULL then
      *                       the entire hierarchy is cleared.
+     * @param[in] aResetPrefix The annotation prefix ('R', 'U', etc.) should be reset to the
+     *                         symbol library prefix.
      */
-    void ClearAnnotation( SCH_SHEET_PATH* aSheetPath );
+    void ClearAnnotation( SCH_SHEET_PATH* aSheetPath, bool aResetPrefix );
 
     /**
      * For screens shared by many sheetpaths (complex hierarchies):

@@ -1493,7 +1493,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             // Clear annotation of g_CurrentSheet itself, because its sheetpath is not a new
             // path, but symbols managed by its sheet path must have their annotation cleared
             // because they are new:
-            sheet->GetScreen()->ClearAnnotation( &m_frame->GetCurrentSheet() );
+            sheet->GetScreen()->ClearAnnotation( &m_frame->GetCurrentSheet(), false );
         }
 
         if( doRefresh )

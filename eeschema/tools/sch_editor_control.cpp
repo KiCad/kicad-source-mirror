@@ -1493,7 +1493,7 @@ void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_SYMBOL* aSymbol, SCH_SCREEN* aP
     if( aForceKeepAnnotations && !reference.IsEmpty() )
         aSymbol->SetRef( &aPastePath, reference );
     else
-        aSymbol->ClearAnnotation( &aPastePath );
+        aSymbol->ClearAnnotation( &aPastePath, false );
 
     // We might clear annotations but always leave the original unit number, value and footprint
     // from the paste

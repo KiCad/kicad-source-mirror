@@ -63,20 +63,20 @@ void SCH_EDIT_FRAME::mapExistingAnnotation( std::map<wxString, wxString>& aMap )
 void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool* aAppendUndo )
 {
     auto clearSymbolAnnotation =
-        [&]( EDA_ITEM* aItem, SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet )
+        [&]( EDA_ITEM* aItem, SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet, bool aResetPrefixes )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( aItem );
 
             SaveCopyInUndoList( aScreen, symbol, UNDO_REDO::CHANGED, *aAppendUndo );
             *aAppendUndo = true;
-            symbol->ClearAnnotation( aSheet );
+            symbol->ClearAnnotation( aSheet, aResetPrefixes );
         };
 
     auto clearSheetAnnotation =
-            [&]( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet )
+            [&]( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet, bool aResetPrefixes )
             {
                 for( SCH_ITEM* item : aScreen->Items().OfType( SCH_SYMBOL_T ) )
-                    clearSymbolAnnotation( item, aScreen, aSheet );
+                    clearSymbolAnnotation( item, aScreen, aSheet, aResetPrefixes );
             };
 
     SCH_SCREEN* screen = GetScreen();
@@ -87,13 +87,15 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool* aA
     case ANNOTATE_ALL:
     {
         for( const SCH_SHEET_PATH& sheet : Schematic().GetSheets() )
-            clearSheetAnnotation( sheet.LastScreen(), nullptr );
+            clearSheetAnnotation( sheet.LastScreen(), nullptr, true );
 
         break;
     }
     case ANNOTATE_CURRENT_SHEET:
     {
-        clearSheetAnnotation( screen, &currentSheet );
+        // One could make an argument that this should clear prefixes.  I have no idea what
+        // the right answer is.
+        clearSheetAnnotation( screen, &currentSheet, false );
         break;
     }
 
@@ -105,7 +107,11 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool* aA
         for( EDA_ITEM* item : selection.Items() )
         {
             if( item->Type() == SCH_SYMBOL_T )
-                clearSymbolAnnotation( item, screen, &currentSheet );
+            {
+                // One could make an argument that this should clear prefixes.  I have no idea
+                // what the right answer is.
+                clearSymbolAnnotation( item, screen, &currentSheet, false );
+            }
         }
         break;
     }
