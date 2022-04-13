@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-11 09:39-0700\n"
-"PO-Revision-Date: 2022-04-13 14:13+0000\n"
+"PO-Revision-Date: 2022-04-14 08:02+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v6/fi/>\n"
 "Language: fi\n"
@@ -33817,7 +33817,7 @@ msgid "I/O Error"
 msgstr "I/O Virhe"
 
 #: pcbnew/tools/board_editor_control.cpp:573
-#, fuzzy, c-format
+#, c-format
 msgid "Orphaned net %s re-parented.\n"
 msgstr "Yksin jääneet verkot %s vanhemmat uudelleen järjestetty.\n"
 
@@ -34332,11 +34332,11 @@ msgstr "Napsauta uutta jäsentä ..."
 
 #: pcbnew/tools/pad_tool.cpp:153
 msgid "Paste Pad Properties"
-msgstr "Liitä tyynyn ominaisuudet"
+msgstr "Liitä Anturan Ominaisuudet"
 
 #: pcbnew/tools/pad_tool.cpp:268
 msgid "Push Pad Settings"
-msgstr "Push Pad -asetukset"
+msgstr "Työntöantura Asetukset"
 
 #: pcbnew/tools/pad_tool.cpp:335
 #, c-format
@@ -34344,34 +34344,34 @@ msgid ""
 "Click on pad %s%d\n"
 "Press <esc> to cancel or double-click to commit"
 msgstr ""
-"Napsauta tyynyä %s %d\n"
+"Napsauta anturaa %s %d\n"
 "Voit peruuttaa painamalla <esc> tai kaksoisnapsauttamalla"
 
 #: pcbnew/tools/pad_tool.cpp:357 pcbnew/tools/pad_tool.cpp:454
 msgid "Renumber pads"
-msgstr "Numeroi tyynyt uudelleen"
+msgstr "Numeroi anturat uudelleen"
 
 #: pcbnew/tools/pad_tool.cpp:558
 msgid "Place pad"
-msgstr "Aseta pad"
+msgstr "Aseta antura"
 
 #: pcbnew/tools/pad_tool.cpp:594
 #, c-format
 msgid "Pad Edit Mode.  Press %s again to exit."
-msgstr "Pad-muokkaustila. Poistu painamalla uudelleen %s."
+msgstr "Anturan Muokkaustila. Poistu painamalla uudelleen %s."
 
 #: pcbnew/tools/pad_tool.cpp:599
 #, c-format
 msgid "Pad Edit Mode.  Press %s to exit."
-msgstr "Pad-muokkaustila. Paina %s poistuaksesi."
+msgstr "Anturan Muokkaustila. Paina %s poistuaksesi."
 
 #: pcbnew/tools/pad_tool.cpp:690
 msgid "Edit pad shapes"
-msgstr "Muokkaa tyynyjen muotoja"
+msgstr "Muokkaa anturoiden muotoja"
 
 #: pcbnew/tools/pad_tool.cpp:823
 msgid "Recombine pads"
-msgstr "Yhdistä tyynyjä"
+msgstr "Yhdistä uudelleen anturat"
 
 #: pcbnew/tools/pcb_actions.cpp:48
 msgid "Create Polygon from Selection"
@@ -34491,11 +34491,11 @@ msgstr "Lisää kohtisuora mitta"
 
 #: pcbnew/tools/pcb_actions.cpp:144
 msgid "Add Leader"
-msgstr "Lisää Johtaja"
+msgstr "Lisää Selite"
 
 #: pcbnew/tools/pcb_actions.cpp:144
 msgid "Add a leader dimension"
-msgstr "Lisää johtajamitta"
+msgstr "Lisää selitemitat"
 
 #: pcbnew/tools/pcb_actions.cpp:155
 msgid "Add Filled Zone"
@@ -34518,7 +34518,6 @@ msgid "Add Rule Area"
 msgstr "Lisää Sääntöalue"
 
 #: pcbnew/tools/pcb_actions.cpp:167
-#, fuzzy
 msgid "Add a rule area (keepout)"
 msgstr "Lisää sääntöalue (säilytys)"
 
