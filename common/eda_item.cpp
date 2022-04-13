@@ -327,6 +327,7 @@ static struct EDA_ITEM_DESC
             .Map( PCB_FP_DIM_LEADER_T,     _HKI( "Leader" ) )
             .Map( PCB_FP_ZONE_T,           _HKI( "Zone" ) )
             .Map( PCB_TRACE_T,             _HKI( "Track" ) )
+            .Map( PCB_ARC_T,               _HKI( "Track" ) )
             .Map( PCB_VIA_T,               _HKI( "Via" ) )
             .Map( PCB_MARKER_T,            _HKI( "Marker" ) )
             .Map( PCB_DIM_ALIGNED_T,       _HKI( "Dimension" ) )
