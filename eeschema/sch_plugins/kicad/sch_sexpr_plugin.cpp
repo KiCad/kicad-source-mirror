@@ -383,7 +383,7 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
         {
         case SCH_SYMBOL_T:
             m_out->Print( 0, "\n" );
-            saveSymbol( static_cast<SCH_SYMBOL*>( item ), nullptr, 1 );
+            saveSymbol( static_cast<SCH_SYMBOL*>( item ), nullptr, 1, false );
             break;
 
         case SCH_BITMAP_T:
@@ -474,7 +474,7 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
 
 void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelectionPath,
                                SCH_SHEET_LIST* aFullSheetHierarchy,
-                               OUTPUTFORMATTER* aFormatter )
+                               OUTPUTFORMATTER* aFormatter, bool aForClipboard )
 {
     wxCHECK( aSelection && aSelectionPath && aFullSheetHierarchy && aFormatter, /* void */ );
 
@@ -515,7 +515,7 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
     {
         m_out->Print( 0, "(lib_symbols\n" );
 
-        for( auto libSymbol : libSymbols )
+        for( const std::pair<const wxString, LIB_SYMBOL*>& libSymbol : libSymbols )
             SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( libSymbol.second, *m_out, 1, libSymbol.first );
 
         m_out->Print( 0, ")\n\n" );
@@ -534,7 +534,7 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
         switch( item->Type() )
         {
         case SCH_SYMBOL_T:
-            saveSymbol( static_cast<SCH_SYMBOL*>( item ), aSelectionPath, 0 );
+            saveSymbol( static_cast<SCH_SYMBOL*>( item ), aSelectionPath, 0, aForClipboard );
 
             aSelectionPath->AppendSymbol( selectedSymbols, static_cast<SCH_SYMBOL*>( item ),
                                           true, true );
@@ -623,7 +623,7 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
 
 
 void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPath,
-                                   int aNestLevel )
+                                   int aNestLevel, bool aForClipboard )
 {
     wxCHECK_RET( aSymbol != nullptr && m_out != nullptr, "" );
 
@@ -720,19 +720,22 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheetPa
         int id = field.GetId();
         wxString value = field.GetText();
 
-        // The instance fields are always set to the default instance regardless of the
-        // sheet instance to prevent file churn.
-        if( id == REFERENCE_FIELD )
+        if( !aForClipboard )
         {
-            field.SetText( aSymbol->GetDefaultInstance().m_Reference );
-        }
-        else if( id == VALUE_FIELD )
-        {
-            field.SetText( aSymbol->GetDefaultInstance().m_Value );
-        }
-        else if( id == FOOTPRINT_FIELD )
-        {
-            field.SetText( aSymbol->GetDefaultInstance().m_Footprint );
+            // The instance fields are always set to the default instance regardless of the
+            // sheet instance to prevent file churn.
+            if( id == REFERENCE_FIELD )
+            {
+                field.SetText( aSymbol->GetDefaultInstance().m_Reference );
+            }
+            else if( id == VALUE_FIELD )
+            {
+                field.SetText( aSymbol->GetDefaultInstance().m_Value );
+            }
+            else if( id == FOOTPRINT_FIELD )
+            {
+                field.SetText( aSymbol->GetDefaultInstance().m_Footprint );
+            }
         }
 
         try
