@@ -87,14 +87,12 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool* aA
     case ANNOTATE_ALL:
     {
         for( const SCH_SHEET_PATH& sheet : Schematic().GetSheets() )
-            clearSheetAnnotation( sheet.LastScreen(), nullptr, true );
+            clearSheetAnnotation( sheet.LastScreen(), nullptr, false );
 
         break;
     }
     case ANNOTATE_CURRENT_SHEET:
     {
-        // One could make an argument that this should clear prefixes.  I have no idea what
-        // the right answer is.
         clearSheetAnnotation( screen, &currentSheet, false );
         break;
     }
@@ -107,11 +105,7 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool* aA
         for( EDA_ITEM* item : selection.Items() )
         {
             if( item->Type() == SCH_SYMBOL_T )
-            {
-                // One could make an argument that this should clear prefixes.  I have no idea
-                // what the right answer is.
                 clearSymbolAnnotation( item, screen, &currentSheet, false );
-            }
         }
         break;
     }
