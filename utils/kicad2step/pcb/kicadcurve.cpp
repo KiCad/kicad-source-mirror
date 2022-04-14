@@ -62,7 +62,7 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
         && CURVE_CIRCLE != aCurveType && CURVE_BEZIER != aCurveType
         && CURVE_POLYGON != aCurveType )
     {
-        wxLogMessage( "* Unsupported curve type: %d\n", aCurveType );
+        wxLogMessage( wxT( "* Unsupported curve type: %d\n" ), aCurveType );
         return false;
     }
 
@@ -76,7 +76,7 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
         || ( CURVE_BEZIER == aCurveType && nchild < 5 )
         || ( CURVE_POLYGON == aCurveType && nchild < 5 ) )
     {
-        wxLogMessage( "* bad curve data; not enough parameters\n" );
+        wxLogMessage( wxT( "* bad curve data; not enough parameters\n" ) );
         return false;
     }
 
@@ -201,10 +201,9 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
         else if( text == "angle" )
         {
             if( child->GetNumberOfChildren() < 2
-                || ( !child->GetChild( 1 )->IsDouble()
-                     && !child->GetChild( 1 )->IsInteger() ) )
+                || ( !child->GetChild( 1 )->IsDouble() && !child->GetChild( 1 )->IsInteger() ) )
             {
-                wxLogMessage( "* bad angle data\n" );
+                wxLogMessage( wxT( "* bad angle data\n" ) );
                 return false;
             }
 
@@ -223,7 +222,7 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
             {
                 std::ostringstream ostr;
                 ostr << "* bad layer data: " << child->AsString();
-                wxLogMessage( "%s\n", ostr.str().c_str() );
+                wxLogMessage( wxT( "%s\n" ), ostr.str().c_str() );
                 return false;
             }
 
@@ -253,7 +252,7 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
         m_end.y = new_arc.GetP0().y/scale;
         m_ep.x = new_arc.GetP1().x/scale;
         m_ep.y = new_arc.GetP1().y/scale;
-        m_angle = new_arc.GetCentralAngle() / 180.0 * M_PI;
+        m_angle = new_arc.GetCentralAngle().AsRadians();
     }
 
     return true;
