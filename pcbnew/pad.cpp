@@ -202,8 +202,6 @@ bool PAD::IsFlipped() const
 
 PCB_LAYER_ID PAD::GetLayer() const
 {
-    wxFAIL_MSG( wxT( "Pads exist on multiple layers.  GetLayer() has no meaning." ) );
-
     return BOARD_ITEM::GetLayer();
 }
 

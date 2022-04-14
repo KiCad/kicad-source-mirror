@@ -221,8 +221,6 @@ VECTOR2I ZONE::GetPosition() const
 
 PCB_LAYER_ID ZONE::GetLayer() const
 {
-    wxFAIL_MSG( wxT( "Zones exist on multiple layers.  GetLayer() has no meaning." ) );
-
     return BOARD_ITEM::GetLayer();
 }
 
