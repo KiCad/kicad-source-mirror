@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,6 +54,7 @@ KICADCURVE::~KICADCURVE()
 }
 
 #include <sexpr/sexpr_parser.h>
+#include <geometry/shape_line_chain.h>
 
 bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
 {
@@ -110,6 +112,8 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
                 SEXPR::SEXPR* sub_child = ( *list )[ii];
                 text = sub_child->GetChild( 0 )->GetSymbol();
 
+                // inside pts list, parmeters are xy point coord
+                // or a arc (start, middle, end) points
                 if( text == "xy" )
                 {
                     DOUBLET coord;
@@ -131,6 +135,49 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
                     }
                     else
                         m_poly.push_back( coord );
+                }
+                else if( text == "arc" )
+                {
+                    int arc_child = sub_child->GetNumberOfChildren();
+                    DOUBLET arc_start, arc_middle, arc_end;
+
+                    for( int jj = 1; jj < arc_child; jj++ )
+                    {
+                        SEXPR::SEXPR* curr_child = sub_child->GetChild( jj );
+                        text = curr_child->GetChild( 0 )->GetSymbol();
+
+                        if( text == "start" )
+                        {
+                             if( !Get2DCoordinate( curr_child, arc_start ) )
+                                return false;
+                        }
+                        else if( text == "end" )
+                        {
+                            if( !Get2DCoordinate( curr_child, arc_end ) )
+                                return false;
+                        }
+                        else if( text == "mid" )
+                        {
+                            if( !Get2DCoordinate( curr_child, arc_middle ) )
+                                return false;
+                        }
+                    }
+
+                    // To convert arc edge to segments, we are using SHAPE_ARC, but SHAPE_ARC use
+                    // integer coords. So to avoid truncations, use a scaling factor.
+                    // 1e5 is enough.
+                    const double scale = 1e5;
+                    SHAPE_ARC new_arc( VECTOR2I( arc_start.x*scale, arc_start.y*scale ),
+                                       VECTOR2I( arc_middle.x*scale, arc_middle.y*scale ),
+                                       VECTOR2I( arc_end.x*scale, arc_end.y*scale ), 0 );
+
+                    double accuracy = 0.005*scale;  // Approx accuracy is 5 microns
+                    SHAPE_LINE_CHAIN segs_from_arc = new_arc.ConvertToPolyline( accuracy );
+
+                    // Add segments to STEP polygon
+                    for( int ll = 0; ll < segs_from_arc.PointCount(); ll++ )
+                        m_poly.emplace_back( segs_from_arc.CPoint(ll).x/scale,
+                                             segs_from_arc.CPoint(ll).y/scale );
                 }
             }
         }
