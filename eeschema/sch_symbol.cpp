@@ -1069,9 +1069,6 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
 
 void SCH_SYMBOL::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath, bool aResetPrefix )
 {
-    // Build a reference with no annotation, i.e. a reference ending with a single '?'
-    wxString defRef = UTIL::GetRefDesUnannotated( m_prefix );
-
     if( aSheetPath )
     {
         KIID_PATH path = aSheetPath->Path();
