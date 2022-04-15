@@ -399,18 +399,26 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
         if( rc_item->GetErrorCode() == DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG )
         {
             PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item );
-            int        net = track->GetNetCode();
-            std::vector<BOARD_ITEM*> segs;
 
-            for( const KIID& id : rc_item->GetIDs() )
+            if( track )
             {
-                PCB_TRACK*  candidate = dynamic_cast<PCB_TRACK*>( board->GetItem( id ) );
+                int        net = track->GetNetCode();
+                std::vector<BOARD_ITEM*> segs;
 
-                if( candidate && candidate->GetNetCode() == net )
-                    segs.push_back( candidate );
+                for( const KIID& id : rc_item->GetIDs() )
+                {
+                    PCB_TRACK*  candidate = dynamic_cast<PCB_TRACK*>( board->GetItem( id ) );
+
+                    if( candidate && candidate->GetNetCode() == net )
+                        segs.push_back( candidate );
+                }
+
+                m_frame->FocusOnItems( segs, principalLayer );
             }
-
-            m_frame->FocusOnItems( segs, principalLayer );
+            else
+            {
+                m_frame->FocusOnItem( item, principalLayer );
+            }
         }
         else if( m_centerMarkerOnIdle )
         {
