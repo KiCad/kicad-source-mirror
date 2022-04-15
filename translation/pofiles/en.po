@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-11 09:40-0700\n"
+"POT-Creation-Date: 2022-04-15 12:59-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -7857,6 +7857,15 @@ msgstr "Field must have a name."
 msgid "Field name '%s' already in use."
 msgstr "Field name '%s' already in use."
 
+msgid "User Fields"
+msgstr "User Fields"
+
+msgid "Delete Field"
+msgstr "Delete Field"
+
+msgid "Select field:"
+msgstr "Select field:"
+
 msgid "Group symbols"
 msgstr "Group symbols"
 
@@ -7865,6 +7874,9 @@ msgstr "Group symbols together based on common properties"
 
 msgid "Add Field..."
 msgstr "Add Field…"
+
+msgid "Remove Field..."
+msgstr "Remove Field..."
 
 msgid "Symbol Fields Table"
 msgstr "Symbol Fields Table"
@@ -10963,6 +10975,9 @@ msgstr "No symbol libraries are loaded."
 msgid "Select Symbol Library"
 msgstr "Select Symbol Library"
 
+msgid "No schematic currently open."
+msgstr "No schematic currently open."
+
 msgid "The current symbol has been modified.  Save changes?"
 msgstr "The current symbol has been modified.  Save changes?"
 
@@ -10975,9 +10990,6 @@ msgstr "Symbol '%s' already exists in library '%s'."
 
 msgid "Overwrite"
 msgstr "Overwrite"
-
-msgid "No schematic currently open."
-msgstr "No schematic currently open."
 
 #, c-format
 msgid "Symbol library '%s' is not writable."
