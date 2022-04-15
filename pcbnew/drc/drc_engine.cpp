@@ -925,30 +925,49 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 case EDGE_CLEARANCE_CONSTRAINT:
                 case MECHANICAL_CLEARANCE_CONSTRAINT:
                 case MECHANICAL_HOLE_CLEARANCE_CONSTRAINT:
-                {
-                    int val = c->constraint.m_Value.Min();
                     REPORT( wxString::Format( _( "Checking %s clearance: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
-                                              REPORT_VALUE( val ) ) )
+                                              REPORT_VALUE( c->constraint.m_Value.Min() ) ) )
                     break;
-                }
 
                 case DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT:
-                {
-                    int val = c->constraint.m_Value.Max();
                     REPORT( wxString::Format( _( "Checking %s max uncoupled length: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
-                                              REPORT_VALUE( val ) ) )
+                                              REPORT_VALUE( c->constraint.m_Value.Max() ) ) )
                     break;
-                }
 
+                case SKEW_CONSTRAINT:
+                    REPORT( wxString::Format( _( "Checking %s max skew: %s." ),
+                                              EscapeHTML( c->constraint.GetName() ),
+                                              REPORT_VALUE( c->constraint.m_Value.Max() ) ) )
+                    break;
+
+                case THERMAL_RELIEF_GAP_CONSTRAINT:
+                    REPORT( wxString::Format( _( "Checking %s gap: %s." ),
+                                              EscapeHTML( c->constraint.GetName() ),
+                                              REPORT_VALUE( c->constraint.m_Value.Min() ) ) )
+                    break;
+
+                case THERMAL_SPOKE_WIDTH_CONSTRAINT:
+                    REPORT( wxString::Format( _( "Checking %s thermal spoke width: %s." ),
+                                              EscapeHTML( c->constraint.GetName() ),
+                                              REPORT_VALUE( c->constraint.m_Value.Opt() ) ) )
+                    break;
+
+                case ZONE_CONNECTION_CONSTRAINT:
+                    REPORT( wxString::Format( _( "Checking %s zone connection: %s." ),
+                                              EscapeHTML( c->constraint.GetName() ),
+                                              EscapeHTML( PrintZoneConnection( c->constraint.m_ZoneConnection ) ) ) )
+                    break;
 
                 case TRACK_WIDTH_CONSTRAINT:
                 case ANNULAR_WIDTH_CONSTRAINT:
                 case VIA_DIAMETER_CONSTRAINT:
+                case HOLE_SIZE_CONSTRAINT:
                 case TEXT_HEIGHT_CONSTRAINT:
                 case TEXT_THICKNESS_CONSTRAINT:
                 case DIFF_PAIR_GAP_CONSTRAINT:
+                case LENGTH_CONSTRAINT:
                 {
                     if( aReporter )
                     {
@@ -959,21 +978,97 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
                         if( implicit )
                         {
+                            min = StringFromValue( UNITS, c->constraint.m_Value.Min(), true );
                             opt = StringFromValue( UNITS, c->constraint.m_Value.Opt(), true );
 
                             switch( c->constraint.m_Type )
                             {
-                            case TRACK_WIDTH_CONSTRAINT:   msg = _( "track width" );   break;
-                            case ANNULAR_WIDTH_CONSTRAINT: msg = _( "annular width" ); break;
-                            case VIA_DIAMETER_CONSTRAINT:  msg = _( "via diameter" );  break;
-                            case DIFF_PAIR_GAP_CONSTRAINT: msg = _( "diff pair gap" ); break;
-                            default:                       msg = _( "constraint" );    break;
-                            }
+                            case TRACK_WIDTH_CONSTRAINT:
+                                if( c->constraint.m_Value.HasOpt() )
+                                {
+                                    REPORT( wxString::Format( _( "Checking %s track width: opt %s." ),
+                                                              EscapeHTML( c->constraint.GetName() ),
+                                                              opt ) )
+                                }
+                                else if( c->constraint.m_Value.HasMin() )
+                                {
+                                    REPORT( wxString::Format( _( "Checking board setup constraints "
+                                                                 "track width: min %s." ),
+                                                              min ) )
+                                }
 
-                            REPORT( wxString::Format( _( "Checking %s %s: opt %s." ),
-                                                      EscapeHTML( c->constraint.GetName() ),
-                                                      EscapeHTML( msg ),
-                                                      opt ) )
+                                break;
+
+                            case ANNULAR_WIDTH_CONSTRAINT:
+                                REPORT( wxString::Format( _( "Checking %s annular width: min %s." ),
+                                                          EscapeHTML( c->constraint.GetName() ),
+                                                          opt ) )
+                                break;
+
+                            case VIA_DIAMETER_CONSTRAINT:
+                                if( c->constraint.m_Value.HasOpt() )
+                                {
+                                    REPORT( wxString::Format( _( "Checking %s via diameter: opt %s." ),
+                                                              EscapeHTML( c->constraint.GetName() ),
+                                                              opt ) )
+                                }
+                                else if( c->constraint.m_Value.HasMin() )
+                                {
+                                    REPORT( wxString::Format( _( "Checking board setup constraints "
+                                                                 "via diameter: min %s." ),
+                                                              min ) )
+                                }
+                                break;
+
+                            case HOLE_SIZE_CONSTRAINT:
+                                if( c->constraint.m_Value.HasOpt() )
+                                {
+                                    REPORT( wxString::Format( _( "Checking %s hole size: opt %s." ),
+                                                              EscapeHTML( c->constraint.GetName() ),
+                                                              opt ) )
+                                }
+                                else if( c->constraint.m_Value.HasMin() )
+                                {
+                                    REPORT( wxString::Format( _( "Checking board setup constraints "
+                                                                 "hole size: min %s." ),
+                                                              min ) )
+                                }
+
+                                break;
+
+                            case TEXT_HEIGHT_CONSTRAINT:
+                                REPORT( wxString::Format( _( "Checking %s: min %s." ),
+                                                          EscapeHTML( c->constraint.GetName() ),
+                                                          min ) )
+                                break;
+
+                            case TEXT_THICKNESS_CONSTRAINT:
+                                REPORT( wxString::Format( _( "Checking %s: min %s." ),
+                                                          EscapeHTML( c->constraint.GetName() ),
+                                                          min ) )
+                                break;
+
+                            case DIFF_PAIR_GAP_CONSTRAINT:
+                                if( c->constraint.m_Value.HasOpt() )
+                                {
+                                    REPORT( wxString::Format( _( "Checking %s diff pair gap: "
+                                                                 "opt %s." ),
+                                                              EscapeHTML( c->constraint.GetName() ),
+                                                              opt ) )
+                                }
+                                else if( c->constraint.m_Value.HasMin() )
+                                {
+                                    REPORT( wxString::Format( _( "Checking board setup constraints "
+                                                                 "clearance: min %s." ),
+                                                              min ) )
+                                }
+
+                                break;
+
+                            default:
+                                REPORT( wxString::Format( _( "Checking %s." ),
+                                                          EscapeHTML( c->constraint.GetName() ) ) )
+                            }
                         }
                         else
                         {

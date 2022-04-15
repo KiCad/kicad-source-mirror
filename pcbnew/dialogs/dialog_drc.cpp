@@ -550,7 +550,12 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     }
     else if( rcItem->GetErrorCode() == DRCE_TEXT_HEIGHT
             || rcItem->GetErrorCode() == DRCE_TEXT_THICKNESS
-            || rcItem->GetErrorCode() == DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG )
+            || rcItem->GetErrorCode() == DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG
+            || rcItem->GetErrorCode() == DRCE_TRACK_WIDTH
+            || rcItem->GetErrorCode() == DRCE_VIA_DIAMETER
+            || rcItem->GetErrorCode() == DRCE_ANNULAR_WIDTH
+            || rcItem->GetErrorCode() == DRCE_DRILL_OUT_OF_RANGE
+            || rcItem->GetErrorCode() == DRCE_MICROVIA_DRILL_OUT_OF_RANGE )
     {
         menu.Append( 3, _( "Run constraints resolution tool..." ) );
     }

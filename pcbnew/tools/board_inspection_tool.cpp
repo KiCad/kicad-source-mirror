@@ -282,9 +282,8 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         constraint = drcEngine.EvalRules( TEXT_HEIGHT_CONSTRAINT, a, b, layer, r );
 
         r->Report( "" );
-        r->Report( wxString::Format( _( "Resolved text height constraints: min %s; opt %s; max %s." ),
+        r->Report( wxString::Format( _( "Resolved height constraints: min %s; max %s." ),
                                      reportMin( r->GetUnits(),  constraint ),
-                                     reportOpt( r->GetUnits(),  constraint ),
                                      reportMax( r->GetUnits(),  constraint ) ) );
         break;
 
@@ -298,9 +297,69 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         constraint = drcEngine.EvalRules( TEXT_THICKNESS_CONSTRAINT, a, b, layer, r );
 
         r->Report( "" );
-        r->Report( wxString::Format( _( "Resolved text thickness constraints: min %s; opt %s; max %s." ),
+        r->Report( wxString::Format( _( "Resolved thickness constraints: min %s; max %s." ),
                                      reportMin( r->GetUnits(),  constraint ),
-                                     reportOpt( r->GetUnits(),  constraint ),
+                                     reportMax( r->GetUnits(),  constraint ) ) );
+        break;
+
+    case DRCE_TRACK_WIDTH:
+        r = m_inspectClearanceDialog->AddPage( _( "Track Width" ) );
+        reportHeader( _( "Track width resolution for:" ), a, r );
+
+        if( compileError )
+            reportCompileError( r );
+
+        constraint = drcEngine.EvalRules( TRACK_WIDTH_CONSTRAINT, a, b, layer, r );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Resolved width constraints: min %s; max %s." ),
+                                     reportMin( r->GetUnits(),  constraint ),
+                                     reportMax( r->GetUnits(),  constraint ) ) );
+        break;
+
+    case DRCE_VIA_DIAMETER:
+        r = m_inspectClearanceDialog->AddPage( _( "Via Diameter" ) );
+        reportHeader( _( "Via diameter resolution for:" ), a, r );
+
+        if( compileError )
+            reportCompileError( r );
+
+        constraint = drcEngine.EvalRules( VIA_DIAMETER_CONSTRAINT, a, b, layer, r );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Resolved diameter constraints: min %s; max %s." ),
+                                     reportMin( r->GetUnits(),  constraint ),
+                                     reportMax( r->GetUnits(),  constraint ) ) );
+        break;
+
+    case DRCE_ANNULAR_WIDTH:
+        r = m_inspectClearanceDialog->AddPage( _( "Via Annulus" ) );
+        reportHeader( _( "Via annular width resolution for:" ), a, r );
+
+        if( compileError )
+            reportCompileError( r );
+
+        constraint = drcEngine.EvalRules( ANNULAR_WIDTH_CONSTRAINT, a, b, layer, r );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Resolved annular width constraints: min %s; max %s." ),
+                                     reportMin( r->GetUnits(),  constraint ),
+                                     reportMax( r->GetUnits(),  constraint ) ) );
+        break;
+
+    case DRCE_DRILL_OUT_OF_RANGE:
+    case DRCE_MICROVIA_DRILL_OUT_OF_RANGE:
+        r = m_inspectClearanceDialog->AddPage( _( "Hole Size" ) );
+        reportHeader( _( "Hose diameter resolution for:" ), a, r );
+
+        if( compileError )
+            reportCompileError( r );
+
+        constraint = drcEngine.EvalRules( HOLE_SIZE_CONSTRAINT, a, b, layer, r );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Resolved diameter constraints: min %s; max %s." ),
+                                     reportMin( r->GetUnits(),  constraint ),
                                      reportMax( r->GetUnits(),  constraint ) ) );
         break;
 
@@ -934,9 +993,9 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Width constraints: min %s; opt %s; max %s." ),
-                                     reportMin( r->GetUnits(),  constraint ),
-                                     reportOpt( r->GetUnits(),  constraint ),
-                                     reportMax( r->GetUnits(),  constraint ) ) );
+                                     reportMin( r->GetUnits(), constraint ),
+                                     reportOpt( r->GetUnits(), constraint ),
+                                     reportMax( r->GetUnits(), constraint ) ) );
 
         r->Flush();
     }
@@ -954,9 +1013,9 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Diameter constraints: min %s; opt %s; max %s." ),
-                                     reportMin( r->GetUnits(),  constraint ),
-                                     reportOpt( r->GetUnits(),  constraint ),
-                                     reportMax( r->GetUnits(),  constraint ) ) );
+                                     reportMin( r->GetUnits(), constraint ),
+                                     reportOpt( r->GetUnits(), constraint ),
+                                     reportMax( r->GetUnits(), constraint ) ) );
 
         r->Flush();
 
@@ -971,9 +1030,9 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Annular width constraints: min %s; opt %s; max %s." ),
-                                     reportMin( r->GetUnits(),  constraint ),
-                                     reportOpt( r->GetUnits(),  constraint ),
-                                     reportMax( r->GetUnits(),  constraint ) ) );
+                                     reportMin( r->GetUnits(), constraint ),
+                                     reportOpt( r->GetUnits(), constraint ),
+                                     reportMax( r->GetUnits(), constraint ) ) );
 
         r->Flush();
     }
@@ -990,13 +1049,11 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         if( compileError )
             reportCompileError( r );
 
-        wxString min = _( "undefined" );
-
-        if( constraint.m_Value.HasMin() )
-            min = StringFromValue( r->GetUnits(), constraint.m_Value.Min(), true );
-
         r->Report( "" );
-        r->Report( wxString::Format( _( "Hole constraint: min %s." ), min ) );
+        r->Report( wxString::Format( _( "Diameter constraints: min %s; opt %s; max %s." ),
+                                     reportMin( r->GetUnits(), constraint ),
+                                     reportOpt( r->GetUnits(), constraint ),
+                                     reportMax( r->GetUnits(), constraint ) ) );
 
         r->Flush();
     }
@@ -1338,6 +1395,7 @@ int BOARD_INSPECTION_TOOL::ClearHighlight( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+
 #if 0
 int BOARD_INSPECTION_TOOL::HighlightNetTool( const TOOL_EVENT& aEvent )
 {
@@ -1372,6 +1430,7 @@ int BOARD_INSPECTION_TOOL::HighlightNetTool( const TOOL_EVENT& aEvent )
 }
 #endif
 
+
 int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
 {
     std::string       tool = aEvent.GetCommandStr().get();
@@ -1382,68 +1441,68 @@ int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
     Activate();
 
     picker->SetClickHandler(
-        [this, board]( const VECTOR2D& pt ) -> bool
-        {
-            PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
-
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, EDIT_TOOL::PadFilter );
-            PCB_SELECTION& selection = selectionTool->GetSelection();
-
-            if( selection.Empty() )
+            [this, board]( const VECTOR2D& pt ) -> bool
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true,
-                                      EDIT_TOOL::FootprintFilter );
-                selection = selectionTool->GetSelection();
-            }
+                PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
-            if( selection.Empty() )
-            {
-                // Clear the previous local ratsnest if we click off all items
-                for( FOOTPRINT* fp : board->Footprints() )
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, EDIT_TOOL::PadFilter );
+                PCB_SELECTION& selection = selectionTool->GetSelection();
+
+                if( selection.Empty() )
                 {
-                    for( PAD* pad : fp->Pads() )
-                        pad->SetLocalRatsnestVisible( displayOptions().m_ShowGlobalRatsnest );
+                    m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true,
+                                          EDIT_TOOL::FootprintFilter );
+                    selection = selectionTool->GetSelection();
                 }
-            }
-            else
-            {
-                for( EDA_ITEM* item : selection )
-                {
-                    if( PAD* pad = dyn_cast<PAD*>( item) )
-                    {
-                        pad->SetLocalRatsnestVisible( !pad->GetLocalRatsnestVisible() );
-                    }
-                    else if( FOOTPRINT* fp = dyn_cast<FOOTPRINT*>( item) )
-                    {
-                        if( !fp->Pads().empty() )
-                        {
-                            bool enable = !fp->Pads()[0]->GetLocalRatsnestVisible();
 
-                            for( PAD* childPad : fp->Pads() )
-                                childPad->SetLocalRatsnestVisible( enable );
+                if( selection.Empty() )
+                {
+                    // Clear the previous local ratsnest if we click off all items
+                    for( FOOTPRINT* fp : board->Footprints() )
+                    {
+                        for( PAD* pad : fp->Pads() )
+                            pad->SetLocalRatsnestVisible( displayOptions().m_ShowGlobalRatsnest );
+                    }
+                }
+                else
+                {
+                    for( EDA_ITEM* item : selection )
+                    {
+                        if( PAD* pad = dyn_cast<PAD*>( item) )
+                        {
+                            pad->SetLocalRatsnestVisible( !pad->GetLocalRatsnestVisible() );
+                        }
+                        else if( FOOTPRINT* fp = dyn_cast<FOOTPRINT*>( item) )
+                        {
+                            if( !fp->Pads().empty() )
+                            {
+                                bool enable = !fp->Pads()[0]->GetLocalRatsnestVisible();
+
+                                for( PAD* childPad : fp->Pads() )
+                                    childPad->SetLocalRatsnestVisible( enable );
+                            }
                         }
                     }
                 }
-            }
 
-            m_toolMgr->GetView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+                m_toolMgr->GetView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
 
-            return true;
-        } );
+                return true;
+            } );
 
     picker->SetFinalizeHandler(
-        [this, board]( int aCondition )
-        {
-            if( aCondition != PCB_PICKER_TOOL::END_ACTIVATE )
+            [this, board]( int aCondition )
             {
-                for( FOOTPRINT* fp : board->Footprints() )
+                if( aCondition != PCB_PICKER_TOOL::END_ACTIVATE )
                 {
-                    for( PAD* pad : fp->Pads() )
-                        pad->SetLocalRatsnestVisible( displayOptions().m_ShowGlobalRatsnest );
+                    for( FOOTPRINT* fp : board->Footprints() )
+                    {
+                        for( PAD* pad : fp->Pads() )
+                            pad->SetLocalRatsnestVisible( displayOptions().m_ShowGlobalRatsnest );
+                    }
                 }
-            }
-        } );
+            } );
 
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
