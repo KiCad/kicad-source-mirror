@@ -769,9 +769,12 @@ void SYMBOL_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName )
     RebuildSymbolUnitsList();
     SetShowDeMorgan( GetCurSymbol()->Flatten()->HasConversion() );
     updateTitle();
+
+    // N.B. The view needs to be rebuilt first as the Symbol Properties change may invalidate
+    // the view pointers by rebuilting the field table
+    RebuildView();
     UpdateMsgPanel();
 
-    RebuildView();
     OnModify();
 }
 
