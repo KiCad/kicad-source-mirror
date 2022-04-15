@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-15 12:59-0700\n"
-"PO-Revision-Date: 2022-04-14 08:02+0000\n"
+"PO-Revision-Date: 2022-04-16 01:08+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -11715,19 +11715,16 @@ msgid "Field name '%s' already in use."
 msgstr "字段名称 \"%s\" 已经被占用。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1060
-#, fuzzy
 msgid "User Fields"
-msgstr "重置字段"
+msgstr "用户字段"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1069
-#, fuzzy
 msgid "Delete Field"
 msgstr "删除字段"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1070
-#, fuzzy
 msgid "Select field:"
-msgstr "图框字段"
+msgstr "选择字段："
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:31
 msgid "Group symbols"
@@ -11742,9 +11739,8 @@ msgid "Add Field..."
 msgstr "添加字段..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:56
-#, fuzzy
 msgid "Remove Field..."
-msgstr "重命名文件..."
+msgstr "删除字段…"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:78
 msgid "Symbol Fields Table"
