@@ -100,36 +100,26 @@ public:
 
             if( idx >= 0 )
             {
-                // And, sadly, it appears to have also become customary to bury the url inside
-                // parentheses.
-                if( idx >= 1 && desc.at( idx - 1 ) == '(' )
+                int nesting = 0;
+
+                for( auto chit = desc.begin() + idx; chit != desc.end(); ++chit )
                 {
-                    int nesting = 0;
+                    int ch = *chit;
 
-                    while( idx < (int) desc.size() )
-                    {
-                        char c = desc.at( idx++ );
+                    // Break on invalid URI characters
+                    if( ch <= 0x20 || ch >= 0x7F || ch == '"' )
+                        break;
 
-                        if( c == '(' )
-                            nesting++;
-                        else if( c == ')' && --nesting < 0 )
-                            break;
+                    // Check for nesting parentheses, e.g. (Body style from: https://this.url/part.pdf)
+                    if( ch == '(' )
+                        ++nesting;
+                    else if( ch == ')' && --nesting < 0 )
+                        break;
 
-                        doc += c;
-                    }
+                    doc += ch;
+                }
 
                     desc.Replace( doc, _( "doc url" ) );
-                }
-                else
-                {
-                    doc = desc.substr( (unsigned) idx );
-
-                    desc = desc.substr( 0, (unsigned) idx );
-                    desc = desc.Trim( true );
-
-                    if( !desc.IsEmpty() && desc.Last() == ',' )
-                        desc.RemoveLast( 1 );
-                }
             }
 
             m_html.Replace( "__NAME__", EscapeHTML( name ) );
