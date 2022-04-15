@@ -186,15 +186,18 @@ void DRC_ENGINE::loadImplicitRules()
 
     rule = createImplicitRule( _( "board setup constraints silk" ) );
     rule->m_LayerCondition = LSET( 2, F_SilkS, B_SilkS );
-
     DRC_CONSTRAINT silkClearanceConstraint( SILK_CLEARANCE_CONSTRAINT );
     silkClearanceConstraint.Value().SetMin( bds.m_SilkClearance );
     rule->AddConstraint( silkClearanceConstraint );
 
+    rule = createImplicitRule( _( "board setup constraints silk text height" ) );
+    rule->m_LayerCondition = LSET( 2, F_SilkS, B_SilkS );
     DRC_CONSTRAINT silkTextHeightConstraint( TEXT_HEIGHT_CONSTRAINT );
     silkTextHeightConstraint.Value().SetMin( bds.m_MinSilkTextHeight );
     rule->AddConstraint( silkTextHeightConstraint );
 
+    rule = createImplicitRule( _( "board setup constraints silk text thickness" ) );
+    rule->m_LayerCondition = LSET( 2, F_SilkS, B_SilkS );
     DRC_CONSTRAINT silkTextThicknessConstraint( TEXT_THICKNESS_CONSTRAINT );
     silkTextThicknessConstraint.Value().SetMin( bds.m_MinSilkTextThickness );
     rule->AddConstraint( silkTextThicknessConstraint );
@@ -920,6 +923,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 case SILK_CLEARANCE_CONSTRAINT:
                 case HOLE_CLEARANCE_CONSTRAINT:
                 case EDGE_CLEARANCE_CONSTRAINT:
+                case MECHANICAL_CLEARANCE_CONSTRAINT:
+                case MECHANICAL_HOLE_CLEARANCE_CONSTRAINT:
                 {
                     int val = c->constraint.m_Value.Min();
                     REPORT( wxString::Format( _( "Checking %s clearance: %s." ),
@@ -928,11 +933,22 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                     break;
                 }
 
+                case DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT:
+                {
+                    int val = c->constraint.m_Value.Max();
+                    REPORT( wxString::Format( _( "Checking %s max uncoupled length: %s." ),
+                                              EscapeHTML( c->constraint.GetName() ),
+                                              REPORT_VALUE( val ) ) )
+                    break;
+                }
+
+
                 case TRACK_WIDTH_CONSTRAINT:
                 case ANNULAR_WIDTH_CONSTRAINT:
                 case VIA_DIAMETER_CONSTRAINT:
                 case TEXT_HEIGHT_CONSTRAINT:
                 case TEXT_THICKNESS_CONSTRAINT:
+                case DIFF_PAIR_GAP_CONSTRAINT:
                 {
                     if( aReporter )
                     {
@@ -950,10 +966,11 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                             case TRACK_WIDTH_CONSTRAINT:   msg = _( "track width" );   break;
                             case ANNULAR_WIDTH_CONSTRAINT: msg = _( "annular width" ); break;
                             case VIA_DIAMETER_CONSTRAINT:  msg = _( "via diameter" );  break;
+                            case DIFF_PAIR_GAP_CONSTRAINT: msg = _( "diff pair gap" ); break;
                             default:                       msg = _( "constraint" );    break;
                             }
 
-                            REPORT( wxString::Format( _( "Checking %s %s: %s." ),
+                            REPORT( wxString::Format( _( "Checking %s %s: opt %s." ),
                                                       EscapeHTML( c->constraint.GetName() ),
                                                       EscapeHTML( msg ),
                                                       opt ) )

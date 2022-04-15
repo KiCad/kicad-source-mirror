@@ -543,9 +543,16 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     }
 
     if( rcItem->GetErrorCode() == DRCE_CLEARANCE
-            || rcItem->GetErrorCode() == DRCE_EDGE_CLEARANCE )
+            || rcItem->GetErrorCode() == DRCE_EDGE_CLEARANCE
+            || rcItem->GetErrorCode() == DRCE_HOLE_CLEARANCE )
     {
         menu.Append( 3, _( "Run clearance resolution tool..." ) );
+    }
+    else if( rcItem->GetErrorCode() == DRCE_TEXT_HEIGHT
+            || rcItem->GetErrorCode() == DRCE_TEXT_THICKNESS
+            || rcItem->GetErrorCode() == DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG )
+    {
+        menu.Append( 3, _( "Run constraints resolution tool..." ) );
     }
 
     menu.AppendSeparator();

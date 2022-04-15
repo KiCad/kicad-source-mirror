@@ -194,19 +194,45 @@ void BOARD_INSPECTION_TOOL::reportHeader( const wxString& aTitle, BOARD_ITEM* a,
 }
 
 
+wxString reportMin( EDA_UNITS aUnits, DRC_CONSTRAINT& aConstraint )
+{
+    if( aConstraint.m_Value.HasMin() )
+        return StringFromValue( aUnits, aConstraint.m_Value.Min(), true );
+    else
+        return wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
+}
+
+
+wxString reportOpt( EDA_UNITS aUnits, DRC_CONSTRAINT& aConstraint )
+{
+    if( aConstraint.m_Value.HasOpt() )
+        return StringFromValue( aUnits, aConstraint.m_Value.Opt(), true );
+    else
+        return wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
+}
+
+
+wxString reportMax( EDA_UNITS aUnits, DRC_CONSTRAINT& aConstraint )
+{
+    if( aConstraint.m_Value.HasMax() )
+        return StringFromValue( aUnits, aConstraint.m_Value.Max(), true );
+    else
+        return wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
+}
+
+
 void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDRCItem )
 {
-    BOARD_ITEM*  a = m_frame->GetBoard()->GetItem( aDRCItem->GetMainItemID() );
-    BOARD_ITEM*  b = m_frame->GetBoard()->GetItem( aDRCItem->GetAuxItemID() );
-    PCB_LAYER_ID layer = m_frame->GetActiveLayer();
-
-    if( !a || !b )
-        return;
+    BOARD_ITEM*           a = m_frame->GetBoard()->GetItem( aDRCItem->GetMainItemID() );
+    BOARD_ITEM*           b = m_frame->GetBoard()->GetItem( aDRCItem->GetAuxItemID() );
+    BOARD_CONNECTED_ITEM* ac = dynamic_cast<BOARD_CONNECTED_ITEM*>( a );
+    BOARD_CONNECTED_ITEM* bc = dynamic_cast<BOARD_CONNECTED_ITEM*>( b );
+    PCB_LAYER_ID          layer = m_frame->GetActiveLayer();
 
     if( m_inspectClearanceDialog == nullptr )
     {
         m_inspectClearanceDialog = std::make_unique<DIALOG_CONSTRAINTS_REPORTER>( m_frame );
-        m_inspectClearanceDialog->SetTitle( _( "Clearance Report" ) );
+        m_inspectClearanceDialog->SetTitle( _( "Violation Report" ) );
 
         m_inspectClearanceDialog->Connect( wxEVT_CLOSE_WINDOW,
                     wxCommandEventHandler( BOARD_INSPECTION_TOOL::onInspectClearanceDialogClosed ),
@@ -222,8 +248,108 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
     switch( aDRCItem->GetErrorCode() )
     {
+    case DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG:
+    {
+        for( KIID id : aDRCItem->GetIDs() )
+        {
+            bc = dynamic_cast<BOARD_CONNECTED_ITEM*>( m_frame->GetBoard()->GetItem( id ) );
+
+            if( ac && bc && ac->GetNetCode() != bc->GetNetCode() )
+                break;
+        }
+
+        r = m_inspectClearanceDialog->AddPage( _( "Uncoupled Length" ) );
+        reportHeader( _( "Diff pair uncoupled length resolution for:" ), ac, bc, r );
+
+        if( compileError )
+            reportCompileError( r );
+
+        constraint = drcEngine.EvalRules( DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT, a, b, layer, r );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Resolved max uncoupled length: %s." ),
+                                     reportMax( r->GetUnits(),  constraint ) ) );
+        break;
+    }
+
+    case DRCE_TEXT_HEIGHT:
+        r = m_inspectClearanceDialog->AddPage( _( "Text Height" ) );
+        reportHeader( _( "Text height resolution for:" ), a, r );
+
+        if( compileError )
+            reportCompileError( r );
+
+        constraint = drcEngine.EvalRules( TEXT_HEIGHT_CONSTRAINT, a, b, layer, r );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Resolved text height constraints: min %s; opt %s; max %s." ),
+                                     reportMin( r->GetUnits(),  constraint ),
+                                     reportOpt( r->GetUnits(),  constraint ),
+                                     reportMax( r->GetUnits(),  constraint ) ) );
+        break;
+
+    case DRCE_TEXT_THICKNESS:
+        r = m_inspectClearanceDialog->AddPage( _( "Text Thickness" ) );
+        reportHeader( _( "Text thickness resolution for:" ), a, r );
+
+        if( compileError )
+            reportCompileError( r );
+
+        constraint = drcEngine.EvalRules( TEXT_THICKNESS_CONSTRAINT, a, b, layer, r );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Resolved text thickness constraints: min %s; opt %s; max %s." ),
+                                     reportMin( r->GetUnits(),  constraint ),
+                                     reportOpt( r->GetUnits(),  constraint ),
+                                     reportMax( r->GetUnits(),  constraint ) ) );
+        break;
+
+    case DRCE_HOLE_CLEARANCE:
+        r = m_inspectClearanceDialog->AddPage( _( "Hole Clearance" ) );
+        reportHeader( _( "Hole clearance resolution for:" ), a, b, r );
+
+        if( compileError )
+            reportCompileError( r );
+
+        if( ac && bc && ac->GetNetCode() == bc->GetNetCode() )
+        {
+            r->Report( "" );
+            r->Report( _( "Items belong to the same net. Clearance is 0." ) );
+        }
+        else
+        {
+            constraint = drcEngine.EvalRules( HOLE_CLEARANCE_CONSTRAINT, a, b, layer, r );
+            clearance = constraint.m_Value.Min();
+            clearanceStr = StringFromValue( r->GetUnits(), clearance, true );
+
+            r->Report( "" );
+            r->Report( wxString::Format( _( "Resolved clearance: %s." ), clearanceStr ) );
+        }
+
+        r->Report( "" );
+        r->Report( "" );
+        r->Report( "" );
+        reportHeader( _( "Mechanical hole clearance resolution for:" ), a, b, layer, r );
+
+        constraint = drcEngine.EvalRules( MECHANICAL_HOLE_CLEARANCE_CONSTRAINT, a, b, layer, r );
+        clearance = constraint.m_Value.Min();
+        clearanceStr = StringFromValue( r->GetUnits(), clearance, true );
+
+        if( !drcEngine.HasRulesForConstraintType( MECHANICAL_HOLE_CLEARANCE_CONSTRAINT ) )
+        {
+            r->Report( "" );
+            r->Report( _( "No 'mechanical_hole_clearance' constraints defined." ) );
+        }
+        else
+        {
+            r->Report( "" );
+            r->Report( wxString::Format( _( "Resolved clearance: %s." ), clearanceStr ) );
+        }
+
+        break;
+
     case DRCE_EDGE_CLEARANCE:
-        r = m_inspectClearanceDialog->AddPage( _( "Clearance" ) );
+        r = m_inspectClearanceDialog->AddPage( _( "Edge Clearance" ) );
         reportHeader( _( "Edge clearance resolution for:" ), a, b, r );
 
         if( compileError )
@@ -271,12 +397,41 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         if( compileError )
             reportCompileError( r );
 
-        constraint = drcEngine.EvalRules( CLEARANCE_CONSTRAINT, a, a, layer, r );
+        if( ac && bc && ac->GetNetCode() == bc->GetNetCode() )
+        {
+            r->Report( "" );
+            r->Report( _( "Items belong to the same net. Clearance is 0." ) );
+        }
+        else
+        {
+            constraint = drcEngine.EvalRules( CLEARANCE_CONSTRAINT, a, a, layer, r );
+            clearance = constraint.m_Value.Min();
+            clearanceStr = StringFromValue( r->GetUnits(), clearance, true );
+
+            r->Report( "" );
+            r->Report( wxString::Format( _( "Resolved clearance: %s." ), clearanceStr ) );
+        }
+
+        r->Report( "" );
+        r->Report( "" );
+        r->Report( "" );
+        reportHeader( _( "Mechanical clearance resolution for:" ), a, b, layer, r );
+
+        constraint = drcEngine.EvalRules( MECHANICAL_CLEARANCE_CONSTRAINT, a, b, layer, r );
         clearance = constraint.m_Value.Min();
         clearanceStr = StringFromValue( r->GetUnits(), clearance, true );
 
-        r->Report( "" );
-        r->Report( wxString::Format( _( "Resolved clearance: %s." ), clearanceStr ) );
+        if( !drcEngine.HasRulesForConstraintType( MECHANICAL_CLEARANCE_CONSTRAINT ) )
+        {
+            r->Report( "" );
+            r->Report( _( "No 'mechanical_clearance' constraints defined." ) );
+        }
+        else
+        {
+            r->Report( "" );
+            r->Report( wxString::Format( _( "Resolved clearance: %s." ), clearanceStr ) );
+        }
+
         break;
 
     default:
@@ -499,6 +654,49 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         r->Flush();
     }
 
+    if( ac && bc )
+    {
+        NETINFO_ITEM* refNet = ac->GetNet();
+        wxString      coupledNet;
+        wxString      dummy;
+
+        if( DRC_ENGINE::MatchDpSuffix( refNet->GetNetname(), coupledNet, dummy )
+                && bc->GetNetname() == coupledNet )
+        {
+            r = m_inspectClearanceDialog->AddPage( _( "Diff Pair" ) );
+            reportHeader( _( "Diff pair gap resolution for:" ), ac, bc, active, r );
+
+            constraint = drcEngine.EvalRules( DIFF_PAIR_GAP_CONSTRAINT, ac, bc, active, r );
+
+            r->Report( "" );
+            r->Report( wxString::Format( _( "Resolved gap constraints: min %s; opt %s; max %s." ),
+                                         reportMin( r->GetUnits(),  constraint ),
+                                         reportOpt( r->GetUnits(),  constraint ),
+                                         reportMax( r->GetUnits(),  constraint ) ) );
+
+            r->Report( "" );
+            r->Report( "" );
+            r->Report( "" );
+            reportHeader( _( "Diff pair max uncoupled length resolution for:" ), ac, bc, active, r );
+
+            if( !drcEngine.HasRulesForConstraintType( DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT ) )
+            {
+                r->Report( "" );
+                r->Report( _( "No 'diff_pair_uncoupled' constraints defined." ) );
+            }
+            else
+            {
+                constraint = drcEngine.EvalRules( DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT, ac, bc,
+                                                  active, r );
+
+                r->Report( "" );
+                r->Report( wxString::Format( _( "Resolved max uncoupled length: %s." ),
+                                             reportMax( r->GetUnits(),  constraint ) ) );
+            }
+            r->Flush();
+        }
+    }
+
     for( PCB_LAYER_ID layer : { F_SilkS, B_SilkS } )
     {
         PCB_LAYER_ID correspondingMask = IsFrontLayer( layer ) ? F_Mask : B_Mask;
@@ -691,33 +889,6 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 }
 
 
-wxString reportMin( EDA_UNITS aUnits, DRC_CONSTRAINT& aConstraint )
-{
-    if( aConstraint.m_Value.HasMin() )
-        return StringFromValue( aUnits, aConstraint.m_Value.Min(), true );
-    else
-        return wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
-}
-
-
-wxString reportOpt( EDA_UNITS aUnits, DRC_CONSTRAINT& aConstraint )
-{
-    if( aConstraint.m_Value.HasOpt() )
-        return StringFromValue( aUnits, aConstraint.m_Value.Opt(), true );
-    else
-        return wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
-}
-
-
-wxString reportMax( EDA_UNITS aUnits, DRC_CONSTRAINT& aConstraint )
-{
-    if( aConstraint.m_Value.HasMax() )
-        return StringFromValue( aUnits, aConstraint.m_Value.Max(), true );
-    else
-        return wxT( "<i>" ) + _( "undefined" ) + wxT( "</i>" );
-}
-
-
 int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 {
 #define EVAL_RULES( constraint, a, b, layer, r ) drcEngine.EvalRules( constraint, a, b, layer, r )
@@ -826,6 +997,43 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Hole constraint: min %s." ), min ) );
+
+        r->Flush();
+    }
+
+    if( item->Type() == PCB_TEXT_T
+            || item->Type() == PCB_TEXTBOX_T
+            || item->Type() == PCB_FP_TEXT_T )
+    {
+        r = m_inspectConstraintsDialog->AddPage( _( "Text Size" ) );
+        reportHeader( _( "Text height resolution for:" ), item, r );
+
+        constraint = EVAL_RULES( TEXT_HEIGHT_CONSTRAINT, item, nullptr, UNDEFINED_LAYER, r );
+
+        if( compileError )
+            reportCompileError( r );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Text height constraints: min %s; opt %s; max %s." ),
+                                     reportMin( r->GetUnits(),  constraint ),
+                                     reportOpt( r->GetUnits(),  constraint ),
+                                     reportMax( r->GetUnits(),  constraint ) ) );
+
+        r->Report( "" );
+        r->Report( "" );
+        r->Report( "" );
+        reportHeader( _( "Text thickness resolution for:" ), item, r );
+
+        constraint = EVAL_RULES( TEXT_THICKNESS_CONSTRAINT, item, nullptr, UNDEFINED_LAYER, r );
+
+        if( compileError )
+            reportCompileError( r );
+
+        r->Report( "" );
+        r->Report( wxString::Format( _( "Text thickness constraints: min %s; opt %s; max %s." ),
+                                     reportMin( r->GetUnits(),  constraint ),
+                                     reportOpt( r->GetUnits(),  constraint ),
+                                     reportMax( r->GetUnits(),  constraint ) ) );
 
         r->Flush();
     }
