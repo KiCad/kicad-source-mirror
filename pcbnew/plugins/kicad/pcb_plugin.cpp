@@ -2049,13 +2049,16 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
 {
     std::string locked = aZone->IsLocked() ? " locked" : "";
 
-    // Save the NET info; For keepout zones, net code and net name are irrelevant
+    // Save the NET info.
+    // For keepout and non copper zones, net code and net name are irrelevant
     // so be sure a dummy value is stored, just for ZONE compatibility
     // (perhaps netcode and netname should be not stored)
+    bool has_no_net = aZone->GetIsRuleArea() || !aZone->IsOnCopperLayer();
+
     m_out->Print( aNestLevel, "(zone%s (net %d) (net_name %s)",
                   locked.c_str(),
-                  aZone->GetIsRuleArea() ? 0 : m_mapping->Translate( aZone->GetNetCode() ),
-                  m_out->Quotew( aZone->GetIsRuleArea() ? wxT("") : aZone->GetNetname() ).c_str() );
+                  has_no_net ? 0 : m_mapping->Translate( aZone->GetNetCode() ),
+                  m_out->Quotew( has_no_net ? wxT("") : aZone->GetNetname() ).c_str() );
 
     // If a zone exists on multiple layers, format accordingly
     if( aZone->GetLayerSet().count() > 1 )
