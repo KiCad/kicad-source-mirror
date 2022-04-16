@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-11 09:39-0700\n"
-"PO-Revision-Date: 2022-04-08 00:06+0000\n"
+"PO-Revision-Date: 2022-04-17 06:19+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
 "Language: cs\n"
@@ -17088,7 +17088,7 @@ msgstr "Režim kreslení"
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:40
 #, fuzzy
 msgid "Sketch flashed items"
-msgstr "Vybrat položky"
+msgstr "Bliká jako obrys"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:43
 msgid "Sketch lines"
@@ -17800,7 +17800,7 @@ msgstr "Zobrazit prokov jako obrys"
 #: gerbview/tools/gerbview_actions.cpp:150
 #, fuzzy
 msgid "Sketch Flashed Items"
-msgstr "Vybrat položky"
+msgstr "Bliká jako obrys"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 msgid "Show flashed items in outline mode"
@@ -24301,9 +24301,8 @@ msgid "Flip bottom footprint padstacks"
 msgstr "Kreslit hodnoty pouzder"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:137
-#, fuzzy
 msgid "Generate unique pin names"
-msgstr "Generovat netlist"
+msgstr "Generovat unikátní jména vývodů"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:138
 msgid "Generate a new shape for each footprint instance (do not reuse shapes)"
@@ -24311,14 +24310,12 @@ msgstr ""
 "Vytvořit nový tvar pro každou instanci pouzdra (nevyužívejte tvar znovu)"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:139
-#, fuzzy
 msgid "Use drill/place file origin as origin"
-msgstr "Počátek vrtání"
+msgstr "Použít soubor vrtání/umístění jako počátek"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:140
-#, fuzzy
 msgid "Save the origin coordinates in the file"
-msgstr "Nastavit počáteční bod pro mřížku"
+msgstr "Uložit souřadnice počátku do souboru"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:77
 msgid "Generate Drill File"
@@ -30626,14 +30623,14 @@ msgid "Changed %s footprint from '%s' to '%s'."
 msgstr "Změněno pouzdro '%s' z '%s' na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s reference designator to %s."
-msgstr "Změna %s reference na %s."
+msgstr "Změnit referenční označení %s na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:275
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s reference designator to %s."
-msgstr "Změna %s reference na %s."
+msgstr "Změněno referenčního označení %s na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:291
 #, c-format
@@ -30820,9 +30817,9 @@ msgid "Total warnings: %d, errors: %d."
 msgstr "Celkem varování: %d, chyb: %d."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find component with ref '%s' in netlist."
-msgstr "Nelze najít součástku s referencí \"%s\" v netlistu."
+msgstr "Nelze najít součástku s ref '%s' v netlistu."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:439
 #, c-format
@@ -31975,6 +31972,9 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
+"Návrh CADSTAR obsahuje prvky mědi, které nemají přímý ekvivalent v KiCadu. "
+"Ty byly importovány jako zóna KiCadu, pokud jsou pevné nebo šrafované, nebo "
+"jako spoj KiCadu, pokud byl tvar nevyplněný obrys (otevřený nebo uzavřený)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2200
 #, c-format
@@ -33138,9 +33138,8 @@ msgid "90-degree rounded"
 msgstr "zaokrouhleno na 90 stupňů"
 
 #: pcbnew/router/router_tool.cpp:2122
-#, fuzzy
 msgid "Corner Style"
-msgstr "Styl čáry"
+msgstr "Styl rohu"
 
 #: pcbnew/router/router_tool.cpp:2127
 #, c-format
@@ -33632,9 +33631,8 @@ msgid "Thickness (mils)"
 msgstr "Tloušťka (milů)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:292
-#, fuzzy
 msgid "Loss Tangent"
-msgstr "Loss Tg"
+msgstr "Loss Tangent"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:315
 msgid "Dielectric"
@@ -34026,9 +34024,8 @@ msgid "Add an aligned linear dimension"
 msgstr "Přidat zarovnaný lineární rozměr"
 
 #: pcbnew/tools/pcb_actions.cpp:134
-#, fuzzy
 msgid "Add Center Dimension"
-msgstr "Přidat kótu"
+msgstr "Přidat centrální rozměr"
 
 #: pcbnew/tools/pcb_actions.cpp:134
 #, fuzzy
