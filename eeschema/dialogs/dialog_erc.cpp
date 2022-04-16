@@ -61,6 +61,7 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
         m_parent( parent ),
         m_running( false ),
         m_ercRun( false ),
+        m_centerMarkerOnIdle( nullptr ),
         m_severities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING )
 {
     SetName( DIALOG_ERC_WINDOW_NAME ); // Set a window name to be able to find it
@@ -523,7 +524,12 @@ void DIALOG_ERC::OnERCItemSelected( wxDataViewEvent& aEvent )
     SCH_SHEET_PATH  sheet;
     SCH_ITEM*       item = m_parent->Schematic().GetSheets().GetItem( itemID, &sheet );
 
-    if( item && item->GetClass() != wxT( "DELETED_SHEET_ITEM" ) )
+    if( m_centerMarkerOnIdle )
+    {
+        // we already came from a cross-probe of the marker in the document; don't go
+        // around in circles
+    }
+    else if( item && item->GetClass() != wxT( "DELETED_SHEET_ITEM" ) )
     {
         WINDOW_THAWER thawer( m_parent );
 
@@ -754,6 +760,29 @@ void DIALOG_ERC::NextMarker()
 
         m_markerTreeModel->NextMarker();
     }
+}
+
+
+void DIALOG_ERC::SelectMarker( const SCH_MARKER* aMarker )
+{
+    if( m_notebook->IsShown() )
+    {
+        m_notebook->SetSelection( 0 );
+        m_markerTreeModel->SelectMarker( aMarker );
+
+        // wxWidgets on some platforms fails to correctly ensure that a selected item is
+        // visible, so we have to do it in a separate idle event.
+        m_centerMarkerOnIdle = aMarker;
+        Bind( wxEVT_IDLE, &DIALOG_ERC::centerMarkerIdleHandler, this );
+    }
+}
+
+
+void DIALOG_ERC::centerMarkerIdleHandler( wxIdleEvent& aEvent )
+{
+    m_markerTreeModel->CenterMarker( m_centerMarkerOnIdle );
+    m_centerMarkerOnIdle = nullptr;
+    Unbind( wxEVT_IDLE, &DIALOG_ERC::centerMarkerIdleHandler, this );
 }
 
 

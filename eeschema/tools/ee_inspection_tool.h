@@ -51,6 +51,7 @@ public:
 
     int PrevMarker( const TOOL_EVENT& aEvent );
     int NextMarker( const TOOL_EVENT& aEvent );
+    int CrossProbe( const TOOL_EVENT& aEvent );
     int ExcludeMarker( const TOOL_EVENT& aEvent );
 
     int CheckSymbol( const TOOL_EVENT& aEvent );

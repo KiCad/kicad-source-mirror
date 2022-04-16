@@ -53,6 +53,7 @@ public:
 
     void PrevMarker();
     void NextMarker();
+    void SelectMarker( const SCH_MARKER* aMarker );
 
     /**
      * Exclude aMarker from the ERC list. If aMarker is nullptr, exclude the selected marker
@@ -81,6 +82,8 @@ private:
     void OnSaveReport( wxCommandEvent& aEvent ) override;
     void OnCancelClick( wxCommandEvent& event ) override;
 
+    void centerMarkerIdleHandler( wxIdleEvent& aEvent );
+
     void redrawDrawPanel();
 
     void testErc();
@@ -103,6 +106,8 @@ private:
 
     bool               m_running;
     bool               m_ercRun;
+
+    const SCH_MARKER*  m_centerMarkerOnIdle;
 
     int                m_severities;
 };

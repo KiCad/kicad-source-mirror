@@ -357,7 +357,12 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
                 }
             };
 
-    if( node && item && item != DELETED_BOARD_ITEM::GetInstance() )
+    if( m_centerMarkerOnIdle )
+    {
+        // we already came from a cross-probe of the marker in the document; don't go
+        // around in circles
+    }
+    else if( node && item && item != DELETED_BOARD_ITEM::GetInstance() )
     {
         PCB_LAYER_ID             principalLayer;
         LSET                     violationLayers;
@@ -465,11 +470,6 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
             }
 
             m_frame->FocusOnItems( items, principalLayer );
-        }
-        else if( m_centerMarkerOnIdle )
-        {
-            // we already came from a cross-probe of the marker in the document; don't go
-            // around in circles
         }
         else
         {

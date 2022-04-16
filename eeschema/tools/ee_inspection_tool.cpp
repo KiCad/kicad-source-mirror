@@ -151,6 +151,26 @@ int EE_INSPECTION_TOOL::NextMarker( const TOOL_EVENT& aEvent )
 }
 
 
+int EE_INSPECTION_TOOL::CrossProbe( const TOOL_EVENT& aEvent )
+{
+    if( m_ercDialog )
+    {
+        EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+        EE_SELECTION&      selection = selectionTool->GetSelection();
+
+        if( selection.GetSize() == 1 && selection.Front()->Type() == SCH_MARKER_T )
+        {
+            if( !m_ercDialog->IsShown() )
+                m_ercDialog->Show( true );
+
+            m_ercDialog->SelectMarker( static_cast<SCH_MARKER*>( selection.Front() ) );
+        }
+    }
+
+    return 0;
+}
+
+
 int EE_INSPECTION_TOOL::ExcludeMarker( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
@@ -311,6 +331,7 @@ void EE_INSPECTION_TOOL::setTransitions()
     Go( &EE_INSPECTION_TOOL::RunERC,              EE_ACTIONS::runERC.MakeEvent() );
     Go( &EE_INSPECTION_TOOL::PrevMarker,          EE_ACTIONS::prevMarker.MakeEvent() );
     Go( &EE_INSPECTION_TOOL::NextMarker,          EE_ACTIONS::nextMarker.MakeEvent() );
+    Go( &EE_INSPECTION_TOOL::CrossProbe,          EVENTS::SelectedEvent );
     Go( &EE_INSPECTION_TOOL::ExcludeMarker,       EE_ACTIONS::excludeMarker.MakeEvent() );
 
     Go( &EE_INSPECTION_TOOL::CheckSymbol,         EE_ACTIONS::checkSymbol.MakeEvent() );
