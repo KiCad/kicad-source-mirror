@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,6 +46,8 @@
 #include <wx/wxhtml.h>
 
 std::mutex DIALOG_CHOOSE_SYMBOL::g_Mutex;
+
+wxString DIALOG_CHOOSE_SYMBOL::g_searchString;
 
 
 DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxString& aTitle,
@@ -129,6 +131,8 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
     treeSizer->Fit( treePanel );
 
     aAdapter->FinishTreeInitialization();
+
+    m_tree->SetSearchString( g_searchString );
 
     m_hsplitter->SetSashGravity( 0.8 );
     m_hsplitter->SetMinimumPaneSize( 20 );
@@ -234,6 +238,8 @@ DIALOG_CHOOSE_SYMBOL::~DIALOG_CHOOSE_SYMBOL()
     // Stop the timer during destruction early to avoid potential race conditions (that do happen)
     m_dbl_click_timer->Stop();
     delete m_dbl_click_timer;
+
+    g_searchString = m_tree->GetSearchString();
 
     if( m_browser_button )
     {

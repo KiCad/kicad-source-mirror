@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,6 +96,12 @@ public:
      * Expand and item i the tree widget.
      */
     void ExpandLibId( const LIB_ID& aLibId );
+
+    /**
+     * Save/restore search string.
+     */
+    void SetSearchString( const wxString& aSearchString );
+    wxString GetSearchString() const;
 
     /**
      * Regenerate the tree.

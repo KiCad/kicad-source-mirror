@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -204,6 +204,18 @@ void LIB_TREE::Unselect()
 void LIB_TREE::ExpandLibId( const LIB_ID& aLibId )
 {
     expandIfValid( m_adapter->FindItem( aLibId ) );
+}
+
+
+void LIB_TREE::SetSearchString( const wxString& aSearchString )
+{
+    m_query_ctrl->SetValue( aSearchString );
+}
+
+
+wxString LIB_TREE::GetSearchString() const
+{
+    return m_query_ctrl->GetValue();
 }
 
 
