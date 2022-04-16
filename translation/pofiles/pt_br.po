@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-15 12:59-0700\n"
-"PO-Revision-Date: 2022-04-14 08:02+0000\n"
+"PO-Revision-Date: 2022-04-19 21:54+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -11976,19 +11976,16 @@ msgid "Field name '%s' already in use."
 msgstr "O nome do campo '%s' já está em uso."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1060
-#, fuzzy
 msgid "User Fields"
-msgstr "Campos"
+msgstr "Campos do usuário"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1069
-#, fuzzy
 msgid "Delete Field"
-msgstr "Exclua o campo"
+msgstr "Excluir o campo"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1070
-#, fuzzy
 msgid "Select field:"
-msgstr "Campos das folhas"
+msgstr "Selecione o campo:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:31
 msgid "Group symbols"
@@ -12003,9 +12000,8 @@ msgid "Add Field..."
 msgstr "Adicione um campo…"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:56
-#, fuzzy
 msgid "Remove Field..."
-msgstr "Renomeia o arquivo..."
+msgstr "Remove o campo..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:78
 msgid "Symbol Fields Table"
