@@ -1240,6 +1240,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
             // Build lists of nearby items and their children
             std::vector<EDA_ITEM*> nearbyItems;
             std::vector<EDA_ITEM*> nearbyChildren;
+            std::vector<EDA_ITEM*> flaggedItems;
 
             for( KIGFX::VIEW::LAYER_ITEM_PAIR& pair : nearbyViewItems )
             {
@@ -1313,6 +1314,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
                 if( Selectable( item ) && item->HitTest( selectionRect, isWindowSelection ) )
                 {
                     item->SetFlags( CANDIDATE );
+                    flaggedItems.push_back( item );
                     selectItem( item );
                 }
             }
@@ -1326,6 +1328,9 @@ bool EE_SELECTION_TOOL::selectMultiple()
                     selectItem( item );
                 }
             }
+
+            for( EDA_ITEM* item : flaggedItems )
+                item->ClearFlags( CANDIDATE );
 
             m_selection.SetIsHover( false );
 
