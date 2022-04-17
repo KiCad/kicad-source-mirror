@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2011 jean-pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,6 +96,13 @@ public:
      * number the same. E.g. U?A or U?B
      */
     void Split();
+
+    /**
+     * Determine if this reference needs to be split or if it likely already has been
+     *
+     * @return true if this reference hasn't been split yet
+     */
+    bool IsSplitNeeded();
 
     void SetRef( const wxString& aReference ) { m_ref = aReference; }
     wxString GetRef() const { return m_ref; }
@@ -245,7 +252,7 @@ public:
      * @param aItem Reference to check
      * @return true if aItem exists in this list
      */
-    bool Contains( const SCH_REFERENCE& aItem );
+    bool Contains( const SCH_REFERENCE& aItem ) const;
 
     /* Sort functions:
      * Sort functions are used to sort symbols for annotation or BOM generation.  Because
@@ -267,6 +274,17 @@ public:
     {
         for( unsigned ii = 0; ii < GetCount(); ii++ )
             flatList[ii].Split();
+    }
+
+    /**
+     * Treat all symbols in this list as non-annotated. Does not update annotation state of the
+     * symbols.
+     * @see SCH_REFERENCE_LIST::UpdateAnnotation
+     */
+    void RemoveAnnotation()
+    {
+        for( unsigned ii = 0; ii < GetCount(); ii++ )
+            flatList[ii].m_isNew = true;
     }
 
     /**
@@ -410,9 +428,10 @@ public:
      *
      * @param aIndex is the index in aSymbolsList for of given #SCH_REFERENCE item to test.
      * @param aUnit is the given unit number to search.
+     * @param aIncludeNew true to include references with the "new" flag in the search.
      * @return index in aSymbolsList if found or -1 if not found.
      */
-    int FindUnit( size_t aIndex, int aUnit ) const;
+    int FindUnit( size_t aIndex, int aUnit, bool aIncludeNew = false ) const;
 
     /**
      * Search the list for a symbol with the given KIID path.
@@ -430,16 +449,26 @@ public:
      * @param aIdList is the buffer to fill.
      * @param aMinRefId is the minimum ID value to store. All values < aMinRefId are ignored.
      */
-    void GetRefsInUse( int aIndex, std::vector< int >& aIdList, int aMinRefId ) const;
+    void GetRefsInUse( int aIndex, std::vector<int>& aIdList, int aMinRefId ) const;
 
     /**
-     * Return the last used (greatest) reference number in the reference list for the prefix
-     * used by the symbol pointed to by \a aIndex.  The symbol list must be sorted.
+     * Return all the unit numbers for a given reference, comparing library reference, value,
+     * reference number and reference prefix.
+     *
+     * @param aRef is the index of a symbol to use for reference prefix and number filtering.
+     */
+    std::vector<int> GetUnitsMatchingRef( const SCH_REFERENCE& aRef ) const;
+
+    /**
+     * Return the first unused reference number from the properties given in aRef, ensuring
+     * all of the units in aRequiredUnits are also unused.
      *
      * @param aIndex The index of the reference item used for the search pattern.
      * @param aMinValue The minimum value for the current search.
+     * @param aRequiredUnits List of units to ensure are free
      */
-    int GetLastReference( int aIndex, int aMinValue ) const;
+    int FindFirstUnusedReference( const SCH_REFERENCE& aRef, int aMinValue,
+                                  const std::vector<int>& aRequiredUnits ) const;
 
     std::vector<SYMBOL_INSTANCE_REFERENCE> GetSymbolInstances() const;
 
@@ -492,7 +521,7 @@ private:
      * @param aFirstValue The first expected free value
      * @return The first free (not yet used) value.
      */
-    int CreateFirstFreeRefId( std::vector<int>& aIdList, int aFirstValue );
+    static int createFirstFreeRefId( std::vector<int>& aIdList, int aFirstValue );
 
     // Used for sorting static sortByTimeStamp function
     friend class BACK_ANNOTATE;

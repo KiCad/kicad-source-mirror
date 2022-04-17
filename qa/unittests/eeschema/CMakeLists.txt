@@ -3,6 +3,7 @@
 #
 # Copyright (C) 2017 CERN
 # @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
+# Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -60,6 +61,7 @@ set( QA_EESCHEMA_SRCS
     test_pin_numbers.cpp
     test_sch_pin.cpp
     test_sch_rtree.cpp
+    test_sch_reference_list.cpp
     test_sch_sheet.cpp
     test_sch_sheet_path.cpp
     test_sch_sheet_list.cpp

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -185,10 +185,6 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
     // Store previous annotations for building info messages
     mapExistingAnnotation( previousAnnotation );
 
-    // If it is an annotation for all the symbols, reset previous annotation.
-    if( aResetAnnotation )
-        DeleteAnnotation( aAnnotateScope, &appendUndo );
-
     // Set sheet number and number of sheets.
     SetSheetNumberAndCount();
 
@@ -207,6 +203,12 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
         selection.GetSymbols( references, currentSheet );
         break;
     }
+
+    // Remove annotation only updates the "new" flag to indicate to the algorithm
+    // that these references must be reannotated, but keeps the original reference
+    // so that we can reannotate multi-unit symbols together.
+    if( aResetAnnotation )
+        references.RemoveAnnotation();
 
     // Build additional list of references to be used during reannotation
     // to avoid duplicate designators (no additional references when annotating
