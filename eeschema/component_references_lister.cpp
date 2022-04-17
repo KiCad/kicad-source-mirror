@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2018 jean-pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 1992-2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
  */
 
 #include <sch_reference_list.h>
+#include <core/kicad_algo.h>
 
 #include <wx/regex.h>
 #include <algorithm>
@@ -48,7 +49,7 @@ void SCH_REFERENCE_LIST::RemoveItem( unsigned int aIndex )
 }
 
 
-bool SCH_REFERENCE_LIST::Contains( const SCH_REFERENCE& aItem )
+bool SCH_REFERENCE_LIST::Contains( const SCH_REFERENCE& aItem ) const
 {
     for( unsigned ii = 0; ii < GetCount(); ii++ )
     {
@@ -154,14 +155,14 @@ bool SCH_REFERENCE_LIST::sortByTimeStamp( const SCH_REFERENCE& item1,
 }
 
 
-int SCH_REFERENCE_LIST::FindUnit( size_t aIndex, int aUnit ) const
+int SCH_REFERENCE_LIST::FindUnit( size_t aIndex, int aUnit, bool aIncludeNew ) const
 {
     int NumRef = flatList[aIndex].m_numRef;
 
     for( size_t ii = 0; ii < flatList.size(); ii++ )
     {
         if(  ( aIndex == ii )
-          || ( flatList[ii].m_isNew )
+          || ( flatList[ii].m_isNew && !aIncludeNew )
           || ( flatList[ii].m_numRef != NumRef )
           || ( flatList[aIndex].CompareRef( flatList[ii] ) != 0 ) )
             continue;
@@ -210,34 +211,98 @@ void SCH_REFERENCE_LIST::GetRefsInUse( int aIndex, std::vector< int >& aIdList,
             aIdList.push_back( ref.m_numRef );
     }
 
-    sort( aIdList.begin(), aIdList.end() );
+    std::sort( aIdList.begin(), aIdList.end() );
 
     // Ensure each reference number appears only once.  If there are symbols with
     // multiple parts per package the same number will be stored for each part.
-    std::vector< int >::iterator it = unique( aIdList.begin(), aIdList.end() );
-
-    // Using the C++ unique algorithm only moves the duplicate entries to the end of
-    // of the array.  This removes the duplicate entries from the array.
-    aIdList.resize( it - aIdList.begin() );
+    alg::remove_duplicates( aIdList );
 }
 
 
-int SCH_REFERENCE_LIST::GetLastReference( int aIndex, int aMinValue ) const
+std::vector<int> SCH_REFERENCE_LIST::GetUnitsMatchingRef( const SCH_REFERENCE& aRef ) const
 {
-    int lastNumber = aMinValue;
+    std::vector<int> unitsList;
+
+    // Always add this reference to the list
+    unitsList.push_back( aRef.m_unit );
+
+    for( SCH_REFERENCE ref : flatList )
+    {
+        if( ref.CompareValue( aRef ) != 0 )
+            continue;
+
+        if( ref.CompareLibName( aRef ) != 0 )
+            continue;
+
+        // Split if needed before comparing ref and number
+        if( ref.IsSplitNeeded() )
+            ref.Split();
+
+        if( ref.CompareRef( aRef ) != 0 )
+            continue;
+
+        if( ref.m_numRef != aRef.m_numRef )
+            continue;
+
+        unitsList.push_back( ref.m_unit );
+    }
+
+    std::sort( unitsList.begin(), unitsList.end() );
+
+    // Ensure each reference number appears only once.  If there are symbols with
+    // multiple parts per package the same number will be stored for each part.
+    alg::remove_duplicates( unitsList );
+
+    return unitsList;
+}
+
+
+int SCH_REFERENCE_LIST::FindFirstUnusedReference( const SCH_REFERENCE& aRef, int aMinValue,
+                                                  const std::vector<int>& aRequiredUnits ) const
+{
+    // Create a map of references indexed by reference number, only including those with the same
+    // reference prefix as aRef
+    std::map<int, std::vector<SCH_REFERENCE>> refNumberMap;
 
     for( const SCH_REFERENCE& ref : flatList )
     {
         // search only for the current reference prefix:
-        if( flatList[aIndex].CompareRef( ref ) != 0 )
+        if( ref.CompareRef( aRef ) != 0 )
             continue;
 
-        // update max value for the current reference prefix
-        if( lastNumber < ref.m_numRef )
-            lastNumber = ref.m_numRef;
+        if( ref.m_isNew )
+            continue; // It will be reannotated
+
+        refNumberMap[ref.m_numRef].push_back( ref );
     }
 
-    return lastNumber;
+    // Start at the given minimum value
+    int minFreeNumber = aMinValue;
+
+    for( ; refNumberMap[minFreeNumber].size() > 0; ++minFreeNumber )
+    {
+        auto isNumberInUse = [&]() -> bool
+                             {
+                                for( const int& unit : aRequiredUnits )
+                                {
+                                    for( const SCH_REFERENCE& ref : refNumberMap[minFreeNumber] )
+                                    {
+                                        if( ref.CompareLibName( aRef ) || ref.CompareValue( aRef )
+                                            || ref.GetUnit() == unit )
+                                        {
+                                            return true;
+                                        }
+                                    }
+                                }
+
+                                return false;
+                             };
+
+        if( !isNumberInUse() )
+            return minFreeNumber;
+    }
+
+    return minFreeNumber;
 }
 
 
@@ -261,7 +326,7 @@ std::vector<SYMBOL_INSTANCE_REFERENCE> SCH_REFERENCE_LIST::GetSymbolInstances() 
 }
 
 
-int SCH_REFERENCE_LIST::CreateFirstFreeRefId( std::vector<int>& aIdList, int aFirstValue )
+int SCH_REFERENCE_LIST::createFirstFreeRefId( std::vector<int>& aIdList, int aFirstValue )
 {
     int expectedId = aFirstValue;
 
@@ -327,9 +392,9 @@ void SCH_REFERENCE_LIST::ReannotateDuplicates( const SCH_REFERENCE_LIST& aAdditi
         if( refstr[refstr.Len() - 1] == '?' )
             continue;
 
-        lockedSymbols[refstr].AddItem( ref );
-
         ref.m_isNew = true; // We want to reannotate all references
+
+        lockedSymbols[refstr].AddItem( ref );
     }
 
     Annotate( false, 0, 0, lockedSymbols, aAdditionalReferences, true );
@@ -390,10 +455,6 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
     else
         minRefId = aStartNumber + 1;
 
-    // This is the list of all Id already in use for a given reference prefix.
-    // Will be refilled for each new reference prefix.
-    std::vector<int>idList;
-    GetRefsInUse( first, idList, minRefId );
 
     for( unsigned ii = 0; ii < flatList.size(); ii++ )
     {
@@ -435,23 +496,20 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                 minRefId = ref_unit.m_sheetNum * aSheetIntervalId + 1;
             else
                 minRefId = aStartNumber + 1;
-
-            GetRefsInUse( first, idList, minRefId );
         }
 
         // Find references greater than current reference (unless not annotated)
         if( aStartAtCurrent && ref_unit.m_numRef > 0 )
-        {
             minRefId = ref_unit.m_numRef;
-            GetRefsInUse( first, idList, minRefId );
-        }
 
         // Annotation of one part per package symbols (trivial case).
         if( ref_unit.GetLibPart()->GetUnitCount() <= 1 )
         {
             if( ref_unit.m_isNew )
             {
-                LastReferenceNumber = CreateFirstFreeRefId( idList, minRefId );
+                std::vector<int> idList;
+                GetRefsInUse( first, idList, minRefId );
+                LastReferenceNumber = createFirstFreeRefId( idList, minRefId );
                 ref_unit.m_numRef = LastReferenceNumber;
             }
 
@@ -463,45 +521,46 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
         // Annotation of multi-unit parts ( n units per part ) (complex case)
         NumberOfUnits = ref_unit.GetLibPart()->GetUnitCount();
 
-        if( ref_unit.m_isNew )
-        {
-            LastReferenceNumber = CreateFirstFreeRefId( idList, minRefId );
-            ref_unit.m_numRef = LastReferenceNumber;
-
-            ref_unit.m_flag = 1;
-        }
-
         // If this symbol is in aLockedUnitMap, copy the annotation to all
         // symbols that are not it
         if( lockedList != nullptr )
         {
             unsigned n_refs = lockedList->GetCount();
+            std::vector<int> units = lockedList->GetUnitsMatchingRef( ref_unit );
 
-            for( unsigned thisRefI = 0; thisRefI < n_refs; ++thisRefI )
+            if( ref_unit.m_isNew )
             {
-                SCH_REFERENCE &thisRef = (*lockedList)[thisRefI];
+                LastReferenceNumber = FindFirstUnusedReference( ref_unit, minRefId, units );
+                ref_unit.m_numRef = LastReferenceNumber;
+                ref_unit.m_isNew = false;
+                ref_unit.m_flag = 1;
+            }
 
-                if( thisRef.IsSameInstance( ref_unit ) )
+            for( unsigned lockedRefI = 0; lockedRefI < n_refs; ++lockedRefI )
+            {
+                SCH_REFERENCE& lockedRef = ( *lockedList )[lockedRefI];
+
+                if( lockedRef.IsSameInstance( ref_unit ) )
                 {
                     // This is the symbol we're currently annotating. Hold the unit!
-                    ref_unit.m_unit = thisRef.m_unit;
+                    ref_unit.m_unit = lockedRef.m_unit;
                     // lock this new full reference
                     inUseRefs.insert( buildFullReference( ref_unit ) );
                 }
 
-                if( thisRef.CompareValue( ref_unit ) != 0 )
+                if( lockedRef.CompareValue( ref_unit ) != 0 )
                     continue;
 
-                if( thisRef.CompareLibName( ref_unit ) != 0 )
+                if( lockedRef.CompareLibName( ref_unit ) != 0 )
                     continue;
 
                 // Find the matching symbol
                 for( unsigned jj = ii + 1; jj < flatList.size(); jj++ )
                 {
-                    if( ! thisRef.IsSameInstance( flatList[jj] ) )
+                    if( !lockedRef.IsSameInstance( flatList[jj] ) )
                         continue;
 
-                    wxString ref_candidate = buildFullReference( ref_unit, thisRef.m_unit );
+                    wxString ref_candidate = buildFullReference( ref_unit, lockedRef.m_unit );
 
                     // propagate the new reference and unit selection to the "old" symbol,
                     // if this new full reference is not already used (can happens when initial
@@ -518,56 +577,16 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                 }
             }
         }
-        else
+        else if( ref_unit.m_isNew )
         {
-            /* search for others units of this symbol.
-            * we search for others parts that have the same value and the same
-            * reference prefix (ref without ref number)
-            */
-            for( Unit = 1; Unit <= NumberOfUnits; Unit++ )
-            {
-                if( ref_unit.m_unit == Unit )
-                    continue;
-
-                int found = FindUnit( ii, Unit );
-
-                if( found >= 0 )
-                    continue; // this unit exists for this reference (unit already annotated)
-
-                // Search a symbol to annotate ( same prefix, same value, not annotated)
-                for( unsigned jj = ii + 1; jj < flatList.size(); jj++ )
-                {
-                    auto& cmp_unit = flatList[jj];
-
-                    if( cmp_unit.m_flag )    // already tested
-                        continue;
-
-                    if( cmp_unit.CompareRef( ref_unit ) != 0 )
-                        continue;
-
-                    if( cmp_unit.CompareValue( ref_unit ) != 0 )
-                        continue;
-
-                    if( cmp_unit.CompareLibName( ref_unit ) != 0 )
-                        continue;
-
-                    if( aUseSheetNum &&
-                            cmp_unit.GetSheetPath().Cmp( ref_unit.GetSheetPath() ) != 0 )
-                        continue;
-
-                    if( !cmp_unit.m_isNew )
-                        continue;
-
-                    // Symbol without reference number found, annotate it if possible.
-                    if( cmp_unit.m_unit == Unit )
-                    {
-                        cmp_unit.m_numRef = ref_unit.m_numRef;
-                        cmp_unit.m_flag   = 1;
-                        cmp_unit.m_isNew  = false;
-                        break;
-                    }
-                }
-            }
+            // Reference belonging to multi-unit symbol that has not yet been annotated. We don't
+            // know what group this might belong to, so just find the first unused reference for
+            // this specific unit. The other units will be annotated in the following passes.
+            std::vector<int> units = { ref_unit.GetUnit() };
+            LastReferenceNumber = FindFirstUnusedReference( ref_unit, minRefId, units );
+            ref_unit.m_numRef = LastReferenceNumber;
+            ref_unit.m_isNew = false;
+            ref_unit.m_flag = 1;
         }
     }
 
@@ -821,6 +840,16 @@ void SCH_REFERENCE::Split()
 
         SetRefStr( refText );
     }
+}
+
+
+bool SCH_REFERENCE::IsSplitNeeded()
+{
+    std::string refText = GetRefStr();
+
+    int ll = refText.length() - 1;
+
+    return ( refText[ll] == '?' ) || isdigit( refText[ll] );
 }
 
 
