@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-15 12:59-0700\n"
-"PO-Revision-Date: 2022-04-14 08:02+0000\n"
+"PO-Revision-Date: 2022-04-19 21:54+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -472,11 +472,11 @@ msgstr "Käytä CAD-värityyliä, joka perustuu materiaalin hajanaiseen väriin"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:208
 msgid "Toggle Through Hole 3D models"
-msgstr "Näytä tai piilota läpireikä-3D-mallit"
+msgstr "Näytä tai Piilota Läpireikä 3D-mallit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:209
 msgid "Toggle 3D models for 'Through hole' type components"
-msgstr "Näytä tai piilota 'Läpireikä' tyypin komponenttien 3D-mallit"
+msgstr "Näytä tai Piilota 'Läpireikä' tyypin komponenttien 3D-mallit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:215
 msgid "Toggle SMD 3D models"
@@ -488,7 +488,7 @@ msgstr "Näytä tai Piilota 'Pinta-asennus' tyypin komponenttien 3D-mallit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
 msgid "Toggle Other 3D models"
-msgstr "Näytä tai piilota muut 3D-mallit"
+msgstr "Näytä tai Piilota Muut 3D-mallit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
 msgid "Toggle 3D models for 'Other' type components"
@@ -658,7 +658,7 @@ msgstr "Näytä juotospastakerrokset"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:46
 msgid "Show adhesive layers"
-msgstr "Näytä liimakerrokset"
+msgstr "Näytä sidosainekerrokset"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "User Layers (not shown in realistic mode)"
@@ -11910,19 +11910,16 @@ msgid "Field name '%s' already in use."
 msgstr "Kentän nimi '%s' on jo käytössä."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1060
-#, fuzzy
 msgid "User Fields"
-msgstr "Käyttäjän kentät:"
+msgstr "Käyttäjäkentät"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1069
-#, fuzzy
 msgid "Delete Field"
-msgstr "Poista kenttä"
+msgstr "Poista Kenttä"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1070
-#, fuzzy
 msgid "Select field:"
-msgstr "Lehtien kentät"
+msgstr "Valitse kenttä:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:31
 msgid "Group symbols"
@@ -11937,9 +11934,8 @@ msgid "Add Field..."
 msgstr "Lisää Kenttä..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:56
-#, fuzzy
 msgid "Remove Field..."
-msgstr "Nimeä tiedosto uudelleen..."
+msgstr "Poista Kenttä..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:78
 msgid "Symbol Fields Table"
@@ -29005,7 +29001,7 @@ msgstr "Ei levyllä, tuotantoapu"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:70
 msgid "If you want an adhesive template for the front side of the board"
-msgstr "Haluttaessa etupuolen liimakerros"
+msgstr "Jos haluat sidosainepohjan piirilevyn etupuolle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:74
 msgid "Adhes_Front"
@@ -29391,7 +29387,7 @@ msgstr "MyytyP_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:610
 msgid "If you want an adhesive layer for the back side of the board"
-msgstr "Haluttaessa takapuolen liimakerros"
+msgstr "Jos haluat sidosainepohjan piirilevyn takapuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:614
 msgid "Adhes_Back"
@@ -37967,11 +37963,11 @@ msgstr "Näytä tai piilota tämä kerros"
 
 #: pcbnew/widgets/appearance_controls.cpp:1543
 msgid "Adhesive on board's front"
-msgstr "Sidosaine levyn etupuolella"
+msgstr "Sidosaine piirilevyn etupuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1544
 msgid "Adhesive on board's back"
-msgstr "Sidosaine levyn takapuolella"
+msgstr "Sidosaine piirilevyn takapuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1545
 msgid "Solder paste on board's front"
