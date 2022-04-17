@@ -1,15 +1,16 @@
 # Tokita, Hiroshi <tokita.hiroshi@gmail.com>, 2021.
 # Ji Yoon Choi <chichoon.choi@gmail.com>, 2021.
 # Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>, 2021, 2022.
+# co8 j <co8@nifty.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-15 12:59-0700\n"
-"PO-Revision-Date: 2022-03-21 12:11+0000\n"
-"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2022-04-19 21:54+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3007,7 +3008,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:171
 msgid "High-contrast mode dimming factor:"
-msgstr ""
+msgstr "ハイコントラストモードの調光要素:"
 
 #: common/dialogs/panel_common_settings_base.cpp:178
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:75
@@ -3189,19 +3190,31 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are not shared in this process."
 msgstr ""
+"KiCadは、クラッシュや特殊なイベントのデータを匿名で開発者に報告し、ユーザー全"
+"体の重要なバグをより効果的に特定したり、"
+"改良のために機能的な分析の手がかりにします\n"
+"\n"
+"\n"
+"同じKiCadインストールからの自動レポートをリンクするために、完全にランダムな一"
+"意の識別子が生成され、それはクラッシュレポートの目的にのみ使用されます。IPア"
+"ドレスを含む個人を特定できる情報（PII）はこの識別子に保存されたり、関連付けた"
+"りしません。このIDはいつでもリセットすることができます。\n"
+"\n"
+"お客様が自発的に参加することを選択した場合、KiCadはクラッシュやイベントが発生"
+"した時に自動的にレポートを送信するように処理します。回路図やPCBのようなあなた"
+"が作成したファイルは、この過程で共有されることはありません。"
 
 #: common/dialogs/panel_data_collection_base.cpp:27
 msgid "I agree to provide anonymous reports"
-msgstr ""
+msgstr "匿名レポートの提供に同意する"
 
 #: common/dialogs/panel_data_collection_base.cpp:30
-#, fuzzy
 msgid "Reset Unique Id"
-msgstr "未配線をリセット"
+msgstr "固有IDのリセット"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:84
 msgid "Type filter text"
-msgstr "フィルター テキストをタイプ"
+msgstr "フィルター テキストを入力"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:120
 msgid "Undo All Changes"
@@ -9472,9 +9485,8 @@ msgid "0"
 msgstr "0"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:36
-#, fuzzy
 msgid "Pin count:"
-msgstr "ピン数"
+msgstr "ピン数:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:47
 #, fuzzy
@@ -10075,9 +10087,8 @@ msgid "Alternate pin assignments are not available for De Morgan symbols."
 msgstr "ド・モルガンのシンボルには、代替ピンの割り当てはありません。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:270
-#, fuzzy
 msgid "Exit sync pins mode"
-msgstr "Spice モデルを編集"
+msgstr "同期ピンモードから抜ける"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:285
 #, fuzzy
@@ -10113,9 +10124,8 @@ msgstr ""
 "続けてもよろしいですか?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:430
-#, fuzzy
 msgid "Synchronized Pins Mode."
-msgstr "同期ピン編集モード"
+msgstr "ピン編集モードを同期。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:432
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
@@ -11897,9 +11907,8 @@ msgid "Field name '%s' already in use."
 msgstr "フィールド名 '%s' は既に使われています。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1060
-#, fuzzy
 msgid "User Fields"
-msgstr "  フィールド"
+msgstr "ユーザーフィールド"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1069
 #, fuzzy
@@ -11907,9 +11916,8 @@ msgid "Delete Field"
 msgstr "フィールドを削除"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1070
-#, fuzzy
 msgid "Select field:"
-msgstr "シートのフィールド"
+msgstr "フィールドを選択:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:31
 msgid "Group symbols"
@@ -12437,7 +12445,7 @@ msgstr "フリーアングル"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "90 deg Angle"
-msgstr ""
+msgstr "90度"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 #, fuzzy
@@ -14306,7 +14314,7 @@ msgstr "この SCH_PLUGIN で Symbol*() 関数の<b>debug</b>ログを有効に�
 
 #: eeschema/sch_plugin.cpp:142
 msgid "Regular expression <b>symbol name</b> filter."
-msgstr "正規表現で<b>symbol name</b>を絞り込みます。"
+msgstr "正規表現で<b>シンボル名</b>を絞り込みます。"
 
 #: eeschema/sch_plugin.cpp:146 pcbnew/plugin.cpp:157
 msgid ""
@@ -35455,14 +35463,12 @@ msgid "Some zones were rule areas and were not merged."
 msgstr "一部のゾーンはルールエリアであり、マージされませんでした。"
 
 #: pcbnew/tools/board_editor_control.cpp:1457
-#, fuzzy
 msgid "Some zone layer sets did not match and were not merged."
-msgstr "ルールレイヤー '%s' が一致しません。ルールは無視されます。"
+msgstr "一部のゾーンのレイヤーセットが一致しなかったので、マージされませんでした。"
 
 #: pcbnew/tools/board_editor_control.cpp:1463
-#, fuzzy
 msgid "Some zones did not intersect and were not merged."
-msgstr "いくつかのアイテムは DRC に失敗して変更されていません。"
+msgstr "一部のゾーンは交差していなかったのでマージされませんでした。"
 
 #: pcbnew/tools/board_editor_control.cpp:1529
 msgid "Duplicate zone"
@@ -35534,9 +35540,9 @@ msgid "Resolved thermal spoke width: %s."
 msgstr "解決されたサーマルスポーク幅: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:425
-#, fuzzy, c-format
+#, c-format
 msgid "Minimum thermal spoke count: %d."
-msgstr "サーマルリリーフ スポーク幅:"
+msgstr "最小サーマルスポーク数:%d。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:431
 msgid "Items are not connected.  No thermal spokes will be generated."
@@ -35685,7 +35691,7 @@ msgstr "動作"
 
 #: pcbnew/tools/board_inspection_tool.cpp:858
 msgid "Assertions for:"
-msgstr ""
+msgstr "アサーション:"
 
 #: pcbnew/tools/convert_tool.cpp:77
 msgid "Create from Selection"
