@@ -1508,7 +1508,7 @@
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
-                                        <property name="choices">&quot;0&quot; &quot;0.0&quot; &quot;0.00&quot; &quot;0.000&quot; &quot;0.0000&quot; &quot;0.00000&quot;</property>
+                                        <property name="choices">&quot;0&quot; &quot;0.0&quot; &quot;0.00&quot; &quot;0.000&quot; &quot;0.0000&quot; &quot;0.00000&quot; &quot;0.00 in / 0 mils / 0.0 mm&quot; &quot;0.000 / 0 / 0.00&quot; &quot;0.0000 / 0.0 / 0.000&quot; &quot;0.00000 / 0.00 / 0.0000&quot;</property>
                                         <property name="close_button">1</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>

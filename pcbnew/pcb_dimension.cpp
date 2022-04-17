@@ -109,8 +109,21 @@ wxString PCB_DIMENSION_BASE::GetValueText() const
     wxChar sep = lc->decimal_point[0];
 
     int      val = GetMeasuredValue();
+    int      precision = m_precision;
     wxString text;
-    wxString format = wxT( "%." ) + wxString::Format( wxT( "%i" ), m_precision ) + wxT( "f" );
+
+    if( precision >= 6 )
+    {
+        switch( m_units )
+        {
+        case EDA_UNITS::INCHES:      precision = precision - 4;                break;
+        case EDA_UNITS::MILS:        precision = std::max( 0, precision - 7 ); break;
+        case EDA_UNITS::MILLIMETRES: precision = precision - 5;                break;
+        default:                     precision = precision - 4;                break;
+        }
+    }
+
+    wxString format = wxT( "%." ) + wxString::Format( wxT( "%i" ), precision ) + wxT( "f" );
 
     text.Printf( format, To_User_Unit( m_units, val ) );
 
@@ -294,7 +307,24 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     {
         aList.emplace_back( _( "Value" ), GetValueText() );
 
-        msg = wxT( "%" ) + wxString::Format( wxT( "1.%df" ), GetPrecision() );
+        switch( GetPrecision() )
+        {
+        case 6:
+            msg = wxT( "0.00 in / 0 mils / 0.0 mm" );
+            break;
+        case 7:
+            msg = wxT( "0.000 in / 0 mils / 0.00 mm" );
+            break;
+        case 8:
+            msg = wxT( "0.0000 in / 0.0 mils / 0.000 mm" );
+            break;
+        case 9:
+            msg = wxT( "0.00000 in / 0.00 mils / 0.0000 mm" );
+            break;
+        default:
+            msg = wxT( "%" ) + wxString::Format( wxT( "1.%df" ), GetPrecision() );
+        }
+
         aList.emplace_back( _( "Precision" ), wxString::Format( msg, 0.0 ) );
     }
 

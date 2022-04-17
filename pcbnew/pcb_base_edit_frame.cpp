@@ -219,9 +219,10 @@ void PCB_BASE_EDIT_FRAME::unitsChangeRefresh()
     {
         EDA_UNITS    units = GetUserUnits();
         KIGFX::VIEW* view  = GetCanvas()->GetView();
+        bool         selectedItemModified = false;
 
         INSPECTOR_FUNC inspector =
-                [units, view]( EDA_ITEM* aItem, void* aTestData )
+                [units, view, &selectedItemModified]( EDA_ITEM* aItem, void* aTestData )
                 {
                     PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( aItem );
 
@@ -229,6 +230,10 @@ void PCB_BASE_EDIT_FRAME::unitsChangeRefresh()
                     {
                         dimension->SetUnits( units );
                         dimension->Update();
+
+                        if( dimension->IsSelected() )
+                            selectedItemModified = true;
+
                         view->Update( dimension );
                     }
 
@@ -236,6 +241,9 @@ void PCB_BASE_EDIT_FRAME::unitsChangeRefresh()
                 };
 
         board->Visit( inspector, nullptr, GENERAL_COLLECTOR::Dimensions );
+
+        if( selectedItemModified )
+            m_toolManager->PostEvent( EVENTS::SelectedItemsModified );
     }
 
     ReCreateAuxiliaryToolbar();
