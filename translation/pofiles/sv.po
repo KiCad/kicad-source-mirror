@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-11 09:39-0700\n"
-"PO-Revision-Date: 2022-04-14 08:02+0000\n"
+"PO-Revision-Date: 2022-04-19 21:54+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
@@ -11229,7 +11229,7 @@ msgstr "Antal"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:698
 msgid "Group By"
-msgstr "Grupp av"
+msgstr "Gruppera efter"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:970
 #: eeschema/symbol_editor/symbol_editor.cpp:1251
@@ -11256,11 +11256,11 @@ msgstr "Fältnamnet '%s' används redan."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:31
 msgid "Group symbols"
-msgstr "Gruppsymboler"
+msgstr "Gruppera symboler"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:33
 msgid "Group symbols together based on common properties"
-msgstr "Gruppera symboler tillsammans baserat på vanliga egenskaper"
+msgstr "Dela in symboler i grupper baserat på deras gemensamma egenskaper"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:53
 msgid "Add Field..."
