@@ -10,23 +10,25 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class BITMAP_BUTTON;
 class WX_GRID;
 
 #include "dialog_shim.h"
-#include <wx/string.h>
-#include <wx/checkbox.h>
+#include <wx/dataview.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/bmpbuttn.h>
+#include <wx/string.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
-#include <wx/dataview.h>
 #include <wx/panel.h>
+#include <wx/srchctrl.h>
+#include <wx/bmpbuttn.h>
+#include <wx/checkbox.h>
 #include <wx/grid.h>
 #include <wx/splitter.h>
 #include <wx/dialog.h>
@@ -45,12 +47,15 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 	protected:
 		wxSplitterWindow* m_splitterMainWindow;
 		wxPanel* m_leftPanel;
-		wxCheckBox* m_groupSymbolsBox;
-		wxBitmapButton* m_bRefresh;
 		wxDataViewListCtrl* m_fieldsCtrl;
 		wxButton* m_addFieldButton;
 		wxButton* m_removeFieldButton;
 		wxPanel* m_rightPanel;
+		wxSearchCtrl* m_filter;
+		BITMAP_BUTTON* m_separator1;
+		wxCheckBox* m_groupSymbolsBox;
+		BITMAP_BUTTON* m_separator2;
+		wxBitmapButton* m_bRefresh;
 		WX_GRID* m_grid;
 		wxButton* m_buttonApply;
 		wxStdDialogButtonSizer* m_sdbSizer;
@@ -59,12 +64,14 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnGroupSymbolsToggled( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRegroupSymbols( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnColumnItemToggled( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnSizeFieldList( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveField( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnFilterText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnFilterMouseMoved( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnGroupSymbolsToggled( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRegroupSymbols( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTableValueChanged( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnTableCellClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnTableItemContextMenu( wxGridEvent& event ) { event.Skip(); }

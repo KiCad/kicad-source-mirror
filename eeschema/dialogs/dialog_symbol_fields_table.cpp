@@ -39,6 +39,7 @@
 #include <tools/sch_editor_control.h>
 #include <kiplatform/ui.h>
 #include <widgets/grid_text_button_helpers.h>
+#include <widgets/bitmap_button.h>
 #include <widgets/wx_grid.h>
 #include <wx/grid.h>
 #include <wx/msgdlg.h>
@@ -469,9 +470,10 @@ public:
         return matchFound;
     }
 
-    void RebuildRows( wxCheckBox* aGroupSymbolsBox, wxDataViewListCtrl* aFieldsCtrl )
+    void RebuildRows( wxSearchCtrl* aFilter, wxCheckBox* aGroupSymbolsBox,
+                      wxDataViewListCtrl* aFieldsCtrl )
     {
-        if ( GetView() )
+        if( GetView() )
         {
             // Commit any pending in-place edits before the row gets moved out from under
             // the editor.
@@ -486,7 +488,14 @@ public:
         for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
         {
             SCH_REFERENCE ref = m_symbolsList[ i ];
-            bool          matchFound = false;
+
+            if( !aFilter->GetValue().IsEmpty()
+                    && !WildCompareString( aFilter->GetValue(), ref.GetRef(), false ) )
+            {
+                continue;
+            }
+
+            bool matchFound = false;
 
             // See if we already have a row which this symbol fits into
             for( DATA_MODEL_ROW& row : m_rows )
@@ -709,6 +718,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     // Get all symbols from the list of schematic sheets
     m_parent->Schematic().GetSheets().GetSymbols( m_symbolsList, false );
 
+    m_separator1->SetIsSeparator();
+    m_separator2->SetIsSeparator();
     m_bRefresh->SetBitmap( KiBitmap( BITMAPS::small_refresh ) );
 
     m_fieldsCtrl->AppendTextColumn( _( "Field" ), wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
@@ -735,6 +746,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     // expander buttons... but it doesn't.  Fix by forcing the indent to 0.
     m_fieldsCtrl->SetIndent( 0 );
 
+    m_filter->SetDescriptiveText( _( "Filter" ) );
+
     m_dataModel = new FIELDS_EDITOR_GRID_DATA_MODEL( m_parent, m_symbolsList );
 
     LoadFieldNames();   // loads rows into m_fieldsCtrl and columns into m_dataModel
@@ -759,7 +772,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_splitterMainWindow->SetMinimumPaneSize( fieldsMinWidth );
     m_splitterMainWindow->SetSashPosition( fieldsMinWidth + 40 );
 
-    m_dataModel->RebuildRows( m_groupSymbolsBox, m_fieldsCtrl );
+    m_dataModel->RebuildRows( m_filter, m_groupSymbolsBox, m_fieldsCtrl );
     m_dataModel->Sort( 0, true );
 
     // wxGrid's column moving is buggy with native headers and this is one dialog where you'd
@@ -1100,6 +1113,29 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRemoveField( wxCommandEvent& event )
 }
 
 
+void DIALOG_SYMBOL_FIELDS_TABLE::OnFilterText( wxCommandEvent& aEvent )
+{
+    m_dataModel->RebuildRows( m_filter, m_groupSymbolsBox, m_fieldsCtrl );
+    m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );
+    m_grid->ForceRefresh();
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::OnFilterMouseMoved( wxMouseEvent& aEvent )
+{
+    wxPoint pos = aEvent.GetPosition();
+    wxRect  ctrlRect = m_filter->GetScreenRect();
+    int     buttonWidth = ctrlRect.GetHeight();         // Presume buttons are square
+
+    if( m_filter->IsSearchButtonVisible() && pos.x < buttonWidth )
+        SetCursor( wxCURSOR_ARROW );
+    else if( m_filter->IsCancelButtonVisible() && pos.x > ctrlRect.GetWidth() - buttonWidth )
+        SetCursor( wxCURSOR_ARROW );
+    else
+        SetCursor( wxCURSOR_IBEAM );
+}
+
+
 void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
 {
     EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
@@ -1139,7 +1175,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
         std::string fieldName( m_fieldsCtrl->GetTextValue( row, CANONICAL_NAME_COLUMN ).ToUTF8() );
         cfg->m_FieldEditorPanel.fields_group_by[fieldName] = value;
 
-        m_dataModel->RebuildRows( m_groupSymbolsBox, m_fieldsCtrl );
+        m_dataModel->RebuildRows( m_filter, m_groupSymbolsBox, m_fieldsCtrl );
         m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );
         m_grid->ForceRefresh();
         break;
@@ -1153,7 +1189,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnGroupSymbolsToggled( wxCommandEvent& event )
 {
-    m_dataModel->RebuildRows( m_groupSymbolsBox, m_fieldsCtrl );
+    m_dataModel->RebuildRows( m_filter, m_groupSymbolsBox, m_fieldsCtrl );
     m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );
     m_grid->ForceRefresh();
 }
@@ -1203,7 +1239,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableColSize( wxGridSizeEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnRegroupSymbols( wxCommandEvent& aEvent )
 {
-    m_dataModel->RebuildRows( m_groupSymbolsBox, m_fieldsCtrl );
+    m_dataModel->RebuildRows( m_filter, m_groupSymbolsBox, m_fieldsCtrl );
     m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );
     m_grid->ForceRefresh();
 }

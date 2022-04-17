@@ -66,8 +66,10 @@ private:
     void OnAddField( wxCommandEvent& event ) override;
     void OnRemoveField( wxCommandEvent& event ) override;
     void OnSaveAndContinue( wxCommandEvent& aEvent ) override;
-    void OnCancel( wxCommandEvent& event ) override;
-    void OnClose( wxCloseEvent& event ) override;
+    void OnCancel( wxCommandEvent& aEvent ) override;
+    void OnClose( wxCloseEvent& aEvent ) override;
+    void OnFilterText( wxCommandEvent& aEvent ) override;
+    void OnFilterMouseMoved( wxMouseEvent& event ) override;
 
     SCH_EDIT_FRAME*                m_parent;
     int                            m_showColWidth;
