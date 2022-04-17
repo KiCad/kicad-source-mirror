@@ -53,6 +53,9 @@ public:
 
     /// Saves the currently-open schematic sheet to an other name
     int SaveCurrSheetCopyAs( const TOOL_EVENT& aEvent );
+
+    int Revert( const TOOL_EVENT& aEvent );
+
     int ShowSchematicSetup( const TOOL_EVENT& aEvent );
     int PageSetup( const TOOL_EVENT& aEvent );
     int Print( const TOOL_EVENT& aEvent );

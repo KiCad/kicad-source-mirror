@@ -369,6 +369,20 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
         return false;
     }
 
+    case ID_REVERT_BOARD:
+    {
+        wxFileName fn = Prj().AbsolutePath( GetBoard()->GetFileName() );
+
+        msg.Printf( _( "Revert '%s' to last version saved?" ), fn.GetFullPath() );
+
+        if( !IsOK( this, msg ) )
+            return false;
+
+        GetScreen()->SetContentModified( false );    // do not prompt the user for changes
+
+        return OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
+    }
+
     case ID_NEW_BOARD:
     {
         if( IsContentModified() )

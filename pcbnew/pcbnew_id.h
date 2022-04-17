@@ -15,6 +15,7 @@ enum pcbnew_ids
 {
     ID_MAIN_MENUBAR = ID_END_LIST,
     ID_COPY_BOARD_AS,
+    ID_REVERT_BOARD,
     ID_IMPORT_NON_KICAD_BOARD,
 
     // Tracks and vias sizes general options

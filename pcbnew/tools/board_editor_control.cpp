@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -321,6 +321,13 @@ int BOARD_EDITOR_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
 int BOARD_EDITOR_CONTROL::SaveCopyAs( const TOOL_EVENT& aEvent )
 {
     m_frame->Files_io_from_id( ID_COPY_BOARD_AS );
+    return 0;
+}
+
+
+int BOARD_EDITOR_CONTROL::Revert( const TOOL_EVENT& aEvent )
+{
+    m_frame->Files_io_from_id( ID_REVERT_BOARD );
     return 0;
 }
 
@@ -1603,6 +1610,7 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::Save,                   ACTIONS::save.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::SaveAs,                 ACTIONS::saveAs.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::SaveCopyAs,             ACTIONS::saveCopyAs.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::Revert,                 ACTIONS::revert.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::PageSettings,           ACTIONS::pageSettings.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::Plot,                   ACTIONS::plot.MakeEvent() );
 

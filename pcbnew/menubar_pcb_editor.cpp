@@ -99,6 +99,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     else
         fileMenu->Add( ACTIONS::saveCopyAs );
 
+    fileMenu->Add( ACTIONS::revert );
+
     fileMenu->AppendSeparator();
     fileMenu->Add( _( "Resc&ue" ),
                    _( "Clear board and get last rescue file automatically saved by PCB editor" ),

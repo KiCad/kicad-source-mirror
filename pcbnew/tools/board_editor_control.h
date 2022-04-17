@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -56,6 +56,7 @@ public:
     int Save( const TOOL_EVENT& aEvent );
     int SaveAs( const TOOL_EVENT& aEvent );
     int SaveCopyAs( const TOOL_EVENT& aEvent );
+    int Revert( const TOOL_EVENT& aEvent );
     int PageSettings( const TOOL_EVENT& aEvent );
     int Plot( const TOOL_EVENT& aEvent );
 

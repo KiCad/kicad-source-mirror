@@ -113,6 +113,45 @@ int SCH_EDITOR_CONTROL::SaveCurrSheetCopyAs( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::Revert( const TOOL_EVENT& aEvent )
+{
+    SCHEMATIC& schematic = m_frame->Schematic();
+    SCH_SHEET& root = schematic.Root();
+
+    if( m_frame->GetCurrentSheet().Last() != &root )
+    {
+        m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
+        // Store the current zoom level into the current screen before switching
+        m_frame->GetScreen()->m_LastZoomLevel = m_frame->GetCanvas()->GetView()->GetScale();
+
+        SCH_SHEET_PATH rootSheetPath;
+        rootSheetPath.push_back( &root );
+        m_frame->SetCurrentSheet( rootSheetPath );
+        m_frame->DisplayCurrentSheet();
+
+        wxSafeYield();
+    }
+
+    wxString msg;
+    msg.Printf( _( "Revert '%s' (and all sub-sheets) to last version saved?" ),
+                schematic.GetFileName() );
+
+    if( !IsOK( m_frame, msg ) )
+        return false;
+
+    SCH_SCREENS screenList( schematic.Root() );
+
+    for( SCH_SCREEN* screen = screenList.GetFirst(); screen; screen = screenList.GetNext() )
+        screen->SetContentModified( false );    // do not prompt the user for changes
+
+    m_frame->OpenProjectFiles( std::vector<wxString>( 1, schematic.GetFileName() ) );
+
+    return 0;
+}
+
+
 int SCH_EDITOR_CONTROL::ShowSchematicSetup( const TOOL_EVENT& aEvent )
 {
     m_frame->ShowSchematicSetupDialog();
@@ -2296,6 +2335,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::SaveAs,                ACTIONS::saveAs.MakeEvent() );
     //Go( &SCH_EDITOR_CONTROL::SaveAs,                ACTIONS::saveCopyAs.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::SaveCurrSheetCopyAs,   EE_ACTIONS::saveCurrSheetCopyAs.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::Revert,                ACTIONS::revert.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowSchematicSetup,    EE_ACTIONS::schematicSetup.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::PageSetup,             ACTIONS::pageSettings.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Print,                 ACTIONS::print.MakeEvent() );

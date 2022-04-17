@@ -91,6 +91,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     else
         fileMenu->Add( EE_ACTIONS::saveCurrSheetCopyAs );
 
+    fileMenu->Add( ACTIONS::revert );
+
     fileMenu->AppendSeparator();
 
     fileMenu->Add( _( "Insert Schematic Sheet Content..." ),
