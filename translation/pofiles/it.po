@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-11 09:39-0700\n"
-"PO-Revision-Date: 2022-04-11 10:02+0200\n"
+"PO-Revision-Date: 2022-04-17 10:49+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -6967,10 +6967,9 @@ msgid "Hotkey file"
 msgstr "File comandi da tastiera"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr ""
-"File di equivalenze \"%s\" non trovato nei percorsi di ricerca predefiniti."
+msgstr "File di equivalenze '%s' non trovato."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -14679,7 +14678,6 @@ msgid "Cancel Load"
 msgstr "Annulla caricamento"
 
 #: eeschema/sheet.cpp:225
-#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -14687,9 +14685,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Ci sono nomi di libreria nello schema caricato che mancano dalla tabella "
-"librerie del progetto.  Ciò può portare a collegamenti librerie di simboli "
-"interrotti per lo schema caricato.  Continuare?"
+"Ci sono nomi di libreria nello schema selezionato che mancano dalla tabella librerie del progetto corrente.  Ciò può portare a riferimenti a librerie di simboli interrotti per lo schema caricato.\n"
+"\n"
+"Continuare?"
 
 #: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
 #: eeschema/sheet.cpp:380
@@ -14704,9 +14702,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Il file selezionato è stato creato come parte di un progetto diverso.  Il collegamento del file a questo progetto potrebbe portare a riferimenti a librerie di simboli mancanti o errati.\n"
+"\n"
+"Continuare?"
 
 #: eeschema/sheet.cpp:315
-#, fuzzy
 msgid ""
 "There are symbol library names in the selected schematic that are missing "
 "from the selected schematic project library table.  This may result in "
@@ -14714,12 +14714,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Ci sono nomi di librerie nello schema caricato che mancano dalla tabella "
-"librerie del progetto dello schema caricato.  Ciò può portare a collegamenti "
-"a librerie di simboli interrotti per lo schema.  Continuare?"
+"Ci sono nomi di librerie di simboli nello schema caricato che mancano dalla tabella librerie del progetto dello schema selezionato.  Ciò può portare a riferimenti a librerie di simboli interrotti per lo schema.\n"
+"\n"
+"Continuare?"
 
 #: eeschema/sheet.cpp:376
-#, fuzzy
 msgid ""
 "A duplicate library name that references a different library exists in the "
 "current library table.  This conflict cannot be resolved and may result in "
@@ -14727,10 +14726,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Nome di libreria duplicato che fa riferimento ad una diversa libreria "
-"esistente nell'attuale tabella librerie.  Questo conflitto non può essere "
-"risolto e può provocare collegamenti a librerie di simboli interrotti per lo "
-"schema.  Continuare?"
+"Nome di libreria duplicato che fa riferimento ad una diversa libreria esistente nell'attuale tabella librerie.  Questo conflitto non può essere risolto e può provocare riferimenti a librerie di simboli interrotti.\n"
+"\n"
+"Continuare?"
 
 #: eeschema/sheet.cpp:564
 #, c-format
@@ -30580,7 +30578,7 @@ msgstr "Importa file grafico vettoriale"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:133
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
-msgstr ""
+msgstr "Memoria esaurita cercando di caricare il DXF; potrebbe essere troppo grande."
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
@@ -36772,13 +36770,3 @@ msgstr "Schema KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Circuito stampato KiCad"
-
-#, c-format
-#~ msgid ""
-#~ "The project library table '%s' does not exist or cannot be read.  This "
-#~ "may result in broken symbol links for the schematic.  Do you wish to "
-#~ "continue?"
-#~ msgstr ""
-#~ "La tabella librerie del progetto '%s' non esiste o non è leggibile.  Ciò "
-#~ "può portare a collegamenti a simboli interrotti per lo schema.  "
-#~ "Continuare?"
