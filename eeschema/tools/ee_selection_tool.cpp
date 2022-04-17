@@ -352,7 +352,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         if( evt->IsMouseDown( BUT_LEFT ) )
         {
             // Avoid triggering when running under other tools
-            if( m_frame->ToolStackIsEmpty() && !m_toolMgr->GetTool<EE_POINT_EDITOR>()->HasPoint() )
+            if( m_frame->ToolStackIsEmpty() && m_toolMgr->GetTool<EE_POINT_EDITOR>()
+                && !m_toolMgr->GetTool<EE_POINT_EDITOR>()->HasPoint() )
             {
                 m_originalCursor = m_toolMgr->GetMousePosition();
                 m_disambiguateTimer.StartOnce( 500 );
