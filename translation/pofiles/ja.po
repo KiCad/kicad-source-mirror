@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-11 09:39-0700\n"
-"PO-Revision-Date: 2022-03-21 22:49+0000\n"
-"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
+"PO-Revision-Date: 2022-04-19 21:54+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v6/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -3198,7 +3198,7 @@ msgstr "MB"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:84
 msgid "Type filter text"
-msgstr "フィルター テキストをタイプ"
+msgstr "フィルター テキストを入力"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:126
 msgid "Undo All Changes"
@@ -13514,7 +13514,7 @@ msgstr "この SCH_PLUGIN で Symbol*() 関数の<b>debug</b>ログを有効に�
 
 #: eeschema/sch_plugin.cpp:142
 msgid "Regular expression <b>symbol name</b> filter."
-msgstr "正規表現で<b>symbol name</b>を絞込みます。"
+msgstr "正規表現で<b>シンボル名</b>を絞り込みます。"
 
 #: eeschema/sch_plugin.cpp:146 pcbnew/plugin.cpp:157
 msgid ""
@@ -33805,14 +33805,12 @@ msgid "Some zones were rule areas and were not merged."
 msgstr "一部のゾーンはルールエリアであり、マージされませんでした。"
 
 #: pcbnew/tools/board_editor_control.cpp:1457
-#, fuzzy
 msgid "Some zone layer sets did not match and were not merged."
-msgstr "ルールレイヤー '%s' が一致しません。ルールは無視されます。"
+msgstr "一部のゾーンのレイヤーセットが一致しなかったので、マージされませんでした。"
 
 #: pcbnew/tools/board_editor_control.cpp:1463
-#, fuzzy
 msgid "Some zones did not intersect and were not merged."
-msgstr "いくつかのアイテムは DRC に失敗して変更されていません。"
+msgstr "一部のゾーンは交差していなかったのでマージされませんでした。"
 
 #: pcbnew/tools/board_editor_control.cpp:1529
 msgid "Duplicate zone"
