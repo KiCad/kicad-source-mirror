@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-11 09:39-0700\n"
-"PO-Revision-Date: 2022-04-08 00:06+0000\n"
+"PO-Revision-Date: 2022-04-19 21:54+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -6913,11 +6913,9 @@ msgid "Hotkey file"
 msgstr "Tastaturbefehl-Datei"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr ""
-"Äquivalenzdatei \"%s\" konnte nicht in den voreingestellten Suchpfaden "
-"gefunden werden."
+msgstr "Äquivalenzdatei \"%s\" konnte nicht gefunden werden."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -14826,7 +14824,6 @@ msgid "Cancel Load"
 msgstr "Laden abbrechen"
 
 #: eeschema/sheet.cpp:225
-#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -14834,10 +14831,12 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Der geladene Schaltplan enthält Bibliotheksnamen, die in der Projekt-"
-"Bibliothekstabelle nicht enthalten sind. Dies kann zu fehlerhaften "
-"Symbolbibliotheksverknüpfungen im geladenen Schaltplan führen. Möchten Sie "
-"fortfahren?"
+"Der gewählte Schaltplan enthält Bibliotheksnamen, die in der "
+"Bibliothekstabelle des aktuellen Projekts nicht enthalten sind.  Dies kann "
+"zu fehlerhaften Symbolbibliotheksverknüpfungen im geladenen Schaltplan "
+"führen.\n"
+"\n"
+"Möchten Sie fortfahren?"
 
 #: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
 #: eeschema/sheet.cpp:380
@@ -14852,9 +14851,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Die gewählte Datei wurde als Teil eines anderen Projekts erstellt.  Das "
+"Verknüpfen der Datei mit diesem Projekt kann zu fehlenden oder fehlerhaften "
+"Symbolbibliotheksverknüpfungen führen.\n"
+"\n"
+"Möchten Sie fortfahren?"
 
 #: eeschema/sheet.cpp:315
-#, fuzzy
 msgid ""
 "There are symbol library names in the selected schematic that are missing "
 "from the selected schematic project library table.  This may result in "
@@ -14862,12 +14865,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Im geladenen Schaltplan sind Bibliotheksnamen enthalten, die nicht in der "
-"Projekt-Bibliothekstabelle enthalten sind. Dies kann zu fehlerhaften "
-"Symbolbibliotheksverknüpfungen im Schaltplan führen. Möchten Sie fortfahren?"
+"Der gewählte Schaltplan enthält Symbol-Bibliotheksnamen, die in der "
+"Bibliothekstabelle des gewählten Schaltplan-Projekts nicht enthalten sind.  "
+"Dies kann zu fehlerhaften Symbolbibliotheksverknüpfungen führen.\n"
+"\n"
+"Möchten Sie fortfahren?"
 
 #: eeschema/sheet.cpp:376
-#, fuzzy
 msgid ""
 "A duplicate library name that references a different library exists in the "
 "current library table.  This conflict cannot be resolved and may result in "
@@ -14875,10 +14879,12 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"In der aktuellen Bibliothekstabelle ist ein doppelter Bibliotheksname "
-"vorhanden, der auf eine andere Bibliothek verweist. Dieser Konflikt kann "
-"nicht behoben werden und kann zu fehlerhaften Symbolbibliotheksverknüpfungen "
-"im Schaltplan führen. Möchten Sie fortfahren?"
+"Die aktuelle Bibliothekstabelle enthält einen doppelten Bibliotheksnamen, "
+"der auf eine andere Bibliothek verweist.  Dieser Konflikt kann nicht "
+"aufgelöst werden und kann zu fehlerhaften Symbolbibliotheksverknüpfungen "
+"führen.\n"
+"\n"
+"Möchten Sie fortfahren?"
 
 #: eeschema/sheet.cpp:564
 #, c-format
@@ -31073,6 +31079,8 @@ msgstr "Importiere Vektorgrafikdatei"
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:133
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
 msgstr ""
+"Nicht genügend Speicher, um die DXF-Datei zu laden. Eventuell ist die Datei "
+"zu groß."
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
