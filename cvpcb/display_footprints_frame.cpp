@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2007-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,6 +56,7 @@
 #include <widgets/infobar.h>
 #include <wx/choice.h>
 #include <wx/debug.h>
+#include <cvpcb_id.h>
 
 
 BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
@@ -145,7 +146,16 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( config() );
 
     if( cfg )
+    {
         GetCanvas()->GetView()->SetScale( cfg->m_FootprintViewerZoom );
+
+        wxAuiToolBarItem* toolOpt = m_mainToolBar->FindTool( ID_CVPCB_FPVIEWER_AUTOZOOM_TOOL );
+
+        if( cfg->m_FootprintViewerAutoZoomOnSelect )
+            toolOpt->SetState( wxAUI_BUTTON_STATE_CHECKED );
+        else
+            toolOpt->SetState( 0 );
+    }
 
     updateView();
 
@@ -306,6 +316,14 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
     UpdateZoomSelectBox();
     m_mainToolBar->AddControl( m_zoomSelectBox );
 
+    // Option to run Zoom automatique on footprint selection changge
+    m_mainToolBar->AddTool( ID_CVPCB_FPVIEWER_AUTOZOOM_TOOL, wxEmptyString,
+                            KiScaledBitmap( BITMAPS::zoom_auto_fit_in_page, this ),
+                            _( "Automatic Zoom on footprint change" ),
+                            wxITEM_CHECK );
+
+    m_mainToolBar->AddScaledSeparator( this );
+
     m_mainToolBar->UpdateControlWidth( ID_ON_GRID_SELECT );
     m_mainToolBar->UpdateControlWidth( ID_ON_ZOOM_SELECT );
 
@@ -349,6 +367,9 @@ void DISPLAY_FOOTPRINTS_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     cfg->m_FootprintViewerDisplayOptions = GetDisplayOptions();
 
     cfg->m_FootprintViewerZoom = GetCanvas()->GetView()->GetScale();
+
+    wxAuiToolBarItem* toolOpt = m_mainToolBar->FindTool( ID_CVPCB_FPVIEWER_AUTOZOOM_TOOL );
+    cfg->m_FootprintViewerAutoZoomOnSelect = ( toolOpt->GetState() & wxAUI_BUTTON_STATE_CHECKED );
 }
 
 
@@ -495,7 +516,9 @@ void DISPLAY_FOOTPRINTS_FRAME::updateView()
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
-    if( m_zoomSelectBox->GetSelection() == 0 )
+    wxAuiToolBarItem* toolOpt = m_mainToolBar->FindTool( ID_CVPCB_FPVIEWER_AUTOZOOM_TOOL );
+
+    if( toolOpt->GetState() & wxAUI_BUTTON_STATE_CHECKED )
         m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     else
         m_toolManager->RunAction( ACTIONS::centerContents, true );

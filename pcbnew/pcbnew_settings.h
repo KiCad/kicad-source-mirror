@@ -347,7 +347,8 @@ public:
 
     std::unique_ptr<PNS::ROUTING_SETTINGS> m_PnsSettings;
 
-    double m_FootprintViewerZoom;       ///< The last zoom level used (0 for auto)
+    double m_FootprintViewerZoom;               ///< The last zoom level used (0 for auto)
+    bool   m_FootprintViewerAutoZoomOnSelect;   ///< true to use automatic zoom on fp selection
 
     wxString m_lastFootprintLibDir;
 

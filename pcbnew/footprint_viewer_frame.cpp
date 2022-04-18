@@ -275,10 +275,17 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     GetCanvas()->GetGAL()->SetAxesEnabled( true );
     ActivateGalCanvas();
 
-    // Restore last zoom.  (If auto-zooming we'll adjust when we load the footprint.)
+    // Restore last zoom and auto zoom option.  (If auto-zooming we'll adjust when we load the footprint.)
     PCBNEW_SETTINGS* cfg = GetPcbNewSettings();
     wxASSERT( cfg );
     GetCanvas()->GetView()->SetScale( cfg->m_FootprintViewerZoom );
+
+    wxAuiToolBarItem* toolOpt = m_mainToolBar->FindTool( ID_FPVIEWER_AUTOZOOM_TOOL );
+
+    if( cfg->m_FootprintViewerAutoZoomOnSelect )
+        toolOpt->SetState( wxAUI_BUTTON_STATE_CHECKED );
+    else
+        toolOpt->SetState( 0 );
 
     updateView();
     setupUnits( config() );
@@ -802,6 +809,9 @@ void FOOTPRINT_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     if( GetCanvas() && GetCanvas()->GetView() )
         cfg->m_FootprintViewerZoom = GetCanvas()->GetView()->GetScale();
+
+    wxAuiToolBarItem* toolOpt = m_mainToolBar->FindTool( ID_FPVIEWER_AUTOZOOM_TOOL );
+    cfg->m_FootprintViewerAutoZoomOnSelect = ( toolOpt->GetState() & wxAUI_BUTTON_STATE_CHECKED );
 }
 
 
@@ -1060,7 +1070,9 @@ void FOOTPRINT_VIEWER_FRAME::updateView()
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
-    if( m_zoomSelectBox->GetSelection() == 0 )
+    wxAuiToolBarItem* toolOpt = m_mainToolBar->FindTool( ID_FPVIEWER_AUTOZOOM_TOOL );
+
+    if( toolOpt->GetState() & wxAUI_BUTTON_STATE_CHECKED )
         m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     else
         m_toolManager->RunAction( ACTIONS::centerContents, true );

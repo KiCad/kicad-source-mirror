@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@ const int cvpcbSchemaVersion = 0;
 CVPCB_SETTINGS::CVPCB_SETTINGS() :
         APP_SETTINGS_BASE( "cvpcb", cvpcbSchemaVersion ),
         m_FootprintViewerZoom( 1.0 ),
+        m_FootprintViewerAutoZoomOnSelect( true ),
         m_FilterFootprint( 0 ),
         m_LibrariesWidth( 0 ),
         m_FootprintsWidth( 0 )
@@ -50,6 +51,8 @@ CVPCB_SETTINGS::CVPCB_SETTINGS() :
     addParamsForWindow( &m_FootprintViewer, "footprint_viewer" );
 
     m_params.emplace_back( new PARAM<double>( "footprint_viewer.zoom", &m_FootprintViewerZoom, 1.0 ) );
+    m_params.emplace_back( new PARAM<bool>( "footprint_viewer.autozoom",
+                                            &m_FootprintViewerAutoZoomOnSelect, true ) );
 }
 
 

@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -44,6 +44,7 @@ public:
     MAGNETIC_SETTINGS m_FootprintViewerMagneticSettings;
 
     double m_FootprintViewerZoom;
+    bool   m_FootprintViewerAutoZoomOnSelect;
 
     int m_FilterFootprint;
     int m_LibrariesWidth;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,4 +43,5 @@ enum id_cvpcb_frm
     ID_CVPCB_FOOTPRINT_LIST,
     ID_CVPCB_LIBRARY_LIST,
     ID_CVPCB_FILTER_TEXT_EDIT,
+    ID_CVPCB_FPVIEWER_AUTOZOOM_TOOL
 };
