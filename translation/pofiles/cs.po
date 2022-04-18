@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-11 09:39-0700\n"
-"PO-Revision-Date: 2022-04-17 06:19+0000\n"
+"PO-Revision-Date: 2022-04-19 21:54+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
 "Language: cs\n"
@@ -14641,6 +14641,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Vybraný soubor byl vytvořen jako součást jiného projektu.  Propojení souboru "
+"k tomuto projektu může mít za následek chybějící nebo nesprávné reference "
+"symbolů knihovny.\n"
+"\n"
+"Chcete pokračovat?"
 
 #: eeschema/sheet.cpp:315
 #, fuzzy
@@ -16216,7 +16221,7 @@ msgstr "Přerušit spoj"
 
 #: eeschema/tools/ee_actions.cpp:508
 msgid "Divide a wire into segments which can be dragged independently"
-msgstr ""
+msgstr "Rozdělte spoj do segmentů, které lze nezávisle přetáhnout"
 
 #: eeschema/tools/ee_actions.cpp:513
 msgid "Break Bus"
@@ -16224,7 +16229,7 @@ msgstr "Přerušit sběrnici"
 
 #: eeschema/tools/ee_actions.cpp:513
 msgid "Divide a bus into segments which can be dragged independently"
-msgstr ""
+msgstr "Rozdělit sběrnici do segmentů, které lze nezávisle přetáhnout"
 
 #: eeschema/tools/ee_actions.cpp:524
 msgid "Add a simulator probe"
@@ -16313,6 +16318,7 @@ msgstr "Nastavení schématu..."
 #: eeschema/tools/ee_actions.cpp:589
 msgid "Edit schematic setup including annotation styles and electrical rules"
 msgstr ""
+"Změnit konfiguraci schématu včetně stylů očíslování a elektrických pravidel"
 
 #: eeschema/tools/ee_actions.cpp:594
 msgid "Edit Sheet Page Number..."
@@ -16371,7 +16377,7 @@ msgstr "Exportovat Netlist..."
 
 #: eeschema/tools/ee_actions.cpp:626
 msgid "Export file containing netlist in one of several formats"
-msgstr ""
+msgstr "Export souboru obsahující netlist v jednom z několika formátů"
 
 #: eeschema/tools/ee_actions.cpp:631
 msgid "Generate BOM..."
@@ -16419,7 +16425,7 @@ msgstr "Oprava schématu"
 
 #: eeschema/tools/ee_actions.cpp:656
 msgid "Run various diagnostics and attempt to repair schematic"
-msgstr ""
+msgstr "Spusťte diagnostické procedury a pokuste se opravit schéma"
 
 #: eeschema/tools/ee_actions.cpp:662 pcbnew/tools/pcb_actions.cpp:794
 msgid "Scripting Console"
@@ -26677,7 +26683,7 @@ msgstr "Poslat projekt přímo"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:37
 msgid "Sends production files to manufacturer from KiCad"
-msgstr ""
+msgstr "Odesílá výrobní soubory výrobci z KiCadu"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:41
 msgid "Produce PCB"
@@ -30265,7 +30271,7 @@ msgstr "Seskupit položky"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:164
 msgid "Add all imported items into a new group"
-msgstr ""
+msgstr "Přidat všechny importované položky do nové skupiny"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:175
 msgid "DXF Parameters"
@@ -31396,7 +31402,7 @@ msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:76
 msgid "Error reading file: cannot determine length."
-msgstr ""
+msgstr "Chyba čtení souboru: Nelze určit délku."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:87
 msgid "Error reading file."
