@@ -461,7 +461,15 @@ void DIALOG_PLOT::OnSetScaleOpt( wxCommandEvent& event )
 void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 {
     // Build the absolute path of current output directory to preselect it in the file browser.
-    wxString path = ExpandEnvVarSubstitutions( m_outputDirectoryName->GetValue(), &Prj() );
+    std::function<bool( wxString* )> textResolver =
+            [&]( wxString* token ) -> bool
+            {
+                return m_parent->GetBoard()->ResolveTextVar( token, 0 );
+            };
+
+    wxString path = m_outputDirectoryName->GetValue();
+    path = ExpandTextVars( path, &textResolver, nullptr, &Prj() );
+    path = ExpandEnvVarSubstitutions( path, &Prj() );
     path = Prj().AbsolutePath( path );
 
     wxDirDialog dirDialog( this, _( "Select Output Directory" ), path );
