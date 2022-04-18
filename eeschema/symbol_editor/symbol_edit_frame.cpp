@@ -604,7 +604,7 @@ void SYMBOL_EDIT_FRAME::RebuildSymbolUnitsList()
 
 void SYMBOL_EDIT_FRAME::OnToggleSymbolTree( wxCommandEvent& event )
 {
-    auto& treePane = m_auimgr.GetPane( m_treePane );
+    wxAuiPaneInfo& treePane = m_auimgr.GetPane( m_treePane );
     treePane.Show( !IsSymbolTreeShown() );
     m_auimgr.Update();
 }

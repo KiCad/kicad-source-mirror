@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Brian Sidebotham <brian.sidebotham@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,6 +90,7 @@ void TEMPLATE_WIDGET::SetTemplate( PROJECT_TEMPLATE* aTemplate )
 {
     m_currTemplate = aTemplate;
     m_staticTitle->SetLabel( *aTemplate->GetTitle() );
+    m_staticTitle->SetFont( KIUI::GetInfoFont( this ) );
     m_staticTitle->Wrap( 100 );
     m_bitmapIcon->SetBitmap( *aTemplate->GetIcon() );
 }
@@ -112,9 +113,12 @@ void DIALOG_TEMPLATE_SELECTOR::onNotebookResize( wxSizeEvent& event )
         // full scroll bars of wxScrolledWindow
         // Fix me if a better way exists
         const int h_margin = 10;
+        const int v_margin = 22;
 
         int max_width = m_notebook->GetClientSize().GetWidth() - h_margin;
-        m_panels[i]->SetSize( max_width, -1);
+        int min_height = m_panels[i]->GetMinHeight() + v_margin;
+        m_panels[i]->SetSize( max_width, std::max( m_panels[i]->GetSize().GetY(), min_height ) );
+        m_panels[i]->SetMinSize( wxSize( -1, min_height ) );
     }
 
     Refresh();
@@ -232,6 +236,9 @@ void DIALOG_TEMPLATE_SELECTOR::buildPageContent( const wxString& aPath, int aPag
             }
         }
     }
+
+    wxSizeEvent dummy;
+    onNotebookResize( dummy );
 }
 
 
@@ -297,7 +304,7 @@ void DIALOG_TEMPLATE_SELECTOR::replaceCurrentPage()
     buildPageContent( m_tcTemplatePath->GetValue(), page );
 
     m_selectedWidget = nullptr;
-    PostSizeEvent();    // A easy way to froce refresh displays
+    PostSizeEvent();    // A easy way to force refresh displays
 }
 
 

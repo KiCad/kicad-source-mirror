@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Brian Sidebotham <brian.sidebotham@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,17 +32,6 @@ class DIALOG_TEMPLATE_SELECTOR;
 
 class TEMPLATE_WIDGET : public TEMPLATE_WIDGET_BASE
 {
-protected:
-    DIALOG_TEMPLATE_SELECTOR* m_dialog;
-    wxWindow*   m_parent;
-    wxPanel*    m_panel;
-    bool        m_selected;
-
-    PROJECT_TEMPLATE* m_currTemplate;
-
-    void OnKillFocus( wxFocusEvent& event );
-    void OnMouse( wxMouseEvent& event );
-
 public:
     TEMPLATE_WIDGET( wxWindow* aParent, DIALOG_TEMPLATE_SELECTOR* aDialog );
 
@@ -57,20 +46,25 @@ public:
     void Select();
     void Unselect();
 
+protected:
+    void OnKillFocus( wxFocusEvent& event );
+    void OnMouse( wxMouseEvent& event );
+
 private:
     bool IsSelected() { return m_selected; }
+
+protected:
+    DIALOG_TEMPLATE_SELECTOR* m_dialog;
+    wxWindow*                 m_parent;
+    wxPanel*                  m_panel;
+    bool                      m_selected;
+
+    PROJECT_TEMPLATE*         m_currTemplate;
 };
 
 
 class TEMPLATE_SELECTION_PANEL : public TEMPLATE_SELECTION_PANEL_BASE
 {
-protected:
-    wxNotebookPage* m_parent;
-    wxString  m_templatesPath;      ///< the path to access to the folder
-                                    ///< containing the templates (which are also folders)
-    int       m_minHeight;          ///< minimal height to show templates (this is the height
-                                    ///< of the biggest template widget)
-
 public:
     /**
      * @param aParent The window creating the dialog
@@ -83,17 +77,18 @@ public:
     void AddTemplateWidget( TEMPLATE_WIDGET* aTemplateWidget );
 
     int GetMinHeight() { return m_minHeight; }
+
+protected:
+    wxNotebookPage* m_parent;
+    wxString        m_templatesPath;   ///< the path to access to the folder
+                                       ///<   containing the templates (which are also folders)
+    int             m_minHeight;       ///< minimal height to show templates (this is the height
+                                       ///<   of the biggest template widget)
 };
 
 
 class DIALOG_TEMPLATE_SELECTOR : public DIALOG_TEMPLATE_SELECTOR_BASE
 {
-protected:
-    std::vector<TEMPLATE_SELECTION_PANEL*> m_panels;
-    TEMPLATE_WIDGET* m_selectedWidget;
-
-    void AddTemplate( int aPage, PROJECT_TEMPLATE* aTemplate );
-
 public:
     DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent );
 
@@ -110,15 +105,16 @@ public:
      */
     PROJECT_TEMPLATE* GetSelectedTemplate();
 
-private:
+    void SetWidget( TEMPLATE_WIDGET* aWidget );
 
+protected:
+    void AddTemplate( int aPage, PROJECT_TEMPLATE* aTemplate );
+
+private:
     void SetHtml( const wxFileName& aFilename )
     {
         m_htmlWin->LoadPage( aFilename.GetFullPath() );
     }
-
-public:
-    void SetWidget( TEMPLATE_WIDGET* aWidget );
 
 private:
     void buildPageContent( const wxString& aPath, int aPage );
@@ -129,6 +125,10 @@ private:
     void onDirectoryBrowseClicked( wxCommandEvent& event ) override;
 	void onReload( wxCommandEvent& event ) override;
 	void OnHtmlLinkActivated( wxHtmlLinkEvent& event ) override;
+
+protected:
+    std::vector<TEMPLATE_SELECTION_PANEL*> m_panels;
+    TEMPLATE_WIDGET*                       m_selectedWidget;
 };
 
 #endif
