@@ -1457,10 +1457,12 @@ void SCH_ALTIUM_PLUGIN::ParseSheetSymbol( int aIndex,
 {
     ASCH_SHEET_SYMBOL elem( aProperties );
 
-    SCH_SHEET*  sheet  = new SCH_SHEET( m_currentSheet, elem.location + m_sheetOffset );
+    SCH_SHEET*  sheet  = new SCH_SHEET(
+        /* aParent */ m_currentSheet,
+        /* aPosition */ elem.location + m_sheetOffset,
+        /* aSize */ elem.size );
     SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
 
-    sheet->SetSize( elem.size );
     sheet->SetBorderColor( GetColorFromInt( elem.color ) );
 
     if( elem.isSolid )

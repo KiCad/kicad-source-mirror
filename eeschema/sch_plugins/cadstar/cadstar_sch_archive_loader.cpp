@@ -2141,11 +2141,13 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheetAndChildSheets( LAYER_ID              
     wxCHECK_MSG( m_sheetMap.find( aCadstarSheetID ) == m_sheetMap.end(), ,
                  "Sheet already loaded!" );
 
-    SCH_SHEET*     sheet = new SCH_SHEET( aParentSheet.Last(), aPosition );
+    SCH_SHEET*     sheet = new SCH_SHEET(
+        /* aParent */ aParentSheet.Last(),
+        /* aPosition */ aPosition,
+        /* aSize */ wxSize( aSheetSize ) );
     SCH_SCREEN*    screen = new SCH_SCREEN( m_schematic );
     SCH_SHEET_PATH instance( aParentSheet );
 
-    sheet->SetSize( (wxSize) aSheetSize );
     sheet->SetScreen( screen );
 
     wxString name = Sheets.SheetNames.at( aCadstarSheetID );

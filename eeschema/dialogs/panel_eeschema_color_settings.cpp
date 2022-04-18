@@ -424,8 +424,10 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         addItem( symbol );
     }
 
-    SCH_SHEET* s = new SCH_SHEET( nullptr, MILS_POINT( 4000, 1300 ) );
-    s->SetSize( wxSize( Mils2iu( 800 ), Mils2iu( 1300 ) ) );
+    SCH_SHEET* s = new SCH_SHEET(
+        /* aParent */ nullptr,
+        /* aPosition */ MILS_POINT( 4000, 1300 ),
+        /* aSize */ wxSize( Mils2iu( 800 ), Mils2iu( 1300 ) ) );
     s->GetFields().at( SHEETNAME ).SetText( wxT( "SHEET" ) );
     s->GetFields().at( SHEETFILENAME ).SetText( _( "/path/to/sheet" ) );
     s->AutoplaceFields( nullptr, false );
