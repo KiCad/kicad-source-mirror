@@ -1688,8 +1688,8 @@ void SCH_DRAWING_TOOLS::sizeSheet( SCH_SHEET* aSheet, const VECTOR2I& aPos )
     VECTOR2I pos = aSheet->GetPosition();
     VECTOR2I size = aPos - pos;
 
-    size.x = std::max( size.x, MIN_SHEET_WIDTH );
-    size.y = std::max( size.y, MIN_SHEET_HEIGHT );
+    size.x = std::max( size.x, Mils2iu( MIN_SHEET_WIDTH ) );
+    size.y = std::max( size.y, Mils2iu( MIN_SHEET_HEIGHT ) );
 
     VECTOR2I grid = m_frame->GetNearestGridPosition( pos + size );
     aSheet->Resize( wxSize( grid.x - pos.x, grid.y - pos.y ) );
