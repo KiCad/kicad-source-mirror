@@ -1447,9 +1447,9 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
         else if( item->Type() == SCH_SHEET_T )
         {
             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
-            VECTOR2I   topRight = sheet->GetPosition();
-            VECTOR2I   bottomRight = topRight + sheet->GetSize();
-            VECTOR2I   tl_gridpt = grid.AlignGrid( topRight ) - topRight;
+            VECTOR2I   topLeft = sheet->GetPosition();
+            VECTOR2I   bottomRight = topLeft + sheet->GetSize();
+            VECTOR2I   tl_gridpt = grid.AlignGrid( topLeft ) - topLeft;
             VECTOR2I   br_gridpt = grid.AlignGrid( bottomRight ) - bottomRight;
 
             if( tl_gridpt != VECTOR2I( 0, 0 ) || br_gridpt != VECTOR2I( 0, 0 ) )
