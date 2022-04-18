@@ -587,7 +587,7 @@ int SCH_SHEET::GetPenWidth() const
 }
 
 
-void SCH_SHEET::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
+void SCH_SHEET::AutoplaceFields( SCH_SCREEN* aScreen, bool /* aManual */ )
 {
     VECTOR2I textSize = m_fields[SHEETNAME].GetTextSize();
     int      borderMargin = KiROUND( GetPenWidth() / 2.0 ) + 4;
