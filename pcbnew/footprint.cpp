@@ -480,6 +480,16 @@ bool FOOTPRINT::ResolveTextVar( wxString* token, int aDepth ) const
         *token = GetLayerName();
         return true;
     }
+    else if( token->IsSameAs( wxT( "FOOTPRINT_LIBRARY" ) ) )
+    {
+        *token = m_fpid.GetLibNickname();
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "FOOTPRINT_NAME" ) ) )
+    {
+        *token = m_fpid.GetLibItemName();
+        return true;
+    }
     else if( m_properties.count( *token ) )
     {
         *token = m_properties.at( *token );
