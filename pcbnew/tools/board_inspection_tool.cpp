@@ -350,7 +350,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
     case DRCE_DRILL_OUT_OF_RANGE:
     case DRCE_MICROVIA_DRILL_OUT_OF_RANGE:
         r = m_inspectClearanceDialog->AddPage( _( "Hole Size" ) );
-        reportHeader( _( "Hose diameter resolution for:" ), a, r );
+        reportHeader( _( "Hole diameter resolution for:" ), a, r );
 
         if( compileError )
             reportCompileError( r );
