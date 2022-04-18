@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -97,12 +97,12 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_plotNoViaOnMaskOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Do not tent vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotNoViaOnMaskOpt->SetToolTip( _("Remove soldermask on vias") );
 
-	gbSizer1->Add( m_plotNoViaOnMaskOpt, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
+	gbSizer1->Add( m_plotNoViaOnMaskOpt, wxGBPosition( 5, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 
 	m_useAuxOriginCheckBox = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Use drill/place file origin"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_useAuxOriginCheckBox->SetToolTip( _("Use the drill/place file origin as the coordinate origin for plotted files") );
 
-	gbSizer1->Add( m_useAuxOriginCheckBox, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
+	gbSizer1->Add( m_useAuxOriginCheckBox, wxGBPosition( 3, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 
 	drillMarksLabel = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Drill marks:"), wxDefaultPosition, wxDefaultSize, 0 );
 	drillMarksLabel->Wrap( -1 );
@@ -144,9 +144,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	gbSizer1->Add( m_zoneFillCheck, wxGBPosition( 6, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	gbSizer1->AddGrowableCol( 0 );
-	gbSizer1->AddGrowableCol( 2 );
-
 	sbOptionsSizer->Add( gbSizer1, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
@@ -166,7 +163,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	m_staticTextAlert1 = new wxStaticText( this, wxID_ANY, _("Most board manufacturers expect 0 and use their own constraints for solder mask minimum width."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextAlert1->Wrap( 580 );
-	bSizerWarningText->Add( m_staticTextAlert1, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizerWarningText->Add( m_staticTextAlert1, 0, wxTOP|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerSecondLine;
 	bSizerSecondLine = new wxBoxSizer( wxHORIZONTAL );

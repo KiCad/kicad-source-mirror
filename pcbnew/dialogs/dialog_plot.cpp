@@ -93,7 +93,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     wxArrayInt plotAllLayersOrder;
     wxArrayString plotAllLayersChoices;
 
-    for( LSEQ seq = board->GetEnabledLayers().SeqStackupBottom2Top(); seq; ++seq )
+    for( LSEQ seq = board->GetEnabledLayers().UIOrder(); seq; ++seq )
     {
         PCB_LAYER_ID id = *seq;
 
@@ -136,7 +136,6 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     m_bpMoveUp->SetBitmap( KiBitmap( BITMAPS::small_up ) );
 
 	bButtonSizer->Add( m_bpMoveUp, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
-    bButtonSizer->AddStretchSpacer();
 
 	m_bpMoveDown = new wxBitmapButton( sbSizer->GetStaticBox(), wxID_ANY, wxNullBitmap,
                                        wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW | 0 );
