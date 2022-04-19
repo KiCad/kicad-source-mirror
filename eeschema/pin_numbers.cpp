@@ -26,9 +26,8 @@
 #include <wx/crt.h>
 #include <wx/translation.h>
 
-namespace {
 
-wxString GetNextSymbol( const wxString& str, wxString::size_type& cursor )
+wxString PIN_NUMBERS::getNextSymbol( const wxString& str, wxString::size_type& cursor )
 {
     if( str.size() <= cursor )
         return wxEmptyString;
@@ -37,14 +36,15 @@ wxString GetNextSymbol( const wxString& str, wxString::size_type& cursor )
 
     wxChar c = str[cursor];
 
-    if( wxIsdigit( c ) || c == '+' || c == '-' )
+    // Need to check that there is a digit in the string before we parse it as a numeric
+    if( ( wxIsdigit( c ) || ( ( c == '+' || c == '-' )  && ( cursor < str.size() - 1 ) && wxIsdigit( str[cursor + 1] ) ) ) )
     {
         // number, possibly with sign
         while( ++cursor < str.size() )
         {
             c = str[cursor];
 
-            if( wxIsdigit( c ) || c == 'v' || c == 'V' )
+            if( wxIsdigit( c ) || c == 'v' || c == 'V' || c == '.' )
                 continue;
             else
                 break;
@@ -64,8 +64,6 @@ wxString GetNextSymbol( const wxString& str, wxString::size_type& cursor )
     }
 
     return str.substr( begin, cursor - begin );
-}
-
 }
 
 
@@ -138,8 +136,8 @@ int PIN_NUMBERS::Compare( const wxString& lhs, const wxString& rhs )
 
     for( ; ; )
     {
-        symbol1 = GetNextSymbol( lhs, cursor1 );
-        symbol2 = GetNextSymbol( rhs, cursor2 );
+        symbol1 = getNextSymbol( lhs, cursor1 );
+        symbol2 = getNextSymbol( rhs, cursor2 );
 
         if( symbol1.empty() && symbol2.empty() )
             return 0;
@@ -150,12 +148,12 @@ int PIN_NUMBERS::Compare( const wxString& lhs, const wxString& rhs )
         if( symbol2.empty() )
             return 2;
 
-        wxChar c1    = symbol1[0];
-        wxChar c2    = symbol2[0];
+        bool sym1_isnumeric = symbol1.find_first_of( "0123456789" ) != wxString::npos;
+        bool sym2_isnumeric = symbol2.find_first_of( "0123456789" ) != wxString::npos;
 
-        if( wxIsdigit( c1 ) || c1 == '-' || c1 == '+' )
+        if( sym1_isnumeric )
         {
-            if( wxIsdigit( c2 ) || c2 == '-' || c2 == '+' )
+            if( sym2_isnumeric )
             {
                 // numeric comparison
                 wxString::size_type v1 = symbol1.find_first_of( "vV" );
@@ -194,7 +192,7 @@ int PIN_NUMBERS::Compare( const wxString& lhs, const wxString& rhs )
         }
         else
         {
-            if( wxIsdigit( c2 ) || c2 == '-' || c2 == '+' )
+            if( sym2_isnumeric )
                 return 2;
 
             int res = symbol1.Cmp( symbol2 );

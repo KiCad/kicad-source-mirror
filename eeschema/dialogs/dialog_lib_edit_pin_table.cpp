@@ -473,6 +473,9 @@ public:
     void RebuildRows( const LIB_PINS& aPins, bool groupByName, bool groupBySelection )
     {
         WX_GRID* grid = dynamic_cast<WX_GRID*>( GetView() );
+        std::vector<LIB_PIN*> clear_flags;
+
+        clear_flags.reserve( aPins.size() );
 
         if( grid )
         {
@@ -489,7 +492,10 @@ public:
                 for( int ii = 0; ii < selectedRowCount; ++ii )
                 {
                     for( LIB_PIN* pin : m_rows[ firstSelectedRow + ii ] )
+                    {
                         pin->SetFlags( CANDIDATE );
+                        clear_flags.push_back( pin );
+                    }
                 }
             }
 
@@ -514,7 +520,7 @@ public:
 
                 if( groupByName )
                     rowIndex = findRow( m_rows, pin->GetName() );
-                else if( groupBySelection && pin->GetFlags() & CANDIDATE )
+                else if( groupBySelection && ( pin->GetFlags() & CANDIDATE ) )
                     rowIndex = 0;
 
                 if( rowIndex < 0 )
@@ -550,6 +556,9 @@ public:
             if( groupBySelection )
                 GetView()->SelectRow( 0 );
         }
+
+        for( LIB_PIN* pin : clear_flags )
+            pin->ClearFlags( CANDIDATE );
     }
 
     void SortRows( int aSortCol, bool ascending )
