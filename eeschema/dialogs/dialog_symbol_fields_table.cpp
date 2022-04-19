@@ -490,7 +490,7 @@ public:
             SCH_REFERENCE ref = m_symbolsList[ i ];
 
             if( !aFilter->GetValue().IsEmpty()
-                    && !WildCompareString( aFilter->GetValue(), ref.GetRef(), false ) )
+                    && !WildCompareString( aFilter->GetValue(), ref.GetFullRef(), false ) )
             {
                 continue;
             }

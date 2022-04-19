@@ -107,9 +107,9 @@ public:
     wxString GetFullRef() const
     {
         if( GetSymbol()->GetUnitCount() > 1 )
-            return GetRef() + LIB_SYMBOL::SubReference( GetUnit() );
+            return GetRef() + GetRefNumber() + LIB_SYMBOL::SubReference( GetUnit() );
         else
-            return GetRef();
+            return GetRef() + GetRefNumber();
     }
 
     wxString GetRefNumber() const
