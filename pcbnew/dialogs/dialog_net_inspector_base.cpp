@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,17 +29,8 @@ DIALOG_NET_INSPECTOR_BASE::DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindow
 	m_staticTextFilter->Wrap( -1 );
 	fgSizer1->Add( m_staticTextFilter, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-	wxBoxSizer* bSizer7;
-	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
-
 	m_textCtrlFilter = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer7->Add( m_textCtrlFilter, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-
-
-	bSizer7->Add( 20, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
-
-
-	fgSizer1->Add( bSizer7, 1, wxEXPAND, 5 );
+	fgSizer1->Add( m_textCtrlFilter, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_cbShowZeroPad = new wxCheckBox( this, wxID_ANY, _("Show zero pad nets"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbShowZeroPad->SetValue(true);
@@ -51,13 +42,13 @@ DIALOG_NET_INSPECTOR_BASE::DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindow
 	m_groupByText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_groupByText, 1, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_groupByKind = new wxComboBox( this, wxID_ANY, _("Wildcard"), wxDefaultPosition, wxSize( -1,-1 ), 0, NULL, wxCB_DROPDOWN|wxCB_READONLY|wxCB_SIMPLE );
+	m_groupByKind = new wxComboBox( this, wxID_ANY, _("Wildcard"), wxDefaultPosition, wxSize( -1,-1 ), 0, NULL, wxCB_DROPDOWN|wxCB_READONLY );
 	m_groupByKind->Append( _("Wildcard") );
 	m_groupByKind->Append( _("RegEx") );
 	m_groupByKind->Append( _("Wildcard Substr") );
 	m_groupByKind->Append( _("RegEx Substr") );
 	m_groupByKind->SetSelection( 0 );
-	fgSizer1->Add( m_groupByKind, 0, wxALIGN_CENTER|wxFIXED_MINSIZE|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_groupByKind, 0, wxALIGN_CENTER|wxLEFT|wxRIGHT, 5 );
 
 
 	bTopSizer->Add( fgSizer1, 1, wxEXPAND, 5 );
@@ -119,7 +110,6 @@ DIALOG_NET_INSPECTOR_BASE::DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindow
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
-	bSizerMain->Fit( this );
 
 	this->Centre( wxBOTH );
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,9 +18,9 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/sizer.h>
 #include <wx/checkbox.h>
 #include <wx/combobox.h>
+#include <wx/sizer.h>
 #include <wx/dataview.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
@@ -56,7 +56,7 @@ class DIALOG_NET_INSPECTOR_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void onFilterChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSortingChanged( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void onSelChanged( wxDataViewEvent& event ) { event.Skip(); }
@@ -69,7 +69,8 @@ class DIALOG_NET_INSPECTOR_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Net Inspector"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Net Inspector"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 579,503 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_NET_INSPECTOR_BASE();
 
 };
