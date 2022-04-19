@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-15 12:59-0700\n"
+"POT-Creation-Date: 2022-04-19 14:57-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -4718,6 +4718,9 @@ msgstr "Footprint Assignment Conflicts"
 msgid "Footprint Viewer"
 msgstr "Footprint Viewer"
 
+msgid "Automatic Zoom on footprint change"
+msgstr "Automatic Zoom on footprint change"
+
 #, c-format
 msgid "Footprint ID '%s' is not valid."
 msgstr "Footprint ID '%s' is not valid."
@@ -7866,17 +7869,17 @@ msgstr "Delete Field"
 msgid "Select field:"
 msgstr "Select field:"
 
-msgid "Group symbols"
-msgstr "Group symbols"
-
-msgid "Group symbols together based on common properties"
-msgstr "Group symbols together based on common properties"
-
 msgid "Add Field..."
 msgstr "Add Field…"
 
 msgid "Remove Field..."
 msgstr "Remove Field..."
+
+msgid "Group symbols"
+msgstr "Group symbols"
+
+msgid "Group symbols together based on common properties"
+msgstr "Group symbols together based on common properties"
 
 msgid "Symbol Fields Table"
 msgstr "Symbol Fields Table"
@@ -10786,6 +10789,110 @@ msgstr ""
 "\n"
 "%s\n"
 
+#, c-format
+msgid ""
+"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+"pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
+msgstr ""
+"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+"pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
+
+#, c-format
+msgid ""
+"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+"pin %s%s at location <b>(%.3f, %.3f)</b> in units %s and %s of converted."
+msgstr ""
+"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+"pin %s%s at location <b>(%.3f, %.3f)</b> in units %s and %s of converted."
+
+#, c-format
+msgid ""
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b>."
+msgstr ""
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b>."
+
+#, c-format
+msgid ""
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b> in units %s and %s."
+msgstr ""
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b> in units %s and %s."
+
+msgid "<b>A Power Symbol should have only one unit</b><br><br>"
+msgstr "<b>A Power Symbol should have only one unit</b><br><br>"
+
+msgid "<b>A Power Symbol should have no convert option</b><br><br>"
+msgstr "<b>A Power Symbol should have no convert option</b><br><br>"
+
+msgid "<b>A Power Symbol should have only one pin</b><br><br>"
+msgstr "<b>A Power Symbol should have only one pin</b><br><br>"
+
+msgid ""
+"<b>Suspicious Power Symbol</b><br>Only a input or output power pin has "
+"meaning<br><br>"
+msgstr ""
+"<b>Suspicious Power Symbol</b><br>Only a input or output power pin has "
+"meaning<br><br>"
+
+msgid ""
+"<b>Suspicious Power Symbol</b><br>Only invisible input power pins are "
+"automatically connected<br><br>"
+msgstr ""
+"<b>Suspicious Power Symbol</b><br>Only invisible input power pins are "
+"automatically connected<br><br>"
+
+#, c-format
+msgid ""
+"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
+msgstr ""
+"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
+
+#, c-format
+msgid ""
+"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
+"of converted."
+msgstr ""
+"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
+"of converted."
+
+#, c-format
+msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
+msgstr "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
+
+#, c-format
+msgid ""
+"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
+msgstr ""
+"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
+
+msgid ""
+"(Hidden power pins will drive their pin names on to any connected nets.)"
+msgstr ""
+"(Hidden power pins will drive their pin names on to any connected nets.)"
+
+#, c-format
+msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
+msgstr "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
+
+#, c-format
+msgid ""
+"<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
+"converted."
+msgstr ""
+"<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
+"converted."
+
+#, c-format
+msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
+msgstr "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
+
+#, c-format
+msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
+msgstr "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
+
 msgid ""
 "Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
 "Libraries dialog to adjust paths and add or remove libraries."
@@ -10914,21 +11021,21 @@ msgstr "Error saving global library table."
 msgid "Error saving project library table."
 msgstr "Error saving project library table."
 
-msgid "Normal save as operation"
-msgstr "Normal save as operation"
+msgid "Do not update library tables"
+msgstr "Do not update library tables"
 
 msgid "Do not perform any additional operations after saving library."
 msgstr "Do not perform any additional operations after saving library."
 
-msgid "Replace library table entry"
-msgstr "Replace library table entry"
+msgid "Update existing library table entry"
+msgstr "Update existing library table entry"
 
 msgid ""
-"Replace symbol library table entry with new library.\n"
+"Update symbol library table entry to point to new library.\n"
 "\n"
 "The original library will no longer be available for use."
 msgstr ""
-"Replace symbol library table entry with new library.\n"
+"Update symbol library table entry to point to new library.\n"
 "\n"
 "The original library will no longer be available for use."
 
@@ -10939,12 +11046,12 @@ msgid ""
 "Add new entry to the global symbol library table.\n"
 "\n"
 "The symbol library table nickname is suffixed with\n"
-"an integer to ensure no duplicate table entries."
+"an integer to prevent duplicate table entries."
 msgstr ""
 "Add new entry to the global symbol library table.\n"
 "\n"
 "The symbol library table nickname is suffixed with\n"
-"an integer to ensure no duplicate table entries."
+"an integer to prevent duplicate table entries."
 
 msgid "Add new project library table entry"
 msgstr "Add new project library table entry"
@@ -10953,12 +11060,12 @@ msgid ""
 "Add new entry to the project symbol library table.\n"
 "\n"
 "The symbol library table nickname is suffixed with\n"
-"an integer to ensure no duplicate table entries."
+"an integer to prevent duplicate table entries."
 msgstr ""
 "Add new entry to the project symbol library table.\n"
 "\n"
 "The symbol library table nickname is suffixed with\n"
-"an integer to ensure no duplicate table entries."
+"an integer to prevent duplicate table entries."
 
 msgid "[from schematic]"
 msgstr "[from schematic]"
@@ -12019,87 +12126,6 @@ msgstr "Save Current Sheet Copy As..."
 msgid "Save a copy of the current sheet to another location or name"
 msgstr "Save a copy of the current sheet to another location or name"
 
-#, c-format
-msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
-"pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
-msgstr ""
-"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
-"pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
-
-#, c-format
-msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
-"pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted."
-msgstr ""
-"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
-"pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted."
-
-#, c-format
-msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
-"%s at location <b>(%s, %s)</b>."
-msgstr ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
-"%s at location <b>(%s, %s)</b>."
-
-#, c-format
-msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
-"%s at location <b>(%s, %s)</b> in units %c and %c."
-msgstr ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
-"%s at location <b>(%s, %s)</b> in units %c and %c."
-
-#, c-format
-msgid ""
-"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
-msgstr ""
-"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
-
-#, c-format
-msgid ""
-"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
-"of converted."
-msgstr ""
-"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
-"of converted."
-
-#, c-format
-msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
-
-#, c-format
-msgid ""
-"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr ""
-"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-
-msgid ""
-"(Hidden power pins will drive their pin names on to any connected nets.)"
-msgstr ""
-"(Hidden power pins will drive their pin names on to any connected nets.)"
-
-#, c-format
-msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
-msgstr "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
-
-#, c-format
-msgid ""
-"<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
-"converted."
-msgstr ""
-"<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
-"converted."
-
-#, c-format
-msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
-
-#, c-format
-msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-
 msgid "No symbol issues found."
 msgstr "No symbol issues found."
 
@@ -12169,6 +12195,10 @@ msgstr "Enter page number for sheet path%s"
 
 msgid "Edit Sheet Page Number"
 msgstr "Edit Sheet Page Number"
+
+#, c-format
+msgid "Revert '%s' (and all sub-sheets) to last version saved?"
+msgstr "Revert '%s' (and all sub-sheets) to last version saved?"
 
 msgid "Reached end of schematic."
 msgstr "Reached end of schematic."
@@ -16827,6 +16857,18 @@ msgstr "0.0000"
 msgid "0.00000"
 msgstr "0.00000"
 
+msgid "0.00 in / 0 mils / 0.0 mm"
+msgstr "0.00 in / 0 mils / 0.0 mm"
+
+msgid "0.000 / 0 / 0.00"
+msgstr "0.000 / 0 / 0.00"
+
+msgid "0.0000 / 0.0 / 0.000"
+msgstr "0.0000 / 0.0 / 0.000"
+
+msgid "0.00000 / 0.00 / 0.0000"
+msgstr "0.00000 / 0.00 / 0.0000"
+
 msgid "Suppress trailing zeroes"
 msgstr "Suppress trailing zeroes"
 
@@ -16931,6 +16973,9 @@ msgstr "Exclude all violations of rule '%s'"
 
 msgid "Run clearance resolution tool..."
 msgstr "Run clearance resolution tool..."
+
+msgid "Run constraints resolution tool..."
+msgstr "Run constraints resolution tool..."
 
 msgid "Open the Board Setup... dialog"
 msgstr "Open the Board Setup... dialog"
@@ -21441,6 +21486,12 @@ msgstr "default"
 msgid "board setup constraints silk"
 msgstr "board setup constraints silk"
 
+msgid "board setup constraints silk text height"
+msgstr "board setup constraints silk text height"
+
+msgid "board setup constraints silk text thickness"
+msgstr "board setup constraints silk text thickness"
+
 msgid "board setup constraints hole"
 msgstr "board setup constraints hole"
 
@@ -21524,32 +21575,76 @@ msgstr "--> Assertion failed. <--"
 msgid "Checking %s clearance: %s."
 msgstr "Checking %s clearance: %s."
 
+#, c-format
+msgid "Checking %s max uncoupled length: %s."
+msgstr "Checking %s max uncoupled length: %s."
+
+#, c-format
+msgid "Checking %s max skew: %s."
+msgstr "Checking %s max skew: %s."
+
+#, c-format
+msgid "Checking %s gap: %s."
+msgstr "Checking %s gap: %s."
+
+#, c-format
+msgid "Checking %s thermal spoke width: %s."
+msgstr "Checking %s thermal spoke width: %s."
+
+#, c-format
+msgid "Checking %s zone connection: %s."
+msgstr "Checking %s zone connection: %s."
+
 msgid "undefined"
 msgstr "undefined"
 
-msgid "track width"
-msgstr "track width"
-
-msgid "annular width"
-msgstr "annular width"
-
-msgid "via diameter"
-msgstr "via diameter"
-
-msgid "constraint"
-msgstr "constraint"
+#, c-format
+msgid "Checking %s track width: opt %s."
+msgstr "Checking %s track width: opt %s."
 
 #, c-format
-msgid "Checking %s %s: %s."
-msgstr "Checking %s %s: %s."
+msgid "Checking board setup constraints track width: min %s."
+msgstr "Checking board setup constraints track width: min %s."
 
 #, c-format
-msgid "Checking %s: min %s; opt %s; max %s."
-msgstr "Checking %s: min %s; opt %s; max %s."
+msgid "Checking %s annular width: min %s."
+msgstr "Checking %s annular width: min %s."
+
+#, c-format
+msgid "Checking %s via diameter: opt %s."
+msgstr "Checking %s via diameter: opt %s."
+
+#, c-format
+msgid "Checking board setup constraints via diameter: min %s."
+msgstr "Checking board setup constraints via diameter: min %s."
+
+#, c-format
+msgid "Checking %s hole size: opt %s."
+msgstr "Checking %s hole size: opt %s."
+
+#, c-format
+msgid "Checking board setup constraints hole size: min %s."
+msgstr "Checking board setup constraints hole size: min %s."
+
+#, c-format
+msgid "Checking %s: min %s."
+msgstr "Checking %s: min %s."
+
+#, c-format
+msgid "Checking %s diff pair gap: opt %s."
+msgstr "Checking %s diff pair gap: opt %s."
+
+#, c-format
+msgid "Checking board setup constraints clearance: min %s."
+msgstr "Checking board setup constraints clearance: min %s."
 
 #, c-format
 msgid "Checking %s."
 msgstr "Checking %s."
+
+#, c-format
+msgid "Checking %s: min %s; opt %s; max %s."
+msgstr "Checking %s: min %s; opt %s; max %s."
 
 msgid "Board and netclass clearances apply only between copper items."
 msgstr "Board and netclass clearances apply only between copper items."
@@ -25398,24 +25493,105 @@ msgstr "[netclass %s]"
 msgid "Report incomplete: could not compile custom design rules.  "
 msgstr "Report incomplete: could not compile custom design rules.  "
 
-msgid "Clearance Report"
-msgstr "Clearance Report"
+msgid "Violation Report"
+msgstr "Violation Report"
 
-msgid "Edge clearance resolution for:"
-msgstr "Edge clearance resolution for:"
+msgid "Uncoupled Length"
+msgstr "Uncoupled Length"
+
+msgid "Diff pair uncoupled length resolution for:"
+msgstr "Diff pair uncoupled length resolution for:"
+
+#, c-format
+msgid "Resolved max uncoupled length: %s."
+msgstr "Resolved max uncoupled length: %s."
+
+msgid "Text height resolution for:"
+msgstr "Text height resolution for:"
+
+#, c-format
+msgid "Resolved height constraints: min %s; max %s."
+msgstr "Resolved height constraints: min %s; max %s."
+
+msgid "Text thickness resolution for:"
+msgstr "Text thickness resolution for:"
+
+#, c-format
+msgid "Resolved thickness constraints: min %s; max %s."
+msgstr "Resolved thickness constraints: min %s; max %s."
+
+msgid "Track width resolution for:"
+msgstr "Track width resolution for:"
+
+#, c-format
+msgid "Resolved width constraints: min %s; max %s."
+msgstr "Resolved width constraints: min %s; max %s."
+
+msgid "Via diameter resolution for:"
+msgstr "Via diameter resolution for:"
+
+#, c-format
+msgid "Resolved diameter constraints: min %s; max %s."
+msgstr "Resolved diameter constraints: min %s; max %s."
+
+msgid "Via Annulus"
+msgstr "Via Annulus"
+
+msgid "Via annular width resolution for:"
+msgstr "Via annular width resolution for:"
+
+#, c-format
+msgid "Resolved annular width constraints: min %s; max %s."
+msgstr "Resolved annular width constraints: min %s; max %s."
+
+msgid "Hole Size"
+msgstr "Hole Size"
+
+msgid "Hole diameter resolution for:"
+msgstr "Hole diameter resolution for:"
+
+msgid "Hole Clearance"
+msgstr "Hole Clearance"
+
+msgid "Hole clearance resolution for:"
+msgstr "Hole clearance resolution for:"
+
+msgid "Items belong to the same net. Clearance is 0."
+msgstr "Items belong to the same net. Clearance is 0."
 
 #, c-format
 msgid "Resolved clearance: %s."
 msgstr "Resolved clearance: %s."
 
+msgid "Mechanical hole clearance resolution for:"
+msgstr "Mechanical hole clearance resolution for:"
+
+msgid "No 'mechanical_hole_clearance' constraints defined."
+msgstr "No 'mechanical_hole_clearance' constraints defined."
+
+msgid "Edge Clearance"
+msgstr "Edge Clearance"
+
+msgid "Edge clearance resolution for:"
+msgstr "Edge clearance resolution for:"
+
 msgid "Clearance resolution for:"
 msgstr "Clearance resolution for:"
+
+msgid "Mechanical clearance resolution for:"
+msgstr "Mechanical clearance resolution for:"
+
+msgid "No 'mechanical_clearance' constraints defined."
+msgstr "No 'mechanical_clearance' constraints defined."
 
 msgid "Select two items for a clearance resolution report."
 msgstr "Select two items for a clearance resolution report."
 
 msgid "Cannot generate clearance report on empty group."
 msgstr "Cannot generate clearance report on empty group."
+
+msgid "Clearance Report"
+msgstr "Clearance Report"
 
 msgid "Zone connection resolution for:"
 msgstr "Zone connection resolution for:"
@@ -25447,8 +25623,21 @@ msgstr "Overridden by larger thermal relief from %s;clearance: %s."
 msgid "Clearance: %s."
 msgstr "Clearance: %s."
 
-msgid "Items belong to the same net. Clearance is 0."
-msgstr "Items belong to the same net. Clearance is 0."
+msgid "Diff Pair"
+msgstr "Diff Pair"
+
+msgid "Diff pair gap resolution for:"
+msgstr "Diff pair gap resolution for:"
+
+#, c-format
+msgid "Resolved gap constraints: min %s; opt %s; max %s."
+msgstr "Resolved gap constraints: min %s; opt %s; max %s."
+
+msgid "Diff pair max uncoupled length resolution for:"
+msgstr "Diff pair max uncoupled length resolution for:"
+
+msgid "No 'diff_pair_uncoupled' constraints defined."
+msgstr "No 'diff_pair_uncoupled' constraints defined."
 
 msgid "Silkscreen clearance resolution for:"
 msgstr "Silkscreen clearance resolution for:"
@@ -25456,23 +25645,8 @@ msgstr "Silkscreen clearance resolution for:"
 msgid "Courtyard clearance resolution for:"
 msgstr "Courtyard clearance resolution for:"
 
-msgid "Hole clearance resolution for:"
-msgstr "Hole clearance resolution for:"
-
 msgid "Mechanical"
 msgstr "Mechanical"
-
-msgid "Mechanical clearance resolution for:"
-msgstr "Mechanical clearance resolution for:"
-
-msgid "No 'mechanical_clearance' constraints defined."
-msgstr "No 'mechanical_clearance' constraints defined."
-
-msgid "Mechanical hole clearance resolution for:"
-msgstr "Mechanical hole clearance resolution for:"
-
-msgid "No 'mechanical_hole_clearance' constraints defined."
-msgstr "No 'mechanical_hole_clearance' constraints defined."
 
 msgid "Select an item for a constraints resolution report."
 msgstr "Select an item for a constraints resolution report."
@@ -25480,15 +25654,9 @@ msgstr "Select an item for a constraints resolution report."
 msgid "Constraints Report"
 msgstr "Constraints Report"
 
-msgid "Track width resolution for:"
-msgstr "Track width resolution for:"
-
 #, c-format
 msgid "Width constraints: min %s; opt %s; max %s."
 msgstr "Width constraints: min %s; opt %s; max %s."
-
-msgid "Via diameter resolution for:"
-msgstr "Via diameter resolution for:"
 
 #, c-format
 msgid "Diameter constraints: min %s; opt %s; max %s."
@@ -25497,22 +25665,17 @@ msgstr "Diameter constraints: min %s; opt %s; max %s."
 msgid "Via Annular Width"
 msgstr "Via Annular Width"
 
-msgid "Via annular width resolution for:"
-msgstr "Via annular width resolution for:"
-
 #, c-format
 msgid "Annular width constraints: min %s; opt %s; max %s."
 msgstr "Annular width constraints: min %s; opt %s; max %s."
 
-msgid "Hole Size"
-msgstr "Hole Size"
-
-msgid "Hole diameter resolution for:"
-msgstr "Hole diameter resolution for:"
+#, c-format
+msgid "Text height constraints: min %s; opt %s; max %s."
+msgstr "Text height constraints: min %s; opt %s; max %s."
 
 #, c-format
-msgid "Hole constraint: min %s."
-msgstr "Hole constraint: min %s."
+msgid "Text thickness constraints: min %s; opt %s; max %s."
+msgstr "Text thickness constraints: min %s; opt %s; max %s."
 
 msgid "Keepouts"
 msgstr "Keepouts"
@@ -27695,6 +27858,79 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Normal save as operation"
+#~ msgstr "Normal save as operation"
+
+#~ msgid "Replace library table entry"
+#~ msgstr "Replace library table entry"
+
+#~ msgid ""
+#~ "Replace symbol library table entry with new library.\n"
+#~ "\n"
+#~ "The original library will no longer be available for use."
+#~ msgstr ""
+#~ "Replace symbol library table entry with new library.\n"
+#~ "\n"
+#~ "The original library will no longer be available for use."
+
+#~ msgid ""
+#~ "Add new entry to the global symbol library table.\n"
+#~ "\n"
+#~ "The symbol library table nickname is suffixed with\n"
+#~ "an integer to ensure no duplicate table entries."
+#~ msgstr ""
+#~ "Add new entry to the global symbol library table.\n"
+#~ "\n"
+#~ "The symbol library table nickname is suffixed with\n"
+#~ "an integer to ensure no duplicate table entries."
+
+#~ msgid ""
+#~ "Add new entry to the project symbol library table.\n"
+#~ "\n"
+#~ "The symbol library table nickname is suffixed with\n"
+#~ "an integer to ensure no duplicate table entries."
+#~ msgstr ""
+#~ "Add new entry to the project symbol library table.\n"
+#~ "\n"
+#~ "The symbol library table nickname is suffixed with\n"
+#~ "an integer to ensure no duplicate table entries."
+
+#, c-format
+#~ msgid ""
+#~ "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+#~ "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted."
+#~ msgstr ""
+#~ "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+#~ "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted."
+
+#, c-format
+#~ msgid ""
+#~ "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
+#~ "%s%s at location <b>(%s, %s)</b> in units %c and %c."
+#~ msgstr ""
+#~ "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
+#~ "%s%s at location <b>(%s, %s)</b> in units %c and %c."
+
+#~ msgid "track width"
+#~ msgstr "track width"
+
+#~ msgid "annular width"
+#~ msgstr "annular width"
+
+#~ msgid "via diameter"
+#~ msgstr "via diameter"
+
+#~ msgid "constraint"
+#~ msgstr "constraint"
+
+#, c-format
+#~ msgid "Checking %s %s: %s."
+#~ msgstr "Checking %s %s: %s."
+
+#, c-format
+#~ msgid "Hole constraint: min %s."
+#~ msgstr "Hole constraint: min %s."
 
 #~ msgid "Set diameter to 0 to use schematic junction dot size."
 #~ msgstr "Set diameter to 0 to use schematic junction dot size."
