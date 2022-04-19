@@ -47,6 +47,8 @@ private:
 
     typedef std::set<wxString, less> container_type;
 
+    static wxString getNextSymbol( const wxString& str, wxString::size_type& cursor );
+
 public:
     typedef container_type::value_type value_type;
     typedef container_type::iterator iterator;
