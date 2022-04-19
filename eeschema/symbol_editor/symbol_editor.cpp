@@ -46,6 +46,9 @@
 #include <string_utils.h>
 
 
+static int g_option = 0;
+
+
 /**
  * Helper control to inquire user what to do on library save as operation.
  */
@@ -55,58 +58,71 @@ public:
     SAVE_AS_HELPER( wxWindow* aParent ) :
         wxPanel( aParent )
     {
-        m_simpleSaveAs = new wxRadioButton( this, wxID_ANY, _( "Normal save as operation" ),
+        m_simpleSaveAs = new wxRadioButton( this, wxID_ANY, _( "Do not update library tables" ),
                                             wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
         m_simpleSaveAs->SetToolTip( _( "Do not perform any additional operations after saving "
                                        "library." ) );
         m_replaceTableEntry = new wxRadioButton( this, wxID_ANY,
-                                                 _( "Replace library table entry" ) );
-        m_replaceTableEntry->SetToolTip( _( "Replace symbol library table entry with new library."
-                                            "\n\nThe original library will no longer be available "
+                                                 _( "Update existing library table entry" ) );
+        m_replaceTableEntry->SetToolTip( _( "Update symbol library table entry to point to new "
+                                            "library.\n\n"
+                                            "The original library will no longer be available "
                                             "for use." ) );
         m_addGlobalTableEntry = new wxRadioButton( this, wxID_ANY,
                                                    _( "Add new global library table entry" ) );
         m_addGlobalTableEntry->SetToolTip( _( "Add new entry to the global symbol library table."
                                               "\n\nThe symbol library table nickname is suffixed "
-                                              "with\nan integer to ensure no duplicate table "
+                                              "with\nan integer to prevent duplicate table "
                                               "entries." ) );
         m_addProjectTableEntry = new wxRadioButton( this, wxID_ANY,
                                                     _( "Add new project library table entry" ) );
         m_addProjectTableEntry->SetToolTip( _( "Add new entry to the project symbol library table."
                                                "\n\nThe symbol library table nickname is suffixed "
-                                               "with\nan integer to ensure no duplicate table "
+                                               "with\nan integer to prevent duplicate table "
                                                "entries." ) );
 
-        wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
-        sizer->Add( m_simpleSaveAs, 0, wxLEFT | wxRIGHT | wxALIGN_CENTER_VERTICAL, 5 );
-        sizer->Add( m_replaceTableEntry, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5 );
-        sizer->Add( m_addGlobalTableEntry, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5 );
-        sizer->Add( m_addProjectTableEntry, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5 );
+        wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+        sizer->Add( m_simpleSaveAs, 0, wxLEFT | wxRIGHT | wxTOP, 5 );
+        sizer->Add( m_replaceTableEntry, 0, wxLEFT | wxRIGHT | wxTOP, 5 );
+        sizer->Add( m_addGlobalTableEntry, 0, wxLEFT | wxRIGHT | wxTOP, 5 );
+        sizer->Add( m_addProjectTableEntry, 0, wxLEFT | wxRIGHT | wxTOP | wxBOTTOM, 5 );
 
         SetSizerAndFit( sizer );
+
+        SetOption( static_cast<SAH_TYPE>( g_option ) );
+    }
+
+    ~SAVE_AS_HELPER()
+    {
+        g_option = GetOption();
     }
 
     enum SAH_TYPE
     {
-        UNDEFINED = -1,
-        NORMAL_SAVE_AS,
+        NORMAL_SAVE_AS = 0,
         REPLACE_TABLE_ENTRY,
         ADD_GLOBAL_TABLE_ENTRY,
         ADD_PROJECT_TABLE_ENTRY
     };
 
+    void SetOption( SAH_TYPE aOption )
+    {
+        m_simpleSaveAs->SetValue( aOption == NORMAL_SAVE_AS );
+        m_replaceTableEntry->SetValue( aOption == REPLACE_TABLE_ENTRY );
+        m_addGlobalTableEntry->SetValue( aOption == ADD_GLOBAL_TABLE_ENTRY );
+        m_addProjectTableEntry->SetValue( aOption == ADD_PROJECT_TABLE_ENTRY );
+    }
+
     SAH_TYPE GetOption() const
     {
-        if( m_simpleSaveAs->GetValue() )
-            return SAH_TYPE::NORMAL_SAVE_AS;
-        else if( m_replaceTableEntry->GetValue() )
+        if( m_replaceTableEntry->GetValue() )
             return SAH_TYPE::REPLACE_TABLE_ENTRY;
         else if( m_addGlobalTableEntry->GetValue() )
             return ADD_GLOBAL_TABLE_ENTRY;
         else if( m_addProjectTableEntry->GetValue() )
             return ADD_PROJECT_TABLE_ENTRY;
         else
-            return UNDEFINED;
+            return SAH_TYPE::NORMAL_SAVE_AS;
     }
 
     /**
@@ -125,10 +141,10 @@ public:
     }
 
 private:
-    wxRadioButton* m_simpleSaveAs;
-    wxRadioButton* m_replaceTableEntry;
-    wxRadioButton* m_addGlobalTableEntry;
-    wxRadioButton* m_addProjectTableEntry;
+    wxRadioButton*  m_simpleSaveAs;
+    wxRadioButton*  m_replaceTableEntry;
+    wxRadioButton*  m_addGlobalTableEntry;
+    wxRadioButton*  m_addProjectTableEntry;
 };
 
 
@@ -1045,7 +1061,7 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 {
     wxFileName fn;
     wxString   msg;
-    SAVE_AS_HELPER::SAH_TYPE type = SAVE_AS_HELPER::SAH_TYPE::UNDEFINED;
+    SAVE_AS_HELPER::SAH_TYPE type = SAVE_AS_HELPER::SAH_TYPE::NORMAL_SAVE_AS;
     SCH_IO_MGR::SCH_FILE_T fileType = SCH_IO_MGR::SCH_FILE_T::SCH_KICAD;
     PROJECT&   prj = Prj();
 
@@ -1142,7 +1158,6 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
             resyncLibTree = addLibTableEntry( fn.GetFullPath(), PROJECT_LIB_TABLE );
             break;
 
-        case SAVE_AS_HELPER::SAH_TYPE::NORMAL_SAVE_AS:
         default:
             break;
         }
