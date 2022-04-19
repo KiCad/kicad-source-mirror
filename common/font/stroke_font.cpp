@@ -212,6 +212,9 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
 {
     constexpr double SPACE_WIDTH = 0.6;
     constexpr double INTER_CHAR = 0.2;
+    constexpr double TAB_WIDTH = 4 * 0.82;  // Not quite as wide as 5.1/6.0 tab formatting, but
+                                            // a better match for Scintilla, and closer to the
+                                            // nominal SPACE_WIDTH + INTER_CHAR
     constexpr double SUPER_SUB_SIZE_MULTIPLIER = 0.7;
     constexpr double SUPER_HEIGHT_OFFSET = 0.5;
     constexpr double SUB_HEIGHT_OFFSET = 0.3;
@@ -232,28 +235,31 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
 
     for( wxUniChar c : aText )
     {
-        // dd is the index into bounding boxes table
-        int dd = (signed) c - ' ';
-
-        if( dd >= (int) m_glyphBoundingBoxes->size() || dd < 0 )
+        // Handle tabs as locked to the nearest 4th column (in space-widths).
+        if( c == '\t' )
         {
-            // Filtering non existing glyphes and non printable chars
-            if( c == '\t' )
-                c = ' ';
-            else
-                c = '?';
+            int tabWidth = KiROUND( glyphSize.x * TAB_WIDTH );
+            int currentIntrusion = ( cursor.x - aOrigin.x ) % tabWidth;
 
-            // Fix the index:
-            dd = (signed) c - ' ';
+            cursor.x += tabWidth - currentIntrusion;
         }
-
-        if( dd <= 0 )   // dd < 0 should not happen
+        else if( c == ' ' )
         {
             // 'space' character - draw nothing, advance cursor position
             cursor.x += KiROUND( glyphSize.x * SPACE_WIDTH );
         }
         else
         {
+            // dd is the index into bounding boxes table
+            int dd = (signed) c - ' ';
+
+            // Filtering non existing glyphs and non printable chars
+            if( dd < 0 || dd >= (int) m_glyphBoundingBoxes->size() )
+            {
+                c = '?';
+                dd = (signed) c - ' ';
+            }
+
             STROKE_GLYPH* source = static_cast<STROKE_GLYPH*>( m_glyphs->at( dd ).get() );
 
             if( aGlyphs )
