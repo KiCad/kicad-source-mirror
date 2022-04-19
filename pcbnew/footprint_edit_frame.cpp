@@ -800,6 +800,8 @@ void FOOTPRINT_EDIT_FRAME::ShowChangedLanguage()
     wxAuiPaneInfo& lm_pane_info = m_auimgr.GetPane( m_appearancePanel );
     bool lm_shown = lm_pane_info.IsShown();
     lm_pane_info.Caption( _( "Appearance" ) );
+    wxAuiPaneInfo& sf_pane_info = m_auimgr.GetPane( m_selectionFilterPanel );
+    sf_pane_info.Caption( _( "Selection Filter" ) );
 
     // update the layer manager
     m_appearancePanel->OnLanguageChanged();
