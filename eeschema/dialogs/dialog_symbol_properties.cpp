@@ -615,8 +615,6 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
         return false;
 
     SCH_SCREEN* currentScreen = GetParent()->GetScreen();
-    SCHEMATIC&  schematic = GetParent()->Schematic();
-
     wxCHECK( currentScreen, false );
 
     // This needs to be done before the LIB_ID is changed to prevent stale library symbols in
@@ -653,7 +651,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     switch( m_mirrorCtrl->GetSelection() )
     {
-    case 0:                                         break;
+    case 0:                                           break;
     case 1: m_symbol->SetOrientation( SYM_MIRROR_X ); break;
     case 2: m_symbol->SetOrientation( SYM_MIRROR_Y ); break;
     }

@@ -1298,8 +1298,10 @@ void PCB_EDIT_FRAME::ShowChangedLanguage()
     // call my base class
     PCB_BASE_EDIT_FRAME::ShowChangedLanguage();
 
-    wxAuiPaneInfo& pane_info = m_auimgr.GetPane( m_appearancePanel );
-    pane_info.Caption( _( "Appearance" ) );
+    wxAuiPaneInfo& ap_pane_info = m_auimgr.GetPane( m_appearancePanel );
+    ap_pane_info.Caption( _( "Appearance" ) );
+    wxAuiPaneInfo& sf_pane_info = m_auimgr.GetPane( m_selectionFilterPanel );
+    sf_pane_info.Caption( _( "Selection Filter" ) );
     m_auimgr.Update();
 
     m_appearancePanel->OnLanguageChanged();
