@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -44,6 +44,7 @@ class LIB_TREE_NODE;
 class LIB_ID;
 class SYMBOL_LIBRARY_MANAGER;
 class SYMBOL_EDITOR_SETTINGS;
+class EDA_LIST_DIALOG;
 
 
 /**
@@ -121,7 +122,7 @@ public:
     /**
      * Create or add an existing library to the symbol library table.
      */
-    bool AddLibraryFile( bool aCreateNew );
+    wxString AddLibraryFile( bool aCreateNew );
 
     /**
      * Create a new symbol in the selected library.
@@ -368,6 +369,9 @@ protected:
 private:
     // Set up the tool framework
     void setupTools();
+
+    EDA_LIST_DIALOG* buildSaveAsDialog( const wxString& aSymbolName,
+                                        const wxString& aLibraryPreselect );
 
     void saveSymbolAs();
 

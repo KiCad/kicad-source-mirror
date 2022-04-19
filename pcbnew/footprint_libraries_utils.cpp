@@ -975,22 +975,17 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
+static int ID_SAVE_AS_NAME     = 4172;
+static int ID_MAKE_NEW_LIBRARY = 4173;
+
+
+EDA_LIST_DIALOG* FOOTPRINT_EDIT_FRAME::buildSaveAsDialog( const wxString& aFootprintName,
+                                                          const wxString& aLibraryPreselect )
 {
-    if( aFootprint == nullptr )
-        return false;
-
-    FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
-
-    SetMsgPanel( aFootprint );
-
-    wxString libraryName = aFootprint->GetFPID().GetLibNickname();
-    wxString footprintName = aFootprint->GetFPID().GetLibItemName();
-    bool     updateValue = aFootprint->GetValue() == footprintName;
-
+    FP_LIB_TABLE*              tbl = Prj().PcbFootprintLibs();
+    std::vector<wxString>      nicknames = tbl->GetLogicalLibs();
     wxArrayString              headers;
     std::vector<wxArrayString> itemsToDisplay;
-    std::vector<wxString>      nicknames = tbl->GetLogicalLibs();
 
     headers.Add( _( "Nickname" ) );
     headers.Add( _( "Description" ) );
@@ -1003,40 +998,87 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
         itemsToDisplay.push_back( item );
     }
 
-    EDA_LIST_DIALOG dlg( this, _( "Save Footprint As" ), headers, itemsToDisplay, libraryName );
-    dlg.SetListLabel( _( "Save in library:" ) );
-    dlg.SetOKLabel( _( "Save" ) );
+    EDA_LIST_DIALOG* dlg = new EDA_LIST_DIALOG( this, _( "Save Footprint As" ), headers,
+                                                itemsToDisplay, aLibraryPreselect );
+
+    dlg->SetListLabel( _( "Save in library:" ) );
+    dlg->SetOKLabel( _( "Save" ) );
 
     wxBoxSizer* bNameSizer = new wxBoxSizer( wxHORIZONTAL );
 
-    wxStaticText* label = new wxStaticText( &dlg, wxID_ANY, _( "Name:" ),
-                                            wxDefaultPosition, wxDefaultSize, 0 );
+    wxStaticText* label = new wxStaticText( dlg, wxID_ANY, _( "Name:" ) );
     bNameSizer->Add( label, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-    wxTextCtrl* nameTextCtrl = new wxTextCtrl( &dlg, wxID_ANY, footprintName,
-                                               wxDefaultPosition, wxDefaultSize, 0 );
+    wxTextCtrl* nameTextCtrl = new wxTextCtrl( dlg, ID_SAVE_AS_NAME, aFootprintName );
     bNameSizer->Add( nameTextCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
     wxTextValidator nameValidator( wxFILTER_EXCLUDE_CHAR_LIST );
     nameValidator.SetCharExcludes( FOOTPRINT::StringLibNameInvalidChars( false ) );
     nameTextCtrl->SetValidator( nameValidator );
 
-    wxSizer* mainSizer = dlg.GetSizer();
-    mainSizer->Prepend( bNameSizer, 0, wxEXPAND|wxTOP|wxLEFT|wxRIGHT, 5 );
+    wxButton* newLibraryButton = new wxButton( dlg, ID_MAKE_NEW_LIBRARY, _( "New Library..." ) );
+    dlg->m_ButtonsSizer->Prepend( 80, 20 );
+    dlg->m_ButtonsSizer->Prepend( newLibraryButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 10 );
+
+    dlg->GetSizer()->Prepend( bNameSizer, 0, wxEXPAND|wxTOP|wxLEFT|wxRIGHT, 5 );
+
+    dlg->Bind( wxEVT_BUTTON,
+            [dlg]( wxCommandEvent& )
+            {
+                dlg->EndModal( ID_MAKE_NEW_LIBRARY );
+            }, ID_MAKE_NEW_LIBRARY );
 
     // Move nameTextCtrl to the head of the tab-order
-    if( dlg.GetChildren().DeleteObject( nameTextCtrl ) )
-        dlg.GetChildren().Insert( nameTextCtrl );
+    if( dlg->GetChildren().DeleteObject( nameTextCtrl ) )
+        dlg->GetChildren().Insert( nameTextCtrl );
 
-    dlg.SetInitialFocus( nameTextCtrl );
+    dlg->SetInitialFocus( nameTextCtrl );
 
-    dlg.Layout();
-    mainSizer->Fit( &dlg );
+    dlg->Layout();
+    dlg->GetSizer()->Fit( dlg );
 
-    if( dlg.ShowModal() != wxID_OK )
-        return false;                   // canceled by user
+    return dlg;
+}
 
-    libraryName = dlg.GetTextSelection();
+
+bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
+{
+    if( aFootprint == nullptr )
+        return false;
+
+    FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
+
+    SetMsgPanel( aFootprint );
+
+    wxString libraryName = aFootprint->GetFPID().GetLibNickname();
+    wxString footprintName = aFootprint->GetFPID().GetLibItemName();
+    bool     updateValue = aFootprint->GetValue() == footprintName;
+    bool     done = false;
+
+    std::unique_ptr<EDA_LIST_DIALOG> dlg;
+
+    while( !done )
+    {
+        dlg.reset( buildSaveAsDialog( footprintName, libraryName ) );
+
+        int ret = dlg->ShowModal();
+
+        if( ret == wxID_CANCEL )
+        {
+            return false;
+        }
+        else if( ret == wxID_OK )
+        {
+            done = true;
+        }
+        else if( ret == ID_MAKE_NEW_LIBRARY )
+        {
+            wxFileName newLibrary( CreateNewLibrary() );
+            libraryName = newLibrary.GetName();
+        }
+    }
+
+    libraryName = dlg->GetTextSelection();
 
     if( libraryName.IsEmpty() )
     {
@@ -1044,7 +1086,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
         return false;
     }
 
-    footprintName = nameTextCtrl->GetValue();
+    footprintName = static_cast<wxTextCtrl*>( dlg->FindWindow( ID_SAVE_AS_NAME ) )->GetValue();
     footprintName.Trim( true );
     footprintName.Trim( false );
 

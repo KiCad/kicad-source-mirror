@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -31,6 +31,7 @@ class FP_LIB_TABLE;
 class FOOTPRINT_TREE_PANE;
 class SYMBOL_LIBRARY_MANAGER;
 class FOOTPRINT_EDITOR_SETTINGS;
+class EDA_LIST_DIALOG;
 
 namespace PCB { struct IFACE; }     // A KIFACE coded in pcbnew.cpp
 
@@ -319,6 +320,9 @@ public:
 protected:
     /// protected so only friend PCB::IFACE::CreateWindow() can act as sole factory.
     FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
+
+    EDA_LIST_DIALOG* buildSaveAsDialog( const wxString& aFootprintName,
+                                        const wxString& aLibraryPreselect );
 
     /**
      * Make sure the footprint info list is loaded (with a progress dialog) and then initialize

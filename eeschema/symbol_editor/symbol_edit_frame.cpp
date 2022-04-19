@@ -828,13 +828,13 @@ bool SYMBOL_EDIT_FRAME::SynchronizePins()
 }
 
 
-bool SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
+wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
 {
     // Select the target library table (global/project)
     SYMBOL_LIB_TABLE* libTable = selectSymLibTable();
 
     if( !libTable )
-        return false;
+        return wxEmptyString;
 
     wxFileName fn = m_libMgr->GetUniqueLibraryName();
 
@@ -843,18 +843,18 @@ bool SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
                              ( libTable == &SYMBOL_LIB_TABLE::GetGlobalLibTable() ),
                              PATHS::GetDefaultUserSymbolsPath() ) )
     {
-        return false;
+        return wxEmptyString;
     }
 
     wxString libName = fn.GetName();
 
     if( libName.IsEmpty() )
-        return false;
+        return wxEmptyString;
 
     if( m_libMgr->LibraryExists( libName ) )
     {
         DisplayError( this, wxString::Format( _( "Library '%s' already exists." ), libName ) );
-        return false;
+        return wxEmptyString;
     }
 
     if( aCreateNew )
@@ -862,9 +862,10 @@ bool SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
         if( !m_libMgr->CreateLibrary( fn.GetFullPath(), libTable ) )
         {
             DisplayError( this, wxString::Format( _( "Could not create the library file '%s'.\n"
-                                                     "Make sure you have write permissions and try again." ),
+                                                     "Make sure you have write permissions and "
+                                                     "try again." ),
                                                   fn.GetFullPath() ) );
-            return false;
+            return wxEmptyString;
         }
     }
     else
@@ -872,7 +873,7 @@ bool SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
         if( !m_libMgr->AddLibrary( fn.GetFullPath(), libTable ) )
         {
             DisplayError( this, _( "Could not open the library file." ) );
-            return false;
+            return wxEmptyString;
         }
     }
 
@@ -882,7 +883,7 @@ bool SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
     std::string packet = fn.GetFullPath().ToStdString();
     this->Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_LIB_EDIT, packet );
 
-    return true;
+    return fn.GetFullPath();
 }
 
 

@@ -34,6 +34,8 @@ EDA_LIST_DIALOG_BASE::EDA_LIST_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 
 	bSizerMain->Add( bMargins, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
+	m_ButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
+
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
 	m_sdbSizer->AddButton( m_sdbSizerOK );
@@ -41,7 +43,10 @@ EDA_LIST_DIALOG_BASE::EDA_LIST_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	bSizerMain->Add( m_sdbSizer, 0, wxEXPAND|wxALL, 5 );
+	m_ButtonsSizer->Add( m_sdbSizer, 1, wxALL, 5 );
+
+
+	bSizerMain->Add( m_ButtonsSizer, 0, wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizerMain );
