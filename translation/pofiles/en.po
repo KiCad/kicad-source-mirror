@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-11 09:39-0700\n"
+"POT-Creation-Date: 2022-04-19 14:55-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -8811,6 +8811,9 @@ msgstr "Errors occurred creating symbol library %s."
 msgid "Open Recent"
 msgstr "Open Recent"
 
+msgid "Clear Recent Files"
+msgstr "Clear Recent Files"
+
 msgid "Insert Schematic Sheet Content..."
 msgstr "Insert Schematic Sheet Content..."
 
@@ -10578,6 +10581,9 @@ msgstr "No symbol libraries are loaded."
 msgid "Select Symbol Library"
 msgstr "Select Symbol Library"
 
+msgid "No schematic currently open."
+msgstr "No schematic currently open."
+
 msgid "The current symbol has been modified.  Save changes?"
 msgstr "The current symbol has been modified.  Save changes?"
 
@@ -10590,9 +10596,6 @@ msgstr "Symbol '%s' already exists in library '%s'."
 
 msgid "Overwrite"
 msgstr "Overwrite"
-
-msgid "No schematic currently open."
-msgstr "No schematic currently open."
 
 #, c-format
 msgid "Symbol library '%s' is not writable."
@@ -12270,11 +12273,11 @@ msgstr "This job file uses an outdated format. Please recreate it."
 msgid "Open Gerber Job File"
 msgstr "Open Gerber Job File"
 
-msgid "Open Recent Gerber File"
-msgstr "Open Recent Gerber File"
-
 msgid "Clear Recent Gerber Files"
 msgstr "Clear Recent Gerber Files"
+
+msgid "Open Recent Gerber File"
+msgstr "Open Recent Gerber File"
 
 msgid "Open Recent Drill File"
 msgstr "Open Recent Drill File"
@@ -12573,9 +12576,6 @@ msgstr "-- mixed values --"
 
 msgid "Reset all colors in this theme to the KiCad defaults"
 msgstr "Reset all colors in this theme to the KiCad defaults"
-
-msgid "Clear Recent Files"
-msgstr "Clear Recent Files"
 
 msgid "This file is already open."
 msgstr "This file is already open."
