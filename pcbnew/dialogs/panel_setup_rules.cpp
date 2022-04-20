@@ -55,12 +55,12 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFr
 
     m_textEditor->AutoCompSetSeparator( '|' );
 
-    m_netClassRegex.Compile( "NetClass\\s*[!=]=\\s*$", wxRE_ADVANCED );
-    m_netNameRegex.Compile( "NetName\\s*[!=]=\\s*$", wxRE_ADVANCED );
-    m_typeRegex.Compile( "Type\\s*[!=]=\\s*$", wxRE_ADVANCED );
-    m_padTypeRegex.Compile( "Pad_Type\\s*[!=]=\\s*$", wxRE_ADVANCED );
-    m_pinTypeRegex.Compile( "Pin_Type\\s*[!=]=\\s*$", wxRE_ADVANCED );
-    m_fabPropRegex.Compile( "Fabrication_Property\\s*[!=]=\\s*$", wxRE_ADVANCED );
+    m_netClassRegex.Compile( "^NetClass\\s*[!=]=\\s*$", wxRE_ADVANCED );
+    m_netNameRegex.Compile( "^NetName\\s*[!=]=\\s*$", wxRE_ADVANCED );
+    m_typeRegex.Compile( "^Type\\s*[!=]=\\s*$", wxRE_ADVANCED );
+    m_padTypeRegex.Compile( "^Pad_Type\\s*[!=]=\\s*$", wxRE_ADVANCED );
+    m_pinTypeRegex.Compile( "^Pin_Type\\s*[!=]=\\s*$", wxRE_ADVANCED );
+    m_fabPropRegex.Compile( "^Fabrication_Property\\s*[!=]=\\s*$", wxRE_ADVANCED );
 
     m_compileButton->SetBitmap( KiBitmap( BITMAPS::drc ) );
 
