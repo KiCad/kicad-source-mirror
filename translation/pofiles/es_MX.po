@@ -8,13 +8,14 @@
 # VicSanRoPe <vicsanrope@protonmail.com>, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2021.
 # Ulices <ulicesah@gmail.com>, 2021, 2022.
+# Ulices <dev.n47os@aleeas.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:57-0700\n"
-"PO-Revision-Date: 2022-04-19 21:54+0000\n"
-"Last-Translator: Ulices <ulicesah@gmail.com>\n"
+"PO-Revision-Date: 2022-04-25 17:47+0000\n"
+"Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
 "Language: es_MX\n"
@@ -22,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -15909,15 +15910,17 @@ msgstr ""
 
 #: eeschema/symbol_checker.cpp:163
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
-msgstr ""
+msgstr "<b>Un símbolo de potencia debe tener solo una unidad</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:169
 msgid "<b>A Power Symbol should have no convert option</b><br><br>"
 msgstr ""
+"<b>Un símbolo de potencia no debe tener ninguna opción de conversión</b> "
+"<br><br>"
 
 #: eeschema/symbol_checker.cpp:175
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
-msgstr ""
+msgstr "<b>Un símbolo de potencia debe tener solo un pin</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:184
 msgid ""
