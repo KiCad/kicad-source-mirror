@@ -110,6 +110,11 @@ protected:
 
     BOX2I getBoundingBox( const std::vector<std::unique_ptr<GLYPH>>& aGlyphs ) const;
 
+    VECTOR2I getTextAsGlyphs( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
+                              const wxString& aText, const VECTOR2I& aSize,
+                              const VECTOR2I& aPosition, const EDA_ANGLE& aAngle, bool aMirror,
+                              const VECTOR2I& aOrigin, TEXT_STYLE_FLAGS aTextStyle ) const;
+
 private:
     // FreeType variables
     static FT_Library m_freeType;

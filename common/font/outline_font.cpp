@@ -239,6 +239,58 @@ VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
                                         bool aMirror, const VECTOR2I& aOrigin,
                                         TEXT_STYLE_FLAGS aTextStyle ) const
 {
+    // HarfBuzz needs further processing to split tab-delimited text into text runs.
+
+    constexpr double TAB_WIDTH = 4 * 0.6;
+
+    VECTOR2I position = aPosition;
+    wxString textRun;
+
+    if( aBBox )
+    {
+        aBBox->SetOrigin( aPosition );
+        aBBox->SetEnd( aPosition );
+    }
+
+    for( wxUniChar c : aText )
+    {
+        // Handle tabs as locked to the nearest 4th column (in space-widths).
+        if( c == '\t' )
+        {
+            if( !textRun.IsEmpty() )
+            {
+                position = getTextAsGlyphs( aBBox, aGlyphs, textRun, aSize, position, aAngle,
+                                            aMirror, aOrigin, aTextStyle );
+                textRun.clear();
+            }
+
+            int tabWidth = KiROUND( aSize.x * TAB_WIDTH );
+            int currentIntrusion = ( position.x - aOrigin.x ) % tabWidth;
+
+            position.x += tabWidth - currentIntrusion;
+        }
+        else
+        {
+            textRun += c;
+        }
+    }
+
+    if( !textRun.IsEmpty() )
+    {
+        position = getTextAsGlyphs( aBBox, aGlyphs, textRun, aSize, position, aAngle, aMirror,
+                                    aOrigin, aTextStyle );
+    }
+
+    return position;
+}
+
+
+VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
+                                        const wxString& aText, const VECTOR2I& aSize,
+                                        const VECTOR2I& aPosition, const EDA_ANGLE& aAngle,
+                                        bool aMirror, const VECTOR2I& aOrigin,
+                                        TEXT_STYLE_FLAGS aTextStyle ) const
+{
     VECTOR2D glyphSize = aSize;
     FT_Face  face = m_face;
     double   scaler = faceSize();
@@ -407,10 +459,7 @@ VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
     VECTOR2I cursorDisplacement( cursor.x * scaleFactor.x, -cursor.y * scaleFactor.y );
 
     if( aBBox )
-    {
-        aBBox->SetOrigin( aPosition.x, aPosition.y );
-        aBBox->SetEnd( aPosition + extents );
-    }
+        aBBox->Merge( aPosition + extents );
 
     return VECTOR2I( aPosition.x + cursorDisplacement.x, aPosition.y + cursorDisplacement.y );
 }
