@@ -471,7 +471,10 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnSymbolNameKillFocus( wxFocusEvent& event )
         m_delayedFocusPage = 0;
 
         if( m_SymbolNameCtrl->GetValidator()->Validate( m_SymbolNameCtrl ) )
+        {
             m_delayedFocusCtrl = nullptr;
+            m_delayedFocusPage = -1;
+        }
     }
 
     event.Skip();
