@@ -153,7 +153,7 @@ if( APPLE )
         include( BundleUtilities )
         fixup_bundle( ${KICAD_BIN}/pl_editor.app/Contents/MacOS/pl_editor
             \"\"
-            \"\"
+            \"${PYTHON_FRAMEWORK}\"
             )
         " COMPONENT Runtime
         )

@@ -189,7 +189,7 @@ if( APPLE )
             include( BundleUtilities )
             fixup_bundle( ${KICAD_BIN}/gerbview.app/Contents/MacOS/gerbview
                 \"\"
-                \"\"
+                \"${PYTHON_FRAMEWORK}\"
                 )
             " COMPONENT Runtime
         )

@@ -76,7 +76,7 @@ if( APPLE )
         include( BundleUtilities )
         fixup_bundle( ${KICAD_BIN}/bitmap2component.app/Contents/MacOS/bitmap2component
             \"\"
-            \"\"
+            \"${PYTHON_FRAMEWORK}\"
             )
         " COMPONENT Runtime
         )

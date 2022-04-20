@@ -786,7 +786,7 @@ if( APPLE )
         include( BundleUtilities )
         fixup_bundle( ${KICAD_BIN}/pcbnew.app/Contents/MacOS/pcbnew
             \"\"
-            \"\"
+            \"${PYTHON_FRAMEWORK}\"
             )
         " COMPONENT Runtime
         )

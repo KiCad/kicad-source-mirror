@@ -152,7 +152,7 @@ if( APPLE )
         include( BundleUtilities )
         fixup_bundle( ${KICAD_BIN}/pcb_calculator.app/Contents/MacOS/pcb_calculator
             \"\"
-            \"\"
+            \"${PYTHON_FRAMEWORK}\"
             )
         " COMPONENT Runtime
         )
