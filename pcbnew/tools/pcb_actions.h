@@ -374,6 +374,8 @@ public:
     static TOOL_ACTION saveToLibrary;
 
     static TOOL_ACTION editFootprint;
+    static TOOL_ACTION duplicateFootprint;
+    static TOOL_ACTION renameFootprint;
     static TOOL_ACTION deleteFootprint;
     static TOOL_ACTION cutFootprint;
     static TOOL_ACTION copyFootprint;

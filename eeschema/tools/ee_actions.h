@@ -179,6 +179,7 @@ public:
     static TOOL_ACTION newSymbol;
     static TOOL_ACTION editSymbol;
     static TOOL_ACTION duplicateSymbol;
+    static TOOL_ACTION renameSymbol;
     static TOOL_ACTION deleteSymbol;
     static TOOL_ACTION cutSymbol;
     static TOOL_ACTION copySymbol;

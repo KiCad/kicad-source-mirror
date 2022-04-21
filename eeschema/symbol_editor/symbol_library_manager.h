@@ -2,7 +2,7 @@
  * This program source code file is symbol of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -174,6 +174,8 @@ public:
      * Return true if symbol has unsaved modifications.
      */
     bool IsSymbolModified( const wxString& aAlias, const wxString& aLibrary ) const;
+
+    void SetSymbolModified( const wxString& aAlias, const wxString& aLibrary );
 
     /**
      * Clear the modified flag for all symbols in a library.

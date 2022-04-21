@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,8 @@
 #include <bitmaps/bitmap_types.h>
 #include <confirm.h>
 #include <wx/filedlg.h>
-
+#include "wx/generic/textdlgg.h"
+#include "string_utils.h"
 
 bool SYMBOL_EDITOR_CONTROL::Init()
 {
@@ -108,6 +109,7 @@ bool SYMBOL_EDITOR_CONTROL::Init()
         ctxMenu.AddItem( EE_ACTIONS::copySymbol,         symbolSelectedCondition );
         ctxMenu.AddItem( EE_ACTIONS::pasteSymbol,        libInferredCondition );
         ctxMenu.AddItem( EE_ACTIONS::duplicateSymbol,    symbolSelectedCondition );
+        ctxMenu.AddItem( EE_ACTIONS::renameSymbol,       symbolSelectedCondition );
         ctxMenu.AddItem( EE_ACTIONS::deleteSymbol,       symbolSelectedCondition );
 
         ctxMenu.AddSeparator();
@@ -285,6 +287,96 @@ int SYMBOL_EDITOR_CONTROL::DuplicateSymbol( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
+{
+    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
+    {
+        SYMBOL_EDIT_FRAME*      editFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+        SYMBOL_LIBRARY_MANAGER& libMgr = editFrame->GetLibManager();
+
+        LIB_ID   libId = editFrame->GetTreeLIBID();
+        wxString libName = libId.GetLibNickname();
+        wxString symbolName = libId.GetLibItemName();
+        wxString newName = symbolName;
+        bool     done = false;
+
+        if( !libMgr.LibraryExists( libName ) )
+            return 0;
+
+        while( !done )
+        {
+            wxTextEntryDialog dlg( m_frame, _( "New name:" ), _( "Change Symbol Name" ), newName );
+
+            if( dlg.ShowModal() != wxID_OK )
+                return 0;   // canceled by user
+
+            newName = dlg.GetValue();
+            newName.Trim( true ).Trim( false );
+
+            if( newName.IsEmpty() )
+            {
+                DisplayErrorMessage( editFrame, _( "Symbol name cannot be empty." ) );
+            }
+            else if( libMgr.SymbolExists( newName, libName ) )
+            {
+                DisplayErrorMessage( editFrame, wxString::Format( _( "Symbol name '%s' already "
+                                                                     "in use in library '%s'." ),
+                                                                  UnescapeString( newName ),
+                                                                  libName ) );
+                newName = symbolName;
+            }
+            else
+            {
+                done = true;
+            }
+        }
+
+        wxString    oldName = symbolName;
+        LIB_SYMBOL* libSymbol = nullptr;
+
+        if( editFrame->IsCurrentSymbol( libId ) )
+        {
+            // Update buffered copy
+            libSymbol = libMgr.GetBufferedSymbol( oldName, libName );
+
+            libSymbol->SetName( newName );
+            libSymbol->GetFieldById( VALUE_FIELD )->SetText( newName );
+
+            libMgr.UpdateSymbolAfterRename( libSymbol, newName, libName );
+
+            // Now update canvasy copy
+            libSymbol = editFrame->GetCurSymbol();
+
+            libSymbol->SetName( newName );
+            libSymbol->GetFieldById( VALUE_FIELD )->SetText( newName );
+
+            editFrame->RebuildView();
+            editFrame->OnModify();
+
+            // N.B. The view needs to be rebuilt first as the Symbol Properties change may
+            // invalidate the view pointers by rebuilting the field table
+            editFrame->UpdateMsgPanel();
+        }
+        else
+        {
+            libSymbol = libMgr.GetBufferedSymbol( oldName, libName );
+
+            libSymbol->SetName( newName );
+            libSymbol->GetFieldById( VALUE_FIELD )->SetText( newName );
+
+            libMgr.UpdateSymbolAfterRename( libSymbol, newName, libName );
+            libMgr.SetSymbolModified( newName, libName );
+        }
+
+        wxDataViewItem treeItem = libMgr.GetAdapter()->FindItem( libId );
+        editFrame->UpdateLibraryTree( treeItem, libSymbol );
+        editFrame->FocusOnLibId( LIB_ID( libName, newName ) );
+    }
+
+    return 0;
+}
+
+
 int SYMBOL_EDITOR_CONTROL::OnDeMorgan( const TOOL_EVENT& aEvent )
 {
     int convert = aEvent.IsAction( &EE_ACTIONS::showDeMorganStandard ) ?
@@ -453,9 +545,8 @@ int SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
         PAGE_INFO pageSave = editFrame->GetScreen()->GetPageSettings();
         PAGE_INFO pageTemp = pageSave;
 
-        VECTOR2I symbolSize =
-                symbol->GetUnitBoundingBox( editFrame->GetUnit(),
-                                                        editFrame->GetConvert() ).GetSize();
+        VECTOR2I symbolSize = symbol->GetUnitBoundingBox( editFrame->GetUnit(),
+                                                          editFrame->GetConvert() ).GetSize();
 
         // Add a small margin to the plot bounding box
         pageTemp.SetWidthMils(  int( symbolSize.x * 1.2 ) );
@@ -552,6 +643,7 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::Revert,                ACTIONS::revert.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::DuplicateSymbol,       EE_ACTIONS::duplicateSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::RenameSymbol,          EE_ACTIONS::renameSymbol.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::CutCopyDelete,         EE_ACTIONS::deleteSymbol.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::CutCopyDelete,         EE_ACTIONS::cutSymbol.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::CutCopyDelete,         EE_ACTIONS::copySymbol.MakeEvent() );

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -284,8 +284,22 @@ bool SYMBOL_LIBRARY_MANAGER::IsSymbolModified( const wxString& aAlias,
         return false;
 
     const LIB_BUFFER& buf = libIt->second;
-    auto symbolBuf = buf.GetBuffer( aAlias );
+    const std::shared_ptr<SYMBOL_LIBRARY_MANAGER::SYMBOL_BUFFER> symbolBuf = buf.GetBuffer( aAlias );
     return symbolBuf ? symbolBuf->IsModified() : false;
+}
+
+
+void SYMBOL_LIBRARY_MANAGER::SetSymbolModified( const wxString& aAlias,
+                                                const wxString& aLibrary )
+{
+    auto libIt = m_libs.find( aLibrary );
+
+    if( libIt == m_libs.end() )
+        return;
+
+    const LIB_BUFFER& buf = libIt->second;
+    std::shared_ptr<SYMBOL_LIBRARY_MANAGER::SYMBOL_BUFFER> symbolBuf = buf.GetBuffer( aAlias );
+    symbolBuf->GetScreen()->SetContentModified();
 }
 
 

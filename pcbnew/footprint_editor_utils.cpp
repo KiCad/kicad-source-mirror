@@ -148,6 +148,20 @@ public:
 };
 
 
+void FOOTPRINT_EDIT_FRAME::UpdateLibraryTree( const wxDataViewItem& aTreeItem,
+                                              FOOTPRINT* aFootprint )
+{
+    BASIC_FOOTPRINT_INFO footprintInfo( aFootprint );
+
+    if( aTreeItem.IsOk() )   // Can be not found in tree if the current footprint is imported
+                             // from file therefore not yet in tree.
+    {
+        static_cast<LIB_TREE_NODE_LIB_ID*>( aTreeItem.GetID() )->Update( &footprintInfo );
+        m_treePane->GetLibTree()->RefreshLibTree();
+    }
+}
+
+
 void FOOTPRINT_EDIT_FRAME::editFootprintProperties( FOOTPRINT* aFootprint )
 {
     LIB_ID oldFPID = aFootprint->GetFPID();
@@ -155,18 +169,10 @@ void FOOTPRINT_EDIT_FRAME::editFootprintProperties( FOOTPRINT* aFootprint )
     DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR dialog( this, aFootprint );
     dialog.ShowModal();
 
-    // Update library tree
-    BASIC_FOOTPRINT_INFO footprintInfo( aFootprint );
-    wxDataViewItem       treeItem = m_adapter->FindItem( oldFPID );
-
-    if( treeItem.IsOk() )   // Can be not found in tree if the current footprint is imported
-                            // from file therefore not yet in tree.
-    {
-        static_cast<LIB_TREE_NODE_LIB_ID*>( treeItem.GetID() )->Update( &footprintInfo );
-        m_treePane->GetLibTree()->RefreshLibTree();
-    }
-
-    UpdateTitle();      // in case of a name change...
+    // Update library tree and title in case of a name change
+    wxDataViewItem treeItem = m_adapter->FindItem( oldFPID );
+    UpdateLibraryTree( treeItem, aFootprint );
+    UpdateTitle();
 
     UpdateMsgPanel();
 }

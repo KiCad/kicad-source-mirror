@@ -317,7 +317,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         {
             wxString msg;
 
-            msg.Printf( _( "The name '%s' conflicts with an existing entry in the library '%s'." ),
+            msg.Printf( _( "Symbol name '%s' already in use in library '%s'." ),
                         UnescapeString( newName ),
                         libName );
             DisplayErrorMessage( this, msg );

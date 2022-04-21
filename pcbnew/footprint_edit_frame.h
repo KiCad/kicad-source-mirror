@@ -181,6 +181,7 @@ public:
      * @return : true if OK, false if abort
      */
     bool SaveFootprint( FOOTPRINT* aFootprint );
+    bool DuplicateFootprint( FOOTPRINT* aFootprint );
     bool SaveFootprintAs( FOOTPRINT* aFootprint );
     bool SaveFootprintToBoard( bool aAddNew );
     bool SaveFootprintInLibrary( FOOTPRINT* aFootprint, const wxString& aLibraryName );
@@ -305,6 +306,11 @@ public:
      * Redisplay the library tree.  Used after changing modified states, descriptions, etc.
      */
     void RefreshLibraryTree();
+
+    /**
+     * Update a single node in the library tree.
+     */
+    void UpdateLibraryTree( const wxDataViewItem& treeItem, FOOTPRINT* aFootprint );
 
     ///< Reload displayed items and sets view.
     void UpdateView();

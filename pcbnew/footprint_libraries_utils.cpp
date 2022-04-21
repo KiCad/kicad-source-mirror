@@ -851,6 +851,39 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( FOOTPRINT* aFootprint )
 }
 
 
+bool FOOTPRINT_EDIT_FRAME::DuplicateFootprint( FOOTPRINT* aFootprint )
+{
+    LIB_ID     fpID = aFootprint->GetFPID();
+    wxString   libraryName = fpID.GetLibNickname();
+    wxString   footprintName = fpID.GetLibItemName();
+
+    // Legacy libraries are readable, but modifying legacy format is not allowed
+    // So prompt the user if he try to add/replace a footprint in a legacy lib
+    wxString libFullName = Prj().PcbFootprintLibs()->FindRow( libraryName )->GetFullURI();
+
+    if( IO_MGR::GuessPluginTypeFromLibPath( libFullName ) == IO_MGR::LEGACY )
+    {
+        DisplayInfoMessage( this, INFO_LEGACY_LIB_WARN_EDIT );
+        return false;
+    }
+
+    FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
+    int           i = 1;
+    wxString      newName = footprintName;
+
+    // Append a number to the name until the name is unique in the library.
+    while( tbl->FootprintExists( libraryName, newName ) )
+        newName.Printf( "%s_%d", footprintName, i++ );
+
+    aFootprint->SetFPID( LIB_ID( libraryName, newName ) );
+
+    if( aFootprint->GetValue() == footprintName )
+        aFootprint->SetValue( newName );
+
+    return SaveFootprintInLibrary( aFootprint, libraryName );
+}
+
+
 bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( FOOTPRINT* aFootprint,
                                                    const wxString& aLibraryName )
 {

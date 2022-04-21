@@ -177,7 +177,8 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
     case 0:
         if( node->m_LibId == m_frame->GetLoadedFPID() && !m_frame->IsCurrentFPFromBoard() )
         {
-            node->m_Name = m_frame->GetLoadedFPID().GetLibItemName();
+            // Do not use GetLoadedFPID(); it returns m_footprintNameWhenLoaded.
+            node->m_Name = m_frame->GetBoard()->GetFirstFootprint()->GetFPID().GetLibItemName();
 
             // mark modified part with an asterisk
             if( m_frame->GetScreen()->IsContentModified() )

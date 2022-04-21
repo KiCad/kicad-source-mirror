@@ -133,6 +133,11 @@ TOOL_ACTION EE_ACTIONS::duplicateSymbol( "eeschema.SymbolLibraryControl.duplicat
         _( "Duplicate Symbol" ), _( "Make a copy of the selected symbol" ),
         BITMAPS::duplicate );
 
+TOOL_ACTION EE_ACTIONS::renameSymbol( "eeschema.SymbolLibraryControl.renameFootprint",
+        AS_GLOBAL, 0, "",
+        _( "Rename Symbol..." ), _( "Rename the selected symbol" ),
+        BITMAPS::edit );
+
 TOOL_ACTION EE_ACTIONS::saveSymbolAs( "eeschema.SymbolLibraryControl.saveSymbolAs",
         AS_GLOBAL, 0, "",
         _( "Save As..." ),  _( "Save the current symbol to a different library." ),

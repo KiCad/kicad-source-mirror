@@ -868,7 +868,7 @@ void SYMBOL_EDIT_FRAME::DeleteSymbolFromLibrary()
             return;
     }
 
-    if( isCurrentSymbol( libId ) )
+    if( IsCurrentSymbol( libId ) )
         emptyScreen();
 
     m_libMgr->RemoveSymbol( libId.GetLibItemName(), libId.GetLibNickname() );
@@ -1027,7 +1027,7 @@ void SYMBOL_EDIT_FRAME::Revert( bool aConfirm )
         }
         else
         {
-            reload_currentSymbol = isCurrentSymbol( libId );
+            reload_currentSymbol = IsCurrentSymbol( libId );
         }
     }
 

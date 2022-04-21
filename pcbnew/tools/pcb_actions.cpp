@@ -369,6 +369,16 @@ TOOL_ACTION PCB_ACTIONS::editFootprint( "pcbnew.ModuleEditor.editFootprint",
         _( "Edit Footprint" ), _( "Show selected footprint on editor canvas" ),
         BITMAPS::edit );
 
+TOOL_ACTION PCB_ACTIONS::duplicateFootprint( "pcbnew.ModuleEditor.duplicateFootprint",
+        AS_GLOBAL, 0, "",
+        _( "Duplicate Footprint" ), _( "Make a copy of the selected footprint" ),
+        BITMAPS::duplicate );
+
+TOOL_ACTION PCB_ACTIONS::renameFootprint( "pcbnew.ModuleEditor.renameFootprint",
+        AS_GLOBAL, 0, "",
+        _( "Rename Footprint..." ), _( "Rename the selected footprint" ),
+        BITMAPS::edit );
+
 TOOL_ACTION PCB_ACTIONS::deleteFootprint( "pcbnew.ModuleEditor.deleteFootprint",
         AS_GLOBAL, 0, "",
         _( "Delete Footprint from Library" ), _( "Delete Footprint from Library" ),

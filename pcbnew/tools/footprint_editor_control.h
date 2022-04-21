@@ -58,6 +58,8 @@ public:
     int EditFootprint( const TOOL_EVENT& aEvent );
     int CutCopyFootprint( const TOOL_EVENT& aEvent );
     int PasteFootprint( const TOOL_EVENT& aEvent );
+    int DuplicateFootprint( const TOOL_EVENT& aEvent );
+    int RenameFootprint( const TOOL_EVENT& aEvent );
     int DeleteFootprint( const TOOL_EVENT& aEvent );
     int ImportFootprint( const TOOL_EVENT& aEvent );
     int ExportFootprint( const TOOL_EVENT& aEvent );

@@ -1014,6 +1014,23 @@ void SYMBOL_EDIT_FRAME::RefreshLibraryTree()
 }
 
 
+void SYMBOL_EDIT_FRAME::FocusOnLibId( const LIB_ID& aLibID )
+{
+    m_treePane->GetLibTree()->SelectLibId( aLibID );
+}
+
+
+void SYMBOL_EDIT_FRAME::UpdateLibraryTree( const wxDataViewItem& aTreeItem, LIB_SYMBOL* aSymbol )
+{
+    if( aTreeItem.IsOk() )   // Can be not found in tree if the current footprint is imported
+                             // from file therefore not yet in tree.
+    {
+        static_cast<LIB_TREE_NODE_LIB_ID*>( aTreeItem.GetID() )->Update( aSymbol );
+        m_treePane->GetLibTree()->RefreshLibTree();
+    }
+}
+
+
 SYMBOL_LIB_TABLE* SYMBOL_EDIT_FRAME::selectSymLibTable( bool aOptional )
 {
     // If no project is loaded, always work with the global table
@@ -1087,11 +1104,11 @@ void SYMBOL_EDIT_FRAME::storeCurrentSymbol()
 }
 
 
-bool SYMBOL_EDIT_FRAME::isCurrentSymbol( const LIB_ID& aLibId ) const
+bool SYMBOL_EDIT_FRAME::IsCurrentSymbol( const LIB_ID& aLibId ) const
 {
     // This will return the root symbol of any alias
     LIB_SYMBOL* symbol = m_libMgr->GetBufferedSymbol( aLibId.GetLibItemName(),
-                                                  aLibId.GetLibNickname() );
+                                                      aLibId.GetLibNickname() );
 
     // Now we can compare the libId of the current symbol and the root symbol
     return ( symbol && m_symbol && symbol->GetLibId() == m_symbol->GetLibId() );

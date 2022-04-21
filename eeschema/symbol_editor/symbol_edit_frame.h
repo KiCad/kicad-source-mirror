@@ -313,6 +313,19 @@ public:
     void RefreshLibraryTree();
 
     /**
+     * Update a symbol node in the library tree.
+     */
+    void UpdateLibraryTree( const wxDataViewItem& aTreeItem, LIB_SYMBOL* aSymbol );
+
+    /**
+     * Return either the symbol selected in the symbol tree (if context menu is active) or the
+     * symbol on the editor canvas.
+     */
+    LIB_ID GetTargetLibId() const;
+
+    void FocusOnLibId( const LIB_ID& aLibID );
+
+    /**
      * Called after the preferences dialog is run.
      */
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
@@ -356,12 +369,11 @@ public:
 
     bool IsSymbolAlias() const;
 
+    ///< Return true if \a aLibId is an alias for the editor screen symbol.
+    bool IsCurrentSymbol( const LIB_ID& aLibId ) const;
+
     ///< Restore the empty editor screen, without any symbol or library selected.
     void emptyScreen();
-
-    ///< Return either the symbol selected in the symbol tree, if context menu is active or the
-    ///< currently modified symbol.
-    LIB_ID GetTargetLibId() const;
 
 protected:
     void setupUIConditions() override;
@@ -468,9 +480,6 @@ private:
 
     ///< Store the currently modified symbol in the library manager buffer.
     void storeCurrentSymbol();
-
-    ///< Return true if \a aLibId is an alias for the editor screen symbol.
-    bool isCurrentSymbol( const LIB_ID& aLibId ) const;
 
     ///< Rename LIB_SYMBOL aliases to avoid conflicts before adding a symbol to a library.
     void ensureUniqueName( LIB_SYMBOL* aSymbol, const wxString& aLibrary );

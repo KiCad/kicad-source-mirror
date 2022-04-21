@@ -189,11 +189,12 @@ LIB_TREE_NODE_UNIT& LIB_TREE_NODE_LIB_ID::AddUnit( LIB_TREE_ITEM* aItem, int aUn
 
 void LIB_TREE_NODE_LIB_ID::Update( LIB_TREE_ITEM* aItem )
 {
-    // Update is called when the names match, so just update the other fields.
-
     m_LibId.SetLibNickname( aItem->GetLibId().GetLibNickname() );
+    m_LibId.SetLibItemName( aItem->GetName() );
 
+    m_Name = aItem->GetName();
     m_Desc = aItem->GetDescription();
+    m_MatchName = aItem->GetName();
 
     m_SearchText = aItem->GetSearchText();
     m_Normalized = false;
