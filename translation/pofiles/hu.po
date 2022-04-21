@@ -4,15 +4,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:55-0700\n"
-"PO-Revision-Date: 2019-06-03 15:48+0200\n"
-"Last-Translator: szlldm\n"
-"Language-Team: szlldm\n"
-"Language: hu_HU\n"
+"PO-Revision-Date: 2022-04-28 11:12+0000\n"
+"Last-Translator: Miklós Márton <martonmiklosqdev@gmail.com>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v6/hu/>\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.7.1\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #, fuzzy
@@ -8284,9 +8284,8 @@ msgid "Change selected symbol(s)"
 msgstr "Rajzjel kiválasztása"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:93
-#, fuzzy
 msgid "Change symbols matching reference designator:"
-msgstr "Alapértelmezett referencia jelölés:"
+msgstr "Alapértelmezett refdes előtag:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:94
 #, fuzzy
@@ -9278,43 +9277,39 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:76
-#, fuzzy
 msgid "Create symbol with alternate body style (De Morgan)"
-msgstr "Rajzjel létrehozása mint alternatív rajzjel (DeMorgan)"
+msgstr "Alternatív szimbólumok létrehozása (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:79
 msgid "Create symbol as power symbol"
-msgstr "Rajzjel létrehozása mint tápszimbólumk"
+msgstr "Rajzjel létrehozása mint tápszimbólum"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:82
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
-#, fuzzy
 msgid "Exclude from schematic bill of materials"
-msgstr "Bevásárlólista létrehozása"
+msgstr "Ne kerüljön bele a kapcsolási rajz BoM listájába"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:85
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:181
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
-#, fuzzy
 msgid "Exclude from board"
-msgstr "Panel törlése"
+msgstr "Nem kerül a panelre"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:103
-#, fuzzy
 msgid "Pin name position offset:"
-msgstr "Alkatrészláb szövegpozíció eltolása:"
+msgstr "Lábszám pozíciók eltolása:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:120
 msgid "Show pin number text"
-msgstr "Alkatrészláb sorszámának megjelenítése"
+msgstr "Lábak számának megjelenítése"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:124
 msgid "Show pin name text"
-msgstr "Alkatrészláb nevének megjelenítése"
+msgstr "Lábak neveinek megjelenítése"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:128
 msgid "Pin name inside"
-msgstr "Alkatrészláb nevének megjelenítés a kereten belül"
+msgstr "Lábak neveinek megjelenítés a kereten belül"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.h:74
 msgid "New Symbol"
@@ -9539,18 +9534,16 @@ msgid "Enter the number of units for a symbol that contains more than one unit"
 msgstr "Adja meg a több részegységből álló rajzjel egységeinek számát"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:199
-#, fuzzy
 msgid "All units are interchangeable"
-msgstr "Részegységek nem felcserélhetőek"
+msgstr "Mindegyik részegység felcserélhető"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:200
-#, fuzzy
 msgid ""
 "Check this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
-"Válassza ezt a lehetőséget, ha a rajzjelet tápszimbólumként szeretné "
-"használni"
+"Akkor használd ezt ha a részegységek csak a lábak\n"
+"számozásában térnek el."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:214
 #, fuzzy
@@ -9577,7 +9570,7 @@ msgstr "Lábnév megjelenítése / elrejtése"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:231
 msgid "Place pin names inside"
-msgstr "Lábnév elhelyezése a rajzjelen belülre"
+msgstr "Lábak nevei a láb felé kerüljenek"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:233
 msgid ""
