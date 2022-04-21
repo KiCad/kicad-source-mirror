@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:57-0700\n"
-"PO-Revision-Date: 2022-04-16 01:08+0000\n"
+"PO-Revision-Date: 2022-04-25 17:47+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -7252,9 +7252,8 @@ msgstr "封装浏览"
 
 #: cvpcb/display_footprints_frame.cpp:322
 #: pcbnew/toolbars_footprint_viewer.cpp:107
-#, fuzzy
 msgid "Automatic Zoom on footprint change"
-msgstr "自动分配封装"
+msgstr "封装变化时自动缩放"
 
 #: cvpcb/display_footprints_frame.cpp:406
 #, c-format
@@ -15496,13 +15495,13 @@ msgstr ""
 "换后的坐标 <b>(%.3f, %.3f)</b>。"
 
 #: eeschema/symbol_checker.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %s and %s of converted."
 msgstr ""
 "<b>重复引脚 %s</b> %s，位置 <b>(%.3f, %.3f)</b>，与引脚 %s%s 冲突，后者位于 "
-"<b>(%.3f, %.3f)</b>, 冲突敷铜在转换后的单元 %c 和 %c。"
+"<b>(%.3f, %.3f)</b>, 冲突敷铜在转换后的单元 %s 和 %s。"
 
 #: eeschema/symbol_checker.cpp:122
 #, c-format
@@ -15514,37 +15513,37 @@ msgstr ""
 "<b>(%s,%s)</b>。"
 
 #: eeschema/symbol_checker.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
-"<b>重复引脚 %s</b> %s，位置 <b>(%s, %s)</b>，和引脚 %s%s 冲突，后者位于 "
-"<b>(%s, %s)</b>，冲突敷铜在单元 %c 和 %c。"
+"<b>重复引脚 %s</b> %s，位置 <b>(%s, %s)</b>，和引脚 %s%s 冲突，后者位于 <b>("
+"%s, %s)</b>，冲突敷铜在单元 %s和 %s。"
 
 #: eeschema/symbol_checker.cpp:163
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
-msgstr ""
+msgstr "<b> A 电源符号应当只有一个单位</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:169
 msgid "<b>A Power Symbol should have no convert option</b><br><br>"
-msgstr ""
+msgstr "<b>A 电源符号应该没有转换选项</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:175
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
-msgstr ""
+msgstr "<b>A 电源符号应该只有一个引脚</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:184
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only a input or output power pin has "
 "meaning<br><br>"
-msgstr ""
+msgstr "<b>可疑电源符号</b><br>仅一个输入或输出电源引脚有意义<br><br>"
 
 #: eeschema/symbol_checker.cpp:191
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only invisible input power pins are "
 "automatically connected<br><br>"
-msgstr ""
+msgstr "<b>可疑电源符号</b><br>仅不可见输入电源引脚自动连接<br><br>"
 
 #: eeschema/symbol_checker.cpp:216
 #, c-format
@@ -15777,27 +15776,24 @@ msgid "Error saving project library table."
 msgstr "保存工程库表时出错。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:61
-#, fuzzy
 msgid "Do not update library tables"
-msgstr "编辑封装库表"
+msgstr "不要更新库表"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:63
 msgid "Do not perform any additional operations after saving library."
 msgstr "保存库后不执行任何额外操作。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:66
-#, fuzzy
 msgid "Update existing library table entry"
-msgstr "将现有库添加到表中"
+msgstr "更新现有库表项"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:67
-#, fuzzy
 msgid ""
 "Update symbol library table entry to point to new library.\n"
 "\n"
 "The original library will no longer be available for use."
 msgstr ""
-"用新库替换符号库表条目。\n"
+"更新符号库表条目以指向新库。\n"
 "\n"
 "原始库将不再可用。"
 
@@ -15806,7 +15802,6 @@ msgid "Add new global library table entry"
 msgstr "添加新的全局库表条目"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:73
-#, fuzzy
 msgid ""
 "Add new entry to the global symbol library table.\n"
 "\n"
@@ -15823,7 +15818,6 @@ msgid "Add new project library table entry"
 msgstr "添加新的项目库表条目"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:79
-#, fuzzy
 msgid ""
 "Add new entry to the project symbol library table.\n"
 "\n"
@@ -17357,9 +17351,9 @@ msgid "Edit Sheet Page Number"
 msgstr "编辑图纸页码"
 
 #: eeschema/tools/sch_editor_control.cpp:138
-#, fuzzy, c-format
+#, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
-msgstr "是否将 \"%s\" 恢复到上个保存的版本？"
+msgstr "是否将 \"%s\" （及所有子表）恢复到上个保存的版本？"
 
 #: eeschema/tools/sch_editor_control.cpp:569
 msgid "Reached end of schematic."
@@ -23719,23 +23713,20 @@ msgid "0.00000"
 msgstr "0.00000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
-#, fuzzy
 msgid "0.00 in / 0 mils / 0.0 mm"
-msgstr "0.0001mm / 0.01 mil"
+msgstr "0.00 英寸/ 0 mils / 0.0 毫米"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
-#, fuzzy
 msgid "0.000 / 0 / 0.00"
-msgstr "0.0001mm / 0.01 mil"
+msgstr "0.000 / 0 / 0.00"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
-#, fuzzy
 msgid "0.0000 / 0.0 / 0.000"
-msgstr "0.0001mm / 0.01 mil"
+msgstr "0.0000 / 0.0 / 0.000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.00000 / 0.00 / 0.0000"
-msgstr ""
+msgstr "0.00000 / 0.00 / 0.0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:180
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:150
@@ -23900,9 +23891,8 @@ msgid "Run clearance resolution tool..."
 msgstr "运行间隙解析工具..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:560
-#, fuzzy
 msgid "Run constraints resolution tool..."
-msgstr "运行间隙解析工具..."
+msgstr "运行约束解决工具…"
 
 #: pcbnew/dialogs/dialog_drc.cpp:587 pcbnew/dialogs/dialog_drc.cpp:763
 msgid "Open the Board Setup... dialog"
@@ -29883,14 +29873,12 @@ msgid "board setup constraints silk"
 msgstr "电路板设置约束丝印"
 
 #: pcbnew/drc/drc_engine.cpp:193
-#, fuzzy
 msgid "board setup constraints silk text height"
-msgstr "电路板设置约束丝印"
+msgstr "电路板设置约束丝印文本高度"
 
 #: pcbnew/drc/drc_engine.cpp:199
-#, fuzzy
 msgid "board setup constraints silk text thickness"
-msgstr "电路板设置约束丝印"
+msgstr "电路板设置约束丝印文本粗细"
 
 #: pcbnew/drc/drc_engine.cpp:205
 msgid "board setup constraints hole"
@@ -30001,29 +29989,29 @@ msgid "Checking %s clearance: %s."
 msgstr "正检查 %s间隙%s。"
 
 #: pcbnew/drc/drc_engine.cpp:934
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max uncoupled length: %s."
-msgstr "正在检查 %s；通孔间隙：%s。"
+msgstr "正在检查 %s 最大解耦长度：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:940
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max skew: %s."
-msgstr "正检查 %s %s: %s。"
+msgstr "正检查 %s 最大偏斜：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:946
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s gap: %s."
-msgstr "正检查 %s %s: %s。"
+msgstr "正检查 %s 间隔：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:952
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s thermal spoke width: %s."
-msgstr "敷铜 %s 散热辐条宽度：%s。"
+msgstr "正检查 %s 热辐条宽度：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:958
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s zone connection: %s."
-msgstr "正在检查网络连接..."
+msgstr "正检查 %s 区域连接：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:974 pcbnew/drc/drc_engine.cpp:975
 #: pcbnew/drc/drc_engine.cpp:976 pcbnew/tools/board_inspection_tool.cpp:202
@@ -30033,54 +30021,54 @@ msgid "undefined"
 msgstr "未定义"
 
 #: pcbnew/drc/drc_engine.cpp:989
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s track width: opt %s."
-msgstr "正在检查布线宽度..."
+msgstr "正检查 %s 布线宽度：最优 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:995
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints track width: min %s."
-msgstr "电路板设置约束空间层"
+msgstr "正检查电路板设置约束布线宽度：最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1003
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s annular width: min %s."
-msgstr "检查过孔环形孔..."
+msgstr "正检查 %s 环形宽度：最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s via diameter: opt %s."
-msgstr "正在检查过孔直径..."
+msgstr "正检查 %s 过孔直径：最优 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1017
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints via diameter: min %s."
-msgstr "电路板设置约束边缘"
+msgstr "正检查电路板设置约束过孔直径：最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1026
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole size: opt %s."
-msgstr "正在检查 %s；通孔间隙：%s。"
+msgstr "正检查 %s 孔尺寸：最优 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints hole size: min %s."
-msgstr "电路板设置约束孔"
+msgstr "正检查电路板设置约束孔尺寸：最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1040 pcbnew/drc/drc_engine.cpp:1046
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s: min %s."
-msgstr "正检查 %s %s: %s。"
+msgstr "正检查 %s：最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1054
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s diff pair gap: opt %s."
-msgstr "正检查 %s间隙%s。"
+msgstr "正检查 %s 差分对间距：最优 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1061
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints clearance: min %s."
-msgstr "正在检查 %s；外框间隙：%s。"
+msgstr "正检查电路板设置约束间隙：最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1069 pcbnew/drc/drc_engine.cpp:1095
 #: pcbnew/drc/drc_engine.cpp:1457
@@ -34998,47 +34986,42 @@ msgid "Report incomplete: could not compile custom design rules.  "
 msgstr "报告不完整：无法编译自定义设计规则。  "
 
 #: pcbnew/tools/board_inspection_tool.cpp:235
-#, fuzzy
 msgid "Violation Report"
-msgstr "违规严重程度"
+msgstr "违规报告"
 
 #: pcbnew/tools/board_inspection_tool.cpp:261
-#, fuzzy
 msgid "Uncoupled Length"
-msgstr "线路长度"
+msgstr "解耦长度"
 
 #: pcbnew/tools/board_inspection_tool.cpp:262
-#, fuzzy
 msgid "Diff pair uncoupled length resolution for:"
-msgstr "差分未耦合长度太长"
+msgstr "下列项的差分对非耦合长度分辨率："
 
 #: pcbnew/tools/board_inspection_tool.cpp:270
 #: pcbnew/tools/board_inspection_tool.cpp:752
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved max uncoupled length: %s."
-msgstr "删除未使用的网络 %s。"
+msgstr "已解决的最大非耦合长度： %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:277
 #: pcbnew/tools/board_inspection_tool.cpp:1066
-#, fuzzy
 msgid "Text height resolution for:"
-msgstr "禁止区解析适用于:"
+msgstr "下列项的文本高度分辨率："
 
 #: pcbnew/tools/board_inspection_tool.cpp:285
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved height constraints: min %s; max %s."
-msgstr "宽度约束：最小 %s；最优 %s；最大 %s。"
+msgstr "已解决的高度约束：最小 %s；最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:292
 #: pcbnew/tools/board_inspection_tool.cpp:1082
-#, fuzzy
 msgid "Text thickness resolution for:"
-msgstr "文本宽度超出范围"
+msgstr "下列项的文字粗细分辨率："
 
 #: pcbnew/tools/board_inspection_tool.cpp:300
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thickness constraints: min %s; max %s."
-msgstr "宽度约束：最小 %s；最优 %s；最大 %s。"
+msgstr "已解决的粗细约束：最小 %s；最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:307
 #: pcbnew/tools/board_inspection_tool.cpp:987
@@ -35046,9 +35029,9 @@ msgid "Track width resolution for:"
 msgstr "布线宽度解析适用于:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved width constraints: min %s; max %s."
-msgstr "宽度约束：最小 %s；最优 %s；最大 %s。"
+msgstr "已解决的宽度约束：最小 %s；最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:322
 #: pcbnew/tools/board_inspection_tool.cpp:1006
@@ -35057,14 +35040,13 @@ msgstr "过孔直径解析适用于:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:330
 #: pcbnew/tools/board_inspection_tool.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved diameter constraints: min %s; max %s."
-msgstr "直径约束：最小 %s；最优 %s；最大 %s。"
+msgstr "已解决的直径约束：最小 %s；最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:336
-#, fuzzy
 msgid "Via Annulus"
-msgstr "通孔环"
+msgstr "过孔环"
 
 #: pcbnew/tools/board_inspection_tool.cpp:337
 #: pcbnew/tools/board_inspection_tool.cpp:1023
@@ -35072,9 +35054,9 @@ msgid "Via annular width resolution for:"
 msgstr "过孔环形宽度解析适用于:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
-msgstr "环形宽度约束：最小 %s；最优 %s；最大 %s。"
+msgstr "已解决的环形宽度约束：最小 %s；最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:352
 #: pcbnew/tools/board_inspection_tool.cpp:1043
@@ -35087,9 +35069,8 @@ msgid "Hole diameter resolution for:"
 msgstr "通孔环形宽度解析适用于:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:367
-#, fuzzy
 msgid "Hole Clearance"
-msgstr "过孔间隙"
+msgstr "孔间隙"
 
 #: pcbnew/tools/board_inspection_tool.cpp:368
 #: pcbnew/tools/board_inspection_tool.cpp:824
@@ -35129,9 +35110,8 @@ msgid "No 'mechanical_hole_clearance' constraints defined."
 msgstr "未定义 'mechanical_hole_clearance' (机械孔间隙) 约束。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:411
-#, fuzzy
 msgid "Edge Clearance"
-msgstr "间隙"
+msgstr "边缘间隙"
 
 #: pcbnew/tools/board_inspection_tool.cpp:412
 #: pcbnew/tools/board_inspection_tool.cpp:857
@@ -35206,29 +35186,25 @@ msgid "Clearance: %s."
 msgstr "间隙： %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:725
-#, fuzzy
 msgid "Diff Pair"
-msgstr "差分对间距"
+msgstr "差分对"
 
 #: pcbnew/tools/board_inspection_tool.cpp:726
-#, fuzzy
 msgid "Diff pair gap resolution for:"
-msgstr "间隙解析适用于:"
+msgstr "下列项的差分对间隙分辨率："
 
 #: pcbnew/tools/board_inspection_tool.cpp:731
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
-msgstr "宽度约束：最小 %s；最优 %s；最大 %s。"
+msgstr "已解决的间距约束：最小 %s；最优 %s；最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:739
-#, fuzzy
 msgid "Diff pair max uncoupled length resolution for:"
-msgstr "差分未耦合长度太长"
+msgstr "下列项的差分对最大未耦合长度分辨率："
 
 #: pcbnew/tools/board_inspection_tool.cpp:744
-#, fuzzy
 msgid "No 'diff_pair_uncoupled' constraints defined."
-msgstr "未定义 'mechanical_clearance' (机械间隙) 约束。"
+msgstr "未定义 'diff_pair_uncoupled' 约束。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:768
 msgid "Silkscreen clearance resolution for:"
@@ -35271,14 +35247,14 @@ msgid "Annular width constraints: min %s; opt %s; max %s."
 msgstr "环形宽度约束：最小 %s；最优 %s；最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1074
-#, fuzzy, c-format
+#, c-format
 msgid "Text height constraints: min %s; opt %s; max %s."
-msgstr "宽度约束：最小 %s；最优 %s；最大 %s。"
+msgstr "文本高度约束：最小 %s；最优 %s；最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1090
-#, fuzzy, c-format
+#, c-format
 msgid "Text thickness constraints: min %s; opt %s; max %s."
-msgstr "宽度约束：最小 %s；最优 %s；最大 %s。"
+msgstr "文本粗细约束：最小 %s；最优 %s；最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1098
 msgid "Keepouts"
