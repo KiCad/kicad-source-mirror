@@ -204,6 +204,9 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( EE_ACTIONS::lineMode45,       ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( EE_ACTIONS::lineMode135,      ACTION_TOOLBAR::TOGGLE );
 
+    m_optionsToolBar->AddScaledSeparator( this );
+    m_optionsToolBar->Add( EE_ACTIONS::toggleAnnotateAuto, ACTION_TOOLBAR::TOGGLE );
+
     if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
         m_optionsToolBar->Add( ACTIONS::toggleBoundingBoxes,    ACTION_TOOLBAR::TOGGLE );
 

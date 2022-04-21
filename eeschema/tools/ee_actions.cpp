@@ -709,6 +709,11 @@ TOOL_ACTION EE_ACTIONS::lineModeNext( "eeschema.EditorControl.lineModeNext",
         _( "Line Mode for Wires and Buses" ), _( "Switch to next line mode" ),
         BITMAPS::unknown );
 
+TOOL_ACTION EE_ACTIONS::toggleAnnotateAuto( "eeschema.EditorControl.annotateAutomatically",
+        AS_GLOBAL, 0, "",
+        _( "Annotate Automatically" ), _( "Toggle automatic annotation of new parts symbols" ),
+        BITMAPS::auto_associate );
+
 TOOL_ACTION EE_ACTIONS::repairSchematic( "eeschema.EditorControl.repairSchematic",
         AS_GLOBAL, 0, "",
         _( "Repair Schematic" ),

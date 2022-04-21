@@ -227,6 +227,9 @@ public:
     static TOOL_ACTION lineMode135;
     static TOOL_ACTION lineModeNext;
 
+    // Annotation
+    static TOOL_ACTION toggleAnnotateAuto;
+
     // SPICE
     static TOOL_ACTION runSimulation;
     static TOOL_ACTION simProbe;
