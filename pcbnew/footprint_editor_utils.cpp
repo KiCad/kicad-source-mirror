@@ -84,8 +84,7 @@ void FOOTPRINT_EDIT_FRAME::LoadFootprintFromLibrary( LIB_ID aFPID )
             val->SetText( wxT( "Val**" ) );
     }
 
-    if( m_zoomSelectBox->GetSelection() == 0 )
-        Zoom_Automatique( false );
+    Zoom_Automatique( false );
 
     Update3DView( true, true );
 
