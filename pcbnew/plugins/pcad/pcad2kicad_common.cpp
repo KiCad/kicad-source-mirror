@@ -161,7 +161,7 @@ double StrToDoublePrecisionUnits( const wxString& aStr, char aAxe,
         else
         {
             ls.ToCDouble( &i );
-            i = Mils2iu( i );
+            i *= IU_PER_MILS;
         }
     }
     else
