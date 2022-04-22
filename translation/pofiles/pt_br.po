@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:57-0700\n"
-"PO-Revision-Date: 2022-04-19 21:54+0000\n"
+"PO-Revision-Date: 2022-04-25 17:47+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -7408,9 +7408,8 @@ msgstr "Visualizador de footprint"
 
 #: cvpcb/display_footprints_frame.cpp:322
 #: pcbnew/toolbars_footprint_viewer.cpp:107
-#, fuzzy
 msgid "Automatic Zoom on footprint change"
-msgstr "Atribua os footprints automaticamente"
+msgstr "Aproximação automática nas alterações dos footprints"
 
 #: cvpcb/display_footprints_frame.cpp:406
 #, c-format
@@ -15919,14 +15918,14 @@ msgstr ""
 "pino %s%s no local <b>(%.3f, %.3f)</b> dos que foram convertidos."
 
 #: eeschema/symbol_checker.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %s and %s of converted."
 msgstr ""
 "<b>Duplique o pino %s</b> %s no local <b> (%.3f, %.3f)</b> está em conflito "
-"com o pino %s%s no local <b>(%.3f, %.3f)</b> nas unidades convertidas %c e "
-"%c."
+"com o pino %s%s no local <b>(%.3f, %.3f)</b> nas unidades convertidas %s e "
+"%s."
 
 #: eeschema/symbol_checker.cpp:122
 #, c-format
@@ -15938,37 +15937,42 @@ msgstr ""
 "pino %s%s no local <b>(%s,%s)</b>."
 
 #: eeschema/symbol_checker.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
 "<b>Duplique o pino %s</b> %s no local <b> (%s, %s)</b> está em conflito com "
-"o pino %s%s no local <b>(%s, %s)</b> nas unidades %c e %c."
+"o pino %s%s no local <b>(%s, %s)</b> nas unidades %s e %s."
 
 #: eeschema/symbol_checker.cpp:163
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
-msgstr ""
+msgstr "<b>Um símbolo de energia deve ter apenas uma unidade</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:169
 msgid "<b>A Power Symbol should have no convert option</b><br><br>"
 msgstr ""
+"<b>Um símbolo de alimentação não deve ter uma opção de conversão</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:175
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
-msgstr ""
+msgstr "<b>Um símbolo de alimentação deve ter apenas um pino</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:184
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only a input or output power pin has "
 "meaning<br><br>"
 msgstr ""
+"<b>Símbolo de alimentação suspeito</b><br>Apenas um pino de alimentação de "
+"entrada ou de saída faz sentido<br><br>"
 
 #: eeschema/symbol_checker.cpp:191
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only invisible input power pins are "
 "automatically connected<br><br>"
 msgstr ""
+"<b>Símbolo de alimentação suspeito</b><br>Apenas os pinos invisíveis de "
+"alimentação da entrada são conectados automaticamente<br><br>"
 
 #: eeschema/symbol_checker.cpp:216
 #, c-format
@@ -16216,28 +16220,25 @@ msgid "Error saving project library table."
 msgstr "Houve um erro ao salvar a tabela da biblioteca do projeto."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:61
-#, fuzzy
 msgid "Do not update library tables"
-msgstr "Editar tabela de bibliotecas de footprint"
+msgstr "Não atualize as tabelas da biblioteca"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:63
 msgid "Do not perform any additional operations after saving library."
 msgstr "Não execute nenhuma operação adicional após salvar a biblioteca."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:66
-#, fuzzy
 msgid "Update existing library table entry"
-msgstr "Adicione uma biblioteca já existente à tabela"
+msgstr "Atualize a entrada existente na tabela da biblioteca"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:67
-#, fuzzy
 msgid ""
 "Update symbol library table entry to point to new library.\n"
 "\n"
 "The original library will no longer be available for use."
 msgstr ""
-"Substitua a entrada da tabela da biblioteca de símbolos por uma nova "
-"biblioteca.\n"
+"Atualize a entrada dos símbolos na tabela da biblioteca para que aponte para "
+"a nova biblioteca.\n"
 "\n"
 "A biblioteca original não estará mais disponível para uso."
 
@@ -16246,34 +16247,32 @@ msgid "Add new global library table entry"
 msgstr "Adicione uma nova entrada global na tabela da biblioteca"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:73
-#, fuzzy
 msgid ""
 "Add new entry to the global symbol library table.\n"
 "\n"
 "The symbol library table nickname is suffixed with\n"
 "an integer to prevent duplicate table entries."
 msgstr ""
-"Adicione uma nova entrada global na tabela dos símbolos da biblioteca.\n"
+"Adicione uma nova entrada na tabela global dos símbolos da biblioteca.\n"
 "\n"
-"O apelido da tabela dos símbolos da biblioteca é sufixado com\n"
-"um inteiro para garantir que não haja entradas duplicadas na tabela."
+"O apelido da tabela do símbolo na biblioteca é sufixado com\n"
+"um valor inteiro visando prevenir a duplicidade de entradas na tabela."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:78
 msgid "Add new project library table entry"
 msgstr "Adicione uma nova entrada na tabela da biblioteca do projeto"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:79
-#, fuzzy
 msgid ""
 "Add new entry to the project symbol library table.\n"
 "\n"
 "The symbol library table nickname is suffixed with\n"
 "an integer to prevent duplicate table entries."
 msgstr ""
-"Adicione uma nova entrada dos símbolos na tabela da biblioteca do projeto.\n"
+"Adicione uma nova entrada na tabela dos símbolos da biblioteca.\n"
 "\n"
-"O apelido da tabela dos símbolos da biblioteca é sufixado com\n"
-"um inteiro para garantir que não haja entradas duplicadas na tabela."
+"O apelido da tabela do símbolo na biblioteca é sufixado com\n"
+"um valor inteiro visando prevenir a duplicidade de entradas na tabela."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:162
 msgid "[from schematic]"
@@ -16466,7 +16465,7 @@ msgstr "Corpo"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1332
 msgid "Power Symbol"
-msgstr "Símbolo da alimentação"
+msgstr "Símbolo de alimentação"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:54
 msgid "Import Symbol"
@@ -17831,9 +17830,11 @@ msgid "Edit Sheet Page Number"
 msgstr "Edite o número da página da folha"
 
 #: eeschema/tools/sch_editor_control.cpp:138
-#, fuzzy, c-format
+#, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
-msgstr "Deseja reverter '%s' para a última versão que foi salva?"
+msgstr ""
+"Deseja reverter '%s' (e todas as páginas associadas) para a última versão "
+"salva?"
 
 #: eeschema/tools/sch_editor_control.cpp:569
 msgid "Reached end of schematic."
@@ -24303,20 +24304,19 @@ msgstr "0.00000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.00 in / 0 mils / 0.0 mm"
-msgstr ""
+msgstr "0.00 in / 0 mils / 0.0 mm"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
-#, fuzzy
 msgid "0.000 / 0 / 0.00"
-msgstr "0.00000"
+msgstr "0.000 / 0 / 0.00"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.0000 / 0.0 / 0.000"
-msgstr ""
+msgstr "0.0000 / 0.0 / 0.000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.00000 / 0.00 / 0.0000"
-msgstr ""
+msgstr "0.00000 / 0.00 / 0.0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:180
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:150
@@ -24487,9 +24487,8 @@ msgid "Run clearance resolution tool..."
 msgstr "Execute a ferramenta de resolução do isolamento..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:560
-#, fuzzy
 msgid "Run constraints resolution tool..."
-msgstr "Execute a ferramenta de resolução do isolamento..."
+msgstr "Execute a ferramenta de resolução de restrições..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:587 pcbnew/dialogs/dialog_drc.cpp:763
 msgid "Open the Board Setup... dialog"
@@ -30597,14 +30596,12 @@ msgid "board setup constraints silk"
 msgstr "configuração da serigrafia da placa"
 
 #: pcbnew/drc/drc_engine.cpp:193
-#, fuzzy
 msgid "board setup constraints silk text height"
-msgstr "configuração da serigrafia da placa"
+msgstr "configuração da restrição da altura da serigrafia do texto da placa"
 
 #: pcbnew/drc/drc_engine.cpp:199
-#, fuzzy
 msgid "board setup constraints silk text thickness"
-msgstr "configuração da serigrafia da placa"
+msgstr "configuração da restrição da espessura da serigrafia do texto da placa"
 
 #: pcbnew/drc/drc_engine.cpp:205
 msgid "board setup constraints hole"
@@ -30715,29 +30712,29 @@ msgid "Checking %s clearance: %s."
 msgstr "Verificando %s isolamento: %s."
 
 #: pcbnew/drc/drc_engine.cpp:934
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max uncoupled length: %s."
-msgstr "Alterar a referência %s para %s."
+msgstr "Verificando o comprimento desacoplado máximo de %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:940
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max skew: %s."
-msgstr "Verificando %s %s: %s."
+msgstr "Verificando a inclinação máxima %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:946
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s gap: %s."
-msgstr "Verificando %s %s: %s."
+msgstr "Verificando a lacuna %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:952
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s thermal spoke width: %s."
-msgstr "Largura do raio térmico da região %s: %s."
+msgstr "Verificando a largura do raio térmico %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:958
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s zone connection: %s."
-msgstr "Verificando conexões da rede..."
+msgstr "Verificando a conexão da região %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:974 pcbnew/drc/drc_engine.cpp:975
 #: pcbnew/drc/drc_engine.cpp:976 pcbnew/tools/board_inspection_tool.cpp:202
@@ -30747,54 +30744,61 @@ msgid "undefined"
 msgstr "indefinido"
 
 #: pcbnew/drc/drc_engine.cpp:989
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s track width: opt %s."
-msgstr "Verificando as larguras das trilhas..."
+msgstr "Verificando a largura da trilha %s: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:995
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints track width: min %s."
-msgstr "configuração das restrições do pedaço"
+msgstr ""
+"Verificando as configurações das restrições da largura da trilha da placa: "
+"min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1003
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s annular width: min %s."
-msgstr "Verificando através dos anéis anulares..."
+msgstr "Verificando a largura anular %s: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s via diameter: opt %s."
-msgstr "Verificando os diâmetros das vias..."
+msgstr "Verificando %s o diâmetro via: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1017
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints via diameter: min %s."
-msgstr "configuração das restrições da borda"
+msgstr ""
+"Verificando a configuração das restrições do diâmetro da via na placa: min "
+"%s."
 
 #: pcbnew/drc/drc_engine.cpp:1026
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole size: opt %s."
-msgstr "Alterar a referência %s para %s."
+msgstr "Verificando o tamanho do furo %s: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints hole size: min %s."
-msgstr "configuração das restrições do furo"
+msgstr ""
+"Verificando as configurações das restrições do tamanho do furo na placa: min "
+"%s."
 
 #: pcbnew/drc/drc_engine.cpp:1040 pcbnew/drc/drc_engine.cpp:1046
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s: min %s."
-msgstr "Verificando %s %s: %s."
+msgstr "Verificando %s: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1054
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s diff pair gap: opt %s."
-msgstr "Verificando %s isolamento: %s."
+msgstr "Verificando a diferença da lacuna do par %s: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1061
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints clearance: min %s."
-msgstr "configuração das restrições do furo"
+msgstr ""
+"Verificando a configuração das restrições do isolamento na placa: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1069 pcbnew/drc/drc_engine.cpp:1095
 #: pcbnew/drc/drc_engine.cpp:1457
@@ -35901,47 +35905,42 @@ msgstr ""
 "design.  "
 
 #: pcbnew/tools/board_inspection_tool.cpp:235
-#, fuzzy
 msgid "Violation Report"
-msgstr "Gravidade da violação"
+msgstr "Relatório de violação"
 
 #: pcbnew/tools/board_inspection_tool.cpp:261
-#, fuzzy
 msgid "Uncoupled Length"
-msgstr "Comprimento roteado"
+msgstr "Comprimento desacoplado"
 
 #: pcbnew/tools/board_inspection_tool.cpp:262
-#, fuzzy
 msgid "Diff pair uncoupled length resolution for:"
-msgstr "Comprimento do diferencial desacoplado é muito longo"
+msgstr "Resolução do comprimento do par desacoplado para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:270
 #: pcbnew/tools/board_inspection_tool.cpp:752
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved max uncoupled length: %s."
-msgstr "Rede sem uso %s foi removida."
+msgstr "O máximo comprimento desacoplado foi resolvido: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:277
 #: pcbnew/tools/board_inspection_tool.cpp:1066
-#, fuzzy
 msgid "Text height resolution for:"
-msgstr "Resolução das exclusões para:"
+msgstr "Resolução da altura do texto para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:285
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved height constraints: min %s; max %s."
-msgstr "Restrições da largura: min %s; opt %s; máx %s."
+msgstr "As restrições da altura foram resolvidas: min %s; máx %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:292
 #: pcbnew/tools/board_inspection_tool.cpp:1082
-#, fuzzy
 msgid "Text thickness resolution for:"
-msgstr "A espessura do texto está fora do alcance"
+msgstr "Resolução da espessura do texto para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:300
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thickness constraints: min %s; max %s."
-msgstr "Restrições da largura: min %s; opt %s; máx %s."
+msgstr "Restrições resolvidas da espessura: min %s; máx %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:307
 #: pcbnew/tools/board_inspection_tool.cpp:987
@@ -35949,9 +35948,9 @@ msgid "Track width resolution for:"
 msgstr "Resolução da largura da trilha para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved width constraints: min %s; max %s."
-msgstr "Restrições da largura: min %s; opt %s; máx %s."
+msgstr "Restrições resolvidas da largura: min %s; máx. %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:322
 #: pcbnew/tools/board_inspection_tool.cpp:1006
@@ -35960,14 +35959,13 @@ msgstr "Resolução do diâmetro da via para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:330
 #: pcbnew/tools/board_inspection_tool.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved diameter constraints: min %s; max %s."
-msgstr "Restrições do diâmetro: min %s; opt %s; máx %s."
+msgstr "Restrições resolvidas do diâmetro: min %s; máx %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:336
-#, fuzzy
 msgid "Via Annulus"
-msgstr "Largura da via anular"
+msgstr "Via Anular"
 
 #: pcbnew/tools/board_inspection_tool.cpp:337
 #: pcbnew/tools/board_inspection_tool.cpp:1023
@@ -35975,9 +35973,9 @@ msgid "Via annular width resolution for:"
 msgstr "Resolução da largura da via anular para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
-msgstr "Restrições da largura anular: min %s; opt %s; máx %s."
+msgstr "Restrições resolvidas da largura anular: min %s; máx %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:352
 #: pcbnew/tools/board_inspection_tool.cpp:1043
@@ -35990,9 +35988,8 @@ msgid "Hole diameter resolution for:"
 msgstr "Resolução do diâmetro do furo para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:367
-#, fuzzy
 msgid "Hole Clearance"
-msgstr "Folga"
+msgstr "Isolamento do furo"
 
 #: pcbnew/tools/board_inspection_tool.cpp:368
 #: pcbnew/tools/board_inspection_tool.cpp:824
@@ -36032,9 +36029,8 @@ msgid "No 'mechanical_hole_clearance' constraints defined."
 msgstr "Nenhuma restrição 'mechanical_hole_clearance' foi definida."
 
 #: pcbnew/tools/board_inspection_tool.cpp:411
-#, fuzzy
 msgid "Edge Clearance"
-msgstr "Folga"
+msgstr "Isolamento da borda"
 
 #: pcbnew/tools/board_inspection_tool.cpp:412
 #: pcbnew/tools/board_inspection_tool.cpp:857
@@ -36110,29 +36106,25 @@ msgid "Clearance: %s."
 msgstr "Isolamento: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:725
-#, fuzzy
 msgid "Diff Pair"
-msgstr "Lacuna entre a diferença do par dif"
+msgstr "Par diferencial"
 
 #: pcbnew/tools/board_inspection_tool.cpp:726
-#, fuzzy
 msgid "Diff pair gap resolution for:"
-msgstr "Resolução do isolamento para:"
+msgstr "Resolução do par de diferenças para a lacuna:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:731
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
-msgstr "Restrições da largura: min %s; opt %s; máx %s."
+msgstr "Restrições resolvidas da lacuna: min %s; opt %s; máx %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:739
-#, fuzzy
 msgid "Diff pair max uncoupled length resolution for:"
-msgstr "Comprimento do diferencial desacoplado é muito longo"
+msgstr "Resolução da diferença do comprimento máximo do par desacoplado para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:744
-#, fuzzy
 msgid "No 'diff_pair_uncoupled' constraints defined."
-msgstr "Nenhuma restrição 'mechanical_clearance' foi definida."
+msgstr "Nenhuma restrição 'diff_pair_uncoupled' foi definida."
 
 #: pcbnew/tools/board_inspection_tool.cpp:768
 msgid "Silkscreen clearance resolution for:"
@@ -36175,14 +36167,14 @@ msgid "Annular width constraints: min %s; opt %s; max %s."
 msgstr "Restrições da largura anular: min %s; opt %s; máx %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1074
-#, fuzzy, c-format
+#, c-format
 msgid "Text height constraints: min %s; opt %s; max %s."
-msgstr "Restrições da largura: min %s; opt %s; máx %s."
+msgstr "Restrições da altura do texto: min %s; opt %s; máx %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1090
-#, fuzzy, c-format
+#, c-format
 msgid "Text thickness constraints: min %s; opt %s; max %s."
-msgstr "Restrições da largura: min %s; opt %s; máx %s."
+msgstr "Restrições da espessura do texto: min %s; opt %s; máx %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1098
 msgid "Keepouts"
