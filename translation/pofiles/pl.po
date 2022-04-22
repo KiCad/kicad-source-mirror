@@ -7,17 +7,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:57-0700\n"
-"PO-Revision-Date: 2022-04-19 21:54+0000\n"
+"PO-Revision-Date: 2022-04-24 08:57+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -7367,9 +7367,8 @@ msgstr "Przeglądarka footprintów"
 
 #: cvpcb/display_footprints_frame.cpp:322
 #: pcbnew/toolbars_footprint_viewer.cpp:107
-#, fuzzy
 msgid "Automatic Zoom on footprint change"
-msgstr "Automatycznie przypisz footprinty"
+msgstr "Automatycznie przybliżanie przy zmianie footprintu"
 
 #: cvpcb/display_footprints_frame.cpp:406
 #, c-format
@@ -15852,14 +15851,14 @@ msgstr ""
 "z pinem %s%s na pozycji <b>(%.3f, %.3f)</b> w symbolu skonwertowanym."
 
 #: eeschema/symbol_checker.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %s and %s of converted."
 msgstr ""
 "<b>Zdublowany pin %s</b> %s na pozycji <b>(%.3f, %.3f)</b> jest w konflikcie "
-"z pinem %s%s na pozycji <b>(%.3f, %.3f)</b> w jednostce %c oraz "
-"skonwertowanej %c."
+"z pinem %s%s na pozycji <b>(%.3f, %.3f)</b> w jednostce %s oraz "
+"skonwertowanej %s."
 
 #: eeschema/symbol_checker.cpp:122
 #, c-format
@@ -15871,37 +15870,44 @@ msgstr ""
 "pinem %s%s na pozycji <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
 "<b>Zdublowany pin %s</b> %s na pozycji <b>(%s, %s)</b> jest w konflikcie z "
-"pinem %s%s na pozycji <b>(%s, %s)</b> w jednostkach %c oraz %c."
+"pinem %s%s na pozycji <b>(%s, %s)</b> w jednostkach %s oraz %s."
 
 #: eeschema/symbol_checker.cpp:163
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
 msgstr ""
+"<b>Symbol zasilania powinien składać się tylko z jednej jednostki</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:169
 msgid "<b>A Power Symbol should have no convert option</b><br><br>"
 msgstr ""
+"<b>Symbol zasilania nie powinien mieć zaznaczonej opcji "
+"Skonwertowany</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:175
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
-msgstr ""
+msgstr "<b>Symbol zasilania powinien posiadać tylko jeden pin</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:184
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only a input or output power pin has "
 "meaning<br><br>"
 msgstr ""
+"<b>Podejrzany symbol zasilania</b><br>Tylko wyjście lub wejście zasilania ma "
+"znaczenie<br><br>"
 
 #: eeschema/symbol_checker.cpp:191
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only invisible input power pins are "
 "automatically connected<br><br>"
 msgstr ""
+"<b>Podejrzany symbol zasilania</b><br>Tylko niewidoczne wejścia zasilania są "
+"automatycznie łączone<br><br>"
 
 #: eeschema/symbol_checker.cpp:216
 #, c-format
@@ -16146,27 +16152,24 @@ msgid "Error saving project library table."
 msgstr "Błąd podczas zapisu lokalnej tablicy bibliotek."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:61
-#, fuzzy
 msgid "Do not update library tables"
-msgstr "Edycja tabeli bibliotek footprintów"
+msgstr "Nie uaktualniaj tabel bibliotek"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:63
 msgid "Do not perform any additional operations after saving library."
 msgstr "Nie wykonuj żadnych dodatkowych operacji po zapisaniu biblioteki."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:66
-#, fuzzy
 msgid "Update existing library table entry"
-msgstr "Dodaje istniejącą bibliotekę do tabeli"
+msgstr "Uaktualnij istniejący wpis o bibliotece w tabeli"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:67
-#, fuzzy
 msgid ""
 "Update symbol library table entry to point to new library.\n"
 "\n"
 "The original library will no longer be available for use."
 msgstr ""
-"Zamienia wpis w tabeli bibliotek symboli nową biblioteką.\n"
+"Uaktualnia wpis w tabeli bibliotek by wskazywał na nową bibliotekę.\n"
 "\n"
 "Poprzednia biblioteka przestanie być już dostępna."
 
@@ -16175,7 +16178,6 @@ msgid "Add new global library table entry"
 msgstr "Dodaj nowy wpis do Globalnej Tabeli Bibliotek"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:73
-#, fuzzy
 msgid ""
 "Add new entry to the global symbol library table.\n"
 "\n"
@@ -16192,7 +16194,6 @@ msgid "Add new project library table entry"
 msgstr "Dodaj nowy wpis w Bibliotece Symboli Projektu"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:79
-#, fuzzy
 msgid ""
 "Add new entry to the project symbol library table.\n"
 "\n"
@@ -17756,9 +17757,11 @@ msgid "Edit Sheet Page Number"
 msgstr "Edycja numeru strony arkusza"
 
 #: eeschema/tools/sch_editor_control.cpp:138
-#, fuzzy, c-format
+#, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
-msgstr "Przywrócić '%s' do ostatnio zapisanej wersji?"
+msgstr ""
+"Przywrócić '%s' (i wszystkie jego arkusze podrzędne) do ostatnio zapisanej "
+"wersji?"
 
 #: eeschema/tools/sch_editor_control.cpp:569
 msgid "Reached end of schematic."
@@ -24190,44 +24193,43 @@ msgstr "Wybiera stopień precyzji wyświetlanego wymiaru"
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:186
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "0.0"
-msgstr "0.0"
+msgstr "0,0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "0.00"
-msgstr "0.00"
+msgstr "0,00"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "0.000"
-msgstr "0.000"
+msgstr "0,000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "0.0000"
-msgstr "0.0000"
+msgstr "0,0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "0.00000"
-msgstr "0.00000"
+msgstr "0,00000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.00 in / 0 mils / 0.0 mm"
-msgstr ""
+msgstr "0,00 cala / 0 milsów / 0,0 mm"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
-#, fuzzy
 msgid "0.000 / 0 / 0.00"
-msgstr "0.00000"
+msgstr "0,00000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.0000 / 0.0 / 0.000"
-msgstr ""
+msgstr "0,0000 / 0,0 / 0,000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.00000 / 0.00 / 0.0000"
-msgstr ""
+msgstr "0,00000 / 0,00 / 0,0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:180
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:150
@@ -24395,9 +24397,8 @@ msgid "Run clearance resolution tool..."
 msgstr "Uruchamiam analizę prześwitów..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:560
-#, fuzzy
 msgid "Run constraints resolution tool..."
-msgstr "Uruchamiam analizę prześwitów..."
+msgstr "Uruchamiam narzędzie to analizy ograniczeń..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:587 pcbnew/dialogs/dialog_drc.cpp:763
 msgid "Open the Board Setup... dialog"
@@ -28224,7 +28225,7 @@ msgstr "Wpisz tekst jaki umieścić na wybranej warstwie."
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:100
 msgid "Knockout"
-msgstr "Strefa bezkonkurencyjna"
+msgstr "W negatywie"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:104
 msgid "Keep text upright"
@@ -30509,14 +30510,12 @@ msgid "board setup constraints silk"
 msgstr "ograniczenia w konfiguracji płytki dla opisów"
 
 #: pcbnew/drc/drc_engine.cpp:193
-#, fuzzy
 msgid "board setup constraints silk text height"
-msgstr "ograniczenia w konfiguracji płytki dla opisów"
+msgstr "ograniczenia w konfiguracji płytki dla wysokości opisów"
 
 #: pcbnew/drc/drc_engine.cpp:199
-#, fuzzy
 msgid "board setup constraints silk text thickness"
-msgstr "ograniczenia w konfiguracji płytki dla opisów"
+msgstr "ograniczenia w konfiguracji płytki dla grubości tekstu opisów"
 
 #: pcbnew/drc/drc_engine.cpp:205
 msgid "board setup constraints hole"
@@ -30627,29 +30626,29 @@ msgid "Checking %s clearance: %s."
 msgstr "Sprawdzanie %s prześwit: %s."
 
 #: pcbnew/drc/drc_engine.cpp:934
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max uncoupled length: %s."
-msgstr "Sprawdzanie %s; prześwit otworu: %s."
+msgstr "Sprawdzanie %s pod względem maksymalnej długości bez pary: %s."
 
 #: pcbnew/drc/drc_engine.cpp:940
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max skew: %s."
-msgstr "Sprawdzam %s %s: %s."
+msgstr "Sprawdzam %s pod względem maksymalnego ukosu: %s."
 
 #: pcbnew/drc/drc_engine.cpp:946
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s gap: %s."
-msgstr "Sprawdzam %s %s: %s."
+msgstr "Sprawdzam %s pod względem prześwitu: %s."
 
 #: pcbnew/drc/drc_engine.cpp:952
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s thermal spoke width: %s."
-msgstr "Strefa %s szerokość poł. termicznego: %s."
+msgstr "Sprawdzam %s pod względem szerokość poł. termicznego: %s."
 
 #: pcbnew/drc/drc_engine.cpp:958
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s zone connection: %s."
-msgstr "Sprawdzenie połączeń poszczególnych sieci..."
+msgstr "Sprawdzenie %s pod względem łączy ze strefą: %s."
 
 #: pcbnew/drc/drc_engine.cpp:974 pcbnew/drc/drc_engine.cpp:975
 #: pcbnew/drc/drc_engine.cpp:976 pcbnew/tools/board_inspection_tool.cpp:202
@@ -30659,54 +30658,55 @@ msgid "undefined"
 msgstr "niezdefiniowany"
 
 #: pcbnew/drc/drc_engine.cpp:989
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s track width: opt %s."
-msgstr "Sprawdzenie szerokości ścieżek..."
+msgstr "Sprawdzenie %s pod względem szerokości ścieżek: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:995
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints track width: min %s."
-msgstr "ograniczenia w konfiguracji płytki dla pól zajętości"
+msgstr "Sprawdzenie szerokości ścieżki w ustawieniach płytki: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1003
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s annular width: min %s."
-msgstr "Sprawdzenie pierścieni przelotek..."
+msgstr "Sprawdzenie %s pod względem szerokości pierścieni: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s via diameter: opt %s."
-msgstr "Sprawdzanie rozmiar przelotki..."
+msgstr "Sprawdzenie %s pod względem rozmiarów przelotek: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1017
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints via diameter: min %s."
-msgstr "ograniczenia w konfiguracji płytki dla krawędzi"
+msgstr ""
+"Sprawdzenie ograniczeń rozmiaru przelotki w ustawieniach płytki: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1026
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole size: opt %s."
-msgstr "Sprawdzanie %s; prześwit otworu: %s."
+msgstr "Sprawdzanie %s pod względem rozmiarów otworu: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints hole size: min %s."
-msgstr "ograniczenia w konfiguracji płytki dla otworów"
+msgstr "Sprawdzenie ograniczeń rozmiaru otworu w ustawieniach płytki: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1040 pcbnew/drc/drc_engine.cpp:1046
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s: min %s."
-msgstr "Sprawdzam %s %s: %s."
+msgstr "Sprawdzam %s: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1054
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s diff pair gap: opt %s."
-msgstr "Sprawdzanie %s prześwit: %s."
+msgstr "Sprawdzenie %s pod względem prześwitu pary różnicowej: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1061
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints clearance: min %s."
-msgstr "Sprawdzanie %s; prześwit obszaru zajętości: %s."
+msgstr "Sprawdzenie ograniczeń prześwitu w ustawieniach płytki: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1069 pcbnew/drc/drc_engine.cpp:1095
 #: pcbnew/drc/drc_engine.cpp:1457
@@ -35794,83 +35794,77 @@ msgid "Report incomplete: could not compile custom design rules.  "
 msgstr "Raport niekompletny: nie można skompilować reguł projektowych.  "
 
 #: pcbnew/tools/board_inspection_tool.cpp:235
-#, fuzzy
 msgid "Violation Report"
-msgstr "Poziom naruszenia"
+msgstr "Raport naruszeń"
 
 #: pcbnew/tools/board_inspection_tool.cpp:261
-#, fuzzy
 msgid "Uncoupled Length"
-msgstr "Długość trasowania"
+msgstr "Długość bez pary"
 
 #: pcbnew/tools/board_inspection_tool.cpp:262
-#, fuzzy
 msgid "Diff pair uncoupled length resolution for:"
-msgstr "Zbyt długa para różnicowa"
+msgstr "Analiza długości dla niesprzężonej pary różnicowej:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:270
 #: pcbnew/tools/board_inspection_tool.cpp:752
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved max uncoupled length: %s."
-msgstr "Usunięto nieużywaną sieć %s."
+msgstr "Przeanalizowano maksymalną długość niesprzężonej pary różnicowej: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:277
 #: pcbnew/tools/board_inspection_tool.cpp:1066
-#, fuzzy
 msgid "Text height resolution for:"
-msgstr "Analiza strefy chronionej dla:"
+msgstr "Analiza dla wysokości tekstu:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:285
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved height constraints: min %s; max %s."
-msgstr "Ograniczenia szerokości: min %s; optymalnie %s; maks %s."
+msgstr "Przeanalizowano ograniczenia wysokości tekstu: min %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:292
 #: pcbnew/tools/board_inspection_tool.cpp:1082
-#, fuzzy
 msgid "Text thickness resolution for:"
-msgstr "Grubość tekstu poza zakresem"
+msgstr "Analiza dla grubości tekstu:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:300
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thickness constraints: min %s; max %s."
-msgstr "Ograniczenia szerokości: min %s; optymalnie %s; maks %s."
+msgstr "Przeanalizowano ograniczenia grubości: min %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:307
 #: pcbnew/tools/board_inspection_tool.cpp:987
 msgid "Track width resolution for:"
-msgstr "Analiza szerokości ścieżki dla:"
+msgstr "Analiza dla szerokości ścieżki:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved width constraints: min %s; max %s."
-msgstr "Ograniczenia szerokości: min %s; optymalnie %s; maks %s."
+msgstr "Przeanalizowano ograniczenia szerokości: min %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:322
 #: pcbnew/tools/board_inspection_tool.cpp:1006
 msgid "Via diameter resolution for:"
-msgstr "Analiza szerokości przelotek dla:"
+msgstr "Analiza dla szerokości przelotki:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:330
 #: pcbnew/tools/board_inspection_tool.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved diameter constraints: min %s; max %s."
-msgstr "Ograniczenia rozmiaru: min %s; optymalnie %s; maks %s."
+msgstr "Przeanalizowano ograniczenia rozmiaru: min %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:336
-#, fuzzy
 msgid "Via Annulus"
-msgstr "Szerokość pierścienia przelotki"
+msgstr "Pierścienie przelotki"
 
 #: pcbnew/tools/board_inspection_tool.cpp:337
 #: pcbnew/tools/board_inspection_tool.cpp:1023
 msgid "Via annular width resolution for:"
-msgstr "Analiza szerokości pierścieni przelotki dla:"
+msgstr "Analiza dla szerokości pierścienia przelotki:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
-msgstr "Ograniczenia w szerokości pierścienia: min %s; optymalnie %s; maks %s."
+msgstr "Przeanalizowano ograniczenia szerokości pierścienia: min %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:352
 #: pcbnew/tools/board_inspection_tool.cpp:1043
@@ -35880,17 +35874,16 @@ msgstr "Rozmiar otworu"
 #: pcbnew/tools/board_inspection_tool.cpp:353
 #: pcbnew/tools/board_inspection_tool.cpp:1044
 msgid "Hole diameter resolution for:"
-msgstr "Analiza rozmiaru otworu dla:"
+msgstr "Analiza dla rozmiaru otworu:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:367
-#, fuzzy
 msgid "Hole Clearance"
-msgstr "Prześwit"
+msgstr "Prześwit otworów"
 
 #: pcbnew/tools/board_inspection_tool.cpp:368
 #: pcbnew/tools/board_inspection_tool.cpp:824
 msgid "Hole clearance resolution for:"
-msgstr "Analiza prześwitu dla otworów:"
+msgstr "Analiza dla prześwitu otworów:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:376
 #: pcbnew/tools/board_inspection_tool.cpp:462
@@ -35917,7 +35910,7 @@ msgstr "Prześwit pola lutowniczego: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:391
 #: pcbnew/tools/board_inspection_tool.cpp:921
 msgid "Mechanical hole clearance resolution for:"
-msgstr "Analiza prześwitu otworów mechanicznych dla:"
+msgstr "Analiza dla prześwitu otworów mechanicznych:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:400
 #: pcbnew/tools/board_inspection_tool.cpp:933
@@ -35925,24 +35918,23 @@ msgid "No 'mechanical_hole_clearance' constraints defined."
 msgstr "Nie zdefiniowano ograniczenia 'mechanical_hole_clearance'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:411
-#, fuzzy
 msgid "Edge Clearance"
-msgstr "Prześwit"
+msgstr "Prześwit względem krawędzi"
 
 #: pcbnew/tools/board_inspection_tool.cpp:412
 #: pcbnew/tools/board_inspection_tool.cpp:857
 msgid "Edge clearance resolution for:"
-msgstr "Analiza prześwitu dla krawędzi:"
+msgstr "Analiza dla prześwitu wobec krawędzi:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:454
 #: pcbnew/tools/board_inspection_tool.cpp:692
 msgid "Clearance resolution for:"
-msgstr "Analiza prześwitu dla:"
+msgstr "Analiza dla prześwitu:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:477
 #: pcbnew/tools/board_inspection_tool.cpp:882
 msgid "Mechanical clearance resolution for:"
-msgstr "Analiza prześwitu mechanicznego dla:"
+msgstr "Analiza dla prześwitu mechanicznego:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:486
 #: pcbnew/tools/board_inspection_tool.cpp:894
@@ -35964,7 +35956,7 @@ msgstr "Raport o prześwitach"
 
 #: pcbnew/tools/board_inspection_tool.cpp:613
 msgid "Zone connection resolution for:"
-msgstr "Analiza połączeń ze strefami:"
+msgstr "Analiza dla połączeń ze strefami:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:622
 #, c-format
@@ -36002,37 +35994,33 @@ msgid "Clearance: %s."
 msgstr "Prześwit: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:725
-#, fuzzy
 msgid "Diff Pair"
-msgstr "Prześwit między ścieżkami pary różnicowej"
+msgstr "Para różnicowa"
 
 #: pcbnew/tools/board_inspection_tool.cpp:726
-#, fuzzy
 msgid "Diff pair gap resolution for:"
-msgstr "Analiza prześwitu dla:"
+msgstr "Analiza dla prześwitu pary różnicowej:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:731
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
-msgstr "Ograniczenia szerokości: min %s; optymalnie %s; maks %s."
+msgstr "Przeanalizowano ograniczenia prześwitu: min %s; optymalnie %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:739
-#, fuzzy
 msgid "Diff pair max uncoupled length resolution for:"
-msgstr "Zbyt długa para różnicowa"
+msgstr "Analiza długości dla niesprzężonej pary różnicowej:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:744
-#, fuzzy
 msgid "No 'diff_pair_uncoupled' constraints defined."
-msgstr "Nie zdefiniowano ograniczenia 'mechanical_clearance'."
+msgstr "Nie zdefiniowano ograniczenia 'diff_pair_uncoupled'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:768
 msgid "Silkscreen clearance resolution for:"
-msgstr "Analiza prześwitu warstwy opisowej dla:"
+msgstr "Analiza dla prześwitu warstwy opisowej:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:792
 msgid "Courtyard clearance resolution for:"
-msgstr "Analiza prześwitu dla pól zajętości:"
+msgstr "Analiza dla prześwitu pomiędzy polami zajętości:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:873
 msgid "Mechanical"
@@ -36067,14 +36055,14 @@ msgid "Annular width constraints: min %s; opt %s; max %s."
 msgstr "Ograniczenia w szerokości pierścienia: min %s; optymalnie %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1074
-#, fuzzy, c-format
+#, c-format
 msgid "Text height constraints: min %s; opt %s; max %s."
-msgstr "Ograniczenia szerokości: min %s; optymalnie %s; maks %s."
+msgstr "Ograniczenia wysokości tekstu: min %s; optymalnie %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1090
-#, fuzzy, c-format
+#, c-format
 msgid "Text thickness constraints: min %s; opt %s; max %s."
-msgstr "Ograniczenia szerokości: min %s; optymalnie %s; maks %s."
+msgstr "Ograniczenia grubości tekstu: min %s; optymalnie %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1098
 msgid "Keepouts"
@@ -36082,7 +36070,7 @@ msgstr "Strefy chronione"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1099
 msgid "Keepout resolution for:"
-msgstr "Analiza strefy chronionej dla:"
+msgstr "Analiza dla strefy chronionej:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1109
 #: pcbnew/tools/board_inspection_tool.cpp:1131
