@@ -80,8 +80,8 @@ DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, const wxString& messag
         m_infoBar->RemoveAllButtons();
         m_infoBar->ShowMessage( message );
 
-        m_rbScope->SetSelection( 0 );
-        m_rbScope->Enable( false );
+        m_rbScope_Schematic->SetValue( true );
+        m_rbScope_Schematic->Enable( false );
     }
 
     m_MessageWindow->SetLabel( _( "Annotation Messages:" ) );
@@ -106,8 +106,11 @@ DIALOG_ANNOTATE::~DIALOG_ANNOTATE()
     cfg->m_AnnotatePanel.method = GetAnnotateAlgo();
     cfg->m_AnnotatePanel.options = m_rbOptions->GetSelection();
 
-    if( m_rbScope->IsEnabled() )
-        cfg->m_AnnotatePanel.scope = m_rbScope->GetSelection();
+    if( m_rbScope_Schematic->IsEnabled() )
+    {
+        cfg->m_AnnotatePanel.scope = GetScope();
+        cfg->m_AnnotatePanel.recursive = m_checkRecursive->GetValue();
+    }
 
     cfg->m_AnnotatePanel.messages_filter = m_MessageWindow->GetVisibleSeverities();
 
@@ -137,8 +140,19 @@ void DIALOG_ANNOTATE::InitValues()
     EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     int option;
 
-    if( m_rbScope->IsEnabled() )
-        m_rbScope->SetSelection( cfg->m_AnnotatePanel.scope );
+    if( m_rbScope_Schematic->IsEnabled() )
+    {
+        switch( cfg->m_AnnotatePanel.scope )
+        {
+        default:
+        case 0: m_rbScope_Schematic->SetValue( true ); break;
+        case 1: m_rbScope_Sheet->SetValue( true );     break;
+        case 2: m_rbScope_Selection->SetValue( true ); break;
+        }
+
+        m_checkRecursive->SetValue( cfg->m_AnnotatePanel.recursive );
+    }
+
 
     m_rbOptions->SetSelection( cfg->m_AnnotatePanel.options );
 
@@ -250,13 +264,12 @@ bool DIALOG_ANNOTATE::GetResetItems()
 
 ANNOTATE_SCOPE_T DIALOG_ANNOTATE::GetScope()
 {
-    switch( m_rbScope->GetSelection() )
-    {
-    case 0:  return ANNOTATE_ALL;
-    case 1:  return ANNOTATE_CURRENT_SHEET;
-    case 2:  return ANNOTATE_SELECTION;
-    default: return ANNOTATE_ALL;
-    }
+    if( m_rbScope_Schematic->GetValue() )
+        return ANNOTATE_ALL;
+    else if( m_rbScope_Sheet->GetValue() )
+        return ANNOTATE_CURRENT_SHEET;
+    else
+        return ANNOTATE_SELECTION;
 }
 
 

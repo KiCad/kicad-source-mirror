@@ -2276,6 +2276,14 @@ int SCH_EDITOR_CONTROL::ToggleAnnotateAuto( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::ToggleAnnotateRecursive( const TOOL_EVENT& aEvent )
+{
+    EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
+    cfg->m_AnnotatePanel.recursive = !cfg->m_AnnotatePanel.recursive;
+    return 0;
+}
+
+
 int SCH_EDITOR_CONTROL::TogglePythonConsole( const TOOL_EVENT& aEvent )
 {
 

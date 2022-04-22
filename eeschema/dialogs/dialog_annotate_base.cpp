@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version 3.10.1-133-g388db8e4)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,6 +20,8 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	bmainSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_infoBar = new WX_INFOBAR( this );
+	m_infoBar->SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
+	m_infoBar->SetEffectDuration( 500 );
 	m_infoBar->Hide();
 
 	bmainSizer->Add( m_infoBar, 0, wxEXPAND|wxBOTTOM, 5 );
@@ -34,11 +36,23 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxString m_rbScopeChoices[] = { _("Entire schematic"), _("Current sheet only"), _("Selection only") };
-	int m_rbScopeNChoices = sizeof( m_rbScopeChoices ) / sizeof( wxString );
-	m_rbScope = new wxRadioBox( this, wxID_ANY, _("Scope"), wxDefaultPosition, wxDefaultSize, m_rbScopeNChoices, m_rbScopeChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbScope->SetSelection( 1 );
-	fgSizer1->Add( m_rbScope, 0, wxALL|wxEXPAND, 5 );
+	wxStaticBoxSizer* sbSizer3;
+	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Scope") ), wxVERTICAL );
+
+	m_rbScope_Schematic = new wxRadioButton( sbSizer3->GetStaticBox(), wxID_ANY, _("Entire schematic"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	sbSizer3->Add( m_rbScope_Schematic, 0, wxALL, 5 );
+
+	m_rbScope_Sheet = new wxRadioButton( sbSizer3->GetStaticBox(), wxID_ANY, _("Current sheet only"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer3->Add( m_rbScope_Sheet, 0, wxALL, 5 );
+
+	m_rbScope_Selection = new wxRadioButton( sbSizer3->GetStaticBox(), wxID_ANY, _("Selection"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer3->Add( m_rbScope_Selection, 0, wxALL, 5 );
+
+	m_checkRecursive = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Recurse into subsheets"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer3->Add( m_checkRecursive, 0, wxALL, 5 );
+
+
+	fgSizer1->Add( sbSizer3, 1, wxALL|wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizer1;
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Order") ), wxVERTICAL );
@@ -150,7 +164,6 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_ANNOTATE_BASE::OnClose ) );
-	m_rbScope->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnOptionChanged ), NULL, this );
 	m_rbSortBy_X_Position->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnOptionChanged ), NULL, this );
 	m_rbSortBy_Y_Position->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnOptionChanged ), NULL, this );
 	m_rbOptions->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnOptionChanged ), NULL, this );
@@ -167,7 +180,6 @@ DIALOG_ANNOTATE_BASE::~DIALOG_ANNOTATE_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_ANNOTATE_BASE::OnClose ) );
-	m_rbScope->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnOptionChanged ), NULL, this );
 	m_rbSortBy_X_Position->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnOptionChanged ), NULL, this );
 	m_rbSortBy_Y_Position->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnOptionChanged ), NULL, this );
 	m_rbOptions->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnOptionChanged ), NULL, this );

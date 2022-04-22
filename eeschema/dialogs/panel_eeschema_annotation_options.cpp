@@ -43,6 +43,7 @@ PANEL_EESCHEMA_ANNOTATION_OPTIONS::PANEL_EESCHEMA_ANNOTATION_OPTIONS(
 void PANEL_EESCHEMA_ANNOTATION_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* aCfg )
 {
     m_checkAutoAnnotate->SetValue( aCfg->m_AnnotatePanel.automatic );
+    m_checkRecursive->SetValue( aCfg->m_AnnotatePanel.recursive );
 
     switch( aCfg->m_AnnotatePanel.sort_order )
     {
@@ -95,6 +96,7 @@ bool PANEL_EESCHEMA_ANNOTATION_OPTIONS::TransferDataFromWindow()
     EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
 
     cfg->m_AnnotatePanel.automatic = m_checkAutoAnnotate->GetValue();
+    cfg->m_AnnotatePanel.recursive = m_checkRecursive->GetValue();
 
     cfg->m_AnnotatePanel.sort_order = m_rbSortBy_Y_Position->GetValue()
                                               ? ANNOTATE_ORDER_T::SORT_BY_Y_POSITION

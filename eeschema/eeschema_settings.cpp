@@ -206,6 +206,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "annotation.automatic",
             &m_AnnotatePanel.automatic, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "annotation.recursive",
+            &m_AnnotatePanel.recursive, true ) );
+
     m_params.emplace_back( new PARAM<int>( "annotation.method",
             &m_AnnotatePanel.method, 0, 0, 2 ) );
 

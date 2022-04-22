@@ -24,6 +24,10 @@ PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE( 
 	m_checkAutoAnnotate->SetValue(true);
 	sbSizerAutomatic->Add( m_checkAutoAnnotate, 0, wxALL, 5 );
 
+	m_checkRecursive = new wxCheckBox( sbSizerAutomatic->GetStaticBox(), wxID_ANY, _("Recursively annotate subsheets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkRecursive->SetValue(true);
+	sbSizerAutomatic->Add( m_checkRecursive, 0, wxALL, 5 );
+
 
 	bLeftColumn->Add( sbSizerAutomatic, 0, wxALL|wxEXPAND, 5 );
 

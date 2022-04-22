@@ -45,6 +45,7 @@ class PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE : public RESETTABLE_PANEL
 
 	protected:
 		wxCheckBox* m_checkAutoAnnotate;
+		wxCheckBox* m_checkRecursive;
 		wxRadioButton* m_rbSortBy_X_Position;
 		wxStaticBitmap* annotate_down_right_bitmap;
 		wxRadioButton* m_rbSortBy_Y_Position;

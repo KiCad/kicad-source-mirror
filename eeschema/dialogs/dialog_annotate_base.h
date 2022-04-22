@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version 3.10.1-133-g388db8e4)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,14 +20,15 @@ class WX_INFOBAR;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
-#include <wx/radiobox.h>
 #include <wx/radiobut.h>
+#include <wx/checkbox.h>
+#include <wx/sizer.h>
+#include <wx/statbox.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
-#include <wx/sizer.h>
-#include <wx/statbox.h>
+#include <wx/radiobox.h>
 #include <wx/textctrl.h>
 #include <wx/gbsizer.h>
 #include <wx/panel.h>
@@ -52,7 +53,10 @@ class DIALOG_ANNOTATE_BASE : public DIALOG_SHIM
 
 	protected:
 		WX_INFOBAR* m_infoBar;
-		wxRadioBox* m_rbScope;
+		wxRadioButton* m_rbScope_Schematic;
+		wxRadioButton* m_rbScope_Sheet;
+		wxRadioButton* m_rbScope_Selection;
+		wxCheckBox* m_checkRecursive;
 		wxRadioButton* m_rbSortBy_X_Position;
 		wxStaticBitmap* annotate_down_right_bitmap;
 		wxRadioButton* m_rbSortBy_Y_Position;
@@ -68,7 +72,7 @@ class DIALOG_ANNOTATE_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnOptionChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnClearAnnotationClick( wxCommandEvent& event ) { event.Skip(); }
@@ -79,6 +83,7 @@ class DIALOG_ANNOTATE_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Annotate Schematic"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_ANNOTATE_BASE();
 
 };
