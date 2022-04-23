@@ -1459,7 +1459,7 @@ int BOARD_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
             continue;
         }
 
-        if( curr_area->GetLayer() != firstZone->GetLayer() )
+        if( curr_area->GetLayerSet() != firstZone->GetLayerSet() )
         {
             wxLogMessage( _( "Some zone layer sets did not match and were not merged." ) );
             continue;

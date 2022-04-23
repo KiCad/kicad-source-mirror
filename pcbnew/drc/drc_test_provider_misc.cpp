@@ -163,7 +163,7 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
                     }
                     else
                     {
-                        // Through hole pad is on whatever layers there are.
+                        // Through hole pad pierces all physical layers.
                     }
                 }
                 else if( item->Type() == PCB_VIA_T )

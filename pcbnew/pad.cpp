@@ -196,6 +196,7 @@ bool PAD::IsFlipped() const
 {
     if( GetParent() &&  GetParent()->GetLayer() == B_Cu )
         return true;
+
     return false;
 }
 
@@ -210,9 +211,8 @@ PCB_LAYER_ID PAD::GetPrincipalLayer() const
 {
     if( m_attribute == PAD_ATTRIB::SMD || m_attribute == PAD_ATTRIB::CONN )
         return m_layer;
-
-    wxFAIL_MSG( wxT( "Non-SMD/CONN pads have no principal layer." ) );
-    return m_layer;
+    else
+        return GetLayerSet().Seq().front();
 }
 
 

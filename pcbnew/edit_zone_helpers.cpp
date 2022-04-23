@@ -113,7 +113,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
 bool BOARD::TestZoneIntersection( ZONE* aZone1, ZONE* aZone2 )
 {
     // see if areas are on same layer
-    if( aZone1->GetLayer() != aZone2->GetLayer() )
+    if( !( aZone1->GetLayerSet() & aZone2->GetLayerSet() ).any() )
         return false;
 
     SHAPE_POLY_SET* poly1 = aZone1->Outline();
