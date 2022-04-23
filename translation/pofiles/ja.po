@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:57-0700\n"
-"PO-Revision-Date: 2022-04-19 21:54+0000\n"
+"PO-Revision-Date: 2022-04-25 17:47+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -5648,7 +5648,7 @@ msgstr ""
 
 #: common/pgm_base.cpp:346
 msgid "Data collection opt in request"
-msgstr ""
+msgstr "データ収集オプトイン要求"
 
 #: common/pgm_base.cpp:388
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -11855,7 +11855,7 @@ msgstr "Ω"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:965
 msgid "Propagation delay"
-msgstr ""
+msgstr "伝播遅延"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:972
 #, fuzzy
@@ -12577,9 +12577,8 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "PCBエディターでハイライトされたトラックのネットをハイライト"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
-#, fuzzy
 msgid "Line Drawing Mode:"
-msgstr "描画モード"
+msgstr "描画モード:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 #, fuzzy
