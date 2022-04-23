@@ -157,7 +157,7 @@ private:
 
     static constexpr double m_subscriptVerticalOffset   = -0.25;
     static constexpr double m_superscriptVerticalOffset = 0.45;
-    static constexpr double m_overbarOffsetRatio        = 0.02;
+    static constexpr double m_overbarOffsetRatio        = -0.15;
     static constexpr double m_overbarThicknessRatio     = 0.08;
 };
 
