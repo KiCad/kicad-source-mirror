@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:55-0700\n"
-"PO-Revision-Date: 2022-04-19 21:54+0000\n"
+"PO-Revision-Date: 2022-04-28 11:12+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v6/fi/>\n"
 "Language: fi\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -14856,15 +14856,15 @@ msgstr "Tallenna Simulaation Työkirja Nimellä"
 
 #: eeschema/sim/sim_plot_frame.cpp:1202
 msgid "Save Plot as Image"
-msgstr "Tallenna tontti kuvana"
+msgstr "Tallenna Piirustustuloste kuvana"
 
 #: eeschema/sim/sim_plot_frame.cpp:1219
 msgid "Save Plot Data"
-msgstr "Tallenna tonttitiedot"
+msgstr "Tallenna Piirustustiedot"
 
 #: eeschema/sim/sim_plot_frame.cpp:1515
 msgid "You need to run plot-providing simulation first."
-msgstr "Sinun on ensin suoritettava juoni-antava simulointi."
+msgstr "Sinun on ensin suoritettava piirustuksen-antava simulointi."
 
 #: eeschema/sim/sim_plot_frame.cpp:1760
 msgid ""
@@ -14896,11 +14896,11 @@ msgstr "Näytä kohdistin"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:19
 msgid "New Plot"
-msgstr "Uusi juoni"
+msgstr "Uusi Piirustus"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:39
 msgid "Save as Image"
-msgstr "Tallenna kuvana"
+msgstr "Tallenna Kuvana"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:43
 msgid "Save as .csv File"
@@ -14943,15 +14943,15 @@ msgstr "Simulointi"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:101
 msgid "Show &Grid"
-msgstr "Näytä ruu&dukko"
+msgstr "Näytä &Ruudukko"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:105
 msgid "Show &Legend"
-msgstr "Show & Legend"
+msgstr "Show &Selite"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:111
 msgid "Dotted Current/Phase"
-msgstr "Pistevirta / vaihe"
+msgstr "Pistevirta/Vaihe"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:115
 msgid "White Background"
@@ -15020,7 +15020,7 @@ msgstr "Napa-nolla"
 
 #: eeschema/sim/spice_simulator.cpp:79
 msgid "Transfer function"
-msgstr "Siirto-toiminto"
+msgstr "Siirtotoiminto"
 
 #: eeschema/sim/spice_simulator.cpp:83
 msgid "UNKNOWN!"
@@ -27773,7 +27773,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:134
 msgid "Allow fillets outside zone outline"
-msgstr "Salli fileet vyöhykkeen ääriviivan ulkopuolella"
+msgstr "Salli kaistaleet vyöhykkeen ääriviivan ulkopuolella"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:149
 msgid "Length tuning"
@@ -28045,7 +28045,7 @@ msgstr "Fab_Front()"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:65
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:629
 msgid "Off-board, manufacturing"
-msgstr "Ei levyllä, tuotantoapu"
+msgstr "Ei levyllä, valmistus"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:70
 msgid "If you want an adhesive template for the front side of the board"
@@ -28323,43 +28323,43 @@ msgstr "In10"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:278
 msgid "In11"
-msgstr "Vuonna11"
+msgstr "In11"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:292
 msgid "In12"
-msgstr "Vuonna 12"
+msgstr "In12"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:306
 msgid "In13"
-msgstr "Vuonna13"
+msgstr "In13"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:320
 msgid "In14"
-msgstr "Vuonna 14"
+msgstr "In14"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:334
 msgid "In15"
-msgstr "Vuonna15"
+msgstr "In15"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:348
 msgid "In16"
-msgstr "Vuonna 16"
+msgstr "In16"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:362
 msgid "In17"
-msgstr "Vuonna 17"
+msgstr "In17"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:376
 msgid "In18"
-msgstr "Vuonna 18"
+msgstr "In18"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:390
 msgid "In19"
-msgstr "Vuonna 19"
+msgstr "In19"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:404
 msgid "In20"
-msgstr "Vuonna20"
+msgstr "In20"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:418
 msgid "In21"
@@ -28383,19 +28383,19 @@ msgstr "In25"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:488
 msgid "In26"
-msgstr "Vuonna26"
+msgstr "In26"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:502
 msgid "In27"
-msgstr "Vuonna 27"
+msgstr "In27"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:516
 msgid "In28"
-msgstr "Vuonna 28"
+msgstr "In28"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:530
 msgid "In29"
-msgstr "Vuonna 29"
+msgstr "In29"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:544
 msgid "In30"
@@ -28510,7 +28510,7 @@ msgstr "Käyttäjä 1"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:783
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:793
 msgid "User defined layer"
-msgstr "Käyttäjän määrittelemä taso"
+msgstr "Käyttäjän määrittelemä kerros"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:720
 msgid "User2"
@@ -29111,8 +29111,7 @@ msgstr "Pidä teksti tasattuna"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:123
 msgid "When checked, dimension text will be kept aligned with dimension lines"
 msgstr ""
-"Kun tämä valitaan, ulottuvuusteksti pidetään kohdistettuna mittaviivojen "
-"kanssa"
+"Kun tämä valitaan, mittateksti pidetään kohdistettuna mittaviivojen kanssa"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:135
 msgid "How many digits of precision to show"
