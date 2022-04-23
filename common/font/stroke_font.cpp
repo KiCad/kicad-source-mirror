@@ -294,21 +294,16 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
         VECTOR2D barStart( aPosition.x + barOffset.x + barTrim, cursor.y - barOffset.y );
         VECTOR2D barEnd( cursor.x + barOffset.x - barTrim, cursor.y - barOffset.y );
 
-        if( !aAngle.IsZero() )
-        {
-            RotatePoint( barStart, aOrigin, aAngle );
-            RotatePoint( barEnd, aOrigin, aAngle );
-        }
-
         if( aGlyphs )
         {
-            std::unique_ptr<STROKE_GLYPH> overbarGlyph = std::make_unique<STROKE_GLYPH>();
+            STROKE_GLYPH overbarGlyph;
 
-            overbarGlyph->AddPoint( barStart );
-            overbarGlyph->AddPoint( barEnd );
-            overbarGlyph->Finalize();
+            overbarGlyph.AddPoint( barStart );
+            overbarGlyph.AddPoint( barEnd );
+            overbarGlyph.Finalize();
 
-            aGlyphs->push_back( std::move( overbarGlyph ) );
+            aGlyphs->push_back( overbarGlyph.Transform( { 1.0, 1.0 }, { 0, 0 }, false,
+                                                         aAngle, aMirror, aOrigin ) );
         }
     }
 

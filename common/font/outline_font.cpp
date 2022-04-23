@@ -322,6 +322,10 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
 
     for( unsigned int i = 0; i < glyphCount; i++ )
     {
+        // Don't process glyphs that were already included in a previous cluster
+        if( i > 0 && glyphInfo[i].cluster == glyphInfo[i-1].cluster )
+            continue;
+
         if( aGlyphs )
         {
             FT_Load_Glyph( face, glyphInfo[i].codepoint, FT_LOAD_NO_BITMAP );
@@ -429,6 +433,12 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
             topLeft.x += aSize.y * ITALIC_TILT;
             topRight.x += aSize.y * ITALIC_TILT;
             extents.x += aSize.y * ITALIC_TILT;
+        }
+
+        if( aMirror )
+        {
+            topLeft.x = aOrigin.x - ( topLeft.x - aOrigin.x );
+            topRight.x = aOrigin.x - ( topRight.x - aOrigin.x );
         }
 
         if( !aAngle.IsZero() )
