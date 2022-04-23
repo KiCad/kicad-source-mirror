@@ -16,16 +16,16 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:57-0700\n"
-"PO-Revision-Date: 2022-04-19 21:54+0000\n"
+"PO-Revision-Date: 2022-04-25 17:47+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -8315,7 +8315,7 @@ msgstr "Aliasname"
 #: eeschema/dialogs/dialog_bus_manager.cpp:75
 #: eeschema/dialogs/dialog_bus_manager.cpp:109
 msgid "Rename"
-msgstr "Umbennenen"
+msgstr "Umbenennen"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:89
 msgid "Alias Members"
@@ -20013,7 +20013,7 @@ msgstr ""
 
 #: kicad/project_tree_item.cpp:132
 msgid "Rename File"
-msgstr "Datei umbennenen"
+msgstr "Datei umbenennen"
 
 #: kicad/project_tree_item.cpp:140
 msgid "Unable to rename file ... "
@@ -20103,7 +20103,7 @@ msgstr "Datei umbenennen..."
 
 #: kicad/project_tree_pane.cpp:745
 msgid "Rename file"
-msgstr "Datei umbennenen"
+msgstr "Datei umbenennen"
 
 #: kicad/project_tree_pane.cpp:749
 msgid "Rename Files..."
