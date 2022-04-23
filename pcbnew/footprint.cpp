@@ -2214,15 +2214,15 @@ void FOOTPRINT::CheckFootprintAttributes( const std::function<void( const wxStri
 
         if( likelyAttr == FP_THROUGH_HOLE )
         {
-            msg.Printf( _( "Expected \"Through hole\" type but set to \"%s\"" ), GetTypeName() );
+            msg.Printf( _( "(expected 'Through hole'; actual '%s')" ), GetTypeName() );
         }
         else if( likelyAttr == FP_SMD )
         {
-            msg.Printf( _( "Expected \"SMD\" type but set to \"%s\"" ), GetTypeName() );
+            msg.Printf( _( "(expected 'SMD'; actual '%s')" ), GetTypeName() );
         }
         else
         {
-            msg.Printf( _( "Expected \"Other\" type but set to \"%s\"" ), GetTypeName() );
+            msg.Printf( _( "(expected 'Other'; actual '%s')" ), GetTypeName() );
         }
 
         msg = wxT( "(" ) + msg + wxT( ")" );

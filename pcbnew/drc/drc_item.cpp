@@ -241,7 +241,7 @@ DRC_ITEM DRC_ITEM::diffPairUncoupledLengthTooLong( DRCE_DIFF_PAIR_UNCOUPLED_LENG
         wxT( "diff_pair_uncoupled_length_too_long" ) );
 
 DRC_ITEM DRC_ITEM::footprintTypeMismatch( DRCE_FOOTPRINT_TYPE_MISMATCH,
-        _( "Footprint type doesn't match footprint pads" ),
+        _( "Footprint component type doesn't match footprint pads" ),
         wxT( "footprint_type_mismatch" ) );
 
 DRC_ITEM DRC_ITEM::footprintTHPadhasNoHole( DRCE_PAD_TH_WITH_NO_HOLE,
