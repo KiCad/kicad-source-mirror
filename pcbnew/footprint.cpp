@@ -2293,6 +2293,9 @@ void FOOTPRINT::CheckOverlappingPads( const std::function<void( const PAD*, cons
             if( other == pad || pad->SameLogicalPadAs( other ) )
                 continue;
 
+            if( !( pad->GetLayerSet() & other->GetLayerSet() ).any() )
+                continue;
+
             // store canonical order so we don't collide in both directions (a:b and b:a)
             PAD* a = pad;
             PAD* b = other;
