@@ -17,16 +17,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:57-0700\n"
-"PO-Revision-Date: 2022-04-19 21:54+0000\n"
+"PO-Revision-Date: 2022-04-25 17:47+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -7369,9 +7369,8 @@ msgstr "Jalanjäljen Katselin"
 
 #: cvpcb/display_footprints_frame.cpp:322
 #: pcbnew/toolbars_footprint_viewer.cpp:107
-#, fuzzy
 msgid "Automatic Zoom on footprint change"
-msgstr "Määrittele Automaattisesti jalanjäljet"
+msgstr "Automaattinen zoomaus, kun muutetaan jalanjälkeä"
 
 #: cvpcb/display_footprints_frame.cpp:406
 #, c-format
@@ -15580,15 +15579,15 @@ msgstr "Tallenna Simulaation Työkirja Nimellä"
 
 #: eeschema/sim/sim_plot_frame.cpp:1196
 msgid "Save Plot as Image"
-msgstr "Tallenna tontti kuvana"
+msgstr "Tallenna Piirustustuloste kuvana"
 
 #: eeschema/sim/sim_plot_frame.cpp:1213
 msgid "Save Plot Data"
-msgstr "Tallenna tonttitiedot"
+msgstr "Tallenna Piirustustiedot"
 
 #: eeschema/sim/sim_plot_frame.cpp:1506
 msgid "You need to run plot-providing simulation first."
-msgstr "Sinun on ensin suoritettava juoni-antava simulointi."
+msgstr "Sinun on ensin suoritettava piirustuksen-antava simulointi."
 
 #: eeschema/sim/sim_plot_frame.cpp:1751
 msgid ""
@@ -15620,11 +15619,11 @@ msgstr "Näytä kohdistin"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:19
 msgid "New Plot"
-msgstr "Uusi juoni"
+msgstr "Uusi Piirustus"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:39
 msgid "Save as Image"
-msgstr "Tallenna kuvana"
+msgstr "Tallenna Kuvana"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:43
 msgid "Save as .csv File"
@@ -15667,15 +15666,15 @@ msgstr "Simulointi"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:101
 msgid "Show &Grid"
-msgstr "Näytä ruu&dukko"
+msgstr "Näytä &Ruudukko"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:105
 msgid "Show &Legend"
-msgstr "Show & Legend"
+msgstr "Show &Selite"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:111
 msgid "Dotted Current/Phase"
-msgstr "Pistevirta / vaihe"
+msgstr "Pistevirta/Vaihe"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:115
 msgid "White Background"
@@ -15739,7 +15738,7 @@ msgstr "Napa-nolla"
 
 #: eeschema/sim/spice_simulator.cpp:79
 msgid "Transfer function"
-msgstr "Siirto-toiminto"
+msgstr "Siirtotoiminto"
 
 #: eeschema/sim/spice_simulator.cpp:83
 msgid "UNKNOWN!"
@@ -15792,14 +15791,14 @@ msgstr ""
 "ristiriidassa nastan %s%s kanssa muunnoksen sijainnissa <b>(%.3f, %.3f)</b>."
 
 #: eeschema/symbol_checker.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %s and %s of converted."
 msgstr ""
-"<b> Nastan kaksoiskappale %s</b> %s sijainnissa <b>(%.3f, %.3f)</b> on "
-"ristiriidassa nastan %s%s kanssa sijainnissa <b> ( %.3f, %.3f) </b> "
-"muunnettuina yksikköinä %c ja %c."
+"<b>Kaksoisnasta %s</b> %s sijainnissa <b>(%.3f, %.3f)</b> on ristiriidassa "
+"nastan %s%s kanssa sijainnissa <b>(%.3f, %.3f)</b> yksiköissä %s ja %s "
+"muunnetusta."
 
 #: eeschema/symbol_checker.cpp:122
 #, c-format
@@ -15811,38 +15810,41 @@ msgstr ""
 "ristiriidassa nastan %s%s kanssa sijainnissa <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
-"<b>Nastakaksoiskappale %s</b> %s sijainnissa <b>(%s, %s)</b> on "
-"ristiriidassa nastan %s%s kanssa sijainnissa <b>(%s, %s)</b> yksikköissä %c "
-"ja %c."
+"<b>Kaksoisnasta %s</b> %s sijainnissa <b>(%s, %s)</b> on ristiriidassa "
+"nastan %s%s kanssa sijainnissa <b>(%s, %s)</b> yksiköissä %s ja %s."
 
 #: eeschema/symbol_checker.cpp:163
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
-msgstr ""
+msgstr "<b>Virtasymbolissa saa olla vain yksi yksikkö</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:169
 msgid "<b>A Power Symbol should have no convert option</b><br><br>"
-msgstr ""
+msgstr "<b>Virtasymbolissa ei saa olla muunnosvaihtoehtoa</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:175
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
-msgstr ""
+msgstr "<b>Virtasymbolissa saa olla vain yksi nasta</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:184
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only a input or output power pin has "
 "meaning<br><br>"
 msgstr ""
+"<b>Epäilyttävä virtasymboli</b><br>Vain tulo- tai lähtövirtanastalla on "
+"merkitys<br><br>"
 
 #: eeschema/symbol_checker.cpp:191
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only invisible input power pins are "
 "automatically connected<br><br>"
 msgstr ""
+"<b>Epäilyttävä Virtasymboli</b><br>Vain näkymätön tulovirtanastat kytketään "
+"automaattisesti<br><br>"
 
 #: eeschema/symbol_checker.cpp:216
 #, c-format
@@ -16088,27 +16090,24 @@ msgid "Error saving project library table."
 msgstr "Virhe projektikohtaisen kirjastotaulukon tallennuksessa."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:61
-#, fuzzy
 msgid "Do not update library tables"
-msgstr "Liitoskuvakirjastotiedostot"
+msgstr "Älä päivitä kirjastotaulukoita"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:63
 msgid "Do not perform any additional operations after saving library."
 msgstr "Älä tee lisätoimenpiteitä kirjaston tallentamisen jälkeen."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:66
-#, fuzzy
 msgid "Update existing library table entry"
-msgstr "Lisää olemassa oleva kirjasto taulukkoon"
+msgstr "Päivitä olemassa oleva kirjasto taulukkoon"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:67
-#, fuzzy
 msgid ""
 "Update symbol library table entry to point to new library.\n"
 "\n"
 "The original library will no longer be available for use."
 msgstr ""
-"Korvaa symbolikirjastoluettelon kirjasto uudella kirjastolla.\n"
+"Päivitä symbolikirjaston taulukkomerkintä osoittamaan uutta kirjastoa.\n"
 "\n"
 "Alkuperäinen kirjasto ei ole enää tämän jälkeen käytettävissä."
 
@@ -16117,7 +16116,6 @@ msgid "Add new global library table entry"
 msgstr "Lisää kirjasto yleiseen kirjastoluetteloon"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:73
-#, fuzzy
 msgid ""
 "Add new entry to the global symbol library table.\n"
 "\n"
@@ -16134,7 +16132,6 @@ msgid "Add new project library table entry"
 msgstr "Lisää uusi projektikirjastotaulukkomerkintä"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:79
-#, fuzzy
 msgid ""
 "Add new entry to the project symbol library table.\n"
 "\n"
@@ -17684,9 +17681,10 @@ msgid "Edit Sheet Page Number"
 msgstr "Muokkaa arkin sivunumeroa"
 
 #: eeschema/tools/sch_editor_control.cpp:138
-#, fuzzy, c-format
+#, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
-msgstr "Palataanko '%s' viimeksi tallennettuun versioon?"
+msgstr ""
+"Palautetaanko '%s' (ja kaikki välisivut) viimeksi tallennettuun versioon?"
 
 #: eeschema/tools/sch_editor_control.cpp:569
 msgid "Reached end of schematic."
@@ -24120,20 +24118,19 @@ msgstr "0,00000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.00 in / 0 mils / 0.0 mm"
-msgstr ""
+msgstr "0.00 tuuma / 0 mils / 0.0 mm"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
-#, fuzzy
 msgid "0.000 / 0 / 0.00"
-msgstr "0,00000"
+msgstr "0.000 / 0 / 0.00"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.0000 / 0.0 / 0.000"
-msgstr ""
+msgstr "0.0000 / 0.0 / 0.000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.00000 / 0.00 / 0.0000"
-msgstr ""
+msgstr "0.00000 / 0.00 / 0.0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:180
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:150
@@ -24300,9 +24297,8 @@ msgid "Run clearance resolution tool..."
 msgstr "Käynnistä välyksen tarkkuustyökalu..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:560
-#, fuzzy
 msgid "Run constraints resolution tool..."
-msgstr "Käynnistä välyksen tarkkuustyökalu..."
+msgstr "Käynnistä rajoitusten tarkkuustyökalu..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:587 pcbnew/dialogs/dialog_drc.cpp:763
 msgid "Open the Board Setup... dialog"
@@ -28780,7 +28776,7 @@ msgstr "Vyöhykkeen täyttämisstrategia"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:108
 msgid "Allow fillets outside zone outline"
-msgstr "Salli fileet vyöhykkeen ääriviivan ulkopuolella"
+msgstr "Salli kaistaleet vyöhykkeen ääriviivan ulkopuolella"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:120
 msgid "Min thermal relief spoke count:"
@@ -29064,7 +29060,7 @@ msgstr "Fab_Front()"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:65
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:629
 msgid "Off-board, manufacturing"
-msgstr "Ei levyllä, tuotantoapu"
+msgstr "Ei levyllä, valmistus"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:70
 msgid "If you want an adhesive template for the front side of the board"
@@ -29342,43 +29338,43 @@ msgstr "In10"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:278
 msgid "In11"
-msgstr "Vuonna11"
+msgstr "In11"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:292
 msgid "In12"
-msgstr "Vuonna 12"
+msgstr "In12"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:306
 msgid "In13"
-msgstr "Vuonna13"
+msgstr "In13"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:320
 msgid "In14"
-msgstr "Vuonna 14"
+msgstr "In14"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:334
 msgid "In15"
-msgstr "Vuonna15"
+msgstr "In15"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:348
 msgid "In16"
-msgstr "Vuonna 16"
+msgstr "In16"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:362
 msgid "In17"
-msgstr "Vuonna 17"
+msgstr "In17"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:376
 msgid "In18"
-msgstr "Vuonna 18"
+msgstr "In18"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:390
 msgid "In19"
-msgstr "Vuonna 19"
+msgstr "In19"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:404
 msgid "In20"
-msgstr "Vuonna20"
+msgstr "In20"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:418
 msgid "In21"
@@ -29402,19 +29398,19 @@ msgstr "In25"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:488
 msgid "In26"
-msgstr "Vuonna26"
+msgstr "In26"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:502
 msgid "In27"
-msgstr "Vuonna 27"
+msgstr "In27"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:516
 msgid "In28"
-msgstr "Vuonna 28"
+msgstr "In28"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:530
 msgid "In29"
-msgstr "Vuonna 29"
+msgstr "In29"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:544
 msgid "In30"
@@ -29529,7 +29525,7 @@ msgstr "Käyttäjä 1"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:783
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:793
 msgid "User defined layer"
-msgstr "Käyttäjän määrittelemä taso"
+msgstr "Käyttäjän määrittelemä kerros"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:720
 msgid "User2"
@@ -30275,8 +30271,7 @@ msgstr "Pidä teksti tasattuna"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:123
 msgid "When checked, dimension text will be kept aligned with dimension lines"
 msgstr ""
-"Kun tämä valitaan, ulottuvuusteksti pidetään kohdistettuna mittaviivojen "
-"kanssa"
+"Kun tämä valitaan, mittateksti pidetään kohdistettuna mittaviivojen kanssa"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:135
 msgid "How many digits of precision to show"
@@ -30344,14 +30339,12 @@ msgid "board setup constraints silk"
 msgstr "levyn asennusrajoitukset silkki"
 
 #: pcbnew/drc/drc_engine.cpp:193
-#, fuzzy
 msgid "board setup constraints silk text height"
-msgstr "levyn asennusrajoitukset silkki"
+msgstr "piirilevyasetusrajoitukset silkkipainotekstin korkeus"
 
 #: pcbnew/drc/drc_engine.cpp:199
-#, fuzzy
 msgid "board setup constraints silk text thickness"
-msgstr "levyn asennusrajoitukset silkki"
+msgstr "Piirilevyasetusrajoitukset silkkipainotekstin paksuus"
 
 #: pcbnew/drc/drc_engine.cpp:205
 msgid "board setup constraints hole"
@@ -30462,29 +30455,29 @@ msgid "Checking %s clearance: %s."
 msgstr "Tarkistetaan %s välystä: %s."
 
 #: pcbnew/drc/drc_engine.cpp:934
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max uncoupled length: %s."
-msgstr "Tarkistetaan %s; reikien välys: %s."
+msgstr "Tarkistetaan %s maksimi erotuspituus: %s."
 
 #: pcbnew/drc/drc_engine.cpp:940
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max skew: %s."
-msgstr "Tarkistetaan %s %s: %s."
+msgstr "Tarkistetaan %s maksimivinoutta: %s."
 
 #: pcbnew/drc/drc_engine.cpp:946
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s gap: %s."
-msgstr "Tarkistetaan %s %s: %s."
+msgstr "Tarkistetaan %s rakoa: %s."
 
 #: pcbnew/drc/drc_engine.cpp:952
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s thermal spoke width: %s."
-msgstr "Alueen %s lämpöpinnan leveys: %s."
+msgstr "Tarkistetaan%s lämpöanturan leveys: %s."
 
 #: pcbnew/drc/drc_engine.cpp:958
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s zone connection: %s."
-msgstr "Tarkistetaan verkkoyhteyksiä ..."
+msgstr "Tarkistetaan %s vyöhykeliitäntä: %s."
 
 #: pcbnew/drc/drc_engine.cpp:974 pcbnew/drc/drc_engine.cpp:975
 #: pcbnew/drc/drc_engine.cpp:976 pcbnew/tools/board_inspection_tool.cpp:202
@@ -30494,54 +30487,55 @@ msgid "undefined"
 msgstr "määrittelemätön"
 
 #: pcbnew/drc/drc_engine.cpp:989
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s track width: opt %s."
-msgstr "Tarkastetaan raideleveyksiä ..."
+msgstr "Tarkastetaan %s johdinleveys: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:995
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints track width: min %s."
-msgstr "levyn asennusrajoitukset piha-alue"
+msgstr "Tarkistetaan piirilevyasetusten johdinleveysrajoitukset: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1003
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s annular width: min %s."
-msgstr "Tarkistetaan läpivientien liitosalueita..."
+msgstr "Tarkistetaan %s kuparirenkaan leveys: minimi %s."
 
 #: pcbnew/drc/drc_engine.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s via diameter: opt %s."
-msgstr "Tarkistetaan läpivientien halkaisijat..."
+msgstr "Tarkistetaan %s läpiviennin halkaisija: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1017
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints via diameter: min %s."
-msgstr "levyn asennusrajoitukset reuna"
+msgstr ""
+"Tarkastetaan piirilevyasetusten rajoitukset läpiviennin halkaisija: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1026
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole size: opt %s."
-msgstr "Tarkistetaan %s; reikien välys: %s."
+msgstr "Tarkistetaan %s; reikäkoko: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints hole size: min %s."
-msgstr "levyn asennusrajoitukset reikä"
+msgstr "Tarkistetaan piirilevyasetuksista reikäkokorajoitukset: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1040 pcbnew/drc/drc_engine.cpp:1046
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s: min %s."
-msgstr "Tarkistetaan %s %s: %s."
+msgstr "Tarkistetaan %s: minimi %s."
 
 #: pcbnew/drc/drc_engine.cpp:1054
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s diff pair gap: opt %s."
-msgstr "Tarkistetaan %s välystä: %s."
+msgstr "Tarkistetaan %s Differentiaaliparin rakoa: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1061
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints clearance: min %s."
-msgstr "Tarkistetaan %s; sisäpihan puhdistuma: %s."
+msgstr "Tarkistetaan piirilevyasetusten rajoitusvälys: minimi %s."
 
 #: pcbnew/drc/drc_engine.cpp:1069 pcbnew/drc/drc_engine.cpp:1095
 #: pcbnew/drc/drc_engine.cpp:1457
@@ -35574,47 +35568,42 @@ msgid "Report incomplete: could not compile custom design rules.  "
 msgstr "Raportti on epätäydellinen: suunnittelusääntöjä ei voitu koota.  "
 
 #: pcbnew/tools/board_inspection_tool.cpp:235
-#, fuzzy
 msgid "Violation Report"
-msgstr "Rikkomisen vakavuus"
+msgstr "Rikkomusraportti"
 
 #: pcbnew/tools/board_inspection_tool.cpp:261
-#, fuzzy
 msgid "Uncoupled Length"
-msgstr "Reititetty Pituus"
+msgstr "Erotuksen Pituus"
 
 #: pcbnew/tools/board_inspection_tool.cpp:262
-#, fuzzy
 msgid "Diff pair uncoupled length resolution for:"
-msgstr "Differentiaalisen erotuksen pituus on liian pitkä"
+msgstr "Differentiaaliparin erotuksen pituustarkkuus:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:270
 #: pcbnew/tools/board_inspection_tool.cpp:752
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved max uncoupled length: %s."
-msgstr "Poistettiin käyttämätön verkko \"%s\"."
+msgstr "Ratkaistiin maksimi erotuspituus: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:277
 #: pcbnew/tools/board_inspection_tool.cpp:1066
-#, fuzzy
 msgid "Text height resolution for:"
-msgstr "Säilyttämisresoluutio:"
+msgstr "Tekstin korkeuden tarkkuus:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:285
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved height constraints: min %s; max %s."
-msgstr "Leveysrajoitukset: min %s; opt %s; max %s."
+msgstr "Ratkaistu korkeusrajoitukset: min %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:292
 #: pcbnew/tools/board_inspection_tool.cpp:1082
-#, fuzzy
 msgid "Text thickness resolution for:"
-msgstr "Tekstin paksuus alueen ulkopuolella"
+msgstr "Tekstin paksuuden tarkuus:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:300
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thickness constraints: min %s; max %s."
-msgstr "Leveysrajoitukset: min %s; opt %s; max %s."
+msgstr "Ratkaistu paksuusrajoitukset: minimi %s; maksimi %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:307
 #: pcbnew/tools/board_inspection_tool.cpp:987
@@ -35622,9 +35611,9 @@ msgid "Track width resolution for:"
 msgstr "Johdinleveyden tarkkuus kohteelle:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved width constraints: min %s; max %s."
-msgstr "Leveysrajoitukset: min %s; opt %s; max %s."
+msgstr "Ratkaistu leveysrajoitukset: min %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:322
 #: pcbnew/tools/board_inspection_tool.cpp:1006
@@ -35633,14 +35622,13 @@ msgstr "Halkaisijan tarkkuuden kautta:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:330
 #: pcbnew/tools/board_inspection_tool.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved diameter constraints: min %s; max %s."
-msgstr "Halkaisijan rajoitukset: min %s; opt %s; max %s."
+msgstr "Ratkaistu halkaisijarajoitukset: minimi %s; maksimi %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:336
-#, fuzzy
 msgid "Via Annulus"
-msgstr "Rengasleveyden kautta"
+msgstr "Läpivienti kuparirenkaan kautta"
 
 #: pcbnew/tools/board_inspection_tool.cpp:337
 #: pcbnew/tools/board_inspection_tool.cpp:1023
@@ -35648,9 +35636,9 @@ msgid "Via annular width resolution for:"
 msgstr "Rengasmaisen leveysresoluution avulla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
-msgstr "Kauluksen leveysrajoitukset: min %s; opt %s; max %s."
+msgstr "Ratkaistu kuparirenkaan leveysrajoitukset: minimi %s; maksimi %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:352
 #: pcbnew/tools/board_inspection_tool.cpp:1043
@@ -35663,9 +35651,8 @@ msgid "Hole diameter resolution for:"
 msgstr "Reiän halkaisijan tarkkuus:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:367
-#, fuzzy
 msgid "Hole Clearance"
-msgstr "Välys"
+msgstr "Reiän Välys"
 
 #: pcbnew/tools/board_inspection_tool.cpp:368
 #: pcbnew/tools/board_inspection_tool.cpp:824
@@ -35705,9 +35692,8 @@ msgid "No 'mechanical_hole_clearance' constraints defined."
 msgstr "Ei 'mekaanisen_reiän_välys' rajoitetta määritelty."
 
 #: pcbnew/tools/board_inspection_tool.cpp:411
-#, fuzzy
 msgid "Edge Clearance"
-msgstr "Välys"
+msgstr "Raunan Välys"
 
 #: pcbnew/tools/board_inspection_tool.cpp:412
 #: pcbnew/tools/board_inspection_tool.cpp:857
@@ -35782,29 +35768,25 @@ msgid "Clearance: %s."
 msgstr "Välys: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:725
-#, fuzzy
 msgid "Diff Pair"
-msgstr "Differentiaaliparin Väli"
+msgstr "Differentiaalipari"
 
 #: pcbnew/tools/board_inspection_tool.cpp:726
-#, fuzzy
 msgid "Diff pair gap resolution for:"
-msgstr "Välystarkkuus kohteelle:"
+msgstr "Differentiaaliparin välin tarkkuus:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:731
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
-msgstr "Leveysrajoitukset: min %s; opt %s; max %s."
+msgstr "Ratkaistu välirajoitukset: minimi %s; opt %s; maksimi %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:739
-#, fuzzy
 msgid "Diff pair max uncoupled length resolution for:"
-msgstr "Differentiaalisen erotuksen pituus on liian pitkä"
+msgstr "Differentiaaliparin maksimierotuksen pituustarkkuus:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:744
-#, fuzzy
 msgid "No 'diff_pair_uncoupled' constraints defined."
-msgstr "Ei 'mekaanista_välystä' rajoitetta määritelty."
+msgstr "Ei 'diff_parin_erotus' rajoitetta määritelty."
 
 #: pcbnew/tools/board_inspection_tool.cpp:768
 msgid "Silkscreen clearance resolution for:"
@@ -35847,14 +35829,14 @@ msgid "Annular width constraints: min %s; opt %s; max %s."
 msgstr "Kauluksen leveysrajoitukset: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1074
-#, fuzzy, c-format
+#, c-format
 msgid "Text height constraints: min %s; opt %s; max %s."
-msgstr "Leveysrajoitukset: min %s; opt %s; max %s."
+msgstr "Tekstin korkeusrajoitukset: minimi %s; opt %s; maksimi %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1090
-#, fuzzy, c-format
+#, c-format
 msgid "Text thickness constraints: min %s; opt %s; max %s."
-msgstr "Leveysrajoitukset: min %s; opt %s; max %s."
+msgstr "Tekstin leveysrajoitukset: minimi %s; opt %s; maksimi %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1098
 msgid "Keepouts"
