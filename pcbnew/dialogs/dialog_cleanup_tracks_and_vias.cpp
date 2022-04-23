@@ -24,7 +24,6 @@
 #include <dialog_cleanup_tracks_and_vias.h>
 #include <board_commit.h>
 #include <pcb_edit_frame.h>
-#include <pcbnew_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tracks_cleaner.h>
@@ -131,7 +130,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
 
     if( m_firstRun )
     {
-        m_reporter->Report( _( "Check zones..." ) );
+        m_reporter->Report( _( "Checking zones..." ) );
         wxSafeYield();      // Timeslice to update UI
         m_parentFrame->GetToolManager()->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( this );
         wxSafeYield();      // Timeslice to close zone progress reporter
@@ -139,12 +138,9 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
     }
 
     // Old model has to be refreshed, GAL normally does not keep updating it
-    m_reporter->Report( _( "Rebuild connectivity..." ) );
+    m_reporter->Report( _( "Rebuilding connectivity..." ) );
     wxSafeYield();      // Timeslice to update UI
     m_parentFrame->Compile_Ratsnest( false );
-
-    m_reporter->Report( _( "Check items..." ) );
-    wxSafeYield();      // Timeslice to update UI
 
     cleaner.CleanupBoard( aDryRun, &m_items, m_cleanShortCircuitOpt->GetValue(),
                                              m_cleanViasOpt->GetValue(),
@@ -153,9 +149,6 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
                                              m_deleteTracksInPadsOpt->GetValue(),
                                              m_deleteDanglingViasOpt->GetValue(),
                                              m_reporter );
-
-    m_reporter->Report( _( "Items checked..." ) );
-    wxSafeYield();      // Timeslice to update UI
 
     if( aDryRun )
     {
@@ -169,7 +162,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
         m_parentFrame->GetCanvas()->Refresh( true );
     }
 
-    m_reporter->Report( _( "Finished..." ) );
+    m_reporter->Report( _( "Done." ) );
     setupOKButtonLabel();
 }
 

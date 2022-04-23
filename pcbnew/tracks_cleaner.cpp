@@ -50,10 +50,11 @@ TRACKS_CLEANER::TRACKS_CLEANER( BOARD* aPcb, BOARD_COMMIT& aCommit ) :
  * - vias on pad
  * - null length segments
  */
-void TRACKS_CLEANER::CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLEANUP_ITEM> >* aItemsList,
+void TRACKS_CLEANER::CleanupBoard( bool aDryRun,
+                                   std::vector<std::shared_ptr<CLEANUP_ITEM> >* aItemsList,
                                    bool aRemoveMisConnected, bool aCleanVias, bool aMergeSegments,
-                                   bool aDeleteUnconnected, bool aDeleteTracksinPad, bool aDeleteDanglingVias,
-                                   REPORTER* aReporter )
+                                   bool aDeleteUnconnected, bool aDeleteTracksinPad,
+                                   bool aDeleteDanglingVias, REPORTER* aReporter )
 {
     m_reporter = aReporter;
     bool has_deleted = false;
@@ -63,7 +64,11 @@ void TRACKS_CLEANER::CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLE
 
     if( m_reporter )
     {
-        m_reporter->Report( _( "Clean vias and tracks" ) );
+        if( aDryRun )
+            m_reporter->Report( _( "Checking null tracks and vias..." ) );
+        else
+            m_reporter->Report( _( "Removing null tracks and vias..." ) );
+
         wxSafeYield();      // Timeslice to update UI
     }
 
@@ -72,17 +77,25 @@ void TRACKS_CLEANER::CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLE
 
     if( m_reporter )
     {
-        m_reporter->Report( _( "Merge collinear tracks" ) );
+        if( aDryRun )
+            m_reporter->Report( _( "Checking redundant tracks..." ) );
+        else
+            m_reporter->Report( _( "Removing redundant tracks..." ) );
+
         wxSafeYield();      // Timeslice to update UI
     }
 
-     cleanup( false, false, true, aMergeSegments );
+    cleanup( false, false, true, aMergeSegments );
 
     if( aRemoveMisConnected )
     {
         if( m_reporter )
         {
-            m_reporter->Report( _( "Remove misconnected" ) );
+            if( aDryRun )
+                m_reporter->Report( _( "Checking shorting tracks..." ) );
+            else
+                m_reporter->Report( _( "Removing shorting tracks..." ) );
+
             wxSafeYield();      // Timeslice to update UI
         }
 
@@ -93,20 +106,49 @@ void TRACKS_CLEANER::CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLE
     {
         if( m_reporter )
         {
-            m_reporter->Report( _( "Delete tracks in pads" ) );
+            if( aDryRun )
+                m_reporter->Report( _( "Checking tracks in pads..." ) );
+            else
+                m_reporter->Report( _( "Removing tracks in pads..." ) );
+
             wxSafeYield();      // Timeslice to update UI
         }
 
         deleteTracksInPads();
     }
 
-    has_deleted = deleteDanglingTracks( aDeleteUnconnected, aDeleteDanglingVias );
+    if( aDeleteUnconnected || aDeleteDanglingVias )
+    {
+        if( m_reporter )
+        {
+            if( aDryRun )
+            {
+                m_reporter->Report( _( "Checking dangling tracks and vias..." ) );
+            }
+            else
+            {
+                if( aDeleteUnconnected )
+                    m_reporter->Report( _( "Removing dangling tracks..." ) );
+
+                if( aDeleteDanglingVias )
+                    m_reporter->Report( _( "Removing dangling vias..." ) );
+            }
+
+            wxSafeYield();      // Timeslice to update UI
+        }
+
+        has_deleted = deleteDanglingTracks( aDeleteUnconnected, aDeleteDanglingVias );
+    }
 
     if( has_deleted && aMergeSegments )
     {
         if( m_reporter )
         {
-            m_reporter->Report( _( "Merge segments" ) );
+            if( aDryRun )
+                m_reporter->Report( _( "Checking collinear tracks..." ) );
+            else
+                m_reporter->Report( _( "Merging collinear tracks..." ) );
+
             wxSafeYield();      // Timeslice to update UI
         }
 
