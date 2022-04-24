@@ -73,10 +73,10 @@ TOOL_ACTION ACTIONS::saveAs( "common.Control.saveAs",
         _( "Save As..." ), _( "Save current document to another location" ),
         BITMAPS::save_as );
 
-TOOL_ACTION ACTIONS::saveCopyAs( "common.Control.saveCopyAs",
+TOOL_ACTION ACTIONS::saveCopy( "common.Control.saveCopy",
         AS_GLOBAL,
         0, "",
-        _( "Save Copy As..." ), _( "Save a copy of the current document to another location" ),
+        _( "Save a Copy..." ), _( "Save a copy of the current document to another location" ),
         BITMAPS::save_as );
 
 TOOL_ACTION ACTIONS::saveAll( "common.Control.saveAll",

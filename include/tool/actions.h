@@ -50,7 +50,7 @@ public:
     static TOOL_ACTION open;
     static TOOL_ACTION save;
     static TOOL_ACTION saveAs;
-    static TOOL_ACTION saveCopyAs;
+    static TOOL_ACTION saveCopy;
     static TOOL_ACTION saveAll;
     static TOOL_ACTION revert;
     static TOOL_ACTION pageSettings;

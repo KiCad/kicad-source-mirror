@@ -318,7 +318,7 @@ int BOARD_EDITOR_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
 }
 
 
-int BOARD_EDITOR_CONTROL::SaveCopyAs( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::SaveCopy( const TOOL_EVENT& aEvent )
 {
     m_frame->Files_io_from_id( ID_COPY_BOARD_AS );
     return 0;
@@ -1609,7 +1609,7 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::Open,                   ACTIONS::open.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::Save,                   ACTIONS::save.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::SaveAs,                 ACTIONS::saveAs.MakeEvent() );
-    Go( &BOARD_EDITOR_CONTROL::SaveCopyAs,             ACTIONS::saveCopyAs.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::SaveCopy,               ACTIONS::saveCopy.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::Revert,                 ACTIONS::revert.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::PageSettings,           ACTIONS::pageSettings.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::Plot,                   ACTIONS::plot.MakeEvent() );

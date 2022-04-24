@@ -2333,7 +2333,6 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::Open,                  ACTIONS::open.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Save,                  ACTIONS::save.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::SaveAs,                ACTIONS::saveAs.MakeEvent() );
-    //Go( &SCH_EDITOR_CONTROL::SaveAs,                ACTIONS::saveCopyAs.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::SaveCurrSheetCopyAs,   EE_ACTIONS::saveCurrSheetCopyAs.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Revert,                ACTIONS::revert.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowSchematicSetup,    EE_ACTIONS::schematicSetup.MakeEvent() );

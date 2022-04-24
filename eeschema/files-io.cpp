@@ -782,7 +782,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
     wxString msg;
     SCH_SCREEN* screen;
     SCH_SCREENS screens( Schematic().Root() );
-    bool        saveCopyAs       = aSaveAs && !Kiface().IsSingle();
+    bool        saveCopy         = aSaveAs && !Kiface().IsSingle();
     bool        success          = true;
     bool        updateFileType   = false;
     bool        createNewProject = false;
@@ -850,7 +850,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         if( wxWindow* ec = dlg.GetExtraControl() )
             createNewProject = static_cast<CREATE_PROJECT_CHECKBOX*>( ec )->GetValue();
 
-        if( !saveCopyAs )
+        if( !saveCopy )
         {
             Schematic().Root().SetFileName( newFileName.GetFullName() );
             Schematic().RootScreen()->SetFileName( newFileName.GetFullPath() );
@@ -914,7 +914,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
                 return false;
             }
 
-            if( saveCopyAs )
+            if( saveCopy )
                 filenameMap[screen] = tmp.GetFullPath();
             else
                 screen->SetFileName( tmp.GetFullPath() );
@@ -932,7 +932,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         }
     }
 
-    if( filenameMap.empty() || !saveCopyAs )
+    if( filenameMap.empty() || !saveCopy )
     {
         for( size_t i = 0; i < screens.GetCount(); i++ )
             filenameMap[screens.GetScreen( i )] = screens.GetScreen( i )->GetFileName();
@@ -1015,7 +1015,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
 
             filenameMap[screen] = tmpFn.GetFullPath();
 
-            if( !saveCopyAs )
+            if( !saveCopy )
                 screen->SetFileName( tmpFn.GetFullPath() );
         }
 
@@ -1027,7 +1027,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
             screen->SetVirtualPageNumber( 0 );  // multiple uses; no way to store the real sheet #
 
         // This is a new schematic file so make sure it has a unique ID.
-        if( !saveCopyAs && tmpFn.GetFullPath() != screen->GetFileName() )
+        if( !saveCopy && tmpFn.GetFullPath() != screen->GetFileName() )
             screen->AssignNewUuid();
 
         success &= saveSchematicFile( screens.GetSheet( i ), tmpFn.GetFullPath() );
@@ -1072,12 +1072,12 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
     wxFileName projectPath( filenameMap.at( Schematic().RootScreen() ) );
     projectPath.SetExt( ProjectFileExtension );
 
-    if( Prj().IsNullProject() || ( aSaveAs && !saveCopyAs ) )
+    if( Prj().IsNullProject() || ( aSaveAs && !saveCopy ) )
     {
         Prj().SetReadOnly( !createNewProject );
         GetSettingsManager()->SaveProjectAs( projectPath.GetFullPath() );
     }
-    else if( saveCopyAs && createNewProject )
+    else if( saveCopy && createNewProject )
     {
         GetSettingsManager()->SaveProjectCopy( projectPath.GetFullPath() );
     }

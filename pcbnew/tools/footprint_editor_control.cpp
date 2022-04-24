@@ -120,8 +120,7 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
 
     ctxMenu.AddSeparator();
     ctxMenu.AddItem( ACTIONS::save,                   libSelectedCondition || libInferredCondition );
-    ctxMenu.AddItem( ACTIONS::saveAs,                 libSelectedCondition );
-    ctxMenu.AddItem( ACTIONS::saveCopyAs,             fpSelectedCondition );
+    ctxMenu.AddItem( ACTIONS::saveAs,                 libSelectedCondition || fpSelectedCondition );
     ctxMenu.AddItem( ACTIONS::revert,                 libSelectedCondition || libInferredCondition );
 
     ctxMenu.AddSeparator();
@@ -284,7 +283,7 @@ int FOOTPRINT_EDITOR_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
     }
     else if( m_frame->GetTargetFPID() == m_frame->GetLoadedFPID() )
     {
-        // Save Board Footprint As
+        // Save Footprint As
         if( footprint() && m_frame->SaveFootprintAs( footprint() ) )
         {
             view()->Update( footprint() );
@@ -720,7 +719,6 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
     Go( &FOOTPRINT_EDITOR_CONTROL::CreateFootprint,      PCB_ACTIONS::createFootprint.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::Save,                 ACTIONS::save.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::SaveAs,               ACTIONS::saveAs.MakeEvent() );
-    Go( &FOOTPRINT_EDITOR_CONTROL::SaveAs,               ACTIONS::saveCopyAs.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::Revert,               ACTIONS::revert.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::DuplicateFootprint,   PCB_ACTIONS::duplicateFootprint.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::RenameFootprint,      PCB_ACTIONS::renameFootprint.MakeEvent() );

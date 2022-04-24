@@ -55,7 +55,7 @@ public:
     int Open( const TOOL_EVENT& aEvent );
     int Save( const TOOL_EVENT& aEvent );
     int SaveAs( const TOOL_EVENT& aEvent );
-    int SaveCopyAs( const TOOL_EVENT& aEvent );
+    int SaveCopy( const TOOL_EVENT& aEvent );
     int Revert( const TOOL_EVENT& aEvent );
     int PageSettings( const TOOL_EVENT& aEvent );
     int Plot( const TOOL_EVENT& aEvent );

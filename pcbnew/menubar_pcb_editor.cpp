@@ -97,7 +97,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     if( Kiface().IsSingle() )
         fileMenu->Add( ACTIONS::saveAs );
     else
-        fileMenu->Add( ACTIONS::saveCopyAs );
+        fileMenu->Add( ACTIONS::saveCopy );
 
     fileMenu->Add( ACTIONS::revert );
 
