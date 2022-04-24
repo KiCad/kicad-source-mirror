@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:55-0700\n"
-"PO-Revision-Date: 2022-04-19 21:54+0000\n"
+"PO-Revision-Date: 2022-04-28 11:12+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
 "Language: cs\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -833,12 +833,9 @@ msgid "Anti-aliasing (slow)"
 msgstr "Antialiasing (pomalé)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
-#, fuzzy
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
-msgstr ""
-"Použít okolní okluzi obrazovky a odrazy globálního osvětlení na konečné "
-"vykreslení (pomalé)"
+msgstr "Okolní okluze v prostoru obrazovky a globální odrazy osvětlení (pomalé)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
 msgid "Number of Samples"
@@ -4775,9 +4772,9 @@ msgid "Gestures"
 msgstr "Gesta"
 
 #: common/kiway.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "Nepodařilo se načíst knihovnu kiface '%s'."
+msgstr "Nepodařilo se ověřit podpis knihovny kiface '%s'."
 
 #: common/kiway.cpp:267
 #, c-format
@@ -6826,9 +6823,9 @@ msgid "Hotkey file"
 msgstr "Soubor kl. zkratek"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "Soubor ekvivalence '%s' nenalezen ve výchozích vyhledávacích cestách."
+msgstr "Soubor ekvivalence '%s' nebyl nalezen."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -13597,9 +13594,9 @@ msgid "Polygon's owner (%d) not found."
 msgstr "Vlastník polygonu (%d) nebyl nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1288
-#, fuzzy, c-format
+#, c-format
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "Reference '%s' nenalezena."
+msgstr "Vlastník zaobleného obdélníku (%d) nebyl nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1324
 msgid "Arcs on schematic not currently supported."
@@ -14621,7 +14618,6 @@ msgid "Cancel Load"
 msgstr "Zrušit načtení"
 
 #: eeschema/sheet.cpp:225
-#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -14631,7 +14627,9 @@ msgid ""
 msgstr ""
 "V načteném schématu jsou názvy knihoven, které chybí v tabulce knihoven "
 "projektu. To může mít za následek nefunkční odkazy na knihovnu symbolů pro "
-"načtené schéma. Chcete pokračovat?"
+"načtené schéma. \n"
+"\n"
+"Chcete pokračovat?"
 
 #: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
 #: eeschema/sheet.cpp:380
@@ -15044,9 +15042,8 @@ msgid "Library changes are unsaved"
 msgstr "Změny v knihovně nejsou uloženy"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:247
-#, fuzzy
 msgid "Symbol library loading was cancelled by user."
-msgstr "Knihovna symbolů '%s' již existuje."
+msgstr "Načítání knihovny symbolů bylo zrušeno uživatelem."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:595
 #: eeschema/tools/sch_edit_tool.cpp:117
@@ -23993,9 +23990,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:259
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:629
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:93
-#, fuzzy
 msgid "Solder paste absolute clearance:"
-msgstr "Pájecí pasta poměr mezer:"
+msgstr "Absolutní izolační mezera pájecí pasty:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:361
 msgid ""
@@ -24016,9 +24012,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:272
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:642
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:108
-#, fuzzy
 msgid "Solder paste relative clearance:"
-msgstr "Pájecí pasta poměr mezer:"
+msgstr "Relativní izolační mezera pájecí pasty:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:374
 msgid ""
@@ -24291,9 +24286,8 @@ msgstr "Zahrnout vrstvu okraje desky"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:83
 #: pcbnew/dialogs/dialog_plot_base.cpp:108
-#, fuzzy
 msgid "Use drill/place file origin"
-msgstr "Počátek vrtání"
+msgstr "Použít soubor počátku vrtání/umístění"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:75
 msgid "Generate Placement Files"
@@ -24721,9 +24715,8 @@ msgstr "Nastavit na zadané hodnoty:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:202
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:211
-#, fuzzy
 msgid "Keep upright"
-msgstr "Přesunout vpravo"
+msgstr "Udržet vertikální"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:226
 msgid "Set to layer default values:"
@@ -24904,9 +24897,8 @@ msgid "Predefined track and via dimensions"
 msgstr "Předdefinované rozměry spojů a prokovů"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
-#, fuzzy
 msgid "Solder mask/paste defaults"
-msgstr "Barva pájecí pasty"
+msgstr "Výchozí nastavení pájecí masky/pasty"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:243
 #: pcbnew/dialogs/dialog_imported_layers.cpp:251
@@ -25354,9 +25346,8 @@ msgid "corners count %d"
 msgstr "počet rohů %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:739
-#, fuzzy
 msgid "Unknown primitive"
-msgstr "Neznámý tvar plošky"
+msgstr "Neznámý základnítvar"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:919
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
@@ -25394,12 +25385,12 @@ msgid "Warning: Negative local clearance values will have no effect."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1287
-#, fuzzy
 msgid ""
 "Warning: Negative solder mask clearances larger than some shape primitives. "
 "Results may be surprising."
 msgstr ""
-"Záporná mezera znamená oblast menší, než ploška (obvykle pro pájecí pastu)."
+"Varování: Záporná mezera pájecí masky větší než některé základní tvary. "
+"Výsledek může být překvapující."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1296
 msgid ""
@@ -25460,9 +25451,8 @@ msgid "Warning: Heatsink property makes no sense of NPTH pads."
 msgstr "Varování: Vlastnost Chladič nemá smysl pro NPTH plošky."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1387
-#, fuzzy
 msgid "Warning: Castellated property is for PTH pads."
-msgstr "Varování: Vlastnost Castellated lze nastavit pouze na PTH ploškách."
+msgstr "Varování: Vlastnost Castellated je pro PTH plošky."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1393
 msgid "Warning: BGA property is for SMD pads."
@@ -31600,7 +31590,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:2217
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
-msgstr ""
+msgstr "Pouzdro %s ploška %s používá neznámý tvar plošky."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2284
 #, c-format
@@ -31619,7 +31609,7 @@ msgstr "Ploška bez mědi %s připojena k síti, která není podporována."
 #: pcbnew/plugins/altium/altium_pcb.cpp:2299
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
-msgstr ""
+msgstr "Ploška bez mědi %s má díru, která není podporována."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2304
 #, c-format
@@ -31809,9 +31799,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "Definice plošky CADSTAR '%s' vrátila chyby importu: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
-msgstr "Nelze najít prohlížeč PDF pro '%s'."
+msgstr "Nelze najít index plošky '%d' v pouzdře '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1291
 #, c-format
