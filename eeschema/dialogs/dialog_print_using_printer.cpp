@@ -166,6 +166,12 @@ bool DIALOG_PRINT_USING_PRINTER::TransferDataToWindow()
 {
     EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
 
+    if( cfg->m_Printing.monochrome )
+    {
+        m_checkBackgroundColor->SetValue( false );
+        m_checkBackgroundColor->Enable( false );
+    }
+
     m_checkReference->SetValue( cfg->m_Printing.title_block );
     m_checkMonochrome->SetValue( cfg->m_Printing.monochrome );
     m_checkBackgroundColor->SetValue( cfg->m_Printing.background );
@@ -241,7 +247,10 @@ void DIALOG_PRINT_USING_PRINTER::SavePrintOptions()
 
     cfg->m_Printing.monochrome  = m_checkMonochrome->IsChecked();
     cfg->m_Printing.title_block = m_checkReference->IsChecked();
-    cfg->m_Printing.background  = m_checkBackgroundColor->IsChecked();
+
+    if( m_checkBackgroundColor->IsEnabled() )
+        cfg->m_Printing.background  = m_checkBackgroundColor->IsChecked();
+
     cfg->m_Printing.use_theme   = m_checkUseColorTheme->IsChecked();
 
     COLOR_SETTINGS* theme = static_cast<COLOR_SETTINGS*>(
