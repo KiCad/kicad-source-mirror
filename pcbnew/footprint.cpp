@@ -2212,20 +2212,18 @@ void FOOTPRINT::CheckFootprintAttributes( const std::function<void( const wxStri
     {
         wxString msg;
 
-        if( likelyAttr == FP_THROUGH_HOLE )
+        switch( likelyAttr )
         {
+        case FP_THROUGH_HOLE:
             msg.Printf( _( "(expected 'Through hole'; actual '%s')" ), GetTypeName() );
-        }
-        else if( likelyAttr == FP_SMD )
-        {
+            break;
+        case FP_SMD:
             msg.Printf( _( "(expected 'SMD'; actual '%s')" ), GetTypeName() );
-        }
-        else
-        {
+            break;
+        default:
             msg.Printf( _( "(expected 'Other'; actual '%s')" ), GetTypeName() );
+            break;
         }
-
-        msg = wxT( "(" ) + msg + wxT( ")" );
 
         (aErrorHandler)( msg );
     }
