@@ -1670,6 +1670,16 @@ void APPEARANCE_CONTROLS::rebuildLayers()
 
     m_paneLayerDisplayOptions->SetLabel( _( "Layer Display Options" ) );
 
+    int hotkey = PCB_ACTIONS::highContrastModeCycle.GetHotKey();
+    wxString msg;
+
+    if( hotkey )
+        msg = wxString::Format( _( "Inactive layers (%s):" ), KeyNameFromKeyCode( hotkey ) );
+    else
+        msg = _( "Inactive layers:" );
+
+    m_inactiveLayersLabel->SetLabel( msg );
+
     m_rbHighContrastNormal->SetLabel( _( "Normal" ) );
     m_rbHighContrastNormal->SetToolTip( _( "Inactive layers will be shown in full color" ) );
 
