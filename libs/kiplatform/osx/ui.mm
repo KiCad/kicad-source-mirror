@@ -136,5 +136,5 @@ void KIPLATFORM::UI::SetOverlayScrolling( const wxWindow* aWindow, bool overlay 
 
 bool KIPLATFORM::UI::AllowIconsInMenus()
 {
-    return false;
+    return true;
 }
