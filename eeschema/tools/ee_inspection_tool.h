@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,7 +51,10 @@ public:
 
     int PrevMarker( const TOOL_EVENT& aEvent );
     int NextMarker( const TOOL_EVENT& aEvent );
+
+    /// Called when clicking on a item:
     int CrossProbe( const TOOL_EVENT& aEvent );
+
     int ExcludeMarker( const TOOL_EVENT& aEvent );
 
     int CheckSymbol( const TOOL_EVENT& aEvent );
@@ -60,6 +63,7 @@ public:
 
     int ShowDatasheet( const TOOL_EVENT& aEvent );
 
+    /// Display the selected item info (when clicking on a item)
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
 
 private:

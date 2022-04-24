@@ -167,6 +167,9 @@ int EE_INSPECTION_TOOL::CrossProbe( const TOOL_EVENT& aEvent )
         }
     }
 
+    // Show the item info on a left click on this item
+    UpdateMessagePanel( aEvent );
+
     return 0;
 }
 
@@ -331,6 +334,7 @@ void EE_INSPECTION_TOOL::setTransitions()
     Go( &EE_INSPECTION_TOOL::RunERC,              EE_ACTIONS::runERC.MakeEvent() );
     Go( &EE_INSPECTION_TOOL::PrevMarker,          EE_ACTIONS::prevMarker.MakeEvent() );
     Go( &EE_INSPECTION_TOOL::NextMarker,          EE_ACTIONS::nextMarker.MakeEvent() );
+    // See note 1:
     Go( &EE_INSPECTION_TOOL::CrossProbe,          EVENTS::SelectedEvent );
     Go( &EE_INSPECTION_TOOL::ExcludeMarker,       EE_ACTIONS::excludeMarker.MakeEvent() );
 
@@ -339,7 +343,9 @@ void EE_INSPECTION_TOOL::setTransitions()
 
     Go( &EE_INSPECTION_TOOL::ShowDatasheet,       EE_ACTIONS::showDatasheet.MakeEvent() );
 
-    Go( &EE_INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::SelectedEvent );
+    // Note 1: tUpdateMessagePanel is called by CrossProbe. So uncomment this line if
+    // call to CrossProbe is modifiied
+    // Go( &EE_INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::SelectedEvent );
     Go( &EE_INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::UnselectedEvent );
     Go( &EE_INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::ClearedEvent );
     Go( &EE_INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::SelectedItemsModified );
