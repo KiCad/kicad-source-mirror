@@ -9,16 +9,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:57-0700\n"
-"PO-Revision-Date: 2022-04-19 21:54+0000\n"
+"PO-Revision-Date: 2022-04-25 17:47+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -2196,15 +2196,15 @@ msgstr "Bildredigerare"
 
 #: common/dialogs/dialog_locked_items_query.cpp:35
 msgid "Skip Locked Items"
-msgstr "Hoppa över låsta föremål"
+msgstr "Hoppa över låsta objekt"
 
 #: common/dialogs/dialog_locked_items_query.cpp:36
 msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
 msgstr ""
-"Ta bort låsta föremål från urvalet och applicera operationen endast på "
-"olåsta föremål (om det finns några)."
+"Ta bort låsta objekt från urvalet och applicera operationen endast på olåsta "
+"objekt (om det finns några)."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, c-format
@@ -2236,12 +2236,12 @@ msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
-"Åsidosätt lås och applicera operationen på alla valda föremål.\n"
-"Alla låsta element förblir låsta tills operationen genomförts."
+"Åsidosätt lås och applicera operationen på alla valda objekt.\n"
+"Alla låsta objekt förblir låsta tills operationen genomförts."
 
 #: common/dialogs/dialog_locked_items_query_base.h:56
 msgid "Locked Items"
-msgstr "Låsta föremål"
+msgstr "Låsta objekt"
 
 #: common/dialogs/dialog_migrate_settings.cpp:31
 msgid "Quit KiCad"
@@ -3039,7 +3039,6 @@ msgstr ""
 "typsnittsskalningsproblem.)"
 
 #: common/dialogs/panel_common_settings_base.cpp:171
-#, fuzzy
 msgid "High-contrast mode dimming factor:"
 msgstr "Högkontrastlägets dämpningsfaktor:"
 
@@ -7407,9 +7406,8 @@ msgstr "Fotavtrycksvisare"
 
 #: cvpcb/display_footprints_frame.cpp:322
 #: pcbnew/toolbars_footprint_viewer.cpp:107
-#, fuzzy
 msgid "Automatic Zoom on footprint change"
-msgstr "Tilldela automatiskt fotavtryck"
+msgstr "Zooma automatiskt vid byte av fotavtryck"
 
 #: cvpcb/display_footprints_frame.cpp:406
 #: cvpcb/display_footprints_frame.cpp:385
@@ -9246,7 +9244,6 @@ msgid "Diameter:"
 msgstr "Diameter:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
-#, fuzzy
 msgid "Set diameter to 0 to use schematic's junction dot size."
 msgstr "Sätt diametern till 0 för att använda kretsschemats knutpunktsstorlek."
 
@@ -9349,7 +9346,7 @@ msgstr "Visa"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:55
 #: eeschema/fields_grid_table.cpp:258
 msgid "H Align"
-msgstr "H Rikta in"
+msgstr "H justering"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:88
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:60
@@ -9357,7 +9354,7 @@ msgstr "H Rikta in"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:56
 #: eeschema/fields_grid_table.cpp:259
 msgid "V Align"
-msgstr "V Rikta in"
+msgstr "V justering"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:91
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
@@ -10034,7 +10031,6 @@ msgid "Text Box Properties"
 msgstr "Egenskaper för textruta"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:77
-#, fuzzy
 msgid "Set width to 0 to use schematic's default line width."
 msgstr ""
 "Sätt bredden till 0 för att använda kretsschemats förinställda linjebredd."
@@ -15953,13 +15949,13 @@ msgstr ""
 "%s%s på plats <b> ( %.3f, %.3f) </b> av konverterad."
 
 #: eeschema/symbol_checker.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %s and %s of converted."
 msgstr ""
-"<b> Dubbelt stift %s </b> %s på plats <b> (%.3f, %.3f) </b> strider mot "
-"stift %s%s på plats <b> ( %.3f, %.3f) </b> i enheter %c och %c av "
+"<b> Dubblettstift %s </b> %s på plats <b> (%.3f, %.3f) </b> är i konflikt "
+"med stift %s%s på plats <b> ( %.3f, %.3f) </b> i enheter %s och %s av "
 "konverterad."
 
 #: eeschema/symbol_checker.cpp:122 eeschema/tools/ee_inspection_tool.cpp:282
@@ -15972,37 +15968,44 @@ msgstr ""
 "på plats <b> ( %s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
-"<b>Dublettstift %s</b> %s\" på plats <b>(%s, %s)</b> strider mot stift %s%s "
-"på plats <b> ( %s, %s)</b> i enheter %c och %c."
+"<b>Dubblettstift %s</b> %s\" på plats <b>(%s, %s)</b> är i konflikt med "
+"stift %s%s på plats <b> ( %s, %s)</b> i enheter %s och %s."
 
 #: eeschema/symbol_checker.cpp:163
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
 msgstr ""
+"<b>En strömförsörjningssymbol skall ha en och endast en enhet</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:169
 msgid "<b>A Power Symbol should have no convert option</b><br><br>"
 msgstr ""
+"<b>En strömförsörjningssymbol skall inte ha optionen \"konvertera\""
+"</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:175
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
-msgstr ""
+msgstr "<b>En strömförsörjningssymbol skall ha endast ett stift</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:184
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only a input or output power pin has "
 "meaning<br><br>"
 msgstr ""
+"<b>Tvivelaktig strömförsörjningssymbol</b><br>Endast ingång eller utgång är "
+"meningsfullt för ett strömförsörjningsstift<br><br>"
 
 #: eeschema/symbol_checker.cpp:191
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only invisible input power pins are "
 "automatically connected<br><br>"
 msgstr ""
+"<b>Tvivelaktig strömförsörjningssymbol</b><br>Endast gömda "
+"strömförsörjningsstift av ingångstyp ansluts automatiskt<br><br>"
 
 #: eeschema/symbol_checker.cpp:216 eeschema/tools/ee_inspection_tool.cpp:333
 #, c-format
@@ -16265,9 +16268,8 @@ msgid "Error saving project library table."
 msgstr "Fel vid sparande av projektspecifik bibliotektabell."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:61
-#, fuzzy
 msgid "Do not update library tables"
-msgstr "Kan inte skapa bibliotekstabellssökväg '%s'."
+msgstr "Uppdatera inte bibliotekstabeller"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:63
 #: eeschema/symbol_editor/symbol_editor.cpp:60
@@ -16275,18 +16277,17 @@ msgid "Do not perform any additional operations after saving library."
 msgstr "Utför inga ytterligare åtgärder efter att du har sparat biblioteket."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:66
-#, fuzzy
 msgid "Update existing library table entry"
-msgstr "Lägg till befintligt bibliotek i tabellen"
+msgstr "Uppdatera befintlig post i bibliotekstabellen"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:67
-#, fuzzy
 msgid ""
 "Update symbol library table entry to point to new library.\n"
 "\n"
 "The original library will no longer be available for use."
 msgstr ""
-"Ersätt symbolbibliotekspost med nytt bibliotek.\n"
+"Uppdatera symbolbibliotekstabellens post till att peka på det nya "
+"biblioteket.\n"
 "\n"
 "Det ursprungliga biblioteket kommer inte längre att vara tillgängligt för "
 "användning."
@@ -16307,7 +16308,7 @@ msgstr ""
 "Lägg till ny post i den globala symbolbibliotekstabellen.\n"
 "\n"
 "Smeknamnet på symbolbibliotekets tabell är försett med\n"
-"ett heltalssuffix för att förhindra duplicerade tabellposter."
+"ett heltalssuffix för att förhindra dubbletter av tabellposter."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:78
 #: eeschema/symbol_editor/symbol_editor.cpp:74
@@ -16315,7 +16316,6 @@ msgid "Add new project library table entry"
 msgstr "Lägg till en ny post i projektbiblioteket"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:79
-#, fuzzy
 msgid ""
 "Add new entry to the project symbol library table.\n"
 "\n"
@@ -16325,7 +16325,7 @@ msgstr ""
 "Lägg till ny post i projektets symbolbibliotekstabell.\n"
 "\n"
 "Smeknamnet på symbolbibliotekets tabell är försett med\n"
-"ett heltalssuffix för att förhindra duplicerade tabellposter."
+"ett heltalssuffix för att förhindra dubbletter av tabellposter."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:162
 #: eeschema/symbol_editor/symbol_editor.cpp:146
@@ -17924,9 +17924,11 @@ msgid "Edit Sheet Page Number"
 msgstr "Ändra bladets sidnummer"
 
 #: eeschema/tools/sch_editor_control.cpp:138
-#, fuzzy, c-format
+#, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
-msgstr "Återställ '%s' till den senast sparade versionen ?"
+msgstr ""
+"Återställ '%s' (och alla underordnade ark) till den senast sparade versionen "
+"?"
 
 #: eeschema/tools/sch_editor_control.cpp:569
 #: eeschema/tools/sch_editor_control.cpp:530
@@ -21881,19 +21883,19 @@ msgstr ""
 "\n"
 "Det styrande värdet visas i fetstil.\n"
 "\n"
-"Beräkningarna gäller för strömmar upp till 35 A (yttre lager) eller 17,5 A "
-"(inre lager), temperaturhöjningar upp till 100 ° C och bredder upp till 400 "
+"Beräkningarna gäller för strömmar upp till 35 A (yttre lager) eller 17,5 A ("
+"inre lager), temperaturhöjningar upp till 100 ° C och bredder upp till 400 "
 "mil (10 mm).\n"
 "\n"
 "Formeln, från IPC 2221, är \n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center> \n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center> \n"
 "där: \n"
 "___I___ är maximal ström i Ampere \n"
 "___&Delta;T___ är temperaturhöjning över omgivningstemperatur i &deg;C \n"
 "___W___ är bredd i mils \n"
 "___H___ är tjocklek (höjd) i mils \n"
-"___K___ är 0.024 för interna spår eller 0.048 för externa spår\n"
+"___K___ är 0.024 för interna spår eller 0,048 för externa spår\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -24373,7 +24375,7 @@ msgstr "Välj hur många precisionssiffror som ska visas"
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:186
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "0.0"
-msgstr "0.0"
+msgstr "0,0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
@@ -24397,20 +24399,19 @@ msgstr "0,00000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.00 in / 0 mils / 0.0 mm"
-msgstr ""
+msgstr "0,00 tum / 0 mils / 0,0 mm"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
-#, fuzzy
 msgid "0.000 / 0 / 0.00"
-msgstr "0,00000"
+msgstr "0,000 / 0 / 0,00"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.0000 / 0.0 / 0.000"
-msgstr ""
+msgstr "0,0000 / 0,0 / 0,000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.00000 / 0.00 / 0.0000"
-msgstr ""
+msgstr "0,00000 / 0,00 / 0,0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:180
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:150
@@ -30405,14 +30406,14 @@ msgid "board setup constraints silk"
 msgstr "mönsterkortsinställningarnas begränsningar för anvisningstryck"
 
 #: pcbnew/drc/drc_engine.cpp:193
-#, fuzzy
 msgid "board setup constraints silk text height"
-msgstr "mönsterkortsinställningarnas begränsningar för anvisningstryck"
+msgstr "mönsterkortsinställningarnas begränsning för texthöjd i anvisningstryck"
 
 #: pcbnew/drc/drc_engine.cpp:199
-#, fuzzy
 msgid "board setup constraints silk text thickness"
-msgstr "mönsterkortsinställningarnas begränsningar för anvisningstryck"
+msgstr ""
+"mönsterkortsinställningarnas begränsning för textens vikt (linjetjocklek) i "
+"anvisningstryck"
 
 #: pcbnew/drc/drc_engine.cpp:205 pcbnew/drc/drc_engine.cpp:202
 msgid "board setup constraints hole"
@@ -30529,29 +30530,29 @@ msgid "Checking %s clearance: %s."
 msgstr "Kontrollerar %s marginal: %s."
 
 #: pcbnew/drc/drc_engine.cpp:934
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max uncoupled length: %s."
-msgstr "Kontroll %s; sidenavstånd: %s."
+msgstr "Kontrollerar %s; maximal okopplad längd: %s."
 
 #: pcbnew/drc/drc_engine.cpp:940
 #, fuzzy, c-format
 msgid "Checking %s max skew: %s."
-msgstr "Kontrollerar %s %s: %s."
+msgstr "Kontrollerar %s max skew: %s."
 
 #: pcbnew/drc/drc_engine.cpp:946
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s gap: %s."
-msgstr "Kontrollerar %s %s: %s."
+msgstr "Kontrollerar %s mellanrum: %s."
 
 #: pcbnew/drc/drc_engine.cpp:952
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s thermal spoke width: %s."
-msgstr "Zon %s termisk avlastning, ekerbredd: %s."
+msgstr "Kontrollerar %s ekerbredd för termisk avlastning: %s."
 
 #: pcbnew/drc/drc_engine.cpp:958
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s zone connection: %s."
-msgstr "Kontrollerar nätanslutningar ..."
+msgstr "Kontrollerar %s anslutning till zon: %s."
 
 #: pcbnew/drc/drc_engine.cpp:974 pcbnew/drc/drc_engine.cpp:975
 #: pcbnew/drc/drc_engine.cpp:976 pcbnew/tools/board_inspection_tool.cpp:202
@@ -30566,54 +30567,61 @@ msgid "undefined"
 msgstr "odefinierad"
 
 #: pcbnew/drc/drc_engine.cpp:989
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s track width: opt %s."
-msgstr "Kontrollerar ledarbredder ..."
+msgstr "Kontrollerar %s ledarbredd: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:995
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints track width: min %s."
-msgstr "mönsterkortsinställningarnas begränsningar för gårdsplan"
+msgstr ""
+"Kontrollerar mönsterkortsinställningarnas begränsning för ledarbredd: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1003
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s annular width: min %s."
-msgstr "Kontroll med ringringar ..."
+msgstr "Kontrollerar %s kragbredd: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s via diameter: opt %s."
-msgstr "Kontroll via diametrar ..."
+msgstr "Kontrollerar %s viadiameter: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1017
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints via diameter: min %s."
-msgstr "mönsterkortsinställningarnas begränsningar för kanter"
+msgstr ""
+"Kontrollerar mönsterkortsinställningarnas begränsning för viadiameter: min "
+"%s."
 
 #: pcbnew/drc/drc_engine.cpp:1026
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole size: opt %s."
-msgstr "Kontroll %s; sidenavstånd: %s."
+msgstr "Kontrollerar %s håldiameter: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints hole size: min %s."
-msgstr "mönsterkortsinställningarnas begränsningar för hål"
+msgstr ""
+"Kontrollerar mönsterkortsinställningarnas begränsning för håldiameter: min "
+"%s."
 
 #: pcbnew/drc/drc_engine.cpp:1040 pcbnew/drc/drc_engine.cpp:1046
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s: min %s."
-msgstr "Kontrollerar %s %s: %s."
+msgstr "Kontrollerar %s: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1054
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s diff pair gap: opt %s."
-msgstr "Kontrollerar %s marginal: %s."
+msgstr "Kontrollerar %s differentialpars mellanrum: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1061
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints clearance: min %s."
-msgstr "Kontroll %s; gårdsavstånd: %s."
+msgstr ""
+"Kontrollerar mönsterkortsinställningarnas begränsning för isolationsavstånd: "
+"min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1069 pcbnew/drc/drc_engine.cpp:1095
 #: pcbnew/drc/drc_engine.cpp:1457 pcbnew/drc/drc_engine.cpp:983
@@ -32139,7 +32147,7 @@ msgstr "Parameter"
 #: pcbnew/footprint_wizard_frame.cpp:565
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
-msgstr "ModView: 3D Viewer [%s]"
+msgstr "ModView: 3D-visare [%s]"
 
 #: pcbnew/footprint_wizard_frame.cpp:586
 msgid "Select wizard script to run"
@@ -34424,7 +34432,7 @@ msgstr ""
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5524
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2469
 msgid "Legacy Zone Warning"
-msgstr "Legacy Zone Warning"
+msgstr "Varning för gammal typ av zon (legacy)"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2453
 #, c-format
@@ -35705,47 +35713,42 @@ msgid "Report incomplete: could not compile custom design rules.  "
 msgstr "Rapport ofullständig: kunde inte kompilera anpassade designregler.  "
 
 #: pcbnew/tools/board_inspection_tool.cpp:235
-#, fuzzy
 msgid "Violation Report"
-msgstr "Överträdelsens allvarlighetsgrad"
+msgstr "Överträdelserapport"
 
 #: pcbnew/tools/board_inspection_tool.cpp:261
-#, fuzzy
 msgid "Uncoupled Length"
-msgstr "Dragen längd"
+msgstr "Okopplad längd"
 
 #: pcbnew/tools/board_inspection_tool.cpp:262
-#, fuzzy
 msgid "Diff pair uncoupled length resolution for:"
-msgstr "Differentiell okopplad längd för lång"
+msgstr "Tar reda på okopplad längd för differentiellt par:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:270
 #: pcbnew/tools/board_inspection_tool.cpp:752
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved max uncoupled length: %s."
-msgstr "Tog bort oanvänt nät %s."
+msgstr "Tog reda på okopplad längd: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:277
 #: pcbnew/tools/board_inspection_tool.cpp:1066
-#, fuzzy
 msgid "Text height resolution for:"
-msgstr "Tar reda på spärrzoner för:"
+msgstr "Tar reda på texthöjd för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:285
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved height constraints: min %s; max %s."
-msgstr "Breddbegränsningar: min %s; opt %s max %s."
+msgstr "Tog reda på höjdbegränsningar: min %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:292
 #: pcbnew/tools/board_inspection_tool.cpp:1082
-#, fuzzy
 msgid "Text thickness resolution for:"
-msgstr "Texttjocklek utanför intervall"
+msgstr "Tar reda på textvikt (linjetjocklek) för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:300
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thickness constraints: min %s; max %s."
-msgstr "Breddbegränsningar: min %s; opt %s max %s."
+msgstr "Tog reda på begränsningar för tjocklek: min %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:307
 #: pcbnew/tools/board_inspection_tool.cpp:987
@@ -35754,9 +35757,9 @@ msgid "Track width resolution for:"
 msgstr "Tar reda på ledarbredd för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved width constraints: min %s; max %s."
-msgstr "Breddbegränsningar: min %s; opt %s max %s."
+msgstr "Tog reda på begränsningar för bredd: min %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:322
 #: pcbnew/tools/board_inspection_tool.cpp:1006
@@ -35766,14 +35769,13 @@ msgstr "Tar reda på viadiameter för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:330
 #: pcbnew/tools/board_inspection_tool.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved diameter constraints: min %s; max %s."
-msgstr "Diameterbegränsningar: min %s; opt %s; max %s."
+msgstr "Tog reda på begränsningar för diameter: min %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:336
-#, fuzzy
 msgid "Via Annulus"
-msgstr "Via ringformad bredd"
+msgstr "Viakrage"
 
 #: pcbnew/tools/board_inspection_tool.cpp:337
 #: pcbnew/tools/board_inspection_tool.cpp:1023
@@ -35782,9 +35784,9 @@ msgid "Via annular width resolution for:"
 msgstr "Tar reda på viors kragbredd för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
-msgstr "Årsringbreddsbegränsningar: min %s; opt %s; max %s."
+msgstr "Tog reda på begränsningar för kragbredd: min %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:352
 #: pcbnew/tools/board_inspection_tool.cpp:1043
@@ -35799,9 +35801,8 @@ msgid "Hole diameter resolution for:"
 msgstr "Tar reda på håldiameter för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:367
-#, fuzzy
 msgid "Hole Clearance"
-msgstr "Isolationsavstånd"
+msgstr "Isolationsavstånd för hål"
 
 #: pcbnew/tools/board_inspection_tool.cpp:368
 #: pcbnew/tools/board_inspection_tool.cpp:824
@@ -35854,9 +35855,8 @@ msgid "No 'mechanical_hole_clearance' constraints defined."
 msgstr "Ingen 'mechanical_hole_clearance'-begräsning definierad."
 
 #: pcbnew/tools/board_inspection_tool.cpp:411
-#, fuzzy
 msgid "Edge Clearance"
-msgstr "Isolationsavstånd"
+msgstr "Marginal för mönsterkortskant"
 
 #: pcbnew/tools/board_inspection_tool.cpp:412
 #: pcbnew/tools/board_inspection_tool.cpp:857
@@ -35952,29 +35952,27 @@ msgid "Clearance: %s."
 msgstr "Isolationsavstånd: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:725
-#, fuzzy
 msgid "Diff Pair"
-msgstr "Mellanrum mellan differentialpar"
+msgstr "Differentiellt par"
 
 #: pcbnew/tools/board_inspection_tool.cpp:726
-#, fuzzy
 msgid "Diff pair gap resolution for:"
-msgstr "Tar reda på isolationsavstånd för:"
+msgstr "Tar reda på mellanrum för differentiellt par:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:731
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
-msgstr "Breddbegränsningar: min %s; opt %s max %s."
+msgstr "Tog reda på begränsningar för mellanrum: min %s; opt %s max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:739
-#, fuzzy
 msgid "Diff pair max uncoupled length resolution for:"
-msgstr "Differentiell okopplad längd för lång"
+msgstr "Tar reda på max okopplad längd för differentiellt par:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:744
-#, fuzzy
 msgid "No 'diff_pair_uncoupled' constraints defined."
-msgstr "Ingen 'mechanical_clearance'-begränsning definierad."
+msgstr ""
+"Inga begränsningar definierade för differentiellt pars okopplade längd: "
+"'diff_pair_uncoupled'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:768
 #: pcbnew/tools/board_inspection_tool.cpp:511
@@ -36026,14 +36024,14 @@ msgid "Annular width constraints: min %s; opt %s; max %s."
 msgstr "Årsringbreddsbegränsningar: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1074
-#, fuzzy, c-format
+#, c-format
 msgid "Text height constraints: min %s; opt %s; max %s."
-msgstr "Breddbegränsningar: min %s; opt %s max %s."
+msgstr "Texthöjdsbegränsningar: min %s; opt %s max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1090
-#, fuzzy, c-format
+#, c-format
 msgid "Text thickness constraints: min %s; opt %s; max %s."
-msgstr "Breddbegränsningar: min %s; opt %s max %s."
+msgstr "Begränsningar för textvikt (linjetjocklek): min %s; opt %s max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1098
 #: pcbnew/tools/board_inspection_tool.cpp:833
@@ -38677,7 +38675,7 @@ msgstr "Endast %s"
 #: pcbnew/widgets/panel_selection_filter.cpp:184
 #: pcbnew/widgets/panel_selection_filter_base.cpp:23
 msgid "Locked items"
-msgstr "Låsta föremål"
+msgstr "Låsta objekt"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:185
 #: pcbnew/widgets/panel_selection_filter_base.cpp:25
