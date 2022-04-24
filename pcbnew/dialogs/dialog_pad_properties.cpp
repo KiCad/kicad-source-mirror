@@ -1345,7 +1345,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     }
 
     if( error )
-        error_msgs.Add(  _( "Too large value for pad delta size." ) );
+        error_msgs.Add(  _( "Error: Trapazoid delta is too large." ) );
 
     switch( m_dummyPad->GetAttribute() )
     {
@@ -1354,20 +1354,25 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         if( drill_size.x <= 0
             || ( drill_size.y <= 0 && m_dummyPad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ) )
         {
-            warning_msgs.Add( _( "Warning: Through hole pad has no hole." ) );
+            error_msgs.Add( _( "Error: Through hole pad has no hole." ) );
         }
         break;
 
     case PAD_ATTRIB::CONN:      // Connector pads are smd pads, just they do not have solder paste.
         if( padlayers_mask[B_Paste] || padlayers_mask[F_Paste] )
         {
-            warning_msgs.Add( _( "Warning: Connector pads normally have no solder paste. Use an "
+            warning_msgs.Add( _( "Warning: Connector pads normally have no solder paste. Use a "
                                  "SMD pad instead." ) );
         }
         KI_FALLTHROUGH;
 
     case PAD_ATTRIB::SMD:       // SMD and Connector pads (One external copper layer only)
     {
+        if( drill_size.x > 0 || drill_size.y > 0 )
+        {
+            error_msgs.Add( _( "Error: SMD pad has a hole." ) );
+        }
+
         LSET innerlayers_mask = padlayers_mask & LSET::InternalCuMask();
 
         if( ( padlayers_mask[F_Cu] && padlayers_mask[B_Cu] ) || innerlayers_mask.count() != 0 )
