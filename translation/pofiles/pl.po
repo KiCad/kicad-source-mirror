@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:57-0700\n"
-"PO-Revision-Date: 2022-04-24 08:57+0000\n"
+"PO-Revision-Date: 2022-04-25 17:47+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -1921,12 +1921,12 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"KiCad został uruchomiony po raz pierwszy z użyciem nowej %s tabeli \n"
-"bibliotek służącej do dostępu do bibliotek.  Aby program KiCad miał dostęp "
-"do \n"
-"%s bibliotek, należy skonfigurować %s tabelę bibliotek. Proszę wybrać \n"
-"jedną z opcji pokazanych poniżej.  Jeśli nie jest pewne, którą opcję "
-"wybrać, \n"
+"KiCad został uruchomiony po raz pierwszy z użyciem nowej tabeli \n"
+"bibliotek %s służącej do dostępu do bibliotek.  Aby program KiCad miał "
+"dostęp do \n"
+"bibliotek %s, należy skonfigurować tabelę bibliotek %s. Proszę wybrać \n"
+"jedną z opcji pokazanych poniżej.  Gdy nie ma pewności, którą opcję wybrać, "
+"\n"
 "prosimy wybrać opcję domyślną."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:49
@@ -22313,7 +22313,7 @@ msgstr "Wybierz warstwę do usunięcia:"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:743
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:165
 msgid "Copper"
-msgstr "Miedź"
+msgstr "Warstwa miedzi"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1033
 msgid ""
@@ -28938,7 +28938,7 @@ msgstr "Dostrajanie długości"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:143
 msgid "Include stackup height in track length calculations"
-msgstr "Uwzględnij wysokość stosu warstw obliczeniach długości ścieżki"
+msgstr "Uwzględnij wysokość stosu warstw w obliczeniach długości ścieżki"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:144
 msgid ""
@@ -35803,7 +35803,7 @@ msgstr "Długość bez pary"
 
 #: pcbnew/tools/board_inspection_tool.cpp:262
 msgid "Diff pair uncoupled length resolution for:"
-msgstr "Analiza długości dla niesprzężonej pary różnicowej:"
+msgstr "Analiza długości niesprzężonej pary różnicowej dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:270
 #: pcbnew/tools/board_inspection_tool.cpp:752
@@ -35814,7 +35814,7 @@ msgstr "Przeanalizowano maksymalną długość niesprzężonej pary różnicowej
 #: pcbnew/tools/board_inspection_tool.cpp:277
 #: pcbnew/tools/board_inspection_tool.cpp:1066
 msgid "Text height resolution for:"
-msgstr "Analiza dla wysokości tekstu:"
+msgstr "Analiza wysokości tekstu dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:285
 #, c-format
@@ -35824,7 +35824,7 @@ msgstr "Przeanalizowano ograniczenia wysokości tekstu: min %s; maks %s."
 #: pcbnew/tools/board_inspection_tool.cpp:292
 #: pcbnew/tools/board_inspection_tool.cpp:1082
 msgid "Text thickness resolution for:"
-msgstr "Analiza dla grubości tekstu:"
+msgstr "Analiza grubości tekstu dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:300
 #, c-format
@@ -35834,7 +35834,7 @@ msgstr "Przeanalizowano ograniczenia grubości: min %s; maks %s."
 #: pcbnew/tools/board_inspection_tool.cpp:307
 #: pcbnew/tools/board_inspection_tool.cpp:987
 msgid "Track width resolution for:"
-msgstr "Analiza dla szerokości ścieżki:"
+msgstr "Analiza szerokości ścieżki dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:315
 #, c-format
@@ -35844,7 +35844,7 @@ msgstr "Przeanalizowano ograniczenia szerokości: min %s; maks %s."
 #: pcbnew/tools/board_inspection_tool.cpp:322
 #: pcbnew/tools/board_inspection_tool.cpp:1006
 msgid "Via diameter resolution for:"
-msgstr "Analiza dla szerokości przelotki:"
+msgstr "Analiza szerokości przelotki dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:330
 #: pcbnew/tools/board_inspection_tool.cpp:361
@@ -35859,7 +35859,7 @@ msgstr "Pierścienie przelotki"
 #: pcbnew/tools/board_inspection_tool.cpp:337
 #: pcbnew/tools/board_inspection_tool.cpp:1023
 msgid "Via annular width resolution for:"
-msgstr "Analiza dla szerokości pierścienia przelotki:"
+msgstr "Analiza szerokości pierścienia przelotki dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:345
 #, c-format
@@ -35874,7 +35874,7 @@ msgstr "Rozmiar otworu"
 #: pcbnew/tools/board_inspection_tool.cpp:353
 #: pcbnew/tools/board_inspection_tool.cpp:1044
 msgid "Hole diameter resolution for:"
-msgstr "Analiza dla rozmiaru otworu:"
+msgstr "Analiza rozmiaru otworu dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:367
 msgid "Hole Clearance"
@@ -35883,7 +35883,7 @@ msgstr "Prześwit otworów"
 #: pcbnew/tools/board_inspection_tool.cpp:368
 #: pcbnew/tools/board_inspection_tool.cpp:824
 msgid "Hole clearance resolution for:"
-msgstr "Analiza dla prześwitu otworów:"
+msgstr "Analiza prześwitu otworów między:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:376
 #: pcbnew/tools/board_inspection_tool.cpp:462
@@ -35910,7 +35910,7 @@ msgstr "Prześwit pola lutowniczego: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:391
 #: pcbnew/tools/board_inspection_tool.cpp:921
 msgid "Mechanical hole clearance resolution for:"
-msgstr "Analiza dla prześwitu otworów mechanicznych:"
+msgstr "Analiza prześwitu otworów mechanicznych między:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:400
 #: pcbnew/tools/board_inspection_tool.cpp:933
@@ -35924,17 +35924,17 @@ msgstr "Prześwit względem krawędzi"
 #: pcbnew/tools/board_inspection_tool.cpp:412
 #: pcbnew/tools/board_inspection_tool.cpp:857
 msgid "Edge clearance resolution for:"
-msgstr "Analiza dla prześwitu wobec krawędzi:"
+msgstr "Analiza prześwitu wobec krawędzi między:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:454
 #: pcbnew/tools/board_inspection_tool.cpp:692
 msgid "Clearance resolution for:"
-msgstr "Analiza dla prześwitu:"
+msgstr "Analiza prześwitu między:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:477
 #: pcbnew/tools/board_inspection_tool.cpp:882
 msgid "Mechanical clearance resolution for:"
-msgstr "Analiza dla prześwitu mechanicznego:"
+msgstr "Analiza prześwitu mechanicznego między:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:486
 #: pcbnew/tools/board_inspection_tool.cpp:894
@@ -35956,7 +35956,7 @@ msgstr "Raport o prześwitach"
 
 #: pcbnew/tools/board_inspection_tool.cpp:613
 msgid "Zone connection resolution for:"
-msgstr "Analiza dla połączeń ze strefami:"
+msgstr "Analiza połączeń ze strefami dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:622
 #, c-format
@@ -35999,7 +35999,7 @@ msgstr "Para różnicowa"
 
 #: pcbnew/tools/board_inspection_tool.cpp:726
 msgid "Diff pair gap resolution for:"
-msgstr "Analiza dla prześwitu pary różnicowej:"
+msgstr "Analiza prześwitu pary różnicowej między:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:731
 #, c-format
@@ -36008,7 +36008,7 @@ msgstr "Przeanalizowano ograniczenia prześwitu: min %s; optymalnie %s; maks %s.
 
 #: pcbnew/tools/board_inspection_tool.cpp:739
 msgid "Diff pair max uncoupled length resolution for:"
-msgstr "Analiza długości dla niesprzężonej pary różnicowej:"
+msgstr "Analiza długości niesprzężonej pary różnicowej dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:744
 msgid "No 'diff_pair_uncoupled' constraints defined."
@@ -36016,11 +36016,11 @@ msgstr "Nie zdefiniowano ograniczenia 'diff_pair_uncoupled'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:768
 msgid "Silkscreen clearance resolution for:"
-msgstr "Analiza dla prześwitu warstwy opisowej:"
+msgstr "Analiza prześwitu warstwy opisowej między:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:792
 msgid "Courtyard clearance resolution for:"
-msgstr "Analiza dla prześwitu pomiędzy polami zajętości:"
+msgstr "Analiza prześwitu pomiędzy polami zajętości:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:873
 msgid "Mechanical"
@@ -36070,7 +36070,7 @@ msgstr "Strefy chronione"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1099
 msgid "Keepout resolution for:"
-msgstr "Analiza dla strefy chronionej:"
+msgstr "Analiza strefy chronionej dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1109
 #: pcbnew/tools/board_inspection_tool.cpp:1131
