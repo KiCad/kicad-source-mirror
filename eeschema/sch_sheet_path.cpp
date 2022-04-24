@@ -97,7 +97,7 @@ namespace std
 
 SCH_SHEET_PATH::SCH_SHEET_PATH()
 {
-    m_virtualPageNumber = 0;
+    m_virtualPageNumber = 1;
     m_current_hash = 0;
 }
 
