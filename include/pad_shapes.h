@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,8 @@
 
 /**
  * The set of pad shapes, used with PAD::{Set,Get}Shape()
- * DO NOT REORDER, legacy_plugin is dependent on the integer values
+ *
+ * --> DO NOT REORDER, legacy_plugin is dependent on the integer values <--
  */
 enum class PAD_SHAPE : int
 {
@@ -41,7 +42,7 @@ enum class PAD_SHAPE : int
     // Rectangle with a chamfered corner ( and with rounded other corners).
     CHAMFERED_RECT,
     CUSTOM            // A shape defined by user, using a set of basic shapes
-                      // (thick segments, circles, arcs, polygons.
+                      // (thick segments, circles, arcs, polygons).
 };
 
 static inline std::string PAD_SHAPE_T_asString( PAD_SHAPE a )
@@ -89,7 +90,7 @@ enum class PAD_ATTRIB
 
 
 /**
- * Ghe set of pad properties used in Gerber files (Draw files, and P&P files)
+ * The set of pad properties used in Gerber files (Draw files, and P&P files)
  * to define some properties in fabrication or test files.
  */
 enum class PAD_PROP
