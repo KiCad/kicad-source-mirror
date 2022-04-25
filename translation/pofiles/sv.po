@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:57-0700\n"
-"PO-Revision-Date: 2022-04-25 17:47+0000\n"
+"PO-Revision-Date: 2022-04-28 11:08+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -2812,7 +2812,7 @@ msgstr "Sidinställningar..."
 #: common/dialogs/dialog_unit_entry_base.cpp:22
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1545
 msgid "MyLabel"
-msgstr "MyLabel"
+msgstr "MinEtikett"
 
 #: common/dialogs/eda_list_dialog.cpp:48 common/widgets/lib_tree.cpp:123
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:749
@@ -3466,7 +3466,7 @@ msgstr "Panorera åt vänster/höger med horisontell rörelse"
 msgid ""
 "Pan the canvas left and right when scrolling left to right on the touchpad"
 msgstr ""
-"Panorera duken till vänster och höger när du rullar vänster och höger på "
+"Panorera ritytan till vänster och höger när du rullar vänster och höger på "
 "pekplattan"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
@@ -3485,7 +3485,7 @@ msgstr "Återställ till standardvärden för Pekplatta"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:710 pcbnew/zone.cpp:599
 #: pcbnew/zone.cpp:1344
 msgid "Solid"
-msgstr "Solid"
+msgstr "Heldragen"
 
 #: common/dialogs/panel_setup_netclasses.cpp:91 common/eda_shape.cpp:1635
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:342
@@ -3503,16 +3503,16 @@ msgstr "Prickad"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:342
 #: include/stroke_params.h:74
 msgid "Dash-Dot"
-msgstr "Streck-Prickad"
+msgstr "Punktstreckad"
 
 #: common/dialogs/panel_setup_netclasses.cpp:97 common/eda_shape.cpp:1638
 #: include/stroke_params.h:75
 msgid "Dash-Dot-Dot"
-msgstr "Streck-Punkt-Punkt"
+msgstr "Dubbelpunktstreckad"
 
 #: common/dialogs/panel_setup_netclasses.cpp:442
 msgid "Netclass must have a name."
-msgstr "Nätklass måste ha ett namn."
+msgstr "Nätklassen måste ha ett namn."
 
 #: common/dialogs/panel_setup_netclasses.cpp:451
 msgid "Netclass name already in use."
@@ -4188,7 +4188,7 @@ msgstr "tum"
 #: pagelayout_editor/pl_editor_frame.cpp:723
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:193
 msgid "mils"
-msgstr "mils"
+msgstr "mils (1/1000 tum)"
 
 #: common/eda_draw_frame.cpp:598
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:56
@@ -4241,7 +4241,7 @@ msgstr "Textruta"
 #: common/eda_item.cpp:335 common/eda_item.cpp:336 pcbnew/pcb_dimension.cpp:298
 #: pcbnew/pcb_dimension.cpp:285
 msgid "Dimension"
-msgstr "Dimensioner"
+msgstr "Måttsättning"
 
 #: common/eda_item.cpp:327 common/eda_item.cpp:337 pcbnew/pcb_dimension.cpp:954
 #: pcbnew/pcb_dimension.cpp:1076 pcbnew/pcb_dimension.cpp:924
@@ -5270,7 +5270,7 @@ msgstr "User.9"
 
 #: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:939
 msgid "Rescue"
-msgstr "Rescue"
+msgstr "Rädda"
 
 #: common/layer_id.cpp:105
 msgid "Wires"
@@ -6296,7 +6296,7 @@ msgstr "Rutnätsegenskaper..."
 
 #: common/tool/actions.cpp:481
 msgid "Set grid dimensions"
-msgstr "Ange rutnätsdimensioner"
+msgstr "Ange rutnätets delning"
 
 #: common/tool/actions.cpp:486
 msgid "Use inches"
@@ -6308,7 +6308,7 @@ msgstr "Använd tum"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:89
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:54
 msgid "Mils"
-msgstr "Mils"
+msgstr "Mils (1/1000 tum)"
 
 #: common/tool/actions.cpp:491
 msgid "Use mils"
@@ -8758,7 +8758,7 @@ msgstr "Ändra allvarlighetsgraden till Fel för alla överträdelser av '%s'"
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr ""
 "Överträdelsens allvarlighetsgrad kan också redigeras i dialogrutan "
-"Mönsterkortsinställningar..."
+"\"Mönsterkortsinställningar...\""
 
 #: eeschema/dialogs/dialog_erc.cpp:615 pcbnew/dialogs/dialog_drc.cpp:574
 #: eeschema/dialogs/dialog_erc.cpp:609 pcbnew/dialogs/dialog_drc.cpp:562
@@ -8789,7 +8789,7 @@ msgstr "Redigera allvarlighetsgraden för överträdelser..."
 #: eeschema/dialogs/dialog_erc.cpp:633 eeschema/dialogs/dialog_erc.cpp:826
 #: eeschema/dialogs/dialog_erc.cpp:627 eeschema/dialogs/dialog_erc.cpp:797
 msgid "Open the Schematic Setup... dialog"
-msgstr "Öppna dialogrutan Kretsschema-inställningar..."
+msgstr "Öppna dialogrutan \"Kretsschemainställningar...\""
 
 #: eeschema/dialogs/dialog_erc.cpp:725
 #: eeschema/dialogs/dialog_schematic_setup.cpp:76
@@ -10424,7 +10424,7 @@ msgstr "Det gick inte att skriva plot-filer till mappen '%s'."
 #: pcbnew/dialogs/dialog_plot.cpp:1056 pcbnew/dialogs/dialog_plot.cpp:1049
 #, c-format
 msgid "Plotted to '%s'."
-msgstr "Plottad till '%s'."
+msgstr "Plottade till '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:528
 #: eeschema/dialogs/dialog_plot_schematic.cpp:698
@@ -10440,7 +10440,7 @@ msgstr "Färdig."
 #: eeschema/dialogs/dialog_plot_schematic.cpp:874
 #, c-format
 msgid "Plotted to '%s'.\n"
-msgstr "Plottad till '%s'.\n"
+msgstr "Plottade till '%s'.\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1185
 msgid "Done"
@@ -10449,7 +10449,7 @@ msgstr "Färdig"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1260
 #, c-format
 msgid "Falling back to user path '%s'."
-msgstr "Faller tillbaka till användarväg '%s'."
+msgstr "Faller tillbaka på användardefinierad sökväg '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1289
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1327
@@ -14335,7 +14335,7 @@ msgstr "Gå till Sida %s (%s)"
 
 #: eeschema/sch_field.cpp:768
 msgid "Back to Previous Selected Sheet"
-msgstr "Tillbaka till tidigare valt blad"
+msgstr "Tillbaka till tidigare valt ark"
 
 #: eeschema/sch_field.cpp:848 eeschema/sch_label.cpp:191
 #: eeschema/sch_label.cpp:1101
@@ -16880,7 +16880,7 @@ msgstr "Redigera symbol"
 
 #: eeschema/tools/ee_actions.cpp:128
 msgid "Show selected symbol on editor canvas"
-msgstr "Visa vald symbol på redigeringsduken"
+msgstr "Visa vald symbol på redigerarens rityta"
 
 #: eeschema/tools/ee_actions.cpp:133
 msgid "Duplicate Symbol"
@@ -17943,7 +17943,7 @@ msgstr "Nått slutet på arket."
 #: eeschema/tools/sch_editor_control.cpp:574
 #: eeschema/tools/sch_editor_control.cpp:535
 msgid "Find again to wrap around to the start."
-msgstr "Hitta igen för att slå tillbaka till början."
+msgstr "Sök igen för att gå tillbaka till början."
 
 #: eeschema/tools/sch_editor_control.cpp:978
 #: eeschema/tools/sch_editor_control.cpp:939
@@ -18567,11 +18567,11 @@ msgstr "Bottenlager"
 
 #: gerbview/files.cpp:209
 msgid "Bottom solder resist"
-msgstr "Lödavvisande mask undersida"
+msgstr "Lödmask undersida"
 
 #: gerbview/files.cpp:210
 msgid "Top solder resist"
-msgstr "Lödavvisande mask ovansida"
+msgstr "Lödmask ovansida"
 
 #: gerbview/files.cpp:211
 msgid "Bottom overlay"
@@ -18720,22 +18720,22 @@ msgstr "AB-axel"
 #: gerbview/toolbars_gerber.cpp:145
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:25
 msgid "Net:"
-msgstr "Netto:"
+msgstr "Nät:"
 
 #: gerbview/gerber_draw_item.cpp:744
 #, c-format
 msgid "Cmp: %s  Pad: %s"
-msgstr "Cmp: %s Pad: %s"
+msgstr "Komp: %s Lödyta: %s"
 
 #: gerbview/gerber_draw_item.cpp:750
 #, c-format
 msgid "Cmp: %s  Pad: %s  Fct %s"
-msgstr "Cmp: %s Pad: %s Fct %s"
+msgstr "Komp: %s Lödyta: %s Funkt: %s"
 
 #: gerbview/gerber_draw_item.cpp:759 gerbview/toolbars_gerber.cpp:129
 #: gerbview/toolbars_gerber.cpp:132
 msgid "Cmp:"
-msgstr "Cmp:"
+msgstr "Komp:"
 
 #: gerbview/gerber_draw_item.cpp:1021
 #, c-format
@@ -18756,11 +18756,11 @@ msgstr "Bildrot."
 
 #: gerbview/gerber_file_image.cpp:355
 msgid "X Justify"
-msgstr "X Motivera"
+msgstr "X Justering"
 
 #: gerbview/gerber_file_image.cpp:358
 msgid "Y Justify"
-msgstr "Y Motivera"
+msgstr "Y Justering"
 
 #: gerbview/gerber_file_image.cpp:382
 msgid "Image Justify Offset"
@@ -19083,7 +19083,7 @@ msgstr "Visa lager i diff (jämför) -läge"
 
 #: gerbview/tools/gerbview_actions.cpp:184
 msgid "Flip Gerber View"
-msgstr "Vänd Gerber View"
+msgstr "Spegelvänd Gerbervisning"
 
 #: gerbview/tools/gerbview_actions.cpp:184
 msgid "Show as mirror image"
@@ -19170,7 +19170,7 @@ msgstr "Visa negativa objekt i den här färgen"
 #: gerbview/widgets/gerbview_layer_widget.cpp:99
 #: pcbnew/widgets/appearance_controls.cpp:357
 msgid "Show the (x,y) grid dots"
-msgstr "Visa rutorna (x, y)"
+msgstr "Visa rutnätspunkter (x, y)"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:101
 msgid "Show drawing sheet border and title block"
@@ -22364,11 +22364,11 @@ msgstr "Lodpasta ovansida"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:535
 msgid "Top Solder Mask"
-msgstr "Topplödmask"
+msgstr "Ovansidans lödmask"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:579
 msgid "Bottom Solder Mask"
-msgstr "Bottenlödmask"
+msgstr "Undersidans lödmask"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:587
 msgid "Bottom Solder Paste"
@@ -22428,7 +22428,7 @@ msgstr "Pläterad mönsterkortskant"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:31
 msgid "Copper finish:"
-msgstr "Kopparns ytfinish:"
+msgstr "Oxidskydd på koppar:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:40
 msgid "Edge card connectors:"
@@ -22444,11 +22444,11 @@ msgstr "Alternativ för kantkortanslutningar."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:117
 msgid "Core"
-msgstr "Kärna"
+msgstr "Laminatbas"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:118
 msgid "PrePreg"
-msgstr "PrePreg"
+msgstr "Bindark"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:177
 #, c-format
@@ -22596,15 +22596,15 @@ msgstr "32"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:37
 msgid "Impedance controlled"
-msgstr "Impedans kontrollerad"
+msgstr "Impedansanpassat"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:38
 msgid ""
 "If Impedance Controlled option is set,\n"
 "Loss tangent and EpsilonR will be added to constraints."
 msgstr ""
-"Om impedanskontrollerat alternativ är inställt,\n"
-"Loss tangent och EpsilonR kommer att läggas till begränsningar."
+"Om alternativ impedansanpassat är valt, kommer\n"
+"förlusttangent och EpsilonR kommer att läggas till begränsningarna."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:45
 msgid "Add Dielectric Layer..."
@@ -22641,7 +22641,7 @@ msgstr "ENEPIG"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:40
 msgid "HAL SnPb"
-msgstr "HAL SnPb"
+msgstr "HAL SnPb (varmluftsförtenning tenn/bly)"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:41
 msgid "HAL lead-free"
@@ -22954,7 +22954,7 @@ msgid ""
 "Back footprints starting with '%s' will have the prefix removed."
 msgstr ""
 "\n"
-"Tillbaka fotavtryck som börjar med '%s' kommer att ta bort prefixet."
+"Baksidans fotavtryck som börjar med '%s' kommer att få prefixet borttaget."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:359
 #, c-format
@@ -22963,7 +22963,7 @@ msgid ""
 "Back footprints will have '%s' inserted as a prefix."
 msgstr ""
 "\n"
-"Tillbaka fotavtryck har \"%s\" infogats som ett prefix."
+"Baksidans fotavtryck kommer att få \"%s\" tillagt som ett prefix."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:367
 #, c-format
@@ -23122,7 +23122,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Tillbaka Fotavtryck"
+"Baksidans fotavtryck"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:916
 msgid "Footprint not found in changelist"
@@ -24256,7 +24256,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:311
 msgid "Change dimension properties"
-msgstr "Ändra dimensionens egenskaper"
+msgstr "Ändra måttsättningens egenskaper"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:22
 msgid "Leader Format"
@@ -24286,7 +24286,7 @@ msgstr "Lager:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:69
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:89
 msgid "Dimension Format"
-msgstr "Dimensionsformat"
+msgstr "Måttsättningsformat"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:98
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:104
@@ -24318,8 +24318,8 @@ msgid ""
 "Units of this dimension (\"automatic\" to follow the units selected in the "
 "editor)"
 msgstr ""
-"Enheter av denna dimension (\"automatisk\" för att följa de enheter som "
-"valts i redigeraren)"
+"Enhet för detta mått (\"automatisk\" för att följa de enheter som valts i "
+"redigeraren)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:132
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:137
@@ -24428,7 +24428,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:211
 msgid "Dimension Text"
-msgstr "Dimensionstext"
+msgstr "Måttsättningstext"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:274
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:167
@@ -24514,7 +24514,7 @@ msgstr "Välj hur texten ska placeras relativt måttlinjen"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:365
 msgid "Keep aligned with dimension"
-msgstr "Håll dig i linje med dimensionen"
+msgstr "Håll i linje med måttet"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:366
 msgid "Automatically set the text orientation to match the dimension lines"
@@ -24526,7 +24526,7 @@ msgstr "Måttsättningslinje"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:389
 msgid "Thickness of the dimension lines"
-msgstr "Dimensionslinjernas tjocklek"
+msgstr "Måttlinjernas tjocklek"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:403
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:139
@@ -24545,7 +24545,7 @@ msgstr "Avstånd mellan de uppmätta punkterna och förlängningslinjernas start
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.h:138
 msgid "Dimension Properties"
-msgstr "Dimensionsegenskaper"
+msgstr "Måttsättningens egenskaper"
 
 #: pcbnew/dialogs/dialog_drc.cpp:98
 msgid "Run DRC"
@@ -24585,7 +24585,7 @@ msgstr "Kör avståndsupplösningsverktyget..."
 #: pcbnew/dialogs/dialog_drc.cpp:587 pcbnew/dialogs/dialog_drc.cpp:763
 #: pcbnew/dialogs/dialog_drc.cpp:575 pcbnew/dialogs/dialog_drc.cpp:751
 msgid "Open the Board Setup... dialog"
-msgstr "Öppna dialogrutan Mönsterkortsinställningar..."
+msgstr "Öppna dialogrutan \"Mönsterkortsinställningar...\""
 
 #: pcbnew/dialogs/dialog_drc.cpp:833 pcbnew/dialogs/dialog_drc.cpp:821
 #, c-format
@@ -24720,7 +24720,7 @@ msgstr ""
 "Uppdatera / återställ strängar: det finns två fall som dessa beskrivningar "
 "måste täcka: användaren har gjort ändringar i ett fotavtryck på "
 "mönsterkortet och vill ta bort dem, eller användaren har gjort ändringar i "
-"bibliotekets fotavtryck och vill överföra dem tillbaka till mönsterkortet."
+"bibliotekets fotavtryck och vill överföra dem till mönsterkortet."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:359
 #, c-format
@@ -25399,9 +25399,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:256
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:608
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:54
-#, fuzzy
 msgid "Solder mask expansion:"
-msgstr "Lödmaskexpansion:"
+msgstr "Lödmaskens frigång:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:287
 msgid ""
@@ -25410,7 +25409,7 @@ msgid ""
 "This value can be superseded by a pad local value.\n"
 "If 0, the global value is used."
 msgstr ""
-"Detta är det lokala avståndet mellan lödytorna och lödmasken för detta "
+"Detta är den lokala frigången mellan lödytorna och lödmasken för detta "
 "fotavtryck.\n"
 "Det här värdet kan ersättas med ett lokalt värde per lödyta.\n"
 "Om 0 används det globala värdet."
@@ -25517,9 +25516,8 @@ msgstr "Termisk avlastning"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:370
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:341
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:790
-#, fuzzy
 msgid "Clearance Overrides and Settings"
-msgstr "Åsidosättande och inställningar för isolationsavstånd"
+msgstr "Lokala avstånd och inställningar"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:389
 msgid ""
@@ -25570,10 +25568,11 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Detta är det lokala nätavståndet för alla lödytor med detta fotavtryck.\n"
-"Om 0 används nätklass-värdena.\n"
+"Detta är det lokala nätisolationsavståndet för alla lödytor i detta "
+"fotavtryck.\n"
+"Om 0 används värden från nätklassinställningarna.\n"
 "Detta värde kan åsidosättas individuellt per lödyta i fliken\n"
-"\"Lokala avstånd och inställningar\" i Lödyte-egenskaper."
+"\"Lokala avstånd och inställningar\" i lödyte-egenskaper."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:258
 msgid ""
@@ -25583,11 +25582,11 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Detta är det lokala spelrummet mellan dynorna och lödmasken för\n"
+"Detta är den lokala frigången mellan lödytorna och lödmasken för\n"
 "detta fotavtryck.\n"
 "Om 0 används det globala värdet.\n"
-"Detta värde kan åsidosättas pad för pad i Local\n"
-"Fliken Clearance and Settings i Pad Properties."
+"Detta värde kan åsidosättas för individuella lödytor i lödyteegenskapernas\n"
+"flik för lokala avstånd och inställningar."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:274
 msgid ""
@@ -26511,7 +26510,7 @@ msgstr "Flytta objekt"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:78 pcbnew/netinfo_item.cpp:77
 msgid "Net Code"
-msgstr "Nettokod"
+msgstr "Nätkod"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:79 pcbnew/netinfo_item.cpp:75
 msgid "Net Name"
@@ -26543,7 +26542,7 @@ msgstr "Total längd"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:85 pcbnew/netinfo_item.cpp:122
 msgid "Net Length"
-msgstr "Nettolängd"
+msgstr "Nätets längd"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1793
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1850
@@ -26863,22 +26862,22 @@ msgstr "Varning: Lödytans hål lämnar inte kvar någon kopparkrage."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1284
 msgid "Warning: Negative local clearance values will have no effect."
-msgstr "Varning: Negativa lokala avståndsvärden har ingen verkan."
+msgstr "Varning: Negativa lokala värden för frigång har ingen verkan."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1301
 msgid ""
 "Warning: Negative solder mask clearances larger than some shape primitives. "
 "Results may be surprising."
 msgstr ""
-"Varning: Negativa lödmaskmarginaler är större än vissa primitiva former. "
-"Resultaten kan bli oförutsägbara."
+"Varning: Negativa värden för lödmaskens frigång är större än vissa primitiva "
+"former. Resultaten kan bli oförutsägbara."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1310
 msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
 msgstr ""
-"Varning: Negativ marginal för lödmask är större än lödytan. Ingen lödmask "
+"Varning: Negativ frigång för lödmask är större än lödytan. Ingen lödmask "
 "genereras."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1329
@@ -27194,7 +27193,7 @@ msgstr "Baksida silkskärm"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:536
 msgid "Back solder mask"
-msgstr "Baklödmask"
+msgstr "Baksidans lödmask"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:539
 msgid "Drafting notes"
@@ -27282,8 +27281,8 @@ msgid ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
 msgstr ""
-"Detta är det lokala avståndet mellan denna lödyta och lödmasken.\n"
-"Om 0 används det lokala fotavtryckets värde eller det globala värdet."
+"Detta är den lokala frigången mellan denna lödyta och lödmasken.\n"
+"Om 0 används det fotavtryckets lokala värde eller det globala värdet."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:623
 msgid ""
@@ -27310,13 +27309,13 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"Detta är den lokala relativa marginalen procent mellan denna lödyta och dess "
-"lodpasta.\n"
+"Detta är den lokala relativa marginalen i procent mellan denna lödyta och "
+"dess lodpasta.\n"
 "Ett värde på 10 betyder att marginalen är 10 procent av lödytans storlek.\n"
 "Om 0, används värdet som är definierat för fotavtrycket, eller det globala "
 "värdet.\n"
-"Den slutliga marginalen är summan av detta värde och den absoluta "
-"marginalen.\n"
+"Den slutliga marginalen är summan av detta värde och den absoluta marginalen."
+"\n"
 "Ett negativt värde betyder att masköppningen för lodpasta är mindre än "
 "lödytan."
 
@@ -27514,7 +27513,7 @@ msgstr "Rita lödytor på tillverkningslager"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
-msgstr "Inkludera pad konturer på F.Fab och B.Fab lager när du plottar"
+msgstr "Inkludera lödytekonturer på lagren F.Fab och B.Fab när du plottar"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:97
 msgid "Do not tent vias"
@@ -27573,7 +27572,7 @@ msgstr "Skissa"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:137
 msgid "Mirrored plot"
-msgstr "Speglad plot"
+msgstr "Spegelvänd plot"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:140
 msgid "Negative plot"
@@ -27587,7 +27586,7 @@ msgstr "Kontrollera fyllning av zoner innan plottning"
 #: pcbnew/dialogs/dialog_plot_base.cpp:163
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
 msgstr ""
-"Globalt minimi-bredd och/eller -marginal för lödmask är inte ställd till 0. "
+"Global minimibredd och/eller frigång för lödmask är inte ställd till 0. "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:164
 #: pcbnew/dialogs/dialog_plot_base.cpp:167
@@ -29150,9 +29149,9 @@ msgid ""
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
 msgstr ""
-"Minsta avstånd mellan kopparelement som inte hör till samma nät. Om angiven "
-"är detta ett absolut minimum som inte kan underskridas av nätklasser, "
-"anpassade regler, eller andra inställningar."
+"Minsta isolationsavstånd mellan kopparelement som inte hör till samma nät. "
+"Om angivet är detta ett absolut minimum som inte kan underskridas av "
+"nätklasser, anpassade regler, eller andra inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:197
 msgid "Minimum track width:"
@@ -29439,7 +29438,7 @@ msgstr "SilkS_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:106
 msgid "If you want a solder mask layer for the front of the board"
-msgstr "Om du vill ha ett lödmaskeringsskikt på framsidan av mönsterkortet"
+msgstr "Om du vill ha ett lager för lödmask på framsidan av mönsterkortet"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:110
 msgid "Mask_Front"
@@ -29766,7 +29765,7 @@ msgstr "Skiktnamn på bakre (nedre) kopparskiktet"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:574
 msgid "If you want a solder mask layer for the back side of the board"
-msgstr "Om du vill ha ett lödmaskskikt på baksidan av mönsterkortet"
+msgstr "Om du vill ha ett lager för lödmask på baksidan av mönsterkortet"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:578
 msgid "SoldM_Back"
@@ -29905,7 +29904,7 @@ msgid ""
 "Use your board manufacturer's recommendations for solder mask expansion and "
 "minimum web width."
 msgstr ""
-"Använd din mönsterkorttillverkares rekommendationer för lödmasksexpansion "
+"Använd din mönsterkorttillverkares rekommendationer för lödmaskens frigång "
 "och minsta bryggbredd."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
@@ -29917,16 +29916,17 @@ msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
-"Globalt utrymme mellan lödytor och lödmasken.\n"
-"Detta värde kan ersättas av lokala värden för ett fotavtryck eller en lödyta."
+"Globalt värde för frigång mellan lödytor och lödmasken.\n"
+"Detta värde kan ersättas av lokalt definierade värden för ett fotavtryck "
+"eller en lödyta."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:61
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
 msgstr ""
-"Positivt avstånd betyder område som är större än lödytan (vanligt för "
-"lödmaskmarginal)."
+"Positivt värde för frigång ger en öppning som är större än lödytan (vanligt "
+"för lödmaskens frigång)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
 msgid "Solder mask minimum web width:"
@@ -29939,8 +29939,9 @@ msgid ""
 "This parameter is only used to plot solder mask layers.\n"
 "Leave at 0 unless you know what you are doing."
 msgstr ""
-"Min. distans mellan två lödytor.\n"
-"Två lödytor närmare än detta värde slås samman under plottning.\n"
+"Min. distans mellan två lödytors lödmasköppningar.\n"
+"Två lödytors lödmasköppningar som är närmare varandra än detta värde slås "
+"samman under plottning.\n"
 "Den här parametern används bara för att plotta lödmasklager.\n"
 "Lämna 0 om du inte vet vad du gör."
 
@@ -29980,8 +29981,8 @@ msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste "
 "clearance)."
 msgstr ""
-"Med negativt avstånd menas en yta som är mindre än lödytan (vanligt för "
-"marginal för lodpasta)."
+"Negativt avstånd ger en yta som är mindre än lödytan (vanligt för marginal "
+"för lodpasta)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:118
 msgid ""
@@ -30313,13 +30314,13 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
-msgstr "Standardegenskaper för objekt för nya dimensioner:"
+msgstr "Standardegenskaper för nya måttsättningsobjekt:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:93
 msgid ""
 "Default units for dimensions (\"automatic\" to follow the chosen UI units)"
 msgstr ""
-"Förinställda måttenheter för dimensioner (\"automatisk\" för att följa de "
+"Förinställda måttenheter för måttsättning (\"automatisk\" för att följa de "
 "enheter som valts i användargränssnittet)"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:100
@@ -30328,7 +30329,7 @@ msgstr "Textposition:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:108
 msgid "Where to position the dimension text relative to the dimension line"
-msgstr "Var man placerar dimensionstexten relativt måttlinjen"
+msgstr "Var man placerar måttsättningstexten relativt måttlinjen"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:122
 msgid "Keep text aligned"
@@ -30336,7 +30337,7 @@ msgstr "Håll texten inriktad"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:123
 msgid "When checked, dimension text will be kept aligned with dimension lines"
-msgstr "När det är markerat hålls dimensionstexten i linje med måttlinjer"
+msgstr "När det är markerat hålls måttsättningstexten i linje med måttlinjer"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:135
 msgid "How many digits of precision to show"
@@ -31297,8 +31298,7 @@ msgstr "(%s maxlängd: %s; faktisk: %s)"
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:158
 #, c-format
 msgid "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)"
-msgstr ""
-"(%s max skev: %s; faktisk: %s; genomsnittlig nettolängd: %s; faktisk: %s)"
+msgstr "(%s max skev: %s; faktisk: %s; genomsnittlig nätlängd: %s; faktisk: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:188
 #, c-format
@@ -31394,12 +31394,12 @@ msgstr "mönsterkortsinställning lödmaskens minsta bredd"
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:450
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:539
 msgid "Front solder mask aperture bridges items with different nets"
-msgstr "Öppning i främre lödmask överbryggar objekt från olika nät"
+msgstr "Öppning i framsidans lödmask överbryggar objekt från olika nät"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:455
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:544
 msgid "Rear solder mask aperture bridges items with different nets"
-msgstr "Öppning i bakre lödmask överbryggar objekt från olika nät"
+msgstr "Öppning i baksidans lödmask överbryggar objekt från olika nät"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:650
 msgid "Building solder mask..."
@@ -31407,7 +31407,7 @@ msgstr "Bygger lödmask..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:658
 msgid "Checking solder mask to silk clearance..."
-msgstr "Kontrollerar avstånd mellan lödmask och screentryck..."
+msgstr "Kontrollerar avstånd mellan lödmask och anvisningstryck..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:663
 msgid "Checking solder mask web integrity..."
@@ -31755,7 +31755,7 @@ msgstr "Mönsterkortssida"
 
 #: pcbnew/footprint.cpp:975 pcbnew/footprint.cpp:965
 msgid "Back (Flipped)"
-msgstr "Tillbaka (vänd)"
+msgstr "Baksida (spegelvänd)"
 
 #: pcbnew/footprint.cpp:993 pcbnew/footprint.cpp:983
 msgid "autoplaced"
@@ -33113,9 +33113,8 @@ msgid "Pad To Die Length"
 msgstr "Längd lödyta till chip"
 
 #: pcbnew/pad.cpp:1718
-#, fuzzy
 msgid "Soldermask Margin Override"
-msgstr "Lokal marginal för lödmask"
+msgstr "Lokalt värde för lödmaskens frigång"
 
 #: pcbnew/pad.cpp:1726 pcbnew/zone.cpp:1367
 msgid "Thermal Relief Spoke Width"
@@ -33398,7 +33397,7 @@ msgstr "Min ringformad bredd: %s"
 
 #: pcbnew/pcb_track.cpp:845
 msgid "NetCode"
-msgstr "NetCode"
+msgstr "Nätkod"
 
 #: pcbnew/pcb_track.cpp:976
 #, c-format
@@ -33562,8 +33561,8 @@ msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"Dimension hittad på ett Altium-lager (%d) som saknar motsvarighet i KiCad. "
-"Den har flyttats till KiCad-lager Eco1_User."
+"Måttsättning hittad på ett Altium-lager (%d) som saknar motsvarighet i "
+"KiCad. Den har flyttats till KiCad-lager Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1547
 msgid "Loading dimension drawings..."
@@ -33573,7 +33572,7 @@ msgstr "Läser in måttritningar..."
 #: pcbnew/plugins/altium/altium_pcb.cpp:1575
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
-msgstr "Ignorerade dimension av typ %d (inte stödd ännu)."
+msgstr "Ignorerade måttsättning av typ %d (stöds inte ännu)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1616
 msgid "No 3D-models will be imported."
@@ -33861,8 +33860,8 @@ msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
 "aligned dimension was loaded instead."
 msgstr ""
-"Dimension ID %s är en vinklad dimension som inte har någon KiCad-ekvivalent. "
-"En anpassad dimension laddades istället."
+"Måttsättning med ID %s är en vinklat mått som inte har någon KiCad-"
+"ekvivalent. En horisontell/vertikal dimension laddades istället."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1384
 #, c-format
@@ -34396,7 +34395,7 @@ msgid ""
 "Items found on undefined layers.  Do you wish to\n"
 "rescue them to the User.Comments layer?"
 msgstr ""
-"Objekt som finns i odefinierade lager. Vill du\n"
+"Objekt hittades på odefinierade lager. Vill du\n"
 "rädda dem till User.Comments-lagret?"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:931
@@ -35875,9 +35874,8 @@ msgstr "Tar reda på isolationsavstånd för:"
 #: pcbnew/tools/board_inspection_tool.cpp:477
 #: pcbnew/tools/board_inspection_tool.cpp:882
 #: pcbnew/tools/board_inspection_tool.cpp:625
-#, fuzzy
 msgid "Mechanical clearance resolution for:"
-msgstr "Tar reda på mekaniskt mellanrum för:"
+msgstr "Tar reda på mekanisk frigång för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:486
 #: pcbnew/tools/board_inspection_tool.cpp:894
@@ -36231,7 +36229,7 @@ msgstr "Placera via"
 
 #: pcbnew/tools/drc_tool.cpp:151
 msgid "Refilling all zones..."
-msgstr "Påfyllning av alla zoner ..."
+msgstr "Gör om fyllning av alla zoner ..."
 
 #: pcbnew/tools/drc_tool.cpp:160
 msgid "Schematic parity tests require a fully annotated schematic."
@@ -36446,7 +36444,7 @@ msgstr "Rita linje"
 
 #: pcbnew/tools/pcb_actions.cpp:82
 msgid "Draw a line"
-msgstr "Dra ett streck"
+msgstr "Rita en linje"
 
 #: pcbnew/tools/pcb_actions.cpp:88
 msgid "Draw Graphic Polygon"
@@ -36490,35 +36488,35 @@ msgstr "Lägg till ett textobjekt med radbrytning"
 
 #: pcbnew/tools/pcb_actions.cpp:134
 msgid "Add Aligned Dimension"
-msgstr "Lägg till inriktad dimension"
+msgstr "Lägg till riktat mått"
 
 #: pcbnew/tools/pcb_actions.cpp:134
 msgid "Add an aligned linear dimension"
-msgstr "Lägg till en justerad linjär dimension"
+msgstr "Lägg till ett riktat linjärt mått"
 
 #: pcbnew/tools/pcb_actions.cpp:139
 msgid "Add Center Dimension"
-msgstr "Lägg till mittdimension"
+msgstr "Lägg till centrummått"
 
 #: pcbnew/tools/pcb_actions.cpp:139
 msgid "Add a center dimension"
-msgstr "Lägg till en mittdimension"
+msgstr "Lägg till ett centrummått"
 
 #: pcbnew/tools/pcb_actions.cpp:144
 msgid "Add Radial Dimension"
-msgstr "Lägg till radiell dimension"
+msgstr "Lägg till radiellt mått"
 
 #: pcbnew/tools/pcb_actions.cpp:144
 msgid "Add a radial dimension"
-msgstr "Lägg till en radiell dimension"
+msgstr "Lägg till ett radiellt mått"
 
 #: pcbnew/tools/pcb_actions.cpp:149
 msgid "Add Orthogonal Dimension"
-msgstr "Lägg till ortogonal dimension"
+msgstr "Lägg till ortogonalt mått"
 
 #: pcbnew/tools/pcb_actions.cpp:149
 msgid "Add an orthogonal dimension"
-msgstr "Lägg till en ortogonal dimension"
+msgstr "Lägg till ett ortogonalt mått"
 
 #: pcbnew/tools/pcb_actions.cpp:154
 msgid "Add Leader"
@@ -36526,7 +36524,7 @@ msgstr "Lägg till Leader"
 
 #: pcbnew/tools/pcb_actions.cpp:154
 msgid "Add a leader dimension"
-msgstr "Lägg till en ledardimension"
+msgstr "Lägg till mått med hänvisningslinje"
 
 #: pcbnew/tools/pcb_actions.cpp:165
 msgid "Add Filled Zone"
@@ -36746,7 +36744,7 @@ msgstr "Redigera fotavtryck"
 
 #: pcbnew/tools/pcb_actions.cpp:369
 msgid "Show selected footprint on editor canvas"
-msgstr "Visa markerat fotavtryck på redigeringsduken"
+msgstr "Visa markerat fotavtryck på redigerarens rityta"
 
 #: pcbnew/tools/pcb_actions.cpp:374
 msgid "Delete Footprint from Library"
@@ -37173,7 +37171,7 @@ msgstr "Förhindra att objekt flyttas och/eller skalas om på ritbordet"
 
 #: pcbnew/tools/pcb_actions.cpp:704
 msgid "Allow items to be moved and/or resized on the canvas"
-msgstr "Tillåt att objekt flyttas och/eller skalas om på duken"
+msgstr "Tillåt att objekt flyttas och/eller skalas om på ritbordet"
 
 #: pcbnew/tools/pcb_actions.cpp:709
 msgid "Group the selected items so that they are treated as a single item"
@@ -37810,7 +37808,7 @@ msgstr "Mått för differentiellt par..."
 
 #: pcbnew/tools/pcb_actions.cpp:1354
 msgid "Open Differential Pair Dimension settings"
-msgstr "Öppna inställningarna för differentiell pardimension"
+msgstr "Öppna måttinställningarna för differentiellt par"
 
 #: pcbnew/tools/pcb_actions.cpp:1359
 msgid "Router Highlight Mode"
@@ -37866,7 +37864,7 @@ msgstr "Ställ in ett differentiellt par"
 
 #: pcbnew/tools/pcb_actions.cpp:1409
 msgid "Walks the current track back one segment."
-msgstr "Går tillbaka med den aktuella ledaren ett segment."
+msgstr "Går tillbaka ett segment längs den aktuella ledaren."
 
 #: pcbnew/tools/pcb_actions.cpp:1414
 msgid ""
@@ -38023,12 +38021,12 @@ msgstr "Regler"
 
 #: pcbnew/tools/zone_filler_tool.cpp:146 pcbnew/tools/zone_filler_tool.cpp:230
 msgid "Zone fills may be inaccurate.  DRC rules contain errors."
-msgstr "Zonpåfyllningar kan vara felaktiga. DRC-regler innehåller fel."
+msgstr "Zonfyllningar kan vara felaktiga. DRC-regler innehåller fel."
 
 #: pcbnew/tools/zone_filler_tool.cpp:241
 #, c-format
 msgid "Refill %d Zones"
-msgstr "Påfyllning %d Zoner"
+msgstr "Gör om fyllning av %d zoner"
 
 #: pcbnew/tools/zone_filler_tool.cpp:250
 msgid "Auto-fill Zone(s)"
@@ -38084,7 +38082,7 @@ msgstr "Visa fotavtryck som finns på mönsterkorets framsida"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Footprints Back"
-msgstr "Fotavtryck tillbaka"
+msgstr "Fotavtryck baksida"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Show footprints that are on board's back"
@@ -38262,7 +38260,7 @@ msgstr "Spegelvänd visningen av mönsterkortet"
 #: pcbnew/widgets/appearance_controls.cpp:661
 #: pcbnew/widgets/appearance_controls.cpp:2352
 msgid "Net Display Options"
-msgstr "Alternativ för nettovisning"
+msgstr "Alternativ för nätvisning"
 
 #: pcbnew/widgets/appearance_controls.cpp:673
 #: pcbnew/widgets/appearance_controls.cpp:2357
@@ -38273,7 +38271,7 @@ msgstr "Nätfärger (%s):"
 #: pcbnew/widgets/appearance_controls.cpp:675
 #: pcbnew/widgets/appearance_controls.cpp:2359
 msgid "Net colors:"
-msgstr "Netto färger:"
+msgstr "Nät färger:"
 
 #: pcbnew/widgets/appearance_controls.cpp:680
 #: pcbnew/widgets/appearance_controls.cpp:2362
@@ -38537,7 +38535,7 @@ msgstr "Visa endast bakre lager"
 
 #: pcbnew/widgets/appearance_controls.cpp:1741
 msgid "Show Only Back Assembly Layers"
-msgstr "Visa endast tillbaka monteringslager"
+msgstr "Visa endast baksidans monteringslager"
 
 #: pcbnew/widgets/appearance_controls.cpp:2058
 #, c-format
@@ -38816,15 +38814,15 @@ msgstr "Ta bort isolerade kopparöar ..."
 
 #: pcbnew/zone_filler.cpp:436
 msgid "Zone fills are out-of-date. Refill?"
-msgstr "Zonfyllningar är inaktuella. Påfyllning?"
+msgstr "Zonfyllningar är inaktuella. Fyll på nytt?"
 
 #: pcbnew/zone_filler.cpp:438
 msgid "Refill"
-msgstr "Påfyllning"
+msgstr "Gör om fyllning"
 
 #: pcbnew/zone_filler.cpp:438
 msgid "Continue without Refill"
-msgstr "Fortsätt utan påfyllning"
+msgstr "Fortsätt utan att fylla om"
 
 #: pcbnew/zones.h:62
 msgid "inherited"
@@ -38836,7 +38834,7 @@ msgstr "termiska avlastningar"
 
 #: pcbnew/zones.h:65
 msgid "solid"
-msgstr "solid"
+msgstr "heltäckande"
 
 #: pcbnew/zones.h:66
 msgid "thermal reliefs for PTH"
