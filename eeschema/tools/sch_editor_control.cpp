@@ -1670,7 +1670,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             return 0;
     }
 
-    bool forceKeepAnnotations = pasteMode == PASTE_MODE::KEEP_ANNOTATIONS;
+    bool forceKeepAnnotations = pasteMode != PASTE_MODE::REMOVE_ANNOTATIONS;
 
     // SCH_SEXP_PLUGIN added the items to the paste screen, but not to the view or anything
     // else.  Pull them back out to start with.
@@ -1873,7 +1873,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             for( SCH_SHEET_PATH& instance : pasteInstances )
             {
                 SCH_SHEET_PATH sheetPath = updatePastedSheet( instance, clipPath, sheet,
-                                                              forceKeepAnnotations,
+                                                              ( forceKeepAnnotations && annotate.recursive ),
                                                               &pastedSheets[instance],
                                                               &pastedSymbols[instance] );
 
@@ -1960,37 +1960,14 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     EE_SELECTION& selection = selTool->GetSelection();
 
-    // We should have a new selection of only the pasted symbols with their annotations cleared
+    // We should have a new selection of only the pasted symbols and sheets
     if( pasteMode == PASTE_MODE::RESPECT_OPTIONS )
     {
-        NULL_REPORTER reporter;
-
         // Annotate the symbols on the current sheet with the selection
         m_frame->AnnotateSymbols( ANNOTATE_SELECTION, (ANNOTATE_ORDER_T) annotate.sort_order,
-                                  (ANNOTATE_ALGO_T) annotate.method, annotateStartNum, false, false,
-                                  reporter, true );
-
-
-        // Annotate all the sheets we've copied and pasted
-        SCH_SHEET_PATH originalSheet = m_frame->GetCurrentSheet();
-
-        for( SCH_SHEET_PATH& instance : pasteInstances )
-        {
-            for( SCH_SHEET_PATH& pastedSheet : pastedSheets[instance] )
-            {
-                m_frame->SetCurrentSheet( pastedSheet );
-                m_frame->GetCurrentSheet().UpdateAllScreenReferences();
-                m_frame->SetSheetNumberAndCount();
-                m_frame->AnnotateSymbols( ANNOTATE_CURRENT_SHEET,
-                                          (ANNOTATE_ORDER_T) annotate.sort_order,
-                                          (ANNOTATE_ALGO_T) annotate.method, annotateStartNum,
-                                          false, false, reporter, true );
-            }
-        }
-
-        m_frame->SetCurrentSheet( originalSheet );
-        m_frame->GetCurrentSheet().UpdateAllScreenReferences();
-        m_frame->SetSheetNumberAndCount();
+                                  (ANNOTATE_ALGO_T) annotate.method, annotate.recursive,
+                                  annotateStartNum, true, false, NULL_REPORTER::GetInstance(),
+                                  true );
     }
 
     if( !selection.Empty() )

@@ -278,8 +278,8 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                     NULL_REPORTER reporter;
                     m_frame->AnnotateSymbols( ANNOTATE_SELECTION,
                                               (ANNOTATE_ORDER_T) annotate.sort_order,
-                                              (ANNOTATE_ALGO_T) annotate.method, annotateStartNum,
-                                              false, false, reporter, true );
+                                              (ANNOTATE_ALGO_T) annotate.method, annotate.recursive,
+                                              annotateStartNum, false, false, reporter, true );
                 }
 
                 if( m_frame->eeconfig()->m_AutoplaceFields.enable )

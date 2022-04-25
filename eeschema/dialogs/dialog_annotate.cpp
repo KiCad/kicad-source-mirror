@@ -59,6 +59,8 @@ private:
 
     ANNOTATE_SCOPE_T GetScope();
 
+    bool GetRecursive();
+
     ANNOTATE_ORDER_T GetSortOrder();
 
     ANNOTATE_ALGO_T GetAnnotateAlgo();
@@ -109,7 +111,7 @@ DIALOG_ANNOTATE::~DIALOG_ANNOTATE()
     if( m_rbScope_Schematic->IsEnabled() )
     {
         cfg->m_AnnotatePanel.scope = GetScope();
-        cfg->m_AnnotatePanel.recursive = m_checkRecursive->GetValue();
+        cfg->m_AnnotatePanel.recursive = GetRecursive();
     }
 
     cfg->m_AnnotatePanel.messages_filter = m_MessageWindow->GetVisibleSeverities();
@@ -216,7 +218,7 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     REPORTER& reporter = m_MessageWindow->Reporter();
     m_MessageWindow->SetLazyUpdate( true );     // Don't update after each message
 
-    m_Parent->AnnotateSymbols( GetScope(), GetSortOrder(), GetAnnotateAlgo(),
+    m_Parent->AnnotateSymbols( GetScope(), GetSortOrder(), GetAnnotateAlgo(), GetRecursive(),
                                GetStartNumber(), GetResetItems(), true, reporter );
 
     m_MessageWindow->Flush( true );             // Now update to show all messages
@@ -244,7 +246,7 @@ void DIALOG_ANNOTATE::OnClearAnnotationClick( wxCommandEvent& event )
 {
     bool appendUndo = false;
 
-    m_Parent->DeleteAnnotation( GetScope(), &appendUndo );
+    m_Parent->DeleteAnnotation( GetScope(), GetRecursive(), &appendUndo );
     m_btnClear->Enable( false );
 }
 
@@ -270,6 +272,12 @@ ANNOTATE_SCOPE_T DIALOG_ANNOTATE::GetScope()
         return ANNOTATE_CURRENT_SHEET;
     else
         return ANNOTATE_SELECTION;
+}
+
+
+bool DIALOG_ANNOTATE::GetRecursive()
+{
+    return m_checkRecursive->GetValue();
 }
 
 

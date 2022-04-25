@@ -365,7 +365,7 @@ public:
      * @param aCurrentSheetOnly Where to clear the annotation. See #ANNOTATE_SCOPE_T
      * @param appendUndo true to add the action to the previous undo list
      */
-    void DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool* appendUndo );
+    void DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRecursive, bool* appendUndo );
 
     /**
      * Annotate the symbols in the schematic that are not currently annotated. Multi-unit symbols
@@ -375,6 +375,7 @@ public:
      * @param aAnnotateScope See #ANNOTATE_SCOPE_T
      * @param aSortOption Define the annotation order.  See #ANNOTATE_ORDER_T.
      * @param aAlgoOption Define the annotation style.  See #ANNOTATE_ALGO_T.
+     * @param aRecursive  Annotation should descend into and annotate subsheets
      * @param aStartNumber The start number for non-sheet-based annotation styles.
      * @param aResetAnnotation Clear any previous annotation if true.  Otherwise, keep the
      *                         existing symbol annotation.
@@ -392,8 +393,9 @@ public:
      * 200 to 299, and so on.
      */
     void AnnotateSymbols( ANNOTATE_SCOPE_T aAnnotateScope, ANNOTATE_ORDER_T aSortOption,
-                          ANNOTATE_ALGO_T aAlgoOption, int aStartNumber, bool aResetAnnotation,
-                          bool aRepairTimestamps, REPORTER& aReporter, bool appendUndo = false );
+                          ANNOTATE_ALGO_T aAlgoOption, bool aRecursive, int aStartNumber,
+                          bool aResetAnnotation, bool aRepairTimestamps, REPORTER& aReporter,
+                          bool appendUndo = false );
 
     /**
      * Check for annotation errors.
@@ -412,7 +414,8 @@ public:
      *                       Otherwise check the entire schematic.
      */
     int CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler,
-                       ANNOTATE_SCOPE_T         aAnnotateScope = ANNOTATE_ALL );
+                       ANNOTATE_SCOPE_T         aAnnotateScope = ANNOTATE_ALL,
+                       bool                     aRecursive = true );
 
     /**
      * Run a modal version of the annotate dialog for a specific purpose.
