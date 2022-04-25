@@ -305,7 +305,8 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
 
     hb_buffer_t* buf = hb_buffer_create();
     hb_buffer_add_utf8( buf, aText.c_str(), -1, 0, -1 );
-    hb_buffer_guess_segment_properties( buf ); // guess direction, script, and language based on contents
+    hb_buffer_guess_segment_properties( buf );  // guess direction, script, and language based on
+                                                // contents
 
     unsigned int         glyphCount;
     hb_glyph_info_t*     glyphInfo = hb_buffer_get_glyph_infos( buf, &glyphCount );
@@ -411,11 +412,24 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
     // Font metrics don't include all descenders and diacriticals, so beef them up just a little.
     extents.y *= 1.05;
 
-    // Shorten the bar a little so its rounded ends don't make it over-long
-    double barTrim = glyphSize.x * 0.125;
-
     if( IsOverbar( aTextStyle ) )
     {
+        std::vector<std::unique_ptr<GLYPH>> underscoreGlyphs;
+
+        getTextAsGlyphs( nullptr, &underscoreGlyphs, wxT( "_" ), aSize, { 0, 0 }, ANGLE_0, false,
+                         { 0, 0 }, aTextStyle & ~TEXT_STYLE::OVERBAR );
+
+        OUTLINE_GLYPH* underscoreGlyph = static_cast<OUTLINE_GLYPH*>( underscoreGlyphs[0].get() );
+        EDA_RECT       underscoreBBox;
+
+        for( const VECTOR2I& pt : underscoreGlyph->Outline( 0 ).CPoints() )
+            underscoreBBox.Merge( pt );
+
+        int barThickness = underscoreBBox.GetHeight();
+
+        // Shorten the bar a little so its rounded ends don't make it over-long
+        double barTrim = barThickness / 2;
+
         VECTOR2I topLeft( aPosition );
         VECTOR2I topRight( aPosition );
 
@@ -449,15 +463,10 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
 
         if( aGlyphs )
         {
-            int thickness = abs( ascender * scaleFactor.y * m_overbarThicknessRatio );
-            int maxError = KiROUND( thickness / 48 );
-
-            if( IsBold() )
-                thickness = KiROUND( thickness * 1.5 );
-
+            int            maxError = KiROUND( barThickness / 48 );
             SHAPE_POLY_SET poly;
 
-            TransformOvalToPolygon( poly, topLeft, topRight, thickness, maxError, ERROR_INSIDE );
+            TransformOvalToPolygon( poly, topLeft, topRight, barThickness, maxError, ERROR_INSIDE );
 
             std::unique_ptr<OUTLINE_GLYPH> overbarGlyph = std::make_unique<OUTLINE_GLYPH>( poly );
             aGlyphs->push_back( std::move( overbarGlyph ) );
