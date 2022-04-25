@@ -1193,7 +1193,7 @@ TOOL_ACTION PCB_ACTIONS::distributeVertically( "pcbnew.AlignAndDistribute.distri
 TOOL_ACTION PCB_ACTIONS::pointEditorAddCorner( "pcbnew.PointEditor.addCorner",
         AS_GLOBAL,
 #ifdef __WXMAC__
-        'I', "",
+        WXK_F1, "",
 #else
         WXK_INSERT, "",
 #endif
