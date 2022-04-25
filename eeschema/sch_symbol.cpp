@@ -625,9 +625,9 @@ void SCH_SYMBOL::SetValue( const SCH_SHEET_PATH* sheet, const wxString& aValue )
 {
     if( sheet == nullptr )
     {
-        // Clear instance overrides and set primary field value
+        // Set all instances to the updated value
         for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
-            instance.m_Value = wxEmptyString;
+            instance.m_Value = aValue;
 
         m_fields[ VALUE_FIELD ].SetText( aValue );
         return;
@@ -676,9 +676,9 @@ void SCH_SYMBOL::SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& aFoo
 {
     if( sheet == nullptr )
     {
-        // Clear instance overrides and set primary field value
+        // Set all instances to new footprint value
         for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
-            instance.m_Footprint = wxEmptyString;
+            instance.m_Footprint = aFootprint;
 
         m_fields[ FOOTPRINT_FIELD ].SetText( aFootprint );
         return;
