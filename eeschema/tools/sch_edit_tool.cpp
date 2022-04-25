@@ -772,9 +772,21 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             else
                 symbol->SetOrientation( SYM_MIRROR_Y );
 
-            if( m_frame->eeconfig()->m_AutoplaceFields.enable )
-                symbol->AutoAutoplaceFields( m_frame->GetScreen() );
+            // If the user asks to mirror the symbol, don't keep their text in the
+            // same place
+            symbol->RunOnChildren(
+                    [&]( SCH_ITEM* aChild )
+                    {
+                        if( SCH_FIELD* field = dyn_cast<SCH_FIELD*>( aChild ) )
+                        {
+                            if( vertical )
+                                field->SetVertJustify( TO_VJUSTIFY( -field->GetVertJustify() ) );
+                            else
+                                field->SetHorizJustify( TO_HJUSTIFY( -field->GetHorizJustify() ) );
+                        }
+                    } );
 
+            symbol->ClearFieldsAutoplaced();
             break;
         }
 
