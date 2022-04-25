@@ -153,7 +153,7 @@ DRC_ITEM DRC_ITEM::npthInsideCourtyard( DRCE_NPTH_IN_COURTYARD,
         wxT( "npth_inside_courtyard" ) );
 
 DRC_ITEM DRC_ITEM::itemOnDisabledLayer( DRCE_DISABLED_LAYER_ITEM,
-        _( "Item on a disabled layer" ),
+        _( "Item on a disabled copper layer" ),
         wxT( "item_on_disabled_layer" ) );
 
 DRC_ITEM DRC_ITEM::invalidOutline( DRCE_INVALID_OUTLINE,
