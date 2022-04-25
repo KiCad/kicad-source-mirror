@@ -324,7 +324,7 @@ public:
     virtual void ClearBoundingBoxCache();
 
     std::vector<std::unique_ptr<KIFONT::GLYPH>>*
-    GetRenderCache( const wxString& forResolvedText ) const;
+    GetRenderCache( const wxString& forResolvedText, const VECTOR2I& aOffset = { 0, 0 } ) const;
 
     // Support for reading the cache from disk.
     void SetupRenderCache( const wxString& aResolvedText, const EDA_ANGLE& aAngle );
@@ -354,6 +354,7 @@ private:
 
     mutable wxString                                    m_render_cache_text;
     mutable EDA_ANGLE                                   m_render_cache_angle;
+    mutable VECTOR2I                                    m_render_cache_offset;
     mutable std::vector<std::unique_ptr<KIFONT::GLYPH>> m_render_cache;
 
     mutable bool     m_bounding_box_cache_valid;

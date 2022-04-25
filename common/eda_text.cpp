@@ -448,7 +448,7 @@ void EDA_TEXT::ClearBoundingBoxCache()
 
 
 std::vector<std::unique_ptr<KIFONT::GLYPH>>*
-EDA_TEXT::GetRenderCache( const wxString& forResolvedText ) const
+EDA_TEXT::GetRenderCache( const wxString& forResolvedText, const VECTOR2I& aOffset ) const
 {
     if( GetDrawFont()->IsOutline() )
     {
@@ -456,7 +456,8 @@ EDA_TEXT::GetRenderCache( const wxString& forResolvedText ) const
 
         if( m_render_cache.empty()
                 || m_render_cache_text != forResolvedText
-                || m_render_cache_angle != resolvedAngle )
+                || m_render_cache_angle != resolvedAngle
+                || m_render_cache_offset != aOffset )
         {
             m_render_cache.clear();
 
@@ -465,9 +466,10 @@ EDA_TEXT::GetRenderCache( const wxString& forResolvedText ) const
 
             attrs.m_Angle = resolvedAngle;
 
-            font->GetLinesAsGlyphs( &m_render_cache, GetShownText(), GetDrawPos(), attrs );
+            font->GetLinesAsGlyphs( &m_render_cache, GetShownText(), GetDrawPos() + aOffset, attrs );
             m_render_cache_angle = resolvedAngle;
             m_render_cache_text = forResolvedText;
+            m_render_cache_offset = aOffset;
         }
 
         return &m_render_cache;
@@ -570,7 +572,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     wxSize   textsize = wxSize( extents.x, extents.y );
     VECTOR2I pos = drawPos;
 
-    if( IsMultilineAllowed() && aLine > 0 && ( aLine < static_cast<int>( strings.GetCount() ) ) )
+    if( IsMultilineAllowed() && aLine > 0 && aLine < (int) strings.GetCount() )
         pos.y -= KiROUND( aLine * font->GetInterline( fontSize.y ) );
 
     if( text.Contains( wxT( "~{" ) ) )
@@ -593,9 +595,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 
         // interline spacing is only *between* lines, so total height is the height of the first
         // line plus the interline distance (with interline spacing) for all subsequent lines
-        // Don't add interline spacing to empty textboxes
-        if( strings.GetCount() )
-            textsize.y += KiROUND( ( strings.GetCount() - 1 ) * font->GetInterline( fontSize.y ) );
+        textsize.y += KiROUND( ( strings.GetCount() - 1 ) * font->GetInterline( fontSize.y ) );
     }
 
     rect.SetSize( textsize );

@@ -287,8 +287,21 @@ KIFONT::FONT* SCH_TEXT::GetDrawFont() const
 
 void SCH_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
-    COLOR4D color = aSettings->GetLayerColor( m_layer );
+    COLOR4D  color = aSettings->GetLayerColor( m_layer );
     VECTOR2I text_offset = aOffset + GetSchematicTextOffset( aSettings );
+
+    // Adjust text drawn in an outline font to more closely mimic the positioning of
+    // SCH_FIELD text.
+    if( GetDrawFont()->IsOutline() )
+    {
+        EDA_RECT firstLineBBox = GetTextBox( 0 );
+        int      sizeDiff = firstLineBBox.GetHeight() - GetTextSize().y;
+        int      adjust = KiROUND( sizeDiff * 0.4 );
+        VECTOR2I adjust_offset( 0, - adjust );
+
+        RotatePoint( adjust_offset, GetDrawRotation() );
+        text_offset += adjust_offset;
+    }
 
     EDA_TEXT::Print( aSettings, text_offset, color );
 }
@@ -417,9 +430,23 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground ) const
     COLOR4D          color = settings->GetLayerColor( layer );
     int              penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
     KIFONT::FONT*    font = GetDrawFont();
+    VECTOR2I         text_offset = GetSchematicTextOffset( aPlotter->RenderSettings() );
 
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );
+
+    // Adjust text drawn in an outline font to more closely mimic the positioning of
+    // SCH_FIELD text.
+    if( GetDrawFont()->IsOutline() )
+    {
+        EDA_RECT firstLineBBox = GetTextBox( 0 );
+        int      sizeDiff = firstLineBBox.GetHeight() - GetTextSize().y;
+        int      adjust = KiROUND( sizeDiff * 0.4 );
+        VECTOR2I adjust_offset( 0, - adjust );
+
+        RotatePoint( adjust_offset, GetDrawRotation() );
+        text_offset += adjust_offset;
+    }
 
     std::vector<VECTOR2I> positions;
     wxArrayString strings_list;
@@ -430,7 +457,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
     for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
     {
-        VECTOR2I  textpos = positions[ii] + GetSchematicTextOffset( aPlotter->RenderSettings() );
+        VECTOR2I  textpos = positions[ii] + text_offset;
         wxString& txt = strings_list.Item( ii );
         aPlotter->Text( textpos, color, txt, GetTextAngle(), GetTextSize(), GetHorizJustify(),
                         GetVertJustify(), penWidth, IsItalic(), IsBold(), false, font );

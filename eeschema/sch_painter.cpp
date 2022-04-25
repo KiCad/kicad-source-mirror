@@ -1883,6 +1883,19 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
         attrs.m_Angle = aText->GetDrawRotation();
         attrs.m_StrokeWidth = getTextThickness( aText, drawingShadows );
 
+        // Adjust text drawn in an outline font to more closely mimic the positioning of
+        // SCH_FIELD text.
+        if( aText->GetDrawFont()->IsOutline() )
+        {
+            EDA_RECT firstLineBBox = aText->GetTextBox( 0 );
+            int      sizeDiff = firstLineBBox.GetHeight() - aText->GetTextSize().y;
+            int      adjust = KiROUND( sizeDiff * 0.4 );
+            VECTOR2I adjust_offset( 0, - adjust );
+
+            RotatePoint( adjust_offset, aText->GetDrawRotation() );
+            text_offset += adjust_offset;
+        }
+
         if( nonCached( aText )
                 && underLODThreshold( aText->GetTextHeight() )
                 && !shownText.Contains( wxT( "\n" ) ) )
@@ -1893,8 +1906,7 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
         {
             std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
 
-            if( !text_offset.x && !text_offset.y )
-                cache = aText->GetRenderCache( shownText );
+            cache = aText->GetRenderCache( shownText, text_offset );
 
             if( cache )
             {
