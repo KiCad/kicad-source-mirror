@@ -499,18 +499,17 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
                 continue;
             }
 
-            SCH_SCREEN* screen = sheet->LastScreen();
+            sheet->UpdateAllScreenReferences();
 
-            item = nextMatch( screen, sheet, nullptr, data );
+            item = nextMatch( sheet->LastScreen(), sheet, nullptr, data );
 
             if( item )
             {
                 m_frame->Schematic().SetCurrentSheet( *sheet );
-                m_frame->GetCurrentSheet().UpdateAllScreenReferences();
 
-                screen->TestDanglingEnds();
+                sheet->LastScreen()->TestDanglingEnds();
 
-                m_frame->SetScreen( screen );
+                m_frame->SetScreen( sheet->LastScreen() );
                 m_frame->UpdateHierarchyNavigator();
                 UpdateFind( ACTIONS::updateFind.MakeEvent() );
 
