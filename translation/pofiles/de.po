@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:55-0700\n"
-"PO-Revision-Date: 2022-04-19 21:54+0000\n"
+"PO-Revision-Date: 2022-04-28 11:12+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -8098,7 +8098,7 @@ msgstr "Aliasname"
 #: eeschema/dialogs/dialog_bus_manager.cpp:75
 #: eeschema/dialogs/dialog_bus_manager.cpp:109
 msgid "Rename"
-msgstr "Umbennenen"
+msgstr "Umbenennen"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:89
 msgid "Alias Members"
@@ -12709,7 +12709,7 @@ msgstr ""
 
 #: eeschema/erc_item.cpp:114
 msgid "Label attached to bus item does not describe a bus"
-msgstr "Bezeichner, der mit einem Bus verbunden ist, beschreibt keinen Bus"
+msgstr "Der am Bus angebrachte Bezeichner beschreibt keinen Bus"
 
 #: eeschema/erc_item.cpp:118
 msgid "Buses are graphically connected but share no bus members"
@@ -17107,7 +17107,7 @@ msgstr "Keine Fehler gefunden."
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:116
 msgid "No bus selected"
-msgstr "Keine Bus gewählt"
+msgstr "Kein Bus ausgewählt"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:125
 msgid "Bus has no members"
@@ -19016,7 +19016,7 @@ msgstr ""
 
 #: kicad/project_tree_item.cpp:132
 msgid "Rename File"
-msgstr "Datei umbennenen"
+msgstr "Datei umbenennen"
 
 #: kicad/project_tree_item.cpp:140
 msgid "Unable to rename file ... "
@@ -19106,7 +19106,7 @@ msgstr "Datei umbenennen..."
 
 #: kicad/project_tree_pane.cpp:743
 msgid "Rename file"
-msgstr "Datei umbennenen"
+msgstr "Datei umbenennen"
 
 #: kicad/project_tree_pane.cpp:747
 msgid "Rename Files..."
