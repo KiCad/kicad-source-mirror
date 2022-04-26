@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:57-0700\n"
-"PO-Revision-Date: 2022-04-14 08:02+0000\n"
+"PO-Revision-Date: 2022-04-28 11:08+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -2791,9 +2791,8 @@ msgid "Set X scale adjust for exact scale plotting"
 msgstr "Ajusta escala X per al traçat a escala natural"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
-#, fuzzy
 msgid "Info text"
-msgstr "Cerca el text"
+msgstr "Text informatiu"
 
 #: common/dialogs/dialog_print_generic_base.cpp:111
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
@@ -11966,9 +11965,8 @@ msgid "Field name '%s' already in use."
 msgstr "El nom del camp '%s' ja està en ús."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1073
-#, fuzzy
 msgid "User Fields"
-msgstr " Camps"
+msgstr "Camps de l'usuari"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1082
 #, fuzzy
@@ -16145,9 +16143,8 @@ msgstr ""
 "símbols «%s»."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:61
-#, fuzzy
 msgid "Do not update library tables"
-msgstr "No s'ha pogut crear el camí '%s' de la taula biblioteques."
+msgstr "No actualitzis les taules de les biblioteques"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:63
 msgid "Do not perform any additional operations after saving library."
@@ -30596,9 +30593,9 @@ msgid "Checking %s clearance: %s."
 msgstr "S'està verificant %s marges: %s."
 
 #: pcbnew/drc/drc_engine.cpp:934
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max uncoupled length: %s."
-msgstr "Canvia el component %s perquè referenciï a «%s».\n"
+msgstr "S'està verificant la longitud màxima desacoblada de %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:940
 #, fuzzy, c-format
@@ -30654,9 +30651,9 @@ msgid "Checking board setup constraints via diameter: min %s."
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:1026
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole size: opt %s."
-msgstr "Canvia el component %s perquè referenciï a «%s».\n"
+msgstr "S'està verificant la mida del forat de %s: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1032
 #, c-format
@@ -30674,9 +30671,11 @@ msgid "Checking %s diff pair gap: opt %s."
 msgstr "S'està verificant %s marges: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1061
-#, fuzzy, c-format
+#, c-format
 msgid "Checking board setup constraints clearance: min %s."
-msgstr "Canvia el component %s perquè referenciï a «%s».\n"
+msgstr ""
+"S'està verificant el marge de les restriccions de la configuració de la "
+"placa: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1069 pcbnew/drc/drc_engine.cpp:1095
 #: pcbnew/drc/drc_engine.cpp:1457
