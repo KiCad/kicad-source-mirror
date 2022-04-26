@@ -380,6 +380,8 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
 
         GetScreen()->SetContentModified( false );    // do not prompt the user for changes
 
+        ReleaseFile();
+
         return OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
     }
 

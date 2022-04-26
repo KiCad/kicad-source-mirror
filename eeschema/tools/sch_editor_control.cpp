@@ -146,6 +146,7 @@ int SCH_EDITOR_CONTROL::Revert( const TOOL_EVENT& aEvent )
     for( SCH_SCREEN* screen = screenList.GetFirst(); screen; screen = screenList.GetNext() )
         screen->SetContentModified( false );    // do not prompt the user for changes
 
+    m_frame->ReleaseFile();
     m_frame->OpenProjectFiles( std::vector<wxString>( 1, schematic.GetFileName() ) );
 
     return 0;
