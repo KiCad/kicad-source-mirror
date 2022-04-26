@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:57-0700\n"
-"PO-Revision-Date: 2022-04-25 17:47+0000\n"
+"PO-Revision-Date: 2022-04-28 11:08+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -13431,7 +13431,7 @@ msgstr ""
 
 #: eeschema/erc_item.cpp:118
 msgid "Label attached to bus item does not describe a bus"
-msgstr "Bezeichner, der mit einem Bus verbunden ist, beschreibt keinen Bus"
+msgstr "Der am Bus angebrachte Bezeichner beschreibt keinen Bus"
 
 #: eeschema/erc_item.cpp:122
 msgid "Buses are graphically connected but share no bus members"
@@ -18008,7 +18008,7 @@ msgstr "Keine Fehler gefunden."
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:115
 msgid "No bus selected"
-msgstr "Keine Bus gewählt"
+msgstr "Kein Bus ausgewählt"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:124
 msgid "Bus has no members"
