@@ -41,7 +41,7 @@
 #include <tools/global_edit_tool.h>
 #include <tools/footprint_editor_control.h>
 #include <dialog_global_edit_text_and_graphics_base.h>
-
+#include "font/kicad_font_name.h"
 
 // Columns of layer classes grid
 enum
@@ -327,54 +327,72 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
 {
     aCommit.Modify( aItem );
 
-    EDA_TEXT*           textItem = dynamic_cast<EDA_TEXT*>( aItem );
-    FP_TEXT*            fpTextItem = dynamic_cast<FP_TEXT*>( aItem );
-    PCB_SHAPE*          drawItem = dynamic_cast<PCB_SHAPE*>( aItem );
+    EDA_TEXT*           edaText = dynamic_cast<EDA_TEXT*>( aItem );
+    FP_TEXT*            fpText = dynamic_cast<FP_TEXT*>( aItem );
+    PCB_SHAPE*          shape = dynamic_cast<PCB_SHAPE*>( aItem );
     PCB_DIMENSION_BASE* dimension = dynamic_cast<PCB_DIMENSION_BASE*>( aItem );
 
     if( dimension )
-        textItem = &dimension->Text();
+        edaText = &dimension->Text();
 
     if( m_setToSpecifiedValues->GetValue() )
     {
         if( m_LayerCtrl->GetLayerSelection() != UNDEFINED_LAYER )
             aItem->SetLayer( ToLAYER_ID( m_LayerCtrl->GetLayerSelection() ) );
 
-        if( !m_textWidth.IsIndeterminate() && textItem )
-            textItem->SetTextSize( wxSize( m_textWidth.GetValue(), textItem->GetTextSize().y ) );
-
-        if( !m_textHeight.IsIndeterminate() && textItem )
-            textItem->SetTextSize( wxSize( textItem->GetTextSize().x, m_textHeight.GetValue() ) );
-
-        if( !m_thickness.IsIndeterminate() && textItem )
-            textItem->SetTextThickness( m_thickness.GetValue() );
-
-        if( m_bold->Get3StateValue() != wxCHK_UNDETERMINED && textItem )
-            textItem->SetBold( m_bold->GetValue() );
-
-        if( m_italic->Get3StateValue() != wxCHK_UNDETERMINED && textItem )
-            textItem->SetItalic( m_italic->GetValue() );
-
-        // Must come after setting bold & italic
-        if( m_fontCtrl->GetStringSelection() != INDETERMINATE_ACTION && textItem )
+        if( edaText )
         {
-            textItem->SetFont( m_fontCtrl->GetFontSelection( textItem->IsBold(),
-                                                             textItem->IsItalic() ) );
+            if( !m_textWidth.IsIndeterminate() )
+                edaText->SetTextSize( wxSize( m_textWidth.GetValue(), edaText->GetTextSize().y ) );
+
+            if( !m_textHeight.IsIndeterminate() )
+                edaText->SetTextSize( wxSize( edaText->GetTextSize().x, m_textHeight.GetValue() ) );
+
+            if( !m_thickness.IsIndeterminate() )
+                edaText->SetTextThickness( m_thickness.GetValue() );
+
+            if( m_bold->Get3StateValue() != wxCHK_UNDETERMINED )
+                edaText->SetBold( m_bold->GetValue() );
+
+            if( m_italic->Get3StateValue() != wxCHK_UNDETERMINED )
+                edaText->SetItalic( m_italic->GetValue() );
+
+            // Must come after setting bold & italic
+            if( m_fontCtrl->GetStringSelection() != INDETERMINATE_ACTION )
+            {
+                edaText->SetFont( m_fontCtrl->GetFontSelection( edaText->IsBold(),
+                                                                edaText->IsItalic() ) );
+            }
+            else if(( m_italic->Get3StateValue() != wxCHK_UNDETERMINED
+                    || m_bold->Get3StateValue() != wxCHK_UNDETERMINED ) )
+            {
+                wxString fontName = edaText->GetFontName();
+
+                if( !edaText->GetFontName().IsEmpty() )
+                {
+                    edaText->SetFont( KIFONT::FONT::GetFont( edaText->GetFontName(),
+                                                             edaText->IsBold(),
+                                                             edaText->IsItalic() ) );
+                }
+            }
+
+            if( m_visible->Get3StateValue() != wxCHK_UNDETERMINED )
+                edaText->SetVisible( m_visible->GetValue() );
         }
 
-        if( m_visible->Get3StateValue() != wxCHK_UNDETERMINED && textItem )
-            textItem->SetVisible( m_visible->GetValue() );
-
-        if( m_keepUpright->Get3StateValue() != wxCHK_UNDETERMINED && fpTextItem )
-            fpTextItem->SetKeepUpright( m_keepUpright->GetValue() );
+        if( fpText )
+        {
+            if( m_keepUpright->Get3StateValue() != wxCHK_UNDETERMINED )
+                fpText->SetKeepUpright( m_keepUpright->GetValue() );
+        }
 
         if( !m_lineWidth.IsIndeterminate() )
         {
-            if( drawItem )
+            if( shape )
             {
-                STROKE_PARAMS stroke = drawItem->GetStroke();
+                STROKE_PARAMS stroke = shape->GetStroke();
                 stroke.SetWidth( m_lineWidth.GetValue() );
-                drawItem->SetStroke( stroke );
+                shape->SetStroke( stroke );
             }
 
             if( dimension )
@@ -385,21 +403,21 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
     {
         PCB_LAYER_ID layer = aItem->GetLayer();
 
-        if( textItem )
+        if( edaText )
         {
-            textItem->SetTextSize( m_brdSettings->GetTextSize( layer ) );
-            textItem->SetTextThickness( m_brdSettings->GetTextThickness( layer ) );
-            textItem->SetItalic( m_brdSettings->GetTextItalic( layer ) );
+            edaText->SetTextSize( m_brdSettings->GetTextSize( layer ) );
+            edaText->SetTextThickness( m_brdSettings->GetTextThickness( layer ) );
+            edaText->SetItalic( m_brdSettings->GetTextItalic( layer ) );
         }
 
-        if( fpTextItem )
-            fpTextItem->SetKeepUpright( m_brdSettings->GetTextUpright( layer ) );
+        if( fpText )
+            fpText->SetKeepUpright( m_brdSettings->GetTextUpright( layer ) );
 
-        if( drawItem )
+        if( shape )
         {
-            STROKE_PARAMS stroke = drawItem->GetStroke();
+            STROKE_PARAMS stroke = shape->GetStroke();
             stroke.SetWidth( m_brdSettings->GetLineThickness( layer ) );
-            drawItem->SetStroke( stroke );
+            shape->SetStroke( stroke );
         }
 
         if( dimension )

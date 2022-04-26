@@ -39,7 +39,7 @@
 #include <tools/sch_edit_tool.h>
 #include <widgets/unit_binder.h>
 #include <widgets/font_choice.h>
-
+#include "font/kicad_font_name.h"
 
 static bool       g_modifyReferences;
 static bool       g_modifyValues;
@@ -275,11 +275,21 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
         if( m_bold->Get3StateValue() != wxCHK_UNDETERMINED )
             eda_text->SetBold( m_bold->GetValue() );
 
-        // Must comer after bold & italic
+        // Must come after bold & italic
         if( m_fontCtrl->GetStringSelection() != INDETERMINATE_ACTION )
         {
             eda_text->SetFont( m_fontCtrl->GetFontSelection( eda_text->IsBold(),
                                                              eda_text->IsItalic() ) );
+        }
+        else if( m_italic->Get3StateValue() != wxCHK_UNDETERMINED
+                || m_bold->Get3StateValue() != wxCHK_UNDETERMINED )
+        {
+            if( !eda_text->GetFontName().IsEmpty() )
+            {
+                eda_text->SetFont( KIFONT::FONT::GetFont( eda_text->GetFontName(),
+                                                          eda_text->IsBold(),
+                                                          eda_text->IsItalic() ) );
+            }
         }
     }
 
