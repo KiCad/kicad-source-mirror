@@ -197,7 +197,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
             renderSettings->SetLayerColor( LAYER_PAD_BK, invisible_color );
 
         // Enable items on copper layers, but do not draw holes
-        for( GAL_LAYER_ID layer : { LAYER_PADS_TH, LAYER_VIA_THROUGH } )
+        for( GAL_LAYER_ID layer : { LAYER_PADS_TH, LAYER_VIA_THROUGH, LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND } )
         {
             if( ( aLayerSet & LSET::AllCuMask() ).any() )   // Items visible on any copper layer
                 aView.SetLayerVisible( layer, true );
@@ -212,7 +212,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
                 {
                     LAYER_MOD_TEXT, LAYER_MOD_FR, LAYER_MOD_BK,
                     LAYER_MOD_VALUES, LAYER_MOD_REFERENCES, LAYER_TRACKS, LAYER_ZONES, LAYER_PADS,
-                    LAYER_VIAS, LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND,
+                    LAYER_VIAS,
                     LAYER_PAD_FR, LAYER_PAD_BK, LAYER_PADS_TH
                 };
 
