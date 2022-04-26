@@ -141,6 +141,7 @@ void PCB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
     aList.emplace_back( _( "Angle" ), wxString::Format( wxT( "%g" ), GetTextAngle().AsDegrees() ) );
 
+    aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
     aList.emplace_back( _( "Thickness" ), MessageTextFromValue( units, GetTextThickness() ) );
     aList.emplace_back( _( "Width" ), MessageTextFromValue( units, GetTextWidth() ) );
     aList.emplace_back( _( "Height" ), MessageTextFromValue( units, GetTextHeight() ) );

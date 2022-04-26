@@ -373,6 +373,8 @@ void LIB_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
     // Don't use GetShownText() here; we want to show the user the variable references
     aList.emplace_back( _( "Text Box" ), UnescapeString( ShortenedText() ) );
 
+    aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
+
     wxString textStyle[] = { _( "Normal" ), _( "Italic" ), _( "Bold" ), _( "Bold Italic" ) };
     int style = IsBold() && IsItalic() ? 3 : IsBold() ? 2 : IsItalic() ? 1 : 0;
     aList.emplace_back( _( "Style" ), textStyle[style] );

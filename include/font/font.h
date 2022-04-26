@@ -108,17 +108,17 @@ public:
     virtual ~FONT()
     { }
 
-    virtual bool IsStroke() const { return false; }
+    virtual bool IsStroke() const  { return false; }
     virtual bool IsOutline() const { return false; }
-    virtual bool IsBold() const { return false; }
-    virtual bool IsItalic() const { return false; }
+    virtual bool IsBold() const    { return false; }
+    virtual bool IsItalic() const  { return false; }
 
-    static FONT* GetFont( const wxString& aFontName = "", bool aBold = false,
+    static FONT* GetFont( const wxString& aFontName = wxEmptyString, bool aBold = false,
                           bool aItalic = false );
-    static bool  IsStroke( const wxString& aFontName );
+    static bool IsStroke( const wxString& aFontName );
 
-    const wxString&    Name() const;
-    inline const char* NameAsToken() const { return Name().utf8_str().data(); }
+    const wxString& GetName() const { return m_fontName; };
+    inline const char* NameAsToken() const { return GetName().utf8_str().data(); }
 
     /**
      * Draw a string.
@@ -266,7 +266,7 @@ private:
 
 inline std::ostream& operator<<(std::ostream& os, const KIFONT::FONT& aFont)
 {
-    os << "[Font \"" << aFont.Name() << "\"" << ( aFont.IsStroke() ? " stroke" : "" )
+    os << "[Font \"" << aFont.GetName() << "\"" << ( aFont.IsStroke() ? " stroke" : "" )
        << ( aFont.IsOutline() ? " outline" : "" ) << ( aFont.IsBold() ? " bold" : "" )
        << ( aFont.IsItalic() ? " italic" : "" ) << "]";
     return os;

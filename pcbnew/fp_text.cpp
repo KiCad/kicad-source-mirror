@@ -259,6 +259,7 @@ EDA_ANGLE FP_TEXT::GetDrawRotation() const
 
 void FP_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
+    EDA_UNITS units = aFrame->GetUserUnits();
     wxString msg;
 
     static const wxString text_type_msg[3] =
@@ -293,14 +294,10 @@ void FP_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     msg.Printf( wxT( "%g" ), GetTextAngle().AsDegrees() );
     aList.emplace_back( _( "Angle" ), msg );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextThickness() );
-    aList.emplace_back( _( "Thickness" ), msg );
-
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth() );
-    aList.emplace_back( _( "Width" ), msg );
-
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextHeight() );
-    aList.emplace_back( _( "Height" ), msg );
+    aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
+    aList.emplace_back( _( "Thickness" ), MessageTextFromValue( units, GetTextThickness() ) );
+    aList.emplace_back( _( "Width" ), MessageTextFromValue( units, GetTextWidth() ) );
+    aList.emplace_back( _( "Height" ), MessageTextFromValue(units, GetTextHeight() ) );
 }
 
 

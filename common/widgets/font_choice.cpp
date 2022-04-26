@@ -72,11 +72,11 @@ void FONT_CHOICE::SetFontSelection( KIFONT::FONT* aFont )
     }
     else
     {
-        SetStringSelection( aFont->Name() );
+        SetStringSelection( aFont->GetName() );
 
         if( GetSelection() == wxNOT_FOUND )
         {
-            Append( aFont->Name() + m_notFound );
+            Append( aFont->GetName() + m_notFound );
             SetSelection( GetCount() );
         }
     }

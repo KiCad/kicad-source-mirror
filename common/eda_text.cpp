@@ -781,7 +781,7 @@ wxString EDA_TEXT::GetTextStyleName() const
 wxString EDA_TEXT::GetFontName() const
 {
     if( GetFont() )
-        return GetFont()->Name();
+        return GetFont()->GetName();
     else
         return wxEmptyString;
 }
@@ -812,7 +812,7 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
 
     aFormatter->Print( 0, " (font" );
 
-    if( GetFont() && !GetFont()->Name().IsEmpty() )
+    if( GetFont() && !GetFont()->GetName().IsEmpty() )
         aFormatter->Print( 0, " (face \"%s\")", GetFont()->NameAsToken() );
 
     // Text size

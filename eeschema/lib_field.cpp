@@ -472,6 +472,8 @@ void LIB_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     aList.emplace_back( _( "Visible" ), IsVisible() ? _( "Yes" ) : _( "No" ) );
 
+    aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
+
     aList.emplace_back( _( "Style" ), GetTextStyleName() );
 
     aList.emplace_back( _( "Text Size" ), MessageTextFromValue( aFrame->GetUserUnits(),

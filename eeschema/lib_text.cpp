@@ -363,6 +363,8 @@ void LIB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     // Don't use GetShownText() here; we want to show the user the variable references
     aList.emplace_back( _( "Text" ), UnescapeString( GetText() ) );
 
+    aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
+
     aList.emplace_back( _( "Style" ), GetTextStyleName() );
 
     aList.emplace_back( _( "Text Size" ), MessageTextFromValue( aFrame->GetUserUnits(),

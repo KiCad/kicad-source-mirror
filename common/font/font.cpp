@@ -53,12 +53,6 @@ FONT::FONT()
 }
 
 
-const wxString& FONT::Name() const
-{
-    return m_fontName;
-}
-
-
 FONT* FONT::getDefaultFont()
 {
     if( !s_defaultFont )

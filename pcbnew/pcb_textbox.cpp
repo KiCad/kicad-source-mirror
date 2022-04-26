@@ -233,6 +233,7 @@ void PCB_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
     aList.emplace_back( _( "Mirror" ), IsMirrored() ? _( "Yes" ) : _( "No" ) );
     aList.emplace_back( _( "Angle" ), wxString::Format( "%g", GetTextAngle().AsDegrees() ) );
 
+    aList.emplace_back( _( "Font" ), GetDrawFont()->GetName() );
     aList.emplace_back( _( "Text Thickness" ), MessageTextFromValue( units, GetTextThickness() ) );
     aList.emplace_back( _( "Text Width" ), MessageTextFromValue( units, GetTextWidth() ) );
     aList.emplace_back( _( "Text Height" ), MessageTextFromValue( units, GetTextHeight() ) );

@@ -253,7 +253,7 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const
     {
         m_out->Print( 0, " (font" );
 
-        if( aItem->m_Font && !aItem->m_Font->Name().IsEmpty() )
+        if( aItem->m_Font && !aItem->m_Font->GetName().IsEmpty() )
             m_out->Print( 0, " (face \"%s\")", aItem->m_Font->NameAsToken() );
 
         if( write_thickness )
