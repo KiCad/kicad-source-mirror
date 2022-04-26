@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:55-0700\n"
 "PO-Revision-Date: 2022-04-28 11:12+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v6/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -23790,7 +23790,7 @@ msgstr "Käyttäjän määrittelemä alkupiste:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "meter"
-msgstr "mittari"
+msgstr "metri"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "0.1 Inch"
