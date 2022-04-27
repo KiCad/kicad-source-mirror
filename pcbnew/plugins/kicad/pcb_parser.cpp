@@ -3636,6 +3636,12 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
                     Expecting( "layer name" );
             }
 
+            if( m_requiredVersion < 20220427 )
+            {
+                privateLayers.set( Edge_Cuts, false );
+                privateLayers.set( Margin, false );
+            }
+
             footprint->SetPrivateLayers( privateLayers );
             break;
         }

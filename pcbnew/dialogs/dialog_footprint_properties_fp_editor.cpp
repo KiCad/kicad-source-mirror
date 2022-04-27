@@ -59,6 +59,8 @@ PRIVATE_LAYERS_GRID_TABLE::PRIVATE_LAYERS_GRID_TABLE( PCB_BASE_FRAME* aFrame ) :
     m_layerColAttr->SetRenderer( new GRID_CELL_LAYER_RENDERER( m_frame ) );
 
     LSET forbiddenLayers = LSET::AllCuMask() | LSET::AllTechMask();
+    forbiddenLayers.set( Edge_Cuts );
+    forbiddenLayers.set( Margin );
     m_layerColAttr->SetEditor( new GRID_CELL_LAYER_SELECTOR( m_frame, forbiddenLayers ) );
 }
 
