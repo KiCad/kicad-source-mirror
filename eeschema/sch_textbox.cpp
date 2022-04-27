@@ -233,6 +233,10 @@ void SCH_TEXTBOX::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
     }
 
     color = aSettings->GetLayerColor( m_layer );
+
+    if( !blackAndWhiteMode && GetTextColor() != COLOR4D::UNSPECIFIED )
+        color = GetTextColor();
+
     EDA_TEXT::Print( aSettings, aOffset, color );
 }
 
@@ -348,6 +352,9 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
         aPlotter->Rect( m_start, m_end, FILL_T::NO_FILL, penWidth );
     }
+
+    if( aPlotter->GetColorMode() && GetTextColor() != COLOR4D::UNSPECIFIED )
+        color = GetTextColor();
 
     penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );

@@ -127,9 +127,13 @@ void LIB_FIELD::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
 {
     wxDC*    DC = aSettings->GetPrintDC();
     COLOR4D  color = aSettings->GetLayerColor( IsVisible() ? GetDefaultLayer() : LAYER_HIDDEN );
+    bool     blackAndWhiteMode = GetGRForceBlackPenState();
     int      penWidth = GetEffectivePenWidth( aSettings );
     VECTOR2I text_pos = aTransform.TransformCoordinate( GetTextPos() ) + aOffset;
     wxString text = aData ? *static_cast<wxString*>( aData ) : GetText();
+
+    if( !blackAndWhiteMode && GetTextColor() != COLOR4D::UNSPECIFIED )
+        color = GetTextColor();
 
     GRPrintText( DC, text_pos, color, text, GetTextAngle(), GetTextSize(), GetHorizJustify(),
                  GetVertJustify(), penWidth, IsItalic(), IsBold(), GetDrawFont() );
@@ -322,9 +326,16 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
     COLOR4D color;
 
     if( aPlotter->GetColorMode() )
-        color = aPlotter->RenderSettings()->GetLayerColor( GetDefaultLayer() );
+    {
+        if( GetTextColor() != COLOR4D::UNSPECIFIED )
+            color = GetTextColor();
+        else
+            color = aPlotter->RenderSettings()->GetLayerColor( GetDefaultLayer() );
+    }
     else
+    {
         color = COLOR4D::BLACK;
+    }
 
     int penWidth = GetEffectivePenWidth( aPlotter->RenderSettings() );
 

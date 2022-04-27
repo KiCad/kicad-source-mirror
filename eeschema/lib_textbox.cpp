@@ -236,6 +236,9 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
 
     LIB_TEXTBOX text( *this );
 
+    if( !blackAndWhiteMode && GetTextColor() != COLOR4D::UNSPECIFIED )
+        color = GetTextColor();
+
     penWidth = std::max( GetEffectiveTextPenWidth(), aSettings->GetMinPenWidth() );
 
     if( aTransform.y1 )
@@ -337,6 +340,18 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
     }
 
     LIB_TEXTBOX text( *this );
+
+    if( aPlotter->GetColorMode() )
+    {
+        if( GetTextColor() != COLOR4D::UNSPECIFIED )
+            color = GetTextColor();
+        else
+            color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
+    }
+    else
+    {
+        color = COLOR4D::BLACK;
+    }
 
     penWidth = std::max( GetEffectiveTextPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
 

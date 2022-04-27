@@ -288,7 +288,11 @@ KIFONT::FONT* SCH_TEXT::GetDrawFont() const
 void SCH_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     COLOR4D  color = aSettings->GetLayerColor( m_layer );
+    bool     blackAndWhiteMode = GetGRForceBlackPenState();
     VECTOR2I text_offset = aOffset + GetSchematicTextOffset( aSettings );
+
+    if( !blackAndWhiteMode && GetTextColor() != COLOR4D::UNSPECIFIED )
+        color = GetTextColor();
 
     // Adjust text drawn in an outline font to more closely mimic the positioning of
     // SCH_FIELD text.
@@ -431,6 +435,9 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground ) const
     int              penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
     KIFONT::FONT*    font = GetDrawFont();
     VECTOR2I         text_offset = GetSchematicTextOffset( aPlotter->RenderSettings() );
+
+    if( aPlotter->GetColorMode() && GetTextColor() != COLOR4D::UNSPECIFIED )
+        color = GetTextColor();
 
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );

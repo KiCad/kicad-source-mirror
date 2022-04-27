@@ -324,11 +324,15 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
 {
     wxDC*    DC = aSettings->GetPrintDC();
     COLOR4D  color = aSettings->GetLayerColor( IsForceVisible() ? LAYER_HIDDEN : m_layer );
+    bool     blackAndWhiteMode = GetGRForceBlackPenState();
     VECTOR2I textpos;
     int      penWidth = GetEffectiveTextPenWidth( aSettings->GetDefaultPenWidth() );
 
     if( ( !IsVisible() && !IsForceVisible() ) || IsVoid() )
         return;
+
+    if( !blackAndWhiteMode && GetTextColor() != COLOR4D::UNSPECIFIED )
+        color = GetTextColor();
 
     // Calculate the text orientation according to the symbol orientation.
     EDA_ANGLE orient = GetTextAngle();
@@ -933,6 +937,9 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground ) const
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
     COLOR4D          color = settings->GetLayerColor( GetLayer() );
     int              penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
+
+    if( aPlotter->GetColorMode() && GetTextColor() != COLOR4D::UNSPECIFIED )
+        color = GetTextColor();
 
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );
 
