@@ -491,7 +491,7 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aF
         m_current_item->content << hpgl_end_polygon_cmd; // Close, fill polygon and draw outlines
         m_current_item->pen_returns = true;
     }
-    else if( aWidth > 0 )
+    else if( aWidth != 0 )
     {
         // Plot only the polygon outline.
         for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
@@ -670,10 +670,10 @@ void HPGL_PLOTTER::FlashPadCircle( const VECTOR2I& pos, int diametre,
         // if filled mode, the pen diameter is removed from diameter
         // to keep the pad size
         radius -= KiROUND( penDiameter ) / 2;
-    }
 
-    if( radius < 0 )
-        radius = 0;
+        if( radius < 0 )
+            radius = 0;
+    }
 
     double rsize = userToDeviceSize( radius );
 

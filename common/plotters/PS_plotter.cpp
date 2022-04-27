@@ -127,13 +127,7 @@ void PSLIKE_PLOTTER::FlashPadCircle( const VECTOR2I& aPadPos, int aDiameter,
     else    // Plot a ring:
     {
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-        int linewidth = GetCurrentLineWidth();
-
-        // avoid aDiameter <= 1 )
-        if( linewidth > aDiameter-2 )
-            linewidth = aDiameter-2;
-
-        Circle( aPadPos, aDiameter - linewidth, FILL_T::NO_FILL, linewidth );
+        Circle( aPadPos, aDiameter, FILL_T::NO_FILL, GetCurrentLineWidth() );
     }
 
     SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
@@ -152,15 +146,6 @@ void PSLIKE_PLOTTER::FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSiz
         SetCurrentLineWidth( 0 );
     else
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-
-    size.x -= GetCurrentLineWidth();
-    size.y -= GetCurrentLineWidth();
-
-    if( size.x < 1 )
-        size.x = 1;
-
-    if( size.y < 1 )
-        size.y = 1;
 
     int dx = size.x / 2;
     int dy = size.y / 2;
@@ -202,8 +187,6 @@ void PSLIKE_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I&
     else
     {
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-        size.x -= GetCurrentLineWidth();
-        size.y -= GetCurrentLineWidth();
         aCornerRadius -= GetCurrentLineWidth() / 2;
     }
 
@@ -242,8 +225,6 @@ void PSLIKE_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aS
     else
     {
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-        size.x -= GetCurrentLineWidth();
-        size.y -= GetCurrentLineWidth();
     }
 
 
@@ -283,23 +264,6 @@ void PSLIKE_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aC
     else
     {
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-        int w = GetCurrentLineWidth();
-
-        // offset polygon by w
-        // coord[0] is assumed the lower left
-        // coord[1] is assumed the upper left
-        // coord[2] is assumed the upper right
-        // coord[3] is assumed the lower right
-
-        /* Trace the outline. */
-        cornerList[0].x += w;
-        cornerList[0].y -= w;
-        cornerList[1].x += w;
-        cornerList[1].y += w;
-        cornerList[2].x -= w;
-        cornerList[2].y += w;
-        cornerList[3].x -= w;
-        cornerList[3].y -= w;
     }
 
     for( int ii = 0; ii < 4; ii++ )

@@ -549,7 +549,7 @@ void PLOTTER::sketchOval( const VECTOR2I& aPos, const VECTOR2I& aSize, const EDA
     }
 
     int deltaxy = size.y - size.x;       /* distance between centers of the oval */
-    int radius  = ( size.x - m_currentPenWidth ) / 2;
+    int radius  = size.x / 2;
 
     pt.x = -radius;
     pt.y = -deltaxy / 2;
