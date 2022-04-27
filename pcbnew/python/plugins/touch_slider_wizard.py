@@ -74,14 +74,14 @@ class TouchSliderWizard(FootprintWizardBase.FootprintWizard):
 
     def smdTrianglePad(self,module,size,pos,name,up_down=1,left_right=0):
         pad = PAD(module)
-        pad.SetSize(wxSize(size[0],size[1]))
+        pad.SetSize(VECTOR2I(size[0],size[1]))
         pad.SetShape(PAD_SHAPE_TRAPEZOID)
         pad.SetAttribute(PAD_ATTRIB_SMD)
         pad.SetLayerSet(pad.ConnSMDMask())
         pad.SetPos0(pos)
         pad.SetPosition(pos)
         pad.SetName(name)
-        pad.SetDelta(wxSize(left_right*size[1],up_down*size[0]))
+        pad.SetDelta(VECTOR2I(left_right*size[1],up_down*size[0]))
         return pad
 
 
@@ -96,17 +96,17 @@ class TouchSliderWizard(FootprintWizardBase.FootprintWizard):
     def AddStartPad(self,position,touch_width,step_length,clearance,name):
         module = self.module
         step_length = step_length - clearance
-        size_pad = wxSize(step_length/2.0+(step_length/3),touch_width)
-        pad = self.smdRectPad(module,size_pad,(VECTOR2I(position)-VECTOR2I( (int)(step_length/6),0),name)
+        size_pad = VECTOR2I( (int)(step_length/2.0+(step_length/3)),(int)(touch_width) )
+        pad = self.smdRectPad(module,size_pad,(VECTOR2I(position)-VECTOR2I( (int)(step_length/6),0)),name)
         module.Add(pad)
 
-        size_pad = wxSize(step_length/2.0,touch_width)
+        size_pad = VECTOR2I((int)(step_length/2.0),(int)(touch_width))
 
-        tp = self.smdTrianglePad(module,wxSize(size_pad[0],size_pad[1]/2),
-                                 position+VECTOR2I( (int)(size_pad[0]/2), (int)(size_pad[1]/4) ),
+        tp = self.smdTrianglePad(module,VECTOR2I(size_pad[0], (int)(size_pad[1]/2)),
+                                 VECTOR2I(position)+VECTOR2I( (int)(size_pad[0]/2), (int)(size_pad[1]/4) ),
                                 name)
         module.Add(tp)
-        tp = self.smdTrianglePad(module,wxSize(size_pad[0],size_pad[1]/2),
+        tp = self.smdTrianglePad(module,VECTOR2I(size_pad[0],(int)(size_pad[1]/2) ),
                                  position+VECTOR2I( (int)(size_pad[0]/2), (int)(-size_pad[1]/4) ),
                                 name
                                 ,-1)
@@ -117,23 +117,23 @@ class TouchSliderWizard(FootprintWizardBase.FootprintWizard):
     def AddMiddlePad(self,position,touch_width,step_length,clearance,name):
         module = self.module
         step_length = step_length - clearance
-        size_pad = wxSize(step_length/2.0,touch_width)
+        size_pad = VECTOR2I((int)(step_length/2.0),(int)(touch_width))
 
-        size_pad = wxSize(step_length/2.0,touch_width)
+        size_pad = VECTOR2I((int)(step_length/2.0),(int)(touch_width))
         pad = self.smdRectPad(module,size_pad,position,name)
         module.Add(pad)
 
-        tp = self.smdTrianglePad(module,wxSize(size_pad[0],size_pad[1]/2),
+        tp = self.smdTrianglePad(module,VECTOR2I(size_pad[0],(int)(size_pad[1]/2)),
                                  position+VECTOR2I( (int)(size_pad[0]/2), (int)(size_pad[1]/4) ),
                                 name)
         module.Add(tp)
-        tp = self.smdTrianglePad(module,wxSize(size_pad[0],size_pad[1]/2),
+        tp = self.smdTrianglePad(module,VECTOR2I(size_pad[0],(int)(size_pad[1]/2)),
                                  position+VECTOR2I( (int)(size_pad[0]/2), (int)(-size_pad[1]/4) ),
                                 name
                                 ,-1)
         module.Add(tp)
 
-        tp = self.smdTrianglePad(module,wxSize(size_pad[0],size_pad[1]/2),
+        tp = self.smdTrianglePad(module,VECTOR2I(size_pad[0],(int)(size_pad[1]/2)),
                                         position+VECTOR2I( -size_pad[0],0),
                                         name,
                                         0,
@@ -144,15 +144,15 @@ class TouchSliderWizard(FootprintWizardBase.FootprintWizard):
     def AddFinalPad(self,position,touch_width,step_length,clearance,name):
         module = self.module
         step_length = step_length - clearance
-        size_pad = wxSize(step_length/2.0,touch_width)
+        size_pad = VECTOR2I((int)(step_length/2.0),(int)(touch_width))
 
         pad = self.smdRectPad(module,
-                              wxSize(size_pad[0]+(step_length/3),size_pad[1]),
+                              VECTOR2I( (int)(size_pad[0]+(step_length/3)),size_pad[1]),
                               position+VECTOR2I( (int)(step_length/6),0),
                               name)
         module.Add(pad)
 
-        tp = self.smdTrianglePad(module,wxSize(size_pad[0],size_pad[1]/2),
+        tp = self.smdTrianglePad(module,VECTOR2I(size_pad[0],(int)(size_pad[1]/2)),
                                         position+VECTOR2I(-size_pad[0],0),
                                         name,
                                         0,
@@ -163,10 +163,10 @@ class TouchSliderWizard(FootprintWizardBase.FootprintWizard):
         self.AddStartPad(pos,touch_width,step_length,touch_clearance,"1")
 
         for n in range(2,steps):
-            pos = pos + VECTOR2I(step_length,0)
+            pos = pos + VECTOR2I((int)(step_length),0)
             self.AddMiddlePad(pos,touch_width,step_length,touch_clearance,str(n))
 
-        pos = pos + VECTOR2I(step_length,0)
+        pos = pos + VECTOR2I((int)(step_length),0)
         self.AddFinalPad(pos,touch_width,step_length,touch_clearance,str(steps))
 
     # build the footprint from parameters
@@ -197,11 +197,11 @@ class TouchSliderWizard(FootprintWizardBase.FootprintWizard):
         xpos = -0.5 * (steps - 1) * step_length
         ypos = -0.5 * (bands - 1) * band_width
 
-        pos = wxPointMM(pcbnew.ToMM(xpos), pcbnew.ToMM(ypos))
+        pos = VECTOR2I(wxPointMM(pcbnew.ToMM(xpos), pcbnew.ToMM(ypos)))
 
         for b in range(bands):
             self.AddStrip(pos,steps,band_width,step_length,touch_clearance)
-            pos += VECTOR2I(0,band_width)
+            pos += VECTOR2I(0,(int)(band_width))
 
 TouchSliderWizard().register()
 
