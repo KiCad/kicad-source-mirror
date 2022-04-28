@@ -185,6 +185,9 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
 
     m_viewControls->UpdateScrollbars();
 
+    if( !m_drawingEnabled )
+        return;
+
     if( !m_gal->IsVisible() )
         return;
 
@@ -388,10 +391,10 @@ void EDA_DRAW_PANEL_GAL::StartDrawing()
 
 void EDA_DRAW_PANEL_GAL::StopDrawing()
 {
+    m_refreshTimer.Stop();
     m_drawingEnabled = false;
     Disconnect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), nullptr, this );
     m_pendingRefresh = false;
-    m_refreshTimer.Stop();
 }
 
 
