@@ -36,7 +36,6 @@
 #include <view/view_controls.h>
 #include <pcb_painter.h>
 #include <kiplatform/ui.h>
-#include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
 #include <dialogs/dialog_text_entry.h>
 #include <validators.h>
@@ -69,22 +68,14 @@ struct DIALOG_NET_INSPECTOR::COLUMN_DESC
 };
 
 
-#define def_col( c, num, name, csv_name, csv_flags ) \
-    const DIALOG_NET_INSPECTOR::COLUMN_DESC DIALOG_NET_INSPECTOR::c = { num, \
-                                                                        name, \
-                                                                        csv_name, \
-                                                                        COLUMN_DESC::csv_flags }
-
-def_col( COLUMN_NET,          0, _( "Net" ),          _( "Net Code" ),     CSV_NONE );
-def_col( COLUMN_NAME,         1, _( "Name" ),         _( "Net Name" ),     CSV_QUOTE );
-def_col( COLUMN_PAD_COUNT,    2, _( "Pad Count" ),    _( "Pad Count" ),    CSV_NONE );
-def_col( COLUMN_VIA_COUNT,    3, _( "Via Count" ),    _( "Via Count" ),    CSV_NONE );
-def_col( COLUMN_VIA_LENGTH,   4, _( "Via Length" ),   _( "Via Length" ),   CSV_NONE );
-def_col( COLUMN_BOARD_LENGTH, 5, _( "Track Length" ), _( "Track Length" ), CSV_NONE );
-def_col( COLUMN_CHIP_LENGTH,  6, _( "Die Length" ),   _( "Die Length" ),   CSV_NONE );
-def_col( COLUMN_TOTAL_LENGTH, 7, _( "Total Length" ), _( "Net Length" ),   CSV_NONE );
-
-#undef def_col
+DIALOG_NET_INSPECTOR::COLUMN_DESC DIALOG_NET_INSPECTOR::COLUMN_NET;
+DIALOG_NET_INSPECTOR::COLUMN_DESC DIALOG_NET_INSPECTOR::COLUMN_NAME;
+DIALOG_NET_INSPECTOR::COLUMN_DESC DIALOG_NET_INSPECTOR::COLUMN_PAD_COUNT;
+DIALOG_NET_INSPECTOR::COLUMN_DESC DIALOG_NET_INSPECTOR::COLUMN_VIA_COUNT;
+DIALOG_NET_INSPECTOR::COLUMN_DESC DIALOG_NET_INSPECTOR::COLUMN_VIA_LENGTH;
+DIALOG_NET_INSPECTOR::COLUMN_DESC DIALOG_NET_INSPECTOR::COLUMN_BOARD_LENGTH;
+DIALOG_NET_INSPECTOR::COLUMN_DESC DIALOG_NET_INSPECTOR::COLUMN_CHIP_LENGTH;
+DIALOG_NET_INSPECTOR::COLUMN_DESC DIALOG_NET_INSPECTOR::COLUMN_TOTAL_LENGTH;
 
 
 class DIALOG_NET_INSPECTOR::LIST_ITEM
@@ -796,6 +787,15 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent,
 
     m_data_model = new DATA_MODEL( *this );
     m_netsList->AssociateModel( &*m_data_model );
+
+    COLUMN_NET =          { 0, _( "Net" ),          _( "Net Code" ),     COLUMN_DESC::CSV_NONE };
+    COLUMN_NAME =         { 1, _( "Name" ),         _( "Net Name" ),     COLUMN_DESC::CSV_QUOTE };
+    COLUMN_PAD_COUNT =    { 2, _( "Pad Count" ),    _( "Pad Count" ),    COLUMN_DESC::CSV_NONE };
+    COLUMN_VIA_COUNT =    { 3, _( "Via Count" ),    _( "Via Count" ),    COLUMN_DESC::CSV_NONE };
+    COLUMN_VIA_LENGTH =   { 4, _( "Via Length" ),   _( "Via Length" ),   COLUMN_DESC::CSV_NONE };
+    COLUMN_BOARD_LENGTH = { 5, _( "Track Length" ), _( "Track Length" ), COLUMN_DESC::CSV_NONE };
+    COLUMN_CHIP_LENGTH =  { 6, _( "Die Length" ),   _( "Die Length" ),   COLUMN_DESC::CSV_NONE };
+    COLUMN_TOTAL_LENGTH = { 7, _( "Total Length" ), _( "Net Length" ),   COLUMN_DESC::CSV_NONE };
 
     std::array<std::function<void( void )>, 8> add_col = {
         [&]()

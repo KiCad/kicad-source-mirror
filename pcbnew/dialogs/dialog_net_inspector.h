@@ -72,14 +72,14 @@ private:
     using LIST_ITEM_ITER       = std::vector<std::unique_ptr<LIST_ITEM>>::iterator;
     using LIST_ITEM_CONST_ITER = std::vector<std::unique_ptr<LIST_ITEM>>::const_iterator;
 
-    static const COLUMN_DESC COLUMN_NET;
-    static const COLUMN_DESC COLUMN_NAME;
-    static const COLUMN_DESC COLUMN_PAD_COUNT;
-    static const COLUMN_DESC COLUMN_VIA_COUNT;
-    static const COLUMN_DESC COLUMN_VIA_LENGTH;
-    static const COLUMN_DESC COLUMN_BOARD_LENGTH;
-    static const COLUMN_DESC COLUMN_CHIP_LENGTH;
-    static const COLUMN_DESC COLUMN_TOTAL_LENGTH;
+    static COLUMN_DESC COLUMN_NET;
+    static COLUMN_DESC COLUMN_NAME;
+    static COLUMN_DESC COLUMN_PAD_COUNT;
+    static COLUMN_DESC COLUMN_VIA_COUNT;
+    static COLUMN_DESC COLUMN_VIA_LENGTH;
+    static COLUMN_DESC COLUMN_BOARD_LENGTH;
+    static COLUMN_DESC COLUMN_CHIP_LENGTH;
+    static COLUMN_DESC COLUMN_TOTAL_LENGTH;
 
     wxString formatNetCode( const NETINFO_ITEM* aNet ) const;
     wxString formatNetName( const NETINFO_ITEM* aNet ) const;
