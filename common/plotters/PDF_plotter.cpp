@@ -7,7 +7,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2012 Lorenzo Marcantonio, l.marcantonio@logossrl.com
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -348,11 +348,11 @@ void PDF_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
     VECTOR2I        end;
     const EDA_ANGLE delta( 5, DEGREES_T );   // increment to draw circles
 
-    startAngle = ANGLE_180 - startAngle;
-    endAngle = ANGLE_180 - endAngle;
-
     if( startAngle > endAngle )
+    {
         std::swap( startAngle, endAngle );
+        std::swap( start, end );
+    }
 
     SetCurrentLineWidth( aWidth );
 
