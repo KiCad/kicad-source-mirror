@@ -539,7 +539,6 @@ void PLOTTER::sketchOval( const VECTOR2I& aPos, const VECTOR2I& aSize, const EDA
     SetCurrentLineWidth( aWidth );
 
     EDA_ANGLE orient( aOrient );
-    VECTOR2I  pt;
     VECTOR2I  size( aSize );
 
     if( size.x > size.y )
@@ -551,32 +550,39 @@ void PLOTTER::sketchOval( const VECTOR2I& aPos, const VECTOR2I& aSize, const EDA
     int deltaxy = size.y - size.x;       /* distance between centers of the oval */
     int radius  = size.x / 2;
 
-    pt.x = -radius;
-    pt.y = -deltaxy / 2;
-    RotatePoint( pt, orient );
-    MoveTo( pt + aPos );
-    pt.x = -radius;
-    pt.y = deltaxy / 2;
-    RotatePoint( pt, orient );
-    FinishTo( pt + aPos );
+    // Build a vertical oval shape giving the start and end points of arcs and edges,
+    // and the middle point of arcs
+    std::vector<VECTOR2I> corners;
+    corners.reserve( 6 );
+    // Shape is (x = corner and arc ends, c = arc centre)
+    //  xcx
+    //
+    //  xcx
+    int half_height = deltaxy / 2;
+    corners.emplace_back( -radius, -half_height );
+    corners.emplace_back( -radius, half_height );
+    corners.emplace_back( 0, half_height );
+    corners.emplace_back( radius, half_height );
+    corners.emplace_back( radius, -half_height );
+    corners.emplace_back( 0, -half_height );
 
-    pt.x = radius;
-    pt.y = -deltaxy / 2;
-    RotatePoint( pt, orient );
-    MoveTo( pt + aPos );
-    pt.x = radius;
-    pt.y = deltaxy / 2;
-    RotatePoint( pt, orient );
-    FinishTo( pt + aPos );
+    // Rotate and move to the actual position
+    for( size_t ii = 0; ii < corners.size(); ii++ )
+    {
+        RotatePoint( corners[ii], orient );
+        corners[ii] += aPos;
+    }
 
-    pt.x = 0;
-    pt.y = deltaxy / 2;
-    RotatePoint( pt, orient );
-    Arc( pt + aPos, orient + ANGLE_180, orient + ANGLE_360, radius, FILL_T::NO_FILL );
-    pt.x = 0;
-    pt.y = -deltaxy / 2;
-    RotatePoint( pt, orient );
-    Arc( pt + aPos, orient, orient + ANGLE_180, radius, FILL_T::NO_FILL );
+    // Gen shape:
+    MoveTo( corners[0] );
+    FinishTo( corners[1] );
+
+    Arc( corners[2], orient + ANGLE_180, orient + ANGLE_360, radius, FILL_T::NO_FILL );
+
+    MoveTo( corners[3] );
+    FinishTo( corners[4] );
+
+    Arc( corners[5], orient, orient + ANGLE_180, radius, FILL_T::NO_FILL );
 }
 
 
