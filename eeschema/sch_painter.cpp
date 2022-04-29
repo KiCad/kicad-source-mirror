@@ -1076,14 +1076,17 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer )
 
         if( borderWidth > 0 )
         {
-            if( !m_schSettings.m_OverrideItemColors && !aTextBox->IsBrightened()
-                    && aTextBox->GetStroke().GetColor() != COLOR4D::UNSPECIFIED )
+            COLOR4D borderColor = aTextBox->GetStroke().GetColor();
+
+            if( m_schSettings.m_OverrideItemColors || aTextBox->IsBrightened()
+                    || borderColor == COLOR4D::UNSPECIFIED )
             {
-                m_gal->SetStrokeColor( aTextBox->GetStroke().GetColor() );
+                borderColor = m_schSettings.GetLayerColor( aLayer );
             }
 
             m_gal->SetIsFill( false );
             m_gal->SetIsStroke( true );
+            m_gal->SetStrokeColor( borderColor );
             m_gal->SetLineWidth( borderWidth );
 
             if( borderStyle <= PLOT_DASH_TYPE::FIRST_TYPE || drawingShadows )
@@ -2004,14 +2007,17 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
 
         if( borderWidth > 0 )
         {
-            if( !m_schSettings.m_OverrideItemColors && !aTextBox->IsBrightened()
-                    && aTextBox->GetStroke().GetColor() != COLOR4D::UNSPECIFIED )
+            COLOR4D borderColor = aTextBox->GetStroke().GetColor();
+
+            if( m_schSettings.m_OverrideItemColors || aTextBox->IsBrightened()
+                    || borderColor == COLOR4D::UNSPECIFIED )
             {
-                m_gal->SetStrokeColor( aTextBox->GetStroke().GetColor() );
+                borderColor = m_schSettings.GetLayerColor( aLayer );
             }
 
             m_gal->SetIsFill( false );
             m_gal->SetIsStroke( true );
+            m_gal->SetStrokeColor( borderColor );
             m_gal->SetLineWidth( borderWidth );
 
             if( borderStyle <= PLOT_DASH_TYPE::FIRST_TYPE || drawingShadows )
