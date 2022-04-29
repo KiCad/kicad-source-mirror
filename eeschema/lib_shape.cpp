@@ -172,9 +172,10 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
             std::swap( start, end );
     }
 
-    int     penWidth;
-    COLOR4D color;
-    FILL_T  fill = m_fill;
+    int            penWidth;
+    COLOR4D        color = GetStroke().GetColor();
+    PLOT_DASH_TYPE lineStyle = GetStroke().GetPlotStyle();
+    FILL_T         fill = m_fill;
 
     if( aBackground )
     {
@@ -199,19 +200,26 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
         }
 
         penWidth = 0;
+        lineStyle = PLOT_DASH_TYPE::SOLID;
     }
     else
     {
+        if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
+            color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
+
+        if( lineStyle == PLOT_DASH_TYPE::DEFAULT )
+            lineStyle = PLOT_DASH_TYPE::DASH;
+
         if( m_fill == FILL_T::FILLED_SHAPE )
             fill = m_fill;
         else
             fill = FILL_T::NO_FILL;
 
         penWidth = GetEffectivePenWidth( aPlotter->RenderSettings() );
-        color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
     }
 
     aPlotter->SetColor( color );
+    aPlotter->SetDash( lineStyle );
 
     switch( GetShape() )
     {
@@ -235,6 +243,8 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
+
+    aPlotter->SetDash( PLOT_DASH_TYPE::SOLID );
 }
 
 

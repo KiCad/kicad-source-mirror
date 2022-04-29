@@ -191,12 +191,13 @@ KIFONT::FONT* SCH_TEXTBOX::GetDrawFont() const
 
 void SCH_TEXTBOX::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
-    wxDC*    DC = aSettings->GetPrintDC();
-    int      penWidth = GetPenWidth();
-    bool     blackAndWhiteMode = GetGRForceBlackPenState();
-    VECTOR2I pt1 = GetStart();
-    VECTOR2I pt2 = GetEnd();
-    COLOR4D  color;
+    wxDC*          DC = aSettings->GetPrintDC();
+    int            penWidth = GetPenWidth();
+    bool           blackAndWhiteMode = GetGRForceBlackPenState();
+    VECTOR2I       pt1 = GetStart();
+    VECTOR2I       pt2 = GetEnd();
+    COLOR4D        color = GetStroke().GetColor();
+    PLOT_DASH_TYPE lineStyle = GetStroke().GetPlotStyle();
 
     if( GetFillMode() == FILL_T::FILLED_WITH_COLOR && !blackAndWhiteMode )
         GRFilledRect( DC, pt1, pt2, 0, GetFillColor(), GetFillColor() );
@@ -205,12 +206,13 @@ void SCH_TEXTBOX::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
     {
         penWidth = std::max( penWidth, aSettings->GetMinPenWidth() );
 
-        if( GetStroke().GetColor() == COLOR4D::UNSPECIFIED )
+        if( blackAndWhiteMode || color == COLOR4D::UNSPECIFIED )
             color = aSettings->GetLayerColor( m_layer );
-        else
-            color = GetStroke().GetColor();
 
-        if( GetStroke().GetPlotStyle() <= PLOT_DASH_TYPE::FIRST_TYPE )
+        if( lineStyle == PLOT_DASH_TYPE::DEFAULT )
+            lineStyle = PLOT_DASH_TYPE::DASH;
+
+        if( lineStyle == PLOT_DASH_TYPE::SOLID )
         {
             GRRect( DC, pt1, pt2, penWidth, color );
         }
@@ -220,7 +222,7 @@ void SCH_TEXTBOX::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
 
             for( SHAPE* shape : shapes )
             {
-                STROKE_PARAMS::Stroke( shape, GetStroke().GetPlotStyle(), penWidth, aSettings,
+                STROKE_PARAMS::Stroke( shape, lineStyle, penWidth, aSettings,
                                        [&]( const VECTOR2I& a, const VECTOR2I& b )
                                        {
                                            GRLine( DC, a.x, a.y, b.x, b.y, penWidth, color );
@@ -232,10 +234,10 @@ void SCH_TEXTBOX::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
         }
     }
 
-    color = aSettings->GetLayerColor( m_layer );
+    color = GetTextColor();
 
-    if( !blackAndWhiteMode && GetTextColor() != COLOR4D::UNSPECIFIED )
-        color = GetTextColor();
+    if( blackAndWhiteMode || color == COLOR4D::UNSPECIFIED )
+        color = aSettings->GetLayerColor( m_layer );
 
     EDA_TEXT::Print( aSettings, aOffset, color );
 }
@@ -339,22 +341,28 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground ) const
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
     KIFONT::FONT*    font = GetDrawFont();
     int              penWidth = GetPenWidth();
-    COLOR4D          color = settings->GetLayerColor( LAYER_NOTES );
+    COLOR4D          color = GetStroke().GetColor();
+    PLOT_DASH_TYPE   lineStyle = GetStroke().GetPlotStyle();
 
     if( penWidth > 0 )
     {
         penWidth = std::max( penWidth, settings->GetMinPenWidth() );
 
-        if( aPlotter->GetColorMode() && GetStroke().GetColor() != COLOR4D::UNSPECIFIED )
-            aPlotter->SetColor( GetStroke().GetColor() );
-        else
-            aPlotter->SetColor( color );
+        if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
+            color = settings->GetLayerColor( m_layer );
 
+        if( lineStyle == PLOT_DASH_TYPE::DEFAULT )
+            lineStyle = PLOT_DASH_TYPE::DASH;
+
+        aPlotter->SetColor( color );
+        aPlotter->SetDash( lineStyle );
         aPlotter->Rect( m_start, m_end, FILL_T::NO_FILL, penWidth );
     }
 
-    if( aPlotter->GetColorMode() && GetTextColor() != COLOR4D::UNSPECIFIED )
-        color = GetTextColor();
+    color = GetTextColor();
+
+    if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
+        color = settings->GetLayerColor( m_layer );
 
     penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );

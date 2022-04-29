@@ -287,12 +287,12 @@ KIFONT::FONT* SCH_TEXT::GetDrawFont() const
 
 void SCH_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
-    COLOR4D  color = aSettings->GetLayerColor( m_layer );
+    COLOR4D  color = GetTextColor();
     bool     blackAndWhiteMode = GetGRForceBlackPenState();
     VECTOR2I text_offset = aOffset + GetSchematicTextOffset( aSettings );
 
-    if( !blackAndWhiteMode && GetTextColor() != COLOR4D::UNSPECIFIED )
-        color = GetTextColor();
+    if( blackAndWhiteMode || color == COLOR4D::UNSPECIFIED )
+        color = aSettings->GetLayerColor( m_layer );
 
     // Adjust text drawn in an outline font to more closely mimic the positioning of
     // SCH_FIELD text.
@@ -431,13 +431,13 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground ) const
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
     SCH_CONNECTION*  connection = Connection();
     int              layer = ( connection && connection->IsBus() ) ? LAYER_BUS : m_layer;
-    COLOR4D          color = settings->GetLayerColor( layer );
+    COLOR4D          color = GetTextColor();
     int              penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
     KIFONT::FONT*    font = GetDrawFont();
     VECTOR2I         text_offset = GetSchematicTextOffset( aPlotter->RenderSettings() );
 
-    if( aPlotter->GetColorMode() && GetTextColor() != COLOR4D::UNSPECIFIED )
-        color = GetTextColor();
+    if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
+        color = settings->GetLayerColor( layer );
 
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );

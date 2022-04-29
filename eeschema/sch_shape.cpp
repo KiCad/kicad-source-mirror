@@ -305,7 +305,7 @@ void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
     else
         color = GetStroke().GetColor();
 
-    if( GetStroke().GetPlotStyle() <= PLOT_DASH_TYPE::FIRST_TYPE )
+    if( GetEffectiveLineStyle() == PLOT_DASH_TYPE::SOLID )
     {
         switch( GetShape() )
         {
@@ -339,7 +339,7 @@ void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
 
         for( SHAPE* shape : shapes )
         {
-            STROKE_PARAMS::Stroke( shape, GetStroke().GetPlotStyle(), penWidth, aSettings,
+            STROKE_PARAMS::Stroke( shape, GetEffectiveLineStyle(), penWidth, aSettings,
                                    [&]( const VECTOR2I& a, const VECTOR2I& b )
                                    {
                                        GRLine( DC, a.x, a.y, b.x, b.y, penWidth, color );

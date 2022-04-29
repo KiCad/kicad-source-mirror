@@ -276,20 +276,10 @@ void LIB_TEXT::Plot( PLOTTER* plotter, bool aBackground, const VECTOR2I& offset,
     int t1  = ( aTransform.x1 != 0 ) ^ ( GetTextAngle() != ANGLE_HORIZONTAL );
     VECTOR2I pos = aTransform.TransformCoordinate( txtpos ) + offset;
 
-    // Get color
-    COLOR4D color;
+    COLOR4D color = GetTextColor();
 
-    if( plotter->GetColorMode() )
-    {
-        if( GetTextColor() != COLOR4D::UNSPECIFIED )
-            color = GetTextColor();
-        else
-            color = plotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
-    }
-    else
-    {
-        color = COLOR4D::BLACK;
-    }
+    if( !plotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
+        color = plotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
 
     RENDER_SETTINGS* settings = plotter->RenderSettings();
 
@@ -322,12 +312,12 @@ void LIB_TEXT::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
                       const TRANSFORM& aTransform )
 {
     wxDC*   DC = aSettings->GetPrintDC();
-    COLOR4D color = aSettings->GetLayerColor( LAYER_DEVICE );
+    COLOR4D color = GetTextColor();
     bool    blackAndWhiteMode = GetGRForceBlackPenState();
     int     penWidth = std::max( GetEffectiveTextPenWidth(), aSettings->GetDefaultPenWidth() );
 
-    if( !blackAndWhiteMode && GetTextColor() != COLOR4D::UNSPECIFIED )
-        color = GetTextColor();
+    if( blackAndWhiteMode || color == COLOR4D::UNSPECIFIED )
+        color = aSettings->GetLayerColor( LAYER_DEVICE );
 
     // Calculate the text orientation, according to the symbol orientation/mirror (needed when
     // draw text in schematic)

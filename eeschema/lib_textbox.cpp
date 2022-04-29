@@ -193,26 +193,30 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
     if( IsPrivate() )
         return;
 
-    bool forceNoFill = static_cast<bool>( aData );
-    bool blackAndWhiteMode = GetGRForceBlackPenState();
-    int  penWidth = GetEffectivePenWidth( aSettings );
+    bool           forceNoFill = static_cast<bool>( aData );
+    bool           blackAndWhiteMode = GetGRForceBlackPenState();
+    int            penWidth = GetEffectivePenWidth( aSettings );
+    COLOR4D        color = GetStroke().GetColor();
+    PLOT_DASH_TYPE lineStyle = GetStroke().GetPlotStyle();
 
     wxDC*    DC = aSettings->GetPrintDC();
     VECTOR2I pt1 = aTransform.TransformCoordinate( m_start ) + aOffset;
     VECTOR2I pt2 = aTransform.TransformCoordinate( m_end ) + aOffset;
-    COLOR4D  color = aSettings->GetLayerColor( LAYER_DEVICE );
 
     if( !forceNoFill && GetFillMode() == FILL_T::FILLED_WITH_COLOR && !blackAndWhiteMode )
-        GRFilledRect( DC, pt1, pt2, penWidth, color, GetFillColor() );
-
-    if( GetStroke().GetColor() != COLOR4D::UNSPECIFIED )
-        color = GetStroke().GetColor();
+        GRFilledRect( DC, pt1, pt2, penWidth, GetFillColor(), GetFillColor() );
 
     if( penWidth > 0 )
     {
         penWidth = std::max( penWidth, aSettings->GetMinPenWidth() );
 
-        if( GetStroke().GetPlotStyle() <= PLOT_DASH_TYPE::FIRST_TYPE )
+        if( blackAndWhiteMode || color == COLOR4D::UNSPECIFIED )
+            color = aSettings->GetLayerColor( LAYER_DEVICE );
+
+        if( lineStyle == PLOT_DASH_TYPE::DEFAULT )
+            lineStyle = PLOT_DASH_TYPE::DASH;
+
+        if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
         {
             GRRect( DC, pt1, pt2, penWidth, color );
         }
@@ -222,7 +226,7 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
 
             for( SHAPE* shape : shapes )
             {
-                STROKE_PARAMS::Stroke( shape, GetStroke().GetPlotStyle(), penWidth, aSettings,
+                STROKE_PARAMS::Stroke( shape, lineStyle, penWidth, aSettings,
                                        [&]( const VECTOR2I& a, const VECTOR2I& b )
                                        {
                                            GRLine( DC, a.x, a.y, b.x, b.y, penWidth, color );
@@ -236,8 +240,10 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
 
     LIB_TEXTBOX text( *this );
 
-    if( !blackAndWhiteMode && GetTextColor() != COLOR4D::UNSPECIFIED )
-        color = GetTextColor();
+    color = GetTextColor();
+
+    if( blackAndWhiteMode || color == COLOR4D::UNSPECIFIED )
+        color = aSettings->GetLayerColor( LAYER_DEVICE );
 
     penWidth = std::max( GetEffectiveTextPenWidth(), aSettings->GetMinPenWidth() );
 
@@ -324,34 +330,31 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
         return;
     }
 
-    VECTOR2I  start = aTransform.TransformCoordinate( m_start ) + aOffset;
-    VECTOR2I  end = aTransform.TransformCoordinate( m_end ) + aOffset;
-    int       penWidth = GetEffectivePenWidth( aPlotter->RenderSettings() );
-    COLOR4D   color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
+    VECTOR2I       start = aTransform.TransformCoordinate( m_start ) + aOffset;
+    VECTOR2I       end = aTransform.TransformCoordinate( m_end ) + aOffset;
+    int            penWidth = GetEffectivePenWidth( aPlotter->RenderSettings() );
+    COLOR4D        color = GetStroke().GetColor();
+    PLOT_DASH_TYPE lineStyle = GetStroke().GetPlotStyle();
 
     if( penWidth > 0 )
     {
-        if( aPlotter->GetColorMode() && GetStroke().GetColor() != COLOR4D::UNSPECIFIED )
-            aPlotter->SetColor( GetStroke().GetColor() );
-        else
-            aPlotter->SetColor( color );
+        if( !aPlotter->GetColorMode() || color != COLOR4D::UNSPECIFIED )
+            color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
 
+        if( lineStyle == PLOT_DASH_TYPE::DEFAULT )
+            lineStyle = PLOT_DASH_TYPE::DASH;
+
+        aPlotter->SetColor( color );
+        aPlotter->SetDash( lineStyle );
         aPlotter->Rect( start, end, FILL_T::NO_FILL, penWidth );
     }
 
     LIB_TEXTBOX text( *this );
 
-    if( aPlotter->GetColorMode() )
-    {
-        if( GetTextColor() != COLOR4D::UNSPECIFIED )
-            color = GetTextColor();
-        else
-            color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
-    }
-    else
-    {
-        color = COLOR4D::BLACK;
-    }
+    color = GetTextColor();
+
+    if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
+        color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
 
     penWidth = std::max( GetEffectiveTextPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
 
