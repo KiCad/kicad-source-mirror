@@ -1465,7 +1465,18 @@ int BOARD_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
             continue;
         }
 
-        if( !board->TestZoneIntersection( curr_area, firstZone ) )
+        bool intersects = curr_area == firstZone;
+
+        for( ZONE* candidate : toMerge )
+        {
+            if( intersects )
+                break;
+
+            if( board->TestZoneIntersection( curr_area, candidate ) )
+                intersects = true;
+        }
+
+        if( !intersects )
         {
             wxLogMessage( _( "Some zones did not intersect and were not merged." ) );
             continue;
@@ -1476,12 +1487,15 @@ int BOARD_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    if( mergeZones( m_frame, commit, toMerge, merged ) )
+    if( !toMerge.empty() )
     {
-        commit.Push( wxT( "Merge zones" ) );
+        if( mergeZones( m_frame, commit, toMerge, merged ) )
+        {
+            commit.Push( wxT( "Merge zones" ) );
 
-        for( EDA_ITEM* item : merged )
-            m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, item );
+            for( EDA_ITEM* item : merged )
+                m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, item );
+        }
     }
 
     return 0;
