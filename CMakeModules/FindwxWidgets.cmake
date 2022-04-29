@@ -231,11 +231,7 @@ endif()
 #=====================================================================
 if(wxWidgets_FIND_STYLE STREQUAL "win32")
   # Useful common wx libs needed by almost all components.
-  if(VCPKG_TOOLCHAIN)
-    set(wxWidgets_COMMON_LIBRARIES libpng16 tiff jpeg zlib libexpat)
-  else()
-    set(wxWidgets_COMMON_LIBRARIES png tiff jpeg zlib regex expat)
-  endif()
+  set(wxWidgets_COMMON_LIBRARIES png tiff jpeg zlib regex expat)
 
   # DEPRECATED: Use find_package(wxWidgets COMPONENTS mono) instead.
   if(NOT wxWidgets_FIND_COMPONENTS)
@@ -258,22 +254,24 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
   #-------------------------------------------------------------------
   #
   # Get filename components for a configuration. For example,
-  #   if _CONFIGURATION = mswunivud, then _UNV=univ, _UCD=u _DBG=d
-  #   if _CONFIGURATION = mswu,      then _UNV="",   _UCD=u _DBG=""
+  #   if _CONFIGURATION = mswunivud, then _PF="msw", _UNV=univ, _UCD=u _DBG=d
+  #   if _CONFIGURATION = mswu,      then _PF="msw", _UNV="",   _UCD=u _DBG=""
   #
-  macro(WX_GET_NAME_COMPONENTS _CONFIGURATION _UNV _UCD _DBG)
+  macro(WX_GET_NAME_COMPONENTS _CONFIGURATION _PF _UNV _UCD _DBG)
+    DBG_MSG_V(${_CONFIGURATION})
     string(REGEX MATCH "univ" ${_UNV} "${_CONFIGURATION}")
-    string(REGEX REPLACE "msw.*(u)[d]*$" "u" ${_UCD} "${_CONFIGURATION}")
+    string(REGEX REPLACE "[msw|qt].*(u)[d]*$" "u" ${_UCD} "${_CONFIGURATION}")
     if(${_UCD} STREQUAL ${_CONFIGURATION})
       set(${_UCD} "")
     endif()
     string(REGEX MATCH "d$" ${_DBG} "${_CONFIGURATION}")
+    string(REGEX MATCH "^[msw|qt]*" ${_PF} "${_CONFIGURATION}")
   endmacro()
 
   #
   # Find libraries associated to a configuration.
   #
-  macro(WX_FIND_LIBS _UNV _UCD _DBG)
+  macro(WX_FIND_LIBS _PF _UNV _UCD _DBG)
     DBG_MSG_V("m_unv = ${_UNV}")
     DBG_MSG_V("m_ucd = ${_UCD}")
     DBG_MSG_V("m_dbg = ${_DBG}")
@@ -286,7 +284,6 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
         NAMES
         wx${LIB}${_UCD}${_DBG} # for regex
         wx${LIB}${_DBG}
-        ${LIB}${_DBG}          # vcpkg libraries aren't specific to wx
         PATHS ${WX_LIB_DIR}
         NO_DEFAULT_PATH
         )
@@ -326,13 +323,13 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
     # Find wxWidgets monolithic library.
     find_library(WX_mono${_DBG}
       NAMES
-      wxmsw${_UNV}31${_UCD}${_DBG}
-      wxmsw${_UNV}30${_UCD}${_DBG}
-      wxmsw${_UNV}29${_UCD}${_DBG}
-      wxmsw${_UNV}28${_UCD}${_DBG}
-      wxmsw${_UNV}27${_UCD}${_DBG}
-      wxmsw${_UNV}26${_UCD}${_DBG}
-      wxmsw${_UNV}25${_UCD}${_DBG}
+      wx${_PF}${_UNV}31${_UCD}${_DBG}
+      wx${_PF}${_UNV}30${_UCD}${_DBG}
+      wx${_PF}${_UNV}29${_UCD}${_DBG}
+      wx${_PF}${_UNV}28${_UCD}${_DBG}
+      wx${_PF}${_UNV}27${_UCD}${_DBG}
+      wx${_PF}${_UNV}26${_UCD}${_DBG}
+      wx${_PF}${_UNV}25${_UCD}${_DBG}
       PATHS ${WX_LIB_DIR}
       NO_DEFAULT_PATH
       )
@@ -340,16 +337,16 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
 
     # Find wxWidgets multilib libraries.
     foreach(LIB core adv aui html media xrc dbgrid gl qa richtext
-                webview stc ribbon propgrid)
+                stc ribbon propgrid webview)
       find_library(WX_${LIB}${_DBG}
         NAMES
-        wxmsw${_UNV}31${_UCD}${_DBG}_${LIB}
-        wxmsw${_UNV}30${_UCD}${_DBG}_${LIB}
-        wxmsw${_UNV}29${_UCD}${_DBG}_${LIB}
-        wxmsw${_UNV}28${_UCD}${_DBG}_${LIB}
-        wxmsw${_UNV}27${_UCD}${_DBG}_${LIB}
-        wxmsw${_UNV}26${_UCD}${_DBG}_${LIB}
-        wxmsw${_UNV}25${_UCD}${_DBG}_${LIB}
+        wx${_PF}${_UNV}31${_UCD}${_DBG}_${LIB}
+        wx${_PF}${_UNV}30${_UCD}${_DBG}_${LIB}
+        wx${_PF}${_UNV}29${_UCD}${_DBG}_${LIB}
+        wx${_PF}${_UNV}28${_UCD}${_DBG}_${LIB}
+        wx${_PF}${_UNV}27${_UCD}${_DBG}_${LIB}
+        wx${_PF}${_UNV}26${_UCD}${_DBG}_${LIB}
+        wx${_PF}${_UNV}25${_UCD}${_DBG}_${LIB}
         PATHS ${WX_LIB_DIR}
         NO_DEFAULT_PATH
         )
@@ -515,74 +512,6 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
       set(WX_LIB_DIR_PREFIX vc)
     endif()
 
-  if(VCPKG_TOOLCHAIN)
-    set(wxWidgets_FOUND TRUE)
-      find_path(wxWidgets_ROOT_DIR
-      NAMES include/wx/wx.h
-      PATHS
-      ENV wxWidgets_ROOT_DIR
-      DOC "wxWidgets base/installation directory"
-      )
-    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-      set(wxWidgets_LIB_DIR ${wxWidgets_ROOT_DIR}/debug/lib)
-      set(wxWidgets_CONFIGURATION mswud)
-    else()
-      set(wxWidgets_LIB_DIR ${wxWidgets_ROOT_DIR}/lib)
-      set(wxWidgets_CONFIGURATION mswu)
-    endif()
-
-    set(wxWidgets_BIN_DIR ${wxWidgets_ROOT_DIR}/bin)
-    set(wxWidgets_INCLUDE_DIR ${wxWidgets_ROOT_DIR}/include)
-    file(GLOB DLL ${wxWidgets_BIN_DIR}/wxmsw*.dll)
-    if (DLL)
-      set(wxWidgets_DEFINITIONS WXUSINGDLL)
-      DBG_MSG_V("detected SHARED/DLL tree wxWidgets_LIB_DIR=${wxWidgets_LIB_DIR}")
-    endif ()
-    set(WX_ROOT_DIR ${wxWidgets_ROOT_DIR})
-    set(WX_LIB_DIR ${wxWidgets_LIB_DIR})  # needed by macro
-    set(WX_CONFIGURATION_LIST ${wxWidgets_CONFIGURATION})
-
-    # Set wxWidgets lib setup include directory.
-    if (EXISTS ${wxWidgets_INCLUDE_DIR}/wx/setup.h)
-      set(wxWidgets_INCLUDE_DIRS ${wxWidgets_INCLUDE_DIR})
-    else ()
-      DBG_MSG("wxWidgets_FOUND FALSE because ${wxWidgets_INCLUDE_DIR}/wx/setup.h does not exists.")
-      set(wxWidgets_FOUND FALSE)
-    endif ()
-
-    # Set wxWidgets main include directory.
-    if (EXISTS ${wxWidgets_ROOT_DIR}/include/wx/wx.h)
-      list(APPEND wxWidgets_INCLUDE_DIRS ${wxWidgets_ROOT_DIR}/include)
-    else ()
-      DBG_MSG("wxWidgets_FOUND FALSE because wxWidgets_ROOT_DIR=${wxWidgets_ROOT_DIR} has no ${wxWidgets_ROOT_DIR}/include/wx/wx.h")
-      set(wxWidgets_FOUND FALSE)
-    endif ()
-
-    DBG_MSG_V("WX_CONFIGURATION_LIST=${WX_CONFIGURATION_LIST}")
-
-
-    # Get configuration parameters from the name.
-    WX_GET_NAME_COMPONENTS(${wxWidgets_CONFIGURATION} UNV UCD DBG)
-
-
-    # Find wxWidgets libraries.
-    WX_FIND_LIBS("${UNV}" "${UCD}" "${DBG}")
-    if (WX_USE_REL_AND_DBG)
-      WX_FIND_LIBS("${UNV}" "${UCD}" "d")
-    endif ()
-
-    # Settings for requested libs (i.e., include dir, libraries, etc.).
-    WX_SET_LIBRARIES(wxWidgets_FIND_COMPONENTS "${DBG}")
-
-    # Add necessary definitions for unicode builds
-    if ("${UCD}" STREQUAL "u")
-      list(APPEND wxWidgets_DEFINITIONS UNICODE _UNICODE)
-    endif ()
-
-    # Add necessary definitions for debug builds
-    set(wxWidgets_DEFINITIONS_DEBUG _DEBUG __WXDEBUG__)
-
-  else()
     if(BUILD_SHARED_LIBS)
       find_path(wxWidgets_LIB_DIR
       NAMES
@@ -617,7 +546,6 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
       DOC "Path to wxWidgets libraries"
       NO_DEFAULT_PATH
       )
-    endif()
   endif()
 
     # If wxWidgets_LIB_DIR changed, clear all libraries.
@@ -675,7 +603,7 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
         endif()
 
         # Get configuration parameters from the name.
-        WX_GET_NAME_COMPONENTS(${wxWidgets_CONFIGURATION} UNV UCD DBG)
+        WX_GET_NAME_COMPONENTS(${wxWidgets_CONFIGURATION} PF UNV UCD DBG)
 
         # Set wxWidgets lib setup include directory.
         if(EXISTS ${WX_LIB_DIR}/${wxWidgets_CONFIGURATION}/wx/setup.h)
@@ -695,9 +623,9 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
         endif()
 
         # Find wxWidgets libraries.
-        WX_FIND_LIBS("${UNV}" "${UCD}" "${DBG}")
+        WX_FIND_LIBS("${PF}" "${UNV}" "${UCD}" "${DBG}")
         if(WX_USE_REL_AND_DBG)
-          WX_FIND_LIBS("${UNV}" "${UCD}" "d")
+          WX_FIND_LIBS("${PF}" "${UNV}" "${UCD}" "d")
         endif()
 
         # Settings for requested libs (i.e., include dir, libraries, etc.).
