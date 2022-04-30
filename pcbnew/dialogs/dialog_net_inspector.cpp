@@ -1744,21 +1744,29 @@ void DIALOG_NET_INSPECTOR::adjustListColumns()
 
     assert( column_order.size() == 8 );
 
-    m_netsList->GetColumn( column_order[0] )->SetMinWidth( w0 );
-    m_netsList->GetColumn( column_order[1] )->SetMinWidth( w1 );
-    m_netsList->GetColumn( column_order[2] )->SetMinWidth( w2 );
-    m_netsList->GetColumn( column_order[3] )->SetMinWidth( w3 );
-    m_netsList->GetColumn( column_order[4] )->SetMinWidth( w4 );
-    m_netsList->GetColumn( column_order[5] )->SetMinWidth( w5 );
-    m_netsList->GetColumn( column_order[6] )->SetMinWidth( w6 );
-    m_netsList->GetColumn( column_order[7] )->SetMinWidth( w7 );
+    auto setColWidth =
+            [&]( int n, int width )
+            {
+                wxDataViewColumn* col = m_netsList->GetColumn( column_order[n] );
+                col->SetMinWidth( width );
+                col->SetWidth( width );
+            };
+
+    setColWidth( 0, w0 );
+    setColWidth( 1, w1 );
+    setColWidth( 2, w2 );
+    setColWidth( 3, w3 );
+    setColWidth( 4, w4 );
+    setColWidth( 5, w5 );
+    setColWidth( 6, w6 );
+    setColWidth( 7, w7 );
 
     // At resizing of the list the width of middle column (Net Names) changes only.
     int width = KIPLATFORM::UI::GetUnobscuredSize( m_netsList ).x;
     int remaining = width - w0 - w2 - w3 - w4 - w5 - w6 - w7;
 
     if( remaining > w1 )
-        m_netsList->GetColumn( column_order[1] )->SetWidth( remaining );
+        setColWidth( 1, remaining );
 
     m_netsList->Refresh();
 
