@@ -509,20 +509,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
         {
             KICAD_T itemType = boardItem->Type();
 
-            if( itemType == PCB_FP_TEXT_T )
-            {
-                // We are guaranteed to always get an EDA_TEXT in this statement, but we must
-                // use the dynamic_cast to move through the type tree anyway.
-                const wxString text = dynamic_cast<EDA_TEXT*>( boardItem )->GetText();
-
-                if( m_references->GetValue() && text == wxT( "${REFERENCE}" ) )
-                    visitItem( commit, boardItem );
-                else if( m_values->GetValue() && text == wxT( "${VALUE}" ) )
-                    visitItem( commit, boardItem );
-                else if( m_otherFields->GetValue() )
-                    visitItem( commit, boardItem );
-            }
-            else if( itemType == PCB_FP_TEXTBOX_T )
+            if( itemType == PCB_FP_TEXT_T || itemType == PCB_FP_TEXTBOX_T )
             {
                 if( m_otherFields->GetValue() )
                     visitItem( commit, boardItem );
