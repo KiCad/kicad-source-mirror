@@ -276,9 +276,10 @@ void CVPCB_MAINFRAME::setupUIConditions()
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
-    mgr->SetConditions( CVPCB_ACTIONS::saveAssociations, ENABLE( cond.ContentModified() ) );
-    mgr->SetConditions( ACTIONS::undo,                   ENABLE( cond.UndoAvailable() ) );
-    mgr->SetConditions( ACTIONS::redo,                   ENABLE( cond.RedoAvailable() ) );
+    mgr->SetConditions( CVPCB_ACTIONS::saveAssociationsToSchematic, ENABLE( cond.ContentModified() ) );
+    mgr->SetConditions( CVPCB_ACTIONS::saveAssociationsToFile,      ENABLE( cond.ContentModified() ) );
+    mgr->SetConditions( ACTIONS::undo,                              ENABLE( cond.UndoAvailable() ) );
+    mgr->SetConditions( ACTIONS::redo,                              ENABLE( cond.RedoAvailable() ) );
 
     auto compFilter =
             [this] ( const SELECTION& )
@@ -327,7 +328,7 @@ void CVPCB_MAINFRAME::setupEventHandlers()
             [this]( wxCommandEvent& )
             {
                 // saveAssociations must be run immediately
-                GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociations, true );
+                GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociationsToFile, true );
             } );
 
     // Connect the handlers for the ok/cancel buttons
@@ -335,7 +336,7 @@ void CVPCB_MAINFRAME::setupEventHandlers()
             [this]( wxCommandEvent& )
             {
                 // saveAssociations must be run immediately, before running Close( true )
-                GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociations, true );
+                GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociationsToSchematic, true );
                 Close( true );
             }, wxID_OK );
     Bind( wxEVT_BUTTON,

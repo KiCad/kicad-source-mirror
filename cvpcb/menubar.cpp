@@ -46,7 +46,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     //
     ACTION_MENU*   fileMenu = new ACTION_MENU( false, tool );
 
-    fileMenu->Add( CVPCB_ACTIONS::saveAssociations );
+    fileMenu->Add( CVPCB_ACTIONS::saveAssociationsToSchematic );
     fileMenu->AppendSeparator();
     fileMenu->AddClose( _( "Assign Footprints" ) );
 
