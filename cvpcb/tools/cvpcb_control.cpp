@@ -231,8 +231,9 @@ int CVPCB_CONTROL::ToNA( const TOOL_EVENT& aEvent )
         return 0;
 
     // Extract the current selection
-    unsigned int curSel = -1;
-    unsigned int newSel = -1;
+    bool changeSel = false;
+    unsigned int newSel = UINT_MAX;
+
     switch( dir )
     {
     case CVPCB_MAINFRAME::ITEM_NEXT:
@@ -240,11 +241,12 @@ int CVPCB_CONTROL::ToNA( const TOOL_EVENT& aEvent )
             newSel = tempSel.front();
 
         // Find the next index in the component list
-        for( unsigned int i : naComp )
+        for( unsigned int idx : naComp )
         {
-            if( i > newSel )
+            if( idx > newSel )
             {
-                newSel = i;
+                changeSel = true;
+                newSel = idx;
                 break;
             }
         }
@@ -255,7 +257,19 @@ int CVPCB_CONTROL::ToNA( const TOOL_EVENT& aEvent )
         if( !tempSel.empty() )
         {
             newSel = tempSel.front();
-            curSel = newSel - 1;        // Break one before the current selection
+
+            // Find the previous index in the component list
+            for( int jj = naComp.size()-1; jj >= 0; jj-- )
+            {
+                unsigned idx = naComp[jj];
+
+                if( idx < newSel )
+                {
+                    changeSel = true;
+                    newSel = idx;
+                    break;
+                }
+            }
         }
 
         break;
@@ -264,18 +278,9 @@ int CVPCB_CONTROL::ToNA( const TOOL_EVENT& aEvent )
         wxASSERT_MSG( false, wxT( "Invalid direction" ) );
     }
 
-    // Find the next index in the component list
-    for( unsigned int i : naComp )
-    {
-        if( i >= curSel )
-        {
-            newSel = i;
-            break;
-        }
-    }
-
-    // Set the component selection
-    m_frame->SetSelectedComponent( newSel );
+    // Set the new component selection
+    if( changeSel )
+        m_frame->SetSelectedComponent( newSel );
 
     return 0;
 }
