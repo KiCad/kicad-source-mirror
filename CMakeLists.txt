@@ -848,9 +848,11 @@ if( UNIX AND NOT APPLE AND KICAD_SCRIPTING_WXPYTHON )
     endif()
 endif()
 
-message( STATUS "Found ${WXPYTHON_FLAVOR} "
-    "${WXPYTHON_VERSION}/${WXPYTHON_TOOLKIT} "
-    "(wxWidgets ${WXPYTHON_WXVERSION})" )
+if( WXPYTHON_FLAVOR )
+    message( STATUS "Found wxPython ${WXPYTHON_FLAVOR} "
+        "${WXPYTHON_VERSION}/${WXPYTHON_TOOLKIT} "
+        "(wxWidgets ${WXPYTHON_WXVERSION})" )
+endif()
 
 #
 # Find wxWidgets library, required
