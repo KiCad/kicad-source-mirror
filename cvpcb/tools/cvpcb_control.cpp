@@ -210,9 +210,16 @@ int CVPCB_CONTROL::ShowEquFileTable( const TOOL_EVENT& aEvent )
 }
 
 
-int CVPCB_CONTROL::SaveAssociations( const TOOL_EVENT& aEvent )
+int CVPCB_CONTROL::SaveAssociationsToFile( const TOOL_EVENT& aEvent )
 {
     m_frame->SaveFootprintAssociation( true );
+    return 0;
+}
+
+
+int CVPCB_CONTROL::SaveAssociationsToSchematic( const TOOL_EVENT& aEvent )
+{
+    m_frame->SaveFootprintAssociation( false );
     return 0;
 }
 
@@ -315,7 +322,8 @@ void CVPCB_CONTROL::setTransitions()
 
     // Management actions
     Go( &CVPCB_CONTROL::ShowEquFileTable,      CVPCB_ACTIONS::showEquFileTable.MakeEvent() );
-    Go( &CVPCB_CONTROL::SaveAssociations,      CVPCB_ACTIONS::saveAssociations.MakeEvent() );
+    Go( &CVPCB_CONTROL::SaveAssociationsToSchematic, CVPCB_ACTIONS::saveAssociationsToSchematic.MakeEvent() );
+    Go( &CVPCB_CONTROL::SaveAssociationsToFile,CVPCB_ACTIONS::saveAssociationsToFile.MakeEvent() );
 
     // Navigation actions
     Go( &CVPCB_CONTROL::ToNA,                  CVPCB_ACTIONS::gotoNextNA.MakeEvent() );

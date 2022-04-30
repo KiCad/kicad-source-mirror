@@ -53,7 +53,8 @@ public:
     static TOOL_ACTION gotoNextNA;
 
     /// Management actions
-    static TOOL_ACTION saveAssociations;
+    static TOOL_ACTION saveAssociationsToSchematic;
+    static TOOL_ACTION saveAssociationsToFile;
     static TOOL_ACTION showEquFileTable;
 
     /// Footprint Association actions

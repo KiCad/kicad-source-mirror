@@ -46,7 +46,7 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
         m_mainToolBar->SetAuiManager( &m_auimgr );
     }
 
-    m_mainToolBar->Add( CVPCB_ACTIONS::saveAssociations );
+    m_mainToolBar->Add( CVPCB_ACTIONS::saveAssociationsToSchematic );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::showFootprintLibTable );
