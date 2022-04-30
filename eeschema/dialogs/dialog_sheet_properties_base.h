@@ -62,7 +62,9 @@ class DIALOG_SHEET_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_pageNumberStaticText;
 		wxTextCtrl* m_pageNumberTextCtrl;
 		wxStaticLine* m_staticline1;
+		wxBoxSizer* m_sizerBottom;
 		wxStaticText* m_hierarchicalPathLabel;
+		wxStaticText* m_hierarchicalPath;
 		wxStdDialogButtonSizer* m_stdDialogButtonSizer;
 		wxButton* m_stdDialogButtonSizerOK;
 		wxButton* m_stdDialogButtonSizerCancel;

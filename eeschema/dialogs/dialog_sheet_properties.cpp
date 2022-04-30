@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2014-2021 KiCad Developers, see CHANGELOG.txt for contributors.
+ * Copyright (C) 2014-2022 KiCad Developers, see CHANGELOG.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,7 @@
 #include <settings/color_settings.h>
 #include <trace_helpers.h>
 #include "panel_eeschema_color_settings.h"
+#include "wx/dcclient.h"
 
 DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_SHEET* aSheet,
                                                   bool* aClearAnnotationNewItems ) :
@@ -86,6 +87,7 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
 
     // Set font sizes
     m_hierarchicalPathLabel->SetFont( KIUI::GetInfoFont( this ) );
+    m_hierarchicalPath->SetFont( KIUI::GetInfoFont( this ) );
 
     // wxFormBuilder doesn't include this event...
     m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
@@ -852,12 +854,10 @@ void DIALOG_SHEET_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     }
 
     // Propagate changes in sheetname to displayed hierarchical path
-    wxString hierarchicalPath = _( "Hierarchical path: " );
+    wxString  path = m_frame->GetCurrentSheet().PathHumanReadable( false );
 
-    hierarchicalPath += m_frame->GetCurrentSheet().PathHumanReadable( false );
-
-    if( hierarchicalPath.Last() != '/' )
-        hierarchicalPath.Append( '/' );
+    if( path.Last() != '/' )
+        path.Append( '/' );
 
     wxGridCellEditor* editor = m_grid->GetCellEditor( SHEETNAME, FDC_VALUE );
     wxControl*        control = editor->GetControl();
@@ -871,12 +871,19 @@ void DIALOG_SHEET_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 
     m_dummySheet.SetFields( *m_fields );
     m_dummySheetNameField.SetText( sheetName );
-    hierarchicalPath += m_dummySheetNameField.GetShownText();
+    path += m_dummySheetNameField.GetShownText();
 
     editor->DecRef();
 
-    if( m_hierarchicalPathLabel->GetLabel() != hierarchicalPath )
-        m_hierarchicalPathLabel->SetLabel( hierarchicalPath );
+    wxClientDC dc( m_hierarchicalPathLabel );
+    int        width = m_sizerBottom->GetSize().x - m_stdDialogButtonSizer->GetSize().x
+                                                  - m_hierarchicalPathLabel->GetSize().x
+                                                  - 30;
+
+    path = wxControl::Ellipsize( path, dc, wxELLIPSIZE_START, width, wxELLIPSIZE_FLAGS_NONE );
+
+    if( m_hierarchicalPath->GetLabel() != path )
+        m_hierarchicalPath->SetLabel( path );
 
     // Handle a delayed focus
     if( m_delayedFocusRow >= 0 )

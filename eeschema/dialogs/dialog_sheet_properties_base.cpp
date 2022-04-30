@@ -186,12 +186,15 @@ DIALOG_SHEET_PROPERTIES_BASE::DIALOG_SHEET_PROPERTIES_BASE( wxWindow* parent, wx
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
-	wxBoxSizer* bSizerBottom;
-	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
+	m_sizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
 	m_hierarchicalPathLabel = new wxStaticText( this, wxID_ANY, _("Hierarchical path:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_hierarchicalPathLabel->Wrap( -1 );
-	bSizerBottom->Add( m_hierarchicalPathLabel, 1, wxLEFT|wxALIGN_CENTER_VERTICAL, 10 );
+	m_sizerBottom->Add( m_hierarchicalPathLabel, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 10 );
+
+	m_hierarchicalPath = new wxStaticText( this, wxID_ANY, _("path"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hierarchicalPath->Wrap( -1 );
+	m_sizerBottom->Add( m_hierarchicalPath, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_stdDialogButtonSizer = new wxStdDialogButtonSizer();
 	m_stdDialogButtonSizerOK = new wxButton( this, wxID_OK );
@@ -200,10 +203,10 @@ DIALOG_SHEET_PROPERTIES_BASE::DIALOG_SHEET_PROPERTIES_BASE( wxWindow* parent, wx
 	m_stdDialogButtonSizer->AddButton( m_stdDialogButtonSizerCancel );
 	m_stdDialogButtonSizer->Realize();
 
-	bSizerBottom->Add( m_stdDialogButtonSizer, 0, wxEXPAND, 5 );
+	m_sizerBottom->Add( m_stdDialogButtonSizer, 0, wxEXPAND|wxALL, 5 );
 
 
-	mainSizer->Add( bSizerBottom, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	mainSizer->Add( m_sizerBottom, 0, wxEXPAND|wxLEFT, 5 );
 
 
 	this->SetSizer( mainSizer );
