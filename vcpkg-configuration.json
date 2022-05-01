@@ -8,7 +8,7 @@
     {
       "kind": "git",
       "repository": "https://gitlab.com/kicad/packaging/kicad-vcpkg-registry.git",
-      "baseline": "67038a11b7b5df4bbc0b8c6dfd3636b79e360b52",
+      "baseline": "77bec4abafb782ac15e5439926a9d1ef05546f1d",
       "packages": [ "python3", "wxpython", "wxwidgets", "ngspice" ]
     }
   ]
