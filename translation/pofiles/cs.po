@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:55-0700\n"
-"PO-Revision-Date: 2022-04-28 11:12+0000\n"
+"PO-Revision-Date: 2022-05-02 12:52+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
 "Language: cs\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.12.1-dev\n"
+"X-Generator: Weblate 4.12.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -833,9 +833,12 @@ msgid "Anti-aliasing (slow)"
 msgstr "Antialiasing (pomalé)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
+#, fuzzy
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
-msgstr "Okolní okluze v prostoru obrazovky a globální odrazy osvětlení (pomalé)"
+msgstr ""
+"Použít okolní okluzi obrazovky a odrazy globálního osvětlení na konečné "
+"vykreslení (pomalé)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
 msgid "Number of Samples"
@@ -6825,7 +6828,7 @@ msgstr "Soubor kl. zkratek"
 #: cvpcb/auto_associate.cpp:108
 #, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "Soubor ekvivalence '%s' nebyl nalezen."
+msgstr "Soubor ekvivalence '%s' nelze najít."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -13594,9 +13597,9 @@ msgid "Polygon's owner (%d) not found."
 msgstr "Vlastník polygonu (%d) nebyl nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1288
-#, c-format
+#, c-format, fuzzy
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "Vlastník zaobleného obdélníku (%d) nebyl nalezen."
+msgstr "Reference '%s' nenalezena."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1324
 msgid "Arcs on schematic not currently supported."
@@ -14618,6 +14621,7 @@ msgid "Cancel Load"
 msgstr "Zrušit načtení"
 
 #: eeschema/sheet.cpp:225
+#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -14627,9 +14631,7 @@ msgid ""
 msgstr ""
 "V načteném schématu jsou názvy knihoven, které chybí v tabulce knihoven "
 "projektu. To může mít za následek nefunkční odkazy na knihovnu symbolů pro "
-"načtené schéma. \n"
-"\n"
-"Chcete pokračovat?"
+"načtené schéma. Chcete pokračovat?"
 
 #: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
 #: eeschema/sheet.cpp:380
@@ -15042,8 +15044,9 @@ msgid "Library changes are unsaved"
 msgstr "Změny v knihovně nejsou uloženy"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:247
+#, fuzzy
 msgid "Symbol library loading was cancelled by user."
-msgstr "Načítání knihovny symbolů bylo zrušeno uživatelem."
+msgstr "Knihovna symbolů '%s' již existuje."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:595
 #: eeschema/tools/sch_edit_tool.cpp:117
@@ -23431,9 +23434,8 @@ msgstr "Souřadnice"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:38
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
-#, fuzzy
 msgid "Drill/place file origin"
-msgstr "Počátek vrtání"
+msgstr "Počátek pro soubor vrtání/umístění"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:41
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
@@ -27624,9 +27626,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
-#, fuzzy
 msgid "Copper to hole clearance:"
-msgstr "Izolační mezera hrany mědi:"
+msgstr "Izolační mezera díry a mědi:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:261
 msgid ""
@@ -27636,9 +27637,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
-#, fuzzy
 msgid "Copper to edge clearance:"
-msgstr "Izolační mezera hrany mědi:"
+msgstr "Izolační mezera hrany a mědi:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:277
 msgid ""
@@ -27662,9 +27662,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:329
-#, fuzzy
 msgid "Hole to hole clearance:"
-msgstr "Pájecí pasta poměr mezer:"
+msgstr "Izolační mezera mezi dírami:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:334
 msgid ""
@@ -28970,9 +28969,8 @@ msgid "Drilled holes too close together"
 msgstr "Vyvrtané otvory jsou příliš blízko sebe"
 
 #: pcbnew/drc/drc_item.cpp:102
-#, fuzzy
 msgid "Drilled holes co-located"
-msgstr "Vyvrtané otvory jsou příliš blízko sebe"
+msgstr "Vyvrtané otvory příliš blízko u sebe"
 
 #: pcbnew/drc/drc_item.cpp:106
 msgid "Track width"
@@ -29165,7 +29163,7 @@ msgstr "Chybějící výraz podmínky."
 #: pcbnew/drc/drc_rule_parser.cpp:210
 #, c-format
 msgid "Unrecognized item '%s'.| Expected quoted expression."
-msgstr ""
+msgstr "Nepoznaný prvek '%s'.| Očekávaný výraz v uvozovkách."
 
 #: pcbnew/drc/drc_rule_parser.cpp:241 pcbnew/drc/drc_rule_parser.cpp:321
 #: pcbnew/drc/drc_rule_parser.cpp:334 pcbnew/drc/drc_rule_parser.cpp:423
@@ -29863,7 +29861,7 @@ msgstr "Změny pouzdra nejsou uloženy"
 #: pcbnew/footprint_edit_frame.cpp:506
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
-msgstr ""
+msgstr "Úprava %s z desky.  Při uložení je aktualizována pouze deska."
 
 #: pcbnew/footprint_edit_frame.cpp:842
 #, c-format
@@ -31799,9 +31797,9 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "Definice plošky CADSTAR '%s' vrátila chyby importu: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1258
-#, c-format
+#, c-format, fuzzy
 msgid "Unable to find pad index '%d' in footprint '%s'."
-msgstr "Nelze najít index plošky '%d' v pouzdře '%s'."
+msgstr "Nelze najít prohlížeč PDF pro '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1291
 #, c-format
@@ -31994,7 +31992,7 @@ msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2372
 msgid "Text Variables could not be set as there is no project loaded."
-msgstr ""
+msgstr "Textové proměnné nelze nastavit, protože není načten žádný projekt."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2479
 #, c-format
