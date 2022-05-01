@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:55-0700\n"
-"PO-Revision-Date: 2022-04-19 21:54+0000\n"
+"PO-Revision-Date: 2022-05-02 12:52+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v6/ja/>\n"
 "Language: ja\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.12.1\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2406,7 +2406,7 @@ msgstr "用紙"
 
 #: common/dialogs/dialog_page_settings.cpp:111
 msgid "Title Block"
-msgstr "タイトル ブロック"
+msgstr "タイトルブロック"
 
 #: common/dialogs/dialog_page_settings.cpp:474
 #, c-format
@@ -4568,12 +4568,10 @@ msgid "Alias: "
 msgstr "エイリアス: "
 
 #: common/filename_resolver.cpp:468
-#, fuzzy
 msgid "This path:"
 msgstr "このパス:"
 
 #: common/filename_resolver.cpp:471
-#, fuzzy
 msgid "Existing path:"
 msgstr "存在するパス:"
 
@@ -4977,7 +4975,7 @@ msgstr "B.Silkscreen"
 
 #: common/layer_id.cpp:71
 msgid "F.Silkscreen"
-msgstr "F.Silkscreen"
+msgstr "F.シルクスクリーン"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
@@ -5350,7 +5348,7 @@ msgstr "論理的なライブラリー名の中に不正な文字があります
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:212
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:223
 msgid "Unit"
-msgstr "ユニット"
+msgstr "単位"
 
 #: common/lib_tree_model_adapter.cpp:281
 msgid "Item"
@@ -6827,9 +6825,9 @@ msgid "Hotkey file"
 msgstr "ホットキー ファイル"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "等価ファイル '%s' は、デフォルトの検索パスに見つかりませんでした。"
+msgstr "等価ファイル '%s' は見つかりませんでした。"
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -11263,7 +11261,7 @@ msgstr "代替割り当て"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:126
 msgid "Unit:"
-msgstr "ユニット:"
+msgstr "単位:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:137
 msgid "Alternate symbol (De Morgan)"
@@ -14633,7 +14631,6 @@ msgid "Cancel Load"
 msgstr "ロードをキャンセル"
 
 #: eeschema/sheet.cpp:225
-#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -14641,9 +14638,12 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"ロードされた回路図にプロジェクト ライブラリー テーブルから失われたライブラ"
-"リー名があります。  これはロードされた回路図でシンボル ライブラリーのリンクを"
-"壊す原因となります。  続行しますか？"
+"ロードされた回路図にプロジェクト ライブラリー "
+"テーブルから失われたライブラリー名があります。  "
+"これはロードされた回路図でシンボル ライブラリーのリンクを壊す原因となります。"
+"\n"
+"\n"
+"続行しますか？"
 
 #: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
 #: eeschema/sheet.cpp:380
@@ -14658,9 +14658,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"選択されたファイルは、別のプロジェクトの一部として作成されました。  "
+"このファイルをこのプロジェクトにリンクすると、シンボル "
+"ライブラリの参照が欠落したり、不正確になる可能性があります。\n"
+"\n"
+"続行しますか？"
 
 #: eeschema/sheet.cpp:315
-#, fuzzy
 msgid ""
 "There are symbol library names in the selected schematic that are missing "
 "from the selected schematic project library table.  This may result in "
@@ -14668,12 +14672,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"ロードされた回路図でロードされた回路図プロジェクト ライブラリー テーブルから"
-"失われたライブラリー名があります。  これは回路図でシンボル ライブラリーのリン"
-"クを壊す原因となります。  続行しますか？"
+"ロードされた回路図でロードされた回路図プロジェクト ライブラリー "
+"テーブルから失われたライブラリー名があります。  これは回路図でシンボル "
+"ライブラリーのリンクを壊す原因となります。\n"
+"\n"
+"続行しますか？"
 
 #: eeschema/sheet.cpp:376
-#, fuzzy
 msgid ""
 "A duplicate library name that references a different library exists in the "
 "current library table.  This conflict cannot be resolved and may result in "
@@ -14682,8 +14687,10 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "異なったライブラリーを参照している重複したライブラリー名が現在のライブラリー "
-"テーブルに存在します。  この衝突は解決不能で、回路図でシンボル ライブラリーの"
-"リンクを壊す原因となります。  続行しますか？"
+"テーブルに存在します。  この衝突は解決不能で、回路図でシンボル "
+"ライブラリーのリンクを壊す原因となります。\n"
+"\n"
+"続行しますか？"
 
 #: eeschema/sheet.cpp:564
 #, c-format
@@ -24020,7 +24027,7 @@ msgstr "スルーホール"
 #: pcbnew/footprint_libraries_utils.cpp:1149 pcbnew/pad.cpp:1175
 #: pcbnew/pad.cpp:1666
 msgid "SMD"
-msgstr "SMD"
+msgstr "表面実装"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
@@ -24695,7 +24702,7 @@ msgstr "基板をクリア"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:55
 msgid "Filter Settings"
-msgstr "設定の絞り込み"
+msgstr "フィルターの設定"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:57
 msgid "Locked graphics"
@@ -24908,9 +24915,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:133
 msgid "Error loading footprint library table."
-msgstr ""
-"プロジェクトのフットプリント ライブラリー テーブルをロード中にエラーしまし"
-"た。"
+msgstr "プロジェクトのフットプリント ライブラリー テーブルをロード中にエラー。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:178
 msgid "Circle Properties"
@@ -25269,9 +25274,8 @@ msgid "Net Inspector"
 msgstr "ネットインスペクター"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:83
-#, fuzzy
 msgid "Load and Test Netlist"
-msgstr "ネットリストをロード"
+msgstr "ネットリストをロードしてテスト"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:125
 msgid "Select Netlist"
@@ -26108,11 +26112,11 @@ msgstr "リファレンス指定子をプロット"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:88
 msgid "Force plotting of invisible values / refs"
-msgstr "非表示の定数/リファレンスを強制的にプロット"
+msgstr "非表示の値/参照を強制的にプロット"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:89
 msgid "Force plot invisible footprint values and reference designators"
-msgstr "非表示フットプリントの定数とリファレンス指定子を強制的にプロット"
+msgstr "非表示フットプリントの値と参照指定子を強制的にプロット"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid "Plot Edge.Cuts on all layers"
@@ -26158,7 +26162,7 @@ msgstr "倍率:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:127
 msgid "Auto"
-msgstr "自動倍率"
+msgstr "自動"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:127
 msgid "3:2"
@@ -28596,7 +28600,6 @@ msgid "Check rule syntax"
 msgstr "ルールの文法をチェック"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -28888,8 +28891,8 @@ msgstr ""
 "\n"
 "### 注\n"
 "\n"
-"version句ははじめの句でなければなりません。  ファイルの文法のバージョンを示"
-"し、\n"
+"version句ははじめの句でなければなりません。  "
+"ファイルの文法のバージョンを示し、\n"
 "将来のルールパーサーが自動的なアップデートをできるようするためです。\n"
 "ここには\"1\"を設定します。\n"
 "\n"
@@ -28902,8 +28905,8 @@ msgstr ""
 "\n"
 "### 式関数\n"
 "\n"
-"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and `?"
-"`).\n"
+"全ての関数のパラメーターは単純なワイルドカードをサポートします。 (`*` and "
+"`?`).\n"
 "<br><br>\n"
 "\n"
 "    A.insideCourtyard('<footprint_refdes>')\n"
@@ -28945,19 +28948,17 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.existsOnLayer('<layer_name>')\n"
-"True if `A` exists on the given layer.  The layer name can be\n"
-"`A`が与えられたレイヤー状にある場合、真になります。\n"
-"レイヤー名は 基板の設定 > 基板編集レイヤー で指定された名前か、正規化名(例: "
-"`F.Cu`)が使えます。\n"
+"`A`が与えられたレイヤー上にある場合、真になります。\n"
+"レイヤー名は 基板の設定 > 基板編集レイヤー で指定された名前か、\n"
+"正規化名(例: `F.Cu`)が使えます。\n"
 "\n"
-"NB: this returns true if `A` is on the given layer, independently\n"
-"注意: これは、ルールがそのレイヤーに対して評価されているかいないかにかかわら"
-"ず\n"
-"`A`がレイヤーにある場合に真を返します。後者の場合、`(layer \"layer_name\")`の"
-"句をルールの中で使います。\n"
+"注意: これは、"
+"ルールがそのレイヤーに対して評価されているかいないかにかかわらず\n"
+"`A`がレイヤーにある場合に真を返します。\n"
+"後者の場合、`(layer \"layer_name\")`の句をルールの中で使います。\n"
 "<br><br><br>\n"
 "\n"
-"### More Examples\n"
+"### 更なる例\n"
 "\n"
 "    (rule \"copper keepout\"\n"
 "       (constraint disallow track via zone)\n"
@@ -30649,7 +30650,8 @@ msgstr "ベクター グラフィックス ファイルをインポート"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:133
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
-msgstr ""
+msgstr "DXFを読み込もうとしたらメモリを使い果たしたので、サイズが大きすぎる可能性があ"
+"ります。"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1380
 msgid "Invalid spline definition encountered"
