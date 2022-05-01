@@ -911,7 +911,7 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
     case LAYER_GLOBLABEL:
         labelItem = new SCH_GLOBALLABEL( aPosition );
         labelItem->SetShape( m_lastGlobalLabelShape );
-        labelItem->GetFields()[0].SetVisible( true );
+        labelItem->GetFields()[0].SetVisible( settings.m_IntersheetRefsShow );
         textItem = labelItem;
         break;
 
