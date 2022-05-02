@@ -75,11 +75,15 @@ if( ${PYTHON_ROOT_DIR} )
     find_program(PYTHON_EXECUTABLE NAMES ${_Python_NAMES}
         PATHS ${PYTHON_ROOT_DIR}
         NO_DEFAULT_PATH )
+elseif(VCPKG_TOOLCHAIN)
+    # Our VCPKG usage will always place it in a known location
+    find_program(PYTHON_EXECUTABLE
+        NAMES ${_Python_NAMES}
+        PATHS "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/tools/python3"
+    )
 else()
-    if(NOT VCPKG_TOOLCHAIN)
-        # If there is no specific path given, look for python in the path
-        find_program(PYTHON_EXECUTABLE NAMES ${_Python_NAMES})
-    endif()
+    # If there is no specific path given, look for python in the path
+    find_program(PYTHON_EXECUTABLE NAMES ${_Python_NAMES})
 endif()
 
 # Set up the versions we know about, in the order we will search. Always add
@@ -112,8 +116,6 @@ if(NOT PYTHON_EXECUTABLE)
         list( APPEND _Python_PPATHS "C:/python/${_CURRENT_VERSION}.2" )
         list( APPEND _Python_PPATHS "C:/python/${_CURRENT_VERSION}.1" )
         list( APPEND _Python_PPATHS "C:/python/${_CURRENT_VERSION}.0" )
-    elseif(VCPKG_TOOLCHAIN)
-        list( APPEND _Python_PPATHS "${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/tools/python3" )
     else()
         list( APPEND _Python_PPATHS [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\${_CURRENT_VERSION}\\InstallPath] )
     endif()
