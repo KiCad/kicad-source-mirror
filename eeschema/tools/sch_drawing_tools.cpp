@@ -1186,17 +1186,71 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 {
                     item = createNewText( cursorPos, LAYER_NOTES );
                 }
-                else if( isGlobalLabel )
-                {
-                    item = createNewText( cursorPos, LAYER_GLOBLABEL );
-                }
                 else if( isHierLabel )
                 {
                     item = createNewText( cursorPos, LAYER_HIERLABEL );
                 }
-                else if( isNetLabel )
+                else if( isNetLabel || isGlobalLabel )
                 {
-                    item = createNewText( cursorPos, LAYER_LOCLABEL );
+                    wxString netName;
+
+                    for( SCH_ITEM* overlapItem :
+                         m_frame->GetScreen()->Items().Overlapping( cursorPos ) )
+                    {
+                        if( overlapItem->GetEditFlags() & STRUCT_DELETED )
+                            continue;
+
+                        if( overlapItem->Type() == SCH_LINE_T )
+                        {
+                            SCH_LINE* line = static_cast<SCH_LINE*>( overlapItem );
+                            if( line->IsWire() )
+                            {
+                                netName = line->GetNetname(m_frame->GetCurrentSheet());
+                                break;
+                            }
+                        }
+                    }
+
+                    if( netName.IsEmpty() )
+                    {
+                        // no connected net label found -> open up the new label dialog
+                        if( isGlobalLabel )
+                        {
+                            item = createNewText( cursorPos, LAYER_GLOBLABEL );
+                        }
+                        else
+                        {
+                            item = createNewText( cursorPos, LAYER_LOCLABEL );
+                        }
+                    }
+                    else
+                    {
+                        // connected net label found -> create the label immediately
+                        SCHEMATIC*          schematic = getModel<SCHEMATIC>();
+                        SCHEMATIC_SETTINGS& settings = schematic->Settings();
+                        SCH_LABEL_BASE*     labelItem = nullptr;
+                        if( isGlobalLabel )
+                        {
+                            labelItem = new SCH_GLOBALLABEL( cursorPos );
+                            labelItem->SetShape( m_lastGlobalLabelShape );
+                            // make intersheets reference visible based on settings
+                            labelItem->GetFields()[0].SetVisible( settings.m_IntersheetRefsShow );
+                        }
+                        else
+                        {
+                            labelItem = new SCH_LABEL( cursorPos );
+                        }
+
+                        labelItem->SetParent( getModel<SCHEMATIC>() );
+                        labelItem->SetBold( m_lastTextBold );
+                        labelItem->SetItalic( m_lastTextItalic );
+                        labelItem->SetTextSpinStyle( m_lastTextOrientation );
+                        labelItem->SetTextSize(
+                                wxSize( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
+                        labelItem->SetFlags( IS_NEW | IS_MOVING );
+                        labelItem->SetText( netName );
+                        item = labelItem;
+                    }
                 }
                 else if( isClassLabel )
                 {
