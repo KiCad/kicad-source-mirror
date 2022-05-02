@@ -393,9 +393,17 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
         }
     }
 
-    static KICAD_T wireTypes[] = { SCH_ITEM_LOCATE_WIRE_T, SCH_LABEL_LOCATE_WIRE_T, EOT };
-    static KICAD_T busTypes[] = { SCH_ITEM_LOCATE_BUS_T, SCH_LABEL_LOCATE_BUS_T, EOT };
-    static KICAD_T schTextAndGraphics[] = { SCH_TEXT_T, SCH_ITEM_LOCATE_GRAPHIC_LINE_T, EOT };
+    static KICAD_T wireTypes[] = { SCH_ITEM_LOCATE_WIRE_T,
+                                   SCH_LABEL_LOCATE_WIRE_T,
+                                   EOT };
+    static KICAD_T busTypes[] = { SCH_ITEM_LOCATE_BUS_T,
+                                  SCH_LABEL_LOCATE_BUS_T,
+                                  EOT };
+    static KICAD_T schTextAndGraphics[] = { SCH_TEXT_T,
+                                            SCH_TEXTBOX_T,
+                                            SCH_ITEM_LOCATE_GRAPHIC_LINE_T,
+                                            SCH_SHAPE_T,
+                                            EOT };
 
     if( aItem->Type() == SCH_SYMBOL_T )
     {
