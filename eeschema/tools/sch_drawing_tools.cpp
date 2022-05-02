@@ -1042,7 +1042,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
     bool                  ignorePrimePosition = false;
-    COMMON_SETTINGS*      settings = Pgm().GetCommonSettings();
+    COMMON_SETTINGS*      common_settings = Pgm().GetCommonSettings();
 
     if( m_inTwoClickPlace )
         return 0;
@@ -1112,7 +1112,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     {
         m_toolMgr->PrimeTool( aEvent.Position() );
     }
-    else if( settings->m_Input.immediate_actions && !aEvent.IsReactivate() && ( isText
+    else if( common_settings->m_Input.immediate_actions && !aEvent.IsReactivate() && ( isText
                                                                                  || isGlobalLabel
                                                                                  || isHierLabel
                                                                                  || isClassLabel
@@ -1229,14 +1229,14 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     {
                         // connected net label found -> create the label immediately
                         SCHEMATIC*          schematic = getModel<SCHEMATIC>();
-                        SCHEMATIC_SETTINGS& settings = schematic->Settings();
+                        SCHEMATIC_SETTINGS& sch_settings = schematic->Settings();
                         SCH_LABEL_BASE*     labelItem = nullptr;
                         if( isGlobalLabel )
                         {
                             labelItem = new SCH_GLOBALLABEL( cursorPos );
                             labelItem->SetShape( m_lastGlobalLabelShape );
                             // make intersheets reference visible based on settings
-                            labelItem->GetFields()[0].SetVisible( settings.m_IntersheetRefsShow );
+                            labelItem->GetFields()[0].SetVisible( sch_settings.m_IntersheetRefsShow );
                         }
                         else
                         {
@@ -1248,7 +1248,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                         labelItem->SetItalic( m_lastTextItalic );
                         labelItem->SetTextSpinStyle( m_lastTextOrientation );
                         labelItem->SetTextSize(
-                                wxSize( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
+                                wxSize( sch_settings.m_DefaultTextSize, sch_settings.m_DefaultTextSize ) );
                         labelItem->SetFlags( IS_NEW | IS_MOVING );
                         labelItem->SetText( netName );
                         item = labelItem;
