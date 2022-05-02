@@ -208,7 +208,7 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
             color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
 
         if( lineStyle == PLOT_DASH_TYPE::DEFAULT )
-            lineStyle = PLOT_DASH_TYPE::DASH;
+            lineStyle = PLOT_DASH_TYPE::SOLID;
 
         if( m_fill == FILL_T::FILLED_SHAPE )
             fill = m_fill;
