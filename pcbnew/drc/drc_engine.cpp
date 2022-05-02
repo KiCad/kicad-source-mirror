@@ -170,8 +170,7 @@ void DRC_ENGINE::loadImplicitRules()
     holeToHoleConstraint.Value().SetMin( bds.m_HoleToHoleMin );
     rule->AddConstraint( holeToHoleConstraint );
 
-    rule = createImplicitRule( _( "default" ) );
-
+    rule = createImplicitRule( _( "board setup constraints zone fill strategy" ) );
     DRC_CONSTRAINT thermalSpokeCountConstraint( MIN_RESOLVED_SPOKES_CONSTRAINT );
     thermalSpokeCountConstraint.Value().SetMin( bds.m_MinResolvedSpokes );
     rule->AddConstraint( thermalSpokeCountConstraint );
@@ -870,7 +869,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 spoke_override = zone->GetMinThickness();
 
                 REPORT( "" )
-                REPORT( wxString::Format( _( "Zone %s min thickness: %s." ),
+                REPORT( wxString::Format( _( "%s min thickness: %s." ),
                                           EscapeHTML( zone->GetSelectMenuText( UNITS ) ),
                                           EscapeHTML( REPORT_VALUE( spoke_override ) ) ) )
             }
@@ -941,6 +940,12 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                     REPORT( wxString::Format( _( "Checking %s thermal spoke width: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
                                               REPORT_VALUE( c->constraint.m_Value.Opt() ) ) )
+                    break;
+
+                case MIN_RESOLVED_SPOKES_CONSTRAINT:
+                    REPORT( wxString::Format( _( "Checking %s min spoke count: %s." ),
+                                              EscapeHTML( c->constraint.GetName() ),
+                                              MessageTextFromValue( EDA_UNITS::UNSCALED, c->constraint.m_Value.Min() ) ) )
                     break;
 
                 case ZONE_CONNECTION_CONSTRAINT:
@@ -1371,7 +1376,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             if( local != ZONE_CONNECTION::INHERITED )
             {
                 REPORT( "" )
-                REPORT( wxString::Format( _( "Footprint %s zone connection: %s." ),
+                REPORT( wxString::Format( _( "%s zone connection: %s." ),
                                           EscapeHTML( footprint->GetSelectMenuText( UNITS ) ),
                                           EscapeHTML( PrintZoneConnection( local ) ) ) )
 
@@ -1387,7 +1392,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             ZONE_CONNECTION local = zone->GetPadConnection();
 
             REPORT( "" )
-            REPORT( wxString::Format( _( "Zone %s pad connection: %s." ),
+            REPORT( wxString::Format( _( "%s pad connection: %s." ),
                                       EscapeHTML( zone->GetSelectMenuText( UNITS ) ),
                                       EscapeHTML( PrintZoneConnection( local ) ) ) )
 
@@ -1404,7 +1409,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             int local = zone->GetThermalReliefGap();
 
             REPORT( "" )
-            REPORT( wxString::Format( _( "Zone %s thermal relief gap: %s." ),
+            REPORT( wxString::Format( _( "%s thermal relief gap: %s." ),
                                       EscapeHTML( zone->GetSelectMenuText( UNITS ) ),
                                       EscapeHTML( REPORT_VALUE( local ) ) ) )
 
@@ -1421,7 +1426,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             int local = zone->GetThermalReliefSpokeWidth();
 
             REPORT( "" )
-            REPORT( wxString::Format( _( "Zone %s thermal spoke width: %s." ),
+            REPORT( wxString::Format( _( "%s thermal spoke width: %s." ),
                                       EscapeHTML( zone->GetSelectMenuText( UNITS ) ),
                                       EscapeHTML( REPORT_VALUE( local ) ) ) )
 

@@ -616,18 +616,37 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
         if( constraint.m_ZoneConnection == ZONE_CONNECTION::THERMAL )
         {
+            r->Report( "" );
+            r->Report( "" );
+            reportHeader( _( "Thermal relief gap resolution for:" ), a, b, layer, r );
+
             constraint = drcEngine.EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad, zone, layer, r );
             int gap = constraint.m_Value.Min();
 
+            if( compileError )
+                reportCompileError( r );
+
+            r->Report( "" );
             r->Report( wxString::Format( _( "Resolved thermal relief gap: %s." ),
                                          StringFromValue( units, gap, true ) ) );
+
+            r->Report( "" );
+            r->Report( "" );
+            reportHeader( _( "Spoke width resolution for:" ), a, b, layer, r );
 
             constraint = drcEngine.EvalRules( THERMAL_SPOKE_WIDTH_CONSTRAINT, pad, zone, layer, r );
             int width = constraint.m_Value.Opt();
 
+            if( compileError )
+                reportCompileError( r );
+
             r->Report( "" );
-            r->Report( wxString::Format( _( "Resolved thermal spoke width: %s." ),
+            r->Report( wxString::Format( _( "Resolved thermal relief spoke width: %s." ),
                                          StringFromValue( units, width, true ) ) );
+
+            r->Report( "" );
+            r->Report( "" );
+            reportHeader( _( "Spoke count resolution for:" ), a, b, layer, r );
 
             constraint = drcEngine.EvalRules( MIN_RESOLVED_SPOKES_CONSTRAINT, pad, zone, layer, r );
             int minSpokes = constraint.m_Value.Min();
@@ -636,46 +655,71 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 reportCompileError( r );
 
             r->Report( "" );
-            r->Report( wxString::Format( _( "Minimum thermal spoke count: %d." ),
+            r->Report( wxString::Format( _( "Resolved min thermal relief spoke count: %d." ),
                                          minSpokes ) );
 
             std::shared_ptr<CONNECTIVITY_DATA> connectivity = pad->GetBoard()->GetConnectivity();
-
-            if( !alg::contains( connectivity->GetConnectedItems( pad, { PCB_ZONE_T } ), zone ) )
-                r->Report( _( "Items are not connected.  No thermal spokes will be generated." ) );
         }
         else if( constraint.m_ZoneConnection == ZONE_CONNECTION::NONE )
         {
+            r->Report( "" );
+            r->Report( "" );
+            reportHeader( _( "Zone clearance resolution for:" ), a, b, layer, r );
+
             clearance = zone->GetLocalClearance();
+            r->Report( "" );
             r->Report( wxString::Format( _( "Zone clearance: %s." ),
                                          StringFromValue( units, clearance, true ) ) );
 
-            constraint = drcEngine.EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad, zone, layer, r );
+            constraint = drcEngine.EvalRules( MECHANICAL_CLEARANCE_CONSTRAINT, pad, zone, layer, r );
 
             if( constraint.m_Value.Min() > clearance )
             {
                 clearance = constraint.m_Value.Min();
-                r->Report( wxString::Format( _( "Overridden by larger thermal relief from %s;"
+
+                r->Report( "" );
+                r->Report( wxString::Format( _( "Overridden by larger mechanical clearance from %s;"
                                                 "clearance: %s." ),
                                              EscapeHTML( constraint.GetName() ),
                                              StringFromValue( units, clearance, true ) ) );
+            }
+
+            if( !pad->FlashLayer( layer ) )
+            {
+                constraint = drcEngine.EvalRules( MECHANICAL_HOLE_CLEARANCE_CONSTRAINT, pad, zone,
+                                                  layer, r );
+
+                if( constraint.m_Value.Min() > clearance )
+                {
+                    clearance = constraint.m_Value.Min();
+
+                    r->Report( "" );
+                    r->Report( wxString::Format( _( "Overridden by larger mechanical hole clearance from %s;"
+                                                    "clearance: %s." ),
+                                                 EscapeHTML( constraint.GetName() ),
+                                                 StringFromValue( units, clearance, true ) ) );
+                }
             }
 
             if( compileError )
                 reportCompileError( r );
 
             r->Report( "" );
-            r->Report( wxString::Format( _( "Clearance: %s." ),
-                                         StringFromValue( units, 0, true ) ) );
+            r->Report( wxString::Format( _( "Resolved clearance: %s." ),
+                                         StringFromValue( units, clearance, true ) ) );
         }
         else
         {
+            r->Report( "" );
+            r->Report( "" );
+            reportHeader( _( "Zone clearance resolution for:" ), a, b, layer, r );
+
             if( compileError )
                 reportCompileError( r );
 
             // Report a 0 clearance for solid connections
             r->Report( "" );
-            r->Report( wxString::Format( _( "Clearance: %s." ),
+            r->Report( wxString::Format( _( "Resolved clearance: %s." ),
                                          StringFromValue( units, 0, true ) ) );
         }
 

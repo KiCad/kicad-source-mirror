@@ -560,7 +560,8 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     ZONE_CONNECTION        connection;
     DRC_CONSTRAINT         constraint;
-    int                    gap;
+    int                    padClearance;
+    int                    holeClearance;
     SHAPE_POLY_SET         holes;
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
@@ -595,11 +596,31 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
             case ZONE_CONNECTION::THERMAL:
                 constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad, aZone,
                                                          aLayer );
-                gap = constraint.GetValue().Min();
+                padClearance = constraint.GetValue().Min();
+                holeClearance = padClearance;
+
+                if( pad->FlashLayer( aLayer ) )
+                    aThermalConnectionPads.push_back( pad );
+
                 break;
 
             case ZONE_CONNECTION::NONE:
-                gap = aZone->GetLocalClearance();
+                constraint = bds.m_DRCEngine->EvalRules( MECHANICAL_CLEARANCE_CONSTRAINT, pad,
+                                                         aZone, aLayer );
+
+                if( constraint.GetValue().Min() > aZone->GetLocalClearance() )
+                    padClearance = constraint.GetValue().Min();
+                else
+                    padClearance = aZone->GetLocalClearance();
+
+                constraint = bds.m_DRCEngine->EvalRules( MECHANICAL_HOLE_CLEARANCE_CONSTRAINT, pad,
+                                                         aZone, aLayer );
+
+                if( constraint.GetValue().Min() > padClearance )
+                    holeClearance = constraint.GetValue().Min();
+                else
+                    holeClearance = padClearance;
+
                 break;
 
             default:
@@ -609,17 +630,16 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
 
             if( pad->FlashLayer( aLayer ) )
             {
-                aThermalConnectionPads.push_back( pad );
-                addKnockout( pad, aLayer, gap, holes );
+                addKnockout( pad, aLayer, padClearance, holes );
             }
             else if( pad->GetDrillSize().x > 0 )
             {
                 // Note: drill size represents finish size, which means the actual holes size
                 // is the plating thickness larger.
-                if( pad->GetAttribute() == PAD_ATTRIB::PTH )
-                    gap += pad->GetBoard()->GetDesignSettings().GetHolePlatingThickness();
+                holeClearance += pad->GetBoard()->GetDesignSettings().GetHolePlatingThickness();
 
-                pad->TransformHoleWithClearanceToPolygon( holes, gap, m_maxError, ERROR_OUTSIDE );
+                pad->TransformHoleWithClearanceToPolygon( holes, holeClearance, m_maxError,
+                                                          ERROR_OUTSIDE );
             }
         }
     }
