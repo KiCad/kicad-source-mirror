@@ -548,6 +548,10 @@ void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
     {
         for( LIB_ITEM& item : m_drawings )
         {
+            // Do not print private items
+            if( item.IsPrivate() )
+                continue;
+
             if( item.Type() == LIB_SHAPE_T )
             {
                 LIB_SHAPE& shape = static_cast<LIB_SHAPE&>( item );
@@ -567,6 +571,10 @@ void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
 
     for( LIB_ITEM& item : m_drawings )
     {
+        // Do not print private items
+        if( item.IsPrivate() )
+            continue;
+
         // Do not draw items not attached to the current part
         if( aUnit && item.m_unit && ( item.m_unit != aUnit ) )
             continue;
