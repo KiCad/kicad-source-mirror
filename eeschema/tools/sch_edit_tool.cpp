@@ -1302,22 +1302,35 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION& selection = m_selectionTool->RequestSelection( rotatableItems );
+    SCH_ITEM*     head = static_cast<SCH_ITEM*>( selection.Front() );
+    bool          moving = head && head->IsMoving();
 
     if( selection.Empty() )
         return 0;
 
-    SCH_ITEM* head = static_cast<SCH_ITEM*>( selection.Front() );
-    bool      moving = head && head->IsMoving();
+    std::vector<SCH_ITEM*> autoplaceItems;
 
     for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
     {
-        SCH_ITEM* sch_item = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
+        SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
 
+        if( item->IsType( EE_COLLECTOR::FieldOwners ) )
+            autoplaceItems.push_back( item );
+        else if( item->GetParent() && item->GetParent()->IsType( EE_COLLECTOR::FieldOwners ) )
+            autoplaceItems.push_back( static_cast<SCH_ITEM*>( item->GetParent() ) );
+    }
+
+    bool appendUndo = false;
+
+    for( SCH_ITEM* sch_item : autoplaceItems )
+    {
         if( !moving && !sch_item->IsNew() )
-            saveCopyInUndoList( sch_item, UNDO_REDO::CHANGED, ii > 0, false );
+        {
+            saveCopyInUndoList( sch_item, UNDO_REDO::CHANGED, appendUndo, false );
+            appendUndo = true;
+        }
 
-        if( sch_item->IsType( EE_COLLECTOR::FieldOwners ) )
-            sch_item->AutoplaceFields( m_frame->GetScreen(), /* aManual */ true );
+        sch_item->AutoplaceFields( m_frame->GetScreen(), /* aManual */ true );
 
         updateItem( sch_item, true );
     }
