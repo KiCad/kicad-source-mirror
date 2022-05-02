@@ -357,15 +357,24 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
 
             GRFilledArc( DC, pt1, pt2, c, 0, fillColor, fillColor );
 
-            GRArc( DC, pt1, pt2, c, penWidth, color );
+            if( penWidth > 0 )
+                GRArc( DC, pt1, pt2, c, penWidth, color );
+
             break;
 
         case SHAPE_T::CIRCLE:
-            GRFilledCircle( DC, pt1, GetRadius(), 0, color, fillColor );
+            GRFilledCircle( DC, pt1, GetRadius(), penWidth, color, fillColor );
             break;
 
         case SHAPE_T::RECT:
-            GRFilledRect( DC, pt1, pt2, penWidth, color, fillColor );
+            // GRFilledRect seems to have issues printing a border over the background colour,
+            // so we fill and stroke separately
+
+            GRFilledRect( DC, pt1, pt2, 0, color, fillColor );
+
+            if( penWidth > 0 )
+                GRRect( DC, pt1, pt2, penWidth, color );
+
             break;
 
         case SHAPE_T::POLY:
