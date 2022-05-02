@@ -55,6 +55,7 @@
 #include <wildcards_and_files_ext.h>
 #include <wx/filedlg.h>
 #include <sch_shape.h>
+#include "pgm_base.h"
 
 SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" ),
@@ -1041,6 +1042,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
     bool                  ignorePrimePosition = false;
+    COMMON_SETTINGS*      settings = Pgm().GetCommonSettings();
 
     if( m_inTwoClickPlace )
         return 0;
@@ -1110,11 +1112,11 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     {
         m_toolMgr->PrimeTool( aEvent.Position() );
     }
-    else if( !aEvent.IsReactivate() && ( isText
-                                         || isGlobalLabel
-                                         || isHierLabel
-                                         || isClassLabel
-                                         || isNetLabel ) )
+    else if( settings->m_Input.immediate_actions && !aEvent.IsReactivate() && ( isText
+                                                                                 || isGlobalLabel
+                                                                                 || isHierLabel
+                                                                                 || isClassLabel
+                                                                                 || isNetLabel ) )
     {
         m_toolMgr->PrimeTool( { 0, 0 } );
         ignorePrimePosition = true;
