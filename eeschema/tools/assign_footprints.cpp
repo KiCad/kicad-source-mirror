@@ -47,6 +47,7 @@ void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfRefer
     SCH_REFERENCE_LIST  refs;
     SCH_SHEET_LIST      sheets    = m_frame->Schematic().GetSheets();
     bool                isChanged = false;
+    bool                appendToUndoList = false;
 
     sheets.GetSymbols( refs, false );
 
@@ -96,6 +97,12 @@ void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfRefer
                     if( oldfp != footprint )
                     {
                         isChanged = true;
+                        SCH_SCREEN* screen = refs[ii].GetSheetPath().LastScreen();
+
+                        m_frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED,
+                                                     appendToUndoList, false );
+                        appendToUndoList = true;
+
                         symbol->SetFootprint( sheetPath, footprint );
                     }
                 }
