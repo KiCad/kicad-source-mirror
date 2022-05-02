@@ -1476,12 +1476,10 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-            int lineWidth = Mils2iu( cfg->m_Drawing.default_line_thickness );
-
             if( isTextBox )
-                item = new SCH_TEXTBOX( lineWidth, m_lastFillStyle );
+                item = new SCH_TEXTBOX( 0, m_lastFillStyle );
             else
-                item = new SCH_SHAPE( type, lineWidth, m_lastFillStyle );
+                item = new SCH_SHAPE( type, 0, m_lastFillStyle );
 
             item->SetFlags( IS_NEW );
             item->BeginEdit( (wxPoint) cursorPos );
@@ -1489,10 +1487,12 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
         }
-        else if( item && ( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+        else if( item && ( evt->IsClick( BUT_LEFT )
+                        || evt->IsDblClick( BUT_LEFT )
                         || evt->IsAction( &EE_ACTIONS::finishDrawing ) ) )
         {
-            if( evt->IsDblClick( BUT_LEFT ) || evt->IsAction( &EE_ACTIONS::finishDrawing )
+            if( evt->IsDblClick( BUT_LEFT )
+                    || evt->IsAction( &EE_ACTIONS::finishDrawing )
                     || !item->ContinueEdit( (wxPoint) cursorPos ) )
             {
                 item->EndEdit();

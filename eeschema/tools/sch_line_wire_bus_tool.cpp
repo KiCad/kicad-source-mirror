@@ -636,8 +636,8 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
                 grid.ClearMaskFlag( GRID_HELPER::HORIZONTAL );
         }
 
-        VECTOR2I eventPosition = static_cast<VECTOR2I>(
-                evt->HasPosition() ? evt->Position() : controls->GetMousePosition() );
+        VECTOR2D eventPosition = evt->HasPosition() ? evt->Position()
+                                                    : controls->GetMousePosition();
 
         VECTOR2I cursorPos = grid.BestSnapAnchor( eventPosition, LAYER_CONNECTABLE, segment );
         controls->ForceCursorPosition( true, cursorPos );
@@ -858,10 +858,14 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
             {
                 // Coerce the line to vertical/horizontal/45 as necessary
                 if( twoSegments && m_wires.size() >= 2 )
+                {
                     computeBreakPoint( { m_wires[m_wires.size() - 2], segment }, cursorPos,
                                        currentMode );
+                }
                 else
+                {
                     segment->SetEndPoint( cursorPos );
+                }
             }
 
             for( SCH_LINE* wire : m_wires )
@@ -886,10 +890,14 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
 
                 // Find new bend point for current mode
                 if( twoSegments && m_wires.size() >= 2 )
+                {
                     computeBreakPoint( { m_wires[m_wires.size() - 2], segment }, cursorPos,
                                        currentMode );
+                }
                 else
+                {
                     segment->SetEndPoint( cursorPos );
+                }
 
                 for( SCH_LINE* wire : m_wires )
                 {
@@ -1002,9 +1010,9 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::startSegments( int aType, const VECTOR2D& aPos
     {
         switch( aType )
         {
-        default: aSegment = new SCH_LINE( aPos, LAYER_NOTES ); break;
-        case LAYER_WIRE: aSegment = new SCH_LINE( aPos, LAYER_WIRE ); break;
-        case LAYER_BUS: aSegment = new SCH_LINE( aPos, LAYER_BUS ); break;
+        default:         aSegment = new SCH_LINE( aPos, LAYER_NOTES ); break;
+        case LAYER_WIRE: aSegment = new SCH_LINE( aPos, LAYER_WIRE );  break;
+        case LAYER_BUS:  aSegment = new SCH_LINE( aPos, LAYER_BUS );   break;
         }
 
         // Give segments a parent so they find the default line/wire/bus widths
