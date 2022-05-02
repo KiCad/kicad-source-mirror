@@ -347,6 +347,7 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
         aPlotter->SetColor( color );
         aPlotter->SetDash( lineStyle );
         aPlotter->Rect( start, end, FILL_T::NO_FILL, penWidth );
+        aPlotter->SetDash( PLOT_DASH_TYPE::SOLID );
     }
 
     LIB_TEXTBOX text( *this );
