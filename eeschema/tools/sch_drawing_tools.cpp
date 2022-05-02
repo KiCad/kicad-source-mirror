@@ -788,11 +788,10 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         }
         else if( evt->Category() == TC_COMMAND )
         {
-            if( ( type == SCH_BUS_WIRE_ENTRY_T )
-                    && (   evt->IsAction( &EE_ACTIONS::rotateCW )
-                        || evt->IsAction( &EE_ACTIONS::rotateCCW )
-                        || evt->IsAction( &EE_ACTIONS::mirrorV )
-                        || evt->IsAction( &EE_ACTIONS::mirrorH ) ) )
+            if( ( type == SCH_BUS_WIRE_ENTRY_T ) && (   evt->IsAction( &EE_ACTIONS::rotateCW )
+                                                     || evt->IsAction( &EE_ACTIONS::rotateCCW )
+                                                     || evt->IsAction( &EE_ACTIONS::mirrorV )
+                                                     || evt->IsAction( &EE_ACTIONS::mirrorH ) ) )
             {
                 SCH_BUS_ENTRY_BASE* busItem = static_cast<SCH_BUS_ENTRY_BASE*>( previewItem );
 
@@ -1217,13 +1216,9 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     {
                         // no connected net label found -> open up the new label dialog
                         if( isGlobalLabel )
-                        {
                             item = createNewText( cursorPos, LAYER_GLOBLABEL );
-                        }
                         else
-                        {
                             item = createNewText( cursorPos, LAYER_LOCLABEL );
-                        }
                     }
                     else
                     {
@@ -1231,6 +1226,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                         SCHEMATIC*          schematic = getModel<SCHEMATIC>();
                         SCHEMATIC_SETTINGS& sch_settings = schematic->Settings();
                         SCH_LABEL_BASE*     labelItem = nullptr;
+
                         if( isGlobalLabel )
                         {
                             labelItem = new SCH_GLOBALLABEL( cursorPos );
@@ -1247,8 +1243,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                         labelItem->SetBold( m_lastTextBold );
                         labelItem->SetItalic( m_lastTextItalic );
                         labelItem->SetTextSpinStyle( m_lastTextOrientation );
-                        labelItem->SetTextSize(
-                                wxSize( sch_settings.m_DefaultTextSize, sch_settings.m_DefaultTextSize ) );
+                        labelItem->SetTextSize( wxSize( sch_settings.m_DefaultTextSize,
+                                                        sch_settings.m_DefaultTextSize ) );
                         labelItem->SetFlags( IS_NEW | IS_MOVING );
                         labelItem->SetText( netName );
                         item = labelItem;
