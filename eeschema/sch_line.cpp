@@ -272,11 +272,7 @@ void SCH_LINE::SetLineStyle( const int aStyleId )
 
 void SCH_LINE::SetLineStyle( const PLOT_DASH_TYPE aStyle )
 {
-    if( aStyle == GetDefaultStyle() )
-        m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
-    else
-        m_stroke.SetPlotStyle( aStyle );
-
+    m_stroke.SetPlotStyle( aStyle );
     m_lastResolvedLineStyle = GetLineStyle();
 }
 
