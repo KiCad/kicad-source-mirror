@@ -63,9 +63,20 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceDevice( const wxString& aSymbol ) cons
 
 bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
-    FILE_OUTPUTFORMATTER outputFile( aOutFileName, wxT( "wt" ), '\'' );
+    try
+    {
+        FILE_OUTPUTFORMATTER outputFile( aOutFileName, wxT( "wt" ), '\'' );
 
-    return Format( &outputFile, aNetlistOptions );
+
+        return Format( &outputFile, aNetlistOptions );
+    }
+    catch( IO_ERROR& )
+    {
+        wxString msg;
+        msg.Printf( _( "Failed to create file '%s'." ), aOutFileName );
+        DisplayError( m_schematic, msg );
+        return false;
+    }
 }
 
 
