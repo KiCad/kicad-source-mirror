@@ -150,10 +150,6 @@ void DRC_ENGINE::loadImplicitRules()
 
     std::shared_ptr<DRC_RULE> rule = createImplicitRule( _( "board setup constraints" ) );
 
-    DRC_CONSTRAINT clearanceConstraint( CLEARANCE_CONSTRAINT );
-    clearanceConstraint.Value().SetMin( bds.m_MinClearance );
-    rule->AddConstraint( clearanceConstraint );
-
     DRC_CONSTRAINT widthConstraint( TRACK_WIDTH_CONSTRAINT );
     widthConstraint.Value().SetMin( bds.m_TrackMinWidth );
     rule->AddConstraint( widthConstraint );
@@ -173,10 +169,6 @@ void DRC_ENGINE::loadImplicitRules()
     DRC_CONSTRAINT holeToHoleConstraint( HOLE_TO_HOLE_CONSTRAINT );
     holeToHoleConstraint.Value().SetMin( bds.m_HoleToHoleMin );
     rule->AddConstraint( holeToHoleConstraint );
-
-    DRC_CONSTRAINT diffPairGapConstraint( DIFF_PAIR_GAP_CONSTRAINT );
-    diffPairGapConstraint.Value().SetMin( bds.m_MinClearance );
-    rule->AddConstraint( diffPairGapConstraint );
 
     rule = createImplicitRule( _( "default" ) );
 
@@ -273,8 +265,7 @@ void DRC_ENGINE::loadImplicitRules()
                     if( nc->GetClearance() )
                     {
                         DRC_CONSTRAINT constraint( CLEARANCE_CONSTRAINT );
-                        constraint.Value().SetMin( std::max( bds.m_MinClearance,
-                                                             nc->GetClearance() ) );
+                        constraint.Value().SetMin( nc->GetClearance() );
                         netclassRule->AddConstraint( constraint );
                     }
 
@@ -321,8 +312,7 @@ void DRC_ENGINE::loadImplicitRules()
                     constraint.Value().SetOpt( nc->GetDiffPairGap() );
                     netclassRule->AddConstraint( constraint );
 
-                    // A narrower diffpair gap overrides the netclass min clearance (but is still
-                    // trimmed to the board min clearance, which is absolute).
+                    // A narrower diffpair gap overrides the netclass min clearance
                     if( nc->GetDiffPairGap() < nc->GetClearance() )
                     {
                         netclassRule = std::make_shared<DRC_RULE>();
@@ -336,8 +326,7 @@ void DRC_ENGINE::loadImplicitRules()
                         netclassItemSpecificRules.push_back( netclassRule );
 
                         DRC_CONSTRAINT min_clearanceConstraint( CLEARANCE_CONSTRAINT );
-                        min_clearanceConstraint.Value().SetMin( std::max( bds.m_MinClearance,
-                                                                          nc->GetDiffPairGap() ) );
+                        min_clearanceConstraint.Value().SetMin( nc->GetDiffPairGap() );
                         netclassRule->AddConstraint( min_clearanceConstraint );
                     }
                 }
@@ -1320,7 +1309,12 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                       REPORT_VALUE( localA ) ) )
 
             if( localA > clearance )
+            {
                 clearance = ac->GetLocalClearance( &m_msg );
+                constraint.SetParentRule( nullptr );
+                constraint.SetName( m_msg );
+                constraint.m_Value.SetMin( clearance );
+            }
         }
 
         if( localB > 0 )
@@ -1331,16 +1325,41 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                       REPORT_VALUE( localB ) ) )
 
             if( localB > clearance )
+            {
                 clearance = bc->GetLocalClearance( &m_msg );
+                constraint.SetParentRule( nullptr );
+                constraint.SetName( m_msg );
+                constraint.m_Value.SetMin( clearance );
+            }
         }
 
-        if( localA > global || localB > global )
+        REPORT( "" )
+        REPORT( wxString::Format( _( "Board minimum clearance: %s." ),
+                                  REPORT_VALUE( m_designSettings->m_MinClearance ) ) )
+
+        if( clearance < m_designSettings->m_MinClearance )
         {
             constraint.SetParentRule( nullptr );
-            constraint.SetName( m_msg );
-            constraint.m_Value.SetMin( clearance );
-            return constraint;
+            constraint.SetName( _( "board minimum" ) );
+            constraint.m_Value.SetMin( m_designSettings->m_MinClearance );
         }
+
+        return constraint;
+    }
+    else if( aConstraintType == DIFF_PAIR_GAP_CONSTRAINT )
+    {
+        REPORT( "" )
+        REPORT( wxString::Format( _( "Board minimum clearance: %s." ),
+                                  REPORT_VALUE( m_designSettings->m_MinClearance ) ) )
+
+        if( constraint.m_Value.Min() < m_designSettings->m_MinClearance )
+        {
+            constraint.SetParentRule( nullptr );
+            constraint.SetName( _( "board minimum" ) );
+            constraint.m_Value.SetMin( m_designSettings->m_MinClearance );
+        }
+
+        return constraint;
     }
     else if( aConstraintType == ZONE_CONNECTION_CONSTRAINT )
     {
