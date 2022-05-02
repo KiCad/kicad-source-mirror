@@ -74,7 +74,7 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
     {
         wxString msg;
         msg.Printf( _( "Failed to create file '%s'." ), aOutFileName );
-        DisplayError( m_schematic, msg );
+        DisplayError( nullptr, msg );
         return false;
     }
 }
