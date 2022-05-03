@@ -79,7 +79,8 @@ private:
     void sortList();
 
 private:
-    const std::vector<wxArrayString>* m_itemsList;
+    // The list of items, locally stored
+    std::vector<wxArrayString> m_itemsList;
 };
 
 

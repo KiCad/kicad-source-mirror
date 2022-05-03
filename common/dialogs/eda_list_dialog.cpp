@@ -36,14 +36,13 @@ static int DEFAULT_SINGLE_COL_WIDTH = 260;
 static int DEFAULT_COL_WIDTHS[] = { 200, 600 };
 
 
-
 EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle,
                                   const wxArrayString& aItemHeaders,
                                   const std::vector<wxArrayString>& aItemList,
                                   const wxString& aPreselectText ) :
     EDA_LIST_DIALOG_BASE( aParent, wxID_ANY, aTitle )
 {
-    m_itemsList = &aItemList;
+    m_itemsList = aItemList;
 
     m_filterBox->SetHint( _( "Filter" ) );
 
@@ -80,7 +79,7 @@ void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders, const wxStr
         }
     }
 
-    InsertItems( *m_itemsList, 0 );
+    InsertItems( m_itemsList, 0 );
 
     if( !aSelection.IsEmpty() )
     {
@@ -127,7 +126,7 @@ void EDA_LIST_DIALOG::textChangeInFilterBox( wxCommandEvent& event )
 
     m_listBox->DeleteAllItems();
 
-    for( const wxArrayString& row : *m_itemsList )
+    for( const wxArrayString& row : m_itemsList )
     {
         itemName = row.Item( 0 );
 
