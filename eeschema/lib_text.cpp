@@ -263,6 +263,9 @@ void LIB_TEXT::Plot( PLOTTER* plotter, bool aBackground, const VECTOR2I& offset,
 {
     wxASSERT( plotter != nullptr );
 
+    if( IsPrivate() )
+        return;
+
     if( aBackground )
         return;
 

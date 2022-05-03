@@ -625,6 +625,10 @@ void LIB_SYMBOL::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, bool aBackgro
 
     for( const LIB_ITEM& item : m_drawings )
     {
+        // Do not plot private items
+        if( item.IsPrivate() )
+            continue;
+
         // Lib Fields are not plotted here, because this plot function
         // is used to plot schematic items, which have they own fields
         if( item.Type() == LIB_FIELD_T )
