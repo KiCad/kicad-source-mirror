@@ -76,6 +76,11 @@ public:
      */
     void UpdateHierarchyTree();
 
+    /**
+     * Updates the tree's selection to match current page
+     */
+    void UpdateHierarchySelection();
+
 private:
     /**
      * Create the hierarchical tree of the schematic.

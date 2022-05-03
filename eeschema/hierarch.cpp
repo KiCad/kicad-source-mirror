@@ -205,6 +205,34 @@ void HIERARCHY_NAVIG_DLG::buildHierarchyTree( SCH_SHEET_PATH* aList, wxTreeItemI
 }
 
 
+void HIERARCHY_NAVIG_DLG::UpdateHierarchySelection()
+{
+    m_currSheet = m_SchFrameEditor->GetCurrentSheet();
+
+    std::function<void( const wxTreeItemId& )> selectSheet = [&]( const wxTreeItemId& id )
+    {
+        wxCHECK_RET( id.IsOk(), wxT( "Invalid tree item" ) );
+
+        TreeItemData* itemData = static_cast<TreeItemData*>( m_Tree->GetItemData( id ) );
+        if( itemData->m_SheetPath == m_currSheet )
+        {
+            m_Tree->EnsureVisible( id );
+            m_Tree->SelectItem( id );
+        }
+
+        wxTreeItemIdValue cookie = id;
+        wxTreeItemId      child = m_Tree->GetFirstChild( id, cookie );
+        while( child.IsOk() )
+        {
+            selectSheet( child );
+            child = m_Tree->GetNextChild( child, cookie );
+        }
+    };
+
+    selectSheet( m_Tree->GetRootItem() );
+}
+
+
 void HIERARCHY_NAVIG_DLG::UpdateHierarchyTree()
 {
     Freeze();
@@ -315,5 +343,6 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     TOOL_EVENT dummy;
     editTool->UpdateNetHighlighting( dummy );
 
-    UpdateHierarchyNavigator();
+    if( FindHierarchyNavigator() )
+        FindHierarchyNavigator()->UpdateHierarchySelection();
 }
