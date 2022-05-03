@@ -182,11 +182,14 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 
+	m_setTextColor = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Text color:"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_setTextColor, 0, wxALL, 5 );
 
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_textColorSwatch = new COLOR_SWATCH( m_specifiedValues, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textColorSwatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
+	m_textColorSwatch->SetMinSize( wxSize( 48,24 ) );
 
-
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+	fgSizer1->Add( m_textColorSwatch, 0, wxALL, 5 );
 
 	m_textSizeLabel = new wxStaticText( m_specifiedValues, wxID_ANY, _("Text size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeLabel->Wrap( -1 );

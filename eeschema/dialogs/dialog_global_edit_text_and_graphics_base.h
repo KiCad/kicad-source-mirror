@@ -67,6 +67,8 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		wxPanel* m_specifiedValues;
 		wxStaticText* m_fontLabel;
 		FONT_CHOICE* m_fontCtrl;
+		wxCheckBox* m_setTextColor;
+		COLOR_SWATCH* m_textColorSwatch;
 		wxStaticText* m_textSizeLabel;
 		wxTextCtrl* m_textSizeCtrl;
 		wxStaticText* m_textSizeUnits;

@@ -126,6 +126,8 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( SCH_
     m_lineStyle->Append( DEFAULT_STYLE );
     m_lineStyle->Append( INDETERMINATE_ACTION );
 
+    m_textColorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
+    m_textColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
     m_colorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
     m_colorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
     m_fillColorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
@@ -259,6 +261,9 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
     {
         if( !m_textSize.IsIndeterminate() )
             eda_text->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
+
+        if( m_setTextColor->GetValue() )
+            eda_text->SetTextColor( m_textColorSwatch->GetSwatchColor() );
 
         if( m_hAlign->GetStringSelection() != INDETERMINATE_ACTION )
             eda_text->SetHorizJustify( EDA_TEXT::MapHorizJustify( m_hAlign->GetSelection() - 1 ) );
