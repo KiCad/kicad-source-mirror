@@ -1756,11 +1756,6 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             if( convertTo != SCH_TEXT_T )
                 txt = EscapeString( txt, CTX_NETNAME );
 
-            std::vector<SCH_FIELD> fields;
-
-            if( text->Type() != SCH_TEXT_T )
-                fields = static_cast<SCH_LABEL_BASE*>( text )->GetFields();
-
             switch( convertTo )
             {
             case SCH_LABEL_T:           newtext = new SCH_LABEL( position, txt );       break;
