@@ -40,7 +40,7 @@ if( VCPKG_TOOLCHAIN )
 # python 3.8+ requires us to use python to add additional load directories (PATH no longer supported)
 # vcpkg does not copy all the dlls into the python folder so we need this for development
 # as the wxpython modules need the wxwidgets library DLLs to load
-    set( _py_dll "import os;os.add_dll_directory(\"${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin\");os.add_dll_directory(\"${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/bin\");" )
+    set( _py_dll "import os;os.add_dll_directory(\"${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin\");os.add_dll_directory(\"${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/bin\");" )
 else()
     set( _py_dll "" )
 endif()
