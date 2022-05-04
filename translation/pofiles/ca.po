@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:57-0700\n"
-"PO-Revision-Date: 2022-04-28 11:08+0000\n"
+"PO-Revision-Date: 2022-05-10 18:50+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.1-dev\n"
+"X-Generator: Weblate 4.12.1\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -11974,9 +11974,8 @@ msgid "Delete Field"
 msgstr "Esborra un camp"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1083
-#, fuzzy
 msgid "Select field:"
-msgstr "Camps del full"
+msgstr "Selecciona camp:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:34
 msgid "Add Field..."
@@ -35742,9 +35741,8 @@ msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:292
 #: pcbnew/tools/board_inspection_tool.cpp:1082
-#, fuzzy
 msgid "Text thickness resolution for:"
-msgstr "Ajusta la longitud d'una sola pista"
+msgstr "Resolució del gruix del text per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:300
 #, c-format
