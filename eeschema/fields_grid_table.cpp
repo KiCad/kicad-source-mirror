@@ -40,15 +40,22 @@
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include "eda_doc.h"
+#include "widgets/grid_color_swatch_helpers.h"
+#include "font/fontconfig.h"
+#include "font/kicad_font_name.h"
 #include <wx/settings.h>
 #include <string_utils.h>
 #include <widgets/grid_combobox.h>
+
 
 enum
 {
     MYID_SELECT_FOOTPRINT = GRIDTRICKS_FIRST_CLIENT_ID,
     MYID_SHOW_DATASHEET
 };
+
+
+#define DEFAULT_FONT_NAME _( "Default Font" )
 
 
 template <class T>
@@ -212,6 +219,24 @@ void FIELDS_GRID_TABLE<T>::initGrid( WX_GRID* aGrid )
     m_netclassAttr = new wxGridCellAttr;
     m_netclassAttr->SetEditor( new GRID_CELL_COMBOBOX( existingNetclasses ) );
 
+    wxArrayString            fonts;
+    std::vector<std::string> fontNames;
+    Fontconfig()->ListFonts( fontNames );
+
+    for( const std::string& name : fontNames )
+        fonts.Add( wxString( name ) );
+
+    fonts.Sort();
+    fonts.Insert( KICAD_FONT_NAME, 0 );
+    fonts.Insert( DEFAULT_FONT_NAME, 0 );
+
+    m_fontAttr = new wxGridCellAttr;
+    m_fontAttr->SetEditor( new GRID_CELL_COMBOBOX( fonts ) );
+
+    m_colorAttr = new wxGridCellAttr;
+    m_colorAttr->SetRenderer( new GRID_CELL_COLOR_RENDERER( m_dialog ) );
+    m_colorAttr->SetEditor( new GRID_CELL_COLOR_SELECTOR( m_dialog, aGrid ) );
+
     m_frame->Bind( UNITS_CHANGED, &FIELDS_GRID_TABLE<T>::onUnitsChanged, this );
 }
 
@@ -232,6 +257,8 @@ FIELDS_GRID_TABLE<T>::~FIELDS_GRID_TABLE()
     m_hAlignAttr->DecRef();
     m_orientationAttr->DecRef();
     m_netclassAttr->DecRef();
+    m_fontAttr->DecRef();
+    m_colorAttr->DecRef();
 
     m_frame->Unbind( UNITS_CHANGED, &FIELDS_GRID_TABLE<T>::onUnitsChanged, this );
 }
@@ -263,6 +290,8 @@ wxString FIELDS_GRID_TABLE<T>::GetColLabelValue( int aCol )
     case FDC_ORIENTATION:  return _( "Orientation" );
     case FDC_POSX:         return _( "X Position" );
     case FDC_POSY:         return _( "Y Position" );
+    case FDC_FONT:         return _( "Font" );
+    case FDC_COLOR:        return _( "Color" );
     default:               wxFAIL; return wxEmptyString;
     }
 }
@@ -281,6 +310,8 @@ bool FIELDS_GRID_TABLE<T>::CanGetValueAs( int aRow, int aCol, const wxString& aT
     case FDC_ORIENTATION:
     case FDC_POSX:
     case FDC_POSY:
+    case FDC_FONT:
+    case FDC_COLOR:
         return aTypeName == wxGRID_VALUE_STRING;
 
     case FDC_SHOWN:
@@ -415,6 +446,14 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
         m_boolAttr->IncRef();
         return m_boolAttr;
 
+    case FDC_FONT:
+        m_fontAttr->IncRef();
+        return m_fontAttr;
+
+    case FDC_COLOR:
+        m_colorAttr->IncRef();
+        return m_colorAttr;
+
     default:
         wxFAIL;
         return nullptr;
@@ -504,6 +543,15 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
     case FDC_POSY:
         return StringFromValue( m_frame->GetUserUnits(), field.GetTextPos().y, true );
 
+    case FDC_FONT:
+        if( field.GetFont() )
+            return field.GetFont()->GetName();
+        else
+            return DEFAULT_FONT_NAME;
+
+    case FDC_COLOR:
+        return field.GetTextColor().ToWxString( wxC2S_CSS_SYNTAX );
+
     default:
         // we can't assert here because wxWidgets sometimes calls this without checking
         // the column type when trying to see if there's an overflow
@@ -567,8 +615,8 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
         }
 
         field.SetText( value );
-    }
         break;
+    }
 
     case FDC_SHOWN:
         field.SetVisible( BoolFromString( aValue ) );
@@ -583,6 +631,7 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
             field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
         else
             wxFAIL_MSG( wxT( "unknown horizontal alignment: " ) + aValue );
+
         break;
 
     case FDC_V_ALIGN:
@@ -594,6 +643,7 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
             field.SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
         else
             wxFAIL_MSG( wxT( "unknown vertical alignment: " ) + aValue);
+
         break;
 
     case FDC_ITALIC:
@@ -616,16 +666,33 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
             field.SetTextAngle( ANGLE_VERTICAL );
         else
             wxFAIL_MSG( wxT( "unknown orientation: " ) + aValue );
+
         break;
 
     case FDC_POSX:
     case FDC_POSY:
         pos = field.GetTextPos();
+
         if( aCol == FDC_POSX )
             pos.x = ValueFromString( m_frame->GetUserUnits(), aValue );
         else
             pos.y = ValueFromString( m_frame->GetUserUnits(), aValue );
+
         field.SetTextPos( pos );
+        break;
+
+    case FDC_FONT:
+        if( aValue == DEFAULT_FONT_NAME )
+            field.SetFont( nullptr );
+        else if( aValue == KICAD_FONT_NAME )
+            field.SetFont( KIFONT::FONT::GetFont( wxEmptyString, field.IsBold(), field.IsItalic() ) );
+        else
+            field.SetFont( KIFONT::FONT::GetFont( aValue, field.IsBold(), field.IsItalic() ) );
+
+        break;
+
+    case FDC_COLOR:
+        field.SetTextColor( wxColor( aValue ) );
         break;
 
     default:
@@ -650,12 +717,15 @@ void FIELDS_GRID_TABLE<T>::SetValueAsBool( int aRow, int aCol, bool aValue )
     case FDC_SHOWN:
         field.SetVisible( aValue );
         break;
+
     case FDC_ITALIC:
         field.SetItalic( aValue );
         break;
+
     case FDC_BOLD:
         field.SetBold( aValue );
         break;
+
     default:
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a bool value" ), aCol ) );
         break;

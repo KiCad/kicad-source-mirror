@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,6 +64,8 @@ enum FIELDS_DATA_COL_ORDER
     FDC_ORIENTATION,
     FDC_POSX,
     FDC_POSY,
+    FDC_FONT,
+    FDC_COLOR,
 
     FDC_COUNT       // keep as last
 };
@@ -139,6 +141,8 @@ private:
     wxGridCellAttr*       m_hAlignAttr;
     wxGridCellAttr*       m_orientationAttr;
     wxGridCellAttr*       m_netclassAttr;
+    wxGridCellAttr*       m_fontAttr;
+    wxGridCellAttr*       m_colorAttr;
 };
 
 

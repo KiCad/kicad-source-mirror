@@ -1006,9 +1006,11 @@ void DIALOG_SYMBOL_PROPERTIES::OnPinTableCellEdited( wxGridEvent& aEvent )
 {
     int row = aEvent.GetRow();
 
-    if( m_pinGrid->GetCellValue( row, COL_ALT_NAME ) ==
-        m_dataModel->GetValue( row, COL_BASE_NAME ) )
+    if( m_pinGrid->GetCellValue( row, COL_ALT_NAME )
+            == m_dataModel->GetValue( row, COL_BASE_NAME ) )
+    {
         m_dataModel->SetValue( row, COL_ALT_NAME, wxEmptyString );
+    }
 
     // These are just to get the cells refreshed
     m_dataModel->SetValue( row, COL_TYPE, m_dataModel->GetValue( row, COL_TYPE ) );
