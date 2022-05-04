@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -476,18 +476,13 @@ void GBR_TO_PCB_EXPORTER::writePcbHeader( const int* aLayerLookUpTable )
 void GBR_TO_PCB_EXPORTER::writePcbPolygon( const SHAPE_POLY_SET& aPolys, int aLayer,
                                            const VECTOR2I& aOffset )
 {
-    SHAPE_POLY_SET polys = aPolys.CloneDropTriangulation();
-
-    // Cleanup the polygon
-    polys.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-
     // Ensure the polygon is valid:
-    if( polys.OutlineCount() == 0 )
+    if( aPolys.OutlineCount() < 1 )
         return;
 
-    polys.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-
-    SHAPE_LINE_CHAIN& poly = polys.Outline( 0 );
+    // aPolys is expected having only one outline and no hole
+    // (because it comes from a gerber file or is built from a aperture )
+    const SHAPE_LINE_CHAIN& poly = aPolys.COutline( 0 );
 
     fprintf( m_fp, "(gr_poly (pts " );
 
@@ -524,7 +519,7 @@ void GBR_TO_PCB_EXPORTER::writePcbPolygon( const SHAPE_POLY_SET& aPolys, int aLa
 void GBR_TO_PCB_EXPORTER::writePcbZoneItem( const GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
     SHAPE_POLY_SET polys = aGbrItem->m_Polygon.CloneDropTriangulation();
-    polys.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    polys.Simplify( SHAPE_POLY_SET::PM_FAST );
 
     if( polys.OutlineCount() == 0 )
         return;
