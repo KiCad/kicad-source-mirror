@@ -1198,7 +1198,7 @@ wxString PAD::GetSelectMenuText( EDA_UNITS aUnits ) const
                                      GetParent()->GetReference(),
                                      layerMaskDescribe() );
         }
-        else if( GetAttribute() == PAD_ATTRIB::NPTH && !FlashLayer( UNDEFINED_LAYER ) )
+        else if( GetAttribute() == PAD_ATTRIB::NPTH && !FlashLayer( F_Cu ) )
         {
             return wxString::Format( _( "Through hole pad %s of %s" ),
                                      wxT( "(" ) + _( "NPTH, Mechanical" ) + wxT( ")" ),
@@ -1221,7 +1221,7 @@ wxString PAD::GetSelectMenuText( EDA_UNITS aUnits ) const
                                      GetParent()->GetReference(),
                                      layerMaskDescribe() );
         }
-        else if( GetAttribute() == PAD_ATTRIB::NPTH && !FlashLayer( UNDEFINED_LAYER ) )
+        else if( GetAttribute() == PAD_ATTRIB::NPTH && !FlashLayer( F_Cu ) )
         {
             return wxString::Format( _( "Through hole pad %s of %s" ),
                                      wxT( "(" ) + _( "NPTH, Mechanical" ) + wxT( ")" ),

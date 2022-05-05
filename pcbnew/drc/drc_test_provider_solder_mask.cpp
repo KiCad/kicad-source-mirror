@@ -309,6 +309,25 @@ bool isMaskAperture( BOARD_ITEM* aItem )
 }
 
 
+bool isNullAperture( BOARD_ITEM* aItem )
+{
+    if( aItem->Type() == PCB_PAD_T )
+    {
+        PAD* pad = static_cast<PAD*>( aItem );
+
+        if( pad->GetAttribute() == PAD_ATTRIB::NPTH
+                && ( pad->GetShape() == PAD_SHAPE::CIRCLE || pad->GetShape() == PAD_SHAPE::OVAL )
+                && pad->GetSize().x <= pad->GetDrillSize().x
+                && pad->GetSize().y <= pad->GetDrillSize().y )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
                                                           const EDA_RECT& aItemBBox,
                                                           PCB_LAYER_ID aRefLayer,
@@ -334,6 +353,9 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
                     otherNet = static_cast<BOARD_CONNECTED_ITEM*>( other )->GetNetCode();
 
                 if( otherNet > 0 && otherNet == itemNet )
+                    return false;
+
+                if( isNullAperture( other ) )
                     return false;
 
                 if( aItem->GetParentFootprint() && other->GetParentFootprint() )
@@ -583,7 +605,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskBridges()
 
                 EDA_RECT itemBBox = item->GetBoundingBox();
 
-                if( item->IsOnLayer( F_Mask ) )
+                if( item->IsOnLayer( F_Mask ) && !isNullAperture( item ) )
                 {
                     // Test for aperture-to-aperture collisions
                     testItemAgainstItems( item, itemBBox, F_Mask, F_Mask );
@@ -597,7 +619,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskBridges()
                     testItemAgainstItems( item, itemBBox, F_Cu, F_Mask );
                 }
 
-                if( item->IsOnLayer( B_Mask ) )
+                if( item->IsOnLayer( B_Mask ) && !isNullAperture( item ) )
                 {
                     // Test for aperture-to-aperture collisions
                     testItemAgainstItems( item, itemBBox, B_Mask, B_Mask );
