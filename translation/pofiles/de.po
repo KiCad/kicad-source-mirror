@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:55-0700\n"
-"PO-Revision-Date: 2022-04-28 11:12+0000\n"
+"PO-Revision-Date: 2022-05-09 07:14+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.1-dev\n"
+"X-Generator: Weblate 4.12.1\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -8424,11 +8424,11 @@ msgstr "Symbolbibliothek-Referenzen"
 
 #: eeschema/dialogs/dialog_erc.cpp:78
 msgid "Run ERC"
-msgstr "Starte ERC"
+msgstr "ERC starten"
 
 #: eeschema/dialogs/dialog_erc.cpp:115
 msgid "Show Annotation dialog"
-msgstr "Zeigt den Dialog für die Annotation"
+msgstr "Dialog für Annotation öffnen"
 
 #: eeschema/dialogs/dialog_erc.cpp:128
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
@@ -8635,7 +8635,7 @@ msgstr "Ausschlüsse"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:109
 msgid "Delete Markers"
-msgstr "Entferne Marker"
+msgstr "Marker entfernen"
 
 #: eeschema/dialogs/dialog_erc_base.h:87 eeschema/tools/ee_actions.cpp:45
 msgid "Electrical Rules Checker"
@@ -10153,11 +10153,11 @@ msgid ""
 "This setting can be changed from the \"Symbol Libraries\" dialog,\n"
 "and the tool can be activated manually from the \"Tools\" menu."
 msgstr ""
-"Soll dieses Werkzeug nicht mehr angezeigt werden?\n"
-"Keine Veränderungen werden durchgeführt.\n"
+"Dieses Werkzeug nicht mehr anzeigen?\n"
+"Es werden keine Änderungen vorgenommen.\n"
 "\n"
-"Diese Einstellung kann im Dialog \"Symbolbibliotheken\" verändert werden,\n"
-"und das Werkzeug kann manuell im \"Werkzeug\"-Menü wieder aktiviert werden."
+"Diese Einstellung kann im Dialog \"Symbolbibliotheken\" geändert werden,\n"
+"und das Werkzeug kann manuell im Menü \"Werkzeuge\" wieder aktiviert werden."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:297
 msgid "Rescue Symbols"
@@ -23526,7 +23526,7 @@ msgstr "Eigenschaften der Bemaßung"
 
 #: pcbnew/dialogs/dialog_drc.cpp:86
 msgid "Run DRC"
-msgstr "Starte DRC"
+msgstr "DRC starten"
 
 #: pcbnew/dialogs/dialog_drc.cpp:226
 msgid "DRC incomplete: could not compile custom design rules.  "
@@ -34485,7 +34485,7 @@ msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:831
 msgid "Run DRC for a full analysis."
-msgstr "Führen Sie DRC für eine vollständige Analyse aus."
+msgstr "Führen Sie den DRC für eine vollständige Analyse aus."
 
 #: pcbnew/tools/board_inspection_tool.cpp:837
 msgid "Item <b>disallowed</b> at current location."
