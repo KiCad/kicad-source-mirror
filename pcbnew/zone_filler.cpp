@@ -679,7 +679,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
             [&bds]( DRC_CONSTRAINT_T aConstraint, const BOARD_ITEM* a, const BOARD_ITEM* b,
                     PCB_LAYER_ID aEvalLayer ) -> int
             {
-                auto c = bds.m_DRCEngine->EvalRules( aConstraint, a, b, aEvalLayer );
+                DRC_CONSTRAINT c = bds.m_DRCEngine->EvalRules( aConstraint, a, b, aEvalLayer );
                 return c.GetValue().Min();
             };
 
@@ -688,23 +688,31 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
     auto knockoutPadClearance =
             [&]( PAD* aPad )
             {
-                int  gap = 0;
+                int  gap = evalRulesForItems( MECHANICAL_CLEARANCE_CONSTRAINT,
+                                              aZone, aPad, aLayer );
                 bool hasHole = aPad->GetDrillSize().x > 0;
                 bool flashLayer = aPad->FlashLayer( aLayer );
                 bool platedHole = hasHole && aPad->GetAttribute() == PAD_ATTRIB::PTH;
 
                 if( flashLayer || platedHole )
-                    gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aPad, aLayer );
+                {
+                    gap = std::max( gap, evalRulesForItems( CLEARANCE_CONSTRAINT,
+                                                            aZone, aPad, aLayer ) );
+                }
 
-                if( flashLayer )
+                if( flashLayer && gap > 0 )
                     addKnockout( aPad, aLayer, gap + extra_margin, aHoles );
 
                 if( hasHole )
                 {
-                    gap = std::max( gap, evalRulesForItems( HOLE_CLEARANCE_CONSTRAINT, aZone,
-                                                            aPad, aLayer ) );
+                    gap = std::max( gap, evalRulesForItems( MECHANICAL_HOLE_CLEARANCE_CONSTRAINT,
+                                                            aZone, aPad, aLayer ) );
 
-                    addHoleKnockout( aPad, gap + extra_margin, aHoles );
+                    gap = std::max( gap, evalRulesForItems( HOLE_CLEARANCE_CONSTRAINT,
+                                                            aZone, aPad, aLayer ) );
+
+                    if( gap > 0 )
+                        addHoleKnockout( aPad, gap + extra_margin, aHoles );
                 }
             };
 
@@ -723,40 +731,56 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
             {
                 if( aTrack->GetBoundingBox().Intersects( zone_boundingbox ) )
                 {
+                    bool sameNet = aTrack->GetNetCode() == aZone->GetNetCode()
+                                        && aZone->GetNetCode() != 0;
+
+                    int  gap = evalRulesForItems( MECHANICAL_CLEARANCE_CONSTRAINT,
+                                                  aZone, aTrack, aLayer );
+
+                    if( !sameNet )
+                    {
+                        gap = std::max( gap, evalRulesForItems( CLEARANCE_CONSTRAINT,
+                                                                aZone, aTrack, aLayer ) );
+                    }
+
                     if( aTrack->Type() == PCB_VIA_T )
                     {
                         PCB_VIA* via = static_cast<PCB_VIA*>( aTrack );
-                        int      gap = 0;
-                        bool     checkHoleClearance = true;
 
-                        gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aTrack, aLayer );
-
-                        if( via->FlashLayer( aLayer ) )
+                        if( via->FlashLayer( aLayer ) && gap > 0 )
                         {
                             via->TransformShapeWithClearanceToPolygon( aHoles, aLayer,
                                                                        gap + extra_margin,
                                                                        m_maxError, ERROR_OUTSIDE );
                         }
 
-                        if( checkHoleClearance )
+                        gap = std::max( gap, evalRulesForItems( MECHANICAL_HOLE_CLEARANCE_CONSTRAINT,
+                                                                aZone, via, aLayer ) );
+
+                        if( !sameNet )
                         {
                             gap = std::max( gap, evalRulesForItems( HOLE_CLEARANCE_CONSTRAINT,
                                                                     aZone, via, aLayer ) );
                         }
 
-                        int radius = via->GetDrillValue() / 2 + bds.GetHolePlatingThickness();
+                        if( gap > 0 )
+                        {
+                            int radius = via->GetDrillValue() / 2 + bds.GetHolePlatingThickness();
 
-                        TransformCircleToPolygon( aHoles, via->GetPosition(),
-                                                  radius + gap + extra_margin,
-                                                  m_maxError, ERROR_OUTSIDE );
+                            TransformCircleToPolygon( aHoles, via->GetPosition(),
+                                                      radius + gap + extra_margin,
+                                                      m_maxError, ERROR_OUTSIDE );
+                        }
                     }
                     else
                     {
-                        int gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aTrack, aLayer );
-
-                        aTrack->TransformShapeWithClearanceToPolygon( aHoles, aLayer,
-                                                                      gap + extra_margin,
-                                                                      m_maxError, ERROR_OUTSIDE );
+                        if( gap > 0 )
+                        {
+                            aTrack->TransformShapeWithClearanceToPolygon( aHoles, aLayer,
+                                                                          gap + extra_margin,
+                                                                          m_maxError,
+                                                                          ERROR_OUTSIDE );
+                        }
                     }
                 }
             };
@@ -764,9 +788,6 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
     for( PCB_TRACK* track : m_board->Tracks() )
     {
         if( !track->IsOnLayer( aLayer ) )
-            continue;
-
-        if( track->GetNetCode() == aZone->GetNetCode() && ( aZone->GetNetCode() != 0) )
             continue;
 
         if( checkForCancel( m_progressReporter ) )
@@ -789,7 +810,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                     if( aItem->GetBoundingBox().Intersects( zone_boundingbox ) )
                     {
                         bool ignoreLineWidths = false;
-                        int  gap = bds.GetDRCEpsilon();
+                        int  gap = evalRulesForItems( MECHANICAL_CLEARANCE_CONSTRAINT,
+                                                      aZone, aItem, aLayer );
 
                         if( aItem->IsOnLayer( aLayer ) )
                         {
@@ -872,8 +894,11 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                     }
                     else
                     {
-                        int gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aKnockout,
-                                                     aLayer );
+                        int gap = evalRulesForItems( MECHANICAL_CLEARANCE_CONSTRAINT, aZone,
+                                                     aKnockout, aLayer );
+
+                        gap = std::max( gap, evalRulesForItems( CLEARANCE_CONSTRAINT, aZone,
+                                                                aKnockout, aLayer ) );
 
                         SHAPE_POLY_SET poly;
                         aKnockout->TransformShapeWithClearanceToPolygon( poly, aLayer,
