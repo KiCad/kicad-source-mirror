@@ -280,7 +280,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
         clearance = constraint.GetValue().Min();
     }
 
-    if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance >= 0 )
+    if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
     {
         // Special processing for track:track intersections
         if( track->Type() == PCB_TRACE_T && other->Type() == PCB_TRACE_T )
@@ -435,7 +435,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
         clearance = constraint.GetValue().Min();
     }
 
-    if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance >= 0 )
+    if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
     {
         std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape( aLayer );
 
@@ -490,7 +490,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
             constraint = m_drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, aItem, aZone, aLayer );
             clearance = constraint.GetValue().Min();
 
-            if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance >= 0 )
+            if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
             {
                 if( zoneTree->QueryColliding( itemBBox, holeShape.get(), aLayer,
                                               std::max( 0, clearance - m_drcEpsilon ),
@@ -740,9 +740,9 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
 
     if( testHoles && otherPad && otherPad->FlashLayer( aLayer ) && pad->GetDrillSize().x )
     {
-        if( clearance >= 0 && otherShape->Collide( pad->GetEffectiveHoleShape(),
-                                                   std::max( 0, clearance - m_drcEpsilon ),
-                                                   &actual, &pos ) )
+        if( clearance > 0 && otherShape->Collide( pad->GetEffectiveHoleShape(),
+                                                  std::max( 0, clearance - m_drcEpsilon ),
+                                                  &actual, &pos ) )
         {
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
 
