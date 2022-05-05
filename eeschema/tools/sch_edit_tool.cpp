@@ -726,10 +726,11 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     }
     else
     {
+        EE_SELECTION selectionCopy = selection;
+
         if( selection.IsHover() )
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-        EE_SELECTION selectionCopy = selection;
         m_toolMgr->RunAction( EE_ACTIONS::trimOverlappingWires, true, &selectionCopy );
         m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &selectionCopy );
 
