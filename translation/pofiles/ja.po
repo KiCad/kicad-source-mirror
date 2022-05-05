@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:55-0700\n"
-"PO-Revision-Date: 2022-05-02 12:52+0000\n"
+"PO-Revision-Date: 2022-05-07 08:28+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v6/ja/>\n"
 "Language: ja\n"
@@ -47,9 +47,8 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:737
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr ""
-"ボードのアウトラインが欠落しているか、不正な形式です。完全な分析のためにDRCを"
-"実行します。"
+msgstr "基板のアウトラインが欠落しているか、不正な形式です。完全な分析のためにDRCを実"
+"行します。"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
 msgid "Create tracks and vias"
@@ -65,11 +64,11 @@ msgstr "導体レイヤーのポリゴンを簡略化"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:760
 msgid "Simplifying polygons on F_Cu"
-msgstr "F_Cu上の単純化したポリゴン"
+msgstr "F_Cu上のポリゴンを単純化"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:771
 msgid "Simplifying polygons on B_Cu"
-msgstr "B_Cu上の単純化したポリゴン"
+msgstr "B_Cu上のポリゴンを単純化"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:801
 #, c-format
@@ -78,11 +77,11 @@ msgstr "導体レイヤー %d 上のポリゴンを簡略化"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:840
 msgid "Simplify holes contours"
-msgstr "穴の輪郭を簡略化する"
+msgstr "穴の輪郭を簡略化"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:869
 msgid "Build Tech layers"
-msgstr "ビルド Tech レイヤー"
+msgstr "Tech レイヤーをビルド"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:903
 #, c-format
@@ -332,7 +331,7 @@ msgstr "エラー"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:718
 msgid "Failed to copy image to clipboard"
-msgstr "クリップボードからイメージをコピーできませんでした"
+msgstr "クリップボードにイメージをコピーできませんでした"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:729
 msgid "Can't save file"
@@ -1347,8 +1346,8 @@ msgid ""
 "layer (but will be marked invisible)."
 msgstr ""
 "外形線を配置する基板のレイヤーを選択します。\n"
-"リファレンス指定子と定数は常にシルクスクリーン レイヤー上に置かれます。(非表"
-"示としてマークされます)."
+"リファレンス指定子と値は常にシルクスクリーン "
+"レイヤー上に置かれます(非表示としてマークされます)."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
@@ -1806,7 +1805,7 @@ msgstr "彩度:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:94
 #: pcbnew/dialogs/dialog_text_properties.cpp:90
 msgid "Value:"
-msgstr "定数:"
+msgstr "値:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:134
 #: common/dialogs/dialog_color_picker_base.h:96
@@ -2530,7 +2529,7 @@ msgstr "カスタム用紙の高さ."
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:146
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:162
 msgid "unit"
-msgstr "単位"
+msgstr "ユニット、単位"
 
 #: common/dialogs/dialog_page_settings_base.cpp:88
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:31
@@ -4335,7 +4334,7 @@ msgstr "太字"
 
 #: common/eda_text.cpp:518
 msgid "Bold+Italic"
-msgstr "<b><i>斜太字</i></b>"
+msgstr "斜太字"
 
 #: common/eda_text.cpp:718
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:193
@@ -4975,7 +4974,7 @@ msgstr "B.Silkscreen"
 
 #: common/layer_id.cpp:71
 msgid "F.Silkscreen"
-msgstr "F.シルクスクリーン"
+msgstr "F.Silkscreen"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
@@ -5075,7 +5074,7 @@ msgstr "バス"
 
 #: common/layer_id.cpp:107
 msgid "Bus junctions"
-msgstr "バスのジャンクション"
+msgstr "バスのジャンクション (接続点)"
 
 #: common/layer_id.cpp:108
 msgid "Junctions"
@@ -5109,7 +5108,7 @@ msgstr "シンボルのリファレンス"
 
 #: common/layer_id.cpp:115
 msgid "Symbol values"
-msgstr "シンボルの定数"
+msgstr "シンボル値"
 
 #: common/layer_id.cpp:116
 msgid "Symbol fields"
@@ -6350,7 +6349,7 @@ msgstr "デフォルトのフットプリントがありません"
 
 #: common/widgets/gal_options_panel.cpp:86
 msgid "Accelerated graphics"
-msgstr "アクセラレーター有効のグラフィックス:"
+msgstr "アクセラレーター有効のグラフィックス"
 
 #: common/widgets/gal_options_panel.cpp:86
 msgid "Fallback graphics"
@@ -7066,7 +7065,7 @@ msgstr "相対パス用の有効な環境変数:"
 #: pcbnew/footprint_wizard_frame.cpp:330 pcbnew/fp_text.cpp:271
 #: pcbnew/fp_text_grid_table.cpp:124 pcbnew/pcb_dimension.cpp:311
 msgid "Value"
-msgstr "定数"
+msgstr "値"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:99
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
@@ -7376,7 +7375,7 @@ msgstr "重複したアイテム %s%s\n"
 #: eeschema/component_references_lister.cpp:717
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
-msgstr "定数相違: %s%d%s (%s) と %s%d%s (%s)"
+msgstr "異なる値: %s%d%s (%s) と %s%d%s (%s)"
 
 #: eeschema/connection_graph.cpp:2352 eeschema/connection_graph.cpp:2383
 #, c-format
@@ -8301,7 +8300,7 @@ msgid ""
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
 "現在のシンボルのフィールドを新しいライブラリーのフィールドで置き換えます。\n"
-"警告: \"定数\" と \"フットプリント\" のフィールドは置き換えられます。"
+"警告: \"値\" と \"フットプリント\" のフィールドは置き換えられます。"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.h:57
 msgid "Symbol Library References"
@@ -9454,11 +9453,11 @@ msgstr "シミュレーターには回路図の完全なアノテーションが
 
 #: eeschema/dialogs/dialog_netlist.cpp:328
 msgid "Reformat passive symbol values"
-msgstr "受動部品シンボルの定数を再フォーマット"
+msgstr "受動部品シンボル値を再フォーマット"
 
 #: eeschema/dialogs/dialog_netlist.cpp:329
 msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
-msgstr "受動部品シンボルの定数を再フォーマット　例: 1M -> 1Meg"
+msgstr "受動部品シンボル値を再フォーマット　例: 1M -> 1Meg"
 
 #: eeschema/dialogs/dialog_netlist.cpp:334
 msgid "External simulator command:"
@@ -10717,7 +10716,7 @@ msgstr "カスタム"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:436
 msgid "Adjust passive symbol values (e.g. M -> Meg; 100 nF -> 100n)"
-msgstr "受動部品シンボルの定数を調整 (例: M -> Meg; 100 nF -> 100n)"
+msgstr "受動部品シンボル値を調整 (例: M -> Meg; 100 nF -> 100n)"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:439
 msgid "Add full path for .include library directives"
@@ -11641,7 +11640,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
-msgstr "PCBエディターで置き換えられたシンボルの定数を更新します。"
+msgstr "PCBエディターで置き換えられたシンボルの値を更新します。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:69
 msgid "Net names"
@@ -13523,9 +13522,8 @@ msgstr "正規表現で<b>シンボル名</b>を絞り込みます。"
 msgid ""
 "Enable transaction logging. The mere presence of this option turns on the "
 "logging, no need to set a Value."
-msgstr ""
-"トランザクションのログを許可する。このオプションを有効にするだけでログを開始"
-"します。定数の設定は必要ありません。"
+msgstr "トランザクションのログを許可します。このオプションを有効にするだけでログを開"
+"始します。値の設定は必要ありません。"
 
 #: eeschema/sch_plugin.cpp:151 pcbnew/plugin.cpp:162
 msgid "User name for <b>login</b> to some special library server."
@@ -14510,7 +14508,7 @@ msgstr "リファレンス指定子は %s 文字を含むことができませ�
 #: eeschema/sch_validators.cpp:106
 #, c-format
 msgid "The value field cannot contain %s character(s)."
-msgstr "定数フィールドは %s 文字を含むことができません。"
+msgstr "値フィールドは %s 文字を含むことができません。"
 
 #: eeschema/sch_validators.cpp:110
 #, c-format
@@ -14983,11 +14981,11 @@ msgstr "不明！"
 
 #: eeschema/sim/spice_value.cpp:42
 msgid "Spice value cannot be empty"
-msgstr "Spice 定数は空にできません"
+msgstr "Spice 値は空にできません"
 
 #: eeschema/sim/spice_value.cpp:47
 msgid "Invalid Spice value string"
-msgstr "不正な Spice 定数文字列"
+msgstr "不正な Spice の値文字列"
 
 #: eeschema/sim/spice_value.cpp:80
 msgid "Invalid unit prefix"
@@ -15664,7 +15662,7 @@ msgstr "%s のフットプリントを '%s' から '%s' へ変更します。"
 #: eeschema/tools/backannotate.cpp:364
 #, c-format
 msgid "Change %s value from '%s' to '%s'."
-msgstr "%s の定数を '%s' から '%s' に変更します。"
+msgstr "%s の値を '%s' から '%s' に変更します。"
 
 #: eeschema/tools/backannotate.cpp:389
 #, c-format
@@ -16106,11 +16104,11 @@ msgstr "リファレンス指定子ダイアログを表示"
 
 #: eeschema/tools/ee_actions.cpp:408
 msgid "Edit Value..."
-msgstr "定数を編集..."
+msgstr "値を編集..."
 
 #: eeschema/tools/ee_actions.cpp:408
 msgid "Displays value field dialog"
-msgstr "定数フィールド ダイアログを表示"
+msgstr "値フィールド ダイアログを表示"
 
 #: eeschema/tools/ee_actions.cpp:414
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:251
@@ -23924,7 +23922,7 @@ msgstr "フットプリントのプロパティを変更"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:527
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:414
 msgid "Reference and value are mandatory."
-msgstr "リファレンスと定数は必須です。"
+msgstr "リファレンスと値は必須です。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:52
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:52
@@ -26104,7 +26102,7 @@ msgstr "境界線とタイトル ブロックをプロット"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:80
 msgid "Plot footprint values"
-msgstr "フットプリントの定数をプロット"
+msgstr "フットプリントの値をプロット"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:84
 msgid "Plot reference designators"
@@ -27496,7 +27494,7 @@ msgstr "新規フットプリントのテキスト アイテム デフォルト�
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:84
 msgid ""
 "Note: a blank reference designator or value will use the footprint name."
-msgstr "注: 空白のリファレンス指定子または定数はフットプリント名を使用します。"
+msgstr "注: 空白のリファレンス指定子または値はフットプリント名を使用します。"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:101
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
@@ -30538,7 +30536,7 @@ msgstr "リファレンス '%s'"
 #: pcbnew/fp_text.cpp:321
 #, c-format
 msgid "Value '%s' of %s"
-msgstr "定数 '%s' (%s)"
+msgstr "値 '%s' (%s)"
 
 #: pcbnew/fp_text.cpp:326
 #, c-format
@@ -31007,12 +31005,12 @@ msgstr "%s リファレンス指定子を %s へ変更しました。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:291
 #, c-format
 msgid "Change %s value from %s to %s."
-msgstr "%s の定数を %s から %s に変更します。"
+msgstr "%s の値を %s から %s に変更します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:298
 #, c-format
 msgid "Changed %s value from %s to %s."
-msgstr "%s の定数を %s から %s に変更しました。"
+msgstr "%s の値を %s から %s に変更しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:320
 #, c-format
@@ -31226,7 +31224,7 @@ msgstr ""
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:152
 msgid "Cannot parse value in symbol section of netlist."
-msgstr "ネットリストのシンボル セクションにある定数を解釈できません。"
+msgstr "ネットリストのシンボル セクションにある値を解釈できません。"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:189
 msgid "Cannot parse pin name in symbol net section of netlist."
@@ -31570,7 +31568,7 @@ msgstr "認識されないレイヤー '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:490
 msgid "Footprint's courtyard is not a single, closed shape."
-msgstr "フットプリントののコートヤードが単一の閉じた形状でない。"
+msgstr "フットプリントのコートヤードが単一の閉じた形状でない。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:503
 msgid "Footprint has no front courtyard."
@@ -31775,7 +31773,7 @@ msgstr "ファイルの読み込みエラー: 長さが決定できません。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:87
 msgid "Error reading file."
-msgstr "ファイルの読み込みでエラーしました。"
+msgstr "ファイル読み込み中のエラー。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:341
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:324
@@ -32449,9 +32447,10 @@ msgid ""
 "hatching has two hatches 90 degrees apart, oriented %.1f degrees from "
 "horizontal."
 msgstr ""
-"CADSTAR のハッチングコード '%s'のハッチの角度の差は%.1f度です。KiCad は 90 度"
-"離れたハッチングのみをサポートしています。 インポートされたハッチングは、水平"
-"から%.1f度向きのの90度離れた2つのハッチになります。"
+"CADSTAR のハッチングコード '%s'のハッチの角度の差は%.1f度です。KiCad は 90 "
+"度離れたハッチングのみをサポートしています。 "
+"インポートされたハッチングは、水平から%."
+"1f度向きの90度離れた2つのハッチになります。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3650
 #, c-format
@@ -33592,7 +33591,7 @@ msgstr "エクスポートできません。問題点を修正してやり直し
 #: pcbnew/specctra_import_export/specctra_export.cpp:1117
 #, c-format
 msgid "Symbol with value of '%s' has empty reference id."
-msgstr "定数 '%s' のシンボルはリファレンスIDが空です。"
+msgstr "値 '%s' のシンボルはリファレンスIDが空です。"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1127
 #, c-format
