@@ -107,9 +107,15 @@ void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
     for( LSEQ layerSeq = aBoard->GetEnabledLayers().UIOrder(); layerSeq; ++layerSeq )
         layersAll.Add( LSET::Name( *layerSeq ), *layerSeq );
 
-    m_propMgr.GetProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ) )->SetChoices( layersAll );
-    m_propMgr.GetProperty( TYPE_HASH( PCB_SHAPE ), _HKI( "Layer" ) )->SetChoices( layersAll );
-    m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ) )->SetChoices( layersAll );
+    if( m_propMgr.GetProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ) ) )
+        m_propMgr.GetProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ) )->SetChoices( layersAll );
+
+    if( m_propMgr.GetProperty( TYPE_HASH( PCB_SHAPE ), _HKI( "Layer" ) ) )
+        m_propMgr.GetProperty( TYPE_HASH( PCB_SHAPE ), _HKI( "Layer" ) )->SetChoices( layersAll );
+
+    if( m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ) ) )
+        m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ) )
+                ->SetChoices( layersAll );
 
     // Regenerate nets
     for( const auto& netinfo : aBoard->GetNetInfo().NetsByNetcode() )

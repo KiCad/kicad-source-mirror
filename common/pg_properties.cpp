@@ -20,6 +20,7 @@
 
 #include <pg_properties.h>
 #include <property_mgr.h>
+#include <wx/dc.h>
 #include <wx/propgrid/propgrid.h>
 #include <wx/regex.h>
 

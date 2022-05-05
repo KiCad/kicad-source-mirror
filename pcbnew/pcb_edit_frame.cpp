@@ -291,7 +291,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .MinSize( 180, -1 ).BestSize( 180, -1 ) );
 
     m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( "PropertiesManager" )
-                      .Left().Layer( 2 )
+                      .Left().Layer( 5 )
                       .Caption( _( "Properties" ) ).PaneBorder( false )
                       .MinSize( 240, -1 ).BestSize( 300, -1 ) );
 
