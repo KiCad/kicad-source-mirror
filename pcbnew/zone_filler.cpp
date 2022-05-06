@@ -605,7 +605,7 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
                 break;
 
             case ZONE_CONNECTION::NONE:
-                constraint = bds.m_DRCEngine->EvalRules( MECHANICAL_CLEARANCE_CONSTRAINT, pad,
+                constraint = bds.m_DRCEngine->EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, pad,
                                                          aZone, aLayer );
 
                 if( constraint.GetValue().Min() > aZone->GetLocalClearance() )
@@ -613,7 +613,7 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
                 else
                     padClearance = aZone->GetLocalClearance();
 
-                constraint = bds.m_DRCEngine->EvalRules( MECHANICAL_HOLE_CLEARANCE_CONSTRAINT, pad,
+                constraint = bds.m_DRCEngine->EvalRules( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, pad,
                                                          aZone, aLayer );
 
                 if( constraint.GetValue().Min() > padClearance )
@@ -688,8 +688,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
     auto knockoutPadClearance =
             [&]( PAD* aPad )
             {
-                int  gap = evalRulesForItems( MECHANICAL_CLEARANCE_CONSTRAINT,
-                                              aZone, aPad, aLayer );
+                int  gap = evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT, aZone, aPad, aLayer );
                 bool hasHole = aPad->GetDrillSize().x > 0;
                 bool flashLayer = aPad->FlashLayer( aLayer );
                 bool platedHole = hasHole && aPad->GetAttribute() == PAD_ATTRIB::PTH;
@@ -705,7 +704,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
 
                 if( hasHole )
                 {
-                    gap = std::max( gap, evalRulesForItems( MECHANICAL_HOLE_CLEARANCE_CONSTRAINT,
+                    gap = std::max( gap, evalRulesForItems( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT,
                                                             aZone, aPad, aLayer ) );
 
                     gap = std::max( gap, evalRulesForItems( HOLE_CLEARANCE_CONSTRAINT,
@@ -734,7 +733,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                     bool sameNet = aTrack->GetNetCode() == aZone->GetNetCode()
                                         && aZone->GetNetCode() != 0;
 
-                    int  gap = evalRulesForItems( MECHANICAL_CLEARANCE_CONSTRAINT,
+                    int  gap = evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT,
                                                   aZone, aTrack, aLayer );
 
                     if( !sameNet )
@@ -754,7 +753,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                                                                        m_maxError, ERROR_OUTSIDE );
                         }
 
-                        gap = std::max( gap, evalRulesForItems( MECHANICAL_HOLE_CLEARANCE_CONSTRAINT,
+                        gap = std::max( gap, evalRulesForItems( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT,
                                                                 aZone, via, aLayer ) );
 
                         if( !sameNet )
@@ -810,7 +809,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                     if( aItem->GetBoundingBox().Intersects( zone_boundingbox ) )
                     {
                         bool ignoreLineWidths = false;
-                        int  gap = evalRulesForItems( MECHANICAL_CLEARANCE_CONSTRAINT,
+                        int  gap = evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT,
                                                       aZone, aItem, aLayer );
 
                         if( aItem->IsOnLayer( aLayer ) )
@@ -894,7 +893,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                     }
                     else
                     {
-                        int gap = evalRulesForItems( MECHANICAL_CLEARANCE_CONSTRAINT, aZone,
+                        int gap = evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT, aZone,
                                                      aKnockout, aLayer );
 
                         gap = std::max( gap, evalRulesForItems( CLEARANCE_CONSTRAINT, aZone,
@@ -1252,7 +1251,7 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
                 if( aItem->IsKnockout() && aItem->IsOnLayer( aLayer )
                         && aItem->GetBoundingBox().Intersects( zone_boundingbox ) )
                 {
-                    DRC_CONSTRAINT cc = bds.m_DRCEngine->EvalRules( MECHANICAL_CLEARANCE_CONSTRAINT,
+                    DRC_CONSTRAINT cc = bds.m_DRCEngine->EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT,
                                                                     aZone, aItem, aLayer );
 
                     addKnockout( aItem, aLayer, cc.GetValue().Min(), false, clearanceHoles );

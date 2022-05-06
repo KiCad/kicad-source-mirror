@@ -72,6 +72,20 @@ void DRC_RULES_PARSER::reportError( const wxString& aMessage )
 }
 
 
+void DRC_RULES_PARSER::reportDeprecation( const wxString& oldToken, const wxString newToken )
+{
+    if( m_reporter )
+    {
+        wxString msg = wxString::Format( _( "The '%s' keyword has been deprecated.  "
+                                            "Please use '%s' instead." ),
+                                         oldToken,
+                                         newToken);
+
+        m_reporter->Report( msg, RPT_SEVERITY_WARNING );
+    }
+}
+
+
 void DRC_RULES_PARSER::parseUnknown()
 {
     int depth = 1;
@@ -258,11 +272,26 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
     T token = NextTok();
 
-    if( (int) token == DSN_RIGHT || token == T_EOF )
+    if( token == T_mechanical_clearance )
+    {
+        reportDeprecation( wxT( "mechanical_clearance" ), wxT( "physical_clearance" ) );
+        token = T_physical_clearance;
+    }
+    else if( token == T_mechanical_hole_clearance )
+    {
+        reportDeprecation( wxT( "mechanical_hole_clearance" ), wxT( "physical_hole_clearance" ) );
+        token = T_physical_hole_clearance;
+    }
+    else if( token == T_hole )
+    {
+        reportDeprecation( wxT( "hole" ), wxT( "hole_size" ) );
+        token = T_hole_size;
+    }
+    else if( (int) token == DSN_RIGHT || token == T_EOF )
     {
         msg.Printf( _( "Missing constraint type.|  Expected %s." ),
                     wxT( "assertion, clearance, hole_clearance, edge_clearance, "
-                         "mechanical_clearance, mechanical_hole_clearance, courtyard_clearance, "
+                         "physical_clearance, physical_hole_clearance, courtyard_clearance, "
                          "silk_clearance, hole_size, hole_to_hole, track_width, annular_width, "
                          "via_diameter, disallow, zone_connection, thermal_relief_gap, "
                          "thermal_spoke_width, min_resolved_spokes, length, skew, via_count, "
@@ -277,7 +306,6 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_clearance:                 c.m_Type = CLEARANCE_CONSTRAINT;                 break;
     case T_hole_clearance:            c.m_Type = HOLE_CLEARANCE_CONSTRAINT;            break;
     case T_edge_clearance:            c.m_Type = EDGE_CLEARANCE_CONSTRAINT;            break;
-    case T_hole:  // legacy token
     case T_hole_size:                 c.m_Type = HOLE_SIZE_CONSTRAINT;                 break;
     case T_hole_to_hole:              c.m_Type = HOLE_TO_HOLE_CONSTRAINT;              break;
     case T_courtyard_clearance:       c.m_Type = COURTYARD_CLEARANCE_CONSTRAINT;       break;
@@ -297,12 +325,16 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_via_count:                 c.m_Type = VIA_COUNT_CONSTRAINT;                 break;
     case T_diff_pair_gap:             c.m_Type = DIFF_PAIR_GAP_CONSTRAINT;             break;
     case T_diff_pair_uncoupled:       c.m_Type = DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT;   break;
-    case T_mechanical_clearance:      c.m_Type = MECHANICAL_CLEARANCE_CONSTRAINT;      break;
-    case T_mechanical_hole_clearance: c.m_Type = MECHANICAL_HOLE_CLEARANCE_CONSTRAINT; break;
+    case T_physical_clearance:        c.m_Type = PHYSICAL_CLEARANCE_CONSTRAINT;        break;
+    case T_physical_hole_clearance:   c.m_Type = PHYSICAL_HOLE_CLEARANCE_CONSTRAINT;   break;
+    // legacy tokens:
+    case T_hole:                      c.m_Type = HOLE_SIZE_CONSTRAINT;                 break;
+    case T_mechanical_clearance:      c.m_Type = PHYSICAL_CLEARANCE_CONSTRAINT;        break;
+    case T_mechanical_hole_clearance: c.m_Type = PHYSICAL_HOLE_CLEARANCE_CONSTRAINT;   break;
     default:
         msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
                     wxT( "assertion, clearance, hole_clearance, edge_clearance, "
-                         "mechanical_clearance, mechanical_hole_clearance, courtyard_clearance, "
+                         "physical_clearance, physical_hole_clearance, courtyard_clearance, "
                          "silk_clearance, hole_size, hole_to_hole, track_width, annular_width, "
                          "disallow, zone_connection, thermal_relief_gap, thermal_spoke_width, "
                          "min_resolved_spokes, length, skew, via_count, via_diameter, "

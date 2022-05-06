@@ -388,16 +388,16 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         r->Report( "" );
         r->Report( "" );
         r->Report( "" );
-        reportHeader( _( "Mechanical hole clearance resolution for:" ), a, b, layer, r );
+        reportHeader( _( "Physical hole clearance resolution for:" ), a, b, layer, r );
 
-        constraint = drcEngine.EvalRules( MECHANICAL_HOLE_CLEARANCE_CONSTRAINT, a, b, layer, r );
+        constraint = drcEngine.EvalRules( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, a, b, layer, r );
         clearance = constraint.m_Value.Min();
         clearanceStr = StringFromValue( r->GetUnits(), clearance, true );
 
-        if( !drcEngine.HasRulesForConstraintType( MECHANICAL_HOLE_CLEARANCE_CONSTRAINT ) )
+        if( !drcEngine.HasRulesForConstraintType( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT ) )
         {
             r->Report( "" );
-            r->Report( _( "No 'mechanical_hole_clearance' constraints defined." ) );
+            r->Report( _( "No 'physical_hole_clearance' constraints defined." ) );
         }
         else
         {
@@ -474,16 +474,16 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         r->Report( "" );
         r->Report( "" );
         r->Report( "" );
-        reportHeader( _( "Mechanical clearance resolution for:" ), a, b, layer, r );
+        reportHeader( _( "Physical clearance resolution for:" ), a, b, layer, r );
 
-        constraint = drcEngine.EvalRules( MECHANICAL_CLEARANCE_CONSTRAINT, a, b, layer, r );
+        constraint = drcEngine.EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, a, b, layer, r );
         clearance = constraint.m_Value.Min();
         clearanceStr = StringFromValue( r->GetUnits(), clearance, true );
 
-        if( !drcEngine.HasRulesForConstraintType( MECHANICAL_CLEARANCE_CONSTRAINT ) )
+        if( !drcEngine.HasRulesForConstraintType( PHYSICAL_CLEARANCE_CONSTRAINT ) )
         {
             r->Report( "" );
-            r->Report( _( "No 'mechanical_clearance' constraints defined." ) );
+            r->Report( _( "No 'physical_clearance' constraints defined." ) );
         }
         else
         {
@@ -671,14 +671,14 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             r->Report( wxString::Format( _( "Zone clearance: %s." ),
                                          StringFromValue( units, clearance, true ) ) );
 
-            constraint = drcEngine.EvalRules( MECHANICAL_CLEARANCE_CONSTRAINT, pad, zone, layer, r );
+            constraint = drcEngine.EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, pad, zone, layer, r );
 
             if( constraint.m_Value.Min() > clearance )
             {
                 clearance = constraint.m_Value.Min();
 
                 r->Report( "" );
-                r->Report( wxString::Format( _( "Overridden by larger mechanical clearance from %s;"
+                r->Report( wxString::Format( _( "Overridden by larger physical clearance from %s;"
                                                 "clearance: %s." ),
                                              EscapeHTML( constraint.GetName() ),
                                              StringFromValue( units, clearance, true ) ) );
@@ -686,7 +686,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
             if( !pad->FlashLayer( layer ) )
             {
-                constraint = drcEngine.EvalRules( MECHANICAL_HOLE_CLEARANCE_CONSTRAINT, pad, zone,
+                constraint = drcEngine.EvalRules( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, pad, zone,
                                                   layer, r );
 
                 if( constraint.m_Value.Min() > clearance )
@@ -694,7 +694,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                     clearance = constraint.m_Value.Min();
 
                     r->Report( "" );
-                    r->Report( wxString::Format( _( "Overridden by larger mechanical hole clearance from %s;"
+                    r->Report( wxString::Format( _( "Overridden by larger physical hole clearance from %s;"
                                                     "clearance: %s." ),
                                                  EscapeHTML( constraint.GetName() ),
                                                  StringFromValue( units, clearance, true ) ) );
@@ -914,7 +914,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         }
     }
 
-    r = m_inspectClearanceDialog->AddPage( _( "Mechanical" ) );
+    r = m_inspectClearanceDialog->AddPage( _( "Physical Clearances" ) );
 
     if( layerIntersection.any() )
     {
@@ -923,19 +923,19 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         if( !layerIntersection.test( layer ) )
             layer = layerIntersection.Seq().front();
 
-        reportHeader( _( "Mechanical clearance resolution for:" ), a, b, layer, r );
+        reportHeader( _( "Physical clearance resolution for:" ), a, b, layer, r );
 
-        constraint = drcEngine.EvalRules( MECHANICAL_CLEARANCE_CONSTRAINT, a, b, layer, r );
+        constraint = drcEngine.EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, a, b, layer, r );
         clearance = constraint.m_Value.Min();
 
         if( compileError )
         {
             reportCompileError( r );
         }
-        else if( !drcEngine.HasRulesForConstraintType( MECHANICAL_CLEARANCE_CONSTRAINT ) )
+        else if( !drcEngine.HasRulesForConstraintType( PHYSICAL_CLEARANCE_CONSTRAINT ) )
         {
             r->Report( "" );
-            r->Report( _( "No 'mechanical_clearance' constraints defined." ) );
+            r->Report( _( "No 'physical_clearance' constraints defined." ) );
         }
         else
         {
@@ -962,19 +962,19 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         else
             layer = a->GetLayer();
 
-        reportHeader( _( "Mechanical hole clearance resolution for:" ), a, b, layer, r );
+        reportHeader( _( "Physical hole clearance resolution for:" ), a, b, layer, r );
 
-        constraint = drcEngine.EvalRules( MECHANICAL_HOLE_CLEARANCE_CONSTRAINT, a, b, layer, r );
+        constraint = drcEngine.EvalRules( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, a, b, layer, r );
         clearance = constraint.m_Value.Min();
 
         if( compileError )
         {
             reportCompileError( r );
         }
-        else if( !drcEngine.HasRulesForConstraintType( MECHANICAL_HOLE_CLEARANCE_CONSTRAINT ) )
+        else if( !drcEngine.HasRulesForConstraintType( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT ) )
         {
             r->Report( "" );
-            r->Report( _( "No 'mechanical_hole_clearance' constraints defined." ) );
+            r->Report( _( "No 'physical_hole_clearance' constraints defined." ) );
         }
         else
         {

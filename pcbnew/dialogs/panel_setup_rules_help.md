@@ -32,9 +32,9 @@
  * length
  * hole\_clearance
  * hole\_size
- * mechanical\_clearance
- * mechanical\_hole\_clearance
  * min\_resolved\_spokes
+ * physical\_clearance
+ * physical\_hole\_clearance
  * silk\_clearance
  * skew
  * text\_height
@@ -46,7 +46,7 @@
  * via\_diameter
  * zone\_connection
 
-Note: `clearance` and `hole_clearance` rules are not run against items of the same net; `mechanical_clearance` and `mechanical_hole_clearance` rules are.
+Note: `clearance` and `hole_clearance` rules are not run against items of the same net; `physical_clearance` and `physical_hole_clearance` rules are.
 <br>
 
 ### Item Types
@@ -258,7 +258,7 @@ For the latter use a `(layer "layer_name")` clause in the rule.
 
     # Prevent solder wicking from SMD pads
     (rule holes_in_pads
-        (constraint mechanical_hole_clearance (min 0.2mm))
+        (constraint physical_hole_clearance (min 0.2mm))
         (condition "B.Pad_Type == 'SMD'"))
 
     # Disallow solder mask margin overrides

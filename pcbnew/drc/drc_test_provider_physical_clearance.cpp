@@ -39,22 +39,22 @@
 #include <drc/drc_test_provider_clearance_base.h>
 
 /*
-    Mechanical clearance test.
+    Physical clearance tests.
 
     Errors generated:
-    - DRCE_MECHANICAL_CLEARANCE
-    - DRCE_MECHANICAL_HOLE_CLEARANCE
+    - DRCE_PHYSICAL_CLEARANCE
+    - DRCE_PHYSICAL_HOLE_CLEARANCE
 */
 
-class DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
+class DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_BASE
 {
 public:
-    DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE () :
+    DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE () :
             DRC_TEST_PROVIDER_CLEARANCE_BASE()
     {
     }
 
-    virtual ~DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE()
+    virtual ~DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE()
     {
     }
 
@@ -62,7 +62,7 @@ public:
 
     virtual const wxString GetName() const override
     {
-        return wxT( "mechanical_clearance" );
+        return wxT( "physical_clearance" );
     };
 
     virtual const wxString GetDescription() const override
@@ -87,7 +87,7 @@ private:
 };
 
 
-bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
+bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
 {
     m_board = m_drcEngine->GetBoard();
     m_itemTree.clear();
@@ -97,10 +97,10 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
     int            errorMax = m_board->GetDesignSettings().m_MaxError;
     DRC_CONSTRAINT worstConstraint;
 
-    if( m_drcEngine->QueryWorstConstraint( MECHANICAL_CLEARANCE_CONSTRAINT, worstConstraint ) )
+    if( m_drcEngine->QueryWorstConstraint( PHYSICAL_CLEARANCE_CONSTRAINT, worstConstraint ) )
         m_largestClearance = worstConstraint.GetValue().Min();
 
-    if( m_drcEngine->QueryWorstConstraint( MECHANICAL_HOLE_CLEARANCE_CONSTRAINT, worstConstraint ) )
+    if( m_drcEngine->QueryWorstConstraint( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, worstConstraint ) )
         m_largestClearance = std::max( m_largestClearance, worstConstraint.GetValue().Min() );
 
     if( m_largestClearance <= 0 )
@@ -282,7 +282,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
                         if( !reportProgress( ii++, count, delta ) )
                             return false;
 
-                        DRC_CONSTRAINT c = m_drcEngine->EvalRules( MECHANICAL_CLEARANCE_CONSTRAINT,
+                        DRC_CONSTRAINT c = m_drcEngine->EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT,
                                                                    item, nullptr, layer );
 
                         if( shape )
@@ -367,10 +367,10 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
 }
 
 
-void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testShapeLineChain( const SHAPE_LINE_CHAIN& aOutline,
-                                                                 int aLineWidth, PCB_LAYER_ID aLayer,
-                                                                 BOARD_ITEM* aParentItem,
-                                                                 DRC_CONSTRAINT& aConstraint )
+void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testShapeLineChain( const SHAPE_LINE_CHAIN& aOutline,
+                                                               int aLineWidth, PCB_LAYER_ID aLayer,
+                                                               BOARD_ITEM* aParentItem,
+                                                               DRC_CONSTRAINT& aConstraint )
 {
     // We don't want to collide with neighboring segments forming a curve until the concavity
     // approaches 180 degrees.
@@ -510,8 +510,8 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testShapeLineChain( const SHAPE_LIN
 }
 
 
-void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAYER_ID aLayer,
-                                                            DRC_CONSTRAINT& aConstraint )
+void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAYER_ID aLayer,
+                                                          DRC_CONSTRAINT& aConstraint )
 {
     int            epsilon = m_board->GetDesignSettings().GetDRCEpsilon();
     int            clearance = aConstraint.GetValue().Min();
@@ -573,10 +573,10 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAY
 }
 
 
-bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* item,
-                                                                  SHAPE* itemShape,
-                                                                  PCB_LAYER_ID layer,
-                                                                  BOARD_ITEM* other )
+bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* item,
+                                                                SHAPE* itemShape,
+                                                                PCB_LAYER_ID layer,
+                                                                BOARD_ITEM* other )
 {
     bool           testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
     bool           testHoles = !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_CLEARANCE );
@@ -589,7 +589,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* it
 
     if( testClearance )
     {
-        constraint = m_drcEngine->EvalRules( MECHANICAL_CLEARANCE_CONSTRAINT, item, other, layer );
+        constraint = m_drcEngine->EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, item, other, layer );
         clearance = constraint.GetValue().Min();
     }
 
@@ -652,7 +652,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* it
 
         if( itemHoleShape || otherHoleShape )
         {
-            constraint = m_drcEngine->EvalRules( MECHANICAL_HOLE_CLEARANCE_CONSTRAINT, other, item,
+            constraint = m_drcEngine->EvalRules( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, other, item,
                                                  layer );
             clearance = constraint.GetValue().Min();
         }
@@ -697,8 +697,8 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* it
 }
 
 
-void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aItem,
-                                                                   PCB_LAYER_ID aLayer )
+void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aItem,
+                                                                 PCB_LAYER_ID aLayer )
 {
     for( ZONE* zone : m_zones )
     {
@@ -723,7 +723,7 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* a
 
             if( testClearance )
             {
-                constraint = m_drcEngine->EvalRules( MECHANICAL_CLEARANCE_CONSTRAINT, aItem, zone,
+                constraint = m_drcEngine->EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, aItem, zone,
                                                      aLayer );
                 clearance = constraint.GetValue().Min();
             }
@@ -803,8 +803,8 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* a
 
                 if( holeShape )
                 {
-                    constraint = m_drcEngine->EvalRules( MECHANICAL_HOLE_CLEARANCE_CONSTRAINT,
-                                                         aItem, zone, aLayer );
+                    constraint = m_drcEngine->EvalRules( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, aItem, 
+                                                         zone, aLayer );
                     clearance = constraint.GetValue().Min();
 
                     if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE
@@ -837,5 +837,5 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* a
 
 namespace detail
 {
-    static DRC_REGISTER_TEST_PROVIDER<DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE> dummy;
+    static DRC_REGISTER_TEST_PROVIDER<DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE> dummy;
 }

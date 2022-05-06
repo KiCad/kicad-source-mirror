@@ -240,7 +240,7 @@ set( PCBNEW_DRC_SRCS
     drc/drc_test_provider_disallow.cpp
     drc/drc_test_provider_connectivity.cpp
     drc/drc_test_provider_copper_clearance.cpp
-    drc/drc_test_provider_mechanical_clearance.cpp
+    drc/drc_test_provider_physical_clearance.cpp
     drc/drc_test_provider_courtyard_clearance.cpp
     drc/drc_test_provider_edge_clearance.cpp
     drc/drc_test_provider_footprint_checks.cpp

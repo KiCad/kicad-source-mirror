@@ -40,9 +40,6 @@
 #include <pad.h>
 #include <pcb_track.h>
 #include <zone.h>
-#include <geometry/shape.h>
-#include <geometry/shape_segment.h>
-#include <geometry/shape_null.h>
 
 
 // wxListBox's performance degrades horrifically with very large datasets.  It's not clear
@@ -911,8 +908,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 case SILK_CLEARANCE_CONSTRAINT:
                 case HOLE_CLEARANCE_CONSTRAINT:
                 case EDGE_CLEARANCE_CONSTRAINT:
-                case MECHANICAL_CLEARANCE_CONSTRAINT:
-                case MECHANICAL_HOLE_CLEARANCE_CONSTRAINT:
+                case PHYSICAL_CLEARANCE_CONSTRAINT:
+                case PHYSICAL_HOLE_CLEARANCE_CONSTRAINT:
                     REPORT( wxString::Format( _( "Checking %s clearance: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
                                               REPORT_VALUE( c->constraint.m_Value.Min() ) ) )
