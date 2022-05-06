@@ -484,18 +484,11 @@ void GBR_TO_PCB_EXPORTER::writePcbHeader( const LAYER_NUM* aLayerLookUpTable )
 void GBR_TO_PCB_EXPORTER::writePcbPolygon( const SHAPE_POLY_SET& aPolys, LAYER_NUM aLayer,
                                            const wxPoint& aOffset )
 {
-    SHAPE_POLY_SET polys = aPolys;
-
-    // Cleanup the polygon
-    polys.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-
     // Ensure the polygon is valid:
-    if( polys.OutlineCount() == 0 )
+    if( aPolys.OutlineCount() == 0 )
         return;
 
-    polys.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-
-    SHAPE_LINE_CHAIN& poly = polys.Outline( 0 );
+    const SHAPE_LINE_CHAIN& poly = aPolys.COutline( 0 );
 
     fprintf( m_fp, "(gr_poly (pts " );
 
@@ -532,7 +525,7 @@ void GBR_TO_PCB_EXPORTER::writePcbPolygon( const SHAPE_POLY_SET& aPolys, LAYER_N
 void GBR_TO_PCB_EXPORTER::writePcbZoneItem( const GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer )
 {
     SHAPE_POLY_SET polys = aGbrItem->m_Polygon;
-    polys.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    polys.Simplify( SHAPE_POLY_SET::PM_FAST );
 
     if( polys.OutlineCount() == 0 )
         return;
