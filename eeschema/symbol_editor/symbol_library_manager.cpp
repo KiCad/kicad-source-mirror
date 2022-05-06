@@ -225,30 +225,38 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
         {
             LIB_SYMBOL* newSymbol;
 
-            if( symbol->IsAlias() )
+            try
             {
-                std::shared_ptr< LIB_SYMBOL > oldParent = symbol->GetParent().lock();
-
-                wxCHECK_MSG( oldParent, false,
-                             wxString::Format( wxT( "Derived symbol '%s' found with undefined parent." ),
-                                               symbol->GetName() ) );
-
-                LIB_SYMBOL* libParent = pi->LoadSymbol( aLibrary, oldParent->GetName(),
-                                                        &properties );
-
-                if( !libParent )
+                if( symbol->IsAlias() )
                 {
-                    libParent = new LIB_SYMBOL( *oldParent.get() );
-                    pi->SaveSymbol( aLibrary, libParent, &properties );
-                }
+                    std::shared_ptr< LIB_SYMBOL > oldParent = symbol->GetParent().lock();
 
-                newSymbol = new LIB_SYMBOL( *symbol );
-                newSymbol->SetParent( libParent );
-                pi->SaveSymbol( aLibrary, newSymbol, &properties );
+                    wxCHECK_MSG( oldParent, false,
+                                 wxString::Format( wxT( "Derived symbol '%s' found with undefined parent." ),
+                                                   symbol->GetName() ) );
+
+                    LIB_SYMBOL* libParent = pi->LoadSymbol( aLibrary, oldParent->GetName(),
+                                                            &properties );
+
+                    if( !libParent )
+                    {
+                        libParent = new LIB_SYMBOL( *oldParent.get() );
+                        pi->SaveSymbol( aLibrary, libParent, &properties );
+                    }
+
+                    newSymbol = new LIB_SYMBOL( *symbol );
+                    newSymbol->SetParent( libParent );
+                    pi->SaveSymbol( aLibrary, newSymbol, &properties );
+                }
+                else if( !pi->LoadSymbol( aLibrary, symbol->GetName(), &properties ) )
+                {
+                    pi->SaveSymbol( aLibrary, new LIB_SYMBOL( *symbol ), &properties );
+                }
             }
-            else if( !pi->LoadSymbol( aLibrary, symbol->GetName(), &properties ) )
+            catch( ... )
             {
-                pi->SaveSymbol( aLibrary, new LIB_SYMBOL( *symbol ), &properties );
+                res = false;
+                break;
             }
         }
     }
