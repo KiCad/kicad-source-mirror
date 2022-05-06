@@ -973,11 +973,23 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( std::shared_ptr<SYMBOL_BUFF
     PROPERTIES properties;
     properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, "" );
 
+    wxString errorMsg = _( "Error saving symbol %s to library '%s'." ) + wxS( "\n%s" );
+
     // Delete the original symbol if the symbol name has been changed.
     if( libSymbol->GetName() != originalSymbol->GetName() )
     {
-        if( aLibTable->LoadSymbol( m_libName, originalSymbol->GetName() ) )
-            aLibTable->DeleteSymbol( m_libName, originalSymbol->GetName() );
+        // DeleteSymbol may throw
+        try
+        {
+            if( aLibTable->LoadSymbol( m_libName, originalSymbol->GetName() ) )
+                aLibTable->DeleteSymbol( m_libName, originalSymbol->GetName() );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxLogError( errorMsg, UnescapeString( originalSymbol->GetName() ), m_libName,
+                        ioe.What() );
+            return false;
+        }
     }
 
     if( libSymbol->IsAlias() )
@@ -1071,8 +1083,17 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( std::shared_ptr<SYMBOL_BUFF
     // Delete the original symbol if the symbol name has been changed.
     if( libSymbol->GetName() != originalSymbol->GetName() )
     {
-        if( aPlugin->LoadSymbol( aFileName, originalSymbol->GetName() ) )
-            aPlugin->DeleteSymbol( aFileName, originalSymbol->GetName(), &properties );
+        try
+        {
+            if( aPlugin->LoadSymbol( aFileName, originalSymbol->GetName() ) )
+                aPlugin->DeleteSymbol( aFileName, originalSymbol->GetName(), &properties );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxLogError( errorMsg, UnescapeString( originalSymbol->GetName() ), aFileName,
+                        ioe.What() );
+            return false;
+        }
     }
 
     if( libSymbol->IsAlias() )
