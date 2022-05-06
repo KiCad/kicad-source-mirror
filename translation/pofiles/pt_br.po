@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:57-0700\n"
-"PO-Revision-Date: 2022-05-02 12:53+0000\n"
+"PO-Revision-Date: 2022-05-10 18:51+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -5511,7 +5511,7 @@ msgstr "Vias cegas/enterradas"
 
 #: common/layer_id.cpp:160
 msgid "Micro-vias"
-msgstr "Micro-vias"
+msgstr "Microvias"
 
 #: common/layer_id.cpp:161
 msgid "Via holes"
