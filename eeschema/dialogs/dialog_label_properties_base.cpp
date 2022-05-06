@@ -307,7 +307,9 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 
 	// Connect Events
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnUpdateUI ) );
+	m_valueSingleLine->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnValueCharHook ), NULL, this );
 	m_valueSingleLine->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnEnterKey ), NULL, this );
+	m_valueCombo->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnValueCharHook ), NULL, this );
 	m_valueCombo->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnEnterKey ), NULL, this );
 	m_syntaxHelp->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnFormattingHelp ), NULL, this );
 	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnSizeGrid ), NULL, this );
@@ -321,7 +323,9 @@ DIALOG_LABEL_PROPERTIES_BASE::~DIALOG_LABEL_PROPERTIES_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnUpdateUI ) );
+	m_valueSingleLine->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnValueCharHook ), NULL, this );
 	m_valueSingleLine->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnEnterKey ), NULL, this );
+	m_valueCombo->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnValueCharHook ), NULL, this );
 	m_valueCombo->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnEnterKey ), NULL, this );
 	m_syntaxHelp->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnFormattingHelp ), NULL, this );
 	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_LABEL_PROPERTIES_BASE::OnSizeGrid ), NULL, this );

@@ -42,6 +42,7 @@ public:
 
 private:
     void OnEnterKey( wxCommandEvent& aEvent ) override;
+    void OnValueCharHook( wxKeyEvent& aEvent ) override;
     void OnFormattingHelp( wxHyperlinkEvent& aEvent ) override;
 
     void onSpinButton( wxCommandEvent &aEvent );

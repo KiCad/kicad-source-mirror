@@ -318,6 +318,33 @@ void DIALOG_LABEL_PROPERTIES::OnEnterKey( wxCommandEvent& aEvent )
 }
 
 
+void DIALOG_LABEL_PROPERTIES::OnValueCharHook( wxKeyEvent& aEvent )
+{
+    if( aEvent.GetKeyCode() == WXK_TAB )
+    {
+        if( aEvent.ShiftDown() )
+        {
+            m_textSizeCtrl->SetFocusFromKbd();
+        }
+        else
+         if( !m_fields->empty() )
+        {
+            m_grid->SetFocusFromKbd();
+            m_grid->MakeCellVisible( 0, 0 );
+            m_grid->SetGridCursor( 0, 0 );
+        }
+        else
+        {
+            m_textSizeCtrl->SetFocusFromKbd();
+        }
+    }
+    else
+    {
+        aEvent.Skip();
+    }
+}
+
+
 static bool positioningChanged( const SCH_FIELD& a, const SCH_FIELD& b )
 {
     if( a.GetPosition() != b.GetPosition() )

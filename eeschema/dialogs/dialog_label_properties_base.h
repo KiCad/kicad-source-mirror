@@ -98,6 +98,7 @@ class DIALOG_LABEL_PROPERTIES_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void OnValueCharHook( wxKeyEvent& event ) { event.Skip(); }
 		virtual void OnEnterKey( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFormattingHelp( wxHyperlinkEvent& event ) { event.Skip(); }
 		virtual void OnSizeGrid( wxSizeEvent& event ) { event.Skip(); }
