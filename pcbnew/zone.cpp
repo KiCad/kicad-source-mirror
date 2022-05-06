@@ -974,7 +974,8 @@ void ZONE::HatchBorder()
     #define MAXPTS 200      // Usually we store only few values per one hatch line
                             // depending on the complexity of the zone outline
 
-    std::vector<VECTOR2I> pointbuffer;
+    static std::vector<VECTOR2I> pointbuffer;
+    pointbuffer.clear();
     pointbuffer.reserve( MAXPTS + 2 );
 
     for( int a = min_a; a < max_a; a += spacing )
