@@ -69,8 +69,8 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_cbTextPositionMode->Hide();
         break;
 
-        case PCB_DIM_CENTER_T:
-        case PCB_FP_DIM_CENTER_T:
+    case PCB_DIM_CENTER_T:
+    case PCB_FP_DIM_CENTER_T:
         m_sizerLeader->GetStaticBox()->Hide();
         m_sizerFormat->GetStaticBox()->Hide();
         m_sizerText->GetStaticBox()->Hide();
@@ -423,6 +423,9 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
     text.SetTextWidth( m_textWidth.GetValue() );
     text.SetTextHeight( m_textHeight.GetValue() );
     text.SetTextThickness( m_textThickness.GetValue() );
+
+    if( m_fontCtrl->HaveFontSelection() )
+        text.SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(), m_italic->IsChecked() ) );
 
     text.SetBold( m_bold->IsChecked() );
     text.SetItalic( m_italic->IsChecked() );

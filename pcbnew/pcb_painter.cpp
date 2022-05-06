@@ -2120,9 +2120,10 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
 
 void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
 {
-    const COLOR4D& strokeColor = m_pcbSettings.GetColor( aDimension, aLayer );
+    const COLOR4D& color = m_pcbSettings.GetColor( aDimension, aLayer );
 
-    m_gal->SetStrokeColor( strokeColor );
+    m_gal->SetStrokeColor( color );
+    m_gal->SetFillColor( color );
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
 
