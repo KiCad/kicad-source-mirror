@@ -34,6 +34,7 @@
 #include <sch_sheet.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
+#include <string_utils.h>
 #include <symbol_lib_table.h>
 #include <wildcards_and_files_ext.h>
 
@@ -100,17 +101,6 @@ static LIB_SYMBOL* findSymbol( const wxString& aName, SYMBOL_LIBS* aLibs, bool a
 
         symbol = each_lib.FindSymbol( aName );
 
-        // At some point during V5 development, the LIB_ID delimiter character ':' was
-        // replaced by '_' when writing the symbol cache library so we have to test for
-        // the LIB_NICKNAME_LIB_SYMBOL_NAME case.
-        if( symbol == nullptr && each_lib.IsCache() )
-        {
-            wxString name = aName;
-
-            if( name.Replace( wxT( ":" ), wxT( "_" ) ) )
-                symbol = each_lib.FindSymbol( name );
-        }
-
         if( symbol )
             break;
     }
@@ -160,7 +150,7 @@ void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer,
     for( SCH_SYMBOL* eachSymbol : *( aRescuer.GetSymbols() ) )
     {
         symbol_name = eachSymbol->GetLibId().GetLibItemName();
-        search_name = LIB_ID::FixIllegalChars( symbol_name, false );
+        search_name = EscapeString ( symbol_name, CTX_LIBID );
 
         if( last_symbol_name != symbol_name )
         {
@@ -265,7 +255,7 @@ void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer,
     for( SCH_SYMBOL* eachSymbol : *( aRescuer.GetSymbols() ) )
     {
         symbol_name = eachSymbol->GetLibId().GetLibItemName();
-        search_name = LIB_ID::FixIllegalChars( symbol_name, false );
+        search_name = EscapeString ( symbol_name, CTX_LIBID );
 
         if( old_symbol_name != symbol_name )
         {
@@ -388,6 +378,8 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
     LIB_SYMBOL* lib_match = nullptr;
     LIB_ID old_symbol_id;
 
+    wxString escapedSymbolName;
+
     for( SCH_SYMBOL* eachSymbol : *( aRescuer.GetSymbols() ) )
     {
         const LIB_ID& symbol_id = eachSymbol->GetLibId();
@@ -398,10 +390,24 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
             // Search the symbol names candidates only once for this group:
             old_symbol_id = symbol_id;
 
+            escapedSymbolName = EscapeString( symbol_id.Format().wx_str(), CTX_LIBID );
+
             // Get the library symbol from the cache library.  It will be a flattened
             // symbol by default (no inheritance).
-            cache_match = findSymbol( symbol_id.Format().wx_str(), aRescuer.GetPrj()->SchLibs(),
+            cache_match = findSymbol( escapedSymbolName, aRescuer.GetPrj()->SchLibs(),
                                       true );
+
+            // At some point during V5 development, the LIB_ID delimiter character ':' was
+            // replaced by '_' when writing the symbol cache library so we have to test for
+            // the LIB_NICKNAME_LIB_SYMBOL_NAME case.
+            if( !cache_match )
+            {
+                escapedSymbolName = EscapeString( symbol_id.GetLibNickname().wx_str() +
+                                                  wxT( "_" ) + symbol_id.GetLibItemName().wx_str(),
+                                                  CTX_LIBID );
+                cache_match = findSymbol( escapedSymbolName, aRescuer.GetPrj()->SchLibs(),
+                                          true );
+            }
 
             // Get the library symbol from the symbol library table.
             lib_match = SchGetLibSymbol( symbol_id, aRescuer.GetPrj()->SchSymbolLibTable() );
