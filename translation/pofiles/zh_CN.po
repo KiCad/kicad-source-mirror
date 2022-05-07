@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:57-0700\n"
-"PO-Revision-Date: 2022-04-25 17:47+0000\n"
+"PO-Revision-Date: 2022-05-10 18:51+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12.1-dev\n"
+"X-Generator: Weblate 4.12.1\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -5379,7 +5379,7 @@ msgstr "布线"
 
 #: common/layer_id.cpp:158
 msgid "Through vias"
-msgstr "通孔过孔"
+msgstr "通孔"
 
 #: common/layer_id.cpp:159
 msgid "Blind/Buried vias"
@@ -30342,7 +30342,7 @@ msgstr "断言失败"
 
 #: pcbnew/drc/drc_item.cpp:196
 msgid "Copper sliver"
-msgstr "铜条"
+msgstr ""
 
 #: pcbnew/drc/drc_item.cpp:200
 msgid "Solder mask aperture bridges items with different nets"
