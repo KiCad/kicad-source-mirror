@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:55-0700\n"
 "PO-Revision-Date: 2022-05-07 08:28+0000\n"
-"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v6/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -17720,7 +17720,7 @@ msgstr "属性:"
 
 #: gerbview/toolbars_gerber.cpp:155
 msgid "Highlight items with this aperture attribute"
-msgstr "このアパーチャ属性を持つアイテムをハイライト"
+msgstr "このアパーチャー属性を持つアイテムをハイライト"
 
 #: gerbview/toolbars_gerber.cpp:167 gerbview/toolbars_gerber.cpp:169
 msgid "DCode:"
