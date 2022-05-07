@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:55-0700\n"
-"PO-Revision-Date: 2022-05-07 08:31+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2022-05-09 07:14+0000\n"
+"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v6/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -1337,7 +1337,7 @@ msgstr "ユーザー レイヤー Eco2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:184
 msgid "Board Layer for Outline"
-msgstr "使用するレイヤー"
+msgstr "外形用の基板レイヤー"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:186
 msgid ""
@@ -3850,7 +3850,7 @@ msgstr "線, 長さ %s"
 
 #: common/drawing_sheet/ds_draw_item.cpp:482
 msgid "Page Limits"
-msgstr "ページ境界"
+msgstr "ページ制限"
 
 #: common/dsnlexer.cpp:35
 msgid "clipboard"
@@ -5712,7 +5712,7 @@ msgstr "プロット..."
 #: common/tool/actions.cpp:108 pcbnew/dialogs/dialog_plot.cpp:68
 #: pcbnew/dialogs/dialog_plot_base.h:153
 msgid "Plot"
-msgstr "製造ファイル出力"
+msgstr "プロット"
 
 #: common/tool/actions.cpp:114
 msgid "Close the current editor"
@@ -5850,7 +5850,7 @@ msgstr "前のマーカー"
 
 #: common/tool/actions.cpp:249
 msgid "Go to previous marker in Checker window"
-msgstr "チェッカー ウィンドウの前のマーカーに移動"
+msgstr "チェッカー ウィンドウ内の一つ前のマーカーに移動"
 
 #: common/tool/actions.cpp:254
 msgid "Next Marker"
@@ -5858,7 +5858,7 @@ msgstr "次のマーカー"
 
 #: common/tool/actions.cpp:254
 msgid "Go to next marker in Checker window"
-msgstr "チェッカー ウィンドウの次のマーカーに移動"
+msgstr "チェッカー ウィンドウ内の次のマーカーに移動"
 
 #: common/tool/actions.cpp:259
 msgid "Exclude Marker"
@@ -10683,7 +10683,7 @@ msgstr "時間ステップ:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:870
 #: eeschema/dialogs/dialog_spice_model_base.cpp:881
 msgid "seconds"
-msgstr "sec"
+msgstr "秒"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:369
 msgid "Final time:"
@@ -11059,7 +11059,7 @@ msgstr "時間:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:634
 msgid "second"
-msgstr "sec"
+msgstr "秒"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:667
 msgid "Piece-wise Linear"
@@ -11723,7 +11723,7 @@ msgstr "選択された子アイテムを描画"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:50
 msgid "Fill selected shapes"
-msgstr "選択された輪郭を塗り潰す"
+msgstr "選択された図形を塗りつぶし"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:59
 msgid "&Highlight thickness:"
@@ -14636,7 +14636,7 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"ロードされた回路図にプロジェクト ライブラリー "
+"選択した回路図にプロジェクト ライブラリー "
 "テーブルから失われたライブラリー名があります。  "
 "これはロードされた回路図でシンボル ライブラリーのリンクを壊す原因となります。"
 "\n"
@@ -21371,7 +21371,7 @@ msgstr "32"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:37
 msgid "Impedance controlled"
-msgstr "インピーダンス コントロール"
+msgstr "インピーダンス制御"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:38
 msgid ""
@@ -34439,7 +34439,7 @@ msgstr "引出線を追加"
 
 #: pcbnew/tools/pcb_actions.cpp:144
 msgid "Add a leader dimension"
-msgstr "引出線を追加"
+msgstr "引出寸法線を追加"
 
 #: pcbnew/tools/pcb_actions.cpp:155
 msgid "Add Filled Zone"
