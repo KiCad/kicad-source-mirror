@@ -503,11 +503,6 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
 PANEL_FP_LIB_TABLE::~PANEL_FP_LIB_TABLE()
 {
-    // When the dialog is closed it will hide the current notebook page first, which will
-    // in turn select the other one.  We then end up saving its index as the "current page".
-    // So flip them back again:
-    m_pageNdx = m_pageNdx == 1 ? 0 : 1;
-
     // Delete the GRID_TRICKS.
     // Any additional event handlers should be popped before the window is deleted.
     m_global_grid->PopEventHandler( true );
