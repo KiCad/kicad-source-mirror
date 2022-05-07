@@ -5,20 +5,18 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:55-0700\n"
-"PO-Revision-Date: 2021-12-09 16:57+0000\n"
-"Last-Translator: Adrian Scripcă <benishor@gmail.com>\n"
-"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ro/>\n"
+"PO-Revision-Date: 2022-05-09 07:15+0000\n"
+"Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
+"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/v6/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.12.1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#, fuzzy
 msgid "All Files"
 msgstr "Toate fișierele"
 
@@ -62,19 +60,17 @@ msgid "Simplifying copper layers polygons"
 msgstr "Simplificarea poligoanelor straturilor de cupru"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:760
-#, fuzzy
 msgid "Simplifying polygons on F_Cu"
-msgstr "Simplificarea poligoanelor straturilor de cupru"
+msgstr "Simplificarea poligoanelor pe F_Cu"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:771
-#, fuzzy
 msgid "Simplifying polygons on B_Cu"
-msgstr "Simplificarea poligoanelor straturilor de cupru"
+msgstr "Simplificarea poligoanelor pe B_Cu"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:801
-#, fuzzy, c-format
+#, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Simplificarea poligoanelor straturilor de cupru"
+msgstr "Simplificarea %d straturi de cupru"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:840
 msgid "Simplify holes contours"
@@ -85,18 +81,17 @@ msgid "Build Tech layers"
 msgstr "Construiți straturi tehnice"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:903
-#, fuzzy, c-format
+#, c-format
 msgid "Build Tech layer %d"
-msgstr "Construiți straturi tehnice"
+msgstr "Construiți stratul Tehnic %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1048
 msgid "Build BVH for holes and vias"
 msgstr "Construiți BVH pentru găuri și via-uri"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:411
-#, fuzzy
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr "Versiunea dvs. OpenGL nu este acceptată. Minimul necesar este 1.5"
+msgstr "Versiunea dvs. OpenGL nu este acceptată. Minimul necesar este 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:539
 #, c-format
@@ -127,9 +122,9 @@ msgid "Load OpenGL: layers"
 msgstr "Încărcați OpenGL: straturi"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:576
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %d"
-msgstr "Încărcați OpenGL: straturi"
+msgstr "Încărcați strat OpenGL%d"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:670
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:790
@@ -464,9 +459,8 @@ msgid "Use all material properties from each 3D model file"
 msgstr "Utilizați toate proprietățile materialelor din fiecare fișier model 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
-#, fuzzy
 msgid "Render Solid Colors"
-msgstr "Randare umbrelor"
+msgstr "Redarea culorilor solide"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from model 3D model file"
@@ -625,9 +619,8 @@ msgid "Use board stackup colors"
 msgstr "constrângeri de configurare a plăcii"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:69
-#, fuzzy
 msgid "Use colors:"
-msgstr "Lipiți culoarea"
+msgstr "Folosiți culori:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:77
 msgid "Silkscreen top:"
@@ -1470,14 +1463,14 @@ msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr "Imposibil de făcut calea \"%s\" absolută în ceea ce privește \"%s\"."
 
 #: common/common.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' created."
-msgstr "Directorul de ieșire \"%s\" a fost creat.\n"
+msgstr "Director de ieșire '%s' creat."
 
 #: common/common.cpp:336
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output directory '%s'."
-msgstr "Nu se poate crea directorul de ieșire \"%s\".\n"
+msgstr "Nu se poate crea directorul de ieșire '%s'."
 
 #: common/common.cpp:608
 msgid "This operating system is not supported by KiCad and its dependencies."
@@ -1914,9 +1907,9 @@ msgstr ""
 "variabila (variabilele) de mediu extern din sistemul dvs."
 
 #: common/dialogs/dialog_configure_paths.cpp:395
-#, fuzzy, c-format
+#, c-format
 msgid "The name %s is reserved, and cannot be used."
-msgstr "Numele %s este rezervat și nu poate fi folosit aici"
+msgstr "Numele %s este rezervat și nu poate fi utilizat."
 
 #: common/dialogs/dialog_configure_paths.cpp:551
 msgid "File Browser..."
@@ -3018,7 +3011,7 @@ msgstr "Selectați vizualizatorul PDF preferat"
 #: common/dialogs/panel_common_settings_base.cpp:21
 #, fuzzy
 msgid "Antialiasing"
-msgstr "Anti-dedublare:"
+msgstr "Anti-dedublare"
 
 #: common/dialogs/panel_common_settings_base.cpp:30
 msgid "Accelerated graphics:"
@@ -3500,7 +3493,7 @@ msgstr "Resetați trackpad-ul la valorile predefinite"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:715 pcbnew/zone.cpp:625
 #: pcbnew/zone.cpp:1446
 msgid "Solid"
-msgstr "Solid"
+msgstr "Masiv"
 
 #: common/dialogs/panel_setup_netclasses.cpp:91 common/eda_shape.cpp:1640
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:318
@@ -5627,9 +5620,8 @@ msgstr "Extragerea fișierului \"%s\"\n"
 
 #: common/project/project_archiver.cpp:95 kicad/pcm/pcm_task_manager.cpp:187
 #: kicad/pcm/pcm_task_manager.cpp:232
-#, fuzzy
 msgid "Error extracting file!"
-msgstr "Eroare la extragerea fișierului!\n"
+msgstr "Eroare la extragerea fișierului!"
 
 #: common/project/project_archiver.cpp:159 eeschema/dialogs/dialog_erc.cpp:782
 #: eeschema/dialogs/dialog_plot_schematic.cpp:517
@@ -7428,12 +7420,12 @@ msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d duplicate ale mărcilor temporale au fost găsite și înlocuite."
 
 #: eeschema/annotate.cpp:289
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s (unit %s) from %s to %s."
 msgstr "Actualizat %s (unitatea %s) de la %s la %s"
 
 #: eeschema/annotate.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s from %s to %s."
 msgstr "Actualizat %s de la %s la %s"
 
@@ -12870,30 +12862,31 @@ msgid ""
 msgstr ""
 
 #: eeschema/files-io.cpp:1436
-#, fuzzy
 msgid "The following automatically saved file(s) could not be restored\n"
-msgstr "Fișierul de salvare automată \"%s\" nu a putut fi eliminat!"
+msgstr "Următoarele fișiere salvate automat nu au putut fi restaurate\n"
 
 #: eeschema/files-io.cpp:1441
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr ""
 
 #: eeschema/files-io.cpp:1463
-#, fuzzy
 msgid "The following automatically saved file(s) could not be removed\n"
-msgstr "Fișierul de salvare automată \"%s\" nu a putut fi eliminat!"
+msgstr "Următoarele fișiere salvate automat nu au putut fi eliminate\n"
 
 #: eeschema/files-io.cpp:1468
 msgid "Manual removal will be required for the file(s) above."
 msgstr ""
 
 #: eeschema/files-io.cpp:1479
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The automatic save master file\n"
 "'%s'\n"
 "could not be deleted."
-msgstr "Fișierul de salvare automată \"%s\" nu a putut fi eliminat!"
+msgstr ""
+"Fișierul principal de salvare automată\n"
+"'%s'\n"
+"nu a putut fi șters."
 
 #: eeschema/files-io.cpp:1487
 msgid ""
@@ -18032,11 +18025,13 @@ msgid "Unzip Project"
 msgstr ""
 
 #: kicad/files-io.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Open '%s'\n"
-msgstr "Se așteaptă ' %s'"
+msgstr ""
+"\n"
+"Deschideți '%s'\n"
 
 #: kicad/files-io.cpp:76
 msgid "Target Directory"
@@ -18351,14 +18346,12 @@ msgid "Metadata"
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:215
-#, fuzzy
 msgid "Package identifier: "
-msgstr "Identificator nou al bibliotecii:"
+msgstr "Identificatorul pachetului: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:216
-#, fuzzy
 msgid "License: "
-msgstr "Licență"
+msgstr "Licență: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:230
 msgid "Tags: "
@@ -18523,9 +18516,8 @@ msgid "Local file"
 msgstr "Fișiere executabile ("
 
 #: kicad/pcm/pcm_task_manager.cpp:60
-#, fuzzy
 msgid "Unable to create download directory!"
-msgstr "Nu s-a reușit crearea fișierului temporar \"%s\"."
+msgstr "Nu s-a reușit crearea directorul de descărcare!"
 
 #: kicad/pcm/pcm_task_manager.cpp:87
 #, c-format
@@ -21165,7 +21157,7 @@ msgstr "32"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:37
 msgid "Impedance controlled"
-msgstr ""
+msgstr "Impedanță controlată"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:38
 msgid ""
@@ -28624,7 +28616,7 @@ msgstr "Lățimea traseului"
 
 #: pcbnew/drc/drc_engine.cpp:891
 msgid "annular width"
-msgstr ""
+msgstr "lățimea inelară"
 
 #: pcbnew/drc/drc_engine.cpp:892
 #, fuzzy
@@ -30788,7 +30780,7 @@ msgstr ""
 #: pcbnew/pad.cpp:1211
 #, fuzzy, c-format
 msgid "Pad %s %s of %s on %s"
-msgstr "Actualizat %s de la %s la %s"
+msgstr "Pad %s %s din %s pe %s."
 
 #: pcbnew/pad.cpp:1225
 #, fuzzy, c-format
@@ -35998,7 +35990,7 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "pcbnew"
-msgstr ""
+msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
