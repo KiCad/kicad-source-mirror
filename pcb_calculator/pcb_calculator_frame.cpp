@@ -46,11 +46,11 @@
 
 PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     KIWAY_PLAYER( aParent, wxID_ANY,
-                 _( "PCB Calculator"  ), // Window title
+                 _( "Calculator Tools"  ), // Window title
                  wxDefaultPosition,
                  wxSize( 646,361 ), // Default size
                  wxDEFAULT_FRAME_STYLE | wxRESIZE_BORDER | wxFULL_REPAINT_ON_RESIZE | wxTAB_TRAVERSAL,
-                 wxT( "pcb_calculator" ) ), // Window name
+                 wxT( "calculator_tools" ) ), // Window name
     m_lastNotebookPage( -1 )
 {
     SHAPE_POLY_SET dummy;   // A ugly trick to force the linker to include
