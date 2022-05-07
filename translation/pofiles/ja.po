@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:57-0700\n"
-"PO-Revision-Date: 2022-05-07 10:10+0000\n"
+"PO-Revision-Date: 2022-05-10 18:50+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -3212,18 +3212,17 @@ msgid ""
 "schematic or PCB are not shared in this process."
 msgstr ""
 "KiCadは、クラッシュや特殊なイベントのデータを匿名で開発者に報告し、ユーザー全"
-"体の重要なバグをより効果的に特定したり、改良のために機能的な分析の手がかりに"
-"します\n"
-"\n"
+"体の重要なバグをより効果的に特定したり、"
+"改良のために機能的な分析の手がかりにします\n"
 "\n"
 "同じKiCadインストールからの自動レポートをリンクするために、完全にランダムな一"
 "意の識別子が生成され、それはクラッシュレポートの目的にのみ使用されます。IPア"
 "ドレスを含む個人を特定できる情報（PII）はこの識別子に保存されたり、関連付けた"
 "りしません。このIDはいつでもリセットすることができます。\n"
 "\n"
-"お客様が自発的に参加することを選択した場合、KiCadはクラッシュやイベントが発生"
-"した時に自動的にレポートを送信するように処理します。回路図やPCBのようなあなた"
-"が作成したファイルは、この過程で共有されることはありません。"
+"自発的に参加することを選択した場合、KiCadはクラッシュやイベントが発生した時に"
+"自動的にレポートを送信するように処理します。回路図やPCBのようなあなたが作成し"
+"たファイルは、この過程で共有されることはありません。"
 
 #: common/dialogs/panel_data_collection_base.cpp:27
 msgid "I agree to provide anonymous reports"
@@ -5639,8 +5638,8 @@ msgstr ""
 "KiCadはクラッシュや特別なイベントのデータを匿名で開発者に報告することができ、"
 "より効果的にユーザーベースの重要なバグを特定することで改善のために機能的に分"
 "析するのに役立ちます。\n"
-"もしお客様が自主的に参加される場合、KiCadはクラッシュやイベントが発生した時に"
-"自動的に報告書を送信します。\n"
+"自主的に参加されることを選択した場合、KiCadはクラッシュやイベントが発生した時"
+"に自動的に報告書を送信します。\n"
 "回路図やPCBのようなあなたがデザインしたファイルはこの過程で共有されません。"
 
 #: common/pgm_base.cpp:346
@@ -9519,9 +9518,8 @@ msgstr "名前のテキスト サイズ"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:100
-#, fuzzy
 msgid "De Morgan"
-msgstr "ド・モルガン標準"
+msgstr "ド・モルガン"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:777
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:55
