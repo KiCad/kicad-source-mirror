@@ -228,7 +228,12 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
     if( m_activeTextEntry )
     {
         // show control characters in a human-readable format
-        m_activeTextEntry->SetValue( UnescapeString( m_currentLabel->GetText() ) );
+        wxString text = UnescapeString( m_currentLabel->GetText() );
+
+        // show text variable cross-references in a human-readable format
+        text = m_currentLabel->Schematic()->ConvertKIIDsToRefs( text );
+
+        m_activeTextEntry->SetValue( text );
     }
 
     if( m_currentLabel->Type() == SCH_GLOBAL_LABEL_T || m_currentLabel->Type() == SCH_LABEL_T )
@@ -402,6 +407,9 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
     {
         // labels need escaping
         text = EscapeString( m_activeTextEntry->GetValue(), CTX_NETNAME );
+
+        // convert any text variable cross-references to their UUIDs
+        text = m_currentLabel->Schematic()->ConvertRefsToKIIDs( text );
 
 #ifdef __WXMAC__
         // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting

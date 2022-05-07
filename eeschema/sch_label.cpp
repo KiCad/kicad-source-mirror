@@ -447,6 +447,12 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 
 bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
 {
+    if( token->Contains( ':' ) )
+    {
+        if( Schematic()->ResolveCrossReference( token, aDepth ) )
+            return true;
+    }
+
     if( ( Type() == SCH_GLOBAL_LABEL_T || Type() == SCH_HIER_LABEL_T || Type() == SCH_SHEET_PIN_T )
          && token->IsSameAs( wxT( "CONNECTION_TYPE" ) ) )
     {
