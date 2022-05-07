@@ -327,10 +327,6 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_diff_pair_uncoupled:       c.m_Type = DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT;   break;
     case T_physical_clearance:        c.m_Type = PHYSICAL_CLEARANCE_CONSTRAINT;        break;
     case T_physical_hole_clearance:   c.m_Type = PHYSICAL_HOLE_CLEARANCE_CONSTRAINT;   break;
-    // legacy tokens:
-    case T_hole:                      c.m_Type = HOLE_SIZE_CONSTRAINT;                 break;
-    case T_mechanical_clearance:      c.m_Type = PHYSICAL_CLEARANCE_CONSTRAINT;        break;
-    case T_mechanical_hole_clearance: c.m_Type = PHYSICAL_HOLE_CLEARANCE_CONSTRAINT;   break;
     default:
         msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ), FromUTF8(),
                     wxT( "assertion, clearance, hole_clearance, edge_clearance, "
