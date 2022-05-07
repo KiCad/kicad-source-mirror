@@ -619,21 +619,18 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
                         return true;
                 }
 
-                if( Type() == SCH_TEXT_T )
+                if( token->Contains( ':' ) )
                 {
-                    if( token->Contains( ':' ) )
-                    {
-                        if( Schematic()->ResolveCrossReference( token, aDepth ) )
-                            return true;
-                    }
-                    else
-                    {
-                        SCHEMATIC* schematic = Schematic();
-                        SCH_SHEET* sheet = schematic ? schematic->CurrentSheet().Last() : nullptr;
+                    if( Schematic()->ResolveCrossReference( token, aDepth ) )
+                        return true;
+                }
+                else
+                {
+                    SCHEMATIC* schematic = Schematic();
+                    SCH_SHEET* sheet = schematic ? schematic->CurrentSheet().Last() : nullptr;
 
-                        if( sheet && sheet->ResolveTextVar( token, aDepth + 1 ) )
-                            return true;
-                    }
+                    if( sheet && sheet->ResolveTextVar( token, aDepth + 1 ) )
+                        return true;
                 }
 
                 return false;

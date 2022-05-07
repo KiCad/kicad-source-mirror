@@ -176,17 +176,22 @@ bool DIALOG_TEXT_AND_LABEL_PROPERTIES::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
+    SCHEMATIC& schematic = m_Parent->Schematic();
+
     if( m_CurrentText->Type() == SCH_TEXT_T )
     {
-        SCHEMATIC& schematic = m_Parent->Schematic();
-
         // show text variable cross-references in a human-readable format
         m_valueMultiLine->SetValue( schematic.ConvertKIIDsToRefs( m_CurrentText->GetText() ) );
     }
     else
     {
         // show control characters in a human-readable format
-        m_activeTextEntry->SetValue( UnescapeString( m_CurrentText->GetText() ) );
+        wxString text = UnescapeString( m_CurrentText->GetText() );
+
+        // show text variable cross-references in a human-readable format
+        text = schematic.ConvertKIIDsToRefs( text );
+
+        m_activeTextEntry->SetValue( text );
     }
 
     if( m_valueCombo->IsShown() )
@@ -315,7 +320,8 @@ bool DIALOG_TEXT_AND_LABEL_PROPERTIES::TransferDataFromWindow()
     if( !m_textSize.Validate( 0.01, 1000.0, EDA_UNITS::MILLIMETRES ) )
         return false;
 
-    wxString text;
+    SCHEMATIC& schematic = m_Parent->Schematic();
+    wxString   text;
 
     /* save old text in undo list if not already in edit */
     if( m_CurrentText->GetEditFlags() == 0 )
@@ -325,14 +331,16 @@ bool DIALOG_TEXT_AND_LABEL_PROPERTIES::TransferDataFromWindow()
 
     if( m_CurrentText->Type() == SCH_TEXT_T )
     {
-        // convert any text variable cross-references to their UUIDs
-        text = m_Parent->Schematic().ConvertRefsToKIIDs( m_valueMultiLine->GetValue() );
+        text = m_valueMultiLine->GetValue();
     }
     else
     {
         // labels need escaping
         text = EscapeString( m_activeTextEntry->GetValue(), CTX_NETNAME );
     }
+
+    // convert any text variable cross-references to their UUIDs
+    text = schematic.ConvertRefsToKIIDs( text );
 
     if( !text.IsEmpty() )
     {
