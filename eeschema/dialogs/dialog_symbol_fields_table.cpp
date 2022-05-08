@@ -37,6 +37,7 @@
 #include <sch_reference_list.h>
 #include <schematic.h>
 #include <tools/sch_editor_control.h>
+#include <kiplatform/ui.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/wx_grid.h>
 #include <wx/grid.h>
@@ -1179,8 +1180,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableItemContextMenu( wxGridEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnSizeFieldList( wxSizeEvent& event )
 {
-    int nameColWidth = event.GetSize().GetX() - m_showColWidth - m_groupByColWidth
-                                                - wxSystemSettings::GetMetric( wxSYS_VSCROLL_X );
+    int nameColWidth = KIPLATFORM::UI::GetUnobscuredSize( m_fieldsCtrl ).x - m_showColWidth
+                       - m_groupByColWidth;
 
     // GTK loses its head and messes these up when resizing the splitter bar:
     m_fieldsCtrl->GetColumn( SHOW_FIELD_COLUMN )->SetWidth( m_showColWidth );
@@ -1188,6 +1189,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSizeFieldList( wxSizeEvent& event )
 
     m_fieldsCtrl->GetColumn( CANONICAL_NAME_COLUMN )->SetHidden( true );
     m_fieldsCtrl->GetColumn( DISPLAY_NAME_COLUMN )->SetWidth( nameColWidth );
+
+    m_fieldsCtrl->Refresh(); // To refresh checkboxes on Windows.
 
     event.Skip();
 }
