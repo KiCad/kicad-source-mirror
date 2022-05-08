@@ -335,7 +335,12 @@ void ACTION_TOOLBAR::doSelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aA
     // Update the item information
     item->SetShortHelp( aAction.GetDescription() );
     item->SetBitmap( KiScaledBitmap( aAction.GetIcon(), GetParent() ) );
+#if wxCHECK_VERSION( 3, 1, 6 )
+    item->SetDisabledBitmap(
+            MakeDisabledBitmap( item->GetBitmapBundle().GetBitmapFor( GetParent() ) ) );
+#else
     item->SetDisabledBitmap( MakeDisabledBitmap( item->GetBitmap() ) );
+#endif
 
     // Register a new handler with the new UI conditions
     if( m_toolManager )
