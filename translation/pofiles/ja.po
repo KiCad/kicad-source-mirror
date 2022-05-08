@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:55-0700\n"
-"PO-Revision-Date: 2022-05-09 07:14+0000\n"
-"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
+"PO-Revision-Date: 2022-05-09 07:15+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v6/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -1489,7 +1489,7 @@ msgstr "警告"
 
 #: common/confirm.cpp:160 common/confirm.cpp:166
 msgid "File Open Error"
-msgstr "ファイルのオープンでエラー"
+msgstr "ファイルオープンエラー"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
