@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -293,12 +293,17 @@ void GRID_TRICKS::showPopupMenu( wxMenu& menu )
         menu.Enable( GRIDTRICKS_ID_COPY, false );
         menu.Enable( GRIDTRICKS_ID_DELETE, false );
     }
+    else if( !m_grid->IsEditable() )
+    {
+        menu.Enable( GRIDTRICKS_ID_CUT,  false );
+        menu.Enable( GRIDTRICKS_ID_DELETE, false );
+    }
 
     menu.Enable( GRIDTRICKS_ID_PASTE, false );
 
     wxLogNull doNotLog; // disable logging of failed clipboard actions
 
-    if( wxTheClipboard->Open() )
+    if( m_grid->IsEditable() && wxTheClipboard->Open() )
     {
         if( wxTheClipboard->IsSupported( wxDF_TEXT )
             || wxTheClipboard->IsSupported( wxDF_UNICODETEXT ) )
@@ -427,7 +432,7 @@ void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
     }
 
     // space-bar toggling of checkboxes
-    if( ev.GetKeyCode() == ' ' )
+    if( m_grid->IsEditable() && ev.GetKeyCode() == ' ' )
     {
         bool retVal = false;
 
@@ -501,9 +506,6 @@ void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
                 }
             }
         }
-        else
-        {
-        }
 
         // Return if there were any cells toggled
         if( retVal )
@@ -569,7 +571,7 @@ void GRID_TRICKS::paste_clipboard()
 {
     wxLogNull doNotLog; // disable logging of failed clipboard actions
 
-    if( wxTheClipboard->Open() )
+    if( m_grid->IsEditable() && wxTheClipboard->Open() )
     {
         if( wxTheClipboard->IsSupported( wxDF_TEXT )
             || wxTheClipboard->IsSupported( wxDF_UNICODETEXT ) )
@@ -708,7 +710,7 @@ void GRID_TRICKS::cutcopy( bool doCopy, bool doDelete )
             if( col < m_sel_col_start + m_sel_col_count - 1 )   // that was not last column
                 txt += COL_SEP;
 
-            if( doDelete )
+            if( doDelete && m_grid->IsEditable() )
             {
                 if( tbl->CanSetValueAs( row, col, wxGRID_VALUE_STRING ) )
                     tbl->SetValue( row, col, wxEmptyString );
