@@ -885,6 +885,8 @@ void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
                 return false;
             } );
 
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
+
     RecreateToolbars();
 
     // The 3D viewer isn't in the Kiway, so send its update manually
