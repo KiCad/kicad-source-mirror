@@ -90,9 +90,7 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
     }
     else
     {
-        // TODO: Plain-language descriptive noun function in EDA_ITEM classes
-        // TODO: Need to override this in PCB editor vs. schematic
-        m_caption->SetLabel( aSelection.Front()->GetClass() );
+        m_caption->SetLabel( aSelection.Front()->GetTypeDesc() );
     }
 
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();

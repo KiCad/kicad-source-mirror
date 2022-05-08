@@ -351,6 +351,12 @@ public:
     virtual wxString GetClass() const = 0;
 
     /**
+     * Return a translated description of the type for this EDA_ITEM for display in user facing
+     * messages.
+     */
+    wxString GetTypeDesc();
+
+    /**
      * Return the text to display to be used in the selection clarification context menu
      * when multiple items are found at the current cursor position.
      *

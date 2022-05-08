@@ -303,6 +303,15 @@ std::ostream& EDA_ITEM::NestedSpace( int nestLevel, std::ostream& os )
 #endif
 
 
+wxString EDA_ITEM::GetTypeDesc()
+{
+    //@see EDA_ITEM_DESC for definition of ENUM_MAP<KICAD_T>
+    wxString typeDescr = ENUM_MAP<KICAD_T>::Instance().ToString( Type() );
+
+    return wxGetTranslation( typeDescr );
+}
+
+
 static struct EDA_ITEM_DESC
 {
     EDA_ITEM_DESC()
