@@ -36,6 +36,9 @@ public:
 
     std::vector<wxString> GenerateSpiceCurrentNames( const wxString& aRefName ) const override;
 
+    bool SetParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
+                                SIM_VALUE_GRAMMAR::NOTATION aNotation ) override;
+
 private:
     std::vector<wxString> getPinNames() const override;
 

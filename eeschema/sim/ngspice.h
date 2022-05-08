@@ -52,9 +52,9 @@ class NGSPICE : public SPICE_SIMULATOR
 public:
     DEFINE_ENUM_CLASS_WITH_ITERATOR( MODEL_TYPE,
         NONE,
-        RESISTOR,
-        CAPACITOR,
-        INDUCTOR,
+        //RESISTOR,
+        //CAPACITOR,
+        //INDUCTOR,
         LTRA,
         TRANLINE,
         URC,

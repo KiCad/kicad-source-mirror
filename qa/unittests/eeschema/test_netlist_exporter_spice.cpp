@@ -109,4 +109,10 @@ BOOST_AUTO_TEST_CASE( NpnCeAmp )
 }
 
 
+BOOST_AUTO_TEST_CASE( Passives )
+{
+    TestNetlist( "passives" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

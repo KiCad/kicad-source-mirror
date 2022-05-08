@@ -29,11 +29,11 @@
 SIM_MODEL_BEHAVIORAL::SIM_MODEL_BEHAVIORAL( TYPE aType )
     : SIM_MODEL( aType )
 {
-    static PARAM::INFO resistor  = makeParamInfo( "r", "Expression for resistance",  "ohm" );
-    static PARAM::INFO capacitor = makeParamInfo( "c", "Expression for capacitance", "F"   );
-    static PARAM::INFO inductor  = makeParamInfo( "l", "Expression for inductance",  "H"   );
-    static PARAM::INFO vsource   = makeParamInfo( "v", "Expression for voltage",     "V"   );
-    static PARAM::INFO isource   = makeParamInfo( "i", "Expression for current",     "A"   );
+    static PARAM::INFO resistor  = makeParams( "r", "Expression for resistance",  "ohm" );
+    static PARAM::INFO capacitor = makeParams( "c", "Expression for capacitance", "F"   );
+    static PARAM::INFO inductor  = makeParams( "l", "Expression for inductance",  "H"   );
+    static PARAM::INFO vsource   = makeParams( "v", "Expression for voltage",     "V"   );
+    static PARAM::INFO isource   = makeParams( "i", "Expression for current",     "A"   );
 
     switch( aType )
     {
@@ -84,16 +84,16 @@ wxString SIM_MODEL_BEHAVIORAL::GenerateSpiceItemLine( const wxString& aRefName,
 }
 
 
-SIM_MODEL::PARAM::INFO SIM_MODEL_BEHAVIORAL::makeParamInfo( wxString name, wxString description,
-                                                            wxString unit )
+SIM_MODEL::PARAM::INFO SIM_MODEL_BEHAVIORAL::makeParams( wxString aName, wxString aDescription,
+                                                         wxString aUnit )
 {
-    SIM_MODEL::PARAM::INFO paramInfo = {};
+    PARAM::INFO paramInfo = {};
 
-    paramInfo.name = name;
+    paramInfo.name = aName;
     paramInfo.type = SIM_VALUE::TYPE::FLOAT;
-    paramInfo.unit = unit;
-    paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.description = description;
+    paramInfo.unit = aUnit;
+    paramInfo.category = PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.description = aDescription;
 
     return paramInfo;
 }

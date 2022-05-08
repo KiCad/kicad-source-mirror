@@ -123,7 +123,7 @@ std::vector<wxString> SIM_MODEL_SUBCKT::GenerateSpiceCurrentNames( const wxStrin
 {
     std::vector<wxString> currentNames;
 
-    for( int i = 0; i < GetPinCount(); ++i )
+    for( unsigned i = 0; i < GetPinCount(); ++i )
         currentNames.push_back( wxString::Format( "I(%s:%s)",
                                                   GenerateSpiceItemName( aRefName ),
                                                   GetPin( i ).name ) );
@@ -137,10 +137,10 @@ void SIM_MODEL_SUBCKT::SetBaseModel( const SIM_MODEL& aBaseModel )
     SIM_MODEL::SetBaseModel( aBaseModel );
 
     // Pins aren't constant for subcircuits, so they need to be copied from the base model.
-    for( int i = 0; i < GetBaseModel()->GetPinCount(); ++i )
+    for( unsigned i = 0; i < GetBaseModel()->GetPinCount(); ++i )
         AddPin( GetBaseModel()->GetPin( i ) );
 
     // Same for parameters.
-    for( int i = 0; i < GetBaseModel()->GetParamCount(); ++i )
+    for( unsigned i = 0; i < GetBaseModel()->GetParamCount(); ++i )
         AddParam( GetBaseModel()->GetParam( i ).info );
 }

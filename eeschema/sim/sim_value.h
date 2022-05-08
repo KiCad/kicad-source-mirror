@@ -154,10 +154,10 @@ namespace SIM_VALUE_GRAMMAR
               TAO_PEGTL_ISTRING( "p" ),
               TAO_PEGTL_ISTRING( "n" ),
               TAO_PEGTL_ISTRING( "u" ),
+              TAO_PEGTL_ISTRING( "Meg" ), // "Meg" must be before "m".
               TAO_PEGTL_ISTRING( "m" ),
               //TAO_PEGTL_ISTRING( "mil" ),
               TAO_PEGTL_ISTRING( "k" ),
-              TAO_PEGTL_ISTRING( "Meg" ),
               TAO_PEGTL_ISTRING( "G" ),
               TAO_PEGTL_ISTRING( "T" )> {};
 
@@ -165,7 +165,7 @@ namespace SIM_VALUE_GRAMMAR
     template <SIM_VALUE::TYPE ValueType, NOTATION Notation>
     struct number : seq<significand<ValueType>,
                         opt<exponentWithPrefix>,
-                        opt<metricSuffix<ValueType, Notation>>> {};
+                        sor<metricSuffix<ValueType, Notation>, not_at<alnum>>> {};
 
     template <SIM_VALUE::TYPE ValueType, NOTATION Notation>
     struct numberGrammar : must<opt<number<ValueType, Notation>>, eof> {};

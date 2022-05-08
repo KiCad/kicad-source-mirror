@@ -22,25 +22,56 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SIM_MODEL_RAWSPICE_H
-#define SIM_MODEL_RAWSPICE_H
+#ifndef SIM_MODEL_SPICE_H
+#define SIM_MODEL_SPICE_H
 
 #include <sim/sim_model.h>
 
 
-class SIM_MODEL_RAWSPICE : public SIM_MODEL
+class SIM_MODEL_SPICE : public SIM_MODEL
 {
 public:
-    SIM_MODEL_RAWSPICE( TYPE aType );
+    DEFINE_ENUM_CLASS_WITH_ITERATOR( SPICE_PARAM,
+        TYPE,
+        MODEL,
+        LIB
+    )
+
+    static constexpr auto LEGACY_TYPE_FIELD = "Spice_Primitive";
+    static constexpr auto LEGACY_PINS_FIELD = "Spice_Node_Sequence";
+    static constexpr auto LEGACY_MODEL_FIELD = "Spice_Model";
+    static constexpr auto LEGACY_ENABLED_FIELD = "Spice_Netlist_Enabled";
+    static constexpr auto LEGACY_LIB_FIELD = "Spice_Lib_File";
+
+
+    SIM_MODEL_SPICE( TYPE aType );
 
     //bool ReadSpiceCode( const std::string& aSpiceCode ) override;
+    void ReadDataSchFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields ) override;
+    void ReadDataLibFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields ) override;
 
-private:
-    bool setParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
+    void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
+    void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
+
+
+    wxString GenerateSpiceModelLine( const wxString& aModelName ) const override;
+    wxString GenerateSpiceItemName( const wxString& aRefName ) const override;
+    wxString GenerateSpiceItemLine( const wxString& aRefName,
+                                    const wxString& aModelName,
+                                    const std::vector<wxString>& aPinNetNames ) const override;
+
+protected:
+    bool SetParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
                                 SIM_VALUE_GRAMMAR::NOTATION aNotation
                                     = SIM_VALUE_GRAMMAR::NOTATION::SPICE ) override;
+
+private:
+    std::vector<PARAM::INFO> makeParamInfos();
+
+    template <typename T>
+    void readLegacyDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
 
     std::vector<std::unique_ptr<PARAM::INFO>> m_paramInfos;
 };
 
-#endif // SIM_MODEL_RAWSPICE_H
+#endif // SIM_MODEL_SPICE_H

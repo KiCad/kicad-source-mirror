@@ -26,6 +26,7 @@
 #include "netlist_exporter_spice.h"
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
+#include <sim/sim_model_spice.h>
 #include <common.h>
 #include <confirm.h>
 #include <pgm_base.h>
@@ -175,7 +176,7 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives()
             else
                 continue;
 
-            tao::pegtl::string_input<> in( text.ToStdString()+"\n", "from_content" );
+            tao::pegtl::string_input<> in( text.ToStdString() + "\n", "from_content" );
             std::unique_ptr<tao::pegtl::parse_tree::node> root;
 
             try
@@ -209,11 +210,19 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives()
 void NETLIST_EXPORTER_SPICE::readLibraryField( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
 {
     SCH_FIELD* field = aSymbol.FindField( SIM_LIBRARY::LIBRARY_FIELD );
+    wxString path;
 
-    if( !field )
+    if( field )
+        path = field->GetShownText();
+    else if( auto model = dynamic_cast<const SIM_MODEL_SPICE*>( aItem.model.get() ) )
+    {
+        // Special case for legacy models.
+        int libParamIndex = static_cast<int>( SIM_MODEL_SPICE::SPICE_PARAM::LIB );
+        path = model->GetParam( libParamIndex ).value->ToString();
+    }
+    
+    if( path.IsEmpty() )
         return;
-
-    wxString path = field->GetShownText();
 
     if( auto library = SIM_LIBRARY::Create( m_schematic->Prj().AbsolutePath( path ) ) )
         m_libraries.try_emplace( path, std::move( library ) );
@@ -239,7 +248,7 @@ void NETLIST_EXPORTER_SPICE::readNameField( SCH_SYMBOL& aSymbol, SPICE_ITEM& aIt
         if( baseModel )
         {
             aItem.model = SIM_MODEL::Create( *baseModel,
-                                             static_cast<int>( m_sortedSymbolPinList.size() ),
+                                             m_sortedSymbolPinList.size(),
                                              aSymbol.GetFields() );
             aItem.modelName = modelName;
             return;

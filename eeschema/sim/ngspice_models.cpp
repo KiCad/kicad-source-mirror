@@ -99,12 +99,12 @@ const NGSPICE::MODEL_INFO& NGSPICE::ModelInfo( MODEL_TYPE aType )
         static MODEL_INFO model = {};
         return model;
     }
-    case MODEL_TYPE::RESISTOR:
+    /*case MODEL_TYPE::RESISTOR:
     {
         static MODEL_INFO model = { "Resistor", "R", "", { "+", "-" }, "Simple linear resistor",
         // Model parameters
         {
-            { "rsh",  103, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, Q(), "ohm/m", SIM_MODEL::PARAM::CATEGORY::DISTRIBUTED_QUANTITIES, "0", "", "Sheet resistance" },
+            { "rsh",  103, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, Q(), "ohm/m", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Sheet resistance" },
             { "narrow",  106, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, Z(), "m", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Narrowing of resistor" },
             { "dw",  106, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, ZR(), "m", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Narrowing of resistor" },
             { "short",  109, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, Z(), "m", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Shortening of resistor" },
@@ -117,15 +117,15 @@ const NGSPICE::MODEL_INFO& NGSPICE::ModelInfo( MODEL_TYPE aType )
             { "defw",  104, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, X(), "m", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "1e-05", "", "Default device width" },
             { "w",  104, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, XR(), "m", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "1e-05", "", "Default device width" },
             { "l",  105, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, X(), "m", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "1e-05", "", "Default device length" },
-            { "kf",  110, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, Q(), "", SIM_MODEL::PARAM::CATEGORY::NOISE, "0", "", "Flicker noise coefficient" },
-            { "af",  111, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, Q(), "", SIM_MODEL::PARAM::CATEGORY::NOISE, "0", "", "Flicker noise exponent" },
+            { "kf",  110, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, Q(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Flicker noise coefficient" },
+            { "af",  111, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, Q(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Flicker noise exponent" },
             { "tnom",  108, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, XU(), "deg C", SIM_MODEL::PARAM::CATEGORY::TEMPERATURE, "27", "", "Parameter measurement temperature" },
-            { "r",  107, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, {}, "ohm", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Resistor model default value" },
+            { "r",  107, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, {}, "ohm", SIM_MODEL::PARAM::CATEGORY::PRINCIPAL, "0", "", "Resistor model default value" },
             { "res",  107, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, R(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "n.a." },
             { "bv_max",  112, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, {}, "V", SIM_MODEL::PARAM::CATEGORY::LIMITING_VALUES, "1e+99", "", "maximum voltage over resistor" },
-            { "lf",  113, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, {}, "", SIM_MODEL::PARAM::CATEGORY::NOISE, "1", "", "noise area length exponent" },
-            { "wf",  114, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, {}, "", SIM_MODEL::PARAM::CATEGORY::NOISE, "1", "", "noise area width exponent" },
-            { "ef",  115, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, {}, "", SIM_MODEL::PARAM::CATEGORY::NOISE, "1", "", "noise frequency exponent" },
+            { "lf",  113, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, {}, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "1", "", "noise area length exponent" },
+            { "wf",  114, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, {}, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "1", "", "noise area width exponent" },
+            { "ef",  115, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, {}, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "1", "", "noise frequency exponent" },
         },
         // Instance parameters
         {
@@ -162,10 +162,10 @@ const NGSPICE::MODEL_INFO& NGSPICE::ModelInfo( MODEL_TYPE aType )
         static MODEL_INFO model = { "Capacitor", "C", "", { "+", "-" }, "Fixed capacitor",
         // Model parameters
         {
-            { "cap",  113, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "F", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Model capacitance" },
-            { "cj",  101, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "F", SIM_MODEL::PARAM::CATEGORY::DISTRIBUTED_QUANTITIES, "0", "", "Bottom Capacitance per area" },
+            { "cap",  113, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "F", SIM_MODEL::PARAM::CATEGORY::PRINCIPAL, "0", "", "Model capacitance" },
+            { "cj",  101, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "F", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Bottom Capacitance per area" },
             { "cox",  101, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, AR(), "F", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Bottom Capacitance per area" },
-            { "cjsw",  102, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "F/m", SIM_MODEL::PARAM::CATEGORY::DISTRIBUTED_QUANTITIES, "0", "", "Sidewall capacitance per meter" },
+            { "cjsw",  102, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "F/m", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Sidewall capacitance per meter" },
             { "capsw",  102, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, AR(), "F/m", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Sidewall capacitance per meter" },
             { "defw",  103, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, X(), "m", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "1e-05", "", "Default width" },
             { "w",  103, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, XR(), "m", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "1e-05", "", "Default width" },
@@ -178,7 +178,7 @@ const NGSPICE::MODEL_INFO& NGSPICE::ModelInfo( MODEL_TYPE aType )
             { "tc2",  109, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "ohm/deg C^2", SIM_MODEL::PARAM::CATEGORY::TEMPERATURE, "0", "", "Second order temp. coefficient" },
             { "tnom",  110, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, XU(), "deg C", SIM_MODEL::PARAM::CATEGORY::TEMPERATURE, "27", "", "Parameter measurement temperature" },
             { "di",  111, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "", SIM_MODEL::PARAM::CATEGORY::DISTRIBUTED_QUANTITIES, "0", "", "Relative dielectric constant" },
-            { "thick",  112, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "m", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "0", "", "Insulator thickness" },
+            { "thick",  112, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "m", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Insulator thickness" },
             { "bv_max",  115, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, {}, "F", SIM_MODEL::PARAM::CATEGORY::LIMITING_VALUES, "1e+99", "", "maximum voltage over capacitance" },
             { "c",  104, SIM_MODEL::PARAM::DIR::IN, SIM_VALUE::TYPE::BOOL, {}, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Capacitor model" },
         },
@@ -214,14 +214,14 @@ const NGSPICE::MODEL_INFO& NGSPICE::ModelInfo( MODEL_TYPE aType )
         static MODEL_INFO model = { "Inductor", "L", "", { "+", "-" }, "Fixed inductor",
         // Model parameters
         {
-            { "ind",  100, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "H", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Model inductance" },
+            { "ind",  100, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "H", SIM_MODEL::PARAM::CATEGORY::PRINCIPAL, "0", "", "Model inductance" },
             { "tc1",  101, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "ohm/deg C", SIM_MODEL::PARAM::CATEGORY::TEMPERATURE, "0", "", "First order temp. coefficient" },
             { "tc2",  102, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "ohm/deg C^2", SIM_MODEL::PARAM::CATEGORY::TEMPERATURE, "0", "", "Second order temp. coefficient" },
             { "tnom",  103, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, XU(), "deg C", SIM_MODEL::PARAM::CATEGORY::TEMPERATURE, "27", "", "Parameter measurement temperature" },
-            { "csect",  104, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "0", "", "Inductor cross section" },
-            { "length",  105, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "m", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "0", "", "Inductor length" },
-            { "nt",  106, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "0", "", "Model number of turns" },
-            { "mu",  107, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "", SIM_MODEL::PARAM::CATEGORY::DISTRIBUTED_QUANTITIES, "0", "", "Relative magnetic permeability" },
+            { "csect",  104, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Inductor cross section" },
+            { "length",  105, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "m", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Inductor length" },
+            { "nt",  106, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Model number of turns" },
+            { "mu",  107, SIM_MODEL::PARAM::DIR::INOUT, SIM_VALUE::TYPE::FLOAT, A(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Relative magnetic permeability" },
             { "l",  108, SIM_MODEL::PARAM::DIR::IN, SIM_VALUE::TYPE::BOOL, {}, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Inductor model" },
         },
         // Instance parameters
@@ -248,7 +248,7 @@ const NGSPICE::MODEL_INFO& NGSPICE::ModelInfo( MODEL_TYPE aType )
             { "sens_cplx",  205, SIM_MODEL::PARAM::DIR::OUT, SIM_VALUE::TYPE::COMPLEX, U(), "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "ac sensitivity" },
         } };
         return model;
-    }
+    }*/
     case MODEL_TYPE::LTRA:
     {
         static MODEL_INFO model = { "LTRA", "LTRA", "", { "1+", "1-", "2+", "2-" }, "Lossy transmission line",

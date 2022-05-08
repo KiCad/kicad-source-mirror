@@ -22,27 +22,31 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SIM_MODEL_BEHAVIORAL_H
-#define SIM_MODEL_BEHAVIORAL_H
+#ifndef SIM_MODEL_PASSIVE_H
+#define SIM_MODEL_PASSIVE_H
 
 #include <sim/sim_model.h>
 
 
-class SIM_MODEL_BEHAVIORAL : public SIM_MODEL
+class SIM_MODEL_PASSIVE : public SIM_MODEL
 {
 public:
-    SIM_MODEL_BEHAVIORAL( TYPE aType );
-
-    wxString GenerateSpiceModelLine( const wxString& aModelName ) const override;
+    SIM_MODEL_PASSIVE( TYPE aType );
 
     wxString GenerateSpiceItemLine( const wxString& aRefName,
                                     const wxString& aModelName,
                                     const std::vector<wxString>& aPinNetNames ) const override;
 
-private:
-    std::vector<wxString> getPinNames() const override { return { "+", "-" }; }
+    bool SetParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
+                                SIM_VALUE_GRAMMAR::NOTATION aNotation
+                                    = SIM_VALUE_GRAMMAR::NOTATION::SPICE ) override;
 
-    static PARAM::INFO makeParams( wxString aName, wxString aDescription, wxString aUnit );
+private:
+    static std::vector<PARAM::INFO> makeParamInfos( wxString aName, wxString aDescription,
+                                                    wxString aUnit );
+
+    std::vector<wxString> getPinNames() const override { return { "+", "-" }; }
 };
 
-#endif // SIM_MODEL_BEHAVIORAL_H
+
+#endif // SIM_MODEL_PASSIVE_H

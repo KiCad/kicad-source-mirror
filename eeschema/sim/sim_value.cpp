@@ -293,32 +293,32 @@ wxString SIM_VALUE_PARSER::ExponentToMetricSuffix( double aExponent, long& aRedu
         aReductionExponent = -18;
         return "a";
     }
-    else if( aExponent > -15 && aExponent <= -12 )
+    else if( aExponent >= -15 && aExponent < -12 )
     {
         aReductionExponent = -15;
         return "f";
     }
-    else if( aExponent > -12 && aExponent <= -9 )
+    else if( aExponent >= -12 && aExponent < -9 )
     {
         aReductionExponent = -12;
         return "p";
     }
-    else if( aExponent > -9 && aExponent <= -6 )
+    else if( aExponent >= -9 && aExponent < -6 )
     {
         aReductionExponent = -9;
         return "n";
     }
-    else if( aExponent > -6 && aExponent <= -3 )
+    else if( aExponent >= -6 && aExponent < -3 )
     {
         aReductionExponent = -6;
         return "u";
     }
-    else if( aExponent > -3 && aExponent < 0 )
+    else if( aExponent >= -3 && aExponent < 0 )
     {
         aReductionExponent = -3;
         return "m";
     }
-    else if( aExponent > 0 && aExponent < 3 )
+    else if( aExponent >= 0 && aExponent < 3 )
     {
         aReductionExponent = 0;
         return "";
@@ -529,7 +529,7 @@ wxString SIM_VALUE_INSTANCE<bool>::ToString( NOTATION aNotation ) const
 {
     LOCALE_IO toggle;
 
-    if( m_value.has_value() )
+    if( m_value )
         return wxString::Format( "%d", *m_value );
 
     return "";
@@ -541,12 +541,12 @@ wxString SIM_VALUE_INSTANCE<long>::ToString( NOTATION aNotation ) const
 {
     LOCALE_IO toggle;
 
-    if( m_value.has_value() )
+    if( m_value )
     {
         long value = *m_value;
         long exponent = 0;
 
-        while( value % 1000 == 0 )
+        while( value != 0 && value % 1000 == 0 )
         {
             exponent += 3;
             value /= 1000;
@@ -567,7 +567,7 @@ wxString SIM_VALUE_INSTANCE<double>::ToString( NOTATION aNotation ) const
 {
     LOCALE_IO toggle;
 
-    if( m_value.has_value() )
+    if( m_value )
     {
         double exponent = std::log10( *m_value );
         long reductionExponent = 0;
@@ -588,7 +588,7 @@ wxString SIM_VALUE_INSTANCE<std::complex<double>>::ToString( NOTATION aNotation 
 {
     LOCALE_IO toggle;
 
-    if( m_value.has_value() )
+    if( m_value )
         return wxString::Format( "%g+%gi", m_value->real(), m_value->imag() );
 
     return "";
@@ -600,7 +600,7 @@ wxString SIM_VALUE_INSTANCE<wxString>::ToString( NOTATION aNotation ) const
 {
     LOCALE_IO toggle;
 
-    if( m_value.has_value() )
+    if( m_value )
         return *m_value;
 
     return ""; // Empty string is completely equivalent to null string.
@@ -610,7 +610,7 @@ wxString SIM_VALUE_INSTANCE<wxString>::ToString( NOTATION aNotation ) const
 template <typename T>
 wxString SIM_VALUE_INSTANCE<T>::ToSimpleString() const
 {
-    if( m_value.has_value() )
+    if( m_value )
     {
         wxString result = "";
         result << *m_value;

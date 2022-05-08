@@ -23,14 +23,17 @@
  */
 
 #include <iterator>
+
 #include <sim/sim_model.h>
-#include <sim/sim_model_ideal.h>
 #include <sim/sim_model_behavioral.h>
+#include <sim/sim_model_ideal.h>
+#include <sim/sim_model_ngspice.h>
+#include <sim/sim_model_passive.h>
 #include <sim/sim_model_source.h>
+#include <sim/sim_model_spice.h>
 #include <sim/sim_model_subckt.h>
 #include <sim/sim_model_xspice.h>
-#include <sim/sim_model_spice.h>
-#include <sim/sim_model_ngspice.h>
+
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
 #include <locale_io.h>
@@ -45,17 +48,15 @@ namespace SIM_MODEL_PARSER
     using namespace SIM_MODEL_GRAMMAR;
 
 
-    template <typename Rule> struct paramValuePairsSelector : std::false_type {};
+    template <typename Rule> struct fieldParamValuePairsSelector : std::false_type {};
 
-    template <> struct paramValuePairsSelector<param> : std::true_type {};
-    template <> struct paramValuePairsSelector<number<SIM_VALUE::TYPE::INT, NOTATION::SI>>
+    template <> struct fieldParamValuePairsSelector<param> : std::true_type {};
+    template <> struct fieldParamValuePairsSelector<number<SIM_VALUE::TYPE::INT, NOTATION::SI>>
         : std::true_type {};
-    template <> struct paramValuePairsSelector<number<SIM_VALUE::TYPE::FLOAT, NOTATION::SI>>
+    template <> struct fieldParamValuePairsSelector<number<SIM_VALUE::TYPE::FLOAT, NOTATION::SI>>
         : std::true_type {};
-    template <> struct paramValuePairsSelector<number<SIM_VALUE::TYPE::INT, NOTATION::SPICE>>
-        : std::true_type {};
-    template <> struct paramValuePairsSelector<number<SIM_VALUE::TYPE::FLOAT, NOTATION::SPICE>>
-        : std::true_type {};
+    template <> struct fieldParamValuePairsSelector<unquotedString> : std::true_type {};
+    template <> struct fieldParamValuePairsSelector<quotedString> : std::true_type {};
 
 
     template <typename Rule> struct spiceUnitSelector : std::false_type {};
@@ -140,7 +141,7 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::SW_V:                 return { DEVICE_TYPE::SW,     "V",              "Voltage-controlled"         };
     case TYPE::SW_I:                 return { DEVICE_TYPE::SW,     "I",              "Current-controlled"         };
 
-    case TYPE::D:                return { DEVICE_TYPE::D,      "",               ""                           };
+    case TYPE::D:                    return { DEVICE_TYPE::D,      "",               ""                           };
     
     case TYPE::NPN_GUMMELPOON:       return { DEVICE_TYPE::NPN,    "GUMMELPOON",     "Gummel-Poon"                };
     case TYPE::PNP_GUMMELPOON:       return { DEVICE_TYPE::PNP,    "GUMMELPOON",     "Gummel-Poon"                };
@@ -253,18 +254,18 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     switch( aType )
     {
     case TYPE::R:                    return { "R", ""        };
-    case TYPE::R_ADV:                return { "R", "R"       };
+    case TYPE::R_ADV:                return { "R", "r"       };
     case TYPE::R_BEHAVIORAL:         return { "R", "",       "",        0,  true   };
 
     case TYPE::C:                    return { "C", ""        };
-    case TYPE::C_ADV:                return { "C", "C",      };
+    case TYPE::C_ADV:                return { "C", "c",      };
     case TYPE::C_BEHAVIORAL:         return { "C", "",       "",        0,  true   };
 
     case TYPE::L:                    return { "L", ""        };
-    case TYPE::L_ADV:                return { "L", "L"       };
+    case TYPE::L_ADV:                return { "L", "l"       };
     case TYPE::L_BEHAVIORAL:         return { "L", "",       "",        0,  true   };
     
-    case TYPE::TLINE_LOSSY:          return { "O", "LTRA"    };
+    case TYPE::TLINE_LOSSY:          return { "O", "ltra"    };
     case TYPE::TLINE_LOSSLESS:       return { "T"  };
     case TYPE::TLINE_URC:            return { "U"  };
     case TYPE::TLINE_KSPICE:         return { "Y"  };
@@ -272,69 +273,69 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::SW_V:                 return { "S", "switch"  };
     case TYPE::SW_I:                 return { "W", "cswitch" };
 
-    case TYPE::D:                    return { "D", "D"       };
+    case TYPE::D:                    return { "D", "d"       };
 
-    case TYPE::NPN_GUMMELPOON:       return { "Q", "NPN",    "",        1   };
-    case TYPE::PNP_GUMMELPOON:       return { "Q", "PNP",    "",        1   };
+    case TYPE::NPN_GUMMELPOON:       return { "Q", "npn",    "",        1   };
+    case TYPE::PNP_GUMMELPOON:       return { "Q", "pnp",    "",        1   };
 
-    case TYPE::NPN_VBIC:             return { "Q", "NPN",    "",        4   };
-    case TYPE::PNP_VBIC:             return { "Q", "PNP",    "",        4   };
+    case TYPE::NPN_VBIC:             return { "Q", "npn",    "",        4   };
+    case TYPE::PNP_VBIC:             return { "Q", "pnp",    "",        4   };
 
-    case TYPE::NPN_HICUML2:          return { "Q", "NPN",    "",        8   };
-    case TYPE::PNP_HICUML2:          return { "Q", "PNP",    "",        8   };
+    case TYPE::NPN_HICUML2:          return { "Q", "npn",    "",        8   };
+    case TYPE::PNP_HICUML2:          return { "Q", "pnp",    "",        8   };
 
-    case TYPE::NJFET_SHICHMANHODGES: return { "M", "NJF",    "",        1   };
-    case TYPE::PJFET_SHICHMANHODGES: return { "M", "PJF",    "",        1   };
-    case TYPE::NJFET_PARKERSKELLERN: return { "M", "NJF",    "",        2   };
-    case TYPE::PJFET_PARKERSKELLERN: return { "M", "PJF",    "",        2   };
+    case TYPE::NJFET_SHICHMANHODGES: return { "M", "njf",    "",        1   };
+    case TYPE::PJFET_SHICHMANHODGES: return { "M", "pjf",    "",        1   };
+    case TYPE::NJFET_PARKERSKELLERN: return { "M", "njf",    "",        2   };
+    case TYPE::PJFET_PARKERSKELLERN: return { "M", "pjf",    "",        2   };
 
-    case TYPE::NMES_STATZ:           return { "Z", "NMF",    "",        1   };
-    case TYPE::PMES_STATZ:           return { "Z", "PMF",    "",        1   };
-    case TYPE::NMES_YTTERDAL:        return { "Z", "NMF",    "",        2   };
-    case TYPE::PMES_YTTERDAL:        return { "Z", "PMF",    "",        2   };
-    case TYPE::NMES_HFET1:           return { "Z", "NMF",    "",        5   };
-    case TYPE::PMES_HFET1:           return { "Z", "PMF",    "",        5   };
-    case TYPE::PMES_HFET2:           return { "Z", "NMF",    "",        6   };
-    case TYPE::NMES_HFET2:           return { "Z", "PMF",    "",        6   };
+    case TYPE::NMES_STATZ:           return { "Z", "nmf",    "",        1   };
+    case TYPE::PMES_STATZ:           return { "Z", "pmf",    "",        1   };
+    case TYPE::NMES_YTTERDAL:        return { "Z", "nmf",    "",        2   };
+    case TYPE::PMES_YTTERDAL:        return { "Z", "pmf",    "",        2   };
+    case TYPE::NMES_HFET1:           return { "Z", "nmf",    "",        5   };
+    case TYPE::PMES_HFET1:           return { "Z", "pmf",    "",        5   };
+    case TYPE::PMES_HFET2:           return { "Z", "nmf",    "",        6   };
+    case TYPE::NMES_HFET2:           return { "Z", "pmf",    "",        6   };
 
-    case TYPE::NMOS_MOS1:            return { "M", "NMOS",   "",        1   };
-    case TYPE::PMOS_MOS1:            return { "M", "PMOS",   "",        1   };
-    case TYPE::NMOS_MOS2:            return { "M", "NMOS",   "",        2   };
-    case TYPE::PMOS_MOS2:            return { "M", "PMOS",   "",        2   };
-    case TYPE::NMOS_MOS3:            return { "M", "NMOS",   "",        3   };
-    case TYPE::PMOS_MOS3:            return { "M", "PMOS",   "",        3   };
-    case TYPE::NMOS_BSIM1:           return { "M", "NMOS",   "",        4   };
-    case TYPE::PMOS_BSIM1:           return { "M", "PMOS",   "",        4   };
-    case TYPE::NMOS_BSIM2:           return { "M", "NMOS",   "",        5   };
-    case TYPE::PMOS_BSIM2:           return { "M", "PMOS",   "",        5   };
-    case TYPE::NMOS_MOS6:            return { "M", "NMOS",   "",        6   };
-    case TYPE::PMOS_MOS6:            return { "M", "PMOS",   "",        6   };
-    case TYPE::NMOS_BSIM3:           return { "M", "NMOS",   "",        8   };
-    case TYPE::PMOS_BSIM3:           return { "M", "PMOS",   "",        8   };
-    case TYPE::NMOS_MOS9:            return { "M", "NMOS",   "",        9   };
-    case TYPE::PMOS_MOS9:            return { "M", "PMOS",   "",        9   };
-    case TYPE::NMOS_B4SOI:           return { "M", "NMOS",   "",        10  };
-    case TYPE::PMOS_B4SOI:           return { "M", "PMOS",   "",        10  };
-    case TYPE::NMOS_BSIM4:           return { "M", "NMOS",   "",        14  };
-    case TYPE::PMOS_BSIM4:           return { "M", "PMOS",   "",        14  };
+    case TYPE::NMOS_MOS1:            return { "M", "nmos",   "",        1   };
+    case TYPE::PMOS_MOS1:            return { "M", "pmos",   "",        1   };
+    case TYPE::NMOS_MOS2:            return { "M", "nmos",   "",        2   };
+    case TYPE::PMOS_MOS2:            return { "M", "pmos",   "",        2   };
+    case TYPE::NMOS_MOS3:            return { "M", "nmos",   "",        3   };
+    case TYPE::PMOS_MOS3:            return { "M", "pmos",   "",        3   };
+    case TYPE::NMOS_BSIM1:           return { "M", "nmos",   "",        4   };
+    case TYPE::PMOS_BSIM1:           return { "M", "pmos",   "",        4   };
+    case TYPE::NMOS_BSIM2:           return { "M", "nmos",   "",        5   };
+    case TYPE::PMOS_BSIM2:           return { "M", "pmos",   "",        5   };
+    case TYPE::NMOS_MOS6:            return { "M", "nmos",   "",        6   };
+    case TYPE::PMOS_MOS6:            return { "M", "pmos",   "",        6   };
+    case TYPE::NMOS_BSIM3:           return { "M", "nmos",   "",        8   };
+    case TYPE::PMOS_BSIM3:           return { "M", "pmos",   "",        8   };
+    case TYPE::NMOS_MOS9:            return { "M", "nmos",   "",        9   };
+    case TYPE::PMOS_MOS9:            return { "M", "pmos",   "",        9   };
+    case TYPE::NMOS_B4SOI:           return { "M", "nmos",   "",        10  };
+    case TYPE::PMOS_B4SOI:           return { "M", "pmos",   "",        10  };
+    case TYPE::NMOS_BSIM4:           return { "M", "nmos",   "",        14  };
+    case TYPE::PMOS_BSIM4:           return { "M", "pmos",   "",        14  };
     //case TYPE::NMOS_EKV2_6:          return {};
     //case TYPE::PMOS_EKV2_6:          return {};
     //case TYPE::NMOS_PSP:             return {};
     //case TYPE::PMOS_PSP:             return {};
-    case TYPE::NMOS_B3SOIFD:         return { "M", "NMOS",   "",        55  };
-    case TYPE::PMOS_B3SOIFD:         return { "M", "PMOS",   "",        55  };
-    case TYPE::NMOS_B3SOIDD:         return { "M", "NMOS",   "",        56  };
-    case TYPE::PMOS_B3SOIDD:         return { "M", "PMOS",   "",        56  };
-    case TYPE::NMOS_B3SOIPD:         return { "M", "NMOS",   "",        57  };
-    case TYPE::PMOS_B3SOIPD:         return { "M", "PMOS",   "",        57  };
+    case TYPE::NMOS_B3SOIFD:         return { "M", "nmos",   "",        55  };
+    case TYPE::PMOS_B3SOIFD:         return { "M", "pmos",   "",        55  };
+    case TYPE::NMOS_B3SOIDD:         return { "M", "nmos",   "",        56  };
+    case TYPE::PMOS_B3SOIDD:         return { "M", "pmos",   "",        56  };
+    case TYPE::NMOS_B3SOIPD:         return { "M", "nmos",   "",        57  };
+    case TYPE::PMOS_B3SOIPD:         return { "M", "pmos",   "",        57  };
     //case TYPE::NMOS_STAG:            return {};
     //case TYPE::PMOS_STAG:            return {};
-    case TYPE::NMOS_HISIM2:          return { "M", "NMOS",   "",        68  };
-    case TYPE::PMOS_HISIM2:          return { "M", "PMOS",   "",        68  };
-    case TYPE::NMOS_HISIMHV1:        return { "M", "NMOS",   "",        73, false, "1.2.4" };
-    case TYPE::PMOS_HISIMHV1:        return { "M", "PMOS",   "",        73, false, "1.2.4" };
-    case TYPE::NMOS_HISIMHV2:        return { "M", "NMOS",   "",        73, false, "2.2.0" };
-    case TYPE::PMOS_HISIMHV2:        return { "M", "PMOS",   "",        73, false, "2.2.0" };
+    case TYPE::NMOS_HISIM2:          return { "M", "nmos",   "",        68  };
+    case TYPE::PMOS_HISIM2:          return { "M", "pmos",   "",        68  };
+    case TYPE::NMOS_HISIMHV1:        return { "M", "nmos",   "",        73, false, "1.2.4" };
+    case TYPE::PMOS_HISIMHV1:        return { "M", "pmos",   "",        73, false, "1.2.4" };
+    case TYPE::NMOS_HISIMHV2:        return { "M", "nmos",   "",        73, false, "2.2.0" };
+    case TYPE::PMOS_HISIMHV2:        return { "M", "pmos",   "",        73, false, "2.2.0" };
 
     case TYPE::V_DC:                 return { "V", ""        };
     case TYPE::V_SIN:                return { "V", "",       "SIN"      };
@@ -442,10 +443,10 @@ template TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<LIB_FIELD>& aFiel
 template <typename T>
 TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields )
 {
-    wxString typeFieldValue = GetFieldValue( &aFields, TYPE_FIELD );
     wxString deviceTypeFieldValue = GetFieldValue( &aFields, DEVICE_TYPE_FIELD );
+    wxString typeFieldValue = GetFieldValue( &aFields, TYPE_FIELD );
 
-    if( !typeFieldValue.IsEmpty() )
+    if( !deviceTypeFieldValue.IsEmpty() )
     {
         for( TYPE type : TYPE_ITERATOR() )
         {
@@ -455,26 +456,85 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields )
                     return type;
             }
         }
-
-        return TYPE::NONE;
     }
 
+    if( !typeFieldValue.IsEmpty() )
+        return TYPE::NONE;
+
     // No type information. For passives we infer the model from the mandatory fields in this case.
+    TYPE typeFromRef = InferTypeFromRef( GetFieldValue( &aFields, REFERENCE_FIELD ) );
+    if( typeFromRef != TYPE::NONE )
+        return typeFromRef;
 
-    wxString ref = GetFieldValue( &aFields, REFERENCE_FIELD );
+    // Finally, try to infer the model from legacy fields, if present.
+    return InferTypeFromLegacyFields( aFields );
+}
 
-    if( ref.StartsWith( "R" ) )
-        return TYPE::R;
-    else if( ref.StartsWith( "C" ) )
-        return TYPE::C;
-    else if( ref.StartsWith( "L" ) )
-        return TYPE::L;
+
+TYPE SIM_MODEL::InferTypeFromRef( const wxString& aRef )
+{
+    static std::map<wxString, TYPE> refPrefixToType = {
+        { "R", TYPE::R },
+        { "C", TYPE::C },
+        { "L", TYPE::L },
+        { "VDC", TYPE::V_DC },
+        { "VSIN", TYPE::V_SIN },
+        { "VPULSE", TYPE::V_PULSE },
+        { "VEXP", TYPE::V_EXP },
+        { "VSFAM", TYPE::V_SFAM },
+        { "VSFFM", TYPE::V_SFFM },
+        { "VPWL", TYPE::V_PWL },
+        { "VWHITENOISE", TYPE::V_WHITENOISE },
+        { "VPINKNOISE", TYPE::V_PINKNOISE },
+        { "VBURSTNOISE", TYPE::V_BURSTNOISE },
+        { "VRANDUNIFORM", TYPE::V_RANDUNIFORM },
+        { "VRANDNORMAL", TYPE::V_RANDNORMAL },
+        { "VRANDEXP", TYPE::V_RANDEXP },
+        { "VRANDPOISSON", TYPE::V_RANDPOISSON },
+        { "VBEHAVIORAL", TYPE::V_BEHAVIORAL },
+        { "IDC", TYPE::I_DC },
+        { "ISIN", TYPE::I_SIN },
+        { "IPULSE", TYPE::I_PULSE },
+        { "IEXP", TYPE::I_EXP },
+        { "ISFAM", TYPE::I_SFAM },
+        { "ISFFM", TYPE::I_SFFM },
+        { "IPWL", TYPE::I_PWL },
+        { "IWHITENOISE", TYPE::I_WHITENOISE },
+        { "IPINKNOISE", TYPE::I_PINKNOISE },
+        { "IBURSTNOISE", TYPE::I_BURSTNOISE },
+        { "IRANDUNIFORM", TYPE::I_RANDUNIFORM },
+        { "IRANDNORMAL", TYPE::I_RANDNORMAL },
+        { "IRANDEXP", TYPE::I_RANDEXP },
+        { "IRANDPOISSON", TYPE::I_RANDPOISSON },
+        { "IBEHAVIORAL", TYPE::I_BEHAVIORAL }
+    };
+
+    for( auto&& [prefix, type] : refPrefixToType )
+    {
+        if( aRef.StartsWith( prefix ) )
+            return type;
+    }
 
     return TYPE::NONE;
 }
 
 
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, int aSymbolPinCount )
+template <typename T>
+TYPE SIM_MODEL::InferTypeFromLegacyFields( const std::vector<T>& aFields )
+{
+    if( !GetFieldValue( &aFields, SIM_MODEL_SPICE::LEGACY_TYPE_FIELD ).IsEmpty()
+        || !GetFieldValue( &aFields, SIM_MODEL_SPICE::LEGACY_MODEL_FIELD ).IsEmpty()
+        || !GetFieldValue( &aFields, SIM_MODEL_SPICE::LEGACY_ENABLED_FIELD ).IsEmpty()
+        || !GetFieldValue( &aFields, SIM_MODEL_SPICE::LEGACY_LIB_FIELD ).IsEmpty() )
+    {
+        return TYPE::SPICE;
+    }
+    else
+        return TYPE::NONE;
+}
+
+
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, unsigned aSymbolPinCount )
 {
     std::unique_ptr<SIM_MODEL> model = create( aType );
 
@@ -502,15 +562,15 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::string& aSpiceCode )
 
 
 template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
-                                                       int aSymbolPinCount,
+                                                       unsigned aSymbolPinCount,
                                                        const std::vector<SCH_FIELD>& aFields );
 
 template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel,
-                                                       int aSymbolPinCount,
+                                                       unsigned aSymbolPinCount,
                                                        const std::vector<LIB_FIELD>& aFields );
 
 template <typename T>
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel, int aSymbolPinCount,
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel, unsigned aSymbolPinCount,
                                               const std::vector<T>& aFields )
 {
     std::unique_ptr<SIM_MODEL> model = create( aBaseModel.GetType() );
@@ -521,13 +581,14 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL& aBaseModel, int a
 }
 
 
-template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( int aSymbolPinCount,
+template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( unsigned aSymbolPinCount,
                                                        const std::vector<SCH_FIELD>& aFields );
-template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( int aSymbolPinCount,
+template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( unsigned aSymbolPinCount,
                                                        const std::vector<LIB_FIELD>& aFields );
 
 template <typename T>
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( int aSymbolPinCount, const std::vector<T>& aFields )
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( unsigned aSymbolPinCount,
+                                              const std::vector<T>& aFields )
 {
     std::unique_ptr<SIM_MODEL> model = SIM_MODEL::create( ReadTypeFromFields( aFields ) );
 
@@ -608,10 +669,10 @@ bool SIM_MODEL::ReadSpiceCode( const std::string& aSpiceCode )
 {
     // The default behavior is to treat the Spice param=value pairs as the model parameters and
     // values (for many models the correspondence is not exact, so this function is overridden).
-    
+
     tao::pegtl::string_input<> in( aSpiceCode, "from_content" );
     std::unique_ptr<tao::pegtl::parse_tree::node> root;
-    
+
     try
     {
         root = tao::pegtl::parse_tree::parse<SIM_MODEL_PARSER::spiceUnitGrammar,
@@ -620,6 +681,7 @@ bool SIM_MODEL::ReadSpiceCode( const std::string& aSpiceCode )
     }
     catch( tao::pegtl::parse_error& e )
     {
+        m_errorMessage = e.what();
         return false;
     }
 
@@ -657,7 +719,7 @@ bool SIM_MODEL::ReadSpiceCode( const std::string& aSpiceCode )
                 {
                     wxASSERT( !paramName.IsEmpty() );
 
-                    if( !setParamFromSpiceCode( paramName, subnode->string() ) )
+                    if( !SetParamFromSpiceCode( paramName, subnode->string() ) )
                         return false;
                 }
                 else
@@ -680,59 +742,59 @@ bool SIM_MODEL::ReadSpiceCode( const std::string& aSpiceCode )
 
 
 template <typename T>
-void SIM_MODEL::ReadDataFields( int aSymbolPinCount, const std::vector<T>* aFields )
+void SIM_MODEL::ReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields )
 {
     doReadDataFields( aSymbolPinCount, aFields );
 }
 
 
 template <>
-void SIM_MODEL::ReadDataFields( int aSymbolPinCount, const std::vector<SCH_FIELD>* aFields )
+void SIM_MODEL::ReadDataFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields )
 {
     ReadDataSchFields( aSymbolPinCount, aFields );
 }
 
 
 template <>
-void SIM_MODEL::ReadDataFields( int aSymbolPinCount, const std::vector<LIB_FIELD>* aFields )
+void SIM_MODEL::ReadDataFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields )
 {
     ReadDataLibFields( aSymbolPinCount, aFields );
 }
 
 
-void SIM_MODEL::ReadDataSchFields( int aSymbolPinCount, const std::vector<SCH_FIELD>* aFields )
+void SIM_MODEL::ReadDataSchFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields )
 {
     doReadDataFields( aSymbolPinCount, aFields );
 }
 
 
-void SIM_MODEL::ReadDataLibFields( int aSymbolPinCount, const std::vector<LIB_FIELD>* aFields )
+void SIM_MODEL::ReadDataLibFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields )
 {
     doReadDataFields( aSymbolPinCount, aFields );
 }
 
 
 template <>
-void SIM_MODEL::WriteFields( std::vector<SCH_FIELD>& aFields )
+void SIM_MODEL::WriteFields( std::vector<SCH_FIELD>& aFields ) const
 {
     WriteDataSchFields( aFields );
 }
 
 
 template <>
-void SIM_MODEL::WriteFields( std::vector<LIB_FIELD>& aFields )
+void SIM_MODEL::WriteFields( std::vector<LIB_FIELD>& aFields ) const
 {
     WriteDataLibFields( aFields );
 }
 
 
-void SIM_MODEL::WriteDataSchFields( std::vector<SCH_FIELD>& aFields )
+void SIM_MODEL::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const
 {
     doWriteFields( aFields );
 }
 
 
-void SIM_MODEL::WriteDataLibFields( std::vector<LIB_FIELD>& aFields )
+void SIM_MODEL::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const
 {
     doWriteFields( aFields );
 }
@@ -750,7 +812,7 @@ wxString SIM_MODEL::GenerateSpiceModelLine( const wxString& aModelName ) const
 
     line << wxString::Format( ".model %s %s(\n+", aModelName, GetSpiceInfo().modelType );
 
-    for( int paramIndex = 0; paramIndex < GetParamCount(); ++paramIndex )
+    for( unsigned paramIndex = 0; paramIndex < GetParamCount(); ++paramIndex )
     {
         const PARAM& param = GetParam( paramIndex );
         wxString valueStr = param.value->ToString();
@@ -776,10 +838,10 @@ wxString SIM_MODEL::GenerateSpiceModelLine( const wxString& aModelName ) const
 
 wxString SIM_MODEL::GenerateSpiceItemName( const wxString& aRefName ) const
 {
-    if( !aRefName.IsEmpty() && aRefName.StartsWith( GetSpiceInfo().primitive ) )
+    if( !aRefName.IsEmpty() && aRefName.StartsWith( GetSpiceInfo().itemType ) )
         return aRefName;
     else
-        return GetSpiceInfo().primitive + aRefName;
+        return GetSpiceInfo().itemType + aRefName;
 }
 
 
@@ -797,23 +859,21 @@ wxString SIM_MODEL::GenerateSpiceItemLine( const wxString& aRefName,
     wxString result = "";
     result << GenerateSpiceItemName( aRefName ) << " ";
 
-    for( int i = 0; i < GetPinCount(); ++i )
+    for( const PIN& pin : GetPins() )
     {
-        for( int j = 0; j < ( int ) aPinNetNames.size(); ++j )
+        for( unsigned i = 0; i < aPinNetNames.size(); ++i )
         {
-            int symbolPinNumber = j + 1;
-
-            if( symbolPinNumber == GetPin( i ).symbolPinNumber )
-                result << aPinNetNames[j] << " ";
+            unsigned symbolPinNumber = i + 1;
+            
+            if( symbolPinNumber == pin.symbolPinNumber )
+                result << aPinNetNames[i] << " ";
         }
     }
 
     result << aModelName << " ";
 
-    for( int i = 0; i < GetParamCount(); ++i )
+    for( const PARAM& param : GetParams() )
     {
-        const PARAM& param = GetParam( i );
-
         if( param.info.isInstanceParam )
             result << param.info.name << "=" << param.value->ToString() << " ";
     }
@@ -860,63 +920,15 @@ std::vector<wxString> SIM_MODEL::GenerateSpiceCurrentNames( const wxString& aRef
 }
 
 
-bool SIM_MODEL::ParsePinsField( int aSymbolPinCount, const wxString& aPinsField )
-{
-    // Default pin sequence: model pins are the same as symbol pins.
-    // Excess model pins are set as Not Connected.
-    for( int i = 0; i < static_cast<int>( getPinNames().size() ); ++i )
-    {
-        if( i < aSymbolPinCount )
-            AddPin( { getPinNames().at( i ), i + 1 } );
-        else
-            AddPin( { getPinNames().at( i ), PIN::NOT_CONNECTED } );
-    }
-
-    if( aPinsField.IsEmpty() )
-        return true;
-
-    LOCALE_IO toggle;
-
-    tao::pegtl::string_input<> in( aPinsField.ToStdString(), "from_content" );
-    std::unique_ptr<tao::pegtl::parse_tree::node> root;
-
-    try
-    {
-        root = tao::pegtl::parse_tree::parse<SIM_MODEL_PARSER::pinSequenceGrammar,
-                                             SIM_MODEL_PARSER::pinSequenceSelector>( in );
-    }
-    catch( const tao::pegtl::parse_error& e )
-    {
-        return false;
-    }
-
-    wxASSERT( root );
-
-    if( static_cast<int>( root->children.size() ) != GetPinCount() )
-        return false;
-
-    for( unsigned int i = 0; i < root->children.size(); ++i )
-    {
-        if( root->children.at( i )->string() == "X" )
-            SetPinSymbolPinNumber( static_cast<int>( i ), PIN::NOT_CONNECTED );
-        else
-            SetPinSymbolPinNumber( static_cast<int>( i ),
-                                   std::stoi( root->children.at( i )->string() ) );
-    }
-
-    return true;
-}
-
-
 void SIM_MODEL::AddPin( const PIN& aPin )
 {
     m_pins.push_back( aPin );
 }
 
 
-int SIM_MODEL::FindModelPinNumber( int aSymbolPinNumber )
+unsigned SIM_MODEL::FindModelPinNumber( unsigned aSymbolPinNumber )
 {
-    for( int i = 0; i < GetPinCount(); ++i )
+    for( unsigned i = 0; i < GetPinCount(); ++i )
     {
         if( GetPin( i ).symbolPinNumber == aSymbolPinNumber )
             return i + 1;
@@ -932,7 +944,18 @@ void SIM_MODEL::AddParam( const PARAM::INFO& aInfo, bool aIsOtherVariant )
 }
 
 
-const SIM_MODEL::PARAM& SIM_MODEL::GetParam( int aParamIndex ) const
+std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> SIM_MODEL::GetPins() const
+{
+    std::vector<std::reference_wrapper<const PIN>> pins;
+
+    for( unsigned i = 0; i < GetPinCount(); ++i )
+        pins.emplace_back( GetPin( i ) );
+
+    return pins;
+}
+
+
+const SIM_MODEL::PARAM& SIM_MODEL::GetParam( unsigned aParamIndex ) const
 {
     if( m_baseModel && m_params.at( aParamIndex ).value->ToString().IsEmpty() )
         return m_baseModel->GetParam( aParamIndex );
@@ -941,13 +964,24 @@ const SIM_MODEL::PARAM& SIM_MODEL::GetParam( int aParamIndex ) const
 }
 
 
-const SIM_MODEL::PARAM& SIM_MODEL::GetUnderlyingParam( int aParamIndex ) const
+std::vector<std::reference_wrapper<const SIM_MODEL::PARAM>> SIM_MODEL::GetParams() const
+{
+    std::vector<std::reference_wrapper<const PARAM>> params;
+
+    for( unsigned i = 0; i < GetParamCount(); ++i )
+        params.emplace_back( GetParam( i ) );
+
+    return params;
+}
+
+
+const SIM_MODEL::PARAM& SIM_MODEL::GetUnderlyingParam( unsigned aParamIndex ) const
 {
     return m_params.at( aParamIndex );
 }
 
 
-const SIM_MODEL::PARAM& SIM_MODEL::GetBaseParam( int aParamIndex ) const
+const SIM_MODEL::PARAM& SIM_MODEL::GetBaseParam( unsigned aParamIndex ) const
 {
     if( m_baseModel )
         return m_baseModel->GetParam( aParamIndex );
@@ -956,7 +990,7 @@ const SIM_MODEL::PARAM& SIM_MODEL::GetBaseParam( int aParamIndex ) const
 }
 
 
-bool SIM_MODEL::SetParamValue( int aParamIndex, const wxString& aValue,
+bool SIM_MODEL::SetParamValue( unsigned aParamIndex, const wxString& aValue,
                                SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
     // Models sourced from a library are immutable.
@@ -999,6 +1033,191 @@ SIM_MODEL::SIM_MODEL( TYPE aType ) : m_baseModel( nullptr ), m_type( aType )
 }
 
 
+template void SIM_MODEL::WriteInferredDataFields( std::vector<SCH_FIELD>& aFields,
+                                                  const wxString& aValue ) const;
+template void SIM_MODEL::WriteInferredDataFields( std::vector<LIB_FIELD>& aFields,
+                                                  const wxString& aValue ) const;
+
+template <typename T>
+void SIM_MODEL::WriteInferredDataFields( std::vector<T>& aFields, const wxString& aValue ) const
+{
+    if( GetPinCount() == 2
+        && GetPin( 0 ).symbolPinNumber == 1
+        && GetPin( 1 ).symbolPinNumber == 2 )
+    {
+        SetFieldValue( aFields, PINS_FIELD, "" );
+    }
+
+    SetFieldValue( aFields, VALUE_FIELD, aValue );
+    SetFieldValue( aFields, DEVICE_TYPE_FIELD, "" );
+    SetFieldValue( aFields, TYPE_FIELD, "" );
+    SetFieldValue( aFields, PARAMS_FIELD, "" );
+}
+
+
+wxString SIM_MODEL::GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const
+{
+    wxString result = "";
+
+    if( aIsFirst )
+        aIsFirst = false;
+    else
+        result << " ";
+
+    result << aParam.info.name + "=" + aParam.value->ToString();
+    return result;
+}
+
+
+wxString SIM_MODEL::GenerateParamsField( const wxString& aPairSeparator ) const
+{
+    bool isFirst = true;
+    wxString result = "";
+
+    for( const PARAM& param : m_params )
+    {
+        wxString valueStr = param.value->ToString();
+
+        if( valueStr.IsEmpty() )
+            continue;
+
+        result << GenerateParamValuePair( param, isFirst );
+    }
+
+    return result;
+}
+
+
+bool SIM_MODEL::ParseParamsField( const wxString& aParamsField )
+{
+    LOCALE_IO toggle;
+
+    tao::pegtl::string_input<> in( aParamsField.ToStdString(), "from_content" );
+    std::unique_ptr<tao::pegtl::parse_tree::node> root;
+
+    try
+    {
+        // Using parse tree instead of actions because we don't care about performance that much,
+        // and having a tree greatly simplifies some things. 
+        root = tao::pegtl::parse_tree::parse<
+            SIM_MODEL_PARSER::fieldParamValuePairsGrammar,
+            SIM_MODEL_PARSER::fieldParamValuePairsSelector>
+                ( in );
+    }
+    catch( const tao::pegtl::parse_error& e )
+    {
+        return false;
+    }
+
+    wxASSERT( root );
+
+    wxString paramName = "";
+
+    for( const auto& node : root->children )
+    {
+        if( node->is_type<SIM_MODEL_PARSER::param>() )
+            paramName = node->string();
+        // TODO: Do something with number<SIM_VALUE::TYPE::INT, ...>.
+        // It doesn't seem too useful?
+        else if( node->is_type<SIM_MODEL_PARSER::number<SIM_VALUE::TYPE::INT,
+                                                        SIM_MODEL_PARSER::NOTATION::SI>>()
+            || node->is_type<SIM_MODEL_PARSER::number<SIM_VALUE::TYPE::FLOAT,
+                                                      SIM_MODEL_PARSER::NOTATION::SI>>()
+            || node->is_type<SIM_MODEL_PARSER::unquotedString>() )
+        {
+            wxASSERT( !paramName.IsEmpty() );
+            // TODO: Shouldn't be named "...fromSpiceCode" here...
+
+            SetParamFromSpiceCode( paramName, node->string(), SIM_VALUE_GRAMMAR::NOTATION::SI );
+        }
+        else if( node->is_type<SIM_MODEL_PARSER::quotedString>() )
+        {
+            wxASSERT( !paramName.IsEmpty() );
+
+            wxString str = node->string();
+
+            // Unescape quotes.
+            str.Replace( "\\\"", "\"" );
+
+            SetParamFromSpiceCode( paramName, str, SIM_VALUE_GRAMMAR::NOTATION::SI );
+        }
+        else
+        {
+            wxFAIL;
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+bool SIM_MODEL::ParsePinsField( unsigned aSymbolPinCount, const wxString& aPinsField )
+{
+    // Default pin sequence: model pins are the same as symbol pins.
+    // Excess model pins are set as Not Connected.
+    for( unsigned i = 0; i < getPinNames().size(); ++i )
+    {
+        if( i < aSymbolPinCount )
+            AddPin( { getPinNames().at( i ), i + 1 } );
+        else
+            AddPin( { getPinNames().at( i ), PIN::NOT_CONNECTED } );
+    }
+
+    if( aPinsField.IsEmpty() )
+        return true;
+
+    LOCALE_IO toggle;
+
+    tao::pegtl::string_input<> in( aPinsField.ToStdString(), "from_content" );
+    std::unique_ptr<tao::pegtl::parse_tree::node> root;
+
+    try
+    {
+        root = tao::pegtl::parse_tree::parse<SIM_MODEL_PARSER::pinSequenceGrammar,
+                                             SIM_MODEL_PARSER::pinSequenceSelector>( in );
+    }
+    catch( const tao::pegtl::parse_error& e )
+    {
+        return false;
+    }
+
+    wxASSERT( root );
+
+    if( root->children.size() != GetPinCount() )
+        return false;
+
+    for( unsigned i = 0; i < root->children.size(); ++i )
+    {
+        if( root->children.at( i )->string() == "X" )
+            SetPinSymbolPinNumber( static_cast<int>( i ), PIN::NOT_CONNECTED );
+        else
+            SetPinSymbolPinNumber( static_cast<int>( i ),
+                                   std::stoi( root->children.at( i )->string() ) );
+    }
+
+    return true;
+}
+
+
+bool SIM_MODEL::SetParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
+                                       SIM_VALUE_GRAMMAR::NOTATION aNotation )
+{
+    std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
+
+    auto it = std::find_if( params.begin(), params.end(),
+                            [aParamName]( const PARAM& param )
+                            {
+                                return param.info.name == aParamName.Lower();
+                            } );
+    
+    if( it == params.end() )
+        return false;
+
+    return SetParamValue( it - params.begin(), aParamValue, aNotation );
+}
+
+
 std::unique_ptr<SIM_MODEL> SIM_MODEL::create( TYPE aType )
 {
     switch( aType )
@@ -1007,6 +1226,11 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::create( TYPE aType )
     case TYPE::C:
     case TYPE::L:
         return std::make_unique<SIM_MODEL_IDEAL>( aType );
+
+    case TYPE::R_ADV:
+    case TYPE::C_ADV:
+    case TYPE::L_ADV:
+        return std::make_unique<SIM_MODEL_PASSIVE>( aType );
 
     case TYPE::R_BEHAVIORAL:
     case TYPE::C_BEHAVIORAL:
@@ -1052,7 +1276,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::create( TYPE aType )
         return std::make_unique<SIM_MODEL_XSPICE>( aType );
 
     case TYPE::SPICE:
-        return std::make_unique<SIM_MODEL_RAWSPICE>( aType );
+        return std::make_unique<SIM_MODEL_SPICE>( aType );
 
     default:
         return std::make_unique<SIM_MODEL_NGSPICE>( aType );
@@ -1062,9 +1286,19 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::create( TYPE aType )
 
 TYPE SIM_MODEL::readTypeFromSpiceTypeString( const std::string& aTypeString )
 {
+    std::string lowercaseTypeString = aTypeString;
+    std::transform( lowercaseTypeString.begin(), lowercaseTypeString.end(),
+                    lowercaseTypeString.begin(), ::tolower );
+
     for( TYPE type : TYPE_ITERATOR() )
     {
-        if( SpiceInfo( type ).modelType == aTypeString )
+        wxString typePrefix = SpiceInfo( type ).modelType;
+
+        if( typePrefix == "" )
+            continue;
+        
+        // Check if `aTypeString` starts with `typePrefix`.
+        if( lowercaseTypeString.rfind( typePrefix, 0 ) == 0 )
             return type;
     }
 
@@ -1075,20 +1309,20 @@ TYPE SIM_MODEL::readTypeFromSpiceTypeString( const std::string& aTypeString )
 
 
 template <typename T>
-void SIM_MODEL::doReadDataFields( int aSymbolPinCount, const std::vector<T>* aFields )
+void SIM_MODEL::doReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields )
 {
     ParsePinsField( aSymbolPinCount, GetFieldValue( aFields, PINS_FIELD ) );
-    parseParamsField( GetFieldValue( aFields, PARAMS_FIELD ) );
+    ParseParamsField( GetFieldValue( aFields, PARAMS_FIELD ) );
 }
 
 
 template <typename T>
-void SIM_MODEL::doWriteFields( std::vector<T>& aFields )
+void SIM_MODEL::doWriteFields( std::vector<T>& aFields ) const
 {
     SetFieldValue( aFields, DEVICE_TYPE_FIELD, generateDeviceTypeField() );
     SetFieldValue( aFields, TYPE_FIELD, generateTypeField() );
     SetFieldValue( aFields, PINS_FIELD, generatePinsField() );
-    SetFieldValue( aFields, PARAMS_FIELD, generateParamsField( " " ) );
+    SetFieldValue( aFields, PARAMS_FIELD, GenerateParamsField( " " ) );
 }
 
 
@@ -1109,7 +1343,7 @@ wxString SIM_MODEL::generatePinsField() const
     wxString result = "";
     bool isFirst = true;
 
-    for( int i = 0; i < GetPinCount(); ++i )
+    for( unsigned i = 0; i < GetPinCount(); ++i )
     {
         if( isFirst )
             isFirst = false;
@@ -1123,97 +1357,4 @@ wxString SIM_MODEL::generatePinsField() const
     }
 
     return result;
-}
-
-
-wxString SIM_MODEL::generateParamsField( const wxString& aPairSeparator ) const
-{
-    bool isFirst = true;
-    wxString result = "";
-
-    for( const PARAM& param : m_params )
-    {
-        wxString valueStr = param.value->ToString();
-
-        if( valueStr.IsEmpty() )
-            continue;
-
-        if( isFirst )
-            isFirst = false;
-        else
-            result << " ";
-
-        result << param.info.name;
-        result << "=";
-        result << param.value->ToString();
-    }
-
-    return result;
-}
-
-
-bool SIM_MODEL::parseParamsField( const wxString& aParamsField )
-{
-    LOCALE_IO toggle;
-    
-    tao::pegtl::string_input<> in( aParamsField.ToStdString(), "from_content" );
-    std::unique_ptr<tao::pegtl::parse_tree::node> root;
-
-    try
-    {
-        // Using parse tree instead of actions because we don't care about performance that much,
-        // and having a tree greatly simplifies some things. 
-        root = tao::pegtl::parse_tree::parse<
-            SIM_MODEL_PARSER::paramValuePairsGrammar<SIM_MODEL_PARSER::NOTATION::SI>,
-            SIM_MODEL_PARSER::paramValuePairsSelector>
-                ( in );
-    }
-    catch( const tao::pegtl::parse_error& e )
-    {
-        return false;
-    }
-
-    wxASSERT( root );
-
-    wxString paramName = "";
-
-    for( const auto& node : root->children )
-    {
-        if( node->is_type<SIM_MODEL_PARSER::param>() )
-            paramName = node->string();
-        // TODO: Do something with number<SIM_VALUE::TYPE::INT, ...>.
-        // It doesn't seem too useful?
-        else if( node->is_type<SIM_MODEL_PARSER::number<SIM_VALUE::TYPE::FLOAT,
-                                                        SIM_MODEL_PARSER::NOTATION::SI>>() )
-        {
-            wxASSERT( !paramName.IsEmpty() );
-            // TODO: Shouldn't be named "...fromSpiceCode" here...
-            setParamFromSpiceCode( paramName, node->string(), SIM_VALUE_GRAMMAR::NOTATION::SI );
-        }
-        else
-        {
-            wxFAIL;
-            return false;
-        }
-    }
-
-    return true;
-}
-
-
-bool SIM_MODEL::setParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
-                                       SIM_VALUE_GRAMMAR::NOTATION aNotation )
-{
-    int i = 0;
-
-    for(; i < GetParamCount(); ++i )
-    {
-        if( GetParam( i ).info.name == aParamName.Lower() )
-            break;
-    }
-
-    if( i == GetParamCount() )
-        return false; // No parameter with this name exists.
-
-    return SetParamValue( i, wxString( aParamValue ), aNotation );
 }

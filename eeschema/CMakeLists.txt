@@ -327,6 +327,7 @@ if( KICAD_SPICE )
         sim/sim_model_xspice.cpp
         sim/sim_model_ideal.cpp
         sim/sim_model_ngspice.cpp
+        sim/sim_model_passive.cpp
         sim/sim_model_spice.cpp
         sim/sim_model_source.cpp
         sim/sim_model_subckt.cpp

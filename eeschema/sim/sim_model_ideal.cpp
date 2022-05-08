@@ -28,7 +28,8 @@ using PARAM = SIM_MODEL::PARAM;
 
 
 SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType )
-    : SIM_MODEL( aType )
+    : SIM_MODEL( aType ),
+      m_isInferred( false )
 {
     static PARAM::INFO resistor  = makeParamInfo( "r", "Resistance",  "ohm" );
     static PARAM::INFO capacitor = makeParamInfo( "c", "Capacitance", "F"   );
@@ -36,40 +37,50 @@ SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType )
 
     switch( aType )
     {
-    case TYPE::R:  AddParam( resistor  ); break;
+    case TYPE::R: AddParam( resistor  ); break;
     case TYPE::C: AddParam( capacitor ); break;
-    case TYPE::L:  AddParam( inductor  ); break;
+    case TYPE::L: AddParam( inductor  ); break;
     default:
         wxFAIL_MSG( "Unhandled SIM_MODEL type in SIM_MODEL_IDEAL" );
     }
 }
 
 
-void SIM_MODEL_IDEAL::ReadDataSchFields( int aSymbolPinCount,
+void SIM_MODEL_IDEAL::ReadDataSchFields( unsigned aSymbolPinCount,
                                          const std::vector<SCH_FIELD>* aFields )
 {
     if( !GetFieldValue( aFields, PARAMS_FIELD ).IsEmpty() )
         SIM_MODEL::ReadDataSchFields( aSymbolPinCount, aFields );
     else
-    {
-        // Inferred model.
-        ParsePinsField( aSymbolPinCount, PINS_FIELD );
-        SetParamValue( 0, GetFieldValue( aFields, VALUE_FIELD ) );
-    }
+        inferredReadDataFields( aSymbolPinCount, aFields );
 }
 
 
-void SIM_MODEL_IDEAL::ReadDataLibFields( int aSymbolPinCount,
+void SIM_MODEL_IDEAL::ReadDataLibFields( unsigned aSymbolPinCount,
                                          const std::vector<LIB_FIELD>* aFields )
 {
     if( !GetFieldValue( aFields, PARAMS_FIELD ).IsEmpty() )
         SIM_MODEL::ReadDataLibFields( aSymbolPinCount, aFields );
     else
-    {
-        // Inferred model.
-        ParsePinsField( aSymbolPinCount, PINS_FIELD );
-        SetParamValue( 0, GetFieldValue( aFields, VALUE_FIELD ) );
-    }
+        inferredReadDataFields( aSymbolPinCount, aFields );
+}
+
+
+void SIM_MODEL_IDEAL::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const
+{
+    SIM_MODEL::WriteDataSchFields( aFields );
+
+    if( m_isInferred )
+        inferredWriteDataFields( aFields );
+}
+
+
+void SIM_MODEL_IDEAL::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const
+{
+    SIM_MODEL::WriteDataLibFields( aFields );
+
+    if( m_isInferred )
+        inferredWriteDataFields( aFields );
 }
 
 
@@ -83,8 +94,35 @@ wxString SIM_MODEL_IDEAL::GenerateSpiceItemLine( const wxString& aRefName,
                                                  const wxString& aModelName,
                                                  const std::vector<wxString>& aPinNetNames ) const
 {
-    return SIM_MODEL::GenerateSpiceItemLine( aRefName, GetParam( 0 ).value->ToString(),
+    return SIM_MODEL::GenerateSpiceItemLine( aRefName,
+                                             GetParam( 0 ).value->ToString( SIM_VALUE::NOTATION::SPICE ),
                                              aPinNetNames );
+}
+
+
+template <typename T>
+void SIM_MODEL_IDEAL::inferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields )
+{
+    ParsePinsField( aSymbolPinCount, PINS_FIELD );
+
+    if( ( InferTypeFromRef( GetFieldValue( aFields, REFERENCE_FIELD ) ) == GetType()
+            && SetParamValue( 0, GetFieldValue( aFields, VALUE_FIELD ) ) )
+        || GetFieldValue( aFields, VALUE_FIELD ) == DeviceTypeInfo( GetDeviceType() ).fieldValue )
+    {
+        m_isInferred = true;
+    }
+}
+
+
+template <typename T>
+void SIM_MODEL_IDEAL::inferredWriteDataFields( std::vector<T>& aFields ) const
+{
+    wxString value = GetParam( 0 ).value->ToString();
+
+    if( value.IsEmpty() )
+        value = DeviceTypeInfo( GetDeviceType() ).fieldValue;
+
+    WriteInferredDataFields( aFields, value );
 }
 
 

@@ -221,6 +221,9 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
         m_firstCategory = m_paramGrid->Append( new wxPropertyCategory( "DC" ) );
         m_paramGrid->HideProperty( "DC" );
 
+        m_paramGrid->Append( new wxPropertyCategory( "Capacitance" ) );
+        m_paramGrid->HideProperty( "Capacitance" );
+
         m_paramGrid->Append( new wxPropertyCategory( "Temperature" ) );
         m_paramGrid->HideProperty( "Temperature" );
 
@@ -242,7 +245,7 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
         m_paramGrid->Append( new wxPropertyCategory( "Flags" ) );
         m_paramGrid->HideProperty( "Flags" );
 
-        for( int i = 0; i < curModel().GetParamCount(); ++i )
+        for( unsigned i = 0; i < curModel().GetParamCount(); ++i )
             addParamPropertyIfRelevant( i );
 
         m_paramGrid->CollapseAll();
@@ -309,9 +312,9 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignmentsTab()
                                             "Not Connected" );
     }
 
-    for( int i = 0; i < curModel().GetPinCount(); ++i )
+    for( unsigned i = 0; i < curModel().GetPinCount(); ++i )
     {
-        int symbolPinNumber = curModel().GetPin( i ).symbolPinNumber;
+        unsigned symbolPinNumber = curModel().GetPin( i ).symbolPinNumber;
 
         if( symbolPinNumber == SIM_MODEL::PIN::NOT_CONNECTED )
             continue;
@@ -319,7 +322,7 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignmentsTab()
         wxString modelPinString = getModelPinString( i + 1 );
         wxArrayString choices; 
 
-        m_pinAssignmentsGrid->SetCellValue( symbolPinNumber - 1,
+        m_pinAssignmentsGrid->SetCellValue( static_cast<int>( symbolPinNumber - 1 ),
                                             static_cast<int>( PIN_COLUMN::MODEL ),
                                             modelPinString );
     }
@@ -337,7 +340,7 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignmentsGridEditors()
     wxString modelPinChoicesString = "";
     bool isFirst = true;
 
-    for( int i = 0; i < curModel().GetPinCount(); ++i )
+    for( unsigned i = 0; i < curModel().GetPinCount(); ++i )
     {
         const SIM_MODEL::PIN& modelPin = curModel().GetPin( i );
         int modelPinNumber = static_cast<int>( i + 1 );
@@ -386,7 +389,15 @@ void DIALOG_SIM_MODEL<T>::updatePinAssignmentsGridEditors()
 template <typename T>
 void DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aFilePath )
 {
-    m_library->ReadFile( Prj().AbsolutePath( aFilePath ) );
+    const wxString absolutePath = Prj().AbsolutePath( aFilePath );
+
+    if( !m_library->ReadFile( Prj().AbsolutePath( aFilePath ) ) )
+    {
+        DisplayErrorMessage( this, wxString::Format( _( "Error loading model library '%s'" ),
+                                                     Prj().AbsolutePath( aFilePath ), aFilePath ),
+                             m_library->GetErrorMessage() );
+    }
+
     m_libraryPathInput->SetValue( aFilePath );
 
     m_libraryModels.clear();
@@ -482,6 +493,12 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
 
     switch( param.info.type )
     {
+    case TYPE::BOOL:
+        // TODO.
+        prop = new wxBoolProperty( paramDescription, param.info.name );
+        prop->SetAttribute( wxPG_BOOL_USE_CHECKBOX, true );
+        break;
+
     case TYPE::INT:
         prop = new SIM_PROPERTY( paramDescription, param.info.name, m_library, curModelSharedPtr(),
                                  aParamIndex, SIM_VALUE::TYPE::INT );
@@ -492,9 +509,12 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
                                  aParamIndex, SIM_VALUE::TYPE::FLOAT );
         break;
 
-    case TYPE::BOOL:
-        prop = new wxBoolProperty( paramDescription, param.info.name );
-        prop->SetAttribute( wxPG_BOOL_USE_CHECKBOX, true );
+    //case TYPE::COMPLEX:
+    //  break;
+
+    case TYPE::STRING:
+        prop = new SIM_PROPERTY( paramDescription, param.info.name, m_library, curModelSharedPtr(),
+                                 aParamIndex, SIM_VALUE::TYPE::STRING );
         break;
 
     default:

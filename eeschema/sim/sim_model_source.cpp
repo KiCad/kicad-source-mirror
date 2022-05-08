@@ -28,10 +28,49 @@ using PARAM = SIM_MODEL::PARAM;
 
 
 SIM_MODEL_SOURCE::SIM_MODEL_SOURCE( TYPE aType )
-    : SIM_MODEL( aType )
+    : SIM_MODEL( aType ),
+      m_isInferred( false )
 {
-    for( const PARAM::INFO& paramInfo : makeParams( aType ) )
+    for( const PARAM::INFO& paramInfo : makeParamInfos( aType ) )
         AddParam( paramInfo );
+}
+
+
+void SIM_MODEL_SOURCE::ReadDataSchFields( unsigned aSymbolPinCount,
+                                          const std::vector<SCH_FIELD>* aFields )
+{
+    if( !GetFieldValue( aFields, PARAMS_FIELD ).IsEmpty() )
+        SIM_MODEL::ReadDataSchFields( aSymbolPinCount, aFields );
+    else
+        inferredReadDataFields( aSymbolPinCount, aFields );
+}
+
+
+void SIM_MODEL_SOURCE::ReadDataLibFields( unsigned aSymbolPinCount,
+                                          const std::vector<LIB_FIELD>* aFields )
+{
+    if( !GetFieldValue( aFields, PARAMS_FIELD ).IsEmpty() )
+        SIM_MODEL::ReadDataLibFields( aSymbolPinCount, aFields );
+    else
+        inferredReadDataFields( aSymbolPinCount, aFields );
+}
+
+
+void SIM_MODEL_SOURCE::WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const
+{
+    SIM_MODEL::WriteDataSchFields( aFields );
+
+    if( m_isInferred )
+        inferredWriteDataFields( aFields );
+}
+
+
+void SIM_MODEL_SOURCE::WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const
+{
+    SIM_MODEL::WriteDataLibFields( aFields );
+
+    if( m_isInferred )
+        inferredWriteDataFields( aFields );
 }
 
 
@@ -47,7 +86,7 @@ wxString SIM_MODEL_SOURCE::GenerateSpiceItemLine( const wxString& aRefName,
 {
     wxString argList = "";
 
-    for( int i = 0; i < GetParamCount(); ++i )
+    for( unsigned i = 0; i < GetParamCount(); ++i )
         argList << GetParam( i ).value->ToString() << " ";
 
     wxString model = wxString::Format( GetSpiceInfo().inlineTypeString + "( %s)", argList );
@@ -56,49 +95,49 @@ wxString SIM_MODEL_SOURCE::GenerateSpiceItemLine( const wxString& aRefName,
 }
 
 
-const std::vector<PARAM::INFO>& SIM_MODEL_SOURCE::makeParams( TYPE aType )
+const std::vector<PARAM::INFO>& SIM_MODEL_SOURCE::makeParamInfos( TYPE aType )
 {
-    static std::vector<PARAM::INFO> vdc = makeDc( "v", "V" );
-    static std::vector<PARAM::INFO> idc = makeDc( "i", "A" );
+    static std::vector<PARAM::INFO> vdc = makeDcParamInfos( "v", "V" );
+    static std::vector<PARAM::INFO> idc = makeDcParamInfos( "i", "A" );
 
-    static std::vector<PARAM::INFO> vsin = makeSin( "v", "V" );
-    static std::vector<PARAM::INFO> isin = makeSin( "i", "A" );
+    static std::vector<PARAM::INFO> vsin = makeSinParamInfos( "v", "V" );
+    static std::vector<PARAM::INFO> isin = makeSinParamInfos( "i", "A" );
 
-    static std::vector<PARAM::INFO> vpulse = makePulse( "v", "V" );
-    static std::vector<PARAM::INFO> ipulse = makePulse( "i", "A" );
+    static std::vector<PARAM::INFO> vpulse = makePulseParamInfos( "v", "V" );
+    static std::vector<PARAM::INFO> ipulse = makePulseParamInfos( "i", "A" );
 
-    static std::vector<PARAM::INFO> vexp = makeExp( "v", "V" );
-    static std::vector<PARAM::INFO> iexp = makeExp( "i", "A" );
+    static std::vector<PARAM::INFO> vexp = makeExpParamInfos( "v", "V" );
+    static std::vector<PARAM::INFO> iexp = makeExpParamInfos( "i", "A" );
 
-    static std::vector<PARAM::INFO> vsfam = makeSfam( "v", "V" );
-    static std::vector<PARAM::INFO> isfam = makeSfam( "i", "A" );
+    static std::vector<PARAM::INFO> vsfam = makeSfamParamInfos( "v", "V" );
+    static std::vector<PARAM::INFO> isfam = makeSfamParamInfos( "i", "A" );
 
-    static std::vector<PARAM::INFO> vsffm = makeSffm( "v", "V" );
-    static std::vector<PARAM::INFO> isffm = makeSffm( "i", "A" );
+    static std::vector<PARAM::INFO> vsffm = makeSffmParamInfos( "v", "V" );
+    static std::vector<PARAM::INFO> isffm = makeSffmParamInfos( "i", "A" );
 
-    static std::vector<PARAM::INFO> vpwl = makePwl( "v", "Voltage", "V" );
-    static std::vector<PARAM::INFO> ipwl = makePwl( "i", "Current", "A" );
+    static std::vector<PARAM::INFO> vpwl = makePwlParamInfos( "v", "Voltage", "V" );
+    static std::vector<PARAM::INFO> ipwl = makePwlParamInfos( "i", "Current", "A" );
 
-    static std::vector<PARAM::INFO> vwhitenoise = makeWhiteNoise( "v", "V" );
-    static std::vector<PARAM::INFO> iwhitenoise = makeWhiteNoise( "i", "A" );
+    static std::vector<PARAM::INFO> vwhitenoise = makeWhiteNoiseParamInfos( "v", "V" );
+    static std::vector<PARAM::INFO> iwhitenoise = makeWhiteNoiseParamInfos( "i", "A" );
 
-    static std::vector<PARAM::INFO> vpinknoise = makePinkNoise( "v", "V" );
-    static std::vector<PARAM::INFO> ipinknoise = makePinkNoise( "i", "A" );
+    static std::vector<PARAM::INFO> vpinknoise = makePinkNoiseParamInfos( "v", "V" );
+    static std::vector<PARAM::INFO> ipinknoise = makePinkNoiseParamInfos( "i", "A" );
 
-    static std::vector<PARAM::INFO> vburstnoise = makeBurstNoise( "v", "V" );
-    static std::vector<PARAM::INFO> iburstnoise = makeBurstNoise( "i", "A" );
+    static std::vector<PARAM::INFO> vburstnoise = makeBurstNoiseParamInfos( "v", "V" );
+    static std::vector<PARAM::INFO> iburstnoise = makeBurstNoiseParamInfos( "i", "A" );
 
-    static std::vector<PARAM::INFO> vrandomuniform = makeRandomUniform( "v", "V" );
-    static std::vector<PARAM::INFO> irandomuniform = makeRandomUniform( "i", "A" );
+    static std::vector<PARAM::INFO> vrandomuniform = makeRandomUniformParamInfos( "v", "V" );
+    static std::vector<PARAM::INFO> irandomuniform = makeRandomUniformParamInfos( "i", "A" );
 
-    static std::vector<PARAM::INFO> vrandomnormal = makeRandomNormal( "v", "V" );
-    static std::vector<PARAM::INFO> irandomnormal = makeRandomNormal( "i", "A" );
+    static std::vector<PARAM::INFO> vrandomnormal = makeRandomNormalParamInfos( "v", "V" );
+    static std::vector<PARAM::INFO> irandomnormal = makeRandomNormalParamInfos( "i", "A" );
 
-    static std::vector<PARAM::INFO> vrandomexp = makeRandomExp( "v", "V" );
-    static std::vector<PARAM::INFO> irandomexp = makeRandomExp( "i", "A" );
+    static std::vector<PARAM::INFO> vrandomexp = makeRandomExpParamInfos( "v", "V" );
+    static std::vector<PARAM::INFO> irandomexp = makeRandomExpParamInfos( "i", "A" );
 
-    static std::vector<PARAM::INFO> vrandompoisson = makeRandomPoisson( "v", "V" );
-    static std::vector<PARAM::INFO> irandompoisson = makeRandomPoisson( "i", "A" );
+    static std::vector<PARAM::INFO> vrandompoisson = makeRandomPoissonParamInfos( "v", "V" );
+    static std::vector<PARAM::INFO> irandompoisson = makeRandomPoissonParamInfos( "i", "A" );
 
     switch( aType )
     {
@@ -138,19 +177,19 @@ const std::vector<PARAM::INFO>& SIM_MODEL_SOURCE::makeParams( TYPE aType )
 }
 
 
-bool SIM_MODEL_SOURCE::SetParamValue( int aParamIndex, const wxString& aValue,
+bool SIM_MODEL_SOURCE::SetParamValue( unsigned aParamIndex, const wxString& aValue,
                                       SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
     // Sources are special. All preceding parameter values must be filled. If they are not, fill
     // them out automatically. If a value is nulled, delete everything after it.
     if( aValue.IsEmpty() )
     {
-        for( int i = aParamIndex; i < GetParamCount(); ++i )
+        for( unsigned i = aParamIndex; i < GetParamCount(); ++i )
             SIM_MODEL::SetParamValue( i, "", aNotation );
     }
     else
     {
-        for( int i = 0; i < aParamIndex; ++i )
+        for( unsigned i = 0; i < aParamIndex; ++i )
         {
             if( GetParam( i ).value->ToString().IsEmpty() )
                 SIM_MODEL::SetParamValue( i, "0", aNotation );
@@ -161,13 +200,48 @@ bool SIM_MODEL_SOURCE::SetParamValue( int aParamIndex, const wxString& aValue,
 }
 
 
+wxString SIM_MODEL_SOURCE::GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const
+{
+    if( aParam.value->ToString() == "0" )
+        return "";
+
+    return SIM_MODEL::GenerateParamValuePair( aParam, aIsFirst );
+}
+
+
+template <typename T>
+void SIM_MODEL_SOURCE::inferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields )
+{
+    ParsePinsField( aSymbolPinCount, PINS_FIELD );
+
+    if( ( InferTypeFromRef( GetFieldValue( aFields, REFERENCE_FIELD ) ) == GetType()
+            && ParseParamsField( GetFieldValue( aFields, VALUE_FIELD ) ) )
+        || GetFieldValue( aFields, VALUE_FIELD ) == DeviceTypeInfo( GetDeviceType() ).fieldValue )
+    {
+        m_isInferred = true;
+    }
+}
+
+
+template <typename T>
+void SIM_MODEL_SOURCE::inferredWriteDataFields( std::vector<T>& aFields ) const
+{
+    wxString value = GetFieldValue( &aFields, PARAMS_FIELD );
+
+    if( value.IsEmpty() )
+        value = DeviceTypeInfo( GetDeviceType() ).fieldValue;
+
+    WriteInferredDataFields( aFields, value );
+}
+
+
 std::vector<wxString> SIM_MODEL_SOURCE::getPinNames() const
 {
     return { "+", "-" };
 }
 
 
-std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeDc( wxString aPrefix, wxString aUnit )
+std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeDcParamInfos( wxString aPrefix, wxString aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -184,7 +258,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeDc( wxString aPrefix, wxString aU
 }
 
 
-std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSin( wxString aPrefix, wxString aUnit )
+std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSinParamInfos( wxString aPrefix, wxString aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -241,7 +315,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSin( wxString aPrefix, wxString a
 }
 
 
-std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makePulse( wxString aPrefix, wxString aUnit )
+std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makePulseParamInfos( wxString aPrefix, wxString aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -314,7 +388,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makePulse( wxString aPrefix, wxString
 }
 
 
-std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeExp( wxString aPrefix, wxString aUnit )
+std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeExpParamInfos( wxString aPrefix, wxString aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -371,7 +445,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeExp( wxString aPrefix, wxString a
 }
 
 
-std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSfam( wxString aPrefix, wxString aUnit )
+std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSfamParamInfos( wxString aPrefix, wxString aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -419,7 +493,7 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSfam( wxString aPrefix, wxString 
 }
 
 
-std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSffm( wxString aPrefix, wxString aUnit )
+std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSffmParamInfos( wxString aPrefix, wxString aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -484,8 +558,8 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeSffm( wxString aPrefix, wxString 
 }
 
 
-std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makePwl( wxString aPrefix, wxString aQuantity,
-                                                    wxString aUnit )
+std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makePwlParamInfos( wxString aPrefix, wxString aQuantity,
+                                                              wxString aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -526,7 +600,8 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makePwl( wxString aPrefix, wxString a
 }
 
 
-std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeWhiteNoise( wxString aPrefix, wxString aUnit )
+std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeWhiteNoiseParamInfos( wxString aPrefix,
+                                                                     wxString aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -559,7 +634,8 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeWhiteNoise( wxString aPrefix, wxS
 }
 
 
-std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makePinkNoise( wxString aPrefix, wxString aUnit )
+std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makePinkNoiseParamInfos( wxString aPrefix, 
+                                                                    wxString aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -600,7 +676,8 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makePinkNoise( wxString aPrefix, wxSt
 }
 
 
-std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeBurstNoise( wxString aPrefix, wxString aUnit )
+std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeBurstNoiseParamInfos( wxString aPrefix,
+                                                                     wxString aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -641,7 +718,8 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeBurstNoise( wxString aPrefix, wxS
 }
 
 
-std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomUniform( wxString aPrefix, wxString aUnit )
+std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomUniformParamInfos( wxString aPrefix,
+                                                                        wxString aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -674,7 +752,8 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomUniform( wxString aPrefix, 
 }
 
 
-std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomNormal( wxString aPrefix, wxString aUnit )
+std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomNormalParamInfos( wxString aPrefix,
+                                                                       wxString aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -707,7 +786,8 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomNormal( wxString aPrefix, w
 }
 
 
-std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomExp( wxString aPrefix, wxString aUnit )
+std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomExpParamInfos( wxString aPrefix,
+                                                                    wxString aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -740,7 +820,8 @@ std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomExp( wxString aPrefix, wxSt
 }
 
 
-std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomPoisson( wxString aPrefix, wxString aUnit )
+std::vector<PARAM::INFO> SIM_MODEL_SOURCE::makeRandomPoissonParamInfos( wxString aPrefix,
+                                                                        wxString aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;

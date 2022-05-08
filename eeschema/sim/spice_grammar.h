@@ -76,7 +76,7 @@ namespace SPICE_GRAMMAR
                      /*seq<alpha,
                            star<sor<alnum,
                                     one<'!', '#', '$', '%', '[', ']', '_'>>>> {};*/
-    struct dotModelType : sor<TAO_PEGTL_ISTRING( "R" ),
+    /*struct dotModelType : sor<TAO_PEGTL_ISTRING( "R" ),
                               TAO_PEGTL_ISTRING( "C" ),
                               TAO_PEGTL_ISTRING( "L" ),
                               TAO_PEGTL_ISTRING( "SW" ),
@@ -92,7 +92,8 @@ namespace SPICE_GRAMMAR
                               TAO_PEGTL_ISTRING( "PMOS" ),
                               TAO_PEGTL_ISTRING( "NMF" ),
                               TAO_PEGTL_ISTRING( "PMF" ),
-                              TAO_PEGTL_ISTRING( "VDMOS" )> {};
+                              TAO_PEGTL_ISTRING( "VDMOS" )> {};*/
+    struct dotModelType : plus<alpha> {};
     struct dotModel : seq<opt<sep>,
                           TAO_PEGTL_ISTRING( ".model" ),
                           sep,

@@ -31,7 +31,6 @@
 #include <lib_field.h>
 #include <wx/string.h>
 #include <map>
-#include <stdexcept>
 
 class SIM_LIBRARY;
 
@@ -39,6 +38,8 @@ class SIM_LIBRARY;
 namespace SIM_MODEL_GRAMMAR
 {
     using namespace SPICE_GRAMMAR;
+
+    struct sep : plus<space> {};
 
 
     struct pinNumber : sor<digits, one<'X'>> {};
@@ -51,11 +52,29 @@ namespace SIM_MODEL_GRAMMAR
                                      opt<sep>,
                                      eof> {};
 
-    template <NOTATION Notation>
-    struct paramValuePairsGrammar : must<opt<sep>,
-                                         paramValuePairs<Notation>,
-                                         opt<sep>,
-                                         eof> {};
+    struct unquotedString : plus<not_at<space>, any> {};
+    struct quotedString : seq<one<'"'>,
+                              until<seq<not_at<string<'\\',
+                                                      '"'>>,
+                                        one<'"'>>>> {};
+
+    struct fieldParamValuePair : seq<param,
+                                     opt<sep>,
+                                     one<'='>,
+                                     opt<sep>,
+                                     sor<number<SIM_VALUE::TYPE::FLOAT, NOTATION::SI>,
+                                         number<SIM_VALUE::TYPE::INT, NOTATION::SI>,
+                                         quotedString,
+                                         unquotedString>> {};
+
+    struct fieldParamValuePairs : seq<opt<fieldParamValuePair>,
+                                      star<sep,
+                                           fieldParamValuePair>> {};
+
+    struct fieldParamValuePairsGrammar : must<opt<sep>,
+                                              fieldParamValuePairs,
+                                              opt<sep>,
+                                              eof> {};
 }
 
 
@@ -270,7 +289,7 @@ public:
 
     struct SPICE_INFO
     {
-        wxString primitive;
+        wxString itemType;
         wxString modelType = "";
         wxString inlineTypeString = "";
         int level = 0;
@@ -284,7 +303,7 @@ public:
         static constexpr auto NOT_CONNECTED = 0;
 
         const wxString name;
-        int symbolPinNumber;
+        unsigned symbolPinNumber;
     };
 
 
@@ -318,14 +337,14 @@ public:
         struct INFO
         {
             wxString name;
-            unsigned int id = 0; // Legacy.
+            unsigned id = 0; // Legacy (don't remove).
             DIR dir = DIR::INOUT;
             SIM_VALUE::TYPE type = SIM_VALUE::TYPE::FLOAT;
-            FLAGS flags = {}; // Legacy
+            FLAGS flags = {}; // Legacy (don't remove).
             wxString unit = "";
             CATEGORY category = CATEGORY::PRINCIPAL;
             wxString defaultValue = "";
-            wxString defaultValueOfOtherVariant = ""; // Legacy.
+            wxString defaultValueOfOtherVariant = ""; // Legacy (don't remove).
             wxString description = "";
             bool isInstanceParam = false;
         };
@@ -352,16 +371,22 @@ public:
     template <typename T>
     static TYPE ReadTypeFromFields( const std::vector<T>& aFields );
 
+    static TYPE InferTypeFromRef( const wxString& aRef );
 
-    static std::unique_ptr<SIM_MODEL> Create( TYPE aType, int aSymbolPinCount = 0 );
+    template <typename T>
+    static TYPE InferTypeFromLegacyFields( const std::vector<T>& aFields );
+
+
+    static std::unique_ptr<SIM_MODEL> Create( TYPE aType, unsigned aSymbolPinCount = 0 );
     static std::unique_ptr<SIM_MODEL> Create( const std::string& aSpiceCode );
 
     template <typename T>
-    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL& aBaseModel, int aSymbolPinCount,
+    static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL& aBaseModel, unsigned aSymbolPinCount,
                                               const std::vector<T>& aFields );
 
     template <typename T>
-    static std::unique_ptr<SIM_MODEL> Create( int aSymbolPinCount, const std::vector<T>& aFields );
+    static std::unique_ptr<SIM_MODEL> Create( unsigned aSymbolPinCount,
+                                              const std::vector<T>& aFields );
 
     template <typename T>
     static wxString GetFieldValue( const std::vector<T>* aFields, const wxString& aFieldName );
@@ -383,19 +408,19 @@ public:
     virtual bool ReadSpiceCode( const std::string& aSpiceCode );
 
     template <typename T>
-    void ReadDataFields( int aSymbolPinCount, const std::vector<T>* aFields );
+    void ReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
 
     // C++ doesn't allow virtual template methods, so we do this:
-    virtual void ReadDataSchFields( int aSymbolPinCount, const std::vector<SCH_FIELD>* aFields );
-    virtual void ReadDataLibFields( int aSymbolPinCount, const std::vector<LIB_FIELD>* aFields );
+    virtual void ReadDataSchFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields );
+    virtual void ReadDataLibFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields );
 
 
     template <typename T>
-    void WriteFields( std::vector<T>& aFields );
+    void WriteFields( std::vector<T>& aFields ) const;
 
     // C++ doesn't allow virtual template methods, so we do this:
-    virtual void WriteDataSchFields( std::vector<SCH_FIELD>& aFields );
-    virtual void WriteDataLibFields( std::vector<LIB_FIELD>& aFields );
+    virtual void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const;
+    virtual void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const;
 
 
     virtual bool HasToIncludeSpiceLibrary() const { return GetBaseModel() && !HasOverrides(); }
@@ -415,10 +440,8 @@ public:
     SPICE_INFO GetSpiceInfo() const;
     virtual std::vector<wxString> GenerateSpiceCurrentNames( const wxString& aRefName ) const;
 
-    bool ParsePinsField( int aSymbolPinCount, const wxString& aPinsField );
-
     void AddPin( const PIN& aPin );
-    int FindModelPinNumber( int aSymbolPinNumber );
+    unsigned FindModelPinNumber( unsigned aSymbolPinNumber );
     void AddParam( const PARAM::INFO& aInfo, bool aIsOtherVariant = false );
 
     DEVICE_TYPE GetDeviceType() const { return TypeInfo( GetType() ).deviceType; }
@@ -427,8 +450,10 @@ public:
     const SIM_MODEL* GetBaseModel() const { return m_baseModel; }
     virtual void SetBaseModel( const SIM_MODEL& aBaseModel ) { m_baseModel = &aBaseModel; }
 
-    int GetPinCount() const { return static_cast<int>( m_pins.size() ); }
-    const PIN& GetPin( int aIndex ) const { return m_pins.at( aIndex ); }
+    unsigned GetPinCount() const { return m_pins.size(); }
+    const PIN& GetPin( unsigned aIndex ) const { return m_pins.at( aIndex ); }
+
+    std::vector<std::reference_wrapper<const PIN>> GetPins() const;
 
     void SetPinSymbolPinNumber( int aIndex, int aSymbolPinNumber )
     {
@@ -436,11 +461,14 @@ public:
     }
 
 
-    int GetParamCount() const { return static_cast<int>( m_params.size() ); }
-    const PARAM& GetParam( int aParamIndex ) const; // Return base parameter unless it's overridden.
-    const PARAM& GetUnderlyingParam( int aParamIndex ) const; // Return the actual parameter.
-    const PARAM& GetBaseParam( int aParamIndex ) const; // Always return base parameter if it exists.
-    virtual bool SetParamValue( int aParamIndex, const wxString& aValue,
+    unsigned GetParamCount() const { return m_params.size(); }
+    const PARAM& GetParam( unsigned aParamIndex ) const; // Return base parameter unless it's overridden.
+
+    std::vector<std::reference_wrapper<const PARAM>> GetParams() const;
+
+    const PARAM& GetUnderlyingParam( unsigned aParamIndex ) const; // Return the actual parameter.
+    const PARAM& GetBaseParam( unsigned aParamIndex ) const; // Always return base parameter if it exists.
+    virtual bool SetParamValue( unsigned aParamIndex, const wxString& aValue,
                                 SIM_VALUE_GRAMMAR::NOTATION aNotation
                                     = SIM_VALUE_GRAMMAR::NOTATION::SI );
 
@@ -450,10 +478,28 @@ public:
     // Can modifying a model parameter also modify other parameters?
     virtual bool HasAutofill() const { return false; }
 
+    wxString GetErrorMessage() { return m_errorMessage; }
+
 protected:
     SIM_MODEL( TYPE aType );
 
+    template <typename T>
+    void WriteInferredDataFields( std::vector<T>& aFields, const wxString& aValue ) const;
+
+    virtual wxString GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const;
+
+    wxString GenerateParamsField( const wxString& aPairSeparator ) const;
+    bool ParseParamsField( const wxString& aParamsField );
+
+    bool ParsePinsField( unsigned aSymbolPinCount, const wxString& aPinsField );
+
+    // TODO: Rename.
+    virtual bool SetParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
+                                        SIM_VALUE_GRAMMAR::NOTATION aNotation
+                                            = SIM_VALUE_GRAMMAR::NOTATION::SPICE );
+
     wxString m_spiceCode;
+    wxString m_errorMessage;
 
 private:
     static std::unique_ptr<SIM_MODEL> create( TYPE aType );
@@ -461,10 +507,10 @@ private:
 
 
     template <typename T>
-    void doReadDataFields( int aSymbolPinCount, const std::vector<T>* aFields );
+    void doReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
 
     template <typename T>
-    void doWriteFields( std::vector<T>& aFields );
+    void doWriteFields( std::vector<T>& aFields ) const;
 
 
     virtual std::vector<wxString> getPinNames() const { return {}; }
@@ -473,15 +519,6 @@ private:
     wxString generateTypeField() const;
 
     wxString generatePinsField() const;
-
-    
-    wxString generateParamsField( const wxString& aPairSeparator ) const;
-    bool parseParamsField( const wxString& aParamsField );
-
-    // TODO: Rename.
-    virtual bool setParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
-                                        SIM_VALUE_GRAMMAR::NOTATION aNotation
-                                            = SIM_VALUE_GRAMMAR::NOTATION::SPICE );
 
 
     const SIM_MODEL* m_baseModel;

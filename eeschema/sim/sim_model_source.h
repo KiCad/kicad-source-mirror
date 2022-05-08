@@ -33,35 +33,53 @@ class SIM_MODEL_SOURCE : public SIM_MODEL
 public:
     SIM_MODEL_SOURCE( TYPE aType );
 
+    void ReadDataSchFields( unsigned aSymbolPinCount, const std::vector<SCH_FIELD>* aFields ) override;
+    void ReadDataLibFields( unsigned aSymbolPinCount, const std::vector<LIB_FIELD>* aFields ) override;
+
+    void WriteDataSchFields( std::vector<SCH_FIELD>& aFields ) const override;
+    void WriteDataLibFields( std::vector<LIB_FIELD>& aFields ) const override;
+
     wxString GenerateSpiceModelLine( const wxString& aModelName ) const override;
     wxString GenerateSpiceItemLine( const wxString& aRefName,
                                     const wxString& aModelName,
                                     const std::vector<wxString>& aPinNetNames ) const override;
 
-    bool SetParamValue( int aParamIndex, const wxString& aValue,
+    bool SetParamValue( unsigned aParamIndex, const wxString& aValue,
                         SIM_VALUE_GRAMMAR::NOTATION aNotation ) override;
 
     bool HasAutofill() const override { return true; }
 
+protected:
+    wxString GenerateParamValuePair( const PARAM& aParam, bool& aIsFirst ) const override;
+
 private:
+    template <typename T>
+    void inferredReadDataFields( unsigned aSymbolPinCount, const std::vector<T>* aFields );
+
+    template <typename T>
+    void inferredWriteDataFields( std::vector<T>& aFields ) const;
+
     std::vector<wxString> getPinNames() const override;
 
-    static const std::vector<PARAM::INFO>& makeParams( TYPE aType );
+    static const std::vector<PARAM::INFO>& makeParamInfos( TYPE aType );
 
-    static std::vector<PARAM::INFO> makeDc( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makeSin( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makePulse( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makeExp( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makeSfam( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makeSffm( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makePwl( wxString aPrefix, wxString aQuantity, wxString aUnit );
-    static std::vector<PARAM::INFO> makeWhiteNoise( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makePinkNoise( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makeBurstNoise( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makeRandomUniform( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makeRandomNormal( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makeRandomExp( wxString aPrefix, wxString aUnit );
-    static std::vector<PARAM::INFO> makeRandomPoisson( wxString aPrefix, wxString aUnit );
+    static std::vector<PARAM::INFO> makeDcParamInfos( wxString aPrefix, wxString aUnit );
+    static std::vector<PARAM::INFO> makeSinParamInfos( wxString aPrefix, wxString aUnit );
+    static std::vector<PARAM::INFO> makePulseParamInfos( wxString aPrefix, wxString aUnit );
+    static std::vector<PARAM::INFO> makeExpParamInfos( wxString aPrefix, wxString aUnit );
+    static std::vector<PARAM::INFO> makeSfamParamInfos( wxString aPrefix, wxString aUnit );
+    static std::vector<PARAM::INFO> makeSffmParamInfos( wxString aPrefix, wxString aUnit );
+    static std::vector<PARAM::INFO> makePwlParamInfos( wxString aPrefix, wxString aQuantity,
+                                                       wxString aUnit );
+    static std::vector<PARAM::INFO> makeWhiteNoiseParamInfos( wxString aPrefix, wxString aUnit );
+    static std::vector<PARAM::INFO> makePinkNoiseParamInfos( wxString aPrefix, wxString aUnit );
+    static std::vector<PARAM::INFO> makeBurstNoiseParamInfos( wxString aPrefix, wxString aUnit );
+    static std::vector<PARAM::INFO> makeRandomUniformParamInfos( wxString aPrefix, wxString aUnit );
+    static std::vector<PARAM::INFO> makeRandomNormalParamInfos( wxString aPrefix, wxString aUnit );
+    static std::vector<PARAM::INFO> makeRandomExpParamInfos( wxString aPrefix, wxString aUnit );
+    static std::vector<PARAM::INFO> makeRandomPoissonParamInfos( wxString aPrefix, wxString aUnit );
+
+    bool m_isInferred;
 };
 
 #endif // SIM_MODEL_SOURCE_H
