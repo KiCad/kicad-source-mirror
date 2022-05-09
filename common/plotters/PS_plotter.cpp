@@ -187,7 +187,6 @@ void PSLIKE_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I&
     else
     {
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-        aCornerRadius -= GetCurrentLineWidth() / 2;
     }
 
 
