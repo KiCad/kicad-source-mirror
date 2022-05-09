@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 14:57-0700\n"
-"PO-Revision-Date: 2022-04-28 11:08+0000\n"
+"PO-Revision-Date: 2022-05-10 18:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.1-dev\n"
+"X-Generator: Weblate 4.12.1\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -496,7 +496,7 @@ msgstr "Växla realistiskt läge"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:236
 msgid "Toggle board body display"
-msgstr "Växla visning av mönsterkortets kropp"
+msgstr "Växla visning av mönsterkortets basmaterial"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:240
 msgid "Show 3D Axis"
@@ -619,11 +619,11 @@ msgstr "Lödmask undersida:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:117
 msgid "Copper/surface finish:"
-msgstr "Koppar/ytbeläggning:"
+msgstr "Koppar/oxidskydd:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:130
 msgid "Board body:"
-msgstr "Mönsterkortskropp:"
+msgstr "Basmaterial:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:24
 msgid "Board Layers"
@@ -675,7 +675,7 @@ msgstr "Realistiskt läge"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:79
 msgid "Show board body"
-msgstr "Visa mönsterkortskropp"
+msgstr "Visa basmaterial"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:82
 msgid "Show filled areas in zones"
@@ -26086,7 +26086,7 @@ msgstr "Grafiska element"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:55
 msgid "Silk Layers"
-msgstr "Anvisningstrycklager"
+msgstr "Anvisningstryckslager"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:256
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:134
@@ -29141,7 +29141,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:181
 msgid "Minimum clearance:"
-msgstr "Minimiavstånd:"
+msgstr "Minsta isolationsavstånd:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:186
 msgid ""
@@ -29191,7 +29191,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:246
 msgid "Copper to hole clearance:"
-msgstr "Avstånd koppar till hål:"
+msgstr "Frigång koppar till hål:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:251
 msgid ""
@@ -29199,13 +29199,13 @@ msgid ""
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
 msgstr ""
-"Minsta avstånd mellan ett hål och ett oförknippat kopparelement. Om angivet "
+"Minsta frigång mellan ett hål och ett oförknippat kopparelement. Om angivet "
 "är detta ett absolut minimum som inte kan underskridas av anpassade regler "
 "eller andra inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:262
 msgid "Copper to edge clearance:"
-msgstr "Avstånd koppar till kant:"
+msgstr "Frigång koppar till ytterkontur:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:267
 msgid ""
@@ -29213,7 +29213,7 @@ msgid ""
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
 msgstr ""
-"Minsta avstånd mellan mönsterkortets kant och kopparelement. Om angivet är "
+"Minsta frigång mellan mönsterkortets kant och kopparelement. Om angivet är "
 "detta ett absolut minimum som inte kan underskridas av anpassade regler "
 "eller andra inställningar."
 
@@ -29244,7 +29244,7 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
-"Minsta avstånd mellan två borrade hål. Om angivet är detta ett absolut "
+"Minsta frigång mellan två borrade hål. Om angivet är detta ett absolut "
 "minimum som inte kan underskridas av anpassade regler eller andra "
 "inställningar. (Obs: detta gäller inte frästa hål.)"
 
@@ -29284,7 +29284,7 @@ msgstr "Anvisningstryck"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:417
 msgid "Minimum item clearance:"
-msgstr "Minsta föremålsavstånd:"
+msgstr "Minsta frigång mellan objekt:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:422
 msgid ""
@@ -30479,7 +30479,7 @@ msgstr "kortminimum"
 #: pcbnew/drc/drc_engine.cpp:814 pcbnew/drc/drc_engine.cpp:811
 #, c-format
 msgid "Board minimum clearance: %s."
-msgstr "Kortets minsta avstånd: %s."
+msgstr "Mönsterkortets minsta isolationsavstånd: %s."
 
 #: pcbnew/drc/drc_engine.cpp:823 pcbnew/drc/drc_engine.cpp:820
 msgid "board minimum hole"
@@ -30488,7 +30488,7 @@ msgstr "kortets minsta hål"
 #: pcbnew/drc/drc_engine.cpp:826 pcbnew/drc/drc_engine.cpp:823
 #, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr "Kortets minsta hålavstånd: %s."
+msgstr "Mönsterkortets minsta frigång mellan hål: %s."
 
 #: pcbnew/drc/drc_engine.cpp:843 pcbnew/drc/drc_engine.cpp:840
 #, c-format
@@ -31222,7 +31222,7 @@ msgstr "Kontrollerar spärrzons- och förbudsbegränsningar..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:141
 msgid "Checking copper to board edge clearances..."
-msgstr "Kontrollera koppar-till-kortkantsavstånd..."
+msgstr "Kontrollerar frigång mellan koppar och mönsterkortets ytterkontur..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:146
 msgid "Checking silk to board edge clearances..."
@@ -34922,7 +34922,9 @@ msgstr "Stämd: skev "
 
 #: pcbnew/router/pns_router.cpp:212
 msgid "Diff pair gap is less than board minimum clearance."
-msgstr "Differentialparavståndet är mindre än kortets minimiavstånd."
+msgstr ""
+"Differentialparets isolationsavstånd är mindre än mönsterkortets minsta "
+"isolationsavstånd."
 
 #: pcbnew/router/pns_router.cpp:232
 msgid "Cannot start routing from a non-plated hole."
