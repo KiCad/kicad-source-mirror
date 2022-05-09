@@ -57,10 +57,9 @@
 /* Execute a remote command send by Eeschema via a socket,
  * port KICAD_PCB_PORT_SERVICE_NUMBER
  * cmdline = received command from Eeschema
- * Commands are
- * $PART: "reference"   put cursor on component
- * $PIN: "pin name"  $PART: "reference" put cursor on the footprint pin
- * $NET: "net name" highlight the given net (if highlight tool is active)
+ * Commands are:
+ * $NET: "net name" Highlight the given net
+ * $NETS: "net name 1,net name 2" Highlight all given nets
  * $CLEAR Clear existing highlight
  * They are a keyword followed by a quoted string.
  */
@@ -145,58 +144,6 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         }
 
         netcode = -1;
-    }
-    else if( strcmp( idcmd, "$PIN:" ) == 0 )
-    {
-        wxString pinName = FROM_UTF8( text );
-
-        text = strtok( nullptr, " \n\r" );
-
-        if( text && strcmp( text, "$PART:" ) == 0 )
-            text = strtok( nullptr, "\"\n\r" );
-
-        modName = FROM_UTF8( text );
-
-        footprint = pcb->FindFootprintByReference( modName );
-
-        if( footprint )
-            pad = footprint->FindPadByNumber( pinName );
-
-        if( pad )
-            netcode = pad->GetNetCode();
-
-        if( footprint == nullptr )
-            msg.Printf( _( "%s not found" ), modName );
-        else if( pad == nullptr )
-            msg.Printf( _( "%s pin %s not found" ), modName, pinName );
-        else
-            msg.Printf( _( "%s pin %s found" ), modName, pinName );
-
-        SetStatusText( msg );
-    }
-    else if( strcmp( idcmd, "$PART:" ) == 0 )
-    {
-        pcb->ResetNetHighLight();
-
-        modName = FROM_UTF8( text );
-
-        footprint = pcb->FindFootprintByReference( modName );
-
-        if( footprint )
-            msg.Printf( _( "%s found" ), modName );
-        else
-            msg.Printf( _( "%s not found" ), modName );
-
-        SetStatusText( msg );
-    }
-    else if( strcmp( idcmd, "$SHEET:" ) == 0 )
-    {
-        msg.Printf( _( "Selecting all from sheet \"%s\"" ), FROM_UTF8( text ) );
-        wxString sheetUIID( FROM_UTF8( text ) );
-        SetStatusText( msg );
-        GetToolManager()->RunAction( PCB_ACTIONS::selectOnSheetFromEeschema, true,
-                                     static_cast<void*>( &sheetUIID ) );
-        return;
     }
     else if( strcmp( idcmd, "$CLEAR" ) == 0 )
     {

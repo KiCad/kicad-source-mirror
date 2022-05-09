@@ -295,19 +295,6 @@ public:
     void TestDanglingEnds();
 
     /**
-     * Send a message to Pcbnew via a socket connection.
-     *
-     * Commands are:
-     * - $PART: reference   put cursor on footprint anchor
-     * - $PIN: number $PART: reference put cursor on the footprint pad
-     * - $SHEET: time_stamp  select all footprints of symbols is the schematic sheet path
-     *
-     * @param aObjectToSync is the item to be located on board.
-     * @param aPart is the symbol if \a aObjectToSync is a sub item of a symbol (like a pin).
-     */
-    void SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_SYMBOL* aPart );
-
-    /**
      * Sends items to Pcbnew for selection
      *
      * @param aSelectConnections - set to select connected tracks/vias too

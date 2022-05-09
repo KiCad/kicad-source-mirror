@@ -379,103 +379,8 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 }
 
 
-std::string FormatProbeItem( EDA_ITEM* aItem, SCH_SYMBOL* aSymbol )
+void SCH_EDIT_FRAME::SendSelectItems( bool aSelectConnections, const std::deque<EDA_ITEM*>& aItems )
 {
-    // This is a keyword followed by a quoted string.
-
-    // Cross probing to Pcbnew if a pin or a symbol is found.
-    switch( aItem->Type() )
-    {
-    case SCH_FIELD_T:
-        if( aSymbol )
-        {
-            return StrPrintf( "$PART: \"%s\"",
-                              TO_UTF8( aSymbol->GetField( REFERENCE_FIELD )->GetText() ) );
-        }
-        break;
-
-    case SCH_SYMBOL_T:
-        aSymbol = (SCH_SYMBOL*) aItem;
-        return StrPrintf( "$PART: \"%s\"",
-                          TO_UTF8( aSymbol->GetField( REFERENCE_FIELD )->GetText() ) );
-
-    case SCH_SHEET_T:
-        {
-            // For cross probing, we need the full path of the sheet, because
-            // in complex hierarchies the sheet uuid of not unique
-            SCH_SHEET* sheet = (SCH_SHEET*)aItem;
-            wxString full_path;
-
-            SCH_SHEET* parent = sheet;
-            while( (parent = dynamic_cast<SCH_SHEET*>( parent->GetParent() ) ) )
-            {
-                if( parent->GetParent() )   // The root sheet has no parent and path is just "/"
-                {
-                    full_path.Prepend( parent->m_Uuid.AsString() );
-                    full_path.Prepend( "/" );
-                }
-            }
-
-            full_path += "/" + sheet->m_Uuid.AsString();
-
-            return StrPrintf( "$SHEET: \"%s\"", TO_UTF8( full_path ) );
-        }
-
-    case SCH_PIN_T:
-        {
-            SCH_PIN* pin = (SCH_PIN*) aItem;
-            aSymbol = pin->GetParentSymbol();
-
-            if( !pin->GetShownNumber().IsEmpty() )
-            {
-                return StrPrintf( "$PIN: \"%s\" $PART: \"%s\"",
-                                  TO_UTF8( pin->GetShownNumber() ),
-                                  TO_UTF8( aSymbol->GetField( REFERENCE_FIELD )->GetText() ) );
-            }
-            else
-            {
-                return StrPrintf( "$PART: \"%s\"",
-                                  TO_UTF8( aSymbol->GetField( REFERENCE_FIELD )->GetText() ) );
-            }
-        }
-
-    default:
-        break;
-    }
-
-    return "";
-}
-
-
-void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_SYMBOL* aLibItem )
-{
-    wxASSERT( aObjectToSync );     // fix the caller
-
-    if( !aObjectToSync )
-        return;
-
-    std::string packet = FormatProbeItem( aObjectToSync, aLibItem );
-
-    if( !packet.empty() )
-    {
-        if( Kiface().IsSingle() )
-        {
-            SendCommand( MSG_TO_PCB, packet );
-        }
-        else
-        {
-            // Typically ExpressMail is going to be s-expression packets, but since
-            // we have existing interpreter of the cross probe packet on the other
-            // side in place, we use that here.
-            Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_CROSS_PROBE, packet, this );
-        }
-    }
-}
-
-
-std::string FormatProbeItems( bool aSelectConnections, const std::deque<EDA_ITEM*>& aItems )
-{
-    std::string        command = "";
     std::set<wxString> parts;
 
     for( EDA_ITEM* item : aItems )
@@ -484,7 +389,7 @@ std::string FormatProbeItems( bool aSelectConnections, const std::deque<EDA_ITEM
         {
         case SCH_SYMBOL_T:
         {
-            SCH_SYMBOL* symbol = (SCH_SYMBOL*) item;
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
             wxString ref = symbol->GetField( REFERENCE_FIELD )->GetText();
 
@@ -496,24 +401,9 @@ std::string FormatProbeItems( bool aSelectConnections, const std::deque<EDA_ITEM
         case SCH_SHEET_T:
         {
             // For cross probing, we need the full path of the sheet, because
-            // in complex hierarchies the sheet uuid of not unique
-            SCH_SHEET* sheet = (SCH_SHEET*) item;
-            wxString   full_path;
+            // we search by the footprint path prefix in the PCB editor
 
-            SCH_SHEET* parent = sheet;
-
-            while( ( parent = dynamic_cast<SCH_SHEET*>( parent->GetParent() ) ) )
-            {
-                if( parent->GetParent() && parent->GetParent()->Type() == SCH_SHEET_T )
-                {
-                    // The root sheet has no parent sheet and path is just "/"
-
-                    full_path.Prepend( parent->m_Uuid.AsString() );
-                    full_path.Prepend( "/" );
-                }
-            }
-
-            full_path += "/" + sheet->m_Uuid.AsString();
+            wxString full_path = GetCurrentSheet().PathAsString() + item->m_Uuid.AsString();
 
             parts.emplace( wxT( "S" ) + full_path );
 
@@ -522,7 +412,7 @@ std::string FormatProbeItems( bool aSelectConnections, const std::deque<EDA_ITEM
 
         case SCH_PIN_T:
         {
-            SCH_PIN*    pin = (SCH_PIN*) item;
+            SCH_PIN*    pin = static_cast<SCH_PIN*>( item );
             SCH_SYMBOL* symbol = pin->GetParentSymbol();
 
             wxString ref = symbol->GetField( REFERENCE_FIELD )->GetText();
@@ -537,48 +427,34 @@ std::string FormatProbeItems( bool aSelectConnections, const std::deque<EDA_ITEM
         }
     }
 
-
-    if( !parts.empty() )
+    if( parts.empty() )
     {
-        command = "$SELECT: ";
-
-        if( aSelectConnections )
-            command += "1";
-        else
-            command += "0";
-
-        command += ",";
-
-        for( wxString part : parts )
-        {
-            command += part;
-            command += ",";
-        }
-
-        command.pop_back();
+        return;
     }
 
-    return command;
-}
+    std::string command = "$SELECT: ";
 
+    command += aSelectConnections ? "1" : "0";
+    command += ",";
 
-void SCH_EDIT_FRAME::SendSelectItems( bool aSelectConnections, const std::deque<EDA_ITEM*>& aItems )
-{
-    std::string packet = FormatProbeItems( aSelectConnections, aItems );
-
-    if( !packet.empty() )
+    for( wxString part : parts )
     {
-        if( Kiface().IsSingle() )
-        {
-            SendCommand( MSG_TO_PCB, packet );
-        }
-        else
-        {
-            // Typically ExpressMail is going to be s-expression packets, but since
-            // we have existing interpreter of the selection packet on the other
-            // side in place, we use that here.
-            Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_SELECTION, packet, this );
-        }
+        command += part;
+        command += ",";
+    }
+
+    command.pop_back();
+
+    if( Kiface().IsSingle() )
+    {
+        SendCommand( MSG_TO_PCB, command );
+    }
+    else
+    {
+        // Typically ExpressMail is going to be s-expression packets, but since
+        // we have existing interpreter of the selection packet on the other
+        // side in place, we use that here.
+        Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_SELECTION, command, this );
     }
 }
 
