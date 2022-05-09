@@ -53,8 +53,6 @@
  *  12;"C1,C4,C5,C6";"CP6";4;"47uF";;;
  */
 
-const wxString CsvFileExtension( wxT( "csv" ) );    // BOM file extension
-
 class BOM_ENTRY
 {
 public:

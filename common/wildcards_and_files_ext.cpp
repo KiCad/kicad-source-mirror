@@ -170,6 +170,7 @@ const std::string WorkbookFileExtension( "wbk" );
 const std::string PngFileExtension( "png" );
 const std::string JpegFileExtension( "jpg" );
 const std::string TextFileExtension( "txt" );
+const std::string CsvFileExtension( "csv" );
 
 
 bool IsProtelExtension( const wxString& ext )
@@ -425,7 +426,7 @@ wxString HtmlFileWildcard()
 
 wxString CsvFileWildcard()
 {
-    return _( "CSV Files" ) + AddFileExtListToFilter( { "csv" } );
+    return _( "CSV Files" ) + AddFileExtListToFilter( { CsvFileExtension } );
 }
 
 

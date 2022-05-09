@@ -41,12 +41,15 @@
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/wx_grid.h>
+#include <wx/ffile.h>
 #include <wx/grid.h>
 #include <wx/msgdlg.h>
 #include <wx/textdlg.h>
+#include <wx/filedlg.h>
 
 #include "dialog_symbol_fields_table.h"
 #include "eda_list_dialog.h"
+#include <wildcards_and_files_ext.h>
 
 #define DISPLAY_NAME_COLUMN   0
 #define SHOW_FIELD_COLUMN     1
@@ -283,6 +286,16 @@ public:
         {
             return GetValue( m_rows[ aRow ], aCol );
         }
+    }
+
+    wxString GetRawValue( int aRow, int aCol )
+    {
+        return GetValue( m_rows[ aRow ], aCol );
+    }
+
+    GROUP_TYPE GetRowFlags( int aRow )
+    {
+        return m_rows[ aRow ].m_Flag;
     }
 
     std::vector<SCH_REFERENCE> GetRowReferences( int aRow ) const
@@ -1303,6 +1316,69 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSaveAndContinue( wxCommandEvent& aEvent )
 {
     if( TransferDataFromWindow() )
         m_parent->SaveProject();
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
+{
+    if( m_dataModel->IsEdited() )
+        if( OKOrCancelDialog( nullptr, _( "Unsaved data" ),
+                              _( "Changes are unsaved. Export unsaved data?" ), "", _( "OK" ),
+                              _( "Cancel" ) )
+            == wxID_CANCEL )
+            return;
+
+
+    // Calculate the netlist filename
+    wxFileName fn = m_parent->Schematic().GetFileName();
+    fn.SetExt( CsvFileExtension );
+
+    wxFileDialog saveDlg( this, _( "Save as CSV" ), wxPathOnly( Prj().GetProjectFullName() ),
+                          fn.GetFullName(), CsvFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( saveDlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxFFile out( saveDlg.GetPath(), "wb" );
+
+    if( !out.IsOpened() )
+        return;
+
+    // Column names
+    for( int col = 0; col < m_grid->GetNumberCols(); col++ )
+    {
+        if( !m_grid->IsColShown( col ) )
+            continue;
+
+        wxString escapedValue = m_grid->GetColLabelValue( col );
+        escapedValue.Replace( "\"", "\"\"" );
+
+        wxString format = col == m_grid->GetNumberCols() - 1 ? "\"%s\"\r\n" : "\"%s\",";
+
+        out.Write( wxString::Format( format, escapedValue ) );
+    }
+
+    // Data rows
+    for( int row = 0; row < m_grid->GetNumberRows(); row++ )
+    {
+        // Don't output child rows
+        if( m_dataModel->GetRowFlags( row ) == CHILD_ITEM )
+            continue;
+
+        for( int col = 0; col < m_grid->GetNumberCols(); col++ )
+        {
+            if( !m_grid->IsColShown( col ) )
+                continue;
+
+            // Get the unanottated version of the field, e.g. no ">   " or "v   " by
+            wxString escapedValue = m_dataModel->GetRawValue( row, col );
+            escapedValue.Replace( "\"", "\"\"" );
+
+            wxString format = col == m_grid->GetNumberCols() - 1 ? "\"%s\"\r\n" : "\"%s\",";
+
+            out.Write( wxString::Format( format, escapedValue ) );
+        }
+    }
 }
 
 
