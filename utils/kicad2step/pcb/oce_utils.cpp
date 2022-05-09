@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -673,6 +673,14 @@ void PCBMODEL::SetPCBThickness( double aThickness )
 }
 
 
+void PCBMODEL::SetBoardColor( double r, double g, double b )
+{
+    m_boardColor[0] = r;
+    m_boardColor[1] = g;
+    m_boardColor[2] = b;
+}
+
+
 void PCBMODEL::SetMinDistance( double aDistance )
 {
     // m_minDistance2 keeps a squared distance value
@@ -889,16 +897,17 @@ bool PCBMODEL::CreatePCB()
 
 
     // color the PCB
-    Handle( XCAFDoc_ColorTool ) color = XCAFDoc_DocumentTool::ColorTool( m_doc->Main () );
-    Quantity_Color pcb_green( 0.06, 0.4, 0.06, Quantity_TOC_RGB );
-    color->SetColor( m_pcb_label, pcb_green, XCAFDoc_ColorSurf );
+    Handle( XCAFDoc_ColorTool ) colorTool = XCAFDoc_DocumentTool::ColorTool( m_doc->Main () );
+    Quantity_Color color( m_boardColor[0], m_boardColor[1], m_boardColor[2], Quantity_TOC_RGB );
+
+    colorTool->SetColor( m_pcb_label, color, XCAFDoc_ColorSurf );
 
     TopExp_Explorer topex;
     topex.Init( m_assy->GetShape( m_pcb_label ), TopAbs_SOLID );
 
     while( topex.More() )
     {
-        color->SetColor( topex.Current(), pcb_green, XCAFDoc_ColorSurf );
+        colorTool->SetColor( topex.Current(), color, XCAFDoc_ColorSurf );
         topex.Next();
     }
 

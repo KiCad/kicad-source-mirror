@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,6 +101,8 @@ public:
         TRIPLET aOffset, TRIPLET aOrientation, TRIPLET aScale,
         bool aSubstituteModels = true );
 
+    void SetBoardColor( double r, double g, double b );
+
     // set the thickness of the PCB (mm); the top of the PCB shall be at Z = aThickness
     // aThickness < 0.0 == use default thickness
     // aThickness <= THICKNESS_MIN == use THICKNESS_MIN
@@ -156,10 +158,10 @@ private:
     int                             m_components;   // number of successfully loaded components;
     double                          m_precision;    // model (length unit) numeric precision
     double                          m_angleprec;    // angle numeric precision
+    double                          m_boardColor[3];// RGB values
     double                          m_thickness;    // PCB thickness, mm
 
-    // minimum X value in curves (leftmost curve feature).
-    double                          m_minx;
+    double                          m_minx;         // leftmost curve point
     double                          m_minDistance2; // minimum squared distance between items (mm)
     std::list<KICADCURVE>::iterator m_mincurve;     // iterator to the leftmost curve
 

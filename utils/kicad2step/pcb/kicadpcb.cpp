@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +43,13 @@
 KICADPCB::KICADPCB( const wxString& aPcbName )
 {
     m_resolver.Set3DConfigDir( wxT( "" ) );
+
+    m_topSolderMask    = wxColour(  15, 102,  15 );
+    m_bottomSolderMask = wxColour(  15, 102,  15 );
+    m_topSilk          = wxColour( 240, 240, 240 );
+    m_bottomSilk       = wxColour( 240, 240, 240 );
+    m_copperFinish     = wxColour( 191, 155,  58 );
+
     m_thickness = 1.6;
     m_pcb_model = nullptr;
     m_minDistance = MIN_DISTANCE;
@@ -124,9 +131,7 @@ bool KICADPCB::ReadFile( const wxString& aFileName )
 bool KICADPCB::WriteSTEP( const wxString& aFileName )
 {
     if( m_pcb_model )
-    {
         return m_pcb_model->WriteSTEP( aFileName );
-    }
 
     return false;
 }
@@ -136,9 +141,7 @@ bool KICADPCB::WriteSTEP( const wxString& aFileName )
 bool KICADPCB::WriteIGES( const wxString& aFileName )
 {
     if( m_pcb_model )
-    {
         return m_pcb_model->WriteIGES( aFileName );
-    }
 
     return false;
 }
@@ -250,6 +253,7 @@ bool KICADPCB::parseLayers( SEXPR::SEXPR* data )
                                              child->GetLineNumber() ) );
             return false;
         }
+
         std::string ref;
 
         if( child->GetChild( 1 )->IsSymbol() )
@@ -258,6 +262,146 @@ bool KICADPCB::parseLayers( SEXPR::SEXPR* data )
             ref = child->GetChild( 1 )->GetString();
 
         m_layersNames[ref] = child->GetChild( 0 )->GetInteger();
+    }
+
+    return true;
+}
+
+
+bool KICADPCB::parseStackupLayer( SEXPR::SEXPR* data )
+{
+    if( data->IsList() && data->GetNumberOfChildren() >= 3 )
+    {
+        size_t nc = data->GetNumberOfChildren();
+        SEXPR::SEXPR* child = NULL;
+        std::string   ref;
+        std::string   value;
+
+        for( size_t i = 1; i < nc; ++i )
+        {
+            child = data->GetChild( i );
+
+            if( child->IsList() && child->GetChild( 0 )->GetSymbol() == "type" )
+            {
+                if( child->GetChild( 1 )->IsSymbol() )
+                    ref = child->GetChild( 1 )->GetSymbol();
+                else
+                    ref = child->GetChild( 1 )->GetString();
+            }
+            else if( child->IsList() && child->GetChild( 0 )->GetSymbol() == "color" )
+            {
+                if( child->GetChild( 1 )->IsSymbol() )
+                    value = child->GetChild( 1 )->GetSymbol();
+                else
+                    value = child->GetChild( 1 )->GetString();
+            }
+        }
+
+        if( !value.empty() )
+        {
+            wxString colorName( value );
+            wxColour color;
+
+            if( colorName.StartsWith( wxT( "#" ) ) )
+                color = wxColour( colorName.Left( 7 ) /* drop alpha component */ );
+            else if( colorName == wxT( "Green" ) )
+                color = wxColour(  20,  51,  36 );
+            else if( colorName == wxT( "Light Green" ) )
+                color = wxColour(  91, 168,  12);
+            else if( colorName == wxT( "Saturated Green" ) )
+                color = wxColour(  13, 104,  11 );
+            else if( colorName == wxT( "Red" ) )
+                color = wxColour( 181,  19,  21 );
+            else if( colorName == wxT( "Light Red" ) )
+                color = wxColour( 210,  40,  14 );
+            else if( colorName == wxT( "Red/Orange" ) )
+                color = wxColour( 239,  53,  41 );
+            else if( colorName == wxT( "Blue" ) )
+                color = wxColour(   2,  59, 162 );
+            else if( colorName == wxT( "Light Blue 1" ) )
+                color = wxColour(  54,  79, 116 );
+            else if( colorName == wxT( "Light Blue 2" ) )
+                color = wxColour(  61,  85, 130 );
+            else if( colorName == wxT( "Green/Blue" ) )
+                color = wxColour(  21,  70,  80 );
+            else if( colorName == wxT( "Black" ) )
+                color = wxColour(  11,  11,  11 );
+            else if( colorName == wxT( "White" ) )
+                color = wxColour( 245, 245, 245 );
+            else if( colorName == wxT( "Purple" ) )
+                color = wxColour(  32,   2,  53 );
+            else if( colorName == wxT( "Light Purple" ) )
+                color = wxColour( 119,  31,  91 );
+            else if( colorName == wxT( "Yellow" ) )
+                color = wxColour( 194,  195,  0 );
+
+            if( ref == "Top Silk Screen" )
+                m_topSilk = color;
+            else if( ref == "Top Solder Mask" )
+                m_topSolderMask = color;
+            else if( ref == "Bottom Silk Screen" )
+                m_bottomSilk = color;
+            else if( ref == "Bottom Solder Mask" )
+                m_bottomSolderMask = color;
+        }
+    }
+
+    return true;
+}
+
+
+bool KICADPCB::parseStackup( SEXPR::SEXPR* data )
+{
+    size_t nc = data->GetNumberOfChildren();
+    SEXPR::SEXPR* child = NULL;
+
+    for( size_t i = 1; i < nc; ++i )
+    {
+        child = data->GetChild( i );
+
+        if( !child->IsList() )
+        {
+            ReportMessage( wxString::Format( wxT( "corrupt PCB file (line %d)\n" ),
+                                             child->GetLineNumber() ) );
+            return false;
+        }
+
+        std::string ref;
+
+        if( child->GetChild( 0 )->GetSymbol() == "layer" )
+        {
+            parseStackupLayer( child );
+        }
+        else if( child->GetChild( 0 )->GetSymbol() == "copper_finish" )
+        {
+            if( child->GetChild( 1 )->IsSymbol() )
+                ref = child->GetChild( 1 )->GetSymbol();
+            else
+                ref = child->GetChild( 1 )->GetString();
+
+            wxString finishName( ref );
+
+            if( finishName.EndsWith( wxT( "OSP" ) ) )
+            {
+                m_copperFinish = wxColour( 184, 115, 50 );
+            }
+            else if( finishName.EndsWith( wxT( "IG" ) )
+                  || finishName.EndsWith( wxT( "gold" ) ) )
+            {
+                m_copperFinish = wxColour( 178, 156, 0 );
+            }
+            else if( finishName.StartsWith( wxT( "HAL" ) )
+                  || finishName.StartsWith( wxT( "HASL" ) )
+                  || finishName.EndsWith( wxT( "tin" ) )
+                  || finishName.EndsWith( wxT( "nickel" ) ) )
+            {
+                m_copperFinish = wxColour( 160, 160, 160 );
+            }
+            else if( finishName.EndsWith( wxT( "silver" ) ) )
+            {
+                m_copperFinish = wxColour( 213, 213, 213 );
+            }
+        }
     }
 
     return true;
@@ -323,7 +467,10 @@ bool KICADPCB::parseSetup( SEXPR::SEXPR* data )
             m_drillOrigin.y = child->GetChild( 2 )->GetDouble();
             m_hasDrillOrigin = true;
         }
-
+        else if( child->GetChild( 0 )->GetSymbol() == "stackup" )
+        {
+            parseStackup( child );
+        }
     }
 
     return true;
@@ -389,15 +536,11 @@ bool KICADPCB::parsePolygon( SEXPR::SEXPR* data )
     std::unique_ptr<KICADCURVE> poly = std::make_unique<KICADCURVE>();
 
     if( !poly->Read( data, CURVE_POLYGON ) )
-    {
         return false;
-    }
 
     // reject any curves not on the Edge.Cuts layer
     if( poly->GetLayer() != LAYER_EDGE )
-    {
         return true;
-    }
 
     auto pts = poly->m_poly;
 
@@ -460,23 +603,23 @@ bool KICADPCB::ComposePCB( bool aComposeVirtual, bool aSubstituteModels )
     // Determine the coordinate system reference:
     // Precedence of reference point is Drill Origin > Grid Origin > User Offset
     if( m_useDrillOrigin && m_hasDrillOrigin )
-    {
         origin = m_drillOrigin;
-    }
     else if( m_useGridOrigin && m_hasDrillOrigin )
-    {
         origin = m_gridOrigin;
-    }
     else
-    {
         origin = m_origin;
-    }
 
     m_pcb_model = new PCBMODEL( m_pcbName );
+
+    // TODO: Handle when top & bottom soldermask colours are different...
+    m_pcb_model->SetBoardColor( m_topSolderMask.Red() / 255.0,
+                                m_topSolderMask.Green() / 255.0,
+                                m_topSolderMask.Blue() / 255.0 );
+
     m_pcb_model->SetPCBThickness( m_thickness );
     m_pcb_model->SetMinDistance( m_minDistance );
 
-    for( auto i : m_curves )
+    for( KICADCURVE* i : m_curves )
     {
         if( CURVE_NONE == i->m_form || LAYER_EDGE != i->m_layer )
             continue;
@@ -501,7 +644,7 @@ bool KICADPCB::ComposePCB( bool aComposeVirtual, bool aSubstituteModels )
         m_pcb_model->AddOutlineSegment( &lcurve );
     }
 
-    for( auto i : m_footprints )
+    for( KICADFOOTPRINT* i : m_footprints )
         i->ComposePCB( m_pcb_model, &m_resolver, origin, aComposeVirtual, aSubstituteModels );
 
     ReportMessage( wxT( "Create PCB solid model\n" ) );
