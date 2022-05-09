@@ -1468,8 +1468,6 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_LEFT ) && !item )
         {
-            EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
-
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
             if( isTextBox )
