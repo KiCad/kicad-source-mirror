@@ -674,11 +674,6 @@ TOOL_ACTION PCB_ACTIONS::zoneDuplicate( "pcbnew.EditorControl.zoneDuplicate",
         _( "Duplicate Zone onto Layer..." ), _( "Duplicate zone outline onto a different layer" ),
         BITMAPS::zone_duplicate );
 
-TOOL_ACTION PCB_ACTIONS::placeTarget( "pcbnew.EditorControl.placeTarget",
-        AS_GLOBAL, 0, "",
-        _( "Add Layer Alignment Target" ), _( "Add a layer alignment target" ),
-        BITMAPS::add_pcb_target, AF_ACTIVATE );
-
 TOOL_ACTION PCB_ACTIONS::placeFootprint( "pcbnew.EditorControl.placeFootprint",
         AS_GLOBAL,
         'A', LEGACY_HK_NAME( "Add Footprint" ),

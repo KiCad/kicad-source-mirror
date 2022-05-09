@@ -1274,124 +1274,6 @@ int BOARD_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 }
 
 
-int BOARD_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
-{
-    if( m_inPlaceTarget )
-        return 0;
-
-    REENTRANCY_GUARD guard( &m_inPlaceTarget );
-
-    KIGFX::VIEW* view = getView();
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    BOARD* board = getModel<BOARD>();
-    PCB_TARGET* target = new PCB_TARGET( board );
-
-    // Init the new item attributes
-    target->SetLayer( Edge_Cuts );
-    target->SetWidth( board->GetDesignSettings().GetLineThickness( Edge_Cuts ) );
-    target->SetSize( Millimeter2iu( 5 ) );
-    VECTOR2I cursorPos = controls->GetCursorPosition();
-    target->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-
-    // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( view );
-    preview.Add( target );
-    view->Add( &preview );
-
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
-    std::string tool = aEvent.GetCommandStr().get();
-    m_frame->PushTool( tool );
-    Activate();
-
-    auto setCursor =
-            [&]()
-            {
-                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
-            };
-
-    // Set initial cursor
-    setCursor();
-
-    // Main loop: keep receiving events
-    while( TOOL_EVENT* evt = Wait() )
-    {
-        setCursor();
-        cursorPos = controls->GetCursorPosition( !evt->DisableGridSnapping() );
-
-        if( evt->IsCancelInteractive() )
-        {
-            frame()->PopTool( tool );
-            break;
-        }
-        else if( evt->IsActivate() )
-        {
-            if( evt->IsMoveTool() )
-            {
-                // leave ourselves on the stack so we come back after the move
-                break;
-            }
-            else
-            {
-                frame()->PopTool( tool );
-                break;
-            }
-        }
-        else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
-        {
-            target->SetWidth( target->GetWidth() + WIDTH_STEP );
-            view->Update( &preview );
-        }
-        else if( evt->IsAction( &PCB_ACTIONS::decWidth ) )
-        {
-            int width = target->GetWidth();
-
-            if( width > WIDTH_STEP )
-            {
-                target->SetWidth( width - WIDTH_STEP );
-                view->Update( &preview );
-            }
-        }
-        else if( evt->IsClick( BUT_LEFT ) )
-        {
-            assert( target->GetSize() > 0 );
-            assert( target->GetWidth() > 0 );
-
-            BOARD_COMMIT commit( m_frame );
-            commit.Add( target );
-            commit.Push( wxT( "Place a layer alignment target" ) );
-
-            preview.Remove( target );
-
-            // Create next PCB_TARGET
-            target = new PCB_TARGET( *target );
-            preview.Add( target );
-        }
-        else if( evt->IsClick( BUT_RIGHT ) )
-        {
-            m_menu.ShowContextMenu( selection() );
-        }
-        else if( evt->IsMotion() )
-        {
-            target->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-            view->Update( &preview );
-        }
-        else
-        {
-            evt->SetPassEvent();
-        }
-    }
-
-    preview.Clear();
-    delete target;
-    view->Remove( &preview );
-
-    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
-
-    return 0;
-}
-
-
 static bool mergeZones( EDA_DRAW_FRAME* aFrame, BOARD_COMMIT& aCommit,
                         std::vector<ZONE*>& aOriginZones, std::vector<ZONE*>& aMergedZones )
 {
@@ -1675,7 +1557,6 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::ZoneDuplicate,          PCB_ACTIONS::zoneDuplicate.MakeEvent() );
 
     // Placing tools
-    Go( &BOARD_EDITOR_CONTROL::PlaceTarget,            PCB_ACTIONS::placeTarget.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::PlaceFootprint,         PCB_ACTIONS::placeFootprint.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::DrillOrigin,            PCB_ACTIONS::drillOrigin.MakeEvent() );
 

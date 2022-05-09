@@ -94,11 +94,6 @@ public:
     int EditFpInFpEditor( const TOOL_EVENT& aEvent );
 
     /**
-     * Allow user to place a layer alignment target.
-     */
-    int PlaceTarget( const TOOL_EVENT& aEvent );
-
-    /**
      * Display a dialog to select a footprint to be added and allows the user to set its position.
      */
     int PlaceFootprint( const TOOL_EVENT& aEvent );

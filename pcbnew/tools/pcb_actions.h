@@ -160,7 +160,6 @@ public:
     static TOOL_ACTION drawZoneCutout;
     static TOOL_ACTION drawSimilarZone;
     static TOOL_ACTION placeCharacteristics;
-    static TOOL_ACTION placeTarget;
     static TOOL_ACTION placeStackup;
     static TOOL_ACTION placeFootprint;
     static TOOL_ACTION placeImportedGraphics;
