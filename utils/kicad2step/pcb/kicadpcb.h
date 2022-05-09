@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@
 #define KICADPCB_H
 
 #include <wx/string.h>
+#include <wx/colour.h>
 #include <string>
 #include <vector>
 #include "3d_resolver.h"
@@ -92,6 +93,8 @@ private:
     bool parsePCB( SEXPR::SEXPR* data );
     bool parseGeneral( SEXPR::SEXPR* data );
     bool parseSetup( SEXPR::SEXPR* data );
+    bool parseStackup( SEXPR::SEXPR* data );
+    bool parseStackupLayer( SEXPR::SEXPR* data );
     bool parseLayers( SEXPR::SEXPR* data );
     bool parseModule( SEXPR::SEXPR* data );
     bool parseCurve( SEXPR::SEXPR* data, CURVE_TYPE aCurveType );
@@ -118,6 +121,11 @@ private:
 
     // PCB parameters/entities
     double                       m_thickness;
+    wxColour                     m_topSolderMask;
+    wxColour                     m_bottomSolderMask;    // Not currently used.
+    wxColour                     m_topSilk;             // Not currently used.
+    wxColour                     m_bottomSilk;          // Not currently used.
+    wxColour                     m_copperFinish;        // Not currently used.
     std::vector<KICADFOOTPRINT*> m_footprints;
     std::vector<KICADCURVE*>     m_curves;
     wxString                     m_pcbName;
