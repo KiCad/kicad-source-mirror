@@ -1252,7 +1252,7 @@ void GERBER_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre, OUTLINE_M
 
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
 
-        Circle( pos, diametre - m_currentPenWidth, FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
+        Circle( pos, diametre, FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
     }
     else
     {
@@ -1372,10 +1372,8 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
                 formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
             SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-            Rect( wxPoint( pos.x - (size.x - GetCurrentLineWidth()) / 2,
-                           pos.y - (size.y - GetCurrentLineWidth()) / 2 ),
-                  wxPoint( pos.x + (size.x - GetCurrentLineWidth()) / 2,
-                           pos.y + (size.y - GetCurrentLineWidth()) / 2 ),
+            Rect( wxPoint( pos.x - ( size.x / 2 ), pos.y - ( size.y / 2 ) ),
+                  wxPoint( pos.x + ( size.x / 2 ), pos.y + ( size.y / 2 ) ),
                   FILL_T::NO_FILL, GetCurrentLineWidth() );
         }
         else
@@ -1445,7 +1443,6 @@ void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
                                               0.0, 0, 0, GetPlotterArcHighDef(), ERROR_INSIDE );
 
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH, &gbr_metadata );
-        outline.Inflate( -GetCurrentLineWidth()/2, 16 );
 
         std::vector< wxPoint > cornerList;
         // TransformRoundRectToPolygon creates only one convex polygon
@@ -1657,7 +1654,6 @@ void GERBER_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize
     if( aTraceMode != FILLED )
     {
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH, &gbr_metadata );
-        polyshape.Inflate( -GetCurrentLineWidth()/2, 16 );
     }
 
     std::vector< wxPoint > cornerList;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -486,7 +486,7 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList, FILL_T aFi
         m_current_item->content << hpgl_end_polygon_cmd; // Close, fill polygon and draw outlines
         m_current_item->pen_returns = true;
     }
-    else if( aWidth > 0 )
+    else if( aWidth != 0 )
     {
         // Plot only the polygon outline.
         for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
@@ -659,10 +659,10 @@ void HPGL_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
         // if filled mode, the pen diameter is removed from diameter
         // to keep the pad size
         radius -= KiROUND( penDiameter ) / 2;
-    }
 
-    if( radius < 0 )
-        radius = 0;
+        if( radius < 0 )
+            radius = 0;
+    }
 
     double rsize = userToDeviceSize( radius );
 
