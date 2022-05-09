@@ -123,6 +123,6 @@ void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
         nets.Add( netinfo.second->GetNetname(), netinfo.first );
     }
 
-    auto netProperty = m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _( "Net" ) );
+    auto netProperty = m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net" ) );
     netProperty->SetChoices( nets );
 }
