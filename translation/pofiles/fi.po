@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:13-0700\n"
 "PO-Revision-Date: 2022-05-12 20:14+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -36648,6 +36648,7 @@ msgid "Show selected footprint on editor canvas"
 msgstr "Näytä valittu jalanjälki editorin kankaalle"
 
 #: pcbnew/tools/pcb_actions.cpp:374
+#, fuzzy
 msgid "Duplicate Footprint"
 msgstr "Kaksoisjalanjälki"
 
