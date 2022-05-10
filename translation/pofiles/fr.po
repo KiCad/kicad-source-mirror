@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-10 12:13-0700\n"
-"PO-Revision-Date: 2022-04-26 11:14+0200\n"
+"POT-Creation-Date: 2022-05-10 13:15+0200\n"
+"PO-Revision-Date: 2022-05-10 12:50+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -7545,18 +7545,16 @@ msgstr ""
 "schématique"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "Sauver dans Schematique"
+msgstr "Sauver dans Schématique et Fichier"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
-#, fuzzy
 msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
 msgstr ""
 "Sauve l'association d'empreintes dans le champ empreinte des symboles en "
-"schématique"
+"schématique et en fichiers"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select next unassigned symbol"
@@ -9138,9 +9136,8 @@ msgid "Set To"
 msgstr "Ajuster à"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
-#, fuzzy
 msgid "Text color:"
-msgstr "Couleur de nets:"
+msgstr "Couleur de texte:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:220
 #: eeschema/pin_type.cpp:129
@@ -9438,9 +9435,8 @@ msgstr "Position Y"
 #: pcbnew/fp_text.cpp:297 pcbnew/fp_textbox.cpp:242
 #: pcbnew/pcb_dimension.cpp:338 pcbnew/pcb_text.cpp:144
 #: pcbnew/pcb_textbox.cpp:236
-#, fuzzy
 msgid "Font"
-msgstr "Fonte:"
+msgstr "Fonte"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:118
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:89
@@ -11095,7 +11091,7 @@ msgstr "Chemin hiérarchique:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:199
 msgid "path"
-msgstr ""
+msgstr "chemin"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:84
 msgid "Sheet Properties"
@@ -12073,18 +12069,17 @@ msgid "Select field:"
 msgstr "Sélection Champ :"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1325
-#, fuzzy
 msgid "Unsaved data"
-msgstr "[Non sauvé]"
+msgstr "Données non sauvées"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1326
 msgid "Changes are unsaved. Export unsaved data?"
 msgstr ""
+"Les modifications ne sont pas sauvées. Exporter des données non sauvées ?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1336
-#, fuzzy
 msgid "Save as CSV"
-msgstr "Sauver comme Image"
+msgstr "Enregistrer au format CSV"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:34
 msgid "Add Field..."
@@ -12103,9 +12098,8 @@ msgid "Group symbols together based on common properties"
 msgstr "Grouper les composants par leur propriétés communes"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:125
-#, fuzzy
 msgid "Export as CSV..."
-msgstr "Exporter Symbole en SVG..."
+msgstr "Exporter au format CSV..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:87
 msgid "Symbol Fields Table"
@@ -16000,7 +15994,7 @@ msgstr ""
 "\n"
 "%s\n"
 
-#: eeschema/symbol_checker.cpp:89
+#: eeschema/symbol_checker.cpp:89 eeschema/tools/symbol_checker.cpp:78
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -16009,7 +16003,7 @@ msgstr ""
 "<b>Pin dupliquée %s</b> %s en position <b>(%.3f, %.3f)</b> en conflit avec "
 "pin %s%s en position <b>(%.3f, %.3f)</b> de converti."
 
-#: eeschema/symbol_checker.cpp:103
+#: eeschema/symbol_checker.cpp:103 eeschema/tools/symbol_checker.cpp:92
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -16018,7 +16012,7 @@ msgstr ""
 "<b>Pin dupliquée %s</b> %s en position <b>(%.3f, %.3f)</b> en conflit avec "
 "pin %s %s en position <b>(%.3f, %.3f)</b> unité %s et %s de converti."
 
-#: eeschema/symbol_checker.cpp:122
+#: eeschema/symbol_checker.cpp:122 eeschema/tools/symbol_checker.cpp:111
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
@@ -16027,7 +16021,7 @@ msgstr ""
 "<b>Pin dupliquée %s</b> %s en position <b>(%s, %s)</b> en conflit avec pin %s"
 "%s en position <b>(%s %s)</b>."
 
-#: eeschema/symbol_checker.cpp:135
+#: eeschema/symbol_checker.cpp:135 eeschema/tools/symbol_checker.cpp:124
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
@@ -16036,23 +16030,23 @@ msgstr ""
 "<b>Pin dupliquée %s</b> %s en position <b>(%s, %s)</b> en conflit avec pin %s"
 "%s en position <b>(%s, %s)</b> unité %s et %s."
 
-#: eeschema/symbol_checker.cpp:163
+#: eeschema/symbol_checker.cpp:163 eeschema/tools/symbol_checker.cpp:152
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
 msgstr ""
 "<b>Un symbole d’alimentation ne doit avoir qu’une seule unité</b><br><br>"
 
-#: eeschema/symbol_checker.cpp:169
+#: eeschema/symbol_checker.cpp:169 eeschema/tools/symbol_checker.cpp:158
 msgid "<b>A Power Symbol should have no convert option</b><br><br>"
 msgstr ""
 "<b>Un symbole d’alimentation ne doit pas avoir d’option de conversion</"
 "b><br><br>"
 
-#: eeschema/symbol_checker.cpp:175
+#: eeschema/symbol_checker.cpp:175 eeschema/tools/symbol_checker.cpp:164
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
 msgstr ""
 "<b>Un symbole d’alimentation ne doit avoir qu’une seule pin</b><br><br>"
 
-#: eeschema/symbol_checker.cpp:184
+#: eeschema/symbol_checker.cpp:184 eeschema/tools/symbol_checker.cpp:173
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only a input or output power pin has "
 "meaning<br><br>"
@@ -16060,7 +16054,7 @@ msgstr ""
 "<b>Symbole d'alimentation suspect</b><br>Seule une broche d’entrée ou de "
 "sortie d’alimentation a une signification<br><br>"
 
-#: eeschema/symbol_checker.cpp:191
+#: eeschema/symbol_checker.cpp:191 eeschema/tools/symbol_checker.cpp:180
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only invisible input power pins are "
 "automatically connected<br><br>"
@@ -16068,7 +16062,7 @@ msgstr ""
 "<b>Symbole d'alimentation suspect</b><br>Seules les broches d’entrée "
 "d’alimentation invisibles sont automatiquement connectées<br><br>"
 
-#: eeschema/symbol_checker.cpp:216
+#: eeschema/symbol_checker.cpp:216 eeschema/tools/symbol_checker.cpp:205
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
@@ -16076,7 +16070,7 @@ msgstr ""
 "Info: <b>Pin power invisible '%s' </b>%s en position <b>(%s, %s)</b> de "
 "converti."
 
-#: eeschema/symbol_checker.cpp:225
+#: eeschema/symbol_checker.cpp:225 eeschema/tools/symbol_checker.cpp:214
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
@@ -16085,12 +16079,12 @@ msgstr ""
 "Info: <b>Pin power invisible '%s' </b>%s en position <b>(%s, %s)</b> dans "
 "unité %c de converti."
 
-#: eeschema/symbol_checker.cpp:238
+#: eeschema/symbol_checker.cpp:238 eeschema/tools/symbol_checker.cpp:227
 #, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr "Info: <b>Pin power invisible '%s' </b>%s en position <b>(%s, %s)</b>."
 
-#: eeschema/symbol_checker.cpp:246
+#: eeschema/symbol_checker.cpp:246 eeschema/tools/symbol_checker.cpp:235
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
@@ -16098,20 +16092,20 @@ msgstr ""
 "Info: <b>Pin power invisible '%s' </b>%s en position <b>(%s, %s)</b> dans "
 "unité %c."
 
-#: eeschema/symbol_checker.cpp:257
+#: eeschema/symbol_checker.cpp:257 eeschema/tools/symbol_checker.cpp:246
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
 "(Les pins d’alimentation invisibles donneront leurs noms à toutes les "
 "équipotentielles connectées.)"
 
-#: eeschema/symbol_checker.cpp:270
+#: eeschema/symbol_checker.cpp:270 eeschema/tools/symbol_checker.cpp:259
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
 "<b>Pin %s hors grille </b> '%s' en position <b>(%s, %s)</b> de converti."
 
-#: eeschema/symbol_checker.cpp:279
+#: eeschema/symbol_checker.cpp:279 eeschema/tools/symbol_checker.cpp:268
 #, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
@@ -16120,12 +16114,12 @@ msgstr ""
 "<b>Pin %s hors grille </b> '%s' en position <b>(%s, %s)</b> dans unité %c de "
 "converti."
 
-#: eeschema/symbol_checker.cpp:292
+#: eeschema/symbol_checker.cpp:292 eeschema/tools/symbol_checker.cpp:281
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr "<b>Pin %s hors grille </b> '%s' en position <b>(%s, %s)</b>."
 
-#: eeschema/symbol_checker.cpp:300
+#: eeschema/symbol_checker.cpp:300 eeschema/tools/symbol_checker.cpp:289
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
@@ -30083,7 +30077,6 @@ msgid "Check rule syntax"
 msgstr "Vérification de la syntaxe de la règle"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -30393,9 +30386,9 @@ msgstr ""
 " * length\n"
 " * hole\\_clearance\n"
 " * hole\\_size\n"
-" * mechanical\\_clearance\n"
-" * mechanical\\_hole\\_clearance\n"
 " * min\\_resolved\\_spokes\n"
+" * physical\\_clearance\n"
+" * physical\\_hole\\_clearance\n"
 " * silk\\_clearance\n"
 " * skew\n"
 " * text\\_height\n"
@@ -30408,8 +30401,7 @@ msgstr ""
 " * zone\\_connection\n"
 "\n"
 "Note: `clearance` and `hole_clearance` rules are not run against items of "
-"the same net; `mechanical_clearance` and `mechanical_hole_clearance` rules "
-"are.\n"
+"the same net; `physical_clearance` and `physical_hole_clearance` rules are.\n"
 "<br>\n"
 "\n"
 "### Item Types\n"
@@ -30626,7 +30618,7 @@ msgstr ""
 "\n"
 "    # Prevent solder wicking from SMD pads\n"
 "    (rule holes_in_pads\n"
-"        (constraint mechanical_hole_clearance (min 0.2mm))\n"
+"        (constraint physical_hole_clearance (min 0.2mm))\n"
 "        (condition \"B.Pad_Type == 'SMD'\"))\n"
 "\n"
 "    # Disallow solder mask margin overrides\n"
@@ -30720,9 +30712,9 @@ msgid "board setup constraints"
 msgstr "configuration des contraintes du PCB"
 
 #: pcbnew/drc/drc_engine.cpp:170
-#, fuzzy
 msgid "board setup constraints zone fill strategy"
-msgstr "configuration des contraintes des trous"
+msgstr ""
+"Contraintes de configuration du PCB pour stratégie de remplissage de zone"
 
 #: pcbnew/drc/drc_engine.cpp:175
 msgid "board setup constraints silk"
@@ -30825,9 +30817,9 @@ msgid "Local override on %s; thermal spoke width: %s."
 msgstr "Forçage local sur %s; largeur rayon frein thermique: %s."
 
 #: pcbnew/drc/drc_engine.cpp:869
-#, fuzzy, c-format
+#, c-format
 msgid "%s min thickness: %s."
-msgstr "Zone %s épaisseur min: %s."
+msgstr "%s épaisseur min: %s."
 
 #: pcbnew/drc/drc_engine.cpp:883
 #, c-format
@@ -30868,9 +30860,9 @@ msgid "Checking %s thermal spoke width: %s."
 msgstr "Vérification de %s largeur des rayons thermiques: %s."
 
 #: pcbnew/drc/drc_engine.cpp:943
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s min spoke count: %s."
-msgstr "Vérification de %s' skew max: %s."
+msgstr "Vérification de '%s' compte min de rayons: %s."
 
 #: pcbnew/drc/drc_engine.cpp:949
 #, c-format
@@ -31017,14 +31009,14 @@ msgid "Local clearance on %s; clearance: %s."
 msgstr "Isolation locale sur: %s; isolation: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1376
-#, fuzzy, c-format
+#, c-format
 msgid "%s zone connection: %s."
-msgstr "Vérification de la connexion de la zone %s : %s."
+msgstr "%s connexion de zone: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1392
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad connection: %s."
-msgstr "Zone %s connexion de pad: %s."
+msgstr "%s connexion de pad: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1397 pcbnew/drc/drc_engine.cpp:1414
 #: pcbnew/drc/drc_engine.cpp:1431 pcbnew/zone.cpp:330 pcbnew/zone.cpp:470
@@ -31032,14 +31024,14 @@ msgid "zone"
 msgstr "zone"
 
 #: pcbnew/drc/drc_engine.cpp:1409
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal relief gap: %s."
-msgstr "Zone %s longueur frein thermique: %s."
+msgstr "%s longueur frein thermique: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1426
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal spoke width: %s."
-msgstr "Zone %s largeur rayon frein thermique: %s."
+msgstr "%s largeur rayon frein thermique: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1459
 #, c-format
@@ -31298,7 +31290,7 @@ msgstr "ERREUR: %s%s"
 #: pcbnew/drc/drc_rule_parser.cpp:79
 #, c-format
 msgid "The '%s' keyword has been deprecated.  Please use '%s' instead."
-msgstr ""
+msgstr "Le mot-clé '%s' est obsolète.  Veuillez utiliser '%s' à la place."
 
 #: pcbnew/drc/drc_rule_parser.cpp:117 pcbnew/drc/drc_rule_parser.cpp:200
 #: pcbnew/drc/drc_rule_parser.cpp:478
@@ -36155,15 +36147,13 @@ msgstr "Isolation résolue: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:391
 #: pcbnew/tools/board_inspection_tool.cpp:965
-#, fuzzy
 msgid "Physical hole clearance resolution for:"
-msgstr "Résolution de marge mecanique des trous pour:"
+msgstr "Résolution de marge physique des trous pour:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:400
 #: pcbnew/tools/board_inspection_tool.cpp:977
-#, fuzzy
 msgid "No 'physical_hole_clearance' constraints defined."
-msgstr "Aucune contrainte « mechanical_hole_clearance » n’est définie."
+msgstr "Aucune contrainte 'physical_hole_clearance' n’est définie."
 
 #: pcbnew/tools/board_inspection_tool.cpp:411
 msgid "Edge Clearance"
@@ -36181,15 +36171,13 @@ msgstr "Résolution d'isolation pour:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:477
 #: pcbnew/tools/board_inspection_tool.cpp:926
-#, fuzzy
 msgid "Physical clearance resolution for:"
-msgstr "Résolution de marge mécanique pour:"
+msgstr "Résolution de marge physique pour:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:486
 #: pcbnew/tools/board_inspection_tool.cpp:938
-#, fuzzy
 msgid "No 'physical_clearance' constraints defined."
-msgstr "Aucune contrainte « mechanical_clearance » n’est définie."
+msgstr "Aucune contrainte 'physical_clearance' n’est définie."
 
 #: pcbnew/tools/board_inspection_tool.cpp:530
 msgid "Select two items for a clearance resolution report."
@@ -36209,9 +36197,8 @@ msgid "Zone connection resolution for:"
 msgstr "Résolution de connexion de zone pour :"
 
 #: pcbnew/tools/board_inspection_tool.cpp:621
-#, fuzzy
 msgid "Thermal relief gap resolution for:"
-msgstr "Résolution de la hauteur du texte pour:"
+msgstr "Résolution de marge de frein thermique pour:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:630
 #, c-format
@@ -36219,30 +36206,27 @@ msgid "Resolved thermal relief gap: %s."
 msgstr "Résolu marge de frein thermique: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:635
-#, fuzzy
 msgid "Spoke width resolution for:"
-msgstr "Résolution de largeur de piste pour:"
+msgstr "Résolution de largeur de rayon pour:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:644
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal relief spoke width: %s."
-msgstr "Résolu largeur rayon de frein thermique: %s."
+msgstr "Résolution de largeur rayon de frein thermique: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:649
-#, fuzzy
 msgid "Spoke count resolution for:"
-msgstr "Résolution de zone interdite pour:"
+msgstr "Résolution de compte de rayon de frein thermique pour:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:658
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min thermal relief spoke count: %d."
-msgstr "Nombre min de rayons de frein thermique:"
+msgstr "Résolu compte min de rayons de frein thermiques: %d."
 
 #: pcbnew/tools/board_inspection_tool.cpp:667
 #: pcbnew/tools/board_inspection_tool.cpp:715
-#, fuzzy
 msgid "Zone clearance resolution for:"
-msgstr "Résolution d'isolation des trous pour:"
+msgstr "Résolution d'isolation de zone pour:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:671
 #, c-format
@@ -36250,14 +36234,15 @@ msgid "Zone clearance: %s."
 msgstr "Isolation de zone: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:681
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
-msgstr "Remplacé par un plus grand frein thermique de %s;clearance: %s."
+msgstr "Remplacé par une plus grande isolation physique de %s;clearance: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:697
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical hole clearance from %s;clearance: %s."
-msgstr "Remplacé par un plus grand frein thermique de %s;clearance: %s."
+msgstr ""
+"Remplacé par une marge physique plus grande de trous de %s;clearance: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
 msgid "Diff Pair"
@@ -36289,9 +36274,8 @@ msgid "Courtyard clearance resolution for:"
 msgstr "Résolution d'isolation de zone d'occupation pour:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:917
-#, fuzzy
 msgid "Physical Clearances"
-msgstr "Paramètres Physiques"
+msgstr "Isolations Physiques"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1004
 msgid "Select an item for a constraints resolution report."
@@ -39231,6 +39215,11 @@ msgstr "freins thermiques pour pads traversants"
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+msgid "bitmap2component"
+msgstr "bitmap2component"
+
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -39241,9 +39230,10 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
-msgid "bitmap2component"
-msgstr "bitmap2component"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
@@ -39257,9 +39247,10 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -39269,9 +39260,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
+msgid "kicad"
+msgstr "kicad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -39286,6 +39277,10 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
+msgid "pcbcalculator"
+msgstr "pcbcalculator"
+
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -39298,6 +39293,11 @@ msgstr "PCB Calculator"
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
 
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+msgid "pcbnew"
+msgstr "pcbnew"
+
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "Editeur de PCB KiCad (indépendant)"
@@ -39309,10 +39309,6 @@ msgstr "Éditeur de circuit imprimé"
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -39370,22 +39366,18 @@ msgstr "Fichier Circuit Imprimé KiCad"
 #~ msgid "Hierarchical path: "
 #~ msgstr "Chemin hiérarchique: "
 
-#, c-format
 #~ msgid "%s pin %s not found"
 #~ msgstr "%s pin %s non trouvée"
 
-#, c-format
 #~ msgid "Selecting all from sheet \"%s\""
 #~ msgstr "Selection des éléments de la feuille \"%s\""
 
 #~ msgid "default"
 #~ msgstr "défaut"
 
-#, c-format
 #~ msgid "Footprint %s zone connection: %s."
 #~ msgstr "Pad %s connexion de zone: %s."
 
-#, c-format
 #~ msgid "Minimum thermal spoke count: %d."
 #~ msgstr "Nombre min de rayons de frein thermique: %d."
 
@@ -39393,18 +39385,11 @@ msgstr "Fichier Circuit Imprimé KiCad"
 #~ msgstr ""
 #~ "Les éléments ne sont pas connectés.  Aucun frein thermique ne sera généré."
 
-#, c-format
 #~ msgid "Clearance: %s."
 #~ msgstr "Isolation %s."
 
 #~ msgid "Mechanical"
 #~ msgstr "Mécanique"
-
-#~ msgid "kicad"
-#~ msgstr "kicad"
-
-#~ msgid "pcbcalculator"
-#~ msgstr "pcbcalculator"
 
 #~ msgid "Save Copy As..."
 #~ msgstr "Sauver Copie Sous..."
