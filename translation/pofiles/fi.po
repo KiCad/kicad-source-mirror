@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:13-0700\n"
-"PO-Revision-Date: 2022-05-10 18:50+0000\n"
+"PO-Revision-Date: 2022-05-10 23:58+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5937,9 +5937,8 @@ msgid "Save current document to another location"
 msgstr "Tallenna nykyinen asiakirja toiseen sijaintiin"
 
 #: common/tool/actions.cpp:79
-#, fuzzy
 msgid "Save a Copy..."
-msgstr "Tallenna &nimellä..."
+msgstr "Tallenna Kopio..."
 
 #: common/tool/actions.cpp:79
 msgid "Save a copy of the current document to another location"
@@ -7499,17 +7498,16 @@ msgstr ""
 "Tallenna jalanjälkiliitokset kytkentäkaavion symbolien jalanjälkikentistä"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "Tallenna Kytkentäkaavioon"
+msgstr "Tallenna Kytkentäkaavioon ja Tiedostoon"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
-#, fuzzy
 msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
 msgstr ""
-"Tallenna jalanjälkiliitokset kytkentäkaavion symbolien jalanjälkikentistä"
+"Tallenna jalanjälkiliitokset kytkentäkaaviosymbolien jalanjälkikenttiin ja "
+"kyskentäkaaviotiedostoihin"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select next unassigned symbol"
@@ -9064,9 +9062,8 @@ msgid "Set To"
 msgstr "Asetettu"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
-#, fuzzy
 msgid "Text color:"
-msgstr "Verkon värit:"
+msgstr "Tekstin väri:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:220
 #: eeschema/pin_type.cpp:129
@@ -9363,9 +9360,8 @@ msgstr "Y-sijainti"
 #: pcbnew/fp_text.cpp:297 pcbnew/fp_textbox.cpp:242
 #: pcbnew/pcb_dimension.cpp:338 pcbnew/pcb_text.cpp:144
 #: pcbnew/pcb_textbox.cpp:236
-#, fuzzy
 msgid "Font"
-msgstr "Kirjasin:"
+msgstr "Kirjasin"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:118
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:89
@@ -9772,9 +9768,9 @@ msgstr "Poista vaihtoehtoinen rungon tyyli (De Morgan) symbolista?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:320
 #: eeschema/tools/symbol_editor_control.cpp:322
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol name '%s' already in use in library '%s'."
-msgstr "Symboli '%s' on jo olemassa kirjastossa '%s'."
+msgstr "Symbolinimi '%s' on jo käytössä kirjastossa '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:437
 #, c-format
@@ -11002,7 +10998,7 @@ msgstr "Hierarkinen polku:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:199
 msgid "path"
-msgstr ""
+msgstr "polku"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:84
 msgid "Sheet Properties"
@@ -11975,18 +11971,16 @@ msgid "Select field:"
 msgstr "Valitse kenttä:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1325
-#, fuzzy
 msgid "Unsaved data"
-msgstr "[Tallentamaton]"
+msgstr "Tallentamaton tieto"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1326
 msgid "Changes are unsaved. Export unsaved data?"
-msgstr ""
+msgstr "Muutokset ovat tallentamatta. Viedäänkö tallentamaton data?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1336
-#, fuzzy
 msgid "Save as CSV"
-msgstr "Tallenna Kuvana"
+msgstr "Tallenna CSV:nä"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:34
 msgid "Add Field..."
@@ -12005,9 +11999,8 @@ msgid "Group symbols together based on common properties"
 msgstr "Ryhmittele symbolit yhteen yhteisten ominaisuuksien perusteella"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:125
-#, fuzzy
 msgid "Export as CSV..."
-msgstr "Vie symboli SVG: ksi ..."
+msgstr "Vie CSV:ksi..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:87
 msgid "Symbol Fields Table"
@@ -16725,14 +16718,12 @@ msgid "Make a copy of the selected symbol"
 msgstr "Tee kopio valitusta symbolista"
 
 #: eeschema/tools/ee_actions.cpp:138
-#, fuzzy
 msgid "Rename Symbol..."
-msgstr "Pelastussymbolit ..."
+msgstr "Uudelleennimeä Symbolit ..."
 
 #: eeschema/tools/ee_actions.cpp:138
-#, fuzzy
 msgid "Rename the selected symbol"
-msgstr "Päivitä valittu symboli(t)"
+msgstr "Nimeä valittu symboli(t)"
 
 #: eeschema/tools/ee_actions.cpp:143
 msgid "Save the current symbol to a different library."
@@ -17854,19 +17845,16 @@ msgstr "Symbolikirjastoa ei ole valittu."
 
 #: eeschema/tools/symbol_editor_control.cpp:308
 #: pcbnew/tools/footprint_editor_control.cpp:397
-#, fuzzy
 msgid "New name:"
-msgstr "Verkkonimi:"
+msgstr "Uusi nimi:"
 
 #: eeschema/tools/symbol_editor_control.cpp:308
-#, fuzzy
 msgid "Change Symbol Name"
-msgstr "Vaihda symbolit"
+msgstr "Vaihda Symbolin Nimi"
 
 #: eeschema/tools/symbol_editor_control.cpp:318
-#, fuzzy
 msgid "Symbol name cannot be empty."
-msgstr "Verkon nimi ei voi olla tyhjä."
+msgstr "Symbolin nimi ei voi olla tyhjä."
 
 #: eeschema/tools/symbol_editor_control.cpp:489
 #: eeschema/tools/symbol_editor_control.cpp:529
@@ -23443,9 +23431,8 @@ msgid "Checking zones..."
 msgstr "Tarkistetaan vyöhykkeet..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:141
-#, fuzzy
 msgid "Rebuilding connectivity..."
-msgstr "Uudelleenrakenna liitettävyys.."
+msgstr "Rakennetaan uudelleen liitettävyyttä.."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:161
 msgid "Board cleanup"
@@ -26675,17 +26662,14 @@ msgstr ""
 "vähintään yhdessä kerroksessa."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1348
-#, fuzzy
 msgid "Error: Trapazoid delta is too large."
-msgstr "Virhe: anturalla ei ole kerrosta."
+msgstr "Virhe: Trapetsi-delta on liian suuri."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1357
-#, fuzzy
 msgid "Error: Through hole pad has no hole."
-msgstr "Läpireiän anturissa ei ole reikää"
+msgstr "Virhe: Läpireikäanturassa ei ole reikää."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1364
-#, fuzzy
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
 msgstr ""
@@ -26693,9 +26677,8 @@ msgstr ""
 "pintaliitosanturaa sen sijaan."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1373
-#, fuzzy
 msgid "Error: SMD pad has a hole."
-msgstr "Virhe: anturalla ei ole kerrosta."
+msgstr "Virhe: pintaliitosanturalla ei ole reikää."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1379
 msgid "Warning: SMD pad has no outer layers."
@@ -26988,7 +26971,6 @@ msgid "E.C.O.2"
 msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:551
-#, fuzzy
 msgid "Fabrication property:"
 msgstr "Valmistusominaisuus:"
 
@@ -29118,7 +29100,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:778
 msgid "Inner Layers To Be Deleted"
-msgstr "Sisäiset kerrokset poistetaan"
+msgstr "Poistettavat Sisäkerrokset"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:813
 msgid "All user-defined layers have already been added."
@@ -29134,12 +29116,12 @@ msgstr "Lisää Käyttäjän Määrittämä Kerros..."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:46
 msgid "CrtYd_Front"
-msgstr "CrtYd_Front()"
+msgstr "CrtYd_Etu"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:51
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:639
 msgid "Off-board, testing"
-msgstr "Off-board, testaus"
+msgstr "Ulkoinen, testaus"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:58
 msgid "If you want a fabrication layer for the front side of the board"
@@ -29179,7 +29161,7 @@ msgstr "Jos sinä haluat juotospastakerroksen piirilevyn etupuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:86
 msgid "SoldP_Front"
-msgstr "MyytyP_Front"
+msgstr "JuotosP_Etu"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:94
 msgid "If you want a silk screen layer for the front side of the board"
@@ -29191,23 +29173,23 @@ msgstr "SilkkiS_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:106
 msgid "If you want a solder mask layer for the front of the board"
-msgstr "Haluttaessa etupuolen juotteenestopinnoitekerros (JEP)"
+msgstr "Jos sinä haluat juotomaskikerroksen piirilevyn etupuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:110
 msgid "Mask_Front"
-msgstr "JEP_etu"
+msgstr "Maski_Etu"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:118
 msgid "If you want a front copper layer"
-msgstr "Haluttaessa etupuolen kuparikerros"
+msgstr "Jos sinä haluat etukuparikerroksen"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:122
 msgid "Front_layer"
-msgstr "Etukerros"
+msgstr "Etu_kerros"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:123
 msgid "Layer name of front (top) copper layer"
-msgstr "Kerroksen nimi etu(päällä)kuparikerrokselle"
+msgstr "Kerroksen nimi edessä(päällä) kuparikerros"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:127
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:141
@@ -29390,7 +29372,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:138
 msgid "In1"
-msgstr "Kohdassa 1"
+msgstr "In1"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:152
 msgid "In2"
@@ -29510,7 +29492,7 @@ msgstr "In30"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:556
 msgid "If you want a back copper layer"
-msgstr "Haluttaessa takapuolen kuparikerros"
+msgstr "Jos sinä haluat takakuparikerroksen"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:561
 msgid "Layer name of back (bottom) copper layer"
@@ -29518,7 +29500,7 @@ msgstr "Kerroksen nimi taka(pohja)kuparikerrokselle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:574
 msgid "If you want a solder mask layer for the back side of the board"
-msgstr "Haluttaessa takapuolen juotteenestopinnoitekerros (JEP)"
+msgstr "Jos sinä haluat juotosmaskikerroksen piirilevyn takapuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:578
 msgid "SoldM_Back"
@@ -29542,7 +29524,7 @@ msgstr "MyytyP_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:610
 msgid "If you want an adhesive layer for the back side of the board"
-msgstr "Jos haluat sidosainepohjan piirilevyn takapuolelle"
+msgstr "Jos haluat sidosainekerroksen piirilevyn takapuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:614
 msgid "Adhes_Back"
@@ -29589,7 +29571,7 @@ msgstr "Eco2()"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:684
 msgid "If you want a separate layer for comments or notes"
-msgstr "Haluttaessa erillinen kommentti- ja merkintäkerros"
+msgstr "Jos sinä haluat erillisen kerroksen kommenteille tai merkinnöille"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:688
 msgid "Comments"
@@ -29597,7 +29579,7 @@ msgstr "Kommentit"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:696
 msgid "If you want a layer for documentation drawings"
-msgstr "Haluttaessa kerros dokumentaatiolle ja piirustuksille"
+msgstr "Jos sinä haluat kerroksen dokumentaatiopiirustuksille"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:700
 msgid "Drawings"
@@ -29669,16 +29651,16 @@ msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
-"Yleinen välys tyynyjen ja juotemaskin välillä.\n"
-"Tämä arvo voidaan korvata jalanjäljen tai tyynyn paikallisilla arvoilla."
+"Yleinen välys anturoiden ja juotosmaskin välillä.\n"
+"Tämä arvo voidaan korvata jalanjäljen tai anturan paikallisilla arvoilla."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:61
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
 msgstr ""
-"Positiivinen välys tarkoittaa aluetta, joka on suurempi kuin tyyny "
-"(tavallinen juotosmaskin puhdistuma)."
+"Positiivinen välys tarkoittaa aluetta, joka on suurempi kuin antura ("
+"yleisesti juotosmaskin välykselle)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
 msgid "Solder mask minimum web width:"
@@ -29691,11 +29673,11 @@ msgid ""
 "This parameter is only used to plot solder mask layers.\n"
 "Leave at 0 unless you know what you are doing."
 msgstr ""
-"Min. 2 pad alueen välillä.\n"
-"Kaksi tätä arvoa lähempänä olevaa tyynyaluetta yhdistetään piirtämisen "
+"Min. etäisyys 2 antura-alueen välillä.\n"
+"Kaksi tätä arvoa lähempänä olevaa antura-aluetta yhdistetään piirtämisen "
 "aikana.\n"
 "Tätä parametria käytetään vain juotosmaskikerrosten piirtämiseen.\n"
-"Lähde klo 0, ellet tiedä mitä olet tekemässä."
+"Jätä nollaan(0), jollet sinä tiedä mitä olet tekemässä."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:76
 msgid ""
@@ -29703,7 +29685,7 @@ msgid ""
 "than this distance will be plotted as a single opening."
 msgstr ""
 "Pienin etäisyys juotosmaskissa olevien aukkojen välillä. Tätä etäisyyttä "
-"lähemmät tyynyaukot piirretään yhtenä aukkona."
+"lähemmät antura-aukot piirretään yhtenä aukkona."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:84
 msgid "Solder mask to copper clearance:"
@@ -29723,17 +29705,17 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value ratio."
 msgstr ""
-"Yleinen välys tyynyjen ja juotospastan välillä.\n"
-"Tämä arvo voidaan korvata jalanjäljen tai tyynyn paikallisilla arvoilla.\n"
-"Lopullinen puhdistuma-arvo on tämän arvon ja puhdistuma-arvon suhteen summa."
+"Yleinen välys anturan ja juotospastan välillä.\n"
+"Tämä arvo voidaan korvata jalanjäljen tai anturan paikallisilla arvoilla.\n"
+"Lopullinen välysarvo on tämän arvon ja välysarvon suhteen summa."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:108
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste "
 "clearance)."
 msgstr ""
-"Negatiivinen välys tarkoittaa aluetta, joka on pienempi kuin tyyny "
-"(tavallinen juotospastan puhdistuma)."
+"Negatiivinen välys tarkoittaa aluetta, joka on pienempi kuin antura ("
+"yleisesti juotospastan välys)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:118
 msgid ""
@@ -29742,14 +29724,14 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value."
 msgstr ""
-"Yleinen puhdistussuhde prosentteina tyynyjen ja juotospastan välillä.\n"
-"Arvo 10 tarkoittaa, että välysarvo on 10 prosenttia tyynyn koosta.\n"
-"Tämä arvo voidaan korvata jalanjäljen tai tyynyn paikallisilla arvoilla.\n"
-"Lopullinen puhdistuma-arvo on tämän arvon ja puhdistuma-arvon summa."
+"Yleinen välys-suhde prosentteina anturoiden ja juotospastan välillä.\n"
+"Arvo 10 tarkoittaa, että välysarvo on 10 prosenttia anturan koosta.\n"
+"Tämä arvo voidaan korvata jalanjäljen tai anturan paikallisilla arvoilla.\n"
+"Lopullinen välysarvo on tämän arvon ja välysarvon summa."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:123
 msgid "Additional clearance as a percentage of the pad size."
-msgstr "Lisäväli prosentteina tyynyn koosta."
+msgstr "Lisäväli prosentteina anturan koosta."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:134
 msgid ""
@@ -29757,7 +29739,7 @@ msgid ""
 "the final clearance."
 msgstr ""
 "Huomautus: Juotospastan välykset (absoluuttinen ja suhteellinen) lisätään "
-"lopullisen puhdistuman määrittämiseksi."
+"lopullisen välyksen määrittämiseksi."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:93
 msgid "Cancel Changes?"
@@ -30408,7 +30390,7 @@ msgstr "Reikä"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:140
 msgid "Differential Pairs"
-msgstr "Tasausparit"
+msgstr "Differentiaaliparit"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:156
 msgid "Gap"
@@ -30423,9 +30405,8 @@ msgid "board setup constraints"
 msgstr "levyn asennusrajoitukset"
 
 #: pcbnew/drc/drc_engine.cpp:170
-#, fuzzy
 msgid "board setup constraints zone fill strategy"
-msgstr "levyn asennusrajoitukset reikä"
+msgstr "piirilevyasetukset rajoitusvyöhykkeen täyttöstrategialle"
 
 #: pcbnew/drc/drc_engine.cpp:175
 msgid "board setup constraints silk"
@@ -30489,27 +30470,27 @@ msgstr "Antura ei ole läpireikäantura; yhteys tulee olemaan: %s."
 #: pcbnew/drc/drc_engine.cpp:765 pcbnew/drc/drc_engine.cpp:780
 #, c-format
 msgid "Local override on %s; clearance: %s."
-msgstr "Paikallinen ohitus %s; puhdistuma: %s."
+msgstr "Paikallinen ohitus %s; välys: %s."
 
 #: pcbnew/drc/drc_engine.cpp:796 pcbnew/drc/drc_engine.cpp:1345
 #: pcbnew/drc/drc_engine.cpp:1360
 msgid "board minimum"
-msgstr "Kortin minimi"
+msgstr "piirilevy minimi"
 
 #: pcbnew/drc/drc_engine.cpp:799 pcbnew/drc/drc_engine.cpp:1339
 #: pcbnew/drc/drc_engine.cpp:1354
 #, c-format
 msgid "Board minimum clearance: %s."
-msgstr "Kortin pienin välys: %s."
+msgstr "Piirilevyn pienin välys: %s."
 
 #: pcbnew/drc/drc_engine.cpp:808
 msgid "board minimum hole"
-msgstr "kortin minimi reikä"
+msgstr "piirilevyn minimireikä"
 
 #: pcbnew/drc/drc_engine.cpp:811
 #, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr "Kortin pienin reikien välys: %s."
+msgstr "Piirilevyn pienin reikien välys: %s."
 
 #: pcbnew/drc/drc_engine.cpp:828
 #, c-format
@@ -30527,9 +30508,9 @@ msgid "Local override on %s; thermal spoke width: %s."
 msgstr "Paikallinen ohitus kohteessa %s; lämpöpinnan leveys: %s."
 
 #: pcbnew/drc/drc_engine.cpp:869
-#, fuzzy, c-format
+#, c-format
 msgid "%s min thickness: %s."
-msgstr "Alueen %s min paksuus %s."
+msgstr "%s min paksuus %s."
 
 #: pcbnew/drc/drc_engine.cpp:883
 #, c-format
@@ -30570,9 +30551,9 @@ msgid "Checking %s thermal spoke width: %s."
 msgstr "Tarkistetaan%s lämpöanturan leveys: %s."
 
 #: pcbnew/drc/drc_engine.cpp:943
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s min spoke count: %s."
-msgstr "Tarkistetaan %s maksimivinoutta: %s."
+msgstr "Tarkistetaan %s minimi lämpöpinnojen määrää: %s."
 
 #: pcbnew/drc/drc_engine.cpp:949
 #, c-format
@@ -30717,14 +30698,14 @@ msgid "Local clearance on %s; clearance: %s."
 msgstr "Paikallinen välys päällä %s; välys: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1376
-#, fuzzy, c-format
+#, c-format
 msgid "%s zone connection: %s."
-msgstr "Tarkistetaan %s vyöhykeliitäntä: %s."
+msgstr "%s vyöhykeliitäntä: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1392
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad connection: %s."
-msgstr "Vyöhykkeen %s Anturaliitäntä: %s."
+msgstr "%s Anturaliitäntä: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1397 pcbnew/drc/drc_engine.cpp:1414
 #: pcbnew/drc/drc_engine.cpp:1431 pcbnew/zone.cpp:330 pcbnew/zone.cpp:470
@@ -30732,14 +30713,14 @@ msgid "zone"
 msgstr "vyöhyke"
 
 #: pcbnew/drc/drc_engine.cpp:1409
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal relief gap: %s."
-msgstr "Vyöhykkeen %s lämpön pienennysrako: %s."
+msgstr "%s lämmönpoistorako: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1426
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal spoke width: %s."
-msgstr "Alueen %s lämpöpinnan leveys: %s."
+msgstr "%s lämpöpinnan leveys: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1459
 #, c-format
@@ -30825,7 +30806,7 @@ msgstr "Poratut reiät ovat liian lähellä toisiaan"
 
 #: pcbnew/drc/drc_item.cpp:108
 msgid "Drilled holes co-located"
-msgstr "Poratut reiät uudelleen sijoitettu"
+msgstr "Poratut reiät uudelleensijoitettu"
 
 #: pcbnew/drc/drc_item.cpp:112
 msgid "Track width"
@@ -30833,7 +30814,7 @@ msgstr "Johtimen leveys"
 
 #: pcbnew/drc/drc_item.cpp:116
 msgid "Annular width"
-msgstr "Rengasmainen leveys"
+msgstr "Kuparirenkaan leveys"
 
 #: pcbnew/drc/drc_item.cpp:120
 msgid "Drill out of range"
@@ -30845,7 +30826,7 @@ msgstr "Läpiviennin halkaisija"
 
 #: pcbnew/drc/drc_item.cpp:128
 msgid "Padstack is not valid"
-msgstr "Padstack ei ole kelvollinen"
+msgstr "Anturapino ei ole kelvollinen"
 
 #: pcbnew/drc/drc_item.cpp:132
 msgid "Micro via drill out of range"
@@ -30872,9 +30853,8 @@ msgid "NPTH inside courtyard"
 msgstr "NPTH sisäpihalla"
 
 #: pcbnew/drc/drc_item.cpp:156
-#, fuzzy
 msgid "Item on a disabled copper layer"
-msgstr "Kohde poistetulta tasolta"
+msgstr "Kohde poiskytketyllä kuparikerroksella"
 
 #: pcbnew/drc/drc_item.cpp:160
 msgid "Board has malformed outline"
@@ -30957,13 +30937,12 @@ msgid "Differential uncoupled length too long"
 msgstr "Differentiaalisen erotuksen pituus on liian pitkä"
 
 #: pcbnew/drc/drc_item.cpp:244
-#, fuzzy
 msgid "Footprint component type doesn't match footprint pads"
-msgstr "Jalanjäljen tyyppi ei täsmää jalanjäljen anturiin"
+msgstr "Jalanjäljen komponenttityyppi ei täsmää jalanjäljen anturoihin"
 
 #: pcbnew/drc/drc_item.cpp:248
 msgid "Through hole pad has no hole"
-msgstr "Läpireiän anturissa ei ole reikää"
+msgstr "Läpireikäanturassa ei ole reikää"
 
 #: pcbnew/drc/drc_item.cpp:252
 msgid "Pads with different numbers overlap"
@@ -31001,7 +30980,7 @@ msgstr "VIRHE: %s %s"
 #: pcbnew/drc/drc_rule_parser.cpp:79
 #, c-format
 msgid "The '%s' keyword has been deprecated.  Please use '%s' instead."
-msgstr ""
+msgstr "Avainsana %s on poistettu käytöstä. Käytä sen sijaan '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:117 pcbnew/drc/drc_rule_parser.cpp:200
 #: pcbnew/drc/drc_rule_parser.cpp:478
@@ -31010,7 +30989,7 @@ msgstr "Puuttuu '('."
 
 #: pcbnew/drc/drc_rule_parser.cpp:123
 msgid "Missing version statement."
-msgstr "Puuttuva version lausunto."
+msgstr "Puuttuva versiolause."
 
 #: pcbnew/drc/drc_rule_parser.cpp:135
 msgid "Missing version number."
@@ -31094,7 +31073,7 @@ msgstr "Opt-arvo puuttuu."
 
 #: pcbnew/drc/drc_rule_parser.cpp:602
 msgid "Missing layer name or type."
-msgstr "Puuttuva tason nimi tai tyyppi."
+msgstr "Puuttuva kerrosnimi tai tyyppi."
 
 #: pcbnew/drc/drc_rule_parser.cpp:628
 #, c-format
@@ -31141,11 +31120,11 @@ msgstr "Tarkistetaan reikien varoetäisyydet..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:223
 msgid "Checking pad clearances..."
-msgstr "Tarkistetaan tyynyjen välykset ..."
+msgstr "Tarkistetaan anturavälykset..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:231
 msgid "Checking pads..."
-msgstr "Tarkistetaan juotospisteet..."
+msgstr "Tarkistetaan anturat..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:239
 msgid "Checking copper zone clearances..."
@@ -31174,7 +31153,7 @@ msgstr "Tarkastetaan kuparivyöhykkeen välyksiä ..."
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:283
 #, c-format
 msgid "(%s clearance %s; actual %s)"
-msgstr "(%s puhdistuma %s; todellinen %s)"
+msgstr "(%s välys %s; todellinen %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:670
 #, c-format
@@ -31205,12 +31184,12 @@ msgstr "(%s irrottamaton enimmäispituus: %s; todellinen: %s)"
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:493
 #, c-format
 msgid "minimum gap: %s; "
-msgstr "pienin aukko: %s; "
+msgstr "pienin väli: %s; "
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:497
 #, c-format
 msgid "maximum gap: %s; "
-msgstr "suurin aukko: %s; "
+msgstr "suurin väli: %s; "
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:500
 #, c-format
@@ -31223,7 +31202,7 @@ msgstr "Tarkistetaan pitoja ja estetään rajoituksia ..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:141
 msgid "Checking copper to board edge clearances..."
-msgstr "Tarkistetaan kuparin ja piirilevyn reunan varoetäisyydet..."
+msgstr "Tarkistetaan kuparin ja piirilevyn reunan välykset..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:146
 msgid "Checking silk to board edge clearances..."
@@ -31231,7 +31210,7 @@ msgstr "Tarkistetaan silkkipainatuksen ja levyn reunan varoetäisyydet..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:75
 msgid "Checking pad holes..."
-msgstr "Tarkastetaan tyynyreikiä ..."
+msgstr "Tarkastetaan anturareikiä ..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:111
 msgid "Checking via holes..."
@@ -31246,23 +31225,23 @@ msgstr "Tarkistetaan mikroläpivientien reiät..."
 #: pcbnew/drc/drc_test_provider_track_width.cpp:132
 #, c-format
 msgid "(%s min width %s; actual %s)"
-msgstr "(%s min leveys %s; todellinen %s)"
+msgstr "(%s minimi leveys %s; todellinen %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:182
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:250
 #: pcbnew/drc/drc_test_provider_track_width.cpp:139
 #, c-format
 msgid "(%s max width %s; actual %s)"
-msgstr "(%s enimmäisleveys %s; todellinen %s)"
+msgstr "(%s maksimi leveys %s; todellinen %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:118
 msgid "Checking hole to hole clearances..."
-msgstr "Reiän ja reiän välysten tarkistaminen ..."
+msgstr "Tarkistetaan reiästä reikään välykset..."
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:304
 #, c-format
 msgid "(%s min %s; actual %s)"
-msgstr "(%s vähintään %s; todellinen %s)"
+msgstr "(%s minimi %s; todellinen %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:422
 msgid "No project loaded, skipping library parity tests."
@@ -31289,12 +31268,12 @@ msgstr "Jalanjälki '%s' ei täsmää kirjastossa olevaan kopioon '%s'."
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:115
 #, c-format
 msgid "(%s min length: %s; actual: %s)"
-msgstr "(%s min pituus: %s; todellinen: %s)"
+msgstr "(%s minimipituus: %s; todellinen: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:122
 #, c-format
 msgid "(%s max length: %s; actual: %s)"
-msgstr "(%s enimmäispituus: %s; todellinen: %s)"
+msgstr "(%s maksimipituus: %s; todellinen: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:158
 #, c-format
@@ -31370,16 +31349,16 @@ msgstr "Puuttuva verkko näkyy kaavamaisesti (%s)."
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:158
 #, c-format
 msgid "Pad net (%s) doesn't match net given by schematic (%s)."
-msgstr "Pad-verkko (%s) ei vastaa kaavion (%s) antamaa verkkoa."
+msgstr "Anturaverkko (%s) ei vastaa kaavion (%s) antamaa verkkoa."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:178
 #, c-format
 msgid "No pad found for pin %s in schematic."
-msgstr "Nastaa %s ei löytynyt kytkentäkaavasta."
+msgstr "Anturaa ei löydy nastalle %s kytkentäkaaviossa."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:214
 msgid "Checking PCB to schematic parity..."
-msgstr "Tarkistetaan piirilevyä kaaviolliseksi pariteetiksi ..."
+msgstr "Tarkistetaan piirilevyn vastaavuutta..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:95
 msgid "Checking silkscreen for overlapping items..."
@@ -31454,12 +31433,12 @@ msgstr "Tarkistetaan läpivientien halkaisijat..."
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:118
 #, c-format
 msgid "(%s min diameter %s; actual %s)"
-msgstr "(%s min halkaisija %s; todellinen %s)"
+msgstr "(%s minimi halkaisija %s; todellinen %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:125
 #, c-format
 msgid "(%s max diameter %s; actual %s)"
-msgstr "(%s enimmäishalkaisija %s; todellinen %s)"
+msgstr "(%s maksimi halkaisija %s; todellinen %s)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:81
 msgid "Checking thermal reliefs..."
@@ -31807,19 +31786,19 @@ msgid "Footprint %s"
 msgstr "Jalanjälki %s"
 
 #: pcbnew/footprint.cpp:2218
-#, fuzzy, c-format
+#, c-format
 msgid "(expected 'Through hole'; actual '%s')"
-msgstr "Odotettiin \"Läpireikä\" tyyppiä mutta asetettu: \"%s\""
+msgstr "(Odotettu 'Läpireikä'; todellinen '%s')"
 
 #: pcbnew/footprint.cpp:2221
-#, fuzzy, c-format
+#, c-format
 msgid "(expected 'SMD'; actual '%s')"
-msgstr "(%s enimmäishalkaisija %s; todellinen %s)"
+msgstr "(odotettu 'SMD'; todellinen '%s')"
 
 #: pcbnew/footprint.cpp:2224
 #, c-format
 msgid "(expected 'Other'; actual '%s')"
-msgstr ""
+msgstr "(odotettu 'Muu'; todellinen '%s')"
 
 #: pcbnew/footprint.cpp:2251
 msgid "(PTH pad has no copper layers)"
@@ -35788,15 +35767,13 @@ msgstr "Ratkaistu Välys: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:391
 #: pcbnew/tools/board_inspection_tool.cpp:965
-#, fuzzy
 msgid "Physical hole clearance resolution for:"
-msgstr "Mekaanisen reiän välyksen tarkkuus:"
+msgstr "Mekaanisen reiän välystarkkuus:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:400
 #: pcbnew/tools/board_inspection_tool.cpp:977
-#, fuzzy
 msgid "No 'physical_hole_clearance' constraints defined."
-msgstr "Ei 'mekaanisen_reiän_välys' rajoitetta määritelty."
+msgstr "Ei 'fyysisen_reiän_välys' rajoitetta määritelty."
 
 #: pcbnew/tools/board_inspection_tool.cpp:411
 msgid "Edge Clearance"
@@ -35814,15 +35791,13 @@ msgstr "Välystarkkuus kohteelle:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:477
 #: pcbnew/tools/board_inspection_tool.cpp:926
-#, fuzzy
 msgid "Physical clearance resolution for:"
-msgstr "Mekaanisen välyksen tarkkuus:"
+msgstr "Fyysisen välyksen tarkkuus:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:486
 #: pcbnew/tools/board_inspection_tool.cpp:938
-#, fuzzy
 msgid "No 'physical_clearance' constraints defined."
-msgstr "Ei 'mekaanista_välystä' rajoitetta määritelty."
+msgstr "Ei 'fyysistä_välystä' rajoitetta määritelty."
 
 #: pcbnew/tools/board_inspection_tool.cpp:530
 msgid "Select two items for a clearance resolution report."
@@ -35842,9 +35817,8 @@ msgid "Zone connection resolution for:"
 msgstr "Vyöhykkeen yhteystarkkuus kohteelle:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:621
-#, fuzzy
 msgid "Thermal relief gap resolution for:"
-msgstr "Tekstin korkeuden tarkkuus:"
+msgstr "Lämmönpoistovälin tarkkuus:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:630
 #, c-format
@@ -35852,30 +35826,27 @@ msgid "Resolved thermal relief gap: %s."
 msgstr "Ratkaistu lämmönpoistoväli: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:635
-#, fuzzy
 msgid "Spoke width resolution for:"
-msgstr "Johdinleveyden tarkkuus kohteelle:"
+msgstr "Lämpöpinnan leveyden tarkkuus:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:644
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal relief spoke width: %s."
 msgstr "Ratkaistu lämpöpinnan leveys: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:649
-#, fuzzy
 msgid "Spoke count resolution for:"
-msgstr "Säilyttämisresoluutio:"
+msgstr "Lämpopinnan määrän tarkkuus:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:658
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min thermal relief spoke count: %d."
-msgstr "Minimi lämmönpoistoanturoiden määrä:"
+msgstr "Ratkaistu vähimmäis lämmönpoistopinnojen määrä: %d."
 
 #: pcbnew/tools/board_inspection_tool.cpp:667
 #: pcbnew/tools/board_inspection_tool.cpp:715
-#, fuzzy
 msgid "Zone clearance resolution for:"
-msgstr "Reiän välyksen tarkkuus kohteelle:"
+msgstr "Vyöhykeen välystarkkuus:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:671
 #, c-format
@@ -35883,14 +35854,14 @@ msgid "Zone clearance: %s."
 msgstr "Vyöhykkeen välys: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:681
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
-msgstr "Ohitettu suuremmalla lämpöpoistolla %s:sta;väli: %s."
+msgstr "Ohitettu suuremmalla fyysisellä välyksellä kohteesta %s;välys: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:697
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical hole clearance from %s;clearance: %s."
-msgstr "Ohitettu suuremmalla lämpöpoistolla %s:sta;väli: %s."
+msgstr "Ohitettu suuremmalla fyysisellä reiän välyksellä %s:sta; välys: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
 msgid "Diff Pair"
@@ -35922,9 +35893,8 @@ msgid "Courtyard clearance resolution for:"
 msgstr "Piha-alueen välyksen tarkkuus kohteelle:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:917
-#, fuzzy
 msgid "Physical Clearances"
-msgstr "Fyysiset parametrit"
+msgstr "Fyysiset Välykset"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1004
 msgid "Select an item for a constraints resolution report."
@@ -36038,7 +36008,7 @@ msgstr "Paksuus (mil)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:292
 msgid "Loss Tangent"
-msgstr "Häviö Tangentti"
+msgstr "Häviötangentti"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:315
 msgid "Dielectric"
@@ -36249,19 +36219,17 @@ msgid "_copy"
 msgstr "_kopioi"
 
 #: pcbnew/tools/footprint_editor_control.cpp:397
-#, fuzzy
 msgid "Change Footprint Name"
-msgstr "Liitoskuva"
+msgstr "Vaihda Jalanjäljen Nimi"
 
 #: pcbnew/tools/footprint_editor_control.cpp:407
-#, fuzzy
 msgid "Footprint name cannot be empty."
-msgstr "Verkon nimi ei voi olla tyhjä."
+msgstr "Jalanjäljen nimi ei voi olla tyhjä."
 
 #: pcbnew/tools/footprint_editor_control.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint name '%s' already in use in library '%s'."
-msgstr "Jalanjälkeä '%s' ei löytynyt kirjastoista '%s'."
+msgstr "Jalanjäljen nimi '%s' on jo käytössä kirjastossa '%s'."
 
 #: pcbnew/tools/footprint_editor_control.cpp:709
 msgid "No footprint problems found."
@@ -36680,24 +36648,20 @@ msgid "Show selected footprint on editor canvas"
 msgstr "Näytä valittu jalanjälki editorin kankaalle"
 
 #: pcbnew/tools/pcb_actions.cpp:374
-#, fuzzy
 msgid "Duplicate Footprint"
-msgstr "Päällekkäiset jalanjäljet"
+msgstr "Kaksoisjalanjälki"
 
 #: pcbnew/tools/pcb_actions.cpp:374
-#, fuzzy
 msgid "Make a copy of the selected footprint"
-msgstr "Tee kopio valitusta symbolista"
+msgstr "Tee kopio valitusta jalanjäljestä"
 
 #: pcbnew/tools/pcb_actions.cpp:379
-#, fuzzy
 msgid "Rename Footprint..."
-msgstr "Luo Jalanjälki..."
+msgstr "Nimeä Jalanjälki uudellen..."
 
 #: pcbnew/tools/pcb_actions.cpp:379
-#, fuzzy
 msgid "Rename the selected footprint"
-msgstr "Päivitä valittu jalanjälki"
+msgstr "Nimeä uudelleen valittu jalanjälki"
 
 #: pcbnew/tools/pcb_actions.cpp:384
 msgid "Delete Footprint from Library"
@@ -37992,69 +37956,56 @@ msgid "Auto-fill Zone(s)"
 msgstr "Auto-täyttö Alueet"
 
 #: pcbnew/tracks_cleaner.cpp:68
-#, fuzzy
 msgid "Checking null tracks and vias..."
-msgstr "Tarkastetaan raideleveyksiä ..."
+msgstr "Tarkastetaan nollajohtimia ja läpivientejä.."
 
 #: pcbnew/tracks_cleaner.cpp:70
-#, fuzzy
 msgid "Removing null tracks and vias..."
-msgstr "Globaali liuskojen ja läpivientien muokkaus"
+msgstr "Poistetaan nollajohtimia ja läpivientejä..."
 
 #: pcbnew/tracks_cleaner.cpp:81
-#, fuzzy
 msgid "Checking redundant tracks..."
-msgstr "Poista tarpeettomat raidat"
+msgstr "Tarkistetaan tarpeettomia johtimia..."
 
 #: pcbnew/tracks_cleaner.cpp:83
-#, fuzzy
 msgid "Removing redundant tracks..."
-msgstr "Poista tarpeettomat raidat"
+msgstr "Poistetaan tarpeettomat johtimet..."
 
 #: pcbnew/tracks_cleaner.cpp:95
-#, fuzzy
 msgid "Checking shorting tracks..."
-msgstr "Tarkistetaan jalanjälkiä ..."
+msgstr "Tarkistetaan oikosulkevat johtimet..."
 
 #: pcbnew/tracks_cleaner.cpp:97
-#, fuzzy
 msgid "Removing shorting tracks..."
-msgstr "Poista läpivienti oikosulkemalla kaksi verkkoa"
+msgstr "Poistetaan oikosulkevat johtimet..."
 
 #: pcbnew/tracks_cleaner.cpp:110
-#, fuzzy
 msgid "Checking tracks in pads..."
-msgstr "Tarkastetaan raideleveyksiä ..."
+msgstr "Tarkastetaan anturoiden johtimet..."
 
 #: pcbnew/tracks_cleaner.cpp:112
-#, fuzzy
 msgid "Removing tracks in pads..."
-msgstr "Poista johdin anturan sisältä"
+msgstr "Poistetaan johtimet anturoista..."
 
 #: pcbnew/tracks_cleaner.cpp:126
-#, fuzzy
 msgid "Checking dangling tracks and vias..."
-msgstr "Tarkastetaan raideleveyksiä ..."
+msgstr "Tarkistetaan roikkuvia johtimia ja läpivientejä..."
 
 #: pcbnew/tracks_cleaner.cpp:131
-#, fuzzy
 msgid "Removing dangling tracks..."
-msgstr "Ladataan johtimia..."
+msgstr "Postetaan roikkuvia johtimia..."
 
 #: pcbnew/tracks_cleaner.cpp:134
-#, fuzzy
 msgid "Removing dangling vias..."
-msgstr "Ladataan läpivientejä…"
+msgstr "Poistetaan roikkuvia läpivientejä…"
 
 #: pcbnew/tracks_cleaner.cpp:148
-#, fuzzy
 msgid "Checking collinear tracks..."
-msgstr "Tarkistetaan reikien varoetäisyydet..."
+msgstr "Tarkistetaan kollineaarisia johtimia..."
 
 #: pcbnew/tracks_cleaner.cpp:150
-#, fuzzy
 msgid "Merging collinear tracks..."
-msgstr "Yhdistä kollineaariset johtimet"
+msgstr "Yhdistetään kollineaariset johtimet..."
 
 #: pcbnew/undo_redo.cpp:553
 msgid "Incomplete undo/redo operation: some items not found"
