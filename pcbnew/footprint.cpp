@@ -47,6 +47,7 @@
 #include <i18n_utility.h>
 #include <drc/drc_item.h>
 #include <geometry/shape_segment.h>
+#include <geometry/shape_simple.h>
 #include <convert_shape_list_to_polygon.h>
 #include <geometry/convex_hull.h>
 #include "fp_textbox.h"
@@ -2131,15 +2132,27 @@ std::shared_ptr<SHAPE> FOOTPRINT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHI
     // 2) just the pads and "edges" (ie: non-text graphic items)
     // 3) the courtyard
 
-    // We'll go with (2) for now....
+    // We'll go with (2) for now, unless the caller is clearly looking for (3)
 
-    for( PAD* pad : Pads() )
-        shape->AddShape( pad->GetEffectiveShape( aLayer, aFlash )->Clone() );
-
-    for( BOARD_ITEM* item : GraphicalItems() )
+    if( aLayer == F_CrtYd || aLayer == B_CrtYd )
     {
-        if( item->Type() == PCB_FP_SHAPE_T )
-            shape->AddShape( item->GetEffectiveShape( aLayer, aFlash )->Clone() );
+        const SHAPE_POLY_SET& courtyard = GetPolyCourtyard( aLayer );
+
+        if( courtyard.OutlineCount() == 0 )    // malformed/empty polygon
+            return shape;
+
+        shape->AddShape( new SHAPE_SIMPLE( courtyard.COutline( 0 ) ) );
+    }
+    else
+    {
+        for( PAD* pad : Pads() )
+            shape->AddShape( pad->GetEffectiveShape( aLayer, aFlash )->Clone() );
+
+        for( BOARD_ITEM* item : GraphicalItems() )
+        {
+            if( item->Type() == PCB_FP_SHAPE_T )
+                shape->AddShape( item->GetEffectiveShape( aLayer, aFlash )->Clone() );
+        }
     }
 
     return shape;

@@ -265,3 +265,10 @@ For the latter use a `(layer "layer_name")` clause in the rule.
     (rule "disallow solder mask margin overrides"
         (constraint assertion "A.Soldermask_Margin_Override == 0mm")
         (condition "A.Type == 'Pad'"))
+
+
+    # Enforce a mechanical clearance between components and board edge
+    (rule front_mechanical_board_edge_clearance
+        (layer "F.Courtyard")
+        (constraint physical_clearance (min 3mm))
+        (condition "B.Layer == 'Edge.Cuts'"))

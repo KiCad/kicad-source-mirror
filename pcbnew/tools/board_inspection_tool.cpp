@@ -885,14 +885,20 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     {
         PCB_LAYER_ID layer = UNDEFINED_LAYER;
 
-        if( a->IsOnLayer( edgeLayer ) && b->IsOnLayer( active ) && IsCopperLayer( active ) )
-            layer = active;
-        else if( b->IsOnLayer( edgeLayer ) && a->IsOnLayer( active ) && IsCopperLayer( active ) )
-            layer = active;
-        else if( a->IsOnLayer( edgeLayer ) && IsCopperLayer( b->GetLayer() ) )
-            layer = b->GetLayer();
-        else if( b->IsOnLayer( edgeLayer ) && IsCopperLayer( a->GetLayer() ) )
-            layer = a->GetLayer();
+        if( a->IsOnLayer( edgeLayer ) && b->Type() != PCB_FOOTPRINT_T )
+        {
+            if( b->IsOnLayer( active ) && IsCopperLayer( active ) )
+                layer = active;
+            else if( IsCopperLayer( b->GetLayer() ) )
+                layer = b->GetLayer();
+        }
+        else if( b->IsOnLayer( edgeLayer ) && a->Type() != PCB_FOOTPRINT_T )
+        {
+            if( a->IsOnLayer( active ) && IsCopperLayer( active ) )
+                layer = active;
+            else if( IsCopperLayer( a->GetLayer() ) )
+                layer = a->GetLayer();
+        }
 
         if( layer >= 0 )
         {
@@ -916,6 +922,35 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
     r = m_inspectClearanceDialog->AddPage( _( "Physical Clearances" ) );
 
+    auto reportPhysicalClearance =
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                reportHeader( _( "Physical clearance resolution for:" ), a, b, aLayer, r );
+
+                constraint = drcEngine.EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, a, b, aLayer, r );
+                clearance = constraint.m_Value.Min();
+
+                if( compileError )
+                {
+                    reportCompileError( r );
+                }
+                else if( !drcEngine.HasRulesForConstraintType( PHYSICAL_CLEARANCE_CONSTRAINT ) )
+                {
+                    r->Report( "" );
+                    r->Report( _( "No 'physical_clearance' constraints defined." ) );
+                }
+                else
+                {
+                    r->Report( "" );
+                    r->Report( wxString::Format( _( "Resolved clearance: %s." ),
+                                                 StringFromValue( units, clearance, true ) ) );
+                }
+
+                r->Report( "" );
+                r->Report( "" );
+                r->Report( "" );
+            };
+
     if( layerIntersection.any() )
     {
         PCB_LAYER_ID layer = active;
@@ -923,30 +958,24 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         if( !layerIntersection.test( layer ) )
             layer = layerIntersection.Seq().front();
 
-        reportHeader( _( "Physical clearance resolution for:" ), a, b, layer, r );
+        reportPhysicalClearance( layer );
+    }
 
-        constraint = drcEngine.EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, a, b, layer, r );
-        clearance = constraint.m_Value.Min();
+    if( aFP && b->IsOnLayer( Edge_Cuts ) )
+    {
+        if( !aFP->GetPolyCourtyard( F_CrtYd ).IsEmpty() )
+            reportPhysicalClearance( F_CrtYd );
 
-        if( compileError )
-        {
-            reportCompileError( r );
-        }
-        else if( !drcEngine.HasRulesForConstraintType( PHYSICAL_CLEARANCE_CONSTRAINT ) )
-        {
-            r->Report( "" );
-            r->Report( _( "No 'physical_clearance' constraints defined." ) );
-        }
-        else
-        {
-            r->Report( "" );
-            r->Report( wxString::Format( _( "Resolved clearance: %s." ),
-                                         StringFromValue( units, clearance, true ) ) );
-        }
+        if( !aFP->GetPolyCourtyard( B_CrtYd ).IsEmpty() )
+            reportPhysicalClearance( B_CrtYd );
+    }
+    else if( bFP && a->IsOnLayer( Edge_Cuts ) )
+    {
+        if( !bFP->GetPolyCourtyard( F_CrtYd ).IsEmpty() )
+            reportPhysicalClearance( F_CrtYd );
 
-        r->Report( "" );
-        r->Report( "" );
-        r->Report( "" );
+        if( !bFP->GetPolyCourtyard( B_CrtYd ).IsEmpty() )
+            reportPhysicalClearance( B_CrtYd );
     }
 
     if( hasHole( a ) || hasHole( b ) )

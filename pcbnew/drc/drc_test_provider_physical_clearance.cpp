@@ -145,11 +145,14 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
 
     static const std::vector<KICAD_T> itemTypes = {
         PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
+        PCB_FOOTPRINT_T,
         PCB_PAD_T,
         PCB_SHAPE_T, PCB_FP_SHAPE_T,
         PCB_TEXT_T, PCB_FP_TEXT_T, PCB_TEXTBOX_T, PCB_FP_TEXTBOX_T,
         PCB_DIMENSION_T
     };
+
+    static const LSET courtyards( 2, F_CrtYd, B_CrtYd );
 
     forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
@@ -172,18 +175,22 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                     PAD* pad = static_cast<PAD*>( item );
 
                     if( pad->GetDrillSizeX() > 0 && pad->GetDrillSizeY() > 0 )
-                        layers |= LSET::PhysicalLayersMask();
+                        layers |= LSET::PhysicalLayersMask() | courtyards;
                 }
                 else if( item->Type() == PCB_VIA_T )
                 {
                     PCB_VIA* via = static_cast<PCB_VIA*>( item );
 
                     if( via->GetDrill() > 0 )
-                        layers |= LSET::PhysicalLayersMask();
+                        layers |= LSET::PhysicalLayersMask() | courtyards;
+                }
+                else if( item->Type() == PCB_FOOTPRINT_T )
+                {
+                    layers = courtyards;
                 }
                 else if( item->IsOnLayer( Edge_Cuts ) )
                 {
-                    layers |= LSET::PhysicalLayersMask();
+                    layers |= LSET::PhysicalLayersMask() | courtyards;
                 }
 
                 for( PCB_LAYER_ID layer : layers.Seq() )
@@ -198,7 +205,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
     if( !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE )
             || !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_CLEARANCE ) )
     {
-        if( !reportPhase( _( "Checking mechanical clearances..." ) ) )
+        if( !reportPhase( _( "Checking physical clearances..." ) ) )
             return false;   // DRC cancelled
 
         forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
@@ -207,7 +214,12 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                     if( !reportProgress( ii++, count, delta ) )
                         return false;
 
-                    for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
+                    LSET layers = item->GetLayerSet();
+
+                    if( item->Type() == PCB_FOOTPRINT_T )
+                        layers = courtyards;
+
+                    for( PCB_LAYER_ID layer : layers.Seq() )
                     {
                         std::shared_ptr<SHAPE> itemShape = item->GetEffectiveShape( layer );
 
