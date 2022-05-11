@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:09-0700\n"
-"PO-Revision-Date: 2022-05-09 07:15+0000\n"
+"PO-Revision-Date: 2022-05-12 20:18+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v6/zh_Hans/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 4.13-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -7149,16 +7149,14 @@ msgid "Save footprint associations in schematic symbol footprint fields"
 msgstr "在原理图符号封装字段中保存封装关联"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "保存到原理图"
+msgstr "保存到原理图和文件"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
-#, fuzzy
 msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
-msgstr "在原理图符号封装字段中保存封装关联"
+msgstr "将封装关联保存在原理图符号封装字段和原理图文件中"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select next unassigned symbol"
