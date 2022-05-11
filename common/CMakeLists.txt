@@ -19,71 +19,13 @@ include_directories(
     ${INC_AFTER}
     )
 
-set( GAL_SRCS
-    # Common part
-	callback_gal.cpp
-    draw_panel_gal.cpp
-    gl_context_mgr.cpp
-    newstroke_font.cpp
-    painter.cpp
-    gal/color4d.cpp
-    gal/cursors.cpp
-    gal/dpi_scaling.cpp
-    gal/gal_display_options.cpp
-    gal/graphics_abstraction_layer.cpp
-    gal/hidpi_gl_canvas.cpp
-
-    view/view_controls.cpp
-    view/view_overlay.cpp
-    view/wx_view_controls.cpp
-    view/zoom_controller.cpp
-
-    # OpenGL GAL
-    gal/opengl/opengl_gal.cpp
-    gal/opengl/gl_resources.cpp
-    gal/opengl/gl_builtin_shaders.cpp
-    gal/opengl/shader.cpp
-    gal/opengl/vertex_item.cpp
-    gal/opengl/vertex_container.cpp
-    gal/opengl/cached_container.cpp
-    gal/opengl/cached_container_gpu.cpp
-    gal/opengl/cached_container_ram.cpp
-    gal/opengl/noncached_container.cpp
-    gal/opengl/vertex_manager.cpp
-    gal/opengl/gpu_manager.cpp
-    gal/opengl/antialiasing.cpp
-    gal/opengl/opengl_compositor.cpp
-    gal/opengl/utils.cpp
-
-    # Cairo GAL
-    gal/cairo/cairo_gal.cpp
-    gal/cairo/cairo_compositor.cpp
-    gal/cairo/cairo_print.cpp
-    )
-
-add_library( gal STATIC ${GAL_SRCS} )
-
-target_link_libraries( gal
-    common          # This is needed until the circular dependency is removed
-    kimath
-    nlohmann_json
-    ${GLEW_LIBRARIES}
-    ${CAIRO_LIBRARIES}
-    ${PIXMAN_LIBRARIES}
-    ${OPENGL_LIBRARIES}
-    ${GDI_PLUS_LIBRARIES}
-	# outline font support
-	${FREETYPE_LIBRARIES}
-	${HarfBuzz_LIBRARIES}
-	${Fontconfig_LIBRARIES}
-)
-
+# Get the GAL Target
+add_subdirectory( gal )
 
 # Only for win32 cross compilation using MXE
 if( WIN32 AND MSYS )
     add_definitions( -DGLEW_STATIC )
 endif()
-
 
 # A shared library subsetted from common which restricts what can go into
 # a single_top link image.  By not linking to common, we control what does
@@ -653,14 +595,6 @@ generate_lemon_grammar(
 # works on Linux:
 make_lexer(
     common
-    stroke_params.keywords
-    stroke_params_lexer.h
-    stroke_params_keywords.cpp
-    STROKEPARAMS_T
-    )
-# works on msys2:
-make_lexer(
-    gal
     stroke_params.keywords
     stroke_params_lexer.h
     stroke_params_keywords.cpp
