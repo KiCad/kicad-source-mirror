@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:13-0700\n"
-"PO-Revision-Date: 2022-05-10 23:58+0000\n"
+"PO-Revision-Date: 2022-05-12 20:14+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 4.13-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -7146,7 +7146,7 @@ msgstr ""
 #: cvpcb/cvpcb.cpp:187
 msgid ""
 "An error occurred attempting to load the global footprint library table."
-msgstr "Virhe yritettäessä ladata yleistä jalanjälkikirjastotaulua."
+msgstr "Virhe yritettäessä ladata yleistä jalanjälkikirjastotaulukkoa."
 
 #: cvpcb/cvpcb_mainframe.cpp:63 cvpcb/menubar.cpp:51
 msgid "Assign Footprints"
@@ -7375,7 +7375,7 @@ msgstr "Jalanjäljen Määritys Ristiriitainen"
 #: cvpcb/display_footprints_frame.cpp:70
 #: pcbnew/toolbars_footprint_viewer.cpp:176
 msgid "Footprint Viewer"
-msgstr "Jalanjäljen Katselin"
+msgstr "Jalanjälkikatselin"
 
 #: cvpcb/display_footprints_frame.cpp:322
 #: pcbnew/toolbars_footprint_viewer.cpp:107
@@ -7470,7 +7470,7 @@ msgstr "Jalanjälkisuodattimet:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:52
 msgid "View selected footprint"
-msgstr "Näytä valittu liitoskuva"
+msgstr "Näytä valittu jalanjälki"
 
 #: cvpcb/tools/cvpcb_actions.cpp:53
 msgid "View the selected footprint in the footprint viewer"
@@ -7507,7 +7507,7 @@ msgid ""
 "schematic files"
 msgstr ""
 "Tallenna jalanjälkiliitokset kytkentäkaaviosymbolien jalanjälkikenttiin ja "
-"kyskentäkaaviotiedostoihin"
+"kytkentäkaaviotiedostoihin"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select next unassigned symbol"
@@ -7648,7 +7648,7 @@ msgstr "Kaksoiskappaleita %s%s%s\n"
 #: eeschema/component_references_lister.cpp:705
 #, c-format
 msgid "Duplicate items %s%s\n"
-msgstr "Kopioi kohteita %s %s\n"
+msgstr "Kaksoiskappaleita %s %s\n"
 
 #: eeschema/component_references_lister.cpp:717
 #, c-format
