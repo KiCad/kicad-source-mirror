@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:13-0700\n"
-"PO-Revision-Date: 2022-05-10 18:51+0000\n"
+"PO-Revision-Date: 2022-05-12 20:14+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 4.13-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -5834,9 +5834,8 @@ msgid "Save current document to another location"
 msgstr "将当前文档保存到其他位置"
 
 #: common/tool/actions.cpp:79
-#, fuzzy
 msgid "Save a Copy..."
-msgstr "另存为..."
+msgstr "保存副本…"
 
 #: common/tool/actions.cpp:79
 msgid "Save a copy of the current document to another location"
@@ -7375,16 +7374,14 @@ msgid "Save footprint associations in schematic symbol footprint fields"
 msgstr "在原理图符号封装字段中保存封装关联"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "保存到原理图"
+msgstr "保存到原理图和文件"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
-#, fuzzy
 msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
-msgstr "在原理图符号封装字段中保存封装关联"
+msgstr "将封装关联保存在原理图符号封装字段和原理图文件中"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select next unassigned symbol"
@@ -8902,9 +8899,8 @@ msgid "Set To"
 msgstr "设置为"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
-#, fuzzy
 msgid "Text color:"
-msgstr "网络颜色："
+msgstr "文本颜色："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:220
 #: eeschema/pin_type.cpp:129
@@ -9198,9 +9194,8 @@ msgstr "Y 坐标"
 #: pcbnew/fp_text.cpp:297 pcbnew/fp_textbox.cpp:242
 #: pcbnew/pcb_dimension.cpp:338 pcbnew/pcb_text.cpp:144
 #: pcbnew/pcb_textbox.cpp:236
-#, fuzzy
 msgid "Font"
-msgstr "字体："
+msgstr "字体"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:118
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:89
@@ -9605,9 +9600,9 @@ msgstr "从符号删除备用主体样式（德摩根）？"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:320
 #: eeschema/tools/symbol_editor_control.cpp:322
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol name '%s' already in use in library '%s'."
-msgstr "符号 '%s' 已存在于库 '%s' 中。"
+msgstr "符号名 '%s' 已用于库 '%s' 。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:437
 #, c-format
@@ -10813,7 +10808,7 @@ msgstr "分层路径："
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:199
 msgid "path"
-msgstr ""
+msgstr "路径"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:84
 msgid "Sheet Properties"
@@ -11781,18 +11776,16 @@ msgid "Select field:"
 msgstr "选择字段："
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1325
-#, fuzzy
 msgid "Unsaved data"
-msgstr "[未保存]"
+msgstr "未保存的数据"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1326
 msgid "Changes are unsaved. Export unsaved data?"
-msgstr ""
+msgstr "更改未保存。导出未保存数据吗？"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1336
-#, fuzzy
 msgid "Save as CSV"
-msgstr "另存为图片"
+msgstr "另存为 CSV"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:34
 msgid "Add Field..."
@@ -11811,9 +11804,8 @@ msgid "Group symbols together based on common properties"
 msgstr "根据公共属性对符号进行分组"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:125
-#, fuzzy
 msgid "Export as CSV..."
-msgstr "导出符号为 SVG..."
+msgstr "导出为 CSV..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:87
 msgid "Symbol Fields Table"
@@ -16405,14 +16397,12 @@ msgid "Make a copy of the selected symbol"
 msgstr "制作所选符号的副本"
 
 #: eeschema/tools/ee_actions.cpp:138
-#, fuzzy
 msgid "Rename Symbol..."
-msgstr "重新映射符号..."
+msgstr "重命名符号..."
 
 #: eeschema/tools/ee_actions.cpp:138
-#, fuzzy
 msgid "Rename the selected symbol"
-msgstr "更新已选中的符号"
+msgstr "重命名所选符号"
 
 #: eeschema/tools/ee_actions.cpp:143
 msgid "Save the current symbol to a different library."
@@ -17523,19 +17513,16 @@ msgstr "未选中符号库。"
 
 #: eeschema/tools/symbol_editor_control.cpp:308
 #: pcbnew/tools/footprint_editor_control.cpp:397
-#, fuzzy
 msgid "New name:"
-msgstr "网络名称："
+msgstr "新名称："
 
 #: eeschema/tools/symbol_editor_control.cpp:308
-#, fuzzy
 msgid "Change Symbol Name"
-msgstr "替换符号"
+msgstr "更改符号名"
 
 #: eeschema/tools/symbol_editor_control.cpp:318
-#, fuzzy
 msgid "Symbol name cannot be empty."
-msgstr "网络名称变量名不能为空。"
+msgstr "符号名不能为空。"
 
 #: eeschema/tools/symbol_editor_control.cpp:489
 #: eeschema/tools/symbol_editor_control.cpp:529
@@ -23059,7 +23046,6 @@ msgid "Checking zones..."
 msgstr "正在检查敷铜..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:141
-#, fuzzy
 msgid "Rebuilding connectivity..."
 msgstr "重建连接..."
 
@@ -26215,25 +26201,21 @@ msgid ""
 msgstr "警告：电镀通孔通常应至少在一层上有铜焊盘。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1348
-#, fuzzy
 msgid "Error: Trapazoid delta is too large."
-msgstr "错误：焊盘没有层。"
+msgstr "错误：梯形德尔塔过大。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1357
-#, fuzzy
 msgid "Error: Through hole pad has no hole."
-msgstr "通孔焊盘没有孔"
+msgstr "错误：通孔焊盘没有孔。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1364
-#, fuzzy
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
 msgstr "警告：连接器焊盘一般而言没有焊膏。使用表面黏装零件（SMD）焊盘代替。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1373
-#, fuzzy
 msgid "Error: SMD pad has a hole."
-msgstr "错误：焊盘没有层。"
+msgstr "错误：SMD 焊盘有个孔。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1379
 msgid "Warning: SMD pad has no outer layers."
@@ -26527,7 +26509,6 @@ msgid "E.C.O.2"
 msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:551
-#, fuzzy
 msgid "Fabrication property:"
 msgstr "制造属性："
 
@@ -29954,9 +29935,8 @@ msgid "board setup constraints"
 msgstr "电路板设置约束"
 
 #: pcbnew/drc/drc_engine.cpp:170
-#, fuzzy
 msgid "board setup constraints zone fill strategy"
-msgstr "电路板设置约束孔"
+msgstr "电路板设置约束 区域填充策略"
 
 #: pcbnew/drc/drc_engine.cpp:175
 msgid "board setup constraints silk"
@@ -30058,9 +30038,9 @@ msgid "Local override on %s; thermal spoke width: %s."
 msgstr "%s 上的本地覆盖；防散热导线宽度：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:869
-#, fuzzy, c-format
+#, c-format
 msgid "%s min thickness: %s."
-msgstr "敷铜 %s 最小宽度：%s。"
+msgstr "%s 最小厚度： %s。"
 
 #: pcbnew/drc/drc_engine.cpp:883
 #, c-format
@@ -30101,9 +30081,9 @@ msgid "Checking %s thermal spoke width: %s."
 msgstr "正检查 %s 热辐条宽度：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:943
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s min spoke count: %s."
-msgstr "正检查 %s 最大偏斜：%s。"
+msgstr "正检查 %s 最小辐条数：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:949
 #, c-format
@@ -30247,14 +30227,14 @@ msgid "Local clearance on %s; clearance: %s."
 msgstr "本地间隙 %s；间隙：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1376
-#, fuzzy, c-format
+#, c-format
 msgid "%s zone connection: %s."
-msgstr "正检查 %s 区域连接：%s。"
+msgstr "%s 区域连接：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1392
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad connection: %s."
-msgstr "敷铜 %s 焊盘连接：%s。"
+msgstr "%s 焊盘连接：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1397 pcbnew/drc/drc_engine.cpp:1414
 #: pcbnew/drc/drc_engine.cpp:1431 pcbnew/zone.cpp:330 pcbnew/zone.cpp:470
@@ -30262,14 +30242,14 @@ msgid "zone"
 msgstr "敷铜"
 
 #: pcbnew/drc/drc_engine.cpp:1409
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal relief gap: %s."
-msgstr "敷铜 %s 散热间隙：%s。"
+msgstr "%s 散热间隙：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1426
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal spoke width: %s."
-msgstr "敷铜 %s 散热辐条宽度：%s。"
+msgstr "%s 热辐条宽度：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1459
 #, c-format
@@ -30402,9 +30382,8 @@ msgid "NPTH inside courtyard"
 msgstr "NPTH 在外框内"
 
 #: pcbnew/drc/drc_item.cpp:156
-#, fuzzy
 msgid "Item on a disabled copper layer"
-msgstr "禁用层上的项目"
+msgstr "禁用铜层上的项目"
 
 #: pcbnew/drc/drc_item.cpp:160
 msgid "Board has malformed outline"
@@ -30487,9 +30466,8 @@ msgid "Differential uncoupled length too long"
 msgstr "差分未耦合长度太长"
 
 #: pcbnew/drc/drc_item.cpp:244
-#, fuzzy
 msgid "Footprint component type doesn't match footprint pads"
-msgstr "封装类型与封装焊盘不匹配"
+msgstr "封装元件类型与封装焊盘不匹配"
 
 #: pcbnew/drc/drc_item.cpp:248
 msgid "Through hole pad has no hole"
@@ -30531,7 +30509,7 @@ msgstr "错误：%s%s"
 #: pcbnew/drc/drc_rule_parser.cpp:79
 #, c-format
 msgid "The '%s' keyword has been deprecated.  Please use '%s' instead."
-msgstr ""
+msgstr "关键词\"%s\"已被废弃。 请使用“%s”。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:117 pcbnew/drc/drc_rule_parser.cpp:200
 #: pcbnew/drc/drc_rule_parser.cpp:478
@@ -31327,19 +31305,19 @@ msgid "Footprint %s"
 msgstr "封装 %s"
 
 #: pcbnew/footprint.cpp:2218
-#, fuzzy, c-format
+#, c-format
 msgid "(expected 'Through hole'; actual '%s')"
-msgstr " (电路板最小通孔 %s; 实际 %s)"
+msgstr "(预期“通孔”，实际“%s”)"
 
 #: pcbnew/footprint.cpp:2221
-#, fuzzy, c-format
+#, c-format
 msgid "(expected 'SMD'; actual '%s')"
-msgstr "(%s 最大直径 %s; 实际 %s)"
+msgstr "(预期“SMD”，实际“%s”)"
 
 #: pcbnew/footprint.cpp:2224
 #, c-format
 msgid "(expected 'Other'; actual '%s')"
-msgstr ""
+msgstr "(预期“其他”，实际“%s”)"
 
 #: pcbnew/footprint.cpp:2251
 msgid "(PTH pad has no copper layers)"
@@ -35203,15 +35181,13 @@ msgstr "已解析的间隙：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:391
 #: pcbnew/tools/board_inspection_tool.cpp:965
-#, fuzzy
 msgid "Physical hole clearance resolution for:"
-msgstr "下列项目的机械孔间隙分辨率："
+msgstr "下列项目的物理孔间隙分辨率："
 
 #: pcbnew/tools/board_inspection_tool.cpp:400
 #: pcbnew/tools/board_inspection_tool.cpp:977
-#, fuzzy
 msgid "No 'physical_hole_clearance' constraints defined."
-msgstr "未定义 'mechanical_hole_clearance' (机械孔间隙) 约束。"
+msgstr "未定义 'physical_hole_clearance' 约束。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:411
 msgid "Edge Clearance"
@@ -35229,15 +35205,13 @@ msgstr "间隙解析适用于:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:477
 #: pcbnew/tools/board_inspection_tool.cpp:926
-#, fuzzy
 msgid "Physical clearance resolution for:"
-msgstr "下列项目的机械间隙分辨率："
+msgstr "下列项目的物理间隙分辨率："
 
 #: pcbnew/tools/board_inspection_tool.cpp:486
 #: pcbnew/tools/board_inspection_tool.cpp:938
-#, fuzzy
 msgid "No 'physical_clearance' constraints defined."
-msgstr "未定义 'mechanical_clearance' (机械间隙) 约束。"
+msgstr "未定义 'physical_clearance' 约束。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:530
 msgid "Select two items for a clearance resolution report."
@@ -35257,9 +35231,8 @@ msgid "Zone connection resolution for:"
 msgstr "敷铜连接解像度，用于："
 
 #: pcbnew/tools/board_inspection_tool.cpp:621
-#, fuzzy
 msgid "Thermal relief gap resolution for:"
-msgstr "下列项的文本高度分辨率："
+msgstr "下列项目的防散热间距："
 
 #: pcbnew/tools/board_inspection_tool.cpp:630
 #, c-format
@@ -35267,30 +35240,27 @@ msgid "Resolved thermal relief gap: %s."
 msgstr "已解决的防散热间隙：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:635
-#, fuzzy
 msgid "Spoke width resolution for:"
-msgstr "布线宽度解析适用于:"
+msgstr "下列项目的辐条宽度分辨率："
 
 #: pcbnew/tools/board_inspection_tool.cpp:644
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal relief spoke width: %s."
-msgstr "已解决的防散热辐条宽度：%s。"
+msgstr "已解析的防散热辐条宽度：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:649
-#, fuzzy
 msgid "Spoke count resolution for:"
-msgstr "禁止区解析适用于:"
+msgstr "下列项目的辐条计数分辨率："
 
 #: pcbnew/tools/board_inspection_tool.cpp:658
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min thermal relief spoke count: %d."
-msgstr "花焊盘最小辐条 (散热) 数目："
+msgstr "已解析的最小辐条 (散热) 辐条数目：%d。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:667
 #: pcbnew/tools/board_inspection_tool.cpp:715
-#, fuzzy
 msgid "Zone clearance resolution for:"
-msgstr "孔间隙解像度，用于:"
+msgstr "下列项目的区域间隙分辨率："
 
 #: pcbnew/tools/board_inspection_tool.cpp:671
 #, c-format
@@ -35298,14 +35268,14 @@ msgid "Zone clearance: %s."
 msgstr "敷铜间隙：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:681
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
-msgstr "被来自 %s 的较大防散热覆盖；间隙：%s。"
+msgstr "被来自 %s 的较大物理间隙覆盖；间隙：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:697
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical hole clearance from %s;clearance: %s."
-msgstr "被来自 %s 的较大防散热覆盖；间隙：%s。"
+msgstr "被来自 %s 的较大物理孔间隙覆盖；间隙：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
 msgid "Diff Pair"
@@ -35337,9 +35307,8 @@ msgid "Courtyard clearance resolution for:"
 msgstr "空间层间隙解像度，适用于："
 
 #: pcbnew/tools/board_inspection_tool.cpp:917
-#, fuzzy
 msgid "Physical Clearances"
-msgstr "物理参数"
+msgstr "物理间隙"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1004
 msgid "Select an item for a constraints resolution report."
@@ -35661,19 +35630,17 @@ msgid "_copy"
 msgstr "_复制(copy)"
 
 #: pcbnew/tools/footprint_editor_control.cpp:397
-#, fuzzy
 msgid "Change Footprint Name"
-msgstr "替换封装"
+msgstr "更改封装名"
 
 #: pcbnew/tools/footprint_editor_control.cpp:407
-#, fuzzy
 msgid "Footprint name cannot be empty."
-msgstr "网络名称变量名不能为空。"
+msgstr "封装名不能为空。"
 
 #: pcbnew/tools/footprint_editor_control.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint name '%s' already in use in library '%s'."
-msgstr "未找到封装 '%s' (在库 '%s' 中)。"
+msgstr "封装名 '%s' 已用于库 '%s'。"
 
 #: pcbnew/tools/footprint_editor_control.cpp:709
 msgid "No footprint problems found."
@@ -36089,24 +36056,20 @@ msgid "Show selected footprint on editor canvas"
 msgstr "在编辑器画布上显示选定的轮廓线"
 
 #: pcbnew/tools/pcb_actions.cpp:374
-#, fuzzy
 msgid "Duplicate Footprint"
-msgstr "重复的封装"
+msgstr "重复封装"
 
 #: pcbnew/tools/pcb_actions.cpp:374
-#, fuzzy
 msgid "Make a copy of the selected footprint"
-msgstr "制作所选符号的副本"
+msgstr "制作所选封装的副本"
 
 #: pcbnew/tools/pcb_actions.cpp:379
-#, fuzzy
 msgid "Rename Footprint..."
-msgstr "创建封装..."
+msgstr "重命名封装..."
 
 #: pcbnew/tools/pcb_actions.cpp:379
-#, fuzzy
 msgid "Rename the selected footprint"
-msgstr "更新选择的封装"
+msgstr "重命名所选封装"
 
 #: pcbnew/tools/pcb_actions.cpp:384
 msgid "Delete Footprint from Library"
@@ -37381,69 +37344,56 @@ msgid "Auto-fill Zone(s)"
 msgstr "自动重填敷铜"
 
 #: pcbnew/tracks_cleaner.cpp:68
-#, fuzzy
 msgid "Checking null tracks and vias..."
-msgstr "测试悬空的焊盘/过孔"
+msgstr "正检查无效导线和过孔…"
 
 #: pcbnew/tracks_cleaner.cpp:70
-#, fuzzy
 msgid "Removing null tracks and vias..."
-msgstr "创建导线和过孔"
+msgstr "正删除无效导线和过孔…"
 
 #: pcbnew/tracks_cleaner.cpp:81
-#, fuzzy
 msgid "Checking redundant tracks..."
-msgstr "移除多余的布线"
+msgstr "正检查多余导线…"
 
 #: pcbnew/tracks_cleaner.cpp:83
-#, fuzzy
 msgid "Removing redundant tracks..."
-msgstr "移除多余的布线"
+msgstr "正删除多余导线…"
 
 #: pcbnew/tracks_cleaner.cpp:95
-#, fuzzy
 msgid "Checking shorting tracks..."
-msgstr "检查封装..."
+msgstr "检查短路导线..."
 
 #: pcbnew/tracks_cleaner.cpp:97
-#, fuzzy
 msgid "Removing shorting tracks..."
-msgstr "删除悬空的布线"
+msgstr "正删除短路的导线…"
 
 #: pcbnew/tracks_cleaner.cpp:110
-#, fuzzy
 msgid "Checking tracks in pads..."
-msgstr "正在检查布线宽度..."
+msgstr "检查焊盘内导线..."
 
 #: pcbnew/tracks_cleaner.cpp:112
-#, fuzzy
 msgid "Removing tracks in pads..."
-msgstr "删除焊盘内的布线"
+msgstr "正删除焊盘内导线…"
 
 #: pcbnew/tracks_cleaner.cpp:126
-#, fuzzy
 msgid "Checking dangling tracks and vias..."
-msgstr "测试悬空的焊盘/过孔"
+msgstr "正检查悬空的导线和过孔…"
 
 #: pcbnew/tracks_cleaner.cpp:131
-#, fuzzy
 msgid "Removing dangling tracks..."
-msgstr "删除悬空的布线"
+msgstr "正删除悬空的导线…"
 
 #: pcbnew/tracks_cleaner.cpp:134
-#, fuzzy
 msgid "Removing dangling vias..."
-msgstr "删除悬空的通孔"
+msgstr "正删除悬空的过孔…"
 
 #: pcbnew/tracks_cleaner.cpp:148
-#, fuzzy
 msgid "Checking collinear tracks..."
-msgstr "正在检查孔间隙..."
+msgstr "检查同一直线上导线..."
 
 #: pcbnew/tracks_cleaner.cpp:150
-#, fuzzy
 msgid "Merging collinear tracks..."
-msgstr "合并共线布线"
+msgstr "合并同一直线上导线…"
 
 #: pcbnew/undo_redo.cpp:553
 msgid "Incomplete undo/redo operation: some items not found"
