@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:13-0700\n"
-"PO-Revision-Date: 2022-05-10 18:51+0000\n"
+"PO-Revision-Date: 2022-05-12 20:14+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 4.13-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -5896,9 +5896,8 @@ msgid "Save current document to another location"
 msgstr "現在のドキュメントを別の場所に保存"
 
 #: common/tool/actions.cpp:79
-#, fuzzy
 msgid "Save a Copy..."
-msgstr "名前をつけてコピーを保存..."
+msgstr "コピーを保存..."
 
 #: common/tool/actions.cpp:79
 msgid "Save a copy of the current document to another location"
@@ -7463,9 +7462,8 @@ msgstr ""
 "回路図シンボルのフットプリント フィールドへフットプリントの関連付けを保存"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "回路図へ保存"
+msgstr "回路図とファイルへ保存"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
 #, fuzzy
@@ -9027,9 +9025,8 @@ msgid "Set To"
 msgstr "セットする値"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
-#, fuzzy
 msgid "Text color:"
-msgstr "ネットの色:"
+msgstr "文字の色:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:220
 #: eeschema/pin_type.cpp:129
@@ -9327,9 +9324,8 @@ msgstr "Y 位置"
 #: pcbnew/fp_text.cpp:297 pcbnew/fp_textbox.cpp:242
 #: pcbnew/pcb_dimension.cpp:338 pcbnew/pcb_text.cpp:144
 #: pcbnew/pcb_textbox.cpp:236
-#, fuzzy
 msgid "Font"
-msgstr "フォント:"
+msgstr "フォント"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:118
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:89
@@ -9736,7 +9732,7 @@ msgstr "シンボルから代替ボディスタイル(ド・モルガン)削除�
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:320
 #: eeschema/tools/symbol_editor_control.cpp:322
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol name '%s' already in use in library '%s'."
 msgstr "シンボル '%s' はライブラリー '%s' に既に存在します。"
 
@@ -10960,9 +10956,8 @@ msgid "Hierarchical path:"
 msgstr "階層パス:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:199
-#, fuzzy
 msgid "path"
-msgstr "ファイルパス:"
+msgstr "パス"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:84
 msgid "Sheet Properties"
@@ -11936,18 +11931,16 @@ msgid "Select field:"
 msgstr "フィールドを選択:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1325
-#, fuzzy
 msgid "Unsaved data"
-msgstr "[未保存]"
+msgstr "未保存データ"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1326
 msgid "Changes are unsaved. Export unsaved data?"
-msgstr ""
+msgstr "変更内容が未保存です。保存されていないデータをエクスポートしますか？"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1336
-#, fuzzy
 msgid "Save as CSV"
-msgstr "画像として保存"
+msgstr "CSVとして保存"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:34
 msgid "Add Field..."
@@ -11966,9 +11959,8 @@ msgid "Group symbols together based on common properties"
 msgstr "共通のプロパティに基づいたシンボルをまとめてグループ化する"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:125
-#, fuzzy
 msgid "Export as CSV..."
-msgstr "SVG をエクスポート..."
+msgstr "CSVとしてエクスポート..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:87
 msgid "Symbol Fields Table"
@@ -12340,7 +12332,6 @@ msgid "Update Symbol Fields"
 msgstr "シンボル フィールドを更新"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:30
-#, fuzzy
 msgid "Wire/bus width:"
 msgstr "線幅:"
 
@@ -12349,9 +12340,8 @@ msgid "Set width to 0 to use netclass's wire/bus widths."
 msgstr "幅を0に設定すると、ネットクラスの線幅を使用します。"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:71
-#, fuzzy
 msgid "Wire & Bus Properties"
-msgstr "配線、ワイヤー、バスのプロパティ"
+msgstr "配線、バスのプロパティ"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:142
 msgid ""
@@ -16675,14 +16665,12 @@ msgid "Make a copy of the selected symbol"
 msgstr "選択されたシンボルをコピー"
 
 #: eeschema/tools/ee_actions.cpp:138
-#, fuzzy
 msgid "Rename Symbol..."
-msgstr "シンボルをレスキュー..."
+msgstr "シンボル名の変更..."
 
 #: eeschema/tools/ee_actions.cpp:138
-#, fuzzy
 msgid "Rename the selected symbol"
-msgstr "選択されたシンボルを更新"
+msgstr "選択されたシンボル名を変更"
 
 #: eeschema/tools/ee_actions.cpp:143
 msgid "Save the current symbol to a different library."
@@ -17810,19 +17798,16 @@ msgstr "シンボル ライブラリーが選択されていません。"
 
 #: eeschema/tools/symbol_editor_control.cpp:308
 #: pcbnew/tools/footprint_editor_control.cpp:397
-#, fuzzy
 msgid "New name:"
-msgstr "ネット名:"
+msgstr "新しい名前:"
 
 #: eeschema/tools/symbol_editor_control.cpp:308
-#, fuzzy
 msgid "Change Symbol Name"
-msgstr "シンボルを変更"
+msgstr "シンボル名を変更"
 
 #: eeschema/tools/symbol_editor_control.cpp:318
-#, fuzzy
 msgid "Symbol name cannot be empty."
-msgstr "ネット名は空にできません。"
+msgstr "シンボル名は空にできません。"
 
 #: eeschema/tools/symbol_editor_control.cpp:489
 #: eeschema/tools/symbol_editor_control.cpp:529
@@ -23738,9 +23723,8 @@ msgid "Isolated islands smaller than this will be removed"
 msgstr "これより小さい孤立した導体部分は削除されます"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:398
-#, fuzzy
 msgid "Export Settings to Other Similar Zones"
-msgstr "他のゾーンに設定をエクスポートする"
+msgstr "他の同じようなゾーンに設定をエクスポートする"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:399
 #, fuzzy
@@ -26618,9 +26602,8 @@ msgid "Error: Trapazoid delta is too large."
 msgstr "エラー: パッドにレイヤーがありません。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1357
-#, fuzzy
 msgid "Error: Through hole pad has no hole."
-msgstr "スルーホール パッドに穴がありません"
+msgstr "エラー:スルーホール パッドに穴がありません"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1364
 #, fuzzy
@@ -26988,17 +26971,15 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:589
 msgid ""
 "Positive clearance means area bigger than the pad (usual for mask clearance)."
-msgstr ""
-"正のクリアランスはパッドより大きな領域を意味します。(通常はマスクのクリアラン"
-"ス)"
+msgstr "正のクリアランスはパッドより大きな領域を意味します(通常はマスクのクリアランス"
+")。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:593
 msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
-msgstr ""
-"負のクリアランスはパッドより小さな領域を意味します。(通常はペーストのクリアラ"
-"ンス)"
+msgstr "負のクリアランスはパッドより小さな領域を意味します(通常はペーストのクリアラン"
+"ス)。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:605
 msgid ""
@@ -30586,14 +30567,14 @@ msgid "Local clearance on %s; clearance: %s."
 msgstr "%sのローカルクリアランス; クリアランス: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1376
-#, fuzzy, c-format
+#, c-format
 msgid "%s zone connection: %s."
-msgstr "%sのゾーン接続を確認中:%s。"
+msgstr "%sのゾーン接続:%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1392
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad connection: %s."
-msgstr "ゾーン %s のパッド接続タイプ: %s."
+msgstr "%s のパッド接続タイプ: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1397 pcbnew/drc/drc_engine.cpp:1414
 #: pcbnew/drc/drc_engine.cpp:1431 pcbnew/zone.cpp:330 pcbnew/zone.cpp:470
@@ -30601,14 +30582,14 @@ msgid "zone"
 msgstr "ゾーン"
 
 #: pcbnew/drc/drc_engine.cpp:1409
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal relief gap: %s."
-msgstr "ゾーン %s のサーマルリリーフギャップ: %s."
+msgstr "%s のサーマルリリーフギャップ: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1426
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal spoke width: %s."
-msgstr "ゾーン %s のサーマルスポーク幅: %s."
+msgstr "%s のサーマルスポーク幅: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1459
 #, fuzzy, c-format
@@ -30872,7 +30853,7 @@ msgstr "エラー: %s%s"
 #: pcbnew/drc/drc_rule_parser.cpp:79
 #, c-format
 msgid "The '%s' keyword has been deprecated.  Please use '%s' instead."
-msgstr ""
+msgstr "'%s' というキーワードは非推奨となりました。  代わりに '%s' を使ってください。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:117 pcbnew/drc/drc_rule_parser.cpp:200
 #: pcbnew/drc/drc_rule_parser.cpp:478
@@ -31157,7 +31138,7 @@ msgid "Footprint '%s' not found in library '%s'."
 msgstr "フットプリント '%s' がライブラリ'%s'にありません。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' does not match copy in library '%s'."
 msgstr "フットプリント '%s' が、ライブラリ '%s' のコピーと一致しません。"
 
@@ -35318,9 +35299,8 @@ msgstr "直線"
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:285
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:291
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:297
-#, fuzzy
 msgid "Curved"
-msgstr "曲線"
+msgstr "曲線的"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:287
 msgid "Style for round shapes"
@@ -35562,9 +35542,8 @@ msgid "Violation Report"
 msgstr "違反のレポート"
 
 #: pcbnew/tools/board_inspection_tool.cpp:261
-#, fuzzy
 msgid "Uncoupled Length"
-msgstr "配線長"
+msgstr "非結合長"
 
 #: pcbnew/tools/board_inspection_tool.cpp:262
 #, fuzzy
@@ -35685,9 +35664,8 @@ msgstr "穴のクリアランスの解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:400
 #: pcbnew/tools/board_inspection_tool.cpp:977
-#, fuzzy
 msgid "No 'physical_hole_clearance' constraints defined."
-msgstr "'mechanical_hole_clearance' の制約が定義されていません。"
+msgstr "'physical_hole_clearance' の制約が定義されていません。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:411
 msgid "Edge Clearance"
@@ -35711,9 +35689,8 @@ msgstr "基板端クリアランスの解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:486
 #: pcbnew/tools/board_inspection_tool.cpp:938
-#, fuzzy
 msgid "No 'physical_clearance' constraints defined."
-msgstr "'mechanical_clearance' の制約が定義されていません。"
+msgstr "'physical_clearance' の制約が定義されていません。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:530
 msgid "Select two items for a clearance resolution report."
@@ -36141,19 +36118,17 @@ msgid "_copy"
 msgstr "_コピー"
 
 #: pcbnew/tools/footprint_editor_control.cpp:397
-#, fuzzy
 msgid "Change Footprint Name"
-msgstr "フットプリントの変更"
+msgstr "フットプリント名の変更"
 
 #: pcbnew/tools/footprint_editor_control.cpp:407
-#, fuzzy
 msgid "Footprint name cannot be empty."
-msgstr "ネット名は空にできません。"
+msgstr "フットプリント名は空にできません。"
 
 #: pcbnew/tools/footprint_editor_control.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint name '%s' already in use in library '%s'."
-msgstr "フットプリント \"%s\" は既にライブラリー \"%s\" 内に既に存在します"
+msgstr "フットプリント名 '%s' は既にライブラリー'%s' 内に既に存在します"
 
 #: pcbnew/tools/footprint_editor_control.cpp:709
 msgid "No footprint problems found."
@@ -36569,24 +36544,20 @@ msgid "Show selected footprint on editor canvas"
 msgstr "エディターのキャンバスに選択されたフットプリントを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:374
-#, fuzzy
 msgid "Duplicate Footprint"
-msgstr "重複したフットプリント"
+msgstr "フットプリントを複製する"
 
 #: pcbnew/tools/pcb_actions.cpp:374
-#, fuzzy
 msgid "Make a copy of the selected footprint"
-msgstr "選択されたシンボルをコピー"
+msgstr "選択されたフットプリントをコピー"
 
 #: pcbnew/tools/pcb_actions.cpp:379
-#, fuzzy
 msgid "Rename Footprint..."
-msgstr "フットプリントを生成..."
+msgstr "フットプリント名を変更..."
 
 #: pcbnew/tools/pcb_actions.cpp:379
-#, fuzzy
 msgid "Rename the selected footprint"
-msgstr "選択されたフットプリントを更新"
+msgstr "選択されたフットプリント名を変更"
 
 #: pcbnew/tools/pcb_actions.cpp:384
 msgid "Delete Footprint from Library"
@@ -38705,7 +38676,6 @@ msgid "Continue without Refill"
 msgstr "再塗り潰しせずに続行"
 
 #: pcbnew/zones.h:62
-#, fuzzy
 msgid "inherited"
 msgstr "継承"
 
