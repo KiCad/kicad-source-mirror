@@ -337,7 +337,7 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
         m_pcm->MarkInstalled( package, package.versions[0].version, "" );
 
     m_reporter->SetFinished();
-    m_reporter->KeepRefreshing( true );
+    m_reporter->KeepRefreshing( false );
     m_reporter->Destroy();
     m_reporter.reset();
 }
