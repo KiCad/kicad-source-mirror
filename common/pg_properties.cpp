@@ -31,8 +31,8 @@
 #include <widgets/color_swatch.h>
 
 // reg-ex describing a signed valid value with a unit
-static const wxChar REGEX_SIGNED_DISTANCE[] = wxT( "([-+]?[0-9]+[\\.?[0-9]*) *(mm|in)*" );
-static const wxChar REGEX_UNSIGNED_DISTANCE[] = wxT( "([0-9]+[\\.?[0-9]*) *(mm|in)*" );
+static const wxChar REGEX_SIGNED_DISTANCE[] = wxT( "([-+]?[0-9]+[\\.?[0-9]*) *(mm|in|mils)*" );
+static const wxChar REGEX_UNSIGNED_DISTANCE[] = wxT( "([0-9]+[\\.?[0-9]*) *(mm|in|mils)*" );
 
 wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
 {
@@ -162,6 +162,8 @@ bool PGPROPERTY_DISTANCE::StringToDistance( wxVariant& aVariant, const wxString&
         unit = EDA_UNITS::MILLIMETRES;
     else if( unitText == "in" )
         unit = EDA_UNITS::INCHES;
+    else if( unitText == "mils" )
+        unit = EDA_UNITS::MILS;
     else
         unit = PROPERTY_MANAGER::Instance().GetUnits();
 
@@ -173,6 +175,10 @@ bool PGPROPERTY_DISTANCE::StringToDistance( wxVariant& aVariant, const wxString&
     {
         case EDA_UNITS::INCHES:
             newValueIU = Mils2iu( value * 1000.0 );
+            break;
+
+        case EDA_UNITS::MILS:
+            newValueIU = Mils2iu( value );
             break;
 
         case EDA_UNITS::MILLIMETRES:
@@ -207,6 +213,9 @@ wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant, int aArgFla
     {
         case EDA_UNITS::INCHES:
             return wxString::Format( wxT( "%g in" ), Iu2Mils( aVariant.GetLong() ) / 1000.0 );
+
+        case EDA_UNITS::MILS:
+            return wxString::Format( wxT( "%g mils" ), Iu2Mils( aVariant.GetLong() ) );
 
         case EDA_UNITS::MILLIMETRES:
             return wxString::Format( wxT( "%g mm" ), Iu2Millimeter( aVariant.GetLong() ) );
