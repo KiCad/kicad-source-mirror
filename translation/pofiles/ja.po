@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:09-0700\n"
-"PO-Revision-Date: 2022-05-09 07:15+0000\n"
+"PO-Revision-Date: 2022-05-12 20:18+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v6/ja/>\n"
 "Language: ja\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 4.13-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -7232,9 +7232,8 @@ msgstr ""
 "回路図シンボルのフットプリント フィールドへフットプリントの関連付けを保存"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "回路図へ保存"
+msgstr "回路図とファイルへ保存"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
 #, fuzzy
@@ -24089,8 +24088,7 @@ msgstr ""
 msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
-msgstr ""
-"負のクリアランスはパッドより小さな領域を意味します(通常はペーストのクリアラン"
+msgstr "負のクリアランスはパッドより小さな領域を意味します(通常はペーストのクリアラン"
 "ス)。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:333
