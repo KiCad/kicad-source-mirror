@@ -9,16 +9,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:13-0700\n"
-"PO-Revision-Date: 2022-05-10 18:51+0000\n"
+"PO-Revision-Date: 2022-05-12 20:14+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 4.13-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -7481,17 +7481,16 @@ msgstr ""
 "Spara fotavtrycksassociationer i fälten för fotavtryck i kretsschemasymboler"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "Spara till Schema"
+msgstr "Spara till kretsschema och fil"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
-#, fuzzy
 msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
 msgstr ""
-"Spara fotavtrycksassociationer i fälten för fotavtryck i kretsschemasymboler"
+"Spara fotavtrycksassociationer i kretsschemasymbolernas fält för fotavtryck "
+"och i kretsschemafiler"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select next unassigned symbol"
@@ -9050,9 +9049,8 @@ msgid "Set To"
 msgstr "Satt till"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
-#, fuzzy
 msgid "Text color:"
-msgstr "Nät färger:"
+msgstr "Textfärg:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:220
 #: eeschema/pin_type.cpp:129
@@ -9349,9 +9347,8 @@ msgstr "Y-position"
 #: pcbnew/fp_text.cpp:297 pcbnew/fp_textbox.cpp:242
 #: pcbnew/pcb_dimension.cpp:338 pcbnew/pcb_text.cpp:144
 #: pcbnew/pcb_textbox.cpp:236
-#, fuzzy
 msgid "Font"
-msgstr "Typsnitt:"
+msgstr "Typsnitt"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:118
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:89
@@ -9761,9 +9758,9 @@ msgstr "Radera alternativ kroppsstil (De Morgan) från symbol?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:320
 #: eeschema/tools/symbol_editor_control.cpp:322
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol name '%s' already in use in library '%s'."
-msgstr "Symbol '%s' finns redan i bibliotek '%s'."
+msgstr "Symbolnamn '%s' används redan i bibliotek '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:437
 #, c-format
@@ -10994,7 +10991,7 @@ msgstr "Hierarkisk väg:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:199
 msgid "path"
-msgstr ""
+msgstr "sökväg"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:84
 msgid "Sheet Properties"
@@ -11968,18 +11965,16 @@ msgid "Select field:"
 msgstr "Välj fält:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1325
-#, fuzzy
 msgid "Unsaved data"
-msgstr "[Osparat]"
+msgstr "Data som ej sparats"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1326
 msgid "Changes are unsaved. Export unsaved data?"
-msgstr ""
+msgstr "Ändringar har inte sparats. Exportera data som ej sparats?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1336
-#, fuzzy
 msgid "Save as CSV"
-msgstr "Spara som bild"
+msgstr "Spara som CSV"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:34
 msgid "Add Field..."
@@ -11998,9 +11993,8 @@ msgid "Group symbols together based on common properties"
 msgstr "Dela in symboler i grupper baserat på deras gemensamma egenskaper"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:125
-#, fuzzy
 msgid "Export as CSV..."
-msgstr "Exportera symbol som SVG ..."
+msgstr "Exportera som CSV ..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:87
 msgid "Symbol Fields Table"
@@ -12036,7 +12030,6 @@ msgid "Default for all sheet instances"
 msgstr "Förinställning för alla instanser på arket"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:147
-#, fuzzy
 msgid ""
 "Check to make the unit and reference, value, and\n"
 "footprint fields the default for all sheet instances\n"
@@ -16727,14 +16720,12 @@ msgid "Make a copy of the selected symbol"
 msgstr "Gör en kopia av den valda symbolen"
 
 #: eeschema/tools/ee_actions.cpp:138
-#, fuzzy
 msgid "Rename Symbol..."
-msgstr "Räddningssymboler ..."
+msgstr "Byt namn på symbol..."
 
 #: eeschema/tools/ee_actions.cpp:138
-#, fuzzy
 msgid "Rename the selected symbol"
-msgstr "Uppdatera vald symbol(er)"
+msgstr "Byt namn på vald symbol"
 
 #: eeschema/tools/ee_actions.cpp:143
 msgid "Save the current symbol to a different library."
@@ -17864,19 +17855,16 @@ msgstr "Inget symbolbibliotek valt."
 
 #: eeschema/tools/symbol_editor_control.cpp:308
 #: pcbnew/tools/footprint_editor_control.cpp:397
-#, fuzzy
 msgid "New name:"
-msgstr "Nätnamn:"
+msgstr "Nytt namn:"
 
 #: eeschema/tools/symbol_editor_control.cpp:308
-#, fuzzy
 msgid "Change Symbol Name"
-msgstr "Ändra Symboler"
+msgstr "Ändra symbolnamn"
 
 #: eeschema/tools/symbol_editor_control.cpp:318
-#, fuzzy
 msgid "Symbol name cannot be empty."
-msgstr "Nätnamnet kan inte utelämnas."
+msgstr "Symbolnamnet kan inte vara tomt."
 
 #: eeschema/tools/symbol_editor_control.cpp:489
 #: eeschema/tools/symbol_editor_control.cpp:529
@@ -25146,13 +25134,11 @@ msgstr "Uteslut från BOM"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:206
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:210
-#, fuzzy
 msgid "Exempt from courtyard requirement"
 msgstr "Undanta från krav på gårdsplan (courtyard)"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:207
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:211
-#, fuzzy
 msgid "Will not generate \"missing courtyard\" DRC violations"
 msgstr "Genererar inte DRC-överträdelse för saknad gårdsplan (courtyard)"
 
@@ -26693,17 +26679,14 @@ msgstr ""
 "ett lager."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1348
-#, fuzzy
 msgid "Error: Trapazoid delta is too large."
-msgstr "Fel: pad har inget lager."
+msgstr "Fel: Trapezoid-delta är för stort."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1357
-#, fuzzy
 msgid "Error: Through hole pad has no hole."
-msgstr "Hålmonterings-lödyta har inget hål"
+msgstr "Fel: Hålmonteringslödö har inget hål"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1364
-#, fuzzy
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
 msgstr ""
@@ -26711,9 +26694,8 @@ msgstr ""
 "istället en lödyta för ytmontering."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1373
-#, fuzzy
 msgid "Error: SMD pad has a hole."
-msgstr "Fel: pad har inget lager."
+msgstr "Fel: SMD-lödyta har ett hål."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1379
 msgid "Warning: SMD pad has no outer layers."
@@ -27007,7 +26989,6 @@ msgid "E.C.O.2"
 msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:551
-#, fuzzy
 msgid "Fabrication property:"
 msgstr "Tillverkningsegenskap:"
 
@@ -30166,9 +30147,8 @@ msgid "board setup constraints"
 msgstr "mönsterkortsinställningarnas begränsningar"
 
 #: pcbnew/drc/drc_engine.cpp:170
-#, fuzzy
 msgid "board setup constraints zone fill strategy"
-msgstr "mönsterkortsinställningarnas begränsningar för hål"
+msgstr "mönsterkortsinställningarnas begränsningar för zonfyllningsstrategi"
 
 #: pcbnew/drc/drc_engine.cpp:175
 msgid "board setup constraints silk"
@@ -30194,7 +30174,6 @@ msgid "board setup constraints edge"
 msgstr "mönsterkortsinställningarnas begränsningar för kanter"
 
 #: pcbnew/drc/drc_engine.cpp:203
-#, fuzzy
 msgid "board setup constraints courtyard"
 msgstr "mönsterkortsinställningarnas begränsningar för gårdsplan"
 
@@ -30274,9 +30253,9 @@ msgid "Local override on %s; thermal spoke width: %s."
 msgstr "Lokalt åsidosättande på %s; värmeavlastningens ekerbredd: %s."
 
 #: pcbnew/drc/drc_engine.cpp:869
-#, fuzzy, c-format
+#, c-format
 msgid "%s min thickness: %s."
-msgstr "Zon %s minimibredd: %s."
+msgstr "%s minimibredd: %s."
 
 #: pcbnew/drc/drc_engine.cpp:883
 #, c-format
@@ -30317,9 +30296,9 @@ msgid "Checking %s thermal spoke width: %s."
 msgstr "Kontrollerar %s ekerbredd för termisk avlastning: %s."
 
 #: pcbnew/drc/drc_engine.cpp:943
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s min spoke count: %s."
-msgstr "Kontrollerar %s max skew: %s."
+msgstr "Kontrollerar %s minsta antal termiska ekrar: %s."
 
 #: pcbnew/drc/drc_engine.cpp:949
 #, c-format
@@ -30472,14 +30451,14 @@ msgid "Local clearance on %s; clearance: %s."
 msgstr "Lokalt avstånd på %s; avstånd: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1376
-#, fuzzy, c-format
+#, c-format
 msgid "%s zone connection: %s."
-msgstr "Kontrollerar %s anslutning till zon: %s."
+msgstr "%s anslutning till zon: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1392
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad connection: %s."
-msgstr "Zon %s lödyteanslutning: %s."
+msgstr "%s lödyteanslutning: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1397 pcbnew/drc/drc_engine.cpp:1414
 #: pcbnew/drc/drc_engine.cpp:1431 pcbnew/zone.cpp:330 pcbnew/zone.cpp:470
@@ -30487,14 +30466,14 @@ msgid "zone"
 msgstr "zon"
 
 #: pcbnew/drc/drc_engine.cpp:1409
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal relief gap: %s."
-msgstr "Zon %s termiskt avlastningsgap: %s."
+msgstr "%s termiskt avlastningsgap: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1426
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal spoke width: %s."
-msgstr "Zon %s termisk avlastning, ekerbredd: %s."
+msgstr "%s termisk avlastning, ekerbredd: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1459
 #, c-format
@@ -30538,9 +30517,8 @@ msgid "Text (or dimension) on Edge.Cuts layer"
 msgstr "Text (eller måttsättning) på Edge.Cuts lager"
 
 #: pcbnew/drc/drc_item.cpp:68
-#, fuzzy
 msgid "Clearance violation"
-msgstr "Överträdelse av isolationsavstånd/separation"
+msgstr "Överträdelse av isolationsavstånd/frigång"
 
 #: pcbnew/drc/drc_item.cpp:72
 msgid "Tracks crossing"
@@ -30627,9 +30605,8 @@ msgid "NPTH inside courtyard"
 msgstr "NPTH inne på gården"
 
 #: pcbnew/drc/drc_item.cpp:156
-#, fuzzy
 msgid "Item on a disabled copper layer"
-msgstr "Objekt på ett inaktiverat lager"
+msgstr "Objekt på ett inaktiverat kopparlager"
 
 #: pcbnew/drc/drc_item.cpp:160
 msgid "Board has malformed outline"
@@ -30713,9 +30690,8 @@ msgid "Differential uncoupled length too long"
 msgstr "Differentiell okopplad längd för lång"
 
 #: pcbnew/drc/drc_item.cpp:244
-#, fuzzy
 msgid "Footprint component type doesn't match footprint pads"
-msgstr "Fotavtryckets typ stämmer inte överens med dess lödytor"
+msgstr "Fotavtryckets komponenttyp stämmer inte överens med dess lödytor"
 
 #: pcbnew/drc/drc_item.cpp:248
 msgid "Through hole pad has no hole"
@@ -30758,7 +30734,7 @@ msgstr "FEL: %s %s"
 #: pcbnew/drc/drc_rule_parser.cpp:79
 #, c-format
 msgid "The '%s' keyword has been deprecated.  Please use '%s' instead."
-msgstr ""
+msgstr "Nyckelordet '%s' är föråldrat. Vänligen använd '%s' istället."
 
 #: pcbnew/drc/drc_rule_parser.cpp:117 pcbnew/drc/drc_rule_parser.cpp:200
 #: pcbnew/drc/drc_rule_parser.cpp:478
@@ -31107,9 +31083,8 @@ msgid "Gathering items..."
 msgstr "Samlar element..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:201
-#, fuzzy
 msgid "Checking mechanical clearances..."
-msgstr "Kontrollerar mekaniska avstånd..."
+msgstr "Kontrollerar mekanisk frigång..."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:115
 #, c-format
@@ -31571,14 +31546,14 @@ msgid "(expected 'Through hole'; actual '%s')"
 msgstr "Förväntad typ är \"hålmonteringshål\" men är satt till \"%s\""
 
 #: pcbnew/footprint.cpp:2221
-#, fuzzy, c-format
+#, c-format
 msgid "(expected 'SMD'; actual '%s')"
-msgstr "(%s max diameter %s; faktisk %s)"
+msgstr "(förväntar 'SMD'; faktisk %s)"
 
 #: pcbnew/footprint.cpp:2224
 #, c-format
 msgid "(expected 'Other'; actual '%s')"
-msgstr ""
+msgstr "(förväntar 'Annan'; faktisk '%s')"
 
 #: pcbnew/footprint.cpp:2251
 msgid "(PTH pad has no copper layers)"
@@ -34650,15 +34625,15 @@ msgstr ""
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:165
 msgid "Too long: skew "
-msgstr "För lång: skev "
+msgstr "För lång: skevhet "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:168
 msgid "Too short: skew "
-msgstr "För kort: skev "
+msgstr "För kort: skevhet "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:171
 msgid "Tuned: skew "
-msgstr "Stämd: skev "
+msgstr "Avstämd: skevhet "
 
 #: pcbnew/router/pns_router.cpp:212
 msgid "Diff pair gap is less than board minimum clearance."
@@ -35551,15 +35526,13 @@ msgstr "Löst avstånd: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:391
 #: pcbnew/tools/board_inspection_tool.cpp:965
-#, fuzzy
 msgid "Physical hole clearance resolution for:"
-msgstr "Tar reda på hålseparation för:"
+msgstr "Tar reda på frigång mellan hål för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:400
 #: pcbnew/tools/board_inspection_tool.cpp:977
-#, fuzzy
 msgid "No 'physical_hole_clearance' constraints defined."
-msgstr "Ingen 'mechanical_hole_clearance'-begräsning definierad."
+msgstr "Ingen 'physical_hole_clearance'-begräsning definierad."
 
 #: pcbnew/tools/board_inspection_tool.cpp:411
 msgid "Edge Clearance"
@@ -35577,15 +35550,13 @@ msgstr "Tar reda på isolationsavstånd för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:477
 #: pcbnew/tools/board_inspection_tool.cpp:926
-#, fuzzy
 msgid "Physical clearance resolution for:"
-msgstr "Tar reda på mekanisk frigång för:"
+msgstr "Tar reda på fysisk frigång för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:486
 #: pcbnew/tools/board_inspection_tool.cpp:938
-#, fuzzy
 msgid "No 'physical_clearance' constraints defined."
-msgstr "Ingen 'mechanical_clearance'-begränsning definierad."
+msgstr "Ingen 'physical_clearance'-begränsning definierad."
 
 #: pcbnew/tools/board_inspection_tool.cpp:530
 msgid "Select two items for a clearance resolution report."
@@ -35605,9 +35576,8 @@ msgid "Zone connection resolution for:"
 msgstr "Tar reda på zonanslutning för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:621
-#, fuzzy
 msgid "Thermal relief gap resolution for:"
-msgstr "Tar reda på texthöjd för:"
+msgstr "Tar reda på termiskt avlastningsgap för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:630
 #, c-format
@@ -35615,30 +35585,27 @@ msgid "Resolved thermal relief gap: %s."
 msgstr "Gap för termisk avlastning: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:635
-#, fuzzy
 msgid "Spoke width resolution for:"
-msgstr "Tar reda på ledarbredd för:"
+msgstr "Tar reda på termiska ekrarnas bredd för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:644
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal relief spoke width: %s."
 msgstr "Fastställd bredd för termisk avlastnings eker: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:649
-#, fuzzy
 msgid "Spoke count resolution for:"
-msgstr "Tar reda på spärrzoner för:"
+msgstr "Tar reda på antal termiska ekrar för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:658
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min thermal relief spoke count: %d."
-msgstr "Minsta antal ekrar för termisk avlastning:"
+msgstr "Tog reda på minsta antal ekrar för termisk avlastning: %d."
 
 #: pcbnew/tools/board_inspection_tool.cpp:667
 #: pcbnew/tools/board_inspection_tool.cpp:715
-#, fuzzy
 msgid "Zone clearance resolution for:"
-msgstr "Tar reda på hålmarginal för:"
+msgstr "Tar reda på zonens isolationsavstånd för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:671
 #, c-format
@@ -35646,14 +35613,14 @@ msgid "Zone clearance: %s."
 msgstr "Zonavstånd: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:681
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
-msgstr "Åsidosatt av större termisk avlastning från %s, avstånd: %s."
+msgstr "Åsidosatt av större fysisk frigång från %s, frigång: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:697
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical hole clearance from %s;clearance: %s."
-msgstr "Åsidosatt av större termisk avlastning från %s, avstånd: %s."
+msgstr "Åsidosatt av större fysisk frigång för hål från %s, frigång: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
 msgid "Diff Pair"
@@ -35687,9 +35654,8 @@ msgid "Courtyard clearance resolution for:"
 msgstr "Tar reda på courtyard-marginal för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:917
-#, fuzzy
 msgid "Physical Clearances"
-msgstr "Fysiska parametrar"
+msgstr "Fysiska frigångsvärden"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1004
 msgid "Select an item for a constraints resolution report."
@@ -36011,19 +35977,17 @@ msgid "_copy"
 msgstr "_kopiera"
 
 #: pcbnew/tools/footprint_editor_control.cpp:397
-#, fuzzy
 msgid "Change Footprint Name"
-msgstr "Byt fotavtryck"
+msgstr "Ändra fotavtrycksnamn"
 
 #: pcbnew/tools/footprint_editor_control.cpp:407
-#, fuzzy
 msgid "Footprint name cannot be empty."
-msgstr "Nätnamnet kan inte utelämnas."
+msgstr "Fotavtrycksnamnet kan inte vara tomt."
 
 #: pcbnew/tools/footprint_editor_control.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint name '%s' already in use in library '%s'."
-msgstr "Fotavtryck '%s' hittades inte i bibliotek '%s'."
+msgstr "Fotavtrycksnamn '%s' används redan i bibliotek '%s'."
 
 #: pcbnew/tools/footprint_editor_control.cpp:709
 msgid "No footprint problems found."
@@ -36442,24 +36406,20 @@ msgid "Show selected footprint on editor canvas"
 msgstr "Visa markerat fotavtryck på redigerarens rityta"
 
 #: pcbnew/tools/pcb_actions.cpp:374
-#, fuzzy
 msgid "Duplicate Footprint"
-msgstr "Dubbla fotavtryck"
+msgstr "Duplicera fotavtryck"
 
 #: pcbnew/tools/pcb_actions.cpp:374
-#, fuzzy
 msgid "Make a copy of the selected footprint"
-msgstr "Gör en kopia av den valda symbolen"
+msgstr "Gör en kopia av det valda fotavtrycket"
 
 #: pcbnew/tools/pcb_actions.cpp:379
-#, fuzzy
 msgid "Rename Footprint..."
-msgstr "Skapa fotavtryck ..."
+msgstr "Byt namn på fotavtryck..."
 
 #: pcbnew/tools/pcb_actions.cpp:379
-#, fuzzy
 msgid "Rename the selected footprint"
-msgstr "Uppdatera valda fotavtryck"
+msgstr "Byt namn på det valda fotavtrycket"
 
 #: pcbnew/tools/pcb_actions.cpp:384
 msgid "Delete Footprint from Library"
@@ -37040,8 +37000,8 @@ msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
 msgstr ""
-"Byt mellan att använda nät- och nätklass-färger för alla nät, bara nätlinjer "
-"eller inget"
+"Växla mellan att använda nät- och nätklassfärger för alla nät, bara "
+"nätlinjer eller inget"
 
 #: pcbnew/tools/pcb_actions.cpp:851
 msgid "Sketch Tracks"
@@ -37575,7 +37535,7 @@ msgstr "Ställ in längden på ett differentialpar"
 
 #: pcbnew/tools/pcb_actions.cpp:1410
 msgid "Tune skew of a differential pair"
-msgstr "Ställ in ett differentiellt par"
+msgstr "Ställ in skevhet för ett differentiellt par"
 
 #: pcbnew/tools/pcb_actions.cpp:1419
 msgid "Walks the current track back one segment."
@@ -37748,69 +37708,56 @@ msgid "Auto-fill Zone(s)"
 msgstr "Autofyll zon(er)"
 
 #: pcbnew/tracks_cleaner.cpp:68
-#, fuzzy
 msgid "Checking null tracks and vias..."
-msgstr "Kontrollerar ledarbredder ..."
+msgstr "Kontrollerar noll-ledare och -vior..."
 
 #: pcbnew/tracks_cleaner.cpp:70
-#, fuzzy
 msgid "Removing null tracks and vias..."
-msgstr "Skapa ledare och vior"
+msgstr "Tar bort noll-ledare och -vior..."
 
 #: pcbnew/tracks_cleaner.cpp:81
-#, fuzzy
 msgid "Checking redundant tracks..."
-msgstr "Ta bort överflödiga ledare"
+msgstr "Kontrollerar överflödiga ledare..."
 
 #: pcbnew/tracks_cleaner.cpp:83
-#, fuzzy
 msgid "Removing redundant tracks..."
-msgstr "Ta bort överflödiga ledare"
+msgstr "Tar bort överflödiga ledare..."
 
 #: pcbnew/tracks_cleaner.cpp:95
-#, fuzzy
 msgid "Checking shorting tracks..."
-msgstr "Kontrollerar fotavtryck..."
+msgstr "Kontrollerar kortslutande ledare..."
 
 #: pcbnew/tracks_cleaner.cpp:97
-#, fuzzy
 msgid "Removing shorting tracks..."
-msgstr "Ta bort dem genom att kortsluta två nät"
+msgstr "Ta bort ledare som kortsluter två nät..."
 
 #: pcbnew/tracks_cleaner.cpp:110
-#, fuzzy
 msgid "Checking tracks in pads..."
-msgstr "Kontrollerar ledarbredder ..."
+msgstr "Kontrollerar ledare i lödytor..."
 
 #: pcbnew/tracks_cleaner.cpp:112
-#, fuzzy
 msgid "Removing tracks in pads..."
-msgstr "Ta bort ledare inuti lödytan"
+msgstr "Tar bort ledare i lödytor..."
 
 #: pcbnew/tracks_cleaner.cpp:126
-#, fuzzy
 msgid "Checking dangling tracks and vias..."
-msgstr "Kontrollerar ledarbredder ..."
+msgstr "Kontrollerar frihängande ledare och vior..."
 
 #: pcbnew/tracks_cleaner.cpp:131
-#, fuzzy
 msgid "Removing dangling tracks..."
-msgstr "Läser in ledare..."
+msgstr "Tar bort frihängande ledare..."
 
 #: pcbnew/tracks_cleaner.cpp:134
-#, fuzzy
 msgid "Removing dangling vias..."
-msgstr "Läser in vior..."
+msgstr "Tar bort frihängande vior..."
 
 #: pcbnew/tracks_cleaner.cpp:148
-#, fuzzy
 msgid "Checking collinear tracks..."
-msgstr "Kontrollerar hålavstånd..."
+msgstr "Kontrollerar kolinjära ledare..."
 
 #: pcbnew/tracks_cleaner.cpp:150
-#, fuzzy
 msgid "Merging collinear tracks..."
-msgstr "Slå samman kolinjära ledare"
+msgstr "Slår samman kolinjära ledare..."
 
 #: pcbnew/undo_redo.cpp:553
 msgid "Incomplete undo/redo operation: some items not found"
@@ -38033,7 +37980,7 @@ msgstr "Nätfärger (%s):"
 #: pcbnew/widgets/appearance_controls.cpp:675
 #: pcbnew/widgets/appearance_controls.cpp:2369
 msgid "Net colors:"
-msgstr "Nät färger:"
+msgstr "Nätfärger:"
 
 #: pcbnew/widgets/appearance_controls.cpp:680
 #: pcbnew/widgets/appearance_controls.cpp:2372
@@ -38043,7 +37990,7 @@ msgstr "Välj när du vill visa nät- och nätklassfärger"
 #: pcbnew/widgets/appearance_controls.cpp:689
 #: pcbnew/widgets/appearance_controls.cpp:2375
 msgid "Net and netclass colors are shown on all copper items"
-msgstr "Nät- och nätklassfärger visas på alla kopparartiklar"
+msgstr "Nät- och nätklassfärger visas på alla kopparobjekt"
 
 #: pcbnew/widgets/appearance_controls.cpp:697
 #: pcbnew/widgets/appearance_controls.cpp:2378
