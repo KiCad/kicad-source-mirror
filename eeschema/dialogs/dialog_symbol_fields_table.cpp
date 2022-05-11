@@ -115,7 +115,7 @@ protected:
         {
             wxString datasheet_uri = m_grid->GetCellValue( m_grid->GetGridCursorRow(),
                                                            DATASHEET_FIELD );
-            GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj() );
+            GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj(), m_dlg->Prj().SchSearchS() );
         }
         else
         {
@@ -779,7 +779,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
 
     // set datasheet column viewer button
     attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_URL_EDITOR( this ) );
+    attr->SetEditor( new GRID_CELL_URL_EDITOR( this, Prj().SchSearchS() ) );
     m_grid->SetColAttr( DATASHEET_FIELD, attr );
 
     // set quantities column attributes
