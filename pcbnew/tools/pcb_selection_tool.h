@@ -315,7 +315,7 @@ private:
     void selectAllItemsOnNet( int aNetCode, bool aSelect = true );
 
     /**
-     * Select all items with the given sheet timestamp/UUID name (the sheet path).
+     * Select all items on a sheet and its subsheets, given the full sheet path.
      *
      * The path of the root sheet is "/".
      */

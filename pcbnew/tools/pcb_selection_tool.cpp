@@ -1366,7 +1366,7 @@ void PCB_SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
         if( aSheetPath.IsEmpty() )
             aSheetPath += '/';
 
-        if( footprint_path == aSheetPath )
+        if( footprint_path.StartsWith( aSheetPath ) )
             footprintList.push_back( footprint );
     }
 

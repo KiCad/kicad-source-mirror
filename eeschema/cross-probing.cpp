@@ -379,7 +379,8 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 }
 
 
-std::string FormatProbeItem( EDA_ITEM* aItem, SCH_SYMBOL* aSymbol )
+std::string FormatProbeItem( const SCH_SHEET_PATH& aCurrentSheet, EDA_ITEM* aItem,
+                             SCH_SYMBOL* aSymbol )
 {
     // This is a keyword followed by a quoted string.
 
@@ -403,20 +404,8 @@ std::string FormatProbeItem( EDA_ITEM* aItem, SCH_SYMBOL* aSymbol )
         {
             // For cross probing, we need the full path of the sheet, because
             // in complex hierarchies the sheet uuid of not unique
-            SCH_SHEET* sheet = (SCH_SHEET*)aItem;
-            wxString full_path;
 
-            SCH_SHEET* parent = sheet;
-            while( (parent = dynamic_cast<SCH_SHEET*>( parent->GetParent() ) ) )
-            {
-                if( parent->GetParent() )   // The root sheet has no parent and path is just "/"
-                {
-                    full_path.Prepend( parent->m_Uuid.AsString() );
-                    full_path.Prepend( "/" );
-                }
-            }
-
-            full_path += "/" + sheet->m_Uuid.AsString();
+            wxString full_path = aCurrentSheet.PathAsString() + aItem->m_Uuid.AsString();
 
             return StrPrintf( "$SHEET: \"%s\"", TO_UTF8( full_path ) );
         }
@@ -454,7 +443,7 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_SYMBOL* a
     if( !aObjectToSync )
         return;
 
-    std::string packet = FormatProbeItem( aObjectToSync, aLibItem );
+    std::string packet = FormatProbeItem( GetCurrentSheet(), aObjectToSync, aLibItem );
 
     if( !packet.empty() )
     {
