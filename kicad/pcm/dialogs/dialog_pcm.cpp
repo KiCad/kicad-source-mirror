@@ -131,7 +131,8 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent ) : DIALOG_PCM_BASE( parent )
                             { wxID_CANCEL, _( "Discard Pending Changes" ) } } );
 
     Bind( wxEVT_CLOSE_WINDOW, &DIALOG_PCM::OnCloseWindow, this );
-
+    m_sdbSizer1Cancel->Bind( wxEVT_UPDATE_UI, &DIALOG_PCM::OnUpdateEventButtons, this );
+    m_sdbSizer1Apply->Bind( wxEVT_UPDATE_UI, &DIALOG_PCM::OnUpdateEventButtons, this );
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     KICAD_SETTINGS*   app_settings = mgr.GetAppSettings<KICAD_SETTINGS>();
@@ -157,6 +158,12 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent ) : DIALOG_PCM_BASE( parent )
 DIALOG_PCM::~DIALOG_PCM()
 {
     m_gridPendingActions->PopEventHandler( true );
+}
+
+
+void DIALOG_PCM::OnUpdateEventButtons( wxUpdateUIEvent& event )
+{
+    event.Enable( !m_pendingActions.empty() );
 }
 
 

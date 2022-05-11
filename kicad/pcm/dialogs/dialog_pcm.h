@@ -67,6 +67,9 @@ public:
     ///< Discards selected pending actions
     void OnDiscardActionClicked( wxCommandEvent& event ) override;
 
+    ///< Handles modification of the buttons' status
+    void OnUpdateEventButtons( wxUpdateUIEvent& event );
+
 private:
     /**
      * @brief Gets package data from PCM and displays it on repository tab
