@@ -297,7 +297,7 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
     }
     else
     {
-        GetAssociatedDocument( m_frame, datasheet, &m_frame->Prj() );
+        GetAssociatedDocument( m_frame, datasheet, &m_frame->Prj(), m_frame->Prj().SchSearchS() );
     }
 
     return 0;

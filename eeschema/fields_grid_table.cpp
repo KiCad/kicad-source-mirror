@@ -152,7 +152,8 @@ void FIELDS_GRID_TABLE<T>::initGrid( WX_GRID* aGrid )
     m_footprintAttr->SetEditor( fpIdEditor );
 
     m_urlAttr = new wxGridCellAttr;
-    GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( m_dialog );
+    GRID_CELL_URL_EDITOR* urlEditor =
+            new GRID_CELL_URL_EDITOR( m_dialog, m_frame->Prj().SchSearchS() );
     urlEditor->SetValidator( m_urlValidator );
     m_urlAttr->SetEditor( urlEditor );
 
@@ -776,7 +777,7 @@ void FIELDS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     else if (event.GetId() == MYID_SHOW_DATASHEET )
     {
         wxString datasheet_uri = m_grid->GetCellValue( DATASHEET_FIELD, FDC_VALUE );
-        GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj() );
+        GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj(), m_dlg->Prj().SchSearchS() );
     }
     else
     {

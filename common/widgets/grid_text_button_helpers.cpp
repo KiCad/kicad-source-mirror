@@ -298,10 +298,11 @@ void GRID_CELL_FOOTPRINT_ID_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
 class TEXT_BUTTON_URL : public wxComboCtrl
 {
 public:
-    TEXT_BUTTON_URL( wxWindow* aParent, DIALOG_SHIM* aParentDlg ) :
+    TEXT_BUTTON_URL( wxWindow* aParent, DIALOG_SHIM* aParentDlg, SEARCH_STACK* aSearchStack ) :
             wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
                          wxTE_PROCESS_ENTER ),
-            m_dlg( aParentDlg )
+            m_dlg( aParentDlg ),
+            m_searchStack( aSearchStack )
     {
         SetButtonBitmaps( KiBitmap( BITMAPS::www ) );
 
@@ -320,17 +321,18 @@ protected:
         wxString filename = GetValue();
 
         if( !filename.IsEmpty() && filename != wxT( "~" ) )
-            GetAssociatedDocument( m_dlg, GetValue(), &m_dlg->Prj() );
+            GetAssociatedDocument( m_dlg, GetValue(), &m_dlg->Prj(), m_searchStack );
     }
 
     DIALOG_SHIM* m_dlg;
+    SEARCH_STACK* m_searchStack;
 };
 
 
 void GRID_CELL_URL_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
                                    wxEvtHandler* aEventHandler )
 {
-    m_control = new TEXT_BUTTON_URL( aParent, m_dlg );
+    m_control = new TEXT_BUTTON_URL( aParent, m_dlg, m_searchStack );
 
 #if wxUSE_VALIDATORS
     // validate text in textctrl, if validator is set

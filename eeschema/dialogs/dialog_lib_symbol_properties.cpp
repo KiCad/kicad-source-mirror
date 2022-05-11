@@ -72,7 +72,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     m_grid->ShowHideColumns( cfg->m_EditSymbolVisibleColumns );
 
     wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_URL_EDITOR( this ) );
+    attr->SetEditor( new GRID_CELL_URL_EDITOR( this, Prj().SchSearchS() ) );
     m_grid->SetAttr( DATASHEET_FIELD, FDC_VALUE, attr );
 
     m_SymbolNameCtrl->SetValidator( SCH_FIELD_VALIDATOR( true, VALUE_FIELD ) );

@@ -40,8 +40,10 @@
  *
  * @param aParent main frame.
  * @param aDocName filename of file to open (Full filename or short filename).
+ * @param aPaths Additional paths to search for local disk datasheet files
 */
-bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT* aProject );
+bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT* aProject,
+                            SEARCH_STACK* aPaths = nullptr );
 
 
 #endif /* __INCLUDE__EDA_DOC_H__ */

@@ -71,18 +71,13 @@ static const wxFileTypeInfo EDAfallbacks[] =
 };
 
 
-bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT* aProject )
+bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT* aProject, SEARCH_STACK* aPaths )
 {
-    SEARCH_STACK* aPaths = nullptr;
     wxString      docname;
     wxString      fullfilename;
     wxString      msg;
     wxString      command;
     bool          success = false;
-
-#if defined( EESCHEMA )
-    SEARCH_STACK* aPaths = aProject ? aProject->SchSearchS() : nullptr;
-#endif
 
     // Is an internet url
     static const std::vector<wxString> url_header =
