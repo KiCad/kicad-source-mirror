@@ -96,7 +96,7 @@ public:
     void DoHypertextMenu( EDA_DRAW_FRAME* aFrame ) override;
 
     /**
-     * Return the field name.
+     * Return the field name (not translated)..
      *
      * @param aUseDefaultName When true return the default field name if the field name is
      *                        empty.  Otherwise the default field name is returned.

@@ -855,7 +855,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
     SCHEMATIC_SETTINGS& settings = m_symbol->Schematic()->Settings();
     int                 fieldID = m_fields->size();
     SCH_FIELD           newField( wxPoint( 0, 0 ), fieldID, m_symbol,
-                                  TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldID ) );
+                                  TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldID, DO_TRANSLATE ) );
 
     newField.SetTextAngle( m_fields->at( REFERENCE_FIELD ).GetTextAngle() );
     newField.SetTextSize( wxSize( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );

@@ -179,27 +179,12 @@ SCH_LABEL_BASE::SCH_LABEL_BASE( const SCH_LABEL_BASE& aLabel ) :
 
 const wxString SCH_LABEL_BASE::GetDefaultFieldName( const wxString& aName, bool aUseDefaultName )
 {
-    static void* locale = nullptr;
-    static wxString intersheetRefsDefault;
-    static wxString netclassRefDefault;
-    static wxString userFieldDefault;
-
-    // Fetching translations can take a surprising amount of time when loading libraries,
-    // so only do it when necessary.
-    if( Pgm().GetLocale() != locale )
-    {
-        intersheetRefsDefault = _( "Sheet References" );
-        netclassRefDefault    = _( "Net Class" );
-        userFieldDefault      = _( "Field" );
-        locale = Pgm().GetLocale();
-    }
-
     if( aName == wxT( "Intersheetrefs" ) )
-        return intersheetRefsDefault;
+        return _( "Sheet References" );
     else if( aName == wxT( "Netclass" ) )
-        return netclassRefDefault;
+        return _( "Net Class" );
     else if( aName.IsEmpty() && aUseDefaultName )
-        return userFieldDefault;
+        return _( "Field" );
     else
         return aName;
 }

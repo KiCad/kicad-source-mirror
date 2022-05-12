@@ -250,6 +250,10 @@ public:
         if( aCol == QUANTITY_COLUMN )
             return _( "Qty" );
         else if( aCol < MANDATORY_FIELDS )
+            // FIX ME: the column label should be displayed translated.
+            // but when translated, and the DATASHEET column is shown, a new field
+            // with the translated DATASHEET field name is added when saving fields
+            // return TEMPLATE_FIELDNAME::GetDefaultFieldName( aCol DO_TRANSLATE );
             return TEMPLATE_FIELDNAME::GetDefaultFieldName( aCol );
         else
             return m_fieldNames[ aCol ];

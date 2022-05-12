@@ -52,11 +52,6 @@
 
 const wxString SCH_SHEET::GetDefaultFieldName( int aFieldNdx, bool aTranslated )
 {
-    static void* locale = nullptr;
-    static wxString sheetnameDefault;
-    static wxString sheetfilenameDefault;
-    static wxString userFieldDefault;
-
     if( !aTranslated )
     {
         switch( aFieldNdx )
@@ -67,22 +62,12 @@ const wxString SCH_SHEET::GetDefaultFieldName( int aFieldNdx, bool aTranslated )
         }
     }
 
-    // Fetching translations can take a surprising amount of time when loading libraries,
-    // so only do it when necessary.
-    if( Pgm().GetLocale() != locale )
-    {
-        sheetnameDefault     = _( SHEET_NAME_CANONICAL );
-        sheetfilenameDefault = _( SHEET_FILE_CANONICAL );
-        userFieldDefault     = _( USER_FIELD_CANONICAL );
-        locale = Pgm().GetLocale();
-    }
-
     // Fixed values for the mandatory fields
     switch( aFieldNdx )
     {
-    case  SHEETNAME:     return sheetnameDefault;
-    case  SHEETFILENAME: return sheetfilenameDefault;
-    default:             return wxString::Format( userFieldDefault, aFieldNdx );
+    case  SHEETNAME:     return _( SHEET_NAME_CANONICAL );
+    case  SHEETFILENAME: return _( SHEET_FILE_CANONICAL );
+    default:             return wxString::Format( _( USER_FIELD_CANONICAL ), aFieldNdx );
     }
 }
 

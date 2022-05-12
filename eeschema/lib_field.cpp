@@ -425,10 +425,11 @@ wxString LIB_FIELD::GetCanonicalName() const
 {
     switch( m_id )
     {
-    case  REFERENCE_FIELD: return wxT( "Reference" );
-    case  VALUE_FIELD:     return wxT( "Value" );
-    case  FOOTPRINT_FIELD: return wxT( "Footprint" );
-    case  DATASHEET_FIELD: return wxT( "Datasheet" );
+    case  REFERENCE_FIELD:
+    case  VALUE_FIELD:
+    case  FOOTPRINT_FIELD:
+    case  DATASHEET_FIELD:
+        return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
     }
 
     return m_name;

@@ -476,7 +476,7 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
         if( m_parentType == SCH_SYMBOL_T )
         {
             if( aRow < m_mandatoryFieldCount )
-                return TEMPLATE_FIELDNAME::GetDefaultFieldName( aRow );
+                return TEMPLATE_FIELDNAME::GetDefaultFieldName( aRow, DO_TRANSLATE );
             else
                 return field.GetName( false );
         }
