@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,18 +35,9 @@ using namespace TFIELD_T;
 #define FOOTPRINT_CANONICAL "Footprint"
 #define DATASHEET_CANONICAL "Datasheet"
 
-static std::mutex s_defaultFieldMutex;
-
-const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx, bool aTranslate )
+const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx, bool aTranslateForHI )
 {
-    static void* locale = nullptr;
-    static wxString referenceDefault;
-    static wxString valueDefault;
-    static wxString footprintDefault;
-    static wxString datasheetDefault;
-    static wxString fieldDefault;
-
-    if( !aTranslate )
+    if( !aTranslateForHI )
     {
         switch( aFieldNdx )
         {
@@ -54,41 +45,19 @@ const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx, bool aTra
         case  VALUE_FIELD:     return VALUE_CANONICAL;       // The symbol value
         case  FOOTPRINT_FIELD: return FOOTPRINT_CANONICAL;   // The footprint for use with Pcbnew
         case  DATASHEET_FIELD: return DATASHEET_CANONICAL;   // Link to a datasheet for symbol
+        default:               return wxString::Format( wxT( "Field%d" ), aFieldNdx );
         }
     }
 
-    // Mutex protection is needed so that multiple loader threads don't write to the static
-    // variables at once
-    std::lock_guard<std::mutex> lock( s_defaultFieldMutex );
-
-    // Fetching translations can take a surprising amount of time when loading libraries,
-    // so only do it when necessary.
-    if( Pgm().GetLocale() != locale )
-    {
-        referenceDefault = _( REFERENCE_CANONICAL );
-        valueDefault     = _( VALUE_CANONICAL );
-        footprintDefault = _( FOOTPRINT_CANONICAL );
-        datasheetDefault = _( DATASHEET_CANONICAL );
-        fieldDefault     = _( "Field%d" );
-        locale = Pgm().GetLocale();
-    }
-
-    // Fixed values for the mandatory fields
     switch( aFieldNdx )
     {
-    case  REFERENCE_FIELD: return referenceDefault;   // The symbol reference, R1, C1, etc.
-    case  VALUE_FIELD:     return valueDefault;       // The symbol value
-    case  FOOTPRINT_FIELD: return footprintDefault;   // The footprint for use with Pcbnew
-    case  DATASHEET_FIELD: return datasheetDefault;   // Link to a datasheet for symbol
-    default:               return wxString::Format( fieldDefault, aFieldNdx );
+    case  REFERENCE_FIELD: return _( REFERENCE_CANONICAL );   // The symbol reference, R1, C1, etc.
+    case  VALUE_FIELD:     return _( VALUE_CANONICAL );       // The symbol value
+    case  FOOTPRINT_FIELD: return _( FOOTPRINT_CANONICAL );   // The footprint for use with Pcbnew
+    case  DATASHEET_FIELD: return _( DATASHEET_CANONICAL );   // Link to a datasheet for symbol
+    default:               return wxString::Format( _( "Field%d" ), aFieldNdx );
     }
-
 }
-
-#undef REFERENCE_CANONICAL
-#undef VALUE_CANONICAL
-#undef FOOTPRINT_CANONICAL
-#undef DATASHEET_CANONICAL
 
 
 void TEMPLATE_FIELDNAME::Format( OUTPUTFORMATTER* out, int nestLevel ) const

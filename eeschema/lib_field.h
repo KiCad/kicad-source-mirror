@@ -85,7 +85,7 @@ public:
     void Init( int aId );
 
     /**
-     * Return the field name.
+     * Return the field name (not translated).
      *
      * The first four field IDs are reserved and therefore always return their respective
      * names.

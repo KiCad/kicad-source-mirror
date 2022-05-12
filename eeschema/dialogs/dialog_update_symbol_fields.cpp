@@ -47,7 +47,7 @@ DIALOG_UPDATE_SYMBOL_FIELDS::DIALOG_UPDATE_SYMBOL_FIELDS( SYMBOL_EDIT_FRAME* aPa
 
     for( int i = 0; i < MANDATORY_FIELDS; ++i )
     {
-        m_fieldsBox->Append( TEMPLATE_FIELDNAME::GetDefaultFieldName( i ) );
+        m_fieldsBox->Append( TEMPLATE_FIELDNAME::GetDefaultFieldName( i, DO_TRANSLATE ) );
         m_fieldsBox->Check( i, true );
     }
 

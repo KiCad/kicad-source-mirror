@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,6 +50,9 @@ enum  MANDATORY_FIELD_T {
     MANDATORY_FIELDS
 };
 
+// A helper to call GetDefaultFieldName with or without translation.
+// Translation should be used only to display field names in dialogs
+#define DO_TRANSLATE true
 
 /**
  * Hold a name of a symbol's field, field value, and default visibility.
@@ -103,9 +106,10 @@ struct TEMPLATE_FIELDNAME
      * These field names are not modifiable but template field names are.
      *
      * @param aFieldNdx The field number index, > 0.
-     * @param aTranslate If true, return the translated field name, else get the canonical name.
+     * @param aTranslateForHI If true, return the translated field name,
+     * else get the canonical name (defualt). Translation is intended only for dialogs
      */
-    static const wxString GetDefaultFieldName( int aFieldNdx, bool aTranslate = true );
+    static const wxString GetDefaultFieldName( int aFieldNdx, bool aTranslateForHI = false );
 
     wxString    m_Name;         // The field name
     bool        m_Visible;      // Field defaults to being visible in schematic.

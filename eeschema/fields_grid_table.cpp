@@ -389,7 +389,7 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
         if( aRow < m_mandatoryFieldCount )
         {
             if( m_parentType == SCH_SYMBOL_T )
-                return TEMPLATE_FIELDNAME::GetDefaultFieldName( aRow );
+                return TEMPLATE_FIELDNAME::GetDefaultFieldName( aRow, DO_TRANSLATE );
             else if( m_parentType == SCH_SHEET_T )
                 return SCH_SHEET::GetDefaultFieldName( aRow );
         }

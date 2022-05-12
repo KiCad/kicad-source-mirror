@@ -100,7 +100,7 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBO
 
     for( int i = 0; i < MANDATORY_FIELDS; ++i )
     {
-        m_fieldsBox->Append( TEMPLATE_FIELDNAME::GetDefaultFieldName( i ) );
+        m_fieldsBox->Append( TEMPLATE_FIELDNAME::GetDefaultFieldName( i, DO_TRANSLATE ) );
 
         if( i == REFERENCE_FIELD )
             m_fieldsBox->Check( i, g_selectRefDes );
