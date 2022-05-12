@@ -95,6 +95,10 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
 
     // Special functions
     EVT_MENU( ID_INIT_WATCHED_PATHS, KICAD_MANAGER_FRAME::OnChangeWatchedPaths )
+
+    // Drop files event
+    EVT_DROP_FILES( KICAD_MANAGER_FRAME::OnDropFiles )
+
 END_EVENT_TABLE()
 
 
@@ -197,6 +201,8 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     // Do not let the messages window have initial focus
     m_leftWin->SetFocus();
+
+    DragAcceptFiles( true );
 
     // Ensure the window is on top
     Raise();
@@ -355,6 +361,19 @@ void KICAD_MANAGER_FRAME::OnSize( wxSizeEvent& event )
     event.Skip();
 }
 
+void KICAD_MANAGER_FRAME::OnDropFiles( wxDropFilesEvent& aEvent )
+{
+    wxString* files = aEvent.GetFiles();
+    for( int nb = 0; nb < aEvent.GetNumberOfFiles(); nb++ )
+    {
+        const wxFileName fn = wxFileName( files[nb] );
+        if( fn.GetExt() == "kicad_pro" || fn.GetExt() == "pro" )
+        {
+            LoadProject( fn );
+            break;
+        }
+    }
+}
 
 bool KICAD_MANAGER_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
