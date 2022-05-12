@@ -804,7 +804,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotDrawingSheet
     plotter->SetRenderSettings( aRenderSettings );
     plotter->SetColorMode( getModeColor() );
     plotter->SetCreator( wxT( "Eeschema-PDF" ) );
-    plotter->SetTitle( m_parent->GetTitleBlock().GetTitle() );
+    plotter->SetTitle( ExpandTextVars( m_parent->GetTitleBlock().GetTitle(), &m_parent->Prj() ) );
 
     wxString   msg;
     wxFileName plotFileName;
