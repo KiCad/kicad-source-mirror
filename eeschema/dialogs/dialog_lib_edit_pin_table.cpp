@@ -1161,7 +1161,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::updateSummary()
     }
 
     m_pin_numbers_summary->SetLabel( pinNumbers.GetSummary() );
-    m_pin_count->SetLabel( wxString::Format( wxT( "%lu" ), m_pins.size() ) );
+    m_pin_count->SetLabel( wxString::Format( wxT( "%u" ), (unsigned) m_pins.size() ) );
     m_duplicate_pins->SetLabel( pinNumbers.GetDuplicates() );
 
     Layout();
