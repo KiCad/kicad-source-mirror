@@ -28,6 +28,7 @@
 #include <board_connected_item.h>
 #include <pg_properties.h>
 #include <pcb_shape.h>
+#include <pcb_track.h>
 #include <settings/color_settings.h>
 
 
@@ -101,21 +102,22 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 
 void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
 {
-    wxPGChoices layersAll, layersCu, layersNonCu, nets;
+    wxPGChoices layersAll, layersCu, nets;
 
     // Regenerate all layers
-    for( LSEQ layerSeq = aBoard->GetEnabledLayers().UIOrder(); layerSeq; ++layerSeq )
-        layersAll.Add( LSET::Name( *layerSeq ), *layerSeq );
+    for( LSEQ seq = aBoard->GetEnabledLayers().UIOrder(); seq; ++seq )
+        layersAll.Add( LSET::Name( *seq ), *seq );
 
-    if( m_propMgr.GetProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ) ) )
-        m_propMgr.GetProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ) )->SetChoices( layersAll );
+    for( LSEQ seq = LSET( aBoard->GetEnabledLayers() & LSET::AllCuMask() ).UIOrder(); seq; ++seq )
+        layersCu.Add( LSET::Name( *seq ), *seq );
 
-    if( m_propMgr.GetProperty( TYPE_HASH( PCB_SHAPE ), _HKI( "Layer" ) ) )
-        m_propMgr.GetProperty( TYPE_HASH( PCB_SHAPE ), _HKI( "Layer" ) )->SetChoices( layersAll );
+    m_propMgr.GetProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ) )->SetChoices( layersAll );
+    m_propMgr.GetProperty( TYPE_HASH( PCB_SHAPE ), _HKI( "Layer" ) )->SetChoices( layersAll );
 
-    if( m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ) ) )
-        m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ) )
-                ->SetChoices( layersAll );
+    // Copper only properties
+    m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ) )->SetChoices( layersCu );
+    m_propMgr.GetProperty( TYPE_HASH( PCB_VIA ), _HKI( "Layer Top" ) )->SetChoices( layersCu );
+    m_propMgr.GetProperty( TYPE_HASH( PCB_VIA ), _HKI( "Layer Bottom" ) )->SetChoices( layersCu );
 
     // Regenerate nets
     for( const auto& netinfo : aBoard->GetNetInfo().NetsByNetcode() )
