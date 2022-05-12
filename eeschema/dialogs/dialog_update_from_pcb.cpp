@@ -30,7 +30,7 @@
 
 // Saved dialog settings
 DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB_SAVED_STATE
-        DIALOG_UPDATE_FROM_PCB::s_savedDialogState{ true, true, true, true, false };
+        DIALOG_UPDATE_FROM_PCB::s_savedDialogState{ false, true, true, true, false };
 
 
 DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent )
