@@ -452,7 +452,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     {
         wxWindow* holderWindow = dynamic_cast<wxWindow*>( m_toolMgr->GetToolHolder() );
 
-#if defined( _WIN32 )
+#if defined( _WIN32 ) || defined( __WXGTK__ )
         // Mouse events may trigger regardless of window status (windows feature)
         // However we need to avoid focus fighting (especially modals)
         if( holderWindow && KIPLATFORM::UI::IsWindowActive( holderWindow ) )
