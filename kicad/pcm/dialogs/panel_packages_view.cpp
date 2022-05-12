@@ -334,7 +334,6 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
             {
                 if( m_gridVersions->GetCellValue( i, COL_VERSION ) == version )
                 {
-                    std::cout << "auto select row: " << i << std::endl;
                     m_gridVersions->SelectRow( i );
                     break;
                 }
