@@ -1,7 +1,7 @@
 ##########################################################################
 # Build KiCad on Fedora and save the results
 ##########################################################################
-fedora_build_linux:
+.fedora_build_linux_base:
   stage: build
 # Don't tag until we have separate CI for MRs
 #  tags:
@@ -46,6 +46,22 @@ fedora_build_linux:
     exclude:
       - build/linux/**/*.o
       - build/linux/**/*.a
+
+# This split is to ensure we can always use our runner for our jobs
+fedora_build_linux_kicad:
+  extends: .fedora_build_linux_base
+  tags:
+    - kicad-fedora
+  only:    
+    variables:
+      - $CI_PROJECT_ROOT_NAMESPACE == "kicad"
+
+fedora_build_linux_public:
+  extends: .fedora_build_linux_base
+  except:    
+    variables:
+      - $CI_PROJECT_ROOT_NAMESPACE == "kicad"
+  
 
 # Upload the compilation log in an easily downloadable form
 fedora_report_build_warn:
