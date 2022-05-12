@@ -459,8 +459,8 @@ void WX_VIEW_CONTROLS::onEnter( wxMouseEvent& aEvent )
         return;
     }
 
-#if defined( _WIN32 )
-    // Win32 transmits mouse move and wheel events to all controls below the mouse regardless
+#if defined( _WIN32 ) || defined( __WXGTK__ )
+    // Win32 and some *nix WMs transmit mouse move and wheel events to all controls below the mouse regardless
     // of focus.  Forcing the focus here will cause the EDA FRAMES to immediately become the
     // top level active window.
     if( m_parentPanel->GetParent() != nullptr )
