@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Oliver Walters
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,6 +78,8 @@ private:
 
     SCH_REFERENCE_LIST             m_symbolsList;
     FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel;
+    static int                     m_newFieldsOption;   // Store the option choice for new fields
+                                                        // during a session:
 };
 
 #endif /* DIALOG_SYMBOL_FIELDS_TABLE_H */

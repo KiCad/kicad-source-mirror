@@ -48,7 +48,7 @@
 
 DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const wxString& aTitle,
                                                   const EDA_TEXT* aTextItem ) :
-    DIALOG_FIELD_PROPERTIES_BASE( aParent ),
+    DIALOG_FIELD_PROPERTIES_BASE( aParent, wxID_ANY, aTitle ),
     m_posX( aParent, m_xPosLabel, m_xPosCtrl, m_xPosUnits, true ),
     m_posY( aParent, m_yPosLabel, m_yPosCtrl, m_yPosUnits, true ),
     m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true ),
@@ -60,8 +60,6 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
     COLOR4D         schematicBackground = colorSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 
     wxASSERT( aTextItem );
-
-    SetTitle( aTitle );
 
     m_note->SetFont( KIUI::GetInfoFont( this ).Italic() );
     m_note->Show( false );
@@ -498,7 +496,14 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
     m_isPower = false;
 
-    m_textLabel->SetLabel( m_field->GetName() + ":" );
+    wxString translated_fieldname;
+
+    if( m_field->GetId() < MANDATORY_FIELDS )
+        translated_fieldname = TEMPLATE_FIELDNAME::GetDefaultFieldName( m_field->GetId(), DO_TRANSLATE );
+    else
+        translated_fieldname = m_field->GetName();
+
+    m_textLabel->SetLabel( translated_fieldname + ":" );
 
     m_position = m_field->GetPosition();
 

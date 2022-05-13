@@ -253,7 +253,7 @@ public:
             // FIX ME: the column label should be displayed translated.
             // but when translated, and the DATASHEET column is shown, a new field
             // with the translated DATASHEET field name is added when saving fields
-            // return TEMPLATE_FIELDNAME::GetDefaultFieldName( aCol DO_TRANSLATE );
+            // return TEMPLATE_FIELDNAME::GetDefaultFieldName( aCol, DO_TRANSLATE );
             return TEMPLATE_FIELDNAME::GetDefaultFieldName( aCol );
         else
             return m_fieldNames[ aCol ];
@@ -657,15 +657,21 @@ public:
                 const wxString& srcValue = srcData.second;
                 SCH_FIELD*      destField = symbol.FindField( srcName );
 
-                if( !destField )
+                // Add a not existing field if it has a value for this symbol
+                bool createField = !destField && !srcValue.IsEmpty();
+
+                if( createField )
                 {
                     const VECTOR2I symbolPos = symbol.GetPosition();
                     destField = symbol.AddField( SCH_FIELD( symbolPos, -1, &symbol, srcName ) );
                 }
 
+                if( !destField )
+                    continue;
+
                 if( destField->GetId() == REFERENCE_FIELD )
                 {
-                    // Reference is not editable
+                    // Reference is not editable from this dialog
                 }
                 else if( destField->GetId() == VALUE_FIELD )
                 {
