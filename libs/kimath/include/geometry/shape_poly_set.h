@@ -498,6 +498,16 @@ public:
 
     SHAPE_POLY_SET& operator=( const SHAPE_POLY_SET& aOther );
 
+    /**
+     * Build a polygon triangulation, needed to draw a polygon on OpenGL and in some
+     * other calculations
+     * @param aPartition = true to created a trinagulation in a partition on a grid
+     * false to create a more basic triangulation of the polygons
+     * Note
+     * in partition calculations the grid size is hard coded to 1e7.
+     * This is a good value for Pcbnew: 1cm, in internal units.
+     * But not good for Gerbview (1e7 = 10cm), however using a partition is not useful.
+     */
     void CacheTriangulation( bool aPartition = true );
     bool IsTriangulationUpToDate() const;
 
@@ -1359,7 +1369,7 @@ public:
 
     /**
      * Build a SHAPE_POLY_SET from a bunch of outlines in provided in random order.
-     * 
+     *
      * @param aPath set of closed outlines forming the polygon. Positive orientation = outline, negative = hole
      * @param aReverseOrientation inverts the sign of the orientation of aPaths (so negative = outline)
      * @param aEvenOdd forces the even-off fill rule (default is non zero)
