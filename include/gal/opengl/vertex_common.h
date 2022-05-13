@@ -41,7 +41,7 @@
 namespace KIGFX
 {
 ///< Possible types of shaders (keep consistent with the actual shader source in
-///< gl_builtin_shaders.cpp).
+///< kicad_vert.glsl and kicad_frag.glsl).
 enum SHADER_MODE
 {
     SHADER_NONE = 0,

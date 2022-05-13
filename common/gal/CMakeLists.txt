@@ -21,7 +21,7 @@ set( GAL_SRCS
     # OpenGL GAL
     opengl/opengl_gal.cpp
     opengl/gl_resources.cpp
-    opengl/gl_builtin_shaders.cpp
+
     opengl/shader.cpp
     opengl/vertex_item.cpp
     opengl/vertex_container.cpp
@@ -70,7 +70,7 @@ function( add_shader outTarget inFile shaderName )
             -DDESTINATION_HEADER_DIR="${CMAKE_BINARY_DIR}/include/gal/shaders/"
             -DOUTCPPFILE="${outCppName}"
             -DOUTHEADERFILE="${outHeaderName}"
-            -DOUTVARNAME="${shaderName}_shader"
+            -DOUTVARNAME="${shaderName}"
             -P ${CMAKE_MODULE_PATH}/BuildSteps/CreateShaderCpp.cmake
         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/shaders/${inFile}
                 ${CMAKE_MODULE_PATH}/BuildSteps/CreateShaderCpp.cmake
@@ -82,3 +82,11 @@ endfunction()
 
 add_shader( gal kicad_frag.glsl glsl_kicad_frag )
 add_shader( gal kicad_vert.glsl glsl_kicad_vert )
+add_shader( gal smaa_base.glsl glsl_smaa_base )
+add_shader( gal smaa_pass_1_frag_color.glsl glsl_smaa_pass_1_frag_color )
+add_shader( gal smaa_pass_1_frag_luma.glsl glsl_smaa_pass_1_frag_luma )
+add_shader( gal smaa_pass_1_vert.glsl glsl_smaa_pass_1_vert )
+add_shader( gal smaa_pass_2_frag.glsl glsl_smaa_pass_2_frag )
+add_shader( gal smaa_pass_2_vert.glsl glsl_smaa_pass_2_vert )
+add_shader( gal smaa_pass_3_frag.glsl glsl_smaa_pass_3_frag )
+add_shader( gal smaa_pass_3_vert.glsl glsl_smaa_pass_3_vert )

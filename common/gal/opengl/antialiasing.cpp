@@ -29,7 +29,14 @@
 #include <memory>
 #include <tuple>
 
-#include "gl_builtin_shaders.h"
+#include <glsl_smaa_base.h>
+#include <glsl_smaa_pass_1_frag_color.h>
+#include <glsl_smaa_pass_1_frag_luma.h>
+#include <glsl_smaa_pass_1_vert.h>
+#include <glsl_smaa_pass_2_frag.h>
+#include <glsl_smaa_pass_2_vert.h>
+#include <glsl_smaa_pass_3_frag.h>
+#include <glsl_smaa_pass_3_vert.h>
 #include "SmaaAreaTex.h"
 #include "SmaaSearchTex.h"
 
@@ -259,7 +266,7 @@ void ANTIALIASING_SMAA::loadShaders()
     // Edge Detection: In Eeschema, when a single pixel line changes color, edge detection using
     //                 color is too aggressive and leads to a white spot at the transition point
     std::string quality_string;
-    const char* edge_detect_shader;
+    std::string edge_detect_shader;
 
     // trades imperfect AA of shallow angles for a near artifact-free reproduction of fine features
     // jaggies are smoothed over max 5px (original step + 2px in both directions)
@@ -268,7 +275,7 @@ void ANTIALIASING_SMAA::loadShaders()
                      "#define SMAA_MAX_SEARCH_STEPS_DIAG 2\n"
                      "#define SMAA_LOCAL_CONTRAST_ADAPTATION_FACTOR 1.5\n"
                      "#define SMAA_CORNER_ROUNDING 0\n";
-    edge_detect_shader = BUILTIN_SHADERS::smaa_pass_1_fragment_shader_luma;
+    edge_detect_shader = BUILTIN_SHADERS::glsl_smaa_pass_1_frag_luma;
 
     // set up shaders
     std::string vert_preamble( R"SHADER(
@@ -287,19 +294,15 @@ uniform vec4 SMAA_RT_METRICS;
 uniform vec4 SMAA_RT_METRICS;
 )SHADER" );
 
-    std::string smaa_source = std::string( BUILTIN_SHADERS::smaa_base_shader_p1 )
-                              + std::string( BUILTIN_SHADERS::smaa_base_shader_p2 )
-                              + std::string( BUILTIN_SHADERS::smaa_base_shader_p3 )
-                              + std::string( BUILTIN_SHADERS::smaa_base_shader_p4 );
-
     //
     // Set up pass 1 Shader
     //
     pass_1_shader = std::make_unique<SHADER>();
     pass_1_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_VERTEX, vert_preamble, quality_string,
-                                          smaa_source, BUILTIN_SHADERS::smaa_pass_1_vertex_shader );
+                                          BUILTIN_SHADERS::glsl_smaa_base,
+                                          BUILTIN_SHADERS::glsl_smaa_pass_1_vert );
     pass_1_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_FRAGMENT, frag_preamble,
-                                          quality_string, smaa_source, edge_detect_shader );
+                                          quality_string, BUILTIN_SHADERS::glsl_smaa_base, edge_detect_shader );
     pass_1_shader->Link();
     checkGlError( "linking pass 1 shader", __FILE__, __LINE__ );
 
@@ -320,10 +323,11 @@ uniform vec4 SMAA_RT_METRICS;
     //
     pass_2_shader = std::make_unique<SHADER>();
     pass_2_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_VERTEX, vert_preamble, quality_string,
-                                          smaa_source, BUILTIN_SHADERS::smaa_pass_2_vertex_shader );
+                                          BUILTIN_SHADERS::glsl_smaa_base,
+                                          BUILTIN_SHADERS::glsl_smaa_pass_2_vert );
     pass_2_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_FRAGMENT, frag_preamble,
-                                          quality_string, smaa_source,
-                                          BUILTIN_SHADERS::smaa_pass_2_fragment_shader );
+                                          quality_string, BUILTIN_SHADERS::glsl_smaa_base,
+                                          BUILTIN_SHADERS::glsl_smaa_pass_2_frag );
     pass_2_shader->Link();
     checkGlError( "linking pass 2 shader", __FILE__, __LINE__ );
 
@@ -352,10 +356,11 @@ uniform vec4 SMAA_RT_METRICS;
     //
     pass_3_shader = std::make_unique<SHADER>();
     pass_3_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_VERTEX, vert_preamble, quality_string,
-                                          smaa_source, BUILTIN_SHADERS::smaa_pass_3_vertex_shader );
+                                          BUILTIN_SHADERS::glsl_smaa_base,
+                                          BUILTIN_SHADERS::glsl_smaa_pass_3_vert );
     pass_3_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_FRAGMENT, frag_preamble,
-                                          quality_string, smaa_source,
-                                          BUILTIN_SHADERS::smaa_pass_3_fragment_shader );
+                                          quality_string, BUILTIN_SHADERS::glsl_smaa_base,
+                                          BUILTIN_SHADERS::glsl_smaa_pass_3_frag );
     pass_3_shader->Link();
 
     GLint smaaP3ColorTexParameter = pass_3_shader->AddParameter( "colorTex" );

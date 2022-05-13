@@ -1,52 +1,3 @@
-/*
-* This program source code file is part of KICAD, a free EDA CAD application.
-*
-* Copyright (C) 2016 Kicad Developers, see change_log.txt for contributors.
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, you may find one here:
-* http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-* or you may search the http://www.gnu.org website for the version 2 license,
-* or you may write to the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
-*/
-
-#include "gl_builtin_shaders.h"
-
-namespace KIGFX {
-namespace BUILTIN_SHADERS {
-
-const char ssaa_x4_fragment_shader[] = R"SHADER_SOURCE(
-
-#version 120
-varying vec2 texcoord;
-uniform sampler2D source;
-void main()
-{
-    float step_x = dFdx(texcoord.x)/4.;
-    float step_y = dFdy(texcoord.y)/4.;
-
-    vec4 q00 = texture2D( source, texcoord + vec2(-step_x, -step_y) );
-    vec4 q01 = texture2D( source, texcoord + vec2( step_x, -step_y) );
-    vec4 q10 = texture2D( source, texcoord + vec2(-step_x,  step_y) );
-    vec4 q11 = texture2D( source, texcoord + vec2( step_x,  step_y) );
-
-    gl_FragColor = (q00+q01+q10+q11)/4;
-}
-
-)SHADER_SOURCE";
-
-const char smaa_base_shader_p1[] = R"SHADER_SOURCE(
 
 /**
  * Copyright (C) 2013 Jorge Jimenez (jorge@iryoku.com)
@@ -416,9 +367,7 @@ const char smaa_base_shader_p1[] = R"SHADER_SOURCE(
 #ifndef SMAA_MAX_SEARCH_STEPS
 #define SMAA_MAX_SEARCH_STEPS 16
 #endif
-)SHADER_SOURCE";
 
-const char smaa_base_shader_p2[] = R"SHADER_SOURCE(
 /**
  * SMAA_MAX_SEARCH_STEPS_DIAG specifies the maximum steps performed in the
  * diagonal pattern searches, at each side of the pixel. In this case we jump
@@ -871,9 +820,7 @@ float2 SMAAColorEdgeDetectionPS(float2 texcoord,
 
     return edges;
 }
-)SHADER_SOURCE";
 
-extern const char smaa_base_shader_p3[] = R"SHADER_SOURCE(
 /**
  * Depth Edge Detection
  */
@@ -1255,10 +1202,7 @@ float4 SMAABlendingWeightCalculationPS(float2 texcoord,
         // SMAAArea below needs a sqrt, as the areas texture is compressed
         // quadratically:
         float2 sqrt_d = sqrt(d);
-)SHADER_SOURCE";
-
-extern const char smaa_base_shader_p4[] = R"SHADER_SOURCE(
-       // Fetch the right crossing edges:
+               // Fetch the right crossing edges:
         float e2 = SMAASampleLevelZeroOffset(edgesTex, coords.zy, int2(1, 0)).r;
 
         // Ok, we know how this pattern looks like, now it is time for getting
@@ -1426,109 +1370,3 @@ void SMAASeparatePS(float4 position,
 
 //-----------------------------------------------------------------------------
 #endif // SMAA_INCLUDE_PS
-
-)SHADER_SOURCE";
-
-const char smaa_pass_1_vertex_shader[] = R"SHADER_SOURCE(
-
-varying vec4 offset[3];
-varying vec2 texcoord;
-
-void main()
-{
-    texcoord = gl_MultiTexCoord0.st;
-    SMAAEdgeDetectionVS( texcoord, offset);
-    gl_Position   = ftransform();
-
-}
-
-)SHADER_SOURCE";
-
-const char smaa_pass_1_fragment_shader_luma[] = R"SHADER_SOURCE(
-
-varying vec2 texcoord;
-varying vec4 offset[3];
-uniform sampler2D colorTex;
-
-void main()
-{
-    gl_FragColor.xy = SMAALumaEdgeDetectionPS(texcoord, offset, colorTex).xy;
-}
-
-)SHADER_SOURCE";
-
-const char smaa_pass_1_fragment_shader_color[] = R"SHADER_SOURCE(
-
-varying vec2 texcoord;
-varying vec4 offset[3];
-uniform sampler2D colorTex;
-
-void main()
-{
-    gl_FragColor.xy = SMAAColorEdgeDetectionPS(texcoord, offset, colorTex).xy;
-}
-
-)SHADER_SOURCE";
-
-const char smaa_pass_2_vertex_shader[] = R"SHADER_SOURCE(
-
-varying vec4 offset[3];
-varying vec2 texcoord;
-varying vec2 pixcoord;
-
-void main()
-{
-    texcoord = gl_MultiTexCoord0.st;
-    SMAABlendingWeightCalculationVS( texcoord, pixcoord, offset );
-    gl_Position = ftransform();
-}
-
-)SHADER_SOURCE";
-
-const char smaa_pass_2_fragment_shader[] = R"SHADER_SOURCE(
-
-varying vec2 texcoord;
-varying vec2 pixcoord;
-varying vec4 offset[3];
-uniform sampler2D edgesTex;
-uniform sampler2D areaTex;
-uniform sampler2D searchTex;
-
-void main()
-{
-    gl_FragColor = SMAABlendingWeightCalculationPS(texcoord, pixcoord, offset, edgesTex, areaTex, searchTex, vec4(0.,0.,0.,0.));
-}
-
-)SHADER_SOURCE";
-
-const char smaa_pass_3_vertex_shader[] = R"SHADER_SOURCE(
-
-varying vec4 offset;
-varying vec2 texcoord;
-
-void main()
-{
-    texcoord = gl_MultiTexCoord0.st;
-    SMAANeighborhoodBlendingVS( texcoord, offset );
-    gl_Position = ftransform();
-}
-
-)SHADER_SOURCE";
-
-const char smaa_pass_3_fragment_shader[] = R"SHADER_SOURCE(
-
-varying vec2 texcoord;
-varying vec4 offset;
-uniform sampler2D colorTex;
-uniform sampler2D blendTex;
-
-void main()
-{
-    gl_FragColor = SMAANeighborhoodBlendingPS(texcoord, offset, colorTex, blendTex);
-}
-
-)SHADER_SOURCE";
-
-}
-}
-

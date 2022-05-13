@@ -2303,14 +2303,14 @@ void OPENGL_GAL::init()
     // Prepare shaders
     if( !m_shader->IsLinked()
         && !m_shader->LoadShaderFromStrings( SHADER_TYPE_VERTEX,
-                                             BUILTIN_SHADERS::glsl_kicad_vert_shader ) )
+                                             BUILTIN_SHADERS::glsl_kicad_vert ) )
     {
         throw std::runtime_error( "Cannot compile vertex shader!" );
     }
 
     if( !m_shader->IsLinked()
         && !m_shader->LoadShaderFromStrings( SHADER_TYPE_FRAGMENT,
-                                             BUILTIN_SHADERS::glsl_kicad_frag_shader ) )
+                                             BUILTIN_SHADERS::glsl_kicad_frag ) )
     {
         throw std::runtime_error( "Cannot compile fragment shader!" );
     }
