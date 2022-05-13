@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:13-0700\n"
-"PO-Revision-Date: 2022-05-12 20:14+0000\n"
+"PO-Revision-Date: 2022-05-13 22:00+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -5945,9 +5945,8 @@ msgid "Save current document to another location"
 msgstr "Guardar el documento activo en otra localización"
 
 #: common/tool/actions.cpp:79
-#, fuzzy
 msgid "Save a Copy..."
-msgstr "Guardar co&pia como..."
+msgstr "Guardar una copia..."
 
 #: common/tool/actions.cpp:79
 msgid "Save a copy of the current document to another location"
@@ -9095,9 +9094,8 @@ msgid "Set To"
 msgstr "Asignar a"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
-#, fuzzy
 msgid "Text color:"
-msgstr "Colores de redes:"
+msgstr "Color de texto:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:220
 #: eeschema/pin_type.cpp:129
@@ -9395,9 +9393,8 @@ msgstr "Posición Y"
 #: pcbnew/fp_text.cpp:297 pcbnew/fp_textbox.cpp:242
 #: pcbnew/pcb_dimension.cpp:338 pcbnew/pcb_text.cpp:144
 #: pcbnew/pcb_textbox.cpp:236
-#, fuzzy
 msgid "Font"
-msgstr "Fuente:"
+msgstr "Fuente"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:118
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:89
@@ -9806,9 +9803,9 @@ msgstr "¿Eliminar el estilo de cuerpo alternativo (De Morgan) del símbolo?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:320
 #: eeschema/tools/symbol_editor_control.cpp:322
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol name '%s' already in use in library '%s'."
-msgstr "El símbolo '%s' ya existe en la librería '%s'."
+msgstr "El nombre de símbolo '%s' ya está en uso en la librería '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:437
 #, c-format
@@ -11042,9 +11039,8 @@ msgid "Hierarchical path:"
 msgstr "Ruta jerárquica:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:199
-#, fuzzy
 msgid "path"
-msgstr "Ruta:"
+msgstr "ruta"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:84
 msgid "Sheet Properties"
@@ -12021,18 +12017,16 @@ msgid "Select field:"
 msgstr "Seleccionar campo:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1325
-#, fuzzy
 msgid "Unsaved data"
-msgstr "[No Guardado]"
+msgstr "Datos no guardados"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1326
 msgid "Changes are unsaved. Export unsaved data?"
-msgstr ""
+msgstr "Los cambios no se han guardado. ¿Exportar datos no guardados?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1336
-#, fuzzy
 msgid "Save as CSV"
-msgstr "Guardar como imagen"
+msgstr "Guardar como CSV"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:34
 msgid "Add Field..."
@@ -12051,9 +12045,8 @@ msgid "Group symbols together based on common properties"
 msgstr "Agrupar los símbolos en función de las propiedades comunes"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:125
-#, fuzzy
 msgid "Export as CSV..."
-msgstr "Exportar SV&G..."
+msgstr "Exportar como CSV..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:87
 msgid "Symbol Fields Table"
@@ -16824,14 +16817,12 @@ msgid "Make a copy of the selected symbol"
 msgstr "Crear una copia del símbolo seleccionado"
 
 #: eeschema/tools/ee_actions.cpp:138
-#, fuzzy
 msgid "Rename Symbol..."
-msgstr "Recuperar símbolos..."
+msgstr "Renombrar símbolo..."
 
 #: eeschema/tools/ee_actions.cpp:138
-#, fuzzy
 msgid "Rename the selected symbol"
-msgstr "Actualizar símbolo(s) seleccionado(s)"
+msgstr "Renombrar el símbolo seleccionado"
 
 #: eeschema/tools/ee_actions.cpp:143
 msgid "Save the current symbol to a different library."
@@ -17969,19 +17960,16 @@ msgstr "No se ha seleccionado ninguna librería de símbolos."
 
 #: eeschema/tools/symbol_editor_control.cpp:308
 #: pcbnew/tools/footprint_editor_control.cpp:397
-#, fuzzy
 msgid "New name:"
-msgstr "Nombre de red:"
+msgstr "Nuevo nombre:"
 
 #: eeschema/tools/symbol_editor_control.cpp:308
-#, fuzzy
 msgid "Change Symbol Name"
-msgstr "Cambiar símbolos"
+msgstr "Cambiar nombre de símbolo"
 
 #: eeschema/tools/symbol_editor_control.cpp:318
-#, fuzzy
 msgid "Symbol name cannot be empty."
-msgstr "El nombre de red no puede estar vacío."
+msgstr "El nombre del símbolo no puede estar vacío."
 
 #: eeschema/tools/symbol_editor_control.cpp:489
 #: eeschema/tools/symbol_editor_control.cpp:529
@@ -23594,9 +23582,8 @@ msgid "Checking zones..."
 msgstr "Comprobando zonas..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:141
-#, fuzzy
 msgid "Rebuilding connectivity..."
-msgstr "Reconstruir la conectividad..."
+msgstr "Reconstruyendo la conectividad..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:161
 msgid "Board cleanup"
@@ -26854,17 +26841,14 @@ msgstr ""
 "al menos una capa."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1348
-#, fuzzy
 msgid "Error: Trapazoid delta is too large."
-msgstr "Error: el pad no tiene una capa."
+msgstr "Error: El delta del trapazoide es demasiado grande."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1357
-#, fuzzy
 msgid "Error: Through hole pad has no hole."
-msgstr "El pad de agujero pasante no tiene un agujero"
+msgstr "Error: El pad de orificio pasante no tiene un agujero."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1364
-#, fuzzy
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
 msgstr ""
@@ -26872,9 +26856,8 @@ msgstr ""
 "Utilice pads SMD en su lugar."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1373
-#, fuzzy
 msgid "Error: SMD pad has a hole."
-msgstr "Error: el pad no tiene una capa."
+msgstr "Error: El pad SMD tiene un agujero."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1379
 msgid "Warning: SMD pad has no outer layers."
@@ -27173,7 +27156,6 @@ msgid "E.C.O.2"
 msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:551
-#, fuzzy
 msgid "Fabrication property:"
 msgstr "Propiedad de fabricación:"
 
@@ -30659,9 +30641,10 @@ msgid "board setup constraints"
 msgstr "restricciones de configuración de placa"
 
 #: pcbnew/drc/drc_engine.cpp:170
-#, fuzzy
 msgid "board setup constraints zone fill strategy"
-msgstr "restricciones de configuración de placa para orificios"
+msgstr ""
+"restricciones de configuración de la placa para estrategia de llenado de "
+"zonas"
 
 #: pcbnew/drc/drc_engine.cpp:175
 msgid "board setup constraints silk"
@@ -30766,9 +30749,9 @@ msgid "Local override on %s; thermal spoke width: %s."
 msgstr "Reemplazo local en %s; ancho de radio térmico: %s."
 
 #: pcbnew/drc/drc_engine.cpp:869
-#, fuzzy, c-format
+#, c-format
 msgid "%s min thickness: %s."
-msgstr "Ancho mínimo de la zona %s: %s."
+msgstr "%s espesor mínimo: %s."
 
 #: pcbnew/drc/drc_engine.cpp:883
 #, c-format
@@ -30809,9 +30792,9 @@ msgid "Checking %s thermal spoke width: %s."
 msgstr "Comprobando ancho de radio térmico de %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:943
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s min spoke count: %s."
-msgstr "Comprobando desviación máxima %s: %s."
+msgstr "Comprobando %s el número mínimo de radios: %s."
 
 #: pcbnew/drc/drc_engine.cpp:949
 #, c-format
@@ -30963,14 +30946,14 @@ msgid "Local clearance on %s; clearance: %s."
 msgstr "Margen local en %s; margen: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1376
-#, fuzzy, c-format
+#, c-format
 msgid "%s zone connection: %s."
-msgstr "Comprobando la conexión de la zona %s: %s."
+msgstr "Conexión de zona %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1392
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad connection: %s."
-msgstr "Conexión de pad en zona %s: %s."
+msgstr "Conexión de pad %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1397 pcbnew/drc/drc_engine.cpp:1414
 #: pcbnew/drc/drc_engine.cpp:1431 pcbnew/zone.cpp:330 pcbnew/zone.cpp:470
@@ -30978,14 +30961,14 @@ msgid "zone"
 msgstr "zona"
 
 #: pcbnew/drc/drc_engine.cpp:1409
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal relief gap: %s."
-msgstr "Brecha de alivio térmico de zona %s: %s."
+msgstr "Brecha de alivio térmico %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1426
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal spoke width: %s."
-msgstr "Ancho del alivio térmico de zona %s: %s."
+msgstr "Ancho de radio térmico %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1459
 #, c-format
@@ -31117,9 +31100,8 @@ msgid "NPTH inside courtyard"
 msgstr "NPTH dentro de patio"
 
 #: pcbnew/drc/drc_item.cpp:156
-#, fuzzy
 msgid "Item on a disabled copper layer"
-msgstr "Elemento en capa desactivada"
+msgstr "Elemento en una capa de cobre deshabilitada"
 
 #: pcbnew/drc/drc_item.cpp:160
 msgid "Board has malformed outline"
@@ -31203,9 +31185,9 @@ msgid "Differential uncoupled length too long"
 msgstr "Longitud diferencial desacoplada demasiado larga"
 
 #: pcbnew/drc/drc_item.cpp:244
-#, fuzzy
 msgid "Footprint component type doesn't match footprint pads"
-msgstr "El tipo de huella no coincide con los pads de la huella"
+msgstr ""
+"El tipo de componente de la huella no coincide con los pads de la huella"
 
 #: pcbnew/drc/drc_item.cpp:248
 msgid "Through hole pad has no hole"
@@ -31247,7 +31229,7 @@ msgstr "ERROR: %s%s"
 #: pcbnew/drc/drc_rule_parser.cpp:79
 #, c-format
 msgid "The '%s' keyword has been deprecated.  Please use '%s' instead."
-msgstr ""
+msgstr "La palabra clave '%s' ha quedado obsoleta.  Utilice en su lugar '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:117 pcbnew/drc/drc_rule_parser.cpp:200
 #: pcbnew/drc/drc_rule_parser.cpp:478
@@ -32064,20 +32046,19 @@ msgid "Footprint %s"
 msgstr "Huella %s"
 
 #: pcbnew/footprint.cpp:2218
-#, fuzzy, c-format
+#, c-format
 msgid "(expected 'Through hole'; actual '%s')"
-msgstr ""
-"Se esperaba el tipo \"Pad de orificio pasante\" pero se ha puesto \"%s\""
+msgstr "(esperado 'orificio pasante' real '%s')"
 
 #: pcbnew/footprint.cpp:2221
-#, fuzzy, c-format
+#, c-format
 msgid "(expected 'SMD'; actual '%s')"
-msgstr "(%s diámetro máximo %s; real %s)"
+msgstr "(esperado 'SMD' real '%s')"
 
 #: pcbnew/footprint.cpp:2224
 #, c-format
 msgid "(expected 'Other'; actual '%s')"
-msgstr ""
+msgstr "(esperado 'Otros' real '%s')"
 
 #: pcbnew/footprint.cpp:2251
 msgid "(PTH pad has no copper layers)"
@@ -36123,15 +36104,13 @@ msgstr "Margen resuelto: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:391
 #: pcbnew/tools/board_inspection_tool.cpp:965
-#, fuzzy
 msgid "Physical hole clearance resolution for:"
-msgstr "Resolución de la holgura de los agujeros mecánicos para:"
+msgstr "Resolución de la holgura del agujero físico para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:400
 #: pcbnew/tools/board_inspection_tool.cpp:977
-#, fuzzy
 msgid "No 'physical_hole_clearance' constraints defined."
-msgstr "No se ha definido ninguna restricción 'mechanical_hole_clearance'."
+msgstr "No se ha definido ninguna restricción 'physical_hole_clearance'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:411
 msgid "Edge Clearance"
@@ -36149,15 +36128,13 @@ msgstr "Resolución de margen para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:477
 #: pcbnew/tools/board_inspection_tool.cpp:926
-#, fuzzy
 msgid "Physical clearance resolution for:"
-msgstr "Resolución juego mecánico para:"
+msgstr "Resolución de holgura física para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:486
 #: pcbnew/tools/board_inspection_tool.cpp:938
-#, fuzzy
 msgid "No 'physical_clearance' constraints defined."
-msgstr "No se han definido restricciones 'mechanical_clearance'."
+msgstr "No se han definido restricciones \"physical_clearance\"."
 
 #: pcbnew/tools/board_inspection_tool.cpp:530
 msgid "Select two items for a clearance resolution report."
@@ -36177,9 +36154,8 @@ msgid "Zone connection resolution for:"
 msgstr "Resolución de conexión de zona para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:621
-#, fuzzy
 msgid "Thermal relief gap resolution for:"
-msgstr "Resolución de la altura del texto para:"
+msgstr "Resolución de la brecha de alivio térmico para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:630
 #, c-format
@@ -36187,19 +36163,17 @@ msgid "Resolved thermal relief gap: %s."
 msgstr "Brecha de alivio térmico resuelta: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:635
-#, fuzzy
 msgid "Spoke width resolution for:"
-msgstr "Resolución de ancho de pista para:"
+msgstr "Resolución de ancho de radios para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:644
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal relief spoke width: %s."
-msgstr "Ancho de radio térmico resuelto: %s."
+msgstr "Resuelto el ancho de los radios de alivio térmico: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:649
-#, fuzzy
 msgid "Spoke count resolution for:"
-msgstr "Resolución de áreas restringidas para:"
+msgstr "Resolución del recuento de radios para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:658
 #, fuzzy, c-format
