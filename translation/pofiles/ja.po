@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:13-0700\n"
-"PO-Revision-Date: 2022-05-12 20:14+0000\n"
+"PO-Revision-Date: 2022-05-13 18:41+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -9683,7 +9683,6 @@ msgid "Fill with body background color"
 msgstr "ボディ背景色で塗りつぶし"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:76
-#, fuzzy
 msgid "Fill with:"
 msgstr "塗潰しタイプ:"
 
@@ -23550,7 +23549,6 @@ msgstr "すべてハッチング"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:143
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:131
-#, fuzzy
 msgid "Outline hatch pitch:"
 msgstr "外形線の太さ:"
 
@@ -26603,7 +26601,7 @@ msgstr "エラー: パッドにレイヤーがありません。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1357
 msgid "Error: Through hole pad has no hole."
-msgstr "エラー:スルーホール パッドに穴がありません"
+msgstr "エラー:スルーホール パッドに穴がありません。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1364
 #, fuzzy
@@ -30377,9 +30375,9 @@ msgid "Local override on %s; thermal spoke width: %s."
 msgstr "%s のローカルオーバーライド; サーマルスポーク幅: %s."
 
 #: pcbnew/drc/drc_engine.cpp:869
-#, fuzzy, c-format
+#, c-format
 msgid "%s min thickness: %s."
-msgstr "ゾーン %s の最小幅: %s."
+msgstr "%s の最小幅: %s."
 
 #: pcbnew/drc/drc_engine.cpp:883
 #, fuzzy, c-format
@@ -30420,9 +30418,9 @@ msgid "Checking %s thermal spoke width: %s."
 msgstr "%s のサーマルスポーク幅: %s をチェックしています。"
 
 #: pcbnew/drc/drc_engine.cpp:943
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s min spoke count: %s."
-msgstr "%s の 最大遅延をチェックしています: %s."
+msgstr "%s の 最小スポーク数をチェックしています: %s."
 
 #: pcbnew/drc/drc_engine.cpp:949
 #, c-format
