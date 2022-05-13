@@ -7,17 +7,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 12:13-0700\n"
-"PO-Revision-Date: 2022-04-25 17:47+0000\n"
+"PO-Revision-Date: 2022-05-13 22:00+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.12.1-dev\n"
+"X-Generator: Weblate 4.13-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -5927,9 +5927,8 @@ msgid "Save current document to another location"
 msgstr "Zapisuje bieżący dokument w innej lokalizacji"
 
 #: common/tool/actions.cpp:79
-#, fuzzy
 msgid "Save a Copy..."
-msgstr "Zapisz kopię jako..."
+msgstr "Zapisz kopię..."
 
 #: common/tool/actions.cpp:79
 msgid "Save a copy of the current document to another location"
@@ -7500,18 +7499,16 @@ msgstr ""
 "schemacie"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "Zapisz na schemacie"
+msgstr "Zapisz na schemacie oraz do pliku"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
-#, fuzzy
 msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
 msgstr ""
 "Zapisuje przydzielenie footprintów w polach nazwy footprintu symboli na "
-"schemacie"
+"schemacie oraz w pliku schematu"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select next unassigned symbol"
@@ -9084,9 +9081,8 @@ msgid "Set To"
 msgstr "Ustaw na"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
-#, fuzzy
 msgid "Text color:"
-msgstr "Kolory sieci:"
+msgstr "Kolor tekstu:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:220
 #: eeschema/pin_type.cpp:129
@@ -9380,9 +9376,8 @@ msgstr "Pozycja Y"
 #: pcbnew/fp_text.cpp:297 pcbnew/fp_textbox.cpp:242
 #: pcbnew/pcb_dimension.cpp:338 pcbnew/pcb_text.cpp:144
 #: pcbnew/pcb_textbox.cpp:236
-#, fuzzy
 msgid "Font"
-msgstr "Czcionka:"
+msgstr "Czcionka"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:118
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:89
@@ -9790,9 +9785,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:320
 #: eeschema/tools/symbol_editor_control.cpp:322
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol name '%s' already in use in library '%s'."
-msgstr "Symbol '%s' istnieje już w bibliotece '%s'."
+msgstr "Nazwa symbolu '%s' występuje już w bibliotece '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:437
 #, c-format
@@ -11027,7 +11022,7 @@ msgstr "Ścieżka hierarchiczna:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:199
 msgid "path"
-msgstr ""
+msgstr "ścieżka"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:84
 msgid "Sheet Properties"
@@ -12002,18 +11997,16 @@ msgid "Select field:"
 msgstr "Wybrane pole:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1325
-#, fuzzy
 msgid "Unsaved data"
-msgstr "[Nie zapisany]"
+msgstr "Dane nie zapisane"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1326
 msgid "Changes are unsaved. Export unsaved data?"
-msgstr ""
+msgstr "Zmiany nie są zapisane. Eksportować mimo to?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1336
-#, fuzzy
 msgid "Save as CSV"
-msgstr "Zapisz jako obraz"
+msgstr "Zapisz jako CSV"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:34
 msgid "Add Field..."
@@ -12032,9 +12025,8 @@ msgid "Group symbols together based on common properties"
 msgstr "Grupuj komponenty razem na postawie wspólnych właściwości"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:125
-#, fuzzy
 msgid "Export as CSV..."
-msgstr "Eksportuj symbol jako SVG..."
+msgstr "Eksportuj jako CSV..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:87
 msgid "Symbol Fields Table"
@@ -16794,14 +16786,12 @@ msgid "Make a copy of the selected symbol"
 msgstr "Tworzy kopię zaznaczonego symbolu"
 
 #: eeschema/tools/ee_actions.cpp:138
-#, fuzzy
 msgid "Rename Symbol..."
-msgstr "Odzyskiwanie zmienionych symboli..."
+msgstr "Zmień nazwę symbolu..."
 
 #: eeschema/tools/ee_actions.cpp:138
-#, fuzzy
 msgid "Rename the selected symbol"
-msgstr "Uaktualnij wybrany symbol"
+msgstr "Zmienia nazwę wybranego symbolu"
 
 #: eeschema/tools/ee_actions.cpp:143
 msgid "Save the current symbol to a different library."
@@ -17935,19 +17925,16 @@ msgstr "Nie wybrano biblioteki symboli."
 
 #: eeschema/tools/symbol_editor_control.cpp:308
 #: pcbnew/tools/footprint_editor_control.cpp:397
-#, fuzzy
 msgid "New name:"
-msgstr "Nazwa sieci:"
+msgstr "Nowa nazwa:"
 
 #: eeschema/tools/symbol_editor_control.cpp:308
-#, fuzzy
 msgid "Change Symbol Name"
-msgstr "Zmień symbole"
+msgstr "Zmień nazwę symbolu"
 
 #: eeschema/tools/symbol_editor_control.cpp:318
-#, fuzzy
 msgid "Symbol name cannot be empty."
-msgstr "Nazwa sieci nie może być pusta."
+msgstr "Nazwa symbolu nie może być pusta."
 
 #: eeschema/tools/symbol_editor_control.cpp:489
 #: eeschema/tools/symbol_editor_control.cpp:529
@@ -23540,7 +23527,6 @@ msgid "Checking zones..."
 msgstr "Sprawdzam wypełnione strefy..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:141
-#, fuzzy
 msgid "Rebuilding connectivity..."
 msgstr "Odtwarzanie połączeń..."
 
@@ -26792,17 +26778,14 @@ msgstr ""
 "przynajmniej na jednej z warstw."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1348
-#, fuzzy
 msgid "Error: Trapazoid delta is too large."
-msgstr "Błąd: Pole lutownicze nie posiada żadnej warstwy sygnałowej."
+msgstr "Błąd: Trapezowość jest zbyt duża."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1357
-#, fuzzy
 msgid "Error: Through hole pad has no hole."
-msgstr "Pole lutownicze THT nie posiada otworu"
+msgstr "Błąd: Pole lutownicze THT nie posiada otworu."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1364
-#, fuzzy
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
 msgstr ""
@@ -26810,9 +26793,8 @@ msgstr ""
 "pól SMD."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1373
-#, fuzzy
 msgid "Error: SMD pad has a hole."
-msgstr "Błąd: Pole lutownicze nie posiada żadnej warstwy sygnałowej."
+msgstr "Błąd: Pole lutownicze SMD posiada otwór."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1379
 msgid "Warning: SMD pad has no outer layers."
@@ -27112,7 +27094,6 @@ msgid "E.C.O.2"
 msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:551
-#, fuzzy
 msgid "Fabrication property:"
 msgstr "Właściwości produkcyjne:"
 
@@ -30596,9 +30577,8 @@ msgid "board setup constraints"
 msgstr "ograniczenia w konfiguracji płytki"
 
 #: pcbnew/drc/drc_engine.cpp:170
-#, fuzzy
 msgid "board setup constraints zone fill strategy"
-msgstr "ograniczenia w konfiguracji płytki dla otworów"
+msgstr "ograniczenia w konfiguracji strategii wypełniania"
 
 #: pcbnew/drc/drc_engine.cpp:175
 msgid "board setup constraints silk"
@@ -30700,9 +30680,9 @@ msgid "Local override on %s; thermal spoke width: %s."
 msgstr "Lokalne zastąpienie na %s; grubość łącza termicznego: %s."
 
 #: pcbnew/drc/drc_engine.cpp:869
-#, fuzzy, c-format
+#, c-format
 msgid "%s min thickness: %s."
-msgstr "Strefa %s minimalna grubość: %s."
+msgstr "%s minimalna grubość: %s."
 
 #: pcbnew/drc/drc_engine.cpp:883
 #, c-format
@@ -30743,9 +30723,9 @@ msgid "Checking %s thermal spoke width: %s."
 msgstr "Sprawdzam %s pod względem szerokość poł. termicznego: %s."
 
 #: pcbnew/drc/drc_engine.cpp:943
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s min spoke count: %s."
-msgstr "Sprawdzam %s pod względem maksymalnego ukosu: %s."
+msgstr "Sprawdzam %s pod względem minimalnej ilości łącz termicznych: %s."
 
 #: pcbnew/drc/drc_engine.cpp:949
 #, c-format
@@ -30892,14 +30872,14 @@ msgid "Local clearance on %s; clearance: %s."
 msgstr "Lokalny prześwit na %s; prześwit: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1376
-#, fuzzy, c-format
+#, c-format
 msgid "%s zone connection: %s."
-msgstr "Sprawdzenie %s pod względem łączy ze strefą: %s."
+msgstr "%s posiada łączy ze strefą: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1392
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad connection: %s."
-msgstr "Strefa %s połączenie z polem: %s."
+msgstr "%s posiada połączeń z polem: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1397 pcbnew/drc/drc_engine.cpp:1414
 #: pcbnew/drc/drc_engine.cpp:1431 pcbnew/zone.cpp:330 pcbnew/zone.cpp:470
@@ -30907,14 +30887,14 @@ msgid "zone"
 msgstr "strefa"
 
 #: pcbnew/drc/drc_engine.cpp:1409
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal relief gap: %s."
-msgstr "Strefa %s prześwit połączenia termicznego: %s."
+msgstr "%s ma prześwit połączenia termicznego: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1426
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal spoke width: %s."
-msgstr "Strefa %s szerokość poł. termicznego: %s."
+msgstr "%s ma szerokość poł. termicznego: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1459
 #, c-format
@@ -31046,9 +31026,8 @@ msgid "NPTH inside courtyard"
 msgstr "Niepokryty otwór wewnątrz strefy zajętości"
 
 #: pcbnew/drc/drc_item.cpp:156
-#, fuzzy
 msgid "Item on a disabled copper layer"
-msgstr "Element na wyłączonej warstwie"
+msgstr "Element na wyłączonej warstwie sygnałowej"
 
 #: pcbnew/drc/drc_item.cpp:160
 msgid "Board has malformed outline"
@@ -31131,7 +31110,6 @@ msgid "Differential uncoupled length too long"
 msgstr "Zbyt długa para różnicowa"
 
 #: pcbnew/drc/drc_item.cpp:244
-#, fuzzy
 msgid "Footprint component type doesn't match footprint pads"
 msgstr "Typ footprintu nie odpowiada polom footprintu"
 
@@ -31175,7 +31153,7 @@ msgstr "BŁĄD: %s%s"
 #: pcbnew/drc/drc_rule_parser.cpp:79
 #, c-format
 msgid "The '%s' keyword has been deprecated.  Please use '%s' instead."
-msgstr ""
+msgstr "Słowo kluczowe '%s' jest przestarzałe.  Proszę użyć '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:117 pcbnew/drc/drc_rule_parser.cpp:200
 #: pcbnew/drc/drc_rule_parser.cpp:478
@@ -31983,20 +31961,19 @@ msgid "Footprint %s"
 msgstr "Footprint %s"
 
 #: pcbnew/footprint.cpp:2218
-#, fuzzy, c-format
+#, c-format
 msgid "(expected 'Through hole'; actual '%s')"
-msgstr ""
-"Spodziewano typu \"Pole lutownicze z otworem na wylot\" ale ustawiono \"%s\""
+msgstr "(spodziewano się 'Pole lutownicze z otworem na wylot'; aktualnie '%s')"
 
 #: pcbnew/footprint.cpp:2221
-#, fuzzy, c-format
+#, c-format
 msgid "(expected 'SMD'; actual '%s')"
-msgstr "(%s maks. rozmiar %s; obecnie %s)"
+msgstr "(spodziewano się 'SMD'; obecnie '%s')"
 
 #: pcbnew/footprint.cpp:2224
 #, c-format
 msgid "(expected 'Other'; actual '%s')"
-msgstr ""
+msgstr "(spodziewany 'Inny'; obecnie '%s')"
 
 #: pcbnew/footprint.cpp:2251
 msgid "(PTH pad has no copper layers)"
@@ -36016,15 +35993,13 @@ msgstr "Prześwit pola lutowniczego: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:391
 #: pcbnew/tools/board_inspection_tool.cpp:965
-#, fuzzy
 msgid "Physical hole clearance resolution for:"
-msgstr "Analiza prześwitu otworów mechanicznych między:"
+msgstr "Analiza prześwitu fizycznych otworów między:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:400
 #: pcbnew/tools/board_inspection_tool.cpp:977
-#, fuzzy
 msgid "No 'physical_hole_clearance' constraints defined."
-msgstr "Nie zdefiniowano ograniczenia 'mechanical_hole_clearance'."
+msgstr "Nie zdefiniowano ograniczenia 'physical_hole_clearance'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:411
 msgid "Edge Clearance"
@@ -36042,15 +36017,13 @@ msgstr "Analiza prześwitu między:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:477
 #: pcbnew/tools/board_inspection_tool.cpp:926
-#, fuzzy
 msgid "Physical clearance resolution for:"
-msgstr "Analiza prześwitu mechanicznego między:"
+msgstr "Analiza fizycznego prześwitu między:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:486
 #: pcbnew/tools/board_inspection_tool.cpp:938
-#, fuzzy
 msgid "No 'physical_clearance' constraints defined."
-msgstr "Nie zdefiniowano ograniczenia 'mechanical_clearance'."
+msgstr "Nie zdefiniowano ograniczenia 'physical_clearance'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:530
 msgid "Select two items for a clearance resolution report."
@@ -36070,9 +36043,8 @@ msgid "Zone connection resolution for:"
 msgstr "Analiza połączeń ze strefami dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:621
-#, fuzzy
 msgid "Thermal relief gap resolution for:"
-msgstr "Analiza wysokości tekstu dla:"
+msgstr "Analiza odległości przerwy w łączu termicznym dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:630
 #, c-format
@@ -36080,30 +36052,27 @@ msgid "Resolved thermal relief gap: %s."
 msgstr "Rozpoznany prześwit łącza termicznego: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:635
-#, fuzzy
 msgid "Spoke width resolution for:"
-msgstr "Analiza szerokości ścieżki dla:"
+msgstr "Analiza szerokości łącz termicznych dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:644
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal relief spoke width: %s."
 msgstr "Rozpoznana szerokość poł. termicznego: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:649
-#, fuzzy
 msgid "Spoke count resolution for:"
-msgstr "Analiza strefy chronionej dla:"
+msgstr "Analiza ilości łącz termicznych dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:658
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min thermal relief spoke count: %d."
-msgstr "Min. ilość łącz termicznych:"
+msgstr "Rozpoznano min. ilość łącz termicznych: %d."
 
 #: pcbnew/tools/board_inspection_tool.cpp:667
 #: pcbnew/tools/board_inspection_tool.cpp:715
-#, fuzzy
 msgid "Zone clearance resolution for:"
-msgstr "Analiza prześwitu otworów między:"
+msgstr "Analiza prześwitu strefy dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:671
 #, c-format
@@ -36111,14 +36080,14 @@ msgid "Zone clearance: %s."
 msgstr "Prześwit pomiędzy strefami: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:681
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
-msgstr "Zastąpiony przez większe połączenie termiczne %s; prześwit: %s."
+msgstr "Zastąpiony przez większy fizyczny prześwit z %s; prześwit: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:697
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical hole clearance from %s;clearance: %s."
-msgstr "Zastąpiony przez większe połączenie termiczne %s; prześwit: %s."
+msgstr "Zastąpiony przez większy prześwit fizycznego otworu %s; prześwit: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
 msgid "Diff Pair"
@@ -36151,9 +36120,8 @@ msgid "Courtyard clearance resolution for:"
 msgstr "Analiza prześwitu pomiędzy polami zajętości:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:917
-#, fuzzy
 msgid "Physical Clearances"
-msgstr "Parametry fizyczne"
+msgstr "Ograniczenia fizyczne"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1004
 msgid "Select an item for a constraints resolution report."
@@ -36478,19 +36446,17 @@ msgid "_copy"
 msgstr "_kopia"
 
 #: pcbnew/tools/footprint_editor_control.cpp:397
-#, fuzzy
 msgid "Change Footprint Name"
-msgstr "Zamień footprinty"
+msgstr "Zmień nazwę footprintu"
 
 #: pcbnew/tools/footprint_editor_control.cpp:407
-#, fuzzy
 msgid "Footprint name cannot be empty."
-msgstr "Nazwa sieci nie może być pusta."
+msgstr "Nazwa footprintu nie może być pusta."
 
 #: pcbnew/tools/footprint_editor_control.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint name '%s' already in use in library '%s'."
-msgstr "Footprint '%s' nie został znaleziony w bibliotece '%s'."
+msgstr "Nazwa footprintu '%s' jest już używana w bibliotece '%s'."
 
 #: pcbnew/tools/footprint_editor_control.cpp:709
 msgid "No footprint problems found."
@@ -36908,24 +36874,20 @@ msgid "Show selected footprint on editor canvas"
 msgstr "Pokazuje zaznaczony footprint w edytorze"
 
 #: pcbnew/tools/pcb_actions.cpp:374
-#, fuzzy
 msgid "Duplicate Footprint"
-msgstr "Zdublowane footprinty"
+msgstr "Powiel footprint"
 
 #: pcbnew/tools/pcb_actions.cpp:374
-#, fuzzy
 msgid "Make a copy of the selected footprint"
-msgstr "Tworzy kopię zaznaczonego symbolu"
+msgstr "Tworzy kopię zaznaczonego footprintu"
 
 #: pcbnew/tools/pcb_actions.cpp:379
-#, fuzzy
 msgid "Rename Footprint..."
-msgstr "Utwórz footprint..."
+msgstr "Zmień nazwę footprintu..."
 
 #: pcbnew/tools/pcb_actions.cpp:379
-#, fuzzy
 msgid "Rename the selected footprint"
-msgstr "Uaktualnij zaznaczony(-e) footprint(-y)"
+msgstr "Zmień nazwę zaznaczonego footprintu"
 
 #: pcbnew/tools/pcb_actions.cpp:384
 msgid "Delete Footprint from Library"
@@ -38223,69 +38185,56 @@ msgid "Auto-fill Zone(s)"
 msgstr "Wypełnij automatycznie strefę(-y)"
 
 #: pcbnew/tracks_cleaner.cpp:68
-#, fuzzy
 msgid "Checking null tracks and vias..."
-msgstr "Sprawdzenie szerokości ścieżek..."
+msgstr "Sprawdzanie niepotrzebnych ścieżek i przelotek..."
 
 #: pcbnew/tracks_cleaner.cpp:70
-#, fuzzy
 msgid "Removing null tracks and vias..."
-msgstr "Tworzenie ścieżek i przelotek"
+msgstr "Usuwanie nieistotnych ścieżek i przelotek..."
 
 #: pcbnew/tracks_cleaner.cpp:81
-#, fuzzy
 msgid "Checking redundant tracks..."
-msgstr "Usuwaj nadmiarowe ścieżki"
+msgstr "Sprawdzanie nadmiarowych ścieżek..."
 
 #: pcbnew/tracks_cleaner.cpp:83
-#, fuzzy
 msgid "Removing redundant tracks..."
-msgstr "Usuwaj nadmiarowe ścieżki"
+msgstr "Usuwanie nadmiarowych ścieżek..."
 
 #: pcbnew/tracks_cleaner.cpp:95
-#, fuzzy
 msgid "Checking shorting tracks..."
-msgstr "Sprawdzam footprinty..."
+msgstr "Sprawdzanie ścieżek robiących zwarcia..."
 
 #: pcbnew/tracks_cleaner.cpp:97
-#, fuzzy
 msgid "Removing shorting tracks..."
-msgstr "Usuń niedokończone ścieżki"
+msgstr "Usuwanie zwarć na ścieżkach..."
 
 #: pcbnew/tracks_cleaner.cpp:110
-#, fuzzy
 msgid "Checking tracks in pads..."
-msgstr "Sprawdzenie szerokości ścieżek..."
+msgstr "Sprawdzenie ścieżek czy nie znajdują się na polach..."
 
 #: pcbnew/tracks_cleaner.cpp:112
-#, fuzzy
 msgid "Removing tracks in pads..."
-msgstr "Usuń ścieżki wewnątrz pola"
+msgstr "Usuwanie ścieżek wewnątrz pola..."
 
 #: pcbnew/tracks_cleaner.cpp:126
-#, fuzzy
 msgid "Checking dangling tracks and vias..."
-msgstr "Sprawdzenie szerokości ścieżek..."
+msgstr "Sprawdzenie niedokończonych ścieżek i przelotek..."
 
 #: pcbnew/tracks_cleaner.cpp:131
-#, fuzzy
 msgid "Removing dangling tracks..."
-msgstr "Usuń niedokończone ścieżki"
+msgstr "Usuwanie niedokończonych ścieżek..."
 
 #: pcbnew/tracks_cleaner.cpp:134
-#, fuzzy
 msgid "Removing dangling vias..."
-msgstr "Usuń niedokończone ścieżki"
+msgstr "Usuwanie niewłaściwych przelotek..."
 
 #: pcbnew/tracks_cleaner.cpp:148
-#, fuzzy
 msgid "Checking collinear tracks..."
-msgstr "Sprawdzam prześwit pomiędzy otworami..."
+msgstr "Sprawdzam współistniejące ścieżki..."
 
 #: pcbnew/tracks_cleaner.cpp:150
-#, fuzzy
 msgid "Merging collinear tracks..."
-msgstr "Połącz współliniowe ścieżki"
+msgstr "Łączenie współliniowych ścieżek..."
 
 #: pcbnew/undo_redo.cpp:553
 msgid "Incomplete undo/redo operation: some items not found"
