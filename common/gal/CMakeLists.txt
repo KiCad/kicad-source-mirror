@@ -1,7 +1,7 @@
 
 set( GAL_SRCS
     # Common part
-	../callback_gal.cpp
+    ../callback_gal.cpp
     ../draw_panel_gal.cpp
     ../gl_context_mgr.cpp
     ../newstroke_font.cpp
@@ -52,9 +52,33 @@ target_link_libraries( gal
     ${PIXMAN_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
-	# outline font support
-	${FREETYPE_LIBRARIES}
-	${HarfBuzz_LIBRARIES}
-	${Fontconfig_LIBRARIES}
+    # outline font support
+    ${FREETYPE_LIBRARIES}
+    ${HarfBuzz_LIBRARIES}
+    ${Fontconfig_LIBRARIES}
 )
+function( add_shader outTarget inFile shaderName )
+    set(outCppName "${shaderName}.cpp")
+    set(outHeaderName "${shaderName}.h")
 
+    add_custom_command(
+        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${outCppName}
+                ${CMAKE_BINARY_DIR}/include/gal/shaders/${outHeaderName}
+        COMMAND ${CMAKE_COMMAND}
+            -DSOURCE="${CMAKE_CURRENT_SOURCE_DIR}/shaders/${inFile}"
+            -DDESTINATION_SOURCE_DIR="${CMAKE_CURRENT_BINARY_DIR}/"
+            -DDESTINATION_HEADER_DIR="${CMAKE_BINARY_DIR}/include/gal/shaders/"
+            -DOUTCPPFILE="${outCppName}"
+            -DOUTHEADERFILE="${outHeaderName}"
+            -DOUTVARNAME="${shaderName}_shader"
+            -P ${CMAKE_MODULE_PATH}/BuildSteps/CreateShaderCpp.cmake
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/shaders/${inFile}
+                ${CMAKE_MODULE_PATH}/BuildSteps/CreateShaderCpp.cmake
+        )
+
+    target_sources( ${outTarget} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/${outCppName} )
+    target_include_directories( ${outTarget} PUBLIC ${CMAKE_BINARY_DIR}/include/gal/shaders/ )
+endfunction()
+
+add_shader( gal kicad_frag.glsl glsl_kicad_frag )
+add_shader( gal kicad_vert.glsl glsl_kicad_vert )

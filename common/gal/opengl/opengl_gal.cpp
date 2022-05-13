@@ -72,7 +72,8 @@ using namespace KIGFX;
 // The current font is "Ubuntu Mono" available under Ubuntu Font Licence 1.0
 // (see ubuntu-font-licence-1.0.txt for details)
 #include "gl_resources.h"
-#include "gl_builtin_shaders.h"
+#include <glsl_kicad_frag.h>
+#include <glsl_kicad_vert.h>
 using namespace KIGFX::BUILTIN_FONT;
 
 static void      InitTesselatorCallbacks( GLUtesselator* aTesselator );
@@ -2302,14 +2303,14 @@ void OPENGL_GAL::init()
     // Prepare shaders
     if( !m_shader->IsLinked()
         && !m_shader->LoadShaderFromStrings( SHADER_TYPE_VERTEX,
-                                             BUILTIN_SHADERS::kicad_vertex_shader ) )
+                                             BUILTIN_SHADERS::glsl_kicad_vert_shader ) )
     {
         throw std::runtime_error( "Cannot compile vertex shader!" );
     }
 
     if( !m_shader->IsLinked()
         && !m_shader->LoadShaderFromStrings( SHADER_TYPE_FRAGMENT,
-                                             BUILTIN_SHADERS::kicad_fragment_shader ) )
+                                             BUILTIN_SHADERS::glsl_kicad_frag_shader ) )
     {
         throw std::runtime_error( "Cannot compile fragment shader!" );
     }
