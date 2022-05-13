@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-10 12:09-0700\n"
+"POT-Creation-Date: 2022-05-13 15:05-0700\n"
 "PO-Revision-Date: 2022-04-17 10:49+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
@@ -2000,7 +2000,7 @@ msgid "File Browser..."
 msgstr "Esplora file..."
 
 #: common/dialogs/dialog_configure_paths.cpp:555
-#: common/widgets/grid_text_button_helpers.cpp:418
+#: common/widgets/grid_text_button_helpers.cpp:420
 msgid "Select Path"
 msgstr "Seleziona percorso"
 
@@ -2046,7 +2046,7 @@ msgstr "Variabili ambiente"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:53
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:43
 #: eeschema/dialogs/panel_sym_lib_table.cpp:299
-#: eeschema/fields_grid_table.cpp:211 eeschema/lib_pin.cpp:1043
+#: eeschema/fields_grid_table.cpp:212 eeschema/lib_pin.cpp:1043
 #: eeschema/sch_pin.cpp:212 eeschema/sch_symbol.cpp:1416
 #: eeschema/sch_symbol.cpp:1456 eeschema/symbol_editor/symbol_editor.cpp:1253
 #: eeschema/symbol_viewer_frame.cpp:366
@@ -4091,16 +4091,16 @@ msgstr ""
 "Il file di salvataggio automatico non può essere rinominato con il nome file "
 "della scheda."
 
-#: common/eda_doc.cpp:135
+#: common/eda_doc.cpp:130
 msgid "Documentation File"
 msgstr "File documentazione"
 
-#: common/eda_doc.cpp:145
+#: common/eda_doc.cpp:140
 #, c-format
 msgid "Documentation file '%s' not found."
 msgstr "File documentazione '%s' non trovato."
 
-#: common/eda_doc.cpp:188
+#: common/eda_doc.cpp:183
 #, c-format
 msgid "Unknown MIME type for documentation file '%s'"
 msgstr "Tipo MIME sconosciuto per il file documentazione '%s'"
@@ -4450,7 +4450,7 @@ msgstr "Normale"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:55
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:58
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:127
-#: eeschema/fields_grid_table.cpp:216 eeschema/sch_text.cpp:767
+#: eeschema/fields_grid_table.cpp:217 eeschema/sch_text.cpp:767
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:114
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:298
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:57
@@ -4471,7 +4471,7 @@ msgstr "Corsivo"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:56
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:127
-#: eeschema/fields_grid_table.cpp:217 eeschema/sch_text.cpp:767
+#: eeschema/fields_grid_table.cpp:218 eeschema/sch_text.cpp:767
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:98
 msgid "Bold"
 msgstr "Grassetto"
@@ -4484,8 +4484,8 @@ msgstr "Grassetto+corsivo"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:193
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:233
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:147
-#: eeschema/fields_grid_table.cpp:158 eeschema/fields_grid_table.cpp:407
-#: eeschema/fields_grid_table.cpp:519 eeschema/lib_field.cpp:471
+#: eeschema/fields_grid_table.cpp:159 eeschema/fields_grid_table.cpp:408
+#: eeschema/fields_grid_table.cpp:520 eeschema/lib_field.cpp:471
 #: eeschema/lib_text.cpp:359 eeschema/pin_type.cpp:128
 #: eeschema/sch_field.cpp:594
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:89
@@ -4500,9 +4500,9 @@ msgstr "Sinistra"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:147
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:177
-#: eeschema/fields_grid_table.cpp:151 eeschema/fields_grid_table.cpp:159
-#: eeschema/fields_grid_table.cpp:408 eeschema/fields_grid_table.cpp:418
-#: eeschema/fields_grid_table.cpp:521 eeschema/fields_grid_table.cpp:532
+#: eeschema/fields_grid_table.cpp:152 eeschema/fields_grid_table.cpp:160
+#: eeschema/fields_grid_table.cpp:409 eeschema/fields_grid_table.cpp:419
+#: eeschema/fields_grid_table.cpp:522 eeschema/fields_grid_table.cpp:533
 #: eeschema/lib_field.cpp:472 eeschema/lib_field.cpp:481
 #: eeschema/lib_text.cpp:360 eeschema/lib_text.cpp:369
 #: eeschema/sch_field.cpp:595 eeschema/sch_field.cpp:604
@@ -4520,8 +4520,8 @@ msgstr "Centra"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:193
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:233
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:147
-#: eeschema/fields_grid_table.cpp:160 eeschema/fields_grid_table.cpp:409
-#: eeschema/fields_grid_table.cpp:523 eeschema/lib_field.cpp:473
+#: eeschema/fields_grid_table.cpp:161 eeschema/fields_grid_table.cpp:410
+#: eeschema/fields_grid_table.cpp:524 eeschema/lib_field.cpp:473
 #: eeschema/lib_text.cpp:361 eeschema/pin_type.cpp:127
 #: eeschema/sch_field.cpp:596
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:89
@@ -4533,8 +4533,8 @@ msgstr "Destra"
 #: common/eda_text.cpp:722
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:177
-#: eeschema/fields_grid_table.cpp:150 eeschema/fields_grid_table.cpp:417
-#: eeschema/fields_grid_table.cpp:530 eeschema/lib_field.cpp:480
+#: eeschema/fields_grid_table.cpp:151 eeschema/fields_grid_table.cpp:418
+#: eeschema/fields_grid_table.cpp:531 eeschema/lib_field.cpp:480
 #: eeschema/lib_text.cpp:368 eeschema/sch_field.cpp:603
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:105
 msgid "Top"
@@ -4543,8 +4543,8 @@ msgstr "Alto"
 #: common/eda_text.cpp:724
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:177
-#: eeschema/fields_grid_table.cpp:152 eeschema/fields_grid_table.cpp:419
-#: eeschema/fields_grid_table.cpp:534 eeschema/lib_field.cpp:482
+#: eeschema/fields_grid_table.cpp:153 eeschema/fields_grid_table.cpp:420
+#: eeschema/fields_grid_table.cpp:535 eeschema/lib_field.cpp:482
 #: eeschema/lib_text.cpp:370 eeschema/sch_field.cpp:605
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:105
 msgid "Bottom"
@@ -6597,7 +6597,7 @@ msgstr ""
 msgid "Always show crosshairs"
 msgstr "Mostra sempre il crocino"
 
-#: common/widgets/grid_text_button_helpers.cpp:386
+#: common/widgets/grid_text_button_helpers.cpp:388
 msgid "Select a File"
 msgstr "Seleziona un file"
 
@@ -7193,7 +7193,7 @@ msgstr "Variabili ambiente disponibili per percorsi relativi:"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:969
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:54
 #: eeschema/dialogs/panel_sym_lib_table.cpp:300
-#: eeschema/fields_grid_table.cpp:212 eeschema/sch_symbol.cpp:1408
+#: eeschema/fields_grid_table.cpp:213 eeschema/sch_symbol.cpp:1408
 #: eeschema/sch_symbol.cpp:1455
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:69
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:69
@@ -8955,7 +8955,7 @@ msgstr "Stile grafico"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:64
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:58
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:61
-#: eeschema/fields_grid_table.cpp:219 eeschema/lib_pin.cpp:1054
+#: eeschema/fields_grid_table.cpp:220 eeschema/lib_pin.cpp:1054
 #: eeschema/sch_pin.cpp:222
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:156
@@ -8980,7 +8980,7 @@ msgstr "Dimensioni testo nome"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:65
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:59
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:62
-#: eeschema/fields_grid_table.cpp:220
+#: eeschema/fields_grid_table.cpp:221
 msgid "X Position"
 msgstr "Posizione X"
 
@@ -8989,7 +8989,7 @@ msgstr "Posizione X"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:66
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:60
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:63
-#: eeschema/fields_grid_table.cpp:221
+#: eeschema/fields_grid_table.cpp:222
 msgid "Y Position"
 msgstr "Posizione Y"
 
@@ -9242,7 +9242,7 @@ msgstr "Campi"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:52
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:697
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:55
-#: eeschema/fields_grid_table.cpp:213
+#: eeschema/fields_grid_table.cpp:214
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:53
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:53
@@ -9255,21 +9255,21 @@ msgstr "Mostra"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:59
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:53
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:56
-#: eeschema/fields_grid_table.cpp:214
+#: eeschema/fields_grid_table.cpp:215
 msgid "H Align"
 msgstr "All. Oriz."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:60
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:54
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
-#: eeschema/fields_grid_table.cpp:215
+#: eeschema/fields_grid_table.cpp:216
 msgid "V Align"
 msgstr "All. Vert."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:63
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:57
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:60
-#: eeschema/fields_grid_table.cpp:218 eeschema/lib_field.cpp:466
+#: eeschema/fields_grid_table.cpp:219 eeschema/lib_field.cpp:466
 #: eeschema/lib_text.cpp:354 eeschema/sch_field.cpp:589
 #: eeschema/sch_text.cpp:778
 msgid "Text Size"
@@ -9503,15 +9503,15 @@ msgid "Position X:"
 msgstr "Posizione X:"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:117
-#: eeschema/fields_grid_table.cpp:166 eeschema/fields_grid_table.cpp:436
-#: eeschema/fields_grid_table.cpp:554
+#: eeschema/fields_grid_table.cpp:167 eeschema/fields_grid_table.cpp:437
+#: eeschema/fields_grid_table.cpp:555
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:142
 msgid "Horizontal"
 msgstr "Orizzontale"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:117
-#: eeschema/fields_grid_table.cpp:167 eeschema/fields_grid_table.cpp:437
-#: eeschema/fields_grid_table.cpp:556
+#: eeschema/fields_grid_table.cpp:168 eeschema/fields_grid_table.cpp:438
+#: eeschema/fields_grid_table.cpp:557
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:142
 msgid "Vertical"
 msgstr "Verticale"
@@ -11349,22 +11349,22 @@ msgid "Spice Model Editor"
 msgstr "Editor modello spice"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:85
-#: eeschema/fields_grid_table.cpp:619
+#: eeschema/fields_grid_table.cpp:620
 msgid "Select Footprint..."
 msgstr "Seleziona impronta..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:86
-#: eeschema/fields_grid_table.cpp:620
+#: eeschema/fields_grid_table.cpp:621
 msgid "Browse for footprint"
 msgstr "Scorri le impronte"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:91
-#: eeschema/fields_grid_table.cpp:625 eeschema/tools/ee_actions.cpp:61
+#: eeschema/fields_grid_table.cpp:626 eeschema/tools/ee_actions.cpp:61
 msgid "Show Datasheet"
 msgstr "Mostra datasheet"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:92
-#: eeschema/fields_grid_table.cpp:626
+#: eeschema/fields_grid_table.cpp:627
 msgid "Show datasheet in browser"
 msgstr "Mostra datasheet nel browser"
 
@@ -12777,7 +12777,7 @@ msgstr "Riferimenti duplicati"
 msgid "Bus Entry needed"
 msgstr "Serve voce bus"
 
-#: eeschema/fields_grid_table.cpp:135 eeschema/files-io.cpp:820
+#: eeschema/fields_grid_table.cpp:136 eeschema/files-io.cpp:820
 #: eeschema/tools/sch_editor_control.cpp:101
 msgid "Schematic Files"
 msgstr "File di schema"
@@ -18431,7 +18431,7 @@ msgstr "Librerie (%d)"
 msgid "Color themes (%d)"
 msgstr "Temi colori (%d)"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:79 kicad/pcm/dialogs/dialog_pcm.cpp:332
+#: kicad/pcm/dialogs/dialog_pcm.cpp:79 kicad/pcm/dialogs/dialog_pcm.cpp:340
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:53
 #, c-format
 msgid "Repository (%d)"
@@ -18452,28 +18452,28 @@ msgstr "Disinstalla"
 msgid "Apply Changes"
 msgstr "Applica"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:172
+#: kicad/pcm/dialogs/dialog_pcm.cpp:180
 msgid ""
 "Are you sure you want to close the package manager and discard pending "
 "changes?"
 msgstr "Chiudere la gestione pacchetti ed annullare i cambiamenti pendenti?"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:174
+#: kicad/pcm/dialogs/dialog_pcm.cpp:182
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Plugin and Content Manager"
 msgstr "Gestione plugin e contenuti"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:253
+#: kicad/pcm/dialogs/dialog_pcm.cpp:261
 msgid "Choose package file"
 msgstr "Scegli file pacchetto"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:348
+#: kicad/pcm/dialogs/dialog_pcm.cpp:356
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:121
 #, c-format
 msgid "Pending (%d)"
 msgstr "Pendenti (%d)"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:382
+#: kicad/pcm/dialogs/dialog_pcm.cpp:390
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:62
 #, c-format
 msgid "Installed (%d)"
@@ -18575,23 +18575,23 @@ msgstr "Manutentore"
 msgid "Resources"
 msgstr "Risorse"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:476
+#: kicad/pcm/dialogs/panel_packages_view.cpp:475
 msgid "Package download url is not specified"
 msgstr "URL di scaricamento pacchetto non specificato"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:477
+#: kicad/pcm/dialogs/panel_packages_view.cpp:476
 msgid "Error downloading package"
 msgstr "Errore nello scaricare il pacchetto"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:486
+#: kicad/pcm/dialogs/panel_packages_view.cpp:485
 msgid "Save package"
 msgstr "Salva pacchetto"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:499
+#: kicad/pcm/dialogs/panel_packages_view.cpp:498
 msgid "Downloading package"
 msgstr "Scaricamento pacchetto"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:517
+#: kicad/pcm/dialogs/panel_packages_view.cpp:516
 msgid ""
 "Integrity of the downloaded package could not be verified, hash does not "
 "match. Are you sure you want to keep this file?"
@@ -18599,11 +18599,11 @@ msgstr ""
 "Integrità del pacchetto scaricato non confermata; l'hash non corrisponde. "
 "Sicuri di voler tenere questo file?"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:519
+#: kicad/pcm/dialogs/panel_packages_view.cpp:518
 msgid "Keep downloaded file"
 msgstr "Mantieni i file scaricati"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:559
+#: kicad/pcm/dialogs/panel_packages_view.cpp:558
 msgid ""
 "This package version is incompatible with your kicad version or platform. "
 "Are you sure you want to install it anyway?"
@@ -18611,7 +18611,7 @@ msgstr ""
 "Questa versione pacchetto non è compatibile con la tua piattaforma o "
 "versione di KiCad. Sicuri di volerlo scaricare ugualmente?"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:561
+#: kicad/pcm/dialogs/panel_packages_view.cpp:560
 msgid "Install package"
 msgstr "Installa pacchetto"
 
