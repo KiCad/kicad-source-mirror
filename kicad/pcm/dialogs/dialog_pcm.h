@@ -52,6 +52,9 @@ public:
     ///< Opens file selection dialog and installs selected package archive
     void OnInstallFromFileClicked( wxCommandEvent& event ) override;
 
+    ///< Opens local directory where packages are installed in file manager
+    void OnOpenPackageDirClicked( wxCommandEvent& event ) override;
+
     ///< Enqueues current pending actions in PCM_TASK_MANAGER and runs the queue
     void OnApplyChangesClicked( wxCommandEvent& event ) override;
 

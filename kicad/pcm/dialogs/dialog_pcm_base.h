@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,10 +19,10 @@ class WX_GRID;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/notebook.h>
 #include <wx/panel.h>
@@ -52,18 +52,20 @@ class DIALOG_PCM_BASE : public DIALOG_SHIM
 		wxBitmapButton* m_discardActionButton;
 		wxButton* m_refreshButton;
 		wxButton* m_installLocalButton;
+		wxButton* m_openPackageDirButton;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Apply;
 		wxButton* m_sdbSizer1Cancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnRepositoryChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnManageRepositoriesClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPendingActionsCellClicked( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnDiscardActionClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRefreshClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnInstallFromFileClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOpenPackageDirClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnApplyChangesClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDiscardChangesClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCloseClicked( wxCommandEvent& event ) { event.Skip(); }
@@ -72,6 +74,7 @@ class DIALOG_PCM_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plugin And Content Manager"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_PCM_BASE();
 
 };

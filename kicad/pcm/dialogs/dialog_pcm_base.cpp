@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -34,7 +34,7 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_choiceRepository->SetSelection( 0 );
 	bSizer6->Add( m_choiceRepository, 1, wxALIGN_CENTER|wxALL, 5 );
 
-	m_buttonManage = new wxButton( m_panelRepository, wxID_ANY, _("Manage"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonManage = new wxButton( m_panelRepository, wxID_ANY, _("Manage..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer6->Add( m_buttonManage, 0, wxALL, 5 );
 
 
@@ -82,11 +82,11 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_gridPendingActions->SetColSize( 3, 200 );
 	m_gridPendingActions->EnableDragColMove( false );
 	m_gridPendingActions->EnableDragColSize( true );
-	m_gridPendingActions->SetColLabelSize( 22 );
 	m_gridPendingActions->SetColLabelValue( 0, _("Action") );
 	m_gridPendingActions->SetColLabelValue( 1, _("Package") );
 	m_gridPendingActions->SetColLabelValue( 2, _("Version") );
 	m_gridPendingActions->SetColLabelValue( 3, _("Repository") );
+	m_gridPendingActions->SetColLabelSize( 22 );
 	m_gridPendingActions->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -134,6 +134,9 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_installLocalButton = new wxButton( this, wxID_ANY, _("Install from File..."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_BottomSizer->Add( m_installLocalButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
+	m_openPackageDirButton = new wxButton( this, wxID_ANY, _("Open Package Directory"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_BottomSizer->Add( m_openPackageDirButton, 0, wxALL, 5 );
+
 
 	m_BottomSizer->Add( 0, 0, 1, 0, 5 );
 
@@ -165,6 +168,7 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_discardActionButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnDiscardActionClicked ), NULL, this );
 	m_refreshButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnRefreshClicked ), NULL, this );
 	m_installLocalButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnInstallFromFileClicked ), NULL, this );
+	m_openPackageDirButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnOpenPackageDirClicked ), NULL, this );
 	m_sdbSizer1Apply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnApplyChangesClicked ), NULL, this );
 	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnDiscardChangesClicked ), NULL, this );
 	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnCloseClicked ), NULL, this );
@@ -179,6 +183,7 @@ DIALOG_PCM_BASE::~DIALOG_PCM_BASE()
 	m_discardActionButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnDiscardActionClicked ), NULL, this );
 	m_refreshButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnRefreshClicked ), NULL, this );
 	m_installLocalButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnInstallFromFileClicked ), NULL, this );
+	m_openPackageDirButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnOpenPackageDirClicked ), NULL, this );
 	m_sdbSizer1Apply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnApplyChangesClicked ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnDiscardChangesClicked ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnCloseClicked ), NULL, this );

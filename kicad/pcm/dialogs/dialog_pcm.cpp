@@ -39,6 +39,7 @@
 #include <vector>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
+#include <launch_ext.h>
 
 
 #define GRID_CELL_MARGIN 4
@@ -466,4 +467,10 @@ void DIALOG_PCM::discardAction( int aIndex )
         entry.second->SetPackageState( action.package.identifier, state );
 
     m_pendingActions.erase( m_pendingActions.begin() + aIndex );
+}
+
+
+void DIALOG_PCM::OnOpenPackageDirClicked( wxCommandEvent& event )
+{
+    LaunchExternal( m_pcm->Get3rdPartyPath() );
 }
