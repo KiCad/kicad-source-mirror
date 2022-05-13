@@ -53,8 +53,6 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
 {
     wxASSERT( aTextItem );
 
-    SetTitle( aTitle );
-
     m_note->SetFont( KIUI::GetInfoFont( this ).Italic() );
     m_note->Show( false );
 
@@ -348,7 +346,14 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
     m_isPower = false;
 
-    m_textLabel->SetLabel( m_field->GetName() + wxT( ":" ) );
+    wxString translated_fieldname;
+
+    if( m_field->GetId() < MANDATORY_FIELDS )
+        translated_fieldname = TEMPLATE_FIELDNAME::GetDefaultFieldName( m_field->GetId(), DO_TRANSLATE );
+    else
+        translated_fieldname = m_field->GetName();
+
+    m_textLabel->SetLabel( translated_fieldname + ":" );
 
     m_position = m_field->GetPosition();
 
