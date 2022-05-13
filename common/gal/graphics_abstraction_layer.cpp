@@ -270,9 +270,8 @@ void GAL::BitmapText( const wxString& aText, const VECTOR2I& aPosition, const ED
 
     // Bitmap font has different metrics than the stroke font so we compensate a bit before
     // stroking
-    attrs.m_Size = VECTOR2I( m_attributes.m_Size.x * 0.83, m_attributes.m_Size.y * 0.86 );
-    int strokeWidth = GetLineWidth();
-    attrs.m_StrokeWidth = strokeWidth * 0.8;
+    attrs.m_Size = VECTOR2I( m_attributes.m_Size.x, m_attributes.m_Size.y * 0.95 );
+    attrs.m_StrokeWidth = GetLineWidth() * 0.74;
 
     font->Draw( this, aText, aPosition, attrs );
 }

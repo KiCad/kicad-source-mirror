@@ -223,7 +223,7 @@ public:
     /**
      * Mark selected items for refresh.
      */
-    void RefreshSelection();
+    void RefreshZoomDependentItems();
 
     /**
      * Mark all items for refresh.

@@ -2036,13 +2036,13 @@ int OPENGL_GAL::drawBitmapChar( unsigned long aChar )
     if( aChar == ' ' )
     {
         const FONT_GLYPH_TYPE* g = LookupGlyph( 'x' );
-        wxASSERT( g );
+        wxCHECK( g, 0 );
 
-        if( !g ) // Should not happen.
-            return 0;
+        // Match stroke font as well as possible
+        double spaceWidth = g->advance * 0.74;
 
-        Translate( VECTOR2D( g->advance, 0 ) );
-        return g->advance;
+        Translate( VECTOR2D( spaceWidth, 0 ) );
+        return KiROUND( spaceWidth );
     }
 
     const FONT_GLYPH_TYPE* glyph = LookupGlyph( aChar );

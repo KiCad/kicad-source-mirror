@@ -235,6 +235,8 @@ public:
     int GetPinLength() const { return m_pinLength; }
     void SetPinLength( int aLength ) { m_pinLength = aLength; }
 
+    int GetPenWidth() const override;
+
     void CreateGraphicShape( const RENDER_SETTINGS* aSettings, std::vector<VECTOR2I>& aPoints,
                              const VECTOR2I& aPos ) const override;
 

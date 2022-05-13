@@ -39,6 +39,13 @@
 #include <project/net_settings.h>
 
 
+// Rendering fonts is expensive (particularly when using outline fonts).  At small effective
+// sizes (ie: zoomed out) the visual differences between outline and/or stroke fonts and the
+// bitmap font becomes immaterial, and there's often more to draw when zoomed out so the
+// performance gain becomes more significant.
+#define BITMAP_FONT_SIZE_THRESHOLD 3
+
+
 /* Constructor and destructor for SCH_ITEM */
 /* They are not inline because this creates problems with gcc at linking time in debug mode */
 
@@ -279,6 +286,15 @@ const wxString& SCH_ITEM::GetDefaultFont() const
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
     return cfg->m_Appearance.default_font;
+}
+
+
+bool SCH_ITEM::RenderAsBitmap( double aWorldScale ) const
+{
+    if( const EDA_TEXT* text = dynamic_cast<const EDA_TEXT*>( this ) )
+        return text->GetTextHeight() * aWorldScale < BITMAP_FONT_SIZE_THRESHOLD;
+
+    return false;
 }
 
 

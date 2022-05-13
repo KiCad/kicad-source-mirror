@@ -52,8 +52,8 @@
 #define SKIP_STRUCT    (1 << 15)   ///< flag indicating that the structure should be ignored
 #define DO_NOT_DRAW    (1 << 16)   ///< Used to disable draw function
 #define IS_PASTED      (1 << 17)   ///< Modifier on IS_NEW which indicates it came from clipboard
-#define UNUSED_1       (1 << 18)
-#define UNUSED_2       (1 << 19)
+#define IS_SHOWN_AS_BITMAP    (1 << 18)
+#define UNUSED_2              (1 << 19)
 #define MALFORMED_F_COURTYARD (1 << 20)
 #define MALFORMED_B_COURTYARD (1 << 21)
 #define MALFORMED_COURTYARDS ( MALFORMED_F_COURTYARD | MALFORMED_B_COURTYARD )

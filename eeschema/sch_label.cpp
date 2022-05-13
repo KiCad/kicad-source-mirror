@@ -607,7 +607,7 @@ const EDA_RECT SCH_LABEL_BASE::GetBoundingBox() const
         {
             EDA_RECT fieldBBox = field.GetBoundingBox();
 
-            if( Type() == SCH_GLOBAL_LABEL_T )
+            if( Type() == SCH_LABEL_T || Type() == SCH_GLOBAL_LABEL_T )
                 fieldBBox.Offset( GetSchematicTextOffset( nullptr ) );
 
             box.Merge( fieldBBox );
@@ -635,7 +635,7 @@ bool SCH_LABEL_BASE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
             EDA_RECT fieldBBox = field.GetBoundingBox();
             fieldBBox.Inflate( aAccuracy );
 
-            if( Type() == SCH_GLOBAL_LABEL_T )
+            if( Type() == SCH_LABEL_T || Type() == SCH_GLOBAL_LABEL_T )
                 fieldBBox.Offset( GetSchematicTextOffset( nullptr ) );
 
             if( fieldBBox.Contains( aPosition ) )
@@ -668,7 +668,7 @@ bool SCH_LABEL_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccur
             {
                 EDA_RECT fieldBBox = field.GetBoundingBox();
 
-                if( Type() == SCH_GLOBAL_LABEL_T )
+                if( Type() == SCH_LABEL_T || Type() == SCH_GLOBAL_LABEL_T )
                     fieldBBox.Offset( GetSchematicTextOffset( nullptr ) );
 
                 if( rect.Intersects( fieldBBox ) )
@@ -900,6 +900,7 @@ const EDA_RECT SCH_LABEL::GetBodyBoundingBox() const
     EDA_RECT rect = GetTextBox();
 
     rect.Offset( 0, -GetTextOffset() );
+    rect.Inflate( GetEffectiveTextPenWidth() );
 
     if( !GetTextAngle().IsZero() )
     {
@@ -961,6 +962,17 @@ SCH_DIRECTIVE_LABEL::SCH_DIRECTIVE_LABEL( const SCH_DIRECTIVE_LABEL& aClassLabel
 {
     m_pinLength = aClassLabel.m_pinLength;
     m_symbolSize = aClassLabel.m_symbolSize;
+}
+
+
+int SCH_DIRECTIVE_LABEL::GetPenWidth() const
+{
+    int pen = 0;
+
+    if( Schematic() )
+        pen = Schematic()->Settings().m_DefaultLineWidth;
+
+    return GetEffectiveTextPenWidth( pen );
 }
 
 

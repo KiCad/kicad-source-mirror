@@ -172,6 +172,18 @@ public:
         ClearFlags( GetEditFlags() );
     }
 
+    virtual bool RenderAsBitmap( double aWorldScale ) const { return false; }
+
+    void SetIsShownAsBitmap( bool aBitmap )
+    {
+        if( aBitmap )
+            SetFlags( IS_SHOWN_AS_BITMAP );
+        else
+            ClearFlags( IS_SHOWN_AS_BITMAP );
+    }
+
+    inline bool IsShownAsBitmap() const { return m_flags & IS_SHOWN_AS_BITMAP; }
+
     /**
      * Check whether the item is one of the listed types.
      *

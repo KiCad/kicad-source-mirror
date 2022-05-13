@@ -262,6 +262,8 @@ public:
 
     const wxString& GetDefaultFont() const;
 
+    bool RenderAsBitmap( double aWorldScale ) const override;
+
     /**
      * Print a schematic item.
      *

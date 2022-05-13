@@ -28,7 +28,6 @@
 #include <core/typeinfo.h>
 #include <memory>
 #include <view/view.h>
-#include <view/view_group.h>
 #include <view/view_rtree.h>
 #include <view/wx_view_controls.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
@@ -74,9 +73,9 @@ void SCH_VIEW::SetScale( double aScale, VECTOR2D aAnchor )
 {
     VIEW::SetScale( aScale, aAnchor );
 
-    //Redraw selection halos since their width is dependent on zoom
+    // Redraw items whose rendering is dependent on zoom
     if( m_frame )
-        m_frame->RefreshSelection();
+        m_frame->RefreshZoomDependentItems();
 }
 
 

@@ -60,7 +60,6 @@ void PANEL_EESCHEMA_DISPLAY_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* cf
     m_checkShowERCExclusions->SetValue( cfg->m_Appearance.show_erc_exclusions );
     m_checkPageLimits->SetValue( cfg->m_Appearance.show_page_limits );
 
-    m_checkSelTextBox->SetValue( cfg->m_Selection.text_as_box );
     m_checkSelDrawChildItems->SetValue( cfg->m_Selection.draw_selected_children );
     m_checkSelFillShapes->SetValue( cfg->m_Selection.fill_shapes );
     m_selWidthCtrl->SetValue( cfg->m_Selection.selection_thickness );
@@ -101,7 +100,6 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
     cfg->m_Appearance.show_erc_exclusions = m_checkShowERCExclusions->GetValue();
     cfg->m_Appearance.show_page_limits = m_checkPageLimits->GetValue();
 
-    cfg->m_Selection.text_as_box = m_checkSelTextBox->GetValue();
     cfg->m_Selection.draw_selected_children = m_checkSelDrawChildItems->GetValue();
     cfg->m_Selection.fill_shapes = m_checkSelFillShapes->GetValue();
     cfg->m_Selection.selection_thickness = KiROUND( m_selWidthCtrl->GetValue() );

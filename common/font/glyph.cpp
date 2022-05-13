@@ -120,13 +120,16 @@ void OUTLINE_GLYPH::Triangulate( std::function<void( const VECTOR2I& aPt1,
                                                      const VECTOR2I& aPt2,
                                                      const VECTOR2I& aPt3 )> aCallback ) const
 {
-    const_cast<OUTLINE_GLYPH*>( this )->CacheTriangulation( false );
+    // Only call CacheTriangulation if it has never been done before.  Otherwise we'll hash
+    // the triangulation to see if it has been edited, and glyphs after creation are read-only.
+    if( TriangulatedPolyCount() == 0 )
+        const_cast<OUTLINE_GLYPH*>( this )->CacheTriangulation( false );
 
     for( unsigned int i = 0; i < TriangulatedPolyCount(); i++ )
     {
         const SHAPE_POLY_SET::TRIANGULATED_POLYGON* polygon = TriangulatedPolygon( i );
 
-        for ( size_t j = 0; j < polygon->GetTriangleCount(); j++ )
+        for( size_t j = 0; j < polygon->GetTriangleCount(); j++ )
         {
             VECTOR2I a, b, c;
             polygon->GetTriangle( j, a, b, c );

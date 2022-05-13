@@ -74,6 +74,21 @@ EESCHEMA_SETTINGS* eeconfig()
 }
 
 
+KICAD_T SCH_PAINTER::g_ScaledSelectionTypes[] = { SCH_MARKER_T,
+                                                  SCH_JUNCTION_T,
+                                                  SCH_NO_CONNECT_T,
+                                                  SCH_BUS_WIRE_ENTRY_T,
+                                                  SCH_BUS_BUS_ENTRY_T,
+                                                  SCH_LINE_T,
+                                                  LIB_SHAPE_T, SCH_SHAPE_T,
+                                                  SCH_BITMAP_T,
+                                                  SCH_DIRECTIVE_LABEL_T,
+                                                  LIB_SYMBOL_T, SCH_SYMBOL_T,
+                                                  SCH_SHEET_T,
+                                                  LIB_PIN_T, SCH_PIN_T,
+                                                  EOT };
+
+
 SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_IsSymbolEditor( false ),
         m_ShowUnit( 0 ),
@@ -248,24 +263,11 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 }
 
 
-// Drawing outline fonts, and to a lesser extent stroke fonts and stroke font drop-shadows, is
-// expensive.  At small effective sizes (ie: zoomed out) the differences between outline and/or
-// stroke fonts and the bitmap font becomes immaterial, and there's often more to draw when
-// zoomed out so the performance gain becomes more material.
-#define BITMAP_FONT_LOD_THRESHOLD 3.5
-
-
 bool SCH_PAINTER::nonCached( const EDA_ITEM* aItem )
 {
     // TODO: it would be nice to have a more definitive test for this, but we've currently got
     // no access to the VIEW_GROUP to see if it's cached or not.
     return aItem->IsSelected();
-}
-
-
-bool SCH_PAINTER::underLODThreshold( int aFontSize )
-{
-    return aFontSize * m_gal->GetWorldScale() < BITMAP_FONT_LOD_THRESHOLD;
 }
 
 
@@ -428,14 +430,17 @@ float SCH_PAINTER::getLineWidth( const EDA_ITEM* aItem, bool aDrawingShadows ) c
 
     float width = pen;
 
-    if( ( aItem->IsBrightened() || aItem->IsSelected() ) && aDrawingShadows )
-        width += getShadowWidth( aItem->IsBrightened() );
+    if( aItem->IsBrightened() || aItem->IsSelected() )
+    {
+        if( aDrawingShadows && aItem->IsType( g_ScaledSelectionTypes ) )
+            width += getShadowWidth( aItem->IsBrightened() );
+    }
 
     return width;
 }
 
 
-float SCH_PAINTER::getTextThickness( const EDA_ITEM* aItem, bool aDrawingShadows ) const
+float SCH_PAINTER::getTextThickness( const EDA_ITEM* aItem ) const
 {
     int pen = m_schSettings.GetDefaultPenWidth();
 
@@ -477,12 +482,7 @@ float SCH_PAINTER::getTextThickness( const EDA_ITEM* aItem, bool aDrawingShadows
         UNIMPLEMENTED_FOR( aItem->GetClass() );
     }
 
-    float width = (float) pen;
-
-    if( ( aItem->IsBrightened() || aItem->IsSelected() ) && aDrawingShadows )
-        width += getShadowWidth( aItem->IsBrightened() );
-
-    return width;
+    return (float) pen;
 }
 
 
@@ -526,10 +526,10 @@ void SCH_PAINTER::strokeText( const wxString& aText, const VECTOR2D& aPosition,
 void SCH_PAINTER::bitmapText( const wxString& aText, const VECTOR2D& aPosition,
                               const TEXT_ATTRIBUTES& aAttrs )
 {
-    // Bitmap font has different metrics than the stroke font so we compensate a bit before
+    // Bitmap font has different metrics from the stroke font so we compensate a bit before
     // stroking
-    m_gal->SetGlyphSize( VECTOR2I( aAttrs.m_Size.x * 0.60, aAttrs.m_Size.y * 0.72 ) );
-    m_gal->SetLineWidth( aAttrs.m_StrokeWidth * 1.2 );
+    m_gal->SetGlyphSize( VECTOR2I( aAttrs.m_Size.x, aAttrs.m_Size.y * 1.05 ) );
+    m_gal->SetLineWidth( aAttrs.m_StrokeWidth * 1.35 );
 
     m_gal->SetHorizontalJustify( aAttrs.m_Halign );
     m_gal->SetVerticalJustify( aAttrs.m_Valign );
@@ -567,17 +567,15 @@ void SCH_PAINTER::boxText( const wxString& aText, const VECTOR2D& aPosition,
     case GR_TEXT_V_ALIGN_BOTTOM: box.SetY( box.GetY() - box.GetHeight() );     break;
     }
 
-    // Many fonts draw diacriticals, descenders, etc. outside the X-height of the font.  This
-    // will cacth most (but probably not all) of them.
-    box.Inflate( 0, aAttrs.m_StrokeWidth );
+    // Give the highlight a bit of margin.
+    box.Inflate( 0, aAttrs.m_StrokeWidth * 2 );
 
     box.Normalize();       // Make h and v sizes always >= 0
     box = box.GetBoundingBoxRotated( (VECTOR2I) aPosition, aAttrs.m_Angle );
     box.RevertYAxis();
 
     m_gal->SetIsFill( true );
-    m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( getShadowWidth( false ) );
+    m_gal->SetIsStroke( false );
     m_gal->DrawRectangle( mapCoords( box.GetOrigin() ), mapCoords( box.GetEnd() ) );
 }
 
@@ -878,28 +876,25 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
     m_gal->SetFillColor( color );
 
     EDA_RECT bbox = aField->GetBoundingBox();
-    VECTOR2I textpos = bbox.Centre();
 
-    if( drawingShadows && ( eeconfig()->m_Selection.text_as_box
-                            || aField->GetDrawFont()->IsOutline()
-                            || underLODThreshold( aField->GetTextHeight() ) ) )
+    if( drawingShadows )
     {
-        m_gal->SetIsStroke( true );
+        bbox.Inflate( getTextThickness( aField ) * 2 );
+
+        m_gal->SetIsStroke( false );
         m_gal->SetIsFill( true );
-        m_gal->SetLineWidth( getTextThickness( aField, drawingShadows ) );
         m_gal->DrawRectangle( bbox.GetPosition(), bbox.GetEnd() );
     }
     else
     {
+        VECTOR2I        textpos = bbox.Centre();
         TEXT_ATTRIBUTES attrs( aField->GetAttributes() );
+
         attrs.m_Halign = GR_TEXT_H_ALIGN_CENTER;
         attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
-        attrs.m_StrokeWidth = getTextThickness( aField, drawingShadows );
+        attrs.m_StrokeWidth = getTextThickness( aField );
 
-        if( nonCached( aField ) && underLODThreshold( aField->GetTextHeight() ) )
-            bitmapText( UnescapeString( aField->GetText() ), textpos, attrs );
-        else
-            strokeText( UnescapeString( aField->GetText() ), textpos, attrs );
+        strokeText( UnescapeString( aField->GetText() ), textpos, attrs );
     }
 
     // Draw the umbilical line when in the schematic editor
@@ -907,7 +902,7 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
     {
         m_gal->SetLineWidth( m_schSettings.m_outlineWidth );
         m_gal->SetStrokeColor( getRenderColor( aField, LAYER_SCHEMATIC_ANCHOR, drawingShadows ) );
-        m_gal->DrawLine( textpos, VECTOR2I( 0, 0 ) );
+        m_gal->DrawLine( bbox.Centre(), VECTOR2I( 0, 0 ) );
     }
 }
 
@@ -936,28 +931,25 @@ void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer )
     }
 
     EDA_RECT bBox = aText->GetBoundingBox();
-    VECTOR2D pos = bBox.Centre();
 
     m_gal->SetFillColor( color );
     m_gal->SetStrokeColor( color );
 
-    if( drawingShadows && ( eeconfig()->m_Selection.text_as_box
-                            || aText->GetDrawFont()->IsOutline()
-                            || underLODThreshold( aText->GetTextHeight() ) ) )
+    if( drawingShadows )
     {
-        m_gal->SetIsStroke( true );
+        bBox.Inflate( getTextThickness( aText ) * 2 );
+
+        m_gal->SetIsStroke( false );
         m_gal->SetIsFill( true );
-        m_gal->SetLineWidth( getTextThickness( aText, drawingShadows ) );
         m_gal->DrawRectangle( bBox.GetPosition(), bBox.GetEnd() );
-        return;
     }
-
-    wxString shownText( aText->GetShownText() );
-
-    if( !shownText.IsEmpty() )
+    else
     {
+        wxString        shownText( aText->GetShownText() );
+        VECTOR2D        pos = bBox.Centre();
         TEXT_ATTRIBUTES attrs = aText->GetAttributes();
-        attrs.m_StrokeWidth = getTextThickness( aText, drawingShadows );
+
+        attrs.m_StrokeWidth = getTextThickness( aText );
 
         if( attrs.m_Angle == ANGLE_VERTICAL )
         {
@@ -982,16 +974,7 @@ void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer )
         // vertically centered.
         attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
 
-        if( nonCached( aText )
-                && underLODThreshold( aText->GetTextHeight() )
-                && !shownText.Contains( wxT( "\n" ) ) )
-        {
-            bitmapText( shownText, pos, attrs );
-        }
-        else
-        {
-            strokeText( shownText, pos, attrs );
-        }
+        strokeText( shownText, pos, attrs );
     }
 }
 
@@ -1009,25 +992,19 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer )
     if( drawingShadows && !( aTextBox->IsBrightened() || aTextBox->IsSelected() ) )
         return;
 
-    COLOR4D        color = getRenderColor( aTextBox, aLayer, drawingShadows );
-    float          borderWidth = getLineWidth( aTextBox, drawingShadows );
-    PLOT_DASH_TYPE borderStyle = aTextBox->GetStroke().GetPlotStyle();
-    wxString       shownText = aTextBox->GetShownText();
+    COLOR4D color = getRenderColor( aTextBox, aLayer, drawingShadows );
+    float   borderWidth = getLineWidth( aTextBox, drawingShadows );
 
     auto drawText =
             [&]()
             {
-                if( !shownText.IsEmpty() )
-                {
-                    TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
-                    attrs.m_Angle = aTextBox->GetDrawRotation();
-                    attrs.m_StrokeWidth = getTextThickness( aTextBox, drawingShadows );
+                wxString        shownText = aTextBox->GetShownText();
+                TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
 
-                    // Note: don't check LODThreshold for textboxes: the bitmap font may mess
-                    // up tab positioning.
+                attrs.m_Angle = aTextBox->GetDrawRotation();
+                attrs.m_StrokeWidth = getTextThickness( aTextBox );
 
-                    strokeText( shownText, aTextBox->GetDrawPos(), attrs );
-               }
+                strokeText( shownText, aTextBox->GetDrawPos(), attrs );
             };
 
     m_gal->SetStrokeColor( color );
@@ -1035,28 +1012,12 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer )
 
     if( aLayer == LAYER_SELECTION_SHADOWS )
     {
-        if( eeconfig()->m_Selection.fill_shapes
-                || eeconfig()->m_Selection.text_as_box
-                || aTextBox->GetDrawFont()->IsOutline()
-                || underLODThreshold( aTextBox->GetTextHeight() ) )
-        {
-            m_gal->SetIsFill( true );
-            m_gal->SetIsStroke( false );
-            m_gal->SetLineWidth( borderWidth );
+        m_gal->SetIsFill( true );
+        m_gal->SetIsStroke( false );
+        m_gal->SetLineWidth( borderWidth );
 
-            m_gal->DrawRectangle( mapCoords( aTextBox->GetPosition() ),
-                                  mapCoords( aTextBox->GetEnd() ) );
-        }
-        else
-        {
-            m_gal->SetIsStroke( true );
-            m_gal->SetIsFill( false );
-            m_gal->SetLineWidth( borderWidth );
-
-            m_gal->DrawRectangle( mapCoords( aTextBox->GetPosition() ),
-                                  mapCoords( aTextBox->GetEnd() ) );
-            drawText();
-        }
+        m_gal->DrawRectangle( mapCoords( aTextBox->GetPosition() ),
+                              mapCoords( aTextBox->GetEnd() ) );
     }
     else if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND )
     {
@@ -1076,7 +1037,8 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer )
 
         if( borderWidth > 0 )
         {
-            COLOR4D borderColor = aTextBox->GetStroke().GetColor();
+            COLOR4D        borderColor = aTextBox->GetStroke().GetColor();
+            PLOT_DASH_TYPE borderStyle = aTextBox->GetStroke().GetPlotStyle();
 
             if( m_schSettings.m_OverrideItemColors || aTextBox->IsBrightened()
                     || borderColor == COLOR4D::UNSPECIFIED )
@@ -1410,6 +1372,17 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         text     [OUTSIDE] = aPin->GetElectricalTypeName();
     }
 
+    // Rendering text is expensive (particularly when using outline fonts).  At small effective
+    // sizes (ie: zoomed out) the visual differences between outline and/or stroke fonts and the
+    // bitmap font becomes immaterial, and there's often more to draw when zoomed out so the
+    // performance gain becomes more significant.
+    #define BITMAP_FONT_SIZE_THRESHOLD 3.5
+
+    bool renderTextAsBitmap = size[0] * m_gal->GetWorldScale() < BITMAP_FONT_SIZE_THRESHOLD
+                           && size[1] * m_gal->GetWorldScale() < BITMAP_FONT_SIZE_THRESHOLD
+                           && size[2] * m_gal->GetWorldScale() < BITMAP_FONT_SIZE_THRESHOLD
+                           && size[3] * m_gal->GetWorldScale() < BITMAP_FONT_SIZE_THRESHOLD;
+
     if( !aPin->IsVisible() )
     {
         for( COLOR4D& c : colour )
@@ -1450,19 +1423,19 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
                 attrs.m_Angle = aAngle;
                 attrs.m_StrokeWidth = thickness[i];
 
-                if( drawingShadows && ( eeconfig()->m_Selection.text_as_box
-                                        || aPin->GetDrawFont()->IsOutline()
-                                        || underLODThreshold( size[i] ) ) )
+                if( drawingShadows )
                 {
                     boxText( text[i], aPos, attrs );
                 }
-                else if( nonCached( aPin ) && underLODThreshold( size[i] ) )
+                else if( nonCached( aPin ) && renderTextAsBitmap )
                 {
                     bitmapText( text[i], aPos, attrs );
+                    const_cast<LIB_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
                 }
                 else
                 {
                     strokeText( text[i], aPos, attrs );
+                    const_cast<LIB_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
                 }
             };
 
@@ -1864,27 +1837,24 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
 
-    VECTOR2I text_offset = aText->GetSchematicTextOffset( &m_schSettings );
-    wxString shownText( aText->GetShownText() );
-
-    if( drawingShadows && ( eeconfig()->m_Selection.text_as_box
-                            || aText->GetDrawFont()->IsOutline()
-                            || underLODThreshold( aText->GetTextHeight() ) ) )
+    if( drawingShadows )
     {
         EDA_RECT bBox = aText->GetBoundingBox();
+        bBox.Inflate( getTextThickness( aText ) * 2 );
         bBox.RevertYAxis();
-        m_gal->SetIsStroke( true );
-        m_gal->SetIsFill( true );
-        m_gal->SetLineWidth( getTextThickness( aText, drawingShadows ) );
-        m_gal->DrawRectangle( mapCoords( bBox.GetPosition() ), mapCoords( bBox.GetEnd() ) );
-        return;
-    }
 
-    if( !shownText.IsEmpty() )
+        m_gal->SetIsStroke( false );
+        m_gal->SetIsFill( true );
+        m_gal->DrawRectangle( mapCoords( bBox.GetPosition() ), mapCoords( bBox.GetEnd() ) );
+    }
+    else
     {
+        wxString        shownText( aText->GetShownText() );
+        VECTOR2I        text_offset = aText->GetSchematicTextOffset( &m_schSettings );
         TEXT_ATTRIBUTES attrs = aText->GetAttributes();
+
         attrs.m_Angle = aText->GetDrawRotation();
-        attrs.m_StrokeWidth = getTextThickness( aText, drawingShadows );
+        attrs.m_StrokeWidth = getTextThickness( aText );
 
         // Adjust text drawn in an outline font to more closely mimic the positioning of
         // SCH_FIELD text.
@@ -1900,10 +1870,11 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
         }
 
         if( nonCached( aText )
-                && underLODThreshold( aText->GetTextHeight() )
+                && aText->RenderAsBitmap( m_gal->GetWorldScale() )
                 && !shownText.Contains( wxT( "\n" ) ) )
         {
             bitmapText( shownText, aText->GetDrawPos() + text_offset, attrs );
+            const_cast<SCH_TEXT*>( aText )->SetFlags( IS_SHOWN_AS_BITMAP );
         }
         else
         {
@@ -1920,6 +1891,8 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
             {
                 strokeText( shownText, aText->GetDrawPos() + text_offset, attrs );
             }
+
+            const_cast<SCH_TEXT*>( aText )->ClearFlags( IS_SHOWN_AS_BITMAP );
         }
     }
 }
@@ -1927,38 +1900,32 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
 
 void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
 {
-    bool           drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
-    COLOR4D        color = getRenderColor( aTextBox, aLayer, drawingShadows );
-    float          borderWidth = getLineWidth( aTextBox, drawingShadows );
-    PLOT_DASH_TYPE borderStyle = aTextBox->GetEffectiveLineStyle();
-    wxString       shownText = aTextBox->GetShownText();
+    bool    drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+    COLOR4D color = getRenderColor( aTextBox, aLayer, drawingShadows );
+    float   borderWidth = getLineWidth( aTextBox, drawingShadows );
 
     auto drawText =
             [&]()
             {
-                if( !shownText.IsEmpty() )
+                wxString        shownText = aTextBox->GetShownText();
+                TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
+
+                attrs.m_Angle = aTextBox->GetDrawRotation();
+                attrs.m_StrokeWidth = getTextThickness( aTextBox );
+
+                std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
+
+                cache = aTextBox->GetRenderCache( shownText );
+
+                if( cache )
                 {
-                    TEXT_ATTRIBUTES attrs = aTextBox->GetAttributes();
-                    attrs.m_Angle = aTextBox->GetDrawRotation();
-                    attrs.m_StrokeWidth = getTextThickness( aTextBox, drawingShadows );
-
-                    // Note: don't check LODThreshold for textboxes: the bitmap font may mess
-                    // up tab positioning.
-
-                    std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
-
-                    cache = aTextBox->GetRenderCache( shownText );
-
-                    if( cache )
-                    {
-                        for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
-                            m_gal->DrawGlyph( *glyph.get() );
-                    }
-                    else
-                    {
-                        strokeText( shownText, aTextBox->GetDrawPos(), attrs );
-                    }
-               }
+                    for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
+                        m_gal->DrawGlyph( *glyph.get() );
+                }
+                else
+                {
+                    strokeText( shownText, aTextBox->GetDrawPos(), attrs );
+                }
             };
 
     if( drawingShadows && !( aTextBox->IsBrightened() || aTextBox->IsSelected() ) )
@@ -1969,26 +1936,11 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
 
     if( aLayer == LAYER_SELECTION_SHADOWS )
     {
-        if( eeconfig()->m_Selection.fill_shapes
-                || eeconfig()->m_Selection.text_as_box
-                || aTextBox->GetDrawFont()->IsOutline()
-                || underLODThreshold( aTextBox->GetTextHeight() ) )
-        {
-            m_gal->SetIsFill( true );
-            m_gal->SetIsStroke( false );
-            m_gal->SetLineWidth( borderWidth );
+        m_gal->SetIsFill( true );
+        m_gal->SetIsStroke( false );
+        m_gal->SetLineWidth( borderWidth );
 
-            m_gal->DrawRectangle( aTextBox->GetPosition(), aTextBox->GetEnd() );
-        }
-        else
-        {
-            m_gal->SetIsStroke( true );
-            m_gal->SetIsFill( false );
-            m_gal->SetLineWidth( borderWidth );
-
-            m_gal->DrawRectangle( aTextBox->GetPosition(), aTextBox->GetEnd() );
-            drawText();
-        }
+        m_gal->DrawRectangle( aTextBox->GetPosition(), aTextBox->GetEnd() );
     }
     else if( aLayer == LAYER_NOTES_BACKGROUND )
     {
@@ -2007,7 +1959,8 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
 
         if( borderWidth > 0 )
         {
-            COLOR4D borderColor = aTextBox->GetStroke().GetColor();
+            COLOR4D        borderColor = aTextBox->GetStroke().GetColor();
+            PLOT_DASH_TYPE borderStyle = aTextBox->GetEffectiveLineStyle();
 
             if( m_schSettings.m_OverrideItemColors || aTextBox->IsBrightened()
                     || borderColor == COLOR4D::UNSPECIFIED )
@@ -2076,7 +2029,7 @@ static void orientSymbol( LIB_SYMBOL* symbol, int orientation )
 
     ORIENT o = orientations[ 0 ];
 
-    for( auto& i : orientations )
+    for( ORIENT& i : orientations )
     {
         if( i.flag == orientation )
         {
@@ -2085,7 +2038,7 @@ static void orientSymbol( LIB_SYMBOL* symbol, int orientation )
         }
     }
 
-    for( auto& item : symbol->GetDrawItems() )
+    for( LIB_ITEM& item : symbol->GetDrawItems() )
     {
         for( int i = 0; i < o.n_rots; i++ )
             item.Rotate( VECTOR2I(0, 0 ), true );
@@ -2138,7 +2091,7 @@ void SCH_PAINTER::draw( SCH_SYMBOL* aSymbol, int aLayer )
 
     for( LIB_ITEM& tempItem : tempSymbol.GetDrawItems() )
     {
-        tempItem.SetFlags( aSymbol->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED
+        tempItem.SetFlags( aSymbol->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED,
         tempItem.MoveTo( tempItem.GetPosition() + (VECTOR2I) mapCoords( aSymbol->GetPosition() ) );
     }
 
@@ -2149,7 +2102,8 @@ void SCH_PAINTER::draw( SCH_SYMBOL* aSymbol, int aLayer )
         LIB_PIN* tempPin = tempPins[ i ];
 
         tempPin->ClearFlags();
-        tempPin->SetFlags( symbolPin->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED
+        tempPin->SetFlags( symbolPin->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED,
+                                                        // IS_SHOWN_AS_BITMAP
 
         tempPin->SetName( symbolPin->GetShownName() );
         tempPin->SetType( symbolPin->GetType() );
@@ -2160,6 +2114,16 @@ void SCH_PAINTER::draw( SCH_SYMBOL* aSymbol, int aLayer )
     }
 
     draw( &tempSymbol, aLayer, false, aSymbol->GetUnit(), aSymbol->GetConvert() );
+
+    for( unsigned i = 0; i < tempPins.size(); ++i )
+    {
+        SCH_PIN* symbolPin = aSymbol->GetPin( originalPins[ i ] );
+        LIB_PIN* tempPin = tempPins[ i ];
+
+        symbolPin->ClearFlags();
+        symbolPin->SetFlags( tempPin->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED,
+                                                        // IS_SHOWN_AS_BITMAP
+    }
 }
 
 
@@ -2230,34 +2194,33 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
         bbox.Offset( label->GetSchematicTextOffset( &m_schSettings ) );
     }
 
-    VECTOR2I textpos = bbox.Centre();
-
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
 
-    if( drawingShadows && ( eeconfig()->m_Selection.text_as_box
-                            || aField->GetDrawFont()->IsOutline()
-                            || underLODThreshold( aField->GetTextHeight() ) ) )
+    if( drawingShadows )
     {
+        bbox.Inflate( getTextThickness( aField ) * 2 );
         bbox.RevertYAxis();
-        m_gal->SetIsStroke( true );
+
+        m_gal->SetIsStroke( false );
         m_gal->SetIsFill( true );
-        m_gal->SetLineWidth( getTextThickness( aField, drawingShadows ) );
         m_gal->DrawRectangle( mapCoords( bbox.GetPosition() ), mapCoords( bbox.GetEnd() ) );
     }
     else
     {
         wxString        shownText = aField->GetShownText();
+        VECTOR2I        textpos = bbox.Centre();
         TEXT_ATTRIBUTES attributes = aField->GetAttributes();
 
         attributes.m_Halign = GR_TEXT_H_ALIGN_CENTER;
         attributes.m_Valign = GR_TEXT_V_ALIGN_CENTER;
-        attributes.m_StrokeWidth = getTextThickness( aField, drawingShadows );
+        attributes.m_StrokeWidth = getTextThickness( aField );
         attributes.m_Angle = orient;
 
-        if( nonCached( aField ) && underLODThreshold( aField->GetTextHeight() ) )
+        if( nonCached( aField ) && aField->RenderAsBitmap( m_gal->GetWorldScale() ) )
         {
             bitmapText( shownText, textpos, attributes );
+            const_cast<SCH_FIELD*>( aField )->SetFlags( IS_SHOWN_AS_BITMAP );
         }
         else
         {
@@ -2274,6 +2237,8 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
             {
                 strokeText( shownText, textpos, attributes );
             }
+
+            const_cast<SCH_FIELD*>( aField )->ClearFlags( IS_SHOWN_AS_BITMAP );
         }
     }
 
@@ -2284,7 +2249,7 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
 
         m_gal->SetLineWidth( m_schSettings.m_outlineWidth );
         m_gal->SetStrokeColor( getRenderColor( aField, LAYER_SCHEMATIC_ANCHOR, drawingShadows ) );
-        m_gal->DrawLine( textpos, parentPos );
+        m_gal->DrawLine( bbox.Centre(), parentPos );
     }
 }
 
@@ -2324,7 +2289,7 @@ void SCH_PAINTER::draw( const SCH_GLOBALLABEL *aLabel, int aLayer )
     m_gal->SetIsFill( fillBg );
     m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
     m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( getTextThickness( aLabel, drawingShadows ) );
+    m_gal->SetLineWidth( getTextThickness( aLabel ) );
     m_gal->SetStrokeColor( color );
     m_gal->DrawPolyline( pts2 );
 
@@ -2392,7 +2357,7 @@ void SCH_PAINTER::draw( const SCH_HIERLABEL *aLabel, int aLayer )
     m_gal->SetIsFill( true );
     m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
     m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( getTextThickness( aLabel, drawingShadows ) );
+    m_gal->SetLineWidth( getTextThickness( aLabel ) );
     m_gal->SetStrokeColor( color );
     m_gal->DrawPolyline( pts2 );
 
@@ -2440,7 +2405,7 @@ void SCH_PAINTER::draw( const SCH_DIRECTIVE_LABEL *aLabel, int aLayer )
     m_gal->SetIsFill( false );
     m_gal->SetFillColor( color );
     m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( getTextThickness( aLabel, drawingShadows ) );
+    m_gal->SetLineWidth( getLineWidth( aLabel, drawingShadows ) );
     m_gal->SetStrokeColor( color );
 
     if( aLabel->GetShape() == LABEL_FLAG_SHAPE::F_DOT )

@@ -186,14 +186,12 @@ private:
     // Indicates the item is drawn on a non-cached layer in OpenGL
     bool nonCached( const EDA_ITEM* aItem );
 
-    bool underLODThreshold( int aFontSize );
-
     bool isUnitAndConversionShown( const LIB_ITEM* aItem ) const;
 
     float getShadowWidth( bool aForHighlight ) const;
     COLOR4D getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows ) const;
     float getLineWidth( const EDA_ITEM* aItem, bool aDrawingShadows ) const;
-    float getTextThickness( const EDA_ITEM* aItem, bool aDrawingShadows ) const;
+    float getTextThickness( const EDA_ITEM* aItem ) const;
 
     bool setDeviceColors( const LIB_ITEM* aItem, int aLayer );
 
@@ -204,6 +202,9 @@ private:
                      const TEXT_ATTRIBUTES& aAttributes );
     void boxText( const wxString& aText, const VECTOR2D& aPosition,
                   const TEXT_ATTRIBUTES& aAttrs );
+
+public:
+    static KICAD_T g_ScaledSelectionTypes[];
 
 private:
     SCH_RENDER_SETTINGS m_schSettings;

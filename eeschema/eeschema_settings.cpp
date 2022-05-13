@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -202,9 +202,6 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "selection.select_pin_selects_symbol",
             &m_Selection.select_pin_selects_symbol, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "selection.text_as_box",
-            &m_Selection.text_as_box, false ) );
 
     m_params.emplace_back( new PARAM<int>( "annotation.method",
             &m_AnnotatePanel.method, 0, 0, 2 ) );
@@ -481,7 +478,6 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<bool>( aCfg, "SelectionFillShapes",     "selection.fill_shapes" );
     ret &= fromLegacy<bool>( aCfg, "SelectPinSelectSymbolOpt",
             "selection.select_pin_selects_symbol" );
-    ret &= fromLegacy<bool>( aCfg, "SelectionTextAsBox",      "selection.text_as_box" );
 
     ret &= fromLegacy<int>(  aCfg, "AnnotateAlgoOption",      "annotation.method" );
     ret &= fromLegacy<int>(  aCfg, "AnnotateFilterMsg",       "annotation.messages_filter" );

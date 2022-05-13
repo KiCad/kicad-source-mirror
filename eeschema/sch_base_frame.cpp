@@ -369,8 +369,17 @@ void SCH_BASE_FRAME::UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete, bool aUpda
 }
 
 
-void SCH_BASE_FRAME::RefreshSelection()
+void SCH_BASE_FRAME::RefreshZoomDependentItems()
 {
+    // We currently have two zoom-dependent renderings: text, which is rendered as bitmap text
+    // when too small to see the difference, and selection shadows.
+    //
+    // Because non-selected text is cached by OpenGL, we only apply the bitmap performance hack
+    // to selected text items.
+    //
+    // Thus, as it currently stands, all zoom-dependent items can be found in the list of selected
+    // items.
+
     if( m_toolManager )
     {
         EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
@@ -379,17 +388,12 @@ void SCH_BASE_FRAME::RefreshSelection()
 
         for( EDA_ITEM* item : selection )
         {
-            EDA_ITEM* parent = item->GetParent();
-
-            if( item->Type() == SCH_SHEET_PIN_T )
-            {
-                // Sheet pins aren't in the view.  Refresh their parent.
-                if( parent )
-                    GetCanvas()->GetView()->Update( parent );
-            }
-            else
+            if( item->RenderAsBitmap( view->GetGAL()->GetWorldScale() ) != item->IsShownAsBitmap()
+                    || item->IsType( KIGFX::SCH_PAINTER::g_ScaledSelectionTypes ) )
             {
                 view->Update( item, KIGFX::REPAINT );
+
+                EDA_ITEM* parent = item->GetParent();
 
                 // Symbol children are drawn from their parents.  Mark them for re-paint.
                 if( parent && parent->Type() == SCH_SYMBOL_T )
