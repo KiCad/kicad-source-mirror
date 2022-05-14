@@ -365,7 +365,7 @@ public:
     void ResetTextAttributes();
 
     void SetGlyphSize( const VECTOR2I aSize )         { m_attributes.m_Size = aSize; }
-    const VECTOR2D& GetGlyphSize() const              { return m_attributes.m_Size; }
+    const VECTOR2I& GetGlyphSize() const              { return m_attributes.m_Size; }
 
     inline void SetFontBold( const bool aBold )       { m_attributes.m_Bold = aBold; }
     inline bool IsFontBold() const                    { return m_attributes.m_Bold; }
@@ -929,7 +929,7 @@ public:
     /// Use GAL_DRAWING_CONTEXT RAII object unless you know what you're doing.
     virtual void EndDrawing() {};
 protected:
-  
+
     /// Enable item update mode.
     /// Private: use GAL_UPDATE_CONTEXT RAII object
     virtual void beginUpdate() {}
@@ -937,7 +937,7 @@ protected:
     /// Disable item update mode.
     virtual void endUpdate() {}
 
-   
+
 
     /// Compute the scaling factor for the world->screen matrix
     inline void computeWorldScale()
