@@ -76,7 +76,7 @@ public:
     bool              m_Visible = true;
     bool              m_Mirrored = false;
     bool              m_Multiline = true;
-    VECTOR2D          m_Size;
+    VECTOR2I          m_Size;
 
     /**
      * If true, keep rotation angle between -90...90 degrees for readability

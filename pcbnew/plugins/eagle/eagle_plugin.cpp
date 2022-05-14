@@ -1678,8 +1678,8 @@ void EAGLE_PLUGIN::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, FP_TE
         if( a.ratio )
             ratio = *a.ratio;
 
-        wxSize  fontz = aFPText->GetTextSize();
-        int     textThickness = KiROUND( fontz.y * ratio / 100 );
+        VECTOR2I fontz = aFPText->GetTextSize();
+        int      textThickness = KiROUND( fontz.y * ratio / 100 );
 
         aFPText->SetTextThickness( textThickness );
         if( a.size )

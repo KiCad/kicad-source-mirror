@@ -530,7 +530,7 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
         return StringFromBool( field.IsBold() );
 
     case FDC_TEXT_SIZE:
-        return StringFromValue( m_frame->GetUserUnits(), field.GetTextSize().GetHeight(), true );
+        return StringFromValue( m_frame->GetUserUnits(), field.GetTextHeight(), true );
 
     case FDC_ORIENTATION:
         if( field.GetTextAngle().IsHorizontal() )

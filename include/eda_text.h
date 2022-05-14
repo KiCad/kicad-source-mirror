@@ -192,9 +192,8 @@ public:
     void SetLineSpacing( double aLineSpacing );
     double GetLineSpacing() const               { return m_attributes.m_LineSpacing; }
 
-    void SetTextSize( const wxSize& aNewSize );
-    wxSize GetTextSize() const                  { return wxSize( m_attributes.m_Size.x,
-                                                                 m_attributes.m_Size.y ); }
+    void SetTextSize( const VECTOR2I& aNewSize );
+    VECTOR2I GetTextSize() const                { return m_attributes.m_Size; }
 
     void SetTextWidth( int aWidth );
     int GetTextWidth() const                    { return m_attributes.m_Size.x; }

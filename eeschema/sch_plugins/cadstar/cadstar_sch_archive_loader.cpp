@@ -2827,9 +2827,9 @@ LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::getScaledLibPart( const LIB_SYMBOL* aSym
         };
 
     auto scaleSize =
-        [&]( wxSize aSize ) -> wxSize
+        [&]( VECTOR2I aSize ) -> VECTOR2I
         {
-            return wxSize( scaleLen( aSize.x ), scaleLen( aSize.y ) );
+            return VECTOR2I( scaleLen( aSize.x ), scaleLen( aSize.y ) );
         };
 
     LIB_ITEMS_CONTAINER& items = retval->GetDrawItems();

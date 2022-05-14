@@ -344,7 +344,7 @@ void EDA_TEXT::SetLineSpacing( double aLineSpacing )
 }
 
 
-void EDA_TEXT::SetTextSize( const wxSize& aNewSize )
+void EDA_TEXT::SetTextSize( const VECTOR2I& aNewSize )
 {
     m_attributes.m_Size = aNewSize;
     ClearRenderCache();
