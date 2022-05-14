@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:03-0700\n"
-"PO-Revision-Date: 2022-05-13 22:00+0000\n"
+"PO-Revision-Date: 2022-05-14 18:07+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -19597,9 +19597,8 @@ msgid "Install from File..."
 msgstr "Instalar desde archivo..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:137
-#, fuzzy
 msgid "Open Package Directory"
-msgstr "Abrir carpeta de plugins"
+msgstr "Abrir directorio de paquetes"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:76
 msgid "Plugin And Content Manager"
@@ -31592,9 +31591,8 @@ msgid "Gathering items..."
 msgstr "Reuniendo elementos..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:208
-#, fuzzy
 msgid "Checking physical clearances..."
-msgstr "Comprobando márgenes de pads..."
+msgstr "Comprobando holguras físicas..."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:115
 #, c-format
@@ -36190,15 +36188,14 @@ msgid "Spoke count resolution for:"
 msgstr "Resolución del recuento de radios para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:658
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min thermal relief spoke count: %d."
-msgstr "Número mínimo de radios de alivio térmico:"
+msgstr "Recuento de radios de alivio térmico mínimo resuelto: %d."
 
 #: pcbnew/tools/board_inspection_tool.cpp:667
 #: pcbnew/tools/board_inspection_tool.cpp:715
-#, fuzzy
 msgid "Zone clearance resolution for:"
-msgstr "Resolución de margen de orificios para:"
+msgstr "Resolución de margen de zona para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:671
 #, c-format
@@ -36206,14 +36203,14 @@ msgid "Zone clearance: %s."
 msgstr "Margen de zona: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:681
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
-msgstr "Remplazado por un alivio térmico mayor desde %s; margen: %s."
+msgstr "Anulado por una mayor holgura física de %s;holgura: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:697
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical hole clearance from %s;clearance: %s."
-msgstr "Remplazado por un alivio térmico mayor desde %s; margen: %s."
+msgstr "Anulado por una mayor holgura física del agujero de %s;holgura: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
 msgid "Diff Pair"
@@ -36245,9 +36242,8 @@ msgid "Courtyard clearance resolution for:"
 msgstr "Resolución de margen de patio para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:923
-#, fuzzy
 msgid "Physical Clearances"
-msgstr "Parámetros físicos"
+msgstr "Holguras físicas"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1033
 msgid "Select an item for a constraints resolution report."
@@ -36574,19 +36570,17 @@ msgid "_copy"
 msgstr "_copia"
 
 #: pcbnew/tools/footprint_editor_control.cpp:397
-#, fuzzy
 msgid "Change Footprint Name"
-msgstr "Cambiar huella"
+msgstr "Cambiar nombre de huella"
 
 #: pcbnew/tools/footprint_editor_control.cpp:407
-#, fuzzy
 msgid "Footprint name cannot be empty."
-msgstr "El nombre de red no puede estar vacío."
+msgstr "El nombre de la huella no puede estar vacío."
 
 #: pcbnew/tools/footprint_editor_control.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint name '%s' already in use in library '%s'."
-msgstr "Huella '%s' no encontrada en la biblioteca '%s'."
+msgstr "El nombre de huella '%s' ya está en uso en la biblioteca '%s'."
 
 #: pcbnew/tools/footprint_editor_control.cpp:709
 msgid "No footprint problems found."
@@ -37008,24 +37002,20 @@ msgid "Show selected footprint on editor canvas"
 msgstr "Mostrar huella seleccionada en el editor"
 
 #: pcbnew/tools/pcb_actions.cpp:374
-#, fuzzy
 msgid "Duplicate Footprint"
-msgstr "Duplicar huellas"
+msgstr "Duplicar huella"
 
 #: pcbnew/tools/pcb_actions.cpp:374
-#, fuzzy
 msgid "Make a copy of the selected footprint"
-msgstr "Crear una copia del símbolo seleccionado"
+msgstr "Hacer una copia de la huella seleccionada"
 
 #: pcbnew/tools/pcb_actions.cpp:379
-#, fuzzy
 msgid "Rename Footprint..."
-msgstr "Crear huella..."
+msgstr "Renombrar huella..."
 
 #: pcbnew/tools/pcb_actions.cpp:379
-#, fuzzy
 msgid "Rename the selected footprint"
-msgstr "Actualizar la(s) huella(s) seleccionada(s)"
+msgstr "Renombrar la huella seleccionada"
 
 #: pcbnew/tools/pcb_actions.cpp:384
 msgid "Delete Footprint from Library"
@@ -38331,69 +38321,56 @@ msgid "Auto-fill Zone(s)"
 msgstr "Autocompletar zona(s)"
 
 #: pcbnew/tracks_cleaner.cpp:68
-#, fuzzy
 msgid "Checking null tracks and vias..."
-msgstr "Comprobando anchos de pistas..."
+msgstr "Comprobando pistas y vías nulas..."
 
 #: pcbnew/tracks_cleaner.cpp:70
-#, fuzzy
 msgid "Removing null tracks and vias..."
-msgstr "Editar todas las pistas y vías..."
+msgstr "Eliminando pistas y vías nulas..."
 
 #: pcbnew/tracks_cleaner.cpp:81
-#, fuzzy
 msgid "Checking redundant tracks..."
-msgstr "Eliminar pistas redundantes"
+msgstr "Comprobando pistas redundantes..."
 
 #: pcbnew/tracks_cleaner.cpp:83
-#, fuzzy
 msgid "Removing redundant tracks..."
-msgstr "Eliminar pistas redundantes"
+msgstr "Eliminando pistas redundantes..."
 
 #: pcbnew/tracks_cleaner.cpp:95
-#, fuzzy
 msgid "Checking shorting tracks..."
-msgstr "Comprobando huellas..."
+msgstr "Comprobando pistas en cortocircuito..."
 
 #: pcbnew/tracks_cleaner.cpp:97
-#, fuzzy
 msgid "Removing shorting tracks..."
-msgstr "Eliminar vía en corto con dos redes"
+msgstr "Eliminando pistas en cortocircuito..."
 
 #: pcbnew/tracks_cleaner.cpp:110
-#, fuzzy
 msgid "Checking tracks in pads..."
-msgstr "Comprobando anchos de pistas..."
+msgstr "Comprobando pistas en pads."
 
 #: pcbnew/tracks_cleaner.cpp:112
-#, fuzzy
 msgid "Removing tracks in pads..."
-msgstr "Eliminar pista adentro de pad"
+msgstr "Eliminando pistas en pads..."
 
 #: pcbnew/tracks_cleaner.cpp:126
-#, fuzzy
 msgid "Checking dangling tracks and vias..."
-msgstr "Comprobando anchos de pistas..."
+msgstr "Comprobando pistas y vias colgantes."
 
 #: pcbnew/tracks_cleaner.cpp:131
-#, fuzzy
 msgid "Removing dangling tracks..."
-msgstr "Cargando pistas..."
+msgstr "Eliminando pistas colgantes..."
 
 #: pcbnew/tracks_cleaner.cpp:134
-#, fuzzy
 msgid "Removing dangling vias..."
-msgstr "Cargando vías..."
+msgstr "Eliminando vías colgantes..."
 
 #: pcbnew/tracks_cleaner.cpp:148
-#, fuzzy
 msgid "Checking collinear tracks..."
-msgstr "Comprobando márgenes de orificios..."
+msgstr "Comprobando pistas colineales..."
 
 #: pcbnew/tracks_cleaner.cpp:150
-#, fuzzy
 msgid "Merging collinear tracks..."
-msgstr "Unir pistas colineares"
+msgstr "Uniendo pistas colineares..."
 
 #: pcbnew/undo_redo.cpp:553
 msgid "Incomplete undo/redo operation: some items not found"
