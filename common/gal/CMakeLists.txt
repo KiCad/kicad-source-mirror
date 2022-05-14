@@ -65,12 +65,12 @@ function( add_shader outTarget inFile shaderName )
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${outCppName}
                 ${CMAKE_BINARY_DIR}/include/gal/shaders/${outHeaderName}
         COMMAND ${CMAKE_COMMAND}
-            -DSOURCE="${CMAKE_CURRENT_SOURCE_DIR}/shaders/${inFile}"
-            -DDESTINATION_SOURCE_DIR="${CMAKE_CURRENT_BINARY_DIR}/"
-            -DDESTINATION_HEADER_DIR="${CMAKE_BINARY_DIR}/include/gal/shaders/"
-            -DOUTCPPFILE="${outCppName}"
-            -DOUTHEADERFILE="${outHeaderName}"
-            -DOUTVARNAME="${shaderName}"
+            -DSOURCE_FILE="${CMAKE_CURRENT_SOURCE_DIR}/shaders/${inFile}"
+            -DOUT_CPP_DIR="${CMAKE_CURRENT_BINARY_DIR}/"
+            -DOUT_HEADER_DIR="${CMAKE_BINARY_DIR}/include/gal/shaders/"
+            -DOUT_CPP_FILENAME="${outCppName}"
+            -DOUT_HEADER_FILENAME="${outHeaderName}"
+            -DOUT_VAR_NAME="${shaderName}"
             -P ${CMAKE_MODULE_PATH}/BuildSteps/CreateShaderCpp.cmake
         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/shaders/${inFile}
                 ${CMAKE_MODULE_PATH}/BuildSteps/CreateShaderCpp.cmake
