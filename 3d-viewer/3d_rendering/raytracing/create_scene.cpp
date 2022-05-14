@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2022 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -632,16 +632,21 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
             if( m_boardAdapter.m_Cfg->m_Render.realistic )
             {
                 if( m_boardAdapter.m_Cfg->m_Render.renderPlatedPadsAsPlated )
+                {
                     layerColor = SFVEC3F( 184.0f / 255.0f, 115.0f / 255.0f, 50.0f / 255.0f );
+                    materialLayer = &m_materials.m_NonPlatedCopper;
+                }
                 else
+                {
                     layerColor = m_boardAdapter.m_CopperColor;
+                    materialLayer = &m_materials.m_Copper;
+                }
             }
             else
             {
                 layerColor = m_boardAdapter.GetLayerColor( layer_id );
             }
 
-            materialLayer = &m_materials.m_NonPlatedCopper;
             break;
         }
 

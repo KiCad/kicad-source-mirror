@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2022 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -223,7 +223,7 @@ SFVEC3F PLATED_COPPER_NORMAL::Generate( const RAY& aRay, const HITINFO& aHitInfo
     const float noise1 = ( s_perlinNoise.noise( hitPos.x, hitPos.y ) - 0.5f );
     const float noise2 = ( s_perlinNoise.noise( hitPos.y, hitPos.x ) - 0.5f );
 
-    return SFVEC3F( noise1, noise2, -( noise1 + noise2 ) ) * 0.02f;
+    return SFVEC3F( noise1, noise2, 0.0f ) * 0.1f;
 }
 
 
