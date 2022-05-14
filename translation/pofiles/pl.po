@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:03-0700\n"
-"PO-Revision-Date: 2022-05-13 22:00+0000\n"
+"PO-Revision-Date: 2022-05-14 18:07+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19523,9 +19523,8 @@ msgid "Installed (%d)"
 msgstr "Zainstalowane (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
-#, fuzzy
 msgid "Manage..."
-msgstr "Zarządzaj"
+msgstr "Zarządzaj..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:85
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:104
@@ -19551,9 +19550,8 @@ msgid "Install from File..."
 msgstr "Instaluj z pliku..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:137
-#, fuzzy
 msgid "Open Package Directory"
-msgstr "Otwórz Folder Wtyczek"
+msgstr "Otwórz folder z pakietami"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:76
 msgid "Plugin And Content Manager"
@@ -29939,7 +29937,6 @@ msgid "Check rule syntax"
 msgstr "Sprawdź składnię reguł"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -30256,9 +30253,9 @@ msgstr ""
 " * length\n"
 " * hole\\_clearance\n"
 " * hole\\_size\n"
-" * mechanical\\_clearance\n"
-" * mechanical\\_hole\\_clearance\n"
 " * min\\_resolved\\_spokes\n"
+" * physical\\_clearance\n"
+" * physical\\_hole\\_clearance\n"
 " * silk\\_clearance\n"
 " * skew\n"
 " * text\\_height\n"
@@ -30271,8 +30268,8 @@ msgstr ""
 " * zone\\_connection\n"
 "\n"
 "Uwaga: Reguły `clearance` oraz `hole_clearance` nie są sprawdzane dla "
-"elementów tej samej sieci; zaś `mechanical_clearance` oraz "
-"`mechanical_hole_clearance` są sprawdzane.\n"
+"elementów tej samej sieci; zaś `physical_clearance` oraz "
+"`physical_hole_clearance` są sprawdzane.\n"
 "<br>\n"
 "\n"
 "### Typy elementów\n"
@@ -30406,8 +30403,8 @@ msgstr ""
 "\n"
 "UWAGA: Zwraca prawdę, jeśli `A` znajduje się na danej warstwie, \n"
 "niezależnie czy reguła jest oceniana dla tej warstwy.\n"
-"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy"
-"\")`.\n"
+"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy\")`."
+"\n"
 "<br><br><br>\n"
 "\n"
 "### Więcej przykładów\n"
@@ -30497,13 +30494,21 @@ msgstr ""
 "\n"
 "    # Zapobiegaj tworzeniu nitek cyny dla pól SMD\n"
 "    (rule holes_in_pads\n"
-"        (constraint mechanical_hole_clearance (min 0.2mm))\n"
+"        (constraint physical_hole_clearance (min 0.2mm))\n"
 "        (condition \"B.Pad_Type == 'SMD'\"))\n"
 "\n"
 "    # Nie zezwalaj na nadpisywanie marginesów maski lutowniczej\n"
 "    (rule \"nie zezwalaj na nadpisywanie marginesów maski lutowniczej\"\n"
 "        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
 "        (condition \"A.Type == 'Pad'\"))\n"
+"\n"
+"\n"
+"    # Wymuś odstęp pod względem mechanicznym pomiędzy komponentami a "
+"krawędzią płytki\n"
+"    (rule front_mechanical_board_edge_clearance\n"
+"        (layer \"F.Courtyard\")\n"
+"        (constraint physical_clearance (min 3mm))\n"
+"        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
@@ -31515,9 +31520,8 @@ msgid "Gathering items..."
 msgstr "Zbieranie elementów..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:208
-#, fuzzy
 msgid "Checking physical clearances..."
-msgstr "Sprawdzam prześwity pól lutowniczych..."
+msgstr "Sprawdzam fizyczne prześwity..."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:115
 #, c-format
