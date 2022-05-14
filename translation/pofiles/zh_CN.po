@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:03-0700\n"
-"PO-Revision-Date: 2022-05-12 20:14+0000\n"
+"PO-Revision-Date: 2022-05-14 18:07+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -19092,9 +19092,8 @@ msgid "Installed (%d)"
 msgstr "已安装 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
-#, fuzzy
 msgid "Manage..."
-msgstr "管理"
+msgstr "管理…"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:85
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:104
@@ -19120,9 +19119,8 @@ msgid "Install from File..."
 msgstr "从文件安装…"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:137
-#, fuzzy
 msgid "Open Package Directory"
-msgstr "打开插件目录"
+msgstr "打开包目录"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:76
 msgid "Plugin And Content Manager"
@@ -30869,9 +30867,8 @@ msgid "Gathering items..."
 msgstr "正在收集项目…"
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:208
-#, fuzzy
 msgid "Checking physical clearances..."
-msgstr "正在检查焊盘间隙..."
+msgstr "检查物理间隙..."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:115
 #, c-format
