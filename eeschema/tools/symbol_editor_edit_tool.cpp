@@ -605,6 +605,17 @@ void SYMBOL_EDITOR_EDIT_TOOL::editSymbolProperties()
     }
 }
 
+void SYMBOL_EDITOR_EDIT_TOOL::handlePinDuplication( LIB_PIN* aOldPin, LIB_PIN* aNewPin,
+                                                    int& aSymbolLastPinNumber )
+{
+    if( !aNewPin->GetNumber().IsEmpty() )
+    {
+        // when duplicating a pin in symbol editor, assigning identical pin number
+        // to the old one does not makes any sense, so assign the next unassigned number to it
+        aSymbolLastPinNumber++;
+        aNewPin->SetNumber( wxString::Format( wxT( "%i" ), aSymbolLastPinNumber ) );
+    }
+}
 
 int SYMBOL_EDITOR_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
 {
@@ -803,11 +814,24 @@ int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         saveCopyInUndoList( m_frame->GetCurSymbol(), UNDO_REDO::LIBEDIT );
 
     EDA_ITEMS newItems;
+    int       symbolLastPinNumber = -1;
 
     for( unsigned ii = 0; ii < selection.GetSize(); ++ii )
     {
         LIB_ITEM* oldItem = static_cast<LIB_ITEM*>( selection.GetItem( ii ) );
         LIB_ITEM* newItem = (LIB_ITEM*) oldItem->Clone();
+
+        if( oldItem->Type() == LIB_PIN_T )
+        {
+            if( symbolLastPinNumber == -1 )
+            {
+                symbolLastPinNumber = symbol->GetMaxPinNumber();
+            }
+
+            handlePinDuplication( static_cast<LIB_PIN*>( oldItem ),
+                                  static_cast<LIB_PIN*>( newItem ), symbolLastPinNumber );
+        }
+
         oldItem->ClearFlags( IS_NEW | IS_PASTED | SELECTED );
         newItem->SetFlags( IS_NEW | IS_PASTED | SELECTED );
         newItem->SetParent( symbol );

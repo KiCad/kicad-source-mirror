@@ -1153,6 +1153,27 @@ bool LIB_SYMBOL::HasConversion() const
     return false;
 }
 
+int LIB_SYMBOL::GetMaxPinNumber() const
+{
+    int                        maxPinNumber = 0;
+    LIB_SYMBOL_SPTR            parent = m_parent.lock();
+    const LIB_ITEMS_CONTAINER& drawItems = parent ? parent->m_drawings : m_drawings;
+
+    for( const LIB_ITEM& item : drawItems[LIB_PIN_T] )
+    {
+        const LIB_PIN* pin = static_cast<const LIB_PIN*>( &item );
+        long           currentPinNumber = 0;
+        bool           isNum = pin->GetNumber().ToLong( &currentPinNumber );
+
+        if( isNum && currentPinNumber > maxPinNumber )
+        {
+            maxPinNumber = currentPinNumber;
+        }
+    }
+
+    return maxPinNumber;
+}
+
 
 void LIB_SYMBOL::ClearTempFlags()
 {

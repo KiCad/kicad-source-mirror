@@ -69,6 +69,7 @@ private:
     void editTextBoxProperties( LIB_ITEM* aItem );
     void editFieldProperties( LIB_FIELD* aField );
     void editSymbolProperties();
+    void handlePinDuplication(LIB_PIN* aOldPin, LIB_PIN* aNewPin, int &aSymbolLastPinNumber );
 
     ///< Set up handlers for various events.
     void setTransitions() override;

@@ -454,6 +454,12 @@ public:
     bool HasConversion() const;
 
     /**
+     * @return the highest pin number of the symbol's pins.
+     * If none of the pins has pin number assigned it returns 0.
+     */
+    int GetMaxPinNumber() const;
+
+    /**
      * Clears the status flag all draw objects in this symbol.
      */
     void ClearTempFlags();
