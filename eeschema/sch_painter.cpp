@@ -1837,6 +1837,12 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
         return;
     }
 
+    if( aText->IsHypertext() && ( aText->GetFlags() & IS_ROLLOVER ) && !drawingShadows
+        && !aText->IsMoving() )
+    {
+        color = m_schSettings.GetLayerColor( LAYER_HOVERED );
+    }
+
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
 
@@ -2164,7 +2170,7 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
     if( aField->IsHypertext() && ( aField->GetFlags() & IS_ROLLOVER ) > 0
             && !drawingShadows && !aField->IsMoving() )
     {
-        color = PUREBLUE;
+        color = m_schSettings.GetLayerColor( LAYER_HOVERED );
     }
 
     // Calculate the text orientation according to the parent orientation.

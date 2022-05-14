@@ -30,7 +30,7 @@
 
 
 ///! Update the schema version whenever a migration is required
-const int colorsSchemaVersion = 4;
+const int colorsSchemaVersion = 5;
 
 
 COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) :
@@ -76,6 +76,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     CLR( "schematic.anchor",            LAYER_SCHEMATIC_ANCHOR       );
     CLR( "schematic.aux_items",         LAYER_SCHEMATIC_AUX_ITEMS    );
     CLR( "schematic.background",        LAYER_SCHEMATIC_BACKGROUND   );
+    CLR( "schematic.hovered",           LAYER_HOVERED                );
     CLR( "schematic.brightened",        LAYER_BRIGHTENED             );
     CLR( "schematic.bus",               LAYER_BUS                    );
     CLR( "schematic.bus_junction",      LAYER_BUS_JUNCTION           );

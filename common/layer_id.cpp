@@ -141,6 +141,7 @@ wxString LayerName( int aLayer )
     case LAYER_SCHEMATIC_GRID_AXES:     return _( "Axes" );
     case LAYER_SCHEMATIC_BACKGROUND:    return _( "Background" );
     case LAYER_SCHEMATIC_CURSOR:        return _( "Cursor" );
+    case LAYER_HOVERED:                 return _( "Hovered items" );
     case LAYER_BRIGHTENED:              return _( "Highlighted items" );
     case LAYER_HIDDEN:                  return _( "Hidden items" );
     case LAYER_SELECTION_SHADOWS:       return _( "Selection highlight" );
