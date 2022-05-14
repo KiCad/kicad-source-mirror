@@ -133,6 +133,10 @@ public:
 
     wxString GetShownText( int aDepth = 0 ) const override;
 
+    virtual bool IsHypertext() const override { return HasHyperlink(); }
+
+    virtual void DoHypertextMenu( EDA_DRAW_FRAME* aFrame ) const override;
+
     /**
      * Set a spin or rotation angle, along with specific horizontal and vertical justification
      * styles with each angle.

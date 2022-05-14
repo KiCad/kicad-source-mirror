@@ -322,6 +322,25 @@ public:
 
     int Compare( const EDA_TEXT* aOther ) const;
 
+    virtual bool HasHyperlink() const           { return !m_hyperlink.IsEmpty(); }
+    wxString     GetHyperlink() const           { return m_hyperlink; }
+    void         SetHyperlink( wxString aLink ) { m_hyperlink = aLink; }
+    void         RemoveHyperlink()              { m_hyperlink = wxEmptyString; }
+
+    /**
+     * Check if aURL is a valid hyperlink.
+     *
+     * @param aURL String to validate
+     * @return true if aURL is a valid hyperlink
+     */
+    static bool ValidateHyperlink( const wxString& aURL );
+
+protected:
+    /**
+     * A hyperlink to a URL or file in the system. If empty, this text object is not a hyperlink
+     */
+    wxString m_hyperlink;
+
 private:
     void cacheShownText();
 

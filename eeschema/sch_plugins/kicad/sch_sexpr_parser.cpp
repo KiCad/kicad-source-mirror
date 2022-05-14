@@ -628,12 +628,31 @@ void SCH_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSynta
 
             break;
 
+        case T_href:
+        {
+            NeedSYMBOL();
+            wxString hyperlink = FromUTF8();
+
+            if( !aText->ValidateHyperlink( hyperlink ) )
+            {
+                THROW_PARSE_ERROR( wxString::Format( _( "Invalid hyperlink url '%s'" ), hyperlink ),
+                                   CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+            }
+            else
+            {
+                aText->SetHyperlink( hyperlink );
+            }
+
+            NeedRIGHT();
+        }
+        break;
+
         case T_hide:
             aText->SetVisible( false );
             break;
 
         default:
-            Expecting( "font, justify, or hide" );
+            Expecting( "font, justify, hide or href" );
         }
     }
 }

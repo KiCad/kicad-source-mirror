@@ -89,12 +89,12 @@ public:
         return false;
     }
 
-    bool IsHypertext() const override
+    virtual bool IsHypertext() const override
     {
         return m_id == 0 && m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T;
     }
 
-    void DoHypertextMenu( EDA_DRAW_FRAME* aFrame ) override;
+    virtual void DoHypertextMenu( EDA_DRAW_FRAME* aFrame ) const override;
 
     /**
      * Return the field name (not translated)..

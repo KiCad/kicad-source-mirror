@@ -236,7 +236,7 @@ public:
      */
     virtual bool IsHypertext() const { return false; }
 
-    virtual void DoHypertextMenu( EDA_DRAW_FRAME* aFrame ) { }
+    virtual void DoHypertextMenu( EDA_DRAW_FRAME* aFrame ) const { }
 
     /**
      * Return the layer this item is on.

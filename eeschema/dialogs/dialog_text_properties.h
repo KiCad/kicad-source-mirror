@@ -46,6 +46,7 @@ private:
     void onSpinButton( wxCommandEvent &aEvent );
     void onBorderChecked( wxCommandEvent& event ) override;
     void onFillChecked( wxCommandEvent& event ) override;
+    void onHyperlinkChecked( wxCommandEvent& aEvent ) override;
 
     void OnFormattingHelp( wxHyperlinkEvent& aEvent ) override;
     void onMultiLineTCLostFocus( wxFocusEvent& event ) override;

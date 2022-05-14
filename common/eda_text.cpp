@@ -56,6 +56,7 @@
 #include <wx/debug.h>           // for wxASSERT
 #include <wx/string.h>
 #include <wx/gdicmn.h>          // for wxPoint, wxSize
+#include <wx/url.h>             // for wxURL
 
 class OUTPUTFORMATTER;
 class wxFindReplaceData;
@@ -836,11 +837,15 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
         aFormatter->Print( 0, ")" ); // (justify
     }
 
-    if( !(aControlBits & CTL_OMIT_HIDE) && !IsVisible() )
+    if( !( aControlBits & CTL_OMIT_HIDE ) && !IsVisible() )
         aFormatter->Print( 0, " hide" );
 
-    aFormatter->Print( 0, ")\n" ); // (justify
+    if( HasHyperlink() )
+    {
+        aFormatter->Print( 0, " (href %s)", aFormatter->Quotew( GetHyperlink() ).c_str() );
+    }
 
+    aFormatter->Print( 0, ")\n" ); // (effects
 #endif
 }
 
@@ -974,6 +979,14 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCorn
 }
 
 
+bool EDA_TEXT::ValidateHyperlink( const wxString& aURL )
+{
+    wxURL url;
+
+    return aURL.IsEmpty() || url.SetURL( aURL ) == wxURL_NOERR;
+}
+
+
 static struct EDA_TEXT_DESC
 {
     EDA_TEXT_DESC()
@@ -992,6 +1005,9 @@ static struct EDA_TEXT_DESC
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, wxString>( _HKI( "Text" ),
                                                                &EDA_TEXT::SetText,
                                                                &EDA_TEXT::GetText ) );
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, wxString>( _HKI( "Hyperlink" ),
+                                                               &EDA_TEXT::SetHyperlink,
+                                                               &EDA_TEXT::GetHyperlink ) );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Thickness" ),
                                                           &EDA_TEXT::SetTextThickness,
                                                           &EDA_TEXT::GetTextThickness,
