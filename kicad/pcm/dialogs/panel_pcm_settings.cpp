@@ -27,9 +27,11 @@
 #include <pgm_base.h>
 #include <settings/kicad_settings.h>
 #include <settings/settings_manager.h>
+#include <widgets/ui_common.h>
 
 PANEL_PCM_SETTINGS::PANEL_PCM_SETTINGS( wxWindow* parent ) : PANEL_PCM_SETTINGS_BASE( parent )
 {
+    m_libHelp->SetFont( KIUI::GetInfoFont( this ).Italic() );
 }
 
 
@@ -39,6 +41,9 @@ bool PANEL_PCM_SETTINGS::TransferDataToWindow()
     KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>();
 
     m_updateCheck->SetValue( settings->m_PcmUpdateCheck );
+    m_libAutoAdd->SetValue( settings->m_PcmLibAutoAdd );
+    m_libAutoRemove->SetValue( settings->m_PcmLibAutoRemove );
+    m_libPrefix->SetValue( settings->m_PcmLibPrefix );
 
     return true;
 }
@@ -50,6 +55,9 @@ bool PANEL_PCM_SETTINGS::TransferDataFromWindow()
     KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>();
 
     settings->m_PcmUpdateCheck = m_updateCheck->GetValue();
+    settings->m_PcmLibAutoAdd = m_libAutoAdd->GetValue();
+    settings->m_PcmLibAutoRemove = m_libAutoRemove->GetValue();
+    settings->m_PcmLibPrefix = m_libPrefix->GetValue();
 
     return true;
 }

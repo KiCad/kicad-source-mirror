@@ -30,11 +30,13 @@
 #include <lib_table_lexer.h>
 #include <pgm_base.h>
 #include <search_stack.h>
+#include <settings/kicad_settings.h>
 #include <settings/settings_manager.h>
 #include <systemdirsappend.h>
 #include <fp_lib_table.h>
 #include <footprint.h>
 
+#include <wx/dir.h>
 #include <wx/hash.h>
 
 #define OPT_SEP     '|'         ///< options separator character
@@ -478,6 +480,66 @@ const wxString FP_LIB_TABLE::GlobalPathEnvVariableName()
 }
 
 
+class PCM_FP_LIB_TRAVERSER final : public wxDirTraverser
+{
+public:
+    explicit PCM_FP_LIB_TRAVERSER( const wxString& aPath, FP_LIB_TABLE& aTable,
+                                   const wxString& aPrefix ) :
+            m_path_prefix( aPath ),
+            m_lib_table( aTable ), m_lib_prefix( aPrefix )
+    {
+        wxFileName f( aPath, "" );
+        m_prefix_dir_count = f.GetDirCount();
+    }
+
+    wxDirTraverseResult OnFile( const wxString& aFilePath ) override { return wxDIR_CONTINUE; }
+
+    wxDirTraverseResult OnDir( const wxString& dirPath ) override
+    {
+        wxFileName dir = wxFileName::DirName( dirPath );
+
+        // consider a directory to be a lib if it's name ends with .pretty and
+        // it is under $KICAD6_3RD_PARTY/footprints/<pkgid>/ i.e. has nested level of at least +3
+        if( dirPath.EndsWith( ".pretty" ) && dir.GetDirCount() >= m_prefix_dir_count + 3 )
+        {
+            wxArrayString parts = dir.GetDirs();
+            parts.RemoveAt( 0, m_prefix_dir_count );
+            parts.Insert( "${KICAD6_3RD_PARTY}", 0 );
+
+            wxString libPath = wxJoin( parts, '/' );
+
+            if( !m_lib_table.HasLibraryWithPath( libPath ) )
+            {
+                wxString name = parts.Last().substr( 0, parts.Last().length() - 7 );
+                wxString nickname = wxString::Format( "%s%s", m_lib_prefix, name );
+
+                if( m_lib_table.HasLibrary( nickname ) )
+                {
+                    int increment = 1;
+                    do
+                    {
+                        nickname = wxString::Format( "%s%s_%d", m_lib_prefix, name, increment );
+                        increment++;
+                    } while( m_lib_table.HasLibrary( nickname ) );
+                }
+
+                m_lib_table.InsertRow(
+                        new FP_LIB_TABLE_ROW( nickname, libPath, wxT( "KiCad" ), wxEmptyString,
+                                              _( "Added by Plugin and Content Manager" ) ) );
+            }
+        }
+
+        return wxDIR_CONTINUE;
+    }
+
+private:
+    FP_LIB_TABLE& m_lib_table;
+    wxString      m_path_prefix;
+    wxString      m_lib_prefix;
+    size_t        m_prefix_dir_count;
+};
+
+
 bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable )
 {
     bool        tableExists = true;
@@ -517,6 +579,45 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable )
     }
 
     aTable.Load( fn.GetFullPath() );
+
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>();
+
+    wxString packagesPath = Pgm().GetLocalEnvVariables().at( wxT( "KICAD6_3RD_PARTY" ) ).GetValue();
+
+    if( settings->m_PcmLibAutoAdd )
+    {
+        // Scan for libraries in PCM packages directory
+
+        wxFileName d( packagesPath, "" );
+        d.AppendDir( "footprints" );
+
+        if( d.DirExists() )
+        {
+            PCM_FP_LIB_TRAVERSER traverser( packagesPath, aTable, settings->m_PcmLibPrefix );
+            wxDir                dir( d.GetPath() );
+
+            dir.Traverse( traverser );
+        }
+    }
+
+    if( settings->m_PcmLibAutoRemove )
+    {
+        // Remove PCM libraries that no longer exist
+        std::vector<wxString> to_remove;
+
+        for( size_t i = 0; i < aTable.GetCount(); i++ )
+        {
+            LIB_TABLE_ROW& row = aTable.At( i );
+            wxString       path = row.GetFullURI( true );
+
+            if( path.StartsWith( packagesPath ) && !wxDir::Exists( path ) )
+                to_remove.push_back( row.GetNickName() );
+        }
+
+        for( const wxString& nickName : to_remove )
+            aTable.RemoveRow( aTable.FindRow( nickName ) );
+    }
 
     return tableExists;
 }

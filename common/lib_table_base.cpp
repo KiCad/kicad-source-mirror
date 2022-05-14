@@ -168,6 +168,18 @@ bool LIB_TABLE::HasLibrary( const wxString& aNickname, bool aCheckEnabled ) cons
 }
 
 
+bool LIB_TABLE::HasLibraryWithPath( const wxString& aPath ) const
+{
+    for( const LIB_TABLE_ROW& row : rows )
+    {
+        if( row.GetFullURI() == aPath )
+            return true;
+    }
+
+    return false;
+}
+
+
 wxString LIB_TABLE::GetFullURI( const wxString& aNickname, bool aExpandEnvVars ) const
 {
     const LIB_TABLE_ROW* row = findRow( aNickname, true );

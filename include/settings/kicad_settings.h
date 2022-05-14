@@ -46,7 +46,8 @@ public:
      */
     int m_updateCheck;
 
-    enum UPDATE_CHECK {
+    enum UPDATE_CHECK
+    {
         UNINITIALIZED = 0,
         NOT_ALLOWED = 1,
         ALLOWED = 2
@@ -60,6 +61,12 @@ public:
     // This controls background update check for PCM.
     // It is set according to m_updateCheck on first start.
     bool m_PcmUpdateCheck;
+    // Auto add libs to global table
+    bool m_PcmLibAutoAdd;
+    // Auto remove libs
+    bool m_PcmLibAutoRemove;
+    // Generated library nickname prefix
+    wxString m_PcmLibPrefix;
 
 protected:
     virtual std::string getLegacyFrameName() const override { return "KicadFrame"; }

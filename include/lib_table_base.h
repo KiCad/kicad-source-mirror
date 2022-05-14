@@ -421,6 +421,14 @@ public:
     bool HasLibrary( const wxString& aNickname, bool aCheckEnabled = false ) const;
 
     /**
+     * Test for the existence of \a aPath in the library table.
+     *
+     * @param aCheckEnabled if true will only return true for enabled libraries
+     * @return true if a library \a aNickname exists in the table.
+     */
+    bool HasLibraryWithPath( const wxString& aPath ) const;
+
+    /**
      * Return the logical library names, all of them that are pertinent to
      * a look up done on this LIB_TABLE.
      */
@@ -450,7 +458,7 @@ public:
      * @param aRow is the row to remove
      * @return true if the row was found (and removed)
      */
-    bool RemoveRow( LIB_TABLE_ROW* aRow )
+    bool RemoveRow( const LIB_TABLE_ROW* aRow )
     {
         for( auto iter = rows.begin(); iter != rows.end(); ++iter )
         {

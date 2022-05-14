@@ -17,6 +17,9 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
+#include <wx/statbox.h>
+#include <wx/stattext.h>
+#include <wx/textctrl.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -31,6 +34,11 @@ class PANEL_PCM_SETTINGS_BASE : public wxPanel
 
 	protected:
 		wxCheckBox* m_updateCheck;
+		wxCheckBox* m_libAutoAdd;
+		wxCheckBox* m_libAutoRemove;
+		wxStaticText* m_staticText1;
+		wxTextCtrl* m_libPrefix;
+		wxStaticText* m_libHelp;
 
 	public:
 
