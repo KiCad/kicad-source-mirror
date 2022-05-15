@@ -2121,6 +2121,7 @@ void SCH_PAINTER::draw( SCH_SYMBOL* aSymbol, int aLayer )
         LIB_PIN* tempPin = tempPins[ i ];
 
         symbolPin->ClearFlags();
+        tempPin->ClearFlags( IS_DANGLING );             // Clear this temporary flag
         symbolPin->SetFlags( tempPin->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED,
                                                         // IS_SHOWN_AS_BITMAP
     }
