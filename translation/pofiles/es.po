@@ -5,7 +5,7 @@
 # Tomás Mora <tom.mora96@gmail.com>, 2021.
 # Adolfo Jayme Barrientos <fitojb@ubuntu.com>, 2021.
 # Iñigo <ifs@elektroquark.com>, 2021.
-# VicSanRoPe <vicsanrope@protonmail.com>, 2021.
+# VicSanRoPe <vicsanrope@protonmail.com>, 2021, 2022.
 # ZbeeGin <zbeegin@op.pl>, 2021.
 # Augusto Fraga Giachero <afg@augustofg.net>, 2021.
 # ferdymercury <fernando.hueso@uv.es>, 2021.
@@ -15,16 +15,16 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:03-0700\n"
-"PO-Revision-Date: 2022-01-02 22:55+0000\n"
-"Last-Translator: Jose Perez <mirror.k2@gmail.com>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
-"source/es/>\n"
+"PO-Revision-Date: 2022-05-15 06:48+0000\n"
+"Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
+"master-source/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.13-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -743,9 +743,8 @@ msgid "Show model bounding boxes"
 msgstr "Mostrar cajas de delimitación de los modelos"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:28
-#, fuzzy
 msgid "Show copper and tech layers thickness (very slow)"
-msgstr "Mostrar grosor del cobre"
+msgstr "Mostrar grosor de las capas de cobre y técnicas (muy lento)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:31
 msgid "Highlight items on rollover"
@@ -1705,12 +1704,11 @@ msgstr "&Cancelar"
 
 #: common/dialog_shim.cpp:660
 msgid "&Yes"
-msgstr ""
+msgstr "&Sí"
 
 #: common/dialog_shim.cpp:661
-#, fuzzy
 msgid "&No"
-msgstr "No"
+msgstr "&No"
 
 #: common/dialog_shim.cpp:662
 msgid "&Apply"
@@ -2799,9 +2797,8 @@ msgid "Set X scale adjust for exact scale plotting"
 msgstr "Ajuster escala X para trazado a escala precisa"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
-#, fuzzy
 msgid "Info text"
-msgstr "Buscar texto"
+msgstr "Texto informativo"
 
 #: common/dialogs/dialog_print_generic_base.cpp:111
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
@@ -3040,7 +3037,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:171
 msgid "High-contrast mode dimming factor:"
-msgstr ""
+msgstr "Factor de atenuación del modo de alto contraste:"
 
 #: common/dialogs/panel_common_settings_base.cpp:178
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:75
@@ -3229,15 +3226,28 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad puede reportar de forma anónima errores y datos de eventos especiales "
+"a los desarrolladores para ayudar a la identificación de fallas críticas en "
+"la base de usuarios más eficazmente para ayudar a perfilar la funcionalidad "
+"para guiar a los desarrolladores.\n"
+"\n"
+"Para enlazar los reportes automáticos de una misma instalación de KiCad, se "
+"genera un identificador único que es completamente aleatorio, solo es usado "
+"para el propósito de reportar errores. Ninguna información personal de "
+"identificación, incluyendo la dirección IP, es almacenada o conectada a este "
+"identificador. Puedes reiniciar este identificador con el botón provisto.\n"
+"\n"
+"Si voluntariamente elijes participar, KiCad automáticamente manejará el "
+"envío de dichos reportes cuando ocurran errores o eventos. Tus archivos de "
+"diseño como el esquema o placa no son enviados en este proceso."
 
 #: common/dialogs/panel_data_collection_base.cpp:27
 msgid "I agree to provide anonymous reports"
-msgstr ""
+msgstr "Acepto proporcionar reportes anónimos"
 
 #: common/dialogs/panel_data_collection_base.cpp:30
-#, fuzzy
 msgid "Reset Unique Id"
-msgstr "Reiniciar vista"
+msgstr "Reiniciar identificador único"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:84
 msgid "Type filter text"
@@ -3499,9 +3509,8 @@ msgstr "Raya-punto"
 #: common/dialogs/panel_setup_netclasses.cpp:97 common/eda_shape.cpp:1638
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:345
 #: include/stroke_params.h:75
-#, fuzzy
 msgid "Dash-Dot-Dot"
-msgstr "Raya-punto"
+msgstr "Raya-punto-punto"
 
 #: common/dialogs/panel_setup_netclasses.cpp:442
 msgid "Netclass must have a name."
@@ -3987,9 +3996,8 @@ msgid "Hotkeys"
 msgstr "Atajos de teclado"
 
 #: common/eda_base_frame.cpp:999
-#, fuzzy
 msgid "Data Collection"
-msgstr "Conexiones de pads"
+msgstr "Recolección de datos"
 
 #: common/eda_base_frame.cpp:1011 common/tool/actions.cpp:582
 #: eeschema/symbol_editor/symbol_editor.cpp:179
@@ -4221,9 +4229,8 @@ msgstr "Gráfico"
 #: common/eda_item.cpp:374 eeschema/lib_textbox.cpp:393
 #: eeschema/sch_textbox.cpp:393 pcbnew/fp_textbox.cpp:233
 #: pcbnew/pcb_textbox.cpp:227
-#, fuzzy
 msgid "Text Box"
-msgstr "Texto trasero"
+msgstr "Caja de texto"
 
 #: common/eda_item.cpp:323 common/eda_item.cpp:324 common/eda_item.cpp:325
 #: common/eda_item.cpp:326 common/eda_item.cpp:333 common/eda_item.cpp:334
@@ -4297,9 +4304,8 @@ msgstr "Etiqueta de red"
 
 #: common/eda_item.cpp:354 eeschema/sch_label.cpp:766
 #: eeschema/sch_label.cpp:1088
-#, fuzzy
 msgid "Directive Label"
-msgstr "Etiqueta de red"
+msgstr "Etiqueta de directiva"
 
 #: common/eda_item.cpp:355 eeschema/sch_label.cpp:767
 msgid "Global Label"
@@ -4792,19 +4798,18 @@ msgstr "Problemas al escribir el archivo de configuración"
 #: eeschema/dialogs/dialog_text_properties_base.cpp:76
 #: eeschema/fields_grid_table.cpp:58
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:154
-#, fuzzy
 msgid "Default Font"
-msgstr "Unidades por defecto:"
+msgstr "Fuente predeterminada"
 
 #: common/font/fontconfig.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading font '%s'."
-msgstr "Error al cargar la placa '%s'."
+msgstr "Error al cargar la fuente '%s'."
 
 #: common/font/fontconfig.cpp:120
-#, fuzzy, c-format
+#, c-format
 msgid "Font '%s' not found; substituting '%s'."
-msgstr "No se ha encontrado la huella '%s'."
+msgstr "No se ha encontrado la fuente '%s'; sustituyendo '%s'."
 
 #: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:885
 #: eeschema/symbol_editor/symbol_library_manager.cpp:96
@@ -4962,9 +4967,9 @@ msgid "Gestures"
 msgstr "Gestos"
 
 #: common/kiway.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "No ha podido cargarse la librería kiface '%s'."
+msgstr "No ha podido verificar la firma de librería kiface '%s'."
 
 #: common/kiway.cpp:268
 #, c-format
@@ -5309,14 +5314,12 @@ msgid "Symbol fields"
 msgstr "Campos del símbolo"
 
 #: common/layer_id.cpp:117
-#, fuzzy
 msgid "Sheet references"
-msgstr "&Guardar Preferencias"
+msgstr "Referencias de hoja"
 
 #: common/layer_id.cpp:118
-#, fuzzy
 msgid "Net class references"
-msgstr "Preferencias de color"
+msgstr "Referencias de clase de red"
 
 #: common/layer_id.cpp:119
 msgid "Symbol body outlines"
@@ -5329,12 +5332,11 @@ msgstr "Rellenos del cuerpo del símbolo"
 #: common/layer_id.cpp:121
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:69
 msgid "Schematic text && graphics"
-msgstr "Texto de esquema y gráficos"
+msgstr "Texto y gráficos de esquema"
 
 #: common/layer_id.cpp:122
-#, fuzzy
 msgid "Schematic text && graphics backgrounds"
-msgstr "Texto de esquema y gráficos"
+msgstr "Fondo de texto y gráficos de esquema"
 
 #: common/layer_id.cpp:123
 msgid "Pins"
@@ -5378,9 +5380,8 @@ msgid "ERC errors"
 msgstr "Errores de ERC"
 
 #: common/layer_id.cpp:133
-#, fuzzy
 msgid "ERC exclusions"
-msgstr "Exclusiones DRC"
+msgstr "Exclusiones de ERC"
 
 #: common/layer_id.cpp:134 common/layer_id.cpp:172
 #: pcbnew/widgets/appearance_controls.cpp:354
@@ -5427,7 +5428,6 @@ msgid "Drawing sheet"
 msgstr "Hoja de dibujo"
 
 #: common/layer_id.cpp:144 common/layer_id.cpp:174
-#, fuzzy
 msgid "Page limits"
 msgstr "Límites de página"
 
@@ -5491,9 +5491,8 @@ msgid "Through vias"
 msgstr "Vías pasantes"
 
 #: common/layer_id.cpp:159
-#, fuzzy
 msgid "Blind/Buried vias"
-msgstr "Vía ciega/enterrada"
+msgstr "Vías ciegas/enterradas"
 
 #: common/layer_id.cpp:160
 msgid "Micro-vias"
@@ -5552,9 +5551,8 @@ msgid "Grid axes"
 msgstr "Ejes de la cuadrícula"
 
 #: common/layer_id.cpp:181
-#, fuzzy
 msgid "Locked item shadow"
-msgstr "Elementos bloqueados"
+msgstr "Sombra de elementos bloqueados"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
@@ -5651,14 +5649,22 @@ msgid ""
 "sending said reports when crashes or events occur. \n"
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad puede reportar de forma anónima errores y datos de eventos especiales "
+"a los desarrolladores para ayudar a la identificación de fallas críticas en "
+"la base de usuarios más eficazmente y para ayudar a perfilar la "
+"funcionalidad para guiar mejoras.\n"
+"Si voluntariamente elijes participar, KiCad automáticamente manejará el "
+"envío de dichos reportes cuando ocurran errores o eventos.\n"
+"Tus archivos de diseño como el esquema o placa no son compartidos en este "
+"proceso."
 
 #: common/pgm_base.cpp:346
 msgid "Data collection opt in request"
-msgstr ""
+msgstr "Petición de participación en la recolección de datos"
 
 #: common/pgm_base.cpp:388
 msgid "Environment variable HOME is empty.  Unable to continue."
-msgstr "La variable de entorno HOME está vacía.  No se puede continuar."
+msgstr "La variable de entorno HOME está vacía. No se puede continuar."
 
 #: common/pgm_base.cpp:603
 msgid "This language is not supported by the operating system."
@@ -5830,14 +5836,12 @@ msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "Se ha creado archivo Zip '%s' (%s sin comprimir, %s comprimido)."
 
 #: common/rc_item.cpp:362
-#, fuzzy
 msgid "Excluded warning: "
-msgstr "Escala:"
+msgstr "Advertencia excluida: "
 
 #: common/rc_item.cpp:364
-#, fuzzy
 msgid "Excluded error: "
-msgstr "Excluido "
+msgstr "Error excluido: "
 
 #: common/rc_item.cpp:368
 msgid "Warning: "
@@ -5939,9 +5943,8 @@ msgid "Save current document to another location"
 msgstr "Guardar el documento activo en otra localización"
 
 #: common/tool/actions.cpp:79
-#, fuzzy
 msgid "Save a Copy..."
-msgstr "Guardar co&pia como..."
+msgstr "Guardar una copia..."
 
 #: common/tool/actions.cpp:79
 msgid "Save a copy of the current document to another location"
@@ -6374,9 +6377,8 @@ msgid "Cycle inactive layers between normal, dimmed, and hidden"
 msgstr "Alternar capas inactivas entre normal, atenuada y oculta"
 
 #: common/tool/actions.cpp:549
-#, fuzzy
 msgid "Draw Bounding Boxes"
-msgstr "Caja envolvente"
+msgstr "Dibujar cajas envolventes"
 
 #: common/tool/actions.cpp:554
 msgid "Select item(s)"
@@ -6603,9 +6605,8 @@ msgid "Mirroring for Y axis is not supported yet"
 msgstr "Aún no está implementado el reflejo sobre el eje Y"
 
 #: common/widgets/font_choice.cpp:58
-#, fuzzy
 msgid "<not found>"
-msgstr " no encontrado"
+msgstr "<no encontrado>"
 
 #: common/widgets/footprint_preview_widget.cpp:103
 msgid "Footprint not found."
@@ -6912,9 +6913,8 @@ msgid "Eagle XML files"
 msgstr "Archivos XML de Eagle"
 
 #: common/wildcards_and_files_ext.cpp:289
-#, fuzzy
 msgid "OrcadPCB2 netlist files"
-msgstr "Archivos de redes de KiCad"
+msgstr "Archivos de redes de OrcadPCB2"
 
 #: common/wildcards_and_files_ext.cpp:296
 msgid "KiCad netlist files"
@@ -6970,9 +6970,8 @@ msgid "Legacy footprint library files"
 msgstr "Archivos de huellas obsoletos"
 
 #: common/wildcards_and_files_ext.cpp:376
-#, fuzzy
 msgid "Altium PCB footprint library files"
-msgstr "Archivos de librería de huellas de Geda PCB"
+msgstr "Archivos de librería de huellas de Altium"
 
 #: common/wildcards_and_files_ext.cpp:382
 msgid "Eagle ver. 6.x XML library files"
@@ -7104,11 +7103,9 @@ msgid "Hotkey file"
 msgstr "Archivo de atajos de teclado"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr ""
-"No se puede encontrar el archivo de equivalencia '%s' en las rutas por "
-"defecto."
+msgstr "No se pudo encontrar el archivo de equivalencia '%s'."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -7395,9 +7392,8 @@ msgstr "Visor de huellas"
 
 #: cvpcb/display_footprints_frame.cpp:322
 #: pcbnew/toolbars_footprint_viewer.cpp:107
-#, fuzzy
 msgid "Automatic Zoom on footprint change"
-msgstr "Vincular huellas automáticamente"
+msgstr "Zoom automático al cambiar huella"
 
 #: cvpcb/display_footprints_frame.cpp:406
 #, c-format
@@ -7520,9 +7516,8 @@ msgstr ""
 "esquema"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "Guardar en el esquema"
+msgstr "Guardar al esquema y el archivo"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
 #, fuzzy
