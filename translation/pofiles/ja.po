@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:03-0700\n"
-"PO-Revision-Date: 2022-05-15 21:57+0000\n"
-"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
+"PO-Revision-Date: 2022-05-15 22:50+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -7469,7 +7469,8 @@ msgstr "回路図とファイルへ保存"
 msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
-msgstr "回路図シンボルのフットプリント フィールドへフットプリントの関連付けを保存"
+msgstr "回路図シンボルのフットプリント "
+"フィールドと回路図ファイルにフットプリントの関連付けを保存"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select next unassigned symbol"
@@ -17415,11 +17416,11 @@ msgstr "バス、配線用ラインのモード"
 
 #: eeschema/tools/ee_actions.cpp:689
 msgid "Lines drawn at any angle"
-msgstr "任意の角度で描画"
+msgstr "任意の角度で線を描画する"
 
 #: eeschema/tools/ee_actions.cpp:694
 msgid "Lines drawn horizontally and vertically"
-msgstr "水平方向と垂直方向に描かれたライン"
+msgstr "線の描画を水平方向と垂直方向に制限する"
 
 #: eeschema/tools/ee_actions.cpp:699
 msgid "Lines drawn horizontally and vertically, with a 45 degree angle end"
@@ -23385,9 +23386,8 @@ msgid "Checking zones..."
 msgstr "ゾーンをチェック中..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:141
-#, fuzzy
 msgid "Rebuilding connectivity..."
-msgstr "基板結線情報の再構築…"
+msgstr "基板結線情報を再構築しています…"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:161
 msgid "Board cleanup"
@@ -30411,9 +30411,9 @@ msgid "Checking %s clearance: %s."
 msgstr "%s のクリアランスをチェックしています: %s."
 
 #: pcbnew/drc/drc_engine.cpp:919
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max uncoupled length: %s."
-msgstr "%s をチェックしています; 穴のクリアランス: %s."
+msgstr "%s の最大非結合長をチェックしています: %s."
 
 #: pcbnew/drc/drc_engine.cpp:925
 #, c-format
