@@ -437,6 +437,17 @@ public:
                        void*                       aData = nullptr );
 
     /**
+     * Create a clickable hyperlink with a rectangular click area
+     *
+     * @aBox is the rectangular click target
+     * @aDestinationURL is the target
+     */
+    virtual void HyperlinkBoxURL( const BOX2I& aBox, const wxString& aDestinationURL )
+    {
+        // NOP for most plotters.
+    }
+
+    /**
      * Draw a marker (used for the drill map).
      */
     static const unsigned MARKER_COUNT = 58;

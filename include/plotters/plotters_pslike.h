@@ -352,6 +352,8 @@ public:
                        KIFONT::FONT*               aFont = nullptr,
                        void*                       aData = nullptr ) override;
 
+    virtual void HyperlinkBoxURL( const BOX2I& aBox, const wxString& aDestinationURL ) override;
+
     /**
      * PDF images are handles as inline, not XObject streams...
      */
@@ -414,6 +416,7 @@ protected:
     wxString m_workFilename;
     FILE* m_workFile;               ///< Temporary file to construct the stream before zipping
     std::vector<long> m_xrefTable;  ///< The PDF xref offset table
+    std::vector<std::pair<BOX2I, wxString>> m_urlHyperlinks; ///< List of loaded URLs so far
 };
 
 

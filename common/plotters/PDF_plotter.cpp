@@ -700,17 +700,67 @@ void PDF_PLOTTER::ClosePage()
     // Close the page stream (and compress it)
     closePdfStream();
 
-    // Emit the page object and put it in the page list for later
-    m_pageHandles.push_back( startPdfObject() );
-
     /* Page size is in 1/72 of inch (default user space units)
        Works like the bbox in postscript but there is no need for
        swapping the sizes, since PDF doesn't require a portrait page.
        We use the MediaBox but PDF has lots of other less used boxes
        to use */
+    const double PTsPERMIL = 0.072;
+    VECTOR2D     psPaperSize = VECTOR2D( m_pageInfo.GetSizeMils() ) * PTsPERMIL;
 
-    const double BIGPTsPERMIL = 0.072;
-    VECTOR2I psPaperSize = m_pageInfo.GetSizeMils();
+    auto iuToPdfUserSpace = [&]( const VECTOR2I& aCoord ) -> VECTOR2D
+                            {
+                                VECTOR2D retval = VECTOR2D( aCoord ) * PTsPERMIL / SCH_IU_PER_MILS;
+                                // PDF y=0 is at bottom of page, invert coordinate
+                                retval.y = psPaperSize.y - retval.y;
+                                return retval;
+                            };
+
+    // Handle annotations (at the moment only "link" type objects)
+    std::vector<int> hyperlinkHandles;
+
+    // Write out all hyperlinks for the page as annotation links
+    for( const std::pair<BOX2I, wxString>& linkPair : m_urlHyperlinks )
+    {
+        const BOX2I&    box = linkPair.first;
+        const wxString& url = linkPair.second;
+
+        VECTOR2D bottomLeft = iuToPdfUserSpace( box.GetPosition() );
+        VECTOR2D topRight = iuToPdfUserSpace( box.GetEnd() );
+
+        hyperlinkHandles.push_back( startPdfObject() );
+        fprintf( m_outputFile,
+                 "<< /Type /Annot\n"
+                 "   /Subtype /Link\n"
+                 "   /Rect[%g %g %g %g] /Border[16 16 1]\n"
+                 "   /A << /Type /Action /S /URI /URI %s >>\n"
+                 ">>\n",
+                 bottomLeft.x, bottomLeft.y, topRight.x, topRight.y,
+                 encodeStringForPlotter( url ).c_str() );
+        closePdfObject();
+    }
+
+    int hyperLinkArrayHandle = -1;
+
+    // If we have added any annotation links, create an array containing all the objects
+    if( hyperlinkHandles.size() > 0 )
+    {
+        hyperLinkArrayHandle = startPdfObject();
+        bool isFirst = true;
+
+        fprintf( m_outputFile, "[%d 0 R", hyperlinkHandles[0] );
+
+        for( auto it = hyperlinkHandles.begin() + 1; it != hyperlinkHandles.end(); ++it )
+        {
+            fprintf( m_outputFile, " %d 0 R", *it );
+        }
+
+        fputs( "]\n", m_outputFile );
+        closePdfObject();
+    }
+
+    // Emit the page object and put it in the page list for later
+    m_pageHandles.push_back( startPdfObject() );
 
     fprintf( m_outputFile,
              "<<\n"
@@ -719,14 +769,19 @@ void PDF_PLOTTER::ClosePage()
              "/Resources <<\n"
              "    /ProcSet [/PDF /Text /ImageC /ImageB]\n"
              "    /Font %d 0 R >>\n"
-             "/MediaBox [0 0 %d %d]\n"
-             "/Contents %d 0 R\n"
-             ">>\n",
+             "/MediaBox [0 0 %g %g]\n"
+             "/Contents %d 0 R\n",
              m_pageTreeHandle,
              m_fontResDictHandle,
-             int( ceil( psPaperSize.x * BIGPTsPERMIL ) ),
-             int( ceil( psPaperSize.y * BIGPTsPERMIL ) ),
+             psPaperSize.x,
+             psPaperSize.y,
              m_pageStreamHandle );
+
+    if( hyperlinkHandles.size() > 0 )
+        fprintf( m_outputFile, "/Annots %d 0 R", hyperLinkArrayHandle );
+
+    fputs( ">>\n", m_outputFile );
+
     closePdfObject();
 
     // Mark the page stream as idle
@@ -954,5 +1009,11 @@ void PDF_PLOTTER::Text( const VECTOR2I&             aPos,
     // Plot the stroked text (if requested)
     PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
                    aBold, aMultilineAllowed, aFont );
+}
+
+
+void PDF_PLOTTER::HyperlinkBoxURL( const BOX2I& aBox, const wxString& aDestinationURL )
+{
+    m_urlHyperlinks.push_back( std::make_pair( aBox, aDestinationURL ) );
 }
 
