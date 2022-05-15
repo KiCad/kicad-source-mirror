@@ -225,6 +225,19 @@ public:
      */
     bool m_AllowTeardrops;
 
+    /**
+     * 3D-Viewer, Raytracing
+     * Bevel height of layer items. Controls the start of curvature normal on the edge.
+     * Value is in micrometre. Good values should be arround or less than the copper thickness.
+     */
+    int m_3DRT_BevelHeight_um;
+
+    /**
+     * 3D-Viewer, Raytracing
+     * Factor applied to Extent.z of the item layer, used on calculation of the bevel's height.
+     */
+    double m_3DRT_BevelExtentFactor;
+
 private:
     ADVANCED_CFG();
 

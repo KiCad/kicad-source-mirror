@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2022 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,10 @@
 #include "layer_item_3d.h"
 #include "3d_fastmath.h"
 #include <wx/debug.h>
+#include <advanced_config.h>
+
+
+extern float g_BevelThickness3DU;
 
 
 LAYER_ITEM::LAYER_ITEM( const OBJECT_2D* aObject2D, float aZMin, float aZMax ) :
@@ -223,17 +227,52 @@ bool LAYER_ITEM::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
             {
                 aHitInfo.m_tHit = t;
                 aHitInfo.m_HitPoint = hitPoint;
+                aHitInfo.pHitObject = this;
+
+                const float zNormalDir = hit_top?1.0f:hit_bot?-1.0f:0.0f;
 
                 if( ( outNormal.x == 0.0f ) && ( outNormal.y == 0.0f ) )
                 {
-                    aHitInfo.m_HitNormal = SFVEC3F( 0.0f, 0.0f, 1.0f );
+                    aHitInfo.m_HitNormal = SFVEC3F( 0.0f, 0.0f, zNormalDir );
                 }
                 else
                 {
-                    aHitInfo.m_HitNormal = SFVEC3F( outNormal.x, outNormal.y, 0.0f );
-                }
+                    // Calculate smooth bevel normal
+                    float zBend = 0.0f;
 
-                aHitInfo.pHitObject = this;
+                    if( hit_top || hit_bot )
+                    {
+                        float zDistanceToTopOrBot;
+
+                        // Calculate the distance from hitpoint z to the Max/Min z of the layer
+                        if( hit_top )
+                        {
+                            zDistanceToTopOrBot = ( m_bbox.Max().z - hitPoint.z );
+                        }
+                        else
+                        {
+                            zDistanceToTopOrBot = ( hitPoint.z - m_bbox.Min().z );
+                        }
+
+                        // For items that are > than g_BevelThickness3DU
+                        // (eg on board vias / plated holeS) use a factor based on m_bbox.GetExtent().z
+                        const float bevelThickness = glm::max( g_BevelThickness3DU,
+                                                               m_bbox.GetExtent().z *
+                                                               (float)ADVANCED_CFG::GetCfg().m_3DRT_BevelExtentFactor );
+
+                        if( ( zDistanceToTopOrBot > 0.0f ) && ( zDistanceToTopOrBot < bevelThickness ) )
+                        {
+                            // Invert and Normalize the distance 0..1
+                            zBend = ( bevelThickness - zDistanceToTopOrBot ) / bevelThickness;
+                        }
+                    }
+
+                    const SFVEC3F normalLateral = SFVEC3F( outNormal.x, outNormal.y, 0.0f );
+                    const SFVEC3F normalTopBot = SFVEC3F( 0.0f, 0.0f, zNormalDir );
+
+                    // Interpolate between the regular lateral normal and the top/bot normal
+                    aHitInfo.m_HitNormal = glm::mix( normalLateral, normalTopBot, zBend );
+                }
 
                 m_material->Generate( aHitInfo.m_HitNormal, aRay, aHitInfo );
 

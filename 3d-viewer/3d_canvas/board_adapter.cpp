@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 2015-2022 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -37,6 +37,7 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <wx/log.h>
+#include <advanced_config.h>
 
 
 #define DEFAULT_BOARD_THICKNESS Millimeter2iu( 1.6 )
@@ -61,6 +62,9 @@ KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultSolderMask;
 KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultSolderPaste;
 KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultSurfaceFinish;
 KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultBoardBody;
+
+// To be used in Raytracing render to create bevels on layer items
+float                g_BevelThickness3DU = 0.0f;
 
 static bool          g_ColorsLoaded = false;
 
@@ -348,6 +352,8 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     m_backCopperThickness3DU       = DEFAULT_COPPER_THICKNESS     * m_biuTo3Dunits;
     m_nonCopperLayerThickness3DU   = DEFAULT_TECH_LAYER_THICKNESS * m_biuTo3Dunits;
     m_solderPasteLayerThickness3DU = SOLDERPASTE_LAYER_THICKNESS  * m_biuTo3Dunits;
+
+    g_BevelThickness3DU = Millimeter2iu( ADVANCED_CFG::GetCfg().m_3DRT_BevelHeight_um / 1000.0 ) * m_biuTo3Dunits;
 
     if( m_board )
     {
