@@ -5,17 +5,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:03-0700\n"
-"PO-Revision-Date: 2022-05-10 18:51+0000\n"
+"PO-Revision-Date: 2022-05-15 11:56+0000\n"
 "Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
-"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ro/>\n"
+"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 4.13-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -2975,9 +2975,8 @@ msgid "Select Preferred PDF Viewer"
 msgstr "Selectați vizualizatorul PDF preferat"
 
 #: common/dialogs/panel_common_settings_base.cpp:21
-#, fuzzy
 msgid "Antialiasing"
-msgstr "Anti-dedublare"
+msgstr "Antialiasing"
 
 #: common/dialogs/panel_common_settings_base.cpp:30
 msgid "Accelerated graphics:"
@@ -4845,9 +4844,9 @@ msgid "Error loading font '%s'."
 msgstr "Eroare la încărcarea PCB '%s'."
 
 #: common/font/fontconfig.cpp:120
-#, fuzzy, c-format
+#, c-format
 msgid "Font '%s' not found; substituting '%s'."
-msgstr "Amprenta \"%s\" nu a fost găsită."
+msgstr "Font '%s' nu a fost găsit; înlocuind '%s'."
 
 #: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:885
 #: eeschema/symbol_editor/symbol_library_manager.cpp:96
@@ -4891,11 +4890,9 @@ msgid "Unable to find a PDF viewer for '%s'."
 msgstr "Nu se poate găsi un program de vizualizare PDF pentru \"%s\"."
 
 #: common/gestfich.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr ""
-"Problemă în timpul rulării vizualizatorului PDF.\n"
-"Comanda este \"%s\"."
+msgstr "Problemă în timpul rulării vizualizatorului PDF \"%s\"."
 
 #: common/gestfich.cpp:223 eeschema/eeschema.cpp:498 eeschema/eeschema.cpp:531
 #: gerbview/gerbview.cpp:241 kicad/project_template.cpp:257
@@ -5678,9 +5675,8 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "Nepotrivire de tip între %lf și \"%s\""
 
 #: common/pgm_base.cpp:183
-#, fuzzy
 msgid "No default editor found, you must choose one."
-msgstr "Nu s-a găsit niciun editor predefinit, trebuie să-l alegeți"
+msgstr "Nu s-a găsit niciun editor predefinit, trebuie să alegeți unul."
 
 #: common/pgm_base.cpp:203 common/pgm_base.cpp:205
 #, fuzzy
@@ -5815,19 +5811,18 @@ msgid "Error loading project footprint library table."
 msgstr "Eroare la încărcarea tabelului de bibliotecă a amprentei proiectului."
 
 #: common/project/project_archiver.cpp:52 kicad/pcm/pcm_task_manager.cpp:270
-#, fuzzy
 msgid "Could not open archive file."
-msgstr "Nu s-a putut deschide fișierul de arhivă\n"
+msgstr "Nu s-a putut deschide fișierul de arhivă."
 
 #: common/project/project_archiver.cpp:61 kicad/pcm/pcm_task_manager.cpp:278
 #, fuzzy
 msgid "Invalid archive file format."
-msgstr "Format de fișier de arhivă nevalabil\n"
+msgstr "Format de fișier de arhivă nevalabil."
 
 #: common/project/project_archiver.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file '%s'."
-msgstr "Extragerea fișierului \"%s\"\n"
+msgstr "Extragerea fișierului \"%s\"."
 
 #: common/project/project_archiver.cpp:95 kicad/pcm/pcm_task_manager.cpp:190
 #: kicad/pcm/pcm_task_manager.cpp:235
@@ -5866,19 +5861,19 @@ msgid "Failed to create file '%s'."
 msgstr "Nu s-a reușit crearea fișierului temporar \"%s\"."
 
 #: common/project/project_archiver.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "Archived file '%s'."
-msgstr "Fișier de arhivă \"%s\"\n"
+msgstr "Fișier arhivat '%s'."
 
 #: common/project/project_archiver.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s'."
-msgstr "Nu se poate crea fișierul de arhivă \"%s\"\n"
+msgstr "Nu s-a reușit arhivarea fișierului '%s'."
 
 #: common/project/project_archiver.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
-msgstr "Arhiva Zip \"%s\" creată (%s necomprimată, %s comprimată)\n"
+msgstr "Arhiva Zip \"%s\" creată (%s necomprimată, %s comprimată)."
 
 #: common/rc_item.cpp:362
 #, fuzzy
@@ -6823,9 +6818,9 @@ msgid "Reset to Defaults"
 msgstr "Resetare la valorile implicite"
 
 #: common/widgets/paged_dialog.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid "Reset %s to Defaults"
-msgstr "Resetare la valorile implicite"
+msgstr "Resetare %s la valorile implicite"
 
 #: common/widgets/unit_binder.cpp:250
 #, c-format
@@ -6854,9 +6849,9 @@ msgid "Set Hotkey"
 msgstr "Setați o comandă rapidă"
 
 #: common/widgets/widget_hotkey_list.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
-msgstr "Numele %s este rezervat și nu poate fi folosit aici"
+msgstr "'%s' este o tastă rapidă rezervată în KiCad și nu poate fi atribuită."
 
 #: common/widgets/widget_hotkey_list.cpp:396
 msgid "Edit..."
@@ -7672,22 +7667,22 @@ msgstr "%d duplicate ale mărcilor temporale au fost găsite și înlocuite."
 #: eeschema/annotate.cpp:289
 #, c-format
 msgid "Updated %s (unit %s) from %s to %s."
-msgstr "Actualizat %s (unitatea %s) de la %s la %s"
+msgstr "Actualizat %s (unitatea %s) de la %s la %s."
 
 #: eeschema/annotate.cpp:297
 #, c-format
 msgid "Updated %s from %s to %s."
-msgstr "Actualizat %s de la %s la %s"
+msgstr "Actualizat %s de la %s la %s."
 
 #: eeschema/annotate.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s (unit %s) as %s."
-msgstr "Adnotat %s (unitate %s) ca %s"
+msgstr "Adnotat %s (unitate %s) ca %s."
 
 #: eeschema/annotate.cpp:314
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s as %s."
-msgstr "Adnotat %s ca %s"
+msgstr "Adnotat %s ca %s."
 
 #: eeschema/annotate.cpp:331
 msgid "Annotation complete."
@@ -8858,9 +8853,9 @@ msgid "Edit ignored violations..."
 msgstr "Editați severitatea încălcărilor..."
 
 #: eeschema/dialogs/dialog_erc.cpp:903 pcbnew/dialogs/dialog_gendrill.cpp:484
-#, fuzzy, c-format
+#, c-format
 msgid "Report file '%s' created."
-msgstr "Fișier de raport \"%s\" creat\n"
+msgstr "Fișier de raport \"%s\" creat."
 
 #: eeschema/dialogs/dialog_erc.cpp:921
 #, c-format
@@ -10917,9 +10912,9 @@ msgstr ""
 "scheme."
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:79
-#, fuzzy, c-format
+#, c-format
 msgid "%s Properties"
-msgstr "Proprietăți"
+msgstr "%s Proprietăți"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:86
 msgid "Sheet Pin Properties"
@@ -12973,9 +12968,8 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:351
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:541
-#, fuzzy
 msgid "Invalid Row Definition"
-msgstr "S-a întâlnit o definiție nevalabilă a splinei"
+msgstr "Definiția rândului nevalabilă"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:353
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:543
@@ -12983,11 +12977,13 @@ msgid ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
 msgstr ""
+"Celulele goale vor avea ca rezultat eliminarea din tabel a tuturor "
+"rândurilor care nu sunt valide."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:355
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:545
 msgid "Remove Invalid Cells"
-msgstr ""
+msgstr "Eliminați celulele nevalabile"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:356
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:546
@@ -13655,7 +13651,6 @@ msgid "The current schematic has been modified.  Save changes?"
 msgstr ""
 
 #: eeschema/files-io.cpp:1379
-#, fuzzy
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -13663,10 +13658,9 @@ msgid ""
 "were not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
-"Ei bine, acest lucru este posibil jenant!\n"
-"Se pare că ultima dată când ai editat fișierul\n"
-"\"%s\"\n"
-"nu a fost salvat corespunzător.  Doriți să restaurați ultimele modificări "
+"Ei bine, acest lucru este potențial jenant!\n"
+"Se pare că ultima dată când ai editat unul sau mai multe fișiere schematice\n"
+"nu au fost salvate corespunzător.  Doriți să restaurați ultimele modificări "
 "salvate pe care le-ați făcut?"
 
 #: eeschema/files-io.cpp:1390
@@ -13832,9 +13826,9 @@ msgid "Polyline, %d points"
 msgstr ""
 
 #: eeschema/lib_shape.cpp:445 eeschema/sch_shape.cpp:387
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve, %d points"
-msgstr "Curbă Bezier"
+msgstr "Curbă Bezier, %d puncte"
 
 #: eeschema/lib_text.cpp:425 eeschema/sch_text.cpp:386
 #, c-format
@@ -14416,9 +14410,8 @@ msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:497
-#, fuzzy
 msgid "Compile mask not currently supported."
-msgstr "Completați magistrala cu segmentul curent"
+msgstr "Masca de compilare nu este acceptată în prezent."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:510
 #, c-format
@@ -15161,14 +15154,14 @@ msgid ""
 msgstr ""
 "<table>\n"
 "    <tr>\n"
-"        <th>Markup</th>\n"
+"        <th>Marcare</th>\n"
 "        <th></th>\n"
-"        <th>Resultat</th>\n"
+"        <th>rezultat</th>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+"        <td>&nbsp;<br><samp><sup>exponent</sup>&nbsp;</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
@@ -15179,9 +15172,9 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+"        <td>&nbsp;<br><samp>_{indice}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+"        <td>&nbsp;<br><samp><sub></sub>&nbsp;indice</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
@@ -15192,23 +15185,23 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~overbar</samp><br> &nbsp;<br><samp>~CLK</"
-"samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+"        <td> &nbsp;<br><samp>~{overbar}</samp><br> "
+"&nbsp;<br><samp>~{CLK}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
 "samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </td>\n"
+"samp><br> <samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td><br></td>\n"
+"        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+"        <td>&nbsp;<br><samp>${variabilă}</samp></td>\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+"        <td>&nbsp;<br><samp>${REVIZIE}</samp></td>\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
 "    </tr>\n"
@@ -15216,10 +15209,10 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+"        <td>&nbsp;<br><samp>${refdes:câmp}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> <i>de refdes</i> "
+"simbol</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -15233,15 +15226,15 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <th>Definiție magistrală</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
-"        <th>Resultat Nets</th>\n"
+"        <th>Definiția autobuzului</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
+"        <th>Plase rezultate</th>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
+"        <td>&nbsp;<br><samp>prefix[m.. n]</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>\n"
+"        <td>&nbsp;<br><samp>prefixm la prefixn</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
@@ -15252,9 +15245,9 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"\t\t<td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
-"\t\t<td></td>\n"
-"\t\t<td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+"        <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
@@ -15272,7 +15265,7 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>USB1{D+ D-}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>USB1.D+, USB1.D-</samp></td>\n"
+"        <td>&nbsp;<br><samp>USB1. D+, USB1. D-</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -15280,17 +15273,24 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
+"        <td>&nbsp;<br> <samp>MEM. D1, MEM. D2, MEM. Zăvor</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp;<sub>"
+"&nbsp;</sub>&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</samp><br><samp>MEM. "
+"D<sub>1</sub>, MEM. D<sub>2</sub>, MEM. Zăvor</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
 "    </tr>\n"
 "</table>\n"
+"<p></p>\n"
+"<p></p>\n"
+"<i>Rețineți că marcarea are prioritate față de definițiile magistralei.</i>\n"
+"\n"
 
 #: eeschema/sch_validators.cpp:102
 #, c-format
@@ -15375,11 +15375,10 @@ msgstr ""
 "magistrală vectorială"
 
 #: eeschema/sch_validators.cpp:231
-#, fuzzy
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
 msgstr ""
 "Numele semnalului conține '[' sau ']', dar nu este un nume valid de "
-"magistrală vectorială"
+"magistrală."
 
 #: eeschema/sheet.cpp:63
 #, c-format
@@ -17612,9 +17611,9 @@ msgstr ""
 
 #: eeschema/tools/sch_edit_tool.cpp:1234
 #: eeschema/tools/symbol_editor_edit_tool.cpp:538
-#, fuzzy, c-format
+#, c-format
 msgid "Edit '%s' Field"
-msgstr "Editați fișierul"
+msgstr "Editați '%s' Câmpul"
 
 #: eeschema/tools/sch_edit_tool.cpp:1874
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
@@ -18572,9 +18571,9 @@ msgid "Open Recent Zip File"
 msgstr ""
 
 #: gerbview/readgerb.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' not found"
-msgstr "Fișierul %s nu a fost găsit."
+msgstr "Fișierul %s nu a fost găsit"
 
 #: gerbview/readgerb.cpp:88
 msgid ""
@@ -18848,9 +18847,9 @@ msgid "Highlight"
 msgstr "Marchează"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:69
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Items of Component '%s'"
-msgstr "Elemente evidențiate"
+msgstr "Evidențiați elementele componentei '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:77
 #, fuzzy, c-format
@@ -19028,9 +19027,8 @@ msgid "Reset all settings on this page to their default"
 msgstr "Resetați toate setările din această pagină la valorile implicite"
 
 #: include/wxstream_helper.h:49
-#, fuzzy
 msgid "Failed to output data"
-msgstr "Nu s-a putut încărca biblioteca kiface \"%s\"."
+msgstr "Ieșirea datelor a eșuat"
 
 #: kicad/dialogs/dialog_template_selector.cpp:147
 msgid "<h1>Template Selector</h1>"
@@ -19281,14 +19279,14 @@ msgid "Plugins (%d)"
 msgstr ""
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Libraries (%d)"
-msgstr "Bibioteci"
+msgstr "Biblioteci (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Color themes (%d)"
-msgstr "Adăugați o temă de culoare"
+msgstr "Teme de culoare (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:79 kicad/pcm/dialogs/dialog_pcm.cpp:334
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:53
@@ -19459,9 +19457,8 @@ msgid "Package download url is not specified"
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:475
-#, fuzzy
 msgid "Error downloading package"
-msgstr "Eroare la încărcarea editorului."
+msgstr "Eroare la descărcarea pachetului"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:484
 #, fuzzy
@@ -19518,19 +19515,19 @@ msgid "Download"
 msgstr "Jos"
 
 #: kicad/pcm/pcm.cpp:90
-#, fuzzy, c-format
+#, c-format
 msgid "schema file '%s' not found"
-msgstr "Fișierul %s nu a fost găsit."
+msgstr "fișier schema '%s' nu a fost găsit"
 
 #: kicad/pcm/pcm.cpp:93
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schema: %s"
-msgstr "Eroare la încărcarea schemei '%s'."
+msgstr "Eroare la încărcarea schemei '%s'"
 
 #: kicad/pcm/pcm.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading installed packages list: %s"
-msgstr "Eroare la încărcarea foii de desen \"%s\"."
+msgstr "Eroare la încărcarea listei de pachete instalate: %s"
 
 #: kicad/pcm/pcm.cpp:206
 #, c-format
@@ -19538,9 +19535,8 @@ msgid "Downloading %lld/%lld kB"
 msgstr ""
 
 #: kicad/pcm/pcm.cpp:231
-#, fuzzy
 msgid "Download is too large."
-msgstr "Dimensiune nevalabilă %lld: prea mare"
+msgstr "Descărcarea este prea mare."
 
 #: kicad/pcm/pcm.cpp:247
 msgid "Fetching repository"
@@ -19552,12 +19548,15 @@ msgid "Unable to load repository url"
 msgstr "Nu se poate crea fișierul de raport '%s'"
 
 #: kicad/pcm/pcm.cpp:267
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse repository:\n"
 "\n"
 "%s"
-msgstr "Imposibil de analizat \"%s\" în '%s'"
+msgstr ""
+"Nu se poate analiza depozitul:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:290
 msgid "Fetching repository packages"
@@ -19572,12 +19571,15 @@ msgid "Packages hash doesn't match. Repository may be corrupted."
 msgstr ""
 
 #: kicad/pcm/pcm.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse packages metadata:\n"
 "\n"
 "%s"
-msgstr "Imposibil de analizat \"%s\" în '%s'"
+msgstr ""
+"Nu se poate analiza metadatele pachetelor:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:405
 msgid ""
@@ -19612,9 +19614,9 @@ msgid ""
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:97
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting package '%s'."
-msgstr "Extragerea fișierului \"%s\"\n"
+msgstr "Extragerea fișierului \"%s\"."
 
 #: kicad/pcm/pcm_task_manager.cpp:113
 #, c-format
@@ -19627,11 +19629,13 @@ msgid "Downloading package url: '%s'"
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to download url %s\n"
 "%s"
-msgstr "Nu s-a putut încărca biblioteca kiface \"%s\"."
+msgstr ""
+"Nu s-a reușit descărcarea url-ului %s\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:253
 msgid "Aborting package installation."
@@ -19671,9 +19675,9 @@ msgid "Removing directory %s"
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:369
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to remove directory %s"
-msgstr "Nu s-a reușit crearea dosarului \"%s\"."
+msgstr "Nu s-a reușit eliminarea directorului %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:385
 #, c-format
@@ -21390,7 +21394,6 @@ msgid "Not worth using"
 msgstr ""
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series are defined in IEC 60063.\n"
 "\n"
@@ -21418,33 +21421,32 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"Seria E definită în IEC 60063 reprezintă un sistem acceptat pe scară largă "
-"de\n"
-"numere pentru componentele electronice.  Valorile disponibile sunt "
-"aproximativ\n"
-"egal distanțate pe o scară logaritmică. \n"
+"Seriile E sunt definite în IEC 60063.\n"
 "\n"
-"\tE12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
-"\tE6: 1,0 - 1,5 - 2,2 - 3,3 - 4,7 - 6,8 -\n"
-"\tE3: 1.0 - - - 2.2 - - - 4.7 - - -\n"
-"\tE1: 1.0 - - - - - - - - - - - - -\n"
+"Valorile disponibile sunt aproximativ la intervale egale pe o scară "
+"logaritmică.\n"
 "\n"
-"Acest calculator găsește combinații de componente standard din seria E "
-"pentru a\n"
-"crea valori arbitrare.  Puteți introduce rezistența necesară de la 0,0025 la "
-"4000 kΩ.\n"
-"Se oferă soluții care utilizează până la 4 componente.\n"
+"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
+"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
+"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
+"\tE6(20%):  1.0 - 1.5 - 2.2 - 3.3 - 4.7 - 6.8 -\n"
+"\tE3(50%):  1.0 - - - 2.2 - - - 4.7 - - -\n"
+"\t\n"
 "\n"
-"În mod implicit, valoarea solicitării este întotdeauna exclusă din setul de "
-"soluții.  De asemenea, este posibil să se specifice\n"
-"până la două valori suplimentare de exclus din soluție dacă aceste valori "
-"ale componentelor nu sunt disponibile\n"
+"- Acest calculator găsește combinații de serii E standard (între 10Ω și 1MΩ) "
+"pentru a crea valori arbitrare.\n"
+"- Puteți introduce rezistența necesară de la 0,0025 la 4000 kΩ.\n"
+"- Sunt oferite soluții care utilizează până la 4 componente.\n"
 "\n"
-"Soluțiile sunt prezentate în următoarele formate:\n"
+"Valoarea solicitată este întotdeauna exclusă din setul de soluții.<br>\n"
+"Opțional, pot fi excluse până la două valori suplimentare, în cazul unor "
+"probleme de disponibilitate a componentelor.\n"
+"\n"
+"Soluțiile sunt oferite în următoarele formate:\n"
 "\n"
 "\tR1 + R2 +...+ Rn rezistențe în serie\n"
-"\t| R1 | R2...| Rezistențe rn în paralel\n"
-"\tR1 + (R2| R3)...\t\torice combinație a celor de mai sus\n"
+"\tR1 | R2 |...| Rn rezistențe în paralel\n"
+"\tR1 + (R2|R3)... orice combinație dintre cele de mai sus\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:76
 msgid "General system design"
@@ -22157,9 +22159,8 @@ msgid "A layer thickness is < 0. Fix it"
 msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1545
-#, fuzzy
 msgid "Custom..."
-msgstr "Personalizat"
+msgstr "Personalizat..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:20
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:49
@@ -22676,9 +22677,9 @@ msgid "Reannotate anyway?"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:790
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "Elemente duplicate %s%s\n"
+msgstr "Instanțe duplicate de %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:796
 msgid "Aborted: too many errors"
@@ -23740,9 +23741,8 @@ msgid "Circular Array"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:350
-#, fuzzy
 msgid "Footprint Annotation"
-msgstr "Amprenta nu a fost găsită."
+msgstr "Adnotarea amprentei"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:352
 #, fuzzy
@@ -26054,7 +26054,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_netlist.cpp:146
 #, fuzzy
 msgid "Please choose a valid netlist file."
-msgstr "Fișiere de placă netlist KiCad"
+msgstr "Vă rugăm să alegeți un fișier netlist valid."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:152 pcbnew/dialogs/dialog_netlist.cpp:189
 msgid "The netlist file does not exist."
@@ -31159,11 +31159,13 @@ msgstr ""
 "Nu s-a reușit redenumirea fișierului temporar '%s."
 
 #: pcbnew/files.cpp:1209
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board copied to:\n"
 "%s"
-msgstr "Conturul plăcii"
+msgstr ""
+"Placă copiat la:\n"
+"%s"
 
 #: pcbnew/footprint.cpp:972
 msgid "Last Change"
@@ -31425,9 +31427,9 @@ msgid "Update footprints on board to refer to %s?"
 msgstr ""
 
 #: pcbnew/footprint_libraries_utils.cpp:740
-#, fuzzy
 msgid "Update footprints on board to refer to new library?"
-msgstr "Actualizarea câmpurilor de simboluri din noua bibliotecă"
+msgstr ""
+"Actualizați amprentele de peplacă pentru a face referire la noua bibliotecă?"
 
 #: pcbnew/footprint_libraries_utils.cpp:917
 #: pcbnew/footprint_viewer_frame.cpp:726
@@ -32308,9 +32310,9 @@ msgid "Netlist Load Error"
 msgstr ""
 
 #: pcbnew/netlist_reader/netlist.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "No footprint defined for symbol %s."
-msgstr "Nicio amprentă definită pentru simbol %s.\n"
+msgstr "Nicio amprentă definită pentru simbol %s."
 
 #: pcbnew/netlist_reader/netlist.cpp:182
 #, c-format
@@ -32323,12 +32325,12 @@ msgid "%s footprint ID '%s' is not valid."
 msgstr "%s ID-ul amprentei \"%s\" nu este valid."
 
 #: pcbnew/netlist_reader/netlist.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
 msgstr ""
 "%s amprenta \"%s\" nu se găsește în nicio bibliotecă din tabelul de "
-"biblioteci de amprente.\n"
+"biblioteci de amprente."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:184
 #, fuzzy, c-format
@@ -32429,7 +32431,7 @@ msgid "Through hole pad %s of %s"
 msgstr ""
 
 #: pcbnew/pad.cpp:1218
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s %s of %s on %s"
 msgstr "Pad %s %s din %s pe %s."
 
@@ -33998,12 +34000,9 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:86
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Method '%s' not found, or not callable"
-msgstr ""
-"Fișier de script:\n"
-"%s\n"
-"nu a fost găsit. Scriptul nu este disponibil."
+msgstr "Metoda '%s' nu a fost găsită, sau nu poate fi apelată"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:87
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:84
