@@ -91,13 +91,15 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     int order = 0;
     LSET plotOnAllLayersSelection = m_plotOpts.GetPlotOnAllLayersSelection();
     wxArrayInt plotAllLayersOrder;
-    wxArrayString plotAllLayersChoices;
+    wxArrayString plotAllLayersChoicesStrings;
+    std::vector<PCB_LAYER_ID> layersIdChoiceList;
 
     for( LSEQ seq = board->GetEnabledLayers().UIOrder(); seq; ++seq )
     {
         PCB_LAYER_ID id = *seq;
 
-        plotAllLayersChoices.Add( board->GetLayerName( id ) );
+        plotAllLayersChoicesStrings.Add( board->GetLayerName( id ) );
+        layersIdChoiceList.push_back( id );
 
         size_t size = plotOnAllLayersSelection.size();
 
@@ -115,14 +117,18 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
 
 	m_plotAllLayersList = new wxRearrangeList( sbSizer->GetStaticBox(), wxID_ANY,
                                                wxDefaultPosition, wxDefaultSize,
-                                               plotAllLayersOrder, plotAllLayersChoices, 0 );
+                                               plotAllLayersOrder, plotAllLayersChoicesStrings, 0 );
 
-    int index = 0;
-
-    for( LSEQ seq = board->GetEnabledLayers().SeqStackupBottom2Top(); seq; ++seq )
+    // Attach the LAYER_ID to each item in m_plotAllLayersList
+    // plotAllLayersChoicesStrings and layersIdChoiceList are in the same order,
+    // but m_plotAllLayersList has these strings in a different order
+    for( size_t idx = 0; idx < layersIdChoiceList.size(); idx++ )
     {
-        m_plotAllLayersList->SetClientObject( index, new PCB_LAYER_ID_CLIENT_DATA( *seq ) );
-        index += 1;
+        wxString& txt = plotAllLayersChoicesStrings[idx];
+        int list_idx = m_plotAllLayersList->FindString( txt, true );
+
+        PCB_LAYER_ID layer_id = layersIdChoiceList[idx];
+        m_plotAllLayersList->SetClientObject( list_idx, new PCB_LAYER_ID_CLIENT_DATA( layer_id ) );
     }
 
 	sbSizer->Add( m_plotAllLayersList, 1, wxALL | wxEXPAND, 5 );
