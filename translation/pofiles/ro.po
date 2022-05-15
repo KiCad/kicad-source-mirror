@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:05-0700\n"
-"PO-Revision-Date: 2022-05-09 07:15+0000\n"
+"PO-Revision-Date: 2022-05-15 11:56+0000\n"
 "Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/v6/ro/>\n"
 "Language: ro\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 4.13-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -3009,9 +3009,8 @@ msgid "Select Preferred PDF Viewer"
 msgstr "Selectați vizualizatorul PDF preferat"
 
 #: common/dialogs/panel_common_settings_base.cpp:21
-#, fuzzy
 msgid "Antialiasing"
-msgstr "Anti-dedublare"
+msgstr "Antialiasing"
 
 #: common/dialogs/panel_common_settings_base.cpp:30
 msgid "Accelerated graphics:"
@@ -4724,11 +4723,9 @@ msgid "Unable to find a PDF viewer for '%s'."
 msgstr "Nu se poate găsi un program de vizualizare PDF pentru \"%s\"."
 
 #: common/gestfich.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr ""
-"Problemă în timpul rulării vizualizatorului PDF.\n"
-"Comanda este \"%s\"."
+msgstr "Problemă în timpul rulării vizualizatorului PDF \"%s\"."
 
 #: common/gestfich.cpp:223 eeschema/eeschema.cpp:410 eeschema/eeschema.cpp:443
 #: gerbview/gerbview.cpp:237 kicad/project_template.cpp:257
@@ -5494,9 +5491,8 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "Nepotrivire de tip între %lf și \"%s\""
 
 #: common/pgm_base.cpp:169
-#, fuzzy
 msgid "No default editor found, you must choose one."
-msgstr "Nu s-a găsit niciun editor predefinit, trebuie să-l alegeți"
+msgstr "Nu s-a găsit niciun editor predefinit, trebuie să alegeți unul."
 
 #: common/pgm_base.cpp:189 common/pgm_base.cpp:191
 #, fuzzy
@@ -5604,19 +5600,18 @@ msgid "Error loading project footprint library table."
 msgstr "Eroare la încărcarea tabelului de bibliotecă a amprentei proiectului."
 
 #: common/project/project_archiver.cpp:52 kicad/pcm/pcm_task_manager.cpp:267
-#, fuzzy
 msgid "Could not open archive file."
-msgstr "Nu s-a putut deschide fișierul de arhivă\n"
+msgstr "Nu s-a putut deschide fișierul de arhivă."
 
 #: common/project/project_archiver.cpp:61 kicad/pcm/pcm_task_manager.cpp:275
 #, fuzzy
 msgid "Invalid archive file format."
-msgstr "Format de fișier de arhivă nevalabil\n"
+msgstr "Format de fișier de arhivă nevalabil."
 
 #: common/project/project_archiver.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file '%s'."
-msgstr "Extragerea fișierului \"%s\"\n"
+msgstr "Extragerea fișierului \"%s\"."
 
 #: common/project/project_archiver.cpp:95 kicad/pcm/pcm_task_manager.cpp:187
 #: kicad/pcm/pcm_task_manager.cpp:232
@@ -5655,19 +5650,19 @@ msgid "Failed to create file '%s'."
 msgstr "Nu s-a reușit crearea fișierului temporar \"%s\"."
 
 #: common/project/project_archiver.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "Archived file '%s'."
-msgstr "Fișier de arhivă \"%s\"\n"
+msgstr "Fișier arhivat '%s'."
 
 #: common/project/project_archiver.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s'."
-msgstr "Nu se poate crea fișierul de arhivă \"%s\"\n"
+msgstr "Nu s-a reușit arhivarea fișierului '%s'."
 
 #: common/project/project_archiver.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
-msgstr "Arhiva Zip \"%s\" creată (%s necomprimată, %s comprimată)\n"
+msgstr "Arhiva Zip \"%s\" creată (%s necomprimată, %s comprimată)."
 
 #: common/rc_item.cpp:355
 msgid "Excluded "
@@ -6605,9 +6600,9 @@ msgid "Reset to Defaults"
 msgstr "Resetare la valorile implicite"
 
 #: common/widgets/paged_dialog.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Reset %s to Defaults"
-msgstr "Resetare la valorile implicite"
+msgstr "Resetare %s la valorile implicite"
 
 #: common/widgets/unit_binder.cpp:222
 #, c-format
@@ -6636,9 +6631,9 @@ msgid "Set Hotkey"
 msgstr "Setați o comandă rapidă"
 
 #: common/widgets/widget_hotkey_list.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
-msgstr "Numele %s este rezervat și nu poate fi folosit aici"
+msgstr "'%s' este o tastă rapidă rezervată în KiCad și nu poate fi atribuită."
 
 #: common/widgets/widget_hotkey_list.cpp:396
 msgid "Edit..."
@@ -7437,22 +7432,22 @@ msgstr "%d duplicate ale mărcilor temporale au fost găsite și înlocuite."
 #: eeschema/annotate.cpp:289
 #, c-format
 msgid "Updated %s (unit %s) from %s to %s."
-msgstr "Actualizat %s (unitatea %s) de la %s la %s"
+msgstr "Actualizat %s (unitatea %s) de la %s la %s."
 
 #: eeschema/annotate.cpp:297
 #, c-format
 msgid "Updated %s from %s to %s."
-msgstr "Actualizat %s de la %s la %s"
+msgstr "Actualizat %s de la %s la %s."
 
 #: eeschema/annotate.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s (unit %s) as %s."
-msgstr "Adnotat %s (unitate %s) ca %s"
+msgstr "Adnotat %s (unitate %s) ca %s."
 
 #: eeschema/annotate.cpp:314
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s as %s."
-msgstr "Adnotat %s ca %s"
+msgstr "Adnotat %s ca %s."
 
 #: eeschema/annotate.cpp:331
 msgid "Annotation complete."
@@ -8611,9 +8606,9 @@ msgid "Violation Severity"
 msgstr "Gravitatea încălcării"
 
 #: eeschema/dialogs/dialog_erc.cpp:777 pcbnew/dialogs/dialog_gendrill.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "Report file '%s' created."
-msgstr "Fișier de raport \"%s\" creat\n"
+msgstr "Fișier de raport \"%s\" creat."
 
 #: eeschema/dialogs/dialog_erc.cpp:795
 #, c-format
@@ -12197,9 +12192,8 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:356
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:539
-#, fuzzy
 msgid "Invalid Row Definition"
-msgstr "S-a întâlnit o definiție nevalabilă a splinei"
+msgstr "Definiția rândului nevalabilă"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:358
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:541
@@ -12207,11 +12201,13 @@ msgid ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
 msgstr ""
+"Celulele goale vor avea ca rezultat eliminarea din tabel a tuturor "
+"rândurilor care nu sunt valide."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:543
 msgid "Remove Invalid Cells"
-msgstr ""
+msgstr "Eliminați celulele nevalabile"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
@@ -12855,7 +12851,6 @@ msgid "The current schematic has been modified.  Save changes?"
 msgstr ""
 
 #: eeschema/files-io.cpp:1379
-#, fuzzy
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -12863,10 +12858,9 @@ msgid ""
 "were not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
-"Ei bine, acest lucru este posibil jenant!\n"
-"Se pare că ultima dată când ai editat fișierul\n"
-"\"%s\"\n"
-"nu a fost salvat corespunzător.  Doriți să restaurați ultimele modificări "
+"Ei bine, acest lucru este potențial jenant!\n"
+"Se pare că ultima dată când ai editat unul sau mai multe fișiere schematice\n"
+"nu au fost salvate corespunzător.  Doriți să restaurați ultimele modificări "
 "salvate pe care le-ați făcut?"
 
 #: eeschema/files-io.cpp:1390
@@ -13025,9 +13019,9 @@ msgid "Polyline, %d points"
 msgstr ""
 
 #: eeschema/lib_shape.cpp:387
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve, %d points"
-msgstr "Curbă Bezier"
+msgstr "Curbă Bezier, %d puncte"
 
 #: eeschema/lib_text.cpp:404 eeschema/sch_text.cpp:670
 #, c-format
@@ -13551,14 +13545,12 @@ msgid "Cannot open file '%s'."
 msgstr "Nu se poate deschide fișierul '%s'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:314
-#, fuzzy
 msgid "Storage file not fully parsed "
-msgstr "'%s' nu a fost analizat complet."
+msgstr "Fișierul de stocare nu a fost analizat complet "
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:476
-#, fuzzy
 msgid "Compile mask not currently supported."
-msgstr "Completați magistrala cu segmentul curent"
+msgstr "Masca de compilare nu este acceptată în prezent."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:489
 #, c-format
@@ -14339,14 +14331,14 @@ msgid ""
 msgstr ""
 "<table>\n"
 "    <tr>\n"
-"        <th>Markup</th>\n"
+"        <th>Marcare</th>\n"
 "        <th></th>\n"
-"        <th>Resultat</th>\n"
+"        <th>rezultat</th>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+"        <td>&nbsp;<br><samp><sup>exponent</sup>&nbsp;</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
@@ -14357,9 +14349,9 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+"        <td>&nbsp;<br><samp>_{indice}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+"        <td>&nbsp;<br><samp><sub></sub>&nbsp;indice</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
@@ -14370,23 +14362,23 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~overbar</samp><br> &nbsp;<br><samp>~CLK</"
-"samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+"        <td> &nbsp;<br><samp>~{overbar}</samp><br> "
+"&nbsp;<br><samp>~{CLK}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
 "samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </td>\n"
+"samp><br> <samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td><br></td>\n"
+"        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+"        <td>&nbsp;<br><samp>${variabilă}</samp></td>\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+"        <td>&nbsp;<br><samp>${REVIZIE}</samp></td>\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
 "    </tr>\n"
@@ -14394,10 +14386,10 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+"        <td>&nbsp;<br><samp>${refdes:câmp}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> <i>de refdes</i> "
+"simbol</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -14411,15 +14403,15 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <th>Definiție magistrală</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
-"        <th>Resultat Nets</th>\n"
+"        <th>Definiția autobuzului</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
+"        <th>Plase rezultate</th>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
+"        <td>&nbsp;<br><samp>prefix[m.. n]</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>\n"
+"        <td>&nbsp;<br><samp>prefixm la prefixn</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
@@ -14430,9 +14422,9 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"\t\t<td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
-"\t\t<td></td>\n"
-"\t\t<td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+"        <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
@@ -14450,7 +14442,7 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>USB1{D+ D-}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>USB1.D+, USB1.D-</samp></td>\n"
+"        <td>&nbsp;<br><samp>USB1. D+, USB1. D-</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -14458,17 +14450,24 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
+"        <td>&nbsp;<br> <samp>MEM. D1, MEM. D2, MEM. Zăvor</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp;<sub>"
+"&nbsp;</sub>&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</samp><br><samp>MEM. "
+"D<sub>1</sub>, MEM. D<sub>2</sub>, MEM. Zăvor</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
 "    </tr>\n"
 "</table>\n"
+"<p></p>\n"
+"<p></p>\n"
+"<i>Rețineți că marcarea are prioritate față de definițiile magistralei.</i>\n"
+"\n"
 
 #: eeschema/sch_validators.cpp:102
 #, c-format
@@ -14553,11 +14552,10 @@ msgstr ""
 "magistrală vectorială"
 
 #: eeschema/sch_validators.cpp:231
-#, fuzzy
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
 msgstr ""
 "Numele semnalului conține '[' sau ']', dar nu este un nume valid de "
-"magistrală vectorială"
+"magistrală."
 
 #: eeschema/sheet.cpp:63
 #, c-format
@@ -16652,9 +16650,9 @@ msgstr ""
 
 #: eeschema/tools/sch_edit_tool.cpp:1128
 #: eeschema/tools/symbol_editor_edit_tool.cpp:515
-#, fuzzy, c-format
+#, c-format
 msgid "Edit '%s' Field"
-msgstr "Editați fișierul"
+msgstr "Editați '%s' Câmpul"
 
 #: eeschema/tools/sch_edit_tool.cpp:1740
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
@@ -17540,9 +17538,9 @@ msgid "Open Recent Zip File"
 msgstr ""
 
 #: gerbview/readgerb.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' not found"
-msgstr "Fișierul %s nu a fost găsit."
+msgstr "Fișierul %s nu a fost găsit"
 
 #: gerbview/readgerb.cpp:88
 msgid ""
@@ -17811,9 +17809,9 @@ msgid "Highlight"
 msgstr "Marchează"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Items of Component '%s'"
-msgstr "Elemente evidențiate"
+msgstr "Evidențiați elementele componentei '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:78
 #, fuzzy, c-format
@@ -17968,9 +17966,8 @@ msgid "Reset all settings on this page to their default"
 msgstr "Resetați toate setările din această pagină la valorile implicite"
 
 #: include/wxstream_helper.h:49
-#, fuzzy
 msgid "Failed to output data"
-msgstr "Nu s-a putut încărca biblioteca kiface \"%s\"."
+msgstr "Ieșirea datelor a eșuat"
 
 #: kicad/dialogs/dialog_template_selector.cpp:143
 msgid "<h1>Template Selector</h1>"
@@ -18221,14 +18218,14 @@ msgid "Plugins (%d)"
 msgstr ""
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Libraries (%d)"
-msgstr "Bibioteci"
+msgstr "Biblioteci (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Color themes (%d)"
-msgstr "Adăugați o temă de culoare"
+msgstr "Teme de culoare (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:79 kicad/pcm/dialogs/dialog_pcm.cpp:340
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:53
@@ -18391,9 +18388,8 @@ msgid "Package download url is not specified"
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:476
-#, fuzzy
 msgid "Error downloading package"
-msgstr "Eroare la încărcarea editorului."
+msgstr "Eroare la descărcarea pachetului"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:485
 #, fuzzy
@@ -18450,19 +18446,19 @@ msgid "Download"
 msgstr "Jos"
 
 #: kicad/pcm/pcm.cpp:90
-#, fuzzy, c-format
+#, c-format
 msgid "schema file '%s' not found"
-msgstr "Fișierul %s nu a fost găsit."
+msgstr "fișier schema '%s' nu a fost găsit"
 
 #: kicad/pcm/pcm.cpp:93
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schema: %s"
-msgstr "Eroare la încărcarea schemei '%s'."
+msgstr "Eroare la încărcarea schemei '%s'"
 
 #: kicad/pcm/pcm.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading installed packages list: %s"
-msgstr "Eroare la încărcarea foii de desen \"%s\"."
+msgstr "Eroare la încărcarea listei de pachete instalate: %s"
 
 #: kicad/pcm/pcm.cpp:206
 #, c-format
@@ -18470,9 +18466,8 @@ msgid "Downloading %lld/%lld Kb"
 msgstr ""
 
 #: kicad/pcm/pcm.cpp:231
-#, fuzzy
 msgid "Download is too large."
-msgstr "Dimensiune nevalabilă %lld: prea mare"
+msgstr "Descărcarea este prea mare."
 
 #: kicad/pcm/pcm.cpp:247
 msgid "Fetching repository"
@@ -18484,12 +18479,15 @@ msgid "Unable to load repository url"
 msgstr "Nu se poate crea fișierul de raport '%s'"
 
 #: kicad/pcm/pcm.cpp:267
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse repository:\n"
 "\n"
 "%s"
-msgstr "Imposibil de analizat \"%s\" în '%s'"
+msgstr ""
+"Nu se poate analiza depozitul:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:290
 msgid "Fetching repository packages"
@@ -18504,12 +18502,15 @@ msgid "Packages hash doesn't match. Repository may be corrupted."
 msgstr ""
 
 #: kicad/pcm/pcm.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse packages metadata:\n"
 "\n"
 "%s"
-msgstr "Imposibil de analizat \"%s\" în '%s'"
+msgstr ""
+"Nu se poate analiza metadatele pachetelor:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:405
 msgid ""
@@ -18544,9 +18545,9 @@ msgid ""
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:97
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting package '%s'."
-msgstr "Extragerea fișierului \"%s\"\n"
+msgstr "Extragerea fișierului \"%s\"."
 
 #: kicad/pcm/pcm_task_manager.cpp:112
 #, c-format
@@ -18559,11 +18560,13 @@ msgid "Downloading package url: '%s'"
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to download url %s\n"
 "%s"
-msgstr "Nu s-a putut încărca biblioteca kiface \"%s\"."
+msgstr ""
+"Nu s-a reușit descărcarea url-ului %s\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:250
 msgid "Aborting package installation."
@@ -18603,9 +18606,9 @@ msgid "Removing directory %s"
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to remove directory %s"
-msgstr "Nu s-a reușit crearea dosarului \"%s\"."
+msgstr "Nu s-a reușit eliminarea directorului %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:381
 #, c-format
@@ -20347,7 +20350,6 @@ msgid "Not worth using"
 msgstr ""
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series are defined in IEC 60063.\n"
 "\n"
@@ -20375,33 +20377,32 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"Seria E definită în IEC 60063 reprezintă un sistem acceptat pe scară largă "
-"de\n"
-"numere pentru componentele electronice.  Valorile disponibile sunt "
-"aproximativ\n"
-"egal distanțate pe o scară logaritmică. \n"
+"Seriile E sunt definite în IEC 60063.\n"
 "\n"
-"\tE12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
-"\tE6: 1,0 - 1,5 - 2,2 - 3,3 - 4,7 - 6,8 -\n"
-"\tE3: 1.0 - - - 2.2 - - - 4.7 - - -\n"
-"\tE1: 1.0 - - - - - - - - - - - - -\n"
+"Valorile disponibile sunt aproximativ la intervale egale pe o scară "
+"logaritmică.\n"
 "\n"
-"Acest calculator găsește combinații de componente standard din seria E "
-"pentru a\n"
-"crea valori arbitrare.  Puteți introduce rezistența necesară de la 0,0025 la "
-"4000 kΩ.\n"
-"Se oferă soluții care utilizează până la 4 componente.\n"
+"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
+"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
+"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
+"\tE6(20%):  1.0 - 1.5 - 2.2 - 3.3 - 4.7 - 6.8 -\n"
+"\tE3(50%):  1.0 - - - 2.2 - - - 4.7 - - -\n"
+"\t\n"
 "\n"
-"În mod implicit, valoarea solicitării este întotdeauna exclusă din setul de "
-"soluții.  De asemenea, este posibil să se specifice\n"
-"până la două valori suplimentare de exclus din soluție dacă aceste valori "
-"ale componentelor nu sunt disponibile\n"
+"- Acest calculator găsește combinații de serii E standard (între 10Ω și 1MΩ) "
+"pentru a crea valori arbitrare.\n"
+"- Puteți introduce rezistența necesară de la 0,0025 la 4000 kΩ.\n"
+"- Sunt oferite soluții care utilizează până la 4 componente.\n"
 "\n"
-"Soluțiile sunt prezentate în următoarele formate:\n"
+"Valoarea solicitată este întotdeauna exclusă din setul de soluții.<br>\n"
+"Opțional, pot fi excluse până la două valori suplimentare, în cazul unor "
+"probleme de disponibilitate a componentelor.\n"
+"\n"
+"Soluțiile sunt oferite în următoarele formate:\n"
 "\n"
 "\tR1 + R2 +...+ Rn rezistențe în serie\n"
-"\t| R1 | R2...| Rezistențe rn în paralel\n"
-"\tR1 + (R2| R3)...\t\torice combinație a celor de mai sus\n"
+"\tR1 | R2 |...| Rn rezistențe în paralel\n"
+"\tR1 + (R2|R3)... orice combinație dintre cele de mai sus\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:49
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
@@ -20425,9 +20426,8 @@ msgid "Color Code"
 msgstr ""
 
 #: pcb_calculator/pcb_calculator_frame.cpp:85
-#, fuzzy
 msgid "TransLine "
-msgstr "TransLine"
+msgstr "TransLine "
 
 #: pcb_calculator/pcb_calculator_frame.cpp:91
 msgid "Electrical Spacing"
@@ -21100,9 +21100,8 @@ msgid "A layer thickness is < 0. Fix it"
 msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1530
-#, fuzzy
 msgid "Custom..."
-msgstr "Personalizat"
+msgstr "Personalizat..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:20
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:49
@@ -21607,9 +21606,9 @@ msgid "Reannotate anyway?"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:790
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "Elemente duplicate %s%s\n"
+msgstr "Instanțe duplicate de %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:796
 msgid "Aborted: too many errors"
@@ -22632,9 +22631,8 @@ msgid "Circular Array"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:350
-#, fuzzy
 msgid "Footprint Annotation"
-msgstr "Amprenta nu a fost găsită."
+msgstr "Adnotarea amprentei"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:352
 #, fuzzy
@@ -24905,7 +24903,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_netlist.cpp:148
 #, fuzzy
 msgid "Please choose a valid netlist file."
-msgstr "Fișiere de placă netlist KiCad"
+msgstr "Vă rugăm să alegeți un fișier netlist valid."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:154 pcbnew/dialogs/dialog_netlist.cpp:191
 msgid "The netlist file does not exist."
@@ -25697,9 +25695,8 @@ msgid "Plot Edge.Cuts on all layers"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
-#, fuzzy
 msgid "Plot the contents of the PCB edge layer on all layers"
-msgstr "Nu trasați conținutul stratului de margine al PCB pe alte straturi."
+msgstr "Reprezentați conținutul stratului de margine al PCB pe toate straturile"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 #, fuzzy
@@ -28258,205 +28255,222 @@ msgid ""
 msgstr ""
 "### Clauze de nivel superior\n"
 "\n"
-"(versiunea <number>)\n"
+"    (version <number>)\n"
 "\n"
-"(regula <rule_name> <rule_clause>...)\n"
+"    (rule <rule_name> <rule_clause> ...)\n"
+"\n"
 "\n"
 "<br><br>\n"
 "\n"
-"### Clauze regulă\n"
+"### Clauze de regulă\n"
 "\n"
-"(constrângere <constraint_type>...)\n"
+"    (constraint <constraint_type> ...)\n"
 "\n"
-"(condiția \"<expression>\")\n"
+"    (condiție \"<expresie>\")\n"
 "\n"
-"(stratul \"<layer_name>\")\n"
+"    (layer \"<layer_name>\")\n"
+"\n"
 "\n"
 "<br><br>\n"
 "\n"
 "### Tipuri de constrângeri\n"
 "\n"
-"* annular_width\n"
-" * clearance-ul\n"
+" * annular\\_width\n"
+" * clearance\n"
 " * courtyard_clearance\n"
-" * dif\\_pair\\_gap\n"
-" * dif\\_pair\\_uncoupled\n"
-" * nu permite\n"
-" * edge_clearance\n"
-" * lungime\n"
-" * gaura\n"
-" * hole_clearance\n"
-" * silk_clearance\n"
-" * oblic\n"
-" * track_width\n"
-" * via_count\n"
+" * diff\\_pair_gap\n"
+" * diff\\_pair\\_uncoupled\n"
+" * disallow\n"
+" * edge\\_clearance\n"
+" * length\n"
+" * hole\\_clearance\n"
+" * hole\\_size\n"
+" * silk\\_clearance\n"
+" * skew\n"
+" * track\\_width\n"
+" * via\\_count\n"
+" * via\\_diametru\n"
+"\n"
 "\n"
 "<br><br>\n"
 "\n"
-"### Tipuri de elemente\n"
+"### Tipuri de articole\n"
 "\n"
-"* buried_via\n"
+" * buried_via\n"
 " * grafic\n"
-" * gaura\n"
+" * hole\n"
 " * micro_via\n"
 " * pad\n"
 " * text\n"
-" * piesa\n"
-" * prin intermediul\n"
-" * zona\n"
+" * track\n"
+" * via\n"
+" * zone\n"
 "\n"
 "<br>\n"
 "\n"
 "### Exemple\n"
 "\n"
-"(versiunea 1)\n"
+"    (versiunea 1)\n"
 "\n"
-"(regula HV\n"
-"       [clearance-ul constrângerii (min 1,5 mm)]\n"
-"       (condiția \"A.NetClass == 'HV'\"))\n"
+"    (regula HV\n"
+"       (constrângere spațiu liber (min 1,5 mm))\n"
+"       (condiție \"A.NetClass == 'HV'\")))\n"
 "\n"
-"(regula HV\n"
-"       (stratul exterior)\n"
-"       [clearance-ul constrângerii (min 1,5 mm)]\n"
-"       (condiția \"A.NetClass == 'HV'\"))\n"
 "\n"
-"(HV_HV regulă\n"
-"       # clearance-ul mai larg între piesele HV\n"
-"       (clearance-ul constrângerii (min \"1,5 mm + 2,0 mm\"))\n"
-"       (condiția \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
+"    (regulă HV\n"
+"       (strat exterior)\n"
+"       (constrângere clearance (min 1,5 mm))\n"
+"       (condiție \"A.NetClass == 'HV'\")))\n"
 "\n"
-"(HV_unshielded regulă\n"
-"       [clearance-ul constrângerii (min 2mm)]\n"
-"       (condiția \"A.NetClass == 'HV' && ! A.insideArea('Scut*')\"))\n"
+"\n"
+"    (regula HV_HV\n"
+"       # spațiu liber mai mare între liniile HV\n"
+"       (constraint clearance (min \"1.5mm + 2.0mm\")))\n"
+"       (condiție \"A.NetClass == 'HV' && B.NetClass == 'HV'\")))\n"
+"\n"
+"\n"
+"    (regula HV_unshielded\n"
+"       (constrângere clearance (min 2mm))\n"
+"       (condiție \"A.NetClass == 'HV' && ! A.insideArea('Shield*')\")))\n"
 "<br><br>\n"
 "\n"
 "### Note\n"
 "\n"
-"Clauza de versiune trebuie să fie prima clauză.  Indică versiunea de sintaxă "
-"a fișierului, astfel încât \n"
-"analizatorii de reguli viitoare pot efectua actualizări automate.  Ar trebui "
-"să fie\n"
-"setat la \"1\".\n"
+"Clauza Version trebuie să fie prima clauză.  Aceasta indică versiunea de "
+"sintaxă a fișierului, astfel încât\n"
+"viitoarele analizoare de reguli să poată efectua actualizări automate.  Ar "
+"trebui să fie\n"
+"setată la \"1\".\n"
 "\n"
-"Regulile ar trebui să fie ordonate prin specificitate.  Regulile ulterioare "
-"iau\n"
-"prioritate față de normele anterioare; odată ce se găsește o regulă de "
-"potrivire\n"
-"nu vor fi verificate alte reguli.\n"
+"Regulile ar trebui să fie ordonate în funcție de specificitate.  Regulile "
+"ulterioare iau\n"
+"prioritate față de regulile anterioare; odată ce se găsește o regulă "
+"corespunzătoare\n"
+"nu se verifică alte reguli.\n"
 "\n"
-"Utilizați Ctrl+/ pentru a comenta sau a decomanda linii.\n"
+"Folosiți Ctrl+/ pentru a comenta sau decomenta linia (liniile).\n"
 "<br><br><br>\n"
 "\n"
 "### Funcții de expresie\n"
 "\n"
-"Toți parametrii funcției acceptă metacaractere simple ('*' și '?').\n"
+"Toți parametrii funcțiilor suportă wildcards simple (`*` și `?`).\n"
 "<br><br>\n"
 "\n"
-"A.insideCourtyard('<footprint_refdes>')\n"
-"Adevărat dacă orice parte din \"A\" se află în curtea principală a amprentei "
+"    A.insideCourtyard('<footprint_refdes>')\n"
+"Adevărat dacă orice parte din `A` se află în interiorul curții principale a "
+"amprentei date's.\n"
+"<br><br>\n"
+"\n"
+"    A.insideFrontCourtyard('<footprint_refdes>')\n"
+"Adevărat dacă orice parte a lui `A` se află în interiorul curții frontale a "
+"amprentei date's.\n"
+"<br><br>\n"
+"\n"
+"    A.insideBackCourtyard('<footprint_refdes>')\n"
+"Adevărat dacă orice parte a lui `A` se află în interiorul curții din spate a "
+"amprentei date's.\n"
+"<br><br>\n"
+"\n"
+"    A.insideArea('<zone_name>')\n"
+"Adevărat dacă orice parte din `A` se află în interiorul conturului zonei's "
 "date.\n"
 "<br><br>\n"
 "\n"
-"A.insideFrontCourtyard('<footprint_refdes>')\n"
-"Adevărat dacă orice parte din \"A\" se află în curtea din față a amprentei "
-"date.\n"
+"    A.isPlated()\n"
+"Adevărat dacă `A` are o gaură care este placată.\n"
 "<br><br>\n"
 "\n"
-"A.insideBackCourtyard('<footprint_refdes>')\n"
-"Adevărat dacă orice parte din \"A\" se află în curtea din spate a amprentei "
-"date.\n"
-"<br><br>\n"
-"\n"
-"A.insideArea('<zone_name>')\n"
-"Adevărat dacă orice parte din \"A\" se află în conturul zonei date.\n"
-"<br><br>\n"
-"\n"
-"A.isPlated()\n"
-"Adevărat dacă \"A\" are o gaură care este placată.\n"
-"<br><br>\n"
-"\n"
-"A.inDiffPair('<net_name>')\n"
-"Adevărat dacă \"A\" are plasă care face parte din perechea diferențială "
+"    A.inDiffPair('<net_name>')\n"
+"Adevărat dacă `A` are o rețea care face parte din perechea diferențială "
 "specificată.\n"
-"\"<net_name>\" este numele de bază al perechii diferențiale.  De exemplu, "
-"\"inDiffPair('CLK')\"\n"
-"se potrivește cu elementele din plasele \"CLK_P\" și \"CLK_N\".\n"
+"`<net_name>` este numele de bază al perechii diferențiale.  De exemplu, "
+"`inDiffPair('/CLK')`.\n"
+"se potrivește cu elementele din rețelele `/CLK_P` și `/CLK_N`.\n"
 "<br><br>\n"
 "\n"
-"AB.isCoupledDiffPair()\n"
-"Adevărat dacă \"A\" și \"B\" sunt membri ai aceleiași perechi de dif.\n"
+"    AB.isCoupledDiffPair()\n"
+"Adevărat dacă `A` și `B` sunt membri ai aceleiași perechi dif.\n"
 "<br><br>\n"
 "\n"
-"A.memberOf('<group_name>')\n"
-"Adevărat dacă \"A\" este un membru al grupului dat. Include calitatea de "
-"membru imbricat.\n"
+"    A.memberOf('<nume_grup>')\n"
+"Adevărat dacă `A` este un membru al grupului dat. Include apartenența "
+"imbricata.\n"
 "<br><br>\n"
 "\n"
-"A.existsOnLayer('<layer_name>')\n"
-"Adevărat dacă \"A\" există pe stratul dat.  Numele stratului poate fi\n"
-"fie numele atribuit în Board Setup > Board Editor Layers, fie\n"
-"denumirea canonică (adică: \"F.Cu\").\n"
+"    A.existsOnLayer('<layer_name>')\n"
+"Adevărat dacă `A` există pe stratul dat.  Numele stratului poate fi\n"
+"fie numele atribuit în Board Setup > Board Editor Layers sau\n"
+"numele canonic (de exemplu: `F.Cu`).\n"
 "\n"
-"NB: acest lucru se întoarce adevărat dacă \"A\" este pe stratul dat, "
+"NB: acest lucru returnează adevărat dacă `A` există pe stratul dat, "
 "independent\n"
-"dacă regula este sau nu evaluată pentru stratul respectiv.\n"
-"Pentru aceasta din urmă utilizați o clauză \"(strat \"layer_name\")\" din "
+"indiferent dacă regula este sau nu evaluată pentru acel strat.\n"
+"Pentru aceasta din urmă, utilizați o clauză `(layer \"layer_name\")` în "
 "regulă.\n"
 "<br><br><br>\n"
 "\n"
 "### Mai multe exemple\n"
 "\n"
-"(regula \"păstrarea cuprului\"\n"
-"       (constrângerea interzice calea ferată prin zonă)\n"
-"       (condiția \"A.insideArea('zone3')\")\")\n"
+"    (regula \"copper keepout\"\n"
+"       (constrângere disallow track via zone)\n"
+"       (condiție \"A.insideArea('zone3')\")))\n"
 "\n"
-"(regula \"BGA neckdown\"\n"
-"       [constrângere track_width (min 0,2 mm) (opt 0,25 mm)]\n"
-"       (clearance-ul constrângerii (min 0.05mm) (opt 0.08mm))\n"
-"       (condiția \"A.insideCourtyard('U3')\"))\n"
 "\n"
-"# preveni mătase peste vias corturi\n"
-"    (silk_over_via regulă\n"
-"       [silk_clearance de constrângere (min 0,2 mm)]\n"
-"       (condiția \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
+"    (regula \"BGA neckdown\"\n"
+"       (constraint track_width (min 0.2mm) (opt 0.25mm)))\n"
+"       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
+"       (condition \"A.insideCourtyard('U3')\")))\n"
 "\n"
-"(regula \"Distanța dintre Vias of Different Nets\"  \n"
-"        [hole_to_hole de constrângere (min 0,254 mm)]\n"
-"        (condiția \"A.Type =='Via' & B.Type =='Via' & A.Net != B.Net\"))\n"
 "\n"
-"(regula \"Clearance-ul între tampoane de plase diferite\"  \n"
-"        [clearance-ul constrângerii (min 3.0mm)]\n"
-"        (condiția \"A.Type =='Pad' && B.Type =='Pad' & A.Net != B.Net\"))\n"
+"    # previne ca mătasea să nu treacă peste pasajele de tip \"tented vias\n"
+"    (rule silk_over_via\n"
+"       (constraint silk_clearance (min 0.2mm))\n"
+"       (condition \"A.Type == '*Text' && B.Type == 'Via'\")))\n"
 "\n"
-"(regula \"Via Hole pentru a urmări Clearance-ul\"  \n"
-"        [hole_clearance de constrângere (min 0,254 mm)]\n"
-"        (condiția \"A.Type =='Via' & B.Type =='Track'\"))\n"
-"    \n"
-"(regula \"Pad pentru a urmări Clearance-ul\"  \n"
-"        [distanța de constrângere (min 0,2 mm)]\n"
-"        (condiția \"A.Type =='Pad' & B.Type =='Track'\"))\n"
 "\n"
-"(regula \"clearance-to-1mm-cutout\"\n"
-"        [clearance-ul constrângerii (min 0,8 mm)]\n"
-"        (condiția \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
+"    (regula \"Distanța dintre Vias de rețele diferite\"\n"
+"        (constrângere gaură_la_gaură (min 0,254mm))\n"
+"        (condiție \"A.Type =='Via' && B.Type =='Via' && A.Net ! = B.Net\"))\n"
 "\n"
-"(regula \"Max Drill Hole Dimensiune mecanică\"  \n"
-"        (orificiu de constrângere (max 6,3 mm))\n"
-"        (condiția \"A.Pad_Type == «NPTH, mecanic»\"))\n"
-"    \n"
-"(regula \"Max Drill Hole Dimensiune PTH\"  \n"
-"        (orificiu de constrângere (max 6,35 mm))\n"
-"        (condiția \"A.Pad_Type == «Prin gaură»\"))\n"
+"    (regula \"Clearance between Pads of Different Nets\"\n"
+"        (constrângere spațiu liber (min. 3,0 mm))\n"
+"        (condiție \"A.Type =='Pad' && B.Type =='Pad' && A.Net ! = B.Net\")))"
 "\n"
-"# Specificați un decalaj optim pentru o anumită pereche de dif\n"
-"    (regula \"dp decalaj de ceas\"\n"
-"        (constrângere diff_pair_gap (opt \"0.8mm\"))\n"
-"        [condiția \"A.inDiffPair('CLK') &&AB.isCoupledDiffPair()\"))\n"
 "\n"
-"# Specificați un clearance-ul mai mare în jurul orice diff-pereche\n"
+"\n"
+"    (regula \"Via Hole to Track Clearance\"\n"
+"        (constrângerea hole_clearance (min 0.254mm))\n"
+"        (condition \"A.Type = 'Via' && B.Type == 'Track'\")))\n"
+"\n"
+"    (regula \"Pad to Track Clearance\"\n"
+"        (constrângere degajare (min. 0,2 mm))\n"
+"        (condiție \"A.Type =='Pad' && B.Type =='Track'\")))\n"
+"\n"
+"\n"
+"    (regula \"clearance-to-1mm-cutout\"\n"
+"        (constrângere clearance (min 0,8mm))\n"
+"        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\")))\n"
+"\n"
+"\n"
+"    (regula \"Max Drill Hole Size Mechanical\"\n"
+"        (constraint hole_size (max 6.3mm))\n"
+"        (condiție \"A.Pad_Type == 'NPTH, mechanical'\")))\n"
+"\n"
+"    (regula \"Max Drill Hole Size PTH\"\n"
+"        (constraint hole_size (max 6.35mm))\n"
+"        (condition \"A.Pad_Type == 'Through-hole'\")))\n"
+"\n"
+"\n"
+"    # Specifică o distanță optimă pentru o anumită pereche de perechi de "
+"diferețe\n"
+"    (regula \"dp clock gap\"\n"
+"        (constraint diff_pair_gap (opt \"0.8mm\")))\n"
+"        (condiție \"A.inDiffPair('/CLK')\")))\n"
+"\n"
+"    # Specificați un joc mai mare în jurul oricărei perechi de diferențiale\n"
 "    (regula \"dp clearance\"\n"
-"        (clearance-ul constrângerii (min \"1,5 mm\"))\n"
-"        (condiția \"A.inDiffPair('*' )\n"
+"        (constraint clearance (min \"1.5mm\"))\n"
+"        (condiție \"A.inDiffPair('*') &&! AB.isCoupledDiffPair()\")))\n"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
@@ -29529,11 +29543,13 @@ msgstr ""
 "Nu s-a reușit redenumirea fișierului temporar '%s."
 
 #: pcbnew/files.cpp:1154
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board copied to:\n"
 "%s"
-msgstr "Conturul plăcii"
+msgstr ""
+"Placă copiat la:\n"
+"%s"
 
 #: pcbnew/footprint.cpp:944
 msgid "Last Change"
@@ -29801,9 +29817,9 @@ msgid "Update footprints on board to refer to %s?"
 msgstr ""
 
 #: pcbnew/footprint_libraries_utils.cpp:740
-#, fuzzy
 msgid "Update footprints on board to refer to new library?"
-msgstr "Actualizarea câmpurilor de simboluri din noua bibliotecă"
+msgstr ""
+"Actualizați amprentele de peplacă pentru a face referire la noua bibliotecă?"
 
 #: pcbnew/footprint_libraries_utils.cpp:884
 #: pcbnew/footprint_viewer_frame.cpp:719
@@ -30666,9 +30682,9 @@ msgid "Netlist Load Error"
 msgstr ""
 
 #: pcbnew/netlist_reader/netlist.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "No footprint defined for symbol %s."
-msgstr "Nicio amprentă definită pentru simbol %s.\n"
+msgstr "Nicio amprentă definită pentru simbol %s."
 
 #: pcbnew/netlist_reader/netlist.cpp:182
 #, c-format
@@ -30681,12 +30697,12 @@ msgid "%s footprint ID '%s' is not valid."
 msgstr "%s ID-ul amprentei \"%s\" nu este valid."
 
 #: pcbnew/netlist_reader/netlist.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
 msgstr ""
 "%s amprenta \"%s\" nu se găsește în nicio bibliotecă din tabelul de "
-"biblioteci de amprente.\n"
+"biblioteci de amprente."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:184
 #, fuzzy, c-format
@@ -30795,7 +30811,7 @@ msgid "Through hole pad %s of %s"
 msgstr ""
 
 #: pcbnew/pad.cpp:1211
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s %s of %s on %s"
 msgstr "Pad %s %s din %s pe %s."
 
@@ -32330,12 +32346,9 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Method '%s' not found, or not callable"
-msgstr ""
-"Fișier de script:\n"
-"%s\n"
-"nu a fost găsit. Scriptul nu este disponibil."
+msgstr "Metoda '%s' nu a fost găsită, sau nu poate fi apelată"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:84
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:84
