@@ -1032,7 +1032,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
     }
     else if( !aEvent.IsReactivate() )
     {
-        m_toolMgr->RunAction( PCB_ACTIONS::cursorClick );
+        m_toolMgr->PrimeTool( aEvent.Position() );
     }
 
     // Main loop: keep receiving events

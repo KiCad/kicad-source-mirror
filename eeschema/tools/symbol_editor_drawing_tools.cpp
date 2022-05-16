@@ -111,7 +111,6 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     // Set initial cursor
     setCursor();
 
-    // Prime the pump
     if( aEvent.HasPosition() )
     {
         m_toolMgr->PrimeTool( aEvent.Position() );
@@ -336,9 +335,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     // Set initial cursor
     setCursor();
 
-    // Prime the pump
     if( aEvent.HasPosition() )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
+        m_toolMgr->PrimeTool( aEvent.Position() );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )

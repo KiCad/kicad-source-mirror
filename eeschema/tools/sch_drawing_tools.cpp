@@ -187,7 +187,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     }
     else if( !aEvent.IsReactivate() )
     {
-        m_toolMgr->RunAction( EE_ACTIONS::cursorClick );
+        m_toolMgr->PrimeTool( aEvent.Position() );
     }
 
     // Main loop: keep receiving events
@@ -430,7 +430,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     if( image )
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
     else if( !aEvent.IsReactivate() )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
+        m_toolMgr->PrimeTool( aEvent.Position() );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -701,7 +701,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
 
     // Prime the pump
     if( aEvent.HasPosition() && type != SCH_SHEET_PIN_T )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
+        m_toolMgr->PrimeTool( aEvent.Position() );
     else
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
 
@@ -1106,16 +1106,12 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     // Set initial cursor
     setCursor();
 
-    // Prime the pump if the tool isn't being re-activated
     if( aEvent.HasPosition() )
     {
         m_toolMgr->PrimeTool( aEvent.Position() );
     }
-    else if( common_settings->m_Input.immediate_actions && !aEvent.IsReactivate() && ( isText
-                                                                                 || isGlobalLabel
-                                                                                 || isHierLabel
-                                                                                 || isClassLabel
-                                                                                 || isNetLabel ) )
+    else if( common_settings->m_Input.immediate_actions && !aEvent.IsReactivate()
+                && ( isText || isGlobalLabel || isHierLabel || isClassLabel || isNetLabel ) )
     {
         m_toolMgr->PrimeTool( { 0, 0 } );
         ignorePrimePosition = true;
@@ -1416,9 +1412,8 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     // Set initial cursor
     setCursor();
 
-    // Prime the pump
     if( aEvent.HasPosition() )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
+        m_toolMgr->PrimeTool( aEvent.Position() );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -1583,9 +1578,8 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
     // Set initial cursor
     setCursor();
 
-    // Prime the pump
     if( aEvent.HasPosition() )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
+        m_toolMgr->PrimeTool( aEvent.Position() );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )

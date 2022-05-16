@@ -1382,9 +1382,8 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     m_router->SetMode( mode );
     m_cancelled = false;
 
-    // Prime the pump
     if( aEvent.HasPosition() )
-        m_toolMgr->PrimeTool( controls->GetCursorPosition( false ) );
+        m_toolMgr->PrimeTool( aEvent.Position() );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )

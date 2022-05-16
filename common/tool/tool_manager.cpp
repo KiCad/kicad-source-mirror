@@ -350,9 +350,15 @@ void TOOL_MANAGER::CancelTool()
 void TOOL_MANAGER::PrimeTool( const VECTOR2D& aPosition )
 {
     int modifiers = 0;
-    modifiers |= wxGetKeyState( WXK_SHIFT ) ? MD_SHIFT : 0;
-    modifiers |= wxGetKeyState( WXK_CONTROL ) ? MD_CTRL : 0;
-    modifiers |= wxGetKeyState( WXK_ALT ) ? MD_ALT : 0;
+
+    /*
+     * Don't include any modifiers.  They're part of the hotkey, not part of the resulting
+     * click.
+     *
+     * modifiers |= wxGetKeyState( WXK_SHIFT ) ? MD_SHIFT : 0;
+     * modifiers |= wxGetKeyState( WXK_CONTROL ) ? MD_CTRL : 0;
+     * modifiers |= wxGetKeyState( WXK_ALT ) ? MD_ALT : 0;
+     */
 
     TOOL_EVENT evt( TC_MOUSE, TA_PRIME, BUT_LEFT | modifiers );
     evt.SetMousePosition( aPosition );

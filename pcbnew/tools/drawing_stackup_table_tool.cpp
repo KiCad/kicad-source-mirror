@@ -577,9 +577,8 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
     // Must be done after Activate() so that it gets set into the correct context
     m_controls->ShowCursor( true );
 
-    // Prime the pump
     if( aEvent.HasPosition() )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
+        m_toolMgr->PrimeTool( aEvent.Position() );
 
     // Main loop: keep receiving events
     wxPoint wxCursorPosition = wxPoint();

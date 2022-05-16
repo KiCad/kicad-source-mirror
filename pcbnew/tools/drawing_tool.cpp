@@ -450,6 +450,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
         circle->SetShape( SHAPE_T::CIRCLE );
         circle->SetFilled( false );
         circle->SetFlags( IS_NEW );
+
         startingPoint = NULLOPT;
     }
 
@@ -471,7 +472,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     PCB_SHAPE*       arc = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ARC );
-    bool             immediateMode = aEvent.HasPosition();
+    OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, { 0, 0 } );
 
     arc->SetShape( SHAPE_T::ARC );
     arc->SetFlags( IS_NEW );
@@ -480,7 +481,10 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
-    while( drawArc( tool, &arc, immediateMode ) )
+    if( aEvent.HasPosition() )
+        startingPoint = aEvent.Position();
+
+    while( drawArc( tool, &arc, startingPoint ) )
     {
         if( arc )
         {
@@ -496,7 +500,8 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
         arc = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
         arc->SetShape( SHAPE_T::ARC );
         arc->SetFlags( IS_NEW );
-        immediateMode = false;
+
+        startingPoint = NULLOPT;
     }
 
     return 0;
@@ -554,9 +559,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     // Set initial cursor
     setCursor();
 
-    // Prime the pump
     if( !aEvent.IsReactivate() )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
+        m_toolMgr->PrimeTool( aEvent.Position() );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -826,7 +830,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     // Set initial cursor
     setCursor();
 
-    // Prime the pump
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
 
     if( aEvent.HasPosition() )
@@ -1553,11 +1556,10 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
     // Set initial cursor
     setCursor();
 
-    // Prime the pump
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
 
     if( aStartingPoint )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
+        m_toolMgr->PrimeTool( aStartingPoint.get() );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -1831,7 +1833,8 @@ static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER
 }
 
 
-bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool aImmediateMode )
+bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic,
+                            OPT<VECTOR2D> aStartingPoint )
 {
     PCB_SHAPE*&  graphic = *aGraphic;
 
@@ -1877,11 +1880,10 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
     bool firstPoint = false;
     bool cancelled = false;
 
-    // Prime the pump
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
 
-    if( aImmediateMode )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
+    if( aStartingPoint )
+        m_toolMgr->PrimeTool(aStartingPoint.get() );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -2203,7 +2205,6 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     // Set initial cursor
     setCursor();
 
-    // Prime the pump
     if( aEvent.HasPosition() )
         m_toolMgr->PrimeTool( aEvent.Position() );
 

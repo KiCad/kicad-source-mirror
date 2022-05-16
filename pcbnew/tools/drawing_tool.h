@@ -231,7 +231,7 @@ private:
      * @return False if the tool was canceled before the origin was set or origin and end are
      *         the same point.
      */
-    bool drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool aImmediateMode );
+    bool drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, OPT<VECTOR2D> aStartingPoint );
 
     /**
      * Draw a polygon, that is added as a zone or a keepout area.

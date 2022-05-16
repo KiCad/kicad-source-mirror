@@ -101,9 +101,8 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
     // Set initial cursor
     setCursor();
 
-    // Prime the pump
     if( aEvent.HasPosition() || ( !aEvent.IsReactivate() && isText ) )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
+        m_toolMgr->PrimeTool( aEvent.Position() );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -248,9 +247,8 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     // Set initial cursor
     setCursor();
 
-    // Prime the pump
     if( aEvent.HasPosition() )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
+        m_toolMgr->PrimeTool( aEvent.Position() );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
