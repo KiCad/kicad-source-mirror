@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:03-0700\n"
-"PO-Revision-Date: 2022-05-15 22:50+0000\n"
+"PO-Revision-Date: 2022-05-17 19:03+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -19398,7 +19398,7 @@ msgstr "インストール済み (%d)"
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
 #, fuzzy
 msgid "Manage..."
-msgstr "管理"
+msgstr "管理…"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:85
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:104
@@ -19424,9 +19424,8 @@ msgid "Install from File..."
 msgstr "ファイルからインストール..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:137
-#, fuzzy
 msgid "Open Package Directory"
-msgstr "プラグイン ディレクトリーを開く"
+msgstr "パッケージディレクトリーを開く"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:76
 msgid "Plugin And Content Manager"
@@ -26616,9 +26615,8 @@ msgstr ""
 "パッドを使用してください。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1373
-#, fuzzy
 msgid "Error: SMD pad has a hole."
-msgstr "エラー: パッドにレイヤーがありません。"
+msgstr "エラー: 表面実装のパッドに穴があります。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1379
 msgid "Warning: SMD pad has no outer layers."
@@ -26912,7 +26910,6 @@ msgid "E.C.O.2"
 msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:551
-#, fuzzy
 msgid "Fabrication property:"
 msgstr "基板製造用プロパティ:"
 
@@ -30734,9 +30731,8 @@ msgid "NPTH inside courtyard"
 msgstr "コートヤード内部に NPTH がある"
 
 #: pcbnew/drc/drc_item.cpp:156
-#, fuzzy
 msgid "Item on a disabled copper layer"
-msgstr "無効なレイヤー上のアイテム"
+msgstr "無効な導体レイヤー上のアイテム"
 
 #: pcbnew/drc/drc_item.cpp:160
 msgid "Board has malformed outline"
@@ -30820,9 +30816,8 @@ msgid "Differential uncoupled length too long"
 msgstr "差動の非結合長が長すぎる"
 
 #: pcbnew/drc/drc_item.cpp:244
-#, fuzzy
 msgid "Footprint component type doesn't match footprint pads"
-msgstr "フットプリントのタイプとフットプリントのパッドが一致しない"
+msgstr "フットプリントのコンポーネントタイプとフットプリントのパッドが一致しない"
 
 #: pcbnew/drc/drc_item.cpp:248
 msgid "Through hole pad has no hole"
@@ -31687,7 +31682,7 @@ msgstr "(%s 最大直径 %s; 現状 %s)"
 #: pcbnew/footprint.cpp:2237
 #, c-format
 msgid "(expected 'Other'; actual '%s')"
-msgstr ""
+msgstr "(期待値は 'Other'; 現状 '%s')"
 
 #: pcbnew/footprint.cpp:2264
 msgid "(PTH pad has no copper layers)"
@@ -35320,7 +35315,7 @@ msgstr ""
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:293
 msgid "Style for rect shapes"
-msgstr ""
+msgstr "矩形スタイル"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:299
 #, fuzzy
@@ -35340,7 +35335,7 @@ msgstr ""
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:318
 msgid "Teardrop on pads in zones"
-msgstr ""
+msgstr "ゾーン内のパッド上のティアドロップ"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:319
 msgid ""
