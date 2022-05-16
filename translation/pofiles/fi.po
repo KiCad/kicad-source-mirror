@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:05-0700\n"
-"PO-Revision-Date: 2022-05-12 20:18+0000\n"
+"PO-Revision-Date: 2022-05-17 19:03+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v6/fi/>\n"
 "Language: fi\n"
@@ -9026,7 +9026,7 @@ msgstr "Uusi symboli"
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:39
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:180
 msgid "Set to 0 to use default values"
-msgstr "Aseta oletusarvoksi 0"
+msgstr "Aseta 0 käyttääksesi oletusarvoja"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:43
 msgid "Do not fill"
@@ -17484,7 +17484,7 @@ msgstr "Ylä-Antura Master"
 
 #: gerbview/files.cpp:156
 msgid "Bottom Pad Master"
-msgstr "Ala-Antura Master"
+msgstr "Ala-antura Master"
 
 #: gerbview/files.cpp:174
 msgid "Open Gerber File(s)"
@@ -18200,8 +18200,8 @@ msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
 msgstr ""
-"Muokkaa piirustusarkin reunoja ja otsikkolohkoja käytettäväksi kaavoissa ja "
-"piirilevymalleissa"
+"Muokkaa piirustusarkin reunoja ja otsikkolohkoja käytettäväksi "
+"kytkentäkaaviossa ja piirilevymalleissa"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:150
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
@@ -18828,7 +18828,7 @@ msgstr "Nimeä tiedosto uudelleen"
 
 #: kicad/project_tree_item.cpp:140
 msgid "Unable to rename file ... "
-msgstr "Uudelleen nimeäminen ei onnistu ... "
+msgstr "Uudelleennimeäminen ei onnistu ... "
 
 #: kicad/project_tree_item.cpp:140
 msgid "Permission error?"
@@ -18898,11 +18898,11 @@ msgstr "Avaa hakemistot järjestelmän oletustiedostonhallinnassa"
 
 #: kicad/project_tree_pane.cpp:730
 msgid "Open the file in a Text Editor"
-msgstr "Avaa tiedosto tekstieditorissa"
+msgstr "Avaa tiedosto Tekstieditorissa"
 
 #: kicad/project_tree_pane.cpp:732
 msgid "Open files in a Text Editor"
-msgstr "Avaa tiedostot tekstieditorissa"
+msgstr "Avaa tiedostot Tekstieditorissa"
 
 #: kicad/project_tree_pane.cpp:734
 msgid "Edit in a Text Editor"
@@ -18922,7 +18922,7 @@ msgstr "Nimeä tiedostot uudelleen ..."
 
 #: kicad/project_tree_pane.cpp:748
 msgid "Rename files"
-msgstr "Uudelleennimeä tiedosto"
+msgstr "Uudelleennimeä tiedostot"
 
 #: kicad/project_tree_pane.cpp:757
 msgid "Delete the file and its content"
@@ -19071,7 +19071,7 @@ msgstr "Järjestelmämallit"
 
 #: kicad/tools/kicad_manager_control.cpp:173
 msgid "User Templates"
-msgstr "Käyttäjän mallit"
+msgstr "Käyttäjän Mallit"
 
 #: kicad/tools/kicad_manager_control.cpp:182
 msgid "No project template was selected.  Cannot generate new project."
