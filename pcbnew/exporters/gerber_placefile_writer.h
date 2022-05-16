@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -80,8 +80,13 @@ public:
 private:
     /**
      * Convert a KiCad footprint orientation to gerber rotation both are in degrees.
+     * @param aAngle is the Pcbnew angle in degrees
+     * @param aIsFlipped = false for footprints on top side, true on bottom side (flipped)
+     * @return the angle in degrees in Gerber convention:
+     *  same as Pcbnew for top side
+     *  180 + angle for bottom side
      */
-    double mapRotationAngle( double aAngle );
+    double mapRotationAngle( double aAngle, bool aIsFlipped );
 
     /**
      * Find the pad(s) 1 (or pad "A1") of a footprint.
