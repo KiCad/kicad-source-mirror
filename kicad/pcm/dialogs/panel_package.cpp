@@ -49,6 +49,15 @@ PANEL_PACKAGE::PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
 
     m_minHeight = GetMinHeight();
 
+    double descLineHeight = m_desc->GetTextExtent( "X" ).GetHeight() * 1.2 /* leading */;
+    m_desc->SetLabel( m_data.package.description );
+    descLineHeight = wxSplit( m_desc->GetLabel(), '\n' ).size() * descLineHeight;
+
+    int nameLineHeight = m_name->GetTextExtent( "X" ).GetHeight();
+    wxSize minSize = GetMinSize();
+    minSize.y = std::max( nameLineHeight + KiROUND( descLineHeight ) + 15, m_minHeight );
+    SetMinSize( minSize );
+
     wxSizeEvent dummy;
     OnSize( dummy );
 
@@ -57,20 +66,7 @@ PANEL_PACKAGE::PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
 
 
 void PANEL_PACKAGE::OnSize( wxSizeEvent& event )
-{
-    Layout();
-
-    int    nameLineHeight = m_name->GetTextExtent( "X" ).GetHeight();
-    double descLineHeight = m_desc->GetTextExtent( "X" ).GetHeight() * 1.2 /* leading */;
-
-    m_desc->SetLabel( m_data.package.description );
-    m_desc->Wrap( m_desc->GetClientSize().GetWidth() - 10 );
-    descLineHeight = wxSplit( m_desc->GetLabel(), '\n' ).size() * descLineHeight;
-
-    wxSize minSize = GetMinSize();
-    minSize.y = std::max( nameLineHeight + KiROUND( descLineHeight ) + 15, m_minHeight );
-    SetMinSize( minSize );
-
+{ 
     Layout();
 }
 
