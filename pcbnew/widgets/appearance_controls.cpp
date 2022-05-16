@@ -1786,7 +1786,7 @@ void APPEARANCE_CONTROLS::OnLayerContextMenu( wxCommandEvent& aEvent )
     {
         visible &= ~presetAllCopper.layers;
 
-        if( !visible.test( current ) )
+        if( !visible.test( current ) && visible.count() > 0 )
             m_frame->SetActiveLayer( *visible.Seq().begin() );
 
         setVisibleLayers( visible );
@@ -1797,7 +1797,7 @@ void APPEARANCE_CONTROLS::OnLayerContextMenu( wxCommandEvent& aEvent )
     {
         visible &= presetAllCopper.layers;
 
-        if( !visible.test( current ) )
+        if( !visible.test( current ) && visible.count() > 0 )
             m_frame->SetActiveLayer( *visible.Seq().begin() );
 
         setVisibleLayers( visible );
