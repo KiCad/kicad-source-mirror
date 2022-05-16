@@ -95,29 +95,14 @@ bool SCH_DRAWING_TOOLS::Init()
 }
 
 
-EDA_RECT SCH_DRAWING_TOOLS::GetCanvasFreeAreaPixels()
-{
-    // calculate the area of the canvas in pixels that create no autopan when
-    // is inside this area the mouse cursor
-    wxSize canvas_size = m_frame->GetCanvas()->GetSize();
-    EDA_RECT canvas_area( wxPoint( 0, 0 ), canvas_size );
-    const KIGFX::VC_SETTINGS& v_settings = getViewControls()->GetSettings();
-
-    if( v_settings.m_autoPanEnabled )
-        canvas_area.Inflate( - v_settings.m_autoPanMargin );
-
-    // Gives a margin of 2 pixels
-    canvas_area.Inflate( -2 );
-
-    return canvas_area;
-}
-
-
 int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 {
     SCH_SYMBOL*                 symbol = aEvent.Parameter<SCH_SYMBOL*>();
     SYMBOL_LIBRARY_FILTER       filter;
     std::vector<PICKED_SYMBOL>* historyList = nullptr;
+    bool                        ignorePrimePosition = false;
+    COMMON_SETTINGS*            common_settings = Pgm().GetCommonSettings();
+    EE_GRID_HELPER              grid( m_toolMgr );
 
     if( m_inPlaceSymbol )
         return 0;
@@ -183,17 +168,25 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     if( symbol )
     {
         addSymbol( symbol );
-        getViewControls()->WarpCursor( getViewControls()->GetMousePosition( false ) );
+        getViewControls()->WarpMouseCursor( getViewControls()->GetMousePosition( false ));
     }
-    else if( !aEvent.IsReactivate() )
+    else if( aEvent.HasPosition() )
     {
         m_toolMgr->PrimeTool( aEvent.Position() );
+    }
+    else if( common_settings->m_Input.immediate_actions && !aEvent.IsReactivate() )
+    {
+        m_toolMgr->PrimeTool( { 0, 0 } );
+        ignorePrimePosition = true;
     }
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
 
         if( evt->IsCancelInteractive() )
@@ -243,39 +236,32 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             {
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-                // Store the mouse position: if it is outside the canvas,
-                // (happens when clicking on a toolbar tool) one cannot
-                // use the last stored cursor position to place the new symbol
-                // (Current mouse pos after closing the dialog will be used)
-                KIGFX::VIEW_CONTROLS* controls = getViewControls();
-                VECTOR2D initialMousePos = controls->GetMousePosition(false);
-                // Build the rectangle area acceptable to move the cursor without
-                // having an auto-pan
-                EDA_RECT canvas_area = GetCanvasFreeAreaPixels();
-
                 // Pick the footprint to be placed
                 bool footprintPreviews = m_frame->eeconfig()->m_Appearance.footprint_preview;
                 PICKED_SYMBOL sel = m_frame->PickSymbolFromLibTree( &filter, *historyList, true,
                                                                     1, 1, footprintPreviews );
-                // Restore cursor position after closing the dialog,
-                // but only if it has meaning (i.e inside the canvas)
-                VECTOR2D newMousePos = controls->GetMousePosition(false);
 
-                if( canvas_area.Contains( VECTOR2I( initialMousePos ) ) )
-                    controls->WarpCursor( controls->GetCursorPosition(), true );
-                else if( !canvas_area.Contains( VECTOR2I( newMousePos ) ) )
-                    // The mouse is outside the canvas area, after closing the dialog,
-                    // thus can creating autopan issues. Warp the mouse to the canvas center
-                    controls->WarpCursor( canvas_area.Centre(), false );
-
-                LIB_SYMBOL* libSymbol = sel.LibId.IsValid() ?
-                                        m_frame->GetLibSymbol( sel.LibId ) : nullptr;
+                LIB_SYMBOL* libSymbol = sel.LibId.IsValid() ? m_frame->GetLibSymbol( sel.LibId )
+                                                            : nullptr;
 
                 if( !libSymbol )
                     continue;
 
-                VECTOR2I pos( cursorPos );
-                symbol = new SCH_SYMBOL( *libSymbol, &m_frame->GetCurrentSheet(), sel, pos );
+                // If we started with a hotkey which has a position then warp back to that.
+                // Otherwise update to the current mouse position pinned inside the autoscroll
+                // boundaries.
+                if( evt->IsPrime() && !ignorePrimePosition )
+                {
+                    cursorPos = grid.Align( evt->Position() );
+                    getViewControls()->WarpMouseCursor( cursorPos, true );
+                }
+                else
+                {
+                    getViewControls()->PinCursorInsideNonAutoscrollArea( true );
+                    cursorPos = getViewControls()->GetMousePosition();
+                }
+
+                symbol = new SCH_SYMBOL( *libSymbol, &m_frame->GetCurrentSheet(), sel, cursorPos );
                 addSymbol( symbol );
 
                 // Update cursor now that we have a symbol
@@ -380,9 +366,11 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 {
-    SCH_BITMAP* image = aEvent.Parameter<SCH_BITMAP*>();
-    bool        immediateMode = image;
-    VECTOR2I    cursorPos = getViewControls()->GetCursorPosition();
+    SCH_BITMAP*      image = aEvent.Parameter<SCH_BITMAP*>();
+    bool             immediateMode = image != nullptr;
+    EE_GRID_HELPER   grid( m_toolMgr );
+    bool             ignorePrimePosition = false;
+    COMMON_SETTINGS* common_settings = Pgm().GetCommonSettings();
 
     if( m_inPlaceImage )
         return 0;
@@ -394,7 +382,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     // Add all the drawable symbols to preview
     if( image )
     {
-        image->SetPosition( cursorPos );
+        image->SetPosition( getViewControls()->GetCursorPosition() );
         m_view->ClearPreview();
         m_view->AddToPreview( image->Clone() );
     }
@@ -428,15 +416,24 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
     // Prime the pump
     if( image )
+    {
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
-    else if( !aEvent.IsReactivate() )
+    }
+    else if( aEvent.HasPosition() )
+    {
         m_toolMgr->PrimeTool( aEvent.Position() );
+    }
+    else if( common_settings->m_Input.immediate_actions && !aEvent.IsReactivate() )
+    {
+        m_toolMgr->PrimeTool( { 0, 0 } );
+        ignorePrimePosition = true;
+    }
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
-        cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
+        VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
 
         if( evt->IsCancelInteractive() )
         {
@@ -491,17 +488,6 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             {
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-                // Store the mouse position: if it is outside the canvas,
-                // (happens when clicking on a toolbar tool) one cannot
-                // use the last stored cursor position to place the new symbol
-                // (Current mouse pos after closing the dialog will be used)
-                KIGFX::VIEW_CONTROLS* controls = getViewControls();
-                VECTOR2D initialMousePos = controls->GetMousePosition(false);
-
-                // Build the rectangle area acceptable to move the cursor without
-                // having an auto-pan
-                EDA_RECT canvas_area = GetCanvasFreeAreaPixels();
-
                 wxFileDialog dlg( m_frame, _( "Choose Image" ), m_mruPath, wxEmptyString,
                                   _( "Image Files" ) + wxS( " " ) + wxImage::GetImageExtWildcard(),
                                   wxFD_OPEN );
@@ -509,18 +495,19 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 if( dlg.ShowModal() != wxID_OK )
                     continue;
 
-                // Restore cursor position after closing the dialog,
-                // but only if it has meaning (i.e inside the canvas)
-                VECTOR2D newMousePos = controls->GetMousePosition( false );
-
-                if( canvas_area.Contains( VECTOR2I( initialMousePos ) ) )
-                    controls->WarpCursor( controls->GetCursorPosition(), true );
-                else if( !canvas_area.Contains( VECTOR2I( newMousePos ) ) )
-                    // The mouse is outside the canvas area, after closing the dialog,
-                    // thus can creating autopan issues. Warp the mouse to the canvas center
-                    controls->WarpCursor( canvas_area.Centre(), false );
-
-                cursorPos = controls->GetMousePosition( true );
+                // If we started with a hotkey which has a position then warp back to that.
+                // Otherwise update to the current mouse position pinned inside the autoscroll
+                // boundaries.
+                if( evt->IsPrime() && !ignorePrimePosition )
+                {
+                    cursorPos = grid.Align( evt->Position() );
+                    getViewControls()->WarpMouseCursor( cursorPos, true );
+                }
+                else
+                {
+                    getViewControls()->PinCursorInsideNonAutoscrollArea( true );
+                    cursorPos = getViewControls()->GetMousePosition();
+                }
 
                 wxString fullFilename = dlg.GetPath();
                 m_mruPath = wxPathOnly( fullFilename );
@@ -626,7 +613,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
             SEG seg( wire->GetStartPoint(), wire->GetEndPoint() );
             VECTOR2I nearest = seg.NearestPoint( getViewControls()->GetCursorPosition() );
             getViewControls()->SetCrossHairCursorPosition( nearest, false );
-            getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
+            getViewControls()->WarpMouseCursor( getViewControls()->GetCursorPosition(), true );
         }
     }
 
@@ -1124,7 +1111,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
-        VECTOR2I cursorPos = evt->IsPrime() ? evt->Position() : controls->GetMousePosition();
+        VECTOR2I cursorPos = controls->GetMousePosition();
         cursorPos = grid.BestSnapAnchor( cursorPos, snapLayer, item );
         controls->ForceCursorPosition( true, cursorPos );
 
@@ -1288,12 +1275,19 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     }
                 }
 
-                // If we started with a click on a tool button or menu then continue with the
-                // current mouse position.  Otherwise warp back to the original click position.
-                if( evt->IsPrime() && ignorePrimePosition )
-                    cursorPos = grid.Align( controls->GetMousePosition() );
+                // If we started with a hotkey which has a position then warp back to that.
+                // Otherwise update to the current mouse position pinned inside the autoscroll
+                // boundaries.
+                if( evt->IsPrime() && !ignorePrimePosition )
+                {
+                    cursorPos = grid.Align( evt->Position() );
+                    getViewControls()->WarpMouseCursor( cursorPos, true );
+                }
                 else
-                    controls->WarpCursor( cursorPos, true );
+                {
+                    getViewControls()->PinCursorInsideNonAutoscrollArea( true );
+                    cursorPos = getViewControls()->GetMousePosition();
+                }
 
                 if( item )
                 {
@@ -1304,6 +1298,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     updatePreview();
 
                     m_selectionTool->AddItemToSel( item );
+
+                    m_toolMgr->RunAction( ACTIONS::refreshPreview );
 
                     // update the cursor so it looks correct before another event
                     setCursor();

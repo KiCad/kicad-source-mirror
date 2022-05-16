@@ -209,7 +209,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     VECTOR2I itemPos = selection.GetTopLeftItem()->GetPosition();
                     m_anchorPos = VECTOR2I( itemPos.x, -itemPos.y );
 
-                    getViewControls()->WarpCursor( m_anchorPos, true, true );
+                    getViewControls()->WarpMouseCursor( m_anchorPos, true, true );
                     m_cursor = m_anchorPos;
                 }
                 else

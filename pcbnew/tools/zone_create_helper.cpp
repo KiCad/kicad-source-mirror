@@ -102,7 +102,7 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
         if( dialogResult == wxID_CANCEL )
             return nullptr;
 
-        controls->WarpCursor( controls->GetCursorPosition(), true );
+        controls->WarpMouseCursor( controls->GetCursorPosition(), true );
     }
 
     // The new zone is a ZONE if created in the board editor and a FP_ZONE if created in the

@@ -703,7 +703,7 @@ void WX_VIEW_CONTROLS::SetCursorPosition( const VECTOR2D& aPosition, bool aWarpV
         m_cursorWarped = true;
     }
 
-    WarpCursor( clampedPosition, true, aWarpView );
+    WarpMouseCursor( clampedPosition, true, aWarpView );
     m_cursorPos = clampedPosition;
 }
 
@@ -726,8 +726,8 @@ void WX_VIEW_CONTROLS::SetCrossHairCursorPosition( const VECTOR2D& aPosition,
 }
 
 
-void WX_VIEW_CONTROLS::WarpCursor( const VECTOR2D& aPosition, bool aWorldCoordinates,
-                                   bool aWarpView )
+void WX_VIEW_CONTROLS::WarpMouseCursor( const VECTOR2D& aPosition, bool aWorldCoordinates,
+                                        bool aWarpView )
 {
     if( aWorldCoordinates )
     {
@@ -768,6 +768,38 @@ void WX_VIEW_CONTROLS::CenterOnCursor() const
         m_view->SetCenter( GetCursorPosition() );
         m_parentPanel->WarpPointer( KiROUND( screenSize.x / 2 ), KiROUND( screenSize.y / 2 ) );
     }
+}
+
+
+void WX_VIEW_CONTROLS::PinCursorInsideNonAutoscrollArea( bool aWarpMouseCursor )
+{
+    int border = std::min( m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().x,
+                           m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().y );
+    border += 2;
+
+    VECTOR2D topLeft( border, border );
+    VECTOR2D botRight( m_view->GetScreenPixelSize().x - border,
+                       m_view->GetScreenPixelSize().y - border );
+
+    topLeft = m_view->ToWorld( topLeft );
+    botRight = m_view->ToWorld( botRight );
+
+    VECTOR2D pos = GetMousePosition( true );
+
+    if( pos.x < topLeft.x )
+        pos.x = topLeft.x;
+    else if( pos.x > botRight.x )
+        pos.x = botRight.x;
+
+    if( pos.y < topLeft.y )
+        pos.y = topLeft.y;
+    else if( pos.y > botRight.y )
+        pos.y = botRight.y;
+
+    SetCursorPosition( pos, false, false, 0 );
+
+    if( aWarpMouseCursor )
+        WarpMouseCursor( pos, true );
 }
 
 

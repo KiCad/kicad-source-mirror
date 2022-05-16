@@ -260,7 +260,7 @@ void SCH_BASE_FRAME::CenterScreen( const VECTOR2I& aCenterPoint, bool aWarpPoint
     GetCanvas()->GetView()->SetCenter( aCenterPoint );
 
     if( aWarpPointer )
-        GetCanvas()->GetViewControls()->WarpCursor( aCenterPoint, true );
+        GetCanvas()->GetViewControls()->WarpMouseCursor( aCenterPoint, true );
 
     GetCanvas()->Refresh();
 }

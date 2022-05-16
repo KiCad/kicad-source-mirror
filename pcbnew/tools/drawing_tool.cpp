@@ -518,12 +518,12 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
     REENTRANCY_GUARD guard( &m_inDrawingTool );
 
+    COMMON_SETTINGS*             common_settings = Pgm().GetCommonSettings();
     BOARD_ITEM*                  text = nullptr;
+    bool                         ignorePrimePosition = false;
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
     BOARD_COMMIT                 commit( m_frame );
     SCOPED_DRAW_MODE             scopedDrawMode( m_mode, MODE::TEXT );
-
-    bool resetCursor = aEvent.HasPosition(); // Detect if activated from a hotkey.
 
     auto cleanup =
             [&]()
@@ -559,8 +559,15 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     // Set initial cursor
     setCursor();
 
-    if( !aEvent.IsReactivate() )
+    if( aEvent.HasPosition() )
+    {
         m_toolMgr->PrimeTool( aEvent.Position() );
+    }
+    else if( common_settings->m_Input.immediate_actions && !aEvent.IsReactivate() )
+    {
+        m_toolMgr->PrimeTool( { 0, 0 } );
+        ignorePrimePosition = true;
+    }
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -710,18 +717,27 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
             m_controls->ForceCursorPosition( false );
 
-            // Reset cursor to the position before the dialog opened if activated from hotkey
-            if( resetCursor )
-                m_controls->SetCursorPosition( cursorPos, false );
+            // If we started with a hotkey which has a position then warp back to that.
+            // Otherwise update to the current mouse position pinned inside the autoscroll
+            // boundaries.
+            if( evt->IsPrime() && !ignorePrimePosition )
+            {
+                cursorPos = evt->Position();
+                m_controls->WarpMouseCursor( cursorPos, true );
+            }
+            else
+            {
+                m_controls->PinCursorInsideNonAutoscrollArea( true );
+                cursorPos = m_controls->GetMousePosition();
+            }
 
-            // Other events must be from hotkeys or mouse clicks, so always reset cursor
-            resetCursor = true;
+            m_toolMgr->RunAction( PCB_ACTIONS::refreshPreview );
 
             m_controls->ShowCursor( true );
             m_controls->CaptureCursor( text != nullptr );
             m_controls->SetAutoPan( text != nullptr );
         }
-        else if( text && evt->IsMotion() )
+        else if( text && ( evt->IsMotion() || evt->IsAction( &PCB_ACTIONS::refreshPreview ) ) )
         {
             text->SetPosition( cursorPos );
             selection().SetReferencePoint( cursorPos );

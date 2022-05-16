@@ -79,6 +79,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     bool                  ignorePrimePosition = false;
     LIB_ITEM*             item   = nullptr;
     bool                  isText = aEvent.IsAction( &EE_ACTIONS::placeSymbolText );
+    COMMON_SETTINGS*      common_settings = Pgm().GetCommonSettings();
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
@@ -115,7 +116,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     {
         m_toolMgr->PrimeTool( aEvent.Position() );
     }
-    else if( !aEvent.IsReactivate() )
+    else if( common_settings->m_Input.immediate_actions && !aEvent.IsReactivate() )
     {
         m_toolMgr->PrimeTool( { 0, 0 } );
         ignorePrimePosition = true;
@@ -217,12 +218,19 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     wxFAIL_MSG( "TwoClickPlace(): unknown type" );
                 }
 
-                // If we started with a click on a tool button or menu then continue with the
-                // current mouse position.  Otherwise warp back to the original click position.
-                if( evt->IsPrime() && ignorePrimePosition )
-                    cursorPos = grid.Align( controls->GetMousePosition() );
+                // If we started with a hotkey which has a position then warp back to that.
+                // Otherwise update to the current mouse position pinned inside the autoscroll
+                // boundaries.
+                if( evt->IsPrime() && !ignorePrimePosition )
+                {
+                    cursorPos = grid.Align( evt->Position() );
+                    getViewControls()->WarpMouseCursor( cursorPos, true );
+                }
                 else
-                    controls->WarpCursor( cursorPos, true );
+                {
+                    getViewControls()->PinCursorInsideNonAutoscrollArea( true );
+                    cursorPos = getViewControls()->GetMousePosition();
+                }
 
                 if( item )
                 {

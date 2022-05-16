@@ -26,6 +26,7 @@
 #include <functional>
 #include <memory>
 
+#include <pgm_base.h>
 #include <advanced_config.h>
 #include "board_editor_control.h"
 #include <bitmaps.h>
@@ -996,9 +997,11 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
     REENTRANCY_GUARD guard( &m_inPlaceFootprint );
 
     FOOTPRINT*            fp = aEvent.Parameter<FOOTPRINT*>();
+    bool                  fromOtherCommand = fp != nullptr;
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     BOARD_COMMIT          commit( m_frame );
     BOARD*                board = getModel<BOARD>();
+    COMMON_SETTINGS*      common_settings = Pgm().GetCommonSettings();
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
@@ -1011,6 +1014,28 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
 
+    auto cleanup =
+            [&] ()
+            {
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+                commit.Revert();
+
+                if( fromOtherCommand )
+                {
+                    PICKED_ITEMS_LIST* undo = m_frame->PopCommandFromUndoList();
+
+                    if( undo )
+                    {
+                        m_frame->PutDataInPreviousState( undo );
+                        undo->ClearListAndDeleteItems();
+                        delete undo;
+                    }
+                }
+
+                fp = nullptr;
+                m_placingFootprint = false;
+            };
+
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
     controls->ShowCursor( true );
@@ -1018,21 +1043,25 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
     setCursor();
 
     VECTOR2I cursorPos = controls->GetCursorPosition();
+    bool     ignorePrimePosition = false;
     bool     reselect = false;
-    bool     fromOtherCommand = fp != nullptr;
-    bool     resetCursor = aEvent.HasPosition(); // Detect if activated from a hotkey.
 
     // Prime the pump
     if( fp )
     {
         m_placingFootprint = true;
-        fp->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+        fp->SetPosition( cursorPos );
         m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, fp );
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
     }
-    else if( !aEvent.IsReactivate() )
+    else if( aEvent.HasPosition() )
     {
         m_toolMgr->PrimeTool( aEvent.Position() );
+    }
+    else if( common_settings->m_Input.immediate_actions && !aEvent.IsReactivate() )
+    {
+        m_toolMgr->PrimeTool( { 0, 0 } );
+        ignorePrimePosition = true;
     }
 
     // Main loop: keep receiving events
@@ -1043,28 +1072,6 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
 
         if( reselect && fp )
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, fp );
-
-        auto cleanup =
-                [&] ()
-                {
-                    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-                    commit.Revert();
-
-                    if( fromOtherCommand )
-                    {
-                        PICKED_ITEMS_LIST* undo = m_frame->PopCommandFromUndoList();
-
-                        if( undo )
-                        {
-                            m_frame->PutDataInPreviousState( undo );
-                            undo->ClearListAndDeleteItems();
-                            delete undo;
-                        }
-                    }
-
-                    fp = nullptr;
-                    m_placingFootprint = false;
-                };
 
         if( evt->IsCancelInteractive() )
         {
@@ -1104,6 +1111,20 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
                 if( fp == nullptr )
                     continue;
 
+                // If we started with a hotkey which has a position then warp back to that.
+                // Otherwise update to the current mouse position pinned inside the autoscroll
+                // boundaries.
+                if( evt->IsPrime() && !ignorePrimePosition )
+                {
+                    cursorPos = evt->Position();
+                    getViewControls()->WarpMouseCursor( cursorPos, true );
+                }
+                else
+                {
+                    getViewControls()->PinCursorInsideNonAutoscrollArea( true );
+                    cursorPos = getViewControls()->GetMousePosition();
+                }
+
                 m_placingFootprint = true;
 
                 fp->SetLink( niluuid );
@@ -1127,17 +1148,10 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
                     fp->Flip( fp->GetPosition(), m_frame->Settings().m_FlipLeftRight );
 
                 fp->SetOrientation( ANGLE_0 );
-                fp->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+                fp->SetPosition( cursorPos );
 
                 commit.Add( fp );
                 m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, fp );
-
-                // Reset cursor to the position before the dialog opened if activated from hotkey
-                if( resetCursor )
-                    controls->SetCursorPosition( cursorPos, false );
-
-                // Other events must be from hotkeys or mouse clicks, so always reset cursor
-                resetCursor = true;
 
                 m_toolMgr->RunAction( ACTIONS::refreshPreview );
             }
@@ -1155,7 +1169,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
         }
         else if( fp && ( evt->IsMotion() || evt->IsAction( &ACTIONS::refreshPreview ) ) )
         {
-            fp->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+            fp->SetPosition( cursorPos );
             selection().SetReferencePoint( cursorPos );
             getView()->Update( &selection() );
             getView()->Update( fp );
