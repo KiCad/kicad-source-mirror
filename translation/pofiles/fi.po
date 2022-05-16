@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:03-0700\n"
-"PO-Revision-Date: 2022-05-12 20:14+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"PO-Revision-Date: 2022-05-17 19:03+0000\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18422,7 +18422,7 @@ msgstr "Ylä-Antura Master"
 
 #: gerbview/files.cpp:221
 msgid "Bottom Pad Master"
-msgstr "Ala-Antura Master"
+msgstr "Ala-antura Master"
 
 #: gerbview/files.cpp:227
 msgid "Open Gerber File(s)"
@@ -19173,8 +19173,8 @@ msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
 msgstr ""
-"Muokkaa piirustusarkin reunoja ja otsikkolohkoja käytettäväksi kaavoissa ja "
-"piirilevymalleissa"
+"Muokkaa piirustusarkin reunoja ja otsikkolohkoja käytettäväksi "
+"kytkentäkaaviossa ja piirilevymalleissa"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:159
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
@@ -19442,9 +19442,8 @@ msgid "Installed (%d)"
 msgstr "Asennetut (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
-#, fuzzy
 msgid "Manage..."
-msgstr "Hallinnoi"
+msgstr "Hallinnoi..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:85
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:104
@@ -19470,9 +19469,8 @@ msgid "Install from File..."
 msgstr "Asenna Tiedostosta..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:137
-#, fuzzy
 msgid "Open Package Directory"
-msgstr "Avaa Laajennushakemisto"
+msgstr "Avaa Pakettihakemisto"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:76
 msgid "Plugin And Content Manager"
@@ -19811,7 +19809,7 @@ msgstr "Nimeä tiedosto uudelleen"
 
 #: kicad/project_tree_item.cpp:140
 msgid "Unable to rename file ... "
-msgstr "Uudelleen nimeäminen ei onnistu ... "
+msgstr "Uudelleennimeäminen ei onnistu ... "
 
 #: kicad/project_tree_item.cpp:140
 msgid "Permission error?"
@@ -19881,11 +19879,11 @@ msgstr "Avaa hakemistot järjestelmän oletustiedostonhallinnassa"
 
 #: kicad/project_tree_pane.cpp:732
 msgid "Open the file in a Text Editor"
-msgstr "Avaa tiedosto tekstieditorissa"
+msgstr "Avaa tiedosto Tekstieditorissa"
 
 #: kicad/project_tree_pane.cpp:734
 msgid "Open files in a Text Editor"
-msgstr "Avaa tiedostot tekstieditorissa"
+msgstr "Avaa tiedostot Tekstieditorissa"
 
 #: kicad/project_tree_pane.cpp:736
 msgid "Edit in a Text Editor"
@@ -19905,7 +19903,7 @@ msgstr "Nimeä tiedostot uudelleen ..."
 
 #: kicad/project_tree_pane.cpp:750
 msgid "Rename files"
-msgstr "Uudelleennimeä tiedosto"
+msgstr "Uudelleennimeä tiedostot"
 
 #: kicad/project_tree_pane.cpp:759
 msgid "Delete the file and its content"
@@ -20055,7 +20053,7 @@ msgstr "Järjestelmämallit"
 
 #: kicad/tools/kicad_manager_control.cpp:172
 msgid "User Templates"
-msgstr "Käyttäjän mallit"
+msgstr "Käyttäjän Mallit"
 
 #: kicad/tools/kicad_manager_control.cpp:181
 msgid "No project template was selected.  Cannot generate new project."
@@ -20295,7 +20293,7 @@ msgstr "Maksimi korkeus:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:225
 msgid "Set to 0 to use default values"
-msgstr "Aseta oletusarvoksi 0"
+msgstr "Aseta 0 käyttääksesi oletusarvoja"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:232
 msgid "Comment:"
@@ -30331,6 +30329,13 @@ msgstr ""
 "    (rule \"disallow solder mask margin overrides\"\n"
 "        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
 "        (condition \"A.Type == 'Pad'\"))\n"
+"\n"
+"\n"
+" # Enforce a mechanical clearance between components and board edge\n"
+"    (rule front_mechanical_board_edge_clearance\n"
+"        (layer \"F.Courtyard\")\n"
+"        (constraint physical_clearance (min 3mm))\n"
+"        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
@@ -31342,9 +31347,8 @@ msgid "Gathering items..."
 msgstr "Kerätään kohteita..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:208
-#, fuzzy
 msgid "Checking physical clearances..."
-msgstr "Tarkistetaan anturavälykset..."
+msgstr "Tarkistetaan fyysiset välykset..."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:115
 #, c-format
@@ -36662,9 +36666,8 @@ msgid "Show selected footprint on editor canvas"
 msgstr "Näytä valittu jalanjälki editorin kankaalle"
 
 #: pcbnew/tools/pcb_actions.cpp:374
-#, fuzzy
 msgid "Duplicate Footprint"
-msgstr "Kaksoisjalanjälki"
+msgstr "Kopioi Jalanjälki"
 
 #: pcbnew/tools/pcb_actions.cpp:374
 msgid "Make a copy of the selected footprint"
