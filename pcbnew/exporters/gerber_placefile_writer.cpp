@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -142,7 +142,8 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
         GBR_CMP_PNP_METADATA pnpAttrib;
 
         // Add rotation info (rotation is CCW, in degrees):
-        pnpAttrib.m_Orientation = mapRotationAngle( footprint->GetOrientationDegrees() );
+        pnpAttrib.m_Orientation = mapRotationAngle( footprint->GetOrientationDegrees(),
+                                                    aLayer == B_Cu ? true : false );
 
         pnpAttrib.m_MountType = GBR_CMP_PNP_METADATA::MOUNT_TYPE_UNSPECIFIED;
 
@@ -315,10 +316,29 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
 }
 
 
-double PLACEFILE_GERBER_WRITER::mapRotationAngle( double aAngle )
+double PLACEFILE_GERBER_WRITER::mapRotationAngle( double aAngle, bool aIsFlipped )
 {
     // Convert a KiCad footprint orientation to gerber rotation, depending on the layer
-    // Currently, same notation as KiCad.
+    // Gerber rotation is:
+    // rot angle > 0 for rot CW, seen from Top side
+    // same a Pcbnew for Top side
+    // (angle + 180) for Bottom layer i.e flipped around Y axis: X axis coordinates mirrored.
+    // because Pcbnew flip around the X axis : Y coord mirrored, that is similar to mirror
+    // around Y axis + 180 deg rotation
+    if( aIsFlipped )
+    {
+        double gbr_angle = 180.0 + aAngle;
+
+        // Normalize between -180 ... + 180 deg
+        // Not mandatory, but the angle is more easy to read
+        if( gbr_angle <= -180 )
+            gbr_angle += 360.0;
+        else if( gbr_angle > 180 )
+            gbr_angle -= 360.0;
+
+        return gbr_angle;
+    }
+
     return aAngle;
 }
 
