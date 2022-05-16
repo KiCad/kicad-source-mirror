@@ -201,7 +201,14 @@ bool calcIsInsideCourtyard( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox,
         return false;
 
     if( !aItemShape )
-        aItemShape = aItem->GetEffectiveShape( aCtx->GetLayer() );
+    {
+        // Since rules are used for zone filling we can't rely on the filled shapes.
+        // Use the zone outline instead.
+        if( ZONE* zone = dynamic_cast<ZONE*>( aItem ) )
+            aItemShape.reset( zone->Outline()->Clone() );
+        else
+            aItemShape = aItem->GetEffectiveShape( aCtx->GetLayer() );
+    }
 
     return footprintCourtyard.Collide( aItemShape.get() );
 };
