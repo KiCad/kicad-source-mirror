@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:03-0700\n"
-"PO-Revision-Date: 2022-05-17 19:03+0000\n"
+"PO-Revision-Date: 2022-05-18 06:39+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -18594,9 +18594,9 @@ msgid "Skipped file '%s' (unknown type)."
 msgstr "Archivo '%s' salteado (tipo desconocido)."
 
 #: gerbview/files.cpp:586
-#, fuzzy, c-format
+#, c-format
 msgid "<b>unzipped file %s read error</b>"
-msgstr "<b>error de lectura en el archivo descomprimido %s</b>\n"
+msgstr "<b>error de lectura del archivo descomprimido %s</b>"
 
 #: gerbview/files.cpp:634
 msgid "Open Zip File"
@@ -18633,14 +18633,12 @@ msgid "Position"
 msgstr "Posición"
 
 #: gerbview/gerber_draw_item.cpp:695
-#, fuzzy
 msgid "Start"
-msgstr "Inicio X"
+msgstr "Inicio"
 
 #: gerbview/gerber_draw_item.cpp:698
-#, fuzzy
 msgid "End"
-msgstr "Final X"
+msgstr "Final"
 
 #: gerbview/gerber_draw_item.cpp:709
 msgid "Clear"
@@ -18741,9 +18739,8 @@ msgid "Gerber Viewer"
 msgstr "Visor Gerber"
 
 #: gerbview/gerbview_frame.cpp:596
-#, fuzzy
 msgid "Drawing layer not in use"
-msgstr "La capa de dibujo %d no está en uso"
+msgstr "Capa de dibujo no usada"
 
 #: gerbview/gerbview_frame.cpp:613
 msgid "(with X2 attributes)"
@@ -18810,9 +18807,8 @@ msgstr ""
 "Por lo que el tamaño de algunos elementos está indefinido"
 
 #: gerbview/rs274d.cpp:413
-#, fuzzy
 msgid "Invalid Code Number"
-msgstr "Número de pin inválido"
+msgstr "Número de código inválido"
 
 #: gerbview/rs274d.cpp:621
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
@@ -18862,31 +18858,28 @@ msgid "<No selection>"
 msgstr "<Sin selección>"
 
 #: gerbview/tools/gerbview_actions.cpp:39
-#, fuzzy
 msgid "Open Autodetected File(s)..."
-msgstr "Abrir archivo(s) de trazado Gerber..."
+msgstr "Abrir archivo(s) autodetectado(s)..."
 
 #: gerbview/tools/gerbview_actions.cpp:40
 msgid "Open Autodetected file(s) on a new layer."
-msgstr ""
+msgstr "Abrir archivo(s) autodetectado(s) en una nueva capa."
 
 #: gerbview/tools/gerbview_actions.cpp:45
 msgid "Open Gerber Plot File(s)..."
 msgstr "Abrir archivo(s) de trazado Gerber..."
 
 #: gerbview/tools/gerbview_actions.cpp:46
-#, fuzzy
 msgid "Open Gerber plot file(s) on a new layer."
-msgstr "Abrir archivo(s) de trazado Gerber..."
+msgstr "Abrir archivo(s) de trazado Gerber en una nueva capa."
 
 #: gerbview/tools/gerbview_actions.cpp:51
 msgid "Open Excellon Drill File(s)..."
 msgstr "Abrir archivo(s) de taladros Excellon..."
 
 #: gerbview/tools/gerbview_actions.cpp:52
-#, fuzzy
 msgid "Open Excellon drill file(s) on a new layer."
-msgstr "Abrir archivo(s) de taladros Excellon..."
+msgstr "Abrir archivo(s) de taladros Excellon en una nueva capa."
 
 #: gerbview/tools/gerbview_actions.cpp:57
 msgid "Open Gerber Job File..."
@@ -19130,9 +19123,8 @@ msgid "Show drawing sheet border and title block"
 msgstr "Mostrar el marco y bloque de título de la hoja de dibujo"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:103
-#, fuzzy
 msgid "Show drawing sheet page limits"
-msgstr "Mostrar límites de hoja"
+msgstr "Mostrar límites de hoja de dibujo"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:105
 msgid "PCB Background"
@@ -19163,17 +19155,15 @@ msgstr "Ordenar capas en modo X2"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:143
 msgid "Sort Layers by File Extension"
-msgstr ""
+msgstr "Ordenar capas por extensión de archivo"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:148
-#, fuzzy
 msgid "Move Current Layer Up"
-msgstr "Oscurecer capa activa"
+msgstr "Mover la capa actual hacia arriba"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:150
-#, fuzzy
 msgid "Move Current Layer Down"
-msgstr "Solo la capa actual"
+msgstr "Mover la capa actual hacia abajo"
 
 #: gerbview/widgets/layer_widget.cpp:130
 msgid "Change Layer Color for"
@@ -19544,14 +19534,12 @@ msgid "Uninstall"
 msgstr "Desinstalar"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:131
-#, fuzzy
 msgid "Apply Pending Changes"
-msgstr "Aplicar cambios"
+msgstr "Aplicar cambios pendientes"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:132
-#, fuzzy
 msgid "Discard Pending Changes"
-msgstr "Descartar cambios"
+msgstr "Descartar cambios pendientes"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:174
 msgid ""
@@ -19583,9 +19571,8 @@ msgid "Installed (%d)"
 msgstr "Instalado (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
-#, fuzzy
 msgid "Manage..."
-msgstr "Administrar"
+msgstr "Administrar..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:85
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:104
@@ -19611,9 +19598,8 @@ msgid "Install from File..."
 msgstr "Instalar desde un archivo..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:137
-#, fuzzy
 msgid "Open Package Directory"
-msgstr "Abrir carpeta de plugins"
+msgstr "Abrir carpeta del paquete"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:76
 msgid "Plugin And Content Manager"
@@ -19624,9 +19610,9 @@ msgid "Aborting remaining tasks."
 msgstr "Cancelando tareas restantes."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "Downloaded %lld/%lld kB"
-msgstr "Descargado %lld/%lld Kb"
+msgstr "Descargado %lld/%lld kB"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
 msgid "Download Progress"
@@ -19649,14 +19635,12 @@ msgid "Applying Package Changes"
 msgstr "Aplicando cambios de paquetes"
 
 #: kicad/pcm/dialogs/panel_package.cpp:97
-#, fuzzy
 msgid "Install Pending"
-msgstr "Tamaño al instalar"
+msgstr "Instalar pendientes"
 
 #: kicad/pcm/dialogs/panel_package.cpp:101
-#, fuzzy
 msgid "Uninstall Pending"
-msgstr "Desinstalar"
+msgstr "Desinstalar pendientes"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:212
 msgid "Metadata"
@@ -19762,9 +19746,9 @@ msgid "Error loading installed packages list: %s"
 msgstr "Error al cargar la lista de paquetes instalados: %s"
 
 #: kicad/pcm/pcm.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "Downloading %lld/%lld kB"
-msgstr "Descargando %lld/%lld Kb"
+msgstr "Descargando %lld/%lld kB"
 
 #: kicad/pcm/pcm.cpp:231
 msgid "Download is too large."
@@ -21758,18 +21742,16 @@ msgstr ""
 "\tR1 + (R2 | R3)...\t\tcualquier combinación de los anteriores\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:76
-#, fuzzy
 msgid "General system design"
-msgstr "Opciones generales"
+msgstr "Diseño general del sistema"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:79
 msgid "Regulators"
 msgstr "Reguladores"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:81
-#, fuzzy
 msgid "Power, current and isolation"
-msgstr "Infracción de margen de orificio"
+msgstr "Potencia, corriente y aislamiento"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:84
 msgid "Electrical Spacing"
@@ -21777,16 +21759,15 @@ msgstr "Espaciado eléctrico"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:90
 msgid "High speed"
-msgstr ""
+msgstr "Alta velocidad"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:94
 msgid "RF Attenuators"
 msgstr "Atenuadores RF"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:96
-#, fuzzy
 msgid "Transmission Lines"
-msgstr "Tipo de línea de transmisión"
+msgstr "Líneas de transmisión"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:98
 msgid "Memo"
@@ -21826,7 +21807,6 @@ msgstr ""
 "¿Desea descartar los cambios y salir?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -21851,8 +21831,8 @@ msgid ""
 "___H___ is thickness (height) in mils<br>\n"
 "___K___ is 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
-"Si especifica la corriente máxima, se calculará el grosor de pista "
-"adecuado.\n"
+"Si especifica la corriente máxima, se calculará el grosor de pista adecuado."
+"\n"
 "\n"
 "Si especifica uno de los grosores de pista, se calculará la corriente máxima "
 "que puede manejar. También se calculará el grosor de la otra pista para que "
@@ -21865,15 +21845,15 @@ msgstr ""
 "de hasta 400 mils (10 mm).\n"
 "\n"
 "La fórmula, de IPC 2221, es\n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>  \n"
-"donde:\n"
-"___I___ es la corriente máxima en A\n"
-"___&Delta;t___ es el aumento de temperatura por encima del ambiente en &deg;"
-"C\n"
-"___W___ es el ancho en mils\n"
-"___H___ es el espesor (altura) en mils\n"
-"___K___ es 0,024 para pistas internas o 0,048 para pistas externas  \n"
+"<center>___I = K &sdot; &Delta;T<sup>0,44</sup> &sdot; (W &sdot; "
+"H)<sup>0,725</sup>___</center>  \n"
+"donde<br>:\n"
+"___I___ es la corriente máxima en A<br>\n"
+"___&Delta;t___ es el aumento de temperatura por encima del ambiente en "
+"&deg;C<br>\n"
+"___W___ es el ancho en mils<br>\n"
+"___H___ es el espesor (altura) en mils<br>\n"
+"___K___ es 0,024 para pistas internas o 0,048 para pistas externas\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -22688,24 +22668,23 @@ msgstr "Amarillo"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:78
 msgid "FR4 natural"
-msgstr ""
+msgstr "FR4 natural"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:79
 msgid "PTFE natural"
-msgstr ""
+msgstr "PTFE natural"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:80
-#, fuzzy
 msgid "Polyimide"
-msgstr "Polilínea"
+msgstr "Poliimida"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:81
 msgid "Phenolic natural"
-msgstr ""
+msgstr "Fenólico natural"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:82
 msgid "Aluminum"
-msgstr ""
+msgstr "Aluminio"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:53
 msgid "Not specified"
@@ -22788,9 +22767,8 @@ msgid "Unknown cleanup action"
 msgstr "Deshacer acción de limpieza"
 
 #: pcbnew/connectivity/connectivity_data.cpp:101
-#, fuzzy
 msgid "Updating nets..."
-msgstr "Actualizando redes"
+msgstr "Actualizando redes..."
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:379
 #: pcbnew/convert_shape_list_to_polygon.cpp:531
@@ -23038,6 +23016,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:586
 msgid "Selected options resulted in errors! Change them and try again."
 msgstr ""
+"¡Las opciones seleccionadas resultaron en errores! Cámbielas e intente de "
+"nuevo."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:593
 #, c-format
@@ -23066,9 +23046,9 @@ msgid "Reannotate anyway?"
 msgstr "¿Reanotar de todas formas?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:790
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "Duplicar elementos %s%s\n"
+msgstr "Instancias duplicadas de %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:796
 msgid "Aborted: too many errors"
@@ -23332,9 +23312,8 @@ msgid "Defaults"
 msgstr "Valores por defecto"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:104
-#, fuzzy
 msgid "Fomatting"
-msgstr "Formato"
+msgstr "Formateado"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:107
 msgid "Design Rules"
@@ -23606,9 +23585,8 @@ msgid "Cleanup Graphics"
 msgstr "Limpiar gráficos"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:81
-#, fuzzy
 msgid "Build Changes"
-msgstr "Deshacer cambios"
+msgstr "Construir cambios"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:133
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:246
@@ -23616,9 +23594,8 @@ msgid "Checking zones..."
 msgstr "Comprobando zonas..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:141
-#, fuzzy
 msgid "Rebuilding connectivity..."
-msgstr "Reconstruir conexiones"
+msgstr "Reconstruyendo conectividad..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:161
 msgid "Board cleanup"
@@ -23682,19 +23659,16 @@ msgid "Constraints Resolution Report"
 msgstr "Informe de Resolución de Requerimientos"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:202
-#, fuzzy
 msgid "Teardrop on Vias/Pads Properties"
-msgstr "Propiedades de pistas y vías"
+msgstr "Lágrimas en propiedades de vías/pads"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:206
-#, fuzzy
 msgid "Teardrop on Tracks Properties"
-msgstr "Ajustar propiedades de pista y vía"
+msgstr "Lágrimas en propiedades de pistas"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:210
-#, fuzzy
 msgid "Teardrop Properties"
-msgstr "Propiedades del grupo"
+msgstr "Propiedades de lágrimas"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:404
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:167
@@ -23788,9 +23762,8 @@ msgstr "Rayado completo"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:143
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:131
-#, fuzzy
 msgid "Outline hatch pitch:"
-msgstr "Grosor de contorno:"
+msgstr "Separación del rayado de contorno:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:157
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:89
@@ -23962,18 +23935,16 @@ msgid "Isolated islands smaller than this will be removed"
 msgstr "Se eliminarán las islas aisladas más pequeñas que este valor"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:398
-#, fuzzy
 msgid "Export Settings to Other Similar Zones"
-msgstr "Exportar ajustes a otras zonas"
+msgstr "Exportar ajustes a otras zonas similares"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:399
-#, fuzzy
 msgid ""
 "Export this zone setup (excluding layer and net selection) to other similar "
 "copper zones (teardrops or usual copper zones)."
 msgstr ""
-"Exporta los ajustes seleccionados en esta zona (exceptuando la capa y la "
-"red) a las demás zonas de cobre."
+"Exporta los ajustes de esta zona (exceptuando la selección de capa y red) a "
+"las otras zonas de cobre similares (lágrimas o zonas de cobre normales)."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:142
 msgid "Copper Zone Properties"
@@ -24217,13 +24188,12 @@ msgid "Create Array"
 msgstr "Crear matriz"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:223
-#, fuzzy
 msgid ""
 "This item was on a non-existing layer.\n"
 "It has been moved to the first defined layer."
 msgstr ""
-"Este elemento se encontraba en una capa no permitida o inexistente.\n"
-"Se ha movido a la primera capa permitida."
+"Este elemento estaba en una capa inexistente.\n"
+"Se ha movido a la primera capa definida."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:311
 msgid "Change dimension properties"
@@ -24369,20 +24339,19 @@ msgstr "0,00000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.00 in / 0 mils / 0.0 mm"
-msgstr ""
+msgstr "0,00 in / 0 mils / 0,0 mm"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
-#, fuzzy
 msgid "0.000 / 0 / 0.00"
-msgstr "0,00000"
+msgstr "0,000 / 0 / 0,00"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.0000 / 0.0 / 0.000"
-msgstr ""
+msgstr "0,0000 / 0,0 / 0,000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 msgid "0.00000 / 0.00 / 0.0000"
-msgstr ""
+msgstr "0,00000 / 0,00 / 0,0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:180
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:150
@@ -24540,23 +24509,22 @@ msgid "-------- DRC cancelled by user.<br><br>"
 msgstr "-------- DRC cancelado por el usuario.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:527
-#, fuzzy, c-format
+#, c-format
 msgid "Remove all exclusions for violations of rule '%s'"
-msgstr "Eliminar exclusión de esta violación"
+msgstr "Eliminar todas las exclusiones para las infracciones de la regla '%s'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:539
-#, fuzzy, c-format
+#, c-format
 msgid "Exclude all violations of rule '%s'"
-msgstr "Excluir esta violación"
+msgstr "Excluir todas las violaciones de la regla '%s'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:549
 msgid "Run clearance resolution tool..."
 msgstr "Abrir la herramienta de resolución de márgenes..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:560
-#, fuzzy
 msgid "Run constraints resolution tool..."
-msgstr "Abrir la herramienta de resolución de márgenes..."
+msgstr "Ejecutar la herramienta de resolución de restricciones..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:587 pcbnew/dialogs/dialog_drc.cpp:763
 msgid "Open the Board Setup... dialog"
@@ -24606,24 +24574,24 @@ msgid "Test for parity between PCB and schematic"
 msgstr "Comprobar la paridad entre la placa y el esquema"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "Violations (%s)"
-msgstr "Infracciones (%d)"
+msgstr "Infracciones (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid "Unconnected Items (%s)"
-msgstr "Elementos no conectados (%d)"
+msgstr "Elementos no conectados (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic Parity (%s)"
-msgstr "Paridad del esquema (%d)"
+msgstr "Paridad del esquema (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored Tests (%s)"
-msgstr "Elementos no conectados (%d)"
+msgstr "Pruebas ignoradas (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.h:106 pcbnew/tools/pcb_actions.cpp:235
 msgid "Design Rules Checker"
@@ -24700,28 +24668,26 @@ msgstr ""
 "librería y quiere propagarlos a la placa."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Updated footprint %s (%s)"
-msgstr "Actualizar la(s) huella(s) seleccionada(s)"
+msgstr "Huella actualizada %s (%s)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Changed footprint %s from '%s' to '%s'"
-msgstr "Cambiar huella %s de '%s' a '%s'"
+msgstr "Huella %s cambiada de '%s' a '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:375
-#, fuzzy
 msgid "*** library footprint not found ***"
-msgstr "*** no se ha encontrado la huella ***"
+msgstr "*** no se ha encontrado la huella de librería ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:395
-#, fuzzy
 msgid ": (no changes)"
-msgstr "Deshacer cambios"
+msgstr ": (sin cambios)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:400
 msgid ": OK"
-msgstr ""
+msgstr ": OK"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
 msgid "Update all footprints on board"
@@ -25186,9 +25152,8 @@ msgid "Search DRC markers"
 msgstr "Buscar marcadores DRC"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:78
-#, fuzzy
 msgid "Search net names"
-msgstr "Nombres de hoja"
+msgstr "Buscar nombres de redes"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:96
 msgid "Find Previous"
@@ -25213,14 +25178,13 @@ msgid "3D Models"
 msgstr "Modelos 3D"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:275
-#, fuzzy
 msgid ""
 "Locked footprints cannot be freely moved and oriented on the canvas and can "
 "only be selected when the 'Locked items' checkbox is enabled in the "
 "selection filter."
 msgstr ""
-"La huella está bloqueada: no puede ser movida u orientada en el lienzo y "
-"solo puede ser seleccionada cuando la opción 'Elementos bloqueados' está "
+"Las huellas bloqueadas no pueden ser movidas u orientadas en el lienzo y "
+"solo pueden ser seleccionadas cuando la opción 'Elementos bloqueados' está "
 "habilitada en el filtro de selección."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:361
@@ -25330,12 +25294,12 @@ msgstr "Excluir del BOM"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:206
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:210
 msgid "Exempt from courtyard requirement"
-msgstr ""
+msgstr "Exento del requisito del patio"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:207
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:211
 msgid "Will not generate \"missing courtyard\" DRC violations"
-msgstr ""
+msgstr "No generará las infracciones de DRC de \"patio faltante\""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:223
 msgid "Update Footprint from Library..."
@@ -25380,9 +25344,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:256
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:616
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:54
-#, fuzzy
 msgid "Solder mask expansion:"
-msgstr "Opciones máscara de soldadura:"
+msgstr "Expansión de máscara de soldadura:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:287
 msgid ""
@@ -25399,7 +25362,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:298
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:269
 msgid "Allow bridged solder mask apertures between pads"
-msgstr ""
+msgstr "Permitir aperturas de máscara de soldadura puenteadas entre pads"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:272
@@ -25409,7 +25372,6 @@ msgid "Solder paste absolute clearance:"
 msgstr "Margen absoluto de la pasta de soldadura:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:303
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder paste for this "
 "footprint.\n"
@@ -25421,9 +25383,10 @@ msgstr ""
 "Este es el margen local entre los pads y la pasta de soldadura para esta "
 "huella.\n"
 "Este valor puede ser sustituido por el valor local del pad.\n"
-"El valor final del margen es la suma de este valor y la proporción de "
-"margen.\n"
-"Un valor negativo significa un tamaño de máscara menor que el del pad."
+"El valor final del margen es la suma de este valor y la proporción de margen."
+"\n"
+"Un valor negativo significa un tamaño de apertura de stencil menor que el "
+"tamaño del pad."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:314
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:285
@@ -25444,12 +25407,15 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"Esta es la proporción en % del margen local entre los pads y la pasta para "
-"esta huella.\n"
-"Un valor de 10 significa que el margen en un 10% del tamaño del pad.\n"
+"Esta es la proporción porcentual del margen local entre el ancho y alto de "
+"los pads para esta huella.\n"
+"Un valor de 10 significa que el margen horizontal es 10% del ancho del pad, "
+"y el margen vertical es 10% del alto del pad.\n"
 "Este valor puede ser sustituido por el valor local del pad.\n"
-"El valor final del margen es la suma de este valor y el valor del margen.\n"
-"Un valor negativo significa un tamaño de máscara menor que el del pad."
+"El valor final del margen es la suma de este valor y el valor absoluto del "
+"margen.\n"
+"Un valor negativo significa un tamaño de apertura de stencil menor que el "
+"tamaño del pad."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:339
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:310
@@ -25530,9 +25496,8 @@ msgid "Footprint name:"
 msgstr "Nombre de huella:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:135
-#, fuzzy
 msgid "Private Layers"
-msgstr "Imprimir capas"
+msgstr "Capas privadas"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:188
 msgid "Component type:"
@@ -25569,7 +25534,6 @@ msgstr ""
 "la pestaña de márgenes y ajustes locales de las propiedades del pad."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:274
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder paste for\n"
 "this footprint.\n"
@@ -25581,9 +25545,10 @@ msgid ""
 msgstr ""
 "Este es el margen local entre los pads y la pasta de soldadura para esta "
 "huella.\n"
-"El valor final del margen es la suma de este valor y la proporción de "
-"margen.\n"
-"Un valor negativo significa un tamaño de máscara menor que el del pad.\n"
+"El valor final del margen es la suma de este valor y la proporción de margen."
+"\n"
+"Un valor negativo significa un tamaño de apertura de stencil menor que el "
+"del pad.\n"
 "Este valor puede ser sustituido individualmente por cada pad en\n"
 "la pestaña de márgenes y ajustes locales de las propiedades del pad."
 
@@ -25600,13 +25565,16 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
-"Esta es la proporción en porcentaje del margen local entre los pads y\n"
-"la pasta de soldadura para esta huella.\n"
-"Un valor de 10 significa que el margen en un 10% del tamaño del pad.\n"
-"El valor final del margen es la suma de este valor y el valor del margen.\n"
-"Un valor negativo significa un tamaño de máscara menor que el del pad.\n"
-"Este valor puede ser sustituido individualmente por cada pad en\n"
-"la pestaña de márgenes y ajustes locales de las propiedades del pad."
+"Esta es la proporción de margen local como un porcentaje entre el ancho y "
+"alto de los pads para esta huella.\n"
+"Un valor de 10 significa que el margen horizontal es un 10% del ancho del "
+"pad, y el margen vertical es un 10% del alto del pad.\n"
+"El valor final del margen es la suma de este valor y el valor absoluto del "
+"margen.\n"
+"Un valor negativo significa un tamaño de apertura de stencil menor que el "
+"tamaño del pad.\n"
+"Este valor puede ser sustituido individualmente por cada pad en la pestaña "
+"de márgenes y ajustes locales de las propiedades del pad."
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:144
 msgid "All footprint generator scripts were loaded"
@@ -26061,14 +26029,12 @@ msgid "Delete Items"
 msgstr "Borrar elementos"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:139
-#, fuzzy
 msgid "Other text items"
-msgstr "Otros elementos"
+msgstr "Otros elementos de texto"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:140
-#, fuzzy
 msgid "Graphic items"
-msgstr "Elementos gráficos de la placa"
+msgstr "Elementos gráficos"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:255
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
@@ -26186,9 +26152,8 @@ msgid "Via Diameter"
 msgstr "Diámetro de vía"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:232
-#, fuzzy
 msgid "uVia Diameter"
-msgstr "Diámetro de vía"
+msgstr "Diámetro de uVía"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:39
 msgid "Filter Items"
@@ -26334,33 +26299,28 @@ msgid "Deselect All"
 msgstr "Deseleccionar todo"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:49
-#, fuzzy
 msgid "Board layers and physical stackup"
-msgstr "Actualizar Apilado Físico"
+msgstr "Capas de placa y apilado físico"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:52
 msgid "Solder mask/paste defaults"
 msgstr "Ajustes por defecto de máscara y pasta de soldadura"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:55
-#, fuzzy
 msgid "Text && graphics default properties"
-msgstr "Propiedades por defecto de texto y gráficos"
+msgstr "Propiedades predeterminadas de texto y gráficos"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
-#, fuzzy
 msgid "Text && graphics formatting"
-msgstr "Texto y gráficos"
+msgstr "Formateado de texto y gráficos"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
-#, fuzzy
 msgid "Design rule constraints"
-msgstr "Reglas de diseño"
+msgstr "Restricciones de reglas de diseño"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:64
-#, fuzzy
 msgid "Predefined track && via dimensions"
-msgstr "Dimensiones por defecto de pistas y vías"
+msgstr "Dimensiones predeterminadas de pistas y vías"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:243
 #: pcbnew/dialogs/dialog_imported_layers.cpp:251
@@ -26615,9 +26575,8 @@ msgid "Net Inspector"
 msgstr "Inspector de red"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:81
-#, fuzzy
 msgid "Load and Test Netlist"
-msgstr "Leer lista de redes"
+msgstr "Cargar y probar lista de redes"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:123
 msgid "Select Netlist"
@@ -26718,9 +26677,9 @@ msgid "Line width may not be 0 for unfilled shapes."
 msgstr "El ancho de línea no puede ser 0 para formas sin relleno."
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid "Corner %d"
-msgstr "Esquinas"
+msgstr "Esquina %d"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:341
 msgid "Polygon must have at least 3 corners"
@@ -26814,9 +26773,8 @@ msgid "corners count %d"
 msgstr "número de esquinas %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:740
-#, fuzzy
 msgid "Unknown primitive"
-msgstr "tipo de pin desconocido"
+msgstr "Primitivo desconocido"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:929
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
@@ -26844,14 +26802,12 @@ msgid "Warning: Pad size is less than zero."
 msgstr "Advertencia: el tamaño del pad es menor a cero."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1265
-#, fuzzy
 msgid "Warning: Pad hole not inside pad shape."
-msgstr "Advertencia: el tamaño del pad es menor a cero."
+msgstr "Advertencia: el orificio del pad está afuera de la forma."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1279
-#, fuzzy
 msgid "Warning: Pad hole will leave no copper."
-msgstr "Advertencia: el tamaño del pad es menor a cero."
+msgstr "Advertencia: el orificio del pad no dejará cobre."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1284
 msgid "Warning: Negative local clearance values will have no effect."
@@ -26895,27 +26851,23 @@ msgstr ""
 "al menos una capa."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1348
-#, fuzzy
 msgid "Error: Trapazoid delta is too large."
-msgstr "Error: el pad no tiene una capa."
+msgstr "Error: el delta del trapezoide es demasiado grande."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1357
-#, fuzzy
 msgid "Error: Through hole pad has no hole."
-msgstr "Pad de orificio pasante sin un orificio"
+msgstr "Error: pad de orificio pasante sin un orificio."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1364
-#, fuzzy
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
 msgstr ""
-"Advertencia: los pads del conector normalmente no tienen pasta de soldadura. "
+"Advertencia: los pads de conector normalmente no tienen pasta de soldadura. "
 "Utilice pads SMD en su lugar."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1373
-#, fuzzy
 msgid "Error: SMD pad has a hole."
-msgstr "Error: el pad no tiene una capa."
+msgstr "Error: el pad SMD tiene un orificio."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1379
 msgid "Warning: SMD pad has no outer layers."
@@ -27214,7 +27166,6 @@ msgid "E.C.O.2"
 msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:551
-#, fuzzy
 msgid "Fabrication property:"
 msgstr "Propiedad de fabricación:"
 
@@ -27267,9 +27218,8 @@ msgid "Castellated pad (through hole only)"
 msgstr "Pad castellado (solo orificio pasante)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:582
-#, fuzzy
 msgid "Clearance Overrides"
-msgstr "Remplazo de margen"
+msgstr "Reemplazos de margenes"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:585
 msgid "Set values to 0 to use parent footprint or netclass values."
@@ -27352,24 +27302,20 @@ msgid "Zone knockout:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:728
-#, fuzzy
 msgid "Pad shape"
-msgstr "Forma del pad:"
+msgstr "Forma de pad"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:728
-#, fuzzy
 msgid "Pad convex hull"
-msgstr "Utilizar pad convexo"
+msgstr "Casco convexo de pad"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:741
-#, fuzzy
 msgid "Thermal Relief Overrides"
-msgstr "Ancho del alivio térmico"
+msgstr "Reemplazos de alivios térmicos"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:749
-#, fuzzy
 msgid "Relief gap:"
-msgstr "Espaciado del alivio térmico:"
+msgstr "Espaciado del alivio:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:760
 msgid "Spoke width:"
