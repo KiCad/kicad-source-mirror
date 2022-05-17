@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:05-0700\n"
-"PO-Revision-Date: 2022-05-15 06:48+0000\n"
+"PO-Revision-Date: 2022-05-17 19:03+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v6/es/>\n"
 "Language: es\n"
@@ -3123,7 +3123,7 @@ msgid ""
 msgstr ""
 "Tiempo de espera después del primer cambio para crear una copia de respaldo "
 "de la placa en disco.\n"
-"Si se indica 0, se desabilitará la copia de respaldo"
+"Si se estableció a 0, se deshabilitará la copia de respaldo"
 
 #: common/dialogs/panel_common_settings_base.cpp:217
 #: common/dialogs/panel_common_settings_base.cpp:294
@@ -3144,7 +3144,7 @@ msgid ""
 "If set to 0, cache clearing is disabled"
 msgstr ""
 "Los archivos de caché 3D más antiguos que esto se eliminan.\n"
-"Si se ha introducido 0, el borrado de la caché está deshabilitado"
+"Si se estableció a 0, el borrado de la caché está deshabilitado"
 
 #: common/dialogs/panel_common_settings_base.cpp:237
 msgid "days"
@@ -3208,7 +3208,7 @@ msgid ""
 "next time you save (set to 0 for no minimum)"
 msgstr ""
 "Número de minutos desde la última copia de seguridad antes de que se cree "
-"otra la próxima vez que guarde (establecido en 0 sin mínimo)"
+"otra la próxima vez que guarde (establecer a 0 para que no haya mínimo)"
 
 #: common/dialogs/panel_common_settings_base.cpp:298
 msgid "Maximum total backup size:"
@@ -7289,13 +7289,12 @@ msgid "Save to Schematic and File"
 msgstr "Guardar al esquema y el archivo"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
-#, fuzzy
 msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
 msgstr ""
-"Guardar la asociación de huella en el campo de huellas del componente del "
-"esquema"
+"Guardar las asociaciones de huellas en los campos de huellas de los símbolos "
+"del esquema y en los archivos del esquema"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select next unassigned symbol"
@@ -12276,15 +12275,13 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:543
-#, fuzzy
 msgid "Remove Invalid Cells"
-msgstr "Eliminar elementos"
+msgstr "Eliminar celdas inválidas"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:361
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
-#, fuzzy
 msgid "Cancel Table Update"
-msgstr "Diámetro de agujero de separación:"
+msgstr "Cancelar actualización de tabla"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
@@ -14379,7 +14376,6 @@ msgid "Syntax Help"
 msgstr "Ayuda de sintaxis"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14554,8 +14550,8 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~{barra superior}</samp><br> &nbsp;"
-"<br><samp>~{CLK}</samp></td>\n"
+"        <td> &nbsp;<br><samp>~{barra superior}</samp><br> "
+"&nbsp;<br><samp>~{CLK}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
 "samp><br> <samp>barra superior</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
@@ -14596,8 +14592,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definición de bus</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>Redes resultantes</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -14645,12 +14641,12 @@ msgstr ""
 "        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -14794,7 +14790,6 @@ msgid "Cancel Load"
 msgstr "Cancelar la carga"
 
 #: eeschema/sheet.cpp:225
-#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -14802,9 +14797,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Hay nombres de biblioteca en el esquema cargado que faltan en la tabla de "
-"librerías del proyecto. Esto puede provocar enlaces a la librería de "
-"símbolos inválidos para el esquema cargado. ¿Desea continuar?"
+"Hay nombres de biblioteca en el esquema seleccionado que faltan en la tabla "
+"de librerías del proyecto actual. Esto puede resultar en referencias de "
+"librería de símbolos inválidas para el esquema cargado.\n"
+"\n"
+"¿Desea continuar?"
 
 #: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
 #: eeschema/sheet.cpp:380
@@ -14819,9 +14816,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"El archivo seleccionado fue creado como parte de un proyecto distinto. "
+"Enlazar el archivo a este proyecto puede resultar en referencias de "
+"librerías de símbolos faltantes o incorrectas.\n"
+"\n"
+"¿Desea continuar?"
 
 #: eeschema/sheet.cpp:315
-#, fuzzy
 msgid ""
 "There are symbol library names in the selected schematic that are missing "
 "from the selected schematic project library table.  This may result in "
@@ -14829,12 +14830,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Hay nombres de librerías en el esquema cargado que faltan en la tabla de "
-"librerías del proyecto cargado. Esto puede provocar enlaces de símbolos "
-"inválidos para el esquema. ¿Desea continuar?"
+"Hay nombres de librerías de símbolos en el esquema seleccionado que faltan "
+"en la tabla de librerías del proyecto del esquema seleccionado. Esto puede "
+"resultar en referencias de librerías de símbolos inválidas.\n"
+"\n"
+"¿Desea continuar?"
 
 #: eeschema/sheet.cpp:376
-#, fuzzy
 msgid ""
 "A duplicate library name that references a different library exists in the "
 "current library table.  This conflict cannot be resolved and may result in "
@@ -14844,8 +14846,10 @@ msgid ""
 msgstr ""
 "Existe un nombre de librería duplicado, que hace referencia a una librería "
 "diferente, en la tabla de librerías activa. Este conflicto no se puede "
-"resolver y puede dar como resultado enlaces de librería de símbolos "
-"inválidos para el esquema. ¿Desea continuar?"
+"resolver y puede resultar en referencias de librerías de símbolos inválidas."
+"\n"
+"\n"
+"¿Desea continuar?"
 
 #: eeschema/sheet.cpp:564
 #, c-format
@@ -15217,9 +15221,8 @@ msgid "Library changes are unsaved"
 msgstr "Los cambios en la biblioteca no se han guardado"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:247
-#, fuzzy
 msgid "Symbol library loading was cancelled by user."
-msgstr "La librería de símbolos '%s' ya existe."
+msgstr "La carga de librería de símbolos fue cancelada por el usuario."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:595
 #: eeschema/tools/sch_edit_tool.cpp:117
