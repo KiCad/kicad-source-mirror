@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:03-0700\n"
-"PO-Revision-Date: 2022-05-15 06:48+0000\n"
+"PO-Revision-Date: 2022-05-17 19:03+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -3106,7 +3106,7 @@ msgid ""
 msgstr ""
 "Tiempo de espera después del primer cambio para crear una copia de respaldo "
 "de la placa en disco.\n"
-"Si se indica 0, se desabilitará la copia de respaldo"
+"Si se estableció a 0, se deshabilitará la copia de respaldo"
 
 #: common/dialogs/panel_common_settings_base.cpp:237
 #: common/dialogs/panel_common_settings_base.cpp:314
@@ -3127,7 +3127,7 @@ msgid ""
 "If set to 0, cache clearing is disabled"
 msgstr ""
 "Los archivos de caché 3D más antiguos que esto se eliminan.\n"
-"Si se ha introducido 0, el borrado de la caché está deshabilitado"
+"Si se estableció a 0, el borrado de la caché está deshabilitado"
 
 #: common/dialogs/panel_common_settings_base.cpp:257
 msgid "days"
@@ -3191,7 +3191,7 @@ msgid ""
 "next time you save (set to 0 for no minimum)"
 msgstr ""
 "Número de minutos desde la última copia de seguridad antes de que se cree "
-"otra la próxima vez que guarde (establecido en 0 sin mínimo)"
+"otra la próxima vez que guarde (establecer a 0 para que no haya mínimo)"
 
 #: common/dialogs/panel_common_settings_base.cpp:318
 msgid "Maximum total backup size:"
@@ -7520,13 +7520,12 @@ msgid "Save to Schematic and File"
 msgstr "Guardar al esquema y el archivo"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
-#, fuzzy
 msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
 msgstr ""
-"Guardar la asociación de huella en el campo de huellas del componente del "
-"esquema"
+"Guardar las asociaciones de huellas en los campos de huellas de los símbolos "
+"del esquema y en los archivos del esquema"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select next unassigned symbol"
@@ -8694,9 +8693,8 @@ msgid "Checking for library symbol issues..."
 msgstr "Comprobando problemas con los símbolos de la biblioteca..."
 
 #: eeschema/dialogs/dialog_erc.cpp:501
-#, fuzzy
 msgid "Checking for off grid pins and wires..."
-msgstr "Comprobando huellas..."
+msgstr "Comprobando pines y cables fuera de la rejilla..."
 
 #: eeschema/dialogs/dialog_erc.cpp:584 pcbnew/dialogs/dialog_drc.cpp:515
 msgid "errors"
@@ -8779,9 +8777,8 @@ msgid "Violation Severity"
 msgstr "Severidad de la infracción"
 
 #: eeschema/dialogs/dialog_erc.cpp:826 pcbnew/dialogs/dialog_drc.cpp:763
-#, fuzzy
 msgid "Edit ignored violations..."
-msgstr "Editar opciones de la línea..."
+msgstr "Editar infracciones ignoradas..."
 
 #: eeschema/dialogs/dialog_erc.cpp:903 pcbnew/dialogs/dialog_gendrill.cpp:484
 #, c-format
@@ -8827,9 +8824,9 @@ msgid "Violations (%d)"
 msgstr "Infracciones (%d)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored Tests (%d)"
-msgstr "Elementos no conectados (%d)"
+msgstr "Pruebas ignoradas (%d)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:139
 #: pcbnew/dialogs/dialog_drc_base.cpp:183
@@ -8894,9 +8891,8 @@ msgstr "(%s)"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:170
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:111
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:83
-#, fuzzy
 msgid "Font:"
-msgstr "Tamaño de fuente:"
+msgstr "Fuente:"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:102
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:173
@@ -8911,21 +8907,18 @@ msgstr "Tamaño de fuente:"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:174
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:115
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:87
-#, fuzzy
 msgid "KiCad Font"
-msgstr "KiCad "
+msgstr "Fuente de KiCad"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:117
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:85
-#, fuzzy
 msgid "Horizontal text"
-msgstr "Horizontal izquierda"
+msgstr "Texto horizontal"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:122
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:90
-#, fuzzy
 msgid "Vertical text"
-msgstr "Vertical"
+msgstr "Texto vertical"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:147
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:115
@@ -8939,9 +8932,8 @@ msgstr "Alineación izquierda"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:120
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:104
 #: eeschema/dialogs/dialog_text_properties_base.cpp:111
-#, fuzzy
 msgid "Align horizontal center"
-msgstr "Alinear al centro horizontal"
+msgstr "Alineación horizontal central"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:157
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:125
@@ -8963,9 +8955,8 @@ msgstr "Alineación superior"
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:140
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:119
 #: eeschema/dialogs/dialog_text_properties_base.cpp:126
-#, fuzzy
 msgid "Align vertical center"
-msgstr "Alinear al centro vertical"
+msgstr "Alineación vertical central"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:177
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:145
@@ -9100,9 +9091,8 @@ msgid "Set To"
 msgstr "Asignar a"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
-#, fuzzy
 msgid "Text color:"
-msgstr "Colores de redes:"
+msgstr "Color del texto:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:220
 #: eeschema/pin_type.cpp:129
@@ -9154,9 +9144,8 @@ msgstr "Estilo de línea:"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:219
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:94
 #: eeschema/dialogs/dialog_text_properties_base.cpp:246
-#, fuzzy
 msgid "Fill color:"
-msgstr "Color de línea:"
+msgstr "Color del relleno:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:366
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:71
@@ -9233,7 +9222,6 @@ msgid "Diameter:"
 msgstr "Diámetro:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
-#, fuzzy
 msgid "Set diameter to 0 to use schematic's junction dot size."
 msgstr ""
 "Establezca el diámetro a 0 para utilizar el tamaño de punto de unión del "
@@ -9242,20 +9230,16 @@ msgstr ""
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_properties_base.cpp:81
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:94
-#, fuzzy
 msgid "Clear color to use Schematic Editor colors."
-msgstr ""
-"Establezca el color como transparente para utilizar los colores del Editor "
-"de Esquemas."
+msgstr "Color transparente para utilizar los colores del Editor de Esquemas."
 
 #: eeschema/dialogs/dialog_junction_props_base.h:59
 msgid "Junction Properties"
 msgstr "Propiedades de la unión"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:97
-#, fuzzy
 msgid "Pin length:"
-msgstr "Longitud de &pin:"
+msgstr "Longitud de pin:"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:102
 msgid "Global Label Properties"
@@ -9271,23 +9255,20 @@ msgid "Label Properties"
 msgstr "Propiedades de la etiqueta"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:105
-#, fuzzy
 msgid "Directive Label Properties"
-msgstr "Propiedades de la etiqueta jerárquica"
+msgstr "Propiedades de la etiqueta directiva"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:106
 msgid "Hierarchical Sheet Pin Properties"
 msgstr "Propiedades de pin de hoja jerárquica"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:421
-#, fuzzy
 msgid "Label can not be empty."
-msgstr "El nombre de red no puede estar vacío."
+msgstr "La etiqueta no puede estar vacía."
 
 #: eeschema/dialogs/dialog_label_properties.cpp:603
-#, fuzzy
 msgid "The first field is mandatory."
-msgstr "Los primeros %d campos son obligatorios."
+msgstr "El primer campo es obligatorio."
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:30
 #: eeschema/dialogs/dialog_label_properties_base.cpp:39
@@ -9410,9 +9391,8 @@ msgstr "Posición Y"
 #: pcbnew/fp_text.cpp:297 pcbnew/fp_textbox.cpp:242
 #: pcbnew/pcb_dimension.cpp:338 pcbnew/pcb_text.cpp:144
 #: pcbnew/pcb_textbox.cpp:236
-#, fuzzy
 msgid "Font"
-msgstr "Tamaño de fuente:"
+msgstr "Fuente"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:118
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:89
@@ -9481,13 +9461,12 @@ msgid "Passive"
 msgstr "Pasivo"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:166
-#, fuzzy
 msgid "Dot"
-msgstr "Puntos"
+msgstr "Punto"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:172
 msgid "Diamond"
-msgstr ""
+msgstr "Diamante"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:182
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
@@ -9498,16 +9477,15 @@ msgstr "Formato"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:42
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:43
 msgid "ALL"
-msgstr ""
+msgstr "TODOS"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:44
 msgid "Standard"
-msgstr "Standard"
+msgstr "Estándar"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:45
-#, fuzzy
 msgid "Alternate"
-msgstr "Nombre de pin alternativo"
+msgstr "Alternativo"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:113
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:87
@@ -9553,9 +9531,8 @@ msgstr "Tamaño de texto del nombre"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:100
-#, fuzzy
 msgid "De Morgan"
-msgstr "Estándar de De Morgan"
+msgstr "De Morgan"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:777
 #: eeschema/dialogs/dialog_lib_shape_properties.cpp:55
@@ -9610,28 +9587,24 @@ msgid "0"
 msgstr "0"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:36
-#, fuzzy
 msgid "Pin count:"
-msgstr "número de pines"
+msgstr "Cantidad de pines:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:47
-#, fuzzy
 msgid "Duplicate pins:"
-msgstr "Duplicados:"
+msgstr "Pines duplicados:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:136
 msgid "Group by name"
 msgstr "Agrupar por nombre"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:139
-#, fuzzy
 msgid "Group Selected"
-msgstr "Seleccionar cuadrícula"
+msgstr "Agrupar seleccionados"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:150
-#, fuzzy
 msgid "Filter by unit:"
-msgstr "Filtrar por número de pines"
+msgstr "Filtrar por unidad:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:81
 msgid "Pin Table"
@@ -9749,9 +9722,8 @@ msgstr "Nuevo símbolo"
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:39
 #: eeschema/dialogs/dialog_text_properties_base.cpp:191
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:150
-#, fuzzy
 msgid "Border"
-msgstr "Orden"
+msgstr "Contorno"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:38
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:129
@@ -9760,11 +9732,10 @@ msgid "Border width:"
 msgstr "Ancho del contorno:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:52
-#, fuzzy
 msgid "Set border width to 0 to use schematic's default symbol line width."
 msgstr ""
-"Establezca el ancho a 0 para utilizar la anchura de las líneas de la clase "
-"de red."
+"Establezca el ancho de contorno a 0 para utilizar el ancho de línea "
+"predeterminado de símbolo de esquema."
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:60
 msgid "Fill Style"
@@ -9783,15 +9754,13 @@ msgid "Fill with body background color"
 msgstr "Rellenar con el color del fondo"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:76
-#, fuzzy
 msgid "Fill with:"
-msgstr "Typo de relleno:"
+msgstr "Ancho de relleno:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:91
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:168
-#, fuzzy
 msgid "Private to Symbol Editor"
-msgstr "Editar con el Editor de símbolos"
+msgstr "Privado al Editor de símbolos"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:97
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:153
@@ -9834,9 +9803,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:320
 #: eeschema/tools/symbol_editor_control.cpp:322
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol name '%s' already in use in library '%s'."
-msgstr "El símbolo '%s' ya existe en la librería '%s'."
+msgstr "El nombre de símbolo '%s' ya está en uso en la librería '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:437
 #, c-format
@@ -10037,33 +10006,28 @@ msgstr "Estilo:"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:213
 #: eeschema/dialogs/dialog_text_properties_base.cpp:240
-#, fuzzy
 msgid "Background fill"
-msgstr "Relleno de fondo:"
+msgstr "Relleno de fondo"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:239
-#, fuzzy
 msgid "Private to symbol editor"
-msgstr "Editar con el Editor de símbolos"
+msgstr "Privado al editor de símbolos"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.h:106
 #: eeschema/dialogs/dialog_text_properties.cpp:58
 #: pcbnew/dialogs/dialog_textbox_properties_base.h:103
-#, fuzzy
 msgid "Text Box Properties"
-msgstr "Propiedades del texto"
+msgstr "Propiedades de caja de texto"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:77
-#, fuzzy
 msgid "Set width to 0 to use schematic's default line width."
 msgstr ""
-"Establezca el ancho a 0 para utilizar la anchura de las líneas de la clase "
-"de red."
+"Establezca el ancho a 0 para utilizar la anchura de línea predeterminada del "
+"esquema."
 
 #: eeschema/dialogs/dialog_line_properties_base.h:68
-#, fuzzy
 msgid "Line Properties"
-msgstr "Propiedades de pin"
+msgstr "Propiedades de línea"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:104
 msgid "Conflicting Labels"
@@ -10224,17 +10188,15 @@ msgstr ""
 "símbolos De Morgan."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:270
-#, fuzzy
 msgid "Exit sync pins mode"
-msgstr "Editar modelo Spice"
+msgstr "Salir del modo de pines sincronizados"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:285
-#, fuzzy
 msgid ""
 "Synchronized pins mode is enabled.\n"
 "Similar pins will be edited regardless of this option."
 msgstr ""
-"El modo de edición de pines sincronizado está activado.\n"
+"El modo de pines sincronizados está activado.\n"
 "Los pines similares serán editados, sin importar esta opción."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:290
@@ -10261,17 +10223,20 @@ msgstr ""
 "¿Quiere continuar?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:430
-#, fuzzy
 msgid "Synchronized Pins Mode."
-msgstr "Modo de edición de pines sincronizado"
+msgstr "Modo de pines sincronizados."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:432
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
 msgstr ""
+"Modo de pines sincronizados. Los pines nuevos serán añadidos a todas las "
+"unidades."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
 msgstr ""
+"Modo de pines sincronizados. Los pines coincidentes en otras unidades serán "
+"actualizados."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:43
 msgid "Pin &name:"
@@ -10900,10 +10865,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_shape_properties.cpp:54
 #: eeschema/dialogs/dialog_sheet_properties.cpp:77
 #: eeschema/dialogs/dialog_text_properties.cpp:72
-#, fuzzy
 msgid "Note: individual item colors overridden in Preferences."
-msgstr ""
-"Nota: los colores de los elementos se ignoran en el tema de color actual."
+msgstr "Nota: colores de elementos individuales ignorados por las preferencias."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:158
@@ -10913,23 +10876,19 @@ msgid "Filled shape"
 msgstr "Forma rellena"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:122
-#, fuzzy
 msgid "Set border width to 0 to use schematic's default line width."
 msgstr ""
-"Establezca el ancho a 0 para utilizar la anchura de las líneas de la clase "
-"de red."
+"Establezca el ancho de contorno a 0 para utilizar la anchura predeterminada "
+"de líneas del esquema."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:126
-#, fuzzy
 msgid "Clear colors to use Schematic Editor colors."
-msgstr ""
-"Establezca el color como transparente para utilizar los colores del Editor "
-"de Esquemas."
+msgstr "Color transparente para utilizar los colores del Editor de esquemas."
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:79
 #, fuzzy, c-format
 msgid "%s Properties"
-msgstr "Propiedades"
+msgstr "%s Propiedades"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:86
 msgid "Sheet Pin Properties"
@@ -11079,9 +11038,8 @@ msgid "Hierarchical path:"
 msgstr "Ruta jerárquica:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:199
-#, fuzzy
 msgid "path"
-msgstr "Ruta:"
+msgstr "ruta"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:84
 msgid "Sheet Properties"
@@ -11422,9 +11380,8 @@ msgid "Subcircuit"
 msgstr "Subcircuito"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:85
-#, fuzzy
 msgid "Code Model"
-msgstr "Mover Todos los Módulos"
+msgstr "Modelo de código"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:497
 msgid ""
@@ -11456,49 +11413,40 @@ msgid "For a JFET, pin order is drain, gate, source"
 msgstr "Para un JFET, el orden de los pines es drenaje, puerta, fuente"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:803
-#, fuzzy
 msgid "Invalid Impedance value"
-msgstr "Valor de propiedad inválido"
+msgstr "Valor de impedancia inválido"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:818
-#, fuzzy
 msgid "Invalid delay value"
-msgstr "Valor de propiedad inválido"
+msgstr "Valor de retraso inválido"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:833
-#, fuzzy
 msgid "Invalid frequency value"
-msgstr "Valor de propiedad inválido"
+msgstr "Valor de frecuencia inválido"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:845
-#, fuzzy
 msgid "Invalid length in wavelength value"
-msgstr "Nombre de pin alternativo inválido"
+msgstr "Valor de longitud de onda inválido"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:870
-#, fuzzy
 msgid "Invalid resistance value"
-msgstr "Valor de propiedad inválido"
+msgstr "Valor de resistencia inválido"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:881
-#, fuzzy
 msgid "Invalid capacitance value"
-msgstr "Valor de cadena Spice no válido"
+msgstr "Valor capacidad inválido"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:892
-#, fuzzy
 msgid "Invalid inductance value"
-msgstr "Valor de cadena Spice no válido"
+msgstr "Valor de inductancia inválido"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:903
-#, fuzzy
 msgid "Invalid conductance value"
-msgstr "Valor de propiedad inválido"
+msgstr "Valor de conductancia inválido"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:914
-#, fuzzy
 msgid "Invalid length value"
-msgstr "Valor de propiedad inválido"
+msgstr "Valor de longitud inválido"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1066
 #, c-format
@@ -11865,9 +11813,8 @@ msgid "Source"
 msgstr "Fuente"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:938
-#, fuzzy
 msgid "Line model"
-msgstr "Modo de impresión"
+msgstr "Modelo de línea"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:954
 #: pcb_calculator/transline_ident.cpp:149
@@ -11890,12 +11837,11 @@ msgstr "ohmio"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:965
 msgid "Propagation delay"
-msgstr ""
+msgstr "Retraso de propagación"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:972
-#, fuzzy
 msgid "s"
-msgstr "ns"
+msgstr "s"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:976
 #: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
@@ -11904,67 +11850,60 @@ msgid "Frequency"
 msgstr "Frecuencia"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:987
-#, fuzzy
 msgid "Length in wavelength"
-msgstr "Longitud en el paquete"
+msgstr "Longitud de longitud de onda"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1000
-#, fuzzy
 msgid "Use time delay"
-msgstr "Retardo de tiempo:"
+msgstr "Usar el retardo de tiempo"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1000
 msgid "Use frequency and number of wavelength"
-msgstr ""
+msgstr "Utilizar la frecuencia y el número de la longitud de onda"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1002
-#, fuzzy
 msgid "Delay / Electrical length"
-msgstr "Longitud eléctrica"
+msgstr "Retraso / Longitud eléctrica"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1010
 msgid "Lossless"
-msgstr ""
+msgstr "Sin pérdidas"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1024
 msgid "Resistance per unit length"
-msgstr ""
+msgstr "Resistencia por unidad de longitud"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1031
 msgid "ohm / unit"
-msgstr ""
+msgstr "ohm / unidad"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1035
-#, fuzzy
 msgid "Inductance per unit length"
-msgstr "Longitud del conductor:"
+msgstr "Inductancia por unidad de longitud"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1042
 msgid "henry / unit"
-msgstr ""
+msgstr "henrio / unidad"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1046
 msgid "Capacitance per unit length"
-msgstr ""
+msgstr "Capacidad por unidad de longitud"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1053
 msgid "farad / unit"
-msgstr ""
+msgstr "faradio / unidad"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1057
-#, fuzzy
 msgid "Conductance per unit length"
-msgstr "Longitud del conductor:"
+msgstr "Conductancia por unidad de longitud"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1064
-#, fuzzy
 msgid "siemens / unit"
-msgstr "Unidades de &medida:"
+msgstr "siemens / unidad"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1079
-#, fuzzy
 msgid "Extra parameters"
-msgstr "Parámetros incorrectos"
+msgstr "Parámetros adicionales"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1092
 msgid ""
@@ -11977,16 +11916,23 @@ msgid ""
 "\n"
 "Any other combination will yield erroneous results and should not be tried."
 msgstr ""
+"Los siguientes tipos de líneas han sido implementadas por ahora:\n"
+"\n"
+"- RLC\n"
+"- RC\n"
+"- LC\n"
+"- RG\n"
+"\n"
+"Cualquier otra combinación producirá resultados erróneos y no debe ser "
+"utilizada."
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1100
-#, fuzzy
 msgid "Lossy"
-msgstr "Tg Pérdida"
+msgstr "Con pérdidas"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1111
-#, fuzzy
 msgid "Transmission Line"
-msgstr "Tipo de línea de transmisión"
+msgstr "Línea de transmisión"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1118
 msgid "Disable symbol for simulation"
@@ -12059,42 +12005,36 @@ msgid "Field name '%s' already in use."
 msgstr "El nombre de campo '%s' ya está en uso."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1096
-#, fuzzy
 msgid "User Fields"
-msgstr "Reinicializar campos"
+msgstr "Campos del usuario"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1105
-#, fuzzy
 msgid "Delete Field"
 msgstr "Eliminar campo"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1106
-#, fuzzy
 msgid "Select field:"
-msgstr "Campos de la hoja"
+msgstr "Seleccionar campo:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1335
-#, fuzzy
 msgid "Unsaved data"
-msgstr "[No Guardado]"
+msgstr "Datos no guardados"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1336
 msgid "Changes are unsaved. Export unsaved data?"
-msgstr ""
+msgstr "Hay cambios no guardados. Exportar datos no guardados?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1346
-#, fuzzy
 msgid "Save as CSV"
-msgstr "Guardar como imagen"
+msgstr "Guardar como CSV"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:34
 msgid "Add Field..."
 msgstr "Añadir campo..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:37
-#, fuzzy
 msgid "Remove Field..."
-msgstr "Renombrar archivo..."
+msgstr "Eliminar campo..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:65
 msgid "Group symbols"
@@ -12105,9 +12045,8 @@ msgid "Group symbols together based on common properties"
 msgstr "Agrupar los símbolos en función de las propiedades comunes"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:125
-#, fuzzy
 msgid "Export as CSV..."
-msgstr "Exportar SV&G..."
+msgstr "Exportar como CSV..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:87
 msgid "Symbol Fields Table"
@@ -12140,7 +12079,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:146
 msgid "Default for all sheet instances"
-msgstr ""
+msgstr "Predeterminado para todas las instancias de hoja"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:147
 msgid ""
@@ -12148,6 +12087,9 @@ msgid ""
 "footprint fields the default for all sheet instances\n"
 "of this symbol"
 msgstr ""
+"Marque para hacer la unidad, y los campos de\n"
+"referencia, valor y huella los predeterminados\n"
+"para todas las instancias de hoja de este símbolo"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:151
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:345
@@ -12401,9 +12343,8 @@ msgid "Remap Symbols"
 msgstr "Reasignar símbolos"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:378
-#, fuzzy
 msgid "Text can not be empty."
-msgstr "El nombre de red no puede estar vacío."
+msgstr "El texto no puede estar vacío."
 
 #: eeschema/dialogs/dialog_text_properties_base.h:104
 #: pcbnew/dialogs/dialog_text_properties.cpp:104
@@ -12488,21 +12429,18 @@ msgid "Update Symbol Fields"
 msgstr "Actualizar campos del símbolo"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:30
-#, fuzzy
 msgid "Wire/bus width:"
-msgstr "Ancho de línea:"
+msgstr "Ancho de cable/bus:"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:90
-#, fuzzy
 msgid "Set width to 0 to use netclass's wire/bus widths."
 msgstr ""
-"Establezca el ancho a 0 para utilizar la anchura de las líneas de la clase "
-"de red."
+"Establezca el ancho a 0 para utilizar la anchura de los cables/buses de la "
+"clase de red."
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:71
-#, fuzzy
 msgid "Wire & Bus Properties"
-msgstr "Propiedades de línea, cable, y bus"
+msgstr "Propiedades de cable y bus"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:142
 msgid ""
@@ -12534,9 +12472,8 @@ msgid "Appearance"
 msgstr "Apariencia"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:33
-#, fuzzy
 msgid "Default font:"
-msgstr "Formato por defecto"
+msgstr "Fuente predeterminada:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:46
 msgid "S&how hidden pins"
@@ -12547,28 +12484,24 @@ msgid "Show hidden fields"
 msgstr "Mostrar campos ocultos"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:52
-#, fuzzy
 msgid "Show ERC errors"
-msgstr "Errores de ERC"
+msgstr "Mostrar errores de ERC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:55
-#, fuzzy
 msgid "Show ERC warnings"
-msgstr "Avisos de ERC"
+msgstr "Mostrar avisos de ERC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:58
-#, fuzzy
 msgid "Show ERC exclusions"
-msgstr "Exclusiones DRC"
+msgstr "Mostrar exclusiones de ERC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:61
 msgid "Show page limi&ts"
 msgstr "Mos&trar límites de página"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:69
-#, fuzzy
 msgid "Selection && Highlighting"
-msgstr "Remarcar selección"
+msgstr "Selección y resaltado"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:71
 msgid "Draw selected text items as box"
@@ -12583,17 +12516,14 @@ msgid "Fill selected shapes"
 msgstr "Rellenar formas seleccionadas"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:86
-#, fuzzy
 msgid "Selection thickness:"
-msgstr "Grosor de línea por defecto:"
+msgstr "Grosor de selección:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:94
-#, fuzzy
 msgid "(selection color can be edited in the \"Colors\" page)"
-msgstr "(el color de resalte puede editarse en la página \"Colores\")"
+msgstr "(el color de selección puede editarse en la página \"Colores\")"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:98
-#, fuzzy
 msgid "Highlight thickness:"
 msgstr "Grosor de resaltado:"
 
@@ -12604,9 +12534,8 @@ msgstr "Prueba cruzada"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:115
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
-#, fuzzy
 msgid "Cross-probe on selection"
-msgstr "Zoom selección"
+msgstr "Prueba cruzada en la selección"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:119
 msgid "Center view on cross-probed items"
@@ -12627,27 +12556,24 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "Resaltar redes cuando estén resaltadas en el editor de PCB"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
-#, fuzzy
 msgid "Line Drawing Mode:"
-msgstr "Modo dibujo"
+msgstr "Modo de dibujo de líneas:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "Free Angle"
 msgstr "Ángulo libre"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "90 deg Angle"
-msgstr ""
+msgstr "Ángulo de 90°"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "45 deg Angle"
-msgstr "45 grados"
+msgstr "Ángulo de 45°"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "135 deg Angle"
-msgstr ""
+msgstr "Ángulo de 135°"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 msgid "Mouse drag performs Drag (G) operation"
@@ -12947,26 +12873,24 @@ msgstr "]"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:213
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:21
-#, fuzzy
 msgid "Dashed Lines"
-msgstr "Elementos resaltados:"
+msgstr "Líneas discontinuas"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:220
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:28
-#, fuzzy
 msgid "Dash length:"
-msgstr "Longitud de vía:"
+msgstr "Longitud de raya:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:227
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:35
-#, fuzzy
 msgid "Gap length:"
-msgstr "Longitud de vía:"
+msgstr "Longitud de espacio:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:237
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:45
 msgid "Dash and dot lengths are ratios of the line width."
 msgstr ""
+"Las longitudes de rayas y espacios son proporcionales al grosor de línea."
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:169
 msgid "No error or warning"
@@ -13006,6 +12930,8 @@ msgid ""
 "Set to 0 to allow symbols to inherit their line widths from\n"
 "their parent Schematic"
 msgstr ""
+"Establecer a 0 para permitir que los símbolos hereden\n"
+"sus grosores de línea de su esquema principal"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:55
 msgid "D&efault pin length:"
@@ -13066,15 +12992,13 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:355
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:545
-#, fuzzy
 msgid "Remove Invalid Cells"
-msgstr "Eliminar elementos"
+msgstr "Eliminar celdas inválidas"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:356
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:546
-#, fuzzy
 msgid "Cancel Table Update"
-msgstr "Diámetro de agujero de separación:"
+msgstr "Cancelar actualización de tabla"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:369
 #, c-format
@@ -13406,7 +13330,7 @@ msgstr "Nombres de hoja duplicados dentro de una hoja dada"
 
 #: eeschema/erc_item.cpp:50
 msgid "Symbol pin or wire end off grid"
-msgstr ""
+msgstr "Pin de símbolo o fin de cable fuera de rejilla"
 
 #: eeschema/erc_item.cpp:54
 msgid "Pin not connected"
@@ -13924,9 +13848,8 @@ msgid "Converted"
 msgstr "Convertido"
 
 #: eeschema/lib_item.cpp:70
-#, fuzzy
 msgid "Private"
-msgstr "Imprimir capas"
+msgstr "Privado"
 
 #: eeschema/lib_pin.cpp:1075 pcbnew/dialogs/dialog_pad_properties_base.cpp:1475
 msgid "Pos X"
@@ -13972,9 +13895,8 @@ msgid "Graphic Text '%s'"
 msgstr "Texto gráfico '%s'"
 
 #: eeschema/lib_textbox.cpp:309 eeschema/sch_textbox.cpp:323
-#, fuzzy
 msgid "Graphic Text Box"
-msgstr "Texto gráfico"
+msgstr "Caja de texto gráfico"
 
 #: eeschema/lib_textbox.cpp:397 eeschema/sch_label.cpp:782
 #: eeschema/sch_text.cpp:484 eeschema/sch_textbox.cpp:397
@@ -13983,15 +13905,13 @@ msgstr "Cursiva negrita"
 
 #: eeschema/lib_textbox.cpp:404 eeschema/sch_textbox.cpp:404
 #: pcbnew/fp_textbox.cpp:248 pcbnew/pcb_textbox.cpp:242
-#, fuzzy
 msgid "Box Width"
-msgstr "Ancho del texto"
+msgstr "Ancho de caja"
 
 #: eeschema/lib_textbox.cpp:407 eeschema/sch_textbox.cpp:407
 #: pcbnew/fp_textbox.cpp:251 pcbnew/pcb_textbox.cpp:245
-#, fuzzy
 msgid "Box Height"
-msgstr "Alto del texto"
+msgstr "Alto de caja"
 
 #: eeschema/libarch.cpp:101
 #, c-format
@@ -14148,9 +14068,8 @@ msgstr ""
 "librería '%s'."
 
 #: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:63
-#, fuzzy
 msgid "none"
-msgstr "<ninguno>"
+msgstr "ninguno"
 
 #: eeschema/pin_type.cpp:57 eeschema/pin_type.cpp:249
 msgid "Free"
@@ -14409,9 +14328,8 @@ msgstr "Atrás a la hoja seleccionada previamente"
 
 #: eeschema/sch_field.cpp:854 eeschema/sch_label.cpp:183
 #: eeschema/sch_label.cpp:1101
-#, fuzzy
 msgid "Sheet References"
-msgstr "Referencias entre hojas"
+msgstr "Referencias de hoja"
 
 #: eeschema/sch_io_mgr.cpp:35 pcbnew/io_mgr.cpp:42
 #, c-format
@@ -15215,7 +15133,6 @@ msgid "Graphic Text"
 msgstr "Texto gráfico"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -15390,8 +15307,8 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~{barra superior}</samp><br> &nbsp;"
-"<br><samp>~{CLK}</samp></td>\n"
+"        <td> &nbsp;<br><samp>~{barra superior}</samp><br> "
+"&nbsp;<br><samp>~{CLK}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
 "samp><br> <samp>barra superior</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
@@ -15432,8 +15349,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definición de bus</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>Redes resultantes</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -15481,12 +15398,12 @@ msgstr ""
 "        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -15630,7 +15547,6 @@ msgid "Cancel Load"
 msgstr "Cancelar la carga"
 
 #: eeschema/sheet.cpp:225
-#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -15638,9 +15554,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Hay nombres de biblioteca en el esquema cargado que faltan en la tabla de "
-"librerías del proyecto. Esto puede provocar enlaces a la librería de "
-"símbolos inválidos para el esquema cargado. ¿Desea continuar?"
+"Hay nombres de biblioteca en el esquema seleccionado que faltan en la tabla "
+"de librerías del proyecto actual. Esto puede resultar en referencias de "
+"librería de símbolos inválidas para el esquema cargado.\n"
+"\n"
+"¿Desea continuar?"
 
 #: eeschema/sheet.cpp:229 eeschema/sheet.cpp:270 eeschema/sheet.cpp:319
 #: eeschema/sheet.cpp:380
@@ -15655,9 +15573,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"El archivo seleccionado fue creado como parte de un proyecto distinto. "
+"Enlazar el archivo a este proyecto puede resultar en referencias de "
+"librerías de símbolos faltantes o incorrectas.\n"
+"\n"
+"¿Desea continuar?"
 
 #: eeschema/sheet.cpp:315
-#, fuzzy
 msgid ""
 "There are symbol library names in the selected schematic that are missing "
 "from the selected schematic project library table.  This may result in "
@@ -15665,12 +15587,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Hay nombres de librerías en el esquema cargado que faltan en la tabla de "
-"librerías del proyecto cargado. Esto puede provocar enlaces de símbolos "
-"inválidos para el esquema. ¿Desea continuar?"
+"Hay nombres de librerías de símbolos en el esquema seleccionado que faltan "
+"en la tabla de librerías del proyecto del esquema seleccionado. Esto puede "
+"resultar en referencias de librerías de símbolos inválidas.\n"
+"\n"
+"¿Desea continuar?"
 
 #: eeschema/sheet.cpp:376
-#, fuzzy
 msgid ""
 "A duplicate library name that references a different library exists in the "
 "current library table.  This conflict cannot be resolved and may result in "
@@ -15680,8 +15603,10 @@ msgid ""
 msgstr ""
 "Existe un nombre de librería duplicado, que hace referencia a una librería "
 "diferente, en la tabla de librerías activa. Este conflicto no se puede "
-"resolver y puede dar como resultado enlaces de librería de símbolos "
-"inválidos para el esquema. ¿Desea continuar?"
+"resolver y puede resultar en referencias de librerías de símbolos inválidas."
+"\n"
+"\n"
+"¿Desea continuar?"
 
 #: eeschema/sheet.cpp:564
 #, c-format
@@ -15770,9 +15695,8 @@ msgid "There were errors during netlist export, aborted."
 msgstr "Ha habido errores al exportar la lista de redes, cancelado."
 
 #: eeschema/sim/sim_plot_frame.cpp:487 eeschema/sim/sim_plot_frame.cpp:1820
-#, fuzzy
 msgid "Another simulation is already running."
-msgstr "El editor de diseño de página ya está abierto. ¿Continuar?"
+msgstr "Ya hay otra simulación ejecutándose."
 
 #: eeschema/sim/sim_plot_frame.cpp:514
 #, c-format
@@ -16017,13 +15941,13 @@ msgstr ""
 "con pin %s%s en la posición <b>(%.3f, %.3f)</b> del convertido."
 
 #: eeschema/symbol_checker.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %s and %s of converted."
 msgstr ""
 "<b>Pin %s duplicado</b> %s en la posición <b>(%.3f, %.3f)</b> en conflicto "
-"con pin %s%s en la posición <b>(%.3f, %.3f)</b> en las unidades %c y %c del "
+"con pin %s%s en la posición <b>(%.3f, %.3f)</b> en las unidades %s y %s del "
 "convertido."
 
 #: eeschema/symbol_checker.cpp:122
@@ -16036,37 +15960,43 @@ msgstr ""
 "pin %s%s en la posición <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
 "%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
 "<b>Pin %s duplicado</b> %s en la posición <b>(%s, %s)</b> en conflicto con "
-"pin %s%s en la posición <b>(%s, %s)</b> en las unidades %c y %c."
+"pin %s%s en la posición <b>(%s, %s)</b> en las unidades %s y %s."
 
 #: eeschema/symbol_checker.cpp:163
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
-msgstr ""
+msgstr "<b>Un símbolo de potencia debería tener solo una unidad</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:169
 msgid "<b>A Power Symbol should have no convert option</b><br><br>"
 msgstr ""
+"<b>Un símbolo de potencia no debería tener una opción de "
+"conversión</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:175
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
-msgstr ""
+msgstr "<b>Un símbolo de potencia debería tener solo un pin</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:184
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only a input or output power pin has "
 "meaning<br><br>"
 msgstr ""
+"<b>Símbolo de potencia sospechoso</b><br>Solo un pin de potencia de entrada "
+"o salida tiene sentido<br><br>"
 
 #: eeschema/symbol_checker.cpp:191
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only invisible input power pins are "
 "automatically connected<br><br>"
 msgstr ""
+"<b>Símbolo de potencia sospechoso</b><br>Solo los pines de potencia "
+"invisibles son conectados automáticamente<br><br>"
 
 #: eeschema/symbol_checker.cpp:216
 #, c-format
@@ -16179,9 +16109,8 @@ msgid "Library changes are unsaved"
 msgstr "Los cambios en la biblioteca no se han guardado"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:247
-#, fuzzy
 msgid "Symbol library loading was cancelled by user."
-msgstr "La librería de símbolos '%s' ya existe."
+msgstr "La carga de librería de símbolos fue cancelada por el usuario."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:592
 #: eeschema/tools/sch_edit_tool.cpp:119
@@ -16315,9 +16244,8 @@ msgid "Error saving project library table."
 msgstr "Error al guardar la tabla de librerías del proyecto."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:61
-#, fuzzy
 msgid "Do not update library tables"
-msgstr "Editar la tabla de librerías de huellas"
+msgstr "No actualizar las tablas de librerías"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:63
 msgid "Do not perform any additional operations after saving library."
@@ -16325,18 +16253,16 @@ msgstr ""
 "No realice ninguna operación adicional después de guardar la biblioteca."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:66
-#, fuzzy
 msgid "Update existing library table entry"
-msgstr "Añadir librería existente a la tabla"
+msgstr "Actualizar una entrada existente de la tabla de librerías"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:67
-#, fuzzy
 msgid ""
 "Update symbol library table entry to point to new library.\n"
 "\n"
 "The original library will no longer be available for use."
 msgstr ""
-"Reemplazar la entrada de la tabla de librería de símbolos con una nueva "
+"Reemplazar una entrada de la tabla de librería de símbolos con una nueva "
 "librería.\n"
 "\n"
 "La librería original no estará disponible para su uso."
@@ -16346,7 +16272,6 @@ msgid "Add new global library table entry"
 msgstr "Agregar entrada a la tabla global de librerías"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:73
-#, fuzzy
 msgid ""
 "Add new entry to the global symbol library table.\n"
 "\n"
@@ -16355,25 +16280,24 @@ msgid ""
 msgstr ""
 "Añadir una nueva entrada a la tabla global de librerías de símbolos.\n"
 "\n"
-"Al alias de la tabla de librería de símbolos se le agrega un entero como\n"
-"sufijo para garantizar que no hallan entradas de tabla duplicadas."
+"Al alias de la tabla de librería de símbolos se le agrega un entero\n"
+"como sufijo para prevenir entradas de tabla duplicadas."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:78
 msgid "Add new project library table entry"
 msgstr "Agregar una entrada a la tabla de librerías del proyecto"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:79
-#, fuzzy
 msgid ""
 "Add new entry to the project symbol library table.\n"
 "\n"
 "The symbol library table nickname is suffixed with\n"
 "an integer to prevent duplicate table entries."
 msgstr ""
-"Añadir una nueva entrada a la tabla del proyecto de librerías de símbolos.\n"
+"Añadir una nueva entrada a la tabla de librerías de símbolos del proyecto.\n"
 "\n"
 "Al alias de la tabla de librería de símbolos se le agrega un entero como\n"
-"sufijo para garantizar que no hallan entradas de tabla duplicadas."
+"sufijo para prevenir entradas de tabla duplicadas."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:162
 msgid "[from schematic]"
@@ -16896,14 +16820,12 @@ msgid "Make a copy of the selected symbol"
 msgstr "Crear una copia del símbolo seleccionado"
 
 #: eeschema/tools/ee_actions.cpp:138
-#, fuzzy
 msgid "Rename Symbol..."
-msgstr "Recuperar símbolos..."
+msgstr "Renombrar símbolo..."
 
 #: eeschema/tools/ee_actions.cpp:138
-#, fuzzy
 msgid "Rename the selected symbol"
-msgstr "Actualizar símbolo(s) seleccionado(s)"
+msgstr "Renombrar el símbolo seleccionado"
 
 #: eeschema/tools/ee_actions.cpp:143
 msgid "Save the current symbol to a different library."
@@ -16980,21 +16902,19 @@ msgid "Create SVG file from the current symbol"
 msgstr "Crear un archivo SVG a partir del símbolo activo"
 
 #: eeschema/tools/ee_actions.cpp:213
-#, fuzzy
 msgid "Synchronized Pins Mode"
-msgstr "Modo de edición de pines sincronizado"
+msgstr "Modo de pines sincronizados"
 
 #: eeschema/tools/ee_actions.cpp:214
-#, fuzzy
 msgid ""
 "Synchronized Pins Mode\n"
 "When enabled propagates all changes (except pin numbers) to other units.\n"
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
-"Modo de edición sincronizada de pines\n"
+"Modo de pines sincronizados\n"
 "Cuando está habilitado, propaga todos cambios (excepto por el número de pin) "
 "a otras unidades.\n"
-"Habilitado por defecto para todos los componentes con varias unidades "
+"Habilitado por defecto para todas las partes con varias unidades "
 "intercambiables."
 
 #: eeschema/tools/ee_actions.cpp:225
@@ -17017,14 +16937,12 @@ msgstr "Añadir un elemento de texto"
 
 #: eeschema/tools/ee_actions.cpp:235 eeschema/tools/ee_actions.cpp:350
 #: pcbnew/tools/pcb_actions.cpp:128
-#, fuzzy
 msgid "Add Text Box"
-msgstr "Añadir texto"
+msgstr "Añadir caja de texto"
 
 #: eeschema/tools/ee_actions.cpp:235
-#, fuzzy
 msgid "Add a text box item"
-msgstr "Añadir un elemento de texto"
+msgstr "Añadir un elemento de caja de texto"
 
 #: eeschema/tools/ee_actions.cpp:240 eeschema/tools/ee_actions.cpp:784
 msgid "Add Lines"
@@ -17119,14 +17037,12 @@ msgid "Add a net label"
 msgstr "Añadir una etiqueta de red"
 
 #: eeschema/tools/ee_actions.cpp:311
-#, fuzzy
 msgid "Add Net Class Directive"
-msgstr "Clase de red"
+msgstr "Añadir directiva de clase de red"
 
 #: eeschema/tools/ee_actions.cpp:311
-#, fuzzy
 msgid "Add a net class directive label"
-msgstr "Añadir una etiqueta de red"
+msgstr "Añadir una etiqueta de directiva de clase de red"
 
 #: eeschema/tools/ee_actions.cpp:317
 msgid "Add Hierarchical Label"
@@ -17165,9 +17081,8 @@ msgid "Add text"
 msgstr "Añadir texto"
 
 #: eeschema/tools/ee_actions.cpp:350
-#, fuzzy
 msgid "Add a text box"
-msgstr "Añadir un elemento de texto"
+msgstr "Añadir una caja de texto"
 
 #: eeschema/tools/ee_actions.cpp:355 pagelayout_editor/tools/pl_actions.cpp:49
 msgid "Add Rectangle"
@@ -17362,14 +17277,12 @@ msgid "Change existing item to a label"
 msgstr "Cambiar el elemento existente a una etiqueta"
 
 #: eeschema/tools/ee_actions.cpp:493
-#, fuzzy
 msgid "Change to Directive Label"
-msgstr "Cambiar a etiqueta jerárquica"
+msgstr "Cambiar a una etiqueta de directiva"
 
 #: eeschema/tools/ee_actions.cpp:493
-#, fuzzy
 msgid "Change existing item to a directive label"
-msgstr "Cambiar el elemento existente a una etiqueta"
+msgstr "Cambiar un elemento existente a una etiqueta de directiva"
 
 #: eeschema/tools/ee_actions.cpp:498
 msgid "Change to Hierarchical Label"
@@ -17607,14 +17520,12 @@ msgid "Generate a bill of materials for the current schematic"
 msgstr "Generar una lista de materiales para el esquema actual"
 
 #: eeschema/tools/ee_actions.cpp:661
-#, fuzzy
 msgid "Select on PCB"
-msgstr "Seleccionar elementos en PCB"
+msgstr "Seleccionar en la placa"
 
 #: eeschema/tools/ee_actions.cpp:662
-#, fuzzy
 msgid "Select corresponding items in PCB editor"
-msgstr "Resaltar elementos correspondientes en el editor de placas"
+msgstr "Seleccionar los elementos correspondientes en el editor de placas"
 
 #: eeschema/tools/ee_actions.cpp:667
 msgid "Show Hidden Pins"
@@ -17633,65 +17544,60 @@ msgid "Toggle display of hidden text fields"
 msgstr "Alternar la visualización de campos de texto ocultos"
 
 #: eeschema/tools/ee_actions.cpp:676
-#, fuzzy
 msgid "Show ERC Warnings"
-msgstr "Advertencias de DRC"
+msgstr "Mostrar advertencias de ERC"
 
 #: eeschema/tools/ee_actions.cpp:676
-#, fuzzy
 msgid "Show markers for electrical rules checker warnings"
-msgstr "Realiza un control de las reglas de eléctricas"
+msgstr ""
+"Mostrar marcadores de advertencias del verificador de reglas de eléctricas"
 
 #: eeschema/tools/ee_actions.cpp:680
-#, fuzzy
 msgid "Show ERC Errors"
-msgstr "Buscar errores de complementos"
+msgstr "Mostrar errores de ERC"
 
 #: eeschema/tools/ee_actions.cpp:680
-#, fuzzy
 msgid "Show markers for electrical rules checker errors"
-msgstr "Realiza un control de las reglas de eléctricas"
+msgstr "Mostrar marcadores de errores del verificador de reglas de eléctricas"
 
 #: eeschema/tools/ee_actions.cpp:684
-#, fuzzy
 msgid "Show ERC Exclusions"
-msgstr "Exclusiones DRC"
+msgstr "Mostrar exclusiones de ERC"
 
 #: eeschema/tools/ee_actions.cpp:685
-#, fuzzy
 msgid "Show markers for excluded electrical rules checker violations"
-msgstr "Realiza un control de las reglas de eléctricas"
+msgstr ""
+"Mostrar marcadores de infracciones excluidas del verificador de reglas de "
+"eléctricas"
 
 #: eeschema/tools/ee_actions.cpp:689 eeschema/tools/ee_actions.cpp:694
 #: eeschema/tools/ee_actions.cpp:699 eeschema/tools/ee_actions.cpp:704
 #: eeschema/tools/ee_actions.cpp:709
-#, fuzzy
 msgid "Line Mode for Wires and Buses"
-msgstr "Forzar cables y buses horizontales o verticales"
+msgstr "Modo de línea para cables y buses"
 
 #: eeschema/tools/ee_actions.cpp:689
 msgid "Lines drawn at any angle"
-msgstr ""
+msgstr "Líneas dibujadas a cualquier ángulo"
 
 #: eeschema/tools/ee_actions.cpp:694
-#, fuzzy
 msgid "Lines drawn horizontally and vertically"
-msgstr "Horizontal, luego vertical"
+msgstr "Líneas dibujadas horizontalmente y verticalmente"
 
 #: eeschema/tools/ee_actions.cpp:699
-#, fuzzy
 msgid "Lines drawn horizontally and vertically, with a 45 degree angle end"
-msgstr "Dibujar el área usando solo líneas horizontales, verticales, y a 45°"
+msgstr ""
+"Líneas dibujadas horizontalmente y verticalmente, con un ángulo final de 45°"
 
 #: eeschema/tools/ee_actions.cpp:704
-#, fuzzy
 msgid "Lines drawn horizontally and vertically, with a 45 degree angle start"
-msgstr "Limitar acciones a horizontal, vertical, o 45° desde el punto inicial"
+msgstr ""
+"Líneas dibujadas horizontalmente y verticalmente, con un ángulo inicial de "
+"45°"
 
 #: eeschema/tools/ee_actions.cpp:709
-#, fuzzy
 msgid "Switch to next line mode"
-msgstr "Cambiar a siguiente cuadrícula"
+msgstr "Cambiar al siguiente modo de línea"
 
 #: eeschema/tools/ee_actions.cpp:714
 msgid "Repair Schematic"
@@ -17773,19 +17679,16 @@ msgid "Undo Last Segment"
 msgstr "Deshacer el último segmento"
 
 #: eeschema/tools/ee_actions.cpp:790
-#, fuzzy
 msgid "Walks the current line back one segment."
-msgstr "Recorre la pista actual un segmento hacia atrás."
+msgstr "Recorre la línea actual un segmento hacia atrás."
 
 #: eeschema/tools/ee_actions.cpp:796
-#, fuzzy
 msgid "Switch Segment Posture"
-msgstr "Alternar posición de arco"
+msgstr "Cambiar postura del segmento"
 
 #: eeschema/tools/ee_actions.cpp:796
-#, fuzzy
 msgid "Switches posture of the current segment."
-msgstr "Cambia la posición de la pista activa."
+msgstr "Cambia la postura del segmento actual."
 
 #: eeschema/tools/ee_actions.cpp:802
 msgid "Finish Wire or Bus"
@@ -17960,9 +17863,9 @@ msgid "Edit Sheet Page Number"
 msgstr "Editar número de página de hoja"
 
 #: eeschema/tools/sch_editor_control.cpp:138
-#, fuzzy, c-format
+#, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
-msgstr "¿Revertir '%s' a la última versión guardada?"
+msgstr "¿Revertir '%s' (y todas sus sub-hojas) a la última versión guardada?"
 
 #: eeschema/tools/sch_editor_control.cpp:569
 msgid "Reached end of schematic."
@@ -18059,19 +17962,16 @@ msgstr "No se ha seleccionado ninguna librería de símbolos."
 
 #: eeschema/tools/symbol_editor_control.cpp:308
 #: pcbnew/tools/footprint_editor_control.cpp:397
-#, fuzzy
 msgid "New name:"
-msgstr "Nombre de red:"
+msgstr "Nuevo nombre:"
 
 #: eeschema/tools/symbol_editor_control.cpp:308
-#, fuzzy
 msgid "Change Symbol Name"
-msgstr "Cambiar símbolos"
+msgstr "Cambiar nombre de símbolo"
 
 #: eeschema/tools/symbol_editor_control.cpp:318
-#, fuzzy
 msgid "Symbol name cannot be empty."
-msgstr "El nombre de red no puede estar vacío."
+msgstr "El nombre del símbolo no puede estar vacío."
 
 #: eeschema/tools/symbol_editor_control.cpp:489
 #: eeschema/tools/symbol_editor_control.cpp:529
@@ -18151,14 +18051,12 @@ msgid "5B S-Curve"
 msgstr "Curva"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
-#, fuzzy
 msgid "Switch"
-msgstr "Cambiar unidades"
+msgstr "Alternar"
 
 #: eeschema/widgets/tuner_slider_base.cpp:70
-#, fuzzy
 msgid "Characteristic Curve"
-msgstr "Impedancia característica"
+msgstr "Curva característica"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -18573,18 +18471,14 @@ msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr "<b>No hay más capas disponibles</b> en GerbView para cargar archivos"
 
 #: gerbview/files.cpp:43
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Not loaded:</b> <i>%s</i>"
-msgstr ""
-"\n"
-"<b>No se ha cargado:</b> <i>%s</i>"
+msgstr "<b>No se ha cargado:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Memory was exhausted reading:</b> <i>%s</i>"
-msgstr ""
-"\n"
-"<b>Se ha acabado la memoria al leer:</b> <i>%s</i>"
+msgstr "<b>Se ha acabado la memoria al leer:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:87
 msgid "Zip files"
@@ -18595,9 +18489,8 @@ msgid "Job files"
 msgstr "Archivos de trabajo"
 
 #: gerbview/files.cpp:181
-#, fuzzy
 msgid "Open Autodetected File(s)"
-msgstr "Abrir archivo(s) Gerber"
+msgstr "Abrir archivo(s) autodetectado(s)"
 
 #: gerbview/files.cpp:201
 msgid "Gerber files (.g* .lgr .pho)"
@@ -18672,9 +18565,8 @@ msgstr ""
 "trazado</b> <i>%s</i>"
 
 #: gerbview/files.cpp:300
-#, fuzzy
 msgid "Loading files..."
-msgstr "Cargando reglas..."
+msgstr "Cargando archivos..."
 
 #: gerbview/files.cpp:303 gerbview/files.cpp:310
 #, c-format
@@ -18687,19 +18579,19 @@ msgid "Zip file '%s' cannot be opened."
 msgstr "No puede abrirse el archivo Zip '%s'."
 
 #: gerbview/files.cpp:479
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (gerber job file)."
-msgstr "Archivo '%s' salteado (archivo de trabajo gerber).\n"
+msgstr "Archivo '%s' salteado (archivo de trabajo gerber)."
 
 #: gerbview/files.cpp:524
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>"
-msgstr "<b>No puede crearse al archivo temporal '%s'.</b>\n"
+msgstr "<b>No puede crearse al archivo temporal '%s'.</b>"
 
 #: gerbview/files.cpp:549
-#, fuzzy, c-format
+#, c-format
 msgid "Skipped file '%s' (unknown type)."
-msgstr "Archivo '%s' salteado (tipo desconocido).\n"
+msgstr "Archivo '%s' salteado (tipo desconocido)."
 
 #: gerbview/files.cpp:586
 #, fuzzy, c-format
