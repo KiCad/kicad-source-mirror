@@ -58,7 +58,7 @@
 # mc: - tune = regola
 # mc: - Push & Shove (spingi e compatta) = sbroglio interattivo P&S
 # mc: - stub = spezzone
-# mc: - hotkey = comando da tastiera (tolto scorciatoia perché si
+# mc: - hotkey = tasti comando (tolto scorciatoie perché si
 # confondeva con le scorciatoie per i menu, i tasti contrassegnati
 # dal carattere & nella stringa di traduzione)
 # mc: - reference designator = (designatore di) riferimento
@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:05-0700\n"
-"PO-Revision-Date: 2022-04-17 10:49+0200\n"
+"PO-Revision-Date: 2022-05-18 17:01+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -2307,7 +2307,7 @@ msgstr "Impostazioni griglia"
 
 #: common/dialogs/dialog_hotkey_list.cpp:34
 msgid "Hotkey List"
-msgstr "Elenco comandi da tastiera"
+msgstr "Elenco tasti comando"
 
 #: common/dialogs/dialog_image_editor.cpp:72
 msgid "Incorrect scale number"
@@ -3196,10 +3196,7 @@ msgstr "Il tasto seleziona lo strumento"
 msgid ""
 "If not checked, hotkeys will immediately perform an action even if the "
 "relevant tool was not previously selected."
-msgstr ""
-"Se non selezionata, i comandi da tastiera eseguiranno immediatamente "
-"un'azione anche se lo strumento corrispondente non fosse stato "
-"precedentemente selezionato."
+msgstr "Se non selezionata, i tasti comando eseguiranno immediatamente un'azione anche se lo strumento corrispondente non fosse stato precedentemente selezionato."
 
 #: common/dialogs/panel_common_settings_base.cpp:190
 msgid "Session"
@@ -3348,9 +3345,7 @@ msgstr "Importa tasti..."
 #: common/dialogs/panel_hotkeys_editor.cpp:136
 msgid ""
 "Import hotkey definitions from an external file, replacing the current values"
-msgstr ""
-"Importa le definizioni dei comandi da tastiera da file esterno, rimpiazzando "
-"i valori correnti"
+msgstr "Importa le definizioni dei tasti comando da file esterno, rimpiazzando i valori correnti"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:198
 msgid "Import Hotkeys File:"
@@ -4064,7 +4059,7 @@ msgstr "Mouse e touchpad"
 
 #: common/eda_base_frame.cpp:1011
 msgid "Hotkeys"
-msgstr "Comandi da tastiera"
+msgstr "Tasti comando"
 
 #: common/eda_base_frame.cpp:1065
 #, c-format
@@ -6965,7 +6960,7 @@ msgstr "File Jpeg"
 
 #: common/wildcards_and_files_ext.cpp:561
 msgid "Hotkey file"
-msgstr "File comandi da tastiera"
+msgstr "File tasti comando"
 
 #: cvpcb/auto_associate.cpp:108
 #, c-format
@@ -7368,17 +7363,14 @@ msgstr ""
 "Salva le associazioni impronte nei campi impronte dei simboli nello schema"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "Salva su schema"
+msgstr "Salva su schema e su file"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
-#, fuzzy
 msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
-msgstr ""
-"Salva le associazioni impronte nei campi impronte dei simboli nello schema"
+msgstr "Salva le associazioni impronte nei campi impronte dei simboli nello schema e sui file schema"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select next unassigned symbol"
@@ -18143,7 +18135,7 @@ msgstr "Espressione malformata"
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
-msgstr "Imposta tutti i comandi da tastiera ai predefiniti di KiCad"
+msgstr "Imposta tutti i tasti comando ai predefiniti KiCad"
 
 #: include/project.h:41
 msgid "untitled"
