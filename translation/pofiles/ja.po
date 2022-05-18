@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:03-0700\n"
-"PO-Revision-Date: 2022-05-17 19:03+0000\n"
+"PO-Revision-Date: 2022-05-18 17:30+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -19396,7 +19396,6 @@ msgid "Installed (%d)"
 msgstr "インストール済み (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
-#, fuzzy
 msgid "Manage..."
 msgstr "管理…"
 
@@ -37845,24 +37844,21 @@ msgid "Auto-fill Zone(s)"
 msgstr "ゾーンを自動的に塗りつぶす"
 
 #: pcbnew/tracks_cleaner.cpp:68
-#, fuzzy
 msgid "Checking null tracks and vias..."
-msgstr "配線とビアをクリーンアップ..."
+msgstr "配線とビアが空かどうかをチェック..."
 
 #: pcbnew/tracks_cleaner.cpp:70
-#, fuzzy
 msgid "Removing null tracks and vias..."
-msgstr "全ての配線とビアを編集..."
+msgstr "空の配線とビアを削除..."
 
 #: pcbnew/tracks_cleaner.cpp:81
-#, fuzzy
 msgid "Checking redundant tracks..."
-msgstr "余分な配線を削除"
+msgstr "余分な配線をチェック…"
 
 #: pcbnew/tracks_cleaner.cpp:83
 #, fuzzy
 msgid "Removing redundant tracks..."
-msgstr "余分な配線を削除"
+msgstr "余分な配線を削除…"
 
 #: pcbnew/tracks_cleaner.cpp:95
 #, fuzzy
@@ -37870,19 +37866,16 @@ msgid "Checking shorting tracks..."
 msgstr "フットプリントをチェック..."
 
 #: pcbnew/tracks_cleaner.cpp:97
-#, fuzzy
 msgid "Removing shorting tracks..."
-msgstr "未接続の配線を削除"
+msgstr "短絡している配線を削除…"
 
 #: pcbnew/tracks_cleaner.cpp:110
-#, fuzzy
 msgid "Checking tracks in pads..."
-msgstr "フットプリントをチェック..."
+msgstr "パッド内の配線をチェック..."
 
 #: pcbnew/tracks_cleaner.cpp:112
-#, fuzzy
 msgid "Removing tracks in pads..."
-msgstr "パッド内の配線を削除"
+msgstr "パッド内の配線を削除…"
 
 #: pcbnew/tracks_cleaner.cpp:126
 #, fuzzy
