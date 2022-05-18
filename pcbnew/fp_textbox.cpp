@@ -401,14 +401,25 @@ void FP_TEXTBOX::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBu
                                                     int aError, ERROR_LOC aErrorLoc,
                                                     bool aIgnoreLineWidth ) const
 {
-    if( PCB_SHAPE::GetStroke().GetWidth() >= 0 )
+    // Don't use FP_SHAPE::TransformShapeWithClearanceToPolygon.  We want to treat the
+    // textbox as filled even if there's no background colour.
+
+    std::vector<VECTOR2I> pts = GetRectCorners();
+
+    aCornerBuffer.NewOutline();
+
+    for( const VECTOR2I& pt : pts )
+        aCornerBuffer.Append( pt );
+
+    int width = GetWidth() + ( 2 * aClearance );
+
+    if( width > 0 )
     {
-        FP_SHAPE::TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, aClearance,
-                                                        aError, aErrorLoc );
-    }
-    else
-    {
-        EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( &aCornerBuffer, aClearance );
+        // Add in segments
+        TransformOvalToPolygon( aCornerBuffer, pts[0], pts[1], width, aError, aErrorLoc );
+        TransformOvalToPolygon( aCornerBuffer, pts[1], pts[2], width, aError, aErrorLoc );
+        TransformOvalToPolygon( aCornerBuffer, pts[2], pts[3], width, aError, aErrorLoc );
+        TransformOvalToPolygon( aCornerBuffer, pts[3], pts[0], width, aError, aErrorLoc );
     }
 }
 
