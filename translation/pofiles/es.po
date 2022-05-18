@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:05-0700\n"
-"PO-Revision-Date: 2022-05-17 19:03+0000\n"
+"PO-Revision-Date: 2022-05-18 06:39+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v6/es/>\n"
 "Language: es\n"
@@ -17854,9 +17854,8 @@ msgstr ""
 "Por lo que el tamaño de algunos elementos está indefinido"
 
 #: gerbview/rs274d.cpp:414
-#, fuzzy
 msgid "Invalid Code Number"
-msgstr "Número de pin inválido"
+msgstr "Número de código inválido"
 
 #: gerbview/rs274d.cpp:622
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
@@ -20839,7 +20838,6 @@ msgstr ""
 "¿Desea descartar los cambios y salir?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -20864,8 +20862,8 @@ msgid ""
 "___H___ is thickness (height) in mils<br>\n"
 "___K___ is 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
-"Si especifica la corriente máxima, se calculará el grosor de pista "
-"adecuado.\n"
+"Si especifica la corriente máxima, se calculará el grosor de pista adecuado."
+"\n"
 "\n"
 "Si especifica uno de los grosores de pista, se calculará la corriente máxima "
 "que puede manejar. También se calculará el grosor de la otra pista para que "
@@ -20878,15 +20876,15 @@ msgstr ""
 "de hasta 400 mils (10 mm).\n"
 "\n"
 "La fórmula, de IPC 2221, es\n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>  \n"
-"donde:\n"
-"___I___ es la corriente máxima en A\n"
-"___&Delta;t___ es el aumento de temperatura por encima del ambiente en &deg;"
-"C\n"
-"___W___ es el ancho en mils\n"
-"___H___ es el espesor (altura) en mils\n"
-"___K___ es 0,024 para pistas internas o 0,048 para pistas externas  \n"
+"<center>___I = K &sdot; &Delta;T<sup>0,44</sup> &sdot; (W &sdot; "
+"H)<sup>0,725</sup>___</center>  \n"
+"donde<br>:\n"
+"___I___ es la corriente máxima en A<br>\n"
+"___&Delta;t___ es el aumento de temperatura por encima del ambiente en "
+"&deg;C<br>\n"
+"___W___ es el ancho en mils<br>\n"
+"___H___ es el espesor (altura) en mils<br>\n"
+"___K___ es 0,024 para pistas internas o 0,048 para pistas externas\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -22036,6 +22034,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:586
 msgid "Selected options resulted in errors! Change them and try again."
 msgstr ""
+"¡Las opciones seleccionadas resultaron en errores! Cámbielas e intente de "
+"nuevo."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:593
 #, c-format
@@ -22064,9 +22064,9 @@ msgid "Reannotate anyway?"
 msgstr "¿Reanotar de todas formas?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:790
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate instances of %s"
-msgstr "Duplicar elementos %s%s\n"
+msgstr "Instancias duplicadas de %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:796
 msgid "Aborted: too many errors"
@@ -25524,9 +25524,8 @@ msgid "Net Inspector"
 msgstr "Inspector de red"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:83
-#, fuzzy
 msgid "Load and Test Netlist"
-msgstr "Leer lista de redes"
+msgstr "Cargar y probar lista de redes"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:125
 msgid "Select Netlist"
@@ -25627,9 +25626,9 @@ msgid "Line width may not be 0 for unfilled shapes."
 msgstr "El ancho de línea no puede ser 0 para formas sin relleno."
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Corner %d"
-msgstr "Esquinas"
+msgstr "Esquina %d"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:334
 msgid "Polygon must have at least 3 corners"
@@ -25723,9 +25722,8 @@ msgid "corners count %d"
 msgstr "número de esquinas %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:739
-#, fuzzy
 msgid "Unknown primitive"
-msgstr "tipo de pin desconocido"
+msgstr "Primitivo desconocido"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:919
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
