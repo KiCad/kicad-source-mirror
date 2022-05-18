@@ -36,13 +36,14 @@ const float SHADER_STROKED_CIRCLE       = 3.0;
 const float SHADER_FONT                 = 4.0;
 const float SHADER_LINE_A               = 5.0;
 
-varying vec4 shaderParams;
-varying vec2 circleCoords;
-uniform sampler2D fontTexture;
-uniform float worldPixelSize;
+varying vec4 v_shaderParams;
+varying vec2 v_circleCoords;
+
+uniform sampler2D u_fontTexture;
+uniform float u_worldPixelSize;
 
 // Needed to reconstruct the mipmap level / texel derivative
-uniform int fontTextureWidth;
+uniform int u_fontTextureWidth;
 
 void filledCircle( vec2 aCoord )
 {
@@ -54,7 +55,7 @@ void filledCircle( vec2 aCoord )
 
 float pixelSegDistance( vec2 aCoord )
 {
-    float aspect = shaderParams[1];
+    float aspect = v_shaderParams[1];
     float dist;
     vec2 v = vec2( 1.0 - ( aspect - abs( aCoord.s ) ), aCoord.t );
 
@@ -109,7 +110,7 @@ void main()
 {
     // VS to FS pipeline does math that means we can't rely on the mode
     // parameter being bit-exact without rounding it first.
-    float mode = floor( shaderParams[0] + 0.5 );
+    float mode = floor( v_shaderParams[0] + 0.5 );
 
     if( mode == SHADER_LINE_A )
     {
@@ -117,24 +118,24 @@ void main()
     }
     else if( mode == SHADER_FILLED_CIRCLE )
     {
-        filledCircle( circleCoords );
+        filledCircle( v_circleCoords );
     }
     else if( mode == SHADER_STROKED_CIRCLE )
     {
-        strokedCircle( circleCoords, shaderParams[2], shaderParams[3] );
+        strokedCircle( v_circleCoords, v_shaderParams[2], v_shaderParams[3] );
     }
     else if( mode == SHADER_FONT )
     {
-        vec2 tex           = shaderParams.yz;
+        vec2 tex           = v_shaderParams.yz;
 
         // Unless we're stretching chars it is okay to consider
         // one derivative for filtering
-        float derivative   = length( dFdx( tex ) ) * fontTextureWidth / 4;
+        float derivative   = length( dFdx( tex ) ) * u_fontTextureWidth / 4;
 
 #ifdef USE_MSDF
-        float dist         = median( texture2D( fontTexture, tex ).rgb );
+        float dist         = median( texture2D( u_fontTexture, tex ).rgb );
 #else
-        float dist         = texture2D( fontTexture, tex ).r;
+        float dist         = texture2D( u_fontTexture, tex ).r;
 #endif
 
         // use the derivative for zoom-adaptive filtering

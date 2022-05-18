@@ -534,12 +534,12 @@ void OPENGL_GAL::BeginDrawing()
         }
 
         // Set shader parameter
-        GLint ufm_fontTexture = m_shader->AddParameter( "fontTexture" );
-        GLint ufm_fontTextureWidth = m_shader->AddParameter( "fontTextureWidth" );
-        ufm_worldPixelSize = m_shader->AddParameter( "worldPixelSize" );
-        ufm_screenPixelSize = m_shader->AddParameter( "screenPixelSize" );
-        ufm_pixelSizeMultiplier = m_shader->AddParameter( "pixelSizeMultiplier" );
-        ufm_antialiasingOffset = m_shader->AddParameter( "antialiasingOffset" );
+        GLint ufm_fontTexture = m_shader->AddParameter( "u_fontTexture" );
+        GLint ufm_fontTextureWidth = m_shader->AddParameter( "u_fontTextureWidth" );
+        ufm_worldPixelSize = m_shader->AddParameter( "u_worldPixelSize" );
+        ufm_screenPixelSize = m_shader->AddParameter( "u_screenPixelSize" );
+        ufm_pixelSizeMultiplier = m_shader->AddParameter( "u_pixelSizeMultiplier" );
+        ufm_antialiasingOffset = m_shader->AddParameter( "u_antialiasingOffset" );
 
         m_shader->Use();
         m_shader->SetParameter( ufm_fontTexture, (int) FONT_TEXTURE_UNIT );

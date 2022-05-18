@@ -72,7 +72,7 @@ GPU_MANAGER::~GPU_MANAGER()
 void GPU_MANAGER::SetShader( SHADER& aShader )
 {
     m_shader = &aShader;
-    m_shaderAttrib = m_shader->GetAttribute( "attrShaderParams" );
+    m_shaderAttrib = m_shader->GetAttribute( "a_shaderParams" );
 
     if( m_shaderAttrib == -1 )
     {
