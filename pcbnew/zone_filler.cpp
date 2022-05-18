@@ -35,6 +35,10 @@
 #include <pcb_shape.h>
 #include <pcb_target.h>
 #include <pcb_track.h>
+#include <pcb_text.h>
+#include <pcb_textbox.h>
+#include <fp_text.h>
+#include <fp_textbox.h>
 #include <connectivity/connectivity_data.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <board_commit.h>
@@ -517,6 +521,33 @@ void ZONE_FILLER::addHoleKnockout( PAD* aPad, int aGap, SHAPE_POLY_SET& aHoles )
 void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
                                bool aIgnoreLineWidth, SHAPE_POLY_SET& aHoles )
 {
+    // Text has a complicated relationship with its boudingBox due to ascenders, descenders,
+    // diacriticals, etc.  Some things want a fairly tight bounding box, and some things don't.
+    // Since there's no uniformly "correct" answer, we pad the bounding box here to limit
+    // shorting as much as possible.  (Note, however, that it will be caught by DRC either way,
+    // as it's not reliant on the bounding box.)
+    switch( aItem->Type() )
+    {
+    case PCB_TEXT_T:
+        aGap += static_cast<PCB_TEXT*>( aItem )->GetTextThickness();
+        break;
+
+    case PCB_TEXTBOX_T:
+        aGap += static_cast<PCB_TEXTBOX*>( aItem )->GetTextThickness();
+        break;
+
+    case PCB_FP_TEXT_T:
+        aGap += static_cast<FP_TEXT*>( aItem )->GetTextThickness();
+        break;
+
+    case PCB_FP_TEXTBOX_T:
+        aGap += static_cast<FP_TEXTBOX*>( aItem )->GetTextThickness();
+        break;
+
+    default:
+        break;
+    }
+
     switch( aItem->Type() )
     {
     case PCB_SHAPE_T:

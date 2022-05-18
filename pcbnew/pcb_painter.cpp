@@ -1681,7 +1681,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
         font->Draw( &callback_gal, resolvedText, aText->GetDrawPos(), attrs );
 
         SHAPE_POLY_SET finalPoly;
-        int            margin = attrs.m_StrokeWidth * 1.5;
+        int            margin = attrs.m_StrokeWidth * 2.5;
 
         aText->TransformBoundingBoxWithClearanceToPolygon( &finalPoly, margin );
         finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
