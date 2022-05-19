@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:03-0700\n"
-"PO-Revision-Date: 2022-05-18 17:30+0000\n"
+"PO-Revision-Date: 2022-05-19 15:34+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -37893,14 +37893,12 @@ msgid "Removing dangling vias..."
 msgstr "未接続の配線を削除"
 
 #: pcbnew/tracks_cleaner.cpp:148
-#, fuzzy
 msgid "Checking collinear tracks..."
-msgstr "穴のクリアランスをチェック中..."
+msgstr "共線の配線をチェック中..."
 
 #: pcbnew/tracks_cleaner.cpp:150
-#, fuzzy
 msgid "Merging collinear tracks..."
-msgstr "共線の配線をマージ"
+msgstr "共線の配線をマージ…"
 
 #: pcbnew/undo_redo.cpp:553
 msgid "Incomplete undo/redo operation: some items not found"
