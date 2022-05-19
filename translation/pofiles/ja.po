@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:03-0700\n"
-"PO-Revision-Date: 2022-05-19 15:34+0000\n"
+"PO-Revision-Date: 2022-05-19 21:28+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -16883,9 +16883,8 @@ msgid "Add Net Class Directive"
 msgstr "ネットクラスフラグを追加"
 
 #: eeschema/tools/ee_actions.cpp:311
-#, fuzzy
 msgid "Add a net class directive label"
-msgstr "ネットクラスフラグを追加"
+msgstr "ネットクラス指示ラベルを追加"
 
 #: eeschema/tools/ee_actions.cpp:317
 msgid "Add Hierarchical Label"
@@ -17117,13 +17116,12 @@ msgid "Change existing item to a label"
 msgstr "既存のアイテムをラベルに変更"
 
 #: eeschema/tools/ee_actions.cpp:493
-#, fuzzy
 msgid "Change to Directive Label"
-msgstr "階層ラベルに変更"
+msgstr "指示ラベルに変更"
 
 #: eeschema/tools/ee_actions.cpp:493
 msgid "Change existing item to a directive label"
-msgstr "既存のアイテムを階層ラベルに変更"
+msgstr "既存のアイテムを指示ラベルに変更"
 
 #: eeschema/tools/ee_actions.cpp:498
 msgid "Change to Hierarchical Label"
@@ -22474,7 +22472,7 @@ msgstr "ポリイミド"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:81
 msgid "Phenolic natural"
-msgstr ""
+msgstr "フェノール"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:82
 msgid "Aluminum"
