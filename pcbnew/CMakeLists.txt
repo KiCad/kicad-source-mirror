@@ -216,7 +216,7 @@ set( PCBNEW_EXPORTERS
     exporters/export_footprint_associations.cpp
     exporters/export_gencad.cpp
     exporters/export_idf.cpp
-    exporters/export_vrml.cpp
+    exporters/exporter_vrml.cpp
     exporters/export_footprints_placefile.cpp
     exporters/gen_drill_report_files.cpp
     exporters/gen_footprints_placefile.cpp

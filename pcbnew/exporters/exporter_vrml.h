@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,8 @@
 
 #pragma once
 
+#include <dialogs/dialog_color_picker.h>
+
 // offset for art layers, mm (silk, paste, etc)
 #define  ART_OFFSET 0.025
 // offset for plating
@@ -34,9 +36,11 @@ enum VRML_COLOR_INDEX
     VRML_COLOR_NONE = -1,
     VRML_COLOR_PCB = 0,
     VRML_COLOR_COPPER,
-    VRML_COLOR_SOLDMASK,
+    VRML_COLOR_TOP_SOLDMASK,
+    VRML_COLOR_BOT_SOLDMASK,
     VRML_COLOR_PASTE,
-    VRML_COLOR_SILK,
+    VRML_COLOR_TOP_SILK,
+    VRML_COLOR_BOT_SILK,
     VRML_COLOR_LAST         // Sentinel
 };
 
@@ -79,7 +83,6 @@ struct VRML_COLOR
 
     VRML_COLOR( float dr, float dg, float db,
                 float sr, float sg, float sb,
-                float er, float eg, float eb,
                 float am, float tr, float sh )
     {
         diffuse_red = dr;
@@ -88,9 +91,9 @@ struct VRML_COLOR
         spec_red = sr;
         spec_grn = sg;
         spec_blu = sb;
-        emit_red = er;
-        emit_grn = eg;
-        emit_blu = eb;
+        emit_red = 0.0f;
+        emit_grn = 0.0f;
+        emit_blu = 0.0f;
 
         ambient = am;
         transp  = tr;
@@ -103,7 +106,7 @@ struct VRML_COLOR
 class EXPORTER_PCB_VRML
 {
 public:
-    EXPORTER_PCB_VRML();
+    EXPORTER_PCB_VRML( BOARD* aPCB );
     ~EXPORTER_PCB_VRML();
 
     VRML_COLOR& GetColor( VRML_COLOR_INDEX aIndex )
@@ -140,8 +143,6 @@ public:
     // Build and exports the board outlines (board body)
     void ExportVrmlBoard();
 
-    void ExportVrmlVia( const PCB_VIA* aVia );
-
     // Export all via holes
     void ExportVrmlViaHoles();
 
@@ -176,49 +177,64 @@ private:
     SGNODE* getSGColor( VRML_COLOR_INDEX colorIdx );
 
 public:
-    IFSG_TRANSFORM m_OutputPCB;
-    VRML_LAYER  m_holes;
-    VRML_LAYER  m_3D_board;
-    VRML_LAYER  m_top_copper;
-    VRML_LAYER  m_bot_copper;
-    VRML_LAYER  m_top_silk;
-    VRML_LAYER  m_bot_silk;
-    VRML_LAYER  m_top_soldermask;
-    VRML_LAYER  m_bot_soldermask;
-    VRML_LAYER  m_top_paste;
-    VRML_LAYER  m_bot_paste;
-    VRML_LAYER  m_plated_holes;
+    static CUSTOM_COLORS_LIST   g_SilkscreenColors;
+    static CUSTOM_COLORS_LIST   g_MaskColors;
+    static CUSTOM_COLORS_LIST   g_PasteColors;
+    static CUSTOM_COLORS_LIST   g_FinishColors;
+    static CUSTOM_COLORS_LIST   g_BoardColors;
 
-    std::list< SGNODE* > m_components;
-    S3D_CACHE* m_Cache3Dmodels;
-    BOARD*     m_Pcb;
+    static KIGFX::COLOR4D       g_DefaultBackgroundTop;
+    static KIGFX::COLOR4D       g_DefaultBackgroundBot;
+    static KIGFX::COLOR4D       g_DefaultSilkscreen;
+    static KIGFX::COLOR4D       g_DefaultSolderMask;
+    static KIGFX::COLOR4D       g_DefaultSolderPaste;
+    static KIGFX::COLOR4D       g_DefaultSurfaceFinish;
+    static KIGFX::COLOR4D       g_DefaultBoardBody;
+
+public:
+    IFSG_TRANSFORM     m_OutputPCB;
+    VRML_LAYER         m_holes;
+    VRML_LAYER         m_3D_board;
+    VRML_LAYER         m_top_copper;
+    VRML_LAYER         m_bot_copper;
+    VRML_LAYER         m_top_silk;
+    VRML_LAYER         m_bot_silk;
+    VRML_LAYER         m_top_soldermask;
+    VRML_LAYER         m_bot_soldermask;
+    VRML_LAYER         m_top_paste;
+    VRML_LAYER         m_bot_paste;
+    VRML_LAYER         m_plated_holes;
+
+    std::list<SGNODE*> m_components;
+    S3D_CACHE*         m_Cache3Dmodels;
+    BOARD*             m_Pcb;
 
     /* true to use VRML inline{} syntax for footprint 3D models, like:
      * Inline { url "F:/tmp/pic_programmer/shapes3D/DIP-18_W7.62mm_Socket.wrl"  }
      * false to merge VRML 3D modules in the .wrl board file
      */
-    bool m_UseInlineModelsInBrdfile;
+    bool     m_UseInlineModelsInBrdfile;
 
     // 3D subdirectory to copy footprint vrml 3D models when not merged in board file
     wxString m_Subdir3DFpModels;
 
     // true to use relative paths in VRML inline{} for footprint 3D models
     // used only if m_UseInlineModelsInBrdfile = true
-    bool m_UseRelPathIn3DModelFilename;
+    bool     m_UseRelPathIn3DModelFilename;
 
     // true to reuse component definitions
-    bool m_ReuseDef;
+    bool     m_ReuseDef;
 
     // scaling from 0.1 inch to desired VRML unit
-    double m_WorldScale = 1.0;
+    double   m_WorldScale = 1.0;
 
     // scaling from mm to desired VRML world scale
-    double m_BoardToVrmlScale;
+    double   m_BoardToVrmlScale;
 
-    double  m_tx;             // global translation along X
-    double  m_ty;             // global translation along Y
+    double   m_tx;             // global translation along X
+    double   m_ty;             // global translation along Y
 
-    double m_brd_thickness; // depth of the PCB
+    double   m_brd_thickness; // depth of the PCB
 
 private:
     VRML_COLOR  vrml_colors_list[VRML_COLOR_LAST];

@@ -58,15 +58,29 @@
 #define ERR_APPROX_MAX_MM 0.005
 
 
+CUSTOM_COLORS_LIST   EXPORTER_PCB_VRML::g_SilkscreenColors;
+CUSTOM_COLORS_LIST   EXPORTER_PCB_VRML::g_MaskColors;
+CUSTOM_COLORS_LIST   EXPORTER_PCB_VRML::g_PasteColors;
+CUSTOM_COLORS_LIST   EXPORTER_PCB_VRML::g_FinishColors;
+CUSTOM_COLORS_LIST   EXPORTER_PCB_VRML::g_BoardColors;
 
-EXPORTER_PCB_VRML::EXPORTER_PCB_VRML() :
+KIGFX::COLOR4D       EXPORTER_PCB_VRML::g_DefaultSilkscreen;
+KIGFX::COLOR4D       EXPORTER_PCB_VRML::g_DefaultSolderMask;
+KIGFX::COLOR4D       EXPORTER_PCB_VRML::g_DefaultSolderPaste;
+KIGFX::COLOR4D       EXPORTER_PCB_VRML::g_DefaultSurfaceFinish;
+KIGFX::COLOR4D       EXPORTER_PCB_VRML::g_DefaultBoardBody;
+
+static bool          g_ColorsLoaded = false;
+
+
+EXPORTER_PCB_VRML::EXPORTER_PCB_VRML( BOARD* aPCB ) :
         m_OutputPCB( nullptr )
 {
     m_ReuseDef = true;
     m_precision = 6;
     m_WorldScale = 1.0;
     m_Cache3Dmodels = nullptr;
-    m_Pcb = nullptr;
+    m_Pcb = aPCB;
     m_UseInlineModelsInBrdfile = false;
     m_UseRelPathIn3DModelFilename = false;
     m_BoardToVrmlScale = MM_PER_IU;
@@ -78,23 +92,181 @@ EXPORTER_PCB_VRML::EXPORTER_PCB_VRML() :
         m_layer_z[i] = 0;
 
     // this default only makes sense if the output is in mm
-    m_brd_thickness = 1.6;
+    m_brd_thickness = Iu2Millimeter( m_Pcb->GetDesignSettings().GetBoardThickness() );
 
-    // pcb green
-    vrml_colors_list[VRML_COLOR_PCB] = VRML_COLOR(
-            0.12f, 0.20f, 0.19f, 0.01f, 0.03f, 0.01f, 0.0f, 0.0f, 0.0f, 0.8f, 0.0f, 0.02f );
-    // copper color
-    vrml_colors_list[VRML_COLOR_COPPER] = VRML_COLOR(
-            0.72f, 0.45f, 0.2f, 0.01f, 0.05f, 0.01f, 0.0f, 0.0f, 0.0f, 0.8f, 0.0f, 0.02f );
-    // silkscreen white
-    vrml_colors_list[VRML_COLOR_SILK] = VRML_COLOR(
-            0.7f, 0.7f, 0.9f, 0.1f, 0.1f, 0.1f, 0.0f, 0.0f, 0.0f, 0.9f, 0.0f, 0.02f );
-    // solder paste silver (gray)
-    vrml_colors_list[VRML_COLOR_PASTE] = VRML_COLOR( 0.4f, 0.4f, 0.4f, 0.2f, 0.2f, 0.2f, 0.0f,
-            0.0f, 0.0f, 0.8f, 0.0f, 0.8f );
-    // solder mask green with transparency
-    vrml_colors_list[VRML_COLOR_SOLDMASK] = VRML_COLOR(
-            0.07f, 0.3f, 0.12f, 0.01f, 0.03f, 0.01f, 0.0f, 0.0f, 0.0f, 0.8f, 0.25f, 0.02f );
+    // TODO: figure out a way to share all these stackup color definitions....
+    if( !g_ColorsLoaded )
+    {
+#define ADD_COLOR( list, r, g, b, a, name ) \
+    list.emplace_back( r/255.0, g/255.0, b/255.0, a, name )
+
+        ADD_COLOR( g_SilkscreenColors, 245, 245, 245, 1.0, _HKI( "Not specified" ) ); // White
+        ADD_COLOR( g_SilkscreenColors,  20,  51,  36, 1.0, wxT( "Green" ) );
+        ADD_COLOR( g_SilkscreenColors, 181,  19,  21, 1.0, wxT( "Red" ) );
+        ADD_COLOR( g_SilkscreenColors,   2,  59, 162, 1.0, wxT( "Blue" ) );
+        ADD_COLOR( g_SilkscreenColors,  11,  11,  11, 1.0, wxT( "Black" ) );
+        ADD_COLOR( g_SilkscreenColors, 245, 245, 245, 1.0, wxT( "White" ) );
+        ADD_COLOR( g_SilkscreenColors,  32,   2,  53, 1.0, wxT( "Purple" ) );
+        ADD_COLOR( g_SilkscreenColors, 194,  195,  0, 1.0, wxT( "Yellow" ) );
+
+        ADD_COLOR( g_MaskColors,  20,  51,  36, 0.83, _HKI( "Not specified" ) ); // Green
+        ADD_COLOR( g_MaskColors,  20,  51,  36, 0.83, wxT( "Green" ) );
+        ADD_COLOR( g_MaskColors,  91, 168,  12, 0.83, wxT( "Light Green" ) );
+        ADD_COLOR( g_MaskColors,  13, 104,  11, 0.83, wxT( "Saturated Green" ) );
+        ADD_COLOR( g_MaskColors, 181,  19,  21, 0.83, wxT( "Red" ) );
+        ADD_COLOR( g_MaskColors, 210,  40,  14, 0.83, wxT( "Light Red" ) );
+        ADD_COLOR( g_MaskColors, 239,  53,  41, 0.83, wxT( "Red/Orange" ) );
+        ADD_COLOR( g_MaskColors,   2,  59, 162, 0.83, wxT( "Blue" ) );
+        ADD_COLOR( g_MaskColors,  54,  79, 116, 0.83, wxT( "Light Blue 1" ) );
+        ADD_COLOR( g_MaskColors,  61,  85, 130, 0.83, wxT( "Light Blue 2" ) );
+        ADD_COLOR( g_MaskColors,  21,  70,  80, 0.83, wxT( "Green/Blue" ) );
+        ADD_COLOR( g_MaskColors,  11,  11,  11, 0.83, wxT( "Black" ) );
+        ADD_COLOR( g_MaskColors, 245, 245, 245, 0.83, wxT( "White" ) );
+        ADD_COLOR( g_MaskColors,  32,   2,  53, 0.83, wxT( "Purple" ) );
+        ADD_COLOR( g_MaskColors, 119,  31,  91, 0.83, wxT( "Light Purple" ) );
+        ADD_COLOR( g_MaskColors, 194,  195,  0, 0.83, wxT( "Yellow" ) );
+
+        ADD_COLOR( g_PasteColors, 128, 128, 128, 1.0, wxT( "Grey" ) );
+        ADD_COLOR( g_PasteColors,  90,  90,  90, 1.0, wxT( "Dark Grey" ) );
+        ADD_COLOR( g_PasteColors, 213, 213, 213, 1.0, wxT( "Silver" ) );
+
+        ADD_COLOR( g_FinishColors, 184, 115,  50, 1.0, wxT( "Copper" ) );
+        ADD_COLOR( g_FinishColors, 178, 156,   0, 1.0, wxT( "Gold" ) );
+        ADD_COLOR( g_FinishColors, 213, 213, 213, 1.0, wxT( "Silver" ) );
+        ADD_COLOR( g_FinishColors, 160, 160, 160, 1.0, wxT( "Tin" ) );
+
+        ADD_COLOR( g_BoardColors,  51,  43,  22, 0.83, wxT( "FR4 natural, dark" ) );
+        ADD_COLOR( g_BoardColors, 109, 116,  75, 0.83, wxT( "FR4 natural" ) );
+        ADD_COLOR( g_BoardColors, 252, 252, 250, 0.90, wxT( "PTFE natural" ) );
+        ADD_COLOR( g_BoardColors, 205, 130,   0, 0.68, wxT( "Polyimide" ) );
+        ADD_COLOR( g_BoardColors,  92,  17,   6, 0.90, wxT( "Phenolic natural" ) );
+        ADD_COLOR( g_BoardColors, 146,  99,  47, 0.83, wxT( "Brown 1" ) );
+        ADD_COLOR( g_BoardColors, 160, 123,  54, 0.83, wxT( "Brown 2" ) );
+        ADD_COLOR( g_BoardColors, 146,  99,  47, 0.83, wxT( "Brown 3" ) );
+        ADD_COLOR( g_BoardColors, 213, 213, 213,  1.0, wxT( "Aluminum" ) );
+
+        g_DefaultSilkscreen =    COLOR4D( 0.94, 0.94, 0.94,  1.0 );
+        g_DefaultSolderMask =    COLOR4D( 0.08, 0.20, 0.14, 0.83 );
+        g_DefaultSolderPaste =   COLOR4D( 0.50, 0.50, 0.50,  1.0 );
+        g_DefaultSurfaceFinish = COLOR4D( 0.75, 0.61, 0.23,  1.0 );
+        g_DefaultBoardBody =     COLOR4D( 0.43, 0.45, 0.30, 0.90 );
+
+        g_ColorsLoaded = true;
+    }
+#undef ADD_COLOR
+
+    COLOR4D topSilk = g_DefaultSilkscreen;
+    COLOR4D botSilk = g_DefaultSilkscreen;
+    COLOR4D topMask = g_DefaultSolderMask;
+    COLOR4D botMask = g_DefaultSolderMask;
+    COLOR4D paste   = g_DefaultSolderPaste;
+    COLOR4D finish  = g_DefaultSurfaceFinish;
+    COLOR4D boardBody( 0, 0, 0, 0 );
+
+    const BOARD_STACKUP& stackup = m_Pcb->GetDesignSettings().GetStackupDescriptor();
+
+    auto findColor =
+            []( const wxString& aColorName, const CUSTOM_COLORS_LIST& aColorSet )
+            {
+                if( aColorName.StartsWith( wxT( "#" ) ) )
+                {
+                    return KIGFX::COLOR4D( aColorName );
+                }
+                else
+                {
+                    for( const CUSTOM_COLOR_ITEM& color : aColorSet )
+                    {
+                        if( color.m_ColorName == aColorName )
+                            return color.m_Color;
+                    }
+                }
+
+                return KIGFX::COLOR4D();
+            };
+
+    for( const BOARD_STACKUP_ITEM* stackupItem : stackup.GetList() )
+    {
+        wxString colorName = stackupItem->GetColor();
+
+        switch( stackupItem->GetType() )
+        {
+        case BS_ITEM_TYPE_SILKSCREEN:
+            if( stackupItem->GetBrdLayerId() == F_SilkS )
+                topSilk = findColor( colorName, g_SilkscreenColors );
+            else
+                botSilk = findColor( colorName, g_SilkscreenColors );
+            break;
+
+        case BS_ITEM_TYPE_SOLDERMASK:
+            if( stackupItem->GetBrdLayerId() == F_Mask )
+                topMask = findColor( colorName, g_MaskColors );
+            else
+                botMask = findColor( colorName, g_MaskColors );
+
+            break;
+
+        case BS_ITEM_TYPE_DIELECTRIC:
+        {
+            KIGFX::COLOR4D layerColor = findColor( colorName, g_BoardColors );
+
+            if( boardBody == COLOR4D( 0, 0, 0, 0 ) )
+                boardBody = layerColor;
+            else
+                boardBody = boardBody.Mix( layerColor, 1.0 - layerColor.a );
+
+            boardBody.a += ( 1.0 - boardBody.a ) * layerColor.a / 2;
+            break;
+        }
+
+        default:
+            break;
+        }
+    }
+
+    if( boardBody == COLOR4D( 0, 0, 0, 0 ) )
+        boardBody = g_DefaultBoardBody;
+
+    const wxString& finishName = stackup.m_FinishType;
+
+    if( finishName.EndsWith( wxT( "OSP" ) ) )
+    {
+        finish = findColor( wxT( "Copper" ), g_FinishColors );
+    }
+    else if( finishName.EndsWith( wxT( "IG" ) )
+          || finishName.EndsWith( wxT( "gold" ) ) )
+    {
+        finish = findColor( wxT( "Gold" ), g_FinishColors );
+    }
+    else if( finishName.StartsWith( wxT( "HAL" ) )
+          || finishName.StartsWith( wxT( "HASL" ) )
+          || finishName.EndsWith( wxT( "tin" ) )
+          || finishName.EndsWith( wxT( "nickel" ) ) )
+    {
+        finish = findColor( wxT( "Tin" ), g_FinishColors );
+    }
+    else if( finishName.EndsWith( wxT( "silver" ) ) )
+    {
+        finish = findColor( wxT( "Silver" ), g_FinishColors );
+    }
+
+    auto toVRMLColor =
+            []( const COLOR4D& aColor, double aSpecular, double aAmbient, double aShiny )
+            {
+                COLOR4D diff  = aColor;
+                COLOR4D spec  = aColor.Brightened( aSpecular );
+
+                return VRML_COLOR( diff.r, diff.g, diff.b,
+                                   spec.r, spec.g, spec.b,
+                                   aAmbient, 1.0 - aColor.a, aShiny );
+            };
+
+    vrml_colors_list[VRML_COLOR_TOP_SILK] =     toVRMLColor( topSilk,   0.1, 0.7, 0.02 );
+    vrml_colors_list[VRML_COLOR_BOT_SILK] =     toVRMLColor( botSilk,   0.1, 0.7, 0.02 );
+    vrml_colors_list[VRML_COLOR_TOP_SOLDMASK] = toVRMLColor( topMask,   0.3, 0.8, 0.30 );
+    vrml_colors_list[VRML_COLOR_BOT_SOLDMASK] = toVRMLColor( botMask,   0.3, 0.8, 0.30 );
+    vrml_colors_list[VRML_COLOR_PASTE] =        toVRMLColor( paste,     0.6, 0.7, 0.70 );
+    vrml_colors_list[VRML_COLOR_COPPER] =       toVRMLColor( finish,    0.6, 0.7, 0.90 );
+    vrml_colors_list[VRML_COLOR_PCB] =          toVRMLColor( boardBody, 0.1, 0.7, 0.01 );
 
     SetOffset( 0.0, 0.0 );
 }
@@ -165,15 +337,15 @@ bool EXPORTER_PCB_VRML::GetLayer3D( int layer, VRML_LAYER** vlayer )
     // a layer has been selected.
     switch( layer )
     {
-    case B_Cu:    *vlayer = &m_bot_copper; return true;
-    case F_Cu:    *vlayer = &m_top_copper; return true;
-    case B_SilkS: *vlayer = &m_bot_silk;   return true;
-    case F_SilkS: *vlayer = &m_top_silk;   return true;
+    case B_Cu:    *vlayer = &m_bot_copper;      return true;
+    case F_Cu:    *vlayer = &m_top_copper;      return true;
+    case B_SilkS: *vlayer = &m_bot_silk;        return true;
+    case F_SilkS: *vlayer = &m_top_silk;        return true;
     case B_Mask:  *vlayer = &m_bot_soldermask;  return true;
     case F_Mask:  *vlayer = &m_top_soldermask;  return true;
-    case B_Paste: *vlayer = &m_bot_paste;  return true;
-    case F_Paste: *vlayer = &m_top_paste;  return true;
-    default:      return false;
+    case B_Paste: *vlayer = &m_bot_paste;       return true;
+    case F_Paste: *vlayer = &m_top_paste;       return true;
+    default:                                    return false;
     }
 }
 
@@ -395,7 +567,7 @@ void EXPORTER_PCB_VRML::writeLayers( const char* aFileName, OSTREAM* aOutputFile
 
     if( m_UseInlineModelsInBrdfile )
     {
-        write_triangle_bag( *aOutputFile, GetColor( VRML_COLOR_SOLDMASK ),
+        write_triangle_bag( *aOutputFile, GetColor( VRML_COLOR_TOP_SOLDMASK ),
                             &m_top_soldermask, true, true,
                             GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) *
                             m_BoardToVrmlScale,
@@ -403,7 +575,7 @@ void EXPORTER_PCB_VRML::writeLayers( const char* aFileName, OSTREAM* aOutputFile
     }
     else
     {
-        create_vrml_plane( m_OutputPCB, VRML_COLOR_SOLDMASK, &m_top_soldermask,
+        create_vrml_plane( m_OutputPCB, VRML_COLOR_TOP_SOLDMASK, &m_top_soldermask,
                            GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) *
                            m_BoardToVrmlScale,
                            true );
@@ -447,7 +619,7 @@ void EXPORTER_PCB_VRML::writeLayers( const char* aFileName, OSTREAM* aOutputFile
 
     if( m_UseInlineModelsInBrdfile )
     {
-        write_triangle_bag( *aOutputFile, GetColor( VRML_COLOR_SOLDMASK ),
+        write_triangle_bag( *aOutputFile, GetColor( VRML_COLOR_BOT_SOLDMASK ),
                             &m_bot_soldermask, true, false,
                             GetLayerZ( B_Cu ) - Millimeter2iu( ART_OFFSET / 2.0 ) *
                             m_BoardToVrmlScale,
@@ -455,7 +627,7 @@ void EXPORTER_PCB_VRML::writeLayers( const char* aFileName, OSTREAM* aOutputFile
     }
     else
     {
-        create_vrml_plane( m_OutputPCB, VRML_COLOR_SOLDMASK, &m_bot_soldermask,
+        create_vrml_plane( m_OutputPCB, VRML_COLOR_BOT_SOLDMASK, &m_bot_soldermask,
                            GetLayerZ( B_Cu ) - Millimeter2iu( ART_OFFSET / 2.0 ) *
                            m_BoardToVrmlScale,
                            false );
@@ -487,12 +659,12 @@ void EXPORTER_PCB_VRML::writeLayers( const char* aFileName, OSTREAM* aOutputFile
 
     if( m_UseInlineModelsInBrdfile )
     {
-        write_triangle_bag( *aOutputFile, GetColor( VRML_COLOR_SILK ), &m_top_silk,
+        write_triangle_bag( *aOutputFile, GetColor( VRML_COLOR_TOP_SILK ), &m_top_silk,
                             true, true, GetLayerZ( F_SilkS ), 0 );
     }
     else
     {
-        create_vrml_plane( m_OutputPCB, VRML_COLOR_SILK, &m_top_silk,
+        create_vrml_plane( m_OutputPCB, VRML_COLOR_TOP_SILK, &m_top_silk,
                            GetLayerZ( F_SilkS ), true );
     }
 
@@ -501,12 +673,12 @@ void EXPORTER_PCB_VRML::writeLayers( const char* aFileName, OSTREAM* aOutputFile
 
     if( m_UseInlineModelsInBrdfile )
     {
-        write_triangle_bag( *aOutputFile, GetColor( VRML_COLOR_SILK ), &m_bot_silk,
+        write_triangle_bag( *aOutputFile, GetColor( VRML_COLOR_BOT_SILK ), &m_bot_silk,
                             true, false, GetLayerZ( B_SilkS ), 0 );
     }
     else
     {
-        create_vrml_plane( m_OutputPCB, VRML_COLOR_SILK, &m_bot_silk,
+        create_vrml_plane( m_OutputPCB, VRML_COLOR_BOT_SILK, &m_bot_silk,
                            GetLayerZ( B_SilkS ), false );
     }
 
@@ -985,12 +1157,10 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
                                       const wxString& a3D_Subdir,
                                       double aXRef, double aYRef )
 {
-    BOARD*          pcb = GetBoard();
-    bool            success  = true;
+    bool              success  = true;
+    EXPORTER_PCB_VRML model3d( GetBoard() );
 
-    EXPORTER_PCB_VRML model3d;
     model_vrml = &model3d;
-    model3d.m_Pcb = GetBoard();
     model3d.SetScale( aMMtoWRMLunit );
     model3d.m_UseInlineModelsInBrdfile = aExport3DFiles;
     model3d.m_Subdir3DFpModels = a3D_Subdir;
@@ -1044,7 +1214,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
         else
         {
             // merge footprints in the .vrml board file
-            for( FOOTPRINT* footprint : pcb->Footprints() )
+            for( FOOTPRINT* footprint : GetBoard()->Footprints() )
                 model3d.ExportVrmlFootprint( footprint, nullptr );
 
             // write out the board and all layers
