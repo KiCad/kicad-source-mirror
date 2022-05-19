@@ -209,7 +209,7 @@ void LIB_TREE::ExpandLibId( const LIB_ID& aLibId )
 
 void LIB_TREE::SetSearchString( const wxString& aSearchString )
 {
-    m_query_ctrl->SetValue( aSearchString );
+    m_query_ctrl->ChangeValue( aSearchString );
 }
 
 
