@@ -633,7 +633,7 @@ class FootprintWizardDrawingAids:
         @param orientation_degree: text orientation in degrees
         """
 
-        text_size = pcbnew.wxSize(size, size)
+        text_size = pcbnew.VECTOR2I(size, size)
 
         self.module.Reference().SetPos0(self.TransformPoint(x, y))
         self.module.Reference().SetPosition(
@@ -650,7 +650,7 @@ class FootprintWizardDrawingAids:
         @param size: the text size (in both directions)
         @param orientation_degree: text orientation in degrees
         """
-        text_size = pcbnew.wxSize(size, size)
+        text_size = pcbnew.VECTOR2I(size, size)
 
         self.module.Value().SetPos0(self.TransformPoint(x, y))
         self.module.Value().SetPosition(self.module.Value().GetPos0())
