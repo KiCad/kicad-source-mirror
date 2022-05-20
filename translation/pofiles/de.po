@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:05-0700\n"
-"PO-Revision-Date: 2022-05-17 19:03+0000\n"
+"PO-Revision-Date: 2022-05-21 07:17+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -3548,11 +3548,11 @@ msgstr "µVia-Lochdurchmesser metallisiert"
 
 #: common/dialogs/panel_setup_netclasses.cpp:516
 msgid "Differential pair track width"
-msgstr "Leiterbahnbreite Differentialpaar"
+msgstr "Differenzialpaar-Leiterbahnbreite"
 
 #: common/dialogs/panel_setup_netclasses.cpp:517
 msgid "Differential pair gap"
-msgstr "Differentialpaar-Abstand"
+msgstr "Differenzialpaar-Abstand"
 
 #: common/dialogs/panel_setup_netclasses.cpp:518
 msgid "Schematic wire thickness"
@@ -4467,7 +4467,7 @@ msgstr "Rechts"
 #: eeschema/lib_text.cpp:368 eeschema/sch_field.cpp:603
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:105
 msgid "Top"
-msgstr "Oberseite"
+msgstr "Oben"
 
 #: common/eda_text.cpp:724
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
@@ -4477,7 +4477,7 @@ msgstr "Oberseite"
 #: eeschema/lib_text.cpp:370 eeschema/sch_field.cpp:605
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:105
 msgid "Bottom"
-msgstr "Unterseite"
+msgstr "Unten"
 
 #: common/eda_text.cpp:730
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
@@ -6099,7 +6099,7 @@ msgstr "Raster-Eigenschaften..."
 
 #: common/tool/actions.cpp:481
 msgid "Set grid dimensions"
-msgstr "Raster einstellen"
+msgstr "Rastermaße einstellen"
 
 #: common/tool/actions.cpp:486
 msgid "Use inches"
@@ -7539,7 +7539,7 @@ msgstr "Annotation-Meldungen:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:92
 msgid "Annotate"
-msgstr "Annotation"
+msgstr "Annotieren"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:37
 msgid "Entire schematic"
@@ -7599,7 +7599,7 @@ msgstr "Erste freie Nummer nach Schaltplanblattnummer × 1000"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:128
 msgid "Clear Annotation"
-msgstr "Lösche Annotationen"
+msgstr "Annotationen löschen"
 
 #: eeschema/dialogs/dialog_annotate_base.h:81
 msgid "Annotate Schematic"
@@ -19640,11 +19640,11 @@ msgstr "Rechts:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:533
 msgid "Top:"
-msgstr "Oberseite:"
+msgstr "Oben:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:547
 msgid "Bottom:"
-msgstr "Unterseite:"
+msgstr "Unten:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:576
 #: pcbnew/dialogs/dialog_plot_base.cpp:68
@@ -22043,7 +22043,7 @@ msgid ""
 "\n"
 msgstr ""
 "\n"
-"Ausgenommen: %s von der erneuten Notation\n"
+"Ausgenommen: %s von Reannotation\n"
 "\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:527
@@ -23289,7 +23289,7 @@ msgstr "Bemaßungsformat"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:102
 msgid "Measured value of this dimension"
-msgstr "Messwert dieser Dimension"
+msgstr "Messwert dieser Bemaßung"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:106
 msgid "Override value"
@@ -23317,13 +23317,13 @@ msgid ""
 "Units of this dimension (\"automatic\" to follow the units selected in the "
 "editor)"
 msgstr ""
-"Einheiten dieser Dimension (\"automatisch\", um den im Editor ausgewählten "
-"Einheiten zu folgen)"
+"Einheiten dieser Bemaßung (\"automatisch\", um die im Editor ausgewählten "
+"Einheiten zu verwenden)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:130
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:135
 msgid "Text to print before the dimension value"
-msgstr "Text, der vor dem Bemaßungswert gedruckt werden soll"
+msgstr "Text, der vor dem Bemaßungswert angezeigt werden soll"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:139
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:112
@@ -23353,7 +23353,7 @@ msgstr "1234 (mm)"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:155
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:160
 msgid "Text to print after the dimension value"
-msgstr "Text, der nach dem Bemaßungswert gedruckt werden soll"
+msgstr "Text, der nach dem Bemaßungswert angezeigt werden soll"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:164
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:124
@@ -23473,8 +23473,8 @@ msgstr "An der Bemaßung ausgerichtet bleiben"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:302
 msgid "Automatically set the text orientation to match the dimension lines"
 msgstr ""
-"Stellen Sie die Textausrichtung automatisch so ein, dass sie mit den "
-"Bemaßungslinien übereinstimmt"
+"Textausrichtung automatisch so einstellen, dass sie mit den Bemaßungslinien "
+"übereinstimmt"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:307
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:191
@@ -25351,7 +25351,7 @@ msgstr "Designregeln"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
 msgid "Predefined track and via dimensions"
-msgstr "Vordefinierte Leiterbahn- und Via-Größen"
+msgstr "Vordefinierte Leiterbahn- und Via-Maße"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
 msgid "Solder mask/paste defaults"
@@ -26834,7 +26834,7 @@ msgstr "Via-Abstand gleich Leiterbahn-Abstand"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:60
 msgid "Differential Pair Dimensions"
-msgstr "Abmessungen differenzielles Signalpaar"
+msgstr "Differenzialpaar-Maße"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:79
 msgid "Single Track Length Tuning"
@@ -26846,7 +26846,7 @@ msgstr "Anpassen der Länge von Differenziellem Paar"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:91
 msgid "Differential Pair Skew Tuning"
-msgstr "Versatz-Anpassung eines Differentialpaars"
+msgstr "Versatz-Anpassung eines Differenzialpaars"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:93
 msgid "Target skew:"
@@ -29339,8 +29339,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<netz_name>')\n"
-"Wahr, wenn `A` Teil des angegebenen Differentialpaars ist.\n"
-"`<netz_name>` ist der basisname des Diffeentialpaars. Beispielsweise passt "
+"Wahr, wenn `A` Teil des angegebenen Differenzialpaars ist.\n"
+"`<netz_name>` ist der Basisname des Differenzialpaars. Beispielsweise passt "
 "`inDiffPair('/CLK')`\n"
 "zu Elementen in den `/CLK_P`- und `/CLK_N`-Netzen.\n"
 "<br><br>\n"
@@ -29363,8 +29363,8 @@ msgstr ""
 "Hinweis: Dies gibt wahr zurück, wenn `A` auf der angegebenen Lage liegt, "
 "unabhängig\n"
 "davon, ob diese Regel für die angegebene Lage angewendet wird.\n"
-"Für letzteres die `(layer \"layer_name\")`-Bestimmung in der Regel "
-"benutzen.\n"
+"Für letzteres die `(layer \"layer_name\")`-Bestimmung in der Regel benutzen."
+"\n"
 "<br><br><br>\n"
 "\n"
 "### Weitere Beispiele\n"
@@ -29388,13 +29388,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
-"\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
-"\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -29432,14 +29432,14 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
-msgstr "Standardwerte für neue Dimensionsobjekte:"
+msgstr "Standardwerte für neue Bemaßungsobjekte:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:93
 msgid ""
 "Default units for dimensions (\"automatic\" to follow the chosen UI units)"
 msgstr ""
-"Standardeinheiten für Bemaßungen (\"automatisch\", um den ausgewählten UI-"
-"Einheiten zu folgen)"
+"Standardeinheiten für Bemaßungen (\"automatisch\", um die ausgewählten "
+"Einheiten der Benutzeroberfläche zu verwenden)"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:100
 msgid "Text position:"
@@ -29479,11 +29479,11 @@ msgstr "Keine Via-Lochgröße definiert."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:290
 msgid "No differential pair gap defined."
-msgstr "Kein Differentialpaar-Abstand definiert."
+msgstr "Kein Differenzialpaar-Abstand definiert."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:19
 msgid "Pre-defined track and via dimensions:"
-msgstr "Vordefinierte Leiterbahn- und Via-Größen:"
+msgstr "Vordefinierte Leiterbahn- und Via-Maße:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:54
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:111
@@ -29548,7 +29548,7 @@ msgstr "Netzklasse '%s'"
 #: pcbnew/drc/drc_engine.cpp:305
 #, c-format
 msgid "netclass '%s' (diff pair)"
-msgstr "Netzklasse '%s' (Differentialpaar)"
+msgstr "Netzklasse '%s' (Differenzialpaar)"
 
 #: pcbnew/drc/drc_engine.cpp:426
 msgid "keepout area"
@@ -29851,11 +29851,11 @@ msgstr "Zu viele Vias in einer Verbindung"
 
 #: pcbnew/drc/drc_item.cpp:198
 msgid "Differential pair gap out of range"
-msgstr "Differentialpaar-Abstand außerhalb des zulässigen Bereichs"
+msgstr "Differenzialpaar-Abstand außerhalb des zulässigen Bereichs"
 
 #: pcbnew/drc/drc_item.cpp:202
 msgid "Differential uncoupled length too long"
-msgstr "Entkoppelte Differentialpaarlänge zu lang"
+msgstr "Entkoppelte Differenzialpaarlänge zu lang"
 
 #: pcbnew/drc/drc_item.cpp:206
 msgid "Footprint type doesn't match footprint pads"
@@ -32676,13 +32676,13 @@ msgid ""
 "internal dimension style instead."
 msgstr ""
 "Die Bemaßungs-ID %s hat in CADSTAR den Stil 'Extern'. Externe Bemaßungsstile "
-"werden in KiCad noch nicht unterstützt. Das Dimensionsobjekt wurde "
-"stattdessen mit einem internen Dimensionsstil importiert."
+"werden in KiCad noch nicht unterstützt. Das Bemaßungsobjekt wurde "
+"stattdessen mit einem internen Bemaßungstil importiert."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1441
 #, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
-msgstr "Unerwarteter Dimensionstyp (ID %s). Dies wurde nicht importiert."
+msgstr "Unerwarteter Bemaßungstyp (ID %s). Dieser wurde nicht importiert."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1576
 #, c-format
@@ -33610,8 +33610,8 @@ msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either N/P or +/-."
 msgstr ""
-"Kann zugehörige Netze für das Differentialpaar nicht finden. Bitte "
-"sicherstellen, dass Netznamen, welche zum Differentialpaar gehören, mit N/P "
+"Kann zugehörige Netze für das Differenzialpaar nicht finden. Bitte "
+"sicherstellen, dass Netznamen, welche zum Differenzialpaar gehören, mit N/P "
 "oder +/- enden."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:492
@@ -33640,8 +33640,8 @@ msgid ""
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
 msgstr ""
-"Kann das zugehörige Netz des Differentialpaars für die Längenanpassung nicht "
-"finden. Bitte sicherstellen, dass Netznamen, welche zum Differentialpaar "
+"Kann das zugehörige Netz des Differenzialpaars für die Längenanpassung nicht "
+"finden. Bitte sicherstellen, dass Netznamen, welche zum Differenzialpaar "
 "gehören, mit _N/_P oder +/- enden."
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:438
@@ -33709,9 +33709,9 @@ msgid ""
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
 msgstr ""
-"Kann das zugehörige Netz des Differentialpaars für die Anpassung des "
+"Kann das zugehörige Netz des Differenzialpaars für die Anpassung des "
 "Versatzes nicht finden. Bitte sicherstellen, dass Netznamen, welche zum "
-"Differentialpaar gehören, mit _N/_P oder +/- enden."
+"Differenzialpaar gehören, mit _N/_P oder +/- enden."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:165
 msgid "Too long: skew "
@@ -33727,7 +33727,7 @@ msgstr "Angepasst: Versatz "
 
 #: pcbnew/router/pns_router.cpp:212
 msgid "Diff pair gap is less than board minimum clearance."
-msgstr "Differentialpaar-Abstand ist kleiner als Mindestabstand der Platine."
+msgstr "Differenzialpaar-Abstand ist kleiner als Mindestabstand der Platine."
 
 #: pcbnew/router/pns_router.cpp:232
 msgid "Cannot start routing from a non-plated hole."
@@ -33918,15 +33918,15 @@ msgstr "Via %s"
 
 #: pcbnew/router/router_tool.cpp:315
 msgid "Select Differential Pair Dimensions"
-msgstr "Auswahl Differentialpaardimensionen"
+msgstr "Differenzialpaar-Maße wählen"
 
 #: pcbnew/router/router_tool.cpp:332
 msgid "Use differential pair dimensions from the net class"
-msgstr "Verwende Differentialpaardimensionen aus der Netzklasse"
+msgstr "Differenzialpaar-Maße aus der Netzklasse"
 
 #: pcbnew/router/router_tool.cpp:337
 msgid "Specify custom differential pair dimensions"
-msgstr "Definition von Benutzerdefinierten Differentialpaardimensionen"
+msgstr "Definition benutzerdefinierter Differenzialpaar-Maße"
 
 #: pcbnew/router/router_tool.cpp:354
 #, c-format
@@ -34011,7 +34011,7 @@ msgstr "Leiterbahn zerteilen"
 #: pcbnew/router/router_tool.cpp:2091
 #, c-format
 msgid "Routing Diff Pair: %s"
-msgstr "Route Differentialpaar: %s"
+msgstr "Route Differenzialpaar: %s"
 
 #: pcbnew/router/router_tool.cpp:2091
 #, c-format
@@ -34062,7 +34062,7 @@ msgstr "Leiterbahnbreite: %s"
 
 #: pcbnew/router/router_tool.cpp:2149
 msgid "Diff Pair Gap"
-msgstr "Differentialpaar-Abstand"
+msgstr "Differenzialpaar-Abstand"
 
 #: pcbnew/sel_layer.cpp:340
 msgid "Warning: top and bottom layers are same."
@@ -36240,7 +36240,7 @@ msgstr "Leiterbahnen verlegen"
 
 #: pcbnew/tools/pcb_actions.cpp:1324
 msgid "Route Differential Pair"
-msgstr "Differentialpaar verlegen"
+msgstr "Differenzialpaar verlegen"
 
 #: pcbnew/tools/pcb_actions.cpp:1324
 msgid "Route differential pairs"
@@ -36256,7 +36256,7 @@ msgstr "Öffnet Einstellungen des interaktiven Routers"
 
 #: pcbnew/tools/pcb_actions.cpp:1335
 msgid "Differential Pair Dimensions..."
-msgstr "Abmessungen differenzielles Signalpaar..."
+msgstr "Differenzialpaar-Maße..."
 
 #: pcbnew/tools/pcb_actions.cpp:1335
 msgid "Open Differential Pair Dimension settings"
@@ -36310,11 +36310,11 @@ msgstr "Länge einer einzelnen Leiterbahn anpassen"
 
 #: pcbnew/tools/pcb_actions.cpp:1374
 msgid "Tune length of a differential pair"
-msgstr "Länge eines Differentialpaares anpassen"
+msgstr "Länge eines Differenzialpaares anpassen"
 
 #: pcbnew/tools/pcb_actions.cpp:1381
 msgid "Tune skew of a differential pair"
-msgstr "Versatz und Abstimmung eines Differentialpaares anpassen"
+msgstr "Versatz und Abstimmung eines Differenzialpaares anpassen"
 
 #: pcbnew/tools/pcb_actions.cpp:1390
 msgid "Undo Last Segment"
