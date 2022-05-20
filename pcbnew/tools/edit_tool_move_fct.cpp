@@ -202,6 +202,8 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::testCourtyardClearances()
                         return false;
                     };
 
+            bool skipNextCmp = false;
+
             if( ( frontA.OutlineCount() > 0 && frontA.BBoxFromCaches().Intersects( fpBBBox ) )
                 || ( backA.OutlineCount() > 0 && backA.BBoxFromCaches().Intersects( fpBBBox ) ) )
             {
@@ -211,10 +213,14 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::testCourtyardClearances()
                     {
                         m_FpInConflict.insert( fpA );
                         m_FpInConflict.insert( fpB );
-                        return;
+                        skipNextCmp = true;
+                        break;
                     }
                 }
             }
+
+            if( skipNextCmp )
+                continue;       // fpA and fpB are already in list
 
             if( ( frontB.OutlineCount() > 0 && frontB.BBoxFromCaches().Intersects( fpABBox ) )
                 || ( backB.OutlineCount() > 0 && backB.BBoxFromCaches().Intersects( fpABBox ) ) )
@@ -225,7 +231,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::testCourtyardClearances()
                     {
                         m_FpInConflict.insert( fpA );
                         m_FpInConflict.insert( fpB );
-                        return;
+                        break;
                     }
                 }
             }
@@ -482,8 +488,8 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                     // Ensure the "old" conflicts are cleared
                     for( FOOTPRINT* fp: lastFpInConflict )
                     {
-                        m_toolMgr->GetView()->Update( fp );
                         fp->ClearFlags( COURTYARD_CONFLICT );
+                        m_toolMgr->GetView()->Update( fp );
                         need_redraw = true;
                     }
 
@@ -493,11 +499,11 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                     {
                         if( !fp->HasFlag( COURTYARD_CONFLICT ) )
                         {
+                            fp->SetFlags( COURTYARD_CONFLICT );
                             m_toolMgr->GetView()->Update( fp );
                             need_redraw = true;
                         }
 
-                        fp->SetFlags( COURTYARD_CONFLICT );
                         lastFpInConflict.push_back( fp );
                     }
 
