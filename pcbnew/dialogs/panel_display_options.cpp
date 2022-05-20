@@ -101,6 +101,7 @@ bool PANEL_DISPLAY_OPTIONS::TransferDataFromWindow()
         cfg->m_Display.m_NetNames = m_ShowNetNamesOption->GetSelection();
         cfg->m_Display.m_Live3DRefresh = m_live3Drefresh->GetValue();
         cfg->m_CrossProbing.on_selection = m_checkCrossProbeOnSelection->GetValue();
+        cfg->m_CrossProbing.center_on_items = m_checkCrossProbeCenter->GetValue();
         cfg->m_CrossProbing.zoom_to_fit = m_checkCrossProbeZoom->GetValue();
         cfg->m_CrossProbing.auto_highlight = m_checkCrossProbeAutoHighlight->GetValue();
     }
