@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:03-0700\n"
-"PO-Revision-Date: 2022-05-17 19:03+0000\n"
+"PO-Revision-Date: 2022-05-20 14:23+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -3227,10 +3227,26 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad pot informar de forma anònima sobre fallades i dades d'esdeveniments "
+"especials als desenvolupadors per tal d'ajudar a identificar errors crítics "
+"a través de la base d'usuaris de manera més eficaç i ajudar la funcionalitat "
+"del perfil per guiar les millores.\n"
+"\n"
+"Per enllaçar informes automàtics de la mateixa instal·lació de KiCad, es "
+"genera un identificador únic que és completament aleatori, només s'utilitza "
+"per a la notificació d'errors. No s'emmagatzema ni es connecta a aquest "
+"identificador cap informació d'identificació personal (PII), inclosa "
+"l'adreça IP. Pots restablir aquest identificador en qualsevol moment amb el "
+"botó proporcionat.\n"
+"\n"
+"Si decideixes participar voluntàriament, KiCad gestionarà automàticament "
+"l'enviament d'aquests informes quan es produeixin accidents o esdeveniments. "
+"Els teus fitxers de disseny, com ara esquemàtics o PCB, no es comparteixen "
+"en aquest procés."
 
 #: common/dialogs/panel_data_collection_base.cpp:27
 msgid "I agree to provide anonymous reports"
-msgstr ""
+msgstr "Accepto proporcionar informes anònims"
 
 #: common/dialogs/panel_data_collection_base.cpp:30
 msgid "Reset Unique Id"
@@ -5635,10 +5651,19 @@ msgid ""
 "sending said reports when crashes or events occur. \n"
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
+"KiCad pot informar de forma anònima sobre fallades i dades d'esdeveniments "
+"especials als desenvolupadors per tal d'ajudar a identificar errors crítics "
+"a través de la base d'usuaris de manera més eficaç i ajudar la funcionalitat "
+"del perfil per guiar les millores.\n"
+"Si decideixes participar voluntàriament, KiCad gestionarà automàticament "
+"l'enviament d'aquests informes quan es produeixin accidents o esdeveniments."
+"\n"
+"Els teus fitxers de disseny, com ara esquemàtics o PCB, no es comparteixen "
+"en aquest procés."
 
 #: common/pgm_base.cpp:346
 msgid "Data collection opt in request"
-msgstr ""
+msgstr "Petició de participació a la recollida de dades"
 
 #: common/pgm_base.cpp:388
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -7078,11 +7103,9 @@ msgid "Hotkey file"
 msgstr "Fitxer de dreceres de teclat"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr ""
-"No s'ha pogut trobar el fitxer d'equivalències '%s' als camins "
-"predeterminats de cerca."
+msgstr "No s'ha pogut trobar el fitxer d'equivalències '%s'."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -7371,9 +7394,8 @@ msgstr "Visualitzador de l'empremta"
 
 #: cvpcb/display_footprints_frame.cpp:322
 #: pcbnew/toolbars_footprint_viewer.cpp:107
-#, fuzzy
 msgid "Automatic Zoom on footprint change"
-msgstr "Assigna empremtes automàticament"
+msgstr "Zoom automàtic en canviar l'empremta"
 
 #: cvpcb/display_footprints_frame.cpp:406
 #, c-format
@@ -7495,9 +7517,8 @@ msgstr ""
 "Desa l'associació d'empremta al camp d'empremtes del component de l'esquema"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "Desa a l'esquemàtic"
+msgstr "Desa a l'esquemàtic i al fitxer"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
 #, fuzzy
@@ -10229,11 +10250,13 @@ msgstr "Mode de pins sincronitzats."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:432
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
-msgstr ""
+msgstr "Mode de pins sincronitzats. S'afegirà un nou pin a totes les unitats."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:434
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
 msgstr ""
+"Mode de pins sincronitzats. Els pins coincidents en altres unitats seran "
+"actualitzats."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:43
 msgid "Pin &name:"
@@ -12023,7 +12046,7 @@ msgstr "[No desat]"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1336
 msgid "Changes are unsaved. Export unsaved data?"
-msgstr ""
+msgstr "Hi ha canvis no desats. Vols exportar les dades no desades?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1346
 #, fuzzy
@@ -12083,7 +12106,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:146
 msgid "Default for all sheet instances"
-msgstr ""
+msgstr "Per defecte per a totes les instàncies del full"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:147
 msgid ""
@@ -12091,6 +12114,9 @@ msgid ""
 "footprint fields the default for all sheet instances\n"
 "of this symbol"
 msgstr ""
+"Mara per fer la unitat i la referència, el valor i els\n"
+"camps d'empremta per defecte per a totes les\n"
+"instàncies del full d'aquest símbol"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:151
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:345
@@ -12567,7 +12593,7 @@ msgstr "angle %s"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "90 deg Angle"
-msgstr ""
+msgstr "Angle de 90º"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 #, fuzzy
@@ -12576,7 +12602,7 @@ msgstr "45 graus"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "135 deg Angle"
-msgstr ""
+msgstr "Angle de 135º"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 msgid "Mouse drag performs Drag (G) operation"
