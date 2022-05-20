@@ -91,7 +91,8 @@ void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContaine
         font->Draw( &callback_gal, aText->GetShownText(), aText->GetDrawPos(), attrs );
 
         SHAPE_POLY_SET finalPoly;
-        int            margin = attrs.m_StrokeWidth * 1.5;
+        int            margin = attrs.m_StrokeWidth * 1.5 +
+                                    GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
 
         aText->TransformBoundingBoxWithClearanceToPolygon( &finalPoly, margin );
         finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );

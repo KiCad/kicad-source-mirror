@@ -825,7 +825,8 @@ void BRDITEMS_PLOTTER::PlotPcbText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, 
         font->Draw( &callback_gal, shownText, aText->GetDrawPos(), attrs );
 
         SHAPE_POLY_SET finalPoly;
-        int            margin = attrs.m_StrokeWidth * 1.5;
+        int            margin = attrs.m_StrokeWidth * 1.5
+                                    + GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
 
         aText->TransformBoundingBoxWithClearanceToPolygon( &finalPoly, margin );
         finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );

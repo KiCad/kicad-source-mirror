@@ -521,32 +521,19 @@ void ZONE_FILLER::addHoleKnockout( PAD* aPad, int aGap, SHAPE_POLY_SET& aHoles )
 void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
                                bool aIgnoreLineWidth, SHAPE_POLY_SET& aHoles )
 {
-    // Text has a complicated relationship with its boudingBox due to ascenders, descenders,
-    // diacriticals, etc.  Some things want a fairly tight bounding box, and some things don't.
-    // Since there's no uniformly "correct" answer, we pad the bounding box here to limit
-    // shorting as much as possible.  (Note, however, that it will be caught by DRC either way,
-    // as it's not reliant on the bounding box.)
+    EDA_TEXT* text = nullptr;
+
     switch( aItem->Type() )
     {
-    case PCB_TEXT_T:
-        aGap += static_cast<PCB_TEXT*>( aItem )->GetTextThickness();
-        break;
-
-    case PCB_TEXTBOX_T:
-        aGap += static_cast<PCB_TEXTBOX*>( aItem )->GetTextThickness();
-        break;
-
-    case PCB_FP_TEXT_T:
-        aGap += static_cast<FP_TEXT*>( aItem )->GetTextThickness();
-        break;
-
-    case PCB_FP_TEXTBOX_T:
-        aGap += static_cast<FP_TEXTBOX*>( aItem )->GetTextThickness();
-        break;
-
-    default:
-        break;
+    case PCB_TEXT_T:       text = static_cast<PCB_TEXT*>( aItem );    break;
+    case PCB_TEXTBOX_T:    text = static_cast<PCB_TEXTBOX*>( aItem ); break;
+    case PCB_FP_TEXT_T:    text = static_cast<FP_TEXT*>( aItem );     break;
+    case PCB_FP_TEXTBOX_T: text = static_cast<FP_TEXTBOX*>( aItem );  break;
+    default:                                                          break;
     }
+
+    if( text )
+        aGap += GetKnockoutTextMargin( text->GetTextSize(), text->GetTextThickness() );
 
     switch( aItem->Type() )
     {
@@ -561,17 +548,13 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
         break;
 
     case PCB_FP_TEXT_T:
-    {
-        FP_TEXT* text = static_cast<FP_TEXT*>( aItem );
-
         if( text->IsVisible() )
         {
-            text->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
-                                                        ERROR_OUTSIDE, aIgnoreLineWidth );
+            aItem->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
+                                                         ERROR_OUTSIDE, aIgnoreLineWidth );
         }
 
         break;
-    }
 
     default:
         break;

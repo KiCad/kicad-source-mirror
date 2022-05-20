@@ -79,6 +79,19 @@ int GetPenSizeForBold( const wxSize& aTextSize );
 int GetPenSizeForNormal( int aTextSize );
 int GetPenSizeForNormal( const wxSize& aTextSize );
 
+
+/**
+ * Returns the margin for knockout text.
+ *
+ * Note that this is not a perfect calculation as fonts (especially outline fonts) vary greatly
+ * in how well ascender and descender heights are enforced.
+ */
+inline int GetKnockoutTextMargin( const VECTOR2I& aSize, int aThickness )
+{
+    return std::max( aThickness, KiROUND( aSize.y / 4.0 ) );
+}
+
+
 /**
  * The full X size is GraphicTextWidth + the thickness of graphic lines.
  *
