@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:03-0700\n"
-"PO-Revision-Date: 2022-05-19 21:28+0000\n"
+"PO-Revision-Date: 2022-05-20 14:23+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -35714,9 +35714,8 @@ msgid "Zone connection resolution for:"
 msgstr "ゾーンの接続の解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:621
-#, fuzzy
 msgid "Thermal relief gap resolution for:"
-msgstr "テキスト高の解決:"
+msgstr "サーマルリリーフギャップの解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:630
 #, c-format
@@ -35729,9 +35728,9 @@ msgid "Spoke width resolution for:"
 msgstr "配線幅の解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:644
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal relief spoke width: %s."
-msgstr "解決されたサーマルスポーク幅: %s."
+msgstr "解決されたサーマルリリーフスポーク幅: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:649
 #, fuzzy
@@ -35796,9 +35795,8 @@ msgid "Courtyard clearance resolution for:"
 msgstr "コートヤードのクリアランスの解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:923
-#, fuzzy
 msgid "Physical Clearances"
-msgstr "物理的パラメーター"
+msgstr "物理的クリアランス"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1033
 msgid "Select an item for a constraints resolution report."
@@ -37854,14 +37852,12 @@ msgid "Checking redundant tracks..."
 msgstr "余分な配線をチェック…"
 
 #: pcbnew/tracks_cleaner.cpp:83
-#, fuzzy
 msgid "Removing redundant tracks..."
 msgstr "余分な配線を削除…"
 
 #: pcbnew/tracks_cleaner.cpp:95
-#, fuzzy
 msgid "Checking shorting tracks..."
-msgstr "フットプリントをチェック..."
+msgstr "短絡している配線をチェック..."
 
 #: pcbnew/tracks_cleaner.cpp:97
 msgid "Removing shorting tracks..."
@@ -37876,19 +37872,16 @@ msgid "Removing tracks in pads..."
 msgstr "パッド内の配線を削除…"
 
 #: pcbnew/tracks_cleaner.cpp:126
-#, fuzzy
 msgid "Checking dangling tracks and vias..."
-msgstr "配線とビアをクリーンアップ..."
+msgstr "未接続の配線とビアをチェック..."
 
 #: pcbnew/tracks_cleaner.cpp:131
-#, fuzzy
 msgid "Removing dangling tracks..."
-msgstr "未接続の配線を削除"
+msgstr "未接続の配線を削除…"
 
 #: pcbnew/tracks_cleaner.cpp:134
-#, fuzzy
 msgid "Removing dangling vias..."
-msgstr "未接続の配線を削除"
+msgstr "未接続のビアを削除…"
 
 #: pcbnew/tracks_cleaner.cpp:148
 msgid "Checking collinear tracks..."
