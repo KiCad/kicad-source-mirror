@@ -82,6 +82,7 @@ static const std::map<int, COLOR4D> s_defaultTheme =
 
             { LAYER_ANCHOR,                 CSS_COLOR( 255, 38,  226, 1 ) },
             { LAYER_LOCKED_ITEM_SHADOW,     CSS_COLOR( 255, 38,  226, 0.5 ) },
+            { LAYER_CONFLICTS_SHADOW,       CSS_COLOR( 255,  0,   05, 0.5 ) },
             { LAYER_AUX_ITEMS,              CSS_COLOR( 255, 255, 255, 1 ) },
             { LAYER_PCB_BACKGROUND,         CSS_COLOR( 0,   16,  35,  1 ) },
             { LAYER_CURSOR,                 CSS_COLOR( 255, 255, 255, 1 ) },
@@ -232,7 +233,8 @@ static const std::map<int, COLOR4D> s_classicTheme =
             { LAYER_GERBVIEW_PAGE_LIMITS,   COLOR4D( MAGENTA ) },
 
             { LAYER_ANCHOR,                 COLOR4D( BLUE ) },
-            { LAYER_LOCKED_ITEM_SHADOW,     COLOR4D( BLUE ) },
+            { LAYER_LOCKED_ITEM_SHADOW,     COLOR4D( BLUE ).WithAlpha( 0.6 ) },
+            { LAYER_CONFLICTS_SHADOW,       COLOR4D( RED ).WithAlpha( 0.5 ) },
             { LAYER_AUX_ITEMS,              COLOR4D( WHITE ) },
             { LAYER_PCB_BACKGROUND,         COLOR4D( BLACK ) },
             { LAYER_CURSOR,                 COLOR4D( WHITE ) },

@@ -353,6 +353,8 @@ const APPEARANCE_CONTROLS::APPEARANCE_SETTING APPEARANCE_CONTROLS::s_objectSetti
     RR( _HKI( "DRC Exclusions" ),   LAYER_DRC_EXCLUSION,      _HKI( "DRC violations which have been individually excluded" ) ),
     RR( _HKI( "Anchors" ),          LAYER_ANCHOR,             _HKI( "Show footprint and text origins as a cross" ) ),
     RR( _HKI( "Shadow on Locked Items" ), LAYER_LOCKED_ITEM_SHADOW, _HKI( "Show a shadow marker on locked items" ) ),
+    RR( _HKI( "Shadow on Conflicts" ), LAYER_CONFLICTS_SHADOW,
+                                       _HKI( "Show a shadow on overlapping courtyards while moving footprints" ) ),
     RR( _HKI( "Drawing Sheet" ),    LAYER_DRAWINGSHEET,       _HKI( "Show drawing sheet borders and title block" ) ),
     RR( _HKI( "Grid" ),             LAYER_GRID,               _HKI( "Show the (x,y) grid dots" ) )
 };

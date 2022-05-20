@@ -402,6 +402,7 @@ PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( wxWindow* aParent, BOA
     }
 
     m_validLayers.push_back( LAYER_LOCKED_ITEM_SHADOW );
+    m_validLayers.push_back( LAYER_CONFLICTS_SHADOW );
     m_validLayers.push_back( LAYER_PAGE_LIMITS );
 
     // NOTE: Main board layers are added by createSwatches()

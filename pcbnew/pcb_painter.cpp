@@ -1969,6 +1969,24 @@ void PCB_PAINTER::draw( const FOOTPRINT* aFootprint, int aLayer )
         const SHAPE_POLY_SET& poly = aFootprint->GetBoundingHull();
         m_gal->DrawPolygon( poly );
     }
+
+    if( aLayer == LAYER_CONFLICTS_SHADOW )    // happens only if locked
+    {
+        const SHAPE_POLY_SET& frontpoly = aFootprint->GetPolyCourtyard( F_CrtYd );
+        const SHAPE_POLY_SET& backpoly = aFootprint->GetPolyCourtyard( B_CrtYd );
+
+        const COLOR4D color = m_pcbSettings.GetColor( aFootprint, aLayer );
+
+        m_gal->SetIsFill( true );
+        m_gal->SetIsStroke( false );
+        m_gal->SetFillColor( color );
+
+        if( frontpoly.OutlineCount() > 0 )
+            m_gal->DrawPolygon( frontpoly );
+
+        if( backpoly.OutlineCount() > 0 )
+            m_gal->DrawPolygon( backpoly );
+    }
 }
 
 

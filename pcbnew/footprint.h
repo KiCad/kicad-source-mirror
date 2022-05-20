@@ -316,6 +316,11 @@ public:
             m_fpStatus &= ~FP_is_LOCKED;
     }
 
+    /**
+     * @return true if the footprint is flagged with conflicting with some item
+     */
+    bool IsConflicting() const;
+
     bool IsPlaced() const { return m_fpStatus & FP_is_PLACED;  }
     void SetIsPlaced( bool isPlaced )
     {

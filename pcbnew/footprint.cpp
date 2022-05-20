@@ -456,6 +456,12 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
 }
 
 
+bool FOOTPRINT::IsConflicting() const
+{
+    return HasFlag( COURTYARD_CONFLICT );
+}
+
+
 void FOOTPRINT::GetContextualTextVars( wxArrayString* aVars ) const
 {
     aVars->push_back( wxT( "REFERENCE" ) );
@@ -1416,6 +1422,9 @@ void FOOTPRINT::ViewGetLayers( int aLayers[], int& aCount ) const
     if( IsLocked() )
         aLayers[ aCount++ ] = LAYER_LOCKED_ITEM_SHADOW;
 
+    if( IsConflicting() )
+        aLayers[ aCount++ ] = LAYER_CONFLICTS_SHADOW;
+
     // If there are no pads, and only drawings on a silkscreen layer, then report the silkscreen
     // layer as well so that the component can be edited with the silkscreen layer
     bool f_silk = false, b_silk = false, non_silk = false;
@@ -1444,6 +1453,18 @@ void FOOTPRINT::ViewGetLayers( int aLayers[], int& aCount ) const
 double FOOTPRINT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
+    {
+        // The locked shadow shape is shown only if the footprint itself is visible
+        if( ( m_layer == F_Cu ) && aView->IsLayerVisible( LAYER_MOD_FR ) )
+            return 0.0;
+
+        if( ( m_layer == B_Cu ) && aView->IsLayerVisible( LAYER_MOD_BK ) )
+            return 0.0;
+
+        return std::numeric_limits<double>::max();
+    }
+
+    if( aLayer == LAYER_CONFLICTS_SHADOW && IsConflicting() )
     {
         // The locked shadow shape is shown only if the footprint itself is visible
         if( ( m_layer == F_Cu ) && aView->IsLayerVisible( LAYER_MOD_FR ) )

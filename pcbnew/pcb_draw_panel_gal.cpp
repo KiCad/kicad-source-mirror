@@ -59,6 +59,7 @@ const int GAL_LAYER_ORDER[] =
 {
     LAYER_GP_OVERLAY,
     LAYER_SELECT_OVERLAY,
+    LAYER_CONFLICTS_SHADOW,
     LAYER_DRC_ERROR, LAYER_DRC_WARNING, LAYER_DRC_EXCLUSION, LAYER_MARKER_SHADOWS,
     LAYER_PAD_NETNAMES, LAYER_VIA_NETNAMES,
     Dwgs_User,
@@ -269,6 +270,7 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
         // fixme do not like the idea of storing the list of layers here,
         // should be done in some other way I guess..
         int layers[] = {
+                LAYER_CONFLICTS_SHADOW,
                 GetNetnameLayer( aLayer ), LAYER_VIA_NETNAMES,
                 LAYER_PAD_FR_NETNAMES, LAYER_PAD_BK_NETNAMES, LAYER_PAD_NETNAMES,
                 ZONE_LAYER_FOR( aLayer ),
@@ -562,7 +564,10 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetLayerDisplayOnly( LAYER_ANCHOR );
 
     m_view->SetLayerTarget( LAYER_LOCKED_ITEM_SHADOW, KIGFX::TARGET_OVERLAY );
+    m_view->SetLayerTarget( LAYER_CONFLICTS_SHADOW, KIGFX::TARGET_OVERLAY );
+
     m_view->SetLayerDisplayOnly( LAYER_LOCKED_ITEM_SHADOW );
+    m_view->SetLayerDisplayOnly( LAYER_CONFLICTS_SHADOW );
 
     // Some more required layers settings
     m_view->SetRequired( LAYER_VIA_NETNAMES, LAYER_VIAS );

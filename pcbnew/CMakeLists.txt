@@ -338,6 +338,7 @@ set( PCBNEW_CLASS_SRCS
     tools/drawing_stackup_table_tool.cpp
     tools/drc_tool.cpp
     tools/edit_tool.cpp
+    tools/edit_tool_move_fct.cpp
     tools/global_edit_tool.cpp
     tools/group_tool.cpp
     tools/footprint_editor_control.cpp
