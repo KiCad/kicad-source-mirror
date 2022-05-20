@@ -356,9 +356,6 @@ int PCB_CONTROL::LayerNext( const TOOL_EVENT& aEvent )
     int             layer      = editFrame->GetActiveLayer();
     int             startLayer = layer;
 
-    if( layer < F_Cu || layer > B_Cu )
-        return 0;
-
     while( startLayer != ++layer )
     {
         if( brd->IsLayerVisible( static_cast<PCB_LAYER_ID>( layer ) ) && IsCopperLayer( layer ) )
@@ -382,9 +379,6 @@ int PCB_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
     int             layer      = editFrame->GetActiveLayer();
     int             startLayer = layer;
 
-    if( layer < F_Cu || layer > B_Cu )
-        return 0;
-
     while( startLayer != --layer )
     {
         if( IsCopperLayer( layer )       // also test for valid layer id (layer >= F_Cu)
@@ -396,7 +390,6 @@ int PCB_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
         if( layer <= F_Cu )
             layer = B_Cu + 1;
     }
-
 
     wxCHECK( IsCopperLayer( layer ), 0 );
     editFrame->SwitchLayer( ToLAYER_ID( layer ) );
