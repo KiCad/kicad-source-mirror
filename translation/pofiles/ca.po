@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:05-0700\n"
-"PO-Revision-Date: 2022-05-17 19:03+0000\n"
+"PO-Revision-Date: 2022-05-20 14:23+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v6/ca/>\n"
 "Language: ca\n"
@@ -6870,11 +6870,9 @@ msgid "Hotkey file"
 msgstr "Fitxer de dreceres de teclat"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr ""
-"No s'ha pogut trobar el fitxer d'equivalències '%s' als camins "
-"predeterminats de cerca."
+msgstr "No s'ha pogut trobar el fitxer d'equivalències '%s'."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -7280,9 +7278,8 @@ msgstr ""
 "Desa l'associació d'empremta al camp d'empremtes del component de l'esquema"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "Desa a l'esquemàtic"
+msgstr "Desa a l'esquemàtic i al fitxer"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
 #, fuzzy
