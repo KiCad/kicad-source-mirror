@@ -119,8 +119,8 @@ void FIELDS_GRID_TABLE<T>::initGrid( WX_GRID* aGrid )
     m_footprintAttr->SetEditor( fpIdEditor );
 
     m_urlAttr = new wxGridCellAttr;
-    GRID_CELL_URL_EDITOR* urlEditor =
-            new GRID_CELL_URL_EDITOR( m_dialog, m_frame->Prj().SchSearchS() );
+    GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( m_dialog,
+                                                                m_frame->Prj().SchSearchS() );
     urlEditor->SetValidator( m_urlValidator );
     m_urlAttr->SetEditor( urlEditor );
 
@@ -503,7 +503,7 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
                 value = fn.GetFullPath();
             }
         }
-        else if( m_parentType == SCH_SYMBOL_T && aRow == VALUE_FIELD )
+        else if( m_parentType == LIB_SYMBOL_T && aRow == VALUE_FIELD )
         {
             value = EscapeString( value, CTX_LIBID );
         }
