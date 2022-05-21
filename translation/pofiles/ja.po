@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:03-0700\n"
-"PO-Revision-Date: 2022-05-20 14:23+0000\n"
+"PO-Revision-Date: 2022-05-23 04:27+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -33116,9 +33116,9 @@ msgid "Missing rule-area identifier argument (A, B, or rule-area name) to %s."
 msgstr ""
 
 #: pcbnew/pcb_expr_evaluator.cpp:711
-#, fuzzy, c-format
+#, c-format
 msgid "Missing group name argument to %s."
-msgstr "'%s' への引数がありません"
+msgstr "%s へのグループ名引数がありません。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:826
 #, c-format
@@ -37747,7 +37747,6 @@ msgid "Select"
 msgstr "選択"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:1119
-#, fuzzy
 msgid "Select/Expand Connection..."
 msgstr "接続を選択/拡張…"
 
