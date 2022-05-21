@@ -13,4 +13,6 @@
   (lib (name "Capacitor_THT")(type "KiCad")(uri "${KICAD6_FOOTPRINT_DIR}/Capacitor_THT.pretty")(options "")(descr ""))
   (lib (name "Diode_THT")(type "KiCad")(uri "${KICAD6_FOOTPRINT_DIR}/Diode_THT.pretty")(options "")(descr ""))
   (lib (name "Potentiometer_SMD")(type "KiCad")(uri "${KICAD6_FOOTPRINT_DIR}/Potentiometer_SMD.pretty")(options "")(descr ""))
+  (lib (name "Jumper")(type "KiCad")(uri "${KICAD6_FOOTPRINT_DIR}/Jumper.pretty")(options "")(descr ""))
+  (lib (name "Connector_Dsub")(type "KiCad")(uri "${KICAD6_FOOTPRINT_DIR}/Connector_Dsub.pretty")(options "")(descr ""))
 )
