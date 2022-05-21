@@ -731,31 +731,13 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
 class TERMINATE_HANDLER : public wxProcess
 {
 public:
-    TERMINATE_HANDLER( const wxString& appName ) :
-            m_appName( appName )
+    TERMINATE_HANDLER( const wxString& appName )
     { }
 
     void OnTerminate( int pid, int status ) override
     {
-        wxString msg = wxString::Format( _( "%s closed [pid=%d]\n" ), m_appName, pid );
-
-        wxWindow* window = wxWindow::FindWindowByName( KICAD_MANAGER_FRAME_NAME );
-
-        if( window )    // Should always happen.
-        {
-            // Be sure the kicad frame manager is found
-            // This dynamic cast is not really mandatory, but ...
-            KICAD_MANAGER_FRAME* frame = dynamic_cast<KICAD_MANAGER_FRAME*>( window );
-
-            if( frame )
-                frame->PrintMsg( msg );
-        }
-
         delete this;
     }
-
-private:
-    wxString m_appName;
 };
 
 
@@ -795,9 +777,6 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
 
     if( pid > 0 )
     {
-        wxString msg = wxString::Format( _( "%s %s opened [pid=%ld]\n" ), execFile, param, pid );
-        m_frame->PrintMsg( msg );
-
 #ifdef __WXMAC__
         // This non-parameterized use of wxExecute is fine because execFile is not derived
         // from user input.
