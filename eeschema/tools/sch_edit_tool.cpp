@@ -751,7 +751,6 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 0 )
         return 0;
 
-    VECTOR2I  mirrorPoint;
     bool      vertical = ( aEvent.Matches( EE_ACTIONS::mirrorV.MakeEvent() ) );
     SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.Front() );
     bool      connections = false;
@@ -802,18 +801,6 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             break;
         }
 
-        case SCH_TEXTBOX_T:
-        {
-            SCH_TEXTBOX* textBox = static_cast<SCH_TEXTBOX*>( item );
-
-            if( vertical )
-                textBox->MirrorVertically( mirrorPoint.y );
-            else
-                textBox->MirrorHorizontally( mirrorPoint.x );
-
-            break;
-        }
-
         case SCH_SHEET_PIN_T:
         {
             // mirror within parent sheet
@@ -827,14 +814,6 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
             break;
         }
-
-        case SCH_BUS_BUS_ENTRY_T:
-        case SCH_BUS_WIRE_ENTRY_T:
-            if( vertical )
-                item->MirrorVertically( item->GetPosition().y );
-            else
-                item->MirrorHorizontally( item->GetPosition().x );
-            break;
 
         case SCH_FIELD_T:
         {
@@ -851,14 +830,6 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             break;
         }
 
-        case SCH_SHAPE_T:
-            if( vertical )
-                item->MirrorVertically( item->GetPosition().y );
-            else
-                item->MirrorHorizontally( item->GetPosition().x );
-
-            break;
-
         case SCH_BITMAP_T:
             if( vertical )
                 item->MirrorVertically( item->GetPosition().y );
@@ -870,8 +841,9 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             break;
 
         case SCH_SHEET_T:
+        {
             // Mirror the sheet on itself. Sheets do not have a anchor point.
-            mirrorPoint = m_frame->GetNearestHalfGridPosition( item->GetBoundingBox().Centre() );
+            VECTOR2I mirrorPoint = m_frame->GetNearestHalfGridPosition( item->GetBoundingBox().Centre() );
 
             if( vertical )
                 item->MirrorVertically( mirrorPoint.y );
@@ -879,9 +851,15 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
                 item->MirrorHorizontally( mirrorPoint.x );
 
             break;
+        }
 
         default:
-            UNIMPLEMENTED_FOR( item->GetClass() );
+            if( vertical )
+                item->MirrorVertically( item->GetPosition().y );
+            else
+                item->MirrorHorizontally( item->GetPosition().x );
+
+            break;
         }
 
         connections = item->IsConnectable();
@@ -889,7 +867,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     }
     else if( selection.GetSize() > 1 )
     {
-        mirrorPoint = m_frame->GetNearestHalfGridPosition( selection.GetCenter() );
+        VECTOR2I mirrorPoint = m_frame->GetNearestHalfGridPosition( selection.GetCenter() );
 
         for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
         {
