@@ -1272,7 +1272,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                         {
                             item = createSheetPin( sheet, label );
 
-                            if( item->Type() == SCH_SHEET_PIN_T)
+                            if( item->Type() == SCH_SHEET_PIN_T )
                             {
                                 item->ClearSelected();
                             }
