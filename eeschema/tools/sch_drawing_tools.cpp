@@ -1271,6 +1271,11 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                         else
                         {
                             item = createSheetPin( sheet, label );
+
+                            if( item->Type() == SCH_SHEET_PIN_T)
+                            {
+                                item->ClearSelected();
+                            }
                         }
                     }
                 }
@@ -1297,7 +1302,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     item->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
                     updatePreview();
 
-                    m_selectionTool->AddItemToSel( item );
+                    if( item->Type() != SCH_SHEET_PIN_T )
+                        m_selectionTool->AddItemToSel( item );
 
                     m_toolMgr->RunAction( ACTIONS::refreshPreview );
 
