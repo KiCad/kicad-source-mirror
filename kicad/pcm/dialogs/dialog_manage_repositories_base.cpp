@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -35,9 +35,9 @@ DIALOG_MANAGE_REPOSITORIES_BASE::DIALOG_MANAGE_REPOSITORIES_BASE( wxWindow* pare
 	m_grid->SetColSize( 1, 400 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
-	m_grid->SetColLabelSize( 22 );
 	m_grid->SetColLabelValue( 0, _("Name") );
 	m_grid->SetColLabelValue( 1, _("URL") );
+	m_grid->SetColLabelSize( 22 );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -54,7 +54,7 @@ DIALOG_MANAGE_REPOSITORIES_BASE::DIALOG_MANAGE_REPOSITORIES_BASE( wxWindow* pare
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_buttonAdd = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_buttonAdd = new SPLIT_BUTTON( this, wxID_ANY, _( "Add Existing" ) );
 	bButtonsSizer->Add( m_buttonAdd, 0, wxRIGHT, 5 );
 
 	m_buttonMoveUp = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
@@ -93,7 +93,6 @@ DIALOG_MANAGE_REPOSITORIES_BASE::DIALOG_MANAGE_REPOSITORIES_BASE( wxWindow* pare
 
 	// Connect Events
 	m_grid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_MANAGE_REPOSITORIES_BASE::OnGridCellClicked ), NULL, this );
-	m_buttonAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MANAGE_REPOSITORIES_BASE::OnAddButtonClicked ), NULL, this );
 	m_buttonMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MANAGE_REPOSITORIES_BASE::OnMoveUpButtonClicked ), NULL, this );
 	m_buttonMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MANAGE_REPOSITORIES_BASE::OnMoveDownButtonClicked ), NULL, this );
 	m_buttonRemove->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MANAGE_REPOSITORIES_BASE::OnRemoveButtonClicked ), NULL, this );
@@ -104,7 +103,6 @@ DIALOG_MANAGE_REPOSITORIES_BASE::~DIALOG_MANAGE_REPOSITORIES_BASE()
 {
 	// Disconnect Events
 	m_grid->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_MANAGE_REPOSITORIES_BASE::OnGridCellClicked ), NULL, this );
-	m_buttonAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MANAGE_REPOSITORIES_BASE::OnAddButtonClicked ), NULL, this );
 	m_buttonMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MANAGE_REPOSITORIES_BASE::OnMoveUpButtonClicked ), NULL, this );
 	m_buttonMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MANAGE_REPOSITORIES_BASE::OnMoveDownButtonClicked ), NULL, this );
 	m_buttonRemove->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MANAGE_REPOSITORIES_BASE::OnRemoveButtonClicked ), NULL, this );

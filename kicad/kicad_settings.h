@@ -22,6 +22,7 @@
 #define _KICAD_SETTINGS_H
 
 #include <settings/app_settings.h>
+#define PCM_DEFAULT_REPOSITORY_URL "https://repository.kicad.org/repository.json"
 
 
 class KICAD_SETTINGS : public APP_SETTINGS_BASE

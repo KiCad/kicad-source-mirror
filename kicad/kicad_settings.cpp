@@ -26,6 +26,13 @@
 ///! Update the schema version whenever a migration is required
 const int kicadSchemaVersion = 0;
 
+const nlohmann::json PCM_DEFAULT_REPOSITORIES = nlohmann::json::array( {
+    nlohmann::json( {
+        { "name", "KiCad official repository" },
+        { "url", PCM_DEFAULT_REPOSITORY_URL },
+    } )
+} );
+
 
 KICAD_SETTINGS::KICAD_SETTINGS() :
         APP_SETTINGS_BASE( "kicad", kicadSchemaVersion ), m_LeftWinWidth( 200 )
@@ -66,12 +73,7 @@ KICAD_SETTINGS::KICAD_SETTINGS() :
                                             wxString( entry["url"].get<std::string>() ) ) );
                 }
             },
-            R"([
-                {
-                    "name": "KiCad official repository",
-                    "url": "https://repository.kicad.org/repository.json"
-                }
-            ])"_json ) );
+            PCM_DEFAULT_REPOSITORIES ) );
 
     m_params.emplace_back(
             new PARAM<wxString>( "pcm.last_download_dir", &m_PcmLastDownloadDir, "" ) );
