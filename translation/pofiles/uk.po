@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:03-0700\n"
-"PO-Revision-Date: 2022-05-23 04:28+0000\n"
+"PO-Revision-Date: 2022-05-24 15:15+0000\n"
 "Last-Translator: Kuzemko Alexsandr <alexandrkuzemko@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -522,11 +522,11 @@ msgstr "Перемкнути показ шарів паяльної пасти"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:265
 msgid "Toggle comments display"
-msgstr "Увімкнути або вимкнути відображення коментарів"
+msgstr "Перемкнути показ коментарів"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:265
 msgid "Toggle display of comments and drawings layers"
-msgstr "Перемикач відображення коментарів та креслень"
+msgstr "Перемкнути показ шарів коментарів та креслень"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:269
 msgid "Toggle ECO display"
@@ -584,27 +584,27 @@ msgstr "Використовувати кольори:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:77
 msgid "Silkscreen top:"
-msgstr "стільниковий екран:"
+msgstr "Шовкографія зверху:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:84
 msgid "Silkscreen bottom:"
-msgstr "Закріплений знизу екрану:"
+msgstr "Шовкографія знизу:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:97
 msgid "Solder mask top:"
-msgstr "Верхня маска м'яча:"
+msgstr "Паяльна маска зверху:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:104
 msgid "Solder mask bottom:"
-msgstr "Маска Паяльника:"
+msgstr "Паяльна Маска знизу:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:117
 msgid "Copper/surface finish:"
-msgstr "Коппер/поверхня закінчена:"
+msgstr "Покриття міді:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:130
 msgid "Board body:"
-msgstr "Опубліковано:"
+msgstr "Тіло плати:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:24
 msgid "Board Layers"
@@ -612,27 +612,27 @@ msgstr "Шари плати"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:31
 msgid "Show silkscreen layers"
-msgstr "Показувати шари екрана"
+msgstr "Показувати шари шовкографії"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
 msgid "Clip silkscreen at solder mask edges"
-msgstr "Відбивати кремній екран при полярних межах"
+msgstr "Вирізати шовкографію на межах паяльної маски"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:37
 msgid "Clip silkscreen at via annuli"
-msgstr "Вібрація Кліпа кремнію через annuli"
+msgstr "Видалити шовкографію на перехідними отворами"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:40
 msgid "Show solder mask layers"
-msgstr "Відображати шари маски"
+msgstr "Показати шари паяльної маски"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:43
 msgid "Show solder paste layers"
-msgstr "Відображати шари паяння"
+msgstr "Показати шари паяльної пасти"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:46
 msgid "Show adhesive layers"
-msgstr "Показувати шари"
+msgstr "Показати клейові шари"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "User Layers (not shown in realistic mode)"
@@ -644,11 +644,11 @@ msgstr "Показати шари коментаря та креслення"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:61
 msgid "Show ECO layers"
-msgstr "Показати шари ECO"
+msgstr "Показати додаткові шари"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:74
 msgid "Render Options"
-msgstr "Параметри відображення"
+msgstr "Параметри візуалізації"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:76
 msgid "Realistic mode"
@@ -660,16 +660,16 @@ msgstr "Показати тіло плати"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:82
 msgid "Show filled areas in zones"
-msgstr "Показувати заповнені області у зонах"
+msgstr "Показати заповнені області у зонах"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:85
 msgid "Use bare copper color for unplated copper"
-msgstr "Використовуйте голий колір міді для незапланованого міді"
+msgstr "Використати колір міді для не залуженої міді"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:86
 msgid "Use different colors for plated and unplated copper. (Slow)"
 msgstr ""
-"Використовуйте різні кольори для расованих і незапланованих міді. (повільно)"
+"Використовуйте різні кольори для залуженої та не залуженої міді. (повільно)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:93
 msgid "Material properties:"
@@ -677,11 +677,11 @@ msgstr "Властивості матеріалу:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:97
 msgid "Realistic"
-msgstr "Реалістичний"
+msgstr "Реалістично"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:97
 msgid "Solid colors"
-msgstr "Суцільні кольори"
+msgstr "Повні кольори"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:97
 msgid "CAD colors"
@@ -689,11 +689,11 @@ msgstr "CAD кольори"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:110
 msgid "Camera Options"
-msgstr "Опції Камери"
+msgstr "Параметри Камери"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:115
 msgid "Rotation increment:"
-msgstr "Збільшення обертання:"
+msgstr "Крок обертання:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:123
 #: pcb_calculator/widgets/unit_selector.cpp:130
@@ -706,11 +706,11 @@ msgstr "Збільшення обертання:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1372
 #: pcbnew/dialogs/panel_edit_options_base.cpp:63
 msgid "deg"
-msgstr "deg"
+msgstr "°"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:133
 msgid "Enable animation"
-msgstr "Увімкнути анімацію"
+msgstr "Ввімкнути анімацію"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:140
 msgid "Animation speed:"
@@ -719,11 +719,11 @@ msgstr "Швидкість анімації:"
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:23
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:21
 msgid "Rendering Options"
-msgstr "Налаштування відображення"
+msgstr "Налаштування Візуалізації"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:25
 msgid "Show model bounding boxes"
-msgstr "Показати моделі, що обмежувальні рамки"
+msgstr "Показати обмежувальні рамки моделей"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:28
 msgid "Show copper and tech layers thickness (very slow)"
@@ -731,7 +731,7 @@ msgstr "Показувати товщину міді та технічних ш�
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:31
 msgid "Highlight items on rollover"
-msgstr "Підсвічувати предмети при гортанні"
+msgstr "Підсвічувати елементи при перетягуванні"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:37
 msgid "Anti-aliasing:"
@@ -761,7 +761,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:49
 msgid "Selection color:"
-msgstr "Вибір кольору:"
+msgstr "Колір виділення:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:63
 msgid "While Moving"
@@ -773,11 +773,11 @@ msgstr "Вимкнути згладжування"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:68
 msgid "Disable thickness"
-msgstr "Вимкнути товщину"
+msgstr "Вимкнути товщину міді"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:71
 msgid "Disable vias"
-msgstr "Вимкнути вібрацію"
+msgstr "Вимкнути перехідні отвори"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:74
 msgid "Disable holes"
@@ -799,16 +799,16 @@ msgstr "Згладжування (повільно)"
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
 msgstr ""
-"Відображення освітлення космічного простору на екрані та глобальних "
-"освітленнях (повільно)"
+"Навколишні затінки у просторі екрану та показ глобального освітлення "
+"(повільно)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
 msgid "Number of Samples"
-msgstr "Кількість зразків"
+msgstr "Кількість Проходів"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:58
 msgid "Spread Factor %"
-msgstr "Збільшення фактора %"
+msgstr "Коефіцієнт розповсюдження %"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:62
 msgid "Recursion Level"
@@ -823,37 +823,41 @@ msgid ""
 "Number of rays that will be cast, into light direction, to evaluate a shadow "
 "point"
 msgstr ""
-"Кількість променів, які будуть промені, на світловий напрямок, щоб обчислити "
-"точку тіні"
+"Кількість променів, які будуть оброблені в напрямку світла для обчислення "
+"тіней"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:81
 msgid "Reflections:"
-msgstr "Віддзеркалні:"
+msgstr "Відбиття:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:86
 msgid "Number of rays that will be cast to evaluate a reflection point"
-msgstr "Кількість променів, які будуть прийняті для оцінки точки відображення"
+msgstr ""
+"Кількість променів, які будуть оброблені в напрямку світла для обчислення "
+"точки відбиття"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:94
 msgid ""
 "Interactions number that a ray can travel through objects. (higher number of "
 "levels improve results, specially on very transparent boards)"
 msgstr ""
-"Взаємодії номер про те, що промінь може подорожувати через об'єкти. (більша "
-"кількість рівнів покращує результати, особливо на дуже прозорих платах)"
+"Кількість взаємодій, яку промінь може зробити під час проходження крізь "
+"обʼєкт. (велике значення покращує результат, особливо на дуже прозорих "
+"платах)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:98
 msgid "Refractions:"
-msgstr "Рефракції:"
+msgstr "Заломлення:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:103
 msgid "Number of rays that will be cast to evaluate a refraction point"
 msgstr ""
-"Кількість променів, які будуть передаватися, щоб обчислити точку відбиття"
+"Кількість променів, які будуть оброблені в напрямку світла для обчислення "
+"точки заломлення"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:111
 msgid "Number of bounces that a ray can hit reflective objects"
-msgstr "Кількість відрисів того, що промінь може нанести відбивні об'єкти"
+msgstr "Кількість заломлень променя від об'єктів"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:125
 msgid "Lights Configuration"
@@ -861,25 +865,25 @@ msgstr "Конфігурація освітлення"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:130
 msgid "Ambient camera light:"
-msgstr "Світлість камери:"
+msgstr "Зовнішнє освітлення камери:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:142
 msgid "Top light:"
-msgstr "Верхня лампа:"
+msgstr "Освітлення зверху:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:154
 msgid "Bottom light:"
-msgstr "Знизу світла:"
+msgstr "Освітлення знизу:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:178
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:195
 msgid "Elevation (deg)"
-msgstr "Висота (град)"
+msgstr "Зеніт (°)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:182
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:199
 msgid "Azimuth (deg)"
-msgstr "Azimuth (deg)"
+msgstr "Азимут(°)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:203
 msgid "Light 1:"
@@ -965,7 +969,7 @@ msgstr "Х:"
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:78
 #: pcbnew/microwave/microwave_polygon.cpp:154
 msgid "Y:"
-msgstr "І:"
+msgstr "Y:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:49
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:94
@@ -973,17 +977,17 @@ msgstr "І:"
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:321
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:333
 msgid "Z:"
-msgstr "Я:"
+msgstr "Z:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:66
 #: gerbview/gerber_draw_item.cpp:706 pcbnew/footprint.cpp:1007
 #: pcbnew/pad.cpp:976
 msgid "Rotation"
-msgstr "Поворот екрану"
+msgstr "Обертання"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:111
 msgid "Offset"
-msgstr "Зміщення"
+msgstr "Зсув"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:156
 msgid "Opacity"
@@ -994,7 +998,7 @@ msgstr "Непрозорість"
 #: eeschema/dialogs/dialog_print_using_printer.cpp:278
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:252
 msgid "Preview"
-msgstr "Прев'ю"
+msgstr "Попередній перегляд"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:221
 msgid "Reload board and 3D models"
@@ -1138,7 +1142,7 @@ msgstr "Файли зображень"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:706
 msgid "Unable to export to the Clipboard"
-msgstr "Не вдалося експортувати до Буферу Обміну"
+msgstr "Не вдалося експортувати до Буфера Обміну"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:742
 msgid "Create Logo File"
@@ -1158,15 +1162,15 @@ msgstr "Створити файл PostScript"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:819
 msgid "Create Symbol Library"
-msgstr "Створити бібліотеку символів"
+msgstr "Створити Бібліотеку Символів"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:858
 msgid "Create Footprint Library"
-msgstr "Створити бібліотеку місць розташування"
+msgstr "Створити Бібліотеку Посадкових Місць"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:900
 msgid "Error allocating memory for potrace bitmap"
-msgstr "Помилка надсилання пам'яті для растру potrace"
+msgstr "Помилка виділення пам'яті для растрового зображення"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:927
 #: common/dialogs/wx_html_report_panel_base.cpp:41
@@ -1184,7 +1188,7 @@ msgstr "Оригінальне зображення"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:29
 msgid "Greyscale Picture"
-msgstr "Відтінки сірого"
+msgstr "Зображення в відтінках сірого"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:32
 msgid "Black&&White Picture"
@@ -1192,11 +1196,11 @@ msgstr ""
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:41
 msgid "Bitmap Information"
-msgstr "Інформація про растр"
+msgstr "Інформація про зображення"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:50
 msgid "Bitmap size:"
-msgstr "Розмір растру:"
+msgstr "Розмір зображення:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:54
 #: bitmap2component/bitmap2cmp_gui_base.cpp:58
@@ -1208,23 +1212,23 @@ msgstr "0000"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:62
 msgid "pixels"
-msgstr "pixels"
+msgstr "пікс"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:66
 msgid "Bitmap PPI:"
-msgstr "Bitmap PPI:"
+msgstr "PPI зображення:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:78
 msgid "PPI"
-msgstr "ППІ"
+msgstr "PPI"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:82
 msgid "BPP:"
-msgstr "БД:"
+msgstr "BPP:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:90
 msgid "bits"
-msgstr "біти"
+msgstr "біт"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:104
 msgid "Output Parameters"
@@ -1232,7 +1236,7 @@ msgstr "Параметри виводу"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
 msgid "Lock height/width ratio"
-msgstr "Закріпити висота/ширину"
+msgstr "Зберегти відношення висота/ширину"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:122
 #: common/dialogs/dialog_page_settings_base.cpp:32
@@ -1247,7 +1251,7 @@ msgstr "300"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:149
 msgid "Load Bitmap"
-msgstr "Завантажити растр"
+msgstr "Завантажити растрове зображення"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:152
 msgid "Export to File"
@@ -1260,19 +1264,19 @@ msgstr "Експорт до буфера обміну"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Symbol (.kicad_sym file)"
-msgstr "Symbol (.kicad_sym file)"
+msgstr "Символ (.kicad_sym файл)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Footprint (.kicad_mod file)"
-msgstr "Місце розташування (файл .kicad_mod)"
+msgstr "Посадкове місце (.kicad_mod файл)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Postscript (.ps file)"
-msgstr "Поштовий індекс (файл .p)"
+msgstr "Postscript (файл .ps)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr "Малюємо лист (файл .kicad_wks)"
+msgstr "Форматна рамка (файл .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
@@ -1291,7 +1295,7 @@ msgstr "Поріг чорного / білого:"
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
-msgstr "Регулювання рівня відтінку сірого зображення на чорно-білу картину."
+msgstr "Регулювання рівня для перетворення на чорно-біле зображення."
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:176
 #: gerbview/gerber_file_image.cpp:350
@@ -1301,24 +1305,24 @@ msgstr "Негатив"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:527
 msgid "Front silk screen"
-msgstr "Передній шовковий екран"
+msgstr "Верхня шовкографія"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:533
 msgid "Front solder mask"
-msgstr "Передня маска паяльника"
+msgstr "Верхня паяльна маска"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 msgid "User layer Eco1"
-msgstr "Eco1"
+msgstr "Шар користувача Eco1"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 msgid "User layer Eco2"
-msgstr "Еко2"
+msgstr "Шар користувача Еко2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:184
 msgid "Board Layer for Outline"
-msgstr "Розмістити плати для обрису"
+msgstr "Шар плати для контуру"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:186
 msgid ""
@@ -1330,18 +1334,19 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_gui_base.h:100
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "Bitmap to Component Converter"
-msgstr "Перетворення растрових компонентів"
+msgstr "Перетворення растрових зображень у компонент"
 
 #: common/common.cpp:227
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr "Розширення змінних середовища не вдалося: '%c' в позиції %u в '%s'."
+msgstr ""
+"Не вдалося підставити змінні оточення: відсутня '%c' на позиції %u у '%s'."
 
 #: common/common.cpp:308
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
-msgstr "Неможливо створити шлях '%s' абсолютно відносно '%s'."
+msgstr "Неможливо створити шлях '%s' абсолютним відносно '%s'."
 
 #: common/common.cpp:327
 #, c-format
@@ -1355,7 +1360,7 @@ msgstr "Не вдалося створити вихідну теку '%s."
 
 #: common/common.cpp:608
 msgid "This operating system is not supported by KiCad and its dependencies."
-msgstr "Ця операційна система не підтримується KiCad та її залежностями."
+msgstr "Ця операційна система не підтримується KiCad."
 
 #: common/common.cpp:610
 msgid "Unsupported Operating System"
@@ -1366,8 +1371,8 @@ msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
 msgstr ""
-"Про будь-які проблеми з KiCad в цій системі не можна повідомити до "
-"офіційного багера."
+"В цій системі не можна повідомити про будь-які проблеми KiCad до офіційного "
+"баг-трекера."
 
 #: common/confirm.cpp:57
 msgid "Do not show again"
@@ -1396,7 +1401,7 @@ msgstr "Питання"
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:337 pcbnew/pcb_marker.cpp:144
 #: pcbnew/plugins/kicad/pcb_parser.cpp:936
 msgid "Warning"
-msgstr "Застереження"
+msgstr "Попередження"
 
 #: common/confirm.cpp:160 common/confirm.cpp:166
 msgid "File Open Error"
@@ -1404,7 +1409,8 @@ msgstr "Помилка відкриття файлу"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
-msgstr "Використання збережень може призвести до дуже несподіваних результатів."
+msgstr ""
+"Збереження, що чергується, може призвести до дуже несподіваних результатів."
 
 #: common/confirm.cpp:164 common/confirm.cpp:169 common/confirm.cpp:259
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1336
@@ -1423,7 +1429,7 @@ msgstr "Зберегти зміни?"
 
 #: common/confirm.cpp:182 common/confirm.cpp:219
 msgid "If you don't save, all your changes will be permanently lost."
-msgstr "Якщо ви не збережете і всі ваші зміни буде втрачено назавжди."
+msgstr "Якщо ви не збережете, всі ваші зміни буде втрачено назавжди."
 
 #: common/confirm.cpp:184 common/confirm.cpp:220 common/tool/actions.cpp:67
 #: eeschema/sim/sim_plot_frame_base.cpp:29
@@ -1447,7 +1453,7 @@ msgstr "Поточні зміни будуть втрачені назавжди
 
 #: common/confirm.cpp:233 common/tool/actions.cpp:91
 msgid "Revert"
-msgstr "Відмінити"
+msgstr "Відновити"
 
 #: common/confirm.cpp:233 common/confirm.cpp:260 common/tool/actions.cpp:121
 #: eeschema/dialogs/dialog_erc.cpp:356
@@ -1461,7 +1467,7 @@ msgstr "Скасувати"
 
 #: common/confirm.cpp:312
 msgid "Information"
-msgstr "Інформація про нас"
+msgstr "Інформація"
 
 #: common/confirm.cpp:325 eeschema/symbol_editor/symbol_editor.cpp:485
 #: eeschema/symbol_editor/symbol_editor.cpp:781
@@ -1499,11 +1505,11 @@ msgid ""
 "electronic schematics and printed circuit boards."
 msgstr ""
 "KiCad EDA Suite - набір додатків з відкритим кодом для створення електронних "
-"схем та друкованих схем."
+"схем та друкованих плат."
 
 #: common/dialog_about/AboutDialog_main.cpp:134
 msgid "KiCad on the web"
-msgstr "Кікад у Інтернеті"
+msgstr "KiCad в Інтернеті"
 
 #: common/dialog_about/AboutDialog_main.cpp:140
 msgid "The official KiCad website - "
@@ -1527,7 +1533,7 @@ msgstr ""
 
 #: common/dialog_about/AboutDialog_main.cpp:168
 msgid "KiCad users group and community"
-msgstr "Група користувачів і спільноти Кікад"
+msgstr "Група користувачів і спільнота KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:173
 msgid "KiCad forum - "
@@ -1535,7 +1541,7 @@ msgstr ""
 
 #: common/dialog_about/AboutDialog_main.cpp:187
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr "Випущений повний набір KiCad EDA під"
+msgstr "KiCad EDA розповсюджується під"
 
 #: common/dialog_about/AboutDialog_main.cpp:189
 msgid "GNU General Public License (GPL) version 3 or any later version"
@@ -1543,11 +1549,11 @@ msgstr "GNU General Public License (GPL) версії 3 або будь-яка �
 
 #: common/dialog_about/AboutDialog_main.cpp:208
 msgid "Lead Development Team"
-msgstr "Команда провідного розробника"
+msgstr "Команда провідних розробників"
 
 #: common/dialog_about/AboutDialog_main.cpp:209
 msgid "Lead Development Alumni"
-msgstr "Розробка лідів Алумні"
+msgstr "Попередні провідні розробники"
 
 #: common/dialog_about/AboutDialog_main.cpp:210
 msgid "Additional Contributions By"
@@ -1555,11 +1561,11 @@ msgstr "Додаткові внески"
 
 #: common/dialog_about/AboutDialog_main.cpp:886
 msgid "KiCad Librarian Team"
-msgstr "Бібліотеки Кікада"
+msgstr "Команда Бібліотек KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:901
 msgid "3D models by"
-msgstr "3D моделей по"
+msgstr "3D моделі"
 
 #: common/dialog_about/AboutDialog_main.cpp:913
 msgid "Symbols by"
@@ -1567,11 +1573,11 @@ msgstr "Символи"
 
 #: common/dialog_about/AboutDialog_main.cpp:920
 msgid "Footprints by"
-msgstr "Місця розташування"
+msgstr "Посадкові Місця"
 
 #: common/dialog_about/AboutDialog_main.cpp:933
 msgid "Icons by"
-msgstr "Значки від"
+msgstr "Значки"
 
 #: common/dialog_about/dialog_about.cpp:96
 #, c-format
@@ -1595,15 +1601,15 @@ msgstr "Розробники"
 
 #: common/dialog_about/dialog_about.cpp:133
 msgid "Doc Writers"
-msgstr "Лікар"
+msgstr "Автори Документації"
 
 #: common/dialog_about/dialog_about.cpp:136
 msgid "Librarians"
-msgstr "Лібари"
+msgstr "Автори Бібліотек"
 
 #: common/dialog_about/dialog_about.cpp:139
 msgid "Artists"
-msgstr "Виконавці"
+msgstr "Художники"
 
 #: common/dialog_about/dialog_about.cpp:141
 msgid "Translators"
@@ -1611,7 +1617,7 @@ msgstr "Перекладачі"
 
 #: common/dialog_about/dialog_about.cpp:143
 msgid "Packagers"
-msgstr "Пакетери"
+msgstr "Автори Пакетів"
 
 #: common/dialog_about/dialog_about.cpp:146
 msgid "License"
@@ -1643,7 +1649,7 @@ msgstr "Інформація про збірку"
 
 #: common/dialog_about/dialog_about_base.cpp:45
 msgid "Lib Version Info"
-msgstr "Інформація про Lib версію"
+msgstr "Інформація про версію бібліотеки"
 
 #: common/dialog_about/dialog_about_base.cpp:58
 msgid "&Copy Version Info"
@@ -1659,7 +1665,7 @@ msgstr ""
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:661
 msgid "Report a problem with KiCad"
-msgstr "Повідомити про проблему з Кікадом"
+msgstr "Повідомити про проблему з KiCad"
 
 #: common/dialog_about/dialog_about_base.cpp:68 common/tool/actions.cpp:655
 msgid "Donate"
@@ -1668,7 +1674,7 @@ msgstr "Пожертвувати"
 #: common/dialog_about/dialog_about_base.cpp:69
 #: common/tool/common_control.cpp:287
 msgid "Donate to KiCad"
-msgstr "Пожертвувати Кікад"
+msgstr "Пожертвувати KiCad"
 
 #: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:658
 msgid "&OK"
@@ -1701,7 +1707,7 @@ msgstr ""
 
 #: common/dialogs/dialog_HTML_reporter_base.h:48
 msgid "Report"
-msgstr "Доповісти"
+msgstr "Повідомити"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
@@ -1725,7 +1731,7 @@ msgstr "Синій:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:74
 msgid "HSV"
-msgstr "ГСВ"
+msgstr "HSV"
 
 #: common/dialogs/dialog_color_picker_base.cpp:91
 msgid "Hue:"
@@ -1755,7 +1761,7 @@ msgstr "Визначені кольори"
 
 #: common/dialogs/dialog_color_picker_base.cpp:163
 msgid "Opacity:"
-msgstr "Прозорість:"
+msgstr "Непрозорість:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:185
 msgid "Preview (old/new):"
@@ -1778,12 +1784,12 @@ msgstr "Шлях змінної середовища не може бути по
 #: common/dialogs/dialog_configure_paths.cpp:316
 #: common/dialogs/dialog_configure_paths.cpp:358
 msgid "3D search path alias cannot be empty."
-msgstr "Псевдонім 3D пошуку не може бути пустим."
+msgstr "Псевдонім шляху пошуку 3D моделей не може бути пустим."
 
 #: common/dialogs/dialog_configure_paths.cpp:324
 #: common/dialogs/dialog_configure_paths.cpp:360
 msgid "3D search path cannot be empty."
-msgstr "Шлях до 3D-пошуку не може бути порожнім."
+msgstr "Шлях пошуку 3D моделей не може бути порожнім."
 
 #: common/dialogs/dialog_configure_paths.cpp:375
 msgid ""
@@ -1829,13 +1835,13 @@ msgid ""
 "field will only accept upper case letters, digits, and the underscore "
 "characters."
 msgstr ""
-"Щоб забезпечити назви змінних середовища дійсними на всіх платформах, поле "
-"назви прийме лише букви у верхньому регістрі, цифри, а також знаки "
+"Для забезпечення сумісності назв змінних середовища на всіх платформах, поле "
+"назви приймає лише букви у верхньому регістрі, цифри, а також знаки "
 "підкреслення."
 
 #: common/dialogs/dialog_configure_paths.cpp:658
 msgid "Environment Variable Help"
-msgstr "Допомога по змінній середовища"
+msgstr "Допомога для змінних середовища"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:22
 msgid "Environment Variables"
@@ -1875,16 +1881,16 @@ msgstr "Шлях"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:74
 msgid "3D Search Paths"
-msgstr "Шлях для пошуку в 3D"
+msgstr "Шлях для пошуку 3D форм"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:92 common/eda_item.cpp:371
 msgid "Alias"
-msgstr "Alias"
+msgstr "Псевдонім"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:39
 #, c-format
 msgid "Configure Global %s Library Table"
-msgstr "Налаштувати глобальну бібліотеку %s"
+msgstr "Налаштування глобальної таблиці бібліотеки %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:42
 #, c-format
@@ -1914,33 +1920,31 @@ msgstr ""
 #: common/dialogs/dialog_global_lib_table_config.cpp:55
 #, c-format
 msgid "Copy custom global %s library table"
-msgstr "Копіювати власну глобальну бібліотеку %s"
+msgstr "Копіювати власну глобальну таблицю бібліотек %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
 msgid ""
 "Select this option to copy a %s library table file other than the default"
 msgstr ""
-"Виберіть цей параметр, щоб скопіювати файл бібліотеки %s відмінний від "
-"типового"
+"Виберіть цей параметр, щоб скопіювати властний файл таблиці бібліотек %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:61
 #, c-format
 msgid "Create an empty global %s library table"
-msgstr "Створіть порожню глобальну бібліотеку %s"
+msgstr "Створіть порожню глобальну таблицю бібліотек %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
 msgstr ""
-"Виберіть цей параметр для визначення %s бібліотек у проектах конкретних "
-"бібліотечних таблиць"
+"Виберіть цей параметр для визначення бібліотек %s в таблиці бібліотек проєкту"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:67
 #, c-format
 msgid "Select global %s library table file:"
-msgstr "Виберіть глобальну таблицю %s бібліотеки:"
+msgstr "Виберіть файл глобальну таблицю бібліотеки %s:"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:21
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:28
@@ -2014,7 +2018,7 @@ msgstr "Виберіть глобальну таблицю %s бібліотек
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:322
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:338
 msgid "dummy"
-msgstr "початківець"
+msgstr "dummy"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:51
 msgid "Select a file"
@@ -2022,11 +2026,11 @@ msgstr "Виберіть файл"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:56
 msgid "Configure Global Library Table"
-msgstr "Налаштувати глобальну бібліотеку"
+msgstr "Налаштувати глобальну таблицю бібліотек"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:26 common/tool/actions.cpp:463
 msgid "Grid Origin"
-msgstr "Походження сітки"
+msgstr "Початок координат"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:63
 #: common/dialogs/dialog_grid_settings_base.cpp:78
@@ -2067,7 +2071,7 @@ msgstr "Користувацька сітка"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:91
 msgid "Size X:"
-msgstr "Size X:"
+msgstr "Розмір X:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:102
 msgid "Size Y:"
@@ -2092,11 +2096,11 @@ msgstr "Сітка 2:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:173 common/tool/actions.cpp:469
 msgid "Reset Grid Origin"
-msgstr "Відновити джерело сітки"
+msgstr "Відновити початок координат сітки"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:176
 msgid "Reset Grid Sizes"
-msgstr "Скинути розміри сітки"
+msgstr "Відновити розміри сітки"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
 msgid "Resets the list of grid sizes to default values"
@@ -2104,7 +2108,7 @@ msgstr "Скидає список розмірів сітки на типові 
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
-msgstr "Налаштування таблиці"
+msgstr "Налаштування сітки"
 
 #: common/dialogs/dialog_hotkey_list.cpp:33
 msgid "Hotkey List"
@@ -2112,15 +2116,13 @@ msgstr "Список гарячих клавіш"
 
 #: common/dialogs/dialog_image_editor.cpp:73
 msgid "Incorrect scale number"
-msgstr "Хибний номер шкали"
+msgstr "Хибний номер масштабу"
 
 #: common/dialogs/dialog_image_editor.cpp:83
 #, c-format
 msgid ""
 "This scale results in an image which is too small (%.2f mm or %.1f mil)."
-msgstr ""
-"Цей масштаб результатів у зображенні, що занадто малий (%.2f мм або %.1f "
-"мала)."
+msgstr "Зображення з таким масштабом занадто мале (%.2f мм або %.1f міл)."
 
 #: common/dialogs/dialog_image_editor.cpp:94
 #, c-format
@@ -2128,16 +2130,16 @@ msgid ""
 "This scale results in an image which is very large (%.1f mm or %.2f in). Are "
 "you sure?"
 msgstr ""
-"Цей масштаб результатів у зображенні, яке дуже велике (%.1f мм або %.2f в). "
-"Ви впевнені?"
+"Зображення з таким масштабом занадто велике (%.1f мм або %.2f міл). "
+"Продовжити?"
 
 #: common/dialogs/dialog_image_editor_base.cpp:33
 msgid "Grey"
-msgstr "Сірий колір"
+msgstr "Сірим"
 
 #: common/dialogs/dialog_image_editor_base.cpp:39
 msgid "Image Scale:"
-msgstr "Image Scale:"
+msgstr "Масштаб Зображення:"
 
 #: common/dialogs/dialog_image_editor_base.h:53
 msgid "Image Editor"
@@ -2152,21 +2154,21 @@ msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
 msgstr ""
-"Видаліть з вибраного заблоковані елементи і застосовуйте тільки операцію з "
-"розблокованими елементів (якщо такі є)."
+"Видаліть з виділення заблоковані елементи та застосовуйте тільки операцію з "
+"розблокованими елементами (якщо такі є)."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, c-format
 msgid "The selection contains %d locked items."
-msgstr "Обрано містить %d заблокованих об'єктів."
+msgstr "Виділення містить %d заблокованих елементів."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
-msgstr "Ці елементи будуть пропущені, якщо ви не перевизначите блокування."
+msgstr "Ці елементи будуть пропущені, доки їх не розблокують."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
-msgstr "Запам'ятайте рішення для цієї сесії."
+msgstr "Запам'ятати для цієї сесії."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:45
 msgid ""
@@ -2176,7 +2178,7 @@ msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
-msgstr "Перевизначити блокування"
+msgstr "Розблокувати"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:56
 msgid ""
@@ -2190,7 +2192,7 @@ msgstr "Заблоковані елементи"
 
 #: common/dialogs/dialog_migrate_settings.cpp:31
 msgid "Quit KiCad"
-msgstr "Quit KiCad"
+msgstr "Вийти з KiCad"
 
 #: common/dialogs/dialog_migrate_settings.cpp:56
 #: common/dialogs/dialog_migrate_settings_base.cpp:21
@@ -2212,7 +2214,7 @@ msgstr "Як би ви хотіли налаштувати KiCad?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
 msgid "Import settings from a previous version at:"
-msgstr "Імпортувати налаштування з попередньої версії на:"
+msgstr "Імпортувати налаштування з попередньої версії:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 msgid "Choose a different path"
@@ -2220,7 +2222,7 @@ msgstr "Вибрати інший шлях"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr "У вибраному шляху немає дійсних налаштувань KiCad!"
+msgstr "У вибраному шляху немає налаштувань KiCad!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 msgid "Import library configuration from previous version"
@@ -2231,8 +2233,8 @@ msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
-"При відмітці значення таблиці бібліотек і виведення символів з попередньої "
-"версії буде імпортовано до цієї версії"
+"Якщо відмічено, таблиці бібліотек символів та посадкових місць буде "
+"імпортовано з попередньої версії"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 msgid "Start with default settings"
@@ -2268,39 +2270,39 @@ msgstr "A0 841х1189мм"
 
 #: common/dialogs/dialog_page_settings.cpp:63
 msgid "A 8.5x11in"
-msgstr "8.5х11ін"
+msgstr "A 8.5х11дюйм"
 
 #: common/dialogs/dialog_page_settings.cpp:64
 msgid "B 11x17in"
-msgstr "11х17-х"
+msgstr "B 11х17дюйм"
 
 #: common/dialogs/dialog_page_settings.cpp:65
 msgid "C 17x22in"
-msgstr "17х22ін"
+msgstr "C 17х22дюйм"
 
 #: common/dialogs/dialog_page_settings.cpp:66
 msgid "D 22x34in"
-msgstr "Д22х34н"
+msgstr "D 22х34дюйм"
 
 #: common/dialogs/dialog_page_settings.cpp:67
 msgid "E 34x44in"
-msgstr "34х44in"
+msgstr "E 34х44дюйм"
 
 #: common/dialogs/dialog_page_settings.cpp:68
 msgid "USLetter 8.5x11in"
-msgstr "USLetter 8.5x11in"
+msgstr "USLetter 8.5x11дюйм"
 
 #: common/dialogs/dialog_page_settings.cpp:69
 msgid "USLegal 8.5x14in"
-msgstr "Юридичний 8.5x14in"
+msgstr "USLegal 8.5x14дюйм"
 
 #: common/dialogs/dialog_page_settings.cpp:70
 msgid "USLedger 11x17in"
-msgstr "Використовувач 11х17ін"
+msgstr "USLedger 11х17дюйм"
 
 #: common/dialogs/dialog_page_settings.cpp:71
 msgid "User (Custom)"
-msgstr "Користувач (Власний)"
+msgstr "Заданий Користувачем (Власний)"
 
 #: common/dialogs/dialog_page_settings.cpp:103
 msgid "Preview Settings"
@@ -2312,7 +2314,7 @@ msgstr "Попередній перегляд"
 
 #: common/dialogs/dialog_page_settings.cpp:105
 msgid "Preview Title Block Data"
-msgstr "Перегляд даних блока заголовків"
+msgstr "Попередній Перегляд даних титульного блоку"
 
 #: common/dialogs/dialog_page_settings.cpp:109
 #: common/dialogs/dialog_page_settings_base.h:145
@@ -2322,7 +2324,7 @@ msgstr "Параметри сторінки"
 #: common/dialogs/dialog_page_settings.cpp:110
 #: common/dialogs/dialog_page_settings_base.cpp:25
 msgid "Paper"
-msgstr "Папір"
+msgstr "Аркуш"
 
 #: common/dialogs/dialog_page_settings.cpp:111
 msgid "Title Block"
@@ -2331,7 +2333,7 @@ msgstr "Титульний блок"
 #: common/dialogs/dialog_page_settings.cpp:474
 #, c-format
 msgid "Drawing sheet file '%s' not found."
-msgstr "Файл таблиці «%s» не знайдено."
+msgstr "Файл форматної рамки «%s» не знайдено."
 
 #: common/dialogs/dialog_page_settings.cpp:708
 #: common/dialogs/dialog_page_settings_base.cpp:49
@@ -2345,11 +2347,11 @@ msgstr "Альбомна орієнтація"
 
 #: common/dialogs/dialog_page_settings.cpp:792
 msgid "Select Drawing Sheet File"
-msgstr "Виберіть файл аркуша"
+msgstr "Виберіть файл форматної рамки"
 
 #: common/dialogs/dialog_page_settings_base.cpp:36
 msgid "dummy text"
-msgstr "фіктивний текст"
+msgstr "пустий текст"
 
 #: common/dialogs/dialog_page_settings_base.cpp:45
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:216
@@ -2365,7 +2367,7 @@ msgstr "Орієнтація:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:55
 msgid "Custom paper size:"
-msgstr "Розмір користувальницького паперу:"
+msgstr "Розмір заданий користувачем:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:67
 #: pcbnew/dialogs/dialog_board_statistics.cpp:106
@@ -2376,7 +2378,7 @@ msgstr "Висота:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:80
 msgid "Custom paper height."
-msgstr "Користувальницька висота паперу."
+msgstr "Висота паперу задана користувачем."
 
 #: common/dialogs/dialog_page_settings_base.cpp:84
 #: common/dialogs/dialog_page_settings_base.cpp:105
@@ -2467,7 +2469,7 @@ msgstr "Ширина:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:101
 msgid "Custom paper width."
-msgstr "Ширина користувальницького паперу."
+msgstr "Ширина паперу заданого користувачем."
 
 #: common/dialogs/dialog_page_settings_base.cpp:112
 #: common/dialogs/dialog_page_settings_base.cpp:223
@@ -2484,13 +2486,13 @@ msgstr "Ширина користувальницького паперу."
 #: common/dialogs/dialog_page_settings_base.cpp:355
 #: common/dialogs/dialog_page_settings_base.cpp:367
 msgid "Export to other sheets"
-msgstr "Експортувати на інші таблиці"
+msgstr "Експортувати на інші аркуші"
 
 #: common/dialogs/dialog_page_settings_base.cpp:140
 #: gerbview/widgets/gerbview_layer_widget.cpp:100
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "Drawing Sheet"
-msgstr "Малюємо лист"
+msgstr "Форматна рамка"
 
 #: common/dialogs/dialog_page_settings_base.cpp:153 eeschema/sch_field.cpp:251
 #: pcbnew/dialogs/dialog_export_step_base.cpp:22
@@ -2509,7 +2511,7 @@ msgstr "Кількість аркушів: %d"
 #: common/dialogs/dialog_page_settings_base.cpp:189
 #, c-format
 msgid "Sheet number: %d"
-msgstr "Номер листа: %d"
+msgstr "Номер аркуша: %d"
 
 #: common/dialogs/dialog_page_settings_base.cpp:202
 msgid "Issue Date:"
@@ -2546,7 +2548,7 @@ msgstr "Коментар3:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:298
 msgid "Comment4:"
-msgstr "Коментування 4:"
+msgstr "Коментар4:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:310
 msgid "Comment5:"
@@ -2554,52 +2556,50 @@ msgstr "Коментар5:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:322
 msgid "Comment6:"
-msgstr "Коментар:"
+msgstr "Коментар6:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:334
 msgid "Comment7:"
-msgstr "Коментар:"
+msgstr "Коментар7:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:346
 msgid "Comment8:"
-msgstr "Коментар:"
+msgstr "Коментар8:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:358
 msgid "Comment9:"
-msgstr "Коментар:"
+msgstr "Коментар9:"
 
 #: common/dialogs/dialog_paste_special.cpp:37
 msgid ""
 "Finds the next available reference designator for any designators that "
 "already exist in the design."
-msgstr ""
-"Шукає наступного доступного рецензента для будь-якого дизайнатора, що вже "
-"існує у дизайні."
+msgstr "Знайти наступне доступне позначення серед наявних."
 
 #: common/dialogs/dialog_paste_special.cpp:44
 #, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "Замінює довідкові дизайнери на '%s."
+msgstr "Замінити позначення на '%s."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "Призначте унікальний орієнтир вкладати символи"
+msgstr "Присвоїти унікальні позначення для вставлених символів"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Keep existing reference designators, even if they are duplicated"
-msgstr "Зберегти існуючі дизайнери посилань, навіть якщо вони дубльовані"
+msgstr "Зберегти наявні позначення, навіть якщо вони дублюються"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Clear reference designators on all pasted symbols"
-msgstr "Очистити орієнтири на всіх вставлених символах"
+msgstr "Очистити позначення на всіх вставлених символах"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
-msgstr "Вставити параметри"
+msgstr "Параметри Вставки"
 
 #: common/dialogs/dialog_paste_special_base.h:48
 msgid "Paste Special"
-msgstr "Спеціяльна вставка"
+msgstr "Спеціальна вставка"
 
 #: common/dialogs/dialog_print_generic.cpp:45
 #: common/dialogs/dialog_print_generic.cpp:247
@@ -2613,7 +2613,7 @@ msgstr "Друк"
 #: common/dialogs/dialog_print_generic.cpp:197
 #: eeschema/dialogs/dialog_print_using_printer.cpp:145
 msgid "Print Preview"
-msgstr "Попередній перегляд"
+msgstr "Попередній перегляд печаті"
 
 #: common/dialogs/dialog_print_generic.cpp:47 common/hotkey_store.cpp:55
 #: common/tool/action_menu.cpp:207 common/tool/action_menu.cpp:212
@@ -2644,7 +2644,7 @@ msgstr "Закрити"
 
 #: common/dialogs/dialog_print_generic.cpp:105
 msgid "Warning: Bad scale number"
-msgstr "Попередження: Помилковий номер шкали"
+msgstr "Попередження: Помилковий масштаб"
 
 #: common/dialogs/dialog_print_generic.cpp:114
 #, c-format
@@ -2676,7 +2676,7 @@ msgstr "Виникла проблема з друком."
 
 #: common/dialogs/dialog_print_generic.cpp:297
 msgid "An error occurred initializing the printer information."
-msgstr "Сталася помилка під час ініціалізації інформації про принтер."
+msgstr "Сталася помилка під час отримання інформації про принтер."
 
 #: common/dialogs/dialog_print_generic_base.cpp:24
 #: eeschema/dialogs/dialog_annotate_base.cpp:84
@@ -2715,15 +2715,15 @@ msgstr "Колір"
 #: common/dialogs/dialog_print_generic_base.cpp:35
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:80
 msgid "Black and white"
-msgstr "Чорно-біла"
+msgstr "Чорно-білий"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 msgid "Print border and title block"
-msgstr "Друкувати межі і блок заголовка"
+msgstr "Друкувати рамку і титульний блок"
 
 #: common/dialogs/dialog_print_generic_base.cpp:43
 msgid "Print Frame references."
-msgstr "Друкувати посилання на кадри."
+msgstr "Друкувати рамку аркуша."
 
 #: common/dialogs/dialog_print_generic_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:121
@@ -2736,15 +2736,15 @@ msgstr "За розміром сторінки"
 
 #: common/dialogs/dialog_print_generic_base.cpp:73
 msgid "Custom:"
-msgstr "Власний:"
+msgstr "Заданий користувачем:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:77
 msgid "Set X scale adjust for exact scale plotting"
-msgstr "Встановити пристосування масштабу X для точного визначення масштабу"
+msgstr "Встановлення точного масштабу по X"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
 msgid "Info text"
-msgstr "Інформація про текст"
+msgstr "Інформація"
 
 #: common/dialogs/dialog_print_generic_base.cpp:111
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
@@ -2768,12 +2768,12 @@ msgstr "Фільтр"
 
 #: common/dialogs/eda_list_dialog_base.cpp:22
 msgid "Items:"
-msgstr "Товари:"
+msgstr "Елементи:"
 
 #: common/dialogs/eda_view_switcher_base.cpp:19
 #: common/dialogs/eda_view_switcher_base.h:40
 msgid "View Preset Switcher"
-msgstr "Перемикач пресетів"
+msgstr "Перемикач попередніх налаштувань"
 
 #: common/dialogs/panel_color_settings.cpp:51
 msgid "Reveal Themes in Finder"
@@ -2794,7 +2794,7 @@ msgstr "Тема вже існує!"
 #: common/dialogs/panel_color_settings.cpp:211
 #: common/dialogs/panel_color_settings.cpp:233
 msgid "New Theme..."
-msgstr "Нова тема..."
+msgstr "Створити тему..."
 
 #: common/dialogs/panel_color_settings.cpp:221
 msgid "(read-only)"
@@ -2819,7 +2819,7 @@ msgstr "Тема:"
 
 #: common/dialogs/panel_color_settings_base.cpp:33
 msgid "Override individual item colors"
-msgstr "Перевизначити індивідуальні кольори речей"
+msgstr "Перевизначити індивідуальні кольори елементів"
 
 #: common/dialogs/panel_color_settings_base.cpp:34
 msgid ""
@@ -2827,19 +2827,19 @@ msgid ""
 "in their properties."
 msgstr ""
 "Показати всі елементи типовим кольором, навіть якщо у них є специфічні "
-"кольори, встановлені їхніми властивостями."
+"кольори, встановлені у властивостях."
 
 #: common/dialogs/panel_color_settings_base.cpp:41
 msgid "Open Theme Folder"
-msgstr "Відкрити папку з темою"
+msgstr "Відкрити теку з темою"
 
 #: common/dialogs/panel_color_settings_base.cpp:42
 msgid "Open the folder containing color themes"
-msgstr "Відкрити папку, що містить колірні теми"
+msgstr "Відкрити теку з темами кольорів"
 
 #: common/dialogs/panel_common_settings.cpp:85
 msgid "Icon scale:"
-msgstr "Розмір значка:"
+msgstr "Масштаб іконки:"
 
 #: common/dialogs/panel_common_settings.cpp:94
 #: common/dialogs/panel_common_settings_base.cpp:135
@@ -2899,11 +2899,11 @@ msgstr "Швидке згладжування"
 #: common/dialogs/panel_common_settings_base.cpp:34
 #: common/dialogs/panel_common_settings_base.cpp:44
 msgid "High Quality Antialiasing"
-msgstr "Згладжування високої якості"
+msgstr "Якісне згладжування"
 
 #: common/dialogs/panel_common_settings_base.cpp:40
 msgid "Fallback graphics:"
-msgstr "Запасна графіка:"
+msgstr "Звичайна графіка:"
 
 #: common/dialogs/panel_common_settings_base.cpp:59
 msgid "Helper Applications"
@@ -2919,7 +2919,7 @@ msgstr "Програма перегляду файлів PDF за замовчу
 
 #: common/dialogs/panel_common_settings_base.cpp:95
 msgid "Other:"
-msgstr "Інше:"
+msgstr "Інший:"
 
 #: common/dialogs/panel_common_settings_base.cpp:112
 msgid "User Interface"
@@ -2927,11 +2927,11 @@ msgstr "Інтерфейс користувача"
 
 #: common/dialogs/panel_common_settings_base.cpp:118
 msgid "Show icons in menus"
-msgstr "Показувати значки в меню"
+msgstr "Показувати іконки в меню"
 
 #: common/dialogs/panel_common_settings_base.cpp:121
 msgid "Icon theme:"
-msgstr "Тема піктограми:"
+msgstr "Тема іконок:"
 
 #: common/dialogs/panel_common_settings_base.cpp:125
 msgid "Light"
@@ -2939,7 +2939,7 @@ msgstr "Світла"
 
 #: common/dialogs/panel_common_settings_base.cpp:126
 msgid "Use icons designed for light window backgrounds"
-msgstr "Використовувати піктограми, призначені для тла світлих вікон"
+msgstr "Використовувати іконки, призначені для світлого тла"
 
 #: common/dialogs/panel_common_settings_base.cpp:130
 #: gerbview/gerber_draw_item.cpp:709
@@ -2948,7 +2948,7 @@ msgstr "Темна"
 
 #: common/dialogs/panel_common_settings_base.cpp:131
 msgid "Use icons designed for dark window backgrounds"
-msgstr "Використовувати значки тла темного вікна"
+msgstr "Використовувати іконки, призначені для темного тла"
 
 #: common/dialogs/panel_common_settings_base.cpp:137
 msgid ""
@@ -2959,15 +2959,15 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:141
 msgid "Canvas scale:"
-msgstr "Шкала полотн:"
+msgstr "Масштаб полотна:"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
 msgid "Apply icon scaling to fonts"
-msgstr "Застосувати масштабування піктограм до шрифтів"
+msgstr "Застосувати масштабування іконок до шрифтів"
 
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
-msgstr "(Це працює поліпшить проблеми з масштабуванням шрифту GTK HiDPI.)"
+msgstr "(це може розв'язувати деякі проблеми з HiDPI в GTK.)"
 
 #: common/dialogs/panel_common_settings_base.cpp:171
 msgid "High-contrast mode dimming factor:"
@@ -2998,11 +2998,11 @@ msgstr "Редагування"
 
 #: common/dialogs/panel_common_settings_base.cpp:197
 msgid "Warp mouse to origin of moved object"
-msgstr "Варпова мишка для походження переміщеного об'єкта"
+msgstr "Змістити курсор до опорної точки об'єкта під час переміщення"
 
 #: common/dialogs/panel_common_settings_base.cpp:201
 msgid "First hotkey selects tool"
-msgstr "Уперше вікно вибору гарячої клавіші"
+msgstr "Гаряча клавіша спочатку вибирає інструмент"
 
 #: common/dialogs/panel_common_settings_base.cpp:202
 msgid ""
@@ -3018,15 +3018,15 @@ msgstr "Сесія"
 
 #: common/dialogs/panel_common_settings_base.cpp:212
 msgid "Remember open files for next project launch"
-msgstr "Пам’ятати файли для наступного запуску проекту"
+msgstr "Пам’ятати файли для наступного запуску проєкту"
 
 #: common/dialogs/panel_common_settings_base.cpp:214
 msgid ""
 "If checked, launching a project will also launch tools such as eeschema and "
 "pcbnew with previously open files"
 msgstr ""
-"Якщо прапорець встановлений, запуск проекту також запустить такі "
-"інструменти, як eeschema та pcbnew з раніше відкритими файлами"
+"Якщо відмічено, запуск проєкту також запустить такі інструменти, як eeschema "
+"та pcbnew з раніше відкритими файлами"
 
 #: common/dialogs/panel_common_settings_base.cpp:227
 msgid "&Auto save:"
@@ -3049,7 +3049,7 @@ msgstr "Розмір історії файлів:"
 
 #: common/dialogs/panel_common_settings_base.cpp:248
 msgid "3D cache file duration:"
-msgstr "Тривалість файлу 3D-кешу:"
+msgstr "Зберігати файли 3D-кешу:"
 
 #: common/dialogs/panel_common_settings_base.cpp:253
 msgid ""
@@ -3063,17 +3063,17 @@ msgstr "днів"
 
 #: common/dialogs/panel_common_settings_base.cpp:270
 msgid "Project Backup"
-msgstr "Резервне копіювання проекту"
+msgstr "Резервне копіювання проєкту"
 
 #: common/dialogs/panel_common_settings_base.cpp:277
 msgid "Automatically backup projects"
-msgstr "Автоматичне резервне копіювання проектів"
+msgstr "Автоматичне резервне копіювання проєктів"
 
 #: common/dialogs/panel_common_settings_base.cpp:278
 msgid ""
 "Automatically create backup archives of the current project when saving files"
 msgstr ""
-"Автоматично створювати резервні копії архівів поточного проекту при "
+"Автоматично створювати резервні копії архівів поточного проєкту при "
 "збереженні файлів"
 
 #: common/dialogs/panel_common_settings_base.cpp:282
@@ -3088,13 +3088,11 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:287
 msgid "Maximum backups to keep:"
-msgstr "Максимальна кількість резервних копій для збереження:"
+msgstr "Максимальна кількість резервних копій:"
 
 #: common/dialogs/panel_common_settings_base.cpp:289
 msgid "How many backup files total to keep (set to 0 for no limit)"
-msgstr ""
-"Кількість резервних файлів, що зберігаються (встановлено як 0 для "
-"відсутності обмежень)"
+msgstr "Кількість файлів резервних копій, що зберігаються (0 - без обмежень)"
 
 #: common/dialogs/panel_common_settings_base.cpp:296
 msgid "Maximum backups per day:"
@@ -3102,9 +3100,7 @@ msgstr "Максимальна кількість резервних копій 
 
 #: common/dialogs/panel_common_settings_base.cpp:298
 msgid "How many backup files to keep each day (set to 0 for no limit)"
-msgstr ""
-"Скільки резервних файлів залишити кожен день (встановіть 0 для відсутності "
-"обмежень)"
+msgstr "Скільки резервних файлів залишити кожен день (0 без обмежень)"
 
 #: common/dialogs/panel_common_settings_base.cpp:305
 msgid "Minimum time between backups:"
@@ -3115,24 +3111,24 @@ msgid ""
 "Number of minutes since the last backup before another will be created the "
 "next time you save (set to 0 for no minimum)"
 msgstr ""
-"Кількість хвилин, відколи остання резервна копія перед іншою буде створена "
-"наступного разу при збереженні (задайте значення 0 для не меншого)"
+"Кількість хвилин між останньою резервною копією та наступною (0 - без "
+"обмежень)"
 
 #: common/dialogs/panel_common_settings_base.cpp:318
 msgid "Maximum total backup size:"
-msgstr "Максимальний розмір резервної копії:"
+msgstr "Максимальний розмір всіх резервних копій:"
 
 #: common/dialogs/panel_common_settings_base.cpp:320
 msgid ""
 "If the total size of backup files grows above this limit, old backups will "
 "be deleted (set to 0 for no limit)"
 msgstr ""
-"Якщо загальний розмір резервної копії росте над цим обмеженням, старі "
-"резервні копії буде видалено (встановіть 0 для необмеженого обмеження)"
+"Якщо загальний розмір резервних копій буде більше цього обмеженням, старі "
+"резервні копії буде видалено (0 - без обмеження)"
 
 #: common/dialogs/panel_common_settings_base.cpp:327
 msgid "MB"
-msgstr "МБ"
+msgstr "Мбайт"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
 msgid ""
@@ -3179,8 +3175,7 @@ msgstr "Імпортувати гарячі клавіші..."
 msgid ""
 "Import hotkey definitions from an external file, replacing the current values"
 msgstr ""
-"Імпортувати гарячі визначення із зовнішнього файлу, замінивши поточні "
-"значення"
+"Імпортувати гарячі клавіші із зовнішнього файлу, замінивши поточні значення"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:193
 msgid "Import Hotkeys File:"
@@ -3193,7 +3188,7 @@ msgstr "| Дія | Гаряча клавіша за замовчуванням |
 #: common/dialogs/panel_mouse_settings.cpp:47
 #: pcbnew/dialogs/panel_edit_options_base.cpp:208
 msgid "Cmd"
-msgstr "Кемд"
+msgstr "Команда"
 
 #: common/dialogs/panel_mouse_settings.cpp:48
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:176
@@ -3205,40 +3200,39 @@ msgstr "Опція"
 #: common/dialogs/panel_mouse_settings.cpp:85
 msgid "Only one action can be assigned to each vertical scroll setting"
 msgstr ""
-"Тільки одна дія може бути призначена на кожне налаштування вертикальної "
+"Тільки одна дія може бути призначена на кожне налаштування вертикального "
 "прокручування"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
-msgstr "Масштабування панорами і масштабу"
+msgstr "Панорамування та Масштаб"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:25
 msgid "Center and warp cursor on zoom"
-msgstr "Центральний і варповтор при масштабуванні"
+msgstr "Центрувати за курсором при масштабуванні"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:26
 msgid "Center the cursor on screen when zooming."
-msgstr "Відцентруйте курсор на екрані при масштабуванні."
+msgstr "Центрувати курсор на екрані при масштабуванні."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:33
 msgid "Automatically pan while moving object"
-msgstr "Автоматично панорама при рухомому об'єкті"
+msgstr "Панорамування при переміщенні об'єкта"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:34
 msgid ""
 "When drawing a track or moving an item, pan when approaching the edge of the "
 "display."
 msgstr ""
-"При малюванні панелі дисплея або переміщенні предмета, pan коли наближається "
-"до краю дисплея."
+"При малюванні доріжки або переміщенні елемента панорамувати на краю дисплея."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:38
 msgid "Use zoom acceleration"
-msgstr "Використання прискорення масштабу"
+msgstr "Використовувати прискорене масштабування"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:39
 msgid "Zoom faster when scrolling quickly"
-msgstr "Збільшення масштабу при прокручуванні швидко"
+msgstr "Прискорене масштабування при швидкому прокручуванні мишки"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:45
 msgid "Zoom speed:"
@@ -3246,7 +3240,7 @@ msgstr "Швидкість масштабування:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:51
 msgid "How far to zoom in for each rotation of the mouse wheel"
-msgstr "Як далеко збільшити для кожного повороту колеса миші"
+msgstr "Як сильно змінювати масштаб при кожному повороті колеса миші"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:58
 msgid "Pick the zoom speed automatically"
@@ -3254,41 +3248,42 @@ msgstr "Автоматична швидкість масштабування"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:67
 msgid "Auto pan speed:"
-msgstr "Швидкість автоматичної панорами:"
+msgstr "Швидкість автоматичного панорамування:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:72
 msgid "How fast to pan when moving an object off the edge of the screen"
-msgstr "Як швидко ковзати, при переміщенні об'єкта за межі екрану"
+msgstr "Швидкість панорамування при переміщенні об'єкта за межі екрану"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:91
 msgid "Drag Gestures"
-msgstr "Перетягніть жести"
+msgstr "Перетягування"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:99
 msgid "Left button drag:"
-msgstr "Перетягніть ліву кнопку:"
+msgstr "Перетягування лівою кнопкою:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Draw selection rectangle"
-msgstr "Намалювати прямокутник вибору"
+msgstr "Намалювати прямокутник виділення"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag selected objects; otherwise draw selection rectangle"
 msgstr ""
-"Перетягніть обрані об’єкти; в іншому випадку намалювати прямокутник вибору"
+"Перетягнути виділені об’єкти; в іншому випадку намалювати прямокутник "
+"виділення"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag any object (selected or not)"
-msgstr "Перетягніть будь-який об'єкт (вибраний чи ні)"
+msgstr "Перетягнути будь-який об'єкт (виділений чи ні)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:112
 msgid "Middle button drag:"
-msgstr "перетягування середньої кнопки:"
+msgstr "Перетягування середньою кнопкою:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:116
 #: common/dialogs/panel_mouse_settings_base.cpp:129
 msgid "Pan"
-msgstr "Навігація"
+msgstr "Панорамування"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:116
 #: common/dialogs/panel_mouse_settings_base.cpp:129
@@ -3318,15 +3313,15 @@ msgstr "Масштабування"
 #: pcbnew/widgets/appearance_controls.cpp:2380
 #: pcbnew/widgets/appearance_controls.cpp:2399 pcbnew/zone.cpp:1342
 msgid "None"
-msgstr "Без ефекту"
+msgstr "Ні"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:125
 msgid "Right button drag:"
-msgstr "Перетягніть праву кнопку:"
+msgstr "Перетягування правою кнопкою:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:145
 msgid "Scroll Gestures"
-msgstr "Прокрутка жестів"
+msgstr "Прокручування"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:153
 msgid "Vertical touchpad or scroll wheel movement:"
@@ -3351,7 +3346,7 @@ msgstr "Сtrl"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:117
 #: pcbnew/dialogs/panel_edit_options_base.cpp:188
 msgid "Shift"
-msgstr "Зсув"
+msgstr "Shift"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:187
 msgid "Alt"
@@ -3359,7 +3354,7 @@ msgstr "Alt"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:191
 msgid "Zoom:"
-msgstr "Масштаб:"
+msgstr "Масштабувати:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:207
 msgid "Pan up/down:"
@@ -3367,17 +3362,18 @@ msgstr "Прокручування вгору/вниз:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:223
 msgid "Pan left/right:"
-msgstr "Вліво/вправо:"
+msgstr "Прокручування вліво/вправо:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:257
 msgid "Pan left/right with horizontal movement"
-msgstr "Ширка вліво/вправо з горизонтальним рухом"
+msgstr "Прокручування вліво/вправо при горизонтальному переміщенні"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:258
 msgid ""
 "Pan the canvas left and right when scrolling left to right on the touchpad"
 msgstr ""
-"Панорайте полотно ліворуч та праворуч при прокручуванні вправо на тачпаді"
+"Панорамування зображення ліворуч та праворуч при прокручуванні ліворуч/"
+"праворуч на сенсорній панелі"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
 msgid "Reset to Mouse Defaults"
@@ -3385,7 +3381,7 @@ msgstr "Відновити параметри за замовчуванням м
 
 #: common/dialogs/panel_mouse_settings_base.cpp:271
 msgid "Reset to Trackpad Defaults"
-msgstr "Відновити налаштування за замовчуванням"
+msgstr "Відновити параметри за замовчуванням сенсорної панелі"
 
 #: common/dialogs/panel_setup_netclasses.cpp:89 common/eda_shape.cpp:1634
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:345
@@ -3395,31 +3391,31 @@ msgstr "Відновити налаштування за замовчуванн�
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:718 pcbnew/zone.cpp:599
 #: pcbnew/zone.cpp:1344
 msgid "Solid"
-msgstr "Solid"
+msgstr "Суцільний"
 
 #: common/dialogs/panel_setup_netclasses.cpp:91 common/eda_shape.cpp:1635
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:345
 #: include/stroke_params.h:72
 msgid "Dashed"
-msgstr "Пунктирна"
+msgstr "Штриховий"
 
 #: common/dialogs/panel_setup_netclasses.cpp:93 common/eda_shape.cpp:1636
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:345
 #: include/stroke_params.h:73
 msgid "Dotted"
-msgstr "Пунктирна"
+msgstr "Пунктир"
 
 #: common/dialogs/panel_setup_netclasses.cpp:95 common/eda_shape.cpp:1637
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:345
 #: include/stroke_params.h:74
 msgid "Dash-Dot"
-msgstr "Дештат"
+msgstr "Штрих-пунктир"
 
 #: common/dialogs/panel_setup_netclasses.cpp:97 common/eda_shape.cpp:1638
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:345
 #: include/stroke_params.h:75
 msgid "Dash-Dot-Dot"
-msgstr "Dot з двома пунктирами"
+msgstr "Штрих-пунктир подвійний"
 
 #: common/dialogs/panel_setup_netclasses.cpp:442
 msgid "Netclass must have a name."
@@ -3431,51 +3427,51 @@ msgstr "Ім'я Netclass вже використовується."
 
 #: common/dialogs/panel_setup_netclasses.cpp:512
 msgid "Minimum copper clearance"
-msgstr "Мінімальна мідна обробка"
+msgstr "Мінімальний проріз міді"
 
 #: common/dialogs/panel_setup_netclasses.cpp:513
 msgid "Minimum track width"
-msgstr "Мінімальна ширина треку"
+msgstr "Мінімальна ширина доріжки"
 
 #: common/dialogs/panel_setup_netclasses.cpp:514
 msgid "Via pad diameter"
-msgstr "Діаметр панелі навігації"
+msgstr "Діаметр контактної площадки перехідного отвору"
 
 #: common/dialogs/panel_setup_netclasses.cpp:515
 msgid "Via plated hole diameter"
-msgstr "Віа діаметр отворів"
+msgstr "Діаметр перехідного отвору"
 
 #: common/dialogs/panel_setup_netclasses.cpp:516
 msgid "Microvia pad diameter"
-msgstr "Microvia pad diameter"
+msgstr "Діаметр контактної площадки перехідного мікроотвору"
 
 #: common/dialogs/panel_setup_netclasses.cpp:517
 msgid "Microvia plated hole diameter"
-msgstr "Діаметр радіаметра мікровії"
+msgstr "Діаметр перехідного мікроотвору"
 
 #: common/dialogs/panel_setup_netclasses.cpp:518
 msgid "Differential pair track width"
-msgstr "Ширина диференційної пари"
+msgstr "Ширина доріжок диференційної пари"
 
 #: common/dialogs/panel_setup_netclasses.cpp:519
 msgid "Differential pair gap"
-msgstr "Диференціальна пара розрив"
+msgstr "Проріз диференціальної пари"
 
 #: common/dialogs/panel_setup_netclasses.cpp:520
 msgid "Schematic wire thickness"
-msgstr "Товщина схеми"
+msgstr "Товщина провідника схеми"
 
 #: common/dialogs/panel_setup_netclasses.cpp:521
 msgid "Bus wire thickness"
-msgstr "Товщина прокрутки"
+msgstr "Товщина шини"
 
 #: common/dialogs/panel_setup_netclasses.cpp:522
 msgid "Schematic wire color"
-msgstr "Колір схеми електропроводу"
+msgstr "Колір провідника схеми"
 
 #: common/dialogs/panel_setup_netclasses.cpp:523
 msgid "Schematic wire line style"
-msgstr "Стиль лінії електропроводів"
+msgstr "Стиль лінії провідника схеми"
 
 #: common/dialogs/panel_setup_netclasses.cpp:574
 msgid "The default net class is required."
@@ -3492,7 +3488,7 @@ msgstr "Мережевий клас"
 #: pcbnew/tools/board_inspection_tool.cpp:453
 #: pcbnew/tools/board_inspection_tool.cpp:906
 msgid "Clearance"
-msgstr "Кліренс"
+msgstr "Проріз"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:43
 #: pcb_calculator/pcb_calculator_frame.cpp:88
@@ -3501,18 +3497,18 @@ msgstr "Кліренс"
 #: pcbnew/tools/board_inspection_tool.cpp:306
 #: pcbnew/tools/board_inspection_tool.cpp:1059
 msgid "Track Width"
-msgstr "Ширина маршруту"
+msgstr "Ширина доріжки"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:44
 #: pcb_calculator/pcb_calculator_frame.cpp:86
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:108
 msgid "Via Size"
-msgstr "За розміром"
+msgstr "Розмір перехідних отворів"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:45
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:231
 msgid "Via Hole"
-msgstr "Хоул"
+msgstr "Діаметр отвору перехідного отвору"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:46
 msgid "uVia Size"
@@ -3525,19 +3521,19 @@ msgstr "голе uVia"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:48
 msgid "DP Width"
-msgstr "DP Width"
+msgstr "Ширина диференціальної пари"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:49
 msgid "DP Gap"
-msgstr "Розподільна прогалина"
+msgstr "Проріз диференціальної пари"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:50
 msgid "Wire Thickness"
-msgstr "Товщина Wire"
+msgstr "Товщина Провідника"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 msgid "Bus Thickness"
-msgstr "Товщина автобуса"
+msgstr "Товщина Шини"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:53
 #: common/stroke_params.cpp:211 eeschema/sch_line.cpp:922
@@ -3554,12 +3550,12 @@ msgstr "Стиль лінії"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:145
 #: eeschema/tools/sch_editor_control.cpp:1111 include/stroke_params.h:79
 msgid "Default"
-msgstr "Типово"
+msgstr "За замовчуванням"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:84
 msgid "Set color to transparent to use KiCad default color."
 msgstr ""
-"Встановіть колір на прозорий для використання стандартного кольору KiCad."
+"Встановіть прозорий колір для використання кольору KiCad за замовчуванням."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:103
 msgid "Filter Nets"
@@ -3572,7 +3568,7 @@ msgstr "Фільтр чистого класу:"
 #: common/dialogs/panel_setup_netclasses_base.cpp:125
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:28
 msgid "Net name filter:"
-msgstr "Фільтр по назва:"
+msgstr "Фільтр за назвою:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:140
 #: pcbnew/widgets/appearance_controls.cpp:898
@@ -3614,16 +3610,16 @@ msgstr "Ігнорувати"
 
 #: common/dialogs/panel_setup_severities.cpp:114
 msgid "From Pin Conflicts Map"
-msgstr "Карта конфліктів з Pin"
+msgstr "З карти конфліктів виводів"
 
 #: common/dialogs/panel_text_variables.cpp:118
 #: common/dialogs/panel_text_variables.cpp:146
 msgid "Variable name cannot be empty."
-msgstr "Ім'я змінної не може бути порожнім."
+msgstr "Імʼя змінної не може бути порожнім."
 
 #: common/dialogs/panel_text_variables_base.cpp:37
 msgid "Variable Name"
-msgstr "Ім'я змінної"
+msgstr "Імʼя змінної"
 
 #: common/dialogs/panel_text_variables_base.cpp:38
 msgid "Text Substitution"
@@ -3642,7 +3638,7 @@ msgstr "Помилка:"
 #: common/dialogs/wx_html_report_panel.cpp:217
 #: common/dialogs/wx_html_report_panel.cpp:243
 msgid "Warning:"
-msgstr "Увага:"
+msgstr "Попередження:"
 
 #: common/dialogs/wx_html_report_panel.cpp:244
 msgid "Info:"
@@ -3664,7 +3660,7 @@ msgstr "Помилка збереження файлу"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:16
 msgid "Output Messages"
-msgstr "Вихідні повідомлення"
+msgstr "Інформація про виконання"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:30
 #: eeschema/dialogs/dialog_erc_base.cpp:117
@@ -3710,27 +3706,26 @@ msgstr "Зберегти..."
 #: common/draw_panel_gal.cpp:286 common/draw_panel_gal.cpp:457
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr ""
-"Не вдалося використовувати OpenGL, перемикання до програмного забезпечення "
-"візуалізації"
+"Не вдалося використовувати OpenGL, перемикання до програмної візуалізації"
 
 #: common/draw_panel_gal.cpp:292 common/draw_panel_gal.cpp:464
 msgid "Could not use OpenGL"
-msgstr "Не вдалося використовувати OpenGL"
+msgstr "Не вдалося використати OpenGL"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:925
 #, c-format
 msgid "Drawing sheet '%s' not found."
-msgstr "Таблицю малювання '%s' не знайдено."
+msgstr "Форматна рамка '%s' не знайдена."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:935
 #, c-format
 msgid "Drawing sheet '%s' could not be opened."
-msgstr "Не вдалося відкрити лист малюнку%s."
+msgstr "Не вдалося відкрити форматну рамку %s."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:948
 #, c-format
 msgid "Drawing sheet '%s' was not fully read."
-msgstr "Таблицю малювання '%s' було не повністю прочитано."
+msgstr "Форматна рамка '%s' була не повністю прочитана."
 
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_item.cpp:318
@@ -3768,7 +3763,7 @@ msgstr "Прямокутник"
 #: common/drawing_sheet/ds_draw_item.cpp:126
 #: common/drawing_sheet/ds_draw_item.cpp:296
 msgid "Imported Shape"
-msgstr "Імпортовані форми"
+msgstr "Імпортований символ"
 
 #: common/drawing_sheet/ds_data_item.cpp:374
 #: common/drawing_sheet/ds_draw_item.cpp:130
@@ -3780,35 +3775,35 @@ msgstr "Зображення"
 #: common/drawing_sheet/ds_data_model_io.cpp:93
 #: common/drawing_sheet/ds_data_model_io.cpp:122
 msgid "Error writing drawing sheet file"
-msgstr "Помилка запису файлу арбітражу"
+msgstr "Помилка запису файлу форматної рамки"
 
 #: common/drawing_sheet/ds_draw_item.cpp:136
 msgid "First Page Only"
-msgstr "Тільки перша сторінка"
+msgstr "На першій сторінці"
 
 #: common/drawing_sheet/ds_draw_item.cpp:137
 msgid "Subsequent Pages"
-msgstr "Наступні сторінки"
+msgstr "На наступних сторінках"
 
 #: common/drawing_sheet/ds_draw_item.cpp:138
 msgid "All Pages"
-msgstr "Усі сторінки"
+msgstr "На всіх сторінках"
 
 #: common/drawing_sheet/ds_draw_item.cpp:141
 msgid "First Page Option"
-msgstr "Перша сторінка"
+msgstr "Перша сторінка - опція"
 
 #: common/drawing_sheet/ds_draw_item.cpp:144
 msgid "Repeat Count"
-msgstr "Повторити підрахунок"
+msgstr "Кількість повторів"
 
 #: common/drawing_sheet/ds_draw_item.cpp:147
 msgid "Repeat Label Increment"
-msgstr "Повторити приріст мітки"
+msgstr "Інкремент мітки"
 
 #: common/drawing_sheet/ds_draw_item.cpp:153
 msgid "Repeat Position Increment"
-msgstr "Повторити Приріст позиції"
+msgstr "Інкремент позиції"
 
 #: common/drawing_sheet/ds_draw_item.cpp:155
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:39
@@ -3824,7 +3819,7 @@ msgstr "Текст '%s'"
 #: eeschema/sch_shape.cpp:378
 #, c-format
 msgid "Rectangle, width %s height %s"
-msgstr "Rectangle, ширина %s висота %s"
+msgstr "Прямокутник, ширина %s висота %s"
 
 #: common/drawing_sheet/ds_draw_item.cpp:425
 #, c-format
@@ -3834,7 +3829,7 @@ msgstr "Лінія, довжина %s"
 #: common/drawing_sheet/ds_draw_item.cpp:479
 #: gerbview/widgets/gerbview_layer_widget.cpp:102
 msgid "Page Limits"
-msgstr "Обмеження сторінок"
+msgstr "Межі сторінки"
 
 #: common/dsnlexer.cpp:35
 msgid "clipboard"
@@ -3848,7 +3843,7 @@ msgstr "Очікуємо %s"
 #: common/dsnlexer.cpp:344
 #, c-format
 msgid "Expecting '%s'"
-msgstr "Очікуємо на '%s'"
+msgstr "Очікуємо '%s'"
 
 #: common/dsnlexer.cpp:352
 #, c-format
@@ -3872,11 +3867,11 @@ msgstr "потрібно число для '%s'"
 
 #: common/dsnlexer.cpp:703 common/dsnlexer.cpp:764
 msgid "Un-terminated delimited string"
-msgstr "Незакритий розділений рядок"
+msgstr "Рядок з роздільниками, що не підтримуються"
 
 #: common/dsnlexer.cpp:725
 msgid "String delimiter must be a single character of ', \", or $"
-msgstr "Роздільник рядка повинен містити один символ ', \" або $"
+msgstr "Роздільник рядка повинен містити один з символів ', \" або $"
 
 #: common/eda_base_frame.cpp:462
 msgid "&About KiCad"
@@ -3894,7 +3889,7 @@ msgstr "Властивості"
 #: common/eda_base_frame.cpp:994 common/hotkey_store.cpp:71
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
 msgid "Common"
-msgstr "Коммон"
+msgstr "Загальні"
 
 #: common/eda_base_frame.cpp:995
 msgid "Mouse and Touchpad"
@@ -3906,7 +3901,7 @@ msgstr "Гарячі клавіші"
 
 #: common/eda_base_frame.cpp:999
 msgid "Data Collection"
-msgstr "Колекція даних"
+msgstr "Набір даних"
 
 #: common/eda_base_frame.cpp:1011 common/tool/actions.cpp:582
 #: eeschema/symbol_editor/symbol_editor.cpp:179
@@ -3918,7 +3913,7 @@ msgstr "Редактор символів"
 #: common/eda_base_frame.cpp:1033 common/eda_base_frame.cpp:1042
 #: common/eda_base_frame.cpp:1065 common/eda_base_frame.cpp:1076
 msgid "Display Options"
-msgstr "Параметри відображення"
+msgstr "Параметри показу"
 
 #: common/eda_base_frame.cpp:1013 common/eda_base_frame.cpp:1021
 #: common/eda_base_frame.cpp:1034 common/eda_base_frame.cpp:1043
@@ -3941,24 +3936,24 @@ msgstr "Редактор схем"
 #: common/eda_base_frame.cpp:1023
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
 msgid "Field Name Templates"
-msgstr "Шаблони полів"
+msgstr "Шаблони назв полів"
 
 #: common/eda_base_frame.cpp:1032 common/tool/actions.cpp:592
 #: kicad/tools/kicad_manager_actions.cpp:87 pcbnew/footprint_edit_frame.cpp:882
 #: pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
-msgstr "Редактор місць розташування"
+msgstr "Редактор посадкових місць"
 
 #: common/eda_base_frame.cpp:1036
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:465
 msgid "Default Values"
-msgstr "Типові значення"
+msgstr "Значення за замовчуванням"
 
 #: common/eda_base_frame.cpp:1041 common/hotkey_store.cpp:74
 #: kicad/tools/kicad_manager_actions.cpp:81 pcbnew/menubar_pcb_editor.cpp:189
 #: pcbnew/pcb_edit_frame.cpp:178 pcbnew/pcb_edit_frame.cpp:1395
 msgid "PCB Editor"
-msgstr "Редактор PCB"
+msgstr "Редактор Друкованих Плат"
 
 #: common/eda_base_frame.cpp:1045
 msgid "Action Plugins"
@@ -3983,15 +3978,15 @@ msgstr "Загальні налаштування"
 
 #: common/eda_base_frame.cpp:1053
 msgid "Realtime Renderer"
-msgstr "Візуалізатор у реальному часі"
+msgstr "Візуалізація в реальному часі"
 
 #: common/eda_base_frame.cpp:1054
 msgid "Raytracing Renderer"
-msgstr "Пропуски рендерингу"
+msgstr "Трасування Променів"
 
 #: common/eda_base_frame.cpp:1064
 msgid "GerbView"
-msgstr "Гербв'ю"
+msgstr "GerbView"
 
 #: common/eda_base_frame.cpp:1066
 msgid "Excellon Options"
@@ -4001,12 +3996,12 @@ msgstr "Виключити параметри"
 #: kicad/tools/kicad_manager_actions.cpp:110 pagelayout_editor/menubar.cpp:89
 #: pagelayout_editor/pl_editor_frame.cpp:543
 msgid "Drawing Sheet Editor"
-msgstr "Редактор аркушів"
+msgstr "Редактор форматних рамок"
 
 #: common/eda_base_frame.cpp:1112
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
-msgstr "Недостатньо прав для папки '%s."
+msgstr "Недостатньо прав для теки '%s'."
 
 #: common/eda_base_frame.cpp:1154
 #, c-format
@@ -4020,21 +4015,21 @@ msgstr ""
 
 #: common/eda_base_frame.cpp:1170
 msgid "The auto save file could not be renamed to the board file name."
-msgstr "Файл автоматичного збереження не вдалося перейменувати на назву файлу."
+msgstr "Не вдалося перейменувати файл автоматичного збереження."
 
 #: common/eda_doc.cpp:130
 msgid "Documentation File"
-msgstr "Документаційний файл"
+msgstr "Файл документації"
 
 #: common/eda_doc.cpp:140
 #, c-format
 msgid "Documentation file '%s' not found."
-msgstr "Документаційний файл '%s' не знайдено."
+msgstr "Файл документації '%s' не знайдено."
 
 #: common/eda_doc.cpp:183
 #, c-format
 msgid "Unknown MIME type for documentation file '%s'"
-msgstr "Невідомий MIME тип файлу з документацією '%s"
+msgstr "Невідомий MIME тип файлу з документацією '%s'"
 
 #: common/eda_draw_frame.cpp:141 common/tool/actions.cpp:486
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:27
@@ -4051,7 +4046,7 @@ msgstr "Дюйми"
 #: common/eda_draw_frame.cpp:147 pagelayout_editor/pl_editor_frame.cpp:157
 #: pcbnew/tools/drawing_tool.cpp:272 pcbnew/tools/pcb_actions.cpp:703
 msgid "Constrain to H, V, 45"
-msgstr "Обмеження для H, 45"
+msgstr "Обмежити горизонтально/вертикально та 45°"
 
 #: common/eda_draw_frame.cpp:352
 msgid "Edit User Grid..."
@@ -4069,7 +4064,7 @@ msgstr "Масштаб %.2f"
 #: common/eda_draw_frame.cpp:595 pagelayout_editor/pl_editor_frame.cpp:722
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:193
 msgid "inches"
-msgstr "дюймів"
+msgstr "дюйми"
 
 #: common/eda_draw_frame.cpp:596
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
@@ -4088,7 +4083,7 @@ msgstr "дюймів"
 #: pagelayout_editor/pl_editor_frame.cpp:723
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:193
 msgid "mils"
-msgstr "мілірадіани"
+msgstr "міл"
 
 #: common/eda_draw_frame.cpp:598
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:56
@@ -4116,23 +4111,23 @@ msgstr "Екран"
 #: pcbnew/fp_text.cpp:275 pcbnew/load_select_footprint.cpp:372
 #: pcbnew/pad.cpp:913
 msgid "Footprint"
-msgstr "Сліди людини"
+msgstr "Посадкове місце"
 
 #: common/eda_item.cpp:316 pcbnew/dialogs/dialog_board_statistics.cpp:510
 #: pcbnew/pad.cpp:916
 msgid "Pad"
-msgstr "Планшет"
+msgstr "Контактна площадка"
 
 #: common/eda_item.cpp:317 common/eda_item.cpp:322 common/eda_item.cpp:372
 msgid "Graphic"
-msgstr "Графік"
+msgstr "Графіка"
 
 #: common/eda_item.cpp:319 common/eda_item.cpp:321 common/eda_item.cpp:352
 #: common/eda_item.cpp:374 eeschema/lib_textbox.cpp:393
 #: eeschema/sch_textbox.cpp:393 pcbnew/fp_textbox.cpp:233
 #: pcbnew/pcb_textbox.cpp:227
 msgid "Text Box"
-msgstr "Текстовий блок"
+msgstr "Напис"
 
 #: common/eda_item.cpp:323 common/eda_item.cpp:324 common/eda_item.cpp:325
 #: common/eda_item.cpp:326 common/eda_item.cpp:333 common/eda_item.cpp:334
@@ -4143,7 +4138,7 @@ msgstr "Розмір"
 #: common/eda_item.cpp:327 common/eda_item.cpp:337 pcbnew/pcb_dimension.cpp:960
 #: pcbnew/pcb_dimension.cpp:1082
 msgid "Leader"
-msgstr "Лідер"
+msgstr "Виносна лінія"
 
 #: common/eda_item.cpp:328 common/eda_item.cpp:339
 #: pcbnew/tools/board_inspection_tool.cpp:612
@@ -4157,7 +4152,7 @@ msgstr "Доріжка"
 #: common/eda_item.cpp:331 pcbnew/dialogs/dialog_board_statistics.cpp:510
 #: pcbnew/pcb_track.cpp:802
 msgid "Via"
-msgstr "Через"
+msgstr "Перехідний отвір"
 
 #: common/eda_item.cpp:332 common/eda_item.cpp:344 pcbnew/pcb_marker.cpp:141
 msgid "Marker"
@@ -4165,11 +4160,11 @@ msgstr "Маркер"
 
 #: common/eda_item.cpp:338 pcbnew/pcb_target.cpp:125
 msgid "Target"
-msgstr "Target"
+msgstr "Орієнтир"
 
 #: common/eda_item.cpp:340
 msgid "ItemList"
-msgstr "ItemList"
+msgstr "Перелік елементів"
 
 #: common/eda_item.cpp:341
 msgid "NetInfo"
@@ -4182,11 +4177,11 @@ msgstr "Група"
 
 #: common/eda_item.cpp:345 eeschema/sch_junction.h:97
 msgid "Junction"
-msgstr "Джанкція"
+msgstr "Зʼєднання"
 
 #: common/eda_item.cpp:346
 msgid "No-Connect Flag"
-msgstr "Прапор без підключення"
+msgstr "Прапорець \"Не під'єднано\""
 
 #: common/eda_item.cpp:347
 msgid "Wire Entry"
@@ -4198,7 +4193,7 @@ msgstr "Введення автобуса"
 
 #: common/eda_item.cpp:350 eeschema/sch_bitmap.cpp:205
 msgid "Bitmap"
-msgstr "Bitmap"
+msgstr "Зображення"
 
 #: common/eda_item.cpp:353
 msgid "Net Label"
@@ -4207,7 +4202,7 @@ msgstr "Мітка"
 #: common/eda_item.cpp:354 eeschema/sch_label.cpp:766
 #: eeschema/sch_label.cpp:1088
 msgid "Directive Label"
-msgstr "Позначка директиви"
+msgstr "Директивна мітка"
 
 #: common/eda_item.cpp:355 eeschema/sch_label.cpp:767
 msgid "Global Label"
@@ -4232,11 +4227,11 @@ msgstr "Символ"
 #: common/eda_item.cpp:359 common/eda_item.cpp:375 eeschema/lib_pin.h:72
 #: eeschema/sch_pin.cpp:194
 msgid "Pin"
-msgstr "Закріплення повідомлень"
+msgstr "Вивід"
 
 #: common/eda_item.cpp:360
 msgid "Sheet Pin"
-msgstr "Листова зв'язка"
+msgstr "Вивід аркуша"
 
 #: common/eda_item.cpp:361 eeschema/dialogs/dialog_migrate_buses.cpp:103
 #: pcbnew/tools/pcb_actions.cpp:1284
@@ -4245,23 +4240,23 @@ msgstr "Лист"
 
 #: common/eda_item.cpp:368
 msgid "SCH Screen"
-msgstr "Екран SCH"
+msgstr "Екран Схеми"
 
 #: common/eda_item.cpp:376 eeschema/sch_field.cpp:691
 msgid "Symbol Field"
-msgstr "Символ поля"
+msgstr "Поле Символу"
 
 #: common/eda_item.cpp:378
 msgid "Gerber Layout"
-msgstr "Макет Ґербера"
+msgstr "Шар Gerber"
 
 #: common/eda_item.cpp:379
 msgid "Draw Item"
-msgstr "Елемент малювання"
+msgstr "Графічний елемент"
 
 #: common/eda_shape.cpp:62 pcbnew/pad.cpp:1167
 msgid "Rect"
-msgstr "Рета"
+msgstr "Прямокутник"
 
 #: common/eda_shape.cpp:63 common/eda_shape.cpp:579 common/eda_shape.cpp:1628
 #: gerbview/gerber_draw_item.cpp:212
@@ -4288,7 +4283,7 @@ msgstr "Крива Безьє"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:734
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2146
 msgid "Polygon"
-msgstr "Многокутник"
+msgstr "Полігон"
 
 #: common/eda_shape.cpp:567 common/eda_shape.cpp:1642
 #: eeschema/dialogs/dialog_label_properties_base.cpp:149
@@ -4305,7 +4300,7 @@ msgstr "Форма"
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:213
 #: pcbnew/pcb_track.cpp:757
 msgid "Radius"
-msgstr "Radius"
+msgstr "Радіус"
 
 #: common/eda_shape.cpp:582 common/eda_shape.cpp:622 pcbnew/fp_text.cpp:295
 #: pcbnew/fp_textbox.cpp:240 pcbnew/pcb_text.cpp:142 pcbnew/pcb_textbox.cpp:234
@@ -4326,7 +4321,7 @@ msgstr "Довжина"
 
 #: common/eda_shape.cpp:599
 msgid "Points"
-msgstr "Бали"
+msgstr "Точки"
 
 #: common/eda_shape.cpp:606 common/eda_text.cpp:1040
 #: eeschema/sch_bitmap.cpp:207 pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -4340,7 +4335,7 @@ msgstr "Бали"
 #: pcbnew/pcb_track.cpp:752 pcbnew/pcb_track.cpp:1191 pcbnew/pcb_track.cpp:1208
 #: pcbnew/pcb_track.cpp:1227
 msgid "Width"
-msgstr "Width"
+msgstr "Ширина"
 
 #: common/eda_shape.cpp:609 common/eda_text.cpp:1044
 #: eeschema/sch_bitmap.cpp:208 pcbnew/dialogs/dialog_board_statistics.cpp:697
@@ -4368,11 +4363,11 @@ msgstr "Нерозпізнано"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:710
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2144
 msgid "Bezier"
-msgstr "Bezier"
+msgstr "Безьє"
 
 #: common/eda_shape.cpp:1644
 msgid "Start X"
-msgstr "Старт X"
+msgstr "Початок X"
 
 #: common/eda_shape.cpp:1646
 msgid "Start Y"
@@ -4427,7 +4422,7 @@ msgstr "Нормальний"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:48
 #: pcbnew/fp_text_grid_table.cpp:103
 msgid "Italic"
-msgstr "Italic"
+msgstr "Курсив"
 
 #: common/eda_text.cpp:773 common/eda_text.cpp:1032
 #: eeschema/dialogs/dialog_field_properties_base.cpp:132
@@ -4447,11 +4442,11 @@ msgstr "Italic"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:92
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:186
 msgid "Bold"
-msgstr "Bold"
+msgstr "Напівжирний"
 
 #: common/eda_text.cpp:774
 msgid "Bold+Italic"
-msgstr "Bold+Italic"
+msgstr "Напівжирний курсив"
 
 #: common/eda_text.cpp:1012
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:220
@@ -4503,7 +4498,7 @@ msgstr "Верх"
 #: eeschema/fields_grid_table.cpp:643 eeschema/lib_field.cpp:507
 #: eeschema/lib_text.cpp:391 eeschema/sch_field.cpp:718
 msgid "Bottom"
-msgstr "Униз"
+msgstr "Вниз"
 
 #: common/eda_text.cpp:1025
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
@@ -4543,34 +4538,34 @@ msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"Базовий шлях до локально встановлених системних бібліотек (.pretty folder)."
+"Шлях до локально встановлених системних бібліотек посадкових місць(.pretty "
+"теки)."
 
 #: common/env_vars.cpp:74
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
-msgstr "Базовий шлях до 3D фігур системи (.3Dshapes папки)."
+msgstr "Шлях до встановлених 3D форм посадкових місць (.3Dshapes теки)."
 
 #: common/env_vars.cpp:76
 msgid "The base path of the locally installed symbol libraries."
-msgstr "Базовий шлях бібліотек встановлених локально символів."
+msgstr "Шлях до локально встановлених бібліотек символів."
 
 #: common/env_vars.cpp:78
 msgid "A directory containing project templates installed with KiCad."
-msgstr "Каталог, який містить шаблони проектів, встановлені з KiCad."
+msgstr "Тека, який містить шаблони проєктів, встановлені з KiCad."
 
 #: common/env_vars.cpp:80
 msgid ""
 "Optional. Can be defined if you want to create your own project templates "
 "folder."
 msgstr ""
-"Необов'язково. Ви можете бути визначені, якщо хочете створити теку власних "
-"шаблонів проекту."
+"Необов'язково. Можна визначити для створення власної теки шаблонів проєкту."
 
 #: common/env_vars.cpp:83
 msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
 msgstr ""
-"Каталог, що містить сторонні плагіни, бібліотеки та інші завантажувані файли."
+"Тека, що містить сторонні плагіни, бібліотеки та інші завантажувані файли."
 
 #: common/env_vars.cpp:86
 msgid ""
@@ -4583,12 +4578,11 @@ msgstr ""
 
 #: common/env_vars.cpp:92
 msgid "A directory containing system-wide scripts installed with KiCad"
-msgstr "Каталог, що містить загальнодоступні скрипти, встановлені з KiCad"
+msgstr "Тека, що містить загальнодоступні скрипти, встановлені з KiCad"
 
 #: common/env_vars.cpp:94
 msgid "A directory containing user-specific scripts installed with KiCad"
-msgstr ""
-"Каталог, що містить специфічні для користувача скрипти, встановлені з KiCad"
+msgstr "Тека, що містить скрипти користувача, встановлені з KiCad"
 
 #: common/env_vars.cpp:98
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
@@ -4600,7 +4594,7 @@ msgstr "Застаріла версія KICAD6_3DMODEL_DIR."
 
 #: common/env_vars.cpp:102
 msgid "Deprecated version of KICAD6_FOOTPRINT_DIR."
-msgstr "Некоректна версія KICAD6_FOOTPRINT_DIR."
+msgstr "Застаріла версія KICAD6_FOOTPRINT_DIR."
 
 #: common/env_vars.cpp:104
 msgid "Deprecated version of KICAD_SYMBOL_DIR."
@@ -4619,7 +4613,7 @@ msgstr "%s в '%s', рядок %d, зсув %d."
 #: common/exceptions.cpp:90
 #, c-format
 msgid "from %s : %s() line:%d"
-msgstr "від %s : рядок %s() :%d"
+msgstr "з %s : %s() рядок:%d"
 
 #: common/exceptions.cpp:101
 #, c-format
@@ -4632,7 +4626,7 @@ msgstr ""
 
 #: common/exceptions.cpp:126
 msgid "Full error text:"
-msgstr "Текст повної помилки:"
+msgstr "Повний текст помилки:"
 
 #: common/filehistory.cpp:155
 msgid "No Files"
@@ -4644,7 +4638,7 @@ msgstr "Даний шлях не існує"
 
 #: common/filename_resolver.cpp:440
 msgid "3D model search path"
-msgstr "Шлях пошуку у 3D-моделі"
+msgstr "Шлях пошуку 3D моделі"
 
 #: common/filename_resolver.cpp:465
 msgid "Alias: "
@@ -4656,7 +4650,7 @@ msgstr "Цей шлях:"
 
 #: common/filename_resolver.cpp:471
 msgid "Existing path:"
-msgstr "Існуючий шлях:"
+msgstr "Чинний шлях:"
 
 #: common/filename_resolver.cpp:473
 msgid "Bad alias (duplicate name)"
@@ -4689,7 +4683,7 @@ msgstr "Проблеми під час запису в конфігурацій�
 #: eeschema/fields_grid_table.cpp:58
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:154
 msgid "Default Font"
-msgstr "Default Font"
+msgstr "Шрифт за замовчуванням"
 
 #: common/font/fontconfig.cpp:118
 #, c-format
@@ -4699,7 +4693,7 @@ msgstr "Помилка завантаження шрифту '%s."
 #: common/font/fontconfig.cpp:120
 #, c-format
 msgid "Font '%s' not found; substituting '%s'."
-msgstr "Шрифт '%sне знайдено; підстановка '%s'."
+msgstr "Шрифт '%s не знайдено; використовуємо '%s'."
 
 #: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:885
 #: eeschema/symbol_editor/symbol_library_manager.cpp:96
@@ -4709,7 +4703,7 @@ msgstr "Помилка завантаження"
 
 #: common/footprint_info.cpp:101
 msgid "Errors were encountered loading footprints:"
-msgstr "Похибки виникли при завантаженні слів:"
+msgstr "Помилки виникли при завантаженні посадкових місць:"
 
 #: common/fp_lib_table.cpp:200
 #, c-format
@@ -4717,7 +4711,7 @@ msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
 msgstr ""
-"Знайдено дублікат нікнейму бібліотеки '%s' в рядку таблиці бібліотек %d."
+"Знайдено копію бібліотеки '%s' в рядку %d таблиці бібліотек посадкових місць."
 
 #: common/fp_lib_table.cpp:300
 #, c-format
@@ -4729,29 +4723,29 @@ msgstr "файли fp-lib-table не містять бібліотеки з на
 #: eeschema/symbol_lib_table.cpp:501
 #, c-format
 msgid "Cannot create global library table path '%s'."
-msgstr "Не вдалося створити глобальний шлях до бібліотеки таблиці '%s."
+msgstr "Не вдалося створити глобальну таблицю бібліотек у '%s'."
 
 #: common/gestfich.cpp:153
 #, c-format
 msgid "Command '%s' could not be found."
-msgstr "Команда '%sне знайдена."
+msgstr "Команда '%s' не знайдена."
 
 #: common/gestfich.cpp:170
 #, c-format
 msgid "Unable to find a PDF viewer for '%s'."
-msgstr "Не вдалося знайти переглядач PDF для '%s."
+msgstr "Не вдалося знайти переглядач PDF для '%s'."
 
 #: common/gestfich.cpp:185
 #, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr "Проблема при запуску PDF-переглядача '%s."
+msgstr "Проблема при запуску PDF-переглядача '%s'."
 
 #: common/gestfich.cpp:223 eeschema/eeschema.cpp:498 eeschema/eeschema.cpp:531
 #: gerbview/gerbview.cpp:241 kicad/project_template.cpp:257
 #: pcbnew/pcbnew.cpp:471
 #, c-format
 msgid "Cannot copy file '%s'."
-msgstr "Не вдалося скопіювати файл '%s."
+msgstr "Не вдалося скопіювати файл '%s'."
 
 #: common/grid_tricks.cpp:278 common/tool/actions.cpp:153
 #: eeschema/tools/ee_actions.cpp:153 pcbnew/dialogs/panel_setup_rules.cpp:112
@@ -4761,16 +4755,16 @@ msgstr "Вирізати"
 
 #: common/grid_tricks.cpp:279
 msgid "Clear selected cells placing original contents on clipboard"
-msgstr "Очистити вибрані клітинки поміщати оригінальний вміст в буфер обміну"
+msgstr "Копіювати виділені комірки в буфер обміну, потім очистити"
 
 #: common/grid_tricks.cpp:280 common/tool/actions.cpp:159
 #: eeschema/tools/ee_actions.cpp:158 pcbnew/dialogs/panel_setup_rules.cpp:113
 msgid "Copy"
-msgstr "Копія"
+msgstr "Копіювати"
 
 #: common/grid_tricks.cpp:281
 msgid "Copy selected cells to clipboard"
-msgstr "Скопіювати виділені вишки в буфер обміну"
+msgstr "Скопіювати виділені комірки в буфер обміну"
 
 #: common/grid_tricks.cpp:282 common/tool/actions.cpp:165
 #: pcbnew/dialogs/panel_setup_rules.cpp:114
@@ -4779,7 +4773,7 @@ msgstr "Вставити"
 
 #: common/grid_tricks.cpp:283
 msgid "Paste clipboard cells to matrix at current cell"
-msgstr "Вставити комірки буфера обміну до матриці в поточній клітинці"
+msgstr "Вставити елементи буфера обміну до таблиці в поточній комірці"
 
 #: common/grid_tricks.cpp:284 common/tool/actions.cpp:191
 #: kicad/project_tree_pane.cpp:773 pcbnew/dialogs/panel_setup_rules.cpp:115
@@ -4789,7 +4783,7 @@ msgstr "Видалити"
 
 #: common/grid_tricks.cpp:284
 msgid "Delete selected cells"
-msgstr "Видалити вибрані комірки"
+msgstr "Видалити виділені комірки"
 
 #: common/grid_tricks.cpp:285 common/tool/actions.cpp:171
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -4804,23 +4798,23 @@ msgstr "Виділити все"
 
 #: common/grid_tricks.cpp:285
 msgid "Select all cells"
-msgstr "Обрати всі комірки"
+msgstr "Виділити всі комірки"
 
 #: common/hotkey_store.cpp:43
 msgid "Pan Left/Right"
-msgstr "Вліво/вправо"
+msgstr "Панорамування вліво/вправо"
 
 #: common/hotkey_store.cpp:44
 msgid "Pan Up/Down"
-msgstr "Прокручування вгору/вниз"
+msgstr "Панорамування вгору/вниз"
 
 #: common/hotkey_store.cpp:45 eeschema/tools/ee_actions.cpp:250
 msgid "Finish Drawing"
-msgstr "Завершити Малювання"
+msgstr "Завершити креслити"
 
 #: common/hotkey_store.cpp:46
 msgid "Add to Selection"
-msgstr "Додати до позначеного"
+msgstr "Додати до виділеного"
 
 #: common/hotkey_store.cpp:47 eeschema/tools/ee_actions.cpp:558
 #: gerbview/tools/gerbview_actions.cpp:119 pcbnew/tools/pcb_actions.cpp:749
@@ -4834,11 +4828,11 @@ msgstr "Видалити з виділеного"
 
 #: common/hotkey_store.cpp:49
 msgid "Ignore Grid Snaps"
-msgstr "Ігнорувати сітку"
+msgstr "Ігнорувати привʼязку до сітки"
 
 #: common/hotkey_store.cpp:50
 msgid "Ignore Other Snaps"
-msgstr "Ігнорувати інші знімки"
+msgstr "Ігнорувати інші привʼязки"
 
 #: common/hotkey_store.cpp:57 common/tool/action_menu.cpp:226
 #: common/tool/actions.cpp:114
@@ -4847,7 +4841,7 @@ msgstr "Вийти"
 
 #: common/hotkey_store.cpp:72
 msgid "Project Manager"
-msgstr "Менеджер проекту"
+msgstr "Менеджер проєкту"
 
 #: common/hotkey_store.cpp:151
 msgid "Gestures"
@@ -4856,12 +4850,12 @@ msgstr "Жести"
 #: common/kiway.cpp:239
 #, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "Не вдалося перевірити підпис kiface бібліотеки '%s."
+msgstr "Не вдалося перевірити підпис kiface бібліотеки '%s'."
 
 #: common/kiway.cpp:268
 #, c-format
 msgid "Failed to load kiface library '%s'."
-msgstr "Не вдалося завантажити бібліотеку kiface '%s."
+msgstr "Не вдалося завантажити бібліотеку kiface '%s'."
 
 #: common/kiway.cpp:276
 #, c-format
@@ -4901,7 +4895,7 @@ msgstr "Не вдалося перемкнути мову на %s"
 
 #: common/languages_menu.cpp:48
 msgid "Set Language"
-msgstr "Встановити мову"
+msgstr "Обрати мову"
 
 #: common/layer_id.cpp:32
 msgid "F.Cu"
@@ -5033,7 +5027,7 @@ msgstr "B.Cu"
 
 #: common/layer_id.cpp:66
 msgid "B.Adhesive"
-msgstr "Квітковий"
+msgstr "B.Adhesive"
 
 #: common/layer_id.cpp:67
 msgid "F.Adhesive"
@@ -5041,35 +5035,35 @@ msgstr "F.Adhesive"
 
 #: common/layer_id.cpp:68
 msgid "B.Paste"
-msgstr "Бі-паста"
+msgstr "B.Paste"
 
 #: common/layer_id.cpp:69
 msgid "F.Paste"
-msgstr "Ф.вставка"
+msgstr "F.Paste"
 
 #: common/layer_id.cpp:70
 msgid "B.Silkscreen"
-msgstr "Сильний екран"
+msgstr "B.Silkscreen"
 
 #: common/layer_id.cpp:71
 msgid "F.Silkscreen"
-msgstr "Шовковий екран"
+msgstr "F.Silkscreen"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
-msgstr "Маска"
+msgstr "B.Mask"
 
 #: common/layer_id.cpp:73
 msgid "F.Mask"
-msgstr "Маска"
+msgstr "F.Mask"
 
 #: common/layer_id.cpp:76
 msgid "User.Drawings"
-msgstr "Креслення"
+msgstr "User.Drawings"
 
 #: common/layer_id.cpp:77
 msgid "User.Comments"
-msgstr "Коментарі"
+msgstr "User.Comments"
 
 #: common/layer_id.cpp:78
 msgid "User.Eco1"
@@ -5141,23 +5135,23 @@ msgstr "Користувач 9"
 
 #: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:939
 msgid "Rescue"
-msgstr "Порятунок"
+msgstr "Відновити"
 
 #: common/layer_id.cpp:105
 msgid "Wires"
-msgstr "Каркас"
+msgstr "Провідники"
 
 #: common/layer_id.cpp:106
 msgid "Buses"
-msgstr "Автобуси"
+msgstr "Шини"
 
 #: common/layer_id.cpp:107
 msgid "Bus junctions"
-msgstr "Автобусні сполучення"
+msgstr "Підключення до Шини"
 
 #: common/layer_id.cpp:108
 msgid "Junctions"
-msgstr "Розв'язки"
+msgstr "З'єднання"
 
 #: common/layer_id.cpp:109
 msgid "Labels"
@@ -5175,19 +5169,19 @@ msgstr "Ієрархічні мітки"
 
 #: common/layer_id.cpp:112
 msgid "Pin numbers"
-msgstr "Прикріпити числа"
+msgstr "Номера виводів"
 
 #: common/layer_id.cpp:113
 msgid "Pin names"
-msgstr "Прикріпити імена"
+msgstr "Імена виводів"
 
 #: common/layer_id.cpp:114
 msgid "Symbol references"
-msgstr "Посилання на символ"
+msgstr "Позначення символу"
 
 #: common/layer_id.cpp:115
 msgid "Symbol values"
-msgstr "Значення знаку"
+msgstr "Значення символу"
 
 #: common/layer_id.cpp:116
 msgid "Symbol fields"
@@ -5195,7 +5189,7 @@ msgstr "Поля символів"
 
 #: common/layer_id.cpp:117
 msgid "Sheet references"
-msgstr "Артикули листа"
+msgstr "Позначення аркушів"
 
 #: common/layer_id.cpp:118
 msgid "Net class references"
@@ -5203,11 +5197,11 @@ msgstr "Артикули класу"
 
 #: common/layer_id.cpp:119
 msgid "Symbol body outlines"
-msgstr "Рівні символу тіла"
+msgstr "Контури символів"
 
 #: common/layer_id.cpp:120
 msgid "Symbol body fills"
-msgstr "Поповнення символів тіла"
+msgstr "Заповнення символів"
 
 #: common/layer_id.cpp:121
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:69
@@ -5220,36 +5214,36 @@ msgstr ""
 
 #: common/layer_id.cpp:123
 msgid "Pins"
-msgstr "Контакти"
+msgstr "Вивід"
 
 #: common/layer_id.cpp:124
 msgid "Sheet borders"
-msgstr "Листові кордони"
+msgstr "Межі аркуша"
 
 #: common/layer_id.cpp:125
 msgid "Sheet backgrounds"
-msgstr "Листове тло"
+msgstr "Тло аркушів"
 
 #: common/layer_id.cpp:126
 msgid "Sheet names"
-msgstr "Назви листів"
+msgstr "Назви аркушів"
 
 #: common/layer_id.cpp:127
 msgid "Sheet fields"
-msgstr "Листові поля"
+msgstr "Поля аркуша"
 
 #: common/layer_id.cpp:128
 msgid "Sheet file names"
-msgstr "Ім'я файлу листа"
+msgstr "Імена файлів аркушів"
 
 #: common/layer_id.cpp:129
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:60
 msgid "Sheet pins"
-msgstr "Шпильки"
+msgstr "Виводи аркушів"
 
 #: common/layer_id.cpp:130
 msgid "No-connect symbols"
-msgstr "Символи без підключення"
+msgstr "Символи \"без підключення\""
 
 #: common/layer_id.cpp:131
 msgid "ERC warnings"
@@ -5257,20 +5251,20 @@ msgstr "Попередження ERC"
 
 #: common/layer_id.cpp:132
 msgid "ERC errors"
-msgstr "Помилка ERC"
+msgstr "Помилки ERC"
 
 #: common/layer_id.cpp:133
 msgid "ERC exclusions"
-msgstr "Перелік ERC"
+msgstr "Винятки ERC"
 
 #: common/layer_id.cpp:134 common/layer_id.cpp:172
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Anchors"
-msgstr "Якоря"
+msgstr "Привʼязки"
 
 #: common/layer_id.cpp:135 common/layer_id.cpp:176
 msgid "Helper items"
-msgstr "Допоміжні предмети"
+msgstr "Допоміжні елементи"
 
 #: common/layer_id.cpp:136 common/layer_id.cpp:177 common/tool/grid_menu.cpp:64
 #: gerbview/widgets/gerbview_layer_widget.cpp:98
@@ -5285,11 +5279,11 @@ msgstr "Вісі"
 #: common/layer_id.cpp:138 common/layer_id.cpp:179
 #: gerbview/widgets/gerbview_layer_widget.cpp:104
 msgid "Background"
-msgstr "Фон"
+msgstr "Тло"
 
 #: common/layer_id.cpp:139 common/layer_id.cpp:175
 msgid "Cursor"
-msgstr "Cursor"
+msgstr "Курсор"
 
 #: common/layer_id.cpp:140
 msgid "Highlighted items"
@@ -5301,23 +5295,23 @@ msgstr "Приховані елементи"
 
 #: common/layer_id.cpp:142 common/layer_id.cpp:180
 msgid "Selection highlight"
-msgstr "Виділення виділення"
+msgstr "Виділення"
 
 #: common/layer_id.cpp:143 common/layer_id.cpp:173
 msgid "Drawing sheet"
-msgstr "Аркуш для малювання"
+msgstr "Форматна рамка"
 
 #: common/layer_id.cpp:144 common/layer_id.cpp:174
 msgid "Page limits"
-msgstr "Обмеження сторінок"
+msgstr "Межі сторінки"
 
 #: common/layer_id.cpp:148
 msgid "Footprints front"
-msgstr "На передніх місцях"
+msgstr "Посадкові місця зверху"
 
 #: common/layer_id.cpp:149
 msgid "Footprints back"
-msgstr "Повернутись назад місць розташування"
+msgstr "Посадкові місця знизу"
 
 #: common/layer_id.cpp:150
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
@@ -5333,11 +5327,11 @@ msgstr "Значення"
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:53
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:28
 msgid "Reference designators"
-msgstr "Оглядачі посилань"
+msgstr "Позначення"
 
 #: common/layer_id.cpp:152
 msgid "Footprint text"
-msgstr "Текст місця розташування"
+msgstr "Текст посадкового місця"
 
 #: common/layer_id.cpp:153
 msgid "Hidden text"
@@ -5345,15 +5339,15 @@ msgstr "Прихований текст"
 
 #: common/layer_id.cpp:154
 msgid "SMD pads front"
-msgstr "SMD фони спереду"
+msgstr "SMD виводи зверху"
 
 #: common/layer_id.cpp:155
 msgid "SMD pads back"
-msgstr "SMD подання назад"
+msgstr "SMD виводи знизу"
 
 #: common/layer_id.cpp:156
 msgid "Through-hole pads"
-msgstr "Наскрізні кадри"
+msgstr "Контактні площадки з наскрізними отворами"
 
 #: common/layer_id.cpp:157
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
@@ -5368,42 +5362,42 @@ msgstr "Доріжки"
 
 #: common/layer_id.cpp:158
 msgid "Through vias"
-msgstr "Через в’язку"
+msgstr "Наскрізні перехідні отвори"
 
 #: common/layer_id.cpp:159
 msgid "Blind/Buried vias"
-msgstr "Сліпий/Відриті черева"
+msgstr "Сліпі/Сховані перехідні отвори"
 
 #: common/layer_id.cpp:160
 msgid "Micro-vias"
-msgstr "Micro-vias"
+msgstr "Перехідні мікроотвори"
 
 #: common/layer_id.cpp:161
 msgid "Via holes"
-msgstr "Віолончелі"
+msgstr "Перехідні отвори"
 
 #: common/layer_id.cpp:162
 msgid "Via hole walls"
-msgstr "Біологічні стіни"
+msgstr "Стінки перехідних отворів"
 
 #: common/layer_id.cpp:163
 msgid "Plated holes"
-msgstr "Ламана"
+msgstr "Металізовані отвори"
 
 #: common/layer_id.cpp:164
 msgid "Plated hole walls"
-msgstr "Пластинчаті дірки"
+msgstr "Стінки металізованих отворів"
 
 #: common/layer_id.cpp:165
 msgid "Non-plated holes"
-msgstr "Неплавні отвори"
+msgstr "Не металізовані отвори"
 
 #: common/layer_id.cpp:166 pcbnew/dialogs/panel_edit_options_base.cpp:318
 #: pcbnew/widgets/appearance_controls.cpp:349
 #: pcbnew/widgets/appearance_controls.cpp:694
 #: pcbnew/widgets/appearance_controls.cpp:2377
 msgid "Ratsnest"
-msgstr "Ратснес"
+msgstr "Звʼязки"
 
 #: common/layer_id.cpp:167
 msgid "No-connects"
@@ -5411,19 +5405,19 @@ msgstr "Без з'єднання"
 
 #: common/layer_id.cpp:168
 msgid "DRC warnings"
-msgstr "Попередження ДРК"
+msgstr "Попередження DRC"
 
 #: common/layer_id.cpp:169
 msgid "DRC errors"
-msgstr "DRC errors"
+msgstr "Помилки DRC"
 
 #: common/layer_id.cpp:170
 msgid "DRC exclusions"
-msgstr "DRC exclusions"
+msgstr "Винятки DRC"
 
 #: common/layer_id.cpp:171
 msgid "DRC marker shadows"
-msgstr "DRC marker shadows"
+msgstr "Тіні маркерів DRC"
 
 #: common/layer_id.cpp:178
 msgid "Grid axes"
@@ -5435,7 +5429,7 @@ msgstr "Тіні для заблокованого елементу"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
-msgstr "Неприпустимий символ, знайдений в імені логіки"
+msgstr "Знайдено неприпустимий символ у логічному імені бібліотеки"
 
 #: common/lib_tree_model.cpp:139
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:125
@@ -5454,7 +5448,7 @@ msgstr "Неприпустимий символ, знайдений в імен�
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:212
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:223
 msgid "Unit"
-msgstr "Юніт"
+msgstr "Частина"
 
 #: common/lib_tree_model_adapter.cpp:281
 msgid "Item"
@@ -5471,7 +5465,7 @@ msgstr "Невідомий батьківський елемент параме�
 
 #: common/libeval_compiler/libeval_compiler.cpp:846
 msgid "Unknown parent of property"
-msgstr "Невідомий батько майна"
+msgstr "Невідомий батько властивості"
 
 #: common/libeval_compiler/libeval_compiler.cpp:869
 #: common/libeval_compiler/libeval_compiler.cpp:899
@@ -5500,12 +5494,12 @@ msgstr "Відсутні одиниці вимірювання для '%s'| (%s)
 #: common/libeval_compiler/libeval_compiler.cpp:1126
 #, c-format
 msgid "Type mismatch between '%s' and %lf"
-msgstr "Введіть невідповідність між '%s' і %lf"
+msgstr "Невідповідність типів між '%s' і %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1132
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr "Введіть невідповідність між %lf і '%s"
+msgstr "Невідповідність типів між %lf і '%s'"
 
 #: common/pgm_base.cpp:183
 msgid "No default editor found, you must choose one."
@@ -5531,7 +5525,7 @@ msgstr ""
 
 #: common/pgm_base.cpp:346
 msgid "Data collection opt in request"
-msgstr "Підтримка збору даних за запитом"
+msgstr "Збір даних за запитом"
 
 #: common/pgm_base.cpp:388
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -5543,7 +5537,7 @@ msgstr "Ця мова не підтримується операційною с�
 
 #: common/pgm_base.cpp:654 common/pgm_base.cpp:692
 msgid "The KiCad language file for this language is not installed."
-msgstr "Мовний файл KiCad для цієї мови не встановлений."
+msgstr "Файл перекладу KiCad для цієї мови не встановлений."
 
 #: common/plugins/altium/altium_parser.cpp:55
 #, c-format
@@ -5552,7 +5546,7 @@ msgstr "Не вдалося відкрити файл '%s."
 
 #: common/plugins/altium/altium_parser.cpp:64
 msgid "Error reading file: cannot determine length."
-msgstr "Помилковий файл читання: не може визначити довжину."
+msgstr "Помилка читання файлу: не можу визначити довжину."
 
 #: common/plugins/altium/altium_parser.cpp:77
 msgid "Error reading file."
@@ -5569,17 +5563,17 @@ msgstr ""
 #: common/plugins/altium/altium_parser.cpp:313
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
-msgstr "Розділ '%s' не закінчується 'м'."
+msgstr "Одиниця вимірювання '%s' не закінчується на 'міл'."
 
 #: common/plugins/altium/altium_parser.cpp:321
 #, c-format
 msgid "Cannot convert '%s' to double."
-msgstr "Неможливо конвертувати '%s' в подвійний."
+msgstr "Неможливо конвертувати '%s' в double."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2334
 #, c-format
 msgid "Cannot open file '%s'"
-msgstr "Не вдалося відкрити файл%s'"
+msgstr "Не вдалося відкрити файл %s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2354
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2651
@@ -5597,7 +5591,7 @@ msgstr "Вибраний файл недійсний або пошкоджени
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2515
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
-msgstr "Неочікувана кількість точок у '%s. Знайдено %d , але очікувалось %d."
+msgstr "Неочікувана кількість точок у '%s'. Знайдено %d, але очікувалось %d."
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:40
 #, c-format
@@ -5612,7 +5606,7 @@ msgstr "Невідомий вузол '%s' в '%s'"
 #: common/plugins/cadstar/cadstar_archive_parser.h:46
 #, c-format
 msgid "Missing Parameter '%s' in '%s'"
-msgstr "Відсутній параметр '%s' in '%s'"
+msgstr "Відсутній параметр '%s' в '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:49
 #, c-format
@@ -5638,7 +5632,7 @@ msgstr "Неправильна дуга з радіусом %f і кутом %f"
 
 #: common/project.cpp:310 common/project.cpp:315 pcbnew/pcb_base_frame.cpp:192
 msgid "Error loading project footprint library table."
-msgstr "Помилка завантаження таблиці з бібліотекою документу проекту."
+msgstr "Помилка завантаження таблиці бібліотек посадкових місць проєкту."
 
 #: common/project/project_archiver.cpp:52 kicad/pcm/pcm_task_manager.cpp:270
 msgid "Could not open archive file."
@@ -5687,17 +5681,17 @@ msgstr "Помилка розпакування файлу!"
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:153
 #, c-format
 msgid "Failed to create file '%s'."
-msgstr "Не вдалося створити файл '%s."
+msgstr "Не вдалося створити файл '%s'."
 
 #: common/project/project_archiver.cpp:205
 #, c-format
 msgid "Archived file '%s'."
-msgstr "Архівований файл '%s."
+msgstr "Архівований файл '%s'."
 
 #: common/project/project_archiver.cpp:215
 #, c-format
 msgid "Failed to archive file '%s'."
-msgstr "Не вдалося архівувати файл '%s."
+msgstr "Не вдалося архівувати файл '%s'."
 
 #: common/project/project_archiver.cpp:241
 #, c-format
@@ -5727,11 +5721,11 @@ msgstr "Не вдалося відкрити %s для читання."
 
 #: common/richio.cpp:221 common/richio.cpp:317
 msgid "Maximum line length exceeded"
-msgstr "Довжина максимальної лінії перевищує допустиме значення"
+msgstr "Перевищено максимальну довжину рядка"
 
 #: common/richio.cpp:283
 msgid "Line length exceeded"
-msgstr "Довжина лінії перевищена"
+msgstr "Перевищено довжину рядка"
 
 #: common/richio.cpp:566
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
@@ -5739,7 +5733,7 @@ msgstr "Помилка запису OUTPUTSTREAM_OUTPUTFORMATTER"
 
 #: common/settings/color_settings.cpp:349
 msgid "(Footprints)"
-msgstr "(Місця)"
+msgstr "(Посадкові місця)"
 
 #: common/settings/color_settings.cpp:401
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings.cpp:78
@@ -5748,7 +5742,7 @@ msgstr "KiCad за замовчуванням"
 
 #: common/settings/color_settings.cpp:406
 msgid "KiCad Classic"
-msgstr "Кікад Класичний"
+msgstr "KiCad Класичний"
 
 #: common/template_fieldnames.cpp:58
 #, c-format
@@ -5780,7 +5774,7 @@ msgstr "Нова бібліотека..."
 
 #: common/tool/actions.cpp:49
 msgid "Create a new library folder"
-msgstr "Створити нову теку в бібліотеці"
+msgstr "Створити нову теку бібліотеки"
 
 #: common/tool/actions.cpp:55
 msgid "Add Library..."
@@ -5788,15 +5782,15 @@ msgstr "Додати бібліотеку..."
 
 #: common/tool/actions.cpp:55
 msgid "Add an existing library folder"
-msgstr "Додати існуючу папку бібліотеки"
+msgstr "Додати наявну теку бібліотеки"
 
 #: common/tool/actions.cpp:61 eeschema/sim/sim_plot_frame_base.cpp:25
 msgid "Open..."
-msgstr "Вiдкрити..."
+msgstr "Відкрити..."
 
 #: common/tool/actions.cpp:61
 msgid "Open existing document"
-msgstr "Відкрити існуючий документ"
+msgstr "Відкрити наявний документ"
 
 #: common/tool/actions.cpp:67
 msgid "Save changes"
@@ -5829,7 +5823,7 @@ msgstr "Зберегти всі зміни"
 
 #: common/tool/actions.cpp:91
 msgid "Throw away changes"
-msgstr "Відкидати зміни"
+msgstr "Відкинути зміни"
 
 #: common/tool/actions.cpp:96
 msgid "Page Settings..."
@@ -5841,16 +5835,16 @@ msgstr "Налаштування розмірів паперу і блоку з�
 
 #: common/tool/actions.cpp:102
 msgid "Print..."
-msgstr "Print..."
+msgstr "Друкувати..."
 
 #: common/tool/actions.cpp:108
 msgid "Plot..."
-msgstr "Плот..."
+msgstr "Креслити..."
 
 #: common/tool/actions.cpp:108 pcbnew/dialogs/dialog_plot.cpp:152
 #: pcbnew/dialogs/dialog_plot_base.h:151
 msgid "Plot"
-msgstr "Діаграма"
+msgstr "Креслити"
 
 #: common/tool/actions.cpp:114
 msgid "Close the current editor"
@@ -5882,43 +5876,43 @@ msgstr "Повторити дію"
 
 #: common/tool/actions.cpp:147
 msgid "Redo last edit"
-msgstr "Повторне редагування"
+msgstr "Повторити останнє редагування"
 
 #: common/tool/actions.cpp:153
 msgid "Cut selected item(s) to clipboard"
-msgstr "Вирізати вибрані елементи в буфер обміну"
+msgstr "Вирізати виділені елементи в буфер обміну"
 
 #: common/tool/actions.cpp:159
 msgid "Copy selected item(s) to clipboard"
-msgstr "Копіювати вибраний елемент у буфер обміну"
+msgstr "Копіювати виділені елементи в буфер обміну"
 
 #: common/tool/actions.cpp:165
 msgid "Paste item(s) from clipboard"
-msgstr "Вставити елемент з буфера обміну"
+msgstr "Вставити елементи з буфера обміну"
 
 #: common/tool/actions.cpp:171
 msgid "Select all items on screen"
-msgstr "Обрати всі елементи на екрані"
+msgstr "Виділити всі елементи на екрані"
 
 #: common/tool/actions.cpp:175
 msgid "Paste Special..."
-msgstr "Вставити особливий..."
+msgstr "Вставити як..."
 
 #: common/tool/actions.cpp:175
 msgid "Paste item(s) from clipboard with options"
-msgstr "Вставити елемент з буфера обміну з опціями"
+msgstr "Вставити елементи з буфера обміну з опціями"
 
 #: common/tool/actions.cpp:180
 msgid "Duplicate"
-msgstr "Duplicate"
+msgstr "Дублювати"
 
 #: common/tool/actions.cpp:180
 msgid "Duplicates the selected item(s)"
-msgstr "Дублює обраний елемент(и)"
+msgstr "Дублювати виділені елементи"
 
 #: common/tool/actions.cpp:191
 msgid "Deletes selected item(s)"
-msgstr "Видаляє вибраний(і) елемент(и)"
+msgstr "Видалити виділені елементи"
 
 #: common/tool/actions.cpp:196
 msgid "Interactive Delete Tool"
@@ -5968,7 +5962,7 @@ msgstr "Знайти наступний маркер"
 
 #: common/tool/actions.cpp:232
 msgid "Replace and Find Next"
-msgstr "Замінити і знайти далі"
+msgstr "Замінити та знайти далі"
 
 #: common/tool/actions.cpp:232
 msgid "Replace current match and find next"
@@ -5996,7 +5990,7 @@ msgstr "Наступний маркер"
 
 #: common/tool/actions.cpp:254
 msgid "Go to next marker in Checker window"
-msgstr "Перейти до наступного маркера в вікні перевірки"
+msgstr "Перейти до наступного маркера у вікні перевірки"
 
 #: common/tool/actions.cpp:259
 msgid "Exclude Marker"
@@ -6012,11 +6006,11 @@ msgstr "Оновити"
 
 #: common/tool/actions.cpp:281
 msgid "Zoom to Fit"
-msgstr "Наблизити до заповнення"
+msgstr "Масштаб за розміром"
 
 #: common/tool/actions.cpp:286
 msgid "Zoom to Objects"
-msgstr "Збільшити до об'єктів"
+msgstr "Масштаб за компонентами"
 
 #: common/tool/actions.cpp:297
 msgid "Zoom In at Cursor"
@@ -6024,19 +6018,19 @@ msgstr "Збільшити під курсором"
 
 #: common/tool/actions.cpp:308
 msgid "Zoom Out at Cursor"
-msgstr "Віддалити в курсорі"
+msgstr "Зменшити під курсором"
 
 #: common/tool/actions.cpp:314 common/widgets/mathplot.cpp:1667
 #: eeschema/sim/sim_plot_frame_base.cpp:87
 #: pcbnew/dialogs/panel_setup_rules.cpp:123
 msgid "Zoom In"
-msgstr "Збільшити масштаб"
+msgstr "Збільшити"
 
 #: common/tool/actions.cpp:320 common/widgets/mathplot.cpp:1668
 #: eeschema/sim/sim_plot_frame_base.cpp:91
 #: pcbnew/dialogs/panel_setup_rules.cpp:124
 msgid "Zoom Out"
-msgstr "Зменшити масштаб"
+msgstr "Зменшити"
 
 #: common/tool/actions.cpp:332
 msgid "Zoom to Selection"
@@ -6044,51 +6038,51 @@ msgstr "Наблизити виділення"
 
 #: common/tool/actions.cpp:345
 msgid "Cursor Up"
-msgstr "Курсор вгору"
+msgstr "Курсор вище"
 
 #: common/tool/actions.cpp:351
 msgid "Cursor Down"
-msgstr "Курсор вниз"
+msgstr "Курсор нижче"
 
 #: common/tool/actions.cpp:357
 msgid "Cursor Left"
-msgstr "Cursor Left"
+msgstr "Курсор лівіше"
 
 #: common/tool/actions.cpp:363
 msgid "Cursor Right"
-msgstr "Cursor Right"
+msgstr "Курсор правіше"
 
 #: common/tool/actions.cpp:370
 msgid "Cursor Up Fast"
-msgstr "Cursor Up Fast"
+msgstr "Курсор вище швидко"
 
 #: common/tool/actions.cpp:376
 msgid "Cursor Down Fast"
-msgstr "Cursor Down Fast"
+msgstr "Курсор нижче швидко"
 
 #: common/tool/actions.cpp:382
 msgid "Cursor Left Fast"
-msgstr "Cursor Left Fast"
+msgstr "Курсор лівіше швидко"
 
 #: common/tool/actions.cpp:388
 msgid "Cursor Right Fast"
-msgstr "Швидке курсатор вправо"
+msgstr "Курсор правіше швидко"
 
 #: common/tool/actions.cpp:394
 msgid "Click"
-msgstr "Click"
+msgstr "Клац"
 
 #: common/tool/actions.cpp:394
 msgid "Performs left mouse button click"
-msgstr "Виконує ліву кнопку миші"
+msgstr "Виконує клац лівої кнопки миші"
 
 #: common/tool/actions.cpp:400
 msgid "Double-click"
-msgstr "Подвійний клік"
+msgstr "Подвійний клац"
 
 #: common/tool/actions.cpp:400
 msgid "Performs left mouse button double-click"
-msgstr "Виконує ліву кнопку миші з подвійним кліком"
+msgstr "Виконує подвійний клац лівої кнопки миші"
 
 #: common/tool/actions.cpp:408
 msgid "Pin Library"
@@ -6108,27 +6102,27 @@ msgstr "Більше не тримати бібліотеку у верхній 
 
 #: common/tool/actions.cpp:419
 msgid "Pan Up"
-msgstr "Прокручування вгору"
+msgstr "Панорамування вгору"
 
 #: common/tool/actions.cpp:425
 msgid "Pan Down"
-msgstr "Пан вниз"
+msgstr "Панорамування вниз"
 
 #: common/tool/actions.cpp:431
 msgid "Pan Left"
-msgstr "Ширка зліва"
+msgstr "Панорамування зліва"
 
 #: common/tool/actions.cpp:437
 msgid "Pan Right"
-msgstr "Прокручування вправо"
+msgstr "Панорамування вправо"
 
 #: common/tool/actions.cpp:444
 msgid "Switch to Fast Grid 1"
-msgstr "Перейти на швидку сітку 1"
+msgstr "Перейти на Сітку 1"
 
 #: common/tool/actions.cpp:449
 msgid "Switch to Fast Grid 2"
-msgstr "Перейти в швидку сітку 2"
+msgstr "Перейти в Сітку 2"
 
 #: common/tool/actions.cpp:454
 msgid "Switch to Next Grid"
@@ -6140,7 +6134,7 @@ msgstr "Перейти до попередньої сітки"
 
 #: common/tool/actions.cpp:463
 msgid "Set the grid origin point"
-msgstr "Встановити точку початку сітки"
+msgstr "Встановити початок координат сітки"
 
 #: common/tool/actions.cpp:476
 msgid "Show Grid"
@@ -6148,7 +6142,7 @@ msgstr "Показати сітку"
 
 #: common/tool/actions.cpp:476
 msgid "Display grid dots or lines in the edit window"
-msgstr "Відображати точки сітки або лінії у вікні редагування"
+msgstr "Показувати точки сітки або лінії у вікні редактора"
 
 #: common/tool/actions.cpp:481
 msgid "Grid Properties..."
@@ -6334,7 +6328,7 @@ msgstr "Початок роботи з KiCad"
 
 #: common/tool/actions.cpp:631
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
-msgstr "Відкрити посібник з \"Початок роботи в KiCad\" для початківців"
+msgstr "Відкрити посібник для початківців \"Початок роботи в KiCad\""
 
 #: common/tool/actions.cpp:636
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:35
@@ -6344,15 +6338,15 @@ msgstr "Довідка"
 
 #: common/tool/actions.cpp:637
 msgid "Open product documentation in a web browser"
-msgstr "Відкрити документацію товару в веб-браузері"
+msgstr "Відкрити документацію в веббраузері"
 
 #: common/tool/actions.cpp:643
 msgid "List Hotkeys..."
-msgstr "Перелічити клавіші гарячі..."
+msgstr "Перелік гарячих клавіш..."
 
 #: common/tool/actions.cpp:644
 msgid "Displays current hotkeys table and corresponding commands"
-msgstr "Відображає поточну таблицю гарячих клавіш і відповідних команд"
+msgstr "Показати поточну таблицю гарячих клавіш і відповідних команд"
 
 #: common/tool/actions.cpp:649
 msgid "Get Involved"
@@ -6360,11 +6354,11 @@ msgstr "Долучитися"
 
 #: common/tool/actions.cpp:650
 msgid "Open \"Contribute to KiCad\" in a web browser"
-msgstr "Відкрити розділ \"Приєднатися до KiCad\" у веб-браузері"
+msgstr "Відкрити розділ \"Приєднатися до KiCad\" у веббраузері"
 
 #: common/tool/actions.cpp:656
 msgid "Open \"Donate to KiCad\" in a web browser"
-msgstr "Відкрити \"Пожертвувати KiCad\" у веб-браузері"
+msgstr "Відкрити \"Пожертвувати KiCad\" у веббраузері"
 
 #: common/tool/actions.cpp:660
 msgid "Report Bug"
@@ -6410,12 +6404,12 @@ msgstr ""
 #: common/tool/grid_menu.cpp:99
 #, c-format
 msgid "Grid: %s (%s)"
-msgstr "Сіда: %s (%s)"
+msgstr "Сітка: %s (%s)"
 
 #: common/tool/grid_menu.cpp:110
 #, c-format
 msgid "User grid: %s (%s)"
-msgstr "Контрагент користувача: %s (%s)"
+msgstr "Сітка користувача: %s (%s)"
 
 #: common/tool/zoom_menu.cpp:67
 #, c-format
@@ -6429,11 +6423,11 @@ msgstr "Неправильне значення: %s"
 
 #: common/validators.cpp:294
 msgid "Entry contains trailing white space."
-msgstr "Матеріал містить білий пробіл."
+msgstr "Значення містить на кінці пробіл."
 
 #: common/validators.cpp:298
 msgid "Entry contains leading white space."
-msgstr "Матеріал містить провідний білий простір."
+msgstr "Значення починається з пробілу."
 
 #: common/validators.cpp:302
 #, c-format
@@ -6442,7 +6436,7 @@ msgstr "'%s' не є коректним форматом ідентифікат�
 
 #: common/validators.cpp:309
 msgid "Library Identifier Validation Error"
-msgstr "Помилка перевірки бібліотеки"
+msgstr "Помилка перевірки ідентифікатора бібліотеки"
 
 #: common/validators.cpp:356
 msgid "Invalid signal name"
@@ -6450,11 +6444,11 @@ msgstr "Некоректна назва сигналу"
 
 #: common/validators.cpp:367
 msgid "Signal names cannot contain CR or LF characters"
-msgstr "Назви Signal не можуть містити символи CR або LF"
+msgstr "Назви сигналів не можуть містити символи CR або LF"
 
 #: common/validators.cpp:370
 msgid "Signal names cannot contain spaces"
-msgstr "Назви Signal не можуть містити пробіли"
+msgstr "Назви сигналів не можуть містити пробіли"
 
 #: common/view/view.cpp:541
 msgid "Mirroring for Y axis is not supported yet"
@@ -6466,11 +6460,11 @@ msgstr ""
 
 #: common/widgets/footprint_preview_widget.cpp:103
 msgid "Footprint not found."
-msgstr "Місце розташування не знайдено."
+msgstr "Посадкове місце не знайдено."
 
 #: common/widgets/footprint_select_widget.cpp:141
 msgid "No default footprint"
-msgstr "Немає місця розташування за замовчуванням"
+msgstr "Немає посадкового місця за замовчуванням"
 
 #: common/widgets/gal_options_panel.cpp:86
 msgid "Accelerated graphics"
@@ -6478,11 +6472,11 @@ msgstr "Прискорена графіка"
 
 #: common/widgets/gal_options_panel.cpp:86
 msgid "Fallback graphics"
-msgstr "Обернені графіки"
+msgstr "Звичайна графіка"
 
 #: common/widgets/gal_options_panel.cpp:87
 msgid "Rendering Engine"
-msgstr "Рушій з візуалізації"
+msgstr "Візуалізатор"
 
 #: common/widgets/gal_options_panel.cpp:91
 msgid "Hardware-accelerated graphics (recommended)"
@@ -6502,7 +6496,7 @@ msgstr "Параметри сітки"
 
 #: common/widgets/gal_options_panel.cpp:109
 msgid "Dots"
-msgstr "Крапки"
+msgstr "Точки"
 
 #: common/widgets/gal_options_panel.cpp:110
 msgid "Lines"
@@ -6510,7 +6504,7 @@ msgstr "Лінії"
 
 #: common/widgets/gal_options_panel.cpp:111
 msgid "Small crosses"
-msgstr "Маленькі хрести"
+msgstr "Маленькі перехрестя"
 
 #: common/widgets/gal_options_panel.cpp:115
 msgid "Grid Style"
@@ -6524,11 +6518,11 @@ msgstr "Товщина сітки:"
 #: common/widgets/gal_options_panel.cpp:154
 #: common/widgets/gal_options_panel.cpp:172
 msgid "px"
-msgstr "px"
+msgstr "пікс."
 
 #: common/widgets/gal_options_panel.cpp:143
 msgid "Min grid spacing:"
-msgstr "Мінімальний інтервал сітки:"
+msgstr "Мінімальний крок сітки:"
 
 #: common/widgets/gal_options_panel.cpp:159
 msgid "Snap to Grid:"
@@ -6544,7 +6538,7 @@ msgstr "Завжди"
 
 #: common/widgets/gal_options_panel.cpp:163
 msgid "When grid shown"
-msgstr "При відображенні сітки"
+msgstr "При показі сітки"
 
 #: common/widgets/gal_options_panel.cpp:163
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:360
@@ -6560,11 +6554,11 @@ msgstr "Параметри курсору"
 
 #: common/widgets/gal_options_panel.cpp:195
 msgid "Small crosshair"
-msgstr "Малий приціл"
+msgstr "Мале перехрестя"
 
 #: common/widgets/gal_options_panel.cpp:196
 msgid "Full window crosshair"
-msgstr "Повний віконний приціл"
+msgstr "Повноекранне перехрестя"
 
 #: common/widgets/gal_options_panel.cpp:201
 msgid "Cursor Shape"
@@ -6572,7 +6566,7 @@ msgstr "Форма курсору"
 
 #: common/widgets/gal_options_panel.cpp:206
 msgid "Cursor shape for drawing, placement and movement tools"
-msgstr "Курсор форми для малювання, розміщення та переміщення"
+msgstr "Форма курсору для креслення, розміщення та переміщення"
 
 #: common/widgets/gal_options_panel.cpp:209
 msgid "Always show crosshairs"
@@ -6588,19 +6582,19 @@ msgstr "Вигляд графіку центру до цього положен�
 
 #: common/widgets/mathplot.cpp:1666 eeschema/sim/sim_plot_frame_base.cpp:95
 msgid "Fit on Screen"
-msgstr "За розміром на екрані"
+msgstr "Масштаб за розміром"
 
 #: common/widgets/mathplot.cpp:1666
 msgid "Set plot view to show all items"
-msgstr "Встановіть відображення діаграми для показу всіх елементів"
+msgstr "Показати на діаграми всі елементи"
 
 #: common/widgets/mathplot.cpp:1667
 msgid "Zoom in plot view."
-msgstr "Збільшити відображення на графіку."
+msgstr "Збільшити зображення графіку."
 
 #: common/widgets/mathplot.cpp:1668
 msgid "Zoom out plot view."
-msgstr "Зменшити вигляд за діаграмою."
+msgstr "Зменшити зображення графіку."
 
 #: common/widgets/net_selector.cpp:58
 msgid "<no net>"
