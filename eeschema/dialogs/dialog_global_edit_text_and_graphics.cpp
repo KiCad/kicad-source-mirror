@@ -249,6 +249,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
             return;
     }
 
+    SCH_SYMBOL*   symbol = dynamic_cast<SCH_SYMBOL*>( aItem->GetParent() );
     EDA_TEXT*     eda_text = dynamic_cast<EDA_TEXT*>( aItem );
     SCH_TEXT*     sch_text = dynamic_cast<SCH_TEXT*>( aItem );
     SCH_JUNCTION* junction = dynamic_cast<SCH_JUNCTION*>( aItem );
@@ -266,10 +267,34 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
             eda_text->SetTextColor( m_textColorSwatch->GetSwatchColor() );
 
         if( m_hAlign->GetStringSelection() != INDETERMINATE_ACTION )
-            eda_text->SetHorizJustify( EDA_TEXT::MapHorizJustify( m_hAlign->GetSelection() - 1 ) );
+        {
+            GR_TEXT_H_ALIGN_T hAlign = EDA_TEXT::MapHorizJustify( m_hAlign->GetSelection() - 1 );
+
+            if( symbol && symbol->GetTransform().x1 < 0 )
+            {
+                if( hAlign == GR_TEXT_H_ALIGN_LEFT )
+                    hAlign = GR_TEXT_H_ALIGN_RIGHT;
+                else if( hAlign == GR_TEXT_H_ALIGN_RIGHT )
+                    hAlign = GR_TEXT_H_ALIGN_LEFT;
+            }
+
+            eda_text->SetHorizJustify( hAlign );
+        }
 
         if( m_vAlign->GetStringSelection() != INDETERMINATE_ACTION )
-            eda_text->SetVertJustify( EDA_TEXT::MapVertJustify( m_vAlign->GetSelection() - 1 ) );
+        {
+            GR_TEXT_V_ALIGN_T vAlign = EDA_TEXT::MapVertJustify( m_vAlign->GetSelection() - 1 );
+
+            if( symbol && symbol->GetTransform().y1 < 0 )
+            {
+                if( vAlign == GR_TEXT_V_ALIGN_TOP )
+                    vAlign = GR_TEXT_V_ALIGN_BOTTOM;
+                else if( vAlign == GR_TEXT_V_ALIGN_BOTTOM )
+                    vAlign = GR_TEXT_V_ALIGN_TOP;
+            }
+
+            eda_text->SetVertJustify( vAlign );
+        }
 
         if( m_visible->Get3StateValue() != wxCHK_UNDETERMINED )
             eda_text->SetVisible( m_visible->GetValue() );
