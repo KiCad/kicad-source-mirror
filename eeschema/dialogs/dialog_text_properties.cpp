@@ -158,9 +158,10 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 
     SCHEMATIC& schematic = m_frame->Schematic();
 
-    m_hyperlinkCb->SetValue( static_cast<SCH_TEXT*>( m_currentItem )->IsHypertext() );
-    m_hyperlinkCtrl->Enable( static_cast<SCH_TEXT*>( m_currentItem )->IsHypertext() );
-    m_hyperlinkCtrl->SetValue( static_cast<SCH_TEXT*>( m_currentItem )->GetHyperlink() );
+    m_hyperlinkCb->SetValue( m_currentText->HasHyperlink() );
+    m_hyperlinkDestinationLabel->Enable( m_currentText->HasHyperlink() );
+    m_hyperlinkCtrl->Enable( m_currentText->HasHyperlink() );
+    m_hyperlinkCtrl->SetValue( m_currentText->GetHyperlink() );
 
     // show text variable cross-references in a human-readable format
     m_textCtrl->SetValue( schematic.ConvertKIIDsToRefs( m_currentText->GetText() ) );
