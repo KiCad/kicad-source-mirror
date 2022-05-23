@@ -1857,8 +1857,7 @@ void EAGLE_PLUGIN::packageWire( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
         }
     }
 
-    // FIXME: the cap attribute is ignored because KiCad can't create lines
-    //        with flat ends.
+    // FIXME: the cap attribute is ignored because KiCad can't create lines with flat ends.
     FP_SHAPE* dwg;
 
     if( !w.curve )
@@ -1926,12 +1925,9 @@ void EAGLE_PLUGIN::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
             break;
 
         case EPAD::OCTAGON:
-            // no KiCad octagonal pad shape, use PAD_CIRCLE for now.
-            // pad->SetShape( PAD_OCTAGON );
-            wxASSERT( pad->GetShape() == PAD_SHAPE::CIRCLE );    // verify set in PAD constructor
             pad->SetShape( PAD_SHAPE::CHAMFERED_RECT );
             pad->SetChamferPositions( RECT_CHAMFER_ALL );
-            pad->SetChamferRectRatio( 0.25 );
+            pad->SetChamferRectRatio( 1 - M_SQRT1_2 );    // Regular polygon
             break;
 
         case EPAD::LONG:
@@ -1968,8 +1964,7 @@ void EAGLE_PLUGIN::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
 
     if( pad->GetShape() == PAD_SHAPE::OVAL )
     {
-        // The Eagle "long" pad is wider than it is tall,
-        // m_elongation is percent elongation
+        // The Eagle "long" pad is wider than it is tall; m_elongation is percent elongation
         wxSize sz = pad->GetSize();
         sz.x = ( sz.x * ( 100 + m_rules->psElongationLong ) ) / 100;
         pad->SetSize( sz );
