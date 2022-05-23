@@ -245,8 +245,16 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
         LIB_PIN* pin  = pinList[ii - 1];
         LIB_PIN* next = pinList[ii];
 
-        if( pin->GetNumber() != next->GetNumber() || pin->GetConvert() != next->GetConvert() )
+        if( pin->GetNumber() != next->GetNumber() )
             continue;
+
+        // Pins are not duplicated only if they are in different convert bodies
+        // (but GetConvert() == 0 means commun to all convert bodies)
+        if( pin->GetConvert() != 0 && next->GetConvert() != 0 )
+        {
+            if( pin->GetConvert() != next->GetConvert() )
+                continue;
+        }
 
         wxString pinName;
         wxString nextName;
