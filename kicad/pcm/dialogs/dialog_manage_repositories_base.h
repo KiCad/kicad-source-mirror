@@ -11,7 +11,6 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class WX_GRID;
-class forward_declare;
 
 #include "dialog_shim.h"
 #include <wx/colour.h>
