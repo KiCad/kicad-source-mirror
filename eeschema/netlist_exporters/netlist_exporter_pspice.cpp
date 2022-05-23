@@ -429,45 +429,6 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
             }
 
             m_spiceItems.push_back( spiceItem );
-
-
-            //Special case for lossline transmission lines ( TXXXX )
-            //From the ngspice doc:
-            // This element models only one propagating mode.
-            // If all four nodes are distinct in the actual circuit, then two modes may be excited.
-            // To simulate such a situation, two transmission-line elements are required.
-
-            // This is apparently also needed for lossy lines
-
-            if( spiceItem.m_primitive == SP_TLINE || spiceItem.m_primitive == SP_TLINE_LOSSY )
-            {
-                std::vector<wxString> pins = spiceItem.m_pins;
-                std::vector<wxString> pins2 = pins;
-
-
-                if( pins.size() == 4 ) // A transmission line as 4 pins in ngspice
-                {
-                    std::sort( pins2.begin(), pins2.end(),
-                               []( wxString& a, wxString& b ) -> bool
-                               {
-                                   return a.Cmp( b ) < 0;
-                               } );
-                    bool has_duplicate =
-                            std::adjacent_find( pins2.begin(), pins2.end() ) != pins2.end();
-
-                    if( !has_duplicate )
-                    {
-                        SPICE_ITEM spiceItem2 = spiceItem;
-                        spiceItem2.m_refName += "_kicad_pair";
-                        spiceItem2.m_pins.at( 0 ) = pins.at( 1 );
-                        spiceItem2.m_pins.at( 1 ) = refNetString;
-                        spiceItem2.m_pins.at( 2 ) = pins.at( 3 );
-                        spiceItem2.m_pins.at( 3 ) = refNetString;
-
-                        m_spiceItems.push_back( spiceItem2 );
-                    }
-                }
-            }
         }
     }
 
