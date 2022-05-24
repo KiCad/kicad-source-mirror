@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:05-0700\n"
-"PO-Revision-Date: 2022-05-17 19:03+0000\n"
+"PO-Revision-Date: 2022-05-25 03:29+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v6/fi/>\n"
 "Language: fi\n"
@@ -7594,7 +7594,7 @@ msgstr "Generaattoritiedoston nimeä ei löydy."
 
 #: eeschema/dialogs/dialog_bom.cpp:461
 msgid "Bill of Material Generation Help"
-msgstr "Materiaalihintojen Generointi Ohje (BOM)"
+msgstr "Materiaalihintojen Generointiohje (BOM)"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:25
 msgid "BOM generator scripts:"
@@ -14968,7 +14968,7 @@ msgstr "Pistevirta/Vaihe"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:115
 msgid "White Background"
-msgstr "Valkoinen tausta"
+msgstr "Valkoinen Tausta"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:118
 msgid "View"
@@ -23804,7 +23804,7 @@ msgstr "Käyttäjän määrittelemä alkupiste:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "meter"
-msgstr "metri"
+msgstr "mittari"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "0.1 Inch"
