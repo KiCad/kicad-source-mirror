@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-13 15:03-0700\n"
-"PO-Revision-Date: 2022-05-17 19:03+0000\n"
+"PO-Revision-Date: 2022-05-25 03:29+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -7832,7 +7832,7 @@ msgstr "Generaattoritiedoston nimeä ei löydy."
 
 #: eeschema/dialogs/dialog_bom.cpp:459
 msgid "Bill of Material Generation Help"
-msgstr "Materiaalihintojen Generointi Ohje (BOM)"
+msgstr "Materiaalihintojen Generointiohje (BOM)"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:25
 msgid "BOM generator scripts:"
@@ -15735,7 +15735,7 @@ msgstr "Pistevirta/Vaihe"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:115
 msgid "White Background"
-msgstr "Valkoinen tausta"
+msgstr "Valkoinen Tausta"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:118
 msgid "View"
@@ -15892,7 +15892,7 @@ msgid ""
 "<b>Suspicious Power Symbol</b><br>Only a input or output power pin has "
 "meaning<br><br>"
 msgstr ""
-"<b>Epäilyttävä virtasymboli</b><br>Vain tulo- tai lähtövirtanastalla on "
+"<b>Epäilyttävä Virtasymboli</b><br>Vain tulo- tai lähtövirtanastalla on "
 "merkitys<br><br>"
 
 #: eeschema/symbol_checker.cpp:191
@@ -16181,8 +16181,8 @@ msgid ""
 msgstr ""
 "Lisää uusi merkintä yleiseen symbolikirjastotaulukkoon.\n"
 "\n"
-"Symbolikirjastotaulukon lempinimi on lisätty\n"
-"kokonaisluku, jotta taulukkomerkintöjä ei ole päällekkäisiä."
+"Symbolikirjastotaulukon lempinimeen on lisätty\n"
+"kokonaisluku, jolla estetään päällekkäiset taulukkomerkinnät."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:78
 msgid "Add new project library table entry"
@@ -16197,8 +16197,8 @@ msgid ""
 msgstr ""
 "Lisää uusi merkintä projektisymbolikirjastotaulukkoon.\n"
 "\n"
-"Symbolikirjastotaulukon lempinimi on lisätty\n"
-"kokonaisluku, jotta taulukkomerkintöjä ei ole päällekkäisiä."
+"Symbolikirjastotaulukon lempinimeen on lisätty\n"
+"kokonaisluku, jolla estetään päällekkäiset taulukkomerkinnät."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:162
 msgid "[from schematic]"
@@ -24844,7 +24844,7 @@ msgstr "Käyttäjän määrittelemä alkupiste:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "meter"
-msgstr "metri"
+msgstr "mittari"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
 msgid "0.1 Inch"
