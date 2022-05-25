@@ -194,12 +194,13 @@ S3D_CACHE::S3D_CACHE()
 
 S3D_CACHE::~S3D_CACHE()
 {
-    COMMON_SETTINGS* commonSettings = Pgm().GetCommonSettings();
-
     FlushCache();
 
     // We'll delete ".3dc" cache files older than this many days
-    int clearCacheInterval = commonSettings->m_System.clear_3d_cache_interval;
+    int clearCacheInterval = 0;
+
+    if( Pgm().GetCommonSettings() )
+        Pgm().GetCommonSettings()->m_System.clear_3d_cache_interval;
 
     // An interval of zero means the user doesn't want to ever clear the cache
 
