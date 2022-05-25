@@ -1217,27 +1217,40 @@ void SIM_PLOT_FRAME::menuSaveCsv( wxCommandEvent& event )
         return;
 
     wxFFile out( saveDlg.GetPath(), "wb" );
-    bool timeWritten = false;
 
-    for( const auto& t : GetCurrentPlot()->GetTraces() )
+    std::map<wxString, TRACE *> traces = GetCurrentPlot()->GetTraces();
+    assert(traces);
+    
+    if( traces.size() == 0 )
+        return;
+
+    SIM_TYPE simType = m_circuitModel->GetSimType();
+    
+    std::size_t rowCount = traces.begin()->second->GetDataX().size();
+
+    // write column header names on the first row
+    wxString xAxisName( m_simulator->GetXAxis( simType ) );
+    out.Write( wxString::Format( "%s%c", xAxisName, SEPARATOR ) );
+
+    for( const auto& trace : traces )
     {
-        const TRACE* trace = t.second;
+        wxString yAxisName = trace.first;
+        out.Write( wxString::Format( "%s%c", yAxisName, SEPARATOR ) );
+    }
 
-        if( !timeWritten )
+    out.Write( "\r\n" );
+
+    // write each row's numerical value
+    for ( std::size_t curRow=0; curRow < rowCount; curRow++ )
+    {
+        double xAxisValue = traces.begin()->second->GetDataX().at( curRow );
+        out.Write( wxString::Format( "%g%c", xAxisValue, SEPARATOR ) );
+
+        for( const auto& trace : traces )
         {
-            out.Write( wxString::Format( "Time%c", SEPARATOR ) );
-
-            for( double v : trace->GetDataX() )
-                out.Write( wxString::Format( "%g%c", v, SEPARATOR ) );
-
-            out.Write( "\r\n" );
-            timeWritten = true;
+            double yAxisValue = trace.second->GetDataY().at( curRow );
+            out.Write( wxString::Format( "%g%c", yAxisValue, SEPARATOR ) );
         }
-
-        out.Write( wxString::Format( "%s%c", t.first, SEPARATOR ) );
-
-        for( double v : trace->GetDataY() )
-            out.Write( wxString::Format( "%g%c", v, SEPARATOR ) );
 
         out.Write( "\r\n" );
     }
