@@ -1191,6 +1191,7 @@ void SHAPE_POLY_SET::unfractureSingle( SHAPE_POLY_SET::POLYGON& aPoly )
     int outline = -1;
 
     POLYGON result;
+    double max_poly;
 
     while( queue.size() )
     {
@@ -1215,10 +1216,13 @@ void SHAPE_POLY_SET::unfractureSingle( SHAPE_POLY_SET::POLYGON& aPoly )
 
         outl.SetClosed( true );
 
-        bool cw = outl.Area() > 0.0;
+        double area = std::fabs( outl.Area() );
 
-        if( cw )
+        if( area > max_poly )
+        {
             outline = n;
+            max_poly = area;
+        }
 
         result.push_back( outl );
         n++;
