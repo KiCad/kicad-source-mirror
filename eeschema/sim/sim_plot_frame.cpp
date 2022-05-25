@@ -1219,7 +1219,6 @@ void SIM_PLOT_FRAME::menuSaveCsv( wxCommandEvent& event )
     wxFFile out( saveDlg.GetPath(), "wb" );
 
     std::map<wxString, TRACE *> traces = GetCurrentPlot()->GetTraces();
-    assert(traces);
     
     if( traces.size() == 0 )
         return;
