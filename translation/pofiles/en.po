@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-13 15:03-0700\n"
+"POT-Creation-Date: 2022-05-25 16:22-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -3419,6 +3419,9 @@ msgstr "Grid axes"
 
 msgid "Locked item shadow"
 msgstr "Locked item shadow"
+
+msgid "Conflicting items shadow"
+msgstr "Conflicting items shadow"
 
 msgid "Illegal character found in logical library name"
 msgstr "Illegal character found in logical library name"
@@ -8228,9 +8231,6 @@ msgstr "Show page limi&ts"
 
 msgid "Selection && Highlighting"
 msgstr "Selection && Highlighting"
-
-msgid "Draw selected text items as box"
-msgstr "Draw selected text items as box"
 
 msgid "Draw selected child items"
 msgstr "Draw selected child items"
@@ -13374,11 +13374,17 @@ msgstr "Reveal project folder in Finder"
 msgid "Open project directory in file explorer"
 msgstr "Open project directory in file explorer"
 
+msgid "Add Default"
+msgstr "Add Default"
+
 msgid "Please enter fully qualified repository url"
 msgstr "Please enter fully qualified repository url"
 
 msgid "Add repository"
 msgstr "Add repository"
+
+msgid "Add Existing"
+msgstr "Add Existing"
 
 msgid "Manage Repositories"
 msgstr "Manage Repositories"
@@ -13966,14 +13972,6 @@ msgstr "KiCad Error"
 
 msgid "Application failed to load."
 msgstr "Application failed to load."
-
-#, c-format
-msgid "%s closed [pid=%d]\n"
-msgstr "%s closed [pid=%d]\n"
-
-#, c-format
-msgid "%s %s opened [pid=%ld]\n"
-msgstr "%s %s opened [pid=%ld]\n"
 
 #, c-format
 msgid "Error code: %d"
@@ -20205,9 +20203,6 @@ msgstr "Failed to open directories to look for libraries"
 msgid "Warning: Duplicate Nicknames"
 msgstr "Warning: Duplicate Nicknames"
 
-msgid "Add Existing"
-msgstr "Add Existing"
-
 msgid "Path Substitutions"
 msgstr "Path Substitutions"
 
@@ -25899,9 +25894,6 @@ msgstr "Unable to resize arc tracks of %s or greater."
 msgid "Drag Arc Track"
 msgstr "Drag Arc Track"
 
-msgid "Select reference point for move..."
-msgstr "Select reference point for move..."
-
 msgid "Edit track width/via size"
 msgstr "Edit track width/via size"
 
@@ -25948,6 +25940,9 @@ msgstr "Selection copied"
 
 msgid "Copy canceled"
 msgstr "Copy canceled"
+
+msgid "Select reference point for move..."
+msgstr "Select reference point for move..."
 
 msgid "_copy"
 msgstr "_copy"
@@ -27382,6 +27377,12 @@ msgstr "Shadow on Locked Items"
 msgid "Show a shadow marker on locked items"
 msgstr "Show a shadow marker on locked items"
 
+msgid "Shadow on Conflicts"
+msgstr "Shadow on Conflicts"
+
+msgid "Show a shadow on overlapping courtyards while moving footprints"
+msgstr "Show a shadow on overlapping courtyards while moving footprints"
+
 msgid "Show drawing sheet borders and title block"
 msgstr "Show drawing sheet borders and title block"
 
@@ -27966,6 +27967,17 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Draw selected text items as box"
+#~ msgstr "Draw selected text items as box"
+
+#, c-format
+#~ msgid "%s closed [pid=%d]\n"
+#~ msgstr "%s closed [pid=%d]\n"
+
+#, c-format
+#~ msgid "%s %s opened [pid=%ld]\n"
+#~ msgstr "%s %s opened [pid=%ld]\n"
 
 #~ msgid "Manage"
 #~ msgstr "Manage"
