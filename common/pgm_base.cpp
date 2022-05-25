@@ -105,6 +105,7 @@ LANGUAGE_DESCR LanguagesList[] =
     { wxLANGUAGE_SWEDISH,    ID_LANGUAGE_SWEDISH,    wxT( "Svenska" ),  true },
     { wxLANGUAGE_VIETNAMESE, ID_LANGUAGE_VIETNAMESE, wxT( "Tiếng Việt" ), true },
     { wxLANGUAGE_TURKISH,    ID_LANGUAGE_TURKISH,    wxT( "Türkçe" ),   true },
+    { wxLANGUAGE_UKRAINIAN,  ID_LANGUAGE_UKRANIAN,   wxT( "Українець" ),   true },
     { wxLANGUAGE_CHINESE_SIMPLIFIED, ID_LANGUAGE_CHINESE_SIMPLIFIED,
             wxT( "简体中文" ), true },
     { wxLANGUAGE_CHINESE_TRADITIONAL, ID_LANGUAGE_CHINESE_TRADITIONAL,
