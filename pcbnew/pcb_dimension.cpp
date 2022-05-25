@@ -78,13 +78,12 @@ void PCB_DIMENSION_BASE::updateText()
         break;
 
     case DIM_UNITS_FORMAT::BARE_SUFFIX: // normal
-        text += wxS( " " );
         text += GetAbbreviatedUnitsLabel( m_units );
         break;
 
     case DIM_UNITS_FORMAT::PAREN_SUFFIX: // parenthetical
         text += wxT( " (" );
-        text += GetAbbreviatedUnitsLabel( m_units );
+        text += GetAbbreviatedUnitsLabel( m_units ).Trim( false );
         text += wxT( ")" );
         break;
     }
