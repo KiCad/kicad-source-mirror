@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-25 16:22-0700\n"
-"PO-Revision-Date: 2022-05-14 18:07+0000\n"
+"PO-Revision-Date: 2022-05-26 02:37+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -5454,9 +5454,8 @@ msgid "Locked item shadow"
 msgstr "锁定的项目阴影"
 
 #: common/layer_id.cpp:182
-#, fuzzy
 msgid "Conflicting items shadow"
-msgstr "相互冲突的标签"
+msgstr "冲突项目阴影"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
@@ -19014,9 +19013,8 @@ msgid "Open project directory in file explorer"
 msgstr "在文件资源管理器中打开工程目录"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:52
-#, fuzzy
 msgid "Add Default"
-msgstr "默认"
+msgstr "添加默认"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:92
 msgid "Please enter fully qualified repository url"
@@ -37526,13 +37524,12 @@ msgid "Show a shadow marker on locked items"
 msgstr "在锁定的项目上显示阴影标记"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
-#, fuzzy
 msgid "Shadow on Conflicts"
-msgstr "锁定项目上的阴影"
+msgstr "冲突阴影"
 
 #: pcbnew/widgets/appearance_controls.cpp:357
 msgid "Show a shadow on overlapping courtyards while moving footprints"
-msgstr ""
+msgstr "移动封装时在重叠的外框上显示阴影"
 
 #: pcbnew/widgets/appearance_controls.cpp:358
 msgid "Show drawing sheet borders and title block"
