@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-25 16:22-0700\n"
-"PO-Revision-Date: 2022-05-14 18:07+0000\n"
+"PO-Revision-Date: 2022-05-26 16:13+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5541,9 +5541,8 @@ msgid "Locked item shadow"
 msgstr "Wyszarzaj zablokowane elementy"
 
 #: common/layer_id.cpp:182
-#, fuzzy
 msgid "Conflicting items shadow"
-msgstr "Etykiety sygnałów w konflikcie"
+msgstr "Wyszarzaj elementy będące w konfliktach"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
@@ -19444,9 +19443,8 @@ msgid "Open project directory in file explorer"
 msgstr "Otwórz folder projektu w eksploratorze plików"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:52
-#, fuzzy
 msgid "Add Default"
-msgstr "Domyślny"
+msgstr "Dodaj domyślny"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:92
 msgid "Please enter fully qualified repository url"
@@ -38375,13 +38373,13 @@ msgid "Show a shadow marker on locked items"
 msgstr "Pokaż wyszarzenie na zablokowanych elementach"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
-#, fuzzy
 msgid "Shadow on Conflicts"
-msgstr "Wyszarzaj zablokowane elementy"
+msgstr "Wyszarzaj konflikty"
 
 #: pcbnew/widgets/appearance_controls.cpp:357
 msgid "Show a shadow on overlapping courtyards while moving footprints"
 msgstr ""
+"Wyszarzaj nakładające się pola zajętości podczas przesuwania footprintów"
 
 #: pcbnew/widgets/appearance_controls.cpp:358
 msgid "Show drawing sheet borders and title block"
