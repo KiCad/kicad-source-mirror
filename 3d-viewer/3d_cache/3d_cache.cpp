@@ -200,7 +200,7 @@ S3D_CACHE::~S3D_CACHE()
     int clearCacheInterval = 0;
 
     if( Pgm().GetCommonSettings() )
-        Pgm().GetCommonSettings()->m_System.clear_3d_cache_interval;
+        clearCacheInterval = Pgm().GetCommonSettings()->m_System.clear_3d_cache_interval;
 
     // An interval of zero means the user doesn't want to ever clear the cache
 
