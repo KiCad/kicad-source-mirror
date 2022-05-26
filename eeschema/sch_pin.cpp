@@ -26,7 +26,7 @@
 #include <schematic_settings.h>
 #include <sch_sheet_path.h>
 #include <sch_edit_frame.h>
-
+#include "string_utils.h"
 
 SCH_PIN::SCH_PIN( LIB_PIN* aLibPin, SCH_SYMBOL* aParentSymbol ) :
     SCH_ITEM( aParentSymbol, SCH_PIN_T )
@@ -286,13 +286,13 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
         // Pin names might not be unique between different units so we must have the
         // unit token in the reference designator
         name << GetParentSymbol()->GetRef( &aPath, true );
-        name << "-" << m_libPin->GetShownName() << ")";
+        name << "-" << EscapeString( m_libPin->GetShownName(), CTX_NETNAME ) << ")";
     }
     else
     {
-        // Pin number are unique, so we skip the unit token
+        // Pin numbers are unique, so we skip the unit token
         name << GetParentSymbol()->GetRef( &aPath, false );
-        name << "-Pad" << m_libPin->GetShownNumber() << ")";
+        name << "-Pad" << EscapeString( m_libPin->GetShownNumber(), CTX_NETNAME ) << ")";
     }
 
     if( annotated )
