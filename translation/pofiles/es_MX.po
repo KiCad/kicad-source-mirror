@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-25 16:22-0700\n"
-"PO-Revision-Date: 2022-05-23 04:27+0000\n"
+"PO-Revision-Date: 2022-05-26 19:27+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -5557,9 +5557,8 @@ msgid "Locked item shadow"
 msgstr "Sombra de elemento bloqueado"
 
 #: common/layer_id.cpp:182
-#, fuzzy
 msgid "Conflicting items shadow"
-msgstr "Etiquetas en conflicto"
+msgstr "Sombra de elementos conflictivos"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
@@ -19489,9 +19488,8 @@ msgid "Open project directory in file explorer"
 msgstr "Abrir carpeta de proyecto en el explorador"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:52
-#, fuzzy
 msgid "Add Default"
-msgstr "Por defecto"
+msgstr "Añadir por defecto"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:92
 msgid "Please enter fully qualified repository url"
@@ -38501,9 +38499,8 @@ msgid "Show a shadow marker on locked items"
 msgstr "Mostrar un marcador de sombra en los elementos bloqueados"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
-#, fuzzy
 msgid "Shadow on Conflicts"
-msgstr "Sombra en elementos bloqueados"
+msgstr "Sombra sobre los conflictos"
 
 #: pcbnew/widgets/appearance_controls.cpp:357
 msgid "Show a shadow on overlapping courtyards while moving footprints"
