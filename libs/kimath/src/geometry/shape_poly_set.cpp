@@ -1191,7 +1191,7 @@ void SHAPE_POLY_SET::unfractureSingle( SHAPE_POLY_SET::POLYGON& aPoly )
     int outline = -1;
 
     POLYGON result;
-    double max_poly;
+    double max_poly = 0.0;
 
     while( queue.size() )
     {
