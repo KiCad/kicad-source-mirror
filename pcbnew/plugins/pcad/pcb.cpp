@@ -148,7 +148,7 @@ XNODE* PCB::FindCompDefName( XNODE* aNode, const wxString& aName ) const
 
     while( lNode )
     {
-        if( lNode->GetName() == wxT( "compDef" ) )
+        if( lNode->GetName().IsSameAs( wxT( "compDef" ), false ) )
         {
             lNode->GetAttribute( wxT( "Name" ), &propValue );
 
@@ -190,7 +190,7 @@ void PCB::SetTextProperty( XNODE* aNode, TTEXTVALUE* aTextValue, const wxString&
 
         while( tNode )
         {
-            if( tNode->GetName() == wxT( "patternGraphicsRef" ) )
+            if( tNode->GetName().IsSameAs( wxT( "patternGraphicsRef" ), false ) )
             {
                 if( FindNode( tNode, wxT( "patternGraphicsNameRef" ) ) )
                 {
@@ -252,7 +252,7 @@ void PCB::DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxString&
     {
         fp = nullptr;
 
-        if( lNode->GetName() == wxT( "pattern" ) )
+        if( lNode->GetName().IsSameAs( wxT( "pattern" ), false ) )
         {
             FindNode( lNode, wxT( "patternRef" ) )->GetAttribute( wxT( "Name" ),
                                                                   &cn );
@@ -309,7 +309,7 @@ void PCB::DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxString&
 
                 str = FindNodeGetContent( lNode, wxT( "isFlipped" ) );
 
-                if( str == wxT( "True" ) )
+                if( str.IsSameAs( wxT( "True" ), false ) )
                     fp->m_Mirror = 1;
 
                 tNode = aNode;
@@ -370,7 +370,7 @@ void PCB::DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxString&
 
                         while( mNode )
                         {
-                            if( mNode->GetName() == wxT( "padNum" ) )
+                            if( mNode->GetName().IsSameAs( wxT( "padNum" ), false ) )
                             {
                                 str     = mNode->GetNodeContent();
                                 mNode   = mNode->GetNext();
@@ -398,19 +398,19 @@ void PCB::DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxString&
                 m_PcbComponents.Add( fp );
             }
         }
-        else if( lNode->GetName() == wxT( "pad" ) )
+        else if( lNode->GetName().IsSameAs( wxT( "pad" ), false ) )
         {
             pad = new PCB_PAD( this, m_board );
             pad->Parse( lNode, m_DefaultMeasurementUnit, aActualConversion );
             m_PcbComponents.Add( pad );
         }
-        else if( lNode->GetName() == wxT( "via" ) )
+        else if( lNode->GetName().IsSameAs( wxT( "via" ), false ) )
         {
             via = new PCB_VIA( this, m_board );
             via->Parse( lNode, m_DefaultMeasurementUnit, aActualConversion );
             m_PcbComponents.Add( via );
         }
-        else if( lNode->GetName() == wxT( "polyKeepOut" ) )
+        else if( lNode->GetName().IsSameAs( wxT( "polyKeepOut" ), false ) )
         {
             keepOut = new PCB_KEEPOUT( m_callbacks, m_board, 0 );
 
@@ -545,13 +545,13 @@ void PCB::MapLayer( XNODE* aNode )
     {
         layerType = FindNode( aNode, wxT( "layerType" ) )->GetNodeContent().Trim( false );
 
-        if( layerType == wxT( "NonSignal" ) )
+        if( layerType.IsSameAs( wxT( "NonSignal" ), false ) )
             newlayer.layerType = LAYER_TYPE_NONSIGNAL;
 
-        if( layerType == wxT( "Signal" ) )
+        if( layerType.IsSameAs( wxT( "Signal" ), false ) )
             newlayer.layerType = LAYER_TYPE_SIGNAL;
 
-        if( layerType == wxT( "Plane" ) )
+        if( layerType.IsSameAs( wxT( "Plane" ), false ) )
             newlayer.layerType = LAYER_TYPE_PLANE;
     }
 
@@ -578,15 +578,6 @@ int PCB::FindOutlinePoint( const VERTICES_ARRAY* aOutline, wxRealPoint aPoint ) 
 }
 
 
-/*int cmpFunc( wxRealPoint **first, wxRealPoint **second )
-{
-    return sqrt( pow( (double) aPointA.x - (double) aPointB.x, 2 ) +
-                 pow( (double) aPointA.y - (double) aPointB.y, 2 ) );
-
-    return 0;
-}*/
-
-
 double PCB::GetDistance( const wxRealPoint* aPoint1, const wxRealPoint* aPoint2 ) const
 {
     return sqrt(  ( aPoint1->x - aPoint2->x ) * ( aPoint1->x - aPoint2->x ) +
@@ -611,7 +602,7 @@ void PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConver
         while( iNode )
         {
             // objects
-            if( iNode->GetName() == wxT( "layerContents" ) )
+            if( iNode->GetName().IsSameAs( wxT( "layerContents" ), false ) )
             {
                 if( FindNode( iNode, wxT( "layerNumRef" ) ) )
                     FindNode( iNode, wxT( "layerNumRef" ) )->GetNodeContent().ToLong( &PCadLayer );
@@ -622,7 +613,7 @@ void PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConver
 
                     while( lNode )
                     {
-                        if( lNode->GetName() == wxT( "line" ) )
+                        if( lNode->GetName().IsSameAs( wxT( "line" ), false ) )
                         {
                             pNode = FindNode( lNode, wxT( "pt" ) );
 
@@ -747,14 +738,15 @@ void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
 
         while( aNode )
         {
-            if( aNode->GetName() == wxT( "layerDef" ) )
+            if( aNode->GetName().IsSameAs( wxT( "layerDef" ), false ) )
             {
                 if( FindNode( aNode, wxT( "layerType" ) ) )
                 {
-                    layerType = FindNode( aNode,
-                                          wxT( "layerType" ) )->GetNodeContent().Trim( false );
+                    layerType = FindNode( aNode, wxT( "layerType" ) )->GetNodeContent().Trim(
+                            false );
 
-                    if( layerType == wxT( "Signal" ) || layerType == wxT( "Plane" ) )
+                    if( layerType.IsSameAs( wxT( "Signal" ), false )
+                            || layerType.IsSameAs( wxT( "Plane" ), false ) )
                     {
                         aNode->GetAttribute( wxT( "Name" ), &layerName );
                         layerName = layerName.MakeUpper();
@@ -779,7 +771,7 @@ void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
 
         while( aNode )
         {
-            if( aNode->GetName() == wxT( "layerDef" ) )
+            if( aNode->GetName().IsSameAs( wxT( "layerDef" ), false ) )
                 MapLayer( aNode );
 
             aNode = aNode->GetNext();
@@ -822,11 +814,11 @@ void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
         while( aNode )
         {
             // Components/footprints
-            if( aNode->GetName() == wxT( "multiLayer" ) )
+            if( aNode->GetName().IsSameAs( wxT( "multiLayer" ), false ) )
                 DoPCBComponents( aNode, aXmlDoc, aActualConversion, aStatusBar );
 
             // objects
-            if( aNode->GetName() == wxT( "layerContents" ) )
+            if( aNode->GetName().IsSameAs( wxT( "layerContents" ), false ) )
                 DoLayerContentsObjects( aNode, nullptr, &m_PcbComponents, aStatusBar,
                                         m_DefaultMeasurementUnit, aActualConversion );
 
@@ -924,7 +916,7 @@ void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
             {
                 // aStatusBar->SetStatusText( wxT( "Processing COMPONENTS " ) );
 
-                if( aNode->GetName() == wxT( "compDef" ) )
+                if( aNode->GetName().IsSameAs( wxT( "compDef" ), false ) )
                 {
                     footprint = new PCB_FOOTPRINT( this, m_board );
                     footprint->Parse( aNode, aStatusBar, m_DefaultMeasurementUnit,

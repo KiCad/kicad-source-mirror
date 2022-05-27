@@ -304,21 +304,21 @@ TTEXT_JUSTIFY GetJustifyIdentificator( const wxString& aJustify )
 {
     TTEXT_JUSTIFY id;
 
-    if( aJustify == wxT( "LowerCenter" ) )
+    if( aJustify.IsSameAs( wxT( "LowerCenter" ), false ) )
         id = LowerCenter;
-    else if( aJustify == wxT( "LowerRight" ) )
+    else if( aJustify.IsSameAs( wxT( "LowerRight" ), false ) )
         id = LowerRight;
-    else if( aJustify == wxT( "UpperLeft" ) )
+    else if( aJustify.IsSameAs( wxT( "UpperLeft" ), false ) )
         id = UpperLeft;
-    else if( aJustify == wxT( "UpperCenter" ) )
+    else if( aJustify.IsSameAs( wxT( "UpperCenter" ), false ) )
         id = UpperCenter;
-    else if( aJustify == wxT( "UpperRight" ) )
+    else if( aJustify.IsSameAs( wxT( "UpperRight" ), false ) )
         id = UpperRight;
-    else if( aJustify == wxT( "Left" ) )
+    else if( aJustify.IsSameAs( wxT( "Left" ), false ) )
         id = Left;
-    else if( aJustify == wxT( "Center" ) )
+    else if( aJustify.IsSameAs( wxT( "Center" ), false ) )
         id = Center;
-    else if( aJustify == wxT( "Right" ) )
+    else if( aJustify.IsSameAs( wxT( "Right" ), false ) )
         id = Right;
     else
         id = LowerLeft;
@@ -354,7 +354,7 @@ void SetTextParameters( XNODE* aNode, TTEXTVALUE* aTextValue,
 
     str = FindNodeGetContent( aNode, wxT( "isVisible" ) );
 
-    if( str == wxT( "True" ) )
+    if( str.IsSameAs( wxT( "True" ), false ) )
         aTextValue->textIsVisible = 1;
     else
         aTextValue->textIsVisible = 0;
@@ -364,7 +364,7 @@ void SetTextParameters( XNODE* aNode, TTEXTVALUE* aTextValue,
 
     str = FindNodeGetContent( aNode, wxT( "isFlipped" ) );
 
-    if( str == wxT( "True" ) )
+    if( str.IsSameAs( wxT( "True" ), false ) )
         aTextValue->mirror = 1;
     else
         aTextValue->mirror = 0;
@@ -408,13 +408,13 @@ void SetFontProperty( XNODE* aNode, TTEXTVALUE* aTextValue, const wxString& aDef
         wxString fontType;
 
         propValue = FindNodeGetContent( aNode, wxT( "textStyleDisplayTType" ) );
-        aTextValue->isTrueType = ( propValue == wxT( "True" ) );
+        aTextValue->isTrueType = ( propValue.IsSameAs( wxT( "True" ), false ) );
 
         aNode = FindNode( aNode, wxT( "font" ) );
         fontType = FindNodeGetContent( aNode, wxT( "fontType" ) );
 
-        if( ( aTextValue->isTrueType && ( fontType != wxT( "TrueType" ) ) ) ||
-            ( !aTextValue->isTrueType && ( fontType != wxT( "Stroke" ) ) ) )
+        if( ( aTextValue->isTrueType && !fontType.IsSameAs( wxT( "TrueType" ), false ) ) ||
+            ( !aTextValue->isTrueType && !fontType.IsSameAs( wxT( "Stroke" ), false ) ) )
             aNode = aNode->GetNext();
 
         if( aNode )
@@ -422,7 +422,7 @@ void SetFontProperty( XNODE* aNode, TTEXTVALUE* aTextValue, const wxString& aDef
             if( aTextValue->isTrueType )
             {
                 propValue = FindNodeGetContent( aNode, wxT( "fontItalic" ) );
-                aTextValue->isItalic = ( propValue == wxT( "True" ) );
+                aTextValue->isItalic = propValue.IsSameAs( wxT( "True" ), false );
 
                 propValue = FindNodeGetContent( aNode, wxT( "fontWeight" ) );
 
@@ -562,7 +562,7 @@ XNODE* FindNode( XNODE* aChild, const wxString& aTag )
 
     while( aChild )
     {
-        if( aChild->GetName() == aTag )
+        if( aChild->GetName().IsSameAs( aTag, false ) )
             return aChild;
 
         aChild = aChild->GetNext();

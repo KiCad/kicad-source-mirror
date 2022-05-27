@@ -154,14 +154,14 @@ void PCB_PAD::Parse( XNODE* aNode, const wxString& aDefaultUnits,
     if( cNode )
         SetWidth( cNode->GetNodeContent(), aDefaultUnits, &m_Hole, aActualConversion );
 
-    if( FindNodeGetContent( lNode, wxT( "isHolePlated" ) ) == wxT( "False" ) )
+    if( FindNodeGetContent( lNode, wxT( "isHolePlated" ) ).IsSameAs( wxT( "False" ), false ) )
         m_IsHolePlated = false;
 
     cNode   = FindNode( lNode, wxT( "padShape" ) );
 
     while( cNode )
     {
-        if( cNode->GetName() == wxT( "padShape" ) )
+        if( cNode->GetName().IsSameAs( wxT( "padShape" ), false ) )
         {
             // we support only Pads on specific layers......
             // we do not support pads on "Plane", "NonSignal" , "Signal" ... layerr
@@ -215,7 +215,7 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncaps
 
         // Mounting Hole: Solder Mask Margin from Top Layer Width size.
         // Used the default zone clearance (simplify)
-        if( m_Shapes.GetCount() && m_Shapes[0]->m_Shape == wxT( "MtHole" ) )
+        if( m_Shapes.GetCount() && m_Shapes[0]->m_Shape.IsSameAs( wxT( "MtHole" ), false ) )
         {
             int sm_margin = ( m_Shapes[0]->m_Width - m_Hole ) / 2;
             pad->SetLocalSolderMaskMargin( sm_margin );
@@ -265,24 +265,24 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncaps
 
         pad->SetNumber( m_name.text );
 
-        if( padShapeName == wxT( "Oval" )
-            || padShapeName == wxT( "Ellipse" )
-            || padShapeName == wxT( "MtHole" ) )
+        if( padShapeName.IsSameAs( wxT( "Oval" ), false )
+            || padShapeName.IsSameAs( wxT( "Ellipse" ), false )
+            || padShapeName.IsSameAs( wxT( "MtHole" ), false ) )
         {
             if( width != height )
                 pad->SetShape( PAD_SHAPE::OVAL );
             else
                 pad->SetShape( PAD_SHAPE::CIRCLE );
         }
-        else if( padShapeName == wxT( "Rect" ) )
+        else if( padShapeName.IsSameAs( wxT( "Rect" ), false ) )
         {
             pad->SetShape( PAD_SHAPE::RECT );
         }
-        else if(  padShapeName == wxT( "RndRect" ) )
+        else if(  padShapeName.IsSameAs( wxT( "RndRect" ), false ) )
         {
             pad->SetShape( PAD_SHAPE::ROUNDRECT );
         }
-        else if( padShapeName == wxT( "Polygon" ) )
+        else if( padShapeName.IsSameAs( wxT( "Polygon" ), false ) )
         {
             pad->SetShape( PAD_SHAPE::RECT ); // approximation
         }

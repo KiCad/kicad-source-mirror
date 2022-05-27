@@ -82,7 +82,7 @@ void PCB_TEXT::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
 
     str = FindNodeGetContent( aNode, wxT( "isFlipped" ) );
 
-    if( str == wxT( "True" ) )
+    if( str.IsSameAs( wxT( "True" ), false ) )
         m_name.mirror = 1;
 
     lNode = FindNode( aNode, wxT( "textStyleRef" ) );
