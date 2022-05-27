@@ -137,6 +137,10 @@ option( KICAD_DRC_PROTO
     "Build the DRC prototype QA tool"
     OFF )
 
+option( KICAD_BUILD_PEGTL_DEBUG_TOOL
+    "Build the PEGTL parser debugging/playground QA tool"
+    OFF )
+
 option( KICAD_BUILD_PNS_DEBUG_TOOL
     "Build the P&S debugging/playground QA tool"
     OFF )

@@ -1,6 +1,8 @@
+#
 # This program source code file is part of KiCad, a free EDA CAD application.
 #
-# Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
+# Copyright (C) 2022 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
+# Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,21 +22,16 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
 
-# add_subdirectory( libeval_compiler )
+add_executable( test_pegtl
+    main.cpp
+  )
 
-if( KICAD_DRC_PROTO )
-    add_subdirectory( drc_proto )
-endif()
+add_dependencies( test_pegtl pegtl )
 
-# Utility/debugging/profiling programs
-add_subdirectory( common_tools )
-add_subdirectory( pcbnew_tools )
-
-if( KICAD_BUILD_PEGTL_DEBUG_TOOL )
-    add_subdirectory( pegtl )
-endif()
-
-if( KICAD_BUILD_PNS_DEBUG_TOOL )
-    add_subdirectory( pns )
-endif()
+include_directories( BEFORE ${INC_BEFORE} )
+include_directories(
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/thirdparty/pegtl/
+    ${INC_AFTER}
+)
 
