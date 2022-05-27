@@ -158,6 +158,23 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 symbol = nullptr;
             };
 
+    auto annotate =
+            [&] ()
+            {
+                EESCHEMA_SETTINGS::PANEL_ANNOTATE& annotate         = m_frame->eeconfig()->m_AnnotatePanel;
+                SCHEMATIC_SETTINGS&                projSettings     = m_frame->Schematic().Settings();
+                int                                annotateStartNum = projSettings.m_AnnotateStartNum;
+
+                if( annotate.automatic )
+                {
+                    NULL_REPORTER reporter;
+                    m_frame->AnnotateSymbols( ANNOTATE_SELECTION,
+                                              (ANNOTATE_ORDER_T) annotate.sort_order,
+                                              (ANNOTATE_ALGO_T) annotate.method, annotate.recursive,
+                                              annotateStartNum, false, false, reporter, true );
+                }
+            };
+
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
     getViewControls()->ShowCursor( true );
@@ -263,25 +280,13 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
                 symbol = new SCH_SYMBOL( *libSymbol, &m_frame->GetCurrentSheet(), sel, cursorPos );
                 addSymbol( symbol );
+                annotate();
 
                 // Update cursor now that we have a symbol
                 setCursor();
             }
             else
             {
-                EESCHEMA_SETTINGS::PANEL_ANNOTATE& annotate         = m_frame->eeconfig()->m_AnnotatePanel;
-                SCHEMATIC_SETTINGS&                projSettings     = m_frame->Schematic().Settings();
-                int                                annotateStartNum = projSettings.m_AnnotateStartNum;
-
-                if( annotate.automatic )
-                {
-                    NULL_REPORTER reporter;
-                    m_frame->AnnotateSymbols( ANNOTATE_SELECTION,
-                                              (ANNOTATE_ORDER_T) annotate.sort_order,
-                                              (ANNOTATE_ALGO_T) annotate.method, annotate.recursive,
-                                              annotateStartNum, false, false, reporter, true );
-                }
-
                 if( m_frame->eeconfig()->m_AutoplaceFields.enable )
                     symbol->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
 
@@ -325,6 +330,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                             nextSymbol->ClearAnnotation( nullptr, false );
 
                         addSymbol( nextSymbol );
+                        annotate();
                     }
                 }
 
