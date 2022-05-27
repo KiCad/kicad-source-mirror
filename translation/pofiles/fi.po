@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-25 16:22-0700\n"
-"PO-Revision-Date: 2022-05-25 03:29+0000\n"
+"PO-Revision-Date: 2022-05-29 05:10+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v6/fi/>\n"
 "Language: fi\n"
@@ -5366,7 +5366,7 @@ msgstr "Ruudukon akselit"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
-msgstr "Laiton merkki löytyi loogisesta kirjaston nimestä"
+msgstr "Laiton merkki löytyi loogisesta kirjastonimestä"
 
 #: common/lib_tree_model.cpp:139 eeschema/lib_item.cpp:54
 #: eeschema/sch_pin.cpp:201 eeschema/symbol_editor/symbol_editor.cpp:1266
