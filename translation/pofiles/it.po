@@ -108,7 +108,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-27 07:38+0200\n"
-"PO-Revision-Date: 2022-05-27 08:07+0200\n"
+"PO-Revision-Date: 2022-05-27 13:46+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -13236,7 +13236,7 @@ msgstr "Aggiungi riga vuota alla tabella"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:110
 msgid "Add existing library to table"
-msgstr "Apri libreria esistente alla tabella"
+msgstr "Aggiungi libreria esistente alla tabella"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:128
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:124
@@ -19885,7 +19885,7 @@ msgstr "Apri nel file esplorer"
 
 #: kicad/project_tree_pane.cpp:708
 msgid "Reveals the directory in a Finder window"
-msgstr "Aprim la cartella della finestra dell'esploratore file"
+msgstr "Apri la cartella della finestra dell'esploratore file"
 
 #: kicad/project_tree_pane.cpp:710
 msgid "Open Directory in File Explorer"
