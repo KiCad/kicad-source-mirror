@@ -89,22 +89,6 @@ public:
         return true;
     }
 
-    bool IsSMD() const
-    {
-        return m_type == PAD_ATTRIB::SMD;
-    }
-
-    PCB_LAYER_ID GetSMDLayer() const
-    {
-        for( PCB_LAYER_ID l : LSET::AllCuMask().Seq() )
-        {
-            if( m_layers[l] )
-                return l;
-        }
-
-        return F_Cu;
-    }
-
     void SetId( int id )
     {
         m_id = id;
@@ -113,21 +97,6 @@ public:
     int GetId() const
     {
         return m_id;
-    }
-
-    int IsSupportedByExporter() const
-    {
-        switch( m_shape )
-        {
-        case PAD_SHAPE::CIRCLE:
-        case PAD_SHAPE::OVAL:
-        case PAD_SHAPE::ROUNDRECT:
-        case PAD_SHAPE::RECT:
-            return true;
-
-        default:
-            return false;
-        }
     }
 
     bool IsEmpty() const
@@ -184,21 +153,30 @@ private:
         switch( aStack.m_shape )
         {
         case PAD_SHAPE::CIRCLE:
-        case PAD_SHAPE::OVAL:      shapeId = 0; break;
-        case PAD_SHAPE::ROUNDRECT: shapeId = 2; break;
-        case PAD_SHAPE::RECT:      shapeId = 1; break;
-        default:
+        case PAD_SHAPE::OVAL:
             shapeId = 0;
+            break;
 
+        case PAD_SHAPE::ROUNDRECT:
+            shapeId = 2;
+            break;
+
+        case PAD_SHAPE::RECT:
+            shapeId = 1;
+            break;
+
+        default:
             if( m_reporter )
             {
                 m_reporter->Report( _( "File contains pad shapes that are not supported by the "
-                                       "Hyperlynx exporter (supported shapes are oval, rectangle "
-                                       "and circle)." ),
+                                       "Hyperlynx exporter (supported shapes are oval, rectangle, "
+                                       "rounded rectangle, and circle)." ),
                                     RPT_SEVERITY_WARNING );
                 m_reporter->Report( _( "They have been exported as oval pads." ),
                                     RPT_SEVERITY_INFO );
             }
+
+            shapeId = 0;
             break;
         }
 
@@ -257,7 +235,7 @@ HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const PCB_VIA* aVia )
     m_sx     = aVia->GetWidth();
     m_sy     = aVia->GetWidth();
     m_angle  = 0;
-    m_layers = LSET::AllCuMask();
+    m_layers = aVia->GetLayerSet();
     m_drill  = aVia->GetDrillValue();
     m_shape  = PAD_SHAPE::CIRCLE;
     m_type   = PAD_ATTRIB::PTH;
@@ -495,6 +473,10 @@ bool HYPERLYNX_EXPORTER::writeNetObjects( const std::vector<BOARD_ITEM*>& aObjec
                           iu2hyp( track->GetEnd().y ),
                           iu2hyp( track->GetWidth() ),
                           (const char*) layerName.c_str() );
+        }
+        else if( PCB_ARC* arc = dyn_cast<PCB_ARC*>( item ) )
+        {
+            // TODO!
         }
         else if( ZONE* zone = dyn_cast<ZONE*>( item ) )
         {
