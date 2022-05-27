@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-25 16:22-0700\n"
-"PO-Revision-Date: 2022-05-25 03:29+0000\n"
+"PO-Revision-Date: 2022-05-29 05:10+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5549,13 +5549,12 @@ msgid "Locked item shadow"
 msgstr "Lukitun kohteen varjo"
 
 #: common/layer_id.cpp:182
-#, fuzzy
 msgid "Conflicting items shadow"
-msgstr "Ristiriitaiset tarrat"
+msgstr "Ristiriitaisten kohteiden varjo"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
-msgstr "Laiton merkki löytyi loogisesta kirjaston nimestä"
+msgstr "Laiton merkki löytyi loogisesta kirjastonimestä"
 
 #: common/lib_tree_model.cpp:139
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:125
@@ -19362,9 +19361,8 @@ msgid "Open project directory in file explorer"
 msgstr "Avaa projektihakemisto resurssienhallinnassa"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:52
-#, fuzzy
 msgid "Add Default"
-msgstr "Oletusasetus"
+msgstr "Lisää Oletus"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:92
 msgid "Please enter fully qualified repository url"
@@ -38145,13 +38143,12 @@ msgid "Show a shadow marker on locked items"
 msgstr "Näytä varjomerkintä lukituissa kohteissa"
 
 #: pcbnew/widgets/appearance_controls.cpp:356
-#, fuzzy
 msgid "Shadow on Conflicts"
-msgstr "Varjo Lukituille Kohteille"
+msgstr "Varjo Konflikteille"
 
 #: pcbnew/widgets/appearance_controls.cpp:357
 msgid "Show a shadow on overlapping courtyards while moving footprints"
-msgstr ""
+msgstr "Näytä varjo päällekkäisillä piha-alueilla, kun siirrät jalanjälkiä"
 
 #: pcbnew/widgets/appearance_controls.cpp:358
 msgid "Show drawing sheet borders and title block"
