@@ -247,6 +247,7 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
 
     EDA_ANGLE orientation = text.GetTextAngle();
     m_orientation.SetAngleValue( orientation.Normalize180() );
+    m_cbTextOrientation->Enable( !m_dimension->GetKeepTextAligned() );
     m_cbKeepAligned->SetValue( m_dimension->GetKeepTextAligned() );
 
     m_bold->Check( text.IsBold() );
