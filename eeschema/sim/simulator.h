@@ -99,6 +99,12 @@ public:
      */
     virtual bool IsRunning() = 0;
 
+    /**
+     * Cleans simulation data (i.e. all vectors) 
+     * 
+     */
+    virtual void Clean() = 0;
+
 protected:
     ///< Model that should be simulated.
     std::shared_ptr<SIMULATION_MODEL> m_simModel;
