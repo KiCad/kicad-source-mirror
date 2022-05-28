@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-25 16:22-0700\n"
-"PO-Revision-Date: 2022-05-13 22:03+0000\n"
+"PO-Revision-Date: 2022-05-29 05:10+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v6/pl/>\n"
 "Language: pl\n"
@@ -59,7 +59,7 @@ msgstr "Tworzenie ścieżek i przelotek"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:682
 msgid "Create zones"
-msgstr "Tworzenie stref wypełnień"
+msgstr "Tworzenie wypełnionych stref"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:751
 msgid "Simplifying copper layers polygons"
@@ -204,7 +204,7 @@ msgstr "Kopiuj obraz 3D do schowka"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:107
 msgid "Raytracing"
-msgstr "Fotorealizm"
+msgstr "Raytracing"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:112 common/tool/actions.cpp:603
 #: cvpcb/menubar.cpp:74 eeschema/menubar.cpp:285
@@ -213,7 +213,7 @@ msgstr "Fotorealizm"
 #: pagelayout_editor/menubar.cpp:159 pcbnew/menubar_footprint_editor.cpp:232
 #: pcbnew/menubar_pcb_editor.cpp:448
 msgid "Preferences..."
-msgstr "Preferencje..."
+msgstr "Ustawienia..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:113 common/tool/actions.cpp:603
 #: cvpcb/menubar.cpp:75 eeschema/menubar.cpp:286
@@ -333,7 +333,7 @@ msgstr "Błąd"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:718
 msgid "Failed to copy image to clipboard"
-msgstr "Nie można skopiować obrazu do schowka"
+msgstr "Nie udało się skopiować obrazu do schowka"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:729
 msgid "Can't save file"
@@ -405,36 +405,36 @@ msgstr "Odwraca widok płytki (lustrzane odbicie)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
 msgid "Toggle orthographic projection"
-msgstr "Włącz/Wyłącz projekcję perspektywiczną"
+msgstr "Przełącz projekcję perspektywiczną"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:192
 msgid "Enable/disable orthographic projection"
-msgstr "Włącz/Wyłącz projekcję perspektywiczną"
+msgstr "Włącza lub wyłącza projekcję perspektywiczną"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:126
 msgid "View Front"
-msgstr "Pokaż od przodu"
+msgstr "Pokaż z przodu"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:132
 msgid "View Back"
-msgstr "Pokaż od tyłu"
+msgstr "Pokaż z tyłu"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:138
 msgid "View Left"
-msgstr "Pokaż od lewej"
+msgstr "Pokaż z lewej"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:144
 msgid "View Right"
-msgstr "Pokaż od prawej"
+msgstr "Pokaż z prawej"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
 msgid "View Top"
-msgstr "Pokaż od góry"
+msgstr "Pokaż z góry"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:156
 msgid "View Bottom"
-msgstr "Pokaż od dołu"
+msgstr "Pokaż z dołu"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:161
 msgid "No 3D Grid"
@@ -450,7 +450,7 @@ msgstr "Siatka 3D 5mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:176
 msgid "3D Grid 2.5mm"
-msgstr "Siatka 3D 2.5mm"
+msgstr "Siatka 3D 2,5mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:181
 msgid "3D Grid 1mm"
@@ -458,7 +458,7 @@ msgstr "Siatka 3D 1mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:187
 msgid "Render Realistic Materials"
-msgstr "Renderuj materiały jako realistyczne"
+msgstr "Renderuj materiały realistycznie"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:188
 msgid "Use all material properties from each 3D model file"
