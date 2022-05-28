@@ -480,6 +480,7 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
     m_simulator->LoadNetlist( formatter.GetString() );
     updateTuners();
     applyTuners();
+    m_simulator->Clean();
     m_simulator->Run();
 }
 
@@ -1648,6 +1649,8 @@ void SIM_PLOT_FRAME::doCloseWindow()
 {
     if( m_simulator->IsRunning() )
         m_simulator->Stop();
+
+    m_simulator->Clean();
 
     // Cancel a running simProbe or simTune tool
     m_schematicFrame->GetToolManager()->RunAction( ACTIONS::cancelInteractive );

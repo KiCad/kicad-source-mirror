@@ -93,6 +93,9 @@ public:
     ///< @copydoc SPICE_SIMULATOR::GetNetlist()
     virtual const std::string GetNetlist() const override;
 
+    ///< @copydoc SIMULATOR::Clean()
+    void Clean() override final;
+
 private:
     void init();
 

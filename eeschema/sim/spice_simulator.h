@@ -92,6 +92,11 @@ public:
     virtual bool IsRunning() = 0;
 
     /**
+     * Clear simulation data (i.e. all vectors).
+     */
+    virtual void Clean() = 0;
+
+    /**
      * Execute a Spice command as if it was typed into console.
      *
      * @param aCmd is the command to be issued.

@@ -680,4 +680,10 @@ void NGSPICE::validate()
 }
 
 
+void NGSPICE::Clean()
+{
+    Command( "destroy all" );
+}
+
+
 bool NGSPICE::m_initialized = false;
