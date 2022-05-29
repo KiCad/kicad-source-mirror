@@ -165,21 +165,6 @@ elseif(MINGW)
 endif()
 
 ########################################
-## find Boost if necessary
-########################################
-if(NANODBC_ENABLE_BOOST)
-  set(Boost_USE_STATIC_LIBS ON)
-  set(Boost_USE_MULTITHREADED ON)
-  find_package(Boost COMPONENTS locale REQUIRED)
-  if(Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIRS})
-    link_directories(${CMAKE_BINARY_DIR}/lib ${Boost_LIBRARY_DIRS})
-  else()
-    message(FATAL_ERROR "can not find boost")
-  endif()
-endif()
-
-########################################
 ## Mac OS X specifics for targets
 ########################################
 if(APPLE)
