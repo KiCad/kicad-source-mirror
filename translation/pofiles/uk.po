@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-25 16:22-0700\n"
-"PO-Revision-Date: 2022-05-26 16:13+0000\n"
+"PO-Revision-Date: 2022-05-29 07:05+0000\n"
 "Last-Translator: Kuzemko Alexsandr <alexandrkuzemko@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -10408,7 +10408,7 @@ msgstr "Встановіть ширину рамки 0 для використа
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:126
 msgid "Clear colors to use Schematic Editor colors."
-msgstr "Очищення кольорів для використання кольорів схематичного редактора."
+msgstr "Очистить кольори, щоб використовувати кольори редактора схеми."
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:79
 #, c-format
@@ -10421,19 +10421,19 @@ msgstr "Властивості виводу аркуша"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:255
 msgid "A sheet must have a valid file name."
-msgstr "Лист має мати правильне ім'я файлу."
+msgstr "Аркуш має мати правильне ім'я файлу."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:265
 msgid "Sheet file must have a '.kicad_sch' extension."
-msgstr "Файл листа повинен мати розширення '.kicad_sch'."
+msgstr "Файл аркуша повинен мати розширення '.kicad_sch'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:299
 msgid "Use relative path for sheet file?"
-msgstr "Використовувати відносний шлях для файлу листа?"
+msgstr "Використовувати відносний шлях для файлу аркуша?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:300
 msgid "Sheet File Path"
-msgstr "Шлях до файлу листа"
+msgstr "Шлях до файлу аркуша"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:303
 msgid ""
@@ -10444,7 +10444,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:307
 msgid "Use Relative Path"
-msgstr "Використовувати Відносний шлях"
+msgstr "Використовувати Відносний Шлях"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:308
 msgid "Use Absolute Path"
@@ -10574,24 +10574,23 @@ msgstr "Джерело 1 та Джерело 2 повинні бути різн�
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:282
 msgid "No valid simulation is configured."
-msgstr "Немає налаштованого правильного моделювання."
+msgstr "Жоден із підтримуваних типів симуляції не вибраний."
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:285
 msgid ""
 "A valid simulation can be configured by selecting a simulation tab, setting "
 "the simulation parameters and clicking the OK button with the tab selected."
 msgstr ""
-"Застосовувати допустиму симуляцію можна за допомогою вкладки моделювання, "
-"установивши параметри моделювання та натиснувши кнопку ОК із вибраною "
-"вкладкою."
+"Режим симуляції можна настроїти на вкладці симуляції. Встановіть потрібні "
+"параметри та натисніть кнопку OK."
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:289
 msgid "Exit Without Valid Simulation"
-msgstr "Вийти без дійсного моделювання"
+msgstr "Вийти без налаштування симуляції"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:290
 msgid "Configure Valid Simulation"
-msgstr "Налаштувати коректне моделювання"
+msgstr "Налаштувати симуляцію"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:588
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:146
@@ -10725,15 +10724,15 @@ msgstr "Переміщення постійного струму"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:214
 #: eeschema/sim/spice_simulator.cpp:67
 msgid "Distortion"
-msgstr "Спотворення сигналу"
+msgstr "Спотворення"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:229
 msgid "Measured node"
-msgstr "Виміряний вузол"
+msgstr "Вимірюваний вузол"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:239
 msgid "Reference node"
-msgstr "Артикул"
+msgstr "Референтний вузол"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:246
 msgid "(optional; default GND)"
@@ -10749,11 +10748,11 @@ msgstr "Кількість точок"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:287
 msgid "Start frequency [Hz]"
-msgstr "Частота запуску [Hz]"
+msgstr "Початкова Частота [Гц]"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:294
 msgid "Stop frequency [Hz]"
-msgstr "Частота зупинки [Hz]"
+msgstr "Кінцева Частота [Гц]"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:311
 #: eeschema/sim/spice_simulator.cpp:70
@@ -10767,11 +10766,11 @@ msgstr "Ця вкладка не має налаштувань"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:330
 #: eeschema/sim/spice_simulator.cpp:55
 msgid "Operating Point"
-msgstr "Точка роботи"
+msgstr "Робоча Точка"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:334
 msgid "Pole-Zero"
-msgstr "Поле-Зеро"
+msgstr "Полюс-нуль"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:338
 #: eeschema/sim/spice_simulator.cpp:76
@@ -10780,11 +10779,11 @@ msgstr "Чутливість"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:342
 msgid "Transfer Function"
-msgstr "Передача функції"
+msgstr "Функція передачі"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:355
 msgid "Time step:"
-msgstr "Крок часу:"
+msgstr "Період:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:362
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:376
@@ -10815,20 +10814,20 @@ msgstr "Початковий час:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:394
 msgid "(optional; default 0)"
-msgstr "(не обов’язково; стандартний)"
+msgstr "(необов'язково; за замовчуванням 0)"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:408
 #: eeschema/sim/spice_simulator.cpp:64
 msgid "Transient"
-msgstr "Transient"
+msgstr "Перехідний процес"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:413
 msgid "Spice directives:"
-msgstr "Спец-директиви:"
+msgstr "Директиви Spice:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:422
 msgid "Load directives from schematic"
-msgstr "Завантажити директиви з технологічної схеми"
+msgstr "Завантажити директиви зі схеми"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:429 pcbnew/pad.cpp:1671
 msgid "Custom"
@@ -10840,7 +10839,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:439
 msgid "Add full path for .include library directives"
-msgstr "Додати повний шлях для .include директив бібліотеки"
+msgstr "Додати повний шлях для директиви .include бібліотеки"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:446
 msgid "Compatibility mode:"
@@ -10848,7 +10847,7 @@ msgstr "Режим сумісності:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "User configuration"
-msgstr "Налаштування користувача"
+msgstr "Конфігурація користувача"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "Spice"
@@ -10856,19 +10855,19 @@ msgstr "Spice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "PSpice"
-msgstr "Пспіце"
+msgstr "PSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "LTSpice"
-msgstr "ЛТспіце"
+msgstr "LTSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "PSpice and LTSpice"
-msgstr "Піспіце-і LTSpice"
+msgstr "PSpice та LTSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "HSpice"
-msgstr "Гспіс"
+msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.h:140
 msgid "Simulation settings"
@@ -10876,7 +10875,7 @@ msgstr "Параметри моделювання"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:80
 msgid "Diode"
-msgstr "Diode"
+msgstr "Діод"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:81
 msgid "BJT"
@@ -10892,11 +10891,11 @@ msgstr "JFET"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:84
 msgid "Subcircuit"
-msgstr "Підколо"
+msgstr "Підсхема"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:85
 msgid "Code Model"
-msgstr "Модель коду"
+msgstr "Модель з коду"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:497
 msgid ""
@@ -10907,25 +10906,24 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model.cpp:506
 msgid "For a Diode, pin order is anode, cathode"
-msgstr "Для діода, згідно стину це антрофей"
+msgstr "Для діодів порядок виводів: анод, катод"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:510
 msgid "For a BJT, pin order is collector, base, emitter, substrate (optional)"
 msgstr ""
-"Для BJT, порядок контакту - колектор, основна, випромінювач, substrate "
-"(необов'язково)"
+"Для BJT, порядок виводів: колектор, база, емітер, підкладинка (необов'язково)"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:514
 msgid "For a MOSFET, pin order is drain, gate, source"
-msgstr "Для MOSFET, пішонний порядок зливається, брама, джерело"
+msgstr "Для MOSFET порядок виводів стік, затвор, витік"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:518
 msgid "For a JFET, pin order is drain, gate, source"
-msgstr "Для JFET, податковий розпорядження є, брама, джерело"
+msgstr "Для JFET порядок виводів стік, затвор, витік"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:803
 msgid "Invalid Impedance value"
-msgstr "Неприпустиме значення імпульсу"
+msgstr "Неправильне значення імпедансу"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:818
 msgid "Invalid delay value"
@@ -10937,23 +10935,23 @@ msgstr "Неправильне значення частоти"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:845
 msgid "Invalid length in wavelength value"
-msgstr "Неприпустима довжина в значенні довжини хвилі"
+msgstr "Неправильне значення довжини хвилі"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:870
 msgid "Invalid resistance value"
-msgstr "Неприпустиме значення опору"
+msgstr "Неправильне значення опору"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:881
 msgid "Invalid capacitance value"
-msgstr "Недопустиме значення ємності"
+msgstr "Неправильне значення ємності"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:892
 msgid "Invalid inductance value"
-msgstr "Недійсне значення індукції"
+msgstr "Неправильне значення індуктивності"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:903
 msgid "Invalid conductance value"
-msgstr "Невірне значення провідності"
+msgstr "Неправильне значення провідності"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:914
 msgid "Invalid length value"
@@ -10963,13 +10961,14 @@ msgstr "Неправильне значення довжини"
 #, c-format
 msgid ""
 "You need to specify at least the first %d parameters for the transient source"
-msgstr "Потрібно вказати принаймні перші %d параметри для тимчасового джерела"
+msgstr ""
+"Потрібно вказати принаймні перші %d параметри для джерела перехідних процесів"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1075
 msgid ""
 "You cannot leave interleaved empty fields when defining a transient source"
 msgstr ""
-"Ви не можете залишити поля без полів при визначенні тимчасового джерела"
+"Ви не можете залишити поля пустими при визначенні джерела перехідних процесів"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1292
 msgid "Select library"
@@ -10978,7 +10977,7 @@ msgstr "Виберіть бібліотеку"
 #: eeschema/dialogs/dialog_spice_model.cpp:1360
 #: eeschema/dialogs/dialog_spice_model_base.cpp:885
 msgid "Range:"
-msgstr "Range:"
+msgstr "Діапазон:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1361
 #: eeschema/dialogs/dialog_spice_model.cpp:1373
@@ -10995,9 +10994,8 @@ msgstr "Стандартне відхилення:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1367
 #: eeschema/dialogs/dialog_spice_model.cpp:1372
-#, fuzzy
 msgid "Mean:"
-msgstr "Значення"
+msgstr "Середнє значення:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1378
 msgid "Lambda:"
@@ -11005,7 +11003,7 @@ msgstr "Лямбда:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1383
 msgid "type of random generator for source is invalid"
-msgstr "тип випадкового генератора джерела невірний"
+msgstr "тип випадкового генератора для джерела живлення невірний"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:30
 #: eeschema/dialogs/dialog_spice_model_base.cpp:233
@@ -11022,11 +11020,11 @@ msgstr "Резистор"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:36
 msgid "Capacitor"
-msgstr "Ємність"
+msgstr "Конденсатор"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:37
 msgid "Inductor"
-msgstr "Індуктор"
+msgstr "Індуктивність"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:41
 msgid "Passive type"
@@ -11044,7 +11042,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:71
 msgid "Spice unit symbols in values (case insensitive):"
-msgstr "Символи одиниці спеції у значеннях (не чутлива до регістру):"
+msgstr "Spice приставки у значеннях (нечутливі до регістру):"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:210
 msgid "Library:"
@@ -11076,7 +11074,7 @@ msgstr "Аналіз DC/AC"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:311
 msgid "DC:"
-msgstr "ДС:"
+msgstr "DC:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:320
 #: eeschema/dialogs/dialog_spice_model_base.cpp:342
@@ -11092,23 +11090,23 @@ msgstr "ДС:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:775
 #: eeschema/dialogs/dialog_spice_model_base.cpp:786
 msgid "Volts/Amps"
-msgstr "Вольт/ОП"
+msgstr "В/А"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:333
 msgid "AC magnitude:"
-msgstr "AC magnitude:"
+msgstr "AC значення:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:346
 msgid "AC phase:"
-msgstr "AC phase:"
+msgstr "AC фаза:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:355
 msgid "radians"
-msgstr "радіани"
+msgstr "рад"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:366
 msgid "Transient Analysis"
-msgstr "Транзистентний аналіз"
+msgstr "Аналіз перехідних процесів"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:376
 #: eeschema/dialogs/dialog_spice_model_base.cpp:536
@@ -11118,7 +11116,7 @@ msgstr "Початкове значення:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:389
 #: eeschema/dialogs/dialog_spice_model_base.cpp:549
 msgid "Pulsed value:"
-msgstr "Число використань:"
+msgstr "Імпульсне значення:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:400
 msgid "Delay time:"
@@ -11126,7 +11124,7 @@ msgstr "Час затримки:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:411
 msgid "Rise time:"
-msgstr "Час підйому:"
+msgstr "Час наростання:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:422
 msgid "Fall time:"
@@ -11134,7 +11132,7 @@ msgstr "Час падіння:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:433
 msgid "Pulse width:"
-msgstr "Ширина пульсації:"
+msgstr "Ширина імпульсу:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:444
 msgid "Period:"
@@ -11142,11 +11140,11 @@ msgstr "Період:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:459
 msgid "Pulse"
-msgstr "Пульс"
+msgstr "Імпульс"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:467
 msgid "DC offset:"
-msgstr "Відхилення DC :"
+msgstr "Зсув DC:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:480
 #: eeschema/dialogs/dialog_spice_model_base.cpp:688
@@ -11171,40 +11169,40 @@ msgstr "Затримка:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:513
 msgid "Damping factor:"
-msgstr "Фактор затухання:"
+msgstr "Коефіцієнт згасання:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:520
 msgid "1/seconds"
-msgstr "1/секунди"
+msgstr "1/с"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:528
 msgid "Sinusoidal"
-msgstr "Sinusoidal"
+msgstr "Синусоїдальний"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:560
 msgid "Rise delay time:"
-msgstr "Час звучання:"
+msgstr "Час затримки наростання:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:571
 msgid "Rise time constant:"
-msgstr "Константа часу жорстки:"
+msgstr "Константа часу наростання:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:582
 msgid "Fall delay time:"
-msgstr "Час затримки:"
+msgstr "Час затримки згасання:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:593
 msgid "Fall time constant:"
-msgstr "Константа часу падіння :"
+msgstr "Константа часу згасання:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:608
 #: eeschema/dialogs/dialog_spice_model_base.cpp:854
 msgid "Exponential"
-msgstr "Exponential"
+msgstr "Експоненціальна"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:610
 msgid "Piece-wise linear"
-msgstr "Широкомовна лінійна"
+msgstr "Лінійна апроксимація"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:625
 msgid "Time:"
@@ -11212,20 +11210,20 @@ msgstr "Час:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:634
 msgid "second"
-msgstr "секунда"
+msgstr "с"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:667
 msgid "Piece-wise Linear"
-msgstr "Лінійна фігура"
+msgstr "Лінійна апроксимація"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:699
 #: eeschema/dialogs/dialog_spice_model_base.cpp:801
 msgid "Carrier frequency:"
-msgstr "Частота перевізника:"
+msgstr "Частота несучої:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:710
 msgid "Modulation index:"
-msgstr "Індекс модулів:"
+msgstr "Коефіцієнт модуляції:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:717
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
@@ -11239,13 +11237,13 @@ msgstr "Частота сигналу:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:732
 #: eeschema/dialogs/dialog_spice_model_base.cpp:823
 msgid "Carrier phase:"
-msgstr "Фаза перевізника:"
+msgstr "Фаза несучої:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:739
 #: eeschema/dialogs/dialog_spice_model_base.cpp:750
 #: eeschema/dialogs/dialog_spice_model_base.cpp:830
 msgid "degrees"
-msgstr "градуси"
+msgstr "°"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:743
 msgid "Signal phase:"
@@ -11253,7 +11251,7 @@ msgstr "Фаза сигналу:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:758
 msgid "FM"
-msgstr "ФМ"
+msgstr "ЧМ"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:790
 msgid "Modulating frequency:"
@@ -11265,19 +11263,19 @@ msgstr "Затримка сигналу:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:838
 msgid "AM"
-msgstr "ДП"
+msgstr "АМ"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:842
 msgid "Transient noise"
-msgstr "Transient noise"
+msgstr "Перехідні завади"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:854
 msgid "Uniform"
-msgstr "Рівномірна"
+msgstr "Рівномірні"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:854
 msgid "Gaussian"
-msgstr "Гауссієць"
+msgstr "Гауссові"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:854
 msgid "Poisson"
@@ -11285,7 +11283,7 @@ msgstr "Poisson"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:863
 msgid "Individual value duration:"
-msgstr "Тривалість індивідуального значення:"
+msgstr "Тривалість:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:874
 msgid "Time delay:"
@@ -11319,7 +11317,7 @@ msgstr "Джерело"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:938
 msgid "Line model"
-msgstr "Лінійна модель"
+msgstr "Модель лінії"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:954
 #: pcb_calculator/transline_ident.cpp:149
@@ -11330,7 +11328,7 @@ msgstr "Лінійна модель"
 #: pcb_calculator/transline_ident.cpp:373
 #: pcb_calculator/transline_ident.cpp:412
 msgid "Characteristic impedance"
-msgstr "Характеристичний імпеданс"
+msgstr "Хвильовий опір"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:961
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:158
@@ -11356,15 +11354,15 @@ msgstr "Частота"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:987
 msgid "Length in wavelength"
-msgstr "Довжина довжини в довжини хвилі"
+msgstr "Довжина в довжинах хвилі"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1000
 msgid "Use time delay"
-msgstr "Затримка часу"
+msgstr "Використовувати затримку часу"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1000
 msgid "Use frequency and number of wavelength"
-msgstr "Використовувати частоту та кількість хвиль"
+msgstr "Використовувати частоту та кількість довжин хвиль"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1002
 msgid "Delay / Electrical length"
@@ -11372,39 +11370,39 @@ msgstr "Затримка / Електрична довжина"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1010
 msgid "Lossless"
-msgstr "Без втрат якості"
+msgstr "Без втрат"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1024
 msgid "Resistance per unit length"
-msgstr "Опір на одиницю"
+msgstr "Опір на одиницю довжини"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1031
 msgid "ohm / unit"
-msgstr "Одиниця Ому"
+msgstr "Ом/од"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1035
 msgid "Inductance per unit length"
-msgstr "Індуктивність на одиницю"
+msgstr "Індуктивність на одиницю довжини"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1042
 msgid "henry / unit"
-msgstr "Генрі / одиниця"
+msgstr "Гн / од"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1046
 msgid "Capacitance per unit length"
-msgstr "Ємність на одиницю"
+msgstr "Ємність на одиницю довжини"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1053
 msgid "farad / unit"
-msgstr "фарад / одиниця"
+msgstr "Ф / од"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1057
 msgid "Conductance per unit length"
-msgstr "Одиниця виміру"
+msgstr "Провідність на одиницю довжини"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1064
 msgid "siemens / unit"
-msgstr "викиди / одиниця"
+msgstr "См / од"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1079
 msgid "Extra parameters"
@@ -11424,7 +11422,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1100
 msgid "Lossy"
-msgstr "Лоссі"
+msgstr "Втрати"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1111
 msgid "Transmission Line"
@@ -11436,7 +11434,7 @@ msgstr "Вимкнути символ для симуляції"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:1124
 msgid "Alternate node sequence:"
-msgstr "Альтернативна послідовність вузла:"
+msgstr "Змінити послідовність виводів:"
 
 #: eeschema/dialogs/dialog_spice_model_base.h:289
 msgid "Spice Model Editor"
@@ -11445,46 +11443,46 @@ msgstr "Редактор Spice моделі"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:89
 #: eeschema/fields_grid_table.cpp:749
 msgid "Select Footprint..."
-msgstr "Виберіть місце розташування..."
+msgstr "Виберіть посадкове місце..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:90
 #: eeschema/fields_grid_table.cpp:750
 msgid "Browse for footprint"
-msgstr "Шукати місце розташування"
+msgstr "Шукати посадкові місця"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:95
 #: eeschema/fields_grid_table.cpp:755 eeschema/tools/ee_actions.cpp:61
 msgid "Show Datasheet"
-msgstr "Show Datasheet"
+msgstr "Показати Документацію"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:96
 #: eeschema/fields_grid_table.cpp:756
 msgid "Show datasheet in browser"
-msgstr "Показати дату в браузері"
+msgstr "Показати документацію в браузері"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:133
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1178
 msgid "The Reference column cannot be hidden."
-msgstr "Артикул не може бути прихованим."
+msgstr "Стовпець Позначення не може бути прихованим."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:251
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:265
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:653
 msgid "Qty"
-msgstr "К-ть"
+msgstr "Кількість"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:751
 msgid "Group By"
-msgstr "Групувати"
+msgstr "Групувати за"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1025
 #: eeschema/symbol_editor/symbol_editor.cpp:1339
 msgid "Datasheet"
-msgstr "Datasheet"
+msgstr "Документація"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1047
 msgid "New field name:"
-msgstr "Нове ім'я поля:"
+msgstr "Імʼя нового поля:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1047
 msgid "Add Field"
@@ -11492,13 +11490,13 @@ msgstr "Додати поле"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1056
 msgid "Field must have a name."
-msgstr "Поле повинно мати назву."
+msgstr "Поле повинно мати імʼя."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1064
 #: eeschema/dialogs/dialog_symbol_properties.cpp:821
 #, c-format
 msgid "Field name '%s' already in use."
-msgstr "Назва поля '%s' вже використовується."
+msgstr "Імʼя поля '%s' вже використовується."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1096
 msgid "User Fields"
@@ -11534,11 +11532,11 @@ msgstr "Видалити поле..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:65
 msgid "Group symbols"
-msgstr "Символи групи"
+msgstr "Групувати символи"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:67
 msgid "Group symbols together based on common properties"
-msgstr "Символи групи разом на основі загальних властивостей"
+msgstr "Групувати символи на основі загальних властивостей"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:125
 msgid "Export as CSV..."
@@ -11550,16 +11548,16 @@ msgstr "Таблиця полів символів"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:146
 msgid "Base Name"
-msgstr "Базова назва"
+msgstr "Основне імʼя"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:147
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:275
 msgid "Alternate Assignment"
-msgstr "Альтернативний доручення"
+msgstr "Альтернативна функція"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:130
 msgid "Unit:"
-msgstr "Одиниці:"
+msgstr "Частина:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:141
 msgid "Alternate symbol (De Morgan)"
@@ -11573,7 +11571,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:146
 msgid "Default for all sheet instances"
-msgstr "Типово для всіх екземплярів листа"
+msgstr "Типово для всіх екземплярів аркушів"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:147
 msgid ""
@@ -11610,11 +11608,11 @@ msgstr "180"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:161
 msgid "Mirror:"
-msgstr "Дзеркало:"
+msgstr "Віддзеркалити:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:165
 msgid "Not mirrored"
-msgstr "Не віддзеркалено"
+msgstr "Не віддзеркалювати"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:165
 msgid "Around X axis"
@@ -11626,15 +11624,15 @@ msgstr "По осі Y"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:183
 msgid "Pin Text"
-msgstr "Закріпити текст"
+msgstr "Текст виводу"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:185
 msgid "Show pin numbers"
-msgstr "Показати контактні номери"
+msgstr "Показати номер виводу"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:191
 msgid "Show pin names"
-msgstr "Показувати назви пін-блоків"
+msgstr "Показувати імʼя виводу"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:201
 msgid "Attributes"
@@ -11642,7 +11640,7 @@ msgstr "Атрибути"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:203
 msgid "Exclude from bill of materials"
-msgstr "Виключити з рахунку матеріалів"
+msgstr "Виключити з переліку елементів"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:204
 msgid ""
@@ -11664,7 +11662,7 @@ msgstr "Оновити символ з бібліотеки..."
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:225
 #: eeschema/tools/ee_actions.cpp:457
 msgid "Change Symbol..."
-msgstr "Змінити символ..."
+msgstr "Замінити символ..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:228
 msgid "Edit Symbol..."
@@ -11673,28 +11671,28 @@ msgstr "Редагувати символ..."
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:234
 #: eeschema/tools/ee_actions.cpp:582
 msgid "Edit Library Symbol..."
-msgstr "Змінити кодування бібліотеки..."
+msgstr "Редагувати символ бібліотеки..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:273
 msgid "Pin Number"
-msgstr "Номер PIN-код"
+msgstr "Номер виводу"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:274
 msgid "Base Pin Name"
-msgstr "Базове ПІН-код"
+msgstr "Базове імʼя виводу"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:300
 msgid "Alternate Pin Assignments"
-msgstr "Альтернативні вбудовані інструкції Pin"
+msgstr "Альтернативні функції виводів"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:310
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:383
 msgid "Library link:"
-msgstr "Посилання до бібліотеки:"
+msgstr "Посилання на бібліотеку:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:325
 msgid "Spice Model..."
-msgstr "Гістограма моделі..."
+msgstr "Spice модель..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.h:105
 msgid "Symbol Properties"
@@ -11706,7 +11704,8 @@ msgid ""
 "Remapping is not possible because you have insufficient privileges to the "
 "project folder '%s'."
 msgstr ""
-"Відновлення неможливе, оскільки у вас недостатньо прав для теки проекту '%s."
+"Повторне визначення неможливе, оскільки у вас недостатньо прав для запису в "
+"теку проєкту '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:67
 msgid ""
@@ -11751,16 +11750,16 @@ msgstr "У таблиці бібліотек символів %s не знайд
 #: eeschema/dialogs/dialog_symbol_remap.cpp:266
 #, c-format
 msgid "Symbol %s mapped to symbol library '%s'."
-msgstr "Символ %s зіставлений з символом бібліотеки '%s."
+msgstr "Символ %s переназначено до бібліотеки '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:275
 msgid "Symbol library table mapping complete!"
-msgstr "Застосування таблиці символів з бібліотекою завершено!"
+msgstr "Переназначення таблиці бібліотек символів завершено!"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:345
 #, c-format
 msgid "Cannot create project remap back up folder '%s'."
-msgstr "Не вдалося створити папку для оновлення проекту '%s."
+msgstr "Не вдалося створити теку резервних копій проєкту '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:348
 #: eeschema/dialogs/dialog_symbol_remap.cpp:496
@@ -11770,7 +11769,7 @@ msgstr "Помилка резервного копіювання"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:350
 #: eeschema/dialogs/dialog_symbol_remap.cpp:500
 msgid "Continue with Rescue"
-msgstr "Продовжити з порятунком"
+msgstr "Продовжити з Порятунком"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:351
 #: eeschema/dialogs/dialog_symbol_remap.cpp:501
@@ -11804,12 +11803,12 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:495
 msgid "Some of the project files could not be backed up."
-msgstr "Деякі з файлів проекту не вдалося зберегти."
+msgstr "Деякі з резервних копій файлів проєкту не вдалося зберегти."
 
 #: eeschema/dialogs/dialog_symbol_remap_base.cpp:30
 #: eeschema/dialogs/dialog_symbol_remap_base.h:54
 msgid "Remap Symbols"
-msgstr "Символи Remap"
+msgstr "Перевизначення Символів"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:378
 msgid "Text can not be empty."
@@ -11835,8 +11834,8 @@ msgstr "Оновити схему"
 msgid ""
 "Re-link footprints to schematic symbols based on their reference designators"
 msgstr ""
-"Повторно зв'язати сліди з схематичними символами на основі їх дизайнаторів "
-"посилань"
+"Повторно визначити звʼязки посадкових місць та символів на основі їх "
+"позначень"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:33
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:28
@@ -11868,7 +11867,7 @@ msgstr "Оновити значення символів, які були зам
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:69
 msgid "Net names"
-msgstr "Чисті імена"
+msgstr "Імена звʼязків"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:55
 msgid "Update Schematic from PCB"
@@ -11897,7 +11896,7 @@ msgstr "Wire/bus width:"
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:90
 msgid "Set width to 0 to use netclass's wire/bus widths."
 msgstr ""
-"Встановіть ширину до 0 для використання ширин мережі або автобусів мережі."
+"Встановіть ширину 0 для використання ширин звʼязків для провідників/шин."
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:71
 msgid "Wire & Bus Properties"
@@ -12003,11 +12002,11 @@ msgstr "Збільшити до розмірів подібних елемент
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:124
 #: pcbnew/dialogs/panel_display_options_base.cpp:88
 msgid "Highlight cross-probed nets"
-msgstr "Виділяти перехресні мережі"
+msgstr "Виділяти перехресні звʼязки"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:126
 msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr "Виділяти сітки в редакторі ПК"
+msgstr "Виділяти звʼязки в схемі які виділені в редакторі плат"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
 msgid "Line Drawing Mode:"
@@ -12315,22 +12314,22 @@ msgstr "]"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:213
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:21
 msgid "Dashed Lines"
-msgstr "Штрихові рядки"
+msgstr "Штрихові лінії"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:220
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:28
 msgid "Dash length:"
-msgstr "Довжина креслення:"
+msgstr "Довжина штрихування:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:227
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:35
 msgid "Gap length:"
-msgstr "Довжина прогалини:"
+msgstr "Інтервал:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:237
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:45
 msgid "Dash and dot lengths are ratios of the line width."
-msgstr "Довжина лінії та крапки є співвідношенням ширини."
+msgstr "Довжина штрихів та пунктирів щодо товщини лінії."
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:169
 msgid "No error or warning"
@@ -12338,11 +12337,11 @@ msgstr "Помилки та попередження відсутні"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:174
 msgid "Generate warning"
-msgstr "Автоматично генерувати попередження"
+msgstr "Створити попередження"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:179
 msgid "Generate error"
-msgstr "Помилка при створенні"
+msgstr "Створити помилку"
 
 #: eeschema/dialogs/panel_setup_pinmap_base.cpp:24
 msgid "Pin to Pin Connections"
@@ -12351,11 +12350,11 @@ msgstr "Закріпити у контактах"
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:22
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings_base.cpp:18
 msgid "Color Theme"
-msgstr "Колір теми"
+msgstr "Кольорова тема"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:25
 msgid "Use schematic editor color theme"
-msgstr "Використовувати тему редактора технологічних схем"
+msgstr "Використовувати кольорову тему редактора схем"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:31
 msgid "Use theme:"
@@ -12686,15 +12685,15 @@ msgstr "Плитка панелі живлення"
 
 #: eeschema/erc.cpp:70 eeschema/erc.cpp:87
 msgid "Power Output Pin"
-msgstr "ПІН-код на потужність"
+msgstr "Вивід живлення"
 
 #: eeschema/erc.cpp:71 eeschema/erc.cpp:88
 msgid "Open Collector"
-msgstr "Відкрити колектор"
+msgstr "Відкритий колектор"
 
 #: eeschema/erc.cpp:72 eeschema/erc.cpp:89
 msgid "Open Emitter"
-msgstr "Відкрити Емітер"
+msgstr "Відкритий Емітер"
 
 #: eeschema/erc.cpp:73 eeschema/erc.cpp:90
 msgid "No Connection"
@@ -12721,17 +12720,17 @@ msgstr "Контакти з підключенням типу \"no connection\""
 #: eeschema/erc.cpp:547
 #, c-format
 msgid "Pins of type %s and %s are connected"
-msgstr "Піни типу %s і %s підключені"
+msgstr "Виводи типу %s і %s зʼєднані"
 
 #: eeschema/erc.cpp:618
 #, c-format
 msgid "Pin %s is connected to both %s and %s"
-msgstr "Закріпити %s під'єднано до обох %s і до %s"
+msgstr "Вивід %s з'єднано з %s та %s"
 
 #: eeschema/erc.cpp:722 pcbnew/drc/drc_test_provider_library_parity.cpp:468
 #, c-format
 msgid "The current configuration does not include the library '%s'."
-msgstr "Поточна конфігурація не містить бібліотеку '%s."
+msgstr "Поточна конфігурація не містить бібліотеку '%s'."
 
 #: eeschema/erc.cpp:733 pcbnew/drc/drc_test_provider_library_parity.cpp:482
 #, c-format
@@ -12801,7 +12800,8 @@ msgstr "Інший слід використовувати в іншій оди�
 
 #: eeschema/erc_item.cpp:102
 msgid "Different net assigned to a shared pin in another unit of the symbol"
-msgstr "Різна мережа виділена спільним контактом в іншій одиниці символу"
+msgstr ""
+"Різні звʼязки підключені до спільних виводів різних частин одного компонента"
 
 #: eeschema/erc_item.cpp:106
 msgid "Conflict between bus alias definitions across schematic sheets"
@@ -12809,11 +12809,11 @@ msgstr "Конфлікт між визначеннями автобусів у �
 
 #: eeschema/erc_item.cpp:110
 msgid "More than one name given to this bus or net"
-msgstr "Більше одного імені дано на цей автобус або зміст"
+msgstr "Більше одного імені назначено цій шині або звʼязку"
 
 #: eeschema/erc_item.cpp:114
 msgid "Net is graphically connected to a bus but not a bus member"
-msgstr "Мережа графічно підключена до автобусу, але не до учасника автобусу"
+msgstr "Звʼязок графічно підключений до шини, але не є сигналом шини"
 
 #: eeschema/erc_item.cpp:118
 msgid "Label attached to bus item does not describe a bus"
@@ -12826,7 +12826,7 @@ msgstr ""
 
 #: eeschema/erc_item.cpp:126
 msgid "Invalid connection between bus and net items"
-msgstr "Нечинний зв'язок між автобусом та елементами"
+msgstr "Нечинний зв'язок між шиною та провідниками"
 
 #: eeschema/erc_item.cpp:130 pcbnew/drc/drc_item.cpp:188
 msgid "Unresolved text variable"
@@ -13358,7 +13358,7 @@ msgstr "Малювання до буфера обміну"
 #: eeschema/menubar.cpp:123 pcbnew/menubar_pcb_editor.cpp:115
 #: pcbnew/pcb_edit_frame.cpp:201
 msgid "Netlist..."
-msgstr "Мережа..."
+msgstr "Список звʼязків..."
 
 #: eeschema/menubar.cpp:187
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:123
@@ -13415,7 +13415,7 @@ msgstr "Успішно."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:186
 msgid "Error: duplicate sheet names. Continue?"
-msgstr "Помилка: дублювання імен листів. Продовжити?"
+msgstr "Помилка: дублювання імен аркушів. Продовжити?"
 
 #: eeschema/picksymbol.cpp:145 pcbnew/load_select_footprint.cpp:255
 msgid "Recently Used"
@@ -13585,7 +13585,7 @@ msgstr "Тип матеріалу автобуса"
 #: eeschema/sch_bus_entry.cpp:549 eeschema/sch_label.cpp:817
 #: eeschema/sch_line.cpp:944
 msgid "Assigned Netclass"
-msgstr "Призначена мережа"
+msgstr "Призначений клас звʼязків"
 
 #: eeschema/sch_connection.cpp:408
 msgid "Connection Name"
@@ -13672,7 +13672,7 @@ msgstr "[немає технологічної схеми]"
 #: eeschema/sch_edit_frame.cpp:1613
 #, c-format
 msgid "Highlighted net: %s"
-msgstr "Підсвічена мережа: %s"
+msgstr "Підсвічений звʼязок: %s"
 
 #: eeschema/sch_field.cpp:761
 msgid "<root sheet>"
@@ -13797,7 +13797,7 @@ msgstr "Тип лінії"
 
 #: eeschema/sch_line.cpp:922
 msgid "from netclass"
-msgstr "з мережевого класу"
+msgstr "з класу звʼязків"
 
 #: eeschema/sch_marker.cpp:190
 msgid "Electrical Rule Check Error"
@@ -14848,7 +14848,7 @@ msgstr "Імітатор Spice"
 
 #: eeschema/sim/sim_plot_frame.cpp:474 eeschema/sim/sim_plot_frame.cpp:1471
 msgid "There were errors during netlist export, aborted."
-msgstr "Сталися помилки під час експорту списку перервано."
+msgstr "Сталися помилки під час експорту списку звʼязків, перервано."
 
 #: eeschema/sim/sim_plot_frame.cpp:487 eeschema/sim/sim_plot_frame.cpp:1833
 msgid "Another simulation is already running."
@@ -14950,13 +14950,13 @@ msgstr "Змінити значення компонента"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:75
 msgid "Show SPICE Netlist..."
-msgstr "Show SPICE Netlist..."
+msgstr "Показати список звʼязків SPICE..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:75
 msgid "Shows current simulation's netlist. Useful for debugging SPICE errors."
 msgstr ""
-"Показує мережевий список поточної симуляції. Корисно для налагодження "
-"помилок SPICE."
+"Показує список звʼязків поточної симуляції. Корисно для налагодження помилок "
+"SPICE."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:80
 msgid "Settings..."
@@ -15800,7 +15800,7 @@ msgstr "Не вдалося знайти %s pin '%s'."
 #: eeschema/tools/backannotate.cpp:533
 #, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
-msgstr "Змінити %s позначку для перевірки мережі %s з '%s' на '%s'."
+msgstr "Змінити %s вивід %s мітки звʼязку з '%s' на '%s'."
 
 #: eeschema/tools/backannotate.cpp:558
 #, c-format
@@ -15811,7 +15811,7 @@ msgstr ""
 #: eeschema/tools/backannotate.cpp:567
 #, c-format
 msgid "Add label '%s' to %s pin %s net."
-msgstr "Add label '%s' to %s pin %s net."
+msgstr "Додавання мітки звʼязку '%s' до %s, вивід %s."
 
 #: eeschema/tools/ee_actions.cpp:45
 msgid "Perform electrical rules check"
@@ -16110,15 +16110,15 @@ msgstr "Додати мітку"
 
 #: eeschema/tools/ee_actions.cpp:306
 msgid "Add a net label"
-msgstr "Додати мітку в мережі"
+msgstr "Додати мітку звʼязку"
 
 #: eeschema/tools/ee_actions.cpp:311
 msgid "Add Net Class Directive"
-msgstr "Додати директиву класу сітки"
+msgstr "Додати директиву Класу звʼязку"
 
 #: eeschema/tools/ee_actions.cpp:311
 msgid "Add a net class directive label"
-msgstr "Додати мітку директиви чистого класу"
+msgstr "Додати мітку директиви класу звʼязку"
 
 #: eeschema/tools/ee_actions.cpp:317
 msgid "Add Hierarchical Label"
@@ -16311,11 +16311,11 @@ msgstr "Символ оновлення, що включає будь-які з�
 
 #: eeschema/tools/ee_actions.cpp:469
 msgid "Assign Netclass..."
-msgstr "Призначити Netclass..."
+msgstr "Призначити клас звʼязків..."
 
 #: eeschema/tools/ee_actions.cpp:469
 msgid "Assign a netclass to the net of the selected wire"
-msgstr "Задати мережевий клас для мережі вибраного дроту"
+msgstr "Задати клас звʼязків для звʼязків виділеного провідника"
 
 #: eeschema/tools/ee_actions.cpp:473
 msgid "De Morgan Conversion"
@@ -16440,23 +16440,23 @@ msgstr "Оберіть значення для налаштування"
 
 #: eeschema/tools/ee_actions.cpp:558
 msgid "Highlight net under cursor"
-msgstr "Підсвічувати мережу під курсором"
+msgstr "Підсвічувати звʼязок під курсором"
 
 #: eeschema/tools/ee_actions.cpp:563 pcbnew/tools/pcb_actions.cpp:759
 msgid "Clear Net Highlighting"
-msgstr "Очистити мережеве підсвічування"
+msgstr "Очистити підсвічування звʼязків"
 
 #: eeschema/tools/ee_actions.cpp:563 pcbnew/tools/pcb_actions.cpp:759
 msgid "Clear any existing net highlighting"
-msgstr "Очистити будь-яке існуюче підсвічування мережі"
+msgstr "Очистити будь-яке наявне підсвічування звʼязків"
 
 #: eeschema/tools/ee_actions.cpp:570
 msgid "Highlight Nets"
-msgstr "Підсвітка мереж"
+msgstr "Підсвітка звʼязків"
 
 #: eeschema/tools/ee_actions.cpp:570
 msgid "Highlight wires and pins of a net"
-msgstr "Підсвічувати дроти і шпильки сітки"
+msgstr "Підсвічувати провідники та виводи одного звʼязку"
 
 #: eeschema/tools/ee_actions.cpp:576
 msgid "Edit with Symbol Editor"
@@ -16575,12 +16575,12 @@ msgstr "Відкрити PCB у редакторі дошок"
 
 #: eeschema/tools/ee_actions.cpp:651
 msgid "Export Netlist..."
-msgstr "Експорт списку мереж..."
+msgstr "Експорт списку звʼязків..."
 
 #: eeschema/tools/ee_actions.cpp:651
 msgid "Export file containing netlist in one of several formats"
 msgstr ""
-"Експортувати файл, що містить список мереж в одному з декількох форматів"
+"Експортувати файл, що містить список звʼязків, в один із декількох форматів"
 
 #: eeschema/tools/ee_actions.cpp:656
 msgid "Generate BOM..."
@@ -16954,23 +16954,23 @@ msgstr "Помилка: дубльовані назви підлистів, ви
 
 #: eeschema/tools/sch_editor_control.cpp:1069
 msgid "Net must be labeled to assign a netclass."
-msgstr "Мережа має бути позначена щоб призначити мереж."
+msgstr "Звʼязок має бути позначено, щоб призначити клас звʼязків."
 
 #: eeschema/tools/sch_editor_control.cpp:1075
 msgid "Bus has no members to assign netclass to."
-msgstr "У автобуса немає учасників на які міг би призначити мережу."
+msgstr "Шина немає сигналів для призначення класу звʼязків."
 
 #: eeschema/tools/sch_editor_control.cpp:1108
 msgid "Netclasses"
-msgstr "Мережа"
+msgstr "Класи звʼязків"
 
 #: eeschema/tools/sch_editor_control.cpp:1121
 msgid "Assign Netclass"
-msgstr "Призначити Netclass"
+msgstr "Призначити клас звʼязків"
 
 #: eeschema/tools/sch_editor_control.cpp:1122
 msgid "Select netclass:"
-msgstr "Select netclass:"
+msgstr "Вибір класу звʼязків:"
 
 #: eeschema/tools/sch_editor_control.cpp:1727
 #, c-format
@@ -17715,7 +17715,7 @@ msgstr "Вісь AB"
 #: gerbview/toolbars_gerber.cpp:145
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:25
 msgid "Net:"
-msgstr "Мережа:"
+msgstr "Звʼязок:"
 
 #: gerbview/gerber_draw_item.cpp:744
 #, c-format
@@ -17887,7 +17887,7 @@ msgstr "Виокремлювати елементи, що належать ць�
 
 #: gerbview/toolbars_gerber.cpp:144
 msgid "Highlight items belonging to this net"
-msgstr "Підсвітити елементи, що належать до цієї мережі"
+msgstr "Підсвітити елементи, що належать до цього звʼязку"
 
 #: gerbview/toolbars_gerber.cpp:158 gerbview/toolbars_gerber.cpp:161
 msgid "Attr:"
@@ -18116,7 +18116,7 @@ msgstr "Підсвічувати елементи компонента '%s"
 #: gerbview/tools/gerbview_selection_tool.cpp:77
 #, c-format
 msgid "Highlight Items of Net '%s'"
-msgstr "Підсвічувати елементи сітки '%s"
+msgstr "Підсвічувати елементи звʼязку '%s"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:87
 #, c-format
@@ -19083,7 +19083,7 @@ msgstr "Змінити ім'я файлу"
 
 #: kicad/project_tree_pane.cpp:1154
 msgid "Network path: not monitoring folder changes"
-msgstr "Шлях мережі: не зміни папки"
+msgstr "Мережа тека: зміни не відстежуються"
 
 #: kicad/project_tree_pane.cpp:1159
 msgid "Local path: monitoring folder changes"
@@ -21075,7 +21075,7 @@ msgstr "Компоненти автокористування"
 
 #: pcbnew/board.cpp:106
 msgid "This is the default net class."
-msgstr "Це клас мережі за замовчуванням."
+msgstr "Це клас звʼязків за замовчуванням."
 
 #: pcbnew/board.cpp:635 pcbnew/drc/drc_engine.cpp:599
 msgid "Tessellating copper zones..."
@@ -21117,7 +21117,7 @@ msgstr "Трек сегментів"
 #: pcbnew/widgets/appearance_controls_base.cpp:61
 #: pcbnew/widgets/appearance_controls_base.cpp:151
 msgid "Nets"
-msgstr "Мережі"
+msgstr "Звʼязки"
 
 #: pcbnew/board.cpp:1254 pcbnew/pcb_draw_panel_gal.cpp:457
 msgid "Unrouted"
@@ -21125,11 +21125,11 @@ msgstr "Не маршрутизовано"
 
 #: pcbnew/board_connected_item.cpp:178
 msgid "NetName"
-msgstr "NetName"
+msgstr "Імʼя звʼязку"
 
 #: pcbnew/board_connected_item.cpp:180
 msgid "NetClass"
-msgstr "NetClass"
+msgstr "Клас звʼязків"
 
 #: pcbnew/board_item.cpp:107
 msgid "all copper layers"
@@ -21580,11 +21580,11 @@ msgstr "Постачальник та ref"
 
 #: pcbnew/cleanup_item.cpp:46
 msgid "Remove track shorting two nets"
-msgstr "Видалити короткий запис двох мереж"
+msgstr "Видалити доріжки, що замикають різні звʼязки"
 
 #: pcbnew/cleanup_item.cpp:47
 msgid "Remove via shorting two nets"
-msgstr "Видалити через короткі дві мережі"
+msgstr "Видалити перехідні отвори, що замикають різні звʼязки"
 
 #: pcbnew/cleanup_item.cpp:48
 msgid "Remove redundant via"
@@ -21632,7 +21632,7 @@ msgstr "Невідома дія очищення"
 
 #: pcbnew/connectivity/connectivity_data.cpp:101
 msgid "Updating nets..."
-msgstr "Оновлення мереж..."
+msgstr "Оновлення звʼязків..."
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:379
 #: pcbnew/convert_shape_list_to_polygon.cpp:531
@@ -22360,7 +22360,7 @@ msgstr "Оновити місце розташування"
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:83
 #: pcbnew/dialogs/dialog_netlist.cpp:83 pcbnew/dialogs/dialog_update_pcb.cpp:59
 msgid "Update PCB"
-msgstr "Оновлення PCB"
+msgstr "Оновити плату"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:116
 msgid "Graphics cleanup"
@@ -22409,7 +22409,8 @@ msgid ""
 "remove track segments connecting nodes belonging to different nets (short "
 "circuit)"
 msgstr ""
-"видалити сегменти треку, що підключаються до різних сіток (коротке схема)"
+"видалити сегменти доріжки, що підключені до різних зв'язків (коротке "
+"замкнення)"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:30
 msgid "&Delete redundant vias"
@@ -22501,11 +22502,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:55
 msgid "Hide auto-generated net names"
-msgstr "Сховати автоматично згенеровані чисті імена"
+msgstr "Сховати автоматично згенеровані імена звʼязків"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:62
 msgid "Sort nets by pad count"
-msgstr "Сортувати сітки за лічильниками клавіатури"
+msgstr "Сортувати звʼязки за кількістю контактних площадок"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:95
 msgid "Zone name:"
@@ -22581,7 +22582,9 @@ msgstr "Очищення:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:202
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
-msgstr "Мідь чіткість для цієї зони (0 використовується чіткість мережу)"
+msgstr ""
+"Проріз міді для цієї зони (0 використовується значення прорізу класу "
+"звʼязків)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:213
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:78
@@ -23901,7 +23904,7 @@ msgstr "Пошук маркерів DRC"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:78
 msgid "Search net names"
-msgstr "Пошук в мережах"
+msgstr "Пошук в іменах звʼязків"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:96
 msgid "Find Previous"
@@ -24835,11 +24838,11 @@ msgstr "Фільтрувати Елементи"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:57
 msgid "Filter items by net class:"
-msgstr "Фільтрувати елементи за чистим класом:"
+msgstr "Фільтрувати елементи за класом звʼязку:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:132
 msgid "Set to net class values:"
-msgstr "Значення чистого класу:"
+msgstr "Встановити значення з класу звʼязків:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:77
 msgid "Set Track and Via Properties"
@@ -25132,11 +25135,11 @@ msgstr "Перемістити предмет"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:791 pcbnew/netinfo_item.cpp:77
 msgid "Net Code"
-msgstr "Чистий код"
+msgstr "Код звʼязку"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:792 pcbnew/netinfo_item.cpp:75
 msgid "Net Name"
-msgstr "Чиста назва"
+msgstr "Назва звʼязку"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:793
 msgid "Pad Count"
@@ -25164,31 +25167,31 @@ msgstr "Загальна довжина"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:798 pcbnew/netinfo_item.cpp:122
 msgid "Net Length"
-msgstr "Довжина сітки"
+msgstr "Довжина звʼязку"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1801
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1858
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:53
 msgid "Net name:"
-msgstr "Чиста:"
+msgstr "Назва звʼязку:"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1801
 msgid "New Net"
-msgstr "Нова Мережа"
+msgstr "Новий звʼязок"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1813
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1881
 #, c-format
 msgid "Net name '%s' is already in use."
-msgstr "Чиста назва '%s' вже використовується."
+msgstr "Назва звʼязку '%s' вже використовується."
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1858
 msgid "Rename Net"
-msgstr "Перейменувати сітку"
+msgstr "Перейменувати звʼязок"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1871
 msgid "Net name cannot be empty."
-msgstr "Ім'я не може бути пустим."
+msgstr "Ім'я звʼязку не може бути пустим."
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1937
 #, c-format
@@ -25207,7 +25210,7 @@ msgstr "Файл звіту"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:35
 msgid "Show zero pad nets"
-msgstr "Показувати нульові мережі вкладень"
+msgstr "Показувати звʼязки без контактних площадок"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:39
 msgid "Group by:"
@@ -25237,28 +25240,28 @@ msgstr "Створити скаргу..."
 #: pcbnew/dialogs/dialog_net_inspector_base.h:72
 #: pcbnew/tools/pcb_actions.cpp:809
 msgid "Net Inspector"
-msgstr "Чистий інспектор"
+msgstr "Інспектор звʼязків"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:81
 msgid "Load and Test Netlist"
-msgstr "Завантажити та протестувати мережу"
+msgstr "Завантажити та протестувати список звʼязків"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:123
 msgid "Select Netlist"
-msgstr "Виберіть список мереж"
+msgstr "Виберіть список звʼязків"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:146
 msgid "Please choose a valid netlist file."
-msgstr "Будь ласка, виберіть правильний файл мережі."
+msgstr "Будь ласка, виберіть правильний файл списку звʼязків."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:152 pcbnew/dialogs/dialog_netlist.cpp:189
 msgid "The netlist file does not exist."
-msgstr "Файл мережевого списку не існує."
+msgstr "Файл списку звʼязків не існує."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:156
 #: pcbnew/dialogs/dialog_update_pcb.cpp:134
 msgid "Changes Applied to PCB"
-msgstr "Зміни застосовані до PCB"
+msgstr "Зміни застосовані до плати"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:224
 #, c-format
@@ -25275,19 +25278,19 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:25
 msgid "Netlist file:"
-msgstr "Файл списку повідомлень:"
+msgstr "Файл списку звʼязків:"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:43
 msgid "Link footprints using component tstamps (unique ids)"
-msgstr "Витрати посилання використовуючи позначки компонента (унікальні іди)"
+msgstr "Зіставити посадкові місця за тимчасовими мітками (унікальних іден.)"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:43
 msgid "Link footprints using reference designators"
-msgstr "Розташування посилання використовуючи дизайнерів посилань"
+msgstr "Зіставити посадкові місця за позначеннями"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:45
 msgid "Link Method"
-msgstr "Метод посилання"
+msgstr "Метод зіставлення"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:47
 msgid ""
@@ -25295,25 +25298,25 @@ msgid ""
 "assigned symbols, or to re-assign footprints to symbols which match their "
 "current references."
 msgstr ""
-"Виберіть, щоб оновити посилання на місце розташування для відповідності їх "
-"поточно призначеним символам, або перепризначити сліди для символів, які "
-"відповідають їх поточним посиланням."
+"Виберіть, чи потрібно оновити позначення посадкових місць, щоб вони "
+"відповідали символам, або призначити нові посадкові місця, що відповідають "
+"символам з таким самим позначенням."
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:54
 msgid "Replace footprints with those specified in netlist"
-msgstr "Замінити місця розташування тими, зазначеними у списку мережі"
+msgstr "Замінити посадкові місця тими, що зазначені у списку звʼязків"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:57
 msgid "Delete footprints with no components in netlist"
-msgstr "Видалити розташування без компонентів у мережевому списку"
+msgstr "Видалити посадкові місця без компонентів у списку звʼязків"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:60
 msgid "Delete tracks shorting multiple nets"
-msgstr "Видалити пісні з короткою кількістю мереж"
+msgstr "Видалити доріжки, що замикають декілька зʼєднань"
 
 #: pcbnew/dialogs/dialog_netlist_base.h:69
 msgid "Import Netlist"
-msgstr "Import Netlist"
+msgstr "Імпортувати список звʼязків"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:57
 msgid "Outline style:"
@@ -26247,7 +26250,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:227
 msgid "Include netlist attributes"
-msgstr "Включити атрибути мережевого списку"
+msgstr "Включити атрибути списку звʼязків"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:228
 msgid ""
@@ -26981,11 +26984,11 @@ msgstr "Зміна мережі також оновить %lu підключен
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:471
 msgid "Change Nets"
-msgstr "Змінити мережі"
+msgstr "Змінити звʼязки"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:471
 msgid "Leave Nets Unchanged"
-msgstr "Залишити незмінені"
+msgstr "Залишити незмінним"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:492
 #: pcbnew/dialogs/dialog_track_via_size.cpp:59
@@ -27002,11 +27005,11 @@ msgstr "Редагувати маршрут/через властивості"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:724
 msgid "Updating nets"
-msgstr "Оновлення мереж"
+msgstr "Оновлення звʼязків"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:35
 msgid "Automatically update via nets"
-msgstr "Автоматичне оновлення через мережі"
+msgstr "Автоматичне оновлення звʼязків перехідних отворів"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:36
 msgid ""
@@ -27043,7 +27046,7 @@ msgstr "Ширина маршруту:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:131
 msgid "Use net class widths"
-msgstr "Використовувати ширини чистого класу"
+msgstr "Використовувати ширини класу звʼязків"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:192
 msgid "Pre-defined sizes:"
@@ -27061,7 +27064,7 @@ msgstr "Через яру:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:230
 msgid "Use net class sizes"
-msgstr "Використовувати розміри чистого класу"
+msgstr "Використовувати розміри класу звʼязків"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 msgid "Via type:"
@@ -27187,11 +27190,12 @@ msgstr "Показувати на документах і доріжках"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:39
 msgid "Net Names"
-msgstr "Чисті імена"
+msgstr "Імена звʼязків"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:41
 msgid "Show or hide net names on pads and/or tracks."
-msgstr "Відображати або приховувати мережеві назви на pad і/або шляхах."
+msgstr ""
+"Показати або приховати імена звʼязків на контактних площадках або доріжках."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:45
 #: pcbnew/tools/pcb_actions.cpp:876
@@ -27244,7 +27248,7 @@ msgstr "Прокручувати перерізи елементів на виг
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:90
 msgid "Highlight nets when they are highlighted in the schematic editor"
-msgstr "Виділяти мережі, коли вони виділяються в схематичному редакторі"
+msgstr "Виділяти звʼязки, коли вони виділяються в редакторі схем"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:94
 msgid "Refresh 3D view automatically"
@@ -27260,7 +27264,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:29
 msgid "Magnetic pads"
-msgstr "Магнітні дороги"
+msgstr "Магнітні контактні площадки"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:32
 msgid "Magnetic graphics"
@@ -27304,7 +27308,7 @@ msgstr "Виберіть елемент(и)."
 #: pcbnew/dialogs/panel_edit_options_base.cpp:142
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
 msgid "Highlight net (for pads or tracks)."
-msgstr "Підсвічувати мережу (для pads or треків)."
+msgstr "Підсвічувати звʼязки (для контактних площадок або доріжок)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:243
 #: pcbnew/dialogs/panel_edit_options_base.cpp:363
@@ -28878,13 +28882,13 @@ msgstr "налаштування мікрозв'язків плати"
 #: pcbnew/drc/drc_engine.cpp:361
 #, c-format
 msgid "netclass '%s'"
-msgstr "netclass '%s'"
+msgstr "клас звʼязків '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:280 pcbnew/drc/drc_engine.cpp:298
 #: pcbnew/drc/drc_engine.cpp:315
 #, c-format
 msgid "netclass '%s' (diff pair)"
-msgstr "мережевий клас '%s' (різниця в парі)"
+msgstr "клас звʼязків '%s' (диференційна пара)"
 
 #: pcbnew/drc/drc_engine.cpp:435
 msgid "keepout area"
@@ -29190,7 +29194,7 @@ msgstr "Немає зв'язку між елементами"
 
 #: pcbnew/drc/drc_item.cpp:56
 msgid "Items shorting two nets"
-msgstr "Товари, що скорочують дві мережі"
+msgstr "Елементи замикають два звʼязки"
 
 #: pcbnew/drc/drc_item.cpp:60
 msgid "Items not allowed"
@@ -29310,7 +29314,7 @@ msgstr "Додатковий слід"
 
 #: pcbnew/drc/drc_item.cpp:176
 msgid "Pad net doesn't match schematic"
-msgstr "Мережа Pad не відповідає схематичному"
+msgstr "Звʼязок контактної площадки не відповідає схемі"
 
 #: pcbnew/drc/drc_item.cpp:180
 msgid "Footprint not found in libraries"
@@ -29540,7 +29544,7 @@ msgstr "Перевірка pad, з використанням з'єднань т
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:155
 msgid "Checking net connections..."
-msgstr "Перевірка з'єднань..."
+msgstr "Перевірка зʼєднання зв'язків..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:190
 msgid "Gathering copper items..."
@@ -29594,7 +29598,7 @@ msgstr "(%s очищення %s, фактичні %s)"
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:670
 #, c-format
 msgid "(nets %s and %s)"
-msgstr "(сітки %s і %s)"
+msgstr "(звʼязки %s та %s)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:82
 msgid "Checking footprint courtyard definitions..."
@@ -30988,52 +30992,52 @@ msgstr "У упаковці"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:138
 #, c-format
 msgid "Cannot add %s (no footprint assigned)."
-msgstr "Не вдалося додати %s (не записано місця розташування)."
+msgstr "Не вдалося додати %s (не призначене посадкове місце)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:150
 #, c-format
 msgid "Cannot add %s (footprint '%s' not found)."
-msgstr "Не вдалося додати %s (знайдено місце розташування '%s)."
+msgstr "Не вдалося додати %s (посадкове місце '%s' не знайдено)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:160
 #, c-format
 msgid "Add %s (footprint '%s')."
-msgstr "Додати %s (місце розташування на '%s')."
+msgstr "Додано %s (посадкове місце '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:190
 #, c-format
 msgid "Added %s (footprint '%s')."
-msgstr "Додано %s (місце розташування '%s')."
+msgstr "Додано %s (посадкове місце '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:208
 #, c-format
 msgid "Cannot update %s (no footprint assigned)."
-msgstr "Неможливо оновити %s (не призначено місце розташування)."
+msgstr "Неможливо оновити %s (не призначено посадкове місце)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:220
 #, c-format
 msgid "Cannot update %s (footprint '%s' not found)."
-msgstr "Неможливо оновити %s (знайдено місце розташування '%s»)."
+msgstr "Неможливо оновити %s (посадкове місце '%s' не знайдено)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:230
 #, c-format
 msgid "Change %s footprint from '%s' to '%s'."
-msgstr "Змінити %s місце розташування з '%s' на '%s'."
+msgstr "Змінити %s посадкове місце з '%s' на '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:242
 #, c-format
 msgid "Changed %s footprint from '%s' to '%s'."
-msgstr "Змінено %s місце розташування з '%s' по '%s'."
+msgstr "Змінено %s посадкове місце з '%s' на '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:269
 #, c-format
 msgid "Change %s reference designator to %s."
-msgstr "Змінити орієнтир %s на %s."
+msgstr "Змінити позначення %s на %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:275
 #, c-format
 msgid "Changed %s reference designator to %s."
-msgstr "Дизайнер відліку %s змінено на %s."
+msgstr "Позначення %s змінено на %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:291
 #, c-format
@@ -31048,17 +31052,17 @@ msgstr "Значення %s змінено з %s на %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:320
 #, c-format
 msgid "Update %s symbol association from %s to %s."
-msgstr "Оновити %s асоціювання символів з %s до %s."
+msgstr "Змінити у символу %s посадкове місце з %s на %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:327
 #, c-format
 msgid "Updated %s symbol association from %s to %s."
-msgstr "Оновлено %s асоціювання символів з %s до %s."
+msgstr "У символу %s змінилось посадкове місце з %s на %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:343
 #, c-format
 msgid "Update %s properties."
-msgstr "Оновіть властивості %s."
+msgstr "Оновити властивості %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:348
 #, c-format
@@ -31068,112 +31072,115 @@ msgstr "Оновлено властивості %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
 #, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr "Додати %s 'виключено з атрибуту виготовлення BOM'."
+msgstr ""
+"Встановлення виробничого атрибута 'виключено з переліку елементів' для %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:370
 #, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "Прибрати %s з атрибуту виготовлення BOM."
+msgstr "Виділення виробничого атрибута 'виключено з переліку елементів' для %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:381
 #, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
-msgstr "Додано %s 'виключено з атрибуту виготовлення BOM'."
+msgstr ""
+"Встановлений виробничий атрибут 'виключено з переліку елементів' для %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:387
 #, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
-msgstr "Видалено %s 'виключено з атрибуту виготовлення BOM'."
+msgstr "Видалений виробничий атрибут 'виключено з переліку елементів' для %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:456
 #, c-format
 msgid "Disconnect %s pin %s."
-msgstr "Від'єднайте %s контакт %s."
+msgstr "Звʼязок від'єднано від %s, вивід %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:462
 #, c-format
 msgid "Disconnected %s pin %s."
-msgstr "Від'єднано %s контакт %s."
+msgstr "Звʼязок від'єднано від %s, вивід %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:472
 #, c-format
 msgid "No net found for symbol %s pin %s."
-msgstr "Не знайдено мережі для символу %s p %s."
+msgstr "Не знайдено звʼязку для символу %s, вивід %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:524
 #, c-format
 msgid "Add net %s."
-msgstr "Add net %s."
+msgstr "Звʼязок додане %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:534
 #, c-format
 msgid "Reconnect %s pin %s from %s to %s."
-msgstr "Повторне підключення %s PIN %s з %s до %s."
+msgstr "Повторно під'єднати %s, вивід %s з %s до %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:542
 #, c-format
 msgid "Reconnected %s pin %s from %s to %s."
-msgstr "Перепідключено %s позначка %s з %s до %s."
+msgstr "Повторне підʼєднання %s виводу %s з %s до %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:553
 #, c-format
 msgid "Connect %s pin %s to %s."
-msgstr "Під'єднайте %s контакт %s до %s."
+msgstr "Під'єднати %s вивід %s до %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:560
 #, c-format
 msgid "Connected %s pin %s to %s."
-msgstr "Під'єднано %s контакт %s до %s."
+msgstr "Під'єднано %s вивід %s до %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:639
 #, c-format
 msgid "Reconnect via from %s to %s."
-msgstr "Повторне підключення за допомогою %s до %s."
+msgstr "Повторно під'єднати перехідний отвір %s до %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:657
 #, c-format
 msgid "Reconnected via from %s to %s."
-msgstr "Повторне підключення через %s до %s."
+msgstr "Повторне підʼєднання перехідного отвору %s до %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:667
 #, c-format
 msgid "Via connected to unknown net (%s)."
-msgstr "Через через невідому мережу (%s)."
+msgstr "Перехідний отвір підʼєднаний до невідомого звʼязку (%s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:710
 #, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
-msgstr "Повторне підключення міді зони '%s' з %s в %s."
+msgstr "Повторне підʼєднання зони міді '%s' з %s до %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:717
 #, c-format
 msgid "Reconnect copper zone from %s to %s."
-msgstr "Повторне підключення міної зони з %s до %s."
+msgstr "Повторне підʼєднання зони міді з %s до %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:738
 #, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
-msgstr "Повторне з'єднання мідні зони '%s' від %s до %s."
+msgstr "Повторне підʼєднання зони міді '%s' з %s до %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:745
 #, c-format
 msgid "Reconnected copper zone from %s to %s."
-msgstr "Повторне з'єднання мідні зони з %s по %s."
+msgstr "Повторне підʼєднання зони міді з %s до %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:758
 #, c-format
 msgid "Copper zone '%s' has no pads connected."
-msgstr "Мідна зона '%s' не має з'єднаних контактів."
+msgstr "Мідна зона '%s' не має під'єднаних контактних площадок."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:766
 #, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
-msgstr "Мідна зона у шарі %s у (%s, %s) не має контактних блоків."
+msgstr ""
+"Мідна зона у шарі %s, координати (%s, %s), не підʼєднана до жодного виводу."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:808
 #, c-format
 msgid "%s pad %s not found in %s."
-msgstr "%s документ %s не знайдено в %s."
+msgstr "%s контактна площадка %s не знайдена в %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:859
 #, c-format
@@ -31183,47 +31190,46 @@ msgstr "Обробка символу '%s:%s'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:928
 #, c-format
 msgid "Multiple footprints found for '%s'."
-msgstr "Знайдено декілька місць для '%s."
+msgstr "Знайдено декілька посадкових місць для '%s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:958
 #, c-format
 msgid "Cannot remove unused footprint %s (locked)."
-msgstr "Неможливо видалити невикористаний місце розташування %s (заблоковано)."
+msgstr "Неможливо видалити невикористане посадкове місце %s (заблоковано)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:963
 #, c-format
 msgid "Could not remove unused footprint %s (locked)."
-msgstr ""
-"Не вдалося видалити невикористаний місце розташування %s (заблоковано)."
+msgstr "Не вдалося видалити невикористане посадкове місце %s (заблоковано)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:975
 #, c-format
 msgid "Remove unused footprint %s."
-msgstr "Видалити невикористаний місце розташування %s."
+msgstr "Видалити невикористане посадкове місце %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:980
 #, c-format
 msgid "Removed unused footprint %s."
-msgstr "Видалено невикористаний місце розташування %s."
+msgstr "Видалено невикористане посадкове місце %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1007
 #, c-format
 msgid "Removed unused net %s."
-msgstr "Видалено невикористаний мережу %s."
+msgstr "Видалено невикористаний зв'язок %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1015
 msgid "Update netlist"
-msgstr "Оновити список мереж"
+msgstr "Оновити список звʼязків"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1033
 #, c-format
 msgid "Total warnings: %d, errors: %d."
-msgstr "Всього попереджень: %d, помилки: %d."
+msgstr "Всього попереджень: %d, помилок: %d."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:270
 #, c-format
 msgid "Cannot find component with ref '%s' in netlist."
-msgstr "Не вдається знайти компонент з ref '%sв списку мереж."
+msgstr "Не вдається знайти компонент з позначенням '%s' у списку звʼязків."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:438
 #, c-format
@@ -31236,46 +31242,42 @@ msgstr ""
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:118
 msgid "Cannot parse time stamp in symbol section of netlist."
-msgstr "Не вдалося проаналізувати час печатки у розділі мережного списку."
+msgstr "Не вдалося проаналізувати часову мітку символу в списку звʼязків."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:128
 msgid "Cannot parse footprint name in symbol section of netlist."
 msgstr ""
-"Не вдалося проаналізувати ім'я слід після символу у розділі мережного списку."
+"Не вдалося проаналізувати ім'я посадкового місця символу в списку звʼязків."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:142
 msgid "Cannot parse reference designator in symbol section of netlist."
-msgstr ""
-"Не вдалося проаналізувати еталонний дизайнер в розділі символів мережевого "
-"списку."
+msgstr "Не вдалося проаналізувати позначення символу в списку звʼязків."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:152
 msgid "Cannot parse value in symbol section of netlist."
-msgstr "Не вдалося аналізувати значення в розділі символів мережного списку."
+msgstr "Не вдалося проаналізувати значення символу в списку звʼязків."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:189
 msgid "Cannot parse pin name in symbol net section of netlist."
-msgstr ""
-"Не вдалося розпізнати ім'я контакту в розділі \"Мережа\" для його "
-"розташування."
+msgstr "Не вдалося проаналізувати ім'я виводу символу в списку звʼязків."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:198
 msgid "Cannot parse net name in symbol net section of netlist."
-msgstr "Не вдалося проаналізувати мережеве ім'я у символі мережевого списку."
+msgstr "Не вдалося проаналізувати ім'я звʼязку символу в списку звʼязків."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:246
 #, c-format
 msgid "Cannot find symbol %s in footprint filter section of netlist."
-msgstr "Символ %s в розділі фільтрування сітки не знайдено."
+msgstr "Символ %s в розділі фільтру посадкових місць не знайдено."
 
 #: pcbnew/netlist_reader/netlist.cpp:67
 #, c-format
 msgid "Cannot open netlist file '%s'."
-msgstr "Не вдалося відкрити файл списку мереж '%s."
+msgstr "Не вдалося відкрити файл списку звʼязків '%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:68
 msgid "Netlist Load Error."
-msgstr "Netlist Load Error."
+msgstr "Помилка завантаження списку звʼязків."
 
 #: pcbnew/netlist_reader/netlist.cpp:78
 #, c-format
@@ -31286,32 +31288,30 @@ msgstr ""
 
 #: pcbnew/netlist_reader/netlist.cpp:79
 msgid "Netlist Load Error"
-msgstr "Netlist Load Error"
+msgstr "Помилка завантаження списку звʼязків"
 
 #: pcbnew/netlist_reader/netlist.cpp:155
 #, c-format
 msgid "No footprint defined for symbol %s."
-msgstr "Для символу %s не визначено жодного місця розташування."
+msgstr "Для символу %s не визначено жодного посадкового місця."
 
 #: pcbnew/netlist_reader/netlist.cpp:182
 #, c-format
 msgid "Footprint of %s changed: board footprint '%s', netlist footprint '%s'."
-msgstr ""
-"Місце розташування %s змінилося: місце розташування платні '%s', місце "
-"розташування несписків '%s'."
+msgstr "Посадкове місце %s змінилося: на платі '%s', в списку звʼязків '%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:205
 #, c-format
 msgid "%s footprint ID '%s' is not valid."
-msgstr "%s ID слід надрукувати '%s' не дійсний."
+msgstr "%s має не дійсний ідентифікатор посадкового місця '%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:222
 #, c-format
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
 msgstr ""
-"%s footprint '%s' не знайдено в жодній бібліотеці в таблиці бібліотек "
-"вдалося вивести з бібліотеки."
+"Для %s посадкове місце '%s' не знайдено в жодній бібліотеці в таблиці "
+"бібліотек."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:184
 #, c-format
@@ -31513,7 +31513,7 @@ msgstr "KiCad PCB Editor"
 
 #: pcbnew/pcb_edit_frame.cpp:202
 msgid "Export netlist used to update schematics"
-msgstr "Експортувати список мереж, що використовується для оновлення схем"
+msgstr "Експортувати список звʼязків, що використовується для оновлення схем"
 
 #: pcbnew/pcb_edit_frame.cpp:347
 msgid "New PCB file is unsaved"
@@ -31548,7 +31548,7 @@ msgstr ""
 
 #: pcbnew/pcb_edit_frame.cpp:1612
 msgid "Eeschema netlist"
-msgstr "Eeschema netlist"
+msgstr "Список звʼязків Eeschema"
 
 #: pcbnew/pcb_edit_frame.cpp:1623
 msgid ""
@@ -31745,7 +31745,7 @@ msgstr "Мін. кількість місячного ширини: %s"
 
 #: pcbnew/pcb_track.cpp:848
 msgid "NetCode"
-msgstr "NetCode"
+msgstr "Код Звʼязків"
 
 #: pcbnew/pcb_track.cpp:979
 #, c-format
@@ -31878,12 +31878,12 @@ msgstr "Завантаження даних про дошку..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1076
 msgid "Loading netclasses..."
-msgstr "Завантаження мереж..."
+msgstr "Завантаження класів звʼязків..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1099
 #, c-format
 msgid "Duplicate netclass name '%s'."
-msgstr "Дублювання назви мережі '%s'."
+msgstr "Дублювання назви класу звʼязків '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1114
 msgid "Loading components..."
@@ -31927,7 +31927,7 @@ msgstr "Файл не знайдено: '%s'. 3D-модель не імпорт�
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1683
 msgid "Loading nets..."
-msgstr "Завантаження мереж..."
+msgstr "Завантаження звʼязків..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1704
 msgid "Loading polygons..."
@@ -32011,7 +32011,8 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:2643
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
-msgstr "Немідний документ %s підключений до мережі, яка не підтримується."
+msgstr ""
+"Не мідна контактна площадка %s підключена до звʼязку, що не підтримується."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2649
 #, c-format
@@ -32344,8 +32345,8 @@ msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
 "been ignored."
 msgstr ""
-"Мережа '%s' посилається на компонент ID '%s, якого не існує. Це було "
-"проігноровано."
+"Звʼязок '%s' посилається на компонент з ідентифікатором '%s', якого не "
+"існує. Проігноровано."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2201
 #, c-format
@@ -32928,7 +32929,7 @@ msgstr "Невідомий тип FP_SHAPE:'%c=0x%02x', рядок %d джере
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2309
 #, c-format
 msgid "Duplicate NETCLASS name '%s'."
-msgstr "Дублювати ім'я NETCLASS '%s."
+msgstr "Дублювати ім'я NETCLASS '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2386
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2397
@@ -33137,7 +33138,7 @@ msgstr "мінімальна ширина плати"
 
 #: pcbnew/router/pns_kicad_iface.cpp:497
 msgid "netclass 'Default'"
-msgstr "netclass 'Default'"
+msgstr "клас звʼязків 'Default'"
 
 #: pcbnew/router/pns_kicad_iface.cpp:499
 msgid "user choice"
@@ -33327,11 +33328,11 @@ msgstr "Шлях за допомогою ширини початкової до�
 
 #: pcbnew/router/router_tool.cpp:210 pcbnew/router/router_tool.cpp:331
 msgid "Use Net Class Values"
-msgstr "Use Net Class Values"
+msgstr "Використати значення класу звʼязків"
 
 #: pcbnew/router/router_tool.cpp:211
 msgid "Use track and via sizes from the net class"
-msgstr "Використовувати трек і в розмірах з чистого класу"
+msgstr "Використовувати розміри доріжки та перехідних отворів з класу звʼязків"
 
 #: pcbnew/router/router_tool.cpp:215 pcbnew/router/router_tool.cpp:336
 #: pcbnew/tools/drawing_tool.cpp:105
@@ -33344,7 +33345,7 @@ msgstr "Вкажіть користувацький трек і розмір"
 
 #: pcbnew/router/router_tool.cpp:227
 msgid "Track netclass width"
-msgstr "Ширина класу мережі доріжки"
+msgstr "Ширина доріжки із класу звʼязків"
 
 #: pcbnew/router/router_tool.cpp:229
 #, c-format
@@ -33353,7 +33354,7 @@ msgstr "Доріжка %s"
 
 #: pcbnew/router/router_tool.cpp:243
 msgid "Via netclass values"
-msgstr "Значення мережі"
+msgstr "Розмір перехідних отворів з класу звʼязків"
 
 #: pcbnew/router/router_tool.cpp:247 pcbnew/tools/drawing_tool.cpp:117
 #, c-format
@@ -33371,7 +33372,7 @@ msgstr "Виберіть диференційні розміри пари"
 
 #: pcbnew/router/router_tool.cpp:332
 msgid "Use differential pair dimensions from the net class"
-msgstr "Використовувати диференціальні розміри пари з чистого класу"
+msgstr "Використовувати розміри диференціальної пари з класу звʼязків"
 
 #: pcbnew/router/router_tool.cpp:337
 msgid "Specify custom differential pair dimensions"
@@ -33462,7 +33463,7 @@ msgstr "Маршрутизація треку: %s"
 #: pcbnew/router/router_tool.cpp:2098
 #, c-format
 msgid "Net Class: %s"
-msgstr "Мережевий клас: %s"
+msgstr "Клас звʼязків: %s"
 
 #: pcbnew/router/router_tool.cpp:2102
 msgid "Routing Track"
@@ -33470,7 +33471,7 @@ msgstr "Маршрутизація"
 
 #: pcbnew/router/router_tool.cpp:2102
 msgid "(no net)"
-msgstr "(немає мережі)"
+msgstr "(немає звʼязку)"
 
 #: pcbnew/router/router_tool.cpp:2109
 msgid "Free-angle"
@@ -33840,11 +33841,11 @@ msgstr "Specctra DSN File"
 
 #: pcbnew/tools/board_editor_control.cpp:477
 msgid "Export Board Netlist"
-msgstr "Експортувати список елементів плати"
+msgstr "Експортувати список звʼязків плати"
 
 #: pcbnew/tools/board_editor_control.cpp:478
 msgid "KiCad board netlist files"
-msgstr "Файли таблиці KiCad"
+msgstr "Файли списку звʼязків плати KiCad"
 
 #: pcbnew/tools/board_editor_control.cpp:492
 #, c-format
@@ -33925,7 +33926,7 @@ msgstr "Мережеві інструменти"
 #: pcbnew/tools/board_inspection_tool.cpp:153
 #, c-format
 msgid "[netclass %s]"
-msgstr "[netclass %s]"
+msgstr "[клас звʼязків %s]"
 
 #: pcbnew/tools/board_inspection_tool.cpp:164
 msgid "Report incomplete: could not compile custom design rules.  "
@@ -35198,11 +35199,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:596
 msgid "Import Netlist..."
-msgstr "Import Netlist..."
+msgstr "Імпорт списку звʼязків..."
 
 #: pcbnew/tools/pcb_actions.cpp:596
 msgid "Read netlist and update board connectivity"
-msgstr "Перегляд списку мереж і оновлення підключення плати"
+msgstr "Зчитати список звʼязків і оновити звʼязки на платі"
 
 #: pcbnew/tools/pcb_actions.cpp:601
 msgid "Import Specctra Session..."
@@ -35254,11 +35255,11 @@ msgstr "Створити звіт всіх місць розташування �
 
 #: pcbnew/tools/pcb_actions.cpp:633
 msgid "IPC-D-356 Netlist File..."
-msgstr "IPC-D-356 Netlist File..."
+msgstr "Файл списку звʼязків IPC-D-356..."
 
 #: pcbnew/tools/pcb_actions.cpp:633
 msgid "Generate IPC-D-356 netlist file"
-msgstr "Згенерувати мережевий файл IPC-D-356"
+msgstr "Згенерувати список звʼязків IPC-D-356"
 
 #: pcbnew/tools/pcb_actions.cpp:638
 msgid "BOM..."
@@ -36783,7 +36784,7 @@ msgstr "Відображати або приховувати рейтинг дл
 
 #: pcbnew/widgets/appearance_controls.cpp:2300
 msgid "Set Netclass Color"
-msgstr "Встановити колір Netclass"
+msgstr "Встановити колір Класу звʼязків"
 
 #: pcbnew/widgets/appearance_controls.cpp:2305
 #, c-format
@@ -36792,7 +36793,7 @@ msgstr "Виділити мережі в %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2319
 msgid "Show All Netclasses"
-msgstr "Показати всі Netclasses"
+msgstr "Показати всі Класи Звʼязків"
 
 #: pcbnew/widgets/appearance_controls.cpp:2322
 msgid "Hide All Other Netclasses"
