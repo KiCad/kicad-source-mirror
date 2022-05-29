@@ -355,7 +355,7 @@ SCH_ITEM* SCH_SCREEN::GetItem( const VECTOR2I& aPosition, int aAccuracy, KICAD_T
 }
 
 
-std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_LINE* aSegment )
+std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_LINE* aSegment, bool aIgnorePins )
 {
     std::set<SCH_ITEM*>   retval;
     std::stack<SCH_LINE*> to_search;
@@ -384,9 +384,9 @@ std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_LINE* aSegment )
             SCH_LINE* line = static_cast<SCH_LINE*>( item );
 
             if( ( test_item->IsEndPoint( line->GetStartPoint() )
-                        && !GetPin( line->GetStartPoint(), nullptr, true ) )
+                        && ( aIgnorePins || !GetPin( line->GetStartPoint(), nullptr, true ) ) )
              || ( test_item->IsEndPoint( line->GetEndPoint() )
-                        && !GetPin( line->GetEndPoint(), nullptr, true ) ) )
+                        && ( aIgnorePins || !GetPin( line->GetEndPoint(), nullptr, true ) ) ) )
             {
                 auto result = retval.insert( line );
 

@@ -1430,12 +1430,26 @@ int EE_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
 
     SCH_LINE* line = (SCH_LINE*) m_selection.Front();
     EDA_ITEMS items;
+    unsigned  done = false;
 
     m_frame->GetScreen()->ClearDrawingState();
-    std::set<SCH_ITEM*> conns = m_frame->GetScreen()->MarkConnections( line );
+    std::set<SCH_ITEM*> conns = m_frame->GetScreen()->MarkConnections( line, false );
 
     for( SCH_ITEM* item : conns )
+    {
+        if( item->IsType( wiresAndBuses ) && !item->IsSelected() )
+            done = true;
+
         select( item );
+    }
+
+    if( !done )
+    {
+        conns = m_frame->GetScreen()->MarkConnections( line, true );
+
+        for( SCH_ITEM* item : conns )
+            select( item );
+    }
 
     if( m_selection.GetSize() > 1 )
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );

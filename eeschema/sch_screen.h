@@ -301,7 +301,7 @@ public:
      *
      * @param aSegment The segment to test for connections.
      */
-    std::set<SCH_ITEM*> MarkConnections( SCH_LINE* aSegment );
+    std::set<SCH_ITEM*> MarkConnections( SCH_LINE* aSegment, bool aIgnorePins );
 
     /**
      * Clear the state flags of all the items in the screen.
