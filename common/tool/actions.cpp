@@ -546,7 +546,7 @@ TOOL_ACTION ACTIONS::highContrastModeCycle( "common.Control.highContrastModeCycl
 
 TOOL_ACTION ACTIONS::toggleBoundingBoxes( "common.Control.toggleBoundingBoxes",
         AS_GLOBAL, 0, "",
-        _( "Draw Bounding Boxes" ), "",
+        _( "Draw Bounding Boxes" ), _( "Draw Bounding Boxes" ),
         BITMAPS::gerbview_show_negative_objects );
 
 TOOL_ACTION ACTIONS::selectionTool( "common.InteractiveSelection.selectionTool",
