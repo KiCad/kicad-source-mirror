@@ -11,15 +11,16 @@
 # Benedikt Freisen <b.freisen@gmx.net>, 2021, 2022.
 # Mark Hämmerling <dev@markh.de>, 2021, 2022.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2022.
+# Ettore Atalan <atalanttore@googlemail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-25 16:22-0700\n"
-"PO-Revision-Date: 2022-05-21 07:18+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2022-05-30 00:58+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2824,9 +2825,8 @@ msgid "Set X scale adjust for exact scale plotting"
 msgstr "Setze X-Skalierung für exakt skaliertes Plotten"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
-#, fuzzy
 msgid "Info text"
-msgstr "Text suchen"
+msgstr "Infotext"
 
 #: common/dialogs/dialog_print_generic_base.cpp:111
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
@@ -4013,9 +4013,8 @@ msgid "Hotkeys"
 msgstr "Tastaturbefehle"
 
 #: common/eda_base_frame.cpp:999
-#, fuzzy
 msgid "Data Collection"
-msgstr "Padverbindungen"
+msgstr "Datensammlung"
 
 #: common/eda_base_frame.cpp:1011 common/tool/actions.cpp:582
 #: eeschema/symbol_editor/symbol_editor.cpp:179
@@ -4247,9 +4246,8 @@ msgstr "Grafik"
 #: common/eda_item.cpp:374 eeschema/lib_textbox.cpp:393
 #: eeschema/sch_textbox.cpp:393 pcbnew/fp_textbox.cpp:233
 #: pcbnew/pcb_textbox.cpp:227
-#, fuzzy
 msgid "Text Box"
-msgstr "Text-Pos. X"
+msgstr "Textbox"
 
 #: common/eda_item.cpp:323 common/eda_item.cpp:324 common/eda_item.cpp:325
 #: common/eda_item.cpp:326 common/eda_item.cpp:333 common/eda_item.cpp:334
