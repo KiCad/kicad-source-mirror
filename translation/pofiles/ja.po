@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-25 16:22-0700\n"
-"PO-Revision-Date: 2022-05-15 22:50+0000\n"
-"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
+"PO-Revision-Date: 2022-05-29 07:05+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v6/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -18358,7 +18358,7 @@ msgstr "完全修飾されたリポジトリのURLを入力してください"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:78
 msgid "Add repository"
-msgstr "Github リポジトリー"
+msgstr "Github リポジトリーを追加"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:61
 msgid "Manage Repositories"
