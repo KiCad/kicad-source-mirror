@@ -218,7 +218,7 @@ bool DRAWING_TOOL::Init()
     ctxMenu.AddItem( PCB_ACTIONS::closeOutline,    canCloseOutline, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::deleteLastPoint, canUndoPoint, 200 );
 
-    ctxMenu.AddCheckItem( PCB_ACTIONS::toggle45, SELECTION_CONDITIONS::ShowAlways, 250 );
+    ctxMenu.AddCheckItem( PCB_ACTIONS::toggleHV45Mode, SELECTION_CONDITIONS::ShowAlways, 250 );
     ctxMenu.AddSeparator( 500 );
 
     std::shared_ptr<VIA_SIZE_MENU> viaSizeMenu = std::make_shared<VIA_SIZE_MENU>();
@@ -1478,7 +1478,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::ToggleLine45degMode( const TOOL_EVENT& toolEvent )
+int DRAWING_TOOL::ToggleHV45Mode( const TOOL_EVENT& toolEvent )
 {
 #define TOGGLE( a ) a = !a
 
@@ -2969,5 +2969,5 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawRectangle,         PCB_ACTIONS::drawTextBox.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceImportedGraphics, PCB_ACTIONS::placeImportedGraphics.MakeEvent() );
     Go( &DRAWING_TOOL::SetAnchor,             PCB_ACTIONS::setAnchor.MakeEvent() );
-    Go( &DRAWING_TOOL::ToggleLine45degMode,   PCB_ACTIONS::toggle45.MakeEvent() );
+    Go( &DRAWING_TOOL::ToggleHV45Mode,        PCB_ACTIONS::toggleHV45Mode.MakeEvent() );
 }

@@ -692,7 +692,7 @@ TOOL_ACTION PCB_ACTIONS::toggleLock( "pcbnew.EditorControl.toggleLock",
         _( "Toggle Lock" ), _( "Lock or unlock selected items" ),
         BITMAPS::lock_unlock );
 
-TOOL_ACTION PCB_ACTIONS::toggle45( "pcbnew.EditorControl.toggle45",
+TOOL_ACTION PCB_ACTIONS::toggleHV45Mode( "pcbnew.EditorControl.toggle45",
         AS_GLOBAL,
         MD_SHIFT + ' ', "",
         _( "Constrain to H, V, 45" ),

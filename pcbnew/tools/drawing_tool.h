@@ -195,9 +195,9 @@ public:
     int SetAnchor( const TOOL_EVENT& aEvent );
 
     /**
-     * Toggle the 45 degree angle constraint for graphic lines.
+     * Toggle the horizontal/veritcal/45-degree constraint for drawing tools.
      */
-    int ToggleLine45degMode( const TOOL_EVENT& aEvent );
+    int ToggleHV45Mode( const TOOL_EVENT& toolEvent );
 
     ///< Set up handlers for various events.
     void setTransitions() override;

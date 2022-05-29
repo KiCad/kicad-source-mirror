@@ -616,7 +616,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
             m_refill = true;
         }
-        else if( evt->IsAction( &PCB_ACTIONS::toggle45 ) )
+        else if( evt->IsAction( &PCB_ACTIONS::toggleHV45Mode ) )
         {
             lock45 = !lock45;
             evt->SetPassEvent( false );

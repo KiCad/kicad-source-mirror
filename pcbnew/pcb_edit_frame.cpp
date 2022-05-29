@@ -778,14 +778,14 @@ void PCB_EDIT_FRAME::setupUIConditions()
     SELECTION_CONDITION zoneMergeCond = SELECTION_CONDITIONS::MoreThan( 1 )
                                     && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Zones );
 
-    mgr->SetConditions( PCB_ACTIONS::zoneDuplicate, ENABLE( singleZoneCond ) );
-    mgr->SetConditions( PCB_ACTIONS::drawZoneCutout, ENABLE( singleZoneCond ) );
+    mgr->SetConditions( PCB_ACTIONS::zoneDuplicate,   ENABLE( singleZoneCond ) );
+    mgr->SetConditions( PCB_ACTIONS::drawZoneCutout,  ENABLE( singleZoneCond ) );
     mgr->SetConditions( PCB_ACTIONS::drawSimilarZone, ENABLE( singleZoneCond ) );
-    mgr->SetConditions( PCB_ACTIONS::zoneMerge, ENABLE( zoneMergeCond ) );
-    mgr->SetConditions( PCB_ACTIONS::zoneFill, ENABLE( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
-    mgr->SetConditions( PCB_ACTIONS::zoneUnfill, ENABLE( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
+    mgr->SetConditions( PCB_ACTIONS::zoneMerge,       ENABLE( zoneMergeCond ) );
+    mgr->SetConditions( PCB_ACTIONS::zoneFill,        ENABLE( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
+    mgr->SetConditions( PCB_ACTIONS::zoneUnfill,      ENABLE( SELECTION_CONDITIONS::MoreThan( 0 ) ) );
 
-    mgr->SetConditions( PCB_ACTIONS::toggle45, CHECK( cond.Get45degMode() ) );
+    mgr->SetConditions( PCB_ACTIONS::toggleHV45Mode,  CHECK( cond.Get45degMode() ) );
 
 #define CURRENT_TOOL( action ) mgr->SetConditions( action, CHECK( cond.CurrentTool( action ) ) )
 

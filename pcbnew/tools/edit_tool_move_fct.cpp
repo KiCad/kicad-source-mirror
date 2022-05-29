@@ -259,12 +259,12 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE_ON_MOVE::Run()
     m_largestClearance = 0;
 
     // Currently, do not use DRC engine for calculation time reasons
-    #if 0
+#if 0
     DRC_CONSTRAINT constraint;
 
     if( m_drcEngine->QueryWorstConstraint( COURTYARD_CLEARANCE_CONSTRAINT, constraint ) )
         m_largestClearance = constraint.GetValue().Min();
-    #endif
+#endif
 
     testCourtyardClearances();
 
@@ -393,7 +393,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     TOOL_EVENT*     evt = &aEvent;
     VECTOR2I        prevPos;
 
-    bool lock45          = false;
+    bool hv45Mode        = false;
     bool eatFirstMouseUp = true;
     bool hasRedrawn3D    = false;
     bool allowRedraw3D   = editFrame->Settings().m_Display.m_Live3DRefresh;
@@ -445,7 +445,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                 if( !selection.HasReferencePoint() )
                     originalPos = m_cursor;
 
-                if( lock45 )
+                if( hv45Mode )
                 {
                     VECTOR2I moveVector = m_cursor - originalPos;
                     m_cursor = originalPos + GetVectorSnapped45( moveVector );
@@ -566,7 +566,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                     // start moving with the reference point attached to the cursor
                     grid.SetAuxAxes( false );
 
-                    if( lock45 )
+                    if( hv45Mode )
                     {
                         VECTOR2I moveVector = m_cursor - originalPos;
                         m_cursor = originalPos + GetVectorSnapped45( moveVector );
@@ -685,9 +685,9 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 
             break; // finish
         }
-        else if( evt->IsAction( &PCB_ACTIONS::toggle45 ) )
+        else if( evt->IsAction( &PCB_ACTIONS::toggleHV45Mode ) )
         {
-            lock45 = !lock45;
+            hv45Mode = !hv45Mode;
             evt->SetPassEvent( false );
         }
         else

@@ -140,7 +140,6 @@ public:
     static TOOL_ACTION drag45Degree;
     static TOOL_ACTION dragFreeAngle;
 
-
     // Drawing Tool Activations
     static TOOL_ACTION drawLine;
     static TOOL_ACTION drawPolygon;
@@ -210,12 +209,8 @@ public:
     static TOOL_ACTION routerInlineDrag;
 
     // Point Editor
-    /// Break outline (insert additional points to an edge)
     static TOOL_ACTION pointEditorAddCorner;
-
-    /// Removes a corner
     static TOOL_ACTION pointEditorRemoveCorner;
-
 
     // Group Tool
     static TOOL_ACTION groupProperties;
@@ -427,7 +422,8 @@ public:
 
     static TOOL_ACTION microwaveCreateLine;
 
-    static TOOL_ACTION toggle45;
+    // Constrained drawing
+    static TOOL_ACTION toggleHV45Mode;
 
     // Locking
     static TOOL_ACTION toggleLock;
