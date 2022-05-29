@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-25 16:22-0700\n"
-"PO-Revision-Date: 2022-05-23 04:27+0000\n"
+"PO-Revision-Date: 2022-05-29 07:05+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19317,9 +19317,8 @@ msgid "Open project directory in file explorer"
 msgstr "ファイル エクスプローラーでプロジェクト ディレクトリーを開く"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:52
-#, fuzzy
 msgid "Add Default"
-msgstr "標準"
+msgstr "デフォルトを追加"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:92
 msgid "Please enter fully qualified repository url"
@@ -19327,7 +19326,7 @@ msgstr "完全修飾されたリポジトリのURLを入力してください"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:93
 msgid "Add repository"
-msgstr "Github リポジトリー"
+msgstr "Github リポジトリーを追加"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:57
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:107
@@ -35557,9 +35556,9 @@ msgstr "差動の非結合長が長すぎる"
 
 #: pcbnew/tools/board_inspection_tool.cpp:270
 #: pcbnew/tools/board_inspection_tool.cpp:796
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved max uncoupled length: %s."
-msgstr "未使用のネット %s を削除します。"
+msgstr "解決された最大非結合長：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:277
 #: pcbnew/tools/board_inspection_tool.cpp:1139
@@ -35603,7 +35602,6 @@ msgid "Resolved diameter constraints: min %s; max %s."
 msgstr "直径の制約: 最小 %s; 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:336
-#, fuzzy
 msgid "Via Annulus"
 msgstr "ビア円環"
 
@@ -35628,9 +35626,8 @@ msgid "Hole diameter resolution for:"
 msgstr "穴の直径の解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:367
-#, fuzzy
 msgid "Hole Clearance"
-msgstr "クリアランス"
+msgstr "穴のクリアランス"
 
 #: pcbnew/tools/board_inspection_tool.cpp:368
 #: pcbnew/tools/board_inspection_tool.cpp:868
