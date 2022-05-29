@@ -30,6 +30,7 @@
 
 #include <sch_plugins/altium/sch_altium_plugin.h>
 #include <sch_plugins/cadstar/cadstar_sch_archive_plugin.h>
+#include <sch_plugins/database/sch_database_plugin.h>
 #include <wildcards_and_files_ext.h>
 
 #define FMT_UNIMPLEMENTED   _( "Plugin \"%s\" does not implement the \"%s\" function." )
@@ -61,6 +62,7 @@ SCH_PLUGIN* SCH_IO_MGR::FindPlugin( SCH_FILE_T aFileType )
     case SCH_ALTIUM:          return new SCH_ALTIUM_PLUGIN();
     case SCH_CADSTAR_ARCHIVE: return new CADSTAR_SCH_ARCHIVE_PLUGIN();
     case SCH_EAGLE:           return new SCH_EAGLE_PLUGIN();
+    case SCH_DATABASE:        return new SCH_DATABASE_PLUGIN();
     default:                  return nullptr;
     }
 }
@@ -89,6 +91,7 @@ const wxString SCH_IO_MGR::ShowType( SCH_FILE_T aType )
     case SCH_ALTIUM:          return wxString( wxT( "Altium" ) );
     case SCH_CADSTAR_ARCHIVE: return wxString( wxT( "CADSTAR Schematic Archive" ) );
     case SCH_EAGLE:           return wxString( wxT( "EAGLE" ) );
+    case SCH_DATABASE:        return wxString( wxT( "Database" ) );
     default:                  return wxString::Format( _( "Unknown SCH_FILE_T value: %d" ),
                                                        aType );
     }
@@ -111,6 +114,8 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::EnumFromStr( const wxString& aType )
         return SCH_CADSTAR_ARCHIVE;
     else if( aType == wxT( "EAGLE" ) )
         return SCH_EAGLE;
+    else if( aType == wxT( "Database" ) )
+        return SCH_DATABASE;
 
     // wxASSERT( blow up here )
 

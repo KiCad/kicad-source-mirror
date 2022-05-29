@@ -443,6 +443,9 @@ set( COMMON_SRCS
     project/project_archiver.cpp
     project/project_file.cpp
     project/project_local_settings.cpp
+
+    database/database_connection.cpp
+    database/database_lib_settings.cpp
     )
 
 add_library( common STATIC
@@ -490,6 +493,10 @@ target_include_directories( common
 add_dependencies( common pegtl )
 target_include_directories( common PUBLIC
     $<TARGET_PROPERTY:pegtl,INTERFACE_INCLUDE_DIRECTORIES>
+    )
+
+target_include_directories( common SYSTEM PUBLIC
+    $<TARGET_PROPERTY:nanodbc,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
 

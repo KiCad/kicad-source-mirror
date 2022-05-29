@@ -54,6 +54,10 @@ set( QA_COMMON_SRCS
     view/test_zoom_controller.cpp
 )
 
+if( KICAD_TEST_DATABASE_LIBRARIES )
+    set( QA_COMMON_SRCS ${QA_COMMON_SRCS} test_database.cpp )
+endif()
+
 set( QA_COMMON_LIBS
     common
     libcontext
@@ -87,5 +91,11 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/qa/mocks/include
     ${INC_AFTER}
 )
+
+if( KICAD_TEST_DATABASE_LIBRARIES )
+    set_source_files_properties( test_database.cpp PROPERTIES
+            COMPILE_DEFINITIONS "QA_DATABASE_FILE_LOCATION=(\"${CMAKE_SOURCE_DIR}/qa/data/dblib\")"
+            )
+endif()
 
 kicad_add_boost_test( qa_common qa_common )

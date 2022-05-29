@@ -1018,7 +1018,8 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
     SCHEMATIC* schematic = Schematic();
 
     // SCH_SYMOL object has no context outside a schematic.
-    wxCHECK( schematic, false );
+    if( !schematic )
+        return false;
 
     for( int i = 0; i < MANDATORY_FIELDS; ++i )
     {

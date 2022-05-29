@@ -140,6 +140,7 @@ const std::string GerberJobFileExtension( "gbrjob" );
 const std::string HtmlFileExtension( "html" );
 const std::string EquFileExtension( "equ" );
 const std::string HotkeyFileExtension( "hotkeys" );
+const std::string DatabaseLibraryFileExtension( "kicad_dbl" );
 
 const std::string ArchiveFileExtension( "zip" );
 
@@ -206,10 +207,19 @@ wxString LegacySymbolLibFileWildcard()
 }
 
 
+wxString DatabaseLibFileWildcard()
+{
+    return _( "KiCad database library files" )
+           + AddFileExtListToFilter( { DatabaseLibraryFileExtension } );
+}
+
+
 wxString AllSymbolLibFilesWildcard()
 {
     return _( "All KiCad symbol library files" )
-            + AddFileExtListToFilter( { KiCadSymbolLibFileExtension, "lib" } );
+            + AddFileExtListToFilter( { KiCadSymbolLibFileExtension,
+                                        DatabaseLibraryFileExtension,
+                                        "lib" } );
 }
 
 

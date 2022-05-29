@@ -73,10 +73,10 @@ endif()
 message(STATUS "nanodbc feature: Disable async features - ${NANODBC_DISABLE_ASYNC}")
 
 if(NANODBC_ENABLE_UNICODE)
-  add_definitions(-DNANODBC_ENABLE_UNICODE)
+  add_compile_definitions(NANODBC_ENABLE_UNICODE)
   if(MSVC)
     # Sets "Use Unicode Character Set" property in Visual Studio projects
-    add_definitions(-DUNICODE -D_UNICODE)
+    add_compile_definitions(UNICODE _UNICODE)
   endif()
 endif()
 message(STATUS "nanodbc feature: Enable Unicode - ${NANODBC_ENABLE_UNICODE}")
@@ -179,16 +179,27 @@ endif()
 ########################################
 ## library target
 ########################################
-add_library(nanodbc nanodbc/nanodbc.cpp nanodbc/nanodbc.h)
+add_library(nanodbc
+        STATIC
+        nanodbc/nanodbc.cpp
+        nanodbc/nanodbc.h)
 
 target_link_libraries(nanodbc ${Boost_LIBRARIES} ${ODBC_LIBRARIES})
 
-target_include_directories(nanodbc PUBLIC
+if(APPLE)
+  target_link_libraries(nanodbc ${ODBC_LINK_FLAGS})
+endif()
+
+target_include_directories(nanodbc PUBLIC SYSTEM
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
   $<INSTALL_INTERFACE:include/nanodbc>) # <prefix>/include/nanodbc
 
 if(UNIX)
   set_target_properties(nanodbc PROPERTIES
-    COMPILE_FLAGS "${ODBC_CFLAGS}"
-    LIBRARY_OUTPUT_DIRECTORY "lib")
+    COMPILE_FLAGS "${ODBC_CFLAGS}")
+endif()
+
+if(NANODBC_ENABLE_UNICODE)
+  add_compile_definitions(NANODBC_ENABLE_UNICODE)
+  target_compile_definitions(nanodbc PUBLIC NANODBC_ENABLE_UNICODE)
 endif()

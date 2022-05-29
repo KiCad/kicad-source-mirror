@@ -274,6 +274,7 @@ set( EESCHEMA_SRCS
     sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp
     sch_plugins/legacy/sch_legacy_plugin.cpp
     sch_plugins/legacy/sch_legacy_plugin_helpers.cpp
+    sch_plugins/database/sch_database_plugin.cpp
 
     # Some simulation features must be built even if libngspice is not linked.
     sim/spice_settings.cpp

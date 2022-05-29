@@ -34,6 +34,7 @@ class SCH_SHEET;
 class SCH_SCREEN;
 class SCH_PLUGIN;
 class SCHEMATIC;
+class SYMBOL_LIB_TABLE;
 class KIWAY;
 class LIB_SYMBOL;
 class SYMBOL_LIB;
@@ -59,6 +60,7 @@ public:
                     SCH_ALTIUM,  ///< Altium file format
                     SCH_CADSTAR_ARCHIVE, ///< CADSTAR Schematic Archive
                     SCH_EAGLE,  ///< Autodesk Eagle file format
+                    SCH_DATABASE, ///< KiCad database library
 
                     // Add your schematic type here.
                     SCH_FILE_UNKNOWN
@@ -458,6 +460,12 @@ public:
      * @return an unformatted string containing errors if any.
      */
     virtual const wxString& GetError() const;
+
+    /**
+     * Some library plugins need to have access to their parent library table.
+     * @param aTable is the table this plugin is registered within.
+     */
+    virtual void SetLibTable( SYMBOL_LIB_TABLE* aTable ) {}
 
     //-----</PUBLIC SCH_PLUGIN API>------------------------------------------------
 

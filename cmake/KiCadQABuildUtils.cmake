@@ -30,7 +30,13 @@ option( KICAD_TEST_XML_OUTPUT
     "Cause unit tests to output xUnit results where possible for more granular CI reporting."
     OFF
 )
+
 mark_as_advanced( KICAD_TEST_XML_OUTPUT ) # Only CI tools need this
+
+option( KICAD_TEST_DATABASE_LIBRARIES
+    "Enable the database libraries QA tests (requires SQlite3 ODBC driver to be installed"
+    OFF
+)
 
 # This is a "meta" target that is used to collect all tests
 add_custom_target( qa_all_tests )

@@ -43,6 +43,7 @@ class LIB_TABLE_LEXER;
 class LIB_ID;
 class LIB_TABLE_ROW;
 class LIB_TABLE_GRID;
+class LIB_TABLE;
 class IO_ERROR;
 
 
@@ -68,7 +69,8 @@ class LIB_TABLE_ROW : boost::noncopyable
 public:
     LIB_TABLE_ROW() :
         enabled( true ),
-        m_loaded( false )
+        m_loaded( false ),
+        m_parent( nullptr )
     {
     }
 
@@ -77,11 +79,12 @@ public:
     }
 
     LIB_TABLE_ROW( const wxString& aNick, const wxString& aURI, const wxString& aOptions,
-                   const wxString& aDescr = wxEmptyString ) :
+                   const wxString& aDescr = wxEmptyString, LIB_TABLE* aParent = nullptr ) :
         nickName( aNick ),
         description( aDescr ),
         enabled( true ),
-        m_loaded( false )
+        m_loaded( false ),
+        m_parent( aParent )
     {
         properties.reset();
         SetOptions( aOptions );
@@ -167,6 +170,10 @@ public:
      */
     void SetDescr( const wxString& aDescr )     { description = aDescr; }
 
+    LIB_TABLE* GetParent() const { return m_parent; }
+
+    void SetParent( LIB_TABLE* aParent ) { m_parent = aParent; }
+
     /**
      * Return the constant #PROPERTIES for this library (#LIB_TABLE_ROW).  These are
      * the "options" in a table.
@@ -198,7 +205,8 @@ protected:
         options( aRow.options ),
         description( aRow.description ),
         enabled( aRow.enabled ),
-        m_loaded( aRow.m_loaded )
+        m_loaded( aRow.m_loaded ),
+        m_parent( aRow.m_parent )
     {
         if( aRow.properties )
             properties = std::make_unique<PROPERTIES>( *aRow.properties.get() );
@@ -225,6 +233,7 @@ private:
 
     bool              enabled  = true;    ///< Whether the LIB_TABLE_ROW is enabled
     bool              m_loaded = false;   ///< Whether the LIB_TABLE_ROW is loaded
+    LIB_TABLE*        m_parent;           ///< Pointer to the table this row lives in (maybe null)
 
     std::unique_ptr< PROPERTIES > properties;
 };
@@ -514,8 +523,6 @@ protected:
 
     void ensureIndex()
     {
-        std::lock_guard<std::recursive_mutex> lock( m_nickIndexMutex );
-
         // The dialog lib table editor may not maintain the nickIndex.
         // Lazy indexing may be required.  To handle lazy indexing, we must enforce
         // that "nickIndex" is either empty or accurate, but never inaccurate.

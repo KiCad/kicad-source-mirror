@@ -76,6 +76,7 @@ bool SYMBOL_LIB_TABLE_ROW::Refresh()
 
         plugin.set( SCH_IO_MGR::FindPlugin( type ) );
         SetLoaded( false );
+        plugin->SetLibTable( static_cast<SYMBOL_LIB_TABLE*>( GetParent() ) );
         plugin->EnumerateSymbolLib( dummyList, GetFullURI( true ), GetProperties() );
         SetLoaded( true );
         return true;
@@ -312,7 +313,10 @@ SYMBOL_LIB_TABLE_ROW* SYMBOL_LIB_TABLE::FindRow( const wxString& aNickname, bool
     // instantiate a PLUGIN of the proper kind if it is not already in this
     // SYMBOL_LIB_TABLE_ROW.
     if( !row->plugin )
+    {
         row->setPlugin( SCH_IO_MGR::FindPlugin( row->type ) );
+        row->plugin->SetLibTable( this );
+    }
 
     return row;
 }
@@ -327,7 +331,7 @@ void SYMBOL_LIB_TABLE::LoadSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
     wxString options = row->GetOptions();
 
     if( aPowerSymbolsOnly )
-        row->SetOptions( row->GetOptions() + " " + PropPowerSymsOnly );
+            row->SetOptions( row->GetOptions() + " " + PropPowerSymsOnly );
 
     row->SetLoaded( false );
     row->plugin->EnumerateSymbolLib( aSymbolList, row->GetFullURI( true ), row->GetProperties() );
@@ -354,7 +358,7 @@ LIB_SYMBOL* SYMBOL_LIB_TABLE::LoadSymbol( const wxString& aNickname, const wxStr
 {
     SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
 
-    if( !row || !row->plugin )
+    if( !row || !row->plugin || !row->GetIsLoaded() )
         return nullptr;
 
     LIB_SYMBOL* symbol = row->plugin->LoadSymbol( row->GetFullURI( true ), aSymbolName,

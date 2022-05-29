@@ -328,6 +328,9 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 addSymbol( symbol );
                 annotate();
 
+                if( m_frame->eeconfig()->m_AutoplaceFields.enable )
+                    symbol->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
+
                 // Update cursor now that we have a symbol
                 setCursor();
             }

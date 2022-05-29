@@ -173,6 +173,9 @@ public:
 
     bool IsMandatory() const;
 
+    bool IsAutoAdded() const { return m_autoAdded; }
+    void SetAutoAdded( bool aAutoAdded ) { m_autoAdded = aAutoAdded; }
+
 private:
 
     /**
@@ -209,6 +212,7 @@ private:
 
     int      m_id;         ///< @see enum MANDATORY_FIELD_T
     wxString m_name;       ///< Name (not the field text value itself, that is #EDA_TEXT::m_Text)
+    bool     m_autoAdded;  ///< Was this field automatically added to a LIB_SYMBOL?
 };
 
 #endif  //  CLASS_LIBENTRY_FIELDS_H

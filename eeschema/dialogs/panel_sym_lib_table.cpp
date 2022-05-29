@@ -214,6 +214,7 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
     pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_KICAD ) );
     pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY ) );
+    pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_DATABASE ) );
 
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
@@ -435,6 +436,9 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
         {
             SYMBOL_LIB_TABLE_ROW& row = dynamic_cast<SYMBOL_LIB_TABLE_ROW&>( table->At( r ) );
 
+            if( !row.GetParent() )
+                row.SetParent( table );
+
             if( !row.GetIsEnabled() )
                 continue;
 
@@ -476,7 +480,8 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 {
     wxString wildcards = AllSymbolLibFilesWildcard()
                             + "|" + KiCadSymbolLibFileWildcard()
-                            + "|" + LegacySymbolLibFileWildcard();
+                            + "|" + LegacySymbolLibFileWildcard()
+                            + "|" + DatabaseLibFileWildcard();
 
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 

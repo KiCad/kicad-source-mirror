@@ -71,6 +71,7 @@ LIB_FIELD& LIB_FIELD::operator=( const LIB_FIELD& field )
     m_id = field.m_id;
     m_name = field.m_name;
     m_parent = field.m_parent;
+    m_autoAdded = field.m_autoAdded;
 
     SetText( field.GetText() );
     SetAttributes( field );
@@ -95,6 +96,8 @@ void LIB_FIELD::Init( int aId )
     // template fieldsnames' initial visibility is controlled by the template fieldname config.
     if( aId == DATASHEET_FIELD || aId == FOOTPRINT_FIELD )
         SetVisible( false );
+
+    m_autoAdded = false;
 }
 
 
@@ -191,6 +194,7 @@ void LIB_FIELD::Copy( LIB_FIELD* aTarget ) const
     aTarget->CopyText( *this );
     aTarget->SetAttributes( *this );
     aTarget->SetParent( m_parent );
+    aTarget->SetAutoAdded( IsAutoAdded() );
 }
 
 

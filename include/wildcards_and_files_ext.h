@@ -128,6 +128,7 @@ extern const std::string GerberJobFileExtension;
 extern const std::string HtmlFileExtension;
 extern const std::string EquFileExtension;
 extern const std::string HotkeyFileExtension;
+extern const std::string DatabaseLibraryFileExtension;
 
 extern const std::string ArchiveFileExtension;
 
@@ -187,6 +188,7 @@ extern wxString DrawingSheetFileWildcard();
 extern wxString SchematicSymbolFileWildcard();
 extern wxString KiCadSymbolLibFileWildcard();
 extern wxString LegacySymbolLibFileWildcard();
+extern wxString DatabaseLibFileWildcard();
 extern wxString AllSymbolLibFilesWildcard();
 extern wxString ProjectFileWildcard();
 extern wxString LegacyProjectFileWildcard();
