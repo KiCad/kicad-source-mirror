@@ -1,13 +1,9 @@
-/**
- * @brief class ZONE_SETTINGS used to handle zones parameters
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,7 +67,6 @@ ZONE_SETTINGS::ZONE_SETTINGS()
 
     m_padConnection = ZONE_CONNECTION::THERMAL; // How pads are covered by copper in zone
 
-    m_Zone_45_Only = false;
     m_Locked = false;
 
     m_cornerSmoothingType = SMOOTHING_NONE;
@@ -119,7 +114,6 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE& aSource )
     m_keepoutDoNotAllowTracks     = aSource.GetDoNotAllowTracks();
     m_keepoutDoNotAllowPads       = aSource.GetDoNotAllowPads();
     m_keepoutDoNotAllowFootprints = aSource.GetDoNotAllowFootprints();
-    m_Zone_45_Only                = aSource.GetHV45();
     m_Locked                      = aSource.IsLocked();
     m_removeIslands               = aSource.GetIslandRemovalMode();
     m_minIslandArea               = aSource.GetMinIslandArea();
@@ -158,7 +152,6 @@ void ZONE_SETTINGS::ExportSetting( ZONE& aTarget, bool aFullExport ) const
     aTarget.SetDoNotAllowTracks( GetDoNotAllowTracks() );
     aTarget.SetDoNotAllowPads( GetDoNotAllowPads() );
     aTarget.SetDoNotAllowFootprints( GetDoNotAllowFootprints() );
-    aTarget.SetHV45( m_Zone_45_Only );
     aTarget.SetLocked( m_Locked );
     aTarget.SetIslandRemovalMode( GetIslandRemovalMode() );
     aTarget.SetMinIslandArea( GetMinIslandArea() );

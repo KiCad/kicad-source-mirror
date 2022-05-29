@@ -168,8 +168,6 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
     SetLocalFlags( aZone.GetLocalFlags() );
 
     m_netinfo                 = aZone.m_netinfo;
-
-    m_hv45                    = aZone.m_hv45;
     m_area                    = aZone.m_area;
 }
 

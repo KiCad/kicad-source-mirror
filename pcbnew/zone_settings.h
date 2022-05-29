@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2008-2018 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,7 +105,6 @@ public:
     long            m_ThermalReliefGap;        // thickness of the gap in thermal reliefs
     long            m_ThermalReliefSpokeWidth; // thickness of the copper bridge in thermal reliefs
 
-    bool            m_Zone_45_Only;
     bool            m_Locked;
 
     /* A zone outline can be a teardrop zone with different rules

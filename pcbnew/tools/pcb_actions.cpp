@@ -697,7 +697,7 @@ TOOL_ACTION PCB_ACTIONS::toggleHV45Mode( "pcbnew.EditorControl.toggle45",
         MD_SHIFT + ' ', "",
         _( "Constrain to H, V, 45" ),
         _( "Limit actions to horizontal, vertical, or 45 degrees from the starting point" ),
-        BITMAPS::INVALID_BITMAP );
+        BITMAPS::hv45mode );
 
 TOOL_ACTION PCB_ACTIONS::lock( "pcbnew.EditorControl.lock",
         AS_GLOBAL, 0, "",

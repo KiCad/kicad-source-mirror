@@ -1107,6 +1107,12 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::zoomTool,               CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
     mgr->SetConditions( ACTIONS::selectionTool,          CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
 
+    auto constrainedDrawingModeCond =
+            [this]( const SELECTION& )
+            {
+                return GetSettings()->m_Use45Limit;
+            };
+
     auto highContrastCond =
             [this]( const SELECTION& )
             {
@@ -1131,6 +1137,7 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
                 return m_auimgr.GetPane( "LayersManager" ).IsShown();
             };
 
+    mgr->SetConditions( PCB_ACTIONS::toggleHV45Mode,        CHECK( constrainedDrawingModeCond ) );
     mgr->SetConditions( ACTIONS::highContrastMode,          CHECK( highContrastCond ) );
     mgr->SetConditions( PCB_ACTIONS::flipBoard,             CHECK( boardFlippedCond ) );
     mgr->SetConditions( ACTIONS::toggleBoundingBoxes,       CHECK( cond.BoundingBoxes() ) );

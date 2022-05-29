@@ -919,10 +919,9 @@ void LEGACY_PLUGIN::loadSETUP()
             BIU tmp = biuParse( line + SZ( "ZoneClearence" ) );
             zs.m_ZoneClearance = tmp;
         }
-        else if( TESTLINE( "Zone_45_Only" ) )
+        else if( TESTLINE( "Zone_45_Only" ) )   // No longer used
         {
-            bool tmp = (bool) intParse( line + SZ( "Zone_45_Only" ) );
-            zs.m_Zone_45_Only = tmp;
+            /* bool tmp = (bool) */ intParse( line + SZ( "Zone_45_Only" ) );
         }
         else if( TESTLINE( "DrawSegmWidth" ) )
         {

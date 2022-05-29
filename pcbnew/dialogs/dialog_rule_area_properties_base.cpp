@@ -93,7 +93,7 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	m_cbFootprintsCtrl = new wxCheckBox( this, wxID_ANY, _("Keep out footprints"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbFootprintsCtrl->SetToolTip( _("Raise a DRC error if a footprint courtyard overlaps this area") );
 
-	fgSizer2->Add( m_cbFootprintsCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_cbFootprintsCtrl, 0, wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerRight->Add( fgSizer2, 0, wxEXPAND, 5 );
@@ -102,21 +102,16 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	bSizerRight->Add( 0, 3, 0, wxEXPAND, 5 );
 
 
-	bSizerRight->Add( 0, 0, 0, wxEXPAND|wxTOP, 5 );
+	bSizerRight->Add( 0, 0, 0, wxEXPAND, 5 );
 
 
-	bSizerRight->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	bSizerRight->Add( 0, 0, 0, wxEXPAND|wxBOTTOM, 5 );
 
 	wxGridBagSizer* gbSizer1;
 	gbSizer1 = new wxGridBagSizer( 3, 3 );
 	gbSizer1->SetFlexibleDirection( wxBOTH );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	gbSizer1->SetEmptyCellSize( wxSize( -1,2 ) );
-
-	m_cbConstrainCtrl = new wxCheckBox( this, wxID_ANY, _("Constrain outline to H, V and 45 deg"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbConstrainCtrl->SetToolTip( _("Draw the area using horizontal, vertical and 45 degree lines only") );
-
-	gbSizer1->Add( m_cbConstrainCtrl, wxGBPosition( 0, 0 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticTextStyle = new wxStaticText( this, wxID_ANY, _("Outline display:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextStyle->Wrap( -1 );

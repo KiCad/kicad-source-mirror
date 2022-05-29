@@ -800,9 +800,6 @@ public:
 
     const std::vector<SEG>& GetHatchLines() const { return m_borderHatchLines; }
 
-    bool   GetHV45() const { return m_hv45; }
-    void   SetHV45( bool aConstrain ) { m_hv45 = aConstrain; }
-
     /**
      * Build the hash value of m_FilledPolysList, and store it internally in m_filledPolysHash.
      * Used in zone filling calculations, to know if m_FilledPolysList is up to date.
@@ -930,8 +927,6 @@ protected:
 
     /// For each layer, a set of insulated islands that were not removed
     std::map<PCB_LAYER_ID, std::set<int>> m_insulatedIslands;
-
-    bool                      m_hv45;              // constrain edges to horiz, vert or 45°
 
     double                    m_area;              // The filled zone area
     double                    m_outlinearea;       // The outline zone area

@@ -67,7 +67,6 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
     zoneInfo.m_Layers.reset().set( m_params.m_layer );  // TODO(JE) multilayer defaults?
     zoneInfo.m_NetcodeSelection = highlightedNets.empty() ? -1 : *highlightedNets.begin();
     zoneInfo.SetIsRuleArea( m_params.m_keepout );
-    zoneInfo.m_Zone_45_Only = ( m_params.m_leaderMode == POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 );
 
     // If we don't have a net from highlighting, maybe we can get one from the selection
     PCB_SELECTION_TOOL* selectionTool = m_tool.GetManager()->GetTool<PCB_SELECTION_TOOL>();
@@ -271,8 +270,8 @@ bool ZONE_CREATE_HELPER::OnFirstPoint( POLYGON_GEOM_MANAGER& aMgr )
 
             m_parentView.SetVisible( &m_previewItem, true );
 
-            aMgr.SetLeaderMode( m_zone->GetHV45() ? POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45
-                                                  : POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
+            aMgr.SetLeaderMode( m_tool.Is45Limited() ? POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45
+                                                     : POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
         }
     }
 

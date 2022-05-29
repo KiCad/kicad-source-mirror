@@ -299,6 +299,7 @@ set( BMAPS_MID
     hotkeys
     hole_to_hole_clearance
     hole_to_copper_clearance
+    hv45mode
     icon_cvpcb_24
     icon_footprint_browser
     icon_gerbview_24

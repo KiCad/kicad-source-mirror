@@ -335,6 +335,7 @@ const std::vector<BITMAP_INFO> g_BitmapInfo = {
     { BITMAPS::hotkeys, wxT( "hotkeys_24.png" ), 24, wxT( "light" ) },
     { BITMAPS::hole_to_hole_clearance, wxT( "hole_to_hole_clearance_24.png" ), 24, wxT( "light" ) },
     { BITMAPS::hole_to_copper_clearance, wxT( "hole_to_copper_clearance_24.png" ), 24, wxT( "light" ) },
+    { BITMAPS::hv45mode, wxT( "hv45mode_24.png" ), 24, wxT( "light" ) },
     { BITMAPS::icon_cvpcb_24, wxT( "icon_cvpcb_24_24.png" ), 24, wxT( "light" ) },
     { BITMAPS::icon_footprint_browser, wxT( "icon_footprint_browser_24.png" ), 24, wxT( "light" ) },
     { BITMAPS::icon_gerbview_24, wxT( "icon_gerbview_24_24.png" ), 24, wxT( "light" ) },

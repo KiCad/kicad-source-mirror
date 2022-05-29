@@ -2187,7 +2187,6 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     // the geometry manager which handles the zone geometry, and hands the calculated points
     // over to the zone creator tool
     POLYGON_GEOM_MANAGER polyGeomMgr( zoneTool );
-    bool                 constrainAngle = false;
     bool                 started     = false;
     PCB_GRID_HELPER      grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
     STATUS_TEXT_POPUP    status( m_frame );
@@ -2238,10 +2237,8 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( ( sourceZone && sourceZone->GetHV45() ) || constrainAngle || Is45Limited() )
-            polyGeomMgr.SetLeaderMode( POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 );
-        else
-            polyGeomMgr.SetLeaderMode( POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
+        polyGeomMgr.SetLeaderMode( Is45Limited() ? POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45
+                                                 : POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
 
         if( evt->IsCancelInteractive() )
         {
@@ -2317,9 +2314,6 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
                 if( !started )
                 {
                     started = true;
-
-                    POLYGON_GEOM_MANAGER::LEADER_MODE leaderMode = polyGeomMgr.GetLeaderMode();
-                    constrainAngle = ( leaderMode == POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 );
 
                     m_controls->SetAutoPan( true );
                     m_controls->CaptureCursor( true );

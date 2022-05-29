@@ -49,7 +49,6 @@ class DIALOG_RULE_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbPadsCtrl;
 		wxCheckBox* m_cbCopperPourCtrl;
 		wxCheckBox* m_cbFootprintsCtrl;
-		wxCheckBox* m_cbConstrainCtrl;
 		wxStaticText* m_staticTextStyle;
 		wxChoice* m_OutlineDisplayCtrl;
 		wxStaticText* m_stBorderHatchPitchText;

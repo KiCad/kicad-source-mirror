@@ -703,9 +703,6 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             &m_DimensionExtensionOffset,
             Millimeter2iu( DEFAULT_DIMENSION_EXTENSION_OFFSET ) ) );
 
-    m_params.emplace_back( new PARAM<bool>( "defaults.zones.45_degree_only",
-            &m_defaultZoneSettings.m_Zone_45_Only, false ) );
-
     m_params.emplace_back( new PARAM_SCALED<int>( "defaults.zones.min_clearance",
             &m_defaultZoneSettings.m_ZoneClearance, Mils2iu( ZONE_CLEARANCE_MIL ),
             Millimeter2iu( 0.0 ), Millimeter2iu( 25.0 ), MM_PER_IU ) );

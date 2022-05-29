@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,7 +117,6 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataToWindow()
     m_cornerRadius.SetValue( m_settings.GetCornerRadius() );
 
     m_minWidth.SetValue( m_settings.m_ZoneMinThickness );
-    m_ConstrainOpt->SetValue( m_settings.m_Zone_45_Only );
     m_cbLocked->SetValue( m_settings.m_Locked );
 
     switch( m_settings.m_ZoneBorderDisplayStyle )
@@ -247,7 +246,6 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
     auto cfg = m_parent->GetPcbNewSettings();
     cfg->m_Zones.hatching_style = static_cast<int>( m_settings.m_ZoneBorderDisplayStyle );
 
-    m_settings.m_Zone_45_Only = m_ConstrainOpt->GetValue();
     m_settings.m_Locked = m_cbLocked->GetValue();
 
     // Get the layer selection for this zone

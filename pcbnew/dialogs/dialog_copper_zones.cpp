@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -238,7 +238,6 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
 
 bool DIALOG_COPPER_ZONE::TransferDataToWindow()
 {
-    m_constrainOutline->SetValue( m_settings.m_Zone_45_Only );
     m_cbLocked->SetValue( m_settings.m_Locked );
     m_cornerSmoothingChoice->SetSelection( m_settings.GetCornerSmoothingType() );
     m_cornerRadius.SetValue( m_settings.GetCornerRadius() );
@@ -542,7 +541,6 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
 
     m_settings.m_ZonePriority = m_PriorityLevelCtrl->GetValue();
 
-    m_settings.m_Zone_45_Only = m_constrainOutline->GetValue();
     m_settings.m_Locked = m_cbLocked->GetValue();
 
     m_settings.m_ThermalReliefGap = m_antipadClearance.GetValue();

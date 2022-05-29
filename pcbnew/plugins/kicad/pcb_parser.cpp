@@ -1904,8 +1904,8 @@ void PCB_PARSER::parseSetup()
             NeedRIGHT();
             break;
 
-        case T_zone_45_only:
-            zoneSettings.m_Zone_45_Only = parseBool();
+        case T_zone_45_only:    // legacy setting
+            /* zoneSettings.m_Zone_45_Only = */ parseBool();
             m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
