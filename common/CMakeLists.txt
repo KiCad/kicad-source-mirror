@@ -463,6 +463,7 @@ target_link_libraries( common
     pybind11::embed
     compoundfilereader
     pcm_settings
+    nanodbc # for now; maybe hoist out of common
     ${Boost_LIBRARIES}
     ${CURL_LIBRARIES}
     ${wxWidgets_LIBRARIES}
