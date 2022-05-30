@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,13 +19,11 @@
 
 #include <class_draw_panel_gal.h>
 #include <eda_draw_frame.h>
-#include <id.h>
 #include <preview_items/selection_area.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
 #include <view/view.h>
-#include <view/view_controls.h>
 
 
 ZOOM_TOOL::ZOOM_TOOL() :
@@ -36,6 +34,22 @@ ZOOM_TOOL::ZOOM_TOOL() :
 
 
 ZOOM_TOOL::~ZOOM_TOOL() {}
+
+
+
+bool ZOOM_TOOL::Init()
+{
+    auto& ctxMenu = m_menu.GetMenu();
+
+    // cancel current tool goes in main context menu at the top if present
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, SELECTION_CONDITIONS::ShowAlways, 1 );
+    ctxMenu.AddSeparator( 1 );
+
+    // Finally, add the standard zoom/grid items
+    getEditFrame<EDA_DRAW_FRAME>()->AddStandardSubMenus( m_menu );
+
+    return true;
+}
 
 
 void ZOOM_TOOL::Reset( RESET_REASON aReason )
@@ -70,6 +84,11 @@ int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( selectRegion() )
                 break;
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            SELECTION dummy;
+            m_menu.ShowContextMenu( dummy );
         }
         else
         {

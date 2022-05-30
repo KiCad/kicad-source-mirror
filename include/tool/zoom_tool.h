@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,6 +30,9 @@ class ZOOM_TOOL : public TOOL_INTERACTIVE
 public:
     ZOOM_TOOL();
     ~ZOOM_TOOL();
+
+    /// @copydoc TOOL_INTERACTIVE::Init()
+    bool Init() override;
 
     /// @copydoc TOOL_BASE::Reset()
     void Reset( RESET_REASON aReason ) override;
