@@ -49,7 +49,7 @@ DIALOG_MANAGE_REPOSITORIES::DIALOG_MANAGE_REPOSITORIES(
     m_buttonAdd->Bind( wxEVT_BUTTON, &DIALOG_MANAGE_REPOSITORIES::OnAdd, this );
 
     wxMenu*     addMenu = m_buttonAdd->GetSplitButtonMenu();
-    wxMenuItem* menuItem = addMenu->Append( wxID_ANY, _( "Add Default" ) );
+    wxMenuItem* menuItem = addMenu->Append( wxID_ANY, _( "Add Default Repository" ) );
 
     addMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &DIALOG_MANAGE_REPOSITORIES::OnAddDefault, this,
                    menuItem->GetId() );
