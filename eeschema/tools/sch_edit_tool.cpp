@@ -176,6 +176,8 @@ bool SCH_EDIT_TOOL::Init()
                 return sheet->HasUndefinedPins();
             };
 
+    auto sheetSelection = E_C::Count( 1 ) && E_C::OnlyType( SCH_SHEET_T );
+
     auto anyTextTool =
             [this]( const SELECTION& aSel )
             {
@@ -385,6 +387,9 @@ bool SCH_EDIT_TOOL::Init()
     // Add editing actions to the drawing tool menu
     //
     CONDITIONAL_MENU& drawMenu = drawingTools->GetToolMenu().GetMenu();
+
+    drawMenu.AddItem( EE_ACTIONS::enterSheet,         sheetSelection && EE_CONDITIONS::Idle, 1 );
+    drawMenu.AddSeparator(                            sheetSelection && EE_CONDITIONS::Idle, 1 );
 
     drawMenu.AddItem( EE_ACTIONS::rotateCCW,        orientCondition, 200 );
     drawMenu.AddItem( EE_ACTIONS::rotateCW,         orientCondition, 200 );

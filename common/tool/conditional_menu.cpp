@@ -99,6 +99,12 @@ void CONDITIONAL_MENU::AddSeparator( int aOrder )
 }
 
 
+void CONDITIONAL_MENU::AddSeparator( const SELECTION_CONDITION& aCondition, int aOrder )
+{
+    addEntry( ENTRY( aCondition, aOrder ) );
+}
+
+
 SELECTION g_resolveDummySelection;
 
 

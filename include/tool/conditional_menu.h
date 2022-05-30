@@ -103,6 +103,8 @@ public:
      */
     void AddSeparator( int aOrder = ANY_ORDER );
 
+    void AddSeparator( const SELECTION_CONDITION& aCondition, int aOrder );
+
     /**
      * Update the contents of the menu based on the supplied conditions.
      */

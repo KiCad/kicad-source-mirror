@@ -1660,11 +1660,28 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
         }
         else if( !sheet && ( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) ) )
         {
+            EE_SELECTION&      selection = m_selectionTool->GetSelection();
             EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
+
+            if( selection.Size() == 1
+                    && selection.Front()->Type() == SCH_SHEET_T
+                    && selection.Front()->GetBoundingBox().Contains( cursorPos ) )
+            {
+                if( evt->IsClick( BUT_LEFT ) )
+                {
+                    // sheet already selected
+                    continue;
+                }
+                else if( evt->IsDblClick( BUT_LEFT ) )
+                {
+                    m_toolMgr->RunAction( EE_ACTIONS::enterSheet, false );
+                    break;
+                }
+            }
 
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-            sheet = new SCH_SHEET( m_frame->GetCurrentSheet().Last(), (VECTOR2I) cursorPos );
+            sheet = new SCH_SHEET( m_frame->GetCurrentSheet().Last(), cursorPos );
             sheet->SetFlags( IS_NEW | IS_RESIZING );
             sheet->SetScreen( nullptr );
             sheet->SetBorderWidth( Mils2iu( cfg->m_Drawing.default_line_thickness ) );
