@@ -45,8 +45,8 @@
 #include <wx/zipstrm.h>
 
 
-const std::tuple<int, int> PLUGIN_CONTENT_MANAGER::m_kicad_version =
-        KICAD_MAJOR_MINOR_VERSION_TUPLE;
+const std::tuple<int, int, int> PLUGIN_CONTENT_MANAGER::m_kicad_version =
+        KICAD_MAJOR_MINOR_PATCH_TUPLE;
 
 
 class THROWING_ERROR_HANDLER : public nlohmann::json_schema::error_handler
@@ -510,19 +510,30 @@ void PLUGIN_CONTENT_MANAGER::preparePackage( PCM_PACKAGE& aPackage )
         // Determine compatibility
         ver.compatible = true;
 
-        auto parse_major_minor = []( const wxString& version )
+        auto parse_version_tuple = []( const wxString& version, int deflt )
         {
-            wxStringTokenizer tokenizer( version, wxT( "." ) );
-            int               ver_major = wxAtoi( tokenizer.GetNextToken() );
-            int               ver_minor = wxAtoi( tokenizer.GetNextToken() );
-            return std::tuple<int, int>( ver_major, ver_minor );
+            int ver_major = deflt;
+            int ver_minor = deflt;
+            int ver_patch = deflt;
+
+            wxStringTokenizer tokenizer( version, "." );
+
+            ver_major = wxAtoi( tokenizer.GetNextToken() );
+
+            if( tokenizer.HasMoreTokens() )
+                ver_minor = wxAtoi( tokenizer.GetNextToken() );
+
+            if( tokenizer.HasMoreTokens() )
+                ver_patch = wxAtoi( tokenizer.GetNextToken() );
+
+            return std::tuple<int, int, int>( ver_major, ver_minor, ver_patch );
         };
 
-        if( parse_major_minor( ver.kicad_version ) > m_kicad_version )
+        if( parse_version_tuple( ver.kicad_version, 0 ) > m_kicad_version )
             ver.compatible = false;
 
         if( ver.kicad_version_max
-            && parse_major_minor( ver.kicad_version_max.get() ) < m_kicad_version )
+            && parse_version_tuple( ver.kicad_version_max.get(), 999 ) < m_kicad_version )
             ver.compatible = false;
 
 #ifdef __WXMSW__

@@ -313,7 +313,7 @@ private:
     STRING_TUPLE_LIST                            m_repository_list; // (id, name, url) tuples
     // Using sorted map to keep order of entries in installed list stable
     std::map<wxString, PCM_INSTALLATION_ENTRY> m_installed;
-    const static std::tuple<int, int>          m_kicad_version;
+    const static std::tuple<int, int, int>     m_kicad_version;
 };
 
 #endif // PCM_H_
