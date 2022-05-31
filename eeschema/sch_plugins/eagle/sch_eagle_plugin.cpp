@@ -692,15 +692,21 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
     if( sheet_count > 1 )
     {
         int x, y, i;
-        i = 1;
+        i = 2;
         x = 1;
         y = 1;
+
+        SCH_SHEET_PATH rootsheetpath;
+        rootsheetpath.push_back( m_rootSheet );
+        m_rootSheet->AddInstance( rootsheetpath );
+        m_rootSheet->SetPageNumber( rootsheetpath, "1" );
 
         while( sheetNode )
         {
             VECTOR2I                   pos    = VECTOR2I( x * Mils2iu( 1000 ), y * Mils2iu( 1000 ) );
             std::unique_ptr<SCH_SHEET> sheet  = std::make_unique<SCH_SHEET>( m_rootSheet, pos );
             SCH_SCREEN*                screen = new SCH_SCREEN( m_schematic );
+            wxString                   pageNo = wxString::Format( "%d", i );
 
             sheet->SetScreen( screen );
             sheet->GetScreen()->SetFileName( sheet->GetFileName() );
@@ -711,10 +717,10 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 
             SCH_SHEET_PATH sheetpath;
             m_rootSheet->LocatePathOfScreen( m_currentSheet->GetScreen(), &sheetpath );
-            sheetpath.push_back( m_currentSheet );
-
+            m_currentSheet->AddInstance( sheetpath );
+            m_currentSheet->SetPageNumber( sheetpath, pageNo );
             m_rootSheet->AddInstance( sheetpath );
-            m_rootSheet->SetPageNumber( sheetpath, wxString::Format( "%d", i ) );
+            m_rootSheet->SetPageNumber( sheetpath, pageNo );
 
             sheetNode = sheetNode->GetNext();
             x += 2;
