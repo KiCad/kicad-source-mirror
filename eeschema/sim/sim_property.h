@@ -26,6 +26,7 @@
 #define SIM_PROPERTY_H
 
 #include <sim/sim_model.h>
+#include <wx/window.h>
 #include <wx/propgrid/props.h>
 
 

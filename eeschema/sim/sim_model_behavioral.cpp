@@ -29,7 +29,7 @@
 SIM_MODEL_BEHAVIORAL::SIM_MODEL_BEHAVIORAL( TYPE aType )
     : SIM_MODEL( aType )
 {
-    static PARAM::INFO resistor  = makeParams( "r", "Expression for resistance",  "ohm" );
+    static PARAM::INFO resistor  = makeParams( "r", "Expression for resistance",  "Ω" );
     static PARAM::INFO capacitor = makeParams( "c", "Expression for capacitance", "F"   );
     static PARAM::INFO inductor  = makeParams( "l", "Expression for inductance",  "H"   );
     static PARAM::INFO vsource   = makeParams( "v", "Expression for voltage",     "V"   );

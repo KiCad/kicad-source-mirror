@@ -138,6 +138,9 @@ public:
      */
     static SIM_TYPE CommandToSimType( const wxString& aCmd );
 
+protected:
+    void WriteDirectives( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions ) const override;
+
 private:
     ///< Custom simulation command (has priority over the schematic sheet simulation commands)
     wxString m_simCommand;

@@ -1,0 +1,132 @@
+*
+* diodes.lib
+*
+
+* Some diode models to test if reading Spice libraries works.
+
+* Not really 1N4148, just shoddily based on some values in datasheet.
+.MODEL 1N4148 D (BV=100 CJO=4p IBV=100u IS=4n M=0.33 N=2
++ RS=0.5 TT=10n VJ=0.8)
+
+* The below models have made up values - I didn't bother to check if they are physically correct.
+
+
+.model D1 D(Is=1.23n N=1.23 Rs=.7890 Ikf=12.34m Xti=3 Eg=1.23 Cjo=.90p
++           M=.56 Vj=.78 Fc=.9 Isr=12.34n Nr=2.345 Bv=100 Ibv=100u Tt=12.34n)
+
+* This line has a single trailing space.
+* DUsual* models always have the same values to save space on test asserts.
+.model D2_Usual D(BV=1.1U CJO=2.2M IBV=3.3 IS=4.4K M=5.5MEG N=6.6G) 
+
+* Trailing spaces, and an (empty) continuation.
+.model D3_Usual D(BV=1.1U CJO=2.2M IBV=3.3 IS=4.4K M=5.5MEG N=6.6G 
++) 
+
+.model D4  D( Is=0.1p 
++             Rs=2 
++             CJO=3p 
++             Tt=45n ; Test comment
++             Bv=678 
++             Ibv=0.1p )
+* (Has trailing spaces after each parameter value)
+
+.model D5_Empty D () ; Empty model
+
+* Parentheses are optional.
+.model D6_Empty D
+
+.model D7_Empty D ; Empty model, no parentheses, ending with a comment.
+
+.model D8_Empty D
+
+.model D9_Empty D;
+
+* Several parameters, no parentheses.
+.model D10_Usual D BV=1.1U CJO=2.2M IBV=3.3 IS=4.4K M=5.5MEG N=6.6G
+
+* Several parameters, no parentheses, multiple lines, backslash continuations.
+.model D11_Usual D BV=1.1U \\  
+                  CJO=2.2M
++                  IBV=3.3;
++                  IS=4.4K ; Test comment
++                  M=5.5MEG\\
+                   N=6.6G
+
+.model D12_Usual D
++BV=1.1U 
+ +CJO=2.2M 
+  +IBV=3.3;
+ +IS=4.4K;
++M=5.5MEG 
+ +N=6.6G 
+
+* Test some parameter synonyms.
+.model D13_Usual D
++ BV=1.1U
++ CJ0=2.2M
++ IBV=3.3
++ JS=4.4K
++ MJ=5.5MEG
++ N=6.6G
+.model D14_Usual D
++ BV=1.1U
++ CJ=2.2M
++ IBV=3.3
++ JS=4.4K
++ MJ=5.5MEG
++ N=6.6G
+
+* Two spaces as a separator everywhere, two leading, two trailing spaces.
+  .model  D15_Usual  D  (  BV=1.1U  CJ=2.2M  IBV=3.3  JS=4.4K  MJ=5.5MEG  N=6.6G  )  
+
+* Spaces aligning param names and values.
+* Leading tab.
+	.model D16_Usual D
++ BV  = 1.1U
++ CJ0 = 2.2M
++ IBV = 3.3
++ JS  = 4.4K
++ MJ  = 5.5MEG
++ N   = 6.6G
+
+* Parameters intermingled with garbage characters. Spice allows that, so we should too.
+.model D17_Usual D ( ()  	 ) , =
++ BV ==== 	 +1.1E-6,
++ CJ0 ,, ,, +2.2e-03 ,
++ 	IBV 3.3E-00
++ JS = = 4.4e+03
++ 	MJ +5.5MEG,;,
++ 	 N = 6.6G ;
+
+* All valid combinations of + - signs.
+.model D18 D
++ N -1.1, MJ +2.2, JS -3.3e-3, IBV +4.4e+4, CJ0 5.5e-5, BV 6.6e+6
+
+* Multiple empty-line continuations.
+* TODO
+.model D19_Usual D
+* Comment 1
+* Comment 2
++ BV=1.1U
++
++ CJ=2.2M\\
+\\
+
++
+* Comment 3
++
++ IBV=3.3
++ 
++ 
++ JS=4.4K
+* Comment 4
+ * Comment 5
++
+* Comment 8
++ MJ=5.5MEG
++
+(),= 	* Comment 9
++ N=6.6G
+
+* No newline at the end of file.
+.model D20_Usual D(BV=1.1U CJ=2.2M IBV=3.3 JS=4.4K MJ=5.5MEG N=6.6G)

@@ -78,7 +78,7 @@ bool NETLIST_EXPORTER_SPICE::GenerateNetlist( OUTPUTFORMATTER& aFormatter, unsig
 
     writeIncludes( aFormatter, aNetlistOptions );
     writeModels( aFormatter );
-    writeDirectives( aFormatter, aNetlistOptions );
+    WriteDirectives( aFormatter, aNetlistOptions );
     writeItems( aFormatter );
 
     aFormatter.Print( 0, ".end\n" );
@@ -115,12 +115,12 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             item.model = SIM_MODEL::Create(
                     static_cast<int>( m_sortedSymbolPinList.size() ), symbol->GetFields() );
 
+            if( !readRefName( sheet, *symbol, item, refNames ) )
+                return false;
+
             readLibraryField( *symbol, item );
             readNameField( *symbol, item );
             readEnabledField( *symbol, item );
-
-            if( !readRefName( sheet, *symbol, item, refNames ) )
-                return false;
 
             readPins( *symbol, item, notConnectedCounter );
 
@@ -217,7 +217,7 @@ void NETLIST_EXPORTER_SPICE::readLibraryField( SCH_SYMBOL& aSymbol, SPICE_ITEM& 
     else if( auto model = dynamic_cast<const SIM_MODEL_SPICE*>( aItem.model.get() ) )
     {
         // Special case for legacy models.
-        int libParamIndex = static_cast<int>( SIM_MODEL_SPICE::SPICE_PARAM::LIB );
+        unsigned libParamIndex = static_cast<unsigned>( SIM_MODEL_SPICE::SPICE_PARAM::LIB );
         path = model->GetParam( libParamIndex ).value->ToString();
     }
     
@@ -233,15 +233,14 @@ void NETLIST_EXPORTER_SPICE::readLibraryField( SCH_SYMBOL& aSymbol, SPICE_ITEM& 
 
 void NETLIST_EXPORTER_SPICE::readNameField( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem )
 {
-    SCH_FIELD* field = aSymbol.FindField( SIM_LIBRARY::NAME_FIELD );
-
-    if( !field )
-        return;
-
-    wxString modelName = field->GetShownText();
-
     if( m_libraries.count( aItem.libraryPath ) )
     {
+        SCH_FIELD* field = aSymbol.FindField( SIM_LIBRARY::NAME_FIELD );
+
+        if( !field )
+            return;
+
+        wxString modelName = field->GetShownText();
         const SIM_LIBRARY& library = *m_libraries.at( aItem.libraryPath );
         const SIM_MODEL* baseModel = library.FindModel( modelName );
 
@@ -254,6 +253,8 @@ void NETLIST_EXPORTER_SPICE::readNameField( SCH_SYMBOL& aSymbol, SPICE_ITEM& aIt
             return;
         }
     }
+    else
+        aItem.modelName = "__" + aItem.model->GenerateSpiceItemName( aItem.refName );
 }
 
 
@@ -360,7 +361,8 @@ void NETLIST_EXPORTER_SPICE::writeItems( OUTPUTFORMATTER& aFormatter )
 }
 
 
-void NETLIST_EXPORTER_SPICE::writeDirectives( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions )
+void NETLIST_EXPORTER_SPICE::WriteDirectives( OUTPUTFORMATTER& aFormatter,
+                                              unsigned         aNetlistOptions ) const
 {
     if( aNetlistOptions & OPTION_SAVE_ALL_VOLTAGES )
         aFormatter.Print( 0, ".save all\n" );

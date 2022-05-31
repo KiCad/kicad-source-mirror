@@ -32,6 +32,7 @@
 #include <sim/sim_model_source.h>
 #include <sim/sim_model_spice.h>
 #include <sim/sim_model_subckt.h>
+#include <sim/sim_model_tline.h>
 #include <sim/sim_model_xspice.h>
 
 #include <pegtl.hpp>
@@ -59,22 +60,25 @@ namespace SIM_MODEL_PARSER
     template <> struct fieldParamValuePairsSelector<quotedString> : std::true_type {};
 
 
+    template <typename Rule> struct pinSequenceSelector : std::false_type {};
+    template <> struct pinSequenceSelector<pinNumber> : std::true_type {};
+}
+
+
+namespace SIM_MODEL_SPICE_PARSER
+{
+    using namespace SPICE_GRAMMAR;
+
+
     template <typename Rule> struct spiceUnitSelector : std::false_type {};
 
     template <> struct spiceUnitSelector<dotModel> : std::true_type {};
     template <> struct spiceUnitSelector<modelName> : std::true_type {};
     template <> struct spiceUnitSelector<dotModelType> : std::true_type {};
     template <> struct spiceUnitSelector<param> : std::true_type {};
-    template <> struct spiceUnitSelector<number<SIM_VALUE::TYPE::INT, NOTATION::SPICE>>
-        : std::true_type {};
-    template <> struct spiceUnitSelector<number<SIM_VALUE::TYPE::FLOAT, NOTATION::SPICE>>
-        : std::true_type {};
+    template <> struct spiceUnitSelector<paramValue> : std::true_type {};
 
     template <> struct spiceUnitSelector<dotSubckt> : std::true_type {};
-
-
-    template <typename Rule> struct pinSequenceSelector : std::false_type {};
-    template <> struct pinSequenceSelector<pinNumber> : std::true_type {};
 }
 
 
@@ -133,10 +137,8 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::L_ADV:                return { DEVICE_TYPE::L,      "ADV",            "Advanced"                   };
     case TYPE::L_BEHAVIORAL:         return { DEVICE_TYPE::L,      "=",              "Behavioral"                 };
 
-    case TYPE::TLINE_LOSSY:          return { DEVICE_TYPE::TLINE,  "",               "Lossy"                      };
-    case TYPE::TLINE_LOSSLESS:       return { DEVICE_TYPE::TLINE,  "LOSSLESS",       "Lossless"                   };
-    case TYPE::TLINE_URC:            return { DEVICE_TYPE::TLINE,  "URC",            "Uniform RC"                 };
-    case TYPE::TLINE_KSPICE:         return { DEVICE_TYPE::TLINE,  "KSPICE",         "KSPICE"                     };
+    case TYPE::TLINE_Z0:             return { DEVICE_TYPE::TLINE,  "Z0",             "Characteristic impedance"   };
+    case TYPE::TLINE_RLGC:           return { DEVICE_TYPE::TLINE,  "RLGC",           "RLGC"                       };
 
     case TYPE::SW_V:                 return { DEVICE_TYPE::SW,     "V",              "Voltage-controlled"         };
     case TYPE::SW_I:                 return { DEVICE_TYPE::SW,     "I",              "Current-controlled"         };
@@ -163,8 +165,8 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::PMES_YTTERDAL:        return { DEVICE_TYPE::PMES,   "YTTERDAL",       "Ytterdal"                   };
     case TYPE::NMES_HFET1:           return { DEVICE_TYPE::NMES,   "HFET1",          "HFET1"                      };
     case TYPE::PMES_HFET1:           return { DEVICE_TYPE::PMES,   "HFET1",          "HFET1"                      };
-    case TYPE::PMES_HFET2:           return { DEVICE_TYPE::NMES,   "HFET2",          "HFET2"                      };
-    case TYPE::NMES_HFET2:           return { DEVICE_TYPE::PMES,   "HFET2",          "HFET2"                      };
+    case TYPE::NMES_HFET2:           return { DEVICE_TYPE::NMES,   "HFET2",          "HFET2"                      };
+    case TYPE::PMES_HFET2:           return { DEVICE_TYPE::PMES,   "HFET2",          "HFET2"                      };
 
     case TYPE::NMOS_MOS1:            return { DEVICE_TYPE::NMOS,   "MOS1",           "Classical quadratic (MOS1)" };
     case TYPE::PMOS_MOS1:            return { DEVICE_TYPE::PMOS,   "MOS1",           "Classical quadratic (MOS1)" };
@@ -255,87 +257,85 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     {
     case TYPE::R:                    return { "R", ""        };
     case TYPE::R_ADV:                return { "R", "r"       };
-    case TYPE::R_BEHAVIORAL:         return { "R", "",       "",        0,  true   };
+    case TYPE::R_BEHAVIORAL:         return { "R", "",       "",        "0",   false, true   };
 
     case TYPE::C:                    return { "C", ""        };
     case TYPE::C_ADV:                return { "C", "c",      };
-    case TYPE::C_BEHAVIORAL:         return { "C", "",       "",        0,  true   };
+    case TYPE::C_BEHAVIORAL:         return { "C", "",       "",        "0",   false, true   };
 
     case TYPE::L:                    return { "L", ""        };
     case TYPE::L_ADV:                return { "L", "l"       };
-    case TYPE::L_BEHAVIORAL:         return { "L", "",       "",        0,  true   };
+    case TYPE::L_BEHAVIORAL:         return { "L", "",       "",        "0",   false, true   };
     
-    case TYPE::TLINE_LOSSY:          return { "O", "ltra"    };
-    case TYPE::TLINE_LOSSLESS:       return { "T"  };
-    case TYPE::TLINE_URC:            return { "U"  };
-    case TYPE::TLINE_KSPICE:         return { "Y"  };
+    case TYPE::TLINE_Z0:             return { "T"  };
+    case TYPE::TLINE_RLGC:           return { "O", "ltra"    };
     
     case TYPE::SW_V:                 return { "S", "switch"  };
     case TYPE::SW_I:                 return { "W", "cswitch" };
 
     case TYPE::D:                    return { "D", "d"       };
 
-    case TYPE::NPN_GUMMELPOON:       return { "Q", "npn",    "",        1   };
-    case TYPE::PNP_GUMMELPOON:       return { "Q", "pnp",    "",        1   };
+    case TYPE::NPN_GUMMELPOON:       return { "Q", "npn",    "",        "1",  true   };
+    case TYPE::PNP_GUMMELPOON:       return { "Q", "pnp",    "",        "1",  true   };
 
-    case TYPE::NPN_VBIC:             return { "Q", "npn",    "",        4   };
-    case TYPE::PNP_VBIC:             return { "Q", "pnp",    "",        4   };
+    case TYPE::NPN_VBIC:             return { "Q", "npn",    "",        "4"   };
+    case TYPE::PNP_VBIC:             return { "Q", "pnp",    "",        "4"   };
 
-    case TYPE::NPN_HICUML2:          return { "Q", "npn",    "",        8   };
-    case TYPE::PNP_HICUML2:          return { "Q", "pnp",    "",        8   };
+    case TYPE::NPN_HICUML2:          return { "Q", "npn",    "",        "8"   };
+    case TYPE::PNP_HICUML2:          return { "Q", "pnp",    "",        "8"   };
 
-    case TYPE::NJFET_SHICHMANHODGES: return { "M", "njf",    "",        1   };
-    case TYPE::PJFET_SHICHMANHODGES: return { "M", "pjf",    "",        1   };
-    case TYPE::NJFET_PARKERSKELLERN: return { "M", "njf",    "",        2   };
-    case TYPE::PJFET_PARKERSKELLERN: return { "M", "pjf",    "",        2   };
+    case TYPE::NJFET_SHICHMANHODGES: return { "M", "njf",    "",        "1"   };
+    case TYPE::PJFET_SHICHMANHODGES: return { "M", "pjf",    "",        "1"   };
+    case TYPE::NJFET_PARKERSKELLERN: return { "M", "njf",    "",        "2"   };
+    case TYPE::PJFET_PARKERSKELLERN: return { "M", "pjf",    "",        "2"   };
 
-    case TYPE::NMES_STATZ:           return { "Z", "nmf",    "",        1   };
-    case TYPE::PMES_STATZ:           return { "Z", "pmf",    "",        1   };
-    case TYPE::NMES_YTTERDAL:        return { "Z", "nmf",    "",        2   };
-    case TYPE::PMES_YTTERDAL:        return { "Z", "pmf",    "",        2   };
-    case TYPE::NMES_HFET1:           return { "Z", "nmf",    "",        5   };
-    case TYPE::PMES_HFET1:           return { "Z", "pmf",    "",        5   };
-    case TYPE::PMES_HFET2:           return { "Z", "nmf",    "",        6   };
-    case TYPE::NMES_HFET2:           return { "Z", "pmf",    "",        6   };
+    case TYPE::NMES_STATZ:           return { "Z", "nmf",    "",        "1"   };
+    case TYPE::PMES_STATZ:           return { "Z", "pmf",    "",        "1"   };
+    case TYPE::NMES_YTTERDAL:        return { "Z", "nmf",    "",        "2"   };
+    case TYPE::PMES_YTTERDAL:        return { "Z", "pmf",    "",        "2"   };
+    case TYPE::NMES_HFET1:           return { "Z", "nmf",    "",        "5"   };
+    case TYPE::PMES_HFET1:           return { "Z", "pmf",    "",        "5"   };
+    case TYPE::NMES_HFET2:           return { "Z", "nmf",    "",        "6"   };
+    case TYPE::PMES_HFET2:           return { "Z", "pmf",    "",        "6"   };
 
-    case TYPE::NMOS_MOS1:            return { "M", "nmos",   "",        1   };
-    case TYPE::PMOS_MOS1:            return { "M", "pmos",   "",        1   };
-    case TYPE::NMOS_MOS2:            return { "M", "nmos",   "",        2   };
-    case TYPE::PMOS_MOS2:            return { "M", "pmos",   "",        2   };
-    case TYPE::NMOS_MOS3:            return { "M", "nmos",   "",        3   };
-    case TYPE::PMOS_MOS3:            return { "M", "pmos",   "",        3   };
-    case TYPE::NMOS_BSIM1:           return { "M", "nmos",   "",        4   };
-    case TYPE::PMOS_BSIM1:           return { "M", "pmos",   "",        4   };
-    case TYPE::NMOS_BSIM2:           return { "M", "nmos",   "",        5   };
-    case TYPE::PMOS_BSIM2:           return { "M", "pmos",   "",        5   };
-    case TYPE::NMOS_MOS6:            return { "M", "nmos",   "",        6   };
-    case TYPE::PMOS_MOS6:            return { "M", "pmos",   "",        6   };
-    case TYPE::NMOS_BSIM3:           return { "M", "nmos",   "",        8   };
-    case TYPE::PMOS_BSIM3:           return { "M", "pmos",   "",        8   };
-    case TYPE::NMOS_MOS9:            return { "M", "nmos",   "",        9   };
-    case TYPE::PMOS_MOS9:            return { "M", "pmos",   "",        9   };
-    case TYPE::NMOS_B4SOI:           return { "M", "nmos",   "",        10  };
-    case TYPE::PMOS_B4SOI:           return { "M", "pmos",   "",        10  };
-    case TYPE::NMOS_BSIM4:           return { "M", "nmos",   "",        14  };
-    case TYPE::PMOS_BSIM4:           return { "M", "pmos",   "",        14  };
+    case TYPE::NMOS_MOS1:            return { "M", "nmos",   "",        "1"   };
+    case TYPE::PMOS_MOS1:            return { "M", "pmos",   "",        "1"   };
+    case TYPE::NMOS_MOS2:            return { "M", "nmos",   "",        "2"   };
+    case TYPE::PMOS_MOS2:            return { "M", "pmos",   "",        "2"   };
+    case TYPE::NMOS_MOS3:            return { "M", "nmos",   "",        "3"   };
+    case TYPE::PMOS_MOS3:            return { "M", "pmos",   "",        "3"   };
+    case TYPE::NMOS_BSIM1:           return { "M", "nmos",   "",        "4"   };
+    case TYPE::PMOS_BSIM1:           return { "M", "pmos",   "",        "4"   };
+    case TYPE::NMOS_BSIM2:           return { "M", "nmos",   "",        "5"   };
+    case TYPE::PMOS_BSIM2:           return { "M", "pmos",   "",        "5"   };
+    case TYPE::NMOS_MOS6:            return { "M", "nmos",   "",        "6"   };
+    case TYPE::PMOS_MOS6:            return { "M", "pmos",   "",        "6"   };
+    case TYPE::NMOS_BSIM3:           return { "M", "nmos",   "",        "8"   };
+    case TYPE::PMOS_BSIM3:           return { "M", "pmos",   "",        "8"   };
+    case TYPE::NMOS_MOS9:            return { "M", "nmos",   "",        "9"   };
+    case TYPE::PMOS_MOS9:            return { "M", "pmos",   "",        "9"   };
+    case TYPE::NMOS_B4SOI:           return { "M", "nmos",   "",        "10"  };
+    case TYPE::PMOS_B4SOI:           return { "M", "pmos",   "",        "10"  };
+    case TYPE::NMOS_BSIM4:           return { "M", "nmos",   "",        "14"  };
+    case TYPE::PMOS_BSIM4:           return { "M", "pmos",   "",        "14"  };
     //case TYPE::NMOS_EKV2_6:          return {};
     //case TYPE::PMOS_EKV2_6:          return {};
     //case TYPE::NMOS_PSP:             return {};
     //case TYPE::PMOS_PSP:             return {};
-    case TYPE::NMOS_B3SOIFD:         return { "M", "nmos",   "",        55  };
-    case TYPE::PMOS_B3SOIFD:         return { "M", "pmos",   "",        55  };
-    case TYPE::NMOS_B3SOIDD:         return { "M", "nmos",   "",        56  };
-    case TYPE::PMOS_B3SOIDD:         return { "M", "pmos",   "",        56  };
-    case TYPE::NMOS_B3SOIPD:         return { "M", "nmos",   "",        57  };
-    case TYPE::PMOS_B3SOIPD:         return { "M", "pmos",   "",        57  };
+    case TYPE::NMOS_B3SOIFD:         return { "M", "nmos",   "",        "55"  };
+    case TYPE::PMOS_B3SOIFD:         return { "M", "pmos",   "",        "55"  };
+    case TYPE::NMOS_B3SOIDD:         return { "M", "nmos",   "",        "56"  };
+    case TYPE::PMOS_B3SOIDD:         return { "M", "pmos",   "",        "56"  };
+    case TYPE::NMOS_B3SOIPD:         return { "M", "nmos",   "",        "57"  };
+    case TYPE::PMOS_B3SOIPD:         return { "M", "pmos",   "",        "57"  };
     //case TYPE::NMOS_STAG:            return {};
     //case TYPE::PMOS_STAG:            return {};
-    case TYPE::NMOS_HISIM2:          return { "M", "nmos",   "",        68  };
-    case TYPE::PMOS_HISIM2:          return { "M", "pmos",   "",        68  };
-    case TYPE::NMOS_HISIMHV1:        return { "M", "nmos",   "",        73, false, "1.2.4" };
-    case TYPE::PMOS_HISIMHV1:        return { "M", "pmos",   "",        73, false, "1.2.4" };
-    case TYPE::NMOS_HISIMHV2:        return { "M", "nmos",   "",        73, false, "2.2.0" };
-    case TYPE::PMOS_HISIMHV2:        return { "M", "pmos",   "",        73, false, "2.2.0" };
+    case TYPE::NMOS_HISIM2:          return { "M", "nmos",   "",        "68"  };
+    case TYPE::PMOS_HISIM2:          return { "M", "pmos",   "",        "68"  };
+    case TYPE::NMOS_HISIMHV1:        return { "M", "nmos",   "",        "73", true,  false, "1.2.4" };
+    case TYPE::PMOS_HISIMHV1:        return { "M", "pmos",   "",        "73", true,  false, "1.2.4" };
+    case TYPE::NMOS_HISIMHV2:        return { "M", "nmos",   "",        "73", true,  false, "2.2.0" };
+    case TYPE::PMOS_HISIMHV2:        return { "M", "pmos",   "",        "73", true,  false, "2.2.0" };
 
     case TYPE::V_DC:                 return { "V", ""        };
     case TYPE::V_SIN:                return { "V", "",       "SIN"      };
@@ -392,13 +392,13 @@ TYPE SIM_MODEL::ReadTypeFromSpiceCode( const std::string& aSpiceCode )
 
     try
     {
-        root = tao::pegtl::parse_tree::parse<SIM_MODEL_PARSER::spiceUnitGrammar,
-                                             SIM_MODEL_PARSER::spiceUnitSelector>
+        root = tao::pegtl::parse_tree::parse<SIM_MODEL_SPICE_PARSER::spiceUnitGrammar,
+                                             SIM_MODEL_SPICE_PARSER::spiceUnitSelector>
             ( in );
     }
     catch( const tao::pegtl::parse_error& e )
     {
-        // TODO: Maybe announce an error somehow?
+        wxLogDebug( "%s", e.what() );
         return TYPE::NONE;
     }
 
@@ -406,24 +406,54 @@ TYPE SIM_MODEL::ReadTypeFromSpiceCode( const std::string& aSpiceCode )
 
     for( const auto& node : root->children )
     {
-        if( node->is_type<SIM_MODEL_PARSER::dotModel>() )
+        if( node->is_type<SIM_MODEL_SPICE_PARSER::dotModel>() )
         {
+            wxString paramName;
+            wxString typeString;
+            wxString level;
+            wxString version;
+
             for( const auto& subnode : node->children )
             {
-                if( subnode->is_type<SIM_MODEL_PARSER::modelName>() )
+                if( subnode->is_type<SIM_MODEL_SPICE_PARSER::modelName>() )
                 {
                     // Do nothing.
                 }
-                else if( subnode->is_type<SIM_MODEL_PARSER::dotModelType>() )
-                    return readTypeFromSpiceTypeString( subnode->string() );
+                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::dotModelType>() )
+                {
+                    typeString = subnode->string();
+                    TYPE type = readTypeFromSpiceStrings( typeString );
+
+                    if( type != TYPE::SPICE )
+                        return type;
+                }
+                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::param>() )
+                {
+                    paramName = subnode->string();
+                }
+                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::paramValue>() )
+                {
+                    wxASSERT( paramName != "" );
+
+                    if( paramName == "level" )
+                        level = subnode->string();
+                    else if( paramName == "version" ) // TODO! This isn't a number!
+                        version = subnode->string();
+                }
                 else
                 {
                     wxFAIL_MSG( "Unhandled parse tree subnode" );
                     return TYPE::NONE;
                 }
             }
+
+            // Type was not determined from Spice type string alone, so now we take `level` and
+            // `version` variables into account too. This is suboptimal since we read the model
+            // twice this way, and moreover the code is now somewhat duplicated.
+
+            return readTypeFromSpiceStrings( typeString, level, version, false );
         }
-        else if( node->is_type<SIM_MODEL_PARSER::dotSubckt>() )
+        else if( node->is_type<SIM_MODEL_SPICE_PARSER::dotSubckt>() )
             return TYPE::SUBCKT;
         else
         {
@@ -550,6 +580,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::string& aSpiceCode )
     
     if( !model->ReadSpiceCode( aSpiceCode ) )
     {
+        wxLogDebug( "%s", model->GetErrorMessage() );
         // Demote to raw Spice element and try again.
         std::unique_ptr<SIM_MODEL> rawSpiceModel = create( TYPE::SPICE );
 
@@ -675,8 +706,8 @@ bool SIM_MODEL::ReadSpiceCode( const std::string& aSpiceCode )
 
     try
     {
-        root = tao::pegtl::parse_tree::parse<SIM_MODEL_PARSER::spiceUnitGrammar,
-                                             SIM_MODEL_PARSER::spiceUnitSelector>
+        root = tao::pegtl::parse_tree::parse<SIM_MODEL_SPICE_PARSER::spiceUnitGrammar,
+                                             SIM_MODEL_SPICE_PARSER::spiceUnitSelector>
             ( in );
     }
     catch( tao::pegtl::parse_error& e )
@@ -690,37 +721,36 @@ bool SIM_MODEL::ReadSpiceCode( const std::string& aSpiceCode )
 
     for( const auto& node : root->children )
     {
-        if( node->is_type<SIM_MODEL_PARSER::dotModel>() )
+        if( node->is_type<SIM_MODEL_SPICE_PARSER::dotModel>() )
         {
             wxString paramName = "";
 
             for( const auto& subnode : node->children )
             {
-                if( subnode->is_type<SIM_MODEL_PARSER::modelName>() )
+                if( subnode->is_type<SIM_MODEL_SPICE_PARSER::modelName>() )
                 {
                     // Do nothing.
                 }
-                else if( subnode->is_type<SIM_MODEL_PARSER::dotModelType>() )
+                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::dotModelType>() )
                 {
                     // Do nothing.
                 }
-                else if( subnode->is_type<SIM_MODEL_PARSER::param>() )
+                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::param>() )
                 {
                     paramName = subnode->string();
                 }
-                // TODO: Do something with number<SIM_VALUE::TYPE::INT, ...>.
-                // It doesn't seem too useful?
-                else if( subnode->is_type<
-                        SIM_MODEL_PARSER::number<SIM_VALUE::TYPE::INT,
-                                                 SIM_MODEL_PARSER::NOTATION::SPICE>>()
-                    || subnode->is_type<
-                        SIM_MODEL_PARSER::number<SIM_VALUE::TYPE::FLOAT,
-                                                 SIM_MODEL_PARSER::NOTATION::SPICE>>() )
+                else if( subnode->is_type<SIM_MODEL_SPICE_PARSER::paramValue>() )
                 {
                     wxASSERT( !paramName.IsEmpty() );
 
                     if( !SetParamFromSpiceCode( paramName, subnode->string() ) )
+                    {
+                        m_errorMessage =
+                            wxString::Format( _( "Failed to set parameter '%s' to '%s'" ),
+                                              paramName,
+                                              subnode->string() );
                         return false;
+                    }
                 }
                 else
                 {
@@ -804,7 +834,7 @@ wxString SIM_MODEL::GenerateSpiceModelLine( const wxString& aModelName ) const
 {
     LOCALE_IO toggle;
 
-    if( !HasOverrides() )
+    if( !HasOverrides() || !requiresSpiceModel() )
         return "";
 
     wxString result = "";
@@ -815,12 +845,12 @@ wxString SIM_MODEL::GenerateSpiceModelLine( const wxString& aModelName ) const
     for( unsigned paramIndex = 0; paramIndex < GetParamCount(); ++paramIndex )
     {
         const PARAM& param = GetParam( paramIndex );
-        wxString valueStr = param.value->ToString();
+        wxString valueStr = param.value->ToString( SIM_VALUE_GRAMMAR::NOTATION::SPICE );
 
         if( valueStr.IsEmpty() )
             continue;
         
-        wxString append = " " + param.info.name + "=" + param.value->ToString();
+        wxString append = " " + param.info.name + "=" + valueStr;
 
         if( line.Length() + append.Length() > 60 )
         {
@@ -831,7 +861,7 @@ wxString SIM_MODEL::GenerateSpiceModelLine( const wxString& aModelName ) const
             line << append;
     }
 
-    result << line + ")\n";
+    result << line + " )\n";
     return result;
 }
 
@@ -870,12 +900,14 @@ wxString SIM_MODEL::GenerateSpiceItemLine( const wxString& aRefName,
         }
     }
 
-    result << aModelName << " ";
+    if( requiresSpiceModel() )
+        result << aModelName << " ";
 
     for( const PARAM& param : GetParams() )
     {
-        if( param.info.isInstanceParam )
-            result << param.info.name << "=" << param.value->ToString() << " ";
+        if( param.info.isSpiceInstanceParam )
+            result << param.info.name << "="
+                << param.value->ToString( SIM_VALUE_GRAMMAR::NOTATION::SPICE ) << " ";
     }
 
     result << "\n";
@@ -904,12 +936,6 @@ wxString SIM_MODEL::GenerateSpicePreview( const wxString& aModelName ) const
         return modelLine;
 
     return GenerateSpiceItemLine( "", aModelName );
-}
-
-
-SIM_MODEL::SPICE_INFO SIM_MODEL::GetSpiceInfo() const
-{
-    return SpiceInfo( GetType() );
 }
 
 
@@ -957,10 +983,27 @@ std::vector<std::reference_wrapper<const SIM_MODEL::PIN>> SIM_MODEL::GetPins() c
 
 const SIM_MODEL::PARAM& SIM_MODEL::GetParam( unsigned aParamIndex ) const
 {
-    if( m_baseModel && m_params.at( aParamIndex ).value->ToString().IsEmpty() )
+    if( m_baseModel && m_params.at( aParamIndex ).value->ToString() == "" )
         return m_baseModel->GetParam( aParamIndex );
     else
         return m_params.at( aParamIndex );
+}
+
+
+const SIM_MODEL::PARAM* SIM_MODEL::FindParam( const wxString& aParamName ) const
+{
+    std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
+
+    auto it = std::find_if( params.begin(), params.end(),
+                            [aParamName]( const PARAM& param )
+                            {
+                                return param.info.name == aParamName.Lower();
+                            } );
+
+    if( it == params.end() )
+        return nullptr;
+
+    return &it->get();
 }
 
 
@@ -994,7 +1037,7 @@ bool SIM_MODEL::SetParamValue( unsigned aParamIndex, const wxString& aValue,
                                SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
     // Models sourced from a library are immutable.
-    if( !m_spiceCode.IsEmpty() )
+    if( m_spiceCode != "" )
         return false;
 
     return m_params.at( aParamIndex ).value->FromString( aValue, aNotation );
@@ -1005,7 +1048,7 @@ bool SIM_MODEL::HasOverrides() const
 {
     for( const PARAM& param : m_params )
     {
-        if( !param.value->ToString().IsEmpty() )
+        if( param.value->ToString() != "" )
             return true;
     }
 
@@ -1013,15 +1056,12 @@ bool SIM_MODEL::HasOverrides() const
 }
 
 
-bool SIM_MODEL::HasNonPrincipalOverrides() const
+bool SIM_MODEL::HasNonInstanceOverrides() const
 {
     for( const PARAM& param : m_params )
     {
-        if( param.info.category != PARAM::CATEGORY::PRINCIPAL
-            && !param.value->ToString().IsEmpty() )
-        {
+        if( !param.info.isInstanceParam && param.value->ToString() != "" )
             return true;
-        }
     }
 
     return false;
@@ -1076,9 +1116,7 @@ wxString SIM_MODEL::GenerateParamsField( const wxString& aPairSeparator ) const
 
     for( const PARAM& param : m_params )
     {
-        wxString valueStr = param.value->ToString();
-
-        if( valueStr.IsEmpty() )
+        if( param.value->ToString() == "" )
             continue;
 
         result << GenerateParamValuePair( param, isFirst );
@@ -1125,7 +1163,7 @@ bool SIM_MODEL::ParseParamsField( const wxString& aParamsField )
                                                       SIM_MODEL_PARSER::NOTATION::SI>>()
             || node->is_type<SIM_MODEL_PARSER::unquotedString>() )
         {
-            wxASSERT( !paramName.IsEmpty() );
+            wxASSERT( paramName != "" );
             // TODO: Shouldn't be named "...fromSpiceCode" here...
 
             SetParamFromSpiceCode( paramName, node->string(), SIM_VALUE_GRAMMAR::NOTATION::SI );
@@ -1238,6 +1276,10 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::create( TYPE aType )
     case TYPE::V_BEHAVIORAL:
     case TYPE::I_BEHAVIORAL:
         return std::make_unique<SIM_MODEL_BEHAVIORAL>( aType );
+    
+    case TYPE::TLINE_Z0:
+    case TYPE::TLINE_RLGC:
+        return std::make_unique<SIM_MODEL_TLINE>( aType );
 
     case TYPE::V_DC:
     case TYPE::I_DC:
@@ -1284,22 +1326,31 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::create( TYPE aType )
 }
 
 
-TYPE SIM_MODEL::readTypeFromSpiceTypeString( const std::string& aTypeString )
+TYPE SIM_MODEL::readTypeFromSpiceStrings( const wxString& aTypeString,
+                                          const wxString& aLevel,
+                                          const wxString& aVersion,
+                                          bool aSkipDefaultLevel )
 {
-    std::string lowercaseTypeString = aTypeString;
-    std::transform( lowercaseTypeString.begin(), lowercaseTypeString.end(),
-                    lowercaseTypeString.begin(), ::tolower );
+    std::unique_ptr<SIM_VALUE> readLevel = SIM_VALUE::Create( SIM_VALUE::TYPE::INT, aLevel );
 
     for( TYPE type : TYPE_ITERATOR() )
     {
         wxString typePrefix = SpiceInfo( type ).modelType;
+        wxString level = SpiceInfo( type ).level;
+        wxString version = SpiceInfo( type ).version;
+        bool isDefaultLevel = SpiceInfo( type ).isDefaultLevel;
 
         if( typePrefix == "" )
             continue;
         
         // Check if `aTypeString` starts with `typePrefix`.
-        if( lowercaseTypeString.rfind( typePrefix, 0 ) == 0 )
+        if( aTypeString.Lower().StartsWith( typePrefix )
+            && ( level == readLevel->ToString()
+                 || ( !aSkipDefaultLevel && isDefaultLevel && aLevel == "" ) )
+            && version == aVersion )
+        {
             return type;
+        }
     }
 
     // If the type string is not recognized, demote to a raw Spice element. This way the user won't
@@ -1357,4 +1408,16 @@ wxString SIM_MODEL::generatePinsField() const
     }
 
     return result;
+}
+
+
+bool SIM_MODEL::requiresSpiceModel() const
+{
+    for( const PARAM& param : GetParams() )
+    {
+        if( !param.info.isSpiceInstanceParam )
+            return true;
+    }
+
+    return false;
 }

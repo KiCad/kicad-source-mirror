@@ -120,6 +120,7 @@ public:
 
 protected:
     void ReadDirectives();
+    virtual void WriteDirectives( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions ) const;
 
 private:
     void readLibraryField( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem );
@@ -132,7 +133,6 @@ private:
     void writeIncludes( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions );
     void writeModels( OUTPUTFORMATTER& aFormatter );
     void writeItems( OUTPUTFORMATTER& aFormatter );
-    void writeDirectives( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions );
 
     wxString                m_title;       ///< Spice simulation title found in the schematic sheet
     std::vector<wxString>   m_directives;  ///< Spice directives found in the schematic sheet

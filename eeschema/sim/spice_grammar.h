@@ -33,46 +33,86 @@ namespace SPICE_GRAMMAR
     using namespace SIM_VALUE_GRAMMAR;
 
 
-    struct eolComment : seq<one<';'>, until<eol>> {};
-    struct commentLine : seq<one<'*', ';'>, until<eol>> {};
+    struct garbage : plus<one<' ', '\t', '=', '(', ')', ','>> {};
+    struct leaders : plus<one<' ', '\t'>> {};
+    struct trailers : plus<one<' ', '\t', '\v', '\f'>> {};
+
+    // NOTE: In Ngspice, a '$' opening a comment must be preceded by ' ', ',', or '\t'. We don't
+    //       implement that here - this may cause problems in the future.
+    // Ngspice supports '//' for comments.
+    struct eolCommentStart : sor<one<';', '$'>,
+                                 string<'/', '/'>> {};
+
+    struct eolComment : seq<eolCommentStart,
+                            until<eol>> {};
+                                            
+
+    struct commentLine : seq<opt<garbage>,
+                             one<'*'>,
+                             until<eol>> {};
 
 
-    struct linespaces : plus<not_at<eol>,
-                             space> {};
     struct newline : seq<sor<eol,
                              eolComment>,
                          not_at<one<'+'>>> {};
-                         
-    struct continuation : seq<opt<linespaces>,
-                              sor<eol,
-                                  eolComment>,
-                              star<commentLine>,
-                              one<'+'>,
-                              opt<linespaces>> {};
 
-    struct sep : sor<continuation,
-                     linespaces> {};
+    struct backslashContinuation : seq<string<'\\', '\\'>,
+                                       opt<trailers>,
+                                       eol> {};
 
+    struct commentBackslashContinuation : seq<eolCommentStart,
+                                              seq<star<not_at<eol>,
+                                                       not_at<string<'\\', '\\'>,
+                                                              opt<trailers>,
+                                                              eol>,
+                                                       any>,
+                                                  string<'\\', '\\'>,
+                                                  opt<trailers>,
+                                                  eol>> {};
+                                                  
 
-    struct param : plus<alnum> {};
-    struct suffixUnit : plus<alpha> {};
+    struct plusContinuation : seq<sor<eol,
+                                      eolComment>,
+                                  star<commentLine>,
+                                  opt<leaders>,
+                                  one<'+'>> {};
 
-    template <SIM_VALUE::TYPE Type, NOTATION Notation>
+    struct continuation : seq<opt<garbage>,
+                              sor<backslashContinuation,
+                                  commentBackslashContinuation,
+                                  plusContinuation>,
+                              opt<garbage>> {};
+                             
+                
+
+    struct sep : sor<plus<continuation>,
+                     garbage> {};
+
+    // Ngspice has some heuristic logic to allow + and - in tokens. We mimic that here.
+    struct tokenStart : seq<opt<one<'+', '-'>>,
+                            opt<seq<star<sor<tao::pegtl::digit,
+                                             one<'.'>>>,
+                                    one<'e', 'E'>,
+                                    opt<one<'+', '-'>>>>> {};
+
+    struct token : seq<tokenStart,
+                       star<not_at<eol>,
+                            not_at<backslashContinuation>,
+                            not_one<' ', '\t', '=', '(', ')', ',', '+', '-', '*', '/', '^', ';'>>>
+        {};
+
+    struct param : token {};
+    struct paramValue : token {};
+
     struct paramValuePair : seq<param,
-                                opt<sep>,
-                                one<'='>,
-                                opt<sep>,
-                                number<Type, Notation>,
-                                opt<suffixUnit>> {};
-    template <NOTATION Notation>
-    struct paramValuePairs : seq<opt<paramValuePair<SIM_VALUE::TYPE::FLOAT,
-                                                    Notation>,
+                                sep,
+                                paramValue> {};
+
+    struct paramValuePairs : seq<opt<paramValuePair,
                                      star<sep,
-                                          paramValuePair<SIM_VALUE::TYPE::FLOAT,
-                                                         Notation>>>> {};
-    struct modelName : plus<alnum,
-                            star<sor<alnum,
-                                     one<'!', '#', '$', '%', '[', ']', '_'>>>> {};
+                                          paramValuePair>>> {};
+    struct modelName : star<sor<alnum,
+                                one<'!', '#', '$', '%', '[', ']', '_'>>> {};
                      /*seq<alpha,
                            star<sor<alnum,
                                     one<'!', '#', '$', '%', '[', ']', '_'>>>> {};*/
@@ -100,15 +140,15 @@ namespace SPICE_GRAMMAR
                           modelName,
                           sep,
                           dotModelType,
-                          sor<seq<opt<sep>,
-                                  one<'('>,
-                                  opt<sep>,
-                                  paramValuePairs<NOTATION::SPICE>,
-                                  opt<sep>,
-                                  // Ngspice doesn't require the parentheses to match, though.
-                                  one<')'>>,
-                              seq<sep,
-                                  paramValuePairs<NOTATION::SPICE>>>,
+                          opt<sor<seq<opt<sep>,
+                                      one<'('>,
+                                      opt<sep>,
+                                      paramValuePairs,
+                                      opt<sep>,
+                                      // Ngspice doesn't require the parentheses to match, though.
+                                      one<')'>>,
+                                  seq<sep,
+                                      paramValuePairs>>>,
                           opt<sep>,
                           newline> {};
 
@@ -131,7 +171,7 @@ namespace SPICE_GRAMMAR
                            opt<sep,
                                TAO_PEGTL_ISTRING( "params:" ),
                                sep,
-                               paramValuePairs<NOTATION::SPICE>>,
+                               paramValuePairs>,
                            opt<sep>,
                            newline,
                            until<dotSubcktEnd>> {};

@@ -115,7 +115,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
         m_modelNameCombobox->SetStringSelection(
                 SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_SPICE::NAME_FIELD ) );
 
-        m_overrideCheckbox->SetValue( curModel().HasNonPrincipalOverrides() );
+        m_overrideCheckbox->SetValue( curModel().HasNonInstanceOverrides() );
     }
     else
     {
@@ -148,19 +148,25 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
     if( !DIALOG_SIM_MODEL_BASE::TransferDataFromWindow() )
         return false;
 
+    wxString modelName = "";
+
+    if( m_useLibraryModelRadioButton->GetValue() )
+        modelName = m_modelNameCombobox->GetValue();
+
+    SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_SPICE::NAME_FIELD, modelName );
+
+    wxString path = "";
+
     if( m_useLibraryModelRadioButton->GetValue() )
     {
-        SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_SPICE::NAME_FIELD,
-                                  m_modelNameCombobox->GetValue() );
-
-        wxString path = m_library->GetFilePath();
+        path = m_library->GetFilePath();
         wxFileName fn( path );
 
         if( fn.MakeRelativeTo( Prj().GetProjectPath() ) && !fn.GetFullPath().StartsWith( ".." ) )
             path = fn.GetFullPath();
-
-        SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_SPICE::LIBRARY_FIELD, path );
     }
+
+    SIM_MODEL::SetFieldValue( m_fields, SIM_LIBRARY_SPICE::LIBRARY_FIELD, path );
 
     curModel().WriteFields( m_fields );
 
@@ -267,7 +273,7 @@ void DIALOG_SIM_MODEL<T>::updateModelParamsTab()
 
         // Most of the values are disabled when the override checkbox is unchecked.
         prop->Enable( m_useInstanceModelRadioButton->GetValue()
-            || prop->GetParam().info.category == CATEGORY::PRINCIPAL
+            || prop->GetParam().info.isInstanceParam
             || m_overrideCheckbox->GetValue() );
     }
 }
@@ -549,7 +555,7 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( int aParamIndex ) const
 
     if( m_useLibraryModelRadioButton->GetValue()
         && !m_overrideCheckbox->GetValue()
-        && param.info.category != SIM_MODEL::PARAM::CATEGORY::PRINCIPAL )
+        && !param.info.isInstanceParam )
     {
         prop->Enable( false );
     }
@@ -611,7 +617,7 @@ wxString DIALOG_SIM_MODEL<T>::getModelPinString( int modelPinNumber ) const
 
 
 template <typename T>
-int DIALOG_SIM_MODEL<T>::getModelPinNumber( const wxString& aModelPinString ) const
+unsigned DIALOG_SIM_MODEL<T>::getModelPinNumber( const wxString& aModelPinString ) const
 {
     if( aModelPinString == "Not Connected" )
         return SIM_MODEL::PIN::NOT_CONNECTED;
@@ -624,7 +630,7 @@ int DIALOG_SIM_MODEL<T>::getModelPinNumber( const wxString& aModelPinString ) co
     long result = 0;
     aModelPinString.Mid( 0, length ).ToCLong( &result );
 
-    return static_cast<int>( result );
+    return static_cast<unsigned>( result );
 }
 
 
@@ -712,8 +718,8 @@ template <typename T>
 void DIALOG_SIM_MODEL<T>::onPinAssignmentsGridCellChange( wxGridEvent& aEvent )
 {
     int symbolPinNumber = aEvent.GetRow() + 1;
-    int oldModelPinNumber = getModelPinNumber( aEvent.GetString() );
-    int modelPinNumber = getModelPinNumber(
+    unsigned oldModelPinNumber = getModelPinNumber( aEvent.GetString() );
+    unsigned modelPinNumber = getModelPinNumber(
             m_pinAssignmentsGrid->GetCellValue( aEvent.GetRow(), aEvent.GetCol() ) );
 
     if( oldModelPinNumber != SIM_MODEL::PIN::NOT_CONNECTED )

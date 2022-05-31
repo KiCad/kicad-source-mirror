@@ -240,7 +240,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "passives.kicad_pro",
+    "filename": "tlines.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -323,7 +323,7 @@
   },
   "sheets": [
     [
-      "24a3b022-7ece-4686-93db-0efadfbf9409",
+      "f74aa792-5ddc-4342-b3b1-f3d782106d77",
       ""
     ]
   ],

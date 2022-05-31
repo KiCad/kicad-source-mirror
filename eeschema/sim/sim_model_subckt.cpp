@@ -27,9 +27,9 @@
 #include <pegtl/contrib/parse_tree.hpp>
 
 
-namespace SIM_MODEL_SUBCKT_PARSER
+namespace SIM_MODEL_SUBCKT_SPICE_PARSER
 {
-    using namespace SIM_MODEL_GRAMMAR;
+    using namespace SPICE_GRAMMAR;
 
     template <typename Rule> struct spiceUnitSelector : std::false_type {};
 
@@ -57,8 +57,8 @@ bool SIM_MODEL_SUBCKT::ReadSpiceCode( const std::string& aSpiceCode )
 
     try
     {
-        root = tao::pegtl::parse_tree::parse<SIM_MODEL_SUBCKT_PARSER::spiceUnitGrammar,
-                                             SIM_MODEL_SUBCKT_PARSER::spiceUnitSelector>
+        root = tao::pegtl::parse_tree::parse<SIM_MODEL_SUBCKT_SPICE_PARSER::spiceUnitGrammar,
+                                             SIM_MODEL_SUBCKT_SPICE_PARSER::spiceUnitSelector>
             ( in );
     }
     catch( const tao::pegtl::parse_error& e )
@@ -70,31 +70,32 @@ bool SIM_MODEL_SUBCKT::ReadSpiceCode( const std::string& aSpiceCode )
 
     for( const auto& node : root->children )
     {
-        if( node->is_type<SIM_MODEL_SUBCKT_PARSER::dotSubckt>() )
+        if( node->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::dotSubckt>() )
         {
             for( const auto& subnode : node->children )
             {
-                if( subnode->is_type<SIM_MODEL_SUBCKT_PARSER::modelName>() )
+                if( subnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::modelName>() )
                 {
                 }
-                else if( subnode->is_type<SIM_MODEL_SUBCKT_PARSER::dotSubcktPinName>() )
+                else if( subnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::dotSubcktPinName>() )
                 {
                     AddPin( { subnode->string(), GetPinCount() + 1 } );
                 }
-                else if( subnode->is_type<SIM_MODEL_SUBCKT_PARSER::param>() )
+                else if( subnode->is_type<SIM_MODEL_SUBCKT_SPICE_PARSER::param>() )
                 {
                     m_paramInfos.push_back( std::make_unique<PARAM::INFO>() );
                     m_paramInfos.back()->name = subnode->string();
                     m_paramInfos.back()->isInstanceParam = true;
+                    m_paramInfos.back()->isSpiceInstanceParam = true;
 
                     AddParam( *m_paramInfos.back() );
                 }
                 else if( subnode->is_type<
-                        SIM_MODEL_SUBCKT_PARSER::number<SIM_VALUE::TYPE::INT,
-                                                        SIM_MODEL_SUBCKT_PARSER::NOTATION::SPICE>>()
+                        SIM_MODEL_SUBCKT_SPICE_PARSER::number<SIM_VALUE::TYPE::INT,
+                                                        SIM_MODEL_SUBCKT_SPICE_PARSER::NOTATION::SPICE>>()
                     || subnode->is_type<
-                        SIM_MODEL_SUBCKT_PARSER::number<SIM_VALUE::TYPE::FLOAT,
-                                                        SIM_MODEL_SUBCKT_PARSER::NOTATION::SPICE>>() )
+                        SIM_MODEL_SUBCKT_SPICE_PARSER::number<SIM_VALUE::TYPE::FLOAT,
+                                                        SIM_MODEL_SUBCKT_SPICE_PARSER::NOTATION::SPICE>>() )
                 {
                     wxASSERT( m_paramInfos.size() > 0 );
                     m_paramInfos.back()->defaultValue = subnode->string();

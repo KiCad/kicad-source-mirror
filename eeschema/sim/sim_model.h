@@ -37,7 +37,7 @@ class SIM_LIBRARY;
 
 namespace SIM_MODEL_GRAMMAR
 {
-    using namespace SPICE_GRAMMAR;
+    using namespace SIM_VALUE_GRAMMAR;
 
     struct sep : plus<space> {};
 
@@ -57,6 +57,8 @@ namespace SIM_MODEL_GRAMMAR
                               until<seq<not_at<string<'\\',
                                                       '"'>>,
                                         one<'"'>>>> {};
+
+    struct param : plus<alnum> {};
 
     struct fieldParamValuePair : seq<param,
                                      opt<sep>,
@@ -142,10 +144,8 @@ public:
         L_ADV,
         L_BEHAVIORAL,
 
-        TLINE_LOSSY,
-        TLINE_LOSSLESS,
-        TLINE_URC,
-        TLINE_KSPICE,
+        TLINE_Z0,
+        TLINE_RLGC,
 
         SW_V,
         SW_I,
@@ -292,7 +292,8 @@ public:
         wxString itemType;
         wxString modelType = "";
         wxString inlineTypeString = "";
-        int level = 0;
+        wxString level = "";
+        bool isDefaultLevel = false;
         bool hasExpression = false;
         wxString version = "";
     };
@@ -300,7 +301,7 @@ public:
 
     struct PIN
     {
-        static constexpr auto NOT_CONNECTED = 0;
+        static constexpr unsigned NOT_CONNECTED = 0;
 
         const wxString name;
         unsigned symbolPinNumber;
@@ -347,6 +348,7 @@ public:
             wxString defaultValueOfOtherVariant = ""; // Legacy (don't remove).
             wxString description = "";
             bool isInstanceParam = false;
+            bool isSpiceInstanceParam = false;
         };
 
         std::unique_ptr<SIM_VALUE> value;
@@ -437,14 +439,17 @@ public:
 
     virtual wxString GenerateSpicePreview( const wxString& aModelName ) const;
 
-    SPICE_INFO GetSpiceInfo() const;
+    SPICE_INFO GetSpiceInfo() const { return SpiceInfo( GetType() ); }
     virtual std::vector<wxString> GenerateSpiceCurrentNames( const wxString& aRefName ) const;
 
     void AddPin( const PIN& aPin );
     unsigned FindModelPinNumber( unsigned aSymbolPinNumber );
     void AddParam( const PARAM::INFO& aInfo, bool aIsOtherVariant = false );
 
-    DEVICE_TYPE GetDeviceType() const { return TypeInfo( GetType() ).deviceType; }
+    DEVICE_INFO GetDeviceTypeInfo() const { return DeviceTypeInfo( GetDeviceType() ); }
+    INFO GetTypeInfo() const { return TypeInfo( GetType() ); }
+
+    DEVICE_TYPE GetDeviceType() const { return GetTypeInfo().deviceType; }
     TYPE GetType() const { return m_type; }
 
     const SIM_MODEL* GetBaseModel() const { return m_baseModel; }
@@ -464,6 +469,8 @@ public:
     unsigned GetParamCount() const { return m_params.size(); }
     const PARAM& GetParam( unsigned aParamIndex ) const; // Return base parameter unless it's overridden.
 
+    const PARAM* FindParam( const wxString& aParamName ) const;
+
     std::vector<std::reference_wrapper<const PARAM>> GetParams() const;
 
     const PARAM& GetUnderlyingParam( unsigned aParamIndex ) const; // Return the actual parameter.
@@ -473,12 +480,12 @@ public:
                                     = SIM_VALUE_GRAMMAR::NOTATION::SI );
 
     bool HasOverrides() const;
-    bool HasNonPrincipalOverrides() const;
+    bool HasNonInstanceOverrides() const;
 
     // Can modifying a model parameter also modify other parameters?
     virtual bool HasAutofill() const { return false; }
 
-    wxString GetErrorMessage() { return m_errorMessage; }
+    wxString GetErrorMessage() const { return m_errorMessage; }
 
 protected:
     SIM_MODEL( TYPE aType );
@@ -503,7 +510,10 @@ protected:
 
 private:
     static std::unique_ptr<SIM_MODEL> create( TYPE aType );
-    static TYPE readTypeFromSpiceTypeString( const std::string& aTypeString );
+    static TYPE readTypeFromSpiceStrings( const wxString& aTypeString,
+                                          const wxString& aLevel = "",
+                                          const wxString& aVersion = "",
+                                          bool aSkipDefaultLevel = true );
 
 
     template <typename T>
@@ -519,6 +529,8 @@ private:
     wxString generateTypeField() const;
 
     wxString generatePinsField() const;
+
+    virtual bool requiresSpiceModel() const;
 
 
     const SIM_MODEL* m_baseModel;

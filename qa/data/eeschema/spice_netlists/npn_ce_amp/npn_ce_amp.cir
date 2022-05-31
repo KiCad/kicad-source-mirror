@@ -11,7 +11,7 @@ R4 Net-_Q1-E_ Net-_C2-Pad2_ 100
 C2 Net-_Q1-E_ Net-_C2-Pad2_ 10u 
 R5 Net-_C2-Pad2_ GND 1 
 R3 Net-_R1-Pad1_ /out 100 
-V2 Net-_C1-Pad1_ GND SIN( 0 10m 10k    ) 
+V2 Net-_C1-Pad1_ GND SIN( 0 10m 10k ) 
 C1 Net-_C1-Pad1_ Net-_Q1-B_ 10u 
 V1 Net-_R1-Pad1_ GND ( 9 ) 
 .end

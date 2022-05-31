@@ -30,35 +30,35 @@
 #include <pegtl/contrib/parse_tree.hpp>
 
 
-#define CALL_INSTANCE( ValueType, Notation, func, ... )                        \
-    switch( ValueType )                                                        \
-    {                                                                          \
+#define CALL_INSTANCE( ValueType, Notation, func, ... )                   \
+    switch( ValueType )                                                   \
+    {                                                                     \
     case SIM_VALUE::TYPE::INT:                                            \
-        switch( Notation )                                                     \
-        {                                                                      \
-        case NOTATION::SI:                                                     \
+        switch( Notation )                                                \
+        {                                                                 \
+        case NOTATION::SI:                                                \
             func<SIM_VALUE::TYPE::INT, NOTATION::SI>( __VA_ARGS__ );      \
-            break;                                                             \
-                                                                               \
-        case NOTATION::SPICE:                                                  \
+            break;                                                        \
+                                                                          \
+        case NOTATION::SPICE:                                             \
             func<SIM_VALUE::TYPE::INT, NOTATION::SPICE>( __VA_ARGS__ );   \
-            break;                                                             \
-        }                                                                      \
-        break;                                                                 \
-                                                                               \
+            break;                                                        \
+        }                                                                 \
+        break;                                                            \
+                                                                          \
     case SIM_VALUE::TYPE::FLOAT:                                          \
-        switch( Notation )                                                     \
-        {                                                                      \
-        case NOTATION::SI:                                                     \
+        switch( Notation )                                                \
+        {                                                                 \
+        case NOTATION::SI:                                                \
             func<SIM_VALUE::TYPE::FLOAT, NOTATION::SI>( __VA_ARGS__ );    \
-            break;                                                             \
-                                                                               \
-        case NOTATION::SPICE:                                                  \
+            break;                                                        \
+                                                                          \
+        case NOTATION::SPICE:                                             \
             func<SIM_VALUE::TYPE::FLOAT, NOTATION::SPICE>( __VA_ARGS__ ); \
-            break;                                                             \
-        }                                                                      \
-        break;                                                                 \
-                                                                               \
+            break;                                                        \
+        }                                                                 \
+        break;                                                            \
+                                                                          \
     case SIM_VALUE::TYPE::BOOL:                                           \
     case SIM_VALUE::TYPE::COMPLEX:                                        \
     case SIM_VALUE::TYPE::STRING:                                         \
@@ -67,7 +67,7 @@
     case SIM_VALUE::TYPE::FLOAT_VECTOR:                                   \
     case SIM_VALUE::TYPE::COMPLEX_VECTOR:                                 \
         wxFAIL_MSG( "Unhandled SIM_VALUE type" );                         \
-        break;                                                                 \
+        break;                                                            \
     }
 
 
@@ -215,7 +215,7 @@ SIM_VALUE_PARSER::PARSE_RESULT SIM_VALUE_PARSER::Parse( const wxString& aString,
             CALL_INSTANCE( aValueType, aNotation, handleNodeForParse, *node, result );
         }
     }
-    catch( std::invalid_argument& e )
+    catch( const std::invalid_argument& e )
     {
         wxFAIL_MSG( wxString::Format( "Parsing simulator value failed: %s", e.what() ) );
         result.isOk = false;
@@ -437,7 +437,7 @@ bool SIM_VALUE_INSTANCE<long>::FromString( const wxString& aString, NOTATION aNo
     if( parseResult.isEmpty )
         return true;
 
-    if( !parseResult.intPart || parseResult.fracPart )
+    if( !parseResult.intPart || ( parseResult.fracPart && *parseResult.fracPart != 0 ) )
         return false;
 
     long exponent = parseResult.exponent ? *parseResult.exponent : 0;
@@ -543,7 +543,7 @@ wxString SIM_VALUE_INSTANCE<long>::ToString( NOTATION aNotation ) const
 
     if( m_value )
     {
-        long value = *m_value;
+        long value = std::abs( *m_value );
         long exponent = 0;
 
         while( value != 0 && value % 1000 == 0 )
@@ -555,7 +555,7 @@ wxString SIM_VALUE_INSTANCE<long>::ToString( NOTATION aNotation ) const
         long dummy = 0;
         wxString metricSuffix = SIM_VALUE_PARSER::ExponentToMetricSuffix(
                 static_cast<double>( exponent ), dummy, aNotation );
-        return wxString::Format( "%d%s", value, metricSuffix );
+        return wxString::Format( "%ld%s", value, metricSuffix );
     }
 
     return "";
@@ -569,11 +569,12 @@ wxString SIM_VALUE_INSTANCE<double>::ToString( NOTATION aNotation ) const
 
     if( m_value )
     {
-        double exponent = std::log10( *m_value );
+        double exponent = std::log10( std::abs( *m_value ) );
         long reductionExponent = 0;
 
         wxString metricSuffix = SIM_VALUE_PARSER::ExponentToMetricSuffix( exponent,
-                                                                          reductionExponent );
+                                                                          reductionExponent,
+                                                                          aNotation );
         double reducedValue = *m_value / std::pow( 10, reductionExponent );
 
         return wxString::Format( "%g%s", reducedValue, metricSuffix );
@@ -637,10 +638,10 @@ wxString SIM_VALUE_INSTANCE<std::complex<double>>::ToSimpleString() const
 template <typename T>
 bool SIM_VALUE_INSTANCE<T>::operator==( const SIM_VALUE& aOther ) const
 {
-    const SIM_VALUE_INSTANCE* otherNumber = dynamic_cast<const SIM_VALUE_INSTANCE*>( &aOther );
+    const SIM_VALUE_INSTANCE* otherValue = dynamic_cast<const SIM_VALUE_INSTANCE*>( &aOther );
 
-    if( otherNumber )
-        return m_value == otherNumber->m_value;
+    if( otherValue )
+        return m_value == otherValue->m_value;
 
     return false;
 }

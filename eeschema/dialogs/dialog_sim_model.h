@@ -67,7 +67,7 @@ private:
 
     wxString getSymbolPinString( int aSymbolPinNumber ) const;
     wxString getModelPinString( int aModelPinNumber ) const;
-    int getModelPinNumber( const wxString& aModelPinString ) const;
+    unsigned getModelPinNumber( const wxString& aModelPinString ) const;
 
     void onRadioButton( wxCommandEvent& aEvent ) override;
     void onBrowseButtonClick( wxCommandEvent& aEvent ) override;

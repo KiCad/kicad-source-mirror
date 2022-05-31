@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_CASE( Models )
             BOOST_CHECK_EQUAL( instanceParamCount, 20 );
             break;*/
         
-        case NGSPICE::MODEL_TYPE::LTRA:
+        /*case NGSPICE::MODEL_TYPE::LTRA:
             BOOST_CHECK_EQUAL( modelParamCount, 18 );
             BOOST_CHECK_EQUAL( instanceParamCount, 9 );
             break;
@@ -71,7 +71,7 @@ BOOST_AUTO_TEST_CASE( Models )
         case NGSPICE::MODEL_TYPE::URC:
             BOOST_CHECK_EQUAL( modelParamCount, 7 );
             BOOST_CHECK_EQUAL( instanceParamCount, 5 );
-            break;
+            break;*/
         
         /*case NGSPICE::MODEL_TYPE::TRANSLINE:
             BOOST_CHECK_EQUAL( modelParamCount, 6 );
@@ -114,7 +114,7 @@ BOOST_AUTO_TEST_CASE( Models )
             break;
         
         case NGSPICE::MODEL_TYPE::JFET2:
-            BOOST_CHECK_EQUAL( modelParamCount, 39 );
+            BOOST_CHECK_EQUAL( modelParamCount, 46 );
             BOOST_CHECK_EQUAL( instanceParamCount, 30 );
             break;
         
@@ -124,17 +124,17 @@ BOOST_AUTO_TEST_CASE( Models )
             break;
         
         case NGSPICE::MODEL_TYPE::MESA:
-            BOOST_CHECK_EQUAL( modelParamCount, 51 );
+            BOOST_CHECK_EQUAL( modelParamCount, 71 );
             BOOST_CHECK_EQUAL( instanceParamCount, 30 );
             break;
         
         case NGSPICE::MODEL_TYPE::HFET1:
-            BOOST_CHECK_EQUAL( modelParamCount, 22 );
+            BOOST_CHECK_EQUAL( modelParamCount, 68 );
             BOOST_CHECK_EQUAL( instanceParamCount, 28 );
             break;
         
         case NGSPICE::MODEL_TYPE::HFET2:
-            BOOST_CHECK_EQUAL( modelParamCount, 19 );
+            BOOST_CHECK_EQUAL( modelParamCount, 40 );
             BOOST_CHECK_EQUAL( instanceParamCount, 28 );
             break;
         
@@ -209,13 +209,13 @@ BOOST_AUTO_TEST_CASE( Models )
             break;
         
         case NGSPICE::MODEL_TYPE::HISIMHV1:
-            BOOST_CHECK_EQUAL( modelParamCount, 536 );
-            BOOST_CHECK_EQUAL( instanceParamCount, 66 );
+            BOOST_CHECK_EQUAL( modelParamCount, 610 );
+            BOOST_CHECK_EQUAL( instanceParamCount, 72 );
             break;
         
         case NGSPICE::MODEL_TYPE::HISIMHV2:
-            BOOST_CHECK_EQUAL( modelParamCount, 630 );
-            BOOST_CHECK_EQUAL( instanceParamCount, 68 );
+            BOOST_CHECK_EQUAL( modelParamCount, 730 );
+            BOOST_CHECK_EQUAL( instanceParamCount, 74 );
             break;
         
         default:

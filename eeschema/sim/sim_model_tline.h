@@ -22,26 +22,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SIM_MODEL_SUBCIRCUIT_H
-#define SIM_MODEL_SUBCIRCUIT_H
+#ifndef SIM_MODEL_TLINE_H
+#define SIM_MODEL_TLINE_H
 
 #include <sim/sim_model.h>
 
 
-class SIM_MODEL_SUBCKT : public SIM_MODEL
+class SIM_MODEL_TLINE : public SIM_MODEL
 {
 public:
-    SIM_MODEL_SUBCKT( TYPE aType );
-
-    bool ReadSpiceCode( const std::string& aSpiceCode ) override;
-    wxString GenerateSpiceModelLine( const wxString& aModelName ) const override;
-    std::vector<wxString> GenerateSpiceCurrentNames( const wxString& aRefName ) const override;
-    void SetBaseModel( const SIM_MODEL& aBaseModel ) override;
+    SIM_MODEL_TLINE( TYPE aType );
 
 private:
-    bool requiresSpiceModel() const override { return true; }
+    static std::vector<PARAM::INFO> makeZ0ParamInfo();
+    static std::vector<PARAM::INFO> makeRlgcParamInfo();
 
-    std::vector<std::unique_ptr<PARAM::INFO>> m_paramInfos;
+    std::vector<wxString> getPinNames() const override { return { "1+", "1-", "2+", "2-" }; }
+
+    // Subcircuits require models even when they have no Spice instance parameters.
+    bool requiresSpiceModel() const override;
 };
 
-#endif // SIM_MODEL_SUBCIRCUIT_H
+#endif // SIM_MODEL_TLINE_H

@@ -1,0 +1,20 @@
+.title KiCad schematic
+.include "passives.lib"
+.model __R2 r(
++ r=10Meg tnom=20 tc1=100u )
+.model __C2 c(
++ c=100u tnom=15 tc1=21.4u )
+.model __L2 l(
++ l=220n tnom=20 tc1=125u )
+.save all
+.probe alli
+.dc TEMP -40 125 1
+
+R2 VCC GND __R2 
+C2 VCC GND __C2 
+R1 VCC GND VISHAY_CRCW060310M0FKTABC 
+L1 VCC GND AVX_0603WL221GT 
+C1 VCC GND AVX_12066D107MAT4A 
+VDC1 VCC GND ( 1 ) 
+L2 VCC GND __L2 
+.end

@@ -79,6 +79,11 @@ std::vector<wxString> SIM_MODEL_NGSPICE::GenerateSpiceCurrentNames( const wxStri
 bool SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const wxString& aParamName, const wxString& aParamValue,
                                                SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
+    // "level" and "version" are not really parameters - they're part of the type - so silently
+    // ignore them.
+    if( aParamName == "level" || aParamName == "version" )
+        return true;
+
     // One Spice param can have multiple names, we need to take this into account.
 
     std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
@@ -93,7 +98,6 @@ bool SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const wxString& aParamName, const
     if( paramIt != params.end() )
         return SetParamValue( paramIt - params.begin(), aParamValue, aNotation );
     
-
     std::vector<PARAM::INFO> ngspiceParams = NGSPICE::ModelInfo( getModelType() ).modelParams;
 
     auto ngspiceParamIt = std::find_if( ngspiceParams.begin(), ngspiceParams.end(),
@@ -133,13 +137,6 @@ NGSPICE::MODEL_TYPE SIM_MODEL_NGSPICE::getModelType() const
     switch( GetType() )
     {
     case TYPE::NONE:                 return NGSPICE::MODEL_TYPE::NONE;
-    //case TYPE::R_ADV:                return NGSPICE::MODEL_TYPE::RESISTOR;
-    //case TYPE::C_ADV:                return NGSPICE::MODEL_TYPE::CAPACITOR;
-    //case TYPE::L_ADV:                return NGSPICE::MODEL_TYPE::INDUCTOR;
-    case TYPE::TLINE_LOSSY:          return NGSPICE::MODEL_TYPE::LTRA;
-    case TYPE::TLINE_LOSSLESS:       return NGSPICE::MODEL_TYPE::TRANLINE;
-    case TYPE::TLINE_URC:            return NGSPICE::MODEL_TYPE::URC;
-    //case TYPE::TLINE_KSPICE:       return NGSPICE::MODEL_TYPE::TRANSLINE;
     case TYPE::SW_V:                 return NGSPICE::MODEL_TYPE::SWITCH;
     case TYPE::SW_I:                 return NGSPICE::MODEL_TYPE::CSWITCH;
     case TYPE::D:                    return NGSPICE::MODEL_TYPE::DIODE;
@@ -162,8 +159,8 @@ NGSPICE::MODEL_TYPE SIM_MODEL_NGSPICE::getModelType() const
     case TYPE::PMES_YTTERDAL:        return NGSPICE::MODEL_TYPE::MESA;
     case TYPE::NMES_HFET1:
     case TYPE::PMES_HFET1:           return NGSPICE::MODEL_TYPE::HFET1;
-    case TYPE::PMES_HFET2:
-    case TYPE::NMES_HFET2:           return NGSPICE::MODEL_TYPE::HFET2;
+    case TYPE::NMES_HFET2:
+    case TYPE::PMES_HFET2:           return NGSPICE::MODEL_TYPE::HFET2;
 
     case TYPE::NMOS_MOS1:
     case TYPE::PMOS_MOS1:            return NGSPICE::MODEL_TYPE::MOS1;

@@ -31,7 +31,7 @@ SIM_MODEL_IDEAL::SIM_MODEL_IDEAL( TYPE aType )
     : SIM_MODEL( aType ),
       m_isInferred( false )
 {
-    static PARAM::INFO resistor  = makeParamInfo( "r", "Resistance",  "ohm" );
+    static PARAM::INFO resistor  = makeParamInfo( "r", "Resistance",  "Ω" );
     static PARAM::INFO capacitor = makeParamInfo( "c", "Capacitance", "F"   );
     static PARAM::INFO inductor  = makeParamInfo( "l", "Inductance",  "H"   );
 

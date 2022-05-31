@@ -320,6 +320,15 @@
     (uuid be48cb8e-7c9f-4216-838e-ee151aaeb3f9)
   )
 
+  (label "out" (at 168.91 91.44 0) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid c6d665cf-2828-4128-ae59-06a65deb6b7e)
+  )
+  (label "in" (at 142.24 88.9 0) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid e8a13b17-85b1-4981-ba25-adfdae039d30)
+  )
+
   (symbol (lib_id "power:GND") (at 157.48 109.22 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 032a39b4-2686-4cc0-a834-fb52cf55377c)

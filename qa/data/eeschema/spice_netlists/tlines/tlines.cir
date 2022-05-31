@@ -1,0 +1,14 @@
+.title KiCad schematic
+.model __OT2 ltra(
++ len=1 r=0 l=1.25m g=0 c=500n )
+.save all
+.probe alli
+.tran 1u 1m
+
+R1 /z0_out GND 50 
+VPULSE2 /rlgc_in GND PULSE( 0 1 0 1u 1u 50u 100u ) 
+OT2 /rlgc_in GND /rlgc_out GND __OT2 
+R2 /rlgc_out GND 50 
+T1 /z0_in GND /z0_out GND z0=50 td=25u 
+VPULSE1 /z0_in GND PULSE( 0 1 0 1u 1u 50u 100u ) 
+.end

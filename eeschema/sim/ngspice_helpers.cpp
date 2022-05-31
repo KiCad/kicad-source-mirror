@@ -151,3 +151,11 @@ bool NGSPICE_CIRCUIT_MODEL::ParseDCCommand( const wxString& aCmd, SPICE_DC_PARAM
 
     return true;
 }
+
+
+void NGSPICE_CIRCUIT_MODEL::WriteDirectives( OUTPUTFORMATTER& aFormatter,
+                                             unsigned         aNetlistOptions ) const
+{
+    NETLIST_EXPORTER_SPICE::WriteDirectives( aFormatter, aNetlistOptions );
+    aFormatter.Print( 0, "%s\n", TO_UTF8( GetSimCommand() ) );
+}

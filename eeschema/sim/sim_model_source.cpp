@@ -85,9 +85,14 @@ wxString SIM_MODEL_SOURCE::GenerateSpiceItemLine( const wxString& aRefName,
                                                   const std::vector<wxString>& aPinNetNames ) const
 {
     wxString argList = "";
+    
+    for( const PARAM& param : GetParams() )
+    {
+        wxString argStr = param.value->ToString( SIM_VALUE_GRAMMAR::NOTATION::SPICE );
 
-    for( unsigned i = 0; i < GetParamCount(); ++i )
-        argList << GetParam( i ).value->ToString() << " ";
+        if( argStr != "" )
+            argList << argStr << " ";
+    }
 
     wxString model = wxString::Format( GetSpiceInfo().inlineTypeString + "( %s)", argList );
 

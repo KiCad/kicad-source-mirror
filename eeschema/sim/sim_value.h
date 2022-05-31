@@ -111,7 +111,7 @@ namespace SIM_VALUE_GRAMMAR
 
     struct sign : one<'+', '-'> {};
 
-    struct intPart : digits {};
+    struct intPart : seq<opt<sign>, digits> {};
 
     //struct fracPartPrefix : one<'.'> {};
     struct fracPart : digits {};

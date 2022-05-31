@@ -331,6 +331,7 @@ if( KICAD_SPICE )
         sim/sim_model_spice.cpp
         sim/sim_model_source.cpp
         sim/sim_model_subckt.cpp
+        sim/sim_model_tline.cpp
         sim/sim_value.cpp
         sim/spice_simulator.cpp
         sim/spice_value.cpp

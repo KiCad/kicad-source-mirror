@@ -115,4 +115,10 @@ BOOST_AUTO_TEST_CASE( Passives )
 }
 
 
+BOOST_AUTO_TEST_CASE( Tlines )
+{
+    TestNetlist( "tlines" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
