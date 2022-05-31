@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -328,7 +328,7 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aEnd,
     VECTOR2D vec2 = (end - start).Resize( d );
     VECTOR2D vc = (end - start).Resize( chord / 2 );
 
-    RotatePoint( vec2, ANGLE_90 );
+    RotatePoint( vec2, -ANGLE_90 );
 
     return VECTOR2D( start + vc + vec2 );
 }
