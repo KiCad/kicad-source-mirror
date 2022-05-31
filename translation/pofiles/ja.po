@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-25 16:22-0700\n"
+"POT-Creation-Date: 2022-05-31 10:30-0700\n"
 "PO-Revision-Date: 2022-05-29 07:05+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v6/ja/>\n"
@@ -33056,7 +33056,7 @@ msgstr "ファイル '%s' は旧形式のライブラリーではありません
 msgid "Unknown PCad layer %u"
 msgstr "不明な PCad レイヤー %u"
 
-#: pcbnew/plugins/pcad/pcb.cpp:764
+#: pcbnew/plugins/pcad/pcb.cpp:756
 msgid "KiCad only supports 32 signal layers."
 msgstr "KiCad は 32層までの信号レイヤーをサポートします。"
 
