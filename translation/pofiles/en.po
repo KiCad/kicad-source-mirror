@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-25 16:22-0700\n"
+"POT-Creation-Date: 2022-05-31 10:31-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2460,6 +2460,9 @@ msgstr "Colors"
 
 msgid "Schematic Editor"
 msgstr "Schematic Editor"
+
+msgid "Annotation Options"
+msgstr "Annotation Options"
 
 msgid "Field Name Templates"
 msgstr "Field Name Templates"
@@ -4982,17 +4985,20 @@ msgstr "Annotation Messages:"
 msgid "Annotate"
 msgstr "Annotate"
 
+msgid "Scope"
+msgstr "Scope"
+
 msgid "Entire schematic"
 msgstr "Entire schematic"
 
 msgid "Current sheet only"
 msgstr "Current sheet only"
 
-msgid "Selection only"
-msgstr "Selection only"
+msgid "Selection"
+msgstr "Selection"
 
-msgid "Scope"
-msgstr "Scope"
+msgid "Recurse into subsheets"
+msgstr "Recurse into subsheets"
 
 msgid "Order"
 msgstr "Order"
@@ -8187,6 +8193,15 @@ msgstr "Set width to 0 to use netclass's wire/bus widths."
 msgid "Wire & Bus Properties"
 msgstr "Wire & Bus Properties"
 
+msgid "Symbol Annotation"
+msgstr "Symbol Annotation"
+
+msgid "Automatically annotate symbols"
+msgstr "Automatically annotate symbols"
+
+msgid "Recursively annotate subsheets"
+msgstr "Recursively annotate subsheets"
+
 msgid ""
 "Some items have the same color as the background\n"
 "and they will not be seen on the screen.  Are you\n"
@@ -8304,9 +8319,6 @@ msgstr "Sheet border:"
 
 msgid "Sheet background:"
 msgstr "Sheet background:"
-
-msgid "Selection"
-msgstr "Selection"
 
 msgid "Clicking on a pin selects the symbol"
 msgstr "Clicking on a pin selects the symbol"
@@ -12043,6 +12055,12 @@ msgstr "Lines drawn horizontally and vertically, with a 45 degree angle start"
 msgid "Switch to next line mode"
 msgstr "Switch to next line mode"
 
+msgid "Annotate Automatically"
+msgstr "Annotate Automatically"
+
+msgid "Toggle automatic annotation of new parts symbols"
+msgstr "Toggle automatic annotation of new parts symbols"
+
 msgid "Repair Schematic"
 msgstr "Repair Schematic"
 
@@ -13374,8 +13392,8 @@ msgstr "Reveal project folder in Finder"
 msgid "Open project directory in file explorer"
 msgstr "Open project directory in file explorer"
 
-msgid "Add Default"
-msgstr "Add Default"
+msgid "Add Default Repository"
+msgstr "Add Default Repository"
 
 msgid "Please enter fully qualified repository url"
 msgstr "Please enter fully qualified repository url"
@@ -16467,9 +16485,6 @@ msgstr ""
 "* If its priority is higher, its outlines are removed from the other zone.\n"
 "* If its priority is equal, a DRC error is set."
 
-msgid "Constrain outline to H, V and 45 degrees"
-msgstr "Constrain outline to H, V and 45 degrees"
-
 msgid "Outline display:"
 msgstr "Outline display:"
 
@@ -18525,8 +18540,8 @@ msgstr "Outline style:"
 msgid "degree"
 msgstr "degree"
 
-msgid "Non Copper Zones Properties"
-msgstr "Non Copper Zones Properties"
+msgid "Non Copper Zone Properties"
+msgstr "Non Copper Zone Properties"
 
 msgid "Ring"
 msgstr "Ring"
@@ -19743,12 +19758,6 @@ msgstr "Keep out footprints"
 
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
 msgstr "Raise a DRC error if a footprint courtyard overlaps this area"
-
-msgid "Constrain outline to H, V and 45 deg"
-msgstr "Constrain outline to H, V and 45 deg"
-
-msgid "Draw the area using horizontal, vertical and 45 degree lines only"
-msgstr "Draw the area using horizontal, vertical and 45 degree lines only"
 
 msgid "Rule Area Properties"
 msgstr "Rule Area Properties"
@@ -22302,10 +22311,10 @@ msgstr "Save Footprint Association File"
 
 msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
-"(supported shapes are oval, rectangle and circle)."
+"(supported shapes are oval, rectangle, rounded rectangle, and circle)."
 msgstr ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
-"(supported shapes are oval, rectangle and circle)."
+"(supported shapes are oval, rectangle, rounded rectangle, and circle)."
 
 msgid "They have been exported as oval pads."
 msgstr "They have been exported as oval pads."
@@ -26564,12 +26573,6 @@ msgstr "Duplicate Zone onto Layer…"
 msgid "Duplicate zone outline onto a different layer"
 msgstr "Duplicate zone outline onto a different layer"
 
-msgid "Add Layer Alignment Target"
-msgstr "Add Layer Alignment Target"
-
-msgid "Add a layer alignment target"
-msgstr "Add a layer alignment target"
-
 msgid "Add Footprint"
 msgstr "Add Footprint"
 
@@ -27967,6 +27970,37 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Selection only"
+#~ msgstr "Selection only"
+
+#~ msgid "Add Default"
+#~ msgstr "Add Default"
+
+#~ msgid "Constrain outline to H, V and 45 degrees"
+#~ msgstr "Constrain outline to H, V and 45 degrees"
+
+#~ msgid "Non Copper Zones Properties"
+#~ msgstr "Non Copper Zones Properties"
+
+#~ msgid "Constrain outline to H, V and 45 deg"
+#~ msgstr "Constrain outline to H, V and 45 deg"
+
+#~ msgid "Draw the area using horizontal, vertical and 45 degree lines only"
+#~ msgstr "Draw the area using horizontal, vertical and 45 degree lines only"
+
+#~ msgid ""
+#~ "File contains pad shapes that are not supported by the Hyperlynx exporter "
+#~ "(supported shapes are oval, rectangle and circle)."
+#~ msgstr ""
+#~ "File contains pad shapes that are not supported by the Hyperlynx exporter "
+#~ "(supported shapes are oval, rectangle and circle)."
+
+#~ msgid "Add Layer Alignment Target"
+#~ msgstr "Add Layer Alignment Target"
+
+#~ msgid "Add a layer alignment target"
+#~ msgstr "Add a layer alignment target"
 
 #~ msgid "Draw selected text items as box"
 #~ msgstr "Draw selected text items as box"

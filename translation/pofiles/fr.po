@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-30 11:15+0200\n"
+"POT-Creation-Date: 2022-05-31 10:31-0700\n"
 "PO-Revision-Date: 2022-05-30 11:17+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -307,7 +307,7 @@ msgstr "Autorisations requises insuffisantes pour enregistrer le fichier '%s'."
 #: kicad/import_project.cpp:173 kicad/kicad.cpp:171
 #: kicad/tools/kicad_manager_control.cpp:182
 #: kicad/tools/kicad_manager_control.cpp:236
-#: kicad/tools/kicad_manager_control.cpp:280 pcbnew/pcb_marker.cpp:143
+#: kicad/tools/kicad_manager_control.cpp:282 pcbnew/pcb_marker.cpp:143
 msgid "Error"
 msgstr "Erreur"
 
@@ -1498,7 +1498,7 @@ msgstr "Information"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:100
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:163
 #: eeschema/tools/symbol_editor_pin_tool.cpp:239 kicad/import_project.cpp:103
-#: kicad/tools/kicad_manager_control.cpp:262
+#: kicad/tools/kicad_manager_control.cpp:263
 #: pcbnew/dialogs/dialog_export_idf.cpp:162
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:470
@@ -4884,7 +4884,7 @@ msgid "Problem while running the PDF viewer '%s'."
 msgstr "Problème en lançant le visualisateur PDF '%s'."
 
 #: common/gestfich.cpp:223 eeschema/eeschema.cpp:506 eeschema/eeschema.cpp:539
-#: gerbview/gerbview.cpp:241 kicad/project_template.cpp:257
+#: gerbview/gerbview.cpp:241 kicad/project_template.cpp:279
 #: pcbnew/pcbnew.cpp:471
 #, c-format
 msgid "Cannot copy file '%s'."
@@ -11042,7 +11042,7 @@ msgstr ""
 "'%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:490
-#: kicad/tools/kicad_manager_control.cpp:568
+#: kicad/tools/kicad_manager_control.cpp:570
 #, c-format
 msgid "'%s' already exists."
 msgstr "'%s' existe déjà."
@@ -14901,7 +14901,7 @@ msgstr ""
 msgid "Unable to read file '%s'."
 msgstr "Impossible de lire le fichier '%s'."
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1286
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1292
 #, c-format
 msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
@@ -14910,7 +14910,7 @@ msgstr ""
 "Erreur d’analyse du fichier Eagle.  Impossible de trouver l’instance '%s' "
 "mais elle est référencée dans le schéma."
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1317
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1323
 #, c-format
 msgid "Could not find '%s' in the imported library."
 msgstr "Ne peut trouver '%s' dans la bibliothèque importée."
@@ -16018,7 +16018,7 @@ msgstr ""
 "\n"
 "%s\n"
 
-#: eeschema/symbol_checker.cpp:97 eeschema/tools/symbol_checker.cpp:78
+#: eeschema/symbol_checker.cpp:97
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -16027,7 +16027,7 @@ msgstr ""
 "<b>Pin dupliquée %s</b> %s en position <b>(%.3f, %.3f)</b> en conflit avec "
 "pin %s%s en position <b>(%.3f, %.3f)</b> de converti."
 
-#: eeschema/symbol_checker.cpp:111 eeschema/tools/symbol_checker.cpp:92
+#: eeschema/symbol_checker.cpp:111
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -16036,7 +16036,7 @@ msgstr ""
 "<b>Pin dupliquée %s</b> %s en position <b>(%.3f, %.3f)</b> en conflit avec "
 "pin %s %s en position <b>(%.3f, %.3f)</b> unité %s et %s de converti."
 
-#: eeschema/symbol_checker.cpp:130 eeschema/tools/symbol_checker.cpp:111
+#: eeschema/symbol_checker.cpp:130
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
@@ -16045,7 +16045,7 @@ msgstr ""
 "<b>Pin dupliquée %s</b> %s en position <b>(%s, %s)</b> en conflit avec pin %s"
 "%s en position <b>(%s %s)</b>."
 
-#: eeschema/symbol_checker.cpp:143 eeschema/tools/symbol_checker.cpp:124
+#: eeschema/symbol_checker.cpp:143
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
@@ -16054,23 +16054,23 @@ msgstr ""
 "<b>Pin dupliquée %s</b> %s en position <b>(%s, %s)</b> en conflit avec pin %s"
 "%s en position <b>(%s, %s)</b> unité %s et %s."
 
-#: eeschema/symbol_checker.cpp:171 eeschema/tools/symbol_checker.cpp:152
+#: eeschema/symbol_checker.cpp:171
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
 msgstr ""
 "<b>Un symbole d’alimentation ne doit avoir qu’une seule unité</b><br><br>"
 
-#: eeschema/symbol_checker.cpp:177 eeschema/tools/symbol_checker.cpp:158
+#: eeschema/symbol_checker.cpp:177
 msgid "<b>A Power Symbol should have no convert option</b><br><br>"
 msgstr ""
 "<b>Un symbole d’alimentation ne doit pas avoir d’option de conversion</"
 "b><br><br>"
 
-#: eeschema/symbol_checker.cpp:183 eeschema/tools/symbol_checker.cpp:164
+#: eeschema/symbol_checker.cpp:183
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
 msgstr ""
 "<b>Un symbole d’alimentation ne doit avoir qu’une seule pin</b><br><br>"
 
-#: eeschema/symbol_checker.cpp:192 eeschema/tools/symbol_checker.cpp:173
+#: eeschema/symbol_checker.cpp:192
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only a input or output power pin has "
 "meaning<br><br>"
@@ -16078,7 +16078,7 @@ msgstr ""
 "<b>Symbole d'alimentation suspect</b><br>Seule une broche d’entrée ou de "
 "sortie d’alimentation a une signification<br><br>"
 
-#: eeschema/symbol_checker.cpp:199 eeschema/tools/symbol_checker.cpp:180
+#: eeschema/symbol_checker.cpp:199
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only invisible input power pins are "
 "automatically connected<br><br>"
@@ -16086,7 +16086,7 @@ msgstr ""
 "<b>Symbole d'alimentation suspect</b><br>Seules les broches d’entrée "
 "d’alimentation invisibles sont automatiquement connectées<br><br>"
 
-#: eeschema/symbol_checker.cpp:224 eeschema/tools/symbol_checker.cpp:205
+#: eeschema/symbol_checker.cpp:224
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
@@ -16094,7 +16094,7 @@ msgstr ""
 "Info: <b>Pin power invisible '%s' </b>%s en position <b>(%s, %s)</b> de "
 "converti."
 
-#: eeschema/symbol_checker.cpp:233 eeschema/tools/symbol_checker.cpp:214
+#: eeschema/symbol_checker.cpp:233
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
@@ -16103,12 +16103,12 @@ msgstr ""
 "Info: <b>Pin power invisible '%s' </b>%s en position <b>(%s, %s)</b> dans "
 "unité %c de converti."
 
-#: eeschema/symbol_checker.cpp:246 eeschema/tools/symbol_checker.cpp:227
+#: eeschema/symbol_checker.cpp:246
 #, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr "Info: <b>Pin power invisible '%s' </b>%s en position <b>(%s, %s)</b>."
 
-#: eeschema/symbol_checker.cpp:254 eeschema/tools/symbol_checker.cpp:235
+#: eeschema/symbol_checker.cpp:254
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
@@ -16116,20 +16116,20 @@ msgstr ""
 "Info: <b>Pin power invisible '%s' </b>%s en position <b>(%s, %s)</b> dans "
 "unité %c."
 
-#: eeschema/symbol_checker.cpp:265 eeschema/tools/symbol_checker.cpp:246
+#: eeschema/symbol_checker.cpp:265
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
 "(Les pins d’alimentation invisibles donneront leurs noms à toutes les "
 "équipotentielles connectées.)"
 
-#: eeschema/symbol_checker.cpp:278 eeschema/tools/symbol_checker.cpp:259
+#: eeschema/symbol_checker.cpp:278
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
 "<b>Pin %s hors grille </b> '%s' en position <b>(%s, %s)</b> de converti."
 
-#: eeschema/symbol_checker.cpp:287 eeschema/tools/symbol_checker.cpp:268
+#: eeschema/symbol_checker.cpp:287
 #, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
@@ -16138,12 +16138,12 @@ msgstr ""
 "<b>Pin %s hors grille </b> '%s' en position <b>(%s, %s)</b> dans unité %c de "
 "converti."
 
-#: eeschema/symbol_checker.cpp:300 eeschema/tools/symbol_checker.cpp:281
+#: eeschema/symbol_checker.cpp:300
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr "<b>Pin %s hors grille </b> '%s' en position <b>(%s, %s)</b>."
 
-#: eeschema/symbol_checker.cpp:308 eeschema/tools/symbol_checker.cpp:289
+#: eeschema/symbol_checker.cpp:308
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
@@ -16433,7 +16433,7 @@ msgstr "Le symbole '%s' existe déjà  en librairie '%s'."
 #: eeschema/symbol_editor/symbol_editor.cpp:782
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:101
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:164
-#: kicad/tools/kicad_manager_control.cpp:264
+#: kicad/tools/kicad_manager_control.cpp:266
 #: pcbnew/dialogs/dialog_export_idf.cpp:163
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:122
 #: pcbnew/footprint_libraries_utils.cpp:477
@@ -17935,33 +17935,33 @@ msgstr "pas de symbole sélectionné"
 msgid "symbol is not multi-unit"
 msgstr "le symbole n'est pas multi-unité"
 
-#: eeschema/tools/sch_edit_tool.cpp:963
+#: eeschema/tools/sch_edit_tool.cpp:968
 msgid "Label value cannot go below zero"
 msgstr "La valeur du label ne peut pas descendre en dessous de zéro"
 
-#: eeschema/tools/sch_edit_tool.cpp:1223 eeschema/tools/sch_edit_tool.cpp:1226
+#: eeschema/tools/sch_edit_tool.cpp:1228 eeschema/tools/sch_edit_tool.cpp:1231
 #: eeschema/tools/symbol_editor_edit_tool.cpp:536
 #, c-format
 msgid "Edit %s Field"
 msgstr "Édition Champ %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1228
+#: eeschema/tools/sch_edit_tool.cpp:1233
 #: eeschema/tools/symbol_editor_edit_tool.cpp:538
 #, c-format
 msgid "Edit '%s' Field"
 msgstr "Édition Champ '%s'"
 
-#: eeschema/tools/sch_edit_tool.cpp:1868
+#: eeschema/tools/sch_edit_tool.cpp:1873
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr ""
 "Souhaitez-vous supprimer les pin de feuille non référencées de cette feuille?"
 
-#: eeschema/tools/sch_edit_tool.cpp:1928
+#: eeschema/tools/sch_edit_tool.cpp:1933
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "Entrez le numéro de page pour le chemin hiérarchique de la feuille %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1931
+#: eeschema/tools/sch_edit_tool.cpp:1936
 msgid "Edit Sheet Page Number"
 msgstr "Editer Numéro de Page de la Feuille"
 
@@ -20028,7 +20028,7 @@ msgstr ""
 msgid "Couldn't find the meta HTML information file for this template!"
 msgstr "Impossible de trouver le fichier d'informations HTML  pour ce modèle!"
 
-#: kicad/project_template.cpp:238
+#: kicad/project_template.cpp:260
 #, c-format
 msgid "Cannot create folder '%s'."
 msgstr "Impossible de créer le  répertoire '%s'."
@@ -20303,7 +20303,7 @@ msgid "New Project Folder"
 msgstr "Nouveau Répertoire Projet"
 
 #: kicad/tools/kicad_manager_control.cpp:235
-#: kicad/tools/kicad_manager_control.cpp:584
+#: kicad/tools/kicad_manager_control.cpp:586
 #, c-format
 msgid "Insufficient permissions to write to folder '%s'."
 msgstr "Autorisations insuffisantes pour écrire dans le dossier '%s'."
@@ -20312,30 +20312,30 @@ msgstr "Autorisations insuffisantes pour écrire dans le dossier '%s'."
 msgid "Overwriting files:"
 msgstr "Ecrasement des fichiers:"
 
-#: kicad/tools/kicad_manager_control.cpp:261
+#: kicad/tools/kicad_manager_control.cpp:262
 msgid "Similar files already exist in the destination folder."
 msgstr ""
 "Des fichier de nom similaires existent déjà dans le répertoire de "
 "destination."
 
-#: kicad/tools/kicad_manager_control.cpp:279
+#: kicad/tools/kicad_manager_control.cpp:281
 msgid "A problem occurred creating new project from template."
 msgstr "Problème lors de la création du nouveau projet à partir du modèle."
 
-#: kicad/tools/kicad_manager_control.cpp:302
+#: kicad/tools/kicad_manager_control.cpp:304
 msgid "Open Existing Project"
 msgstr "Ouvrir un Projet  Existant"
 
-#: kicad/tools/kicad_manager_control.cpp:509
+#: kicad/tools/kicad_manager_control.cpp:511
 #, c-format
 msgid "Cannot copy folder '%s'."
 msgstr "Impossible de copier le  répertoire '%s'."
 
-#: kicad/tools/kicad_manager_control.cpp:555
+#: kicad/tools/kicad_manager_control.cpp:557
 msgid "Save Project To"
 msgstr "Sauver Projet vers"
 
-#: kicad/tools/kicad_manager_control.cpp:575
+#: kicad/tools/kicad_manager_control.cpp:577
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -20346,29 +20346,29 @@ msgstr ""
 "\n"
 "Assurez-vous d'avoir les autorisations d'écriture et réessayez."
 
-#: kicad/tools/kicad_manager_control.cpp:586
+#: kicad/tools/kicad_manager_control.cpp:588
 msgid "Error!"
 msgstr "Erreur!"
 
-#: kicad/tools/kicad_manager_control.cpp:642
+#: kicad/tools/kicad_manager_control.cpp:644
 msgid "Create (or open) a project to edit a schematic."
 msgstr "Créer (ou ouvrir) un projet pour modifier un schéma."
 
-#: kicad/tools/kicad_manager_control.cpp:648
+#: kicad/tools/kicad_manager_control.cpp:650
 msgid "Create (or open) a project to edit a pcb."
 msgstr "Créer (ou ouvrir) un projet pour modifier un pcb."
 
-#: kicad/tools/kicad_manager_control.cpp:667
+#: kicad/tools/kicad_manager_control.cpp:669
 msgid "Application failed to load:\n"
 msgstr "Échec du chargement de l’application:\n"
 
-#: kicad/tools/kicad_manager_control.cpp:667
-#: kicad/tools/kicad_manager_control.cpp:674 pcbnew/pcb_edit_frame.cpp:1657
+#: kicad/tools/kicad_manager_control.cpp:669
+#: kicad/tools/kicad_manager_control.cpp:676 pcbnew/pcb_edit_frame.cpp:1657
 #: pcbnew/pcb_edit_frame.cpp:1687
 msgid "KiCad Error"
 msgstr "KiCad erreur"
 
-#: kicad/tools/kicad_manager_control.cpp:674
+#: kicad/tools/kicad_manager_control.cpp:676
 msgid "Application failed to load."
 msgstr "Échec du chargement de l’application."
 
@@ -39248,11 +39248,6 @@ msgstr "freins thermiques pour pads traversants"
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
-msgid "bitmap2component"
-msgstr "bitmap2component"
-
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -39263,10 +39258,9 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+msgid "bitmap2component"
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
@@ -39280,10 +39274,9 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -39293,9 +39286,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
-msgid "kicad"
-msgstr "kicad"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -39310,10 +39303,6 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
-msgid "pcbcalculator"
-msgstr "pcbcalculator"
-
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -39326,11 +39315,6 @@ msgstr "PCB Calculator"
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
-msgid "pcbnew"
-msgstr "pcbnew"
-
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "Editeur de PCB KiCad (indépendant)"
@@ -39342,6 +39326,10 @@ msgstr "Éditeur de circuit imprimé"
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
+
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+msgid "pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -39395,6 +39383,12 @@ msgstr "Schématique KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Fichier Circuit Imprimé KiCad"
+
+#~ msgid "kicad"
+#~ msgstr "kicad"
+
+#~ msgid "pcbcalculator"
+#~ msgstr "pcbcalculator"
 
 #, fuzzy
 #~ msgid "Add Default"
