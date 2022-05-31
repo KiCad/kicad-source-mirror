@@ -243,9 +243,9 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
 
     if( ps->GetSelectedTemplate()->GetDestinationFiles( fn, destFiles ) )
     {
-        std::vector< wxFileName > overwrittenFiles;
+        std::vector<wxFileName> overwrittenFiles;
 
-        for( const auto& file : destFiles )
+        for( const wxFileName& file : destFiles )
         {
             if( file.FileExists() )
                 overwrittenFiles.push_back( file );
@@ -255,11 +255,13 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
         {
             wxString extendedMsg = _( "Overwriting files:" ) + "\n";
 
-            for( const auto& file : overwrittenFiles )
+            for( const wxFileName& file : overwrittenFiles )
                 extendedMsg += "\n" + file.GetFullName();
 
-            KIDIALOG msgDlg( m_frame, _( "Similar files already exist in the destination folder." ),
-                             _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+            KIDIALOG msgDlg( m_frame,
+                             _( "Similar files already exist in the destination folder." ),
+                             _( "Confirmation" ),
+                             wxOK | wxCANCEL | wxICON_WARNING );
             msgDlg.SetExtendedMessage( extendedMsg );
             msgDlg.SetOKLabel( _( "Overwrite" ) );
             msgDlg.DoNotShowCheckbox( __FILE__, __LINE__ );
