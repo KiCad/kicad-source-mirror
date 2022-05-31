@@ -476,23 +476,6 @@ void PCB_FOOTPRINT::Parse( XNODE* aNode, wxStatusBar* aStatusBar,
 }
 
 
-wxString PCB_FOOTPRINT::ModuleLayer( int aMirror )
-{
-    wxString result;
-
-    // ///NOT !   {IntToStr(KiCadLayer)}    NOT !
-    // /  FOOTPRINTs ARE HARD PLACED ON COMPONENT OR COPPER LAYER.
-    // /  IsFLIPPED--> MIRROR attribute is decision Point!!!
-
-    if( aMirror == 0 )
-        result = wxT( "15" );   // Components side
-    else
-        result = wxT( "0" );    // Copper side
-
-    return result;
-}
-
-
 void PCB_FOOTPRINT::AddToBoard()
 {
     int i;
@@ -540,7 +523,7 @@ void PCB_FOOTPRINT::AddToBoard()
     ref_text->SetMirrored( m_name.mirror );
     ref_text->SetVisible( m_name.textIsVisible );
 
-    ref_text->SetLayer( m_name.mirror ? FlipLayer( m_KiCadLayer ) : m_KiCadLayer );
+    ref_text->SetLayer( m_Mirror ? FlipLayer( m_KiCadLayer ) : m_KiCadLayer );
 
     // Calculate the actual position.
     ref_text->SetDrawCoord();
