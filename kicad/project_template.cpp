@@ -71,25 +71,43 @@ PROJECT_TEMPLATE::PROJECT_TEMPLATE( const wxString& aPath )
 }
 
 
+class FILE_TRAVERSER : public wxDirTraverser
+{
+public:
+    FILE_TRAVERSER( std::vector<wxFileName>& files, const wxString exclude ) :
+        m_files( files ),
+        m_exclude( exclude )
+    { }
+
+    virtual wxDirTraverseResult OnFile( const wxString& filename )
+    {
+        if( !filename.StartsWith( m_exclude ) )
+            m_files.emplace_back( wxFileName( filename ) );
+
+        return wxDIR_CONTINUE;
+    }
+
+    virtual wxDirTraverseResult OnDir( const wxString& dirname )
+    {
+        if( !dirname.StartsWith( m_exclude ) )
+            m_files.emplace_back( wxFileName::DirName( dirname ) );
+
+        return wxDIR_CONTINUE;
+    }
+
+private:
+    std::vector<wxFileName>& m_files;
+    wxString                 m_exclude;
+};
+
+
 std::vector<wxFileName> PROJECT_TEMPLATE::GetFileList()
 {
     std::vector<wxFileName> files;
-    wxString f = m_basePath.GetPath();
-    wxArrayString allfiles;
-    wxFileName p;
+    FILE_TRAVERSER          sink( files, m_metaPath.GetPath() );
+    wxDir                   dir( m_basePath.GetPath() );
 
-    wxDir::GetAllFiles( f, &allfiles );
-
-    // Create the vector and ignore all of the meta data files!
-    for( size_t i=0; i < allfiles.size(); i++ )
-    {
-        p = allfiles[i];
-
-        // Files that are in the meta directory must not be included
-        if( !p.GetPath().StartsWith( m_metaPath.GetPath() ) )
-            files.emplace_back(allfiles[i] );
-    }
-
+    dir.Traverse( sink );
     return files;
 }
 
@@ -200,16 +218,20 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
 
         if( destFile.GetExt() == DrawingSheetFileExtension )
         {
-            // Skip these; they're often shared
+            // Don't rename drawing sheet definitions; they're often shared
         }
-        if( destFile.GetName().EndsWith( "-cache" ) || destFile.GetName().EndsWith( "-rescue" ) )
+        else if( destFile.GetName().EndsWith( "-cache" )
+                    || destFile.GetName().EndsWith( "-rescue" ) )
         {
             currname.Replace( basename, aNewProjectPath.GetName() );
         }
-        else if( destFile.GetExt() == "dcm" || destFile.GetExt() == "lib" )
+        else if( destFile.GetExt() == "dcm"
+                    || destFile.GetExt() == "lib"
+                    // Footprint libraries are directories not files, so GetExt() won't work
+                    || destFile.GetPath().EndsWith( ".pretty" ) )
         {
-            // Don't rename project-specific symbol libraries.  This will break the symbol library
-            // table which will cause broken symbol library links in the schematic.
+            // Don't rename project-specific libraries.  This will break the library tables and
+            // cause broken links in the schematic/pcb.
         }
         else
         {
@@ -245,7 +267,7 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
 
         destFile.SetPath( destpath );
 
-        if( !wxCopyFile( srcFile.GetFullPath(), destFile.GetFullPath() ) )
+        if( srcFile.FileExists() && !wxCopyFile( srcFile.GetFullPath(), destFile.GetFullPath() ) )
         {
             if( aErrorMsg )
             {
