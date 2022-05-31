@@ -67,7 +67,6 @@ public:
 
 private:
     XNODE*   FindPatternMultilayerSection( XNODE* aNode, wxString* aPatGraphRefName );
-    wxString ModuleLayer( int aMirror );
 };
 
 } // namespace PCAD2KICAD
