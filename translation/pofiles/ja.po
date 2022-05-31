@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-25 16:22-0700\n"
-"PO-Revision-Date: 2022-05-29 07:05+0000\n"
+"PO-Revision-Date: 2022-05-31 13:29+0000\n"
 "Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -38001,9 +38001,8 @@ msgid "Show footprint and text origins as a cross"
 msgstr "フットプリントとテキストの原点を十字で表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
-#, fuzzy
 msgid "Shadow on Locked Items"
-msgstr "ロックされたアイテムを除外"
+msgstr "ロックされたアイテム上の影"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show a shadow marker on locked items"
