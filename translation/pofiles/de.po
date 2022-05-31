@@ -13235,7 +13235,7 @@ msgstr "Zuletzt geöffnet"
 #: eeschema/menubar.cpp:73 include/filehistory.h:54
 #: pagelayout_editor/menubar.cpp:65 pcbnew/menubar_pcb_editor.cpp:75
 msgid "Clear Recent Files"
-msgstr "Zuletzt verwendete Dateien löschen"
+msgstr "Liste der zuletzt verwendeten Dateien leeren"
 
 #: eeschema/menubar.cpp:96
 msgid "Insert Schematic Sheet Content..."
@@ -17830,17 +17830,17 @@ msgstr "Grafische Lage %d"
 #: gerbview/gerbview_frame.cpp:74 gerbview/menubar.cpp:134
 #: gerbview/menubar.cpp:140
 msgid "Clear Recent Zip Files"
-msgstr "Zuletzt verwendetes Zip-Archiv löschen"
+msgstr "Liste der zuletzt verwendeten Zip-Archive leeren"
 
 #: gerbview/gerbview_frame.cpp:76 gerbview/menubar.cpp:92
 #: gerbview/menubar.cpp:98
 msgid "Clear Recent Drill Files"
-msgstr "Zuletzt verwendete Bohrdatei löschen"
+msgstr "Liste der zuletzt verwendeten Bohrdateien leeren"
 
 #: gerbview/gerbview_frame.cpp:78 gerbview/menubar.cpp:112
 #: gerbview/menubar.cpp:119
 msgid "Clear Recent Job Files"
-msgstr "Zuletzt verwendete Jobdatei löschen"
+msgstr "Liste der zuletzt verwendeten Jobdateien leeren"
 
 #: gerbview/gerbview_frame.cpp:95
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
@@ -17890,7 +17890,7 @@ msgstr "Gerber-Jobdatei öffnen"
 
 #: gerbview/menubar.cpp:69 gerbview/menubar.cpp:76
 msgid "Clear Recent Gerber Files"
-msgstr "Zuletzt verwendete Gerberdatei löschen"
+msgstr "Liste der zuletzt verwendeten Gerberdateien leeren"
 
 #: gerbview/menubar.cpp:75 gerbview/menubar.cpp:97
 msgid "Open Recent Gerber File"
@@ -18525,7 +18525,7 @@ msgstr "Wiederherstellen von \"%s\""
 
 #: kicad/menubar.cpp:56
 msgid "Clear Recent Projects"
-msgstr "Zuletzt verwendete Schaltplanprojekte löschen"
+msgstr "Liste der zuletzt verwendeten Schaltplanprojekte leeren"
 
 #: kicad/menubar.cpp:101
 msgid "Import Non-KiCad Project..."
@@ -33514,7 +33514,7 @@ msgstr "Die Datei '%s' ist keine im veralteten Format vorliegende Bibliothek."
 msgid "Unknown PCad layer %u"
 msgstr "Unbekannte PCad Lage %u"
 
-#: pcbnew/plugins/pcad/pcb.cpp:756
+#: pcbnew/plugins/pcad/pcb.cpp:756 pcbnew/plugins/pcad/pcb.cpp:764
 msgid "KiCad only supports 32 signal layers."
 msgstr "KiCad unterstützt nur 32 Lagen für Signale."
 
@@ -42346,52 +42346,42 @@ msgstr "KiCad-Leiterplatte"
 #~ msgstr "sch Dateien"
 
 #, fuzzy
-#~| msgid "Requested length too large"
 #~ msgid "stream too large"
 #~ msgstr "Gewünschte Länge zu groß"
 
 #, fuzzy
-#~| msgid "Paste Pad Properties"
 #~ msgid "Board6 stream has no properties!"
 #~ msgstr "Pad Eigenschaften anwenden"
 
 #, fuzzy
-#~| msgid "Change text properties"
 #~ msgid "Classes6 stream has no properties!"
 #~ msgstr "Objekt Eigenschaften"
 
 #, fuzzy
-#~| msgid "Group components together based on common properties"
 #~ msgid "Components6 stream has no properties!"
 #~ msgstr "Gruppiert Bauteile basierend auf gemeinsamen Eigenschaften"
 
 #, fuzzy
-#~| msgid "Dimension Properties"
 #~ msgid "Dimensions6 stream has no properties"
 #~ msgstr "Eigenschaften der Abmessungen"
 
 #, fuzzy
-#~| msgid "Text Item Properties"
 #~ msgid "Nets6 stream has no properties"
 #~ msgstr "Eigenschaften Textelement"
 
 #, fuzzy
-#~| msgid "Polygon Properties"
 #~ msgid "Polygons6 stream has no properties"
 #~ msgstr "Polygon-Eigenschaften"
 
 #, fuzzy
-#~| msgid "Default pad properties"
 #~ msgid "Rules6 stream has no properties"
 #~ msgstr "Standard Pad Eigenschaften"
 
 #, fuzzy
-#~| msgid "Component %s not found"
 #~ msgid "Components6 stream is not fully parsed"
 #~ msgstr "Bauteil %s nicht gefunden."
 
 #, fuzzy
-#~| msgid "Default properties for new dimension objects:"
 #~ msgid "Incorrect number of reference points for linear dimension object"
 #~ msgstr "Standardwerte für neue Dimensionsobjekte:"
 
@@ -42404,12 +42394,10 @@ msgstr "KiCad-Leiterplatte"
 #~ "Nicht erwartete vertikale Textposition, dies sollte nicht passieren."
 
 #, fuzzy
-#~| msgid "The file \"%s\" was not fully read"
 #~ msgid "Texts6 stream is not fully parsed"
 #~ msgstr "Die Datei \"%s\" wurde nicht vollständig gelesen"
 
 #, fuzzy
-#~| msgid "The file \"%s\" was not fully read"
 #~ msgid "Fills6 stream is not fully parsed"
 #~ msgstr "Die Datei \"%s\" wurde nicht vollständig gelesen"
 
@@ -42666,12 +42654,10 @@ msgstr "KiCad-Leiterplatte"
 #~ msgstr "Pin %s (%s) von Bauteil %s wird nicht angesteuert (Netz %d)."
 
 #, fuzzy
-#~| msgid "Global label \"%s\" (sheet \"%s\") looks like:"
 #~ msgid "Global label '%s' (sheet '%s') looks like:"
 #~ msgstr "Globaler Bezeichner '%s' (Schaltplan '%s') sieht aus wie:"
 
 #, fuzzy
-#~| msgid "Local label \"%s\" (sheet \"%s\") looks like:"
 #~ msgid "Local label '%s' (sheet '%s') looks like:"
 #~ msgstr "Lokaler Bezeichner '%s' (Schaltplan '%s') sieht aus wie:"
 
@@ -42720,7 +42706,6 @@ msgstr "KiCad-Leiterplatte"
 #~ msgstr "Datei &löschen"
 
 #, fuzzy
-#~| msgid "Print"
 #~ msgid "&Print"
 #~ msgstr "&Drucken"
 
@@ -42774,7 +42759,6 @@ msgstr "KiCad-Leiterplatte"
 #~ msgstr "Platinenseite:"
 
 #, fuzzy
-#~| msgid "Library:"
 #~ msgid "Library Id:"
 #~ msgstr "Bibliothek:"
 
@@ -42809,14 +42793,12 @@ msgstr "KiCad-Leiterplatte"
 #~ msgstr "Löschen einzelnes Pad Netz"
 
 #, fuzzy
-#~| msgid "Update footprints to include any changes from the library"
 #~ msgid "Update footprint references to match any changed symbol references"
 #~ msgstr ""
 #~ "Aktualisieren der Footprints um alle Änderungen der Bibliothek zu "
 #~ "speichern."
 
 #, fuzzy
-#~| msgid "Save footprint associations in schematic symbol footprint fields"
 #~ msgid "Update footprint associations by existing references"
 #~ msgstr ""
 #~ "Speichere die Footprintzuweisung in den Footprintfeldern der Bauteile im "
