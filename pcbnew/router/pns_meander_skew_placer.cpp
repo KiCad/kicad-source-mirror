@@ -110,14 +110,14 @@ bool MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 
     if ( m_originPair.PLine().Net() == m_originLine.Net() )
     {
-        m_padToDieLength = m_padToDieN;
-        m_coupledLength = lineLength( m_tunedPathN );
+        m_padToDieLength = m_padToDieP;
+        m_coupledLength = m_padToDieN + lineLength( m_tunedPathN );
         m_tunedPath = m_tunedPathP;
     }
     else
     {
-        m_padToDieLength = m_padToDieP;
-        m_coupledLength = lineLength( m_tunedPathP );
+        m_padToDieLength = m_padToDieN;
+        m_coupledLength = m_padToDieP + lineLength( m_tunedPathP );
         m_tunedPath = m_tunedPathN;
     }
 
