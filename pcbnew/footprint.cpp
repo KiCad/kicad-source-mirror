@@ -2635,10 +2635,15 @@ static struct FOOTPRINT_DESC
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Solderpaste Margin Override" ),
                     &FOOTPRINT::SetLocalSolderPasteMargin, &FOOTPRINT::GetLocalSolderPasteMargin,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT,
-                             double>( _HKI( "Solderpaste Margin Ratio Override" ),
-                                      &FOOTPRINT::SetLocalSolderPasteMarginRatio,
-                                      &FOOTPRINT::GetLocalSolderPasteMarginRatio ) );
-        // TODO zone connection, FPID?
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>( _HKI( "Solderpaste Margin Ratio Override" ),
+                    &FOOTPRINT::SetLocalSolderPasteMarginRatio,
+                    &FOOTPRINT::GetLocalSolderPasteMarginRatio ) );
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Library ID" ),
+                    &FOOTPRINT::SetFPIDAsString, &FOOTPRINT::GetFPIDAsString ) );
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Description" ),
+                    &FOOTPRINT::SetDescription, &FOOTPRINT::GetDescription ) );
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Keywords" ),
+                    &FOOTPRINT::SetKeywords, &FOOTPRINT::GetKeywords ) );
+        // TODO zone connection
     }
 } _FOOTPRINT_DESC;
