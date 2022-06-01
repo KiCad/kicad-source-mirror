@@ -278,7 +278,7 @@ bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits )
 }
 
 
-void UNIT_BINDER::SetValue( int aValue )
+void UNIT_BINDER::SetValue( long long int aValue )
 {
     double value = aValue;
     double displayValue = m_originTransforms.ToDisplay( value, m_coordType );
