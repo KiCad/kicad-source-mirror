@@ -112,11 +112,20 @@ public:
                         && m_linkedItems.Count( SEGMENT_T | ARC_T ) == 2
                         && m_linkedItems.Count( VIA_T ) == 1 )
             {
-                assert( static_cast<const ITEM*>( m_linkedItems[2] )->Kind() == VIA_T );
+                const VIA* via = nullptr;
 
-                const VIA* via = static_cast<const VIA*>( m_linkedItems[2] );
+                for( const ITEM* item : m_linkedItems.CItems() )
+                {
+                    if( item->Kind() == VIA_T )
+                    {
+                        via = static_cast<const VIA*>( item );
+                        break;
+                    }
+                }
 
-                if( !via->IsVirtual() )
+                assert( via );
+
+                if( !via || !via->IsVirtual() )
                     return false;
             }
             else
