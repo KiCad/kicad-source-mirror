@@ -2373,18 +2373,21 @@ static struct FOOTPRINT_DESC
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Solderpaste Margin Override" ),
                     &FOOTPRINT::SetLocalSolderPasteMargin, &FOOTPRINT::GetLocalSolderPasteMargin,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT,
-                             double>( _HKI( "Solderpaste Margin Ratio Override" ),
-                                      &FOOTPRINT::SetLocalSolderPasteMarginRatio,
-                                      &FOOTPRINT::GetLocalSolderPasteMarginRatio ) );
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>( _HKI( "Solderpaste Margin Ratio Override" ),
+                    &FOOTPRINT::SetLocalSolderPasteMarginRatio,
+                    &FOOTPRINT::GetLocalSolderPasteMarginRatio ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Thermal Relief Width" ),
-                                                           &FOOTPRINT::SetThermalWidth,
-                                                           &FOOTPRINT::GetThermalWidth,
-                                                           PROPERTY_DISPLAY::DISTANCE ) );
+                    &FOOTPRINT::SetThermalWidth, &FOOTPRINT::GetThermalWidth,
+                    PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Thermal Relief Gap" ),
-                                                           &FOOTPRINT::SetThermalGap,
-                                                           &FOOTPRINT::GetThermalGap,
-                                                           PROPERTY_DISPLAY::DISTANCE ) );
-        // TODO zone connection, FPID?
+                    &FOOTPRINT::SetThermalGap, &FOOTPRINT::GetThermalGap,
+                    PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Library ID" ),
+                    &FOOTPRINT::SetFPIDAsString, &FOOTPRINT::GetFPIDAsString ) );
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Description" ),
+                    &FOOTPRINT::SetDescription, &FOOTPRINT::GetDescription ) );
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Keywords" ),
+                    &FOOTPRINT::SetKeywords, &FOOTPRINT::GetKeywords ) );
+        // TODO zone connection
     }
 } _FOOTPRINT_DESC;

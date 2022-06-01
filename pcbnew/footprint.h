@@ -195,6 +195,9 @@ public:
     const LIB_ID& GetFPID() const { return m_fpid; }
     void SetFPID( const LIB_ID& aFPID ) { m_fpid = aFPID; }
 
+    const wxString GetFPIDAsString() const { return m_fpid.Format(); }
+    void SetFPIDAsString( const wxString& aFPID ) { m_fpid.Parse( aFPID ); }
+
     const wxString& GetDescription() const { return m_doc; }
     void SetDescription( const wxString& aDoc ) { m_doc = aDoc; }
 
