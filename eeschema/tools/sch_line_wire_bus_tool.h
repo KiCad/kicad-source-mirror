@@ -131,9 +131,10 @@ private:
      * @param aPosition A reference to a wxPoint object containing the coordinates of the
      *                  position used to calculate the line break point.
      * @param mode      LINE_MODE specifying the way to break the line
+     * @param posture   Toggles the posture of the line
      */
     void computeBreakPoint( const std::pair<SCH_LINE*, SCH_LINE*>& aSegments, VECTOR2I& aPosition,
-                            LINE_MODE mode );
+                            LINE_MODE mode, bool posture );
 
 private:
     bool                    m_inDrawingTool;   // Reentrancy guard

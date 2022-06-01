@@ -141,7 +141,6 @@ public:
     int ToggleERCExclusions( const TOOL_EVENT& aEvent );
     int ChangeLineMode( const TOOL_EVENT& aEvent );
     int NextLineMode( const TOOL_EVENT& aEvent );
-    int SwitchSegmentPosture( const TOOL_EVENT& aEvent );
     int ToggleAnnotateAuto( const TOOL_EVENT& aEvent );
     int ToggleAnnotateRecursive( const TOOL_EVENT& aEvent );
     int TogglePythonConsole( const TOOL_EVENT& aEvent );

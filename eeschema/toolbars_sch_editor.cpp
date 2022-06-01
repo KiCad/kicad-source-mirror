@@ -205,7 +205,6 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( EE_ACTIONS::lineModeFree,     ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( EE_ACTIONS::lineMode90,       ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( EE_ACTIONS::lineMode45,       ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( EE_ACTIONS::lineMode135,      ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( EE_ACTIONS::toggleAnnotateAuto,      ACTION_TOOLBAR::TOGGLE );

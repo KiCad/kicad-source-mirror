@@ -441,7 +441,6 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::lineModeFree,     CHECK( cond.LineMode( LINE_MODE::LINE_MODE_FREE ) ) );
     mgr->SetConditions( EE_ACTIONS::lineMode90,       CHECK( cond.LineMode( LINE_MODE::LINE_MODE_90 ) ) );
     mgr->SetConditions( EE_ACTIONS::lineMode45,       CHECK( cond.LineMode( LINE_MODE::LINE_MODE_45 ) ) );
-    mgr->SetConditions( EE_ACTIONS::lineMode135,      CHECK( cond.LineMode( LINE_MODE::LINE_MODE_135 ) ) );
 
     mgr->SetConditions( ACTIONS::cut,                 ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::copy,                ENABLE( hasElements ) );

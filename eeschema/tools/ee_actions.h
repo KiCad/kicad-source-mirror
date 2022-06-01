@@ -230,7 +230,6 @@ public:
     static TOOL_ACTION lineModeFree;
     static TOOL_ACTION lineMode90;
     static TOOL_ACTION lineMode45;
-    static TOOL_ACTION lineMode135;
     static TOOL_ACTION lineModeNext;
 
     // Annotation

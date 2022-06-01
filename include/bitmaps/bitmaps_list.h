@@ -307,6 +307,7 @@ enum class BITMAPS : unsigned int
     library_archive_as,
     library_browser,
     library_table,
+    lines_any,
     lines90,
     list_nets,
     list_nets_16,

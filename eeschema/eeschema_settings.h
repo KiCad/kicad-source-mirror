@@ -35,7 +35,6 @@ enum LINE_MODE
     LINE_MODE_FREE          = 0,
     LINE_MODE_90            = 1,
     LINE_MODE_45            = 2,
-    LINE_MODE_135           = 3,
 
     LINE_MODE_COUNT,
 };

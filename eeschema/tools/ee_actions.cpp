@@ -687,7 +687,7 @@ TOOL_ACTION EE_ACTIONS::toggleERCExclusions( "eeschema.EditorControl.showERCExcl
 TOOL_ACTION EE_ACTIONS::lineModeFree( "eeschema.EditorControl.lineModeFree",
         AS_GLOBAL, 0, "",
         _( "Line Mode for Wires and Buses" ), _( "Lines drawn at any angle" ),
-        BITMAPS::unknown, AF_NONE, (void*) LINE_MODE::LINE_MODE_FREE );
+        BITMAPS::lines_any, AF_NONE, (void*) LINE_MODE::LINE_MODE_FREE );
 
 TOOL_ACTION EE_ACTIONS::lineMode90( "eeschema.EditorControl.lineModeOrthonal",
         AS_GLOBAL, 0, "",
@@ -696,13 +696,8 @@ TOOL_ACTION EE_ACTIONS::lineMode90( "eeschema.EditorControl.lineModeOrthonal",
 
 TOOL_ACTION EE_ACTIONS::lineMode45( "eeschema.EditorControl.lineMode45",
         AS_GLOBAL, 0, "",
-        _( "Line Mode for Wires and Buses" ), _( "Lines drawn horizontally and vertically, with a 45 degree angle end" ),
-        BITMAPS::unknown, AF_NONE, (void*) LINE_MODE::LINE_MODE_45);
-
-TOOL_ACTION EE_ACTIONS::lineMode135( "eeschema.EditorControl.lineMode135",
-        AS_GLOBAL, 0, "",
-        _( "Line Mode for Wires and Buses" ), _( "Lines drawn horizontally and vertically, with a 45 degree angle start" ),
-        BITMAPS::unknown, AF_NONE, (void*) LINE_MODE::LINE_MODE_135);
+        _( "Line Mode for Wires and Buses" ), _( "Lines drawn horizontally, vertically, and at a 45 degree angle" ),
+        BITMAPS::hv45mode, AF_NONE, (void*) LINE_MODE::LINE_MODE_45);
 
 TOOL_ACTION EE_ACTIONS::lineModeNext( "eeschema.EditorControl.lineModeNext",
         AS_GLOBAL, MD_SHIFT + WXK_SPACE, "",

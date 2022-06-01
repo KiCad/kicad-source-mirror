@@ -2190,21 +2190,6 @@ int SCH_EDITOR_CONTROL::NextLineMode( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_EDITOR_CONTROL::SwitchSegmentPosture( const TOOL_EVENT& aEvent )
-{
-    // The 45/135 angle modes are the only ones with fixed postures, so
-    // only toggle them if we're already in one of these modes
-    if (m_frame->eeconfig()->m_Drawing.line_mode == LINE_MODE::LINE_MODE_45)
-        m_frame->eeconfig()->m_Drawing.line_mode = LINE_MODE::LINE_MODE_135;
-    else if (m_frame->eeconfig()->m_Drawing.line_mode == LINE_MODE::LINE_MODE_135)
-        m_frame->eeconfig()->m_Drawing.line_mode = LINE_MODE::LINE_MODE_45;
-
-    m_toolMgr->RunAction( ACTIONS::refreshPreview );
-
-    return 0;
-}
-
-
 int SCH_EDITOR_CONTROL::ToggleAnnotateAuto( const TOOL_EVENT& aEvent )
 {
     EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
@@ -2394,9 +2379,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::ChangeLineMode,        EE_ACTIONS::lineModeFree.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ChangeLineMode,        EE_ACTIONS::lineMode90.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ChangeLineMode,        EE_ACTIONS::lineMode45.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::ChangeLineMode,        EE_ACTIONS::lineMode135.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::NextLineMode,          EE_ACTIONS::lineModeNext.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::SwitchSegmentPosture,  EE_ACTIONS::switchSegmentPosture.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleAnnotateAuto,    EE_ACTIONS::toggleAnnotateAuto.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::TogglePythonConsole,   EE_ACTIONS::showPythonConsole.MakeEvent() );
