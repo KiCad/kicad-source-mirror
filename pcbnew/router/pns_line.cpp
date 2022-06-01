@@ -709,7 +709,7 @@ void LINE::dragCorner45( const VECTOR2I& aP, int aIndex )
         // fixme: awkward behaviour for "outwards" drags
         path = dragCornerInternal( m_line.Slice( 0, aIndex ), snapped );
         SHAPE_LINE_CHAIN path_rev =
-                dragCornerInternal( m_line.Slice( aIndex + 1, -1 ).Reverse(), snapped ).Reverse();
+                dragCornerInternal( m_line.Slice( aIndex, -1 ).Reverse(), snapped ).Reverse();
         path.Append( path_rev );
     }
 
