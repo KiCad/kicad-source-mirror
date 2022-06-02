@@ -64,6 +64,14 @@ public:
         return false;
     }
 
+    VECTOR2I GetTopLeft() const override;
+    VECTOR2I GetBotRight() const override;
+
+    void SetTop( int aVal ) override;
+    void SetLeft( int aVal ) override;
+    void SetRight( int aVal ) override;
+    void SetBottom( int aVal ) override;
+
     wxString GetParentAsString() const { return m_parent->m_Uuid.AsString(); }
 
     bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override

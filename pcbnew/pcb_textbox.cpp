@@ -58,6 +58,80 @@ int PCB_TEXTBOX::GetTextMargin() const
 }
 
 
+VECTOR2I PCB_TEXTBOX::GetTopLeft() const
+{
+    EDA_ANGLE rotation = GetDrawRotation();
+
+    if( rotation == ANGLE_90 )
+        return VECTOR2I( GetStartX(), GetEndY() );
+    else if( rotation == ANGLE_180 )
+        return GetEnd();
+    else if( rotation == ANGLE_270 )
+        return VECTOR2I( GetEndX(), GetStartY() );
+    else
+        return GetStart();
+}
+
+
+VECTOR2I PCB_TEXTBOX::GetBotRight() const
+{
+    EDA_ANGLE rotation = GetDrawRotation();
+
+    if( rotation == ANGLE_90 )
+        return VECTOR2I( GetEndX(), GetStartY() );
+    else if( rotation == ANGLE_180 )
+        return GetStart();
+    else if( rotation == ANGLE_270 )
+        return VECTOR2I( GetStartX(), GetEndY() );
+    else
+        return GetEnd();
+}
+
+
+void PCB_TEXTBOX::SetTop( int aVal )
+{
+    EDA_ANGLE rotation = GetDrawRotation();
+
+    if( rotation == ANGLE_90 || rotation == ANGLE_180 )
+        SetEndY( aVal );
+    else
+        SetStartY( aVal );
+}
+
+
+void PCB_TEXTBOX::SetBottom( int aVal )
+{
+    EDA_ANGLE rotation = GetDrawRotation();
+
+    if( rotation == ANGLE_90 || rotation == ANGLE_180 )
+        SetStartY( aVal );
+    else
+        SetEndY( aVal );
+}
+
+
+void PCB_TEXTBOX::SetLeft( int aVal )
+{
+    EDA_ANGLE rotation = GetDrawRotation();
+
+    if( rotation == ANGLE_180 || rotation == ANGLE_270 )
+        SetEndX( aVal );
+    else
+        SetStartX( aVal );
+}
+
+
+void PCB_TEXTBOX::SetRight( int aVal )
+{
+    EDA_ANGLE rotation = GetDrawRotation();
+
+    if( rotation == ANGLE_180 || rotation == ANGLE_270 )
+        SetStartX( aVal );
+    else
+        SetEndX( aVal );
+}
+
+
 std::vector<VECTOR2I> PCB_TEXTBOX::GetAnchorAndOppositeCorner() const
 {
     std::vector<VECTOR2I> pts;

@@ -60,6 +60,80 @@ int FP_TEXTBOX::GetTextMargin() const
 }
 
 
+VECTOR2I FP_TEXTBOX::GetTopLeft() const
+{
+    EDA_ANGLE rotation = GetDrawRotation();
+
+    if( rotation == ANGLE_90 )
+        return VECTOR2I( GetStartX(), GetEndY() );
+    else if( rotation == ANGLE_180 )
+        return GetEnd();
+    else if( rotation == ANGLE_270 )
+        return VECTOR2I( GetEndX(), GetStartY() );
+    else
+        return GetStart();
+}
+
+
+VECTOR2I FP_TEXTBOX::GetBotRight() const
+{
+    EDA_ANGLE rotation = GetDrawRotation();
+
+    if( rotation == ANGLE_90 )
+        return VECTOR2I( GetEndX(), GetStartY() );
+    else if( rotation == ANGLE_180 )
+        return GetStart();
+    else if( rotation == ANGLE_270 )
+        return VECTOR2I( GetStartX(), GetEndY() );
+    else
+        return GetEnd();
+}
+
+
+void FP_TEXTBOX::SetTop( int aVal )
+{
+    EDA_ANGLE rotation = GetDrawRotation();
+
+    if( rotation == ANGLE_90 || rotation == ANGLE_180 )
+        SetEndY( aVal );
+    else
+        SetStartY( aVal );
+}
+
+
+void FP_TEXTBOX::SetBottom( int aVal )
+{
+    EDA_ANGLE rotation = GetDrawRotation();
+
+    if( rotation == ANGLE_90 || rotation == ANGLE_180 )
+        SetStartY( aVal );
+    else
+        SetEndY( aVal );
+}
+
+
+void FP_TEXTBOX::SetLeft( int aVal )
+{
+    EDA_ANGLE rotation = GetDrawRotation();
+
+    if( rotation == ANGLE_180 || rotation == ANGLE_270 )
+        SetEndX( aVal );
+    else
+        SetStartX( aVal );
+}
+
+
+void FP_TEXTBOX::SetRight( int aVal )
+{
+    EDA_ANGLE rotation = GetDrawRotation();
+
+    if( rotation == ANGLE_180 || rotation == ANGLE_270 )
+        SetStartX( aVal );
+    else
+        SetEndX( aVal );
+}
+
+
 EDA_ANGLE FP_TEXTBOX::GetDrawRotation() const
 {
     FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_parent );

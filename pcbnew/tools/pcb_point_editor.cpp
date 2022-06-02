@@ -210,10 +210,10 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
             break;
 
         case SHAPE_T::RECT:
-            points->AddPoint( shape->GetStart() );
-            points->AddPoint( VECTOR2I( shape->GetEnd().x, shape->GetStart().y ) );
-            points->AddPoint( shape->GetEnd() );
-            points->AddPoint( VECTOR2I( shape->GetStart().x, shape->GetEnd().y ) );
+            points->AddPoint( shape->GetTopLeft() );
+            points->AddPoint( VECTOR2I( shape->GetBotRight().x, shape->GetTopLeft().y ) );
+            points->AddPoint( shape->GetBotRight() );
+            points->AddPoint( VECTOR2I( shape->GetTopLeft().x, shape->GetBotRight().y ) );
 
             points->AddLine( points->Point( RECT_TOP_LEFT ), points->Point( RECT_TOP_RIGHT ) );
             points->Line( RECT_TOP ).SetConstraint( new EC_PERPLINE( points->Line( RECT_TOP ) ) );
@@ -1111,24 +1111,26 @@ void PCB_POINT_EDITOR::updateItem() const
                     || isModified( m_editPoints->Point( RECT_BOT_RIGHT ) )
                     || isModified( m_editPoints->Point( RECT_BOT_LEFT ) ) )
             {
-                shape->SetPosition( topLeft );
-                shape->SetEnd( botRight );
+                shape->SetLeft( topLeft.x );
+                shape->SetTop( topLeft.y );
+                shape->SetRight( botRight.x );
+                shape->SetBottom( botRight.y );
             }
             else if( isModified( m_editPoints->Line( RECT_TOP ) ) )
             {
-                shape->SetStartY( topLeft.y );
+                shape->SetTop( topLeft.y );
             }
             else if( isModified( m_editPoints->Line( RECT_LEFT ) ) )
             {
-                shape->SetStartX( topLeft.x );
+                shape->SetLeft( topLeft.x );
             }
             else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
             {
-                shape->SetEndY( botRight.y );
+                shape->SetBottom( botRight.y );
             }
             else if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
             {
-                shape->SetEndX( botRight.x );
+                shape->SetRight( botRight.x );
             }
 
             for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
@@ -1666,12 +1668,12 @@ void PCB_POINT_EDITOR::updatePoints()
 
         if( shape->GetShape() == SHAPE_T::RECT )
         {
-            m_editPoints->Point( RECT_TOP_LEFT ).SetPosition( shape->GetStart() );
-            m_editPoints->Point( RECT_TOP_RIGHT ).SetPosition( shape->GetEnd().x,
-                                                               shape->GetStart().y );
-            m_editPoints->Point( RECT_BOT_RIGHT ).SetPosition( shape->GetEnd() );
-            m_editPoints->Point( RECT_BOT_LEFT ).SetPosition( shape->GetStart().x,
-                                                              shape->GetEnd().y );
+            m_editPoints->Point( RECT_TOP_LEFT ).SetPosition( shape->GetTopLeft() );
+            m_editPoints->Point( RECT_TOP_RIGHT ).SetPosition( shape->GetBotRight().x,
+                                                               shape->GetTopLeft().y );
+            m_editPoints->Point( RECT_BOT_RIGHT ).SetPosition( shape->GetBotRight() );
+            m_editPoints->Point( RECT_BOT_LEFT ).SetPosition( shape->GetTopLeft().x,
+                                                              shape->GetBotRight().y );
         }
         else if( shape->GetShape() == SHAPE_T::POLY )
         {
@@ -1694,12 +1696,12 @@ void PCB_POINT_EDITOR::updatePoints()
             break;
 
         case SHAPE_T::RECT:
-            m_editPoints->Point( RECT_TOP_LEFT ).SetPosition( shape->GetStart() );
-            m_editPoints->Point( RECT_TOP_RIGHT ).SetPosition( shape->GetEnd().x,
-                                                               shape->GetStart().y );
-            m_editPoints->Point( RECT_BOT_RIGHT ).SetPosition( shape->GetEnd() );
-            m_editPoints->Point( RECT_BOT_LEFT ).SetPosition( shape->GetStart().x,
-                                                              shape->GetEnd().y );
+            m_editPoints->Point( RECT_TOP_LEFT ).SetPosition( shape->GetTopLeft() );
+            m_editPoints->Point( RECT_TOP_RIGHT ).SetPosition( shape->GetBotRight().x,
+                                                               shape->GetTopLeft().y );
+            m_editPoints->Point( RECT_BOT_RIGHT ).SetPosition( shape->GetBotRight() );
+            m_editPoints->Point( RECT_BOT_LEFT ).SetPosition( shape->GetTopLeft().x,
+                                                              shape->GetBotRight().y );
             break;
 
         case SHAPE_T::ARC:

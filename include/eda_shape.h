@@ -113,8 +113,8 @@ public:
      * Return the starting point of the graphic.
      */
     const VECTOR2I& GetStart() const { return m_start; }
-    int             GetStartY() { return m_start.y; }
-    int             GetStartX() { return m_start.x; }
+    int             GetStartY() const { return m_start.y; }
+    int             GetStartX() const { return m_start.x; }
 
     void SetStart( const VECTOR2I& aStart )
     {
@@ -138,8 +138,8 @@ public:
      * Return the ending point of the graphic.
      */
     const VECTOR2I& GetEnd() const { return m_end; }
-    int             GetEndY() { return m_end.y; }
-    int             GetEndX() { return m_end.x; }
+    int             GetEndY() const { return m_end.y; }
+    int             GetEndX() const { return m_end.x; }
 
     void SetEnd( const VECTOR2I& aEnd )
     {
@@ -158,6 +158,14 @@ public:
         m_end.x = x;
         m_endsSwapped = false;
     }
+
+    virtual VECTOR2I GetTopLeft() const { return GetStart(); }
+    virtual VECTOR2I GetBotRight() const { return GetEnd(); }
+
+    virtual void SetTop( int val ) { SetStartY( val ); }
+    virtual void SetLeft( int val ) { SetStartX( val ); }
+    virtual void SetRight( int val ) { SetEndX( val ); }
+    virtual void SetBottom( int val ) { SetEndY( val ); }
 
     void            SetBezierC1( const VECTOR2I& aPt ) { m_bezierC1 = aPt; }
     const VECTOR2I& GetBezierC1() const { return m_bezierC1; }

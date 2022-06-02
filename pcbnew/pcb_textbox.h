@@ -62,6 +62,14 @@ public:
         return false;
     }
 
+    VECTOR2I GetTopLeft() const override;
+    VECTOR2I GetBotRight() const override;
+
+    void SetTop( int aVal ) override;
+    void SetLeft( int aVal ) override;
+    void SetRight( int aVal ) override;
+    void SetBottom( int aVal ) override;
+
     int GetTextMargin() const;
 
     VECTOR2I GetDrawPos() const override;
