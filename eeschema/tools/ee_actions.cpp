@@ -728,6 +728,11 @@ TOOL_ACTION EE_ACTIONS::showPythonConsole( "eeschema.EditorControl.showPythonCon
 
 // SCH_NAVIGATE_TOOL
 //
+TOOL_ACTION EE_ACTIONS::changeSheet( "eeschema.NavigateTool.changeSheet",
+        AS_GLOBAL, 0, "",
+        _( "Enter Sheet" ), _( "Change to provided sheet's contents in the schematic editor" ),
+        BITMAPS::enter_sheet );
+
 TOOL_ACTION EE_ACTIONS::enterSheet( "eeschema.NavigateTool.enterSheet",
         AS_GLOBAL, 0, "",
         _( "Enter Sheet" ), _( "Display the selected sheet's contents in the schematic editor" ),
@@ -739,8 +744,38 @@ TOOL_ACTION EE_ACTIONS::leaveSheet( "eeschema.NavigateTool.leaveSheet",
         _( "Leave Sheet" ), _( "Display the parent sheet in the schematic editor" ),
         BITMAPS::leave_sheet );
 
-TOOL_ACTION EE_ACTIONS::navigateHierarchy( "eeschema.NavigateTool.navigateHierarchy",
-        AS_GLOBAL, 0, "",
+TOOL_ACTION EE_ACTIONS::navigateUp( "eeschema.NavigateTool.up",
+        AS_GLOBAL, MD_ALT + WXK_UP, "",
+        _( "Navigate Up" ), _( "Navigate up one sheet in the hierarchy" ),
+        BITMAPS::up );
+
+TOOL_ACTION EE_ACTIONS::navigateBack( "eeschema.NavigateTool.back",
+        AS_GLOBAL,
+        MD_ALT + WXK_LEFT, "",
+        _( "Navigate Back" ), _( "Move forward in sheet navigation history" ),
+        BITMAPS::left );
+
+TOOL_ACTION EE_ACTIONS::navigateForward( "eeschema.NavigateTool.forward",
+        AS_GLOBAL,
+        MD_ALT + WXK_RIGHT, "",
+        _( "Navigate Forward" ), _( "Move backward in sheet navigation history" ),
+        BITMAPS::right );
+
+TOOL_ACTION EE_ACTIONS::navigatePrevious( "eeschema.NavigateTool.previous",
+        AS_GLOBAL,
+        WXK_PAGEUP, "",
+        _( "Previous Sheet" ), _( "Move to previous sheet by number" ),
+        BITMAPS::left );
+
+TOOL_ACTION EE_ACTIONS::navigateNext( "eeschema.NavigateTool.next",
+        AS_GLOBAL,
+        WXK_PAGEDOWN, "",
+        _( "Next Sheet" ), _( "Move to next sheet by number" ),
+        BITMAPS::right );
+
+TOOL_ACTION EE_ACTIONS::showHierarchy( "eeschema.EditorTool.showHierarchy",
+        AS_GLOBAL,
+        MD_CTRL + 'H', "",
         _( "Hierarchy Navigator" ), _( "Show schematic sheet hierarchy" ),
         BITMAPS::hierarchy_nav );
 

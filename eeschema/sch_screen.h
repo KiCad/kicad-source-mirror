@@ -73,9 +73,6 @@ enum SCH_LINE_TEST_T
 };
 
 
-/// Max number of sheets in a hierarchy project
-#define NB_MAX_SHEET    500
-
 struct PICKED_SYMBOL
 {
     LIB_ID LibId;

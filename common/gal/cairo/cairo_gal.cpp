@@ -1329,6 +1329,12 @@ CAIRO_GAL::CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
     Connect( wxEVT_RIGHT_UP, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
     Connect( wxEVT_RIGHT_DCLICK, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_AUX1_DOWN, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_AUX1_UP, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_AUX1_DCLICK, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_AUX2_DOWN, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_AUX2_UP, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_AUX2_DCLICK, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
     Connect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
 #if defined _WIN32 || defined _WIN64
     Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );

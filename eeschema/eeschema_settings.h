@@ -51,7 +51,6 @@ public:
         wxString edit_label_visible_columns;
         int  erc_severities;
         bool footprint_preview;
-        bool navigator_stays_open;
         bool print_sheet_reference;
         wxString default_font;
         bool show_hidden_pins;
@@ -63,6 +62,12 @@ public:
         bool show_page_limits;
         bool show_sexpr_file_convert_warning;
         bool show_sheet_filename_case_sensitivity_dialog;
+    };
+
+    struct AUI_PANELS
+    {
+        int  left_panel_width;
+        bool show_schematic_hierarchy;
     };
 
     struct AUTOPLACE_FIELDS
@@ -254,6 +259,8 @@ public:
     APPEARANCE m_Appearance;
 
     AUTOPLACE_FIELDS m_AutoplaceFields;
+
+    AUI_PANELS m_AuiPanels;
 
     DRAWING m_Drawing;
 

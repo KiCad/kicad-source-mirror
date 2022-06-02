@@ -245,24 +245,10 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     FinishAUIInitialization();
 
+    wxAuiPaneInfo& treePane = m_auimgr.GetPane( "Footprints" );
+
     if( m_editorSettings->m_LibWidth > 0 )
-    {
-        wxAuiPaneInfo& treePane = m_auimgr.GetPane( "Footprints" );
-
-        // wxAUI hack: force width by setting MinSize() and then Fixed()
-        // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
-        treePane.MinSize( m_editorSettings->m_LibWidth, -1 );
-        treePane.Fixed();
-        m_auimgr.Update();
-
-        // now make it resizable again
-        treePane.Resizable();
-        m_auimgr.Update();
-
-        // Note: DO NOT call m_auimgr.Update() anywhere after this; it will nuke the size
-        // back to minimum.
-        treePane.MinSize( 250, -1 );
-    }
+        SetAuiPaneSize( m_auimgr, treePane, m_editorSettings->m_LibWidth, -1 );
 
     // Apply saved visibility stuff at the end
     FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
@@ -357,7 +343,14 @@ void FOOTPRINT_EDIT_FRAME::ToggleSearchTree()
 {
     wxAuiPaneInfo& treePane = m_auimgr.GetPane( m_treePane );
     treePane.Show( !IsSearchTreeShown() );
-    m_auimgr.Update();
+
+    if( IsSearchTreeShown() )
+        SetAuiPaneSize( m_auimgr, treePane, m_editorSettings->m_LibWidth, -1 );
+    else
+    {
+        m_editorSettings->m_LibWidth = m_treePane->GetSize().x;
+        m_auimgr.Update();
+    }
 }
 
 

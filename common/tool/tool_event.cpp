@@ -136,6 +136,8 @@ const std::string TOOL_EVENT::Format() const
         { BUT_LEFT,   "left"   },
         { BUT_RIGHT,  "right"  },
         { BUT_MIDDLE, "middle" },
+        { BUT_AUX1,   "aux1"   },
+        { BUT_AUX2,   "aux2"   },
         { 0,          ""       }
     };
 

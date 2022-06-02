@@ -268,10 +268,6 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	m_footprintPreview = new wxCheckBox( sbSizer6->GetStaticBox(), wxID_ANY, _("Show footprint previews in Symbol Chooser"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer6->Add( m_footprintPreview, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_navigatorStaysOpen = new wxCheckBox( sbSizer6->GetStaticBox(), wxID_ANY, _("Keep hierarchy navigator open"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_navigatorStaysOpen->SetValue(true);
-	sbSizer6->Add( m_navigatorStaysOpen, 0, wxALL, 5 );
-
 
 	bRightColumn->Add( sbSizer6, 1, wxEXPAND|wxALL, 5 );
 

@@ -256,6 +256,12 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
     Connect( wxEVT_RIGHT_UP, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
     Connect( wxEVT_RIGHT_DCLICK, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_AUX1_DOWN, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_AUX1_UP, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_AUX1_DCLICK, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_AUX2_DOWN, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_AUX2_UP, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_AUX2_DCLICK, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
     Connect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
 #if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
     Connect( wxEVT_MAGNIFY, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );

@@ -167,8 +167,12 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     ACTION_MENU* viewMenu = new ACTION_MENU( false, selTool );
 
     viewMenu->Add( ACTIONS::showSymbolBrowser );
-    viewMenu->Add( EE_ACTIONS::navigateHierarchy );
-    viewMenu->Add( EE_ACTIONS::leaveSheet );
+    viewMenu->Add( EE_ACTIONS::showHierarchy, ACTION_MENU::CHECK );
+    viewMenu->Add( EE_ACTIONS::navigateBack );
+    viewMenu->Add( EE_ACTIONS::navigateUp );
+    viewMenu->Add( EE_ACTIONS::navigateForward );
+    viewMenu->Add( EE_ACTIONS::navigatePrevious );
+    viewMenu->Add( EE_ACTIONS::navigateNext );
 
     viewMenu->AppendSeparator();
     viewMenu->Add( ACTIONS::zoomInCenter );

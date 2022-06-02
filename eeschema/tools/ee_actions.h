@@ -88,6 +88,7 @@ public:
     static TOOL_ACTION placeGlobalLabel;
     static TOOL_ACTION placeHierLabel;
     static TOOL_ACTION drawSheet;
+    static TOOL_ACTION importSingleSheetPin;
     static TOOL_ACTION importSheetPin;
     static TOOL_ACTION placeSchematicText;
     static TOOL_ACTION drawTextBox;
@@ -189,11 +190,16 @@ public:
     static TOOL_ACTION updateSymbolFields;
 
     // Hierarchy navigation
+    static TOOL_ACTION changeSheet;
     static TOOL_ACTION enterSheet;
     static TOOL_ACTION leaveSheet;
-    static TOOL_ACTION navigateHierarchy;
+    static TOOL_ACTION navigateUp;
+    static TOOL_ACTION navigateForward;
+    static TOOL_ACTION navigateBack;
+    static TOOL_ACTION navigatePrevious;
+    static TOOL_ACTION navigateNext;
+    static TOOL_ACTION showHierarchy;
     static TOOL_ACTION hypertextCommand;
-    static TOOL_ACTION importSingleSheetPin;
 
     // Global edit tools
     static TOOL_ACTION cleanupSheetPins;

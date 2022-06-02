@@ -80,7 +80,6 @@ class PANEL_EESCHEMA_EDITING_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_labelIncrementLabel;
 		wxSpinCtrl* m_spinLabelRepeatStep;
 		wxCheckBox* m_footprintPreview;
-		wxCheckBox* m_navigatorStaysOpen;
 
 	public:
 

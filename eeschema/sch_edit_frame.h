@@ -59,7 +59,7 @@ class SCHEMATIC;
 class DIALOG_SCH_FIND;
 class wxFindReplaceData;
 class RESCUER;
-class HIERARCHY_NAVIG_DLG;
+class HIERARCHY_NAVIG_PANEL;
 
 // @todo Move this to transform alone with all of the transform manipulation code.
 /// enum used in RotationMiroir()
@@ -232,16 +232,9 @@ public:
     void ShowFindReplaceDialog( bool aReplace );
 
     /**
-     * Run the Hierarchy Navigator dialog.
-     * @param aForceUpdate: When true, creates a new dialog. And if a dialog
-     * already exist, it destroys it first.
+     * Update the hierarchy navigation tree and history
      */
-    void UpdateHierarchyNavigator( bool aForceUpdate = false );
-
-    /**
-     * @return a reference to the Hierarchy Navigator dialog if exists, or nullptr.
-     */
-    HIERARCHY_NAVIG_DLG* FindHierarchyNavigator();
+    void UpdateHierarchyNavigator();
 
     void ShowFindReplaceStatus( const wxString& aMsg, int aStatusTime );
     void ClearFindReplaceStatus();
@@ -834,6 +827,12 @@ public:
      */
     virtual void CheckForAutoSaveFile( const wxFileName& aFileName ) override;
 
+
+    /**
+     * Toggle the show/hide state of the left side schematic navigation panel
+     */
+    void ToggleSchematicHierarchy();
+
     DECLARE_EVENT_TABLE()
 
 protected:
@@ -940,6 +939,9 @@ private:
                                                   ///< to call a custom net list generator.
 
     DIALOG_SCH_FIND*        m_findReplaceDialog;
+
+    HIERARCHY_NAVIG_PANEL*  m_hierarchy;
+    bool                    m_showHierarchy;
 };
 
 

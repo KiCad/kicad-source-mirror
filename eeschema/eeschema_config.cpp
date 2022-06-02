@@ -35,6 +35,7 @@
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
 #include <schematic.h>
+#include <hierarch.h>
 #include <settings/app_settings.h>
 #include <settings/settings_manager.h>
 #include <symbol_lib_table.h>
@@ -143,6 +144,8 @@ void SCH_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     // For now, axes are forced off in Eeschema even if turned on in config
     eeconfig()->m_Window.grid.axes_enabled = false;
 
+    m_showHierarchy = eeconfig()->m_AuiPanels.show_schematic_hierarchy;
+
     SCH_BASE_FRAME::LoadSettings( eeconfig() );
 
     GetRenderSettings()->m_ShowPinsElectricalType = false;
@@ -155,7 +158,11 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     // TODO(JE) do we need to keep m_userUnits around?
     if( eeconfig() )
+    {
         eeconfig()->m_System.units = static_cast<int>( m_userUnits );
+        eeconfig()->m_AuiPanels.show_schematic_hierarchy = m_showHierarchy;
+        eeconfig()->m_AuiPanels.left_panel_width = m_hierarchy->GetSize().x;
+    }
 }
 
 

@@ -126,7 +126,9 @@ enum TOOL_MOUSE_BUTTONS
     BUT_LEFT         = 0x1,
     BUT_RIGHT        = 0x2,
     BUT_MIDDLE       = 0x4,
-    BUT_BUTTON_MASK  = BUT_LEFT | BUT_RIGHT | BUT_MIDDLE,
+    BUT_AUX1         = 0x8,
+    BUT_AUX2         = 0x10,
+    BUT_BUTTON_MASK  = BUT_LEFT | BUT_RIGHT | BUT_MIDDLE | BUT_AUX1 | BUT_AUX2,
     BUT_ANY          = 0xffffffff
 };
 

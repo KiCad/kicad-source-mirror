@@ -3,7 +3,8 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022 Mike Williams <mike at mikebwilliams.com>
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,25 +32,29 @@
 #include <wx/imaglist.h>
 #include <wx/object.h> // wxRTTI macros
 #include <wx/treectrl.h>
+#include <widgets/wx_panel.h>
 
-// The window name of the hierarchy navigator, used to find it
-#define HIERARCHY_NAVIG_DLG_WNAME "hierarchy_navig_dlg"
 
 class SCH_EDIT_FRAME;
 class SCH_SHEET_PATH;
 
-class HIERARCHY_NAVIG_DLG;
+class HIERARCHY_NAVIG_PANEL;
+
 
 /**
- * Handle hierarchy tree control.
+ * Navigation hierarchy tree control.
+ *
+ * wxTreeCtrl must be subclassed to implement the OnCompareItems method
+ * to sort according to page numbers.
  */
 class HIERARCHY_TREE : public wxTreeCtrl
 {
 public:
-    HIERARCHY_TREE( HIERARCHY_NAVIG_DLG* parent );
-
-    // Closes the dialog on escape key
-    void onChar( wxKeyEvent& event );
+    HIERARCHY_TREE( HIERARCHY_NAVIG_PANEL* parent ) :
+            wxTreeCtrl( (wxWindow*) parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                        wxTR_HAS_BUTTONS, wxDefaultValidator, wxT( "HierachyTreeCtrl" ) )
+    {
+    }
 
     int OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 ) override;
 
@@ -57,24 +62,25 @@ private:
     // Need to use wxRTTI macros in order for OnCompareItems to work properly
     // See: https://docs.wxwidgets.org/3.1/classwx_tree_ctrl.html#ab90a465793c291ca7aa827a576b7d146
     wxDECLARE_ABSTRACT_CLASS( HIERARCHY_TREE );
-
-    HIERARCHY_NAVIG_DLG* m_parent;
-    wxImageList*         imageList;
 };
 
-class HIERARCHY_NAVIG_DLG : public DIALOG_SHIM
+
+class HIERARCHY_NAVIG_PANEL : public WX_PANEL
 {
 public:
-    HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent );
+    HIERARCHY_NAVIG_PANEL( SCH_EDIT_FRAME* aParent );
 
-    ~HIERARCHY_NAVIG_DLG();
-
-    void OnCloseNav( wxCloseEvent& event );
+    ~HIERARCHY_NAVIG_PANEL();
 
     /**
      * Update the hierarchical tree of the schematic.
      */
     void UpdateHierarchyTree();
+
+    /**
+     * Updates the tree's selection to match current page
+     */
+    void UpdateHierarchySelection();
 
 private:
     /**
@@ -85,7 +91,7 @@ private:
      * @param[in] aList is the #SCH_SHEET_PATH list to explore.
      * @param aPreviousmenu is the wxTreeItemId used as parent to add sub items.
      */
-    void buildHierarchyTree( SCH_SHEET_PATH* aList, wxTreeItemId* aPreviousmenu );
+    void buildHierarchyTree( SCH_SHEET_PATH* aList, const wxTreeItemId& aParent );
 
     /**
      * Open the selected sheet and display the corresponding screen when a tree item is
@@ -103,11 +109,9 @@ private:
     */
     wxString formatPageString( const wxString& aName, const wxString& aPage );
 
-    SCH_SHEET_PATH  m_currSheet;
     SCH_SHEET_PATH  m_list;
-    SCH_EDIT_FRAME* m_SchFrameEditor;
-    HIERARCHY_TREE* m_Tree;
-    int             m_nbsheets;
+    SCH_EDIT_FRAME* m_frame;
+    HIERARCHY_TREE* m_tree;
 };
 
 #endif // HIERARCH_H

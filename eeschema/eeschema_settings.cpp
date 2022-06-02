@@ -88,9 +88,6 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "appearance.footprint_preview",
             &m_Appearance.footprint_preview, true ) );
 
-    m_params.emplace_back( new PARAM<bool>( "appearance.navigator_stays_open",
-            &m_Appearance.navigator_stays_open, false ) );
-
     m_params.emplace_back( new PARAM<bool>( "appearance.print_sheet_reference",
             &m_Appearance.print_sheet_reference, true ) );
 
@@ -124,6 +121,12 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back(
             new PARAM<bool>( "appearance.show_sheet_filename_case_sensitivity_dialog",
             &m_Appearance.show_sheet_filename_case_sensitivity_dialog, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "aui.show_schematic_hierarchy",
+            &m_AuiPanels.show_schematic_hierarchy, true ) );
+
+    m_params.emplace_back( new PARAM<int>( "aui.left_panel_width",
+            &m_AuiPanels.left_panel_width, -1 ) );
 
     m_params.emplace_back( new PARAM<bool>( "autoplace_fields.enable",
             &m_AutoplaceFields.enable, true ) );

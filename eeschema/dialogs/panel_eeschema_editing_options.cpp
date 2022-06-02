@@ -65,7 +65,6 @@ void PANEL_EESCHEMA_EDITING_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* aC
 
     m_choiceLineMode->SetSelection( aCfg->m_Drawing.line_mode );
     m_footprintPreview->SetValue( aCfg->m_Appearance.footprint_preview );
-    m_navigatorStaysOpen->SetValue( aCfg->m_Appearance.navigator_stays_open );
 
     m_checkAutoplaceFields->SetValue( aCfg->m_AutoplaceFields.enable );
     m_checkAutoplaceJustify->SetValue( aCfg->m_AutoplaceFields.allow_rejustify );
@@ -103,7 +102,6 @@ bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataFromWindow()
 
     cfg->m_Drawing.line_mode = m_choiceLineMode->GetSelection();
     cfg->m_Appearance.footprint_preview = m_footprintPreview->GetValue();
-    cfg->m_Appearance.navigator_stays_open = m_navigatorStaysOpen->GetValue();
 
     cfg->m_AutoplaceFields.enable = m_checkAutoplaceFields->GetValue();
     cfg->m_AutoplaceFields.allow_rejustify = m_checkAutoplaceJustify->GetValue();

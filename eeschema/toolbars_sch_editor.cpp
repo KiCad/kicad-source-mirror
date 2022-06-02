@@ -30,11 +30,13 @@
 #include <kiface_base.h>
 #include <bitmaps.h>
 #include <eeschema_id.h>
+#include <hierarch.h>
 #include <python_scripting.h>
 #include <tool/tool_manager.h>
 #include <tool/action_toolbar.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
+#include <widgets/wx_aui_utils.h>
 
 /* Create  the main Horizontal Toolbar for the schematic editor
  */
@@ -89,8 +91,9 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE, ACTION_TOOLBAR::CANCEL );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EE_ACTIONS::navigateHierarchy );
-    m_mainToolBar->Add( EE_ACTIONS::leaveSheet );
+    m_mainToolBar->Add( EE_ACTIONS::navigateBack );
+    m_mainToolBar->Add( EE_ACTIONS::navigateUp );
+    m_mainToolBar->Add( EE_ACTIONS::navigateForward );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::rotateCCW );
@@ -216,4 +219,23 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
 
     m_optionsToolBar->KiRealize();
+}
+
+
+void SCH_EDIT_FRAME::ToggleSchematicHierarchy()
+{
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    wxAuiPaneInfo&     hierarchy = m_auimgr.GetPane( "SchematicHierarchy" );
+
+    // show auxiliary Vertical layers and visibility manager toolbar
+    m_showHierarchy = !m_showHierarchy;
+    hierarchy.Show( m_showHierarchy );
+
+    if( m_showHierarchy && cfg )
+        SetAuiPaneSize( m_auimgr, hierarchy, cfg->m_AuiPanels.left_panel_width, -1 );
+    else
+    {
+        cfg->m_AuiPanels.left_panel_width = m_hierarchy->GetSize().x;
+        m_auimgr.Update();
+    }
 }

@@ -113,6 +113,12 @@ struct TOOL_DISPATCHER::BUTTON_STATE
         case BUT_RIGHT:
             return mouseState.RightIsDown();
 
+        case BUT_AUX1:
+            return mouseState.Aux1IsDown();
+
+        case BUT_AUX2:
+            return mouseState.Aux2IsDown();
+
         default:
             assert( false );
             break;
@@ -138,6 +144,10 @@ TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr ) :
                          wxEVT_RIGHT_UP, wxEVT_RIGHT_DCLICK ) );
     m_buttons.push_back( new BUTTON_STATE( BUT_MIDDLE, wxEVT_MIDDLE_DOWN,
                          wxEVT_MIDDLE_UP, wxEVT_MIDDLE_DCLICK ) );
+    m_buttons.push_back( new BUTTON_STATE( BUT_AUX1, wxEVT_AUX1_DOWN,
+                         wxEVT_AUX1_UP, wxEVT_AUX1_DCLICK ) );
+    m_buttons.push_back( new BUTTON_STATE( BUT_AUX2, wxEVT_AUX2_DOWN,
+                         wxEVT_AUX2_UP, wxEVT_AUX2_DCLICK ) );
 
     ResetState();
 }
@@ -311,10 +321,11 @@ static bool isKeyModifierOnly( int aKeyCode )
 
 static bool isMouseClick( wxEventType type )
 {
-    return type == wxEVT_LEFT_DOWN || type == wxEVT_LEFT_UP || type == wxEVT_MIDDLE_DOWN
-           || type == wxEVT_MIDDLE_UP || type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP
-           || type == wxEVT_LEFT_DCLICK || type == wxEVT_MIDDLE_DCLICK
-           || type == wxEVT_RIGHT_DCLICK;
+    return type == wxEVT_LEFT_DOWN || type == wxEVT_LEFT_UP || type == wxEVT_LEFT_DCLICK
+           || type == wxEVT_MIDDLE_DOWN || type == wxEVT_MIDDLE_UP || type == wxEVT_MIDDLE_DCLICK
+           || type == wxEVT_RIGHT_DOWN || type == wxEVT_RIGHT_UP || type == wxEVT_RIGHT_DCLICK
+           || type == wxEVT_AUX1_DOWN || type == wxEVT_AUX1_UP || type == wxEVT_AUX1_DCLICK
+           || type == wxEVT_AUX2_DOWN || type == wxEVT_AUX2_UP || type == wxEVT_AUX2_DCLICK;
 }
 
 

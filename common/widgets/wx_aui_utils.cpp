@@ -32,7 +32,10 @@ void SetAuiPaneSize( wxAuiManager& aManager, wxAuiPaneInfo& aPane, int aWidth, i
     aManager.Update();
 
     // now make it resizable again
-    aPane.MinSize( minSize.x, minSize.y );
     aPane.Resizable();
     aManager.Update();
+
+    // Note: DO NOT call m_auimgr.Update() anywhere after this; it will nuke the size
+    // back to minimum.
+    aPane.MinSize( minSize.x, minSize.y );
 }

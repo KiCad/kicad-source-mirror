@@ -28,10 +28,28 @@
 #include <tools/sch_navigate_tool.h>
 
 
-int SCH_NAVIGATE_TOOL::NavigateHierarchy( const TOOL_EVENT& aEvent )
+void SCH_NAVIGATE_TOOL::ResetHistory()
 {
-    m_frame->UpdateHierarchyNavigator( true );
-    return 0;
+    m_navHistory.clear();
+    m_navHistory.push_back( m_frame->GetCurrentSheet() );
+    m_navIndex = m_navHistory.begin();
+}
+
+
+void SCH_NAVIGATE_TOOL::CleanHistory()
+{
+    SCH_SHEET_LIST sheets = m_frame->Schematic().GetSheets();
+
+    // Search through our history, and removing any entries
+    // that the no longer point to a sheet on the schematic
+    auto entry = m_navHistory.begin();
+    while( entry != m_navHistory.end() )
+    {
+        if( std::find( sheets.begin(), sheets.end(), *entry ) != sheets.end() )
+            ++entry;
+        else
+            entry = m_navHistory.erase( entry );
+    }
 }
 
 
@@ -48,30 +66,120 @@ int SCH_NAVIGATE_TOOL::HypertextCommand( const TOOL_EVENT& aEvent )
                 {
                     if( sheet.GetPageNumber() == *aPage )
                     {
-                        m_frame->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
-                        m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
-
-                        m_frame->SetCurrentSheet( sheet );
-                        m_frame->DisplayCurrentSheet();
-
+                        changeSheet( sheet );
                         return;
                     }
                 }
             };
 
     if( *page == "HYPERTEXT_BACK" )
-    {
-        if( m_hypertextStack.size() > 0 )
-        {
-            goToPage( &m_hypertextStack.top() );
-            m_hypertextStack.pop();
-        }
-    }
+        Back( aEvent );
     else
-    {
-        m_hypertextStack.push( m_frame->GetCurrentSheet().GetPageNumber() );
         goToPage( page );
+
+    return 0;
+}
+
+
+int SCH_NAVIGATE_TOOL::Up( const TOOL_EVENT& aEvent )
+{
+    // Checks for CanGoUp()
+    LeaveSheet( aEvent );
+    return 0;
+}
+
+
+int SCH_NAVIGATE_TOOL::Forward( const TOOL_EVENT& aEvent )
+{
+    if( CanGoForward() )
+    {
+        m_navIndex++;
+
+        m_frame->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
+        m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
+
+        m_frame->SetCurrentSheet( *m_navIndex );
+        m_frame->DisplayCurrentSheet();
     }
+
+    return 0;
+}
+
+
+int SCH_NAVIGATE_TOOL::Back( const TOOL_EVENT& aEvent )
+{
+    if( CanGoBack() )
+    {
+        m_navIndex--;
+
+        m_frame->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
+        m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
+
+        m_frame->SetCurrentSheet( *m_navIndex );
+        m_frame->DisplayCurrentSheet();
+    }
+
+    return 0;
+}
+
+
+int SCH_NAVIGATE_TOOL::Previous( const TOOL_EVENT& aEvent )
+{
+    if( CanGoPrevious() )
+        changeSheet( m_frame->Schematic().GetSheets().at(
+                m_frame->GetCurrentSheet().GetVirtualPageNumber() - 2 ) );
+
+    return 0;
+}
+
+
+int SCH_NAVIGATE_TOOL::Next( const TOOL_EVENT& aEvent )
+{
+    if( CanGoNext() )
+        changeSheet( m_frame->Schematic().GetSheets().at(
+                m_frame->GetCurrentSheet().GetVirtualPageNumber() ) );
+
+    return 0;
+}
+
+
+bool SCH_NAVIGATE_TOOL::CanGoBack()
+{
+    return m_navIndex != m_navHistory.begin();
+}
+
+
+bool SCH_NAVIGATE_TOOL::CanGoForward()
+{
+    return m_navIndex != --m_navHistory.end();
+}
+
+
+bool SCH_NAVIGATE_TOOL::CanGoUp()
+{
+    return m_frame->GetCurrentSheet().Last() != &m_frame->Schematic().Root();
+}
+
+
+bool SCH_NAVIGATE_TOOL::CanGoPrevious()
+{
+    return m_frame->GetCurrentSheet().GetVirtualPageNumber() > 1;
+}
+
+
+bool SCH_NAVIGATE_TOOL::CanGoNext()
+{
+    return m_frame->GetCurrentSheet().GetVirtualPageNumber()
+           < (int) m_frame->Schematic().GetSheets().size();
+}
+
+
+int SCH_NAVIGATE_TOOL::ChangeSheet( const TOOL_EVENT& aEvent )
+{
+    SCH_SHEET_PATH* path = aEvent.Parameter<SCH_SHEET_PATH*>();
+    wxCHECK( path, 0 );
+
+    changeSheet( *path );
 
     return 0;
 }
@@ -84,13 +192,10 @@ int SCH_NAVIGATE_TOOL::EnterSheet( const TOOL_EVENT& aEvent )
 
     if( selection.GetSize() == 1 )
     {
-        SCH_SHEET* sheet = (SCH_SHEET*) selection.Front();
+        SCH_SHEET_PATH pushed = m_frame->GetCurrentSheet();
+        pushed.push_back( (SCH_SHEET*) selection.Front() );
 
-        m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-
-        m_frame->GetCurrentSheet().push_back( sheet );
-        m_frame->DisplayCurrentSheet();
+        changeSheet( pushed );
     }
 
     return 0;
@@ -99,13 +204,12 @@ int SCH_NAVIGATE_TOOL::EnterSheet( const TOOL_EVENT& aEvent )
 
 int SCH_NAVIGATE_TOOL::LeaveSheet( const TOOL_EVENT& aEvent )
 {
-    if( m_frame->GetCurrentSheet().Last() != &m_frame->Schematic().Root() )
+    if( CanGoUp() )
     {
-        m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+        SCH_SHEET_PATH popped = m_frame->GetCurrentSheet();
+        popped.pop_back();
 
-        m_frame->GetCurrentSheet().pop_back();
-        m_frame->DisplayCurrentSheet();
+        changeSheet( popped );
     }
 
     return 0;
@@ -114,8 +218,40 @@ int SCH_NAVIGATE_TOOL::LeaveSheet( const TOOL_EVENT& aEvent )
 
 void SCH_NAVIGATE_TOOL::setTransitions()
 {
+    Go( &SCH_NAVIGATE_TOOL::ChangeSheet,           EE_ACTIONS::changeSheet.MakeEvent() );
     Go( &SCH_NAVIGATE_TOOL::EnterSheet,            EE_ACTIONS::enterSheet.MakeEvent() );
     Go( &SCH_NAVIGATE_TOOL::LeaveSheet,            EE_ACTIONS::leaveSheet.MakeEvent() );
-    Go( &SCH_NAVIGATE_TOOL::NavigateHierarchy,     EE_ACTIONS::navigateHierarchy.MakeEvent() );
     Go( &SCH_NAVIGATE_TOOL::HypertextCommand,      EE_ACTIONS::hypertextCommand.MakeEvent() );
+
+    Go( &SCH_NAVIGATE_TOOL::Up,                    EE_ACTIONS::navigateUp.MakeEvent() );
+    Go( &SCH_NAVIGATE_TOOL::Forward,               EE_ACTIONS::navigateForward.MakeEvent() );
+    Go( &SCH_NAVIGATE_TOOL::Back,                  EE_ACTIONS::navigateBack.MakeEvent() );
+
+    Go( &SCH_NAVIGATE_TOOL::Previous,              EE_ACTIONS::navigatePrevious.MakeEvent() );
+    Go( &SCH_NAVIGATE_TOOL::Next,                  EE_ACTIONS::navigateNext.MakeEvent() );
+}
+
+
+void SCH_NAVIGATE_TOOL::pushToHistory( SCH_SHEET_PATH aPath )
+{
+    if( CanGoForward() )
+        m_navHistory.erase( std::next( m_navIndex ), m_navHistory.end() );
+
+    m_navHistory.push_back( aPath );
+    m_navIndex = --m_navHistory.end();
+}
+
+
+void SCH_NAVIGATE_TOOL::changeSheet( SCH_SHEET_PATH aPath )
+{
+    m_frame->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
+    m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
+
+    // Store the current zoom level into the current screen before switching
+    m_frame->GetScreen()->m_LastZoomLevel = m_frame->GetCanvas()->GetView()->GetScale();
+
+    pushToHistory( aPath );
+
+    m_frame->SetCurrentSheet( aPath );
+    m_frame->DisplayCurrentSheet();
 }

@@ -535,6 +535,14 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
             }
         }
+        else if( evt->IsMouseDown( BUT_AUX1 ) )
+        {
+            m_toolMgr->RunAction( EE_ACTIONS::navigateBack, true );
+        }
+        else if( evt->IsMouseDown( BUT_AUX2 ) )
+        {
+            m_toolMgr->RunAction( EE_ACTIONS::navigateForward, true );
+        }
         else if( evt->Category() == TC_COMMAND && evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
             m_disambiguateTimer.Stop();

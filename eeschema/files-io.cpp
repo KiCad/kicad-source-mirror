@@ -54,6 +54,7 @@
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_editor_control.h>
+#include <tools/sch_navigate_tool.h>
 #include <trace_helpers.h>
 #include <widgets/infobar.h>
 #include <wildcards_and_files_ext.h>
@@ -518,6 +519,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     UpdateHierarchyNavigator();
     UpdateTitle();
+    m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->ResetHistory();
 
     wxFileName fn = Prj().AbsolutePath( GetScreen()->GetFileName() );
 

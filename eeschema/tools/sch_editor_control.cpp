@@ -57,6 +57,7 @@
 #include <tools/ee_selection.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_editor_control.h>
+#include <tools/sch_navigate_tool.h>
 #include <drawing_sheet/ds_proxy_undo_item.h>
 #include <dialog_update_from_pcb.h>
 #include <eda_list_dialog.h>
@@ -313,13 +314,6 @@ int SCH_EDITOR_CONTROL::FindAndReplace( const TOOL_EVENT& aEvent )
 {
     m_frame->ShowFindReplaceDialog( aEvent.IsAction( &ACTIONS::findAndReplace ) );
     return UpdateFind( aEvent );
-}
-
-
-int SCH_EDITOR_CONTROL::NavigateHierarchy( const TOOL_EVENT& aEvent )
-{
-    m_frame->UpdateHierarchyNavigator( true );
-    return 0;
 }
 
 
@@ -2112,43 +2106,9 @@ int SCH_EDITOR_CONTROL::ShowBusManager( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_EDITOR_CONTROL::EnterSheet( const TOOL_EVENT& aEvent )
+int SCH_EDITOR_CONTROL::ShowHierarchy( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    const EE_SELECTION& selection = selTool->RequestSelection( EE_COLLECTOR::SheetsOnly );
-
-    if( selection.GetSize() == 1 )
-    {
-        SCH_SHEET* sheet = (SCH_SHEET*) selection.Front();
-
-        m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-
-        // Store the current zoom level into the current screen before switching
-        m_frame->GetScreen()->m_LastZoomLevel = m_frame->GetCanvas()->GetView()->GetScale();
-
-        m_frame->GetCurrentSheet().push_back( sheet );
-        m_frame->DisplayCurrentSheet();
-    }
-
-    return 0;
-}
-
-
-int SCH_EDITOR_CONTROL::LeaveSheet( const TOOL_EVENT& aEvent )
-{
-    if( m_frame->GetCurrentSheet().Last() != &m_frame->Schematic().Root() )
-    {
-        m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-
-        // Store the current zoom level into the current screen before switching
-        m_frame->GetScreen()->m_LastZoomLevel = m_frame->GetCanvas()->GetView()->GetScale();
-
-        m_frame->GetCurrentSheet().pop_back();
-        m_frame->DisplayCurrentSheet();
-    }
-
+    getEditFrame<SCH_EDIT_FRAME>()->ToggleSchematicHierarchy();
     return 0;
 }
 
@@ -2424,10 +2384,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::DrawSheetOnClipboard,  EE_ACTIONS::drawSheetOnClipboard.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::ShowBusManager,        EE_ACTIONS::showBusManager.MakeEvent() );
-
-    Go( &SCH_EDITOR_CONTROL::EnterSheet,            EE_ACTIONS::enterSheet.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::LeaveSheet,            EE_ACTIONS::leaveSheet.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::NavigateHierarchy,     EE_ACTIONS::navigateHierarchy.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ShowHierarchy,         EE_ACTIONS::showHierarchy.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::ToggleHiddenPins,      EE_ACTIONS::toggleHiddenPins.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleHiddenFields,    EE_ACTIONS::toggleHiddenFields.MakeEvent() );
