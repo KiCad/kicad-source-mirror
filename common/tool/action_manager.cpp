@@ -247,16 +247,18 @@ int ACTION_MANAGER::GetHotKey( const TOOL_ACTION& aAction ) const
 
 void ACTION_MANAGER::UpdateHotKeys( bool aFullUpdate )
 {
-    std::map<std::string, int> legacyHotKeyMap;
-    std::map<std::string, int> userHotKeyMap;
+    static std::map<std::string, int> legacyHotKeyMap;
+    static std::map<std::string, int> userHotKeyMap;
+    static bool                       mapsInitialized = false;
 
     m_actionHotKeys.clear();
     m_hotkeys.clear();
 
-    if( aFullUpdate && m_toolMgr->GetToolHolder() )
+    if( aFullUpdate && !mapsInitialized && m_toolMgr->GetToolHolder() )
     {
         ReadLegacyHotkeyConfig( m_toolMgr->GetToolHolder()->ConfigBaseName(), legacyHotKeyMap );
         ReadHotKeyConfig( wxEmptyString, userHotKeyMap );
+        mapsInitialized = true;
     }
 
     for( const auto& ii : m_actionNameIndex )
@@ -277,16 +279,17 @@ void ACTION_MANAGER::UpdateHotKeys( bool aFullUpdate )
 }
 
 
-int ACTION_MANAGER::processHotKey( TOOL_ACTION* aAction, std::map<std::string, int> aLegacyMap,
-                                   std::map<std::string, int> aHotKeyMap )
+int ACTION_MANAGER::processHotKey( TOOL_ACTION* aAction,
+                                   const std::map<std::string, int>& aLegacyMap,
+                                   const std::map<std::string, int>& aHotKeyMap )
 {
     aAction->m_hotKey = aAction->m_defaultHotKey;
 
     if( !aAction->m_legacyName.empty() && aLegacyMap.count( aAction->m_legacyName ) )
-        aAction->SetHotKey( aLegacyMap[ aAction->m_legacyName ] );
+        aAction->SetHotKey( aLegacyMap.at( aAction->m_legacyName ) );
 
     if( aHotKeyMap.count( aAction->m_name ) )
-        aAction->SetHotKey( aHotKeyMap[ aAction->m_name ] );
+        aAction->SetHotKey( aHotKeyMap.at( aAction->m_name ) );
 
     return aAction->m_hotKey;
 }
