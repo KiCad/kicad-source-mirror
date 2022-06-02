@@ -699,6 +699,10 @@ void PAD_TOOL::recombinePad( PAD* aPad )
 {
     int  maxError = board()->GetDesignSettings().m_MaxError;
 
+    // Don't leave an object in the point editor that might no longer exist after
+    // recombining the pad.
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
     auto findNext =
             [&]( PCB_LAYER_ID aLayer ) -> FP_SHAPE*
             {
@@ -822,7 +826,7 @@ void PAD_TOOL::recombinePad( PAD* aPad )
         commit.Remove( fpShape );
     }
 
-    commit.Push(_("Recombine pads") );
+    commit.Push( _( "Recombine pads" ) );
 }
 
 
