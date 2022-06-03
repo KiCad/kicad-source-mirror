@@ -82,7 +82,7 @@ class PANEL_E_SERIE_BASE : public CALCULATOR_PANEL
 
 	public:
 
-		PANEL_E_SERIE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 677,453 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_E_SERIE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 887,453 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_E_SERIE_BASE();
 
