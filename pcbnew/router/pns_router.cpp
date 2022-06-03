@@ -445,7 +445,7 @@ bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
 }
 
 
-void ROUTER::Move( const VECTOR2I& aP, ITEM* endItem )
+bool ROUTER::Move( const VECTOR2I& aP, ITEM* endItem )
 {
     if( m_logger )
         m_logger->Log( LOGGER::EVT_MOVE, aP, endItem );
@@ -453,13 +453,11 @@ void ROUTER::Move( const VECTOR2I& aP, ITEM* endItem )
     switch( m_state )
     {
     case ROUTE_TRACK:
-        movePlacing( aP, endItem );
-        break;
+        return movePlacing( aP, endItem );
 
     case DRAG_SEGMENT:
     case DRAG_COMPONENT:
-        moveDragging( aP, endItem );
-        break;
+        return moveDragging( aP, endItem );
 
     default:
         break;
@@ -467,14 +465,15 @@ void ROUTER::Move( const VECTOR2I& aP, ITEM* endItem )
 }
 
 
-void ROUTER::moveDragging( const VECTOR2I& aP, ITEM* aEndItem )
+bool ROUTER::moveDragging( const VECTOR2I& aP, ITEM* aEndItem )
 {
     m_iface->EraseView();
 
-    m_dragger->Drag( aP );
+    bool ret = m_dragger->Drag( aP );
     ITEM_SET dragged = m_dragger->Traces();
 
     updateView( m_dragger->CurrentNode(), dragged, true );
+    return ret;
 }
 
 
@@ -599,11 +598,11 @@ void ROUTER::UpdateSizes( const SIZES_SETTINGS& aSizes )
 }
 
 
-void ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
+bool ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
 {
     m_iface->EraseView();
 
-    m_placer->Move( aP, aEndItem );
+    bool ret = m_placer->Move( aP, aEndItem );
     ITEM_SET current = m_placer->Traces();
 
     for( const ITEM* item : current.CItems() )
@@ -632,6 +631,8 @@ void ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
     //ITEM_SET tmp( &current );
 
     updateView( m_placer->CurrentNode( true ), current );
+
+    return ret;
 }
 
 

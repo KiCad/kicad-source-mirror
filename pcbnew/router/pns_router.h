@@ -142,7 +142,7 @@ public:
 
     bool RoutingInProgress() const;
     bool StartRouting( const VECTOR2I& aP, ITEM* aItem, int aLayer );
-    void Move( const VECTOR2I& aP, ITEM* aItem );
+    bool Move( const VECTOR2I& aP, ITEM* aItem );
     bool FixRoute( const VECTOR2I& aP, ITEM* aItem, bool aForceFinish = false );
     void BreakSegment( ITEM *aItem, const VECTOR2I& aP );
 
@@ -211,8 +211,8 @@ public:
     const BOX2I& VisibleViewArea() const { return m_visibleViewArea; }
 
 private:
-    void movePlacing( const VECTOR2I& aP, ITEM* aItem );
-    void moveDragging( const VECTOR2I& aP, ITEM* aItem );
+    bool movePlacing( const VECTOR2I& aP, ITEM* aItem );
+    bool moveDragging( const VECTOR2I& aP, ITEM* aItem );
 
     void updateView( NODE* aNode, ITEM_SET& aCurrent, bool aDragging = false );
 
