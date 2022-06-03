@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-31 10:31-0700\n"
-"PO-Revision-Date: 2022-06-03 18:31+0000\n"
+"PO-Revision-Date: 2022-06-03 23:04+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -4032,9 +4032,8 @@ msgid "Schematic Editor"
 msgstr "Editor de esquemas"
 
 #: common/eda_base_frame.cpp:1022
-#, fuzzy
 msgid "Annotation Options"
-msgstr "Anotaciones"
+msgstr "Opciones de anotación"
 
 #: common/eda_base_frame.cpp:1024
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
@@ -7768,9 +7767,8 @@ msgid "Selection"
 msgstr "Selección"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
-#, fuzzy
 msgid "Recurse into subsheets"
-msgstr "Hoja actual?"
+msgstr "Repetir en subhojas"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:58
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:35
@@ -12465,14 +12463,12 @@ msgid "Wire & Bus Properties"
 msgstr "Propiedades de cable y bus"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:21
-#, fuzzy
 msgid "Symbol Annotation"
-msgstr "Anotación unidad de símbolo:"
+msgstr "Anotación de símbolo"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:23
-#, fuzzy
 msgid "Automatically annotate symbols"
-msgstr "Situar campos de símbolo a&utomáticamente"
+msgstr "Anotar símbolos automáticamente"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:27
 msgid "Recursively annotate subsheets"
@@ -17625,9 +17621,8 @@ msgid "Switch to next line mode"
 msgstr "Cambiar al siguiente modo de línea"
 
 #: eeschema/tools/ee_actions.cpp:714
-#, fuzzy
 msgid "Annotate Automatically"
-msgstr "Ajustar automáticamente"
+msgstr "Anotar automáticamente"
 
 #: eeschema/tools/ee_actions.cpp:714
 msgid "Toggle automatic annotation of new parts symbols"
@@ -19525,9 +19520,8 @@ msgid "Open project directory in file explorer"
 msgstr "Abrir carpeta de proyecto en el explorador"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:52
-#, fuzzy
 msgid "Add Default Repository"
-msgstr "Añadir repositorio"
+msgstr "Añadir un repositorio por defecto"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:92
 msgid "Please enter fully qualified repository url"
@@ -25435,8 +25429,8 @@ msgid ""
 msgstr ""
 "Esta es la proporción de separación local aplicada como porcentaje entre el "
 "ancho y la altura del pad para esta huella.\n"
-"Un valor de 10 significa que el valor de la separación horizontal es el "
-"10% del ancho del pad y el valor de la separación vertical es el 10% de la "
+"Un valor de 10 significa que el valor de la separación horizontal es el 10% "
+"del ancho del pad y el valor de la separación vertical es el 10% de la "
 "altura del pad.\n"
 "Este valor puede ser sustituido por un valor local del pad.\n"
 "La separación final es la suma de este valor y el valor de separación "
@@ -25594,8 +25588,8 @@ msgid ""
 msgstr ""
 "Esta es la proporción de separación local aplicada como porcentaje entre el "
 "ancho y la altura del pad para esta huella.\n"
-"Un valor de 10 significa que el valor de la separación horizontal es el "
-"10% del ancho del pad y el valor de la separación vertical es el 10% de la "
+"Un valor de 10 significa que el valor de la separación horizontal es el 10% "
+"del ancho del pad y el valor de la separación vertical es el 10% de la "
 "altura del pad.\n"
 "La separación final es la suma de este valor y el valor de separación "
 "absoluta.\n"
@@ -26689,7 +26683,6 @@ msgid "degree"
 msgstr "grado"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:86
-#, fuzzy
 msgid "Non Copper Zone Properties"
 msgstr "Propiedades de zonas sin cobre"
 
@@ -31757,13 +31750,13 @@ msgid "Save Footprint Association File"
 msgstr "Guardar archivo de asociación de huellas"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:171
-#, fuzzy
 msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle, rounded rectangle, and circle)."
 msgstr ""
 "El archivo contiene formas de pads que no son soportadas por el exportador "
-"Hyperlynx (las formas soportadas son óvalo, rectángulo, y círculo)."
+"Hyperlynx (las formas soportadas son óvalo, rectángulo, rectángulo "
+"redondeado y círculo)."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:175
 msgid "They have been exported as oval pads."
