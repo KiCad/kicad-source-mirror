@@ -35,6 +35,39 @@ int sgn( T aVal )
     return ( T( 0 ) < aVal ) - ( aVal < T( 0 ) );
 }
 
+template <typename T>
+constexpr T sqrt_helper(T x, T lo, T hi)
+{
+  if (lo == hi)
+    return lo;
+
+  const T mid = (lo + hi + 1) / 2;
+  if (x / mid < mid)
+    return sqrt_helper<T>(x, lo, mid - 1);
+  else
+    return sqrt_helper(x, mid, hi);
+}
+
+template <typename T>
+constexpr T ct_sqrt(T x)
+{
+  return sqrt_helper<T>(x, 0, x / 2 + 1);
+}
+
+template <typename T>
+T isqrt(T x)
+{
+  T r = (T) std::sqrt((double) x);
+  T sqrt_max = ct_sqrt(std::numeric_limits<T>::max());
+
+  while (r < sqrt_max && r * r < x)
+    r++;
+  while (r > sqrt_max || r * r > x)
+    r--;
+
+  return r;
+}
+
 
 SEG::ecoord SEG::SquaredDistance( const SEG& aSeg ) const
 {
@@ -207,7 +240,7 @@ bool SEG::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
     if( dist_sq == 0 || dist_sq < (ecoord) aClearance * aClearance )
     {
         if( aActual )
-            *aActual = sqrt( dist_sq );
+            *aActual = isqrt( dist_sq );
 
         return true;
     }
@@ -282,13 +315,13 @@ VECTOR2I SEG::LineProject( const VECTOR2I& aP ) const
 
 int SEG::Distance( const SEG& aSeg ) const
 {
-    return KiROUND( sqrt( SquaredDistance( aSeg ) ) );
+    return isqrt( SquaredDistance( aSeg ) );
 }
 
 
 int SEG::Distance( const VECTOR2I& aP ) const
 {
-    return KiROUND( sqrt( SquaredDistance( aP ) ) );
+    return isqrt( SquaredDistance( aP ) );
 }
 
 
@@ -297,8 +330,16 @@ int SEG::LineDistance( const VECTOR2I& aP, bool aDetermineSide ) const
     ecoord p = ecoord{ A.y } - B.y;
     ecoord q = ecoord{ B.x } - A.x;
     ecoord r = -p * A.x - q * A.y;
+    ecoord l = p * p + q * q;
+    ecoord det = p * aP.x + q * aP.y + r;
+    ecoord dist_sq = 0;
 
-    ecoord dist = KiROUND( ( p * aP.x + q * aP.y + r ) / sqrt( p * p + q * q ) );
+    if( l > 0 )
+    {
+        dist_sq  = rescale( det, det, l );
+    }
+
+    ecoord dist = isqrt( dist_sq );
 
     return aDetermineSide ? dist : std::abs( dist );
 }
