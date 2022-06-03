@@ -108,24 +108,30 @@ public:
             {
                 return false;
             }
-            else if( m_linkedItems.Size() == 3
-                        && m_linkedItems.Count( SEGMENT_T | ARC_T ) == 2
-                        && m_linkedItems.Count( VIA_T ) == 1 )
+            // There will be multiple VVIAs on joints between two locked segments, because we
+            // naively add a VVIA to each end of a locked segment.
+            else if( ( m_linkedItems.Size() - m_linkedItems.Count( SEGMENT_T | ARC_T ) )
+                     == m_linkedItems.Count( VIA_T ) )
             {
                 const VIA* via = nullptr;
+                bool       hasNonVirtualVia = false;
 
                 for( const ITEM* item : m_linkedItems.CItems() )
                 {
                     if( item->Kind() == VIA_T )
                     {
                         via = static_cast<const VIA*>( item );
-                        break;
+
+                        hasNonVirtualVia = !via->IsVirtual();
+
+                        if( hasNonVirtualVia )
+                            break;
                     }
                 }
 
                 assert( via );
 
-                if( !via || !via->IsVirtual() )
+                if( !via || hasNonVirtualVia )
                     return false;
             }
             else

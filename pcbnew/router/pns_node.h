@@ -79,9 +79,11 @@ class RULE_RESOLVER
 public:
     virtual ~RULE_RESOLVER() {}
 
-    virtual int Clearance( const ITEM* aA, const ITEM* aB ) = 0;
-    virtual int HoleClearance( const ITEM* aA, const ITEM* aB ) = 0;
-    virtual int HoleToHoleClearance( const ITEM* aA, const ITEM* aB ) = 0;
+    virtual int Clearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilon = true ) = 0;
+    virtual int HoleClearance( const ITEM* aA, const ITEM* aB,
+                               bool aUseClearanceEpsilon = true ) = 0;
+    virtual int HoleToHoleClearance( const ITEM* aA, const ITEM* aB,
+                                     bool aUseClearanceEpsilon = true ) = 0;
 
     virtual int DpCoupledNet( int aNet ) = 0;
     virtual int DpNetPolarity( int aNet ) = 0;
@@ -154,9 +156,10 @@ public:
     ~NODE();
 
     ///< Return the expected clearance between items a and b.
-    int GetClearance( const ITEM* aA, const ITEM* aB ) const;
-    int GetHoleClearance( const ITEM* aA, const ITEM* aB ) const;
-    int GetHoleToHoleClearance( const ITEM* aA, const ITEM* aB ) const;
+    int GetClearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilon = true ) const;
+    int GetHoleClearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilon = true ) const;
+    int GetHoleToHoleClearance( const ITEM* aA, const ITEM* aB,
+                                bool aUseClearanceEpsilon = true ) const;
 
     ///< Return the pre-set worst case clearance between any pair of items.
     int GetMaxClearance() const
@@ -214,10 +217,13 @@ public:
      *
      * @param aLine the item to find collisions with
      * @param aKindMask mask of obstacle types to take into account
+     * @param aRestrictedSet is an optional set of items that should be considered as obstacles
+     * @param aUseClearanceEpsilon determines if the epsilon is subtracted from the hull size
      * @return the obstacle, if found, otherwise empty.
      */
     OPT_OBSTACLE NearestObstacle( const LINE* aLine, int aKindMask = ITEM::ANY_T,
-                                  const std::set<ITEM*>* aRestrictedSet = nullptr );
+                                  const std::set<ITEM*>* aRestrictedSet = nullptr,
+                                  bool aUseClearanceEpsilon = true );
 
     /**
      * Check if the item collides with anything else in the world, and if found, returns the

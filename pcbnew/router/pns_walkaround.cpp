@@ -41,7 +41,7 @@ void WALKAROUND::start( const LINE& aInitialPath )
 NODE::OPT_OBSTACLE WALKAROUND::nearestObstacle( const LINE& aPath )
 {
     NODE::OPT_OBSTACLE obs = m_world->NearestObstacle(
-            &aPath, m_itemMask, m_restrictedSet.empty() ? nullptr : &m_restrictedSet );
+            &aPath, m_itemMask, m_restrictedSet.empty() ? nullptr : &m_restrictedSet, false );
 
     if( m_restrictedSet.empty() )
         return obs;
