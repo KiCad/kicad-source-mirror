@@ -50,6 +50,9 @@ using namespace std::placeholders;
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_grid_helper.h>
 
+#include <project.h>
+#include <project/project_file.h>
+
 #include "router_tool.h"
 #include "pns_segment.h"
 #include "pns_router.h"
@@ -512,10 +515,12 @@ void ROUTER_TOOL::saveRouterDebugLog()
 
     wxString cwd = wxGetCwd();
 
-    wxFileName fname_log( cwd );
+    wxFileName fname_log;
+    fname_log.SetPath( cwd );
     fname_log.SetName( "pns.log" );
 
     wxFileName fname_dump( cwd );
+    fname_dump.SetPath( cwd );
     fname_dump.SetName( "pns.dump" );
 
     wxString msg = wxString::Format( _( "Event file: %s\nBoard dump: %s" ), fname_log.GetFullPath(), fname_log.GetFullPath() );
@@ -551,6 +556,9 @@ void ROUTER_TOOL::saveRouterDebugLog()
     PCB_PLUGIN  pcb_io;
 
     pcb_io.Save( fname_dump.GetFullPath(), m_iface->GetBoard(), nullptr );
+
+    auto prj = m_iface->GetBoard()->GetProject();
+    prj->GetProjectFile().SaveAs( cwd, "pns" );
 }
 
 
