@@ -66,7 +66,11 @@ SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         m_lastTextBold( false ),
         m_lastTextItalic( false ),
         m_lastNetClassDirectiveItalic( true ),
+        m_lastTextAngle( ANGLE_0 ),
+        m_lastTextJust( GR_TEXT_H_ALIGN_LEFT ),
         m_lastFillStyle( FILL_T::NO_FILL ),
+        m_lastFillColor( COLOR4D::UNSPECIFIED ),
+        m_lastStroke( 0, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_mruPath( wxEmptyString ),
         m_inPlaceSymbol( false ),
         m_inDrawShape( false ),
@@ -1398,9 +1402,11 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
-    SCH_SHAPE* item = nullptr;
-    bool       isTextBox = aEvent.IsAction( &EE_ACTIONS::drawTextBox );
-    SHAPE_T    type = aEvent.Parameter<SHAPE_T>();
+    SCHEMATIC*          schematic = getModel<SCHEMATIC>();
+    SCHEMATIC_SETTINGS& sch_settings = schematic->Settings();
+    SCH_SHAPE*          item = nullptr;
+    bool                isTextBox = aEvent.IsAction( &EE_ACTIONS::drawTextBox );
+    SHAPE_T             type = aEvent.Parameter<SHAPE_T>();
 
     if( m_inDrawShape )
         return 0;
@@ -1491,9 +1497,25 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
             if( isTextBox )
-                item = new SCH_TEXTBOX( 0, m_lastFillStyle );
+            {
+                SCH_TEXTBOX* textbox = new SCH_TEXTBOX( 0, m_lastFillStyle );
+
+                textbox->SetBold( m_lastTextBold );
+                textbox->SetItalic( m_lastTextItalic );
+                textbox->SetTextSize( wxSize( sch_settings.m_DefaultTextSize,
+                                              sch_settings.m_DefaultTextSize ) );
+                textbox->SetTextAngle( m_lastTextAngle );
+                textbox->SetHorizJustify( m_lastTextJust );
+
+                item = textbox;
+            }
             else
+            {
                 item = new SCH_SHAPE( type, 0, m_lastFillStyle );
+            }
+
+            item->SetStroke( m_lastStroke );
+            item->SetFillColor( m_lastFillColor );
 
             item->SetFlags( IS_NEW );
             item->BeginEdit( (wxPoint) cursorPos );
@@ -1515,14 +1537,24 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
                 if( isTextBox )
                 {
-                    DIALOG_TEXT_PROPERTIES dlg( m_frame, item );
+                    SCH_TEXTBOX*           textbox = static_cast<SCH_TEXTBOX*>( item );
+                    DIALOG_TEXT_PROPERTIES dlg( m_frame, textbox );
 
                     if( dlg.ShowQuasiModal() != wxID_OK )
                     {
                         cleanup();
                         continue;
                     }
+
+                    m_lastTextBold = textbox->IsBold();
+                    m_lastTextItalic = textbox->IsItalic();
+                    m_lastTextAngle = textbox->GetTextAngle();
+                    m_lastTextJust = textbox->GetHorizJustify();
                 }
+
+                m_lastStroke = item->GetStroke();
+                m_lastFillStyle = item->GetFillMode();
+                m_lastFillColor = item->GetFillColor();
 
                 m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), item, false );
                 m_selectionTool->AddItemToSel( item );
