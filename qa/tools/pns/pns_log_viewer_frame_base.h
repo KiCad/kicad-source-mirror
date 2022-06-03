@@ -51,6 +51,8 @@ class PNS_LOG_VIEWER_FRAME_BASE : public wxFrame
 		wxTextCtrl* m_filterString;
 		wxCheckBox* m_chkShowRPItems;
 		wxCheckBox* m_chkThinLines;
+		wxCheckBox* m_showVertices;
+		wxStaticText* m_algoStatus;
 		wxBoxSizer* m_viewSizer;
 		wxTreeListCtrl* m_itemList;
 		wxStatusBar* m_statusBar;
@@ -63,8 +65,10 @@ class PNS_LOG_VIEWER_FRAME_BASE : public wxFrame
 		virtual void onBtnRewindRight( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRewindCountText2( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRewindCountText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onFilterText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onShowRPIsChecked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onShowThinLinesChecked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onShowVerticesChecked( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

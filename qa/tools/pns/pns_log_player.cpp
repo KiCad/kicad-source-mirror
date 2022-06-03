@@ -136,8 +136,8 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
             m_debugDecorator->NewStage( "move", 0, PNSLOGINFO );
             m_viewTracker->SetStage( m_debugDecorator->GetStageCount() - 1 );
             m_debugDecorator->Message( wxString::Format( "move (%d, %d)", evt.p.x, evt.p.y ) );
-            printf( "  move -> (%d, %d)\n", evt.p.x, evt.p.y );
-            m_router->Move( evt.p, ritem );
+            bool ret = m_router->Move( evt.p, ritem );
+            m_debugDecorator->SetCurrentStageStatus( ret );
             break;
         }
 

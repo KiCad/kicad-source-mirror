@@ -47,9 +47,10 @@
 class WX_SHAPE_TREE_ITEM_DATA : public wxClientData
 {
 public:
-    WX_SHAPE_TREE_ITEM_DATA( PNS_DEBUG_SHAPE* item ) : m_item( item ){};
+    WX_SHAPE_TREE_ITEM_DATA( PNS_DEBUG_SHAPE* item, int level = 0 ) : m_item( item ), m_level( level ) {};
 
     PNS_DEBUG_SHAPE* m_item;
+    int m_level;
 };
 
 
@@ -64,8 +65,8 @@ void PNS_LOG_VIEWER_OVERLAY::AnnotatedPolyline( const SHAPE_LINE_CHAIN& aL, std:
 {
     Polyline( aL );
 
-    if( aShowVertexNumbers)
-        m_labelMgr->Add( aL, GetStrokeColor() );
+    if( name.length() > 0 )
+        m_labelMgr->Add( aL.CPoint(-1), name, GetStrokeColor() );
 }
 
 
@@ -74,8 +75,8 @@ void PNS_LOG_VIEWER_OVERLAY::AnnotatedPoint( const VECTOR2I p, int size, std::st
     Line( p + VECTOR2D( size, size ), p - VECTOR2D( size, size ) );
     Line( p + VECTOR2D( -size, size ), p - VECTOR2D( -size, size ) );
 
-    //if( aShowVertexNumbers)
-      //  m_labelMgr->Add( aL, GetStrokeColor() );
+    if( name.length() > 0 )
+        m_labelMgr->Add( p, name, GetStrokeColor() );
 }
 
 
@@ -157,6 +158,8 @@ PNS_LOG_VIEWER_FRAME::PNS_LOG_VIEWER_FRAME( wxFrame* frame ) : PNS_LOG_VIEWER_FR
     m_itemList->AppendColumn( "File" );
     m_itemList->AppendColumn( "Method" );
     m_itemList->AppendColumn( "Line" );
+    m_itemList->AppendColumn( "VCount" );
+    m_itemList->AppendColumn( "Non-45" );
 
     m_overlay.reset( new PNS_LOG_VIEWER_OVERLAY ( m_galPanel->GetGAL() ) );
     m_galPanel->GetView()->Add( m_overlay.get() );
@@ -212,7 +215,7 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
     auto drawShapes = [&]( PNS_DEBUG_SHAPE* ent ) -> bool
     {
         bool isEnabled = ent->IsVisible();
-        bool isSelected = false;
+        bool isSelected = ent->m_selected;
 
         if( !isEnabled )
             return true;
@@ -261,7 +264,7 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
             case SH_LINE_CHAIN:
             {
                 auto lc = static_cast<SHAPE_LINE_CHAIN*>( sh );
-                m_overlay->AnnotatedPolyline( *lc, ent->m_name.ToStdString(), ent->m_hasLabels && isSelected );
+                m_overlay->AnnotatedPolyline( *lc, ent->m_name.ToStdString(), m_showVertices || ( ent->m_hasLabels && isSelected ) );
 
                 break;
 
@@ -364,6 +367,13 @@ void PNS_LOG_VIEWER_FRAME::onShowRPIsChecked( wxCommandEvent& event )
     updatePnsPreviewItems( m_rewindIter );
 }
 
+void PNS_LOG_VIEWER_FRAME::onShowVerticesChecked( wxCommandEvent& event )
+{
+    m_showVertices = event.GetInt();
+    drawLoggedItems( m_rewindIter );
+    updatePnsPreviewItems( m_rewindIter );
+}
+
 
 void PNS_LOG_VIEWER_FRAME::onRewindScroll( wxScrollEvent& event )
 {
@@ -408,6 +418,12 @@ void PNS_LOG_VIEWER_FRAME::onBtnRewindRight( wxCommandEvent& event )
         sprintf( str, "%d", m_rewindIter );
         m_rewindPos->SetValue( str );
     }
+}
+
+void PNS_LOG_VIEWER_FRAME::onFilterText( wxCommandEvent& event )
+{
+    m_searchString = m_filterString->GetValue();
+    updateDumpPanel( m_rewindIter );
 }
 
 
@@ -518,6 +534,81 @@ void PNS_LOG_VIEWER_FRAME::onListSelect( wxCommandEvent& event )
 }
 
 
+
+static bool isLine45Degree( const SHAPE_LINE_CHAIN* lc )
+{
+    for( int i = 0; i < lc->SegmentCount(); i++ )
+    {
+        const SEG& s = lc->CSegment( i );
+
+        if( lc->IsArcSegment( i ) )
+            continue;
+
+        if( s.Length() < 10 )
+            continue;
+
+        double angle = 180.0 / M_PI *
+                       atan2( (double) s.B.y - (double) s.A.y,
+                              (double) s.B.x - (double) s.A.x );
+
+        if( angle < 0 )
+            angle += 360.0;
+
+        double angle_a = fabs( fmod( angle, 45.0 ) );
+
+        if( angle_a > 1.0 && angle_a < 44.0 )
+            return false;
+    }
+
+    return true;
+}
+
+
+bool PNS_LOG_VIEWER_FRAME::filterStringMatches( PNS_DEBUG_SHAPE* ent )
+{
+    
+    std::set<PNS_DEBUG_SHAPE*> processed;
+    std::deque<PNS_DEBUG_SHAPE*> q;
+
+    q.push_back(ent);
+    int total = 0;
+    while ( q.size() > 0 )
+    {
+        PNS_DEBUG_SHAPE* top = q.front();
+
+        q.pop_front();
+
+        for ( auto chld : top->m_children )
+        {
+            bool match = m_searchString.Length() == 0 ? true : false;
+            //printf("CHK %s\n", (const char *) chld->m_name.c_str() );
+            chld->m_filterMatch = false;
+            if ( chld->m_name.Contains( m_searchString ) )
+                match = true;
+            if ( chld->m_msg.Contains( m_searchString ) )
+                match = true;
+
+            if( match )
+            {
+                for ( PNS_DEBUG_SHAPE *cur = chld; cur; cur = cur->m_parent )
+                    cur->m_filterMatch = match;
+            }
+
+            if( processed.find(chld) == processed.end() )
+            {
+                q.push_back( chld );
+                processed.insert( chld );
+            }
+        }
+        total++;
+    }
+
+    printf("total: %d\n", total );
+
+    return false;
+}
+
+
 void PNS_LOG_VIEWER_FRAME::buildListTree( wxTreeListItem item,
                                           PNS_DEBUG_SHAPE* ent, int depth )
 {
@@ -533,7 +624,8 @@ void PNS_LOG_VIEWER_FRAME::buildListTree( wxTreeListItem item,
 
     wxTreeListItem ritem;
 
-    printf("depth %d\n", depth );
+    if( !ent->m_filterMatch )
+        return;
 
     if( ent->m_msg.length() )
     {
@@ -560,7 +652,35 @@ void PNS_LOG_VIEWER_FRAME::buildListTree( wxTreeListItem item,
     m_itemList->SetItemText( ritem, 3, ent->m_srcLoc.funcName );
     m_itemList->SetItemText( ritem, 4, wxString::Format("%d", ent->m_srcLoc.line ) );
 
-    m_itemList->SetItemData( ritem, new WX_SHAPE_TREE_ITEM_DATA( ent ) );
+    int  totalVC = 0, totalVCSimplified = 0;
+    bool is45Degree = true;
+
+    for( SHAPE* sh : ent->m_shapes )
+    {
+        if( sh->Type() == SH_LINE_CHAIN )
+        {
+            auto lc = static_cast<SHAPE_LINE_CHAIN*>( sh );
+
+            totalVC += lc->PointCount();
+
+            SHAPE_LINE_CHAIN simp(*lc);
+
+            simp.Simplify();
+
+            totalVCSimplified += simp.PointCount();
+
+            if( !isLine45Degree( lc ) )
+                is45Degree = false;
+        }
+    }
+
+    if( totalVC > 0 )
+        m_itemList->SetItemText( ritem, 5, wxString::Format( "%d [%d]", totalVC, totalVCSimplified ) );
+
+    if( !is45Degree )
+        m_itemList->SetItemText( ritem, 6, wxT("") );
+
+    m_itemList->SetItemData( ritem, new WX_SHAPE_TREE_ITEM_DATA( ent, depth ) );
 
     if( !ent->m_children.size() )
         return;
@@ -572,7 +692,7 @@ void PNS_LOG_VIEWER_FRAME::buildListTree( wxTreeListItem item,
 }
 
 
-static void expandAllChildren( wxTreeListCtrl* tree, int maxLevel = 0 )
+static void expandAllChildren( wxTreeListCtrl* tree, int maxLevel = -1 )
 {
     wxTreeListItem child = tree->GetFirstItem ();
 
@@ -581,7 +701,7 @@ static void expandAllChildren( wxTreeListCtrl* tree, int maxLevel = 0 )
         WX_SHAPE_TREE_ITEM_DATA* idata =
                 static_cast<WX_SHAPE_TREE_ITEM_DATA*>( tree->GetItemData( child ) );
 
-        if( idata->m_item->m_level <= maxLevel )
+        if( maxLevel < 0 || idata->m_level <= maxLevel )
             tree->Expand ( child );
         else
             tree->Collapse ( child );
@@ -621,13 +741,26 @@ void PNS_LOG_VIEWER_FRAME::updateDumpPanel( int iter )
         iter = count - 1;
 
     auto st = dbgd->GetStage( iter );
+
+    if( st->m_status )
+    {
+        m_algoStatus->SetLabel("OK");
+        m_algoStatus->SetForegroundColour( wxColor(*wxGREEN));
+    }
+    else
+    {
+        m_algoStatus->SetLabel("FAIL");
+        m_algoStatus->SetForegroundColour( wxColor(*wxRED));
+    }
+
     auto rootItem = m_itemList->GetRootItem();
 
     m_itemList->DeleteAllItems();
+    filterStringMatches( st->m_entries );
     buildListTree( rootItem, st->m_entries );
     m_itemList->CheckItemRecursively( rootItem, wxCHK_UNCHECKED );
 
-    expandAllChildren( m_itemList );
+    expandAllChildren( m_itemList, 0 );
 
     m_itemList->Refresh();
 }

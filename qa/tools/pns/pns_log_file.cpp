@@ -64,9 +64,21 @@ PNS_LOG_FILE::PNS_LOG_FILE()
 }
 
 
-bool PNS_LOG_FILE::Load( const std::string& logName, const std::string boardName )
+bool PNS_LOG_FILE::Load( const wxFileName& logFileName )
 {
-    FILE* f = fopen( logName.c_str(), "rb" );
+    wxFileName fname_log( logFileName );
+    fname_log.SetExt( wxT( "log" ) );
+
+    wxFileName fname_dump( logFileName );
+    fname_dump.SetExt( wxT( "dump" ) );
+
+    wxFileName fname_project( logFileName );
+    fname_project.SetExt( wxT( "kicad_pro" ) );
+    fname_project.MakeAbsolute();
+
+    FILE* f = fopen( fname_log.GetFullPath().c_str(), "rb" );
+
+    printf("Loading dump from '%s'\n", (const char*) fname_log.GetFullPath().c_str() );
 
     if( !f )
         return false;
@@ -101,10 +113,15 @@ bool PNS_LOG_FILE::Load( const std::string& logName, const std::string boardName
 
     fclose( f );
 
+    
+    m_settingsMgr.reset( new SETTINGS_MANAGER ( true ) );
+    m_settingsMgr->LoadProject( fname_project.GetFullPath() );
+
     try
     {
         PCB_PLUGIN io;
-        m_board.reset( io.Load( boardName.c_str(), nullptr, nullptr ) );
+        m_board.reset( io.Load( fname_dump.GetFullPath(), nullptr, nullptr ) );
+        m_board->SetProject( m_settingsMgr->GetProject( fname_project.GetFullPath() ) );
 
         std::shared_ptr<DRC_ENGINE> drcEngine( new DRC_ENGINE );
 
@@ -112,6 +129,8 @@ bool PNS_LOG_FILE::Load( const std::string& logName, const std::string boardName
         BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
         bds.m_DRCEngine = drcEngine;
+
+        m_board->SynchronizeNetsAndNetClasses();
 
         drcEngine->SetBoard( m_board.get() );
         drcEngine->SetDesignSettings( &bds );

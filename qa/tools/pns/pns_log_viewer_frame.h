@@ -63,6 +63,7 @@ private:
     void             syncModel();
     PNS_DEBUG_STAGE* getCurrentStage();
     void             updatePnsPreviewItems( int iter );
+    bool             filterStringMatches( PNS_DEBUG_SHAPE* ent );
 
     virtual void onReload( wxCommandEvent& event ) override;
     virtual void onExit( wxCommandEvent& event ) override;
@@ -75,6 +76,8 @@ private:
     virtual void onListChecked( wxCommandEvent& event );
     virtual void onShowThinLinesChecked( wxCommandEvent& event ) override;
     virtual void onShowRPIsChecked( wxCommandEvent& event ) override;
+    virtual void onShowVerticesChecked( wxCommandEvent& event ) override;
+    virtual void onFilterText( wxCommandEvent& event ) override;
 
     std::shared_ptr<PNS_LOG_VIEWER_OVERLAY> m_overlay;
     std::shared_ptr<PNS_LOG_FILE>           m_logFile;
@@ -85,6 +88,8 @@ private:
 
     bool m_showThinLines = true;
     bool m_showRPIs = true;
+    bool m_showVertices = false;
+    wxString m_searchString;
 };
 
 class LABEL_MANAGER;

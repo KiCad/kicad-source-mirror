@@ -31,6 +31,8 @@
 #include <memory>
 #include <vector>
 
+#include <wx/filename.h>
+
 #include <kiid.h>
 #include <math/vector2d.h>
 #include <router/pns_logger.h>
@@ -39,6 +41,8 @@
 
 #include <pcbnew/board.h>
 #include <pcbnew/board_connected_item.h>
+
+#include <settings/settings_manager.h>
 
 class PNS_LOG_FILE
 {
@@ -55,7 +59,7 @@ public:
     };
 
     // Loads a P&S event log and the associated board file. These two always go together.
-    bool Load( const std::string& logFileName, const std::string boardFileName );
+    bool Load( const wxFileName& logFileName );
 
     BOARD_CONNECTED_ITEM* ItemById( const EVENT_ENTRY& evt );
 
@@ -67,6 +71,7 @@ public:
     PNS::ROUTING_SETTINGS* GetRoutingSettings() const { return m_routerSettings.get(); }
 
 private:
+    std::shared_ptr<SETTINGS_MANAGER>      m_settingsMgr;
     std::unique_ptr<PNS::ROUTING_SETTINGS> m_routerSettings;
     std::vector<EVENT_ENTRY>               m_events;
     std::shared_ptr<BOARD>                 m_board;

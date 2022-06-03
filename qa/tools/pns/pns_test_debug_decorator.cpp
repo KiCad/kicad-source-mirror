@@ -101,6 +101,7 @@ PNS_DEBUG_STAGE::PNS_DEBUG_STAGE()
     m_name = "<unknown>";
     m_iter = 0;
     m_entries = new PNS_DEBUG_SHAPE();
+    m_status = false;
 }
 
 PNS_DEBUG_STAGE::~PNS_DEBUG_STAGE()
@@ -252,7 +253,13 @@ void PNS_TEST_DEBUG_DECORATOR::NewStage( const wxString& name, int iter,
     m_activeEntry = m_stages.back()->m_entries;
 }
 
+void PNS_TEST_DEBUG_DECORATOR::SetCurrentStageStatus( bool stat )
+{
+    if( m_stages.empty() )
+        return;
 
+    m_stages.back()->m_status = stat;
+}
 
 BOX2I PNS_TEST_DEBUG_DECORATOR::GetStageExtents( int stage ) const
 {

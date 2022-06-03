@@ -78,8 +78,9 @@ void PNS_LOG_VIEWER_OVERLAY::AnnotatedPoint( const VECTOR2I p, int size, std::st
     Line( p + VECTOR2D( size, size ), p - VECTOR2D( size, size ) );
     Line( p + VECTOR2D( -size, size ), p - VECTOR2D( -size, size ) );
 
-    //if( aShowVertexNumbers)
-      //  m_labelMgr->Add( aL, GetStrokeColor() );
+    if( name.length() > 0 )
+        m_labelMgr->Add( p, name, GetStrokeColor() );
+    
 }
 
 
@@ -627,7 +628,7 @@ void PNS_LOG_VIEWER_FRAME::updateDumpPanel( int iter )
     buildListTree( rootItem, st->m_entries );
     m_itemList->CheckItemRecursively( rootItem, wxCHK_UNCHECKED );
 
-    expandAllChildren( m_itemList );
+    collapseAllChildren( m_itemList );
 
     m_itemList->Refresh();
 }

@@ -51,6 +51,7 @@ public:
     PNS::DEBUG_DECORATOR::SRC_LOCATION_INFO m_srcLoc;
     bool                                    m_visible;
     bool                                    m_selected;
+    bool                                    m_filterMatch;
     int                                     m_level;
 };
 
@@ -62,6 +63,7 @@ struct PNS_DEBUG_STAGE
     wxString         m_name;
     int              m_iter;
     PNS_DEBUG_SHAPE* m_entries;
+    bool             m_status;
 };
 
 
@@ -100,6 +102,8 @@ public:
     PNS_DEBUG_STAGE* GetStage( int index ) { return m_stages[index]; }
 
     BOX2I GetStageExtents( int stage ) const;
+
+    void SetCurrentStageStatus( bool stat );
 
 private:
     void addEntry( PNS_DEBUG_SHAPE* ent );
