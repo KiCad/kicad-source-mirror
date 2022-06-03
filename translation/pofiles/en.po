@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 10:31-0700\n"
+"POT-Creation-Date: 2022-06-03 16:53-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -8397,9 +8397,6 @@ msgstr "Dialog Preferences"
 msgid "Show footprint previews in Symbol Chooser"
 msgstr "Show footprint previews in Symbol Chooser"
 
-msgid "Keep hierarchy navigator open"
-msgstr "Keep hierarchy navigator open"
-
 msgid "Annotations"
 msgstr "Annotations"
 
@@ -9153,9 +9150,6 @@ msgstr "Alias of"
 msgid "Unknown"
 msgstr "Unknown"
 
-msgid "Navigator"
-msgstr "Navigator"
-
 msgid "Root"
 msgstr "Root"
 
@@ -9471,6 +9465,9 @@ msgstr "The following libraries were not found:"
 
 msgid "KiCad Schematic Editor"
 msgstr "KiCad Schematic Editor"
+
+msgid "Schematic Hierarchy"
+msgstr "Schematic Hierarchy"
 
 msgid "New schematic file is unsaved"
 msgstr "New schematic file is unsaved"
@@ -12046,11 +12043,8 @@ msgstr "Lines drawn at any angle"
 msgid "Lines drawn horizontally and vertically"
 msgstr "Lines drawn horizontally and vertically"
 
-msgid "Lines drawn horizontally and vertically, with a 45 degree angle end"
-msgstr "Lines drawn horizontally and vertically, with a 45 degree angle end"
-
-msgid "Lines drawn horizontally and vertically, with a 45 degree angle start"
-msgstr "Lines drawn horizontally and vertically, with a 45 degree angle start"
+msgid "Lines drawn horizontally, vertically, and at a 45 degree angle"
+msgstr "Lines drawn horizontally, vertically, and at a 45 degree angle"
 
 msgid "Switch to next line mode"
 msgstr "Switch to next line mode"
@@ -12076,6 +12070,9 @@ msgstr "Show the Python scripting console"
 msgid "Enter Sheet"
 msgstr "Enter Sheet"
 
+msgid "Change to provided sheet's contents in the schematic editor"
+msgstr "Change to provided sheet's contents in the schematic editor"
+
 msgid "Display the selected sheet's contents in the schematic editor"
 msgstr "Display the selected sheet's contents in the schematic editor"
 
@@ -12084,6 +12081,36 @@ msgstr "Leave Sheet"
 
 msgid "Display the parent sheet in the schematic editor"
 msgstr "Display the parent sheet in the schematic editor"
+
+msgid "Navigate Up"
+msgstr "Navigate Up"
+
+msgid "Navigate up one sheet in the hierarchy"
+msgstr "Navigate up one sheet in the hierarchy"
+
+msgid "Navigate Back"
+msgstr "Navigate Back"
+
+msgid "Move forward in sheet navigation history"
+msgstr "Move forward in sheet navigation history"
+
+msgid "Navigate Forward"
+msgstr "Navigate Forward"
+
+msgid "Move backward in sheet navigation history"
+msgstr "Move backward in sheet navigation history"
+
+msgid "Previous Sheet"
+msgstr "Previous Sheet"
+
+msgid "Move to previous sheet by number"
+msgstr "Move to previous sheet by number"
+
+msgid "Next Sheet"
+msgstr "Next Sheet"
+
+msgid "Move to next sheet by number"
+msgstr "Move to next sheet by number"
 
 msgid "Hierarchy Navigator"
 msgstr "Hierarchy Navigator"
@@ -14634,6 +14661,9 @@ msgstr "Solutions"
 
 msgid "Simple solution:"
 msgstr "Simple solution:"
+
+msgid "Approximation:"
+msgstr "Approximation:"
 
 msgid "3R solution:"
 msgstr "3R solution:"
@@ -22580,6 +22610,9 @@ msgstr "Solderpaste Margin Override"
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Solderpaste Margin Ratio Override"
 
+msgid "Library ID"
+msgstr "Library ID"
+
 #, c-format
 msgid "footprint %s"
 msgstr "footprint %s"
@@ -27970,6 +28003,20 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Keep hierarchy navigator open"
+#~ msgstr "Keep hierarchy navigator open"
+
+#~ msgid "Navigator"
+#~ msgstr "Navigator"
+
+#~ msgid "Lines drawn horizontally and vertically, with a 45 degree angle end"
+#~ msgstr "Lines drawn horizontally and vertically, with a 45 degree angle end"
+
+#~ msgid ""
+#~ "Lines drawn horizontally and vertically, with a 45 degree angle start"
+#~ msgstr ""
+#~ "Lines drawn horizontally and vertically, with a 45 degree angle start"
 
 #~ msgid "Selection only"
 #~ msgstr "Selection only"
