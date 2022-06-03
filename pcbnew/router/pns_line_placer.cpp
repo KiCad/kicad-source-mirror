@@ -821,7 +821,6 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead )
         walkaround.SetWorld( m_currentNode );
         walkaround.SetSolidsOnly( false );
         walkaround.SetIterationLimit( 10 );
-        walkaround.SetApproachCursor( true, aP );
         walkaround.Route( initTrack, l2 );
         aNewHead = l2.ClipToNearestObstacle( m_shove->CurrentNode() );
 

@@ -28,6 +28,8 @@
 #include "pns_utils.h"
 #include "pns_router.h"
 #include "pns_debug_decorator.h"
+#include "pns_solid.h"
+
 
 namespace PNS {
 
@@ -50,6 +52,25 @@ NODE::OPT_OBSTACLE WALKAROUND::nearestObstacle( const LINE& aPath )
         return obs;
 
     return NODE::OPT_OBSTACLE();
+}
+
+
+void WALKAROUND::RestrictToSet( bool aEnabled, const std::set<ITEM*>& aSet )
+{
+    m_restrictedVertices.clear();
+
+    if( aEnabled )
+        m_restrictedSet = aSet;
+    else
+        m_restrictedSet.clear();
+
+    for( auto item : aSet )
+    {
+        if( auto solid = dyn_cast<SOLID*>( item ) )
+        {
+            m_restrictedVertices.push_back( solid->Anchor( 0 ) );
+        }
+    }
 }
 
 
@@ -111,7 +132,6 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
     start( aInitialPath );
 
     m_currentObstacle[0] = m_currentObstacle[1] = nearestObstacle( aInitialPath );
-    m_recursiveBlockageCount = 0;
 
     result.lineCw = aInitialPath;
     result.lineCcw = aInitialPath;
@@ -120,11 +140,6 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
     {
         s_cw = m_forceCw ? IN_PROGRESS : STUCK;
         s_ccw = m_forceCw ? STUCK : IN_PROGRESS;
-        m_forceSingleDirection = true;
-    }
-    else
-    {
-        m_forceSingleDirection = false;
     }
 
     // In some situations, there isn't a trivial path (or even a path at all).  Hitting the
@@ -198,6 +213,9 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
         result.statusCcw = ALMOST_DONE;
     }
 
+    result.lineCw.ClearLinks();
+    result.lineCcw.ClearLinks();
+
     return result;
 }
 
@@ -223,7 +241,6 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::Route( const LINE& aInitialPath, LINE&
     start( aInitialPath );
 
     m_currentObstacle[0] = m_currentObstacle[1] = nearestObstacle( aInitialPath );
-    m_recursiveBlockageCount = 0;
 
     aWalkPath = aInitialPath;
 
@@ -231,11 +248,6 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::Route( const LINE& aInitialPath, LINE&
     {
         s_cw = m_forceCw ? IN_PROGRESS : STUCK;
         s_ccw = m_forceCw ? STUCK : IN_PROGRESS;
-        m_forceSingleDirection = true;
-    }
-    else
-    {
-        m_forceSingleDirection = false;
     }
 
     while( m_iteration < m_iterationLimit )

@@ -710,12 +710,10 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle, OB
         {
 
             nextRank = currentRank - 1;
-            walkaround.SetSingleDirection( true );
         }
         else
         {
             nextRank = currentRank + 10000;
-            walkaround.SetSingleDirection( false );
         }
 
 
