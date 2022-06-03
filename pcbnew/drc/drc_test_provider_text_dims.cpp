@@ -217,7 +217,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                 }
                 else
                 {
-                    int actualThickness = text->GetTextThickness();
+                    int actualThickness = text->GetEffectiveTextPenWidth();
 
                     if( constraint.Value().HasMin() && actualThickness < constraint.Value().Min() )
                     {
