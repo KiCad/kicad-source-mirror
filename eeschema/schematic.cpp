@@ -301,11 +301,23 @@ wxString SCHEMATIC::ConvertRefsToKIIDs( const wxString& aSource ) const
         {
             wxString token;
             bool     isCrossRef = false;
+            int      nesting = 0;
 
             for( i = i + 2; i < sourceLen; ++i )
             {
+                if( aSource[i] == '{'
+                        && ( aSource[i-1] == '_' || aSource[i-1] == '^' || aSource[i-1] == '~' ) )
+                {
+                    nesting++;
+                }
+
                 if( aSource[i] == '}' )
-                    break;
+                {
+                    nesting--;
+
+                    if( nesting < 0 )
+                        break;
+                }
 
                 if( aSource[i] == ':' )
                     isCrossRef = true;
