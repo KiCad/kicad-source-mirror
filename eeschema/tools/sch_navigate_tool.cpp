@@ -145,13 +145,13 @@ int SCH_NAVIGATE_TOOL::Next( const TOOL_EVENT& aEvent )
 
 bool SCH_NAVIGATE_TOOL::CanGoBack()
 {
-    return m_navIndex != m_navHistory.begin();
+    return m_navHistory.size() > 0 && m_navIndex != m_navHistory.begin();
 }
 
 
 bool SCH_NAVIGATE_TOOL::CanGoForward()
 {
-    return m_navIndex != --m_navHistory.end();
+    return m_navHistory.size() > 0 && m_navIndex != --m_navHistory.end();
 }
 
 
