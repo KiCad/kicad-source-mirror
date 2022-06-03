@@ -65,7 +65,7 @@ const SHAPE_LINE_CHAIN OctagonalHull( const VECTOR2I& aP0, const VECTOR2I& aSize
 
 const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aSeg, int aClearance, int aWalkaroundThickness )
 {
-    int d = aSeg.GetWidth() / 2 + aClearance + aWalkaroundThickness / 2 + HULL_MARGIN
+    int d = aSeg.GetWidth() / 2 + aClearance + aWalkaroundThickness / 2
             + SHAPE_ARC::DefaultAccuracyForPCB();
     int x = (int) ( 2.0 / ( 1.0 + M_SQRT2 ) * d ) / 2;
 
@@ -144,7 +144,7 @@ const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aSeg, int aClearance, int aWalk
 const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
                                      int aWalkaroundThickness )
 {
-    int cl = aClearance + aWalkaroundThickness / 2 + HULL_MARGIN;
+    int cl = aClearance + aWalkaroundThickness / 2;
     int d = aSeg.GetWidth() / 2 + cl;
     int x = (int)( 2.0 / ( 1.0 + M_SQRT2 ) * d );
 
@@ -155,7 +155,7 @@ const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
     {
         return OctagonalHull( a - VECTOR2I( aSeg.GetWidth() / 2, aSeg.GetWidth() / 2 ),
                               VECTOR2I( aSeg.GetWidth(), aSeg.GetWidth() ),
-                              cl + 1,
+                              cl,
                               2.0 * ( 1.0 - M_SQRT1_2 ) * d );
     }
 
@@ -191,7 +191,6 @@ static void MoveDiagonal( SEG& aDiagonal, const SHAPE_LINE_CHAIN& aVertices, int
     int dist;
 
     aVertices.NearestPoint( aDiagonal, dist );
-    dist -= HULL_MARGIN;
     VECTOR2I moveBy = ( aDiagonal.A - aDiagonal.B ).Perpendicular().Resize( dist - aClearance );
     aDiagonal.A += moveBy;
     aDiagonal.B += moveBy;
@@ -201,7 +200,7 @@ static void MoveDiagonal( SEG& aDiagonal, const SHAPE_LINE_CHAIN& aVertices, int
 const SHAPE_LINE_CHAIN ConvexHull( const SHAPE_SIMPLE& aConvex, int aClearance )
 {
     // this defines the horizontal and vertical lines in the hull octagon
-    BOX2I box = aConvex.BBox( aClearance + HULL_MARGIN );
+    BOX2I box = aConvex.BBox( aClearance );
     box.Normalize();
 
     SEG topline = SEG( VECTOR2I( box.GetX(), box.GetY() + box.GetHeight() ),
