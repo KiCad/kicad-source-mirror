@@ -1253,6 +1253,8 @@ public:
         DFLTSETTINGS DefaultSettings;
         std::map<ATTRIBUTE_ID, ATTRCOL> AttributeColors;
 
+        bool IsVisible = true; // unclear what this represents - maybe all attributes are hidden?
+
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
