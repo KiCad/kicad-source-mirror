@@ -1,13 +1,14 @@
 # Kuzemko Alexsandr <alexandrkuzemko@gmail.com>, 2022.
+# Ivan Chuba <xtrvweb@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-31 10:31-0700\n"
-"PO-Revision-Date: 2022-05-29 07:05+0000\n"
-"Last-Translator: Kuzemko Alexsandr <alexandrkuzemko@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"PO-Revision-Date: 2022-06-03 23:04+0000\n"
+"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -100,13 +101,13 @@ msgstr "Час останнього візуалізації %.0f мс"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:731
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
-msgstr ""
+msgstr "Зв'язки %s\tКласЗв'язків %s\tІм'яСліду %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:756
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:769
 #, c-format
 msgid "Net %s\tNetClass %s"
-msgstr ""
+msgstr "Зв'язки %s\tКласЗв'язків %s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:463
 msgid "Load OpenGL: board"
@@ -232,7 +233,7 @@ msgstr "3D сітка"
 #: pcbnew/menubar_footprint_editor.cpp:251 pcbnew/menubar_pcb_editor.cpp:473
 #: pcbnew/toolbars_footprint_viewer.cpp:193
 msgid "&File"
-msgstr ""
+msgstr "&Файл"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:146 cvpcb/menubar.cpp:88
 #: eeschema/menubar.cpp:308
@@ -240,7 +241,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:170 pcbnew/menubar_footprint_editor.cpp:252
 #: pcbnew/menubar_pcb_editor.cpp:474
 msgid "&Edit"
-msgstr ""
+msgstr "&Редагувати"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:147 eeschema/menubar.cpp:309
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:181
@@ -249,12 +250,12 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:253 pcbnew/menubar_pcb_editor.cpp:475
 #: pcbnew/toolbars_footprint_viewer.cpp:194
 msgid "&View"
-msgstr ""
+msgstr "&Перегляд"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:148 cvpcb/menubar.cpp:89
 #: gerbview/menubar.cpp:240 kicad/menubar.cpp:203
 msgid "&Preferences"
-msgstr ""
+msgstr "&Додатково"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
 msgid "Reload board"
@@ -1192,7 +1193,7 @@ msgstr "Зображення в відтінках сірого"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:32
 msgid "Black&&White Picture"
-msgstr ""
+msgstr "Чорно&&Біле Зображення"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:41
 msgid "Bitmap Information"
