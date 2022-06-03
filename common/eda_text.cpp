@@ -294,24 +294,24 @@ void EDA_TEXT::SwapAttributes( EDA_TEXT& aTradingPartner )
 }
 
 
-int EDA_TEXT::GetEffectiveTextPenWidth( int aDefaultWidth ) const
+int EDA_TEXT::GetEffectiveTextPenWidth( int aDefaultPenWidth ) const
 {
-    int width = GetTextThickness();
+    int penWidth = GetTextThickness();
 
-    if( width <= 1 )
+    if( penWidth <= 1 )
     {
-        width = aDefaultWidth;
+        penWidth = aDefaultPenWidth;
 
         if( IsBold() )
-            width = GetPenSizeForBold( GetTextWidth() );
-        else if( width <= 1 )
-            width = GetPenSizeForNormal( GetTextWidth() );
+            penWidth = GetPenSizeForBold( GetTextWidth() );
+        else if( penWidth <= 1 )
+            penWidth = GetPenSizeForNormal( GetTextWidth() );
     }
 
     // Clip pen size for small texts:
-    width = Clamp_Text_PenSize( width, GetTextSize(), ALLOW_BOLD_THICKNESS );
+    penWidth = Clamp_Text_PenSize( penWidth, GetTextSize(), ALLOW_BOLD_THICKNESS );
 
-    return width;
+    return penWidth;
 }
 
 
