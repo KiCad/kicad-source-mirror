@@ -29,6 +29,7 @@
 #include "pcb_track.h"
 
 #include "pns_item.h"
+#include "pns_linked_item.h"
 
 namespace PNS {
 
@@ -45,11 +46,11 @@ struct VIA_HANDLE
     int         net = -1;
 };
 
-class VIA : public ITEM
+class VIA : public LINKED_ITEM
 {
 public:
     VIA() :
-        ITEM( VIA_T )
+        LINKED_ITEM( VIA_T )
     {
         m_diameter = 2; // Dummy value
         m_drill    = 0;
@@ -60,7 +61,7 @@ public:
 
     VIA( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aDiameter, int aDrill,
          int aNet = -1, VIATYPE aViaType = VIATYPE::THROUGH ) :
-        ITEM( VIA_T )
+        LINKED_ITEM( VIA_T )
     {
         SetNet( aNet );
         SetLayers( aLayers );
@@ -75,7 +76,7 @@ public:
     }
 
     VIA( const VIA& aB ) :
-        ITEM( aB )
+        LINKED_ITEM( aB )
     {
         SetNet( aB.Net() );
         SetLayers( aB.Layers() );
