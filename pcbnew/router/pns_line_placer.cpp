@@ -117,6 +117,7 @@ bool LINE_PLACER::handleSelfIntersections()
     if( tail.CPoint(0) == head.CPoint(0) )
     {
         m_p_start = tail.CPoint( 0 );
+        PNS_DBG( Dbg(), AddPoint, m_p_start, WHITE, 10000, wxT( "new-pstart [sameP0]" ) );
         m_direction = m_initial_direction;
         tail.Clear();
         return true;
@@ -151,6 +152,8 @@ bool LINE_PLACER::handleSelfIntersections()
     if( n < 2 )
     {
         m_p_start = tail.CPoint( 0 );
+        PNS_DBG( Dbg(), AddPoint, m_p_start, WHITE, 10000, wxT( "new-pstart [self-isect1]" ) );
+
         m_direction = m_initial_direction;
         tail.Clear();
         head.Clear();
@@ -163,6 +166,8 @@ bool LINE_PLACER::handleSelfIntersections()
         // Set the direction to the one of this segment.
         const SEG last = tail.CSegment( n - 1 );
         m_p_start = last.A;
+        PNS_DBG( Dbg(), AddPoint, m_p_start, WHITE, 10000, wxT( "new-pstart [self-isect2]" ) );
+
         m_direction = DIRECTION_45( last );
         tail.Remove( n, -1 );
         return true;
@@ -189,6 +194,8 @@ bool LINE_PLACER::handlePullback()
     else if( n == 1 )
     {
         m_p_start = tail.CPoint( 0 );
+        PNS_DBG( Dbg(), AddPoint, m_p_start, WHITE, 10000, wxT( "new-pstart [pullback]" ) );
+
         tail.Clear();
         return true;
     }
@@ -229,6 +236,8 @@ bool LINE_PLACER::handlePullback()
             const SEG& seg = tail.CSegment( lastSegIdx );
             m_direction    = DIRECTION_45( seg );
             m_p_start      = seg.A;
+            PNS_DBG( Dbg(), AddPoint, m_p_start, WHITE, 10000, wxT( "new-pstart [pullback3]" ) );
+
         }
         else
         {
@@ -310,6 +319,8 @@ bool LINE_PLACER::reduceTail( const VECTOR2I& aEnd )
         SHAPE_LINE_CHAIN reducedLine = new_direction.BuildInitialTrace( new_start, aEnd );
 
         m_p_start = new_start;
+        PNS_DBG( Dbg(), AddPoint, m_p_start, WHITE, 10000, wxT( "new-pstart [reduceTail]" ) );
+
         m_direction = new_direction;
         tail.Remove( reduce_index + 1, -1 );
         head.Clear();
@@ -381,6 +392,9 @@ bool LINE_PLACER::mergeHead()
     SEG last  = tail.CSegment( -1 );
     m_p_start = last.B;
 
+    PNS_DBG( Dbg(), AddPoint, m_p_start, WHITE, 10000, wxT( "new-pstart [mergeHead]" ) );
+
+
     int lastSegIdx = tail.PointCount() - 2;
 
     if( !tail.IsArcSegment( lastSegIdx ) )
@@ -390,8 +404,8 @@ bool LINE_PLACER::mergeHead()
 
     head.Remove( 0, -1 );
 
-    wxLogTrace( wxT( "PNS" ), wxT( "Placer: merge %d, new direction: %s" ), n_head,
-                m_direction.Format().c_str() );
+  //  wxLogTrace( wxT( "PNS" ), wxT( "Placer: merge %d, new direction: %s" ), n_head,
+//                m_direction.Format().c_str() );
 
     head.Simplify();
     tail.Simplify();
@@ -851,11 +865,11 @@ bool LINE_PLACER::optimizeTailHeadTransition()
 
         m_head = linetmp;
         m_p_start = linetmp.CLine().CPoint( 0 );
+
+        PNS_DBG( Dbg(), AddPoint, m_p_start, WHITE, 10000, wxT( "new-pstart [optFanoutCleanup]" ) );
+
         m_direction = DIRECTION_45( linetmp.CSegment( 0 ) );
         m_tail.Line().Clear();
-
-        PNS_DBG( Dbg(), Message, wxString::Format( "Placer: optimize fanout-cleanup" ) );
-
 
         return true;
     }
@@ -893,13 +907,14 @@ bool LINE_PLACER::optimizeTailHeadTransition()
     {
         LINE tmp( m_tail, opt_line );
 
-        PNS_DBG( Dbg(), Message, wxString::Format( "Placer: optimize tail-head [%d]", threshold ) );
-
         head.Clear();
         tail.Replace( -threshold, -1, new_head.CLine() );
         tail.Simplify();
 
         m_p_start = new_head.CLine().CPoint( -1 );
+
+        PNS_DBG( Dbg(), AddPoint, m_p_start, WHITE, 10000, wxT( "new-pstart [opt-tail-head]" ) );
+
         m_direction = DIRECTION_45( new_head.CSegment( -1 ) );
 
         return true;
@@ -943,7 +958,7 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
             fail = true;
         }
 
-        PNS_DBG( Dbg(), AddItem, &new_head, LIGHTGREEN, 100000, wxT( "new_head" ) );
+        PNS_DBG( Dbg(), AddItem, &new_head, LIGHTGREEN, 100000, wxString::Format( "new_head [fail: %d]", fail?1:0 ) );
 
         if( fail )
             break;
@@ -974,6 +989,7 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
         if( m_last_head.PointCount() > 0 )
         {
             m_head = m_last_head;
+            PNS_DBG( Dbg(), AddItem, &m_last_head, CYAN, 10000, wxT( "apply-last-head" ) );
         }
         else
         {
@@ -1707,6 +1723,9 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aForce
     if( m_orthoMode )
         cornerMode = DIRECTION_45::CORNER_MODE::MITERED_45;
 
+    PNS_DBG( Dbg(), AddPoint, m_p_start, WHITE, 10000, wxT( "pstart [buildInitial]" ) );
+
+
     if( m_p_start == aP )
     {
         l.Clear();
@@ -1736,6 +1755,9 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aForce
 
     aHead.SetLayer( m_currentLayer );
     aHead.SetShape( l );
+
+    PNS_DBG( Dbg(), AddItem, &aHead, CYAN, 10000, wxT( "initial-trace" ) );
+
 
     if( !m_placingVia || aForceNoVia )
         return true;

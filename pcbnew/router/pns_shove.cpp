@@ -292,9 +292,9 @@ SHOVE::SHOVE_STATUS SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE&
         {
             const SHAPE_LINE_CHAIN& hull = aHulls[invertTraversal ? aHulls.size() - 1 - i : i];
 
-            PNS_DBG( Dbg(), AddShape, &hull, YELLOW, 10000, wxT( "hull" ) );
-            PNS_DBG( Dbg(), AddShape, &path, WHITE, l.Width(), wxT( "path" ) );
-            PNS_DBG( Dbg(), AddShape, &obs, LIGHTGRAY, aObstacleLine.Width(),  wxT( "obs" ) );
+            PNS_DBG( Dbg(), AddShape, &hull, YELLOW, 10000, wxString::Format( "hull[%d]", i ) );
+            PNS_DBG( Dbg(), AddShape, &path, WHITE, l.Width(), wxString::Format( "path[%d]", i ) );
+            PNS_DBG( Dbg(), AddShape, &obs, LIGHTGRAY, aObstacleLine.Width(),  wxString::Format( "obs[%d]", i ) );
 
             if( !l.Walkaround( hull, path, clockwise ) )
             {
@@ -307,7 +307,12 @@ SHOVE::SHOVE_STATUS SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE&
                 return SH_INCOMPLETE;
             }
 
+            PNS_DBG( Dbg(), AddShape, &path, WHITE, l.Width(), wxString::Format( "path-presimp[%d]", i ) );
+
             path.Simplify();
+
+            PNS_DBG( Dbg(), AddShape, &path, WHITE, l.Width(), wxString::Format( "path-postsimp[%d]", i ) );
+
             l.SetShape( path );
         }
 
@@ -435,10 +440,8 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& 
 
         hulls.reserve( currentLineSegmentCount + 1 );
 
-#ifdef DEBUG
-        Dbg()->Message( wxString::Format( wxT( "shove process-single: cur net %d obs %d cl %d" ),
+        PNS_DBG( Dbg(), Message, wxString::Format( wxT( "shove process-single: cur net %d obs %d cl %d" ),
                                           aCurLine.Net(), aObstacleLine.Net(), clearance ) );
-#endif
 
         for( int i = 0; i < currentLineSegmentCount; i++ )
         {
@@ -448,6 +451,12 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& 
             // Arcs need additional clearance to ensure the hulls are always bigger than the arc
             if( aCurLine.CLine().IsArcSegment( i ) )
                 extra = SHAPE_ARC::DefaultAccuracyForPCB();
+
+            if( extra > 0 )
+	    {
+                PNS_DBG( Dbg(), Message, wxString::Format( wxT( "shove add-extra-clearance %d" ),
+                                          extra ) );
+            }
 
             SHAPE_LINE_CHAIN hull =
                     seg.Hull( clearance + extra, obstacleLineWidth, aObstacleLine.Layer() );
@@ -673,6 +682,19 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle, OB
 
     std::set<ITEM*> cluster = topo.AssembleCluster( aObstacle, aCurrent.Layers().Start() );
 
+
+
+    PNS_DBG( Dbg(), BeginGroup, "walk-cluster", 1 );
+
+    for( auto item : cluster )
+    {
+        PNS_DBG( Dbg(), AddItem, item, RED, 10000, wxT( "cl-item" ) );
+    }
+
+    PNS_DBGN( Dbg(), EndGroup );
+
+
+    walkaround.SetDebugDecorator( Dbg() );
     walkaround.SetSolidsOnly( false );
     walkaround.RestrictToSet( true, cluster );
     walkaround.SetIterationLimit( 16 ); // fixme: make configurable
@@ -969,6 +991,8 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
  */
 SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia, OBSTACLE& aObstacleInfo )
 {
+    assert( aObstacleVia );
+
     int clearance = getClearance( aCurrent, aObstacleVia );
     VECTOR2I mtv;
     int rank = -1;
@@ -991,6 +1015,12 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia, OB
         LINE* currentLine = (LINE*) aCurrent;
 
         PNS_DBG( Dbg(), AddItem, currentLine, LIGHTRED, 10000, wxT( "current-line" ) );
+        
+        if( currentLine->EndsWithVia() )
+        {
+            PNS_DBG( Dbg(), AddItem, &currentLine->Via(), LIGHTRED, 10000, wxT( "current-line-via" ) );
+        }
+        
         PNS_DBG( Dbg(), AddItem, &vtmp, LIGHTRED, 100000, wxT( "orig-via" ) );
 
         lineCollision = vtmp.Shape()->Collide( currentLine->Shape(),
@@ -1021,6 +1051,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia, OB
         mtv = VECTOR2I(0, 0);
 
     SHOVE::SHOVE_STATUS st = pushOrShoveVia( aObstacleVia, -mtv, aCurrent->Rank() );
+    PNS_DBG(Dbg(), Message, wxString::Format("push-or-shove-via st %d", st ) );
 
     PNS_DBGN( Dbg(), EndGroup );
 
@@ -1163,7 +1194,11 @@ void SHOVE::unwindLineStack( ITEM* aItem )
 bool SHOVE::pushLineStack( const LINE& aL, bool aKeepCurrentOnTop )
 {
     if( !aL.IsLinkedChecked() && aL.SegmentCount() != 0 )
+    {
+        PNS_DBG( Dbg(), AddItem, &aL, BLUE, 10000, wxT( "push line stack failed" ) );
+
         return false;
+    }
 
     if( aKeepCurrentOnTop && m_lineStack.size() > 0)
     {
@@ -1304,9 +1339,13 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
          nearest = m_currentNode->NearestObstacle( &currentLine, search_order );
 
          if( nearest )
+         {
              PNS_DBG( Dbg(), Message,
                       wxString::Format( wxT( "nearest %p %s rank %d" ), nearest->m_item,
                                         nearest->m_item->KindStr(), nearest->m_item->Rank() ) );
+
+            PNS_DBG( Dbg(), AddShape, nearest->m_item->Shape(), YELLOW, 10000, wxT("nearest") );
+         }   
 
          if( nearest )
             break;
@@ -1361,13 +1400,14 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
             popLineStack();
             st = onCollidingLine( revLine, currentLine );
 
-            PNS_DBGN( Dbg(), EndGroup );
 
             if( !pushLineStack( revLine ) )
             {
                 return SH_INCOMPLETE;
             }
 
+
+            PNS_DBGN( Dbg(), EndGroup );
 
             break;
         }
@@ -1425,7 +1465,8 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
             break;
 
         case ITEM::VIA_T:
-            PNS_DBG( Dbg(), BeginGroup, wxString::Format( "iter %d: collide-via (fixup: %d)", aIter, 0 ), 0 );            st = onCollidingVia( &currentLine, (VIA*) ni, nearest.get() );
+            PNS_DBG( Dbg(), BeginGroup, wxString::Format( "iter %d: collide-via (fixup: %d)", aIter, 0 ), 0 );            
+            st = onCollidingVia( &currentLine, (VIA*) ni, nearest.get() );
 
             if( st == SH_TRY_WALK )
                 st = onCollidingSolid( currentLine, ni, nearest.get() );
