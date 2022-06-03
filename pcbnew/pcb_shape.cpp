@@ -148,10 +148,7 @@ void PCB_SHAPE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
 FOOTPRINT* PCB_SHAPE::GetParentFootprint() const
 {
-    if( !m_parent || m_parent->Type() != PCB_FOOTPRINT_T )
-        return nullptr;
-
-    return (FOOTPRINT*) m_parent;
+    return dynamic_cast<FOOTPRINT*>( BOARD_ITEM::GetParentFootprint() );
 }
 
 
