@@ -234,7 +234,9 @@ void SCH_EDIT_FRAME::ToggleSchematicHierarchy()
         SetAuiPaneSize( m_auimgr, hierarchy, cfg->m_AuiPanels.left_panel_width, -1 );
     else
     {
-        cfg->m_AuiPanels.left_panel_width = m_hierarchy->GetSize().x;
+        if( cfg )
+            cfg->m_AuiPanels.left_panel_width = m_hierarchy->GetSize().x;
+
         m_auimgr.Update();
     }
 }
