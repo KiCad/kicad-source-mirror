@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-31 10:31-0700\n"
-"PO-Revision-Date: 2022-05-27 00:39+0000\n"
+"PO-Revision-Date: 2022-06-03 23:04+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -4048,9 +4048,8 @@ msgid "Schematic Editor"
 msgstr "Editor do esquemático"
 
 #: common/eda_base_frame.cpp:1022
-#, fuzzy
 msgid "Annotation Options"
-msgstr "Anotações"
+msgstr "Opções de anotação"
 
 #: common/eda_base_frame.cpp:1024
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
@@ -7794,9 +7793,8 @@ msgid "Selection"
 msgstr "Seleção"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
-#, fuzzy
 msgid "Recurse into subsheets"
-msgstr "Atingiu o fim da folha."
+msgstr "Recursar nas sub-folhas"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:58
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:35
@@ -12488,18 +12486,16 @@ msgid "Wire & Bus Properties"
 msgstr "Propriedades da linha & barramento"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:21
-#, fuzzy
 msgid "Symbol Annotation"
-msgstr "Notação da unidade do símbolo:"
+msgstr "Anotação do símbolo"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:23
-#, fuzzy
 msgid "Automatically annotate symbols"
-msgstr "Dispor a&utomaticamente os campos de símbolos"
+msgstr "Anote os símbolos automaticamente"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:27
 msgid "Recursively annotate subsheets"
-msgstr ""
+msgstr "Anote recursivamente as sub-folhas"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:142
 msgid ""
@@ -17666,13 +17662,12 @@ msgid "Switch to next line mode"
 msgstr "Alterne para o próximo modo de linha"
 
 #: eeschema/tools/ee_actions.cpp:714
-#, fuzzy
 msgid "Annotate Automatically"
-msgstr "Ajusta automaticamente"
+msgstr "Anote automaticamente"
 
 #: eeschema/tools/ee_actions.cpp:714
 msgid "Toggle automatic annotation of new parts symbols"
-msgstr ""
+msgstr "Alterna a anotação automática nos símbolos das novas peças"
 
 #: eeschema/tools/ee_actions.cpp:719
 msgid "Repair Schematic"
@@ -19558,9 +19553,8 @@ msgid "Open project directory in file explorer"
 msgstr "Abra a pasta do projeto no explorador de arquivos"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:52
-#, fuzzy
 msgid "Add Default Repository"
-msgstr "Adicione um repositório"
+msgstr "Adiciona um repositório padrão"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:92
 msgid "Please enter fully qualified repository url"
@@ -26718,9 +26712,8 @@ msgid "degree"
 msgstr "grau"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:86
-#, fuzzy
 msgid "Non Copper Zone Properties"
-msgstr "Propriedades das zonas sem cobre"
+msgstr "Propriedades das zonas não cobreadas"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:136
 msgid "Ring"
@@ -31769,13 +31762,13 @@ msgid "Save Footprint Association File"
 msgstr "Salva o arquivo da associação do footprint"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:171
-#, fuzzy
 msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle, rounded rectangle, and circle)."
 msgstr ""
-"O arquivo contém ilhas com formas que não são suportadas pelo exportador "
-"Hyperlynx (as formas suportadas são oval, retângulo e círculo)."
+"O arquivo contém ilhas com formas que não são compatíveis com o exportador "
+"Hyperlynx (as formas compatíveis são oval, retângulo, retângulo arredondado "
+"e círculo)."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:175
 msgid "They have been exported as oval pads."
