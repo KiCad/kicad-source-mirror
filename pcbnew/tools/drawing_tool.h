@@ -278,8 +278,9 @@ private:
 
     PCB_LAYER_ID              m_layer;             // The layer we last drew on
     STROKE_PARAMS             m_stroke;            // Current stroke for multi-segment drawing
-    static const unsigned int WIDTH_STEP;          // Amount of width change for one -/+ key press
+    TEXT_ATTRIBUTES           m_textAttrs;
 
+    static const unsigned int WIDTH_STEP;          // Amount of width change for one -/+ key press
 
     friend class              ZONE_CREATE_HELPER;  // give internal access to helper classes
 };

@@ -169,6 +169,7 @@ public:
 
     void CopyText( const EDA_TEXT& aSrc );
 
+    void SetAttributes( const TEXT_ATTRIBUTES& aTextAttrs ) { m_attributes = aTextAttrs; }
     const TEXT_ATTRIBUTES& GetAttributes() const { return m_attributes; }
 
     /**

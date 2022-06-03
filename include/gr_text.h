@@ -79,6 +79,15 @@ int GetPenSizeForBold( const wxSize& aTextSize );
 int GetPenSizeForNormal( int aTextSize );
 int GetPenSizeForNormal( const wxSize& aTextSize );
 
+inline void InferBold( TEXT_ATTRIBUTES* aAttrs )
+{
+    int    penSize( aAttrs->m_StrokeWidth );
+    wxSize textSize( aAttrs->m_Size.x, aAttrs->m_Size.y );
+
+    aAttrs->m_Bold = abs( penSize - GetPenSizeForBold( textSize ) )
+                   < abs( penSize - GetPenSizeForNormal( textSize ) );
+}
+
 
 /**
  * Returns the margin for knockout text.

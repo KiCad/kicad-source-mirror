@@ -365,7 +365,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
     rect = makeNew();
     rect->SetShape( SHAPE_T::RECT );
     rect->SetFilled( false );
-    rect->SetFlags(IS_NEW );
+    rect->SetFlags( IS_NEW );
 
     if( aEvent.HasPosition() )
         startingPoint = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
@@ -398,7 +398,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
         rect = makeNew();
         rect->SetShape( SHAPE_T::RECT );
         rect->SetFilled( false );
-        rect->SetFlags(IS_NEW );
+        rect->SetFlags( IS_NEW );
         startingPoint = NULLOPT;
     }
 
@@ -521,7 +521,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     COMMON_SETTINGS*             common_settings = Pgm().GetCommonSettings();
     BOARD_ITEM*                  text = nullptr;
     bool                         ignorePrimePosition = false;
-    const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
+    const BOARD_DESIGN_SETTINGS& bds = m_frame->GetDesignSettings();
     BOARD_COMMIT                 commit( m_frame );
     SCOPED_DRAW_MODE             scopedDrawMode( m_mode, MODE::TEXT );
 
@@ -616,10 +616,16 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
                 m_controls->ForceCursorPosition( true, m_controls->GetCursorPosition() );
-                PCB_LAYER_ID layer = m_frame->GetActiveLayer();
 
-                wxSize textSize = dsnSettings.GetTextSize( layer );
-                int    thickness = dsnSettings.GetTextThickness( layer );
+                PCB_LAYER_ID    layer = m_frame->GetActiveLayer();
+                TEXT_ATTRIBUTES textAttrs;
+
+                textAttrs.m_Size = bds.GetTextSize( layer );
+                textAttrs.m_StrokeWidth = bds.GetTextThickness( layer );
+                InferBold( &textAttrs );
+                textAttrs.m_Italic = bds.GetTextItalic( layer );
+                textAttrs.m_KeepUpright = bds.GetTextUpright( layer );
+                textAttrs.m_Mirrored = IsBackLayer( layer );
 
                 // Init the new item attributes
                 if( m_isFootprintEditor )
@@ -627,12 +633,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     FP_TEXT* fpText = new FP_TEXT( (FOOTPRINT*) m_frame->GetModel() );
 
                     fpText->SetLayer( layer );
-                    fpText->SetTextSize( textSize );
-                    fpText->SetTextThickness( thickness );
-                    fpText->SetBold( abs( thickness - GetPenSizeForBold( textSize ) ) <
-                                     abs( thickness - GetPenSizeForNormal( textSize ) ) );
-                    fpText->SetItalic( dsnSettings.GetTextItalic( layer ) );
-                    fpText->SetKeepUpright( dsnSettings.GetTextUpright( layer ) );
+                    fpText->SetAttributes( textAttrs );
                     fpText->SetTextPos( cursorPos );
 
                     text = fpText;
@@ -663,16 +664,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     pcbText->SetFlags( IS_NEW );
 
                     pcbText->SetLayer( layer );
-
-                    // Set the mirrored option for layers on the BACK side of the board
-                    if( IsBackLayer( layer ) )
-                        pcbText->SetMirrored( true );
-
-                    pcbText->SetTextSize( textSize );
-                    pcbText->SetTextThickness( thickness );
-                    pcbText->SetBold( abs( thickness - GetPenSizeForBold( textSize ) ) <
-                                      abs( thickness - GetPenSizeForNormal( textSize ) ) );
-                    pcbText->SetItalic( dsnSettings.GetTextItalic( layer ) );
+                    pcbText->SetAttributes( textAttrs );
                     pcbText->SetTextPos( cursorPos );
 
                     RunMainStack( [&]()
@@ -1519,9 +1511,10 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
     // Only three shapes are currently supported
     wxASSERT( shape == SHAPE_T::SEGMENT || shape == SHAPE_T::CIRCLE || shape == SHAPE_T::RECT );
 
-    EDA_UNITS        userUnits = m_frame->GetUserUnits();
-    PCB_GRID_HELPER  grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
-    PCB_SHAPE*&      graphic = *aGraphic;
+    const BOARD_DESIGN_SETTINGS& bds = m_frame->GetDesignSettings();
+    EDA_UNITS                    userUnits = m_frame->GetUserUnits();
+    PCB_GRID_HELPER              grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    PCB_SHAPE*&                  graphic = *aGraphic;
 
     if( m_layer != m_frame->GetActiveLayer() )
     {
@@ -1529,6 +1522,13 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
         m_stroke.SetWidth( getSegmentWidth( m_layer ) );
         m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
         m_stroke.SetColor( COLOR4D::UNSPECIFIED );
+
+        m_textAttrs.m_Size = bds.GetTextSize( m_layer );
+        m_textAttrs.m_StrokeWidth = bds.GetTextThickness( m_layer );
+        InferBold( &m_textAttrs );
+        m_textAttrs.m_Italic = bds.GetTextItalic( m_layer );
+        m_textAttrs.m_KeepUpright = bds.GetTextUpright( m_layer );
+        m_textAttrs.m_Mirrored = IsBackLayer( m_layer );
     }
 
     // geometric construction manager
@@ -1633,6 +1633,13 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
                 m_stroke.SetWidth( getSegmentWidth( m_layer ) );
                 m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
                 m_stroke.SetColor( COLOR4D::UNSPECIFIED );
+
+                m_textAttrs.m_Size = bds.GetTextSize( m_layer );
+                m_textAttrs.m_StrokeWidth = bds.GetTextThickness( m_layer );
+                InferBold( &m_textAttrs );
+                m_textAttrs.m_Italic = bds.GetTextItalic( m_layer );
+                m_textAttrs.m_KeepUpright = bds.GetTextUpright( m_layer );
+                m_textAttrs.m_Mirrored = IsBackLayer( m_layer );
             }
 
             if( graphic )
@@ -1645,6 +1652,12 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
 
                 graphic->SetLayer( m_layer );
                 graphic->SetStroke( m_stroke );
+
+                if( FP_TEXTBOX* fp_textbox = dynamic_cast<FP_TEXTBOX*>( graphic ) )
+                    fp_textbox->SetAttributes( m_textAttrs );
+                else if( PCB_TEXTBOX* pcb_textbox = dynamic_cast<PCB_TEXTBOX*>( graphic ) )
+                    pcb_textbox->SetAttributes( m_textAttrs );
+
                 m_view->Update( &preview );
                 frame()->SetMsgPanel( graphic );
             }
@@ -1688,6 +1701,12 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
                 graphic->SetFilled( false );
                 graphic->SetStroke( m_stroke );
                 graphic->SetLayer( m_layer );
+
+                if( FP_TEXTBOX* fp_textbox = dynamic_cast<FP_TEXTBOX*>( graphic ) )
+                    fp_textbox->SetAttributes( m_textAttrs );
+                else if( PCB_TEXTBOX* pcb_textbox = dynamic_cast<PCB_TEXTBOX*>( graphic ) )
+                    pcb_textbox->SetAttributes( m_textAttrs );
+
                 grid.SetSkipPoint( cursorPos );
 
                 twoPointManager.SetOrigin( cursorPos );
