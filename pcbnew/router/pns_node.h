@@ -212,7 +212,7 @@ public:
      * @return number of obstacles found
      */
     int QueryColliding( const ITEM* aItem, OBSTACLES& aObstacles, int aKindMask = ITEM::ANY_T,
-                        int aLimitCount = -1, bool aDifferentNetsOnly = true );
+                        int aLimitCount = -1, bool aDifferentNetsOnly = true, int aOverrideClearance = -1 );
 
     int QueryJoints( const BOX2I& aBox, std::vector<JOINT*>& aJoints,
                      LAYER_RANGE aLayerMask = LAYER_RANGE::All(), int aKindMask = ITEM::ANY_T );

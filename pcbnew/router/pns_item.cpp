@@ -29,7 +29,7 @@ typedef VECTOR2I::extended_type ecoord;
 
 namespace PNS {
 
-bool ITEM::collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOnly ) const
+bool ITEM::collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOnly, int aOverrideClearance ) const
 {
     const ROUTER_IFACE* iface = ROUTER::GetInstance()->GetInterface();
     const SHAPE*        shapeA = Shape();
@@ -123,14 +123,14 @@ bool ITEM::collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferent
     if( !Layers().IsMultilayer() && !iface->IsFlashedOnLayer( aOther, Layer()) )
         return false;
 
-    int clearance = aNode->GetClearance( this, aOther );
+    int clearance = aOverrideClearance >= 0 ? aOverrideClearance : aNode->GetClearance( this, aOther );
     return shapeA->Collide( shapeB, clearance + lineWidthA + lineWidthB );
 }
 
 
-bool ITEM::Collide( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOnly ) const
+bool ITEM::Collide( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOnly, int aOverrideClearance ) const
 {
-    if( collideSimple( aOther, aNode, aDifferentNetsOnly ) )
+    if( collideSimple( aOther, aNode, aDifferentNetsOnly, aOverrideClearance ) )
         return true;
 
     // Special cases for "head" lines with vias attached at the end.  Note that this does not
@@ -141,7 +141,7 @@ bool ITEM::Collide( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOn
     {
         const LINE* line = static_cast<const LINE*>( this );
 
-        if( line->EndsWithVia() && line->Via().collideSimple( aOther, aNode, aDifferentNetsOnly ) )
+        if( line->EndsWithVia() && line->Via().collideSimple( aOther, aNode, aDifferentNetsOnly, aOverrideClearance ) )
             return true;
     }
 
@@ -149,7 +149,7 @@ bool ITEM::Collide( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOn
     {
         const LINE* line = static_cast<const LINE*>( aOther );
 
-        if( line->EndsWithVia() && line->Via().collideSimple( this, aNode, aDifferentNetsOnly ) )
+        if( line->EndsWithVia() && line->Via().collideSimple( this, aNode, aDifferentNetsOnly, aOverrideClearance ) )
             return true;
     }
 

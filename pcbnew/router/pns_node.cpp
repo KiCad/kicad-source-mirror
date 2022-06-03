@@ -217,15 +217,17 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
     int        m_limitCount;
     int        m_matchCount;
     bool       m_differentNetsOnly;
+    int        m_overrideClearance;
 
     DEFAULT_OBSTACLE_VISITOR( NODE::OBSTACLES& aTab, const ITEM* aItem, int aKindMask,
-                              bool aDifferentNetsOnly ) :
+                              bool aDifferentNetsOnly, int aOverrideClearance ) :
         OBSTACLE_VISITOR( aItem ),
         m_tab( aTab ),
         m_kindMask( aKindMask ),
         m_limitCount( -1 ),
         m_matchCount( 0 ),
-        m_differentNetsOnly( aDifferentNetsOnly )
+        m_differentNetsOnly( aDifferentNetsOnly ),
+        m_overrideClearance( aOverrideClearance )
     {
     }
 
@@ -246,7 +248,7 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
         if( visit( aCandidate ) )
             return true;
 
-        if( !aCandidate->Collide( m_item, m_node, m_differentNetsOnly ) )
+        if( !aCandidate->Collide( m_item, m_node, m_differentNetsOnly, m_overrideClearance ) )
             return true;
 
         OBSTACLE obs;
@@ -267,13 +269,13 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
 
 
 int NODE::QueryColliding( const ITEM* aItem, NODE::OBSTACLES& aObstacles, int aKindMask,
-                          int aLimitCount, bool aDifferentNetsOnly )
+                          int aLimitCount, bool aDifferentNetsOnly, int aOverrideClearance )
 {
     /// By default, virtual items cannot collide
     if( aItem->IsVirtual() )
         return 0;
 
-    DEFAULT_OBSTACLE_VISITOR visitor( aObstacles, aItem, aKindMask, aDifferentNetsOnly );
+    DEFAULT_OBSTACLE_VISITOR visitor( aObstacles, aItem, aKindMask, aDifferentNetsOnly, aOverrideClearance );
 
 #ifdef DEBUG
     assert( allocNodes.find( this ) != allocNodes.end() );

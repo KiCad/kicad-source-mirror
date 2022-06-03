@@ -192,7 +192,7 @@ public:
      * @param aOther is the item to check collision against.
      * @return true, if a collision was found.
      */
-    bool Collide( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOnly = true ) const;
+    bool Collide( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOnly = true, int aOverrideClearance = -1 ) const;
 
     /**
      * Return the geometrical shape of the item. Used for collision detection and spatial indexing.
@@ -241,7 +241,7 @@ public:
     bool IsCompoundShapePrimitive() const { return m_isCompoundShapePrimitive; }
 
 private:
-    bool collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOnly ) const;
+    bool collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOnly, int aOverrideClearance ) const;
 
 protected:
     PnsKind       m_kind;
