@@ -100,7 +100,7 @@ NODE::~NODE()
 }
 
 
-int NODE::GetClearance( const ITEM* aA, const ITEM* aB ) const
+int NODE::GetClearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilon ) const
 {
    if( !m_ruleResolver )
         return 100000;
@@ -108,11 +108,11 @@ int NODE::GetClearance( const ITEM* aA, const ITEM* aB ) const
    if( aA->IsVirtual() || aB->IsVirtual() )
        return 0;
 
-   return m_ruleResolver->Clearance( aA, aB );
+   return m_ruleResolver->Clearance( aA, aB, aUseClearanceEpsilon );
 }
 
 
-int NODE::GetHoleClearance( const ITEM* aA, const ITEM* aB ) const
+int NODE::GetHoleClearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilon ) const
 {
     if( !m_ruleResolver )
         return 0;
@@ -120,11 +120,11 @@ int NODE::GetHoleClearance( const ITEM* aA, const ITEM* aB ) const
     if( aA->IsVirtual() || aB->IsVirtual() )
         return 0;
 
-    return m_ruleResolver->HoleClearance( aA, aB );
+    return m_ruleResolver->HoleClearance( aA, aB, aUseClearanceEpsilon );
 }
 
 
-int NODE::GetHoleToHoleClearance( const ITEM* aA, const ITEM* aB ) const
+int NODE::GetHoleToHoleClearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilon ) const
 {
    if( !m_ruleResolver )
         return 0;
@@ -132,7 +132,7 @@ int NODE::GetHoleToHoleClearance( const ITEM* aA, const ITEM* aB ) const
    if( aA->IsVirtual() || aB->IsVirtual() )
        return 0;
 
-   return m_ruleResolver->HoleToHoleClearance( aA, aB );
+   return m_ruleResolver->HoleToHoleClearance( aA, aB, aUseClearanceEpsilon );
 }
 
 
@@ -299,7 +299,8 @@ int NODE::QueryColliding( const ITEM* aItem, NODE::OBSTACLES& aObstacles, int aK
 
 
 NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
-                                          const std::set<ITEM*>* aRestrictedSet )
+                                          const std::set<ITEM*>* aRestrictedSet,
+                                          bool aUseClearanceEpsilon )
 {
     OBSTACLES obstacleList;
     obstacleList.reserve( 100 );
@@ -349,8 +350,10 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
         if( aRestrictedSet && aRestrictedSet->find( obstacle.m_item ) == aRestrictedSet->end() )
             continue;
 
-        int clearance = GetClearance( obstacle.m_item, aLine ) + aLine->Width() / 2;
-        obstacleHull = obstacle.m_item->Hull( clearance + PNS_HULL_MARGIN, 0, layer );
+        int clearance =
+            GetClearance( obstacle.m_item, aLine, aUseClearanceEpsilon ) + aLine->Width() / 2;
+
+        obstacleHull = obstacle.m_item->Hull( clearance, 0, layer );
         //debugDecorator->AddLine( obstacleHull, 2, 40000, "obstacle-hull-test" );
         //debugDecorator->AddLine( aLine->CLine(), 5, 40000, "obstacle-test-line" );
 
@@ -377,7 +380,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
             if( holeClearance > viaClearance )
                 viaClearance = holeClearance;
 
-            obstacleHull = obstacle.m_item->Hull( viaClearance + PNS_HULL_MARGIN, 0, layer );
+            obstacleHull = obstacle.m_item->Hull( viaClearance, 0, layer );
             //debugDecorator->AddLine( obstacleHull, 3 );
 
             intersectingPts.clear();
@@ -392,7 +395,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
         if( m_collisionQueryScope == CQS_ALL_RULES && obstacle.m_item->Hole() )
         {
             clearance = GetHoleClearance( obstacle.m_item, aLine ) + aLine->Width() / 2;
-            obstacleHull = obstacle.m_item->HoleHull( clearance + PNS_HULL_MARGIN, 0, layer );
+            obstacleHull = obstacle.m_item->HoleHull( clearance, 0, layer );
             //debugDecorator->AddLine( obstacleHull, 4 );
 
             intersectingPts.clear();
