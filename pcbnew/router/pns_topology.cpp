@@ -531,10 +531,15 @@ const std::set<ITEM*> TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer )
 
         visited.insert( top );
 
-        m_world->QueryColliding( top, obstacles, ITEM::ANY_T, -1, false );
+        m_world->QueryColliding( top, obstacles, ITEM::ANY_T, -1, false, 0 ); // only query touching objects
 
         for( OBSTACLE& obs : obstacles )
         {
+            bool trackOnTrack = ( obs.m_item->Net() != top->Net() ) &&  obs.m_item->OfKind( ITEM::SEGMENT_T ) && top->OfKind( ITEM::SEGMENT_T );
+
+            if( trackOnTrack )
+                continue;
+
             if( visited.find( obs.m_item ) == visited.end() &&
                 obs.m_item->Layers().Overlaps( aLayer ) && !( obs.m_item->Marker() & MK_HEAD ) )
             {
