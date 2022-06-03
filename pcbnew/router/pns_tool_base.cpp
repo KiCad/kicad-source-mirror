@@ -310,7 +310,13 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
     m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
 
     controls()->ForceCursorPosition( false );
-    VECTOR2I mousePos = controls()->GetMousePosition();
+    
+    VECTOR2I mousePos;
+    
+    if( ! aEvent.IsDrag() )
+        mousePos = controls()->GetMousePosition();
+    else
+        mousePos = aEvent.DragOrigin();
 
     if( m_router->Settings().Mode() != RM_MarkObstacles &&
         ( m_router->GetCurrentNets().empty() || m_router->GetCurrentNets().front() < 0 ) )
