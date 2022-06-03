@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-31 10:31-0700\n"
-"PO-Revision-Date: 2022-05-26 19:27+0000\n"
+"PO-Revision-Date: 2022-06-03 18:31+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -12476,7 +12476,7 @@ msgstr "Situar campos de símbolo a&utomáticamente"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:27
 msgid "Recursively annotate subsheets"
-msgstr ""
+msgstr "Anotar recursivamente las subhojas"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:142
 msgid ""
@@ -17631,7 +17631,7 @@ msgstr "Ajustar automáticamente"
 
 #: eeschema/tools/ee_actions.cpp:714
 msgid "Toggle automatic annotation of new parts symbols"
-msgstr ""
+msgstr "Alternar la anotación automática de símbolos de piezas nuevas"
 
 #: eeschema/tools/ee_actions.cpp:719
 msgid "Repair Schematic"
@@ -38523,6 +38523,7 @@ msgstr "Sombra sobre los conflictos"
 #: pcbnew/widgets/appearance_controls.cpp:357
 msgid "Show a shadow on overlapping courtyards while moving footprints"
 msgstr ""
+"Mostrar una sombra en los patios superpuestos mientras se mueven las huellas"
 
 #: pcbnew/widgets/appearance_controls.cpp:358
 msgid "Show drawing sheet borders and title block"
