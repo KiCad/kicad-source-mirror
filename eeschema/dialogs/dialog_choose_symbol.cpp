@@ -47,7 +47,8 @@
 
 std::mutex DIALOG_CHOOSE_SYMBOL::g_Mutex;
 
-wxString DIALOG_CHOOSE_SYMBOL::g_searchString;
+wxString DIALOG_CHOOSE_SYMBOL::g_symbolSearchString;
+wxString DIALOG_CHOOSE_SYMBOL::g_powerSearchString;
 
 
 DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxString& aTitle,
@@ -72,8 +73,10 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
           m_show_footprints( aShowFootprints ),
           m_external_browser_requested( false )
 {
+    m_showPower = aAdapter->GetFilter() == SYMBOL_TREE_MODEL_ADAPTER::SYM_FILTER_POWER;
+
     // Never show footprints in power symbol mode
-    if( aAdapter->GetFilter() == SYMBOL_TREE_MODEL_ADAPTER::SYM_FILTER_POWER )
+    if( m_showPower )
         m_show_footprints = false;
 
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
@@ -132,7 +135,10 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
 
     aAdapter->FinishTreeInitialization();
 
-    m_tree->SetSearchString( g_searchString );
+    if( m_showPower )
+        m_tree->SetSearchString( g_powerSearchString );
+    else
+        m_tree->SetSearchString( g_symbolSearchString );
 
     m_hsplitter->SetSashGravity( 0.8 );
     m_hsplitter->SetMinimumPaneSize( 20 );
@@ -148,11 +154,11 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
         buttonsSizer->Add( m_browser_button, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
     }
 
-    m_keepSymbol = new wxCheckBox( this, wxID_ANY, _("Place repeated copies"), wxDefaultPosition,
+    m_keepSymbol = new wxCheckBox( this, wxID_ANY, _( "Place repeated copies" ), wxDefaultPosition,
                                    wxDefaultSize, wxALIGN_RIGHT );
     m_keepSymbol->SetToolTip( _( "Keep the symbol selected for subsequent clicks." ) );
 
-    m_useUnits = new wxCheckBox( this, wxID_ANY, _("Place all units"), wxDefaultPosition,
+    m_useUnits = new wxCheckBox( this, wxID_ANY, _( "Place all units" ), wxDefaultPosition,
                                  wxDefaultSize, wxALIGN_RIGHT );
     m_useUnits->SetToolTip( _( "Sequentially place all units of the symbol." ) );
 
@@ -186,13 +192,13 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
 
         // We specify the width of the right window (m_symbol_view_panel), because specify
         // the width of the left window does not work as expected when SetSashGravity() is called
-        m_hsplitter->SetSashPosition( panelCfg.sash_pos_h > 0 ? panelCfg.sash_pos_h :
-                                      horizPixelsFromDU( 220 ) );
+        m_hsplitter->SetSashPosition( panelCfg.sash_pos_h > 0 ? panelCfg.sash_pos_h
+                                                              : horizPixelsFromDU( 220 ) );
 
         if( m_vsplitter )
         {
-            m_vsplitter->SetSashPosition( panelCfg.sash_pos_v > 0 ? panelCfg.sash_pos_v :
-                                          vertPixelsFromDU( 230 ) );
+            m_vsplitter->SetSashPosition( panelCfg.sash_pos_v > 0 ? panelCfg.sash_pos_v
+                                                                  : vertPixelsFromDU( 230 ) );
         }
 
         wxSize dlgSize( panelCfg.width > 0 ? panelCfg.width : horizPixelsFromDU( 390 ),
@@ -239,7 +245,10 @@ DIALOG_CHOOSE_SYMBOL::~DIALOG_CHOOSE_SYMBOL()
     m_dbl_click_timer->Stop();
     delete m_dbl_click_timer;
 
-    g_searchString = m_tree->GetSearchString();
+    if( m_showPower )
+        g_powerSearchString = m_tree->GetSearchString();
+    else
+        g_symbolSearchString = m_tree->GetSearchString();
 
     if( m_browser_button )
     {

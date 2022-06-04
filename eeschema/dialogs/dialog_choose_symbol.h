@@ -203,7 +203,8 @@ public:
     static std::mutex g_Mutex;
 
 protected:
-    static wxString   g_searchString;
+    static wxString           g_symbolSearchString;
+    static wxString           g_powerSearchString;
 
     wxTimer*                  m_dbl_click_timer;
     SYMBOL_PREVIEW_WIDGET*    m_symbol_preview;
@@ -219,6 +220,7 @@ protected:
     HTML_WINDOW*              m_details;
 
     SCH_BASE_FRAME*           m_parent;
+    bool                      m_showPower;
     int                       m_deMorganConvert;
     bool                      m_allow_field_edits;
     bool                      m_show_footprints;
